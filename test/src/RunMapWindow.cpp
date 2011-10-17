@@ -60,6 +60,7 @@ Copyright_License {
 #include "Look/TaskLook.hpp"
 #include "Look/AircraftLook.hpp"
 #include "Look/TrafficLook.hpp"
+#include "Look/MarkerLook.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -117,9 +118,10 @@ public:
              const AirspaceLook &airspace_look,
              const TaskLook &task_look,
              const AircraftLook &aircraft_look,
-             const TrafficLook &traffic_look)
+             const TrafficLook &traffic_look,
+             const MarkerLook &marker_look)
     :map(waypoint_look, airspace_look,
-         task_look, aircraft_look, traffic_look) {}
+         task_look, aircraft_look, traffic_look, marker_look) {}
 
 #ifdef USE_GDI
   static bool register_class(HINSTANCE hInstance) {
@@ -305,8 +307,11 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TrafficLook *traffic_look = new TrafficLook();
   traffic_look->Initialise();
 
+  MarkerLook *marker_look = new MarkerLook();
+  marker_look->Initialise();
+
   TestWindow window(*waypoint_look, *airspace_look, *task_look,
-                    *aircraft_look, *traffic_look);
+                    *aircraft_look, *traffic_look, *marker_look);
   window.set(0, 0, 640, 480);
 
   Graphics::Initialise();

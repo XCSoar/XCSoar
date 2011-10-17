@@ -29,7 +29,7 @@ Copyright_License {
 
 GlueMapWindow::GlueMapWindow(const Look &look)
   :MapWindow(look.waypoint, look.airspace, look.task,
-             look.aircraft, look.traffic),
+             look.aircraft, look.traffic, look.marker),
    logger(NULL),
    idle_robin(2),
    drag_mode(DRAG_NONE),

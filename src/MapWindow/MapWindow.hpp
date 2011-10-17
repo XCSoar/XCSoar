@@ -45,6 +45,7 @@ struct WaypointLook;
 struct TaskLook;
 struct AircraftLook;
 struct TrafficLook;
+struct MarkerLook;
 class TopographyStore;
 class TopographyRenderer;
 class RasterTerrain;
@@ -127,6 +128,7 @@ protected:
   const TaskLook &task_look;
   const AircraftLook &aircraft_look;
   const TrafficLook &traffic_look;
+  const MarkerLook &marker_look;
 
   BackgroundDrawHelper m_background;
   WaypointRenderer way_point_renderer;
@@ -170,7 +172,8 @@ public:
             const AirspaceLook &airspace_look,
             const TaskLook &task_look,
             const AircraftLook &aircraft_look,
-            const TrafficLook &traffic_look);
+            const TrafficLook &traffic_look,
+            const MarkerLook &marker_look);
   virtual ~MapWindow();
 
   /**

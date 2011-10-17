@@ -1677,6 +1677,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Look/AircraftLook.cpp \
 	$(SRC)/Look/TrafficLook.cpp \
+	$(SRC)/Look/MarkerLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMap.cpp \
 	$(SRC)/SettingsComputer.cpp \
@@ -1977,6 +1978,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/AircraftLook.cpp \
 	$(SRC)/Look/TrafficLook.cpp \
 	$(SRC)/Look/InfoBoxLook.cpp \
+	$(SRC)/Look/MarkerLook.cpp \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \

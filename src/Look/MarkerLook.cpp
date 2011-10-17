@@ -21,40 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MARKS_HPP
-#define XCSOAR_MARKS_HPP
+#include "MarkerLook.hpp"
+#include "resource.h"
 
-#include "Poco/RWLock.h"
-#include "Screen/Icon.hpp"
-#include "Navigation/GeoPoint.hpp"
-#include "DateTime.hpp"
-
-#include <vector>
-
-class WindowProjection;
-class Canvas;
-struct MarkerLook;
-
-class Marks
+void
+MarkerLook::Initialise()
 {
-  struct Marker {
-    GeoPoint location;
-    BrokenDateTime time;
-  };
-
-  std::vector<Marker> marker_store;
-
-  Poco::RWLock lock;
-
-public:
-  Marks();
-  ~Marks();
-
-  void Reset();
-  void Draw(Canvas &canvas, const WindowProjection &projection,
-            const MarkerLook &look);
-  void MarkLocation(const GeoPoint &loc,
-                    const BrokenDateTime &time);
-};
-
-#endif
+  icon.load_big(IDB_MARK, IDB_MARK_HD);
+}

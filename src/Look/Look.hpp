@@ -37,6 +37,7 @@ Copyright_License {
 #include "Gauge/FlarmTrafficLook.hpp"
 #include "TaskLook.hpp"
 #include "InfoBoxLook.hpp"
+#include "MarkerLook.hpp"
 
 struct UISettings;
 
@@ -55,6 +56,7 @@ struct Look {
   FlarmTrafficLook flarm_dialog;
   TaskLook task;
   InfoBoxLook info_box;
+  MarkerLook marker;
 
   void Initialise();
   void InitialiseConfigured(const UISettings &settings);

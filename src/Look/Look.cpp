@@ -35,6 +35,7 @@ Look::Initialise()
   flarm_dialog.Initialise(traffic, false);
   flarm_gauge.Initialise(traffic, true);
   task.Initialise();
+  marker.Initialise();
 }
 
 void

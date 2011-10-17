@@ -29,11 +29,11 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "IO/DataFile.hpp"
 #include "Projection/WindowProjection.hpp"
+#include "Look/MarkerLook.hpp"
 
 Marks::Marks()
 {
   LogStartUp(_T("Initialise marks"));
-  icon.load_big(IDB_MARK, IDB_MARK_HD);
   Reset();
 }
 
@@ -78,13 +78,14 @@ Marks::MarkLocation(const GeoPoint &loc,
   }
 }
 
-void Marks::Draw(Canvas &canvas, const WindowProjection &projection)
+void Marks::Draw(Canvas &canvas, const WindowProjection &projection,
+                 const MarkerLook &look)
 {
   Poco::ScopedRWLock protect(lock, false); // read only
 
   for (unsigned i = 0; i < marker_store.size(); i++) {
     RasterPoint sc;
     if (projection.GeoToScreenIfVisible(marker_store[i].location, sc))
-      icon.draw(canvas, sc);
+      look.icon.draw(canvas, sc);
   }
 }

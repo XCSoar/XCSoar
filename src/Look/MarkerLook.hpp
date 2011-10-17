@@ -1,5 +1,5 @@
 /*
-Copyright_License {
+  Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2011 The XCSoar Project
@@ -21,40 +21,15 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MARKS_HPP
-#define XCSOAR_MARKS_HPP
+#ifndef XCSOAR_MARKER_LOOK_HPP
+#define XCSOAR_MARKER_LOOK_HPP
 
-#include "Poco/RWLock.h"
 #include "Screen/Icon.hpp"
-#include "Navigation/GeoPoint.hpp"
-#include "DateTime.hpp"
 
-#include <vector>
+struct MarkerLook {
+  MaskedIcon icon;
 
-class WindowProjection;
-class Canvas;
-struct MarkerLook;
-
-class Marks
-{
-  struct Marker {
-    GeoPoint location;
-    BrokenDateTime time;
-  };
-
-  std::vector<Marker> marker_store;
-
-  Poco::RWLock lock;
-
-public:
-  Marks();
-  ~Marks();
-
-  void Reset();
-  void Draw(Canvas &canvas, const WindowProjection &projection,
-            const MarkerLook &look);
-  void MarkLocation(const GeoPoint &loc,
-                    const BrokenDateTime &time);
+  void Initialise();
 };
 
 #endif
