@@ -207,8 +207,9 @@ EditClicked(gcc_unused WndButton &button)
 {
   assert(plane_list->GetCursorIndex() < list.size());
 
-  const TCHAR *old_path = list[plane_list->GetCursorIndex()].path;
-  const TCHAR *old_filename = list[plane_list->GetCursorIndex()].name;
+  const unsigned index = plane_list->GetCursorIndex();
+  const TCHAR *old_path = list[index].path;
+  const TCHAR *old_filename = list[index].name;
 
   Plane plane;
   PlaneGlue::ReadFile(plane, old_path);
@@ -239,8 +240,15 @@ EditClicked(gcc_unused WndButton &button)
 
       File::Delete(old_path);
       PlaneGlue::WriteFile(plane, path);
+      if (Profile::GetPathIsEqual(_T("PlanePath"), old_path)) {
+        list[index].path = path;
+        list[index].name = filename;
+        Load(index);
+      }
     } else {
       PlaneGlue::WriteFile(plane, old_path);
+      if (Profile::GetPathIsEqual(_T("PlanePath"), old_path))
+        Load(index);
     }
 
     UpdateList();
