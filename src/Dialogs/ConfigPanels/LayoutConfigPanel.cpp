@@ -54,7 +54,7 @@ static const StaticEnumChoice info_box_geometry_list[] = {
   { InfoBoxLayout::ibLeft4Right4, N_("8 Left + Right (Landscape)") },
   { InfoBoxLayout::ibLeft8, N_("8 Left (Landscape)") },
   { InfoBoxLayout::ibRight8, N_("8 Right (Landscape)") },
-  { InfoBoxLayout::ibGNav, _("9 Right + Vario (Landscape)") },
+  { InfoBoxLayout::ibGNav, N_("9 Right + Vario (Landscape)") },
   { InfoBoxLayout::ibGNav2, N_("9 Left + Right (Landscape)") },
   { InfoBoxLayout::ibSquare, N_("5 Right (Square)") },
   { InfoBoxLayout::ibRight12, N_("12 Right (Landscape)") },
