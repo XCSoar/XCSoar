@@ -131,11 +131,20 @@ TestDateTime()
   ok1(BrokenDateTime(2010, 12, 31, 23, 59, 59) + 1 == BrokenDateTime(2011, 1, 1));
 
   ok1(BrokenDateTime(2010, 1, 2, 12, 15, 30).ToUnixTimeUTC() == 1262434530);
+
+  ok1(BrokenDateTime(2010, 1, 1, 0, 0 ,1) -
+      BrokenDateTime(2010, 1, 1, 0, 0 ,0) == 1);
+  ok1(BrokenDateTime(2010, 1, 1, 0, 1 ,0) -
+      BrokenDateTime(2010, 1, 1, 0, 0 ,0) == 60);
+  ok1(BrokenDateTime(2010, 1, 1, 1, 0 ,0) -
+      BrokenDateTime(2010, 1, 1, 0, 0 ,0) == 60 * 60);
+  ok1(BrokenDateTime(2010, 1, 2, 0, 0 ,0) -
+      BrokenDateTime(2010, 1, 1, 0, 0 ,0) == 60 * 60 * 24);
 }
 
 int main(int argc, char **argv)
 {
-  plan_tests(77);
+  plan_tests(81);
 
   TestDate();
   TestTime();

@@ -224,6 +224,14 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   BrokenDateTime operator-(int seconds) const {
     return *this + (-seconds);
   }
+
+  /**
+   * Returns the number of seconds between the two BrokenDateTime structs.
+   * The second one is subtracted from the first one.
+   *
+   * <now> - <old> = positive timespan since <old> in seconds
+   */
+  int operator-(const BrokenDateTime &other) const;
 };
 
 #endif

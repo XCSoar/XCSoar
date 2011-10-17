@@ -251,3 +251,9 @@ BrokenDateTime::operator+(int seconds) const
   return ToBrokenDateTime(ft);
 #endif
 }
+
+int
+BrokenDateTime::operator-(const BrokenDateTime &other) const
+{
+  return ToUnixTimeUTC() - other.ToUnixTimeUTC();
+}
