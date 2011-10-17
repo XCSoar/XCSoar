@@ -43,6 +43,8 @@ class Markers
   std::vector<Marker> marker_store;
 
 public:
+  typedef std::vector<Marker>::const_iterator const_iterator;
+
   Markers();
   ~Markers();
 
@@ -50,6 +52,13 @@ public:
   void Draw(Canvas &canvas, const WindowProjection &projection,
             const MarkerLook &look) const;
   void MarkLocation(const GeoPoint &loc, const BrokenDateTime &time);
+
+  const_iterator begin() const {
+    return marker_store.begin();
+  }
+  const_iterator end() const {
+    return marker_store.end();
+  }
 };
 
 #endif

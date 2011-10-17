@@ -74,9 +74,9 @@ Markers::MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
 void Markers::Draw(Canvas &canvas, const WindowProjection &projection,
                  const MarkerLook &look) const
 {
-  for (unsigned i = 0; i < marker_store.size(); i++) {
+  for (const_iterator it = begin(), it_end = end(); it != it_end; ++it) {
     RasterPoint sc;
-    if (projection.GeoToScreenIfVisible(marker_store[i].location, sc))
+    if (projection.GeoToScreenIfVisible(it->location, sc))
       look.icon.draw(canvas, sc);
   }
 }
