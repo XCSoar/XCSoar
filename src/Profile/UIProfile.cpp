@@ -24,6 +24,7 @@ Copyright_License {
 #include "Profile/UIProfile.hpp"
 #include "Profile/MapProfile.hpp"
 #include "Profile/InfoBoxConfig.hpp"
+#include "Profile/PageProfile.hpp"
 #include "Profile/Profile.hpp"
 #include "UISettings.hpp"
 
@@ -52,5 +53,6 @@ Profile::Load(UISettings &settings)
 
   Load(settings.map);
   Load(settings.info_boxes);
+  Load(settings.pages);
   Load(settings.dialog);
 }

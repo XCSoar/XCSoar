@@ -26,6 +26,8 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "Form/Edit.hpp"
 #include "Pages.hpp"
+#include "Profile/PageProfile.hpp"
+#include "Interface.hpp"
 
 using namespace Pages;
 
@@ -36,8 +38,9 @@ static void
 UpdateComboBox(DataFieldEnum* dfe, unsigned page)
 {
   TCHAR buffer[128];
-  const PageLayout* pl;
-  const PageLayout* currentPL = GetLayout(page);
+  const PageSettings::PageLayout *pl;
+  const PageSettings::PageLayout *currentPL =
+    &CommonInterface::SetUISettings().pages.pages[page];
   assert(currentPL != NULL);
   currentPL->MakeTitle(buffer);
   // dont offer "None" for first page
@@ -59,7 +62,7 @@ PagesConfigPanel::Init(WndForm *_wf)
   wf = _wf;
 
   TCHAR prpName[64];
-  for (unsigned i = 0; i < MAX_PAGES; i++) {
+  for (unsigned i = 0; i < PageSettings::MAX_PAGES; i++) {
     _stprintf(prpName, _T("prpPageLayout%u"), i);
     WndProperty* wp = (WndProperty*)wf->FindByName(prpName);
     if (wp) {
@@ -76,14 +79,21 @@ PagesConfigPanel::Save()
 {
   TCHAR prpName[64];
   bool changed = false;
-  for (unsigned int i = 0; i < MAX_PAGES; i++) {
+
+  PageSettings &settings = CommonInterface::SetUISettings().pages;
+  for (unsigned int i = 0; i < PageSettings::MAX_PAGES; i++) {
      _stprintf(prpName, _T("prpPageLayout%u"), i);
     WndProperty* wp = (WndProperty*)wf->FindByName(prpName);
     if (wp) {
-      const PageLayout* currentPL = GetLayout(i);
-      const PageLayout* setPL = PossiblePageLayout(wp->GetDataField()->GetAsInteger());
+      PageSettings::PageLayout *currentPL = &settings.pages[i];
+      const PageSettings::PageLayout *setPL =
+        PossiblePageLayout(wp->GetDataField()->GetAsInteger());
       if (! (*currentPL == *setPL)) {
         SetLayout(i, *setPL);
+
+        *currentPL = *setPL;
+        Profile::Save(*currentPL, i);
+
         changed = true;
       }
     }

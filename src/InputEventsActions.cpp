@@ -253,22 +253,29 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   //  -- normal infobox
 
   using namespace Pages;
+  typedef PageSettings::InfoBoxConfig InfoBoxConfig;
+  typedef PageSettings::PageLayout PageLayout;
 
   const UIState &ui_state = CommonInterface::GetUIState();
 
   if (_tcscmp(misc, _T("normal")) == 0) {
-    PageLayout pl(PageLayout::tlMapAndInfoBoxes);
+    const PageSettings::PageLayout pl(PageLayout::tlMapAndInfoBoxes,
+                                      InfoBoxConfig(true, 0));
     OpenLayout(pl);
   } else if (_tcscmp(misc, _T("auxilary")) == 0) {
-    PageLayout pl(PageLayout::tlMapAndInfoBoxes, InfoBoxConfig(false, 3));
+    const PageSettings::PageLayout pl(PageLayout::tlMapAndInfoBoxes,
+                                      InfoBoxConfig(false, 3));
     OpenLayout(pl);
   } else if (_tcscmp(misc, _T("toggleauxiliary")) == 0) {
-    PageLayout pl(!ui_state.auxiliary_enabled ?
-      PageLayout(PageLayout::tlMapAndInfoBoxes, InfoBoxConfig(false, 3)) :
-      PageLayout(PageLayout::tlMapAndInfoBoxes));
+    const PageLayout pl(!ui_state.auxiliary_enabled ?
+                        PageLayout(PageLayout::tlMapAndInfoBoxes,
+                                   PageSettings::InfoBoxConfig(false, 3)) :
+                        PageLayout(PageLayout::tlMapAndInfoBoxes,
+                                   PageSettings::InfoBoxConfig(true, 0)));
     OpenLayout(pl);
   } else if (_tcscmp(misc, _T("full")) == 0) {
-    PageLayout pl(PageLayout::tlMap);
+    const PageLayout pl(PageLayout::tlMap,
+                        PageSettings::InfoBoxConfig(true, 0));
     OpenLayout(pl);
   } else if (_tcscmp(misc, _T("togglefull")) == 0) {
     XCSoarInterface::main_window.SetFullScreen(

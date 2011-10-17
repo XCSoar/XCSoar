@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "SettingsMap.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
+#include "PageSettings.hpp"
 #include "Dialogs/DialogSettings.hpp"
 
 enum StateMessageAlign_t {
@@ -54,6 +55,7 @@ struct UISettings {
 
   SETTINGS_MAP map;
   InfoBoxSettings info_boxes;
+  PageSettings pages;
   DialogSettings dialog;
 
   void SetDefaults();

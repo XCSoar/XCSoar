@@ -21,23 +21,16 @@ Copyright_License {
 }
 */
 
-#include "UISettings.hpp"
-#include "Asset.hpp"
+#ifndef XCSOAR_PAGE_PROFILE_HPP
+#define XCSOAR_PAGE_PROFILE_HPP
 
-void
-UISettings::SetDefaults()
-{
-  custom_fonts = false;
-  enable_auto_blank = false;
+#include "PageSettings.hpp"
 
-  enable_flarm_gauge = true;
-  auto_close_flarm_dialog = false;
-  enable_thermal_assistant_gauge = true;
+namespace Profile {
+  void Load(PageSettings &settings);
 
-  popup_message_position = smAlignCenter;
+  void Save(const PageSettings::PageLayout &page, unsigned i);
+  void Save(const PageSettings &settings);
+};
 
-  map.SetDefaults();
-  info_boxes.SetDefaults();
-  pages.SetDefaults();
-  dialog.SetDefaults();
-}
+#endif

@@ -479,7 +479,7 @@ XCSoarInterface::Startup()
   // Give focus to the map
   main_window.SetDefaultFocus();
 
-  Pages::LoadFromProfile();
+  Pages::Initialise(GetUISettings().pages);
 
   // Start calculation thread
   merge_thread->Start();

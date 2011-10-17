@@ -361,6 +361,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InputEventsActions.cpp \
 	$(SRC)/InputEventsDevice.cpp \
 	$(SRC)/InputParser.cpp \
+	$(SRC)/PageSettings.cpp \
 	$(SRC)/Pages.cpp \
 	$(SRC)/StatusMessage.cpp \
 	$(SRC)/PopupMessage.cpp \
@@ -497,6 +498,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/RouteProfile.cpp \
 	$(SRC)/Profile/TaskProfile.cpp \
 	$(SRC)/Profile/MapProfile.cpp \
+	$(SRC)/Profile/PageProfile.cpp \
 	$(SRC)/Profile/UIProfile.cpp \
 	$(SRC)/Profile/ProfileGlue.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \

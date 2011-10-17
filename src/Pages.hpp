@@ -24,61 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_PAGES_HPP
 #define XCSOAR_PAGES_HPP
 
+#include "PageSettings.hpp"
+
 #include <tchar.h>
 
 namespace Pages
 {
-  const unsigned MAX_PAGES = 8;
-
-  struct InfoBoxConfig {
-    bool autoSwitch;
-    unsigned panel;
-
-    InfoBoxConfig(bool autoSwitch = true, unsigned panel = 0)
-      : autoSwitch(autoSwitch), panel(panel) {}
-
-    bool operator==(const InfoBoxConfig& ibc) const {
-      if (autoSwitch != ibc.autoSwitch)
-        return false;
-      if (panel != ibc.panel)
-        return false;
-      return true;
-    }
-
-    bool operator!=(const InfoBoxConfig& ibc) const {
-      return !(*this == ibc);
-    }
-  };
-
-  struct PageLayout
-  {
-    enum eTopLayout {
-      tlEmpty,
-      tlMap,
-      tlMapAndInfoBoxes,
-      tlLAST = tlMapAndInfoBoxes
-    } topLayout;
-
-    InfoBoxConfig infoBoxConfig;
-
-    PageLayout(eTopLayout topLayout=tlEmpty, InfoBoxConfig infoBoxConfig=InfoBoxConfig()) :
-      topLayout(topLayout), infoBoxConfig(infoBoxConfig) {}
-
-    void MakeTitle(TCHAR* str, const bool concise=false) const;
-
-    bool operator==(const PageLayout& pl) const {
-      if (topLayout != pl.topLayout)
-        return false;
-      if (infoBoxConfig != pl.infoBoxConfig)
-        return false;
-      return true;
-    }
-
-    bool operator!=(const PageLayout& pl) const {
-      return !(*this == pl);
-    }
-  };
-
   /**
    * Opens the given page.
    * @param page The page to open
@@ -94,36 +45,22 @@ namespace Pages
   void Prev();
 
   /**
-   * Retrieve current layout
-   */
-  const PageLayout& get_current();
-
-  /**
    * Opens the given layout.
    * Attention! Internally the previous page is still selected.
    * @param layout The layout to open
    */
-  void OpenLayout(const PageLayout &layout);
+  void OpenLayout(const PageSettings::PageLayout &layout);
 
   /**
    * Assigns a new layout to the given page
    * @param page The page to change
    * @param layout The layout that should be assigned
    */
-  void SetLayout(unsigned page, const PageLayout &layout);
-  /**
-   * Returns the layout of the given page
-   * @param page The page to look for
-   * @return The layout of the given page
-   */
-  PageLayout* GetLayout(unsigned page);
+  void SetLayout(unsigned page, const PageSettings::PageLayout &layout);
 
-  void SavePageToProfile(unsigned page);
-  void SaveToProfile();
-  void LoadPageFromProfile(unsigned page);
-  void LoadFromProfile();
+  void Initialise(const PageSettings &_settings);
   void LoadDefault();
-  const PageLayout* PossiblePageLayout(unsigned i);
+  const PageSettings::PageLayout *PossiblePageLayout(unsigned i);
 
   unsigned NextIndex();
   unsigned PrevIndex();
