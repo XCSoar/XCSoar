@@ -269,20 +269,20 @@ InfoBoxContentAltitude::PnlSetupOnSetup(gcc_unused WndButton &Sender)
  * Subpart callback function pointers
  */
 
-static const
+static gcc_constexpr_data
 InfoBoxContentAltitude::PanelContent Panels[] = {
   InfoBoxContentAltitude::PanelContent (
-    _("Simulator"),
+    N_("Simulator"),
     (*InfoBoxContentAltitude::PnlSimulatorLoad)),
 
   InfoBoxContentAltitude::PanelContent (
-    _("Info"),
+    N_("Info"),
     (*InfoBoxContentAltitude::PnlInfoLoad),
     NULL,
     (*InfoBoxContentAltitude::PnlInfoOnTabPreShow)),
 
   InfoBoxContentAltitude::PanelContent (
-    _("Setup"),
+    N_("Setup"),
     (*InfoBoxContentAltitude::PnlSetupLoad))
 };
 

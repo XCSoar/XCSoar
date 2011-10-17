@@ -87,8 +87,12 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
     if (wPanel[i] == NULL)
       continue;
 
-    wTabBar->AddClient(wPanel[i], dlgContent->Panels[i].name, false, NULL, (*dlgContent->Panels[i].preHide), (*dlgContent->Panels[i].preShow),
-                                                                           (*dlgContent->Panels[i].postShow), (*dlgContent->Panels[i].reClick));
+    wTabBar->AddClient(wPanel[i], gettext(dlgContent->Panels[i].name),
+                       false, NULL,
+                       dlgContent->Panels[i].preHide,
+                       dlgContent->Panels[i].preShow,
+                       dlgContent->Panels[i].postShow,
+                       dlgContent->Panels[i].reClick);
   }
 
   Window* wClose =

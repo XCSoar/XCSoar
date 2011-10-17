@@ -280,15 +280,15 @@ InfoBoxContentWind::PnlSetupOnSetup(gcc_unused WndButton &Sender)
  * Subpart callback function pointers
  */
 
-static const InfoBoxContentWind::PanelContent Panels[] = {
+static gcc_constexpr_data InfoBoxContentWind::PanelContent Panels[] = {
 InfoBoxContentWind::PanelContent (
-  _("Edit"),
+  N_("Edit"),
   (*InfoBoxContentWind::PnlEditLoad),
   NULL,
   (*InfoBoxContentWind::PnlEditOnTabPreShow)),
 
 InfoBoxContentWind::PanelContent (
-  _("Setup"),
+  N_("Setup"),
   (*InfoBoxContentWind::PnlSetupLoad),
   (*InfoBoxContentWind::PnlSetupOnTabPreHide))
 };

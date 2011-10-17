@@ -160,13 +160,13 @@ InfoBoxContentMacCready::PnlSetupOnMode(gcc_unused WndButton &Sender)
  * Subpart callback function pointers
  */
 
-static const InfoBoxContentMacCready::PanelContent panels[] = {
+static gcc_constexpr_data InfoBoxContentMacCready::PanelContent panels[] = {
   InfoBoxContentMacCready::PanelContent (
-    _("Edit"),
+    N_("Edit"),
     (*InfoBoxContentMacCready::PnlEditLoad)),
 
   InfoBoxContentMacCready::PanelContent (
-    _("Setup"),
+    N_("Setup"),
     (*InfoBoxContentMacCready::PnlSetupLoad),
     NULL,
     (*InfoBoxContentMacCready::PnlSetupPreShow))
