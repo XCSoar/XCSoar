@@ -36,6 +36,9 @@ Copyright_License {
 #define N_(x) (x)
 #endif
 
+static inline void AllowLanguage() {}
+static inline void DisallowLanguage() {}
+
 #else // !HAVE_POSIX
 
 #include "Compiler.h"
@@ -44,6 +47,14 @@ Copyright_License {
 
 class MOFile;
 extern const MOFile *mo_file;
+
+#ifdef NDEBUG
+static inline void AllowLanguage() {}
+static inline void DisallowLanguage() {}
+#else
+void AllowLanguage();
+void DisallowLanguage();
+#endif
 
 gcc_const
 const TCHAR* gettext(const TCHAR* text);

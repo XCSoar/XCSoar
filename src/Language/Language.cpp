@@ -27,6 +27,8 @@ Copyright_License {
 #include "Util/UTF8.hpp"
 #include "Util/Macros.hpp"
 
+#include <assert.h>
+
 #if defined(HAVE_POSIX) && !defined(ANDROID)
 
 #include <locale.h>
@@ -48,6 +50,26 @@ typedef std::map<tstring,tstring> translation_map;
 static translation_map translations;
 #endif
 
+#ifndef NDEBUG
+
+static bool language_allowed = false;
+
+void
+AllowLanguage()
+{
+  assert(!language_allowed);
+  language_allowed = true;
+}
+
+void
+DisallowLanguage()
+{
+  assert(language_allowed);
+  language_allowed = false;
+}
+
+#endif
+
 /**
  * Looks up a string of text from the current language file
  *
@@ -65,6 +87,7 @@ static translation_map translations;
 const TCHAR*
 gettext(const TCHAR* text)
 {
+  assert(language_allowed);
   assert(text != NULL);
 
   // If empty string or no language file is loaded -> skip the translation

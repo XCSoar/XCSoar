@@ -42,6 +42,7 @@ Copyright_License {
 #include "Net/Init.hpp"
 #include "UtilsSystem.hpp"
 #include "ResourceLoader.hpp"
+#include "Language/Language.hpp"
 
 /**
  * Main entry point for the whole XCSoar application
@@ -97,12 +98,16 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   MainWindow::register_class(hInstance);
 #endif
 
+  AllowLanguage();
+
   // Perform application initialization and run loop
   int ret = EXIT_FAILURE;
   if (XCSoarInterface::Startup())
     ret = CommonInterface::main_window.event_loop();
 
   CommonInterface::main_window.reset();
+
+  DisallowLanguage();
 
   Fonts::Deinitialize();
   Graphics::Deinitialise();
