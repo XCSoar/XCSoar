@@ -187,7 +187,7 @@ protected:
     return i >= 0 && (unsigned)i < length ? i : -1;
   }
 
-  gcc_const
+  gcc_pure
   PixelRect item_rect(unsigned i) const {
     PixelRect rc;
     rc.left = 0;

@@ -141,14 +141,16 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
     {0, -5},
    };
 
-  const unsigned AIRCRAFT_POINTS_LARGE = ARRAY_SIZE(AircraftLarge);
-  const unsigned AIRCRAFT_POINTS_SMALL = ARRAY_SIZE(AircraftSmall);
+  static const unsigned AIRCRAFT_POINTS_LARGE = ARRAY_SIZE(AircraftLarge);
+  static const unsigned AIRCRAFT_POINTS_SMALL = ARRAY_SIZE(AircraftSmall);
+  static const unsigned AIRCRAFT_POINTS_MAX =
+    std::max(AIRCRAFT_POINTS_LARGE, AIRCRAFT_POINTS_SMALL);
 
   const RasterPoint *Aircraft = large ? AircraftLarge : AircraftSmall;
   const unsigned AircraftPoints = large ?
                                   AIRCRAFT_POINTS_LARGE : AIRCRAFT_POINTS_SMALL;
 
-  RasterPoint aircraft[std::max(AIRCRAFT_POINTS_LARGE, AIRCRAFT_POINTS_SMALL)];
+  RasterPoint aircraft[AIRCRAFT_POINTS_MAX];
   std::copy(Aircraft, Aircraft + AircraftPoints, aircraft);
   PolygonRotateShift(aircraft, AircraftPoints,
                      aircraft_pos.x, aircraft_pos.y, angle, true);
