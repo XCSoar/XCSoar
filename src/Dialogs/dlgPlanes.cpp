@@ -120,7 +120,7 @@ OnPlaneListPaint(Canvas &canvas, const PixelRect rc, unsigned i)
                       rc, list[i].path);
 }
 
-static void
+static bool
 Load(unsigned i)
 {
   assert(i < list.size());
@@ -132,7 +132,7 @@ Load(unsigned i)
     _stprintf(tmp, _("Loading of plane profile \"%s\" failed!"),
               list[i].name.c_str());
     MessageBoxX(tmp, _("Error"), MB_OK);
-    return;
+    return false;
   }
 
   Profile::SetPath(_T("PlanePath"), list[i].path);
@@ -144,14 +144,14 @@ Load(unsigned i)
   _stprintf(tmp, _("Plane profile \"%s\" activated."),
             list[i].name.c_str());
   MessageBoxX(tmp, _("Load"), MB_OK);
-
-  dialog->SetModalResult(mrOK);
+  return true;
 }
 
 static void
 LoadClicked(gcc_unused WndButton &button)
 {
-  Load(plane_list->GetCursorIndex());
+  if (Load(plane_list->GetCursorIndex()))
+    dialog->SetModalResult(mrOK);
 }
 
 static void
@@ -263,7 +263,8 @@ ListItemSelected(unsigned i)
             list[i].name.c_str());
 
   if (MessageBoxX(tmp, _("Load"), MB_YESNO) == IDYES)
-    Load(i);
+    if (Load(i))
+      dialog->SetModalResult(mrOK);
 }
 
 static CallBackTableEntry CallBackTable[] = {
