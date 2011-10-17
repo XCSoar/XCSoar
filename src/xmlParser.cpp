@@ -604,11 +604,11 @@ XMLNode::AddChild(const TCHAR *lpszName, bool isDeclaration)
   return d->pChild[nc];
 }
 
-XMLAttribute *
+void
 XMLNode::AddAttribute(const TCHAR *lpszName, const TCHAR *lpszValuev)
 {
   if (!lpszName)
-    return &emptyXMLAttribute;
+    return;
 
   unsigned na = d->nAttribute;
   d->pAttribute = (XMLAttribute*)myRealloc(d->pAttribute, (na + 1),
@@ -618,7 +618,6 @@ XMLNode::AddAttribute(const TCHAR *lpszName, const TCHAR *lpszValuev)
   pAttr->lpszValue = lpszValuev;
   addToOrder(na, eNodeAttribute);
   d->nAttribute++;
-  return pAttr;
 }
 
 const TCHAR *

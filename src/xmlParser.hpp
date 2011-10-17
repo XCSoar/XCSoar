@@ -277,7 +277,7 @@ public:
   /**
    * Add an attribute to an element.
    */
-  XMLAttribute *AddAttribute(const TCHAR *lpszName, const TCHAR *lpszValuev);
+  void AddAttribute(const TCHAR *lpszName, const TCHAR *lpszValuev);
 
   /**
    * Add text to the element.
