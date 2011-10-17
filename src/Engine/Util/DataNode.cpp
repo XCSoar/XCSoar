@@ -29,13 +29,13 @@ DataNode::~DataNode()
 }
 
 void
-DataNode::set_attribute(const tstring &name, Angle value)
+DataNode::set_attribute(const TCHAR *name, Angle value)
 {
   set_attribute(name, value.Degrees());
 }
 
 void
-DataNode::set_attribute(const tstring &name, fixed value)
+DataNode::set_attribute(const TCHAR *name, fixed value)
 {
   TCHAR buf[100];
   _stprintf(buf, _T("%g"), (double)value);
@@ -43,7 +43,7 @@ DataNode::set_attribute(const tstring &name, fixed value)
 }
 
 void
-DataNode::set_attribute(const tstring &name, int value)
+DataNode::set_attribute(const TCHAR *name, int value)
 {
   TCHAR buf[100];
   _stprintf(buf, _T("%d"), value);
@@ -51,7 +51,7 @@ DataNode::set_attribute(const tstring &name, int value)
 }
 
 void
-DataNode::set_attribute(const tstring &name, unsigned value)
+DataNode::set_attribute(const TCHAR *name, unsigned value)
 {
   TCHAR buf[100];
   _stprintf(buf, _T("%d"), value);
@@ -59,7 +59,7 @@ DataNode::set_attribute(const tstring &name, unsigned value)
 }
 
 void
-DataNode::set_attribute(const tstring &name, bool &value)
+DataNode::set_attribute(const TCHAR *name, bool &value)
 {
   TCHAR buf[100];
   _stprintf(buf, _T("%d"), (int)value);
@@ -67,7 +67,7 @@ DataNode::set_attribute(const tstring &name, bool &value)
 }
 
 bool
-DataNode::get_attribute(const tstring &name, Angle &value) const
+DataNode::get_attribute(const TCHAR *name, Angle &value) const
 {
   fixed v;
   if (get_attribute(name, v)) {
@@ -78,7 +78,7 @@ DataNode::get_attribute(const tstring &name, Angle &value) const
 }
 
 bool
-DataNode::get_attribute(const tstring &name, fixed &value) const
+DataNode::get_attribute(const TCHAR *name, fixed &value) const
 {
   tstring val;
   if (get_attribute(name, val)) {
@@ -90,7 +90,7 @@ DataNode::get_attribute(const tstring &name, fixed &value) const
 }
 
 bool
-DataNode::get_attribute(const tstring &name, int &value) const
+DataNode::get_attribute(const TCHAR *name, int &value) const
 {
   tstring val;
   if (get_attribute(name, val)) {
@@ -102,7 +102,7 @@ DataNode::get_attribute(const tstring &name, int &value) const
 }
 
 bool
-DataNode::get_attribute(const tstring &name, unsigned &value) const
+DataNode::get_attribute(const TCHAR *name, unsigned &value) const
 {
   tstring val;
   if (get_attribute(name, val)) {
@@ -114,7 +114,7 @@ DataNode::get_attribute(const tstring &name, unsigned &value) const
 }
 
 bool
-DataNode::get_attribute(const tstring &name, bool &value) const
+DataNode::get_attribute(const TCHAR *name, bool &value) const
 {
   tstring val;
   if (get_attribute(name, val)) {

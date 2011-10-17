@@ -27,12 +27,6 @@
 
 #include <stdio.h>
 
-static TCHAR *
-stringDup(const tstring text)
-{
-  return _tcsdup(text.c_str());
-}
-
 DataNodeXML::DataNodeXML(const XMLNode &the_node)
 {
   m_xml_node = new XMLNode(the_node);
@@ -55,9 +49,9 @@ DataNodeXML::load(const TCHAR* path)
 }
 
 DataNodeXML*
-DataNodeXML::createRoot(const tstring &node_name)
+DataNodeXML::createRoot(const TCHAR *node_name)
 {
-  XMLNode new_root = XMLNode::createRoot(stringDup(node_name));
+  XMLNode new_root = XMLNode::createRoot(_tcsdup(node_name));
   return new DataNodeXML(new_root);
 }
 
@@ -67,22 +61,22 @@ DataNodeXML::serialise(TextWriter &writer)
   m_xml_node->serialise(writer, true);
 }
 
-const tstring
+const TCHAR *
 DataNodeXML::get_name() const
 {
-  return tstring(m_xml_node->getName());
+  return m_xml_node->getName();
 }
 
 DataNode*
-DataNodeXML::add_child(const tstring &name)
+DataNodeXML::add_child(const TCHAR *name)
 {
-  return new DataNodeXML(m_xml_node->AddChild(stringDup(name), false));
+  return new DataNodeXML(m_xml_node->AddChild(_tcsdup(name), false));
 }
 
 DataNode*
-DataNodeXML::get_child_by_name(const tstring name, const unsigned i) const
+DataNodeXML::get_child_by_name(const TCHAR *name, const unsigned i) const
 {
-  XMLNode child = m_xml_node->getChildNode(name.c_str(), i);
+  XMLNode child = m_xml_node->getChildNode(name, i);
   if (child.isEmpty())
     return NULL;
 
@@ -100,15 +94,15 @@ DataNodeXML::get_child(unsigned i) const
 }
 
 void
-DataNodeXML::set_attribute(const tstring &name, const tstring value)
+DataNodeXML::set_attribute(const TCHAR *name, const TCHAR *value)
 {
-  m_xml_node->AddAttribute(stringDup(name), stringDup(value));
+  m_xml_node->AddAttribute(_tcsdup(name), _tcsdup(value));
 }
 
 bool
-DataNodeXML::get_attribute(const tstring &name, tstring &value) const
+DataNodeXML::get_attribute(const TCHAR *name, tstring &value) const
 {
-  const TCHAR *v = m_xml_node->getAttribute(name.c_str());
+  const TCHAR *v = m_xml_node->getAttribute(name);
   if (v == NULL)
     return false;
 

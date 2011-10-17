@@ -62,7 +62,7 @@ public:
    *
    * @return Pointer to root node
    */
-  static DataNodeXML* createRoot(const tstring &node_name);
+  static DataNodeXML* createRoot(const TCHAR *node_name);
 
   virtual void serialise(TextWriter &writer);
 
@@ -75,14 +75,15 @@ public:
    */
   bool save(const TCHAR* path);
 
-  const tstring get_name() const;
+  virtual const TCHAR *get_name() const;
 
-  DataNode* add_child(const tstring &name);
+  virtual DataNode *add_child(const TCHAR *name);
   DataNode* get_child(unsigned i) const;
-  DataNode* get_child_by_name(const tstring name, const unsigned i=0) const;
+  virtual DataNode *get_child_by_name(const TCHAR *name,
+                                      const unsigned i=0) const;
 
-  void set_attribute(const tstring &name, const tstring value);
-  bool get_attribute(const tstring &name, tstring &value) const;
+  virtual void set_attribute(const TCHAR *name, const TCHAR *value);
+  virtual bool get_attribute(const TCHAR *name, tstring &value) const;
 
 private:
   XMLNode *m_xml_node;
