@@ -47,7 +47,7 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpStartMaxSpeedMargin"), ugHorizontalSpeed,
                    task_behaviour.start_max_speed_margin);
 
-  static const StaticEnumChoice start_max_height_ref_list[] = {
+  static gcc_constexpr_data StaticEnumChoice start_max_height_ref_list[] = {
     { hrAGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point)") },
     { hrMSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level)") },
     { 0 }
@@ -61,7 +61,7 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpStartMaxHeightMargin"), ugAltitude,
                    task_behaviour.start_max_height_margin);
 
-  static const StaticEnumChoice finish_min_height_ref_list[] = {
+  static gcc_constexpr_data StaticEnumChoice finish_min_height_ref_list[] = {
     { hrAGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point)") },
     { hrMSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level)") },
     { 0 }

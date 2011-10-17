@@ -210,7 +210,7 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
     /* XCSoar before 6.2 used to store a "speed index", not the real
        baud rate - try to import the old settings */
 
-    static const unsigned speed_index_table[] = {
+    static gcc_constexpr_data unsigned speed_index_table[] = {
       1200,
       2400,
       4800,

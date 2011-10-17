@@ -75,7 +75,7 @@ RouteConfigPanel::Init(WndForm *_wf)
   const RoutePlannerConfig &route_planner =
     settings_computer.task.route_planner;
 
-  static const StaticEnumChoice final_glide_terrain_list[] = {
+  static gcc_constexpr_data StaticEnumChoice final_glide_terrain_list[] = {
     { SETTINGS_FEATURES::FGT_OFF, N_("Off") },
     { SETTINGS_FEATURES::FGT_LINE, N_("Line") },
     { SETTINGS_FEATURES::FGT_SHADE, N_("Shade") },
@@ -85,7 +85,7 @@ RouteConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpFinalGlideTerrain"), final_glide_terrain_list,
                    settings_computer.FinalGlideTerrain);
 
-  static const StaticEnumChoice route_mode_list[] = {
+  static gcc_constexpr_data StaticEnumChoice route_mode_list[] = {
     { RoutePlannerConfig::rpNone, N_("None") },
     { RoutePlannerConfig::rpTerrain, N_("Terrain") },
     { RoutePlannerConfig::rpAirspace, N_("Airspace") },
@@ -102,7 +102,7 @@ RouteConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpRoutePlannerUseCeiling"),
                    route_planner.use_ceiling);
 
-  static const StaticEnumChoice turning_reach_list[] = {
+  static gcc_constexpr_data StaticEnumChoice turning_reach_list[] = {
     { RoutePlannerConfig::rmOff, N_("Off") },
     { RoutePlannerConfig::rmStraight, N_("Straight") },
     { RoutePlannerConfig::rmTurning, N_("Turning") },
@@ -112,7 +112,7 @@ RouteConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpTurningReach"), turning_reach_list,
                    route_planner.reach_calc_mode);
 
-  static const StaticEnumChoice reach_polar_list[] = {
+  static gcc_constexpr_data StaticEnumChoice reach_polar_list[] = {
     { RoutePlannerConfig::rpmTask, N_("Task") },
     { RoutePlannerConfig::rpmSafety, N_("Safety MC") },
     { 0 }

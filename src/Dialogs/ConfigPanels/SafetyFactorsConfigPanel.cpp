@@ -48,7 +48,7 @@ SafetyFactorsConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpSafetyAltitudeTerrain"), ugAltitude,
                    task_behaviour.route_planner.safety_height_terrain);
 
-  static const StaticEnumChoice abort_task_mode_list[] = {
+  static gcc_constexpr_data StaticEnumChoice abort_task_mode_list[] = {
     { atmSimple, N_("Simple") },
     { atmTask, N_("Task") },
     { atmHome, N_("Home") },

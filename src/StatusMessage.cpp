@@ -31,7 +31,7 @@ Copyright_License {
 
 #include <stdio.h>
 
-static const StatusMessageSTRUCT StatusMessageDefaults[] = {
+static gcc_constexpr_data StatusMessageSTRUCT StatusMessageDefaults[] = {
 #include "Status_defaults.cpp"
   { NULL }
 };
@@ -48,7 +48,7 @@ StatusMessageList::StatusMessageList()
   first.delay_ms = 2500; // 2.5 s
 
   // Load up other defaults - allow overwrite in config file
-  const StatusMessageSTRUCT *src = StatusMessageDefaults;
+  const StatusMessageSTRUCT *src = &StatusMessageDefaults[0];
   while (src->key != NULL)
     StatusMessageData.append(*src++);
 }

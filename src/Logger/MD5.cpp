@@ -21,11 +21,12 @@
  */
 
 #include "Logger/MD5.hpp"
+#include "Compiler.h"
 
 #include <stdio.h>
 #include <string.h>
 
-static const uint32_t k[64] = {
+static gcc_constexpr_data uint32_t k[64] = {
   // k[i] := floor(abs(sin(i)) * (2 pow 32))
   // RLD should be sin(i + 1) but want compatibility
   3614090360UL, // k=0
@@ -94,7 +95,7 @@ static const uint32_t k[64] = {
   3951481745UL,  // k=63
 };
 
-static const uint32_t r[64] = {
+static gcc_constexpr_data uint32_t r[64] = {
   7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,
   5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,
   4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,

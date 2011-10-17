@@ -117,8 +117,12 @@ RoutePolar::dxdy_to_index_norm(const int dx, const int dy)
 void
 RoutePolar::index_to_dxdy(const int index, int& dx, int& dy)
 {
-  static const int sx[ROUTEPOLAR_POINTS]= {128, 126, 123, 118, 111, 102, 91, 79, 66, 51, 36, 20, 4, -12, -28, -44, -59, -73, -86, -97, -107, -115, -121, -125, -127, -127, -125, -121, -115, -107, -97, -86, -73, -59, -44, -28, -12, 4, 20, 36, 51, 66, 79, 91, 102, 111, 118, 123, 126, };
-  static const int sy[ROUTEPOLAR_POINTS]= {0, 16, 32, 48, 62, 76, 89, 100, 109, 117, 122, 126, 127, 127, 124, 120, 113, 104, 94, 82, 69, 55, 40, 24, 8, -8, -24, -40, -55, -69, -82, -94, -104, -113, -120, -124, -127, -127, -126, -122, -117, -109, -100, -89, -76, -62, -48, -32, -16, };
+  static gcc_constexpr_data int sx[ROUTEPOLAR_POINTS]= {
+    128, 126, 123, 118, 111, 102, 91, 79, 66, 51, 36, 20, 4, -12, -28, -44, -59, -73, -86, -97, -107, -115, -121, -125, -127, -127, -125, -121, -115, -107, -97, -86, -73, -59, -44, -28, -12, 4, 20, 36, 51, 66, 79, 91, 102, 111, 118, 123, 126,
+  };
+  static gcc_constexpr_data int sy[ROUTEPOLAR_POINTS]= {
+    0, 16, 32, 48, 62, 76, 89, 100, 109, 117, 122, 126, 127, 127, 124, 120, 113, 104, 94, 82, 69, 55, 40, 24, 8, -8, -24, -40, -55, -69, -82, -94, -104, -113, -120, -124, -127, -127, -126, -122, -117, -109, -100, -89, -76, -62, -48, -32, -16,
+  };
 
   dx = sx[index];
   dy = sy[index];
@@ -301,9 +305,9 @@ RoutePolars::neighbour_link(const RoutePoint &start,
   // a = asin(sina/256)
   // cosa = 256*cos(a)
 
-  static const int sina[] =
+  static gcc_constexpr_data int sina[] =
     {256, 128, 85, 64, 51, 43, 37, 32, 28, 26, 23, 21, 20, 18 };
-  static const int cosa[] =
+  static gcc_constexpr_data int cosa[] =
     {256, 222, 241, 248, 251, 252, 253, 254, 254, 255, 255, 255, 255, 255 };
 
   const int index = std::min((int)8, std::max(abs(d.Longitude), abs(d.Latitude))-1);

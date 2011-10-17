@@ -43,7 +43,7 @@ struct WeatherDescriptor {
   const TCHAR *help;
 };
 
-static const WeatherDescriptor WeatherDescriptors[RasterWeather::MAX_WEATHER_MAP] = {
+static gcc_constexpr_data WeatherDescriptor WeatherDescriptors[RasterWeather::MAX_WEATHER_MAP] = {
   {
     NULL,
     N_("Terrain"),

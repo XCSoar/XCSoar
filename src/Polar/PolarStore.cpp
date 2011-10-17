@@ -25,6 +25,7 @@ Copyright_License {
 #include "Polar/Polar.hpp"
 #include "Units/Units.hpp"
 #include "Util/Macros.hpp"
+#include "Compiler.h"
 
 #include <assert.h>
 
@@ -50,7 +51,7 @@ PolarStore::Item::ToPolarInfo() const
 /**
  *  Note: new items should be added to bottom, otherwise saved index is lost
  */
-static const PolarStore::Item InternalPolars[] =
+static gcc_constexpr_data PolarStore::Item InternalPolars[] =
 {
   { _T("206 Hornet"), 318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8, 41.666, 100 },
   { _T("604 Kestrel"), 570, 100, 112.97, -0.72, 150.64, -1.42, 207.13, -4.1, 16.26, 0.0, 114 },

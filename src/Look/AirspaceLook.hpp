@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 #include "Sizes.h"
+#include "Compiler.h"
 
 struct AirspaceRendererSettings;
 

@@ -41,7 +41,7 @@ GlideComputerConfigPanel::Init(WndForm *_wf)
 
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
 
-  static const StaticEnumChoice auto_wind_list[] = {
+  static gcc_constexpr_data StaticEnumChoice auto_wind_list[] = {
     { D_AUTOWIND_NONE, N_("Manual") },
     { D_AUTOWIND_CIRCLING, N_("Circling") },
     { D_AUTOWIND_ZIGZAG, N_("ZigZag") },
@@ -54,7 +54,7 @@ GlideComputerConfigPanel::Init(WndForm *_wf)
 
   LoadFormProperty(*wf, _T("prpExternalWind"), settings_computer.ExternalWind);
 
-  static const StaticEnumChoice auto_mc_list[] = {
+  static gcc_constexpr_data StaticEnumChoice auto_mc_list[] = {
     { TaskBehaviour::AUTOMC_FINALGLIDE, N_("Final glide") },
     { TaskBehaviour::AUTOMC_CLIMBAVERAGE, N_("Trending average climb") },
     { TaskBehaviour::AUTOMC_BOTH, N_("Both") },
@@ -73,7 +73,7 @@ GlideComputerConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpEnableExternalTriggerCruise"),
                    settings_computer.EnableExternalTriggerCruise);
 
-  static const StaticEnumChoice aver_eff_list[] = {
+  static gcc_constexpr_data StaticEnumChoice aver_eff_list[] = {
     { ae15seconds, _T("15 s") },
     { ae30seconds, _T("30 s") },
     { ae60seconds, _T("60 s") },

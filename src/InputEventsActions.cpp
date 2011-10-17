@@ -1466,7 +1466,7 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
                                      N_("Task & Landables"),
                                      N_("Task"),
                                      N_("None")};
-  static const unsigned int n=ARRAY_SIZE(msg);
+  static gcc_constexpr_data unsigned int n = ARRAY_SIZE(msg);
   static const TCHAR *const actions[n] = {_T("all"),
                                           _T("task+landables"),
                                           _T("task"),

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DateTime.hpp"
+#include "Compiler.h"
 
 #include <assert.h>
 
@@ -164,7 +165,7 @@ IsLeapYear(unsigned y)
 static time_t
 timegm (struct tm *tm)
 {
-  static const unsigned ndays[] = {
+  static gcc_constexpr_data unsigned ndays[] = {
     31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
   };
 

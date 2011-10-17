@@ -51,7 +51,7 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
                      const RasterPoint aircraft_pos)
 {
   {
-    static const RasterPoint Aircraft[] = {
+    static gcc_constexpr_data RasterPoint Aircraft[] = {
       {0, -10},
       {-2, -7},
       {-2, -2},
@@ -65,7 +65,7 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
       {-5, 18},
       {0, 18},
     };
-    const unsigned AIRCRAFT_POINTS = ARRAY_SIZE(Aircraft);
+    static gcc_constexpr_data unsigned AIRCRAFT_POINTS = ARRAY_SIZE(Aircraft);
     RasterPoint buffer[2 * AIRCRAFT_POINTS];
 
     if (!inverse) {
@@ -81,7 +81,7 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
   }
 
   {
-    static const RasterPoint Canopy[] = {
+    static gcc_constexpr_data RasterPoint Canopy[] = {
       {0, -7},
       {-1, -7},
       {-1, -2},
@@ -103,7 +103,7 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
                    const Angle angle,
                    const RasterPoint aircraft_pos, bool large)
 {
-  static const RasterPoint AircraftLarge[] = {
+  static gcc_constexpr_data RasterPoint AircraftLarge[] = {
     {1, -7},
     {1, -1},
     {17, -1},
@@ -122,7 +122,7 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
     {-1, -7},
   };
 
-  static const RasterPoint AircraftSmall[] = {
+  static gcc_constexpr_data RasterPoint AircraftSmall[] = {
     {1, -5},
     {1, 0},
     {14, 0},
@@ -141,8 +141,8 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
     {0, -5},
    };
 
-  static const unsigned AIRCRAFT_POINTS_LARGE = ARRAY_SIZE(AircraftLarge);
-  static const unsigned AIRCRAFT_POINTS_SMALL = ARRAY_SIZE(AircraftSmall);
+  static gcc_constexpr_data unsigned AIRCRAFT_POINTS_LARGE = ARRAY_SIZE(AircraftLarge);
+  static gcc_constexpr_data unsigned AIRCRAFT_POINTS_SMALL = ARRAY_SIZE(AircraftSmall);
   static const unsigned AIRCRAFT_POINTS_MAX =
     std::max(AIRCRAFT_POINTS_LARGE, AIRCRAFT_POINTS_SMALL);
 

@@ -32,7 +32,7 @@ struct UnitStoreItem
   UnitSetting Units;
 };
 
-static const UnitStoreItem Presets[] =
+static gcc_constexpr_data UnitStoreItem Presets[] =
 {
   { N_("European"), {
     unKiloMeter,

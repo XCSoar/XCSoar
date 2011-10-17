@@ -54,9 +54,9 @@ InfoBoxSettings::SetDefaults()
   for (unsigned i = 0; i < MAX_PANELS; ++i)
     panels[i].Clear();
 
-  static const unsigned DFLT_CONFIG_BOXES = 9;
-  static const unsigned DFLT_CONFIG_PANELS = 4;
-  static const int contents[DFLT_CONFIG_PANELS][DFLT_CONFIG_BOXES] = {
+  static gcc_constexpr_data unsigned DFLT_CONFIG_BOXES = 9;
+  static gcc_constexpr_data unsigned DFLT_CONFIG_PANELS = 4;
+  static gcc_constexpr_data int contents[DFLT_CONFIG_PANELS][DFLT_CONFIG_BOXES] = {
     { 0x0E, 0x0B, 0x16, 0x31, 0x30, 0x21, 0x07, 0x0F, 0x2D },
     { 0x0E, 0x0B, 0x03, 0x2B, 0x30, 0x21, 0x11, 0x0F, 0x2D },
     { 0x0E, 0x12, 0x03, 0x2B, 0x26, 0x21, 0x29, 0x0F, 0x2D },

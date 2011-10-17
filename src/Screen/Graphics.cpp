@@ -191,20 +191,20 @@ Graphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
 void
 Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 {
-  static const ColorRamp snail_colors_vario[] = {
+  static gcc_constexpr_data ColorRamp snail_colors_vario[] = {
     {0,   0xc4, 0x80, 0x1e}, // sinkColor
     {100, 0xa0, 0xa0, 0xa0},
     {200, 0x1e, 0xf1, 0x73} // liftColor
   };
 
-  static const ColorRamp snail_colors_vario2[] = {
+  static gcc_constexpr_data ColorRamp snail_colors_vario2[] = {
     {0,   0x00, 0x00, 0xff},
     {99,  0x00, 0xff, 0xff},
     {100, 0xff, 0xff, 0x00},
     {200, 0xff, 0x00, 0x00}
   };
 
-  static const ColorRamp snail_colors_alt[] = {
+  static gcc_constexpr_data ColorRamp snail_colors_alt[] = {
     {0,   0xff, 0x00, 0x00},
     {50,  0xff, 0xff, 0x00},
     {100, 0x00, 0xff, 0x00},

@@ -127,7 +127,7 @@ unsigned i_rsqrt(const uint64_t x, const uint64_t yhint)
 static inline
 unsigned log2_fast(const unsigned v)
 {
-  static const int8_t LogTable256[256] = {
+  static gcc_constexpr_data int8_t LogTable256[256] = {
 #define L8(n) n, n, n, n, n, n, n, n
 #define L16(n) L8(n), L8(n)
     -1, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,

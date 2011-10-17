@@ -46,7 +46,7 @@ Copyright_License {
 /**
  * Special enum integer value for "filter disabled".
  */
-static const unsigned WILDCARD = 0x7fff;
+static gcc_constexpr_data unsigned WILDCARD = 0x7fff;
 
 static WndForm *wf=NULL;
 static WndProperty *wpName;
@@ -59,7 +59,7 @@ static fixed distance_filter;
 static unsigned direction_filter = WILDCARD;
 static Angle last_heading;
 
-static const StaticEnumChoice type_filter_list[] = {
+static gcc_constexpr_data StaticEnumChoice type_filter_list[] = {
   { WILDCARD, _T("*") },
   { OTHER, _T("Other") },
   { RESTRICT, _T("Restricted areas") },
@@ -344,7 +344,7 @@ FillDistanceEnum(DataFieldEnum &df)
 {
   df.AddChoice(0, _T("*"));
 
-  static const unsigned distances[] = {
+  static gcc_constexpr_data unsigned distances[] = {
     25, 50, 75, 100, 150, 250, 500, 1000
   };
 
@@ -366,7 +366,7 @@ FillDirectionEnum(DataFieldEnum &df)
   df.AddChoice(WILDCARD, _T("*"));
   df.AddChoice(0, GetHeadingString(buffer));
 
-  static const unsigned directions[] = {
+  static gcc_constexpr_data unsigned directions[] = {
     360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
   };
 

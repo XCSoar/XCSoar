@@ -139,7 +139,7 @@ struct Text2EventSTRUCT {
   pt2Event event;
 };
 
-static const Text2EventSTRUCT Text2Event[] = {
+static gcc_constexpr_data Text2EventSTRUCT Text2Event[] = {
 #include "InputEvents_Text2Event.cpp"
   { NULL, NULL }
 };
@@ -255,7 +255,7 @@ struct string_to_key {
   unsigned key;
 };
 
-static const struct string_to_key string_to_key[] = {
+static gcc_constexpr_data struct string_to_key string_to_key[] = {
   { _T("APP1"), VK_APP1 },
   { _T("APP2"), VK_APP2 },
   { _T("APP3"), VK_APP3 },
@@ -287,7 +287,7 @@ static const struct string_to_key string_to_key[] = {
 unsigned
 InputEvents::findKey(const TCHAR *data)
 {
-  for (const struct string_to_key *p = string_to_key; p->name != NULL; ++p)
+  for (const struct string_to_key *p = &string_to_key[0]; p->name != NULL; ++p)
     if (_tcscmp(data, p->name) == 0)
       return p->key;
 
