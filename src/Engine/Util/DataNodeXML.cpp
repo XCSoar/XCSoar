@@ -76,21 +76,21 @@ DataNodeXML::add_child(const TCHAR *name)
 DataNode*
 DataNodeXML::get_child_by_name(const TCHAR *name, const unsigned i) const
 {
-  XMLNode child = m_xml_node->getChildNode(name, i);
-  if (child.isEmpty())
+  const XMLNode *child = m_xml_node->getChildNode(name, i);
+  if (child == NULL)
     return NULL;
 
-  return new DataNodeXML(child);
+  return new DataNodeXML(*child);
 }
 
 DataNode*
 DataNodeXML::get_child(unsigned i) const
 {
-  XMLNode child = m_xml_node->getChildNode(i);
-  if (child.isEmpty())
+  const XMLNode *child = m_xml_node->getChildNode(i);
+  if (child == NULL)
     return NULL;
 
-  return new DataNodeXML(child);
+  return new DataNodeXML(*child);
 }
 
 void

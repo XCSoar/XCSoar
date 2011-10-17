@@ -188,19 +188,21 @@ public:
   }
 
   /** @return ith child node */
-  XMLNode getChildNode(unsigned i);
+  gcc_pure
+  const XMLNode *getChildNode(unsigned i) const;
 
   /**
    * @return ith child node with specific name (return an empty node
    * if failing)
    */
-  XMLNode getChildNode(const TCHAR *name, unsigned i);
+  gcc_pure
+  const XMLNode *getChildNode(const TCHAR *name, unsigned i) const;
 
   /**
    * @return next child node with specific name (return an empty node
    * if failing)
    */
-  XMLNode getChildNode(const TCHAR *name, unsigned *i=NULL);
+  const XMLNode *getChildNode(const TCHAR *name, unsigned *i=NULL) const;
 
   /** @return the number of child node with specific name */
   unsigned nChildNode(const TCHAR *name) const;

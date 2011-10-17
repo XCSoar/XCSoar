@@ -650,10 +650,11 @@ LoadChild(WndForm &form, ContainerWindow &parent,
     property->SetHelpText(StringToStringDflt(node.getAttribute(_T("Help")), _T("")));
 
     // If the control has (at least) one DataField child control
-    if (node.nChildNode(_T("DataField")) > 0){
+    const XMLNode *data_field_node = node.getChildNode(_T("DataField"), 0u);
+    if (data_field_node != NULL) {
       // -> Load the first DataField control
       DataField *data_field =
-        LoadDataField(node.getChildNode(_T("DataField"), 0u),
+        LoadDataField(*data_field_node,
                       lookup_table, dialog_style);
 
       if (data_field != NULL)

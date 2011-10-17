@@ -1094,7 +1094,8 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
   error = xml.error;
 
   // If the document node does not have childnodes
-  if (xnode.nChildNode() < 1) {
+  const XMLNode *child = xnode.getChildNode(0u);
+  if (child == NULL) {
     // If XMLResults object exists
     if (pResults) {
       // -> Save the error type
@@ -1107,14 +1108,15 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
     return emptyXMLNode;
   } else {
     // Set the document's first childnode as new main node
-    xnode = xnode.getChildNode(0u);
+    xnode = XMLNode(*child);
   }
 
   // If the new main node is the xml declaration
   // -> try to take the first childnode again
   if (xnode.isDeclaration()) {
     // If the declaration does not have childnodes
-    if (xnode.nChildNode() < 1) {
+    child = xnode.getChildNode(0u);
+    if (child == NULL) {
       // If XMLResults object exists
       if (pResults) {
         // -> Save the error type
@@ -1127,7 +1129,7 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
       return emptyXMLNode;
     } else {
       // Set the declaration's first childnode as new main node
-      xnode = xnode.getChildNode(0u);
+      xnode = XMLNode(*child);
     }
   }
 
@@ -1498,11 +1500,11 @@ XMLNode::nChildNode(const TCHAR *name) const
   return j;
 }
 
-XMLNode
-XMLNode::getChildNode(const TCHAR *name, unsigned *j)
+const XMLNode *
+XMLNode::getChildNode(const TCHAR *name, unsigned *j) const
 {
   if (!d)
-    return emptyXMLNode;
+    return NULL;
 
   unsigned i = 0, n = d->nChild;
   if (j)
@@ -1512,19 +1514,19 @@ XMLNode::getChildNode(const TCHAR *name, unsigned *j)
     if (_tcsicmp(pc->d->lpszName, name) == 0) {
       if (j)
         *j = i + 1;
-      return *pc;
+      return pc;
     }
     pc++;
   }
 
-  return emptyXMLNode;
+  return NULL;
 }
 
-XMLNode
-XMLNode::getChildNode(const TCHAR *name, unsigned j)
+const XMLNode *
+XMLNode::getChildNode(const TCHAR *name, unsigned j) const
 {
   if (!d)
-    return emptyXMLNode;
+    return NULL;
 
   unsigned i = 0;
   while (j-- > 0)
@@ -1618,13 +1620,13 @@ XMLNode::getText(unsigned i) const
   return d->pText[i];
 }
 
-XMLNode
-XMLNode::getChildNode(unsigned i)
+const XMLNode *
+XMLNode::getChildNode(unsigned i) const
 {
   if (!d)
-    return emptyXMLNode;
+    return NULL;
   if (i >= d->nChild)
-    return emptyXMLNode;
+    return NULL;
 
-  return d->pChild[i];
+  return &d->pChild[i];
 }
