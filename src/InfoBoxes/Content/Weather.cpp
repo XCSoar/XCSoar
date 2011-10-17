@@ -34,9 +34,20 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/Float.hpp"
 #include "DataField/Boolean.hpp"
+#include "Util/Macros.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
+
+static gcc_constexpr_data
+CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(InfoBoxContentWind::PnlEditOnWindSpeed),
+  DeclareCallBackEntry(InfoBoxContentWind::PnlEditOnWindDirection),
+
+  DeclareCallBackEntry(InfoBoxContentWind::PnlSetupOnSetup),
+
+  DeclareCallBackEntry(NULL)
+};
 
 void
 InfoBoxContentHumidity::Update(InfoBoxWindow &infobox)
@@ -269,7 +280,7 @@ InfoBoxContentWind::PnlSetupOnSetup(gcc_unused WndButton &Sender)
  * Subpart callback function pointers
  */
 
-InfoBoxContentWind::PanelContent InfoBoxContentWind::Panels[] = {
+static const InfoBoxContentWind::PanelContent Panels[] = {
 InfoBoxContentWind::PanelContent (
   _("Edit"),
   (*InfoBoxContentWind::PnlEditLoad),
@@ -282,22 +293,12 @@ InfoBoxContentWind::PanelContent (
   (*InfoBoxContentWind::PnlSetupOnTabPreHide))
 };
 
-const CallBackTableEntry InfoBoxContentWind::CallBackTable[] = {
-  DeclareCallBackEntry(InfoBoxContentWind::PnlEditOnWindSpeed),
-  DeclareCallBackEntry(InfoBoxContentWind::PnlEditOnWindDirection),
-
-  DeclareCallBackEntry(InfoBoxContentWind::PnlSetupOnSetup),
-
-  DeclareCallBackEntry(NULL)
+const InfoBoxContentWind::DialogContent InfoBoxContentWind::dlgContent = {
+  ARRAY_SIZE(Panels), &Panels[0],
+  &CallBackTable[0],
 };
 
-InfoBoxContentWind::DialogContent InfoBoxContentWind::dlgContent = {
-    InfoBoxContentWind::PANELSIZE,
-    InfoBoxContentWind::Panels,
-    InfoBoxContentWind::CallBackTable
-};
-
-InfoBoxContentWind::DialogContent*
+const InfoBoxContentWind::DialogContent *
 InfoBoxContentWind::GetDialogContent() {
   return &dlgContent;
 }

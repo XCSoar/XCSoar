@@ -30,11 +30,8 @@ Copyright_License {
 
 class InfoBoxContentMacCready : public InfoBoxContent
 {
-private:
-  static const int PANELSIZE = 2;
-
 public:
-  virtual DialogContent* GetDialogContent();
+  virtual const DialogContent *GetDialogContent();
 
   static Window* PnlEditLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
   static void PnlEditOnCloseClicked(WndButton &Sender);
@@ -45,10 +42,7 @@ public:
   static void PnlEditOnMinusSmall(WndButton &Sender);
   static void PnlEditOnMinusBig(WndButton &Sender);
 
-  static const CallBackTableEntry CallBackTable[];
-  static PanelContent Panels[];
-
-  static DialogContent dlgContent;
+  static const DialogContent dlgContent;
 
   static Window* PnlInfoLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
 

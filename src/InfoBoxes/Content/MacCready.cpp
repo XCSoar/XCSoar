@@ -36,6 +36,7 @@ Copyright_License {
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
+#include "Util/Macros.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -159,8 +160,7 @@ InfoBoxContentMacCready::PnlSetupOnMode(gcc_unused WndButton &Sender)
  * Subpart callback function pointers
  */
 
-
-InfoBoxContentMacCready::PanelContent InfoBoxContentMacCready::Panels[] = {
+static const InfoBoxContentMacCready::PanelContent panels[] = {
   InfoBoxContentMacCready::PanelContent (
     _("Edit"),
     (*InfoBoxContentMacCready::PnlEditLoad)),
@@ -172,7 +172,7 @@ InfoBoxContentMacCready::PanelContent InfoBoxContentMacCready::Panels[] = {
     (*InfoBoxContentMacCready::PnlSetupPreShow))
 };
 
-const CallBackTableEntry InfoBoxContentMacCready::CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry call_back_table[] = {
   DeclareCallBackEntry(InfoBoxContentMacCready::PnlEditOnPlusSmall),
   DeclareCallBackEntry(InfoBoxContentMacCready::PnlEditOnPlusBig),
   DeclareCallBackEntry(InfoBoxContentMacCready::PnlEditOnMinusSmall),
@@ -184,13 +184,12 @@ const CallBackTableEntry InfoBoxContentMacCready::CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-InfoBoxContentMacCready::DialogContent InfoBoxContentMacCready::dlgContent = {
-    InfoBoxContentMacCready::PANELSIZE,
-    InfoBoxContentMacCready::Panels,
-    InfoBoxContentMacCready::CallBackTable
+const InfoBoxContentMacCready::DialogContent InfoBoxContentMacCready::dlgContent = {
+  ARRAY_SIZE(panels), &panels[0],
+  &call_back_table[0],
 };
 
-InfoBoxContentMacCready::DialogContent*
+const InfoBoxContentMacCready::DialogContent*
 InfoBoxContentMacCready::GetDialogContent() {
   return &dlgContent;
 }

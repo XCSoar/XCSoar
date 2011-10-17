@@ -67,6 +67,7 @@ public:
   }
 
   struct PanelContent {
+    gcc_constexpr_ctor
     PanelContent(const TCHAR* _name,
                         Window* (*_load)(SingleWindow&, TabBarControl*, WndForm*, int),
                         bool (*_preHide)(void) = NULL,
@@ -89,11 +90,11 @@ public:
 
   struct DialogContent {
     const int PANELSIZE;
-    PanelContent* Panels;
+    const PanelContent *Panels;
     const CallBackTableEntry *CallBackTable;
   };
 
-  virtual DialogContent* GetDialogContent() {
+  virtual const DialogContent *GetDialogContent() {
     return NULL;
   }
 

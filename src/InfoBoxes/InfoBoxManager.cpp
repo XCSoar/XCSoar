@@ -325,7 +325,7 @@ InfoBoxManager::ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode)
   ResetDisplayTimeOut();
 }
 
-InfoBoxContent::DialogContent*
+const InfoBoxContent::DialogContent *
 InfoBoxManager::GetDialogContent(const int id)
 {
   if (id < 0)

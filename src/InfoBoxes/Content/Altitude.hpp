@@ -31,21 +31,13 @@ Copyright_License {
 
 class InfoBoxContentAltitude : public InfoBoxContent
 {
-private:
-  static const int PANELSIZE = 3;
-
 public:
-  virtual DialogContent* GetDialogContent();
+  virtual const DialogContent *GetDialogContent();
 
   static Window* PnlInfoLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
   static void OnTimerNotify(WndForm &Sender);
   static bool PnlInfoOnTabPreShow(TabBarControl::EventType EventType);
   static bool PnlInfoUpdate();
-
-  static const CallBackTableEntry CallBackTable[];
-  static PanelContent Panels[];
-
-  static DialogContent dlgContent;
 
   static Window* PnlSimulatorLoad(SingleWindow &parent, TabBarControl* wTabBar,
                                   WndForm* wf, const int id);

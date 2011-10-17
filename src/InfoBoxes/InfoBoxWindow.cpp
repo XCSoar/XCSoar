@@ -436,7 +436,7 @@ InfoBoxWindow::HandleQuickAccess(const TCHAR *Value)
   return false;
 }
 
-InfoBoxContent::DialogContent*
+const InfoBoxContent::DialogContent *
 InfoBoxWindow::GetDialogContent()
 {
   if (content != NULL)

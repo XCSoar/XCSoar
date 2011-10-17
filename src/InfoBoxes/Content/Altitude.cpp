@@ -45,6 +45,18 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
+static gcc_constexpr_data
+CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnPlusBig),
+  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnPlusSmall),
+  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnMinusSmall),
+  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnMinusBig),
+  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSetupOnQNH),
+  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSetupOnSetup),
+
+  DeclareCallBackEntry(NULL)
+};
+
 /*
  * InfoBoxContentAltitude
  *
@@ -257,7 +269,8 @@ InfoBoxContentAltitude::PnlSetupOnSetup(gcc_unused WndButton &Sender)
  * Subpart callback function pointers
  */
 
-InfoBoxContentAltitude::PanelContent InfoBoxContentAltitude::Panels[] = {
+static const
+InfoBoxContentAltitude::PanelContent Panels[] = {
   InfoBoxContentAltitude::PanelContent (
     _("Simulator"),
     (*InfoBoxContentAltitude::PnlSimulatorLoad)),
@@ -273,24 +286,13 @@ InfoBoxContentAltitude::PanelContent InfoBoxContentAltitude::Panels[] = {
     (*InfoBoxContentAltitude::PnlSetupLoad))
 };
 
-const CallBackTableEntry InfoBoxContentAltitude::CallBackTable[] = {
-  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnPlusBig),
-  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnPlusSmall),
-  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnMinusSmall),
-  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnMinusBig),
-  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSetupOnQNH),
-  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSetupOnSetup),
-
-  DeclareCallBackEntry(NULL)
+static gcc_constexpr_data
+InfoBoxContentAltitude::DialogContent dlgContent = {
+  ARRAY_SIZE(Panels), &Panels[0],
+  &CallBackTable[0],
 };
 
-InfoBoxContentAltitude::DialogContent InfoBoxContentAltitude::dlgContent = {
-    InfoBoxContentAltitude::PANELSIZE,
-    InfoBoxContentAltitude::Panels,
-    InfoBoxContentAltitude::CallBackTable
-};
-
-InfoBoxContentAltitude::DialogContent*
+const InfoBoxContentAltitude::DialogContent *
 InfoBoxContentAltitude::GetDialogContent() {
   return &dlgContent;
 }

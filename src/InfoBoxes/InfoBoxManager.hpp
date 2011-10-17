@@ -83,7 +83,7 @@ namespace InfoBoxManager
   void Show();
   void Hide();
 
-  InfoBoxContent::DialogContent* GetDialogContent(const int id);
+  const InfoBoxContent::DialogContent *GetDialogContent(const int id);
 
   unsigned GetCurrentPanel();
   const TCHAR* GetCurrentPanelName();
