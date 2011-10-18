@@ -111,6 +111,16 @@ protected:
     unsigned *pOrder;
 
     unsigned ref_count;
+
+    typedef const XMLNode *const_iterator;
+
+    const_iterator begin() const {
+      return pChild;
+    }
+
+    const_iterator end() const {
+      return pChild + nChild;
+    }
   };
 
   XMLNodeData *d;
@@ -165,6 +175,16 @@ public:
     assert(d != NULL);
 
     return d->nText;
+  }
+
+  typedef XMLNodeData::const_iterator const_iterator;
+
+  const_iterator begin() const {
+    return d->begin();
+  }
+
+  const_iterator end() const {
+    return d->end();
   }
 
   /** @return ith child node */

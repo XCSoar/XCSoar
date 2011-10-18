@@ -97,7 +97,8 @@ LoadChild(WndForm &form, ContainerWindow &parent,
 
 static void
 LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
-                    const CallBackTableEntry *lookup_table, XMLNode *node,
+                    const CallBackTableEntry *lookup_table,
+                    const XMLNode *node,
                     const DialogStyle dialog_style);
 
 /**
@@ -799,12 +800,12 @@ LoadChild(WndForm &form, ContainerWindow &parent,
 
     window = tabbed;
 
-    const unsigned n = node.nChildNode();
-    for (unsigned i = 0; i < n; ++i) {
+    for (XMLNode::const_iterator i = node.begin(), end = node.end();
+         i != end; ++i) {
       // Load each child control from the child nodes
       Window *child = LoadChild(form, *tabbed,
                                 lookup_table,
-                                node.getChildNode(i), dialog_style);
+                                *i, dialog_style);
       if (child != NULL)
         tabbed->AddClient(child);
     }
@@ -869,19 +870,18 @@ LoadChild(WndForm &form, ContainerWindow &parent,
  */
 static void
 LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
-                    const CallBackTableEntry *lookup_table, XMLNode *node,
+                    const CallBackTableEntry *lookup_table,
+                    const XMLNode *node,
                     const DialogStyle dialog_style)
 {
-  // Get the number of childnodes
-  int count = node->nChildNode();
-
   unsigned bottom_most = 0;
 
   // Iterate through the childnodes
-  for (int i = 0; i < count; i++) {
+  for (XMLNode::const_iterator i = node->begin(), end = node->end();
+       i != end; ++i) {
     // Load each child control from the child nodes
     Window *window = LoadChild(form, parent, lookup_table,
-                               node->getChildNode(i), dialog_style,
+                               *i, dialog_style,
                                bottom_most);
     if (window == NULL)
       continue;
