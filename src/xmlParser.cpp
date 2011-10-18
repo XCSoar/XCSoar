@@ -580,7 +580,6 @@ XMLNode::AddAttribute(const TCHAR *lpszName, const TCHAR *lpszValuev)
 {
   assert(lpszName != NULL);
 
-  addToOrder(d->pAttribute.size(), eNodeAttribute);
   d->pAttribute.push_back((XMLAttribute){lpszName, lpszValuev});
 }
 
@@ -1215,8 +1214,6 @@ XMLNode::enumContent(const XMLNodeData *pEntry, unsigned i,
   switch (j) {
   case eNodeChild:
     return pEntry->pChild[i].d;
-  case eNodeAttribute:
-    return &pEntry->pAttribute[i];
   case eNodeText:
     return (void*)(pEntry->pText[i]);
   }
@@ -1325,9 +1322,6 @@ XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
 
       // Recursively add child nodes
       serialiseR((const XMLNodeData*)pChild, writer, nChildFormat);
-      break;
-
-    default:
       break;
     }
   }

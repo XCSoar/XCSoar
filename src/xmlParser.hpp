@@ -56,7 +56,6 @@ enum XMLError {
 /** Enumeration used to manage type of data. */
 enum XMLElementType {
   eNodeChild = 0,
-  eNodeAttribute = 1,
   eNodeText = 2,
 };
 
@@ -116,7 +115,7 @@ protected:
     }
 
     unsigned Size() const {
-      return pChild.size() + pText.size() + pAttribute.size();
+      return pChild.size() + pText.size();
     }
 
     typedef std::vector<XMLNode>::const_iterator const_iterator;
