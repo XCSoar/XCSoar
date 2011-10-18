@@ -495,7 +495,7 @@ WndListFrame::on_mouse_down(PixelScalar x, PixelScalar y)
       // -> select it
       SetCursorIndex(index);
 
-      drag_y = origin + y;
+      drag_y = GetPixelOrigin() + y;
       dragging = true;
       set_capture();
     }
