@@ -28,6 +28,7 @@ Copyright_License {
 
 #include "Simulator.hpp"
 #include "DeviceBlackboard.hpp"
+#include "Components.hpp"
 #include "Message.hpp"
 #include "Language/Language.hpp"
 #include "Units/UnitsFormatter.hpp"
@@ -67,21 +68,21 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
 
   switch (keycode) {
   case ibkUp:
-    device_blackboard.SetSpeed(
+    device_blackboard->SetSpeed(
         XCSoarInterface::Basic().ground_speed + fixed_step);
     return true;
 
   case ibkDown:
-    device_blackboard.SetSpeed(
+    device_blackboard->SetSpeed(
         max(fixed_zero, XCSoarInterface::Basic().ground_speed - fixed_step));
     return true;
 
   case ibkLeft:
-    device_blackboard.SetTrack(XCSoarInterface::Basic().track - a5);
+    device_blackboard->SetTrack(XCSoarInterface::Basic().track - a5);
     return true;
 
   case ibkRight:
-    device_blackboard.SetTrack(XCSoarInterface::Basic().track + a5);
+    device_blackboard->SetTrack(XCSoarInterface::Basic().track + a5);
     return true;
 
   case ibkEnter:

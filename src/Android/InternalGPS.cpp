@@ -26,6 +26,7 @@ Copyright_License {
 #include "Java/Class.hpp"
 #include "org_xcsoar_InternalGPS.h"
 #include "DeviceBlackboard.hpp"
+#include "Components.hpp"
 #include "OS/Clock.hpp"
 #include "Geo/Geoid.hpp"
 
@@ -69,8 +70,8 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
                                        "index", "I");
   unsigned index = env->GetIntField(obj, fid_index);
 
-  ScopeLock protect(device_blackboard.mutex);
-  NMEAInfo &basic = device_blackboard.SetRealState(index);
+  ScopeLock protect(device_blackboard->mutex);
+  NMEAInfo &basic = device_blackboard->SetRealState(index);
 
   switch (connected) {
   case 0: /* not connected */
@@ -90,7 +91,7 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
     break;
   }
 
-  device_blackboard.ScheduleMerge();
+  device_blackboard->ScheduleMerge();
 }
 
 JNIEXPORT void JNICALL
@@ -107,8 +108,8 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
                                        "index", "I");
   unsigned index = env->GetIntField(obj, fid_index);
 
-  ScopeLock protect(device_blackboard.mutex);
-  NMEAInfo &basic = device_blackboard.SetRealState(index);
+  ScopeLock protect(device_blackboard->mutex);
+  NMEAInfo &basic = device_blackboard->SetRealState(index);
   basic.UpdateClock();
   basic.connected.Update(basic.clock);
 
@@ -161,5 +162,5 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
     basic.acceleration.g_load = fixed(acceleration);
   }
 
-  device_blackboard.ScheduleMerge();
+  device_blackboard->ScheduleMerge();
 }

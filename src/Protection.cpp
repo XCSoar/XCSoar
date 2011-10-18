@@ -78,16 +78,16 @@ TriggerCalculatedUpdate()
 void CreateCalculationThread(void) {
   assert(glide_computer != NULL);
 
-  device_blackboard.ReadSettingsComputer(XCSoarInterface::SettingsComputer());
+  device_blackboard->ReadSettingsComputer(XCSoarInterface::SettingsComputer());
 
-  glide_computer->ReadBlackboard(device_blackboard.Basic());
-  glide_computer->ReadSettingsComputer(device_blackboard.SettingsComputer());
+  glide_computer->ReadBlackboard(device_blackboard->Basic());
+  glide_computer->ReadSettingsComputer(device_blackboard->SettingsComputer());
   glide_computer->ProcessGPS();
 
-  device_blackboard.ReadBlackboard(glide_computer->Calculated());
+  device_blackboard->ReadBlackboard(glide_computer->Calculated());
 
   // Create a read thread for performing calculations
-  merge_thread = new MergeThread(device_blackboard);
+  merge_thread = new MergeThread(*device_blackboard);
   merge_thread->Trigger();
 
   calculation_thread = new CalculationThread(*glide_computer);

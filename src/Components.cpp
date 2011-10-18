@@ -111,6 +111,8 @@ RasterWeather RASP;
 DrawThread *draw_thread;
 #endif
 
+DeviceBlackboard *device_blackboard;
+
 MergeThread *merge_thread;
 CalculationThread *calculation_thread;
 
@@ -313,7 +315,7 @@ XCSoarInterface::Startup()
   InputEvents::readFile();
 
   // Initialize DeviceBlackboard
-  device_blackboard.Initialise();
+  device_blackboard = new DeviceBlackboard();
 
   // Initialize Markers
   marks = new Markers();
@@ -392,8 +394,8 @@ XCSoarInterface::Startup()
                         false);
 
   // ReSynchronise the blackboards here since SetHome touches them
-  device_blackboard.Merge();
-  ReadBlackboardBasic(device_blackboard.Basic());
+  device_blackboard->Merge();
+  ReadBlackboardBasic(device_blackboard->Basic());
 
   // Scan for weather forecast
   LogStartUp(_T("RASP load"));
@@ -404,7 +406,8 @@ XCSoarInterface::Startup()
                operation);
 
   const AircraftState aircraft_state =
-    ToAircraftState(device_blackboard.Basic(), device_blackboard.Calculated());
+    ToAircraftState(device_blackboard->Basic(),
+                    device_blackboard->Calculated());
   airspace_warning->reset(aircraft_state);
   airspace_warning->set_config(CommonInterface::SettingsComputer().airspace.warnings);
 
@@ -606,6 +609,9 @@ XCSoarInterface::Shutdown(void)
   RawLoggerShutdown();
 
   delete replay;
+
+  delete device_blackboard;
+  device_blackboard = NULL;
 
   protected_task_manager->SetRoutePlanner(NULL);
 

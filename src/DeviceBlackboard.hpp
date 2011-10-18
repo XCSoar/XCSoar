@@ -73,7 +73,7 @@ public:
   Mutex mutex;
 
 public:
-  void Initialise();
+  DeviceBlackboard();
   void ReadBlackboard(const DerivedInfo &derived_info);
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
 
@@ -143,7 +143,5 @@ public:
    */
   void Merge();
 };
-
-extern DeviceBlackboard device_blackboard;
 
 #endif

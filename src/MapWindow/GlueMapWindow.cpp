@@ -80,9 +80,9 @@ GlueMapWindow::ExchangeBlackboard()
 {
   /* copy device_blackboard to MapWindow */
 
-  device_blackboard.mutex.Lock();
-  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
-  device_blackboard.mutex.Unlock();
+  device_blackboard->mutex.Lock();
+  ReadBlackboard(device_blackboard->Basic(), device_blackboard->Calculated());
+  device_blackboard->mutex.Unlock();
 
 #ifndef ENABLE_OPENGL
   next_mutex.Lock();

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Gauge/GlueGaugeVario.hpp"
 #include "DeviceBlackboard.hpp"
+#include "Components.hpp"
 #include "Interface.hpp"
 
 void
@@ -42,8 +43,8 @@ void
 GlueGaugeVario::on_paint_buffer(Canvas &canvas)
 {
   if (!blackboard_valid) {
-    const ScopeLock protect(device_blackboard.mutex);
-    CommonInterface::ReadBlackboardBasic(device_blackboard.Basic());
+    const ScopeLock protect(device_blackboard->mutex);
+    CommonInterface::ReadBlackboardBasic(device_blackboard->Basic());
   }
 
   GaugeVario::on_paint_buffer(canvas);

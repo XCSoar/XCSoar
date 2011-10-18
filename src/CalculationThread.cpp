@@ -61,12 +61,12 @@ CalculationThread::Tick()
 
   // update and transfer master info to glide computer
   {
-    ScopeLock protect(device_blackboard.mutex);
+    ScopeLock protect(device_blackboard->mutex);
 
-    gps_updated = device_blackboard.Basic().location_available.Modified(glide_computer.Basic().location_available);
+    gps_updated = device_blackboard->Basic().location_available.Modified(glide_computer.Basic().location_available);
 
     // Copy data from DeviceBlackboard to GlideComputerBlackboard
-    glide_computer.ReadBlackboard(device_blackboard.Basic());
+    glide_computer.ReadBlackboard(device_blackboard->Basic());
   }
 
   {
@@ -90,8 +90,8 @@ CalculationThread::Tick()
   // should be changed in DoCalculations, so we only need to write
   // that one back (otherwise we may write over new data)
   {
-    ScopeLock protect(device_blackboard.mutex);
-    device_blackboard.ReadBlackboard(glide_computer.Calculated());
+    ScopeLock protect(device_blackboard->mutex);
+    device_blackboard->ReadBlackboard(glide_computer.Calculated());
   }
 
   // if (new GPS data)

@@ -28,6 +28,7 @@
 #include "Language/Language.hpp"
 #include "Dialogs/Message.hpp"
 #include "DeviceBlackboard.hpp"
+#include "Components.hpp"
 #include "Profile/DeviceConfig.hpp"
 
 NmeaReplayGlue::NmeaReplayGlue()
@@ -76,7 +77,7 @@ NmeaReplayGlue::Stop()
   delete parser;
   parser = NULL;
 
-  device_blackboard.StopReplay();
+  device_blackboard->StopReplay();
 }
 
 void
@@ -84,14 +85,14 @@ NmeaReplayGlue::on_sentence(const char *line)
 {
   assert(device != NULL);
 
-  ScopeLock protect(device_blackboard.mutex);
-  NMEAInfo &data = device_blackboard.SetReplayState();
+  ScopeLock protect(device_blackboard->mutex);
+  NMEAInfo &data = device_blackboard->SetReplayState();
 
   if ((device != NULL && device->ParseNMEA(line, data)) ||
       (parser != NULL && parser->ParseLine(line, data))) {
     data.gps.replay = true;
     data.connected.Update(fixed(MonotonicClockMS()) / 1000);
-    device_blackboard.ScheduleMerge();
+    device_blackboard->ScheduleMerge();
   }
 }
 

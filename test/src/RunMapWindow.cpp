@@ -72,7 +72,7 @@ using std::min;
 void MapProjectionBlackboard::ReadMapProjection(const MapWindowProjection &) {}
 #endif
 
-DeviceBlackboard device_blackboard;
+DeviceBlackboard *device_blackboard;
 
 ProtectedTaskManager *protected_task_manager;
 ProtectedAirspaceWarningManager *airspace_warnings;

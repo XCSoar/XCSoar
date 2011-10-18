@@ -28,6 +28,7 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Device/Register.hpp"
 #include "DeviceBlackboard.hpp"
+#include "Components.hpp"
 #include "Port/ConfiguredPort.hpp"
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
@@ -77,10 +78,10 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver,
 
   reopen_clock.update();
 
-  device_blackboard.mutex.Lock();
-  device_blackboard.SetRealState(index).Reset();
-  device_blackboard.ScheduleMerge();
-  device_blackboard.mutex.Unlock();
+  device_blackboard->mutex.Lock();
+  device_blackboard->SetRealState(index).Reset();
+  device_blackboard->ScheduleMerge();
+  device_blackboard->mutex.Unlock();
 
   settings_sent.Clear();
   settings_received.Clear();
@@ -176,10 +177,10 @@ DeviceDescriptor::Close()
   pDevPipeTo = NULL;
   ticker = false;
 
-  device_blackboard.mutex.Lock();
-  device_blackboard.SetRealState(index).Reset();
-  device_blackboard.ScheduleMerge();
-  device_blackboard.mutex.Unlock();
+  device_blackboard->mutex.Lock();
+  device_blackboard->SetRealState(index).Reset();
+  device_blackboard->ScheduleMerge();
+  device_blackboard->mutex.Unlock();
 
   settings_sent.Clear();
   settings_received.Clear();
@@ -226,7 +227,7 @@ DeviceDescriptor::CanDeclare() const
 {
   return Driver != NULL &&
     (Driver->CanDeclare() ||
-     device_blackboard.IsFLARM(index));
+     device_blackboard->IsFLARM(index));
 }
 
 bool
@@ -250,8 +251,8 @@ DeviceDescriptor::IsManageable() const
 bool
 DeviceDescriptor::IsConnected() const
 {
-  ScopeLock protect(device_blackboard.mutex);
-  return device_blackboard.RealState(index).connected;
+  ScopeLock protect(device_blackboard->mutex);
+  return device_blackboard->RealState(index).connected;
 }
 
 bool
@@ -324,8 +325,8 @@ DeviceDescriptor::PutMacCready(fixed value)
   if (!device->PutMacCready(value))
     return false;
 
-  ScopeLock protect(device_blackboard.mutex);
-  NMEAInfo &basic = device_blackboard.SetRealState(index);
+  ScopeLock protect(device_blackboard->mutex);
+  NMEAInfo &basic = device_blackboard->SetRealState(index);
   settings_sent.mac_cready = value;
   settings_sent.mac_cready_available.Update(basic.clock);
 
@@ -341,8 +342,8 @@ DeviceDescriptor::PutBugs(fixed value)
   if (!device->PutBugs(value))
     return false;
 
-  ScopeLock protect(device_blackboard.mutex);
-  NMEAInfo &basic = device_blackboard.SetRealState(index);
+  ScopeLock protect(device_blackboard->mutex);
+  NMEAInfo &basic = device_blackboard->SetRealState(index);
   settings_sent.bugs = value;
   settings_sent.bugs_available.Update(basic.clock);
 
@@ -358,8 +359,8 @@ DeviceDescriptor::PutBallast(fixed value)
   if (!device->PutBallast(value))
     return false;
 
-  ScopeLock protect(device_blackboard.mutex);
-  NMEAInfo &basic = device_blackboard.SetRealState(index);
+  ScopeLock protect(device_blackboard->mutex);
+  NMEAInfo &basic = device_blackboard->SetRealState(index);
   settings_sent.ballast_fraction = value;
   settings_sent.ballast_fraction_available.Update(basic.clock);
 
@@ -393,8 +394,8 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure &value)
   if (!device->PutQNH(value))
     return false;
 
-  ScopeLock protect(device_blackboard.mutex);
-  NMEAInfo &basic = device_blackboard.SetRealState(index);
+  ScopeLock protect(device_blackboard->mutex);
+  NMEAInfo &basic = device_blackboard->SetRealState(index);
   settings_sent.qnh = value;
   settings_sent.qnh_available.Update(basic.clock);
 
@@ -425,7 +426,7 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
 
   bool result = device != NULL && device->Declare(declaration, env);
 
-  if (device_blackboard.IsFLARM(index)) {
+  if (device_blackboard->IsFLARM(index)) {
     _stprintf(text, _T("%s: FLARM."), _("Sending declaration"));
     env.SetText(text);
     result = FlarmDeclare(Com, declaration, env) || result;
@@ -496,8 +497,8 @@ DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
 bool
 DeviceDescriptor::ParseLine(const char *line)
 {
-  ScopeLock protect(device_blackboard.mutex);
-  NMEAInfo &basic = device_blackboard.SetRealState(index);
+  ScopeLock protect(device_blackboard->mutex);
+  NMEAInfo &basic = device_blackboard->SetRealState(index);
   basic.UpdateClock();
   return ParseNMEA(line, basic);
 }
@@ -515,5 +516,5 @@ DeviceDescriptor::LineReceived(const char *line)
   }
 
   if (ParseLine(line))
-    device_blackboard.ScheduleMerge();
+    device_blackboard->ScheduleMerge();
 }

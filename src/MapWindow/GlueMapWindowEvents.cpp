@@ -29,6 +29,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "DeviceBlackboard.hpp"
+#include "Components.hpp"
 #include "Protection.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/Task.hpp"
@@ -196,11 +197,11 @@ GlueMapWindow::on_mouse_up(PixelScalar x, PixelScalar y)
       const Angle newbearing = drag_start_geopoint.Bearing(G);
       if (((newbearing - oldbearing).AsDelta().AbsoluteDegrees() < fixed(30)) ||
           (Basic().ground_speed < minspeed))
-        device_blackboard.SetSpeed(min(fixed(100.0),
-                                       max(minspeed,
-                                           fixed(distance / (Layout::FastScale(3))))));
+        device_blackboard->SetSpeed(min(fixed(100.0),
+                                        max(minspeed,
+                                            fixed(distance / (Layout::FastScale(3))))));
 
-      device_blackboard.SetTrack(newbearing);
+      device_blackboard->SetTrack(newbearing);
       // change bearing without changing speed if direction change > 30
       // 20080815 JMW prevent dragging to stop glider
 

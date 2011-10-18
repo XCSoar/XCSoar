@@ -38,16 +38,11 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-DeviceBlackboard device_blackboard;
-
 /**
  * Initializes the DeviceBlackboard
  */
-void
-DeviceBlackboard::Initialise()
+DeviceBlackboard::DeviceBlackboard()
 {
-  ScopeLock protect(mutex);
-
   // Clear the gps_info and calculated_info
   gps_info.Reset();
   calculated_info.Reset();

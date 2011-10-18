@@ -28,6 +28,7 @@ Copyright_License {
 
 #include "Simulator.hpp"
 #include "DeviceBlackboard.hpp"
+#include "Components.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -53,12 +54,12 @@ InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode)
   const Angle a5 = Angle::Degrees(fixed(5));
   switch (keycode) {
   case ibkUp:
-    device_blackboard.SetTrack(
+    device_blackboard->SetTrack(
         XCSoarInterface::Basic().track + a5);
     return true;
 
   case ibkDown:
-    device_blackboard.SetTrack(
+    device_blackboard->SetTrack(
         XCSoarInterface::Basic().track - a5);
     return true;
 

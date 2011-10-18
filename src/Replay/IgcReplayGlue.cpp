@@ -26,6 +26,7 @@
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 #include "DeviceBlackboard.hpp"
+#include "Components.hpp"
 
 #include <algorithm>
 
@@ -60,13 +61,13 @@ IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
                           const Angle bearing, const fixed alt,
                           const fixed baroalt, const fixed t)
 {
-  device_blackboard.SetLocation(loc, speed, bearing, alt, baroalt, t);
+  device_blackboard->SetLocation(loc, speed, bearing, alt, baroalt, t);
 }
 
 void
 IgcReplayGlue::on_stop()
 {
-  device_blackboard.StopReplay();
+  device_blackboard->StopReplay();
 
   if (logger != NULL)
     logger->clearBuffer();

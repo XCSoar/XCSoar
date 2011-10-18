@@ -28,6 +28,7 @@ Copyright_License {
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
 #include "DeviceBlackboard.hpp"
+#include "Components.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
 #include "Form/List.hpp"
@@ -79,7 +80,7 @@ RefreshList()
 static bool
 IsFlarm(unsigned index)
 {
-  return device_blackboard.RealState(indices[index]).flarm.IsDetected();
+  return device_blackboard->RealState(indices[index]).flarm.IsDetected();
 }
 
 static void
@@ -102,7 +103,7 @@ PaintDevice(Canvas &canvas, const PixelRect rc, unsigned i)
 
   /* show a list of features that are available in the second row */
 
-  const NMEAInfo &basic = device_blackboard.RealState(indices[i]);
+  const NMEAInfo &basic = device_blackboard->RealState(indices[i]);
   if (basic.connected) {
     _tcscpy(buffer1, _("Connected"));
 

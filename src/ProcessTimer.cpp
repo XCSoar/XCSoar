@@ -156,7 +156,7 @@ ProcessTimer::SystemProcessTimer()
 static void
 BlackboardProcessTimer()
 {
-  device_blackboard.expire_wall_clock();
+  device_blackboard->expire_wall_clock();
   XCSoarInterface::ExchangeBlackboard();
 }
 
@@ -360,7 +360,7 @@ ProcessTimer::Process(void)
       m_clock.update();
     } else if (m_clock.elapsed() >= 1000) {
       m_clock.update();
-      device_blackboard.ProcessSimulation();
+      device_blackboard->ProcessSimulation();
     }
   }
 

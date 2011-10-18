@@ -76,16 +76,16 @@ XCSoarInterface::ExchangeBlackboard()
 void
 XCSoarInterface::ExchangeDeviceBlackboard()
 {
-  ScopeLock protect(device_blackboard.mutex);
-  ReadBlackboardBasic(device_blackboard.Basic());
+  ScopeLock protect(device_blackboard->mutex);
+  ReadBlackboardBasic(device_blackboard->Basic());
 
-  const NMEAInfo &real = device_blackboard.RealState();
+  const NMEAInfo &real = device_blackboard->RealState();
   movement_detected = real.connected && real.gps.real &&
     real.MovementDetected();
 
-  ReadBlackboardCalculated(device_blackboard.Calculated());
+  ReadBlackboardCalculated(device_blackboard->Calculated());
 
-  device_blackboard.ReadSettingsComputer(SettingsComputer());
+  device_blackboard->ReadSettingsComputer(SettingsComputer());
 }
 
 void
@@ -124,7 +124,7 @@ ActionInterface::SetMacCready(fixed mc, bool to_devices)
   /* send to external devices */
 
   if (to_devices)
-    device_blackboard.SetMC(mc);
+    device_blackboard->SetMC(mc);
 }
 
 void

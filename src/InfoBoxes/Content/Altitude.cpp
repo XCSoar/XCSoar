@@ -32,6 +32,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 
 #include "DeviceBlackboard.hpp"
+#include "Components.hpp"
 #include "Simulator.hpp"
 #include "Protection.hpp"
 #include "MainWindow.hpp"
@@ -211,8 +212,8 @@ InfoBoxContentAltitude::ChangeAltitude(const fixed step)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
-  device_blackboard.SetAltitude(basic.gps_altitude +
-                                (fixed)Units::ToSysAltitude(step));
+  device_blackboard->SetAltitude(basic.gps_altitude +
+                                 (fixed)Units::ToSysAltitude(step));
 }
 
 /*
@@ -250,7 +251,7 @@ InfoBoxContentAltitude::PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessK
   case DataField::daChange:
     settings_computer.pressure.SetQNH(Sender->GetAsFixed());
     settings_computer.pressure_available.Update(CommonInterface::Basic().clock);
-    device_blackboard.SetQNH(Sender->GetAsFixed());
+    device_blackboard->SetQNH(Sender->GetAsFixed());
     break;
 
   case DataField::daSpecial:
@@ -344,12 +345,12 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
     return true;
 
   case ibkLeft:
-    device_blackboard.SetTrack(
+    device_blackboard->SetTrack(
         basic.track - a5);
     return true;
 
   case ibkRight:
-    device_blackboard.SetTrack(
+    device_blackboard->SetTrack(
         basic.track + a5);
     return true;
 

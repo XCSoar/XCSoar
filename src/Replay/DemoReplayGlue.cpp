@@ -24,6 +24,7 @@
 #include "Replay/DemoReplayGlue.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "DeviceBlackboard.hpp"
+#include "Components.hpp"
 #include "Task/TaskManager.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 
@@ -111,7 +112,7 @@ DemoReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
                            const Angle bearing, const fixed alt,
                            const fixed baroalt, const fixed t)
 {
-  device_blackboard.SetLocation(loc, speed, bearing, alt, baroalt, t);
+  device_blackboard->SetLocation(loc, speed, bearing, alt, baroalt, t);
 }
 
 void
@@ -120,17 +121,17 @@ DemoReplayGlue::Start()
   ProtectedTaskManager::ExclusiveLease task_manager(*m_task_manager);
   ProtectedTaskAccessor ta(task_manager, fixed_zero);
   parms.realistic();
-  parms.start_alt = device_blackboard.Basic().nav_altitude;
-  DemoReplay::Start(ta, device_blackboard.Basic().location);
+  parms.start_alt = device_blackboard->Basic().nav_altitude;
+  DemoReplay::Start(ta, device_blackboard->Basic().location);
 
   // get wind from aircraft
-  aircraft.GetState().wind = device_blackboard.Calculated().wind;
+  aircraft.GetState().wind = device_blackboard->Calculated().wind;
 }
 
 void
 DemoReplayGlue::on_stop()
 {
-  device_blackboard.StopReplay();
+  device_blackboard->StopReplay();
 }
 
 bool
@@ -143,8 +144,8 @@ DemoReplayGlue::Update()
     return true;
 
   fixed floor_alt = fixed_300;
-  if (device_blackboard.Calculated().terrain_valid) {
-    floor_alt += device_blackboard.Calculated().terrain_altitude;
+  if (device_blackboard->Calculated().terrain_valid) {
+    floor_alt += device_blackboard->Calculated().terrain_altitude;
   }
 
   ProtectedTaskManager::ExclusiveLease task_manager(*m_task_manager);
