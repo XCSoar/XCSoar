@@ -32,6 +32,7 @@
 #include "Compiler.h"
 
 #include <vector>
+#include <list>
 
 #include <assert.h>
 #include <tchar.h>
@@ -94,7 +95,7 @@ protected:
     std::vector<const TCHAR *> pText;
 
     /** Array of attributes */
-    std::vector<XMLAttribute> pAttribute;
+    std::list<XMLAttribute> pAttribute;
 
     /** order in which the child_nodes,text_fields,clear_fields and */
     std::vector<unsigned> pOrder;
