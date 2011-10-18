@@ -30,6 +30,8 @@
 
 #include "Compiler.h"
 
+#include <vector>
+
 #include <assert.h>
 #include <tchar.h>
 
@@ -83,38 +85,26 @@ protected:
     /** Element name (=NULL if root) */
     const TCHAR *lpszName;
 
-    /** Num of child nodes */
-    unsigned nChild;
-
-    /** Num of text fields */
-    unsigned nText;
-
-    /** Num of attributes */
-    unsigned nAttribute;
-
     /** Whether node is an XML declaration - '<?xml ?>' */
     bool isDeclaration;
 
     /** Array of child nodes */
-    XMLNode *pChild;
+    std::vector<XMLNode> pChild;
 
     /** Array of text fields */
-    const TCHAR **pText;
+    std::vector<const TCHAR *> pText;
 
     /** Array of attributes */
-    XMLAttribute *pAttribute;
+    std::vector<XMLAttribute> pAttribute;
 
     /** order in which the child_nodes,text_fields,clear_fields and */
-    unsigned *pOrder;
+    std::vector<unsigned> pOrder;
 
     unsigned ref_count;
 
-    gcc_constexpr_ctor
     XMLNodeData(const TCHAR *_name, bool _is_declaration)
       :lpszName(_name),
-       nChild(0), nText(0), nAttribute(0),
        isDeclaration(_is_declaration),
-       pChild(NULL), pText(NULL), pAttribute(NULL), pOrder(NULL),
        ref_count(1) {}
     ~XMLNodeData();
 
@@ -122,21 +112,21 @@ protected:
     void Unref();
 
     bool HasChildren() const {
-      return nChild > 0 || nText > 0;
+      return !pChild.empty() || !pText.empty();
     }
 
     unsigned Size() const {
-      return nChild + nText + nAttribute;
+      return pChild.size() + pText.size() + pAttribute.size();
     }
 
-    typedef const XMLNode *const_iterator;
+    typedef std::vector<XMLNode>::const_iterator const_iterator;
 
     const_iterator begin() const {
-      return pChild;
+      return pChild.begin();
     }
 
     const_iterator end() const {
-      return pChild + nChild;
+      return pChild.end();
     }
   };
 

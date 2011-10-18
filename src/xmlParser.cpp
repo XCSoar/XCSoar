@@ -115,21 +115,15 @@ XMLNode::XMLNodeData::~XMLNodeData()
 {
   assert(ref_count == 0);
 
-  unsigned i = 0;
+  for (auto i = pText.begin(), end = pText.end(); i != end; ++i)
+    free((void*)*i);
 
-  for (i = 0; i < nChild; i++) {
-    destroyCurrentBuffer(pChild[i].d);
+  for (auto i = pAttribute.begin(), end = pAttribute.end(); i != end; ++i) {
+    XMLAttribute &attribute = *i;
+    free((void*)attribute.lpszName);
+    free((void*)attribute.lpszValue);
   }
-  free(pChild);
-  for (i = 0; i < nText; i++)
-    free((void*)pText[i]);
-  free(pText);
-  for (i = 0; i < nAttribute; i++) {
-    free((void*)pAttribute[i].lpszName);
-    free((void*)pAttribute[i].lpszValue);
-  }
-  free(pAttribute);
-  free(pOrder);
+
   free((void*)lpszName);
 }
 
@@ -565,32 +559,10 @@ XMLNode::XMLNode(const TCHAR *lpszName, bool isDeclaration)
   assert(d);
 }
 
-static const size_t memoryIncrease = 50;
-
-static void *
-myRealloc(void *p, size_t newsize, size_t memInc, size_t sizeofElem)
-{
-  size_t blocks = newsize / memInc + 1;
-  if (p == NULL) {
-    void* v = malloc(blocks * memInc * sizeofElem);
-    assert(v);
-    return v;
-  }
-  if ((newsize % memInc) == 0) {
-    p = realloc(p, blocks * memInc * sizeofElem);
-    assert(p);
-  }
-  return p;
-}
-
 void
 XMLNode::addToOrder(unsigned index, unsigned type)
 {
-  unsigned n = nElement();
-  d->pOrder = (unsigned *)myRealloc(d->pOrder, n + 1, memoryIncrease * 3,
-                                    sizeof(unsigned));
-  assert(d->pOrder);
-  d->pOrder[n] = (index << 2) + type;
+  d->pOrder.push_back((index << 2) + type);
 }
 
 XMLNode
@@ -598,15 +570,9 @@ XMLNode::AddChild(const TCHAR *lpszName, bool isDeclaration)
 {
   assert(lpszName != NULL);
 
-  unsigned nc = d->nChild;
-  d->pChild = (XMLNode*)myRealloc(d->pChild, (nc + 1), memoryIncrease,
-                                  sizeof(XMLNode));
-  assert(d->pChild);
-  d->pChild[nc].d = NULL;
-  d->pChild[nc] = XMLNode(lpszName, isDeclaration);
-  addToOrder(nc, eNodeChild);
-  d->nChild++;
-  return d->pChild[nc];
+  addToOrder(d->pChild.size(), eNodeChild);
+  d->pChild.push_back(XMLNode(lpszName, isDeclaration));
+  return d->pChild.back();
 }
 
 void
@@ -614,14 +580,8 @@ XMLNode::AddAttribute(const TCHAR *lpszName, const TCHAR *lpszValuev)
 {
   assert(lpszName != NULL);
 
-  unsigned na = d->nAttribute;
-  d->pAttribute = (XMLAttribute*)myRealloc(d->pAttribute, (na + 1),
-                                           memoryIncrease, sizeof(XMLAttribute));
-  XMLAttribute *pAttr = d->pAttribute + na;
-  pAttr->lpszName = lpszName;
-  pAttr->lpszValue = lpszValuev;
-  addToOrder(na, eNodeAttribute);
-  d->nAttribute++;
+  addToOrder(d->pAttribute.size(), eNodeAttribute);
+  d->pAttribute.push_back((XMLAttribute){lpszName, lpszValuev});
 }
 
 void
@@ -629,12 +589,8 @@ XMLNode::AddText(const TCHAR *lpszValue)
 {
   assert(lpszValue != NULL);
 
-  unsigned nt = d->nText;
-  d->pText = (const TCHAR **)myRealloc(d->pText, (nt + 1), memoryIncrease,
-                                       sizeof(const TCHAR *));
-  d->pText[nt] = lpszValue;
-  addToOrder(nt, eNodeText);
-  d->nText++;
+  addToOrder(d->pText.size(), eNodeText);
+  d->pText.push_back(lpszValue);
 }
 
 /**
@@ -780,20 +736,6 @@ XMLNode::ParseXMLElement(XML *pXML)
           // processing to do...
 
           if (!pNew.ParseXMLElement(pXML)) {
-            d->pOrder = (unsigned *)myRealloc(d->pOrder, nElement(),
-                                              memoryIncrease * 3,
-                                              sizeof(unsigned));
-            d->pChild = (XMLNode*)myRealloc(d->pChild, d->nChild,
-                                            memoryIncrease, sizeof(XMLNode));
-            if (d->nAttribute > 0)
-              d->pAttribute = (XMLAttribute*)myRealloc(d->pAttribute,
-                                                       d->nAttribute,
-                                                       memoryIncrease,
-                                                       sizeof(XMLAttribute));
-            if (d->nText > 0)
-              d->pText = (const TCHAR **)myRealloc(d->pText, d->nText,
-                                                   memoryIncrease,
-                                                   sizeof(const TCHAR *));
             return false;
           } else {
             // If the call to recurse this function
@@ -1274,7 +1216,7 @@ XMLNode::enumContent(const XMLNodeData *pEntry, unsigned i,
   case eNodeChild:
     return pEntry->pChild[i].d;
   case eNodeAttribute:
-    return pEntry->pAttribute + i;
+    return &pEntry->pAttribute[i];
   case eNodeText:
     return (void*)(pEntry->pText[i]);
   default:
@@ -1305,7 +1247,6 @@ XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
   int nChildFormat = -1;
   bool bHasChildren = false;
   unsigned i;
-  const XMLAttribute *pAttr;
 
   assert(pEntry);
 
@@ -1321,9 +1262,9 @@ XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
     writer.write(pEntry->lpszName);
 
     // Enumerate attributes and add them to the string
-    nIndex = pEntry->nAttribute;
-    pAttr = pEntry->pAttribute;
-    for (i = 0; i < nIndex; i++) {
+    for (auto i = pEntry->pAttribute.begin(), end = pEntry->pAttribute.end();
+         i != end; ++i) {
+      const XMLAttribute *pAttr = &*i;
       writer.write(' ');
       writer.write(pAttr->lpszName);
       writer.write('=');
@@ -1461,17 +1402,16 @@ XMLNode::getChildNode(const TCHAR *name, unsigned *j) const
   if (!d)
     return NULL;
 
-  unsigned i = 0, n = d->nChild;
+  unsigned i = 0, n = d->pChild.size();
   if (j)
     i = *j;
-  XMLNode *pc = d->pChild + i;
   for (; i < n; i++) {
+    const XMLNode *pc = &d->pChild[i];
     if (_tcsicmp(pc->d->lpszName, name) == 0) {
       if (j)
         *j = i + 1;
       return pc;
     }
-    pc++;
   }
 
   return NULL;
@@ -1496,7 +1436,7 @@ XMLNode::getAttribute(const TCHAR *lpszAttrib) const
   if (!d)
     return NULL;
 
-  for (const XMLAttribute *i = d->pAttribute, *end = i + d->nAttribute;
+  for (auto i = d->pAttribute.begin(), end = d->pAttribute.end();
        i != end; ++i)
     if (_tcsicmp(i->lpszName, lpszAttrib) == 0)
       return i->lpszValue;
@@ -1509,7 +1449,7 @@ XMLNode::getChildNode(unsigned i) const
 {
   if (!d)
     return NULL;
-  if (i >= d->nChild)
+  if (i >= d->pChild.size())
     return NULL;
 
   return &d->pChild[i];
