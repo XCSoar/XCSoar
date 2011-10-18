@@ -154,6 +154,10 @@ public:
   }
 
   void SetPixelOrigin(int pixel_origin) {
+    int max = length * item_height - get_height();
+    if (pixel_origin > max)
+      pixel_origin = max;
+
     if (pixel_origin < 0)
       pixel_origin = 0;
 
