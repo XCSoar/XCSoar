@@ -317,7 +317,7 @@ GetCallBack(const CallBackTableEntry *lookup_table,
                         StringToStringDflt(node.getAttribute(attribute), NULL));
 }
 
-static XMLNode
+static XMLNode *
 LoadXMLFromResource(const TCHAR* resource, XMLResults *xml_results)
 {
   ResourceLoader::Data data = ResourceLoader::Load(resource, _T("XMLDialog"));
@@ -335,7 +335,7 @@ LoadXMLFromResource(const TCHAR* resource, XMLResults *xml_results)
   const char *buffer2 = buffer;
 #endif
 
-  XMLNode x = XMLNode::parseString(buffer2, xml_results);
+  XMLNode *x = XMLNode::parseString(buffer2, xml_results);
 
 #ifdef _UNICODE
   delete[] buffer2;
@@ -349,7 +349,7 @@ LoadXMLFromResource(const TCHAR* resource, XMLResults *xml_results)
  * @param lpszXML The resource name
  * @return The parsed XMLNode
  */
-static XMLNode
+static XMLNode *
 LoadXMLFromResource(const TCHAR *resource)
 {
   XMLResults xml_results;
@@ -359,7 +359,7 @@ LoadXMLFromResource(const TCHAR *resource)
   XMLNode::GlobalError = false;
 
   // Load and parse the resource
-  XMLNode node = LoadXMLFromResource(resource, &xml_results);
+  XMLNode *node = LoadXMLFromResource(resource, &xml_results);
 
   // Show errors if they exist
   assert(xml_results.error == eXMLErrorNone);
@@ -403,14 +403,16 @@ LoadWindow(const CallBackTableEntry *lookup_table, WndForm *form,
   if (!form)
     return NULL;
 
-  XMLNode node = LoadXMLFromResource(resource);
-  assert(!node.isEmpty());
+  XMLNode *node = LoadXMLFromResource(resource);
+  assert(node != NULL);
+  assert(!node->isEmpty());
 
   // use style of last form loaded
   DialogStyle dialog_style = dialog_style_last;
 
   // load only one top-level control.
-  Window *window = LoadChild(*form, parent, lookup_table, node, dialog_style, 0);
+  Window *window = LoadChild(*form, parent, lookup_table, *node, dialog_style, 0);
+  delete node;
 
   assert(!XMLNode::GlobalError);
 
@@ -434,27 +436,25 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   WndForm *form = NULL;
 
   // Find XML file or resource and load XML data out of it
-  XMLNode node = LoadXMLFromResource(resource);
+  XMLNode *node = LoadXMLFromResource(resource);
 
   // TODO code: put in error checking here and get rid of exits in xmlParser
   // If XML error occurred -> Error messagebox + cancel
-  assert(!node.isEmpty());
+  assert(node != NULL);
+  assert(!node->isEmpty());
 
   // If the main XMLNode is of type "Form"
-  assert(_tcscmp(node.getName(), _T("Form")) == 0);
-
-  // If Node does not exists -> Error messagebox + cancel
-  assert(!node.isEmpty());
+  assert(_tcscmp(node->getName(), _T("Form")) == 0);
 
   // Determine the dialog style of the dialog
-  DialogStyle dialog_style = GetDialogStyle(node);
+  DialogStyle dialog_style = GetDialogStyle(*node);
   dialog_style_last = dialog_style;
 
   // Determine the dialog size
-  const TCHAR* caption = GetCaption(node);
+  const TCHAR* caption = GetCaption(*node);
   const PixelRect rc = target_rc ? *target_rc : parent.get_client_rect();
-  ControlPosition pos = GetPosition(node, rc, 0);
-  ControlSize size = GetSize(node, rc, pos);
+  ControlPosition pos = GetPosition(*node, rc, 0);
+  ControlSize size = GetSize(*node, rc, pos);
 
   InitScaleWidth(size, rc, dialog_style);
 
@@ -490,7 +490,7 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
 
   // Load the children controls
   LoadChildrenFromXML(*form, form->GetClientAreaWindow(),
-                      lookup_table, &node, dialog_style);
+                      lookup_table, node, dialog_style);
 
   // If XML error occurred -> Error messagebox + cancel
   assert(!XMLNode::GlobalError);

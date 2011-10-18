@@ -34,16 +34,17 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  XMLNode node = XMLNode::parseFile(argv[1]);
-  if (node.isEmpty()) {
+  XMLNode *node = XMLNode::parseFile(argv[1]);
+  if (node == NULL) {
     fprintf(stderr, "XML parser failed\n");
     return EXIT_FAILURE;
   }
 
 #ifndef WIN32
   TextWriter writer("/dev/stdout");
-  node.serialise(writer, true);
+  node->serialise(writer, true);
 #endif
+  delete node;
 
   return EXIT_SUCCESS;
 }

@@ -41,11 +41,13 @@ DataNode*
 DataNodeXML::load(const TCHAR* path)
 {
   NarrowPathName buf(path);
-  XMLNode child = XMLNode::openFileHelper(buf);
-  if (child.isEmpty())
+  XMLNode *child = XMLNode::openFileHelper(buf);
+  if (child == NULL)
     return NULL;
 
-  return new DataNodeXML(child);
+  DataNodeXML *data_node = new DataNodeXML(*child);
+  delete child;
+  return data_node;
 }
 
 DataNodeXML*

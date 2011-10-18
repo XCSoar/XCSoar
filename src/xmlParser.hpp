@@ -137,9 +137,9 @@ public:
 
   static XMLNode createRoot(const TCHAR *lpszName);
 
-  static XMLNode parseString(const TCHAR *lpszXML, XMLResults *pResults=NULL);
-  static XMLNode parseFile     (const char *lpszXML, XMLResults *pResults=NULL);
-  static XMLNode openFileHelper(const char *lpszXML);
+  static XMLNode *parseString(const TCHAR *lpszXML, XMLResults *pResults=NULL);
+  static XMLNode *parseFile(const char *lpszXML, XMLResults *pResults=NULL);
+  static XMLNode *openFileHelper(const char *lpszXML);
 
   // The tag parameter should be the name of the first tag inside the XML file.
   // If the tag parameter is omitted, the 3 functions return a node that represents

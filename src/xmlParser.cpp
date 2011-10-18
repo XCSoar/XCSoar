@@ -1068,7 +1068,7 @@ CountLinesAndColumns(const TCHAR *lpXML, size_t nUpto, XMLResults *pResults)
  * @param pResults XMLResult object to write in on error or success
  * @return The main XMLNode or empty XMLNode on error
  */
-XMLNode
+XMLNode *
 XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
 {
   // If String is empty
@@ -1082,7 +1082,7 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
     }
 
     // -> Return empty XMLNode
-    return emptyXMLNode;
+    return NULL;
   }
 
   enum XMLError error;
@@ -1108,7 +1108,7 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
     }
 
     // -> Return empty XMLNode
-    return emptyXMLNode;
+    return NULL;
   } else {
     // Set the document's first childnode as new main node
     xnode = XMLNode(*child);
@@ -1129,16 +1129,12 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
       }
 
       // -> Return empty XMLNode
-      return emptyXMLNode;
+      return NULL;
     } else {
       // Set the declaration's first childnode as new main node
       xnode = XMLNode(*child);
     }
   }
-
-  // If error occurred -> set node to empty
-  if (error != eXMLErrorNone)
-    xnode = emptyXMLNode;
 
   // If an XMLResults object exists
   // -> save the result (error/success)
@@ -1153,8 +1149,12 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
     }
   }
 
+  // If error occurred -> set node to empty
+  if (error != eXMLErrorNone)
+    return NULL;
+
   // Return the node (empty, main or child of main that equals tag)
-  return xnode;
+  return new XMLNode(xnode);
 }
 
 static bool
@@ -1195,7 +1195,7 @@ read_text_file(const char *path, tstring &buffer)
  * @param pResults Pointer to the XMLResults object to fill on error or success
  * @return The main XMLNode or an empty node on error
  */
-XMLNode
+XMLNode *
 XMLNode::parseFile(const char *filename, XMLResults *pResults)
 {
   // Open the file for reading
@@ -1212,7 +1212,7 @@ XMLNode::parseFile(const char *filename, XMLResults *pResults)
     }
 
     // -> Return empty XMLNode
-    return emptyXMLNode;
+    return NULL;
   }
 
   // Parse the string and get the main XMLNode
@@ -1226,14 +1226,14 @@ XMLNode::parseFile(const char *filename, XMLResults *pResults)
  * @param tag (?)
  * @return The main XMLNode
  */
-XMLNode
+XMLNode *
 XMLNode::openFileHelper(const char *lpszXML)
 {
   XMLResults pResults;
   XMLNode::GlobalError = false;
 
   // Parse the file and get the main XMLNode
-  XMLNode xnode = XMLNode::parseFile(lpszXML, &pResults);
+  XMLNode *xnode = XMLNode::parseFile(lpszXML, &pResults);
 
   // If error appeared
   if (pResults.error != eXMLErrorNone) {
