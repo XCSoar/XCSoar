@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.2.2 - not yet released
 * calculations
   - fix instant L/D formula
+* user interface
+  - fixed several minor bugs in the plane database dialog
 
 Version 6.2.1 - 2011/09/26
 * faster METAR and TAF download
