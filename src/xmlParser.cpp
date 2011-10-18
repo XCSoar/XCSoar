@@ -64,8 +64,6 @@
 
 bool XMLNode::GlobalError = false;
 
-static const XMLNode emptyXMLNode = {};
-
 /** Enumeration used to decipher what type a token is. */
 enum TokenTypeTag {
     eTokenText = 0,
@@ -769,7 +767,7 @@ XMLNode::ParseXMLElement(XML *pXML)
         // the current one and recurse
         pNew = AddChild(stringDup(token.pStr, cbToken), nDeclaration);
 
-        while (!pNew.isEmpty()) {
+        while (true) {
           // Callself to process the new node.  If we return
           // FALSE this means we dont have any more
           // processing to do...
@@ -832,7 +830,7 @@ XMLNode::ParseXMLElement(XML *pXML)
               pXML->cbNewElement = 0;
             } else {
               // If we didn't have a new element to create
-              pNew = emptyXMLNode;
+              break;
             }
           }
         }
