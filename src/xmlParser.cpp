@@ -847,7 +847,13 @@ XMLNode::ParseXMLElement(XML *pXML)
         if (lpszText) {
           cbTemp = token.pStr - lpszText;
           FindEndOfText(lpszText, &cbTemp);
-          AddText(fromXMLString(lpszText, cbTemp));
+          TCHAR *text = fromXMLString(lpszText, cbTemp);
+          if (text == NULL) {
+            pXML->error = eXMLErrorUnexpectedToken;
+            return false;
+          }
+
+          AddText(text);
           lpszText = NULL;
         }
 
