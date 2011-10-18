@@ -405,7 +405,6 @@ LoadWindow(const CallBackTableEntry *lookup_table, WndForm *form,
 
   XMLNode *node = LoadXMLFromResource(resource);
   assert(node != NULL);
-  assert(!node->isEmpty());
 
   // use style of last form loaded
   DialogStyle dialog_style = dialog_style_last;
@@ -441,7 +440,6 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   // TODO code: put in error checking here and get rid of exits in xmlParser
   // If XML error occurred -> Error messagebox + cancel
   assert(node != NULL);
-  assert(!node->isEmpty());
 
   // If the main XMLNode is of type "Form"
   assert(_tcscmp(node->getName(), _T("Form")) == 0);

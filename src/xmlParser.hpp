@@ -226,12 +226,6 @@ public:
     return d->nChild + d->nText + d->nAttribute;
   }
 
-  /** is this node empty? */
-  gcc_pure
-  bool isEmpty() const {
-    return d == NULL;
-  }
-
   gcc_pure
   bool isDeclaration() const {
     assert(d != NULL);
