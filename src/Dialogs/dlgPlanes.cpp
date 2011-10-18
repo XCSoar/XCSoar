@@ -120,38 +120,48 @@ OnPlaneListPaint(Canvas &canvas, const PixelRect rc, unsigned i)
                       rc, list[i].path);
 }
 
-static void
+static bool
 Load(unsigned i)
 {
   assert(i < list.size());
 
   SETTINGS_COMPUTER &settings = CommonInterface::SetSettingsComputer();
 
-  if (!PlaneGlue::ReadFile(settings.plane, list[i].path)) {
-    TCHAR tmp[256];
-    _stprintf(tmp, _("Loading of plane profile \"%s\" failed!"),
-              list[i].name.c_str());
-    MessageBoxX(tmp, _("Error"), MB_OK);
-    return;
-  }
+  if (!PlaneGlue::ReadFile(settings.plane, list[i].path))
+    return false;
 
   Profile::SetPath(_T("PlanePath"), list[i].path);
   PlaneGlue::Synchronize(settings.plane, settings, settings.glide_polar_task);
   if (protected_task_manager != NULL)
     protected_task_manager->SetGlidePolar(settings.glide_polar_task);
 
-  TCHAR tmp[256];
-  _stprintf(tmp, _("Plane profile \"%s\" activated."),
-            list[i].name.c_str());
-  MessageBoxX(tmp, _("Load"), MB_OK);
+  return true;
+}
 
-  dialog->SetModalResult(mrOK);
+static bool
+LoadWithDialog(unsigned i)
+{
+  TCHAR tmp[256];
+
+  bool result = Load(i);
+  if (!result) {
+    _stprintf(tmp, _("Loading of plane profile \"%s\" failed!"),
+              list[i].name.c_str());
+    MessageBoxX(tmp, _("Error"), MB_OK);
+  } else {
+    _stprintf(tmp, _("Plane profile \"%s\" activated."),
+              list[i].name.c_str());
+    MessageBoxX(tmp, _("Load"), MB_OK);
+  }
+
+  return result;
 }
 
 static void
 LoadClicked(gcc_unused WndButton &button)
 {
-  Load(plane_list->GetCursorIndex());
+  if (LoadWithDialog(plane_list->GetCursorIndex()))
+    dialog->SetModalResult(mrOK);
 }
 
 static void
@@ -197,8 +207,9 @@ EditClicked(gcc_unused WndButton &button)
 {
   assert(plane_list->GetCursorIndex() < list.size());
 
-  const TCHAR *old_path = list[plane_list->GetCursorIndex()].path;
-  const TCHAR *old_filename = list[plane_list->GetCursorIndex()].name;
+  const unsigned index = plane_list->GetCursorIndex();
+  const TCHAR *old_path = list[index].path;
+  const TCHAR *old_filename = list[index].name;
 
   Plane plane;
   PlaneGlue::ReadFile(plane, old_path);
@@ -229,8 +240,15 @@ EditClicked(gcc_unused WndButton &button)
 
       File::Delete(old_path);
       PlaneGlue::WriteFile(plane, path);
+      if (Profile::GetPathIsEqual(_T("PlanePath"), old_path)) {
+        list[index].path = path;
+        list[index].name = filename;
+        Load(index);
+      }
     } else {
       PlaneGlue::WriteFile(plane, old_path);
+      if (Profile::GetPathIsEqual(_T("PlanePath"), old_path))
+        Load(index);
     }
 
     UpdateList();
@@ -263,7 +281,8 @@ ListItemSelected(unsigned i)
             list[i].name.c_str());
 
   if (MessageBoxX(tmp, _("Load"), MB_YESNO) == IDYES)
-    Load(i);
+    if (LoadWithDialog(i))
+      dialog->SetModalResult(mrOK);
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {

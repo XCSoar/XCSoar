@@ -1327,7 +1327,8 @@ XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
       writer.write(pAttr->lpszName);
       writer.write('=');
       writer.write('"');
-      write_xml_string(writer, pAttr->lpszValue);
+      if (pAttr->lpszValue != NULL)
+        write_xml_string(writer, pAttr->lpszValue);
       writer.write('"');
       pAttr++;
     }
