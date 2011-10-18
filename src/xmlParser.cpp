@@ -533,10 +533,10 @@ XMLNode::getError(XMLError error)
 XMLNode
 XMLNode::createRoot(const TCHAR *lpszName)
 {
-  return XMLNode(NULL, lpszName, false);
+  return XMLNode(lpszName, false);
 }
 
-XMLNode::XMLNode(XMLNode *pParent, const TCHAR *lpszName, bool isDeclaration)
+XMLNode::XMLNode(const TCHAR *lpszName, bool isDeclaration)
 {
   d = (XMLNodeData*)malloc(sizeof(XMLNodeData));
   assert(d);
@@ -550,7 +550,6 @@ XMLNode::XMLNode(XMLNode *pParent, const TCHAR *lpszName, bool isDeclaration)
 
   d->isDeclaration = isDeclaration;
 
-  d->pParent = pParent;
   d->pChild = NULL;
   d->pText = NULL;
   d->pAttribute = NULL;
@@ -595,7 +594,7 @@ XMLNode::AddChild(const TCHAR *lpszName, bool isDeclaration)
                                   sizeof(XMLNode));
   assert(d->pChild);
   d->pChild[nc].d = NULL;
-  d->pChild[nc] = XMLNode(this, lpszName, isDeclaration);
+  d->pChild[nc] = XMLNode(lpszName, isDeclaration);
   addToOrder(nc, eNodeChild);
   d->nChild++;
   return d->pChild[nc];
@@ -1084,7 +1083,7 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
   }
 
   enum XMLError error;
-  XMLNode xnode(NULL, NULL, false);
+  XMLNode xnode(NULL, false);
   struct XML xml = { NULL, 0, eXMLErrorNone, NULL, 0, NULL, 0, true, };
 
   xml.lpXML = lpszXML;
@@ -1437,10 +1436,7 @@ XMLNode::destroyCurrentBuffer(XMLNodeData *d)
   if (d->ref_count == 0) {
     unsigned i = 0;
 
-    assert(d->pParent == NULL);
-
     for (i = 0; i < d->nChild; i++) {
-      d->pChild[i].d->pParent = NULL;
       destroyCurrentBuffer(d->pChild[i].d);
     }
     free(d->pChild);

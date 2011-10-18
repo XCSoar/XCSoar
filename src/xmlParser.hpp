@@ -95,9 +95,6 @@ protected:
     /** Whether node is an XML declaration - '<?xml ?>' */
     bool isDeclaration;
 
-    /** Pointer to parent element (=NULL if root) */
-    XMLNode *pParent;
-
     /** Array of child nodes */
     XMLNode *pChild;
 
@@ -129,7 +126,7 @@ protected:
    * Protected constructor: use "parse" functions to get your first
    * instance of XMLNode.
    */
-  XMLNode(XMLNode *pParent, const TCHAR *lpszName, bool isDeclaration);
+  XMLNode(const TCHAR *lpszName, bool isDeclaration);
 
 public:
   // You must create your first instance of XMLNode with these 3 parse functions:
