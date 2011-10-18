@@ -26,6 +26,7 @@
 #include "tstring.hpp"
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
+#include "Util/NonCopyable.hpp"
 
 class TextWriter;
 
@@ -33,7 +34,7 @@ class TextWriter;
  * Class used as generic node for tree-structured data.
  * 
  */
-class DataNode 
+class DataNode : private NonCopyable
 {
 public:
   virtual ~DataNode();
