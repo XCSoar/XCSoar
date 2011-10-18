@@ -104,7 +104,7 @@ Copyright_License {
 #endif
 
 #if defined(__cplusplus)
-#if GCC_VERSION >= 40600 || defined(__clang__)
+#if GCC_VERSION >= 40600 && !defined(__clang__)
 /* constexpr is supported since gcc 4.6 */
 #define gcc_constexpr_function constexpr gcc_const
 #define gcc_constexpr_method constexpr gcc_pure
