@@ -167,16 +167,6 @@ public:
     return d->lpszName;
   }
 
-  /** @return ith text field */
-  const TCHAR *getText(unsigned i = 0) const;
-
-  /** nbr of text field */
-  unsigned nText() const {
-    assert(d != NULL);
-
-    return d->nText;
-  }
-
   typedef XMLNodeData::const_iterator const_iterator;
 
   const_iterator begin() const {
@@ -204,18 +194,6 @@ public:
    */
   const XMLNode *getChildNode(const TCHAR *name, unsigned *i=NULL) const;
 
-  /** @return the number of child node with specific name */
-  unsigned nChildNode(const TCHAR *name) const;
-
-  /** nbr of child node */
-  unsigned nChildNode() const;
-
-  /** @return ith attribute */
-  XMLAttribute getAttribute(unsigned i);
-
-  /** test if an attribute with a specific name is given */
-  bool isAttributeSet(const TCHAR *name) const;
-
   /**
    * @return ith attribute content with specific name (return a NULL
    * if failing)
@@ -227,15 +205,6 @@ public:
    * if failing)
    */
   const TCHAR *getAttribute(const TCHAR *name, unsigned *i=NULL) const;
-
-  /**
-   * nbr of attribute
-   */
-  unsigned nAttribute() const {
-    assert(d != NULL);
-
-    return d->nAttribute;
-  }
 
   /**
    * Create an XML file from the head element.

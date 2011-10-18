@@ -65,7 +65,6 @@
 bool XMLNode::GlobalError = false;
 
 static const XMLNode emptyXMLNode = {};
-static gcc_constexpr_data XMLAttribute emptyXMLAttribute = { NULL, NULL };
 
 /** Enumeration used to decipher what type a token is. */
 enum TokenTypeTag {
@@ -1483,23 +1482,6 @@ XMLNode::XMLNode(const XMLNode &A)
     (d->ref_count)++;
 }
 
-unsigned
-XMLNode::nChildNode(const TCHAR *name) const
-{
-  if (!d)
-    return 0;
-
-  unsigned j = 0, n = d->nChild;
-  XMLNode *pc = d->pChild;
-  for (unsigned i = 0; i < n; i++) {
-    if (_tcsicmp(pc->d->lpszName, name) == 0)
-      j++;
-    pc++;
-  }
-
-  return j;
-}
-
 const XMLNode *
 XMLNode::getChildNode(const TCHAR *name, unsigned *j) const
 {
@@ -1558,24 +1540,6 @@ XMLNode::getAttribute(const TCHAR *lpszAttrib, unsigned *j) const
   return NULL;
 }
 
-bool
-XMLNode::isAttributeSet(const TCHAR *lpszAttrib) const
-{
-  if (!d)
-    return false;
-
-  unsigned i, n = d->nAttribute;
-  XMLAttribute *pAttr = d->pAttribute;
-  for (i = 0; i < n; i++) {
-    if (_tcsicmp(pAttr->lpszName, lpszAttrib) == 0) {
-      return true;
-    }
-    pAttr++;
-  }
-
-  return false;
-}
-
 const TCHAR *
 XMLNode::getAttribute(const TCHAR *name, unsigned j) const
 {
@@ -1587,37 +1551,6 @@ XMLNode::getAttribute(const TCHAR *name, unsigned j) const
     getAttribute(name, &i);
 
   return getAttribute(name, &i);
-}
-
-unsigned
-XMLNode::nChildNode() const
-{
-  if (!d)
-    return 0;
-
-  return d->nChild;
-}
-
-XMLAttribute
-XMLNode::getAttribute(unsigned i)
-{
-  if (!d)
-    return emptyXMLAttribute;
-  if (i >= d->nAttribute)
-    return emptyXMLAttribute;
-
-  return d->pAttribute[i];
-}
-
-const TCHAR *
-XMLNode::getText(unsigned i) const
-{
-  if (!d)
-    return NULL;
-  if (i >= d->nText)
-    return NULL;
-
-  return d->pText[i];
 }
 
 const XMLNode *
