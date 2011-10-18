@@ -246,9 +246,10 @@ Deserialiser::deserialise(OrderedTask &task)
   deserialise(beh);
   task.set_ordered_task_behaviour(beh);
 
-  DataNode* point_node;
-  for (unsigned i = 0;
-       (point_node = m_node.get_child_by_name(_T("Point"), i)) != NULL; ++i) {
+  const DataNode::List children = m_node.ListChildrenNamed(_T("Point"));
+  for (DataNode::List::const_iterator i = children.begin(),
+         end = children.end(); i != end; ++i) {
+    DataNode *point_node = *i;
     Deserialiser pser(*point_node, waypoints);
     pser.deserialise_point(task);
     delete point_node;

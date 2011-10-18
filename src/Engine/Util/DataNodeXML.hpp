@@ -82,6 +82,9 @@ public:
   virtual DataNode *get_child_by_name(const TCHAR *name,
                                       const unsigned i=0) const;
 
+  virtual List ListChildren() const;
+  virtual List ListChildrenNamed(const TCHAR *name) const;
+
   virtual void set_attribute(const TCHAR *name, const TCHAR *value);
   virtual bool get_attribute(const TCHAR *name, tstring &value) const;
 

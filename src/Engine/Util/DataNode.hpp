@@ -28,6 +28,8 @@
 #include "Math/Angle.hpp"
 #include "Util/NonCopyable.hpp"
 
+#include <list>
+
 class TextWriter;
 
 /**
@@ -37,6 +39,8 @@ class TextWriter;
 class DataNode : private NonCopyable
 {
 public:
+  typedef std::list<DataNode *> List;
+
   virtual ~DataNode();
 
   /**
@@ -73,6 +77,19 @@ public:
    * @return Pointer to child if found, or NULL
    */
   virtual DataNode* get_child_by_name(const TCHAR *name, const unsigned i=0) const = 0;
+
+  /**
+   * Obtains a list of all children.  The caller is responsible for
+   * deleting the elements.
+   */
+  virtual List ListChildren() const = 0;
+
+  /**
+   * Obtains a list of all children matching the specified name.
+   * Returns an empty list if there is no such child.  The caller is
+   * responsible for deleting the elements.
+   */
+  virtual List ListChildrenNamed(const TCHAR *name) const = 0;
 
   /**
    * Writes the canonical serialised form of this node to a
