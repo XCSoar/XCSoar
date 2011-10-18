@@ -807,7 +807,6 @@ LoadChild(WndForm &form, ContainerWindow &parent,
                                 node.getChildNode(i), dialog_style);
       if (child != NULL)
         tabbed->AddClient(child);
-        continue;
     }
   // TabBarControl (TabBar)
   } else if (_tcscmp(node.getName(), _T("TabBar")) == 0) {
