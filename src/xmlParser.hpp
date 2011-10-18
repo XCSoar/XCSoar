@@ -109,6 +109,15 @@ protected:
 
     unsigned ref_count;
 
+    gcc_constexpr_ctor
+    XMLNodeData(const TCHAR *_name, bool _is_declaration)
+      :lpszName(_name),
+       nChild(0), nText(0), nAttribute(0),
+       isDeclaration(_is_declaration),
+       pChild(NULL), pText(NULL), pAttribute(NULL), pOrder(NULL),
+       ref_count(1) {}
+    ~XMLNodeData();
+
     typedef const XMLNode *const_iterator;
 
     const_iterator begin() const {

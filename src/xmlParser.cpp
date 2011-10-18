@@ -111,6 +111,29 @@ enum Status {
     eOutsideTag
 };
 
+XMLNode::XMLNodeData::~XMLNodeData()
+{
+  assert(ref_count == 0);
+
+  unsigned i = 0;
+
+  for (i = 0; i < nChild; i++) {
+    destroyCurrentBuffer(pChild[i].d);
+  }
+  free(pChild);
+  for (i = 0; i < nText; i++)
+    free((void*)pText[i]);
+  free(pText);
+  for (i = 0; i < nAttribute; i++) {
+    free((void*)pAttribute[i].lpszName);
+    if (pAttribute[i].lpszValue)
+      free((void*)pAttribute[i].lpszValue);
+  }
+  free(pAttribute);
+  free(pOrder);
+  free((void*)lpszName);
+}
+
 static void
 write_xml_string(TextWriter &writer, const TCHAR *source)
 {
@@ -537,23 +560,9 @@ XMLNode::createRoot(const TCHAR *lpszName)
 }
 
 XMLNode::XMLNode(const TCHAR *lpszName, bool isDeclaration)
+  :d(new XMLNodeData(lpszName, isDeclaration))
 {
-  d = (XMLNodeData*)malloc(sizeof(XMLNodeData));
   assert(d);
-  d->ref_count = 1;
-
-  d->lpszName = lpszName;
-
-  d->nChild = 0;
-  d->nText = 0;
-  d->nAttribute = 0;
-
-  d->isDeclaration = isDeclaration;
-
-  d->pChild = NULL;
-  d->pText = NULL;
-  d->pAttribute = NULL;
-  d->pOrder = NULL;
 }
 
 static const size_t memoryIncrease = 50;
@@ -1434,24 +1443,7 @@ XMLNode::destroyCurrentBuffer(XMLNodeData *d)
   (d->ref_count)--;
 
   if (d->ref_count == 0) {
-    unsigned i = 0;
-
-    for (i = 0; i < d->nChild; i++) {
-      destroyCurrentBuffer(d->pChild[i].d);
-    }
-    free(d->pChild);
-    for (i = 0; i < d->nText; i++)
-      free((void*)d->pText[i]);
-    free(d->pText);
-    for (i = 0; i < d->nAttribute; i++) {
-      free((void*)d->pAttribute[i].lpszName);
-      if (d->pAttribute[i].lpszValue)
-        free((void*)d->pAttribute[i].lpszValue);
-    }
-    free(d->pAttribute);
-    free(d->pOrder);
-    free((void*)d->lpszName);
-    free(d);
+    delete d;
   }
 }
 
