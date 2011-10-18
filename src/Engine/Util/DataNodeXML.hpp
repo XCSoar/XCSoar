@@ -78,9 +78,8 @@ public:
   virtual const TCHAR *get_name() const;
 
   virtual DataNode *add_child(const TCHAR *name);
-  DataNode* get_child(unsigned i) const;
-  virtual DataNode *get_child_by_name(const TCHAR *name,
-                                      const unsigned i=0) const;
+
+  virtual DataNode *GetChildNamed(const TCHAR *name) const;
 
   virtual List ListChildren() const;
   virtual List ListChildrenNamed(const TCHAR *name) const;

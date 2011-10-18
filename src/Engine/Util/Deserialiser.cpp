@@ -47,7 +47,7 @@ Deserialiser::deserialise_point(OrderedTask& data)
     return;
   }
 
-  DataNode* wp_node = m_node.get_child_by_name(_T("Waypoint"));
+  DataNode *wp_node = m_node.GetChildNamed(_T("Waypoint"));
   if (wp_node == NULL)
     return;
 
@@ -58,7 +58,7 @@ Deserialiser::deserialise_point(OrderedTask& data)
     return;
   }
 
-  DataNode* oz_node = m_node.get_child_by_name(_T("ObservationZone"));
+  DataNode *oz_node = m_node.GetChildNamed(_T("ObservationZone"));
   if (oz_node == NULL) {
     delete wp_node;
     delete wp;
@@ -174,7 +174,7 @@ Deserialiser::deserialise(GeoPoint& data)
 Waypoint*
 Deserialiser::deserialise_waypoint()
 {
-  DataNode* loc_node = m_node.get_child_by_name(_T("Location"));
+  DataNode *loc_node = m_node.GetChildNamed(_T("Location"));
   if (!loc_node)
     return NULL;
 

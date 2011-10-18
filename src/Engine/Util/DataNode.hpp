@@ -60,23 +60,13 @@ public:
   virtual DataNode* add_child(const TCHAR *name) = 0;
 
   /**
-   * Retrieve child by index
-   *
-   * @param i Index of child
-   *
-   * @return Pointer to child if found, or NULL
-   */
-  virtual DataNode* get_child(unsigned i) const = 0;
-
-  /**
    * Retrieve child by name
    *
    * @param name Name of child
-   * @param i Optional, index of child (if more than one found)
    *
    * @return Pointer to child if found, or NULL
    */
-  virtual DataNode* get_child_by_name(const TCHAR *name, const unsigned i=0) const = 0;
+  virtual DataNode *GetChildNamed(const TCHAR *name) const = 0;
 
   /**
    * Obtains a list of all children.  The caller is responsible for

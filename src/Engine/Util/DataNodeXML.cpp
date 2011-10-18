@@ -75,20 +75,10 @@ DataNodeXML::add_child(const TCHAR *name)
   return new DataNodeXML(m_xml_node->AddChild(_tcsdup(name), false));
 }
 
-DataNode*
-DataNodeXML::get_child_by_name(const TCHAR *name, const unsigned i) const
+DataNode *
+DataNodeXML::GetChildNamed(const TCHAR *name) const
 {
-  const XMLNode *child = m_xml_node->getChildNode(name, i);
-  if (child == NULL)
-    return NULL;
-
-  return new DataNodeXML(*child);
-}
-
-DataNode*
-DataNodeXML::get_child(unsigned i) const
-{
-  const XMLNode *child = m_xml_node->getChildNode(i);
+  const XMLNode *child = m_xml_node->getChildNode(name, 0u);
   if (child == NULL)
     return NULL;
 
