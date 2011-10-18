@@ -28,6 +28,7 @@
 #ifndef __INCLUDE_XML_NODE__
 #define __INCLUDE_XML_NODE__
 
+#include "Util/NonCopyable.hpp"
 #include "Compiler.h"
 
 #include <vector>
@@ -81,7 +82,7 @@ protected:
    * To allow shallow copy and "intelligent/smart" pointers (automatic
    * delete).
    */
-  struct XMLNodeData {
+  struct XMLNodeData : private NonCopyable {
     /** Element name (=NULL if root) */
     const TCHAR *lpszName;
 
