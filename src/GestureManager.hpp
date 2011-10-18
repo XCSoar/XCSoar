@@ -41,6 +41,14 @@
  */
 class GestureManager
 {
+  /** Position of the last mouse_move event */
+  RasterPoint drag_last;
+  /** The gesture string */
+  StaticString<11> gesture;
+
+  /** The threshold distance in px for edge detection */
+  int threshold;
+
 public:
   /**
    * Constructor of the GestureManager class
@@ -54,23 +62,16 @@ public:
    * @return NULL or recognized gesture string
    */
   const TCHAR* Finish();
+
   /**
    * Starts the GestureManager at the given coordinates
    */
   void Start(PixelScalar x, PixelScalar y, int _threshold);
+
   /**
    * Adds new coordinates to the GestureManager
    */
   void Update(PixelScalar x, PixelScalar y);
-
-protected:
-  /** Position of the last mouse_move event */
-  RasterPoint drag_last;
-  /** The gesture string */
-  StaticString<11> gesture;
-
-  /** The threshold distance in px for edge detection */
-  int threshold;
 };
 
 #endif
