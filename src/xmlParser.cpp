@@ -134,6 +134,24 @@ XMLNode::XMLNodeData::~XMLNodeData()
   free((void*)lpszName);
 }
 
+void
+XMLNode::XMLNodeData::Ref()
+{
+  assert(ref_count > 0);
+
+  ++ref_count;
+}
+
+void
+XMLNode::XMLNodeData::Unref()
+{
+  assert(ref_count > 0);
+
+  --ref_count;
+  if (ref_count == 0)
+    delete this;
+}
+
 static void
 write_xml_string(TextWriter &writer, const TCHAR *source)
 {
@@ -1440,11 +1458,7 @@ XMLNode::destroyCurrentBuffer(XMLNodeData *d)
   if (!d)
     return;
 
-  (d->ref_count)--;
-
-  if (d->ref_count == 0) {
-    delete d;
-  }
+  d->Unref();
 }
 
 XMLNode&
@@ -1454,7 +1468,7 @@ XMLNode::operator=(const XMLNode& A)
     destroyCurrentBuffer(d);
     d = A.d;
     if (d)
-      (d->ref_count)++;
+      d->Ref();
   }
   return *this;
 }
@@ -1463,7 +1477,7 @@ XMLNode::XMLNode(const XMLNode &A)
 {
   d = A.d;
   if (d)
-    (d->ref_count)++;
+    d->Ref();
 }
 
 const XMLNode *

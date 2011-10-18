@@ -118,6 +118,9 @@ protected:
        ref_count(1) {}
     ~XMLNodeData();
 
+    void Ref();
+    void Unref();
+
     typedef const XMLNode *const_iterator;
 
     const_iterator begin() const {
