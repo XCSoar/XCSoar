@@ -1437,14 +1437,7 @@ XMLNode::destroyCurrentBuffer(XMLNodeData *d)
   if (d->ref_count == 0) {
     unsigned i = 0;
 
-    if (d->pParent) {
-      XMLNode *pa = d->pParent->d->pChild;
-      while (((void*)(pa[i].d)) != ((void*)d))
-        i++;
-      d->pParent->d->nChild--;
-      memmove(pa + i, pa + i + 1, (d->pParent->d->nChild - i) * sizeof(XMLNode));
-      removeOrderElement(d->pParent->d, eNodeChild, i);
-    }
+    assert(d->pParent == NULL);
 
     for (i = 0; i < d->nChild; i++) {
       d->pChild[i].d->pParent = NULL;
