@@ -296,12 +296,6 @@ private:
 
   gcc_pure
   static unsigned nElement(const XMLNodeData *pEntry);
-
-  /**
-   * Update "order" information when deleting a content of a XMLNode.
-   */
-  static void removeOrderElement(XMLNodeData *d, XMLElementType t,
-                                 unsigned index);
 };
 
 #endif

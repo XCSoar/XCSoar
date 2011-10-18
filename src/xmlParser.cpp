@@ -291,23 +291,6 @@ myTagCompare(const TCHAR *cclose, const TCHAR *copen)
   return 1;
 }
 
-void
-XMLNode::removeOrderElement(XMLNodeData *d, XMLElementType t, unsigned index)
-{
-  unsigned j = (unsigned)((index << 2) + t), i = 0, n = nElement(d) + 1, *o = d->pOrder;
-  while ((o[i] != j) && (i < n))
-    i++;
-  n--;
-  memmove(o + i, o + i + 1, (n - i) * sizeof(unsigned));
-  for (; i < n; i++)
-    if ((o[i] & 3) == (unsigned)t)
-      o[i] -= 4;
-  // We should normally do:
-  // d->pOrder=(int)realloc(d->pOrder,n*sizeof(int));
-  // but we skip reallocation because it's too time consuming.
-  // Anyway, at the end, it will be free'd completely at once.
-}
-
 /**
  * Obtain the next character from the string.
  */
