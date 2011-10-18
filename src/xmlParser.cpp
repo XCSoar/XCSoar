@@ -1219,9 +1219,9 @@ XMLNode::enumContent(const XMLNodeData *pEntry, unsigned i,
     return &pEntry->pAttribute[i];
   case eNodeText:
     return (void*)(pEntry->pText[i]);
-  default:
-    break;
   }
+
+  assert(false);
   return NULL;
 }
 

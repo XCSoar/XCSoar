@@ -58,7 +58,6 @@ enum XMLElementType {
   eNodeChild = 0,
   eNodeAttribute = 1,
   eNodeText = 2,
-  eNodeNULL = 4
 };
 
 /** Structure used to obtain error details if the parse fails. */
