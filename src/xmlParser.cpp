@@ -126,8 +126,7 @@ XMLNode::XMLNodeData::~XMLNodeData()
   free(pText);
   for (i = 0; i < nAttribute; i++) {
     free((void*)pAttribute[i].lpszName);
-    if (pAttribute[i].lpszValue)
-      free((void*)pAttribute[i].lpszValue);
+    free((void*)pAttribute[i].lpszValue);
   }
   free(pAttribute);
   free(pOrder);
