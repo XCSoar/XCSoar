@@ -440,10 +440,7 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   assert(!node.isEmpty());
 
   // If the main XMLNode is of type "Form"
-  if (_tcsicmp(node.getName(), _T("Form")) != 0)
-    // Get the first child node of the type "Form"
-    // and save it as the dialog node
-    node = node.getChildNode(_T("Form"));
+  assert(_tcscmp(node.getName(), _T("Form")) == 0);
 
   // If Node does not exists -> Error messagebox + cancel
   assert(!node.isEmpty());
