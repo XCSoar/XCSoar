@@ -277,7 +277,7 @@ public:
   /**
    * Add text to the element.
    */
-  const TCHAR *AddText(const TCHAR *lpszValue);
+  void AddText(const TCHAR *lpszValue);
 
 private:
   // these are functions used internally (don't bother about them):

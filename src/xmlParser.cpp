@@ -624,7 +624,7 @@ XMLNode::AddAttribute(const TCHAR *lpszName, const TCHAR *lpszValuev)
   d->nAttribute++;
 }
 
-const TCHAR *
+void
 XMLNode::AddText(const TCHAR *lpszValue)
 {
   assert(lpszValue != NULL);
@@ -635,7 +635,6 @@ XMLNode::AddText(const TCHAR *lpszValue)
   d->pText[nt] = lpszValue;
   addToOrder(nt, eNodeText);
   d->nText++;
-  return d->pText[nt];
 }
 
 /**
