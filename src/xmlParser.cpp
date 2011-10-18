@@ -590,8 +590,8 @@ XMLNode::addToOrder(unsigned index, unsigned type)
 XMLNode
 XMLNode::AddChild(const TCHAR *lpszName, bool isDeclaration)
 {
-  if (!lpszName)
-    return emptyXMLNode;
+  assert(lpszName != NULL);
+
   unsigned nc = d->nChild;
   d->pChild = (XMLNode*)myRealloc(d->pChild, (nc + 1), memoryIncrease,
                                   sizeof(XMLNode));
@@ -606,8 +606,7 @@ XMLNode::AddChild(const TCHAR *lpszName, bool isDeclaration)
 void
 XMLNode::AddAttribute(const TCHAR *lpszName, const TCHAR *lpszValuev)
 {
-  if (!lpszName)
-    return;
+  assert(lpszName != NULL);
 
   unsigned na = d->nAttribute;
   d->pAttribute = (XMLAttribute*)myRealloc(d->pAttribute, (na + 1),
@@ -622,8 +621,7 @@ XMLNode::AddAttribute(const TCHAR *lpszName, const TCHAR *lpszValuev)
 const TCHAR *
 XMLNode::AddText(const TCHAR *lpszValue)
 {
-  if (!lpszValue)
-    return NULL;
+  assert(lpszValue != NULL);
 
   unsigned nt = d->nText;
   d->pText = (const TCHAR **)myRealloc(d->pText, (nt + 1), memoryIncrease,
