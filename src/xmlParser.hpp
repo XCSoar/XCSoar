@@ -121,6 +121,14 @@ protected:
     void Ref();
     void Unref();
 
+    bool HasChildren() const {
+      return nChild > 0 || nText > 0;
+    }
+
+    unsigned Size() const {
+      return nChild + nText + nAttribute;
+    }
+
     typedef const XMLNode *const_iterator;
 
     const_iterator begin() const {
@@ -232,7 +240,7 @@ public:
   unsigned nElement() const {
     assert(d != NULL);
 
-    return d->nChild + d->nText + d->nAttribute;
+    return d->Size();
   }
 
   gcc_pure
@@ -295,7 +303,9 @@ private:
                                  XMLElementType *nodeType);
 
   gcc_pure
-  static unsigned nElement(const XMLNodeData *pEntry);
+  static unsigned nElement(const XMLNodeData *pEntry) {
+    return pEntry->Size();
+  }
 };
 
 #endif

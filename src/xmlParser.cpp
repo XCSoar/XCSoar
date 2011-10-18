@@ -1284,12 +1284,6 @@ XMLNode::enumContent(const XMLNodeData *pEntry, unsigned i,
   return NULL;
 }
 
-unsigned
-XMLNode::nElement(const XMLNodeData *pEntry)
-{
-  return pEntry->nChild + pEntry->nText + pEntry->nAttribute;
-}
-
 static inline void
 charmemset(TCHAR *dest, TCHAR c, size_t l)
 {
@@ -1341,7 +1335,7 @@ XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
       pAttr++;
     }
 
-    bHasChildren = (pEntry->nAttribute != nElement(pEntry));
+    bHasChildren = pEntry->HasChildren();
     if (pEntry->isDeclaration) {
       writer.write('?');
       writer.write('>');
