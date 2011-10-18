@@ -1492,39 +1492,17 @@ XMLNode::getChildNode(const TCHAR *name, unsigned j) const
 }
 
 const TCHAR *
-XMLNode::getAttribute(const TCHAR *lpszAttrib, unsigned *j) const
+XMLNode::getAttribute(const TCHAR *lpszAttrib) const
 {
   if (!d)
     return NULL;
 
-  unsigned i = 0, n = d->nAttribute;
-  if (j)
-    i = *j;
-
-  XMLAttribute *pAttr = d->pAttribute + i;
-  for (; i < n; i++) {
-    if (_tcsicmp(pAttr->lpszName, lpszAttrib) == 0) {
-      if (j)
-        *j = i + 1;
-      return pAttr->lpszValue;
-    }
-    pAttr++;
-  }
+  for (const XMLAttribute *i = d->pAttribute, *end = i + d->nAttribute;
+       i != end; ++i)
+    if (_tcsicmp(i->lpszName, lpszAttrib) == 0)
+      return i->lpszValue;
 
   return NULL;
-}
-
-const TCHAR *
-XMLNode::getAttribute(const TCHAR *name, unsigned j) const
-{
-  if (!d)
-    return NULL;
-
-  unsigned i = 0;
-  while (j-- > 0)
-    getAttribute(name, &i);
-
-  return getAttribute(name, &i);
 }
 
 const XMLNode *

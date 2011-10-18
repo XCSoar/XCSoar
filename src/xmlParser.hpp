@@ -215,13 +215,7 @@ public:
    * @return ith attribute content with specific name (return a NULL
    * if failing)
    */
-  const TCHAR *getAttribute(const TCHAR *name, unsigned i) const;
-
-  /**
-   * @return next attribute content with specific name (return a NULL
-   * if failing)
-   */
-  const TCHAR *getAttribute(const TCHAR *name, unsigned *i=NULL) const;
+  const TCHAR *getAttribute(const TCHAR *name) const;
 
   /**
    * Create an XML file from the head element.
