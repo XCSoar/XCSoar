@@ -50,7 +50,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
                                SettingsMap().airspace, Basic(),
                                Calculated());
 
-  if (marks)
+  if (marks && render_projection.GetMapScale() <= fixed_int_constant(30000))
     builder.AddMarkers(*marks, range);
 
   if (way_points)
