@@ -367,6 +367,14 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
   return strip - triangle_strip;
 }
 
+static void
+AddToTriangleStrip(RasterPoint* &strip, PixelScalar x, PixelScalar y)
+{
+  strip->x = x;
+  strip->y = y;
+  strip++;
+}
+
 unsigned
 LineToTriangles(const RasterPoint *points, unsigned num_points,
                 RasterPoint *strip, unsigned line_width, bool loop, bool tcap)
@@ -423,20 +431,14 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
       p.y = a->y - b->y;
       Normalize(&p, half_line_width);
 
-      s->x = a->x + p.x;
-      s->y = a->y + p.y;
-      s++;
+      AddToTriangleStrip(s, a->x + p.x, a->y + p.y);
     }
     p.x = a->y - b->y;
     p.y = b->x - a->x;
     Normalize(&p, half_line_width);
 
-    s->x = a->x - p.x;
-    s->y = a->y - p.y;
-    s++;
-    s->x = a->x + p.x;
-    s->y = a->y + p.y;
-    s++;
+    AddToTriangleStrip(s, a->x - p.x, a->y - p.y);
+    AddToTriangleStrip(s, a->x + p.x, a->y + p.y);
   }
 
   // add points by calculating the angle bisector of ab and bc
@@ -466,12 +468,8 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
         bisector_x = floor(bisector_x * scale + 0.5f);
         bisector_y = floor(bisector_y * scale + 0.5f);
 
-        s->x = b->x - bisector_x;
-        s->y = b->y - bisector_y;
-        s++;
-        s->x = b->x + bisector_x;
-        s->y = b->y + bisector_y;
-        s++;
+        AddToTriangleStrip(s, b->x - bisector_x, b->y - bisector_y);
+        AddToTriangleStrip(s, b->x + bisector_x, b->y + bisector_y);
       }
 
       a = b;
@@ -486,12 +484,8 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
 
   if (loop) {
     // repeat first two points at the end
-    s->x = strip[0].x;
-    s->y = strip[0].y;
-    s++;
-    s->x = strip[1].x;
-    s->y = strip[1].y;
-    s++;
+    AddToTriangleStrip(s, strip[0].x, strip[0].y);
+    AddToTriangleStrip(s, strip[1].x, strip[1].y);
   } else {
     // add flat or triangle cap at end of line
     RasterPoint p;
@@ -499,20 +493,14 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
     p.y = b->x - a->x;
     Normalize(&p, half_line_width);
 
-    s->x = b->x - p.x;
-    s->y = b->y - p.y;
-    s++;
-    s->x = b->x + p.x;
-    s->y = b->y + p.y;
-    s++;
+    AddToTriangleStrip(s, b->x - p.x, b->y - p.y);
+    AddToTriangleStrip(s, b->x + p.x, b->y + p.y);
+
     if (tcap) {
       p.x = b->x - a->x;
       p.y = b->y - a->y;
       Normalize(&p, half_line_width);
-
-      s->x = b->x + p.x;
-      s->y = b->y + p.y;
-      s++;
+      AddToTriangleStrip(s, b->x + p.x, b->y + p.y);
     }
   }
 
