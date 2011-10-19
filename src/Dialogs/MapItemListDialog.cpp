@@ -51,6 +51,24 @@ static const SETTINGS_MAP *settings;
 static GeoVector vector;
 static const MapItemList *list;
 static WndForm *wf;
+static WndButton *details_button;
+
+static bool
+HasDetails(const MapItem &item)
+{
+  switch (item.type) {
+  case MapItem::SELF:
+  case MapItem::MARKER:
+    return false;
+
+  case MapItem::AIRSPACE:
+  case MapItem::WAYPOINT:
+  case MapItem::TASK_OZ:
+    return true;
+  }
+
+  return false;
+}
 
 static void
 PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
@@ -58,6 +76,12 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
   const MapItem &item = *(*list)[idx];
   MapItemListRenderer::Draw(canvas, rc, item, *aircraft_look, *airspace_look,
                             *waypoint_look, *task_look, *marker_look, *settings);
+}
+
+static void
+OnListIndexChange(unsigned i)
+{
+  details_button->set_enabled(HasDetails(*(*list)[i]));
 }
 
 static void
@@ -99,6 +123,9 @@ ShowMapItemListDialog(SingleWindow &parent)
                   _T("IDR_XML_MAPITEMLIST_L") : _T("IDR_XML_MAPITEMLIST"));
   assert(wf != NULL);
 
+  details_button = (WndButton *)wf->FindByName(_T("cmdDetails"));
+  assert(details_button);
+
   WndListFrame *list_control =
       (WndListFrame *)wf->FindByName(_T("frmComboPopupList"));
   assert(list_control != NULL);
@@ -107,6 +134,8 @@ ShowMapItemListDialog(SingleWindow &parent)
   list_control->SetCursorIndex(0);
   list_control->SetActivateCallback(OnComboPopupListEnter);
   list_control->SetPaintItemCallback(PaintListItem);
+  list_control->SetCursorCallback(OnListIndexChange);
+  OnListIndexChange(0);
 
   TCHAR info_buffer[256], distance_buffer[32], direction_buffer[32];
   if (vector.IsValid()) {

@@ -4,6 +4,6 @@
   <Label Name="lblInfo" X="65" Height="20"/>
   <List Name="frmComboPopupList" X="65"/>
 
-  <Button Caption="Details" Y="-70" Width="65" Height="35" OnClick="OnDetailsClicked"/>
+  <Button Name="cmdDetails" Caption="Details" Y="-70" Width="65" Height="35" OnClick="OnDetailsClicked"/>
   <Button Caption="Cancel" Y="-35" Width="65" Height="35" OnClick="OnCancelClicked"/>
 </Form>
