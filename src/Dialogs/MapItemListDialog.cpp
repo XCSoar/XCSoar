@@ -61,7 +61,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 }
 
 static void
-OnCloseClicked(gcc_unused WndButton &Sender)
+OnDetailsClicked(gcc_unused WndButton &Sender)
 {
   wf->SetModalResult(mrOK);
 }
@@ -79,7 +79,7 @@ OnCancelClicked(gcc_unused WndButton &Sender)
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnDetailsClicked),
   DeclareCallBackEntry(OnCancelClicked),
   DeclareCallBackEntry(NULL)
 };
