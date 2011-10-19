@@ -368,6 +368,96 @@ public:
   gcc_pure
   fixed log() const;
 
+  gcc_constexpr_function
+  friend fixed operator+(const fixed a, const fixed b) {
+    return fixed(fixed::internal(), a.m_nVal + b.m_nVal);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator-(const fixed a, const fixed b) {
+    return fixed(fixed::internal(), a.m_nVal - b.m_nVal);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator*(const fixed a, const long b) {
+    return fixed(fixed::internal(), a.m_nVal * b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator*(const fixed a, const unsigned long b) {
+    return fixed(fixed::internal(), a.m_nVal * b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator*(const fixed a, const int b) {
+    return fixed(fixed::internal(), a.m_nVal * b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator*(const fixed a, const unsigned int b) {
+    return fixed(fixed::internal(), a.m_nVal * b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator*(const fixed a, const short b) {
+    return fixed(fixed::internal(), a.m_nVal * b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator*(const fixed a, const unsigned short b) {
+    return fixed(fixed::internal(), a.m_nVal * b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator*(const fixed a, const char b) {
+    return fixed(fixed::internal(), a.m_nVal * b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator*(const fixed a, const unsigned char b) {
+    return fixed(fixed::internal(), a.m_nVal * b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator/(const fixed a, const long b) {
+    return fixed(fixed::internal(), a.m_nVal / b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator/(const fixed a, const unsigned long b) {
+    return fixed(fixed::internal(), a.m_nVal / b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator/(const fixed a, const int b) {
+    return fixed(fixed::internal(), a.m_nVal / b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator/(const fixed a, const unsigned int b) {
+    return fixed(fixed::internal(), a.m_nVal / b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator/(const fixed a, const short b) {
+    return fixed(fixed::internal(), a.m_nVal / b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator/(const fixed a, const unsigned short b) {
+    return fixed(fixed::internal(), a.m_nVal / b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator/(const fixed a, const char b) {
+    return fixed(fixed::internal(), a.m_nVal / b);
+  }
+
+  gcc_constexpr_function
+  friend fixed operator/(const fixed a, const unsigned char b) {
+    return fixed(fixed::internal(), a.m_nVal / b);
+  }
+
   fixed& operator%=(fixed const& other);
   fixed& operator*=(fixed const& val);
   fixed& operator/=(fixed const divisor);
@@ -550,137 +640,52 @@ inline bool fixed::negative() const
   return (m_nVal<0);
 }
 
-gcc_pure
-inline fixed operator-(fixed const& a,fixed const& b)
+gcc_constexpr_function
+inline fixed operator*(unsigned long a, const fixed b)
 {
-  fixed temp(a);
-  return temp-=b;
+  return b * a;
 }
 
-gcc_pure
-inline fixed operator%(fixed const& a,fixed const& b)
+gcc_constexpr_function
+inline fixed operator*(long a, const fixed b)
 {
-  fixed temp(a);
-  return temp%=b;
+  return b * a;
 }
 
-gcc_pure
-inline fixed operator+(fixed const& a,fixed const& b)
+gcc_constexpr_function
+inline fixed operator*(unsigned a, const fixed b)
 {
-  fixed temp(a);
-  return temp+=b;
+  return b * a;
 }
 
-gcc_pure
-inline fixed operator*(unsigned long a, fixed const& b)
+gcc_constexpr_function
+inline fixed operator*(int a, const fixed b)
 {
-  fixed temp(b);
-  return temp*=a;
+  return b * a;
 }
 
-gcc_pure
-inline fixed operator*(long a, fixed const& b)
+gcc_constexpr_function
+inline fixed operator*(unsigned short a, const fixed b)
 {
-  fixed temp(b);
-  return temp*=a;
+  return b * a;
 }
 
-gcc_pure
-inline fixed operator*(unsigned a, fixed const& b)
+gcc_constexpr_function
+inline fixed operator*(short a, const fixed b)
 {
-  fixed temp(b);
-  return temp*=a;
+  return b * a;
 }
 
-gcc_pure
-inline fixed operator*(int a, fixed const& b)
+gcc_constexpr_function
+inline fixed operator*(unsigned char a, const fixed b)
 {
-  fixed temp(b);
-  return temp*=a;
+  return b * a;
 }
 
-gcc_pure
-inline fixed operator*(unsigned short a, fixed const& b)
+gcc_constexpr_function
+inline fixed operator*(char a, const fixed b)
 {
-  fixed temp(b);
-  return temp*=a;
-}
-
-gcc_pure
-inline fixed operator*(short a, fixed const& b)
-{
-  fixed temp(b);
-  return temp*=a;
-}
-
-gcc_pure
-inline fixed operator*(unsigned char a, fixed const& b)
-{
-  fixed temp(b);
-  return temp*=a;
-}
-
-gcc_pure
-inline fixed operator*(char a, fixed const& b)
-{
-  fixed temp(b);
-  return temp*=a;
-}
-
-gcc_pure
-inline fixed operator*(fixed const& a,unsigned long b)
-{
-  fixed temp(a);
-  return temp *= b;
-}
-
-gcc_pure
-inline fixed operator*(fixed const& a,long b)
-{
-  fixed temp(a);
-  return temp *= b;
-}
-
-gcc_pure
-inline fixed operator*(fixed const& a,unsigned b)
-{
-  fixed temp(a);
-  return temp *= b;
-}
-
-gcc_pure
-inline fixed operator*(fixed const& a,int b)
-{
-  fixed temp(a);
-  return temp *= b;
-}
-
-gcc_pure
-inline fixed operator*(fixed const& a,unsigned short b)
-{
-  fixed temp(a);
-  return temp *= b;
-}
-
-gcc_pure
-inline fixed operator*(fixed const& a,short b)
-{
-  fixed temp(a);
-  return temp *= b;
-}
-
-gcc_pure
-inline fixed operator*(fixed const& a,unsigned char b)
-{
-  fixed temp(a);
-  return temp *= b;
-}
-
-gcc_pure
-inline fixed operator*(fixed const& a,char b)
-{
-  fixed temp(a);
-  return temp *= b;
+  return b * a;
 }
 
 gcc_pure
@@ -710,62 +715,6 @@ gcc_constexpr_function
 inline fixed fast_mult(fixed a, fixed b, int b_bits)
 {
   return fixed::fast_mult(a, 0, b, b_bits);
-}
-
-gcc_pure
-inline fixed operator/(fixed const& a,unsigned long b)
-{
-  fixed temp(a);
-  return temp /= b;
-}
-
-gcc_pure
-inline fixed operator/(fixed const& a,long b)
-{
-  fixed temp(a);
-  return temp /= b;
-}
-
-gcc_pure
-inline fixed operator/(fixed const& a,unsigned b)
-{
-  fixed temp(a);
-  return temp /= b;
-}
-
-gcc_pure
-inline fixed operator/(fixed const& a,int b)
-{
-  fixed temp(a);
-  return temp /= b;
-}
-
-gcc_pure
-inline fixed operator/(fixed const& a,unsigned short b)
-{
-  fixed temp(a);
-  return temp /= b;
-}
-
-gcc_pure
-inline fixed operator/(fixed const& a,short b)
-{
-  fixed temp(a);
-  return temp /= b;
-}
-
-gcc_pure
-inline fixed operator/(fixed const& a,unsigned char b)
-{
-  fixed temp(a);
-  return temp /= b;
-}
-
-gcc_pure
-inline fixed operator/(fixed const& a,char b)
-{
-  fixed temp(a);
-  return temp /= b;
 }
 
 gcc_pure
