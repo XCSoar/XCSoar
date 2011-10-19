@@ -379,60 +379,80 @@ unsigned
 LineToTriangles(const RasterPoint *points, unsigned num_points,
                 RasterPoint *strip, unsigned line_width, bool loop, bool tcap)
 {
+  // A line has to have at least two points
   if (num_points < 2)
     return 0;
 
+  // A closed line path needs to have at least three points
   if (loop && num_points < 3)
+    // .. otherwise don't close it
     loop = false;
 
   float half_line_width = line_width * 0.5f;
+
+  // strip will point to the start of the output array
+  // s is the working pointer
   RasterPoint *s = strip;
+
   const RasterPoint *a, *b, *c;
+
+  // pointer to the end of the original points array
+  // used for faster loop conditions
   const RasterPoint * const points_end = points + num_points;
 
   // initialize a, b and c vertices
   if (loop) {
+    // b is set to last RasterPoint in the array
     b = points + num_points - 1;
+    // a is set to the point before that
     a = b - 1;
 
+    // skip identical points at the end
     while (a >= points && a->x == b->x && a->y == b->y)
-      // skip identical points
       a--;
 
     if (a < points)
-      // no two different points found
+      // all points in the array are identical
       return 0;
 
+    // c is set to the first RasterPoint in the array
     c = points;
   } else  {
+    // a is set to the first RasterPoint in the array
     a = points;
+    // b is set to the point after that
     b = a + 1;
 
+    // skip identical points at the beginning
     while (b != points_end && a->x == b->x && a->y == b->y)
-      // skip identical points
       b++;
 
     if (b == points_end)
-      // no two different points found
+      // all points in the array are identical
       return 0;
 
-    c = b+1;
+    // c is set to the point after b (third point if nothing was skipped)
+    c = b + 1;
   }
 
+  // skip identical points after b
   while (c != points_end && b->x == c->x && b->y == c->y)
-    // skip identical points
     c++;
 
   if (!loop) {
     // add flat or triangle cap at beginning of line
     RasterPoint p;
     if (tcap) {
+      // add triangle cap coordinate to the output array
       p.x = a->x - b->x;
       p.y = a->y - b->y;
       Normalize(&p, half_line_width);
 
       AddToTriangleStrip(s, a->x + p.x, a->y + p.y);
     }
+
+    // add flat cap coordinates to the output array
+    // (first triangle if tcap == true)
     p.x = a->y - b->y;
     p.y = b->x - a->x;
     Normalize(&p, half_line_width);
