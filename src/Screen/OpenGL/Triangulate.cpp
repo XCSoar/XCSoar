@@ -37,11 +37,12 @@ PolygonRotatesLeft(const PT *points, unsigned num_points)
 {
   int area = 0;
 
-  for (unsigned a=num_points-1, b=0; b<num_points; a=b++) {
+  for (unsigned a = num_points - 1, b = 0; b < num_points; a = b++)
     area += points[a].x * (int)points[b].y -
             points[a].y * (int)points[b].x;
-  }
-  return area > 0;  // we actually calculated area*2
+
+  // we actually calculated area * 2
+  return area > 0;
 }
 
 /**
@@ -51,8 +52,8 @@ template <typename PT>
 static inline bool
 TriangleEmpty(const PT &a, const PT &b, const PT &c)
 {
-  return ((b.x-a.x) * (int)(c.y-b.y) -
-          (b.y-a.y) * (int)(c.x-b.x)) == 0;
+  return ((b.x - a.x) * (int)(c.y - b.y) -
+          (b.y - a.y) * (int)(c.x - b.x)) == 0;
 }
 
 /**
@@ -70,7 +71,7 @@ PointLeftOfLine(const PT &p, const PT &a, const PT &b)
   int apy = p.y - a.y;
 
   // almost distance point from line (normal has to be normalized for that)
-  return (nx*apx + ny*apy) >= 0;
+  return (nx * apx + ny * apy) >= 0;
 }
 
 /**
@@ -93,8 +94,8 @@ template <typename PT>
 static inline bool
 LeftBend(const PT &a, const PT &b, const PT &c)
 {
-  return ((b.x-a.x) * (int)(c.y-b.y) -
-          (b.y-a.y) * (int)(c.x-b.x)) > 0;
+  return ((b.x - a.x) * (int)(c.y - b.y) -
+          (b.y - a.y) * (int)(c.x - b.x)) > 0;
 }
 
 /**
@@ -104,9 +105,9 @@ static inline void
 Normalize(RasterPoint *v, float length)
 {
   // TODO: optimize!
-  float scale = length / sqrt(v->x*(float)v->x + v->y*(float)v->y);
-  v->x = floor(v->x*scale + 0.5f);
-  v->y = floor(v->y*scale + 0.5f);
+  float scale = length / sqrt(v->x * (float)v->x + v->y * (float)v->y);
+  v->x = floor(v->x * scale + 0.5f);
+  v->y = floor(v->y * scale + 0.5f);
 }
 
 #if RASTER_POINT_SIZE == SHAPE_POINT_SIZE
@@ -120,38 +121,37 @@ _PolygonToTriangle(const PT *points, unsigned num_points,
                    GLushort *triangles, unsigned min_distance)
 #endif
 {
-  //const unsigned orig_num_points = num_points;
-
   // no redundant start/end please
   if (num_points >= 1 &&
-      points[0].x == points[num_points-1].x &&
-      points[0].y == points[num_points-1].y) {
+      points[0].x == points[num_points - 1].x &&
+      points[0].y == points[num_points - 1].y)
     num_points--;
-  }
 
   if (num_points < 3)
     return 0;
 
   assert(num_points < 65536);
-  GLushort *next = new GLushort[num_points];  // next vertex pointer
-  GLushort start = 0;  // index of the first vertex
+  // next vertex pointer
+  GLushort *next = new GLushort[num_points];
+  // index of the first vertex
+  GLushort start = 0;
 
   // initialize next pointer counterclockwise
   if (PolygonRotatesLeft(points, num_points)) {
     for (unsigned i = 0; i < num_points-1; i++)
-      next[i] = i+1;
-    next[num_points-1] = 0;
+      next[i] = i + 1;
+    next[num_points - 1] = 0;
   } else {
-    next[0] = num_points-1;
+    next[0] = num_points - 1;
     for (unsigned i = 1; i < num_points; i++)
-      next[i] = i-1;
+      next[i] = i - 1;
   }
 
   // thinning
   if (min_distance > 0) {
-    for (unsigned a=start, b=next[a], c=next[b], heat=0;
+    for (unsigned a = start, b = next[a], c = next[b], heat = 0;
          num_points > 3 && heat < num_points;
-         a=b, b=c, c=next[c], heat++) {
+         a = b, b = c, c = next[c], heat++) {
       bool point_removeable = TriangleEmpty(points[a], points[b], points[c]);
       if (!point_removeable) {
         unsigned distance = manhattan_distance(points[a], points[b]);
@@ -170,7 +170,9 @@ _PolygonToTriangle(const PT *points, unsigned num_points,
       if (point_removeable) {
         // remove node b from polygon
         if (b == start)
-          start = std::min(a, c);  // keep track of the smallest index
+          // keep track of the smallest index
+          start = std::min(a, c);
+
         next[a] = c;
         num_points--;
         // 'a' should stay the same in the next loop
@@ -185,9 +187,8 @@ _PolygonToTriangle(const PT *points, unsigned num_points,
 
   // triangulation
   GLushort *t = triangles;
-  for (unsigned a=start, b=next[a], c=next[b], heat=0;
-       num_points > 2;
-       a=b, b=c, c=next[c]) {
+  for (unsigned a = start, b = next[a], c = next[b], heat = 0;
+       num_points > 2; a = b, b = c, c = next[c]) {
     if (LeftBend(points[a], points[b], points[c])) {
       bool ear_cuttable = true;
       for (unsigned p = next[c]; p != a; p = next[p]) {
@@ -198,7 +199,9 @@ _PolygonToTriangle(const PT *points, unsigned num_points,
       }
       if (ear_cuttable) {
         // save triangle indices
-        *t++ = a; *t++ = b; *t++ = c;
+        *t++ = a;
+        *t++ = b;
+        *t++ = c;
         // remove node b from polygon
         next[a] = c;
         num_points--;
@@ -248,7 +251,7 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
   for (v = t; v < t_end; v++)
     vcount[*v]++;
 
-  const unsigned triangle_buffer_size = index_count + 2*(polygon_count-1);
+  const unsigned triangle_buffer_size = index_count + 2 * (polygon_count - 1);
   GLushort *triangle_strip = new GLushort[triangle_buffer_size];
   GLushort *strip = triangle_strip;
 
@@ -256,17 +259,21 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
   for (v = t; v < t_end; v++)
     if (vcount[*v] == 1)
       break;
+
   strip[0] = *v;
-  v = t + (v-t)/3*3;
+  v = t + (v - t) / 3 * 3;
   strip[1] = (v[0] == strip[0]) ? v[1] : v[0];
   strip[2] = (v[2] == strip[0]) ? v[1] : v[2];
 
   unsigned strip_size = 0;
-  unsigned triangles_left = index_count/3;
+  unsigned triangles_left = index_count / 3;
   while (triangles_left > 1) {
     bool found_something = false;
 
-    vcount[v[0]]--;  vcount[v[1]]--;  vcount[v[2]]--;
+    vcount[v[0]]--;
+    vcount[v[1]]--;
+    vcount[v[2]]--;
+
     // fill hole in triangle array
     if (v != t) {
       v[0] = t[0];
@@ -282,7 +289,7 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
      *       Use a higher polygon_count and bigger triangle buffer if you
      *       hit this one.
      */
-    assert(strip+4 <= triangle_strip+triangle_buffer_size);
+    assert(strip + 4 <= triangle_strip + triangle_buffer_size);
 
     // search for a shared edge
     if (vcount[strip[1]] > 0 && vcount[strip[2]] > 0) {
@@ -325,20 +332,21 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
       for (v = t; v < t_end; v++)
         if (vcount[*v] == 1)
           break;
+
       assert(v != t_end);
 
       // add two redundant points
-      assert(strip+5 <= triangle_strip+triangle_buffer_size);
+      assert(strip + 5 <= triangle_strip + triangle_buffer_size);
       strip += 2;
       strip[1] = strip[0];
       strip[2] = *v;
     }
 
     // add triangle to strip
-    assert(strip+6 <= triangle_strip+triangle_buffer_size);
+    assert(strip + 6 <= triangle_strip + triangle_buffer_size);
     strip += 3;
     strip[0] = *v;
-    v = t + (v-t)/3*3;
+    v = t + (v - t) / 3 * 3;
     strip[1] = (v[0] == strip[0]) ? v[1] : v[0];
     strip[2] = (v[2] == strip[0]) ? v[1] : v[2];
     strip_size = 0;
@@ -346,7 +354,7 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
   strip += 3;
 
   // copy strip over triangles
-  for (t=triangles, v=triangle_strip; v < strip; v++, t++)
+  for (t = triangles, v = triangle_strip; v < strip; v++, t++)
     *t = *v;
 
   //LogDebug(_T("triangle_to_strip: indices=%u strip indices=%u (%u%%)"),
@@ -365,10 +373,11 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
 {
   if (num_points < 2)
     return 0;
+
   if (loop && num_points < 3)
     loop = false;
 
-  float half_line_width = line_width*0.5f;
+  float half_line_width = line_width * 0.5f;
   RasterPoint *s = strip;
   const RasterPoint *a, *b, *c;
   const RasterPoint * const points_end = points + num_points;
@@ -376,23 +385,35 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
   // initialize a, b and c vertices
   if (loop) {
     b = points + num_points - 1;
-    a = b-1;
+    a = b - 1;
+
     while (a >= points && a->x == b->x && a->y == b->y)
-      a--;  // skip identical points
+      // skip identical points
+      a--;
+
     if (a < points)
-      return 0;  // no two different points found
+      // no two different points found
+      return 0;
+
     c = points;
   } else  {
     a = points;
-    b = a+1;
+    b = a + 1;
+
     while (b != points_end && a->x == b->x && a->y == b->y)
-      b++;  // skip identical points
+      // skip identical points
+      b++;
+
     if (b == points_end)
-      return 0;  // no two different points found
+      // no two different points found
+      return 0;
+
     c = b+1;
   }
+
   while (c != points_end && b->x == c->x && b->y == c->y)
-    c++;  // skip identical points
+    // skip identical points
+    c++;
 
   if (!loop) {
     // add flat or triangle cap at beginning of line
@@ -421,7 +442,8 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
   // add points by calculating the angle bisector of ab and bc
   if (num_points >= 3) {
     while (c != points_end) {
-      if (!TriangleEmpty(*a, *b, *c)) {  // skip zero or 180 degree bends
+      if (!TriangleEmpty(*a, *b, *c)) {
+        // skip zero or 180 degree bends
         // TODO: support 180 degree bends!
 
         RasterPoint g, h;
@@ -434,15 +456,15 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
         int bisector_x = -g.y - h.y;
         int bisector_y = g.x + h.x;
 
-        float projected_length = (-g.y*bisector_x + g.x*bisector_y) * (1.f/1000.f);
+        float projected_length = (-g.y * bisector_x + g.x * bisector_y) * (1.f / 1000.f);
 
         // HACK: reduce artefacts for acute angles
         if (projected_length < 400.f)
           projected_length = 400.f;
 
         float scale = half_line_width / projected_length;
-        bisector_x = floor(bisector_x*scale + 0.5f);
-        bisector_y = floor(bisector_y*scale + 0.5f);
+        bisector_x = floor(bisector_x * scale + 0.5f);
+        bisector_y = floor(bisector_y * scale + 0.5f);
 
         s->x = b->x - bisector_x;
         s->y = b->y - bisector_y;
@@ -452,9 +474,13 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
         s++;
       }
 
-      a=b;  b=c;  c++;
+      a = b;
+      b = c;
+      c++;
+
       while (c != points_end && b->x == c->x && b->y == c->y)
-        c++;  // skip identical points
+        // skip identical points
+        c++;
     }
   }
 
