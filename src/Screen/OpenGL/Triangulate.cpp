@@ -109,19 +109,6 @@ normalize(RasterPoint *v, float length)
   v->y = floor(v->y*scale + 0.5f);
 }
 
-/**
- * cutting ears - simple algorithm, no support for holes
- * Optionally removes all points from a polygon that are too close together.
- *
- * @param points polygon coordinates
- * @param num_points numer of polygon vertices
- * @param triangles triangle indices, size: 3*(num_points-2)
- * @param min_distance minimum distance a point should have from its neighbours
- *
- * @return Returns the number of triangle indices. Possible values:
- *         0: failure,
- *         3 to 3*(num_points-3): success
- */
 #if RASTER_POINT_SIZE == SHAPE_POINT_SIZE
 unsigned
 polygon_to_triangle(const RasterPoint *points, unsigned num_points,
@@ -249,22 +236,6 @@ polygon_to_triangle(const ShapePoint *points, unsigned num_points,
 }
 #endif
 
-/**
- * Pack triangle indices into a triangle strip.
- * Empty triangles are inserted to connect individual strips. Thus we always
- * get one "degenerated" triangle strip. The degenerated triangles should
- * be discarded pretty early in the rendering pipeline. This saves a lot of
- * OpenGL API calls.
- * The triangle buffer must hold at least:
- *   3*(triangle_count-2) + 2*(polygon_count-1) indices.
- *
- * @param triangles triangle indicies, which will be overwriten with the strip
- * @param index_count number of triangle indices. (triangle_count*3)
- * @param vertex_count number of vertices used: max(triangles[i])+1
- * @param polygon_count number of unconnected polygons
- *
- * @return number of indices in the triangle strip
- */
 unsigned
 triangle_to_strip(GLushort *triangles, unsigned index_count,
                   unsigned vertex_count, unsigned polygon_count)
@@ -388,18 +359,6 @@ triangle_to_strip(GLushort *triangles, unsigned index_count,
   return strip - triangle_strip;
 }
 
-/**
- * Create a triangle strip representing a thick line.
- *
- * @param points line coordinates
- * @param num_points number of line points
- * @param strip triangle vertices, size: 2*(num_points + (int)(loop || tcap))
- * @param line_width width of line in pixels
- * @param loop true if line is a closed loop
- * @param tcap add a triangle at the beginning and end of the line
- *
- * @return Returns the number of triangle coordinates or 0 for failure
- */
 unsigned
 line_to_triangle(const RasterPoint *points, unsigned num_points,
                  RasterPoint *strip, unsigned line_width,
