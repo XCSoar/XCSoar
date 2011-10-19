@@ -116,8 +116,8 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
 
     static AllocatedArray<GLushort> triangle_buffer;
     triangle_buffer.grow_discard(3 * (num_points - 2));
-    unsigned idx_count = polygon_to_triangle(points, num_points,
-                                             triangle_buffer.begin());
+    unsigned idx_count = PolygonToTriangle(points, num_points,
+                                           triangle_buffer.begin());
     if (idx_count > 0)
       glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT,
                      triangle_buffer.begin());
@@ -129,9 +129,9 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
       glDrawArrays(GL_LINE_LOOP, 0, num_points);
     } else {
       vertex_buffer.grow_discard(2 * (num_points + 1));
-      unsigned vertices = line_to_triangle(points, num_points,
-                                           vertex_buffer.begin(),
-                                           pen.get_width(), true);
+      unsigned vertices = LineToTriangles(points, num_points,
+                                          vertex_buffer.begin(),
+                                          pen.get_width(), true);
       if (vertices > 0) {
         glVertexPointer(2, GL_VALUE, 0, vertex_buffer.begin());
         glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
@@ -159,9 +159,9 @@ Canvas::TriangleFan(const RasterPoint *points, unsigned num_points)
       glDrawArrays(GL_LINE_LOOP, 0, num_points);
     } else {
       vertex_buffer.grow_discard(2 * (num_points + 1));
-      unsigned vertices = line_to_triangle(points, num_points,
-                                           vertex_buffer.begin(),
-                                           pen.get_width(), true);
+      unsigned vertices = LineToTriangles(points, num_points,
+                                          vertex_buffer.begin(),
+                                          pen.get_width(), true);
       if (vertices > 0) {
         glVertexPointer(2, GL_VALUE, 0, vertex_buffer.begin());
         glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
@@ -192,8 +192,8 @@ Canvas::line_piece(const RasterPoint a, const RasterPoint b)
   const RasterPoint v[] = { {a.x, a.y}, {b.x, b.y} };
   if (pen.get_width() > 2) {
     RasterPoint strip[6];
-    unsigned strip_len = line_to_triangle(v, 2, strip, pen.get_width(),
-                                          false, true);
+    unsigned strip_len = LineToTriangles(v, 2, strip, pen.get_width(),
+                                         false, true);
     if (strip_len > 0) {
       glVertexPointer(2, GL_VALUE, 0, &strip[0].x);
       glDrawArrays(GL_TRIANGLE_STRIP, 0, strip_len);

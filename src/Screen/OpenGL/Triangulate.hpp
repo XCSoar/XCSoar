@@ -41,13 +41,13 @@ Copyright_License {
  *         3 to 3*(num_points-3): success
  */
 unsigned
-polygon_to_triangle(const RasterPoint *points, unsigned num_points,
-                    GLushort *triangles, unsigned min_distance=1);
+PolygonToTriangle(const RasterPoint *points, unsigned num_points,
+                  GLushort *triangles, unsigned min_distance=1);
 
 #if RASTER_POINT_SIZE != SHAPE_POINT_SIZE
 unsigned
-polygon_to_triangle(const ShapePoint *points, unsigned num_points,
-                    GLushort *triangles, unsigned min_distance=1);
+PolygonToTriangle(const ShapePoint *points, unsigned num_points,
+                  GLushort *triangles, unsigned min_distance=1);
 #endif
 
 /**
@@ -67,8 +67,8 @@ polygon_to_triangle(const ShapePoint *points, unsigned num_points,
  * @return number of indices in the triangle strip
  */
 unsigned
-triangle_to_strip(GLushort *triangles, unsigned index_count,
-                  unsigned vertex_count, unsigned polygon_count=1);
+TriangleToStrip(GLushort *triangles, unsigned index_count,
+                unsigned vertex_count, unsigned polygon_count=1);
 
 /**
  * Create a triangle strip representing a thick line.
@@ -83,8 +83,8 @@ triangle_to_strip(GLushort *triangles, unsigned index_count,
  * @return Returns the number of triangle coordinates or 0 for failure
  */
 unsigned
-line_to_triangle(const RasterPoint *points, unsigned num_points,
-                 RasterPoint *strip, unsigned line_width,
-                 bool loop=false, bool tcap=false);
+LineToTriangles(const RasterPoint *points, unsigned num_points,
+                RasterPoint *strip, unsigned line_width,
+                bool loop=false, bool tcap=false);
 
 #endif

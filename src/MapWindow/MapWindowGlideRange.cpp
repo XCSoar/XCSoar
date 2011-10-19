@@ -55,8 +55,8 @@ struct ProjectedFan {
     AllocatedArray<GLushort> triangle_buffer;
     triangle_buffer.grow_discard(3 * (size - 2));
 
-    unsigned idx_count = polygon_to_triangle(points + start, size,
-                                             triangle_buffer.begin());
+    unsigned idx_count = PolygonToTriangle(points + start, size,
+                                           triangle_buffer.begin());
     if (idx_count == 0)
       return;
 

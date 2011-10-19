@@ -33,7 +33,7 @@ Copyright_License {
  */
 template <typename PT>
 static inline bool
-polygon_rotates_left(const PT *points, unsigned num_points)
+PolygonRotatesLeft(const PT *points, unsigned num_points)
 {
   int area = 0;
 
@@ -49,7 +49,7 @@ polygon_rotates_left(const PT *points, unsigned num_points)
  */
 template <typename PT>
 static inline bool
-triangle_empty(const PT &a, const PT &b, const PT &c)
+TriangleEmpty(const PT &a, const PT &b, const PT &c)
 {
   return ((b.x-a.x) * (int)(c.y-b.y) -
           (b.y-a.y) * (int)(c.x-b.x)) == 0;
@@ -60,7 +60,7 @@ triangle_empty(const PT &a, const PT &b, const PT &c)
  */
 template <typename PT>
 static inline bool
-point_left_of_line(const PT &p, const PT &a, const PT &b)
+PointLeftOfLine(const PT &p, const PT &a, const PT &b)
 {
   // normal vector of the line
   int nx = a.y - b.y;
@@ -79,11 +79,11 @@ point_left_of_line(const PT &p, const PT &a, const PT &b)
  */
 template <typename PT>
 static inline bool
-inside_triangle(const PT &p, const PT &a, const PT &b, const PT &c)
+InsideTriangle(const PT &p, const PT &a, const PT &b, const PT &c)
 {
-  return point_left_of_line(p, a, b) &&
-         point_left_of_line(p, b, c) &&
-         point_left_of_line(p, c, a);
+  return PointLeftOfLine(p, a, b) &&
+         PointLeftOfLine(p, b, c) &&
+         PointLeftOfLine(p, c, a);
 }
 
 /**
@@ -91,7 +91,7 @@ inside_triangle(const PT &p, const PT &a, const PT &b, const PT &c)
  */
 template <typename PT>
 static inline bool
-left_bend(const PT &a, const PT &b, const PT &c)
+LeftBend(const PT &a, const PT &b, const PT &c)
 {
   return ((b.x-a.x) * (int)(c.y-b.y) -
           (b.y-a.y) * (int)(c.x-b.x)) > 0;
@@ -101,7 +101,7 @@ left_bend(const PT &a, const PT &b, const PT &c)
  * Scale vector v to a given length.
  */
 static inline void
-normalize(RasterPoint *v, float length)
+Normalize(RasterPoint *v, float length)
 {
   // TODO: optimize!
   float scale = length / sqrt(v->x*(float)v->x + v->y*(float)v->y);
@@ -111,13 +111,13 @@ normalize(RasterPoint *v, float length)
 
 #if RASTER_POINT_SIZE == SHAPE_POINT_SIZE
 unsigned
-polygon_to_triangle(const RasterPoint *points, unsigned num_points,
-                    GLushort *triangles, unsigned min_distance)
+PolygonToTriangle(const RasterPoint *points, unsigned num_points,
+                  GLushort *triangles, unsigned min_distance)
 #else
 template <typename PT>
 static inline unsigned
-_polygon_to_triangle(const PT *points, unsigned num_points,
-                     GLushort *triangles, unsigned min_distance)
+_PolygonToTriangle(const PT *points, unsigned num_points,
+                   GLushort *triangles, unsigned min_distance)
 #endif
 {
   //const unsigned orig_num_points = num_points;
@@ -137,7 +137,7 @@ _polygon_to_triangle(const PT *points, unsigned num_points,
   GLushort start = 0;  // index of the first vertex
 
   // initialize next pointer counterclockwise
-  if (polygon_rotates_left(points, num_points)) {
+  if (PolygonRotatesLeft(points, num_points)) {
     for (unsigned i = 0; i < num_points-1; i++)
       next[i] = i+1;
     next[num_points-1] = 0;
@@ -152,14 +152,14 @@ _polygon_to_triangle(const PT *points, unsigned num_points,
     for (unsigned a=start, b=next[a], c=next[b], heat=0;
          num_points > 3 && heat < num_points;
          a=b, b=c, c=next[c], heat++) {
-      bool point_removeable = triangle_empty(points[a], points[b], points[c]);
+      bool point_removeable = TriangleEmpty(points[a], points[b], points[c]);
       if (!point_removeable) {
         unsigned distance = manhattan_distance(points[a], points[b]);
         if (distance < min_distance) {
           point_removeable = true;
           if (distance != 0) {
             for (unsigned p = next[c]; p != a; p = next[p]) {
-              if (inside_triangle(points[p], points[a], points[b], points[c])) {
+              if (InsideTriangle(points[p], points[a], points[b], points[c])) {
                 point_removeable = false;
                 break;
               }
@@ -188,10 +188,10 @@ _polygon_to_triangle(const PT *points, unsigned num_points,
   for (unsigned a=start, b=next[a], c=next[b], heat=0;
        num_points > 2;
        a=b, b=c, c=next[c]) {
-    if (left_bend(points[a], points[b], points[c])) {
+    if (LeftBend(points[a], points[b], points[c])) {
       bool ear_cuttable = true;
       for (unsigned p = next[c]; p != a; p = next[p]) {
-        if (inside_triangle(points[p], points[a], points[b], points[c])) {
+        if (InsideTriangle(points[p], points[a], points[b], points[c])) {
           ear_cuttable = false;
           break;
         }
@@ -222,23 +222,23 @@ _polygon_to_triangle(const PT *points, unsigned num_points,
 
 #if RASTER_POINT_SIZE != SHAPE_POINT_SIZE
 unsigned
-polygon_to_triangle(const RasterPoint *points, unsigned num_points,
+PolygonToTriangle(const RasterPoint *points, unsigned num_points,
                     GLushort *triangles, unsigned min_distance)
 {
-  return _polygon_to_triangle(points, num_points, triangles, min_distance);
+  return _PolygonToTriangle(points, num_points, triangles, min_distance);
 }
 
 unsigned
-polygon_to_triangle(const ShapePoint *points, unsigned num_points,
+PolygonToTriangle(const ShapePoint *points, unsigned num_points,
                     GLushort *triangles, unsigned min_distance)
 {
-  return _polygon_to_triangle(points, num_points, triangles, min_distance);
+  return _PolygonToTriangle(points, num_points, triangles, min_distance);
 }
 #endif
 
 unsigned
-triangle_to_strip(GLushort *triangles, unsigned index_count,
-                  unsigned vertex_count, unsigned polygon_count)
+TriangleToStrip(GLushort *triangles, unsigned index_count,
+                unsigned vertex_count, unsigned polygon_count)
 {
   // count the number of occurrences for each vertex
   GLushort *vcount = new GLushort[vertex_count]();
@@ -360,9 +360,8 @@ triangle_to_strip(GLushort *triangles, unsigned index_count,
 }
 
 unsigned
-line_to_triangle(const RasterPoint *points, unsigned num_points,
-                 RasterPoint *strip, unsigned line_width,
-                 bool loop, bool tcap)
+LineToTriangles(const RasterPoint *points, unsigned num_points,
+                RasterPoint *strip, unsigned line_width, bool loop, bool tcap)
 {
   if (num_points < 2)
     return 0;
@@ -401,7 +400,7 @@ line_to_triangle(const RasterPoint *points, unsigned num_points,
     if (tcap) {
       p.x = a->x - b->x;
       p.y = a->y - b->y;
-      normalize(&p, half_line_width);
+      Normalize(&p, half_line_width);
 
       s->x = a->x + p.x;
       s->y = a->y + p.y;
@@ -409,7 +408,7 @@ line_to_triangle(const RasterPoint *points, unsigned num_points,
     }
     p.x = a->y - b->y;
     p.y = b->x - a->x;
-    normalize(&p, half_line_width);
+    Normalize(&p, half_line_width);
 
     s->x = a->x - p.x;
     s->y = a->y - p.y;
@@ -422,7 +421,7 @@ line_to_triangle(const RasterPoint *points, unsigned num_points,
   // add points by calculating the angle bisector of ab and bc
   if (num_points >= 3) {
     while (c != points_end) {
-      if (!triangle_empty(*a, *b, *c)) {  // skip zero or 180 degree bends
+      if (!TriangleEmpty(*a, *b, *c)) {  // skip zero or 180 degree bends
         // TODO: support 180 degree bends!
 
         RasterPoint g, h;
@@ -430,8 +429,8 @@ line_to_triangle(const RasterPoint *points, unsigned num_points,
         g.y = b->y - a->y;
         h.x = c->x - b->x;
         h.y = c->y - b->y;
-        normalize(&g, 1000.);
-        normalize(&h, 1000.);
+        Normalize(&g, 1000.);
+        Normalize(&h, 1000.);
         int bisector_x = -g.y - h.y;
         int bisector_y = g.x + h.x;
 
@@ -472,7 +471,7 @@ line_to_triangle(const RasterPoint *points, unsigned num_points,
     RasterPoint p;
     p.x = a->y - b->y;
     p.y = b->x - a->x;
-    normalize(&p, half_line_width);
+    Normalize(&p, half_line_width);
 
     s->x = b->x - p.x;
     s->y = b->y - p.y;
@@ -483,7 +482,7 @@ line_to_triangle(const RasterPoint *points, unsigned num_points,
     if (tcap) {
       p.x = b->x - a->x;
       p.y = b->y - a->y;
-      normalize(&p, half_line_width);
+      Normalize(&p, half_line_width);
 
       s->x = b->x + p.x;
       s->y = b->y + p.y;
