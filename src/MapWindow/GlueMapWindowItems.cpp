@@ -64,7 +64,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
   if (Basic().location_available)
     vector = Basic().location.DistanceBearing(location);
   else
-    vector.distance = fixed_minus_one;
+    vector.SetInvalid();
 
   ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), vector, list,
                         aircraft_look,

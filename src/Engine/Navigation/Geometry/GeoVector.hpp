@@ -109,6 +109,10 @@ struct GeoVector {
   inline bool IsValid() const {
     return !negative(distance);
   }
+
+  void SetInvalid() {
+    distance = fixed_minus_one;
+  }
 };
 
 #endif
