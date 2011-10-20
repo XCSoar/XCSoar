@@ -7,6 +7,8 @@ Version 6.2.2 - not yet released
   - fix instant L/D formula
 * user interface
   - fixed several minor bugs in the plane database dialog
+* Android
+  - acquire "Vibrate" permission
 
 Version 6.2.1 - 2011/09/26
 * faster METAR and TAF download
