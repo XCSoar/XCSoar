@@ -36,7 +36,7 @@ public:
    */
   class Handler {
   public:
-    virtual void LineReceived(const char *line) = 0;
+    virtual void DataReceived(const void *data, size_t length) = 0;
   };
 
 protected:

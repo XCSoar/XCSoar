@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_TCP_PORT_HPP
 #define XCSOAR_DEVICE_TCP_PORT_HPP
 
-#include "FifoBuffer.hpp"
 #include "Thread/StoppableThread.hpp"
 #include "Port.hpp"
 
@@ -33,15 +32,11 @@ Copyright_License {
  */
 class TCPPort : public Port, protected StoppableThread
 {
-  typedef FifoBuffer<char, 256u> Buffer;
-
   unsigned port;
 
   unsigned rx_timeout;
 
   int listener_fd, connection_fd;
-
-  Buffer buffer;
 
 public:
   /**
@@ -77,7 +72,6 @@ public:
   virtual unsigned SetBaudrate(unsigned BaudRate);
   virtual bool StopRxThread();
   virtual bool StartRxThread();
-  void ProcessChar(char c);
 
   virtual int Read(void *buffer, size_t length);
 

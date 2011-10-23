@@ -76,8 +76,8 @@ TTYPort::Run()
   // XXX use poll()
   while (!WaitForStopped(50)) {
     ssize_t nbytes = read(fd, buffer, sizeof(buffer));
-    for (ssize_t i = 0; i < nbytes; ++i)
-      ProcessChar(buffer[i]);
+    if (nbytes > 0)
+      handler.DataReceived(buffer, nbytes);
   }
 
   Flush();
@@ -280,27 +280,4 @@ TTYPort::Read(void *Buffer, size_t Size)
     return -1;
 
   return read(fd, Buffer, Size);
-}
-
-void
-TTYPort::ProcessChar(char c)
-{
-  Buffer::Range range = buffer.Write();
-  if (range.second == 0) {
-    // overflow, so reset buffer
-    buffer.Clear();
-    return;
-  }
-
-  if (c == '\n') {
-    range.first[0] = _T('\0');
-    buffer.Append(1);
-
-    range = buffer.Read();
-    handler.LineReceived(range.first);
-    buffer.Clear();
-  } else if (c != '\r') {
-    range.first[0] = c;
-    buffer.Append(1);
-  }
 }

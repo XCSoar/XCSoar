@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_DESCRIPTOR_HPP
 
 #include "Port/Port.hpp"
+#include "Port/LineHandler.hpp"
 #include "Device/Parser.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "RadioFrequency.hpp"
@@ -46,7 +47,7 @@ class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
 
-class DeviceDescriptor : public Port::Handler {
+class DeviceDescriptor : public PortLineHandler {
   /** the index of this device in the global list */
   unsigned index;
 
@@ -243,6 +244,7 @@ public:
 
   bool ParseLine(const char *line);
 
+protected:
   virtual void LineReceived(const char *line);
 };
 

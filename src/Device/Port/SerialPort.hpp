@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_SERIAL_PORT_HPP
 #define XCSOAR_DEVICE_SERIAL_PORT_HPP
 
-#include "FifoBuffer.hpp"
 #include "Thread/StoppableThread.hpp"
 #include "Port.hpp"
 
@@ -39,16 +38,12 @@ class OverlappedEvent;
  */
 class SerialPort : public Port, protected StoppableThread
 {
-  typedef FifoBuffer<char, 256u> Buffer;
-
   /** Name of the serial port */
   TCHAR sPortName[64];
 
   unsigned baud_rate;
 
   HANDLE hPort;
-
-  Buffer buffer;
 
 #ifdef _WIN32_WCE
   /**
@@ -123,7 +118,6 @@ public:
   virtual unsigned SetBaudrate(unsigned BaudRate);
   virtual bool StopRxThread();
   virtual bool StartRxThread();
-  void ProcessChar(char c);
 
   virtual int Read(void *Buffer, size_t Size);
 

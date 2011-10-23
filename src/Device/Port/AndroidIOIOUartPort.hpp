@@ -28,7 +28,6 @@ Copyright_License {
 #include "Android/IOIOHelper.hpp"
 #endif
 #include "Util/StaticString.hpp"
-#include "Util/FifoBuffer.hpp"
 #include "Thread/StoppableThread.hpp"
 #include "Thread/Trigger.hpp"
 #include "Port.hpp"
@@ -46,10 +45,6 @@ class IOIOHelper;
  */
 class AndroidIOIOUartPort : public Port, protected StoppableThread
 {
-  typedef FifoBuffer<char, 256u> Buffer;
-
-  Buffer buffer;
-
 public:
   AndroidIOIOUartPort(unsigned UartID, unsigned BaudRate, Handler &_handler);
   virtual ~AndroidIOIOUartPort();
@@ -73,7 +68,6 @@ public:
   virtual unsigned SetBaudrate(unsigned BaudRate);
   virtual bool StopRxThread();
   virtual bool StartRxThread();
-  void ProcessChar(char c);
 
   virtual int Read(void *Buffer, size_t Size);
 

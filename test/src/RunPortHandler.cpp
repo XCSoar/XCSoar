@@ -31,11 +31,12 @@ Copyright_License {
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 
 class MyHandler : public Port::Handler {
 public:
-  virtual void LineReceived(const char *line) {
-    printf("%s\n", line);
+  virtual void DataReceived(const void *data, size_t length) {
+    fwrite(data, 1, length, stdout);
   }
 };
 

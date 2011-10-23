@@ -144,8 +144,7 @@ TCPPort::Run()
           continue;
         }
 
-        for (ssize_t i = 0; i < nbytes; ++i)
-          ProcessChar(buffer[i]);
+        handler.DataReceived(buffer, nbytes);
       } else if (ret < 0) {
         close(connection_fd);
         connection_fd = -1;
@@ -259,27 +258,4 @@ TCPPort::Read(void *buffer, size_t length)
     return -1;
 
   return read(ufd, buffer, length);
-}
-
-void
-TCPPort::ProcessChar(char c)
-{
-  Buffer::Range range = buffer.Write();
-  if (range.second == 0) {
-    // overflow, so reset buffer
-    buffer.Clear();
-    return;
-  }
-
-  if (c == '\n') {
-    range.first[0] = _T('\0');
-    buffer.Append(1);
-
-    range = buffer.Read();
-    handler.LineReceived(range.first);
-    buffer.Clear();
-  } else if (c != '\r') {
-    range.first[0] = c;
-    buffer.Append(1);
-  }
 }

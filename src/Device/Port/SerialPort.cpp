@@ -65,8 +65,6 @@ SerialPort::Open()
 
   DCB PortDCB;
 
-  buffer.Clear();
-
   // Open the serial port.
   hPort = CreateFile(sPortName,    // Pointer to the name of the port
                      GENERIC_READ | GENERIC_WRITE, // Access (read-write) mode
@@ -251,8 +249,7 @@ SerialPort::Run()
     }
 
     // Process data that was directly read by ReadFile()
-    for (unsigned int j = 0; j < dwBytesTransferred; j++)
-      ProcessChar(inbuf[j]);
+    handler.DataReceived(inbuf, dwBytesTransferred);
 
 #else
 
@@ -282,8 +279,7 @@ SerialPort::Run()
       continue;
     }
 
-    for (unsigned int j = 0; j < dwBytesTransferred; j++)
-      ProcessChar(inbuf[j]);
+    handler.DataReceived(inbuf, dwBytesTransferred);
 #endif
 
   }
@@ -566,29 +562,4 @@ SerialPort::Read(void *Buffer, size_t Size)
     return -1;
   }
 #endif
-}
-
-void
-SerialPort::ProcessChar(char c)
-{
-  assert(Thread::IsInside());
-
-  Buffer::Range range = buffer.Write();
-  if (range.second == 0) {
-    // overflow, so reset buffer
-    buffer.Clear();
-    return;
-  }
-
-  if (c == '\n') {
-    range.first[0] = _T('\0');
-    buffer.Append(1);
-
-    range = buffer.Read();
-    handler.LineReceived(range.first);
-    buffer.Clear();
-  } else if (c != '\r') {
-    range.first[0] = c;
-    buffer.Append(1);
-  }
 }

@@ -21,30 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_NULL_PORT_HPP
-#define XCSOAR_DEVICE_NULL_PORT_HPP
+#ifndef XCSOAR_DEVICE_LINE_HANDLER_HPP
+#define XCSOAR_DEVICE_LINE_HANDLER_HPP
 
 #include "Port.hpp"
+#include "FifoBuffer.hpp"
 
-/**
- * Generic NullPort thread handler class
- */
-class NullPort : public Port, private Port::Handler {
-public:
-  NullPort();
-  NullPort(Port::Handler &_handler);
+class PortLineHandler : protected Port::Handler {
+  typedef FifoBuffer<char, 256u> Buffer;
 
-  virtual size_t Write(const void *data, size_t length);
-  virtual void Flush();
-  virtual bool SetRxTimeout(unsigned Timeout);
-  virtual unsigned GetBaudrate() const;
-  virtual unsigned SetBaudrate(unsigned BaudRate);
-  virtual bool StopRxThread();
-  virtual bool StartRxThread();
-  virtual int Read(void *Buffer, size_t Size);
+  Buffer buffer;
 
-private:
+protected:
   virtual void DataReceived(const void *data, size_t length);
-  };
+  virtual void LineReceived(const char *line) = 0;
+};
 
 #endif

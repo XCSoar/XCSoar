@@ -83,6 +83,6 @@ NullPort::Read(void *Buffer, size_t Size)
 }
 
 void
-NullPort::LineReceived(const char *line)
+NullPort::DataReceived(const void *data, size_t length)
 {
 }

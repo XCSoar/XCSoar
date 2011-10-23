@@ -65,8 +65,10 @@ AndroidBluetoothPort::Run()
 
   while (!CheckStopped()) {
     int ch = helper->read(env);
-    if (ch >= 0)
-      ProcessChar(ch);
+    if (ch >= 0) {
+      char ch2 = ch;
+      handler.DataReceived(&ch2, sizeof(ch2));
+    }
   }
 }
 
@@ -171,27 +173,4 @@ AndroidBluetoothPort::Read(void *Buffer, size_t Size)
 
   *(uint8_t *)Buffer = ch;
   return 1;
-}
-
-void
-AndroidBluetoothPort::ProcessChar(char c)
-{
-  Buffer::Range range = buffer.Write();
-  if (range.second == 0) {
-    // overflow, so reset buffer
-    buffer.Clear();
-    return;
-  }
-
-  if (c == '\n') {
-    range.first[0] = _T('\0');
-    buffer.Append(1);
-
-    range = buffer.Read();
-    handler.LineReceived(range.first);
-    buffer.Clear();
-  } else if (c != '\r') {
-    range.first[0] = c;
-    buffer.Append(1);
-  }
 }

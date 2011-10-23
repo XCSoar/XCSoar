@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_DEVICE_ANDROID_BLUETOOTH_PORT_HPP
 
 #include "Util/StaticString.hpp"
-#include "Util/FifoBuffer.hpp"
 #include "Thread/StoppableThread.hpp"
 #include "Thread/Trigger.hpp"
 #include "Port.hpp"
@@ -41,14 +40,10 @@ class BluetoothHelper;
  */
 class AndroidBluetoothPort : public Port, protected StoppableThread
 {
-  typedef FifoBuffer<char, 256u> Buffer;
-
   /** the peer's Bluetooth address */
   StaticString<32> address;
 
   BluetoothHelper *helper;
-
-  Buffer buffer;
 
 public:
   AndroidBluetoothPort(const TCHAR *address, Handler &_handler);
@@ -73,7 +68,6 @@ public:
   virtual unsigned SetBaudrate(unsigned BaudRate);
   virtual bool StopRxThread();
   virtual bool StartRxThread();
-  void ProcessChar(char c);
 
   virtual int Read(void *Buffer, size_t Size);
 

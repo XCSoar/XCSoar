@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_TTY_PORT_HPP
 #define XCSOAR_DEVICE_TTY_PORT_HPP
 
-#include "FifoBuffer.hpp"
 #include "Thread/StoppableThread.hpp"
 #include "Port.hpp"
 
@@ -33,8 +32,6 @@ Copyright_License {
  */
 class TTYPort : public Port, protected StoppableThread
 {
-  typedef FifoBuffer<char, 256u> Buffer;
-
   /** Name of the serial port */
   TCHAR sPortName[64];
 
@@ -43,8 +40,6 @@ class TTYPort : public Port, protected StoppableThread
   unsigned baud_rate;
 
   int fd;
-
-  Buffer buffer;
 
 public:
   /**
@@ -81,7 +76,6 @@ public:
   virtual unsigned SetBaudrate(unsigned BaudRate);
   virtual bool StopRxThread();
   virtual bool StartRxThread();
-  void ProcessChar(char c);
 
   virtual int Read(void *Buffer, size_t Size);
 
