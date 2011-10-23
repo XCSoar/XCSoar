@@ -60,7 +60,7 @@ Canvas::polyline(const RasterPoint *lppt, unsigned cPoints)
 void
 Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
 {
-  if (brush.IsHollow() && !pen.defined())
+  if (brush.IsHollow() && !pen.IsDefined())
     return;
 
   Sint16 vx[cPoints], vy[cPoints];
@@ -75,7 +75,7 @@ Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
                          brush.GetColor().GFXColor());
 
   if (pen_over_brush())
-    ::polygonColor(surface, vx, vy, cPoints, pen.get_color().GFXColor());
+    ::polygonColor(surface, vx, vy, cPoints, pen.GetColor().GFXColor());
 }
 
 void
@@ -89,7 +89,7 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
                         brush.GetColor().GFXColor());
 
   if (pen_over_brush())
-    ::circleColor(surface, x, y, radius, pen.get_color().GFXColor());
+    ::circleColor(surface, x, y, radius, pen.GetColor().GFXColor());
 }
 
 void
@@ -111,7 +111,7 @@ Canvas::segment(PixelScalar x, PixelScalar y, UPixelScalar radius,
     ::pieColor(surface, x, y, radius, 
                (int)start.Degrees() - 90,
                (int)end.Degrees() - 90,
-               pen.get_color().GFXColor());
+               pen.GetColor().GFXColor());
 }
 
 void

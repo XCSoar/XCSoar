@@ -361,7 +361,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
 #ifdef ENABLE_OPENGL
     visitor.fans.Prepare();
-    Graphics::hpTerrainLine.set();
+    Graphics::hpTerrainLine.Set();
 #else
     // Select the TerrainLine pen
     canvas.hollow_brush();
@@ -397,7 +397,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   glStencilFunc(GL_NOTEQUAL, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-  Graphics::hpTerrainLineThick.set();
+  Graphics::hpTerrainLineThick.Set();
   visitor.fans.DrawOutline(canvas);
 
   glDisable(GL_STENCIL_TEST);

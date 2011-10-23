@@ -149,7 +149,7 @@ public:
   }
 
   void select(const Pen &pen) {
-    select_object(pen.native());
+    select_object(pen.Native());
   }
 
   void select(const Brush &brush) {

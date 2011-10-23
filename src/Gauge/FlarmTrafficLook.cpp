@@ -49,18 +49,18 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
   team_brush_magenta.Set(Color(0xFF, 0, 0xCB));
 
   UPixelScalar width = Layout::FastScale(small ? 1 : 2);
-  warning_pen.set(width, warning_color);
-  alarm_pen.set(width, alarm_color);
-  default_pen.set(width, default_color);
-  passive_pen.set(width, passive_color);
-  selection_pen.set(width, selection_color);
-  team_pen_green.set(width, Color(0x74, 0xFF, 0));
-  team_pen_blue.set(width, Color(0, 0x90, 0xFF));
-  team_pen_yellow.set(width, Color(0xFF, 0xE8, 0));
-  team_pen_magenta.set(width, Color(0xFF, 0, 0xCB));
+  warning_pen.Set(width, warning_color);
+  alarm_pen.Set(width, alarm_color);
+  default_pen.Set(width, default_color);
+  passive_pen.Set(width, passive_color);
+  selection_pen.Set(width, selection_color);
+  team_pen_green.Set(width, Color(0x74, 0xFF, 0));
+  team_pen_blue.Set(width, Color(0, 0x90, 0xFF));
+  team_pen_yellow.Set(width, Color(0xFF, 0xE8, 0));
+  team_pen_magenta.Set(width, Color(0xFF, 0, 0xCB));
 
-  plane_pen.set(width, radar_color);
-  radar_pen.set(1, radar_color);
+  plane_pen.Set(width, radar_color);
+  radar_pen.Set(1, radar_color);
 
   no_traffic_font.set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
   label_font.set(Fonts::GetStandardFontFace(), Layout::FastScale(14));
@@ -86,18 +86,18 @@ FlarmTrafficLook::Deinitialise()
   team_brush_yellow.Reset();
   team_brush_magenta.Reset();
 
-  warning_pen.reset();
-  alarm_pen.reset();
-  default_pen.reset();
-  passive_pen.reset();
-  selection_pen.reset();
-  team_pen_green.reset();
-  team_pen_blue.reset();
-  team_pen_yellow.reset();
-  team_pen_magenta.reset();
+  warning_pen.Reset();
+  alarm_pen.Reset();
+  default_pen.Reset();
+  passive_pen.Reset();
+  selection_pen.Reset();
+  team_pen_green.Reset();
+  team_pen_blue.Reset();
+  team_pen_yellow.Reset();
+  team_pen_magenta.Reset();
 
-  plane_pen.reset();
-  radar_pen.reset();
+  plane_pen.Reset();
+  radar_pen.Reset();
 
   no_traffic_font.reset();
   label_font.reset();

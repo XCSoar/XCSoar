@@ -39,13 +39,13 @@ class Pen
 {
 public:
 #ifndef USE_GDI
-  enum style {
+  enum Style {
     SOLID,
     DASH,
     BLANK
   };
 #else
-  enum style {
+  enum Style {
     SOLID = PS_SOLID,
     DASH = PS_DASH,
     BLANK = PS_NULL
@@ -65,7 +65,7 @@ public:
   Pen():width(0) {}
 
   gcc_constexpr_ctor
-  Pen(enum style style, unsigned _width, const Color _color)
+  Pen(Style style, unsigned _width, const Color _color)
     :width(_width), color(_color) {} // XXX style
 
   gcc_constexpr_ctor
@@ -80,8 +80,8 @@ public:
    * @param width Width of the line/Pen
    * @param c Color of the Pen
    */
-  Pen(enum style style, unsigned width, const Color c):pen(NULL) {
-    set(style, width, c);
+  Pen(Style Style, unsigned width, const Color c):pen(NULL) {
+    Set(Style, width, c);
   }
   /**
    * Constructor that creates a solid Pen object, based on the given parameters
@@ -89,11 +89,11 @@ public:
    * @param c Color of the Pen
    */
   Pen(unsigned width, Color c):pen(NULL) {
-    set(width, c);
+    Set(width, c);
   }
 
   /** Destructor */
-  ~Pen() { reset(); }
+  ~Pen() { Reset(); }
 #endif /* USE_GDI */
 
 public:
@@ -103,24 +103,24 @@ public:
    * @param width Width of the line/Pen
    * @param c Color of the Pen
    */
-  void set(enum style style, unsigned width, const Color c);
+  void Set(Style style, unsigned width, const Color c);
   /**
    * Sets the Pens parameters to the given values
    * @param width Width of the line/Pen
    * @param c Color of the Pen
    */
-  void set(unsigned width, const Color c);
+  void Set(unsigned width, const Color c);
   /**
    * Resets the Pen to NULL
    */
-  void reset();
+  void Reset();
 
   /**
    * Returns whether the Pen is defined (!= NULL)
    * @return True if the Pen is defined, False otherwise
    */
   bool
-  defined() const
+  IsDefined() const
   {
 #ifndef USE_GDI
     return width > 0;
@@ -131,13 +131,13 @@ public:
 
 #ifndef USE_GDI
   unsigned
-  get_width() const
+  GetWidth() const
   {
     return width;
   }
 
   const Color
-  get_color() const
+  GetColor() const
   {
     return color;
   }
@@ -146,14 +146,14 @@ public:
    * Returns the native HPEN object
    * @return The native HPEN object
    */
-  HPEN native() const { return pen; }
+  HPEN Native() const { return pen; }
 #endif
 
 #ifdef ENABLE_OPENGL
   /**
    * Configures this pen in the OpenGL context.
    */
-  void set() const {
+  void Set() const {
     color.Set();
 
 #ifdef HAVE_GLES

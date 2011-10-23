@@ -60,7 +60,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   // in screen coords
 
 #ifdef ENABLE_OPENGL
-  pen.set();
+  pen.Set();
   brush.Set();
 #else
   shape_renderer.configure(&pen, &brush);

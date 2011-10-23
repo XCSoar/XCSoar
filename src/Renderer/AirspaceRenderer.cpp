@@ -168,17 +168,17 @@ public:
       setup_interior(airspace);
       if (m_warnings.is_warning(airspace) ||
           m_warnings.is_inside(airspace) ||
-          pen_thick.get_width() >= 2*screen_radius) {
+          pen_thick.GetWidth() >= 2 * screen_radius) {
         // fill whole circle
         canvas.circle(screen_center.x, screen_center.y, screen_radius);
       } else {
         // draw a ring inside the circle
         Color color = airspace_look.colors[settings.colours[airspace.GetType()]];
-        Pen pen_donut(pen_thick.get_width()/2, color.WithAlpha(90));
+        Pen pen_donut(pen_thick.GetWidth() / 2, color.WithAlpha(90));
         canvas.hollow_brush();
         canvas.select(pen_donut);
         canvas.circle(screen_center.x, screen_center.y,
-                      screen_radius - pen_thick.get_width()/4);
+                      screen_radius - pen_thick.GetWidth() / 4);
       }
     }
 

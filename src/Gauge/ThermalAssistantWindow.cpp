@@ -66,13 +66,13 @@ ThermalAssistantWindow::on_create()
 
   UPixelScalar width = Layout::FastScale(small ? 1 : 2);
 #ifdef ENABLE_OPENGL
-  hpPolygon.set(width, hcPolygonPen.WithAlpha(128));
+  hpPolygon.Set(width, hcPolygonPen.WithAlpha(128));
 #else /* !OPENGL */
-  hpPolygon.set(width, hcPolygonPen);
+  hpPolygon.Set(width, hcPolygonPen);
 #endif /* !OPENGL */
-  hpInnerCircle.set(1, hcCircles);
-  hpOuterCircle.set(Pen::DASH, 1, hcCircles);
-  hpPlane.set(width, hcCircles);
+  hpInnerCircle.Set(1, hcCircles);
+  hpOuterCircle.Set(Pen::DASH, 1, hcCircles);
+  hpPlane.Set(width, hcCircles);
 
   hfNoTraffic.set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
   hfLabels.set(Fonts::GetStandardFontFace(), Layout::FastScale(12));

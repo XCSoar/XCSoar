@@ -31,8 +31,8 @@ ThermalBandLook::Initialise(bool _inverse)
   inverse = _inverse;
 
   brush.Set(Graphics::skyColor);
-  pen.set(Layout::Scale(1), DarkColor(Graphics::skyColor));
+  pen.Set(Layout::Scale(1), DarkColor(Graphics::skyColor));
 
-  white_pen.set(2, COLOR_WHITE);
-  black_pen.set(2, COLOR_BLACK);
+  white_pen.Set(2, COLOR_WHITE);
+  black_pen.Set(2, COLOR_BLACK);
 }

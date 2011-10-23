@@ -93,8 +93,8 @@ protected:
    * brush and pen share the same color.
    */
   bool pen_over_brush() const {
-    return pen.defined() &&
-      (brush.IsHollow() || brush.GetColor() != pen.get_color());
+    return pen.IsDefined() &&
+      (brush.IsHollow() || brush.GetColor() != pen.GetColor());
   }
 
 public:
@@ -206,7 +206,7 @@ public:
 
   void outline_rectangle(PixelScalar left, PixelScalar top,
                          PixelScalar right, PixelScalar bottom) {
-    pen.set();
+    pen.Set();
     OutlineRectangleGL(left, top, right, bottom);
   }
 

@@ -50,9 +50,9 @@ VarioLook::Initialise(bool _inverse, bool _colors,
   sink_brush.Set(sink_color);
   lift_brush.Set(lift_color);
 
-  thick_background_pen.set(Layout::Scale(5), background_color);
-  thick_sink_pen.set(Layout::Scale(5), sink_color);
-  thick_lift_pen.set(Layout::Scale(5), lift_color);
+  thick_background_pen.Set(Layout::Scale(5), background_color);
+  thick_sink_pen.Set(Layout::Scale(5), sink_color);
+  thick_lift_pen.Set(Layout::Scale(5), lift_color);
 
   background_bitmap.load(Units::GetUserVerticalSpeedUnit() == unKnots
                          ? IDB_VARIOSCALEC : IDB_VARIOSCALEA);

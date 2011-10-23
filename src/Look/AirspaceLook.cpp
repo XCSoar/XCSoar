@@ -53,7 +53,7 @@ void
 AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
 {
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
-    pens[i].set(Layout::Scale(2),
+    pens[i].Set(Layout::Scale(2),
                 colors[settings.colours[i]]);
 
   // airspace brushes and colors

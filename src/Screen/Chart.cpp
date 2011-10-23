@@ -149,7 +149,7 @@ Chart::StyleLine(const RasterPoint l1, const RasterPoint l2, ChartLook::Style St
 void
 Chart::StyleLine(const RasterPoint l1, const RasterPoint l2, const Pen &pen)
 {
-  assert(pen.defined());
+  assert(pen.IsDefined());
   canvas.select(pen);
   canvas.line(l1, l2);
 }

@@ -99,14 +99,14 @@ Canvas::polyline(const RasterPoint *points, unsigned num_points)
 {
   glVertexPointer(2, GL_VALUE, 0, points);
 
-  pen.set();
+  pen.Set();
   glDrawArrays(GL_LINE_STRIP, 0, num_points);
 }
 
 void
 Canvas::polygon(const RasterPoint *points, unsigned num_points)
 {
-  if (brush.IsHollow() && !pen.defined())
+  if (brush.IsHollow() && !pen.IsDefined())
     return;
 
   glVertexPointer(2, GL_VALUE, 0, points);
@@ -124,14 +124,14 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
   }
 
   if (pen_over_brush()) {
-    pen.set();
-    if (pen.get_width() <= 2) {
+    pen.Set();
+    if (pen.GetWidth() <= 2) {
       glDrawArrays(GL_LINE_LOOP, 0, num_points);
     } else {
       vertex_buffer.grow_discard(2 * (num_points + 1));
       unsigned vertices = LineToTriangles(points, num_points,
                                           vertex_buffer.begin(),
-                                          pen.get_width(), true);
+                                          pen.GetWidth(), true);
       if (vertices > 0) {
         glVertexPointer(2, GL_VALUE, 0, vertex_buffer.begin());
         glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
@@ -143,7 +143,7 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
 void
 Canvas::TriangleFan(const RasterPoint *points, unsigned num_points)
 {
-  if (brush.IsHollow() && !pen.defined())
+  if (brush.IsHollow() && !pen.IsDefined())
     return;
 
   glVertexPointer(2, GL_VALUE, 0, points);
@@ -154,14 +154,14 @@ Canvas::TriangleFan(const RasterPoint *points, unsigned num_points)
   }
 
   if (pen_over_brush()) {
-    pen.set();
-    if (pen.get_width() <= 2) {
+    pen.Set();
+    if (pen.GetWidth() <= 2) {
       glDrawArrays(GL_LINE_LOOP, 0, num_points);
     } else {
       vertex_buffer.grow_discard(2 * (num_points + 1));
       unsigned vertices = LineToTriangles(points, num_points,
                                           vertex_buffer.begin(),
-                                          pen.get_width(), true);
+                                          pen.GetWidth(), true);
       if (vertices > 0) {
         glVertexPointer(2, GL_VALUE, 0, vertex_buffer.begin());
         glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
@@ -173,7 +173,7 @@ Canvas::TriangleFan(const RasterPoint *points, unsigned num_points)
 void
 Canvas::line(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by)
 {
-  pen.set();
+  pen.Set();
 
   const GLvalue v[] = { ax, ay, bx, by };
   glVertexPointer(2, GL_VALUE, 0, v);
@@ -187,12 +187,12 @@ Canvas::line(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by)
 void
 Canvas::line_piece(const RasterPoint a, const RasterPoint b)
 {
-  pen.set();
+  pen.Set();
 
   const RasterPoint v[] = { {a.x, a.y}, {b.x, b.y} };
-  if (pen.get_width() > 2) {
+  if (pen.GetWidth() > 2) {
     RasterPoint strip[6];
-    unsigned strip_len = LineToTriangles(v, 2, strip, pen.get_width(),
+    unsigned strip_len = LineToTriangles(v, 2, strip, pen.GetWidth(),
                                          false, true);
     if (strip_len > 0) {
       glVertexPointer(2, GL_VALUE, 0, &strip[0].x);
@@ -209,7 +209,7 @@ Canvas::two_lines(PixelScalar ax, PixelScalar ay,
                   PixelScalar bx, PixelScalar by,
                   PixelScalar cx, PixelScalar cy)
 {
-  pen.set();
+  pen.Set();
 
   const GLvalue v[] = { ax, ay, bx, by, cx, cy };
   glVertexPointer(2, GL_VALUE, 0, v);
@@ -220,7 +220,7 @@ void
 Canvas::two_lines(const RasterPoint a, const RasterPoint b,
                   const RasterPoint c)
 {
-  pen.set();
+  pen.Set();
 
   const RasterPoint v[] = { a, b, c };
   glVertexPointer(2, GL_VALUE, 0, v);
@@ -230,17 +230,17 @@ Canvas::two_lines(const RasterPoint a, const RasterPoint b,
 void
 Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
 {
-  if (pen_over_brush() && pen.get_width() > 2) {
+  if (pen_over_brush() && pen.GetWidth() > 2) {
     GLDonutVertices vertices(x, y,
-                             radius - pen.get_width()/2,
-                             radius + pen.get_width()/2);
+                             radius - pen.GetWidth() / 2,
+                             radius + pen.GetWidth() / 2);
     if (!brush.IsHollow()) {
       vertices.bind_inner_circle();
       brush.Set();
       glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.CIRCLE_SIZE);
     }
     vertices.bind();
-    pen.set();
+    pen.Set();
     glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.SIZE);
   } else if (OpenGL::vertex_buffer_object && radius < 16) {
     /* draw a "small" circle with VBO */
@@ -264,7 +264,7 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
     }
 
     if (pen_over_brush()) {
-      pen.set();
+      pen.Set();
       glDrawArrays(GL_LINE_LOOP, 0, OpenGL::SMALL_CIRCLE_SIZE);
     }
 
@@ -293,7 +293,7 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
     }
 
     if (pen_over_brush()) {
-      pen.set();
+      pen.Set();
       glDrawArrays(GL_LINE_LOOP, 0, OpenGL::CIRCLE_SIZE);
     }
 
@@ -310,7 +310,7 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
     }
 
     if (pen_over_brush()) {
-      pen.set();
+      pen.Set();
       glDrawArrays(GL_LINE_LOOP, 0, vertices.SIZE);
     }
   }
@@ -353,7 +353,7 @@ Canvas::annulus(PixelScalar x, PixelScalar y,
   }
 
   if (pen_over_brush()) {
-    pen.set();
+    pen.Set();
 
     if (istart != iend) {
       if (brush.IsHollow())

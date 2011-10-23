@@ -29,6 +29,6 @@ TraceHistoryLook::Initialise(bool _inverse)
 {
   inverse = _inverse;
 
-  axis_pen.set(1, COLOR_GRAY);
-  line_pen.set(2, inverse ? COLOR_WHITE : COLOR_BLACK);
+  axis_pen.Set(1, COLOR_GRAY);
+  line_pen.Set(2, inverse ? COLOR_WHITE : COLOR_BLACK);
 }

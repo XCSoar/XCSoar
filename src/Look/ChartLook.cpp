@@ -27,11 +27,11 @@ Copyright_License {
 void
 ChartLook::Initialise(const Font &_axis_label_font)
 {
-  pens[STYLE_BLUETHIN].set(Pen::DASH, is_altair() ? 1 : 2, Color(0, 50, 255));
-  pens[STYLE_REDTHICK].set(Pen::DASH, 3, Color(200, 50, 50));
-  pens[STYLE_DASHGREEN].set(Pen::DASH, 2, COLOR_GREEN);
-  pens[STYLE_MEDIUMBLACK].set(is_altair() ? 1 : 2, Color(50, 243, 45));
-  pens[STYLE_THINDASHPAPER].set(Pen::DASH, 1, Color(0xB0, 0xB0, 0xB0));
+  pens[STYLE_BLUETHIN].Set(Pen::DASH, is_altair() ? 1 : 2, Color(0, 50, 255));
+  pens[STYLE_REDTHICK].Set(Pen::DASH, 3, Color(200, 50, 50));
+  pens[STYLE_DASHGREEN].Set(Pen::DASH, 2, COLOR_GREEN);
+  pens[STYLE_MEDIUMBLACK].Set(is_altair() ? 1 : 2, Color(50, 243, 45));
+  pens[STYLE_THINDASHPAPER].Set(Pen::DASH, 1, Color(0xB0, 0xB0, 0xB0));
 
   axis_label_font = &_axis_label_font;
 }

@@ -100,8 +100,8 @@ protected:
    * brush and pen share the same color.
    */
   bool pen_over_brush() const {
-    return pen.defined() &&
-      (brush.IsHollow() || brush.GetColor() != pen.get_color());
+    return pen.IsDefined() &&
+      (brush.IsHollow() || brush.GetColor() != pen.GetColor());
   }
 
 public:
@@ -196,7 +196,7 @@ public:
     fill_rectangle(left, top, right, bottom, brush);
 
     if (pen_over_brush())
-      outline_rectangle(left, top, right, bottom, pen.get_color());
+      outline_rectangle(left, top, right, bottom, pen.GetColor());
   }
 
   void fill_rectangle(PixelScalar left, PixelScalar top,
@@ -300,12 +300,12 @@ public:
   (SDL_GFXPRIMITIVES_MAJOR == 2 && (SDL_GFXPRIMITIVES_MINOR > 0 || \
                                     SDL_GFXPRIMITIVES_MICRO >= 22))
     /* thickLineColor() was added in SDL_gfx 2.0.22 */
-    if (pen.get_width() > 1)
+    if (pen.GetWidth() > 1)
       ::thickLineColor(surface, ax, ay, bx, by,
-                       pen.get_width(), pen.get_color().GFXColor());
+                       pen.GetWidth(), pen.GetColor().GFXColor());
     else
 #endif
-      ::lineColor(surface, ax, ay, bx, by, pen.get_color().GFXColor());
+      ::lineColor(surface, ax, ay, bx, by, pen.GetColor().GFXColor());
   }
 
   void line(const RasterPoint a, const RasterPoint b) {

@@ -34,20 +34,20 @@ TaskLook::Initialise()
   const Color bearing_color = Color(0x3e,0x30,0x5f);
   const Color isoline_color = bearing_color;
 
-  oz_current_pen.set(Pen::SOLID, Layout::SmallScale(2), task_color);
-  oz_active_pen.set(Pen::SOLID, Layout::SmallScale(1), task_color);
-  oz_inactive_pen.set(Pen::SOLID, Layout::SmallScale(1),
+  oz_current_pen.Set(Pen::SOLID, Layout::SmallScale(2), task_color);
+  oz_active_pen.Set(Pen::SOLID, Layout::SmallScale(1), task_color);
+  oz_inactive_pen.Set(Pen::SOLID, Layout::SmallScale(1),
                       DarkColor(task_color));
 
-  leg_active_pen.set(Pen::DASH, Layout::Scale(2), task_color);
-  leg_inactive_pen.set(Pen::DASH, Layout::Scale(1), task_color);
-  arrow_pen.set(Layout::Scale(1), task_color);
+  leg_active_pen.Set(Pen::DASH, Layout::Scale(2), task_color);
+  leg_inactive_pen.Set(Pen::DASH, Layout::Scale(1), task_color);
+  arrow_pen.Set(Layout::Scale(1), task_color);
 
-  isoline_pen.set(Pen::DASH, Layout::Scale(1), isoline_color);
+  isoline_pen.Set(Pen::DASH, Layout::Scale(1), isoline_color);
 
-  bearing_pen.set(Layout::Scale(2), bearing_color);
+  bearing_pen.Set(Layout::Scale(2), bearing_color);
   best_cruise_track_brush.Set(bearing_color);
-  best_cruise_track_pen.set(Layout::Scale(1), DarkColor(bearing_color));
+  best_cruise_track_pen.Set(Layout::Scale(1), DarkColor(bearing_color));
 
   target_icon.load_big(IDB_TARGET, IDB_TARGET_HD);
 }

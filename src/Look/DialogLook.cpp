@@ -42,7 +42,7 @@ DialogLook::Initialise(const Font &caption_font,
   button_font = &_button_font;
 
   focused.text_color = COLOR_BLACK;
-  focused.border_pen.set(Layout::FastScale(1) + 2, COLOR_BLACK);
+  focused.border_pen.Set(Layout::FastScale(1) + 2, COLOR_BLACK);
 
   list.background_color = COLOR_WHITE;
   list.text_color = COLOR_BLACK;

@@ -29,7 +29,7 @@ Copyright_License {
 #ifndef USE_GDI
 
 void
-Pen::set(enum style style, unsigned _width, const Color c)
+Pen::Set(Style style, unsigned _width, const Color c)
 {
   assert(IsScreenInitialized());
 
@@ -38,15 +38,15 @@ Pen::set(enum style style, unsigned _width, const Color c)
 }
 
 void
-Pen::set(unsigned width, const Color c)
+Pen::Set(unsigned width, const Color c)
 {
-  set(SOLID, width, c);
+  Set(SOLID, width, c);
 }
 
 void
-Pen::reset()
+Pen::Reset()
 {
-  assert(!defined() || IsScreenInitialized());
+  assert(!IsDefined() || IsScreenInitialized());
 
 #ifndef NDEBUG
   width = 0;
@@ -56,24 +56,24 @@ Pen::reset()
 #else /* USE_GDI */
 
 void
-Pen::set(enum style style, unsigned width, const Color c)
+Pen::Set(Style Style, unsigned width, const Color c)
 {
   assert(IsScreenInitialized());
 
-  reset();
-  pen = ::CreatePen(style, width, c);
+  Reset();
+  pen = ::CreatePen(Style, width, c);
 }
 
 void
-Pen::set(unsigned width, const Color c)
+Pen::Set(unsigned width, const Color c)
 {
-  set(SOLID, width, c);
+  Set(SOLID, width, c);
 }
 
 void
-Pen::reset()
+Pen::Reset()
 {
-  assert(!defined() || IsScreenInitialized());
+  assert(!IsDefined() || IsScreenInitialized());
 
   if (pen != NULL) {
     ::DeleteObject(pen);

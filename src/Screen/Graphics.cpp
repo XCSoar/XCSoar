@@ -124,8 +124,8 @@ Graphics::Initialise()
   hAboveTerrainBrush.Set(hAboveTerrainBitmap);
 #endif
 
-  hpWind.set(Layout::Scale(1), DarkColor(COLOR_GRAY));
-  hpWindTail.set(Pen::DASH, 1, COLOR_BLACK);
+  hpWind.Set(Layout::Scale(1), DarkColor(COLOR_GRAY));
+  hpWindTail.Set(Pen::DASH, 1, COLOR_BLACK);
   hbWind.Set(COLOR_GRAY);
 
   hBmpMapScaleLeft.load_big(IDB_MAPSCALE_LEFT, IDB_MAPSCALE_LEFT_HD, false);
@@ -150,25 +150,25 @@ Graphics::Initialise()
   hbCompass.Set(Color(207, 207, 207));
 
   hbFinalGlideBelow.Set(COLOR_RED);
-  hpFinalGlideBelow.set(Layout::Scale(1), DarkColor(COLOR_RED));
+  hpFinalGlideBelow.Set(Layout::Scale(1), DarkColor(COLOR_RED));
 
   hbFinalGlideBelowLandable.Set(COLOR_ORANGE);
-  hpFinalGlideBelowLandable.set(Layout::Scale(1), DarkColor(COLOR_ORANGE));
+  hpFinalGlideBelowLandable.Set(Layout::Scale(1), DarkColor(COLOR_ORANGE));
 
   hbFinalGlideAbove.Set(COLOR_GREEN);
-  hpFinalGlideAbove.set(Layout::Scale(1), DarkColor(COLOR_GREEN));
+  hpFinalGlideAbove.Set(Layout::Scale(1), DarkColor(COLOR_GREEN));
 
-  hpCompass.set(Layout::Scale(1), COLOR_GRAY);
+  hpCompass.Set(Layout::Scale(1), COLOR_GRAY);
 
-  hpMapScale.set(Layout::Scale(1), COLOR_BLACK);
+  hpMapScale.Set(Layout::Scale(1), COLOR_BLACK);
 
-  hpTerrainLine.set(Pen::DASH, Layout::Scale(1), clrSepia);
-  hpTerrainLineThick.set(Pen::DASH, Layout::Scale(2), clrSepia);
+  hpTerrainLine.Set(Pen::DASH, Layout::Scale(1), clrSepia);
+  hpTerrainLineThick.Set(Pen::DASH, Layout::Scale(2), clrSepia);
 
-  TracePen.set(2, Color(50, 243, 45));
-  ContestPen[0].set(Layout::Scale(1)+2, COLOR_RED);
-  ContestPen[1].set(Layout::Scale(1)+1, COLOR_ORANGE);
-  ContestPen[2].set(Layout::Scale(1), COLOR_BLUE);
+  TracePen.Set(2, Color(50, 243, 45));
+  ContestPen[0].Set(Layout::Scale(1)+2, COLOR_RED);
+  ContestPen[1].Set(Layout::Scale(1)+1, COLOR_ORANGE);
+  ContestPen[2].Set(Layout::Scale(1), COLOR_BLUE);
 
     // used for landable rendering
   hbGreen.Set(COLOR_GREEN);
@@ -179,7 +179,7 @@ Graphics::Initialise()
 
   hbGround.Set(GroundColor);
 
-  hpTrackBearingLine.set(3, COLOR_GRAY);
+  hpTrackBearingLine.Set(3, COLOR_GRAY);
 }
 
 void
@@ -231,8 +231,8 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
                    PixelScalar((i - NUMSNAILCOLORS / 2) *
                                Layout::Scale(16) / NUMSNAILCOLORS));
 
-    hpSnail[i].set(minwidth, color);
-    hpSnailVario[i].set(iwidth, color);
+    hpSnail[i].Set(minwidth, color);
+    hpSnailVario[i].Set(iwidth, color);
   }
 }
 
@@ -284,23 +284,23 @@ Graphics::Deinitialise()
   hbFinalGlideBelowLandable.Reset();
   hbFinalGlideAbove.Reset();
 
-  hpWind.reset();
-  hpWindTail.reset();
+  hpWind.Reset();
+  hpWindTail.Reset();
 
-  hpCompass.reset();
+  hpCompass.Reset();
 
-  hpFinalGlideBelow.reset();
-  hpFinalGlideBelowLandable.reset();
-  hpFinalGlideAbove.reset();
+  hpFinalGlideBelow.Reset();
+  hpFinalGlideBelowLandable.Reset();
+  hpFinalGlideAbove.Reset();
 
-  hpMapScale.reset();
-  hpTerrainLine.reset();
-  hpTerrainLineThick.reset();
+  hpMapScale.Reset();
+  hpTerrainLine.Reset();
+  hpTerrainLineThick.Reset();
 
-  TracePen.reset();
-  ContestPen[0].reset();
-  ContestPen[1].reset();
-  ContestPen[2].reset();
+  TracePen.Reset();
+  ContestPen[0].Reset();
+  ContestPen[1].Reset();
+  ContestPen[2].Reset();
 
   hbGreen.Reset();
   hbWhite.Reset();
@@ -310,10 +310,10 @@ Graphics::Deinitialise()
 
   hbGround.Reset();
 
-  hpTrackBearingLine.reset();
+  hpTrackBearingLine.Reset();
 
   for (unsigned i = 0; i < NUMSNAILCOLORS; i++) {
-    hpSnail[i].reset();
-    hpSnailVario[i].reset();
+    hpSnail[i].Reset();
+    hpSnailVario[i].Reset();
   }
 }
