@@ -119,7 +119,7 @@ public:
 
   /**
    * Read a single byte from the serial port
-   * @return the unsigned byte that was read or -1 in failure
+   * @return the unsigned byte that was read or -1 on failure
    */
   int GetChar();
 
@@ -127,7 +127,7 @@ public:
    * Read data from the serial port
    * @param Buffer Pointer to the buffer
    * @param Size Size of the buffer
-   * @return Number of bytes read from the serial port or -1 in failure
+   * @return Number of bytes read from the serial port or -1 on failure
    */
   virtual int Read(void *Buffer, size_t Size) = 0;
 
