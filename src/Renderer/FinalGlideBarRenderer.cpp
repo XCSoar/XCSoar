@@ -181,8 +181,8 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc, const DerivedIn
   canvas.set_background_color(COLOR_WHITE);
 
   TextInBoxMode style;
-  style.Mode = RoundedBlack;
-  style.Bold = true;
-  style.MoveInView = true;
+  style.mode = RM_ROUNDED_BLACK;
+  style.bold = true;
+  style.move_in_view = true;
   TextInBox(canvas, Value, 0, (int)Offset, style, rc);
 }

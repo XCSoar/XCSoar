@@ -86,8 +86,8 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   canvas.set_text_color(COLOR_BLACK);
 
   TextInBoxMode style;
-  style.Align = Center;
-  style.Mode = Outlined;
+  style.align = A_CENTER;
+  style.mode = RM_OUTLINED;
 
   if (arrow[5].y >= arrow[6].y)
     TextInBox(canvas, sTmp, arrow[5].x - kx, arrow[5].y, style, rc);

@@ -33,41 +33,41 @@ class LabelBlock;
 
 enum TextAlign
 {
-  Left,
-  Center,
-  Right
+  A_LEFT,
+  A_CENTER,
+  A_RIGHT,
 };
 
 enum RenderMode
 {
-  Simple,
-  Filled,
-  Outlined,
-  OutlinedInverted,
-  RoundedWhite,
-  RoundedBlack
+  RM_SIMPLE,
+  RM_FILLED,
+  RM_OUTLINED,
+  RM_OUTLINED_INVERTED,
+  RM_ROUNDED_WHITE,
+  RM_ROUNDED_BLACK,
 };
 
 struct TextInBoxMode
 {
-  RenderMode Mode;
-  TextAlign Align;
-  bool Bold;
-  bool MoveInView;
+  RenderMode mode;
+  TextAlign align;
+  bool bold;
+  bool move_in_view;
 
   TextInBoxMode() :
-    Mode(Simple), Align(Left), Bold(false), MoveInView(false) {}
+    mode(RM_SIMPLE), align(A_LEFT), bold(false), move_in_view(false) {}
 };
 
-bool TextInBox(Canvas &canvas, const TCHAR *Value,
+bool TextInBox(Canvas &canvas, const TCHAR *value,
                PixelScalar x, PixelScalar y,
-               TextInBoxMode Mode, const PixelRect &MapRect,
-               LabelBlock *label_block=NULL);
+               TextInBoxMode mode, const PixelRect &map_rc,
+               LabelBlock *label_block = NULL);
 
 bool
-TextInBox(Canvas &canvas, const TCHAR *Value, PixelScalar x, PixelScalar y,
-          TextInBoxMode Mode,
+TextInBox(Canvas &canvas, const TCHAR *value, PixelScalar x, PixelScalar y,
+          TextInBoxMode mode,
           UPixelScalar screen_width, UPixelScalar screen_height,
-          LabelBlock *label_block=NULL);
+          LabelBlock *label_block = NULL);
 
 #endif

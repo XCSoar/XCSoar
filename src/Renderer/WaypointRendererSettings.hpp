@@ -80,7 +80,7 @@ struct WaypointRendererSettings {
   void SetDefaults() {
     display_text_type = DISPLAYFIRSTFIVE;
     arrival_height_display = WP_ARRIVAL_HEIGHT_GLIDE;
-    landable_render_mode = RoundedBlack;
+    landable_render_mode = RM_ROUNDED_BLACK;
 
     landable_style = wpLandableWinPilot;
     vector_landable_rendering = true;

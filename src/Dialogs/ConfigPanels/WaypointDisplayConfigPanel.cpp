@@ -86,8 +86,8 @@ WaypointDisplayConfigPanel::Init(WndForm *_wf)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Rounded rectangle"), RoundedBlack);
-    dfe->addEnumText(_("Outlined"), OutlinedInverted);
+    dfe->addEnumText(_("Rounded rectangle"), RM_ROUNDED_BLACK);
+    dfe->addEnumText(_("Outlined"), RM_OUTLINED_INVERTED);
     dfe->Set(settings.landable_render_mode);
     wp->RefreshDisplay();
   }

@@ -89,7 +89,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     sc_av.y += Layout::Scale(5);
 
     TextInBoxMode mode;
-    mode.Mode = Outlined;
+    mode.mode = RM_OUTLINED;
 
     // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
 

@@ -262,16 +262,16 @@ protected:
     TextInBoxMode text_mode;
     if (vwp.reachable != WaypointRenderer::Unreachable &&
         way_point.IsLandable()) {
-      text_mode.Mode = settings.landable_render_mode;
-      text_mode.Bold = true;
-      text_mode.MoveInView = true;
+      text_mode.mode = settings.landable_render_mode;
+      text_mode.bold = true;
+      text_mode.move_in_view = true;
     } else if (vwp.in_task) {
-      text_mode.Mode = OutlinedInverted;
-      text_mode.Bold = true;
+      text_mode.mode = RM_OUTLINED_INVERTED;
+      text_mode.bold = true;
     } else if (watchedWaypoint) {
-      text_mode.Mode = Outlined;
-      text_mode.Bold = false;
-      text_mode.MoveInView = true;
+      text_mode.mode = RM_OUTLINED;
+      text_mode.bold = false;
+      text_mode.move_in_view = true;
     }
 
     TCHAR Buffer[NAME_SIZE+1];

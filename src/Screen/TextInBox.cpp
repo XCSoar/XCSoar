@@ -30,42 +30,42 @@ Copyright_License {
 #include "Sizes.h" /* for WPCIRCLESIZE */
 
 static RasterPoint
-TextInBoxMoveInView(PixelRect &brect, const PixelRect &MapRect)
+TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 {
   RasterPoint offset;
   offset.x = 0;
   offset.y = 0;
 
   // If label is above maprect
-  if (MapRect.top > brect.top) {
+  if (map_rc.top > rc.top) {
     // Move label down into maprect
-    UPixelScalar d = MapRect.top - brect.top;
-    brect.top += d;
-    brect.bottom += d;
+    UPixelScalar d = map_rc.top - rc.top;
+    rc.top += d;
+    rc.bottom += d;
     offset.y += d;
   }
 
   // If label is right of maprect
-  if (MapRect.right < brect.right) {
-    UPixelScalar d = MapRect.right - brect.right;
-    brect.right += d;
-    brect.left += d;
+  if (map_rc.right < rc.right) {
+    UPixelScalar d = map_rc.right - rc.right;
+    rc.right += d;
+    rc.left += d;
     offset.x += d;
   }
 
   // If label is below maprect
-  if (MapRect.bottom < brect.bottom) {
-    UPixelScalar d = MapRect.bottom - brect.bottom;
-    brect.top += d;
-    brect.bottom += d;
+  if (map_rc.bottom < rc.bottom) {
+    UPixelScalar d = map_rc.bottom - rc.bottom;
+    rc.top += d;
+    rc.bottom += d;
     offset.y += d;
   }
 
   // If label is left of maprect
-  if (MapRect.left > brect.left) {
-    UPixelScalar d = MapRect.left - brect.left;
-    brect.right += d;
-    brect.left += d;
+  if (map_rc.left > rc.left) {
+    UPixelScalar d = map_rc.left - rc.left;
+    rc.right += d;
+    rc.left += d;
     offset.x += d;
   }
 
@@ -91,70 +91,69 @@ RenderShadowedText(Canvas &canvas, const TCHAR* text,
 
 // returns true if really wrote something
 bool
-TextInBox(Canvas &canvas, const TCHAR* Value, PixelScalar x, PixelScalar y,
-          TextInBoxMode Mode, const PixelRect &MapRect,
-          LabelBlock *label_block)
+TextInBox(Canvas &canvas, const TCHAR* text, PixelScalar x, PixelScalar y,
+          TextInBoxMode mode, const PixelRect &map_rc, LabelBlock *label_block)
 {
-  PixelRect brect;
+  PixelRect rc;
 
-  if ((x < MapRect.left - WPCIRCLESIZE)
-      || (x > MapRect.right + (WPCIRCLESIZE * 3))
-      || (y < MapRect.top - WPCIRCLESIZE)
-      || (y > MapRect.bottom + WPCIRCLESIZE))
+  if ((x < map_rc.left - WPCIRCLESIZE)
+      || (x > map_rc.right + (WPCIRCLESIZE * 3))
+      || (y < map_rc.top - WPCIRCLESIZE)
+      || (y > map_rc.bottom + WPCIRCLESIZE))
     return false; // FIX Not drawn really
 
   // landable waypoint label inside white box
 
-  canvas.select(Mode.Bold ? Fonts::MapBold : Fonts::Map);
+  canvas.select(mode.bold ? Fonts::MapBold : Fonts::Map);
 
-  PixelSize tsize = canvas.text_size(Value);
+  PixelSize tsize = canvas.text_size(text);
 
-  if (Mode.Align == Right) {
+  if (mode.align == A_RIGHT) {
     x -= tsize.cx;
-  } else if (Mode.Align == Center) {
+  } else if (mode.align == A_CENTER) {
     x -= tsize.cx / 2;
   }
 
-  brect.left = x - Layout::FastScale(2) - 1;
-  brect.right = x + tsize.cx + Layout::FastScale(2);
-  brect.top = y;
-  brect.bottom = y + tsize.cy + 1;
+  rc.left = x - Layout::FastScale(2) - 1;
+  rc.right = x + tsize.cx + Layout::FastScale(2);
+  rc.top = y;
+  rc.bottom = y + tsize.cy + 1;
 
-  if (Mode.MoveInView) {
-    RasterPoint offset = TextInBoxMoveInView(brect, MapRect);
+  if (mode.move_in_view) {
+    RasterPoint offset = TextInBoxMoveInView(rc, map_rc);
     x += offset.x;
     y += offset.y;
   }
 
-  if (label_block != NULL && !label_block->check(brect))
+  if (label_block != NULL && !label_block->check(rc))
     return false;
 
-  if (Mode.Mode == RoundedBlack || Mode.Mode == RoundedWhite) {
-    if (Mode.Mode == RoundedBlack)
+  if (mode.mode == RM_ROUNDED_BLACK || mode.mode == RM_ROUNDED_WHITE) {
+    if (mode.mode == RM_ROUNDED_BLACK)
       canvas.black_pen();
     else
       canvas.white_pen();
 
     canvas.white_brush();
-    canvas.round_rectangle(brect.left, brect.top, brect.right, brect.bottom,
+    canvas.round_rectangle(rc.left, rc.top, rc.right, rc.bottom,
                            Layout::Scale(8), Layout::Scale(8));
 
     canvas.background_transparent();
     canvas.set_text_color(COLOR_BLACK);
-    canvas.text(x, y, Value);
+    canvas.text(x, y, text);
     canvas.background_opaque();
-  } else if (Mode.Mode == Filled) {
+  } else if (mode.mode == RM_FILLED) {
     canvas.set_background_color(COLOR_WHITE);
     canvas.set_text_color(COLOR_BLACK);
-    canvas.text_opaque(x, y, brect, Value);
-  } else if (Mode.Mode == Outlined) {
-    RenderShadowedText(canvas, Value, x, y, false);
-  } else if (Mode.Mode == OutlinedInverted) {
-    RenderShadowedText(canvas, Value, x, y, true);
+    canvas.text_opaque(x, y, rc, text);
+  } else if (mode.mode == RM_OUTLINED) {
+    RenderShadowedText(canvas, text, x, y, false);
+  } else if (mode.mode == RM_OUTLINED_INVERTED) {
+    RenderShadowedText(canvas, text, x, y, true);
   } else {
     canvas.background_transparent();
     canvas.set_text_color(COLOR_BLACK);
-    canvas.text(x, y, Value);
+    canvas.text(x, y, text);
     canvas.background_opaque();
   }
 
@@ -162,8 +161,8 @@ TextInBox(Canvas &canvas, const TCHAR* Value, PixelScalar x, PixelScalar y,
 }
 
 bool
-TextInBox(Canvas &canvas, const TCHAR *Value, PixelScalar x, PixelScalar y,
-          TextInBoxMode Mode,
+TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
+          TextInBoxMode mode,
           UPixelScalar screen_width, UPixelScalar screen_height,
           LabelBlock *label_block)
 {
@@ -173,5 +172,5 @@ TextInBox(Canvas &canvas, const TCHAR *Value, PixelScalar x, PixelScalar y,
   rc.right = screen_width;
   rc.bottom = screen_height;
 
-  return TextInBox(canvas, Value, x, y, Mode, rc, label_block);
+  return TextInBox(canvas, text, x, y, mode, rc, label_block);
 }
