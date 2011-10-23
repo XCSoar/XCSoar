@@ -66,7 +66,7 @@ struct Color {
    */
   gcc_constexpr_method
   uint8_t
-  red() const
+  Red() const
   {
 #ifdef HAVE_GLES
     return (uint8_t)(r >> 8u);
@@ -81,7 +81,7 @@ struct Color {
    */
   gcc_constexpr_method
   uint8_t
-  green() const
+  Green() const
   {
 #ifdef HAVE_GLES
     return (uint8_t)(g >> 8u);
@@ -96,7 +96,7 @@ struct Color {
    */
   gcc_constexpr_method
   uint8_t
-  blue() const
+  Blue() const
   {
 #ifdef HAVE_GLES
     return (uint8_t)(b >> 8u);
@@ -114,9 +114,9 @@ struct Color {
    */
   operator SDL_Color() const {
     SDL_Color color;
-    color.r = red();
-    color.g = green();
-    color.b = blue();
+    color.r = Red();
+    color.g = Green();
+    color.b = Blue();
     color.unused = SDL_ALPHA_OPAQUE;
     return color;
   }
@@ -124,8 +124,8 @@ struct Color {
 
   gcc_constexpr_method
   Color
-  with_alpha(GLubyte alpha) const {
-    return Color(red(), green(), blue(), alpha);
+  WithAlpha(GLubyte alpha) const {
+    return Color(Red(), Green(), Blue(), alpha);
   }
 
   /**
@@ -133,7 +133,7 @@ struct Color {
    */
   gcc_constexpr_method
   Color
-  highlight() const
+  Highlight() const
   {
 #ifdef HAVE_GLES
     return Color((r + 3) / 4., (g + 3) / 4., (b + 3) / 4.);
@@ -145,7 +145,7 @@ struct Color {
   /**
    * Configures this color in the OpenGL context.
    */
-  void set() const {
+  void Set() const {
 #ifdef HAVE_GLES
     /* on Android, glColor4ub() is not implemented, and we're forced
        to use floating point math for something as trivial as

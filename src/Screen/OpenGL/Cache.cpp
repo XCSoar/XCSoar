@@ -120,12 +120,12 @@ TextCache::get(const Font *font, Color background_color, Color text_color,
            font->get_facename(),
            font->get_style(),
            font->get_height(),
-           background_color.red(),
-           background_color.green(),
-           background_color.blue(),
-           text_color.red(),
-           text_color.green(),
-           text_color.blue(),
+           background_color.Red(),
+           background_color.Green(),
+           background_color.Blue(),
+           text_color.Red(),
+           text_color.Green(),
+           text_color.Blue(),
            text);
 
   /* look it up */

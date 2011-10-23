@@ -174,7 +174,7 @@ public:
       } else {
         // draw a ring inside the circle
         Color color = airspace_look.colors[settings.colours[airspace.GetType()]];
-        Pen pen_donut(pen_thick.get_width()/2, color.with_alpha(90));
+        Pen pen_donut(pen_thick.get_width()/2, color.WithAlpha(90));
         canvas.hollow_brush();
         canvas.select(pen_donut);
         canvas.circle(screen_center.x, screen_center.y,
@@ -247,7 +247,7 @@ private:
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
     Color color = airspace_look.colors[settings.colours[airspace.GetType()]];
-    canvas.select(Brush(color.with_alpha(90)));
+    canvas.select(Brush(color.WithAlpha(90)));
     canvas.null_pen();
   }
 
@@ -337,7 +337,7 @@ private:
 
   void setup_interior(const AbstractAirspace &airspace) {
     Color color = airspace_look.colors[settings.colours[airspace.GetType()]];
-    canvas.select(Brush(color.with_alpha(90)));
+    canvas.select(Brush(color.WithAlpha(90)));
     canvas.null_pen();
   }
 };
@@ -422,7 +422,7 @@ private:
     } else {
 #endif
       // this color is used as the black bit
-      m_buffer.set_text_color(light_color(airspace_look.colors[color_index]));
+      m_buffer.set_text_color(LightColor(airspace_look.colors[color_index]));
 
       // get brush, can be solid or a 1bpp bitmap
       m_buffer.select(airspace_look.brushes[settings.brushes[airspace.GetType()]]);

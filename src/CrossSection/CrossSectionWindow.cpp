@@ -165,12 +165,12 @@ public:
 #ifndef USE_GDI
     Color color = airspace_look.colors[settings.colours[type]];
 #ifdef ENABLE_OPENGL
-    color = color.with_alpha(48);
+    color = color.WithAlpha(48);
 #endif
     Brush brush(color);
 #else
     const Brush &brush = airspace_look.brushes[settings.brushes[type]];
-    canvas.set_text_color(light_color(airspace_look.colors[settings.colours[type]]));
+    canvas.set_text_color(LightColor(airspace_look.colors[settings.colours[type]]));
 #endif
 
     PixelRect rcd;

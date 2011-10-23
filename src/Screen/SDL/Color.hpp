@@ -42,7 +42,7 @@ struct Color {
   gcc_constexpr_ctor
   Color(uint8_t r, uint8_t g, uint8_t b)
     :value({r, g, b,
-          /* alpha for SDL_gfx, see gfx_color() */
+          /* alpha for SDL_gfx, see GFXColor() */
           SDL_ALPHA_OPAQUE}) {}
 
   /**
@@ -50,7 +50,7 @@ struct Color {
    * @return The red part of the color (0-255)
    */
   gcc_constexpr_method
-  uint8_t red() const
+  uint8_t Red() const
   {
     return value.r;
   }
@@ -60,7 +60,7 @@ struct Color {
    * @return The green part of the color (0-255)
    */
   gcc_constexpr_method
-  uint8_t green() const
+  uint8_t Green() const
   {
     return value.g;
   }
@@ -70,7 +70,7 @@ struct Color {
    * @return The blue part of the color (0-255)
    */
   gcc_constexpr_method
-  uint8_t blue() const
+  uint8_t Blue() const
   {
     return value.b;
   }
@@ -81,7 +81,7 @@ struct Color {
   }
 
   gcc_constexpr_method
-  Uint32 gfx_color() const {
+  Uint32 GFXColor() const {
     return ((Uint32)value.r << 24) | ((Uint32)value.g << 16) |
       ((Uint32)value.b << 8) | (Uint32)value.unused;
   }
@@ -91,7 +91,7 @@ struct Color {
    */
   gcc_constexpr_method
   Color
-  highlight() const
+  Highlight() const
   {
     return Color((value.r + 0xff * 3) / 4,
                  (value.g + 0xff * 3) / 4,

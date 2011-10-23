@@ -37,7 +37,7 @@ TaskLook::Initialise()
   oz_current_pen.set(Pen::SOLID, Layout::SmallScale(2), task_color);
   oz_active_pen.set(Pen::SOLID, Layout::SmallScale(1), task_color);
   oz_inactive_pen.set(Pen::SOLID, Layout::SmallScale(1),
-                      dark_color(task_color));
+                      DarkColor(task_color));
 
   leg_active_pen.set(Pen::DASH, Layout::Scale(2), task_color);
   leg_inactive_pen.set(Pen::DASH, Layout::Scale(1), task_color);
@@ -47,7 +47,7 @@ TaskLook::Initialise()
 
   bearing_pen.set(Layout::Scale(2), bearing_color);
   best_cruise_track_brush.Set(bearing_color);
-  best_cruise_track_pen.set(Layout::Scale(1), dark_color(bearing_color));
+  best_cruise_track_pen.set(Layout::Scale(1), DarkColor(bearing_color));
 
   target_icon.load_big(IDB_TARGET, IDB_TARGET_HD);
 }

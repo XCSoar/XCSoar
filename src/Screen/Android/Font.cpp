@@ -92,8 +92,8 @@ Font::text_texture_gl(const TCHAR *text, PixelSize &size,
 
   const TextUtil::Texture texture =
     textUtilObject->getTextTextureGL(text,
-                                     fg.red(), fg.green(), fg.blue(),
-                                     bg.red(), bg.green(), bg.blue());
+                                     fg.Red(), fg.Green(), fg.Blue(),
+                                     bg.Red(), bg.Green(), bg.Blue());
   size.cx = texture.width;
   size.cy = texture.height;
   return texture.id;

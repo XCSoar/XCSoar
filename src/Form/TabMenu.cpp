@@ -580,7 +580,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle)
     } else if ((*i)->MainMenuIndex == SelectedIndex.MainIndex) {
         canvas.set_text_color(COLOR_WHITE);
         if (has_focus() && !has_pointer()) {
-          canvas.set_background_color(COLOR_GRAY.highlight());
+          canvas.set_background_color(COLOR_GRAY.Highlight());
         } else {
           canvas.set_background_color(COLOR_BLACK);
         }
@@ -650,7 +650,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle)
     } else if (i->Menu.SubIndex == SelectedIndex.SubIndex) {
         canvas.set_text_color(COLOR_WHITE);
         if (has_focus() && !has_pointer()) {
-          canvas.set_background_color(COLOR_GRAY.highlight());
+          canvas.set_background_color(COLOR_GRAY.Highlight());
         } else {
           canvas.set_background_color(COLOR_BLACK);
         }

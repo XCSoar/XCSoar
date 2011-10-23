@@ -124,7 +124,7 @@ Graphics::Initialise()
   hAboveTerrainBrush.Set(hAboveTerrainBitmap);
 #endif
 
-  hpWind.set(Layout::Scale(1), dark_color(COLOR_GRAY));
+  hpWind.set(Layout::Scale(1), DarkColor(COLOR_GRAY));
   hpWindTail.set(Pen::DASH, 1, COLOR_BLACK);
   hbWind.Set(COLOR_GRAY);
 
@@ -150,13 +150,13 @@ Graphics::Initialise()
   hbCompass.Set(Color(207, 207, 207));
 
   hbFinalGlideBelow.Set(COLOR_RED);
-  hpFinalGlideBelow.set(Layout::Scale(1), dark_color(COLOR_RED));
+  hpFinalGlideBelow.set(Layout::Scale(1), DarkColor(COLOR_RED));
 
   hbFinalGlideBelowLandable.Set(COLOR_ORANGE);
-  hpFinalGlideBelowLandable.set(Layout::Scale(1), dark_color(COLOR_ORANGE));
+  hpFinalGlideBelowLandable.set(Layout::Scale(1), DarkColor(COLOR_ORANGE));
 
   hbFinalGlideAbove.Set(COLOR_GREEN);
-  hpFinalGlideAbove.set(Layout::Scale(1), dark_color(COLOR_GREEN));
+  hpFinalGlideAbove.set(Layout::Scale(1), DarkColor(COLOR_GREEN));
 
   hpCompass.set(Layout::Scale(1), COLOR_GRAY);
 
@@ -175,7 +175,7 @@ Graphics::Initialise()
   hbWhite.Set(COLOR_WHITE);
   hbOrange.Set(COLOR_ORANGE);
   hbLightGray.Set(COLOR_LIGHT_GRAY);
-  hbNotReachableTerrain.Set(light_color(COLOR_RED));
+  hbNotReachableTerrain.Set(LightColor(COLOR_RED));
 
   hbGround.Set(GroundColor);
 

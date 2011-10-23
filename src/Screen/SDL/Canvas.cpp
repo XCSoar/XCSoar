@@ -72,10 +72,10 @@ Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
 
   if (!brush.IsHollow())
     ::filledPolygonColor(surface, vx, vy, cPoints,
-                         brush.GetColor().gfx_color());
+                         brush.GetColor().GFXColor());
 
   if (pen_over_brush())
-    ::polygonColor(surface, vx, vy, cPoints, pen.get_color().gfx_color());
+    ::polygonColor(surface, vx, vy, cPoints, pen.get_color().GFXColor());
 }
 
 void
@@ -86,10 +86,10 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
 
   if (!brush.IsHollow())
     ::filledCircleColor(surface, x, y, radius,
-                        brush.GetColor().gfx_color());
+                        brush.GetColor().GFXColor());
 
   if (pen_over_brush())
-    ::circleColor(surface, x, y, radius, pen.get_color().gfx_color());
+    ::circleColor(surface, x, y, radius, pen.get_color().GFXColor());
 }
 
 void
@@ -105,13 +105,13 @@ Canvas::segment(PixelScalar x, PixelScalar y, UPixelScalar radius,
     ::filledPieColor(surface, x, y, radius, 
                      (int)start.Degrees() - 90,
                      (int)end.Degrees() - 90,
-                     brush.GetColor().gfx_color());
+                     brush.GetColor().GFXColor());
 
   if (pen_over_brush())
     ::pieColor(surface, x, y, radius, 
                (int)start.Degrees() - 90,
                (int)end.Degrees() - 90,
-               pen.get_color().gfx_color());
+               pen.get_color().GFXColor());
 }
 
 void

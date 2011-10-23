@@ -345,9 +345,9 @@ RasterRenderer::ColorTable(const ColorRamp *color_ramp, bool do_water,
       } else {
         Color color =  ColorRampLookup(i << height_scale, color_ramp,
                                        NUM_COLOR_RAMP_LEVELS, interp_levels);
-        r = color.red();
-        g = color.green();
-        b = color.blue();
+        r = color.Red();
+        g = color.Green();
+        b = color.Blue();
 
         TerrainShading(mag, r, g, b);
       }

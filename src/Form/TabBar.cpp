@@ -384,7 +384,7 @@ TabDisplay::on_paint(Canvas &canvas)
     } else if (i == theTabBar.GetCurrentPage()) {
         canvas.set_text_color(COLOR_WHITE);
         if (has_focus() && !has_pointer()) {
-          canvas.set_background_color(COLOR_GRAY.highlight());
+          canvas.set_background_color(COLOR_GRAY.Highlight());
         } else {
           canvas.set_background_color(COLOR_BLACK);
         }

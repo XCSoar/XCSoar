@@ -44,10 +44,10 @@ Copyright_License {
 #define COLOR_CYAN Color(0x00, 0xff, 0xff)
 #define COLOR_MAGENTA Color(0xff, 0x00, 0xff)
 #define COLOR_ORANGE Color(0xff, 0xa2, 0x00)
-#define COLOR_BROWN Color(0xb7,0x64,0x1e)
+#define COLOR_BROWN Color(0xb7, 0x64, 0x1e)
 
 static inline gcc_constexpr_function uint8_t
-light_color(uint8_t c)
+LightColor(uint8_t c)
 {
   return ((c ^ 0xff) >> 1) ^ 0xff;
 }
@@ -57,14 +57,14 @@ light_color(uint8_t c)
  * SRCAND filtering.
  */
 static inline gcc_constexpr_function Color
-light_color(Color c)
+LightColor(Color c)
 {
-  return Color(light_color(c.red()), light_color(c.green()),
-               light_color(c.blue()));
+  return Color(LightColor(c.Red()), LightColor(c.Green()),
+               LightColor(c.Blue()));
 }
 
 static inline gcc_constexpr_function uint8_t
-dark_color(uint8_t c)
+DarkColor(uint8_t c)
 {
   return (c >> 1);
 }
@@ -73,12 +73,12 @@ dark_color(uint8_t c)
  * Returns a darker version of the specified color.
  */
 static inline gcc_constexpr_function Color
-dark_color(Color c)
+DarkColor(Color c)
 {
-  return Color(dark_color(c.red()), dark_color(c.green()),
-               dark_color(c.blue()));
+  return Color(DarkColor(c.Red()), DarkColor(c.Green()),
+               DarkColor(c.Blue()));
 }
 
-Color desaturate(Color c);
+Color Desaturate(Color c);
 
 #endif

@@ -213,7 +213,7 @@ public:
   void outline_rectangle(PixelScalar left, PixelScalar top,
                          PixelScalar right, PixelScalar bottom,
                          Color color) {
-    color.set();
+    color.Set();
 #ifdef HAVE_GLES
     glLineWidthx(1 << 16);
 #else

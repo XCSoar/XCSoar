@@ -48,9 +48,9 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc, const NMEAInfo &Basic
   const int radius = min(rc.right - rc.left, rc.bottom - rc.top) / 2 -
                      Layout::Scale(1);
 
-  Pen hpHorizonSky(Layout::Scale(1), dark_color(Graphics::skyColor));
+  Pen hpHorizonSky(Layout::Scale(1), DarkColor(Graphics::skyColor));
   Brush hbHorizonSky(Graphics::skyColor);
-  Pen hpHorizonGround(Layout::Scale(1), dark_color(Graphics::GroundColor));
+  Pen hpHorizonGround(Layout::Scale(1), DarkColor(Graphics::GroundColor));
 
 #define fixed_div fixed(1.0 / 50.0)
 #define fixed_89 fixed_int_constant(89)

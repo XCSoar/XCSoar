@@ -58,7 +58,7 @@ struct Color {
    * @return The red part of the color (0-255)
    */
   gcc_constexpr_method
-  uint8_t red() const
+  uint8_t Red() const
   {
     return GetRValue(value);
   }
@@ -68,7 +68,7 @@ struct Color {
    * @return The green part of the color (0-255)
    */
   gcc_constexpr_method
-  uint8_t green() const
+  uint8_t Green() const
   {
     return GetGValue(value);
   }
@@ -78,7 +78,7 @@ struct Color {
    * @return The blue part of the color (0-255)
    */
   gcc_constexpr_method
-  uint8_t blue() const
+  uint8_t Blue() const
   {
     return GetBValue(value);
   }
@@ -98,7 +98,7 @@ struct Color {
    */
   gcc_constexpr_method
   Color
-  highlight() const
+  Highlight() const
   {
     return Color((value + 0x00ffffff * 3) / 4);
   }

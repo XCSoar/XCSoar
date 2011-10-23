@@ -123,7 +123,7 @@ public:
    * Configures this brush in the OpenGL context.
    */
   void Set() const {
-    color.set();
+    color.Set();
   }
 #endif /* OPENGL */
 };

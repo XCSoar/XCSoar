@@ -154,7 +154,7 @@ public:
    * Configures this pen in the OpenGL context.
    */
   void set() const {
-    color.set();
+    color.Set();
 
 #ifdef HAVE_GLES
     glLineWidthx(width << 16);

@@ -188,7 +188,7 @@ public:
                          PixelScalar right, PixelScalar bottom,
                          Color color) {
     ::rectangleColor(surface, left + x_offset, top + y_offset,
-                     right + x_offset, bottom + y_offset, color.gfx_color());
+                     right + x_offset, bottom + y_offset, color.GFXColor());
   }
 
   void rectangle(PixelScalar left, PixelScalar top,
@@ -302,10 +302,10 @@ public:
     /* thickLineColor() was added in SDL_gfx 2.0.22 */
     if (pen.get_width() > 1)
       ::thickLineColor(surface, ax, ay, bx, by,
-                       pen.get_width(), pen.get_color().gfx_color());
+                       pen.get_width(), pen.get_color().GFXColor());
     else
 #endif
-      ::lineColor(surface, ax, ay, bx, by, pen.get_color().gfx_color());
+      ::lineColor(surface, ax, ay, bx, by, pen.get_color().GFXColor());
   }
 
   void line(const RasterPoint a, const RasterPoint b) {

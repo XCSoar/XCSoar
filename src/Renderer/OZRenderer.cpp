@@ -52,7 +52,7 @@ OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    canvas.select(Brush(color.with_alpha(64)));
+    canvas.select(Brush(color.WithAlpha(64)));
 #elif defined(USE_GDI)
     canvas.mix_mask();
 

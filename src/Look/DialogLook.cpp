@@ -57,5 +57,5 @@ DialogLook::SetBackgroundColor(Color color)
   background_color = color;
   background_brush.Set(color);
 
-  focused.background_color = color.highlight();
+  focused.background_color = color.Highlight();
 }

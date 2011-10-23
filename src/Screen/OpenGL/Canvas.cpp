@@ -43,7 +43,7 @@ Canvas::fill_rectangle(PixelScalar left, PixelScalar top,
                        PixelScalar right, PixelScalar bottom,
                        const Color color)
 {
-  color.set();
+  color.Set();
 
 #ifdef HAVE_GLES
   const RasterPoint vertices[] = {
@@ -432,7 +432,7 @@ Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
     /* draw the text color on top */
     OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     logic_op.set(GL_OR);
-    text_color.set();
+    text_color.Set();
     texture->draw(x, y);
   }
 }
@@ -464,7 +464,7 @@ Canvas::text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text)
     /* draw the text color on top */
     OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     logic_op.set(GL_OR);
-    text_color.set();
+    text_color.Set();
     texture->draw(x, y);
   }
 }
@@ -501,7 +501,7 @@ Canvas::text_clipped(PixelScalar x, PixelScalar y, UPixelScalar width,
     /* draw the text color on top */
     OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     logic_op.set(GL_OR);
-    text_color.set();
+    text_color.Set();
     texture->draw(x, y, width, height, 0, 0, width, height);
   }
 }

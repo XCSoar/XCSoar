@@ -59,14 +59,14 @@ ThermalAssistantWindow::on_create()
   hbBackground.Set(hcBackground);
 
 #ifdef ENABLE_OPENGL
-  hbPolygon.Set(hcPolygonBrush.with_alpha(128));
+  hbPolygon.Set(hcPolygonBrush.WithAlpha(128));
 #else /* !OPENGL */
   hbPolygon.Set(hcPolygonBrush);
 #endif /* !OPENGL */
 
   UPixelScalar width = Layout::FastScale(small ? 1 : 2);
 #ifdef ENABLE_OPENGL
-  hpPolygon.set(width, hcPolygonPen.with_alpha(128));
+  hpPolygon.set(width, hcPolygonPen.WithAlpha(128));
 #else /* !OPENGL */
   hpPolygon.set(width, hcPolygonPen);
 #endif /* !OPENGL */

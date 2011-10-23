@@ -40,7 +40,7 @@ WaypointLook::Initialise(const WaypointRendererSettings &settings)
   obstacle_icon.load_big(IDB_OBSTACLE, IDB_OBSTACLE_HD);
 
   reachable_brush.Set(COLOR_GREEN);
-  terrain_unreachable_brush.Set(light_color(COLOR_RED));
+  terrain_unreachable_brush.Set(LightColor(COLOR_RED));
   unreachable_brush.Set(COLOR_RED);
   white_brush.Set(COLOR_WHITE);
   light_gray_brush.Set(COLOR_LIGHT_GRAY);
