@@ -28,13 +28,13 @@ Copyright_License {
 
 class TopCanvas : public Canvas {
 public:
-  void set(UPixelScalar width = 640, UPixelScalar height = 480);
+  void Set(UPixelScalar width = 640, UPixelScalar height = 480);
 
   void OnResize(UPixelScalar width, UPixelScalar height);
 
-  void full_screen();
+  void Fullscreen();
 
-  void flip();
+  void Flip();
 };
 
 #endif

@@ -37,7 +37,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-TopCanvas::set(UPixelScalar width, UPixelScalar height)
+TopCanvas::Set(UPixelScalar width, UPixelScalar height)
 {
 #ifndef ANDROID
   Uint32 flags = SDL_ANYFORMAT;
@@ -109,7 +109,7 @@ TopCanvas::OnResize(UPixelScalar width, UPixelScalar height)
 }
 
 void
-TopCanvas::full_screen()
+TopCanvas::Fullscreen()
 {
 #if 0 /* disabled for now, for easier development */
   ::SDL_WM_ToggleFullScreen(surface);
@@ -117,7 +117,7 @@ TopCanvas::full_screen()
 }
 
 void
-TopCanvas::flip()
+TopCanvas::Flip()
 {
 #ifdef ANDROID
   native_view->swap();

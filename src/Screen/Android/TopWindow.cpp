@@ -179,7 +179,7 @@ TopWindow::on_event(const Event &event)
        is ignored on Android (tested on a Dell Streak / Android
        2.2.2); let's do one dummy call before we really draw
        something */
-    screen.flip();
+    screen.Flip();
 
     resize(event.x, event.y);
     return true;

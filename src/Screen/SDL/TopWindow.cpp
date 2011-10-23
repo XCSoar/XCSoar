@@ -55,7 +55,7 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
   WindowStyle style;
   style.popup();
 
-  screen.set(width, height);
+  screen.Set(width, height);
 
   /* apply the mode which was chosen by TopCanvas */
   width = screen.get_width();
@@ -79,7 +79,7 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
 void
 TopWindow::full_screen()
 {
-  screen.full_screen();
+  screen.Fullscreen();
 }
 
 void
@@ -112,7 +112,7 @@ TopWindow::invalidate()
 void
 TopWindow::expose() {
   on_paint(screen);
-  screen.flip();
+  screen.Flip();
 }
 
 void
@@ -134,7 +134,7 @@ TopWindow::refresh()
     paused = false;
     resumed = false;
 
-    screen.set();
+    screen.Set();
 
     SurfaceCreated();
 
