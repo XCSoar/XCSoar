@@ -56,12 +56,12 @@ ThermalAssistantWindow::on_create()
 {
   BufferWindow::on_create();
 
-  hbBackground.set(hcBackground);
+  hbBackground.Set(hcBackground);
 
 #ifdef ENABLE_OPENGL
-  hbPolygon.set(hcPolygonBrush.with_alpha(128));
+  hbPolygon.Set(hcPolygonBrush.with_alpha(128));
 #else /* !OPENGL */
-  hbPolygon.set(hcPolygonBrush);
+  hbPolygon.Set(hcPolygonBrush);
 #endif /* !OPENGL */
 
   UPixelScalar width = Layout::FastScale(small ? 1 : 2);

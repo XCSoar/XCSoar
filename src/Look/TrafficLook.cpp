@@ -31,9 +31,9 @@ TrafficLook::Initialise()
   warning_color = Color(0xfe,0x84,0x38);
   alarm_color = Color(0xfb,0x35,0x2f);
 
-  safe_brush.set(safe_color);
-  warning_brush.set(warning_color);
-  alarm_brush.set(alarm_color);
+  safe_brush.Set(safe_color);
+  warning_brush.Set(warning_color);
+  alarm_brush.Set(alarm_color);
 
   teammate_icon.load_big(IDB_TEAMMATE_POS, IDB_TEAMMATE_POS_HD);
 }

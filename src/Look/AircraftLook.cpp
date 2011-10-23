@@ -32,5 +32,5 @@ AircraftLook::Initialise()
   aircraft_simple2_pen.set(Layout::Scale(3), COLOR_WHITE);
 
   canopy_pen.set(1, dark_color(COLOR_CYAN));
-  canopy_brush.set(COLOR_CYAN);
+  canopy_brush.Set(COLOR_CYAN);
 }

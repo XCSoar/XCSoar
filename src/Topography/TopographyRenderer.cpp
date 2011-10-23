@@ -61,7 +61,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
 #ifdef ENABLE_OPENGL
   pen.set();
-  brush.set();
+  brush.Set();
 #else
   shape_renderer.configure(&pen, &brush);
 #endif

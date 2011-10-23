@@ -84,7 +84,7 @@ ContainerWindow::on_message(HWND hWnd, UINT message,
       if (brush == NULL)
         break;
 
-      return (LRESULT)brush->native();
+      return (LRESULT)brush->Native();
     }
 
   case WM_DRAWITEM:

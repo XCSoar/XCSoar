@@ -30,7 +30,7 @@ CrossSectionLook::Initialise()
   background_color = COLOR_WHITE;
   text_color = COLOR_BLACK;
 
-  terrain_brush.set(Graphics::GroundColor);
+  terrain_brush.Set(Graphics::GroundColor);
   grid_pen.set(Pen::DASH, 1, Color(0x60, 0x60, 0x60));
-  aircraft_brush.set(text_color);
+  aircraft_brush.Set(text_color);
 }

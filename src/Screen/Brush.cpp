@@ -28,7 +28,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-Brush::set(const Color c)
+Brush::Set(const Color c)
 {
   assert(IsScreenInitialized());
 
@@ -36,7 +36,7 @@ Brush::set(const Color c)
   hollow = false;
   color = c;
   #else
-  reset();
+  Reset();
   brush = ::CreateSolidBrush(c);
   #endif
 }
@@ -44,18 +44,18 @@ Brush::set(const Color c)
 #ifdef HAVE_HATCHED_BRUSH
 
 void
-Brush::set(const Bitmap &bitmap)
+Brush::Set(const Bitmap &bitmap)
 {
-  reset();
+  Reset();
   brush = ::CreatePatternBrush(bitmap.native());
 }
 
 #endif
 
 void
-Brush::reset()
+Brush::Reset()
 {
-  assert(!defined() || IsScreenInitialized());
+  assert(!IsDefined() || IsScreenInitialized());
 
   #ifndef USE_GDI
   hollow = true;

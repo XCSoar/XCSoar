@@ -39,13 +39,13 @@ WaypointLook::Initialise(const WaypointRendererSettings &settings)
   power_plant_icon.load_big(IDB_POWER_PLANT, IDB_POWER_PLANT_HD);
   obstacle_icon.load_big(IDB_OBSTACLE, IDB_OBSTACLE_HD);
 
-  reachable_brush.set(COLOR_GREEN);
-  terrain_unreachable_brush.set(light_color(COLOR_RED));
-  unreachable_brush.set(COLOR_RED);
-  white_brush.set(COLOR_WHITE);
-  light_gray_brush.set(COLOR_LIGHT_GRAY);
-  magenta_brush.set(COLOR_MAGENTA);
-  orange_brush.set(COLOR_ORANGE);
+  reachable_brush.Set(COLOR_GREEN);
+  terrain_unreachable_brush.Set(light_color(COLOR_RED));
+  unreachable_brush.Set(COLOR_RED);
+  white_brush.Set(COLOR_WHITE);
+  light_gray_brush.Set(COLOR_LIGHT_GRAY);
+  magenta_brush.Set(COLOR_MAGENTA);
+  orange_brush.Set(COLOR_ORANGE);
 
   if (settings.landable_style == wpLandableWinPilot) {
     airport_reachable_icon.load_big(IDB_REACHABLE, IDB_REACHABLE_HD);

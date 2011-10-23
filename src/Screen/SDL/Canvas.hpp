@@ -101,7 +101,7 @@ protected:
    */
   bool pen_over_brush() const {
     return pen.defined() &&
-      (brush.is_hollow() || brush.get_color() != pen.get_color());
+      (brush.IsHollow() || brush.GetColor() != pen.get_color());
   }
 
 public:
@@ -137,7 +137,7 @@ public:
   }
 
   void hollow_brush() {
-    brush.reset();
+    brush.Reset();
   }
 
   void white_brush() {
@@ -224,10 +224,10 @@ public:
   void fill_rectangle(PixelScalar left, PixelScalar top,
                       PixelScalar right, PixelScalar bottom,
                       const Brush &brush) {
-    if (brush.is_hollow())
+    if (brush.IsHollow())
       return;
 
-    fill_rectangle(left, top, right, bottom, brush.get_color());
+    fill_rectangle(left, top, right, bottom, brush.GetColor());
   }
 
   void fill_rectangle(const PixelRect &rc, const HWColor color) {

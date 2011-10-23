@@ -121,12 +121,12 @@ Graphics::Initialise()
 #ifdef HAVE_HATCHED_BRUSH
   hAboveTerrainBitmap.load(IDB_ABOVETERRAIN);
 
-  hAboveTerrainBrush.set(hAboveTerrainBitmap);
+  hAboveTerrainBrush.Set(hAboveTerrainBitmap);
 #endif
 
   hpWind.set(Layout::Scale(1), dark_color(COLOR_GRAY));
   hpWindTail.set(Pen::DASH, 1, COLOR_BLACK);
-  hbWind.set(COLOR_GRAY);
+  hbWind.Set(COLOR_GRAY);
 
   hBmpMapScaleLeft.load_big(IDB_MAPSCALE_LEFT, IDB_MAPSCALE_LEFT_HD, false);
   hBmpMapScaleRight.load_big(IDB_MAPSCALE_RIGHT, IDB_MAPSCALE_RIGHT_HD, false);
@@ -147,15 +147,15 @@ Graphics::Initialise()
   hBmpTrafficWarning.load_big(IDB_TRAFFIC_WARNING, IDB_TRAFFIC_WARNING_HD, false);
   hBmpTrafficAlarm.load_big(IDB_TRAFFIC_ALARM, IDB_TRAFFIC_ALARM_HD, false);
 
-  hbCompass.set(Color(207, 207, 207));
+  hbCompass.Set(Color(207, 207, 207));
 
-  hbFinalGlideBelow.set(COLOR_RED);
+  hbFinalGlideBelow.Set(COLOR_RED);
   hpFinalGlideBelow.set(Layout::Scale(1), dark_color(COLOR_RED));
 
-  hbFinalGlideBelowLandable.set(COLOR_ORANGE);
+  hbFinalGlideBelowLandable.Set(COLOR_ORANGE);
   hpFinalGlideBelowLandable.set(Layout::Scale(1), dark_color(COLOR_ORANGE));
 
-  hbFinalGlideAbove.set(COLOR_GREEN);
+  hbFinalGlideAbove.Set(COLOR_GREEN);
   hpFinalGlideAbove.set(Layout::Scale(1), dark_color(COLOR_GREEN));
 
   hpCompass.set(Layout::Scale(1), COLOR_GRAY);
@@ -171,13 +171,13 @@ Graphics::Initialise()
   ContestPen[2].set(Layout::Scale(1), COLOR_BLUE);
 
     // used for landable rendering
-  hbGreen.set(COLOR_GREEN);
-  hbWhite.set(COLOR_WHITE);
-  hbOrange.set(COLOR_ORANGE);
-  hbLightGray.set(COLOR_LIGHT_GRAY);
-  hbNotReachableTerrain.set(light_color(COLOR_RED));
+  hbGreen.Set(COLOR_GREEN);
+  hbWhite.Set(COLOR_WHITE);
+  hbOrange.Set(COLOR_ORANGE);
+  hbLightGray.Set(COLOR_LIGHT_GRAY);
+  hbNotReachableTerrain.Set(light_color(COLOR_RED));
 
-  hbGround.set(GroundColor);
+  hbGround.Set(GroundColor);
 
   hpTrackBearingLine.set(3, COLOR_GRAY);
 }
@@ -253,11 +253,11 @@ Graphics::Deinitialise()
   hAbort.reset();
 
 #ifdef HAVE_HATCHED_BRUSH
-  hAboveTerrainBrush.reset();
+  hAboveTerrainBrush.Reset();
   hAboveTerrainBitmap.reset();
 #endif
 
-  hbWind.reset();
+  hbWind.Reset();
 
   hBmpMapScaleLeft.reset();
   hBmpMapScaleRight.reset();
@@ -278,11 +278,11 @@ Graphics::Deinitialise()
   hBmpTrafficWarning.reset();
   hBmpTrafficAlarm.reset();
 
-  hbCompass.reset();
+  hbCompass.Reset();
 
-  hbFinalGlideBelow.reset();
-  hbFinalGlideBelowLandable.reset();
-  hbFinalGlideAbove.reset();
+  hbFinalGlideBelow.Reset();
+  hbFinalGlideBelowLandable.Reset();
+  hbFinalGlideAbove.Reset();
 
   hpWind.reset();
   hpWindTail.reset();
@@ -302,13 +302,13 @@ Graphics::Deinitialise()
   ContestPen[1].reset();
   ContestPen[2].reset();
 
-  hbGreen.reset();
-  hbWhite.reset();
-  hbOrange.reset();
-  hbLightGray.reset();
-  hbNotReachableTerrain.reset();
+  hbGreen.Reset();
+  hbWhite.Reset();
+  hbOrange.Reset();
+  hbLightGray.Reset();
+  hbNotReachableTerrain.Reset();
 
-  hbGround.reset();
+  hbGround.Reset();
 
   hpTrackBearingLine.reset();
 

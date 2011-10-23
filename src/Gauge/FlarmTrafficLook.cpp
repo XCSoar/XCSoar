@@ -37,16 +37,16 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
   background_color = COLOR_WHITE;
   radar_color = COLOR_LIGHT_GRAY;
 
-  warning_brush.set(warning_color);
-  alarm_brush.set(alarm_color);
-  default_brush.set(default_color);
-  passive_brush.set(passive_color);
-  selection_brush.set(selection_color);
-  radar_brush.set(radar_color);
-  team_brush_green.set(Color(0x74, 0xFF, 0));
-  team_brush_blue.set(Color(0, 0x90, 0xFF));
-  team_brush_yellow.set(Color(0xFF, 0xE8, 0));
-  team_brush_magenta.set(Color(0xFF, 0, 0xCB));
+  warning_brush.Set(warning_color);
+  alarm_brush.Set(alarm_color);
+  default_brush.Set(default_color);
+  passive_brush.Set(passive_color);
+  selection_brush.Set(selection_color);
+  radar_brush.Set(radar_color);
+  team_brush_green.Set(Color(0x74, 0xFF, 0));
+  team_brush_blue.Set(Color(0, 0x90, 0xFF));
+  team_brush_yellow.Set(Color(0xFF, 0xE8, 0));
+  team_brush_magenta.Set(Color(0xFF, 0, 0xCB));
 
   UPixelScalar width = Layout::FastScale(small ? 1 : 2);
   warning_pen.set(width, warning_color);
@@ -75,16 +75,16 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
 void
 FlarmTrafficLook::Deinitialise()
 {
-  warning_brush.reset();
-  alarm_brush.reset();
-  default_brush.reset();
-  passive_brush.reset();
-  selection_brush.reset();
-  radar_brush.reset();
-  team_brush_green.reset();
-  team_brush_blue.reset();
-  team_brush_yellow.reset();
-  team_brush_magenta.reset();
+  warning_brush.Reset();
+  alarm_brush.Reset();
+  default_brush.Reset();
+  passive_brush.Reset();
+  selection_brush.Reset();
+  radar_brush.Reset();
+  team_brush_green.Reset();
+  team_brush_blue.Reset();
+  team_brush_yellow.Reset();
+  team_brush_magenta.Reset();
 
   warning_pen.reset();
   alarm_pen.reset();

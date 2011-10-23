@@ -63,10 +63,10 @@ public:
    * Constructor (creates a Brush object of the given Color
    * @param c Color of the Brush
    */
-  explicit Brush(const Color c) : brush(NULL) { set(c); }
+  explicit Brush(const Color c) : brush(NULL) { Set(c); }
 
   /** Destructor */
-  ~Brush() { reset(); }
+  ~Brush() { Reset(); }
   #endif
 
 public:
@@ -74,7 +74,7 @@ public:
    * Sets the Color of the Brush
    * @param c The new Color
    */
-  void set(const Color c);
+  void Set(const Color c);
 
 #ifdef HAVE_HATCHED_BRUSH
 
@@ -82,21 +82,21 @@ public:
    * Creates a bitmap-based Brush
    * @param bitmap The bitmap the new Brush will be based on
    */
-  void set(const Bitmap &bitmap);
+  void Set(const Bitmap &bitmap);
 
 #endif
 
   /**
    * Resets the Brush to NULL
    */
-  void reset();
+  void Reset();
 
   /**
    * Returns whether the Brush is defined (!= NULL)
    * @return True if the Brush is defined, False otherwise
    */
   bool
-  defined() const
+  IsDefined() const
   {
 #ifndef USE_GDI
     return !hollow;
@@ -106,14 +106,14 @@ public:
   }
 
 #ifndef USE_GDI
-  bool is_hollow() const { return hollow; }
-  const Color get_color() const { return color; }
+  bool IsHollow() const { return hollow; }
+  const Color GetColor() const { return color; }
 #else
   /**
    * Returns the native HBRUSH object
    * @return The native HBRUSH object
    */
-  HBRUSH native() const {
+  HBRUSH Native() const {
     return brush;
   }
 #endif
@@ -122,7 +122,7 @@ public:
   /**
    * Configures this brush in the OpenGL context.
    */
-  void set() const {
+  void Set() const {
     color.set();
   }
 #endif /* OPENGL */

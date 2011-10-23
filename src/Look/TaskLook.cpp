@@ -46,7 +46,7 @@ TaskLook::Initialise()
   isoline_pen.set(Pen::DASH, Layout::Scale(1), isoline_color);
 
   bearing_pen.set(Layout::Scale(2), bearing_color);
-  best_cruise_track_brush.set(bearing_color);
+  best_cruise_track_brush.Set(bearing_color);
   best_cruise_track_pen.set(Layout::Scale(1), dark_color(bearing_color));
 
   target_icon.load_big(IDB_TARGET, IDB_TARGET_HD);

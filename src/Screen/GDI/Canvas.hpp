@@ -153,7 +153,7 @@ public:
   }
 
   void select(const Brush &brush) {
-    select_object(brush.native());
+    select_object(brush.Native());
   }
 
   void select(const Font &font) {
@@ -249,7 +249,7 @@ public:
   void fill_rectangle(const PixelRect rc, const Brush &brush) {
     assert(defined());
 
-    ::FillRect(dc, &rc, brush.native());
+    ::FillRect(dc, &rc, brush.Native());
   }
 
   void fill_rectangle(PixelScalar left, PixelScalar top,

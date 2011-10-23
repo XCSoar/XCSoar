@@ -68,7 +68,7 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
   bitmaps[7].load(IDB_AIRSPACE7);
 
   for (int i = 0; i < NUMAIRSPACEBRUSHES; i++)
-    brushes[i].set(bitmaps[i]);
+    brushes[i].Set(bitmaps[i]);
 #endif
 
 #ifdef HAVE_ALPHA_BLEND
@@ -76,7 +76,7 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
 #endif
 #if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
     for (unsigned i = 0; i < NUMAIRSPACECOLORS; ++i)
-      solid_brushes[i].set(colors[i]);
+      solid_brushes[i].Set(colors[i]);
 #endif
 
   intercept_icon.load_big(IDB_AIRSPACEI, IDB_AIRSPACEI_HD);

@@ -40,7 +40,7 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors)
 
   value.fg_color = title.fg_color = comment.fg_color =
     inverse ? COLOR_WHITE : COLOR_BLACK;
-  background_brush.set(inverse ? COLOR_BLACK : COLOR_WHITE);
+  background_brush.Set(inverse ? COLOR_BLACK : COLOR_WHITE);
 
   Color border_color = Color(128, 128, 128);
   border_pen.set(BORDER_WIDTH, border_color);

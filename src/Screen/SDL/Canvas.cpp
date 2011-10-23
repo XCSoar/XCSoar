@@ -60,7 +60,7 @@ Canvas::polyline(const RasterPoint *lppt, unsigned cPoints)
 void
 Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
 {
-  if (brush.is_hollow() && !pen.defined())
+  if (brush.IsHollow() && !pen.defined())
     return;
 
   Sint16 vx[cPoints], vy[cPoints];
@@ -70,9 +70,9 @@ Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
     vy[i] = y_offset + lppt[i].y;
   }
 
-  if (!brush.is_hollow())
+  if (!brush.IsHollow())
     ::filledPolygonColor(surface, vx, vy, cPoints,
-                         brush.get_color().gfx_color());
+                         brush.GetColor().gfx_color());
 
   if (pen_over_brush())
     ::polygonColor(surface, vx, vy, cPoints, pen.get_color().gfx_color());
@@ -84,9 +84,9 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
   x += x_offset;
   y += y_offset;
 
-  if (!brush.is_hollow())
+  if (!brush.IsHollow())
     ::filledCircleColor(surface, x, y, radius,
-                        brush.get_color().gfx_color());
+                        brush.GetColor().gfx_color());
 
   if (pen_over_brush())
     ::circleColor(surface, x, y, radius, pen.get_color().gfx_color());
@@ -101,11 +101,11 @@ Canvas::segment(PixelScalar x, PixelScalar y, UPixelScalar radius,
   x += x_offset;
   y += y_offset;
 
-  if (!brush.is_hollow())
+  if (!brush.IsHollow())
     ::filledPieColor(surface, x, y, radius, 
                      (int)start.Degrees() - 90,
                      (int)end.Degrees() - 90,
-                     brush.get_color().gfx_color());
+                     brush.GetColor().gfx_color());
 
   if (pen_over_brush())
     ::pieColor(surface, x, y, radius, 

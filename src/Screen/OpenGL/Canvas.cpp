@@ -106,13 +106,13 @@ Canvas::polyline(const RasterPoint *points, unsigned num_points)
 void
 Canvas::polygon(const RasterPoint *points, unsigned num_points)
 {
-  if (brush.is_hollow() && !pen.defined())
+  if (brush.IsHollow() && !pen.defined())
     return;
 
   glVertexPointer(2, GL_VALUE, 0, points);
 
-  if (!brush.is_hollow() && num_points >= 3) {
-    brush.set();
+  if (!brush.IsHollow() && num_points >= 3) {
+    brush.Set();
 
     static AllocatedArray<GLushort> triangle_buffer;
     triangle_buffer.grow_discard(3 * (num_points - 2));
@@ -143,13 +143,13 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
 void
 Canvas::TriangleFan(const RasterPoint *points, unsigned num_points)
 {
-  if (brush.is_hollow() && !pen.defined())
+  if (brush.IsHollow() && !pen.defined())
     return;
 
   glVertexPointer(2, GL_VALUE, 0, points);
 
-  if (!brush.is_hollow() && num_points >= 3) {
-    brush.set();
+  if (!brush.IsHollow() && num_points >= 3) {
+    brush.Set();
     glDrawArrays(GL_TRIANGLE_FAN, 0, num_points);
   }
 
@@ -234,9 +234,9 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
     GLDonutVertices vertices(x, y,
                              radius - pen.get_width()/2,
                              radius + pen.get_width()/2);
-    if (!brush.is_hollow()) {
+    if (!brush.IsHollow()) {
       vertices.bind_inner_circle();
-      brush.set();
+      brush.Set();
       glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.CIRCLE_SIZE);
     }
     vertices.bind();
@@ -258,8 +258,8 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
     glScalef(radius / 256., radius / 256., 1.);
 #endif
 
-    if (!brush.is_hollow()) {
-      brush.set();
+    if (!brush.IsHollow()) {
+      brush.Set();
       glDrawArrays(GL_TRIANGLE_FAN, 0, OpenGL::SMALL_CIRCLE_SIZE);
     }
 
@@ -287,8 +287,8 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
     glScalef(radius / 1024., radius / 1024., 1.);
 #endif
 
-    if (!brush.is_hollow()) {
-      brush.set();
+    if (!brush.IsHollow()) {
+      brush.Set();
       glDrawArrays(GL_TRIANGLE_FAN, 0, OpenGL::CIRCLE_SIZE);
     }
 
@@ -304,8 +304,8 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
     GLCircleVertices vertices(x, y, radius);
     vertices.bind();
 
-    if (!brush.is_hollow()) {
-      brush.set();
+    if (!brush.IsHollow()) {
+      brush.Set();
       glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.SIZE);
     }
 
@@ -340,8 +340,8 @@ Canvas::annulus(PixelScalar x, PixelScalar y,
   const unsigned istart = AngleToDonutVertex(start);
   const unsigned iend = AngleToDonutVertex(end);
 
-  if (!brush.is_hollow()) {
-    brush.set();
+  if (!brush.IsHollow()) {
+    brush.Set();
     vertices.bind();
 
     if (istart > iend) {
@@ -356,7 +356,7 @@ Canvas::annulus(PixelScalar x, PixelScalar y,
     pen.set();
 
     if (istart != iend) {
-      if (brush.is_hollow())
+      if (brush.IsHollow())
         vertices.bind();
 
       glDrawArrays(GL_LINE_STRIP, istart, 2);

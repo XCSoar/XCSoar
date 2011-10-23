@@ -47,8 +47,8 @@ VarioLook::Initialise(bool _inverse, bool _colors,
     lift_color = Color(0x19,0x94,0x03);
   }
 
-  sink_brush.set(sink_color);
-  lift_brush.set(lift_color);
+  sink_brush.Set(sink_color);
+  lift_brush.Set(lift_color);
 
   thick_background_pen.set(Layout::Scale(5), background_color);
   thick_sink_pen.set(Layout::Scale(5), sink_color);

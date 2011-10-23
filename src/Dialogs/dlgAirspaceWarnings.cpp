@@ -510,10 +510,10 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close)
 
   wf->SetKeyDownNotify(OnKeyDown);
 
-  hBrushInsideBk.set(Color(254,50,50));
-  hBrushNearBk.set(Color(254,254,50));
-  hBrushInsideAckBk.set(Color(254,100,100));
-  hBrushNearAckBk.set(Color(254,254,100));
+  hBrushInsideBk.Set(Color(254,50,50));
+  hBrushNearBk.Set(Color(254,254,50));
+  hBrushInsideAckBk.Set(Color(254,100,100));
+  hBrushNearAckBk.Set(Color(254,254,100));
 
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceWarningList"));
   assert(wAirspaceList != NULL);
@@ -540,8 +540,8 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close)
 
   warning_list.clear();
 
-  hBrushInsideBk.reset();
-  hBrushNearBk.reset();
-  hBrushInsideAckBk.reset();
-  hBrushNearAckBk.reset();
+  hBrushInsideBk.Reset();
+  hBrushNearBk.Reset();
+  hBrushInsideAckBk.Reset();
+  hBrushNearAckBk.Reset();
 }
