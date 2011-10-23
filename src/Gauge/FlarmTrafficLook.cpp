@@ -62,14 +62,14 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
   plane_pen.Set(width, radar_color);
   radar_pen.Set(1, radar_color);
 
-  no_traffic_font.set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
-  label_font.set(Fonts::GetStandardFontFace(), Layout::FastScale(14));
-  side_info_font.set(Fonts::GetStandardFontFace(),
+  no_traffic_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
+  label_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(14));
+  side_info_font.Set(Fonts::GetStandardFontFace(),
                  Layout::FastScale(small ? 12 : 18), true);
 
-  info_labels_font.set(Fonts::GetStandardFontFace(), Layout::FastScale(10), true);
-  info_values_font.set(Fonts::GetStandardFontFace(), Layout::FastScale(20));
-  call_sign_font.set(Fonts::GetStandardFontFace(), Layout::FastScale(28), true);
+  info_labels_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(10), true);
+  info_values_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(20));
+  call_sign_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(28), true);
 }
 
 void
@@ -99,11 +99,11 @@ FlarmTrafficLook::Deinitialise()
   plane_pen.Reset();
   radar_pen.Reset();
 
-  no_traffic_font.reset();
-  label_font.reset();
-  side_info_font.reset();
+  no_traffic_font.Reset();
+  label_font.Reset();
+  side_info_font.Reset();
 
-  info_labels_font.reset();
-  info_values_font.reset();
-  call_sign_font.reset();
+  info_labels_font.Reset();
+  info_values_font.Reset();
+  call_sign_font.Reset();
 }

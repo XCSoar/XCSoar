@@ -62,9 +62,9 @@ TextCache::GetSize(const Font &font, const char *text)
   char key_buffer[4096];
   snprintf(key_buffer, sizeof(key_buffer),
            "%s_%u_%u_000000_ffffff_%s",
-           font.get_facename(),
-           font.get_style(),
-           font.get_height(),
+           font.GetFacename(),
+           font.GetStyle(),
+           font.GetHeight(),
            text);
 
   const std::string key(key_buffer);
@@ -88,9 +88,9 @@ TextCache::LookupSize(const Font &font, const char *text)
   char key[4096];
   snprintf(key, sizeof(key),
            "%s_%u_%u_000000_ffffff_%s",
-           font.get_facename(),
-           font.get_style(),
-           font.get_height(),
+           font.GetFacename(),
+           font.GetStyle(),
+           font.GetHeight(),
            text);
 
   Map::const_iterator i = text_cache_map.find(key);
@@ -117,9 +117,9 @@ TextCache::get(const Font *font, Color background_color, Color text_color,
   char key[4096];
   snprintf(key, sizeof(key),
            "%s_%u_%u_%02x%02x%02x_%02x%02x%02x_%s",
-           font->get_facename(),
-           font->get_style(),
-           font->get_height(),
+           font->GetFacename(),
+           font->GetStyle(),
+           font->GetHeight(),
            background_color.Red(),
            background_color.Green(),
            background_color.Blue(),
@@ -155,13 +155,13 @@ TextCache::get(const Font *font, Color background_color, Color text_color,
 
 #ifdef ANDROID
   PixelSize size;
-  int texture_id = font->text_texture_gl(text, size, text_color, background_color);
+  int texture_id = font->TextTextureGL(text, size, text_color, background_color);
   if (texture_id == 0)
     return NULL;
 
   RenderedText *rt = new RenderedText(key, texture_id, size.cx, size.cy);
 #else
-  SDL_Surface *surface = ::TTF_RenderUTF8_Solid(font->native(), text,
+  SDL_Surface *surface = ::TTF_RenderUTF8_Solid(font->Native(), text,
                                                 COLOR_BLACK);
   if (surface == NULL)
     return NULL;

@@ -104,7 +104,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
     tmp = metar.content.c_str();
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + code_font.get_height() + Layout::FastScale(4),
+                      rc.top + code_font.GetHeight() + Layout::FastScale(4),
                       rc, tmp);
 }
 
@@ -221,8 +221,8 @@ dlgNOAAListShowModal(SingleWindow &parent)
                   _T("IDR_XML_NOAA_LIST"));
   assert(wf != NULL);
 
-  UPixelScalar item_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
-                         Fonts::MapLabel.get_height();
+  UPixelScalar item_height = Fonts::MapBold.GetHeight() + Layout::Scale(6) +
+                         Fonts::MapLabel.GetHeight();
 
   station_list = (WndListFrame *)wf->FindByName(_T("StationList"));
   assert(station_list != NULL);

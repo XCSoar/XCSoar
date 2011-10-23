@@ -125,7 +125,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
     canvas.select(name_font);
     _stprintf(buffer, _T("  (%s)"), _("Add Turnpoint"));
     canvas.text(rc.left + line_height + Layout::FastScale(2),
-                rc.top + line_height / 2 - name_font.get_height() / 2, buffer);
+                rc.top + line_height / 2 - name_font.GetHeight() / 2, buffer);
     return;
   }
 
@@ -143,7 +143,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
   wir.Draw(tp.GetWaypoint(), pt, WaypointIconRenderer::Unreachable, true);
 
   // Y-Coordinate of the second row
-  PixelScalar top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
+  PixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
 
   // Use small font for details
   canvas.select(small_font);
@@ -155,7 +155,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
     UPixelScalar width = leg_info_width = canvas.text_width(buffer);
     canvas.text(rc.right - Layout::FastScale(2) - width,
                 rc.top + Layout::FastScale(2) +
-                (name_font.get_height() - small_font.get_height()) / 2, buffer);
+                (name_font.GetHeight() - small_font.GetHeight()) / 2, buffer);
 
     // Draw leg bearing
     _stprintf(buffer, _T("%.0f" DEG " T"), (double)leg.bearing.Degrees());
@@ -371,8 +371,8 @@ pnlTaskEdit::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
   assert(wSummary);
   TaskSummaryRect = wSummary->get_position();
 
-  UPixelScalar line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
-    Fonts::MapLabel.get_height();
+  UPixelScalar line_height = Fonts::MapBold.GetHeight() + Layout::Scale(6) +
+    Fonts::MapLabel.GetHeight();
   wTaskPoints->SetItemHeight(line_height);
   wTaskPoints->SetActivateCallback(OnTaskListEnter);
   wTaskPoints->SetPaintItemCallback(OnTaskPaintListItem);

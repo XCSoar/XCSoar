@@ -78,11 +78,11 @@ GetLogFont(LOGFONT &logfont)
 static void RedrawSampleFont(void)
 {
   GetLogFont(NewLogFont);
-  NewFont.set(NewLogFont);
+  NewFont.Set(NewLogFont);
 
   WndFrame *wp = (WndFrame *)wf->FindByName(_T("prpFontSample"));
   if (wp) {
-    if (NewFont.defined()) {
+    if (NewFont.IsDefined()) {
       wp->SetFont(NewFont);
       wp->SetCaption(_("Sample Text\n123"));
     } else {
@@ -221,7 +221,7 @@ dlgFontEditShowModal(const TCHAR * FontDescription,
 
   delete wf;
 
-  NewFont.reset();
+  NewFont.Reset();
 
   return bRetVal;
 }

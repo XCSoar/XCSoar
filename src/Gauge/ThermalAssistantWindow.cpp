@@ -74,8 +74,8 @@ ThermalAssistantWindow::on_create()
   hpOuterCircle.Set(Pen::DASH, 1, hcCircles);
   hpPlane.Set(width, hcCircles);
 
-  hfNoTraffic.set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
-  hfLabels.set(Fonts::GetStandardFontFace(), Layout::FastScale(12));
+  hfNoTraffic.Set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
+  hfLabels.Set(Fonts::GetStandardFontFace(), Layout::FastScale(12));
 
   return true;
 }
@@ -83,8 +83,8 @@ ThermalAssistantWindow::on_create()
 bool
 ThermalAssistantWindow::on_destroy()
 {
-  hfNoTraffic.reset();
-  hfLabels.reset();
+  hfNoTraffic.Reset();
+  hfLabels.Reset();
 
   BufferWindow::on_destroy();
   return true;

@@ -103,7 +103,7 @@ SizeLogFont(LOGFONT &logfont, UPixelScalar width, const TCHAR* str)
     --logfont.lfHeight;
 
     Font font;
-    if (!font.set(logfont))
+    if (!font.Set(logfont))
       break;
 
     canvas.select(font);
@@ -167,12 +167,12 @@ Fonts::Initialize()
 {
   InitialiseLogFonts();
 
-  Title.set(LogTitle);
-  CDI.set(LogCDI);
-  MapLabel.set(LogMapLabel);
-  MapLabelImportant.set(LogMapLabelImportant);
-  Map.set(LogMap);
-  MapBold.set(LogMapBold);
+  Title.Set(LogTitle);
+  CDI.Set(LogCDI);
+  MapLabel.Set(LogMapLabel);
+  MapLabelImportant.Set(LogMapLabelImportant);
+  Map.Set(LogMap);
+  MapBold.Set(LogMapBold);
 }
 
 void
@@ -182,25 +182,25 @@ Fonts::SizeInfoboxFont(UPixelScalar control_width)
 
   if (!is_altair())
     SizeLogFont(lf, control_width, _T("1234m"));
-  InfoBox.set(lf);
+  InfoBox.Set(lf);
 
   lf = LogInfoBoxSmall;
   if (!is_altair())
     SizeLogFont(lf, control_width, _T("12345m"));
-  InfoBoxSmall.set(lf);
+  InfoBoxSmall.Set(lf);
 }
 
 void
 Fonts::Deinitialize()
 {
-  InfoBox.reset();
-  InfoBoxSmall.reset();
-  Title.reset();
-  Map.reset();
-  MapBold.reset();
-  CDI.reset();
-  MapLabel.reset();
-  MapLabelImportant.reset();
+  InfoBox.Reset();
+  InfoBoxSmall.Reset();
+  Title.Reset();
+  Map.Reset();
+  MapBold.Reset();
+  CDI.Reset();
+  MapLabel.Reset();
+  MapLabelImportant.Reset();
 }
 
 const TCHAR*

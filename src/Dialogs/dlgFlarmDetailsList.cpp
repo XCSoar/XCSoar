@@ -100,7 +100,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
     _tcscpy(tmp, _("No further information"));
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + name_font.get_height() + Layout::FastScale(4),
+                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, tmp);
 }
 
@@ -111,8 +111,8 @@ dlgFlarmDetailsListShowModal(SingleWindow &parent, const TCHAR *title,
   assert(count > 0);
 
   array = _array;
-  UPixelScalar line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
-                         Fonts::MapLabel.get_height();
+  UPixelScalar line_height = Fonts::MapBold.GetHeight() + Layout::Scale(6) +
+                         Fonts::MapLabel.GetHeight();
   int index = ListPicker(parent, title, count, 0, line_height, PaintListItem, true);
   return (index < 0 || index >= (int)count) ? NULL : array[index];
 }

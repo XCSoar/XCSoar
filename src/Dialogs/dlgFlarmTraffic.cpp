@@ -306,7 +306,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
     Units::FormatUserVSpeed(traffic.climb_rate_avg30s, tmp, 20);
     canvas.select(look.info_values_font);
     sz = canvas.text_size(tmp);
-    canvas.text(rc.right - sz.cx, rc.top + look.info_labels_font.get_height(), tmp);
+    canvas.text(rc.right - sz.cx, rc.top + look.info_labels_font.GetHeight(), tmp);
 
     canvas.select(look.info_labels_font);
     sz = canvas.text_size(_("Vario"));
@@ -321,7 +321,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 
   canvas.select(look.info_labels_font);
   canvas.text(rc.left,
-              rc.bottom - look.info_values_font.get_height() - look.info_labels_font.get_height(),
+              rc.bottom - look.info_values_font.GetHeight() - look.info_labels_font.GetHeight(),
               _("Distance"));
 
   // Relative Height
@@ -333,21 +333,21 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   canvas.select(look.info_labels_font);
   sz = canvas.text_size(_("Rel. Alt."));
   canvas.text(rc.right - sz.cx,
-              rc.bottom - look.info_values_font.get_height() - look.info_labels_font.get_height(),
+              rc.bottom - look.info_values_font.GetHeight() - look.info_labels_font.GetHeight(),
               _("Rel. Alt."));
 
   // ID / Name
   unsigned font_size;
   if (traffic.HasName()) {
     canvas.select(look.call_sign_font);
-    font_size = look.call_sign_font.get_height();
+    font_size = look.call_sign_font.GetHeight();
 
     if (!traffic.HasAlarm())
       canvas.set_text_color(look.selection_color);
 
     _tcscpy(tmp, traffic.name);
   } else {
-    font_size = look.info_labels_font.get_height();
+    font_size = look.info_labels_font.GetHeight();
     traffic.id.Format(tmp);
   }
 

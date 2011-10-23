@@ -67,15 +67,15 @@ InitialiseFonts()
 
   LOGFONT lf;
   InitialiseLogfont(&lf, face, FontHeight / 2);
-  normal_font.set(lf);
+  normal_font.Set(lf);
 
   InitialiseLogfont(&lf, face, FontHeight / 2, true);
-  bold_font.set(lf);
+  bold_font.Set(lf);
 }
 
 void
 DeinitialiseFonts()
 {
-  bold_font.reset();
-  normal_font.reset();
+  bold_font.Reset();
+  normal_font.Reset();
 }

@@ -91,7 +91,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   canvas.select(small_font);
   canvas.text_clipped(left,
-                      rc.top + name_font.get_height() + Layout::FastScale(4),
+                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, buffer);
 }
 
@@ -124,19 +124,19 @@ MapItemListRenderer::Draw(
 
   canvas.select(small_font);
   canvas.text_clipped(left,
-                      rc.top + name_font.get_height() + Layout::FastScale(4),
+                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, airspace.GetTypeText(false));
 
   PixelScalar altitude_width =
     canvas.text_width(airspace.GetTopText(true).c_str());
   canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
-                      rc.top + name_font.get_height() -
-                      small_font.get_height() + Layout::FastScale(2), rc,
+                      rc.top + name_font.GetHeight() -
+                      small_font.GetHeight() + Layout::FastScale(2), rc,
                       airspace.GetTopText(true).c_str());
 
   altitude_width = canvas.text_width(airspace.GetBaseText(true).c_str());
   canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
-                      rc.top + name_font.get_height() + Layout::FastScale(4),
+                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, airspace.GetBaseText(true).c_str());
 }
 
@@ -177,7 +177,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   _stprintf(buffer, _("dropped at %s"), time_buffer);
   canvas.select(small_font);
   canvas.text_clipped(left,
-                      rc.top + name_font.get_height() + Layout::FastScale(4),
+                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, buffer);
 }
 
@@ -207,7 +207,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   TCHAR buffer[256];
 
   // Y-Coordinate of the second row
-  UPixelScalar top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
+  UPixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
 
   // Use small font for details
   canvas.select(small_font);

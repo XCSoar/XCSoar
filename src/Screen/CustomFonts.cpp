@@ -32,7 +32,7 @@ LoadCustomFont(Font *theFont, const TCHAR FontRegKey[])
   LOGFONT logfont;
   memset((char *)&logfont, 0, sizeof(LOGFONT));
   if (Profile::GetFont(FontRegKey, &logfont))
-    theFont->set(logfont);
+    theFont->Set(logfont);
 }
 
 void

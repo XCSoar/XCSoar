@@ -104,7 +104,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   wir.Draw(waypoint, pt, reachable);
 
   // Y-Coordinate of the second row
-  PixelScalar top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
+  PixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
 
   // Use small font for details
   canvas.select(small_font);
@@ -146,7 +146,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   wir.Draw(waypoint, pt);
 
   // Y-Coordinate of the second row
-  PixelScalar top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
+  PixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
 
   // Use small font for details
   canvas.select(small_font);
@@ -158,7 +158,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     UPixelScalar width = leg_info_width = canvas.text_width(buffer);
     canvas.text(rc.right - Layout::FastScale(2) - width,
                 rc.top + Layout::FastScale(2) +
-                (name_font.get_height() - small_font.get_height()) / 2, buffer);
+                (name_font.GetHeight() - small_font.GetHeight()) / 2, buffer);
 
     // Draw leg bearing
     _stprintf(buffer, _T(" %.0f" DEG " T"),

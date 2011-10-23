@@ -163,7 +163,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                             sizeof(buffer) / sizeof(TCHAR), true);
   PixelSize TextSize = canvas.text_size(buffer);
 
-  UPixelScalar Height = Fonts::MapBold.get_capital_height() + Layout::Scale(2);
+  UPixelScalar Height = Fonts::MapBold.GetCapitalHeight() + Layout::Scale(2);
   // 2: add 1pix border
 
   canvas.fill_rectangle(Layout::Scale(4), rc.bottom - Height,
@@ -174,7 +174,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   canvas.set_text_color(COLOR_BLACK);
 
   canvas.text(Layout::Scale(7),
-              rc.bottom - Fonts::MapBold.get_ascent_height() - Layout::Scale(1),
+              rc.bottom - Fonts::MapBold.GetAscentHeight() - Layout::Scale(1),
               buffer);
 
   Graphics::hBmpMapScaleLeft.draw(canvas, 0, rc.bottom - Height);

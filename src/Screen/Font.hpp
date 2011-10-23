@@ -48,7 +48,7 @@ class TextUtil;
 class Font : private NonCopyable {
 protected:
   #ifdef ANDROID
-  TextUtil *textUtilObject;
+  TextUtil *text_util_object;
 
   unsigned line_spacing, style;
   tstring facename;
@@ -62,7 +62,7 @@ protected:
 
   unsigned height, ascent_height, capital_height;
 
-  void calculate_heights();
+  void CalculateHeights();
   #ifndef ANDROID
   #ifdef ENABLE_SDL
   bool _set(const char *file, UPixelScalar ptsize, bool bold = false,
@@ -72,11 +72,11 @@ protected:
 
 public:
   #ifdef ANDROID
-  Font():textUtilObject(NULL) {}
+  Font():text_util_object(NULL) {}
   #else
   Font():font(NULL) {}
   #endif
-  ~Font() { reset(); }
+  ~Font() { Reset(); }
 
   /**
    * Perform global font initialisation.
@@ -85,71 +85,71 @@ public:
 
 public:
   bool
-  defined() const {
+  IsDefined() const {
     #ifdef ANDROID
-    return textUtilObject != NULL;
+    return text_util_object != NULL;
     #else
     return font != NULL;
     #endif
   }
 
-  bool set(const TCHAR *facename, UPixelScalar height, bool bold = false,
+  bool Set(const TCHAR *facename, UPixelScalar height, bool bold = false,
            bool italic = false);
-  bool set(const LOGFONT &log_font);
-  void reset();
+  bool Set(const LOGFONT &log_font);
+  void Reset();
 
   gcc_pure
   PixelSize TextSize(const TCHAR *text) const;
 
   #ifdef ANDROID
-  int text_texture_gl(const TCHAR *text, PixelSize &size,
-                      const Color &fg, const Color &bg) const;
+  int TextTextureGL(const TCHAR *text, PixelSize &size,
+                    const Color &fg, const Color &bg) const;
   #else // !ANDROID
   #ifdef ENABLE_SDL
   TTF_Font*
-  native() const {
+  Native() const {
     return font;
   }
   #else
   HFONT
-  native() const {
+  Native() const {
     return font;
   }
   #endif
   #endif // !ANDROID
 
-  UPixelScalar get_height() const {
+  UPixelScalar GetHeight() const {
     return height;
   }
-  UPixelScalar get_ascent_height() const {
+  UPixelScalar GetAscentHeight() const {
     return ascent_height;
   }
-  UPixelScalar get_capital_height() const {
+  UPixelScalar GetCapitalHeight() const {
     return capital_height;
   }
   #ifdef ANDROID
-  UPixelScalar get_line_spacing() const {
+  UPixelScalar GetLineSpacing() const {
     return line_spacing;
   }
-  unsigned get_style() const {
+  unsigned GetStyle() const {
     return style;
   }
-  const TCHAR *get_facename() const {
+  const TCHAR *GetFacename() const {
     return facename.c_str();
   }
 #elif defined(ENABLE_SDL)
   gcc_pure
-  const TCHAR *get_facename() const {
+  const TCHAR *GetFacename() const {
     return ::TTF_FontFaceFamilyName(font);
   }
 
   gcc_pure
-  unsigned get_style() const {
+  unsigned GetStyle() const {
     return ::TTF_GetFontStyle(font);
   }
 
   gcc_pure
-  UPixelScalar get_line_spacing() const {
+  UPixelScalar GetLineSpacing() const {
     return ::TTF_FontLineSkip(font);
   }
 #endif

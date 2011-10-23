@@ -31,67 +31,67 @@ Copyright_License {
 #include <assert.h>
 
 bool
-Font::set(const LOGFONT &log)
+Font::Set(const LOGFONT &log)
 {
-  return set(log.lfFaceName, (int) log.lfHeight,
+  return Set(log.lfFaceName, (int) log.lfHeight,
              log.lfWeight > 600, log.lfItalic != 0);
 }
 
 /*
  * create a new instance of org.xcsoar.TextUtil and store it with a global
- * reference in textUtilObject member.
+ * reference in text_util_object member.
  */
 bool
-Font::set(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
+Font::Set(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
 {
   assert(IsScreenInitialized());
 
-  delete textUtilObject;
-  textUtilObject = TextUtil::create(facename, height, bold, italic);
-  if (!textUtilObject)
+  delete text_util_object;
+  text_util_object = TextUtil::create(facename, height, bold, italic);
+  if (!text_util_object)
     return false;
 
-  this->height = textUtilObject->get_height();
-  style = textUtilObject->get_style();
-  ascent_height = textUtilObject->get_ascent_height();
-  capital_height = textUtilObject->get_capital_height();
-  line_spacing = textUtilObject->get_line_spacing();
+  this->height = text_util_object->get_height();
+  style = text_util_object->get_style();
+  ascent_height = text_util_object->get_ascent_height();
+  capital_height = text_util_object->get_capital_height();
+  line_spacing = text_util_object->GetLineSpacing();
 
-  return textUtilObject != NULL;
+  return text_util_object != NULL;
 }
 
 void
-Font::reset()
+Font::Reset()
 {
-  assert(!defined() || IsScreenInitialized());
+  assert(!IsDefined() || IsScreenInitialized());
 
-  delete textUtilObject;
-  textUtilObject = NULL;
+  delete text_util_object;
+  text_util_object = NULL;
 }
 
 PixelSize
 Font::TextSize(const TCHAR *text) const
 {
-  if (textUtilObject == NULL) {
+  if (text_util_object == NULL) {
     PixelSize empty = { 0, 0 };
     return empty;
   }
 
-  return textUtilObject->getTextBounds(text);
+  return text_util_object->getTextBounds(text);
 }
 
 int
-Font::text_texture_gl(const TCHAR *text, PixelSize &size,
+Font::TextTextureGL(const TCHAR *text, PixelSize &size,
                       const Color &fg, const Color &bg) const
 {
-  if (!textUtilObject)
+  if (!text_util_object)
     return 0;
 
   if (*text == _T('\0'))
     return 0;
 
   const TextUtil::Texture texture =
-    textUtilObject->getTextTextureGL(text,
+    text_util_object->getTextTextureGL(text,
                                      fg.Red(), fg.Green(), fg.Blue(),
                                      bg.Red(), bg.Green(), bg.Blue());
   size.cx = texture.width;

@@ -147,7 +147,7 @@ WndForm::UpdateLayout()
 
   mTitleRect = rc;
   mTitleRect.bottom = rc.top +
-    (mCaption.empty() ? 0 : look.caption.font->get_height());
+    (mCaption.empty() ? 0 : look.caption.font->GetHeight());
 
   mClientRect = rc;
   mClientRect.top = mTitleRect.bottom;

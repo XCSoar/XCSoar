@@ -64,8 +64,8 @@ dlgAlternatesListShowModal(SingleWindow &parent)
     return;
 
   UpdateAlternates();
-  UPixelScalar line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
-                         Fonts::MapLabel.get_height();
+  UPixelScalar line_height = Fonts::MapBold.GetHeight() + Layout::Scale(6) +
+                         Fonts::MapLabel.GetHeight();
   int i = ListPicker(parent, _("Alternates"), alternates.size(), 0,
                      line_height, PaintListItem, true);
 

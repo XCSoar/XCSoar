@@ -46,8 +46,8 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   // Determine text height
 #ifndef USE_GDI
-  font.set("Droid Sans", 12);
-  text_height = font.get_height();
+  font.Set("Droid Sans", 12);
+  text_height = font.GetHeight();
 #else
   VirtualCanvas canvas(1, 1);
   text_height = canvas.text_height(_T("W"));

@@ -208,7 +208,7 @@ Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
   s = ::TTF_RenderUNICODE_Solid(font->native(), (const Uint16 *)text,
                                 COLOR_BLACK);
 #else
-  s = ::TTF_RenderUTF8_Solid(font->native(), text, COLOR_BLACK);
+  s = ::TTF_RenderUTF8_Solid(font->Native(), text, COLOR_BLACK);
 #endif
   if (s == NULL)
     return;
@@ -235,10 +235,10 @@ Canvas::text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text)
     return;
 
 #ifdef UNICODE
-  s = ::TTF_RenderUNICODE_Solid(font->native(), (const Uint16 *)text,
+  s = ::TTF_RenderUNICODE_Solid(font->Native(), (const Uint16 *)text,
                                 COLOR_BLACK);
 #else
-  s = ::TTF_RenderUTF8_Solid(font->native(), text, COLOR_BLACK);
+  s = ::TTF_RenderUTF8_Solid(font->Native(), text, COLOR_BLACK);
 #endif
   if (s == NULL)
     return;
@@ -257,7 +257,7 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
   if (font == NULL)
     return;
 
-  UPixelScalar skip = font->get_line_spacing();
+  UPixelScalar skip = font->GetLineSpacing();
   unsigned max_lines = (format & DT_CALCRECT) ? -1 :
                        (rc->bottom - rc->top + skip - 1) / skip;
 

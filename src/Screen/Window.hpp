@@ -511,7 +511,7 @@ public:
     invalidate();
 #else
     ::SendMessage(hWnd, WM_SETFONT,
-                  (WPARAM)_font.native(), MAKELPARAM(TRUE,0));
+                  (WPARAM)_font.Native(), MAKELPARAM(TRUE,0));
 #endif
   }
 

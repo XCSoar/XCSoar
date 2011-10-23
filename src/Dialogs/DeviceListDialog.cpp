@@ -231,7 +231,7 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look)
 
   current = 0;
 
-  font_height = look.list.font->get_height();
+  font_height = look.list.font->GetHeight();
 
   WindowStyle list_style;
   list_style.tab_stop();

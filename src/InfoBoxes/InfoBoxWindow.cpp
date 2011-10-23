@@ -206,16 +206,16 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
   PixelScalar halftextwidth = (recTitle.left + recTitle.right - tsize.cx) / 2;
   PixelScalar x = max(PixelScalar(1),
                       PixelScalar(recTitle.left + halftextwidth));
-  PixelScalar y = recTitle.top + 1 + font.get_capital_height() -
-    font.get_ascent_height();
+  PixelScalar y = recTitle.top + 1 + font.GetCapitalHeight() -
+    font.GetAscentHeight();
 
   canvas.TextAutoClipped(x, y, mTitle.c_str());
 
   if (settings.border_style == apIbTab && halftextwidth > Layout::Scale(3)) {
-    PixelScalar ytop = recTitle.top + font.get_capital_height() / 2;
+    PixelScalar ytop = recTitle.top + font.GetCapitalHeight() / 2;
     PixelScalar ytopedge = ytop + Layout::Scale(2);
     PixelScalar ybottom = recTitle.top + Layout::Scale(6)
-      + font.get_capital_height();
+      + font.GetCapitalHeight();
 
     canvas.select(look.border_pen);
 
@@ -244,14 +244,14 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   canvas.set_text_color(look.get_value_color(colorValue));
 
   canvas.select(*look.value.font);
-  UPixelScalar ascent_height = look.value.font->get_ascent_height();
-  UPixelScalar capital_height = look.value.font->get_capital_height();
+  UPixelScalar ascent_height = look.value.font->GetAscentHeight();
+  UPixelScalar capital_height = look.value.font->GetCapitalHeight();
 
   PixelSize tsize = canvas.text_size(mValue.c_str());
   if (tsize.cx > recValue.right - recValue.left) {
     canvas.select(*look.small_font);
-    ascent_height = look.small_font->get_ascent_height();
-    capital_height = look.small_font->get_capital_height();
+    ascent_height = look.small_font->GetAscentHeight();
+    capital_height = look.small_font->GetCapitalHeight();
     tsize = canvas.text_size(mValue.c_str());
   }
 
@@ -309,8 +309,8 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
   PixelScalar x = max(PixelScalar(1),
                       PixelScalar((recComment.left + recComment.right
                                    - tsize.cx) / 2));
-  PixelScalar y = recComment.top + 1 + font.get_capital_height()
-    - font.get_ascent_height();
+  PixelScalar y = recComment.top + 1 + font.GetCapitalHeight()
+    - font.GetAscentHeight();
 
   canvas.TextAutoClipped(x, y, mComment);
 }
@@ -465,11 +465,11 @@ InfoBoxWindow::on_resize(UPixelScalar width, UPixelScalar height)
     rc.bottom -= look.BORDER_WIDTH;
 
   recTitle = rc;
-  recTitle.bottom = rc.top + look.title.font->get_capital_height() + 2;
+  recTitle.bottom = rc.top + look.title.font->GetCapitalHeight() + 2;
 
   recComment = rc;
   recComment.top = recComment.bottom
-    - (look.comment.font->get_capital_height() + 2);
+    - (look.comment.font->GetCapitalHeight() + 2);
 
   recValue = rc;
   recValue.top = recTitle.bottom;

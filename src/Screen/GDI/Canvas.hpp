@@ -157,7 +157,7 @@ public:
   }
 
   void select(const Font &font) {
-    select_object(font.native());
+    select_object(font.Native());
   }
 
   void set_text_color(const Color c) {

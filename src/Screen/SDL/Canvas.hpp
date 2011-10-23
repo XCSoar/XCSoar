@@ -362,7 +362,7 @@ public:
 
   gcc_pure
   UPixelScalar text_height(const TCHAR *text) const {
-    return font != NULL ? font->get_height() : 0;
+    return font != NULL ? font->GetHeight() : 0;
   }
 
   void text(PixelScalar x, PixelScalar y, const TCHAR *text);

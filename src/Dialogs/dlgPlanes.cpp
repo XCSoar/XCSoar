@@ -116,7 +116,7 @@ OnPlaneListPaint(Canvas &canvas, const PixelRect rc, unsigned i)
   canvas.select(details_font);
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + name_font.get_height() + Layout::FastScale(4),
+                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, list[i].path);
 }
 
@@ -302,8 +302,8 @@ dlgPlanesShowModal(SingleWindow &parent)
                       _T("IDR_XML_PLANES_L") : _T("IDR_XML_PLANES"));
   assert(dialog != NULL);
 
-  UPixelScalar item_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
-                         Fonts::MapLabel.get_height();
+  UPixelScalar item_height = Fonts::MapBold.GetHeight() + Layout::Scale(6) +
+                         Fonts::MapLabel.GetHeight();
 
   plane_list = (WndListFrame*)dialog->FindByName(_T("List"));
   assert(plane_list != NULL);

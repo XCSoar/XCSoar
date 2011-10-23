@@ -72,7 +72,7 @@ public:
     return capital_height;
   }
 
-  unsigned get_line_spacing() const {
+  unsigned GetLineSpacing() const {
     return line_spacing;
   }
 

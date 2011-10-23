@@ -730,7 +730,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     const Font &name_font = Fonts::MapBold;
     canvas.select(name_font);
     canvas.text(rc.left + line_height + Layout::FastScale(2),
-                rc.top + line_height / 2 - name_font.get_height() / 2,
+                rc.top + line_height / 2 - name_font.GetHeight() / 2,
                 filter_data.defined() || way_points.empty() ?
                 _("No Match!") : _("Choose a filter or click here"));
     return;
@@ -851,8 +851,8 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &location,
   assert(wWaypointList != NULL);
   wWaypointList->SetActivateCallback(OnWaypointListEnter);
   wWaypointList->SetPaintItemCallback(OnPaintListItem);
-  UPixelScalar line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
-                         Fonts::MapLabel.get_height();
+  UPixelScalar line_height = Fonts::MapBold.GetHeight() + Layout::Scale(6) +
+                         Fonts::MapLabel.GetHeight();
   wWaypointList->SetItemHeight(line_height);
 
   wbName = (WndButton*)wf->FindByName(_T("cmdFltName"));

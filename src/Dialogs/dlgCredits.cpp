@@ -96,7 +96,7 @@ OnLogoPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
   y += title_size.cy + Layout::FastScale(20);
 
   Font font;
-  font.set(Fonts::GetStandardFontFace(), Layout::FastScale(16));
+  font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(16));
   canvas.select(font);
   canvas.set_text_color(COLOR_BLACK);
   canvas.background_transparent();
