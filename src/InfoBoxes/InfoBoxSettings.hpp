@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Util/StaticString.hpp"
 #include "Compiler.h"
+#include "InfoBoxes/Content/Factory.hpp"
 
 enum InfoBoxBorderAppearance_t {
   apIbBox = 0,
@@ -37,7 +38,7 @@ struct InfoBoxSettings {
     static const unsigned MAX_CONTENTS = 24;
 
     StaticString<32u> name;
-    unsigned contents[MAX_CONTENTS];
+    InfoBoxFactory::t_InfoBox contents[MAX_CONTENTS];
 
     void Clear();
 

@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 #include "InfoBoxes/Content/Base.hpp"
+#include "InfoBoxes/Content/Factory.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 
 struct InfoBoxSettings;
@@ -89,7 +90,7 @@ namespace InfoBoxManager
   const TCHAR* GetCurrentPanelName();
   const TCHAR* GetPanelName(unsigned panel);
 
-  unsigned GetType(unsigned box, unsigned panel);
+  InfoBoxFactory::t_InfoBox GetType(unsigned box, unsigned panel);
   const TCHAR* GetTitle(unsigned box);
 
   bool IsEmpty(unsigned panel);

@@ -27,11 +27,13 @@ Copyright_License {
 #include <algorithm>
 #include <stdio.h>
 
+using namespace InfoBoxFactory;
+
 void
 InfoBoxSettings::Panel::Clear()
 {
   name.clear();
-  std::fill(contents, contents + MAX_CONTENTS, 0);
+  std::fill(contents, contents + MAX_CONTENTS, InfoBoxFactory::MIN_TYPE_VAL);
 }
 
 bool
@@ -56,11 +58,15 @@ InfoBoxSettings::SetDefaults()
 
   static gcc_constexpr_data unsigned DFLT_CONFIG_BOXES = 9;
   static gcc_constexpr_data unsigned DFLT_CONFIG_PANELS = 4;
-  static gcc_constexpr_data int contents[DFLT_CONFIG_PANELS][DFLT_CONFIG_BOXES] = {
-    { 0x0E, 0x0B, 0x16, 0x31, 0x30, 0x21, 0x07, 0x0F, 0x2D },
-    { 0x0E, 0x0B, 0x03, 0x2B, 0x30, 0x21, 0x11, 0x0F, 0x2D },
-    { 0x0E, 0x12, 0x03, 0x2B, 0x26, 0x21, 0x29, 0x0F, 0x2D },
-    { 0x34, 0x33, 0x31, 0x00, 0x06, 0x19, 0x27, 0x25, 0x1A }
+  static gcc_constexpr_data t_InfoBox contents[DFLT_CONFIG_PANELS][DFLT_CONFIG_BOXES] = {
+    { e_WP_Name,       e_WP_Distance,     e_Thermal_Gain, e_HumidityRel, e_Temperature,
+      e_H_Baro,        e_TL_Avg,          e_Fin_AltDiff,  e_Fin_TimeLocal },
+    { e_WP_Name,       e_WP_Distance,     e_Bearing,      e_Act_Speed,   e_Temperature,
+      e_H_Baro,        e_SpeedTaskAvg,    e_Fin_AltDiff,  e_Fin_TimeLocal },
+    { e_WP_Name,       e_Fin_Distance,    e_Bearing,      e_Act_Speed,   e_WP_LD,
+      e_H_Baro,        e_Fin_Time,        e_Fin_AltDiff,  e_Fin_TimeLocal },
+    { e_AA_SpeedAvg,   e_Fin_AA_Distance, e_HumidityRel,  e_HeightGPS,   e_Speed_GPS,
+      e_WindSpeed_Est, e_TimeLocal,       e_Load_G,       e_WindBearing_Est }
   };
 
   assert(MAX_PANELS >= DFLT_CONFIG_PANELS);

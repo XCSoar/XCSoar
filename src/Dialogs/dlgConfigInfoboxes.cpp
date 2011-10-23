@@ -102,7 +102,7 @@ OnPaste(gcc_unused WndButton &button)
     return;
 
   for (unsigned item = 0; item < clipboard_size; item++) {
-    unsigned content = clipboard.contents[item];
+    InfoBoxFactory::t_InfoBox content = clipboard.contents[item];
     if (content >= InfoBoxFactory::NUM_TYPES)
       continue;
 
@@ -145,7 +145,7 @@ OnContentAccess(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   const DataFieldEnum &dfe = (const DataFieldEnum &)*Sender;
 
-  data.contents[current_preview] = dfe.GetAsInteger();
+  data.contents[current_preview] = (InfoBoxFactory::t_InfoBox)dfe.GetAsInteger();
   previews[current_preview].invalidate();
 }
 
@@ -178,7 +178,7 @@ InfoBoxPreview::on_paint(Canvas &canvas)
   canvas.black_pen();
   canvas.rectangle(0, 0, canvas.get_width() - 1, canvas.get_height() - 1);
 
-  unsigned type = data.contents[i];
+  InfoBoxFactory::t_InfoBox type = data.contents[i];
   const TCHAR *caption = type < InfoBoxFactory::NUM_TYPES
     ? InfoBoxFactory::GetCaption(type)
     : NULL;
@@ -197,7 +197,7 @@ static void
 OnContentHelp(WindowControl *Sender)
 {
   WndProperty *wp = (WndProperty*)Sender;
-  unsigned type = wp->GetDataField()->GetAsInteger();
+  InfoBoxFactory::t_InfoBox type = (InfoBoxFactory::t_InfoBox)wp->GetDataField()->GetAsInteger();
   if (type >= InfoBoxFactory::NUM_TYPES)
     return;
 
@@ -390,7 +390,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
                                  NULL);
 
   dfe = new DataFieldEnum(OnContentAccess);
-  for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; ++i) {
+  for (InfoBoxFactory::t_InfoBox i = InfoBoxFactory::MIN_TYPE_VAL; i < InfoBoxFactory::NUM_TYPES; i++) {
     const TCHAR *name = InfoBoxFactory::GetName(i);
     if (name != NULL)
       dfe->addEnumText(gettext(name), i);

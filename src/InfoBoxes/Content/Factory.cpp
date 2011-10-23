@@ -41,6 +41,8 @@ Copyright_License {
 
 #include "Language/Language.hpp"
 
+#include "Profile/ProfileMap.hpp"
+
 #include <stddef.h>
 
 // Groups:
@@ -878,8 +880,17 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   },
 };
 
+bool
+InfoBoxFactory::Get(const TCHAR *key, InfoBoxFactory::t_InfoBox &val)
+{
+  unsigned _val = val;
+  bool ret = ProfileMap::Get(key, _val);
+  val = (InfoBoxFactory::t_InfoBox)_val;
+  return ret;
+}
+
 InfoBoxContent*
-InfoBoxFactory::Create(unsigned InfoBoxType)
+InfoBoxFactory::Create(t_InfoBox InfoBoxType)
 {
   switch (InfoBoxType) {
   case e_HeightGPS:
@@ -1066,7 +1077,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
 
   case e_NearestAirspaceVertical:
     return new InfoBoxContentNearestAirspaceVertical();
-  }
 
-  return NULL;
+  default:
+    return NULL;
+  }
 }

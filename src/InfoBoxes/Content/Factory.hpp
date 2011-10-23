@@ -111,7 +111,7 @@ namespace InfoBoxFactory
     e_Alternate_1_Name, /* Displays name and bearing to the best alternate landing location */
     e_Alternate_2_Name, /* Displays name and bearing to the second alternate landing location */
     e_Alternate_1_GR, /* Geometric gradient to the arrival height above the best alternate. This is not adjusted for total energy */
-    /* 70..76 */
+    /* 70..79 */
     e_H_QFE, /* Automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude */
     e_LD_Avg, /* The distance made in the configured period of time divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of LD the value is shown as +++ . You can configure the period of averaging in the Special config menu. Suggested values for this configuration are 60, 90 or 120: lower values will be closed to LD INST, and higher values will be closed to LD Cruise. Notice that the distance is NOT the straight line between your old and current position: it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling */
     e_Experimental1, /* Experimental1 */
@@ -121,8 +121,8 @@ namespace InfoBoxFactory
     e_WP_H, /* Absolute arrival altitude at the next waypoint in final glide */
     e_Free_RAM, /* Free RAM as reported by OS */
     e_FlightLevel, /* Flight Level, also known as pressure altitude */
-    /* 79 */
     e_Barogram,
+    /* 80..89 */
     e_Vario_spark,
     e_NettoVario_spark,
     e_CirclingAverage_spark,
@@ -143,10 +143,12 @@ namespace InfoBoxFactory
     const TCHAR *name;
     const TCHAR *caption;
     const TCHAR *description;
-    enum t_InfoBox next, previous;
+    t_InfoBox next, previous;
   };
 
-  static const unsigned NUM_TYPES = (unsigned)e_NUM_TYPES;
+  static const t_InfoBox NUM_TYPES = e_NUM_TYPES;
+  static const t_InfoBox MIN_TYPE_VAL = (t_InfoBox)0;
+  static const t_InfoBox MAX_TYPE_VAL = (t_InfoBox)(e_NUM_TYPES - 1);
 
   extern const InfoBoxMetaData MetaData[NUM_TYPES];
 
@@ -154,7 +156,7 @@ namespace InfoBoxFactory
    * Returns the human-readable name of the info box type.
    */
   static inline const TCHAR *
-  GetName(unsigned type)
+  GetName(t_InfoBox type)
   {
     assert(type < NUM_TYPES);
 
@@ -167,7 +169,7 @@ namespace InfoBoxFactory
    * git in the small #InfoBoxWindow.
    */
   static inline const TCHAR *
-  GetCaption(unsigned type)
+  GetCaption(t_InfoBox type)
   {
     assert(type < NUM_TYPES);
 
@@ -178,31 +180,40 @@ namespace InfoBoxFactory
    * Returns the long description (help text) of the info box type.
    */
   static inline const TCHAR *
-  GetDescription(unsigned type)
+  GetDescription(t_InfoBox type)
   {
     assert(type < NUM_TYPES);
 
     return MetaData[type].description;
   }
 
-  static inline unsigned
-  GetNext(unsigned type)
+  static inline t_InfoBox
+  GetNext(t_InfoBox type)
   {
     assert(type < NUM_TYPES);
 
     return MetaData[type].next;
   }
 
-  static inline unsigned
-  GetPrevious(unsigned type)
+  static inline t_InfoBox
+  GetPrevious(t_InfoBox type)
   {
     assert(type < NUM_TYPES);
 
     return MetaData[type].previous;
   }
 
+  bool
+  Get(const TCHAR *key, t_InfoBox &val);
+
+  static inline t_InfoBox
+  operator++(t_InfoBox &val, int)
+  {
+    return (t_InfoBox)(val + 1);
+  }
+
   gcc_const
-  InfoBoxContent* Create(unsigned InfoBoxType);
+  InfoBoxContent* Create(t_InfoBox InfoBoxType);
 };
 
 #endif
