@@ -24,8 +24,6 @@ Copyright_License {
 #include "Screen/Color.hpp"
 
 Color desaturate(Color c) {
-  int a = (c.red()+c.green()+c.blue())/3;
-  return Color((c.red()+a)/2,
-               (c.green()+a)/2,
-               (c.blue()+a)/2);
+  int a = (c.red() + c.green() + c.blue()) / 3;
+  return Color((c.red() + a) / 2, (c.green() + a) / 2, (c.blue() + a) / 2);
 }
