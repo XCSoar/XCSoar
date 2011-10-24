@@ -268,7 +268,9 @@ public:
                  PixelScalar bx, PixelScalar by,
                  PixelScalar cx, PixelScalar cy);
   void two_lines(const RasterPoint a, const RasterPoint b,
-                 const RasterPoint c);
+                 const RasterPoint c) {
+    two_lines(a.x, a.y, b.x, b.y, c.x, c.y);
+  }
 
   void circle(PixelScalar x, PixelScalar y, UPixelScalar radius);
 

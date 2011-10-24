@@ -217,17 +217,6 @@ Canvas::two_lines(PixelScalar ax, PixelScalar ay,
 }
 
 void
-Canvas::two_lines(const RasterPoint a, const RasterPoint b,
-                  const RasterPoint c)
-{
-  pen.Set();
-
-  const RasterPoint v[] = { a, b, c };
-  glVertexPointer(2, GL_VALUE, 0, v);
-  glDrawArrays(GL_LINE_STRIP, 0, 3);
-}
-
-void
 Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
 {
   if (pen_over_brush() && pen.GetWidth() > 2) {
