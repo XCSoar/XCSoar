@@ -171,6 +171,7 @@ $(BMP_LAUNCH_DLL_SIM_224): %_dll_2.bmp: %.png
 
 RESOURCE_FILES = $(wildcard Data/Dialogs/*.xml)
 RESOURCE_FILES += $(wildcard Data/Dialogs/Infobox/*.xml)
+RESOURCE_FILES += $(wildcard Data/Dialogs/Configuration/*.xml)
 
 ifeq ($(TARGET),ANDROID)
 RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
