@@ -287,14 +287,17 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
   m1.Scale(projection.GetScale());
 #endif
 
+  // Iterate over all shapes in the file
   for (TopographyFile::const_iterator it = file.begin(), end = file.end();
        it != end; ++it) {
     const XShape &shape = *it;
 
+    // Skip shapes without a label
     const TCHAR *label = shape.get_label();
     if (label == NULL)
       continue;
 
+    // Skip shapes that are not inside the screen
     if (!projection.GetScreenBounds().overlaps(shape.get_bounds()))
       continue;
 
