@@ -68,7 +68,7 @@ public:
                           unsigned max_update=1024);
 
   void Load(OperationEnvironment &operation, NLineReader &reader,
-            const TCHAR *Directory, struct zzip_dir *zdir = NULL);
+            const TCHAR *directory, struct zzip_dir *zdir = NULL);
   void Reset();
 };
 

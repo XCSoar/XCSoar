@@ -70,22 +70,21 @@ TopographyStore::~TopographyStore()
 
 void
 TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
-                      const TCHAR *Directory, struct zzip_dir *zdir)
+                      const TCHAR *directory, struct zzip_dir *zdir)
 {
   Reset();
 
-  double ShapeRange;
-  long ShapeIcon;
-  long ShapeField;
-  char ShapeFilename[MAX_PATH];
-
-  if (Directory != NULL) {
-    strcpy(ShapeFilename, NarrowPathName(Directory));
-    strcat(ShapeFilename, DIR_SEPARATOR_S);
+  double shape_range;
+  long shape_icon;
+  long shape_field;
+  char shape_filename[MAX_PATH];
+  if (directory != NULL) {
+    strcpy(shape_filename, NarrowPathName(directory));
+    strcat(shape_filename, DIR_SEPARATOR_S);
   } else
-    ShapeFilename[0] = 0;
+    shape_filename[0] = 0;
 
-  char *ShapeFilenameEnd = ShapeFilename + strlen(ShapeFilename);
+  char *shape_filename_end = shape_filename + strlen(shape_filename);
 
   long filesize = std::max(reader.size(), 1l);
 
@@ -116,23 +115,23 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
         continue;
     }
 
-    memcpy(ShapeFilenameEnd, line, p - line);
+    memcpy(shape_filename_end, line, p - line);
 
-    strcpy(ShapeFilenameEnd + (p - line), ".shp");
+    strcpy(shape_filename_end + (p - line), ".shp");
 
     // Shape range
-    ShapeRange = strtod(p + 1, &p);
+    shape_range = strtod(p + 1, &p);
     if (*p != _T(','))
       continue;
 
     // Shape icon
-    ShapeIcon = strtol(p + 1, &p, 10);
+    shape_icon = strtol(p + 1, &p, 10);
     if (*p != _T(','))
       continue;
 
     // Shape field for text display
     // sjt 02NOV05 - field parameter enabled
-    ShapeField = strtol(p + 1, &p, 10) - 1;
+    shape_field = strtol(p + 1, &p, 10) - 1;
     if (*p != _T(','))
       continue;
 
@@ -160,21 +159,21 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     }
 
     // range for displaying labels
-    double labelRange = ShapeRange;
+    double label_range = shape_range;
     if (*p == _T(','))
-      labelRange = strtod(p + 1, &p);
+      label_range = strtod(p + 1, &p);
 
     // range for displaying labels with "important" rendering style
     double labelImportantRange = 0;
     if (*p == _T(','))
       labelImportantRange = strtod(p + 1, &p);
 
-    files.append(new TopographyFile(zdir, ShapeFilename,
-                                  fixed(ShapeRange) * 1000,
-                                  fixed(labelRange) * 1000,
+    files.append(new TopographyFile(zdir, shape_filename,
+                                  fixed(shape_range) * 1000,
+                                  fixed(label_range) * 1000,
                                   fixed(labelImportantRange) * 1000,
                                   Color(red, green, blue),
-                                  ShapeField, ShapeIcon,
+                                  shape_field, shape_icon,
                                   pen_width));
 
     operation.SetProgressPosition((reader.tell() * 100) / filesize);
