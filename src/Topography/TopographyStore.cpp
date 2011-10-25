@@ -123,7 +123,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     strcpy(shape_filename_end + (p - line), ".shp");
 
     // Parse shape range
-    double shape_range = strtod(p + 1, &p);
+    fixed shape_range = fixed(strtod(p + 1, &p)) * 1000;
     if (*p != _T(','))
       continue;
 
@@ -161,20 +161,19 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     }
 
     // Parse range for displaying labels
-    double label_range = shape_range;
+    fixed label_range = shape_range;
     if (*p == _T(','))
-      label_range = strtod(p + 1, &p);
+      label_range = fixed(strtod(p + 1, &p)) * 1000;
 
     // Parse range for displaying labels with "important" rendering style
-    double labelImportantRange = 0;
+    fixed labelImportantRange = fixed_zero;
     if (*p == _T(','))
-      labelImportantRange = strtod(p + 1, &p);
+      labelImportantRange = fixed(strtod(p + 1, &p)) * 1000;
 
     // Create TopographyFile instance from parsed line
     TopographyFile *file = new TopographyFile(zdir, shape_filename,
-                                              fixed(shape_range) * 1000,
-                                              fixed(label_range) * 1000,
-                                              fixed(labelImportantRange) * 1000,
+                                              shape_range, label_range,
+                                              labelImportantRange,
                                               Color(red, green, blue),
                                               shape_field, shape_icon,
                                               pen_width);
