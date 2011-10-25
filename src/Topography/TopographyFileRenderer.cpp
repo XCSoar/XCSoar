@@ -62,7 +62,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   pen.Set();
   brush.Set();
 #else
-  shape_renderer.configure(&pen, &brush);
+  shape_renderer.Configure(&pen, &brush);
 #endif
 
   // get drawing info
@@ -184,16 +184,16 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #else // !ENABLE_OPENGL
       for (; lines < end_lines; ++lines) {
         unsigned msize = *lines;
-        shape_renderer.begin_shape(msize);
+        shape_renderer.Begin(msize);
 
         const GeoPoint *end = points + msize - 1;
         for (; points < end; ++points)
-          shape_renderer.add_point_if_distant(projection.GeoToScreen(*points));
+          shape_renderer.AddPointIfDistant(projection.GeoToScreen(*points));
 
         // make sure we always draw the last point
-        shape_renderer.add_point(projection.GeoToScreen(*points));
+        shape_renderer.AddPoint(projection.GeoToScreen(*points));
 
-        shape_renderer.finish_polyline(canvas);
+        shape_renderer.FinishPolyline(canvas);
       }
 #endif
       }
@@ -232,14 +232,14 @@ TopographyFileRenderer::Paint(Canvas &canvas,
         if (msize < 3)
           continue;
 
-        shape_renderer.begin_shape(msize);
+        shape_renderer.Begin(msize);
 
         for (unsigned i = 0; i < msize; ++i) {
           GeoPoint g = geo_points[i];
-          shape_renderer.add_point_if_distant(projection.GeoToScreen(g));
+          shape_renderer.AddPointIfDistant(projection.GeoToScreen(g));
         }
 
-        shape_renderer.finish_polygon(canvas);
+        shape_renderer.FinishPolygon(canvas);
       }
 #endif
       break;
@@ -251,7 +251,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #ifdef ENABLE_OPENGL
   glPopMatrix();
 #else
-  shape_renderer.commit();
+  shape_renderer.Commit();
 #endif
 }
 

@@ -46,7 +46,7 @@ class ShapeRenderer : private NonCopyable {
   enum { NONE, OUTLINE, SOLID } mode;
 
 public:
-  void configure(const Pen *_pen, const Brush *_brush) {
+  void Configure(const Pen *_pen, const Brush *_brush) {
     pen = _pen;
     brush = _brush;
     mode = NONE;
@@ -54,13 +54,13 @@ public:
     num_points = 0;
   }
 
-  void begin_shape(unsigned n) {
+  void Begin(unsigned n) {
     assert(num_points == 0);
 
     points.grow_discard(((n - 1) | 0x3ff) + 1);
   }
 
-  void add_point(RasterPoint pt) {
+  void AddPoint(RasterPoint pt) {
     assert(num_points < points.size());
 
     points[num_points++] = pt;
@@ -70,14 +70,14 @@ public:
    * Adds the point only if it a few pixels distant from the previous
    * one.  Useful to reduce the complexity of small figures.
    */
-   void add_point_if_distant(RasterPoint pt) {
+   void AddPointIfDistant(RasterPoint pt) {
     assert(num_points < points.size());
 
     if (num_points == 0 || manhattan_distance(points[num_points - 1], pt) >= 8)
-      add_point(pt);
+      AddPoint(pt);
   }
 
-  void finish_polyline(Canvas &canvas) {
+  void FinishPolyline(Canvas &canvas) {
     if (mode != OUTLINE) {
       canvas.select(*pen);
       mode = OUTLINE;
@@ -88,7 +88,7 @@ public:
     num_points = 0;
   }
 
-  void finish_polygon(Canvas &canvas) {
+  void FinishPolygon(Canvas &canvas) {
     if (mode != SOLID) {
       canvas.null_pen();
       canvas.select(*brush);
@@ -100,7 +100,7 @@ public:
     num_points = 0;
   }
 
-  void commit() {
+  void Commit() {
     assert(num_points == 0);
   }
 };
