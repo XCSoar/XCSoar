@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef SHAPE_RENDERER_HPP
 #define SHAPE_RENDERER_HPP
 
-#ifndef ENABLE_OPENGL
-
 #include "Screen/Pen.hpp"
 #include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
@@ -107,5 +105,4 @@ public:
   }
 };
 
-#endif // !ENABLE_OPENGL
 #endif
