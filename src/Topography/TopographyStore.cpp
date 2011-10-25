@@ -74,9 +74,6 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
 {
   Reset();
 
-  double shape_range;
-  long shape_icon;
-  long shape_field;
   char shape_filename[MAX_PATH];
   if (directory != NULL) {
     strcpy(shape_filename, NarrowPathName(directory));
@@ -96,8 +93,6 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     if (string_is_empty(line) || line[0] == '*')
       continue;
 
-
-    uint8_t red, green, blue;
     // filename,range,icon,field
 
     // File name
@@ -120,33 +115,33 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     strcpy(shape_filename_end + (p - line), ".shp");
 
     // Shape range
-    shape_range = strtod(p + 1, &p);
+    double shape_range = strtod(p + 1, &p);
     if (*p != _T(','))
       continue;
 
     // Shape icon
-    shape_icon = strtol(p + 1, &p, 10);
+    long shape_icon = strtol(p + 1, &p, 10);
     if (*p != _T(','))
       continue;
 
     // Shape field for text display
     // sjt 02NOV05 - field parameter enabled
-    shape_field = strtol(p + 1, &p, 10) - 1;
+    long shape_field = strtol(p + 1, &p, 10) - 1;
     if (*p != _T(','))
       continue;
 
     // Red component of line / shading colour
-    red = (uint8_t)strtol(p + 1, &p, 10);
+    uint8_t red = (uint8_t)strtol(p + 1, &p, 10);
     if (*p != _T(','))
       continue;
 
     // Green component of line / shading colour
-    green = (uint8_t)strtol(p + 1, &p, 10);
+    uint8_t green = (uint8_t)strtol(p + 1, &p, 10);
     if (*p != _T(','))
       continue;
 
     // Blue component of line / shading colour
-    blue = (uint8_t)strtol(p + 1, &p, 10);
+    uint8_t blue = (uint8_t)strtol(p + 1, &p, 10);
 
     // Pen width of lines
     int pen_width=1;
