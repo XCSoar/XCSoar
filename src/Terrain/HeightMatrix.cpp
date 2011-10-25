@@ -33,7 +33,7 @@ HeightMatrix::SetSize(size_t _size)
 {
   assert(_size > 0);
 
-  data.grow_discard(_size);
+  data.GrowDiscard(_size);
 }
 
 void

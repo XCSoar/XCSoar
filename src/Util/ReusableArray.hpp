@@ -48,7 +48,7 @@ public:
    * Obtains an array.  Its values are undefined.
    */
   T *get(unsigned _length) {
-    array.grow_discard(_length);
+    array.GrowDiscard(_length);
     return array.begin();
   }
 

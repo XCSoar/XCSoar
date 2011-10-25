@@ -44,7 +44,7 @@ MOFile::MOFile(const void *_data, size_t _size)
   if (n >= 0x100000)
     return;
 
-  strings.resize_discard(n);
+  strings.ResizeDiscard(n);
 
   const struct mo_table_entry *entry = (const struct mo_table_entry *)
     (const void *)(data + import_uint32(header->original_table_offset));

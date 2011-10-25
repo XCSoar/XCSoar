@@ -41,7 +41,7 @@
 template<class T>
 class AllocatedArray {
 protected:
-  unsigned the_size;
+  unsigned size;
   T *gcc_restrict data;
 
 public:
@@ -49,21 +49,23 @@ public:
   typedef const T *const_iterator;
 
 public:
-  gcc_constexpr_ctor AllocatedArray():the_size(0), data(NULL) {}
-  explicit AllocatedArray(unsigned _size):the_size(_size), data(new T[the_size]) {
-    assert(size() == 0 || data != NULL);
+  gcc_constexpr_ctor AllocatedArray(): size(0), data(NULL) {}
+
+  explicit AllocatedArray(unsigned _size): size(_size), data(new T[size]) {
+    assert(Size() == 0 || data != NULL);
   }
+
   explicit AllocatedArray(const AllocatedArray &other)
-    :the_size(other.size()), data(new T[the_size]) {
-    assert(size() == 0 || data != NULL);
-    assert(other.size() == 0 || other.data != NULL);
+    :size(other.Size()), data(new T[size]) {
+    assert(Size() == 0 || data != NULL);
+    assert(other.Size() == 0 || other.data != NULL);
 
-    std::copy(other.data, other.data + the_size, data);
+    std::copy(other.data, other.data + size, data);
   }
 
-  explicit AllocatedArray(AllocatedArray &&other):
-    the_size(other.the_size), data(other.data) {
-    other.the_size = 0;
+  explicit AllocatedArray(AllocatedArray &&other)
+    :size(other.size), data(other.data) {
+    other.size = 0;
     other.data = NULL;
   }
 
@@ -72,37 +74,37 @@ public:
   }
 
   AllocatedArray &operator=(const AllocatedArray &other) {
-    assert(size() == 0 || data != NULL);
-    assert(other.size() == 0 || other.data != NULL);
+    assert(Size() == 0 || data != NULL);
+    assert(other.Size() == 0 || other.data != NULL);
 
     if (&other == this)
       return *this;
 
-    resize_discard(other.size());
+    ResizeDiscard(other.Size());
     std::copy(other.begin(), other.end(), data);
     return *this;
   }
 
   AllocatedArray &operator=(AllocatedArray &&other) {
     delete[] data;
-    the_size = other.the_size;
+    size = other.size;
     data = other.data;
-    other.the_size = 0;
+    other.size = 0;
     other.data = NULL;
   }
 
   /**
    * Returns the number of allocated elements.
    */
-  unsigned size() const {
-    return the_size;
+  unsigned Size() const {
+    return size;
   }
 
   /**
    * Returns one element.  No bounds checking.
    */
   T &operator[](unsigned i) {
-    assert(i < size());
+    assert(i < Size());
 
     return data[i];
   }
@@ -111,7 +113,7 @@ public:
    * Returns one constant element.  No bounds checking.
    */
   const T &operator[](unsigned i) const {
-    assert(i < size());
+    assert(i < Size());
 
     return data[i];
   }
@@ -125,43 +127,43 @@ public:
   }
 
   iterator end() {
-    return data + the_size;
+    return data + size;
   }
 
   const_iterator end() const {
-    return data + the_size;
+    return data + size;
   }
 
   /**
    * Resizes the array, discarding old data.
    */
-  void resize_discard(unsigned _size) {
-    if (_size == the_size)
+  void ResizeDiscard(unsigned _size) {
+    if (_size == size)
       return;
 
     delete[] data;
-    the_size = _size;
-    data = new T[the_size];
+    size = _size;
+    data = new T[size];
 
-    assert(size() == 0 || data != NULL);
+    assert(Size() == 0 || data != NULL);
   }
 
   /**
    * Grows the array to the specified size, discarding old data.
-   * Similar to resize_discard(), but will never shrink the array to
+   * Similar to ResizeDiscard(), but will never shrink the array to
    * avoid expensive heap operations.
    */
-  void grow_discard(unsigned _size) {
-    if (_size > the_size)
-      resize_discard(_size);
+  void GrowDiscard(unsigned _size) {
+    if (_size > size)
+      ResizeDiscard(_size);
   }
 
   /**
    * Grows the array to the specified size, preserving the value of a
    * range of elements, starting from the beginning.
    */
-  void grow_preserve(unsigned _size, unsigned preserve) {
-    if (_size <= the_size)
+  void GrowPreserve(unsigned _size, unsigned preserve) {
+    if (_size <= size)
       return;
 
     T *new_data = new T[_size];
@@ -170,7 +172,7 @@ public:
     std::copy(data, data + preserve, new_data);
     delete[] data;
     data = new_data;
-    the_size = _size;
+    size = _size;
   }
 };
 

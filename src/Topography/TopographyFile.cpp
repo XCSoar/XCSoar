@@ -53,7 +53,7 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
     return;
   }
 
-  shapes.resize_discard(file.numshapes);
+  shapes.ResizeDiscard(file.numshapes);
   std::fill(shapes.begin(), shapes.end(), ShapeList(NULL));
 
   if (dir != NULL)
@@ -80,7 +80,7 @@ TopographyFile::~TopographyFile()
 void
 TopographyFile::ClearCache()
 {
-  for (unsigned i = 0; i < shapes.size(); i++) {
+  for (unsigned i = 0; i < shapes.Size(); i++) {
     delete shapes[i].shape;
     shapes[i].shape = NULL;
   }

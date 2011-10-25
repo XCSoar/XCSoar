@@ -65,7 +65,7 @@ MapDrawHelper::draw_search_point_vector(Canvas& the_canvas,
     return;
 
   /* copy all SearchPointVector elements to geo_points */
-  geo_points.grow_discard(size * 3);
+  geo_points.GrowDiscard(size * 3);
   for (unsigned i = 0; i < size; ++i)
     geo_points[i] = points[i].get_location();
 

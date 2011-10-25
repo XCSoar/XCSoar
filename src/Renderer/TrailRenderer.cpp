@@ -152,7 +152,7 @@ DrawTraceVector(Canvas &canvas, const Projection &projection,
                 const TracePointVector &trace)
 {
   static AllocatedArray<RasterPoint> points;
-  points.grow_discard(trace.size());
+  points.GrowDiscard(trace.size());
 
   unsigned n = 0;
   for (TracePointVector::const_iterator i = trace.begin(), end = trace.end();

@@ -111,7 +111,7 @@ MapCanvas::prepare_polygon(const SearchPointVector &points)
     return false;
 
   /* copy all SearchPointVector elements to geo_points */
-  geo_points.grow_discard(num_points * 3);
+  geo_points.GrowDiscard(num_points * 3);
   for (unsigned i = 0; i < num_points; ++i)
     geo_points[i] = points[i].get_location();
 
@@ -123,7 +123,7 @@ MapCanvas::prepare_polygon(const SearchPointVector &points)
     return false;
 
   /* project all GeoPoints to screen coordinates */
-  raster_points.grow_discard(num_raster_points);
+  raster_points.GrowDiscard(num_raster_points);
   for (unsigned i = 0; i < num_raster_points; ++i)
     raster_points[i] = projection.GeoToScreen(geo_points[i]);
 

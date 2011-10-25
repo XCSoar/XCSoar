@@ -57,11 +57,11 @@ public:
   void Begin(unsigned n) {
     assert(num_points == 0);
 
-    points.grow_discard(((n - 1) | 0x3ff) + 1);
+    points.GrowDiscard(((n - 1) | 0x3ff) + 1);
   }
 
   void AddPoint(RasterPoint pt) {
-    assert(num_points < points.size());
+    assert(num_points < points.Size());
 
     points[num_points++] = pt;
   }
@@ -71,7 +71,7 @@ public:
    * one.  Useful to reduce the complexity of small figures.
    */
    void AddPointIfDistant(RasterPoint pt) {
-    assert(num_points < points.size());
+    assert(num_points < points.Size());
 
     if (num_points == 0 || manhattan_distance(points[num_points - 1], pt) >= 8)
       AddPoint(pt);

@@ -222,7 +222,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
            them, to avoid integer overflows (as RasterPoint may store
            only 16 bit integers on some platforms) */
 
-        geo_points.grow_discard(msize * 3);
+        geo_points.GrowDiscard(msize * 3);
 
         for (unsigned i = 0; i < msize; ++i)
           geo_points[i] = points[i * iskip];

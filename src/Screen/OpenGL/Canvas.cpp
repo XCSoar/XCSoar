@@ -115,7 +115,7 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
     brush.Set();
 
     static AllocatedArray<GLushort> triangle_buffer;
-    triangle_buffer.grow_discard(3 * (num_points - 2));
+    triangle_buffer.GrowDiscard(3 * (num_points - 2));
     unsigned idx_count = PolygonToTriangle(points, num_points,
                                            triangle_buffer.begin());
     if (idx_count > 0)
@@ -128,7 +128,7 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
     if (pen.GetWidth() <= 2) {
       glDrawArrays(GL_LINE_LOOP, 0, num_points);
     } else {
-      vertex_buffer.grow_discard(2 * (num_points + 1));
+      vertex_buffer.GrowDiscard(2 * (num_points + 1));
       unsigned vertices = LineToTriangles(points, num_points,
                                           vertex_buffer.begin(),
                                           pen.GetWidth(), true);
@@ -158,7 +158,7 @@ Canvas::TriangleFan(const RasterPoint *points, unsigned num_points)
     if (pen.GetWidth() <= 2) {
       glDrawArrays(GL_LINE_LOOP, 0, num_points);
     } else {
-      vertex_buffer.grow_discard(2 * (num_points + 1));
+      vertex_buffer.GrowDiscard(2 * (num_points + 1));
       unsigned vertices = LineToTriangles(points, num_points,
                                           vertex_buffer.begin(),
                                           pen.GetWidth(), true);

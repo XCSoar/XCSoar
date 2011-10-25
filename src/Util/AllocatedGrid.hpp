@@ -50,7 +50,7 @@ public:
     :array(_width * _height), width(_width), height(_height) {}
 
   bool Defined() const {
-    return array.size() > 0;
+    return array.Size() > 0;
   }
 
   unsigned GetWidth() const {
@@ -112,11 +112,11 @@ public:
 
   void Reset() {
     width = height = 0;
-    array.resize_discard(0);
+    array.ResizeDiscard(0);
   }
 
   void GrowDiscard(unsigned _width, unsigned _height) {
-    array.grow_discard(_width * _height);
+    array.GrowDiscard(_width * _height);
     width = _width;
     height = _height;
   }
