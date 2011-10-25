@@ -170,13 +170,20 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     if (*p == _T(','))
       labelImportantRange = strtod(p + 1, &p);
 
-    files.append(new TopographyFile(zdir, shape_filename,
-                                  fixed(shape_range) * 1000,
-                                  fixed(label_range) * 1000,
-                                  fixed(labelImportantRange) * 1000,
-                                  Color(red, green, blue),
-                                  shape_field, shape_icon,
-                                  pen_width));
+    // Create TopographyFile instance from parsed line
+    TopographyFile *file = new TopographyFile(zdir, shape_filename,
+                                              fixed(shape_range) * 1000,
+                                              fixed(label_range) * 1000,
+                                              fixed(labelImportantRange) * 1000,
+                                              Color(red, green, blue),
+                                              shape_field, shape_icon,
+                                              pen_width);
+    if (file->IsEmpty())
+      // If the shape file could not be read -> skip this line/file
+      delete file;
+    else
+      // .. otherwise append it to our list of shape files
+      files.append(file);
 
     // Update progress bar
     operation.SetProgressPosition((reader.tell() * 100) / filesize);
