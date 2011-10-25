@@ -27,14 +27,28 @@ Copyright_License {
 
 struct NMEAInfo;
 
+/**
+ * Returns the local time as a number of second since midnight 
+ * based on info from the device or GPS
+ */
 gcc_pure
 unsigned
 DetectCurrentTime(const NMEAInfo &Basic);
 
+/**
+ * Returns the local time express as seconds from midnight
+ * @param d UTC time in seconds
+ * @param utc_offset Offset in second
+ */
 gcc_pure
 unsigned
 TimeLocal(int d, int utc_offset);
 
+/**
+ * Returns the local time express as seconds from midnight using the 
+ * settings to get the UTC offest
+ * @param d UTC time in seconds
+ */
 gcc_pure
 unsigned
 TimeLocal(int d);
