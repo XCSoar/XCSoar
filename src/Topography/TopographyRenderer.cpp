@@ -43,7 +43,7 @@ TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file)
    brush(file.GetColor())
 {
   if (file.GetIcon() == IDB_TOWN)
-    icon.load_big(IDB_TOWN, IDB_TOWN_HD);
+    icon.Load(IDB_TOWN, IDB_TOWN_HD);
 }
 
 void
@@ -131,7 +131,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
       break;
 
     case MS_SHAPE_POINT:
-      if (!icon.defined())
+      if (!icon.IsDefined())
         break;
 
 #ifdef ENABLE_OPENGL
@@ -143,7 +143,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
           glPushMatrix();
           glLoadMatrixf(opengl_matrix);
 #endif
-          icon.draw(canvas, sc.x, sc.y);
+          icon.Draw(canvas, sc.x, sc.y);
 #ifndef HAVE_GLES
           glPopMatrix();
 #endif
@@ -155,7 +155,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
         for (; points < end; ++points) {
           RasterPoint sc;
           if (projection.GeoToScreenIfVisible(*points, sc))
-            icon.draw(canvas, sc.x, sc.y);
+            icon.Draw(canvas, sc.x, sc.y);
         }
       }
 #endif

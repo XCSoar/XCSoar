@@ -32,7 +32,7 @@ Copyright_License {
 #endif
 
 void
-MaskedIcon::load_big(unsigned id, unsigned big_id, bool center)
+MaskedIcon::Load(unsigned id, unsigned big_id, bool center)
 {
   if (Layout::ScaleEnabled()) {
     if (big_id > 0)
@@ -48,7 +48,7 @@ MaskedIcon::load_big(unsigned id, unsigned big_id, bool center)
   size.cx = 0;
   size.cy = center;
 #else
-  assert(defined());
+  assert(IsDefined());
 
   CalculateLayout(center);
 #endif
@@ -71,9 +71,9 @@ MaskedIcon::CalculateLayout(bool center)
 }
 
 void
-MaskedIcon::draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
+MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
 {
-  assert(defined());
+  assert(IsDefined());
 
 #ifdef ENABLE_OPENGL
   if (size.cx == 0)

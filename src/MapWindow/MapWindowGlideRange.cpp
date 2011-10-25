@@ -448,6 +448,6 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
   RasterPoint sc;
   if (render_projection.GeoToScreenIfVisible(Calculated().terrain_warning_location,
                                              sc))
-    Graphics::hTerrainWarning.draw(canvas, sc.x, sc.y);
+    Graphics::hTerrainWarning.Draw(canvas, sc.x, sc.y);
 }
 

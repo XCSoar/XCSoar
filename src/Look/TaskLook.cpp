@@ -49,5 +49,5 @@ TaskLook::Initialise()
   best_cruise_track_brush.Set(bearing_color);
   best_cruise_track_pen.Set(Layout::Scale(1), DarkColor(bearing_color));
 
-  target_icon.load_big(IDB_TARGET, IDB_TARGET_HD);
+  target_icon.Load(IDB_TARGET, IDB_TARGET_HD);
 }

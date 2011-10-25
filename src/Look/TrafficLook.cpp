@@ -35,5 +35,5 @@ TrafficLook::Initialise()
   warning_brush.Set(warning_color);
   alarm_brush.Set(alarm_color);
 
-  teammate_icon.load_big(IDB_TEAMMATE_POS, IDB_TEAMMATE_POS_HD);
+  teammate_icon.Load(IDB_TEAMMATE_POS, IDB_TEAMMATE_POS_HD);
 }

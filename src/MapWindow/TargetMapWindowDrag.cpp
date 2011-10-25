@@ -31,7 +31,7 @@ Copyright_License {
 void
 TargetMapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
 {
-  task_look.target_icon.draw(canvas, drag_last.x, drag_last.y);
+  task_look.target_icon.Draw(canvas, drag_last.x, drag_last.y);
 }
 
 bool

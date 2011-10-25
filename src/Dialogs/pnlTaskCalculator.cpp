@@ -262,10 +262,10 @@ pnlTaskCalculator::OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &
 
     const AirspaceLook &look = CommonInterface::main_window.look->airspace;
     const MaskedIcon *bmp = &look.intercept_icon;
-    const int offsetx = bmp->get_size().cx;
-    const int offsety = canvas.get_height() - bmp->get_size().cy;
+    const int offsetx = bmp->GetSize().cx;
+    const int offsety = canvas.get_height() - bmp->GetSize().cy;
     canvas.clear(COLOR_YELLOW);
-    bmp->draw(canvas, offsetx, offsety);
+    bmp->Draw(canvas, offsetx, offsety);
     canvas.set_background_color(COLOR_YELLOW);
 
     canvas.text(offsetx * 2 + Layout::Scale(2),

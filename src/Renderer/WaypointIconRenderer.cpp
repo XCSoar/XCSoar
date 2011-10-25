@@ -133,7 +133,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
         ? &look.airport_unreachable_icon
         : &look.field_unreachable_icon;
 
-    icon->draw(canvas, point);
+    icon->Draw(canvas, point);
     return;
   }
 
@@ -197,5 +197,5 @@ WaypointIconRenderer::Draw(const Waypoint &waypoint, const RasterPoint &point,
     DrawLandable(waypoint, point, reachable);
   else
     // non landable turnpoint
-    GetWaypointIcon(look, waypoint, small_icons, in_task).draw(canvas, point);
+    GetWaypointIcon(look, waypoint, small_icons, in_task).Draw(canvas, point);
 }

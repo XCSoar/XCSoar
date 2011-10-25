@@ -77,6 +77,6 @@ void Markers::Draw(Canvas &canvas, const WindowProjection &projection,
   for (const_iterator it = begin(), it_end = end(); it != it_end; ++it) {
     RasterPoint sc;
     if (projection.GeoToScreenIfVisible(it->location, sc))
-      look.icon.draw(canvas, sc);
+      look.icon.Draw(canvas, sc);
   }
 }

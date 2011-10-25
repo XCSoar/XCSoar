@@ -27,5 +27,5 @@ Copyright_License {
 void
 MarkerLook::Initialise()
 {
-  icon.load_big(IDB_MARK, IDB_MARK_HD);
+  icon.Load(IDB_MARK, IDB_MARK_HD);
 }

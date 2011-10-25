@@ -159,7 +159,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
                      PixelScalar(rc.top + line_height / 2) };
 
-  look.icon.draw(canvas, pt);
+  look.icon.Draw(canvas, pt);
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;

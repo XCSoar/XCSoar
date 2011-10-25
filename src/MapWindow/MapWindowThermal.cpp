@@ -68,6 +68,6 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
     // draw if it is in the field of view
     RasterPoint pt;
     if (render_projection.GeoToScreenIfVisible(loc, pt))
-      Graphics::hBmpThermalSource.draw(canvas, pt);
+      Graphics::hBmpThermalSource.Draw(canvas, pt);
   }
 }

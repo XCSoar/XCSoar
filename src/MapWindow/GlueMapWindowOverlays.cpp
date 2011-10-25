@@ -74,9 +74,9 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
 
   PixelScalar x = rc.left + Layout::FastScale(2);
   PixelScalar y = rc.bottom - Layout::FastScale(35);
-  icon->draw(canvas, x, y);
+  icon->Draw(canvas, x, y);
 
-  x += icon->get_size().cx + Layout::FastScale(4);
+  x += icon->GetSize().cx + Layout::FastScale(4);
   y = rc.bottom - Layout::FastScale(34);
 
   TextInBoxMode mode;
@@ -95,8 +95,8 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
   if (logger != NULL && logger->isLoggerActive()) {
     bool flip = (Basic().date_time_utc.second % 2) == 0;
     MaskedIcon &icon = flip ? Graphics::hLogger : Graphics::hLoggerOff;
-    offset = icon.get_size().cx;
-    icon.draw(canvas, rc.right - offset, rc.bottom - icon.get_size().cy);
+    offset = icon.GetSize().cx;
+    icon.Draw(canvas, rc.right - offset, rc.bottom - icon.GetSize().cy);
   }
 
   // draw flight mode
@@ -111,10 +111,10 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
   else
     bmp = &Graphics::hCruise;
 
-  offset += bmp->get_size().cx + Layout::Scale(6);
+  offset += bmp->GetSize().cx + Layout::Scale(6);
 
-  bmp->draw(canvas, rc.right - offset,
-            rc.bottom - bmp->get_size().cy - Layout::Scale(4));
+  bmp->Draw(canvas, rc.right - offset,
+            rc.bottom - bmp->GetSize().cy - Layout::Scale(4));
 
   // draw flarm status
   if (CommonInterface::GetUISettings().enable_flarm_gauge)
@@ -138,10 +138,10 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
     break;
   };
 
-  offset += bmp->get_size().cx + Layout::Scale(6);
+  offset += bmp->GetSize().cx + Layout::Scale(6);
 
-  bmp->draw(canvas, rc.right - offset,
-            rc.bottom - bmp->get_size().cy - Layout::Scale(2));
+  bmp->Draw(canvas, rc.right - offset,
+            rc.bottom - bmp->GetSize().cy - Layout::Scale(2));
 }
 
 void
@@ -177,8 +177,8 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
               rc.bottom - Fonts::MapBold.GetAscentHeight() - Layout::Scale(1),
               buffer);
 
-  Graphics::hBmpMapScaleLeft.draw(canvas, 0, rc.bottom - Height);
-  Graphics::hBmpMapScaleRight.draw(canvas, Layout::Scale(9) + TextSize.cx,
+  Graphics::hBmpMapScaleLeft.Draw(canvas, 0, rc.bottom - Height);
+  Graphics::hBmpMapScaleRight.Draw(canvas, Layout::Scale(9) + TextSize.cx,
                                    rc.bottom - Height);
 
   buffer[0] = '\0';
@@ -241,7 +241,7 @@ GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
     if (thermal_locator.estimate_valid) {
       RasterPoint sc;
       if (projection.GeoToScreenIfVisible(thermal_locator.estimate_location, sc)) {
-        Graphics::hBmpThermalSource.draw(canvas, sc);
+        Graphics::hBmpThermalSource.Draw(canvas, sc);
       }
     }
   } else {

@@ -498,7 +498,7 @@ AirspaceRenderer::DrawIntersections(Canvas &canvas,
   for (unsigned i = m_airspace_intersections.size(); i--;) {
     RasterPoint sc;
     if (projection.GeoToScreenIfVisible(m_airspace_intersections[i], sc))
-      airspace_look.intercept_icon.draw(canvas, sc.x, sc.y);
+      airspace_look.intercept_icon.Draw(canvas, sc.x, sc.y);
   }
 }
 

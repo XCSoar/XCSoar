@@ -79,5 +79,5 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
       solid_brushes[i].Set(colors[i]);
 #endif
 
-  intercept_icon.load_big(IDB_AIRSPACEI, IDB_AIRSPACEI_HD);
+  intercept_icon.Load(IDB_AIRSPACEI, IDB_AIRSPACEI_HD);
 }

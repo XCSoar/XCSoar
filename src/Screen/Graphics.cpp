@@ -107,16 +107,16 @@ Graphics::Initialise()
 
   LoadUnitSymbols();
 
-  hTerrainWarning.load_big(IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD);
-  hGPSStatus1.load_big(IDB_GPSSTATUS1, IDB_GPSSTATUS1_HD, false);
-  hGPSStatus2.load_big(IDB_GPSSTATUS2, IDB_GPSSTATUS2_HD, false);
-  hLogger.load_big(IDB_LOGGER, IDB_LOGGER_HD);
-  hLoggerOff.load_big(IDB_LOGGEROFF, IDB_LOGGEROFF_HD);
+  hTerrainWarning.Load(IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD);
+  hGPSStatus1.Load(IDB_GPSSTATUS1, IDB_GPSSTATUS1_HD, false);
+  hGPSStatus2.Load(IDB_GPSSTATUS2, IDB_GPSSTATUS2_HD, false);
+  hLogger.Load(IDB_LOGGER, IDB_LOGGER_HD);
+  hLoggerOff.Load(IDB_LOGGEROFF, IDB_LOGGEROFF_HD);
 
-  hCruise.load_big(IDB_CRUISE, IDB_CRUISE_HD, false);
-  hClimb.load_big(IDB_CLIMB, IDB_CLIMB_HD, false);
-  hFinalGlide.load_big(IDB_FINALGLIDE, IDB_FINALGLIDE_HD, false);
-  hAbort.load_big(IDB_ABORT, IDB_ABORT_HD, false);
+  hCruise.Load(IDB_CRUISE, IDB_CRUISE_HD, false);
+  hClimb.Load(IDB_CLIMB, IDB_CLIMB_HD, false);
+  hFinalGlide.Load(IDB_FINALGLIDE, IDB_FINALGLIDE_HD, false);
+  hAbort.Load(IDB_ABORT, IDB_ABORT_HD, false);
 
 #ifdef HAVE_HATCHED_BRUSH
   hAboveTerrainBitmap.load(IDB_ABOVETERRAIN);
@@ -128,8 +128,8 @@ Graphics::Initialise()
   hpWindTail.Set(Pen::DASH, 1, COLOR_BLACK);
   hbWind.Set(COLOR_GRAY);
 
-  hBmpMapScaleLeft.load_big(IDB_MAPSCALE_LEFT, IDB_MAPSCALE_LEFT_HD, false);
-  hBmpMapScaleRight.load_big(IDB_MAPSCALE_RIGHT, IDB_MAPSCALE_RIGHT_HD, false);
+  hBmpMapScaleLeft.Load(IDB_MAPSCALE_LEFT, IDB_MAPSCALE_LEFT_HD, false);
+  hBmpMapScaleRight.Load(IDB_MAPSCALE_RIGHT, IDB_MAPSCALE_RIGHT_HD, false);
 
   hBmpTabTask.load((Layout::scale > 1) ? IDB_TASK_HD : IDB_TASK);
   hBmpTabWrench.load((Layout::scale > 1) ? IDB_WRENCH_HD : IDB_WRENCH);
@@ -141,11 +141,11 @@ Graphics::Initialise()
   hBmpTabRules.load((Layout::scale > 1) ? IDB_RULES_HD : IDB_RULES);
   hBmpTabTimes.load((Layout::scale > 1) ? IDB_CLOCK_HD : IDB_CLOCK);
 
-  hBmpThermalSource.load_big(IDB_THERMALSOURCE, IDB_THERMALSOURCE_HD);
+  hBmpThermalSource.Load(IDB_THERMALSOURCE, IDB_THERMALSOURCE_HD);
 
-  hBmpTrafficSafe.load_big(IDB_TRAFFIC_SAFE, IDB_TRAFFIC_SAFE_HD, false);
-  hBmpTrafficWarning.load_big(IDB_TRAFFIC_WARNING, IDB_TRAFFIC_WARNING_HD, false);
-  hBmpTrafficAlarm.load_big(IDB_TRAFFIC_ALARM, IDB_TRAFFIC_ALARM_HD, false);
+  hBmpTrafficSafe.Load(IDB_TRAFFIC_SAFE, IDB_TRAFFIC_SAFE_HD, false);
+  hBmpTrafficWarning.Load(IDB_TRAFFIC_WARNING, IDB_TRAFFIC_WARNING_HD, false);
+  hBmpTrafficAlarm.Load(IDB_TRAFFIC_ALARM, IDB_TRAFFIC_ALARM_HD, false);
 
   hbCompass.Set(Color(207, 207, 207));
 
@@ -241,16 +241,16 @@ Graphics::Deinitialise()
 {
   DeinitialiseUnitSymbols();
 
-  hTerrainWarning.reset();
-  hGPSStatus1.reset();
-  hGPSStatus2.reset();
-  hLogger.reset();
-  hLoggerOff.reset();
+  hTerrainWarning.Reset();
+  hGPSStatus1.Reset();
+  hGPSStatus2.Reset();
+  hLogger.Reset();
+  hLoggerOff.Reset();
 
-  hCruise.reset();
-  hClimb.reset();
-  hFinalGlide.reset();
-  hAbort.reset();
+  hCruise.Reset();
+  hClimb.Reset();
+  hFinalGlide.Reset();
+  hAbort.Reset();
 
 #ifdef HAVE_HATCHED_BRUSH
   hAboveTerrainBrush.Reset();
@@ -259,8 +259,8 @@ Graphics::Deinitialise()
 
   hbWind.Reset();
 
-  hBmpMapScaleLeft.reset();
-  hBmpMapScaleRight.reset();
+  hBmpMapScaleLeft.Reset();
+  hBmpMapScaleRight.Reset();
 
   hBmpTabTask.reset();
   hBmpTabWrench.reset();
@@ -272,11 +272,11 @@ Graphics::Deinitialise()
   hBmpTabRules.reset();
   hBmpTabTimes.reset();
 
-  hBmpThermalSource.reset();
+  hBmpThermalSource.Reset();
 
-  hBmpTrafficSafe.reset();
-  hBmpTrafficWarning.reset();
-  hBmpTrafficAlarm.reset();
+  hBmpTrafficSafe.Reset();
+  hBmpTrafficWarning.Reset();
+  hBmpTrafficAlarm.Reset();
 
   hbCompass.Reset();
 

@@ -41,23 +41,23 @@ protected:
   RasterPoint origin;
 
 public:
-  const PixelSize &get_size() const {
+  const PixelSize &GetSize() const {
     return size;
   }
 
-  bool defined() const {
+  bool IsDefined() const {
     return bitmap.defined();
   }
 
-  void load_big(unsigned id, unsigned big_id = 0, bool center=true);
+  void Load(unsigned id, unsigned big_id = 0, bool center=true);
 
-  void reset() {
+  void Reset() {
     bitmap.reset();
   }
 
-  void draw(Canvas &canvas, PixelScalar x, PixelScalar y) const;
-  void draw(Canvas &canvas, RasterPoint pt) const {
-    draw(canvas, pt.x, pt.y);
+  void Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const;
+  void Draw(Canvas &canvas, RasterPoint pt) const {
+    Draw(canvas, pt.x, pt.y);
   }
 
 protected:

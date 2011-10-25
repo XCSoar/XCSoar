@@ -162,6 +162,6 @@ MapWindow::DrawTeammate(Canvas &canvas) const
     RasterPoint sc;
     if (render_projection.GeoToScreenIfVisible(teamcode_info.teammate_location,
                                                  sc))
-      traffic_look.teammate_icon.draw(canvas, sc);
+      traffic_look.teammate_icon.Draw(canvas, sc);
   }
 }
