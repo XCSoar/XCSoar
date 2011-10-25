@@ -91,7 +91,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Vario"), 3, NULL, NULL, N_("IDR_XML_VARIOCONFIGPANEL")},
   {N_("Task Rules"), 4, NULL, NULL, N_("IDR_XML_TASKRULESCONFIGPANEL")},
   {N_("Turnpoint Types"), 4, NULL, NULL, N_("IDR_XML_TASKDEFAULTSCONFIGPANEL")},
-  {N_("Lanugage, Input"), 5, InterfaceConfigPanel::PreShow, InterfaceConfigPanel::PreHide, N_("IDR_XML_INTERFACECONFIGPANEL")},
+  {N_("Language, Input"), 5, InterfaceConfigPanel::PreShow, InterfaceConfigPanel::PreHide, N_("IDR_XML_INTERFACECONFIGPANEL")},
   {N_("Screen Layout"), 5, NULL, NULL, N_("IDR_XML_LAYOUTCONFIGPANEL")},
   {N_("InfoBox Pages"), 5, NULL, NULL, N_("IDR_XML_PAGESCONFIGPANEL")},
   {N_("InfoBox Modes"), 5, NULL, NULL, N_("IDR_XML_INFOBOXESCONFIGPANEL")},
