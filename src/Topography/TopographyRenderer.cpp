@@ -28,12 +28,12 @@ TopographyRenderer::TopographyRenderer(const TopographyStore &_store)
   :store(_store)
 {
   for (unsigned i = 0; i < store.size(); ++i)
-    files[i] = new TopographyFileRenderer(store[i]);
+    files.append(new TopographyFileRenderer(store[i]));
 }
 
 TopographyRenderer::~TopographyRenderer()
 {
-  for (unsigned i = 0; i < store.size(); ++i)
+  for (unsigned i = 0; i < files.size(); ++i)
     delete files[i];
 }
 
@@ -41,7 +41,7 @@ void
 TopographyRenderer::Draw(Canvas &canvas,
                          const WindowProjection &projection) const
 {
-  for (unsigned i = 0; i < store.size(); ++i)
+  for (unsigned i = 0; i < files.size(); ++i)
     files[i]->Paint(canvas, projection);
 }
 
@@ -50,6 +50,6 @@ TopographyRenderer::DrawLabels(Canvas &canvas,
                                const WindowProjection &projection,
                                LabelBlock &label_block) const
 {
-  for (unsigned i = 0; i < store.size(); ++i)
+  for (unsigned i = 0; i < files.size(); ++i)
     files[i]->PaintLabels(canvas, projection, label_block);
 }

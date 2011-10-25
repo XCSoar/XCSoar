@@ -25,6 +25,7 @@ Copyright_License {
 #define TOPOGRAPHY_RENDERER_HPP
 
 #include "Topography/TopographyStore.hpp"
+#include "Util/StaticArray.hpp"
 #include "Util/NonCopyable.hpp"
 
 class Canvas;
@@ -37,7 +38,7 @@ class TopographyFileRenderer;
  */
 class TopographyRenderer : private NonCopyable {
   const TopographyStore &store;
-  TopographyFileRenderer *files[TopographyStore::MAXTOPOGRAPHY];
+  StaticArray<TopographyFileRenderer *, TopographyStore::MAXTOPOGRAPHY> files;
 
 public:
   TopographyRenderer(const TopographyStore &store);
