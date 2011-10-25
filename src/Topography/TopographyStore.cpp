@@ -111,8 +111,11 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
       /* hard-coded blacklist for huge files on PPC2000; those
          devices usually have very little memory */
 
+      // Null-terminate the line string after the first comma
+      // for strcmp() calls in IsHugeTopographyFile() function
       *p = 0;
 
+      // Skip large topography files
       if (IsHugeTopographyFile(line))
         continue;
     }
