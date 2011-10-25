@@ -41,7 +41,7 @@ struct zzip_dir;
 class TopographyStore : private NonCopyable {
 public:
   enum {
-    /** maximum number of topologies */
+    /** maximum number of topography layers */
     MAXTOPOGRAPHY = 20,
   };
 

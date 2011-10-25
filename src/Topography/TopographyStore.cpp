@@ -74,6 +74,8 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
 {
   Reset();
 
+  // Create buffer for the shape filenames
+  // (shape_filename will be modified with the shape_filename_end pointer)
   char shape_filename[MAX_PATH];
   if (directory != NULL) {
     strcpy(shape_filename, NarrowPathName(directory));
@@ -83,21 +85,26 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
 
   char *shape_filename_end = shape_filename + strlen(shape_filename);
 
+  // Read file size to have a rough progress estimate for the progress bar
   long filesize = std::max(reader.size(), 1l);
 
+  // Set progress bar to 100 steps
   operation.SetProgressRange(100);
 
+  // Iterate through shape files in the "topology.tpl" file until
+  // end or max. file number reached
   char *line;
   while (!files.full() && (line = reader.read()) != NULL) {
-    // Look For Comment
+    // Line format: filename,range,icon,field,r,g,b,pen_width,label_range,important_range
+
+    // Ignore comments (lines starting with *) and empty lines
     if (string_is_empty(line) || line[0] == '*')
       continue;
 
-    // filename,range,icon,field
-
-    // File name
+    // Find first comma to extract shape filename
     char *p = strchr(line, ',');
     if (p == NULL || p == line)
+      // If no comma was found -> ignore this line/shapefile
       continue;
 
     if (HasLittleMemory()) {
@@ -110,40 +117,40 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
         continue;
     }
 
+    // Extract filename and append it to the shape_filename buffer
     memcpy(shape_filename_end, line, p - line);
-
+    // Append ".shp" file extension to the shape_filename buffer
     strcpy(shape_filename_end + (p - line), ".shp");
 
-    // Shape range
+    // Parse shape range
     double shape_range = strtod(p + 1, &p);
     if (*p != _T(','))
       continue;
 
-    // Shape icon
+    // Parse shape icon id
     long shape_icon = strtol(p + 1, &p, 10);
     if (*p != _T(','))
       continue;
 
-    // Shape field for text display
-    // sjt 02NOV05 - field parameter enabled
+    // Parse shape field for text display
     long shape_field = strtol(p + 1, &p, 10) - 1;
     if (*p != _T(','))
       continue;
 
-    // Red component of line / shading colour
+    // Parse red component of line / shading colour
     uint8_t red = (uint8_t)strtol(p + 1, &p, 10);
     if (*p != _T(','))
       continue;
 
-    // Green component of line / shading colour
+    // Parse green component of line / shading colour
     uint8_t green = (uint8_t)strtol(p + 1, &p, 10);
     if (*p != _T(','))
       continue;
 
-    // Blue component of line / shading colour
+    // Parse blue component of line / shading colour
     uint8_t blue = (uint8_t)strtol(p + 1, &p, 10);
 
-    // Pen width of lines
+    // Parse pen width of lines
     int pen_width=1;
     if (*p == _T(',')) {
       pen_width = strtol(p + 1, &p, 10);
@@ -153,12 +160,12 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
         pen_width=31;
     }
 
-    // range for displaying labels
+    // Parse range for displaying labels
     double label_range = shape_range;
     if (*p == _T(','))
       label_range = strtod(p + 1, &p);
 
-    // range for displaying labels with "important" rendering style
+    // Parse range for displaying labels with "important" rendering style
     double labelImportantRange = 0;
     if (*p == _T(','))
       labelImportantRange = strtod(p + 1, &p);
@@ -171,6 +178,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
                                   shape_field, shape_icon,
                                   pen_width));
 
+    // Update progress bar
     operation.SetProgressPosition((reader.tell() * 100) / filesize);
   }
 }
