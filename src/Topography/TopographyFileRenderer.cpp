@@ -45,6 +45,57 @@ TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file)
     icon.Load(IDB_TOWN, IDB_TOWN_HD);
 }
 
+#ifdef ENABLE_OPENGL
+
+void
+TopographyFileRenderer::PaintPoint(Canvas &canvas,
+                                   const WindowProjection &projection,
+                                   const XShape &shape,
+                                   float *opengl_matrix) const
+{
+  if (!icon.IsDefined())
+    return;
+
+  // TODO: for now i assume there is only one point for point-XShapes
+
+  RasterPoint sc;
+  if (!projection.GeoToScreenIfVisible(shape.get_center(), sc))
+    return;
+
+#ifndef HAVE_GLES
+  glPushMatrix();
+  glLoadMatrixf(opengl_matrix);
+#endif
+  icon.Draw(canvas, sc.x, sc.y);
+#ifndef HAVE_GLES
+  glPopMatrix();
+#endif
+}
+
+#else
+
+void
+TopographyFileRenderer::PaintPoint(Canvas &canvas,
+                                   const WindowProjection &projection,
+                                   const unsigned short *lines,
+                                   const unsigned short *end_lines,
+                                   const GeoPoint *points) const
+{
+  if (!icon.IsDefined())
+    return;
+
+  for (; lines < end_lines; ++lines) {
+    const GeoPoint *end = points + *lines;
+    for (; points < end; ++points) {
+      RasterPoint sc;
+      if (projection.GeoToScreenIfVisible(*points, sc))
+        icon.Draw(canvas, sc.x, sc.y);
+    }
+  }
+}
+
+#endif
+
 void
 TopographyFileRenderer::Paint(Canvas &canvas,
                             const WindowProjection &projection) const
@@ -130,33 +181,14 @@ TopographyFileRenderer::Paint(Canvas &canvas,
       break;
 
     case MS_SHAPE_POINT:
-      if (!icon.IsDefined())
-        break;
-
 #ifdef ENABLE_OPENGL
-      // TODO: for now i assume there is only one point for point-XShapes
-      {
-        RasterPoint sc;
-        if (projection.GeoToScreenIfVisible(shape.get_center(), sc)) {
-#ifndef HAVE_GLES
-          glPushMatrix();
-          glLoadMatrixf(opengl_matrix);
+#ifdef HAVE_GLES
+      PaintPoint(canvas, projection, shape, NULL);
+#else
+      PaintPoint(canvas, projection, shape, opengl_matrix);
 #endif
-          icon.Draw(canvas, sc.x, sc.y);
-#ifndef HAVE_GLES
-          glPopMatrix();
-#endif
-        }
-      }
 #else // !ENABLE_OPENGL
-      for (; lines < end_lines; ++lines) {
-        const GeoPoint *end = points + *lines;
-        for (; points < end; ++points) {
-          RasterPoint sc;
-          if (projection.GeoToScreenIfVisible(*points, sc))
-            icon.Draw(canvas, sc.x, sc.y);
-        }
-      }
+      PaintPoint(canvas, projection, lines, end_lines, points);
 #endif
       break;
 

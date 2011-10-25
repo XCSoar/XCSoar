@@ -37,6 +37,8 @@ class TopographyFile;
 class Canvas;
 class WindowProjection;
 class LabelBlock;
+class XShape;
+struct GeoPoint;
 
 /**
  * Class used to manage and render vector topography layers
@@ -73,6 +75,16 @@ public:
    */
   void PaintLabels(Canvas &canvas,
                    const WindowProjection &projection, LabelBlock &label_block) const;
+
+private:
+#ifdef ENABLE_OPENGL
+  void PaintPoint(Canvas &canvas, const WindowProjection &projection,
+                  const XShape &shape, float *opengl_matrix) const;
+#else
+  void PaintPoint(Canvas &canvas, const WindowProjection &projection,
+                  const unsigned short *lines, const unsigned short *end_lines,
+                  const GeoPoint *points) const;
+#endif
 };
 
 #endif
