@@ -154,6 +154,17 @@ struct TempAirspaceType
   }
 
   void
+  resetTNP()
+  {
+    // Preserve Type Radio and days_of_operation for next airspace blocks
+    points.clear();
+    Center.longitude = Angle::Zero();
+    Center.latitude = Angle::Zero();
+    Rotation = 1;
+    Radius = fixed_zero;
+  }
+
+  void
   AddPolygon(Airspaces &airspace_database)
   {
     AbstractAirspace *as = new AirspacePolygon(points);
@@ -757,7 +768,7 @@ ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
       return false;
 
     temp_area.AddCircle(airspace_database);
-    temp_area.reset();
+    temp_area.resetTNP();
   } else if ((parameter =
       string_after_prefix_ci(line, _T("CLOCKWISE "))) != NULL) {
     temp_area.Rotation = 1;
@@ -769,17 +780,21 @@ ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
     if (!ParseArcTNP(parameter, temp_area))
       return false;
   } else if ((parameter = string_after_prefix_ci(line, _T("TITLE="))) != NULL) {
+    if (!temp_area.points.empty())
+      temp_area.AddPolygon(airspace_database);
+
+    temp_area.resetTNP();
+
     temp_area.Name = parameter;
   } else if ((parameter = string_after_prefix_ci(line, _T("TYPE="))) != NULL) {
     if (!temp_area.points.empty())
       temp_area.AddPolygon(airspace_database);
 
-    temp_area.reset();
+    temp_area.resetTNP();
 
     temp_area.Type = ParseTypeTNP(parameter);
   } else if ((parameter = string_after_prefix_ci(line, _T("CLASS="))) != NULL) {
-    if (temp_area.Type == OTHER)
-      temp_area.Type = ParseClassTNP(parameter);
+    temp_area.Type = ParseClassTNP(parameter);
   } else if ((parameter = string_after_prefix_ci(line, _T("TOPS="))) != NULL) {
     ReadAltitude(parameter, temp_area.Top);
   } else if ((parameter = string_after_prefix_ci(line, _T("BASE="))) != NULL) {
