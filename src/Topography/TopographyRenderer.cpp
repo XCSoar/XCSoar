@@ -48,9 +48,8 @@ TopographyRenderer::Draw(Canvas &canvas,
 void
 TopographyRenderer::DrawLabels(Canvas &canvas,
                                const WindowProjection &projection,
-                               LabelBlock &label_block,
-                               const SETTINGS_MAP &settings_map) const
+                               LabelBlock &label_block) const
 {
   for (unsigned i = 0; i < store.size(); ++i)
-    files[i]->PaintLabels(canvas, projection, label_block, settings_map);
+    files[i]->PaintLabels(canvas, projection, label_block);
 }

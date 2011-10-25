@@ -37,7 +37,6 @@ class TopographyFile;
 class Canvas;
 class WindowProjection;
 class LabelBlock;
-struct SETTINGS_MAP;
 
 /**
  * Class used to manage and render vector topography layers
@@ -73,8 +72,7 @@ public:
    * @param settings_map
    */
   void PaintLabels(Canvas &canvas,
-                   const WindowProjection &projection, LabelBlock &label_block,
-                   const SETTINGS_MAP &settings_map) const;
+                   const WindowProjection &projection, LabelBlock &label_block) const;
 };
 
 #endif

@@ -25,7 +25,6 @@ Copyright_License {
 #include "Topography/TopographyFile.hpp"
 #include "Topography/XShape.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "SettingsMap.hpp"
 #include "resource.h"
 #include "Screen/Canvas.hpp"
 #include "Screen/Fonts.hpp"
@@ -259,8 +258,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 void
 TopographyFileRenderer::PaintLabels(Canvas &canvas,
                                   const WindowProjection &projection,
-                                  LabelBlock &label_block,
-                                  const SETTINGS_MAP &settings_map) const
+                                  LabelBlock &label_block) const
 {
   fixed map_scale = projection.GetMapScale();
   if (!file.IsVisible(map_scale) || !file.IsLabelVisible(map_scale))

@@ -30,7 +30,6 @@ Copyright_License {
 class Canvas;
 class WindowProjection;
 class LabelBlock;
-struct SETTINGS_MAP;
 class TopographyFileRenderer;
 
 /**
@@ -51,9 +50,8 @@ public:
    */
   void Draw(Canvas &canvas, const WindowProjection &projection) const;
 
-  void DrawLabels(Canvas &canvas,
-                  const WindowProjection &projection, LabelBlock &label_block,
-                  const SETTINGS_MAP &settings_map) const;
+  void DrawLabels(Canvas &canvas, const WindowProjection &projection,
+                  LabelBlock &label_block) const;
 };
 
 #endif

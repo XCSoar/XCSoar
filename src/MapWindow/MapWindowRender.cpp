@@ -54,8 +54,7 @@ void
 MapWindow::RenderTopographyLabels(Canvas &canvas)
 {
   if (topography_renderer != NULL && SettingsMap().EnableTopography)
-    topography_renderer->DrawLabels(canvas, render_projection, label_block,
-                                  SettingsMap());
+    topography_renderer->DrawLabels(canvas, render_projection, label_block);
 }
 
 void
