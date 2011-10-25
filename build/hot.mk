@@ -6,7 +6,7 @@ HOT_SOURCES = \
 	$(MATH_SOURCES) \
 	$(ZLIB_SOURCES) \
 	$(JASPER) \
-	$(SRC)/Topography/TopographyRenderer.cpp \
+	$(SRC)/Topography/TopographyFileRenderer.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/HeightMatrix.cpp \

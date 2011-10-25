@@ -25,54 +25,13 @@ Copyright_License {
 #define TOPOGRAPHY_RENDERER_HPP
 
 #include "Topography/TopographyStore.hpp"
-#include "Topography/ShapeRenderer.hpp"
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Icon.hpp"
 #include "Util/NonCopyable.hpp"
 
 class Canvas;
 class WindowProjection;
 class LabelBlock;
 struct SETTINGS_MAP;
-
-/**
- * Class used to manage and render vector topography layers
- */
-class TopographyFileRenderer : private NonCopyable {
-  const TopographyFile &file;
-
-#ifndef ENABLE_OPENGL
-  mutable ShapeRenderer shape_renderer;
-#endif
-
-  Pen pen;
-  Brush brush;
-
-  MaskedIcon icon;
-
-public:
-  TopographyFileRenderer(const TopographyFile &file);
-
-  /**
-   * Paints the polygons, lines and points/icons in the TopographyFile
-   * @param canvas The canvas to paint on
-   * @param bitmap_canvas Temporary canvas for the icon
-   * @param projection
-   */
-  void Paint(Canvas &canvas, const WindowProjection &projection) const;
-
-  /**
-   * Paints a topography label if the space is available in the LabelBlock
-   * @param canvas The canvas to paint on
-   * @param projection
-   * @param label_block The LabelBlock class to use for decluttering
-   * @param settings_map
-   */
-  void PaintLabels(Canvas &canvas,
-                   const WindowProjection &projection, LabelBlock &label_block,
-                   const SETTINGS_MAP &settings_map) const;
-};
+class TopographyFileRenderer;
 
 /**
  * Class used to manage and render vector topography layers
