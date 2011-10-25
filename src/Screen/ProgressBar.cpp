@@ -73,8 +73,7 @@ ProgressBar::set_range(unsigned min_value, unsigned max_value)
   step_size = 1;
   expose();
 #else
-  ::SendMessage(hWnd,
-                PBM_SETRANGE, (WPARAM)0,
+  ::SendMessage(hWnd, PBM_SETRANGE, (WPARAM)0,
                 (LPARAM)MAKELPARAM(min_value, max_value));
 #endif
 }
@@ -89,8 +88,7 @@ ProgressBar::set_position(unsigned value)
   this->value = value;
   expose();
 #else
-  ::SendMessage(hWnd, PBM_SETPOS,
-                value, 0);
+  ::SendMessage(hWnd, PBM_SETPOS, value, 0);
 #endif
 }
 
@@ -104,8 +102,7 @@ ProgressBar::set_step(unsigned size)
   step_size = size;
   expose();
 #else
-  ::SendMessage(hWnd,
-                PBM_SETSTEP, (WPARAM)size, (LPARAM)0);
+  ::SendMessage(hWnd, PBM_SETSTEP, (WPARAM)size, (LPARAM)0);
 #endif
 }
 
@@ -119,8 +116,7 @@ ProgressBar::step()
   value += step_size;
   expose();
 #else
-  ::SendMessage(hWnd, PBM_STEPIT,
-                (WPARAM)0, (LPARAM)0);
+  ::SendMessage(hWnd, PBM_STEPIT, (WPARAM)0, (LPARAM)0);
 #endif
 }
 
