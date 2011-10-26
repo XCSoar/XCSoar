@@ -115,9 +115,8 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
     brush.Set();
 
     static AllocatedArray<GLushort> triangle_buffer;
-    triangle_buffer.GrowDiscard(3 * (num_points - 2));
     unsigned idx_count = PolygonToTriangles(points, num_points,
-                                            triangle_buffer.begin());
+                                            triangle_buffer);
     if (idx_count > 0)
       glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT,
                      triangle_buffer.begin());
@@ -128,9 +127,7 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
     if (pen.GetWidth() <= 2) {
       glDrawArrays(GL_LINE_LOOP, 0, num_points);
     } else {
-      vertex_buffer.GrowDiscard(2 * (num_points + 1));
-      unsigned vertices = LineToTriangles(points, num_points,
-                                          vertex_buffer.begin(),
+      unsigned vertices = LineToTriangles(points, num_points, vertex_buffer,
                                           pen.GetWidth(), true);
       if (vertices > 0) {
         glVertexPointer(2, GL_VALUE, 0, vertex_buffer.begin());
@@ -158,9 +155,7 @@ Canvas::TriangleFan(const RasterPoint *points, unsigned num_points)
     if (pen.GetWidth() <= 2) {
       glDrawArrays(GL_LINE_LOOP, 0, num_points);
     } else {
-      vertex_buffer.GrowDiscard(2 * (num_points + 1));
-      unsigned vertices = LineToTriangles(points, num_points,
-                                          vertex_buffer.begin(),
+      unsigned vertices = LineToTriangles(points, num_points, vertex_buffer,
                                           pen.GetWidth(), true);
       if (vertices > 0) {
         glVertexPointer(2, GL_VALUE, 0, vertex_buffer.begin());
@@ -191,11 +186,10 @@ Canvas::line_piece(const RasterPoint a, const RasterPoint b)
 
   const RasterPoint v[] = { {a.x, a.y}, {b.x, b.y} };
   if (pen.GetWidth() > 2) {
-    RasterPoint strip[6];
-    unsigned strip_len = LineToTriangles(v, 2, strip, pen.GetWidth(),
+    unsigned strip_len = LineToTriangles(v, 2, vertex_buffer, pen.GetWidth(),
                                          false, true);
     if (strip_len > 0) {
-      glVertexPointer(2, GL_VALUE, 0, &strip[0].x);
+      glVertexPointer(2, GL_VALUE, 0, vertex_buffer.begin());
       glDrawArrays(GL_TRIANGLE_STRIP, 0, strip_len);
     }
   } else {

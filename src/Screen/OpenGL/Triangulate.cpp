@@ -111,12 +111,12 @@ Normalize(RasterPoint *v, float length)
 }
 
 #if RASTER_POINT_SIZE == SHAPE_POINT_SIZE
-unsigned
-PolygonToTriangles(const RasterPoint *points, unsigned num_points,
-                   GLushort *triangles, unsigned min_distance)
+unsigned static
+_PolygonToTriangles(const RasterPoint *points, unsigned num_points,
+                    GLushort *triangles, unsigned min_distance)
 #else
 template <typename PT>
-static inline unsigned
+static unsigned
 _PolygonToTriangles(const PT *points, unsigned num_points,
                     GLushort *triangles, unsigned min_distance)
 #endif
@@ -223,12 +223,13 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
   return t - triangles;
 }
 
-#if RASTER_POINT_SIZE != SHAPE_POINT_SIZE
 unsigned
 PolygonToTriangles(const RasterPoint *points, unsigned num_points,
-                   GLushort *triangles, unsigned min_distance)
+                   AllocatedArray<GLushort> &triangles, unsigned min_distance)
 {
-  return _PolygonToTriangles(points, num_points, triangles, min_distance);
+  triangles.GrowDiscard(3 * (num_points - 2));
+  return _PolygonToTriangles(points, num_points, triangles.begin(),
+                             min_distance);
 }
 
 unsigned
@@ -237,7 +238,6 @@ PolygonToTriangles(const ShapePoint *points, unsigned num_points,
 {
   return _PolygonToTriangles(points, num_points, triangles, min_distance);
 }
-#endif
 
 unsigned
 TriangleToStrip(GLushort *triangles, unsigned index_count,
@@ -377,13 +377,17 @@ AddToTriangleStrip(RasterPoint* &strip, PixelScalar x, PixelScalar y)
 
 unsigned
 LineToTriangles(const RasterPoint *points, unsigned num_points,
-                RasterPoint *strip, unsigned line_width, bool loop, bool tcap)
+                AllocatedArray<RasterPoint> &strip,
+                unsigned line_width, bool loop, bool tcap)
 {
   // A line has to have at least two points
   if (num_points < 2)
     return 0;
 
-  // A closed line path needs to have at least three points
+  // allocate memory for triangle vertices
+  // max. size: 2*(num_points + (int)(loop || tcap))
+  strip.GrowDiscard(2 * (num_points + 1));
+
   if (loop && num_points < 3)
     // .. otherwise don't close it
     loop = false;
@@ -392,7 +396,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
 
   // strip will point to the start of the output array
   // s is the working pointer
-  RasterPoint *s = strip;
+  RasterPoint *s = strip.begin();
 
   const RasterPoint *a, *b, *c;
 
@@ -524,5 +528,5 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
     }
   }
 
-  return s - strip;
+  return s - strip.begin();
 }

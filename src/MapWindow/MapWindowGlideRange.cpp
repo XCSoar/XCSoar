@@ -53,10 +53,9 @@ struct ProjectedFan {
   void DrawFill(const RasterPoint *points, unsigned start) const {
     /* triangulate the polygon */
     AllocatedArray<GLushort> triangle_buffer;
-    triangle_buffer.GrowDiscard(3 * (size - 2));
 
     unsigned idx_count = PolygonToTriangles(points + start, size,
-                                            triangle_buffer.begin());
+                                            triangle_buffer);
     if (idx_count == 0)
       return;
 

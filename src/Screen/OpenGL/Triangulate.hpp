@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_TRIANGULATE_HPP
 #define XCSOAR_SCREEN_OPENGL_TRIANGULATE_HPP
 
+#include "Util/AllocatedArray.hpp"
 #include "Screen/Point.hpp"
 #include "Topography/XShapePoint.hpp"
 
@@ -42,13 +43,11 @@ Copyright_License {
  */
 unsigned
 PolygonToTriangles(const RasterPoint *points, unsigned num_points,
-                   GLushort *triangles, unsigned min_distance=1);
-
-#if RASTER_POINT_SIZE != SHAPE_POINT_SIZE
+                   AllocatedArray<GLushort> &triangles,
+                   unsigned min_distance=1);
 unsigned
 PolygonToTriangles(const ShapePoint *points, unsigned num_points,
                    GLushort *triangles, unsigned min_distance=1);
-#endif
 
 /**
  * Pack triangle indices into a triangle strip.
@@ -75,7 +74,7 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
  *
  * @param points line coordinates
  * @param num_points number of line points
- * @param strip triangle vertices, size: 2*(num_points + (int)(loop || tcap))
+ * @param strip buffer for triangle vertices
  * @param line_width width of line in pixels
  * @param loop true if line is a closed loop
  * @param tcap add a triangle at the beginning and end of the line
@@ -84,7 +83,7 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
  */
 unsigned
 LineToTriangles(const RasterPoint *points, unsigned num_points,
-                RasterPoint *strip, unsigned line_width,
-                bool loop=false, bool tcap=false);
+                AllocatedArray<RasterPoint> &strip,
+                unsigned line_width, bool loop=false, bool tcap=false);
 
 #endif
