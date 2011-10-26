@@ -57,7 +57,7 @@ public:
   FifoBuffer():head(0), tail(0) {}
 
 protected:
-  void shift() {
+  void Shift() {
     if (head == 0)
       return;
 
@@ -72,7 +72,7 @@ protected:
   }
 
 public:
-  void clear() {
+  void Clear() {
     head = tail = 0;
   }
 
@@ -80,8 +80,8 @@ public:
    * Prepares writing.  Returns a buffer range which may be written.
    * When you are finished, call append().
    */
-  Range write() {
-    shift();
+  Range Write() {
+    Shift();
     return Range(data + tail, size - tail);
   }
 
@@ -89,7 +89,7 @@ public:
    * Expands the tail of the buffer, after data has been written to
    * the buffer returned by write().
    */
-  void append(unsigned n) {
+  void Append(unsigned n) {
     assert(tail <= size);
     assert(n <= size);
     assert(tail + n <= size);
@@ -101,14 +101,14 @@ public:
    * Return a buffer range which may be read.  The buffer pointer is
    * writable, to allow modifications while parsing.
    */
-  Range read() {
+  Range Read() {
     return Range(data + head, tail - head);
   }
 
   /**
    * Marks a chunk as consumed.
    */
-  void consume(unsigned n) {
+  void Consume(unsigned n) {
     assert(tail <= size);
     assert(head <= tail);
     assert(n <= tail);

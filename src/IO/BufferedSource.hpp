@@ -44,17 +44,17 @@ protected:
 
 public:
   virtual Range read() {
-    Range r = buffer.write();
+    Range r = buffer.Write();
     if (r.second > 0) {
       unsigned n = read(r.first, r.second);
-      buffer.append(n);
+      buffer.Append(n);
     }
 
-    return buffer.read();
+    return buffer.Read();
   }
 
   virtual void consume(unsigned n) {
-    buffer.consume(n);
+    buffer.Consume(n);
     position += n;
   }
 

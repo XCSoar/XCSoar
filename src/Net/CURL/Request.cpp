@@ -69,13 +69,13 @@ Net::Request::~Request()
 size_t
 Net::Request::ResponseData(const uint8_t *ptr, size_t size)
 {
-  Buffer::Range range = buffer.write();
+  Buffer::Range range = buffer.Write();
   if ((size_t)range.second < size)
     /* buffer is full, pause CURL */
     return CURL_WRITEFUNC_PAUSE;
 
   std::copy(ptr, ptr + size, range.first);
-  buffer.append(size);
+  buffer.Append(size);
   return size;
 }
 
@@ -103,7 +103,7 @@ Net::Request::Read(void *_buffer, size_t buffer_size, unsigned long timeout)
   Buffer::Range range;
   CURLMcode mcode = CURLM_CALL_MULTI_PERFORM;
   while (true) {
-    range = buffer.read();
+    range = buffer.Read();
     if (range.second > 0)
       break;
 
@@ -128,7 +128,7 @@ Net::Request::Read(void *_buffer, size_t buffer_size, unsigned long timeout)
   std::copy(range.first, range.first + buffer_size, p);
   p[buffer_size] = 0;
 
-  buffer.consume(buffer_size);
+  buffer.Consume(buffer_size);
   curl_easy_pause(handle, CURLPAUSE_CONT);
 
   return buffer_size;

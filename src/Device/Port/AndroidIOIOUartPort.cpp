@@ -208,22 +208,22 @@ AndroidIOIOUartPort::Read(void *Buffer, size_t Size)
 void
 AndroidIOIOUartPort::ProcessChar(char c)
 {
-  Buffer::Range range = buffer.write();
+  Buffer::Range range = buffer.Write();
   if (range.second == 0) {
     // overflow, so reset buffer
-    buffer.clear();
+    buffer.Clear();
     return;
   }
 
   if (c == '\n') {
     range.first[0] = _T('\0');
-    buffer.append(1);
+    buffer.Append(1);
 
-    range = buffer.read();
+    range = buffer.Read();
     handler.LineReceived(range.first);
-    buffer.clear();
+    buffer.Clear();
   } else if (c != '\r') {
     range.first[0] = c;
-    buffer.append(1);
+    buffer.Append(1);
   }
 }
