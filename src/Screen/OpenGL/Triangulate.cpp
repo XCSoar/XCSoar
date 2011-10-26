@@ -466,6 +466,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
   }
 
   // add points by calculating the angle bisector of ab and bc
+  int sign = 1;
   if (num_points >= 3) {
     while (c != points_end) {
       if (!TriangleEmpty(*a, *b, *c)) {
@@ -482,15 +483,21 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
         int bisector_x = -g.y - h.y;
         int bisector_y = g.x + h.x;
 
-        float projected_length = (-g.y * bisector_x + g.x * bisector_y) * (1.f / 1000.f);
-
-        // HACK: reduce artefacts for acute angles
-        if (projected_length < 400.f)
-          projected_length = 400.f;
+        float projected_length = (-g.y * bisector_x + g.x * bisector_y) *
+                                 (1.f / 1000.f);
+        if (projected_length < 400.f) {
+          // acute angle, use the normal of the bisector instead
+          projected_length = (g.x * bisector_x + g.y * bisector_y) *
+                             (1.f / 1000.f);
+          std::swap(bisector_x, bisector_y);
+          bisector_y *= -1;
+          // the order of the triangles switches. keep track with 'sign'
+          sign *= -1;
+        }
 
         float scale = half_line_width / projected_length;
-        bisector_x = floor(bisector_x * scale + 0.5f);
-        bisector_y = floor(bisector_y * scale + 0.5f);
+        bisector_x = sign*floor(bisector_x * scale + 0.5f);
+        bisector_y = sign*floor(bisector_y * scale + 0.5f);
 
         AddToTriangleStrip(s, b->x - bisector_x, b->y - bisector_y);
         AddToTriangleStrip(s, b->x + bisector_x, b->y + bisector_y);
@@ -508,13 +515,22 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
 
   if (loop) {
     // repeat first two points at the end
-    AddToTriangleStrip(s, strip[0].x, strip[0].y);
-    AddToTriangleStrip(s, strip[1].x, strip[1].y);
+    int idx0, idx1;
+    if (sign == 1) {
+      idx0 = 0;
+      idx1 = 1;
+    } else {
+      idx0 = 1;
+      idx1 = 0;
+    }
+
+    AddToTriangleStrip(s, strip[idx0].x, strip[idx0].y);
+    AddToTriangleStrip(s, strip[idx1].x, strip[idx1].y);
   } else {
     // add flat or triangle cap at end of line
     RasterPoint p;
-    p.x = a->y - b->y;
-    p.y = b->x - a->x;
+    p.x = sign * (a->y - b->y);
+    p.y = sign * (b->x - a->x);
     Normalize(&p, half_line_width);
 
     AddToTriangleStrip(s, b->x - p.x, b->y - p.y);
