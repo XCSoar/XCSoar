@@ -91,6 +91,7 @@ public:
     data = other.data;
     other.size = 0;
     other.data = NULL;
+    return *this;
   }
 
   /**
