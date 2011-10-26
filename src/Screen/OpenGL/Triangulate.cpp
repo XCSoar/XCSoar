@@ -112,13 +112,13 @@ Normalize(RasterPoint *v, float length)
 
 #if RASTER_POINT_SIZE == SHAPE_POINT_SIZE
 unsigned
-PolygonToTriangle(const RasterPoint *points, unsigned num_points,
-                  GLushort *triangles, unsigned min_distance)
+PolygonToTriangles(const RasterPoint *points, unsigned num_points,
+                   GLushort *triangles, unsigned min_distance)
 #else
 template <typename PT>
 static inline unsigned
-_PolygonToTriangle(const PT *points, unsigned num_points,
-                   GLushort *triangles, unsigned min_distance)
+_PolygonToTriangles(const PT *points, unsigned num_points,
+                    GLushort *triangles, unsigned min_distance)
 #endif
 {
   // no redundant start/end please
@@ -225,17 +225,17 @@ _PolygonToTriangle(const PT *points, unsigned num_points,
 
 #if RASTER_POINT_SIZE != SHAPE_POINT_SIZE
 unsigned
-PolygonToTriangle(const RasterPoint *points, unsigned num_points,
-                    GLushort *triangles, unsigned min_distance)
+PolygonToTriangles(const RasterPoint *points, unsigned num_points,
+                   GLushort *triangles, unsigned min_distance)
 {
-  return _PolygonToTriangle(points, num_points, triangles, min_distance);
+  return _PolygonToTriangles(points, num_points, triangles, min_distance);
 }
 
 unsigned
-PolygonToTriangle(const ShapePoint *points, unsigned num_points,
-                    GLushort *triangles, unsigned min_distance)
+PolygonToTriangles(const ShapePoint *points, unsigned num_points,
+                   GLushort *triangles, unsigned min_distance)
 {
-  return _PolygonToTriangle(points, num_points, triangles, min_distance);
+  return _PolygonToTriangles(points, num_points, triangles, min_distance);
 }
 #endif
 

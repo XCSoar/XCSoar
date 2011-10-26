@@ -253,8 +253,8 @@ XShape::BuildIndices(unsigned thinning_level, unsigned min_distance)
     *idx_count = 0;
     const ShapePoint *pt = points;
     for (unsigned i=0; i < num_lines; i++) {
-      unsigned count = PolygonToTriangle(pt, lines[i], idx + *idx_count,
-                                         min_distance);
+      unsigned count = PolygonToTriangles(pt, lines[i], idx + *idx_count,
+                                          min_distance);
       if (i > 0) {
         const GLushort offset = pt - points;
         const unsigned max_idx_count = *idx_count + count;

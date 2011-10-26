@@ -41,13 +41,13 @@ Copyright_License {
  *         3 to 3*(num_points-3): success
  */
 unsigned
-PolygonToTriangle(const RasterPoint *points, unsigned num_points,
-                  GLushort *triangles, unsigned min_distance=1);
+PolygonToTriangles(const RasterPoint *points, unsigned num_points,
+                   GLushort *triangles, unsigned min_distance=1);
 
 #if RASTER_POINT_SIZE != SHAPE_POINT_SIZE
 unsigned
-PolygonToTriangle(const ShapePoint *points, unsigned num_points,
-                  GLushort *triangles, unsigned min_distance=1);
+PolygonToTriangles(const ShapePoint *points, unsigned num_points,
+                   GLushort *triangles, unsigned min_distance=1);
 #endif
 
 /**

@@ -41,16 +41,16 @@ Copyright_License {
 #include "Screen/OpenGL/Triangulate.hpp"
 
 unsigned
-PolygonToTriangle(const RasterPoint *points, unsigned num_points,
-                  GLushort *triangles, unsigned min_distance)
+PolygonToTriangles(const RasterPoint *points, unsigned num_points,
+                   GLushort *triangles, unsigned min_distance)
 {
   return 0;
 }
 
 #if RASTER_POINT_SIZE != SHAPE_POINT_SIZE
 unsigned
-PolygonToTriangle(const ShapePoint *points, unsigned num_points,
-                  GLushort *triangles, unsigned min_distance)
+PolygonToTriangles(const ShapePoint *points, unsigned num_points,
+                   GLushort *triangles, unsigned min_distance)
 {
   return 0;
 }

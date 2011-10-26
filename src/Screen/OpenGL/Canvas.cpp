@@ -116,8 +116,8 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
 
     static AllocatedArray<GLushort> triangle_buffer;
     triangle_buffer.GrowDiscard(3 * (num_points - 2));
-    unsigned idx_count = PolygonToTriangle(points, num_points,
-                                           triangle_buffer.begin());
+    unsigned idx_count = PolygonToTriangles(points, num_points,
+                                            triangle_buffer.begin());
     if (idx_count > 0)
       glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT,
                      triangle_buffer.begin());
