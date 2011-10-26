@@ -54,20 +54,20 @@ public:
   }
 
 protected:
-  static unsigned next(unsigned i) {
+  static unsigned Next(unsigned i) {
     return (i + 1) % size;
   }
 
 public:
-  bool empty() const {
+  bool IsEmpty() const {
     return tail == 0;
   }
 
-  bool full() const {
+  bool IsFull() const {
     return tail == size;
   }
 
-  unsigned length() const {
+  unsigned Length() const {
     return tail;
   }
 
@@ -75,11 +75,11 @@ public:
     return data[i];
   }
 
-  T &append() {
+  T &Append() {
     return data[tail++];
   }
 
-  void clear() {
+  void Clear() {
     tail = 0;
   }
 };

@@ -31,10 +31,10 @@ Copyright_License {
 bool
 BatchTextWriter::writeln(const char *line)
 {
-  if (buffer.full() && !flush())
+  if (buffer.IsFull() && !flush())
     return false;
 
-  buffer.append() = line;
+  buffer.Append() = line;
   return true;
 }
 
@@ -42,7 +42,7 @@ BatchTextWriter::writeln(const char *line)
 bool
 BatchTextWriter::writeln(const TCHAR *line)
 {
-  if (buffer.full() && !flush())
+  if (buffer.IsFull() && !flush())
     return false;
 
   size_t wide_length = _tcslen(line);
@@ -53,7 +53,7 @@ BatchTextWriter::writeln(const TCHAR *line)
   if (narrow_length == 0 && wide_length > 0)
     return false;
 
-  buffer.append().assign(narrow, narrow_length);
+  buffer.Append().assign(narrow, narrow_length);
   return true;
 }
 #endif
@@ -61,7 +61,7 @@ BatchTextWriter::writeln(const TCHAR *line)
 bool
 BatchTextWriter::flush()
 {
-  if (buffer.empty())
+  if (buffer.IsEmpty())
     return true;
 
   TextWriter writer(path.c_str(), append);
@@ -71,11 +71,11 @@ BatchTextWriter::flush()
   /* the following flush() calls will append */
   append = true;
 
-  for (unsigned i = 0; i < buffer.length(); ++i)
+  for (unsigned i = 0; i < buffer.Length(); ++i)
     if (!writer.writeln(buffer[i].c_str()))
       return false;
 
-  buffer.clear();
+  buffer.Clear();
 
   return true;
 }

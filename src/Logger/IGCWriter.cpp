@@ -78,14 +78,14 @@ IGCWriter::IGCWriter(const TCHAR *_path, const NMEAInfo &gps_info)
 bool
 IGCWriter::flush()
 {
-  if (buffer.empty())
+  if (buffer.IsEmpty())
     return true;
 
   TextWriter writer(path, true);
   if (writer.error())
     return false;
 
-  for (unsigned i = 0; i < buffer.length(); ++i) {
+  for (unsigned i = 0; i < buffer.Length(); ++i) {
     if (!writer.writeln(buffer[i]))
       return false;
 
@@ -95,7 +95,7 @@ IGCWriter::flush()
   if (!writer.flush())
     return false;
 
-  buffer.clear();
+  buffer.Clear();
   return true;
 }
 
@@ -119,12 +119,12 @@ clean(char *p)
 bool
 IGCWriter::writeln(const char *line)
 {
-  if (buffer.full() && !flush())
+  if (buffer.IsFull() && !flush())
     return false;
 
-  assert(!buffer.full());
+  assert(!buffer.IsFull());
 
-  char *dest = buffer.append();
+  char *dest = buffer.Append();
   strncpy(dest, line, MAX_IGC_BUFF);
   dest[MAX_IGC_BUFF - 1] = '\0';
 
