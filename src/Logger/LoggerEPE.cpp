@@ -61,7 +61,7 @@ IGCWriter::GetHFFXARecord()
    * XCSoar Interpretation: Use 50 meters to be conservative:
    * ---> HFFXA50
    */
-  return "HFFXA50\r\n";
+  return "HFFXA50";
 }
 
 const char *
@@ -89,7 +89,7 @@ IGCWriter::GetIRecord()
    *
    * ---> I023638FXA3940SIU  (no spaces)
    */
-  return "I023638FXA3940SIU\r\n";
+  return "I023638FXA3940SIU";
 }
 
 fixed

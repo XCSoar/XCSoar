@@ -74,7 +74,6 @@ LoggerFRecord::update(const GPSState &gps,
       length += 2;
     }
   }
-  sprintf(szFRecord + length,"\r\n");
 
   DetectFRecordChange = DetectFRecordChange ||
     strcmp(szFRecord + 7, szLastFRecord + 7);
