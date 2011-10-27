@@ -119,6 +119,9 @@ clean(char *p)
 bool
 IGCWriter::writeln(const char *line)
 {
+  assert(strchr(line, '\r') == NULL);
+  assert(strchr(line, '\n') == NULL);
+
   if (buffer.full() && !flush())
     return false;
 
