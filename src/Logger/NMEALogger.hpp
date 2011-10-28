@@ -26,16 +26,17 @@ Copyright_License {
 
 #include <tchar.h>
 
-extern bool EnableLogNMEA;
+namespace NMEALogger
+{
+  extern bool EnableLogNMEA;
 
-void
-RawLoggerShutdown();
+  void RawLoggerShutdown();
 
-/**
- * Logs NMEA string to log file
- * @param text
- */
-void
-LogNMEA(const char *line);
+  /**
+   * Logs NMEA string to log file
+   * @param text
+   */
+  void LogNMEA(const char *line);
+}
 
 #endif

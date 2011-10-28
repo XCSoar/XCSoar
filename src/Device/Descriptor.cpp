@@ -506,7 +506,7 @@ DeviceDescriptor::ParseLine(const char *line)
 void
 DeviceDescriptor::LineReceived(const char *line)
 {
-  LogNMEA(line);
+  NMEALogger::LogNMEA(line);
 
   if (pDevPipeTo && pDevPipeTo->Com) {
     // stream pipe, pass nmea to other device (NmeaOut)

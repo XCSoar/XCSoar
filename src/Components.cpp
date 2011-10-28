@@ -606,7 +606,7 @@ XCSoarInterface::Shutdown(void)
   // Close any device connections
   devShutdown();
 
-  RawLoggerShutdown();
+  NMEALogger::RawLoggerShutdown();
 
   delete replay;
 

@@ -35,7 +35,7 @@ Copyright_License {
 static Mutex RawLoggerMutex;
 static BatchTextWriter *RawLoggerWriter;
 
-bool EnableLogNMEA = false;
+bool NMEALogger::EnableLogNMEA = false;
 
 static bool
 RawLoggerStart()
@@ -63,13 +63,13 @@ RawLoggerStart()
 }
 
 void
-RawLoggerShutdown()
+NMEALogger::RawLoggerShutdown()
 {
   delete RawLoggerWriter;
 }
 
 void
-LogNMEA(const char *text)
+NMEALogger::LogNMEA(const char *text)
 {
   if (!EnableLogNMEA)
     return;
