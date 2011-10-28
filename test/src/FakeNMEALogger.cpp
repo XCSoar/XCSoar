@@ -24,6 +24,6 @@ Copyright_License {
 #include "Logger/NMEALogger.hpp"
 
 void
-NMEALogger::LogNMEA(const char *text)
+NMEALogger::Log(const char *text)
 {
 }

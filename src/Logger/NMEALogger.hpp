@@ -28,15 +28,15 @@ Copyright_License {
 
 namespace NMEALogger
 {
-  extern bool EnableLogNMEA;
+  extern bool enabled;
 
-  void RawLoggerShutdown();
+  void Shutdown();
 
   /**
    * Logs NMEA string to log file
    * @param text
    */
-  void LogNMEA(const char *line);
+  void Log(const char *line);
 }
 
 #endif

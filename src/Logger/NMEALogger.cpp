@@ -32,15 +32,15 @@ Copyright_License {
 #include <windef.h> // for MAX_PATH
 #include <stdio.h>
 
-static Mutex RawLoggerMutex;
-static BatchTextWriter *RawLoggerWriter;
+static Mutex mutex;
+static BatchTextWriter *writer;
 
-bool NMEALogger::EnableLogNMEA = false;
+bool NMEALogger::enabled = false;
 
 static bool
 RawLoggerStart()
 {
-  if (RawLoggerWriter != NULL)
+  if (writer != NULL)
     return true;
 
   BrokenDateTime dt = XCSoarInterface::Basic().date_time_utc;
@@ -58,23 +58,23 @@ RawLoggerStart()
 
   LocalPath(path, _T("logs"), name);
 
-  RawLoggerWriter = new BatchTextWriter(path, false);
-  return RawLoggerWriter != NULL;
+  writer = new BatchTextWriter(path, false);
+  return writer != NULL;
 }
 
 void
-NMEALogger::RawLoggerShutdown()
+NMEALogger::Shutdown()
 {
-  delete RawLoggerWriter;
+  delete writer;
 }
 
 void
-NMEALogger::LogNMEA(const char *text)
+NMEALogger::Log(const char *text)
 {
-  if (!EnableLogNMEA)
+  if (!enabled)
     return;
 
-  ScopeLock protect(RawLoggerMutex);
+  ScopeLock protect(mutex);
   if (RawLoggerStart())
-    RawLoggerWriter->writeln(text);
+    writer->writeln(text);
 }

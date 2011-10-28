@@ -1188,8 +1188,8 @@ InputEvents::eventLogger(const TCHAR *misc)
     logger.GUIToggleLogger(basic, settings_computer,
                            *protected_task_manager, true);
   else if (_tcscmp(misc, _T("nmea")) == 0) {
-    NMEALogger::EnableLogNMEA = !NMEALogger::EnableLogNMEA;
-    if (NMEALogger::EnableLogNMEA) {
+    NMEALogger::enabled = !NMEALogger::enabled;
+    if (NMEALogger::enabled) {
       Message::AddMessage(_("NMEA log on"));
     } else {
       Message::AddMessage(_("NMEA log off"));
