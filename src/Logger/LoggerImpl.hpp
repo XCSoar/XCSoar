@@ -44,26 +44,40 @@ class DeviceDescriptor;
 /**
  * Implementation of logger
  */
-class LoggerImpl {
+class LoggerImpl
+{
 public:
   enum {
-    LOGGER_PRETAKEOFF_BUFFER_MAX = 60, /**< Buffer size (s) of points recorded before takeoff */
-    LOGGER_DISK_BUFFER_NUM_RECS = 10, /**< Number of records in disk buffer */
+    /**< Buffer size (s) of points recorded before takeoff */
+    LOGGER_PRETAKEOFF_BUFFER_MAX = 60,
+    /**< Number of records in disk buffer */
+    LOGGER_DISK_BUFFER_NUM_RECS = 10,
     MAX_IGC_BUFF = 255,
   };
 
   /** Buffer for points recorded before takeoff */
-  struct LoggerPreTakeoffBuffer {
-    GeoPoint Location;          /**< Location of fix */
-    fixed Altitude;            /**< GPS Altitude (m) */
-    fixed BaroAltitude;        /**< Barometric altitude (m) */
-    BrokenDateTime DateTime;    /**< Date and time of fix */
-    int SatelliteIDs[GPSState::MAXSATELLITES]; /**< IDs of satellites in fix */
-    fixed Time;                /**< Time of fix (s) */
-    int NAVWarning;             /**< GPS fix state */
-    int FixQuality;             /**< GPS fix quality */
-    int SatellitesUsed;         /**< GPS fix state */
-    fixed HDOP; /**< GPS Horizontal Dilution of precision */
+  struct LoggerPreTakeoffBuffer
+  {
+    /** Location of fix */
+    GeoPoint Location;
+    /** GPS Altitude (m) */
+    fixed Altitude;
+    /** Barometric altitude (m) */
+    fixed BaroAltitude;
+    /** Date and time of fix */
+    BrokenDateTime DateTime;
+    /** IDs of satellites in fix */
+    int SatelliteIDs[GPSState::MAXSATELLITES];
+    /** Time of fix (s) */
+    fixed Time;
+    /** GPS fix state */
+    int NAVWarning;
+    /** GPS fix quality */
+    int FixQuality;
+    /** GPS fix state */
+    int SatellitesUsed;
+    /** GPS Horizontal Dilution of precision */
+    fixed HDOP;
 
     /**
      * Is the fix real? (no replay, no simulator)
@@ -97,17 +111,14 @@ public:
   }
 
   static bool LoggerClearFreeSpace(const NMEAInfo &gps_info);
-  void StartLogger(const NMEAInfo &gps_info,
-                   const SETTINGS_COMPUTER &settings,
-                   const TCHAR *strAssetNumber,
-                   const Declaration &decl);
+  void StartLogger(const NMEAInfo &gps_info, const SETTINGS_COMPUTER &settings,
+                   const TCHAR *strAssetNumber, const Declaration &decl);
   void StopLogger(const NMEAInfo &gps_info);
   void LoggerNote(const TCHAR *text);
   void clearBuffer();
 
 private:
-  void StartLogger(const NMEAInfo &gps_info,
-                   const SETTINGS_COMPUTER &settings,
+  void StartLogger(const NMEAInfo &gps_info, const SETTINGS_COMPUTER &settings,
                    const TCHAR *strAssetNumber);
   
 private:

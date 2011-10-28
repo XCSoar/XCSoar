@@ -169,6 +169,7 @@ LoggerImpl::LogPoint(const NMEAInfo& gps_info)
       tmp_info.location_available.Clear();
     else
       tmp_info.location_available.Update(tmp_info.clock);
+
     tmp_info.gps.fix_quality = src.FixQuality;
     tmp_info.gps.satellites_used = src.SatellitesUsed;
     tmp_info.gps.hdop = src.HDOP;
@@ -186,9 +187,9 @@ LoggerImpl::LogPoint(const NMEAInfo& gps_info)
 static bool
 IsAlphaNum (TCHAR c)
 {
-  if (((c >= _T('A')) && (c <= _T('Z')))
-      || ((c >= _T('a')) && (c <= _T('z')))
-      || ((c >= _T('0')) && (c <= _T('9'))))
+  if ((c >= _T('A') && c <= _T('Z')) ||
+      (c >= _T('a') && c <= _T('z')) ||
+      (c >= _T('0') && c <= _T('9')))
     return true;
 
   return false;
@@ -198,10 +199,8 @@ void
 LoggerImpl::StartLogger(const NMEAInfo &gps_info,
     const SETTINGS_COMPUTER &settings, const TCHAR *astrAssetNumber)
 {
-  int i;
-
   // chars must be legal in file names
-  for (i = 0; i < 3; i++)
+  for (unsigned i = 0; i < 3; i++)
     strAssetNumber[i] = IsAlphaNum(strAssetNumber[i]) ?
                         strAssetNumber[i] : _T('A');
 
@@ -209,22 +208,18 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   Directory::Create(szLoggerFileName);
 
   TCHAR name[64];
-  for (i = 1; i < 99; i++) {
+  for (unsigned i = 1; i < 99; i++) {
     // 2003-12-31-XXX-987-01.igc
     // long filename form of IGC file.
     // XXX represents manufacturer code
 
     if (!settings.LoggerShortName) {
       // Long file name
-      _stprintf(name,
-                _T("%04u-%02u-%02u-XCS-%c%c%c-%02d.igc"),
+      _stprintf(name, _T("%04u-%02u-%02u-XCS-%c%c%c-%02d.igc"),
                 gps_info.date_time_utc.year,
                 gps_info.date_time_utc.month,
                 gps_info.date_time_utc.day,
-          strAssetNumber[0],
-          strAssetNumber[1],
-          strAssetNumber[2],
-          i);
+                strAssetNumber[0], strAssetNumber[1], strAssetNumber[2], i);
     } else {
       // Short file name
       TCHAR cyear, cmonth, cday, cflight;
@@ -232,16 +227,9 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
       cmonth = NumToIGCChar(gps_info.date_time_utc.month);
       cday = NumToIGCChar(gps_info.date_time_utc.day);
       cflight = NumToIGCChar(i);
-      _stprintf(name,
-                _T("%c%c%cX%c%c%c%c.igc"),
-          cyear,
-          cmonth,
-          cday,
-          strAssetNumber[0],
-          strAssetNumber[1],
-          strAssetNumber[2],
-          cflight);
-
+      _stprintf(name, _T("%c%c%cX%c%c%c%c.igc"), cyear, cmonth, cday,
+                strAssetNumber[0], strAssetNumber[1], strAssetNumber[2],
+                cflight);
     }
 
     LocalPath(szLoggerFileName, _T("logs"), name);
@@ -413,8 +401,7 @@ LoggerImpl::LoggerClearFreeSpace(const NMEAInfo &gps_info)
 void
 LoggerImpl::StartLogger(const NMEAInfo &gps_info,
                         const SETTINGS_COMPUTER &settings,
-                        const TCHAR *strAssetNumber,
-                        const Declaration &decl)
+                        const TCHAR *strAssetNumber, const Declaration &decl)
 {
   StartLogger(gps_info, settings, strAssetNumber);
 
