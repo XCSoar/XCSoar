@@ -32,13 +32,18 @@ Copyright_License {
 #include <windef.h> // for MAX_PATH
 #include <stdio.h>
 
-static Mutex mutex;
-static BatchTextWriter *writer;
+namespace NMEALogger
+{
+  Mutex mutex;
+  BatchTextWriter *writer;
 
-bool NMEALogger::enabled = false;
+  bool enabled = false;
 
-static bool
-RawLoggerStart()
+  bool Start();
+}
+
+bool
+NMEALogger::Start()
 {
   if (writer != NULL)
     return true;
@@ -75,6 +80,6 @@ NMEALogger::Log(const char *text)
     return;
 
   ScopeLock protect(mutex);
-  if (RawLoggerStart())
+  if (Start())
     writer->writeln(text);
 }
