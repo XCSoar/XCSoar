@@ -47,6 +47,10 @@
 #include <stdio.h>
 #include <algorithm>
 
+// JMW note: we want to clear up enough space to save the persistent
+// data (85 kb approx) and a new log file
+#define LOGGER_MINFREESTORAGE 750
+
 const struct LoggerImpl::PreTakeoffBuffer &
 LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
 {
@@ -363,10 +367,6 @@ DeleteOldestIGCFile(const NMEAInfo &gps_info, const TCHAR *pathname)
   // did delete one
   return true;
 }
-
-#define LOGGER_MINFREESTORAGE (250+MINFREESTORAGE)
-// JMW note: we want to clear up enough space to save the persistent
-// data (85 kb approx) and a new log file
 
 bool
 LoggerImpl::LoggerClearFreeSpace(const NMEAInfo &gps_info)

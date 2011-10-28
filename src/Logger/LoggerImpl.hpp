@@ -24,7 +24,6 @@ Copyright_License {
 #if !defined(XCSOAR_LOGGER_IMPL_HPP)
 #define XCSOAR_LOGGER_IMPL_HPP
 
-#include "Sizes.h"
 #include "DateTime.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Logger/IGCWriter.hpp"
