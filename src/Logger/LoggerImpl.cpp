@@ -102,10 +102,6 @@ IGCCharToNum(TCHAR c)
   return 0; // Error!
 }
 
-/**
- * Stops the logger
- * @param gps_info NMEA_INFO struct holding the current date
- */
 void
 LoggerImpl::StopLogger(const NMEAInfo &gps_info)
 {
@@ -372,12 +368,6 @@ DeleteOldestIGCFile(const NMEAInfo &gps_info, const TCHAR *pathname)
 // JMW note: we want to clear up enough space to save the persistent
 // data (85 kb approx) and a new log file
 
-/**
- * Deletes old IGC files until at least LOGGER_MINFREESTORAGE KiB of space are
- * available
- * @param gps_info Current NMEA_INFO
- * @return True if enough space could be cleared, False otherwise
- */
 bool
 LoggerImpl::LoggerClearFreeSpace(const NMEAInfo &gps_info)
 {

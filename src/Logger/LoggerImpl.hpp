@@ -110,9 +110,20 @@ public:
     return writer != NULL;
   }
 
+  /**
+   * Deletes old IGC files until at least LOGGER_MINFREESTORAGE KiB of space are
+   * available
+   * @param gps_info Current NMEA_INFO
+   * @return True if enough space could be cleared, False otherwise
+   */
   static bool LoggerClearFreeSpace(const NMEAInfo &gps_info);
   void StartLogger(const NMEAInfo &gps_info, const SETTINGS_COMPUTER &settings,
                    const TCHAR *strAssetNumber, const Declaration &decl);
+
+  /**
+   * Stops the logger
+   * @param gps_info NMEA_INFO struct holding the current date
+   */
   void StopLogger(const NMEAInfo &gps_info);
   void LoggerNote(const TCHAR *text);
   void ClearBuffer();
