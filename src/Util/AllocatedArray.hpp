@@ -167,7 +167,13 @@ public:
     T *new_data = new T[_size];
     assert(_size == 0 || new_data != NULL);
 
+#ifdef ANDROID
+    /* STLport doesn't have std::move() */
     std::copy(data, data + preserve, new_data);
+#else
+    std::move(data, data + preserve, new_data);
+#endif
+
     delete[] data;
     data = new_data;
     size = _size;
