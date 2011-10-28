@@ -47,21 +47,21 @@ GRecord::Initialize()
 bool
 GRecord::AppendRecordToBuffer(const char *record)
 {
-  const unsigned char *szIn = (const unsigned char *)record;
+  const unsigned char *in = (const unsigned char *)record;
 
-  if (!IncludeRecordInGCalc(szIn))
+  if (!IncludeRecordInGCalc(in))
     return false;
 
-  AppendStringToBuffer(szIn);
+  AppendStringToBuffer(in);
   return true;
 }
 
 void
-GRecord::AppendStringToBuffer(const unsigned char * szIn)
+GRecord::AppendStringToBuffer(const unsigned char *in)
 {
   for (int i = 0; i < 4; i++)
     // skip whitespace flag=1
-    md5[i].AppendString(szIn, 1);
+    md5[i].AppendString(in, 1);
 }
 
 void
@@ -72,12 +72,12 @@ GRecord::FinalizeBuffer()
 }
 
 void
-GRecord::GetDigest(char *szOutput)
+GRecord::GetDigest(char *output)
 {
-  for (int idig = 0; idig <= 3; idig++)
-    md5[idig].GetDigest(szOutput + idig * 32);
+  for (int i = 0; i <= 3; i++)
+    md5[i].GetDigest(output + i * 32);
 
-  szOutput[128] = '\0';
+  output[128] = '\0';
 }
 
 void
@@ -120,37 +120,37 @@ GRecord::Initialize(int key_id)
 }
 
 void
-GRecord::SetFileName(const TCHAR *szFileNameIn)
+GRecord::SetFileName(const TCHAR *_filename)
 {
-  _tcscpy(filename, szFileNameIn);
+  _tcscpy(filename, _filename);
 }
 
 bool
-GRecord::IncludeRecordInGCalc(const unsigned char *szIn)
+GRecord::IncludeRecordInGCalc(const unsigned char *in)
 {
-  bool bValid;
-  TCHAR c1;
+  bool valid = false;
+  TCHAR c1 = in[0];
 
-  bValid = false;
-  c1 = szIn[0];
   switch (c1) {
   case 'L':
-    if (memcmp(szIn + 1, XCSOAR_IGC_CODE, 3) == 0)
-      bValid = 1; // only include L records made by XCS
+    if (memcmp(in + 1, XCSOAR_IGC_CODE, 3) == 0)
+      // only include L records made by XCS
+      valid = true;
     break;
 
   case 'G':
     break;
 
   case 'H':
-    if ((szIn[1] != 'O') && (szIn[1] != 'P'))
-      bValid = 1;
+    if ((in[1] != 'O') && (in[1] != 'P'))
+      valid = true;
     break;
 
   default:
-    bValid = 1;
+    valid = true;
   }
-  return bValid;
+
+  return valid;
 }
 
 bool
@@ -169,60 +169,58 @@ GRecord::LoadFileToBuffer()
 }
 
 bool
-GRecord::AppendGRecordToFile(bool bValid)
+GRecord::AppendGRecordToFile(bool valid)
 {
   TextWriter writer(filename, true);
   if (writer.error())
     return false;
 
-  char szDigest[BUFF_LEN];
-  GetDigest(szDigest);
+  char digest[BUFF_LEN];
+  GetDigest(digest);
 
-  if (bValid) {
-    int iLine;
-    int iNumCharsPerLine;
-    iNumCharsPerLine = 16;
-    static char sDig16[BUFF_LEN];
-    sDig16[0] = 'G';
+  static const unsigned chars_per_line = 16;
+
+  if (valid) {
+    static char digest16[BUFF_LEN];
+    digest16[0] = 'G';
     // 0 - 15
-    for (iLine = 0; iLine < (128 / iNumCharsPerLine); iLine++) {
-      for (int iChar = 0; iChar < iNumCharsPerLine; iChar++)
-        sDig16[iChar + 1] = szDigest[iChar + iNumCharsPerLine * iLine];
+    for (unsigned line = 0; line < (128 / chars_per_line); line++) {
+      for (unsigned i = 0; i < chars_per_line; i++)
+        digest16[i + 1] = digest[i + chars_per_line * line];
 
-      sDig16[iNumCharsPerLine + 1] = 0; // +1 is the initial "G"
+      digest16[chars_per_line + 1] = 0; // +1 is the initial "G"
 
-      writer.writeln(sDig16);
+      writer.writeln(digest16);
     }
   } else {
-    static const char sMessage[] = "G Record Invalid";
-    writer.writeln(sMessage);
+    writer.writeln("G Record Invalid");
   }
 
   return true;
 }
 
 bool
-GRecord::ReadGRecordFromFile(char *szOutput, size_t max_length)
+GRecord::ReadGRecordFromFile(char *output, size_t max_length)
 {
   FileLineReaderA reader(filename);
   if (reader.error())
     return false;
 
-  unsigned int iLenDigest = 0;
+  unsigned int digest_length = 0;
   char *data;
   while ((data = reader.read()) != NULL) {
     if (data[0] != 'G')
       continue;
 
     for (const char *p = data + 1; *p != '\0'; ++p) {
-      szOutput[iLenDigest++] = *p;
-      if (iLenDigest >= max_length)
+      output[digest_length++] = *p;
+      if (digest_length >= max_length)
         /* G record too large */
         return false;
     }
   }
 
-  szOutput[iLenDigest] = '\0';
+  output[digest_length] = '\0';
   return true;
 }
 
@@ -234,15 +232,15 @@ GRecord::VerifyGRecordInFile()
   LoadFileToBuffer();
 
   // load Existing Digest "old"
-  char szOldGRecord[BUFF_LEN];
-  if (!ReadGRecordFromFile(szOldGRecord, BUFF_LEN))
+  char old_g_record[BUFF_LEN];
+  if (!ReadGRecordFromFile(old_g_record, BUFF_LEN))
     return false;
 
   // recalculate digest from buffer
   FinalizeBuffer();
 
-  char szNewGRecord[BUFF_LEN];
-  GetDigest(szNewGRecord);
+  char new_g_record[BUFF_LEN];
+  GetDigest(new_g_record);
 
-  return strcmp(szOldGRecord, szNewGRecord) == 0;
+  return strcmp(old_g_record, new_g_record) == 0;
 }
