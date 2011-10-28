@@ -41,7 +41,8 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-#define  USESHORTTPNAME   1       // hack, soulf be configurable
+// hack, soulf be configurable
+#define  USESHORTTPNAME   1
 
 // Additional sentance for EW support
 
@@ -81,10 +82,11 @@ WriteWithChecksum(Port *port, const char *String)
 bool
 EWDevice::TryConnect()
 {
-  int retries=10;
-  while (--retries){
+  int retries = 10;
+  while (--retries) {
 
-    port->Write("##\r\n");         // send IO Mode command
+    // send IO Mode command
+    port->Write("##\r\n");
     if (port->ExpectString("IO Mode.\r"))
       return true;
 
@@ -124,7 +126,8 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
   if (!TryConnect())
     return false;
 
-  WriteWithChecksum(port, "#SPI"); // send SetPilotInfo
+  // send SetPilotInfo
+  WriteWithChecksum(port, "#SPI");
   env.Sleep(50);
 
   char sPilot[13], sGliderType[9], sGliderID[9];
@@ -133,17 +136,9 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
   convert_string(sGliderID, sizeof(sGliderID), declaration.aircraft_registration);
 
   // build string (field 4-5 are GPS info, no idea what to write)
-  sprintf(sTmp, "%-12s%-8s%-8s%-12s%-12s%-6s\r",
-          sPilot,
-          sGliderType,
-          sGliderID,
-          "", // GPS Model
-          "", // GPS Serial No.
-          "" // Flight Date,
-                                                  // format unknown,
-                                                  // left blank (GPS
-                                                  // has a RTC)
-  );
+  sprintf(sTmp, "%-12s%-8s%-8s%-12s%-12s%-6s\r", sPilot, sGliderType, sGliderID,
+          "" /* GPS Model */, "" /* GPS Serial No. */, "" /* Flight Date */
+          /* format unknown, left blank (GPS has a RTC) */);
   port->Write(sTmp);
 
   if (!port->ExpectString("OK\r"))
@@ -178,12 +173,14 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
     return false;
   */
 
-  for (int i=0; i<6; i++){                        // clear all 6 TP's
+  // clear all 6 TP's
+  for (int i = 0; i < 6; i++) {
     sprintf(sTmp, "#CTP%02d", i);
     WriteWithChecksum(port, sTmp);
     if (!port->ExpectString("OK\r"))
       return false;
   }
+
   for (unsigned j = 0; j < declaration.Size(); ++j)
     if (!AddWaypoint(declaration.GetWaypoint(j)))
       return false;
@@ -195,19 +192,22 @@ bool
 EWDevice::Declare(const struct Declaration &declaration,
                   OperationEnvironment &env)
 {
-  lLastBaudrate = port->SetBaudrate(9600L);    // change to IO Mode baudrate
+  // change to IO Mode baudrate
+  lLastBaudrate = port->SetBaudrate(9600L);
 
-  port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
+  // set RX timeout to 500[ms]
+  port->SetRxTimeout(500);
 
   bool success = DeclareInner(declaration, env);
 
-  port->Write("NMEA\r\n"); // switch to NMEA mode
+  // switch to NMEA mode
+  port->Write("NMEA\r\n");
 
-  port->SetBaudrate(lLastBaudrate);            // restore baudrate
+  // restore baudrate
+  port->SetBaudrate(lLastBaudrate);
 
   return success;
 }
-
 
 bool
 EWDevice::AddWaypoint(const Waypoint &way_point)
@@ -219,90 +219,79 @@ EWDevice::AddWaypoint(const Waypoint &way_point)
   char NoS, EoW;
   short EoW_Flag, NoS_Flag, EW_Flags;
 
-  if (ewDecelTpIndex > 6){                        // check for max 6 TP's
+  // check for max 6 TP's
+  if (ewDecelTpIndex > 6)
     return false;
-  }
 
-  CopyString(IDString, way_point.name.c_str(), 7); // copy at most 6 chars
+  // copy at most 6 chars
+  CopyString(IDString, way_point.name.c_str(), 7);
 
-  while (_tcslen(IDString) < 6)                   // fill up with spaces
+  // fill up with spaces
+  while (_tcslen(IDString) < 6)
     _tcscat(IDString, _T(" "));
 
-  #if USESHORTTPNAME > 0
-    _tcscpy(&IDString[3], _T("   "));           // truncate to short name
-  #endif
+#if USESHORTTPNAME > 0
+  // truncate to short name
+  _tcscpy(&IDString[3], _T("   "));
+#endif
 
   // prepare lat
   tmp = (double)way_point.location.latitude.Degrees();
   NoS = 'N';
-  if (tmp < 0)
-    {
-      NoS = 'S';
-      tmp = -tmp;
-    }
+  if (tmp < 0) {
+    NoS = 'S';
+    tmp = -tmp;
+  }
   DegLat = (int)tmp;
   MinLat = (tmp - DegLat) * 60 * 1000;
-
 
   // prepare long
   tmp = (double)way_point.location.longitude.Degrees();
   EoW = 'E';
-  if (tmp < 0)
-    {
-      EoW = 'W';
-      tmp = -tmp;
-    }
+  if (tmp < 0) {
+    EoW = 'W';
+    tmp = -tmp;
+  }
   DegLon = (int)tmp;
   MinLon = (tmp - DegLon) * 60 * 1000;
 
   //	Calc E/W and N/S flags
 
   //	Clear flags
-  EoW_Flag = 0;                                   // prepare flags
+  EoW_Flag = 0;
   NoS_Flag = 0;
   EW_Flags = 0;
 
+  // prepare flags
   if (EoW == 'W')
-    {
-      EoW_Flag = 0x08;
-    }
+    EoW_Flag = 0x08;
   else
-    {
-      EoW_Flag = 0x04;
-    }
+    EoW_Flag = 0x04;
+
   if (NoS == 'N')
-    {
-      NoS_Flag = 0x01;
-    }
+    NoS_Flag = 0x01;
   else
-    {
-      NoS_Flag = 0x02;
-    }
+    NoS_Flag = 0x02;
+
   //  Do the calculation
   EW_Flags = (short)(EoW_Flag | NoS_Flag);
 
-                                                  // setup command string
+  // setup command string
   sprintf(EWRecord, "#STP%02X%02X%02X%02X%02X%02X%02X%02X%02X%04X%02X%04X",
-                      ewDecelTpIndex,
-                      IDString[0],
-                      IDString[1],
-                      IDString[2],
-                      IDString[3],
-                      IDString[4],
-                      IDString[5],
-                      EW_Flags,
-                      DegLat, (int)MinLat/10,
-                      DegLon, (int)MinLon/10);
+          ewDecelTpIndex, IDString[0], IDString[1], IDString[2], IDString[3],
+          IDString[4], IDString[5], EW_Flags, DegLat, (int)MinLat / 10, DegLon,
+          (int)MinLon / 10);
   WriteWithChecksum(port, EWRecord);
 
-  if (!port->ExpectString("OK\r")) // wait for response
+  // wait for response
+  if (!port->ExpectString("OK\r"))
     return false;
 
-  ewDecelTpIndex = ewDecelTpIndex + 1;            // increase TP index
+  // increase TP index
+  ewDecelTpIndex++;
 
   return true;
 }
-
 
 void
 EWDevice::LinkTimeout()
