@@ -134,6 +134,54 @@ public:
     width = _width;
     height = _height;
   }
+
+  /**
+   * Resize the grid, preserving as many old values as fit into the
+   * new dimensions, and fill newly allocated array slots.
+   */
+  void GrowPreserveFill(unsigned _width, unsigned _height, const T &fill=T()) {
+    if (_width < width) {
+      const unsigned h = std::min(height, _height);
+      const auto end = array.begin() + h * width;
+
+      for (auto in = array.begin() + width, out = array.begin() + _width;
+           in < end; in += width) {
+#ifdef ANDROID
+        /* STLport doesn't have std::move() */
+        out = std::copy(in, in + _width, out);
+#else
+        out = std::move(in, in + _width, out);
+#endif
+      }
+
+      width = _width;
+    }
+
+    array.GrowPreserve(_width * _height, width * height);
+
+    if (_width > width) {
+      const unsigned h = std::min(height, _height);
+      const auto end = array.begin();
+
+      for (auto in = array.begin() + (h - 1) * width,
+             out = array.begin() + (h - 1) * _width + width;
+           in < end; in -= width, out -= _width) {
+#ifdef ANDROID
+        /* STLport doesn't have std::move() */
+        std::copy_backward(in, in + width, out);
+#else
+        std::move_backward(in, in + width, out);
+#endif
+        std::fill(out, out + _width - width, fill);
+      }
+
+      width = _width;
+    }
+
+    std::fill(array.begin() + width * height, array.end(), fill);
+
+    height = _height;
+  }
 };
 
 #endif
