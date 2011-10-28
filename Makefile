@@ -539,10 +539,12 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
+	$(SRC)/Screen/TerminalWindow.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	\
 	$(SRC)/Look/Look.cpp \
 	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/TerminalLook.cpp \
 	$(SRC)/Look/VarioLook.cpp \
 	$(SRC)/Look/ChartLook.cpp \
 	$(SRC)/Look/ThermalBandLook.cpp \

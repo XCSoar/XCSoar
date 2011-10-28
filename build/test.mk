@@ -744,6 +744,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunCirclingWind RunWindZigZag RunWindEKF \
 	RunCanvas RunMapWindow \
 	RunDialog RunListControl \
+	RunTerminal \
 	RunRenderOZ \
 	RunProgressWindow \
 	RunJobDialog \
@@ -1820,6 +1821,32 @@ $(RUN_LIST_CONTROL_BIN): $(RUN_LIST_CONTROL_OBJS) $(RUN_LIST_CONTROL_LDADD) | $(
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
 
+RUN_TERMINAL_SOURCES = \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Notify.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Screen/TerminalWindow.cpp \
+	$(SRC)/Look/TerminalLook.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/RunTerminal.cpp
+RUN_TERMINAL_OBJS = $(call SRC_TO_OBJ,$(RUN_TERMINAL_SOURCES))
+RUN_TERMINAL_BIN = $(TARGET_BIN_DIR)/RunTerminal$(TARGET_EXEEXT)
+RUN_TERMINAL_LDADD = \
+	$(SCREEN_LIBS) \
+	$(MATH_LIBS)
+$(RUN_TERMINAL_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(RUN_TERMINAL_BIN): LDLIBS += $(SCREEN_LDLIBS)
+$(RUN_TERMINAL_BIN): $(RUN_TERMINAL_OBJS) $(RUN_TERMINAL_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
+
 RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -1981,6 +2008,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/TrafficLook.cpp \
 	$(SRC)/Look/InfoBoxLook.cpp \
 	$(SRC)/Look/MarkerLook.cpp \
+	$(SRC)/Look/TerminalLook.cpp \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \

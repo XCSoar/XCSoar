@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_LOOK_HPP
 
 #include "DialogLook.hpp"
+#include "TerminalLook.hpp"
 #include "VarioLook.hpp"
 #include "ChartLook.hpp"
 #include "ThermalBandLook.hpp"
@@ -43,6 +44,7 @@ struct UISettings;
 
 struct Look {
   DialogLook dialog;
+  TerminalLook terminal;
   VarioLook vario;
   ChartLook chart;
   ThermalBandLook thermal_band;
