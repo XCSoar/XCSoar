@@ -348,7 +348,7 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
       oz = new FAISectorZone(wp->location, is_intermediate);
 
   } else if (is_intermediate) { //AAT intermediate point
-    Angle A12adj = turnpoint_infos.angle12.Reciprocal();
+    Angle A12adj;
     assert(wps[pos + 1]);
     assert(wps[pos - 1]);
 
