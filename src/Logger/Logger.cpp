@@ -52,22 +52,29 @@ Logger::LogEvent(const NMEAInfo &gps_info, const char* event)
     _logger.LogEvent(gps_info, event);
     lock.unlock();
   }
-
 }
 
-void Logger::LogStartEvent(const NMEAInfo &gps_info) {
+void
+Logger::LogStartEvent(const NMEAInfo &gps_info)
+{
   LogEvent(gps_info, "STA");
 }
 
-void Logger::LogFinishEvent(const NMEAInfo &gps_info) {
+void
+Logger::LogFinishEvent(const NMEAInfo &gps_info)
+{
   LogEvent(gps_info, "FIN");
 }
 
-void Logger::LogPilotEvent(const NMEAInfo &gps_info) {
+void
+Logger::LogPilotEvent(const NMEAInfo &gps_info)
+{
   LogEvent(gps_info, "PEV");
 }
 
-void Logger::LogTurnpointEvent(const NMEAInfo &gps_info) {
+void
+Logger::LogTurnpointEvent(const NMEAInfo &gps_info)
+{
   LogEvent(gps_info, "TPC");
 }
 
@@ -96,7 +103,6 @@ Logger::LoggerClearFreeSpace(const NMEAInfo &gps_info)
   Poco::ScopedRWLock protect(lock, true);
   return _logger.LoggerClearFreeSpace(gps_info);
 }
-
 
 void
 Logger::GUIStartLogger(const NMEAInfo& gps_info,
@@ -150,11 +156,10 @@ Logger::GUIToggleLogger(const NMEAInfo& gps_info,
                       const ProtectedTaskManager &protected_task_manager,
                      bool noAsk)
 {
-  if (IsLoggerActive()) {
+  if (IsLoggerActive())
     GUIStopLogger(gps_info, noAsk);
-  } else {
+  else
     GUIStartLogger(gps_info, settings, protected_task_manager, noAsk);
-  }
 }
 
 void
@@ -164,8 +169,7 @@ Logger::GUIStopLogger(const NMEAInfo &gps_info,
   if (!IsLoggerActive())
     return;
 
-  if (noAsk || (MessageBoxX(_("Stop Logger"),
-                            _("Stop Logger"),
+  if (noAsk || (MessageBoxX(_("Stop Logger"), _("Stop Logger"),
                             MB_YESNO | MB_ICONQUESTION) == IDYES)) {
     Poco::ScopedRWLock protect(lock, true);
     _logger.StopLogger(gps_info);
