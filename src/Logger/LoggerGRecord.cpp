@@ -37,9 +37,11 @@ GRecord::GetVersion() const
 
 void
 GRecord::Initialize()
-{  // key #1 used w/ Vali 1.0.0
-   // key #2 used w/ Vali 1.0.2
-  return Initialize(2);  // OLC uses key #2 since 9/1/2008
+{
+  // key #1 used w/ Vali 1.0.0
+  // key #2 used w/ Vali 1.0.2
+  // OLC uses key #2 since 9/1/2008
+  return Initialize(2);
 }
 
 bool
@@ -57,44 +59,38 @@ GRecord::AppendRecordToBuffer(const char *record)
 void
 GRecord::AppendStringToBuffer(const unsigned char * szIn)
 {
-  for (int i = 0; i < 4; i++) {
-    md5[i].AppendString(szIn, 1); // skip whitespace flag=1
-  }
+  for (int i = 0; i < 4; i++)
+    // skip whitespace flag=1
+    md5[i].AppendString(szIn, 1);
 }
 
 void
 GRecord::FinalizeBuffer()
 {
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 4; i++)
     md5[i].Finalize();
-  }
 }
 
 void
 GRecord::GetDigest(char *szOutput)
 {
-  for (int idig=0; idig <=3; idig++) {
+  for (int idig = 0; idig <= 3; idig++)
     md5[idig].GetDigest(szOutput + idig * 32);
-  }
 
-  szOutput[128]='\0';
+  szOutput[128] = '\0';
 }
-
 
 void
 GRecord::Initialize(int key_id)
 {
+  for (unsigned i = 0; i < BUFF_LEN; i++)
+    filename[i] = 0;
 
-  unsigned int i=0;
-  for (i=0; i< BUFF_LEN; i++) {
-    filename[i]=0;
-  }
-
-  for (i=0; i < 3; i++) {
+  for (unsigned i = 0; i < 3; i++)
     md5[i].InitDigest();
-  }
 
-  switch ( key_id) // 4 different 512 bit keys
+  // 4 different 512 bit keys
+  switch (key_id)
   {
   case 2:
     // key 2
@@ -126,21 +122,21 @@ GRecord::Initialize(int key_id)
 void
 GRecord::SetFileName(const TCHAR *szFileNameIn)
 {
-  _tcscpy(filename,szFileNameIn);
+  _tcscpy(filename, szFileNameIn);
 }
 
-bool GRecord::IncludeRecordInGCalc(const unsigned char *szIn)
+bool
+GRecord::IncludeRecordInGCalc(const unsigned char *szIn)
 {
   bool bValid;
   TCHAR c1;
 
-  bValid=false;
-  c1=szIn[0];
-  switch ( c1 )
-  {
+  bValid = false;
+  c1 = szIn[0];
+  switch (c1) {
   case 'L':
-    if (memcmp(szIn+1,XCSOAR_IGC_CODE,3) ==0)
-      bValid=1; // only include L records made by XCS
+    if (memcmp(szIn + 1, XCSOAR_IGC_CODE, 3) == 0)
+      bValid = 1; // only include L records made by XCS
     break;
 
   case 'G':
@@ -148,11 +144,11 @@ bool GRecord::IncludeRecordInGCalc(const unsigned char *szIn)
 
   case 'H':
     if ((szIn[1] != 'O') && (szIn[1] != 'P'))
-      bValid=1;
+      bValid = 1;
     break;
 
   default:
-    bValid=1;
+    bValid = 1;
   }
   return bValid;
 }
@@ -172,8 +168,6 @@ GRecord::LoadFileToBuffer()
   return true;
 }
 
-
-
 bool
 GRecord::AppendGRecordToFile(bool bValid)
 {
@@ -185,29 +179,26 @@ GRecord::AppendGRecordToFile(bool bValid)
   GetDigest(szDigest);
 
   if (bValid) {
-
-    int iLine; //
+    int iLine;
     int iNumCharsPerLine;
-    iNumCharsPerLine=16;
+    iNumCharsPerLine = 16;
     static char sDig16[BUFF_LEN];
-    sDig16[0]='G';
-    for ( iLine = 0; iLine < (128/iNumCharsPerLine); iLine++) {// 0 - 15
-      for (int iChar = 0; iChar < iNumCharsPerLine; iChar++) {
-        sDig16[iChar+1] = szDigest[iChar + iNumCharsPerLine*iLine];
-      }
+    sDig16[0] = 'G';
+    // 0 - 15
+    for (iLine = 0; iLine < (128 / iNumCharsPerLine); iLine++) {
+      for (int iChar = 0; iChar < iNumCharsPerLine; iChar++)
+        sDig16[iChar + 1] = szDigest[iChar + iNumCharsPerLine * iLine];
 
-      sDig16[iNumCharsPerLine+1]=0; // +1 is the initial "G"
+      sDig16[iNumCharsPerLine + 1] = 0; // +1 is the initial "G"
 
       writer.writeln(sDig16);
     }
-  }
-  else {
+  } else {
     static const char sMessage[] = "G Record Invalid";
     writer.writeln(sMessage);
   }
 
   return true;
-
 }
 
 bool
@@ -217,7 +208,7 @@ GRecord::ReadGRecordFromFile(char *szOutput, size_t max_length)
   if (reader.error())
     return false;
 
-  unsigned int iLenDigest=0;
+  unsigned int iLenDigest = 0;
   char *data;
   while ((data = reader.read()) != NULL) {
     if (data[0] != 'G')
@@ -229,14 +220,14 @@ GRecord::ReadGRecordFromFile(char *szOutput, size_t max_length)
         /* G record too large */
         return false;
     }
-  } // read
+  }
 
   szOutput[iLenDigest] = '\0';
   return true;
 }
 
-
-bool GRecord::VerifyGRecordInFile()
+bool
+GRecord::VerifyGRecordInFile()
 {
   // assumes FileName member is set
   // Load File into Buffer (assume name is already set)

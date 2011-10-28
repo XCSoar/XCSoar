@@ -20,8 +20,8 @@
 }
  */
 
-#ifndef __GRecord__
-#define __GRecord__
+#ifndef GRECORD_HPP
+#define GRECORD_HPP
 
 #include "Compiler.h"
 
@@ -30,7 +30,8 @@
 
 #define XCSOAR_IGC_CODE "XCS"
 
-class  GRecord {
+class GRecord
+{
 public:
   enum {
     DIGEST_LENGTH = 4 * MD5::DIGEST_LENGTH + 1,
@@ -84,7 +85,6 @@ private:
    * G record calc (see IGC specs)
    */
   bool IncludeRecordInGCalc(const unsigned char *szIn);
-
 };
 #endif
 
