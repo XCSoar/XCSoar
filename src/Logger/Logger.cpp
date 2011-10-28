@@ -94,7 +94,7 @@ bool
 Logger::IsLoggerActive() const
 {
   Poco::ScopedRWLock protect(lock, false);
-  return _logger.isLoggerActive();
+  return _logger.IsActive();
 }
 
 bool
@@ -193,5 +193,5 @@ void
 Logger::ClearBuffer()
 {
   Poco::ScopedRWLock protect(lock, true);
-  _logger.clearBuffer();
+  _logger.ClearBuffer();
 }

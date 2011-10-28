@@ -49,35 +49,35 @@ class LoggerImpl
 public:
   enum {
     /**< Buffer size (s) of points recorded before takeoff */
-    LOGGER_PRETAKEOFF_BUFFER_MAX = 60,
+    PRETAKEOFF_BUFFER_MAX = 60,
     /**< Number of records in disk buffer */
-    LOGGER_DISK_BUFFER_NUM_RECS = 10,
+    DISK_BUFFER_NUM_RECS = 10,
     MAX_IGC_BUFF = 255,
   };
 
   /** Buffer for points recorded before takeoff */
-  struct LoggerPreTakeoffBuffer
+  struct PreTakeoffBuffer
   {
     /** Location of fix */
-    GeoPoint Location;
+    GeoPoint location;
     /** GPS Altitude (m) */
-    fixed Altitude;
+    fixed altitude_gps;
     /** Barometric altitude (m) */
-    fixed BaroAltitude;
+    fixed altitude_baro;
     /** Date and time of fix */
-    BrokenDateTime DateTime;
+    BrokenDateTime date_time_utc;
     /** IDs of satellites in fix */
-    int SatelliteIDs[GPSState::MAXSATELLITES];
+    int satellite_ids[GPSState::MAXSATELLITES];
     /** Time of fix (s) */
-    fixed Time;
+    fixed time;
     /** GPS fix state */
-    int NAVWarning;
+    int nav_warning;
     /** GPS fix quality */
-    int FixQuality;
+    int fix_quality;
     /** GPS fix state */
-    int SatellitesUsed;
+    int satellites_used;
     /** GPS Horizontal Dilution of precision */
-    fixed HDOP;
+    fixed hdop;
 
     /**
      * Is the fix real? (no replay, no simulator)
@@ -91,7 +91,7 @@ public:
      * 
      * @return Buffer value
      */
-    const struct LoggerPreTakeoffBuffer &operator=(const NMEAInfo &src);
+    const struct PreTakeoffBuffer &operator=(const NMEAInfo &src);
   };
 
 private:
@@ -106,7 +106,7 @@ public:
   void LogPoint(const NMEAInfo &gps_info);
   void LogEvent(const NMEAInfo &gps_info, const char* event);
 
-  bool isLoggerActive() const {
+  bool IsActive() const {
     return writer != NULL;
   }
 
@@ -115,7 +115,7 @@ public:
                    const TCHAR *strAssetNumber, const Declaration &decl);
   void StopLogger(const NMEAInfo &gps_info);
   void LoggerNote(const TCHAR *text);
-  void clearBuffer();
+  void ClearBuffer();
 
 private:
   void StartLogger(const NMEAInfo &gps_info, const SETTINGS_COMPUTER &settings,
@@ -125,8 +125,8 @@ private:
   void LogPointToBuffer(const NMEAInfo &gps_info);
 
 private:
-  TCHAR szLoggerFileName[MAX_PATH];
-  OverwritingRingBuffer<LoggerPreTakeoffBuffer,LOGGER_PRETAKEOFF_BUFFER_MAX> PreTakeoffBuffer;
+  TCHAR filename[MAX_PATH];
+  OverwritingRingBuffer<PreTakeoffBuffer, PRETAKEOFF_BUFFER_MAX> pre_takeoff_buffer;
 };
 
 #endif
