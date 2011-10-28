@@ -42,6 +42,7 @@ private:
   LoggerImpl _logger;
   mutable Poco::RWLock lock;
   void LogEvent(const NMEAInfo &gps_info, const char*);
+
 public:
   void LogPoint(const NMEAInfo &gps_info);
   void LogStartEvent(const NMEAInfo &gps_info);
@@ -49,6 +50,12 @@ public:
   void LogTurnpointEvent(const NMEAInfo &gps_info);
   void LogOnTaskEvent(const NMEAInfo &gps_info);
   void LogPilotEvent(const NMEAInfo &gps_info);
+
+  /**
+   * Checks whether a Task is declared to the Logger.
+   * If so, asks whether to invalidate the declaration.
+   * @return True if a Task is NOT declared to the Logger, False otherwise
+   */
   bool CheckDeclaration(void);
 
   gcc_pure

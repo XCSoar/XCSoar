@@ -71,12 +71,6 @@ void Logger::LogTurnpointEvent(const NMEAInfo &gps_info) {
   LogEvent(gps_info, "TPC");
 }
 
-
-/**
- * Checks whether a Task is declared to the Logger.
- * If so, asks whether to invalidate the declaration.
- * @return True if a Task is NOT declared to the Logger, False otherwise
- */
 bool
 Logger::CheckDeclaration(void)
 {
