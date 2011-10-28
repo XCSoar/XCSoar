@@ -77,7 +77,7 @@ public:
   bool VerifyGRecordInFile(void);
 
 private:
-  void Init(int iKey);
+  void Initialize(int iKey);
   void AppendStringToBuffer(const unsigned char *szIn);
   /**
    * returns false if record is not to be included in

@@ -39,7 +39,7 @@ void
 GRecord::Initialize()
 {  // key #1 used w/ Vali 1.0.0
    // key #2 used w/ Vali 1.0.2
-  return Init(2);  // OLC uses key #2 since 9/1/2008
+  return Initialize(2);  // OLC uses key #2 since 9/1/2008
 }
 
 bool
@@ -82,7 +82,7 @@ GRecord::GetDigest(char *szOutput)
 
 
 void
-GRecord::Init(int iKey)
+GRecord::Initialize(int key_id)
 {
 
   unsigned int i=0;
@@ -94,7 +94,7 @@ GRecord::Init(int iKey)
     md5[i].InitDigest();
   }
 
-  switch ( iKey) // 4 different 512 bit keys
+  switch ( key_id) // 4 different 512 bit keys
   {
   case 1: // key 1
     md5[0].InitKey(0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476);
