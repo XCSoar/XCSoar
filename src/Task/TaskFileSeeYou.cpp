@@ -40,39 +40,41 @@
 
 struct SeeYouTaskInformation {
   /** True = RT, False = AAT */
-  bool WpDis;
+  bool wp_dis;
   /** AAT task time in seconds */
-  fixed TaskTime;
+  fixed task_time;
   /** MaxAltStart in meters */
-  fixed MaxAltStart;
+  fixed max_start_altitude;
 
   SeeYouTaskInformation():
-    WpDis(true), TaskTime(fixed_zero), MaxAltStart(fixed_zero) {}
+    wp_dis(true), task_time(fixed_zero), max_start_altitude(fixed_zero) {}
 };
 
 struct SeeYouTurnpointInformation {
-  bool Valid; // CUP file contained info for this OZ
-  enum style_t {
-    Fixed,
-    Symmetrical,
-    ToNextPoint,
-    ToPreviousPoint,
-    ToStartPoint,
-  } Style;
+  /** CUP file contained info for this OZ */
+  bool valid;
 
-  bool Line;
-  bool Reduce;
+  enum Style {
+    FIXED,
+    SYMMETRICAL,
+    TO_NEXT_POINT,
+    TO_PREVIOUS_POINT,
+    TO_START_POINT,
+  } style;
 
-  fixed Radius1, Radius2, MaxAlt;
-  Angle Angle1, Angle2, Angle12;
+  bool is_line;
+  bool reduce;
+
+  fixed radius1, radius2, max_altitude;
+  Angle angle1, angle2, angle12;
 
   SeeYouTurnpointInformation():
-    Valid(false), Style(Symmetrical), Line(false), Reduce(false),
-    Radius1(fixed(500)), Radius2(fixed(500)),
-    MaxAlt(fixed_zero),
-    Angle1(Angle::Degrees(fixed_zero)),
-    Angle2(Angle::Degrees(fixed_zero)),
-    Angle12(Angle::Degrees(fixed_zero)) {}
+    valid(false), style(SYMMETRICAL), is_line(false), reduce(false),
+    radius1(fixed(500)), radius2(fixed(500)),
+    max_altitude(fixed_zero),
+    angle1(Angle::Degrees(fixed_zero)),
+    angle2(Angle::Degrees(fixed_zero)),
+    angle12(Angle::Degrees(fixed_zero)) {}
 };
 
 static fixed
@@ -89,7 +91,7 @@ ParseTaskTime(const TCHAR* str)
   return fixed(ss + mm * 60 + hh * 3600);
 }
 
-static SeeYouTurnpointInformation::style_t
+static SeeYouTurnpointInformation::Style
 ParseStyle(const TCHAR* str)
 {
   int style = 1;
@@ -98,7 +100,7 @@ ParseStyle(const TCHAR* str)
   if (str == end)
     style = 1;
 
-  return (SeeYouTurnpointInformation::style_t)style;
+  return (SeeYouTurnpointInformation::Style)style;
 }
 
 static Angle
@@ -148,7 +150,7 @@ ParseMaxAlt(const TCHAR* str)
  */
 static void
 ParseOptions(SeeYouTaskInformation *task_info, const TCHAR *params[],
-    const size_t n_params)
+             const size_t n_params)
 {
   // Iterate through available task options
   for (unsigned i = 1; i < n_params; i++) {
@@ -156,11 +158,11 @@ ParseOptions(SeeYouTaskInformation *task_info, const TCHAR *params[],
       // Parse WpDis option
       if (_tcslen(params[i]) > 6 &&
           _tcsncmp(params[i] + 6, _T("False"), 5) == 0)
-        task_info->WpDis = false;
+        task_info->wp_dis = false;
     } else if (_tcsncmp(params[i], _T("TaskTime"), 8) == 0) {
       // Parse TaskTime option
       if (_tcslen(params[i]) > 9)
-        task_info->TaskTime = ParseTaskTime(params[i] + 9);
+        task_info->task_time = ParseTaskTime(params[i] + 9);
     }
   }
 }
@@ -174,7 +176,7 @@ ParseOptions(SeeYouTaskInformation *task_info, const TCHAR *params[],
  */
 static int
 ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
-    unsigned n_params)
+         unsigned n_params)
 {
   // Read OZ index
   TCHAR* end;
@@ -182,39 +184,39 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
   if (params[0] + 8 == end || oz_index >= 30)
     return -1;
 
-  turnpoint_infos[oz_index].Valid = true;
+  turnpoint_infos[oz_index].valid = true;
   // Iterate through available OZ options
   for (unsigned i = 1; i < n_params; i++) {
     const TCHAR *pair = params[i];
     SeeYouTurnpointInformation &tp_info = turnpoint_infos[oz_index];
 
-    if (_tcsncmp(pair, _T("Style"), 5) == 0) {
+    if (_tcsncmp(pair, _T("style"), 5) == 0) {
       if (_tcslen(pair) > 6)
-        tp_info.Style = ParseStyle(pair + 6);
+        tp_info.style = ParseStyle(pair + 6);
     } else if (_tcsncmp(pair, _T("R1="), 3) == 0) {
       if (_tcslen(pair) > 3)
-        tp_info.Radius1 = ParseRadius(pair + 3);
+        tp_info.radius1 = ParseRadius(pair + 3);
     } else if (_tcsncmp(pair, _T("A1="), 3) == 0) {
       if (_tcslen(pair) > 3)
-        tp_info.Angle1 = ParseAngle(pair + 3);
+        tp_info.angle1 = ParseAngle(pair + 3);
     } else if (_tcsncmp(pair, _T("R2="), 3) == 0) {
       if (_tcslen(pair) > 3)
-        tp_info.Radius2 = ParseRadius(pair + 3);
+        tp_info.radius2 = ParseRadius(pair + 3);
     } else if (_tcsncmp(pair, _T("A2="), 3) == 0) {
       if (_tcslen(pair) > 3)
-        tp_info.Angle2 = ParseAngle(pair + 3);
+        tp_info.angle2 = ParseAngle(pair + 3);
     } else if (_tcsncmp(pair, _T("A12="), 4) == 0) {
       if (_tcslen(pair) > 3)
-        tp_info.Angle12 = ParseAngle(pair + 4);
-    } else if (_tcsncmp(pair, _T("MaxAlt="), 7) == 0) {
+        tp_info.angle12 = ParseAngle(pair + 4);
+    } else if (_tcsncmp(pair, _T("max_altitude="), 7) == 0) {
       if (_tcslen(pair) > 7)
-        tp_info.MaxAlt = ParseMaxAlt(pair + 7);
-      } else if (_tcsncmp(pair, _T("Line"), 4) == 0) {
+        tp_info.max_altitude = ParseMaxAlt(pair + 7);
+      } else if (_tcsncmp(pair, _T("is_line"), 4) == 0) {
       if (_tcslen(pair) > 5 && pair[5] == _T('1'))
-        tp_info.Line = true;
-    } else if (_tcsncmp(pair, _T("Reduce"), 6) == 0) {
+        tp_info.is_line = true;
+    } else if (_tcsncmp(pair, _T("reduce"), 6) == 0) {
       if (_tcslen(pair) > 7 && pair[7] == _T('1'))
-        tp_info.Reduce = true;
+        tp_info.reduce = true;
     }
   }
   return oz_index;
@@ -228,7 +230,7 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
  */
 static void
 ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
-  SeeYouTurnpointInformation turnpoint_infos[])
+                   SeeYouTurnpointInformation turnpoint_infos[])
 {
   // Read options/observation zones
   TCHAR params_buffer[1024];
@@ -252,17 +254,17 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
 
       TPIndex = ParseOZs(turnpoint_infos, params, n_params);
       if (TPIndex == 0)
-        task_info->MaxAltStart = turnpoint_infos[TPIndex].MaxAlt;
+        task_info->max_start_altitude = turnpoint_infos[TPIndex].max_altitude;
     }
   } // end while
 }
 
 static bool isKeyhole(const SeeYouTurnpointInformation &turnpoint_infos)
 {
-  if (fabs(turnpoint_infos.Angle1.Degrees() - fixed(45)) < fixed(2) &&
-      fabs(turnpoint_infos.Radius1 - fixed(10000)) < fixed(2) &&
-      fabs(turnpoint_infos.Angle2.Degrees() - fixed(180)) < fixed(2) &&
-      fabs(turnpoint_infos.Radius2 - fixed(500)) < fixed(2))
+  if (fabs(turnpoint_infos.angle1.Degrees() - fixed(45)) < fixed(2) &&
+      fabs(turnpoint_infos.radius1 - fixed(10000)) < fixed(2) &&
+      fabs(turnpoint_infos.angle2.Degrees() - fixed(180)) < fixed(2) &&
+      fabs(turnpoint_infos.radius2 - fixed(500)) < fixed(2))
 
     return true;
       else
@@ -271,10 +273,10 @@ static bool isKeyhole(const SeeYouTurnpointInformation &turnpoint_infos)
 
 static bool isBGAFixedCourseZone(const SeeYouTurnpointInformation &turnpoint_infos)
 {
-  if (fabs(turnpoint_infos.Angle1.Degrees() - fixed(45)) < fixed(2) &&
-      fabs(turnpoint_infos.Radius1 - fixed(20000)) < fixed(2) &&
-      fabs(turnpoint_infos.Angle2.Degrees() - fixed(180)) < fixed(2) &&
-      fabs(turnpoint_infos.Radius2 - fixed(500)) < fixed(2))
+  if (fabs(turnpoint_infos.angle1.Degrees() - fixed(45)) < fixed(2) &&
+      fabs(turnpoint_infos.radius1 - fixed(20000)) < fixed(2) &&
+      fabs(turnpoint_infos.angle2.Degrees() - fixed(180)) < fixed(2) &&
+      fabs(turnpoint_infos.radius2 - fixed(500)) < fixed(2))
 
     return true;
       else
@@ -284,10 +286,10 @@ static bool isBGAFixedCourseZone(const SeeYouTurnpointInformation &turnpoint_inf
 static bool isBGAEnhancedOptionZone(const SeeYouTurnpointInformation
                                     &turnpoint_infos)
 {
-  if (fabs(turnpoint_infos.Angle1.Degrees() - fixed(90)) < fixed(2) &&
-      fabs(turnpoint_infos.Radius1 - fixed(10000)) < fixed(2) &&
-      fabs(turnpoint_infos.Angle2.Degrees() - fixed(180)) < fixed(2) &&
-      fabs(turnpoint_infos.Radius2 - fixed(500)) < fixed(2))
+  if (fabs(turnpoint_infos.angle1.Degrees() - fixed(90)) < fixed(2) &&
+      fabs(turnpoint_infos.radius1 - fixed(10000)) < fixed(2) &&
+      fabs(turnpoint_infos.angle2.Degrees() - fixed(180)) < fixed(2) &&
+      fabs(turnpoint_infos.radius2 - fixed(500)) < fixed(2))
 
     return true;
       else
@@ -312,86 +314,86 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
          TaskBehaviour::FactoryType factType)
 {
   ObservationZonePoint* oz = NULL;
-  const bool isIntermediate = (pos > 0) && (pos < (size - 1));
+  const bool is_intermediate = (pos > 0) && (pos < (size - 1));
   const Waypoint *wp = wps[pos];
 
-  if (!turnpoint_infos.Valid)
+  if (!turnpoint_infos.valid)
     return NULL;
 
   if (factType == TaskBehaviour::FACTORY_RT &&
-      isIntermediate && isKeyhole(turnpoint_infos))
+      is_intermediate && isKeyhole(turnpoint_infos))
     oz = new KeyholeZone(wp->location);
 
   else if (factType == TaskBehaviour::FACTORY_RT &&
-      isIntermediate && isBGAEnhancedOptionZone(turnpoint_infos))
+      is_intermediate && isBGAEnhancedOptionZone(turnpoint_infos))
     oz = new BGAEnhancedOptionZone(wp->location);
 
   else if (factType == TaskBehaviour::FACTORY_RT &&
-      isIntermediate && isBGAFixedCourseZone(turnpoint_infos))
+      is_intermediate && isBGAFixedCourseZone(turnpoint_infos))
     oz = new BGAFixedCourseZone(wp->location);
 
-  else if (!isIntermediate && turnpoint_infos.Line) // special case "Line"
-    oz = new LineSectorZone(wp->location, turnpoint_infos.Radius1);
+  else if (!is_intermediate && turnpoint_infos.is_line) // special case "is_line"
+    oz = new LineSectorZone(wp->location, turnpoint_infos.radius1);
 
   // special case "Cylinder"
-  else if (fabs(turnpoint_infos.Angle1.Degrees() - fixed(180)) < fixed(1) )
-    oz = new CylinderZone(wp->location, turnpoint_infos.Radius1);
+  else if (fabs(turnpoint_infos.angle1.Degrees() - fixed(180)) < fixed(1) )
+    oz = new CylinderZone(wp->location, turnpoint_infos.radius1);
 
   else if (factType == TaskBehaviour::FACTORY_RT) {
 
     // XCSoar does not support fixed sectors for RT
-    if (turnpoint_infos.Style == SeeYouTurnpointInformation::Fixed)
-      oz = new CylinderZone(wp->location, turnpoint_infos.Radius1);
+    if (turnpoint_infos.style == SeeYouTurnpointInformation::FIXED)
+      oz = new CylinderZone(wp->location, turnpoint_infos.radius1);
     else
-      oz = new FAISectorZone(wp->location, isIntermediate);
+      oz = new FAISectorZone(wp->location, is_intermediate);
 
-  } else if (isIntermediate) { //AAT intermediate point
-    Angle A12adj = turnpoint_infos.Angle12.Reciprocal();
+  } else if (is_intermediate) { //AAT intermediate point
+    Angle A12adj = turnpoint_infos.angle12.Reciprocal();
     assert(wps[pos + 1]);
     assert(wps[pos - 1]);
 
-    switch (turnpoint_infos.Style) {
-    case SeeYouTurnpointInformation::Fixed: {
-      A12adj = turnpoint_infos.Angle12.Reciprocal();
+    switch (turnpoint_infos.style) {
+    case SeeYouTurnpointInformation::FIXED: {
+      A12adj = turnpoint_infos.angle12.Reciprocal();
       break;
     }
-    case SeeYouTurnpointInformation::Symmetrical: {
+    case SeeYouTurnpointInformation::SYMMETRICAL: {
       const Angle ap = wps[pos - 1]->location.Bearing(wp->location);
       const Angle an = wps[pos + 1]->location.Bearing(wp->location);
       A12adj = ap.HalfAngle(an).Reciprocal();
       break;
     }
 
-    case SeeYouTurnpointInformation::ToNextPoint: {
+    case SeeYouTurnpointInformation::TO_NEXT_POINT: {
       A12adj = wps[pos + 1]->location.Bearing(wp->location);
       break;
     }
-    case SeeYouTurnpointInformation::ToPreviousPoint: {
+    case SeeYouTurnpointInformation::TO_PREVIOUS_POINT: {
       A12adj = wps[pos - 1]->location.Bearing(wp->location);
       break;
     }
-    case SeeYouTurnpointInformation::ToStartPoint: {
+    case SeeYouTurnpointInformation::TO_START_POINT: {
       A12adj = wps[0]->location.Bearing(wp->location);
       break;
     }
     }
 
     const Angle RadialStart = (A12adj
-        - turnpoint_infos.Angle1).AsBearing();
+        - turnpoint_infos.angle1).AsBearing();
     const Angle RadialEnd = (A12adj
-        + turnpoint_infos.Angle1).AsBearing();
+        + turnpoint_infos.angle1).AsBearing();
 
-    if (turnpoint_infos.Radius2 > fixed_zero &&
-        (turnpoint_infos.Angle2.AsBearing().Degrees()) < fixed_one) {
-      oz = new AnnularSectorZone(wp->location, turnpoint_infos.Radius1,
-          RadialStart, RadialEnd, turnpoint_infos.Radius2);
+    if (turnpoint_infos.radius2 > fixed_zero &&
+        (turnpoint_infos.angle2.AsBearing().Degrees()) < fixed_one) {
+      oz = new AnnularSectorZone(wp->location, turnpoint_infos.radius1,
+          RadialStart, RadialEnd, turnpoint_infos.radius2);
     } else {
-      oz = new SectorZone(wp->location, turnpoint_infos.Radius1,
+      oz = new SectorZone(wp->location, turnpoint_infos.radius1,
           RadialStart, RadialEnd);
     }
 
   } else { // catch-all
-    oz = new CylinderZone(wp->location, turnpoint_infos.Radius1);
+    oz = new CylinderZone(wp->location, turnpoint_infos.radius1);
   }
 
   return oz;
@@ -481,7 +483,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 
   SeeYouTaskInformation task_info;
   SeeYouTurnpointInformation turnpoint_infos[30];
-  const Waypoint *wpsInTask[30];
+  const Waypoint *waypoints_in_task[30];
 
   ParseCUTaskDetails(reader, &task_info, turnpoint_infos);
 
@@ -489,18 +491,18 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   if (task == NULL)
     return NULL;
 
-  task->SetFactory(task_info.WpDis ?
+  task->SetFactory(task_info.wp_dis ?
                     TaskBehaviour::FACTORY_RT : TaskBehaviour::FACTORY_AAT);
   AbstractTaskFactory& fact = task->GetFactory();
   const TaskBehaviour::FactoryType factType = task->get_factory_type();
 
   OrderedTaskBehaviour beh = task->get_ordered_task_behaviour();
   if (factType == TaskBehaviour::FACTORY_AAT) {
-    beh.aat_min_time = task_info.TaskTime;
+    beh.aat_min_time = task_info.task_time;
   }
   if (factType == TaskBehaviour::FACTORY_AAT ||
       factType == TaskBehaviour::FACTORY_RT) {
-    beh.start_max_height = (unsigned)task_info.MaxAltStart;
+    beh.start_max_height = (unsigned)task_info.max_start_altitude;
     beh.start_max_height_ref = hrMSL;
   }
   task->set_ordered_task_behaviour(beh);
@@ -518,7 +520,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     if (wp != NULL &&
         wp->location.Distance(file_wp->location) <= fixed_ten) {
       // Use this waypoint for the task
-      wpsInTask[i] = wp;
+      waypoints_in_task[i] = wp;
       continue;
     }
 
@@ -529,21 +531,21 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     if (wp != NULL &&
         wp->location.Distance(file_wp->location) <= fixed_ten) {
       // Use this waypoint for the task
-      wpsInTask[i] = wp;
+      waypoints_in_task[i] = wp;
       continue;
     }
 
     // Use the original waypoint
-    wpsInTask[i] = file_wp;
+    waypoints_in_task[i] = file_wp;
   }
 
   //now create TPs and OZs
   for (unsigned i = 0; i < n_waypoints; i++) {
 
     ObservationZonePoint* oz = CreateOZ(turnpoint_infos[i], i, n_waypoints,
-                                        wpsInTask, factType);
-    assert(wpsInTask[i]);
-    OrderedTaskPoint *pt = CreatePoint(i, n_waypoints, wpsInTask[i],
+                                        waypoints_in_task, factType);
+    assert(waypoints_in_task[i]);
+    OrderedTaskPoint *pt = CreatePoint(i, n_waypoints, waypoints_in_task[i],
                                        fact, oz, factType);
 
     if (pt != NULL)
