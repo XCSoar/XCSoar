@@ -72,7 +72,7 @@ IGCWriter::IGCWriter(const TCHAR *_path, const NMEAInfo &gps_info)
   last_valid_point.initialized = false;
 
   if (!simulator)
-    grecord.Init();
+    grecord.Initialize();
 }
 
 bool
@@ -379,7 +379,7 @@ IGCWriter::Sign()
   grecord.GetDigest(OldGRecordBuff);
 
   // now calc from whats in the igc file on disk
-  grecord.Init();
+  grecord.Initialize();
   grecord.SetFileName(path);
   grecord.LoadFileToBuffer();
   grecord.FinalizeBuffer();

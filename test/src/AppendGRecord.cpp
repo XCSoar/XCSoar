@@ -47,7 +47,7 @@ main(int argc, char **argv)
 #endif
 
   GRecord g;
-  g.Init();
+  g.Initialize();
   g.SetFileName(path);
 
   if (!g.LoadFileToBuffer()) {

@@ -36,7 +36,7 @@ GRecord::GetVersion() const
 }
 
 void
-GRecord::Init()
+GRecord::Initialize()
 {  // key #1 used w/ Vali 1.0.0
    // key #2 used w/ Vali 1.0.2
   return Init(2);  // OLC uses key #2 since 9/1/2008
@@ -61,7 +61,7 @@ void
 GRecord::AppendStringToBuffer(const unsigned char * szIn)
 {
   for (int i = 0; i < 4; i++) {
-    oMD5[i].AppendString(szIn, 1); // skip whitespace flag=1
+    md5[i].AppendString(szIn, 1); // skip whitespace flag=1
   }
 }
 
@@ -69,7 +69,7 @@ void
 GRecord::FinalizeBuffer()
 {
   for (int i = 0; i < 4; i++) {
-    oMD5[i].Finalize();
+    md5[i].Finalize();
   }
 }
 
@@ -77,7 +77,7 @@ void
 GRecord::GetDigest(char *szOutput)
 {
   for (int idig=0; idig <=3; idig++) {
-    oMD5[idig].GetDigest(szOutput + idig * 32);
+    md5[idig].GetDigest(szOutput + idig * 32);
   }
 
   szOutput[128]='\0';
@@ -90,47 +90,47 @@ GRecord::Init(int iKey)
 
   unsigned int i=0;
   for (i=0; i< BUFF_LEN; i++) {
-    FileName[i]=0;
+    filename[i]=0;
   }
 
   for (i=0; i < 3; i++) {
-    oMD5[i].InitDigest();
+    md5[i].InitDigest();
   }
 
   switch ( iKey) // 4 different 512 bit keys
   {
   case 1: // key 1
-    oMD5[0].InitKey(0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476);
-    oMD5[1].InitKey(0x48327203, 0x3948ebea, 0x9a9b9c9e, 0xb3bed89a);
+    md5[0].InitKey(0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476);
+    md5[1].InitKey(0x48327203, 0x3948ebea, 0x9a9b9c9e, 0xb3bed89a);
 
-    oMD5[2].InitKey(0x67452301, 0xefcdab89,  0x98badcfe, 0x10325476);
-    oMD5[3].InitKey( 0xc8e899e8, 0x9321c28a, 0x438eba12, 0x8cbe0aee);
+    md5[2].InitKey(0x67452301, 0xefcdab89,  0x98badcfe, 0x10325476);
+    md5[3].InitKey( 0xc8e899e8, 0x9321c28a, 0x438eba12, 0x8cbe0aee);
     break;
 
   case 2: // key 2
 
-    oMD5[0].InitKey(0x1C80A301,0x9EB30b89,0x39CB2Afe,0x0D0FEA76);
-    oMD5[1].InitKey(0x48327203,0x3948ebea,0x9a9b9c9e,0xb3bed89a);
+    md5[0].InitKey(0x1C80A301,0x9EB30b89,0x39CB2Afe,0x0D0FEA76);
+    md5[1].InitKey(0x48327203,0x3948ebea,0x9a9b9c9e,0xb3bed89a);
 
-    oMD5[2].InitKey(0x67452301,0xefcdab89,0x98badcfe,0x10325476);
-    oMD5[3].InitKey(0xc8e899e8,0x9321c28a,0x438eba12,0x8cbe0aee);
+    md5[2].InitKey(0x67452301,0xefcdab89,0x98badcfe,0x10325476);
+    md5[3].InitKey(0xc8e899e8,0x9321c28a,0x438eba12,0x8cbe0aee);
     break;
 
   case 3: // key 3
 
-    oMD5[0].InitKey(0x7894abde,0x9cb4e90a,0x0bc8f0ea,0x03a9e01a);
-    oMD5[1].InitKey(0x3c4a4c93,0x9cbf7ae3,0xa9bcd0ea,0x9a8c2aaa);
+    md5[0].InitKey(0x7894abde,0x9cb4e90a,0x0bc8f0ea,0x03a9e01a);
+    md5[1].InitKey(0x3c4a4c93,0x9cbf7ae3,0xa9bcd0ea,0x9a8c2aaa);
 
-    oMD5[2].InitKey(0x3c9ae1f1,0x9fe02a1f,0x3fc9a497,0x93cad3ef);
-    oMD5[3].InitKey(0x41a0c8e8,0xf0e37acf,0xd8bcabe2,0x9bed015a);
+    md5[2].InitKey(0x3c9ae1f1,0x9fe02a1f,0x3fc9a497,0x93cad3ef);
+    md5[3].InitKey(0x41a0c8e8,0xf0e37acf,0xd8bcabe2,0x9bed015a);
     break;
 
   default:  // key 1
-    oMD5[0].InitKey(0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476);
-    oMD5[1].InitKey(0x48327203, 0x3948ebea, 0x9a9b9c9e, 0xb3bed89a);
+    md5[0].InitKey(0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476);
+    md5[1].InitKey(0x48327203, 0x3948ebea, 0x9a9b9c9e, 0xb3bed89a);
 
-    oMD5[2].InitKey(0x67452301, 0xefcdab89,  0x98badcfe, 0x10325476);
-    oMD5[3].InitKey( 0xc8e899e8, 0x9321c28a, 0x438eba12, 0x8cbe0aee);
+    md5[2].InitKey(0x67452301, 0xefcdab89,  0x98badcfe, 0x10325476);
+    md5[3].InitKey( 0xc8e899e8, 0x9321c28a, 0x438eba12, 0x8cbe0aee);
     break;
 
   }
@@ -139,7 +139,7 @@ GRecord::Init(int iKey)
 void
 GRecord::SetFileName(const TCHAR *szFileNameIn)
 {
-  _tcscpy(FileName,szFileNameIn);
+  _tcscpy(filename,szFileNameIn);
 }
 
 bool GRecord::IncludeRecordInGCalc(const unsigned char *szIn)
@@ -173,7 +173,7 @@ bool GRecord::IncludeRecordInGCalc(const unsigned char *szIn)
 bool
 GRecord::LoadFileToBuffer()
 { //loads a file into the data buffer
-  FileLineReaderA reader(FileName);
+  FileLineReaderA reader(filename);
   if (reader.error())
     return false;
 
@@ -190,7 +190,7 @@ GRecord::LoadFileToBuffer()
 bool
 GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
 {
-  TextWriter writer(FileName, true);
+  TextWriter writer(filename, true);
   if (writer.error())
     return false;
 
@@ -226,7 +226,7 @@ GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
 bool
 GRecord::ReadGRecordFromFile(char *szOutput, size_t max_length)
 {// returns in szOutput the G Record from the file referenced by FileName member
-  FileLineReaderA reader(FileName);
+  FileLineReaderA reader(filename);
   if (reader.error())
     return false;
 

@@ -62,7 +62,7 @@ ValidateXCS(const TCHAR *FileName, GRecord &oGRecord)
 
   eStatus = eValidationFailed;
 
-  oGRecord.Init();
+  oGRecord.Initialize();
   oGRecord.SetFileName(FileName);
   if (oGRecord.VerifyGRecordInFile())
     eStatus = eValidationPassed;

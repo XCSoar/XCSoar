@@ -138,7 +138,7 @@ int main(int argc, char **argv)
   CheckTextFile(path, expect);
 
   GRecord grecord;
-  grecord.Init();
+  grecord.Initialize();
   grecord.SetFileName(path);
   ok1(grecord.VerifyGRecordInFile());
 

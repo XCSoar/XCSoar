@@ -48,7 +48,7 @@ main(int argc, char **argv)
 #endif
 
   GRecord g;
-  g.Init();
+  g.Initialize();
   g.SetFileName(path);
 
   char data[1024];

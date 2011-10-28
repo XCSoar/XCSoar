@@ -37,17 +37,17 @@ public:
   };
 
 private:
-  MD5 oMD5[4];
+  MD5 md5[4];
 
   enum {
     BUFF_LEN = 255,
   };
 
-  TCHAR FileName[BUFF_LEN];
+  TCHAR filename[BUFF_LEN];
 
 public:
 
-  void Init();
+  void Initialize();
   const TCHAR *GetVersion() const;
   bool AppendRecordToBuffer(const char *szIn);
   void FinalizeBuffer();
@@ -61,9 +61,11 @@ public:
   // File specific functions
   void SetFileName(const TCHAR *szIn);
   bool LoadFileToBuffer();
-  bool AppendGRecordToFile(bool bValid); // writes error if invalid G Record
+  /// writes error if invalid G Record
+  bool AppendGRecordToFile(bool bValid);
   bool ReadGRecordFromFile(char *buffer, size_t max_length);
-  bool VerifyGRecordInFile(void);  // returns 0 if false, 1 if true
+  /// returns 0 if false, 1 if true
+  bool VerifyGRecordInFile(void);
 
 private:
   void Init(int iKey);
