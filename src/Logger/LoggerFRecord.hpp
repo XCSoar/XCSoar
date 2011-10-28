@@ -29,20 +29,19 @@ Copyright_License {
 struct BrokenTime;
 struct GPSState;
 
-class LoggerFRecord {
-  GPSClock frecord_clock;
-  char szLastFRecord[64];
-  bool DetectFRecordChange;
+class LoggerFRecord
+{
+  GPSClock clock;
+  char last_f_record[64];
+  bool detect_f_record_change;
 
 public:
   LoggerFRecord()
-    :frecord_clock(fixed_270) // 4.5 minutes
-  {}
+    :clock(fixed_270 /* 4.5 minutes */) {}
 
-  const char *update(const GPSState &gps,
-                     const BrokenTime &broken_time, fixed Time,
-                     bool NAVWarning);
-  void reset();
+  const char *Update(const GPSState &gps, const BrokenTime &broken_time,
+                     fixed time, bool nav_warning);
+  void Reset();
 };
 
 #endif

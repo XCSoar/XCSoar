@@ -39,7 +39,9 @@ Copyright_License {
  * satellites used in the fixes which are recorded in the B record. The F Record is not recorded continuously but at
  * the start of fixing and then only when a change in satellites used is detected. (AL4)
  */
-/* Interpretation:
+
+/*
+ * Interpretation:
  * Every logpoint, check if constellation has changed, and set flag if change is detected
  * every 4.5 minutes, if constellation has changed during the period
  * then log the new FRecord
@@ -49,44 +51,43 @@ Copyright_License {
  */
 
 void
-LoggerFRecord::reset()
+LoggerFRecord::Reset()
 {
-  szLastFRecord[0] = 0;
-  DetectFRecordChange=true;
-  frecord_clock.reset(); // reset clock / timer
-  frecord_clock.set_dt(fixed_one); // 1 sec so it appears at top of each file
+  last_f_record[0] = 0;
+  detect_f_record_change=true;
+  clock.reset(); // reset clock / timer
+  clock.set_dt(fixed_one); // 1 sec so it appears at top of each file
 }
 
 const char *
-LoggerFRecord::update(const GPSState &gps,
-                      const BrokenTime &broken_time, fixed Time,
-                      bool NAVWarning)
+LoggerFRecord::Update(const GPSState &gps, const BrokenTime &broken_time,
+                      fixed time, bool nav_warning)
 { 
-  char szFRecord[sizeof(szLastFRecord)];
+  char f_record[sizeof(last_f_record)];
   
-  sprintf(szFRecord,"F%02u%02u%02u",
+  sprintf(f_record,"F%02u%02u%02u",
           broken_time.hour, broken_time.minute, broken_time.second);
   unsigned length = 7;
 
   for (unsigned i = 0; i < GPSState::MAXSATELLITES; ++i) {
     if (gps.satellite_ids[i] > 0){
-      sprintf(szFRecord + length, "%02d", gps.satellite_ids[i]);
+      sprintf(f_record + length, "%02d", gps.satellite_ids[i]);
       length += 2;
     }
   }
-  sprintf(szFRecord + length,"\r\n");
+  sprintf(f_record + length,"\r\n");
 
-  DetectFRecordChange = DetectFRecordChange ||
-    strcmp(szFRecord + 7, szLastFRecord + 7);
+  detect_f_record_change = detect_f_record_change ||
+    strcmp(f_record + 7, last_f_record + 7);
   
-  if (gps.satellites_used < 3 || NAVWarning) 
-    frecord_clock.set_dt(fixed(30)); // accelerate to 30 seconds if bad signal
+  if (gps.satellites_used < 3 || nav_warning)
+    clock.set_dt(fixed(30)); // accelerate to 30 seconds if bad signal
    
-  if (!frecord_clock.check_advance(fixed(Time)) || !DetectFRecordChange)
+  if (!clock.check_advance(fixed(time)) || !detect_f_record_change)
     return NULL;
 
-  strcpy(szLastFRecord, szFRecord);
-  DetectFRecordChange=false;
-  frecord_clock.set_dt(fixed(270)); //4.5 minutes
-  return szLastFRecord;
+  strcpy(last_f_record, f_record);
+  detect_f_record_change=false;
+  clock.set_dt(fixed_270); //4.5 minutes
+  return last_f_record;
 }

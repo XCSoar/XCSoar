@@ -68,7 +68,7 @@ IGCWriter::IGCWriter(const TCHAR *_path, const NMEAInfo &gps_info)
 {
   _tcscpy(path, _path);
 
-  frecord.reset();
+  frecord.Reset();
   last_valid_point.initialized = false;
 
   if (!simulator)
@@ -309,7 +309,7 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
     simulator = true;
 
   if (!simulator) {
-    const char *f_record_line = frecord.update(gps_info.gps,
+    const char *f_record_line = frecord.Update(gps_info.gps,
                                                gps_info.date_time_utc,
                                                gps_info.time,
                                                !gps_info.location_available);
