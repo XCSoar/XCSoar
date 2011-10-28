@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "LoggerImpl.hpp"
 
-#include <windows.h>
 #include <tchar.h>
 #include "Poco/RWLock.h"
 
