@@ -115,7 +115,7 @@ MD5::InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in)
   h1 = h1in;
   h2 = h2in;
   h3 = h3in;
-  MessageLenBits = 0;
+  message_length_bits = 0;
 }
 
 void
@@ -123,7 +123,7 @@ MD5::InitDigest(void)
 {
   memset(buff512bits, 0, 64);
 
-  MessageLenBits = 0;
+  message_length_bits = 0;
   a = b = c = d = 0;
   h0 = h1 = h2 = h3 = 0;
   f = g = 0;
@@ -158,22 +158,22 @@ MD5::IsValidIGCChar(char c)
 }
 
 void
-MD5::AppendString(const unsigned char *szin, int bSkipInvalidIGCCharsFlag) // must be NULL-terminated string!
+MD5::AppendString(const unsigned char *in, int skip_invalid_igc_chars) // must be NULL-terminated string!
 {
-  size_t iLen = strlen((const char *)szin);
-  int BuffLeftover = (MessageLenBits / 8) % 64;
+  size_t length = strlen((const char *)in);
+  int buffer_left_over = (message_length_bits / 8) % 64;
 
-  MessageLenBits += ((uint32_t)iLen * 8);
+  message_length_bits += ((uint32_t)length * 8);
 
-  for (size_t i = 0; i < iLen; i++) {
-    if (bSkipInvalidIGCCharsFlag == 1 && !IsValidIGCChar(szin[i]))
+  for (size_t i = 0; i < length; i++) {
+    if (skip_invalid_igc_chars == 1 && !IsValidIGCChar(in[i]))
       // skip OD because when saved to file, OD OA comes back as OA only
-      MessageLenBits -= 8; //subtract it out of the buffer pointer
+      message_length_bits -= 8; //subtract it out of the buffer pointer
     else {
-      buff512bits[BuffLeftover++] = szin[i];  //
-      if (BuffLeftover * 8 == 512) { // we have a full buffer
+      buff512bits[buffer_left_over++] = in[i];  //
+      if (buffer_left_over * 8 == 512) { // we have a full buffer
         Process512(buff512bits);
-        BuffLeftover = 0; //and reset buffer
+        buffer_left_over = 0; //and reset buffer
       }
     }
   }
@@ -183,15 +183,15 @@ void
 MD5::Finalize(void)
 {
   // append "0" bits until message length in bits ? 448 (mod 512)
-  int BuffLeftover = (MessageLenBits / 8) % 64;
+  int buffer_left_over = (message_length_bits / 8) % 64;
   // need at least 64 bits (8 bytes) for length bits at end
 
-  if (BuffLeftover < (64 - 8)) {
+  if (buffer_left_over < (64 - 8)) {
     // append "1" bit to end of buffer
-    buff512bits[BuffLeftover] = 0x80;
+    buff512bits[buffer_left_over] = 0x80;
 
     // pad with 56 - len to get exactly
-    for (int i = BuffLeftover + 1; i < 64; i++)
+    for (int i = buffer_left_over + 1; i < 64; i++)
       // clear out rest of buffer too
       buff512bits[i] = 0;
 
@@ -202,10 +202,10 @@ MD5::Finalize(void)
     // >= 56 bits already in buffer
 
     // append "1" bit to end of buffer
-    buff512bits[BuffLeftover] = 0x80;
+    buff512bits[buffer_left_over] = 0x80;
 
     // fill buffer w/ 0's and process
-    for (int i = BuffLeftover + 1; i < 64; i++ )
+    for (int i = buffer_left_over + 1; i < 64; i++ )
       buff512bits[i] = 0;
 
     Process512(buff512bits);
@@ -221,10 +221,10 @@ MD5::Finalize(void)
   //append bit length (bit, not byte) of unpadded message as 64-bit little-endian integer to message
   // store 8 bytes of length into last 8 bytes of buffer (little endian least sig bytes first
   // 4 bytes of length we store go in bytes 56-59 of buffer, 60-63 are all 0's (already)
-  buff512bits[59] = (unsigned char)((MessageLenBits & 0xFF000000) >> 24);
-  buff512bits[58] = (unsigned char)((MessageLenBits & 0x00FF0000) >> 16);
-  buff512bits[57] = (unsigned char)((MessageLenBits & 0x0000FF00) >> 8);
-  buff512bits[56] = (unsigned char)(MessageLenBits & 0x000000FF);
+  buff512bits[59] = (unsigned char)((message_length_bits & 0xFF000000) >> 24);
+  buff512bits[58] = (unsigned char)((message_length_bits & 0x00FF0000) >> 16);
+  buff512bits[57] = (unsigned char)((message_length_bits & 0x0000FF00) >> 8);
+  buff512bits[56] = (unsigned char)(message_length_bits & 0x000000FF);
 
   Process512(buff512bits);
 }

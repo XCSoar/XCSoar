@@ -20,8 +20,8 @@
 }
 */
 
-#ifndef __MD5__
-#define __MD5__
+#ifndef MD5_HPP
+#define MD5_HPP
 
 #include <stdint.h>
 
@@ -37,15 +37,17 @@ private:
   uint32_t a, b, c, d;
   uint32_t h0, h1, h2, h3;
   uint32_t f, g;
-  uint32_t MessageLenBits; // max message size=536,870,912 because of 32-bit length tracking (MD5 standard is 64-bits)
+  // max message size = 536870912
+  // because of 32-bit length tracking (MD5 standard is 64-bits)
+  uint32_t message_length_bits;
 
-  void Process512(const unsigned char *s512in);
+  void Process512(const unsigned char *in);
 
 public:
   void InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in);
 
   void InitDigest(void);
-  void AppendString(const unsigned char *sin, int bSkipWhiteSpaceFlag); // must be NULL-terminated string!
+  void AppendString(const unsigned char *in, int skip_invalid_igc_chars); // must be NULL-terminated string!
   void Finalize(void);
   int GetDigest(char *buffer);
   static bool IsValidIGCChar(char c);
