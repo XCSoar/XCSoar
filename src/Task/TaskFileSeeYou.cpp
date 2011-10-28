@@ -378,10 +378,8 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
     }
     }
 
-    const Angle RadialStart = (A12adj
-        - turnpoint_infos.angle1).AsBearing();
-    const Angle RadialEnd = (A12adj
-        + turnpoint_infos.angle1).AsBearing();
+    const Angle RadialStart = (A12adj - turnpoint_infos.angle1).AsBearing();
+    const Angle RadialEnd = (A12adj + turnpoint_infos.angle1).AsBearing();
 
     if (turnpoint_infos.radius2 > fixed_zero &&
         (turnpoint_infos.angle2.AsBearing().Degrees()) < fixed_one) {
