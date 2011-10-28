@@ -33,12 +33,12 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-const IGCWriter::LogPoint_GPSPosition &
-IGCWriter::LogPoint_GPSPosition::operator=(const NMEAInfo &gps_info)
+const IGCWriter::Fix &
+IGCWriter::Fix::operator=(const NMEAInfo &gps_info)
 {
-  Location = gps_info.location;
-  GPSAltitude = (int)gps_info.gps_altitude;
-  Initialized = true;
+  location = gps_info.location;
+  altitude_gps = (int)gps_info.gps_altitude;
+  initialized = true;
 
   return *this;
 }
@@ -64,19 +64,19 @@ igc_format_location(char *buffer, const GeoPoint &location)
 }
 
 IGCWriter::IGCWriter(const TCHAR *_path, const NMEAInfo &gps_info)
-  :Simulator(gps_info.connected && !gps_info.gps.real)
+  :simulator(gps_info.connected && !gps_info.gps.real)
 {
   _tcscpy(path, _path);
 
   frecord.reset();
-  LastValidPoint.Initialized = false;
+  last_valid_point.initialized = false;
 
-  if (!Simulator)
+  if (!simulator)
     grecord.Init();
 }
 
 bool
-IGCWriter::flush()
+IGCWriter::Flush()
 {
   if (buffer.IsEmpty())
     return true;
@@ -100,12 +100,12 @@ IGCWriter::flush()
 }
 
 void
-IGCWriter::finish(const NMEAInfo &gps_info)
+IGCWriter::Finish(const NMEAInfo &gps_info)
 {
   if (gps_info.connected && !gps_info.gps.real)
-    Simulator = true;
+    simulator = true;
 
-  flush();
+  Flush();
 }
 
 static void
@@ -117,9 +117,9 @@ clean(char *p)
 }
 
 bool
-IGCWriter::writeln(const char *line)
+IGCWriter::WriteLine(const char *line)
 {
-  if (buffer.IsFull() && !flush())
+  if (buffer.IsFull() && !Flush())
     return false;
 
   assert(!buffer.IsFull());
@@ -134,7 +134,7 @@ IGCWriter::writeln(const char *line)
 }
 
 bool
-IGCWriter::write_tstring(const char *a, const TCHAR *b)
+IGCWriter::WriteLine(const char *a, const TCHAR *b)
 {
   size_t a_length = strlen(a);
   size_t b_length = _tcslen(b);
@@ -157,14 +157,14 @@ IGCWriter::write_tstring(const char *a, const TCHAR *b)
   memcpy(buffer + a_length, b, b_length + 1);
 #endif
 
-  return writeln(buffer);
+  return WriteLine(buffer);
 }
 
 void
-IGCWriter::header(const BrokenDateTime &DateTime,
-                  const TCHAR *pilot_name, const TCHAR *aircraft_model,
-                  const TCHAR *aircraft_registration,
-                  const TCHAR *strAssetNumber, const TCHAR *driver_name)
+IGCWriter::WriteHeader(const BrokenDateTime &DateTime,
+                       const TCHAR *pilot_name, const TCHAR *aircraft_model,
+                       const TCHAR *aircraft_registration,
+                       const TCHAR *strAssetNumber, const TCHAR *driver_name)
 {
   /*
    * HFDTE141203  <- should be UTC, same as time in filename
@@ -189,25 +189,25 @@ IGCWriter::header(const BrokenDateTime &DateTime,
           (char)strAssetNumber[0],
           (char)strAssetNumber[1],
           (char)strAssetNumber[2]);
-  writeln(buffer);
+  WriteLine(buffer);
 
   sprintf(buffer, "HFDTE%02u%02u%02u",
           DateTime.day, DateTime.month, DateTime.year % 100);
-  writeln(buffer);
+  WriteLine(buffer);
 
-  if (!Simulator)
-    writeln(GetHFFXARecord());
+  if (!simulator)
+    WriteLine(GetHFFXARecord());
 
-  write_tstring("HFPLTPILOT:", pilot_name);
-  write_tstring("HFGTYGLIDERTYPE:", aircraft_model);
-  write_tstring("HFGIDGLIDERID:", aircraft_registration);
-  write_tstring("HFFTYFR TYPE:XCSOAR,XCSOAR ", XCSoar_VersionStringOld);
-  write_tstring("HFGPS: ", driver_name);
+  WriteLine("HFPLTPILOT:", pilot_name);
+  WriteLine("HFGTYGLIDERTYPE:", aircraft_model);
+  WriteLine("HFGIDGLIDERID:", aircraft_registration);
+  WriteLine("HFFTYFR TYPE:XCSOAR,XCSOAR ", XCSoar_VersionStringOld);
+  WriteLine("HFGPS: ", driver_name);
 
-  writeln("HFDTM100Datum: WGS-84");
+  WriteLine("HFDTM100Datum: WGS-84");
 
-  if (!Simulator)
-    writeln(GetIRecord());
+  if (!simulator)
+    WriteLine(GetIRecord());
 }
 
 void
@@ -228,11 +228,11 @@ IGCWriter::StartDeclaration(const BrokenDateTime &FirstDateTime,
           FirstDateTime.second,
           number_of_turnpoints - 2);
 
-  writeln(buffer);
+  WriteLine(buffer);
 
   // takeoff line
   // IGC GNSS specification 3.6.3
-  writeln("C00000000N000000000ETAKEOFF");
+  WriteLine("C00000000N000000000ETAKEOFF");
 }
 
 void
@@ -240,7 +240,7 @@ IGCWriter::EndDeclaration(void)
 {
   // TODO bug: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
-  writeln("C00000000N000000000ELANDING");
+  WriteLine("C00000000N000000000ELANDING");
 }
 
 void
@@ -263,13 +263,13 @@ IGCWriter::AddDeclaration(const GeoPoint &location, const TCHAR *ID)
   p = igc_format_location(p, location);
   strcpy(p, IDString);
 
-  writeln(szCRecord);
+  WriteLine(szCRecord);
 }
 
 void
 IGCWriter::LoggerNote(const TCHAR *text)
 {
-  write_tstring("LPLT", text);
+  WriteLine("LPLT", text);
 }
 
 /**
@@ -300,24 +300,24 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
   char szBRecord[500];
   int iSIU = GetSIU(gps_info);
   fixed dEPE = GetEPE(gps_info);
-  LogPoint_GPSPosition p;
+  Fix p;
 
   char IsValidFix;
 
   // if at least one GPS fix comes from the simulator, disable signing
   if (gps_info.connected && !gps_info.gps.real)
-    Simulator = true;
+    simulator = true;
 
-  if (!Simulator) {
+  if (!simulator) {
     const char *f_record_line = frecord.update(gps_info.gps,
                                                gps_info.date_time_utc,
                                                gps_info.time,
                                                !gps_info.location_available);
     if (f_record_line != NULL)
-      writeln(f_record_line);
+      WriteLine(f_record_line);
   }
 
-  if (!LastValidPoint.Initialized &&
+  if (!last_valid_point.initialized &&
       ((gps_info.gps_altitude < fixed(-100))
        || (gps_info.baro_altitude < fixed(-100))
           || !gps_info.location_available))
@@ -326,11 +326,11 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
 
   if (!gps_info.location_available) {
     IsValidFix = 'V'; // invalid
-    p = LastValidPoint;
+    p = last_valid_point;
   } else {
     IsValidFix = 'A'; // Active
     // save last active fix location
-    p = LastValidPoint = gps_info;
+    p = last_valid_point = gps_info;
   }
 
   char *q = szBRecord;
@@ -339,18 +339,18 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
           gps_info.date_time_utc.second);
   q += strlen(q);
 
-  q = igc_format_location(q, p.Location);
+  q = igc_format_location(q, p.location);
 
   sprintf(q, "%c%05d%05d%03d%02d",
           IsValidFix,
           normalize_igc_altitude(gps_info.baro_altitude_available
                                  ? (int)gps_info.baro_altitude
                                  /* fall back to GPS altitude */
-                                 : p.GPSAltitude),
-          normalize_igc_altitude(p.GPSAltitude),
+                                 : p.altitude_gps),
+          normalize_igc_altitude(p.altitude_gps),
           (int)dEPE, iSIU);
 
-  writeln(szBRecord);
+  WriteLine(szBRecord);
 }
 
 void
@@ -361,15 +361,15 @@ IGCWriter::LogEvent(const NMEAInfo &gps_info, const char *event)
           gps_info.date_time_utc.hour, gps_info.date_time_utc.minute,
           gps_info.date_time_utc.second, event);
 
-  writeln(szBRecord);
+  WriteLine(szBRecord);
   // tech_spec_gnss.pdf says we need a B record immediately after an E record
   LogPoint(gps_info);
 }
 
 void
-IGCWriter::sign()
+IGCWriter::Sign()
 {
-  if (Simulator)
+  if (simulator)
     return;
 
   // buffer is appended w/ each igc file write

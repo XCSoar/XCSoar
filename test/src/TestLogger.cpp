@@ -112,8 +112,8 @@ int main(int argc, char **argv)
 
   IGCWriter writer(path, i);
 
-  writer.header(i.date_time_utc, _T("Pilot Name"), _T("ASK-21"), _T("D-1234"),
-                _T("foo"), _T("bar"));
+  writer.WriteHeader(i.date_time_utc, _T("Pilot Name"), _T("ASK-21"),
+                     _T("D-1234"), _T("foo"), _T("bar"));
   writer.StartDeclaration(i.date_time_utc, 3);
   writer.AddDeclaration(home, _T("Bergneustadt"));
   writer.AddDeclaration(tp, _T("Suhl"));
@@ -132,8 +132,8 @@ int main(int argc, char **argv)
                         Angle::Degrees(fixed(-51.051944444444445)));
   writer.LogPoint(i);
 
-  writer.finish(i);
-  writer.sign();
+  writer.Finish(i);
+  writer.Sign();
 
   CheckTextFile(path, expect);
 

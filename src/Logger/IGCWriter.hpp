@@ -40,7 +40,8 @@ struct GeoPoint;
 
 class IGCWriter {
   enum {
-    LOGGER_DISK_BUFFER_NUM_RECS = 10, /**< Number of records in disk buffer */
+    /** Number of records in disk buffer */
+    LOGGER_DISK_BUFFER_NUM_RECS = 10,
     MAX_IGC_BUFF = 255,
   };
 
@@ -55,30 +56,30 @@ class IGCWriter {
    * (NMEA_INFO.Simulator), then this flag is true, and signing is
    * disabled.
    */
-  bool Simulator;
+  bool simulator;
 
-  struct LogPoint_GPSPosition {
-    bool Initialized;
+  struct Fix {
+    bool initialized;
 
-    GeoPoint Location;
-    int GPSAltitude;
+    GeoPoint location;
+    int altitude_gps;
 
-    const LogPoint_GPSPosition &operator=(const NMEAInfo &gps_info);
+    const Fix &operator=(const NMEAInfo &gps_info);
   };
 
-  LogPoint_GPSPosition LastValidPoint;
+  Fix last_valid_point;
 
 public:
   IGCWriter(const TCHAR *_path, const NMEAInfo &gps_info);
 
-  bool flush();
-  void finish(const NMEAInfo &gps_info);
-  void sign();
+  bool Flush();
+  void Finish(const NMEAInfo &gps_info);
+  void Sign();
 
-  bool writeln(const char *line);
+  bool WriteLine(const char *line);
 
 private:
-  bool write_tstring(const char *a, const TCHAR *b);
+  bool WriteLine(const char *a, const TCHAR *b);
 
   static const char *GetHFFXARecord();
   static const char *GetIRecord();
@@ -87,10 +88,10 @@ private:
   static int GetSIU(const NMEAInfo &gps_info);
 
 public:
-  void header(const BrokenDateTime &DateTime,
-              const TCHAR *pilot_name, const TCHAR *aircraft_model,
-              const TCHAR *aircraft_registration,
-              const TCHAR *strAssetNumber, const TCHAR *driver_name);
+  void WriteHeader(const BrokenDateTime &DateTime,
+                   const TCHAR *pilot_name, const TCHAR *aircraft_model,
+                   const TCHAR *aircraft_registration,
+                   const TCHAR *strAssetNumber, const TCHAR *driver_name);
 
   void AddDeclaration(const GeoPoint &location, const TCHAR *ID);
   void StartDeclaration(const BrokenDateTime &FirstDateTime,

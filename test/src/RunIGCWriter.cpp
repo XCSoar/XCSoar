@@ -46,16 +46,15 @@ int main(int argc, char **argv)
 
   PathName igc_path(output_file);
   IGCWriter writer(igc_path, replay->Basic());
-  writer.header(replay->Basic().date_time_utc,
-                _T("Manfred Mustermann"), _T("Ventus"),
-                _T("D-1234"), _T("Foo"), driver_name);
+  writer.WriteHeader(replay->Basic().date_time_utc, _T("Manfred Mustermann"),
+                     _T("Ventus"), _T("D-1234"), _T("Foo"), driver_name);
 
   GPSClock log_clock(fixed(1));
   while (replay->Next())
     if (log_clock.check_advance(replay->Basic().time))
       writer.LogPoint(replay->Basic());
 
-  writer.flush();
+  writer.Flush();
 
   return EXIT_SUCCESS;
 }

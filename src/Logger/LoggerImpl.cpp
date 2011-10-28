@@ -113,8 +113,8 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   if (writer == NULL)
     return;
 
-  writer->finish(gps_info);
-  writer->sign();
+  writer->Finish(gps_info);
+  writer->Sign();
 
   // Logger off
   delete writer;
@@ -425,9 +425,9 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   else
     Profile::GetDeviceConfig(0, device_config);
 
-  writer->header(gps_info.date_time_utc,
-                 decl.pilot_name, decl.aircraft_type, decl.aircraft_registration,
-                 strAssetNumber, device_config.driver_name);
+  writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name,
+                      decl.aircraft_type, decl.aircraft_registration,
+                      strAssetNumber, device_config.driver_name);
 
   if (decl.Size()) {
     BrokenDateTime FirstDateTime = !PreTakeoffBuffer.empty()
