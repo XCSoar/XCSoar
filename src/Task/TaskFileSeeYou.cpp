@@ -261,39 +261,27 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
 
 static bool isKeyhole(const SeeYouTurnpointInformation &turnpoint_infos)
 {
-  if (fabs(turnpoint_infos.angle1.Degrees() - fixed(45)) < fixed(2) &&
-      fabs(turnpoint_infos.radius1 - fixed(10000)) < fixed(2) &&
-      fabs(turnpoint_infos.angle2.Degrees() - fixed(180)) < fixed(2) &&
-      fabs(turnpoint_infos.radius2 - fixed(500)) < fixed(2))
-
-    return true;
-      else
-    return false;
+  return (fabs(turnpoint_infos.angle1.Degrees() - fixed(45)) < fixed(2) &&
+          fabs(turnpoint_infos.radius1 - fixed(10000)) < fixed(2) &&
+          fabs(turnpoint_infos.angle2.Degrees() - fixed(180)) < fixed(2) &&
+          fabs(turnpoint_infos.radius2 - fixed(500)) < fixed(2));
 }
 
 static bool isBGAFixedCourseZone(const SeeYouTurnpointInformation &turnpoint_infos)
 {
-  if (fabs(turnpoint_infos.angle1.Degrees() - fixed(45)) < fixed(2) &&
-      fabs(turnpoint_infos.radius1 - fixed(20000)) < fixed(2) &&
-      fabs(turnpoint_infos.angle2.Degrees() - fixed(180)) < fixed(2) &&
-      fabs(turnpoint_infos.radius2 - fixed(500)) < fixed(2))
-
-    return true;
-      else
-    return false;
+  return (fabs(turnpoint_infos.angle1.Degrees() - fixed(45)) < fixed(2) &&
+          fabs(turnpoint_infos.radius1 - fixed(20000)) < fixed(2) &&
+          fabs(turnpoint_infos.angle2.Degrees() - fixed(180)) < fixed(2) &&
+          fabs(turnpoint_infos.radius2 - fixed(500)) < fixed(2));
 }
 
 static bool isBGAEnhancedOptionZone(const SeeYouTurnpointInformation
                                     &turnpoint_infos)
 {
-  if (fabs(turnpoint_infos.angle1.Degrees() - fixed(90)) < fixed(2) &&
-      fabs(turnpoint_infos.radius1 - fixed(10000)) < fixed(2) &&
-      fabs(turnpoint_infos.angle2.Degrees() - fixed(180)) < fixed(2) &&
-      fabs(turnpoint_infos.radius2 - fixed(500)) < fixed(2))
-
-    return true;
-      else
-    return false;
+  return (fabs(turnpoint_infos.angle1.Degrees() - fixed(90)) < fixed(2) &&
+          fabs(turnpoint_infos.radius1 - fixed(10000)) < fixed(2) &&
+          fabs(turnpoint_infos.angle2.Degrees() - fixed(180)) < fixed(2) &&
+          fabs(turnpoint_infos.radius2 - fixed(500)) < fixed(2));
 }
 
 /**
