@@ -35,26 +35,17 @@ class OrderedTask;
 class TaskStore 
 {
 public:
-  /**
-   * Scan the XCSoarData folder for .tsk files and add them to the TaskStore
-   */
-  void Scan();
-  /**
-   * Clear all the tasks from the TaskStore
-   */
-  void Clear();
-
   struct Item
   {
-    Item(const tstring &the_filename, const tstring _task_name,
-         unsigned _task_index = 0);
-    ~Item();
-
     tstring task_name;
     tstring filename;
     unsigned task_index;
     OrderedTask* task;
     bool valid;
+
+    Item(const tstring &the_filename, const tstring _task_name,
+         unsigned _task_index = 0);
+    ~Item();
 
     const TCHAR* GetName() const;
     OrderedTask* GetTask();
@@ -63,6 +54,23 @@ public:
   };
 
   typedef std::vector<TaskStore::Item> ItemVector;
+
+private:
+  /**
+   * Internal task storage
+   */
+  ItemVector store;
+
+public:
+  /**
+   * Scan the XCSoarData folder for .tsk files and add them to the TaskStore
+   */
+  void Scan();
+
+  /**
+   * Clear all the tasks from the TaskStore
+   */
+  void Clear();
 
   /**
    * Return the number of tasks in the TaskStore
@@ -84,12 +92,6 @@ public:
    * @return The task defined by the given index
    */
   OrderedTask* GetTask(unsigned index);
-
-private:
-  /**
-   * Internal task storage
-   */
-  ItemVector store;
 };
 
 #endif
