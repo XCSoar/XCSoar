@@ -71,10 +71,10 @@ get_cursor_index()
 static OrderedTask*
 get_cursor_task()
 {
-  if (get_cursor_index() >= task_store->size())
+  if (get_cursor_index() >= task_store->Size())
     return NULL;
 
-  OrderedTask * ordered_task = task_store->get_task(get_cursor_index());
+  OrderedTask * ordered_task = task_store->GetTask(get_cursor_index());
 
   if (!ordered_task)
     return NULL;
@@ -90,10 +90,10 @@ get_cursor_task()
 static const TCHAR *
 get_cursor_name()
 {
-  if (get_cursor_index() >= task_store->size())
+  if (get_cursor_index() >= task_store->Size())
     return _T("");
 
-  return task_store->get_name(get_cursor_index());
+  return task_store->GetName(get_cursor_index());
 }
 
 static OrderedTask*
@@ -131,9 +131,9 @@ void
 pnlTaskList::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
                                  unsigned DrawListIndex)
 {
-  assert(DrawListIndex <= task_store->size());
+  assert(DrawListIndex <= task_store->Size());
 
-  const TCHAR *name = task_store->get_name(DrawListIndex);
+  const TCHAR *name = task_store->GetName(DrawListIndex);
 
   canvas.text(rc.left + Layout::FastScale(2),
               rc.top + Layout::FastScale(2), name);
@@ -142,7 +142,7 @@ pnlTaskList::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 static void
 RefreshView()
 {
-  wTasks->SetLength(task_store->size());
+  wTasks->SetLength(task_store->Size());
   wTaskView->invalidate();
 
   WndFrame* wSummary = (WndFrame*)wf->FindByName(_T("frmSummary1"));
@@ -169,7 +169,7 @@ SaveTask()
     if (!OrderedTaskSave(*(SingleWindow *)wf->get_root_owner(), **active_task))
       return;
 
-    task_store->scan();
+    task_store->Scan();
     RefreshView();
   } else {
     MessageBoxX(getTaskValidationErrors(
@@ -233,7 +233,7 @@ DeleteTask()
   LocalPath(path, fname);
   File::Delete(path);
 
-  task_store->scan();
+  task_store->Scan();
   RefreshView();
 }
 
@@ -279,7 +279,7 @@ RenameTask()
 
   File::Rename(oldpath, newpath);
 
-  task_store->scan();
+  task_store->Scan();
   RefreshView();
 }
 
@@ -297,7 +297,7 @@ pnlTaskList::OnBrowseClicked(gcc_unused WndButton &Sender)
   if (!lazy_loaded) {
     lazy_loaded = true;
     // Scan XCSoarData for available tasks
-    task_store->scan();
+    task_store->Scan();
   }
 
   dlgTaskManager::TaskViewRestore(wTaskView);

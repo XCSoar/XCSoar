@@ -20,6 +20,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #ifndef TASK_STORE_HPP
 #define TASK_STORE_HPP
 
@@ -37,11 +38,11 @@ public:
   /**
    * Scan the XCSoarData folder for .tsk files and add them to the TaskStore
    */
-  void scan();
+  void Scan();
   /**
    * Clear all the tasks from the TaskStore
    */
-  void clear();
+  void Clear();
 
   struct Item
   {
@@ -55,10 +56,10 @@ public:
     OrderedTask* task;
     bool valid;
 
-    const TCHAR* get_name() const;
-    OrderedTask* get_task();
+    const TCHAR* GetName() const;
+    OrderedTask* GetTask();
 
-    bool operator<(const TaskStore::Item &i2) const;
+    bool operator<(const TaskStore::Item &other) const;
   };
 
   typedef std::vector<TaskStore::Item> ItemVector;
@@ -67,27 +68,28 @@ public:
    * Return the number of tasks in the TaskStore
    * @return The number of tasks in the TaskStore
    */
-  size_t size() const;
+  size_t Size() const;
+
   /**
    * Return the filename of the task defined by the given index
    * (e.g. TestTask.tsk)
    * @param index TaskStore index of the desired Task
    * @return Filename of the task defined by the given index
    */
-  const TCHAR *get_name(unsigned index) const;
+  const TCHAR *GetName(unsigned index) const;
 
   /**
    * Return the task defined by the given index
    * @param index TaskStore index of the desired Task
    * @return The task defined by the given index
    */
-  OrderedTask* get_task(unsigned index); 
+  OrderedTask* GetTask(unsigned index);
 
 private:
   /**
    * Internal task storage
    */
-  ItemVector m_store;
+  ItemVector store;
 };
 
 #endif

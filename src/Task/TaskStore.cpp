@@ -37,13 +37,13 @@ Copyright_License {
 class TaskFileVisitor: public File::Visitor
 {
 private:
-  TaskStore::ItemVector &m_store;
+  TaskStore::ItemVector &store;
 
 public:
-  TaskFileVisitor(TaskStore::ItemVector &store):
-    m_store(store) {}
+  TaskFileVisitor(TaskStore::ItemVector &_store):
+    store(_store) {}
 
-  void Visit(const TCHAR* path, const TCHAR* filename) {
+  void Visit(const TCHAR *path, const TCHAR *filename) {
     // Create a TaskFile instance to determine how many
     // tasks are inside of this task file
     TaskFile* task_file = TaskFile::Create(path);
@@ -78,7 +78,7 @@ public:
       }
 
       // Add the task to the TaskStore
-      m_store.push_back(TaskStore::Item(path, (name == NULL) ? path : name, i));
+      store.push_back(TaskStore::Item(path, (name == NULL) ? path : name, i));
     }
 
     // Remove temporary TaskFile instance
@@ -87,35 +87,35 @@ public:
 };
 
 void
-TaskStore::clear()
+TaskStore::Clear()
 {
   // clear entries first
-  m_store.erase(m_store.begin(), m_store.end());
+  store.erase(store.begin(), store.end());
 }
 
 void
-TaskStore::scan()
+TaskStore::Scan()
 {
-  clear();
+  Clear();
 
   // scan files
-  TaskFileVisitor tfv(m_store);
+  TaskFileVisitor tfv(store);
   VisitDataFiles(_T("*.tsk"), tfv);
   VisitDataFiles(_T("*.cup"), tfv);
 
-  std::sort(m_store.begin(), m_store.end());
+  std::sort(store.begin(), store.end());
 }
 
 size_t
-TaskStore::size() const
+TaskStore::Size() const
 {
-  return m_store.size();
+  return store.size();
 }
 
-TaskStore::Item::Item(const tstring &the_filename, const tstring _task_name,
+TaskStore::Item::Item(const tstring &_filename, const tstring _task_name,
                       unsigned _task_index):
   task_name(_task_name),
-  filename(the_filename),
+  filename(_filename),
   task_index(_task_index),
   task(NULL),
   valid(true)
@@ -129,7 +129,7 @@ TaskStore::Item::~Item()
 }
 
 OrderedTask*
-TaskStore::Item::get_task()
+TaskStore::Item::GetTask()
 {
   if (task != NULL)
     return task;
@@ -145,25 +145,25 @@ TaskStore::Item::get_task()
 }
 
 const TCHAR *
-TaskStore::Item::get_name() const
+TaskStore::Item::GetName() const
 {
   return task_name.c_str();
 }
 
 bool
-TaskStore::Item::operator<(const Item &i2) const
+TaskStore::Item::operator<(const Item &other) const
 {
-  return _tcscmp(get_name(), i2.get_name()) == -1;
+  return _tcscmp(GetName(), other.GetName()) == -1;
 }
 
 const TCHAR *
-TaskStore::get_name(unsigned index) const
+TaskStore::GetName(unsigned index) const
 {
-  return m_store[index].get_name();
+  return store[index].GetName();
 }
 
 OrderedTask* 
-TaskStore::get_task(unsigned index)
+TaskStore::GetTask(unsigned index)
 {
-  return m_store[index].get_task();
+  return store[index].GetTask();
 }
