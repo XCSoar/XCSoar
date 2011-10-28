@@ -86,11 +86,8 @@ public:
   }
 
   AllocatedArray &operator=(AllocatedArray &&other) {
-    delete[] data;
-    size = other.size;
-    data = other.data;
-    other.size = 0;
-    other.data = NULL;
+    std::swap(size, other.size);
+    std::swap(data, other.data);
     return *this;
   }
 
