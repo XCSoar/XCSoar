@@ -142,19 +142,9 @@ MD5::IsValidIGCChar(char c)
 
   // 1.0.2 filtering (and use key #2, 3 or 4 b/c key #1 used by 1.0.0 has a dupe in it
 
-    if (c >= 0x20 && c <= 0x7E &&
-        c != 0x0D &&
-        c != 0x0A &&
-        c != 0x24 &&
-        c != 0x2A &&
-        c != 0x2C &&
-        c != 0x21 &&
-        c != 0x5C &&
-        c != 0x5E &&
-        c != 0x7E)
-      return true;
-    else
-      return false;
+  return c >= 0x20 && c <= 0x7E && c != 0x0D && c != 0x0A && c != 0x24 &&
+         c != 0x2A && c != 0x2C && c != 0x21 && c != 0x5C && c != 0x5E &&
+         c != 0x7E;
 }
 
 void
