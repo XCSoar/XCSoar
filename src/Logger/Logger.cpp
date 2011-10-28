@@ -84,13 +84,13 @@ Logger::CheckDeclaration(void)
 }
 
 bool
-Logger::isTaskDeclared() const
+Logger::IsTaskDeclared() const
 {
   return ExternalLogger::IsDeclared();
 }
 
 bool
-Logger::isLoggerActive() const
+Logger::IsLoggerActive() const
 {
   Poco::ScopedRWLock protect(lock, false);
   return _logger.isLoggerActive();
@@ -105,12 +105,12 @@ Logger::LoggerClearFreeSpace(const NMEAInfo &gps_info)
 
 
 void
-Logger::guiStartLogger(const NMEAInfo& gps_info,
+Logger::GUIStartLogger(const NMEAInfo& gps_info,
                     const SETTINGS_COMPUTER& settings,
                        const ProtectedTaskManager &protected_task_manager,
                     bool noAsk)
 {
-  if (isLoggerActive() || gps_info.gps.replay)
+  if (IsLoggerActive() || gps_info.gps.replay)
     return;
 
   OrderedTask* task = protected_task_manager.TaskClone();
@@ -151,23 +151,23 @@ Logger::guiStartLogger(const NMEAInfo& gps_info,
 }
 
 void
-Logger::guiToggleLogger(const NMEAInfo& gps_info,
+Logger::GUIToggleLogger(const NMEAInfo& gps_info,
                      const SETTINGS_COMPUTER& settings,
                       const ProtectedTaskManager &protected_task_manager,
                      bool noAsk)
 {
-  if (isLoggerActive()) {
-    guiStopLogger(gps_info, noAsk);
+  if (IsLoggerActive()) {
+    GUIStopLogger(gps_info, noAsk);
   } else {
-    guiStartLogger(gps_info, settings, protected_task_manager, noAsk);
+    GUIStartLogger(gps_info, settings, protected_task_manager, noAsk);
   }
 }
 
 void
-Logger::guiStopLogger(const NMEAInfo &gps_info,
+Logger::GUIStopLogger(const NMEAInfo &gps_info,
                    bool noAsk)
 {
-  if (!isLoggerActive())
+  if (!IsLoggerActive())
     return;
 
   if (noAsk || (MessageBoxX(_("Stop Logger"),
@@ -192,7 +192,7 @@ Logger::LoggerNote(const TCHAR *text)
 }
 
 void
-Logger::clearBuffer()
+Logger::ClearBuffer()
 {
   Poco::ScopedRWLock protect(lock, true);
   _logger.clearBuffer();

@@ -128,7 +128,7 @@ UpdateValuesSystem()
 
   wp = (WndProperty*)wf->FindByName(_T("prpLogger"));
   assert(wp != NULL);
-  if (logger.isLoggerActive())
+  if (logger.IsLoggerActive())
     wp->SetText(_("On"));
   else
     wp->SetText(_("Off"));
@@ -138,7 +138,7 @@ UpdateValuesSystem()
 
   wp = (WndProperty*)wf->FindByName(_T("prpDeclared"));
   assert(wp != NULL);
-  if (logger.isTaskDeclared())
+  if (logger.IsTaskDeclared())
     wp->SetText(_("Yes"));
   else
     wp->SetText(_("No"));

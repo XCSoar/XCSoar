@@ -529,7 +529,7 @@ XCSoarInterface::Shutdown(void)
 
   // Stop logger and save igc file
   operation.SetText(_("Shutdown, saving logs..."));
-  logger.guiStopLogger(Basic(), true);
+  logger.GUIStopLogger(Basic(), true);
 
   // Save settings to profile
   operation.SetText(_("Shutdown, saving profile..."));

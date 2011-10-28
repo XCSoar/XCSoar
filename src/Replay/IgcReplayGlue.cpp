@@ -70,7 +70,7 @@ IgcReplayGlue::on_stop()
   device_blackboard->StopReplay();
 
   if (logger != NULL)
-    logger->clearBuffer();
+    logger->ClearBuffer();
 }
 
 void
@@ -84,5 +84,5 @@ void
 IgcReplayGlue::on_reset()
 {
   if (logger != NULL)
-    logger->clearBuffer();
+    logger->ClearBuffer();
 }

@@ -52,25 +52,25 @@ public:
   bool CheckDeclaration(void);
 
   gcc_pure
-  bool isTaskDeclared() const;
+  bool IsTaskDeclared() const;
 
   gcc_pure
-  bool isLoggerActive() const;
+  bool IsLoggerActive() const;
 
   bool LoggerClearFreeSpace(const NMEAInfo &gps_info);
-  void guiStartLogger(const NMEAInfo& gps_info,
+  void GUIStartLogger(const NMEAInfo& gps_info,
                       const SETTINGS_COMPUTER& settings,
                       const ProtectedTaskManager &protected_task_manager,
                       bool noAsk = false);
-  void guiToggleLogger(const NMEAInfo& gps_info,
+  void GUIToggleLogger(const NMEAInfo& gps_info,
                        const SETTINGS_COMPUTER& settings,
                        const ProtectedTaskManager &protected_task_manager,
                        bool noAsk = false);
-  void guiStopLogger(const NMEAInfo &gps_info,
+  void GUIStopLogger(const NMEAInfo &gps_info,
                      bool noAsk = false);
   void LoggerDeviceDeclare(const OrderedTask& task);
   void LoggerNote(const TCHAR *text);
-  void clearBuffer();
+  void ClearBuffer();
 };
 
 #endif

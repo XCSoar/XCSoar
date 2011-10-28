@@ -92,7 +92,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
   PixelScalar offset = 0;
 
   // draw logger status
-  if (logger != NULL && logger->isLoggerActive()) {
+  if (logger != NULL && logger->IsLoggerActive()) {
     bool flip = (Basic().date_time_utc.second % 2) == 0;
     MaskedIcon &icon = flip ? Graphics::hLogger : Graphics::hLoggerOff;
     offset = icon.GetSize().cx;

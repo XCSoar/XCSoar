@@ -1172,20 +1172,20 @@ InputEvents::eventLogger(const TCHAR *misc)
     CommonInterface::SettingsComputer();
 
   if (_tcscmp(misc, _T("start ask")) == 0)
-    logger.guiStartLogger(basic, settings_computer,
+    logger.GUIStartLogger(basic, settings_computer,
                           *protected_task_manager);
   else if (_tcscmp(misc, _T("start")) == 0)
-    logger.guiStartLogger(basic, settings_computer,
+    logger.GUIStartLogger(basic, settings_computer,
                           *protected_task_manager, true);
   else if (_tcscmp(misc, _T("stop ask")) == 0)
-    logger.guiStopLogger(basic);
+    logger.GUIStopLogger(basic);
   else if (_tcscmp(misc, _T("stop")) == 0)
-    logger.guiStopLogger(basic, true);
+    logger.GUIStopLogger(basic, true);
   else if (_tcscmp(misc, _T("toggle ask")) == 0)
-    logger.guiToggleLogger(basic, settings_computer,
+    logger.GUIToggleLogger(basic, settings_computer,
                            *protected_task_manager);
   else if (_tcscmp(misc, _T("toggle")) == 0)
-    logger.guiToggleLogger(basic, settings_computer,
+    logger.GUIToggleLogger(basic, settings_computer,
                            *protected_task_manager, true);
   else if (_tcscmp(misc, _T("nmea")) == 0) {
     EnableLogNMEA = !EnableLogNMEA;
@@ -1195,7 +1195,7 @@ InputEvents::eventLogger(const TCHAR *misc)
       Message::AddMessage(_("NMEA log off"));
     }
   } else if (_tcscmp(misc, _T("show")) == 0)
-    if (logger.isLoggerActive()) {
+    if (logger.IsLoggerActive()) {
       Message::AddMessage(_("Logger on"));
     } else {
       Message::AddMessage(_("Logger off"));
