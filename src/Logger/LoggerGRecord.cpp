@@ -42,9 +42,6 @@ GRecord::Initialize()
   return Init(2);  // OLC uses key #2 since 9/1/2008
 }
 
-/**
- * @return returns true if record is appended, false if skipped
- */
 bool
 GRecord::AppendRecordToBuffer(const char *record)
 {
@@ -143,7 +140,7 @@ GRecord::SetFileName(const TCHAR *szFileNameIn)
 }
 
 bool GRecord::IncludeRecordInGCalc(const unsigned char *szIn)
-{ //returns false if record is not to be included in G record calc (see IGC specs)
+{
   bool bValid;
   TCHAR c1;
 
@@ -172,7 +169,7 @@ bool GRecord::IncludeRecordInGCalc(const unsigned char *szIn)
 
 bool
 GRecord::LoadFileToBuffer()
-{ //loads a file into the data buffer
+{
   FileLineReaderA reader(filename);
   if (reader.error())
     return false;
@@ -188,7 +185,7 @@ GRecord::LoadFileToBuffer()
 
 
 bool
-GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
+GRecord::AppendGRecordToFile(bool bValid)
 {
   TextWriter writer(filename, true);
   if (writer.error())
@@ -225,7 +222,7 @@ GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
 
 bool
 GRecord::ReadGRecordFromFile(char *szOutput, size_t max_length)
-{// returns in szOutput the G Record from the file referenced by FileName member
+{
   FileLineReaderA reader(filename);
   if (reader.error())
     return false;
@@ -250,7 +247,8 @@ GRecord::ReadGRecordFromFile(char *szOutput, size_t max_length)
 
 
 bool GRecord::VerifyGRecordInFile()
-{ // assumes FileName member is set
+{
+  // assumes FileName member is set
   // Load File into Buffer (assume name is already set)
   LoadFileToBuffer();
 

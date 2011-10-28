@@ -49,6 +49,10 @@ public:
 
   void Initialize();
   const TCHAR *GetVersion() const;
+
+  /**
+   * @return returns true if record is appended, false if skipped
+   */
   bool AppendRecordToBuffer(const char *szIn);
   void FinalizeBuffer();
   void GetDigest(char *buffer);
@@ -60,9 +64,14 @@ public:
 
   // File specific functions
   void SetFileName(const TCHAR *szIn);
+  /** loads a file into the data buffer */
   bool LoadFileToBuffer();
   /// writes error if invalid G Record
   bool AppendGRecordToFile(bool bValid);
+  /**
+   * returns in szOutput the G Record from the file referenced by
+   * filename member
+   */
   bool ReadGRecordFromFile(char *buffer, size_t max_length);
   /// returns 0 if false, 1 if true
   bool VerifyGRecordInFile(void);
@@ -70,6 +79,10 @@ public:
 private:
   void Init(int iKey);
   void AppendStringToBuffer(const unsigned char *szIn);
+  /**
+   * returns false if record is not to be included in
+   * G record calc (see IGC specs)
+   */
   bool IncludeRecordInGCalc(const unsigned char *szIn);
 
 };
