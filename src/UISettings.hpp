@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "SettingsMap.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
+#include "Gauge/VarioSettings.hpp"
 #include "PageSettings.hpp"
 #include "Dialogs/DialogSettings.hpp"
 #include "Util/TypeTraits.hpp"
@@ -56,6 +57,7 @@ struct UISettings {
 
   SETTINGS_MAP map;
   InfoBoxSettings info_boxes;
+  VarioSettings vario;
   PageSettings pages;
   DialogSettings dialog;
 

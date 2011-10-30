@@ -21,24 +21,19 @@ Copyright_License {
 }
 */
 
-#include "UISettings.hpp"
-#include "Asset.hpp"
+#ifndef XCSOAR_VARIO_SETTINGS_HPP
+#define XCSOAR_VARIO_SETTINGS_HPP
 
-void
-UISettings::SetDefaults()
-{
-  custom_fonts = false;
-  enable_auto_blank = false;
+struct VarioSettings {
+  bool ShowAvgText;
+  bool ShowMc;
+  bool ShowSpeedToFly;
+  bool ShowBallast;
+  bool ShowBugs;
+  bool ShowGross;
+  bool ShowAveNeedle;
 
-  enable_flarm_gauge = true;
-  auto_close_flarm_dialog = false;
-  enable_thermal_assistant_gauge = true;
+  void SetDefaults();
+};
 
-  popup_message_position = smAlignCenter;
-
-  map.SetDefaults();
-  info_boxes.SetDefaults();
-  vario.SetDefaults();
-  pages.SetDefaults();
-  dialog.SetDefaults();
-}
+#endif

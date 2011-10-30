@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Math/FastRotation.hpp"
 #include "LogFile.hpp"
-#include "Profile/Profile.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -48,13 +47,6 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
                        UPixelScalar width, UPixelScalar height,
                        const WindowStyle style)
   :blackboard(_blackboard), look(_look),
-   ShowAvgText(false),
-   ShowMc(false),
-   ShowSpeedToFly(false),
-   ShowBallast(false),
-   ShowBugs(false),
-   ShowGross(true),
-   ShowAveNeedle(false),
    nlength0(Layout::Scale(15)),
    nlength1(Layout::Scale(6)),
    nwidth(Layout::Scale(4)),
@@ -62,14 +54,6 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
    dirty(true), layout_initialised(false), needle_initialised(false),
    ballast_initialised(false), bugs_initialised(false)
 {
-  Profile::Get(szProfileAppGaugeVarioSpeedToFly, ShowSpeedToFly);
-  Profile::Get(szProfileAppGaugeVarioAvgText, ShowAvgText);
-  Profile::Get(szProfileAppGaugeVarioMc, ShowMc);
-  Profile::Get(szProfileAppGaugeVarioBugs, ShowBugs);
-  Profile::Get(szProfileAppGaugeVarioBallast, ShowBallast);
-  Profile::Get(szProfileAppGaugeVarioGross, ShowGross);
-  Profile::Get(szProfileAppAveNeedle, ShowAveNeedle);
-
   diValueTop.InitDone = false;
   diValueMiddle.InitDone = false;
   diValueBottom.InitDone = false;
@@ -109,7 +93,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
     layout_initialised = true;
   }
 
-  if (ShowAvgText) {
+  if (Settings().ShowAvgText) {
     // JMW averager now displays netto average if not circling
     if (!Calculated().circling) {
       RenderValue(canvas, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
@@ -121,22 +105,22 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
     }
   }
 
-  if (ShowMc) {
+  if (Settings().ShowMc) {
     fixed mc = Units::ToUserVSpeed(Calculated().common_stats.current_mc);
     RenderValue(canvas, orgBottom.x, orgBottom.y, &diValueBottom, &diLabelBottom,
                 mc,
                 SettingsComputer().task.auto_mc ? _T("Auto MC") : _T("MC"));
   }
 
-  if (ShowSpeedToFly)
+  if (Settings().ShowSpeedToFly)
     RenderSpeedToFly(canvas, rc.right - 11, (rc.top + rc.bottom) / 2);
   else
     RenderClimb(canvas);
 
-  if (ShowBallast)
+  if (Settings().ShowBallast)
     RenderBallast(canvas);
 
-  if (ShowBugs)
+  if (Settings().ShowBugs)
     RenderBugs(canvas);
 
   dirty = false;
@@ -148,7 +132,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
   fixed vval = Basic().brutto_vario;
   ival = ValueToNeedlePos(fixed(vval));
   sval = ValueToNeedlePos(Calculated().sink_rate);
-  if (ShowAveNeedle) {
+  if (Settings().ShowAveNeedle) {
     if (!Calculated().circling)
       ival_av = ValueToNeedlePos(Calculated().netto_average);
     else
@@ -157,7 +141,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
 
   // clear items first
 
-  if (ShowAveNeedle) {
+  if (Settings().ShowAveNeedle) {
     if (!is_persistent() || ival_av != ival_last)
       RenderNeedle(canvas, ival_last, true, true);
 
@@ -176,12 +160,12 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
 
   // now draw items
   RenderVarioLine(canvas, ival, sval, false);
-  if (ShowAveNeedle)
+  if (Settings().ShowAveNeedle)
     RenderNeedle(canvas, ival_av, true, false);
 
   RenderNeedle(canvas, ival, false, false);
 
-  if (ShowGross) {
+  if (Settings().ShowGross) {
     fixed vvaldisplay = min(fixed(99.9), max(fixed(-99.9), Units::ToUserVSpeed(vval)));
 
     RenderValue(canvas, orgMiddle.x, orgMiddle.y,

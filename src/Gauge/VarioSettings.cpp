@@ -21,24 +21,16 @@ Copyright_License {
 }
 */
 
-#include "UISettings.hpp"
-#include "Asset.hpp"
+#include "VarioSettings.hpp"
 
 void
-UISettings::SetDefaults()
+VarioSettings::SetDefaults()
 {
-  custom_fonts = false;
-  enable_auto_blank = false;
-
-  enable_flarm_gauge = true;
-  auto_close_flarm_dialog = false;
-  enable_thermal_assistant_gauge = true;
-
-  popup_message_position = smAlignCenter;
-
-  map.SetDefaults();
-  info_boxes.SetDefaults();
-  vario.SetDefaults();
-  pages.SetDefaults();
-  dialog.SetDefaults();
+  ShowAvgText = false;
+  ShowMc = false;
+  ShowSpeedToFly = false;
+  ShowBallast = false;
+  ShowBugs = false;
+  ShowGross = true;
+  ShowAveNeedle = false;
 }

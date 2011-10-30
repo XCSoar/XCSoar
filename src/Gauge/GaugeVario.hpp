@@ -61,15 +61,6 @@ class GaugeVario : public BufferWindow
 
   const VarioLook &look;
 
-public:
-  bool ShowAvgText;
-  bool ShowMc;
-  bool ShowSpeedToFly;
-  bool ShowBallast;
-  bool ShowBugs;
-  bool ShowGross;
-  bool ShowAveNeedle;
-
 private:
   const UPixelScalar nlength0, nlength1, nwidth, nline;
   PixelScalar xoffset;
@@ -114,6 +105,10 @@ protected:
 
   const SETTINGS_COMPUTER &SettingsComputer() const {
     return blackboard.SettingsComputer();
+  }
+
+  const VarioSettings &Settings() const {
+    return blackboard.GetUISettings().vario;
   }
 
 protected:

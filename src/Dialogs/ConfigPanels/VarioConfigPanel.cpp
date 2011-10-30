@@ -21,15 +21,11 @@ Copyright_License {
 }
 */
 
+#include "VarioConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Profile/Profile.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
-//#include "DataField/Enum.hpp"
 #include "Interface.hpp"
-#include "MainWindow.hpp"
-#include "Gauge/GlueGaugeVario.hpp"
-#include "VarioConfigPanel.hpp"
 
 static WndForm* wf = NULL;
 
@@ -40,26 +36,28 @@ VarioConfigPanel::Init(WndForm *_wf)
   assert(_wf != NULL);
   wf = _wf;
 
+  const VarioSettings &settings = CommonInterface::GetUISettings().vario;
+
   LoadFormProperty(*wf, _T("prpAppGaugeVarioSpeedToFly"),
-                   XCSoarInterface::main_window.vario->ShowSpeedToFly);
+                   settings.ShowSpeedToFly);
 
   LoadFormProperty(*wf, _T("prpAppGaugeVarioAvgText"),
-                   XCSoarInterface::main_window.vario->ShowAvgText);
+                   settings.ShowAvgText);
 
   LoadFormProperty(*wf, _T("prpAppGaugeVarioMc"),
-                   XCSoarInterface::main_window.vario->ShowMc);
+                   settings.ShowMc);
 
   LoadFormProperty(*wf, _T("prpAppGaugeVarioBugs"),
-                   XCSoarInterface::main_window.vario->ShowBugs);
+                   settings.ShowBugs);
 
   LoadFormProperty(*wf, _T("prpAppGaugeVarioBallast"),
-                   XCSoarInterface::main_window.vario->ShowBallast);
+                   settings.ShowBallast);
 
   LoadFormProperty(*wf, _T("prpAppGaugeVarioGross"),
-                   XCSoarInterface::main_window.vario->ShowGross);
+                   settings.ShowGross);
 
   LoadFormProperty(*wf, _T("prpAppAveNeedle"),
-                   XCSoarInterface::main_window.vario->ShowAveNeedle);
+                   settings.ShowAveNeedle);
 }
 
 
@@ -68,32 +66,34 @@ VarioConfigPanel::Save()
 {
   bool changed = false;
 
+  VarioSettings &settings = CommonInterface::SetUISettings().vario;
+
   changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioSpeedToFly"),
                               szProfileAppGaugeVarioSpeedToFly,
-                              XCSoarInterface::main_window.vario->ShowSpeedToFly);
+                              settings.ShowSpeedToFly);
 
   changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioAvgText"),
                               szProfileAppGaugeVarioAvgText,
-                              XCSoarInterface::main_window.vario->ShowAvgText);
+                              settings.ShowAvgText);
 
   changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioMc"),
                               szProfileAppGaugeVarioMc,
-                              XCSoarInterface::main_window.vario->ShowMc);
+                              settings.ShowMc);
 
   changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioBugs"),
                               szProfileAppGaugeVarioBugs,
-                              XCSoarInterface::main_window.vario->ShowBugs);
+                              settings.ShowBugs);
 
   changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioBallast"),
                               szProfileAppGaugeVarioBallast,
-                              XCSoarInterface::main_window.vario->ShowBallast);
+                              settings.ShowBallast);
 
   changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioGross"),
                               szProfileAppGaugeVarioGross,
-                              XCSoarInterface::main_window.vario->ShowGross);
+                              settings.ShowGross);
 
   changed |= SaveFormProperty(*wf, _T("prpAppAveNeedle"), szProfileAppAveNeedle,
-                              XCSoarInterface::main_window.vario->ShowAveNeedle);
+                              settings.ShowAveNeedle);
 
   return changed;
 }

@@ -29,8 +29,21 @@ Copyright_License {
 #include "UISettings.hpp"
 
 namespace Profile {
+  static void Load(VarioSettings &settings);
   static void Load(DialogSettings &settings);
 };
+
+void
+Profile::Load(VarioSettings &settings)
+{
+  Get(szProfileAppGaugeVarioSpeedToFly, settings.ShowSpeedToFly);
+  Get(szProfileAppGaugeVarioAvgText, settings.ShowAvgText);
+  Get(szProfileAppGaugeVarioMc, settings.ShowMc);
+  Get(szProfileAppGaugeVarioBugs, settings.ShowBugs);
+  Get(szProfileAppGaugeVarioBallast, settings.ShowBallast);
+  Get(szProfileAppGaugeVarioGross, settings.ShowGross);
+  Get(szProfileAppAveNeedle, settings.ShowAveNeedle);
+}
 
 void
 Profile::Load(DialogSettings &settings)
@@ -53,6 +66,7 @@ Profile::Load(UISettings &settings)
 
   Load(settings.map);
   Load(settings.info_boxes);
+  Load(settings.vario);
   Load(settings.pages);
   Load(settings.dialog);
 }
