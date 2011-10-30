@@ -125,11 +125,11 @@ public:
   AirspaceListBuilderVisitor(MapItemList &_list):list(_list) {}
 
   void Visit(const AirspacePolygon &airspace) {
-    list.checked_append(new AirspaceMapItem(&airspace));
+    list.checked_append(new AirspaceMapItem(airspace));
   }
 
   void Visit(const AirspaceCircle &airspace) {
-    list.checked_append(new AirspaceMapItem(&airspace));
+    list.checked_append(new AirspaceMapItem(airspace));
   }
 };
 

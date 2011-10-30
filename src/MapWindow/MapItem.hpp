@@ -77,8 +77,8 @@ struct AirspaceMapItem: public MapItem
 {
   const AbstractAirspace *airspace;
 
-  AirspaceMapItem(const AbstractAirspace *_airspace)
-    :MapItem(AIRSPACE), airspace(_airspace) {}
+  AirspaceMapItem(const AbstractAirspace &_airspace)
+    :MapItem(AIRSPACE), airspace(&_airspace) {}
 };
 
 struct WaypointMapItem: public MapItem
