@@ -91,6 +91,9 @@ CompareMapItems(const MapItem *a, const MapItem *b)
         ((const AirspaceMapItem *)a)->airspace->GetBase(),
         ((const AirspaceMapItem *)b)->airspace->GetBase());
 
+  if (a->type == MapItem::MARKER && b->type == MapItem::MARKER)
+    return ((const MarkerMapItem *)a)->id < ((const MarkerMapItem *)b)->id;
+
   return a->type < b->type;
 }
 
