@@ -146,12 +146,7 @@ public:
 
       for (auto in = array.begin() + width, out = array.begin() + _width;
            in < end; in += width) {
-#ifdef ANDROID
-        /* STLport doesn't have std::move() */
-        out = std::copy(in, in + _width, out);
-#else
         out = std::move(in, in + _width, out);
-#endif
       }
 
       width = _width;
@@ -166,12 +161,7 @@ public:
       for (auto in = array.begin() + (h - 1) * width,
              out = array.begin() + (h - 1) * _width + width;
            in < end; in -= width, out -= _width) {
-#ifdef ANDROID
-        /* STLport doesn't have std::move() */
-        std::copy_backward(in, in + width, out);
-#else
         std::move_backward(in, in + width, out);
-#endif
         std::fill(out, out + _width - width, fill);
       }
 
