@@ -65,7 +65,12 @@ protected:
     assert(tail <= size);
     assert(tail >= head);
 
+#ifdef ANDROID
+    /* STLport doesn't have std::move() */
     std::copy(data + head, data + tail, data);
+#else
+    std::move(data + head, data + tail, data);
+#endif
 
     tail -= head;
     head = 0;
