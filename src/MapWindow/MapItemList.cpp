@@ -27,6 +27,33 @@ Copyright_License {
 #include "Engine/Airspace/AbstractAirspace.hpp"
 
 static bool
+CompareWaypointItems(const WaypointMapItem *a, const WaypointMapItem *b)
+{
+  enum {
+    AIRPORT, LANDABLE, WAYPOINT,
+  } type1, type2;
+
+  if (a->waypoint.IsAirport())
+    type1 = AIRPORT;
+  else if (a->waypoint.IsLandable())
+    type1 = LANDABLE;
+  else
+    type1 = WAYPOINT;
+
+  if (b->waypoint.IsAirport())
+    type2 = AIRPORT;
+  else if (b->waypoint.IsLandable())
+    type2 = LANDABLE;
+  else
+    type2 = WAYPOINT;
+
+  if (type1 != type2)
+    return type1 < type2;
+
+  return a->waypoint.id < b->waypoint.id;
+}
+
+static bool
 CompareMapItems(const MapItem *a, const MapItem *b)
 {
   if (a->type == MapItem::SELF)
@@ -35,21 +62,25 @@ CompareMapItems(const MapItem *a, const MapItem *b)
   if (b->type == MapItem::SELF)
     return false;
 
-  if (a->type == MapItem::WAYPOINT &&
+  if (a->type == MapItem::WAYPOINT && b->type != MapItem::WAYPOINT &&
       ((const WaypointMapItem *)a)->waypoint.IsAirport())
     return true;
 
-  if (b->type == MapItem::WAYPOINT &&
+  if (a->type != MapItem::WAYPOINT && b->type == MapItem::WAYPOINT &&
       ((const WaypointMapItem *)b)->waypoint.IsAirport())
     return false;
 
-  if (a->type == MapItem::WAYPOINT &&
+  if (a->type == MapItem::WAYPOINT && b->type != MapItem::WAYPOINT &&
       ((const WaypointMapItem *)a)->waypoint.IsLandable())
     return true;
 
-  if (b->type == MapItem::WAYPOINT &&
+  if (a->type != MapItem::WAYPOINT && b->type == MapItem::WAYPOINT &&
       ((const WaypointMapItem *)b)->waypoint.IsLandable())
     return false;
+
+  if (a->type == MapItem::WAYPOINT && b->type == MapItem::WAYPOINT)
+    return CompareWaypointItems((const WaypointMapItem *)a,
+                                (const WaypointMapItem *)b);
 
   if (a->type == MapItem::TASK_OZ && b->type == MapItem::TASK_OZ)
     return ((const TaskOZMapItem *)a)->index <
