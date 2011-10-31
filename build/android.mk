@@ -91,7 +91,7 @@ endif
 
 # symlink some important files to $(ANDROID_BUILD) and let the Android
 # SDK generate build.xml
-$(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_OUTPUT_DIR)/bin/dirstamp
+$(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) build/r.sed | $(TARGET_OUTPUT_DIR)/bin/dirstamp
 	@$(NQ)echo "  ANDROID $@"
 	$(Q)rm -r -f $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
 	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src
