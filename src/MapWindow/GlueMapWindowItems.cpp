@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "MapWindow/MapItemList.hpp"
 #include "MapWindow/MapItemListBuilder.hpp"
+#include "Terrain/RasterTerrain.hpp"
 
 bool
 GlueMapWindow::ShowMapItems(const GeoPoint &location)
@@ -66,8 +67,15 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
   else
     vector.SetInvalid();
 
+  short elevation;
+  if (terrain)
+    elevation = terrain->GetTerrainHeight(location);
+  else
+    elevation = RasterBuffer::TERRAIN_INVALID;
+
+
   ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), vector, list,
-                        aircraft_look,
+                        elevation, aircraft_look,
                         airspace_renderer.GetLook(),
                         way_point_renderer.GetLook(),
                         task_look, marker_look, SettingsMap());

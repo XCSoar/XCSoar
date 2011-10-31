@@ -29,6 +29,7 @@ Copyright_License {
 #include "Dialogs/Waypoint.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Navigation/Geometry/GeoVector.hpp"
+#include "Terrain/RasterBuffer.hpp"
 #include "MapWindow/MapItem.hpp"
 #include "MapWindow/MapItemList.hpp"
 #include "MapWindow/MapItemListBuilder.hpp"
@@ -50,6 +51,7 @@ static const MarkerLook *marker_look;
 static const SETTINGS_MAP *settings;
 static GeoVector vector;
 static const MapItemList *list;
+static short elevation;
 static WndForm *wf;
 static WndButton *details_button;
 
@@ -149,6 +151,14 @@ ShowMapItemListDialog(SingleWindow &parent)
     _stprintf(info_buffer, _T("%s: %s - %s: %s"),
               _("Distance"), _T("???"), _("Direction"), _T("???"));
   }
+
+  if (elevation != RasterBuffer::TERRAIN_INVALID) {
+    TCHAR elevation_buffer[32];
+    Units::FormatUserAltitude(fixed(elevation), elevation_buffer, 32);
+    _stprintf(info_buffer + _tcslen(info_buffer), _T(" - %s: %s"),
+              _("Elevation"), elevation_buffer);
+  }
+
   WndFrame *info_label = (WndFrame *)wf->FindByName(_T("lblInfo"));
   assert(info_label);
   info_label->SetAlignCenter();
@@ -187,7 +197,7 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
 void
 ShowMapItemListDialog(SingleWindow &parent,
                       const GeoVector &_vector,
-                      const MapItemList &_list,
+                      const MapItemList &_list, short _elevation,
                       const AircraftLook &_aircraft_look,
                       const AirspaceLook &_airspace_look,
                       const WaypointLook &_waypoint_look,
@@ -209,6 +219,7 @@ ShowMapItemListDialog(SingleWindow &parent,
     /* more than one map item: show a list */
     vector = _vector;
     list = &_list;
+    elevation = _elevation;
 
     aircraft_look = &_aircraft_look;
     airspace_look = &_airspace_look;

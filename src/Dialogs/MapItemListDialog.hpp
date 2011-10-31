@@ -39,7 +39,7 @@ void ShowMapItemDialog(const MapItem &item, SingleWindow &parent);
 
 void ShowMapItemListDialog(SingleWindow &parent,
                            const GeoVector &_vector,
-                           const MapItemList &_list,
+                           const MapItemList &_list, short _elevation,
                            const AircraftLook &_aircraft_look,
                            const AirspaceLook &_airspace_look,
                            const WaypointLook &_waypoint_look,
