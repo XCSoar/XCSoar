@@ -51,6 +51,9 @@ Copyright_License {
 #define gcc_likely(x) __builtin_expect (!!(x), 1)
 #define gcc_unlikely(x) __builtin_expect (!!(x), 0)
 
+#define gcc_visibility_hidden __attribute__((visibility("hidden")))
+#define gcc_visibility_default __attribute__((visibility("default")))
+
 #else /* ! GCC_VERSION >= 30000 */
 
 /* generic C compiler */
@@ -69,6 +72,9 @@ Copyright_License {
 
 #define gcc_likely(x) (x)
 #define gcc_unlikely(x) (x)
+
+#define gcc_visibility_hidden
+#define gcc_visibility_default
 
 #endif /* ! GCC_VERSION >= 30000 */
 
