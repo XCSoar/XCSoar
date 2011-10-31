@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-31 08:31+0100\n"
-"PO-Revision-Date: 2011-05-10 12:19+0000\n"
-"Last-Translator: briga <Unknown>\n"
+"PO-Revision-Date: 2011-09-30 15:20+0000\n"
+"Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-11 18:39+0000\n"
-"X-Generator: Launchpad (build 13014)\n"
+"X-Launchpad-Export-Date: 2011-10-31 07:28+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:532
 #: src/InputEventsActions.cpp:1467 src/Dialogs/dlgAnalysis.cpp:347
@@ -39,7 +39,7 @@ msgstr ""
 
 #: src/Airspace/AirspaceParser.cpp:229
 msgid "Line skipped."
-msgstr ""
+msgstr "Linea saltata."
 
 #: src/Airspace/AirspaceParser.cpp:230 src/Dialogs/dlgAnalysis.cpp:365
 #: src/Dialogs/dlgConfiguration.cpp:96
@@ -98,11 +98,11 @@ msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:91
 msgid "Declare task?"
-msgstr ""
+msgstr "Dichiarare il compito?"
 
 #: src/Logger/ExternalLogger.cpp:94
 msgid "Task declared!"
-msgstr ""
+msgstr "Compito dichiarato!"
 
 #: src/Logger/ExternalLogger.cpp:98
 msgid ""
@@ -128,12 +128,12 @@ msgstr "Tema Dichiarato"
 
 #: src/Logger/ExternalLogger.cpp:282
 msgid "Failed to download flight list."
-msgstr ""
+msgstr "Fallito il download dei voli."
 
 #: src/Logger/ExternalLogger.cpp:283 src/Logger/ExternalLogger.cpp:289
 #: src/Logger/ExternalLogger.cpp:317
 msgid "Download flight"
-msgstr ""
+msgstr "Scarica volo"
 
 #: src/Logger/ExternalLogger.cpp:288
 msgid "Logger is empty."
@@ -1842,9 +1842,9 @@ msgid "Nearest airspace horizontal"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:866
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Near AS H"
-msgstr "Vicino"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:867
 #, no-c-format
@@ -1857,9 +1857,9 @@ msgid "Nearest airspace vertical"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:874
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Near AS V"
-msgstr "Vicino"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:875
 #, no-c-format
@@ -2667,18 +2667,16 @@ msgid "GPS fix"
 msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:116
-#, fuzzy
 msgid "Baro"
-msgstr "Barogramma"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:121 Data/Dialogs/dlgVegaDemo.xml:10
 msgid "Airspeed"
 msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:136
-#, fuzzy
 msgid "Not connected"
-msgstr "Nessun logger collegato"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:216 src/Dialogs/dlgConfiguration.cpp:99
 #: Data/Input/default.xci:728
@@ -2734,14 +2732,12 @@ msgid "Refresh"
 msgstr "Aggiorna"
 
 #: src/Dialogs/DeviceListDialog.cpp:223
-#, fuzzy
 msgid "Reconnect"
-msgstr "Disconnesso"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:224
-#, fuzzy
 msgid "Flight download"
-msgstr "Replay Volo"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:225 src/Dialogs/dlgTaskManager.cpp:317
 #: src/Dialogs/dlgTaskManager.cpp:345
@@ -2792,9 +2788,8 @@ msgid "No Match!"
 msgstr "Non Corrisp.!"
 
 #: src/Dialogs/dlgAirspaceSelect.cpp:275
-#, fuzzy
 msgid "Heading"
-msgstr "Atterraggio"
+msgstr ""
 
 #: src/Dialogs/dlgAirspaceWarnings.cpp:303
 msgid "No Warnings"
@@ -2929,9 +2924,8 @@ msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
 msgstr ""
 
 #: src/Dialogs/dlgPlanes.cpp:195 src/Dialogs/dlgPlanes.cpp:237
-#, fuzzy
 msgid "Overwrite"
-msgstr "Sovrascrivi?"
+msgstr ""
 
 #: src/Dialogs/dlgPlanes.cpp:265
 #, c-format
@@ -2958,15 +2952,13 @@ msgstr ""
 
 #: src/Dialogs/dlgPlaneDetails.cpp:40 Data/Dialogs/dlgPlaneDetails.xml:3
 #: Data/Dialogs/dlgPlaneDetails_L.xml:3
-#, fuzzy
 msgid "Plane Details"
-msgstr "Dettagli"
+msgstr ""
 
 #: src/Dialogs/dlgPlanePolar.cpp:48 Data/Dialogs/dlgPlanePolar.xml:3
 #: Data/Dialogs/dlgPlanePolar_L.xml:3
-#, fuzzy
 msgid "Plane Polar"
-msgstr "Polare"
+msgstr ""
 
 #: src/Dialogs/dlgPlanePolar.cpp:56 src/Dialogs/dlgConfiguration.cpp:95
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:102
@@ -3116,9 +3108,8 @@ msgid "Name"
 msgstr "Nome"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:241
-#, fuzzy
 msgid "Panel name"
-msgstr "Nome Pilota"
+msgstr ""
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:387
 msgid "Content"
@@ -3373,9 +3364,8 @@ msgid "Bottom Right"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:99
-#, fuzzy
 msgid "Centre Top"
-msgstr "Centro"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:100
 msgid "Centre Bottom"
@@ -3481,9 +3471,8 @@ msgid "Use the current target waypoint as basis."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:243
-#, fuzzy
 msgid "Polar name"
-msgstr "File Polare"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:80
 #: src/Dialogs/dlgTaskHelpers.cpp:242
@@ -3831,19 +3820,16 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:309 src/Dialogs/dlgTaskManager.cpp:333
-#, fuzzy
 msgid "Calculator"
-msgstr "Calcolo Tema"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:312 src/Dialogs/dlgTaskManager.cpp:340
-#, fuzzy
 msgid "Turn Points"
-msgstr "Piloni Tema"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:321 src/Dialogs/dlgTaskManager.cpp:349
-#, fuzzy
 msgid "Rules"
-msgstr "Regole Tema"
+msgstr ""
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
@@ -3862,9 +3848,8 @@ msgid "Task edit"
 msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:126
-#, fuzzy
 msgid "Add Turnpoint"
-msgstr "Prox pilone"
+msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:176
 msgid "Task not saved"
@@ -3915,14 +3900,12 @@ msgid "(Add Alternate Start)"
 msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:151
-#, fuzzy
 msgid "Enable Alternate Starts"
-msgstr "Punti partenza alternati"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:154
-#, fuzzy
 msgid "Edit Alternates"
-msgstr "Alternato"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:296
 msgid "Remove task point?"
@@ -4090,9 +4073,8 @@ msgid "BGA Enhanced Option"
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:266
-#, fuzzy
 msgid "BGA Start Sector"
-msgstr "Settore FAI"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:276
 msgid ""
@@ -4363,9 +4345,8 @@ msgid "Comment"
 msgstr "Commento"
 
 #: src/Dialogs/dlgWaypointSelect.cpp:658
-#, fuzzy
 msgid "Waypoint name"
-msgstr "Info Pilone"
+msgstr ""
 
 #: src/Dialogs/dlgWaypointSelect.cpp:739
 msgid "Choose a filter or click here"
@@ -4439,9 +4420,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgWaypointDetails.xml:18
 #: Data/Dialogs/dlgWaypointDetails_L.xml:18
-#, fuzzy
 msgid "Bearing and Distance"
-msgstr "Distanza restante"
+msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:18
 msgid ""
@@ -4462,9 +4442,8 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:597 Data/Dialogs/dlgConfiguration.xml:618
 #: Data/Dialogs/dlgConfiguration_L.xml:601
 #: Data/Dialogs/dlgConfiguration_L.xml:622
-#, fuzzy
 msgid "Bulk baud rate"
-msgstr "Velocita"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:13 Data/Dialogs/dlgVario_L.xml:12
 msgid "TE port"
@@ -4665,9 +4644,8 @@ msgid "GPS lock"
 msgstr "GPS"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:46 Data/Dialogs/dlgPlaneDetails_L.xml:38
-#, fuzzy
 msgid "Dump Time"
-msgstr "Tempo scarico"
+msgstr ""
 
 #: Data/Dialogs/dlgTextEntry.xml:8
 msgid "A-"
@@ -6127,9 +6105,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:233
 #: Data/Dialogs/dlgConfiguration_L.xml:233
-#, fuzzy
 msgid "Thermal band"
-msgstr "Quota termica"
+msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:23
 msgid "Gear down"
@@ -6582,9 +6559,8 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:527
 #: Data/Dialogs/pnlTaskProperties.xml:30
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
-#, fuzzy
 msgid "Finish height ref."
-msgstr "Quota arrivo FAI"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:90 Data/Dialogs/dlgConfiguration_L.xml:90
 msgid "Max. auto zoom distance"
@@ -7174,9 +7150,8 @@ msgid "Trail drift"
 msgstr "Scarr.Scia"
 
 #: Data/Dialogs/dlgPlanePolar.xml:57 Data/Dialogs/dlgPlanePolar_L.xml:45
-#, fuzzy
 msgid "Dry Mass"
-msgstr "Massa"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskCalculator.xml:41
 #: Data/Dialogs/pnlTaskCalculator_L.xml:41
@@ -8070,33 +8045,8 @@ msgid ""
 "TAF"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Dew point"
-#~ msgstr "Nuovo Pilone"
-
 #~ msgid "Locked"
 #~ msgstr "Bloccato"
-
-#~ msgid "Configuration saved"
-#~ msgstr "Configurazione Salvata"
-
-#~ msgid "System"
-#~ msgstr "Sistema"
-
-#~ msgid "Task Rules"
-#~ msgstr "Regole Tema"
-
-#~ msgid "Add Waypoint"
-#~ msgstr "aggiungi pilone"
-
-#~ msgid "File Browser"
-#~ msgstr "Esplora files"
-
-#~ msgid "Free"
-#~ msgstr "Libero"
-
-#~ msgid "File type"
-#~ msgstr "Tipo file"
 
 #~ msgid "Declare Task?"
 #~ msgstr "Dichiara Tema?"
@@ -8151,6 +8101,9 @@ msgstr ""
 
 #~ msgid "Min sink"
 #~ msgstr "Min caduta"
+
+#~ msgid "Configuration saved"
+#~ msgstr "Configurazione Salvata"
 
 #~ msgid "Wind at Altitude"
 #~ msgstr "Vento in Quota"
@@ -8224,8 +8177,17 @@ msgstr ""
 #~ msgid "White outline"
 #~ msgstr "Riquadro Bianco"
 
+#~ msgid "Alternate"
+#~ msgstr "Alternato"
+
 #~ msgid "Changes to configuration saved."
 #~ msgstr "Cambio di configurazione salvato"
+
+#~ msgid "System"
+#~ msgstr "Sistema"
+
+#~ msgid "Task Rules"
+#~ msgstr "Regole Tema"
 
 #~ msgid "TRUE"
 #~ msgstr "VERO"
@@ -8235,6 +8197,9 @@ msgstr ""
 
 #~ msgid "add waypoint"
 #~ msgstr "aggiungi pilone"
+
+#~ msgid "FAI Sector"
+#~ msgstr "Settore FAI"
 
 #~ msgid "Append to task"
 #~ msgstr "Aggiungi al tema"
@@ -8299,8 +8264,17 @@ msgstr ""
 #~ msgid "Customize Fonts"
 #~ msgstr "Customizza Stili"
 
+#~ msgid "Polar file"
+#~ msgstr "File Polare"
+
 #~ msgid "Start alt"
 #~ msgstr "Quota start"
+
+#~ msgid "FAI finish height"
+#~ msgstr "Quota arrivo FAI"
+
+#~ msgid "Free"
+#~ msgstr "Libero"
 
 #~ msgid "Select pattern"
 #~ msgstr "Selez. Motivo"
@@ -8320,6 +8294,9 @@ msgstr ""
 #~ msgid "Topology display"
 #~ msgstr "Topologia"
 
+#~ msgid "File type"
+#~ msgstr "Tipo file"
+
 #~ msgid "Start height ref"
 #~ msgstr "Quota Rif Start"
 
@@ -8337,6 +8314,9 @@ msgstr ""
 
 #~ msgid "V ach"
 #~ msgstr "V ott"
+
+#~ msgid "Task Calculator"
+#~ msgstr "Calcolo Tema"
 
 #~ msgid "Info box values small"
 #~ msgstr "InfoBox valori piccoli"
@@ -8364,18 +8344,3 @@ msgstr ""
 
 #~ msgid "Final Glide Through Terrain"
 #~ msgstr "Planata Finale Attraverso Terreno"
-
-#~ msgid "Topology"
-#~ msgstr "Topologia"
-
-#~ msgid "True"
-#~ msgstr "VERO"
-
-#~ msgid "False"
-#~ msgstr "FALSO"
-
-#~ msgid "Orange"
-#~ msgstr "Arancio"
-
-#~ msgid "Clear Task"
-#~ msgstr "Cancella tema"
