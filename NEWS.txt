@@ -5,8 +5,12 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.2.2 - not yet released
 * calculations
   - fix instant L/D formula
+  - fix malformed F records in IGC files
+  - minor fix for FLARM stealth calculations
 * user interface
   - fixed several minor bugs in the plane database dialog
+  - fix MacCready steps for knots and ft/min
+  - manual updates
 * Android
   - acquire "Vibrate" permission
 
