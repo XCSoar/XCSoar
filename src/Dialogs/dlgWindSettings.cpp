@@ -63,7 +63,7 @@ dlgWindSettingsShowModal(void)
     return;
 
   const bool external_wind = XCSoarInterface::Basic().external_wind_available &&
-    XCSoarInterface::SettingsComputer().ExternalWind;
+    XCSoarInterface::SettingsComputer().use_external_wind;
 
   WndProperty* wp;
 
@@ -100,7 +100,7 @@ dlgWindSettingsShowModal(void)
     dfe->addEnumText(_("Circling"));
     dfe->addEnumText(_("ZigZag"));
     dfe->addEnumText(_("Both"));
-    dfe->Set(XCSoarInterface::SettingsComputer().AutoWindMode);
+    dfe->Set(XCSoarInterface::SettingsComputer().auto_wind_mode);
     wp->RefreshDisplay();
   }
 
@@ -120,21 +120,21 @@ dlgWindSettingsShowModal(void)
     wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
     if (wp != NULL) {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-      XCSoarInterface::SetSettingsComputer().ManualWind.norm =
+      XCSoarInterface::SetSettingsComputer().manual_wind.norm =
         Units::ToSysWindSpeed(df.GetAsFixed());
-      XCSoarInterface::SetSettingsComputer().ManualWindAvailable.Update(XCSoarInterface::Basic().clock);
+      XCSoarInterface::SetSettingsComputer().manual_wind_available.Update(XCSoarInterface::Basic().clock);
     }
 
     wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
     if (wp != NULL) {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-      XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
+      XCSoarInterface::SetSettingsComputer().manual_wind.bearing =
         Angle::Degrees(df.GetAsFixed());
-      XCSoarInterface::SetSettingsComputer().ManualWindAvailable.Update(XCSoarInterface::Basic().clock);
+      XCSoarInterface::SetSettingsComputer().manual_wind_available.Update(XCSoarInterface::Basic().clock);
     }
 
     SaveFormProperty(*wf, _T("prpAutoWind"), szProfileAutoWind,
-                     XCSoarInterface::SetSettingsComputer().AutoWindMode);
+                     XCSoarInterface::SetSettingsComputer().auto_wind_mode);
   }
 
   SaveFormProperty(*wf, _T("prpTrailDrift"),

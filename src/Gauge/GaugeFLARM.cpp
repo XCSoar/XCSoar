@@ -47,7 +47,7 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
 
 void
 GaugeFLARM::Update(bool enable, const NMEAInfo &gps_info,
-                   const SETTINGS_TEAMCODE &settings)
+                   const TeamCodeSettings &settings)
 {
   // If FLARM alarm level higher then 0
   if (gps_info.flarm.alarm_level > 0)

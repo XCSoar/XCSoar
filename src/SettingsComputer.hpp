@@ -47,21 +47,21 @@ struct Waypoint;
 // but are used read-only by calculations
 
 /** AutoWindMode (not in use) */
-enum AutoWindModeBits_t
+enum AutoWindModeBits
 {
   /** 0: Manual */
-  D_AUTOWIND_NONE = 0,
+  AUTOWIND_NONE = 0,
   /** 1: Circling */
-  D_AUTOWIND_CIRCLING,
+  AUTOWIND_CIRCLING,
   /** 2: ZigZag */
-  D_AUTOWIND_ZIGZAG
+  AUTOWIND_ZIGZAG,
   /** 3: Both */
 };
 
 /**
  * Wind calculator settings
  */
-struct SETTINGS_WIND {
+struct WindSettings {
 /**
  * AutoWind calculation mode
  * 0: Manual
@@ -69,20 +69,20 @@ struct SETTINGS_WIND {
  * 2: ZigZag
  * 3: Both
  */
-  uint8_t AutoWindMode;
+  uint8_t auto_wind_mode;
 
   /**
    * If enabled, then the wind vector received from external devices
    * overrides XCSoar's internal wind calculation.
    */
-  bool ExternalWind;
+  bool use_external_wind;
 
   /**
    * This is the manual wind set by the pilot. Validity is set when
    * changeing manual wind but does not expire.
    */
-  SpeedVector ManualWind;
-  Validity ManualWindAvailable;
+  SpeedVector manual_wind;
+  Validity manual_wind_available;
 
   void SetDefaults();
 };
@@ -90,14 +90,14 @@ struct SETTINGS_WIND {
 /**
  * Logger settings
  */
-struct SETTINGS_LOGGER {
+struct LoggerSettings {
   /** Logger interval in cruise mode */
-  uint16_t LoggerTimeStepCruise;
+  uint16_t logger_time_step_cruise;
   /** Logger interval in circling mode */
-  uint16_t LoggerTimeStepCircling;
+  uint16_t logger_time_step_circling;
   /** Use short IGC filenames for the logger files */
-  bool LoggerShortName;
-  bool DisableAutoLogger;
+  bool logger_short_name;
+  bool auto_logger_disabled;
 
   void SetDefaults();
 };
@@ -105,19 +105,19 @@ struct SETTINGS_LOGGER {
 /**
  * Glide polar settings
  */
-struct SETTINGS_POLAR {
-  bool BallastTimerActive;      /**< Whether the ballast countdown timer is active */
+struct PolarSettings {
+  bool ballast_timer_active;      /**< Whether the ballast countdown timer is active */
 
   void SetDefaults();
 };
 
-struct SETTINGS_SOUND {
+struct SoundSettings {
   // sound stuff not used?
-  bool EnableSoundVario;
-  bool EnableSoundTask;
-  bool EnableSoundModes;
-  uint8_t SoundVolume;
-  uint8_t SoundDeadband;
+  bool sound_vario_enabled;
+  bool sound_task_enabled;
+  bool sound_modes_enabled;
+  uint8_t sound_volume;
+  uint8_t sound_deadband;
 
   void SetDefaults();
 };
@@ -125,29 +125,29 @@ struct SETTINGS_SOUND {
 /** 
  * Settings for teamcode calculations
  */
-struct SETTINGS_TEAMCODE {
-  int TeamCodeRefWaypoint;      /**< Reference waypoint id for code origin */
-  bool TeamFlarmTracking;       /**< Whether to enable tracking by FLARM */
-  bool TeammateCodeValid;       /**< Whether the teammate code is valid */  
+struct TeamCodeSettings {
+  int team_code_reference_waypoint;      /**< Reference waypoint id for code origin */
+  bool team_flarm_tracking;       /**< Whether to enable tracking by FLARM */
+  bool team_code_valid;       /**< Whether the teammate code is valid */  
 
-  StaticString<4> TeamFlarmCNTarget;   /**< CN of the glider to track */
-  TeamCode TeammateCode;       /**< auto-detected, see also in Info.h */
+  StaticString<4> team_flarm_callsign;   /**< CN of the glider to track */
+  TeamCode team_code;       /**< auto-detected, see also in Info.h */
 
-  FlarmId TeamFlarmIdTarget; /**< FlarmId of the glider to track */
+  FlarmId team_flarm_id; /**< FlarmId of the glider to track */
 
   void SetDefaults();
 };
 
-struct SETTINGS_VOICE {
+struct VoiceSettings {
   // vegavoice stuff
-  bool EnableVoiceClimbRate;
-  bool EnableVoiceTerrain;
-  bool EnableVoiceWaypointDistance;
-  bool EnableVoiceTaskAltitudeDifference;
-  bool EnableVoiceMacCready;
-  bool EnableVoiceNewWaypoint;
-  bool EnableVoiceInSector;
-  bool EnableVoiceAirspace;
+  bool voice_climb_rate_enabled;
+  bool voice_terrain_enabled;
+  bool voice_waypoint_distance_enabled;
+  bool voice_task_altitude_difference_enabled;
+  bool voice_mac_cready_enabled;
+  bool voice_new_waypoint_enabled;
+  bool voice_in_sector_enabled;
+  bool voice_airspace_enabled;
 
   void SetDefaults();
 };
@@ -155,13 +155,13 @@ struct SETTINGS_VOICE {
 /**
  * Options for tracking places of interest as alternates
  */
-struct SETTINGS_PLACES_OF_INTEREST {
+struct PlacesOfInterestSettings {
   /** Array index of the home waypoint */
-  int HomeWaypoint;
+  int home_waypoint;
 
-  bool HomeLocationAvailable;
+  bool home_location_available;
 
-  GeoPoint HomeLocation;
+  GeoPoint home_location;
 
   void SetDefaults() {
     ClearHome();
@@ -175,24 +175,24 @@ struct SETTINGS_PLACES_OF_INTEREST {
 /**
  * Options for glide computer features
  */
-struct SETTINGS_FEATURES {
+struct FeaturesSettings {
   /** Calculate final glide over terrain */
   enum FinalGlideTerrain {
     FGT_OFF,
     FGT_LINE,
     FGT_SHADE,
-  } FinalGlideTerrain;
+  } final_glide_terrain;
 
   /** block speed to fly instead of dolphin */
-  bool EnableBlockSTF;
+  bool block_stf_enabled;
 
   /** Navigate by baro altitude instead of GPS altitude */
-  bool EnableNavBaroAltitude;
+  bool nav_baro_altitude_enabled;
 
   void SetDefaults();
 };
 
-enum AverEffTime_t {
+enum AverageEffTime {
   ae15seconds,
   ae30seconds,
   ae60seconds,
@@ -202,24 +202,24 @@ enum AverEffTime_t {
 };
 
 struct SETTINGS_COMPUTER: 
-  public SETTINGS_WIND,
-  public SETTINGS_LOGGER,
-  public SETTINGS_POLAR,
-  public SETTINGS_SOUND,
-  public SETTINGS_TEAMCODE,
-  public SETTINGS_VOICE,
-  public SETTINGS_PLACES_OF_INTEREST,
-  public SETTINGS_FEATURES
+  public WindSettings,
+  public LoggerSettings,
+  public PolarSettings,
+  public SoundSettings,
+  public TeamCodeSettings,
+  public VoiceSettings,
+  public PlacesOfInterestSettings,
+  public FeaturesSettings
 {
-  bool EnableExternalTriggerCruise;
+  bool external_trigger_cruise_enabled;
 
-  AverEffTime_t AverEffTime;
+  AverageEffTime average_eff_time;
 
   /** Update system time from GPS time */
-  bool SetSystemTimeFromGPS;
+  bool set_system_time_from_gps;
 
   /** local time adjustment */
-  int UTCOffset;
+  int utc_offset;
 
   /**
    * Troposhere atmosphere model for QNH correction

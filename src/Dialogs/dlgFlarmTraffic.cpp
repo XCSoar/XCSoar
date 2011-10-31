@@ -70,7 +70,7 @@ protected:
 
 public:
   void Update(Angle new_direction, const FlarmState &new_data,
-              const SETTINGS_TEAMCODE &new_settings);
+              const TeamCodeSettings &new_settings);
   void UpdateTaskDirection(bool show_task_direction, Angle bearing);
 
   bool GetNorthUp() const {
@@ -182,7 +182,7 @@ FlarmTrafficControl::CalcAutoZoom()
 
 void
 FlarmTrafficControl::Update(Angle new_direction, const FlarmState &new_data,
-                            const SETTINGS_TEAMCODE &new_settings)
+                            const TeamCodeSettings &new_settings)
 {
   FlarmTrafficWindow::Update(new_direction, new_data, new_settings);
 
@@ -357,8 +357,8 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 
     // If no color found but target is teammate
     if (team_color == FlarmFriends::NONE &&
-        settings.TeamFlarmTracking &&
-        traffic.id == settings.TeamFlarmIdTarget)
+        settings.team_flarm_tracking &&
+        traffic.id == settings.team_flarm_id)
       // .. use yellow color
       team_color = FlarmFriends::GREEN;
 

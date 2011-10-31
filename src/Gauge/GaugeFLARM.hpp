@@ -27,7 +27,7 @@ Copyright_License {
 #include "FlarmTrafficWindow.hpp"
 
 struct NMEAInfo;
-struct SETTINGS_TEAMCODE;
+struct TeamCodeSettings;
 class ContainerWindow;
 
 /**
@@ -45,7 +45,7 @@ public:
              const WindowStyle style=WindowStyle());
 
   void Update(bool enable, const NMEAInfo &gps_info,
-              const SETTINGS_TEAMCODE &settings);
+              const TeamCodeSettings &settings);
 
 protected:
   bool on_mouse_down(PixelScalar x, PixelScalar y);

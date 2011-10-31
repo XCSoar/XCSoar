@@ -47,18 +47,18 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[]={
 
 static void LoadIntoForm(WndForm &form, const SETTINGS_COMPUTER &settings){
   LoadFormProperty(form, _T("prpVoiceClimbRate"),
-                   settings.EnableVoiceClimbRate);
-  LoadFormProperty(form, _T("prpVoiceTerrain"), settings.EnableVoiceTerrain);
+                   settings.voice_climb_rate_enabled);
+  LoadFormProperty(form, _T("prpVoiceTerrain"), settings.voice_terrain_enabled);
   LoadFormProperty(form, _T("prpVoiceWaypointDistance"),
-                   settings.EnableVoiceWaypointDistance);
+                   settings.voice_waypoint_distance_enabled);
   LoadFormProperty(form, _T("prpVoiceTaskAltitudeDifference"),
-                   settings.EnableVoiceTaskAltitudeDifference);
+                   settings.voice_task_altitude_difference_enabled);
   LoadFormProperty(form, _T("prpVoiceMacCready"),
-                   settings.EnableVoiceMacCready);
+                   settings.voice_mac_cready_enabled);
   LoadFormProperty(form, _T("prpVoiceNewWaypoint"),
-                   settings.EnableVoiceNewWaypoint);
-  LoadFormProperty(form, _T("prpVoiceInSector"), settings.EnableVoiceInSector);
-  LoadFormProperty(form, _T("prpVoiceAirspace"), settings.EnableVoiceAirspace);
+                   settings.voice_new_waypoint_enabled);
+  LoadFormProperty(form, _T("prpVoiceInSector"), settings.voice_in_sector_enabled);
+  LoadFormProperty(form, _T("prpVoiceAirspace"), settings.voice_airspace_enabled);
 }
 
 static bool
@@ -66,26 +66,26 @@ SaveFromForm(const WndForm &form, SETTINGS_COMPUTER &settings)
 {
   return
     SaveFormProperty(form, _T("prpVoiceClimbRate"),
-                     settings.EnableVoiceClimbRate,
+                     settings.voice_climb_rate_enabled,
                      szProfileVoiceClimbRate) ||
     SaveFormProperty(form, _T("prpVoiceTerrain"),
-                     settings.EnableVoiceTerrain, szProfileVoiceTerrain) ||
+                     settings.voice_terrain_enabled, szProfileVoiceTerrain) ||
     SaveFormProperty(form, _T("prpVoiceWaypointDistance"),
-                     settings.EnableVoiceWaypointDistance,
+                     settings.voice_waypoint_distance_enabled,
                      szProfileVoiceWaypointDistance) ||
     SaveFormProperty(form, _T("prpVoiceTaskAltitudeDifference"),
-                     settings.EnableVoiceTaskAltitudeDifference,
+                     settings.voice_task_altitude_difference_enabled,
                      szProfileVoiceTaskAltitudeDifference) ||
     SaveFormProperty(form, _T("prpVoiceMacCready"),
-                     settings.EnableVoiceMacCready,
+                     settings.voice_mac_cready_enabled,
                      szProfileVoiceMacCready) ||
     SaveFormProperty(form, _T("prpVoiceNewWaypoint"),
-                     settings.EnableVoiceNewWaypoint,
+                     settings.voice_new_waypoint_enabled,
                      szProfileVoiceNewWaypoint) ||
     SaveFormProperty(form, _T("prpVoiceInSector"),
-                     settings.EnableVoiceInSector, szProfileVoiceInSector) ||
+                     settings.voice_in_sector_enabled, szProfileVoiceInSector) ||
     SaveFormProperty(form, _T("prpVoiceAirspace"),
-                     settings.EnableVoiceAirspace, szProfileVoiceAirspace);
+                     settings.voice_airspace_enabled, szProfileVoiceAirspace);
 }
 
 

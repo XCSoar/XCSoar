@@ -173,7 +173,7 @@ FlarmTrafficWindow::UpdateWarnings()
  */
 void
 FlarmTrafficWindow::Update(Angle new_direction, const FlarmState &new_data,
-                           const SETTINGS_TEAMCODE &new_settings)
+                           const TeamCodeSettings &new_settings)
 {
   FlarmId selection_id;
   RasterPoint pt;
@@ -301,8 +301,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
       // If no color found but target is teammate
       if (team_color == FlarmFriends::NONE &&
-          settings.TeamFlarmTracking &&
-          traffic.id == settings.TeamFlarmIdTarget)
+          settings.team_flarm_tracking &&
+          traffic.id == settings.team_flarm_id)
         // .. use yellow color
         team_color = FlarmFriends::GREEN;
 

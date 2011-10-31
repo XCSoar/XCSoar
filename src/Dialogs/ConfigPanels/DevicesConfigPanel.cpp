@@ -551,7 +551,7 @@ DevicesConfigPanel::Init(WndForm *_wf)
                     (WndProperty*)wf->FindByName(_T("prpComDevice2")));
 
   LoadFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
-                   CommonInterface::SettingsComputer().SetSystemTimeFromGPS);
+                   CommonInterface::SettingsComputer().set_system_time_from_gps);
 
   LoadFormProperty(*wf, _T("prpIgnoreNMEAChecksum"),
                    NMEAParser::ignore_checksum);
@@ -578,7 +578,7 @@ DevicesConfigPanel::Save()
 
   changed |= SaveFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
                               szProfileSetSystemTimeFromGPS,
-                              CommonInterface::SetSettingsComputer().SetSystemTimeFromGPS);
+                              CommonInterface::SetSettingsComputer().set_system_time_from_gps);
 
   changed |= SaveFormProperty(*wf, _T("prpIgnoreNMEAChecksum"),
                               szProfileIgnoreNMEAChecksum,

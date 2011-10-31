@@ -215,7 +215,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
     // long filename form of IGC file.
     // XXX represents manufacturer code
 
-    if (!settings.LoggerShortName) {
+    if (!settings.logger_short_name) {
       // Long file name
       _stprintf(name,
                 _T("%04u-%02u-%02u-XCS-%c%c%c-%02d.igc"),

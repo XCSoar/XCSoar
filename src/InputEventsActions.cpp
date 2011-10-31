@@ -137,7 +137,7 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
   } else {
     protected_marks->MarkLocation(basic.location, basic.date_time_utc);
 
-    if (XCSoarInterface::SettingsComputer().EnableSoundModes)
+    if (XCSoarInterface::SettingsComputer().sound_modes_enabled)
       PlayResource(_T("IDR_WAV_CLEAR"));
   }
 
@@ -152,13 +152,13 @@ InputEvents::eventSounds(const TCHAR *misc)
  // bool OldEnableSoundVario = EnableSoundVario;
 
   if (_tcscmp(misc, _T("toggle")) == 0)
-    settings_computer.EnableSoundVario = !settings_computer.EnableSoundVario;
+    settings_computer.sound_vario_enabled = !settings_computer.sound_vario_enabled;
   else if (_tcscmp(misc, _T("on")) == 0)
-    settings_computer.EnableSoundVario = true;
+    settings_computer.sound_vario_enabled = true;
   else if (_tcscmp(misc, _T("off")) == 0)
-    settings_computer.EnableSoundVario = false;
+    settings_computer.sound_vario_enabled = false;
   else if (_tcscmp(misc, _T("show")) == 0) {
-    if (settings_computer.EnableSoundVario)
+    if (settings_computer.sound_vario_enabled)
       Message::AddMessage(_("Vario sounds on"));
     else
       Message::AddMessage(_("Vario sounds off"));
@@ -952,16 +952,16 @@ InputEvents::eventAudioDeadband(const TCHAR *misc)
     CommonInterface::SetSettingsComputer();
 
   if (_tcscmp(misc, _T("+"))) {
-    if (settings_computer.SoundDeadband >= 40)
+    if (settings_computer.sound_deadband >= 40)
       return;
 
-    settings_computer.SoundDeadband++;
+    settings_computer.sound_deadband++;
   }
   if (_tcscmp(misc, _T("-"))) {
-    if (settings_computer.SoundDeadband <= 0)
+    if (settings_computer.sound_deadband <= 0)
       return;
 
-    settings_computer.SoundDeadband--;
+    settings_computer.sound_deadband--;
   }
 
   /*
@@ -1143,7 +1143,7 @@ InputEvents::eventBallast(const TCHAR *misc)
 void
 InputEvents::eventAutoLogger(const TCHAR *misc)
 {
-  if (!XCSoarInterface::SettingsComputer().DisableAutoLogger)
+  if (!XCSoarInterface::SettingsComputer().auto_logger_disabled)
     eventLogger(misc);
 }
 

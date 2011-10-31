@@ -40,10 +40,10 @@ LoggerConfigPanel::Init(WndForm *_wf)
   const Plane &plane = settings_computer.plane;
 
   LoadFormProperty(*wf, _T("prpLoggerTimeStepCruise"),
-                   settings_computer.LoggerTimeStepCruise);
+                   settings_computer.logger_time_step_cruise);
 
   LoadFormProperty(*wf, _T("prpLoggerTimeStepCircling"),
-                   settings_computer.LoggerTimeStepCircling);
+                   settings_computer.logger_time_step_circling);
 
   LoadFormPropertyFromProfile(*wf, _T("PilotName"), szProfilePilotName);
   LoadFormProperty(*wf, _T("AircraftType"), plane.type);
@@ -52,10 +52,10 @@ LoggerConfigPanel::Init(WndForm *_wf)
   LoadFormPropertyFromProfile(*wf, _T("LoggerID"), szProfileLoggerID);
 
   LoadFormProperty(*wf, _T("prpLoggerShortName"),
-                   settings_computer.LoggerShortName);
+                   settings_computer.logger_short_name);
 
   LoadFormProperty(*wf, _T("prpDisableAutoLogger"),
-                   !settings_computer.DisableAutoLogger);
+                   !settings_computer.auto_logger_disabled);
 }
 
 
@@ -70,11 +70,11 @@ LoggerConfigPanel::Save()
 
   changed |= SaveFormProperty(*wf, _T("prpLoggerTimeStepCruise"),
                               szProfileLoggerTimeStepCruise,
-                              settings_computer.LoggerTimeStepCruise);
+                              settings_computer.logger_time_step_cruise);
 
   changed |= SaveFormProperty(*wf, _T("prpLoggerTimeStepCircling"),
                               szProfileLoggerTimeStepCircling,
-                              settings_computer.LoggerTimeStepCircling);
+                              settings_computer.logger_time_step_circling);
 
   changed |= SaveFormPropertyToProfile(*wf, _T("PilotName"),
                                        szProfilePilotName);
@@ -85,12 +85,12 @@ LoggerConfigPanel::Save()
 
   changed |= SaveFormProperty(*wf, _T("prpLoggerShortName"),
                               szProfileLoggerShort,
-                              settings_computer.LoggerShortName);
+                              settings_computer.logger_short_name);
 
   /* GUI label is "Enable Auto Logger" */
   changed |= SaveFormPropertyNegated(*wf, _T("prpDisableAutoLogger"),
                                      szProfileDisableAutoLogger,
-                                     settings_computer.DisableAutoLogger);
+                                     settings_computer.auto_logger_disabled);
 
   if (changed)
     PlaneGlue::ToProfile(settings_computer.plane);

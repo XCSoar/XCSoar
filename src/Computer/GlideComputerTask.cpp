@@ -107,7 +107,7 @@ GlideComputerTask::ProcessMoreTask()
                      SettingsComputer().task.route_planner,
                      glide_polar, safety_polar);
 
-  if (SettingsComputer().EnableBlockSTF)
+  if (SettingsComputer().block_stf_enabled)
     SetCalculated().V_stf = Calculated().common_stats.V_block;
   else
     SetCalculated().V_stf = Calculated().common_stats.V_dolphin;

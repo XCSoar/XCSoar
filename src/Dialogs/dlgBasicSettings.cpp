@@ -52,7 +52,7 @@ SetButtons()
 
   if ((wb = (WndButton *)wf->FindByName(_T("cmdDump"))) != NULL) {
     wb->set_visible(glide_polar.HasBallast());
-    wb->SetCaption(XCSoarInterface::SettingsComputer().BallastTimerActive ?
+    wb->SetCaption(XCSoarInterface::SettingsComputer().ballast_timer_active ?
         _("Stop") : _("Dump"));
   }
 }
@@ -69,7 +69,7 @@ SetBallastTimer(bool active)
   if (protected_task_manager == NULL)
     return;
 
-  if (active == XCSoarInterface::SettingsComputer().BallastTimerActive)
+  if (active == XCSoarInterface::SettingsComputer().ballast_timer_active)
     return;
 
   if (active && changed) {
@@ -79,7 +79,7 @@ SetBallastTimer(bool active)
     changed = false;
   }
 
-  XCSoarInterface::SetSettingsComputer().BallastTimerActive = active;
+  XCSoarInterface::SetSettingsComputer().ballast_timer_active = active;
 
   SetButtons();
 }
@@ -87,7 +87,7 @@ SetBallastTimer(bool active)
 static void
 OnBallastDump(gcc_unused WndButton &Sender)
 {
-  SetBallastTimer(!XCSoarInterface::SettingsComputer().BallastTimerActive);
+  SetBallastTimer(!XCSoarInterface::SettingsComputer().ballast_timer_active);
 }
 
 static void
@@ -183,7 +183,7 @@ static void
 OnTimerNotify(gcc_unused WndForm &Sender)
 {
   if (protected_task_manager != NULL &&
-      XCSoarInterface::SettingsComputer().BallastTimerActive && !changed) {
+      XCSoarInterface::SettingsComputer().ballast_timer_active && !changed) {
     /* get new GlidePolar values */
     glide_polar = CommonInterface::SettingsComputer().glide_polar_task;
 
@@ -205,7 +205,7 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
   switch (Mode) {
   case DataField::daSpecial:
     SetBallastTimer(glide_polar.HasBallast() &&
-                    !XCSoarInterface::SettingsComputer().BallastTimerActive);
+                    !XCSoarInterface::SettingsComputer().ballast_timer_active);
     break;
   case DataField::daChange:
     glide_polar.SetBallastLitres(df.GetAsFixed());

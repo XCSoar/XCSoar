@@ -76,14 +76,14 @@ RouteConfigPanel::Init(WndForm *_wf)
     settings_computer.task.route_planner;
 
   static gcc_constexpr_data StaticEnumChoice final_glide_terrain_list[] = {
-    { SETTINGS_FEATURES::FGT_OFF, N_("Off") },
-    { SETTINGS_FEATURES::FGT_LINE, N_("Line") },
-    { SETTINGS_FEATURES::FGT_SHADE, N_("Shade") },
+    { FeaturesSettings::FGT_OFF, N_("Off") },
+    { FeaturesSettings::FGT_LINE, N_("Line") },
+    { FeaturesSettings::FGT_SHADE, N_("Shade") },
     { 0 }
   };
 
   LoadFormProperty(*wf, _T("prpFinalGlideTerrain"), final_glide_terrain_list,
-                   settings_computer.FinalGlideTerrain);
+                   settings_computer.final_glide_terrain);
 
   static gcc_constexpr_data StaticEnumChoice route_mode_list[] = {
     { RoutePlannerConfig::rpNone, N_("None") },
@@ -143,7 +143,7 @@ RouteConfigPanel::Save()
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpFinalGlideTerrain"),
                                   szProfileFinalGlideTerrain,
-                                  settings_computer.FinalGlideTerrain);
+                                  settings_computer.final_glide_terrain);
 
   changed |= SaveFormProperty(*wf, _T("prpRoutePlannerAllowClimb"),
                               szProfileRoutePlannerAllowClimb,

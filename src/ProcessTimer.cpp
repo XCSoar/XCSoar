@@ -101,7 +101,7 @@ SystemClockTimer()
   static bool sysTimeInitialised = false;
 
   if (basic.connected &&
-      CommonInterface::SettingsComputer().SetSystemTimeFromGPS
+      CommonInterface::SettingsComputer().set_system_time_from_gps
       && basic.gps.real
       /* assume that we only have a valid date and time when we have a
          full GPS fix */
@@ -213,7 +213,7 @@ BallastDumpProcessTimer()
   SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SetSettingsComputer();
 
-  if (!settings_computer.BallastTimerActive)
+  if (!settings_computer.ballast_timer_active)
     return;
 
   // only update every 5 seconds to stop flooding the devices
@@ -223,7 +223,7 @@ BallastDumpProcessTimer()
 
   // We don't know how fast the water is flowing so don't pretend that we do
   if (settings_computer.plane.dump_time <= 0) {
-    settings_computer.BallastTimerActive = false;
+    settings_computer.ballast_timer_active = false;
     return;
   }
 
@@ -238,7 +238,7 @@ BallastDumpProcessTimer()
 
   ballast -= dt * percent_per_second;
   if (negative(ballast)) {
-    settings_computer.BallastTimerActive = false;
+    settings_computer.ballast_timer_active = false;
     ballast = fixed_zero;
   }
 
@@ -256,8 +256,8 @@ ManualWindProcessTimer()
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
   /* as soon as another wind setting is used, clear the manual wind */
-  if (calculated.wind_available.Modified(settings_computer.ManualWindAvailable))
-    settings_computer.ManualWindAvailable.Clear();
+  if (calculated.wind_available.Modified(settings_computer.manual_wind_available))
+    settings_computer.manual_wind_available.Clear();
 }
 
 static void

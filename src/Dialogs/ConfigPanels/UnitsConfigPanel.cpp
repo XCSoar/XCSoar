@@ -252,7 +252,7 @@ UnitsConfigPanel::Init(WndForm *_wf)
 
   UpdateUnitFields(Units::Current);
 
-  int utc_offset = XCSoarInterface::SettingsComputer().UTCOffset;
+  int utc_offset = XCSoarInterface::SettingsComputer().utc_offset;
   LoadFormProperty(*wf, _T("prpUTCOffset"),
                    fixed(iround(fixed(utc_offset) / 1800)) / 2);
 #ifdef WIN32
@@ -411,8 +411,8 @@ UnitsConfigPanel::Save()
   assert(wp != NULL);
   DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
   int ival = iround(df.GetAsFixed() * 3600);
-  if (settings_computer.UTCOffset != ival) {
-    settings_computer.UTCOffset = ival;
+  if (settings_computer.utc_offset != ival) {
+    settings_computer.utc_offset = ival;
 
     // have to do this because registry variables can't be negative!
     if (ival < 0)

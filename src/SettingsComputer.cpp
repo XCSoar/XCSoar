@@ -27,101 +27,101 @@ Copyright_License {
 #include "Asset.hpp"
 
 void
-SETTINGS_WIND::SetDefaults()
+WindSettings::SetDefaults()
 {
-  AutoWindMode = D_AUTOWIND_CIRCLING;
-  ExternalWind = true;
-  ManualWindAvailable.Clear();
+  auto_wind_mode = AUTOWIND_CIRCLING;
+  use_external_wind = true;
+  manual_wind_available.Clear();
 }
 
 void
-SETTINGS_LOGGER::SetDefaults()
+LoggerSettings::SetDefaults()
 {
-  LoggerTimeStepCruise = 5;
-  LoggerTimeStepCircling = 1;
-  LoggerShortName = false;
-  DisableAutoLogger = false;
+  logger_time_step_cruise = 5;
+  logger_time_step_circling = 1;
+  logger_short_name = false;
+  auto_logger_disabled = false;
 }
 
 void
-SETTINGS_POLAR::SetDefaults()
+PolarSettings::SetDefaults()
 {
-  BallastTimerActive = false;
+  ballast_timer_active = false;
 }
 
 void
-SETTINGS_SOUND::SetDefaults()
+SoundSettings::SetDefaults()
 {
-  EnableSoundVario = true;
-  EnableSoundTask = true;
-  EnableSoundModes = true;
-  SoundVolume = 80;
-  SoundDeadband = 5;
+  sound_vario_enabled = true;
+  sound_task_enabled = true;
+  sound_modes_enabled = true;
+  sound_volume = 80;
+  sound_deadband = 5;
 }
 
 void
-SETTINGS_TEAMCODE::SetDefaults()
+TeamCodeSettings::SetDefaults()
 {
-  TeamCodeRefWaypoint = -1;
-  TeamFlarmTracking = false;
-  TeammateCodeValid = false;
-  TeamFlarmCNTarget.clear();
-  TeamFlarmIdTarget.Clear();
+  team_code_reference_waypoint = -1;
+  team_flarm_tracking = false;
+  team_code_valid = false;
+  team_flarm_callsign.clear();
+  team_flarm_id.Clear();
 }
 
 void
-SETTINGS_VOICE::SetDefaults()
+VoiceSettings::SetDefaults()
 {
-  EnableVoiceClimbRate = false;
-  EnableVoiceTerrain = false;
-  EnableVoiceWaypointDistance = false;
-  EnableVoiceTaskAltitudeDifference = false;
-  EnableVoiceMacCready = false;
-  EnableVoiceNewWaypoint = false;
-  EnableVoiceInSector = false;
-  EnableVoiceAirspace = false;
+  voice_climb_rate_enabled = false;
+  voice_terrain_enabled = false;
+  voice_waypoint_distance_enabled = false;
+  voice_task_altitude_difference_enabled = false;
+  voice_mac_cready_enabled = false;
+  voice_new_waypoint_enabled = false;
+  voice_in_sector_enabled = false;
+  voice_airspace_enabled = false;
 }
 
 void
-SETTINGS_PLACES_OF_INTEREST::ClearHome()
+PlacesOfInterestSettings::ClearHome()
 {
-  HomeWaypoint = -1;
-  HomeLocationAvailable = false;
+  home_waypoint = -1;
+  home_location_available = false;
 }
 
 void
-SETTINGS_PLACES_OF_INTEREST::SetHome(const Waypoint &wp)
+PlacesOfInterestSettings::SetHome(const Waypoint &wp)
 {
-  HomeWaypoint = wp.id;
-  HomeLocation = wp.location;
-  HomeLocationAvailable = true;
+  home_waypoint = wp.id;
+  home_location = wp.location;
+  home_location_available = true;
 }
 
 void
-SETTINGS_FEATURES::SetDefaults()
+FeaturesSettings::SetDefaults()
 {
-  FinalGlideTerrain = FGT_LINE;
-  EnableBlockSTF = false;
-  EnableNavBaroAltitude = true;
+  final_glide_terrain = FGT_LINE;
+  block_stf_enabled = false;
+  nav_baro_altitude_enabled = true;
 }
 
 void
 SETTINGS_COMPUTER::SetDefaults()
 {
-  SETTINGS_WIND::SetDefaults();
-  SETTINGS_LOGGER::SetDefaults();
-  SETTINGS_POLAR::SetDefaults();
-  SETTINGS_SOUND::SetDefaults();
-  SETTINGS_TEAMCODE::SetDefaults();
-  SETTINGS_VOICE::SetDefaults();
-  SETTINGS_PLACES_OF_INTEREST::SetDefaults();
-  SETTINGS_FEATURES::SetDefaults();
-  SETTINGS_PLACES_OF_INTEREST::SetDefaults();
+  WindSettings::SetDefaults();
+  LoggerSettings::SetDefaults();
+  PolarSettings::SetDefaults();
+  SoundSettings::SetDefaults();
+  TeamCodeSettings::SetDefaults();
+  VoiceSettings::SetDefaults();
+  PlacesOfInterestSettings::SetDefaults();
+  FeaturesSettings::SetDefaults();
+  PlacesOfInterestSettings::SetDefaults();
 
-  EnableExternalTriggerCruise =false;
-  AverEffTime = ae30seconds;
-  SetSystemTimeFromGPS = is_altair() && is_embedded();
-  UTCOffset = GetSystemUTCOffset();
+  external_trigger_cruise_enabled =false;
+  average_eff_time = ae30seconds;
+  set_system_time_from_gps = is_altair() && is_embedded();
+  utc_offset = GetSystemUTCOffset();
   pressure.SetStandardPressure();
   pressure_available.Clear();
   airspace.SetDefaults();

@@ -98,18 +98,18 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
   LogStartUp(_T("SetHome"));
 
   // check invalid home waypoint or forced reset due to file change
-  const Waypoint *wp = reset ? NULL : way_points.lookup_id(settings.HomeWaypoint);
-  if (wp == NULL && settings.HomeLocationAvailable) {
+  const Waypoint *wp = reset ? NULL : way_points.lookup_id(settings.home_waypoint);
+  if (wp == NULL && settings.home_location_available) {
     /* fall back to HomeLocation, try to find it in the waypoint
        database */
-    wp = way_points.lookup_location(settings.HomeLocation, fixed(100));
+    wp = way_points.lookup_location(settings.home_location, fixed(100));
     if (wp != NULL && wp->IsAirport())
       settings.SetHome(*wp);
   }
 
   if (wp != NULL) {
     // home waypoint found
-    way_points.set_home(settings.HomeWaypoint);
+    way_points.set_home(settings.home_waypoint);
   } else {
     // search for home in waypoint list, if we don't have a home
     wp = way_points.find_home();
@@ -121,9 +121,9 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 
   // check invalid task ref waypoint or forced reset due to file change
   if (reset || way_points.empty() ||
-      !way_points.lookup_id(settings.TeamCodeRefWaypoint))
+      !way_points.lookup_id(settings.team_code_reference_waypoint))
     // set team code reference waypoint if we don't have one
-    settings.TeamCodeRefWaypoint = settings.HomeWaypoint;
+    settings.team_code_reference_waypoint = settings.home_waypoint;
 
   if (device_blackboard != NULL) {
     if (wp != NULL) {
@@ -140,11 +140,11 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
   }
 
   // Save the home waypoint number in the resgistry
-  Profile::Set(szProfileHomeWaypoint,settings.HomeWaypoint);
-  if (settings.HomeLocationAvailable)
-    Profile::SetGeoPoint(szProfileHomeLocation, settings.HomeLocation);
+  Profile::Set(szProfileHomeWaypoint,settings.home_waypoint);
+  if (settings.home_location_available)
+    Profile::SetGeoPoint(szProfileHomeLocation, settings.home_location);
 
-  Profile::Set(szProfileTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
+  Profile::Set(szProfileTeamcodeRefWaypoint,settings.team_code_reference_waypoint);
 }
 
 bool

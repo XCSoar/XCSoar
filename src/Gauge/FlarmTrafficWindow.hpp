@@ -66,7 +66,7 @@ protected:
   FastRotation fr;
   FastIntegerRotation fir;
   FlarmState data;
-  SETTINGS_TEAMCODE settings;
+  TeamCodeSettings settings;
 
 public:
   int side_display_type;
@@ -111,7 +111,7 @@ protected:
   void UpdateSelector(const FlarmId id, const RasterPoint pt);
   void UpdateWarnings();
   void Update(Angle new_direction, const FlarmState &new_data,
-              const SETTINGS_TEAMCODE &new_settings);
+              const TeamCodeSettings &new_settings);
   void PaintRadarNoTraffic(Canvas &canvas) const;
   void PaintRadarTarget(Canvas &canvas, const FlarmTraffic &traffic,
                         unsigned i);

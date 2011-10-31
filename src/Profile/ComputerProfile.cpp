@@ -28,97 +28,97 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 
 namespace Profile {
-  static void Load(SETTINGS_WIND &settings);
-  static void Load(SETTINGS_LOGGER &settings);
-  static void Load(SETTINGS_SOUND &settings);
-  static void Load(SETTINGS_TEAMCODE &settings);
-  static void Load(SETTINGS_VOICE &settings);
-  static void Load(SETTINGS_PLACES_OF_INTEREST &settings);
-  static void Load(SETTINGS_FEATURES &settings);
+  static void Load(WindSettings &settings);
+  static void Load(LoggerSettings &settings);
+  static void Load(SoundSettings &settings);
+  static void Load(TeamCodeSettings &settings);
+  static void Load(VoiceSettings &settings);
+  static void Load(PlacesOfInterestSettings &settings);
+  static void Load(FeaturesSettings &settings);
 };
 
 void
-Profile::Load(SETTINGS_WIND &settings)
+Profile::Load(WindSettings &settings)
 {
-  Get(szProfileAutoWind, settings.AutoWindMode);
-  Get(szProfileExternalWind, settings.ExternalWind);
+  Get(szProfileAutoWind, settings.auto_wind_mode);
+  Get(szProfileExternalWind, settings.use_external_wind);
 }
 
 void
-Profile::Load(SETTINGS_LOGGER &settings)
+Profile::Load(LoggerSettings &settings)
 {
-  Get(szProfileLoggerTimeStepCruise, settings.LoggerTimeStepCruise);
-  Get(szProfileLoggerTimeStepCircling, settings.LoggerTimeStepCircling);
-  Get(szProfileLoggerShort, settings.LoggerShortName);
-  Get(szProfileDisableAutoLogger, settings.DisableAutoLogger);
+  Get(szProfileLoggerTimeStepCruise, settings.logger_time_step_cruise);
+  Get(szProfileLoggerTimeStepCircling, settings.logger_time_step_circling);
+  Get(szProfileLoggerShort, settings.logger_short_name);
+  Get(szProfileDisableAutoLogger, settings.auto_logger_disabled);
 }
 
 void
-Profile::Load(SETTINGS_SOUND &settings)
+Profile::Load(SoundSettings &settings)
 {
-  Get(szProfileSoundAudioVario, settings.EnableSoundVario);
-  Get(szProfileSoundTask, settings.EnableSoundTask);
-  Get(szProfileSoundModes, settings.EnableSoundModes);
-  Get(szProfileSoundVolume, settings.SoundVolume);
-  Get(szProfileSoundDeadband, settings.SoundDeadband);
+  Get(szProfileSoundAudioVario, settings.sound_vario_enabled);
+  Get(szProfileSoundTask, settings.sound_task_enabled);
+  Get(szProfileSoundModes, settings.sound_modes_enabled);
+  Get(szProfileSoundVolume, settings.sound_volume);
+  Get(szProfileSoundDeadband, settings.sound_deadband);
 }
 
 void
-Profile::Load(SETTINGS_TEAMCODE &settings)
+Profile::Load(TeamCodeSettings &settings)
 {
-  Get(szProfileTeamcodeRefWaypoint, settings.TeamCodeRefWaypoint);
+  Get(szProfileTeamcodeRefWaypoint, settings.team_code_reference_waypoint);
 }
 
 void
-Profile::Load(SETTINGS_VOICE &settings)
+Profile::Load(VoiceSettings &settings)
 {
-  Get(szProfileVoiceClimbRate, settings.EnableVoiceClimbRate);
-  Get(szProfileVoiceTerrain, settings.EnableVoiceTerrain);
-  Get(szProfileVoiceWaypointDistance, settings.EnableVoiceWaypointDistance);
+  Get(szProfileVoiceClimbRate, settings.voice_climb_rate_enabled);
+  Get(szProfileVoiceTerrain, settings.voice_terrain_enabled);
+  Get(szProfileVoiceWaypointDistance, settings.voice_waypoint_distance_enabled);
   Get(szProfileVoiceTaskAltitudeDifference,
-      settings.EnableVoiceTaskAltitudeDifference);
-  Get(szProfileVoiceMacCready, settings.EnableVoiceMacCready);
-  Get(szProfileVoiceNewWaypoint, settings.EnableVoiceNewWaypoint);
-  Get(szProfileVoiceInSector, settings.EnableVoiceInSector);
-  Get(szProfileVoiceAirspace, settings.EnableVoiceAirspace);
+      settings.voice_task_altitude_difference_enabled);
+  Get(szProfileVoiceMacCready, settings.voice_mac_cready_enabled);
+  Get(szProfileVoiceNewWaypoint, settings.voice_new_waypoint_enabled);
+  Get(szProfileVoiceInSector, settings.voice_in_sector_enabled);
+  Get(szProfileVoiceAirspace, settings.voice_airspace_enabled);
 }
 
 void
-Profile::Load(SETTINGS_PLACES_OF_INTEREST &settings)
+Profile::Load(PlacesOfInterestSettings &settings)
 {
-  Get(szProfileHomeWaypoint, settings.HomeWaypoint);
-  settings.HomeLocationAvailable =
-    GetGeoPoint(szProfileHomeLocation, settings.HomeLocation);
+  Get(szProfileHomeWaypoint, settings.home_waypoint);
+  settings.home_location_available =
+    GetGeoPoint(szProfileHomeLocation, settings.home_location);
 }
 
 void
-Profile::Load(SETTINGS_FEATURES &settings)
+Profile::Load(FeaturesSettings &settings)
 {
-  GetEnum(szProfileFinalGlideTerrain, settings.FinalGlideTerrain);
-  Get(szProfileBlockSTF, settings.EnableBlockSTF);
-  Get(szProfileEnableNavBaroAltitude, settings.EnableNavBaroAltitude);
+  GetEnum(szProfileFinalGlideTerrain, settings.final_glide_terrain);
+  Get(szProfileBlockSTF, settings.block_stf_enabled);
+  Get(szProfileEnableNavBaroAltitude, settings.nav_baro_altitude_enabled);
 }
 
 void
 Profile::Load(SETTINGS_COMPUTER &settings)
 {
-  Load((SETTINGS_WIND &)settings);
-  Load((SETTINGS_LOGGER &)settings);
-  Load((SETTINGS_SOUND &)settings);
-  Load((SETTINGS_TEAMCODE &)settings);
-  Load((SETTINGS_VOICE &)settings);
-  Load((SETTINGS_PLACES_OF_INTEREST &)settings);
-  Load((SETTINGS_FEATURES &)settings);
+  Load((WindSettings &)settings);
+  Load((LoggerSettings &)settings);
+  Load((SoundSettings &)settings);
+  Load((TeamCodeSettings &)settings);
+  Load((VoiceSettings &)settings);
+  Load((PlacesOfInterestSettings &)settings);
+  Load((FeaturesSettings &)settings);
 
   Get(szProfileEnableExternalTriggerCruise,
-      settings.EnableExternalTriggerCruise);
+      settings.external_trigger_cruise_enabled);
 
-  GetEnum(szProfileAverEffTime, settings.AverEffTime);
+  GetEnum(szProfileAverEffTime, settings.average_eff_time);
 
-  Get(szProfileSetSystemTimeFromGPS, settings.SetSystemTimeFromGPS);
-  Get(szProfileUTCOffset, settings.UTCOffset);
-  if (settings.UTCOffset > 12 * 3600)
-    settings.UTCOffset -= 24 * 3600;
+  Get(szProfileSetSystemTimeFromGPS, settings.set_system_time_from_gps);
+  Get(szProfileUTCOffset, settings.utc_offset);
+  if (settings.utc_offset > 12 * 3600)
+    settings.utc_offset -= 24 * 3600;
 
   Load(settings.task);
 

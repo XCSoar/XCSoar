@@ -135,7 +135,7 @@ InfoBoxContentWind::PnlEditOnTabPreShow(TabBarControl::EventType EventType)
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
   const bool external_wind = basic.external_wind_available &&
-    settings_computer.ExternalWind;
+    settings_computer.use_external_wind;
 
   WndProperty* wp;
 
@@ -167,12 +167,12 @@ InfoBoxContentWind::PnlEditOnWindSpeed(gcc_unused DataFieldFloat &Sender)
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
   const bool external_wind = basic.external_wind_available &&
-    settings_computer.ExternalWind;
+    settings_computer.use_external_wind;
 
   if (!external_wind) {
-    settings_computer.ManualWind.norm =
+    settings_computer.manual_wind.norm =
       Units::ToSysWindSpeed(Sender.GetAsFixed());
-    settings_computer.ManualWindAvailable.Update(basic.clock);
+    settings_computer.manual_wind_available.Update(basic.clock);
   }
 }
 
@@ -183,11 +183,11 @@ InfoBoxContentWind::PnlEditOnWindDirection(gcc_unused DataFieldFloat &Sender)
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
   const bool external_wind = basic.external_wind_available &&
-    settings_computer.ExternalWind;
+    settings_computer.use_external_wind;
 
   if (!external_wind) {
-    settings_computer.ManualWind.bearing = Angle::Degrees(Sender.GetAsFixed());
-    settings_computer.ManualWindAvailable.Update(basic.clock);
+    settings_computer.manual_wind.bearing = Angle::Degrees(Sender.GetAsFixed());
+    settings_computer.manual_wind_available.Update(basic.clock);
   }
 }
 
@@ -212,7 +212,7 @@ InfoBoxContentWind::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar,
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
   const bool external_wind = basic.external_wind_available &&
-    settings_computer.ExternalWind;
+    settings_computer.use_external_wind;
 
   WndProperty* wp;
 
@@ -230,7 +230,7 @@ InfoBoxContentWind::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar,
     dfe->addEnumText(_("Circling"));
     dfe->addEnumText(_("ZigZag"));
     dfe->addEnumText(_("Both"));
-    dfe->Set(settings_computer.AutoWindMode);
+    dfe->Set(settings_computer.auto_wind_mode);
     wp->RefreshDisplay();
   }
 
@@ -251,16 +251,16 @@ InfoBoxContentWind::PnlSetupOnTabPreHide()
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
   const bool external_wind = basic.external_wind_available &&
-    settings_computer.ExternalWind;
+    settings_computer.use_external_wind;
 
   if (!external_wind)
     SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpAutoWind"), szProfileAutoWind,
-                     settings_computer.AutoWindMode);
+                     settings_computer.auto_wind_mode);
 
   DataFieldEnum* dfe = (DataFieldEnum*)((WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAutoWind")))->GetDataField();
 
   if (_tcscmp(dfe->GetAsString(), _("Manual")) == 0)
-    settings_computer.ManualWindAvailable.Update(basic.clock);
+    settings_computer.manual_wind_available.Update(basic.clock);
 
   SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpTrailDrift"),
                    XCSoarInterface::SetSettingsMap().trail_drift_enabled);

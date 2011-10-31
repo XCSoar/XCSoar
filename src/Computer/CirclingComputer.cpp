@@ -85,7 +85,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   // Force cruise or climb mode if external device says so
   bool forcecruise = false;
   bool forcecircling = false;
-  if (settings_computer.EnableExternalTriggerCruise && !basic.gps.replay) {
+  if (settings_computer.external_trigger_cruise_enabled && !basic.gps.replay) {
     switch (basic.switch_state.flight_mode) {
     case SwitchInfo::MODE_UNKNOWN:
       forcecircling = false;

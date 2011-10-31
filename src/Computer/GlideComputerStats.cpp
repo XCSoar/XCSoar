@@ -62,9 +62,9 @@ GlideComputerStats::DoLogging()
 
   // log points more often in circling mode
   if (Calculated().circling)
-    log_clock.set_dt(fixed(SettingsComputer().LoggerTimeStepCircling));
+    log_clock.set_dt(fixed(SettingsComputer().logger_time_step_circling));
   else
-    log_clock.set_dt(fixed(SettingsComputer().LoggerTimeStepCruise));
+    log_clock.set_dt(fixed(SettingsComputer().logger_time_step_cruise));
 
   if (FastLogNum) {
     log_clock.set_dt(fixed_one);

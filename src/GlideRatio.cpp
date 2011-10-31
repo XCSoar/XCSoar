@@ -36,7 +36,7 @@ GlideRatioCalculator::init(const SETTINGS_COMPUTER &settings)
 {
   unsigned bsize;
 
-  switch (settings.AverEffTime) {
+  switch (settings.average_eff_time) {
   case ae15seconds:
     bsize = 15; // useless, LDinst already there
     break;

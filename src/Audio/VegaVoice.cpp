@@ -322,7 +322,7 @@ VegaVoiceMessage::Update(const NMEAInfo &basic,
     // "INFO"
     break;
   case VV_CLIMBRATE:
-    if (!settings.EnableVoiceClimbRate) return false;
+    if (!settings.voice_climb_rate_enabled) return false;
 
     if (calculated.circling && positive(calculated.average)) {
       // Gives the average climb rate in user units every X seconds
@@ -337,7 +337,7 @@ VegaVoiceMessage::Update(const NMEAInfo &basic,
     }
     break;
   case VV_TERRAIN:
-    if (!settings.EnableVoiceTerrain) return false;
+    if (!settings.voice_terrain_enabled) return false;
     // TODO feature: final glide with terrain warning
     // CAUTION TERRAIN
     break;
@@ -392,7 +392,7 @@ VegaVoiceMessage::Update(const NMEAInfo &basic,
 #endif
     break;
   case VV_MACCREADY:
-    if (!settings.EnableVoiceMacCready) return false;
+    if (!settings.voice_mac_cready_enabled) return false;
     // TODO feature: report when not in auto maccready mode, if
     // vario has changed in last 3 seconds but hasn't changed
     // for more than one second
@@ -401,7 +401,7 @@ VegaVoiceMessage::Update(const NMEAInfo &basic,
     // Later: "MACCREADY THREE DECIMAL FOUR"
     break;
   case VV_NEWWAYPOINT:
-    if (!settings.EnableVoiceNewWaypoint) return false;
+    if (!settings.voice_new_waypoint_enabled) return false;
 #ifdef OLD_TASK
     static unsigned LastWaypoint = 1000;
     if (task.getActiveIndex() != LastWaypoint) {
@@ -417,7 +417,7 @@ VegaVoiceMessage::Update(const NMEAInfo &basic,
 #endif
     break;
   case VV_INSECTOR:
-    if (!settings.EnableVoiceInSector) return false;
+    if (!settings.voice_in_sector_enabled) return false;
 #ifdef OLD_TASK
     if (calculated.IsInSector) {
       // Reports when the aircraft is in an AAT/task sector
@@ -431,7 +431,7 @@ VegaVoiceMessage::Update(const NMEAInfo &basic,
 #endif
     break;
   case VV_AIRSPACE:
-    if (!settings.EnableVoiceAirspace) return false;
+    if (!settings.voice_airspace_enabled) return false;
 #ifdef OLD_TASK
     if (calculated.IsInAirspace) {
       // Reports when the aircraft is inside airspace

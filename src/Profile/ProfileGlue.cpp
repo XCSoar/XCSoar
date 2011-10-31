@@ -66,13 +66,13 @@ Profile::SetSoundSettings()
     XCSoarInterface::SettingsComputer();
 
   Set(szProfileSoundVolume,
-      settings_computer.SoundVolume);
+      settings_computer.sound_volume);
   Set(szProfileSoundDeadband,
-      settings_computer.SoundDeadband);
+      settings_computer.sound_deadband);
   Set(szProfileSoundAudioVario,
-      settings_computer.EnableSoundVario);
+      settings_computer.sound_vario_enabled);
   Set(szProfileSoundTask,
-      settings_computer.EnableSoundTask);
+      settings_computer.sound_task_enabled);
   Set(szProfileSoundModes,
-      settings_computer.EnableSoundModes);
+      settings_computer.sound_modes_enabled);
 }

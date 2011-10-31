@@ -75,12 +75,12 @@ Update()
   SetFormValue(*wf, _T("prpOwnCode"),
                teamcode_info.own_teammate_code.GetCode());
   SetFormValue(*wf, _T("prpMateCode"),
-               CommonInterface::SettingsComputer().TeammateCode.GetCode());
+               CommonInterface::SettingsComputer().team_code.GetCode());
 
-  const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
+  const TeamCodeSettings &settings = CommonInterface::SettingsComputer();
   SetFormValue(*wf, _T("prpFlarmLock"),
-               settings.TeamFlarmTracking
-               ? settings.TeamFlarmCNTarget.c_str()
+               settings.team_flarm_tracking
+               ? settings.team_flarm_callsign.c_str()
                : _T(""));
 }
 
@@ -90,7 +90,7 @@ OnSetWaypointClicked(gcc_unused WndButton &button)
   const Waypoint* wp = dlgWaypointSelect(XCSoarInterface::main_window,
                                          XCSoarInterface::Basic().location);
   if (wp != NULL) {
-    XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint = wp->id;
+    XCSoarInterface::SetSettingsComputer().team_code_reference_waypoint = wp->id;
     Profile::Set(szProfileTeamcodeRefWaypoint, wp->id);
   }
 }
@@ -101,7 +101,7 @@ OnCodeClicked(gcc_unused WndButton &button)
   TCHAR newTeammateCode[10];
 
   CopyString(newTeammateCode,
-             XCSoarInterface::SettingsComputer().TeammateCode.GetCode(), 10);
+             XCSoarInterface::SettingsComputer().team_code.GetCode(), 10);
 
   if (!dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
                              newTeammateCode, 7))
@@ -109,46 +109,46 @@ OnCodeClicked(gcc_unused WndButton &button)
 
   TrimRight(newTeammateCode);
 
-  XCSoarInterface::SetSettingsComputer().TeammateCode.Update(newTeammateCode);
-  if (!string_is_empty(XCSoarInterface::SettingsComputer().TeammateCode.GetCode())) {
-    XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
-    XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
+  XCSoarInterface::SetSettingsComputer().team_code.Update(newTeammateCode);
+  if (!string_is_empty(XCSoarInterface::SettingsComputer().team_code.GetCode())) {
+    XCSoarInterface::SetSettingsComputer().team_code_valid = true;
+    XCSoarInterface::SetSettingsComputer().team_flarm_tracking = false;
   }
   else
-    XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
+    XCSoarInterface::SetSettingsComputer().team_code_valid = false;
 }
 
 static void
 OnFlarmLockClicked(gcc_unused WndButton &button)
 {
-  SETTINGS_TEAMCODE &settings = CommonInterface::SetSettingsComputer();
-  TCHAR newTeamFlarmCNTarget[settings.TeamFlarmCNTarget.MAX_SIZE];
-  _tcscpy(newTeamFlarmCNTarget, settings.TeamFlarmCNTarget.c_str());
+  TeamCodeSettings &settings = CommonInterface::SetSettingsComputer();
+  TCHAR newTeamFlarmCNTarget[settings.team_flarm_callsign.MAX_SIZE];
+  _tcscpy(newTeamFlarmCNTarget, settings.team_flarm_callsign.c_str());
 
   if (!dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
                              newTeamFlarmCNTarget, 4))
     return;
 
-  settings.TeamFlarmCNTarget = newTeamFlarmCNTarget;
-  settings.TeammateCodeValid = false;
+  settings.team_flarm_callsign = newTeamFlarmCNTarget;
+  settings.team_code_valid = false;
 
-  if (string_is_empty(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget)) {
-    settings.TeamFlarmTracking = false;
-    settings.TeamFlarmIdTarget.Clear();
+  if (string_is_empty(XCSoarInterface::SettingsComputer().team_flarm_callsign)) {
+    settings.team_flarm_tracking = false;
+    settings.team_flarm_id.Clear();
     return;
   }
 
   const FlarmId *ids[30];
   unsigned count = FlarmDetails::FindIdsByCallSign(
-      XCSoarInterface::SettingsComputer().TeamFlarmCNTarget, ids, 30);
+      XCSoarInterface::SettingsComputer().team_flarm_callsign, ids, 30);
 
   if (count > 0) {
     const FlarmId *id = dlgFlarmDetailsListShowModal(
         XCSoarInterface::main_window, _("Set new teammate:"), ids, count);
 
     if (id != NULL && id->IsDefined()) {
-      settings.TeamFlarmIdTarget = *id;
-      settings.TeamFlarmTracking = true;
+      settings.team_flarm_id = *id;
+      settings.team_flarm_tracking = true;
       return;
     }
   } else {
@@ -156,9 +156,9 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
                 _("Not Found"), MB_OK | MB_ICONINFORMATION);
   }
 
-  settings.TeamFlarmTracking = false;
-  settings.TeamFlarmIdTarget.Clear();
-  settings.TeamFlarmCNTarget.clear();
+  settings.team_flarm_tracking = false;
+  settings.team_flarm_id.Clear();
+  settings.team_flarm_callsign.clear();
 }
 
 static void

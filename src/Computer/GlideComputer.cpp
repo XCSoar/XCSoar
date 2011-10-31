@@ -155,13 +155,13 @@ GlideComputer::DetermineTeamCodeRefLocation()
 {
   const SETTINGS_COMPUTER &settings_computer = SettingsComputer();
 
-  if (settings_computer.TeamCodeRefWaypoint < 0)
+  if (settings_computer.team_code_reference_waypoint < 0)
     return false;
 
-  if (settings_computer.TeamCodeRefWaypoint == TeamCodeRefId)
+  if (settings_computer.team_code_reference_waypoint == TeamCodeRefId)
     return TeamCodeRefFound;
 
-  TeamCodeRefId = settings_computer.TeamCodeRefWaypoint;
+  TeamCodeRefId = settings_computer.team_code_reference_waypoint;
   const Waypoint *wp = way_points.lookup_id(TeamCodeRefId);
   if (wp == NULL)
     return TeamCodeRefFound = false;
@@ -245,16 +245,16 @@ GlideComputer::CalculateTeammateBearingRange()
   if (!DetermineTeamCodeRefLocation())
     return;
 
-  if (settings_computer.TeamFlarmTracking) {
+  if (settings_computer.team_flarm_tracking) {
     ComputeFlarmTeam(basic.location, TeamCodeRefLocation,
-                     basic.flarm, settings_computer.TeamFlarmIdTarget,
+                     basic.flarm, settings_computer.team_flarm_id,
                      teamcode_info);
     CheckTeammateRange();
-  } else if (settings_computer.TeammateCodeValid) {
+  } else if (settings_computer.team_code_valid) {
     teamcode_info.flarm_teammate_code_available = false;
 
     ComputeTeamCode(basic.location, TeamCodeRefLocation,
-                    settings_computer.TeammateCode,
+                    settings_computer.team_code,
                     teamcode_info);
     CheckTeammateRange();
   } else {

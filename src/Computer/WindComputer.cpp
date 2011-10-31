@@ -41,7 +41,7 @@ WindComputer::Compute(const SETTINGS_COMPUTER &settings,
                       const MoreData &basic, const NMEAInfo &last_basic,
                       DerivedInfo &calculated)
 {
-  if ((settings.AutoWindMode & D_AUTOWIND_CIRCLING) != 0 &&
+  if ((settings.auto_wind_mode & AUTOWIND_CIRCLING) != 0 &&
       calculated.circling != last_circling)
     circling_wind.slot_newFlightMode(calculated, calculated.TurningLeft(), 0);
 
@@ -50,14 +50,14 @@ last_circling = calculated.circling;
   if (!calculated.flight.flying || !basic.HasTimeAdvancedSince(last_basic))
     return;
 
-  if ((settings.AutoWindMode & D_AUTOWIND_CIRCLING) != 0 &&
+  if ((settings.auto_wind_mode & AUTOWIND_CIRCLING) != 0 &&
       calculated.turn_mode == CLIMB) {
     CirclingWind::Result result = circling_wind.NewSample(basic);
     if (result.IsValid())
       wind_store.SlotMeasurement(basic, result.wind, result.quality);
   }
 
-  if ((settings.AutoWindMode & D_AUTOWIND_ZIGZAG) != 0 &&
+  if ((settings.auto_wind_mode & AUTOWIND_ZIGZAG) != 0 &&
       basic.airspeed_available && basic.airspeed_real &&
       basic.true_airspeed > settings.glide_polar_task.GetVTakeoff()) {
     WindEKFGlue::Result result = wind_ekf.Update(basic, calculated);
@@ -67,7 +67,7 @@ last_circling = calculated.circling;
     }
   }
 
-  if (settings.AutoWindMode != 0)
+  if (settings.auto_wind_mode != 0)
     wind_store.SlotAltitude(basic, calculated);
 }
 
@@ -75,27 +75,27 @@ void
 WindComputer::Select(const SETTINGS_COMPUTER &settings,
                      const NMEAInfo &basic, DerivedInfo &calculated)
 {
-  if (basic.external_wind_available && settings.ExternalWind) {
+  if (basic.external_wind_available && settings.use_external_wind) {
     // external wind available
     calculated.wind = basic.external_wind;
     calculated.wind_available = basic.external_wind_available;
 
-  } else if (settings.ManualWindAvailable && settings.AutoWindMode == 0) {
+  } else if (settings.manual_wind_available && settings.auto_wind_mode == 0) {
     // manual wind only if available and desired
-    calculated.wind = settings.ManualWind;
+    calculated.wind = settings.manual_wind;
     calculated.wind_available.Update(basic.clock);
 
-  } else if (calculated.estimated_wind_available.Modified(settings.ManualWindAvailable)
-             && settings.AutoWindMode) {
+  } else if (calculated.estimated_wind_available.Modified(settings.manual_wind_available)
+             && settings.auto_wind_mode) {
     // auto wind when available and newer than manual wind
     calculated.wind = calculated.estimated_wind;
     calculated.wind_available = calculated.estimated_wind_available;
 
-  } else if (settings.ManualWindAvailable
-             && settings.AutoWindMode) {
+  } else if (settings.manual_wind_available
+             && settings.auto_wind_mode) {
     // manual wind overrides auto wind if available
-    calculated.wind = settings.ManualWind;
-    calculated.wind_available = settings.ManualWindAvailable;
+    calculated.wind = settings.manual_wind;
+    calculated.wind_available = settings.manual_wind_available;
 
   } else
    // no wind available
