@@ -47,7 +47,7 @@ GaugesConfigPanel::Init(WndForm *_wf)
                    ui_settings.enable_thermal_assistant_gauge);
 
   LoadFormProperty(*wf, _T("prpEnableThermalProfile"),
-                   XCSoarInterface::SettingsMap().EnableThermalProfile);
+                   XCSoarInterface::SettingsMap().show_thermal_profile);
 }
 
 
@@ -72,7 +72,7 @@ GaugesConfigPanel::Save()
 
   changed |= SaveFormProperty(*wf, _T("prpEnableThermalProfile"),
                               szProfileEnableThermalProfile,
-                              XCSoarInterface::SetSettingsMap().EnableThermalProfile);
+                              XCSoarInterface::SetSettingsMap().show_thermal_profile);
 
   return changed;
 }

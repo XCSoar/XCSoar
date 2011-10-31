@@ -237,7 +237,7 @@ InfoBoxContentWind::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar,
   wp = (WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpTrailDrift"));
   if (wp) {
     DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
-    df.Set(XCSoarInterface::SettingsMap().EnableTrailDrift);
+    df.Set(XCSoarInterface::SettingsMap().trail_drift_enabled);
     wp->RefreshDisplay();
   }
 
@@ -263,7 +263,7 @@ InfoBoxContentWind::PnlSetupOnTabPreHide()
     settings_computer.ManualWindAvailable.Update(basic.clock);
 
   SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpTrailDrift"),
-                   XCSoarInterface::SetSettingsMap().EnableTrailDrift);
+                   XCSoarInterface::SetSettingsMap().trail_drift_enabled);
   ActionInterface::SendSettingsMap();
 
   return true;

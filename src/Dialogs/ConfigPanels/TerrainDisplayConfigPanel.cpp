@@ -63,7 +63,7 @@ TerrainDisplayConfigPanel::Init(WndForm *_wf, const SETTINGS_MAP &settings_map)
   LoadFormProperty(*wf, _T("prpEnableTerrain"), terrain.enable);
 
   LoadFormProperty(*wf, _T("prpEnableTopography"),
-                   settings_map.EnableTopography);
+                   settings_map.topography_enabled);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSlopeShadingType"));
   if (wp) {
@@ -117,7 +117,7 @@ TerrainDisplayConfigPanel::Save(SETTINGS_MAP &settings_map)
 
   changed |= SaveFormProperty(*wf, _T("prpEnableTopography"),
                               szProfileDrawTopography,
-                              settings_map.EnableTopography);
+                              settings_map.topography_enabled);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSlopeShadingType"));
   if (wp) {

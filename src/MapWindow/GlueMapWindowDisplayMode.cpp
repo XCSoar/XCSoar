@@ -124,7 +124,7 @@ GlueMapWindow::SetMapScale(const fixed x)
 {
   MapWindow::SetMapScale(x);
 
-  if (GetDisplayMode() == DM_CIRCLING && SettingsMap().CircleZoom)
+  if (GetDisplayMode() == DM_CIRCLING && SettingsMap().circle_zoom_enabled)
     // save cruise scale
     zoomclimb.ClimbScale = visible_projection.GetScale();
   else
@@ -160,7 +160,7 @@ GlueMapWindow::SwitchZoomClimb()
 {
   bool isclimb = (GetDisplayMode() == DM_CIRCLING);
 
-  if (SettingsMap().CircleZoom) {
+  if (SettingsMap().circle_zoom_enabled) {
     if (isclimb != zoomclimb.last_isclimb) {
       if (isclimb) {
         // save cruise scale
@@ -206,9 +206,9 @@ GlueMapWindow::UpdateScreenAngle()
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const SETTINGS_MAP &settings = CommonInterface::SettingsMap();
 
-  DisplayOrientation_t orientation =
+  DisplayOrientation orientation =
       (GetDisplayMode() == DM_CIRCLING) ?
-          settings.OrientationCircling : settings.OrientationCruise;
+          settings.circling_orientation : settings.cruise_orientation;
 
   if (orientation == TARGETUP &&
       calculated.task_stats.current_leg.solution_remaining.IsDefined())
@@ -231,18 +231,18 @@ GlueMapWindow::UpdateMapScale()
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const SETTINGS_MAP &settings = CommonInterface::SettingsMap();
 
-  if (GetDisplayMode() == DM_CIRCLING && SettingsMap().CircleZoom)
+  if (GetDisplayMode() == DM_CIRCLING && SettingsMap().circle_zoom_enabled)
     return;
 
   if (!IsNearSelf())
     return;
 
   fixed wpd = calculated.auto_zoom_distance;
-  if (settings.AutoZoom && positive(wpd)) {
+  if (settings.auto_zoom_enabled && positive(wpd)) {
     // Calculate distance percentage between plane symbol and map edge
     // 50: centered  100: at edge of map
     int AutoZoomFactor = (GetDisplayMode() == DM_CIRCLING) ?
-                                 50 : 100 - SettingsMap().GliderScreenPosition;
+                                 50 : 100 - SettingsMap().glider_screen_position;
     // Leave 5% of full distance for target display
     AutoZoomFactor -= 5;
     // Adjust to account for map scale units
@@ -250,7 +250,7 @@ GlueMapWindow::UpdateMapScale()
     wpd = wpd / ((fixed) AutoZoomFactor / fixed_int_constant(100));
     // Clip map auto zoom range to reasonable values
     wpd = max(fixed_int_constant(525),
-              min(SettingsMap().MaxAutoZoomDistance / fixed_int_constant(10), wpd));
+              min(SettingsMap().max_auto_zoom_distance / fixed_int_constant(10), wpd));
     visible_projection.SetFreeMapScale(wpd);
   }
 }
@@ -272,23 +272,23 @@ GlueMapWindow::UpdateProjection()
 
   if (GetDisplayMode() == DM_CIRCLING || !IsNearSelf())
     visible_projection.SetScreenOrigin(center.x, center.y);
-  else if (settings_map.OrientationCruise == NORTHUP) {
+  else if (settings_map.cruise_orientation == NORTHUP) {
     RasterPoint offset = OffsetHistory::zeroPoint;
-    if (settings_map.GliderScreenPosition != 50 &&
-        settings_map.MapShiftBias != MAP_SHIFT_BIAS_NONE) {
+    if (settings_map.glider_screen_position != 50 &&
+        settings_map.map_shift_bias != MAP_SHIFT_BIAS_NONE) {
       fixed x = fixed_zero;
       fixed y = fixed_zero;
-      if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_TRACK) {
+      if (settings_map.map_shift_bias == MAP_SHIFT_BIAS_TRACK) {
         if (basic.track_available &&
             basic.ground_speed_available &&
             basic.ground_speed > fixed_int_constant(8)) /* 8 m/s ~ 30 km/h */
           basic.track.Reciprocal().SinCos(x, y);
-      } else if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_TARGET) {
+      } else if (settings_map.map_shift_bias == MAP_SHIFT_BIAS_TARGET) {
         if (calculated.task_stats.current_leg.solution_remaining.IsDefined())
           calculated.task_stats.current_leg.solution_remaining
                       .vector.bearing.Reciprocal().SinCos(x, y);
       }
-      fixed gspFactor = (fixed) (50 - settings_map.GliderScreenPosition) / 100;
+      fixed gspFactor = (fixed) (50 - settings_map.glider_screen_position) / 100;
       offset.x = PixelScalar(x * (rc.right - rc.left) * gspFactor);
       offset.y = PixelScalar(y * (rc.top - rc.bottom) * gspFactor);
       offsetHistory.add(offset);
@@ -297,7 +297,7 @@ GlueMapWindow::UpdateProjection()
     visible_projection.SetScreenOrigin(center.x + offset.x, center.y + offset.y);
   } else
     visible_projection.SetScreenOrigin(center.x,
-        ((rc.top - rc.bottom) * settings_map.GliderScreenPosition / 100) + rc.bottom);
+        ((rc.top - rc.bottom) * settings_map.glider_screen_position / 100) + rc.bottom);
 
   if (!IsNearSelf()) {
     /* no-op - the Projection's location is updated manually */

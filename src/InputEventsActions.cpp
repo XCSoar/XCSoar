@@ -329,7 +329,7 @@ InputEvents::eventZoom(const TCHAR* misc)
   else if (_tcscmp(misc, _T("auto off")) == 0)
     sub_AutoZoom(0);
   else if (_tcscmp(misc, _T("auto show")) == 0) {
-    if (settings_map.AutoZoom)
+    if (settings_map.auto_zoom_enabled)
       Message::AddMessage(_("Auto. zoom on"));
     else
       Message::AddMessage(_("Auto. zoom off"));
@@ -350,13 +350,13 @@ InputEvents::eventZoom(const TCHAR* misc)
   else if (_tcscmp(misc, _T("++")) == 0)
     sub_ScaleZoom(2);
   else if (_tcscmp(misc, _T("circlezoom toggle")) == 0) {
-    settings_map.CircleZoom = !settings_map.CircleZoom;
+    settings_map.circle_zoom_enabled = !settings_map.circle_zoom_enabled;
   } else if (_tcscmp(misc, _T("circlezoom on")) == 0) {
-    settings_map.CircleZoom = true;
+    settings_map.circle_zoom_enabled = true;
   } else if (_tcscmp(misc, _T("circlezoom off")) == 0) {
-    settings_map.CircleZoom = false;
+    settings_map.circle_zoom_enabled = false;
   } else if (_tcscmp(misc, _T("circlezoom show")) == 0) {
-    if (settings_map.CircleZoom)
+    if (settings_map.circle_zoom_enabled)
       Message::AddMessage(_("Circling zoom on"));
     else
       Message::AddMessage(_("Circling zoom off"));
@@ -1584,20 +1584,20 @@ InputEvents::eventOrientation(const TCHAR *misc)
   SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
 
   if (_tcscmp(misc, _T("northup")) == 0) {
-    settings_map.OrientationCruise = NORTHUP;
-    settings_map.OrientationCircling = NORTHUP;
+    settings_map.cruise_orientation = NORTHUP;
+    settings_map.circling_orientation = NORTHUP;
   } else if (_tcscmp(misc, _T("northcircle")) == 0) {
-    settings_map.OrientationCruise = TRACKUP;
-    settings_map.OrientationCircling = NORTHUP;
+    settings_map.cruise_orientation = TRACKUP;
+    settings_map.circling_orientation = NORTHUP;
   } else if (_tcscmp(misc, _T("trackcircle")) == 0) {
-    settings_map.OrientationCruise = NORTHUP;
-    settings_map.OrientationCircling = TRACKUP;
+    settings_map.cruise_orientation = NORTHUP;
+    settings_map.circling_orientation = TRACKUP;
   } else if (_tcscmp(misc, _T("trackup")) == 0) {
-    settings_map.OrientationCruise = TRACKUP;
-    settings_map.OrientationCircling = TRACKUP;
+    settings_map.cruise_orientation = TRACKUP;
+    settings_map.circling_orientation = TRACKUP;
   } else if (_tcscmp(misc, _T("northtrack")) == 0) {
-    settings_map.OrientationCruise = TRACKUP;
-    settings_map.OrientationCircling = TARGETUP;
+    settings_map.cruise_orientation = TRACKUP;
+    settings_map.circling_orientation = TARGETUP;
   }
 
   ActionInterface::SendSettingsMap(true);
@@ -1664,7 +1664,7 @@ InputEvents::sub_TerrainTopography(int vswitch)
     // toggle through 4 possible options
     char val = 0;
 
-    if (settings_map.EnableTopography)
+    if (settings_map.topography_enabled)
       val++;
     if (settings_map.terrain.enable)
       val += (char)2;
@@ -1673,20 +1673,20 @@ InputEvents::sub_TerrainTopography(int vswitch)
     if (val > 3)
       val = 0;
 
-    settings_map.EnableTopography = ((val & 0x01) == 0x01);
+    settings_map.topography_enabled = ((val & 0x01) == 0x01);
     settings_map.terrain.enable = ((val & 0x02) == 0x02);
   } else if (vswitch == -2)
     // toggle terrain
     settings_map.terrain.enable = !settings_map.terrain.enable;
   else if (vswitch == -3)
     // toggle topography
-    settings_map.EnableTopography = !settings_map.EnableTopography;
+    settings_map.topography_enabled = !settings_map.topography_enabled;
   else if (vswitch == 1)
     // Turn on topography
-    settings_map.EnableTopography = true;
+    settings_map.topography_enabled = true;
   else if (vswitch == 2)
     // Turn off topography
-    settings_map.EnableTopography = false;
+    settings_map.topography_enabled = false;
   else if (vswitch == 3)
     // Turn on terrain
     settings_map.terrain.enable = true;
@@ -1698,7 +1698,7 @@ InputEvents::sub_TerrainTopography(int vswitch)
     // ARH Let user know what's happening
     TCHAR buf[128];
 
-    if (settings_map.EnableTopography)
+    if (settings_map.topography_enabled)
       _stprintf(buf, _T("\r\n%s / "), _("On"));
     else
       _stprintf(buf, _T("\r\n%s / "), _("Off"));
@@ -1712,7 +1712,7 @@ InputEvents::sub_TerrainTopography(int vswitch)
 
   /* save new values to profile */
   Profile::Set(szProfileDrawTopography,
-               settings_map.EnableTopography);
+               settings_map.topography_enabled);
   Profile::Set(szProfileDrawTerrain,
                settings_map.terrain.enable);
 
@@ -1783,13 +1783,13 @@ InputEvents::sub_AutoZoom(int vswitch)
   SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
 
   if (vswitch == -1)
-    settings_map.AutoZoom = !settings_map.AutoZoom;
+    settings_map.auto_zoom_enabled = !settings_map.auto_zoom_enabled;
   else
-    settings_map.AutoZoom = (vswitch != 0); // 0 off, 1 on
+    settings_map.auto_zoom_enabled = (vswitch != 0); // 0 off, 1 on
 
-  Profile::Set(szProfileAutoZoom, settings_map.AutoZoom);
+  Profile::Set(szProfileAutoZoom, settings_map.auto_zoom_enabled);
 
-  if (settings_map.AutoZoom &&
+  if (settings_map.auto_zoom_enabled &&
       CommonInterface::main_window.map != NULL)
     CommonInterface::main_window.map->SetPan(false);
 
@@ -1805,10 +1805,10 @@ InputEvents::sub_SetZoom(fixed value)
     return;
 
   DisplayMode displayMode = XCSoarInterface::main_window.GetDisplayMode();
-  if (settings_map.AutoZoom &&
-      !(displayMode == DM_CIRCLING && settings_map.CircleZoom) &&
+  if (settings_map.auto_zoom_enabled &&
+      !(displayMode == DM_CIRCLING && settings_map.circle_zoom_enabled) &&
       !CommonInterface::IsPanning()) {
-    settings_map.AutoZoom = false;  // disable autozoom if user manually changes zoom
+    settings_map.auto_zoom_enabled = false;  // disable autozoom if user manually changes zoom
     Profile::Set(szProfileAutoZoom, false);
     Message::AddMessage(_("Auto. zoom off"));
   }

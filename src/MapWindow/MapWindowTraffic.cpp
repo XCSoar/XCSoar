@@ -44,7 +44,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
                             const RasterPoint aircraft_pos) const
 {
   // Return if FLARM icons on moving map are disabled
-  if (!SettingsMap().EnableFLARMMap)
+  if (!SettingsMap().show_flarm_on_map)
     return;
 
   // Return if FLARM data is not available

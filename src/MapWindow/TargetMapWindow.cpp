@@ -122,14 +122,14 @@ TargetMapWindow::RenderTerrain(Canvas &canvas)
 void
 TargetMapWindow::RenderTopography(Canvas &canvas)
 {
-  if (topography_renderer != NULL && SettingsMap().EnableTopography)
+  if (topography_renderer != NULL && SettingsMap().topography_enabled)
     topography_renderer->Draw(canvas, projection);
 }
 
 void
 TargetMapWindow::RenderTopographyLabels(Canvas &canvas)
 {
-  if (topography_renderer != NULL && SettingsMap().EnableTopography)
+  if (topography_renderer != NULL && SettingsMap().topography_enabled)
     topography_renderer->DrawLabels(canvas, projection, label_block);
 }
 

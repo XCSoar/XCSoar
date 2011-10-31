@@ -65,7 +65,7 @@ SymbolsConfigPanel::Init(WndForm *_wf)
   DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
   dfe->addEnumText(_("Arrow head"));
   dfe->addEnumText(_("Full arrow"));
-  dfe->Set(settings_map.WindArrowStyle);
+  dfe->Set(settings_map.wind_arrow_style);
   wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpTrail"));
@@ -79,7 +79,7 @@ SymbolsConfigPanel::Init(WndForm *_wf)
   wp->RefreshDisplay();
 
   LoadFormProperty(*wf, _T("prpTrailDrift"),
-                   settings_map.EnableTrailDrift);
+                   settings_map.trail_drift_enabled);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
   assert(wp != NULL);
@@ -92,14 +92,14 @@ SymbolsConfigPanel::Init(WndForm *_wf)
   _tcscat(tmp_text, _T(" #2"));
   dfe->addEnumText(tmp_text);
   dfe->addEnumText(_("Altitude"));
-  dfe->Set((int)settings_map.SnailType);
+  dfe->Set((int)settings_map.snail_type);
   wp->RefreshDisplay();
 
   LoadFormProperty(*wf, _T("prpSnailWidthScale"),
-                   settings_map.SnailScaling);
+                   settings_map.snail_scaling_enabled);
 
   LoadFormProperty(*wf, _T("prpDetourCostMarker"),
-                   settings_map.EnableDetourCostMarker);
+                   settings_map.detour_cost_markers_enabled);
 
   wp = (WndProperty*)wf->FindByName(_T("prpDisplayTrackBearing"));
   assert(wp != NULL);
@@ -107,11 +107,11 @@ SymbolsConfigPanel::Init(WndForm *_wf)
   dfe->addEnumText(_("Off"));
   dfe->addEnumText(_("On"));
   dfe->addEnumText(_("Auto"));
-  dfe->Set(settings_map.DisplayTrackBearing);
+  dfe->Set(settings_map.display_track_bearing);
   wp->RefreshDisplay();
 
   LoadFormProperty(*wf, _T("prpEnableFLARMMap"),
-                   settings_map.EnableFLARMMap);
+                   settings_map.show_flarm_on_map);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAircraftSymbol"));
   assert(wp != NULL);
@@ -135,7 +135,7 @@ SymbolsConfigPanel::Save()
 
   changed |= SaveFormProperty(*wf, _T("prpWindArrowStyle"),
                               szProfileWindArrowStyle,
-                              settings_map.WindArrowStyle);
+                              settings_map.wind_arrow_style);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpTrail"),
                                   szProfileSnailTrail,
@@ -143,13 +143,13 @@ SymbolsConfigPanel::Save()
 
   changed |= SaveFormProperty(*wf, _T("prpTrailDrift"),
                               szProfileTrailDrift,
-                              settings_map.EnableTrailDrift);
+                              settings_map.trail_drift_enabled);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
   assert(wp != NULL);
-  if (settings_map.SnailType != (SnailType_t)wp->GetDataField()->GetAsInteger()) {
-    settings_map.SnailType = (SnailType_t)wp->GetDataField()->GetAsInteger();
-    Profile::Set(szProfileSnailType, (int)settings_map.SnailType);
+  if (settings_map.snail_type != (SnailType)wp->GetDataField()->GetAsInteger()) {
+    settings_map.snail_type = (SnailType)wp->GetDataField()->GetAsInteger();
+    Profile::Set(szProfileSnailType, (int)settings_map.snail_type);
     changed = true;
     Graphics::InitSnailTrail(settings_map);
   }
@@ -157,27 +157,27 @@ SymbolsConfigPanel::Save()
   bool snailscaling_changed =
       SaveFormProperty(*wf, _T("prpSnailWidthScale"),
                        szProfileSnailWidthScale,
-                       settings_map.SnailScaling);
+                       settings_map.snail_scaling_enabled);
   changed |= snailscaling_changed;
   if (snailscaling_changed)
     Graphics::InitSnailTrail(settings_map);
 
   changed |= SaveFormProperty(*wf, _T("prpDetourCostMarker"),
                               szProfileDetourCostMarker,
-                              settings_map.EnableDetourCostMarker);
+                              settings_map.detour_cost_markers_enabled);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpDisplayTrackBearing"),
                               szProfileDisplayTrackBearing,
-                              settings_map.DisplayTrackBearing);
+                              settings_map.display_track_bearing);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableFLARMMap"),
                               szProfileEnableFLARMMap,
-                              settings_map.EnableFLARMMap);
+                              settings_map.show_flarm_on_map);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAircraftSymbol"));
   assert(wp != NULL);
-  if (settings_map.aircraft_symbol != (AircraftSymbol_t)wp->GetDataField()->GetAsInteger()) {
-    settings_map.aircraft_symbol = (AircraftSymbol_t)wp->GetDataField()->GetAsInteger();
+  if (settings_map.aircraft_symbol != (AircraftSymbol)wp->GetDataField()->GetAsInteger()) {
+    settings_map.aircraft_symbol = (AircraftSymbol)wp->GetDataField()->GetAsInteger();
     Profile::Set(szProfileAircraftSymbol, (int)settings_map.aircraft_symbol);
     changed = true;
   }

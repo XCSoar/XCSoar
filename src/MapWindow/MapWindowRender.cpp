@@ -46,14 +46,14 @@ MapWindow::RenderTerrain(Canvas &canvas)
 void
 MapWindow::RenderTopography(Canvas &canvas)
 {
-  if (topography_renderer != NULL && SettingsMap().EnableTopography)
+  if (topography_renderer != NULL && SettingsMap().topography_enabled)
     topography_renderer->Draw(canvas, render_projection);
 }
 
 void
 MapWindow::RenderTopographyLabels(Canvas &canvas)
 {
-  if (topography_renderer != NULL && SettingsMap().EnableTopography)
+  if (topography_renderer != NULL && SettingsMap().topography_enabled)
     topography_renderer->DrawLabels(canvas, render_projection, label_block);
 }
 

@@ -30,25 +30,25 @@ Copyright_License {
 void
 Profile::Load(SETTINGS_MAP &settings)
 {
-  Get(szProfileCircleZoom, settings.CircleZoom);
-  Get(szProfileMaxAutoZoomDistance, settings.MaxAutoZoomDistance);
-  Get(szProfileDrawTopography, settings.EnableTopography);
+  Get(szProfileCircleZoom, settings.circle_zoom_enabled);
+  Get(szProfileMaxAutoZoomDistance, settings.max_auto_zoom_distance);
+  Get(szProfileDrawTopography, settings.topography_enabled);
 
   LoadTerrainRendererSettings(settings.terrain);
 
   GetEnum(szProfileAircraftSymbol, settings.aircraft_symbol);
 
-  Get(szProfileTrailDrift, settings.EnableTrailDrift);
-  Get(szProfileDetourCostMarker, settings.EnableDetourCostMarker);
-  GetEnum(szProfileDisplayTrackBearing, settings.DisplayTrackBearing);
-  Get(szProfileAutoZoom, settings.AutoZoom);
-  Get(szProfileSnailWidthScale, settings.SnailScaling);
+  Get(szProfileTrailDrift, settings.trail_drift_enabled);
+  Get(szProfileDetourCostMarker, settings.detour_cost_markers_enabled);
+  GetEnum(szProfileDisplayTrackBearing, settings.display_track_bearing);
+  Get(szProfileAutoZoom, settings.auto_zoom_enabled);
+  Get(szProfileSnailWidthScale, settings.snail_scaling_enabled);
 
-  GetEnum(szProfileSnailType, settings.SnailType);
+  GetEnum(szProfileSnailType, settings.snail_type);
 
   unsigned Temp;
   if (Get(szProfileWindArrowStyle, Temp))
-    settings.WindArrowStyle = Temp;
+    settings.wind_arrow_style = Temp;
 
   settings.waypoint.LoadFromProfile();
 
@@ -56,7 +56,7 @@ Profile::Load(SETTINGS_MAP &settings)
 
   LoadAirspaceConfig();
 
-  Get(szProfileGliderScreenPosition, settings.GliderScreenPosition);
+  Get(szProfileGliderScreenPosition, settings.glider_screen_position);
 
   bool orientation_found = false;
 
@@ -66,13 +66,13 @@ Profile::Load(SETTINGS_MAP &settings)
 
   switch (Temp) {
   case TRACKUP:
-    settings.OrientationCircling = TRACKUP;
+    settings.circling_orientation = TRACKUP;
     break;
   case NORTHUP:
-    settings.OrientationCircling = NORTHUP;
+    settings.circling_orientation = NORTHUP;
     break;
   case TARGETUP:
-    settings.OrientationCircling = TARGETUP;
+    settings.circling_orientation = TARGETUP;
     break;
   }
 
@@ -82,13 +82,13 @@ Profile::Load(SETTINGS_MAP &settings)
 
   switch (Temp) {
   case TRACKUP:
-    settings.OrientationCruise = TRACKUP;
+    settings.cruise_orientation = TRACKUP;
     break;
   case NORTHUP:
-    settings.OrientationCruise = NORTHUP;
+    settings.cruise_orientation = NORTHUP;
     break;
   case TARGETUP:
-    settings.OrientationCruise = TARGETUP;
+    settings.cruise_orientation = TARGETUP;
     break;
   }
 
@@ -97,30 +97,30 @@ Profile::Load(SETTINGS_MAP &settings)
     Get(szProfileDisplayUpValue, Temp);
     switch (Temp) {
     case 0:
-      settings.OrientationCruise = TRACKUP;
-      settings.OrientationCircling = TRACKUP;
+      settings.cruise_orientation = TRACKUP;
+      settings.circling_orientation = TRACKUP;
       break;
     case 1:
-      settings.OrientationCruise = NORTHUP;
-      settings.OrientationCircling = NORTHUP;
+      settings.cruise_orientation = NORTHUP;
+      settings.circling_orientation = NORTHUP;
       break;
     case 2:
-      settings.OrientationCruise = TRACKUP;
-      settings.OrientationCircling = NORTHUP;
+      settings.cruise_orientation = TRACKUP;
+      settings.circling_orientation = NORTHUP;
       break;
     case 3:
-      settings.OrientationCruise = TRACKUP;
-      settings.OrientationCircling = TARGETUP;
+      settings.cruise_orientation = TRACKUP;
+      settings.circling_orientation = TARGETUP;
       break;
     case 4:
-      settings.OrientationCruise = NORTHUP;
-      settings.OrientationCircling = TRACKUP;
+      settings.cruise_orientation = NORTHUP;
+      settings.circling_orientation = TRACKUP;
       break;
     }
   }
 
-  GetEnum(szProfileMapShiftBias, settings.MapShiftBias);
-  Get(szProfileEnableFLARMMap, settings.EnableFLARMMap);
+  GetEnum(szProfileMapShiftBias, settings.map_shift_bias);
+  Get(szProfileEnableFLARMMap, settings.show_flarm_on_map);
 
-  Get(szProfileEnableThermalProfile, settings.EnableThermalProfile);
+  Get(szProfileEnableThermalProfile, settings.show_thermal_profile);
 }

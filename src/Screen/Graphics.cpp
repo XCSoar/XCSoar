@@ -217,14 +217,14 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 
   for (int i = 0; i < NUMSNAILCOLORS; i++) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    Color color = (settings_map.SnailType == stAltitude) ?
+    Color color = (settings_map.snail_type == stAltitude) ?
                   ColorRampLookup(ih, snail_colors_alt, 5) :
-                  (settings_map.SnailType == stSeeYouVario) ?
+                  (settings_map.snail_type == stSeeYouVario) ?
                   ColorRampLookup(ih, snail_colors_vario2, 4) :
                   ColorRampLookup(ih, snail_colors_vario, 3);
 
     if (i < NUMSNAILCOLORS / 2 ||
-        !settings_map.SnailScaling)
+        !settings_map.snail_scaling_enabled)
       iwidth = minwidth;
     else
       iwidth = max(minwidth,

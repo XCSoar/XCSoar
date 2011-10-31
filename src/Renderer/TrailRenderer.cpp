@@ -81,7 +81,7 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
 
   fixed value_max, value_min;
 
-  if (settings.SnailType == stAltitude) {
+  if (settings.snail_type == stAltitude) {
     value_max = fixed(1000);
     value_min = fixed(500);
     for (TracePointVector::const_iterator it = trace.begin();
@@ -101,7 +101,7 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
     value_min = max(fixed(-5.0), value_min);
   }
 
-  bool scaled_trail = settings.SnailScaling &&
+  bool scaled_trail = settings.snail_scaling_enabled &&
                       projection.GetMapScale() <= fixed_int_constant(6000);
 
   const GeoBounds bounds = projection.GetScreenBounds().scale(fixed_four);
@@ -123,7 +123,7 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
     RasterPoint pt = projection.GeoToScreen(gp);
 
     if (last_valid) {
-      if (settings.SnailType == stAltitude) {
+      if (settings.snail_type == stAltitude) {
         int index((it->GetAltitude() - value_min) / (value_max - value_min)
                   * (NUMSNAILCOLORS - 1));
         index = max(0, min(NUMSNAILCOLORS - 1, index));

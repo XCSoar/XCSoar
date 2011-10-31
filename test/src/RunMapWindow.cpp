@@ -176,10 +176,10 @@ protected:
 static void
 SetDefaults(SETTINGS_MAP &settings_map)
 {
-  settings_map.OrientationCruise = NORTHUP;
-  settings_map.OrientationCircling = NORTHUP;
+  settings_map.cruise_orientation = NORTHUP;
+  settings_map.circling_orientation = NORTHUP;
   settings_map.waypoint.SetDefaults();
-  settings_map.EnableTopography = true;
+  settings_map.topography_enabled = true;
   settings_map.terrain.SetDefaults();
   settings_map.terrain.enable = true;
   settings_map.terrain.slope_shading = sstFixed;

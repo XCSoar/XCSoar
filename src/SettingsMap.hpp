@@ -32,19 +32,19 @@ Copyright_License {
 #include "Renderer/WaypointRendererSettings.hpp"
 #include "Terrain/TerrainSettings.hpp"
 
-enum AircraftSymbol_t {
+enum AircraftSymbol {
   acSimple = 0,
   acDetailed,
   acSimpleLarge,
 };
 
-enum DisplayOrientation_t {
+enum DisplayOrientation {
   TRACKUP = 0,
   NORTHUP,
   TARGETUP
 };
 
-enum MapShiftBias_t {
+enum MapShiftBias {
   MAP_SHIFT_BIAS_NONE = 0,
   MAP_SHIFT_BIAS_TRACK,
   MAP_SHIFT_BIAS_TARGET
@@ -57,13 +57,13 @@ enum TrailLength {
   TRAIL_FULL,
 };
 
-enum SnailType_t {
+enum SnailType {
   stStandardVario,
   stSeeYouVario,
   stAltitude,
 };
 
-enum DisplayTrackBearing_t {
+enum DisplayTrackBearing {
   dtbOff,
   dtbOn,
   dtbAuto
@@ -87,29 +87,29 @@ enum FlarmLocation {
 
 struct SETTINGS_MAP {
   /** Map zooms in on circling */
-  bool CircleZoom;
+  bool circle_zoom_enabled;
   /** Maximum distance limit for AutoZoom */
-  fixed MaxAutoZoomDistance;
+  fixed max_auto_zoom_distance;
   /** Map will show topography */
-  bool EnableTopography;
+  bool topography_enabled;
 
   TerrainRendererSettings terrain;
 
-  AircraftSymbol_t aircraft_symbol;
+  AircraftSymbol aircraft_symbol;
 
   /** Snailtrail wind drifting in circling mode */
-  bool EnableTrailDrift;
+  bool trail_drift_enabled;
   /** Indicate extra distance reqd. if deviating from target heading */
-  bool EnableDetourCostMarker;
+  bool detour_cost_markers_enabled;
   /** Render track bearing on map */
-  DisplayTrackBearing_t DisplayTrackBearing;
+  DisplayTrackBearing display_track_bearing;
 
   /** Automatic zoom when closing in on waypoint */
-  bool AutoZoom;
-  bool SnailScaling;
+  bool auto_zoom_enabled;
+  bool snail_scaling_enabled;
   /** 0: standard, 1: seeyou colors */
-  SnailType_t SnailType;
-  int WindArrowStyle;
+  SnailType snail_type;
+  int wind_arrow_style;
 
   WaypointRendererSettings waypoint;
 
@@ -117,18 +117,18 @@ struct SETTINGS_MAP {
 
   AirspaceRendererSettings airspace;
 
-  int GliderScreenPosition;
+  int glider_screen_position;
   /** Orientation of the map (North up, Track up, etc.) */
-  DisplayOrientation_t OrientationCruise;
-  DisplayOrientation_t OrientationCircling;
+  DisplayOrientation cruise_orientation;
+  DisplayOrientation circling_orientation;
 
   /** The bias for map shifting (Heading, Target, etc.) */
-  MapShiftBias_t MapShiftBias;
+  MapShiftBias map_shift_bias;
 
-  bool EnableFLARMMap;
+  bool show_flarm_on_map;
 
   /** Display climb band on map */
-  bool EnableThermalProfile;
+  bool show_thermal_profile;
 
   void SetDefaults();
 };

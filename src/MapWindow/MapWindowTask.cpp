@@ -103,7 +103,7 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
   if (Calculated().circling 
       || !Basic().location_available
       || !Basic().track_available
-      || !SettingsMap().EnableDetourCostMarker
+      || !SettingsMap().detour_cost_markers_enabled
       || (task == NULL)) 
     return;
 

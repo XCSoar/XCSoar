@@ -50,11 +50,11 @@ TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const DerivedInfo &calculated,
                         const SETTINGS_MAP &settings)
 {
-  if (settings.DisplayTrackBearing == dtbOff ||
+  if (settings.display_track_bearing == dtbOff ||
       calculated.circling)
     return;
 
-  if (settings.DisplayTrackBearing == dtbAuto &&
+  if (settings.display_track_bearing == dtbAuto &&
       (basic.track - calculated.heading).AsDelta().AbsoluteDegrees() < fixed(5))
     return;
 

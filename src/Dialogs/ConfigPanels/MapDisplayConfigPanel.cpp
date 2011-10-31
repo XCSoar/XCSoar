@@ -66,20 +66,20 @@ MapDisplayConfigPanel::Init(WndForm *_wf)
   const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
 
   LoadFormProperty(*wf, _T("prpOrientationCruise"), orientation_list,
-                   settings_map.OrientationCruise);
+                   settings_map.cruise_orientation);
   LoadFormProperty(*wf, _T("prpOrientationCircling"), orientation_list,
-                   settings_map.OrientationCircling);
+                   settings_map.circling_orientation);
   LoadFormProperty(*wf, _T("prpMapShiftBias"), shift_bias_list,
-                   settings_map.MapShiftBias);
+                   settings_map.map_shift_bias);
 
   LoadFormProperty(*wf, _T("prpGliderScreenPosition"),
-                   XCSoarInterface::SettingsMap().GliderScreenPosition);
+                   XCSoarInterface::SettingsMap().glider_screen_position);
 
   LoadFormProperty(*wf, _T("prpCirclingZoom"),
-                   XCSoarInterface::SettingsMap().CircleZoom);
+                   XCSoarInterface::SettingsMap().circle_zoom_enabled);
 
   LoadFormProperty(*wf, _T("prpMaxAutoZoomDistance"), ugDistance,
-                   XCSoarInterface::SettingsMap().MaxAutoZoomDistance);
+                   XCSoarInterface::SettingsMap().max_auto_zoom_distance);
 
   UpdateVisibilities();
 }
@@ -105,27 +105,27 @@ MapDisplayConfigPanel::Save()
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpOrientationCruise"),
                                   szProfileOrientationCruise,
-                                  settings_map.OrientationCruise);
+                                  settings_map.cruise_orientation);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpOrientationCircling"),
                                   szProfileOrientationCircling,
-                                  settings_map.OrientationCircling);
+                                  settings_map.circling_orientation);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpMapShiftBias"),
                                   szProfileMapShiftBias,
-                                  settings_map.MapShiftBias);
+                                  settings_map.map_shift_bias);
 
   changed |= SaveFormProperty(*wf, _T("prpGliderScreenPosition"),
                               szProfileGliderScreenPosition,
-                              XCSoarInterface::SetSettingsMap().GliderScreenPosition);
+                              XCSoarInterface::SetSettingsMap().glider_screen_position);
 
   changed |= SaveFormProperty(*wf, _T("prpCirclingZoom"),
                               szProfileCircleZoom,
-                              XCSoarInterface::SetSettingsMap().CircleZoom);
+                              XCSoarInterface::SetSettingsMap().circle_zoom_enabled);
 
   changed |= SaveFormProperty(*wf, _T("prpMaxAutoZoomDistance"),
                               ugDistance,
-                              XCSoarInterface::SetSettingsMap().MaxAutoZoomDistance,
+                              XCSoarInterface::SetSettingsMap().max_auto_zoom_distance,
                               szProfileMaxAutoZoomDistance);
 
   return changed;

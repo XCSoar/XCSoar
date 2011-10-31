@@ -107,7 +107,7 @@ dlgWindSettingsShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpTrailDrift"));
   if (wp) {
     DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
-    df.Set(XCSoarInterface::SettingsMap().EnableTrailDrift);
+    df.Set(XCSoarInterface::SettingsMap().trail_drift_enabled);
     wp->RefreshDisplay();
   }
 
@@ -138,7 +138,7 @@ dlgWindSettingsShowModal(void)
   }
 
   SaveFormProperty(*wf, _T("prpTrailDrift"),
-                   XCSoarInterface::SetSettingsMap().EnableTrailDrift);
+                   XCSoarInterface::SetSettingsMap().trail_drift_enabled);
 
   ActionInterface::SendSettingsMap();
 

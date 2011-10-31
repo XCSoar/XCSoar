@@ -109,5 +109,5 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
     return;
 
   WindArrowRenderer::Draw(canvas, screen_angle, calculated.wind, pos, rc,
-                          settings.WindArrowStyle == 1);
+                          settings.wind_arrow_style == 1);
 }

@@ -466,7 +466,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
   if (_tcsstr(OutBuffer, _T("$(TerrainTopologyToggleName)"))) {
     char val = 0;
-    if (SettingsMap().EnableTopography)
+    if (SettingsMap().topography_enabled)
       val++;
     if (SettingsMap().terrain.enable)
       val += (char)2;
@@ -492,7 +492,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
   if (_tcsstr(OutBuffer, _T("$(TerrainTopographyToggleName)"))) {
     char val = 0;
-    if (SettingsMap().EnableTopography)
+    if (SettingsMap().topography_enabled)
       val++;
     if (SettingsMap().terrain.enable)
       val += (char)2;
@@ -519,13 +519,13 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   CondReplaceInString(CommonInterface::main_window.GetFullScreen(), OutBuffer,
                       _T("$(FullScreenToggleActionName)"),
                       _("Off"), _("On"), Size);
-  CondReplaceInString(SettingsMap().AutoZoom, OutBuffer,
+  CondReplaceInString(SettingsMap().auto_zoom_enabled, OutBuffer,
 		                  _T("$(ZoomAutoToggleActionName)"),
 		                  _("Manual"), _("Auto"), Size);
-  CondReplaceInString(SettingsMap().EnableTopography, OutBuffer,
+  CondReplaceInString(SettingsMap().topography_enabled, OutBuffer,
                       _T("$(TopologyToggleActionName)"),
                       _("Off"), _("On"), Size);
-  CondReplaceInString(SettingsMap().EnableTopography, OutBuffer,
+  CondReplaceInString(SettingsMap().topography_enabled, OutBuffer,
                       _T("$(TopographyToggleActionName)"),
                       _("Off"), _("On"), Size);
   CondReplaceInString(SettingsMap().terrain.enable, OutBuffer,
