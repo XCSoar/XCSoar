@@ -176,7 +176,7 @@ ifeq ($(TARGET),ANDROID)
   endif
   endif
 
-  TARGET_ARCH += -fpic -funwind-tables -fstack-protector -fno-short-enums
+  TARGET_ARCH += -fpic -funwind-tables
 
   HAVE_POSIX := y
   HAVE_WIN32 := n
