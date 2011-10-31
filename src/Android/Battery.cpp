@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Hardware/Battery.hpp"
 #include "org_xcsoar_NativeView.h"
+#include "Compiler.h"
 
 namespace Power {
   namespace Battery {
@@ -35,6 +36,7 @@ namespace Power {
   }
 }
 
+gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_setBatteryPercent(JNIEnv *env, jobject obj,
                                              jint value, jint plugged)

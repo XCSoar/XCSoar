@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/Window.hpp"
 #include "Screen/Android/Event.hpp"
 #include "org_xcsoar_Timer.h"
+#include "Compiler.h"
 
 #include <assert.h>
 
@@ -85,6 +86,7 @@ AndroidTimer::run()
     bridge.install();
 }
 
+gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_Timer_run(JNIEnv *env, jobject obj, jlong ptr)
 {

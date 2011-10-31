@@ -37,6 +37,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Java/Global.hpp"
+#include "Compiler.h"
 #include "org_xcsoar_NativeView.h"
 
 #ifndef NDEBUG
@@ -54,6 +55,7 @@ EventQueue *event_queue;
 
 SoundUtil *sound_util;
 
+gcc_visibility_default
 JNIEXPORT jboolean JNICALL
 Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jobject _context,
@@ -81,6 +83,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   return XCSoarInterface::Startup();
 }
 
+gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
 {
@@ -89,6 +92,7 @@ Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
   CommonInterface::main_window.event_loop();
 }
 
+gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 {
@@ -108,6 +112,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   delete context;
 }
 
+gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
                                          jint width, jint height)
@@ -123,6 +128,7 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
   event_queue->push(event);
 }
 
+gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
@@ -137,6 +143,7 @@ Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
   assert(num_buffers == 0);
 }
 
+gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
 {

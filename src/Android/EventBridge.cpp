@@ -24,6 +24,7 @@ Copyright_License {
 #include "org_xcsoar_EventBridge.h"
 #include "Screen/Android/Event.hpp"
 #include "Android/Main.hpp"
+#include "Compiler.h"
 
 /**
  * @see http://developer.android.com/reference/android/view/KeyEvent.html
@@ -49,18 +50,21 @@ TranslateKeyCode(unsigned key_code)
   return key_code;
 }
 
+gcc_visibility_default
 void
 Java_org_xcsoar_EventBridge_onKeyDown(JNIEnv *env, jclass cls, jint key_code)
 {
   event_queue->push(Event(Event::KEY_DOWN, TranslateKeyCode(key_code)));
 }
 
+gcc_visibility_default
 void
 Java_org_xcsoar_EventBridge_onKeyUp(JNIEnv *env, jclass cls, jint key_code)
 {
   event_queue->push(Event(Event::KEY_UP, TranslateKeyCode(key_code)));
 }
 
+gcc_visibility_default
 void
 Java_org_xcsoar_EventBridge_onMouseDown(JNIEnv *env, jclass cls,
                                         jint x, jint y)
@@ -68,6 +72,7 @@ Java_org_xcsoar_EventBridge_onMouseDown(JNIEnv *env, jclass cls,
   event_queue->push(Event(Event::MOUSE_DOWN, x, y));
 }
 
+gcc_visibility_default
 void
 Java_org_xcsoar_EventBridge_onMouseUp(JNIEnv *env, jclass cls,
                                       jint x, jint y)
@@ -75,6 +80,7 @@ Java_org_xcsoar_EventBridge_onMouseUp(JNIEnv *env, jclass cls,
   event_queue->push(Event(Event::MOUSE_UP, x, y));
 }
 
+gcc_visibility_default
 void
 Java_org_xcsoar_EventBridge_onMouseMove(JNIEnv *env, jclass cls,
                                         jint x, jint y)

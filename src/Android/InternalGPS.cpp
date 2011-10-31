@@ -29,6 +29,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "OS/Clock.hpp"
 #include "Geo/Geoid.hpp"
+#include "Compiler.h"
 
 InternalGPS::InternalGPS(JNIEnv *env, jobject obj)
   :Java::Object(env, obj)
@@ -62,6 +63,7 @@ InternalGPS::create(JNIEnv *env, Context *context, unsigned index)
   return internal_gps;
 }
 
+gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
                                          jint connected)
@@ -94,6 +96,7 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
   device_blackboard->ScheduleMerge();
 }
 
+gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
                                         jlong time, jint n_satellites,
