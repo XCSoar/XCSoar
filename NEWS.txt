@@ -10,7 +10,7 @@ Version 6.2.2 - not yet released
 * user interface
   - fixed several minor bugs in the plane database dialog
   - fix MacCready steps for knots and ft/min
-  - manual updates
+  - manual and translation updates
 * Android
   - acquire "Vibrate" permission
 

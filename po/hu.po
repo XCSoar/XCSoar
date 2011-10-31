@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-31 08:31+0100\n"
-"PO-Revision-Date: 2011-08-15 09:51+0000\n"
-"Last-Translator: Szombathelyi Zoltán <Unknown>\n"
+"PO-Revision-Date: 2011-10-22 23:31+0000\n"
+"Last-Translator: Úr Balázs <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-08-19 06:12+0000\n"
-"X-Generator: Launchpad (build 13697)\n"
+"X-Launchpad-Export-Date: 2011-10-31 07:28+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:532
 #: src/InputEventsActions.cpp:1467 src/Dialogs/dlgAnalysis.cpp:347
@@ -3450,7 +3450,7 @@ msgstr "Alatta mindet"
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:41
 #, no-c-format
 msgid "Default"
-msgstr "Alap"
+msgstr "Alapértelmezett"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:127
 msgid "Fill all"
@@ -8696,6 +8696,9 @@ msgstr ""
 #~ msgid "Height barometric"
 #~ msgstr "Magasság barometrikus"
 
+#~ msgid "The vertical distance to the nearest airspace"
+#~ msgstr "Függőleges távolság a legközelebbi légtérig"
+
 #~ msgid "No METAR available"
 #~ msgstr "METAR nem elérhető"
 
@@ -8726,21 +8729,11 @@ msgstr ""
 #~ msgid "This function is not available on your platform yet."
 #~ msgstr "Ez a funkció még nem elérhető a platformodon."
 
-#, fuzzy
-#~ msgid "Dew point"
-#~ msgstr "Új Fordulópont"
-
 #~ msgid "No METAR available!"
 #~ msgstr "METÁR nem elérhető!"
 
 #~ msgid "No TAF available!"
 #~ msgstr "TAF nem elérhető!"
-
-#~ msgid "Locked"
-#~ msgstr "Zárva"
-
-#~ msgid "The vertical distance to the nearest airspace"
-#~ msgstr "Függőleges távolság a legközelebbi légtérig"
 
 #~ msgid "No fix"
 #~ msgstr "Nincs pozíció"
@@ -8750,6 +8743,9 @@ msgstr ""
 
 #~ msgid "SC"
 #~ msgstr "SC"
+
+#~ msgid "Locked"
+#~ msgstr "Zárva"
 
 #~ msgid "Previous turnpoint"
 #~ msgstr "Előző fordulópont"
