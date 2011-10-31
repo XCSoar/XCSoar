@@ -17,6 +17,7 @@ ANDROID_KEYSTORE = $(HOME)/.android/mk.keystore
 ANDROID_KEY_ALIAS = mk
 ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/build
 ANDROID_BIN = $(TARGET_OUTPUT_DIR)/bin
+ANDROID_JNI = $(TARGET_OUTPUT_DIR)/jni
 
 ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux_x86
 ANDROID_ABI = $(ANDROID_ABI3)
@@ -39,6 +40,7 @@ CLASS_SOURCE = $(subst .,/,$(CLASS_NAME)).java
 CLASS_CLASS = $(patsubst %.java,%.class,$(CLASS_SOURCE))
 
 NATIVE_CLASSES = NativeView EventBridge Timer InternalGPS Settings
+NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
 NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
 NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 
@@ -158,13 +160,17 @@ $(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libapplica
 	@$(NQ)echo "  ANT     $@"
 	$(Q)cd $(ANDROID_BUILD) && $(ANT) debug
 
-$(ANDROID_BIN)/classes/$(CLASS_CLASS): $(JAVA_SOURCES) $(SOUND_FILES) $(ANDROID_BUILD)/build.xml
-	@$(NQ)echo "  ANT     $@"
-	$(Q)cd $(ANDROID_BUILD) && $(ANT) compile
+$(ANDROID_JNI)/build.xml $(ANDROID_JNI)/AndroidManifest.xml: | $(ANDROID_JNI)/dirstamp
+	@$(NQ)echo "  ANDROID $@"
+	$(Q)ln -s ../../../android/$(@F) $@
 
-$(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES)): $(NATIVE_PREFIX)%.h: $(ANDROID_BIN)/classes/$(CLASS_CLASS)
+$(ANDROID_JNI)/classes/$(CLASS_CLASS): $(NATIVE_SOURCES) $(ANDROID_JNI)/build.xml $(ANDROID_JNI)/AndroidManifest.xml $(ANDROID_BUILD)/build.xml
+	@$(NQ)echo "  ANT     $@"
+	$(Q)cd $(ANDROID_JNI) && $(ANT) compile-jni-classes
+
+$(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES)): $(NATIVE_PREFIX)%.h: $(ANDROID_JNI)/classes/$(CLASS_CLASS)
 	@$(NQ)echo "  JAVAH   $@"
-	$(Q)javah -classpath $(ANDROID_BIN)/classes -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
+	$(Q)javah -classpath $(ANDROID_JNI)/classes -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
 
 $(ANDROID_BIN)/XCSoar-unsigned.apk: $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libapplication.so $(ANDROID_SO_FILES) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) android/src/*.java
 	@$(NQ)echo "  ANT     $@"
