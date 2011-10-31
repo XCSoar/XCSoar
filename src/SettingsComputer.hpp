@@ -62,13 +62,13 @@ enum AutoWindModeBits
  * Wind calculator settings
  */
 struct WindSettings {
-/**
- * AutoWind calculation mode
- * 0: Manual
- * 1: Circling
- * 2: ZigZag
- * 3: Both
- */
+  /**
+   * AutoWind calculation mode
+   * 0: Manual
+   * 1: Circling
+   * 2: ZigZag
+   * 3: Both
+   */
   uint8_t auto_wind_mode;
 
   /**
@@ -106,7 +106,8 @@ struct LoggerSettings {
  * Glide polar settings
  */
 struct PolarSettings {
-  bool ballast_timer_active;      /**< Whether the ballast countdown timer is active */
+  /** Whether the ballast countdown timer is active */
+  bool ballast_timer_active;
 
   void SetDefaults();
 };
@@ -126,14 +127,20 @@ struct SoundSettings {
  * Settings for teamcode calculations
  */
 struct TeamCodeSettings {
-  int team_code_reference_waypoint;      /**< Reference waypoint id for code origin */
-  bool team_flarm_tracking;       /**< Whether to enable tracking by FLARM */
-  bool team_code_valid;       /**< Whether the teammate code is valid */  
+  /** Reference waypoint id for code origin */
+  int team_code_reference_waypoint;
+  /** Whether to enable tracking by FLARM */
+  bool team_flarm_tracking;
+  /** Whether the teammate code is valid */
+  bool team_code_valid;
 
-  StaticString<4> team_flarm_callsign;   /**< CN of the glider to track */
-  TeamCode team_code;       /**< auto-detected, see also in Info.h */
+  /** CN of the glider to track */
+  StaticString<4> team_flarm_callsign;
+  /** auto-detected, see also in Info.h */
+  TeamCode team_code;
 
-  FlarmId team_flarm_id; /**< FlarmId of the glider to track */
+  /** FlarmId of the glider to track */
+  FlarmId team_flarm_id;
 
   void SetDefaults();
 };
