@@ -34,12 +34,12 @@ Copyright_License {
 
 struct FlarmIdNameCouple
 {
-  FlarmId ID;
+  FlarmId id;
 
-  StaticString<21> Name;
+  StaticString<21> name;
 };
 
-static StaticArray<FlarmIdNameCouple, 200> FLARM_Names;
+static StaticArray<FlarmIdNameCouple, 200> flarm_names;
 
 void
 FlarmDetails::Load()
@@ -87,8 +87,8 @@ FlarmDetails::LoadSecondary()
   LogStartUp(_T("OpenFLARMDetails"));
 
   // if (FLARM Details already there) delete them;
-  if (!FLARM_Names.empty())
-    FLARM_Names.clear();
+  if (!flarm_names.empty())
+    flarm_names.clear();
 
   TLineReader *reader = OpenDataTextFile(_T("xcsoar-flarm.txt"));
   if (reader != NULL) {
@@ -106,10 +106,10 @@ FlarmDetails::SaveSecondary()
 
   TCHAR id[16];
 
-  for (unsigned i = 0; i < FLARM_Names.size(); i++)
+  for (unsigned i = 0; i < flarm_names.size(); i++)
     writer->printfln(_T("%s=%s"),
-                     FLARM_Names[i].ID.Format(id),
-                     FLARM_Names[i].Name.c_str());
+                     flarm_names[i].id.Format(id),
+                     flarm_names[i].name.c_str());
 
   delete writer;
 }
@@ -117,8 +117,8 @@ FlarmDetails::SaveSecondary()
 int
 FlarmDetails::LookupSecondaryIndex(FlarmId id)
 {
-  for (unsigned i = 0; i < FLARM_Names.size(); i++)
-    if (FLARM_Names[i].ID == id)
+  for (unsigned i = 0; i < flarm_names.size(); i++)
+    if (flarm_names[i].id == id)
       return i;
 
   return -1;
@@ -127,8 +127,8 @@ FlarmDetails::LookupSecondaryIndex(FlarmId id)
 int
 FlarmDetails::LookupSecondaryIndex(const TCHAR *cn)
 {
-  for (unsigned i = 0; i < FLARM_Names.size(); i++)
-    if (FLARM_Names[i].Name.equals(cn))
+  for (unsigned i = 0; i < flarm_names.size(); i++)
+    if (flarm_names[i].name.equals(cn))
       return i;
 
   return -1;
@@ -147,7 +147,7 @@ FlarmDetails::LookupCallsign(FlarmId id)
   // try to find flarm from userFile
   int index = LookupSecondaryIndex(id);
   if (index != -1)
-    return FLARM_Names[index].Name;
+    return flarm_names[index].name;
 
   // try to find flarm from FlarmNet.org File
   const FlarmNet::Record *record = FlarmNet::FindRecordById(id);
@@ -163,7 +163,7 @@ FlarmDetails::LookupId(const TCHAR *cn)
   // try to find flarm from userFile
   int index = LookupSecondaryIndex(cn);
   if (index != -1)
-    return FLARM_Names[index].ID;
+    return flarm_names[index].id;
 
   // try to find flarm from FlarmNet.org File
   const FlarmNet::Record *record = FlarmNet::FindFirstRecordByCallSign(cn);
@@ -181,18 +181,18 @@ FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name)
   int index = LookupSecondaryIndex(id);
   if (index != -1) {
     // modify existing record
-    FLARM_Names[index].ID = id;
-    FLARM_Names[index].Name = name;
+    flarm_names[index].id = id;
+    flarm_names[index].name = name;
     return true;
   }
 
-  if (FLARM_Names.full())
+  if (flarm_names.full())
     return false;
 
   // create new record
-  FlarmIdNameCouple &item = FLARM_Names.append();
-  item.ID = id;
-  item.Name = name;
+  FlarmIdNameCouple &item = flarm_names.append();
+  item.id = id;
+  item.name = name;
 
   return true;
 }
@@ -203,9 +203,9 @@ FlarmDetails::FindIdsByCallSign(const TCHAR *cn, const FlarmId *array[],
 {
   unsigned count = FlarmNet::FindIdsByCallSign(cn, array, size);
 
-  for (unsigned i = 0; i < FLARM_Names.size() && count < size; i++) {
-    if (FLARM_Names[i].Name.equals(cn)) {
-      array[count] = &FLARM_Names[i].ID;
+  for (unsigned i = 0; i < flarm_names.size() && count < size; i++) {
+    if (flarm_names[i].name.equals(cn)) {
+      array[count] = &flarm_names[i].id;
       count++;
     }
   }
