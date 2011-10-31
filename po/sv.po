@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-27 16:42+0200\n"
+"POT-Creation-Date: 2011-10-31 08:31+0100\n"
 "PO-Revision-Date: 2011-04-08 15:32+0000\n"
 "Last-Translator: Rolf Lindgren <Unknown>\n"
 "Language-Team: none\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Launchpad (build 12757)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:532
-#: src/InputEventsActions.cpp:1466 src/Dialogs/dlgAnalysis.cpp:350
+#: src/InputEventsActions.cpp:1467 src/Dialogs/dlgAnalysis.cpp:347
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:116
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:53
 #: Data/Dialogs/dlgConfiguration.xml:570
@@ -41,7 +41,7 @@ msgstr ""
 msgid "Line skipped."
 msgstr ""
 
-#: src/Airspace/AirspaceParser.cpp:230 src/Dialogs/dlgAnalysis.cpp:368
+#: src/Airspace/AirspaceParser.cpp:230 src/Dialogs/dlgAnalysis.cpp:365
 #: src/Dialogs/dlgConfiguration.cpp:96
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:91
 #: Data/Dialogs/dlgAirspace.xml:3 Data/Dialogs/dlgAirspace_L.xml:3
@@ -115,36 +115,36 @@ msgstr ""
 "Ett fel har uppstått\n"
 "Ingen bana deklarerad"
 
-#: src/Logger/ExternalLogger.cpp:124
+#: src/Logger/ExternalLogger.cpp:123
 msgid "No logger connected"
 msgstr "Ingen logger ansluten"
 
-#: src/Logger/ExternalLogger.cpp:125
+#: src/Logger/ExternalLogger.cpp:124 src/Dialogs/pnlTaskList.cpp:364
 msgid "Declare task"
 msgstr "Deklarera bana"
 
-#: src/Logger/ExternalLogger.cpp:140
+#: src/Logger/ExternalLogger.cpp:139
 msgid "OK to invalidate declaration?"
 msgstr "OK att ogiltigförklara deklarationen?"
 
-#: src/Logger/ExternalLogger.cpp:141
+#: src/Logger/ExternalLogger.cpp:140
 msgid "Task declared"
 msgstr "Bana deklarerad"
 
-#: src/Logger/ExternalLogger.cpp:261
+#: src/Logger/ExternalLogger.cpp:282
 msgid "Failed to download flight list."
 msgstr ""
 
-#: src/Logger/ExternalLogger.cpp:262 src/Logger/ExternalLogger.cpp:268
-#: src/Logger/ExternalLogger.cpp:296
+#: src/Logger/ExternalLogger.cpp:283 src/Logger/ExternalLogger.cpp:289
+#: src/Logger/ExternalLogger.cpp:317
 msgid "Download flight"
 msgstr ""
 
-#: src/Logger/ExternalLogger.cpp:267
+#: src/Logger/ExternalLogger.cpp:288
 msgid "Logger is empty."
 msgstr ""
 
-#: src/Logger/ExternalLogger.cpp:295
+#: src/Logger/ExternalLogger.cpp:316
 msgid "Failed to download flight."
 msgstr ""
 
@@ -300,7 +300,7 @@ msgstr ""
 #: src/ExpandMacros.cpp:451 src/ExpandMacros.cpp:458 src/ExpandMacros.cpp:515
 #: src/ExpandMacros.cpp:521 src/ExpandMacros.cpp:524 src/ExpandMacros.cpp:527
 #: src/ExpandMacros.cpp:545 src/ExpandMacros.cpp:598
-#: src/InputEventsActions.cpp:1696 src/InputEventsActions.cpp:1699
+#: src/InputEventsActions.cpp:1697 src/InputEventsActions.cpp:1700
 #: src/Dialogs/XML.cpp:542 src/Dialogs/dlgStatus.cpp:138
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:79
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:106
@@ -313,8 +313,8 @@ msgstr "av"
 
 #: src/ExpandMacros.cpp:458 src/ExpandMacros.cpp:515 src/ExpandMacros.cpp:521
 #: src/ExpandMacros.cpp:524 src/ExpandMacros.cpp:527 src/ExpandMacros.cpp:545
-#: src/ExpandMacros.cpp:598 src/InputEventsActions.cpp:1694
-#: src/InputEventsActions.cpp:1699 src/Dialogs/XML.cpp:542
+#: src/ExpandMacros.cpp:598 src/InputEventsActions.cpp:1695
+#: src/InputEventsActions.cpp:1700 src/Dialogs/XML.cpp:542
 #: src/Dialogs/dlgStatus.cpp:136
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:115
 msgid "On"
@@ -337,7 +337,7 @@ msgid "Terrain Off"
 msgstr "Terräng av"
 
 #: src/ExpandMacros.cpp:518 src/ExpandMacros.cpp:542
-#: src/InfoBoxes/Content/Weather.cpp:219 src/InfoBoxes/Content/Weather.cpp:252
+#: src/InfoBoxes/Content/Weather.cpp:218 src/InfoBoxes/Content/Weather.cpp:251
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:45
 #: src/Dialogs/dlgWindSettings.cpp:99
 #, no-c-format
@@ -351,18 +351,18 @@ msgstr "Manuell"
 msgid "Auto"
 msgstr "auto"
 
-#: src/ExpandMacros.cpp:530 src/InputEventsActions.cpp:1464
+#: src/ExpandMacros.cpp:530 src/InputEventsActions.cpp:1465
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:101
 #, no-c-format
 msgid "All"
 msgstr "Allt"
 
-#: src/ExpandMacros.cpp:531 src/InputEventsActions.cpp:1465
+#: src/ExpandMacros.cpp:531 src/InputEventsActions.cpp:1466
 #, no-c-format
 msgid "Task & Landables"
 msgstr ""
 
-#: src/ExpandMacros.cpp:533 src/InputEventsActions.cpp:1467
+#: src/ExpandMacros.cpp:533 src/InputEventsActions.cpp:1468
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:42
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:89
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:67
@@ -936,21 +936,20 @@ msgid "Indicated Airspeed reported by a supported external intelligent vario."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:359
-#, no-c-format
-msgid "Height barometric"
-msgstr ""
+#, fuzzy, no-c-format
+msgid "Barometric altitude"
+msgstr "Luftrum Tak"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
-#: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:5
 #, no-c-format
-msgid "H Baro"
+msgid "Alt. Baro."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:361
 #, no-c-format
 msgid ""
-"This is the barometric altitude obtained from a GPS equipped with pressure "
-"sensor, or a supported external intelligent vario."
+"This is the barometric altitude obtained from a device equipped with a "
+"pressure sensor."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:368
@@ -1233,7 +1232,7 @@ msgid ""
 "by a connected intelligent variometer."
 msgstr ""
 
-#: src/InfoBoxes/Content/Factory.cpp:512 src/InputEventsActions.cpp:1430
+#: src/InfoBoxes/Content/Factory.cpp:512 src/InputEventsActions.cpp:1431
 #, no-c-format
 msgid "Forecast temperature"
 msgstr ""
@@ -1900,7 +1899,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Altitude.cpp:272
 #: src/InfoBoxes/Content/MacCready.cpp:169
-#: src/InfoBoxes/Content/Weather.cpp:281
+#: src/InfoBoxes/Content/Weather.cpp:280
 msgid "Setup"
 msgstr ""
 
@@ -1922,7 +1921,7 @@ msgid "AUTO"
 msgstr ""
 
 #: src/InfoBoxes/Content/MacCready.cpp:165
-#: src/InfoBoxes/Content/Weather.cpp:275 Data/Dialogs/dlgConfigFonts.xml:11
+#: src/InfoBoxes/Content/Weather.cpp:274 Data/Dialogs/dlgConfigFonts.xml:11
 #: Data/Dialogs/dlgConfigFonts.xml:14 Data/Dialogs/dlgConfigFonts.xml:17
 #: Data/Dialogs/dlgConfigFonts.xml:20 Data/Dialogs/dlgConfigFonts.xml:23
 #: Data/Dialogs/dlgConfigFonts.xml:26 Data/Dialogs/dlgConfigFonts.xml:29
@@ -1956,25 +1955,25 @@ msgstr ""
 msgid "Time Below"
 msgstr ""
 
-#: src/InfoBoxes/Content/Weather.cpp:213 src/Dialogs/dlgWindSettings.cpp:93
+#: src/InfoBoxes/Content/Weather.cpp:212 src/Dialogs/dlgWindSettings.cpp:93
 msgid "External"
 msgstr ""
 
-#: src/InfoBoxes/Content/Weather.cpp:220 src/InfoBoxes/InfoBoxSettings.cpp:69
+#: src/InfoBoxes/Content/Weather.cpp:219 src/InfoBoxes/InfoBoxSettings.cpp:69
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:46
 #: src/Dialogs/dlgWindSettings.cpp:100 Data/Dialogs/dlgVegaDemo.xml:14
 #, no-c-format
 msgid "Circling"
 msgstr "Kurvläge"
 
-#: src/InfoBoxes/Content/Weather.cpp:221
+#: src/InfoBoxes/Content/Weather.cpp:220
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:47
 #: src/Dialogs/dlgWindSettings.cpp:101
 #, no-c-format
 msgid "ZigZag"
 msgstr ""
 
-#: src/InfoBoxes/Content/Weather.cpp:222
+#: src/InfoBoxes/Content/Weather.cpp:221
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:48
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:60
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:92
@@ -2004,200 +2003,200 @@ msgstr ""
 msgid "No help available on this item"
 msgstr ""
 
-#: src/InputEventsActions.cpp:161
+#: src/InputEventsActions.cpp:162
 msgid "Vario sounds on"
 msgstr ""
 
-#: src/InputEventsActions.cpp:163
+#: src/InputEventsActions.cpp:164
 msgid "Vario sounds off"
 msgstr ""
 
-#: src/InputEventsActions.cpp:192
+#: src/InputEventsActions.cpp:193
 msgid "Snail trail off"
 msgstr ""
 
-#: src/InputEventsActions.cpp:196
+#: src/InputEventsActions.cpp:197
 msgid "Long snail trail"
 msgstr "Spår På Långt"
 
-#: src/InputEventsActions.cpp:200
+#: src/InputEventsActions.cpp:201
 msgid "Short snail trail"
 msgstr ""
 
-#: src/InputEventsActions.cpp:204
+#: src/InputEventsActions.cpp:205
 msgid "Full snail trail"
 msgstr "Spår På Full"
 
-#: src/InputEventsActions.cpp:237
+#: src/InputEventsActions.cpp:238
 msgid "Show airspace off"
 msgstr "Visa Luftrum Av"
 
-#: src/InputEventsActions.cpp:239
+#: src/InputEventsActions.cpp:240
 msgid "Show airspace on"
 msgstr "Visa Luftrum På"
 
-#: src/InputEventsActions.cpp:277
+#: src/InputEventsActions.cpp:278
 msgid "Screen Mode Full"
 msgstr ""
 
-#: src/InputEventsActions.cpp:279
+#: src/InputEventsActions.cpp:280
 msgid "Auxiliary InfoBoxes"
 msgstr ""
 
-#: src/InputEventsActions.cpp:281
+#: src/InputEventsActions.cpp:282
 msgid "Default InfoBoxes"
 msgstr ""
 
-#: src/InputEventsActions.cpp:325
+#: src/InputEventsActions.cpp:326
 msgid "Auto. zoom on"
 msgstr "AutoZoom På"
 
-#: src/InputEventsActions.cpp:327 src/InputEventsActions.cpp:1805
+#: src/InputEventsActions.cpp:328 src/InputEventsActions.cpp:1806
 msgid "Auto. zoom off"
 msgstr "AutoZoom Av"
 
-#: src/InputEventsActions.cpp:352
+#: src/InputEventsActions.cpp:353
 msgid "Circling zoom on"
 msgstr "Kurv Zoom På"
 
-#: src/InputEventsActions.cpp:354
+#: src/InputEventsActions.cpp:355
 msgid "Circling zoom off"
 msgstr "Kurv Zoom Av"
 
-#: src/InputEventsActions.cpp:419
+#: src/InputEventsActions.cpp:420
 msgid "Pan mode on"
 msgstr "Panorera På"
 
-#: src/InputEventsActions.cpp:421
+#: src/InputEventsActions.cpp:422
 msgid "Pan mode off"
 msgstr "Panorera Av"
 
-#: src/InputEventsActions.cpp:564
+#: src/InputEventsActions.cpp:565
 msgid "Advance manually"
 msgstr ""
 
-#: src/InputEventsActions.cpp:567
+#: src/InputEventsActions.cpp:568
 msgid "Advance automatically"
 msgstr ""
 
-#: src/InputEventsActions.cpp:570
+#: src/InputEventsActions.cpp:571
 msgid "Ready to start"
 msgstr ""
 
-#: src/InputEventsActions.cpp:573
+#: src/InputEventsActions.cpp:574
 msgid "Hold start"
 msgstr ""
 
-#: src/InputEventsActions.cpp:576
+#: src/InputEventsActions.cpp:577
 msgid "Ready to turn"
 msgstr ""
 
-#: src/InputEventsActions.cpp:579
+#: src/InputEventsActions.cpp:580
 msgid "Hold turn"
 msgstr ""
 
-#: src/InputEventsActions.cpp:652 src/Dialogs/dlgFlarmTrafficDetails.cpp:241
+#: src/InputEventsActions.cpp:653 src/Dialogs/dlgFlarmTrafficDetails.cpp:241
 #: Data/Dialogs/dlgConfiguration.xml:662
 #: Data/Dialogs/dlgConfiguration_L.xml:666
 msgid "Competition ID"
 msgstr ""
 
-#: src/InputEventsActions.cpp:660
+#: src/InputEventsActions.cpp:661
 #, fuzzy
 msgid "Show details:"
 msgstr "Detaljer"
 
-#: src/InputEventsActions.cpp:665
+#: src/InputEventsActions.cpp:666
 msgid "Unknown competition number"
 msgstr ""
 
-#: src/InputEventsActions.cpp:666
+#: src/InputEventsActions.cpp:667
 msgid "Not found"
 msgstr ""
 
-#: src/InputEventsActions.cpp:730
+#: src/InputEventsActions.cpp:731
 msgid "No active waypoint!"
 msgstr "Ingen aktiv Brytpunkt!"
 
-#: src/InputEventsActions.cpp:806
+#: src/InputEventsActions.cpp:807
 msgid "Auto. MacCready on"
 msgstr "Auto MacCready På"
 
-#: src/InputEventsActions.cpp:808
+#: src/InputEventsActions.cpp:809
 msgid "Auto. MacCready off"
 msgstr "Auto MacCready Av"
 
-#: src/InputEventsActions.cpp:815
+#: src/InputEventsActions.cpp:816
 msgid "MacCready "
 msgstr ""
 
-#: src/InputEventsActions.cpp:1017
+#: src/InputEventsActions.cpp:1018
 msgid "Task aborted"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1020
+#: src/InputEventsActions.cpp:1021
 msgid "Go to target"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1023
+#: src/InputEventsActions.cpp:1024
 msgid "Ordered task"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1026
+#: src/InputEventsActions.cpp:1027
 #: src/Renderer/FlightStatisticsRenderer.cpp:759
 msgid "No task"
 msgstr "Ingen Bana"
 
-#: src/InputEventsActions.cpp:1085
+#: src/InputEventsActions.cpp:1086
 msgid "Bugs performance"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1126
+#: src/InputEventsActions.cpp:1127
 msgid "Ballast %"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1185
+#: src/InputEventsActions.cpp:1186
 msgid "NMEA log on"
 msgstr "NMEA Log På"
 
-#: src/InputEventsActions.cpp:1187
+#: src/InputEventsActions.cpp:1188
 msgid "NMEA log off"
 msgstr "NMEA Log Av"
 
-#: src/InputEventsActions.cpp:1191
+#: src/InputEventsActions.cpp:1192
 msgid "Logger on"
 msgstr "Logger På"
 
-#: src/InputEventsActions.cpp:1193
+#: src/InputEventsActions.cpp:1194
 msgid "Logger off"
 msgstr "Logger Av"
 
-#: src/InputEventsActions.cpp:1480 Data/Dialogs/dlgConfigFonts.xml:19
+#: src/InputEventsActions.cpp:1481 Data/Dialogs/dlgConfigFonts.xml:19
 #: Data/Dialogs/dlgConfigFonts_L.xml:19
 msgid "Waypoint labels"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1518
+#: src/InputEventsActions.cpp:1519
 msgid "Map labels on"
 msgstr "Kartetiketter På"
 
-#: src/InputEventsActions.cpp:1701
+#: src/InputEventsActions.cpp:1702
 msgid "Topography/Terrain"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1874
+#: src/InputEventsActions.cpp:1875
 msgid "Task start"
 msgstr "Startpunkt"
 
-#: src/InputEventsActions.cpp:1876
+#: src/InputEventsActions.cpp:1877
 msgid "Next turnpoint"
 msgstr "Nästa Brytpunkt"
 
-#: src/InputEventsActions.cpp:1878
+#: src/InputEventsActions.cpp:1879
 msgid "Task finished"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1880
+#: src/InputEventsActions.cpp:1881
 msgid "In sector, arm advance when ready"
 msgstr "Inom sektor, armera Nästa brytp."
 
@@ -2395,7 +2394,7 @@ msgid "Scanning weather forecast"
 msgstr ""
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:318
-#: src/Dialogs/dlgAnalysis.cpp:323
+#: src/Dialogs/dlgAnalysis.cpp:320
 msgid "Mass"
 msgstr "Vikt"
 
@@ -2572,7 +2571,7 @@ msgid "Initialising"
 msgstr ""
 
 #. Start the device thread(s)
-#: src/Components.cpp:418
+#: src/Components.cpp:420
 msgid "Starting devices"
 msgstr ""
 
@@ -2583,27 +2582,27 @@ msgstr ""
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Components.cpp:429
+#: src/Components.cpp:431
 msgid "Initialising display"
 msgstr ""
 
 #. Show progress dialog
-#: src/Components.cpp:497 src/Components.cpp:523 src/Components.cpp:565
+#: src/Components.cpp:499 src/Components.cpp:525 src/Components.cpp:567
 msgid "Shutdown, please wait..."
 msgstr ""
 
 #. Stop logger and save igc file
-#: src/Components.cpp:507
+#: src/Components.cpp:509
 msgid "Shutdown, saving logs..."
 msgstr ""
 
 #. Save settings to profile
-#: src/Components.cpp:511
+#: src/Components.cpp:513
 msgid "Shutdown, saving profile..."
 msgstr ""
 
 #. Save the task for the next time
-#: src/Components.cpp:556
+#: src/Components.cpp:558
 msgid "Shutdown, saving task..."
 msgstr ""
 
@@ -2700,11 +2699,9 @@ msgstr "Ingen logger ansluten"
 msgid "Devices"
 msgstr "Instrument"
 
-#. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
-#. create buttons
-#: src/Dialogs/DeviceListDialog.cpp:245 src/Dialogs/ManageCAI302Dialog.cpp:98
+#: src/Dialogs/DeviceListDialog.cpp:221 src/Dialogs/ManageCAI302Dialog.cpp:98
 #: src/Dialogs/dlgConfigInfoboxes.cpp:411 src/Dialogs/dlgInfoBoxAccess.cpp:97
-#: src/Dialogs/dlgTaskManager.cpp:318 src/Dialogs/dlgTaskManager.cpp:327
+#: src/Dialogs/dlgTaskManager.cpp:327 src/Dialogs/dlgTaskManager.cpp:336
 #: Data/Dialogs/dlgAirspace.xml:4 Data/Dialogs/dlgAirspaceColours.xml:4
 #: Data/Dialogs/dlgAirspaceColours_L.xml:4
 #: Data/Dialogs/dlgAirspaceDetails.xml:4
@@ -2745,22 +2742,22 @@ msgstr "Instrument"
 msgid "Close"
 msgstr "Stäng"
 
-#: src/Dialogs/DeviceListDialog.cpp:246
+#: src/Dialogs/DeviceListDialog.cpp:222
 msgid "Refresh"
 msgstr "Förnya"
 
-#: src/Dialogs/DeviceListDialog.cpp:247
+#: src/Dialogs/DeviceListDialog.cpp:223
 #, fuzzy
 msgid "Reconnect"
 msgstr "Frånkopplad"
 
-#: src/Dialogs/DeviceListDialog.cpp:248
+#: src/Dialogs/DeviceListDialog.cpp:224
 #, fuzzy
 msgid "Flight download"
 msgstr "Spela upp flygning"
 
-#: src/Dialogs/DeviceListDialog.cpp:249 src/Dialogs/dlgTaskManager.cpp:308
-#: src/Dialogs/dlgTaskManager.cpp:336
+#: src/Dialogs/DeviceListDialog.cpp:225 src/Dialogs/dlgTaskManager.cpp:317
+#: src/Dialogs/dlgTaskManager.cpp:345
 msgid "Manage"
 msgstr ""
 
@@ -2812,7 +2809,7 @@ msgstr "Ingen träff!"
 msgid "Heading"
 msgstr "Landning"
 
-#: src/Dialogs/dlgAirspaceWarnings.cpp:298
+#: src/Dialogs/dlgAirspaceWarnings.cpp:303
 msgid "No Warnings"
 msgstr "Inga varingar"
 
@@ -2824,62 +2821,62 @@ msgstr ""
 msgid "No further information"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:287 src/Dialogs/dlgAnalysis.cpp:296
-#: src/Dialogs/dlgAnalysis.cpp:305 src/Dialogs/dlgAnalysis.cpp:314
-#: src/Dialogs/dlgAnalysis.cpp:322 src/Dialogs/dlgAnalysis.cpp:332
-#: src/Dialogs/dlgAnalysis.cpp:341 src/Dialogs/dlgAnalysis.cpp:349
-#: src/Dialogs/dlgAnalysis.cpp:358 src/Dialogs/dlgAnalysis.cpp:367
+#: src/Dialogs/dlgAnalysis.cpp:284 src/Dialogs/dlgAnalysis.cpp:293
+#: src/Dialogs/dlgAnalysis.cpp:302 src/Dialogs/dlgAnalysis.cpp:311
+#: src/Dialogs/dlgAnalysis.cpp:319 src/Dialogs/dlgAnalysis.cpp:329
+#: src/Dialogs/dlgAnalysis.cpp:338 src/Dialogs/dlgAnalysis.cpp:346
+#: src/Dialogs/dlgAnalysis.cpp:355 src/Dialogs/dlgAnalysis.cpp:364
 #: Data/Dialogs/dlgAnalysis.xml:3 Data/Dialogs/dlgAnalysis_L.xml:3
 #: Data/Input/default.xci:880
 msgid "Analysis"
 msgstr "Analys"
 
-#: src/Dialogs/dlgAnalysis.cpp:288
+#: src/Dialogs/dlgAnalysis.cpp:285
 msgid "Barograph"
 msgstr "Barograf"
 
-#: src/Dialogs/dlgAnalysis.cpp:292 src/Dialogs/dlgAnalysis.cpp:328
-#: src/Dialogs/dlgAnalysis.cpp:337
+#: src/Dialogs/dlgAnalysis.cpp:289 src/Dialogs/dlgAnalysis.cpp:325
+#: src/Dialogs/dlgAnalysis.cpp:334
 msgid "Settings"
 msgstr "Inställning"
 
-#: src/Dialogs/dlgAnalysis.cpp:297
+#: src/Dialogs/dlgAnalysis.cpp:294
 msgid "Climb"
 msgstr "Stig"
 
-#: src/Dialogs/dlgAnalysis.cpp:301 src/Dialogs/dlgAnalysis.cpp:345
+#: src/Dialogs/dlgAnalysis.cpp:298 src/Dialogs/dlgAnalysis.cpp:342
 msgid "Task Calc"
 msgstr "Beräkna"
 
-#: src/Dialogs/dlgAnalysis.cpp:306
+#: src/Dialogs/dlgAnalysis.cpp:303
 msgid "Thermal Band"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:315
+#: src/Dialogs/dlgAnalysis.cpp:312
 msgid "Wind At Altitude"
 msgstr "Vind på höjd"
 
-#: src/Dialogs/dlgAnalysis.cpp:318
+#: src/Dialogs/dlgAnalysis.cpp:315
 msgid "Set Wind"
 msgstr "Ange vind"
 
-#: src/Dialogs/dlgAnalysis.cpp:323
+#: src/Dialogs/dlgAnalysis.cpp:320
 msgid "Glide Polar"
 msgstr "Glid Polar"
 
-#: src/Dialogs/dlgAnalysis.cpp:333
+#: src/Dialogs/dlgAnalysis.cpp:330
 msgid "Temp Trace"
 msgstr "Temp kurva"
 
-#: src/Dialogs/dlgAnalysis.cpp:342
+#: src/Dialogs/dlgAnalysis.cpp:339
 msgid "Task Speed"
 msgstr "Hastighet Bana"
 
-#: src/Dialogs/dlgAnalysis.cpp:354
+#: src/Dialogs/dlgAnalysis.cpp:351
 msgid "Task calc"
 msgstr "Beräkna"
 
-#: src/Dialogs/dlgAnalysis.cpp:371 Data/Dialogs/dlgConfiguration.xml:461
+#: src/Dialogs/dlgAnalysis.cpp:368 Data/Dialogs/dlgConfiguration.xml:461
 #: Data/Dialogs/dlgConfiguration_L.xml:462
 msgid "Warnings"
 msgstr "Varningar"
@@ -2901,16 +2898,18 @@ msgstr ""
 msgid "Create xcsoar-checklist.txt\n"
 msgstr ""
 
-#: src/Dialogs/dlgPlanes.cpp:124
+#: src/Dialogs/dlgPlanes.cpp:109
+msgid "Active"
+msgstr ""
+
+#: src/Dialogs/dlgPlanes.cpp:148
 #, c-format
 msgid "Loading of plane profile \"%s\" failed!"
 msgstr ""
 
-#: src/Dialogs/dlgPlanes.cpp:126 src/Dialogs/dlgPlanes.cpp:162
-#: src/Dialogs/dlgPlanes.cpp:200 src/Dialogs/dlgConfigWaypoints.cpp:87
-#: src/Dialogs/dlgNOAAList.cpp:91 src/Dialogs/dlgNOAAList.cpp:102
-#: src/Dialogs/dlgNOAAList.cpp:109 src/Dialogs/dlgNOAAList.cpp:214
-#: src/Dialogs/dlgNOAADetails.cpp:172 src/Dialogs/dlgWaypointDetails.cpp:202
+#: src/Dialogs/dlgPlanes.cpp:150 src/Dialogs/dlgPlanes.cpp:181
+#: src/Dialogs/dlgPlanes.cpp:220 src/Dialogs/dlgConfigWaypoints.cpp:87
+#: src/Dialogs/dlgWaypointDetails.cpp:202
 #: src/Dialogs/dlgWaypointDetails.cpp:211
 #: src/Dialogs/dlgWaypointDetails.cpp:253
 #: src/Dialogs/dlgWaypointDetails.cpp:258
@@ -2922,44 +2921,44 @@ msgstr ""
 msgid "Error"
 msgstr "Fel"
 
-#: src/Dialogs/dlgPlanes.cpp:135
+#: src/Dialogs/dlgPlanes.cpp:152
 #, c-format
 msgid "Plane profile \"%s\" activated."
 msgstr ""
 
-#: src/Dialogs/dlgPlanes.cpp:137 src/Dialogs/dlgPlanes.cpp:256
+#: src/Dialogs/dlgPlanes.cpp:154 src/Dialogs/dlgPlanes.cpp:283
 #: Data/Dialogs/dlgPlanes.xml:10 Data/Dialogs/dlgPlanes_L.xml:10
 #: Data/Dialogs/pnlTaskList.xml:17 Data/Dialogs/pnlTaskList_L.xml:21
 msgid "Load"
 msgstr "Ladda"
 
-#: src/Dialogs/dlgPlanes.cpp:161 src/Dialogs/dlgPlanes.cpp:199
+#: src/Dialogs/dlgPlanes.cpp:180 src/Dialogs/dlgPlanes.cpp:219
 msgid "Please enter the registration of the plane!"
 msgstr ""
 
-#: src/Dialogs/dlgPlanes.cpp:174 src/Dialogs/dlgPlanes.cpp:215
+#: src/Dialogs/dlgPlanes.cpp:193 src/Dialogs/dlgPlanes.cpp:235
 #, c-format
 msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
 msgstr ""
 
-#: src/Dialogs/dlgPlanes.cpp:176 src/Dialogs/dlgPlanes.cpp:217
+#: src/Dialogs/dlgPlanes.cpp:195 src/Dialogs/dlgPlanes.cpp:237
 #, fuzzy
 msgid "Overwrite"
 msgstr "Skriv över?"
 
-#: src/Dialogs/dlgPlanes.cpp:238
+#: src/Dialogs/dlgPlanes.cpp:265
 #, c-format
 msgid "Do you really want to delete plane profile \"%s\"?"
 msgstr ""
 
-#: src/Dialogs/dlgPlanes.cpp:240 Data/Dialogs/dlgConfigWaypoints.xml:9
+#: src/Dialogs/dlgPlanes.cpp:267 Data/Dialogs/dlgConfigWaypoints.xml:9
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:9 Data/Dialogs/dlgPlanes.xml:9
 #: Data/Dialogs/dlgPlanes_L.xml:9 Data/Dialogs/pnlTaskList.xml:19
 #: Data/Dialogs/pnlTaskList_L.xml:23
 msgid "Delete"
 msgstr "Radera"
 
-#: src/Dialogs/dlgPlanes.cpp:253
+#: src/Dialogs/dlgPlanes.cpp:280
 #, c-format
 msgid "Do you want to load plane profile \"%s\"?"
 msgstr ""
@@ -3192,87 +3191,6 @@ msgstr ""
 #: Data/Dialogs/dlgHelp_L.xml:3
 msgid "Help"
 msgstr "Hjälp"
-
-#: src/Dialogs/dlgNOAAList.cpp:77
-msgid "No METAR available"
-msgstr ""
-
-#: src/Dialogs/dlgNOAAList.cpp:90
-msgid ""
-"The list of tracked stations is full. Please remove a station before adding "
-"a new one."
-msgstr ""
-
-#: src/Dialogs/dlgNOAAList.cpp:97
-msgid "Airport ICAO code"
-msgstr ""
-
-#: src/Dialogs/dlgNOAAList.cpp:101
-msgid "Please enter the FOUR letter code of the desired station."
-msgstr ""
-
-#: src/Dialogs/dlgNOAAList.cpp:108
-msgid ""
-"Please don't use special characters in the four letter code of the desired "
-"station."
-msgstr ""
-
-#: src/Dialogs/dlgNOAAList.cpp:124 src/Dialogs/dlgNOAADetails.cpp:108
-msgid "Download"
-msgstr ""
-
-#: src/Dialogs/dlgNOAAList.cpp:136 src/Dialogs/dlgNOAADetails.cpp:117
-#, c-format
-msgid "Do you want to remove station %s?"
-msgstr ""
-
-#: src/Dialogs/dlgNOAAList.cpp:139 src/Dialogs/dlgNOAADetails.cpp:120
-#: Data/Dialogs/dlgNOAADetails.xml:7 Data/Dialogs/dlgNOAADetails_L.xml:7
-#: Data/Dialogs/dlgNOAAList.xml:8 Data/Dialogs/dlgNOAAList_L.xml:10
-#: Data/Dialogs/dlgTaskOptionalStarts.xml:5
-#: Data/Dialogs/dlgTaskOptionalStarts_L.xml:5 Data/Dialogs/dlgTaskPoint.xml:14
-#: Data/Dialogs/dlgTaskPoint_L.xml:13
-msgid "Remove"
-msgstr "Ta bort"
-
-#: src/Dialogs/dlgNOAAList.cpp:213 src/Dialogs/dlgNOAADetails.cpp:171
-msgid "This function is not available on your platform yet."
-msgstr ""
-
-#: src/Dialogs/dlgNOAADetails.cpp:55 Data/Dialogs/dlgConfiguration.xml:705
-#: Data/Dialogs/dlgConfiguration_L.xml:709 Data/Dialogs/dlgVario.xml:33
-#: Data/Dialogs/dlgVario_L.xml:32
-msgid "Temperature"
-msgstr ""
-
-#: src/Dialogs/dlgNOAADetails.cpp:60
-#, fuzzy
-msgid "Dew point"
-msgstr "Ny Brytpunkt"
-
-#: src/Dialogs/dlgNOAADetails.cpp:70
-#: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:75
-msgid "Wind"
-msgstr ""
-
-#: src/Dialogs/dlgNOAADetails.cpp:77 Data/Dialogs/dlgBasicSettings.xml:19
-#: Data/Dialogs/Infobox/pnlInfoBoxAltitudeSetup.xml:4
-msgid "QNH"
-msgstr ""
-
-#: src/Dialogs/dlgNOAADetails.cpp:86
-msgid "No METAR available!"
-msgstr ""
-
-#: src/Dialogs/dlgNOAADetails.cpp:95
-msgid "No TAF available!"
-msgstr ""
-
-#: src/Dialogs/dlgNOAADetails.cpp:153 Data/Dialogs/dlgNOAADetails.xml:3
-#: Data/Dialogs/dlgNOAADetails_L.xml:3 Data/Dialogs/dlgNOAAList.xml:3
-#: Data/Dialogs/dlgNOAAList_L.xml:3
-msgid "METAR and TAF"
-msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:58 Data/Dialogs/dlgStatus.xml:2
 #: Data/Dialogs/dlgStatus_L.xml:2 Data/Input/default.xci:898
@@ -3687,6 +3605,10 @@ msgstr ""
 msgid "Sun"
 msgstr ""
 
+#: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:75
+msgid "Wind"
+msgstr ""
+
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:90
 msgid "Low lands"
 msgstr "Låglänt"
@@ -3912,32 +3834,32 @@ msgid ""
 "reachable at all."
 msgstr ""
 
-#: src/Dialogs/dlgTaskManager.cpp:75 src/Dialogs/dlgTaskManager.cpp:162
+#: src/Dialogs/dlgTaskManager.cpp:79 src/Dialogs/dlgTaskManager.cpp:171
 #: Data/Dialogs/dlgTaskManager.xml:3 Data/Dialogs/dlgTaskManager_L.xml:3
 msgid "Task Manager"
 msgstr ""
 
-#: src/Dialogs/dlgTaskManager.cpp:159
+#: src/Dialogs/dlgTaskManager.cpp:168
 msgid "Validation Errors"
 msgstr ""
 
-#: src/Dialogs/dlgTaskManager.cpp:161
+#: src/Dialogs/dlgTaskManager.cpp:170
 msgid ""
 "Task not valid. Changes will be lost.\n"
 "Continue?"
 msgstr ""
 
-#: src/Dialogs/dlgTaskManager.cpp:300 src/Dialogs/dlgTaskManager.cpp:324
+#: src/Dialogs/dlgTaskManager.cpp:309 src/Dialogs/dlgTaskManager.cpp:333
 #, fuzzy
 msgid "Calculator"
 msgstr "Uppgiftskalkylator"
 
-#: src/Dialogs/dlgTaskManager.cpp:303 src/Dialogs/dlgTaskManager.cpp:331
+#: src/Dialogs/dlgTaskManager.cpp:312 src/Dialogs/dlgTaskManager.cpp:340
 #, fuzzy
 msgid "Turn Points"
 msgstr "VARNING"
 
-#: src/Dialogs/dlgTaskManager.cpp:312 src/Dialogs/dlgTaskManager.cpp:340
+#: src/Dialogs/dlgTaskManager.cpp:321 src/Dialogs/dlgTaskManager.cpp:349
 #, fuzzy
 msgid "Rules"
 msgstr "Regler"
@@ -3965,44 +3887,44 @@ msgstr ""
 msgid "Add Turnpoint"
 msgstr "Nästa brytpunkt"
 
-#: src/Dialogs/pnlTaskList.cpp:168
+#: src/Dialogs/pnlTaskList.cpp:176
 msgid "Task not saved"
 msgstr ""
 
-#: src/Dialogs/pnlTaskList.cpp:180
+#: src/Dialogs/pnlTaskList.cpp:188
 msgid "Load the selected task?"
 msgstr ""
 
-#: src/Dialogs/pnlTaskList.cpp:185 src/Dialogs/pnlTaskList.cpp:220
+#: src/Dialogs/pnlTaskList.cpp:193 src/Dialogs/pnlTaskList.cpp:228
 msgid "Task Browser"
 msgstr ""
 
-#: src/Dialogs/pnlTaskList.cpp:209
+#: src/Dialogs/pnlTaskList.cpp:217
 msgid "Can't delete .CUP files"
 msgstr ""
 
-#: src/Dialogs/pnlTaskList.cpp:209
+#: src/Dialogs/pnlTaskList.cpp:217
 msgid "Delete Error"
 msgstr ""
 
-#: src/Dialogs/pnlTaskList.cpp:215
+#: src/Dialogs/pnlTaskList.cpp:223
 msgid "Delete the selected task?"
 msgstr ""
 
-#: src/Dialogs/pnlTaskList.cpp:255
+#: src/Dialogs/pnlTaskList.cpp:263
 msgid "Can't rename .CUP files"
 msgstr ""
 
-#: src/Dialogs/pnlTaskList.cpp:255
+#: src/Dialogs/pnlTaskList.cpp:263
 msgid "Rename Error"
 msgstr ""
 
-#: src/Dialogs/pnlTaskList.cpp:304
+#: src/Dialogs/pnlTaskList.cpp:312
 #, fuzzy
 msgid "Create new task?"
 msgstr "Ersätt i Bana"
 
-#: src/Dialogs/pnlTaskList.cpp:304
+#: src/Dialogs/pnlTaskList.cpp:312
 #, fuzzy
 msgid "Task New"
 msgstr "Hastighet Bana"
@@ -4015,21 +3937,21 @@ msgstr ""
 msgid "(Add Alternate Start)"
 msgstr ""
 
-#: src/Dialogs/dlgTaskPoint.cpp:147
+#: src/Dialogs/dlgTaskPoint.cpp:151
 #, fuzzy
 msgid "Enable Alternate Starts"
 msgstr "Alternativ startpunkt"
 
-#: src/Dialogs/dlgTaskPoint.cpp:150
+#: src/Dialogs/dlgTaskPoint.cpp:154
 #, fuzzy
 msgid "Edit Alternates"
 msgstr "Alternativ"
 
-#: src/Dialogs/dlgTaskPoint.cpp:287
+#: src/Dialogs/dlgTaskPoint.cpp:296
 msgid "Remove task point?"
 msgstr ""
 
-#: src/Dialogs/dlgTaskPoint.cpp:288 src/Dialogs/dlgTaskPointType.cpp:108
+#: src/Dialogs/dlgTaskPoint.cpp:297 src/Dialogs/dlgTaskPointType.cpp:108
 msgid "Task Point"
 msgstr ""
 
@@ -4941,6 +4863,10 @@ msgstr "Ändra text"
 msgid "Profile"
 msgstr "Profil"
 
+#: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:5
+msgid "H Baro"
+msgstr ""
+
 #: Data/Dialogs/dlgStatusAircraft.xml:5 Data/Dialogs/dlgWaypointEdit_L.xml:34
 #: Data/Dialogs/pnlStatusFlight.xml:3
 msgid "Latitude"
@@ -5380,10 +5306,6 @@ msgid ""
 "airfields."
 msgstr ""
 
-#: Data/Dialogs/dlgTarget.xml:32 Data/Dialogs/dlgTarget_L.xml:12
-msgid "Locked"
-msgstr "Låst"
-
 #: Data/Dialogs/dlgConfiguration.xml:102
 #: Data/Dialogs/dlgConfiguration_L.xml:102
 msgid "FLARM traffic"
@@ -5610,6 +5532,14 @@ msgstr "Enhet B"
 #: Data/Dialogs/dlgConfiguration.xml:36 Data/Dialogs/dlgConfiguration_L.xml:36
 msgid "Watched waypoints"
 msgstr ""
+
+#: Data/Dialogs/dlgNOAADetails.xml:7 Data/Dialogs/dlgNOAADetails_L.xml:7
+#: Data/Dialogs/dlgNOAAList.xml:8 Data/Dialogs/dlgNOAAList_L.xml:10
+#: Data/Dialogs/dlgTaskOptionalStarts.xml:5
+#: Data/Dialogs/dlgTaskOptionalStarts_L.xml:5 Data/Dialogs/dlgTaskPoint.xml:14
+#: Data/Dialogs/dlgTaskPoint_L.xml:13
+msgid "Remove"
+msgstr "Ta bort"
 
 #: Data/Dialogs/dlgVario.xml:353 Data/Dialogs/dlgVario_L.xml:352
 msgid "Interval; info"
@@ -6181,6 +6111,11 @@ msgstr "Min Målgångshöjd"
 msgid "A percentage to select the size landables are displayed on the map."
 msgstr ""
 
+#: Data/Dialogs/dlgNOAADetails.xml:3 Data/Dialogs/dlgNOAADetails_L.xml:3
+#: Data/Dialogs/dlgNOAAList.xml:3 Data/Dialogs/dlgNOAAList_L.xml:3
+msgid "METAR and TAF"
+msgstr ""
+
 #: Data/Dialogs/dlgConfiguration.xml:633
 #: Data/Dialogs/dlgConfiguration_L.xml:637
 msgid ""
@@ -6489,6 +6424,10 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:793
 #: Data/Dialogs/dlgConfiguration_L.xml:797
 msgid "Dialog style"
+msgstr ""
+
+#: Data/Dialogs/dlgTarget.xml:32 Data/Dialogs/dlgTarget_L.xml:12
+msgid "Optimized"
 msgstr ""
 
 #: Data/Dialogs/dlgWaypointDetails.xml:14
@@ -7374,6 +7313,11 @@ msgstr ""
 msgid "Cruise lift trigger"
 msgstr ""
 
+#: Data/Dialogs/dlgBasicSettings.xml:19
+#: Data/Dialogs/Infobox/pnlInfoBoxAltitudeSetup.xml:4
+msgid "QNH"
+msgstr ""
+
 #: Data/Dialogs/dlgSimulatorPrompt.xml:4
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:4
 msgid "What do you want to do?"
@@ -7389,6 +7333,12 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:105 Data/Dialogs/dlgVario_L.xml:104
 msgid "Variometer low pass filter time constant in cruise mode."
+msgstr ""
+
+#: Data/Dialogs/dlgConfiguration.xml:705
+#: Data/Dialogs/dlgConfiguration_L.xml:709 Data/Dialogs/dlgVario.xml:33
+#: Data/Dialogs/dlgVario_L.xml:32
+msgid "Temperature"
 msgstr ""
 
 #: Data/Dialogs/pnlTaskList.xml:20 Data/Dialogs/pnlTaskList_L.xml:24
@@ -8157,6 +8107,13 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Dew point"
+#~ msgstr "Ny Brytpunkt"
+
+#~ msgid "Locked"
+#~ msgstr "Låst"
 
 #, fuzzy
 #~ msgid "Declaring to %s"

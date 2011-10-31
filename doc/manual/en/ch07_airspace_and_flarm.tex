@@ -177,6 +177,12 @@ from this space. (Key F8 on Altair)
   The dialog will re-open automatically if the airspace warning level increases.
 \end{description}
 
+Note that not all acknowledgement buttons may be visible for all
+warning levels.  In particular, if inside SUA, you do not have the
+option to Acknowledge the Warning (ACK Warn), since it is at this
+point no longer warning of an impending airspace incursion, but in
+fact stating that you are currently inside the airspace.
+
 The general guidelines for using the dialog are:
 \begin{itemize}
 \item Don't acknowledge a warning if you intend to or must avoid the airspace
@@ -200,7 +206,7 @@ flight level, radio frequencies).
 %\end{center}
 
 Acknowledged warnings will repeat after a certain time specified as
-the 'airspace repeat time' in the configuration settings.
+the 'Acknowledge time' in the configuration settings.
 
 Airspace warning acknowledgements apply to individual SUA regions.
 If, for example, a glider enters airspace A and the pilot acknowledges
@@ -208,15 +214,15 @@ the warning, and shortly thereafter is predicted to enter airspace B,
 an airspace warning for SUA region B will be raised.
 
 \tip If you want acknowledged airspace warnings to not be repeated,
-set a very large value for the configuration setting `acknowledgement
+set a very large value for the configuration setting `Acknowledge
 time'.
 
 Airspace warnings are automatically cleared when both the current
-glider's position as well as the predicted advance position are clear
+glider's position as well as the estimated future track are clear
 of the airspace.
 
 Simultaneous airspace warnings can occur if the aircraft (or its
-predicted future position) penetrates multiple airspace regions.
+estimated future track) penetrates multiple airspace regions.
 
 \section{Airspace queries}
 

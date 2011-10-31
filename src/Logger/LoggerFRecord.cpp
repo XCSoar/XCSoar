@@ -75,7 +75,6 @@ LoggerFRecord::Update(const GPSState &gps, const BrokenTime &broken_time,
       length += 2;
     }
   }
-  sprintf(f_record + length,"\r\n");
 
   detect_f_record_change = detect_f_record_change ||
     strcmp(f_record + 7, last_f_record + 7);

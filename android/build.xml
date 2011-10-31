@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<!--
+
+Not the real build.xml.  This one is just used to compile the Java classes
+that have native methods, to prepare for calling "javah".
+
+-->
+
+<project name="XCSoar" default="help">
+  <loadproperties srcFile="../build/local.properties" />
+  <loadproperties srcFile="../build/project.properties" />
+  <import file="${sdk.dir}/tools/ant/build.xml"/>
+
+  <property name="src.dir" location="../../../android/src"/>
+  <property name="native.classes.dir" location="classes"/>
+
+  <target name="compile-jni-classes" depends="-setup">
+    <mkdir dir="${native.classes.dir}"/>
+    <javac source="${java.source}" target="${java.target}"
+           debug="true" extdirs=""
+           destdir="${native.classes.dir}"
+           bootclasspathref="android.target.classpath"
+           verbose="${verbose}">
+      <src path="${src.dir}" />
+      <include name="NativeView.java"/>
+      <include name="EventBridge.java"/>
+      <include name="Timer.java"/>
+      <include name="InternalGPS.java"/>
+      <include name="Settings.java"/>
+    </javac>
+  </target>
+</project>
