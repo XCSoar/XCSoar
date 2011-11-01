@@ -121,7 +121,7 @@ SystemClockTimer()
 
 #if defined(_WIN32_WCE) && defined(GNAV)
     TIME_ZONE_INFORMATION tzi;
-    tzi.Bias = - CommonInterface::SettingsComputer().UTCOffset / 60;
+    tzi.Bias = - CommonInterface::SettingsComputer().utc_offset / 60;
     _tcscpy(tzi.StandardName,TEXT("Altair"));
     tzi.StandardDate.wMonth= 0; // disable daylight savings
     tzi.StandardBias = 0;
