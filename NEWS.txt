@@ -5,6 +5,14 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.3 - not yet released
 * devices
   - COM port monitor
+* map
+  - airspace rendering fixed
+  - show new map items list on click
+* user interface
+  - show METAR data in natural language
+  - sort METAR stations by name
+* internet
+  - added LiveTrack24 live tracking
 
 Version 6.2.2 - not yet released
 * calculations
