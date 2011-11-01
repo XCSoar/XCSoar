@@ -35,6 +35,7 @@ static const char *const all_font_paths[] = {
 #else
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/truetype/ttf-droid/DroidSans.ttf",
+  "/usr/share/fonts/truetype/droid/DroidSans.ttf",
   "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf",
   "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
   "/usr/share/fonts/truetype/unifont/unifont.ttf",
