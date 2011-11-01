@@ -26,8 +26,7 @@ Copyright_License {
 
 #include "Util/StaticArray.hpp"
 #include "Form/Tabbed.hpp"
-
-#include <windef.h> /* for MAX_PATH */
+#include "Util/StaticString.hpp"
 
 struct DialogLook;
 class Bitmap;
@@ -232,7 +231,7 @@ protected:
  */
 class OneTabButton {
 public:
-  TCHAR Caption[MAX_PATH];
+  StaticString<32> Caption;
   bool IsButtonOnly;
   const Bitmap *bmp;
   PixelRect butSize;
@@ -274,7 +273,7 @@ public:
                  PostShowFunction(_PostShowFunction),
                  ReClickFunction(_ReClickFunction)
   {
-    _tcscpy(Caption, _Caption);
+    Caption = _Caption;
     butSize.left = 0;
     butSize.top = 0;
     butSize.right = 0;

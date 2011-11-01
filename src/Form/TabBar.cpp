@@ -97,7 +97,7 @@ TabBarControl::GetButtonCaption(unsigned i)
   if (i >= buttons.size())
     return _T("");
 
-  return buttons[i]->Caption;
+  return buttons[i]->Caption.c_str();
 }
 
 const Bitmap *
