@@ -40,15 +40,30 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
 {
   const UPixelScalar width = rc.right - rc.left, height = rc.bottom - rc.top;
 
+  enum {
+    LANDSCAPE, PORTRAIT, SQUARE,
+  } orientation;
+
+  if (width == height)
+    orientation = SQUARE;
+  else if (width > height)
+    orientation = LANDSCAPE;
+  else
+    orientation = PORTRAIT;
+
   // Load logo
-  Bitmap &bitmap_logo = (width >= 290 && height >= 170) ||
-    (width >= 170 && height >= 210)
-    ? big_logo : logo;
+  const Bitmap &bitmap_logo =
+      (orientation == LANDSCAPE && width >= 510 && height >= 170) ||
+      (orientation == PORTRAIT && width >= 330 && height >= 250) ||
+      (orientation == SQUARE && width >= 210 && height >= 210) ?
+      big_logo : logo;
 
   // Adjust the title to larger screens
-  Bitmap &bitmap_title = (width >= 530 && height >= 60) ||
-    (width >= 330 && height >= 250)
-    ? big_title : title;
+  const Bitmap &bitmap_title =
+      (orientation == LANDSCAPE && width >= 510 && height >= 170) ||
+      (orientation == PORTRAIT && width >= 330 && height >= 250) ||
+      (orientation == SQUARE && width >= 210 && height >= 210) ?
+      big_title : title;
 
   // Determine logo size
   PixelSize logo_size = bitmap_logo.get_size();
@@ -58,16 +73,14 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
 
   PixelScalar logox, logoy, titlex, titley;
 
-  bool hidetitle = false;
-
   // Determine logo and title positions
-  if ((UPixelScalar)(logo_size.cx + title_size.cy + title_size.cx) <= width) {
+  if (orientation == LANDSCAPE) {
     // Landscape
     logox = (width - (logo_size.cx + title_size.cy + title_size.cx)) / 2;
     logoy = (height - logo_size.cy) / 2;
     titlex = logox + logo_size.cx + title_size.cy;
     titley = (height - title_size.cy) / 2;
-  } else if ((UPixelScalar)(logo_size.cy + title_size.cy * 2) <= height) {
+  } else if (orientation == PORTRAIT) {
     // Portrait
     logox = (width - logo_size.cx) / 2;
     logoy = (height - (logo_size.cy + title_size.cy * 2)) / 2;
@@ -77,11 +90,10 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
     // Square screen
     logox = (width - logo_size.cx) / 2;
     logoy = (height - logo_size.cy) / 2;
-    hidetitle = true;
   }
 
   // Draw 'XCSoar N.N' title
-  if (!hidetitle)
+  if (orientation != SQUARE)
     canvas.copy(titlex, titley, title_size.cx, title_size.cy, bitmap_title, 0, 0);
 
   // Draw XCSoar swift logo
