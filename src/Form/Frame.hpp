@@ -46,6 +46,10 @@ public:
   void SetAlignCenter();
   void SetVAlignCenter();
 
+  const Font &GetFont() const {
+    return *font;
+  }
+
   void SetFont(const Font &_font) {
     font = &_font;
     invalidate();
