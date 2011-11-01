@@ -86,19 +86,25 @@ struct UnitDescriptor_t
 
 struct UnitSetting
 {
-  Units_t DistanceUnit;  /**< Unit for distances */
-  Units_t AltitudeUnit; /**< Unit for altitudes, heights */
-  Units_t TemperatureUnit; /**< Unit for temperature */
-  Units_t SpeedUnit; /**< Unit for aircraft speeds */
-  Units_t VerticalSpeedUnit; /**< Unit for vertical speeds, varios */
-  Units_t WindSpeedUnit; /**< Unit for wind speeds */
-  Units_t TaskSpeedUnit; /**< Unit for task speeds */
+  /** Unit for distances */
+  Units_t DistanceUnit;
+  /** Unit for altitudes, heights */
+  Units_t AltitudeUnit;
+  /** Unit for temperature */
+  Units_t TemperatureUnit;
+  /** Unit for aircraft speeds */
+  Units_t SpeedUnit;
+  /** Unit for vertical speeds, varios */
+  Units_t VerticalSpeedUnit;
+  /** Unit for wind speeds */
+  Units_t WindSpeedUnit;
+  /** Unit for task speeds */
+  Units_t TaskSpeedUnit;
 };
 
 /**
  * Namespace to manage unit conversions.
  * internal system units are (metric SI).
- * 
  */
 namespace Units
 {
