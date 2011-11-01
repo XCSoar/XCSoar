@@ -32,7 +32,7 @@ Copyright_License {
 static const int MAXEFFICIENCYSHOW = 200;
 
 void
-GlideRatioCalculator::init(const SETTINGS_COMPUTER &settings)
+GlideRatioCalculator::Initialize(const SETTINGS_COMPUTER &settings)
 {
   unsigned bsize;
 
@@ -70,7 +70,7 @@ GlideRatioCalculator::init(const SETTINGS_COMPUTER &settings)
 }
 
 void
-GlideRatioCalculator::add(unsigned distance, int altitude)
+GlideRatioCalculator::Add(unsigned distance, int altitude)
 {
   static short errs = 0;
 
@@ -101,7 +101,7 @@ GlideRatioCalculator::add(unsigned distance, int altitude)
  * returns 0 if invalid, 999 if too high
  */
 int
-GlideRatioCalculator::calculate() const
+GlideRatioCalculator::Calculate() const
 {
   int altdiff, eff;
   short bcold;
@@ -137,35 +137,35 @@ GlideRatioCalculator::calculate() const
 // limit to reasonable values
 gcc_const
 static fixed
-LimitLD(fixed LD)
+LimitLD(fixed ld)
 {
-  if (fabs(LD) > fixed(INVALID_GR))
+  if (fabs(ld) > fixed(INVALID_GR))
     return fixed(INVALID_GR);
 
-  if (LD >= fixed_zero && LD < fixed_one)
+  if (ld >= fixed_zero && ld < fixed_one)
     return fixed_one;
 
-  if (LD < fixed_zero && LD > fixed_minus_one)
+  if (ld < fixed_zero && ld > fixed_minus_one)
     return fixed_minus_one;
 
-  return LD;
+  return ld;
 }
 
 fixed
-UpdateLD(fixed LD, fixed leg_distance, fixed height_above_leg,
+UpdateLD(fixed ld, fixed leg_distance, fixed height_above_leg,
          fixed filter_factor)
 {
   if (!positive(leg_distance))
-    return LD;
+    return ld;
 
   fixed glideangle = height_above_leg / leg_distance;
-  if (LD != fixed(INVALID_GR))
-    glideangle = LowPassFilter(fixed_one / LD, glideangle, filter_factor);
+  if (ld != fixed(INVALID_GR))
+    glideangle = LowPassFilter(fixed_one / ld, glideangle, filter_factor);
 
   if (fabs(glideangle) > fixed_one / INVALID_GR)
-    LD = LimitLD(fixed_one / glideangle);
+    ld = LimitLD(fixed_one / glideangle);
   else
-    LD = fixed(INVALID_GR);
+    ld = fixed(INVALID_GR);
 
-  return LD;
+  return ld;
 }

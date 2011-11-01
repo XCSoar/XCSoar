@@ -33,7 +33,7 @@ static const unsigned INVALID_GR = 999;
 struct SETTINGS_COMPUTER;
 
 class GlideRatioCalculator : private NonCopyable {
-  struct record {
+  struct Record {
     unsigned distance;
     int altitude;
   };
@@ -41,7 +41,7 @@ class GlideRatioCalculator : private NonCopyable {
   /**
    * Rotary array with a predefined max capacity.
    */
-  record records[180];
+  Record records[180];
 
   unsigned totaldistance;
 
@@ -58,9 +58,9 @@ class GlideRatioCalculator : private NonCopyable {
   bool valid;
 
 public:
-  void init(const SETTINGS_COMPUTER &settings);
-  void add(unsigned distance, int altitude);
-  int calculate() const;
+  void Initialize(const SETTINGS_COMPUTER &settings);
+  void Add(unsigned distance, int altitude);
+  int Calculate() const;
 };
 
 // methods using low-pass filter

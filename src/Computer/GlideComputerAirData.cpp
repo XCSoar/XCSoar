@@ -60,7 +60,7 @@ GlideComputerAirData::ResetFlight(const bool full)
 
   thermallocator.Reset();
 
-  rotaryLD.init(SettingsComputer());
+  rotaryLD.Initialize(SettingsComputer());
 
   flying_computer.Reset();
   wind_computer.Reset();
@@ -107,7 +107,7 @@ GlideComputerAirData::ProcessVertical()
   CruiseLD();
 
   if (calculated.flight.flying && !calculated.circling)
-    calculated.average_ld = rotaryLD.calculate();
+    calculated.average_ld = rotaryLD.Calculate();
 
   Average30s();
   AverageClimbRate();
@@ -358,7 +358,7 @@ GlideComputerAirData::LD()
                LastBasic().nav_altitude - Basic().nav_altitude, fixed(0.1));
 
     if (calculated.flight.flying && !calculated.circling)
-      rotaryLD.add((int)DistanceFlown, (int)Basic().nav_altitude);
+      rotaryLD.Add((int)DistanceFlown, (int)Basic().nav_altitude);
   }
 
   // LD instantaneous from vario, updated every reading..
@@ -502,7 +502,7 @@ GlideComputerAirData::OnTakeoff()
 void
 GlideComputerAirData::OnSwitchClimbMode(bool isclimb, bool left)
 {
-  rotaryLD.init(SettingsComputer());
+  rotaryLD.Initialize(SettingsComputer());
 }
 
 /**
