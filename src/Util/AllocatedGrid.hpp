@@ -102,6 +102,10 @@ public:
     return array.begin();
   }
 
+  iterator end() {
+    return begin() + width * height;
+  }
+
   const_iterator end() const {
     return begin() + width * height;
   }
