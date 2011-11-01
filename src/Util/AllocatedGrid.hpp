@@ -110,6 +110,13 @@ public:
     return begin() + width * height;
   }
 
+  iterator GetPointerAt(unsigned x, unsigned y) {
+    assert(x < width);
+    assert(y < height);
+
+    return begin() + y * width + x;
+  }
+
   const_iterator GetPointerAt(unsigned x, unsigned y) const {
     assert(x < width);
     assert(y < height);
