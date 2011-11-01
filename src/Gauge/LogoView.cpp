@@ -74,22 +74,23 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   PixelScalar logox, logoy, titlex, titley;
 
   // Determine logo and title positions
-  if (orientation == LANDSCAPE) {
-    // Landscape
+  switch (orientation) {
+  case LANDSCAPE:
     logox = (width - (logo_size.cx + title_size.cy + title_size.cx)) / 2;
     logoy = (height - logo_size.cy) / 2;
     titlex = logox + logo_size.cx + title_size.cy;
     titley = (height - title_size.cy) / 2;
-  } else if (orientation == PORTRAIT) {
-    // Portrait
+    break;
+  case PORTRAIT:
     logox = (width - logo_size.cx) / 2;
     logoy = (height - (logo_size.cy + title_size.cy * 2)) / 2;
     titlex = (width - title_size.cx) / 2;
     titley = logoy + logo_size.cy + title_size.cy;
-  } else {
-    // Square screen
+    break;
+  case SQUARE:
     logox = (width - logo_size.cx) / 2;
     logoy = (height - logo_size.cy) / 2;
+    break;
   }
 
   // Draw 'XCSoar N.N' title
