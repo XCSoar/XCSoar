@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/DeviceListDialog.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/ManageCAI302Dialog.hpp"
+#include "Dialogs/PortMonitor.hpp"
 #include "Util/StaticArray.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
@@ -40,12 +41,14 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Logger/ExternalLogger.hpp"
 
+static const TerminalLook *terminal_look;
 static WndForm *dialog;
 static WndListFrame *list;
 static unsigned current;
 static UPixelScalar font_height;
 
 static WndButton *reconnect_button, *flight_button, *manage_button;
+static WndButton *monitor_button;
 
 static StaticArray<unsigned, NUMDEV> indices;
 
@@ -56,12 +59,14 @@ UpdateButtons()
     reconnect_button->set_enabled(false);
     flight_button->set_enabled(false);
     manage_button->set_enabled(false);
+    monitor_button->set_enabled(false);
   } else {
     const DeviceDescriptor &device = DeviceList[indices[current]];
 
     reconnect_button->set_enabled(device.IsConfigured());
     flight_button->set_enabled(device.IsLogger());
     manage_button->set_enabled(device.IsManageable());
+    monitor_button->set_enabled(device.GetConfig().UsesPort());
   }
 }
 
@@ -201,9 +206,23 @@ OnManageClicked(gcc_unused WndButton &button)
   descriptor.SetBusy(false);
 }
 
-void
-ShowDeviceList(SingleWindow &parent, const DialogLook &look)
+static void
+OnMonitorClicked(gcc_unused WndButton &button)
 {
+  if (current >= indices.size())
+    return;
+
+  DeviceDescriptor &descriptor = DeviceList[indices[current]];
+  ShowPortMonitor(dialog->GetMainWindow(), dialog->GetLook(), *terminal_look,
+                  descriptor);
+}
+
+void
+ShowDeviceList(SingleWindow &parent, const DialogLook &look,
+               const TerminalLook &_terminal_look)
+{
+  terminal_look = &_terminal_look;
+
   UPixelScalar margin = Layout::Scale(2);
 
   /* create the dialog */
@@ -224,6 +243,7 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look)
   reconnect_button = buttons.Add(_("Reconnect"), OnReconnectClicked);
   flight_button = buttons.Add(_("Flight download"), OnFlightDownloadClicked);
   manage_button = buttons.Add(_("Manage"), OnManageClicked);
+  monitor_button = buttons.Add(_("Monitor"), OnMonitorClicked);
 
   const PixelRect rc = buttons.GetRemainingRect();
 

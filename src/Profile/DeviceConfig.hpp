@@ -149,6 +149,10 @@ struct DeviceConfig {
     return IsDriver(_T("Vega"));
   }
 
+  bool UsesPort() const {
+    return UsesDriver();
+  }
+
   void Clear() {
     port_type = PortType::DISABLED;
     baud_rate = 4800u;

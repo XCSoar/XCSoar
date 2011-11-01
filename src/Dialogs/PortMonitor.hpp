@@ -21,23 +21,17 @@ Copyright_License {
 }
 */
 
-#include "InputEvents.hpp"
-#include "Interface.hpp"
-#include "MainWindow.hpp"
-#include "Look/Look.hpp"
-#include "Dialogs/DeviceListDialog.hpp"
+#ifndef XCSOAR_PORT_MONITOR_DIALOG_HPP
+#define XCSOAR_PORT_MONITOR_DIALOG_HPP
 
-#include <assert.h>
-#include <tchar.h>
-#include <string.h>
+struct DialogLook;
+struct TerminalLook;
+class SingleWindow;
+class DeviceDescriptor;
 
 void
-InputEvents::eventDevice(const TCHAR *misc)
-{
-  assert(misc != NULL);
+ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
+                const TerminalLook &terminal_look,
+                DeviceDescriptor &device);
 
-  if (_tcscmp(misc, _T("list")) == 0)
-    ShowDeviceList(CommonInterface::main_window,
-                   CommonInterface::main_window.look->dialog,
-                   CommonInterface::main_window.look->terminal);
-}
+#endif
