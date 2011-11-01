@@ -318,7 +318,7 @@ InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
                     Units::ToUserWindSpeed(info.wind.norm));
 
   // Set Unit
-  infobox.SetValueUnit(Units::Current.WindSpeedUnit);
+  infobox.SetValueUnit(Units::current.wind_speed_unit);
 
   // Set Comment
   infobox.SetComment(info.wind.bearing, _T("T"));

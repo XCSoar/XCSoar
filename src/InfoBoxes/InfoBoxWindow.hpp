@@ -64,7 +64,7 @@ private:
   StaticString<32> title;
   StaticString<32> value;
   StaticString<32> comment;
-  Units_t value_unit;
+  Unit value_unit;
   int id;
 
   /** a timer which returns keyboard focus back to the map window after a while */
@@ -114,7 +114,7 @@ public:
    * Sets the unit of the InfoBox value
    * @param Value New unit of the InfoBox value
    */
-  void SetValueUnit(Units_t value_unit);
+  void SetValueUnit(Unit value_unit);
   /**
    * Sets the InfoBox ID to the given Value
    * @param id New value of the InfoBox ID

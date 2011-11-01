@@ -37,7 +37,7 @@ Profile::LoadUnits()
   unsigned Temp = 0;
 
   if (Get(szProfileLatLonUnits, Temp))
-    Units::SetCoordinateFormat((CoordinateFormats_t)Temp);
+    Units::SetCoordinateFormat((CoordinateFormats)Temp);
 
   unsigned Speed = 1;
   found |= Get(szProfileSpeedUnitsValue, Speed);

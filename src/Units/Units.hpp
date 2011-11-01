@@ -32,14 +32,14 @@ class Angle;
 
 #define DEG "°"
 
-enum CoordinateFormats_t {
-  cfDDMMSS = 0,
-  cfDDMMSSss,
-  cfDDMMmmm,
-  cfDDdddd
+enum CoordinateFormats {
+  CF_DDMMSS = 0,
+  CF_DDMMSS_SS,
+  CF_DDMM_MMM,
+  CF_DD_DDDD,
 };
 
-enum Units_t {
+enum Unit {
   unUndef,
   unKiloMeter,
   unNauticalMiles,
@@ -65,7 +65,7 @@ enum Units_t {
   unCount
 };
 
-enum UnitGroup_t
+enum UnitGroup
 {
   ugNone,
   ugDistance,
@@ -77,29 +77,29 @@ enum UnitGroup_t
   ugTaskSpeed
 };
 
-struct UnitDescriptor_t
+struct UnitDescriptor
 {
-  const TCHAR *Name;
-  fixed ToUserFact;
-  fixed ToUserOffset;
+  const TCHAR *name;
+  fixed factor_to_user;
+  fixed offset_to_user;
 };
 
 struct UnitSetting
 {
   /** Unit for distances */
-  Units_t DistanceUnit;
+  Unit distance_unit;
   /** Unit for altitudes, heights */
-  Units_t AltitudeUnit;
+  Unit altitude_unit;
   /** Unit for temperature */
-  Units_t TemperatureUnit;
+  Unit temperature_unit;
   /** Unit for aircraft speeds */
-  Units_t SpeedUnit;
+  Unit speed_unit;
   /** Unit for vertical speeds, varios */
-  Units_t VerticalSpeedUnit;
+  Unit vertical_speed_unit;
   /** Unit for wind speeds */
-  Units_t WindSpeedUnit;
+  Unit wind_speed_unit;
   /** Unit for task speeds */
-  Units_t TaskSpeedUnit;
+  Unit task_speed_unit;
 };
 
 /**
@@ -108,122 +108,124 @@ struct UnitSetting
  */
 namespace Units
 {
-  extern const UnitDescriptor_t UnitDescriptors[];
+  extern const UnitDescriptor unit_descriptors[];
 
-  extern UnitSetting Current;
-  extern CoordinateFormats_t CoordinateFormat; /**< Unit for lat/lon */
+  extern UnitSetting current;
+
+  /** Unit for lat/lon */
+  extern CoordinateFormats coordinate_format;
 
   /**
    * Returns the name of the given Unit
    * @return The name of the given Unit (e.g. "km" or "ft")
    */
   gcc_const
-  const TCHAR *GetUnitName(Units_t Unit);
+  const TCHAR *GetUnitName(Unit unit);
 
   /**
    * Returns the user-specified coordinate format
    * @return The user-specified coordinate format
    */
   gcc_pure
-  CoordinateFormats_t GetCoordinateFormat();
+  CoordinateFormats GetCoordinateFormat();
   /**
    * Sets the user-specified coordinate format
    * @param NewUnit The new coordinate format
    */
-  void SetCoordinateFormat(CoordinateFormats_t NewFormat);
+  void SetCoordinateFormat(CoordinateFormats format);
 
   /**
    * Returns the user-specified unit for a horizontal distance
    * @return The user-specified unit for a horizontal distance
    */
   gcc_pure
-  Units_t GetUserDistanceUnit();
+  Unit GetUserDistanceUnit();
   /**
    * Sets the user-specified unit for a horizontal distance
    * @param NewUnit The new unit
    */
-  void SetUserDistanceUnit(Units_t NewUnit);
+  void SetUserDistanceUnit(Unit unit);
 
   /**
    * Returns the user-specified unit for an altitude
    * @return The user-specified unit for an altitude
    */
   gcc_pure
-  Units_t GetUserAltitudeUnit();
+  Unit GetUserAltitudeUnit();
 
   /**
    * Sets the user-specified unit for an altitude
    * @param NewUnit The new unit
    */
-  void SetUserAltitudeUnit(Units_t NewUnit);
+  void SetUserAltitudeUnit(Unit unit);
 
   /**
    * Returns the user-specified unit for a temperature
    * @return The user-specified unit for a temperature
    */
   gcc_pure
-  Units_t GetUserTemperatureUnit();
+  Unit GetUserTemperatureUnit();
 
   /**
    * Sets the user-specified unit for a temperature
    * @param NewUnit The new unit
    */
-  void SetUserTemperatureUnit(Units_t NewUnit);
+  void SetUserTemperatureUnit(Unit unit);
 
   /**
    * Returns the user-specified unit for a horizontal speed
    * @return The user-specified unit for a horizontal speed
    */
   gcc_pure
-  Units_t GetUserSpeedUnit();
+  Unit GetUserSpeedUnit();
 
   /**
    * Sets the user-specified unit for a horizontal speed
    * @param NewUnit The new unit
    */
-  void SetUserSpeedUnit(Units_t NewUnit);
+  void SetUserSpeedUnit(Unit unit);
 
   /**
    * Returns the user-specified unit for a task speed
    * @return The user-specified unit for a task speed
    */
   gcc_pure
-  Units_t GetUserTaskSpeedUnit();
+  Unit GetUserTaskSpeedUnit();
 
   /**
    * Sets the user-specified unit for a task speed
    * @param NewUnit The new unit
    */
-  void SetUserTaskSpeedUnit(Units_t NewUnit);
+  void SetUserTaskSpeedUnit(Unit unit);
 
   /**
    * Returns the user-specified unit for a vertical speed
    * @return The user-specified unit for a vertical speed
    */
   gcc_pure
-  Units_t GetUserVerticalSpeedUnit();
+  Unit GetUserVerticalSpeedUnit();
 
   /**
    * Sets the user-specified unit for a vertical speed
    * @param NewUnit The new unit
    */
-  void SetUserVerticalSpeedUnit(Units_t NewUnit);
+  void SetUserVerticalSpeedUnit(Unit unit);
 
   /**
    * Returns the user-specified unit for a wind speed
    * @return The user-specified unit for a wind speed
    */
   gcc_pure
-  Units_t GetUserWindSpeedUnit();
+  Unit GetUserWindSpeedUnit();
 
   /**
    * Sets the user-specified unit for a wind speed
    * @param NewUnit The new unit
    */
-  void SetUserWindSpeedUnit(Units_t NewUnit);
+  void SetUserWindSpeedUnit(Unit unit);
 
   gcc_pure
-  Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
+  Unit GetUserUnitByGroup(UnitGroup group);
 
   /**
    * Converts a double-based Longitude to degrees, minute, seconds and a
@@ -234,7 +236,7 @@ namespace Units
    * @param ss Seconds (pointer)
    * @param east True if East, False if West (pointer)
    */
-  void LongitudeToDMS(Angle Longitude,
+  void LongitudeToDMS(Angle longitude,
                       int *dd, int *mm, int *ss, bool *east);
 
   /**
@@ -246,7 +248,7 @@ namespace Units
    * @param ss Seconds (pointer)
    * @param north True if North, False if South (pointer)
    */
-  void LatitudeToDMS(Angle Latitude,
+  void LatitudeToDMS(Angle latitude,
                      int *dd, int *mm, int *ss, bool *north);
 
   gcc_pure
@@ -268,105 +270,105 @@ namespace Units
   const TCHAR *GetTaskSpeedName();
 
   /**
-   * Converts a Value from the system unit to the user-specified unit
-   * @param Value The value in system unit
+   * Converts a value from the system unit to the user-specified unit
+   * @param value The value in system unit
    * @param Unit The destination unit
    * @return The value in user-specified unit
    */
   gcc_const
-  fixed ToUserUnit(fixed Value, Units_t Unit);
+  fixed ToUserUnit(fixed value, Unit unit);
 
   /**
-   * Converts a Value from the user-specified unit to the system unit
-   * @param Value The value in user-specified unit
+   * Converts a value from the user-specified unit to the system unit
+   * @param value The value in user-specified unit
    * @param Unit The source unit
    * @return The value in system unit
    */
   gcc_const
-  fixed ToSysUnit(fixed Value, Units_t Unit);
+  fixed ToSysUnit(fixed value, Unit unit);
 
   static inline fixed
-  ToUserAltitude(fixed Value)
+  ToUserAltitude(fixed value)
   {
-    return ToUserUnit(Value, Current.AltitudeUnit);
+    return ToUserUnit(value, current.altitude_unit);
   }
 
   static inline fixed
-  ToSysAltitude(fixed Value)
+  ToSysAltitude(fixed value)
   {
-    return ToSysUnit(Value, Current.AltitudeUnit);
+    return ToSysUnit(value, current.altitude_unit);
   }
 
   static inline fixed
-  ToUserTemperature(fixed Value)
+  ToUserTemperature(fixed value)
   {
-    return ToUserUnit(Value, Current.TemperatureUnit);
+    return ToUserUnit(value, current.temperature_unit);
   }
 
   static inline fixed
-  ToSysTemperature(fixed Value)
+  ToSysTemperature(fixed value)
   {
-    return ToSysUnit(Value, Current.TemperatureUnit);
+    return ToSysUnit(value, current.temperature_unit);
   }
 
   static inline fixed
-  ToUserDistance(fixed Value)
+  ToUserDistance(fixed value)
   {
-    return ToUserUnit(Value, Current.DistanceUnit);
+    return ToUserUnit(value, current.distance_unit);
   }
 
   static inline fixed
-  ToSysDistance(fixed Value)
+  ToSysDistance(fixed value)
   {
-    return ToSysUnit(Value, Current.DistanceUnit);
+    return ToSysUnit(value, current.distance_unit);
   }
 
   static inline fixed
-  ToUserSpeed(fixed Value)
+  ToUserSpeed(fixed value)
   {
-    return ToUserUnit(Value, Current.SpeedUnit);
+    return ToUserUnit(value, current.speed_unit);
   }
 
   static inline fixed
-  ToSysSpeed(fixed Value)
+  ToSysSpeed(fixed value)
   {
-    return ToSysUnit(Value, Current.SpeedUnit);
+    return ToSysUnit(value, current.speed_unit);
   }
 
   static inline fixed
-  ToUserVSpeed(fixed Value)
+  ToUserVSpeed(fixed value)
   {
-    return ToUserUnit(Value, Current.VerticalSpeedUnit);
+    return ToUserUnit(value, current.vertical_speed_unit);
   }
 
   static inline fixed
-  ToSysVSpeed(fixed Value)
+  ToSysVSpeed(fixed value)
   {
-    return ToSysUnit(Value, Current.VerticalSpeedUnit);
+    return ToSysUnit(value, current.vertical_speed_unit);
   }
 
   static inline fixed
-  ToUserTaskSpeed(fixed Value)
+  ToUserTaskSpeed(fixed value)
   {
-    return ToUserUnit(Value, Current.TaskSpeedUnit);
+    return ToUserUnit(value, current.task_speed_unit);
   }
 
   static inline fixed
-  ToSysTaskSpeed(fixed Value)
+  ToSysTaskSpeed(fixed value)
   {
-    return ToSysUnit(Value, Current.TaskSpeedUnit);
+    return ToSysUnit(value, current.task_speed_unit);
   }
 
   static inline fixed
-  ToUserWindSpeed(fixed Value)
+  ToUserWindSpeed(fixed value)
   {
-    return ToUserUnit(Value, Current.WindSpeedUnit);
+    return ToUserUnit(value, current.wind_speed_unit);
   }
 
   static inline fixed
-  ToSysWindSpeed(fixed Value)
+  ToSysWindSpeed(fixed value)
   {
-    return ToSysUnit(Value, Current.WindSpeedUnit);
+    return ToSysUnit(value, current.wind_speed_unit);
   }
 };
 

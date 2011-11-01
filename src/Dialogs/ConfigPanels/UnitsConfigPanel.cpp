@@ -54,36 +54,36 @@ static void
 UpdateUnitFields(const UnitSetting &units)
 {
   unsigned index;
-  index = (units.SpeedUnit == unStatuteMilesPerHour) ? 0 :
-          (units.SpeedUnit == unKnots) ? 1 : 2;
+  index = (units.speed_unit == unStatuteMilesPerHour) ? 0 :
+          (units.speed_unit == unKnots) ? 1 : 2;
   LoadFormProperty(*wf, _T("prpUnitsSpeed"), index);
   if (loading)
     SpeedUnits = index;
 
-  index = (units.TaskSpeedUnit == unStatuteMilesPerHour) ? 0 :
-          (units.TaskSpeedUnit == unKnots) ? 1 : 2;
+  index = (units.task_speed_unit == unStatuteMilesPerHour) ? 0 :
+          (units.task_speed_unit == unKnots) ? 1 : 2;
   LoadFormProperty(*wf, _T("prpUnitsTaskSpeed"), index);
   if (loading)
     TaskSpeedUnits = index;
 
-  index = (units.DistanceUnit == unStatuteMiles) ? 0 :
-          (units.DistanceUnit == unNauticalMiles) ? 1 : 2;
+  index = (units.distance_unit == unStatuteMiles) ? 0 :
+          (units.distance_unit == unNauticalMiles) ? 1 : 2;
   LoadFormProperty(*wf, _T("prpUnitsDistance"), index);
   if (loading)
     DistanceUnits = index;
 
-  index = (units.AltitudeUnit == unFeet) ? 0 : 1;
+  index = (units.altitude_unit == unFeet) ? 0 : 1;
   LoadFormProperty(*wf, _T("prpUnitsAltitude"), index);
   if (loading)
     AltitudeUnits = index;
 
-  index = (units.TemperatureUnit == unGradFahrenheit) ? 1 : 0;
+  index = (units.temperature_unit == unGradFahrenheit) ? 1 : 0;
   LoadFormProperty(*wf, _T("prpUnitsTemperature"), index);
   if (loading)
     TemperatureUnits = index;
 
-  index = (units.VerticalSpeedUnit == unKnots) ? 0 :
-          (units.VerticalSpeedUnit == unFeetPerMinute) ? 2 : 1;
+  index = (units.vertical_speed_unit == unKnots) ? 0 :
+          (units.vertical_speed_unit == unFeetPerMinute) ? 2 : 1;
   LoadFormProperty(*wf, _T("prpUnitsLift"), index);
   if (loading)
     LiftUnits = index;
@@ -250,7 +250,7 @@ UnitsConfigPanel::Init(WndForm *_wf)
   dfe->addEnumText(_("ft/min"));
   wp->RefreshDisplay();
 
-  UpdateUnitFields(Units::Current);
+  UpdateUnitFields(Units::current);
 
   int utc_offset = XCSoarInterface::SettingsComputer().utc_offset;
   LoadFormProperty(*wf, _T("prpUTCOffset"),
@@ -302,7 +302,7 @@ UnitsConfigPanel::Save()
   assert(wp != NULL);
   if ((int)Units::GetCoordinateFormat() != wp->GetDataField()->GetAsInteger()) {
     Units::SetCoordinateFormat(
-        (CoordinateFormats_t)wp->GetDataField()->GetAsInteger());
+        (CoordinateFormats)wp->GetDataField()->GetAsInteger());
     Profile::Set(szProfileLatLonUnits, Units::GetCoordinateFormat());
     changed = true;
   }

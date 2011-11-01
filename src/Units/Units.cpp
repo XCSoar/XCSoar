@@ -32,11 +32,11 @@ Copyright_License {
 #include <math.h>
 #include <tchar.h>
 
-CoordinateFormats_t Units::CoordinateFormat;
+CoordinateFormats Units::coordinate_format;
 
 //SI to Local Units
 
-const UnitDescriptor_t Units::UnitDescriptors[] = {
+const UnitDescriptor Units::unit_descriptors[] = {
   { NULL, fixed_one, fixed_zero },
   { _T("km"), fixed_constant(0.001, 0x41893LL), fixed_zero },
   { _T("nm"), fixed_constant(0.000539956803, 0x2362fLL), fixed_zero },
@@ -58,7 +58,7 @@ const UnitDescriptor_t Units::UnitDescriptors[] = {
   { _T("inHg"), fixed(0.0295287441401431), fixed_zero },
 };
 
-UnitSetting Units::Current = {
+UnitSetting Units::current = {
   unKiloMeter,
   unMeter,
   unGradCelcius,
@@ -69,12 +69,12 @@ UnitSetting Units::Current = {
 };
 
 void
-Units::LongitudeToDMS(Angle Longitude, int *dd, int *mm, int *ss, bool *east)
+Units::LongitudeToDMS(Angle longitude, int *dd, int *mm, int *ss, bool *east)
 {
   // if (Longitude is negative) -> Longitude is West otherwise East
-  *east = (Longitude.Sign() >= 0);
+  *east = (longitude.Sign() >= 0);
 
-  unsigned value = (unsigned)(Longitude.AbsoluteDegrees() * 3600 +
+  unsigned value = (unsigned)(longitude.AbsoluteDegrees() * 3600 +
                               fixed_half);
 
   *ss = value % 60;
@@ -87,12 +87,12 @@ Units::LongitudeToDMS(Angle Longitude, int *dd, int *mm, int *ss, bool *east)
 }
 
 void
-Units::LatitudeToDMS(Angle Latitude, int *dd, int *mm, int *ss, bool *north)
+Units::LatitudeToDMS(Angle latitude, int *dd, int *mm, int *ss, bool *north)
 {
   // if (Latitude is negative) -> Latitude is South otherwise North
-  *north = (Latitude.Sign() >= 0);
+  *north = (latitude.Sign() >= 0);
 
-  unsigned value = (unsigned)(Latitude.AbsoluteDegrees() * 3600 +
+  unsigned value = (unsigned)(latitude.AbsoluteDegrees() * 3600 +
                               fixed_half);
 
   *ss = value % 60;
@@ -105,111 +105,111 @@ Units::LatitudeToDMS(Angle Latitude, int *dd, int *mm, int *ss, bool *north)
 }
 
 const TCHAR *
-Units::GetUnitName(Units_t Unit)
+Units::GetUnitName(Unit unit)
 {
-  return UnitDescriptors[Unit].Name;
+  return unit_descriptors[unit].name;
 }
 
-CoordinateFormats_t
+CoordinateFormats
 Units::GetCoordinateFormat()
 {
-  return CoordinateFormat;
+  return coordinate_format;
 }
 
 void
-Units::SetCoordinateFormat(CoordinateFormats_t NewFormat)
+Units::SetCoordinateFormat(CoordinateFormats format)
 {
-  CoordinateFormat = NewFormat;
+  coordinate_format = format;
 }
 
-Units_t
+Unit
 Units::GetUserDistanceUnit()
 {
-  return Current.DistanceUnit;
+  return current.distance_unit;
 }
 
 void
-Units::SetUserDistanceUnit(Units_t NewUnit)
+Units::SetUserDistanceUnit(Unit unit)
 {
-  Current.DistanceUnit = NewUnit;
+  current.distance_unit = unit;
 }
 
-Units_t
+Unit
 Units::GetUserAltitudeUnit()
 {
-  return Current.AltitudeUnit;
+  return current.altitude_unit;
 }
 
 void
-Units::SetUserAltitudeUnit(Units_t NewUnit)
+Units::SetUserAltitudeUnit(Unit unit)
 {
-  Current.AltitudeUnit = NewUnit;
+  current.altitude_unit = unit;
 }
 
-Units_t
+Unit
 Units::GetUserTemperatureUnit()
 {
-  return Current.TemperatureUnit;
+  return current.temperature_unit;
 }
 
 void
-Units::SetUserTemperatureUnit(Units_t NewUnit)
+Units::SetUserTemperatureUnit(Unit unit)
 {
-  Current.TemperatureUnit = NewUnit;
+  current.temperature_unit = unit;
 }
 
-Units_t
+Unit
 Units::GetUserSpeedUnit()
 {
-  return Current.SpeedUnit;
+  return current.speed_unit;
 }
 
 void
-Units::SetUserSpeedUnit(Units_t NewUnit)
+Units::SetUserSpeedUnit(Unit unit)
 {
-  Current.SpeedUnit = NewUnit;
+  current.speed_unit = unit;
 }
 
-Units_t
+Unit
 Units::GetUserTaskSpeedUnit()
 {
-  return Current.TaskSpeedUnit;
+  return current.task_speed_unit;
 }
 
 void
-Units::SetUserTaskSpeedUnit(Units_t NewUnit)
+Units::SetUserTaskSpeedUnit(Unit unit)
 {
-  Current.TaskSpeedUnit = NewUnit;
+  current.task_speed_unit = unit;
 }
 
-Units_t
+Unit
 Units::GetUserVerticalSpeedUnit()
 {
-  return Current.VerticalSpeedUnit;
+  return current.vertical_speed_unit;
 }
 
 void
-Units::SetUserVerticalSpeedUnit(Units_t NewUnit)
+Units::SetUserVerticalSpeedUnit(Unit unit)
 {
-  Current.VerticalSpeedUnit = NewUnit;
+  current.vertical_speed_unit = unit;
 }
 
-Units_t
+Unit
 Units::GetUserWindSpeedUnit()
 {
-  return Current.WindSpeedUnit;
+  return current.wind_speed_unit;
 }
 
 void
-Units::SetUserWindSpeedUnit(Units_t NewUnit)
+Units::SetUserWindSpeedUnit(Unit unit)
 {
-  Current.WindSpeedUnit = NewUnit;
+  current.wind_speed_unit = unit;
 }
 
-Units_t
-Units::GetUserUnitByGroup(UnitGroup_t UnitGroup)
+Unit
+Units::GetUserUnitByGroup(UnitGroup group)
 {
-  switch (UnitGroup) {
+  switch (group) {
   case ugNone:
     return unUndef;
   case ugDistance:
@@ -268,15 +268,15 @@ Units::GetTaskSpeedName()
 }
 
 fixed
-Units::ToUserUnit(fixed Value, Units_t Unit)
+Units::ToUserUnit(fixed value, Unit unit)
 {
-  const UnitDescriptor_t *pU = &UnitDescriptors[Unit];
-  return Value * pU->ToUserFact + pU->ToUserOffset;
+  const UnitDescriptor *ud = &unit_descriptors[unit];
+  return value * ud->factor_to_user + ud->offset_to_user;
 }
 
 fixed
-Units::ToSysUnit(fixed Value, Units_t Unit)
+Units::ToSysUnit(fixed value, Unit unit)
 {
-  const UnitDescriptor_t *pU = &UnitDescriptors[Unit];
-  return (Value - pU->ToUserOffset) / pU->ToUserFact;
+  const UnitDescriptor *ud = &unit_descriptors[unit];
+  return (value - ud->offset_to_user) / ud->factor_to_user;
 }

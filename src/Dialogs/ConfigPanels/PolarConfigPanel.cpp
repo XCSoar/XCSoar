@@ -65,7 +65,7 @@ SetLiftFieldStepAndMax(const TCHAR *control)
 {
   WndProperty *ctl = (WndProperty *)wf->FindByName(control);
   DataFieldFloat* df = (DataFieldFloat*)ctl->GetDataField();
-  switch (Units::Current.VerticalSpeedUnit) {
+  switch (Units::current.vertical_speed_unit) {
     case unFeetPerMinute:
       df->SetStep(fixed_ten);
       df->SetMin(fixed(-2000));

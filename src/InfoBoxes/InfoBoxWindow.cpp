@@ -73,7 +73,7 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent,
 }
 
 void
-InfoBoxWindow::SetValueUnit(Units_t _value_unit)
+InfoBoxWindow::SetValueUnit(Unit _value_unit)
 {
   if (value_unit == _value_unit)
     return;

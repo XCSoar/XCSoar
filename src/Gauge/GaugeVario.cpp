@@ -79,7 +79,7 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
 
   set(parent, left, top, width, height, style);
 
-  unit_symbol = GetUnitSymbol(Units::Current.VerticalSpeedUnit);
+  unit_symbol = GetUnitSymbol(Units::current.vertical_speed_unit);
 
   hide();
 }

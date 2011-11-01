@@ -139,13 +139,13 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, int &value,
+                 UnitGroup unit_group, int &value,
                  const TCHAR *registry_name)
 {
   assert(control_name != NULL);
   assert(registry_name != NULL);
 
-  Units_t unit = Units::GetUserUnitByGroup(unit_group);
+  Unit unit = Units::GetUserUnitByGroup(unit_group);
   int new_value = GetFormValueInteger(form, control_name);
   new_value = iround(Units::ToSysUnit(fixed(new_value), unit));
   if (new_value == value)
@@ -158,7 +158,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, fixed &value,
+                 UnitGroup unit_group, fixed &value,
                  const TCHAR *registry_name)
 {
   assert(registry_name != NULL);

@@ -68,7 +68,7 @@ DeinitialiseUnitSymbols()
 }
 
 const UnitSymbol *
-GetUnitSymbol(Units_t unit)
+GetUnitSymbol(Unit unit)
 {
   assert(unit <= unCount);
 

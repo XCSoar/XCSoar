@@ -120,5 +120,5 @@ InfoBoxContent::SetValueFromDistance(InfoBoxWindow &infobox, fixed distance)
   Units::FormatUserDistance(distance, tmp, 32, false);
   infobox.SetValue(tmp);
 
-  infobox.SetValueUnit(Units::Current.DistanceUnit);
+  infobox.SetValueUnit(Units::current.distance_unit);
 }

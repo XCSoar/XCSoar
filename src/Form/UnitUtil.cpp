@@ -30,7 +30,7 @@ Copyright_License {
 
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, int value)
+                 UnitGroup unit_group, int value)
 {
   assert(control_name != NULL);
 
@@ -38,7 +38,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
   if (ctl == NULL)
     return;
 
-  Units_t unit = Units::GetUserUnitByGroup(unit_group);
+  Unit unit = Units::GetUserUnitByGroup(unit_group);
   DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
   assert(df.GetType() == DataField::TYPE_REAL);
   df.SetUnits(Units::GetUnitName(unit));
@@ -48,7 +48,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
 
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, fixed value)
+                 UnitGroup unit_group, fixed value)
 {
   assert(control_name != NULL);
 
@@ -56,7 +56,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
   if (ctl == NULL)
     return;
 
-  Units_t unit = Units::GetUserUnitByGroup(unit_group);
+  Unit unit = Units::GetUserUnitByGroup(unit_group);
 
   DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
   assert(df.GetType() == DataField::TYPE_REAL);
@@ -67,7 +67,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
 
 void
 LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
-                         UnitGroup_t unit_group, fixed value)
+                         UnitGroup unit_group, fixed value)
 {
   assert(control_name != NULL);
 
@@ -75,7 +75,7 @@ LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
   if (ctl == NULL)
     return;
 
-  Units_t unit = Units::GetUserUnitByGroup(unit_group);
+  Unit unit = Units::GetUserUnitByGroup(unit_group);
   DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
   assert(df.GetType() == DataField::TYPE_REAL);
   df.SetUnits(Units::GetUnitName(unit));
@@ -85,7 +85,7 @@ LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, unsigned &value,
+                 UnitGroup unit_group, unsigned &value,
                  const TCHAR *registry_name)
 {
   int value2 = value;
@@ -99,12 +99,12 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, fixed &value)
+                 UnitGroup unit_group, fixed &value)
 {
   assert(control_name != NULL);
 
   fixed new_value = GetFormValueFixed(form, control_name);
-  Units_t unit = Units::GetUserUnitByGroup(unit_group);
+  Unit unit = Units::GetUserUnitByGroup(unit_group);
   new_value = Units::ToSysUnit(new_value, unit);
   if (new_value == value)
     return false;

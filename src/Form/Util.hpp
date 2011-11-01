@@ -87,22 +87,22 @@ LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
 
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, int value);
+                 UnitGroup unit_group, int value);
 
 void
 LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
-                         UnitGroup_t unit_group, fixed value);
+                         UnitGroup unit_group, fixed value);
 
 static inline void
 LoadFormProperty(WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, unsigned value)
+                 UnitGroup unit_group, unsigned value)
 {
   LoadFormProperty(form, control_name, unit_group, (int)value);
 }
 
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, fixed value);
+                 UnitGroup unit_group, fixed value);
 
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name,
@@ -156,7 +156,7 @@ SaveFormProperty(WndForm &form, const TCHAR *control_name, double &value);
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, fixed &value);
+                 UnitGroup unit_group, fixed &value);
 
 /**
  * Saves a form value into a variable and into the registry.
@@ -204,17 +204,17 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, int &value,
+                 UnitGroup unit_group, int &value,
                  const TCHAR *registry_name);
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, unsigned &value,
+                 UnitGroup unit_group, unsigned &value,
                  const TCHAR *registry_name);
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, fixed &value,
+                 UnitGroup unit_group, fixed &value,
                  const TCHAR *registry_name);
 
 template<typename T>

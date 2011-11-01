@@ -239,7 +239,7 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
   infobox.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::Current.AltitudeUnit);
+  infobox.SetValueUnit(Units::current.altitude_unit);
 }
 
 void
@@ -260,7 +260,7 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
   infobox.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::Current.AltitudeUnit);
+  infobox.SetValueUnit(Units::current.altitude_unit);
 }
 
 void
@@ -282,7 +282,7 @@ InfoBoxContentNextAltitudeArrival::Update(InfoBoxWindow &infobox)
   infobox.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::Current.AltitudeUnit);
+  infobox.SetValueUnit(Units::current.altitude_unit);
 }
 
 
@@ -391,7 +391,7 @@ InfoBoxContentFinalAltitudeDiff::Update(InfoBoxWindow &infobox)
   infobox.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::Current.AltitudeUnit);
+  infobox.SetValueUnit(Units::current.altitude_unit);
 }
 
 void
@@ -411,7 +411,7 @@ InfoBoxContentFinalAltitudeRequire::Update(InfoBoxWindow &infobox)
   infobox.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::Current.AltitudeUnit);
+  infobox.SetValueUnit(Units::current.altitude_unit);
 }
 
 void
@@ -428,7 +428,7 @@ InfoBoxContentTaskSpeed::Update(InfoBoxWindow &infobox)
                     Units::ToUserTaskSpeed(task_stats.total.travelled.get_speed()));
 
   // Set Unit
-  infobox.SetValueUnit(Units::Current.TaskSpeedUnit);
+  infobox.SetValueUnit(Units::current.task_speed_unit);
 }
 
 void
@@ -445,7 +445,7 @@ InfoBoxContentTaskSpeedAchieved::Update(InfoBoxWindow &infobox)
                     Units::ToUserTaskSpeed(task_stats.total.remaining_effective.get_speed()));
 
   // Set Unit
-  infobox.SetValueUnit(Units::Current.TaskSpeedUnit);
+  infobox.SetValueUnit(Units::current.task_speed_unit);
 }
 
 void
@@ -462,7 +462,7 @@ InfoBoxContentTaskSpeedInstant::Update(InfoBoxWindow &infobox)
                     Units::ToUserTaskSpeed(task_stats.get_pirker_speed()));
 
   // Set Unit
-  infobox.SetValueUnit(Units::Current.TaskSpeedUnit);
+  infobox.SetValueUnit(Units::current.task_speed_unit);
 }
 
 void
@@ -693,7 +693,7 @@ InfoBoxContentTaskAASpeed::Update(InfoBoxWindow &infobox)
                     Units::ToUserTaskSpeed(common_stats.aat_speed_remaining));
 
   // Set Unit
-  infobox.SetValueUnit(Units::Current.TaskSpeedUnit);
+  infobox.SetValueUnit(Units::current.task_speed_unit);
 }
 
 void
@@ -713,7 +713,7 @@ InfoBoxContentTaskAASpeedMax::Update(InfoBoxWindow &infobox)
                     Units::ToUserTaskSpeed(common_stats.aat_speed_max));
 
   // Set Unit
-  infobox.SetValueUnit(Units::Current.TaskSpeedUnit);
+  infobox.SetValueUnit(Units::current.task_speed_unit);
 }
 
 void
@@ -733,7 +733,7 @@ InfoBoxContentTaskAASpeedMin::Update(InfoBoxWindow &infobox)
                     Units::ToUserTaskSpeed(common_stats.aat_speed_min));
 
   // Set Unit
-  infobox.SetValueUnit(Units::Current.TaskSpeedUnit);
+  infobox.SetValueUnit(Units::current.task_speed_unit);
 }
 
 void

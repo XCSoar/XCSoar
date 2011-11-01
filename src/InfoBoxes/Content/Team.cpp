@@ -164,7 +164,7 @@ InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
     infobox.SetValue(tmp);
 
     // Set Unit
-    infobox.SetValueUnit(Units::Current.DistanceUnit);
+    infobox.SetValueUnit(Units::current.distance_unit);
   } else
     infobox.SetValueInvalid();
 

@@ -224,6 +224,6 @@ InfoBoxContentNearestAirspaceVertical::Update(InfoBoxWindow &infobox)
   Units::FormatUserArrival(nearest.distance, buffer,
                            ARRAY_SIZE(buffer), false);
   infobox.SetValue(buffer);
-  infobox.SetValueUnit(Units::Current.AltitudeUnit);
+  infobox.SetValueUnit(Units::current.altitude_unit);
   infobox.SetComment(nearest.airspace->GetName());
 }

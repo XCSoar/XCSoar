@@ -245,7 +245,7 @@ ShowParseWarning(int line, const TCHAR* str)
 static void
 ReadAltitude(const TCHAR *Text, AirspaceAltitude &Alt)
 {
-  Units_t unit = unFeet;
+  Unit unit = unFeet;
   enum { MSL, AGL, SFC, FL, STD, UNLIMITED } type = MSL;
   fixed altitude = fixed_zero;
 
