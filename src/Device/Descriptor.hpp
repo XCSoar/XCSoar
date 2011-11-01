@@ -54,6 +54,8 @@ class DeviceDescriptor : public PortLineHandler {
   DeviceConfig config;
 
   Port *Com;
+  Port::Handler *monitor;
+
   DeviceDescriptor *pDevPipeTo;
   const struct DeviceRegister *Driver;
 
@@ -218,6 +220,10 @@ private:
   bool ParseNMEA(const char *line, struct NMEAInfo &info);
 
 public:
+  void SetMonitor(Port::Handler *_monitor) {
+    monitor = _monitor;
+  }
+
   void WriteNMEA(const char *line);
 #ifdef _UNICODE
   void WriteNMEA(const TCHAR *line);
@@ -245,6 +251,7 @@ public:
   bool ParseLine(const char *line);
 
 protected:
+  virtual void DataReceived(const void *data, size_t length);
   virtual void LineReceived(const char *line);
 };
 

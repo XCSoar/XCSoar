@@ -52,7 +52,8 @@ Copyright_License {
 #include <assert.h>
 
 DeviceDescriptor::DeviceDescriptor()
-  :Com(NULL), pDevPipeTo(NULL),
+  :Com(NULL), monitor(NULL),
+   pDevPipeTo(NULL),
    Driver(NULL), device(NULL),
 #ifdef ANDROID
    internal_gps(NULL),
@@ -501,6 +502,15 @@ DeviceDescriptor::ParseLine(const char *line)
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   basic.UpdateClock();
   return ParseNMEA(line, basic);
+}
+
+void
+DeviceDescriptor::DataReceived(const void *data, size_t length)
+{
+  if (monitor != NULL)
+    monitor->DataReceived(data, length);
+
+  PortLineHandler::DataReceived(data, length);
 }
 
 void
