@@ -34,6 +34,7 @@ class Font;
 namespace Fonts
 {
   extern Font InfoBox;
+  extern Font InfoBoxUnits;
   extern Font Title;
   extern Font Map;
   extern Font InfoBoxSmall;

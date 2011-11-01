@@ -44,6 +44,7 @@ struct InfoBoxLook {
   } title, value, comment;
 
   const Font *small_font;
+  const Font *unit_font;
 
   Color colors[6];
 
