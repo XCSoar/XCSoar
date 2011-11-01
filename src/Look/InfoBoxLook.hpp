@@ -44,7 +44,9 @@ struct InfoBoxLook {
   } title, value, comment;
 
   const Font *small_font;
+#ifndef GNAV
   const Font *unit_font;
+#endif
 
   Color colors[6];
 
