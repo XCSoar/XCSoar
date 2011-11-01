@@ -27,6 +27,8 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Form/Tabbed.hpp"
 
+#include <windef.h> /* for MAX_PATH */
+
 struct DialogLook;
 class Bitmap;
 class WndOwnerDrawFrame;

@@ -32,6 +32,7 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdio.h>
+#include <windef.h> /* for MAX_PATH */
 
 void
 Chart::ResetScale()

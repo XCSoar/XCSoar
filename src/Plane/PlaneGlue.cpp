@@ -29,7 +29,7 @@ Copyright_License {
 #include "Polar/PolarGlue.hpp"
 #include "SettingsComputer.hpp"
 
-#include <windows.h>
+#include <windef.h> /* for MAX_PATH */
 
 void
 PlaneGlue::FromProfile(Plane &plane)
