@@ -28,7 +28,9 @@ Copyright_License {
 /// values inside infoboxes  like numbers, etc.
 Font Fonts::InfoBox;
 Font Fonts::InfoBoxSmall;
+#ifndef GNAV
 Font Fonts::InfoBoxUnits;
+#endif
 /// Titles of infoboxes like Next, WP L/D etc.
 Font Fonts::Title;
 /// text names on the map
@@ -45,7 +47,9 @@ Font Fonts::MapLabelImportant;
 
 // these are the non-custom parameters
 LOGFONT LogInfoBox;
+#ifndef GNAV
 LOGFONT LogInfoBoxUnits;
+#endif
 LOGFONT LogTitle;
 LOGFONT LogMap;
 LOGFONT LogInfoBoxSmall;
@@ -84,7 +88,6 @@ static void
 LoadAltairLogFonts()
 {
   InitialiseLogfont(&LogInfoBox, _T("RasterGothicTwentyFourCond"), 24, true);
-  InitialiseLogfont(&LogInfoBoxUnits, _T("RasterGothicNineCond"), 10, true);
   InitialiseLogfont(&LogTitle, _T("RasterGothicNineCond"), 10);
   InitialiseLogfont(&LogCDI, _T("RasterGothicEighteenCond"), 19, true);
   InitialiseLogfont(&LogMapLabel, _T("RasterGothicTwelveCond"), 13);
@@ -190,14 +193,12 @@ Fonts::SizeInfoboxFont(UPixelScalar control_width)
     SizeLogFont(lf, control_width, _T("1234m"));
   InfoBox.Set(lf);
 
-  if (!is_altair()) {
-    unsigned height = lf.lfHeight;
-    lf = LogInfoBoxUnits;
-    lf.lfHeight = (height * 2) / 5;
-  } else {
-    lf = LogInfoBoxUnits;
-  }
+#ifndef GNAV
+  unsigned height = lf.lfHeight;
+  lf = LogInfoBoxUnits;
+  lf.lfHeight = (height * 2) / 5;
   InfoBoxUnits.Set(lf);
+#endif
 
   lf = LogInfoBoxSmall;
   if (!is_altair())
@@ -210,7 +211,9 @@ Fonts::Deinitialize()
 {
   InfoBox.Reset();
   InfoBoxSmall.Reset();
+#ifndef GNAV
   InfoBoxUnits.Reset();
+#endif
   Title.Reset();
   Map.Reset();
   MapBold.Reset();

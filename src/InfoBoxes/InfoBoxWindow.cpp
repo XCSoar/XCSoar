@@ -242,6 +242,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
 
   canvas.set_text_color(look.get_value_color(value_color));
 
+#ifndef GNAV
   // Do text-based unit rendering on higher resolutions
   if (Layout::FastScale(10) > 18) {
     canvas.select(*look.unit_font);
@@ -277,6 +278,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
     }
     return;
   }
+#endif
 
   canvas.select(*look.value.font);
   UPixelScalar ascent_height = look.value.font->GetAscentHeight();
