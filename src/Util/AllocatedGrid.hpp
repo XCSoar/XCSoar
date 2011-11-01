@@ -45,6 +45,9 @@ protected:
   unsigned width, height;
 
 public:
+  typedef typename AllocatedArray<T>::iterator iterator;
+  typedef typename AllocatedArray<T>::const_iterator const_iterator;
+
   gcc_constexpr_ctor AllocatedGrid():width(0), height(0) {}
   AllocatedGrid(unsigned _width, unsigned _height)
     :array(_width * _height), width(_width), height(_height) {}
@@ -91,19 +94,19 @@ public:
     return array[i];
   }
 
-  T *begin() {
+  iterator begin() {
     return array.begin();
   }
 
-  const T *begin() const {
+  const_iterator begin() const {
     return array.begin();
   }
 
-  const T *end() const {
+  const_iterator end() const {
     return begin() + width * height;
   }
 
-  const T *GetPointerAt(unsigned x, unsigned y) const {
+  const_iterator GetPointerAt(unsigned x, unsigned y) const {
     assert(x < width);
     assert(y < height);
 
