@@ -24,9 +24,6 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "Interface.hpp"
 #include "NMEA/Info.hpp"
-#include "Asset.hpp"
-
-#include <windows.h>
 
 unsigned
 TimeLocal(int localtime, int utc_offset)
