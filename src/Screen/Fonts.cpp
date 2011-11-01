@@ -43,7 +43,7 @@ Font Fonts::CDI;
 Font Fonts::MapLabel;
 /// font labels for important labels (e.g. big/medium cities)
 Font Fonts::MapLabelImportant;
-
+Font Fonts::monospace;
 
 // these are the non-custom parameters
 LOGFONT LogInfoBox;
@@ -57,6 +57,16 @@ LOGFONT LogMapBold;
 LOGFONT LogCDI;
 LOGFONT LogMapLabel;
 LOGFONT LogMapLabelImportant;
+static LOGFONT log_monospace;
+
+static const TCHAR *
+GetStandardMonospaceFontFace()
+{
+  if (is_android())
+    return _T("Droid Sans Mono");
+
+  return _T("Courier");
+}
 
 static void
 InitialiseLogfont(LOGFONT* font, const TCHAR* facename, UPixelScalar height,
@@ -67,10 +77,8 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, UPixelScalar height,
 
   _tcscpy(font->lfFaceName, facename);
 
-#ifdef WIN32
   font->lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
                           | FF_DONTCARE;
-#endif
 
   font->lfHeight = (long)height;
   font->lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
@@ -96,6 +104,8 @@ LoadAltairLogFonts()
   InitialiseLogfont(&LogMap, _T("RasterGothicFourteenCond"), 15);
   InitialiseLogfont(&LogMapBold, _T("RasterGothicFourteenCond"), 15, true);
   InitialiseLogfont(&LogInfoBoxSmall, _T("RasterGothicEighteenCond"), 19, true);
+  InitialiseLogfont(&log_monospace, GetStandardMonospaceFontFace(),
+                    10, false, false, false);
 }
 
 static void
@@ -169,6 +179,9 @@ InitialiseLogFonts()
 
   InitialiseLogfont(&LogInfoBoxSmall, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.56), true);
+
+  InitialiseLogfont(&log_monospace, GetStandardMonospaceFontFace(),
+                    UPixelScalar(FontHeight * 0.39), false, false, false);
 }
 
 void
@@ -182,6 +195,7 @@ Fonts::Initialize()
   MapLabelImportant.Set(LogMapLabelImportant);
   Map.Set(LogMap);
   MapBold.Set(LogMapBold);
+  monospace.Set(log_monospace);
 }
 
 void
@@ -220,6 +234,7 @@ Fonts::Deinitialize()
   CDI.Reset();
   MapLabel.Reset();
   MapLabelImportant.Reset();
+  monospace.Reset();
 }
 
 const TCHAR*

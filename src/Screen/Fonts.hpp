@@ -44,6 +44,7 @@ namespace Fonts
   extern Font CDI;
   extern Font MapLabel;
   extern Font MapLabelImportant;
+  extern Font monospace;
 
   void Initialize();
   void SizeInfoboxFont(UPixelScalar control_width);

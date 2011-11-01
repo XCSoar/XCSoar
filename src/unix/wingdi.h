@@ -29,6 +29,10 @@ Copyright_License {
 enum {
   FW_MEDIUM = 500,
   FW_BOLD = 700,
+
+  FF_DONTCARE = 0,
+  FIXED_PITCH = 1,
+  VARIABLE_PITCH = 2,
 };
 
 typedef struct tagLOGFONT {

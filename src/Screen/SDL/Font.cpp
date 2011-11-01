@@ -43,13 +43,27 @@ static const char *const all_font_paths[] = {
   NULL
 };
 
+static const char *const all_monospace_font_paths[] = {
+#ifdef __APPLE__
+  "/Library/Fonts/Courier New.ttf",
+#else
+  "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf",
+  "/usr/share/fonts/truetype/ttf-droid/DroidSansMono.ttf",
+  "/usr/share/fonts/truetype/droid/DroidSansMono.ttf",
+  "/usr/share/fonts/truetype/msttcorefonts/couri.ttf",
+  "/usr/share/fonts/truetype/freefont/FreeMono.ttf",
+#endif
+  NULL
+};
+
 static const char *font_path;
+static const char *monospace_font_path;
 
 gcc_const
 static const char *
-DetectFont()
+DetectFont(const char *const* fonts)
 {
-  for (const char *const* i = all_font_paths; *i != NULL; ++i)
+  for (const char *const* i = fonts; *i != NULL; ++i)
     if (File::Exists(*i))
       return *i;
 
@@ -59,7 +73,11 @@ DetectFont()
 void
 Font::Initialise()
 {
-  font_path = DetectFont();
+  font_path = DetectFont(all_font_paths);
+
+  monospace_font_path = DetectFont(all_monospace_font_paths);
+  if (monospace_font_path == NULL)
+    monospace_font_path = font_path;
 }
 
 bool
@@ -100,10 +118,14 @@ Font::Set(const LOGFONT &log_font)
 {
   assert(IsScreenInitialized());
 
-  if (font_path == NULL)
+  const TCHAR *path = (log_font.lfPitchAndFamily & 0x03) == FIXED_PITCH
+    ? monospace_font_path
+    : font_path;
+
+  if (path == NULL)
     return false;
 
-  return _set(font_path, log_font.lfHeight > 0 ? log_font.lfHeight : 10,
+  return _set(path, log_font.lfHeight > 0 ? log_font.lfHeight : 10,
               log_font.lfWeight >= 700,
               log_font.lfItalic);
 }
