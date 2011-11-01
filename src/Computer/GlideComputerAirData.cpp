@@ -66,9 +66,6 @@ GlideComputerAirData::ResetFlight(const bool full)
   wind_computer.Reset();
 }
 
-/**
- * Calculates some basic values
- */
 void
 GlideComputerAirData::ProcessBasic()
 {
@@ -78,9 +75,6 @@ GlideComputerAirData::ProcessBasic()
   NettoVario();
 }
 
-/**
- * Calculates some other values
- */
 void
 GlideComputerAirData::ProcessVertical()
 {
@@ -115,9 +109,6 @@ GlideComputerAirData::ProcessVertical()
   UpdateLiftDatabase();
 }
 
-/**
- * Calculates the wind
- */
 void
 GlideComputerAirData::Wind()
 {
@@ -132,9 +123,6 @@ GlideComputerAirData::SelectWind()
   wind_computer.Select(SettingsComputer(), Basic(), SetCalculated());
 }
 
-/**
- * Calculates the heading
- */
 void
 GlideComputerAirData::Heading()
 {
@@ -431,12 +419,6 @@ GlideComputerAirData::TerrainHeight()
   calculated.altitude_agl_valid = true;
 }
 
-/**
- * 1. Detects time retreat and calls ResetFlight if GPS lost
- * 2. Detects change in replay status and calls ResetFlight if so
- * 3. Calls DetectStartTime and saves the time of flight
- * @return true as default, false if something is wrong in time
- */
 bool
 GlideComputerAirData::FlightTimes()
 {
@@ -467,9 +449,6 @@ GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
                           Calculated(), SetCalculated().flight);
 }
 
-/**
- * Detects takeoff and landing events
- */
 void
 GlideComputerAirData::TakeoffLanding()
 {
@@ -505,10 +484,6 @@ GlideComputerAirData::OnSwitchClimbMode(bool isclimb, bool left)
   rotaryLD.Initialize(SettingsComputer());
 }
 
-/**
- * Calculate the circling time percentage and call the thermal band calculation
- * @param Rate Current turn rate
- */
 void
 GlideComputerAirData::PercentCircling()
 {
@@ -547,9 +522,6 @@ GlideComputerAirData::PercentCircling()
     calculated.circling_percentage = fixed_zero;
 }
 
-/**
- * Calculates the turn rate
- */
 void
 GlideComputerAirData::TurnRate()
 {
@@ -558,10 +530,6 @@ GlideComputerAirData::TurnRate()
                              Calculated(), LastCalculated());
 }
 
-/**
- * Calculates the turn rate and the derived features.
- * Determines the current flight mode (cruise/circling).
- */
 void
 GlideComputerAirData::Turning()
 {

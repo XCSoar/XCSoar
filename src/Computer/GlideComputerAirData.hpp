@@ -70,7 +70,15 @@ public:
 
 protected:
   void ResetFlight(const bool full=true);
+
+  /**
+   * Calculates some basic values
+   */
   void ProcessBasic();
+
+  /**
+   * Calculates some other values
+   */
   void ProcessVertical();
 
   virtual void OnTakeoff();
@@ -82,9 +90,18 @@ private:
 protected:
   virtual void OnSwitchClimbMode(bool isclimb, bool left);
 
+  /**
+   * 1. Detects time retreat and calls ResetFlight if GPS lost
+   * 2. Detects change in replay status and calls ResetFlight if so
+   * 3. Calls DetectStartTime and saves the time of flight
+   * @return true as default, false if something is wrong in time
+   */
   bool FlightTimes();
 
 private:
+  /**
+   * Calculates the heading
+   */
   void Heading();
   void EnergyHeight();
   void NettoVario();
@@ -96,6 +113,10 @@ private:
   void MaxHeightGain();
   void LD();
   void CruiseLD();
+
+  /**
+   * Calculates the wind
+   */
   void Wind();
 
   /**
@@ -105,6 +126,10 @@ private:
 
   void TerrainHeight();
   void FlightState(const GlidePolar& glide_polar);
+
+  /**
+   * Detects takeoff and landing events
+   */
   void TakeoffLanding();
   void ThermalSources();
 
@@ -125,8 +150,22 @@ private:
   void LastThermalStats();
   void WorkingBand();
   void ThermalBand();
+
+  /**
+   * Calculate the circling time percentage and call the thermal band calculation
+   * @param Rate Current turn rate
+   */
   void PercentCircling();
+
+  /**
+   * Calculates the turn rate
+   */
   void TurnRate();
+
+  /**
+   * Calculates the turn rate and the derived features.
+   * Determines the current flight mode (cruise/circling).
+   */
   void Turning();
   void ProcessSun();
 };
