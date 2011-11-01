@@ -25,6 +25,8 @@ Copyright_License {
 #include "Screen/AnyCanvas.hpp"
 #include "Look/DialogLook.hpp"
 
+#include <winuser.h>
+
 WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
                    int X, int Y, int Width, int Height,
                    const WindowStyle style)

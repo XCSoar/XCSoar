@@ -31,6 +31,8 @@ Copyright_License {
 #include <algorithm>
 #endif
 
+#include <winuser.h>
+
 class EditWindowStyle : public WindowStyle {
 public:
   bool is_read_only;

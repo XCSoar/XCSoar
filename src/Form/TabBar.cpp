@@ -31,7 +31,7 @@ Copyright_License {
 #include "Asset.hpp"
 
 #include <assert.h>
-
+#include <winuser.h>
 
 TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                              PixelScalar x, PixelScalar y,

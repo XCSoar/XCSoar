@@ -27,6 +27,8 @@ Copyright_License {
 #include <Screen/Window.hpp>
 #include "Util/tstring.hpp"
 
+#include <winuser.h>
+
 class ButtonWindowStyle : public WindowStyle {
 public:
   ButtonWindowStyle() {

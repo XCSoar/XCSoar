@@ -39,7 +39,6 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <assert.h>
-#include <windows.h>
 #include <tchar.h>
 
 #include <SDL_gfxPrimitives.h>

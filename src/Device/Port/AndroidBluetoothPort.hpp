@@ -30,8 +30,6 @@ Copyright_License {
 #include "Port.hpp"
 #include "Java/Object.hpp"
 
-#include <windows.h>
-
 class BluetoothHelper;
 
 /**

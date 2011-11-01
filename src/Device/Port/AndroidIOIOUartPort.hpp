@@ -33,8 +33,6 @@ Copyright_License {
 #include "Port.hpp"
 #include "Java/Object.hpp"
 
-#include <windows.h>
-
 #if defined (IOIOLIB)
 class IOIOHelper;
 #endif

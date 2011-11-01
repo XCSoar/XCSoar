@@ -25,6 +25,8 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Math/FastMath.h"
 
+#include <winuser.h>
+
 static 
 void segment_poly(RasterPoint* pt,
                   const PixelScalar x,

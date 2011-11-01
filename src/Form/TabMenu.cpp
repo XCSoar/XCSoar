@@ -34,6 +34,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 
 #include <assert.h>
+#include <winuser.h>
 
 TabMenuControl::TabMenuControl(ContainerWindow &_parent,
                                WndForm &_form,

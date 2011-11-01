@@ -26,7 +26,11 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
+#ifdef WIN32
 #include <windows.h>
+#else
+#include <winuser.h>
+#endif
 
 class Window;
 class Canvas;

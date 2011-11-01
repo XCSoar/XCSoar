@@ -31,6 +31,7 @@ Copyright_License {
 
 #include <assert.h>
 #include <string.h>
+#include <winuser.h>
 
 #ifndef ENABLE_OPENGL
 #include "Screen/Util.hpp"

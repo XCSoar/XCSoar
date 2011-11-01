@@ -34,7 +34,9 @@ Copyright_License {
 #include "Android/Timer.hpp"
 #elif defined(ENABLE_SDL)
 #include "Screen/SDL/Timer.hpp"
-#endif /* ENABLE_SDL */
+#else /* GDI */
+#include <windows.h>
+#endif /* GDI */
 
 #ifdef ANDROID
 struct Event;
