@@ -162,7 +162,7 @@ public:
   ~TopographyFile();
 
   bool IsEmpty() const {
-    return shapes.Size() == 0;
+    return shapes.size() == 0;
   }
 
   bool IsVisible(fixed map_scale) const {

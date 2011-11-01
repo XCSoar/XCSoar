@@ -53,7 +53,7 @@ public:
     :array(_width * _height), width(_width), height(_height) {}
 
   bool Defined() const {
-    return array.Size() > 0;
+    return array.size() > 0;
   }
 
   unsigned GetWidth() const {

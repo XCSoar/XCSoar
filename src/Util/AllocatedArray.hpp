@@ -41,7 +41,7 @@
 template<class T>
 class AllocatedArray {
 protected:
-  unsigned size;
+  unsigned the_size;
   T *gcc_restrict data;
 
 public:
@@ -49,23 +49,24 @@ public:
   typedef const T *const_iterator;
 
 public:
-  gcc_constexpr_ctor AllocatedArray(): size(0), data(NULL) {}
+  gcc_constexpr_ctor AllocatedArray():the_size(0), data(NULL) {}
 
-  explicit AllocatedArray(unsigned _size): size(_size), data(new T[size]) {
-    assert(Size() == 0 || data != NULL);
+  explicit AllocatedArray(unsigned _size)
+    :the_size(_size), data(new T[the_size]) {
+    assert(size() == 0 || data != NULL);
   }
 
   explicit AllocatedArray(const AllocatedArray &other)
-    :size(other.Size()), data(new T[size]) {
-    assert(Size() == 0 || data != NULL);
-    assert(other.Size() == 0 || other.data != NULL);
+    :the_size(other.size()), data(new T[the_size]) {
+    assert(size() == 0 || data != NULL);
+    assert(other.size() == 0 || other.data != NULL);
 
-    std::copy(other.data, other.data + size, data);
+    std::copy(other.data, other.data + the_size, data);
   }
 
   explicit AllocatedArray(AllocatedArray &&other)
-    :size(other.size), data(other.data) {
-    other.size = 0;
+    :the_size(other.the_size), data(other.data) {
+    other.the_size = 0;
     other.data = NULL;
   }
 
@@ -74,19 +75,19 @@ public:
   }
 
   AllocatedArray &operator=(const AllocatedArray &other) {
-    assert(Size() == 0 || data != NULL);
-    assert(other.Size() == 0 || other.data != NULL);
+    assert(size() == 0 || data != NULL);
+    assert(other.size() == 0 || other.data != NULL);
 
     if (&other == this)
       return *this;
 
-    ResizeDiscard(other.Size());
+    ResizeDiscard(other.size());
     std::copy(other.begin(), other.end(), data);
     return *this;
   }
 
   AllocatedArray &operator=(AllocatedArray &&other) {
-    std::swap(size, other.size);
+    std::swap(the_size, other.the_size);
     std::swap(data, other.data);
     return *this;
   }
@@ -94,15 +95,15 @@ public:
   /**
    * Returns the number of allocated elements.
    */
-  unsigned Size() const {
-    return size;
+  unsigned size() const {
+    return the_size;
   }
 
   /**
    * Returns one element.  No bounds checking.
    */
   T &operator[](unsigned i) {
-    assert(i < Size());
+    assert(i < size());
 
     return data[i];
   }
@@ -111,7 +112,7 @@ public:
    * Returns one constant element.  No bounds checking.
    */
   const T &operator[](unsigned i) const {
-    assert(i < Size());
+    assert(i < size());
 
     return data[i];
   }
@@ -125,25 +126,25 @@ public:
   }
 
   iterator end() {
-    return data + size;
+    return data + the_size;
   }
 
   const_iterator end() const {
-    return data + size;
+    return data + the_size;
   }
 
   /**
    * Resizes the array, discarding old data.
    */
   void ResizeDiscard(unsigned _size) {
-    if (_size == size)
+    if (_size == the_size)
       return;
 
     delete[] data;
-    size = _size;
-    data = new T[size];
+    the_size = _size;
+    data = new T[the_size];
 
-    assert(Size() == 0 || data != NULL);
+    assert(size() == 0 || data != NULL);
   }
 
   /**
@@ -152,7 +153,7 @@ public:
    * avoid expensive heap operations.
    */
   void GrowDiscard(unsigned _size) {
-    if (_size > size)
+    if (_size > the_size)
       ResizeDiscard(_size);
   }
 
@@ -161,7 +162,7 @@ public:
    * range of elements, starting from the beginning.
    */
   void GrowPreserve(unsigned _size, unsigned preserve) {
-    if (_size <= size)
+    if (_size <= the_size)
       return;
 
     T *new_data = new T[_size];
@@ -176,7 +177,7 @@ public:
 
     delete[] data;
     data = new_data;
-    size = _size;
+    the_size = _size;
   }
 };
 

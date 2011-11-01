@@ -61,7 +61,7 @@ public:
   }
 
   void AddPoint(RasterPoint pt) {
-    assert(num_points < points.Size());
+    assert(num_points < points.size());
 
     points[num_points++] = pt;
   }
@@ -71,7 +71,7 @@ public:
    * one.  Useful to reduce the complexity of small figures.
    */
    void AddPointIfDistant(RasterPoint pt) {
-    assert(num_points < points.Size());
+    assert(num_points < points.size());
 
     if (num_points == 0 || manhattan_distance(points[num_points - 1], pt) >= 8)
       AddPoint(pt);
