@@ -93,6 +93,13 @@ public:
   }
 
   /**
+   * Returns true if no memory was allocated so far.
+   */
+  bool empty() const {
+    return the_size == 0;
+  }
+
+  /**
    * Returns the number of allocated elements.
    */
   unsigned size() const {
