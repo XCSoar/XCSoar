@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/MapItemListDialog.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/AnyCanvas.hpp"
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Waypoint.hpp"
@@ -139,6 +140,11 @@ ShowMapItemListDialog(SingleWindow &parent)
   list_control->SetCursorCallback(OnListIndexChange);
   OnListIndexChange(0);
 
+  WndFrame *info_label = (WndFrame *)wf->FindByName(_T("lblInfo"));
+  assert(info_label);
+  info_label->SetAlignCenter();
+  info_label->SetVAlignCenter();
+
   TCHAR info_buffer[256], distance_buffer[32], direction_buffer[32];
   if (vector.IsValid()) {
     Units::FormatUserDistance(vector.distance, distance_buffer, 32);
@@ -152,17 +158,26 @@ ShowMapItemListDialog(SingleWindow &parent)
               _("Distance"), _T("???"), _("Direction"), _T("???"));
   }
 
+  TCHAR elevation_buffer[32];
   if (elevation != RasterBuffer::TERRAIN_INVALID) {
-    TCHAR elevation_buffer[32];
     Units::FormatUserAltitude(fixed(elevation), elevation_buffer, 32);
     _stprintf(info_buffer + _tcslen(info_buffer), _T(" - %s: %s"),
               _("Elevation"), elevation_buffer);
   }
 
-  WndFrame *info_label = (WndFrame *)wf->FindByName(_T("lblInfo"));
-  assert(info_label);
-  info_label->SetAlignCenter();
-  info_label->SetVAlignCenter();
+  AnyCanvas canvas;
+  canvas.select(info_label->GetFont());
+  UPixelScalar text_width = canvas.text_width(info_buffer);
+  if (text_width > info_label->get_width()) {
+    if (vector.IsValid())
+      _stprintf(info_buffer, _T("%s - %s"), distance_buffer, direction_buffer);
+    else
+      _stprintf(info_buffer, _T("%s - %s"), _T("???"), _T("???"));
+
+    if (elevation != RasterBuffer::TERRAIN_INVALID)
+      _stprintf(info_buffer + _tcslen(info_buffer), _T(" - %s"), elevation_buffer);
+  }
+
   info_label->SetCaption(info_buffer);
 
   int result = wf->ShowModal() == mrOK
