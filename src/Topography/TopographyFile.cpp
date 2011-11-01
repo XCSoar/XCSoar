@@ -80,9 +80,9 @@ TopographyFile::~TopographyFile()
 void
 TopographyFile::ClearCache()
 {
-  for (unsigned i = 0; i < shapes.Size(); i++) {
-    delete shapes[i].shape;
-    shapes[i].shape = NULL;
+  for (auto i = shapes.begin(), end = shapes.end(); i != end; ++i) {
+    delete i->shape;
+    i->shape = NULL;
   }
 
   first = NULL;
