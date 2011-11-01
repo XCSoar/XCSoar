@@ -50,7 +50,7 @@ struct InfoBoxLook;
 class InfoBoxWindow : public PaintWindow
 {
   /** timeout in quarter seconds of infobox focus */
-  static const unsigned FOCUSTIMEOUTMAX = 24*4;
+  static const unsigned FOCUS_TIMEOUT_MAX = 24*4;
 
 private:
   InfoBoxContent *content;
@@ -59,25 +59,25 @@ private:
   const InfoBoxSettings &settings;
   const InfoBoxLook &look;
 
-  int  mBorderKind;
+  int border_kind;
 
-  StaticString<32> mTitle;
-  StaticString<32> mValue;
-  StaticString<32> mComment;
-  Units_t mValueUnit;
-  int mID;
+  StaticString<32> title;
+  StaticString<32> value;
+  StaticString<32> comment;
+  Units_t value_unit;
+  int id;
 
   /** a timer which returns keyboard focus back to the map window after a while */
   timer_t focus_timer;
 
-  PixelRect recTitle;
-  PixelRect recValue;
-  PixelRect recComment;
-  PixelRect recValueAndComment;
+  PixelRect title_rect;
+  PixelRect value_rect;
+  PixelRect comment_rect;
+  PixelRect value_and_comment_rect;
 
-  int colorValue;
-  int colorComment;
-  int colorTitle;
+  int value_color;
+  int comment_color;
+  int title_color;
 
   PeriodClock click_clock;
 
@@ -114,56 +114,56 @@ public:
    * Sets the unit of the InfoBox value
    * @param Value New unit of the InfoBox value
    */
-  void SetValueUnit(Units_t Value);
+  void SetValueUnit(Units_t value_unit);
   /**
    * Sets the InfoBox ID to the given Value
    * @param id New value of the InfoBox ID
    */
   void SetID(const int id);
-  int GetID() { return mID; };
+  int GetID() { return id; };
   /**
    * Sets the InfoBox title to the given Value
    * @param Value New value of the InfoBox title
    */
-  void SetTitle(const TCHAR *Value);
-  const TCHAR* GetTitle() { return mTitle; };
+  void SetTitle(const TCHAR *title);
+  const TCHAR* GetTitle() { return title; };
   /**
    * Sets the InfoBox value to the given Value
    * @param Value New value of the InfoBox value
    */
-  void SetValue(const TCHAR *Value);
+  void SetValue(const TCHAR *value);
 
   /**
    * Sets the InfoBox value to the given angle.
    */
-  void SetValue(Angle value, const TCHAR *suffix=_T(""));
+  void SetValue(Angle value, const TCHAR *suffix = _T(""));
 
   /**
    * Sets the InfoBox comment to the given Value
    * @param Value New value of the InfoBox comment
    */
-  void SetComment(const TCHAR *Value);
+  void SetComment(const TCHAR *comment);
 
   /**
    * Sets the InfoBox comment to the given angle.
    */
-  void SetComment(Angle value, const TCHAR *suffix=_T(""));
+  void SetComment(Angle comment, const TCHAR *suffix = _T(""));
 
   /**
    * Sets the color of the InfoBox value to the given value
    * @param value New color of the InfoBox value
    */
-  void SetColor(int Value);
+  void SetColor(int value_color);
   /**
    * Sets the color of the InfoBox comment to the given value
    * @param value New color of the InfoBox comment
    */
-  void SetColorBottom(int Value);
+  void SetColorBottom(int comment_color);
   /**
    * Sets the color of the InfoBox title to the given value
    * @param value New color of the InfoBox title
    */
-  void SetColorTop(int Value);
+  void SetColorTop(int title_color);
 
   /**
    * Calls SetValueInvalid() then SetCommentInvalid()
@@ -186,12 +186,9 @@ public:
    * @param Width Width of the InfoBox
    * @param Height Height of the InfoBox
    */
-  InfoBoxWindow(ContainerWindow &Parent,
-                PixelScalar x, PixelScalar y,
-                UPixelScalar Width, UPixelScalar Height,
-          int border_flags,
-                const InfoBoxSettings &settings,
-          const InfoBoxLook &_look);
+  InfoBoxWindow(ContainerWindow &parent, PixelScalar x, PixelScalar y,
+                UPixelScalar width, UPixelScalar height, int border_flags,
+                const InfoBoxSettings &settings, const InfoBoxLook &_look);
 
   ~InfoBoxWindow() { delete content; }
 
@@ -209,15 +206,15 @@ public:
    * @param Value Value to handle
    * @return True on success, Fales otherwise
    */
-  bool HandleQuickAccess(const TCHAR *Value);
+  bool HandleQuickAccess(const TCHAR *value);
 
   const InfoBoxContent::DialogContent *GetDialogContent();
 
-  const PixelRect get_value_rect() const {
-    return recValue;
+  const PixelRect GetValueRect() const {
+    return value_rect;
   }
-  const PixelRect get_value_and_comment_rect() const {
-    return recValueAndComment;
+  const PixelRect GetValueAndCommentRect() const {
+    return value_and_comment_rect;
   }
 
 protected:

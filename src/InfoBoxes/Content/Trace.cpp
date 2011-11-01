@@ -45,7 +45,7 @@ Copyright_License {
 static PixelRect
 get_spark_rect(const InfoBoxWindow &infobox)
 {
-  PixelRect rc = infobox.get_value_rect();
+  PixelRect rc = infobox.GetValueRect();
   rc.top += Layout::FastScale(2);
   rc.right -= Layout::FastScale(2);
   rc.left += Layout::FastScale(2);
@@ -178,7 +178,7 @@ InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canva
                                 CommonInterface::Calculated(),
                                 CommonInterface::SettingsComputer(),
                                 canvas,
-                                infobox.get_value_and_comment_rect(),
+                                infobox.GetValueAndCommentRect(),
                                 XCSoarInterface::SettingsComputer().task);
 }
 
@@ -196,7 +196,7 @@ InfoBoxContentTaskProgress::on_custom_paint(InfoBoxWindow &infobox, Canvas &canv
 {
   TaskProgressRenderer::Draw(CommonInterface::Calculated().
                              common_stats.ordered_summary,
-                             canvas, infobox.get_value_and_comment_rect(),
+                             canvas, infobox.GetValueAndCommentRect(),
                              infobox.GetLook().inverse);
 }
 

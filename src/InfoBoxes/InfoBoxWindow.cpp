@@ -46,125 +46,124 @@ using std::max;
 #define SELECTORWIDTH Layout::Scale(5)
 
 InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent,
-                             PixelScalar X, PixelScalar Y,
-                             UPixelScalar Width, UPixelScalar Height,
-                 int border_flags,
-                             const InfoBoxSettings &_settings,
-                 const InfoBoxLook &_look)
+                             PixelScalar x, PixelScalar y,
+                             UPixelScalar width, UPixelScalar height,
+                             int border_flags, const InfoBoxSettings &_settings,
+                             const InfoBoxLook &_look)
   :content(NULL),
    parent(_parent),
    settings(_settings), look(_look),
-   mBorderKind(border_flags),
+   border_kind(border_flags),
    focus_timer(0)
 {
-  colorValue = 0;
-  colorTitle = 0;
-  colorComment = 0;
+  value_color = 0;
+  title_color = 0;
+  comment_color = 0;
 
   WindowStyle style;
   style.enable_double_clicks();
-  set(parent, X, Y, Width, Height, style);
+  set(parent, x, y, width, height, style);
 
-  mValueUnit = unUndef;
+  value_unit = unUndef;
 
-  mTitle.clear();
-  mValue.clear();
-  mComment.clear();
-  mID = -1;
+  title.clear();
+  value.clear();
+  comment.clear();
+  id = -1;
 }
 
 void
-InfoBoxWindow::SetValueUnit(Units_t Value)
+InfoBoxWindow::SetValueUnit(Units_t _value_unit)
 {
-  if (mValueUnit == Value)
+  if (value_unit == _value_unit)
     return;
 
-  mValueUnit = Value;
-  invalidate(recValue);
+  value_unit = _value_unit;
+  invalidate(value_rect);
 }
 
 void
-InfoBoxWindow::SetID(const int id)
+InfoBoxWindow::SetID(const int _id)
 {
-  mID = id;
+  id = _id;
 }
 
 void
-InfoBoxWindow::SetTitle(const TCHAR *Value)
+InfoBoxWindow::SetTitle(const TCHAR *_title)
 {
-  if (!mTitle.equals(Value)) {
-    mTitle = Value;
-    invalidate(recTitle);
+  if (!title.equals(_title)) {
+    title = _title;
+    invalidate(title_rect);
   }
 }
 
 void
-InfoBoxWindow::SetValue(const TCHAR *Value)
+InfoBoxWindow::SetValue(const TCHAR *_value)
 {
-  if (!mValue.equals(Value)) {
-    mValue = Value;
-    invalidate(recValue);
+  if (!value.equals(_value)) {
+    value = _value;
+    invalidate(value_rect);
   }
 }
 
 void
-InfoBoxWindow::SetValue(Angle value, const TCHAR *suffix)
+InfoBoxWindow::SetValue(Angle _value, const TCHAR *suffix)
 {
   assert(suffix != NULL);
 
   TCHAR tmp[32];
   _stprintf(tmp, _T("%d")_T(DEG)_T("%s"),
-            iround(value.Degrees()), suffix);
+            iround(_value.Degrees()), suffix);
   SetValue(tmp);
 }
 
 void
-InfoBoxWindow::SetColor(int value)
+InfoBoxWindow::SetColor(int _value_color)
 {
-  if (colorValue == value)
+  if (value_color == _value_color)
     return;
 
-  colorValue = value;
-  invalidate(recValue);
+  value_color = _value_color;
+  invalidate(value_rect);
 }
 
 void
-InfoBoxWindow::SetColorBottom(int value)
+InfoBoxWindow::SetColorBottom(int _comment_color)
 {
-  if (colorComment == value)
+  if (comment_color == _comment_color)
     return;
 
-  colorComment = value;
-  invalidate(recComment);
+  comment_color = _comment_color;
+  invalidate(comment_rect);
 }
 
 void
-InfoBoxWindow::SetColorTop(int value)
+InfoBoxWindow::SetColorTop(int _title_color)
 {
-  if (colorTitle == value)
+  if (title_color == _title_color)
     return;
 
-  colorTitle = value;
-  invalidate(recTitle);
+  title_color = _title_color;
+  invalidate(title_rect);
 }
 
 void
-InfoBoxWindow::SetComment(const TCHAR *Value)
+InfoBoxWindow::SetComment(const TCHAR *_comment)
 {
-  if (!mComment.equals(Value)) {
-    mComment = Value;
-    invalidate(recComment);
+  if (!comment.equals(_comment)) {
+    comment = _comment;
+    invalidate(comment_rect);
   }
 }
 
 void
-InfoBoxWindow::SetComment(Angle value, const TCHAR *suffix)
+InfoBoxWindow::SetComment(Angle _comment, const TCHAR *suffix)
 {
   assert(suffix != NULL);
 
   TCHAR tmp[32];
   _stprintf(tmp, _T("%d")_T(DEG)_T("%s"),
-            iround(value.Degrees()), suffix);
+            iround(_comment.Degrees()), suffix);
   SetComment(tmp);
 }
 
@@ -189,46 +188,45 @@ InfoBoxWindow::SetCommentInvalid()
   SetComment(_T(""));
 }
 
-
 void
 InfoBoxWindow::PaintTitle(Canvas &canvas)
 {
-  if (mTitle.empty())
+  if (title.empty())
     return;
 
-  canvas.set_text_color(look.get_title_color(colorTitle));
+  canvas.set_text_color(look.get_title_color(title_color));
 
   const Font &font = *look.title.font;
   canvas.select(font);
 
-  PixelSize tsize = canvas.text_size(mTitle.c_str());
+  PixelSize tsize = canvas.text_size(title.c_str());
 
-  PixelScalar halftextwidth = (recTitle.left + recTitle.right - tsize.cx) / 2;
+  PixelScalar halftextwidth = (title_rect.left + title_rect.right - tsize.cx) / 2;
   PixelScalar x = max(PixelScalar(1),
-                      PixelScalar(recTitle.left + halftextwidth));
-  PixelScalar y = recTitle.top + 1 + font.GetCapitalHeight() -
+                      PixelScalar(title_rect.left + halftextwidth));
+  PixelScalar y = title_rect.top + 1 + font.GetCapitalHeight() -
     font.GetAscentHeight();
 
-  canvas.TextAutoClipped(x, y, mTitle.c_str());
+  canvas.TextAutoClipped(x, y, title.c_str());
 
   if (settings.border_style == apIbTab && halftextwidth > Layout::Scale(3)) {
-    PixelScalar ytop = recTitle.top + font.GetCapitalHeight() / 2;
+    PixelScalar ytop = title_rect.top + font.GetCapitalHeight() / 2;
     PixelScalar ytopedge = ytop + Layout::Scale(2);
-    PixelScalar ybottom = recTitle.top + Layout::Scale(6)
+    PixelScalar ybottom = title_rect.top + Layout::Scale(6)
       + font.GetCapitalHeight();
 
     canvas.select(look.border_pen);
 
     RasterPoint tab[8];
-    tab[0].x = tab[1].x = recTitle.left;
+    tab[0].x = tab[1].x = title_rect.left;
     tab[0].y = tab[7].y = ybottom;
-    tab[2].x = recTitle.left + Layout::Scale(2);
+    tab[2].x = title_rect.left + Layout::Scale(2);
     tab[2].y = tab[5].y = tab[3].y = tab[4].y = ytop;
     tab[1].y = tab[6].y = ytopedge;
-    tab[5].x = recTitle.right - Layout::Scale(2);
-    tab[6].x = tab[7].x = recTitle.right;
-    tab[3].x = recTitle.left + halftextwidth - Layout::Scale(1);
-    tab[4].x = recTitle.right - halftextwidth + Layout::Scale(1);
+    tab[5].x = title_rect.right - Layout::Scale(2);
+    tab[6].x = tab[7].x = title_rect.right;
+    tab[3].x = title_rect.left + halftextwidth - Layout::Scale(1);
+    tab[4].x = title_rect.right - halftextwidth + Layout::Scale(1);
 
     canvas.polyline(tab, 4);
     canvas.polyline(tab + 4, 4);
@@ -238,25 +236,25 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 void
 InfoBoxWindow::PaintValue(Canvas &canvas)
 {
-  if (mValue.empty())
+  if (value.empty())
     return;
 
-  canvas.set_text_color(look.get_value_color(colorValue));
+  canvas.set_text_color(look.get_value_color(value_color));
 
   canvas.select(*look.value.font);
   UPixelScalar ascent_height = look.value.font->GetAscentHeight();
   UPixelScalar capital_height = look.value.font->GetCapitalHeight();
 
-  PixelSize tsize = canvas.text_size(mValue.c_str());
-  if (tsize.cx > recValue.right - recValue.left) {
+  PixelSize tsize = canvas.text_size(value.c_str());
+  if (tsize.cx > value_rect.right - value_rect.left) {
     canvas.select(*look.small_font);
     ascent_height = look.small_font->GetAscentHeight();
     capital_height = look.small_font->GetCapitalHeight();
-    tsize = canvas.text_size(mValue.c_str());
+    tsize = canvas.text_size(value.c_str());
   }
 
   PixelSize unit_size;
-  const UnitSymbol *unit_symbol = GetUnitSymbol(mValueUnit);
+  const UnitSymbol *unit_symbol = GetUnitSymbol(value_unit);
   if (unit_symbol != NULL) {
     unit_size = unit_symbol->get_size();
   } else {
@@ -265,15 +263,15 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   }
 
   PixelScalar x = max(PixelScalar(1),
-                      PixelScalar((recValue.left + recValue.right - tsize.cx
+                      PixelScalar((value_rect.left + value_rect.right - tsize.cx
                                    - Layout::FastScale(unit_size.cx)) / 2));
 
-  PixelScalar y = recValue.top + 1 - ascent_height +
-    (recValue.bottom - recValue.top + capital_height) / 2;
+  PixelScalar y = value_rect.top + 1 - ascent_height +
+    (value_rect.bottom - value_rect.top + capital_height) / 2;
 
-  canvas.TextAutoClipped(x, y, mValue.c_str());
+  canvas.TextAutoClipped(x, y, value.c_str());
 
-  if (unit_symbol != NULL && colorValue >= 0) {
+  if (unit_symbol != NULL && value_color >= 0) {
 #ifndef HAVE_CLIPPING
     /* sort-of clipping */
     if (x + tsize.cx >= (int)canvas.get_width())
@@ -296,23 +294,23 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
 void
 InfoBoxWindow::PaintComment(Canvas &canvas)
 {
-  if (mComment.empty())
+  if (comment.empty())
     return;
 
-  canvas.set_text_color(look.get_comment_color(colorComment));
+  canvas.set_text_color(look.get_comment_color(comment_color));
 
   const Font &font = *look.comment.font;
   canvas.select(font);
 
-  PixelSize tsize = canvas.text_size(mComment);
+  PixelSize tsize = canvas.text_size(comment);
 
   PixelScalar x = max(PixelScalar(1),
-                      PixelScalar((recComment.left + recComment.right
+                      PixelScalar((comment_rect.left + comment_rect.right
                                    - tsize.cx) / 2));
-  PixelScalar y = recComment.top + 1 + font.GetCapitalHeight()
+  PixelScalar y = comment_rect.top + 1 + font.GetCapitalHeight()
     - font.GetAscentHeight();
 
-  canvas.TextAutoClipped(x, y, mComment);
+  canvas.TextAutoClipped(x, y, comment);
 }
 
 void
@@ -353,25 +351,25 @@ InfoBoxWindow::Paint(Canvas &canvas)
   PaintComment(canvas);
   PaintValue(canvas);
 
-  if (mBorderKind != 0) {
+  if (border_kind != 0) {
     canvas.select(look.border_pen);
 
     const UPixelScalar width = canvas.get_width(),
       height = canvas.get_height();
 
-    if (mBorderKind & BORDERTOP) {
+    if (border_kind & BORDERTOP) {
       canvas.line(0, 0, width - 1, 0);
     }
 
-    if (mBorderKind & BORDERRIGHT) {
+    if (border_kind & BORDERRIGHT) {
       canvas.line(width - 1, 0, width - 1, height);
     }
 
-    if (mBorderKind & BORDERBOTTOM) {
+    if (border_kind & BORDERBOTTOM) {
       canvas.line(0, height - 1, width - 1, height - 1);
     }
 
-    if (mBorderKind & BORDERLEFT) {
+    if (border_kind & BORDERLEFT) {
       canvas.line(0, 0, 0, height - 1);
     }
   }
@@ -427,9 +425,9 @@ InfoBoxWindow::HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode)
 }
 
 bool
-InfoBoxWindow::HandleQuickAccess(const TCHAR *Value)
+InfoBoxWindow::HandleQuickAccess(const TCHAR *value)
 {
-  if (content != NULL && content->HandleQuickAccess(Value)) {
+  if (content != NULL && content->HandleQuickAccess(value)) {
     UpdateContent();
     return true;
   }
@@ -452,31 +450,31 @@ InfoBoxWindow::on_resize(UPixelScalar width, UPixelScalar height)
 
   PixelRect rc = get_client_rect();
 
-  if (mBorderKind & BORDERLEFT)
+  if (border_kind & BORDERLEFT)
     rc.left += look.BORDER_WIDTH;
 
-  if (mBorderKind & BORDERRIGHT)
+  if (border_kind & BORDERRIGHT)
     rc.right -= look.BORDER_WIDTH;
 
-  if (mBorderKind & BORDERTOP)
+  if (border_kind & BORDERTOP)
     rc.top += look.BORDER_WIDTH;
 
-  if (mBorderKind & BORDERBOTTOM)
+  if (border_kind & BORDERBOTTOM)
     rc.bottom -= look.BORDER_WIDTH;
 
-  recTitle = rc;
-  recTitle.bottom = rc.top + look.title.font->GetCapitalHeight() + 2;
+  title_rect = rc;
+  title_rect.bottom = rc.top + look.title.font->GetCapitalHeight() + 2;
 
-  recComment = rc;
-  recComment.top = recComment.bottom
+  comment_rect = rc;
+  comment_rect.top = comment_rect.bottom
     - (look.comment.font->GetCapitalHeight() + 2);
 
-  recValue = rc;
-  recValue.top = recTitle.bottom;
-  recValue.bottom = recComment.top;
+  value_rect = rc;
+  value_rect.top = title_rect.bottom;
+  value_rect.bottom = comment_rect.top;
 
-  recValueAndComment = recValue;
-  recValueAndComment.bottom = recComment.bottom;
+  value_and_comment_rect = value_rect;
+  value_and_comment_rect.bottom = comment_rect.bottom;
 
   return true;
 }
@@ -495,7 +493,7 @@ InfoBoxWindow::on_key_down(unsigned key_code)
     if (focus_timer != 0)
       kill_timer(focus_timer);
 
-    focus_timer = set_timer(100, FOCUSTIMEOUTMAX * 500);
+    focus_timer = set_timer(100, FOCUS_TIMEOUT_MAX * 500);
     return true;
   }
 
@@ -515,10 +513,11 @@ InfoBoxWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 bool
 InfoBoxWindow::on_mouse_up(PixelScalar x, PixelScalar y)
 {
-  if (!has_focus()) return PaintWindow::on_mouse_up(x, y);
+  if (!has_focus())
+    return PaintWindow::on_mouse_up(x, y);
 
   if (click_clock.check(1000)) {
-    InfoBoxManager::ShowDlgInfoBox(mID);
+    InfoBoxManager::ShowDlgInfoBox(id);
     return true;
   } else
     return PaintWindow::on_mouse_up(x, y);
@@ -556,7 +555,7 @@ InfoBoxWindow::on_setfocus()
 
   // Start the focus-auto-return timer
   // to automatically return focus back to MapWindow if idle
-  focus_timer = set_timer(100, FOCUSTIMEOUTMAX * 500);
+  focus_timer = set_timer(100, FOCUS_TIMEOUT_MAX * 500);
 
   // Redraw fast to paint the selector
   invalidate();
