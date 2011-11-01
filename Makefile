@@ -390,6 +390,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/OZPreviewRenderer.cpp \
 	$(SRC)/Renderer/TrackLineRenderer.cpp \
 	$(SRC)/Renderer/TrailRenderer.cpp \
+	$(SRC)/Renderer/UnitSymbolRenderer.cpp \
 	$(SRC)/Renderer/WaypointListRenderer.cpp \
 	$(SRC)/Renderer/WaypointIconRenderer.cpp \
 	$(SRC)/Renderer/WaypointRenderer.cpp \

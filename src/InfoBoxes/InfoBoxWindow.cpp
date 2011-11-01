@@ -26,6 +26,7 @@ Copyright_License {
 #include "Look/InfoBoxLook.hpp"
 #include "InputEvents.hpp"
 #include "Compatibility/string.h"
+#include "Renderer/UnitSymbolRenderer.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/BufferCanvas.hpp"
@@ -240,6 +241,42 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
     return;
 
   canvas.set_text_color(look.get_value_color(value_color));
+
+  // Do text-based unit rendering on higher resolutions
+  if (Layout::FastScale(10) > 18) {
+    canvas.select(*look.unit_font);
+    PixelSize unit_size = UnitSymbolRenderer::GetSize(canvas, value_unit);
+
+    canvas.select(*look.value.font);
+    UPixelScalar ascent_height = look.value.font->GetAscentHeight();
+
+    PixelSize tsize = canvas.text_size(value.c_str());
+    if (tsize.cx > value_rect.right - value_rect.left) {
+      canvas.select(*look.small_font);
+      ascent_height = look.small_font->GetAscentHeight();
+      tsize = canvas.text_size(value.c_str());
+    }
+
+    PixelScalar x = max(PixelScalar(0),
+                        PixelScalar((value_rect.left + value_rect.right - tsize.cx
+                                     - unit_size.cx) / 2));
+
+    PixelScalar y = (value_rect.top + value_rect.bottom - tsize.cy) / 2;
+
+    canvas.TextAutoClipped(x, y, value.c_str());
+
+    if (unit_size.cx != 0) {
+      UPixelScalar unit_height =
+          UnitSymbolRenderer::GetAscentHeight(*look.unit_font, value_unit);
+
+      canvas.select(*look.unit_font);
+      UnitSymbolRenderer::Draw(canvas,
+                               { PixelScalar(x + tsize.cx),
+                                 PixelScalar(y + ascent_height - unit_height) },
+                               value_unit);
+    }
+    return;
+  }
 
   canvas.select(*look.value.font);
   UPixelScalar ascent_height = look.value.font->GetAscentHeight();

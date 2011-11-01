@@ -21,34 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FONTS_HPP
-#define XCSOAR_FONTS_HPP
+#ifndef XCSOAR_UNIT_SYMBOL_RENDERER_HPP
+#define XCSOAR_UNIT_SYMBOL_RENDERER_HPP
 
 #include "Screen/Point.hpp"
+#include "Units/Units.hpp"
 
-#include <tchar.h>
-
-struct Appearance;
+class Canvas;
 class Font;
 
-namespace Fonts
+namespace UnitSymbolRenderer
 {
-  extern Font InfoBox;
-  extern Font InfoBoxUnits;
-  extern Font Title;
-  extern Font Map;
-  extern Font InfoBoxSmall;
-  extern Font MapBold;
-  extern Font CDI;
-  extern Font MapLabel;
-  extern Font MapLabelImportant;
-
-  void Initialize();
-  void SizeInfoboxFont(UPixelScalar control_width);
-  void LoadCustom();
-  void Deinitialize();
-
-  const TCHAR* GetStandardFontFace();
+  PixelSize GetSize(const Canvas &canvas, const Unit unit);
+  UPixelScalar GetAscentHeight(const Font &font, const Unit unit);
+  void Draw(Canvas &canvas, const RasterPoint pos, const Unit unit);
 }
 
 #endif

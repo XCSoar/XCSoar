@@ -50,6 +50,7 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors)
   title.font = &Fonts::Title;
   comment.font = &Fonts::Title;
   small_font = &Fonts::InfoBoxSmall;
+  unit_font = &Fonts::InfoBoxUnits;
 
   colors[0] = border_color;
   if (use_colors) {
