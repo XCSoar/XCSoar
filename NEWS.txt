@@ -3,10 +3,10 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.3 - not yet released
-
-Version 6.2.2 - not yet released
 * devices
   - COM port monitor
+
+Version 6.2.2 - not yet released
 * calculations
   - fix instant L/D formula
   - fix malformed F records in IGC files
