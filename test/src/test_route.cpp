@@ -33,15 +33,13 @@
 #include "Compatibility/path.h"
 #include "Operation.hpp"
 
-extern Airspaces *airspaces;
-
 #define NUM_SOL 15
 
 static bool
 test_route(const unsigned n_airspaces, const RasterMap& map)
 {
-  airspaces = new Airspaces;
-  setup_airspaces(*airspaces, map.GetMapCenter(), n_airspaces);
+  Airspaces airspaces;
+  setup_airspaces(airspaces, map.GetMapCenter(), n_airspaces);
 
   {
     std::ofstream fout("results/terrain.txt");
@@ -89,16 +87,16 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     state.altitude = loc_start.altitude;
 
     {
-      Airspaces as_route(*airspaces, false);
+      Airspaces as_route(airspaces, false);
       // dummy
 
       // real one, see if items changed
-      as_route.synchronise_in_range(*airspaces, vec.MidPoint(loc_start), range);
+      as_route.synchronise_in_range(airspaces, vec.MidPoint(loc_start), range);
       int size_1 = as_route.size();
       if (verbose)
         printf("# route airspace size %d\n", size_1);
 
-      as_route.synchronise_in_range(*airspaces, vec.MidPoint(loc_start), fixed_one);
+      as_route.synchronise_in_range(airspaces, vec.MidPoint(loc_start), fixed_one);
       int size_2 = as_route.size();
       if (verbose)
         printf("# route airspace size %d\n", size_2);
@@ -106,7 +104,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
       ok(size_2 < size_1, "shrink as", 0);
 
       // go back
-      as_route.synchronise_in_range(*airspaces, vec.MidPoint(loc_end), range);
+      as_route.synchronise_in_range(airspaces, vec.MidPoint(loc_end), range);
       int size_3 = as_route.size();
       if (verbose)
         printf("# route airspace size %d\n", size_3);
@@ -114,7 +112,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
       ok(size_3 >= size_2, "grow as", 0);
 
       // and again
-      as_route.synchronise_in_range(*airspaces, vec.MidPoint(loc_start), range);
+      as_route.synchronise_in_range(airspaces, vec.MidPoint(loc_start), range);
       int size_4 = as_route.size();
       if (verbose)
         printf("# route airspace size %d\n", size_4);
@@ -128,7 +126,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     SpeedVector wind(Angle::Degrees(fixed(0)), fixed(0.0));
     GlidePolar polar(fixed_one);
 
-    AirspaceRoute route(*airspaces);
+    AirspaceRoute route(airspaces);
     route.UpdatePolar(polar, polar, wind);
     route.SetTerrain(&map);
     RoutePlannerConfig config;
@@ -138,7 +136,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     for (int i = 0; i < NUM_SOL; i++) {
       loc_end.latitude += Angle::Degrees(fixed(0.1));
       loc_end.altitude = map.GetHeight(loc_end) + 100;
-      route.synchronise(*airspaces, loc_start, loc_end);
+      route.synchronise(airspaces, loc_start, loc_end);
       if (route.Solve(loc_start, loc_end, config)) {
         sol = true;
         if (verbose) {
@@ -156,7 +154,6 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     }
   }
 
-  delete airspaces; airspaces = NULL;
   return true;
 }
 
