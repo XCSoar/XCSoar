@@ -46,7 +46,9 @@ public:
    * Returns the current team code
    * @return Current team code
    */
-  const TCHAR* GetCode() const;
+  const TCHAR *GetCode() const {
+    return code;
+  }
 
   /**
    * Returns the position of the team member in respect to

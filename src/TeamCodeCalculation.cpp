@@ -152,12 +152,6 @@ TeamCode::Update(const TCHAR* _code)
   CopyString(code, _code, 10);
 }
 
-const TCHAR*
-TeamCode::GetCode() const
-{
-  return code;
-}
-
 GeoPoint
 TeamCode::GetLocation(const GeoPoint ref) const
 {
