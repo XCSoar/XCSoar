@@ -28,6 +28,7 @@ Copyright_License {
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Waypoint.hpp"
+#include "Dialogs/Traffic.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Navigation/Geometry/GeoVector.hpp"
 #include "Terrain/RasterBuffer.hpp"
@@ -49,6 +50,7 @@ static const AirspaceLook *airspace_look;
 static const WaypointLook *waypoint_look;
 static const TaskLook *task_look;
 static const MarkerLook *marker_look;
+static const TrafficLook *traffic_look;
 static const SETTINGS_MAP *settings;
 static GeoVector vector;
 static const MapItemList *list;
@@ -67,6 +69,7 @@ HasDetails(const MapItem &item)
   case MapItem::AIRSPACE:
   case MapItem::WAYPOINT:
   case MapItem::TASK_OZ:
+  case MapItem::TRAFFIC:
     return true;
   }
 
@@ -78,7 +81,8 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
   const MapItem &item = *(*list)[idx];
   MapItemListRenderer::Draw(canvas, rc, item, *aircraft_look, *airspace_look,
-                            *waypoint_look, *task_look, *marker_look, *settings);
+                            *waypoint_look, *task_look, *marker_look, *traffic_look,
+                            *settings);
 }
 
 static void
@@ -206,6 +210,9 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
   case MapItem::TASK_OZ:
     dlgTargetShowModal(((const TaskOZMapItem &)item).index);
     break;
+  case MapItem::TRAFFIC:
+    dlgFlarmTrafficDetailsShowModal( ((const TrafficMapItem &)item).traffic.id );
+    break;
   }
 }
 
@@ -218,6 +225,7 @@ ShowMapItemListDialog(SingleWindow &parent,
                       const WaypointLook &_waypoint_look,
                       const TaskLook &_task_look,
                       const MarkerLook &_marker_look,
+                      const TrafficLook &_traffic_look,
                       const SETTINGS_MAP &_settings)
 {
   switch (_list.size()) {
@@ -241,6 +249,7 @@ ShowMapItemListDialog(SingleWindow &parent,
     waypoint_look = &_waypoint_look;
     task_look = &_task_look;
     marker_look = &_marker_look;
+    traffic_look = &_traffic_look;
     settings = &_settings;
 
     int i = ShowMapItemListDialog(parent);
