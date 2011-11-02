@@ -30,7 +30,6 @@ Copyright_License {
 #include "Computer/GlideComputer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Engine/Math/Earth.hpp"
-#include "Util/AllocatedArray.hpp"
 
 #include <algorithm>
 
@@ -56,12 +55,11 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
                     const WindowProjection &projection, unsigned min_time,
                     bool enable_traildrift, const RasterPoint pos,
                     const NMEAInfo &basic, const DerivedInfo &calculated,
-                    const SETTINGS_MAP &settings)
+                    const SETTINGS_MAP &settings) const
 {
   if (settings.trail_length == TRAIL_OFF)
     return;
 
-  TracePointVector trace;
   glide_computer.LockedCopyTraceTo(trace, min_time,
                                    projection.GetGeoScreenCenter(),
                                    projection.DistancePixelsToMeters(3));
@@ -147,11 +145,10 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
   canvas.line(last_point, pos);
 }
 
-static void
-DrawTraceVector(Canvas &canvas, const Projection &projection,
-                const TracePointVector &trace)
+void
+TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
+                               const TracePointVector &trace) const
 {
-  static AllocatedArray<RasterPoint> points;
   points.GrowDiscard(trace.size());
 
   unsigned n = 0;
@@ -164,9 +161,9 @@ DrawTraceVector(Canvas &canvas, const Projection &projection,
 
 void
 TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
-                    const WindowProjection &projection, unsigned min_time)
+                    const WindowProjection &projection,
+                    unsigned min_time) const
 {
-  TracePointVector trace;
   glide_computer.LockedCopyTraceTo(trace, min_time,
                                    projection.GetGeoScreenCenter(),
                                    projection.DistancePixelsToMeters(4));

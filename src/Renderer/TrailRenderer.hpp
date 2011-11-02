@@ -24,24 +24,34 @@ Copyright_License {
 #ifndef XCSOAR_TRAIL_RENDERER_HPP
 #define XCSOAR_TRAIL_RENDERER_HPP
 
+#include "Util/AllocatedArray.hpp"
 #include "Screen/Point.hpp"
+#include "Engine/Navigation/TracePoint.hpp"
 
 class Canvas;
 class GlideComputer;
+class Projection;
 class WindowProjection;
 struct NMEAInfo;
 struct DerivedInfo;
 struct SETTINGS_MAP;
 
-namespace TrailRenderer
-{
+class TrailRenderer {
+  mutable TracePointVector trace;
+  mutable AllocatedArray<RasterPoint> points;
+
+public:
   void Draw(Canvas &canvas, const GlideComputer &glide_computer,
             const WindowProjection &projection, unsigned min_time,
             bool enable_traildrift, const RasterPoint pos, const NMEAInfo &basic,
-            const DerivedInfo &calculated, const SETTINGS_MAP &settings);
+            const DerivedInfo &calculated, const SETTINGS_MAP &settings) const;
 
   void Draw(Canvas &canvas, const GlideComputer &glide_computer,
-            const WindowProjection &projection, unsigned min_time);
-}
+            const WindowProjection &projection, unsigned min_time) const;
+
+private:
+  void DrawTraceVector(Canvas &canvas, const Projection &projection,
+                       const TracePointVector &trace) const;
+};
 
 #endif

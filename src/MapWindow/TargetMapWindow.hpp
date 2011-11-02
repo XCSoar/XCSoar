@@ -31,6 +31,7 @@ Copyright_License {
 #include "MapWindowBlackboard.hpp"
 #include "BackgroundDrawHelper.hpp"
 #include "Renderer/WaypointRenderer.hpp"
+#include "Renderer/TrailRenderer.hpp"
 #include "Compiler.h"
 
 #ifndef ENABLE_OPENGL
@@ -69,6 +70,8 @@ class TargetMapWindow : public BufferWindow {
   AirspaceRenderer airspace_renderer;
 
   WaypointRenderer way_point_renderer;
+
+  TrailRenderer trail_renderer;
 
   ProtectedTaskManager *task;
   const GlideComputer *glide_computer;

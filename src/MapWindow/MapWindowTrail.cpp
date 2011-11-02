@@ -36,6 +36,7 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
                      unsigned min_time, bool enable_traildrift) const
 {
   if (glide_computer)
-    TrailRenderer::Draw(canvas, *glide_computer, render_projection, min_time,
-                        enable_traildrift, aircraft_pos, Basic(), Calculated(), SettingsMap());
+    trail_renderer.Draw(canvas, *glide_computer, render_projection, min_time,
+                        enable_traildrift, aircraft_pos,
+                        Basic(), Calculated(), SettingsMap());
 }

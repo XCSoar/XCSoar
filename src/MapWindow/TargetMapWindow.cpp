@@ -193,7 +193,7 @@ TargetMapWindow::RenderTrail(Canvas &canvas) const
     return;
 
   unsigned min_time = max(0, (int)Basic().time - 600);
-  TrailRenderer::Draw(canvas, *glide_computer, projection, min_time);
+  trail_renderer.Draw(canvas, *glide_computer, projection, min_time);
 }
 
 void

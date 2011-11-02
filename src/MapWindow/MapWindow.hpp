@@ -38,6 +38,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "BackgroundDrawHelper.hpp"
 #include "Renderer/WaypointRenderer.hpp"
+#include "Renderer/TrailRenderer.hpp"
 #include "Compiler.h"
 #include <vector>
 
@@ -134,6 +135,8 @@ protected:
   WaypointRenderer way_point_renderer;
 
   AirspaceRenderer airspace_renderer;
+
+  TrailRenderer trail_renderer;
 
   ProtectedTaskManager *task;
   const ProtectedRoutePlanner *route_planner;
