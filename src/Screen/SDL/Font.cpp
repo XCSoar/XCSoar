@@ -111,6 +111,7 @@ Font::Set(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
   lf.lfWeight = bold ? 700 : 500;
   lf.lfHeight = height;
   lf.lfItalic = italic;
+  lf.lfPitchAndFamily = FF_DONTCARE | VARIABLE_PITCH;
   return Set(lf);
 }
 
