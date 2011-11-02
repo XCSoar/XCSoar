@@ -36,9 +36,6 @@ Copyright_License {
 #define k6 fixed(1.0 / 42266.5)
 #define k7 fixed(1.0 / 0.234969)
 
-AtmosphericPressure::AtmosphericPressure():
-  qnh(fixed_101325) {}
-
 fixed
 AtmosphericPressure::QNHAltitudeToStaticPressure(const fixed alt) const
 {
