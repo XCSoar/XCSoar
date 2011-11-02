@@ -97,16 +97,17 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
       }
 
       if (dirty) {
-        protected_route_planner.SolveRoute(dest, start, config, h_ceiling,
-                                           calculated.planned_route);
+        protected_route_planner.SolveRoute(dest, start, config, h_ceiling);
+        route_planner.get_solution(calculated.planned_route);
+
         calculated.terrain_warning =
           route_planner.intersection(start, dest,
                                      calculated.terrain_warning_location);
       }
       return;
     } else {
-      protected_route_planner.SolveRoute(start, start, config, h_ceiling,
-                                         calculated.planned_route);
+      protected_route_planner.SolveRoute(start, start, config, h_ceiling);
+      route_planner.get_solution(calculated.planned_route);
     }
   }
   calculated.terrain_warning = false;

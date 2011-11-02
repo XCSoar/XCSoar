@@ -43,13 +43,11 @@ void
 ProtectedRoutePlanner::SolveRoute(const AGeoPoint &dest,
                                   const AGeoPoint &start,
                                   const RoutePlannerConfig &config,
-                                  const RoughAltitude h_ceiling,
-                                  Route &solution)
+                                  const RoughAltitude h_ceiling)
 {
   ExclusiveLease lease(*this);
   lease->synchronise(airspaces, dest, start);
   lease->solve(dest, start, config, h_ceiling);
-  lease->get_solution(solution);
 }
 
 bool

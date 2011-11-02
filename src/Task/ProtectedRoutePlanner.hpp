@@ -54,8 +54,7 @@ public:
 
   void SolveRoute(const AGeoPoint &dest, const AGeoPoint &start,
                   const RoutePlannerConfig &config,
-                  const RoughAltitude h_ceiling,
-                  Route &solution);
+                  const RoughAltitude h_ceiling);
 
   bool Intersection(const AGeoPoint &origin,
                     const AGeoPoint &destination,
