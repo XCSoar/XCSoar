@@ -318,6 +318,9 @@ GlideComputer::FLARM_ScanTraffic()
   const NMEAInfo &basic = Basic();
   const NMEAInfo &last_basic = LastBasic();
 
+  if (!basic.flarm.available || !last_basic.flarm.available)
+    return;
+
   if (basic.flarm.rx && last_basic.flarm.rx == 0)
     // traffic has appeared..
     InputEvents::processGlideComputer(GCE_FLARM_TRAFFIC);
