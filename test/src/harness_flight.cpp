@@ -268,7 +268,7 @@ bool run_flight(TaskManager &task_manager,
         if (warnings_updated) {
           printf("# airspace warnings updated, size %d\n",
                  (int)airspace_warnings->size());
-          print_warnings();
+          print_warnings(*airspace_warnings);
           wait_prompt();
         }
       }
