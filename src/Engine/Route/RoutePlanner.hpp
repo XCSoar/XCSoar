@@ -218,10 +218,10 @@ public:
   /**
    * Retrieve current solution.  If solver failed previously,
    * direct flight from origin to destination is produced.
-   *
-   * @param route Vector to store result (output)
    */
-  void GetSolution(Route& route) const;
+  const Route &GetSolution() const {
+    return solution_route;
+  }
 
   /**
    * Update aircraft performance model used for path planning.

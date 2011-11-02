@@ -49,12 +49,6 @@ RoutePlanner::Reset()
   reach.reset();
 }
 
-void
-RoutePlanner::GetSolution(Route &route) const
-{
-  route = solution_route;
-}
-
 bool
 RoutePlanner::SolveReach(const AGeoPoint &origin, const bool do_solve)
 {

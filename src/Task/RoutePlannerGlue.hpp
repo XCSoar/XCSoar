@@ -55,8 +55,8 @@ public:
              const RoutePlannerConfig& config,
              const RoughAltitude h_ceiling);
 
-  void get_solution(Route& route) const {
-    m_planner.GetSolution(route);
+  const Route &GetSolution() const {
+    return m_planner.GetSolution();
   }
 
   void solve_reach(const AGeoPoint& origin, const bool do_solve);
