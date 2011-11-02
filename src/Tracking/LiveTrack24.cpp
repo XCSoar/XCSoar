@@ -32,6 +32,7 @@ Copyright_License {
 #include "Version.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 #include <cstdlib>
 
 namespace LiveTrack24
