@@ -29,7 +29,6 @@
 #include <fstream>
 
 Airspaces *airspaces = NULL;
-AirspaceWarningManager *airspace_warnings = NULL;
 AircraftStateFilter *aircraft_filter = NULL;
 
 double time_elapsed = 0.0;
@@ -217,10 +216,12 @@ bool run_flight(TaskManager &task_manager,
   aircraft.Start(autopilot.location_start, autopilot.location_previous,
                  parms.start_alt);
 
+  AirspaceWarningManager *airspace_warnings;
   if (airspaces) {
-    airspace_warnings =
-        new AirspaceWarningManager(*airspaces, task_manager);
+    airspace_warnings = new AirspaceWarningManager(*airspaces, task_manager);
     airspace_warnings->reset(aircraft.GetState());
+  } else {
+    airspace_warnings = NULL;
   }
 
   do {
