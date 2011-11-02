@@ -88,16 +88,17 @@ OrderedTask::update_geometry()
     return;
 
   // scan location of task points
-  for (unsigned i = 0; i < task_points.size(); ++i) {
-    if (i == 0)
-      task_projection.reset(task_points[i]->GetLocation());
+  for (auto begin = task_points.cbegin(), end = task_points.cend(), i = begin;
+       i != end; ++i) {
+    if (i == begin)
+      task_projection.reset((*i)->GetLocation());
 
-    task_points[i]->scan_projection(task_projection);
+    (*i)->scan_projection(task_projection);
   }
   // ... and optional start points
-  for (unsigned i = 0; i < optional_start_points.size(); ++i) {
-    optional_start_points[i]->scan_projection(task_projection);
-  }
+  for (auto i = optional_start_points.cbegin(),
+         end = optional_start_points.cend(); i != end; ++i)
+    (*i)->scan_projection(task_projection);
 
   // projection can now be determined
   task_projection.update_fast();
@@ -108,12 +109,12 @@ OrderedTask::update_geometry()
 
   // now that the task projection is stable, and oz is stable,
   // calculate the bounding box in projected coordinates
-  for (unsigned i = 0; i < task_points.size(); ++i) {
-    task_points[i]->update_boundingbox(task_projection);
-  }
-  for (unsigned i = 0; i < optional_start_points.size(); ++i) {
-    optional_start_points[i]->update_boundingbox(task_projection);
-  }
+  for (auto i = task_points.cbegin(), end = task_points.cend(); i != end; ++i)
+    (*i)->update_boundingbox(task_projection);
+
+  for (auto i = optional_start_points.cbegin(),
+         end = optional_start_points.cend(); i != end; ++i)
+    (*i)->update_boundingbox(task_projection);
 
   // update stats so data can be used during task construction
   /// @todo this should only be done if not flying! (currently done with has_entered)
@@ -342,8 +343,10 @@ OrderedTask::check_transition_optional_start(const AircraftState &state,
                                              bool &last_started)
 {
   bool full_update = false;
-  for (unsigned j = 0; j < optional_start_points.size(); ++j) {
-    full_update |= check_transition_point(*optional_start_points[j], 
+
+  for (auto begin = optional_start_points.cbegin(),
+         end = optional_start_points.cend(), i = begin; i != end; ++i) {
+    full_update |= check_transition_point(**i,
                                           state, state_last, bb_now, bb_last, 
                                           transition_enter, transition_exit,
                                           last_started, true);
@@ -353,7 +356,7 @@ OrderedTask::check_transition_optional_start(const AircraftState &state,
       // user has no choice in this: rules for multiple start points are that
       // the last start OZ flown through is used for scoring
       
-      select_optional_start(j);
+      select_optional_start(std::distance(begin, i));
 
       return full_update;
     }
@@ -457,9 +460,9 @@ OrderedTask::set_neighbours(unsigned position)
   task_points[position]->set_neighbours(prev, next);
 
   if (position==0) {
-    for (unsigned i = 0; i < optional_start_points.size(); ++i) {
-      optional_start_points[i]->set_neighbours(prev, next);
-    }
+    for (auto i = optional_start_points.begin(),
+           end = optional_start_points.end(); i != end; ++i)
+      (*i)->set_neighbours(prev, next);
   }
 }
 
@@ -820,9 +823,9 @@ OrderedTask::CalcGradient(const AircraftState &state) const
 
   // Iterate through remaining turnpoints
   fixed distance = fixed_zero;
-  for (unsigned i = active_task_point; i < task_points.size(); i++)
+  for (auto i = task_points.cbegin(), end = task_points.cend(); i != end; ++i)
     // Sum up the leg distances
-    distance += task_points[i]->GetVectorRemaining(state).distance;
+    distance += (*i)->GetVectorRemaining(state).distance;
 
   if (!distance)
     return fixed_zero;
@@ -1052,8 +1055,8 @@ OrderedTask::GetFinishState() const
 bool
 OrderedTask::HasTargets() const
 {
-  for (unsigned i = 0; i < task_points.size(); ++i)
-    if (task_points[i]->HasTarget())
+  for (auto i = task_points.cbegin(), end = task_points.cend(); i != end; ++i)
+    if ((*i)->HasTarget())
       return true;
 
   return false;
@@ -1095,12 +1098,13 @@ OrderedTask::Clone(TaskEvents &te, const TaskBehaviour &tb,
   new_task->m_ordered_behaviour = m_ordered_behaviour;
 
   new_task->SetFactory(factory_mode);
-  for (unsigned i = 0; i < task_points.size(); ++i) {
-    new_task->Append(*task_points[i]);
-  }
-  for (unsigned i = 0; i < optional_start_points.size(); ++i) {
-    new_task->AppendOptionalStart(*optional_start_points[i]);
-  }
+  for (auto i = task_points.cbegin(), end = task_points.cend(); i != end; ++i)
+    new_task->Append(**i);
+
+  for (auto i = optional_start_points.cbegin(),
+         end = optional_start_points.cend(); i != end; ++i)
+    new_task->AppendOptionalStart(**i);
+
   new_task->active_task_point = active_task_point;
   new_task->update_geometry();
   return new_task;
@@ -1111,17 +1115,18 @@ OrderedTask::CheckDuplicateWaypoints(Waypoints& waypoints,
                                      OrderedTaskPointVector& points,
                                      const bool is_task)
 {
-  for (unsigned i = 0; i < points.size(); ++i) {
+  for (auto begin = points.cbegin(), end = points.cend(), i = begin;
+       i != end; ++i) {
     const Waypoint &wp =
-      waypoints.check_exists_or_append(points[i]->GetWaypoint());
+      waypoints.check_exists_or_append((*i)->GetWaypoint());
 
-    const OrderedTaskPoint *new_tp = points[i]->clone(task_behaviour,
-                                                      m_ordered_behaviour,
-                                                      &wp);
+    const OrderedTaskPoint *new_tp = (*i)->clone(task_behaviour,
+                                                 m_ordered_behaviour,
+                                                 &wp);
     if (is_task)
-      Replace(*new_tp, i);
+      Replace(*new_tp, std::distance(begin, i));
     else
-      ReplaceOptionalStart(*new_tp, i);
+      ReplaceOptionalStart(*new_tp, std::distance(begin, i));
     delete new_tp;
   }
 }
@@ -1388,13 +1393,17 @@ OrderedTask::update_summary(TaskSummary& ordered_summary) const
   ordered_summary.clear();
 
   ordered_summary.active = active_task_point;
-  for (unsigned i = 0; i < task_points.size(); ++i) {    
+
+  for (auto begin = task_points.cbegin(), end = task_points.cend(), i = begin;
+       i != end; ++i) {
+    const OrderedTaskPoint &tp = **i;
+
     TaskSummaryPoint tsp;
-    tsp.d_planned = task_points[i]->GetVectorPlanned().distance;
-    if (i==0) {
-      tsp.achieved = task_points[i]->HasExited();
+    tsp.d_planned = tp.GetVectorPlanned().distance;
+    if (i == begin) {
+      tsp.achieved = tp.HasExited();
     } else {
-      tsp.achieved = task_points[i]->HasSampled();
+      tsp.achieved = tp.HasSampled();
     }
     ordered_summary.append(tsp);
   }
