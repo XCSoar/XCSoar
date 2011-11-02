@@ -190,7 +190,7 @@ TaskAutoPilot::update_cruise_bearing(const TaskAccessor& task,
                                      const AircraftState& state,
                                      const fixed timestep)
 {
-  const ElementStat stat = task.leg_stats();
+  const ElementStat &stat = task.leg_stats();
   Angle bct = stat.solution_remaining.cruise_track_bearing;
   Angle bearing;
 
@@ -233,7 +233,7 @@ TaskAutoPilot::update_state(const TaskAccessor& task,
   case Cruise:
   case FinalGlide:
   {
-    const ElementStat stat = task.leg_stats();
+    const ElementStat &stat = task.leg_stats();
     if (positive(stat.solution_remaining.v_opt)) {
       state.true_airspeed = stat.solution_remaining.v_opt*speed_factor;
     } else {
