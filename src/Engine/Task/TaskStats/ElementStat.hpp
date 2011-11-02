@@ -108,6 +108,7 @@ public:
   DistanceStatComputer planned;
   DistanceStatComputer travelled;
   DistanceStatComputer pirker;
+  TaskVarioComputer vario;
 
 private:
   bool initialised;

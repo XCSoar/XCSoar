@@ -13,16 +13,14 @@ struct GlideResult;
  */
 class TaskVario
 {
+  friend class TaskVarioComputer;
+
   fixed value;
 
-  DiffFilter df;
-  Filter v_lpf;
-
 public:
-  /**
-   * Constructor
-   */
-  TaskVario();
+  void Reset() {
+    value = fixed_zero;
+  }
 
 /** 
  * Retrieve current vario value from last update
@@ -32,6 +30,20 @@ public:
   fixed get_value() const {
     return value;
   }
+};
+
+class TaskVarioComputer
+{
+  TaskVario &data;
+
+  DiffFilter df;
+  Filter v_lpf;
+
+private:
+  bool initialised;
+
+public:
+  TaskVarioComputer(TaskVario &_data);
 
 /** 
  * Update vario, taking altitude difference from a specified glide solution
