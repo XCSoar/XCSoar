@@ -69,6 +69,13 @@ struct SpeedVector {
   SpeedVector(fixed x, fixed y):bearing(Angle::FromXY(y,x).AsBearing()), norm(sqrt(x*x+y*y)) {}
 
   /**
+   * Returns the null vector.
+   */
+  static gcc_constexpr_function SpeedVector Zero() {
+    return SpeedVector(Angle::Zero(), fixed_zero);
+  }
+
+  /**
    * Returns true if the norm of the vector is zero.
    */
   bool is_zero() const {

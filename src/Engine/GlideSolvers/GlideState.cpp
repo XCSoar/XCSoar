@@ -94,8 +94,7 @@ GlideState::CalcSpeedups(const SpeedVector _wind)
     head_wind = -wind.norm * effective_wind_angle.cos();
     head_wind_doubled = fixed_two * head_wind;
   } else {
-    wind.bearing = Angle::Zero();
-    wind.norm = fixed_zero;
+    wind = SpeedVector::Zero();
     effective_wind_angle = Angle::Zero();
     head_wind = fixed_zero;
     wind_speed_squared = fixed_zero;
