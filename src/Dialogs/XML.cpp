@@ -489,6 +489,7 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   // Load the children controls
   LoadChildrenFromXML(*form, form->GetClientAreaWindow(),
                       lookup_table, node, dialog_style);
+  delete node;
 
   // If XML error occurred -> Error messagebox + cancel
   assert(!XMLNode::GlobalError);
