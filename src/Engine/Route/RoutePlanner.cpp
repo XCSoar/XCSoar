@@ -166,12 +166,13 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
   if (retval) {
     // correct solution for rounding
     assert(solution_route.size()>=2);
-    for (unsigned i = 0; i < solution_route.size(); ++i) {
-      FlatGeoPoint p(task_projection.project(solution_route[i]));
+    for (auto i = solution_route.begin(), end = solution_route.end();
+         i != end; ++i) {
+      FlatGeoPoint p(task_projection.project(*i));
       if (p == origin_last) {
-        solution_route[i] = AGeoPoint(origin, solution_route[i].altitude);
+        *i = AGeoPoint(origin, i->altitude);
       } else if (p == destination_last) {
-        solution_route[i] = AGeoPoint(destination, solution_route[i].altitude);
+        *i = AGeoPoint(destination, i->altitude);
       }
     }
 
