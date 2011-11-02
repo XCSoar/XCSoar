@@ -71,7 +71,7 @@ private:
 
 public:
   VegaDevice(Port *_port)
-    :port(_port), qnh(fixed(1013.25)), detected(false) {}
+    :port(_port), qnh(AtmosphericPressure::Standard()), detected(false) {}
 
 protected:
   void VarioWriteSettings(const DerivedInfo &calculated) const;

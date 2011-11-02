@@ -49,10 +49,12 @@ public:
   AtmosphericPressure(fixed _qnh):qnh(_qnh) {}
 
   /**
-   * Configure the standard pressure (1013.25 hPa);
+   * Returns an object representing the standard pressure (1013.25
+   * hPa).
    */
-  void SetStandardPressure() {
-    SetQNH(fixed(1013.25));
+  static gcc_constexpr_function
+  AtmosphericPressure Standard() {
+    return AtmosphericPressure(fixed(1013.25));
   }
 
   /**
