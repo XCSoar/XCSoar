@@ -38,7 +38,7 @@ class TeamCode
   TCHAR code[10];
 
 public:
-  TeamCode() {
+  void Clear() {
     code[0] = 0;
   }
 
