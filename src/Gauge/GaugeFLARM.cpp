@@ -52,12 +52,12 @@ GaugeFLARM::Update(bool enable, const NMEAInfo &gps_info,
   const FlarmState &flarm = gps_info.flarm;
 
   // If FLARM alarm level higher then 0
-  if (flarm.alarm_level > 0)
+  if (flarm.available && flarm.alarm_level > 0)
     // Show FLARM gauge and do not care about suppression
     Suppress = false;
 
   bool visible = ForceVisible ||
-    (!flarm.traffic.empty() && enable && !Suppress);
+    (flarm.available && !flarm.traffic.empty() && enable && !Suppress);
   if (visible) {
     FlarmTrafficWindow::Update(gps_info.track, flarm,
                                settings);
