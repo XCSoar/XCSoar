@@ -26,6 +26,7 @@ Copyright_License {
 #define XCSOAR_SPEED_VECTOR_HPP
 
 #include "Math/Angle.hpp"
+#include "Compiler.h"
 
 /**
  * An object describing the speed vector in a two dimensional surface.
@@ -55,6 +56,7 @@ struct SpeedVector {
    * @param _norm Magnitude of vector (m/s)
    * @return Initialised object
    */
+  gcc_constexpr_ctor
   SpeedVector(Angle _bearing, fixed _norm):bearing(_bearing), norm(_norm) {}
 
   /** 
