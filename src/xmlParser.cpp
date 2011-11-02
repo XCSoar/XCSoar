@@ -580,7 +580,7 @@ XMLNode::AddAttribute(const TCHAR *lpszName, const TCHAR *lpszValuev)
 {
   assert(lpszName != NULL);
 
-  d->pAttribute.push_back((XMLAttribute){lpszName, lpszValuev});
+  d->pAttribute.push_front((XMLAttribute){lpszName, lpszValuev});
 }
 
 void

@@ -32,7 +32,7 @@
 #include "Compiler.h"
 
 #include <vector>
-#include <list>
+#include <forward_list>
 
 #include <assert.h>
 #include <tchar.h>
@@ -95,7 +95,7 @@ protected:
     std::vector<const TCHAR *> pText;
 
     /** Array of attributes */
-    std::list<XMLAttribute> pAttribute;
+    std::forward_list<XMLAttribute> pAttribute;
 
     /** order in which the child_nodes,text_fields,clear_fields and */
     std::vector<unsigned> pOrder;
