@@ -88,21 +88,6 @@ public:
   OverwritingRingBuffer()
     :head(0), tail(0) {}
 
-  OverwritingRingBuffer(const OverwritingRingBuffer<T,size> &other) {
-    head = other.head;
-    tail = other.tail;
-
-    assert(head < size);
-    assert(tail < size);
-
-    if (head < tail)
-      std::copy(other.data + head, other.data + tail, data + head);
-    else if (head > tail) {
-      std::copy(other.data + head, other.data + size, data + head);
-      std::copy(other.data, other.data + tail, data);
-    }
-  }
-
 protected:
   static unsigned next(unsigned i) {
     assert(i < size);
