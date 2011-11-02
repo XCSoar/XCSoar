@@ -250,6 +250,8 @@ struct AGeoPoint: public GeoPoint {
   /**< Nav reference altitude (m) */
   RoughAltitude altitude;
 
+  AGeoPoint() = default;
+
   gcc_constexpr_ctor
   AGeoPoint(const GeoPoint p, const RoughAltitude alt)
     :GeoPoint(p),altitude(alt) {};
