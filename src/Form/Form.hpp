@@ -33,7 +33,7 @@ Copyright_License {
 #endif
 
 #include <map>
-#include <list>
+#include <forward_list>
 
 struct DialogLook;
 class SingleWindow;
@@ -58,7 +58,7 @@ class WndForm: public ContainerWindow
     }
   };
 
-  typedef std::list<Window *> window_list_t;
+  typedef std::forward_list<Window *> window_list_t;
   typedef std::map<tstring, Window *, tstring_less_than> name_to_window_t;
 
   class ClientAreaWindow : public ContainerWindow {
@@ -215,7 +215,7 @@ public:
    * Adds a #Window to the "advanced window list" (#advanced_windows).
    */
   void AddExpert(Window *window) {
-    expert_windows.push_back(window);
+    expert_windows.push_front(window);
   }
 
   /**
