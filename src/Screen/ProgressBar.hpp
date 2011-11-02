@@ -28,7 +28,7 @@ Copyright_License {
 
 class ProgressBarStyle : public WindowStyle {
 public:
-  ProgressBarStyle() {}
+  ProgressBarStyle() = default;
   ProgressBarStyle(const WindowStyle &_style):WindowStyle(_style) {}
 
   void vertical();

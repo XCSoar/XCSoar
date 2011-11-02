@@ -82,7 +82,7 @@ struct GlideResult {
   fixed min_height;
 
   /** Construct an uninitialised object. */
-  GlideResult() {}
+  GlideResult() = default;
 
   /**
    * Constructor with partial initialisation for a particular

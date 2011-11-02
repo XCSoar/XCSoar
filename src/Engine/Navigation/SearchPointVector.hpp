@@ -33,7 +33,7 @@ struct GeoBounds;
 
 class SearchPointVector: public std::vector<SearchPoint> {
 public:
-  SearchPointVector() {}
+  SearchPointVector() = default;
   SearchPointVector(const_iterator begin, const_iterator end)
     :std::vector<SearchPoint>(begin, end) {}
 

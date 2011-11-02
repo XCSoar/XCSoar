@@ -33,7 +33,7 @@ Copyright_License {
  */
 class VirtualCanvas : public Canvas {
 public:
-  VirtualCanvas() {}
+  VirtualCanvas() = default;
   VirtualCanvas(UPixelScalar _width, UPixelScalar _height);
   VirtualCanvas(const Canvas &canvas,
                 UPixelScalar _width, UPixelScalar _height);

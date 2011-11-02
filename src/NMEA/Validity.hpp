@@ -50,7 +50,7 @@ public:
   /**
    * Cheap default constructor without initialization.
    */
-  Validity() {}
+  Validity() = default;
 
   /**
    * Initialize the object with the specified timestamp.

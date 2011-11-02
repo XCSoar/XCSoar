@@ -42,7 +42,7 @@ struct GeoVector {
   Angle bearing;
 
   /** Empty non-initializing constructor */
-  GeoVector() {}
+  GeoVector() = default;
 
   /** Constructor given supplied distance/bearing */
   gcc_constexpr_ctor

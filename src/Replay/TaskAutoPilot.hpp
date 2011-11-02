@@ -59,8 +59,6 @@ public:
   GeoPoint location_previous;
   Angle heading;
 
-  AbstractAutoPilot() {};
-
   void set_default_location(const GeoPoint& default_location) {
     location_start = default_location;
     location_previous = default_location;

@@ -80,7 +80,7 @@ public:
   /**
    * Constructs an uninitialized object.
    */
-  GlidePolar() {}
+  GlidePolar() = default;
 
   /**
    * Constructor.  Performs search for best LD at instantiation

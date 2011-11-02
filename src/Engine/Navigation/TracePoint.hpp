@@ -39,7 +39,7 @@ public:
   /**
    * Non-initialising constructor.
    */
-  TracePoint() {}
+  TracePoint() = default;
 
   /**
    * Constructor for a TracePoint which is only used as parameter to

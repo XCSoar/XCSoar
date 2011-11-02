@@ -87,7 +87,7 @@ public:
 
 class GLArrayBuffer : private GLBuffer {
 public:
-  GLArrayBuffer() {}
+  GLArrayBuffer() = default;
   explicit GLArrayBuffer(GLuint _id):GLBuffer(_id) {}
 
   void Bind() {

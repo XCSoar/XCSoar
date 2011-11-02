@@ -31,7 +31,7 @@ struct PolarCoefficients
 {
   fixed a, b, c;
 
-  PolarCoefficients() {}
+  PolarCoefficients() = default;
   PolarCoefficients(fixed _a, fixed _b, fixed _c):a(_a), b(_b), c(_c) {}
 
   gcc_pure

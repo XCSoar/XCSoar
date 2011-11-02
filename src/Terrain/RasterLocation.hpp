@@ -32,7 +32,7 @@ Copyright_License {
 struct RasterLocation {
   unsigned x, y;
 
-  RasterLocation() {}
+  RasterLocation() = default;
   RasterLocation(unsigned _x, unsigned _y):x(_x), y(_y) {}
 
   bool operator==(const RasterLocation &other) const {

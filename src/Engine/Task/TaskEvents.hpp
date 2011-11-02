@@ -35,11 +35,6 @@ class TaskEvents
 {
 public:
   /**
-   * Base constructor, provides null events
-   */
-  TaskEvents() {}
-
-  /**
    * Called when the aircraft enters a turnpoint observation zone
    *
    * @param tp The turnpoint entered

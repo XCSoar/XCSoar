@@ -81,7 +81,7 @@ struct Event {
 
   PixelScalar x, y;
 
-  Event() {}
+  Event() = default;
   Event(enum type _type):type(_type) {}
   Event(enum type _type, unsigned _param):type(_type), param(_param) {}
   Event(enum type _type, unsigned _param, void *_ptr)

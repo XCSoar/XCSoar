@@ -44,7 +44,7 @@ struct ProjectedFan {
    */
   unsigned size;
 
-  ProjectedFan() {}
+  ProjectedFan() = default;
 
   ProjectedFan(unsigned n):size(n) {
   }

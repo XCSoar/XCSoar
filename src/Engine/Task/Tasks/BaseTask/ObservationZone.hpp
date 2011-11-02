@@ -34,7 +34,6 @@
 class ObservationZone
 {
 public:
-  ObservationZone() {}
   virtual ~ObservationZone() {}
 
   /** 

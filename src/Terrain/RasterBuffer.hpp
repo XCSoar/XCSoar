@@ -55,7 +55,7 @@ private:
   AllocatedGrid<short> data;
 
 public:
-  RasterBuffer() {}
+  RasterBuffer() = default;
   RasterBuffer(unsigned _width, unsigned _height)
     :data(_width, _height) {}
 

@@ -37,7 +37,7 @@ class ChartProjection:
   public WindowProjection
 {
 public:
-  ChartProjection() {}
+  ChartProjection() = default;
 
   ChartProjection(const PixelRect &rc,
                   const TaskManager &task,

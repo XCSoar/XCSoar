@@ -33,7 +33,7 @@ Copyright_License {
 
 class TextWindowStyle : public WindowStyle {
 public:
-  TextWindowStyle() {}
+  TextWindowStyle() = default;
   TextWindowStyle(const WindowStyle other):WindowStyle(other) {}
 
   void left() {

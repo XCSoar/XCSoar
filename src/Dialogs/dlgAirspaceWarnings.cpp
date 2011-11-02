@@ -46,7 +46,7 @@ struct WarningItem {
   AirspaceInterceptSolution solution;
   bool ack_expired, ack_day;
 
-  WarningItem() {}
+  WarningItem() = default;
 
   WarningItem(const AirspaceWarning &w)
     :airspace(&w.get_airspace()),

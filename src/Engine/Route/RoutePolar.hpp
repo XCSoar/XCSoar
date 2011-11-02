@@ -201,7 +201,7 @@ public:
   /**
    * Dummy constructor, does nothing!
    */
-  RoutePolar() {};
+  RoutePolar() = default;
 
   /**
    * Populate internal structure with performance data.
@@ -273,11 +273,6 @@ private:
  */
 class RoutePolars {
 public:
-  /**
-   * Non-initialising constructor.
-   */
-  RoutePolars() {}
-
   /**
    * Re-initialise performance tables when polar or wind changes
    *
