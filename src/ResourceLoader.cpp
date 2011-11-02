@@ -74,7 +74,7 @@ ResourceLoader::Load(const TCHAR *name, const TCHAR *type)
     if (_tcscmp(named_resources[i].name, name) == 0)
       return Data(named_resources[i].data, named_resources[i].size);
 
-  return Data(NULL, 0);
+  return Data((const void *)NULL, 0);
 #endif
 }
 
@@ -89,7 +89,7 @@ ResourceLoader::Load(unsigned id)
     if (numeric_resources[i].id == id)
       return Data(numeric_resources[i].data, numeric_resources[i].size);
 
-  return Data(NULL, 0);
+  return Data((const void *)NULL, 0);
 #endif
 }
 
