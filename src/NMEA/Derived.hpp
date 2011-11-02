@@ -222,5 +222,9 @@ struct DerivedInfo:
   }
 };
 
+
+static_assert(has_trivial_copy_and_destructor<DerivedInfo>::value,
+              "type is not trivial");
+
 #endif
 
