@@ -86,7 +86,6 @@ MapWindow::DrawRoute(Canvas &canvas)
 {
   const Route& route = Calculated().planned_route;
 
-  canvas.select(task_look.bearing_pen);
   const int r_size = route.size();
   RasterPoint p[r_size];
   RasterPoint* pp = &p[0];
@@ -94,6 +93,8 @@ MapWindow::DrawRoute(Canvas &canvas)
     *pp = render_projection.GeoToScreen(*i);
   }
   ScreenClosestPoint(p[r_size-1], p[r_size-2], p[r_size-1], &p[r_size-1], Layout::Scale(20));
+
+  canvas.select(task_look.bearing_pen);
   canvas.polyline(p, r_size);
 }
 
