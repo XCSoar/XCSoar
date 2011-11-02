@@ -34,7 +34,9 @@ class ConditionMonitorWind: public ConditionMonitor
   SpeedVector last_wind;
 
 public:
-  ConditionMonitorWind():ConditionMonitor(60 * 5, 10) {}
+  ConditionMonitorWind()
+    :ConditionMonitor(60 * 5, 10),
+     wind(SpeedVector::Zero()), last_wind(SpeedVector::Zero()) {}
 
 protected:
   bool CheckCondition(const GlideComputer &cmp);

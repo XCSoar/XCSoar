@@ -43,11 +43,9 @@ struct SpeedVector {
   fixed norm;
 
   /** 
-   * Constructor for null speed
-   * 
-   * @return Initialised object
+   * Non-initialising default constructor.
    */
-  SpeedVector():bearing(Angle::Zero()), norm(fixed_zero) {}
+  SpeedVector() = default;
 
   /** 
    * Constructor given bearing and magnitude
