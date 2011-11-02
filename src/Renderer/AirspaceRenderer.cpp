@@ -88,15 +88,15 @@ public:
   }
 
   void visit_warned(AirspaceVisitor &visitor) {
-    for (unsigned i = 0; i < ids_warning.size(); i++)
-      if (!is_acked(*ids_warning[i]))
-        visitor.Visit(*ids_warning[i]);
+    for (auto it = ids_warning.begin(), end = ids_warning.end(); it != end; ++it)
+      if (!is_acked(**it))
+        visitor.Visit(**it);
   }
 
   void visit_inside(AirspaceVisitor &visitor) {
-    for (unsigned i = 0; i < ids_inside.size(); i++)
-      if (!is_acked(*ids_inside[i]))
-        visitor.Visit(*ids_inside[i]);
+    for (auto it = ids_inside.begin(), end = ids_inside.end(); it != end; ++it)
+      if (!is_acked(**it))
+        visitor.Visit(**it);
   }
 
 private:

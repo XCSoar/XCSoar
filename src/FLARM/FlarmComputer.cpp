@@ -58,8 +58,9 @@ FlarmComputer::Process(FlarmState &flarm, const FlarmState &last_flarm,
   }
 
   // for each item in traffic
-  for (unsigned i = 0; i < flarm.traffic.size(); i++) {
-    FlarmTraffic &traffic = flarm.traffic[i];
+  for (auto it = flarm.traffic.begin(), end = flarm.traffic.end();
+       it != end; ++it) {
+    FlarmTraffic &traffic = *it;
 
     // if we don't know the target's name yet
     if (!traffic.HasName()) {

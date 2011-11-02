@@ -264,8 +264,8 @@ static unsigned
 GetFlightNumber(RecordedFlightList &flight_list, const RecordedFlightInfo &theFlight)
 {
   unsigned FlightNumber = 1;
-  for (unsigned i = 0; i < flight_list.size(); ++i) {
-    const RecordedFlightInfo &flight = flight_list[i];
+  for (auto it = flight_list.begin(), end = flight_list.end(); it != end; ++it) {
+    const RecordedFlightInfo &flight = *it;
     if (theFlight.date == flight.date &&
         (theFlight.start_time.GetSecondOfDay() >
          flight.start_time.GetSecondOfDay()))

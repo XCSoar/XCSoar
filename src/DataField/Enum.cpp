@@ -234,10 +234,9 @@ DataFieldEnum::CreateComboList() const
 {
   ComboList *combo_list = new ComboList();
 
-  for (unsigned i = 0; i < entries.size(); i++)
-    combo_list->Append(entries[i].GetId(), entries[i].GetString(),
-                       entries[i].GetDisplayString(),
-                       entries[i].GetHelp());
+  for (auto it = entries.begin(), end = entries.end(); it != end; ++it)
+    combo_list->Append(it->GetId(), it->GetString(), it->GetDisplayString(),
+                       it->GetHelp());
 
   combo_list->ComboPopupItemSavedIndex = value;
   return combo_list;

@@ -93,9 +93,9 @@ public:
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   FlarmTraffic *FindTraffic(FlarmId id) {
-    for (unsigned i = 0; i < traffic.size(); i++)
-      if (traffic[i].id == id)
-        return &traffic[i];
+    for (auto it = traffic.begin(), end = traffic.end(); it != end; ++it)
+      if (it->id == id)
+        return it;
 
     return NULL;
   }
@@ -107,9 +107,9 @@ public:
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   const FlarmTraffic *FindTraffic(FlarmId id) const {
-    for (unsigned i = 0; i < traffic.size(); i++)
-      if (traffic[i].id == id)
-        return &traffic[i];
+    for (auto it = traffic.begin(), end = traffic.end(); it != end; ++it)
+      if (it->id == id)
+        return it;
 
     return NULL;
   }
@@ -121,9 +121,9 @@ public:
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   FlarmTraffic *FindTraffic(const TCHAR *name) {
-    for (unsigned i = 0; i < traffic.size(); i++)
-      if (traffic[i].name.equals(name))
-        return &traffic[i];
+    for (auto it = traffic.begin(), end = traffic.end(); it != end; ++it)
+      if (it->name.equals(name))
+        return it;
 
     return NULL;
   }
@@ -135,9 +135,9 @@ public:
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   const FlarmTraffic *FindTraffic(const TCHAR *name) const {
-    for (unsigned i = 0; i < traffic.size(); i++)
-      if (traffic[i].name.equals(name))
-        return &traffic[i];
+    for (auto it = traffic.begin(), end = traffic.end(); it != end; ++it)
+      if (it->name.equals(name))
+        return it;
 
     return NULL;
   }

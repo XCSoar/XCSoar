@@ -64,8 +64,9 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
   RasterPoint Arrow[5];
 
   // Circle through the FLARM targets
-  for (unsigned i = 0; i < flarm.traffic.size(); i++) {
-    const FlarmTraffic &traffic = flarm.traffic[i];
+  for (auto it = flarm.traffic.begin(), end = flarm.traffic.end();
+      it != end; ++it) {
+    const FlarmTraffic &traffic = *it;
 
     if (!traffic.location_available)
       continue;

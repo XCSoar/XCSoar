@@ -36,8 +36,8 @@ FlarmState::FindMaximumAlert() const
 {
   const FlarmTraffic *alert = NULL;
 
-  for (unsigned i = 0; i < traffic.size(); ++i) {
-    const FlarmTraffic &traffic = this->traffic[i];
+  for (auto it = traffic.begin(), end = traffic.end(); it != end; ++it) {
+    const FlarmTraffic &traffic = *it;
 
     if (traffic.HasAlarm() &&
         (alert == NULL ||

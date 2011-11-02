@@ -315,8 +315,8 @@ RasterTileCache::Reset()
 
   Overview.reset();
 
-  for (unsigned i = 0; i < tiles.GetSize(); i++)
-    tiles.GetLinear(i).Disable();
+  for (auto it = tiles.begin(), end = tiles.end(); it != end; ++it)
+    it->Disable();
 }
 
 gcc_pure
@@ -512,8 +512,9 @@ RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
   /* permanently disable the requested tiles which are still not
      loaded, to prevent trying to reload them over and over in a busy
      loop */
-  for (unsigned i = 0; i < RequestTiles.size(); ++i) {
-    RasterTile &tile = tiles.GetLinear(RequestTiles[i]);
+  for (auto it = RequestTiles.begin(), end = RequestTiles.end();
+      it != end; ++it) {
+    RasterTile &tile = tiles.GetLinear(*it);
     if (tile.is_requested() && !tile.IsEnabled())
       tile.Clear();
   }

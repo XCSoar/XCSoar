@@ -47,8 +47,8 @@ ComboList::Item::~Item()
 void
 ComboList::Clear()
 {
-  for (unsigned i = 0; i < items.size(); i++)
-    delete items[i];
+  for (auto it = items.begin(), end = items.end(); it != end; ++it)
+    delete *it;
 
   items.clear();
 }

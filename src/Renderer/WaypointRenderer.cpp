@@ -352,8 +352,8 @@ public:
   void Calculate(const ProtectedRoutePlanner &route_planner) {
     const ProtectedRoutePlanner::Lease lease(route_planner);
 
-    for (unsigned i = 0; i < waypoints.size(); ++i) {
-      VisibleWaypoint &vwp = waypoints[i];
+    for (auto it = waypoints.begin(), end = waypoints.end(); it != end; ++it) {
+      VisibleWaypoint &vwp = *it;
       const Waypoint &way_point = *vwp.waypoint;
 
       if (way_point.IsLandable() || way_point.flags.watched)
@@ -362,8 +362,8 @@ public:
   }
 
   void Draw(Canvas &canvas) {
-    for (unsigned i = 0; i < waypoints.size(); ++i)
-      DrawWaypoint(canvas, waypoints[i]);
+    for (auto it = waypoints.begin(), end = waypoints.end(); it != end; ++it)
+      DrawWaypoint(canvas, *it);
   }
 };
 
