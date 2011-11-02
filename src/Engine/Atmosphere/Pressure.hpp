@@ -37,8 +37,6 @@ class AtmosphericPressure
   fixed qnh;
 
 public:
-  static gcc_constexpr_data fixed standard = fixed(1013.25);
-
   /**
    * Non-initialising constructor.
    */
@@ -54,7 +52,7 @@ public:
    * Configure the standard pressure (1013.25 hPa);
    */
   void SetStandardPressure() {
-    SetQNH(standard);
+    SetQNH(fixed(1013.25));
   }
 
   /**
