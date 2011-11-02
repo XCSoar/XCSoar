@@ -37,7 +37,7 @@ Copyright_License {
 struct FlarmState
 {
   enum {
-    FLARM_MAX_TRAFFIC = 15,
+    FLARM_MAX_TRAFFIC = 25,
   };
 
   enum GPSStatus {
