@@ -246,7 +246,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
     index_right = e_long.polar_index + REACH_SWEEP;
   }
 
-  children.push_back(FlatTriangleFanTree(depth + 1));
+  children.emplace_back(depth + 1);
   FlatTriangleFanTree &child = children.back();
 
   for (fixed f = f0; f < fixed(0.9); f += fixed(0.1)) {
