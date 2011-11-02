@@ -107,7 +107,8 @@ TargetMapWindow::set(ContainerWindow &parent,
 void
 TargetMapWindow::RenderTerrain(Canvas &canvas)
 {
-  if (SettingsMap().terrain.slope_shading == sstWind)
+  if (SettingsMap().terrain.slope_shading == sstWind &&
+      Calculated().wind_available)
     background.sun_from_wind(projection, Calculated().wind);
   else
     background.set_sun_angle(projection,

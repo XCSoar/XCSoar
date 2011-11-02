@@ -125,7 +125,7 @@ DemoReplayGlue::Start()
   DemoReplay::Start(ta, device_blackboard->Basic().location);
 
   // get wind from aircraft
-  aircraft.GetState().wind = device_blackboard->Calculated().wind;
+  aircraft.GetState().wind = device_blackboard->Calculated().GetWindOrZero();
 }
 
 void

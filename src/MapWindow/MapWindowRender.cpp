@@ -31,7 +31,8 @@ Copyright_License {
 void
 MapWindow::RenderTerrain(Canvas &canvas)
 {
-  if (SettingsMap().terrain.slope_shading == sstWind)
+  if (SettingsMap().terrain.slope_shading == sstWind &&
+      Calculated().wind_available)
     m_background.sun_from_wind(render_projection, Calculated().wind);
   else
     m_background.set_sun_angle(render_projection,

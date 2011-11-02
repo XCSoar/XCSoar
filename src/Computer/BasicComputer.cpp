@@ -249,7 +249,8 @@ static void
 ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 {
   if (calculated.flight.flying &&
-      (positive(basic.ground_speed) || calculated.wind.is_non_zero())) {
+      (positive(basic.ground_speed) ||
+       (calculated.wind_available && calculated.wind.is_non_zero()))) {
 
     // estimate bank angle (assuming balanced turn)
     if (basic.airspeed_available) {

@@ -93,7 +93,8 @@ GlideComputerAirData::ProcessVertical()
   thermallocator.Process(calculated.circling,
                          basic.time, basic.location,
                          basic.netto_vario,
-                         calculated.wind, calculated.thermal_locator);
+                         calculated.GetWindOrZero(),
+                         calculated.thermal_locator);
 
   CuSonde::updateMeasurements(basic, calculated);
   LastThermalStats();
@@ -571,7 +572,7 @@ GlideComputerAirData::ThermalSources()
   EstimateThermalBase(thermal_locator.estimate_location,
                       Basic().nav_altitude,
                       calculated.last_thermal.lift_rate,
-                      calculated.wind,
+                      calculated.GetWindOrZero(),
                       ground_location,
                       ground_altitude);
 

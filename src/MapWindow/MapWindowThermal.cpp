@@ -53,17 +53,18 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
     if (negative(dh))
       continue;
 
-    // convert height difference to thermal rise time
-    fixed t = dh / thermal_locator.sources[i].lift_rate;
+    GeoPoint loc = thermal_locator.sources[i].location;
 
-    // find estimated location of thermal at glider's height by
-    // projecting the thermal to drift at wind speed for thermal rise time
-    // to reach the glider's height.
+    if (Calculated().wind_available) {
+      // convert height difference to thermal rise time
+      fixed t = dh / thermal_locator.sources[i].lift_rate;
 
-    GeoPoint loc =
-        FindLatitudeLongitude(thermal_locator.sources[i].location,
-                              wind.bearing.Reciprocal(),
-                              wind.norm * t);
+      // find estimated location of thermal at glider's height by
+      // projecting the thermal to drift at wind speed for thermal rise time
+      // to reach the glider's height.
+      loc = FindLatitudeLongitude(loc, wind.bearing.Reciprocal(),
+                                  wind.norm * t);
+    }
 
     // draw if it is in the field of view
     RasterPoint pt;

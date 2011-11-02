@@ -31,7 +31,7 @@ Copyright_License {
 bool
 ConditionMonitorWind::CheckCondition(const GlideComputer &cmp)
 {
-  wind = cmp.Calculated().wind;
+  wind = cmp.Calculated().GetWindOrZero();
 
   if (!cmp.Calculated().flight.flying) {
     last_wind = wind;

@@ -67,13 +67,15 @@ dlgWindSettingsShowModal(void)
 
   WndProperty* wp;
 
+  const SpeedVector wind = CommonInterface::Calculated().GetWindOrZero();
+
   wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
   if (wp) {
     wp->set_enabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
     df.SetUnits(Units::GetSpeedName());
-    df.Set(Units::ToUserWindSpeed(CommonInterface::Calculated().wind.norm));
+    df.Set(Units::ToUserWindSpeed(wind.norm));
     wp->RefreshDisplay();
   }
 
@@ -81,7 +83,7 @@ dlgWindSettingsShowModal(void)
   if (wp) {
     wp->set_enabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.Set(CommonInterface::Calculated().wind.bearing.Degrees());
+    df.Set(wind.bearing.Degrees());
     wp->RefreshDisplay();
   }
 

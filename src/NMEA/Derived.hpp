@@ -204,6 +204,17 @@ struct DerivedInfo:
   void ResetFlight(bool full);
 
   void Expire(fixed Time);
+
+  /**
+   * Return the current wind vector, or the null vector if no wind is
+   * available.
+   */
+  gcc_pure
+  SpeedVector GetWindOrZero() const {
+    return wind_available
+      ? wind
+      : SpeedVector::Zero();
+  }
 };
 
 #endif
