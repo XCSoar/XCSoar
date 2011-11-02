@@ -29,6 +29,7 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "NMEA/Validity.hpp"
 #include "Util/StaticString.hpp"
+#include "Util/TypeTraits.hpp"
 #include "Rough/RoughAltitude.hpp"
 #include "Rough/RoughDistance.hpp"
 #include "Rough/RoughSpeed.hpp"
@@ -185,5 +186,7 @@ struct FlarmTraffic {
 
   void Update(const FlarmTraffic &other);
 };
+
+static_assert(is_trivial_clang<FlarmTraffic>::value, "type is not trivial");
 
 #endif

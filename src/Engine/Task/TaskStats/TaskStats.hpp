@@ -23,6 +23,7 @@
 #define TASKSTATS_HPP
 
 #include "ElementStat.hpp"
+#include "Util/TypeTraits.hpp"
 
 #ifdef DO_PRINT
 #include <iostream>
@@ -89,6 +90,8 @@ public:
                                    const TaskStats& ts);
 #endif
 };
+
+static_assert(is_trivial_clang<TaskStats>::value, "type is not trivial");
 
 class TaskStatsComputer {
   TaskStats &data;

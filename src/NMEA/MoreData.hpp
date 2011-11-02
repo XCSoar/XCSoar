@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "NMEA/Info.hpp"
 
+#include <type_traits>
+
 /**
  * A wrapper for NMEA_INFO which adds a few attributes that are cheap
  * to calculate.  They are managed by #BasicComputer inside
@@ -55,5 +57,12 @@ struct MoreData : public NMEAInfo {
 
   void Reset();
 };
+
+#if GCC_VERSION >= 40600
+static_assert(std::has_trivial_copy_constructor<MoreData>() &&
+              std::has_trivial_copy_assign<MoreData>() &&
+              std::has_trivial_destructor<MoreData>(),
+              "type is not trivial");
+#endif
 
 #endif

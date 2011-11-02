@@ -29,6 +29,8 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Util/TinyEnum.hpp"
 
+#include <type_traits>
+
 /**
  * Received FLARM data, cached
  */
@@ -207,5 +209,12 @@ public:
     new_traffic = false;
   }
 };
+
+#if GCC_VERSION >= 40600
+static_assert(std::has_trivial_copy_constructor<FlarmState>() &&
+              std::has_trivial_copy_assign<FlarmState>() &&
+              std::has_trivial_destructor<FlarmState>(),
+              "type is not trivial");
+#endif
 
 #endif

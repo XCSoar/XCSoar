@@ -28,6 +28,7 @@ struct AircraftState;
 
 #include "PolarCoefficients.hpp"
 #include "Math/fixed.hpp"
+#include "Util/TypeTraits.hpp"
 #include "Compiler.h"
 
 struct PolarInfo;
@@ -481,5 +482,7 @@ private:
   /** Solve for min sink rate at current bugs/ballast setting. */
   void UpdateSMin();
 };
+
+static_assert(is_trivial_clang<GlidePolar>::value, "type is not trivial");
 
 #endif

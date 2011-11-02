@@ -34,6 +34,8 @@ Copyright_License {
 #include "FLARM/State.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
 
+#include <type_traits>
+
 /**
  * State of external switch devices (esp Vega)
  */
@@ -577,5 +579,12 @@ struct NMEAInfo {
    */
   void Complement(const NMEAInfo &add);
 };
+
+#if GCC_VERSION >= 40600
+static_assert(std::has_trivial_copy_constructor<NMEAInfo>() &&
+              std::has_trivial_copy_assign<NMEAInfo>() &&
+              std::has_trivial_destructor<NMEAInfo>(),
+              "type is not trivial");
+#endif
 
 #endif

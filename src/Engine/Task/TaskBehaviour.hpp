@@ -27,6 +27,7 @@
 #include "OrderedTaskBehaviour.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Route/Config.hpp"
+#include "Util/TypeTraits.hpp"
 
 struct AircraftState;
 
@@ -169,5 +170,7 @@ struct TaskBehaviour : public TaskStartMargins {
    */
   void DisableAll();
 };
+
+static_assert(is_trivial_clang<TaskBehaviour>::value, "type is not trivial");
 
 #endif

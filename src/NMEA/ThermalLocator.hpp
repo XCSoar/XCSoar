@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_NMEA_THERMAL_LOCATOR_HPP
 
 #include "Engine/Navigation/GeoPoint.hpp"
+#include "Util/TypeTraits.hpp"
 
 /** Structure to hold information on identified thermal sources on the ground */
 struct ThermalSource
@@ -56,5 +57,8 @@ struct ThermalLocatorInfo
    */
   ThermalSource &AllocateSource(fixed Time);
 };
+
+static_assert(is_trivial_clang<ThermalLocatorInfo>::value,
+              "type is not trivial");
 
 #endif

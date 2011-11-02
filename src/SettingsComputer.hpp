@@ -30,6 +30,7 @@ Copyright_License {
 #include "Engine/Atmosphere/Pressure.hpp"
 #include "Engine/Route/Config.hpp"
 #include "Util/StaticString.hpp"
+#include "Util/TypeTraits.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Tracking/TrackingSettings.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
@@ -86,6 +87,8 @@ struct WindSettings {
 
   void SetDefaults();
 };
+
+static_assert(is_trivial_clang<WindSettings>::value, "type is not trivial");
 
 /**
  * Logger settings
@@ -144,6 +147,9 @@ struct TeamCodeSettings {
 
   void SetDefaults();
 };
+
+static_assert(is_trivial_clang<TeamCodeSettings>::value,
+              "type is not trivial");
 
 struct VoiceSettings {
   // vegavoice stuff
@@ -248,6 +254,9 @@ struct SETTINGS_COMPUTER:
 
   void SetDefaults();
 };
+
+static_assert(is_trivial_clang<SETTINGS_COMPUTER>::value,
+              "type is not trivial");
 
 #endif
 

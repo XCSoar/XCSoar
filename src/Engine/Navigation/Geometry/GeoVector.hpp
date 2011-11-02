@@ -24,6 +24,7 @@
 #define GEO_VECTOR_HPP
 
 #include "Math/Angle.hpp"
+#include "Util/TypeTraits.hpp"
 #include "Compiler.h"
 
 struct GeoPoint;
@@ -114,5 +115,7 @@ struct GeoVector {
     distance = fixed_minus_one;
   }
 };
+
+static_assert(is_trivial_clang<GeoVector>::value, "type is not trivial");
 
 #endif

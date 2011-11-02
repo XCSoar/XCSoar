@@ -25,6 +25,7 @@
 #include "Math/fixed.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "GlideSolvers/GlideResult.hpp"
+#include "Util/TypeTraits.hpp"
 #include "TaskSummary.hpp"
 
 #ifdef DO_PRINT
@@ -128,5 +129,8 @@ public:
   friend std::ostream& operator<< (std::ostream& o, const CommonStats& ts);
 #endif
 };
+
+static_assert(has_trivial_copy_and_destructor<CommonStats>::value,
+              "type is not trivial");
 
 #endif

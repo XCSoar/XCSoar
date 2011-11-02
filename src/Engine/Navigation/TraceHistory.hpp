@@ -22,6 +22,8 @@ Copyright_License {
 */
 #ifndef TRACEHISTORY_HPP
 #define TRACEHISTORY_HPP
+
+#include "Util/TypeTraits.hpp"
 #include "Util/OverwritingRingBuffer.hpp"
 #include "Math/fixed.hpp"
 
@@ -38,5 +40,8 @@ public:
   void append(const MoreData &basic);
   void clear();
 };
+
+static_assert(has_trivial_copy_and_destructor<TraceHistory>::value,
+              "type is not trivial");
 
 #endif

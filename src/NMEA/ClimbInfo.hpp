@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_CLIMB_INFO_HPP
 
 #include "Math/fixed.hpp"
+#include "Util/TypeTraits.hpp"
 
 /** Information about one thermal that was or is being climbed. */
 struct OneClimbInfo
@@ -81,5 +82,7 @@ struct ClimbInfo
 
   void Clear();
 };
+
+static_assert(is_trivial_clang<ClimbInfo>::value, "type is not trivial");
 
 #endif

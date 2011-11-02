@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_ROUGH_ALTITUDE_HPP
 
 #include "Math/fixed.hpp"
+#include "Util/TypeTraits.hpp"
 #include "Compiler.h"
 
 #include <limits.h>
@@ -168,5 +169,7 @@ static inline
 fixed operator*(const fixed a, const RoughAltitude b) {
   return b * a;
 }
+
+static_assert(is_trivial_clang<RoughAltitude>::value, "type is not trivial");
 
 #endif

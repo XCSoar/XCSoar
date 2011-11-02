@@ -44,6 +44,7 @@ Copyright_License {
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Engine/Atmosphere/Pressure.hpp"
 #include "Engine/Route/Route.hpp"
+#include "Util/TypeTraits.hpp"
 
 /** Derived terrain altitude information, including glide range */
 struct TerrainInfo
@@ -83,6 +84,8 @@ struct TerrainInfo
   }
 };
 
+static_assert(is_trivial_clang<TerrainInfo>::value, "type is not trivial");
+
 /** Derived team code information */
 struct TeamInfo
 {
@@ -109,6 +112,8 @@ struct TeamInfo
 
   void Clear();
 };
+
+static_assert(is_trivial_clang<TeamInfo>::value, "type is not trivial");
 
 struct AirspaceWarningsInfo {
   /**

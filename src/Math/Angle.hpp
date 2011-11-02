@@ -23,6 +23,7 @@ Copyright_License {
 #ifndef ANGLE_HPP
 #define ANGLE_HPP
 
+#include "Util/TypeTraits.hpp"
 #include "Math/fixed.hpp"
 #include "Math/FastMath.h"
 #include "Compiler.h"
@@ -336,5 +337,7 @@ public:
     return Angle::Radians(atan2(y,x));
   }
 };
+
+static_assert(is_trivial_clang<Angle>::value, "type is not trivial");
 
 #endif

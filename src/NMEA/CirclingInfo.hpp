@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_CIRCLING_INFO_HPP
 
 #include "Util/TinyEnum.hpp"
+#include "Util/TypeTraits.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Math/fixed.hpp"
 
@@ -109,5 +110,7 @@ struct CirclingInfo
     return negative(turn_rate_smoothed);
   }
 };
+
+static_assert(is_trivial_clang<CirclingInfo>::value, "type is not trivial");
 
 #endif

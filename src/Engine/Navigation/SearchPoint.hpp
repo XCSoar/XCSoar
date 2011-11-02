@@ -25,6 +25,7 @@
 #include "GeoPoint.hpp"
 #include "Navigation/Flat/FlatGeoPoint.hpp"
 #include "Util/DebugFlag.hpp"
+#include "Util/TypeTraits.hpp"
 
 #include <assert.h>
 
@@ -162,5 +163,8 @@ public:
   }
 };
 
+#ifndef __clang__
+static_assert(is_trivial_ndebug<SearchPoint>::value, "type is not trivial");
+#endif
 
 #endif

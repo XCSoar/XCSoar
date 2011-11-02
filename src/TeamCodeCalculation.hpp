@@ -25,9 +25,9 @@ Copyright_License {
 #define	XCSOAR_TEAM_CODE_CALCULATION_HPP
 
 #include "Util/StaticString.hpp"
+#include "Util/TypeTraits.hpp"
 #include "Math/fixed.hpp"
 #include "Compiler.h"
-#include <tchar.h>
 
 struct GeoPoint;
 class Angle;
@@ -84,5 +84,7 @@ public:
    */
   void Update(const TCHAR* _code);
 };
+
+static_assert(is_trivial_clang<TeamCode>::value, "type is not trivial");
 
 #endif

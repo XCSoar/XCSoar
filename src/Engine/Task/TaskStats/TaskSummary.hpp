@@ -23,6 +23,7 @@
 #define TASK_SUMMARY_HPP
 
 #include "Util/StaticArray.hpp"
+#include "Util/TypeTraits.hpp"
 #include "Math/fixed.hpp"
 
 struct TaskSummaryPoint {
@@ -66,5 +67,8 @@ struct TaskSummary {
     }
   }
 };
+
+static_assert(has_trivial_copy_and_destructor<TaskSummary>::value,
+              "type is not trivial");
 
 #endif

@@ -25,6 +25,8 @@ Copyright_License {
 #define XCSOAR_ROUGH_DISTANCE_HPP
 
 #include "Math/fixed.hpp"
+#include "Util/TypeTraits.hpp"
+#include "Compiler.h"
 
 #include <stdint.h>
 
@@ -67,5 +69,7 @@ public:
     return value == 0;
   }
 };
+
+static_assert(is_trivial_clang<RoughDistance>::value, "type is not trivial");
 
 #endif

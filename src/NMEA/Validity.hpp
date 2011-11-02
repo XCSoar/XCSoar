@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_VALIDITY_HPP
 
 #include "Math/fixed.hpp"
+#include "Util/TypeTraits.hpp"
 
 #include <stdint.h>
 
@@ -140,5 +141,7 @@ public:
     return IsValid();
   }
 };
+
+static_assert(is_trivial_clang<Validity>::value, "type is not trivial");
 
 #endif

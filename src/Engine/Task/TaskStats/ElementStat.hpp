@@ -28,6 +28,7 @@
 #endif
 #include "DistanceStat.hpp"
 #include "TaskVario.hpp"
+#include "Util/TypeTraits.hpp"
 
 struct AircraftState;
 
@@ -97,6 +98,8 @@ struct ElementStat
   friend std::ostream& operator<< (std::ostream &o, const ElementStat &es);
 #endif
 };
+
+static_assert(is_trivial_clang<ElementStat>::value, "type is not trivial");
 
 class ElementStatComputer
 {

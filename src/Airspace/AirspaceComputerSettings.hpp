@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_AIRSPACE_COMPUTER_SETTINGS_HPP
 
 #include "Engine/Airspace/AirspaceWarningConfig.hpp"
+#include "Util/TypeTraits.hpp"
 
 /**
  * Settings for airspace options
@@ -37,5 +38,7 @@ struct AirspaceComputerSettings {
 
   void SetDefaults();
 };
+
+static_assert(is_trivial_clang<AirspaceComputerSettings>::value, "type is not trivial");
 
 #endif

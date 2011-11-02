@@ -28,6 +28,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "PageSettings.hpp"
 #include "Dialogs/DialogSettings.hpp"
+#include "Util/TypeTraits.hpp"
 
 enum StateMessageAlign_t {
   smAlignCenter = 0,
@@ -60,5 +61,7 @@ struct UISettings {
 
   void SetDefaults();
 };
+
+static_assert(is_trivial_clang<UISettings>::value, "type is not trivial");
 
 #endif

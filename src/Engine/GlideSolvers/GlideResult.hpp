@@ -23,6 +23,7 @@
 #define GLIDERESULT_HPP
 
 #include "Navigation/Geometry/GeoVector.hpp"
+#include "Util/TypeTraits.hpp"
 #include "Compiler.h"
 
 #ifdef DO_PRINT
@@ -198,5 +199,7 @@ private:
    */
   void CalcCruiseBearing();
 };
+
+static_assert(is_trivial_clang<GlideResult>::value, "type is not trivial");
 
 #endif
