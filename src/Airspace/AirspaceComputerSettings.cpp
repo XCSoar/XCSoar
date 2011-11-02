@@ -27,4 +27,6 @@ void
 AirspaceComputerSettings::SetDefaults()
 {
   enable_warnings = true;
+
+  warnings.SetDefaults();
 }

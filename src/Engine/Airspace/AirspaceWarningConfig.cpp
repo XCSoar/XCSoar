@@ -20,33 +20,20 @@
 }
  */
 
-#ifndef AIRSPACE_WARNING_CONFIG_HPP
-#define AIRSPACE_WARNING_CONFIG_HPP
+#include "AirspaceWarningConfig.hpp"
 
-#include "AirspaceClass.hpp"
+#include <algorithm>
 
-#include <assert.h>
+void
+AirspaceWarningConfig::SetDefaults()
+{
+  WarningTime = 30;
+  AcknowledgementTime = 30;
+  AltWarningMargin = 100;
 
-struct AirspaceWarningConfig {
-  /** Warning time before airspace entry */
-  unsigned WarningTime;
-
-  /** Time an acknowledgement will persist before a warning is reissued */
-  unsigned AcknowledgementTime;
-
-  /** Altitude margin (m) outside of which to not display airspace for auto mode */
-  unsigned AltWarningMargin;    
-
-  /** Class-specific warning flags */
-  bool class_warnings[AIRSPACECLASSCOUNT];
-
-  void SetDefaults();
-
-  bool class_enabled(AirspaceClass cls) const {
-    assert(cls >= 0 && cls < AIRSPACECLASSCOUNT);
-
-    return class_warnings[cls];
-  }
-};
-
-#endif
+  std::fill(class_warnings, class_warnings + AIRSPACECLASSCOUNT, true);
+  class_warnings[CLASSE] = false;
+  class_warnings[CLASSF] = false;
+  class_warnings[CLASSG] = false;
+  class_warnings[AATASK] = false;
+}
