@@ -58,6 +58,11 @@ public:
   gcc_constexpr_method
   size_type capacity() const { return max; }
 
+  gcc_constexpr_method
+  size_type max_size() const {
+    return max;
+  }
+
   /**
    * Returns the number of allocated elements.
    */
