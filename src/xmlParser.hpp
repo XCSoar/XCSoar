@@ -242,10 +242,20 @@ public:
    */
   XMLNode(const XMLNode &A);
 
+  XMLNode(XMLNode &&other)
+    :d(other.d) {
+    other.d = NULL;
+  }
+
   /**
    * Shallow copy.
    */
   XMLNode& operator=(const XMLNode& A);
+
+  XMLNode &operator=(XMLNode &&other) {
+    std::swap(d, other.d);
+    return *this;
+  }
 
   static void destroyCurrentBuffer(XMLNodeData *d);
 
