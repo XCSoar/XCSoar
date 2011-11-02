@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_CLIMB_HISTORY_HPP
 
 #include "Math/fixed.hpp"
+#include "Util/TypeTraits.hpp"
 
 #include <assert.h>
 
@@ -66,5 +67,7 @@ public:
     return vario[speed] / count[speed];
   }
 };
+
+static_assert(is_trivial_clang<ClimbHistory>::value, "type is not trivial");
 
 #endif

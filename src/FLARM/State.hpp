@@ -28,8 +28,7 @@ Copyright_License {
 #include "NMEA/Validity.hpp"
 #include "Util/StaticArray.hpp"
 #include "Util/TinyEnum.hpp"
-
-#include <type_traits>
+#include "Util/TypeTraits.hpp"
 
 /**
  * Received FLARM data, cached
@@ -210,11 +209,7 @@ public:
   }
 };
 
-#if GCC_VERSION >= 40600
-static_assert(std::has_trivial_copy_constructor<FlarmState>() &&
-              std::has_trivial_copy_assign<FlarmState>() &&
-              std::has_trivial_destructor<FlarmState>(),
+static_assert(has_trivial_copy_and_destructor<FlarmState>::value,
               "type is not trivial");
-#endif
 
 #endif

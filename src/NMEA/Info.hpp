@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_NMEA_INFO_H
 
 #include "Util/TinyEnum.hpp"
+#include "Util/TypeTraits.hpp"
 #include "NMEA/Validity.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "NMEA/Acceleration.hpp"
@@ -33,8 +34,6 @@ Copyright_License {
 #include "Atmosphere/Pressure.hpp"
 #include "FLARM/State.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
-
-#include <type_traits>
 
 /**
  * State of external switch devices (esp Vega)
@@ -580,11 +579,7 @@ struct NMEAInfo {
   void Complement(const NMEAInfo &add);
 };
 
-#if GCC_VERSION >= 40600
-static_assert(std::has_trivial_copy_constructor<NMEAInfo>() &&
-              std::has_trivial_copy_assign<NMEAInfo>() &&
-              std::has_trivial_destructor<NMEAInfo>(),
+static_assert(has_trivial_copy_and_destructor<NMEAInfo>::value,
               "type is not trivial");
-#endif
 
 #endif

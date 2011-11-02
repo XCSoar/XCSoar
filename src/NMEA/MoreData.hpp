@@ -25,8 +25,7 @@ Copyright_License {
 #define XCSOAR_MORE_DATA_HPP
 
 #include "NMEA/Info.hpp"
-
-#include <type_traits>
+#include "Util/TypeTraits.hpp"
 
 /**
  * A wrapper for NMEA_INFO which adds a few attributes that are cheap
@@ -58,11 +57,7 @@ struct MoreData : public NMEAInfo {
   void Reset();
 };
 
-#if GCC_VERSION >= 40600
-static_assert(std::has_trivial_copy_constructor<MoreData>() &&
-              std::has_trivial_copy_assign<MoreData>() &&
-              std::has_trivial_destructor<MoreData>(),
+static_assert(has_trivial_copy_and_destructor<MoreData>::value,
               "type is not trivial");
-#endif
 
 #endif

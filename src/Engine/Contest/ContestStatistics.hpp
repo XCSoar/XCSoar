@@ -24,6 +24,7 @@
 #define CONTEST_STATISTICS_HPP
 
 #include "ContestResult.hpp"
+#include "Util/TypeTraits.hpp"
 
 struct ContestStatistics
 {
@@ -73,5 +74,8 @@ struct ContestStatistics
     return i_best;
   }
 };
+
+static_assert(has_trivial_copy_and_destructor<ContestStatistics>::value,
+              "type is not trivial");
 
 #endif

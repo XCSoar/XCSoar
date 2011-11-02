@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DATE_TIME_HPP
 #define XCSOAR_DATE_TIME_HPP
 
+#include "Util/TypeTraits.hpp"
 #include "Compiler.h"
 
 #include <stdint.h>
@@ -233,5 +234,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    */
   int operator-(const BrokenDateTime &other) const;
 };
+
+static_assert(is_trivial_clang<BrokenDateTime>::value, "type is not trivial");
 
 #endif
