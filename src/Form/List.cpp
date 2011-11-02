@@ -144,7 +144,7 @@ void
 WndListFrame::on_paint(Canvas &canvas)
 {
   if (PaintItemCallback != NULL)
-    DrawItems(canvas, origin, origin + items_visible + 1);
+    DrawItems(canvas, origin, origin + items_visible + 2);
 
   DrawScrollBar(canvas);
 }
