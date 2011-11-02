@@ -367,8 +367,11 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
   return strip - triangle_strip;
 }
 
+/**
+ * Append a RasterPoint to the end of an array and advance the array pointer
+ */
 static void
-AddToTriangleStrip(RasterPoint* &strip, PixelScalar x, PixelScalar y)
+AppendPoint(RasterPoint* &strip, PixelScalar x, PixelScalar y)
 {
   strip->x = x;
   strip->y = y;
@@ -388,6 +391,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
   // max. size: 2*(num_points + (int)(loop || tcap))
   strip.GrowDiscard(2 * (num_points + 1));
 
+  // A closed line path needs to have at least three points
   if (loop && num_points < 3)
     // .. otherwise don't close it
     loop = false;
@@ -398,6 +402,9 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
   // s is the working pointer
   RasterPoint *s = strip.begin();
 
+  // a, b and c point to three consecutive points which are used to iterate
+  // through the line given in 'points'. Where b is the current position,
+  // a the previous point and c the next point.
   const RasterPoint *a, *b, *c;
 
   // pointer to the end of the original points array
@@ -406,12 +413,10 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
 
   // initialize a, b and c vertices
   if (loop) {
-    // b is set to last RasterPoint in the array
     b = points + num_points - 1;
-    // a is set to the point before that
     a = b - 1;
 
-    // skip identical points at the end
+    // skip identical points before b
     while (a >= points && a->x == b->x && a->y == b->y)
       a--;
 
@@ -419,15 +424,12 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
       // all points in the array are identical
       return 0;
 
-    // c is set to the first RasterPoint in the array
     c = points;
   } else  {
-    // a is set to the first RasterPoint in the array
     a = points;
-    // b is set to the point after that
     b = a + 1;
 
-    // skip identical points at the beginning
+    // skip identical points after a
     while (b != points_end && a->x == b->x && a->y == b->y)
       b++;
 
@@ -435,7 +437,6 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
       // all points in the array are identical
       return 0;
 
-    // c is set to the point after b (third point if nothing was skipped)
     c = b + 1;
   }
 
@@ -452,27 +453,25 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
       p.y = a->y - b->y;
       Normalize(&p, half_line_width);
 
-      AddToTriangleStrip(s, a->x + p.x, a->y + p.y);
+      AppendPoint(s, a->x + p.x, a->y + p.y);
     }
 
     // add flat cap coordinates to the output array
-    // (first triangle if tcap == true)
     p.x = a->y - b->y;
     p.y = b->x - a->x;
     Normalize(&p, half_line_width);
 
-    AddToTriangleStrip(s, a->x - p.x, a->y - p.y);
-    AddToTriangleStrip(s, a->x + p.x, a->y + p.y);
+    AppendPoint(s, a->x - p.x, a->y - p.y);
+    AppendPoint(s, a->x + p.x, a->y + p.y);
   }
 
   // add points by calculating the angle bisector of ab and bc
   int sign = 1;
   if (num_points >= 3) {
     while (c != points_end) {
+      // skip zero or 180 degree bends
+      // TODO: support 180 degree bends!
       if (!TriangleEmpty(*a, *b, *c)) {
-        // skip zero or 180 degree bends
-        // TODO: support 180 degree bends!
-
         RasterPoint g, h;
         g.x = b->x - a->x;
         g.y = b->y - a->y;
@@ -499,8 +498,8 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
         bisector_x = sign*floor(bisector_x * scale + 0.5f);
         bisector_y = sign*floor(bisector_y * scale + 0.5f);
 
-        AddToTriangleStrip(s, b->x - bisector_x, b->y - bisector_y);
-        AddToTriangleStrip(s, b->x + bisector_x, b->y + bisector_y);
+        AppendPoint(s, b->x - bisector_x, b->y - bisector_y);
+        AppendPoint(s, b->x + bisector_x, b->y + bisector_y);
       }
 
       a = b;
@@ -515,17 +514,13 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
 
   if (loop) {
     // repeat first two points at the end
-    int idx0, idx1;
     if (sign == 1) {
-      idx0 = 0;
-      idx1 = 1;
+      AppendPoint(s, strip[0].x, strip[0].y);
+      AppendPoint(s, strip[1].x, strip[1].y);
     } else {
-      idx0 = 1;
-      idx1 = 0;
+      AppendPoint(s, strip[1].x, strip[1].y);
+      AppendPoint(s, strip[0].x, strip[0].y);
     }
-
-    AddToTriangleStrip(s, strip[idx0].x, strip[idx0].y);
-    AddToTriangleStrip(s, strip[idx1].x, strip[idx1].y);
   } else {
     // add flat or triangle cap at end of line
     RasterPoint p;
@@ -533,14 +528,14 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
     p.y = sign * (b->x - a->x);
     Normalize(&p, half_line_width);
 
-    AddToTriangleStrip(s, b->x - p.x, b->y - p.y);
-    AddToTriangleStrip(s, b->x + p.x, b->y + p.y);
+    AppendPoint(s, b->x - p.x, b->y - p.y);
+    AppendPoint(s, b->x + p.x, b->y + p.y);
 
     if (tcap) {
       p.x = b->x - a->x;
       p.y = b->y - a->y;
       Normalize(&p, half_line_width);
-      AddToTriangleStrip(s, b->x + p.x, b->y + p.y);
+      AppendPoint(s, b->x + p.x, b->y + p.y);
     }
   }
 
