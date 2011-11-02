@@ -25,20 +25,16 @@
 
 SearchPoint::SearchPoint(const GeoPoint &loc, const TaskProjection& tp):
   reference(loc),
-  flatLocation(tp.project(loc))
-#ifndef NDEBUG
-  , projected(true)
-#endif
+  flatLocation(tp.project(loc)),
+  projected(true)
 {      
 }
 
 SearchPoint::SearchPoint(const FlatGeoPoint &floc,
                          const TaskProjection& tp):
   reference(tp.unproject(floc)),
-  flatLocation(floc)
-#ifndef NDEBUG
-  , projected(true)
-#endif
+  flatLocation(floc),
+  projected(true)
 {
 }
 

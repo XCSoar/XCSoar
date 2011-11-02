@@ -24,6 +24,7 @@
 
 #include "GeoPoint.hpp"
 #include "Navigation/Flat/FlatGeoPoint.hpp"
+#include "Util/DebugFlag.hpp"
 
 #include <assert.h>
 
@@ -37,9 +38,7 @@ class SearchPoint
   GeoPoint reference;
   FlatGeoPoint flatLocation;
 
-#ifndef NDEBUG
-  bool projected;
-#endif
+  DebugFlag projected;
 
 public:
   /** 
@@ -47,11 +46,7 @@ public:
    * 
    * @return Null object
    */
-  SearchPoint()
-#ifndef NDEBUG
-    :projected(false)
-#endif
-  {}
+  SearchPoint() = default;
 
   /**
    * Constructor.  The flat location is not initialized here; the
@@ -62,9 +57,6 @@ public:
    */
   SearchPoint(const GeoPoint &loc) :
     reference(loc)
-#ifndef NDEBUG
-    , projected(false)
-#endif
   {}
 
   /**

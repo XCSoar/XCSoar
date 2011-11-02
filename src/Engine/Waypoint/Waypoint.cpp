@@ -35,9 +35,6 @@ Waypoint::Flags::SetDefaultFlags(bool turnpoint)
 
 Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):
   location(_location),
-#ifndef NDEBUG
-  flat_location_initialised(false),
-#endif
   type(TYPE_NORMAL)
 {
   flags.SetDefaultFlags(is_turnpoint);
@@ -55,8 +52,5 @@ void
 Waypoint::Project(const TaskProjection &task_projection)
 {
   flat_location = task_projection.project(location);
-
-#ifndef NDEBUG
   flat_location_initialised = true;
-#endif
 }

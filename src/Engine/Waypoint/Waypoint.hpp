@@ -25,6 +25,7 @@
 
 #include "Util/tstring.hpp"
 #include "Util/TinyEnum.hpp"
+#include "Util/DebugFlag.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/Flat/FlatGeoPoint.hpp"
 #include "RadioFrequency.hpp"
@@ -98,9 +99,7 @@ struct Waypoint {
   /** Flat projected location */
   FlatGeoPoint flat_location;
 
-#ifndef NDEBUG
-  bool flat_location_initialised;
-#endif
+  DebugFlag flat_location_initialised;
 
   /** Height AMSL (m) of waypoint terrain */
   fixed altitude;

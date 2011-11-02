@@ -27,15 +27,14 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Projection.hpp"
 #include "Geo/GeoBounds.hpp"
+#include "Util/DebugFlag.hpp"
 
 #include <assert.h>
 
 class WindowProjection:
   public Projection
 {
-#ifndef NDEBUG
-  bool screen_size_initialised;
-#endif
+  DebugFlag screen_size_initialised;
 
   unsigned screen_width, screen_height;
 
@@ -48,10 +47,6 @@ class WindowProjection:
   GeoBounds screenbounds_latlon;
 
 public:
-#ifndef NDEBUG
-  WindowProjection():screen_size_initialised(false) {}
-#endif
-
   /**
    * Converts a geographical location to a screen coordinate if the
    * location is within the visible bounds
@@ -81,12 +76,11 @@ public:
 #ifndef NDEBUG
     assert(width > 0);
     assert(height > 0);
-
-    screen_size_initialised = true;
 #endif
 
     screen_width = width;
     screen_height = height;
+    screen_size_initialised = true;
   }
 
   void SetMapRect(const PixelRect &rc) {

@@ -31,6 +31,7 @@
 #define XCSOAR_CACHE_HPP
 
 #include "Util/ListHead.hpp"
+#include "Util/DebugFlag.hpp"
 #include "Compiler.h"
 
 #include <map>
@@ -48,15 +49,12 @@ class Cache {
    */
   template<typename T>
   class Constructible {
-#ifndef NDEBUG
-    bool constructed;
-#endif
+    DebugFlag constructed;
 
     char buffer[sizeof(T)];
 
   public:
 #ifndef NDEBUG
-    Constructible():constructed(false) {}
     ~Constructible() {
       assert(!constructed);
     }
@@ -82,9 +80,7 @@ class Cache {
       void *p = static_cast<void *>(buffer);
       new (p) T();
 
-#ifndef NDEBUG
       constructed = true;
-#endif
     }
 
     void Construct(const T &value) {
@@ -93,9 +89,7 @@ class Cache {
       void *p = static_cast<void *>(buffer);
       new (p) T(value);
 
-#ifndef NDEBUG
       constructed = true;
-#endif
     }
 
     void Destruct() {
@@ -104,9 +98,7 @@ class Cache {
       T &value = Get();
       value.T::~T();
 
-#ifndef NDEBUG
       constructed = false;
-#endif
     }
   };
 
