@@ -29,7 +29,6 @@
 #include <fstream>
 
 Airspaces *airspaces = NULL;
-AircraftStateFilter *aircraft_filter = NULL;
 
 double time_elapsed = 0.0;
 double time_planned = 1.0;
@@ -175,12 +174,21 @@ protected:
   }
 };
 
-
-bool run_flight(TaskManager &task_manager,
-                const AutopilotParameters &parms,
-                const int n_wind,
-                const double speed_factor) 
+bool
+run_flight(TaskManager &task_manager, const AutopilotParameters &parms,
+           const int n_wind, const double speed_factor)
 {
+  return run_flight(TestFlightComponents(), task_manager, parms, n_wind,
+                    speed_factor);
+}
+
+bool
+run_flight(TestFlightComponents components, TaskManager &task_manager,
+           const AutopilotParameters &parms, const int n_wind,
+           const double speed_factor)
+{
+  AircraftStateFilter *aircraft_filter = components.aircraft_filter;
+
   DirectTaskAccessor ta(task_manager);
   PrintTaskAutoPilot autopilot(parms);
   AircraftSim aircraft;
@@ -325,10 +333,17 @@ bool run_flight(TaskManager &task_manager,
   return true;
 }
 
-
 bool
 test_flight(int test_num, int n_wind, const double speed_factor,
             const bool auto_mc)
+{
+  return test_flight(TestFlightComponents(), test_num, n_wind, speed_factor,
+                     auto_mc);
+}
+
+bool
+test_flight(TestFlightComponents components, int test_num, int n_wind,
+            const double speed_factor, const bool auto_mc)
 {
   // multipurpose flight test
 
@@ -367,7 +382,7 @@ test_flight(int test_num, int n_wind, const double speed_factor,
 
   waypoints.clear(); // clear waypoints so abort wont do anything
 
-  return run_flight(task_manager, autopilot_parms, n_wind,
+  return run_flight(components, task_manager, autopilot_parms, n_wind,
                     speed_factor);
 }
 
