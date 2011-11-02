@@ -32,6 +32,7 @@
 
 #include "Compiler.h"
 
+#include <utility>
 #include <cstddef>
 #include <assert.h>
 
@@ -198,8 +199,9 @@ public:
     /* unreachable */
   }
 
-  void construct(T *t, const T& val) {
-    new ((void *)t) T(val);
+  template<typename... Args>
+  void construct(pointer p, Args&&... args) {
+    ::new((void *)p) T(std::forward<Args>(args)...);
   }
 
   void destroy(T *t) {
@@ -248,8 +250,9 @@ public:
     allocator.deallocate(t, n);
   }
 
-  void construct(T *t, const T &val) {
-    allocator.construct(t, val);
+  template<typename... Args>
+  void construct(pointer p, Args&&... args) {
+    allocator.construct(p, std::forward<Args>(args)...);
   }
 
   void destroy(T *t) {
