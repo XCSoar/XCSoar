@@ -28,8 +28,6 @@
 #include "Replay/AircraftSim.hpp"
 #include <fstream>
 
-Airspaces *airspaces = NULL;
-
 double time_elapsed = 0.0;
 double time_planned = 1.0;
 double time_remaining = 0;
@@ -188,6 +186,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
            const double speed_factor)
 {
   AircraftStateFilter *aircraft_filter = components.aircraft_filter;
+  Airspaces *airspaces = components.airspaces;
 
   DirectTaskAccessor ta(task_manager);
   PrintTaskAutoPilot autopilot(parms);

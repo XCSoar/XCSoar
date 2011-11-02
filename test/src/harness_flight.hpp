@@ -32,8 +32,9 @@
 struct TestFlightComponents
 {
   AircraftStateFilter *aircraft_filter;
+  Airspaces *airspaces;
 
-  TestFlightComponents():aircraft_filter(NULL) {}
+  TestFlightComponents():aircraft_filter(NULL), airspaces(NULL) {}
 };
 
 bool run_flight(TestFlightComponents components, TaskManager &task_manager,
