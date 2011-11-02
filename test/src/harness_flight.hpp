@@ -68,7 +68,6 @@ bool test_bestcruisetrack(int test_num, int n_wind);
 bool test_abort(int n_wind);
 bool test_goto(int n_wind, unsigned id, bool auto_mc=false);
 bool test_null();
-bool test_airspace(const unsigned n_airspaces);
 bool test_olc(int n_wind, Contests id);
 
 fixed

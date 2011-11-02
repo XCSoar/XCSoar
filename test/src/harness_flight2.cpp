@@ -316,16 +316,6 @@ bool test_null()
 }
 
 
-bool test_airspace(const unsigned n_airspaces)
-{
-  TestFlightComponents components;
-  components.airspaces = new Airspaces;
-  setup_airspaces(*components.airspaces, GeoPoint(Angle::Degrees(fixed_half), Angle::Degrees(fixed_half)), n_airspaces);
-  bool fine = test_flight(components, 4, 0);
-  delete components.airspaces;
-  return fine;
-}
-
 bool test_effective_mc(int test_num, int n_wind) 
 {
   // tests functionality of effective mc calculations
