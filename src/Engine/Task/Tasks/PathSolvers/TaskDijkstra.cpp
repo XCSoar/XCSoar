@@ -22,6 +22,7 @@
 
 #include "TaskDijkstra.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
+#include "Util/GlobalSliceAllocator.hpp"
 
 TaskDijkstra::TaskDijkstra(OrderedTask& _task, bool is_min, const bool do_reserve):
   NavDijkstra<SearchPoint> (is_min, 0, do_reserve? DIJKSTRA_QUEUE_SIZE: 0),
