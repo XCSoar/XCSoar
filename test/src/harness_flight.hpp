@@ -80,7 +80,6 @@ const char* wind_name(int n_wind);
 
 bool test_flight_times(int test_num, int n_wind);
 bool test_speed_factor(int test_num, int n_wind);
-bool test_cruise_efficiency(int test_num, int n_wind);
 bool test_effective_mc(int test_num, int n_wind);
 bool test_bestcruisetrack(int test_num, int n_wind);
 bool test_abort(int n_wind);
