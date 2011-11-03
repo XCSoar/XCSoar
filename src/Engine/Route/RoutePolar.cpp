@@ -120,7 +120,7 @@ RoutePolars::msl_intercept(const int index, const AGeoPoint& p, const TaskProjec
   dx= (dx*steps)>>7;
   dy= (dy*steps)>>7;
   const FlatGeoPoint dp(fp.Longitude+dx, fp.Latitude+dy);
-  return (proj.unproject(dp)-(GeoPoint)p)+(GeoPoint)p;
+  return proj.unproject(dp);
 }
 
 
