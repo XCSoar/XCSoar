@@ -28,12 +28,6 @@
 #include "Replay/AircraftSim.hpp"
 #include <fstream>
 
-double time_elapsed = 0.0;
-double time_planned = 1.0;
-double time_remaining = 0;
-double calc_cruise_efficiency = 1.0;
-double calc_effective_mc = 1.0;
-
 fixed
 aat_min_time(int test_num)
 {
@@ -172,7 +166,7 @@ protected:
   }
 };
 
-bool
+TestFlightResult
 run_flight(TaskManager &task_manager, const AutopilotParameters &parms,
            const int n_wind, const double speed_factor)
 {
@@ -180,13 +174,15 @@ run_flight(TaskManager &task_manager, const AutopilotParameters &parms,
                     speed_factor);
 }
 
-bool
+TestFlightResult
 run_flight(TestFlightComponents components, TaskManager &task_manager,
            const AutopilotParameters &parms, const int n_wind,
            const double speed_factor)
 {
   AircraftStateFilter *aircraft_filter = components.aircraft_filter;
   Airspaces *airspaces = components.airspaces;
+
+  TestFlightResult result;
 
   DirectTaskAccessor ta(task_manager);
   PrintTaskAutoPilot autopilot(parms);
@@ -205,12 +201,6 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
 
   bool do_print = verbose;
   bool first = true;
-
-  time_elapsed = 0.0;
-  time_planned = 1.0;
-  time_remaining = 0;
-  calc_cruise_efficiency = 1.0;
-  calc_effective_mc = 1.0;
 
   static const fixed fixed_10(10);
 
@@ -235,14 +225,14 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
 
     if ((task_manager.GetActiveTaskPointIndex() == 1) &&
         first && (task_manager.GetStats().total.time_elapsed > fixed_10)) {
-      time_remaining = (double)task_manager.GetStats().total.time_remaining;
+      result.time_remaining = (double)task_manager.GetStats().total.time_remaining;
       first = false;
 
-      time_planned = (double)task_manager.GetStats().total.time_planned;
+      result.time_planned = (double)task_manager.GetStats().total.time_planned;
 
       if (verbose > 1) {
-        printf("# time remaining %g\n", time_remaining);
-        printf("# time planned %g\n", time_planned);
+        printf("# time remaining %g\n", result.time_remaining);
+        printf("# time planned %g\n", result.time_planned);
       }
     }
 
@@ -318,10 +308,10 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
   }
   wait_prompt();
 
-  time_elapsed = (double)task_manager.GetStats().total.time_elapsed;
-  time_planned = (double)task_manager.GetStats().total.time_planned;
-  calc_cruise_efficiency = (double)task_manager.GetStats().cruise_efficiency;
-  calc_effective_mc = (double)task_manager.GetStats().effective_mc;
+  result.time_elapsed = (double)task_manager.GetStats().total.time_elapsed;
+  result.time_planned = (double)task_manager.GetStats().total.time_planned;
+  result.calc_cruise_efficiency = (double)task_manager.GetStats().cruise_efficiency;
+  result.calc_effective_mc = (double)task_manager.GetStats().effective_mc;
 
   if (verbose)
     distance_counts();
@@ -329,10 +319,11 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
   if (airspace_warnings)
     delete airspace_warnings;
 
-  return true;
+  result.result = true;
+  return result;
 }
 
-bool
+TestFlightResult
 test_flight(int test_num, int n_wind, const double speed_factor,
             const bool auto_mc)
 {
@@ -340,7 +331,7 @@ test_flight(int test_num, int n_wind, const double speed_factor,
                      auto_mc);
 }
 
-bool
+TestFlightResult
 test_flight(TestFlightComponents components, int test_num, int n_wind,
             const double speed_factor, const bool auto_mc)
 {
@@ -391,14 +382,15 @@ test_flight_times(int test_num, int n_wind)
   // tests whether elapsed/planned times are consistent
   // there will be small error due to start location
 
-  bool fine = test_flight(test_num, n_wind);
-  const double t_rat = fabs(time_elapsed / time_planned - 1.0);
+  TestFlightResult result = test_flight(test_num, n_wind);
+  bool fine = result.result;
+  const double t_rat = fabs(result.time_elapsed / result.time_planned - 1.0);
   fine &= t_rat < 0.02;
 
   if ((verbose) || !fine) {
-    printf("# time remaining %g\n", time_remaining);
-    printf("# time elapsed %g\n", time_elapsed);
-    printf("# time planned %g\n", time_planned);
+    printf("# time remaining %g\n", result.time_remaining);
+    printf("# time elapsed %g\n", result.time_elapsed);
+    printf("# time planned %g\n", result.time_planned);
     printf("# time ratio error (elapsed/planned) %g\n", t_rat);
   }
 

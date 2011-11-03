@@ -37,22 +37,42 @@ struct TestFlightComponents
   TestFlightComponents():aircraft_filter(NULL), airspaces(NULL) {}
 };
 
-bool run_flight(TestFlightComponents components, TaskManager &task_manager,
-                const AutopilotParameters &parms,
-                const int n_wind,
-                const double speed_factor=1.0);
+struct TestFlightResult
+{
+  bool result;
+  double time_elapsed;
+  double time_planned;
+  double time_remaining;
+  double calc_cruise_efficiency;
+  double calc_effective_mc;
 
-bool run_flight(TaskManager &task_manager,
-                const AutopilotParameters &parms,
-                const int n_wind,
-                const double speed_factor=1.0);
+  TestFlightResult()
+    :result(false),
+     time_elapsed(0.0), time_planned(1.0), time_remaining(0.0),
+     calc_cruise_efficiency(1.0), calc_effective_mc(1.0) {}
 
-bool test_flight(TestFlightComponents components,
-                 int test_num, int n_wind, const double speed_factor=1.0,
-                 const bool auto_mc=false);
+  operator bool() {
+    return result;
+  }
+};
 
-bool test_flight(int test_num, int n_wind, const double speed_factor=1.0,
-                 const bool auto_mc=false);
+TestFlightResult run_flight(TestFlightComponents components,
+                            TaskManager &task_manager,
+                            const AutopilotParameters &parms, const int n_wind,
+                            const double speed_factor = 1.0);
+
+TestFlightResult run_flight(TaskManager &task_manager,
+                            const AutopilotParameters &parms, const int n_wind,
+                            const double speed_factor = 1.0);
+
+TestFlightResult test_flight(TestFlightComponents components,
+                             int test_num, int n_wind,
+                             const double speed_factor = 1.0,
+                             const bool auto_mc = false);
+
+TestFlightResult test_flight(int test_num, int n_wind,
+                             const double speed_factor = 1.0,
+                             const bool auto_mc = false);
 
 #define NUM_WIND 9
 
