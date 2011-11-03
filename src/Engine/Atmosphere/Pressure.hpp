@@ -57,12 +57,20 @@ public:
     return AtmosphericPressure(fixed(1013.25));
   }
 
+  void SetPascal(const fixed _value) {
+    SetHectoPascal(_value / 100);
+  }
+
+  fixed GetPascal() {
+    return GetHectoPascal() * 100;
+  }
+
   /**
    * Set QNH value (Mean Sea Level pressure)
    *
    * @param set New value of QNH (hPa)
    */
-  void SetQNH(const fixed _qnh) {
+  void SetHectoPascal(const fixed _qnh) {
     qnh = _qnh;
   }
 
@@ -71,7 +79,7 @@ public:
    *
    * @return QNH value (hPa)
    */
-  fixed GetQNH() const {
+  fixed GetHectoPascal() const {
     return qnh;
   }
 

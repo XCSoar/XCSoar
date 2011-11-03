@@ -354,7 +354,7 @@ ParseQNH(const TCHAR *token, ParsedMETAR &parsed)
     if (endptr == NULL || endptr == token)
       return false;
 
-    parsed.qnh.SetQNH(fixed(hpa));
+    parsed.qnh.SetHectoPascal(fixed(hpa));
     parsed.qnh_available = true;
     return true;
   }
@@ -368,7 +368,8 @@ ParseQNH(const TCHAR *token, ParsedMETAR &parsed)
     if (endptr == NULL || endptr == token)
       return false;
 
-    parsed.qnh.SetQNH(Units::ToSysUnit(fixed(inch_hg) / 100, unInchMercurial));
+    parsed.qnh.SetHectoPascal(Units::ToSysUnit(fixed(inch_hg) / 100,
+                                               unInchMercurial));
     parsed.qnh_available = true;
     return true;
   }

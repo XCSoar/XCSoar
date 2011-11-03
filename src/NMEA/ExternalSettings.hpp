@@ -141,7 +141,7 @@ struct ExternalSettings {
    * value is different or if there is no value
    */
   bool CompareQNH(fixed value) const {
-    return qnh_available && fabs(qnh.GetQNH() - value) <= fixed_half;
+    return qnh_available && fabs(qnh.GetHectoPascal() - value) <= fixed_half;
   }
 
   /**

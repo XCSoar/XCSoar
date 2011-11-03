@@ -135,7 +135,7 @@ OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daChange:
-    settings_computer.pressure.SetQNH(Sender->GetAsFixed());
+    settings_computer.pressure.SetHectoPascal(Sender->GetAsFixed());
     settings_computer.pressure_available.Update(basic.clock);
     device_blackboard->SetQNH(Sender->GetAsFixed());
     RefreshAltitudeControl();
@@ -277,7 +277,7 @@ dlgBasicSettingsShowModal()
   SetBallast();
   LoadFormProperty(*wf, _T("prpBugs"), glide_polar.GetBugs() * 100);
   LoadFormProperty(*wf, _T("prpQNH"),
-                   CommonInterface::SettingsComputer().pressure.GetQNH());
+                   CommonInterface::SettingsComputer().pressure.GetHectoPascal());
 
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));

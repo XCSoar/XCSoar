@@ -235,7 +235,7 @@ InfoBoxContentAltitude::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBa
   assert(wInfoBoxAccessSetup);
 
   LoadFormProperty(*wf, _T("prpQNH"),
-                   CommonInterface::SettingsComputer().pressure.GetQNH());
+                   CommonInterface::SettingsComputer().pressure.GetHectoPascal());
 
   return wInfoBoxAccessSetup;
 }
@@ -249,7 +249,7 @@ InfoBoxContentAltitude::PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessK
 
   switch (Mode) {
   case DataField::daChange:
-    settings_computer.pressure.SetQNH(Sender->GetAsFixed());
+    settings_computer.pressure.SetHectoPascal(Sender->GetAsFixed());
     settings_computer.pressure_available.Update(CommonInterface::Basic().clock);
     device_blackboard->SetQNH(Sender->GetAsFixed());
     break;
