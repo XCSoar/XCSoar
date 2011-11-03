@@ -79,7 +79,6 @@ TestFlightResult test_flight(int test_num, int n_wind,
 const char* wind_name(int n_wind);
 
 bool test_flight_times(int test_num, int n_wind);
-bool test_speed_factor(int test_num, int n_wind);
 
 fixed
 aat_min_time(int test_num);

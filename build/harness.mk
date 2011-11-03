@@ -19,7 +19,6 @@ TEST_SRC = \
 	$(TEST_SRC_DIR)/harness_aircraft.cpp \
 	$(TEST_SRC_DIR)/harness_airspace.cpp \
 	$(TEST_SRC_DIR)/harness_flight.cpp \
-	$(TEST_SRC_DIR)/harness_flight2.cpp \
 	$(TEST_SRC_DIR)/harness_waypoints.cpp \
 	$(TEST_SRC_DIR)/harness_task.cpp \
 	$(TEST_SRC_DIR)/harness_task2.cpp \
