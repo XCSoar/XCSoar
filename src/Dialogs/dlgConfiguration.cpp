@@ -263,7 +263,7 @@ PrepareConfigurationDialog()
   cb->set_checked(expert_mode);
   wf->FilterAdvanced(expert_mode);
 
-  PrepareConfigurationMenu(); // this will change when we break out the XML into panels
+  PrepareConfigurationMenu();
 
   setVariables();
 
