@@ -32,20 +32,28 @@ struct SETTINGS_COMPUTER;
 class AtmosphericPressure;
 class Waypoints;
 
-namespace AutoQNH
-{
+class AutoQNH {
+  static const unsigned QNH_TIME = 10;
+
+  unsigned countdown_autoqnh;
+
+public:
   void Process(const NMEAInfo &basic, DerivedInfo &calculated,
                const SETTINGS_COMPUTER &settings_computer,
                const Waypoints &way_points);
 
   void Reset();
-  bool IsFinished();
+
+protected:
+  bool IsFinished() const {
+    return countdown_autoqnh > QNH_TIME;
+  }
 
   bool CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
                     const AtmosphericPressure &pressure,
                     const Waypoints &way_points);
   void CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
                     const AtmosphericPressure &pressure, fixed altitude);
-}
+};
 
 #endif

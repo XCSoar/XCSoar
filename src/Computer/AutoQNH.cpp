@@ -27,13 +27,6 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
-#define QNH_TIME 10
-
-namespace AutoQNH
-{
-  unsigned countdown_autoqnh = QNH_TIME;
-}
-
 void
 AutoQNH::Process(const NMEAInfo &basic, DerivedInfo &calculated,
         const SETTINGS_COMPUTER &settings_computer, const Waypoints &way_points)
@@ -66,12 +59,6 @@ void
 AutoQNH::Reset()
 {
   countdown_autoqnh = QNH_TIME;
-}
-
-bool
-AutoQNH::IsFinished()
-{
-  return countdown_autoqnh > QNH_TIME;
 }
 
 bool

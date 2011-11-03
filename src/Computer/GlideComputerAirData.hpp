@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_GLIDECOMPUTER_AIRDATA_HPP
 
 #include "GlideComputerBlackboard.hpp"
+#include "AutoQNH.hpp"
 #include "GlideRatio.hpp"
 #include "FlyingComputer.hpp"
 #include "CirclingComputer.hpp"
@@ -45,6 +46,8 @@ class ProtectedAirspaceWarningManager;
 class GlideComputerAirData: virtual public GlideComputerBlackboard {
   const Waypoints &way_points;
   const RasterTerrain *terrain;
+
+  AutoQNH auto_qnh;
 
   GlideRatioCalculator rotaryLD;
 

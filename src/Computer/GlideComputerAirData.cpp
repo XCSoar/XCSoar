@@ -32,7 +32,6 @@ Copyright_License {
 #include "ThermalBase.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "NMEA/Aircraft.hpp"
-#include "AutoQNH.hpp"
 #include "Math/SunEphemeris.hpp"
 
 #include <algorithm>
@@ -53,6 +52,8 @@ GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points)
 void
 GlideComputerAirData::ResetFlight(const bool full)
 {
+  auto_qnh.Reset();
+
   vario_30s_filter.reset();
   netto_30s_filter.reset();
 
@@ -81,7 +82,7 @@ GlideComputerAirData::ProcessVertical()
   const NMEAInfo &basic = Basic();
   DerivedInfo &calculated = SetCalculated();
 
-  AutoQNH::Process(basic, calculated, SettingsComputer(), way_points);
+  auto_qnh.Process(basic, calculated, SettingsComputer(), way_points);
 
   Heading();
   TurnRate();
