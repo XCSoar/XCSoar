@@ -29,6 +29,7 @@ Copyright_License {
 #include "Engine/Task/Tasks/BaseTask/ObservationZonePoint.hpp"
 #include "Engine/Task/Tasks/BaseTask/TaskPoint.hpp"
 #include "Markers.hpp"
+#include "FLARM/Traffic.hpp"
 
 class AbstractAirspace;
 struct Waypoint;
@@ -41,6 +42,7 @@ struct MapItem
     AIRSPACE,
     MARKER,
     WAYPOINT,
+    TRAFFIC,
   } type;
 
 protected:
@@ -97,5 +99,14 @@ struct MarkerMapItem: public MapItem
   MarkerMapItem(unsigned _id, const Markers::Marker &_marker)
     :MapItem(MARKER), id(_id), marker(_marker) {}
 };
+
+struct TrafficMapItem: public MapItem
+{
+  const FlarmTraffic &traffic;
+
+  TrafficMapItem(const FlarmTraffic &_traffic)
+    :MapItem(TRAFFIC), traffic(_traffic) {}
+};
+
 
 #endif

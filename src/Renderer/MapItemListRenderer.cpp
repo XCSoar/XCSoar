@@ -42,6 +42,8 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "SettingsMap.hpp"
 #include "LocalTime.hpp"
+#include "Math/Screen.hpp"
+#include "Look/TrafficLook.hpp"
 
 #include <cstdio>
 
@@ -64,6 +66,9 @@ namespace MapItemListRenderer
   void Draw(Canvas &canvas, const PixelRect rc, const TaskOZMapItem &item,
             const TaskLook &look, const AirspaceLook &airspace_look,
             const AirspaceRendererSettings &airspace_settings);
+
+  void Draw(Canvas &canvas, const PixelRect rc, const TrafficMapItem &item,
+            const TrafficLook &traffic_look, const SETTINGS_MAP &settings);
 }
 
 void
@@ -227,6 +232,73 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 }
 
 void
+MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                          const TrafficMapItem &item,
+                          const TrafficLook &traffic_look,
+                          const SETTINGS_MAP &settings)
+{
+  const PixelScalar line_height = rc.bottom - rc.top;
+  const FlarmTraffic traffic = item.traffic;
+
+  RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
+                     (PixelScalar)(rc.top + line_height / 2) };
+  //AircraftRenderer::Draw(canvas, settings, look, item.traffic.track, pt);
+
+  // Create point array that will form that arrow polygon
+  RasterPoint Arrow[5];
+
+  // Fill the Arrow array with a normal arrow pointing north
+  Arrow[0].x = -4;
+  Arrow[0].y = 6;
+  Arrow[1].x = 0;
+  Arrow[1].y = -8;
+  Arrow[2].x = 4;
+  Arrow[2].y = 6;
+  Arrow[3].x = 0;
+  Arrow[3].y = 3;
+  Arrow[4].x = -4;
+  Arrow[4].y = 6;
+
+  // Select brush depending on AlarmLevel
+  switch (traffic.alarm_level) {
+  case FlarmTraffic::ALARM_LOW:
+    canvas.select(traffic_look.warning_brush);
+    break;
+  case FlarmTraffic::ALARM_IMPORTANT:
+  case FlarmTraffic::ALARM_URGENT:
+    canvas.select(traffic_look.alarm_brush);
+    break;
+  case FlarmTraffic::ALARM_NONE:
+    canvas.select(traffic_look.safe_brush);
+    break;
+  }
+
+  // Select black pen
+  canvas.black_pen();
+
+  // Rotate and shift the arrow to the right position and angle
+  PolygonRotateShift(Arrow, 5, pt.x, pt.y,
+                     traffic.track);
+
+  // Draw the arrow
+  canvas.polygon(Arrow, 5);
+
+  const Font &name_font = Fonts::MapBold;
+  const Font &small_font = Fonts::MapLabel;
+  canvas.set_text_color(COLOR_BLACK);
+
+  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+  canvas.select(name_font);
+  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
+                      _("FLARM Traffic"));
+
+  canvas.select(small_font);
+  canvas.text_clipped(left,
+                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                      rc, FlarmTraffic::GetTypeString(item.traffic.type));
+}
+
+void
 MapItemListRenderer::Draw(
     Canvas &canvas, const PixelRect rc, const MapItem &item,
     const AircraftLook &aircraft_look,
@@ -234,6 +306,7 @@ MapItemListRenderer::Draw(
     const WaypointLook &waypoint_look,
     const TaskLook &task_look,
     const MarkerLook &marker_look,
+    const TrafficLook &traffic_look,
     const SETTINGS_MAP &settings)
 {
   switch (item.type) {
@@ -254,6 +327,9 @@ MapItemListRenderer::Draw(
     break;
   case MapItem::MARKER:
     Draw(canvas, rc, (const MarkerMapItem &)item, marker_look);
+    break;
+  case MapItem::TRAFFIC:
+    Draw(canvas, rc, (const TrafficMapItem &)item, traffic_look, settings);
     break;
   }
 }

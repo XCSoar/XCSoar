@@ -37,6 +37,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "FLARM/State.hpp"
 #include "ProtectedMarkers.hpp"
 #include "Markers.hpp"
 #include "MapItem.hpp"
@@ -218,3 +219,13 @@ MapItemListBuilder::AddMarkers(const ProtectedMarkers &marks, fixed range)
     i++;
   }
 }
+
+void
+MapItemListBuilder::AddTraffic(const FlarmState &flarm, fixed range)
+{
+  for (auto it=flarm.traffic.begin(), end = flarm.traffic.end(); it != end; ++it) {
+    if (location.Distance(it->location) < range)
+      list.checked_append(new TrafficMapItem(*it));
+  }
+}
+

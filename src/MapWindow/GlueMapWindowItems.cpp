@@ -57,6 +57,9 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
   if (way_points)
     builder.AddWaypoints(*way_points, range);
 
+  if (Basic().flarm.GetActiveTrafficCount())
+    builder.AddTraffic(Basic().flarm,range);
+
   // Sort the list of map items
   list.Sort();
 
@@ -78,7 +81,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
                         elevation, aircraft_look,
                         airspace_renderer.GetLook(),
                         way_point_renderer.GetLook(),
-                        task_look, marker_look, SettingsMap());
+                        task_look, marker_look, traffic_look, SettingsMap());
 
   // Save function result for later
   return !list.empty();

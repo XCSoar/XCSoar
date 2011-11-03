@@ -37,6 +37,7 @@ struct MoreData;
 struct DerivedInfo;
 class ProtectedTaskManager;
 class ProtectedMarkers;
+struct FlarmState;
 
 class MapItemListBuilder
 {
@@ -56,6 +57,7 @@ public:
                           const MoreData &basic, const DerivedInfo &calculated);
   void AddTaskOZs(const ProtectedTaskManager &task);
   void AddMarkers(const ProtectedMarkers &marks, fixed range);
+  void AddTraffic(const FlarmState &flarm, fixed range);
 };
 
 #endif
