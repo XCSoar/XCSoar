@@ -21,24 +21,55 @@
 */
 
 #include "Math/FastMath.h"
+#include "TaskEventsPrint.hpp"
 #include "harness_flight.hpp"
 #include "harness_airspace.hpp"
 
-int main(int argc, char** argv) {
-  
+static bool
+test_olc(int n_wind, Contests olc_type)
+{
+  GlidePolar glide_polar(fixed_two);
+  Waypoints waypoints;
+  setup_waypoints(waypoints);
+
+  if (verbose)
+    distance_counts();
+
+  TaskEventsPrint default_events(verbose);
+
+  TaskManager task_manager(default_events, waypoints);
+
+  TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
+  task_behaviour.DisableAll();
+  task_behaviour.enable_olc = true;
+  if (!verbose)
+    task_behaviour.enable_trace = false;
+  task_manager.SetTaskBehaviour(task_behaviour);
+
+  task_manager.SetGlidePolar(glide_polar);
+  test_task(task_manager, waypoints, 1);
+
+  waypoints.clear(); // clear waypoints so abort wont do anything
+
+  autopilot_parms.goto_target = true;
+  return run_flight(task_manager, autopilot_parms, n_wind);
+}
+
+int
+main(int argc, char** argv)
+{
   // default arguments
   autopilot_parms.realistic();
   autopilot_parms.start_alt = fixed(400);
 
-  if (!parse_args(argc,argv)) {
+  if (!parse_args(argc, argv))
     return 0;
-  }
 
   plan_tests(3);
 
-  ok(test_olc(0,OLC_Sprint),"olc sprint",0);
-  ok(test_olc(0,OLC_Classic),"olc classic",0);
-  ok(test_olc(0,OLC_FAI),"olc fai",0);
+  ok(test_olc(0, OLC_Sprint), "olc sprint", 0);
+  ok(test_olc(0, OLC_Classic), "olc classic", 0);
+  ok(test_olc(0, OLC_FAI), "olc fai", 0);
 
   return exit_status();
 }

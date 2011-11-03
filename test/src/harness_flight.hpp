@@ -80,7 +80,6 @@ const char* wind_name(int n_wind);
 
 bool test_flight_times(int test_num, int n_wind);
 bool test_speed_factor(int test_num, int n_wind);
-bool test_olc(int n_wind, Contests id);
 
 fixed
 aat_min_time(int test_num);

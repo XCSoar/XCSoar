@@ -23,8 +23,6 @@
 #include "harness_flight.hpp"
 #include "harness_airspace.hpp"
 #include "harness_waypoints.hpp"
-#include "TaskEventsPrint.hpp"
-#include <fstream>
 
 bool test_speed_factor(int test_num, int n_wind) 
 {
@@ -51,35 +49,4 @@ bool test_speed_factor(int test_num, int n_wind)
     printf("# sf 1.2 time_elapsed_rat %g\n",te2/te0);
   }
   return retval;
-}
-
-bool test_olc(int n_wind, Contests olc_type)
-{
-  GlidePolar glide_polar(fixed_two);
-  Waypoints waypoints;
-  setup_waypoints(waypoints);
-
-  if (verbose) {
-    distance_counts();
-  }
-
-  TaskEventsPrint default_events(verbose);
-
-  TaskManager task_manager(default_events,
-                           waypoints);
-
-  TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
-  task_behaviour.DisableAll();
-  task_behaviour.enable_olc = true;
-  if (!verbose)
-    task_behaviour.enable_trace = false;
-  task_manager.SetTaskBehaviour(task_behaviour);
-
-  task_manager.SetGlidePolar(glide_polar);
-  test_task(task_manager, waypoints, 1);
-
-  waypoints.clear(); // clear waypoints so abort wont do anything
-
-  autopilot_parms.goto_target = true;
-  return run_flight(task_manager, autopilot_parms, n_wind);
 }
