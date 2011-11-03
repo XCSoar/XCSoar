@@ -42,6 +42,6 @@ void scan_airspaces(const AircraftState state,
 bool test_airspace_extra(Airspaces &airspaces);
 
 
-void print_warnings();
+void print_warnings(const AirspaceWarningManager &airspace_warnings);
 
 #endif

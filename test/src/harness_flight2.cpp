@@ -26,8 +26,6 @@
 #include "TaskEventsPrint.hpp"
 #include <fstream>
 
-extern Airspaces *airspaces;
-
 extern double time_elapsed;
 extern double calc_cruise_efficiency;
 extern double calc_effective_mc;
@@ -316,17 +314,6 @@ bool test_null()
   autopilot_parms.goto_target = true;
   return run_flight(task_manager, autopilot_parms, 0);
 }
-
-
-bool test_airspace(const unsigned n_airspaces)
-{
-  airspaces = new Airspaces;
-  setup_airspaces(*airspaces, GeoPoint(Angle::Degrees(fixed_half), Angle::Degrees(fixed_half)), n_airspaces);
-  bool fine = test_flight(4,0);
-  delete airspaces; airspaces = NULL;
-  return fine;
-}
-
 
 
 bool test_effective_mc(int test_num, int n_wind) 

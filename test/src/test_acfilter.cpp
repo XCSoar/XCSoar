@@ -24,7 +24,6 @@
 #include "harness_flight.hpp"
 
 #include "Util/AircraftStateFilter.hpp"
-extern AircraftStateFilter *aircraft_filter;
 
 int main(int argc, char** argv) {
   // default arguments
@@ -35,13 +34,14 @@ int main(int argc, char** argv) {
   }
 
   AircraftState dummy;
-  aircraft_filter = new AircraftStateFilter(fixed(120));
-  aircraft_filter->Reset(dummy);
+  TestFlightComponents components;
+  components.aircraft_filter = new AircraftStateFilter(fixed(120));
+  components.aircraft_filter->Reset(dummy);
 
   plan_tests(1);
-  ok(test_flight(1,0,1.0,true),"basic flight test",0);
+  ok(test_flight(components, 1,0,1.0,true),"basic flight test",0);
 
-  delete aircraft_filter;
+  delete components.aircraft_filter;
 
   return exit_status();
 }

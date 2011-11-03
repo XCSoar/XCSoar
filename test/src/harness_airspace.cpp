@@ -363,22 +363,19 @@ private:
   AirspaceWarning::State m_state;
 };
 
-void print_warnings() {
-  if (airspace_warnings) {
-    {
-      AirspaceWarningPrint visitor_inside("results/res-as-warnings-inside.txt", 
-                                          AirspaceWarning::WARNING_INSIDE);
-      AirspaceWarningPrint visitor_glide("results/res-as-warnings-glide.txt", 
-                                          AirspaceWarning::WARNING_GLIDE);
-      AirspaceWarningPrint visitor_filter("results/res-as-warnings-filter.txt", 
-                                          AirspaceWarning::WARNING_FILTER);
-      AirspaceWarningPrint visitor_task("results/res-as-warnings-task.txt", 
-                                          AirspaceWarning::WARNING_TASK);
-      airspace_warnings->visit_warnings(visitor_inside);
-      airspace_warnings->visit_warnings(visitor_glide);
-      airspace_warnings->visit_warnings(visitor_filter);
-      airspace_warnings->visit_warnings(visitor_task);
-    }
-  }
+void
+print_warnings(const AirspaceWarningManager &airspace_warnings)
+{
+  AirspaceWarningPrint visitor_inside("results/res-as-warnings-inside.txt",
+                                      AirspaceWarning::WARNING_INSIDE);
+  AirspaceWarningPrint visitor_glide("results/res-as-warnings-glide.txt",
+                                     AirspaceWarning::WARNING_GLIDE);
+  AirspaceWarningPrint visitor_filter("results/res-as-warnings-filter.txt",
+                                      AirspaceWarning::WARNING_FILTER);
+  AirspaceWarningPrint visitor_task("results/res-as-warnings-task.txt",
+                                    AirspaceWarning::WARNING_TASK);
+  airspace_warnings.visit_warnings(visitor_inside);
+  airspace_warnings.visit_warnings(visitor_glide);
+  airspace_warnings.visit_warnings(visitor_filter);
+  airspace_warnings.visit_warnings(visitor_task);
 }
-
