@@ -39,7 +39,7 @@ Copyright_License {
 AtmosphericPressure
 AtmosphericPressure::QNHAltitudeToStaticPressure(const fixed alt) const
 {
-  return HectoPascal(pow((pow(qnh, k1) - k2 * alt), inv_k1));
+  return HectoPascal(pow((pow(GetHectoPascal(), k1) - k2 * alt), inv_k1));
 }
 
 AtmosphericPressure
@@ -52,7 +52,7 @@ AtmosphericPressure::PressureAltitudeToStaticPressure(const fixed alt)
 fixed
 AtmosphericPressure::StaticPressureToQNHAltitude(const AtmosphericPressure ps) const
 {
-  return (pow(qnh, k1) - pow(ps.GetHectoPascal(), k1)) * inv_k2;
+  return (pow(GetHectoPascal(), k1) - pow(ps.GetHectoPascal(), k1)) * inv_k2;
 }
 
 fixed
