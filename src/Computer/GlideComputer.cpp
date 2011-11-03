@@ -99,12 +99,18 @@ GlideComputer::ProcessGPS()
   ProcessBasic();
 
   // Process basic task information
-  ProcessBasicTask();
-  ProcessMoreTask();
+  ProcessBasicTask(basic, LastBasic(),
+                   calculated, LastCalculated(),
+                   SettingsComputer());
+  ProcessMoreTask(basic, calculated, LastCalculated(),
+                  SettingsComputer());
 
   // Check if everything is okay with the gps time and process it
   if (!FlightTimes())
     return false;
+
+  if (!time_retreated())
+    GlideComputerTask::ProcessAutoTask(basic, calculated, LastCalculated());
 
   // Process extended information
   ProcessVertical();
@@ -144,7 +150,8 @@ GlideComputer::ProcessIdle(bool exhaustive)
   // (snail trail, stats, olc, ...)
   DoLogging(Basic(), LastBasic(), Calculated(), SettingsComputer());
 
-  GlideComputerTask::ProcessIdle(exhaustive);
+  GlideComputerTask::ProcessIdle(Basic(), SetCalculated(), SettingsComputer(),
+                                 exhaustive);
 
   if (time_advanced())
     warning_computer.Update(SettingsComputer(), Basic(), LastBasic(),
@@ -286,7 +293,6 @@ void
 GlideComputer::OnTakeoff()
 {
   GlideComputerAirData::OnTakeoff();
-  GlideComputerTask::OnTakeoff();
   InputEvents::processGlideComputer(GCE_TAKEOFF);
 }
 

@@ -24,17 +24,14 @@ Copyright_License {
 #if !defined(XCSOAR_GLIDECOMPUTER_TASK_HPP)
 #define XCSOAR_GLIDECOMPUTER_TASK_HPP
 
-#include "GlideComputerBlackboard.hpp"
-#include "TraceComputer.hpp"
 #include "GlideComputerRoute.hpp"
 #include "TraceComputer.hpp"
 #include "ContestComputer.hpp"
 
+struct NMEAInfo;
 class ProtectedTaskManager;
 
-class GlideComputerTask: 
-  virtual public GlideComputerBlackboard 
-{
+class GlideComputerTask {
   ProtectedTaskManager &m_task;
 
   GlideComputerRoute route;
@@ -71,16 +68,28 @@ public:
 protected:
 
   void Initialise();
-  void ProcessBasicTask();
-  void ProcessMoreTask();
+  void ProcessBasicTask(const MoreData &basic, const MoreData &last_basic,
+                        DerivedInfo &calculated,
+                        const DerivedInfo &last_calculated,
+                        const SETTINGS_COMPUTER &settings_computer);
+  void ProcessMoreTask(const MoreData &basic, DerivedInfo &calculated,
+                       const DerivedInfo &last_calculated,
+                       const SETTINGS_COMPUTER &settings_computer);
   void ResetFlight(const bool full=true);
 
   void set_terrain(const RasterTerrain* _terrain);
 
-  virtual void OnTakeoff();
+public:
+  /**
+   * Auto-create a task on takeoff that leads back home.
+   */
+  void ProcessAutoTask(const NMEAInfo &basic, const DerivedInfo &calculated,
+                       const DerivedInfo &last_calculated);
 
 protected:
-  void ProcessIdle(bool exhaustive=false);
+  void ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
+                   const SETTINGS_COMPUTER &settings_computer,
+                   bool exhaustive=false);
 };
 
 #endif
