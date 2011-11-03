@@ -60,6 +60,7 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
   if (settings.trail_length == TRAIL_OFF)
     return;
 
+  trace.clear();
   glide_computer.LockedCopyTraceTo(trace, min_time,
                                    projection.GetGeoScreenCenter(),
                                    projection.DistancePixelsToMeters(3));
@@ -164,6 +165,7 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
                     const WindowProjection &projection,
                     unsigned min_time) const
 {
+  trace.clear();
   glide_computer.LockedCopyTraceTo(trace, min_time,
                                    projection.GetGeoScreenCenter(),
                                    projection.DistancePixelsToMeters(4));
