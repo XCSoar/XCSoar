@@ -35,7 +35,7 @@ AutoQNH::Process(const NMEAInfo &basic, DerivedInfo &calculated,
       || IsFinished()    // only do it once
       || !basic.gps.real // never in replay mode / simulator
       || !basic.location_available // Reject if no valid GPS fix
-      || !basic.pressure_altitude_available // Reject if no pressure altitude
+      || !basic.static_pressure_available // Reject if no pressure
       || settings_computer.pressure_available // Reject if QNH already known
     ) {
     if (!IsFinished())
@@ -82,6 +82,6 @@ void
 AutoQNH::CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
                       fixed altitude)
 {
-  calculated.pressure = AtmosphericPressure::FindQNHFromPressureAltitude(basic.pressure_altitude, altitude);
+  calculated.pressure = AtmosphericPressure::FindQNHFromPressure(basic.static_pressure, altitude);
   calculated.pressure_available.Update(basic.clock);
 }

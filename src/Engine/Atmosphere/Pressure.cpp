@@ -76,18 +76,6 @@ AtmosphericPressure::FindQNHFromPressure(const AtmosphericPressure pressure,
   return pressure.QNHAltitudeToStaticPressure(-alt_known);
 }
 
-AtmosphericPressure
-AtmosphericPressure::FindQNHFromPressureAltitude(const fixed alt_raw,
-                                                 const fixed alt_known)
-{
-  // step 1, find static pressure from device assuming it's QNH adjusted
-  const AtmosphericPressure pressure =
-    Standard().QNHAltitudeToStaticPressure(alt_raw);
-
-  // step 2, calculate QNH so that reported alt will be known alt
-  return FindQNHFromPressure(pressure, alt_known);
-}
-
 fixed
 AtmosphericPressure::AirDensity(const fixed altitude)
 {
