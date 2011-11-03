@@ -81,7 +81,7 @@ struct is_trivial_clang : public is_trivial<T> {};
 #ifdef NDEBUG
 template<typename T>
 struct is_trivial_ndebug
-  : public std::integral_constant<bool, std::is_trivial<T>::value>
+  : public std::integral_constant<bool, is_trivial<T>::value>
 {
 };
 #else
