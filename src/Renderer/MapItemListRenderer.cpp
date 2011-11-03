@@ -242,7 +242,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
                      (PixelScalar)(rc.top + line_height / 2) };
-  //AircraftRenderer::Draw(canvas, settings, look, item.traffic.track, pt);
 
   // Create point array that will form that arrow polygon
   RasterPoint Arrow[5];

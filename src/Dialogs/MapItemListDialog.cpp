@@ -211,7 +211,7 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
     dlgTargetShowModal(((const TaskOZMapItem &)item).index);
     break;
   case MapItem::TRAFFIC:
-    dlgFlarmTrafficDetailsShowModal( ((const TrafficMapItem &)item).traffic.id );
+    dlgFlarmTrafficDetailsShowModal(((const TrafficMapItem &)item).traffic.id);
     break;
   }
 }
