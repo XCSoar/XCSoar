@@ -19,6 +19,7 @@ Version 6.2.2 - not yet released
   - fix instant L/D formula
   - fix malformed F records in IGC files
   - minor fix for FLARM stealth calculations
+  - fix auto QNH formula
 * user interface
   - fixed several minor bugs in the plane database dialog
   - fix MacCready steps for knots and ft/min

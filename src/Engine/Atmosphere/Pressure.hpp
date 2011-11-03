@@ -86,9 +86,9 @@ public:
    * @param alt_raw Current pressure altitude (m)
    * @param alt_known Altitude of a known location (m)
    */
-  gcc_pure
-  fixed FindQNHFromPressureAltitude(const fixed alt_raw,
-                                    const fixed alt_known) const;
+  gcc_const
+  static fixed FindQNHFromPressureAltitude(const fixed alt_raw,
+                                           const fixed alt_known);
 
   /**
    * Converts altitude with QNH=1013.25 reference to QNH adjusted altitude

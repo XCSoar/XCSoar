@@ -29,7 +29,6 @@ Copyright_License {
 struct NMEAInfo;
 struct DerivedInfo;
 struct SETTINGS_COMPUTER;
-class AtmosphericPressure;
 class Waypoints;
 
 class AutoQNH {
@@ -50,10 +49,9 @@ protected:
   }
 
   bool CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
-                    const AtmosphericPressure &pressure,
                     const Waypoints &way_points);
   void CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
-                    const AtmosphericPressure &pressure, fixed altitude);
+                    fixed altitude);
 };
 
 #endif
