@@ -23,16 +23,12 @@ Copyright_License {
 
 #include "Pressure.hpp"
 
-#define fixed_101325 fixed(1013.25)
 #define isa_sea_level_density fixed(1.225)
-#define hpa_to_pa fixed_int_constant(100)
-#define pa_to_hpa fixed(0.01)
 #define k1 fixed(0.190263)
 #define inv_k1 fixed(1.0 / 0.190263)
 #define k2 fixed(8.417286e-5)
 #define inv_k2 fixed(1.0 / 8.417286e-5)
 #define k4 fixed(44330.8)
-#define k5 fixed(1.0 / 4946.54)
 #define k6 fixed(1.0 / 42266.5)
 #define k7 fixed(1.0 / 0.234969)
 
@@ -45,7 +41,7 @@ AtmosphericPressure::QNHAltitudeToStaticPressure(const fixed alt) const
 AtmosphericPressure
 AtmosphericPressure::PressureAltitudeToStaticPressure(const fixed alt)
 {
-  return HectoPascal(pow((pow(fixed_101325, k1) - k2 * alt), inv_k1));
+  return Standard().QNHAltitudeToStaticPressure(alt);
 }
 
 
@@ -58,27 +54,26 @@ AtmosphericPressure::StaticPressureToQNHAltitude(const AtmosphericPressure ps) c
 fixed
 AtmosphericPressure::PressureAltitudeToQNHAltitude(const fixed alt) const
 {
-  return StaticPressureToQNHAltitude(Pascal(pow((k4 - alt) * k5, inv_k1)));
+  return StaticPressureToQNHAltitude(PressureAltitudeToStaticPressure(alt));
 }
 
 fixed
 AtmosphericPressure::QNHAltitudeToPressureAltitude(const fixed alt) const
 {
-  return (pow(fixed_101325, k1) - pow(QNHAltitudeToStaticPressure(alt).GetHectoPascal(), k1)) * inv_k2;
+  return StaticPressureToPressureAltitude(QNHAltitudeToStaticPressure(alt));
 }
 
 fixed
 AtmosphericPressure::StaticPressureToPressureAltitude(const AtmosphericPressure ps)
 {
-  return (pow(fixed_101325, k1) - pow(ps.GetHectoPascal(), k1)) * inv_k2;
+  return Standard().StaticPressureToQNHAltitude(ps);
 }
 
 AtmosphericPressure
 AtmosphericPressure::FindQNHFromPressure(const AtmosphericPressure pressure,
                                          const fixed alt_known)
 {
-  return HectoPascal(pow(pow(pressure.GetHectoPascal(), k1) + k2 * alt_known,
-                         inv_k1));
+  return pressure.QNHAltitudeToStaticPressure(-alt_known);
 }
 
 AtmosphericPressure
