@@ -28,7 +28,7 @@ static bool
 test_find_qnh()
 {
   AtmosphericPressure pres =
-    AtmosphericPressure::HectoPascal(AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(100)));
+    AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(100));
   return fabs(pres.GetHectoPascal() - fixed(1013.25)) < fixed(0.01);
 }
 
@@ -36,7 +36,7 @@ static bool
 test_find_qnh2()
 {
   AtmosphericPressure pres =
-    AtmosphericPressure::HectoPascal(AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(120)));
+    AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(120));
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(pres.GetHectoPascal()));
   }
@@ -51,7 +51,7 @@ static bool
 test_qnh_to_static()
 {
   AtmosphericPressure pres = AtmosphericPressure::Standard();
-  fixed p0 = pres.QNHAltitudeToStaticPressure(fixed_zero);
+  fixed p0 = pres.QNHAltitudeToStaticPressure(fixed_zero).GetPascal();
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(p0));
   }
@@ -62,7 +62,7 @@ static bool
 test_qnh_round()
 {
   AtmosphericPressure pres =
-    AtmosphericPressure::HectoPascal(AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(120)));
+    AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(120));
   fixed h0 = pres.PressureAltitudeToQNHAltitude(fixed(100));
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(h0));
@@ -74,11 +74,10 @@ static bool
 test_qnh_round2()
 {
   AtmosphericPressure pres =
-    AtmosphericPressure::HectoPascal(AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(120)));
-  fixed p0 = pres.GetPascal();
-  fixed h0 = pres.StaticPressureToQNHAltitude(p0);
+    AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(120));
+  fixed h0 = pres.StaticPressureToQNHAltitude(pres);
   if (verbose) {
-    printf("%g %g\n",FIXED_DOUBLE(p0),FIXED_DOUBLE(h0));
+    printf("%g %g\n", FIXED_DOUBLE(pres.GetPascal()), FIXED_DOUBLE(h0));
   }
   return fabs(h0)<fixed(1);
 }
@@ -87,7 +86,7 @@ static bool
 test_isa_pressure(const fixed alt, const fixed prat)
 {
   const AtmosphericPressure pres = AtmosphericPressure::Standard();
-  fixed p0 = pres.QNHAltitudeToStaticPressure(alt);
+  fixed p0 = pres.QNHAltitudeToStaticPressure(alt).GetPascal();
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(p0));
   }

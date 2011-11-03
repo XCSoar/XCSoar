@@ -36,59 +36,61 @@ Copyright_License {
 #define k6 fixed(1.0 / 42266.5)
 #define k7 fixed(1.0 / 0.234969)
 
-fixed
+AtmosphericPressure
 AtmosphericPressure::QNHAltitudeToStaticPressure(const fixed alt) const
 {
-  return hpa_to_pa * pow((pow(qnh, k1) - k2 * alt), inv_k1);
+  return HectoPascal(pow((pow(qnh, k1) - k2 * alt), inv_k1));
 }
 
-fixed
+AtmosphericPressure
 AtmosphericPressure::PressureAltitudeToStaticPressure(const fixed alt)
 {
-  return hpa_to_pa * pow((pow(fixed_101325, k1) - k2 * alt), inv_k1);
+  return HectoPascal(pow((pow(fixed_101325, k1) - k2 * alt), inv_k1));
 }
 
 
 fixed
-AtmosphericPressure::StaticPressureToQNHAltitude(const fixed ps) const
+AtmosphericPressure::StaticPressureToQNHAltitude(const AtmosphericPressure ps) const
 {
-  return (pow(qnh, k1) - pow(ps * pa_to_hpa, k1)) * inv_k2;
+  return (pow(qnh, k1) - pow(ps.GetHectoPascal(), k1)) * inv_k2;
 }
 
 fixed
 AtmosphericPressure::PressureAltitudeToQNHAltitude(const fixed alt) const
 {
-  return StaticPressureToQNHAltitude(fixed(pow((k4 - alt) * k5, inv_k1)));
+  return StaticPressureToQNHAltitude(Pascal(pow((k4 - alt) * k5, inv_k1)));
 }
 
 fixed
 AtmosphericPressure::QNHAltitudeToPressureAltitude(const fixed alt) const
 {
-  return (pow(fixed_101325, k1) - pow(QNHAltitudeToStaticPressure(alt) * pa_to_hpa, k1)) * inv_k2;
+  return (pow(fixed_101325, k1) - pow(QNHAltitudeToStaticPressure(alt).GetHectoPascal(), k1)) * inv_k2;
 }
 
 fixed
-AtmosphericPressure::StaticPressureToPressureAltitude(const fixed ps)
+AtmosphericPressure::StaticPressureToPressureAltitude(const AtmosphericPressure ps)
 {
-  return (pow(fixed_101325, k1) - pow(ps * pa_to_hpa, k1)) * inv_k2;
+  return (pow(fixed_101325, k1) - pow(ps.GetHectoPascal(), k1)) * inv_k2;
 }
 
-fixed
-AtmosphericPressure::FindQNHFromPressure(const fixed pressure_hpa,
+AtmosphericPressure
+AtmosphericPressure::FindQNHFromPressure(const AtmosphericPressure pressure,
                                          const fixed alt_known)
 {
-  return pow(pow(pressure_hpa, k1) + k2 * alt_known, inv_k1);
+  return HectoPascal(pow(pow(pressure.GetHectoPascal(), k1) + k2 * alt_known,
+                         inv_k1));
 }
 
-fixed
+AtmosphericPressure
 AtmosphericPressure::FindQNHFromPressureAltitude(const fixed alt_raw,
                                                  const fixed alt_known)
 {
   // step 1, find static pressure from device assuming it's QNH adjusted
-  const fixed pressure_pa = Standard().QNHAltitudeToStaticPressure(alt_raw);
+  const AtmosphericPressure pressure =
+    Standard().QNHAltitudeToStaticPressure(alt_raw);
 
   // step 2, calculate QNH so that reported alt will be known alt
-  return FindQNHFromPressure(pressure_pa * pa_to_hpa, alt_known);
+  return FindQNHFromPressure(pressure, alt_known);
 }
 
 fixed

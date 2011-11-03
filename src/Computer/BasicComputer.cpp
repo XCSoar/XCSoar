@@ -60,11 +60,11 @@ ComputePressure(NMEAInfo &basic, const SETTINGS_COMPUTER &settings_computer)
   if (!basic.static_pressure_available) {
     if (basic.pressure_altitude_available) {
       basic.static_pressure =
-        AtmosphericPressure::PressureAltitudeToStaticPressure(basic.pressure_altitude);
+        AtmosphericPressure::PressureAltitudeToStaticPressure(basic.pressure_altitude).GetPascal();
       basic.static_pressure_available = basic.pressure_altitude_available;
     } else if (basic.baro_altitude_available && qnh_available) {
       basic.static_pressure =
-        qnh.QNHAltitudeToStaticPressure(basic.baro_altitude);
+        qnh.QNHAltitudeToStaticPressure(basic.baro_altitude).GetPascal();
       basic.static_pressure_available = basic.baro_altitude_available;
     }
   }
@@ -72,7 +72,7 @@ ComputePressure(NMEAInfo &basic, const SETTINGS_COMPUTER &settings_computer)
   if (!basic.pressure_altitude_available) {
     if (static_pressure_available) {
       basic.pressure_altitude =
-        AtmosphericPressure::StaticPressureToPressureAltitude(basic.static_pressure);
+        AtmosphericPressure::StaticPressureToPressureAltitude(AtmosphericPressure::Pascal(basic.static_pressure));
       basic.pressure_altitude_available = basic.static_pressure_available;
     } else if (basic.baro_altitude_available && qnh_available) {
       basic.pressure_altitude =
@@ -88,7 +88,7 @@ ComputePressure(NMEAInfo &basic, const SETTINGS_COMPUTER &settings_computer)
 
     if (static_pressure_available) {
       basic.baro_altitude =
-        qnh.StaticPressureToQNHAltitude(basic.static_pressure);
+        qnh.StaticPressureToQNHAltitude(AtmosphericPressure::Pascal(basic.static_pressure));
       basic.baro_altitude_available = basic.static_pressure_available;
     } else if (pressure_altitude_available) {
       basic.baro_altitude =
