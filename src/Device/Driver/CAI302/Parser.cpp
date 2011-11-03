@@ -112,7 +112,8 @@ cai_w(NMEAInputLine &line, NMEAInfo &info)
     info.ProvideBaroAltitudeTrue(value - fixed(1000));
 
   if (line.read_checked(value))
-    info.settings.ProvideQNH(value, info.clock);
+    info.settings.ProvideQNH(AtmosphericPressure::HectoPascal(value),
+                             info.clock);
 
   if (line.read_checked(value))
     info.ProvideTrueAirspeed(value / 100);

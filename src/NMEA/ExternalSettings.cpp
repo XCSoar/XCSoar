@@ -101,8 +101,7 @@ ExternalSettings::EliminateRedundant(const ExternalSettings &other,
       !last.CompareBugs(bugs))
     bugs_available.Clear();
 
-  if (qnh_available && other.CompareQNH(qnh.GetHectoPascal()) &&
-      !last.CompareQNH(qnh.GetHectoPascal()))
+  if (qnh_available && other.CompareQNH(qnh) && !last.CompareQNH(qnh))
     qnh_available.Clear();
 }
 
@@ -162,12 +161,12 @@ ExternalSettings::ProvideBugs(fixed value, fixed time)
 }
 
 bool
-ExternalSettings::ProvideQNH(fixed value, fixed time)
+ExternalSettings::ProvideQNH(AtmosphericPressure value, fixed time)
 {
   if (CompareQNH(value))
     return false;
 
-  qnh = AtmosphericPressure::HectoPascal(value);
+  qnh = value;
   qnh_available.Update(time);
   return true;
 }

@@ -140,8 +140,9 @@ struct ExternalSettings {
    * @return true if the current setting is the same, false if the
    * value is different or if there is no value
    */
-  bool CompareQNH(fixed value) const {
-    return qnh_available && fabs(qnh.GetHectoPascal() - value) <= fixed_half;
+  bool CompareQNH(AtmosphericPressure value) const {
+    return qnh_available &&
+      fabs(qnh.GetHectoPascal() - value.GetHectoPascal()) <= fixed_half;
   }
 
   /**
@@ -155,7 +156,7 @@ struct ExternalSettings {
   bool ProvideBallastOverload(fixed value, fixed time);
   bool ProvideWingLoading(fixed value, fixed time);
   bool ProvideBugs(fixed value, fixed time);
-  bool ProvideQNH(fixed value, fixed time);
+  bool ProvideQNH(AtmosphericPressure value, fixed time);
 };
 
 #endif
