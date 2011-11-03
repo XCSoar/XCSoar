@@ -33,6 +33,40 @@
 
 #define MC_CEILING_PENALTY_FACTOR 5.0
 
+gcc_const
+static Angle
+IndexToAngle(unsigned i)
+{
+  assert(i < ROUTEPOLAR_POINTS);
+
+  return Angle::radians(fixed_half_pi - i * fixed_two_pi / ROUTEPOLAR_POINTS);
+}
+
+gcc_const
+static unsigned
+AngleToIndex(Angle a)
+{
+  fixed i = ROUTEPOLAR_POINTS * (fixed(1.25)
+                                 - a.as_bearing().value_radians()
+                                 / fixed_two_pi);
+  assert(positive(i));
+  return uround(i) % ROUTEPOLAR_POINTS;
+}
+
+gcc_const
+static Angle
+XYToAngle(fixed x, fixed y)
+{
+  return Angle::radians(atan2(x, y));
+}
+
+gcc_const
+static unsigned
+XYToIndex(fixed x, fixed y)
+{
+  return AngleToIndex(XYToAngle(x, y));
+}
+
 RoutePolar::RoutePolar(const RoutePolar& from)
 {
   std::copy(from.points, from.points+ ROUTEPOLAR_POINTS, points);
@@ -54,7 +88,7 @@ void RoutePolar::initialise(const GlidePolar& polar,
                             const bool is_glide)
 {
   for (unsigned i=0; i< ROUTEPOLAR_POINTS; ++i) {
-    Angle ang(Angle::radians(fixed_half_pi-i*fixed_two_pi/ROUTEPOLAR_POINTS));
+    const Angle ang = IndexToAngle(i);
     GlideResult res = solve_task(polar, wind, ang, is_glide);
     RoutePolarPoint point(res.time_elapsed, res.height_glide);
     if (res.validity != GlideResult::RESULT_OK)
@@ -62,57 +96,6 @@ void RoutePolar::initialise(const GlidePolar& polar,
     points[i] = point;
   }
 }
-
-
-int
-RoutePolar::dxdy_to_index(const int dx, const int dy)
-{
-  const int adx = abs(dx);
-  const int ady = abs(dy);
-  const int v = i_normalise_sine(adx, ady);
-  int index;
-  if (ady<= adx) {
-    index = v;
-  } else {
-    index = ROUTEPOLAR_Q1 - v;
-  }
-  if (dx<0)
-    if (dy<0) {
-      return index + ROUTEPOLAR_Q2;
-    } else {
-      return ROUTEPOLAR_Q2-index;
-    }
-  else if (dy<0)
-    return ROUTEPOLAR_Q3-index;
-
-  return index;
-}
-
-
-int
-RoutePolar::dxdy_to_index_norm(const int dx, const int dy)
-{
-  const int adx = abs(dx);
-  const int ady = abs(dy);
-  const int v = std::min(adx, ady);
-  int index;
-  if (ady<= adx) {
-    index = v;
-  } else {
-    index = ROUTEPOLAR_Q1 - v;
-  }
-  if (dx<0)
-    if (dy<0) {
-      return index + ROUTEPOLAR_Q2;
-    } else {
-      return ROUTEPOLAR_Q2-index;
-    }
-  else if (dy<0)
-    return ROUTEPOLAR_Q3-index;
-
-  return index;
-}
-
 
 void
 RoutePolar::index_to_dxdy(const int index, int& dx, int& dy)
@@ -186,8 +169,7 @@ RouteLink::calc_speedups(const TaskProjection& proj)
     return;
   }
   mag_rmag(dx, dy, d, inv_d);
-  const fixed fact = inv_d*(1<< (NORMALISE_BITS-3));
-  polar_index = RoutePolar::dxdy_to_index_norm(dx*fact, dy*fact);
+  polar_index = XYToIndex(dx, dy);
   d*= scale;
   inv_d/= scale;
 }
