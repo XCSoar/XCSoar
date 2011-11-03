@@ -68,7 +68,7 @@ namespace MapItemListRenderer
             const AirspaceRendererSettings &airspace_settings);
 
   void Draw(Canvas &canvas, const PixelRect rc, const TrafficMapItem &item,
-            const TrafficLook &traffic_look, const SETTINGS_MAP &settings);
+            const TrafficLook &traffic_look);
 }
 
 void
@@ -234,8 +234,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const TrafficMapItem &item,
-                          const TrafficLook &traffic_look,
-                          const SETTINGS_MAP &settings)
+                          const TrafficLook &traffic_look)
 {
   const PixelScalar line_height = rc.bottom - rc.top;
   const FlarmTraffic traffic = item.traffic;
@@ -328,7 +327,7 @@ MapItemListRenderer::Draw(
     Draw(canvas, rc, (const MarkerMapItem &)item, marker_look);
     break;
   case MapItem::TRAFFIC:
-    Draw(canvas, rc, (const TrafficMapItem &)item, traffic_look, settings);
+    Draw(canvas, rc, (const TrafficMapItem &)item, traffic_look);
     break;
   }
 }
