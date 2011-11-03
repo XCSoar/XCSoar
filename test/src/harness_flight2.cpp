@@ -147,29 +147,6 @@ bool test_cruise_efficiency(int test_num, int n_wind)
   return retval;
 }
 
-
-
-
-bool test_aat(int test_num, int n_wind) 
-{
-
-  // test whether flying to targets in an AAT task produces
-  // elapsed (finish) times equal to desired time with 1.5% tolerance
-
-  TestFlightResult result = test_flight(test_num, n_wind);
-  bool fine = result.result;
-  double min_time = (double)aat_min_time(test_num)+300.0;
-  // 300 second offset is default 5 minute margin provided in TaskBehaviour
-
-  const double t_ratio = fabs(result.time_elapsed/min_time-1.0);
-  fine &= (t_ratio<0.015);
-  if (!fine || verbose) {
-    printf("# time ratio error (elapsed/target) %g\n", t_ratio);
-  }
-  return fine;
-}
-
-
 bool test_automc(int test_num, int n_wind) 
 {
   // test whether flying by automc (starting above final glide)
