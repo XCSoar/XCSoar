@@ -81,6 +81,17 @@ public:
   }
 
   /**
+   * Calculates the current QNH by comparing a pressure value to a
+   * known altitude of a certain location
+   *
+   * @param pressure_hpa Current pressure (hPa)
+   * @param alt_known Altitude of a known location (m)
+   */
+  gcc_const
+  static fixed FindQNHFromPressure(const fixed pressure_hpa,
+                                   const fixed alt_known);
+
+  /**
    * Calculates the current QNH by comparing a raw altitude
    * to a known altitude of a certain location
    *
