@@ -135,7 +135,8 @@ OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daChange:
-    settings_computer.pressure.SetHectoPascal(Sender->GetAsFixed());
+    settings_computer.pressure =
+      AtmosphericPressure::HectoPascal(Sender->GetAsFixed());
     settings_computer.pressure_available.Update(basic.clock);
     device_blackboard->SetQNH(Sender->GetAsFixed());
     RefreshAltitudeControl();

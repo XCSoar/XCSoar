@@ -167,7 +167,7 @@ ExternalSettings::ProvideQNH(fixed value, fixed time)
   if (CompareQNH(value))
     return false;
 
-  qnh = value;
+  qnh = AtmosphericPressure::HectoPascal(value);
   qnh_available.Update(time);
   return true;
 }

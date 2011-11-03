@@ -28,7 +28,7 @@ static bool
 test_find_qnh()
 {
   AtmosphericPressure pres =
-    AtmosphericPressure(AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(100)));
+    AtmosphericPressure::HectoPascal(AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(100)));
   return fabs(pres.GetHectoPascal() - fixed(1013.25)) < fixed(0.01);
 }
 
@@ -36,7 +36,7 @@ static bool
 test_find_qnh2()
 {
   AtmosphericPressure pres =
-    AtmosphericPressure(AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(120)));
+    AtmosphericPressure::HectoPascal(AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(120)));
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(pres.GetHectoPascal()));
   }
@@ -62,7 +62,7 @@ static bool
 test_qnh_round()
 {
   AtmosphericPressure pres =
-    AtmosphericPressure(AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(120)));
+    AtmosphericPressure::HectoPascal(AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(120)));
   fixed h0 = pres.PressureAltitudeToQNHAltitude(fixed(100));
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(h0));
@@ -74,7 +74,7 @@ static bool
 test_qnh_round2()
 {
   AtmosphericPressure pres =
-    AtmosphericPressure(AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(120)));
+    AtmosphericPressure::HectoPascal(AtmosphericPressure::FindQNHFromPressureAltitude(fixed(100), fixed(120)));
   fixed p0 = pres.GetPascal();
   fixed h0 = pres.StaticPressureToQNHAltitude(p0);
   if (verbose) {

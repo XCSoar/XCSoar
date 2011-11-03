@@ -293,7 +293,7 @@ DeviceBlackboard::Merge()
 void
 DeviceBlackboard::SetQNH(fixed qnh)
 {
-  AllDevicesPutQNH(AtmosphericPressure(qnh));
+  AllDevicesPutQNH(AtmosphericPressure::HectoPascal(qnh));
 }
 
 void

@@ -82,6 +82,6 @@ void
 AutoQNH::CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
                       fixed altitude)
 {
-  calculated.pressure.SetHectoPascal(AtmosphericPressure::FindQNHFromPressureAltitude(basic.pressure_altitude, altitude));
+  calculated.pressure = AtmosphericPressure::HectoPascal(AtmosphericPressure::FindQNHFromPressureAltitude(basic.pressure_altitude, altitude));
   calculated.pressure_available.Update(basic.clock);
 }

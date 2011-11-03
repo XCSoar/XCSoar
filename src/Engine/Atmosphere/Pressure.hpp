@@ -36,17 +36,17 @@ class AtmosphericPressure
   /** Pressure at sea level, hPa */
   fixed qnh;
 
+  /**
+   * @param qnh the QNH in hPa
+   */
+  explicit gcc_constexpr_ctor
+  AtmosphericPressure(fixed _qnh):qnh(_qnh) {}
+
 public:
   /**
    * Non-initialising constructor.
    */
   AtmosphericPressure() = default;
-
-  /**
-   * @param qnh the QNH in hPa
-   */
-  gcc_constexpr_ctor
-  AtmosphericPressure(fixed _qnh):qnh(_qnh) {}
 
   /**
    * Returns an object representing the standard pressure (1013.25
@@ -57,21 +57,18 @@ public:
     return AtmosphericPressure(fixed(1013.25));
   }
 
-  void SetPascal(const fixed _value) {
-    SetHectoPascal(_value / 100);
+  static gcc_constexpr_function
+  AtmosphericPressure Pascal(fixed value) {
+    return AtmosphericPressure(value / 100);
+  }
+
+  static gcc_constexpr_function
+  AtmosphericPressure HectoPascal(fixed value) {
+    return AtmosphericPressure(value);
   }
 
   fixed GetPascal() {
     return GetHectoPascal() * 100;
-  }
-
-  /**
-   * Set QNH value (Mean Sea Level pressure)
-   *
-   * @param set New value of QNH (hPa)
-   */
-  void SetHectoPascal(const fixed _qnh) {
-    qnh = _qnh;
   }
 
   /**
