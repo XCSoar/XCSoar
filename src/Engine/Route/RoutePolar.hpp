@@ -178,7 +178,8 @@ class RoutePolar {
    * Structure to hold aircraft performance for a single direction
    */
   struct RoutePolarPoint {
-    RoutePolarPoint():slowness(fixed_zero), gradient(fixed_zero), inv_gradient(fixed_zero), valid(false) {};
+    RoutePolarPoint() = default;
+
     RoutePolarPoint(const fixed &_slowness, const fixed &_gradient):slowness(_slowness),gradient(_gradient),valid(true)
       {
         if (positive(gradient))
