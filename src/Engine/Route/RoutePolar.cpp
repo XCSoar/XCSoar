@@ -149,7 +149,7 @@ RoutePolars::initialise(const GlidePolar& polar,
 {
   polar_glide.initialise(polar, wind, true);
   polar_cruise.initialise(polar, wind, false);
-  const fixed &mc = polar.GetMC();
+  const fixed mc = polar.GetMC();
   if (positive(mc)) {
     inv_M = fixed(MC_CEILING_PENALTY_FACTOR)/mc;
   } else {
