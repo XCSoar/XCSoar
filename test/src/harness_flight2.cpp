@@ -58,34 +58,6 @@ bool test_speed_factor(int test_num, int n_wind)
   return retval;
 }
 
-bool test_bestcruisetrack(int test_num, int n_wind)
-{
-
-  // tests whether following the cruise track which compensates for wind drift
-  // produces routes that are more on track than if the route is allowed to drift
-  // downwind during climbs
-
-  // this test allows for a small error margin
-
-  autopilot_parms.enable_bestcruisetrack = false;
-  TestFlightResult result = test_flight(test_num, n_wind);
-  double t0 = result.time_elapsed;
-
-  autopilot_parms.enable_bestcruisetrack = true;
-  result = test_flight(test_num, n_wind);
-  double t1 = result.time_elapsed;
-  autopilot_parms.enable_bestcruisetrack = false;
-
-  bool fine = (t1/t0<1.01);
-  ok(fine,test_name("faster flying with bestcruisetrack",test_num, n_wind),0);
-  
-  if (!fine || verbose) {
-    printf("# time ratio %g\n", t1/t0);
-  }
-  return fine;
-}
-
-
 bool test_abort(int n_wind)
 {
   GlidePolar glide_polar(fixed_two);
