@@ -8,6 +8,7 @@ Version 6.3 - not yet released
 * map
   - airspace rendering fixed
   - show new map items list on click
+  - reduce map jiggling, improved E Ink display support
 * user interface
   - show METAR data in natural language
   - sort METAR stations by name

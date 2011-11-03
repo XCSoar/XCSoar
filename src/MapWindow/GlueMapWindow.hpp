@@ -214,6 +214,14 @@ private:
   void UpdateScreenAngle();
   void UpdateProjection();
 
+  /**
+   * Update the visible_projection location, but only if the new
+   * location is sufficiently distant from the current one.  This
+   * shall avoid unnecessary map jiggling.  This is a great
+   * improvement for E Ink displays to reduce flickering.
+   */
+  void SetLocationLazy(const GeoPoint location);
+
 public:
   void UpdateMapScale();
   void UpdateDisplayMode();

@@ -256,6 +256,17 @@ GlueMapWindow::UpdateMapScale()
 }
 
 void
+GlueMapWindow::SetLocationLazy(const GeoPoint location)
+{
+  const fixed distance_meters =
+    visible_projection.GetGeoLocation().Distance(location);
+  const fixed distance_pixels =
+    visible_projection.DistanceMetersToPixels(distance_meters);
+  if (distance_pixels > fixed_half)
+    SetLocation(location);
+}
+
+void
 GlueMapWindow::UpdateProjection()
 {
   const PixelRect rc = get_client_rect();
@@ -305,7 +316,7 @@ GlueMapWindow::UpdateProjection()
            calculated.thermal_locator.estimate_valid) {
     const fixed d_t = calculated.thermal_locator.estimate_location.Distance(basic.location);
     if (!positive(d_t)) {
-      SetLocation(basic.location);
+      SetLocationLazy(basic.location);
     } else {
       const fixed d_max = visible_projection.GetMapScale() * fixed_two;
       const fixed t = std::min(d_t, d_max)/d_t;
@@ -314,7 +325,7 @@ GlueMapWindow::UpdateProjection()
     }
   } else
     // Pan is off
-    SetLocation(basic.location);
+    SetLocationLazy(basic.location);
 
   visible_projection.UpdateScreenBounds();
 }
