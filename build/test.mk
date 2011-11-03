@@ -2037,7 +2037,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/FlightStatisticsRenderer.cpp \
 	$(SRC)/Renderer/ThermalBandRenderer.cpp \
 	$(SRC)/GlideRatio.cpp \
-	$(SRC)/AutoQNH.cpp \
+	$(SRC)/Computer/AutoQNH.cpp \
 	$(SRC)/Computer/BasicComputer.cpp \
 	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \

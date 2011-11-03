@@ -428,7 +428,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/DrawThread.cpp \
 	\
 	$(SRC)/Computer/BasicComputer.cpp \
-	$(SRC)/AutoQNH.cpp \
+	$(SRC)/Computer/AutoQNH.cpp \
 	$(SRC)/DeviceBlackboard.cpp \
 	$(SRC)/InterfaceBlackboard.cpp \
 	$(SRC)/MapProjectionBlackboard.cpp \
