@@ -82,7 +82,6 @@ bool test_flight_times(int test_num, int n_wind);
 bool test_speed_factor(int test_num, int n_wind);
 bool test_cruise_efficiency(int test_num, int n_wind);
 bool test_effective_mc(int test_num, int n_wind);
-bool test_automc(int test_num, int n_wind);
 bool test_bestcruisetrack(int test_num, int n_wind);
 bool test_abort(int n_wind);
 bool test_goto(int n_wind, unsigned id, bool auto_mc=false);
