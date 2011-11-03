@@ -42,7 +42,7 @@ VARIO(NMEAInputLine &line, NMEAInfo &info)
 
   fixed value;
   if (line.read_checked(value))
-    info.ProvideStaticPressure(value * 100);
+    info.ProvideStaticPressure(AtmosphericPressure::HectoPascal(value));
 
   if (line.read_checked(value))
     info.ProvideTotalEnergyVario(value / 10);

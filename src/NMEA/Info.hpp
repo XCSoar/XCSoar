@@ -212,7 +212,7 @@ struct NMEAInfo {
   /**
    * Static pressure value [Pa].
    */
-  fixed static_pressure;
+  AtmosphericPressure static_pressure;
   Validity static_pressure_available;
 
   /**
@@ -466,7 +466,7 @@ struct NMEAInfo {
    * only use it if the previous altitude was not present or the
    * same/lower priority.
    */
-  void ProvideStaticPressure(fixed value) {
+  void ProvideStaticPressure(AtmosphericPressure value) {
     static_pressure = value;
     static_pressure_available.Update(clock);
   }

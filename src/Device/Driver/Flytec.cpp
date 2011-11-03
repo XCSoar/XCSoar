@@ -142,7 +142,7 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
 
   //  Raw pressure (xxxxxx Pa),  6 Digits
   if (line.read_checked(value))
-    info.ProvideStaticPressure(value);
+    info.ProvideStaticPressure(AtmosphericPressure::Pascal(value));
 
   //  Baro Altitude (xxxxx meter),          5 Digits (-xxxx to xxxxx) (Based on 1013.25hPa)
   if (line.read_checked(value))

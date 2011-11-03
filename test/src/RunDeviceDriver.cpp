@@ -121,7 +121,8 @@ Dump(const NMEAInfo &basic)
     printf("GPSAltitude=%d\n", (int)basic.gps_altitude);
 
   if (basic.static_pressure_available)
-    printf("StaticPressure=%d\n", (int)basic.static_pressure);
+    printf("StaticPressure=%f hPa\n",
+           (double)basic.static_pressure.GetHectoPascal());
 
   if (basic.pressure_altitude_available)
     printf("PressureAltitude=%d\n", (int)basic.pressure_altitude);
