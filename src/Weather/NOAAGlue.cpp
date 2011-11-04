@@ -31,10 +31,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-namespace NOAAStore
-{
-  bool LoadFromString(const TCHAR *string);
-};
+NOAAStore *noaa_store;
 
 bool
 NOAAStore::LoadFromString(const TCHAR *string)
@@ -44,7 +41,7 @@ NOAAStore::LoadFromString(const TCHAR *string)
     // New code
     if (*string == ',' && i == 4) {
       code[4] = '\0';
-      NOAAStore::AddStation(code);
+      AddStation(code);
 
       i = 0;
       continue;
@@ -77,7 +74,7 @@ NOAAStore::SaveToProfile()
 {
   TCHAR buffer[120];
   for (unsigned i = 0; i < NOAAStore::Count(); i++) {
-    const TCHAR *code = NOAAStore::GetCodeT(i);
+    const TCHAR *code = GetCodeT(i);
     _tcscpy(buffer + (i * 5), code);
     _tcscpy(buffer + (i * 5) + 4, _T(","));
   }

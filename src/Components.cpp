@@ -91,6 +91,7 @@ Copyright_License {
 #include "Operation.hpp"
 #include "Pages.hpp"
 #include "Weather/NOAAGlue.hpp"
+#include "Weather/NOAAStore.hpp"
 #include "Plane/PlaneGlue.hpp"
 #include "UIState.hpp"
 #include "Net/Features.hpp"
@@ -415,7 +416,8 @@ XCSoarInterface::Startup()
   FlarmDetails::Load();
 
 #ifdef HAVE_NET
-  NOAAStore::LoadFromProfile();
+  noaa_store = new NOAAStore();
+  noaa_store->LoadFromProfile();
 #endif
 
 #ifndef DISABLEAUDIOVARIO
@@ -618,6 +620,9 @@ XCSoarInterface::Shutdown(void)
   delete protected_task_manager;
   delete task_manager;
 
+#ifdef HAVE_NET
+  delete noaa_store;
+#endif
 
 #ifdef HAVE_TRACKING
   if (tracking != NULL) {

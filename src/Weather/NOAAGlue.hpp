@@ -24,10 +24,8 @@ Copyright_License {
 #ifndef NOAA_GLUE_HPP
 #define NOAA_GLUE_HPP
 
-namespace NOAAStore
-{
-  bool LoadFromProfile();
-  void SaveToProfile();
-};
+class NOAAStore;
+
+extern NOAAStore *noaa_store;
 
 #endif

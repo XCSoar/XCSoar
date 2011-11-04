@@ -48,7 +48,7 @@ Update()
   tstring metar_taf = _T("");
 
   METAR metar;
-  if (!NOAAStore::GetMETAR(station_index, metar)) {
+  if (!noaa_store->GetMETAR(station_index, metar)) {
     metar_taf += _("No METAR available!");
   } else {
     metar_taf += metar.decoded.c_str();
@@ -59,7 +59,7 @@ Update()
   metar_taf += _T("\n\n");
 
   TAF taf;
-  if (!NOAAStore::GetTAF(station_index, taf)) {
+  if (!noaa_store->GetTAF(station_index, taf)) {
     metar_taf += _("No TAF available!");
   } else {
     metar_taf += taf.content.c_str();
@@ -74,7 +74,7 @@ UpdateClicked(gcc_unused WndButton &Sender)
 {
   DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
                          _("Download"), true);
-  NOAAStore::UpdateStation(station_index, runner);
+  noaa_store->UpdateStation(station_index, runner);
   Update();
 }
 
@@ -83,13 +83,13 @@ RemoveClicked(gcc_unused WndButton &Sender)
 {
   TCHAR tmp[256];
   _stprintf(tmp, _("Do you want to remove station %s?"),
-            NOAAStore::GetCodeT(station_index));
+            noaa_store->GetCodeT(station_index));
 
   if (MessageBoxX(tmp, _("Remove"), MB_YESNO) == IDNO)
     return;
 
-  NOAAStore::RemoveStation(station_index);
-  NOAAStore::SaveToProfile();
+  noaa_store->RemoveStation(station_index);
+  noaa_store->SaveToProfile();
 
   wf->SetModalResult(mrOK);
 }
@@ -110,7 +110,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 void
 dlgNOAADetailsShowModal(SingleWindow &parent, unsigned _station_index)
 {
-  assert(_station_index < NOAAStore::Count());
+  assert(_station_index < noaa_store->Count());
   station_index = _station_index;
 
   wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
@@ -119,7 +119,7 @@ dlgNOAADetailsShowModal(SingleWindow &parent, unsigned _station_index)
 
   TCHAR caption[100];
   _stprintf(caption, _T("%s: %s"), _("METAR and TAF"),
-            NOAAStore::GetCodeT(station_index));
+            noaa_store->GetCodeT(station_index));
   wf->SetCaption(caption);
 
   Update();

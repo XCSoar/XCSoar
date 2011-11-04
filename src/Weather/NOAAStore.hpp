@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef NOAA_STORE_HPP
 #define NOAA_STORE_HPP
 
+#include "Util/StaticArray.hpp"
+#include "METAR.hpp"
+#include "TAF.hpp"
+
 #include <tchar.h>
 
 struct METAR;
@@ -31,8 +35,31 @@ struct ParsedMETAR;
 struct TAF;
 class JobRunner;
 
-namespace NOAAStore
+class NOAAStore
 {
+  struct Item
+  {
+    char code[5];
+
+    bool metar_available;
+    bool taf_available;
+
+    METAR metar;
+    TAF taf;
+  };
+
+  typedef StaticArray<Item, 20> StationContainer;
+
+  StationContainer stations;
+
+  gcc_pure
+  int GetStationIndex(const char *code) const;
+
+public:
+  bool LoadFromString(const TCHAR *string);
+  bool LoadFromProfile();
+  void SaveToProfile();
+
   /**
    * Add a station to the set of stations for which
    * weather information should be downloaded
@@ -62,8 +89,11 @@ namespace NOAAStore
    * @param index Index of the station in the array
    * @return Four letter code of the station/airport
    */
-  const char *GetCode(unsigned index);
-  const TCHAR *GetCodeT(unsigned index);
+  gcc_pure
+  const char *GetCode(unsigned index) const;
+
+  gcc_pure
+  const TCHAR *GetCodeT(unsigned index) const;
 
   /**
    * Transfers the downloaded METAR into the given reference if available
@@ -72,7 +102,8 @@ namespace NOAAStore
    * @return True if the data was available,
    * False if no METAR data was available
    */
-  bool GetMETAR(unsigned index, METAR &metar);
+  bool GetMETAR(unsigned index, METAR &metar) const;
+
   /**
    * Transfers the downloaded METAR into the given reference if available
    * @param code Four letter code of the station/airport (upper case)
@@ -80,7 +111,7 @@ namespace NOAAStore
    * @return True if the data was available,
    * False if no METAR data was available
    */
-  bool GetMETAR(const char *code, METAR &metar);
+  bool GetMETAR(const char *code, METAR &metar) const;
 
   /**
    * Transfers the downloaded TAF into the given reference if available
@@ -89,7 +120,8 @@ namespace NOAAStore
    * @return True if the data was available,
    * False if no TAF data was available
    */
-  bool GetTAF(unsigned index, TAF &taf);
+  bool GetTAF(unsigned index, TAF &taf) const;
+
   /**
    * Transfers the downloaded TAF into the given reference if available
    * @param code Four letter code of the station/airport (upper case)
@@ -97,7 +129,7 @@ namespace NOAAStore
    * @return True if the data was available,
    * False if no TAF data was available
    */
-  bool GetTAF(const char *code, TAF &taf);
+  bool GetTAF(const char *code, TAF &taf) const;
 
   /**
    * Attempts to download new data for the given station
@@ -126,12 +158,14 @@ namespace NOAAStore
    * Returns the amount of stations in the array
    * @return The amount of stations in the array
    */
-  unsigned Count();
+  gcc_pure
+  unsigned Count() const;
 
   /**
    * Returns whether the station array is already full
    */
-  bool Full();
+  gcc_pure
+  bool Full() const;
 };
 
 #endif

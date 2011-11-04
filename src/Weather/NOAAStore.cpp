@@ -24,42 +24,14 @@ Copyright_License {
 #include "NOAAStore.hpp"
 #include "NOAADownloader.hpp"
 #include "METARParser.hpp"
-#include "METAR.hpp"
 #include "ParsedMETAR.hpp"
-#include "TAF.hpp"
-#include "Util/StaticArray.hpp"
 
 #ifdef _UNICODE
 #include <windows.h>
 #endif
 
-namespace NOAAStore
-{
-  struct Item
-  {
-    char code[5];
-
-    bool metar_available;
-    bool taf_available;
-
-    METAR metar;
-    TAF taf;
-  };
-
-  typedef StaticArray<Item, 20> StationArray;
-
-  StationArray stations;
-
-  /**
-   * Searches the given station code in the array
-   * @param code Four letter code of the station/airport (upper case)
-   * @return If found index of the station, otherwise (unsigned)-1
-   */
-  int GetStationIndex(const char *code);
-}
-
 int
-NOAAStore::GetStationIndex(const char *code)
+NOAAStore::GetStationIndex(const char *code) const
 {
 #ifndef NDEBUG
   assert(strlen(code) == 4);
@@ -143,14 +115,14 @@ NOAAStore::RemoveStation(const char *code)
 }
 
 const char *
-NOAAStore::GetCode(unsigned index)
+NOAAStore::GetCode(unsigned index) const
 {
   assert(index < stations.size());
   return stations[index].code;
 }
 
 const TCHAR *
-NOAAStore::GetCodeT(unsigned index)
+NOAAStore::GetCodeT(unsigned index) const
 {
 #ifdef _UNICODE
   const char *code = GetCode(index);
@@ -167,7 +139,7 @@ NOAAStore::GetCodeT(unsigned index)
 }
 
 bool
-NOAAStore::GetMETAR(unsigned index, METAR &metar)
+NOAAStore::GetMETAR(unsigned index, METAR &metar) const
 {
   assert(index < stations.size());
   if (!stations[index].metar_available)
@@ -178,7 +150,7 @@ NOAAStore::GetMETAR(unsigned index, METAR &metar)
 }
 
 bool
-NOAAStore::GetMETAR(const char *code, METAR &metar)
+NOAAStore::GetMETAR(const char *code, METAR &metar) const
 {
 #ifndef NDEBUG
   assert(strlen(code) == 4);
@@ -194,7 +166,7 @@ NOAAStore::GetMETAR(const char *code, METAR &metar)
 }
 
 bool
-NOAAStore::GetTAF(unsigned index, TAF &taf)
+NOAAStore::GetTAF(unsigned index, TAF &taf) const
 {
   assert(index < stations.size());
   if (!stations[index].taf_available)
@@ -205,7 +177,7 @@ NOAAStore::GetTAF(unsigned index, TAF &taf)
 }
 
 bool
-NOAAStore::GetTAF(const char *code, TAF &taf)
+NOAAStore::GetTAF(const char *code, TAF &taf) const
 {
 #ifndef NDEBUG
   assert(strlen(code) == 4);
@@ -280,13 +252,13 @@ NOAAStore::Update(JobRunner &runner)
 }
 
 unsigned
-NOAAStore::Count()
+NOAAStore::Count() const
 {
   return stations.size();
 }
 
 bool
-NOAAStore::Full()
+NOAAStore::Full() const
 {
   return stations.full();
 }

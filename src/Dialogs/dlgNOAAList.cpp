@@ -66,10 +66,10 @@ UpdateList()
 {
   list.clear();
 
-  unsigned len = NOAAStore::Count();
+  unsigned len = noaa_store->Count();
   for (unsigned i = 0; i < len; ++i) {
     NOAAListItem item;
-    item.code = NOAAStore::GetCodeT(i);
+    item.code = noaa_store->GetCodeT(i);
     item.index = i;
     list.push_back(item);
   }
@@ -98,7 +98,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   METAR metar;
   const TCHAR *tmp;
-  if (!NOAAStore::GetMETAR(list[index].index, metar))
+  if (!noaa_store->GetMETAR(list[index].index, metar))
     tmp = _("No METAR available");
   else
     tmp = metar.content.c_str();
@@ -111,7 +111,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 static void
 AddClicked(gcc_unused WndButton &button)
 {
-  if (NOAAStore::Full()) {
+  if (noaa_store->Full()) {
     MessageBoxX(_("The list of tracked stations is full. Please remove a station before adding a new one."),
                 _("Error"), MB_OK);
     return;
@@ -136,12 +136,12 @@ AddClicked(gcc_unused WndButton &button)
     }
   }
 
-  NOAAStore::AddStation(code);
-  NOAAStore::SaveToProfile();
+  noaa_store->AddStation(code);
+  noaa_store->SaveToProfile();
 
   DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
                          _("Download"), true);
-  NOAAStore::UpdateStation(code, runner);
+  noaa_store->UpdateStation(code, runner);
 
   UpdateList();
 }
@@ -151,7 +151,7 @@ UpdateClicked(gcc_unused WndButton &Sender)
 {
   DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
                          _("Download"), true);
-  NOAAStore::Update(runner);
+  noaa_store->Update(runner);
   UpdateList();
 }
 
@@ -168,8 +168,8 @@ RemoveClicked(gcc_unused WndButton &Sender)
   if (MessageBoxX(tmp, _("Remove"), MB_YESNO) == IDNO)
     return;
 
-  NOAAStore::RemoveStation(list[index].index);
-  NOAAStore::SaveToProfile();
+  noaa_store->RemoveStation(list[index].index);
+  noaa_store->SaveToProfile();
 
   UpdateList();
 }
