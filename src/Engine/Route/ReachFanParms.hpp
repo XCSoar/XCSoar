@@ -50,7 +50,7 @@ struct ReachFanParms {
   unsigned char set_depth;
 
   FlatGeoPoint reach_intercept(const int index, const AGeoPoint& ao) const {
-    return rpolars.reach_intercept(index, ao, terrain, task_proj);
+    return rpolars.ReachIntercept(index, ao, terrain, task_proj);
   }
 };
 

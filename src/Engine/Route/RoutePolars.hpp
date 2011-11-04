@@ -48,7 +48,7 @@ class RoutePolars
   RoutePolar polar_cruise;
 
   /** Reciprocal of MacCready value (s/m) */
-  fixed inv_M;
+  fixed inv_mc;
 
   RoutePlannerConfig config;
 
@@ -64,7 +64,7 @@ public:
    * @param polar Polar used for performance
    * @param wind Wind condition
    */
-  void initialise(const GlidePolar& polar, const SpeedVector& wind);
+  void Initialise(const GlidePolar& polar, const SpeedVector& wind);
 
   /**
    * Calculate the time required to fly the link.  Returns UINT_MAX
@@ -80,7 +80,7 @@ public:
    *
    * @return Time (s) elapsed to fly the link
    */
-  unsigned calc_time(const RouteLink& link) const;
+  unsigned CalcTime(const RouteLink& link) const;
 
   /**
    * Test whether flight through a link intersects with terrain
@@ -100,7 +100,7 @@ public:
    *
    * @return True if intersect occurs
    */
-  bool check_clearance(const RouteLink &e, const RasterMap* map,
+  bool CheckClearance(const RouteLink &e, const RasterMap* map,
                        const TaskProjection &proj, RoutePoint& inp) const;
 
   /**
@@ -113,11 +113,11 @@ public:
    *
    * @return Rotated link
    */
-  RouteLink neighbour_link(const RoutePoint &start, const RoutePoint &end,
-                           const TaskProjection &proj, const int sign) const;
+  RouteLink NeighbourLink(const RoutePoint &start, const RoutePoint &end,
+                          const TaskProjection &proj, const int sign) const;
 
   /** Whether climbs are possible/allowed */
-  bool can_climb() const;
+  bool CanClimb() const;
 
   /**
    * Calculate the glide height that would be used up in
@@ -127,7 +127,7 @@ public:
    *
    * @return Height of glide (m)
    */
-  RoughAltitude calc_vheight(const RouteLink& link) const;
+  RoughAltitude CalcVHeight(const RouteLink& link) const;
 
   /**
    * Generate a link from the destination imposing constraints on the origin
@@ -139,9 +139,9 @@ public:
    *
    * @return Link
    */
-  RouteLink generate_intermediate (const RoutePoint& _dest,
-                                   const RoutePoint& _origin,
-                                   const TaskProjection& proj) const;
+  RouteLink GenerateIntermediate(const RoutePoint& _dest,
+                                 const RoutePoint& _origin,
+                                 const TaskProjection& proj) const;
   /**
    * Test whether the specified link is achievable given climb potential and
    * climb ceiling limits.  If climbs are not possible, the destination must be
@@ -152,7 +152,7 @@ public:
    *
    * @return True if achievable to fly this link
    */
-  bool achievable(const RouteLink& link, const bool check_ceiling=false) const;
+  bool IsAchievable(const RouteLink &link, const bool check_ceiling=false) const;
 
   /**
    * Set configuration parameters for this performance model.
@@ -165,16 +165,16 @@ public:
    * @param _cruise_alt Cruise altitude (m)
    * @param _ceiling_alt Ceiling altitude (m)
    */
-  void set_config(const RoutePlannerConfig& _config,
-                  const RoughAltitude _cruise_alt = RoughAltitude::Max(),
-                  const RoughAltitude _ceiling_alt = RoughAltitude::Max());
+  void SetConfig(const RoutePlannerConfig &_config,
+                 const RoughAltitude _cruise_alt = RoughAltitude::Max(),
+                 const RoughAltitude _ceiling_alt = RoughAltitude::Max());
 
   /**
    * Check whether the configuration requires intersection tests with airspace.
    *
    * @return True if airspace tests are required
    */
-  bool airspace_enabled() const {
+  bool IsAirspaceEnabled() const {
     return config.airspace_enabled();
   }
 
@@ -183,7 +183,7 @@ public:
    *
    * @return True if terrain tests are required
    */
-  bool terrain_enabled() const {
+  bool IsTerrainEnabled() const {
     return config.terrain_enabled();
   }
 
@@ -192,7 +192,7 @@ public:
    *
    * @return True if allow turns, otherwise straight
    */
-  bool turning_reach() const {
+  bool IsTurningReachEnabled() const {
     return config.reach_calc_mode == RoutePlannerConfig::rmTurning;
   }
 
@@ -200,7 +200,7 @@ public:
    * round up just below nearest 8 second block in a quick way
    * this is an attempt to stabilise solutions
    */
-  static unsigned round_time(const unsigned val);
+  static unsigned RoundTime(const unsigned val);
 
   /**
    * Determine if intersection with terrain occurs in forwards direction from
@@ -214,27 +214,28 @@ public:
    *
    * @return true if terrain intersects
    */
-  bool intersection(const AGeoPoint& origin, const AGeoPoint& destination,
+  bool Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
                     const RasterMap* map, const TaskProjection& proj,
                     GeoPoint& intx) const;
 
   /**
    * Calculate height of arrival at destination starting from origin
    */
-  RoughAltitude calc_glide_arrival(const AFlatGeoPoint& origin,
-                                   const FlatGeoPoint& dest,
-                                   const TaskProjection& proj) const;
+  RoughAltitude CalcGlideArrival(const AFlatGeoPoint& origin,
+                                 const FlatGeoPoint& dest,
+                                 const TaskProjection& proj) const;
 
-  RoughAltitude safety_height() const {
+  RoughAltitude GetSafetyHeight() const {
     return RoughAltitude(config.safety_height_terrain);
   }
 
-  FlatGeoPoint reach_intercept(const int index, const AGeoPoint& p,
-                               const RasterMap* map,
-                               const TaskProjection& proj) const;
+  FlatGeoPoint ReachIntercept(const int index, const AGeoPoint& p,
+                              const RasterMap* map,
+                              const TaskProjection& proj) const;
 
 private:
-  GeoPoint msl_intercept(const int index, const AGeoPoint& p, const TaskProjection& proj) const;
+  GeoPoint MSLIntercept(const int index, const AGeoPoint &p,
+                        const TaskProjection &proj) const;
 };
 
 #endif

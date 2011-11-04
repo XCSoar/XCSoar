@@ -71,7 +71,7 @@ public:
 
     GeoPoint point = m_intersections[0].first;
 
-    RouteLink l = rpolar.generate_intermediate(link.first,
+    RouteLink l = rpolar.GenerateIntermediate(link.first,
                                                RoutePoint(proj.project(point), link.second.altitude),
                                                proj);
 
@@ -292,7 +292,7 @@ AirspaceRoute::AddNearby(const RouteLink &e)
 bool
 AirspaceRoute::CheckSecondary(const RouteLink &e)
 {
-  if (!rpolars_route.airspace_enabled())
+  if (!rpolars_route.IsAirspaceEnabled())
     return true; // trivial
 
   m_inx = first_intersecting(e);
@@ -315,7 +315,7 @@ AirspaceRoute::CheckClearance(const RouteLink &e, RoutePoint& inp) const
     return false;
   }
 
-  if (!rpolars_route.airspace_enabled())
+  if (!rpolars_route.IsAirspaceEnabled())
     return true; // trivial
 
   // passes terrain, so now check airspace clearance

@@ -49,7 +49,7 @@ bool ReachFan::solve(const AGeoPoint origin,
   const AFlatGeoPoint ao(task_proj.project(origin), origin.altitude);
 
   if (!RasterBuffer::is_invalid(h) &&
-      (origin.altitude <= h2 + rpolars.safety_height())) {
+      (origin.altitude <= h2 + rpolars.GetSafetyHeight())) {
     terrain_base = h2;
     root.DummyReach(ao);
     return false;

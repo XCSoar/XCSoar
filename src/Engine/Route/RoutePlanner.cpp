@@ -60,10 +60,10 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
                     const RoutePlannerConfig &config, const RoughAltitude h_ceiling)
 {
   OnSolve(origin, destination);
-  rpolars_route.set_config(config, std::max(destination.altitude, origin.altitude),
-                           h_ceiling);
-  rpolars_reach.set_config(config, std::max(destination.altitude, origin.altitude),
-                           h_ceiling);
+  rpolars_route.SetConfig(config, std::max(destination.altitude, origin.altitude),
+                          h_ceiling);
+  rpolars_reach.SetConfig(config, std::max(destination.altitude, origin.altitude),
+                          h_ceiling);
 
   reach_polar_mode = config.reach_polar_mode;
 
@@ -92,7 +92,7 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
   solution_route.push_back(origin);
   solution_route.push_back(destination);
 
-  if (!rpolars_route.terrain_enabled() && !rpolars_route.airspace_enabled())
+  if (!rpolars_route.IsTerrainEnabled() && !rpolars_route.IsAirspaceEnabled())
     return false; // trivial
 
   search_hull.clear();
@@ -104,7 +104,7 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
   RouteLink e_test(start, astar_goal, task_projection);
   if (e_test.is_short())
     return false;
-  if (!rpolars_route.achievable(e_test))
+  if (!rpolars_route.IsAchievable(e_test))
     return false;
 
   count_dij = 0;
@@ -208,7 +208,7 @@ RoutePlanner::FindSolution(const RoutePoint &final, Route &this_route) const
       // create intermediate point for part cruise, part glide
 
       const RouteLink l(p, p_last, task_projection);
-      const RoughAltitude vh = rpolars_route.calc_vheight(l);
+      const RoughAltitude vh = rpolars_route.CalcVHeight(l);
       assert(vh.IsPositive());
       if (vh > p_last.altitude - p.altitude) { // climb was cut off
         const fixed f = (p_last.altitude - p.altitude) / vh;
@@ -237,22 +237,22 @@ RoutePlanner::LinkCleared(const RouteLink &e)
 {
   const bool is_final = (e.second == astar_goal);
 
-  if (!rpolars_route.achievable(e, true))
+  if (!rpolars_route.IsAchievable(e, true))
     return false;
 
   if (!((FlatGeoPoint)e.second == astar_goal))
     assert(e.second.altitude >= e.first.altitude);
 
-  const unsigned g = rpolars_route.calc_time(e);
+  const unsigned g = rpolars_route.CalcTime(e);
   if (g == UINT_MAX)
     // not achievable
     return false;
 
   const RouteLink e_rem(e.second, astar_goal, task_projection);
-  if (!rpolars_route.achievable(e_rem))
+  if (!rpolars_route.IsAchievable(e_rem))
     return false;
 
-  const unsigned h = rpolars_route.calc_time(e_rem);
+  const unsigned h = rpolars_route.CalcTime(e_rem);
   if (h == UINT_MAX)
     // not achievable
     return false;
@@ -260,8 +260,8 @@ RoutePlanner::LinkCleared(const RouteLink &e)
   assert(!(e.first==e.second));
 
   count_dij++;
-  AStarPriorityValue v((is_final ? RoutePolars::round_time(g+h) : g),
-                       (is_final ? 0 : RoutePolars::round_time(h)));
+  AStarPriorityValue v((is_final ? RoutePolars::RoundTime(g+h) : g),
+                       (is_final ? 0 : RoutePolars::RoundTime(h)));
   // add one to tie-break towards lower number of links
 
   planner.Reserve(ASTAR_QUEUE_SIZE);
@@ -290,7 +290,7 @@ RoutePlanner::AddCandidate(const RouteLinkBase& e)
     return;
 
   const RouteLink c_link =
-      rpolars_route.generate_intermediate(e.first, e.second, task_projection);
+      rpolars_route.GenerateIntermediate(e.first, e.second, task_projection);
 
   links.push(c_link);
 }
@@ -329,8 +329,8 @@ RoutePlanner::AddShortcut(const RoutePoint &node)
   assert(pre.altitude <= node.altitude);
 
   RoutePoint inx;
-  const RoughAltitude vh = rpolars_route.calc_vheight(r_shortcut);
-  if (!rpolars_route.can_climb())
+  const RoughAltitude vh = rpolars_route.CalcVHeight(r_shortcut);
+  if (!rpolars_route.CanClimb())
     r_shortcut.second.altitude = r_shortcut.first.altitude + vh;
 
   if (CheckClearance(r_shortcut, inx))
@@ -349,7 +349,7 @@ RoutePlanner::AddEdges(const RouteLink &e)
     return;
   }
 
-  if (!rpolars_route.achievable(e))
+  if (!rpolars_route.IsAchievable(e))
     return;
 
   if (!this_short)
@@ -363,7 +363,7 @@ RoutePlanner::UpdatePolar(const GlidePolar &task_polar,
                            const GlidePolar &safety_polar,
                            const SpeedVector &wind)
 {
-  rpolars_route.initialise(task_polar, wind);
+  rpolars_route.Initialise(task_polar, wind);
   switch (reach_polar_mode) {
   case RoutePlannerConfig::rpmTask:
     rpolars_reach = rpolars_route;
@@ -371,7 +371,7 @@ RoutePlanner::UpdatePolar(const GlidePolar &task_polar,
     // make copy to avoid waste
     break;
   case RoutePlannerConfig::rpmSafety:
-    rpolars_reach.initialise(safety_polar, wind);
+    rpolars_reach.Initialise(safety_polar, wind);
     glide_polar_reach = safety_polar;
     break;
   }
@@ -389,7 +389,7 @@ RoutePlanner::CheckClearanceTerrain(const RouteLink &e, RoutePoint& inp) const
     return true;
 
   count_terrain++;
-  return rpolars_route.check_clearance(e, terrain, task_projection, inp);
+  return rpolars_route.CheckClearance(e, terrain, task_projection, inp);
 }
 
 void
@@ -401,7 +401,7 @@ RoutePlanner::AddNearbyTerrainSweep(const RoutePoint& p,
     return;
 
   // make short link neighbouring last intercept
-  RouteLink link_divert = rpolars_route.neighbour_link(c_link.first, p,
+  RouteLink link_divert = rpolars_route.NeighbourLink(c_link.first, p,
                                                        task_projection, sign);
 
   // dont add directions 90 degrees away from target
@@ -409,7 +409,7 @@ RoutePlanner::AddNearbyTerrainSweep(const RoutePoint& p,
     return;
 
   // ensure the target is achievable due to climb constraints
-  if (!rpolars_route.achievable(link_divert))
+  if (!rpolars_route.IsAchievable(link_divert))
     return;
 
   // don't add if inside hull
@@ -450,7 +450,7 @@ RoutePlanner::AddNearbyTerrain(const RoutePoint &p, const RouteLink& e)
     }
   }
 
-  if (!rpolars_route.achievable(c_link))
+  if (!rpolars_route.IsAchievable(c_link))
     return; // cant reach this
 
   // add clearance to intercept path
@@ -489,7 +489,7 @@ RoutePlanner::Intersection(const AGeoPoint& origin,
   TaskProjection proj;
   proj.reset(origin);
   proj.update_fast();
-  return rpolars_route.intersection(origin, destination, terrain, proj, intx);
+  return rpolars_route.Intersection(origin, destination, terrain, proj, intx);
 }
 
 /*
