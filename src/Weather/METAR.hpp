@@ -35,7 +35,7 @@ struct METAR
   ContentString content;
   ContentString decoded;
 
-  void clear() {
+  void Clear() {
     last_update.year = 0;
     last_update.month = 0;
     last_update.day = 0;
