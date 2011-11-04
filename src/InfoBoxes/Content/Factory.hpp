@@ -206,12 +206,6 @@ namespace InfoBoxFactory
   bool
   Get(const TCHAR *key, t_InfoBox &val);
 
-  static inline t_InfoBox
-  operator++(t_InfoBox &val, int)
-  {
-    return (t_InfoBox)(val + 1);
-  }
-
   gcc_const
   InfoBoxContent* Create(t_InfoBox InfoBoxType);
 };

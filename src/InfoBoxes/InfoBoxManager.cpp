@@ -592,8 +592,8 @@ InfoBoxManager::SetupFocused(const int id)
   const InfoBoxFactory::t_InfoBox old_type = panel.contents[i];
 
   ComboList list;
-  for (t_InfoBox i = InfoBoxFactory::MIN_TYPE_VAL; i < InfoBoxFactory::NUM_TYPES; i++)
-    list.Append(i, gettext(InfoBoxFactory::GetName(i)));
+  for (unsigned j = InfoBoxFactory::MIN_TYPE_VAL; j < InfoBoxFactory::NUM_TYPES; j++)
+    list.Append(j, gettext(InfoBoxFactory::GetName((t_InfoBox) j)));
 
   list.Sort();
   list.ComboPopupItemSavedIndex = list.LookUp(old_type);
