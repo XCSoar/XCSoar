@@ -24,6 +24,7 @@ HOT_SOURCES = \
 	$(ENGINE_SRC_DIR)/Route/FlatTriangleFanTree.cpp \
 	$(ENGINE_SRC_DIR)/Route/ReachFan.cpp \
 	$(ENGINE_SRC_DIR)/Route/RoutePolar.cpp \
+	$(ENGINE_SRC_DIR)/Route/RoutePolars.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/ContestDijkstra.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp
 

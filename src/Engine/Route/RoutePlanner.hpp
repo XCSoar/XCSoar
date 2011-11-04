@@ -25,6 +25,7 @@
 
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "RoutePolars.hpp"
 #include "RoutePolar.hpp"
 #include "Route.hpp"
 #include "AStar.hpp"

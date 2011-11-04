@@ -23,7 +23,7 @@
 #ifndef REACHFAN_PARMS_HPP
 #define REACHFAN_PARMS_HPP
 
-#include "Route/RoutePolar.hpp"
+#include "Route/RoutePolars.hpp"
 
 class TaskProjection;
 class RasterMap;
