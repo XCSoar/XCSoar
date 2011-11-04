@@ -356,13 +356,18 @@ protected:
 public:
   void NextPage();
   void PreviousPage();
-  /* assumes array is sorted by menugroup, then pagenum */
   void SetCurrentPage(unsigned page);
   void SetCurrentPage(menu_tab_index menuIndex);
 
   bool Save(bool &changed, bool &require_restart) {
     return pager.Save(changed, require_restart);
   }
+
+  /**
+   * sets page that determines which menu item is displayed as selected
+   * @param page
+   */
+  void SetLastContentPage(unsigned page);
 };
 
 class TabMenuDisplay : public PaintWindow {

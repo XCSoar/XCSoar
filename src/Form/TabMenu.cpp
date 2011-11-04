@@ -177,8 +177,7 @@ TabMenuControl::SetCurrentPage(unsigned page)
 
   } else {
     const PageItem& theitem = GetPageItem(page);
-    LastContent.MainIndex = theitem.main_menu_index;
-    LastContent.SubIndex = GetSubMenuButton(page)->Menu.SubIndex;
+    SetLastContentPage(page);
     const OneMainMenuButton *butMain =
       GetMainMenuButton(LastContent.MainIndex);
     assert(butMain);
@@ -187,6 +186,13 @@ TabMenuControl::SetCurrentPage(unsigned page)
                gettext(butMain->Caption), theitem.menu_caption);
     form.SetCaption(caption);
   }
+}
+
+void TabMenuControl::SetLastContentPage(unsigned page)
+{
+  const PageItem& theitem = GetPageItem(page);
+  LastContent.MainIndex = theitem.main_menu_index;
+  LastContent.SubIndex = GetSubMenuButton(page)->Menu.SubIndex;
 }
 
 int
