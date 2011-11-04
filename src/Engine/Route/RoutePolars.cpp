@@ -28,38 +28,35 @@
 #define MC_CEILING_PENALTY_FACTOR 5.0
 
 GeoPoint
-RoutePolars::msl_intercept(const int index, const AGeoPoint& p, const TaskProjection& proj) const
+RoutePolars::msl_intercept(const int index, const AGeoPoint& p,
+                           const TaskProjection& proj) const
 {
-  const unsigned safe_index = ((unsigned)index)% ROUTEPOLAR_POINTS;
+  const unsigned safe_index = ((unsigned)index) % ROUTEPOLAR_POINTS;
   const FlatGeoPoint fp = proj.project(p);
-  const fixed d = p.altitude*polar_glide.get_point(safe_index).inv_gradient;
+  const fixed d = p.altitude * polar_glide.get_point(safe_index).inv_gradient;
   const fixed scale = proj.get_approx_scale();
   const int steps = int(d / scale) + 1;
-  int dx;
-  int dy;
+  int dx, dy;
   RoutePolar::index_to_dxdy(safe_index, dx, dy);
-  dx= (dx*steps)>>7;
-  dy= (dy*steps)>>7;
-  const FlatGeoPoint dp(fp.Longitude+dx, fp.Latitude+dy);
+  dx = (dx * steps) >> 7;
+  dy = (dy * steps) >> 7;
+  const FlatGeoPoint dp(fp.Longitude + dx, fp.Latitude + dy);
   return proj.unproject(dp);
 }
 
-
 void
-RoutePolars::initialise(const GlidePolar& polar,
-                        const SpeedVector& wind)
+RoutePolars::initialise(const GlidePolar& polar, const SpeedVector& wind)
 {
   polar_glide.initialise(polar, wind, true);
   polar_cruise.initialise(polar, wind, false);
   const fixed imc = polar.GetInvMC();
-  if (positive(imc)) {
+  if (positive(imc))
     inv_M = fixed(MC_CEILING_PENALTY_FACTOR) * imc;
-  } else {
+  else
     inv_M = fixed_zero;
-  }
 }
 
-unsigned 
+unsigned
 RoutePolars::round_time(const unsigned val)
 {
   return val | 0x07;
@@ -70,30 +67,36 @@ RoutePolars::calc_time(const RouteLink& link) const
 {
   const RoughAltitude dh = link.second.altitude - link.first.altitude;
   if (dh.IsNegative() && !positive(inv_M))
-    return UINT_MAX; // impossible, can't climb
+    // impossible, can't climb
+    return UINT_MAX;
 
   // dh/d = gradient
   const fixed rho = dh.IsPositive() ?
-    std::min(fixed_one, (dh*link.inv_d*polar_glide.get_point(link.polar_index).inv_gradient))
-    : fixed_zero;
+    std::min(fixed_one, (dh * link.inv_d *
+                         polar_glide.get_point(link.polar_index).inv_gradient)) :
+    fixed_zero;
 
-  if ((rho< fixed_one) && !polar_cruise.get_point(link.polar_index).valid)
-    return UINT_MAX; // impossible, can't cruise
+  if ((rho < fixed_one) && !polar_cruise.get_point(link.polar_index).valid)
+    // impossible, can't cruise
+    return UINT_MAX;
+
   if (positive(rho) && !polar_glide.get_point(link.polar_index).valid)
-    return UINT_MAX; // impossible, can't glide
+    // impossible, can't glide
+    return UINT_MAX;
 
-  const int t_cruise = (int)(link.d*(rho*polar_glide.get_point(link.polar_index).slowness+
-                                     (fixed_one-rho)*polar_cruise.get_point(link.polar_index).slowness));
+  const int t_cruise = (int)(
+    link.d * (rho * polar_glide.get_point(link.polar_index).slowness +
+    (fixed_one - rho) * polar_cruise.get_point(link.polar_index).slowness));
 
   if (link.second.altitude > cruise_altitude) {
     // penalise any climbs required above cruise altitude
-    const RoughAltitude h_penalty =
-      std::max(RoughAltitude(0),
-               link.second.altitude - std::max(cruise_altitude, link.first.altitude));
-    return t_cruise+(int)(h_penalty*inv_M);
-  } else {
-    return t_cruise;
+    const RoughAltitude h_penalty = std::max(
+        RoughAltitude(0),
+        link.second.altitude - std::max(cruise_altitude, link.first.altitude));
+    return t_cruise + (int)(h_penalty * inv_M);
   }
+
+  return t_cruise;
 }
 
 RoughAltitude
@@ -104,8 +107,7 @@ RoutePolars::calc_vheight(const RouteLink &link) const
 
 bool
 RoutePolars::check_clearance(const RouteLink &e, const RasterMap* map,
-                             const TaskProjection &proj,
-                             RoutePoint& inp) const
+                             const TaskProjection &proj, RoutePoint& inp) const
 {
   if (!config.terrain_enabled())
     return true;
@@ -117,10 +119,9 @@ RoutePolars::check_clearance(const RouteLink &e, const RasterMap* map,
 
   assert(map);
 
-  if (!map->FirstIntersection(start, (short)e.first.altitude,
-                              dest, (short)e.second.altitude,
-                              (short)calc_vheight(e), (short)climb_ceiling,
-                              (short)safety_height(),
+  if (!map->FirstIntersection(start, (short)e.first.altitude, dest,
+                              (short)e.second.altitude, (short)calc_vheight(e),
+                              (short)climb_ceiling, (short)safety_height(),
                               int_x, int_h))
     return true;
 
@@ -128,16 +129,13 @@ RoutePolars::check_clearance(const RouteLink &e, const RasterMap* map,
   return false;
 }
 
-
-
-
 RouteLink
-RoutePolars::generate_intermediate (const RoutePoint& _dest,
-                                    const RoutePoint& _origin,
-                                    const TaskProjection& proj) const
+RoutePolars::generate_intermediate(const RoutePoint& _dest,
+                                   const RoutePoint& _origin,
+                                   const TaskProjection& proj) const
 {
   RouteLink link(_dest, _origin, proj);
-  const RoughAltitude vh = calc_vheight(link)+_dest.altitude;
+  const RoughAltitude vh = calc_vheight(link) + _dest.altitude;
   if (can_climb())
     link.second.altitude = std::max(_dest.altitude, std::min(vh, cruise_altitude));
   else
@@ -146,12 +144,10 @@ RoutePolars::generate_intermediate (const RoutePoint& _dest,
 }
 
 RouteLink
-RoutePolars::neighbour_link(const RoutePoint &start,
-                            const RoutePoint &end,
-                            const TaskProjection &proj,
-                            const int sign) const
+RoutePolars::neighbour_link(const RoutePoint &start, const RoutePoint &end,
+                            const TaskProjection &proj, const int sign) const
 {
-  const FlatGeoPoint d = end-start;
+  const FlatGeoPoint d = end - start;
 
   // table of rotations for different maximum lengths.  these are calculated so
   // there is sufficient rotation as lengths get small for deltas to not
@@ -170,27 +166,30 @@ RoutePolars::neighbour_link(const RoutePoint &start,
   static gcc_constexpr_data int cosa[] =
     {256, 222, 241, 248, 251, 252, 253, 254, 254, 255, 255, 255, 255, 255 };
 
-  const int index = std::min((int)8, std::max(abs(d.Longitude), abs(d.Latitude))-1);
+  const int index = std::min((int)8,
+                             std::max(abs(d.Longitude), abs(d.Latitude)) - 1);
 
-  FlatGeoPoint dr((d.Longitude * cosa[index] - d.Latitude * sina[index] * sign)>>8,
-                  (d.Longitude * sina[index] * sign + d.Latitude * cosa[index])>>8);
-  RoutePoint pd(start+dr,
-                start.altitude);
+  FlatGeoPoint dr(
+      (d.Longitude * cosa[index] - d.Latitude * sina[index] * sign) >> 8,
+      (d.Longitude * sina[index] * sign + d.Latitude * cosa[index]) >> 8);
+  RoutePoint pd(start + dr, start.altitude);
   pd.RoundLocation();
   return generate_intermediate(start, pd, proj);
 }
-
 
 bool
 RoutePolars::achievable(const RouteLink& link, const bool check_ceiling) const
 {
   if (can_climb())
     return true;
-  if (check_ceiling && config.use_ceiling &&
-      (link.second.altitude > climb_ceiling))
+
+  if (check_ceiling &&
+      config.use_ceiling &&
+      link.second.altitude > climb_ceiling)
     return false;
-  return (link.second.altitude <= cruise_altitude)
-    && (link.second.altitude-link.first.altitude >= calc_vheight(link));
+
+  return link.second.altitude <= cruise_altitude &&
+         link.second.altitude - link.first.altitude >= calc_vheight(link);
 }
 
 void
@@ -201,23 +200,21 @@ RoutePolars::set_config(const RoutePlannerConfig& _config,
   config = _config;
 
   cruise_altitude = _cruise_alt;
-  if (config.use_ceiling) {
+  if (config.use_ceiling)
     climb_ceiling = std::max(_ceiling_alt, cruise_altitude);
-  } else {
+  else
     climb_ceiling = SHRT_MAX;
-  }
 }
 
 bool
-RoutePolars::can_climb() const {
+RoutePolars::can_climb() const
+{
   return config.allow_climb && positive(inv_M);
 }
 
 bool
-RoutePolars::intersection(const AGeoPoint& origin,
-                          const AGeoPoint& destination,
-                          const RasterMap* map,
-                          const TaskProjection& proj,
+RoutePolars::intersection(const AGeoPoint& origin, const AGeoPoint& destination,
+                          const RasterMap* map, const TaskProjection& proj,
                           GeoPoint& intx) const
 {
   if (!map || !map->isMapLoaded())
@@ -225,7 +222,8 @@ RoutePolars::intersection(const AGeoPoint& origin,
 
   RouteLink e(RoutePoint(proj.project(destination), destination.altitude),
               RoutePoint(proj.project(origin), origin.altitude), proj);
-  if (!positive(e.d)) return false;
+  if (!positive(e.d))
+    return false;
 
   const RoughAltitude h_diff = origin.altitude - destination.altitude;
 
@@ -241,8 +239,7 @@ RoutePolars::intersection(const AGeoPoint& origin,
   if (h_diff > vh) {
     // have excess height to glide, scan pure glide, will arrive at destination high
 
-    intx = map->Intersection(origin,
-                             (short)(origin.altitude - safety_height()),
+    intx = map->Intersection(origin, (short)(origin.altitude - safety_height()),
                              (short)vh, destination);
     return !(intx == destination);
   }
@@ -272,14 +269,12 @@ RoutePolars::calc_glide_arrival(const AFlatGeoPoint& origin,
                                 const FlatGeoPoint& dest,
                                 const TaskProjection& proj) const
 {
-  const RouteLink e(RoutePoint(dest, RoughAltitude(0)),
-                    origin, proj);
-  return origin.altitude-calc_vheight(e);
+  const RouteLink e(RoutePoint(dest, RoughAltitude(0)), origin, proj);
+  return origin.altitude - calc_vheight(e);
 }
 
 FlatGeoPoint
-RoutePolars::reach_intercept(const int index,
-                             const AGeoPoint& origin,
+RoutePolars::reach_intercept(const int index, const AGeoPoint& origin,
                              const RasterMap* map,
                              const TaskProjection& proj) const
 {
@@ -287,8 +282,7 @@ RoutePolars::reach_intercept(const int index,
   const RoughAltitude altitude = origin.altitude - safety_height();
   const AGeoPoint m_origin((GeoPoint)origin, altitude);
   const GeoPoint dest = msl_intercept(index, m_origin, proj);
-  const GeoPoint p = valid
-    ? map->Intersection(m_origin, (short)altitude, (short)altitude, dest)
-    : dest;
+  const GeoPoint p = valid ?
+    map->Intersection(m_origin, (short)altitude, (short)altitude, dest) : dest;
   return proj.project(p);
 }

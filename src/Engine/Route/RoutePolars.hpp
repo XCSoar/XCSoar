@@ -42,7 +42,8 @@ struct AFlatGeoPoint;
  * for pure glide and cruise-climb modes, with front-end functions to
  * calculate path times which may involve switching between the modes.
  */
-class RoutePolars {
+class RoutePolars
+{
 public:
   /**
    * Re-initialise performance tables when polar or wind changes
@@ -87,8 +88,7 @@ public:
    * @return True if intersect occurs
    */
   bool check_clearance(const RouteLink &e, const RasterMap* map,
-                       const TaskProjection &proj,
-                       RoutePoint& inp) const;
+                       const TaskProjection &proj, RoutePoint& inp) const;
 
   /**
    * Rotate line from start to end either left or right
@@ -100,15 +100,16 @@ public:
    *
    * @return Rotated link
    */
-  RouteLink neighbour_link(const RoutePoint &start,
-                           const RoutePoint &end,
-                           const TaskProjection &proj,
-                           const int sign) const;
+  RouteLink neighbour_link(const RoutePoint &start, const RoutePoint &end,
+                           const TaskProjection &proj, const int sign) const;
 
-  RoughAltitude cruise_altitude; /**< Altitude (m) above which climbs become slow */
-  RoughAltitude climb_ceiling; /**< Altitude (m) above which the aircraft cannot climb */
+  /** Altitude (m) above which climbs become slow */
+  RoughAltitude cruise_altitude;
+  /** Altitude (m) above which the aircraft cannot climb */
+  RoughAltitude climb_ceiling;
 
-  bool can_climb() const; /**< Whether climbs are possible/allowed */
+  /** Whether climbs are possible/allowed */
+  bool can_climb() const;
 
   /**
    * Calculate the glide height that would be used up in
@@ -205,10 +206,8 @@ public:
    *
    * @return true if terrain intersects
    */
-  bool intersection(const AGeoPoint& origin,
-                    const AGeoPoint& destination,
-                    const RasterMap* map,
-                    const TaskProjection& proj,
+  bool intersection(const AGeoPoint& origin, const AGeoPoint& destination,
+                    const RasterMap* map, const TaskProjection& proj,
                     GeoPoint& intx) const;
 
   /**
@@ -222,16 +221,16 @@ public:
     return RoughAltitude(config.safety_height_terrain);
   }
 
-  FlatGeoPoint reach_intercept(const int index,
-                               const AGeoPoint& p,
+  FlatGeoPoint reach_intercept(const int index, const AGeoPoint& p,
                                const RasterMap* map,
                                const TaskProjection& proj) const;
 
 private:
-
   RoutePolar polar_glide;
   RoutePolar polar_cruise;
-  fixed inv_M; /**< Reciprocal of MacCready value (s/m) */
+
+  /** Reciprocal of MacCready value (s/m) */
+  fixed inv_M;
 
   RoutePlannerConfig config;
 
