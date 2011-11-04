@@ -73,7 +73,9 @@ public:
   int flight_mode_height_margin;
 
   /** Incremental task speed adjusted for mc, target changes */
-  fixed get_pirker_speed() const;
+  fixed get_pirker_speed() const {
+    return total.pirker.get_speed_incremental();
+  }
 
   /** Reset each element (for incremental speeds). */
   void reset();

@@ -68,9 +68,3 @@ TaskStatsComputer::reset()
   total.Reset();
   current_leg.Reset();
 }
-
-fixed
-TaskStats::get_pirker_speed() const
-{
-  return total.pirker.get_speed_incremental();
-}
