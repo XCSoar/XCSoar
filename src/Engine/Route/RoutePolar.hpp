@@ -47,11 +47,14 @@ typedef AFlatGeoPoint RoutePoint;
  * is the origin (earlier in time).
  */
 struct RouteLinkBase {
-  RoutePoint first;                                         /**< Destination location */
-  RoutePoint second;                                        /**< Origin location */
+  /** Destination location */
+  RoutePoint first;
+  /** Origin location */
+  RoutePoint second;
 
   RouteLinkBase (const RoutePoint& _dest,
                  const RoutePoint& _origin): first(_dest), second(_origin) {}
+
   /**
    * Equality comparison operator
    *
@@ -73,13 +76,23 @@ struct RouteLinkBase {
    * @return true if lexicographically smaller
    */
   gcc_pure
-  bool operator< (const RouteLinkBase &o) const {
-    if (first.Longitude != o.first.Longitude) return first.Longitude < o.first.Longitude;
-    if (first.Latitude != o.first.Latitude) return first.Latitude < o.first.Latitude;
-    if (first.altitude != o.first.altitude) return first.altitude < o.first.altitude;
-    if (second.Longitude != o.second.Longitude) return second.Longitude < o.second.Longitude;
-    if (second.Latitude != o.second.Latitude) return second.Latitude < o.second.Latitude;
-    if (second.altitude != o.second.altitude) return second.altitude < o.second.altitude;
+  bool
+  operator<(const RouteLinkBase &o) const
+  {
+    if (first.Longitude != o.first.Longitude)
+      return first.Longitude < o.first.Longitude;
+    if (first.Latitude != o.first.Latitude)
+      return first.Latitude < o.first.Latitude;
+    if (first.altitude != o.first.altitude)
+      return first.altitude < o.first.altitude;
+
+    if (second.Longitude != o.second.Longitude)
+      return second.Longitude < o.second.Longitude;
+    if (second.Latitude != o.second.Latitude)
+      return second.Latitude < o.second.Latitude;
+    if (second.altitude != o.second.altitude)
+      return second.altitude < o.second.altitude;
+
     return false;
    }
 
@@ -125,7 +138,7 @@ struct RouteLinkBase {
    */
   gcc_pure
   int cross(const RouteLinkBase& o) const {
-    return (o.second-o.first).CrossProduct(second-first);
+    return (o.second - o.first).CrossProduct(second - first);
   }
 };
 
@@ -136,12 +149,12 @@ struct RouteLinkBase {
  */
 struct RouteLink: public RouteLinkBase {
 public:
-  fixed d;                                                  /**< Distance (m) */
-  fixed inv_d;                                              /**< Reciprocal of
-                                                             * distance (1/m) */
-  unsigned polar_index;                                     /**< Direction index
-                                                             * to be used for
-                                                             * RoutePolar lookups*/
+  /** Distance (m) */
+  fixed d;
+  /** Reciprocal of distance (1/m) */
+  fixed inv_d;
+  /** Direction index to be used for RoutePolar lookups */
+  unsigned polar_index;
 
   RouteLink (const RouteLinkBase& link,
              const TaskProjection& proj);
@@ -172,25 +185,32 @@ private:
  * Enables fast performance simulation without using GlidePolar calls.
  *
  */
-class RoutePolar {
+class RoutePolar
+{
   /**
    * Structure to hold aircraft performance for a single direction
    */
-  struct RoutePolarPoint {
-    fixed slowness; /**< Inverse speed (s/m) */
-    fixed gradient; /**< Glide slope gradient (m loss / m travelled) */
-    fixed inv_gradient; /**< Reciprocal gradient (m travelled / m loss) */
-    bool valid; /**< Whether this solution is valid (non-zero speed) */
+  struct RoutePolarPoint
+  {
+    /** Inverse speed (s/m) */
+    fixed slowness;
+    /** Glide slope gradient (m loss / m travelled) */
+    fixed gradient;
+    /** Reciprocal gradient (m travelled / m loss) */
+    fixed inv_gradient;
+    /** Whether this solution is valid (non-zero speed) */
+    bool valid;
 
     RoutePolarPoint() = default;
 
-    RoutePolarPoint(const fixed &_slowness, const fixed &_gradient):slowness(_slowness),gradient(_gradient),valid(true)
-      {
-        if (positive(gradient))
-          inv_gradient = fixed_one/gradient;
-        else
-          inv_gradient = fixed_zero;
-      };
+    RoutePolarPoint(const fixed &_slowness, const fixed &_gradient)
+      :slowness(_slowness), gradient(_gradient), valid(true)
+    {
+      if (positive(gradient))
+        inv_gradient = fixed_one / gradient;
+      else
+        inv_gradient = fixed_zero;
+    };
   };
 
   RoutePolarPoint points[ROUTEPOLAR_POINTS];
@@ -204,8 +224,7 @@ public:
    * @param wind Wind condition
    * @param glide Whether pure glide or cruise-climb is enforced
    */
-  void initialise(const GlidePolar& polar,
-                  const SpeedVector& wind,
+  void initialise(const GlidePolar& polar, const SpeedVector& wind,
                   const bool glide);
 
   /**

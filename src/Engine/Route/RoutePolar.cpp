@@ -73,12 +73,11 @@ RoutePolar::solve_task(const GlidePolar& glide_polar,
   return MacCready::solve(glide_polar, task);
 }
 
-
-void RoutePolar::initialise(const GlidePolar& polar,
-                            const SpeedVector& wind,
-                            const bool is_glide)
+void
+RoutePolar::initialise(const GlidePolar& polar, const SpeedVector& wind,
+                       const bool is_glide)
 {
-  for (unsigned i=0; i< ROUTEPOLAR_POINTS; ++i) {
+  for (unsigned i = 0; i < ROUTEPOLAR_POINTS; ++i) {
     const Angle ang = IndexToAngle(i);
     GlideResult res = solve_task(polar, wind, ang, is_glide);
     RoutePolarPoint point(res.time_elapsed, res.height_glide);
@@ -92,27 +91,31 @@ void
 RoutePolar::index_to_dxdy(const int index, int& dx, int& dy)
 {
   static gcc_constexpr_data int sx[ROUTEPOLAR_POINTS]= {
-    128, 126, 123, 118, 111, 102, 91, 79, 66, 51, 36, 20, 4, -12, -28, -44, -59, -73, -86, -97, -107, -115, -121, -125, -127, -127, -125, -121, -115, -107, -97, -86, -73, -59, -44, -28, -12, 4, 20, 36, 51, 66, 79, 91, 102, 111, 118, 123, 126,
+    128, 126, 123, 118, 111, 102, 91, 79, 66, 51, 36, 20, 4, -12, -28, -44,
+    -59, -73, -86, -97, -107, -115, -121, -125, -127, -127, -125, -121, -115,
+    -107, -97, -86, -73, -59, -44, -28, -12, 4, 20, 36, 51, 66, 79, 91, 102,
+    111, 118, 123, 126,
   };
   static gcc_constexpr_data int sy[ROUTEPOLAR_POINTS]= {
-    0, 16, 32, 48, 62, 76, 89, 100, 109, 117, 122, 126, 127, 127, 124, 120, 113, 104, 94, 82, 69, 55, 40, 24, 8, -8, -24, -40, -55, -69, -82, -94, -104, -113, -120, -124, -127, -127, -126, -122, -117, -109, -100, -89, -76, -62, -48, -32, -16,
+    0, 16, 32, 48, 62, 76, 89, 100, 109, 117, 122, 126, 127, 127, 124, 120,
+    113, 104, 94, 82, 69, 55, 40, 24, 8, -8, -24, -40, -55, -69, -82, -94,
+    -104, -113, -120, -124, -127, -127, -126, -122, -117, -109, -100, -89,
+    -76, -62, -48, -32, -16,
   };
 
   dx = sx[index];
   dy = sy[index];
 }
 
-RouteLink::RouteLink (const RouteLinkBase& _link,
-                      const TaskProjection &proj):
-  RouteLinkBase(_link)
+RouteLink::RouteLink (const RouteLinkBase& _link, const TaskProjection &proj)
+  :RouteLinkBase(_link)
 {
   calc_speedups(proj);
 }
 
-RouteLink::RouteLink (const RoutePoint& _destination,
-                      const RoutePoint& _origin,
-                      const TaskProjection &proj):
-  RouteLinkBase(_destination, _origin)
+RouteLink::RouteLink (const RoutePoint& _destination, const RoutePoint& _origin,
+                      const TaskProjection &proj)
+  :RouteLinkBase(_destination, _origin)
 {
   calc_speedups(proj);
 }
@@ -121,18 +124,18 @@ void
 RouteLink::calc_speedups(const TaskProjection& proj)
 {
   const fixed scale = proj.get_approx_scale();
-  const fixed dx = fixed(first.Longitude-second.Longitude);
-  const fixed dy = fixed(first.Latitude-second.Latitude);
+  const fixed dx = fixed(first.Longitude - second.Longitude);
+  const fixed dy = fixed(first.Latitude - second.Latitude);
   if (!positive(fabs(dx)) && !positive(fabs(dy))) {
-    d= fixed_zero;
+    d = fixed_zero;
     inv_d = fixed_zero;
     polar_index = 0;
     return;
   }
   mag_rmag(dx, dy, d, inv_d);
   polar_index = XYToIndex(dx, dy);
-  d*= scale;
-  inv_d/= scale;
+  d *= scale;
+  inv_d /= scale;
 }
 
 RouteLink
@@ -148,6 +151,6 @@ RouteLink::flat() const
 bool
 RouteLinkBase::is_short() const
 {
-  return (abs(first.Longitude-second.Longitude)<ROUTE_MIN_STEP)
-    && (abs(first.Latitude-second.Latitude)<ROUTE_MIN_STEP);
+  return abs(first.Longitude - second.Longitude) < ROUTE_MIN_STEP &&
+         abs(first.Latitude - second.Latitude) < ROUTE_MIN_STEP;
 }
