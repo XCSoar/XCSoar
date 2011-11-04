@@ -47,11 +47,11 @@ typedef AFlatGeoPoint RoutePoint;
  * is the origin (earlier in time).
  */
 struct RouteLinkBase {
-  RouteLinkBase (const RoutePoint& _dest,
-                 const RoutePoint& _origin): first(_dest), second(_origin) {}
   RoutePoint first;                                         /**< Destination location */
   RoutePoint second;                                        /**< Origin location */
 
+  RouteLinkBase (const RoutePoint& _dest,
+                 const RoutePoint& _origin): first(_dest), second(_origin) {}
   /**
    * Equality comparison operator
    *
@@ -127,7 +127,6 @@ struct RouteLinkBase {
   int cross(const RouteLinkBase& o) const {
     return (o.second-o.first).CrossProduct(second-first);
   }
-
 };
 
 /**
@@ -137,11 +136,6 @@ struct RouteLinkBase {
  */
 struct RouteLink: public RouteLinkBase {
 public:
-  RouteLink (const RouteLinkBase& link,
-             const TaskProjection& proj);
-  RouteLink (const RoutePoint& _first,
-             const RoutePoint& _second,
-             const TaskProjection& proj);
   fixed d;                                                  /**< Distance (m) */
   fixed inv_d;                                              /**< Reciprocal of
                                                              * distance (1/m) */
@@ -149,6 +143,11 @@ public:
                                                              * to be used for
                                                              * RoutePolar lookups*/
 
+  RouteLink (const RouteLinkBase& link,
+             const TaskProjection& proj);
+  RouteLink (const RoutePoint& _first,
+             const RoutePoint& _second,
+             const TaskProjection& proj);
   /**
    * Generate RouteLink projected flat such that the destination altitude equals
    * the start altitude.  The start altitude is unaffected.
@@ -156,6 +155,7 @@ public:
    * @return link equivalent to this link flattened
    */
   RouteLink flat() const;
+
 private:
   void calc_speedups(const TaskProjection& proj);
 };
@@ -173,11 +173,15 @@ private:
  *
  */
 class RoutePolar {
-
   /**
    * Structure to hold aircraft performance for a single direction
    */
   struct RoutePolarPoint {
+    fixed slowness; /**< Inverse speed (s/m) */
+    fixed gradient; /**< Glide slope gradient (m loss / m travelled) */
+    fixed inv_gradient; /**< Reciprocal gradient (m travelled / m loss) */
+    bool valid; /**< Whether this solution is valid (non-zero speed) */
+
     RoutePolarPoint() = default;
 
     RoutePolarPoint(const fixed &_slowness, const fixed &_gradient):slowness(_slowness),gradient(_gradient),valid(true)
@@ -187,11 +191,9 @@ class RoutePolar {
         else
           inv_gradient = fixed_zero;
       };
-    fixed slowness; /**< Inverse speed (s/m) */
-    fixed gradient; /**< Glide slope gradient (m loss / m travelled) */
-    fixed inv_gradient; /**< Reciprocal gradient (m travelled / m loss) */
-    bool valid; /**< Whether this solution is valid (non-zero speed) */
   };
+
+  RoutePolarPoint points[ROUTEPOLAR_POINTS];
 
 public:
   /**
@@ -229,9 +231,6 @@ public:
 private:
   GlideResult solve_task(const GlidePolar& polar, const SpeedVector& wind,
                          const Angle theta, const bool glide) const;
-
-  RoutePolarPoint points[ROUTEPOLAR_POINTS];
-
 };
 
 #endif
