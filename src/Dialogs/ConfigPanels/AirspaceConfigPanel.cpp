@@ -55,7 +55,8 @@ static void
 ShowDisplayControls(AirspaceDisplayMode_t mode)
 {
   ShowFormControl(*wf, _T("prpClipAltitude"), mode == CLIP);
-  ShowFormControl(*wf, _T("prpAltWarningMargin"), mode == AUTO);
+  ShowFormControl(*wf, _T("prpAltWarningMargin"),
+                  mode == AUTO || mode == ALLBELOW);
 }
 
 static void

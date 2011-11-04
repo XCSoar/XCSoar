@@ -270,6 +270,13 @@ struct DeviceRegister {
      * of a "Manage" dialog?
      */
     MANAGE = 0x10,
+
+    /**
+     * Shall timeout and auto-restart be disabled for this driver?
+     * This flag should be set for devices that are not expected to
+     * send data every second.
+     */
+    NO_TIMEOUT = 0x20,
   };
 
   /**
@@ -328,6 +335,13 @@ struct DeviceRegister {
    */
   bool SupportsBulkBaudRate() const {
     return (Flags & BULK_BAUD_RATE) != 0;
+  }
+
+  /**
+   * Shall devices be restarted automatically when they time out?
+   */
+  bool HasTimeout() const {
+    return (Flags & NO_TIMEOUT) == 0;
   }
 };
 

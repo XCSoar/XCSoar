@@ -288,15 +288,6 @@ void dlgConfigFontsShowModal()
                               szProfileUseCustomFonts,
                               ui_settings.custom_fonts);
 
-  TempInfoWindowFont.Reset();
-  TempTitleWindowFont.Reset();
-  TempMapWindowFont.Reset();
-  TempTitleSmallWindowFont.Reset();
-  TempMapWindowBoldFont.Reset();
-  TempCDIWindowFont.Reset();
-  TempMapLabelFont.Reset();
-  TempMapLabelImportantFont.Reset();
-
   if (changed) {
     Profile::Save();
 
@@ -305,4 +296,13 @@ void dlgConfigFontsShowModal()
   }
 
   delete wf;
+
+  TempInfoWindowFont.Reset();
+  TempTitleWindowFont.Reset();
+  TempMapWindowFont.Reset();
+  TempTitleSmallWindowFont.Reset();
+  TempMapWindowBoldFont.Reset();
+  TempCDIWindowFont.Reset();
+  TempMapLabelFont.Reset();
+  TempMapLabelImportantFont.Reset();
 }

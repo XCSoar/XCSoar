@@ -227,28 +227,6 @@ public:
   }
 
   /**
-   * Calculate direction index from x,y offsets.  This is equivalent
-   * to a fast, inaccurate atan2 returning an index.
-   *
-   * @param dx X distance units
-   * @param dy Y distance units
-   *
-   * @return Direction index
-   */
-  static int dxdy_to_index(const int dx, const int dy);
-
-  /**
-   * Calculate direction index from normalised x,y offsets.  This is equivalent
-   * to a fast, inaccurate atan2 returning an index.
-   *
-   * @param dx X distance units
-   * @param dy Y distance units
-   *
-   * @return Direction index
-   */
-  static int dxdy_to_index_norm(const int dx, const int dy);
-
-  /**
    * Calculate distances normalised to 128 corresponding to direction index
    *
    * @param index Direction index
