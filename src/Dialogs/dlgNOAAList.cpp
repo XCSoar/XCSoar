@@ -74,8 +74,7 @@ UpdateList()
     list.push_back(item);
   }
 
-  if (len > 1)
-    std::sort(list.begin(), list.end());
+  std::sort(list.begin(), list.end());
 
   station_list->SetLength(len);
   station_list->invalidate();
