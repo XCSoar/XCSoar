@@ -51,7 +51,7 @@ class ThreadedOperationEnvironment
     Data()
       :text(_T("")),
        progress_range(0u), progress_position(0u),
-       update_text(false),
+       update_error(false), update_text(false),
        update_progress_range(false), update_progress_position(false) {}
 
     void SetErrorMessage(const TCHAR *_error) {
