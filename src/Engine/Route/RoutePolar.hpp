@@ -52,8 +52,8 @@ struct RouteLinkBase {
   /** Origin location */
   RoutePoint second;
 
-  RouteLinkBase (const RoutePoint& _dest,
-                 const RoutePoint& _origin): first(_dest), second(_origin) {}
+  RouteLinkBase(const RoutePoint& _dest, const RoutePoint& _origin)
+    :first(_dest), second(_origin) {}
 
   /**
    * Equality comparison operator
@@ -64,8 +64,7 @@ struct RouteLinkBase {
    */
   gcc_pure
   bool operator==(const RouteLinkBase &o) const {
-    return (first == o.first) &&
-      (second == o.second);
+    return (first == o.first) && (second == o.second);
   }
 
   /**
@@ -97,11 +96,11 @@ struct RouteLinkBase {
    }
 
   /**
-   * Return 2d distance of this link
+   * Return 2d Distance of this link
    * @return distance in FlatGeoPoint units
    */
   gcc_pure
-  unsigned distance() const {
+  unsigned Distance() const {
     return first.Distance(second);
   }
 
@@ -112,7 +111,7 @@ struct RouteLinkBase {
    * @return true if this link is short
    */
   gcc_pure
-  bool is_short() const;
+  bool IsShort() const;
 
   /**
    * Calculate the dot product of this link with another.
@@ -124,7 +123,7 @@ struct RouteLinkBase {
    * @return dot product of this object with second object
    */
   gcc_pure
-  int dot(const RouteLinkBase& o) const {
+  int DotProduct(const RouteLinkBase& o) const {
     return (o.second-o.first).DotProduct(second-first);
   }
 
@@ -137,7 +136,7 @@ struct RouteLinkBase {
    * @return cross product of this object with second object
    */
   gcc_pure
-  int cross(const RouteLinkBase& o) const {
+  int CrossProduct(const RouteLinkBase& o) const {
     return (o.second - o.first).CrossProduct(second - first);
   }
 };
@@ -151,26 +150,25 @@ struct RouteLink: public RouteLinkBase {
 public:
   /** Distance (m) */
   fixed d;
-  /** Reciprocal of distance (1/m) */
+  /** Reciprocal of Distance (1/m) */
   fixed inv_d;
   /** Direction index to be used for RoutePolar lookups */
   unsigned polar_index;
 
-  RouteLink (const RouteLinkBase& link,
+  RouteLink(const RouteLinkBase& link, const TaskProjection& proj);
+  RouteLink (const RoutePoint& _first, const RoutePoint& _second,
              const TaskProjection& proj);
-  RouteLink (const RoutePoint& _first,
-             const RoutePoint& _second,
-             const TaskProjection& proj);
+
   /**
    * Generate RouteLink projected flat such that the destination altitude equals
    * the start altitude.  The start altitude is unaffected.
    *
    * @return link equivalent to this link flattened
    */
-  RouteLink flat() const;
+  RouteLink Flat() const;
 
 private:
-  void calc_speedups(const TaskProjection& proj);
+  void CalcSpeedups(const TaskProjection& proj);
 };
 
 #define ROUTEPOLAR_Q0 (6)
@@ -224,7 +222,7 @@ public:
    * @param wind Wind condition
    * @param glide Whether pure glide or cruise-climb is enforced
    */
-  void initialise(const GlidePolar& polar, const SpeedVector& wind,
+  void Initialise(const GlidePolar& polar, const SpeedVector& wind,
                   const bool glide);
 
   /**
@@ -234,7 +232,7 @@ public:
    *
    * @return RoutePolarPoint data corresponding to this direction index
    */
-  const RoutePolarPoint& get_point(const int index) const {
+  const RoutePolarPoint& GetPoint(const int index) const {
     return points[index];
   }
 
@@ -245,11 +243,11 @@ public:
    * @param dx X distance units
    * @param dy Y distance units
    */
-  static void index_to_dxdy(const int index, int& dx, int& dy);
+  static void IndexToDXDY(const int index, int& dx, int& dy);
 
 private:
-  GlideResult solve_task(const GlidePolar& polar, const SpeedVector& wind,
-                         const Angle theta, const bool glide) const;
+  GlideResult SolveTask(const GlidePolar& polar, const SpeedVector& wind,
+                        const Angle theta, const bool glide) const;
 };
 
 #endif

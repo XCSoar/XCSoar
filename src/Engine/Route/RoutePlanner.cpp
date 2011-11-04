@@ -102,7 +102,7 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
   astar_goal = destination_last;
 
   RouteLink e_test(start, astar_goal, task_projection);
-  if (e_test.is_short())
+  if (e_test.IsShort())
     return false;
   if (!rpolars_route.IsAchievable(e_test))
     return false;
@@ -284,7 +284,7 @@ RoutePlanner::IsSetUnique(const RouteLinkBase &e)
 void
 RoutePlanner::AddCandidate(const RouteLinkBase& e)
 {
-  if (e.is_short())
+  if (e.IsShort())
     return;
   if (!IsSetUnique(e))
     return;
@@ -340,7 +340,7 @@ RoutePlanner::AddShortcut(const RoutePoint &node)
 void
 RoutePlanner::AddEdges(const RouteLink &e)
 {
-  const bool this_short = e.is_short();
+  const bool this_short = e.IsShort();
   RoutePoint inx;
   if (!CheckClearance(e, inx)) {
     if (!this_short)
@@ -405,7 +405,7 @@ RoutePlanner::AddNearbyTerrainSweep(const RoutePoint& p,
                                                        task_projection, sign);
 
   // dont add directions 90 degrees away from target
-  if (link_divert.dot(c_link) <= 0)
+  if (link_divert.DotProduct(c_link) <= 0)
     return;
 
   // ensure the target is achievable due to climb constraints
@@ -425,7 +425,7 @@ RoutePlanner::AddNearbyTerrain(const RoutePoint &p, const RouteLink& e)
   RouteLink c_link(e.first, p, task_projection);
 
   // dont process at all if too short
-  if (c_link.is_short())
+  if (c_link.IsShort())
     return;
 
   // give secondary intersect method a chance to catch earlier intercept
@@ -443,10 +443,10 @@ RoutePlanner::AddNearbyTerrain(const RoutePoint &p, const RouteLink& e)
       // if this link was shooting directly for goal, try both directions
       AddNearbyTerrainSweep(p, e, 1);
       AddNearbyTerrainSweep(p, e, -1);
-    } else if (e.dot(end) > 0) {
+    } else if (e.DotProduct(end) > 0) {
       // this link was already deflecting, so keep deflecting in same direction
       // until we get 90 degrees to goal (no backtracking)
-      AddNearbyTerrainSweep(p, e, e.cross(end) > 0 ? 1 : -1);
+      AddNearbyTerrainSweep(p, e, e.CrossProduct(end) > 0 ? 1 : -1);
     }
   }
 

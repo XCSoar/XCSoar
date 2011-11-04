@@ -64,7 +64,7 @@ XYToIndex(fixed x, fixed y)
 }
 
 GlideResult
-RoutePolar::solve_task(const GlidePolar& glide_polar,
+RoutePolar::SolveTask(const GlidePolar& glide_polar,
                        const SpeedVector& wind,
                        const Angle theta, const bool glide) const
 {
@@ -74,12 +74,12 @@ RoutePolar::solve_task(const GlidePolar& glide_polar,
 }
 
 void
-RoutePolar::initialise(const GlidePolar& polar, const SpeedVector& wind,
+RoutePolar::Initialise(const GlidePolar& polar, const SpeedVector& wind,
                        const bool is_glide)
 {
   for (unsigned i = 0; i < ROUTEPOLAR_POINTS; ++i) {
     const Angle ang = IndexToAngle(i);
-    GlideResult res = solve_task(polar, wind, ang, is_glide);
+    GlideResult res = SolveTask(polar, wind, ang, is_glide);
     RoutePolarPoint point(res.time_elapsed, res.height_glide);
     if (res.validity != GlideResult::RESULT_OK)
       point.valid = false;
@@ -88,7 +88,7 @@ RoutePolar::initialise(const GlidePolar& polar, const SpeedVector& wind,
 }
 
 void
-RoutePolar::index_to_dxdy(const int index, int& dx, int& dy)
+RoutePolar::IndexToDXDY(const int index, int& dx, int& dy)
 {
   static gcc_constexpr_data int sx[ROUTEPOLAR_POINTS]= {
     128, 126, 123, 118, 111, 102, 91, 79, 66, 51, 36, 20, 4, -12, -28, -44,
@@ -110,18 +110,18 @@ RoutePolar::index_to_dxdy(const int index, int& dx, int& dy)
 RouteLink::RouteLink (const RouteLinkBase& _link, const TaskProjection &proj)
   :RouteLinkBase(_link)
 {
-  calc_speedups(proj);
+  CalcSpeedups(proj);
 }
 
 RouteLink::RouteLink (const RoutePoint& _destination, const RoutePoint& _origin,
                       const TaskProjection &proj)
   :RouteLinkBase(_destination, _origin)
 {
-  calc_speedups(proj);
+  CalcSpeedups(proj);
 }
 
 void
-RouteLink::calc_speedups(const TaskProjection& proj)
+RouteLink::CalcSpeedups(const TaskProjection& proj)
 {
   const fixed scale = proj.get_approx_scale();
   const fixed dx = fixed(first.Longitude - second.Longitude);
@@ -139,7 +139,7 @@ RouteLink::calc_speedups(const TaskProjection& proj)
 }
 
 RouteLink
-RouteLink::flat() const
+RouteLink::Flat() const
 {
   RouteLink copy(*this);
   copy.second.altitude = copy.first.altitude;
@@ -149,7 +149,7 @@ RouteLink::flat() const
 #define ROUTE_MIN_STEP 3
 
 bool
-RouteLinkBase::is_short() const
+RouteLinkBase::IsShort() const
 {
   return abs(first.Longitude - second.Longitude) < ROUTE_MIN_STEP &&
          abs(first.Latitude - second.Latitude) < ROUTE_MIN_STEP;
