@@ -289,15 +289,6 @@ void dlgConfigFontsShowModal()
                               szProfileUseCustomFonts,
                               ui_settings.custom_fonts);
 
-  TempInfoWindowFont.reset();
-  TempTitleWindowFont.reset();
-  TempMapWindowFont.reset();
-  TempTitleSmallWindowFont.reset();
-  TempMapWindowBoldFont.reset();
-  TempCDIWindowFont.reset();
-  TempMapLabelFont.reset();
-  TempMapLabelImportantFont.reset();
-
   if (changed) {
     Profile::Save();
 
@@ -306,4 +297,13 @@ void dlgConfigFontsShowModal()
   }
 
   delete wf;
+
+  TempInfoWindowFont.reset();
+  TempTitleWindowFont.reset();
+  TempMapWindowFont.reset();
+  TempTitleSmallWindowFont.reset();
+  TempMapWindowBoldFont.reset();
+  TempCDIWindowFont.reset();
+  TempMapLabelFont.reset();
+  TempMapLabelImportantFont.reset();
 }

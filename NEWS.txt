@@ -16,6 +16,7 @@ Version 6.2.2 - not yet released
   - fix MacCready steps for knots and ft/min
   - manual and translation updates
   - support "airspace margin" setting for "All below"
+  - fix crash in font editor
 * data files
   - fixed bugs in TNP airspace file parsing
 * Android
