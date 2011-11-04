@@ -30,6 +30,11 @@ Copyright_License {
 #include <tchar.h>
 #include <cctype>
 
+namespace METARParser
+{
+  bool ParseLine(const METAR::ContentString &content, ParsedMETAR &parsed);
+}
+
 class METARLine {
 protected:
   TCHAR *start, *data, *end;
@@ -378,16 +383,14 @@ ParseQNH(const TCHAR *token, ParsedMETAR &parsed)
 }
 
 bool
-METARParser::Parse(const METAR &metar, ParsedMETAR &parsed)
+METARParser::ParseLine(const METAR::ContentString &content, ParsedMETAR &parsed)
 {
   // Examples:
   // EDDL 231050Z 31007KT 9999 FEW020 SCT130 23/18 Q1013 NOSIG
   // METAR ETOU 231055Z AUTO 15004KT 9999 FEW130 27/19 A2993 RMK AO2 RAB1038E1048DZB1006E1011 SLP128 P0000 T02710189=
   // METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=
 
-  parsed.Reset();
-
-  METARLine line(metar.content.begin());
+  METARLine line(content.begin());
   const TCHAR *token;
 
   // Parse four-letter ICAO code
@@ -458,4 +461,12 @@ METARParser::Parse(const METAR &metar, ParsedMETAR &parsed)
   }
 
   return true;
+}
+
+bool
+METARParser::Parse(const METAR &metar, ParsedMETAR &parsed)
+{
+  parsed.Reset();
+
+  return ParseLine(metar.content, parsed);
 }
