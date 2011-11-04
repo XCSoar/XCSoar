@@ -79,7 +79,7 @@ XCOM760CreateOnPort(const DeviceConfig &config, Port *com_port)
 const struct DeviceRegister xcom760Device = {
   _T("XCOM760"),
   _T("XCOM760"),
-  0,
+  DeviceRegister::NO_TIMEOUT,
   XCOM760CreateOnPort,
 };
 

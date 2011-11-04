@@ -196,6 +196,7 @@ void
 DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 {
   if (is_altair() || !config.IsAvailable() || IsConnected() ||
+      (Driver != NULL && !Driver->HasTimeout()) ||
       /* attempt to reopen a failed device every 30 seconds */
       !reopen_clock.check_update(30000))
     return;
