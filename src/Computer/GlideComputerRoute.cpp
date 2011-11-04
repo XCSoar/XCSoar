@@ -57,7 +57,7 @@ GlideComputerRoute::ProcessRoute(const MoreData &basic,
                                  const GlidePolar &safety_polar)
 {
   protected_route_planner.SetPolars(glide_polar, safety_polar,
-                                    calculated.wind);
+                                    calculated.GetWindOrZero());
 
   Reach(basic, calculated, config);
   TerrainWarning(basic, calculated, last_calculated, config);
