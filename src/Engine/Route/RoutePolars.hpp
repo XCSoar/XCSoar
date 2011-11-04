@@ -44,7 +44,20 @@ struct AFlatGeoPoint;
  */
 class RoutePolars
 {
+  RoutePolar polar_glide;
+  RoutePolar polar_cruise;
+
+  /** Reciprocal of MacCready value (s/m) */
+  fixed inv_M;
+
+  RoutePlannerConfig config;
+
 public:
+  /** Altitude (m) above which climbs become slow */
+  RoughAltitude cruise_altitude;
+  /** Altitude (m) above which the aircraft cannot climb */
+  RoughAltitude climb_ceiling;
+
   /**
    * Re-initialise performance tables when polar or wind changes
    *
@@ -102,11 +115,6 @@ public:
    */
   RouteLink neighbour_link(const RoutePoint &start, const RoutePoint &end,
                            const TaskProjection &proj, const int sign) const;
-
-  /** Altitude (m) above which climbs become slow */
-  RoughAltitude cruise_altitude;
-  /** Altitude (m) above which the aircraft cannot climb */
-  RoughAltitude climb_ceiling;
 
   /** Whether climbs are possible/allowed */
   bool can_climb() const;
@@ -226,14 +234,6 @@ public:
                                const TaskProjection& proj) const;
 
 private:
-  RoutePolar polar_glide;
-  RoutePolar polar_cruise;
-
-  /** Reciprocal of MacCready value (s/m) */
-  fixed inv_M;
-
-  RoutePlannerConfig config;
-
   GeoPoint msl_intercept(const int index, const AGeoPoint& p, const TaskProjection& proj) const;
 };
 
