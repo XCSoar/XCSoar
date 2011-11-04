@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.2.2 - not yet released
+* devices
+  - save the "bulk baud rate" setting
 * calculations
   - fix instant L/D formula
   - fix malformed F records in IGC files

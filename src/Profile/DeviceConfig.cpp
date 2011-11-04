@@ -311,6 +311,9 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("BaudRate"));
   Set(buffer, config.baud_rate);
 
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("BulkBaudRate"));
+  Set(buffer, config.bulk_baud_rate);
+
   _tcscpy(buffer, _T("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
   Set(buffer, config.driver_name);
