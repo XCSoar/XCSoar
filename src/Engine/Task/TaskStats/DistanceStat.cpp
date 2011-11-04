@@ -22,14 +22,13 @@
 
 #include "DistanceStat.hpp"
 
-DistanceStatComputer::DistanceStatComputer(DistanceStat &_data,
-                                           const bool _is_positive)
-  :data(_data), df(fixed_zero),
+DistanceStatComputer::DistanceStatComputer(const bool _is_positive)
+  :df(fixed_zero),
    v_lpf(fixed(400) / N_AV, false),
    is_positive(_is_positive) {}
 
 void
-DistanceStatComputer::calc_incremental_speed(const fixed dt)
+DistanceStatComputer::calc_incremental_speed(DistanceStat &data, const fixed dt)
 {
   if ((dt + fixed_half >= fixed_one) && positive(data.distance)) {
     if (av_dist.update(data.distance)) {
@@ -44,12 +43,12 @@ DistanceStatComputer::calc_incremental_speed(const fixed dt)
       data.speed_incremental = (is_positive ? -v_f : v_f);
     }
   } else if (!positive(dt) || !positive(data.distance)) {
-    reset_incremental_speed();
+    reset_incremental_speed(data);
   }
 }
 
 void
-DistanceStatComputer::reset_incremental_speed()
+DistanceStatComputer::reset_incremental_speed(DistanceStat &data)
 {
   df.reset(fixed(data.distance), (is_positive ? -1 : 1) * fixed(data.speed));
   v_lpf.reset((is_positive ? -1 : 1) * fixed(data.speed));

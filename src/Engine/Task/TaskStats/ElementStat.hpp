@@ -103,8 +103,6 @@ static_assert(is_trivial_clang<ElementStat>::value, "type is not trivial");
 
 class ElementStatComputer
 {
-  ElementStat &data;
-
 public:
   DistanceStatComputer remaining_effective;
   DistanceStatComputer remaining;
@@ -117,7 +115,7 @@ private:
   bool initialised;
 
 public:
-  ElementStatComputer(ElementStat &_data);
+  ElementStatComputer();
 
   /**
    * Calculate element speeds.  Incremental speeds are
@@ -125,13 +123,13 @@ public:
    *
    * @param dt Time step of sample (s)
    */
-  void CalcSpeeds(const fixed dt);
+  void CalcSpeeds(ElementStat &data, const fixed dt);
 
   /**
    * Reset to uninitialised state, to supress calculation
    * of incremental speeds.
    */
-  void Reset();
+  void Reset(ElementStat &data);
 };
 
 #endif

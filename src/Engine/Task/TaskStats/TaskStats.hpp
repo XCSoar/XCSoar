@@ -96,19 +96,13 @@ public:
 static_assert(is_trivial_clang<TaskStats>::value, "type is not trivial");
 
 class TaskStatsComputer {
-  TaskStats &data;
-
 public:
   ElementStatComputer total;
   ElementStatComputer current_leg;
 
 public:
-  TaskStatsComputer(TaskStats &_data)
-    :data(_data),
-     total(data.total), current_leg(data.current_leg) {}
-
   /** Reset each element (for incremental speeds). */
-  void reset();
+  void reset(TaskStats &data);
 };
 
 #endif

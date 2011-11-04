@@ -64,59 +64,60 @@ ElementStat::SetTimes(const fixed ts, const AircraftState& state)
 }
 
 void
-ElementStatComputer::Reset()
+ElementStatComputer::Reset(ElementStat &data)
 {
   initialised = false;
 
-  CalcSpeeds(fixed_zero);
+  CalcSpeeds(data, fixed_zero);
 }
 
 void 
-ElementStatComputer::CalcSpeeds(const fixed dt)
+ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed dt)
 {
-  remaining_effective.calc_speed(data.time_remaining);
-  remaining.calc_speed(data.time_remaining);
-  planned.calc_speed(data.time_planned);
-  travelled.calc_speed(data.time_elapsed);
-  pirker.calc_speed(data.time_elapsed);
+  data.remaining_effective.calc_speed(data.time_remaining);
+  data.remaining.calc_speed(data.time_remaining);
+  data.planned.calc_speed(data.time_planned);
+  data.travelled.calc_speed(data.time_elapsed);
+  data.pirker.calc_speed(data.time_elapsed);
 
   if (!initialised) {
     if (positive(dt) && data.time_elapsed > fixed(15))
       initialised = true;
 
-    vario.reset(data.solution_remaining);
-    remaining_effective.calc_incremental_speed(fixed_zero);
-    remaining.calc_incremental_speed(fixed_zero);
-    planned.calc_incremental_speed(fixed_zero);
-    travelled.calc_incremental_speed(fixed_zero);
-    pirker.calc_incremental_speed(fixed_zero);
+    vario.reset(data.vario, data.solution_remaining);
+    remaining_effective.calc_incremental_speed(data.remaining_effective,
+                                               fixed_zero);
+    remaining.calc_incremental_speed(data.remaining, fixed_zero);
+    planned.calc_incremental_speed(data.planned, fixed_zero);
+    travelled.calc_incremental_speed(data.travelled, fixed_zero);
+    pirker.calc_incremental_speed(data.pirker, fixed_zero);
     return;
   }
 
   if (!positive(dt))
     return;
 
-  remaining.calc_incremental_speed(dt);
-  planned.calc_incremental_speed(dt);
-  travelled.calc_incremental_speed(dt);
+  remaining.calc_incremental_speed(data.remaining, dt);
+  planned.calc_incremental_speed(data.planned, dt);
+  travelled.calc_incremental_speed(data.travelled, dt);
 
   if (data.solution_remaining.IsOk()) {
-    remaining_effective.calc_incremental_speed(dt);
-    pirker.calc_incremental_speed(dt);
-    vario.update(data.solution_remaining, fixed(dt));
+    remaining_effective.calc_incremental_speed(data.remaining_effective, dt);
+    pirker.calc_incremental_speed(data.pirker, dt);
+    vario.update(data.vario, data.solution_remaining, fixed(dt));
   } else {
-    remaining_effective.calc_incremental_speed(fixed_zero);
-    pirker.calc_incremental_speed(fixed_zero);
-    vario.reset(data.solution_remaining);
+    remaining_effective.calc_incremental_speed(data.remaining_effective,
+                                               fixed_zero);
+    pirker.calc_incremental_speed(data.pirker, fixed_zero);
+    vario.reset(data.vario, data.solution_remaining);
   }
 }
 
-ElementStatComputer::ElementStatComputer(ElementStat &_data)
-  :data(_data),
-   remaining_effective(data.remaining_effective),
-   remaining(data.remaining),
-   planned(data.planned),
-   travelled(data.travelled, false),
-   pirker(data.pirker, false),
-   vario(data.vario),
+ElementStatComputer::ElementStatComputer()
+  :remaining_effective(),
+   remaining(),
+   planned(),
+   travelled(false),
+   pirker(false),
+   vario(),
    initialised(false) {}

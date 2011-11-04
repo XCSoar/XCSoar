@@ -111,9 +111,6 @@ public:
  * internal values, while DistanceStat has only the results.
  */
 class DistanceStatComputer {
-protected:
-  DistanceStat &data;
-
 private:
   static const unsigned N_AV = 3;
 
@@ -124,11 +121,7 @@ private:
 
 public:
   /** Constructor; initialises all to zero */
-  DistanceStatComputer(DistanceStat &_data, const bool is_positive=true);
-
-  void calc_speed(fixed time) {
-    data.calc_speed(time);
-  }
+  DistanceStatComputer(const bool is_positive=true);
 
   /**
    * Calculate incremental speed from previous step.
@@ -136,18 +129,10 @@ public:
    *
    * @param dt Time step (s)
    */
-  void calc_incremental_speed(const fixed dt);
-
-  fixed get_speed_incremental() const {
-    return data.get_speed_incremental();
-  }
-
-  fixed get_speed() const {
-    return data.get_speed();
-  }
+  void calc_incremental_speed(DistanceStat &data, const fixed dt);
 
 private:
-  void reset_incremental_speed();
+  void reset_incremental_speed(DistanceStat &data);
 };
 
 #endif

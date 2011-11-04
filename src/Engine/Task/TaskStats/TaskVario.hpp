@@ -37,8 +37,6 @@ static_assert(is_trivial_clang<TaskVario>::value, "type is not trivial");
 
 class TaskVarioComputer
 {
-  TaskVario &data;
-
   DiffFilter df;
   Filter v_lpf;
 
@@ -46,7 +44,7 @@ private:
   bool initialised;
 
 public:
-  TaskVarioComputer(TaskVario &_data);
+  TaskVarioComputer();
 
 /** 
  * Update vario, taking altitude difference from a specified glide solution
@@ -54,14 +52,14 @@ public:
  * @param solution Solution for task element
  * @param dt Time step
  */
-  void update(const GlideResult& solution, const fixed dt);
+  void update(TaskVario &data, const GlideResult &solution, const fixed dt);
 
 /** 
  * Reset vario value (as if solution is held constant)
  * 
  * @param solution Element
  */
-  void reset(const GlideResult& solution);
+  void reset(TaskVario &data, const GlideResult &solution);
 };
 
 #endif

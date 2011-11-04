@@ -62,9 +62,8 @@ TaskStats::calc_flight_mode()
 }
 
 void
-TaskStatsComputer::reset()
+TaskStatsComputer::reset(TaskStats &data)
 {
-  data.reset();
-  total.Reset();
-  current_leg.Reset();
+  total.Reset(data.total);
+  current_leg.Reset(data.current_leg);
 }

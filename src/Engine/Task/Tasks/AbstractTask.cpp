@@ -33,7 +33,6 @@ AbstractTask::AbstractTask(enum Type _type, TaskEvents &te,
   :TaskInterface(_type),
    active_task_point(0),
    active_task_point_last(0-1),
-   stats_computer(stats),
    task_events(te),
    task_behaviour(tb),
    glide_polar(gp),
@@ -224,11 +223,11 @@ AbstractTask::UpdateStatsSpeeds(const AircraftState &state,
   if (!TaskFinished()) {
     if (TaskStarted()) {
       const fixed dt = state.time - state_last.time;
-      stats_computer.total.CalcSpeeds(dt);
-      stats_computer.current_leg.CalcSpeeds(dt);
+      stats_computer.total.CalcSpeeds(stats.total, dt);
+      stats_computer.current_leg.CalcSpeeds(stats.current_leg, dt);
     } else {
-      stats_computer.total.Reset();
-      stats_computer.current_leg.Reset();
+      stats_computer.total.Reset(stats.total);
+      stats_computer.current_leg.Reset(stats.current_leg);
     }
   }
 }
@@ -263,7 +262,7 @@ AbstractTask::Reset()
   ResetAutoMC();
   active_task_point_last = 0 - 1;
   ce_lpf.reset(fixed_one);
-  stats_computer.reset();
+  stats.reset();
 }
 
 fixed
