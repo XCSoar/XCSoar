@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.2.3 - not yet released
+* calculations
+  - don't discard manual wind when auto wind is disabled
 
 Version 6.2.2 - 2011/11/04
 * devices
