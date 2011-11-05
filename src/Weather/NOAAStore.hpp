@@ -163,13 +163,17 @@ public:
    * @return The amount of stations in the array
    */
   gcc_pure
-  unsigned Count() const;
+  unsigned Count() const {
+    return stations.size();
+  }
 
   /**
    * Returns whether the station array is already full
    */
   gcc_pure
-  bool Full() const;
+  bool Full() const {
+    return stations.full();
+  }
 };
 
 #endif

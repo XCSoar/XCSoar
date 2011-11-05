@@ -246,15 +246,3 @@ NOAAStore::Update(JobRunner &runner)
 
   return result;
 }
-
-unsigned
-NOAAStore::Count() const
-{
-  return stations.size();
-}
-
-bool
-NOAAStore::Full() const
-{
-  return stations.full();
-}
