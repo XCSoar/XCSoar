@@ -51,7 +51,7 @@ namespace CuSonde
     fixed thermalIndex;
 
     void updateTemps(fixed rh, fixed t);
-    void updateThermalIndex(unsigned short level, bool newdata=true);
+    void updateThermalIndex(unsigned short level);
 
     /** Number of measurements */
     unsigned nmeasurements;

@@ -73,7 +73,7 @@ CuSonde::setForecastTemperature(fixed val)
   for (unsigned level = 0; level < NUM_LEVELS; level++) {
     // update the ThermalIndex for each level with
     // the new maxGroundTemperature
-    cslevels[level].updateThermalIndex((unsigned short)level, false);
+    cslevels[level].updateThermalIndex((unsigned short)level);
 
     // determine to which level measurements are available
     if (!cslevels[level].empty())
@@ -208,10 +208,6 @@ CuSonde::findThermalHeight(unsigned short level)
 
     // set the overall thermal height to the calculated value
     thermalHeight = dthermalheight;
-
-#ifdef DEBUG_CUSONDE
-    LogDebug(_T("%g # thermal height \r\n"), (double)thermalHeight);
-#endif
   }
 }
 
@@ -255,10 +251,6 @@ CuSonde::findCloudBase(unsigned short level)
 
     // set the overall cloudbase to the calculated value
     cloudBase = dcloudbase;
-
-#ifdef DEBUG_CUSONDE
-    LogDebug(_T("%g # cloud base \r\n"), (double)cloudBase);
-#endif
   }
 }
 
@@ -297,7 +289,7 @@ CuSonde::Level::updateTemps(fixed rh, fixed t)
  * @param newdata Function logs data to debug file if true
  */
 void
-CuSonde::Level::updateThermalIndex(unsigned short level, bool newdata)
+CuSonde::Level::updateThermalIndex(unsigned short level)
 {
   fixed hlevel = fixed(level * HEIGHT_STEP);
 
@@ -306,13 +298,6 @@ CuSonde::Level::updateThermalIndex(unsigned short level, bool newdata)
 
   // Calculate ThermalIndex
   thermalIndex = airTemp - tempDry;
-
-#ifdef DEBUG_CUSONDE
-  if (newdata)
-    LogDebug(_T("%g %g %g %g # temp measurement \r\n"),
-             (double)hlevel, (double)airTemp, (double)dewpoint, 
-             (double)thermalIndex);
-#endif
 }
 
 /*
