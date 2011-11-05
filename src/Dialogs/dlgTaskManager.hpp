@@ -170,7 +170,7 @@ public:
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return True
    */
-  static bool OnTabPreShow(TabBarControl::EventType EventType);
+  static bool OnTabPreShow();
 
   /**
    * unzooms the task view if it is maximized
@@ -218,7 +218,7 @@ public:
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return true
    */
-  static bool OnTabPreShow(TabBarControl::EventType EventType);
+  static bool OnTabPreShow();
 
   /**
    * unzooms the task view if it is maximized
@@ -260,7 +260,7 @@ public:
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return True
    */
-  static bool OnTabPreShow(TabBarControl::EventType EventType);
+  static bool OnTabPreShow();
 
   /**
    * unzooms the task view if it is maximized
@@ -296,7 +296,9 @@ public:
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return True
    */
-  static bool OnTabPreShow(TabBarControl::EventType EventType);
+  static bool OnTabPreShow();
+
+  static bool OnTabClick();
 
   /**
    * Called when the Close tab is displayed and clicked a 2nd time
@@ -330,7 +332,7 @@ public:
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return true
    */
-  static bool OnTabPreShow(TabBarControl::EventType EventType);
+  static bool OnTabPreShow();
 
   /**
    * draws colored warning message if task has been modified

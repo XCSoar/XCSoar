@@ -318,7 +318,7 @@ pnlTaskEdit::OnKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 }
 
 bool
-pnlTaskEdit::OnTabPreShow(gcc_unused TabBarControl::EventType EventType)
+pnlTaskEdit::OnTabPreShow()
 {
   if (ordered_task != *ordered_task_pointer) {
     ordered_task = *ordered_task_pointer;

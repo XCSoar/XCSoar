@@ -359,10 +359,12 @@ public:
                    TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
                    TabBarControl::PreShowNotifyCallback_t _PreShowFunction,
                    TabBarControl::PostShowNotifyCallback_t _PostShowFunction,
+                   TabBarControl::ClickNotifyCallback_t _ClickFunction,
                    TabBarControl::ReClickNotifyCallback_t _ReClickFunction):
                    OneTabButton(_Caption, false, NULL,
                                 _PreHideFunction, _PreShowFunction,
-                                _PostShowFunction, _ReClickFunction),
+                                _PostShowFunction,
+                                _ClickFunction, _ReClickFunction),
                                 Menu(TabMenuControl::
                                      menu_tab_index(_main_menu_index,
                                                     _sub_menu_index)),
@@ -387,10 +389,12 @@ public:
                    TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
                    TabBarControl::PreShowNotifyCallback_t _PreShowFunction,
                    TabBarControl::PostShowNotifyCallback_t _PostShowFunction,
+                    TabBarControl::ClickNotifyCallback_t _ClickFunction,
                    TabBarControl::ReClickNotifyCallback_t _ReClickFunction):
                      OneTabButton(_Caption, false, NULL,
                                 _PreHideFunction, _PreShowFunction,
-                                _PostShowFunction, _ReClickFunction),
+                                  _PostShowFunction,
+                                  _ClickFunction, _ReClickFunction),
                                 FirstPageIndex(_FirstPageIndex),
                                 LastPageIndex(_LastPageIndex),
                                 MainMenuIndex(_MainMenuIndex)

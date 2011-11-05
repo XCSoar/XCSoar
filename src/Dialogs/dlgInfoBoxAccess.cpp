@@ -92,6 +92,7 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
                        dlgContent->Panels[i].preHide,
                        dlgContent->Panels[i].preShow,
                        dlgContent->Panels[i].postShow,
+                       NULL,
                        dlgContent->Panels[i].reClick);
   }
 
@@ -99,7 +100,9 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
     dlgInfoBoxAccess::pnlCloseLoad(parent, wTabBar, wf);
   assert(wClose);
   wTabBar->AddClient(wClose, _("Close"), false, NULL, NULL,  dlgInfoBoxAccess::pnlCloseOnTabPreShow,
-                                                 NULL, dlgInfoBoxAccess::pnlCloseOnTabReClick);
+                     NULL,
+                     dlgInfoBoxAccess::pnlCloseOnTabClick,
+                     dlgInfoBoxAccess::pnlCloseOnTabReClick);
 
   wTabBar->SetCurrentPage(0);
 
@@ -130,6 +133,13 @@ dlgInfoBoxAccess::pnlCloseOnCloseClicked(gcc_unused WndButton &Sender)
   dlgInfoBoxAccess::OnClose();
 }
 
+bool
+dlgInfoBoxAccess::pnlCloseOnTabClick()
+{
+  dlgInfoBoxAccess::OnClose();
+  return false;
+}
+
 void
 dlgInfoBoxAccess::pnlCloseOnTabReClick()
 {
@@ -137,12 +147,8 @@ dlgInfoBoxAccess::pnlCloseOnTabReClick()
 }
 
 bool
-dlgInfoBoxAccess::pnlCloseOnTabPreShow(TabBarControl::EventType EventType)
+dlgInfoBoxAccess::pnlCloseOnTabPreShow()
 {
-  if (EventType == TabBarControl::MouseOrButton) {
-    dlgInfoBoxAccess::OnClose();
-    return true;
-  }
   return true;
 }
 

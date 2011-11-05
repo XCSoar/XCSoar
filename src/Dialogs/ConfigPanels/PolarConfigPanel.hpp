@@ -36,7 +36,7 @@ namespace PolarConfigPanel
   bool Save();
 
   void SetVisible(bool active);
-  bool PreShow(TabBarControl::EventType);
+  bool PreShow();
   bool PreHide();
 
   void OnLoadInternal(WndButton &button);

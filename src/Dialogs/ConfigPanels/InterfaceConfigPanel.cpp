@@ -55,7 +55,7 @@ InterfaceConfigPanel::SetVisible(bool active)
 }
 
 bool
-InterfaceConfigPanel::PreShow(TabBarControl::EventType)
+InterfaceConfigPanel::PreShow()
 {
   InterfaceConfigPanel::SetVisible(true);
   return true;

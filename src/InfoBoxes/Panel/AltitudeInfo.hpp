@@ -32,7 +32,7 @@ class WndForm;
 class TabBarControl;
 
 bool
-AltitudeInfoPreShow(TabBarControl::EventType EventType);
+AltitudeInfoPreShow();
 
 Window *
 LoadAltitudeInfoPanel(SingleWindow &parent, TabBarControl *wTabBar,

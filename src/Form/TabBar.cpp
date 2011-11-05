@@ -139,12 +139,15 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
     PreHideNotifyCallback_t PreHideFunction,
     PreShowNotifyCallback_t PreShowFunction,
     PostShowNotifyCallback_t PostShowFunction,
+                         ClickNotifyCallback_t ClickFunction,
     ReClickNotifyCallback_t ReClickFunction)
 {
   AddClientWindow(w);
 
   OneTabButton *b = new OneTabButton(Caption, IsButtonOnly, bmp,
-      PreHideFunction, PreShowFunction, PostShowFunction, ReClickFunction);
+                                     PreHideFunction,
+                                     PreShowFunction, PostShowFunction,
+                                     ClickFunction, ReClickFunction);
 
   buttons.append(b);
 
@@ -168,9 +171,14 @@ TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
           Continue = false;
     }
 
+    if (Continue && _EventType == MouseOrButton &&
+        buttons[i]->ClickFunction != NULL &&
+        !buttons[i]->ClickFunction())
+      Continue = false;
+
     if (Continue) {
       if (buttons[i]->PreShowFunction) {
-        Continue = buttons[i]->PreShowFunction(_EventType);
+        Continue = buttons[i]->PreShowFunction();
       }
     }
 

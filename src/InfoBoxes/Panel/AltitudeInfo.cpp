@@ -88,7 +88,7 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 }
 
 bool
-AltitudeInfoPreShow(TabBarControl::EventType EventType)
+AltitudeInfoPreShow()
 {
   return PnlInfoUpdate();
 }

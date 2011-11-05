@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Dialogs/XML.hpp"
 #include "Dialogs/dlgTools.h"
-#include "Form/TabBar.hpp"
 
 #include <tchar.h>
 #include "Language/Language.hpp"
@@ -35,6 +34,7 @@ Copyright_License {
 class InfoBoxWindow;
 struct Waypoint;
 class Angle;
+class TabBarControl;
 
 class InfoBoxContent
 {
@@ -71,7 +71,7 @@ public:
     PanelContent(const TCHAR* _name,
                         Window* (*_load)(SingleWindow&, TabBarControl*, WndForm*, int),
                         bool (*_preHide)(void) = NULL,
-                        bool (*_preShow)(TabBarControl::EventType) = NULL,
+                        bool (*_preShow)() = NULL,
                         void (*_postShow)(void) = NULL,
                         void (*_reClick)(void) = NULL ) :
                         name(_name),
@@ -83,7 +83,7 @@ public:
     const TCHAR* name;
     Window* (*load)(SingleWindow&, TabBarControl*, WndForm*, int); // ptr to Load function
     bool (*preHide)(void); // ptr to PreHideFunction
-    bool (*preShow)(TabBarControl::EventType); // ptr to PreShowFunction
+    bool (*preShow)(); // ptr to PreShowFunction
     void (*postShow)(void); // ptr to PostShowFunction
     void (*reClick)(void); // ptr to ReClickFunction
   };

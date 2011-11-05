@@ -81,7 +81,7 @@ LoadWindEditPanel(SingleWindow &parent, TabBarControl *wTabBar,
 }
 
 bool
-WindEditPanelPreShow(TabBarControl::EventType EventType)
+WindEditPanelPreShow()
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
   const SETTINGS_COMPUTER &settings_computer =

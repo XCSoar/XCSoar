@@ -52,11 +52,12 @@ public:
                               WndForm* wf);
 
   static void pnlCloseOnCloseClicked(WndButton &Sender);
+  static bool pnlCloseOnTabClick();
   /**
    * callback
    */
   static void pnlCloseOnTabReClick();
-  static bool pnlCloseOnTabPreShow(TabBarControl::EventType EventType);
+  static bool pnlCloseOnTabPreShow();
 };
 
 #endif /* DLGINFOBOXACCESS_H_ */

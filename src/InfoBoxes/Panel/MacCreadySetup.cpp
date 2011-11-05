@@ -72,7 +72,7 @@ LoadMacCreadySetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
 }
 
 bool
-MacCreadySetupPanelPreShow(TabBarControl::EventType EventType)
+MacCreadySetupPanelPreShow()
 {
   if (XCSoarInterface::SettingsComputer().task.auto_mc)
     ((WndButton *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("cmdMode")))->SetCaption(_("MANUAL"));

@@ -36,6 +36,6 @@ LoadMacCreadySetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
                         WndForm *wf, int id);
 
 bool
-MacCreadySetupPanelPreShow(TabBarControl::EventType EventType);
+MacCreadySetupPanelPreShow();
 
 #endif

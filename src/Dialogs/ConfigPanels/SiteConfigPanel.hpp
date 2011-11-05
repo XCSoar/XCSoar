@@ -34,7 +34,7 @@ namespace SiteConfigPanel
   bool Save();
 
   void SetVisible(bool active);
-  bool PreShow(TabBarControl::EventType);
+  bool PreShow();
   bool PreHide();
 };
 

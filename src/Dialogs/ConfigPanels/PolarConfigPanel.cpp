@@ -286,7 +286,7 @@ PolarConfigPanel::SetVisible(bool active)
 }
 
 bool
-PolarConfigPanel::PreShow(TabBarControl::EventType)
+PolarConfigPanel::PreShow()
 {
   PolarConfigPanel::SetVisible(true);
   return true;

@@ -45,7 +45,7 @@ SiteConfigPanel::SetVisible(bool active)
 }
 
 bool
-SiteConfigPanel::PreShow(TabBarControl::EventType)
+SiteConfigPanel::PreShow()
 {
   SiteConfigPanel::SetVisible(true);
   return true;

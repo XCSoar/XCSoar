@@ -312,21 +312,22 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
     wTabBar->AddClient(wEdit, _("Turn Points"), false, TurnPointIcon, NULL,
                        pnlTaskEdit::OnTabPreShow, dlgTaskManager::SetTitle,
-                       pnlTaskEdit::OnTabReClick);
+                       NULL, pnlTaskEdit::OnTabReClick);
     TurnpointTab = 1;
 
     wTabBar->AddClient(wLst, _("Manage"), false, BrowseIcon, NULL,
                        pnlTaskList::OnTabPreShow, dlgTaskManager::SetTitle,
-                       pnlTaskList::OnTabReClick);
+                       NULL, pnlTaskList::OnTabReClick);
 
     wTabBar->AddClient(wProps, _("Rules"), false, PropertiesIcon,
                        pnlTaskProperties::OnTabPreHide,
                        pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
-                       pnlTaskProperties::OnTabReClick);
+                       NULL, pnlTaskProperties::OnTabReClick);
     PropertiesTab = 3;
 
     wTabBar->AddClient(wClose, _("Close"), false, NULL, NULL,
                        pnlTaskManagerClose::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskManagerClose::OnTabClick,
                        pnlTaskManagerClose::OnTabReClick);
 
     wTabBar->SetCurrentPage(0);
@@ -336,21 +337,21 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
     wTabBar->AddClient(wClose, _("Close"), false, NULL, NULL,
                        pnlTaskManagerClose::OnTabPreShow, dlgTaskManager::SetTitle,
-                       pnlTaskManagerClose::OnTabReClick);
+                       NULL, pnlTaskManagerClose::OnTabReClick);
 
     wTabBar->AddClient(wEdit, _("Turn Points"), false, TurnPointIcon, NULL,
                        pnlTaskEdit::OnTabPreShow, dlgTaskManager::SetTitle,
-                       pnlTaskEdit::OnTabReClick);
+                       NULL, pnlTaskEdit::OnTabReClick);
     TurnpointTab = 2;
 
     wTabBar->AddClient(wLst, _("Manage"), false, BrowseIcon, NULL,
                        pnlTaskList::OnTabPreShow, dlgTaskManager::SetTitle,
-                       pnlTaskList::OnTabReClick);
+                       NULL, pnlTaskList::OnTabReClick);
 
     wTabBar->AddClient(wProps, _("Rules"), false, PropertiesIcon,
                        pnlTaskProperties::OnTabPreHide,
                        pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
-                       pnlTaskProperties::OnTabReClick);
+                       NULL, pnlTaskProperties::OnTabReClick);
     PropertiesTab = 4;
 
     wTabBar->SetCurrentPage(0);

@@ -36,6 +36,6 @@ LoadWindEditPanel(SingleWindow &parent, TabBarControl *wTabBar,
                   WndForm *wf, int id);
 
 bool
-WindEditPanelPreShow(TabBarControl::EventType EventType);
+WindEditPanelPreShow();
 
 #endif

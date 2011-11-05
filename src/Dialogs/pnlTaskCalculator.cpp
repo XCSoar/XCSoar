@@ -228,7 +228,7 @@ pnlTaskCalculator::OnCruiseEfficiencyData(DataField *Sender, DataField::DataAcce
 }
 
 bool
-pnlTaskCalculator::OnTabPreShow(gcc_unused TabBarControl::EventType EventType)
+pnlTaskCalculator::OnTabPreShow()
 {
   if (!lazy_loaded) {
     lazy_loaded = true;

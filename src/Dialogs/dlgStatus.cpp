@@ -451,7 +451,7 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 }
 
 static bool
-OnTabUpdate(TabBarControl::EventType EventType)
+OnTabUpdate()
 {
   UpdateValuesSystem();
   UpdateValuesFlight();

@@ -60,6 +60,17 @@ pnlTaskManagerClose::OnRevertClicked(gcc_unused WndButton &Sender)
   RefreshStatus();
 }
 
+bool
+pnlTaskManagerClose::OnTabClick()
+{
+  if (!(*task_modified)) {
+    dlgTaskManager::OnClose();
+    return false;
+  }
+
+  return true;
+}
+
 void
 pnlTaskManagerClose::OnTabReClick()
 {
@@ -67,12 +78,8 @@ pnlTaskManagerClose::OnTabReClick()
 }
 
 bool
-pnlTaskManagerClose::OnTabPreShow(TabBarControl::EventType EventType)
+pnlTaskManagerClose::OnTabPreShow()
 {
-  if (!(*task_modified) && EventType == TabBarControl::MouseOrButton) {
-    dlgTaskManager::OnClose();
-    return true;
-  }
   dlgTaskManager::TaskViewRestore(wTaskView);
 
   RefreshStatus();

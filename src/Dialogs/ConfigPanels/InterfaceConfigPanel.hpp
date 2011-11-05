@@ -34,7 +34,7 @@ namespace InterfaceConfigPanel
 
   void SetVisible(bool active);
   bool PreHide();
-  bool PreShow(TabBarControl::EventType);
+  bool PreShow();
 };
 
 #endif /* INTERFACECONFIGPANEL_HPP */

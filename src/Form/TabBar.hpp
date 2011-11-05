@@ -49,8 +49,9 @@ public:
     NextPreviousKey
   };
   typedef bool (*PreHideNotifyCallback_t)(void);
-  typedef bool (*PreShowNotifyCallback_t)(EventType _EventType);
+  typedef bool (*PreShowNotifyCallback_t)();
   typedef void (*PostShowNotifyCallback_t)(void);
+  typedef bool (*ClickNotifyCallback_t)();
   typedef void (*ReClickNotifyCallback_t)(void);
 
 protected:
@@ -120,6 +121,7 @@ public:
         PreHideNotifyCallback_t PreHideFunction = NULL,
         PreShowNotifyCallback_t PreShowFunction = NULL,
         PostShowNotifyCallback_t PostShowFunction = NULL,
+                     ClickNotifyCallback_t ClickFunction = NULL,
         ReClickNotifyCallback_t ReClickFunction = NULL);
 
 public:
@@ -254,6 +256,11 @@ public:
   TabBarControl::PostShowNotifyCallback_t PostShowFunction;
 
   /**
+   * Called when the tab is being clicked explicitly.
+   */
+  TabBarControl::ClickNotifyCallback_t ClickFunction;
+
+  /**
    * Called if tab is clicked while it is the currently displayed tab
    */
   TabBarControl::ReClickNotifyCallback_t ReClickFunction;
@@ -265,12 +272,14 @@ public:
                TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
                TabBarControl::PreShowNotifyCallback_t _PreShowFunction,
                TabBarControl::PostShowNotifyCallback_t _PostShowFunction,
+               TabBarControl::ClickNotifyCallback_t _ClickFunction,
                TabBarControl::ReClickNotifyCallback_t _ReClickFunction):
                  IsButtonOnly(_IsButtonOnly),
                  bmp(_bmp),
                  PreHideFunction(_PreHideFunction),
                  PreShowFunction(_PreShowFunction),
                  PostShowFunction(_PostShowFunction),
+                 ClickFunction(_ClickFunction),
                  ReClickFunction(_ReClickFunction)
   {
     Caption = _Caption;

@@ -393,7 +393,7 @@ pnlTaskList::OnTaskViewClick(gcc_unused WndOwnerDrawFrame *Sender,
 }
 
 bool
-pnlTaskList::OnTabPreShow(gcc_unused TabBarControl::EventType EventType)
+pnlTaskList::OnTabPreShow()
 {
   browse_tabbed->SetCurrentPage(0);
   wTasks->SetCursorIndex(0); // so Save & Declare are always available
