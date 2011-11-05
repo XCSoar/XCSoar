@@ -63,9 +63,8 @@ namespace Units
    * @param Altitude The double-based Altitude
    * @param Buffer Buffer string to write to (pointer)
    * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
    */
-  bool FormatUserAltitude(fixed Altitude, TCHAR *Buffer, size_t size,
+  void FormatUserAltitude(fixed Altitude, TCHAR *buffer, size_t size,
                           bool IncludeUnit = true);
 
   /**
@@ -74,9 +73,8 @@ namespace Units
    * @param Altitude The double-based Altitude
    * @param Buffer Buffer string to write to (pointer)
    * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
    */
-  bool FormatAlternateUserAltitude(fixed Altitude, TCHAR *Buffer,
+  void FormatAlternateUserAltitude(fixed Altitude, TCHAR *buffer,
                                    size_t size, bool IncludeUnit = true);
 
   /**
@@ -84,9 +82,8 @@ namespace Units
    * @param Altitude The double-based Arrival Altitude
    * @param Buffer Buffer string to write to (pointer)
    * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
    */
-  bool FormatUserArrival(fixed Altitude, TCHAR *Buffer, size_t size,
+  void FormatUserArrival(fixed Altitude, TCHAR *buffer, size_t size,
                          bool IncludeUnit = true);
 
   /**
@@ -94,12 +91,11 @@ namespace Units
    * @param Distance The double-based Distance
    * @param Buffer Buffer string to write to (pointer)
    * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
    */
-  bool FormatUserDistance(fixed Distance, TCHAR *Buffer, size_t size,
+  void FormatUserDistance(fixed Distance, TCHAR *buffer, size_t size,
                           bool IncludeUnit = true);
 
-  bool FormatUserMapScale(fixed Distance, TCHAR *Buffer,
+  void FormatUserMapScale(fixed Distance, TCHAR *buffer,
                           size_t size, bool IncludeUnit = true);
 
   /**
@@ -109,7 +105,7 @@ namespace Units
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  bool FormatUserSpeed(fixed Altitude, TCHAR *Buffer, size_t size,
+  void FormatUserSpeed(fixed Altitude, TCHAR *buffer, size_t size,
                        bool IncludeUnit = true, bool Precision = true);
 
   /**
@@ -119,7 +115,7 @@ namespace Units
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  bool FormatUserWindSpeed(fixed speed, TCHAR *buffer, size_t size,
+  void FormatUserWindSpeed(fixed speed, TCHAR *buffer, size_t size,
                            bool IncludeUnit = true, bool Precision = true);
 
   /**
@@ -129,7 +125,7 @@ namespace Units
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  bool FormatUserVSpeed(fixed Altitude, TCHAR *Buffer, size_t size,
+  void FormatUserVSpeed(fixed Altitude, TCHAR *buffer, size_t size,
                         bool IncludeUnit = true);
 
   /**

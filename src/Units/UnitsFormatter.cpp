@@ -183,82 +183,60 @@ Units::FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size)
   return buffer;
 }
 
-bool
-Units::FormatUserAltitude(fixed Altitude, TCHAR *Buffer, size_t size,
+void
+Units::FormatUserAltitude(fixed Altitude, TCHAR *buffer, size_t size,
                           bool IncludeUnit)
 {
-  TCHAR sTmp[32];
   const UnitDescriptor *pU = &unit_descriptors[current.altitude_unit];
 
   /// \todo rounding
   Altitude = Altitude * pU->factor_to_user; // + pU->ToUserOffset;
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%d %s"), iround(Altitude), pU->name);
+    _sntprintf(buffer, size, _T("%d %s"), iround(Altitude), pU->name);
   else
-    _stprintf(sTmp, _T("%d"), iround(Altitude));
-
-  if (_tcslen(sTmp) < size - 1) {
-    _tcscpy(Buffer, sTmp);
-    return true;
-  } else {
-    CopyString(Buffer, sTmp, size);
-    return false;
-  }
+    _sntprintf(buffer, size, _T("%d"), iround(Altitude));
 }
 
-bool
+void
 Units::FormatAlternateUserAltitude(fixed Altitude, TCHAR *Buffer, size_t size,
                                    bool IncludeUnit)
 {
   Unit saveUnit = current.altitude_unit;
-  bool res;
 
   if (saveUnit == unMeter)
     current.altitude_unit = unFeet;
   if (saveUnit == unFeet)
     current.altitude_unit = unMeter;
 
-  res = FormatUserAltitude(Altitude, Buffer, size, IncludeUnit);
+  FormatUserAltitude(Altitude, Buffer, size, IncludeUnit);
 
   current.altitude_unit = saveUnit;
-
-  return res;
 }
 
 // JMW, what does this do?
 // TB: It seems to be the same as FormatUserAltitude() but it includes the
 //     sign (+/-) in the output (see _stprintf())
-bool
-Units::FormatUserArrival(fixed Altitude, TCHAR *Buffer, size_t size,
+void
+Units::FormatUserArrival(fixed Altitude, TCHAR *buffer, size_t size,
                          bool IncludeUnit)
 {
-  TCHAR sTmp[32];
   const UnitDescriptor *pU = &unit_descriptors[current.altitude_unit];
 
   Altitude = Altitude * pU->factor_to_user; // + pU->ToUserOffset;
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%+d %s"), iround(Altitude), pU->name);
+    _sntprintf(buffer, size, _T("%+d %s"), iround(Altitude), pU->name);
   else
-    _stprintf(sTmp, _T("%+d"), iround(Altitude));
-
-  if (_tcslen(sTmp) < size - 1) {
-    _tcscpy(Buffer, sTmp);
-    return true;
-  } else {
-    CopyString(Buffer, sTmp, size);
-    return false;
-  }
+    _sntprintf(buffer, size, _T("%+d"), iround(Altitude));
 }
 
-bool
-Units::FormatUserDistance(fixed Distance, TCHAR *Buffer, size_t size,
+void
+Units::FormatUserDistance(fixed Distance, TCHAR *buffer, size_t size,
                           bool IncludeUnit)
 {
   int prec;
   fixed value;
-  TCHAR sTmp[32];
 
   const UnitDescriptor *pU = &unit_descriptors[current.distance_unit];
 
@@ -292,26 +270,17 @@ Units::FormatUserDistance(fixed Distance, TCHAR *Buffer, size_t size,
   }
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%.*f %s"), prec, (double)value, pU->name);
+    _sntprintf(buffer, size, _T("%.*f %s"), prec, (double)value, pU->name);
   else
-    _stprintf(sTmp, _T("%.*f"), prec, (double)value);
-
-  if (_tcslen(sTmp) < size - 1) {
-    _tcscpy(Buffer, sTmp);
-    return true;
-  } else {
-    CopyString(Buffer, sTmp, size);
-    return false;
-  }
+    _sntprintf(buffer, size, _T("%.*f"), prec, (double)value);
 }
 
-bool
-Units::FormatUserMapScale(fixed Distance, TCHAR *Buffer,
+void
+Units::FormatUserMapScale(fixed Distance, TCHAR *buffer,
                           size_t size, bool IncludeUnit)
 {
   int prec;
   fixed value;
-  TCHAR sTmp[32];
 
   const UnitDescriptor *pU = &unit_descriptors[current.distance_unit];
 
@@ -340,25 +309,16 @@ Units::FormatUserMapScale(fixed Distance, TCHAR *Buffer,
   }
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%.*f%s"), prec, (double)value, pU->name);
+    _sntprintf(buffer, size, _T("%.*f%s"), prec, (double)value, pU->name);
   else
-    _stprintf(sTmp, _T("%.*f"), prec, (double)value);
-
-  if (_tcslen(sTmp) < size - 1) {
-    _tcscpy(Buffer, sTmp);
-    return true;
-  } else {
-    CopyString(Buffer, sTmp, size);
-    return false;
-  }
+    _sntprintf(buffer, size, _T("%.*f"), prec, (double)value);
 }
 
-bool
-Units::FormatUserSpeed(fixed Speed, TCHAR *Buffer, size_t size,
+void
+Units::FormatUserSpeed(fixed Speed, TCHAR *buffer, size_t size,
                        bool IncludeUnit, bool Precision)
 {
   int prec;
-  TCHAR sTmp[32];
   const UnitDescriptor *pU = &unit_descriptors[current.speed_unit];
 
   Speed = Speed * pU->factor_to_user;
@@ -368,25 +328,16 @@ Units::FormatUserSpeed(fixed Speed, TCHAR *Buffer, size_t size,
     prec = 1;
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%.*f%s"), prec, (double)Speed, pU->name);
+    _sntprintf(buffer, size, _T("%.*f%s"), prec, (double)Speed, pU->name);
   else
-    _stprintf(sTmp, _T("%.*f"), prec, (double)Speed);
-
-  if (_tcslen(sTmp) < size - 1) {
-    _tcscpy(Buffer, sTmp);
-    return true;
-  } else {
-    CopyString(Buffer, sTmp, size);
-    return false;
-  }
+    _sntprintf(buffer, size, _T("%.*f"), prec, (double)Speed);
 }
 
-bool
-Units::FormatUserWindSpeed(fixed Speed, TCHAR *Buffer, size_t size,
+void
+Units::FormatUserWindSpeed(fixed Speed, TCHAR *buffer, size_t size,
                            bool IncludeUnit, bool Precision)
 {
   int prec;
-  TCHAR sTmp[32];
   const UnitDescriptor *pU = &unit_descriptors[current.wind_speed_unit];
 
   Speed = Speed * pU->factor_to_user;
@@ -396,40 +347,23 @@ Units::FormatUserWindSpeed(fixed Speed, TCHAR *Buffer, size_t size,
     prec = 1;
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%.*f%s"), prec, (double)Speed, pU->name);
+    _sntprintf(buffer, size, _T("%.*f%s"), prec, (double)Speed, pU->name);
   else
-    _stprintf(sTmp, _T("%.*f"), prec, (double)Speed);
-
-  if (_tcslen(sTmp) < size - 1) {
-    _tcscpy(Buffer, sTmp);
-    return true;
-  } else {
-    CopyString(Buffer, sTmp, size);
-    return false;
-  }
+    _sntprintf(buffer, size, _T("%.*f"), prec, (double)Speed);
 }
 
-bool
-Units::FormatUserVSpeed(fixed Speed, TCHAR *Buffer, size_t size,
+void
+Units::FormatUserVSpeed(fixed Speed, TCHAR *buffer, size_t size,
                         bool IncludeUnit)
 {
-  TCHAR sTmp[32];
   const UnitDescriptor *pU = &unit_descriptors[current.vertical_speed_unit];
 
   Speed = Speed * pU->factor_to_user;
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%+.1f%s"), (double)Speed, pU->name);
+    _sntprintf(buffer, size, _T("%+.1f%s"), (double)Speed, pU->name);
   else
-    _stprintf(sTmp, _T("%+.1f"), (double)Speed);
-
-  if (_tcslen(sTmp) < size - 1) {
-    _tcscpy(Buffer, sTmp);
-    return true;
-  } else {
-    CopyString(Buffer, sTmp, size);
-    return false;
-  }
+    _sntprintf(buffer, size, _T("%+.1f"), (double)Speed);
 }
 
 void
