@@ -79,8 +79,7 @@ public:
   HorizontalAirspaceCondition(const MoreData &basic,
                               const DerivedInfo &calculated)
     :location(basic.location),
-     altitude_available(basic.baro_altitude_available ||
-                        basic.gps_altitude_available)
+     altitude_available(basic.NavAltitudeAvailable())
   {
     if (altitude_available) {
       altitude.altitude = basic.nav_altitude;

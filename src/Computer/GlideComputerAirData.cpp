@@ -315,7 +315,7 @@ GlideComputerAirData::MaxHeightGain()
   const MoreData &basic = Basic();
   DerivedInfo &calculated = SetCalculated();
 
-  if (!calculated.flight.flying)
+  if (!basic.NavAltitudeAvailable() || !calculated.flight.flying)
     return;
 
   if (positive(calculated.min_altitude)) {
@@ -331,7 +331,15 @@ GlideComputerAirData::MaxHeightGain()
 void
 GlideComputerAirData::LD()
 {
+  const MoreData &basic = Basic();
+  const MoreData &last_basic = LastBasic();
   DerivedInfo &calculated = SetCalculated();
+
+  if (!basic.NavAltitudeAvailable() || !last_basic.NavAltitudeAvailable()) {
+    calculated.ld_vario = fixed(INVALID_GR);
+    calculated.ld = fixed(INVALID_GR);
+    return;
+  }
 
   if (time_retreated()) {
     calculated.ld_vario = fixed(INVALID_GR);
@@ -363,9 +371,10 @@ GlideComputerAirData::LD()
 void
 GlideComputerAirData::CruiseLD()
 {
+  const MoreData &basic = Basic();
   DerivedInfo &calculated = SetCalculated();
 
-  if (!calculated.circling) {
+  if (!calculated.circling && basic.NavAltitudeAvailable()) {
     if (negative(calculated.cruise_start_time)) {
       calculated.cruise_start_location = Basic().location;
       calculated.cruise_start_altitude = Basic().nav_altitude;
@@ -415,8 +424,12 @@ GlideComputerAirData::TerrainHeight()
 
   calculated.terrain_valid = true;
   calculated.terrain_altitude = fixed(Alt);
-  calculated.altitude_agl = basic.nav_altitude - calculated.terrain_altitude;
-  calculated.altitude_agl_valid = true;
+
+  if (basic.NavAltitudeAvailable()) {
+    calculated.altitude_agl = basic.nav_altitude - calculated.terrain_altitude;
+    calculated.altitude_agl_valid = true;
+  } else
+    calculated.altitude_agl_valid = false;
 }
 
 bool
@@ -552,10 +565,12 @@ GlideComputerAirData::Turning()
 void
 GlideComputerAirData::ThermalSources()
 {
+  const MoreData &basic = Basic();
   const DerivedInfo &calculated = Calculated();
   ThermalLocatorInfo &thermal_locator = SetCalculated().thermal_locator;
 
   if (!thermal_locator.estimate_valid ||
+      !basic.NavAltitudeAvailable() ||
       !calculated.last_thermal.IsDefined())
     return;
 

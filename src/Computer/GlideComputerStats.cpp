@@ -82,8 +82,11 @@ GlideComputerStats::DoLogging(const MoreData &basic,
       stats_clock.check_advance(basic.time)) {
     flightstats.AddAltitudeTerrain(calculated.flight.flight_time,
                                    calculated.terrain_altitude);
-    flightstats.AddAltitude(calculated.flight.flight_time,
-                            basic.nav_altitude);
+
+    if (basic.NavAltitudeAvailable())
+      flightstats.AddAltitude(calculated.flight.flight_time,
+                              basic.nav_altitude);
+
     flightstats.AddTaskSpeed(calculated.flight.flight_time,
                              calculated.task_stats.get_pirker_speed());
   }

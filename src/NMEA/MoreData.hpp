@@ -55,6 +55,10 @@ struct MoreData : public NMEAInfo {
   fixed brutto_vario;
 
   void Reset();
+
+  bool NavAltitudeAvailable() const {
+    return baro_altitude_available || gps_altitude_available;
+  }
 };
 
 static_assert(has_trivial_copy_and_destructor<MoreData>::value,

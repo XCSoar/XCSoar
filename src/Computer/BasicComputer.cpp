@@ -208,6 +208,11 @@ ComputeGPSVario(MoreData &basic, const MoreData &last)
   assert(last.time_available);
   assert(basic.time > last.time);
 
+  if (!basic.NavAltitudeAvailable() || !last.NavAltitudeAvailable()) {
+    basic.gps_vario = basic.gps_vario_TE = fixed_zero;
+    return;
+  }
+
   // Calculate time passed since last calculation
   const fixed dT = basic.time - last.time;
 
