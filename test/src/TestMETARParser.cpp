@@ -29,13 +29,14 @@
 int
 main(int argc, char **argv)
 {
-  plan_tests(44);
+  plan_tests(49);
 
   METAR metar;
 
   {
     ParsedMETAR parsed;
     metar.content = _T("EDDL 231050Z 31007MPS 9999 FEW020 SCT130 23/18 Q1015 NOSIG");
+    metar.decoded = _T("");
     if (!ok1(METARParser::Parse(metar, parsed)))
       return exit_status();
 
@@ -54,10 +55,13 @@ main(int argc, char **argv)
     ok1(parsed.visibility_available);
     ok1(parsed.visibility == 9999);
     ok1(!parsed.cavok);
+    ok1(!parsed.location_available);
   }
   {
     ParsedMETAR parsed;
     metar.content = _T("METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=");
+    metar.decoded = _T("Pudahuel, Chile (SCEL) 33-23S 070-47W 476M\r\n"
+                       "Nov 04, 2011 - 07:50 PM EDT / 2011.11.04 2350 UTC\r\n");
     if (!ok1(METARParser::Parse(metar, parsed)))
       return exit_status();
 
@@ -76,10 +80,14 @@ main(int argc, char **argv)
     ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(-1.7), unGradCelcius)));
     ok1(!parsed.visibility_available);
     ok1(!parsed.cavok);
+    ok1(parsed.location_available);
+    ok1(equals(parsed.location, -33.3833333333333, -70.78333333333333));
   }
   {
     ParsedMETAR parsed;
     metar.content = _T("METAR EDJA 231950Z VRB01KT CAVOK 21/17 Q1017=");
+    metar.decoded = _T("Duesseldorf, Germany (EDDL) 51-18N 006-46E 41M\r\n"
+                       "Nov 04, 2011 - 07:50 PM EDT / 2011.11.04 2350 UTC\r\n");
     if (!ok1(METARParser::Parse(metar, parsed)))
       return exit_status();
 
@@ -95,6 +103,8 @@ main(int argc, char **argv)
     ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(17), unGradCelcius)));
     ok1(!parsed.visibility_available);
     ok1(parsed.cavok);
+    ok1(parsed.location_available);
+    ok1(equals(parsed.location, 51.3, 6.766666666666667));
   }
 
   return exit_status();

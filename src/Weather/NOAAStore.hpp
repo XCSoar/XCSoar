@@ -25,12 +25,12 @@ Copyright_License {
 #define NOAA_STORE_HPP
 
 #include "METAR.hpp"
+#include "ParsedMETAR.hpp"
 #include "TAF.hpp"
 
 #include <list>
 #include <tchar.h>
 
-struct ParsedMETAR;
 class JobRunner;
 
 class NOAAStore
@@ -41,9 +41,11 @@ public:
     char code[5];
 
     bool metar_available;
+    bool parsed_metar_available;
     bool taf_available;
 
     METAR metar;
+    ParsedMETAR parsed_metar;
     TAF taf;
 
     /**

@@ -30,6 +30,12 @@ Copyright_License {
 #include <tchar.h>
 #include <cctype>
 
+namespace METARParser
+{
+  bool ParseLine(const METAR::ContentString &content, ParsedMETAR &parsed);
+  void ParseDecoded(const METAR::ContentString &decoded, ParsedMETAR &parsed);
+}
+
 class METARLine {
 protected:
   TCHAR *start, *data, *end;
@@ -378,16 +384,14 @@ ParseQNH(const TCHAR *token, ParsedMETAR &parsed)
 }
 
 bool
-METARParser::Parse(const METAR &metar, ParsedMETAR &parsed)
+METARParser::ParseLine(const METAR::ContentString &content, ParsedMETAR &parsed)
 {
   // Examples:
   // EDDL 231050Z 31007KT 9999 FEW020 SCT130 23/18 Q1013 NOSIG
   // METAR ETOU 231055Z AUTO 15004KT 9999 FEW130 27/19 A2993 RMK AO2 RAB1038E1048DZB1006E1011 SLP128 P0000 T02710189=
   // METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=
 
-  parsed.Reset();
-
-  METARLine line(metar.content.begin());
+  METARLine line(content.begin());
   const TCHAR *token;
 
   // Parse four-letter ICAO code
@@ -458,4 +462,98 @@ METARParser::Parse(const METAR &metar, ParsedMETAR &parsed)
   }
 
   return true;
+}
+
+static bool
+ParseLocation(const TCHAR *buffer, ParsedMETAR &parsed)
+{
+  // 51-18N 006-46E
+  TCHAR *end;
+  unsigned lat_deg = _tcstoul(buffer, &end, 10);
+
+  if (*end != '-')
+    return false;
+  end++;
+
+  unsigned lat_min = _tcstoul(end, &end, 10);
+
+  bool north;
+  if (*end == _T('N') || *end == _T('n'))
+    north = true;
+  else if (*end == _T('S') || *end == _T('s'))
+    north = false;
+  else
+    return false;
+  end++;
+
+  while (*end != ' ')
+    return false;
+  end++;
+
+  unsigned lon_deg = _tcstoul(end, &end, 10);
+
+  if (*end != '-')
+    return false;
+  end++;
+
+  unsigned lon_min = _tcstoul(end, &end, 10);
+
+  bool east;
+  if (*end == _T('E') || *end == _T('e'))
+    east = true;
+  else if (*end == _T('W') || *end == _T('w'))
+    east = false;
+  else
+    return false;
+  end++;
+
+  GeoPoint location;
+  location.latitude = Angle::Degrees(fixed(lat_deg) + fixed(lat_min) / 60);
+  location.longitude = Angle::Degrees(fixed(lon_deg) + fixed(lon_min) / 60);
+
+  if (!north)
+    location.latitude.Flip();
+
+  if (!east)
+    location.longitude.Flip();
+
+  parsed.location = location;
+  parsed.location_available = true;
+  return true;
+}
+
+void
+METARParser::ParseDecoded(const METAR::ContentString &decoded,
+                          ParsedMETAR &parsed)
+{
+  // Duesseldorf, Germany (EDDL) 51-18N 006-46E 41M
+  // Nov 04, 2011 - 07:50 PM EDT / 2011.11.04 2350 UTC
+
+  const TCHAR *start = decoded.begin();
+  const TCHAR *end = start + _tcslen(start);
+  const TCHAR *closing_brace = _tcschr(start, _T(')'));
+  const TCHAR *line_break = _tcschr(start, _T('\n'));
+
+  if (line_break == NULL || line_break >= end)
+    return;
+
+  if (closing_brace == NULL || closing_brace >= line_break)
+    return;
+
+  do
+    closing_brace++;
+  while (*closing_brace == _T(' '));
+
+  ParseLocation(closing_brace, parsed);
+}
+
+bool
+METARParser::Parse(const METAR &metar, ParsedMETAR &parsed)
+{
+  parsed.Reset();
+
+  if (!metar.decoded.empty())
+    ParseDecoded(metar.decoded, parsed);
+
+  return ParseLine(metar.content, parsed);
 }

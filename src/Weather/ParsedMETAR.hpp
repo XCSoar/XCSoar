@@ -25,6 +25,7 @@ Copyright_License {
 #define PARSED_METAR_HPP
 
 #include "Engine/Navigation/SpeedVector.hpp"
+#include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Atmosphere/Pressure.hpp"
 #include "Util/StaticString.hpp"
 
@@ -43,6 +44,7 @@ struct ParsedMETAR
   bool wind_available;
   bool temperatures_available;
   bool visibility_available;
+  bool location_available;
 
   bool cavok;
 
@@ -50,12 +52,14 @@ struct ParsedMETAR
   SpeedVector wind;
   fixed temperature, dew_point;
   unsigned visibility;
+  GeoPoint location;
 
   void Reset() {
     qnh_available = false;
     wind_available = false;
     temperatures_available = false;
     visibility_available = false;
+    location_available = false;
     cavok = false;
   }
 };
