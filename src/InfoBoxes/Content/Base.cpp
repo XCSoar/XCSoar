@@ -64,30 +64,24 @@ void
 InfoBoxContent::SetValueBearingDifference(InfoBoxData &data, Angle delta)
 {
   fixed delta_degrees = delta.AsDelta().Degrees();
-  TCHAR tmp[32];
   if (delta_degrees > fixed_one)
-    _stprintf(tmp, _T("%2.0f°»"), (double)delta_degrees);
+    data.UnsafeFormatValue(_T("%2.0f°»"), (double)delta_degrees);
   else if (delta_degrees < fixed_minus_one)
-    _stprintf(tmp, _T("«%2.0f°"), (double)-delta_degrees);
+    data.UnsafeFormatValue(_T("«%2.0f°"), (double)-delta_degrees);
   else
-    _tcscpy(tmp, _T("«»"));
-
-  data.SetValue(tmp);
+    data.SetValue(_T("«»"));
 }
 
 void
 InfoBoxContent::SetCommentBearingDifference(InfoBoxData &data, Angle delta)
 {
   fixed delta_degrees = delta.AsDelta().Degrees();
-  TCHAR tmp[32];
   if (delta_degrees > fixed_one)
-    _stprintf(tmp, _T("%2.0f°»"), (double)delta_degrees);
+    data.UnsafeFormatValue(_T("%2.0f°»"), (double)delta_degrees);
   else if (delta_degrees < fixed_minus_one)
-    _stprintf(tmp, _T("«%2.0f°"), (double)-delta_degrees);
+    data.UnsafeFormatValue(_T("«%2.0f°"), (double)-delta_degrees);
   else
-    _tcscpy(tmp, _T("«»"));
-
-  data.SetComment(tmp);
+    data.SetValue(_T("«»"));
 }
 
 void
@@ -108,9 +102,7 @@ void
 InfoBoxContent::SetValueFromFixed(InfoBoxData &data,
                                   const TCHAR* format, fixed value)
 {
-  TCHAR tmp[32];
-  _stprintf(tmp, format, (double)value);
-  data.SetValue(tmp);
+  data.UnsafeFormatValue(format, (double)value);
 }
 
 void

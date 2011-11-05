@@ -38,19 +38,15 @@ InfoBoxContentTimeLocal::Update(InfoBoxData &data)
     return;
   }
 
-  TCHAR sTmp[32];
-
   // Set Value
   int dd = DetectCurrentTime(XCSoarInterface::Basic());
   const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
 
   // Set Value
-  _stprintf(sTmp, _T("%02u:%02u"), t.hour, t.minute);
-  data.SetValue(sTmp);
+  data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
 
   // Set Comment
-  _stprintf(sTmp, _T("%02u"), t.second);
-  data.SetComment(sTmp);
+  data.UnsafeFormatComment(_T("%02u"), t.second);
 }
 
 void
@@ -61,16 +57,12 @@ InfoBoxContentTimeUTC::Update(InfoBoxData &data)
     return;
   }
 
-  TCHAR sTmp[32];
-
   // Set Value
   const BrokenDateTime t = XCSoarInterface::Basic().date_time_utc;
-  _stprintf(sTmp, _T("%02d:%02d"), t.hour, t.minute);
-  data.SetValue(sTmp);
+  data.UnsafeFormatValue(_T("%02d:%02d"), t.hour, t.minute);
 
   // Set Comment
-  _stprintf(sTmp, _T("%02d"), t.second);
-  data.SetComment(sTmp);
+  data.UnsafeFormatComment(_T("%02d"), t.second);
 }
 
 void

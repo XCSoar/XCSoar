@@ -42,9 +42,7 @@ InfoBoxContentHumidity::Update(InfoBoxData &data)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%d"), (int)basic.humidity);
-  data.SetValue(tmp);
+  data.UnsafeFormatValue( _T("%d"), (int)basic.humidity);
 }
 
 void

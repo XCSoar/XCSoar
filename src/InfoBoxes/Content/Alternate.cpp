@@ -57,9 +57,7 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
     }
   }
 
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("Altrn %d"), index+1);
-  data.SetTitle(tmp);
+  data.FormatTitle(_T("Altrn %d"), index + 1);
 
   if (alternate == NULL || !XCSoarInterface::Basic().track_available) {
     data.SetInvalid();
@@ -123,9 +121,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data)
     }
   }
 
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("Altrn %d GR"), index+1);
-  data.SetTitle(tmp);
+  data.FormatTitle(_T("Altrn %d GR"), index + 1);
 
   if (alternate == NULL) {
     data.SetInvalid();
@@ -143,9 +139,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data)
     return;
   }
   if (::GradientValid(gradient)) {
-    TCHAR tmp[32];
-    _stprintf(tmp, _T("%d"), (int)gradient);
-    data.SetValue(tmp);
+    data.UnsafeFormatValue(_T("%d"), (int)gradient);
   } else {
     data.SetInvalid();
   }

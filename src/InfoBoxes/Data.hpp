@@ -109,6 +109,31 @@ struct InfoBoxData {
    */
   void SetComment(Angle comment, const TCHAR *suffix=_T(""));
 
+  template<typename... Args>
+  void FormatTitle(const TCHAR *fmt, Args&&... args) {
+    title.Format(fmt, args...);
+  }
+
+  template<typename... Args>
+  void FormatValue(const TCHAR *fmt, Args&&... args) {
+    value.Format(fmt, args...);
+  }
+
+  template<typename... Args>
+  void FormatComment(const TCHAR *fmt, Args&&... args) {
+    comment.Format(fmt, args...);
+  }
+
+  template<typename... Args>
+  void UnsafeFormatValue(const TCHAR *fmt, Args&&... args) {
+    value.UnsafeFormat(fmt, args...);
+  }
+
+  template<typename... Args>
+  void UnsafeFormatComment(const TCHAR *fmt, Args&&... args) {
+    comment.UnsafeFormat(fmt, args...);
+  }
+
   /**
    * Sets the unit of the InfoBox value
    *

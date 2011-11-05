@@ -242,7 +242,6 @@ InfoBoxContentFlightLevel::Update(InfoBoxData &data)
   const NMEAInfo &basic = CommonInterface::Basic();
   const SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SettingsComputer();
-  TCHAR sTmp[32];
 
   if (basic.pressure_altitude_available) {
     fixed Altitude = Units::ToUserUnit(basic.pressure_altitude, unFeet);
@@ -251,12 +250,10 @@ InfoBoxContentFlightLevel::Update(InfoBoxData &data)
     data.SetTitleColor(0);
 
     // Set Value
-    _stprintf(sTmp, _T("%03d"), iround(Altitude/100));
-    data.SetValue(sTmp);
+    data.UnsafeFormatValue(_T("%03d"), iround(Altitude / 100));
 
     // Set Comment
-    _stprintf(sTmp, _T("%dft"), iround(Altitude));
-    data.SetComment(sTmp);
+    data.UnsafeFormatComment(_T("%dft"), iround(Altitude));
 
   } else if (basic.gps_altitude_available &&
              settings_computer.pressure_available) {
@@ -268,12 +265,10 @@ InfoBoxContentFlightLevel::Update(InfoBoxData &data)
     data.SetTitleColor(1);
 
     // Set Value
-    _stprintf(sTmp, _T("%03d"), iround(Altitude/100));
-    data.SetValue(sTmp);
+    data.UnsafeFormatValue(_T("%03d"), iround(Altitude / 100));
 
     // Set Comment
-    _stprintf(sTmp, _T("%dft"), iround(Altitude));
-    data.SetComment(sTmp);
+    data.UnsafeFormatComment(_T("%dft"), iround(Altitude));
 
   } else if ((basic.baro_altitude_available || basic.gps_altitude_available) &&
              !settings_computer.pressure_available) {

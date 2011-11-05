@@ -50,8 +50,6 @@ void
 InfoBoxContentBattery::Update(InfoBoxData &data)
 {
 #ifdef HAVE_BATTERY
-  TCHAR tmp[32];
-
   bool DisplaySupplyVoltageAsValue=false;
   switch (Power::External::Status) {
     case Power::External::OFF:
@@ -78,11 +76,10 @@ InfoBoxContentBattery::Update(InfoBoxData &data)
     case Power::Battery::CHARGING:
       if (Power::Battery::RemainingPercentValid){
 #endif
-        _stprintf(tmp, _T("%d%%"), Power::Battery::RemainingPercent);
         if (!DisplaySupplyVoltageAsValue)
-          data.SetValue(tmp);
+          data.UnsafeFormatValue(_T("%d%%"), Power::Battery::RemainingPercent);
         else
-          data.SetComment(tmp);
+          data.UnsafeFormatComment(_T("%d%%"), Power::Battery::RemainingPercent);
 #ifndef ANDROID
       }
       else
@@ -129,11 +126,9 @@ InfoBoxContentExperimental2::Update(InfoBoxData &data)
 void
 InfoBoxContentCPULoad::Update(InfoBoxData &data)
 {
-  TCHAR tmp[32];
   unsigned percent_load = SystemLoadCPU();
   if (percent_load <= 100) {
-    _stprintf(tmp, _T("%d%%"), percent_load);
-    data.SetValue(tmp);
+    data.UnsafeFormatValue(_T("%d%%"), percent_load);
   } else {
     data.SetInvalid();
   }
@@ -143,7 +138,6 @@ void
 InfoBoxContentFreeRAM::Update(InfoBoxData &data)
 {
 #ifdef HAVE_MEM_INFO
-  TCHAR tmp[32];
   TCHAR unit;
   unsigned long freeRAM = SystemFreeRAM();
   double f = freeRAM;
@@ -158,8 +152,7 @@ InfoBoxContentFreeRAM::Update(InfoBoxData &data)
     unit = _T('K');
   } else
     unit = _T('B');
-  _stprintf(tmp, _T("%.1f%c"), f, unit);
-  data.SetValue(tmp);
+  data.UnsafeFormatValue(_T("%.1f%c"), f, unit);
 #else
   data.SetInvalid();
 #endif

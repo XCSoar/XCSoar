@@ -90,11 +90,9 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
 
   // Set Comment
   if (way_point->radio_frequency.IsDefined()) {
-    StaticString<128> comment;
     const unsigned freq = way_point->radio_frequency.GetKiloHertz();
-    _sntprintf(comment.buffer(), comment.MAX_SIZE, _T("%u.%03u %s"),
-               freq / 1000, freq % 1000, way_point->comment.c_str());
-    data.SetComment(comment);
+    data.FormatComment(_T("%u.%03u %s"),
+                       freq / 1000, freq % 1000, way_point->comment.c_str());
   }
   else
     data.SetComment(way_point->comment.c_str());
@@ -205,19 +203,16 @@ InfoBoxContentNextETA::Update(InfoBoxData &data)
     return;
   }
 
-  TCHAR tmp[32];
   int dd = (int)(XCSoarInterface::Calculated().task_stats.current_leg.
                  solution_remaining.time_elapsed) +
     DetectCurrentTime(XCSoarInterface::Basic());
   const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
 
   // Set Value
-  _stprintf(tmp, _T("%02u:%02u"), t.hour, t.minute);
-  data.SetValue(tmp);
+  data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
 
   // Set Comment
-  _stprintf(tmp, _T("%02u"), t.second);
-  data.SetComment(tmp);
+  data.UnsafeFormatComment(_T("%02u"), t.second);
 }
 
 void
@@ -303,9 +298,7 @@ InfoBoxContentNextLD::Update(InfoBoxData &data)
     return;
   }
   if (::GradientValid(gradient)) {
-    TCHAR tmp[32];
-    _stprintf(tmp, _T("%d"), (int)gradient);
-    data.SetValue(tmp);
+    data.UnsafeFormatValue(_T("%d"), (int)gradient);
   } else {
     data.SetInvalid();
   }
@@ -359,18 +352,15 @@ InfoBoxContentFinalETA::Update(InfoBoxData &data)
     return;
   }
 
-  TCHAR tmp[32];
   int dd = (int)task_stats.total.solution_remaining.time_elapsed +
     DetectCurrentTime(XCSoarInterface::Basic());
   const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
 
   // Set Value
-  _stprintf(tmp, _T("%02u:%02u"), t.hour, t.minute);
-  data.SetValue(tmp);
+  data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
 
   // Set Comment
-  _stprintf(tmp, _T("%02u"), t.second);
-  data.SetComment(tmp);
+  data.UnsafeFormatComment(_T("%02u"), t.second);
 }
 
 void
@@ -480,9 +470,7 @@ InfoBoxContentFinalLD::Update(InfoBoxData &data)
     return;
   }
   if (::GradientValid(gradient)) {
-    TCHAR tmp[32];
-    _stprintf(tmp, _T("%d"), (int)gradient);
-    data.SetValue(tmp);
+    data.UnsafeFormatValue(_T("%d"), (int)gradient);
   } else {
     data.SetInvalid();
   }
@@ -504,9 +492,7 @@ InfoBoxContentFinalGR::Update(InfoBoxData &data)
     return;
   }
   if (::GradientValid(gradient)) {
-    TCHAR tmp[32];
-    _stprintf(tmp, _T("%d"), (int)gradient);
-    data.SetValue(tmp);
+    data.UnsafeFormatValue(_T("%d"), (int)gradient);
   } else {
     data.SetInvalid();
   }
@@ -547,9 +533,7 @@ InfoBoxContentOLC::Update(InfoBoxData &data)
   // Set Value
   SetValueFromDistance(data, result_olc.distance);
 
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%.1f pts"), (double)result_olc.score);
-  data.SetComment(tmp);
+  data.UnsafeFormatComment(_T("%.1f pts"), (double)result_olc.score);
 }
 
 bool
@@ -615,9 +599,7 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxData &data)
   const int dd = abs((int)diff);
   Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
-  TCHAR tmp[32];
-  _stprintf(tmp, negative(diff) ? _T("-%s") : _T("%s"), HHMMSSsmart);
-  data.SetValue(tmp);
+  data.UnsafeFormatValue(negative(diff) ? _T("-%s") : _T("%s"), HHMMSSsmart);
 
   data.SetComment(SSsmart);
 
