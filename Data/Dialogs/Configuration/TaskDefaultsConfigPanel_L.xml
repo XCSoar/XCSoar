@@ -26,7 +26,7 @@
   <Panel Name="frmTaskTurnpoint" X="2" Y="96" Width="-2" Height="48" Border="1">    
     <Edit Name="prpTurnpointType" Caption="Turn point" X="0" Y="2" Width="-2" Height="22" CaptionWidth="120"
       Help="Default turn point type for new tasks you create.">
-      <DataField DataType="enum" OnDataAccess="OnTaskDefaults_TurnpointType"/>
+      <DataField DataType="enum"/>
     </Edit>
     <Edit Name="prpTurnpointRadius" Caption="Radius" Width="-2" Height="22" CaptionWidth="120" 
       Help="Default radius of turnpoint cylinders and sectors in new tasks.">
@@ -37,7 +37,7 @@
   <Panel Name="frmTaskType" X="2" Y="143" Width="-2" Height="72" Border="1">    
     <Edit Name="prpTaskType" Caption="Task" X="0" Y="2" Width="-2" Height="22" CaptionWidth="120"
       Help="Default task type for new tasks you create.">
-      <DataField DataType="enum" OnDataAccess="OnTaskDefaults_TaskType"/>
+      <DataField DataType="enum"/>
     </Edit>
     <Edit Name="prpAATMinTime" Caption="AAT min. time" Width="-2" Height="22" CaptionWidth="120" 
       Help="Default AAT min. time for new AAT tasks.">
