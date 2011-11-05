@@ -2037,6 +2037,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/Renderer/FlightStatisticsRenderer.cpp \
 	$(SRC)/Renderer/ThermalBandRenderer.cpp \
+	$(SRC)/Renderer/CuRenderer.cpp \
 	$(SRC)/GlideRatio.cpp \
 	$(SRC)/Computer/AutoQNH.cpp \
 	$(SRC)/Computer/BasicComputer.cpp \
@@ -2053,6 +2054,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/GlideComputerAirData.cpp \
 	$(SRC)/Computer/GlideComputerStats.cpp \
 	$(SRC)/Computer/GlideComputerInterface.cpp \
+	$(SRC)/Computer/CuComputer.cpp \
 	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Replay/IGCParser.cpp \

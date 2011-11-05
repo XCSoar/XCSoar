@@ -28,12 +28,10 @@ Copyright_License {
 #include "Math/LowPassFilter.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "LocalTime.hpp"
-#include "Atmosphere/CuSonde.hpp"
 #include "ThermalBase.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Math/SunEphemeris.hpp"
-#include "Units/Units.hpp"
 
 #include <algorithm>
 
@@ -98,9 +96,6 @@ GlideComputerAirData::ProcessVertical()
                          calculated.GetWindOrZero(),
                          calculated.thermal_locator);
 
-  CuSonde::setForecastTemperature(Units::ToUserUnit(SettingsComputer().forecast_temperature,
-                                                    unGradCelcius));
-  CuSonde::updateMeasurements(basic, calculated);
   LastThermalStats();
   LD();
   CruiseLD();

@@ -50,6 +50,7 @@ struct ChartLook;
 struct AirspaceLook;
 struct TaskLook;
 struct AircraftLook;
+class CuSonde;
 
 class FlightStatisticsRenderer {
   const FlightStatistics &fs;
@@ -93,7 +94,8 @@ public:
                   const NMEAInfo &nmea_info,
                   const WindStore &wind_store) const;
 
-  void RenderTemperature(Canvas &canvas, const PixelRect rc) const;
+  void RenderTemperature(Canvas &canvas, const PixelRect rc,
+                         const CuSonde &cu_sonde) const;
 
   void RenderOLC(Canvas &canvas, const PixelRect rc,
                  const NMEAInfo &nmea_info,
@@ -120,7 +122,7 @@ public:
   void CaptionClimb(TCHAR* sTmp);
   void CaptionPolar(TCHAR * sTmp, const GlidePolar& glide_polar) const;
 
-  void CaptionTempTrace(TCHAR *sTmp) const;
+  void CaptionTempTrace(TCHAR *sTmp, const CuSonde &cu_sonde) const;
   void CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) const;
   void CaptionOLC(TCHAR *sTmp, const TaskBehaviour &task_behaviour,
                   const DerivedInfo &derived) const;

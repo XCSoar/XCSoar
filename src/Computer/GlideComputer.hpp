@@ -31,6 +31,7 @@ Copyright_License {
 #include "GlideComputerStats.hpp"
 #include "GlideComputerTask.hpp"
 #include "WarningComputer.hpp"
+#include "CuComputer.hpp"
 #include "Compiler.h"
 
 class Waypoints;
@@ -46,6 +47,7 @@ class GlideComputer:
     public GlideComputerAirData, public GlideComputerTask,
     public GlideComputerStats
 {
+  CuComputer cu_computer;
   WarningComputer warning_computer;
 
   const Waypoints &way_points;
@@ -84,6 +86,10 @@ public:
   void OnStartTask();
   void OnFinishTask();
   void OnTransitionEnter();
+
+  const CuSonde &GetCuSonde() const {
+    return cu_computer.GetCuSonde();
+  }
 
 protected:
   virtual void OnTakeoff();

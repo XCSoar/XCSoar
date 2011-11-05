@@ -69,6 +69,7 @@ GlideComputer::ResetFlight(const bool full)
   GlideComputerTask::ResetFlight(full);
   GlideComputerStats::ResetFlight(full);
 
+  cu_computer.Reset();
   warning_computer.Reset(Basic(), Calculated());
 }
 

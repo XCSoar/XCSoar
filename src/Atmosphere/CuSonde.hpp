@@ -33,8 +33,8 @@ struct DerivedInfo;
  * Namespaces that provides simple estimates of thermal heights from lapse rates
  * derived from temperature trace obtained during flight.
  */
-namespace CuSonde
-{
+class CuSonde {
+public:
   /** Meters between levels */
   static const unsigned HEIGHT_STEP = 100;
   /** Number of levels */
@@ -64,24 +64,31 @@ namespace CuSonde
     bool empty() const {
       return nmeasurements == 0;
     }
+
+    void Reset() {
+      nmeasurements = 0;
+    }
   };
 
   /** Expected temperature maximum on the ground */
-  extern fixed maxGroundTemperature;
+  fixed maxGroundTemperature;
   /** Height of ground above MSL */
-  extern fixed hGround;
-  extern unsigned short last_level;
+  fixed hGround;
+  unsigned short last_level;
+  Level cslevels[NUM_LEVELS];
+
+  /** Estimated ThermailHeight */
+  fixed thermalHeight;
+  /** Estimated CloudBase */
+  fixed cloudBase;
+
+  void Reset();
+
   void updateMeasurements(const NMEAInfo &basic,
                           const DerivedInfo &calculated);
-  extern Level cslevels[NUM_LEVELS];
   void findCloudBase(unsigned short level);
   void findThermalHeight(unsigned short level);
   void setForecastTemperature(fixed val);
-
-  /** Estimated ThermailHeight */
-  extern fixed thermalHeight;
-  /** Estimated CloudBase */
-  extern fixed cloudBase;
 };
 
 #endif

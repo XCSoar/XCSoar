@@ -217,7 +217,7 @@ ChartControl::on_paint(Canvas &canvas)
                         settings_computer.glide_polar_task);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
-    fs.RenderTemperature(canvas, rcgfx);
+    fs.RenderTemperature(canvas, rcgfx, glide_computer->GetCuSonde());
     break;
   case ANALYSIS_PAGE_TASK:
     if (protected_task_manager != NULL) {
@@ -333,7 +333,7 @@ Update(void)
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
               _("Temp Trace"));
     wf->SetCaption(sTmp);
-    fs.CaptionTempTrace(sTmp);
+    fs.CaptionTempTrace(sTmp, glide_computer->GetCuSonde());
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Settings"));
     break;

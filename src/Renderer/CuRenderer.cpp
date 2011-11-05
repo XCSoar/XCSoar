@@ -35,29 +35,30 @@ using std::max;
 
 void
 FlightStatisticsRenderer::RenderTemperature(Canvas &canvas,
-                                            const PixelRect rc) const
+                                            const PixelRect rc,
+                                            const CuSonde &cu_sonde) const
 {
   Chart chart(chart_look, canvas, rc);
 
   int hmin = 10000;
   int hmax = -10000;
-  fixed tmin = CuSonde::maxGroundTemperature;
-  fixed tmax = CuSonde::maxGroundTemperature;
+  fixed tmin = cu_sonde.maxGroundTemperature;
+  fixed tmax = cu_sonde.maxGroundTemperature;
 
   // find range for scaling of graph
-  for (unsigned i = 0; i < CuSonde::NUM_LEVELS - 1u; i++) {
-    if (CuSonde::cslevels[i].empty())
+  for (unsigned i = 0; i < cu_sonde.NUM_LEVELS - 1u; i++) {
+    if (cu_sonde.cslevels[i].empty())
       continue;
 
     hmin = min(hmin, (int)i);
     hmax = max(hmax, (int)i);
 
-    tmin = min(tmin, min(CuSonde::cslevels[i].tempDry,
-                         min(CuSonde::cslevels[i].airTemp,
-                             CuSonde::cslevels[i].dewpoint)));
-    tmax = max(tmax, max(CuSonde::cslevels[i].tempDry,
-                         max(CuSonde::cslevels[i].airTemp,
-                             CuSonde::cslevels[i].dewpoint)));
+    tmin = min(tmin, min(cu_sonde.cslevels[i].tempDry,
+                         min(cu_sonde.cslevels[i].airTemp,
+                             cu_sonde.cslevels[i].dewpoint)));
+    tmax = max(tmax, max(cu_sonde.cslevels[i].tempDry,
+                         max(cu_sonde.cslevels[i].airTemp,
+                             cu_sonde.cslevels[i].dewpoint)));
   }
 
   if (hmin >= hmax) {
@@ -76,37 +77,37 @@ FlightStatisticsRenderer::RenderTemperature(Canvas &canvas,
 
   int ipos = 0;
 
-  for (unsigned i = 0; i < CuSonde::NUM_LEVELS - 1u; i++) {
-    if (CuSonde::cslevels[i].empty() ||
-        CuSonde::cslevels[i + 1].empty())
+  for (unsigned i = 0; i < cu_sonde.NUM_LEVELS - 1u; i++) {
+    if (cu_sonde.cslevels[i].empty() ||
+        cu_sonde.cslevels[i + 1].empty())
       continue;
 
     ipos++;
 
-    chart.DrawLine(CuSonde::cslevels[i].tempDry, fixed(i),
-                   CuSonde::cslevels[i + 1].tempDry, fixed(i + 1),
+    chart.DrawLine(cu_sonde.cslevels[i].tempDry, fixed(i),
+                   cu_sonde.cslevels[i + 1].tempDry, fixed(i + 1),
                    ChartLook::STYLE_REDTHICK);
 
-    chart.DrawLine(CuSonde::cslevels[i].airTemp, fixed(i),
-                   CuSonde::cslevels[i + 1].airTemp, fixed(i + 1),
+    chart.DrawLine(cu_sonde.cslevels[i].airTemp, fixed(i),
+                   cu_sonde.cslevels[i + 1].airTemp, fixed(i + 1),
                    ChartLook::STYLE_MEDIUMBLACK);
 
-    chart.DrawLine(CuSonde::cslevels[i].dewpoint, fixed(i),
-                   CuSonde::cslevels[i + 1].dewpoint, fixed(i + 1),
+    chart.DrawLine(cu_sonde.cslevels[i].dewpoint, fixed(i),
+                   cu_sonde.cslevels[i + 1].dewpoint, fixed(i + 1),
                    ChartLook::STYLE_BLUETHIN);
 
     if (ipos > 2) {
       if (!labelDry) {
         chart.DrawLabel(_T("DALR"),
-                        CuSonde::cslevels[i + 1].tempDry, fixed(i));
+                        cu_sonde.cslevels[i + 1].tempDry, fixed(i));
         labelDry = true;
       } else if (!labelAir) {
         chart.DrawLabel(_T("Air"),
-                        CuSonde::cslevels[i + 1].airTemp, fixed(i));
+                        cu_sonde.cslevels[i + 1].airTemp, fixed(i));
         labelAir = true;
       } else if (!labelDew) {
         chart.DrawLabel(_T("Dew"),
-                        CuSonde::cslevels[i + 1].dewpoint, fixed(i));
+                        cu_sonde.cslevels[i + 1].dewpoint, fixed(i));
         labelDew = true;
       }
     }
@@ -117,13 +118,14 @@ FlightStatisticsRenderer::RenderTemperature(Canvas &canvas,
 }
 
 void
-FlightStatisticsRenderer::CaptionTempTrace(TCHAR *sTmp) const
+FlightStatisticsRenderer::CaptionTempTrace(TCHAR *sTmp,
+                                           const CuSonde &cu_sonde) const
 {
   _stprintf(sTmp, _T("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
             _("Thermal height"),
-            (double)Units::ToUserAltitude(CuSonde::thermalHeight),
+            (double)Units::ToUserAltitude(cu_sonde.thermalHeight),
             Units::GetAltitudeName(),
             _("Cloud base"),
-            (double)Units::ToUserAltitude(CuSonde::cloudBase),
+            (double)Units::ToUserAltitude(cu_sonde.cloudBase),
             Units::GetAltitudeName());
 }

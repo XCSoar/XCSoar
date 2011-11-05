@@ -45,12 +45,18 @@ Copyright_License {
 
 using std::max;
 
-unsigned short CuSonde::last_level = 0;
-fixed CuSonde::thermalHeight = fixed_zero;
-fixed CuSonde::cloudBase = fixed_zero;
-fixed CuSonde::hGround = fixed_zero;
-fixed CuSonde::maxGroundTemperature = fixed(25);
-CuSonde::Level CuSonde::cslevels[NUM_LEVELS];
+void
+CuSonde::Reset()
+{
+  last_level = 0;
+  thermalHeight = fixed_zero;
+  cloudBase = fixed_zero;
+  hGround = fixed_zero;
+  maxGroundTemperature = fixed(25);
+
+  for (unsigned i = 0; i < NUM_LEVELS; ++i)
+    cslevels[i].Reset();
+}
 
 // TODO accuracy: recalculate thermal index etc if maxGroundTemp changes
 
