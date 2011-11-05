@@ -21,12 +21,10 @@ Copyright_License {
 }
 */
 
-#include "InfoBoxes/Content/Thermal.hpp"
 #include "InfoBoxes/Content/MacCready.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "InfoBoxes/Panel/MacCreadyEdit.hpp"
 #include "InfoBoxes/Panel/MacCreadySetup.hpp"
-#include "InfoBoxes/InfoBoxWindow.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Interface.hpp"
 
@@ -43,12 +41,12 @@ Copyright_License {
 #include <stdio.h>
 
 static void
-SetVSpeed(InfoBoxWindow &infobox, fixed value)
+SetVSpeed(InfoBoxData &data, fixed value)
 {
   TCHAR buffer[32];
   Units::FormatUserVSpeed(value, buffer, 32, false);
-  infobox.SetValue(buffer[0] == _T('+') ? buffer + 1 : buffer);
-  infobox.SetValueUnit(Units::current.vertical_speed_unit);
+  data.SetValue(buffer[0] == _T('+') ? buffer + 1 : buffer);
+  data.SetValueUnit(Units::current.vertical_speed_unit);
 }
 
 /*
@@ -81,18 +79,18 @@ InfoBoxContentMacCready::GetDialogContent() {
  */
 
 void
-InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
+InfoBoxContentMacCready::Update(InfoBoxData &data)
 {
   const SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SettingsComputer();
 
-  SetVSpeed(infobox, settings_computer.glide_polar_task.GetMC());
+  SetVSpeed(data, settings_computer.glide_polar_task.GetMC());
 
   // Set Comment
   if (XCSoarInterface::SettingsComputer().task.auto_mc)
-    infobox.SetComment(_("AUTO"));
+    data.SetComment(_("AUTO"));
   else
-    infobox.SetComment(_("MANUAL"));
+    data.SetComment(_("MANUAL"));
 }
 
 bool

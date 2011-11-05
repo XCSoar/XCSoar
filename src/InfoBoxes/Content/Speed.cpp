@@ -22,14 +22,12 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Speed.hpp"
-
-#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 
 #include "Simulator.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Components.hpp"
-#include "Message.hpp"
 #include "Language/Language.hpp"
 #include "Units/UnitsFormatter.hpp"
 
@@ -37,11 +35,11 @@ Copyright_License {
 #include <stdio.h>
 
 void
-InfoBoxContentSpeedGround::Update(InfoBoxWindow &infobox)
+InfoBoxContentSpeedGround::Update(InfoBoxData &data)
 {
 
   if (!XCSoarInterface::Basic().ground_speed_available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -49,10 +47,10 @@ InfoBoxContentSpeedGround::Update(InfoBoxWindow &infobox)
   TCHAR tmp[32];
   Units::FormatUserSpeed(XCSoarInterface::Basic().ground_speed,
                          tmp, 32, false);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.speed_unit);
+  data.SetValueUnit(Units::current.speed_unit);
 }
 
 bool
@@ -93,10 +91,10 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
 }
 
 void
-InfoBoxContentSpeedIndicated::Update(InfoBoxWindow &infobox)
+InfoBoxContentSpeedIndicated::Update(InfoBoxData &data)
 {
   if (!XCSoarInterface::Basic().airspeed_available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -104,17 +102,17 @@ InfoBoxContentSpeedIndicated::Update(InfoBoxWindow &infobox)
   TCHAR tmp[32];
   Units::FormatUserSpeed(XCSoarInterface::Basic().indicated_airspeed,
                          tmp, 32, false, false);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.speed_unit);
+  data.SetValueUnit(Units::current.speed_unit);
 }
 
 void
-InfoBoxContentSpeed::Update(InfoBoxWindow &infobox)
+InfoBoxContentSpeed::Update(InfoBoxData &data)
 {
   if (!XCSoarInterface::Basic().airspeed_available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -122,42 +120,42 @@ InfoBoxContentSpeed::Update(InfoBoxWindow &infobox)
   TCHAR tmp[32];
   Units::FormatUserSpeed(XCSoarInterface::Basic().true_airspeed,
                          tmp, 32, false, false);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.speed_unit);
+  data.SetValueUnit(Units::current.speed_unit);
 }
 
 void
-InfoBoxContentSpeedMacCready::Update(InfoBoxWindow &infobox)
+InfoBoxContentSpeedMacCready::Update(InfoBoxData &data)
 {
   // Set Value
   TCHAR tmp[32];
   Units::FormatUserSpeed(XCSoarInterface::Calculated().common_stats.V_block,
                          tmp, 32, false, false);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.speed_unit);
+  data.SetValueUnit(Units::current.speed_unit);
 }
 
 void
-InfoBoxContentSpeedDolphin::Update(InfoBoxWindow &infobox)
+InfoBoxContentSpeedDolphin::Update(InfoBoxData &data)
 {
   // Set Value
   TCHAR tmp[32];
   Units::FormatUserSpeed(XCSoarInterface::Calculated().V_stf,
                          tmp, 32, false, false);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.speed_unit);
+  data.SetValueUnit(Units::current.speed_unit);
 
   // Set Comment
   if (XCSoarInterface::SettingsComputer().block_stf_enabled)
-    infobox.SetComment(_("BLOCK"));
+    data.SetComment(_("BLOCK"));
   else
-    infobox.SetComment(_("DOLPHIN"));
+    data.SetComment(_("DOLPHIN"));
 
 }
 

@@ -22,39 +22,37 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Team.hpp"
-
-#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Util/StringUtil.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
 
 void
-InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
+InfoBoxContentTeamCode::Update(InfoBoxData &data)
 {
   const TeamCodeSettings &settings = CommonInterface::SettingsComputer();
   const TeamInfo &teamcode_info = XCSoarInterface::Calculated();
 
   if (!settings.team_code_reference_waypoint) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  infobox.SetValue(XCSoarInterface::Calculated().own_teammate_code.GetCode());
+  data.SetValue(XCSoarInterface::Calculated().own_teammate_code.GetCode());
 
   // Set Comment
   if (teamcode_info.flarm_teammate_code_available) {
-    infobox.SetComment(teamcode_info.flarm_teammate_code.GetCode());
-    infobox.SetColorBottom(teamcode_info.flarm_teammate_code_current ? 2 : 1);
+    data.SetComment(teamcode_info.flarm_teammate_code.GetCode());
+    data.SetCommentColor(teamcode_info.flarm_teammate_code_current ? 2 : 1);
   } else if (settings.team_code_valid) {
-    infobox.SetComment(settings.team_code.GetCode());
-    infobox.SetColorBottom(0);
+    data.SetComment(settings.team_code.GetCode());
+    data.SetCommentColor(0);
   }
   else
-    infobox.SetCommentInvalid();
+    data.SetCommentInvalid();
 }
 
 bool
@@ -94,7 +92,7 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
 }
 
 void
-InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
+InfoBoxContentTeamBearing::Update(InfoBoxData &data)
 {
   const TeamCodeSettings &settings = CommonInterface::SettingsComputer();
   const FlarmState &flarm = XCSoarInterface::Basic().flarm;
@@ -102,27 +100,27 @@ InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
 
   if (teamcode_info.teammate_available) {
     // Set Value
-    infobox.SetValue(teamcode_info.teammate_vector.bearing, _T("T"));
+    data.SetValue(teamcode_info.teammate_vector.bearing, _T("T"));
   }
   else
-    infobox.SetValueInvalid();
+    data.SetValueInvalid();
 
   // Set Comment
   if (!settings.team_flarm_id.IsDefined())
-    infobox.SetCommentInvalid();
+    data.SetCommentInvalid();
   else if (!settings.team_flarm_callsign.empty())
-    infobox.SetComment(settings.team_flarm_callsign.c_str());
+    data.SetComment(settings.team_flarm_callsign.c_str());
   else
-    infobox.SetComment(_T("???"));
+    data.SetComment(_T("???"));
 
   if (flarm.FindTraffic(settings.team_flarm_id) != NULL)
-    infobox.SetColorBottom(2);
+    data.SetCommentColor(2);
   else
-    infobox.SetColorBottom(1);
+    data.SetCommentColor(1);
 }
 
 void
-InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
+InfoBoxContentTeamBearingDiff::Update(InfoBoxData &data)
 {
   const TeamCodeSettings &settings = CommonInterface::SettingsComputer();
   const NMEAInfo &basic = XCSoarInterface::Basic();
@@ -132,26 +130,26 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
   if (teamcode_info.teammate_available && basic.track_available) {
     // Set Value
     Angle Value = teamcode_info.teammate_vector.bearing - basic.track;
-    SetValueBearingDifference(infobox, Value);
+    SetValueBearingDifference(data, Value);
   } else
-    infobox.SetValueInvalid();
+    data.SetValueInvalid();
 
   // Set Comment
   if (!settings.team_flarm_id.IsDefined())
-    infobox.SetCommentInvalid();
+    data.SetCommentInvalid();
   else if (!string_is_empty(settings.team_flarm_callsign))
-    infobox.SetComment(settings.team_flarm_callsign);
+    data.SetComment(settings.team_flarm_callsign);
   else
-    infobox.SetComment(_T("???"));
+    data.SetComment(_T("???"));
 
   if (flarm.FindTraffic(settings.team_flarm_id) != NULL)
-    infobox.SetColorBottom(2);
+    data.SetCommentColor(2);
   else
-    infobox.SetColorBottom(1);
+    data.SetCommentColor(1);
 }
 
 void
-InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
+InfoBoxContentTeamDistance::Update(InfoBoxData &data)
 {
   const TeamCodeSettings &settings = CommonInterface::SettingsComputer();
   const TeamInfo &teamcode_info = CommonInterface::Calculated();
@@ -161,20 +159,20 @@ InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
     TCHAR tmp[32];
     Units::FormatUserDistance(teamcode_info.teammate_vector.distance,
                               tmp, 32, false);
-    infobox.SetValue(tmp);
+    data.SetValue(tmp);
 
     // Set Unit
-    infobox.SetValueUnit(Units::current.distance_unit);
+    data.SetValueUnit(Units::current.distance_unit);
   } else
-    infobox.SetValueInvalid();
+    data.SetValueInvalid();
 
   // Set Comment
   if (!settings.team_flarm_id.IsDefined())
-    infobox.SetCommentInvalid();
+    data.SetCommentInvalid();
   else if (!string_is_empty(settings.team_flarm_callsign))
-    infobox.SetComment(settings.team_flarm_callsign);
+    data.SetComment(settings.team_flarm_callsign);
   else
-    infobox.SetComment(_T("???"));
+    data.SetComment(_T("???"));
 
-  infobox.SetColorBottom(teamcode_info.flarm_teammate_code_current ? 2 : 1);
+  data.SetCommentColor(teamcode_info.flarm_teammate_code_current ? 2 : 1);
 }

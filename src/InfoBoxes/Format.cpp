@@ -21,19 +21,26 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_INFOBOX_CONTENT_AIRSPACE_HPP
-#define XCSOAR_INFOBOX_CONTENT_AIRSPACE_HPP
+#include "Data.hpp"
 
-#include "InfoBoxes/Content/Base.hpp"
+void
+InfoBoxData::SetValue(Angle _value, const TCHAR *suffix)
+{
+  assert(suffix != NULL);
 
-class InfoBoxContentNearestAirspaceHorizontal : public InfoBoxContent {
-public:
-  virtual void Update(InfoBoxData &data);
-};
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%d")_T(DEG)_T("%s"),
+            iround(_value.Degrees()), suffix);
+  SetValue(tmp);
+}
 
-class InfoBoxContentNearestAirspaceVertical : public InfoBoxContent {
-public:
-  virtual void Update(InfoBoxData &data);
-};
+void
+InfoBoxData::SetComment(Angle _value, const TCHAR *suffix)
+{
+  assert(suffix != NULL);
 
-#endif
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%d")_T(DEG)_T("%s"),
+            iround(_value.Degrees()), suffix);
+  SetComment(tmp);
+}

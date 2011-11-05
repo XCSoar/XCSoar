@@ -29,19 +29,19 @@ Copyright_License {
 class InfoBoxContentTimeLocal : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTimeUTC: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTimeFlight: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 #endif

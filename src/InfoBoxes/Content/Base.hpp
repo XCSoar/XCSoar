@@ -29,6 +29,7 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct InfoBoxData;
 class InfoBoxWindow;
 struct Waypoint;
 class Angle;
@@ -52,7 +53,7 @@ public:
 
   virtual ~InfoBoxContent() {}
 
-  virtual void Update(InfoBoxWindow &infobox) = 0;
+  virtual void Update(InfoBoxData &data) = 0;
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) {
     return false;
   }
@@ -100,18 +101,18 @@ public:
     return NULL;
   }
 
-  static void SetTitleFromWaypointName(InfoBoxWindow &infobox,
+  static void SetTitleFromWaypointName(InfoBoxData &data,
                                        const Waypoint* waypoint);
 
-  static void SetCommentFromWaypointName(InfoBoxWindow &infobox,
+  static void SetCommentFromWaypointName(InfoBoxData &data,
                                          const Waypoint* waypoint);
 
-  static void SetValueFromFixed(InfoBoxWindow &infobox,
+  static void SetValueFromFixed(InfoBoxData &data,
                                 const TCHAR* format, fixed value);
 
-  static void SetValueBearingDifference(InfoBoxWindow &infobox, Angle delta);
-  static void SetCommentBearingDifference(InfoBoxWindow &infobox, Angle delta);
-  static void SetValueFromDistance(InfoBoxWindow &infobox, fixed distance);
+  static void SetValueBearingDifference(InfoBoxData &data, Angle delta);
+  static void SetCommentBearingDifference(InfoBoxData &data, Angle delta);
+  static void SetValueFromDistance(InfoBoxData &data, fixed distance);
 };
 
 #endif

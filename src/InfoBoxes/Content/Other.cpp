@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Other.hpp"
-
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
 #include "Renderer/HorizonRenderer.hpp"
@@ -35,20 +34,20 @@ Copyright_License {
 #include <stdio.h>
 
 void
-InfoBoxContentGLoad::Update(InfoBoxWindow &infobox)
+InfoBoxContentGLoad::Update(InfoBoxData &data)
 {
   if (!XCSoarInterface::Basic().acceleration.available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.2f"),
+  SetValueFromFixed(data, _T("%2.2f"),
                     XCSoarInterface::Basic().acceleration.g_load);
 }
 
 void
-InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
+InfoBoxContentBattery::Update(InfoBoxData &data)
 {
 #ifdef HAVE_BATTERY
   TCHAR tmp[32];
@@ -56,20 +55,20 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
   bool DisplaySupplyVoltageAsValue=false;
   switch (Power::External::Status) {
     case Power::External::OFF:
-      infobox.SetComment(_("AC Off"));
+      data.SetComment(_("AC Off"));
       break;
     case Power::External::ON:
       if (!XCSoarInterface::Basic().voltage_available)
-        infobox.SetComment(_("AC ON"));
+        data.SetComment(_("AC ON"));
       else{
         DisplaySupplyVoltageAsValue = true;
-        SetValueFromFixed(infobox, _T("%2.1fV"),
+        SetValueFromFixed(data, _T("%2.1fV"),
                           XCSoarInterface::Basic().voltage);
       }
       break;
     case Power::External::UNKNOWN:
     default:
-      infobox.SetCommentInvalid();
+      data.SetCommentInvalid();
   }
 #ifndef ANDROID
   switch (Power::Battery::Status){
@@ -81,23 +80,23 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
 #endif
         _stprintf(tmp, _T("%d%%"), Power::Battery::RemainingPercent);
         if (!DisplaySupplyVoltageAsValue)
-          infobox.SetValue(tmp);
+          data.SetValue(tmp);
         else
-          infobox.SetComment(tmp);
+          data.SetComment(tmp);
 #ifndef ANDROID
       }
       else
         if (!DisplaySupplyVoltageAsValue)
-          infobox.SetValueInvalid();
+          data.SetValueInvalid();
         else
-          infobox.SetCommentInvalid();
+          data.SetCommentInvalid();
       break;
     case Power::Battery::NOBATTERY:
     case Power::Battery::UNKNOWN:
       if (!DisplaySupplyVoltageAsValue)
-        infobox.SetValueInvalid();
+        data.SetValueInvalid();
       else
-        infobox.SetCommentInvalid();
+        data.SetCommentInvalid();
   }
 #endif
   return;
@@ -105,43 +104,43 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
 #endif
 
   if (XCSoarInterface::Basic().voltage_available) {
-    SetValueFromFixed(infobox, _T("%2.1fV"),
+    SetValueFromFixed(data, _T("%2.1fV"),
                       XCSoarInterface::Basic().voltage);
     return;
   }
 
-  infobox.SetInvalid();
+  data.SetInvalid();
 }
 
 void
-InfoBoxContentExperimental1::Update(InfoBoxWindow &infobox)
+InfoBoxContentExperimental1::Update(InfoBoxData &data)
 {
   // Set Value
-  infobox.SetInvalid();
+  data.SetInvalid();
 }
 
 void
-InfoBoxContentExperimental2::Update(InfoBoxWindow &infobox)
+InfoBoxContentExperimental2::Update(InfoBoxData &data)
 {
   // Set Value
-  infobox.SetInvalid();
+  data.SetInvalid();
 }
 
 void
-InfoBoxContentCPULoad::Update(InfoBoxWindow &infobox)
+InfoBoxContentCPULoad::Update(InfoBoxData &data)
 {
   TCHAR tmp[32];
   unsigned percent_load = SystemLoadCPU();
   if (percent_load <= 100) {
     _stprintf(tmp, _T("%d%%"), percent_load);
-    infobox.SetValue(tmp);
+    data.SetValue(tmp);
   } else {
-    infobox.SetInvalid();
+    data.SetInvalid();
   }
 }
 
 void
-InfoBoxContentFreeRAM::Update(InfoBoxWindow &infobox)
+InfoBoxContentFreeRAM::Update(InfoBoxData &data)
 {
 #ifdef HAVE_MEM_INFO
   TCHAR tmp[32];
@@ -160,9 +159,9 @@ InfoBoxContentFreeRAM::Update(InfoBoxWindow &infobox)
   } else
     unit = _T('B');
   _stprintf(tmp, _T("%.1f%c"), f, unit);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 #else
-  infobox.SetInvalid();
+  data.SetInvalid();
 #endif
 }
 
@@ -176,12 +175,12 @@ InfoBoxContentHorizon::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 }
 
 void
-InfoBoxContentHorizon::Update(InfoBoxWindow &infobox)
+InfoBoxContentHorizon::Update(InfoBoxData &data)
 {
   if (!CommonInterface::Basic().acceleration.available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
-  infobox.SetValue(_T(""));
-  infobox.invalidate();
+
+  data.SetCustom();
 }

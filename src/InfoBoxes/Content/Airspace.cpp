@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Airspace.hpp"
-#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
@@ -121,16 +121,16 @@ FindNearestHorizontalAirspace()
 }
 
 void
-InfoBoxContentNearestAirspaceHorizontal::Update(InfoBoxWindow &infobox)
+InfoBoxContentNearestAirspaceHorizontal::Update(InfoBoxData &data)
 {
   NearestAirspace nearest = FindNearestHorizontalAirspace();
   if (!nearest.IsDefined()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
-  SetValueFromDistance(infobox, nearest.distance);
-  infobox.SetComment(nearest.airspace->GetName());
+  SetValueFromDistance(data, nearest.distance);
+  data.SetComment(nearest.airspace->GetName());
 }
 
 class VerticalAirspaceVisitor : public AirspaceVisitor {
@@ -211,18 +211,18 @@ FindNearestVerticalAirspace()
 }
 
 void
-InfoBoxContentNearestAirspaceVertical::Update(InfoBoxWindow &infobox)
+InfoBoxContentNearestAirspaceVertical::Update(InfoBoxData &data)
 {
   NearestAirspace nearest = FindNearestVerticalAirspace();
   if (!nearest.IsDefined()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   TCHAR buffer[32];
   Units::FormatUserArrival(nearest.distance, buffer,
                            ARRAY_SIZE(buffer), false);
-  infobox.SetValue(buffer);
-  infobox.SetValueUnit(Units::current.altitude_unit);
-  infobox.SetComment(nearest.airspace->GetName());
+  data.SetValue(buffer);
+  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetComment(nearest.airspace->GetName());
 }

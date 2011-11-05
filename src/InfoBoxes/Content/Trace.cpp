@@ -86,7 +86,7 @@ InfoBoxContentCirclingAverageSpark::on_custom_paint(InfoBoxWindow &infobox, Canv
 }
 
 void
-InfoBoxContentSpark::label_vspeed(InfoBoxWindow &infobox,
+InfoBoxContentSpark::label_vspeed(InfoBoxData &data,
                                   const TraceVariableHistory& var)
 {
   if (var.empty())
@@ -95,43 +95,41 @@ InfoBoxContentSpark::label_vspeed(InfoBoxWindow &infobox,
   TCHAR sTmp[32];
   Units::FormatUserVSpeed(var.last(), sTmp,
                           ARRAY_SIZE(sTmp));
-  infobox.SetComment(sTmp);
+  data.SetComment(sTmp);
 
-  infobox.SetValue(_T(""));
-  infobox.invalidate();
+  data.SetCustom();
 }
 
 void
-InfoBoxContentVarioSpark::Update(InfoBoxWindow &infobox)
+InfoBoxContentVarioSpark::Update(InfoBoxData &data)
 {
-  label_vspeed(infobox, CommonInterface::Calculated().trace_history.BruttoVario);
+  label_vspeed(data, CommonInterface::Calculated().trace_history.BruttoVario);
 }
 
 void
-InfoBoxContentNettoVarioSpark::Update(InfoBoxWindow &infobox)
+InfoBoxContentNettoVarioSpark::Update(InfoBoxData &data)
 {
-  label_vspeed(infobox, CommonInterface::Calculated().trace_history.NettoVario);
+  label_vspeed(data, CommonInterface::Calculated().trace_history.NettoVario);
 }
 
 void
-InfoBoxContentCirclingAverageSpark::Update(InfoBoxWindow &infobox)
+InfoBoxContentCirclingAverageSpark::Update(InfoBoxData &data)
 {
-  label_vspeed(infobox, CommonInterface::Calculated().trace_history.CirclingAverage);
+  label_vspeed(data, CommonInterface::Calculated().trace_history.CirclingAverage);
 }
 
 
 void
-InfoBoxContentBarogram::Update(InfoBoxWindow &infobox)
+InfoBoxContentBarogram::Update(InfoBoxData &data)
 {
   const MoreData &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
   Units::FormatUserAltitude(basic.nav_altitude, sTmp,
                             ARRAY_SIZE(sTmp));
-  infobox.SetComment(sTmp);
+  data.SetComment(sTmp);
 
-  infobox.SetValue(_T(""));
-  infobox.invalidate();
+  data.SetCustom();
 }
 
 void
@@ -183,10 +181,9 @@ InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canva
 }
 
 void
-InfoBoxContentThermalBand::Update(InfoBoxWindow &infobox)
+InfoBoxContentThermalBand::Update(InfoBoxData &data)
 {
-  infobox.SetValue(_T(""));
-  infobox.invalidate();
+  data.SetCustom();
 }
 
 
@@ -200,8 +197,7 @@ InfoBoxContentTaskProgress::on_custom_paint(InfoBoxWindow &infobox, Canvas &canv
 }
 
 void
-InfoBoxContentTaskProgress::Update(InfoBoxWindow &infobox)
+InfoBoxContentTaskProgress::Update(InfoBoxData &data)
 {
-  infobox.SetValue(_T(""));
-  infobox.invalidate();
+  data.SetCustom();
 }

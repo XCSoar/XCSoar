@@ -22,65 +22,64 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Glide.hpp"
-
-#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
 
 void
-InfoBoxContentLDInstant::Update(InfoBoxWindow &infobox)
+InfoBoxContentLDInstant::Update(InfoBoxData &data)
 {
   if (XCSoarInterface::Calculated().ld == fixed(999)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.0f"), XCSoarInterface::Calculated().ld);
+  SetValueFromFixed(data, _T("%2.0f"), XCSoarInterface::Calculated().ld);
 }
 
 void
-InfoBoxContentLDCruise::Update(InfoBoxWindow &infobox)
+InfoBoxContentLDCruise::Update(InfoBoxData &data)
 {
   if (XCSoarInterface::Calculated().cruise_ld == fixed(999)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.0f"), XCSoarInterface::Calculated().cruise_ld);
+  SetValueFromFixed(data, _T("%2.0f"), XCSoarInterface::Calculated().cruise_ld);
 }
 
 void
-InfoBoxContentLDAvg::Update(InfoBoxWindow &infobox)
+InfoBoxContentLDAvg::Update(InfoBoxData &data)
 {
   if (XCSoarInterface::Calculated().average_ld == 0) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
   if (XCSoarInterface::Calculated().average_ld < 0)
-    infobox.SetValue(_T("^^^"));
+    data.SetValue(_T("^^^"));
   else if (XCSoarInterface::Calculated().average_ld >= 999)
-    infobox.SetValue(_T("+++"));
+    data.SetValue(_T("+++"));
   else
-    SetValueFromFixed(infobox, _T("%2.0f"),
+    SetValueFromFixed(data, _T("%2.0f"),
                       fixed(XCSoarInterface::Calculated().average_ld));
 }
 
 void
-InfoBoxContentLDVario::Update(InfoBoxWindow &infobox)
+InfoBoxContentLDVario::Update(InfoBoxData &data)
 {
   if (XCSoarInterface::Calculated().ld_vario == fixed(999) ||
       !XCSoarInterface::Basic().total_energy_vario_available ||
       !XCSoarInterface::Basic().airspeed_available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.0f"), XCSoarInterface::Calculated().ld_vario);
+  SetValueFromFixed(data, _T("%2.0f"), XCSoarInterface::Calculated().ld_vario);
 }

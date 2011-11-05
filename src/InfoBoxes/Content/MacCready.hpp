@@ -33,7 +33,7 @@ public:
 
   static const DialogContent dlgContent;
 
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
   virtual bool HandleQuickAccess(const TCHAR *misc);
 };

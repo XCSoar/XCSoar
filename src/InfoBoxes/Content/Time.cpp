@@ -22,8 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Time.hpp"
-
-#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "LocalTime.hpp"
 #include "Units/UnitsFormatter.hpp"
@@ -32,10 +31,10 @@ Copyright_License {
 #include <stdio.h>
 
 void
-InfoBoxContentTimeLocal::Update(InfoBoxWindow &infobox)
+InfoBoxContentTimeLocal::Update(InfoBoxData &data)
 {
   if (!CommonInterface::Basic().time_available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -47,18 +46,18 @@ InfoBoxContentTimeLocal::Update(InfoBoxWindow &infobox)
 
   // Set Value
   _stprintf(sTmp, _T("%02u:%02u"), t.hour, t.minute);
-  infobox.SetValue(sTmp);
+  data.SetValue(sTmp);
 
   // Set Comment
   _stprintf(sTmp, _T("%02u"), t.second);
-  infobox.SetComment(sTmp);
+  data.SetComment(sTmp);
 }
 
 void
-InfoBoxContentTimeUTC::Update(InfoBoxWindow &infobox)
+InfoBoxContentTimeUTC::Update(InfoBoxData &data)
 {
   if (!CommonInterface::Basic().time_available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -67,18 +66,18 @@ InfoBoxContentTimeUTC::Update(InfoBoxWindow &infobox)
   // Set Value
   const BrokenDateTime t = XCSoarInterface::Basic().date_time_utc;
   _stprintf(sTmp, _T("%02d:%02d"), t.hour, t.minute);
-  infobox.SetValue(sTmp);
+  data.SetValue(sTmp);
 
   // Set Comment
   _stprintf(sTmp, _T("%02d"), t.second);
-  infobox.SetComment(sTmp);
+  data.SetComment(sTmp);
 }
 
 void
-InfoBoxContentTimeFlight::Update(InfoBoxWindow &infobox)
+InfoBoxContentTimeFlight::Update(InfoBoxData &data)
 {
   if (!positive(CommonInterface::Calculated().flight.flight_time)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -87,6 +86,6 @@ InfoBoxContentTimeFlight::Update(InfoBoxWindow &infobox)
   Units::TimeToTextSmart(value, comment,
                          (int)XCSoarInterface::Calculated().flight.flight_time);
 
-  infobox.SetValue(value);
-  infobox.SetComment(comment);
+  data.SetValue(value);
+  data.SetComment(comment);
 }

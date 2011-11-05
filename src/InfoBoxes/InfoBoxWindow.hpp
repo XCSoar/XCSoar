@@ -25,10 +25,10 @@ Copyright_License {
 #define XCSOAR_INFO_BOX_HPP
 
 #include "Util/StaticString.hpp"
-#include "Units/Units.hpp"
 #include "InfoBoxes/Content/Base.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "PeriodClock.hpp"
+#include "Data.hpp"
 
 enum BorderKind_t {
   bkNone,
@@ -43,7 +43,6 @@ enum BorderKind_t {
 #define BORDERBOTTOM (1<<bkBottom)
 #define BORDERLEFT   (1<<bkLeft)
 
-class Angle;
 struct InfoBoxSettings;
 struct InfoBoxLook;
 
@@ -61,10 +60,8 @@ private:
 
   int border_kind;
 
-  StaticString<32> title;
-  StaticString<32> value;
-  StaticString<32> comment;
-  Unit value_unit;
+  InfoBoxData data;
+
   int id;
 
   /** a timer which returns keyboard focus back to the map window after a while */
@@ -74,10 +71,6 @@ private:
   PixelRect value_rect;
   PixelRect comment_rect;
   PixelRect value_and_comment_rect;
-
-  int value_color;
-  int comment_color;
-  int title_color;
 
   PeriodClock click_clock;
 
@@ -111,11 +104,6 @@ public:
                  UPixelScalar width, UPixelScalar height);
 
   /**
-   * Sets the unit of the InfoBox value
-   * @param Value New unit of the InfoBox value
-   */
-  void SetValueUnit(Unit value_unit);
-  /**
    * Sets the InfoBox ID to the given Value
    * @param id New value of the InfoBox ID
    */
@@ -126,57 +114,10 @@ public:
    * @param Value New value of the InfoBox title
    */
   void SetTitle(const TCHAR *title);
-  const TCHAR* GetTitle() { return title; };
-  /**
-   * Sets the InfoBox value to the given Value
-   * @param Value New value of the InfoBox value
-   */
-  void SetValue(const TCHAR *value);
 
-  /**
-   * Sets the InfoBox value to the given angle.
-   */
-  void SetValue(Angle value, const TCHAR *suffix = _T(""));
-
-  /**
-   * Sets the InfoBox comment to the given Value
-   * @param Value New value of the InfoBox comment
-   */
-  void SetComment(const TCHAR *comment);
-
-  /**
-   * Sets the InfoBox comment to the given angle.
-   */
-  void SetComment(Angle comment, const TCHAR *suffix = _T(""));
-
-  /**
-   * Sets the color of the InfoBox value to the given value
-   * @param value New color of the InfoBox value
-   */
-  void SetColor(int value_color);
-  /**
-   * Sets the color of the InfoBox comment to the given value
-   * @param value New color of the InfoBox comment
-   */
-  void SetColorBottom(int comment_color);
-  /**
-   * Sets the color of the InfoBox title to the given value
-   * @param value New color of the InfoBox title
-   */
-  void SetColorTop(int title_color);
-
-  /**
-   * Calls SetValueInvalid() then SetCommentInvalid()
-   */
-  void SetInvalid();
-  /**
-   * Resets value to --- and unassigns the unit
-   */
-  void SetValueInvalid();
-  /**
-   * Clears comment
-   */
-  void SetCommentInvalid();
+  const TCHAR* GetTitle() {
+    return data.title;
+  };
 
   /**
    * Constructor of the InfoBoxWindow class

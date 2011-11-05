@@ -29,32 +29,32 @@ Copyright_License {
 class InfoBoxContentSpeedGround : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 };
 
 class InfoBoxContentSpeedIndicated : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentSpeed : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentSpeedMacCready : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentSpeedDolphin : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 #endif

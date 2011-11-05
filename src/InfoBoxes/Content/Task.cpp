@@ -22,8 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Task.hpp"
-
-#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -38,23 +37,23 @@ Copyright_License {
 #include <stdio.h>
 
 void
-InfoBoxContentBearing::Update(InfoBoxWindow &infobox)
+InfoBoxContentBearing::Update(InfoBoxData &data)
 {
   const GlideResult &solution_remaining =
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       !solution_remaining.IsDefined() ||
       solution_remaining.vector.distance <= fixed(10)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  infobox.SetValue(solution_remaining.vector.bearing, _T("T"));
+  data.SetValue(solution_remaining.vector.bearing, _T("T"));
 }
 
 void
-InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
+InfoBoxContentBearingDiff::Update(InfoBoxData &data)
 {
   const GlideResult &solution_remaining =
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
@@ -62,7 +61,7 @@ InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
       !XCSoarInterface::Calculated().task_stats.task_valid ||
       !solution_remaining.IsOk() ||
       solution_remaining. vector.distance <= fixed(10)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -70,11 +69,11 @@ InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
   Angle Value =
     solution_remaining.vector.bearing - XCSoarInterface::Basic().track;
 
-  SetValueBearingDifference(infobox, Value);
+  SetValueBearingDifference(data, Value);
 }
 
 void
-InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
+InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
 
@@ -83,11 +82,11 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
     : NULL;
 
   if (!way_point) {
-    infobox.SetTitle(_("Next"));
-    infobox.SetInvalid();
+    data.SetTitle(_("Next"));
+    data.SetInvalid();
     return;
   }
-  SetTitleFromWaypointName(infobox, way_point);
+  SetTitleFromWaypointName(data, way_point);
 
   // Set Comment
   if (way_point->radio_frequency.IsDefined()) {
@@ -95,10 +94,10 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
     const unsigned freq = way_point->radio_frequency.GetKiloHertz();
     _sntprintf(comment.buffer(), comment.MAX_SIZE, _T("%u.%03u %s"),
                freq / 1000, freq % 1000, way_point->comment.c_str());
-    infobox.SetComment(comment);
+    data.SetComment(comment);
   }
   else
-    infobox.SetComment(way_point->comment.c_str());
+    data.SetComment(way_point->comment.c_str());
 
   const GlideResult &solution_remaining =
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
@@ -106,7 +105,7 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
       !XCSoarInterface::Calculated().task_stats.task_valid ||
       !solution_remaining.IsDefined() ||
       solution_remaining.vector.distance <= fixed(10)) {
-    infobox.SetValueInvalid();
+    data.SetValueInvalid();
     return;
   }
 
@@ -114,10 +113,10 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
   Angle Value =
     solution_remaining.vector.bearing - XCSoarInterface::Basic().track;
 
-  SetValueBearingDifference(infobox, Value);
+  SetValueBearingDifference(data, Value);
 
   // Set Color (blue/black)
-  infobox.SetColor(solution_remaining.IsFinalGlide() ? 2 : 0);
+  data.SetValueColor(solution_remaining.IsFinalGlide() ? 2 : 0);
 }
 
 bool
@@ -149,7 +148,7 @@ InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
 }
 
 void
-InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
+InfoBoxContentNextDistance::Update(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
 
@@ -158,22 +157,22 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
   if (!task_stats.task_valid ||
       !solution_remaining.IsDefined()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromDistance(infobox, solution_remaining.vector.distance);
+  SetValueFromDistance(data, solution_remaining.vector.distance);
 
   if (XCSoarInterface::Basic().track_available) {
     Angle bd = solution_remaining.vector.bearing - XCSoarInterface::Basic().track;
-    SetCommentBearingDifference(infobox, bd);
+    SetCommentBearingDifference(data, bd);
   } else
-    infobox.SetCommentInvalid();
+    data.SetCommentInvalid();
 }
 
 void
-InfoBoxContentNextETE::Update(InfoBoxWindow &infobox)
+InfoBoxContentNextETE::Update(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
 
@@ -181,7 +180,7 @@ InfoBoxContentNextETE::Update(InfoBoxWindow &infobox)
       !XCSoarInterface::Calculated().task_stats.current_leg.IsAchievable() ||
       !positive(XCSoarInterface::Calculated().task_stats.
                 current_leg.time_remaining)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -191,18 +190,18 @@ InfoBoxContentNextETE::Update(InfoBoxWindow &infobox)
       task_stats.current_leg.time_remaining;
   Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
-  infobox.SetValue(HHMMSSsmart);
-  infobox.SetComment(SSsmart);
+  data.SetValue(HHMMSSsmart);
+  data.SetComment(SSsmart);
 }
 
 void
-InfoBoxContentNextETA::Update(InfoBoxWindow &infobox)
+InfoBoxContentNextETA::Update(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
 
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       !XCSoarInterface::Calculated().task_stats.current_leg.IsAchievable()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -214,64 +213,64 @@ InfoBoxContentNextETA::Update(InfoBoxWindow &infobox)
 
   // Set Value
   _stprintf(tmp, _T("%02u:%02u"), t.hour, t.minute);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 
   // Set Comment
   _stprintf(tmp, _T("%02u"), t.second);
-  infobox.SetComment(tmp);
+  data.SetComment(tmp);
 }
 
 void
-InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
+InfoBoxContentNextAltitudeDiff::Update(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult &next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
   if (!task_stats.task_valid || !next_solution.IsDefined()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
   Units::FormatUserAltitude(next_solution.altitude_difference, tmp, 32, false);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueUnit(Units::current.altitude_unit);
 }
 
 void
-InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
+InfoBoxContentNextAltitudeRequire::Update(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult &next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
   if (!task_stats.task_valid || !next_solution.IsDefined()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
   Units::FormatUserAltitude(next_solution.altitude_required, tmp, 32, false);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueUnit(Units::current.altitude_unit);
 }
 
 void
-InfoBoxContentNextAltitudeArrival::Update(InfoBoxWindow &infobox)
+InfoBoxContentNextAltitudeArrival::Update(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
   if (!task_stats.task_valid || !next_solution.IsAchievable(true)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -279,66 +278,66 @@ InfoBoxContentNextAltitudeArrival::Update(InfoBoxWindow &infobox)
   TCHAR tmp[32];
   fixed alt = XCSoarInterface::Basic().nav_altitude-next_solution.height_glide;
   Units::FormatUserAltitude(alt, tmp, 32, false);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueUnit(Units::current.altitude_unit);
 }
 
 
 void
-InfoBoxContentNextLD::Update(InfoBoxWindow &infobox)
+InfoBoxContentNextLD::Update(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp, and this
   // is what current_leg gradient does.
 
   if (!XCSoarInterface::Calculated().task_stats.task_valid) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   fixed gradient = XCSoarInterface::Calculated().task_stats.current_leg.gradient;
 
   if (!positive(gradient)) {
-    infobox.SetValue(_T("+++"));
+    data.SetValue(_T("+++"));
     return;
   }
   if (::GradientValid(gradient)) {
     TCHAR tmp[32];
     _stprintf(tmp, _T("%d"), (int)gradient);
-    infobox.SetValue(tmp);
+    data.SetValue(tmp);
   } else {
-    infobox.SetInvalid();
+    data.SetInvalid();
   }
 }
 
 void
-InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
+InfoBoxContentFinalDistance::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
   if (!task_stats.task_valid ||
       !task_stats.current_leg.solution_remaining.IsDefined()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   // Set Value
-  SetValueFromDistance(infobox, common_stats.task_finished ?
+  SetValueFromDistance(data, common_stats.task_finished ?
                                 task_stats.current_leg.solution_remaining.vector.distance :
                                 task_stats.total.remaining.get_distance());
 }
 
 void
-InfoBoxContentFinalETE::Update(InfoBoxWindow &infobox)
+InfoBoxContentFinalETE::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
   if (!task_stats.task_valid || !task_stats.total.IsAchievable() ||
       !positive(task_stats.total.time_remaining)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -347,16 +346,16 @@ InfoBoxContentFinalETE::Update(InfoBoxWindow &infobox)
   const int dd = abs((int)task_stats.total.time_remaining);
   Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
-  infobox.SetValue(HHMMSSsmart);
-  infobox.SetComment(SSsmart);
+  data.SetValue(HHMMSSsmart);
+  data.SetComment(SSsmart);
 }
 
 void
-InfoBoxContentFinalETA::Update(InfoBoxWindow &infobox)
+InfoBoxContentFinalETA::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid || !task_stats.total.IsAchievable()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -367,20 +366,20 @@ InfoBoxContentFinalETA::Update(InfoBoxWindow &infobox)
 
   // Set Value
   _stprintf(tmp, _T("%02u:%02u"), t.hour, t.minute);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 
   // Set Comment
   _stprintf(tmp, _T("%02u"), t.second);
-  infobox.SetComment(tmp);
+  data.SetComment(tmp);
 }
 
 void
-InfoBoxContentFinalAltitudeDiff::Update(InfoBoxWindow &infobox)
+InfoBoxContentFinalAltitudeDiff::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid ||
       !task_stats.total.solution_remaining.IsOk()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -388,19 +387,19 @@ InfoBoxContentFinalAltitudeDiff::Update(InfoBoxWindow &infobox)
   TCHAR tmp[32];
   Units::FormatUserAltitude(task_stats.total.solution_remaining.altitude_difference,
                             tmp, 32, false);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueUnit(Units::current.altitude_unit);
 }
 
 void
-InfoBoxContentFinalAltitudeRequire::Update(InfoBoxWindow &infobox)
+InfoBoxContentFinalAltitudeRequire::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid ||
       !task_stats.total.solution_remaining.IsOk()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -408,132 +407,132 @@ InfoBoxContentFinalAltitudeRequire::Update(InfoBoxWindow &infobox)
   TCHAR tmp[32];
   Units::FormatUserAltitude(task_stats.total.solution_remaining.altitude_required,
                             tmp, 32, false);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueUnit(Units::current.altitude_unit);
 }
 
 void
-InfoBoxContentTaskSpeed::Update(InfoBoxWindow &infobox)
+InfoBoxContentTaskSpeed::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.0f"),
+  SetValueFromFixed(data, _T("%2.0f"),
                     Units::ToUserTaskSpeed(task_stats.total.travelled.get_speed()));
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.task_speed_unit);
+  data.SetValueUnit(Units::current.task_speed_unit);
 }
 
 void
-InfoBoxContentTaskSpeedAchieved::Update(InfoBoxWindow &infobox)
+InfoBoxContentTaskSpeedAchieved::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.0f"),
+  SetValueFromFixed(data, _T("%2.0f"),
                     Units::ToUserTaskSpeed(task_stats.total.remaining_effective.get_speed()));
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.task_speed_unit);
+  data.SetValueUnit(Units::current.task_speed_unit);
 }
 
 void
-InfoBoxContentTaskSpeedInstant::Update(InfoBoxWindow &infobox)
+InfoBoxContentTaskSpeedInstant::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.0f"),
+  SetValueFromFixed(data, _T("%2.0f"),
                     Units::ToUserTaskSpeed(task_stats.get_pirker_speed()));
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.task_speed_unit);
+  data.SetValueUnit(Units::current.task_speed_unit);
 }
 
 void
-InfoBoxContentFinalLD::Update(InfoBoxWindow &infobox)
+InfoBoxContentFinalLD::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   fixed gradient = task_stats.total.gradient;
 
   if (!positive(gradient)) {
-    infobox.SetValue(_T("+++"));
+    data.SetValue(_T("+++"));
     return;
   }
   if (::GradientValid(gradient)) {
     TCHAR tmp[32];
     _stprintf(tmp, _T("%d"), (int)gradient);
-    infobox.SetValue(tmp);
+    data.SetValue(tmp);
   } else {
-    infobox.SetInvalid();
+    data.SetInvalid();
   }
 }
 
 void
-InfoBoxContentFinalGR::Update(InfoBoxWindow &infobox)
+InfoBoxContentFinalGR::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   fixed gradient = task_stats.total.gradient;
 
   if (!positive(gradient)) {
-    infobox.SetValue(_T("+++"));
+    data.SetValue(_T("+++"));
     return;
   }
   if (::GradientValid(gradient)) {
     TCHAR tmp[32];
     _stprintf(tmp, _T("%d"), (int)gradient);
-    infobox.SetValue(tmp);
+    data.SetValue(tmp);
   } else {
-    infobox.SetInvalid();
+    data.SetInvalid();
   }
 }
 
 void
-InfoBoxContentHomeDistance::Update(InfoBoxWindow &infobox)
+InfoBoxContentHomeDistance::Update(InfoBoxData &data)
 {
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   // Set Value
-  SetValueFromDistance(infobox, common_stats.vector_home.distance);
+  SetValueFromDistance(data, common_stats.vector_home.distance);
 
   if (XCSoarInterface::Basic().track_available) {
     Angle bd = common_stats.vector_home.bearing - XCSoarInterface::Basic().track;
-    SetCommentBearingDifference(infobox, bd);
+    SetCommentBearingDifference(data, bd);
   } else
-    infobox.SetCommentInvalid();
+    data.SetCommentInvalid();
 }
 
 void
-InfoBoxContentOLC::Update(InfoBoxWindow &infobox)
+InfoBoxContentOLC::Update(InfoBoxData &data)
 {
   if (!XCSoarInterface::SettingsComputer().task.enable_olc ||
       !protected_task_manager) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -541,16 +540,16 @@ InfoBoxContentOLC::Update(InfoBoxWindow &infobox)
     XCSoarInterface::Calculated().contest_stats.GetResult();
 
   if (result_olc.score < fixed_one) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromDistance(infobox, result_olc.distance);
+  SetValueFromDistance(data, result_olc.distance);
 
   TCHAR tmp[32];
   _stprintf(tmp, _T("%.1f pts"), (double)result_olc.score);
-  infobox.SetComment(tmp);
+  data.SetComment(tmp);
 }
 
 bool
@@ -573,7 +572,7 @@ InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
 }
 
 void
-InfoBoxContentTaskAATime::Update(InfoBoxWindow &infobox)
+InfoBoxContentTaskAATime::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
@@ -581,7 +580,7 @@ InfoBoxContentTaskAATime::Update(InfoBoxWindow &infobox)
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !task_stats.total.IsAchievable() ||
       !positive(common_stats.aat_time_remaining)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -590,12 +589,12 @@ InfoBoxContentTaskAATime::Update(InfoBoxWindow &infobox)
   const int dd = abs((int)common_stats.aat_time_remaining);
   Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
-  infobox.SetValue(HHMMSSsmart);
-  infobox.SetComment(SSsmart);
+  data.SetValue(HHMMSSsmart);
+  data.SetComment(SSsmart);
 }
 
 void
-InfoBoxContentTaskAATimeDelta::Update(InfoBoxWindow &infobox)
+InfoBoxContentTaskAATimeDelta::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
@@ -604,7 +603,7 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxWindow &infobox)
       !task_stats.task_valid || !task_stats.total.IsAchievable() ||
       !positive(task_stats.total.time_remaining) ||
       !positive(common_stats.aat_time_remaining)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -618,126 +617,126 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxWindow &infobox)
 
   TCHAR tmp[32];
   _stprintf(tmp, negative(diff) ? _T("-%s") : _T("%s"), HHMMSSsmart);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 
-  infobox.SetComment(SSsmart);
+  data.SetComment(SSsmart);
 
   // Set Color (red/blue/black)
-  infobox.SetColor(negative(diff) ? 1 :
+  data.SetValueColor(negative(diff) ? 1 :
                    task_stats.total.time_remaining <
                        common_stats.aat_time_remaining + fixed(5) ? 2 : 0);
 }
 
 void
-InfoBoxContentTaskAADistance::Update(InfoBoxWindow &infobox)
+InfoBoxContentTaskAADistance::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromDistance(infobox, task_stats.total.planned.get_distance());
+  SetValueFromDistance(data, task_stats.total.planned.get_distance());
 }
 
 void
-InfoBoxContentTaskAADistanceMax::Update(InfoBoxWindow &infobox)
+InfoBoxContentTaskAADistanceMax::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromDistance(infobox, task_stats.distance_max);
+  SetValueFromDistance(data, task_stats.distance_max);
 }
 
 void
-InfoBoxContentTaskAADistanceMin::Update(InfoBoxWindow &infobox)
+InfoBoxContentTaskAADistanceMin::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromDistance(infobox, task_stats.distance_min);
+  SetValueFromDistance(data, task_stats.distance_min);
 }
 
 void
-InfoBoxContentTaskAASpeed::Update(InfoBoxWindow &infobox)
+InfoBoxContentTaskAASpeed::Update(InfoBoxData &data)
 {
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !positive(common_stats.aat_speed_remaining)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.0f"),
+  SetValueFromFixed(data, _T("%2.0f"),
                     Units::ToUserTaskSpeed(common_stats.aat_speed_remaining));
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.task_speed_unit);
+  data.SetValueUnit(Units::current.task_speed_unit);
 }
 
 void
-InfoBoxContentTaskAASpeedMax::Update(InfoBoxWindow &infobox)
+InfoBoxContentTaskAASpeedMax::Update(InfoBoxData &data)
 {
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !positive(common_stats.aat_speed_max)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.0f"),
+  SetValueFromFixed(data, _T("%2.0f"),
                     Units::ToUserTaskSpeed(common_stats.aat_speed_max));
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.task_speed_unit);
+  data.SetValueUnit(Units::current.task_speed_unit);
 }
 
 void
-InfoBoxContentTaskAASpeedMin::Update(InfoBoxWindow &infobox)
+InfoBoxContentTaskAASpeedMin::Update(InfoBoxData &data)
 {
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !positive(common_stats.aat_speed_min)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.0f"),
+  SetValueFromFixed(data, _T("%2.0f"),
                     Units::ToUserTaskSpeed(common_stats.aat_speed_min));
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.task_speed_unit);
+  data.SetValueUnit(Units::current.task_speed_unit);
 }
 
 void
-InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxWindow &infobox)
+InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxData &data)
 {
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
@@ -747,7 +746,7 @@ InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxWindow &infobox)
   if (!task_stats.task_valid || !positive(maxheight)
       || !protected_task_manager
       || !positive(common_stats.TimeUnderStartMaxHeight)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -758,15 +757,15 @@ InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxWindow &infobox)
   TCHAR SSsmart[32];
   Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
-  infobox.SetValue(HHMMSSsmart);
-  infobox.SetComment(_("Time Below"));
+  data.SetValue(HHMMSSsmart);
+  data.SetComment(_("Time Below"));
 }
 
 void
-InfoBoxContentNextETEVMG::Update(InfoBoxWindow &infobox)
+InfoBoxContentNextETEVMG::Update(InfoBoxData &data)
 {
   if (!XCSoarInterface::Basic().ground_speed_available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -777,7 +776,7 @@ InfoBoxContentNextETEVMG::Update(InfoBoxWindow &infobox)
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       !positive(d) ||
       !positive(v)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -786,15 +785,15 @@ InfoBoxContentNextETEVMG::Update(InfoBoxWindow &infobox)
   const int dd = (int)(d/v);
   Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
-  infobox.SetValue(HHMMSSsmart);
-  infobox.SetComment(SSsmart);
+  data.SetValue(HHMMSSsmart);
+  data.SetComment(SSsmart);
 }
 
 void
-InfoBoxContentFinalETEVMG::Update(InfoBoxWindow &infobox)
+InfoBoxContentFinalETEVMG::Update(InfoBoxData &data)
 {
   if (!XCSoarInterface::Basic().ground_speed_available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -805,7 +804,7 @@ InfoBoxContentFinalETEVMG::Update(InfoBoxWindow &infobox)
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       !positive(d) ||
       !positive(v)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -814,6 +813,6 @@ InfoBoxContentFinalETEVMG::Update(InfoBoxWindow &infobox)
   const int dd = (int)(d/v);
   Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
-  infobox.SetValue(HHMMSSsmart);
-  infobox.SetComment(SSsmart);
+  data.SetValue(HHMMSSsmart);
+  data.SetComment(SSsmart);
 }

@@ -29,201 +29,201 @@ Copyright_License {
 class InfoBoxContentBearing : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentBearingDiff : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentNextWaypoint : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 };
 
 class InfoBoxContentNextDistance : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentNextETE : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentNextETA : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentNextAltitudeDiff : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentNextAltitudeRequire : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentNextAltitudeArrival : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentNextLD: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentFinalDistance : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentFinalETE : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentFinalETA : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentFinalAltitudeDiff : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentFinalAltitudeRequire : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentFinalLD: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentFinalGR: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentHomeDistance: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentOLC: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 };
 
 class InfoBoxContentTaskSpeed : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTaskSpeedAchieved : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTaskSpeedInstant : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTaskAATime : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTaskAATimeDelta : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTaskAADistance : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTaskAADistanceMax : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTaskAADistanceMin : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTaskAASpeed : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTaskAASpeedMax : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTaskAASpeedMin : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTaskTimeUnderMaxHeight : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentNextETEVMG : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentFinalETEVMG : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 #endif

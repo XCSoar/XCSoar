@@ -24,54 +24,48 @@ Copyright_License {
 #include "InfoBoxes/Content/Weather.hpp"
 #include "InfoBoxes/Panel/WindEdit.hpp"
 #include "InfoBoxes/Panel/WindSetup.hpp"
-#include "InfoBoxes/InfoBoxWindow.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
-#include "Protection.hpp"
-
 #include "Dialogs/dlgInfoBoxAccess.hpp"
-#include "DataField/Enum.hpp"
-#include "DataField/Float.hpp"
-#include "DataField/Boolean.hpp"
 #include "Util/Macros.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
 
 void
-InfoBoxContentHumidity::Update(InfoBoxWindow &infobox)
+InfoBoxContentHumidity::Update(InfoBoxData &data)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
   if (!basic.humidity_available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%d"), (int)basic.humidity);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 }
 
 void
-InfoBoxContentTemperature::Update(InfoBoxWindow &infobox)
+InfoBoxContentTemperature::Update(InfoBoxData &data)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
   if (!basic.temperature_available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.1f")_T(DEG),
+  SetValueFromFixed(data, _T("%2.1f")_T(DEG),
                     Units::ToUserTemperature(basic.temperature));
 }
 
 void
-InfoBoxContentTemperatureForecast::Update(InfoBoxWindow &infobox)
+InfoBoxContentTemperatureForecast::Update(InfoBoxData &data)
 {
   fixed temperature = CommonInterface::SettingsComputer().forecast_temperature;
-  SetValueFromFixed(infobox, _T("%2.1f")_T(DEG),
+  SetValueFromFixed(data, _T("%2.1f")_T(DEG),
                     Units::ToUserTemperature(temperature));
 }
 
@@ -122,33 +116,33 @@ InfoBoxContentWind::GetDialogContent() {
 
 
 void
-InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
+InfoBoxContentWindSpeed::Update(InfoBoxData &data)
 {
   const DerivedInfo &info = CommonInterface::Calculated();
   if (!info.wind_available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.0f"),
+  SetValueFromFixed(data, _T("%2.0f"),
                     Units::ToUserWindSpeed(info.wind.norm));
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.wind_speed_unit);
+  data.SetValueUnit(Units::current.wind_speed_unit);
 
   // Set Comment
-  infobox.SetComment(info.wind.bearing, _T("T"));
+  data.SetComment(info.wind.bearing, _T("T"));
 }
 
 void
-InfoBoxContentWindBearing::Update(InfoBoxWindow &infobox)
+InfoBoxContentWindBearing::Update(InfoBoxData &data)
 {
   const DerivedInfo &info = CommonInterface::Calculated();
   if (!info.wind_available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
-  infobox.SetValue(info.wind.bearing, _T("T"));
+  data.SetValue(info.wind.bearing, _T("T"));
 }

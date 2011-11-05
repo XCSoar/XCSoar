@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Alternate.hpp"
-#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -34,10 +34,10 @@ Copyright_License {
 #include <tchar.h>
 
 void
-InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
+InfoBoxContentAlternateName::Update(InfoBoxData &data)
 {
   if (protected_task_manager == NULL) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -59,23 +59,23 @@ InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
 
   TCHAR tmp[32];
   _stprintf(tmp, _T("Altrn %d"), index+1);
-  infobox.SetTitle(tmp);
+  data.SetTitle(tmp);
 
   if (alternate == NULL || !XCSoarInterface::Basic().track_available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
-  SetCommentFromWaypointName(infobox, &alternate->waypoint);
+  SetCommentFromWaypointName(data, &alternate->waypoint);
 
   // Set Value
   Angle Value = alternate->solution.vector.bearing -
     XCSoarInterface::Basic().track;
 
-  SetValueBearingDifference(infobox, Value);
+  SetValueBearingDifference(data, Value);
 
   // Set Color (blue/black)
-  infobox.SetColor(alternate->solution.IsAchievable(true) ? 2 : 0);
+  data.SetValueColor(alternate->solution.IsAchievable(true) ? 2 : 0);
 }
 
 bool
@@ -100,10 +100,10 @@ InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
 }
 
 void
-InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
+InfoBoxContentAlternateGR::Update(InfoBoxData &data)
 {
   if (protected_task_manager == NULL) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -125,33 +125,33 @@ InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
 
   TCHAR tmp[32];
   _stprintf(tmp, _T("Altrn %d GR"), index+1);
-  infobox.SetTitle(tmp);
+  data.SetTitle(tmp);
 
   if (alternate == NULL) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
-  SetCommentFromWaypointName(infobox, &alternate->waypoint);
+  SetCommentFromWaypointName(data, &alternate->waypoint);
 
   fixed gradient =
     ::AngleToGradient(alternate->solution.DestinationAngleGround());
 
   if (negative(gradient)) {
-    infobox.SetColor(0);
-    infobox.SetValue(_T("+++"));
+    data.SetValueColor(0);
+    data.SetValue(_T("+++"));
     return;
   }
   if (::GradientValid(gradient)) {
     TCHAR tmp[32];
     _stprintf(tmp, _T("%d"), (int)gradient);
-    infobox.SetValue(tmp);
+    data.SetValue(tmp);
   } else {
-    infobox.SetInvalid();
+    data.SetInvalid();
   }
 
   // Set Color (blue/black)
-  infobox.SetColor(alternate->solution.IsAchievable(true) ? 2 : 0);
+  data.SetValueColor(alternate->solution.IsAchievable(true) ? 2 : 0);
 }
 
 bool

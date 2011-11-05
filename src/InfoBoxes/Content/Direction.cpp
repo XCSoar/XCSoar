@@ -22,8 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Direction.hpp"
-
-#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 
 #include "Simulator.hpp"
@@ -34,13 +33,13 @@ Copyright_License {
 #include <stdio.h>
 
 void
-InfoBoxContentTrack::Update(InfoBoxWindow &infobox)
+InfoBoxContentTrack::Update(InfoBoxData &data)
 {
   if (!XCSoarInterface::Basic().track_available) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
-  infobox.SetValue(XCSoarInterface::Basic().track, _T("T"));
+  data.SetValue(XCSoarInterface::Basic().track, _T("T"));
 }
 
 bool

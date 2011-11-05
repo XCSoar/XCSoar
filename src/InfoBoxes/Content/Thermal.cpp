@@ -22,84 +22,82 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Thermal.hpp"
-
-#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Interface.hpp"
-
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "DeviceBlackboard.hpp"
+
 #include <tchar.h>
 #include <stdio.h>
 
 static void
-SetVSpeed(InfoBoxWindow &infobox, fixed value)
+SetVSpeed(InfoBoxData &data, fixed value)
 {
   TCHAR buffer[32];
   Units::FormatUserVSpeed(value, buffer, 32, false);
-  infobox.SetValue(buffer[0] == _T('+') ? buffer + 1 : buffer);
-  infobox.SetValueUnit(Units::current.vertical_speed_unit);
+  data.SetValue(buffer[0] == _T('+') ? buffer + 1 : buffer);
+  data.SetValueUnit(Units::current.vertical_speed_unit);
 }
 
 void
-InfoBoxContentVario::Update(InfoBoxWindow &infobox)
+InfoBoxContentVario::Update(InfoBoxData &data)
 {
-  SetVSpeed(infobox, CommonInterface::Basic().brutto_vario);
+  SetVSpeed(data, CommonInterface::Basic().brutto_vario);
 }
 
 void
-InfoBoxContentVarioNetto::Update(InfoBoxWindow &infobox)
+InfoBoxContentVarioNetto::Update(InfoBoxData &data)
 {
-  SetVSpeed(infobox, CommonInterface::Basic().netto_vario);
+  SetVSpeed(data, CommonInterface::Basic().netto_vario);
 }
 
 void
-InfoBoxContentThermal30s::Update(InfoBoxWindow &infobox)
+InfoBoxContentThermal30s::Update(InfoBoxData &data)
 {
-  SetVSpeed(infobox, XCSoarInterface::Calculated().average);
+  SetVSpeed(data, XCSoarInterface::Calculated().average);
 
   // Set Color (red/black)
-  infobox.SetColor(XCSoarInterface::Calculated().average * fixed_two <
+  data.SetValueColor(XCSoarInterface::Calculated().average * fixed_two <
       XCSoarInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
 }
 
 void
-InfoBoxContentThermalLastAvg::Update(InfoBoxWindow &infobox)
+InfoBoxContentThermalLastAvg::Update(InfoBoxData &data)
 {
   const OneClimbInfo &thermal = CommonInterface::Calculated().last_thermal;
   if (!thermal.IsDefined()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
-  SetVSpeed(infobox, thermal.lift_rate);
+  SetVSpeed(data, thermal.lift_rate);
 }
 
 void
-InfoBoxContentThermalLastGain::Update(InfoBoxWindow &infobox)
+InfoBoxContentThermalLastGain::Update(InfoBoxData &data)
 {
   const OneClimbInfo &thermal = CommonInterface::Calculated().last_thermal;
   if (!thermal.IsDefined()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR sTmp[32];
   Units::FormatUserAltitude(thermal.gain, sTmp, 32, false);
-  infobox.SetValue(sTmp);
+  data.SetValue(sTmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueUnit(Units::current.altitude_unit);
 }
 
 void
-InfoBoxContentThermalLastTime::Update(InfoBoxWindow &infobox)
+InfoBoxContentThermalLastTime::Update(InfoBoxData &data)
 {
   const OneClimbInfo &thermal = CommonInterface::Calculated().last_thermal;
   if (!thermal.IsDefined()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
@@ -108,76 +106,76 @@ InfoBoxContentThermalLastTime::Update(InfoBoxWindow &infobox)
   TCHAR value[32], comment[32];
   Units::TimeToTextSmart(value, comment, (int)thermal.duration);
 
-  infobox.SetValue(value);
-  infobox.SetComment(comment);
+  data.SetValue(value);
+  data.SetComment(comment);
 }
 
 void
-InfoBoxContentThermalAllAvg::Update(InfoBoxWindow &infobox)
+InfoBoxContentThermalAllAvg::Update(InfoBoxData &data)
 {
   if (!positive(XCSoarInterface::Calculated().time_climb)) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
-  SetVSpeed(infobox, XCSoarInterface::Calculated().total_height_gain /
+  SetVSpeed(data, XCSoarInterface::Calculated().total_height_gain /
             XCSoarInterface::Calculated().time_climb);
 }
 
 void
-InfoBoxContentThermalAvg::Update(InfoBoxWindow &infobox)
+InfoBoxContentThermalAvg::Update(InfoBoxData &data)
 {
   const OneClimbInfo &thermal = CommonInterface::Calculated().current_thermal;
   if (!thermal.IsDefined()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
-  SetVSpeed(infobox, thermal.lift_rate);
+  SetVSpeed(data, thermal.lift_rate);
 
   // Set Color (red/black)
-  infobox.SetColor(thermal.lift_rate * fixed(1.5) <
+  data.SetValueColor(thermal.lift_rate * fixed(1.5) <
       XCSoarInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
 }
 
 void
-InfoBoxContentThermalGain::Update(InfoBoxWindow &infobox)
+InfoBoxContentThermalGain::Update(InfoBoxData &data)
 {
   const OneClimbInfo &thermal = CommonInterface::Calculated().current_thermal;
   if (!thermal.IsDefined()) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR sTmp[32];
   Units::FormatUserAltitude(thermal.gain, sTmp, 32, false);
-  infobox.SetValue(sTmp);
+  data.SetValue(sTmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueUnit(Units::current.altitude_unit);
 }
 
 void
-InfoBoxContentThermalRatio::Update(InfoBoxWindow &infobox)
+InfoBoxContentThermalRatio::Update(InfoBoxData &data)
 {
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.0f%%"),
+  SetValueFromFixed(data, _T("%2.0f%%"),
                     XCSoarInterface::Calculated().circling_percentage);
 }
 
 void
-InfoBoxContentVarioDistance::Update(InfoBoxWindow &infobox)
+InfoBoxContentVarioDistance::Update(InfoBoxData &data)
 {
   if (!XCSoarInterface::Calculated().task_stats.task_valid) {
-    infobox.SetInvalid();
+    data.SetInvalid();
     return;
   }
 
-  SetVSpeed(infobox,
+  SetVSpeed(data,
             XCSoarInterface::Calculated().task_stats.total.vario.get_value());
 
   // Set Color (red/black)
-  infobox.SetColor(negative(
+  data.SetValueColor(negative(
       XCSoarInterface::Calculated().task_stats.total.vario.get_value()) ? 1 : 0);
 }

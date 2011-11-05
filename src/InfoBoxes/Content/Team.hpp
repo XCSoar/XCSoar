@@ -29,26 +29,26 @@ Copyright_License {
 class InfoBoxContentTeamCode : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 };
 
 class InfoBoxContentTeamBearing : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTeamBearingDiff : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTeamDistance : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 #endif

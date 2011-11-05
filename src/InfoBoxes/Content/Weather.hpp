@@ -29,19 +29,19 @@ Copyright_License {
 class InfoBoxContentHumidity : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTemperature : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentTemperatureForecast : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 };
 
@@ -56,13 +56,13 @@ public:
 class InfoBoxContentWindSpeed : public InfoBoxContentWind
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 class InfoBoxContentWindBearing : public InfoBoxContentWind
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
 };
 
 #endif

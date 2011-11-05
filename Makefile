@@ -356,6 +356,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Content/Trace.cpp \
 	$(SRC)/InfoBoxes/Content/Weather.cpp \
 	$(SRC)/InfoBoxes/Content/Airspace.cpp \
+	$(SRC)/InfoBoxes/Data.cpp \
+	$(SRC)/InfoBoxes/Format.cpp \
 	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
 	$(SRC)/InfoBoxes/InfoBoxWindow.cpp \
 	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \

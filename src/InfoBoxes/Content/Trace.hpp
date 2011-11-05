@@ -35,7 +35,7 @@ protected:
   void do_paint(InfoBoxWindow &infobox, Canvas &canvas,
                 const TraceVariableHistory& var,
                 const bool center = true);
-  void label_vspeed(InfoBoxWindow &infobox,
+  void label_vspeed(InfoBoxData &data,
                     const TraceVariableHistory& var);
 
 };
@@ -43,28 +43,28 @@ protected:
 class InfoBoxContentVarioSpark : public InfoBoxContentSpark
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
   virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
 };
 
 class InfoBoxContentNettoVarioSpark : public InfoBoxContentSpark
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
   virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
 };
 
 class InfoBoxContentCirclingAverageSpark : public InfoBoxContentSpark
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
   virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
 };
 
 class InfoBoxContentBarogram : public InfoBoxContentAltitude
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
   virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 };
@@ -72,14 +72,14 @@ public:
 class InfoBoxContentThermalBand : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
   virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
 };
 
 class InfoBoxContentTaskProgress : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxWindow &infobox);
+  virtual void Update(InfoBoxData &data);
   virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
 };
 

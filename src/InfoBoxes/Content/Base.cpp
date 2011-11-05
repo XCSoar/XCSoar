@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Base.hpp"
-#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Math/Angle.hpp"
@@ -32,7 +32,7 @@ Copyright_License {
 #include <stdio.h>
 
 static
-void FillInfoBoxWaypointName(InfoBoxWindow& infobox, const Waypoint* way_point,
+void FillInfoBoxWaypointName(InfoBoxData &data, const Waypoint* way_point,
                              const bool title=true)
 {
   TCHAR tmp[32];
@@ -54,14 +54,14 @@ void FillInfoBoxWaypointName(InfoBoxWindow& infobox, const Waypoint* way_point,
     }
   }
   if (title) {
-    infobox.SetTitle(tmp);
+    data.SetTitle(tmp);
   } else {
-    infobox.SetComment(tmp);
+    data.SetComment(tmp);
   }
 }
 
 void
-InfoBoxContent::SetValueBearingDifference(InfoBoxWindow &infobox, Angle delta)
+InfoBoxContent::SetValueBearingDifference(InfoBoxData &data, Angle delta)
 {
   fixed delta_degrees = delta.AsDelta().Degrees();
   TCHAR tmp[32];
@@ -72,11 +72,11 @@ InfoBoxContent::SetValueBearingDifference(InfoBoxWindow &infobox, Angle delta)
   else
     _tcscpy(tmp, _T("«»"));
 
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 }
 
 void
-InfoBoxContent::SetCommentBearingDifference(InfoBoxWindow &infobox, Angle delta)
+InfoBoxContent::SetCommentBearingDifference(InfoBoxData &data, Angle delta)
 {
   fixed delta_degrees = delta.AsDelta().Degrees();
   TCHAR tmp[32];
@@ -87,38 +87,38 @@ InfoBoxContent::SetCommentBearingDifference(InfoBoxWindow &infobox, Angle delta)
   else
     _tcscpy(tmp, _T("«»"));
 
-  infobox.SetComment(tmp);
+  data.SetComment(tmp);
 }
 
 void
-InfoBoxContent::SetTitleFromWaypointName(InfoBoxWindow &infobox,
+InfoBoxContent::SetTitleFromWaypointName(InfoBoxData &data,
                                          const Waypoint* waypoint)
 {
-  FillInfoBoxWaypointName(infobox, waypoint, true);
+  FillInfoBoxWaypointName(data, waypoint, true);
 }
 
 void
-InfoBoxContent::SetCommentFromWaypointName(InfoBoxWindow &infobox,
+InfoBoxContent::SetCommentFromWaypointName(InfoBoxData &data,
                                            const Waypoint* waypoint)
 {
-  FillInfoBoxWaypointName(infobox, waypoint, false);
+  FillInfoBoxWaypointName(data, waypoint, false);
 }
 
 void
-InfoBoxContent::SetValueFromFixed(InfoBoxWindow &infobox,
+InfoBoxContent::SetValueFromFixed(InfoBoxData &data,
                                   const TCHAR* format, fixed value)
 {
   TCHAR tmp[32];
   _stprintf(tmp, format, (double)value);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 }
 
 void
-InfoBoxContent::SetValueFromDistance(InfoBoxWindow &infobox, fixed distance)
+InfoBoxContent::SetValueFromDistance(InfoBoxData &data, fixed distance)
 {
   TCHAR tmp[32];
   Units::FormatUserDistance(distance, tmp, 32, false);
-  infobox.SetValue(tmp);
+  data.SetValue(tmp);
 
-  infobox.SetValueUnit(Units::current.distance_unit);
+  data.SetValueUnit(Units::current.distance_unit);
 }

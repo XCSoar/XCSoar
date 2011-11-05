@@ -57,29 +57,12 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent,
    border_kind(border_flags),
    focus_timer(0)
 {
-  value_color = 0;
-  title_color = 0;
-  comment_color = 0;
+  data.Clear();
 
   style.enable_double_clicks();
   set(parent, x, y, width, height, style);
 
-  value_unit = unUndef;
-
-  title.clear();
-  value.clear();
-  comment.clear();
   id = -1;
-}
-
-void
-InfoBoxWindow::SetValueUnit(Unit _value_unit)
-{
-  if (value_unit == _value_unit)
-    return;
-
-  value_unit = _value_unit;
-  invalidate(value_rect);
 }
 
 void
@@ -91,115 +74,22 @@ InfoBoxWindow::SetID(const int _id)
 void
 InfoBoxWindow::SetTitle(const TCHAR *_title)
 {
-  if (!title.equals(_title)) {
-    title = _title;
-    invalidate(title_rect);
-  }
-}
-
-void
-InfoBoxWindow::SetValue(const TCHAR *_value)
-{
-  if (!value.equals(_value)) {
-    value = _value;
-    invalidate(value_rect);
-  }
-}
-
-void
-InfoBoxWindow::SetValue(Angle _value, const TCHAR *suffix)
-{
-  assert(suffix != NULL);
-
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%d")_T(DEG)_T("%s"),
-            iround(_value.Degrees()), suffix);
-  SetValue(tmp);
-}
-
-void
-InfoBoxWindow::SetColor(int _value_color)
-{
-  if (value_color == _value_color)
-    return;
-
-  value_color = _value_color;
-  invalidate(value_rect);
-}
-
-void
-InfoBoxWindow::SetColorBottom(int _comment_color)
-{
-  if (comment_color == _comment_color)
-    return;
-
-  comment_color = _comment_color;
-  invalidate(comment_rect);
-}
-
-void
-InfoBoxWindow::SetColorTop(int _title_color)
-{
-  if (title_color == _title_color)
-    return;
-
-  title_color = _title_color;
+  data.SetTitle(_title);
   invalidate(title_rect);
-}
-
-void
-InfoBoxWindow::SetComment(const TCHAR *_comment)
-{
-  if (!comment.equals(_comment)) {
-    comment = _comment;
-    invalidate(comment_rect);
-  }
-}
-
-void
-InfoBoxWindow::SetComment(Angle _comment, const TCHAR *suffix)
-{
-  assert(suffix != NULL);
-
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%d")_T(DEG)_T("%s"),
-            iround(_comment.Degrees()), suffix);
-  SetComment(tmp);
-}
-
-void
-InfoBoxWindow::SetInvalid()
-{
-  SetColor(0);
-  SetValueInvalid();
-  SetCommentInvalid();
-}
-
-void
-InfoBoxWindow::SetValueInvalid()
-{
-  SetValue(_T("---"));
-  SetValueUnit(unUndef);
-}
-
-void
-InfoBoxWindow::SetCommentInvalid()
-{
-  SetComment(_T(""));
 }
 
 void
 InfoBoxWindow::PaintTitle(Canvas &canvas)
 {
-  if (title.empty())
+  if (data.title.empty())
     return;
 
-  canvas.set_text_color(look.get_title_color(title_color));
+  canvas.set_text_color(look.get_title_color(data.title_color));
 
   const Font &font = *look.title.font;
   canvas.select(font);
 
-  PixelSize tsize = canvas.text_size(title.c_str());
+  PixelSize tsize = canvas.text_size(data.title);
 
   PixelScalar halftextwidth = (title_rect.left + title_rect.right - tsize.cx) / 2;
   PixelScalar x = max(PixelScalar(1),
@@ -207,7 +97,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
   PixelScalar y = title_rect.top + 1 + font.GetCapitalHeight() -
     font.GetAscentHeight();
 
-  canvas.TextAutoClipped(x, y, title.c_str());
+  canvas.TextAutoClipped(x, y, data.title);
 
   if (settings.border_style == apIbTab && halftextwidth > Layout::Scale(3)) {
     PixelScalar ytop = title_rect.top + font.GetCapitalHeight() / 2;
@@ -236,25 +126,25 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 void
 InfoBoxWindow::PaintValue(Canvas &canvas)
 {
-  if (value.empty())
+  if (data.value.empty())
     return;
 
-  canvas.set_text_color(look.get_value_color(value_color));
+  canvas.set_text_color(look.get_value_color(data.value_color));
 
 #ifndef GNAV
   // Do text-based unit rendering on higher resolutions
   if (Layout::FastScale(10) > 18) {
     canvas.select(*look.unit_font);
-    PixelSize unit_size = UnitSymbolRenderer::GetSize(canvas, value_unit);
+    PixelSize unit_size = UnitSymbolRenderer::GetSize(canvas, data.value_unit);
 
     canvas.select(*look.value.font);
     UPixelScalar ascent_height = look.value.font->GetAscentHeight();
 
-    PixelSize tsize = canvas.text_size(value.c_str());
+    PixelSize tsize = canvas.text_size(data.value);
     if (tsize.cx > value_rect.right - value_rect.left) {
       canvas.select(*look.small_font);
       ascent_height = look.small_font->GetAscentHeight();
-      tsize = canvas.text_size(value.c_str());
+      tsize = canvas.text_size(data.value);
     }
 
     PixelScalar x = max(PixelScalar(0),
@@ -263,17 +153,18 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
 
     PixelScalar y = (value_rect.top + value_rect.bottom - tsize.cy) / 2;
 
-    canvas.TextAutoClipped(x, y, value.c_str());
+    canvas.TextAutoClipped(x, y, data.value);
 
     if (unit_size.cx != 0) {
       UPixelScalar unit_height =
-          UnitSymbolRenderer::GetAscentHeight(*look.unit_font, value_unit);
+          UnitSymbolRenderer::GetAscentHeight(*look.unit_font,
+                                              data.value_unit);
 
       canvas.select(*look.unit_font);
       UnitSymbolRenderer::Draw(canvas,
                                { PixelScalar(x + tsize.cx),
                                  PixelScalar(y + ascent_height - unit_height) },
-                               value_unit);
+                               data.value_unit);
     }
     return;
   }
@@ -283,16 +174,16 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   UPixelScalar ascent_height = look.value.font->GetAscentHeight();
   UPixelScalar capital_height = look.value.font->GetCapitalHeight();
 
-  PixelSize tsize = canvas.text_size(value.c_str());
+  PixelSize tsize = canvas.text_size(data.value);
   if (tsize.cx > value_rect.right - value_rect.left) {
     canvas.select(*look.small_font);
     ascent_height = look.small_font->GetAscentHeight();
     capital_height = look.small_font->GetCapitalHeight();
-    tsize = canvas.text_size(value.c_str());
+    tsize = canvas.text_size(data.value);
   }
 
   PixelSize unit_size;
-  const UnitSymbol *unit_symbol = GetUnitSymbol(value_unit);
+  const UnitSymbol *unit_symbol = GetUnitSymbol(data.value_unit);
   if (unit_symbol != NULL) {
     unit_size = unit_symbol->get_size();
   } else {
@@ -307,9 +198,9 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   PixelScalar y = value_rect.top + 1 - ascent_height +
     (value_rect.bottom - value_rect.top + capital_height) / 2;
 
-  canvas.TextAutoClipped(x, y, value.c_str());
+  canvas.TextAutoClipped(x, y, data.value);
 
-  if (unit_symbol != NULL && value_color >= 0) {
+  if (unit_symbol != NULL) {
 #ifndef HAVE_CLIPPING
     /* sort-of clipping */
     if (x + tsize.cx >= (int)canvas.get_width())
@@ -332,15 +223,15 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
 void
 InfoBoxWindow::PaintComment(Canvas &canvas)
 {
-  if (comment.empty())
+  if (data.comment.empty())
     return;
 
-  canvas.set_text_color(look.get_comment_color(comment_color));
+  canvas.set_text_color(look.get_comment_color(data.comment_color));
 
   const Font &font = *look.comment.font;
   canvas.select(font);
 
-  PixelSize tsize = canvas.text_size(comment);
+  PixelSize tsize = canvas.text_size(data.comment);
 
   PixelScalar x = max(PixelScalar(1),
                       PixelScalar((comment_rect.left + comment_rect.right
@@ -348,7 +239,7 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
   PixelScalar y = comment_rect.top + 1 + font.GetCapitalHeight()
     - font.GetAscentHeight();
 
-  canvas.TextAutoClipped(x, y, comment);
+  canvas.TextAutoClipped(x, y, data.comment);
 }
 
 void
@@ -380,7 +271,7 @@ InfoBoxWindow::Paint(Canvas &canvas)
 {
   canvas.clear(look.background_brush);
 
-  if (content != NULL)
+  if (data.GetCustom() && content != NULL)
     content->on_custom_paint(*this, canvas);
 
   canvas.background_transparent();
@@ -435,11 +326,8 @@ InfoBoxWindow::SetContentProvider(InfoBoxContent *_content)
   delete content;
   content = _content;
 
-  SetColor(0);
-  SetColorTop(0);
-  SetColorBottom(0);
-
-  SetInvalid();
+  data.SetInvalid();
+  invalidate();
 }
 
 void
@@ -448,7 +336,27 @@ InfoBoxWindow::UpdateContent()
   if (content == NULL)
     return;
 
-  content->Update(*this);
+  InfoBoxData old = data;
+  content->Update(data);
+
+  if (old.GetCustom() || data.GetCustom())
+    /* must invalidate everything when custom painting is/was
+       enabled */
+    invalidate();
+  else {
+#ifdef ENABLE_OPENGL
+    if (!data.CompareTitle(old) || !data.CompareValue(old) ||
+        !data.CompareComment(old))
+      invalidate();
+#else
+    if (!data.CompareTitle(old))
+      invalidate(title_rect);
+    if (!data.CompareValue(old))
+      invalidate(value_rect);
+    if (!data.CompareComment(old))
+      invalidate(comment_rect);
+#endif
+  }
 }
 
 bool
