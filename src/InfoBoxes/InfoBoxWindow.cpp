@@ -50,7 +50,7 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent,
                              PixelScalar x, PixelScalar y,
                              UPixelScalar width, UPixelScalar height,
                              int border_flags, const InfoBoxSettings &_settings,
-                             const InfoBoxLook &_look)
+                             const InfoBoxLook &_look, WindowStyle style)
   :content(NULL),
    parent(_parent),
    settings(_settings), look(_look),
@@ -61,7 +61,6 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent,
   title_color = 0;
   comment_color = 0;
 
-  WindowStyle style;
   style.enable_double_clicks();
   set(parent, x, y, width, height, style);
 

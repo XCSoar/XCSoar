@@ -531,7 +531,7 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
     InfoBoxes[i] = new InfoBoxWindow(XCSoarInterface::main_window,
                                      rc.left, rc.top,
                                      rc.right - rc.left, rc.bottom - rc.top,
-                                     Border, settings, look);
+                                     Border, settings, look, style);
   }
 
   SetDirty();

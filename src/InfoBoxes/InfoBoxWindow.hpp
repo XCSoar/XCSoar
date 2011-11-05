@@ -188,7 +188,8 @@ public:
    */
   InfoBoxWindow(ContainerWindow &parent, PixelScalar x, PixelScalar y,
                 UPixelScalar width, UPixelScalar height, int border_flags,
-                const InfoBoxSettings &settings, const InfoBoxLook &_look);
+                const InfoBoxSettings &settings, const InfoBoxLook &_look,
+                WindowStyle style=WindowStyle());
 
   ~InfoBoxWindow() { delete content; }
 
