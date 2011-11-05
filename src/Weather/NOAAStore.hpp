@@ -63,6 +63,13 @@ namespace NOAAStore
    * @return Four letter code of the station/airport
    */
   const char *GetCode(unsigned index);
+
+  /**
+   * Returns the four letter code as a TCHAR string.  This may return
+   * a pointer to a static buffer, and consecutive calls (even with
+   * different objects) may invalidate the previous return value.  May
+   * be called only from the main thread.
+   */
   const TCHAR *GetCodeT(unsigned index);
 
   /**
