@@ -16,6 +16,7 @@ Version 6.2.4 - not yet released
 * Android
   - fix bogus long InfoBox clicks
   - fix crash after resuming
+  - don't reveal InfoBoxes after rotating the display during pan
 * Windows
   - work around startup problem on hx4700 with Windows Mobile 5
 * Altair

@@ -48,7 +48,7 @@ using std::max;
 InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent, int X, int Y, int Width, int Height,
                  int border_flags,
                              const InfoBoxSettings &_settings,
-                 const InfoBoxLook &_look)
+                             const InfoBoxLook &_look, WindowStyle style)
   :content(NULL),
    parent(_parent),
    settings(_settings), look(_look),
@@ -59,7 +59,6 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent, int X, int Y, int Width, 
   colorTitle = 0;
   colorComment = 0;
 
-  WindowStyle style;
   style.enable_double_clicks();
   set(parent, X, Y, Width, Height, style);
 
