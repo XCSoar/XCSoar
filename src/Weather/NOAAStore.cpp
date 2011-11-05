@@ -69,8 +69,12 @@ bool
 NOAAStore::Item::Update(JobRunner &runner)
 {
   bool metar_downloaded = NOAADownloader::DownloadMETAR(code, metar, runner);
-  if (metar_downloaded)
+  if (metar_downloaded) {
     metar_available = true;
+
+    if (METARParser::Parse(metar, parsed_metar))
+      parsed_metar_available = true;
+  }
 
   bool taf_downloaded = NOAADownloader::DownloadTAF(code, taf, runner);
   if (taf_downloaded)
@@ -96,6 +100,7 @@ NOAAStore::AddStation(const char *code)
 
   // Reset available flags
   item.metar_available = false;
+  item.parsed_metar_available = false;
   item.taf_available = false;
 
   stations.push_back(item);
