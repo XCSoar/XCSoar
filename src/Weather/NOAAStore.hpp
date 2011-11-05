@@ -64,11 +64,10 @@ public:
    * Add a station to the set of stations for which
    * weather information should be downloaded
    * @param code Four letter code of the station/airport (upper case)
-   * @return True if the station was added, False if the array is full
    */
-  bool AddStation(const char *code);
+  void AddStation(const char *code);
 #ifdef _UNICODE
-  bool AddStation(const TCHAR *code);
+  void AddStation(const TCHAR *code);
 #endif
 
   /**

@@ -48,7 +48,7 @@ NOAAStore::GetStationIndex(const char *code) const
   return (unsigned)-1;
 }
 
-bool
+void
 NOAAStore::AddStation(const char *code)
 {
 #ifndef NDEBUG
@@ -56,9 +56,7 @@ NOAAStore::AddStation(const char *code)
   for (unsigned i = 0; i < 4; i++)
     assert(code[i] >= 'A' && code[i] <= 'Z');
 #endif
-
-  if (stations.full())
-    return false;
+  assert(!stations.full());
 
   Item &item = stations.append();
 
@@ -69,12 +67,10 @@ NOAAStore::AddStation(const char *code)
   // Reset available flags
   item.metar_available = false;
   item.taf_available = false;
-
-  return true;
 }
 
 #ifdef _UNICODE
-bool
+void
 NOAAStore::AddStation(const TCHAR *code)
 {
 #ifndef NDEBUG

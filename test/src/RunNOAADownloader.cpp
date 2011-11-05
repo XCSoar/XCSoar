@@ -92,10 +92,7 @@ main(int argc, char *argv[])
   NOAAStore store;
   for (int i = 1; i < argc; i++) {
     cout << "Adding station " << argv[i] << endl;
-    if (!store.AddStation(argv[i])) {
-      cout << "NOAA station store full!" << endl;
-      break;
-    }
+    store.AddStation(argv[i]);
   }
 
   Net::Initialise();
