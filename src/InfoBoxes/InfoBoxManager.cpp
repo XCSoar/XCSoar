@@ -56,9 +56,6 @@ namespace InfoBoxManager
 {
   InfoBoxLayout::Layout layout;
 
-  /** the window for displaying infoboxes full-screen */
-  InfoBoxFullWindow full_window;
-
   /**
    * Is this the initial DisplayInfoBox() call?  If yes, then all
    * content objects need to be created.
@@ -79,54 +76,6 @@ static bool InfoBoxesHidden = false;
 
 InfoBoxWindow *InfoBoxes[InfoBoxSettings::Panel::MAX_CONTENTS];
 
-void
-InfoBoxFullWindow::on_paint(Canvas &canvas)
-{
-  canvas.clear_white();
-
-  for (unsigned i = 0; i < InfoBoxManager::layout.count; i++) {
-    // JMW TODO: make these calculated once only.
-    int x, y;
-    int rx, ry;
-    int rw;
-    int rh;
-    double fw, fh;
-
-    if (Layout::landscape) {
-      rw = 84;
-      rh = 68;
-    } else {
-      rw = 120;
-      rh = 80;
-    }
-
-    fw = rw / (double)InfoBoxManager::layout.control_width;
-    fh = rh / (double)InfoBoxManager::layout.control_height;
-
-    double f = std::min(fw, fh);
-    rw = (int)(f * InfoBoxManager::layout.control_width);
-    rh = (int)(f * InfoBoxManager::layout.control_height);
-
-    if (Layout::landscape) {
-      rx = i % 3;
-      ry = i / 3;
-
-      x = (rw + 4) * rx;
-      y = (rh + 3) * ry;
-    } else {
-      rx = i % 2;
-      ry = i / 4;
-
-      x = (rw) * rx;
-      y = (rh) * ry;
-    }
-
-    assert(InfoBoxes[i] != NULL);
-    InfoBoxes[i]->PaintInto(canvas, Layout::Scale(x), Layout::Scale(y),
-                            Layout::Scale(rw), Layout::Scale(rh));
-  }
-}
-
 // TODO locking
 void
 InfoBoxManager::Hide()
@@ -135,8 +84,6 @@ InfoBoxManager::Hide()
 
   for (unsigned i = 0; i < layout.count; i++)
     InfoBoxes[i]->fast_hide();
-
-  full_window.hide();
 }
 
 void
@@ -277,7 +224,6 @@ InfoBoxManager::Event_Change(int i)
   panel.contents[InfoFocus] = j;
 
   InfoBoxes[InfoFocus]->UpdateContent();
-  Paint();
 }
 
 void
@@ -305,8 +251,6 @@ InfoBoxManager::DisplayInfoBox()
 
     InfoBoxes[i]->UpdateContent();
   }
-
-  Paint();
 
   first = false;
 }
@@ -385,17 +329,6 @@ void
 InfoBoxManager::ProcessTimer()
 {
   InfoBoxDrawIfDirty();
-}
-
-void
-InfoBoxManager::Paint()
-{
-  if (!InfoBoxLayout::fullscreen) {
-    full_window.hide();
-  } else {
-    full_window.invalidate();
-    full_window.show();
-  }
 }
 
 int
@@ -520,8 +453,6 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
 
   WindowStyle style;
   style.hide();
-  full_window.set(XCSoarInterface::main_window, rc.left, rc.top,
-                  rc.right - rc.left, rc.bottom - rc.top, style);
 
   // create infobox windows
   for (unsigned i = layout.count; i-- > 0;) {
@@ -544,8 +475,6 @@ InfoBoxManager::Destroy()
     delete InfoBoxes[i];
     InfoBoxes[i] = NULL;
   }
-
-  full_window.reset();
 }
 
 static const ComboList *info_box_combo_list;

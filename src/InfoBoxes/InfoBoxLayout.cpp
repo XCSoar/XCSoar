@@ -39,7 +39,6 @@ static const unsigned char geometry_counts[] = {
 namespace InfoBoxLayout
 {
   Geometry InfoBoxGeometry = ibTop4Bottom4;
-  bool fullscreen = false;
 
   gcc_const
   static Geometry

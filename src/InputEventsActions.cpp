@@ -286,9 +286,6 @@ InputEvents::eventScreenModes(const TCHAR *misc)
         Message::AddMessage(_("Auxiliary InfoBoxes"));
     else
         Message::AddMessage(_("Default InfoBoxes"));
-  } else if (_tcscmp(misc, _T("togglebiginfo")) == 0) {
-    InfoBoxLayout::fullscreen = !InfoBoxLayout::fullscreen;
-    InfoBoxManager::SetDirty();
   } else if (_tcscmp(misc, _T("previous")) == 0)
     Pages::Prev();
   else

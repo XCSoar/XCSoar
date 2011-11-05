@@ -72,7 +72,6 @@ namespace InfoBoxLayout
     PixelRect remaining;
   };
 
-  extern bool fullscreen;
   extern Geometry InfoBoxGeometry;
 
   gcc_pure

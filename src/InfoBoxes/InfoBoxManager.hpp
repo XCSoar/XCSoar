@@ -38,11 +38,6 @@ namespace InfoBoxLayout {
   struct Layout;
 };
 
-class InfoBoxFullWindow : public PaintWindow {
-protected:
-  virtual void on_paint(Canvas &canvas);
-};
-
 namespace InfoBoxManager
 {
   enum PanelSelection {
@@ -80,7 +75,6 @@ namespace InfoBoxManager
   void Create(PixelRect rc, const InfoBoxLayout::Layout &layout,
               const InfoBoxLook &look);
   void Destroy();
-  void Paint();
   void Show();
   void Hide();
 
