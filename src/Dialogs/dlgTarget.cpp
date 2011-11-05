@@ -474,12 +474,16 @@ InitTargetPoints()
     target_point = max(target_point, ActiveTaskPointOnEntry);
 
   target_point = max(0, min((int)target_point, (int)TaskSize - 1));
-  for (unsigned i = ActiveTaskPointOnEntry; i < TaskSize; i++) {
-    StaticString<80u> label;
-    label.Format(_T("%d %s"), i,
-                 protected_task_manager->GetOrderedTaskpointName(i));
-    dfe->addEnumText(label.c_str());
+  {
+    ProtectedTaskManager::Lease lease(*protected_task_manager);
+    for (unsigned i = ActiveTaskPointOnEntry; i < TaskSize; i++) {
+      StaticString<80u> label;
+      label.Format(_T("%d %s"), i,
+                   lease->GetOrderedTaskpointName(i));
+      dfe->addEnumText(label.c_str());
+    }
   }
+
   dfe->Set(max(0, (int)target_point - (int)ActiveTaskPointOnEntry));
 
   if (TaskSize > target_point) {

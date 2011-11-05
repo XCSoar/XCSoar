@@ -91,13 +91,6 @@ ProtectedTaskManager::TargetLock(const unsigned index, bool do_lock)
   return lease->TargetLock(index, do_lock);
 }
 
-const TCHAR*
-ProtectedTaskManager::GetOrderedTaskpointName(const unsigned index) const
-{
- Lease lease(*this);
- return lease->GetOrderedTaskpointName(index);
-}
-
 void 
 ProtectedTaskManager::IncrementActiveTaskPoint(int offset)
 {

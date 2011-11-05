@@ -162,14 +162,6 @@ public:
    */
   bool TargetLock(const unsigned index, bool do_lock);
 
-  /**
-   * returns copy of name of specified ordered tp
-   *
-   * @param index index of ordered tp in task
-   */
-  gcc_pure
-  const TCHAR* GetOrderedTaskpointName(const unsigned index) const;
-
   void SetRoutePlanner(const RoutePlannerGlue *_route);
 
   short GetTerrainBase() const;
