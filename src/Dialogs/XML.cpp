@@ -305,13 +305,13 @@ CallBackLookup(const CallBackTableEntry *lookup_table, const TCHAR *name)
   assert(!string_is_empty(name));
   assert(lookup_table != NULL);
 
-  for (unsigned i = 0; lookup_table[i].callback != NULL; i++)
-    if (_tcscmp(lookup_table[i].name, name) == 0)
-      return lookup_table[i].callback;
+  for (const CallBackTableEntry *p = lookup_table;; ++p) {
+    assert(p->name != NULL);
+    assert(p->callback != NULL);
 
-  /* unreachable */
-  assert(false);
-  return NULL;
+    if (_tcscmp(p->name, name) == 0)
+      return p->callback;
+  }
 }
 
 static void *
