@@ -467,8 +467,6 @@ InitTargetPoints()
   GetTaskData();
   DataFieldEnum* dfe;
   dfe = (DataFieldEnum*)wp->GetDataField();
-  TCHAR tp_label[80];
-  TCHAR tp_short[21];
 
   if (TaskSize <= target_point)
     target_point = ActiveTaskPointOnEntry;
@@ -477,10 +475,10 @@ InitTargetPoints()
 
   target_point = max(0, min((int)target_point, (int)TaskSize - 1));
   for (unsigned i = ActiveTaskPointOnEntry; i < TaskSize; i++) {
-    CopyString(tp_short, protected_task_manager->GetOrderedTaskpointName(i),
-               20);
-    _stprintf(tp_label, _T("%d %s"), i, tp_short);
-    dfe->addEnumText(tp_label);
+    StaticString<80u> label;
+    label.Format(_T("%d %s"), i,
+                 protected_task_manager->GetOrderedTaskpointName(i));
+    dfe->addEnumText(label.c_str());
   }
   dfe->Set(max(0, (int)target_point - (int)ActiveTaskPointOnEntry));
 
