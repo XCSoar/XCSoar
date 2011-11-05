@@ -34,6 +34,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 #include <tchar.h>
 #include <algorithm>
 
@@ -191,6 +192,36 @@ public:
    */
   TCHAR *next_token(const TCHAR *delim) {
     return _tcstok(NULL, delim);
+  }
+
+  /**
+   * Use snprintf() to set the value of this string.  The value is
+   * truncated if it is too long for the buffer.
+   */
+  template<typename... Args>
+  void Format(const TCHAR *fmt, Args&&... args) {
+    ::_sntprintf(data, MAX_SIZE, fmt, args...);
+  }
+
+  /**
+   * Use snprintf() to append to this string.  The value is truncated
+   * if it would become too long for the buffer.
+   */
+  template<typename... Args>
+  void AppendFormat(const TCHAR *fmt, Args&&... args) {
+    size_t l = length();
+    ::_sntprintf(data + l, MAX_SIZE - l, fmt, args...);
+  }
+
+  /**
+   * Use sprintf() to set the value of this string.  WARNING: this
+   * does not check if the new value fits into the buffer, and might
+   * overflow.  Use only when you are sure that the buffer is big
+   * enough!
+   */
+  template<typename... Args>
+  void UnsafeFormat(const TCHAR *fmt, Args&&... args) {
+    ::_stprintf(data, fmt, args...);
   }
 };
 
