@@ -316,9 +316,11 @@ static void *
 GetCallBack(const CallBackTableEntry *lookup_table,
             const XMLNode &node, const TCHAR* attribute)
 {
-  const TCHAR *name = StringToStringDflt(node.getAttribute(attribute), NULL);
+  const TCHAR *name = node.getAttribute(attribute);
   if (name == NULL)
     return NULL;
+
+  assert(!string_is_empty(name));
 
   return CallBackLookup(lookup_table, name);
 }
