@@ -444,17 +444,10 @@ TaskManager::GetTaskRadius(const GeoPoint& fallback_location) const
 const TCHAR*
 TaskManager::GetOrderedTaskpointName(unsigned index) const
 {
- static TCHAR buff[NAME_SIZE+1];
- buff[0] = '\0';
-
- if (!CheckOrderedTask())
-   return buff;
-
- if (active_task == &task_ordered && index < TaskSize())
-   CopyString(buff, task_ordered.GetTaskPoint(index)->GetWaypoint().name.c_str(),
-              NAME_SIZE + 1);
-
- return buff;
+ return active_task == &task_ordered && CheckOrderedTask() &&
+   index < TaskSize()
+   ? task_ordered.GetTaskPoint(index)->GetWaypoint().name.c_str()
+   : _T("");
 }
 
 bool
