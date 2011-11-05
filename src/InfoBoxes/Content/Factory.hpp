@@ -166,7 +166,7 @@ namespace InfoBoxFactory
   /**
    * Returns the default caption of the info box type.  This is
    * usually a shorter version of the string returned by GetName(), to
-   * git in the small #InfoBoxWindow.
+   * fit in the small #InfoBoxWindow.
    */
   static inline const TCHAR *
   GetCaption(t_InfoBox type)
