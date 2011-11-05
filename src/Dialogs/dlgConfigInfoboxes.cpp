@@ -30,6 +30,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/SingleWindow.hpp"
 #include "DataField/Enum.hpp"
 #include "Compiler.h"
 #include "InfoBoxes/InfoBoxSettings.hpp"

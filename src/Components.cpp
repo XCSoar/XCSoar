@@ -34,6 +34,7 @@ Copyright_License {
 #include "Terrain/RasterWeather.hpp"
 #include "InputEvents.hpp"
 #include "Geo/Geoid.hpp"
+#include "Dialogs/XML.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
 #include "ButtonLabel.hpp"

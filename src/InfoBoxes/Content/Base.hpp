@@ -24,17 +24,20 @@ Copyright_License {
 #ifndef XCSOAR_INFOBOX_CONTENT_HPP
 #define XCSOAR_INFOBOX_CONTENT_HPP
 
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgTools.h"
-
-#include <tchar.h>
 #include "Language/Language.hpp"
 #include "fixed.hpp"
+
+#include <tchar.h>
 
 class InfoBoxWindow;
 struct Waypoint;
 class Angle;
+class Window;
+class SingleWindow;
+class WndForm;
 class TabBarControl;
+class Canvas;
+struct CallBackTableEntry;
 
 class InfoBoxContent
 {
