@@ -35,9 +35,9 @@ MergeThread::MergeThread(DeviceBlackboard &_device_blackboard)
 }
 
 void
-MergeThread::Tick()
+MergeThread::Process()
 {
-  ScopeLock protect(device_blackboard.mutex);
+  assert(!IsDefined() || IsInside());
 
   device_blackboard.Merge();
 
@@ -51,7 +51,16 @@ MergeThread::Tick()
 
   flarm_computer.Process(device_blackboard.SetBasic().flarm,
                          last_fix.flarm, basic);
+}
 
+void
+MergeThread::Tick()
+{
+  ScopeLock protect(device_blackboard.mutex);
+
+  Process();
+
+  const MoreData &basic = device_blackboard.Basic();
   if (last_any.location_available != basic.location_available)
     // trigger update if gps has become available or dropped out
     TriggerGPSUpdate();

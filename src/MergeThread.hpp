@@ -56,6 +56,16 @@ class MergeThread : public WorkerThread {
 public:
   MergeThread(DeviceBlackboard &_device_blackboard);
 
+  /**
+   * This method is called during XCSoar startup, for the initial run
+   * of the MergeThread.
+   */
+  void FirstRun() {
+    assert(!IsDefined());
+
+    Process();
+  }
+
   bool Start(bool suspended=false) {
     if (!WorkerThread::Start(suspended))
       return false;
@@ -63,6 +73,9 @@ public:
     SetLowPriority();
     return true;
   }
+
+private:
+  void Process();
 
 protected:
   virtual void Tick();
