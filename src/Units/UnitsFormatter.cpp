@@ -34,7 +34,7 @@ Copyright_License {
 bool
 Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
 {
-  TCHAR EW[] = _T("WEE");
+  static gcc_constexpr_data TCHAR EW[] = _T("WEE");
   int dd, mm, ss;
 
   // Calculate Longitude sign
@@ -101,7 +101,7 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
 bool
 Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
 {
-  TCHAR EW[] = _T("SNN");
+  static gcc_constexpr_data TCHAR EW[] = _T("SNN");
   int dd, mm, ss;
 
   // Calculate Latitude sign
