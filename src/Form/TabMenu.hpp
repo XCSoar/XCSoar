@@ -430,7 +430,8 @@ protected:
   virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
   virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
   virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-
+  virtual bool on_key_check(unsigned key_code) const;
+  virtual bool on_key_down(unsigned key_code);
   /**
    * canvas is the tabmenu which is the full content window, no content
    * @param canvas

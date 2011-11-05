@@ -26,6 +26,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 #include "Screen/Canvas.hpp"
 #include "Look/DialogLook.hpp"
 #include "Dialogs/XML.hpp"
@@ -214,6 +215,7 @@ void TabMenuControl::SetLastContentPage(unsigned page)
   const PageItem& theitem = GetPageItem(page);
   LastContent.MainIndex = theitem.main_menu_index;
   LastContent.SubIndex = GetSubMenuButton(page)->Menu.SubIndex;
+  GetTabMenuDisplay()->SetSelectedIndex(LastContent);
 }
 
 int
@@ -467,6 +469,45 @@ TabMenuDisplay::SetSelectedIndex(TabMenuControl::menu_tab_index di)
 {
   SelectedIndex = di;
   invalidate();
+}
+
+bool
+TabMenuDisplay::on_key_check(unsigned key_code) const
+{
+ switch (key_code) {
+
+ case VK_RETURN:
+ case VK_LEFT:
+ case VK_RIGHT:
+   return menu.IsCurrentPageTheMenu();
+
+ default:
+   return false;
+ }
+}
+
+bool
+TabMenuDisplay::on_key_down(unsigned key_code)
+{
+ const unsigned page = menu.GetPageNum(SelectedIndex);
+
+ if (menu.IsCurrentPageTheMenu()) {
+   switch (key_code) {
+
+   case VK_RETURN:
+     menu.SetCurrentPage(page);
+     return true;
+
+   case VK_RIGHT:
+     menu.HighlightNextMenuItem();
+     return true;
+
+   case VK_LEFT:
+     menu.HighlightPreviousMenuItem();
+     return true;
+   }
+ }
+ return PaintWindow::on_key_down(key_code);
 }
 
 bool
