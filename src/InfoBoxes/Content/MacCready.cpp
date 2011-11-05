@@ -23,7 +23,8 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Thermal.hpp"
 #include "InfoBoxes/Content/MacCready.hpp"
-
+#include "InfoBoxes/Panel/MacCreadyEdit.hpp"
+#include "InfoBoxes/Panel/MacCreadySetup.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Units/UnitsFormatter.hpp"
@@ -51,137 +52,19 @@ SetVSpeed(InfoBoxWindow &infobox, fixed value)
 }
 
 /*
- * InfoBoxContentMacCready
- *
- * Subpart Panel Edit
- */
-
-static int InfoBoxID;
-
-Window*
-InfoBoxContentMacCready::PnlEditLoad(SingleWindow &parent, TabBarControl* wTabBar,
-                                 WndForm* wf, const int id)
-{
-  assert(wTabBar);
-  assert(wf);
-//  wf = _wf;
-
-  InfoBoxID = id;
-
-  Window *wInfoBoxAccessEdit =
-      LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_INFOBOXMACCREADYEDIT"));
-  assert(wInfoBoxAccessEdit);
-
-  return wInfoBoxAccessEdit;
-}
-
-void
-InfoBoxContentMacCready::PnlEditOnCloseClicked(gcc_unused WndButton &Sender)
-{
-  dlgInfoBoxAccess::OnClose();
-}
-
-void
-InfoBoxContentMacCready::PnlEditOnPlusSmall(gcc_unused WndButton &Sender)
-{
-  InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("+0.1"));
-}
-
-void
-InfoBoxContentMacCready::PnlEditOnPlusBig(gcc_unused WndButton &Sender)
-{
-  InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("+0.5"));
-}
-
-void
-InfoBoxContentMacCready::PnlEditOnMinusSmall(gcc_unused WndButton &Sender)
-{
-  InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("-0.1"));
-}
-
-void
-InfoBoxContentMacCready::PnlEditOnMinusBig(gcc_unused WndButton &Sender)
-{
-  InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("-0.5"));
-}
-
-/*
- * Subpart Panel Setup
- */
-
-Window*
-InfoBoxContentMacCready::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar,
-                                 WndForm* wf, const int id)
-{
-  assert(wTabBar);
-  assert(wf);
-//  wf = _wf;
-
-  InfoBoxID = id;
-
-  Window *wInfoBoxAccessSetup =
-      LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_INFOBOXMACCREADYSETUP"));
-  assert(wInfoBoxAccessSetup);
-
-  return wInfoBoxAccessSetup;
-}
-
-bool
-InfoBoxContentMacCready::PnlSetupPreShow(TabBarControl::EventType EventType)
-{
-
-  if (XCSoarInterface::SettingsComputer().task.auto_mc)
-    ((WndButton *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("cmdMode")))->SetCaption(_("MANUAL"));
-  else
-    ((WndButton *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("cmdMode")))->SetCaption(_("AUTO"));
-
-  return true;
-}
-
-void
-InfoBoxContentMacCready::PnlSetupOnSetup(gcc_unused WndButton &Sender) {
-  InfoBoxManager::SetupFocused(InfoBoxID);
-  dlgInfoBoxAccess::OnClose();
-}
-
-void
-InfoBoxContentMacCready::PnlSetupOnMode(gcc_unused WndButton &Sender)
-{
-  if (XCSoarInterface::SettingsComputer().task.auto_mc)
-    Sender.SetCaption(_("AUTO"));
-  else
-    Sender.SetCaption(_("MANUAL"));
-
-  InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("mode"));
-}
-
-
-/*
  * Subpart callback function pointers
  */
 
 static gcc_constexpr_data InfoBoxContentMacCready::PanelContent panels[] = {
   InfoBoxContentMacCready::PanelContent (
     N_("Edit"),
-    (*InfoBoxContentMacCready::PnlEditLoad)),
+    LoadMacCreadyEditPanel),
 
   InfoBoxContentMacCready::PanelContent (
     N_("Setup"),
-    (*InfoBoxContentMacCready::PnlSetupLoad),
+    LoadMacCreadySetupPanel,
     NULL,
-    (*InfoBoxContentMacCready::PnlSetupPreShow))
-};
-
-static gcc_constexpr_data CallBackTableEntry call_back_table[] = {
-  DeclareCallBackEntry(InfoBoxContentMacCready::PnlEditOnPlusSmall),
-  DeclareCallBackEntry(InfoBoxContentMacCready::PnlEditOnPlusBig),
-  DeclareCallBackEntry(InfoBoxContentMacCready::PnlEditOnMinusSmall),
-  DeclareCallBackEntry(InfoBoxContentMacCready::PnlEditOnMinusBig),
-
-  DeclareCallBackEntry(InfoBoxContentMacCready::PnlSetupOnSetup),
-  DeclareCallBackEntry(InfoBoxContentMacCready::PnlSetupOnMode),
-
-  DeclareCallBackEntry(NULL)
+    MacCreadySetupPanelPreShow),
 };
 
 const InfoBoxContentMacCready::DialogContent InfoBoxContentMacCready::dlgContent = {

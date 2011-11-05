@@ -22,14 +22,14 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Weather.hpp"
-
+#include "InfoBoxes/Panel/WindEdit.hpp"
+#include "InfoBoxes/Panel/WindSetup.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Interface.hpp"
 #include "Protection.hpp"
 
 #include "Dialogs/dlgInfoBoxAccess.hpp"
-#include "Profile/Profile.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Float.hpp"
 #include "DataField/Boolean.hpp"
@@ -37,16 +37,6 @@ Copyright_License {
 
 #include <tchar.h>
 #include <stdio.h>
-
-static gcc_constexpr_data
-CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(InfoBoxContentWind::PnlEditOnWindSpeed),
-  DeclareCallBackEntry(InfoBoxContentWind::PnlEditOnWindDirection),
-
-  DeclareCallBackEntry(InfoBoxContentWind::PnlSetupOnSetup),
-
-  DeclareCallBackEntry(NULL)
-};
 
 void
 InfoBoxContentHumidity::Update(InfoBoxWindow &infobox)
@@ -105,194 +95,20 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
 }
 
 /*
- * InfoBoxContentWind
- *
- * Subpart Panel Edit
- */
-
-static int InfoBoxID;
-
-Window*
-InfoBoxContentWind::PnlEditLoad(SingleWindow &parent, TabBarControl* wTabBar,
-                                WndForm* wf, const int id)
-{
-  assert(wTabBar);
-  assert(wf);
-
-  InfoBoxID = id;
-
-  Window *wInfoBoxAccessEdit =
-      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXWINDEDIT"));
-  assert(wInfoBoxAccessEdit);
-
-  return wInfoBoxAccessEdit;
-}
-
-bool
-InfoBoxContentWind::PnlEditOnTabPreShow(TabBarControl::EventType EventType)
-{
-  const NMEAInfo &basic = XCSoarInterface::Basic();
-  const SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::SettingsComputer();
-  const bool external_wind = basic.external_wind_available &&
-    settings_computer.use_external_wind;
-
-  WndProperty* wp;
-
-  const SpeedVector wind = CommonInterface::Calculated().GetWindOrZero();
-
-  wp = (WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpSpeed"));
-  if (wp) {
-    wp->set_enabled(!external_wind);
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
-    df.SetUnits(Units::GetSpeedName());
-    df.Set(Units::ToUserWindSpeed(wind.norm));
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpDirection"));
-  if (wp) {
-    wp->set_enabled(!external_wind);
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.Set(wind.bearing.Degrees());
-    wp->RefreshDisplay();
-  }
-
-  return true;
-}
-
-void
-InfoBoxContentWind::PnlEditOnWindSpeed(gcc_unused DataFieldFloat &Sender)
-{
-  const NMEAInfo &basic = XCSoarInterface::Basic();
-  SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::SetSettingsComputer();
-  const bool external_wind = basic.external_wind_available &&
-    settings_computer.use_external_wind;
-
-  if (!external_wind) {
-    settings_computer.manual_wind.norm =
-      Units::ToSysWindSpeed(Sender.GetAsFixed());
-    settings_computer.manual_wind_available.Update(basic.clock);
-  }
-}
-
-void
-InfoBoxContentWind::PnlEditOnWindDirection(gcc_unused DataFieldFloat &Sender)
-{
-  const NMEAInfo &basic = XCSoarInterface::Basic();
-  SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::SetSettingsComputer();
-  const bool external_wind = basic.external_wind_available &&
-    settings_computer.use_external_wind;
-
-  if (!external_wind) {
-    settings_computer.manual_wind.bearing = Angle::Degrees(Sender.GetAsFixed());
-    settings_computer.manual_wind_available.Update(basic.clock);
-  }
-}
-
-/*
- * Subpart Panel Setup
- */
-
-Window*
-InfoBoxContentWind::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar,
-                                 WndForm* wf, const int id)
-{
-  assert(wTabBar);
-  assert(wf);
-
-  InfoBoxID = id;
-
-  Window *wInfoBoxAccessSetup =
-      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXWINDSETUP"));
-  assert(wInfoBoxAccessSetup);
-
-  const NMEAInfo &basic = XCSoarInterface::Basic();
-  const SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::SettingsComputer();
-  const bool external_wind = basic.external_wind_available &&
-    settings_computer.use_external_wind;
-
-  WndProperty* wp;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoWind"));
-  if (external_wind) {
-    wp->set_enabled(false);
-    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
-    df.addEnumText(_("External"));
-    df.Set(0);
-    wp->RefreshDisplay();
-  } else {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Manual"));
-    dfe->addEnumText(_("Circling"));
-    dfe->addEnumText(_("ZigZag"));
-    dfe->addEnumText(_("Both"));
-    dfe->Set(settings_computer.auto_wind_mode);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpTrailDrift"));
-  if (wp) {
-    DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
-    df.Set(XCSoarInterface::SettingsMap().trail_drift_enabled);
-    wp->RefreshDisplay();
-  }
-
-  return wInfoBoxAccessSetup;
-}
-
-bool
-InfoBoxContentWind::PnlSetupOnTabPreHide()
-{
-  const NMEAInfo &basic = XCSoarInterface::Basic();
-  SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::SetSettingsComputer();
-  const bool external_wind = basic.external_wind_available &&
-    settings_computer.use_external_wind;
-
-  if (!external_wind)
-    SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpAutoWind"), szProfileAutoWind,
-                     settings_computer.auto_wind_mode);
-
-  DataFieldEnum* dfe = (DataFieldEnum*)((WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAutoWind")))->GetDataField();
-
-  if (_tcscmp(dfe->GetAsString(), _("Manual")) == 0)
-    settings_computer.manual_wind_available.Update(basic.clock);
-
-  SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpTrailDrift"),
-                   XCSoarInterface::SetSettingsMap().trail_drift_enabled);
-  ActionInterface::SendSettingsMap();
-
-  return true;
-}
-
-void
-InfoBoxContentWind::PnlSetupOnSetup(gcc_unused WndButton &Sender)
-{
-  InfoBoxManager::SetupFocused(InfoBoxID);
-  dlgInfoBoxAccess::OnClose();
-}
-
-/*
  * Subpart callback function pointers
  */
 
 static gcc_constexpr_data InfoBoxContentWind::PanelContent Panels[] = {
 InfoBoxContentWind::PanelContent (
   N_("Edit"),
-  (*InfoBoxContentWind::PnlEditLoad),
+  LoadWindEditPanel,
   NULL,
-  (*InfoBoxContentWind::PnlEditOnTabPreShow)),
+  WindEditPanelPreShow),
 
 InfoBoxContentWind::PanelContent (
   N_("Setup"),
-  (*InfoBoxContentWind::PnlSetupLoad),
-  (*InfoBoxContentWind::PnlSetupOnTabPreHide))
+  LoadWindSetupPanel,
+  WindSetupPanelPreHide),
 };
 
 const InfoBoxContentWind::DialogContent InfoBoxContentWind::dlgContent = {

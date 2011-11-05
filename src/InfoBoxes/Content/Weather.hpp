@@ -25,9 +25,6 @@ Copyright_License {
 #define XCSOAR_INFOBOX_CONTENT_WEATHER_HPP
 
 #include "InfoBoxes/Content/Base.hpp"
-#include "Form/TabBar.hpp"
-#include "Form/Button.hpp"
-#include "DataField/Float.hpp"
 
 class InfoBoxContentHumidity : public InfoBoxContent
 {
@@ -50,23 +47,10 @@ public:
 
 class InfoBoxContentWind : public InfoBoxContent
 {
-private:
-  static const int PANELSIZE = 2;
-
 public:
   virtual const DialogContent *GetDialogContent();
 
-  static Window* PnlEditLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
-  static bool PnlEditOnTabPreShow(TabBarControl::EventType EventType);
-  static void PnlEditOnWindSpeed(DataFieldFloat &Sender);
-  static void PnlEditOnWindDirection(DataFieldFloat &Sender);
-
   static const DialogContent dlgContent;
-
-  static Window* PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
-  static bool PnlSetupOnTabPreShow(TabBarControl::EventType EventType);
-  static bool PnlSetupOnTabPreHide();
-  static void PnlSetupOnSetup(WndButton &Sender);
 };
 
 class InfoBoxContentWindSpeed : public InfoBoxContentWind

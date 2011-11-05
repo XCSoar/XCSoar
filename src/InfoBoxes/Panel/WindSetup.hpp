@@ -21,21 +21,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_INFOBOX_CONTENT_MACCREADY_HPP
-#define XCSOAR_INFOBOX_CONTENT_MACCREADY_HPP
+#ifndef XCSOAR_WIND_SETUP_PANEL_HPP
+#define XCSOAR_WIND_SETUP_PANEL_HPP
 
-#include "InfoBoxes/Content/Base.hpp"
+class Window;
+class SingleWindow;
+class WndForm;
+class TabBarControl;
 
-class InfoBoxContentMacCready : public InfoBoxContent
-{
-public:
-  virtual const DialogContent *GetDialogContent();
+Window *
+LoadWindSetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
+                   WndForm *wf, int id);
 
-  static const DialogContent dlgContent;
-
-  virtual void Update(InfoBoxWindow &infobox);
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
-  virtual bool HandleQuickAccess(const TCHAR *misc);
-};
+bool
+WindSetupPanelPreHide();
 
 #endif

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
 <Panel Name="frmInfoBoxMacCreadySetup" Border="0">
-  <Button Name="cmdMode" Caption="Setup Mode" X="5" Y="2" Width="80" Height="45" onClick="InfoBoxContentMacCready::PnlSetupOnMode"/>
-  <Button Name="cmdSetup" Caption="Setup InfoBox" X="-85" Y="2" Width="80" Height="45" onClick="InfoBoxContentMacCready::PnlSetupOnSetup"/>
+  <Button Name="cmdMode" Caption="Setup Mode" X="5" Y="2" Width="80" Height="45" onClick="PnlSetupOnMode"/>
+  <Button Name="cmdSetup" Caption="Setup InfoBox" X="-85" Y="2" Width="80" Height="45" onClick="PnlSetupOnSetup"/>
 </Panel>

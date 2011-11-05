@@ -2,10 +2,10 @@
 
 <Panel Name="frmInfoBoxWindEdit" Border="0">
   <Edit Name="prpSpeed" Caption="Speed" X="2" Y="2" Width="145" Height="22" CaptionWidth="68" Help="Manual adjustment of wind speed.">
-    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Step="1" OnDataAccess="InfoBoxContentWind::PnlEditOnWindSpeed"/>
+    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Step="1" OnDataAccess="PnlEditOnWindSpeed"/>
   </Edit>
 
   <Edit Name="prpDirection" Caption="Direction" X="2" Y="24" Width="145" Height="22" CaptionWidth="68" Help="Manual adjustment of wind direction.">
-    <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="0" Max="355" Step="5" OnDataAccess="InfoBoxContentWind::PnlEditOnWindDirection"/>
+    <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="0" Max="355" Step="5" OnDataAccess="PnlEditOnWindDirection"/>
   </Edit>
 </Panel>

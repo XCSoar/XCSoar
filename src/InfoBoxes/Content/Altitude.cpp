@@ -22,6 +22,9 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Altitude.hpp"
+#include "InfoBoxes/Panel/AltitudeInfo.hpp"
+#include "InfoBoxes/Panel/AltitudeSimulator.hpp"
+#include "InfoBoxes/Panel/AltitudeSetup.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Units/UnitsFormatter.hpp"
@@ -35,236 +38,11 @@ Copyright_License {
 #include "Components.hpp"
 #include "Simulator.hpp"
 #include "Protection.hpp"
-#include "MainWindow.hpp"
 
-#include "Dialogs/dlgInfoBoxAccess.hpp"
-#include "Screen/Layout.hpp"
-#include "DataField/Float.hpp"
-#include "DataField/Base.hpp"
 #include "Util/Macros.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
-
-static gcc_constexpr_data
-CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnPlusBig),
-  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnPlusSmall),
-  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnMinusSmall),
-  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnMinusBig),
-  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSetupOnQNH),
-  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSetupOnSetup),
-
-  DeclareCallBackEntry(NULL)
-};
-
-/*
- * InfoBoxContentAltitude
- *
- * Subpart Panel Info
- */
-
-static int InfoBoxID;
-
-Window*
-InfoBoxContentAltitude::PnlInfoLoad(SingleWindow &parent, TabBarControl* wTabBar,
-                                    WndForm* wf, const int id)
-{
-  assert(wTabBar);
-  assert(wf);
-//  wf = _wf;
-
-  InfoBoxID = id;
-
-  Window *wInfoBoxAccessInfo =
-      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXALTITUDEINFO"));
-  assert(wInfoBoxAccessInfo);
-
-  wf->SetTimerNotify(OnTimerNotify);
-
-  return wInfoBoxAccessInfo;
-}
-
-void
-InfoBoxContentAltitude::OnTimerNotify(gcc_unused WndForm &Sender)
-{
-  PnlInfoUpdate();
-}
-
-bool
-InfoBoxContentAltitude::PnlInfoOnTabPreShow(TabBarControl::EventType EventType)
-{
-  return PnlInfoUpdate();
-}
-
-bool
-InfoBoxContentAltitude::PnlInfoUpdate()
-{
-  const DerivedInfo &calculated = CommonInterface::Calculated();
-  const NMEAInfo &basic = CommonInterface::Basic();
-  TCHAR sTmp[32];
-
-  if (!calculated.altitude_agl_valid) {
-    ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltAGL")))->SetText(_("N/A"));
-  } else {
-    // Set Value
-    _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(calculated.altitude_agl),
-                                   Units::GetAltitudeName());
-
-    ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltAGL")))->SetText(sTmp);
-  }
-
-  if (!basic.baro_altitude_available) {
-    ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltBaro")))->SetText(_("N/A"));
-  } else {
-    // Set Value
-    _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(basic.baro_altitude),
-                                       Units::GetAltitudeName());
-
-    ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltBaro")))->SetText(sTmp);
-  }
-
-  if (!basic.gps_altitude_available) {
-    ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltGPS")))->SetText(_("N/A"));
-  } else {
-    // Set Value
-     _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(basic.gps_altitude),
-                                         Units::GetAltitudeName());
-
-      ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltGPS")))->SetText(sTmp);
-  }
-
-  if (!calculated.terrain_valid){
-    ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpTerrain")))->SetText(_("N/A"));
-  } else {
-    // Set Value
-     _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(calculated.terrain_altitude),
-                                         Units::GetAltitudeName());
-
-      ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpTerrain")))->SetText(sTmp);
-  }
-
-  return true;
-}
-
-/*
- * Subpart Panel Simulator
- */
-
-Window*
-InfoBoxContentAltitude::PnlSimulatorLoad(SingleWindow &parent,
-                                         TabBarControl* wTabBar,
-                                         WndForm* wf, const int id)
-{
-  assert(wTabBar);
-  assert(wf);
-
-  if (!is_simulator())
-    return NULL;
-
-  InfoBoxID = id;
-
-  Window *wInfoBoxAccessSimulator =
-      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXALTITUDESIMULATOR"));
-  assert(wInfoBoxAccessSimulator);
-
-  return wInfoBoxAccessSimulator;
-}
-
-void
-InfoBoxContentAltitude::PnlSimulatorOnPlusBig(gcc_unused WndButton &Sender)
-{
-  if (!is_simulator())
-    return;
-
-  ChangeAltitude(fixed(+100));
-}
-
-void
-InfoBoxContentAltitude::PnlSimulatorOnPlusSmall(gcc_unused WndButton &Sender)
-{
-  if (!is_simulator())
-    return;
-
-  ChangeAltitude(fixed(+10));
-}
-
-void
-InfoBoxContentAltitude::PnlSimulatorOnMinusSmall(gcc_unused WndButton &Sender)
-{
-  if (!is_simulator())
-    return;
-
-  ChangeAltitude(fixed(-10));
-}
-
-void
-InfoBoxContentAltitude::PnlSimulatorOnMinusBig(gcc_unused WndButton &Sender)
-{
-  if (!is_simulator())
-    return;
-
-  ChangeAltitude(fixed(-100));
-}
-
-void
-InfoBoxContentAltitude::ChangeAltitude(const fixed step)
-{
-  const NMEAInfo &basic = CommonInterface::Basic();
-
-  device_blackboard->SetAltitude(basic.gps_altitude +
-                                 (fixed)Units::ToSysAltitude(step));
-}
-
-/*
- * Subpart Panel Setup
- */
-
-Window*
-InfoBoxContentAltitude::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar,
-                                     WndForm* wf, const int id)
-{
-  assert(wTabBar);
-  assert(wf);
-//  wf = _wf;
-
-  InfoBoxID = id;
-
-  Window *wInfoBoxAccessSetup =
-      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXALTITUDESETUP"));
-  assert(wInfoBoxAccessSetup);
-
-  LoadFormProperty(*wf, _T("prpQNH"),
-                   CommonInterface::SettingsComputer().pressure.GetHectoPascal());
-
-  return wInfoBoxAccessSetup;
-}
-
-void
-InfoBoxContentAltitude::PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode)
-{
-  DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
-  SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SetSettingsComputer();
-
-  switch (Mode) {
-  case DataField::daChange:
-    settings_computer.pressure = AtmosphericPressure::HectoPascal(Sender->GetAsFixed());
-    settings_computer.pressure_available.Update(CommonInterface::Basic().clock);
-    device_blackboard->SetQNH(Sender->GetAsFixed());
-    break;
-
-  case DataField::daSpecial:
-    return;
-  }
-}
-
-void
-InfoBoxContentAltitude::PnlSetupOnSetup(gcc_unused WndButton &Sender)
-{
-  InfoBoxManager::SetupFocused(InfoBoxID);
-  dlgInfoBoxAccess::OnClose();
-}
 
 /*
  * Subpart callback function pointers
@@ -274,17 +52,17 @@ static gcc_constexpr_data
 InfoBoxContentAltitude::PanelContent Panels[] = {
   InfoBoxContentAltitude::PanelContent (
     N_("Simulator"),
-    (*InfoBoxContentAltitude::PnlSimulatorLoad)),
+    LoadAltitudeSimulatorPanel),
 
   InfoBoxContentAltitude::PanelContent (
     N_("Info"),
-    (*InfoBoxContentAltitude::PnlInfoLoad),
+    LoadAltitudeInfoPanel,
     NULL,
-    (*InfoBoxContentAltitude::PnlInfoOnTabPreShow)),
+    AltitudeInfoPreShow),
 
   InfoBoxContentAltitude::PanelContent (
     N_("Setup"),
-    (*InfoBoxContentAltitude::PnlSetupLoad))
+    LoadAltitudeSetupPanel)
 };
 
 static gcc_constexpr_data
@@ -320,6 +98,15 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
 
   // Set Unit
   infobox.SetValueUnit(Units::current.altitude_unit);
+}
+
+static void
+ChangeAltitude(const fixed step)
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+
+  device_blackboard->SetAltitude(basic.gps_altitude +
+                                 (fixed)Units::ToSysAltitude(step));
 }
 
 bool

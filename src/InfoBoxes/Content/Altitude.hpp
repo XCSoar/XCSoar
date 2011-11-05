@@ -25,32 +25,11 @@ Copyright_License {
 #define XCSOAR_INFOBOX_CONTENT_ALTITUDE_HPP
 
 #include "InfoBoxes/Content/Base.hpp"
-#include "Form/TabBar.hpp"
-#include "Form/Button.hpp"
-#include "DataField/Base.hpp"
 
 class InfoBoxContentAltitude : public InfoBoxContent
 {
 public:
   virtual const DialogContent *GetDialogContent();
-
-  static Window* PnlInfoLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
-  static void OnTimerNotify(WndForm &Sender);
-  static bool PnlInfoOnTabPreShow(TabBarControl::EventType EventType);
-  static bool PnlInfoUpdate();
-
-  static Window* PnlSimulatorLoad(SingleWindow &parent, TabBarControl* wTabBar,
-                                  WndForm* wf, const int id);
-  static void PnlSimulatorOnPlusBig(WndButton &Sender);
-  static void PnlSimulatorOnPlusSmall(WndButton &Sender);
-  static void PnlSimulatorOnMinusSmall(WndButton &Sender);
-  static void PnlSimulatorOnMinusBig(WndButton &Sender);
-
-  static Window* PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
-  static void PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode);
-  static void PnlSetupOnSetup(WndButton &Sender);
-
-  static void ChangeAltitude(const fixed step);
 };
 
 class InfoBoxContentAltitudeGPS : public InfoBoxContentAltitude

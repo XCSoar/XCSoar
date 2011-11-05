@@ -360,6 +360,13 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/InfoBoxWindow.cpp \
 	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \
 	$(SRC)/InfoBoxes/InfoBoxManager.cpp \
+	$(SRC)/InfoBoxes/Panel/AltitudeInfo.cpp \
+	$(SRC)/InfoBoxes/Panel/AltitudeSimulator.cpp \
+	$(SRC)/InfoBoxes/Panel/AltitudeSetup.cpp \
+	$(SRC)/InfoBoxes/Panel/MacCreadyEdit.cpp \
+	$(SRC)/InfoBoxes/Panel/MacCreadySetup.cpp \
+	$(SRC)/InfoBoxes/Panel/WindEdit.cpp \
+	$(SRC)/InfoBoxes/Panel/WindSetup.cpp \
 	$(SRC)/InputEvents.cpp \
 	$(SRC)/InputEventsActions.cpp \
 	$(SRC)/InputEventsDevice.cpp \

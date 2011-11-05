@@ -9,5 +9,5 @@
     <DataField DataType="boolean"/>
   </Edit>
   
-  <Button Name="cmdSetup" Caption="Setup InfoBox" X="-85" Y="2" Width="80" Height="45" onClick="InfoBoxContentWind::PnlSetupOnSetup"/>
+  <Button Name="cmdSetup" Caption="Setup InfoBox" X="-85" Y="2" Width="80" Height="45" onClick="PnlSetupOnSetup"/>
 </Panel>
