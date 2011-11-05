@@ -143,6 +143,7 @@ namespace InfoBoxFactory
     const TCHAR *name;
     const TCHAR *caption;
     const TCHAR *description;
+    InfoBoxContent *(*Create)();
     t_InfoBox next, previous;
   };
 
