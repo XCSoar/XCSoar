@@ -261,7 +261,9 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 void
 dlgBasicSettingsShowModal()
 {
-  glide_polar = CommonInterface::SettingsComputer().glide_polar_task;
+  const SETTINGS_COMPUTER &settings = CommonInterface::SettingsComputer();
+
+  glide_polar = settings.glide_polar_task;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                       _T("IDR_XML_BASICSETTINGS"));
@@ -277,8 +279,7 @@ dlgBasicSettingsShowModal()
 
   SetBallast();
   LoadFormProperty(*wf, _T("prpBugs"), glide_polar.GetBugs() * 100);
-  LoadFormProperty(*wf, _T("prpQNH"),
-                   CommonInterface::SettingsComputer().pressure.GetHectoPascal());
+  LoadFormProperty(*wf, _T("prpQNH"), settings.pressure.GetHectoPascal());
 
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));
@@ -293,7 +294,9 @@ dlgBasicSettingsShowModal()
   }
 
   if (wf->ShowModal() == mrOK && changed) {
-    CommonInterface::SetSettingsComputer().glide_polar_task = glide_polar;
+    SETTINGS_COMPUTER &settings = CommonInterface::SetSettingsComputer();
+
+    settings.glide_polar_task = glide_polar;
 
     if (protected_task_manager != NULL)
       protected_task_manager->SetGlidePolar(glide_polar);
