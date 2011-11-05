@@ -80,7 +80,10 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
   if (!real_data.location_available)
     real_data.SetFakeLocation(loc, alt);
 
-  simulator_data.SetFakeLocation(loc, alt);
+  if (is_simulator()) {
+    simulator_data.SetFakeLocation(loc, alt);
+    simulator.Touch(simulator_data);
+  }
 
   ScheduleMerge();
 }
@@ -168,6 +171,7 @@ DeviceBlackboard::SetSpeed(fixed val)
   ScopeLock protect(mutex);
   NMEAInfo &basic = simulator_data;
 
+  simulator.Touch(basic);
   basic.ground_speed = val;
   basic.ProvideBothAirspeeds(val);
 
@@ -184,6 +188,7 @@ void
 DeviceBlackboard::SetTrack(Angle val)
 {
   ScopeLock protect(mutex);
+  simulator.Touch(simulator_data);
   simulator_data.track = val.AsBearing();
 
   ScheduleMerge();
@@ -201,6 +206,7 @@ DeviceBlackboard::SetAltitude(fixed val)
   ScopeLock protect(mutex);
   NMEAInfo &basic = simulator_data;
 
+  simulator.Touch(basic);
   basic.gps_altitude = val;
   basic.ProvidePressureAltitude(val);
   basic.ProvideBaroAltitudeTrue(val);

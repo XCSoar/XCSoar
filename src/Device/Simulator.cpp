@@ -91,7 +91,7 @@ Simulator::GenerateFLARMTraffic(NMEAInfo &basic)
 }
 
 void
-Simulator::Process(NMEAInfo &basic)
+Simulator::Touch(NMEAInfo &basic)
 {
   assert(is_simulator());
 
@@ -105,10 +105,19 @@ Simulator::Process(NMEAInfo &basic)
   basic.gps.android_internal_gps = false;
 #endif
 
-  basic.location = FindLatitudeLongitude(basic.location, basic.track,
-                                         basic.ground_speed);
   basic.location_available.Update(basic.clock);
   basic.gps_altitude_available.Update(basic.clock);
+}
+
+void
+Simulator::Process(NMEAInfo &basic)
+{
+  assert(is_simulator());
+
+  Touch(basic);
+
+  basic.location = FindLatitudeLongitude(basic.location, basic.track,
+                                         basic.ground_speed);
   basic.track_available.Update(basic.clock);
   basic.ground_speed_available.Update(basic.clock);
 

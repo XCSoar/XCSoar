@@ -30,6 +30,14 @@ class Simulator {
   void GenerateFLARMTraffic(NMEAInfo &basic);
 
 public:
+  /**
+   * Update the clock and a few important Validity attributes, as if
+   * there had been a new GPS fix, without actually modifying the
+   * values.  This is useful to force a calculation update after a
+   * simulation parameter has been changed (e.g. altitude).
+   */
+  void Touch(NMEAInfo &basic);
+
   void Process(NMEAInfo &basic);
 };
 
