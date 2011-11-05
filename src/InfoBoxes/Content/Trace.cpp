@@ -185,7 +185,6 @@ InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canva
 void
 InfoBoxContentThermalBand::Update(InfoBoxWindow &infobox)
 {
-  infobox.SetComment(_T(""));
   infobox.SetValue(_T(""));
   infobox.invalidate();
 }
@@ -203,7 +202,6 @@ InfoBoxContentTaskProgress::on_custom_paint(InfoBoxWindow &infobox, Canvas &canv
 void
 InfoBoxContentTaskProgress::Update(InfoBoxWindow &infobox)
 {
-  infobox.SetComment(_T(""));
   infobox.SetValue(_T(""));
   infobox.invalidate();
 }

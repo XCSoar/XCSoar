@@ -178,7 +178,6 @@ InfoBoxContentHorizon::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 void
 InfoBoxContentHorizon::Update(InfoBoxWindow &infobox)
 {
-  infobox.SetComment(_T(""));
   if (!CommonInterface::Basic().acceleration.available) {
     infobox.SetInvalid();
     return;
