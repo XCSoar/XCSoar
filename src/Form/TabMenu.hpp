@@ -368,6 +368,16 @@ public:
    * @param page
    */
   void SetLastContentPage(unsigned page);
+
+  /**
+   * if displaying the menu page, will select/highlight the next menu item
+   */
+  void HighlightNextMenuItem();
+
+  /**
+   * if displaying the menu page, will select/highlight the previous menu item
+   */
+  void HighlightPreviousMenuItem();
 };
 
 class TabMenuDisplay : public PaintWindow {
@@ -398,6 +408,12 @@ public:
   UPixelScalar GetTabWidth() const {
     return this->get_width();
   }
+
+  /**
+   * Returns index of selected (highlighted) tab
+   * @return
+   */
+  const TabMenuControl::menu_tab_index GetSelectedIndex() { return SelectedIndex; }
 
 protected:
   TabMenuControl &GetTabMenuBar() {
