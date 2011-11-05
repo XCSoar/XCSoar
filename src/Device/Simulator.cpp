@@ -93,8 +93,7 @@ Simulator::GenerateFLARMTraffic(NMEAInfo &basic)
 void
 Simulator::Process(NMEAInfo &basic)
 {
-  if (!is_simulator())
-    return;
+  assert(is_simulator());
 
   basic.UpdateClock();
   basic.connected.Update(basic.clock);
