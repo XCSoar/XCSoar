@@ -303,12 +303,14 @@ CallBackLookup(const CallBackTableEntry *lookup_table, const TCHAR *name)
 {
   assert(name != NULL);
   assert(!string_is_empty(name));
+  assert(lookup_table != NULL);
 
-  if (lookup_table != NULL)
-    for (unsigned i = 0; lookup_table[i].callback != NULL; i++)
-      if (_tcscmp(lookup_table[i].name, name) == 0)
-        return lookup_table[i].callback;
+  for (unsigned i = 0; lookup_table[i].callback != NULL; i++)
+    if (_tcscmp(lookup_table[i].name, name) == 0)
+      return lookup_table[i].callback;
 
+  /* unreachable */
+  assert(false);
   return NULL;
 }
 
