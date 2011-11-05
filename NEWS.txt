@@ -15,6 +15,10 @@ Version 6.3 - not yet released
 * internet
   - added LiveTrack24 live tracking
 
+Version 6.2.3 - not yet released
+* calculations
+  - don't discard manual wind when auto wind is disabled
+
 Version 6.2.2 - 2011/11/04
 * devices
   - save the "bulk baud rate" setting

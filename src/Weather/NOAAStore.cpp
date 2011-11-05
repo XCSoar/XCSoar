@@ -25,6 +25,7 @@ Copyright_License {
 #include "NOAADownloader.hpp"
 #include "METARParser.hpp"
 #include "ParsedMETAR.hpp"
+#include "Util/Macros.hpp"
 
 #ifdef _UNICODE
 #include <windows.h>
@@ -127,10 +128,9 @@ NOAAStore::GetCodeT(unsigned index) const
 #ifdef _UNICODE
   const char *code = GetCode(index);
 
-  int length = strlen(code);
-  TCHAR *code2 = new TCHAR[length + 1];
-  length = MultiByteToWideChar(CP_UTF8, 0, code, length, code2, length);
-  code2[length] = _T('\0');
+  static TCHAR code2[ARRAY_SIZE(Item::code)];
+  if (MultiByteToWideChar(CP_UTF8, 0, code, -1, code2, ARRAY_SIZE(code2)) <= 0)
+    return _T("");
 
   return code2;
 #else

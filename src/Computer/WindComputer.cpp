@@ -83,7 +83,7 @@ WindComputer::Select(const SETTINGS_COMPUTER &settings,
   } else if (settings.manual_wind_available && settings.auto_wind_mode == 0) {
     // manual wind only if available and desired
     calculated.wind = settings.manual_wind;
-    calculated.wind_available.Update(basic.clock);
+    calculated.wind_available = settings.manual_wind_available;
 
   } else if (calculated.estimated_wind_available.Modified(settings.manual_wind_available)
              && settings.auto_wind_mode) {
