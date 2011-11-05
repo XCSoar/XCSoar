@@ -301,7 +301,10 @@ GetSize(const XMLNode &node, const PixelRect rc, const RasterPoint &pos)
 static void *
 CallBackLookup(const CallBackTableEntry *lookup_table, const TCHAR *name)
 {
-  if (lookup_table != NULL && name != NULL && !string_is_empty(name))
+  assert(name != NULL);
+  assert(!string_is_empty(name));
+
+  if (lookup_table != NULL)
     for (unsigned i = 0; lookup_table[i].callback != NULL; i++)
       if (_tcscmp(lookup_table[i].name, name) == 0)
         return lookup_table[i].callback;
@@ -313,8 +316,11 @@ static void *
 GetCallBack(const CallBackTableEntry *lookup_table,
             const XMLNode &node, const TCHAR* attribute)
 {
-  return CallBackLookup(lookup_table,
-                        StringToStringDflt(node.getAttribute(attribute), NULL));
+  const TCHAR *name = StringToStringDflt(node.getAttribute(attribute), NULL);
+  if (name == NULL)
+    return NULL;
+
+  return CallBackLookup(lookup_table, name);
 }
 
 static XMLNode *
