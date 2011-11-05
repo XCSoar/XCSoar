@@ -183,35 +183,50 @@ Units::FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size)
   return buffer;
 }
 
+static void
+FormatInteger(TCHAR *buffer, size_t size,
+              const fixed value, const UnitDescriptor &unit, bool include_unit)
+{
+  const fixed uvalue = value * unit.factor_to_user + unit.offset_to_user;
+  const int ivalue = iround(uvalue);
+
+  if (include_unit)
+    _sntprintf(buffer, size, _T("%d %s"), ivalue, unit.name);
+  else
+    _sntprintf(buffer, size, _T("%d"), ivalue);
+}
+
 void
 Units::FormatUserAltitude(fixed Altitude, TCHAR *buffer, size_t size,
                           bool IncludeUnit)
 {
-  const UnitDescriptor *pU = &unit_descriptors[current.altitude_unit];
+  FormatInteger(buffer, size, Altitude,
+                unit_descriptors[current.altitude_unit], IncludeUnit);
+}
 
-  /// \todo rounding
-  Altitude = Altitude * pU->factor_to_user; // + pU->ToUserOffset;
+gcc_const
+static Unit
+GetAlternateUnit(Unit unit)
+{
+  switch (unit) {
+  case unMeter:
+    return unFeet;
 
-  if (IncludeUnit)
-    _sntprintf(buffer, size, _T("%d %s"), iround(Altitude), pU->name);
-  else
-    _sntprintf(buffer, size, _T("%d"), iround(Altitude));
+  case unFeet:
+    return unMeter;
+
+  default:
+    return unit;
+  }
 }
 
 void
-Units::FormatAlternateUserAltitude(fixed Altitude, TCHAR *Buffer, size_t size,
+Units::FormatAlternateUserAltitude(fixed Altitude, TCHAR *buffer, size_t size,
                                    bool IncludeUnit)
 {
-  Unit saveUnit = current.altitude_unit;
-
-  if (saveUnit == unMeter)
-    current.altitude_unit = unFeet;
-  if (saveUnit == unFeet)
-    current.altitude_unit = unMeter;
-
-  FormatUserAltitude(Altitude, Buffer, size, IncludeUnit);
-
-  current.altitude_unit = saveUnit;
+  FormatInteger(buffer, size, Altitude,
+                unit_descriptors[GetAlternateUnit(current.altitude_unit)],
+                IncludeUnit);
 }
 
 // JMW, what does this do?
