@@ -46,6 +46,7 @@ GlideComputerRoute::ResetFlight()
 {
   route_clock.reset();
   reach_clock.reset();
+  protected_route_planner.Reset();
 }
 
 void

@@ -47,6 +47,11 @@ public:
     :Guard<RoutePlannerGlue>(route),
      airspaces(_airspaces) {}
 
+  void Reset() {
+    ExclusiveLease lease(*this);
+    lease->reset();
+  }
+
   void SetTerrain(const RasterTerrain *terrain);
 
   void SetPolars(const GlidePolar &glide_polar, const GlidePolar &safety_polar,
