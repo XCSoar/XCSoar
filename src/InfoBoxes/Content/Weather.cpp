@@ -26,7 +26,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Interface.hpp"
-#include "Atmosphere/CuSonde.hpp"
 #include "Protection.hpp"
 
 #include "Dialogs/dlgInfoBoxAccess.hpp"
@@ -81,8 +80,9 @@ InfoBoxContentTemperature::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTemperatureForecast::Update(InfoBoxWindow &infobox)
 {
-  // Set Value
-  SetValueFromFixed(infobox, _T("%2.1f")_T(DEG), CuSonde::maxGroundTemperature);
+  fixed temperature = CommonInterface::SettingsComputer().forecast_temperature;
+  SetValueFromFixed(infobox, _T("%2.1f")_T(DEG),
+                    Units::ToUserTemperature(temperature));
 }
 
 bool
@@ -90,11 +90,11 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch(keycode) {
   case ibkUp:
-    CuSonde::adjustForecastTemperature(fixed_half);
+    CommonInterface::SetSettingsComputer().forecast_temperature += fixed_half;
     return true;
 
   case ibkDown:
-    CuSonde::adjustForecastTemperature(-fixed_half);
+    CommonInterface::SetSettingsComputer().forecast_temperature -= fixed_half;
     return true;
 
   default:

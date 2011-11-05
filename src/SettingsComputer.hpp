@@ -235,6 +235,11 @@ struct SETTINGS_COMPUTER:
   int utc_offset;
 
   /**
+   * The forecasted maximum ground temperature [Kelvin].
+   */
+  fixed forecast_temperature;
+
+  /**
    * Troposhere atmosphere model for QNH correction
    */
   AtmosphericPressure pressure;

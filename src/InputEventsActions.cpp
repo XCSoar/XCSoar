@@ -73,7 +73,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Units/UnitsFormatter.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
-#include "Atmosphere/CuSonde.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Profile/Profile.hpp"
 #include "LocalPath.hpp"
@@ -1429,12 +1428,15 @@ void
 InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
 {
   if (_tcscmp(misc, _T("+")) == 0)
-    CuSonde::adjustForecastTemperature(fixed_one);
+    CommonInterface::SetSettingsComputer().forecast_temperature += fixed_one;
   else if (_tcscmp(misc, _T("-")) == 0)
-    CuSonde::adjustForecastTemperature(fixed_minus_one);
+    CommonInterface::SetSettingsComputer().forecast_temperature -= fixed_one;
   else if (_tcscmp(misc, _T("show")) == 0) {
+    fixed temperature =
+      CommonInterface::SettingsComputer().forecast_temperature;
     TCHAR Temp[100];
-    _stprintf(Temp, _T("%f"), (double)CuSonde::maxGroundTemperature);
+    _stprintf(Temp, _T("%f"),
+              (double)Units::ToUserTemperature(temperature));
     Message::AddMessage(_("Forecast temperature"), Temp);
   }
 }

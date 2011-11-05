@@ -233,24 +233,9 @@ OnBugsData(DataField *_Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-static void
-OnTempData(DataField *_Sender, DataField::DataAccessKind_t Mode)
-{
-  DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
-  switch (Mode) {
-  case DataField::daChange:
-    CuSonde::setForecastTemperature(Units::ToUserUnit(Units::ToSysTemperature(Sender->GetAsFixed()),
-                                                      unGradCelcius));
-    break;
-
-  case DataField::daSpecial:
-    return;
-  }
-}
-
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnBugsData),
-  DeclareCallBackEntry(OnTempData),
+
   DeclareCallBackEntry(OnBallastData),
   DeclareCallBackEntry(OnQnhData),
   DeclareCallBackEntry(OnCloseClicked),
@@ -288,18 +273,22 @@ dlgBasicSettingsShowModal()
     df.SetMin(Units::ToUserTemperature(Units::ToSysUnit(fixed(-50), unGradCelcius)));
     df.SetMax(Units::ToUserTemperature(Units::ToSysUnit(fixed(60), unGradCelcius)));
     df.SetUnits(Units::GetTemperatureName());
-    df.Set(Units::ToUserTemperature(Units::ToSysUnit(fixed(CuSonde::maxGroundTemperature),
-                                                     unGradCelcius)));
+    df.Set(Units::ToUserTemperature(settings.forecast_temperature));
     wp->RefreshDisplay();
   }
 
-  if (wf->ShowModal() == mrOK && changed) {
+  if (wf->ShowModal() == mrOK) {
     SETTINGS_COMPUTER &settings = CommonInterface::SetSettingsComputer();
 
-    settings.glide_polar_task = glide_polar;
+    if (changed) {
+      settings.glide_polar_task = glide_polar;
 
-    if (protected_task_manager != NULL)
-      protected_task_manager->SetGlidePolar(glide_polar);
+      if (protected_task_manager != NULL)
+        protected_task_manager->SetGlidePolar(glide_polar);
+    }
+
+    SaveFormProperty(*wf, _T("prpTemperature"),
+                     ugTemperature, settings.forecast_temperature);
   }
 
   delete wf;

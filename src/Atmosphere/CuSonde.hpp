@@ -76,7 +76,6 @@ namespace CuSonde
   extern Level cslevels[NUM_LEVELS];
   void findCloudBase(unsigned short level);
   void findThermalHeight(unsigned short level);
-  void adjustForecastTemperature(fixed delta);
   void setForecastTemperature(fixed val);
 
   /** Estimated ThermailHeight */

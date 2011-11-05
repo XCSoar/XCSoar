@@ -61,6 +61,9 @@ CuSonde::Level CuSonde::cslevels[NUM_LEVELS];
 void
 CuSonde::setForecastTemperature(fixed val)
 {
+  if (maxGroundTemperature == val)
+    return;
+
   maxGroundTemperature = val;
 
   unsigned zlevel = 0;
@@ -92,16 +95,6 @@ CuSonde::setForecastTemperature(fixed val)
     // calculate CloudBase
     findCloudBase((unsigned short)level);
   }
-}
-
-/**
- * Adjusts the maximum ground temperature by delta
- * @param delta Degrees C to be added to the maximum ground temperature
- */
-void
-CuSonde::adjustForecastTemperature(fixed delta)
-{
-  setForecastTemperature(maxGroundTemperature + delta);
 }
 
 /**
