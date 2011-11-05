@@ -40,6 +40,7 @@ Copyright_License {
 #include "Look/MarkerLook.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StaticString.hpp"
 #include "SettingsMap.hpp"
 #include "LocalTime.hpp"
 #include "Math/Screen.hpp"
@@ -249,17 +250,37 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Now render the text information
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
+  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+
   canvas.set_text_color(COLOR_BLACK);
 
-  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+  StaticString<26> title_string(_("FLARM Traffic"));
+  // Append name to the title, if it exists
+  if (traffic.HasName()) {
+    title_string.append(_(" - "));
+    title_string.append(traffic.name);
+  }
   canvas.select(name_font);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
-                      _("FLARM Traffic"));
+  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, title_string);
 
+  StaticString<60> info_string(FlarmTraffic::GetTypeString(item.traffic.type));
+  // Generate the line of info about the target, if it's available
+  if (traffic.altitude_available) {
+    TCHAR tmp[15];
+    Units::FormatUserAltitude(traffic.altitude, tmp, 15);
+    info_string += _(" - Altitude: ");
+    info_string += tmp;
+  }
+  if (traffic.climb_rate_avg30s_available) {
+    TCHAR tmp[15];
+    Units::FormatUserVSpeed(traffic.climb_rate_avg30s, tmp, 15);
+    info_string += _(" - Vario: ");
+    info_string += tmp;
+  }
   canvas.select(small_font);
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, FlarmTraffic::GetTypeString(item.traffic.type));
+                      rc, info_string);
 }
 
 void
