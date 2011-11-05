@@ -198,7 +198,7 @@ public:
   }
 
   void SetContentProvider(InfoBoxContent *_content);
-  bool UpdateContent();
+  void UpdateContent();
   bool HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode);
 
   /**

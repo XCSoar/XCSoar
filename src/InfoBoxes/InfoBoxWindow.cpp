@@ -442,14 +442,13 @@ InfoBoxWindow::SetContentProvider(InfoBoxContent *_content)
   SetInvalid();
 }
 
-bool
+void
 InfoBoxWindow::UpdateContent()
 {
-  if (content != NULL) {
-    content->Update(*this);
-    return true;
-  }
-  return false;
+  if (content == NULL)
+    return;
+
+  content->Update(*this);
 }
 
 bool
