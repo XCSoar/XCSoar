@@ -33,6 +33,7 @@ Copyright_License {
 namespace METARParser
 {
   bool ParseLine(const METAR::ContentString &content, ParsedMETAR &parsed);
+  void ParseDecoded(const METAR::ContentString &decoded, ParsedMETAR &parsed);
 }
 
 class METARLine {
@@ -463,10 +464,96 @@ METARParser::ParseLine(const METAR::ContentString &content, ParsedMETAR &parsed)
   return true;
 }
 
+static bool
+ParseLocation(const TCHAR *buffer, ParsedMETAR &parsed)
+{
+  // 51-18N 006-46E
+  TCHAR *end;
+  unsigned lat_deg = _tcstoul(buffer, &end, 10);
+
+  if (*end != '-')
+    return false;
+  end++;
+
+  unsigned lat_min = _tcstoul(end, &end, 10);
+
+  bool north;
+  if (*end == _T('N') || *end == _T('n'))
+    north = true;
+  else if (*end == _T('S') || *end == _T('s'))
+    north = false;
+  else
+    return false;
+  end++;
+
+  while (*end != ' ')
+    return false;
+  end++;
+
+  unsigned lon_deg = _tcstoul(end, &end, 10);
+
+  if (*end != '-')
+    return false;
+  end++;
+
+  unsigned lon_min = _tcstoul(end, &end, 10);
+
+  bool east;
+  if (*end == _T('E') || *end == _T('e'))
+    east = true;
+  else if (*end == _T('W') || *end == _T('w'))
+    east = false;
+  else
+    return false;
+  end++;
+
+  GeoPoint location;
+  location.latitude = Angle::Degrees(fixed(lat_deg) + fixed(lat_min) / 60);
+  location.longitude = Angle::Degrees(fixed(lon_deg) + fixed(lon_min) / 60);
+
+  if (!north)
+    location.latitude.Flip();
+
+  if (!east)
+    location.longitude.Flip();
+
+  parsed.location = location;
+  parsed.location_available = true;
+  return true;
+}
+
+void
+METARParser::ParseDecoded(const METAR::ContentString &decoded,
+                          ParsedMETAR &parsed)
+{
+  // Duesseldorf, Germany (EDDL) 51-18N 006-46E 41M
+  // Nov 04, 2011 - 07:50 PM EDT / 2011.11.04 2350 UTC
+
+  const TCHAR *start = decoded.begin();
+  const TCHAR *end = start + _tcslen(start);
+  const TCHAR *closing_brace = _tcschr(start, _T(')'));
+  const TCHAR *line_break = _tcschr(start, _T('\n'));
+
+  if (line_break == NULL || line_break >= end)
+    return;
+
+  if (closing_brace == NULL || closing_brace >= line_break)
+    return;
+
+  do
+    closing_brace++;
+  while (*closing_brace == _T(' '));
+
+  ParseLocation(closing_brace, parsed);
+}
+
 bool
 METARParser::Parse(const METAR &metar, ParsedMETAR &parsed)
 {
   parsed.Reset();
+
+  if (!metar.decoded.empty())
+    ParseDecoded(metar.decoded, parsed);
 
   return ParseLine(metar.content, parsed);
 }
