@@ -84,7 +84,6 @@ OnOKClicked(gcc_unused WndButton &Sender)
   wf->SetModalResult(mrOK);
 }
 
-static void InitTargetPoints();
 static void RefreshTargetPoint(void);
 
 static void
@@ -444,14 +443,26 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-static void
-GetTaskData()
+static bool
+GetTaskData(DataFieldEnum &df)
 {
   ProtectedTaskManager::Lease task_manager(*protected_task_manager);
-  const AbstractTask *at = task_manager->GetActiveTask();
+  if (task_manager->GetMode() != TaskManager::MODE_ORDERED)
+    return false;
+
+  const OrderedTask &task = task_manager->GetOrderedTask();
 
   ActiveTaskPointOnEntry = task_manager->GetActiveTaskPointIndex();
-  TaskSize = at->TaskSize();
+  TaskSize = task.TaskSize();
+
+  for (unsigned i = ActiveTaskPointOnEntry; i < TaskSize; i++) {
+    StaticString<80u> label;
+    label.Format(_T("%d %s"), i,
+                 task_manager->GetOrderedTaskpointName(i));
+    df.addEnumText(label.c_str());
+  }
+
+  return true;
 }
 
 /*
@@ -460,13 +471,15 @@ GetTaskData()
  * and loads the Task Point UI
  * and initializes the pan mode on the map
  */
-static void
+static bool
 InitTargetPoints()
 {
   WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
-  GetTaskData();
   DataFieldEnum* dfe;
   dfe = (DataFieldEnum*)wp->GetDataField();
+
+  if (!GetTaskData(*dfe))
+    return false;
 
   if (TaskSize <= target_point)
     target_point = ActiveTaskPointOnEntry;
@@ -474,15 +487,6 @@ InitTargetPoints()
     target_point = max(target_point, ActiveTaskPointOnEntry);
 
   target_point = max(0, min((int)target_point, (int)TaskSize - 1));
-  {
-    ProtectedTaskManager::Lease lease(*protected_task_manager);
-    for (unsigned i = ActiveTaskPointOnEntry; i < TaskSize; i++) {
-      StaticString<80u> label;
-      label.Format(_T("%d %s"), i,
-                   lease->GetOrderedTaskpointName(i));
-      dfe->addEnumText(label.c_str());
-    }
-  }
 
   dfe->Set(max(0, (int)target_point - (int)ActiveTaskPointOnEntry));
 
@@ -491,6 +495,7 @@ InitTargetPoints()
   }
 
   wp->RefreshDisplay();
+  return true;
 }
 
 static void
@@ -514,8 +519,7 @@ drawBtnNext()
 void
 dlgTargetShowModal(int TargetPoint)
 {
-  if (protected_task_manager == NULL ||
-      protected_task_manager->GetMode() != TaskManager::MODE_ORDERED)
+  if (protected_task_manager == NULL)
     return;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
@@ -525,7 +529,12 @@ dlgTargetShowModal(int TargetPoint)
 
   if (TargetPoint >=0)
     target_point = TargetPoint;
-  InitTargetPoints();
+
+  if (!InitTargetPoints()) {
+    delete wf;
+    map = NULL;
+    return;
+  }
 
   chkbOptimized = (CheckBoxControl*)wf->FindByName(_T("chkbOptimized"));
   assert(chkbOptimized != NULL);
