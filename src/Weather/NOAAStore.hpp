@@ -24,10 +24,10 @@ Copyright_License {
 #ifndef NOAA_STORE_HPP
 #define NOAA_STORE_HPP
 
-#include "Util/StaticArray.hpp"
 #include "METAR.hpp"
 #include "TAF.hpp"
 
+#include <list>
 #include <tchar.h>
 
 struct ParsedMETAR;
@@ -86,7 +86,7 @@ public:
     bool Update(JobRunner &runner);
   };
 
-  typedef StaticArray<Item, 20> StationContainer;
+  typedef std::list<Item> StationContainer;
 
   StationContainer stations;
 
@@ -115,7 +115,7 @@ public:
   }
 
   void erase(iterator i) {
-    stations.quick_remove(std::distance(begin(), i));
+    stations.erase(i);
   }
 
   /**
@@ -140,15 +140,7 @@ public:
    */
   gcc_pure
   unsigned Count() const {
-    return stations.size();
-  }
-
-  /**
-   * Returns whether the station array is already full
-   */
-  gcc_pure
-  bool Full() const {
-    return stations.full();
+    return std::distance(begin(), end());
   }
 };
 

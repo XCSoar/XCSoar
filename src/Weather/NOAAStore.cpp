@@ -87,9 +87,8 @@ NOAAStore::AddStation(const char *code)
   for (unsigned i = 0; i < 4; i++)
     assert(code[i] >= 'A' && code[i] <= 'Z');
 #endif
-  assert(!stations.full());
 
-  Item &item = stations.append();
+  Item item;
 
   // Copy station code
   strncpy(item.code, code, 4);
@@ -99,7 +98,8 @@ NOAAStore::AddStation(const char *code)
   item.metar_available = false;
   item.taf_available = false;
 
-  return &item;
+  stations.push_back(item);
+  return --end();
 }
 
 #ifdef _UNICODE
