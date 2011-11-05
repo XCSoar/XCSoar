@@ -70,10 +70,12 @@ CuSonde::setForecastTemperature(fixed val)
   thermalHeight = fixed_minus_one;
 
   // iterate through all levels
-  for (unsigned level = 0; level < NUM_LEVELS; level++) {
+  fixed h_agl = -CuSonde::hGround;
+  for (unsigned level = 0; level < NUM_LEVELS;
+       level++, h_agl += fixed(HEIGHT_STEP)) {
     // update the ThermalIndex for each level with
     // the new maxGroundTemperature
-    cslevels[level].updateThermalIndex((unsigned short)level);
+    cslevels[level].updateThermalIndex(h_agl, maxGroundTemperature);
 
     // determine to which level measurements are available
     if (!cslevels[level].empty())
@@ -145,7 +147,9 @@ CuSonde::updateMeasurements(const NMEAInfo &basic,
     // we round down (level) because of potential lag of temp sensor
     cslevels[level].updateTemps(basic.humidity,
         Units::ToUserUnit(basic.temperature, unGradCelcius));
-    cslevels[level].updateThermalIndex(level);
+
+    fixed h_agl = fixed(level * HEIGHT_STEP) - hGround;
+    cslevels[level].updateThermalIndex(h_agl, maxGroundTemperature);
 
     if (level > 0) {
       findThermalHeight((unsigned short)(level - 1));
@@ -157,7 +161,9 @@ CuSonde::updateMeasurements(const NMEAInfo &basic,
     // we round up (level+1) because of potential lag of temp sensor
     cslevels[level + 1].updateTemps(basic.humidity,
         Units::ToUserUnit(basic.temperature, unGradCelcius));
-    cslevels[level + 1].updateThermalIndex((unsigned short)(level + 1));
+
+    fixed h_agl = fixed((level + 1) * HEIGHT_STEP) - hGround;
+    cslevels[level + 1].updateThermalIndex(h_agl, maxGroundTemperature);
 
     if (level < NUM_LEVELS - 1) {
       findThermalHeight(level);
@@ -289,12 +295,10 @@ CuSonde::Level::updateTemps(fixed rh, fixed t)
  * @param newdata Function logs data to debug file if true
  */
 void
-CuSonde::Level::updateThermalIndex(unsigned short level)
+CuSonde::Level::updateThermalIndex(fixed h_agl, fixed max_ground_temperature)
 {
-  fixed hlevel = fixed(level * HEIGHT_STEP);
-
   // Calculate the dry temperature at altitude = hlevel
-  tempDry = DALR * (hlevel - CuSonde::hGround) + CuSonde::maxGroundTemperature;
+  tempDry = DALR * h_agl + max_ground_temperature;
 
   // Calculate ThermalIndex
   thermalIndex = airTemp - tempDry;

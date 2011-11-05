@@ -51,7 +51,7 @@ namespace CuSonde
     fixed thermalIndex;
 
     void updateTemps(fixed rh, fixed t);
-    void updateThermalIndex(unsigned short level);
+    void updateThermalIndex(fixed h_agl, fixed max_ground_temperature);
 
     /** Number of measurements */
     unsigned nmeasurements;
