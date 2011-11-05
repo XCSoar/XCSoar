@@ -152,7 +152,8 @@ WaypointDetails::ReadFileFromProfile(Waypoints &way_points,
   LogStartUp(_T("WaypointDetails::ReadFileFromProfile"));
 
   TLineReader *reader =
-    OpenConfiguredTextFile(szProfileAirfieldFile, _T("airfields.txt"));
+    OpenConfiguredTextFile(szProfileAirfieldFile, _T("airfields.txt"),
+                           ConvertLineReader::AUTO);
   if (reader == NULL)
     return;
 
