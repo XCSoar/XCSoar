@@ -37,7 +37,6 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Wind/WindStore.hpp"
 #include "Language/Language.hpp"
-#include "Atmosphere/CuSonde.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsMap.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
@@ -520,89 +519,6 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 
 
 void
-FlightStatisticsRenderer::RenderTemperature(Canvas &canvas,
-                                            const PixelRect rc) const
-{
-  Chart chart(chart_look, canvas, rc);
-
-  int hmin = 10000;
-  int hmax = -10000;
-  fixed tmin = CuSonde::maxGroundTemperature;
-  fixed tmax = CuSonde::maxGroundTemperature;
-
-  // find range for scaling of graph
-  for (unsigned i = 0; i < CuSonde::NUM_LEVELS - 1u; i++) {
-    if (CuSonde::cslevels[i].empty())
-      continue;
-
-    hmin = min(hmin, (int)i);
-    hmax = max(hmax, (int)i);
-
-    tmin = min(tmin, min(CuSonde::cslevels[i].tempDry,
-                         min(CuSonde::cslevels[i].airTemp,
-                             CuSonde::cslevels[i].dewpoint)));
-    tmax = max(tmax, max(CuSonde::cslevels[i].tempDry,
-                         max(CuSonde::cslevels[i].airTemp,
-                             CuSonde::cslevels[i].dewpoint)));
-  }
-
-  if (hmin >= hmax) {
-    chart.DrawNoData();
-    return;
-  }
-
-  chart.ScaleYFromValue(fixed(hmin));
-  chart.ScaleYFromValue(fixed(hmax));
-  chart.ScaleXFromValue(tmin);
-  chart.ScaleXFromValue(tmax);
-
-  bool labelDry = false;
-  bool labelAir = false;
-  bool labelDew = false;
-
-  int ipos = 0;
-
-  for (unsigned i = 0; i < CuSonde::NUM_LEVELS - 1u; i++) {
-    if (CuSonde::cslevels[i].empty() ||
-        CuSonde::cslevels[i + 1].empty())
-      continue;
-
-    ipos++;
-
-    chart.DrawLine(CuSonde::cslevels[i].tempDry, fixed(i),
-                   CuSonde::cslevels[i + 1].tempDry, fixed(i + 1),
-                   ChartLook::STYLE_REDTHICK);
-
-    chart.DrawLine(CuSonde::cslevels[i].airTemp, fixed(i),
-                   CuSonde::cslevels[i + 1].airTemp, fixed(i + 1),
-                   ChartLook::STYLE_MEDIUMBLACK);
-
-    chart.DrawLine(CuSonde::cslevels[i].dewpoint, fixed(i),
-                   CuSonde::cslevels[i + 1].dewpoint, fixed(i + 1),
-                   ChartLook::STYLE_BLUETHIN);
-
-    if (ipos > 2) {
-      if (!labelDry) {
-        chart.DrawLabel(_T("DALR"),
-                        CuSonde::cslevels[i + 1].tempDry, fixed(i));
-        labelDry = true;
-      } else if (!labelAir) {
-        chart.DrawLabel(_T("Air"),
-                        CuSonde::cslevels[i + 1].airTemp, fixed(i));
-        labelAir = true;
-      } else if (!labelDew) {
-        chart.DrawLabel(_T("Dew"),
-                        CuSonde::cslevels[i + 1].dewpoint, fixed(i));
-        labelDew = true;
-      }
-    }
-  }
-
-  chart.DrawXLabel(_T("T")_T(DEG));
-  chart.DrawYLabel(_T("h"));
-}
-
-void
 FlightStatisticsRenderer::RenderWind(Canvas &canvas, const PixelRect rc,
                              const NMEAInfo &nmea_info,
                              const WindStore &wind_store) const
@@ -736,18 +652,6 @@ FlightStatisticsRenderer::CaptionPolar(TCHAR *sTmp, const GlidePolar& glide_pola
             Units::GetVerticalSpeedName(),
             (int)Units::ToUserSpeed(glide_polar.GetVMin()),
             Units::GetSpeedName());
-}
-
-void
-FlightStatisticsRenderer::CaptionTempTrace(TCHAR *sTmp) const
-{
-  _stprintf(sTmp, _T("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
-            _("Thermal height"),
-            (double)Units::ToUserAltitude(CuSonde::thermalHeight),
-            Units::GetAltitudeName(),
-            _("Cloud base"),
-            (double)Units::ToUserAltitude(CuSonde::cloudBase),
-            Units::GetAltitudeName());
 }
 
 void

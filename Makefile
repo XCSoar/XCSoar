@@ -465,6 +465,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/Renderer/FlightStatisticsRenderer.cpp \
+	$(SRC)/Renderer/CuRenderer.cpp \
 	\
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \
