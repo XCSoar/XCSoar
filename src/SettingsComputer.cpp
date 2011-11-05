@@ -122,6 +122,7 @@ SETTINGS_COMPUTER::SetDefaults()
   average_eff_time = ae30seconds;
   set_system_time_from_gps = is_altair() && is_embedded();
   utc_offset = GetSystemUTCOffset();
+  forecast_temperature = fixed(25);
   pressure = AtmosphericPressure::Standard();
   pressure_available.Clear();
   airspace.SetDefaults();
