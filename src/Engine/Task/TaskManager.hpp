@@ -416,15 +416,6 @@ public:
   fixed GetTaskRadius(const GeoPoint& fallback_location) const;
 
   /**
-   * returns taskpoint name
-   *
-   * @param TPindex index of taskpoint
-   *
-   * @return pointer to buffer with taskpoint name
-   */
- const TCHAR* GetOrderedTaskpointName(unsigned index) const;
-
-  /**
    * Check whether observer is within OZ of specified tp
    *
    * @param TPindex index of tp in task

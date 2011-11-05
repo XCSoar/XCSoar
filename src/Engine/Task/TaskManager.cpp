@@ -441,15 +441,6 @@ TaskManager::GetTaskRadius(const GeoPoint& fallback_location) const
   return fixed_zero;
 }
 
-const TCHAR*
-TaskManager::GetOrderedTaskpointName(unsigned index) const
-{
- return active_task == &task_ordered && CheckOrderedTask() &&
-   index < TaskSize()
-   ? task_ordered.GetTaskPoint(index)->GetWaypoint().name.c_str()
-   : _T("");
-}
-
 bool
 TaskManager::IsInSector (const unsigned index, const AircraftState &ref,
                          const bool AATOnly) const

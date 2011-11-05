@@ -371,12 +371,12 @@ UpdateValuesRules(void)
   TCHAR name[64];
   {
     ProtectedTaskManager::Lease task_manager(*protected_task_manager);
-    const TCHAR *name2 = task_manager->GetMode() == TaskManager::MODE_ORDERED
-      ? task_manager->GetOrderedTaskpointName(0)
-      : NULL;
-    if (name2 != NULL) {
-      CopyString(name, name2, 64);
-    } else
+    const OrderedTask &task = task_manager->GetOrderedTask();
+
+    if (task_manager->GetMode() == TaskManager::MODE_ORDERED &&
+        task.TaskSize() > 0)
+      CopyString(name, task.GetTaskPoint(0)->GetWaypoint().name.c_str(), 64);
+    else
       name[0] = _T('\0');
   }
 
