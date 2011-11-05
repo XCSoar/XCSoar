@@ -29,6 +29,7 @@ Copyright_License {
 #include "NOAAStore.hpp"
 #include "Profile/Profile.hpp"
 
+#include <algorithm>
 #include <tchar.h>
 
 NOAAStore *noaa_store;
@@ -72,12 +73,14 @@ NOAAStore::LoadFromProfile()
 void
 NOAAStore::SaveToProfile()
 {
-  TCHAR buffer[120];
-  for (unsigned i = 0; i < NOAAStore::Count(); i++) {
-    const TCHAR *code = GetCodeT(i);
-    _tcscpy(buffer + (i * 5), code);
-    _tcscpy(buffer + (i * 5) + 4, _T(","));
+  TCHAR buffer[120], *p = buffer;
+  for (auto i = begin(), e = end(); i != e; ++i) {
+    const TCHAR *code = i->GetCodeT();
+    p = std::copy(code, code + _tcslen(code), p);
+    *p++ = _T(',');
   }
+
+  *p = _T('\0');
 
   Profile::Set(szProfileWeatherStations, buffer);
 }

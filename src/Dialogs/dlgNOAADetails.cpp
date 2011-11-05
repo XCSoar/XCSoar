@@ -40,7 +40,7 @@ Copyright_License {
 #include <stdio.h>
 
 static WndForm *wf = NULL;
-static unsigned station_index;
+static NOAAStore::iterator station_iterator;
 
 static void
 Update()
@@ -48,7 +48,7 @@ Update()
   tstring metar_taf = _T("");
 
   METAR metar;
-  if (!noaa_store->GetMETAR(station_index, metar)) {
+  if (!station_iterator->GetMETAR(metar)) {
     metar_taf += _("No METAR available!");
   } else {
     metar_taf += metar.decoded.c_str();
@@ -59,7 +59,7 @@ Update()
   metar_taf += _T("\n\n");
 
   TAF taf;
-  if (!noaa_store->GetTAF(station_index, taf)) {
+  if (!station_iterator->GetTAF(taf)) {
     metar_taf += _("No TAF available!");
   } else {
     metar_taf += taf.content.c_str();
@@ -74,7 +74,7 @@ UpdateClicked(gcc_unused WndButton &Sender)
 {
   DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
                          _("Download"), true);
-  noaa_store->UpdateStation(station_index, runner);
+  station_iterator->Update(runner);
   Update();
 }
 
@@ -83,12 +83,12 @@ RemoveClicked(gcc_unused WndButton &Sender)
 {
   TCHAR tmp[256];
   _stprintf(tmp, _("Do you want to remove station %s?"),
-            noaa_store->GetCodeT(station_index));
+            station_iterator->GetCodeT());
 
   if (MessageBoxX(tmp, _("Remove"), MB_YESNO) == IDNO)
     return;
 
-  noaa_store->RemoveStation(station_index);
+  noaa_store->erase(station_iterator);
   noaa_store->SaveToProfile();
 
   wf->SetModalResult(mrOK);
@@ -108,10 +108,9 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgNOAADetailsShowModal(SingleWindow &parent, unsigned _station_index)
+dlgNOAADetailsShowModal(SingleWindow &parent, NOAAStore::iterator iterator)
 {
-  assert(_station_index < noaa_store->Count());
-  station_index = _station_index;
+  station_iterator = iterator;
 
   wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
                   _T("IDR_XML_NOAA_DETAILS_L") : _T("IDR_XML_NOAA_DETAILS"));
@@ -119,7 +118,7 @@ dlgNOAADetailsShowModal(SingleWindow &parent, unsigned _station_index)
 
   TCHAR caption[100];
   _stprintf(caption, _T("%s: %s"), _("METAR and TAF"),
-            noaa_store->GetCodeT(station_index));
+            station_iterator->GetCodeT());
   wf->SetCaption(caption);
 
   Update();

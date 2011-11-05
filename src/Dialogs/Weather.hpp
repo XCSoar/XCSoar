@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_WEATHER_HPP
 #define XCSOAR_DIALOGS_WEATHER_HPP
 
+#include "Weather/NOAAStore.hpp"
+
 class SingleWindow;
 
 void
@@ -33,6 +35,7 @@ void
 dlgNOAAListShowModal(SingleWindow &parent);
 
 void
-dlgNOAADetailsShowModal(SingleWindow &parent, unsigned index);
+dlgNOAADetailsShowModal(SingleWindow &parent,
+                        NOAAStore::iterator iterator);
 
 #endif

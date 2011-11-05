@@ -52,7 +52,7 @@ static WndListFrame *station_list;
 struct NOAAListItem
 {
   StaticString<5> code;
-  unsigned index;
+  NOAAStore::iterator iterator;
 
   bool operator<(const NOAAListItem &i2) const {
     return _tcscmp(code, i2.code) == -1;
@@ -66,17 +66,16 @@ UpdateList()
 {
   list.clear();
 
-  unsigned len = noaa_store->Count();
-  for (unsigned i = 0; i < len; ++i) {
+  for (auto i = noaa_store->begin(), end = noaa_store->end(); i != end; ++i) {
     NOAAListItem item;
-    item.code = noaa_store->GetCodeT(i);
-    item.index = i;
+    item.code = i->GetCodeT();
+    item.iterator = i;
     list.push_back(item);
   }
 
   std::sort(list.begin(), list.end());
 
-  station_list->SetLength(len);
+  station_list->SetLength(list.size());
   station_list->invalidate();
 }
 
@@ -97,7 +96,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   METAR metar;
   const TCHAR *tmp;
-  if (!noaa_store->GetMETAR(list[index].index, metar))
+  if (!list[index].iterator->GetMETAR(metar))
     tmp = _("No METAR available");
   else
     tmp = metar.content.c_str();
@@ -135,12 +134,12 @@ AddClicked(gcc_unused WndButton &button)
     }
   }
 
-  noaa_store->AddStation(code);
+  NOAAStore::iterator i = noaa_store->AddStation(code);
   noaa_store->SaveToProfile();
 
   DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
                          _("Download"), true);
-  noaa_store->UpdateStation(code, runner);
+  i->Update(runner);
 
   UpdateList();
 }
@@ -167,7 +166,7 @@ RemoveClicked(gcc_unused WndButton &Sender)
   if (MessageBoxX(tmp, _("Remove"), MB_YESNO) == IDNO)
     return;
 
-  noaa_store->RemoveStation(list[index].index);
+  noaa_store->erase(list[index].iterator);
   noaa_store->SaveToProfile();
 
   UpdateList();
@@ -184,7 +183,7 @@ OpenDetails(unsigned index)
 {
   assert(index < list.size());
   dlgNOAADetailsShowModal(*(SingleWindow *)wf->get_root_owner(),
-                          list[index].index);
+                          list[index].iterator);
   UpdateList();
 }
 

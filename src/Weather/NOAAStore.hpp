@@ -30,13 +30,12 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct METAR;
 struct ParsedMETAR;
-struct TAF;
 class JobRunner;
 
 class NOAAStore
 {
+public:
   struct Item
   {
     char code[5];
@@ -46,110 +45,87 @@ class NOAAStore
 
     METAR metar;
     TAF taf;
+
+    /**
+     * Returns the four letter code as a TCHAR string.  This may
+     * return a pointer to a static buffer, and consecutive calls
+     * (even with different objects) may invalidate the previous
+     * return value.  May be called only from the main thread.
+     */
+#ifdef _UNICODE
+    gcc_pure
+    const TCHAR *GetCodeT() const;
+#else
+    const TCHAR *GetCodeT() const {
+      return code;
+    }
+#endif
+
+    /**
+     * Transfers the downloaded METAR into the given reference if available
+     *
+     * @param metar Destination METAR struct
+     * @return True if the data was available,
+     * False if no METAR data was available
+     */
+    bool GetMETAR(METAR &metar) const;
+
+    /**
+     * Transfers the downloaded TAF into the given reference if available
+     * @param index Index of the station in the array
+     * @param metar Destination TAF struct
+     * @return True if the data was available,
+     * False if no TAF data was available
+     */
+    bool GetTAF(TAF &taf) const;
+
+    /**
+     * Attempts to download new data.
+     * @return True if the data was downloaded successfully
+     */
+    bool Update(JobRunner &runner);
   };
 
   typedef StaticArray<Item, 20> StationContainer;
 
   StationContainer stations;
 
-  gcc_pure
-  int GetStationIndex(const char *code) const;
-
 public:
   bool LoadFromString(const TCHAR *string);
   bool LoadFromProfile();
   void SaveToProfile();
+
+  typedef StationContainer::iterator iterator;
+  typedef StationContainer::const_iterator const_iterator;
+
+  iterator begin() {
+    return stations.begin();
+  }
+
+  iterator end() {
+    return stations.end();
+  }
+
+  const_iterator begin() const {
+    return stations.begin();
+  }
+
+  const_iterator end() const {
+    return stations.end();
+  }
+
+  void erase(iterator i) {
+    stations.quick_remove(std::distance(begin(), i));
+  }
 
   /**
    * Add a station to the set of stations for which
    * weather information should be downloaded
    * @param code Four letter code of the station/airport (upper case)
    */
-  void AddStation(const char *code);
+  iterator AddStation(const char *code);
 #ifdef _UNICODE
-  void AddStation(const TCHAR *code);
-#endif
-
-  /**
-   * Removes a station from the set of stations for which
-   * weather information should be downloaded
-   * @param index Index of the station in the array
-   */
-  void RemoveStation(unsigned index);
-  /**
-   * Removes a station from the set of stations for which
-   * weather information should be downloaded
-   * @param code Four letter code of the station/airport (upper case)
-   */
-  void RemoveStation(const char *code);
-
-  /**
-   * Returns the four letter code of the station given by the array index
-   * @param index Index of the station in the array
-   * @return Four letter code of the station/airport
-   */
-  gcc_pure
-  const char *GetCode(unsigned index) const;
-
-  /**
-   * Returns the four letter code as a TCHAR string.  This may return
-   * a pointer to a static buffer, and consecutive calls (even with
-   * different objects) may invalidate the previous return value.  May
-   * be called only from the main thread.
-   */
-  const TCHAR *GetCodeT(unsigned index) const;
-
-  /**
-   * Transfers the downloaded METAR into the given reference if available
-   * @param index Index of the station in the array
-   * @param metar Destination METAR struct
-   * @return True if the data was available,
-   * False if no METAR data was available
-   */
-  bool GetMETAR(unsigned index, METAR &metar) const;
-
-  /**
-   * Transfers the downloaded METAR into the given reference if available
-   * @param code Four letter code of the station/airport (upper case)
-   * @param metar Destination METAR struct
-   * @return True if the data was available,
-   * False if no METAR data was available
-   */
-  bool GetMETAR(const char *code, METAR &metar) const;
-
-  /**
-   * Transfers the downloaded TAF into the given reference if available
-   * @param index Index of the station in the array
-   * @param metar Destination TAF struct
-   * @return True if the data was available,
-   * False if no TAF data was available
-   */
-  bool GetTAF(unsigned index, TAF &taf) const;
-
-  /**
-   * Transfers the downloaded TAF into the given reference if available
-   * @param code Four letter code of the station/airport (upper case)
-   * @param metar Destination TAF struct
-   * @return True if the data was available,
-   * False if no TAF data was available
-   */
-  bool GetTAF(const char *code, TAF &taf) const;
-
-  /**
-   * Attempts to download new data for the given station
-   * @param index Index of the station in the array
-   * @return True if the data was downloaded successfully
-   */
-  bool UpdateStation(unsigned index, JobRunner &runner);
-
-  /**
-   * Attempts to download new data for the given station
-   * @param code Four letter code of the station/airport (upper case)
-   * @return True if the data was downloaded successfully
-   */
-  bool UpdateStation(const char *code, JobRunner &runner);
-#ifdef _UNICODE
-  bool UpdateStation(const TCHAR *code, JobRunner &runner);
+  iterator AddStation(const TCHAR *code);
 #endif
 
   /**

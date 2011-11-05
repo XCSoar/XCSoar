@@ -33,10 +33,10 @@ Copyright_License {
 using namespace std;
 
 static void
-DisplayMETAR(const NOAAStore &store, unsigned index)
+DisplayMETAR(const NOAAStore::Item &station)
 {
   METAR metar;
-  if (!store.GetMETAR(index, metar)) {
+  if (!station.GetMETAR(metar)) {
     cout << "METAR Download failed!" << endl;
     return;
   }
@@ -57,10 +57,10 @@ DisplayMETAR(const NOAAStore &store, unsigned index)
 }
 
 static void
-DisplayTAF(const NOAAStore &store, unsigned index)
+DisplayTAF(const NOAAStore::Item &station)
 {
   TAF taf;
-  if (!store.GetTAF(index, taf)) {
+  if (!station.GetTAF(taf)) {
     cout << "TAF Download failed!" << endl;
     return;
   }
@@ -101,11 +101,11 @@ main(int argc, char *argv[])
   ConsoleJobRunner runner;
   store.Update(runner);
 
-  for (unsigned i = 0; i < store.Count(); i++) {
+  for (auto i = store.begin(), end = store.end(); i != end; ++i) {
     cout << "---" << endl;
-    cout << "Station " << store.GetCode(i) << ":" << endl;
-    DisplayMETAR(store, i);
-    DisplayTAF(store, i);
+    cout << "Station " << i->code << ":" << endl;
+    DisplayMETAR(*i);
+    DisplayTAF(*i);
   }
 
   Net::Deinitialise();
