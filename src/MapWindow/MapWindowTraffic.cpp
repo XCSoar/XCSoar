@@ -32,6 +32,7 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Look/TrafficLook.hpp"
+#include "Renderer/TrafficRenderer.hpp"
 
 #include <stdio.h>
 
@@ -59,9 +60,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
   // the pilot)
   if (projection.GetMapScale() > fixed_int_constant(7300))
     return;
-
-  // Create point array that will form that arrow polygon
-  RasterPoint Arrow[5];
 
   // Circle through the FLARM targets
   for (auto it = flarm.traffic.begin(), end = flarm.traffic.end();
@@ -112,41 +110,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
       }
     }
 
-    // Fill the Arrow array with a normal arrow pointing north
-    Arrow[0].x = -4;
-    Arrow[0].y = 6;
-    Arrow[1].x = 0;
-    Arrow[1].y = -8;
-    Arrow[2].x = 4;
-    Arrow[2].y = 6;
-    Arrow[3].x = 0;
-    Arrow[3].y = 3;
-    Arrow[4].x = -4;
-    Arrow[4].y = 6;
-
-    // Select brush depending on AlarmLevel
-    switch (traffic.alarm_level) {
-    case FlarmTraffic::ALARM_LOW:
-      canvas.select(traffic_look.warning_brush);
-      break;
-    case FlarmTraffic::ALARM_IMPORTANT:
-    case FlarmTraffic::ALARM_URGENT:
-      canvas.select(traffic_look.alarm_brush);
-      break;
-    case FlarmTraffic::ALARM_NONE:
-      canvas.select(traffic_look.safe_brush);
-      break;
-    }
-
-    // Select black pen
-    canvas.black_pen();
-
-    // Rotate and shift the arrow to the right position and angle
-    PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                       traffic.track - projection.GetScreenAngle());
-
-    // Draw the arrow
-    canvas.polygon(Arrow, 5);
+    TrafficRenderer::Draw(canvas, traffic_look, traffic,
+                          traffic.track - projection.GetScreenAngle(), sc);
   }
 }
 

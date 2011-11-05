@@ -44,6 +44,7 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "Math/Screen.hpp"
 #include "Look/TrafficLook.hpp"
+#include "Renderer/TrafficRenderer.hpp"
 
 #include <cstdio>
 
@@ -242,45 +243,10 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
                      (PixelScalar)(rc.top + line_height / 2) };
 
-  // Create point array that will form that arrow polygon
-  RasterPoint Arrow[5];
+  // Render the representation of the traffic icon
+  TrafficRenderer::Draw(canvas, traffic_look, traffic, traffic.track, pt);
 
-  // Fill the Arrow array with a normal arrow pointing north
-  Arrow[0].x = -4;
-  Arrow[0].y = 6;
-  Arrow[1].x = 0;
-  Arrow[1].y = -8;
-  Arrow[2].x = 4;
-  Arrow[2].y = 6;
-  Arrow[3].x = 0;
-  Arrow[3].y = 3;
-  Arrow[4].x = -4;
-  Arrow[4].y = 6;
-
-  // Select brush depending on AlarmLevel
-  switch (traffic.alarm_level) {
-  case FlarmTraffic::ALARM_LOW:
-    canvas.select(traffic_look.warning_brush);
-    break;
-  case FlarmTraffic::ALARM_IMPORTANT:
-  case FlarmTraffic::ALARM_URGENT:
-    canvas.select(traffic_look.alarm_brush);
-    break;
-  case FlarmTraffic::ALARM_NONE:
-    canvas.select(traffic_look.safe_brush);
-    break;
-  }
-
-  // Select black pen
-  canvas.black_pen();
-
-  // Rotate and shift the arrow to the right position and angle
-  PolygonRotateShift(Arrow, 5, pt.x, pt.y,
-                     traffic.track);
-
-  // Draw the arrow
-  canvas.polygon(Arrow, 5);
-
+  // Now render the text information
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
   canvas.set_text_color(COLOR_BLACK);
