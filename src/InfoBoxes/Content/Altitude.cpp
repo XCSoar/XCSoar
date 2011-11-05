@@ -290,7 +290,6 @@ InfoBoxContentAltitude::PanelContent Panels[] = {
 static gcc_constexpr_data
 InfoBoxContentAltitude::DialogContent dlgContent = {
   ARRAY_SIZE(Panels), &Panels[0],
-  &CallBackTable[0],
 };
 
 const InfoBoxContentAltitude::DialogContent *

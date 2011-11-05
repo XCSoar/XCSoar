@@ -67,7 +67,7 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
 
   const PixelRect targetRect = InfoBoxManager::layout.remaining;
 
-  wf = LoadDialog(dlgContent->CallBackTable, parent,
+  wf = LoadDialog(NULL, parent,
                   _T("IDR_XML_INFOBOXACCESS"), &targetRect);
 
   assert(wf != NULL);
@@ -96,7 +96,7 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
   }
 
   Window* wClose =
-    dlgInfoBoxAccess::pnlCloseLoad(parent, wTabBar, wf, dlgContent->CallBackTable);
+    dlgInfoBoxAccess::pnlCloseLoad(parent, wTabBar, wf);
   assert(wClose);
   wTabBar->AddClient(wClose, _("Close"), false, NULL, NULL,  dlgInfoBoxAccess::pnlCloseOnTabPreShow,
                                                  NULL, dlgInfoBoxAccess::pnlCloseOnTabReClick);
@@ -148,8 +148,7 @@ dlgInfoBoxAccess::pnlCloseOnTabPreShow(TabBarControl::EventType EventType)
 
 Window*
 dlgInfoBoxAccess::pnlCloseLoad(gcc_unused SingleWindow &parent, TabBarControl* wTabBar,
-                               WndForm* _wf,
-                               const CallBackTableEntry *CallBackTable)
+                               WndForm* _wf)
 {
   assert(wTabBar);
 
@@ -157,7 +156,7 @@ dlgInfoBoxAccess::pnlCloseLoad(gcc_unused SingleWindow &parent, TabBarControl* w
   wf = _wf;
 
   Window *wInfoBoxAccessClose =
-      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXACCESSCLOSE"));
+      LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_INFOBOXACCESSCLOSE"));
   assert(wInfoBoxAccessClose);
 
   return wInfoBoxAccessClose;

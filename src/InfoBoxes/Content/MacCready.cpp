@@ -69,7 +69,7 @@ InfoBoxContentMacCready::PnlEditLoad(SingleWindow &parent, TabBarControl* wTabBa
   InfoBoxID = id;
 
   Window *wInfoBoxAccessEdit =
-      LoadWindow(dlgContent.CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXMACCREADYEDIT"));
+      LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_INFOBOXMACCREADYEDIT"));
   assert(wInfoBoxAccessEdit);
 
   return wInfoBoxAccessEdit;
@@ -120,7 +120,7 @@ InfoBoxContentMacCready::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabB
   InfoBoxID = id;
 
   Window *wInfoBoxAccessSetup =
-      LoadWindow(dlgContent.CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXMACCREADYSETUP"));
+      LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_INFOBOXMACCREADYSETUP"));
   assert(wInfoBoxAccessSetup);
 
   return wInfoBoxAccessSetup;
@@ -186,7 +186,6 @@ static gcc_constexpr_data CallBackTableEntry call_back_table[] = {
 
 const InfoBoxContentMacCready::DialogContent InfoBoxContentMacCready::dlgContent = {
   ARRAY_SIZE(panels), &panels[0],
-  &call_back_table[0],
 };
 
 const InfoBoxContentMacCready::DialogContent*

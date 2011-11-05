@@ -297,7 +297,6 @@ InfoBoxContentWind::PanelContent (
 
 const InfoBoxContentWind::DialogContent InfoBoxContentWind::dlgContent = {
   ARRAY_SIZE(Panels), &Panels[0],
-  &CallBackTable[0],
 };
 
 const InfoBoxContentWind::DialogContent *
