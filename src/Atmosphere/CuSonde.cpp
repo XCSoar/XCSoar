@@ -76,10 +76,10 @@ CuSonde::setForecastTemperature(fixed val)
     cslevels[level].updateThermalIndex((unsigned short)level, false);
 
     // determine to which level measurements are available
-    if (cslevels[level].nmeasurements)
+    if (!cslevels[level].empty())
       zlevel = level;
 
-    if ((cslevels[level].nmeasurements == 0) && (zlevel))
+    if (cslevels[level].empty() && zlevel)
       break;
   }
 
@@ -176,9 +176,9 @@ CuSonde::updateMeasurements(const NMEAInfo &basic,
 void
 CuSonde::findThermalHeight(unsigned short level)
 {
-  if (cslevels[level + 1].nmeasurements == 0)
+  if (cslevels[level + 1].empty())
     return;
-  if (cslevels[level].nmeasurements == 0)
+  if (cslevels[level].empty())
     return;
 
   // Delta of ThermalIndex
@@ -198,7 +198,7 @@ CuSonde::findThermalHeight(unsigned short level)
 
   if ((dlevel > fixed_one)
       && (level + 2u < NUM_LEVELS)
-      && (cslevels[level + 2].nmeasurements > 0))
+      && !cslevels[level + 2].empty())
       // estimated point should be in next level.
       return;
 
@@ -223,9 +223,9 @@ CuSonde::findThermalHeight(unsigned short level)
 void
 CuSonde::findCloudBase(unsigned short level)
 {
-  if (cslevels[level + 1].nmeasurements == 0)
+  if (cslevels[level + 1].empty())
     return;
-  if (cslevels[level].nmeasurements == 0)
+  if (cslevels[level].empty())
     return;
 
   fixed dti = (cslevels[level + 1].tempDry - cslevels[level + 1].dewpoint)
@@ -245,7 +245,7 @@ CuSonde::findCloudBase(unsigned short level)
 
   if ((dlevel > fixed_one)
       && (level + 2u < NUM_LEVELS)
-      && (cslevels[level + 2].nmeasurements > 0))
+      && !cslevels[level + 2].empty())
     // estimated point should be in next level.
     return;
 
@@ -277,7 +277,7 @@ CuSonde::Level::updateTemps(fixed rh, fixed t)
   adewpoint = logEx * fixed(237.3) / (fixed(7.5) - logEx);
 
   // update statistics
-  if (nmeasurements == 0) {
+  if (empty()) {
     dewpoint = adewpoint;
     airTemp = t;
   } else {

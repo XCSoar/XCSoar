@@ -532,17 +532,18 @@ FlightStatisticsRenderer::RenderTemperature(Canvas &canvas,
 
   // find range for scaling of graph
   for (unsigned i = 0; i < CuSonde::NUM_LEVELS - 1u; i++) {
-    if (CuSonde::cslevels[i].nmeasurements) {
-      hmin = min(hmin, (int)i);
-      hmax = max(hmax, (int)i);
+    if (CuSonde::cslevels[i].empty())
+      continue;
 
-      tmin = min(tmin, min(CuSonde::cslevels[i].tempDry,
-                           min(CuSonde::cslevels[i].airTemp,
-                               CuSonde::cslevels[i].dewpoint)));
-      tmax = max(tmax, max(CuSonde::cslevels[i].tempDry,
-                           max(CuSonde::cslevels[i].airTemp,
-                               CuSonde::cslevels[i].dewpoint)));
-    }
+    hmin = min(hmin, (int)i);
+    hmax = max(hmax, (int)i);
+
+    tmin = min(tmin, min(CuSonde::cslevels[i].tempDry,
+                         min(CuSonde::cslevels[i].airTemp,
+                             CuSonde::cslevels[i].dewpoint)));
+    tmax = max(tmax, max(CuSonde::cslevels[i].tempDry,
+                         max(CuSonde::cslevels[i].airTemp,
+                             CuSonde::cslevels[i].dewpoint)));
   }
 
   if (hmin >= hmax) {
@@ -562,37 +563,37 @@ FlightStatisticsRenderer::RenderTemperature(Canvas &canvas,
   int ipos = 0;
 
   for (unsigned i = 0; i < CuSonde::NUM_LEVELS - 1u; i++) {
-    if (CuSonde::cslevels[i].nmeasurements
-        && CuSonde::cslevels[i + 1].nmeasurements) {
+    if (CuSonde::cslevels[i].empty() ||
+        CuSonde::cslevels[i + 1].empty())
+      continue;
 
-      ipos++;
+    ipos++;
 
-      chart.DrawLine(CuSonde::cslevels[i].tempDry, fixed(i),
-                     CuSonde::cslevels[i + 1].tempDry, fixed(i + 1),
-                     ChartLook::STYLE_REDTHICK);
+    chart.DrawLine(CuSonde::cslevels[i].tempDry, fixed(i),
+                   CuSonde::cslevels[i + 1].tempDry, fixed(i + 1),
+                   ChartLook::STYLE_REDTHICK);
 
-      chart.DrawLine(CuSonde::cslevels[i].airTemp, fixed(i),
-                     CuSonde::cslevels[i + 1].airTemp, fixed(i + 1),
-                     ChartLook::STYLE_MEDIUMBLACK);
+    chart.DrawLine(CuSonde::cslevels[i].airTemp, fixed(i),
+                   CuSonde::cslevels[i + 1].airTemp, fixed(i + 1),
+                   ChartLook::STYLE_MEDIUMBLACK);
 
-      chart.DrawLine(CuSonde::cslevels[i].dewpoint, fixed(i),
-                     CuSonde::cslevels[i + 1].dewpoint, fixed(i + 1),
-                     ChartLook::STYLE_BLUETHIN);
+    chart.DrawLine(CuSonde::cslevels[i].dewpoint, fixed(i),
+                   CuSonde::cslevels[i + 1].dewpoint, fixed(i + 1),
+                   ChartLook::STYLE_BLUETHIN);
 
-      if (ipos > 2) {
-        if (!labelDry) {
-          chart.DrawLabel(_T("DALR"),
-                          CuSonde::cslevels[i + 1].tempDry, fixed(i));
-          labelDry = true;
-        } else if (!labelAir) {
-          chart.DrawLabel(_T("Air"),
-                          CuSonde::cslevels[i + 1].airTemp, fixed(i));
-          labelAir = true;
-        } else if (!labelDew) {
-          chart.DrawLabel(_T("Dew"),
-                          CuSonde::cslevels[i + 1].dewpoint, fixed(i));
-          labelDew = true;
-        }
+    if (ipos > 2) {
+      if (!labelDry) {
+        chart.DrawLabel(_T("DALR"),
+                        CuSonde::cslevels[i + 1].tempDry, fixed(i));
+        labelDry = true;
+      } else if (!labelAir) {
+        chart.DrawLabel(_T("Air"),
+                        CuSonde::cslevels[i + 1].airTemp, fixed(i));
+        labelAir = true;
+      } else if (!labelDew) {
+        chart.DrawLabel(_T("Dew"),
+                        CuSonde::cslevels[i + 1].dewpoint, fixed(i));
+        labelDew = true;
       }
     }
   }

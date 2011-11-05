@@ -60,6 +60,10 @@ namespace CuSonde
     fixed thermalHeight;
     /** Estimated CloudBase with data of this level */
     fixed cloudBase;
+
+    bool empty() const {
+      return nmeasurements == 0;
+    }
   };
 
   /** Expected temperature maximum on the ground */
