@@ -521,9 +521,7 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable,
   fine = StringToIntDflt(node.getAttribute(_T("Fine")), 0);
 
   DataField::DataAccessCallback_t callback = (DataField::DataAccessCallback_t)
-    CallBackLookup(LookUpTable,
-                   StringToStringDflt(node.getAttribute(_T("OnDataAccess")),
-                                      NULL));
+    GetCallBack(LookUpTable, node, _T("OnDataAccess"));
 
   if (_tcsicmp(data_type, _T("enum")) == 0)
     return new DataFieldEnum(callback);
