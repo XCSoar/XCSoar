@@ -28,6 +28,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "GestureManager.hpp"
 #include "Renderer/ThermalBandRenderer.hpp"
+#include "Renderer/FinalGlideBarRenderer.hpp"
 #include "DisplayMode.hpp"
 
 struct Look;
@@ -116,6 +117,7 @@ class GlueMapWindow : public MapWindow {
 #endif
 
   ThermalBandRenderer thermal_band_renderer;
+  FinalGlideBarRenderer final_glide_bar_renderer;
 
   timer_t map_item_timer;
 

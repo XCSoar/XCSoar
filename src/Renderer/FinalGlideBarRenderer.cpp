@@ -32,7 +32,8 @@ Copyright_License {
 #include "Util/Macros.hpp"
 
 void
-FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc, const DerivedInfo &calculated, const TaskLook &task_look)
+FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
+                            const DerivedInfo &calculated) const
 {
   RasterPoint GlideBar[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }

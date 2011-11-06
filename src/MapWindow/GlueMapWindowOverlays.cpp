@@ -147,7 +147,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 void
 GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
 {
-  FinalGlideBarRenderer::Draw(canvas, rc, Calculated(), task_look);
+  final_glide_bar_renderer.Draw(canvas, rc, Calculated());
 }
 
 void

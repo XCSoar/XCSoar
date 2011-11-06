@@ -30,9 +30,15 @@ class Canvas;
 struct DerivedInfo;
 struct TaskLook;
 
-namespace FinalGlideBarRenderer
-{
-  void Draw(Canvas &canvas, const PixelRect &rc, const DerivedInfo &calculated, const TaskLook &task_look);
-}
+class FinalGlideBarRenderer {
+  const TaskLook &task_look;
+
+public:
+  FinalGlideBarRenderer(const TaskLook &_task_look)
+    :task_look(_task_look) {}
+
+  void Draw(Canvas &canvas, const PixelRect &rc,
+            const DerivedInfo &calculated) const;
+};
 
 #endif

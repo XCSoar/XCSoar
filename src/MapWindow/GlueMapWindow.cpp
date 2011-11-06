@@ -36,6 +36,7 @@ GlueMapWindow::GlueMapWindow(const Look &look)
    ignore_single_click(false),
    DisplayMode(DM_CRUISE),
    thermal_band_renderer(look.thermal_band, look.chart),
+   final_glide_bar_renderer(look.task),
    map_item_timer(0)
 {
 }
