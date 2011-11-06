@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "CompassRenderer.hpp"
+#include "Look/MapLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Screen.hpp"
@@ -46,8 +46,8 @@ CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 {
   RasterPoint arrow[5] = { { 0, -13 }, { -6, 10 }, { 0, 4 }, { 6, 10 }, { 0, -13 } };
 
-  canvas.select(Graphics::hpCompass);
-  canvas.select(Graphics::hbCompass);
+  canvas.select(look.hpCompass);
+  canvas.select(look.hbCompass);
 
   // North arrow
   PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos.x, pos.y, -screen_angle);

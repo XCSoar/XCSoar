@@ -42,6 +42,7 @@ Copyright_License {
 #include "Compiler.h"
 #include <vector>
 
+struct MapLook;
 struct WaypointLook;
 struct TaskLook;
 struct AircraftLook;
@@ -77,6 +78,8 @@ class MapWindow :
   LabelBlock label_block;
 
 protected:
+  const MapLook &look;
+
   /**
    * What object does the projection's screen origin follow?
    */
@@ -171,7 +174,8 @@ protected:
   friend class DrawThread;
 
 public:
-  MapWindow(const WaypointLook &waypoint_look,
+  MapWindow(const MapLook &look,
+            const WaypointLook &waypoint_look,
             const AirspaceLook &airspace_look,
             const TrailLook &trail_look,
             const TaskLook &task_look,

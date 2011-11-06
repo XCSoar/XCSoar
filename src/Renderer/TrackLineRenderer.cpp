@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "TrackLineRenderer.hpp"
+#include "Look/MapLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Graphics.hpp"
 #include "Math/Angle.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
@@ -40,7 +40,7 @@ TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   end.x = pos.x + iround(x * fixed_int_constant(400));
   end.y = pos.y - iround(y * fixed_int_constant(400));
 
-  canvas.select(Graphics::hpTrackBearingLine);
+  canvas.select(look.hpTrackBearingLine);
   canvas.line(pos, end);
 }
 

@@ -21,30 +21,48 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_WIND_ARROW_RENDERER_HPP
-#define XCSOAR_WIND_ARROW_RENDERER_HPP
+#ifndef XCSOAR_MAP_LOOK_HPP
+#define XCSOAR_MAP_LOOK_HPP
 
-#include "Screen/Point.hpp"
+#include "Screen/Icon.hpp"
+#include "Screen/Bitmap.hpp"
+#include "Screen/Pen.hpp"
+#include "Screen/Brush.hpp"
+#include "Screen/Features.hpp"
 
-class Canvas;
-class Angle;
-struct MapLook;
-struct SpeedVector;
-struct DerivedInfo;
-struct SETTINGS_MAP;
+struct WaypointRendererSettings;
 
-class WindArrowRenderer {
-  const MapLook &look;
+struct MapLook {
+#ifdef HAVE_HATCHED_BRUSH
+  Bitmap hAboveTerrainBitmap;
+  Brush hAboveTerrainBrush;
+#endif
 
-public:
-  WindArrowRenderer(const MapLook &_look):look(_look) {}
+  MaskedIcon hTerrainWarning;
 
-  void Draw(Canvas &canvas, const Angle screen_angle, const SpeedVector wind,
-            const RasterPoint pos, const PixelRect rc, bool with_tail);
+  Pen hpWind, hpWindTail;
+  Brush hbWind;
 
-  void Draw(Canvas &canvas, const Angle screen_angle, const RasterPoint pos,
-            const PixelRect rc, const DerivedInfo &calculated,
-            const SETTINGS_MAP &settings);
+  Pen hpCompass;
+  Brush hbCompass;
+
+  Pen hpTerrainLine;
+  Pen hpTerrainLineThick;
+
+  Pen hpTrackBearingLine;
+
+  Pen ContestPen[3];
+
+  MaskedIcon hBmpThermalSource;
+
+  MaskedIcon hBmpTrafficSafe;
+  MaskedIcon hBmpTrafficWarning;
+  MaskedIcon hBmpTrafficAlarm;
+
+  MaskedIcon hBmpMapScaleLeft;
+  MaskedIcon hBmpMapScaleRight;
+
+  void Initialise();
 };
 
 #endif

@@ -36,14 +36,16 @@ Copyright_License {
 /**
  * Constructor of the MapWindow class
  */
-MapWindow::MapWindow(const WaypointLook &_waypoint_look,
+MapWindow::MapWindow(const MapLook &_look,
+                     const WaypointLook &_waypoint_look,
                      const AirspaceLook &_airspace_look,
                      const TrailLook &_trail_look,
                      const TaskLook &_task_look,
                      const AircraftLook &_aircraft_look,
                      const TrafficLook &_traffic_look,
                      const MarkerLook &_marker_look)
-  :follow_mode(FOLLOW_SELF),
+  :look(_look),
+   follow_mode(FOLLOW_SELF),
    way_points(NULL),
    topography(NULL), topography_renderer(NULL),
    terrain(NULL),

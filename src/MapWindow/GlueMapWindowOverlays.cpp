@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "GlueMapWindow.hpp"
+#include "Look/MapLook.hpp"
 #include "Look/TaskLook.hpp"
 #include "Screen/Icon.hpp"
 #include "Language/Language.hpp"
@@ -100,7 +101,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
   }
 
   // draw flight mode
-  MaskedIcon *bmp;
+  const MaskedIcon *bmp;
 
   if (task != NULL && (task->GetMode() == TaskManager::MODE_ABORT))
     bmp = &Graphics::hAbort;
@@ -127,14 +128,14 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 
   switch (flarm.alarm_level) {
   case 0:
-    bmp = &Graphics::hBmpTrafficSafe;
+    bmp = &look.hBmpTrafficSafe;
     break;
   case 1:
-    bmp = &Graphics::hBmpTrafficWarning;
+    bmp = &look.hBmpTrafficWarning;
     break;
   case 2:
   case 3:
-    bmp = &Graphics::hBmpTrafficAlarm;
+    bmp = &look.hBmpTrafficAlarm;
     break;
   };
 
@@ -177,8 +178,8 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
               rc.bottom - Fonts::MapBold.GetAscentHeight() - Layout::Scale(1),
               buffer);
 
-  Graphics::hBmpMapScaleLeft.Draw(canvas, 0, rc.bottom - Height);
-  Graphics::hBmpMapScaleRight.Draw(canvas, Layout::Scale(9) + TextSize.cx,
+  look.hBmpMapScaleLeft.Draw(canvas, 0, rc.bottom - Height);
+  look.hBmpMapScaleRight.Draw(canvas, Layout::Scale(9) + TextSize.cx,
                                    rc.bottom - Height);
 
   buffer[0] = '\0';
@@ -241,7 +242,7 @@ GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
     if (thermal_locator.estimate_valid) {
       RasterPoint sc;
       if (projection.GeoToScreenIfVisible(thermal_locator.estimate_location, sc)) {
-        Graphics::hBmpThermalSource.Draw(canvas, sc);
+        look.hBmpThermalSource.Draw(canvas, sc);
       }
     }
   } else {

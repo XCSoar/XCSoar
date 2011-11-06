@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
+#include "Look/MapLook.hpp"
 #include "Math/Earth.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Layout.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
@@ -69,6 +69,6 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
     // draw if it is in the field of view
     RasterPoint pt;
     if (render_projection.GeoToScreenIfVisible(loc, pt))
-      Graphics::hBmpThermalSource.Draw(canvas, pt);
+      look.hBmpThermalSource.Draw(canvas, pt);
   }
 }

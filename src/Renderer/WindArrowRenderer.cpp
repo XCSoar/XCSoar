@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "WindArrowRenderer.hpp"
+#include "Look/MapLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
@@ -43,8 +43,8 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   canvas.select(Fonts::MapBold);
   UPixelScalar text_width = canvas.text_size(_T("99")).cx / 2;
 
-  canvas.select(Graphics::hpWind);
-  canvas.select(Graphics::hbWind);
+  canvas.select(look.hpWind);
+  canvas.select(look.hbWind);
 
   PixelScalar wmag = iround(4 * wind.norm);
 
@@ -76,7 +76,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
     PolygonRotateShift(tail, 2, pos.x, pos.y, wind.bearing - screen_angle);
 
     // optionally draw dashed line
-    canvas.select(Graphics::hpWindTail);
+    canvas.select(look.hpWindTail);
     canvas.line(tail[0], tail[1]);
   }
 

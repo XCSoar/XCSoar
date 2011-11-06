@@ -30,6 +30,7 @@ Copyright_License {
 #include "ChartLook.hpp"
 #include "ThermalBandLook.hpp"
 #include "TraceHistoryLook.hpp"
+#include "MapLook.hpp"
 #include "WaypointLook.hpp"
 #include "AirspaceLook.hpp"
 #include "CrossSectionLook.hpp"
@@ -51,6 +52,7 @@ struct Look {
   ChartLook chart;
   ThermalBandLook thermal_band;
   TraceHistoryLook trace_history;
+  MapLook map;
   WaypointLook waypoint;
   AirspaceLook airspace;
   CrossSectionLook cross_section;

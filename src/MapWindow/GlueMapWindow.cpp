@@ -28,7 +28,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 
 GlueMapWindow::GlueMapWindow(const Look &look)
-  :MapWindow(look.waypoint, look.airspace, look.trail, look.task,
+  :MapWindow(look.map, look.waypoint, look.airspace, look.trail, look.task,
              look.aircraft, look.traffic, look.marker),
    logger(NULL),
    idle_robin(2),

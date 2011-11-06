@@ -28,18 +28,23 @@ Copyright_License {
 
 class Canvas;
 class Angle;
+struct MapLook;
 struct NMEAInfo;
 struct DerivedInfo;
 struct SETTINGS_MAP;
 
-namespace TrackLineRenderer
-{
+class TrackLineRenderer {
+  const MapLook &look;
+
+public:
+  TrackLineRenderer(const MapLook &_look):look(_look) {}
+
   void Draw(Canvas &canvas, const Angle screen_angle, const Angle track_angle,
             const RasterPoint pos);
 
   void Draw(Canvas &canvas, const Angle screen_angle,
             const RasterPoint pos, const NMEAInfo &basic,
             const DerivedInfo &calculated, const SETTINGS_MAP &settings);
-}
+};
 
 #endif

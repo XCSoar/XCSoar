@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "FlightStatisticsRenderer.hpp"
 #include "FlightStatistics.hpp"
+#include "Look/MapLook.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Fonts.hpp"
@@ -352,7 +353,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
 
   for (unsigned i=0; i< 3; ++i) {
     if (contest.GetResult(i).IsDefined()) {
-      canvas.select(Graphics::ContestPen[i]);
+      canvas.select(map_look.ContestPen[i]);
       trail_renderer.Draw(canvas, proj, contest.GetSolution(i));
     }
   }

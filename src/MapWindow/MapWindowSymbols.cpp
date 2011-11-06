@@ -31,16 +31,22 @@ void
 MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
                     const PixelRect &rc) const
 {
-  if (!IsPanning())
-    WindArrowRenderer::Draw(canvas, render_projection.GetScreenAngle(),
-                            Start, rc, Calculated(), SettingsMap());
+  if (IsPanning())
+    return;
+
+  WindArrowRenderer wind_arrow_renderer(look);
+  wind_arrow_renderer.Draw(canvas, render_projection.GetScreenAngle(),
+                           Start, rc, Calculated(), SettingsMap());
 }
 
 void
 MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const
 {
-  if (compass_visible)
-    CompassRenderer::Draw(canvas, render_projection.GetScreenAngle(), rc);
+  if (!compass_visible)
+    return;
+
+  CompassRenderer compass_renderer(look);
+  compass_renderer.Draw(canvas, render_projection.GetScreenAngle(), rc);
 }
 
 void
@@ -55,7 +61,10 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) c
 void
 MapWindow::DrawTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
-  if (Basic().location_available)
-    TrackLineRenderer::Draw(canvas, render_projection.GetScreenAngle(),
-                            aircraft_pos, Basic(), Calculated(), SettingsMap());
+  if (!Basic().location_available)
+    return;
+
+  TrackLineRenderer track_line_renderer(look);
+  track_line_renderer.Draw(canvas, render_projection.GetScreenAngle(),
+                           aircraft_pos, Basic(), Calculated(), SettingsMap());
 }

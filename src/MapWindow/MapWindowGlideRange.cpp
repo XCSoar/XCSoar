@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
+#include "Look/MapLook.hpp"
 #include "Geo/GeoClip.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Icon.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
 
@@ -326,11 +326,11 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     buffer.set_text_color(Color(0xd0, 0xd0, 0xd0));
 
     // Paint the whole buffer canvas with a pattern brush (small dots)
-    buffer.clear(Graphics::hAboveTerrainBrush);
+    buffer.clear(look.hAboveTerrainBrush);
 
     // Select the TerrainLine pen
     buffer.hollow_brush();
-    buffer.select(Graphics::hpTerrainLineThick);
+    buffer.select(look.hpTerrainLineThick);
     buffer.set_background_color(Color(0xf0, 0xf0, 0xf0));
 
     // Draw the TerrainLine polygons
@@ -360,11 +360,11 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
 #ifdef ENABLE_OPENGL
     visitor.fans.Prepare();
-    Graphics::hpTerrainLine.Set();
+    look.hpTerrainLine.Set();
 #else
     // Select the TerrainLine pen
     canvas.hollow_brush();
-    canvas.select(Graphics::hpTerrainLine);
+    canvas.select(look.hpTerrainLine);
     canvas.background_opaque();
     canvas.set_background_color(COLOR_WHITE);
 
@@ -396,7 +396,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   glStencilFunc(GL_NOTEQUAL, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-  Graphics::hpTerrainLineThick.Set();
+  look.hpTerrainLineThick.Set();
   visitor.fans.DrawOutline(canvas);
 
   glDisable(GL_STENCIL_TEST);
@@ -411,7 +411,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   // Select the TerrainLine pen
   buffer.hollow_brush();
-  buffer.select(Graphics::hpTerrainLineThick);
+  buffer.select(look.hpTerrainLineThick);
   buffer.background_opaque();
   buffer.set_background_color(Color(0xf0, 0xf0, 0xf0));
 
@@ -447,6 +447,6 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
   RasterPoint sc;
   if (render_projection.GeoToScreenIfVisible(Calculated().terrain_warning_location,
                                              sc))
-    Graphics::hTerrainWarning.Draw(canvas, sc.x, sc.y);
+    look.hTerrainWarning.Draw(canvas, sc.x, sc.y);
 }
 

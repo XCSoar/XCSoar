@@ -55,6 +55,7 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "Operation.hpp"
+#include "Look/MapLook.hpp"
 #include "Look/WaypointLook.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Look/TrailLook.hpp"
@@ -115,14 +116,15 @@ public:
   };
 
 public:
-  TestWindow(const WaypointLook &waypoint_look,
+  TestWindow(const MapLook &map_look,
+             const WaypointLook &waypoint_look,
              const AirspaceLook &airspace_look,
              const TrailLook &trail_look,
              const TaskLook &task_look,
              const AircraftLook &aircraft_look,
              const TrafficLook &traffic_look,
              const MarkerLook &marker_look)
-    :map(waypoint_look, airspace_look, trail_look,
+    :map(map_look, waypoint_look, airspace_look, trail_look,
          task_look, aircraft_look, traffic_look, marker_look) {}
 
 #ifdef USE_GDI
@@ -294,6 +296,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   settings_map.SetDefaults();
   SetDefaults(settings_map);
 
+  MapLook *map_look = new MapLook();
+  map_look->Initialise();
+
   WaypointLook *waypoint_look = new WaypointLook();
   waypoint_look->Initialise(settings_map.waypoint);
 
@@ -315,7 +320,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   MarkerLook *marker_look = new MarkerLook();
   marker_look->Initialise();
 
-  TestWindow window(*waypoint_look, *airspace_look, *trail_look, *task_look,
+  TestWindow window(*map_look, *waypoint_look, *airspace_look,
+                    *trail_look, *task_look,
                     *aircraft_look, *traffic_look, *marker_look);
   window.set(0, 0, 640, 480);
 

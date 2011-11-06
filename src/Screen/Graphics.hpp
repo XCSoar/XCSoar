@@ -41,33 +41,9 @@ namespace Graphics {
   void Initialise();
   void Deinitialise();
 
-#ifdef HAVE_HATCHED_BRUSH
-  extern Bitmap hAboveTerrainBitmap;
-  extern Brush hAboveTerrainBrush;
-#endif
-
-  extern MaskedIcon hTerrainWarning;
   extern MaskedIcon hLogger, hLoggerOff;
   extern MaskedIcon hCruise, hClimb, hFinalGlide, hAbort;
   extern MaskedIcon hGPSStatus1, hGPSStatus2;
-
-  extern Pen hpWind, hpWindTail;
-  extern Pen hpCompass;
-  extern Pen hpTerrainLine;
-  extern Pen hpTerrainLineThick;
-  extern Pen hpTrackBearingLine;
-  extern Pen ContestPen[3];
-
-  extern Brush hbCompass;
-  extern Brush hbWind;
-
-  extern MaskedIcon hBmpThermalSource;
-  extern MaskedIcon hBmpTrafficSafe;
-  extern MaskedIcon hBmpTrafficWarning;
-  extern MaskedIcon hBmpTrafficAlarm;
-
-  extern MaskedIcon hBmpMapScaleLeft;
-  extern MaskedIcon hBmpMapScaleRight;
 
   // task dialog
   extern Bitmap hBmpTabTask;

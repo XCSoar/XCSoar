@@ -26,13 +26,18 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
+struct MapLook;
 class Canvas;
 class Angle;
 
-namespace CompassRenderer
-{
+class CompassRenderer {
+  const MapLook &look;
+
+public:
+  CompassRenderer(const MapLook &_look):look(_look) {}
+
   void Draw(Canvas &canvas, const Angle screen_angle, const RasterPoint pos);
   void Draw(Canvas &canvas, const Angle screen_angle, const PixelRect rc);
-}
+};
 
 #endif

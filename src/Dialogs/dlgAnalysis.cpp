@@ -179,7 +179,7 @@ ChartControl::on_paint(Canvas &canvas)
   // background is painted in the base-class
 
   const FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
-                                    chart_look, airspace_look,
+                                    chart_look, look->map, airspace_look,
                                     aircraft_look, task_look,
                                     look->trail);
 
@@ -279,7 +279,7 @@ Update(void)
   const DerivedInfo &calculated = blackboard->Calculated();
 
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
-                              look->chart, look->airspace,
+                              look->chart, look->map, look->airspace,
                               look->aircraft, look->task,
                               look->trail);
 
