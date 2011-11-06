@@ -30,3 +30,4 @@ tmp/
 test/data/private
 /.project
 /.cproject
+.DS_Store
