@@ -353,16 +353,12 @@ mode=default
 type=key
 data=7
 event=Calculator
-label=$(CheckTaskResumed)
-location=6
 
 #mode=default
 #type=key
 #data=8
 #event=Setup Task
 #event=Mode default
-#label=$(CheckTaskResumed)$(CheckWaypointFile)
-#location=7
 
 mode=default
 type=key
@@ -374,8 +370,6 @@ event=Setup Target
 #data=0
 #event=ArmAdvance show
 #event=ArmAdvance toggle
-#label=$(CheckTaskResumed)$(CheckTask)
-#location=9
 
 
 # ------------

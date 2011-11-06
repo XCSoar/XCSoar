@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <tchar.h>
+#include <string.h>
 
 /**
  * Data of an item in the mode menu.
@@ -42,6 +43,15 @@ public:
   gcc_constexpr_method
   bool defined() const {
     return event > 0;
+  }
+
+  /**
+   * Does this item have a dynamic label?  It may need updates more
+   * often, because the variables that the label depends on may change
+   * at any time.
+   */
+  bool IsDynamic() const {
+    return label != NULL && _tcsstr(label, _T("$(")) != NULL;
   }
 };
 

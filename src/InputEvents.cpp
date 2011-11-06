@@ -364,7 +364,7 @@ InputEvents::setMode(mode mode)
   */
   ButtonLabel::SetLabelText(0, NULL);
 
-  drawButtons(current_mode);
+  drawButtons(current_mode, true);
 }
 
 void
@@ -376,7 +376,7 @@ InputEvents::setMode(const TCHAR *mode)
 }
 
 void
-InputEvents::drawButtons(mode Mode)
+InputEvents::drawButtons(mode Mode, bool full)
 {
   if (!globalRunningEvent.Test())
     return;
@@ -385,7 +385,8 @@ InputEvents::drawButtons(mode Mode)
   for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
     const MenuItem &item = menu[i];
 
-    ButtonLabel::SetLabelText(i, item.label);
+    if (full || item.IsDynamic())
+      ButtonLabel::SetLabelText(i, item.label);
   }
 }
 
@@ -422,7 +423,7 @@ InputEvents::processButton(unsigned bindex)
   processGo(item.event);
 
   // experimental: update button text, macro may change the label
-  if (lastMode == getModeID() && item.label != NULL)
+  if (lastMode == getModeID() && item.IsDynamic())
     drawButtons(lastMode);
 
   return true;
