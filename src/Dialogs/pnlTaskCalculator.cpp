@@ -260,7 +260,7 @@ pnlTaskCalculator::OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &
     canvas.select(Fonts::Title);
     const int textheight = canvas.text_height(message);
 
-    const AirspaceLook &look = CommonInterface::main_window.look->airspace;
+    const AirspaceLook &look = CommonInterface::main_window.look->map.airspace;
     const MaskedIcon *bmp = &look.intercept_icon;
     const int offsetx = bmp->GetSize().cx;
     const int offsety = canvas.get_height() - bmp->GetSize().cy;

@@ -179,9 +179,7 @@ ChartControl::on_paint(Canvas &canvas)
   // background is painted in the base-class
 
   const FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
-                                    chart_look, look->map, airspace_look,
-                                    aircraft_look, task_look,
-                                    look->trail);
+                                    chart_look, look->map);
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -279,9 +277,7 @@ Update(void)
   const DerivedInfo &calculated = blackboard->Calculated();
 
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
-                              look->chart, look->map, look->airspace,
-                              look->aircraft, look->task,
-                              look->trail);
+                              look->chart, look->map);
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -550,7 +546,7 @@ OnCreateCrossSectionControl(ContainerWindow &parent,
                             UPixelScalar width, UPixelScalar height,
                             const WindowStyle style)
 {
-  csw = new CrossSectionControl(look->cross_section, look->airspace,
+  csw = new CrossSectionControl(look->cross_section, look->map.airspace,
                                 look->chart);
   csw->set(parent, left, top, width, height, style);
   csw->set_airspaces(airspaces);
@@ -566,8 +562,8 @@ OnCreateChartControl(ContainerWindow &parent,
                      const WindowStyle style)
 {
   return new ChartControl(parent, left, top, width, height, style,
-                          look->chart, look->airspace, look->aircraft,
-                          look->task,
+                          look->chart, look->map.airspace, look->map.aircraft,
+                          look->map.task,
                           look->thermal_band);
 }
 

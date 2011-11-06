@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
+#include "Look/MapLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyRenderer.hpp"
@@ -37,13 +38,7 @@ Copyright_License {
  * Constructor of the MapWindow class
  */
 MapWindow::MapWindow(const MapLook &_look,
-                     const WaypointLook &_waypoint_look,
-                     const AirspaceLook &_airspace_look,
-                     const TrailLook &_trail_look,
-                     const TaskLook &_task_look,
-                     const AircraftLook &_aircraft_look,
-                     const TrafficLook &_traffic_look,
-                     const MarkerLook &_marker_look)
+                     const TrafficLook &_traffic_look)
   :look(_look),
    follow_mode(FOLLOW_SELF),
    way_points(NULL),
@@ -51,13 +46,10 @@ MapWindow::MapWindow(const MapLook &_look,
    terrain(NULL),
    terrain_radius(fixed_zero),
    weather(NULL),
-   task_look(_task_look),
-   aircraft_look(_aircraft_look),
    traffic_look(_traffic_look),
-   marker_look(_marker_look),
-   way_point_renderer(NULL, _waypoint_look),
-   airspace_renderer(_airspace_look),
-   trail_renderer(_trail_look),
+   way_point_renderer(NULL, look.waypoint),
+   airspace_renderer(look.airspace),
+   trail_renderer(look.trail),
    task(NULL), route_planner(NULL), glide_computer(NULL),
    marks(NULL),
    compass_visible(true)

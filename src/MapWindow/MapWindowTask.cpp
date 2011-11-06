@@ -31,7 +31,7 @@ Copyright_License {
 #include "Renderer/OZRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
-#include "Look/TaskLook.hpp"
+#include "Look/MapLook.hpp"
 
 #include <stdio.h>
 #include <math.h>
@@ -61,11 +61,11 @@ MapWindow::DrawTask(Canvas &canvas)
     RenderTaskPoint::TargetVisibility target_visibility =
         IsNearSelf() ? RenderTaskPoint::ACTIVE : RenderTaskPoint::ALL;
 
-    OZRenderer ozv(task_look, airspace_renderer.GetLook(),
+    OZRenderer ozv(look.task, airspace_renderer.GetLook(),
                               SettingsMap().airspace);
     RenderTaskPoint tpv(canvas,
                         render_projection,
-                        task_look,
+                        look.task,
                         /* we're accessing the OrderedTask here,
                            which may be invalid at this point, but it
                            will be used only if active, so it's ok */
@@ -93,7 +93,7 @@ MapWindow::DrawRoute(Canvas &canvas)
 
   ScreenClosestPoint(p[r_size-1], p[r_size-2], p[r_size-1], &p[r_size-1], Layout::Scale(20));
 
-  canvas.select(task_look.bearing_pen);
+  canvas.select(look.task.bearing_pen);
   canvas.polyline(p, r_size);
 }
 

@@ -56,13 +56,7 @@ Copyright_License {
 #include "IO/ConfiguredFile.hpp"
 #include "Operation.hpp"
 #include "Look/MapLook.hpp"
-#include "Look/WaypointLook.hpp"
-#include "Look/AirspaceLook.hpp"
-#include "Look/TrailLook.hpp"
-#include "Look/TaskLook.hpp"
-#include "Look/AircraftLook.hpp"
 #include "Look/TrafficLook.hpp"
-#include "Look/MarkerLook.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -117,15 +111,8 @@ public:
 
 public:
   TestWindow(const MapLook &map_look,
-             const WaypointLook &waypoint_look,
-             const AirspaceLook &airspace_look,
-             const TrailLook &trail_look,
-             const TaskLook &task_look,
-             const AircraftLook &aircraft_look,
-             const TrafficLook &traffic_look,
-             const MarkerLook &marker_look)
-    :map(map_look, waypoint_look, airspace_look, trail_look,
-         task_look, aircraft_look, traffic_look, marker_look) {}
+             const TrafficLook &traffic_look)
+    :map(map_look, traffic_look) {}
 
 #ifdef USE_GDI
   static bool register_class(HINSTANCE hInstance) {
@@ -297,32 +284,12 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   SetDefaults(settings_map);
 
   MapLook *map_look = new MapLook();
-  map_look->Initialise();
-
-  WaypointLook *waypoint_look = new WaypointLook();
-  waypoint_look->Initialise(settings_map.waypoint);
-
-  AirspaceLook *airspace_look = new AirspaceLook();
-  airspace_look->Initialise(settings_map.airspace);
-
-  TrailLook *trail_look = new TrailLook();
-  trail_look->Initialise(settings_map);
-
-  TaskLook *task_look = new TaskLook();
-  task_look->Initialise();
-
-  AircraftLook *aircraft_look = new AircraftLook();
-  aircraft_look->Initialise();
+  map_look->Initialise(settings_map);
 
   TrafficLook *traffic_look = new TrafficLook();
   traffic_look->Initialise();
 
-  MarkerLook *marker_look = new MarkerLook();
-  marker_look->Initialise();
-
-  TestWindow window(*map_look, *waypoint_look, *airspace_look,
-                    *trail_look, *task_look,
-                    *aircraft_look, *traffic_look, *marker_look);
+  TestWindow window(*map_look, *traffic_look);
   window.set(0, 0, 640, 480);
 
   Graphics::Initialise();
@@ -343,10 +310,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   delete terrain;
   delete topography;
   delete traffic_look;
-  delete aircraft_look;
-  delete task_look;
-  delete airspace_look;
-  delete waypoint_look;
+  delete map_look;
 
   DeinitialiseDataPath();
 

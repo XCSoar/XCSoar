@@ -28,15 +28,14 @@ Copyright_License {
 #include "Look/Look.hpp"
 
 GlueMapWindow::GlueMapWindow(const Look &look)
-  :MapWindow(look.map, look.waypoint, look.airspace, look.trail, look.task,
-             look.aircraft, look.traffic, look.marker),
+  :MapWindow(look.map, look.traffic),
    logger(NULL),
    idle_robin(2),
    drag_mode(DRAG_NONE),
    ignore_single_click(false),
    DisplayMode(DM_CRUISE),
    thermal_band_renderer(look.thermal_band, look.chart),
-   final_glide_bar_renderer(look.final_glide_bar, look.task),
+   final_glide_bar_renderer(look.final_glide_bar, look.map.task),
    map_item_timer(0)
 {
 }

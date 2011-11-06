@@ -123,7 +123,7 @@ pnlTaskList::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   PaintTask(canvas, Sender->get_client_rect(), *ordered_task,
             XCSoarInterface::Basic().location,
             XCSoarInterface::SettingsMap(),
-            look.task, look.airspace,
+            look.map.task, look.map.airspace,
             terrain);
 }
 

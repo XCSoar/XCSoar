@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
+#include "Look/MapLook.hpp"
 #include "Renderer/BestCruiseArrowRenderer.hpp"
 #include "Renderer/CompassRenderer.hpp"
 #include "Renderer/TrackLineRenderer.hpp"
@@ -53,7 +54,7 @@ void
 MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
   if (Basic().location_available)
-    BestCruiseArrowRenderer::Draw(canvas, task_look,
+    BestCruiseArrowRenderer::Draw(canvas, look.task,
                                   render_projection.GetScreenAngle(),
                                   aircraft_pos, Calculated());
 }

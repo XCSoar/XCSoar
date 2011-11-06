@@ -31,16 +31,10 @@ Copyright_License {
 #include "ThermalBandLook.hpp"
 #include "TraceHistoryLook.hpp"
 #include "MapLook.hpp"
-#include "WaypointLook.hpp"
-#include "AirspaceLook.hpp"
 #include "CrossSectionLook.hpp"
-#include "AircraftLook.hpp"
 #include "TrafficLook.hpp"
 #include "Gauge/FlarmTrafficLook.hpp"
-#include "TaskLook.hpp"
 #include "InfoBoxLook.hpp"
-#include "MarkerLook.hpp"
-#include "TrailLook.hpp"
 #include "FinalGlideBarLook.hpp"
 
 struct UISettings;
@@ -53,17 +47,11 @@ struct Look {
   ThermalBandLook thermal_band;
   TraceHistoryLook trace_history;
   MapLook map;
-  WaypointLook waypoint;
-  AirspaceLook airspace;
   CrossSectionLook cross_section;
-  AircraftLook aircraft;
   TrafficLook traffic;
   FlarmTrafficLook flarm_gauge;
   FlarmTrafficLook flarm_dialog;
-  TaskLook task;
   InfoBoxLook info_box;
-  MarkerLook marker;
-  TrailLook trail;
   FinalGlideBarLook final_glide_bar;
 
   void Initialise();

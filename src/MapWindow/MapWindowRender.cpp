@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
+#include "Look/MapLook.hpp"
 #include "ProtectedMarkers.hpp"
 #include "Topography/TopographyRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -84,7 +85,7 @@ MapWindow::RenderMarkers(Canvas &canvas)
 {
   if (marks != NULL &&
       render_projection.GetMapScale() <= fixed_int_constant(30000))
-    marks->Draw(canvas, render_projection, marker_look);
+    marks->Draw(canvas, render_projection, look.marker);
 }
 
 void
@@ -168,7 +169,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   // Finally, draw you!
   if (Basic().connected)
-    AircraftRenderer::Draw(canvas, SettingsMap(), aircraft_look,
+    AircraftRenderer::Draw(canvas, SettingsMap(), look.aircraft,
                            Calculated().heading - render_projection.GetScreenAngle(),
                            aircraft_pos);
 

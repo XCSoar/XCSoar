@@ -39,7 +39,7 @@ OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
   assert(i < NUMAIRSPACECOLORS);
 
-  const AirspaceLook &look = CommonInterface::main_window.look->airspace;
+  const AirspaceLook &look = CommonInterface::main_window.look->map.airspace;
 
   canvas.background_transparent();
   canvas.select(look.brushes[i]);

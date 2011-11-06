@@ -24,15 +24,28 @@ Copyright_License {
 #ifndef XCSOAR_MAP_LOOK_HPP
 #define XCSOAR_MAP_LOOK_HPP
 
+#include "WaypointLook.hpp"
+#include "AirspaceLook.hpp"
+#include "AircraftLook.hpp"
+#include "TaskLook.hpp"
+#include "MarkerLook.hpp"
+#include "TrailLook.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Features.hpp"
 
-struct WaypointRendererSettings;
+struct SETTINGS_MAP;
 
 struct MapLook {
+  WaypointLook waypoint;
+  AirspaceLook airspace;
+  AircraftLook aircraft;
+  TaskLook task;
+  MarkerLook marker;
+  TrailLook trail;
+
 #ifdef HAVE_HATCHED_BRUSH
   Bitmap hAboveTerrainBitmap;
   Brush hAboveTerrainBrush;
@@ -62,7 +75,7 @@ struct MapLook {
   MaskedIcon hBmpMapScaleLeft;
   MaskedIcon hBmpMapScaleRight;
 
-  void Initialise();
+  void Initialise(const struct SETTINGS_MAP &settings);
 };
 
 #endif

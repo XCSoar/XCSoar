@@ -22,12 +22,20 @@ Copyright_License {
 */
 
 #include "MapLook.hpp"
+#include "SettingsMap.hpp"
 #include "Screen/Layout.hpp"
 #include "resource.h"
 
 void
-MapLook::Initialise()
+MapLook::Initialise(const struct SETTINGS_MAP &settings)
 {
+  waypoint.Initialise(settings.waypoint);
+  airspace.Initialise(settings.airspace);
+  aircraft.Initialise();
+  task.Initialise();
+  marker.Initialise();
+  trail.Initialise(settings);
+
 #ifdef HAVE_HATCHED_BRUSH
   hAboveTerrainBitmap.load(IDB_ABOVETERRAIN);
   hAboveTerrainBrush.Set(hAboveTerrainBitmap);

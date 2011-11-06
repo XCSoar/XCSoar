@@ -137,8 +137,7 @@ InfoBoxContentBarogram::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   const Look &look = *CommonInterface::main_window.look;
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
-                              look.chart, look.map, look.airspace,
-                              look.aircraft, look.task, look.trail);
+                              look.chart, look.map);
   fs.RenderBarographSpark(canvas, get_spark_rect(infobox),
                           infobox.GetLook().inverse,
                           XCSoarInterface::Basic(),
@@ -191,7 +190,7 @@ void
 InfoBoxContentTaskProgress::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   const Look &look = *CommonInterface::main_window.look;
-  TaskProgressRenderer renderer(look.task);
+  TaskProgressRenderer renderer(look.map.task);
   renderer.Draw(CommonInterface::Calculated().
                 common_stats.ordered_summary,
                 canvas, infobox.GetValueAndCommentRect(),

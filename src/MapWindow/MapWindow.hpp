@@ -43,11 +43,7 @@ Copyright_License {
 #include <vector>
 
 struct MapLook;
-struct WaypointLook;
-struct TaskLook;
-struct AircraftLook;
 struct TrafficLook;
-struct MarkerLook;
 class TopographyStore;
 class TopographyRenderer;
 class RasterTerrain;
@@ -129,10 +125,7 @@ protected:
 
   RasterWeather *weather;
 
-  const TaskLook &task_look;
-  const AircraftLook &aircraft_look;
   const TrafficLook &traffic_look;
-  const MarkerLook &marker_look;
 
   BackgroundDrawHelper m_background;
   WaypointRenderer way_point_renderer;
@@ -175,13 +168,7 @@ protected:
 
 public:
   MapWindow(const MapLook &look,
-            const WaypointLook &waypoint_look,
-            const AirspaceLook &airspace_look,
-            const TrailLook &trail_look,
-            const TaskLook &task_look,
-            const AircraftLook &aircraft_look,
-            const TrafficLook &traffic_look,
-            const MarkerLook &marker_look);
+            const TrafficLook &traffic_look);
   virtual ~MapWindow();
 
   /**

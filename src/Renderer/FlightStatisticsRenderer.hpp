@@ -49,36 +49,19 @@ class FlightStatistics;
 struct ContestStatistics;
 struct ChartLook;
 struct MapLook;
-struct AirspaceLook;
-struct TaskLook;
-struct AircraftLook;
 class CuSonde;
 
 class FlightStatisticsRenderer {
   const FlightStatistics &fs;
   const ChartLook &chart_look;
   const MapLook &map_look;
-  const AirspaceLook &airspace_look;
-  const AircraftLook &aircraft_look;
-  const TaskLook &task_look;
 
   mutable TrailRenderer trail_renderer;
 
 public:
   FlightStatisticsRenderer(const FlightStatistics &_flight_statistics,
                            const ChartLook &_chart_look,
-                           const MapLook &_map_look,
-                           const AirspaceLook &_airspace_look,
-                           const AircraftLook &_aircraft_look,
-                           const TaskLook &_task_look,
-                           const TrailLook &trail_look)
-    :fs(_flight_statistics),
-     chart_look(_chart_look),
-     map_look(_map_look),
-     airspace_look(_airspace_look),
-     aircraft_look(_aircraft_look),
-     task_look(_task_look),
-     trail_renderer(trail_look) {}
+                           const MapLook &_map_look);
 
 public:
   void RenderBarograph(Canvas &canvas, const PixelRect rc,

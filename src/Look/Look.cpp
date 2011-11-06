@@ -30,12 +30,9 @@ Look::Initialise()
 {
   dialog.Initialise(Fonts::MapBold, Fonts::Map,
                     Fonts::MapBold, Fonts::MapBold);
-  aircraft.Initialise();
   traffic.Initialise();
   flarm_dialog.Initialise(traffic, false);
   flarm_gauge.Initialise(traffic, true);
-  task.Initialise();
-  marker.Initialise();
 }
 
 void
@@ -50,12 +47,9 @@ Look::InitialiseConfigured(const UISettings &settings)
   chart.Initialise(Fonts::MapLabel);
   thermal_band.Initialise(settings.info_boxes.inverse);
   trace_history.Initialise(settings.info_boxes.inverse);
-  waypoint.Initialise(settings.map.waypoint);
-  airspace.Initialise(settings.map.airspace);
   cross_section.Initialise();
   info_box.Initialise(settings.info_boxes.inverse,
                       settings.info_boxes.use_colors);
-  trail.Initialise(settings.map);
   final_glide_bar.Initialise();
-  map.Initialise();
+  map.Initialise(settings.map);
 }

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "GlueMapWindow.hpp"
+#include "Look/MapLook.hpp"
 #include "Dialogs/MapItemListDialog.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
@@ -78,10 +79,10 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
 
 
   ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), vector, list,
-                        elevation, aircraft_look,
+                        elevation, look.aircraft,
                         airspace_renderer.GetLook(),
                         way_point_renderer.GetLook(),
-                        task_look, marker_look, traffic_look, SettingsMap());
+                        look.task, look.marker, traffic_look, SettingsMap());
 
   // Save function result for later
   return !list.empty();

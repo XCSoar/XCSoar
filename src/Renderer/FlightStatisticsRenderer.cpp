@@ -59,6 +59,14 @@ Copyright_License {
 using std::min;
 using std::max;
 
+FlightStatisticsRenderer::FlightStatisticsRenderer(const FlightStatistics &_flight_statistics,
+                                                   const ChartLook &_chart_look,
+                                                   const MapLook &_map_look)
+  :fs(_flight_statistics),
+   chart_look(_chart_look),
+   map_look(_map_look),
+   trail_renderer(map_look.trail) {}
+
 static bool
 IsTaskLegVisible(const OrderedTaskPoint &tp)
 {
@@ -346,7 +354,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
   ChartProjection proj(rc, trail_renderer.GetBounds(nmea_info.location));
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
-  AircraftRenderer::Draw(canvas, settings_map, aircraft_look,
+  AircraftRenderer::Draw(canvas, settings_map, map_look.aircraft,
                          calculated.heading, aircraft_pos);
 
   trail_renderer.Draw(canvas, proj);
@@ -466,8 +474,8 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 
     proj.Set(rc, task, nmea_info.location);
 
-    OZRenderer ozv(task_look, airspace_look, settings_map.airspace);
-    RenderTaskPoint tpv(canvas, proj, task_look,
+    OZRenderer ozv(map_look.task, map_look.airspace, settings_map.airspace);
+    RenderTaskPoint tpv(canvas, proj, map_look.task,
                         task.GetTaskProjection(),
                         ozv, false, RenderTaskPoint::ALL, nmea_info.location);
     ::TaskRenderer dv(tpv, proj.GetScreenBounds());
@@ -478,7 +486,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
     trail_renderer.Draw(canvas, *trace_computer, proj, 0);
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
-  AircraftRenderer::Draw(canvas, settings_map, aircraft_look,
+  AircraftRenderer::Draw(canvas, settings_map, map_look.aircraft,
                          calculated.heading, aircraft_pos);
 }
 
