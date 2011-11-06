@@ -105,7 +105,6 @@ namespace Graphics {
 
   // used for landable rendering
   extern Brush hbGreen;
-  extern Brush hbWhite;
   extern Brush hbOrange;
   extern Brush hbLightGray;
   extern Brush hbNotReachableTerrain;

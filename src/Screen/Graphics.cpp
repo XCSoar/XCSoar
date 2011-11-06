@@ -87,7 +87,6 @@ Bitmap Graphics::hBmpTabTimes;
 
 // used for landable rendering
 Brush Graphics::hbGreen;
-Brush Graphics::hbWhite;
 Brush Graphics::hbOrange;
 Brush Graphics::hbLightGray;
 Brush Graphics::hbNotReachableTerrain;
@@ -172,7 +171,6 @@ Graphics::Initialise()
 
     // used for landable rendering
   hbGreen.Set(COLOR_GREEN);
-  hbWhite.Set(COLOR_WHITE);
   hbOrange.Set(COLOR_ORANGE);
   hbLightGray.Set(COLOR_LIGHT_GRAY);
   hbNotReachableTerrain.Set(LightColor(COLOR_RED));
@@ -303,7 +301,6 @@ Graphics::Deinitialise()
   ContestPen[2].Reset();
 
   hbGreen.Reset();
-  hbWhite.Reset();
   hbOrange.Reset();
   hbLightGray.Reset();
   hbNotReachableTerrain.Reset();
