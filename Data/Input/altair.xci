@@ -197,8 +197,6 @@ location=6
 #data=8
 #event=Setup Task
 #event=Mode default
-#label=$(CheckTaskResumed)$(CheckWaypointFile)
-#location=7
 
 mode=default
 type=key
@@ -210,8 +208,6 @@ event=Setup Target
 #data=0
 #event=ArmAdvance show
 #event=ArmAdvance toggle
-#label=$(CheckTaskResumed)$(CheckTask)
-#location=9
 
 mode=default
 type=key
