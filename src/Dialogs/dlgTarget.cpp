@@ -65,7 +65,7 @@ OnCreateMap(ContainerWindow &parent, PixelScalar left, PixelScalar top,
 {
   const Look &look = *CommonInterface::main_window.look;
 
-  map = new TargetMapWindow(look.waypoint, look.airspace,
+  map = new TargetMapWindow(look.waypoint, look.airspace, look.trail,
                             look.task, look.aircraft);
   map->SetTerrain(terrain);
   map->SetTopograpgy(topography);

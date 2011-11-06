@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "TrailRenderer.hpp"
+#include "Look/TrailLook.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Graphics.hpp"
 #include "NMEA/Info.hpp"
@@ -46,8 +47,8 @@ gcc_const
 static int
 GetSnailColorIndex(fixed cv)
 {
-  return max((short)0, min((short)(NUMSNAILCOLORS - 1),
-                           (short)((cv + fixed_one) / 2 * NUMSNAILCOLORS)));
+  return max((short)0, min((short)(TrailLook::NUMSNAILCOLORS - 1),
+                           (short)((cv + fixed_one) / 2 * TrailLook::NUMSNAILCOLORS)));
 }
 
 void
@@ -123,19 +124,19 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
 
     if (last_valid) {
       if (settings.snail_type == stAltitude) {
-        int index((it->GetAltitude() - value_min) / (value_max - value_min)
-                  * (NUMSNAILCOLORS - 1));
-        index = max(0, min(NUMSNAILCOLORS - 1, index));
-        canvas.select(Graphics::hpSnail[index]);
+        unsigned index((it->GetAltitude() - value_min) / (value_max - value_min)
+                       * (TrailLook::NUMSNAILCOLORS - 1));
+        index = max(0u, min(TrailLook::NUMSNAILCOLORS - 1, index));
+        canvas.select(look.hpSnail[index]);
       } else {
         const fixed colour_vario = negative(it->GetVario())
           ? - it->GetVario() / value_min
           : it->GetVario() / value_max ;
 
         if (!scaled_trail)
-          canvas.select(Graphics::hpSnail[GetSnailColorIndex(colour_vario)]);
+          canvas.select(look.hpSnail[GetSnailColorIndex(colour_vario)]);
         else
-          canvas.select(Graphics::hpSnailVario[GetSnailColorIndex(colour_vario)]);
+          canvas.select(look.hpSnailVario[GetSnailColorIndex(colour_vario)]);
       }
       canvas.line_piece(last_point, pt);
     }

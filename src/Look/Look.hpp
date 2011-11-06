@@ -39,6 +39,7 @@ Copyright_License {
 #include "TaskLook.hpp"
 #include "InfoBoxLook.hpp"
 #include "MarkerLook.hpp"
+#include "TrailLook.hpp"
 
 struct UISettings;
 
@@ -59,6 +60,7 @@ struct Look {
   TaskLook task;
   InfoBoxLook info_box;
   MarkerLook marker;
+  TrailLook trail;
 
   void Initialise();
   void InitialiseConfigured(const UISettings &settings);

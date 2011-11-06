@@ -309,8 +309,6 @@ XCSoarInterface::Startup()
   LocalPath(path, _T("cache"));
   file_cache = new FileCache(path);
 
-  Graphics::InitialiseConfigured(SettingsMap());
-
   ReadLanguageFile();
 
   status_messages.LoadFile();

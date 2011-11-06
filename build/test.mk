@@ -1679,6 +1679,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Look/WaypointLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
+	$(SRC)/Look/TrailLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Look/AircraftLook.cpp \
 	$(SRC)/Look/TrafficLook.cpp \

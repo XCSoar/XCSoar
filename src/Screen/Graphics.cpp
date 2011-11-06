@@ -24,7 +24,6 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Ramp.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Brush.hpp"
@@ -35,9 +34,6 @@ Copyright_License {
 #include "resource.h"
 #include "Asset.hpp"
 #include "LogFile.hpp"
-
-Pen Graphics::hpSnail[NUMSNAILCOLORS];
-Pen Graphics::hpSnailVario[NUMSNAILCOLORS];
 
 #ifdef HAVE_HATCHED_BRUSH
 Bitmap Graphics::hAboveTerrainBitmap;
@@ -181,60 +177,6 @@ Graphics::Initialise()
 }
 
 void
-Graphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
-{
-  InitSnailTrail(settings_map);
-}
-
-void
-Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
-{
-  static gcc_constexpr_data ColorRamp snail_colors_vario[] = {
-    {0,   0xc4, 0x80, 0x1e}, // sinkColor
-    {100, 0xa0, 0xa0, 0xa0},
-    {200, 0x1e, 0xf1, 0x73} // liftColor
-  };
-
-  static gcc_constexpr_data ColorRamp snail_colors_vario2[] = {
-    {0,   0x00, 0x00, 0xff},
-    {99,  0x00, 0xff, 0xff},
-    {100, 0xff, 0xff, 0x00},
-    {200, 0xff, 0x00, 0x00}
-  };
-
-  static gcc_constexpr_data ColorRamp snail_colors_alt[] = {
-    {0,   0xff, 0x00, 0x00},
-    {50,  0xff, 0xff, 0x00},
-    {100, 0x00, 0xff, 0x00},
-    {150, 0x00, 0xff, 0xff},
-    {200, 0x00, 0x00, 0xff},
-  };
-
-  PixelScalar iwidth;
-  PixelScalar minwidth = Layout::Scale(2);
-
-  for (int i = 0; i < NUMSNAILCOLORS; i++) {
-    short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    Color color = (settings_map.snail_type == stAltitude) ?
-                  ColorRampLookup(ih, snail_colors_alt, 5) :
-                  (settings_map.snail_type == stSeeYouVario) ?
-                  ColorRampLookup(ih, snail_colors_vario2, 4) :
-                  ColorRampLookup(ih, snail_colors_vario, 3);
-
-    if (i < NUMSNAILCOLORS / 2 ||
-        !settings_map.snail_scaling_enabled)
-      iwidth = minwidth;
-    else
-      iwidth = max(minwidth,
-                   PixelScalar((i - NUMSNAILCOLORS / 2) *
-                               Layout::Scale(16) / NUMSNAILCOLORS));
-
-    hpSnail[i].Set(minwidth, color);
-    hpSnailVario[i].Set(iwidth, color);
-  }
-}
-
-void
 Graphics::Deinitialise()
 {
   DeinitialiseUnitSymbols();
@@ -308,9 +250,4 @@ Graphics::Deinitialise()
   hbGround.Reset();
 
   hpTrackBearingLine.Reset();
-
-  for (unsigned i = 0; i < NUMSNAILCOLORS; i++) {
-    hpSnail[i].Reset();
-    hpSnailVario[i].Reset();
-  }
 }

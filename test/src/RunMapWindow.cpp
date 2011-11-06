@@ -57,6 +57,7 @@ Copyright_License {
 #include "Operation.hpp"
 #include "Look/WaypointLook.hpp"
 #include "Look/AirspaceLook.hpp"
+#include "Look/TrailLook.hpp"
 #include "Look/TaskLook.hpp"
 #include "Look/AircraftLook.hpp"
 #include "Look/TrafficLook.hpp"
@@ -116,11 +117,12 @@ public:
 public:
   TestWindow(const WaypointLook &waypoint_look,
              const AirspaceLook &airspace_look,
+             const TrailLook &trail_look,
              const TaskLook &task_look,
              const AircraftLook &aircraft_look,
              const TrafficLook &traffic_look,
              const MarkerLook &marker_look)
-    :map(waypoint_look, airspace_look,
+    :map(waypoint_look, airspace_look, trail_look,
          task_look, aircraft_look, traffic_look, marker_look) {}
 
 #ifdef USE_GDI
@@ -298,6 +300,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   AirspaceLook *airspace_look = new AirspaceLook();
   airspace_look->Initialise(settings_map.airspace);
 
+  TrailLook *trail_look = new TrailLook();
+  trail_look->Initialise(settings_map);
+
   TaskLook *task_look = new TaskLook();
   task_look->Initialise();
 
@@ -310,12 +315,11 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   MarkerLook *marker_look = new MarkerLook();
   marker_look->Initialise();
 
-  TestWindow window(*waypoint_look, *airspace_look, *task_look,
+  TestWindow window(*waypoint_look, *airspace_look, *trail_look, *task_look,
                     *aircraft_look, *traffic_look, *marker_look);
   window.set(0, 0, 640, 480);
 
   Graphics::Initialise();
-  Graphics::InitialiseConfigured(settings_map);
 
   GenerateBlackboard(window.map, settings_map);
   Fonts::Initialize();

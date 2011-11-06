@@ -32,15 +32,20 @@ class Canvas;
 class GlideComputer;
 class Projection;
 class WindowProjection;
+struct TrailLook;
 struct NMEAInfo;
 struct DerivedInfo;
 struct SETTINGS_MAP;
 
 class TrailRenderer {
+  const TrailLook &look;
+
   mutable TracePointVector trace;
   mutable AllocatedArray<RasterPoint> points;
 
 public:
+  TrailRenderer(const TrailLook &_look):look(_look) {}
+
   void Draw(Canvas &canvas, const GlideComputer &glide_computer,
             const WindowProjection &projection, unsigned min_time,
             bool enable_traildrift, const RasterPoint pos, const NMEAInfo &basic,

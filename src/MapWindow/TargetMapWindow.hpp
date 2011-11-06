@@ -88,6 +88,7 @@ class TargetMapWindow : public BufferWindow {
 public:
   TargetMapWindow(const WaypointLook &waypoint_look,
                   const AirspaceLook &airspace_look,
+                  const TrailLook &trail_look,
                   const TaskLook &task_look,
                   const AircraftLook &aircraft_look);
   virtual ~TargetMapWindow();

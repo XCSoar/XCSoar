@@ -34,23 +34,12 @@ class Brush;
 struct Color;
 class Pen;
 
-struct SETTINGS_MAP;
-struct WaypointRendererSettings;
-class LabelBlock;
-
 class Canvas;
 class Angle;
 
-#define NUMSNAILCOLORS 15
-
 namespace Graphics {
   void Initialise();
-  void InitialiseConfigured(const SETTINGS_MAP &settings_map);
-  void InitSnailTrail(const SETTINGS_MAP &settings_map);
   void Deinitialise();
-
-  extern Pen hpSnail[NUMSNAILCOLORS];
-  extern Pen hpSnailVario[NUMSNAILCOLORS];
 
 #ifdef HAVE_HATCHED_BRUSH
   extern Bitmap hAboveTerrainBitmap;

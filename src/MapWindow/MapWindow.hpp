@@ -173,6 +173,7 @@ protected:
 public:
   MapWindow(const WaypointLook &waypoint_look,
             const AirspaceLook &airspace_look,
+            const TrailLook &trail_look,
             const TaskLook &task_look,
             const AircraftLook &aircraft_look,
             const TrafficLook &traffic_look,

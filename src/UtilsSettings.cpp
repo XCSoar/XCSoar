@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "UtilsSettings.hpp"
 #include "Protection.hpp"
+#include "Look/Look.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "SettingsComputer.hpp"
@@ -190,7 +191,7 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   if (settings_map.snail_type != old_settings_map.snail_type ||
       settings_map.snail_scaling_enabled != old_settings_map.snail_scaling_enabled)
-    Graphics::InitSnailTrail(settings_map);
+    main_window.look->trail.Initialise(settings_map);
 
   if (settings_map.waypoint.landable_style != old_settings_map.waypoint.landable_style)
     main_window.look->waypoint.Initialise(settings_map.waypoint);

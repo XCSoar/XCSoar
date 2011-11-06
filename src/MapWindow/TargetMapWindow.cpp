@@ -77,6 +77,7 @@ Calculated()
  */
 TargetMapWindow::TargetMapWindow(const WaypointLook &waypoint_look,
                                  const AirspaceLook &_airspace_look,
+                                 const TrailLook &_trail_look,
                                  const TaskLook &_task_look,
                                  const AircraftLook &_aircraft_look)
   :task_look(_task_look),
@@ -84,6 +85,7 @@ TargetMapWindow::TargetMapWindow(const WaypointLook &waypoint_look,
    topography_renderer(NULL),
    airspace_renderer(_airspace_look),
    way_point_renderer(NULL, waypoint_look),
+   trail_renderer(_trail_look),
    task(NULL)
 {
 }

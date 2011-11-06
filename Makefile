@@ -564,6 +564,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
+	$(SRC)/Look/TrailLook.cpp \
 	$(SRC)/Look/CrossSectionLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Look/TrafficLook.cpp \

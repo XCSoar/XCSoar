@@ -228,7 +228,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                   0, 0, 640, 480);
 
   Graphics::Initialise();
-  Graphics::InitialiseConfigured(blackboard.SettingsMap());
 
   Fonts::Initialize();
 
