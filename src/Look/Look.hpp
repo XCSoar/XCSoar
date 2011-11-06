@@ -40,6 +40,7 @@ Copyright_License {
 #include "InfoBoxLook.hpp"
 #include "MarkerLook.hpp"
 #include "TrailLook.hpp"
+#include "FinalGlideBarLook.hpp"
 
 struct UISettings;
 
@@ -61,6 +62,7 @@ struct Look {
   InfoBoxLook info_box;
   MarkerLook marker;
   TrailLook trail;
+  FinalGlideBarLook final_glide_bar;
 
   void Initialise();
   void InitialiseConfigured(const UISettings &settings);

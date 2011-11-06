@@ -21,27 +21,18 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FINAL_GLIDE_BAR_RENDERER_HPP
-#define XCSOAR_FINAL_GLIDE_BAR_RENDERER_HPP
+#include "FinalGlideBarLook.hpp"
+#include "Screen/Layout.hpp"
 
-#include "Screen/Point.hpp"
+void
+FinalGlideBarLook::Initialise()
+{
+  hbFinalGlideBelow.Set(COLOR_RED);
+  hpFinalGlideBelow.Set(Layout::Scale(1), DarkColor(COLOR_RED));
 
-class Canvas;
-struct DerivedInfo;
-struct FinalGlideBarLook;
-struct TaskLook;
+  hbFinalGlideBelowLandable.Set(COLOR_ORANGE);
+  hpFinalGlideBelowLandable.Set(Layout::Scale(1), DarkColor(COLOR_ORANGE));
 
-class FinalGlideBarRenderer {
-  const FinalGlideBarLook &look;
-  const TaskLook &task_look;
-
-public:
-  FinalGlideBarRenderer(const FinalGlideBarLook &_look,
-                        const TaskLook &_task_look)
-    :look(_look), task_look(_task_look) {}
-
-  void Draw(Canvas &canvas, const PixelRect &rc,
-            const DerivedInfo &calculated) const;
-};
-
-#endif
+  hbFinalGlideAbove.Set(COLOR_GREEN);
+  hpFinalGlideAbove.Set(Layout::Scale(1), DarkColor(COLOR_GREEN));
+}

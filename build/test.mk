@@ -2014,6 +2014,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/MarkerLook.cpp \
 	$(SRC)/Look/TerminalLook.cpp \
 	$(SRC)/Look/TrailLook.cpp \
+	$(SRC)/Look/FinalGlideBarLook.cpp \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \

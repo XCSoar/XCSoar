@@ -50,9 +50,6 @@ MaskedIcon Graphics::hBmpTrafficSafe, Graphics::hBmpTrafficWarning, Graphics::hB
 Pen Graphics::hpWind;
 Pen Graphics::hpWindTail;
 Pen Graphics::hpCompass;
-Pen Graphics::hpFinalGlideAbove;
-Pen Graphics::hpFinalGlideBelow;
-Pen Graphics::hpFinalGlideBelowLandable;
 Pen Graphics::hpMapScale;
 Pen Graphics::hpTerrainLine;
 Pen Graphics::hpTerrainLineThick;
@@ -61,9 +58,6 @@ Pen Graphics::TracePen;
 Pen Graphics::ContestPen[3];
 
 Brush Graphics::hbCompass;
-Brush Graphics::hbFinalGlideBelow;
-Brush Graphics::hbFinalGlideBelowLandable;
-Brush Graphics::hbFinalGlideAbove;
 Brush Graphics::hbWind;
 
 MaskedIcon Graphics::hBmpThermalSource;
@@ -144,15 +138,6 @@ Graphics::Initialise()
 
   hbCompass.Set(Color(207, 207, 207));
 
-  hbFinalGlideBelow.Set(COLOR_RED);
-  hpFinalGlideBelow.Set(Layout::Scale(1), DarkColor(COLOR_RED));
-
-  hbFinalGlideBelowLandable.Set(COLOR_ORANGE);
-  hpFinalGlideBelowLandable.Set(Layout::Scale(1), DarkColor(COLOR_ORANGE));
-
-  hbFinalGlideAbove.Set(COLOR_GREEN);
-  hpFinalGlideAbove.Set(Layout::Scale(1), DarkColor(COLOR_GREEN));
-
   hpCompass.Set(Layout::Scale(1), COLOR_GRAY);
 
   hpMapScale.Set(Layout::Scale(1), COLOR_BLACK);
@@ -220,18 +205,10 @@ Graphics::Deinitialise()
 
   hbCompass.Reset();
 
-  hbFinalGlideBelow.Reset();
-  hbFinalGlideBelowLandable.Reset();
-  hbFinalGlideAbove.Reset();
-
   hpWind.Reset();
   hpWindTail.Reset();
 
   hpCompass.Reset();
-
-  hpFinalGlideBelow.Reset();
-  hpFinalGlideBelowLandable.Reset();
-  hpFinalGlideAbove.Reset();
 
   hpMapScale.Reset();
   hpTerrainLine.Reset();

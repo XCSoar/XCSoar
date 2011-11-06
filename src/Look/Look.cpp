@@ -56,4 +56,5 @@ Look::InitialiseConfigured(const UISettings &settings)
   info_box.Initialise(settings.info_boxes.inverse,
                       settings.info_boxes.use_colors);
   trail.Initialise(settings.map);
+  final_glide_bar.Initialise();
 }

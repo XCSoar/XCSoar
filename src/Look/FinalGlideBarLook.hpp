@@ -1,5 +1,5 @@
 /*
-Copyright_License {
+  Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2011 The XCSoar Project
@@ -21,27 +21,23 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FINAL_GLIDE_BAR_RENDERER_HPP
-#define XCSOAR_FINAL_GLIDE_BAR_RENDERER_HPP
+#ifndef XCSOAR_FINAL_GLIDE_BAR_LOOK_HPP
+#define XCSOAR_FINAL_GLIDE_BAR_LOOK_HPP
 
-#include "Screen/Point.hpp"
+#include "Screen/Pen.hpp"
+#include "Screen/Brush.hpp"
 
-class Canvas;
-struct DerivedInfo;
-struct FinalGlideBarLook;
-struct TaskLook;
+struct FinalGlideBarLook {
+  Pen hpFinalGlideAbove;
+  Brush hbFinalGlideAbove;
 
-class FinalGlideBarRenderer {
-  const FinalGlideBarLook &look;
-  const TaskLook &task_look;
+  Pen hpFinalGlideBelow;
+  Brush hbFinalGlideBelow;
 
-public:
-  FinalGlideBarRenderer(const FinalGlideBarLook &_look,
-                        const TaskLook &_task_look)
-    :look(_look), task_look(_task_look) {}
+  Pen hpFinalGlideBelowLandable;
+  Brush hbFinalGlideBelowLandable;
 
-  void Draw(Canvas &canvas, const PixelRect &rc,
-            const DerivedInfo &calculated) const;
+  void Initialise();
 };
 
 #endif

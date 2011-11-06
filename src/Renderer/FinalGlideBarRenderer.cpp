@@ -23,10 +23,10 @@ Copyright_License {
 
 #include "FinalGlideBarRenderer.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/TextInBox.hpp"
 #include "NMEA/Derived.hpp"
+#include "Look/FinalGlideBarLook.hpp"
 #include "Look/TaskLook.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Util/Macros.hpp"
@@ -121,29 +121,29 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   // draw actual glide bar
   if (Offset <= 0) {
     if (calculated.common_stats.landable_reachable) {
-      canvas.select(Graphics::hpFinalGlideBelowLandable);
-      canvas.select(Graphics::hbFinalGlideBelowLandable);
+      canvas.select(look.hpFinalGlideBelowLandable);
+      canvas.select(look.hbFinalGlideBelowLandable);
     } else {
-      canvas.select(Graphics::hpFinalGlideBelow);
-      canvas.select(Graphics::hbFinalGlideBelow);
+      canvas.select(look.hpFinalGlideBelow);
+      canvas.select(look.hbFinalGlideBelow);
     }
   } else {
-    canvas.select(Graphics::hpFinalGlideAbove);
-    canvas.select(Graphics::hbFinalGlideAbove);
+    canvas.select(look.hpFinalGlideAbove);
+    canvas.select(look.hbFinalGlideAbove);
   }
   canvas.polygon(GlideBar, 6);
 
   // draw glide bar at mc 0
   if (Offset0 <= 0) {
     if (calculated.common_stats.landable_reachable) {
-      canvas.select(Graphics::hpFinalGlideBelowLandable);
+      canvas.select(look.hpFinalGlideBelowLandable);
       canvas.hollow_brush();
     } else {
-      canvas.select(Graphics::hpFinalGlideBelow);
+      canvas.select(look.hpFinalGlideBelow);
       canvas.hollow_brush();
     }
   } else {
-    canvas.select(Graphics::hpFinalGlideAbove);
+    canvas.select(look.hpFinalGlideAbove);
     canvas.hollow_brush();
   }
 

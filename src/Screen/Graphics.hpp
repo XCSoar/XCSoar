@@ -56,9 +56,6 @@ namespace Graphics {
 
   extern Pen hpWind, hpWindTail;
   extern Pen hpCompass;
-  extern Pen hpFinalGlideAbove;
-  extern Pen hpFinalGlideBelow;
-  extern Pen hpFinalGlideBelowLandable;
   extern Pen hpMapScale;
   extern Pen hpTerrainLine;
   extern Pen hpTerrainLineThick;
@@ -67,9 +64,6 @@ namespace Graphics {
   extern Pen ContestPen[3];
 
   extern Brush hbCompass;
-  extern Brush hbFinalGlideBelow;
-  extern Brush hbFinalGlideBelowLandable;
-  extern Brush hbFinalGlideAbove;
   extern Brush hbWind;
 
   extern MaskedIcon hBmpThermalSource;
