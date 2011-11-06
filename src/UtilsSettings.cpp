@@ -50,6 +50,7 @@ Copyright_License {
 #include "Waypoint/WaypointGlue.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Language/LanguageGlue.hpp"
+#include "Screen/Graphics.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
@@ -93,7 +94,7 @@ SettingsEnter()
 }
 
 static void
-SettingsLeave()
+SettingsLeave(const UISettings &old_ui_settings)
 {
   if (!globalRunningEvent.Test())
     return;
@@ -182,6 +183,18 @@ SettingsLeave()
   if (DevicePortChanged)
     devRestart();
 
+  const UISettings &ui_settings = CommonInterface::GetUISettings();
+
+  const SETTINGS_MAP &old_settings_map = old_ui_settings.map;
+  const SETTINGS_MAP &settings_map = ui_settings.map;
+
+  if (settings_map.snail_type != old_settings_map.snail_type ||
+      settings_map.snail_scaling_enabled != old_settings_map.snail_scaling_enabled)
+    Graphics::InitSnailTrail(settings_map);
+
+  if (settings_map.waypoint.landable_style != old_settings_map.waypoint.landable_style)
+    main_window.look->waypoint.Initialise(settings_map.waypoint);
+
   ResumeAllThreads();
   // allow map and calculations threads to continue
 
@@ -195,7 +208,9 @@ SettingsLeave()
 void
 SystemConfiguration()
 {
+  const UISettings old_ui_settings = CommonInterface::GetUISettings();
+
   SettingsEnter();
   dlgConfigurationShowModal();
-  SettingsLeave();
+  SettingsLeave(old_ui_settings);
 }

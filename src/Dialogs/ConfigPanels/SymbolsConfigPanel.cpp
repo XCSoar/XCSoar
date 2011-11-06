@@ -28,7 +28,6 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
-#include "Screen/Graphics.hpp"
 #include "Language/Language.hpp"
 
 static WndForm* wf = NULL;
@@ -151,16 +150,11 @@ SymbolsConfigPanel::Save()
     settings_map.snail_type = (SnailType)wp->GetDataField()->GetAsInteger();
     Profile::Set(szProfileSnailType, (int)settings_map.snail_type);
     changed = true;
-    Graphics::InitSnailTrail(settings_map);
   }
 
-  bool snailscaling_changed =
-      SaveFormProperty(*wf, _T("prpSnailWidthScale"),
-                       szProfileSnailWidthScale,
-                       settings_map.snail_scaling_enabled);
-  changed |= snailscaling_changed;
-  if (snailscaling_changed)
-    Graphics::InitSnailTrail(settings_map);
+  changed |= SaveFormProperty(*wf, _T("prpSnailWidthScale"),
+                              szProfileSnailWidthScale,
+                              settings_map.snail_scaling_enabled);
 
   changed |= SaveFormProperty(*wf, _T("prpDetourCostMarker"),
                               szProfileDetourCostMarker,
