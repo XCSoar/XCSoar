@@ -162,7 +162,7 @@ InitialiseLogFonts()
                     Layout::Scale(20));
 }
 
-void
+bool
 Fonts::Initialize()
 {
   InitialiseLogFonts();
@@ -173,6 +173,10 @@ Fonts::Initialize()
   MapLabelImportant.set(LogMapLabelImportant);
   Map.set(LogMap);
   MapBold.set(LogMapBold);
+
+  return Title.defined() && CDI.defined() &&
+    MapLabel.defined() && MapLabelImportant.defined() &&
+    Map.defined() && MapBold.defined();
 }
 
 void

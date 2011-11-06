@@ -35,7 +35,7 @@ LoadCustomFont(Font *theFont, const TCHAR FontRegKey[])
     theFont->set(logfont);
 }
 
-void
+bool
 Fonts::LoadCustom()
 {
   LoadCustomFont(&InfoBox, szProfileFontInfoWindowFont);
@@ -46,4 +46,8 @@ Fonts::LoadCustom()
   LoadCustomFont(&MapLabelImportant, szProfileFontMapLabelImportantFont);
   LoadCustomFont(&Map, szProfileFontMapWindowFont);
   LoadCustomFont(&MapBold, szProfileFontMapWindowBoldFont);
+
+  return Title.defined() && CDI.defined() &&
+    MapLabel.defined() && MapLabelImportant.defined() &&
+    Map.defined() && MapBold.defined();
 }
