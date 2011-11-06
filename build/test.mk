@@ -2013,6 +2013,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/InfoBoxLook.cpp \
 	$(SRC)/Look/MarkerLook.cpp \
 	$(SRC)/Look/TerminalLook.cpp \
+	$(SRC)/Look/TrailLook.cpp \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \

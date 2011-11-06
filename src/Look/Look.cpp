@@ -55,4 +55,5 @@ Look::InitialiseConfigured(const UISettings &settings)
   cross_section.Initialise();
   info_box.Initialise(settings.info_boxes.inverse,
                       settings.info_boxes.use_colors);
+  trail.Initialise(settings.map);
 }
