@@ -77,11 +77,11 @@ InfoBoxContent::SetCommentBearingDifference(InfoBoxData &data, Angle delta)
 {
   fixed delta_degrees = delta.AsDelta().Degrees();
   if (delta_degrees > fixed_one)
-    data.UnsafeFormatValue(_T("%2.0f°»"), (double)delta_degrees);
+    data.UnsafeFormatComment(_T("%2.0f°»"), (double)delta_degrees);
   else if (delta_degrees < fixed_minus_one)
-    data.UnsafeFormatValue(_T("«%2.0f°"), (double)-delta_degrees);
+    data.UnsafeFormatComment(_T("«%2.0f°"), (double)-delta_degrees);
   else
-    data.SetValue(_T("«»"));
+    data.SetComment(_T("«»"));
 }
 
 void
