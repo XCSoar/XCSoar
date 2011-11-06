@@ -56,7 +56,6 @@ namespace Graphics {
   extern Pen hpTerrainLine;
   extern Pen hpTerrainLineThick;
   extern Pen hpTrackBearingLine;
-  extern Pen TracePen;
   extern Pen ContestPen[3];
 
   extern Brush hbCompass;

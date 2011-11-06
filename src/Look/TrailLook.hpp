@@ -35,6 +35,8 @@ struct TrailLook {
   Pen hpSnail[NUMSNAILCOLORS];
   Pen hpSnailVario[NUMSNAILCOLORS];
 
+  Pen trace_pen;
+
   void Initialise(const SETTINGS_MAP &settings_map);
 };
 

@@ -72,4 +72,6 @@ TrailLook::Initialise(const SETTINGS_MAP &settings_map)
     hpSnail[i].Set(minwidth, color);
     hpSnailVario[i].Set(iwidth, color);
   }
+
+  trace_pen.Set(2, Color(50, 243, 45));
 }

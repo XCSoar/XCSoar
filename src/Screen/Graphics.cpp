@@ -53,7 +53,6 @@ Pen Graphics::hpCompass;
 Pen Graphics::hpTerrainLine;
 Pen Graphics::hpTerrainLineThick;
 Pen Graphics::hpTrackBearingLine;
-Pen Graphics::TracePen;
 Pen Graphics::ContestPen[3];
 
 Brush Graphics::hbCompass;
@@ -137,7 +136,6 @@ Graphics::Initialise()
   hpTerrainLine.Set(Pen::DASH, Layout::Scale(1), clrSepia);
   hpTerrainLineThick.Set(Pen::DASH, Layout::Scale(2), clrSepia);
 
-  TracePen.Set(2, Color(50, 243, 45));
   ContestPen[0].Set(Layout::Scale(1)+2, COLOR_RED);
   ContestPen[1].Set(Layout::Scale(1)+1, COLOR_ORANGE);
   ContestPen[2].Set(Layout::Scale(1), COLOR_BLUE);
@@ -199,7 +197,6 @@ Graphics::Deinitialise()
   hpTerrainLine.Reset();
   hpTerrainLineThick.Reset();
 
-  TracePen.Reset();
   ContestPen[0].Reset();
   ContestPen[1].Reset();
   ContestPen[2].Reset();

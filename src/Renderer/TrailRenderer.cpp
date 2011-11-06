@@ -24,7 +24,6 @@ Copyright_License {
 #include "TrailRenderer.hpp"
 #include "Look/TrailLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Graphics.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "SettingsMap.hpp"
@@ -187,7 +186,7 @@ TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
 void
 TrailRenderer::Draw(Canvas &canvas, const WindowProjection &projection)
 {
-  canvas.select(Graphics::TracePen);
+  canvas.select(look.trace_pen);
   DrawTraceVector(canvas, projection, trace);
 }
 
