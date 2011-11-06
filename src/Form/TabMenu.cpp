@@ -212,9 +212,13 @@ TabMenuControl::SetCurrentPage(unsigned page)
 
 void TabMenuControl::SetLastContentPage(unsigned page)
 {
-  const PageItem& theitem = GetPageItem(page);
-  LastContent.MainIndex = theitem.main_menu_index;
-  LastContent.SubIndex = GetSubMenuButton(page)->Menu.SubIndex;
+  if (page == GetMenuPage())
+    LastContent = menu_tab_index::None();
+  else {
+    const PageItem& theitem = GetPageItem(page);
+    LastContent.MainIndex = theitem.main_menu_index;
+    LastContent.SubIndex = GetSubMenuButton(page)->Menu.SubIndex;
+  }
   GetTabMenuDisplay()->SetSelectedIndex(LastContent);
 }
 
