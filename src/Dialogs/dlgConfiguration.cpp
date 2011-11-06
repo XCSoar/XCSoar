@@ -285,13 +285,13 @@ PrepareConfigurationDialog()
 
   setVariables();
 
-  /* restore previous page */
+  wTabMenu->GotoMenuPage();
+  /* restore last selected menu item */
   static bool Initialized = false;
-  if (!Initialized) {
-    current_page = wTabMenu->GotoMenuPage();
+  if (!Initialized)
     Initialized = true;
-  }
-  wTabMenu->SetCurrentPage(current_page);
+  else
+    wTabMenu->SetLastContentPage(current_page);
 }
 
 void dlgConfigurationShowModal(void)
