@@ -31,11 +31,38 @@ Copyright_License {
 #include "Computer/TraceComputer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Engine/Math/Earth.hpp"
+#include "Engine/Contest/ContestResult.hpp"
 
 #include <algorithm>
 
 using std::min;
 using std::max;
+
+bool
+TrailRenderer::LoadTrace(const TraceComputer &trace_computer)
+{
+  trace.clear();
+  trace_computer.LockedCopyTo(trace);
+  return !trace.empty();
+}
+
+bool
+TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
+                         unsigned min_time,
+                         const WindowProjection &projection)
+{
+  trace.clear();
+  trace_computer.LockedCopyTo(trace, min_time,
+                              projection.GetGeoScreenCenter(),
+                              projection.DistancePixelsToMeters(3));
+  return !trace.empty();
+}
+
+TaskProjection
+TrailRenderer::GetBounds(const GeoPoint fallback_location) const
+{
+  return get_bounds(trace, fallback_location);
+}
 
 /**
  * This function returns the corresponding SnailTrail
@@ -61,11 +88,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   if (settings.trail_length == TRAIL_OFF)
     return;
 
-  trace.clear();
-  trace_computer.LockedCopyTo(trace, min_time,
-                              projection.GetGeoScreenCenter(),
-                              projection.DistancePixelsToMeters(3));
-  if (trace.empty())
+  if (!LoadTrace(trace_computer, min_time, projection))
     return;
 
   if (!calculated.wind_available)
@@ -162,17 +185,31 @@ TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
 }
 
 void
+TrailRenderer::Draw(Canvas &canvas, const WindowProjection &projection)
+{
+  canvas.select(Graphics::TracePen);
+  DrawTraceVector(canvas, projection, trace);
+}
+
+void
 TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const WindowProjection &projection,
                     unsigned min_time)
 {
-  trace.clear();
-  trace_computer.LockedCopyTo(trace, min_time,
-                              projection.GetGeoScreenCenter(),
-                              projection.DistancePixelsToMeters(4));
-  if (trace.empty())
-    return;
-
-  canvas.select(Graphics::TracePen);
-  DrawTraceVector(canvas, projection, trace);
+  if (LoadTrace(trace_computer, min_time, projection))
+    Draw(canvas, projection);
 }
+
+void
+TrailRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
+                    const ContestTraceVector &trace)
+{
+  points.GrowDiscard(trace.size());
+
+  unsigned n = 0;
+  for (auto i = trace.begin(), end = trace.end(); i != end; ++i)
+    points[n++] = projection.GeoToScreen(i->get_location());
+
+  canvas.polyline(points.begin(), n);
+}
+

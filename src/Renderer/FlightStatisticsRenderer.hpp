@@ -25,6 +25,7 @@ Copyright_License {
 #define FLIGHT_STATISTICS_RENDERER_HPP
 
 #include "Screen/Point.hpp"
+#include "Renderer/TrailRenderer.hpp"
 
 #include <tchar.h>
 
@@ -59,17 +60,21 @@ class FlightStatisticsRenderer {
   const AircraftLook &aircraft_look;
   const TaskLook &task_look;
 
+  mutable TrailRenderer trail_renderer;
+
 public:
   FlightStatisticsRenderer(const FlightStatistics &_flight_statistics,
                            const ChartLook &_chart_look,
                            const AirspaceLook &_airspace_look,
                            const AircraftLook &_aircraft_look,
-                           const TaskLook &_task_look)
+                           const TaskLook &_task_look,
+                           const TrailLook &trail_look)
     :fs(_flight_statistics),
      chart_look(_chart_look),
      airspace_look(_airspace_look),
      aircraft_look(_aircraft_look),
-     task_look(_task_look) {}
+     task_look(_task_look),
+     trail_renderer(trail_look) {}
 
 public:
   void RenderBarograph(Canvas &canvas, const PixelRect rc,
@@ -103,7 +108,7 @@ public:
                  const SETTINGS_COMPUTER &settings_computer,
                  const SETTINGS_MAP &settings_map,
                  const ContestStatistics &contest,
-                 const TracePointVector& trace) const;
+                 const TraceComputer &trace_computer) const;
 
   void RenderTask(Canvas &canvas, const PixelRect rc,
                   const NMEAInfo &nmea_info,

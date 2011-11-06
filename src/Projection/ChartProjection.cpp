@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "ChartProjection.hpp"
 #include "Engine/Task/TaskManager.hpp"
-#include "Engine/Navigation/TracePoint.hpp"
 
 ChartProjection::ChartProjection(const PixelRect &rc,
                                  const TaskManager &task,
@@ -68,13 +67,6 @@ ChartProjection::Set(const PixelRect &rc,
   const GeoPoint center = task.GetTaskCenter(fallback_loc);
   const fixed radius = max(fixed(10000), task.GetTaskRadius(fallback_loc));
   set_projection(rc, center, radius);
-}
-
-ChartProjection::ChartProjection(const PixelRect &rc,
-                                 const TracePointVector& trace,
-                                 const GeoPoint &fallback_loc) 
-{
-  Set(rc, get_bounds(trace, fallback_loc));
 }
 
 void ChartProjection::set_projection(const PixelRect &rc, 

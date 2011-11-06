@@ -32,6 +32,7 @@ class Canvas;
 class TraceComputer;
 class Projection;
 class WindowProjection;
+class ContestTraceVector;
 struct TrailLook;
 struct NMEAInfo;
 struct DerivedInfo;
@@ -46,13 +47,38 @@ class TrailRenderer {
 public:
   TrailRenderer(const TrailLook &_look):look(_look) {}
 
+  /**
+   * Load the full trace into this object.
+   */
+  bool LoadTrace(const TraceComputer &trace_computer);
+
+  /**
+   * Load a filtered trace into this object.
+   */
+  bool LoadTrace(const TraceComputer &trace_computer, unsigned min_time,
+                 const WindowProjection &projection);
+
+  gcc_pure
+  TaskProjection GetBounds(const GeoPoint fallback_location) const;
+
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
             const WindowProjection &projection, unsigned min_time,
             bool enable_traildrift, const RasterPoint pos, const NMEAInfo &basic,
             const DerivedInfo &calculated, const SETTINGS_MAP &settings);
 
+  /**
+   * Draw the trace that was obtained by LoadTrace() with the trace pen.
+   */
+  void Draw(Canvas &canvas, const WindowProjection &projection);
+
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
             const WindowProjection &projection, unsigned min_time);
+
+  /**
+   * Draw a ContestTraceVector.  The caller must select a Pen.
+   */
+  void Draw(Canvas &canvas, const WindowProjection &projection,
+            const ContestTraceVector &trace);
 
 private:
   void DrawTraceVector(Canvas &canvas, const Projection &projection,

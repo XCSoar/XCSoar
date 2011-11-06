@@ -28,7 +28,6 @@ class TaskManager;
 class OrderedTask;
 class OrderedTaskPoint;
 class ContestTraceVector;
-class TracePointVector;
 
 /**
  * Utility class to determine projection for a chart from task data,
@@ -56,10 +55,6 @@ public:
 
   ChartProjection(const PixelRect &rc,
                   const OrderedTaskPoint& point,
-                  const GeoPoint &fallback_loc);
-
-  ChartProjection(const PixelRect &rc,
-                  const TracePointVector& trace,
                   const GeoPoint &fallback_loc);
 
   void Set(const PixelRect &rc, const TaskProjection &task_projection,

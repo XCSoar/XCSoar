@@ -180,7 +180,8 @@ ChartControl::on_paint(Canvas &canvas)
 
   const FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
                                     chart_look, airspace_look,
-                                    aircraft_look, task_look);
+                                    aircraft_look, task_look,
+                                    look->trail);
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -232,12 +233,10 @@ ChartControl::on_paint(Canvas &canvas)
     break;
   case ANALYSIS_PAGE_OLC:
     if (glide_computer != NULL) {
-      TracePointVector trace;
-      glide_computer->LockedCopyTraceTo(trace);
-
       fs.RenderOLC(canvas, rcgfx, basic, calculated,
                    settings_computer, settings_map,
-                   calculated.contest_stats, trace);
+                   calculated.contest_stats,
+                   glide_computer->GetTraceComputer());
     }
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
@@ -281,7 +280,8 @@ Update(void)
 
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
                               look->chart, look->airspace,
-                              look->aircraft, look->task);
+                              look->aircraft, look->task,
+                              look->trail);
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:

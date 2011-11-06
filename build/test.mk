@@ -1986,6 +1986,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/RenderTaskPoint.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
+	$(SRC)/Renderer/TrailRenderer.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/Units/Units.cpp \

@@ -327,36 +327,6 @@ FlightStatisticsRenderer::RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   }
 }
 
-template<typename TraceVector>
-static void
-DrawTraceVector(Canvas &canvas, const ChartProjection& proj,
-                const TraceVector &trace)
-{
-  static AllocatedArray<RasterPoint> points;
-  points.GrowDiscard(trace.size());
-  unsigned i = 0;
-  for (typename TraceVector::const_iterator it = trace.begin();
-       it != trace.end(); ++it) {
-    points[i++] = proj.GeoToScreen(it->get_location());
-  }
-
-  canvas.polyline(points.begin(), i);
-}
-
-static void
-DrawTrace(Canvas &canvas, const ChartProjection& proj,
-          const TracePointVector& trace)
-{
-  DrawTraceVector(canvas, proj, trace);
-}
-
-static void
-DrawTrace(Canvas &canvas, const ChartProjection& proj,
-          const ContestTraceVector& trace)
-{
-  DrawTraceVector(canvas, proj, trace);
-}
-
 void
 FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
                             const NMEAInfo &nmea_info, 
@@ -364,26 +334,26 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
                             const SETTINGS_COMPUTER &settings_computer,
                             const SETTINGS_MAP &settings_map,
                             const ContestStatistics &contest,
-                            const TracePointVector& trace) const
+                                    const TraceComputer &trace_computer) const
 {
-  if (trace.size() < 2) {
+  if (!trail_renderer.LoadTrace(trace_computer)) {
     Chart chart(chart_look, canvas, rc);
     chart.DrawNoData();
     return;
   }
 
-  ChartProjection proj(rc, trace, nmea_info.location);
+  ChartProjection proj(rc, trail_renderer.GetBounds(nmea_info.location));
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
   AircraftRenderer::Draw(canvas, settings_map, aircraft_look,
                          calculated.heading, aircraft_pos);
 
-  canvas.select(Graphics::TracePen);
-  DrawTrace(canvas, proj, trace);
+  trail_renderer.Draw(canvas, proj);
+
   for (unsigned i=0; i< 3; ++i) {
     if (contest.GetResult(i).IsDefined()) {
       canvas.select(Graphics::ContestPen[i]);
-      DrawTrace(canvas, proj, contest.GetSolution(i));
+      trail_renderer.Draw(canvas, proj, contest.GetSolution(i));
     }
   }
 }
@@ -503,14 +473,8 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
     dv.Draw(task);
   }
 
-  if (trace_computer != NULL) {
-    TracePointVector trace;
-    trace_computer->LockedCopyTo(trace, 0,
-                                 proj.GetGeoScreenCenter(),
-                                 proj.DistancePixelsToMeters(3));
-    canvas.select(Graphics::TracePen);
-    DrawTrace(canvas, proj, trace);
-  }
+  if (trace_computer != NULL)
+    trail_renderer.Draw(canvas, *trace_computer, proj, 0);
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
   AircraftRenderer::Draw(canvas, settings_map, aircraft_look,
