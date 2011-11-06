@@ -50,7 +50,6 @@ MaskedIcon Graphics::hBmpTrafficSafe, Graphics::hBmpTrafficWarning, Graphics::hB
 Pen Graphics::hpWind;
 Pen Graphics::hpWindTail;
 Pen Graphics::hpCompass;
-Pen Graphics::hpMapScale;
 Pen Graphics::hpTerrainLine;
 Pen Graphics::hpTerrainLineThick;
 Pen Graphics::hpTrackBearingLine;
@@ -140,8 +139,6 @@ Graphics::Initialise()
 
   hpCompass.Set(Layout::Scale(1), COLOR_GRAY);
 
-  hpMapScale.Set(Layout::Scale(1), COLOR_BLACK);
-
   hpTerrainLine.Set(Pen::DASH, Layout::Scale(1), clrSepia);
   hpTerrainLineThick.Set(Pen::DASH, Layout::Scale(2), clrSepia);
 
@@ -210,7 +207,6 @@ Graphics::Deinitialise()
 
   hpCompass.Reset();
 
-  hpMapScale.Reset();
   hpTerrainLine.Reset();
   hpTerrainLineThick.Reset();
 

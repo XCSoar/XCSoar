@@ -47,16 +47,12 @@ namespace Graphics {
 #endif
 
   extern MaskedIcon hTerrainWarning;
-  extern MaskedIcon hFLARMTraffic;
   extern MaskedIcon hLogger, hLoggerOff;
   extern MaskedIcon hCruise, hClimb, hFinalGlide, hAbort;
   extern MaskedIcon hGPSStatus1, hGPSStatus2;
 
-  extern Brush hBackgroundBrush;
-
   extern Pen hpWind, hpWindTail;
   extern Pen hpCompass;
-  extern Pen hpMapScale;
   extern Pen hpTerrainLine;
   extern Pen hpTerrainLineThick;
   extern Pen hpTrackBearingLine;
