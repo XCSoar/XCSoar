@@ -152,10 +152,8 @@ AirspaceConfigPanel::Save(bool &requirerestart,
 {
   bool changed = false;
 
-  short tmp = renderer.altitude_mode;
-  changed |= SaveFormProperty(*wf, _T("prpAirspaceDisplay"),
-                              szProfileAltMode, tmp);
-  renderer.altitude_mode = (AirspaceDisplayMode_t)tmp;
+  changed |= SaveFormPropertyEnum(*wf, _T("prpAirspaceDisplay"),
+                                  szProfileAltMode, renderer.altitude_mode);
 
   changed |= SaveFormProperty(*wf, _T("prpClipAltitude"), ugAltitude,
                               renderer.clip_altitude,
@@ -187,10 +185,9 @@ AirspaceConfigPanel::Save(bool &requirerestart,
                               szProfileAirspaceBlackOutline,
                               renderer.black_outline);
 
-  tmp = renderer.fill_mode;
-  changed |= SaveFormProperty(*wf, _T("prpAirspaceFillMode"),
-                              szProfileAirspaceFillMode, tmp);
-  renderer.fill_mode = (enum AirspaceRendererSettings::AirspaceFillMode)tmp;
+  changed |= SaveFormPropertyEnum(*wf, _T("prpAirspaceFillMode"),
+                                  szProfileAirspaceFillMode,
+                                  renderer.fill_mode);
 
 #ifndef ENABLE_OPENGL
 #ifdef HAVE_ALPHA_BLEND

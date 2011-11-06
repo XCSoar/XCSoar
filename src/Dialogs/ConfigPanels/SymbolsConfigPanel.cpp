@@ -130,7 +130,6 @@ SymbolsConfigPanel::Save()
 {
   SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
   bool changed = false;
-  WndProperty *wp;
 
   changed |= SaveFormProperty(*wf, _T("prpWindArrowStyle"),
                               szProfileWindArrowStyle,
@@ -144,13 +143,9 @@ SymbolsConfigPanel::Save()
                               szProfileTrailDrift,
                               settings_map.trail_drift_enabled);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
-  assert(wp != NULL);
-  if (settings_map.snail_type != (SnailType)wp->GetDataField()->GetAsInteger()) {
-    settings_map.snail_type = (SnailType)wp->GetDataField()->GetAsInteger();
-    Profile::Set(szProfileSnailType, (int)settings_map.snail_type);
-    changed = true;
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpSnailType"),
+                                  szProfileSnailType,
+                                  settings_map.snail_type);
 
   changed |= SaveFormProperty(*wf, _T("prpSnailWidthScale"),
                               szProfileSnailWidthScale,
@@ -168,13 +163,9 @@ SymbolsConfigPanel::Save()
                               szProfileEnableFLARMMap,
                               settings_map.show_flarm_on_map);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAircraftSymbol"));
-  assert(wp != NULL);
-  if (settings_map.aircraft_symbol != (AircraftSymbol)wp->GetDataField()->GetAsInteger()) {
-    settings_map.aircraft_symbol = (AircraftSymbol)wp->GetDataField()->GetAsInteger();
-    Profile::Set(szProfileAircraftSymbol, (int)settings_map.aircraft_symbol);
-    changed = true;
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpAircraftSymbol"),
+                                  szProfileAircraftSymbol,
+                                  settings_map.aircraft_symbol);
 
   return changed;
 }

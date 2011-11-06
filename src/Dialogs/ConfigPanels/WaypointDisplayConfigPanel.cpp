@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "WaypointDisplayConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Profile/Profile.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
@@ -35,9 +34,7 @@ static WndForm* wf = NULL;
 void
 WaypointDisplayConfigPanel::UpdateVisibilities()
 {
-  WndProperty* wp = (WndProperty*)wf->FindByName(_T("prpAppUseSWLandablesRendering"));
-  assert(wp != NULL);
-  bool visible = (wp->GetDataField()->GetAsInteger() != 0);
+  bool visible = GetFormValueBoolean(*wf, _T("prpAppUseSWLandablesRendering"));
 
   ShowFormControl(*wf, _T("prpAppLandableRenderingScale"), visible);
   ShowFormControl(*wf, _T("prpAppScaleRunwayLength"), visible);
@@ -48,81 +45,75 @@ WaypointDisplayConfigPanel::Init(WndForm *_wf)
 {
   assert(_wf != NULL);
   wf = _wf;
-  WndProperty *wp;
 
   const WaypointRendererSettings &settings =
     CommonInterface::SettingsMap().waypoint;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpWaypointLabels"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("Full name"), DISPLAYNAME, _("The full name of each waypoint is displayed."));
-    dfe->addEnumText(_("First word of name"), DISPLAYUNTILSPACE, _("The first word of the waypoint name is displayed."));
-    dfe->addEnumText(_("First 3 letters"), DISPLAYFIRSTTHREE, _("The first 3 letters of the waypoint name are displayed."));
-    dfe->addEnumText(_("First 5 letters"), DISPLAYFIRSTFIVE, _("The first 5 letters of the waypoint name are displayed."));
-    dfe->addEnumText(_("None"), DISPLAYNONE, _("No waypoint name is displayed."));
-    dfe->Set(settings.display_text_type);
-    wp->RefreshDisplay();
-  }
+  static gcc_constexpr_data StaticEnumChoice wp_labels_list[] = {
+    { DISPLAYNAME, N_("Full name"),
+      N_("The full name of each waypoint is displayed.") },
+    { DISPLAYUNTILSPACE, N_("First word of name"),
+      N_("The first word of the waypoint name is displayed.") },
+    { DISPLAYFIRSTTHREE, N_("First 3 letters"),
+      N_("The first 3 letters of the waypoint name are displayed.") },
+    { DISPLAYFIRSTFIVE, N_("First 5 letters"),
+      N_("The first 5 letters of the waypoint name are displayed.") },
+    { DISPLAYNONE, N_("None"), N_("No waypoint name is displayed.") },
+    { 0 }
+  };
 
-  wp = (WndProperty*)wf->FindByName(_T("prpWaypointArrivalHeightDisplay"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("None"), WP_ARRIVAL_HEIGHT_NONE, _("No arrival height is displayed."));
-    dfe->addEnumText(_("Straight glide"), WP_ARRIVAL_HEIGHT_GLIDE, _("Straight glide arrival height (no terrain is considered)."));
-    dfe->addEnumText(_("Terrain avoidance glide"), WP_ARRIVAL_HEIGHT_TERRAIN, _("Arrival height considering terrain avoidance"));
-    dfe->addEnumText(_("Straight & terrain glide"), WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN, _("Both arrival heights are displayed."));
-    dfe->Set(settings.arrival_height_display);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpWaypointLabels"), wp_labels_list,
+                   settings.display_text_type);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpWaypointLabelStyle"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Rounded rectangle"), RM_ROUNDED_BLACK);
-    dfe->addEnumText(_("Outlined"), RM_OUTLINED_INVERTED);
-    dfe->Set(settings.landable_render_mode);
-    wp->RefreshDisplay();
-  }
+  static gcc_constexpr_data StaticEnumChoice wp_arrival_list[] = {
+    { WP_ARRIVAL_HEIGHT_NONE, N_("None"),
+      N_("No arrival height is displayed.") },
+    { WP_ARRIVAL_HEIGHT_GLIDE, N_("Straight glide"),
+      N_("Straight glide arrival height (no terrain is considered).") },
+    { WP_ARRIVAL_HEIGHT_TERRAIN, N_("Terrain avoidance glide"),
+      N_("Arrival height considering terrain avoidance") },
+    { WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN, N_("Straight & terrain glide"),
+      N_("Both arrival heights are displayed.") },
+    { 0 }
+  };
 
-  wp = (WndProperty*)wf->FindByName(_T("prpWaypointLabelSelection"));
-  if (wp) {
-    //Determines what waypoint labels are displayed for each waypoint (space permitting):&#10;
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("All"), wlsAllWaypoints,
-                     _("All waypoint labels will be displayed."));
-    dfe->addEnumText(_("Task waypoints & landables"),
-                     wlsTaskAndLandableWaypoints,
-                     _("All waypoints part of a task and all landables will be displayed."));
-    dfe->addEnumText(_("Task waypoints"), wlsTaskWaypoints,
-                     _("All waypoints part of a task will be displayed."));
-    dfe->addEnumText(_("None"), wlsNoWaypoints,
-                     _("No waypoint labels will be displayed."));
-    dfe->Set(settings.label_selection);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpWaypointArrivalHeightDisplay"), wp_arrival_list,
+                   settings.arrival_height_display);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppIndLandable"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("Purple circle"), wpLandableWinPilot,
-                     _("Airports and outlanding fields are displayed as purple circles. If the waypoint is reachable a bigger green circle is added behind the purple one. If the waypoint is blocked by a mountain the green circle will be red instead."));
-    dfe->addEnumText(_("B/W"), wpLandableAltA,
-                     _("Airports and outlanding fields are displayed in white/grey. If the waypoint is reachable the color is changed to green. If the waypoint is blocked by a mountain the color is changed to red instead."));
-    dfe->addEnumText(_("Traffic lights"), wpLandableAltB,
-                     _("Airports and outlanding fields are displayed in the colors of a traffic light. Green if reachable, Orange if blocked by mountain and red if not reachable at all."));
-    dfe->Set(settings.landable_style);
-    wp->RefreshDisplay();
-  }
+  static gcc_constexpr_data StaticEnumChoice wp_label_list[] = {
+    { RM_ROUNDED_BLACK, N_("Rounded rectangle") },
+    { RM_OUTLINED_INVERTED, N_("Outlined") },
+    { 0 }
+  };
+
+  LoadFormProperty(*wf, _T("prpWaypointLabelStyle"), wp_label_list,
+                   settings.landable_render_mode);
+
+  static gcc_constexpr_data StaticEnumChoice wp_selection_list[] = {
+    { wlsAllWaypoints, N_("All"), N_("All waypoint labels will be displayed.") },
+    { wlsTaskAndLandableWaypoints, N_("Task waypoints & landables"),
+      N_("All waypoints part of a task and all landables will be displayed.") },
+    { wlsTaskWaypoints, N_("Task waypoints"),
+      N_("All waypoints part of a task will be displayed.") },
+    { wlsNoWaypoints, N_("None"), N_("No waypoint labels will be displayed.") },
+    { 0 }
+  };
+
+  LoadFormProperty(*wf, _T("prpWaypointLabelSelection"), wp_selection_list,
+                   settings.label_selection);
+
+  static gcc_constexpr_data StaticEnumChoice wp_style_list[] = {
+    { wpLandableWinPilot, N_("Purple circle"),
+      N_("Airports and outlanding fields are displayed as purple circles. If the waypoint is reachable a bigger green circle is added behind the purple one. If the waypoint is blocked by a mountain the green circle will be red instead.") },
+    { wpLandableAltA, N_("B/W"),
+      N_("Airports and outlanding fields are displayed in white/grey. If the waypoint is reachable the color is changed to green. If the waypoint is blocked by a mountain the color is changed to red instead.") },
+    { wpLandableAltB, N_("Traffic lights"),
+      N_("Airports and outlanding fields are displayed in the colors of a traffic light. Green if reachable, Orange if blocked by mountain and red if not reachable at all.") },
+    { 0 }
+  };
+
+  LoadFormProperty(*wf, _T("prpAppIndLandable"), wp_style_list,
+                   settings.landable_style);
 
   LoadFormProperty(*wf, _T("prpAppUseSWLandablesRendering"),
                    settings.vector_landable_rendering);
@@ -157,7 +148,6 @@ WaypointDisplayConfigPanel::Save()
     CommonInterface::SetSettingsMap().waypoint;
 
   bool changed = false;
-  WndProperty *wp;
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabels"),
                                   szProfileDisplayText,
@@ -175,14 +165,9 @@ WaypointDisplayConfigPanel::Save()
                                   szProfileWaypointLabelSelection,
                                   settings.label_selection);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppIndLandable"));
-  if (wp) {
-    if (settings.landable_style != (IndLandable_t)(wp->GetDataField()->GetAsInteger())) {
-      settings.landable_style = (IndLandable_t)(wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppIndLandable, settings.landable_style);
-      changed = true;
-    }
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpAppIndLandable"),
+                                  szProfileAppIndLandable,
+                                  settings.landable_style);
 
   changed |= SaveFormProperty(*wf, _T("prpAppUseSWLandablesRendering"),
                               szProfileAppUseSWLandablesRendering,

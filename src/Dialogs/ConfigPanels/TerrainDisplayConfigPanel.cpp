@@ -119,15 +119,9 @@ TerrainDisplayConfigPanel::Save(SETTINGS_MAP &settings_map)
                               szProfileDrawTopography,
                               settings_map.topography_enabled);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSlopeShadingType"));
-  if (wp) {
-    if (terrain.slope_shading != wp->GetDataField()->GetAsInteger()) {
-      terrain.slope_shading =
-        (SlopeShadingType_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileSlopeShadingType, terrain.slope_shading);
-      changed = true;
-    }
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpSlopeShadingType"),
+                                  szProfileSlopeShadingType,
+                                  terrain.slope_shading);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainContrast"));
   if (wp) {
