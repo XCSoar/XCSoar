@@ -69,7 +69,10 @@ namespace InputEvents
   void makeLabel(mode mode_id, const TCHAR *label,
                         unsigned location, unsigned event_id);
 
-  void drawButtons(mode Mode);
+  /**
+   * @param full if false, update only the dynamic labels
+   */
+  void drawButtons(mode Mode, bool full=false);
 
 
   // helpers (temporary)

@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.2.3 - not yet released
 * calculations
   - don't discard manual wind when auto wind is disabled
+* user interface
+  - reduce menu flickering
 * data files
   - Automatically try to detect character encoding of airfield details file
 
