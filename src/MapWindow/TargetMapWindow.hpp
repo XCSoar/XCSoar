@@ -142,7 +142,7 @@ private:
    */
   void RenderAirspace(Canvas &canvas);
 
-  void RenderTrail(Canvas &canvas) const;
+  void RenderTrail(Canvas &canvas);
 
   void DrawWaypoints(Canvas &canvas);
 

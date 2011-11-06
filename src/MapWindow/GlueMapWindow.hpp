@@ -206,7 +206,7 @@ private:
   void DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const;
   void DrawStallRatio(Canvas &canvas, const PixelRect &rc) const;
   virtual void DrawThermalEstimate(Canvas &canvas) const;
-  virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const;
+  virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos);
 
   void SwitchZoomClimb();
 

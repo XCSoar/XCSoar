@@ -26,7 +26,7 @@ Copyright_License {
 #include "Computer/GlideComputer.hpp"
 
 void
-MapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
+MapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos)
 {
   unsigned min_time = max(0, (int)Basic().time - 600);
   DrawTrail(canvas, aircraft_pos, min_time);
@@ -34,7 +34,7 @@ MapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
 
 void
 MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
-                     unsigned min_time, bool enable_traildrift) const
+                     unsigned min_time, bool enable_traildrift)
 {
   if (glide_computer)
     trail_renderer.Draw(canvas, glide_computer->GetTraceComputer(),

@@ -189,7 +189,7 @@ TargetMapWindow::DrawWaypoints(Canvas &canvas)
 }
 
 void
-TargetMapWindow::RenderTrail(Canvas &canvas) const
+TargetMapWindow::RenderTrail(Canvas &canvas)
 {
   if (glide_computer == NULL)
     return;

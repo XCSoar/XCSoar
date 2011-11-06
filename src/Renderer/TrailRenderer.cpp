@@ -56,7 +56,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const WindowProjection &projection, unsigned min_time,
                     bool enable_traildrift, const RasterPoint pos,
                     const NMEAInfo &basic, const DerivedInfo &calculated,
-                    const SETTINGS_MAP &settings) const
+                    const SETTINGS_MAP &settings)
 {
   if (settings.trail_length == TRAIL_OFF)
     return;
@@ -149,7 +149,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
 void
 TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
-                               const TracePointVector &trace) const
+                               const TracePointVector &trace)
 {
   points.GrowDiscard(trace.size());
 
@@ -164,7 +164,7 @@ TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
 void
 TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const WindowProjection &projection,
-                    unsigned min_time) const
+                    unsigned min_time)
 {
   trace.clear();
   trace_computer.LockedCopyTo(trace, min_time,

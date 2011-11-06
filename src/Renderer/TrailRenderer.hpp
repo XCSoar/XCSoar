@@ -40,8 +40,8 @@ struct SETTINGS_MAP;
 class TrailRenderer {
   const TrailLook &look;
 
-  mutable TracePointVector trace;
-  mutable AllocatedArray<RasterPoint> points;
+  TracePointVector trace;
+  AllocatedArray<RasterPoint> points;
 
 public:
   TrailRenderer(const TrailLook &_look):look(_look) {}
@@ -49,14 +49,14 @@ public:
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
             const WindowProjection &projection, unsigned min_time,
             bool enable_traildrift, const RasterPoint pos, const NMEAInfo &basic,
-            const DerivedInfo &calculated, const SETTINGS_MAP &settings) const;
+            const DerivedInfo &calculated, const SETTINGS_MAP &settings);
 
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
-            const WindowProjection &projection, unsigned min_time) const;
+            const WindowProjection &projection, unsigned min_time);
 
 private:
   void DrawTraceVector(Canvas &canvas, const Projection &projection,
-                       const TracePointVector &trace) const;
+                       const TracePointVector &trace);
 };
 
 #endif

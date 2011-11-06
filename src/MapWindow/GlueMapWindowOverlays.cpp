@@ -250,7 +250,7 @@ GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
 }
 
 void
-GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
+GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos)
 {
   unsigned min_time = 0;
   if (GetDisplayMode() == DM_CIRCLING) {
