@@ -795,7 +795,9 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   if (!waypoint.comment.empty()) {
     _tcscat(buffer, _T(" - "));
-    _tcscat(buffer, waypoint.comment.c_str());
+    size_t length = _tcslen(buffer);
+    CopyString(buffer + length, waypoint.comment.c_str(),
+               ARRAY_SIZE(buffer) - length);
   }
 
   unsigned left = rc.left + line_height + Layout::FastScale(2);
