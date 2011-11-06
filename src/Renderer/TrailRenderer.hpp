@@ -29,7 +29,7 @@ Copyright_License {
 #include "Engine/Navigation/TracePoint.hpp"
 
 class Canvas;
-class GlideComputer;
+class TraceComputer;
 class Projection;
 class WindowProjection;
 struct TrailLook;
@@ -46,12 +46,12 @@ class TrailRenderer {
 public:
   TrailRenderer(const TrailLook &_look):look(_look) {}
 
-  void Draw(Canvas &canvas, const GlideComputer &glide_computer,
+  void Draw(Canvas &canvas, const TraceComputer &trace_computer,
             const WindowProjection &projection, unsigned min_time,
             bool enable_traildrift, const RasterPoint pos, const NMEAInfo &basic,
             const DerivedInfo &calculated, const SETTINGS_MAP &settings) const;
 
-  void Draw(Canvas &canvas, const GlideComputer &glide_computer,
+  void Draw(Canvas &canvas, const TraceComputer &trace_computer,
             const WindowProjection &projection, unsigned min_time) const;
 
 private:

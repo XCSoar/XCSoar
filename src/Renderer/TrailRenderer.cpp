@@ -28,7 +28,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "SettingsMap.hpp"
-#include "Computer/GlideComputer.hpp"
+#include "Computer/TraceComputer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Engine/Math/Earth.hpp"
 
@@ -52,7 +52,7 @@ GetSnailColorIndex(fixed cv)
 }
 
 void
-TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
+TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const WindowProjection &projection, unsigned min_time,
                     bool enable_traildrift, const RasterPoint pos,
                     const NMEAInfo &basic, const DerivedInfo &calculated,
@@ -62,9 +62,9 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
     return;
 
   trace.clear();
-  glide_computer.LockedCopyTraceTo(trace, min_time,
-                                   projection.GetGeoScreenCenter(),
-                                   projection.DistancePixelsToMeters(3));
+  trace_computer.LockedCopyTo(trace, min_time,
+                              projection.GetGeoScreenCenter(),
+                              projection.DistancePixelsToMeters(3));
   if (trace.empty())
     return;
 
@@ -162,14 +162,14 @@ TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
 }
 
 void
-TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
+TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const WindowProjection &projection,
                     unsigned min_time) const
 {
   trace.clear();
-  glide_computer.LockedCopyTraceTo(trace, min_time,
-                                   projection.GetGeoScreenCenter(),
-                                   projection.DistancePixelsToMeters(4));
+  trace_computer.LockedCopyTo(trace, min_time,
+                              projection.GetGeoScreenCenter(),
+                              projection.DistancePixelsToMeters(4));
   if (trace.empty())
     return;
 
