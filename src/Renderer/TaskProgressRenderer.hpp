@@ -27,10 +27,15 @@ Copyright_License {
 #include "Screen/Point.hpp"
 
 class Canvas;
+struct TaskLook;
 struct TaskSummary;
 
 class TaskProgressRenderer {
+  const TaskLook &look;
+
 public:
+  TaskProgressRenderer(const TaskLook &_look):look(_look) {}
+
   void Draw(const TaskSummary &summary, Canvas &canvas,
             const PixelRect &rc, bool inverse);
 };

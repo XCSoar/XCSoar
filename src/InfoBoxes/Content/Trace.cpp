@@ -190,7 +190,8 @@ InfoBoxContentThermalBand::Update(InfoBoxData &data)
 void
 InfoBoxContentTaskProgress::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  TaskProgressRenderer renderer;
+  const Look &look = *CommonInterface::main_window.look;
+  TaskProgressRenderer renderer(look.task);
   renderer.Draw(CommonInterface::Calculated().
                 common_stats.ordered_summary,
                 canvas, infobox.GetValueAndCommentRect(),

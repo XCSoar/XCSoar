@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "TaskProgressRenderer.hpp"
+#include "Look/TaskLook.hpp"
 #include "Engine/Task/TaskStats/TaskSummary.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Icon.hpp"
 
@@ -44,7 +44,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   Pen pen_f(1, inverse ? COLOR_WHITE : COLOR_BLACK);
 
   if (summary.p_remaining < fixed(0.99)) {
-    canvas.select(Graphics::hbWind);
+    canvas.select(look.hbGray);
     canvas.null_pen();
     canvas.segment(center.x, center.y, radius, Angle::Radians(fixed_zero),
                    Angle::Radians(sweep * (fixed_one -  summary.p_remaining)));
@@ -64,23 +64,23 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
     int w;
     if (i == summary.active) {
       if (it->achieved)
-        canvas.select(Graphics::hbGreen);
+        canvas.select(look.hbGreen);
       else
-        canvas.select(Graphics::hbOrange);
+        canvas.select(look.hbOrange);
 
       w = Layout::Scale(3);
     } else if (i < summary.active) {
       if (it->achieved)
-        canvas.select(Graphics::hbGreen);
+        canvas.select(look.hbGreen);
       else
-        canvas.select(Graphics::hbNotReachableTerrain);
+        canvas.select(look.hbNotReachableTerrain);
 
       w = Layout::Scale(2);
     } else {
       if (it->achieved)
-        canvas.select(Graphics::hbGreen);
+        canvas.select(look.hbGreen);
       else
-        canvas.select(Graphics::hbLightGray);
+        canvas.select(look.hbLightGray);
 
       w = Layout::Scale(1);
     }

@@ -82,11 +82,6 @@ namespace Graphics {
   extern Bitmap hBmpTabRules;
   extern Bitmap hBmpTabTimes;
 
-  // used for landable rendering
-  extern Brush hbGreen;
-  extern Brush hbOrange;
-  extern Brush hbLightGray;
-  extern Brush hbNotReachableTerrain;
   extern Brush hbGround;
 
   extern const Color GroundColor;

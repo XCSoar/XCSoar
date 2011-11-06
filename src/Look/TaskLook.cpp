@@ -50,4 +50,10 @@ TaskLook::Initialise()
   best_cruise_track_pen.Set(Layout::Scale(1), DarkColor(bearing_color));
 
   target_icon.Load(IDB_TARGET, IDB_TARGET_HD);
+
+  hbGreen.Set(COLOR_GRAY);
+  hbGreen.Set(COLOR_GREEN);
+  hbOrange.Set(COLOR_ORANGE);
+  hbLightGray.Set(COLOR_LIGHT_GRAY);
+  hbNotReachableTerrain.Set(LightColor(COLOR_RED));
 }

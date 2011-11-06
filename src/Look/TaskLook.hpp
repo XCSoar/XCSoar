@@ -47,6 +47,11 @@ struct TaskLook {
 
   MaskedIcon target_icon;
 
+  /**
+   * Used by TaskProgressRenderer.
+   */
+  Brush hbGray, hbGreen, hbOrange, hbLightGray, hbNotReachableTerrain;
+
   void Initialise();
 };
 
