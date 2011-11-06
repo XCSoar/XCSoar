@@ -51,6 +51,17 @@ ChartProjection::ChartProjection(const PixelRect &rc,
 
 void
 ChartProjection::Set(const PixelRect &rc,
+                     const TaskProjection &task_projection,
+                     fixed radius_factor)
+{
+  const GeoPoint center = task_projection.get_center();
+  const fixed radius = max(fixed(10000),
+                           task_projection.ApproxRadius() * radius_factor);
+  set_projection(rc, center, radius);
+}
+
+void
+ChartProjection::Set(const PixelRect &rc,
                      const OrderedTask &task,
                      const GeoPoint &fallback_loc)
 {
@@ -63,10 +74,7 @@ ChartProjection::ChartProjection(const PixelRect &rc,
                                  const TracePointVector& trace,
                                  const GeoPoint &fallback_loc) 
 {
-  const TaskProjection proj = get_bounds(trace, fallback_loc);
-  const GeoPoint center = proj.get_center();
-  const fixed radius = max(fixed(10000), proj.ApproxRadius() * fixed(1.1));
-  set_projection(rc, center, radius);
+  Set(rc, get_bounds(trace, fallback_loc));
 }
 
 void ChartProjection::set_projection(const PixelRect &rc, 
@@ -88,7 +96,5 @@ ChartProjection::ChartProjection(const PixelRect &rc,
   task_projection.reset(fallback_loc);
   point.scan_projection(task_projection);
 
-  const GeoPoint center = task_projection.get_center();
-  const fixed radius = max(fixed(10000), task_projection.ApproxRadius());
-  set_projection(rc, center, radius * fixed(1.3));
+  Set(rc, task_projection, fixed(1.3));
 }
