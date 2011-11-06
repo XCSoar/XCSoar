@@ -29,10 +29,10 @@ Copyright_License {
 class Canvas;
 struct TaskSummary;
 
-namespace TaskProgressRenderer
-{
+class TaskProgressRenderer {
+public:
   void Draw(const TaskSummary &summary, Canvas &canvas,
             const PixelRect &rc, bool inverse);
-}
+};
 
 #endif
