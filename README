@@ -50,6 +50,8 @@ For Linux/Unix, you need:
 - Boost (http://www.boost.org/)
 - zlib (http://www.zlib.net/)
 - CURL (http://curl.haxx.se/)
+- SDL (http://www.libsdl.org/)
+- SDL_ttf (http://www.libsdl.org/projects/SDL_ttf/)
 - OpenGL
 
 For Android, you need:
