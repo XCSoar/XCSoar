@@ -477,6 +477,49 @@ Colour conventions in use are:
 \item Text is greyed out (but still visible) if the item is disabled
 \end{itemize}
 
+\subsection{Dialog types and navigation buttons}
+There are four types of dialogs in XCSoar, and the navigation 
+buttons for each are different.  
+Navigation buttons are the Close, OK, Cancel and Select buttons.
+\begin{itemize}
+\item Dialogs that modify and save data when the dialog closes.
+
+These shall usually have a Close button (no Cancel) and may have context specific 
+function buttons
+\item Dialogs that modify data where Cancel would be important for the user.
+
+These shall have OK and Cancel buttons.  This may include dialogs with 
+children dialogs where hitting Cancel from the parent dialog cancels 
+all the changes made in the children dialogs
+
+\item Dialogs that have a list of values, one of which can be selected to return to the parent dialog.
+
+These shall have Select and Cancel buttons
+\item Dialogs that display information that cannot be modified.
+
+These shall have a Close button
+\end{itemize}
+
+\subsection{Dialog button placement and size}
+\begin{itemize}
+\item The Close and Cancel buttons will never appear in the same dialog and are always located in the same place.  This location will be:
+
+For portrait: lower right
+
+For landscape: lower left
+\item The Select button will be accompanied with a Cancel button.  The locations will be:
+
+For portrait: Select in lower left, Cancel in lower right
+
+For landscape: Cancel in lower left, Select immediately above it
+\item Buttons will be 35 (scaled) pixels high
+\item Buttons will be flush with the bottom of the screen and with the sides of the screen and against each other (no margins)
+\item In portrait, buttons will be 33% or 50% or 100% width of the screen
+\item In landscape, buttons will be 65 to 80 (scaled) pixels wide, as wide as the frame permits.  They will generally be a vertical row of buttons flush left of the screen
+\item If text won't fit on a button, the buttons can be made larger consistently for a screen, but this should be the exception because if it must contain that much text consider using a different type of control.
+\item Exceptions to all the dialog concepts above are encouraged, but should be mocked up and reviewed with the development community prior to implementing and possibly documenting in the developers guide.
+\end{itemize}
+
 \subsection{Usability}
 \begin{itemize}
 \item Minimum size of buttons should be X by Y mm
