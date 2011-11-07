@@ -184,7 +184,7 @@ InitialiseLogFonts()
                     UPixelScalar(FontHeight * 0.39), false, false, false);
 }
 
-void
+bool
 Fonts::Initialize()
 {
   InitialiseLogFonts();
@@ -196,6 +196,11 @@ Fonts::Initialize()
   Map.Set(LogMap);
   MapBold.Set(LogMapBold);
   monospace.Set(log_monospace);
+
+  return Title.IsDefined() && CDI.IsDefined() &&
+    MapLabel.IsDefined() && MapLabelImportant.IsDefined() &&
+    Map.IsDefined() && MapBold.IsDefined() &&
+    monospace.IsDefined();
 }
 
 void

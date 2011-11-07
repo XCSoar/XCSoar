@@ -99,6 +99,25 @@ MainWindow::set(const TCHAR* text,
   SingleWindow::set(_T("XCSoarMain"), text, left, top, width, height);
 }
 
+gcc_noreturn
+static void
+NoFontsAvailable()
+{
+  const TCHAR *msg = _T("Font initialisation failed");
+
+  /* log the error */
+  LogStartUp(_T("%s"), msg);
+
+  /* now try to get a GUI error message out to the user */
+#ifdef WIN32
+  MessageBox(NULL, msg, _T("XCSoar"), MB_ICONEXCLAMATION|MB_OK);
+#elif !defined(ANDROID)
+  execl("/usr/bin/xmessage", "xmessage", msg, NULL);
+  execl("/usr/X11/bin/xmessage", "xmessage", msg, NULL);
+#endif
+  exit(EXIT_FAILURE);
+}
+
 void
 MainWindow::Initialise()
 {
@@ -110,7 +129,10 @@ MainWindow::Initialise()
   Graphics::Initialise();
 
   LogStartUp(_T("Initialise fonts"));
-  Fonts::Initialize();
+  if (!Fonts::Initialize()) {
+    reset();
+    NoFontsAvailable();
+  }
 
   if (look == NULL)
     look = new Look();
@@ -133,8 +155,14 @@ MainWindow::InitialiseConfigured()
   Fonts::SizeInfoboxFont(ib_layout.control_width);
 
   if (ui_settings.custom_fonts) {
-    LogStartUp(_T("Load fonts"));
-    Fonts::LoadCustom();
+    LogStartUp(_T("Load custom fonts"));
+    if (!Fonts::LoadCustom()) {
+      LogStartUp(_T("Failed to load custom fonts"));
+      if (!Fonts::Initialize()) {
+        reset();
+        NoFontsAvailable();
+      }
+    }
   }
 
   assert(look != NULL);

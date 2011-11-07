@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Max Kellermann <max@duempel.org>
 Build-Depends: debhelper (>= 5),
  libboost-dev,
- libsdl1.2-dev, libsdl-gfx1.2-dev, libsdl-ttf2.0-dev,
+ libsdl1.2-dev, libsdl-ttf2.0-dev,
  libgl-dev,
  libgconf2-dev,
  librsvg2-bin, imagemagick (>= 7:6.4), xsltproc,

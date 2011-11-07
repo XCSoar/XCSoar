@@ -36,6 +36,7 @@ ifeq ($(shell uname -s),Darwin)
 # -lSDL flag manually
 SDL_LDLIBS := $(filter-out -l%,$(SDL_LDLIBS))
 SDL_LDLIBS += /opt/local/lib/libSDL_ttf.a /opt/local/lib/libfreetype.a
+SDL_LDLIBS += /opt/local/lib/libbz2.a
 else
 SDL_LDLIBS += -lSDL_ttf
 endif

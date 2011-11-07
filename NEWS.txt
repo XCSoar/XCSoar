@@ -23,6 +23,10 @@ Version 6.2.3 - not yet released
   - fix crash in waypoint list dialog when waypoints have large comments
 * data files
   - Automatically try to detect character encoding of airfield details file
+* Linux
+  - display error message when fonts could not be loaded
+* Mac OS X
+  - initial public release, distributed in a DMG package
 
 Version 6.2.2 - 2011/11/04
 * devices

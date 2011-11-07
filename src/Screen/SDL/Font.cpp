@@ -34,12 +34,18 @@ static const char *const all_font_paths[] = {
   "/Library/Fonts/Arial Narrow.ttf",
 #else
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf",
+  "/usr/share/fonts/dejavu/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/truetype/ttf-droid/DroidSans.ttf",
+  "/usr/share/fonts/droid/DroidSans.ttf",
   "/usr/share/fonts/truetype/droid/DroidSans.ttf",
   "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf",
+  "/usr/share/fonts/corefonts/arial.ttf",
   "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
+  "/usr/share/fonts/freefont-ttf/FreeSans.ttf",
   "/usr/share/fonts/truetype/unifont/unifont.ttf",
+  "/usr/share/fonts/unifont/unifont.ttf",
   "/usr/share/fonts/local/tahoma.ttf",
+  "/usr/share/fonts/corefonts/tahoma.ttf",
 #endif
   NULL
 };

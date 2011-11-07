@@ -54,6 +54,7 @@ include $(topdir)/build/compile.mk
 include $(topdir)/build/llvm.mk
 include $(topdir)/build/tools.mk
 include $(topdir)/build/version.mk
+include $(topdir)/build/osx.mk
 include $(topdir)/build/generate.mk
 include $(topdir)/build/doxygen.mk
 include $(topdir)/build/manual.mk

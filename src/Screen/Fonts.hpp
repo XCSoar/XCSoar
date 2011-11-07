@@ -46,9 +46,22 @@ namespace Fonts
   extern Font MapLabelImportant;
   extern Font monospace;
 
-  void Initialize();
+  /**
+   * Load all fonts.
+   *
+   * @return true on success
+   */
+  bool Initialize();
+
   void SizeInfoboxFont(UPixelScalar control_width);
-  void LoadCustom();
+
+  /**
+   * Load custom fonts from the profile.
+   *
+   * @return true on success
+   */
+  bool LoadCustom();
+
   void Deinitialize();
 
   const TCHAR* GetStandardFontFace();
