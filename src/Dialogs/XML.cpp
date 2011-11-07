@@ -49,6 +49,8 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "ResourceLoader.hpp"
 
+#include <zlib/zlib.h>
+
 #include <stdio.h>    // for _stprintf
 #include <assert.h>
 #include <tchar.h>
@@ -327,20 +329,59 @@ GetCallBack(const CallBackTableEntry *lookup_table,
   return CallBackLookup(lookup_table, name);
 }
 
+/**
+ * Uncompress the given buffer, and return it as a C string.  The
+ * caller is responsible for freeing it with delete[].
+ */
+static char *
+InflateToString(const void *compressed, size_t length)
+{
+  size_t buffer_size = length * 8;
+  char *buffer = new char[buffer_size];
+
+  z_stream strm;
+  memset(&strm, 0, sizeof(strm));
+  strm.zalloc = 0;
+  strm.zfree = 0;
+  strm.next_in = reinterpret_cast<const uint8_t *>(compressed);
+  strm.avail_in = length;
+  strm.next_out = reinterpret_cast<uint8_t *>(buffer);
+  strm.avail_out = buffer_size - 1;
+
+  int result = inflateInit2(&strm, 16+MAX_WBITS);
+  if (result != Z_OK) {
+    delete[] buffer;
+    return NULL;
+  }
+
+  result = inflate(&strm, Z_NO_FLUSH);
+  inflateEnd(&strm);
+  if (result != Z_STREAM_END) {
+    delete[] buffer;
+    return NULL;
+  }
+
+  assert((size_t)strm.avail_out < buffer_size);
+
+  buffer[buffer_size - 1 - strm.avail_out] = 0;
+  return buffer;
+}
+
 static XMLNode *
 LoadXMLFromResource(const TCHAR* resource, XMLResults *xml_results)
 {
   ResourceLoader::Data data = ResourceLoader::Load(resource, _T("XMLDialog"));
   assert(data.first != NULL);
 
-  const char *buffer = (const char *)data.first;
+  char *buffer = InflateToString(data.first, data.second);
 
 #ifdef _UNICODE
-  int length = data.second;
+  int length = strlen(buffer);
   TCHAR *buffer2 = new TCHAR[length + 1];
   length = MultiByteToWideChar(CP_UTF8, 0, buffer, length,
                                buffer2, length);
   buffer2[length] = _T('\0');
+  delete[] buffer;
 #else
   const char *buffer2 = buffer;
 #endif
@@ -349,6 +390,8 @@ LoadXMLFromResource(const TCHAR* resource, XMLResults *xml_results)
 
 #ifdef _UNICODE
   delete[] buffer2;
+#else
+  delete[] buffer;
 #endif
 
   return x;

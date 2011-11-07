@@ -169,9 +169,18 @@ $(BMP_LAUNCH_DLL_SIM_224): %_dll_2.bmp: %.png
 
 #######
 
-RESOURCE_FILES = $(wildcard Data/Dialogs/*.xml)
-RESOURCE_FILES += $(wildcard Data/Dialogs/Infobox/*.xml)
-RESOURCE_FILES += $(wildcard Data/Dialogs/Configuration/*.xml)
+DIALOG_FILES = $(wildcard Data/Dialogs/*.xml)
+DIALOG_FILES += $(wildcard Data/Dialogs/Infobox/*.xml)
+DIALOG_FILES += $(wildcard Data/Dialogs/Configuration/*.xml)
+
+DIALOG_COMPRESSED = $(patsubst Data/Dialogs/%.xml,output/data/dialogs/%.xml,$(DIALOG_FILES))
+$(DIALOG_COMPRESSED): output/data/dialogs/%.xml: Data/Dialogs/%.xml \
+	| output/data/dialogs/Configuration/dirstamp output/data/dialogs/Infobox/dirstamp
+	@$(NQ)echo "  GZIP    $@"
+	$(Q)gzip --best <$< >$@.tmp
+	$(Q)mv $@.tmp $@
+
+RESOURCE_FILES = $(DIALOG_COMPRESSED)
 
 ifeq ($(TARGET),ANDROID)
 RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
