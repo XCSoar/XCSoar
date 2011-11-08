@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Form/Tabbed.hpp"
+#include "WindowWidget.hpp"
 
 #include <assert.h>
 
@@ -34,20 +35,37 @@ TabbedControl::TabbedControl(ContainerWindow &parent,
 }
 
 void
-TabbedControl::AddClient(Window *w)
+TabbedControl::AddPage(Widget *w)
 {
+  assert(defined());
+
   if (tabs.empty()) {
     current = 0;
   } else {
     assert(current < tabs.size());
-
-    w->hide();
   }
 
+  const bool show = tabs.empty();
   tabs.append(w);
+  Page &tab = tabs.back();
 
   const PixelRect rc = get_client_rect();
-  w->move(rc.left, rc.top, rc.right, rc.bottom);
+  w->Initialise(*this, rc);
+
+  if (show) {
+    tab.prepared = true;
+    w->Prepare(*this, rc);
+    w->Show(rc);
+  }
+}
+
+void
+TabbedControl::AddClient(Window *w)
+{
+  /* backwards compatibility: make sure the Window is hidden */
+  w->hide();
+
+  AddPage(new WindowWidget(w));
 }
 
 void
@@ -58,9 +76,17 @@ TabbedControl::SetCurrentPage(unsigned i)
   if (i == current)
     return;
 
-  tabs[current]->hide();
+  assert(tabs[current].prepared);
+  tabs[current].widget->Hide();
+
   current = i;
-  tabs[current]->show();
+
+  if (!tabs[current].prepared) {
+    tabs[current].prepared = true;
+    tabs[current].widget->Prepare(*this, get_client_rect());
+  }
+
+  tabs[current].widget->Show(get_client_rect());
 }
 
 void
@@ -90,9 +116,25 @@ TabbedControl::on_resize(UPixelScalar width, UPixelScalar height)
 {
   ContainerWindow::on_resize(width, height);
 
-  const PixelRect rc = get_client_rect();
-  for (unsigned i = tabs.size(); i--;)
-    tabs[i]->move(rc.left, rc.top, rc.right, rc.bottom);
+  if (!tabs.empty()) {
+    /* adjust the current page: hide and show it again with the new
+       dimensions */
+    Page &tab = tabs[current];
+    assert(tab.prepared);
+    tab.widget->Hide();
+    tab.widget->Show(get_client_rect());
+  }
 
+  return true;
+}
+
+bool
+TabbedControl::on_destroy()
+{
+  for (auto i = tabs.begin(), end = tabs.end(); i != end; ++i)
+    delete i->widget;
+  tabs.clear();
+
+  ContainerWindow::on_destroy();
   return true;
 }

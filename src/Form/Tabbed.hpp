@@ -27,10 +27,26 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Util/StaticArray.hpp"
 
+class Widget;
+
 class TabbedControl : public ContainerWindow {
 protected:
+  struct Page {
+    Widget *widget;
+
+    /**
+     * Has Widget::Prepare() been called?
+     */
+    bool prepared;
+
+    Page() = default;
+
+    gcc_constexpr_ctor
+    Page(Widget *_widget):widget(_widget), prepared(false) {}
+  };
+
   unsigned current;
-  StaticArray<Window *, 32> tabs;
+  StaticArray<Page, 32> tabs;
 
 public:
   /**
@@ -44,6 +60,12 @@ public:
                 UPixelScalar width, UPixelScalar height,
                 const WindowStyle style=WindowStyle());
 
+  /**
+   * Append a page to the end.  The program will abort when the list
+   * of pages is already full.
+   */
+  void AddPage(Widget *w);
+
   void AddClient(Window *w);
 
   unsigned GetTabCount() const {
@@ -54,12 +76,17 @@ public:
     return current;
   }
 
+  const Widget *GetCurrentWidget() const {
+    return tabs[current].widget;
+  }
+
   void SetCurrentPage(unsigned i);
   void NextPage();
   void PreviousPage();
 
 protected:
   virtual bool on_resize(UPixelScalar width, UPixelScalar height);
+  virtual bool on_destroy();
 };
 
 #endif
