@@ -58,6 +58,9 @@ WndListFrame::WndListFrame(ContainerWindow &parent, const DialogLook &_look,
   ActivateCallback(NULL),
   CursorCallback(NULL),
   PaintItemCallback(NULL)
+#ifndef _WIN32_WCE
+  , kinetic_timer(0)
+#endif
 {
   set(parent, X, Y, Width, Height, style);
 }
@@ -337,6 +340,13 @@ WndListFrame::on_key_down(unsigned key_code)
 {
   scroll_bar.drag_end(this);
 
+#ifndef _WIN32_WCE
+  if (kinetic_timer) {
+    kill_timer(kinetic_timer);
+    kinetic_timer = 0;
+  }
+#endif
+
   switch (key_code) {
 #ifdef GNAV
   // JMW added this to make data entry easier
@@ -409,6 +419,12 @@ WndListFrame::on_mouse_up(PixelScalar x, PixelScalar y)
     return true;
   } else if (dragging) {
     drag_end();
+
+#ifndef _WIN32_WCE
+    kinetic.MouseUp(GetPixelOrigin());
+    kinetic_timer = set_timer(1037, 30);
+#endif
+
     return true;
   } else
     return PaintWindow::on_mouse_up(x, y);
@@ -436,6 +452,9 @@ WndListFrame::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
   } else if (dragging) {
     int new_origin = drag_y - y;
     SetPixelOrigin(new_origin);
+#ifndef _WIN32_WCE
+    kinetic.MouseMove(GetPixelOrigin());
+#endif
     return true;
   }
 
@@ -448,6 +467,13 @@ WndListFrame::on_mouse_down(PixelScalar x, PixelScalar y)
   // End any previous drag
   scroll_bar.drag_end(this);
   drag_end();
+
+#ifndef _WIN32_WCE
+  if (kinetic_timer) {
+    kill_timer(kinetic_timer);
+    kinetic_timer = 0;
+  }
+#endif
 
   RasterPoint Pos;
   Pos.x = x;
@@ -496,6 +522,9 @@ WndListFrame::on_mouse_down(PixelScalar x, PixelScalar y)
       SetCursorIndex(index);
 
       drag_y = GetPixelOrigin() + y;
+#ifndef _WIN32_WCE
+      kinetic.MouseDown(GetPixelOrigin());
+#endif
       dragging = true;
       set_capture();
     }
@@ -509,6 +538,13 @@ WndListFrame::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
 {
   scroll_bar.drag_end(this);
   drag_end();
+
+#ifndef _WIN32_WCE
+  if (kinetic_timer) {
+    kill_timer(kinetic_timer);
+    kinetic_timer = 0;
+  }
+#endif
 
   if (delta > 0) {
     // scroll up
@@ -531,5 +567,41 @@ WndListFrame::on_cancel_mode()
   scroll_bar.drag_end(this);
   drag_end();
 
+#ifndef _WIN32_WCE
+  if (kinetic_timer) {
+    kill_timer(kinetic_timer);
+    kinetic_timer = 0;
+  }
+#endif
+
   return false;
 }
+
+#ifndef _WIN32_WCE
+
+bool
+WndListFrame::on_timer(timer_t id)
+{
+  if (id == kinetic_timer) {
+    if (kinetic.IsSteady()) {
+      kill_timer(kinetic_timer);
+      kinetic_timer = 0;
+    } else
+      SetPixelOrigin(kinetic.GetPosition());
+
+    return true;
+  }
+
+  return PaintWindow::on_timer(id);
+}
+
+bool
+WndListFrame::on_destroy()
+{
+  if (kinetic_timer)
+    kill_timer(kinetic_timer);
+
+  return PaintWindow::on_destroy();
+}
+
+#endif

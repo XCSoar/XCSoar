@@ -12,6 +12,7 @@ Version 6.3 - not yet released
 * user interface
   - show METAR data in natural language
   - sort METAR stations by name
+  - added kinetic scrolling for non-WinCE platforms
 * internet
   - added LiveTrack24 live tracking
 

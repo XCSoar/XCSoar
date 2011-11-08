@@ -28,6 +28,10 @@ Copyright_License {
 #include "Form/ScrollBar.hpp"
 #include "Compiler.h"
 
+#ifndef _WIN32_WCE
+#include "KineticManager.hpp"
+#endif
+
 struct DialogLook;
 class ContainerWindow;
 
@@ -72,6 +76,11 @@ protected:
   ActivateCallback_t ActivateCallback;
   CursorCallback_t CursorCallback;
   PaintItemCallback_t PaintItemCallback;
+
+#ifndef _WIN32_WCE
+  KineticManager kinetic;
+  timer_t kinetic_timer;
+#endif
 
 public:
   /**
@@ -259,6 +268,11 @@ protected:
    */
   virtual void on_paint(Canvas &canvas);
   virtual void on_paint(Canvas &canvas, const PixelRect &dirty);
+
+#ifndef _WIN32_WCE
+  virtual bool on_timer(timer_t id);
+  virtual bool on_destroy();
+#endif
 };
 
 #endif

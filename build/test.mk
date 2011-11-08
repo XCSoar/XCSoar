@@ -1805,6 +1805,7 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/KineticManager.cpp \
 	$(SRC)/Form/Form.cpp \
 	$(SRC)/Form/List.cpp \
 	$(SRC)/Form/ScrollBar.cpp \

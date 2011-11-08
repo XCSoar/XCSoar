@@ -3,6 +3,7 @@
 FORM_SRC_DIR = $(SRC)/Form
 
 FORM_SOURCES = \
+	$(SRC)/KineticManager.cpp \
 	$(FORM_SRC_DIR)/Internal.cpp \
 	$(FORM_SRC_DIR)/Control.cpp \
 	$(FORM_SRC_DIR)/Panel.cpp \
