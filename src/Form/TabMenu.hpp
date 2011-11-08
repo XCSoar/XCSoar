@@ -134,7 +134,7 @@ public:
    * @return Rectangle of button coordinates,
    *   or {0,0,0,0} if index out of bounds
    */
-  virtual const PixelRect &GetSubMenuButtonSize(unsigned i);
+  const PixelRect &GetSubMenuButtonSize(unsigned i);
 
   /**
    * Calculates and caches the size and position of ith main menu button
@@ -143,7 +143,7 @@ public:
    * @return Rectangle of button coordinates,
    *   or {0,0,0,0} if index out of bounds
    */
-  virtual const PixelRect &GetMainMenuButtonSize(unsigned i);
+  const PixelRect &GetMainMenuButtonSize(unsigned i);
 
   /**
    * @param main_menu_index
@@ -293,14 +293,12 @@ protected:
   void HideAllPageExtras();
 
 public:
-  virtual void NextPage(EventType _EventType = TabBarControl::NextPreviousKey);
-  virtual void PreviousPage(EventType _EventType =
-                            TabBarControl::NextPreviousKey);
+  void NextPage(EventType _EventType = TabBarControl::NextPreviousKey);
+  void PreviousPage(EventType _EventType = TabBarControl::NextPreviousKey);
   /* assumes array is sorted by menugroup, then pagenum */
-  virtual void SetCurrentPage(unsigned page,
-                              TabBarControl::EventType EventType =
-                                  TabBarControl::MouseOrButton,
-                              bool ReClick = false);
+  void SetCurrentPage(unsigned page,
+                      TabBarControl::EventType EventType = TabBarControl::MouseOrButton,
+                      bool ReClick = false);
   void SetCurrentPage(menu_tab_index menuIndex,
                               TabBarControl::EventType EventType =
                                   TabBarControl::MouseOrButton,
