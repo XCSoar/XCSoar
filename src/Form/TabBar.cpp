@@ -114,9 +114,6 @@ TabBarControl::GetButtonIcon(unsigned i)
 void
 TabBarControl::AddClientWindow(Window *w)
 {
-  if (GetCurrentPage() != buttons.size())
-    w->hide();
-
   TabbedControl::AddClient(w);
   const PixelRect rc = get_client_rect();
   if (clientOverlapTabs) {
