@@ -85,7 +85,7 @@ TabMenuControl::AddClient(Window *w, const PageItem& item,
 }
 
 void
-TabMenuControl::NextPage(EventType _EventType)
+TabMenuControl::NextPage()
 {
   const unsigned NumAllPages = NumPages + 1; // add one for menu page
   if (NumAllPages < 2)
@@ -94,7 +94,7 @@ TabMenuControl::NextPage(EventType _EventType)
 }
 
 void
-TabMenuControl::PreviousPage(EventType _EventType)
+TabMenuControl::PreviousPage()
 {
   const unsigned NumAllPages = NumPages + 1; // add one for menu page
 
@@ -145,8 +145,7 @@ TabMenuControl::GetCurrentPage()
 }
 
 void
-TabMenuControl::SetCurrentPage(TabMenuControl::menu_tab_index menuIndex,
-                               TabBarControl::EventType EventType, bool ReClick)
+TabMenuControl::SetCurrentPage(TabMenuControl::menu_tab_index menuIndex)
 {
   assert(!((menuIndex.SubIndex == NO_SUB_MENU) &&
       (menuIndex.MainIndex == NO_MAIN_MENU)));
@@ -155,9 +154,7 @@ TabMenuControl::SetCurrentPage(TabMenuControl::menu_tab_index menuIndex,
 }
 
 void
-TabMenuControl::SetCurrentPage(unsigned page,
-                               TabBarControl::EventType EventType,
-                               bool ReClick)
+TabMenuControl::SetCurrentPage(unsigned page)
 {
   HideAllPageExtras();
   SetIsVisible(page == GetMenuPage());

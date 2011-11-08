@@ -293,16 +293,11 @@ protected:
   void HideAllPageExtras();
 
 public:
-  void NextPage(EventType _EventType = TabBarControl::NextPreviousKey);
-  void PreviousPage(EventType _EventType = TabBarControl::NextPreviousKey);
+  void NextPage();
+  void PreviousPage();
   /* assumes array is sorted by menugroup, then pagenum */
-  void SetCurrentPage(unsigned page,
-                      TabBarControl::EventType EventType = TabBarControl::MouseOrButton,
-                      bool ReClick = false);
-  void SetCurrentPage(menu_tab_index menuIndex,
-                              TabBarControl::EventType EventType =
-                                  TabBarControl::MouseOrButton,
-                              bool ReClick = false);
+  void SetCurrentPage(unsigned page);
+  void SetCurrentPage(menu_tab_index menuIndex);
 };
 
 class TabMenuDisplay : public TabDisplay {
