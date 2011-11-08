@@ -414,7 +414,6 @@ TabDisplay::on_paint(Canvas &canvas)
     rcFocus.bottom = canvas.get_height();
     canvas.draw_focus(rcFocus);
   }
-  this->show();
 }
 
 bool
