@@ -170,6 +170,6 @@ fixed operator*(const fixed a, const RoughAltitude b) {
   return b * a;
 }
 
-static_assert(is_trivial_clang<RoughAltitude>::value, "type is not trivial");
+static_assert(is_trivial<RoughAltitude>::value, "type is not trivial");
 
 #endif

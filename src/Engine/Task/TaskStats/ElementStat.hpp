@@ -107,7 +107,7 @@ struct ElementStat
 #endif
 };
 
-static_assert(is_trivial_clang<ElementStat>::value, "type is not trivial");
+static_assert(is_trivial<ElementStat>::value, "type is not trivial");
 
 class ElementStatComputer
 {

@@ -171,6 +171,6 @@ struct TaskBehaviour : public TaskStartMargins {
   void DisableAll();
 };
 
-static_assert(is_trivial_clang<TaskBehaviour>::value, "type is not trivial");
+static_assert(is_trivial<TaskBehaviour>::value, "type is not trivial");
 
 #endif

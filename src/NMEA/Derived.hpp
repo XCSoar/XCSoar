@@ -84,7 +84,7 @@ struct TerrainInfo
   }
 };
 
-static_assert(is_trivial_clang<TerrainInfo>::value, "type is not trivial");
+static_assert(is_trivial<TerrainInfo>::value, "type is not trivial");
 
 /** Derived team code information */
 struct TeamInfo
@@ -113,7 +113,7 @@ struct TeamInfo
   void Clear();
 };
 
-static_assert(is_trivial_clang<TeamInfo>::value, "type is not trivial");
+static_assert(is_trivial<TeamInfo>::value, "type is not trivial");
 
 struct AirspaceWarningsInfo {
   /**
@@ -125,7 +125,7 @@ struct AirspaceWarningsInfo {
   void Clear();
 };
 
-static_assert(is_trivial_clang<AirspaceWarningsInfo>::value, "type is not trivial");
+static_assert(is_trivial<AirspaceWarningsInfo>::value, "type is not trivial");
 
 /**
  * A struct that holds all the calculated values derived from the data in the
@@ -224,9 +224,7 @@ struct DerivedInfo:
   }
 };
 
-#ifndef __clang__
 static_assert(is_trivial_ndebug<DerivedInfo>::value, "type is not trivial");
-#endif
 
 #endif
 

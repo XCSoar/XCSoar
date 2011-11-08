@@ -483,6 +483,6 @@ private:
   void UpdateSMin();
 };
 
-static_assert(is_trivial_clang<GlidePolar>::value, "type is not trivial");
+static_assert(is_trivial<GlidePolar>::value, "type is not trivial");
 
 #endif

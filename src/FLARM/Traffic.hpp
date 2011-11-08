@@ -187,6 +187,6 @@ struct FlarmTraffic {
   void Update(const FlarmTraffic &other);
 };
 
-static_assert(is_trivial_clang<FlarmTraffic>::value, "type is not trivial");
+static_assert(is_trivial<FlarmTraffic>::value, "type is not trivial");
 
 #endif

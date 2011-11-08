@@ -68,6 +68,6 @@ struct TaskSummary {
   }
 };
 
-static_assert(is_trivial_clang<TaskSummary>::value, "type is not trivial");
+static_assert(is_trivial<TaskSummary>::value, "type is not trivial");
 
 #endif

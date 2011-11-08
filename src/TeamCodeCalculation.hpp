@@ -85,6 +85,6 @@ public:
   void Update(const TCHAR* _code);
 };
 
-static_assert(is_trivial_clang<TeamCode>::value, "type is not trivial");
+static_assert(is_trivial<TeamCode>::value, "type is not trivial");
 
 #endif

@@ -133,9 +133,7 @@ public:
   }
 };
 
-#ifndef __clang__
 static_assert(is_trivial_ndebug<TracePoint>::value, "type is not trivial");
-#endif
 
 class TracePointVector : public std::vector<TracePoint> {
 };

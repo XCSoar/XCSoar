@@ -70,6 +70,6 @@ public:
   }
 };
 
-static_assert(is_trivial_clang<RoughAngle>::value, "type is not trivial");
+static_assert(is_trivial<RoughAngle>::value, "type is not trivial");
 
 #endif

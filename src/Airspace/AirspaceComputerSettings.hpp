@@ -39,6 +39,6 @@ struct AirspaceComputerSettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial_clang<AirspaceComputerSettings>::value, "type is not trivial");
+static_assert(is_trivial<AirspaceComputerSettings>::value, "type is not trivial");
 
 #endif

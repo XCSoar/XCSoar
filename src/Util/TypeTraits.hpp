@@ -63,17 +63,6 @@ struct is_trivial : public has_trivial_copy_and_destructor<T> {};
 #endif
 
 /**
- * Wrapper for std::is_trivial with a workaround for a clang bug.
- */
-#ifdef __clang__
-template<typename T>
-struct is_trivial_clang : public has_trivial_copy_and_destructor<T> {};
-#else
-template<typename T>
-struct is_trivial_clang : public is_trivial<T> {};
-#endif
-
-/**
  * Check if the specified type is "trivial" in the non-debug build,
  * but allow a non-trivial default constructor in the debug build.
  * This is needed for types that use #DebugFlag.

@@ -125,6 +125,6 @@ public:
 #endif
 };
 
-static_assert(is_trivial_clang<CommonStats>::value, "type is not trivial");
+static_assert(is_trivial<CommonStats>::value, "type is not trivial");
 
 #endif

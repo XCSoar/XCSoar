@@ -83,6 +83,6 @@ struct ClimbInfo
   void Clear();
 };
 
-static_assert(is_trivial_clang<ClimbInfo>::value, "type is not trivial");
+static_assert(is_trivial<ClimbInfo>::value, "type is not trivial");
 
 #endif

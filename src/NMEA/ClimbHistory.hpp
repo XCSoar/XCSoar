@@ -68,6 +68,6 @@ public:
   }
 };
 
-static_assert(is_trivial_clang<ClimbHistory>::value, "type is not trivial");
+static_assert(is_trivial<ClimbHistory>::value, "type is not trivial");
 
 #endif

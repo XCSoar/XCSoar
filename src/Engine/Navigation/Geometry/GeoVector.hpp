@@ -124,6 +124,6 @@ struct GeoVector {
   }
 };
 
-static_assert(is_trivial_clang<GeoVector>::value, "type is not trivial");
+static_assert(is_trivial<GeoVector>::value, "type is not trivial");
 
 #endif

@@ -235,6 +235,6 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   int operator-(const BrokenDateTime &other) const;
 };
 
-static_assert(is_trivial_clang<BrokenDateTime>::value, "type is not trivial");
+static_assert(is_trivial<BrokenDateTime>::value, "type is not trivial");
 
 #endif

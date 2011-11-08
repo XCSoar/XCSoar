@@ -64,7 +64,7 @@ struct ThermalLocatorInfo
   ThermalSource &AllocateSource(fixed Time);
 };
 
-static_assert(is_trivial_clang<ThermalLocatorInfo>::value,
+static_assert(is_trivial<ThermalLocatorInfo>::value,
               "type is not trivial");
 
 #endif

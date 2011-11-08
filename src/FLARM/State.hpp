@@ -209,6 +209,6 @@ public:
   }
 };
 
-static_assert(is_trivial_clang<FlarmState>::value, "type is not trivial");
+static_assert(is_trivial<FlarmState>::value, "type is not trivial");
 
 #endif

@@ -50,12 +50,10 @@ struct ContestResult
   }
 };
 
-static_assert(is_trivial_clang<ContestResult>::value, "type is not trivial");
+static_assert(is_trivial<ContestResult>::value, "type is not trivial");
 
 class ContestTraceVector: public TrivialArray<TracePoint, 10> {};
 
-#ifndef __clang__
 static_assert(is_trivial_ndebug<ContestTraceVector>::value, "type is not trivial");
-#endif
 
 #endif

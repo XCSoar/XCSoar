@@ -70,6 +70,6 @@ public:
   }
 };
 
-static_assert(is_trivial_clang<RoughDistance>::value, "type is not trivial");
+static_assert(is_trivial<RoughDistance>::value, "type is not trivial");
 
 #endif

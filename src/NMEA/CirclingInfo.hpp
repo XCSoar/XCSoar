@@ -111,6 +111,6 @@ struct CirclingInfo
   }
 };
 
-static_assert(is_trivial_clang<CirclingInfo>::value, "type is not trivial");
+static_assert(is_trivial<CirclingInfo>::value, "type is not trivial");
 
 #endif

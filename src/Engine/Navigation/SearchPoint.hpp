@@ -163,8 +163,7 @@ public:
   }
 };
 
-#ifndef __clang__
 static_assert(is_trivial_ndebug<SearchPoint>::value, "type is not trivial");
-#endif
+
 
 #endif

@@ -338,6 +338,6 @@ public:
   }
 };
 
-static_assert(is_trivial_clang<Angle>::value, "type is not trivial");
+static_assert(is_trivial<Angle>::value, "type is not trivial");
 
 #endif

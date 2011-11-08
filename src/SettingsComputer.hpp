@@ -88,7 +88,7 @@ struct WindSettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial_clang<WindSettings>::value, "type is not trivial");
+static_assert(is_trivial<WindSettings>::value, "type is not trivial");
 
 /**
  * Logger settings
@@ -148,7 +148,7 @@ struct TeamCodeSettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial_clang<TeamCodeSettings>::value,
+static_assert(is_trivial<TeamCodeSettings>::value,
               "type is not trivial");
 
 struct VoiceSettings {
@@ -260,7 +260,7 @@ struct SETTINGS_COMPUTER:
   void SetDefaults();
 };
 
-static_assert(is_trivial_clang<SETTINGS_COMPUTER>::value,
+static_assert(is_trivial<SETTINGS_COMPUTER>::value,
               "type is not trivial");
 
 #endif

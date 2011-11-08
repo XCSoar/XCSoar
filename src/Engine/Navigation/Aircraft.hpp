@@ -129,7 +129,7 @@ struct FlyingState
   void Reset();
 };
 
-static_assert(is_trivial_clang<FlyingState>::value, "type is not trivial");
+static_assert(is_trivial<FlyingState>::value, "type is not trivial");
 
 /**
  * Compound structure defining an aircraft state

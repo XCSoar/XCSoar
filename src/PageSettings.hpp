@@ -100,6 +100,6 @@ struct PageSettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial_clang<PageSettings>::value, "type is not trivial");
+static_assert(is_trivial<PageSettings>::value, "type is not trivial");
 
 #endif

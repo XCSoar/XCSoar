@@ -200,6 +200,6 @@ private:
   void CalcCruiseBearing();
 };
 
-static_assert(is_trivial_clang<GlideResult>::value, "type is not trivial");
+static_assert(is_trivial<GlideResult>::value, "type is not trivial");
 
 #endif

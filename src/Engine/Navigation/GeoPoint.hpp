@@ -244,7 +244,7 @@ struct GeoPoint {
   bool Sort(const GeoPoint &other) const;
 };
 
-static_assert(is_trivial_clang<GeoPoint>::value, "type is not trivial");
+static_assert(is_trivial<GeoPoint>::value, "type is not trivial");
 
 /**
  * Extension of GeoPoint for altitude (3d location in spherical space)
@@ -260,6 +260,6 @@ struct AGeoPoint: public GeoPoint {
     :GeoPoint(p),altitude(alt) {};
 };
 
-static_assert(is_trivial_clang<AGeoPoint>::value, "type is not trivial");
+static_assert(is_trivial<AGeoPoint>::value, "type is not trivial");
 
 #endif
