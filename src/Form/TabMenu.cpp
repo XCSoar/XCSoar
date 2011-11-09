@@ -42,15 +42,13 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent,
                                const DialogLook &look, const TCHAR * _caption,
                                PixelScalar x, PixelScalar y,
                                UPixelScalar _width, UPixelScalar _height,
-                               const WindowStyle style):
-                               TabBarControl(_parent, 1, look,
-                                             x, y, _width, _height,
-                                             style),
-                               NumPages(0),
-                               LastContent(NO_MAIN_MENU, NO_SUB_MENU),
-                               CurrentPageNum(UNINITIALIZED),
-                               form(_form),
-                               LookUpTable(_look_up_table)
+                               const WindowStyle style)
+  :TabBarControl(_parent, 1, look, x, y, _width, _height, style),
+   NumPages(0),
+   LastContent(NO_MAIN_MENU, NO_SUB_MENU),
+   CurrentPageNum(UNINITIALIZED),
+   form(_form),
+   LookUpTable(_look_up_table)
 
 {
   CopyString(Caption, _caption, sizeof(Caption) / sizeof(Caption[0]));
@@ -431,13 +429,10 @@ TabMenuDisplay::TabMenuDisplay(TabBarControl& _theTabBar,
                                const DialogLook &_look,
                                PixelScalar left, PixelScalar top,
                                UPixelScalar width, UPixelScalar height,
-                               bool _flipOrientation) :
-                               TabDisplay(_theTabBar, _look, left, top, width,
-                                          height, _flipOrientation),
-                              DownIndex(TabMenuControl::NO_MAIN_MENU,
-                                        TabMenuControl::NO_SUB_MENU),
-                              SelectedIndex(TabMenuControl::NO_MAIN_MENU,
-                                            TabMenuControl::NO_SUB_MENU)
+                               bool _flipOrientation)
+  :TabDisplay(_theTabBar, _look, left, top, width, height, _flipOrientation),
+   DownIndex(TabMenuControl::NO_MAIN_MENU, TabMenuControl::NO_SUB_MENU),
+   SelectedIndex(TabMenuControl::NO_MAIN_MENU, TabMenuControl::NO_SUB_MENU)
 {
 }
 
