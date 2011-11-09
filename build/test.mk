@@ -1610,6 +1610,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/NMEA/MoreData.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \

@@ -28,6 +28,8 @@ Copyright_License {
 #include "Util/TypeTraits.hpp"
 #include "Util/TrivialArray.hpp"
 
+struct SpeedVector;
+
 /** Structure to hold information on identified thermal sources on the ground */
 struct ThermalSource
 {
@@ -35,6 +37,9 @@ struct ThermalSource
   fixed ground_height;
   fixed lift_rate;
   fixed time;
+
+  GeoPoint CalculateAdjustedLocation(fixed altitude,
+                                     const SpeedVector &wind) const;
 };
 
 /** Structure for current thermal estimate from ThermalLocator */

@@ -22,6 +22,8 @@ Copyright_License {
 */
 
 #include "NMEA/ThermalLocator.hpp"
+#include "Engine/Navigation/SpeedVector.hpp"
+#include "Math/Earth.hpp"
 
 void
 ThermalLocatorInfo::Clear()
@@ -48,4 +50,13 @@ ThermalLocatorInfo::AllocateSource(fixed Time)
 
   assert(oldest != NULL);
   return *oldest;
+}
+
+GeoPoint
+ThermalSource::CalculateAdjustedLocation(fixed altitude,
+                                         const SpeedVector &wind) const
+{
+  fixed dh = altitude - ground_height;
+  fixed t = dh / lift_rate;
+  return FindLatitudeLongitude(location, wind.bearing.Reciprocal(), wind.norm * t);
 }
