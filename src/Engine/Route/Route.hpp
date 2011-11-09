@@ -24,7 +24,7 @@
 #define XCSOAR_ROUTE_HPP
 
 #include "Navigation/GeoPoint.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/TrivialArray.hpp"
 
 #include <vector>
 
@@ -36,7 +36,7 @@ typedef std::vector<AGeoPoint> Route;
 /**
  * A variant of Route based on StaticArray.
  */
-struct StaticRoute : public StaticArray<Route::value_type, 64u> {
+struct StaticRoute : public TrivialArray<Route::value_type, 64u> {
   /**
    * Copy a Route to a StaticRoute, clipping items that don't fit.
    */
