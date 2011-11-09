@@ -579,7 +579,6 @@ struct NMEAInfo {
   void Complement(const NMEAInfo &add);
 };
 
-static_assert(has_trivial_copy_and_destructor<NMEAInfo>::value,
-              "type is not trivial");
+static_assert(is_trivial_clang<NMEAInfo>::value, "type is not trivial");
 
 #endif
