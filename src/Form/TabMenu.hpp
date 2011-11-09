@@ -362,15 +362,12 @@ public:
                    TabBarControl::PreShowNotifyCallback_t _PreShowFunction,
                    TabBarControl::PostShowNotifyCallback_t _PostShowFunction,
                    TabBarControl::ClickNotifyCallback_t _ClickFunction,
-                   TabBarControl::ReClickNotifyCallback_t _ReClickFunction):
-                   OneTabButton(_Caption, false, NULL,
-                                _PreHideFunction, _PreShowFunction,
-                                _PostShowFunction,
-                                _ClickFunction, _ReClickFunction),
-                                Menu(TabMenuControl::
-                                     menu_tab_index(_main_menu_index,
-                                                    _sub_menu_index)),
-                                PageIndex(_page_index)
+                   TabBarControl::ReClickNotifyCallback_t _ReClickFunction)
+    :OneTabButton(_Caption, false, NULL,
+                  _PreHideFunction, _PreShowFunction, _PostShowFunction,
+                  _ClickFunction, _ReClickFunction),
+     Menu(TabMenuControl::menu_tab_index(_main_menu_index, _sub_menu_index)),
+     PageIndex(_page_index)
   {
   }
 
@@ -394,23 +391,23 @@ public:
   const unsigned MainMenuIndex;
 
   OneMainMenuButton(const TCHAR* _Caption,
-                   unsigned _FirstPageIndex,
-                   unsigned _LastPageIndex,
-                   unsigned _MainMenuIndex,
-                   TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
-                   TabBarControl::PreShowNotifyCallback_t _PreShowFunction,
-                   TabBarControl::PostShowNotifyCallback_t _PostShowFunction,
+                    unsigned _FirstPageIndex,
+                    unsigned _LastPageIndex,
+                    unsigned _MainMenuIndex,
+                    TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
+                    TabBarControl::PreShowNotifyCallback_t _PreShowFunction,
+                    TabBarControl::PostShowNotifyCallback_t _PostShowFunction,
                     TabBarControl::ClickNotifyCallback_t _ClickFunction,
-                   TabBarControl::ReClickNotifyCallback_t _ReClickFunction):
-                     OneTabButton(_Caption, false, NULL,
-                                _PreHideFunction, _PreShowFunction,
-                                  _PostShowFunction,
-                                  _ClickFunction, _ReClickFunction),
-                                FirstPageIndex(_FirstPageIndex),
-                                LastPageIndex(_LastPageIndex),
-                                MainMenuIndex(_MainMenuIndex)
+                    TabBarControl::ReClickNotifyCallback_t _ReClickFunction)
+    :OneTabButton(_Caption, false, NULL,
+                  _PreHideFunction, _PreShowFunction, _PostShowFunction,
+                  _ClickFunction, _ReClickFunction),
+     FirstPageIndex(_FirstPageIndex),
+     LastPageIndex(_LastPageIndex),
+     MainMenuIndex(_MainMenuIndex)
   {
   }
+
 public:
   unsigned NumSubMenus() const { return LastPageIndex - FirstPageIndex + 1; };
 };
