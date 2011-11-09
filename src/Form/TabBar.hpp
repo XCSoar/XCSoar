@@ -129,8 +129,12 @@ public:
       EventType EventType = TabBarControl::MouseOrButton, bool ReClick = false);
   void NextPage();
   void PreviousPage();
-  UPixelScalar GetTabHeight();
-  UPixelScalar GetTabWidth();
+
+  gcc_pure
+  UPixelScalar GetTabHeight() const;
+
+  gcc_pure
+  UPixelScalar GetTabWidth() const;
 
 /**
  * calculates the size and position of ith button
@@ -138,13 +142,25 @@ public:
  * @param i index of button
  * @return Rectangle of button coordinates
  */
-  const PixelRect &GetButtonSize(unsigned i);
-  const TCHAR* GetButtonCaption(unsigned i);
-  const Bitmap* GetButtonIcon(unsigned i);
-  bool GetButtonIsButtonOnly(unsigned i);
+  gcc_pure
+  const PixelRect &GetButtonSize(unsigned i) const;
+
+  gcc_pure
+  const TCHAR *GetButtonCaption(unsigned i) const;
+
+  gcc_pure
+  const Bitmap *GetButtonIcon(unsigned i) const;
+
+  gcc_pure
+  bool GetButtonIsButtonOnly(unsigned i) const;
+
   const StaticArray<OneTabButton *, 32>
       &GetTabButtons() { return buttons; }
-  UPixelScalar GetTabLineHeight() {return TabLineHeight; }
+
+  UPixelScalar GetTabLineHeight() const {
+    return TabLineHeight;
+  }
+
   void SetClientOverlapTabs(bool value) {clientOverlapTabs = value; }
 
 protected:
@@ -197,8 +213,14 @@ public:
 
 public:
   void trigger_invalidate() { invalidate(); }
-  UPixelScalar GetTabHeight() { return this->get_height(); }
-  UPixelScalar GetTabWidth() { return this->get_width(); }
+
+  UPixelScalar GetTabHeight() const {
+    return this->get_height();
+  }
+
+  UPixelScalar GetTabWidth() const {
+    return this->get_width();
+  }
 
 protected:
 /**

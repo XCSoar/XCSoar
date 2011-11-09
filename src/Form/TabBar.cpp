@@ -78,7 +78,7 @@ TabBarControl::~TabBarControl()
 }
 
 bool
-TabBarControl::GetButtonIsButtonOnly(unsigned i)
+TabBarControl::GetButtonIsButtonOnly(unsigned i) const
 {
 
   assert(i < buttons.size());
@@ -87,7 +87,7 @@ TabBarControl::GetButtonIsButtonOnly(unsigned i)
 }
 
 const TCHAR*
-TabBarControl::GetButtonCaption(unsigned i)
+TabBarControl::GetButtonCaption(unsigned i) const
 {
   assert(i < buttons.size());
 
@@ -95,7 +95,7 @@ TabBarControl::GetButtonCaption(unsigned i)
 }
 
 const Bitmap *
-TabBarControl::GetButtonIcon(unsigned i)
+TabBarControl::GetButtonIcon(unsigned i) const
 {
   assert(i < buttons.size());
 
@@ -215,8 +215,8 @@ TabBarControl::PreviousPage()
                  NextPreviousKey, false);
 }
 
-const PixelRect
-&TabBarControl::GetButtonSize(unsigned i)
+const PixelRect &
+TabBarControl::GetButtonSize(unsigned i) const
 {
   const static PixelRect rcFallback = {0, 0, 0, 0};
 
@@ -280,13 +280,13 @@ const PixelRect
 }
 
 UPixelScalar
-TabBarControl::GetTabHeight()
+TabBarControl::GetTabHeight() const
 {
   return theTabDisplay->GetTabHeight();
 }
 
 UPixelScalar
-TabBarControl::GetTabWidth()
+TabBarControl::GetTabWidth() const
 {
   return theTabDisplay->GetTabWidth();
 }
