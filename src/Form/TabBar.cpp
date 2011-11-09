@@ -115,19 +115,18 @@ void
 TabBarControl::AddClientWindow(Window *w)
 {
   TabbedControl::AddClient(w);
+  if (clientOverlapTabs)
+    return;
+
   const PixelRect rc = get_client_rect();
-  if (clientOverlapTabs) {
-    w->move(rc.left , rc.top, rc.right - rc.left , rc.bottom - rc.top);
-  } else {
-    if (Layout::landscape ^ flipOrientation)
-      w->move(rc.left + theTabDisplay->GetTabWidth(), rc.top,
-              rc.right - rc.left - theTabDisplay->GetTabWidth(),
-              rc.bottom - rc.top);
-    else
-      w->move(rc.left, rc.top + theTabDisplay->GetTabHeight(),
-              rc.right - rc.left,
-              rc.bottom - rc.top - theTabDisplay->GetTabHeight());
-  }
+  if (Layout::landscape ^ flipOrientation)
+    w->move(rc.left + theTabDisplay->GetTabWidth(), rc.top,
+            rc.right - rc.left - theTabDisplay->GetTabWidth(),
+            rc.bottom - rc.top);
+  else
+    w->move(rc.left, rc.top + theTabDisplay->GetTabHeight(),
+            rc.right - rc.left,
+            rc.bottom - rc.top - theTabDisplay->GetTabHeight());
 }
 
 unsigned
