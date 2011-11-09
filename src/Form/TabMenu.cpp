@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/PaintWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Canvas.hpp"
-#include "Util/StringUtil.hpp"
 #include "Look/DialogLook.hpp"
 #include "Dialogs/XML.hpp"
 #include "Util/Macros.hpp"
@@ -46,13 +45,12 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent,
   :TabBarControl(_parent, 1, look, x, y, _width, _height, style),
    NumPages(0),
    LastContent(NO_MAIN_MENU, NO_SUB_MENU),
+   Caption(_caption),
    CurrentPageNum(UNINITIALIZED),
    form(_form),
    LookUpTable(_look_up_table)
 
 {
-  CopyString(Caption, _caption, sizeof(Caption) / sizeof(Caption[0]));
-
   theTabDisplay = new TabMenuDisplay(*this, look,
                                      0, y, _width, _height,
                                      flipOrientation);

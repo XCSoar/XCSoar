@@ -100,7 +100,7 @@ protected:
   /* Sub index of last page selected by menu */
   unsigned SubMenuIndex;
 
-  TCHAR Caption[256];
+  StaticString<256u> Caption;
 
   /* value of last displayed content (non-menu) page */
   unsigned CurrentPageNum;
