@@ -125,6 +125,8 @@ struct AirspaceWarningsInfo {
   void Clear();
 };
 
+static_assert(is_trivial_clang<AirspaceWarningsInfo>::value, "type is not trivial");
+
 /**
  * A struct that holds all the calculated values derived from the data in the
  * NMEA_INFO struct
