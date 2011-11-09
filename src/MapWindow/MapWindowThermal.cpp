@@ -42,22 +42,22 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
   const ThermalLocatorInfo &thermal_locator = Calculated().thermal_locator;
   const SpeedVector &wind = Calculated().wind;
 
-  for (unsigned i = 0; i < ThermalLocatorInfo::MAX_SOURCES; i++) {
+  for (auto it = thermal_locator.sources.begin(),
+       end = thermal_locator.sources.end(); it != end; ++it) {
     // trivial/bad thermal, don't draw it
-    if (!positive(thermal_locator.sources[i].lift_rate))
+    if (!positive(it->lift_rate))
       continue;
 
     // find height difference
-    fixed dh = Basic().nav_altitude -
-      thermal_locator.sources[i].ground_height;
+    fixed dh = Basic().nav_altitude - it->ground_height;
     if (negative(dh))
       continue;
 
-    GeoPoint loc = thermal_locator.sources[i].location;
+    GeoPoint loc = it->location;
 
     if (Calculated().wind_available) {
       // convert height difference to thermal rise time
-      fixed t = dh / thermal_locator.sources[i].lift_rate;
+      fixed t = dh / it->lift_rate;
 
       // find estimated location of thermal at glider's height by
       // projecting the thermal to drift at wind speed for thermal rise time

@@ -27,26 +27,25 @@ void
 ThermalLocatorInfo::Clear()
 {
   // clear thermal sources for first time.
-  for (unsigned i = 0; i < MAX_SOURCES; i++)
-    sources[i].lift_rate = fixed_minus_one;
+  sources.clear();
 }
 
 ThermalSource &
 ThermalLocatorInfo::AllocateSource(fixed Time)
 {
-  fixed tbest = fixed_zero;
-  unsigned ibest = 0;
+  if (!sources.full())
+    return sources.append();
 
-  for (unsigned i = 0; i < MAX_SOURCES; i++) {
-    if (negative(sources[i].lift_rate))
-      return sources[i];
-
-    fixed dt = Time - sources[i].time;
-    if (dt > tbest) {
-      tbest = dt;
-      ibest = i;
+  ThermalSource *oldest = NULL;
+  fixed oldest_dt = fixed_zero;
+  for (auto it = sources.begin(), end = sources.end(); it != end; ++it) {
+    fixed dt = Time - it->time;
+    if (dt > oldest_dt) {
+      oldest_dt = dt;
+      oldest = &(*it);
     }
   }
 
-  return sources[ibest];
+  assert(oldest != NULL);
+  return *oldest;
 }

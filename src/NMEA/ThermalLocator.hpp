@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Util/TypeTraits.hpp"
+#include "Util/TrivialArray.hpp"
 
 /** Structure to hold information on identified thermal sources on the ground */
 struct ThermalSource
@@ -47,7 +48,7 @@ struct ThermalLocatorInfo
   bool estimate_valid;
 
   /** Position and data of the last thermal sources */
-  ThermalSource sources[MAX_SOURCES];
+  TrivialArray<ThermalSource, MAX_SOURCES> sources;
 
   void Clear();
 
