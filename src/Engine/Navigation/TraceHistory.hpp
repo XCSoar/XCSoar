@@ -27,7 +27,7 @@ Copyright_License {
 #include "Util/OverwritingRingBuffer.hpp"
 #include "Math/fixed.hpp"
 
-class TraceVariableHistory: public OverwritingRingBuffer<fixed, 30> {};
+class TraceVariableHistory: public TrivialOverwritingRingBuffer<fixed, 30> {};
 
 struct MoreData;
 
@@ -41,7 +41,6 @@ public:
   void clear();
 };
 
-static_assert(has_trivial_copy_and_destructor<TraceHistory>::value,
-              "type is not trivial");
+static_assert(is_trivial_clang<TraceHistory>::value, "type is not trivial");
 
 #endif
