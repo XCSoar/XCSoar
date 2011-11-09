@@ -1,7 +1,6 @@
 #include "CommonStats.hpp"
 
-CommonStats::CommonStats():
-  vector_home(fixed_zero)
+CommonStats::CommonStats()
 {
   reset();
 }
@@ -37,6 +36,8 @@ CommonStats::reset_task()
 void
 CommonStats::reset()
 {
+  vector_home.SetInvalid();
+
   V_block = fixed_zero;
   V_dolphin = fixed_zero;
 

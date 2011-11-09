@@ -503,6 +503,11 @@ InfoBoxContentHomeDistance::Update(InfoBoxData &data)
 {
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
+  if (!common_stats.vector_home.IsValid()) {
+    data.SetInvalid();
+    return;
+  }
+
   // Set Value
   SetValueFromDistance(data, common_stats.vector_home.distance);
 
