@@ -457,9 +457,8 @@ TabMenuDisplay::on_mouse_down(PixelScalar x, PixelScalar y)
   Pos.y = y;
 
   // If possible -> Give focus to the Control
-  bool had_focus = TabDisplay::has_focus();
-  if (!had_focus)
-    set_focus();
+  set_focus();
+
   DownIndex = GetTabMenuBar().IsPointOverButton(Pos,
                                                 SelectedIndex.MainIndex);
 

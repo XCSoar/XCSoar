@@ -526,9 +526,8 @@ TabDisplay::on_mouse_down(PixelScalar x, PixelScalar y)
   Pos.y = y;
 
   // If possible -> Give focus to the Control
-  bool had_focus = has_focus();
-  if (!had_focus)
-    set_focus();
+  set_focus();
+
   for (unsigned i = 0; i < theTabBar.GetTabCount(); i++) {
     const PixelRect rc = theTabBar.GetButtonSize(i);
     if (PtInRect(&rc, Pos)) {
