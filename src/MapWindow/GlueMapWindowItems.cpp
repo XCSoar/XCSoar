@@ -79,10 +79,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
 
 
   ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), vector, list,
-                        elevation, look.aircraft,
-                        airspace_renderer.GetLook(),
-                        way_point_renderer.GetLook(),
-                        look.task, look.marker, traffic_look, SettingsMap());
+                        elevation, look, traffic_look, SettingsMap());
 
   // Save function result for later
   return !list.empty();

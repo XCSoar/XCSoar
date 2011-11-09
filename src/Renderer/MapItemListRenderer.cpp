@@ -26,9 +26,8 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 #include "MapWindow/MapItem.hpp"
-#include "Look/AircraftLook.hpp"
+#include "Look/MapLook.hpp"
 #include "Renderer/AircraftRenderer.hpp"
-#include "Look/AirspaceLook.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Renderer/WaypointListRenderer.hpp"
@@ -36,8 +35,6 @@ Copyright_License {
 #include "Units/UnitsFormatter.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
-#include "Look/TaskLook.hpp"
-#include "Look/MarkerLook.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/StaticString.hpp"
@@ -286,32 +283,28 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 void
 MapItemListRenderer::Draw(
     Canvas &canvas, const PixelRect rc, const MapItem &item,
-    const AircraftLook &aircraft_look,
-    const AirspaceLook &airspace_look,
-    const WaypointLook &waypoint_look,
-    const TaskLook &task_look,
-    const MarkerLook &marker_look,
+    const MapLook &look,
     const TrafficLook &traffic_look,
     const SETTINGS_MAP &settings)
 {
   switch (item.type) {
   case MapItem::SELF:
-    Draw(canvas, rc, (const SelfMapItem &)item, aircraft_look, settings);
+    Draw(canvas, rc, (const SelfMapItem &)item, look.aircraft, settings);
     break;
   case MapItem::AIRSPACE:
-    Draw(canvas, rc, (const AirspaceMapItem &)item, airspace_look,
+    Draw(canvas, rc, (const AirspaceMapItem &)item, look.airspace,
          settings.airspace);
     break;
   case MapItem::WAYPOINT:
-    Draw(canvas, rc, (const WaypointMapItem &)item, waypoint_look,
+    Draw(canvas, rc, (const WaypointMapItem &)item, look.waypoint,
          settings.waypoint);
     break;
   case MapItem::TASK_OZ:
-    Draw(canvas, rc, (const TaskOZMapItem &)item, task_look, airspace_look,
+    Draw(canvas, rc, (const TaskOZMapItem &)item, look.task, look.airspace,
          settings.airspace);
     break;
   case MapItem::MARKER:
-    Draw(canvas, rc, (const MarkerMapItem &)item, marker_look);
+    Draw(canvas, rc, (const MarkerMapItem &)item, look.marker);
     break;
   case MapItem::TRAFFIC:
     Draw(canvas, rc, (const TrafficMapItem &)item, traffic_look);

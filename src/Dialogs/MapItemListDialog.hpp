@@ -28,11 +28,7 @@ class SingleWindow;
 struct MapItem;
 class MapItemList;
 struct GeoVector;
-struct AircraftLook;
-struct AirspaceLook;
-struct WaypointLook;
-struct TaskLook;
-struct MarkerLook;
+struct MapLook;
 struct TrafficLook;
 struct SETTINGS_MAP;
 
@@ -41,11 +37,7 @@ void ShowMapItemDialog(const MapItem &item, SingleWindow &parent);
 void ShowMapItemListDialog(SingleWindow &parent,
                            const GeoVector &_vector,
                            const MapItemList &_list, short _elevation,
-                           const AircraftLook &_aircraft_look,
-                           const AirspaceLook &_airspace_look,
-                           const WaypointLook &_waypoint_look,
-                           const TaskLook &_task_look,
-                           const MarkerLook &_marker_look,
+                           const MapLook &_look,
                            const TrafficLook &_traffic_look,
                            const SETTINGS_MAP &_settings);
 

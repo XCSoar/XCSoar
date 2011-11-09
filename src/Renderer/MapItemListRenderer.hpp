@@ -28,22 +28,14 @@ Copyright_License {
 
 class Canvas;
 struct MapItem;
-struct AircraftLook;
-struct AirspaceLook;
-struct WaypointLook;
-struct TaskLook;
-struct MarkerLook;
+struct MapLook;
 struct TrafficLook;
 struct SETTINGS_MAP;
 
 namespace MapItemListRenderer
 {
   void Draw(Canvas &canvas, const PixelRect rc, const MapItem &item,
-            const AircraftLook &aircraft_look,
-            const AirspaceLook &airspace_look,
-            const WaypointLook &waypoint_look,
-            const TaskLook &task_look,
-            const MarkerLook &marker_look,
+            const MapLook &look,
             const TrafficLook &traffic_look,
             const SETTINGS_MAP &settings);
 }

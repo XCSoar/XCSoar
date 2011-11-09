@@ -45,11 +45,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Units/UnitsFormatter.hpp"
 
-static const AircraftLook *aircraft_look;
-static const AirspaceLook *airspace_look;
-static const WaypointLook *waypoint_look;
-static const TaskLook *task_look;
-static const MarkerLook *marker_look;
+static const MapLook *look;
 static const TrafficLook *traffic_look;
 static const SETTINGS_MAP *settings;
 static GeoVector vector;
@@ -80,9 +76,7 @@ static void
 PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
   const MapItem &item = *(*list)[idx];
-  MapItemListRenderer::Draw(canvas, rc, item, *aircraft_look, *airspace_look,
-                            *waypoint_look, *task_look, *marker_look, *traffic_look,
-                            *settings);
+  MapItemListRenderer::Draw(canvas, rc, item, *look, *traffic_look, *settings);
 }
 
 static void
@@ -220,11 +214,7 @@ void
 ShowMapItemListDialog(SingleWindow &parent,
                       const GeoVector &_vector,
                       const MapItemList &_list, short _elevation,
-                      const AircraftLook &_aircraft_look,
-                      const AirspaceLook &_airspace_look,
-                      const WaypointLook &_waypoint_look,
-                      const TaskLook &_task_look,
-                      const MarkerLook &_marker_look,
+                      const MapLook &_look,
                       const TrafficLook &_traffic_look,
                       const SETTINGS_MAP &_settings)
 {
@@ -244,11 +234,7 @@ ShowMapItemListDialog(SingleWindow &parent,
     list = &_list;
     elevation = _elevation;
 
-    aircraft_look = &_aircraft_look;
-    airspace_look = &_airspace_look;
-    waypoint_look = &_waypoint_look;
-    task_look = &_task_look;
-    marker_look = &_marker_look;
+    look = &_look;
     traffic_look = &_traffic_look;
     settings = &_settings;
 
