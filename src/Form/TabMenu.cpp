@@ -55,6 +55,7 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent,
                                      0, y, _width, _height,
                                      flipOrientation);
 }
+
 TabMenuControl::~TabMenuControl()
 {
   StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS>::const_iterator i,
@@ -142,20 +143,15 @@ void
 TabMenuControl::SetCurrentPage(unsigned page)
 {
   HideAllPageExtras();
-  SetIsVisible(page == GetMenuPage());
+
+  TabBarControl::SetCurrentPage(page);
 
   if (page == GetMenuPage()) {
     form.SetCaption(Caption);
-    tabs[TabbedControl::GetCurrentPage()]->hide();
     const menu_tab_index di = LastContent;
     this->GetTabMenuDisplay()->SetSelectedIndex(di);
 
   } else {
-    TabBarControl::SetCurrentPage(page);
-
-    if (GetCurrentPage() == page || GetCurrentPage() == GetMenuPage())
-      tabs[TabbedControl::GetCurrentPage()]->show();
-
     const PageItem& theitem = GetPageItem(page);
     LastContent.MainIndex = theitem.main_menu_index;
     LastContent.SubIndex = GetSubMenuButton(page)->Menu.SubIndex;
@@ -167,6 +163,7 @@ TabMenuControl::SetCurrentPage(unsigned page)
                gettext(butMain->Caption), theitem.menu_caption);
     form.SetCaption(caption);
   }
+
   CurrentPageNum = page;
 }
 
@@ -313,17 +310,6 @@ TabMenuControl::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
 }
 
 void
-TabMenuControl::SetIsVisible(bool visible)
-{
-  if (!visible) {
-    theTabDisplay->hide();
-  }
-  else {
-    theTabDisplay->show_on_top();
-  }
-}
-
-void
 TabMenuControl::CreateSubMenuItem(const unsigned sub_menu_index,
                                   const PageItem &item, const unsigned page)
 {
@@ -378,6 +364,8 @@ TabMenuControl::InitMenu(const PageItem pages[],
     CreateSubMenu(main_menu_captions[i], i);
 
   CurrentPageNum = GetMenuPage();
+
+  TabBarControl::AddClient(theTabDisplay, Caption);
 }
 
 unsigned

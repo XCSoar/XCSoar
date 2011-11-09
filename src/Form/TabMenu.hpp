@@ -264,9 +264,6 @@ protected:
     return NumPages;
   }
 
-  /* Show or Hide the menu control when a content page is being displayed */
-  void SetIsVisible(bool visible);
-
   TabMenuDisplay *GetTabMenuDisplay() {
     return theTabDisplay;
   }
