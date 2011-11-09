@@ -127,8 +127,8 @@ public:
 public:
   void SetCurrentPage(unsigned i,
       EventType EventType = TabBarControl::MouseOrButton, bool ReClick = false);
-  void NextPage(EventType EventType = TabBarControl::MouseOrButton);
-  void PreviousPage(EventType EventType = TabBarControl::MouseOrButton);
+  void NextPage();
+  void PreviousPage();
   UPixelScalar GetTabHeight();
   UPixelScalar GetTabWidth();
 

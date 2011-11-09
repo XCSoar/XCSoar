@@ -184,7 +184,7 @@ TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
 }
 
 void
-TabBarControl::NextPage(EventType _EventType)
+TabBarControl::NextPage()
 {
   if (buttons.size() < 2)
     return;
@@ -195,11 +195,12 @@ TabBarControl::NextPage(EventType _EventType)
     // prevent wraparound
     return;
 
-  SetCurrentPage((GetCurrentPage() + 1) % buttons.size(), _EventType, false);
+  SetCurrentPage((GetCurrentPage() + 1) % buttons.size(),
+                 NextPreviousKey, false);
 }
 
 void
-TabBarControl::PreviousPage(EventType _EventType)
+TabBarControl::PreviousPage()
 {
   if (buttons.size() < 2)
     return;
@@ -211,7 +212,7 @@ TabBarControl::PreviousPage(EventType _EventType)
     return;
 
   SetCurrentPage((GetCurrentPage() + buttons.size() - 1) % buttons.size(),
-                  _EventType, false);
+                 NextPreviousKey, false);
 }
 
 const PixelRect
@@ -495,14 +496,14 @@ TabDisplay::on_key_down(unsigned key_code)
     break;
 
   case VK_RIGHT:
-    theTabBar.NextPage(TabBarControl::NextPreviousKey);
+    theTabBar.NextPage();
     return true;
 
   case VK_UP:
     break;
 
   case VK_LEFT:
-    theTabBar.PreviousPage(TabBarControl::NextPreviousKey);
+    theTabBar.PreviousPage();
     return true;
   }
   return PaintWindow::on_key_down(key_code);
