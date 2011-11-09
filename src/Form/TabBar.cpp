@@ -186,7 +186,9 @@ TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
       }
     }
   }
-  theTabDisplay->trigger_invalidate();
+
+  if (theTabDisplay != NULL)
+    theTabDisplay->trigger_invalidate();
 
   setting_up = false;
 }

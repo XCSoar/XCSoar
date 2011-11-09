@@ -61,6 +61,7 @@ TabMenuControl::~TabMenuControl()
       end = MainMenuButtons.end();
   for (i = MainMenuButtons.begin(); i != end; ++i)
     delete *i;
+  delete theTabDisplay;
 }
 
 unsigned
@@ -163,6 +164,8 @@ TabMenuControl::SetCurrentPage(unsigned page)
 
   } else {
     TabBarControl::SetCurrentPage(page);
+    theTabDisplay->invalidate();
+
     if (GetCurrentPage() == page || GetCurrentPage() == GetMenuPage())
       tabs[TabbedControl::GetCurrentPage()]->show();
 

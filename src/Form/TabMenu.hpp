@@ -88,6 +88,8 @@ protected:
   /* holds info and buttons for the main menu.  not on child menus */
   StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS> MainMenuButtons;
 
+  TabMenuDisplay *theTabDisplay;
+
   /* holds pointer to array of menus info (must be sorted by MenuGroup) */
   PageItem const *Pages;
 
@@ -241,7 +243,10 @@ protected:
   /* Show or Hide the menu control when a content page is being displayed */
   void SetIsVisible(bool visible);
 
-  TabMenuDisplay *GetTabMenuDisplay() {return (TabMenuDisplay*)theTabDisplay; }
+  TabMenuDisplay *GetTabMenuDisplay() {
+    return theTabDisplay;
+  }
+
   /**
    * appends a submenu button to the buttons array and
    * loads it's XML file
