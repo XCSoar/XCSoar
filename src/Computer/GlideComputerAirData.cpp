@@ -571,7 +571,8 @@ GlideComputerAirData::ThermalSources()
 
   if (!thermal_locator.estimate_valid ||
       !basic.NavAltitudeAvailable() ||
-      !calculated.last_thermal.IsDefined())
+      !calculated.last_thermal.IsDefined() ||
+      negative(calculated.last_thermal.lift_rate))
     return;
 
   if (calculated.wind_available &&

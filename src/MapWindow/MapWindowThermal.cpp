@@ -43,10 +43,6 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
 
   for (auto it = thermal_locator.sources.begin(),
        end = thermal_locator.sources.end(); it != end; ++it) {
-    // trivial/bad thermal, don't draw it
-    if (!positive(it->lift_rate))
-      continue;
-
     // find height difference
     if (Basic().nav_altitude < it->ground_height)
       continue;
