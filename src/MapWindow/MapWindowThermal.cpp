@@ -32,8 +32,7 @@ Copyright_License {
 void
 MapWindow::DrawThermalEstimate(Canvas &canvas) const
 {
-  const MapWindowProjection &projection = render_projection;
-  if (projection.GetMapScale() > fixed(4000))
+  if (render_projection.GetMapScale() > fixed(4000))
     return;
 
   // draw only at close map scales in non-circling mode
