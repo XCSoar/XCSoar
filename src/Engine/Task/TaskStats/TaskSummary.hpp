@@ -22,7 +22,7 @@
 #ifndef TASK_SUMMARY_HPP
 #define TASK_SUMMARY_HPP
 
-#include "Util/StaticArray.hpp"
+#include "Util/TrivialArray.hpp"
 #include "Util/TypeTraits.hpp"
 #include "Math/fixed.hpp"
 
@@ -41,7 +41,7 @@ struct TaskSummary {
   /** Index of active taskpoint */
   unsigned active;
 
-  typedef StaticArray<TaskSummaryPoint, 16u> TaskSummaryPointVector;
+  typedef TrivialArray<TaskSummaryPoint, 16u> TaskSummaryPointVector;
 
   /** Vector of turnpoint data */
   TaskSummaryPointVector pts;
@@ -68,7 +68,6 @@ struct TaskSummary {
   }
 };
 
-static_assert(has_trivial_copy_and_destructor<TaskSummary>::value,
-              "type is not trivial");
+static_assert(is_trivial_clang<TaskSummary>::value, "type is not trivial");
 
 #endif
