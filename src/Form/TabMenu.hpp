@@ -84,6 +84,31 @@ public:
     menu_tab_index(unsigned mainNum, unsigned subNum);
   };
 
+protected:
+  /* holds info and buttons for the main menu.  not on child menus */
+  StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS> MainMenuButtons;
+
+  /* holds pointer to array of menus info (must be sorted by MenuGroup) */
+  PageItem const *Pages;
+
+  unsigned NumPages;
+  menu_tab_index LastContent;
+
+  /* Index of last page selected by menu */
+  unsigned MainMenuIndex;
+
+  /* Sub index of last page selected by menu */
+  unsigned SubMenuIndex;
+
+  TCHAR Caption[256];
+
+  /* value of last displayed content (non-menu) page */
+  unsigned CurrentPageNum;
+
+  WndForm &form;
+  const CallBackTableEntry *LookUpTable;
+
+public:
   /**
    * @param parent
    * @param Caption the page caption shown on the menu page
@@ -206,24 +231,6 @@ protected:
    */
   unsigned GetCurrentPage();
 
-
-
-protected:
-  /* holds info and buttons for the main menu.  not on child menus */
-  StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS> MainMenuButtons;
-
-  /* holds pointer to array of menus info (must be sorted by MenuGroup) */
-  PageItem const *Pages;
-  unsigned NumPages;
-  menu_tab_index LastContent;
-  /* Index of last page selected by menu */
-  unsigned MainMenuIndex;
-  /* Sub index of last page selected by menu */
-  unsigned SubMenuIndex;
-  TCHAR Caption[256];
-  /* value of last displayed content (non-menu) page */
-  unsigned CurrentPageNum;
-
 protected:
 
   /**
@@ -233,9 +240,6 @@ protected:
 
   /* Show or Hide the menu control when a content page is being displayed */
   void SetIsVisible(bool visible);
-
-  WndForm &form;
-  const CallBackTableEntry *LookUpTable;
 
   TabMenuDisplay *GetTabMenuDisplay() {return (TabMenuDisplay*)theTabDisplay; }
   /**
@@ -375,6 +379,15 @@ public:
  */
 class OneMainMenuButton : public OneTabButton {
 public:
+  /* index to Pages array of first page in submenu */
+  const unsigned FirstPageIndex;
+
+  /* index to Pages array of last page in submenu */
+  const unsigned LastPageIndex;
+
+  /* index of button in MainMenu */
+  const unsigned MainMenuIndex;
+
   OneMainMenuButton(const TCHAR* _Caption,
                    unsigned _FirstPageIndex,
                    unsigned _LastPageIndex,
@@ -394,12 +407,6 @@ public:
   {
   }
 public:
-  /* index to Pages array of first page in submenu */
-  const unsigned FirstPageIndex;
-  /* index to Pages array of last page in submenu */
-  const unsigned LastPageIndex;
   unsigned NumSubMenus() const { return LastPageIndex - FirstPageIndex + 1; };
-  /* index of button in MainMenu */
-  const unsigned MainMenuIndex;
 };
 #endif
