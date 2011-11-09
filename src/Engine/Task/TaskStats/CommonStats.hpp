@@ -111,11 +111,6 @@ public:
   TaskSummary ordered_summary;
 
   /**
-   * Constructor, initialises all to zero
-   */
-  CommonStats();
-
-  /**
    * Reset the stats as if never flown
    */
   void reset();
@@ -130,7 +125,6 @@ public:
 #endif
 };
 
-static_assert(has_trivial_copy_and_destructor<CommonStats>::value,
-              "type is not trivial");
+static_assert(is_trivial_clang<CommonStats>::value, "type is not trivial");
 
 #endif

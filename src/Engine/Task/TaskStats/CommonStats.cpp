@@ -1,10 +1,5 @@
 #include "CommonStats.hpp"
 
-CommonStats::CommonStats()
-{
-  reset();
-}
-
 void
 CommonStats::reset_task()
 {
