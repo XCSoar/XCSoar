@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "FLARM/Traffic.hpp"
 #include "NMEA/Validity.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/TrivialArray.hpp"
 #include "Util/TinyEnum.hpp"
 #include "Util/TypeTraits.hpp"
 
@@ -65,7 +65,7 @@ struct FlarmState
   /** Is FLARM information available? */
   Validity available;
   /** Flarm traffic information */
-  StaticArray<FlarmTraffic, FLARM_MAX_TRAFFIC> traffic;
+  TrivialArray<FlarmTraffic, FLARM_MAX_TRAFFIC> traffic;
 
 public:
   void Clear();
@@ -209,7 +209,6 @@ public:
   }
 };
 
-static_assert(has_trivial_copy_and_destructor<FlarmState>::value,
-              "type is not trivial");
+static_assert(is_trivial_clang<FlarmState>::value, "type is not trivial");
 
 #endif
