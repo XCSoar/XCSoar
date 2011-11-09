@@ -36,16 +36,16 @@ Copyright_License {
 TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                              PixelScalar x, PixelScalar y,
                              UPixelScalar _width, UPixelScalar _height,
-                const WindowStyle style, bool _flipOrientation,
-                bool _clientOverlapTabs):
-                TabbedControl(_parent, 0, 0, _parent.get_width(), _parent.get_height(), style),
-                theTabDisplay(NULL),
-                TabLineHeight((Layout::landscape ^ _flipOrientation) ?
-                    (Layout::Scale(TabLineHeightInitUnscaled) * 0.75) :
-                    Layout::Scale(TabLineHeightInitUnscaled)),
-                flipOrientation(_flipOrientation),
-                clientOverlapTabs(_clientOverlapTabs),
-                setting_up(true)
+                             const WindowStyle style, bool _flipOrientation,
+                             bool _clientOverlapTabs)
+  :TabbedControl(_parent, 0, 0, _parent.get_width(), _parent.get_height(), style),
+   theTabDisplay(NULL),
+   TabLineHeight((Layout::landscape ^ _flipOrientation)
+                 ? (Layout::Scale(TabLineHeightInitUnscaled) * 0.75)
+                 : Layout::Scale(TabLineHeightInitUnscaled)),
+   flipOrientation(_flipOrientation),
+   clientOverlapTabs(_clientOverlapTabs),
+   setting_up(true)
 {
   theTabDisplay = new TabDisplay(*this, look,
                                  x, y, _width, _height,
@@ -57,14 +57,14 @@ TabBarControl::TabBarControl(ContainerWindow &_parent,
                              const DialogLook &look,
                              PixelScalar x, PixelScalar y,
                              UPixelScalar _width, UPixelScalar _height,
-                             const WindowStyle style):
-                             TabbedControl(_parent, x, 0, _parent.get_width() - x,
-                                           _parent.get_height(), style),
-                             theTabDisplay(NULL),
-                             TabLineHeight(Layout::Scale(_tabLineHeight)),
-                             flipOrientation(!Layout::landscape),
-                             clientOverlapTabs(true),
-                             setting_up(true)
+                             const WindowStyle style)
+  :TabbedControl(_parent, x, 0, _parent.get_width() - x,
+                 _parent.get_height(), style),
+   theTabDisplay(NULL),
+   TabLineHeight(Layout::Scale(_tabLineHeight)),
+   flipOrientation(!Layout::landscape),
+   clientOverlapTabs(true),
+   setting_up(true)
 {
 }
 
@@ -122,12 +122,12 @@ TabBarControl::AddClientWindow(Window *w)
 
 unsigned
 TabBarControl::AddClient(Window *w, const TCHAR* Caption,
-    bool IsButtonOnly, const Bitmap *bmp,
-    PreHideNotifyCallback_t PreHideFunction,
-    PreShowNotifyCallback_t PreShowFunction,
-    PostShowNotifyCallback_t PostShowFunction,
+                         bool IsButtonOnly, const Bitmap *bmp,
+                         PreHideNotifyCallback_t PreHideFunction,
+                         PreShowNotifyCallback_t PreShowFunction,
+                         PostShowNotifyCallback_t PostShowFunction,
                          ClickNotifyCallback_t ClickFunction,
-    ReClickNotifyCallback_t ReClickFunction)
+                         ReClickNotifyCallback_t ReClickFunction)
 {
   AddClientWindow(w);
 

@@ -272,14 +272,14 @@ public:
                TabBarControl::PreShowNotifyCallback_t _PreShowFunction,
                TabBarControl::PostShowNotifyCallback_t _PostShowFunction,
                TabBarControl::ClickNotifyCallback_t _ClickFunction,
-               TabBarControl::ReClickNotifyCallback_t _ReClickFunction):
-                 IsButtonOnly(_IsButtonOnly),
-                 bmp(_bmp),
-                 PreHideFunction(_PreHideFunction),
-                 PreShowFunction(_PreShowFunction),
-                 PostShowFunction(_PostShowFunction),
-                 ClickFunction(_ClickFunction),
-                 ReClickFunction(_ReClickFunction)
+               TabBarControl::ReClickNotifyCallback_t _ReClickFunction)
+    :IsButtonOnly(_IsButtonOnly),
+     bmp(_bmp),
+     PreHideFunction(_PreHideFunction),
+     PreShowFunction(_PreShowFunction),
+     PostShowFunction(_PostShowFunction),
+     ClickFunction(_ClickFunction),
+     ReClickFunction(_ReClickFunction)
   {
     Caption = _Caption;
     butSize.left = 0;
