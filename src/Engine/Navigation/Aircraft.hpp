@@ -88,6 +88,8 @@ struct AltitudeState
 
   /** Altitude over terrain */
   fixed altitude_agl;
+
+  void Reset();
 };
 
 /**
@@ -174,6 +176,8 @@ struct AircraftState:
  */
   gcc_pure
   AircraftState GetPredictedState(const fixed& in_time) const;
+
+  void Reset();
 };
 
 #endif

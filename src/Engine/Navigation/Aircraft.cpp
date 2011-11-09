@@ -39,11 +39,24 @@ AircraftState::AircraftState():
 {
 }
 
-AltitudeState::AltitudeState():
-  altitude(fixed_zero),
-  working_band_fraction(fixed_one),
-  altitude_agl(fixed_zero)
+void
+AircraftState::Reset()
 {
+  AltitudeState::Reset();
+  FlyingState::Reset();
+}
+
+AltitudeState::AltitudeState()
+{
+  Reset();
+}
+
+void
+AltitudeState::Reset()
+{
+  altitude = fixed_zero;
+  working_band_fraction = fixed_zero;
+  altitude_agl = fixed_zero;
 }
 
 void
