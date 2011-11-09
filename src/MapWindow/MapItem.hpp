@@ -30,6 +30,7 @@ Copyright_License {
 #include "Engine/Task/Tasks/BaseTask/TaskPoint.hpp"
 #include "Markers.hpp"
 #include "FLARM/Traffic.hpp"
+#include "NMEA/ThermalLocator.hpp"
 
 class AbstractAirspace;
 struct Waypoint;
@@ -41,6 +42,7 @@ struct MapItem
     TASK_OZ,
     AIRSPACE,
     MARKER,
+    THERMAL,
     WAYPOINT,
     TRAFFIC,
   } type;
@@ -108,5 +110,12 @@ struct TrafficMapItem: public MapItem
     :MapItem(TRAFFIC), traffic(_traffic) {}
 };
 
+struct ThermalMapItem: public MapItem
+{
+  ThermalSource thermal;
+
+  ThermalMapItem(const ThermalSource &_thermal)
+    :MapItem(THERMAL), thermal(_thermal) {}
+};
 
 #endif

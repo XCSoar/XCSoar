@@ -68,6 +68,9 @@ namespace MapItemListRenderer
 
   void Draw(Canvas &canvas, const PixelRect rc, const TrafficMapItem &item,
             const TrafficLook &traffic_look);
+
+  void Draw(Canvas &canvas, const PixelRect rc, const ThermalMapItem &item,
+            const MapLook &look);
 }
 
 void
@@ -179,6 +182,38 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   TCHAR time_buffer[32];
   Units::TimeToTextHHMMSigned(time_buffer, TimeLocal(marker.time.GetSecondOfDay()));
   _stprintf(buffer, _("dropped at %s"), time_buffer);
+  canvas.select(small_font);
+  canvas.text_clipped(left,
+                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                      rc, buffer);
+}
+
+void
+MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                          const ThermalMapItem &item, const MapLook &look)
+{
+  const PixelScalar line_height = rc.bottom - rc.top;
+
+  const ThermalSource &thermal = item.thermal;
+
+  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
+                     PixelScalar(rc.top + line_height / 2) };
+
+  look.hBmpThermalSource.Draw(canvas, pt);
+
+  const Font &name_font = Fonts::MapBold;
+  const Font &small_font = Fonts::MapLabel;
+  canvas.set_text_color(COLOR_BLACK);
+
+  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+
+  canvas.select(name_font);
+  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, _("Thermal"));
+
+  TCHAR buffer[256], lift_buffer[32], time_buffer[32];
+  Units::FormatUserVSpeed(thermal.lift_rate, lift_buffer, 32);
+  Units::TimeToTextHHMMSigned(time_buffer, TimeLocal((int)thermal.time));
+  _stprintf(buffer, _("Avg. lift: %s - left at %s"), lift_buffer, time_buffer);
   canvas.select(small_font);
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
@@ -308,6 +343,9 @@ MapItemListRenderer::Draw(
     break;
   case MapItem::TRAFFIC:
     Draw(canvas, rc, (const TrafficMapItem &)item, traffic_look);
+    break;
+  case MapItem::THERMAL:
+    Draw(canvas, rc, (const ThermalMapItem &)item, look);
     break;
   }
 }

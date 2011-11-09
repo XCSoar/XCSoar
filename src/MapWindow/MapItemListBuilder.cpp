@@ -40,8 +40,11 @@ Copyright_License {
 #include "FLARM/State.hpp"
 #include "ProtectedMarkers.hpp"
 #include "Markers.hpp"
+#include "NMEA/ThermalLocator.hpp"
 #include "MapItem.hpp"
 #include "MapItemList.hpp"
+#include "NMEA/MoreData.hpp"
+#include "NMEA/Derived.hpp"
 
 class AirspaceWarningList
 {
@@ -229,3 +232,22 @@ MapItemListBuilder::AddTraffic(const FlarmState &flarm, fixed range)
   }
 }
 
+void
+MapItemListBuilder::AddThermals(const ThermalLocatorInfo &thermals, fixed range,
+                                const MoreData &basic,
+                                const DerivedInfo &calculated)
+{
+  for (auto it = thermals.sources.begin(), end = thermals.sources.end();
+       it != end; ++it) {
+    // find height difference
+    if (basic.nav_altitude < it->ground_height)
+      continue;
+
+    GeoPoint loc = calculated.wind_available ?
+      it->CalculateAdjustedLocation(basic.nav_altitude, calculated.wind) :
+      it->location;
+
+    if (location.Distance(loc) < range)
+      list.checked_append(new ThermalMapItem(*it));
+  }
+}

@@ -60,6 +60,7 @@ HasDetails(const MapItem &item)
   switch (item.type) {
   case MapItem::SELF:
   case MapItem::MARKER:
+  case MapItem::THERMAL:
     return false;
 
   case MapItem::AIRSPACE:
@@ -192,6 +193,7 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
   switch (item.type) {
   case MapItem::SELF:
   case MapItem::MARKER:
+  case MapItem::THERMAL:
     break;
 
   case MapItem::AIRSPACE:

@@ -55,6 +55,10 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
   if (marks && render_projection.GetMapScale() <= fixed_int_constant(30000))
     builder.AddMarkers(*marks, range);
 
+  if (render_projection.GetMapScale() <= fixed_int_constant(4000))
+    builder.AddThermals(Calculated().thermal_locator, range,
+                        Basic(), Calculated());
+
   if (way_points)
     builder.AddWaypoints(*way_points, range);
 
