@@ -45,7 +45,7 @@ class ContainerWindow;
  * Creates a vertical menu in both Portrait and in landscape modes
  * ToDo: lazy loading of panels (XML and Init() routines)
  */
-class TabMenuControl : public TabBarControl {
+class TabMenuControl : public ContainerWindow {
 public:
 
   /**List of all submenu items in array of PageItem[0 to (n-1)]
@@ -88,6 +88,10 @@ public:
   };
 
 protected:
+  TabbedControl pager;
+
+  StaticArray<OneTabButton *, 32> buttons;
+
   /* holds info and buttons for the main menu.  not on child menus */
   StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS> MainMenuButtons;
 
@@ -110,6 +114,9 @@ protected:
   /* value of last displayed content (non-menu) page */
   unsigned CurrentPageNum;
 
+  // used to indicate initial state before tabs have changed
+  bool setting_up;
+
   WndForm &form;
   const CallBackTableEntry *LookUpTable;
 
@@ -129,6 +136,10 @@ public:
                  UPixelScalar width, UPixelScalar height,
                  const WindowStyle style = WindowStyle());
   ~TabMenuControl();
+
+  const StaticArray<OneTabButton *, 32> &GetTabButtons() {
+    return buttons;
+  }
 
 public:
   /**
@@ -330,27 +341,47 @@ public:
   void SetCurrentPage(menu_tab_index menuIndex);
 };
 
-class TabMenuDisplay : public TabDisplay {
+class TabMenuDisplay : public PaintWindow {
+  TabMenuControl &menu;
+  const DialogLook &look;
+  bool dragging; // tracks that mouse is down and captured
+  int downindex; // index of tab where mouse down occurred
+  bool dragoffbutton; // set by mouse_move
+
+public:
   /* used to track mouse down/up clicks */
   TabMenuControl::menu_tab_index DownIndex;
   /* used to render which submenu is drawn and which item is highlighted */
   TabMenuControl::menu_tab_index SelectedIndex;
 
 public:
-  TabMenuDisplay(TabBarControl& _theTabBar, const DialogLook &look,
+  TabMenuDisplay(TabMenuControl &_menu, const DialogLook &look,
                  ContainerWindow &parent,
                  PixelScalar left, PixelScalar top,
-                 UPixelScalar width, UPixelScalar height,
-                 bool _flipOrientation = false);
+                 UPixelScalar width, UPixelScalar height);
 
   void SetSelectedIndex(TabMenuControl::menu_tab_index di);
+
+  UPixelScalar GetTabHeight() const {
+    return this->get_height();
+  }
+
+  UPixelScalar GetTabWidth() const {
+    return this->get_width();
+  }
+
 protected:
-  TabMenuControl& GetTabMenuBar() { return (TabMenuControl&)theTabBar; }
+  TabMenuControl &GetTabMenuBar() {
+    return menu;
+  }
+
+  void drag_end();
 
   /**
    * @return Rect of button holding down pointer capture
    */
   const PixelRect& GetDownButtonRC();
+
   virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
   virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
   virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
@@ -361,6 +392,9 @@ protected:
    * Todo: support icons and "ButtonOnly" style
    */
   virtual void on_paint(Canvas &canvas);
+
+  virtual bool on_killfocus();
+  virtual bool on_setfocus();
 
   /**
    * draw border around main menu

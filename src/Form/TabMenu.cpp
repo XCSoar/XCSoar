@@ -42,22 +42,33 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent,
                                PixelScalar x, PixelScalar y,
                                UPixelScalar _width, UPixelScalar _height,
                                const WindowStyle style)
-  :TabBarControl(_parent, 1, look, x, y, _width, _height, style),
+  :// tabLineHeight=1
    NumPages(0),
    LastContent(NO_MAIN_MENU, NO_SUB_MENU),
    Caption(_caption),
    CurrentPageNum(UNINITIALIZED),
+   setting_up(true),
    form(_form),
    LookUpTable(_look_up_table)
 
 {
-  theTabDisplay = new TabMenuDisplay(*this, look, GetClientAreaWindow(),
-                                     0, y, _width, _height,
-                                     flipOrientation);
+  set(_parent, x, 0, _parent.get_width() - x, _parent.get_height(), style);
+
+  const PixelRect rc = get_client_rect();
+  WindowStyle pager_style;
+  pager_style.control_parent();
+  pager.set(*this, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
+            pager_style);
+
+  theTabDisplay = new TabMenuDisplay(*this, look, pager,
+                                     0, y, _width, _height);
 }
 
 TabMenuControl::~TabMenuControl()
 {
+  for (auto i = buttons.begin(), end = buttons.end(); i != end; ++i)
+    delete *i;
+
   StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS>::const_iterator i,
       end = MainMenuButtons.end();
   for (i = MainMenuButtons.begin(); i != end; ++i)
@@ -143,7 +154,24 @@ TabMenuControl::SetCurrentPage(unsigned page)
 {
   HideAllPageExtras();
 
-  TabBarControl::SetCurrentPage(page);
+  bool Continue = true;
+  assert(page < buttons.size());
+
+  if (!setting_up && buttons[pager.GetCurrentPage()]->PreHideFunction) {
+    if (!buttons[pager.GetCurrentPage()]->PreHideFunction())
+      Continue = false;
+  }
+
+  if (Continue) {
+    if (buttons[page]->PreShowFunction) {
+      Continue = buttons[page]->PreShowFunction();
+    }
+  }
+
+  if (Continue)
+    Continue = pager.ClickPage(page);
+
+  setting_up = false;
 
   if (page == GetMenuPage()) {
     form.SetCaption(Caption);
@@ -184,6 +212,12 @@ TabMenuControl::GetPageNum(const unsigned main_menu_index,
     return GetMenuPage();
 }
 
+static UPixelScalar
+GetTabLineHeight()
+{
+  return Layout::Scale(1);
+}
+
 UPixelScalar
 TabMenuControl::GetTabHeight() const
 {
@@ -212,7 +246,7 @@ TabMenuControl::GetButtonVerticalOffset() const
 UPixelScalar
 TabMenuControl::GetMenuButtonWidth() const
 {
-  return (theTabDisplay->GetTabWidth() - TabLineHeight) / 2;
+  return (theTabDisplay->GetTabWidth() - GetTabLineHeight()) / 2;
 }
 
 const PixelRect&
@@ -278,7 +312,7 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page) const
   rc.top += GetButtonVerticalOffset();
   rc.bottom = rc.top + butHeight;
 
-  rc.left = GetMenuButtonWidth() + TabLineHeight;
+  rc.left = GetMenuButtonWidth() + GetTabLineHeight();
   rc.right = rc.left + GetMenuButtonWidth();
 
   return buttons[page]->butSize;
@@ -319,8 +353,7 @@ TabMenuControl::CreateSubMenuItem(const unsigned sub_menu_index,
              item.XML_PortraitResource,
              Layout::landscape ? _T("_L") : _T(""));
 
-  Window *w = LoadWindow(LookUpTable, &form, GetClientAreaWindow(),
-                         xml_resource);
+  Window *w = LoadWindow(LookUpTable, &form, pager, xml_resource);
   AddClient(w, item, sub_menu_index, page);
 }
 
@@ -365,7 +398,8 @@ TabMenuControl::InitMenu(const PageItem pages[],
 
   CurrentPageNum = GetMenuPage();
 
-  TabBarControl::AddClient(theTabDisplay, Caption);
+  pager.AddClient(theTabDisplay);
+  buttons.append(new OneTabButton(Caption, false, NULL, NULL, NULL));
 }
 
 unsigned
@@ -376,17 +410,22 @@ TabMenuControl::GotoMenuPage()
 }
 
 // TabMenuDisplay Functions
-TabMenuDisplay::TabMenuDisplay(TabBarControl& _theTabBar,
+TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
                                const DialogLook &_look,
                                ContainerWindow &parent,
                                PixelScalar left, PixelScalar top,
-                               UPixelScalar width, UPixelScalar height,
-                               bool _flipOrientation)
-  :TabDisplay(_theTabBar, _look,
-              parent, left, top, width, height, _flipOrientation),
+                               UPixelScalar width, UPixelScalar height)
+  :menu(_theTabBar),
+   look(_look),
+   dragging(false),
+   downindex(-1),
+   dragoffbutton(false),
    DownIndex(TabMenuControl::NO_MAIN_MENU, TabMenuControl::NO_SUB_MENU),
    SelectedIndex(TabMenuControl::NO_MAIN_MENU, TabMenuControl::NO_SUB_MENU)
 {
+  WindowStyle mystyle;
+  mystyle.tab_stop();
+  set(parent, left, top, width, height, mystyle);
 }
 
 void
@@ -490,7 +529,7 @@ void
 TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas)
 {
   TabMenuControl &tb = GetTabMenuBar();
-  const UPixelScalar bwidth = tb.GetTabLineHeight();
+  const UPixelScalar bwidth = GetTabLineHeight();
 
   const PixelRect rcFirst = tb.GetMainMenuButtonSize(0);
   const UPixelScalar menuBottom = tb.GetMainMenuButtonSize(
@@ -536,8 +575,8 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle)
       canvas.set_background_color(COLOR_WHITE);
     }
     const PixelRect rc = tb.GetMainMenuButtonSize((*i)->MainMenuIndex);
-    PaintButton(canvas, CaptionStyle, gettext((*i)->Caption), rc,
-                false, NULL, isDown, inverse);
+    TabDisplay::PaintButton(canvas, CaptionStyle, gettext((*i)->Caption), rc,
+                            false, NULL, isDown, inverse);
   }
   if (has_focus()) {
     PixelRect rcFocus;
@@ -552,7 +591,7 @@ void
 TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas, const OneMainMenuButton *butMain)
 {
   TabMenuControl &tb = GetTabMenuBar();
-  const UPixelScalar bwidth =  tb.GetTabLineHeight();
+  const UPixelScalar bwidth =  GetTabLineHeight();
   const UPixelScalar subTop = tb.GetSubMenuButtonSize(butMain->FirstPageIndex).top;
   const PixelRect bLast = tb.GetSubMenuButtonSize(butMain->LastPageIndex);
   const PixelRect rcBlackBorder = { PixelScalar(bLast.left - bwidth),
@@ -606,8 +645,10 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle)
       canvas.set_background_color(COLOR_WHITE);
     }
     const PixelRect &rc = tb.GetSubMenuButtonSize(i->PageIndex);
-    PaintButton(canvas, CaptionStyle, gettext(i->Caption), rc, false, NULL,
-                i->Menu.SubIndex == SelectedIndex.SubIndex, inverse);
+    TabDisplay::PaintButton(canvas, CaptionStyle, gettext(i->Caption), rc,
+                            false, NULL,
+                            i->Menu.SubIndex == SelectedIndex.SubIndex,
+                            inverse);
   }
 }
 
@@ -622,4 +663,31 @@ TabMenuDisplay::on_paint(Canvas &canvas)
 
   PaintMainMenuItems(canvas, CaptionStyle);
   PaintSubMenuItems(canvas, CaptionStyle);
+}
+
+bool
+TabMenuDisplay::on_killfocus()
+{
+  invalidate();
+  PaintWindow::on_killfocus();
+
+  return true;
+}
+
+bool
+TabMenuDisplay::on_setfocus()
+{
+  invalidate();
+  PaintWindow::on_setfocus();
+  return true;
+}
+
+void
+TabMenuDisplay::drag_end()
+{
+  if (dragging) {
+    dragging = false;
+    dragoffbutton = false;
+    release_capture();
+  }
 }
