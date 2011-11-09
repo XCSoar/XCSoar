@@ -40,6 +40,10 @@ public:
 
   void AddClient(Window *w);
 
+  unsigned GetTabCount() const {
+    return tabs.size();
+  }
+
   unsigned GetCurrentPage() const {
     return current;
   }

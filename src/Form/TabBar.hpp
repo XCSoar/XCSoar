@@ -129,7 +129,6 @@ public:
       EventType EventType = TabBarControl::MouseOrButton, bool ReClick = false);
   void NextPage(EventType EventType = TabBarControl::MouseOrButton);
   void PreviousPage(EventType EventType = TabBarControl::MouseOrButton);
-  unsigned GetTabCount() { return buttons.size(); }
   UPixelScalar GetTabHeight();
   UPixelScalar GetTabWidth();
 
