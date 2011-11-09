@@ -81,7 +81,10 @@ public:
   struct menu_tab_index {
     unsigned MainIndex;
     unsigned SubIndex;
-    menu_tab_index(unsigned mainNum, unsigned subNum);
+
+    gcc_constexpr_ctor
+    menu_tab_index(unsigned mainNum, unsigned subNum)
+      :MainIndex(mainNum), SubIndex(subNum) {}
   };
 
 protected:
@@ -144,7 +147,10 @@ public:
   /**
    * @return true if currently displaying the menu page
    */
-  bool IsCurrentPageTheMenu();
+  gcc_pure
+  bool IsCurrentPageTheMenu() const {
+    return GetCurrentPage() == GetMenuPage();
+  }
 
   /**
    * Sets the current page to the menu page
@@ -152,7 +158,9 @@ public:
    */
   unsigned GotoMenuPage();
 
-  unsigned GetNumMainMenuItems() { return MainMenuButtons.size(); }
+  unsigned GetNumMainMenuItems() const {
+    return MainMenuButtons.size();
+  }
 
   /**
    * Calculates and caches the size and position of ith sub menu button
@@ -161,7 +169,8 @@ public:
    * @return Rectangle of button coordinates,
    *   or {0,0,0,0} if index out of bounds
    */
-  const PixelRect &GetSubMenuButtonSize(unsigned i);
+  gcc_pure
+  const PixelRect &GetSubMenuButtonSize(unsigned i) const;
 
   /**
    * Calculates and caches the size and position of ith main menu button
@@ -170,26 +179,30 @@ public:
    * @return Rectangle of button coordinates,
    *   or {0,0,0,0} if index out of bounds
    */
-  const PixelRect &GetMainMenuButtonSize(unsigned i);
+  gcc_pure
+  const PixelRect &GetMainMenuButtonSize(unsigned i) const;
 
   /**
    * @param main_menu_index
    * @return pointer to button or NULL if index is out of range
    */
-  OneMainMenuButton * GetMainMenuButton(unsigned main_menu_index);
+  gcc_pure
+  const OneMainMenuButton *GetMainMenuButton(unsigned main_menu_index) const;
 
   /**
    * @param page
    * @return pointer to button or NULL if index is out of range
    */
-  OneSubMenuButton * GetSubMenuButton(unsigned page);
+  gcc_pure
+  const OneSubMenuButton *GetSubMenuButton(unsigned page) const;
 
   /**
    * @param Pos position of pointer
    * @param mainIndex main menu whose submenu buttons are visible
    * @return menu_tab_index w/ location of item
    */
-  menu_tab_index IsPointOverButton(RasterPoint Pos, unsigned mainIndex);
+  gcc_pure
+  menu_tab_index IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const;
 
   /**
    * @return number of pages excluding the menu page
@@ -199,7 +212,10 @@ public:
   /**
    *  returns menu item from data array of pages
    */
-  const PageItem& GetPageItem(unsigned page);
+  const PageItem &GetPageItem(unsigned page) const {
+    assert(page < NumPages);
+    return Pages[page];
+  }
 
   /**
    * Looks up the page id from the menu table
@@ -210,19 +226,23 @@ public:
    * returns page number of selected sub menu item base on menus indexes
    *  or GetMenuPage() if index is not a valid page
    */
+  gcc_pure
   int GetPageNum(const unsigned main_menu_index,
-                 const unsigned sub_menu_index);
+                 const unsigned sub_menu_index) const;
 
   /**
    * overloads from TabBarControl.
    */
-  UPixelScalar GetTabHeight();
+  UPixelScalar GetTabHeight() const;
 
   /**
    * @return last content page shown (0 to (NumPages-1))
    * or MAIN_MENU_PAGE if no content pages have been shown
    */
-  unsigned GetLastContentPage();
+  gcc_pure
+  unsigned GetLastContentPage() const {
+    return GetPageNum(LastContent.MainIndex, LastContent.SubIndex);
+  }
 
   const StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS>
       &GetMainMenuButtons() { return MainMenuButtons; }
@@ -231,14 +251,18 @@ protected:
   /**
    * @returns Page Index being displayed (including NumPages for Menu)
    */
-  unsigned GetCurrentPage();
+  unsigned GetCurrentPage() const {
+    return CurrentPageNum;
+  }
 
 protected:
 
   /**
    * @return virtual menu page -- one greater than size of the menu array
    */
-  unsigned GetMenuPage();
+  unsigned GetMenuPage() const {
+    return NumPages;
+  }
 
   /* Show or Hide the menu control when a content page is being displayed */
   void SetIsVisible(bool visible);
@@ -284,17 +308,17 @@ protected:
   /**
    * @return Height of any item in Main or Sub menu
    */
-  UPixelScalar GetMenuButtonHeight();
+  UPixelScalar GetMenuButtonHeight() const;
 
   /**
    * @return Width of any item in Main or Sub menu
    */
-  UPixelScalar GetMenuButtonWidth();
+  UPixelScalar GetMenuButtonWidth() const;
 
   /**
    * @return for portrait mode, puts menu near vertical center of screen
    */
-  UPixelScalar GetButtonVerticalOffset();
+  UPixelScalar GetButtonVerticalOffset() const;
 
   /**
    * hides all buttons etc for all content pages

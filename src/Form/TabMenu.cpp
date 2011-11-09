@@ -110,14 +110,8 @@ TabMenuControl::HideAllPageExtras()
   }
 }
 
-unsigned
-TabMenuControl::GetLastContentPage()
-{
-  return GetPageNum(LastContent.MainIndex, LastContent.SubIndex);
-}
-
-OneMainMenuButton *
-TabMenuControl::GetMainMenuButton(unsigned main_menu_index)
+const OneMainMenuButton *
+TabMenuControl::GetMainMenuButton(unsigned main_menu_index) const
 {
   if (main_menu_index >= MainMenuButtons.size())
     return NULL;
@@ -125,20 +119,14 @@ TabMenuControl::GetMainMenuButton(unsigned main_menu_index)
     return MainMenuButtons[main_menu_index];
 }
 
-OneSubMenuButton *
-TabMenuControl::GetSubMenuButton(unsigned page)
+const OneSubMenuButton *
+TabMenuControl::GetSubMenuButton(unsigned page) const
 {
   assert(page < NumPages && page < buttons.size());
   if (page >= buttons.size())
     return NULL;
   else
     return (OneSubMenuButton *)buttons[page];
-}
-
-unsigned
-TabMenuControl::GetCurrentPage()
-{
-  return CurrentPageNum;
 }
 
 void
@@ -172,7 +160,8 @@ TabMenuControl::SetCurrentPage(unsigned page)
     const PageItem& theitem = GetPageItem(page);
     LastContent.MainIndex = theitem.main_menu_index;
     LastContent.SubIndex = GetSubMenuButton(page)->Menu.SubIndex;
-    OneMainMenuButton *butMain = GetMainMenuButton(LastContent.MainIndex);
+    const OneMainMenuButton *butMain =
+      GetMainMenuButton(LastContent.MainIndex);
     assert(butMain);
     TCHAR caption[128];
     _sntprintf(caption, 128, _T("%s > %s"),
@@ -184,7 +173,7 @@ TabMenuControl::SetCurrentPage(unsigned page)
 
 int
 TabMenuControl::GetPageNum(const unsigned main_menu_index,
-                           const unsigned sub_menu_index)
+                           const unsigned sub_menu_index) const
 {
   if (sub_menu_index == TabMenuControl::NO_SUB_MENU ||
       main_menu_index == TabMenuControl::NO_MAIN_MENU)
@@ -193,7 +182,7 @@ TabMenuControl::GetPageNum(const unsigned main_menu_index,
   assert(main_menu_index < MainMenuButtons.size());
   assert(sub_menu_index < NumPages);
 
-  OneMainMenuButton *butMain = GetMainMenuButton(main_menu_index);
+  const OneMainMenuButton *butMain = GetMainMenuButton(main_menu_index);
   if (butMain)
     return butMain->FirstPageIndex + sub_menu_index;
   else
@@ -201,20 +190,20 @@ TabMenuControl::GetPageNum(const unsigned main_menu_index,
 }
 
 UPixelScalar
-TabMenuControl::GetTabHeight()
+TabMenuControl::GetTabHeight() const
 {
   return GetMenuButtonHeight() * TabMenuControl::MAX_MAIN_MENU_ITEMS
       + GetTabLineHeight() * 2;
 }
 
 UPixelScalar
-TabMenuControl::GetMenuButtonHeight()
+TabMenuControl::GetMenuButtonHeight() const
 {
   return Layout::Scale(31);
 }
 
 UPixelScalar
-TabMenuControl::GetButtonVerticalOffset()
+TabMenuControl::GetButtonVerticalOffset() const
 {
   if (!Layout::landscape) {
     PixelRect rc = get_client_rect();
@@ -226,13 +215,13 @@ TabMenuControl::GetButtonVerticalOffset()
 }
 
 UPixelScalar
-TabMenuControl::GetMenuButtonWidth()
+TabMenuControl::GetMenuButtonWidth() const
 {
   return (theTabDisplay->GetTabWidth() - TabLineHeight) / 2;
 }
 
 const PixelRect&
-TabMenuControl::GetMainMenuButtonSize(unsigned i)
+TabMenuControl::GetMainMenuButtonSize(unsigned i) const
 {
   const static PixelRect rcFallback = {0, 0, 0, 0};
 
@@ -256,7 +245,7 @@ TabMenuControl::GetMainMenuButtonSize(unsigned i)
 }
 
 const PixelRect&
-TabMenuControl::GetSubMenuButtonSize(unsigned page)
+TabMenuControl::GetSubMenuButtonSize(unsigned page) const
 {
   const static PixelRect rcFallback = {0, 0, 0, 0};
 
@@ -300,15 +289,8 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page)
   return buttons[page]->butSize;
 }
 
-TabMenuControl::menu_tab_index::menu_tab_index(unsigned mainNum,
-                                               unsigned subNum) :
-                                               MainIndex(mainNum),
-                                               SubIndex(subNum)
-{
-}
-
 TabMenuControl::menu_tab_index
-TabMenuControl::IsPointOverButton(RasterPoint Pos, unsigned mainIndex)
+TabMenuControl::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
 {
   // scan main menu buttons
   for (unsigned i = 0; i < GetNumMainMenuItems(); i++)
@@ -399,30 +381,11 @@ TabMenuControl::InitMenu(const PageItem pages[],
   CurrentPageNum = GetMenuPage();
 }
 
-bool
-TabMenuControl::IsCurrentPageTheMenu()
-{
-  return GetCurrentPage() == GetMenuPage();
-}
-
-unsigned
-TabMenuControl::GetMenuPage()
-{
-  return NumPages;
-}
-
 unsigned
 TabMenuControl::GotoMenuPage()
 {
   SetCurrentPage(GetMenuPage());
   return GetMenuPage();
-}
-
-const TabMenuControl::PageItem&
-TabMenuControl::GetPageItem(unsigned page)
-{
-  assert(page < NumPages);
-  return Pages[page];
 }
 
 // TabMenuDisplay Functions
