@@ -83,9 +83,6 @@ TabBarControl::GetButtonIsButtonOnly(unsigned i)
 
   assert(i < buttons.size());
 
-  if (i >= buttons.size())
-    return false;
-
   return buttons[i]->IsButtonOnly;
 }
 
@@ -94,9 +91,6 @@ TabBarControl::GetButtonCaption(unsigned i)
 {
   assert(i < buttons.size());
 
-  if (i >= buttons.size())
-    return _T("");
-
   return buttons[i]->Caption.c_str();
 }
 
@@ -104,9 +98,6 @@ const Bitmap *
 TabBarControl::GetButtonIcon(unsigned i)
 {
   assert(i < buttons.size());
-
-  if (i >= buttons.size())
-    return NULL;
 
   return buttons[i]->bmp;
 }
