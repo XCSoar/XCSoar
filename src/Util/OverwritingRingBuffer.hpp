@@ -43,17 +43,18 @@
  * Not thread safe.
  */
 template<class T, unsigned size>
-class OverwritingRingBuffer {
+class TrivialOverwritingRingBuffer
+{
   friend class const_iterator;
 
 public:
   class const_iterator {
-    friend class OverwritingRingBuffer;
+    friend class TrivialOverwritingRingBuffer;
 
-    const OverwritingRingBuffer &buffer;
+    const TrivialOverwritingRingBuffer &buffer;
     unsigned i;
 
-    const_iterator(const OverwritingRingBuffer<T, size> &_buffer, unsigned _i)
+    const_iterator(const TrivialOverwritingRingBuffer<T, size> &_buffer, unsigned _i)
       :buffer(_buffer), i(_i) {
       assert(i < size);
     }
@@ -63,7 +64,7 @@ public:
       return buffer.data[i];
     }
 
-    typename OverwritingRingBuffer::const_iterator &operator++() {
+    typename TrivialOverwritingRingBuffer::const_iterator &operator++() {
       i = buffer.next(i);
       return *this;
     }
@@ -83,10 +84,12 @@ protected:
   T data[size];
   unsigned head, tail;
 
-public:
   gcc_constexpr_ctor
-  OverwritingRingBuffer()
-    :head(0), tail(0) {}
+  TrivialOverwritingRingBuffer(unsigned _head, unsigned _tail)
+    :head(_head), tail(_tail) {}
+
+public:
+  TrivialOverwritingRingBuffer() = default;
 
 protected:
   static unsigned next(unsigned i) {
@@ -162,6 +165,13 @@ public:
   unsigned capacity() const {
     return size;
   }
+};
+
+template<class T, unsigned size>
+class OverwritingRingBuffer: public TrivialOverwritingRingBuffer<T, size>
+{
+public:
+  OverwritingRingBuffer():TrivialOverwritingRingBuffer<T, size>(0, 0) {}
 };
 
 #endif
