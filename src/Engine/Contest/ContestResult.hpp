@@ -24,7 +24,7 @@
 #define CONTEST_RESULT_HPP
 
 #include "Navigation/TracePoint.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/TrivialArray.hpp"
 #include "Util/TypeTraits.hpp"
 
 struct ContestResult
@@ -52,6 +52,10 @@ struct ContestResult
 
 static_assert(is_trivial_clang<ContestResult>::value, "type is not trivial");
 
-class ContestTraceVector: public StaticArray<TracePoint, 10> {};
+class ContestTraceVector: public TrivialArray<TracePoint, 10> {};
+
+#ifndef __clang__
+static_assert(is_trivial_ndebug<ContestTraceVector>::value, "type is not trivial");
+#endif
 
 #endif

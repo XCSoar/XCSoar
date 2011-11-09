@@ -75,7 +75,8 @@ struct ContestStatistics
   }
 };
 
-static_assert(has_trivial_copy_and_destructor<ContestStatistics>::value,
-              "type is not trivial");
+#ifndef __clang__
+static_assert(is_trivial_ndebug<ContestStatistics>::value, "type is not trivial");
+#endif
 
 #endif
