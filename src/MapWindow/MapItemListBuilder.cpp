@@ -151,15 +151,14 @@ public:
 };
 
 void
-MapItemListBuilder::AddSelfIfNear(const GeoPoint &self, const Angle &bearing,
-                                  fixed range)
+MapItemListBuilder::AddSelfIfNear(const GeoPoint &self, const Angle &bearing)
 {
   if (location.Distance(self) < range)
     list.checked_append(new SelfMapItem(self, bearing));
 }
 
 void
-MapItemListBuilder::AddWaypoints(const Waypoints &waypoints, fixed range)
+MapItemListBuilder::AddWaypoints(const Waypoints &waypoints)
 {
   WaypointListBuilderVisitor waypoint_list_builder(list);
   waypoints.visit_within_range(location, range, waypoint_list_builder);
@@ -210,7 +209,7 @@ MapItemListBuilder::AddTaskOZs(const ProtectedTaskManager &task)
 }
 
 void
-MapItemListBuilder::AddMarkers(const ProtectedMarkers &marks, fixed range)
+MapItemListBuilder::AddMarkers(const ProtectedMarkers &marks)
 {
   ProtectedMarkers::Lease lease(marks);
   unsigned i = 0;
@@ -224,7 +223,7 @@ MapItemListBuilder::AddMarkers(const ProtectedMarkers &marks, fixed range)
 }
 
 void
-MapItemListBuilder::AddTraffic(const FlarmState &flarm, fixed range)
+MapItemListBuilder::AddTraffic(const FlarmState &flarm)
 {
   for (auto it=flarm.traffic.begin(), end = flarm.traffic.end(); it != end; ++it) {
     if (location.Distance(it->location) < range)
@@ -233,7 +232,7 @@ MapItemListBuilder::AddTraffic(const FlarmState &flarm, fixed range)
 }
 
 void
-MapItemListBuilder::AddThermals(const ThermalLocatorInfo &thermals, fixed range,
+MapItemListBuilder::AddThermals(const ThermalLocatorInfo &thermals,
                                 const MoreData &basic,
                                 const DerivedInfo &calculated)
 {

@@ -33,13 +33,13 @@ Copyright_License {
 bool
 GlueMapWindow::ShowMapItems(const GeoPoint &location)
 {
-  MapItemList list;
-  MapItemListBuilder builder(list, location);
-
   fixed range = visible_projection.DistancePixelsToMeters(Layout::Scale(10));
 
+  MapItemList list;
+  MapItemListBuilder builder(list, location, range);
+
   if (Basic().location_available)
-    builder.AddSelfIfNear(Basic().location, Calculated().heading, range);
+    builder.AddSelfIfNear(Basic().location, Calculated().heading);
 
   if (task)
     builder.AddTaskOZs(*task);
@@ -53,17 +53,16 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
                                Calculated());
 
   if (marks && render_projection.GetMapScale() <= fixed_int_constant(30000))
-    builder.AddMarkers(*marks, range);
+    builder.AddMarkers(*marks);
 
   if (render_projection.GetMapScale() <= fixed_int_constant(4000))
-    builder.AddThermals(Calculated().thermal_locator, range,
-                        Basic(), Calculated());
+    builder.AddThermals(Calculated().thermal_locator, Basic(), Calculated());
 
   if (way_points)
-    builder.AddWaypoints(*way_points, range);
+    builder.AddWaypoints(*way_points);
 
   if (Basic().flarm.available)
-    builder.AddTraffic(Basic().flarm, range);
+    builder.AddTraffic(Basic().flarm);
 
   // Sort the list of map items
   list.Sort();

@@ -44,22 +44,23 @@ class MapItemListBuilder
 {
   MapItemList &list;
   GeoPoint location;
+  fixed range;
 
 public:
-  MapItemListBuilder(MapItemList &_list, GeoPoint _location)
-    :list(_list), location(_location) {}
+  MapItemListBuilder(MapItemList &_list, GeoPoint _location, fixed _range)
+    :list(_list), location(_location), range(_range) {}
 
-  void AddSelfIfNear(const GeoPoint &self, const Angle &bearing, fixed range);
-  void AddWaypoints(const Waypoints &waypoints, fixed range);
+  void AddSelfIfNear(const GeoPoint &self, const Angle &bearing);
+  void AddWaypoints(const Waypoints &waypoints);
   void AddVisibleAirspace(const Airspaces &airspaces,
                           const ProtectedAirspaceWarningManager *warning_manager,
                           const AirspaceComputerSettings &computer_settings,
                           const AirspaceRendererSettings &renderer_settings,
                           const MoreData &basic, const DerivedInfo &calculated);
   void AddTaskOZs(const ProtectedTaskManager &task);
-  void AddMarkers(const ProtectedMarkers &marks, fixed range);
-  void AddTraffic(const FlarmState &flarm, fixed range);
-  void AddThermals(const ThermalLocatorInfo &thermals, fixed range,
+  void AddMarkers(const ProtectedMarkers &marks);
+  void AddTraffic(const FlarmState &flarm);
+  void AddThermals(const ThermalLocatorInfo &thermals,
                    const MoreData &basic, const DerivedInfo &calculated);
 };
 
