@@ -75,24 +75,26 @@ FlarmDevice::SetGet(TCHAR *s)
 bool
 FlarmDevice::SetPilot(const TCHAR *pilot_name)
 {
-  TCHAR buffer[256];
-  _stprintf(buffer, _T("PFLAC,S,PILOT,%s"), pilot_name);
-  return SetGet(buffer);
+  return SetConfig(_T("PILOT"), pilot_name);
 }
 
 bool
 FlarmDevice::SetPlaneType(const TCHAR *plane_type)
 {
-  TCHAR buffer[256];
-  _stprintf(buffer, _T("PFLAC,S,GLIDERTYPE,%s"), plane_type);
-  return SetGet(buffer);
+  return SetConfig(_T("GLIDERTYPE"), plane_type);
 }
 
 bool
 FlarmDevice::SetPlaneRegistration(const TCHAR *registration)
 {
+  return SetConfig(_T("GLIDERID"), registration);
+}
+
+bool
+FlarmDevice::SetConfig(const TCHAR *setting, const TCHAR *value)
+{
   TCHAR buffer[256];
-  _stprintf(buffer, _T("PFLAC,S,GLIDERID,%s"), registration);
+  _stprintf(buffer, _T("PFLAC,S,%s,%s"), setting, value);
   return SetGet(buffer);
 }
 
@@ -100,7 +102,6 @@ bool
 FlarmDevice::DeclareInternal(const Declaration &declaration,
                              OperationEnvironment &env)
 {
-  TCHAR Buffer[256];
   unsigned size = declaration.Size();
 
   env.SetProgressRange(6 + size);
@@ -121,14 +122,12 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
 
   env.SetProgressPosition(3);
 
-  _stprintf(Buffer, _T("PFLAC,S,NEWTASK,Task"));
-  if (!SetGet(Buffer))
+  if (!SetConfig(_T("NEWTASK"), _T("Task")))
     return false;
 
   env.SetProgressPosition(4);
 
-  _stprintf(Buffer, _T("PFLAC,S,ADDWP,0000000N,00000000E,TAKEOFF"));
-  if (!SetGet(Buffer))
+  if (!SetConfig(_T("ADDWP"), _T("0000000N,00000000E,TAKEOFF")))
     return false;
 
   env.SetProgressPosition(5);
@@ -158,18 +157,18 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
     DegLon = (int)tmp;
     MinLon = (tmp - fixed(DegLon)) * 60 * 1000;
 
-    _stprintf(Buffer, _T("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"), DegLat,
+    TCHAR buffer[256];
+    _stprintf(buffer, _T("%02d%05.0f%c,%03d%05.0f%c,%s"), DegLat,
               (double)MinLat, NoS, DegLon, (double)MinLon, EoW,
               declaration.GetName(i));
 
-    if (!SetGet(Buffer))
+    if (!SetConfig(_T("ADDWP"), buffer))
       return false;
 
     env.SetProgressPosition(6 + i);
   }
 
-  _stprintf(Buffer, _T("PFLAC,S,ADDWP,0000000N,00000000E,LANDING"));
-  if (!SetGet(Buffer))
+  if (!SetConfig(_T("ADDWP"), _T("0000000N,00000000E,LANDING")))
     return false;
 
   env.SetProgressPosition(6 + size);

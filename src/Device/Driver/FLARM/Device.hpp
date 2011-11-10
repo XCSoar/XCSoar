@@ -44,6 +44,8 @@ public:
   bool SetPlaneRegistration(const TCHAR *registration);
 
 private:
+  bool SetConfig(const TCHAR *setting, const TCHAR *value);
+
   bool SetGet(char *buffer);
 #ifdef _UNICODE
   bool SetGet(TCHAR *s);
