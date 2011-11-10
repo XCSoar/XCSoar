@@ -44,6 +44,7 @@ public:
   bool SetPlaneRegistration(const TCHAR *registration);
 
   bool SetStealthMode(bool enabled);
+  bool SetRange(unsigned range);
 
   void Restart();
 

@@ -87,6 +87,14 @@ FlarmDevice::SetStealthMode(bool enabled)
 }
 
 bool
+FlarmDevice::SetRange(unsigned range)
+{
+  TCHAR buffer[32];
+  _stprintf(buffer, _T("%d"), range);
+  return SetConfig(_T("RANGE"), buffer);
+}
+
+bool
 FlarmDevice::SetPilot(const TCHAR *pilot_name)
 {
   return SetConfig(_T("PILOT"), pilot_name);

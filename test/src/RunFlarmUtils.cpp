@@ -114,6 +114,39 @@ ChangeRegistration(FlarmDevice &flarm)
 }
 
 static void
+ChangeRange(FlarmDevice &flarm)
+{
+  while (true) {
+    fprintf(stdout, "Please enter the range setting (2000-25500):\n");
+    fprintf(stdout, "> ");
+
+    char range[64];
+    if (fgets(range, 64, stdin) == NULL || strlen(range) == 0) {
+      fprintf(stdout, "Invalid input\n");
+      continue;
+    }
+
+    TrimRight(range);
+
+    char *end_ptr;
+    unsigned num_range = strtoul(range, &end_ptr, 10);
+    if (range == end_ptr) {
+      fprintf(stdout, "Invalid input\n");
+      continue;
+    }
+
+    fprintf(stdout, "Setting range to \"%d\" ...\n", num_range);
+
+    if (flarm.SetRange(num_range))
+      fprintf(stdout, "Range set to \"%d\"\n", num_range);
+    else
+      fprintf(stdout, "Operation failed!\n");
+
+    return;
+  }
+}
+
+static void
 WriteMenu()
 {
   fprintf(stdout, "------------------------------------\n"
@@ -124,6 +157,7 @@ WriteMenu()
                   "1:  Change pilot name\n"
                   "2:  Change plane type\n"
                   "3:  Change plane registration\n"
+                  "4:  Change receiving range\n"
                   "r:  Restart the FLARM\n"
                   "s+: Enable the stealth mode\n"
                   "s-: Disable the stealth mode\n"
@@ -159,6 +193,9 @@ RunUI(FlarmDevice &flarm)
       break;
     case '3':
       ChangeRegistration(flarm);
+      break;
+    case '4':
+      ChangeRange(flarm);
       break;
     case 'r':
     case 'R':
