@@ -29,7 +29,6 @@ TabbedControl::TabbedControl(ContainerWindow &parent,
                              PixelScalar x, PixelScalar y,
                              UPixelScalar width, UPixelScalar height,
                              const WindowStyle style)
-  :current(0)
 {
   set(parent, x, y, width, height, style);
 }
@@ -37,8 +36,13 @@ TabbedControl::TabbedControl(ContainerWindow &parent,
 void
 TabbedControl::AddClient(Window *w)
 {
-  if (current != tabs.size())
+  if (tabs.empty()) {
+    current = 0;
+  } else {
+    assert(current < tabs.size());
+
     w->hide();
+  }
 
   tabs.append(w);
 
