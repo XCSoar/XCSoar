@@ -39,6 +39,10 @@ public:
 
   bool Declare(const Declaration &declaration, OperationEnvironment &env);
 
+  bool SetPilot(const TCHAR *pilot_name);
+  bool SetPlaneType(const TCHAR *plane_type);
+  bool SetPlaneRegistration(const TCHAR *registration);
+
 private:
   bool SetGet(char *buffer);
 #ifdef _UNICODE

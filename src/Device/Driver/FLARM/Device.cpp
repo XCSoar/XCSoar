@@ -73,6 +73,30 @@ FlarmDevice::SetGet(TCHAR *s)
 #endif
 
 bool
+FlarmDevice::SetPilot(const TCHAR *pilot_name)
+{
+  TCHAR buffer[256];
+  _stprintf(buffer, _T("PFLAC,S,PILOT,%s"), pilot_name);
+  return SetGet(buffer);
+}
+
+bool
+FlarmDevice::SetPlaneType(const TCHAR *plane_type)
+{
+  TCHAR buffer[256];
+  _stprintf(buffer, _T("PFLAC,S,GLIDERTYPE,%s"), plane_type);
+  return SetGet(buffer);
+}
+
+bool
+FlarmDevice::SetPlaneRegistration(const TCHAR *registration)
+{
+  TCHAR buffer[256];
+  _stprintf(buffer, _T("PFLAC,S,GLIDERID,%s"), registration);
+  return SetGet(buffer);
+}
+
+bool
 FlarmDevice::DeclareInternal(const Declaration &declaration,
                              OperationEnvironment &env)
 {
@@ -82,22 +106,17 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
   env.SetProgressRange(6 + size);
   env.SetProgressPosition(0);
 
-  _stprintf(Buffer, _T("PFLAC,S,PILOT,%s"), declaration.pilot_name.c_str());
-  if (!SetGet(Buffer))
+  if (!SetPilot(declaration.pilot_name.c_str()))
     return false;
 
   env.SetProgressPosition(1);
 
-  _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"),
-            declaration.aircraft_registration.c_str());
-  if (!SetGet(Buffer))
+  if (!SetPlaneRegistration(declaration.aircraft_registration.c_str()))
     return false;
 
   env.SetProgressPosition(2);
 
-  _stprintf(Buffer, _T("PFLAC,S,GLIDERTYPE,%s"),
-            declaration.aircraft_type.c_str());
-  if (!SetGet(Buffer))
+  if (!SetPlaneType(declaration.aircraft_type.c_str()))
     return false;
 
   env.SetProgressPosition(3);
