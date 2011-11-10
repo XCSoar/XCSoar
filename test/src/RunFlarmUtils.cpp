@@ -41,8 +41,8 @@ Copyright_License {
 static void
 ChangePilot(FlarmDevice &flarm)
 {
-  fprintf(stdout, "Please enter the new pilot name:\n");
   while (true) {
+    fprintf(stdout, "Please enter the new pilot name:\n");
     fprintf(stdout, "> ");
 
     char pilot_name[64];
@@ -66,8 +66,8 @@ ChangePilot(FlarmDevice &flarm)
 static void
 ChangePlaneType(FlarmDevice &flarm)
 {
-  fprintf(stdout, "Please enter the new plane type:\n");
   while (true) {
+    fprintf(stdout, "Please enter the new plane type:\n");
     fprintf(stdout, "> ");
 
     char plane_type[64];
@@ -91,8 +91,8 @@ ChangePlaneType(FlarmDevice &flarm)
 static void
 ChangeRegistration(FlarmDevice &flarm)
 {
-  fprintf(stdout, "Please enter the new plane registration:\n");
   while (true) {
+    fprintf(stdout, "Please enter the new plane registration:\n");
     fprintf(stdout, "> ");
 
     char registration[64];
