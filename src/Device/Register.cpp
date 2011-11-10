@@ -77,6 +77,12 @@ enum {
   DeviceRegisterCount = ARRAY_SIZE(DeviceRegister) - 1
 };
 
+const struct DeviceRegister *
+GetDriverByIndex(unsigned i)
+{
+  return i < DeviceRegisterCount ? DeviceRegister[i] : NULL;
+}
+
 const TCHAR *
 GetDriverNameByIndex(unsigned i)
 {

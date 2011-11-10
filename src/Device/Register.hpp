@@ -33,6 +33,9 @@ Copyright_License {
 
 struct DeviceRegister;
 
+const struct DeviceRegister *
+GetDriverByIndex(unsigned i);
+
 const TCHAR *
 GetDriverNameByIndex(unsigned i);
 
