@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Device/Driver.hpp"
+#include "Device/Driver/FLARM/Device.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
@@ -90,19 +91,6 @@ int main(int argc, char **argv)
   config.Clear();
   config.baud_rate = atoi(argv[3]);
 
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == NULL) {
-    fprintf(stderr, "No such driver: %s\n", argv[1]);
-    return EXIT_FAILURE;
-  }
-
-  if (!driver->CanDeclare()) {
-    fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
-    return EXIT_FAILURE;
-  }
-
-  assert(driver->CreateOnPort != NULL);
-
 #ifdef HAVE_POSIX
   TTYPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
 #else
@@ -110,15 +98,6 @@ int main(int argc, char **argv)
 #endif
   if (!port.Open()) {
     fprintf(stderr, "Failed to open COM port\n");
-    return EXIT_FAILURE;
-  }
-
-  Device *device = driver->CreateOnPort(config, &port);
-  assert(device != NULL);
-
-  ConsoleOperationEnvironment env;
-  if (!device->Open(env)) {
-    fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
     return EXIT_FAILURE;
   }
 
@@ -135,12 +114,42 @@ int main(int argc, char **argv)
   declaration.Append(MakeWaypoint(_T("Bergneustadt"), 488,
                                   7.7061111111111114, 51.051944444444445));
 
-  if (device->Declare(declaration, env))
-    fprintf(stderr, "Declaration ok\n");
-  else
-    fprintf(stderr, "Declaration failed\n");
+  if (!strcmp(argv[1], "FLARM")) {
+    ConsoleOperationEnvironment env;
+    FlarmDevice flarm(port);
+    if (flarm.Declare(declaration, env))
+      fprintf(stderr, "Declaration ok\n");
+    else
+      fprintf(stderr, "Declaration failed\n");
+  } else {
+    const struct DeviceRegister *driver = FindDriverByName(driver_name);
+    if (driver == NULL) {
+      fprintf(stderr, "No such driver: %s\n", argv[1]);
+      return EXIT_FAILURE;
+    }
 
-  delete device;
+    if (!driver->CanDeclare()) {
+      fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
+      return EXIT_FAILURE;
+    }
+
+    assert(driver->CreateOnPort != NULL);
+    Device *device = driver->CreateOnPort(config, &port);
+    assert(device != NULL);
+
+    ConsoleOperationEnvironment env;
+    if (!device->Open(env)) {
+      fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
+      return EXIT_FAILURE;
+    }
+
+    if (device->Declare(declaration, env))
+      fprintf(stderr, "Declaration ok\n");
+    else
+      fprintf(stderr, "Declaration failed\n");
+
+    delete device;
+  }
 
   return EXIT_SUCCESS;
 }
