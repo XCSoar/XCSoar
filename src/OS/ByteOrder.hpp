@@ -60,6 +60,9 @@ ByteSwap32(uint32_t value)
 #endif
 }
 
+/**
+ * Converts a 16bit value from big endian to the system's byte order
+ */
 gcc_const
 static inline uint16_t
 FromBE16(uint16_t value)
@@ -79,6 +82,9 @@ FromBE16(uint16_t value)
 #endif
 }
 
+/**
+ * Converts a 32bit value from big endian to the system's byte order
+ */
 gcc_const
 static inline uint32_t
 FromBE32(uint32_t value)
@@ -98,6 +104,9 @@ FromBE32(uint32_t value)
 #endif
 }
 
+/**
+ * Converts a 16bit value from little endian to the system's byte order
+ */
 gcc_const
 static inline uint16_t
 FromLE16(uint16_t value)
@@ -117,6 +126,9 @@ FromLE16(uint16_t value)
 #endif
 }
 
+/**
+ * Converts a 32bit value from little endian to the system's byte order
+ */
 gcc_const
 static inline uint32_t
 FromLE32(uint32_t value)
@@ -136,6 +148,9 @@ FromLE32(uint32_t value)
 #endif
 }
 
+/**
+ * Converts a 16bit value from the system's byte order to big endian
+ */
 gcc_const
 static inline uint16_t
 ToBE16(uint16_t value)
@@ -151,6 +166,9 @@ ToBE16(uint16_t value)
 #endif
 }
 
+/**
+ * Converts a 32bit value from the system's byte order to big endian
+ */
 gcc_const
 static inline uint32_t
 ToBE32(uint32_t value)
@@ -166,6 +184,9 @@ ToBE32(uint32_t value)
 #endif
 }
 
+/**
+ * Converts a 16bit value from the system's byte order to little endian
+ */
 gcc_const
 static inline uint16_t
 ToLE16(uint16_t value)
@@ -181,6 +202,9 @@ ToLE16(uint16_t value)
 #endif
 }
 
+/**
+ * Converts a 32bit value from the system's byte order to little endian
+ */
 gcc_const
 static inline uint32_t
 ToLE32(uint32_t value)
