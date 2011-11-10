@@ -21,18 +21,32 @@ Copyright_License {
 }
 */
 
-#include "FLARM.hpp"
-#include "Driver/FLARM/Device.hpp"
+#ifndef XCSOAR_FLARM_DEVICE_HPP
+#define XCSOAR_FLARM_DEVICE_HPP
 
-#include <assert.h>
-#include <string.h>
+#include "tchar.h"
 
-bool
-FlarmDeclare(Port *port, const Declaration &declaration,
-             OperationEnvironment &env)
+class Port;
+struct Declaration;
+class OperationEnvironment;
+
+class FlarmDevice
 {
-  assert(port != NULL);
+  Port &port;
 
-  FlarmDevice flarm(*port);
-  return flarm.Declare(declaration, env);
-}
+public:
+  FlarmDevice(Port &_port):port(_port) {}
+
+  bool Declare(const Declaration &declaration, OperationEnvironment &env);
+
+private:
+  bool SetGet(char *buffer);
+#ifdef _UNICODE
+  bool SetGet(TCHAR *s);
+#endif
+
+  bool DeclareInternal(const Declaration &declaration,
+                       OperationEnvironment &env);
+};
+
+#endif

@@ -48,11 +48,15 @@ LX_SOURCES = \
 	$(DRIVER_SRC_DIR)/LX/LXN.cpp \
 	$(DRIVER_SRC_DIR)/LX/Register.cpp
 
+FLARM_SOURCES = \
+	$(DRIVER_SRC_DIR)/FLARM/Device.cpp
+
 DRIVER_SOURCES = \
 	$(VOLKSLOGGER_SOURCES) \
 	$(CAI302_SOURCES) \
 	$(IMI_SOURCES) \
 	$(LX_SOURCES) \
+	$(FLARM_SOURCES) \
 	$(DRIVER_SRC_DIR)/AltairPro.cpp \
 	$(DRIVER_SRC_DIR)/BorgeltB50.cpp \
 	$(DRIVER_SRC_DIR)/CaiGpsNav.cpp \
