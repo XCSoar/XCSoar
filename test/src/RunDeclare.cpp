@@ -104,24 +104,20 @@ int main(int argc, char **argv)
   assert(driver->CreateOnPort != NULL);
 
 #ifdef HAVE_POSIX
-  TTYPort *port = new TTYPort(port_name, config.baud_rate,
-                              *(Port::Handler *)NULL);
+  TTYPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
 #else
-  SerialPort *port = new SerialPort(port_name, config.baud_rate,
-                                    *(Port::Handler *)NULL);
+  SerialPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
 #endif
-  if (!port->Open()) {
-    delete port;
+  if (!port.Open()) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;
   }
 
-  Device *device = driver->CreateOnPort(config, port);
+  Device *device = driver->CreateOnPort(config, &port);
   assert(device != NULL);
 
   ConsoleOperationEnvironment env;
   if (!device->Open(env)) {
-    delete port;
     fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
     return EXIT_FAILURE;
   }
@@ -145,7 +141,6 @@ int main(int argc, char **argv)
     fprintf(stderr, "Declaration failed\n");
 
   delete device;
-  delete port;
 
   return EXIT_SUCCESS;
 }
