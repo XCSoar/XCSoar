@@ -22,47 +22,8 @@ Copyright_License {
 */
 
 #include "Device.hpp"
-#include "Device/Port/Port.hpp"
 
-#include <assert.h>
 #include <cstdio>
-
-#ifdef _UNICODE
-#include <windows.h>
-#endif
-
-void
-FlarmDevice::Send(const char *sentence)
-{
-  assert(sentence != NULL);
-
-  port.Write('$');
-  port.Write(sentence);
-  port.Write("\r\n");
-}
-
-bool
-FlarmDevice::SetGet(char *buffer)
-{
-  assert(buffer != NULL);
-
-  Send(buffer);
-
-  buffer[6] = _T('A');
-  return port.ExpectString(buffer);
-}
-
-#ifdef _UNICODE
-bool
-FlarmDevice::SetGet(TCHAR *s)
-{
-  assert(s != NULL);
-
-  char buffer[_tcslen(s) * 4 + 1];
-  return ::WideCharToMultiByte(CP_ACP, 0, s, -1, buffer, sizeof(buffer), NULL,
-                               NULL) > 0 && SetGet(buffer);
-}
-#endif
 
 bool
 FlarmDevice::SetStealthMode(bool enabled)
