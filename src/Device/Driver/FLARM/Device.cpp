@@ -98,6 +98,12 @@ FlarmDevice::SetConfig(const TCHAR *setting, const TCHAR *value)
   return SetGet(buffer);
 }
 
+void
+FlarmDevice::Restart()
+{
+  port.Write("$PFLAR,0\r\n");
+}
+
 bool
 FlarmDevice::DeclareInternal(const Declaration &declaration,
                              OperationEnvironment &env)
@@ -184,7 +190,7 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
   // PFLAC,,ADDWP:
 
   // Reset the FLARM to activate the declaration
-  port.Write("$PFLAR,0\r\n");
+  Restart();
 
   return true;
 }

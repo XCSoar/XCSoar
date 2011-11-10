@@ -43,6 +43,8 @@ public:
   bool SetPlaneType(const TCHAR *plane_type);
   bool SetPlaneRegistration(const TCHAR *registration);
 
+  void Restart();
+
 private:
   bool SetConfig(const TCHAR *setting, const TCHAR *value);
 
