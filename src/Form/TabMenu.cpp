@@ -152,7 +152,6 @@ TabMenuControl::SetCurrentPage(unsigned page)
 
   } else {
     TabBarControl::SetCurrentPage(page);
-    theTabDisplay->invalidate();
 
     if (GetCurrentPage() == page || GetCurrentPage() == GetMenuPage())
       tabs[TabbedControl::GetCurrentPage()]->show();
