@@ -751,7 +751,8 @@ DEBUG_PROGRAM_NAMES = \
 	RunAnalysis \
 	RunAirspaceWarningDialog \
 	TestNotify \
-	DebugDisplay
+	DebugDisplay \
+	RunFlarmUtils
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += FeedNMEA \
@@ -1362,6 +1363,41 @@ RUN_DECLARE_LDADD = \
   $(IO_LIBS)
 $(RUN_DECLARE_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(TARGET_BIN_DIR)/RunDeclare$(TARGET_EXEEXT): $(RUN_DECLARE_OBJS) $(RUN_DECLARE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
+
+RUN_FLARM_UTILS_SOURCES = \
+	$(SRC)/Device/Port/Port.cpp \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Declaration.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/Operation.cpp \
+	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
+	$(TEST_SRC_DIR)/RunFlarmUtils.cpp
+ifeq ($(HAVE_POSIX),y)
+RUN_FLARM_UTILS_SOURCES += \
+	$(SRC)/Device/Port/TTYPort.cpp
+else
+RUN_FLARM_UTILS_SOURCES += \
+	$(SRC)/Device/Port/SerialPort.cpp
+endif
+ifeq ($(HAVE_CE),y)
+RUN_FLARM_UTILS_SOURCES += \
+	$(SRC)/Device/Port/Widcomm.cpp
+endif
+RUN_FLARM_UTILS_OBJS = $(call SRC_TO_OBJ,$(RUN_FLARM_UTILS_SOURCES))
+RUN_FLARM_UTILS_LDADD = \
+	$(ZZIP_LIBS) \
+	$(DRIVER_LIBS) \
+	$(ENGINE_LIBS) \
+	$(MATH_LIBS) \
+	$(UTIL_LIBS) \
+  $(IO_LIBS)
+$(RUN_FLARM_UTILS_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(TARGET_BIN_DIR)/RunFlarmUtils$(TARGET_EXEEXT): $(RUN_FLARM_UTILS_OBJS) $(RUN_FLARM_UTILS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
 
