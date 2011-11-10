@@ -115,6 +115,10 @@ public:
     return pager;
   }
 
+  unsigned AddTab(Widget *widget, const TCHAR *caption,
+                  bool button_only=false,
+                  const Bitmap *bmp=NULL);
+
   /** adds a tab to the TabBar
    * @param w. The window (e.g. created by LoadWindow()
    * @param Caption. Caption for the tab display
@@ -143,6 +147,11 @@ public:
   gcc_pure
   unsigned GetCurrentPage() const {
     return pager.GetCurrentPage();
+  }
+
+  gcc_pure
+  const Widget *GetCurrentWidget() const {
+    return pager.GetCurrentWidget();
   }
 
   void SetCurrentPage(unsigned i,

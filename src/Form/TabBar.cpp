@@ -142,6 +142,19 @@ TabBarControl::GetButtonIcon(unsigned i) const
   return buttons[i]->bmp;
 }
 
+unsigned
+TabBarControl::AddTab(Widget *widget, const TCHAR *caption,
+                      bool button_only, const Bitmap *bmp)
+{
+  pager.AddPage(widget);
+
+  OneTabButton *b = new OneTabButton(caption, button_only, bmp,
+                                     NULL, NULL, NULL, NULL, NULL);
+  buttons.append(b);
+
+  return buttons.size() - 1;
+}
+
 void
 TabBarControl::AddClientWindow(Window *w)
 {
