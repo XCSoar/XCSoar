@@ -81,6 +81,12 @@ FlarmDevice::SetGet(TCHAR *s)
 #endif
 
 bool
+FlarmDevice::SetStealthMode(bool enabled)
+{
+  return SetConfig(_T("PRIV"), enabled ? _T("1") : _T("0"));
+}
+
+bool
 FlarmDevice::SetPilot(const TCHAR *pilot_name)
 {
   return SetConfig(_T("PILOT"), pilot_name);

@@ -43,6 +43,8 @@ public:
   bool SetPlaneType(const TCHAR *plane_type);
   bool SetPlaneRegistration(const TCHAR *registration);
 
+  bool SetStealthMode(bool enabled);
+
   void Restart();
 
 private:

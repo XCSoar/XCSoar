@@ -116,17 +116,19 @@ ChangeRegistration(FlarmDevice &flarm)
 static void
 WriteMenu()
 {
-  fprintf(stdout, "--------------------------------\n"
+  fprintf(stdout, "------------------------------------\n"
                   "Flarm Utils Menu\n"
-                  "--------------------------------\n"
-                  "Press any of the following keys:\n\n"
-                  "h: Display this menu\n"
-                  "1: Change pilot name\n"
-                  "2: Change plane type\n"
-                  "3: Change plane registration\n"
-                  "r: Restart the FLARM\n"
-                  "q: Quit this application\n"
-                  "--------------------------------\n");
+                  "------------------------------------\n"
+                  "Press any of the following commands:\n\n"
+                  "h:  Display this menu\n"
+                  "1:  Change pilot name\n"
+                  "2:  Change plane type\n"
+                  "3:  Change plane registration\n"
+                  "r:  Restart the FLARM\n"
+                  "s+: Enable the stealth mode\n"
+                  "s-: Disable the stealth mode\n"
+                  "q:  Quit this application\n"
+                  "------------------------------------\n");
 }
 
 static void
@@ -162,6 +164,22 @@ RunUI(FlarmDevice &flarm)
     case 'R':
       fprintf(stdout, "Restarting the FLARM ...\n");
       flarm.Restart();
+      break;
+    case 's':
+    case 'S':
+      if (strlen(in) < 2 || (in[1] != '+' && in[1] != '-')) {
+        fprintf(stdout, "Invalid input\n");
+        break;
+      }
+
+      fprintf(stdout, "Changing stealth mode setting ...\n");
+      if (flarm.SetStealthMode(in[1] == '+')) {
+        if (in[1] == '+')
+          fprintf(stdout, "Stealth mode enabled\n");
+        else
+          fprintf(stdout, "Stealth mode disabled\n");
+      } else
+        fprintf(stdout, "Operation failed!\n");
       break;
     case 'q':
     case 'Q':
