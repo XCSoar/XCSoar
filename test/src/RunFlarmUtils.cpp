@@ -144,6 +144,7 @@ RunUI(FlarmDevice &flarm)
     }
 
     switch (in[0]) {
+    case '?':
     case 'h':
     case 'H':
       WriteMenu();
