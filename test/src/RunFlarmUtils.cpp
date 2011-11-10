@@ -124,6 +124,7 @@ WriteMenu()
                   "1: Change pilot name\n"
                   "2: Change plane type\n"
                   "3: Change plane registration\n"
+                  "r: Restart the FLARM\n"
                   "q: Quit this application\n"
                   "--------------------------------\n");
 }
@@ -155,6 +156,11 @@ RunUI(FlarmDevice &flarm)
       break;
     case '3':
       ChangeRegistration(flarm);
+      break;
+    case 'r':
+    case 'R':
+      fprintf(stdout, "Restarting the FLARM ...\n");
+      flarm.Restart();
       break;
     case 'q':
     case 'Q':
