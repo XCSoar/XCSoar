@@ -33,6 +33,12 @@ protected:
   StaticArray<Window *, 32> tabs;
 
 public:
+  /**
+   * Create an instance without actually creating the Window.  Call
+   * set() to do that.
+   */
+  TabbedControl() = default;
+
   TabbedControl(ContainerWindow &parent,
                 PixelScalar x, PixelScalar y,
                 UPixelScalar width, UPixelScalar height,
