@@ -42,7 +42,7 @@ class OneTabButton;
  * Each tab must be added via code (not via XML)
  * ToDo: support lazy loading
  */
-class TabBarControl : public TabbedControl {
+class TabBarControl : public ContainerWindow {
 public:
   enum EventType {
     MouseOrButton = 0,
@@ -55,6 +55,8 @@ public:
   typedef void (*ReClickNotifyCallback_t)(void);
 
 protected:
+  TabbedControl pager;
+
   TabDisplay * theTabDisplay;
   StaticArray<OneTabButton *, 32> buttons;
   const UPixelScalar TabLineHeight;
@@ -105,6 +107,14 @@ private:
 #define TabLineHeightInitUnscaled (unsigned)5
 
 public:
+  /**
+   * Returns the ContainerWindow that will be the parent window of all
+   * tab windows.
+   */
+  ContainerWindow &GetClientAreaWindow() {
+    return pager;
+  }
+
   /** adds a tab to the TabBar
    * @param w. The window (e.g. created by LoadWindow()
    * @param Caption. Caption for the tab display
@@ -125,6 +135,16 @@ public:
                      ReClickNotifyCallback_t ReClickFunction = NULL);
 
 public:
+  gcc_pure
+  unsigned GetTabCount() const {
+    return pager.GetTabCount();
+  }
+
+  gcc_pure
+  unsigned GetCurrentPage() const {
+    return pager.GetCurrentPage();
+  }
+
   void SetCurrentPage(unsigned i,
       EventType EventType = TabBarControl::MouseOrButton, bool ReClick = false);
   void NextPage();

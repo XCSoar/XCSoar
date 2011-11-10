@@ -51,7 +51,7 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent,
    LookUpTable(_look_up_table)
 
 {
-  theTabDisplay = new TabMenuDisplay(*this, look, *this,
+  theTabDisplay = new TabMenuDisplay(*this, look, GetClientAreaWindow(),
                                      0, y, _width, _height,
                                      flipOrientation);
 }
@@ -70,7 +70,7 @@ TabMenuControl::AddClient(Window *w, const PageItem& item,
                           const unsigned sub_menu_index,
                           const unsigned page)
 {
-  TabbedControl::AddClient(w);
+  pager.AddClient(w);
   OneSubMenuButton *b =
       new OneSubMenuButton(item.menu_caption, item.main_menu_index,
                            sub_menu_index,
@@ -320,7 +320,8 @@ TabMenuControl::CreateSubMenuItem(const unsigned sub_menu_index,
              item.XML_PortraitResource,
              Layout::landscape ? _T("_L") : _T(""));
 
-  Window *w = LoadWindow(LookUpTable, &form, *this, xml_resource);
+  Window *w = LoadWindow(LookUpTable, &form, GetClientAreaWindow(),
+                         xml_resource);
   AddClient(w, item, sub_menu_index, page);
 }
 

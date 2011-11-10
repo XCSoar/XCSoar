@@ -38,8 +38,7 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                              UPixelScalar _width, UPixelScalar _height,
                              const WindowStyle style, bool _flipOrientation,
                              bool _clientOverlapTabs)
-  :TabbedControl(_parent, 0, 0, _parent.get_width(), _parent.get_height(), style),
-   theTabDisplay(NULL),
+  :theTabDisplay(NULL),
    TabLineHeight((Layout::landscape ^ _flipOrientation)
                  ? (Layout::Scale(TabLineHeightInitUnscaled) * 0.75)
                  : Layout::Scale(TabLineHeightInitUnscaled)),
@@ -47,9 +46,24 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
    clientOverlapTabs(_clientOverlapTabs),
    setting_up(true)
 {
+  set(_parent, 0, 0, _parent.get_width(), _parent.get_height(), style),
+
   theTabDisplay = new TabDisplay(*this, look, *this,
                                  x, y, _width, _height,
                                  flipOrientation);
+
+  PixelRect rc = get_client_rect();
+  if (!_clientOverlapTabs) {
+    if (Layout::landscape ^ flipOrientation)
+      rc.left += theTabDisplay->GetTabWidth();
+    else
+      rc.top += theTabDisplay->GetTabHeight();
+  }
+
+  WindowStyle pager_style;
+  pager_style.control_parent();
+  pager.set(*this, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
+            pager_style);
 }
 
 TabBarControl::TabBarControl(ContainerWindow &_parent,
@@ -58,14 +72,21 @@ TabBarControl::TabBarControl(ContainerWindow &_parent,
                              PixelScalar x, PixelScalar y,
                              UPixelScalar _width, UPixelScalar _height,
                              const WindowStyle style)
-  :TabbedControl(_parent, x, 0, _parent.get_width() - x,
-                 _parent.get_height(), style),
-   theTabDisplay(NULL),
+  :theTabDisplay(NULL),
    TabLineHeight(Layout::Scale(_tabLineHeight)),
    flipOrientation(!Layout::landscape),
    clientOverlapTabs(true),
    setting_up(true)
 {
+  set(_parent, x, 0, _parent.get_width() - x, _parent.get_height(), style);
+
+  WindowStyle pager_style;
+
+  const PixelRect rc = get_client_rect();
+
+  pager_style.control_parent();
+  pager.set(*this, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
+            pager_style);
 }
 
 TabBarControl::~TabBarControl()
@@ -105,7 +126,7 @@ TabBarControl::GetButtonIcon(unsigned i) const
 void
 TabBarControl::AddClientWindow(Window *w)
 {
-  TabbedControl::AddClient(w);
+  pager.AddClient(w);
   if (clientOverlapTabs)
     return;
 
@@ -170,7 +191,7 @@ TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
     }
 
     if (Continue) {
-      TabbedControl::SetCurrentPage(i);
+      pager.SetCurrentPage(i);
       if (buttons[i]->PostShowFunction) {
         buttons[i]->PostShowFunction();
       }
