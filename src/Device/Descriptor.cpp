@@ -24,7 +24,7 @@ Copyright_License {
 #include "Device/Descriptor.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
-#include "Device/FLARM.hpp"
+#include "Driver/FLARM/Device.hpp"
 #include "Device/Internal.hpp"
 #include "Device/Register.hpp"
 #include "DeviceBlackboard.hpp"
@@ -431,7 +431,8 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
   if (device_blackboard->IsFLARM(index)) {
     _stprintf(text, _T("%s: FLARM."), _("Sending declaration"));
     env.SetText(text);
-    result = FlarmDeclare(Com, declaration, env) || result;
+    FlarmDevice flarm(*Com);
+    result = flarm.Declare(declaration, env) || result;
   }
 
   Com->StartRxThread();
