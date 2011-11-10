@@ -315,18 +315,6 @@ RunUI(FlarmDevice &flarm)
     }
   }
 }
-static Waypoint
-MakeWaypoint(const TCHAR *name, int altitude,
-             double longitude, double latitude)
-{
-  const GeoPoint gp(Angle::Degrees(fixed(7.7061111111111114)),
-                    Angle::Degrees(fixed(51.051944444444445)));
-  Waypoint wp(GeoPoint(Angle::Degrees(fixed(longitude)),
-                       Angle::Degrees(fixed(latitude))));
-  wp.name = name;
-  wp.altitude = fixed(altitude);
-  return wp;
-}
 
 int
 main(int argc, char **argv)
@@ -352,19 +340,6 @@ main(int argc, char **argv)
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;
   }
-
-  Declaration declaration(NULL);
-  declaration.pilot_name = _T("Foo Bar");
-  declaration.aircraft_type = _T("Cirrus");
-  declaration.aircraft_registration = _T("D-3003");
-  declaration.competition_id = _T("33");
-
-  declaration.Append(MakeWaypoint(_T("Bergneustadt"), 488,
-                                  7.7061111111111114, 51.051944444444445));
-  declaration.Append(MakeWaypoint(_T("Foo"), 488, 8, 52));
-  declaration.Append(MakeWaypoint(_T("Bar"), 488, 7.5, 50));
-  declaration.Append(MakeWaypoint(_T("Bergneustadt"), 488,
-                                  7.7061111111111114, 51.051944444444445));
 
   port.SetRxTimeout(500);
   FlarmDevice flarm(port);
