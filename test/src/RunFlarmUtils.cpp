@@ -64,6 +64,31 @@ ChangePilot(FlarmDevice &flarm)
 }
 
 static void
+ChangeCoPilot(FlarmDevice &flarm)
+{
+  while (true) {
+    fprintf(stdout, "Please enter the new copilot name:\n");
+    fprintf(stdout, "> ");
+
+    char copilot_name[64];
+    if (fgets(copilot_name, 64, stdin) == NULL || strlen(copilot_name) == 0) {
+      fprintf(stdout, "Invalid input\n");
+      continue;
+    }
+
+    TrimRight(copilot_name);
+    fprintf(stdout, "Setting copilot name to \"%s\" ...\n", copilot_name);
+
+    if (flarm.SetCoPilot(PathName(copilot_name)))
+      fprintf(stdout, "CoPilot name set to \"%s\"\n", copilot_name);
+    else
+      fprintf(stdout, "Operation failed!\n");
+
+    return;
+  }
+}
+
+static void
 ChangePlaneType(FlarmDevice &flarm)
 {
   while (true) {
@@ -114,6 +139,56 @@ ChangeRegistration(FlarmDevice &flarm)
 }
 
 static void
+ChangeCompetitionId(FlarmDevice &flarm)
+{
+  while (true) {
+    fprintf(stdout, "Please enter the new competition id:\n");
+    fprintf(stdout, "> ");
+
+    char id[64];
+    if (fgets(id, 64, stdin) == NULL || strlen(id) == 0) {
+      fprintf(stdout, "Invalid input\n");
+      continue;
+    }
+
+    TrimRight(id);
+    fprintf(stdout, "Setting competition id to \"%s\" ...\n", id);
+
+    if (flarm.SetCompetitionId(PathName(id)))
+      fprintf(stdout, "competition id set to \"%s\"\n", id);
+    else
+      fprintf(stdout, "Operation failed!\n");
+
+    return;
+  }
+}
+
+static void
+ChangeCompetitionClass(FlarmDevice &flarm)
+{
+  while (true) {
+    fprintf(stdout, "Please enter the new competition class:\n");
+    fprintf(stdout, "> ");
+
+    char comp_class[64];
+    if (fgets(comp_class, 64, stdin) == NULL || strlen(comp_class) == 0) {
+      fprintf(stdout, "Invalid input\n");
+      continue;
+    }
+
+    TrimRight(comp_class);
+    fprintf(stdout, "Setting competition class to \"%s\" ...\n", comp_class);
+
+    if (flarm.SetCompetitionClass(PathName(comp_class)))
+      fprintf(stdout, "Competition class set to \"%s\"\n", comp_class);
+    else
+      fprintf(stdout, "Operation failed!\n");
+
+    return;
+  }
+}
+
+static void
 ChangeRange(FlarmDevice &flarm)
 {
   while (true) {
@@ -155,9 +230,12 @@ WriteMenu()
                   "Press any of the following commands:\n\n"
                   "h:  Display this menu\n"
                   "1:  Change pilot name\n"
-                  "2:  Change plane type\n"
-                  "3:  Change plane registration\n"
-                  "4:  Change receiving range\n"
+                  "2:  Change copilot name\n"
+                  "3:  Change plane type\n"
+                  "4:  Change plane registration\n"
+                  "5:  Change competition id\n"
+                  "6:  Change competition class\n"
+                  "7:  Change receiving range\n"
                   "r:  Restart the FLARM\n"
                   "s+: Enable the stealth mode\n"
                   "s-: Disable the stealth mode\n"
@@ -189,12 +267,21 @@ RunUI(FlarmDevice &flarm)
       ChangePilot(flarm);
       break;
     case '2':
-      ChangePlaneType(flarm);
+      ChangeCoPilot(flarm);
       break;
     case '3':
-      ChangeRegistration(flarm);
+      ChangePlaneType(flarm);
       break;
     case '4':
+      ChangeRegistration(flarm);
+      break;
+    case '5':
+      ChangeCompetitionId(flarm);
+      break;
+    case '6':
+      ChangeCompetitionClass(flarm);
+      break;
+    case '7':
       ChangeRange(flarm);
       break;
     case 'r':

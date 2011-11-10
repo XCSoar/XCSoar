@@ -101,6 +101,12 @@ FlarmDevice::SetPilot(const TCHAR *pilot_name)
 }
 
 bool
+FlarmDevice::SetCoPilot(const TCHAR *copilot_name)
+{
+  return SetConfig(_T("COPIL"), copilot_name);
+}
+
+bool
 FlarmDevice::SetPlaneType(const TCHAR *plane_type)
 {
   return SetConfig(_T("GLIDERTYPE"), plane_type);
@@ -110,6 +116,18 @@ bool
 FlarmDevice::SetPlaneRegistration(const TCHAR *registration)
 {
   return SetConfig(_T("GLIDERID"), registration);
+}
+
+bool
+FlarmDevice::SetCompetitionId(const TCHAR *competition_id)
+{
+  return SetConfig(_T("COMPID"), competition_id);
+}
+
+bool
+FlarmDevice::SetCompetitionClass(const TCHAR *competition_class)
+{
+  return SetConfig(_T("COMPCLASS"), competition_class);
 }
 
 bool

@@ -40,8 +40,11 @@ public:
   bool Declare(const Declaration &declaration, OperationEnvironment &env);
 
   bool SetPilot(const TCHAR *pilot_name);
+  bool SetCoPilot(const TCHAR *copilot_name);
   bool SetPlaneType(const TCHAR *plane_type);
   bool SetPlaneRegistration(const TCHAR *registration);
+  bool SetCompetitionId(const TCHAR *competition_id);
+  bool SetCompetitionClass(const TCHAR *competition_class);
 
   bool SetStealthMode(bool enabled);
   bool SetRange(unsigned range);
