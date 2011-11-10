@@ -47,14 +47,22 @@ FlarmDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
   return result;
 }
 
+void
+FlarmDevice::Send(const char *sentence)
+{
+  assert(sentence != NULL);
+
+  port.Write('$');
+  port.Write(sentence);
+  port.Write("\r\n");
+}
+
 bool
 FlarmDevice::SetGet(char *buffer)
 {
   assert(buffer != NULL);
 
-  port.Write('$');
-  port.Write(buffer);
-  port.Write("\r\n");
+  Send(buffer);
 
   buffer[6] = _T('A');
   return port.ExpectString(buffer);
@@ -101,7 +109,7 @@ FlarmDevice::SetConfig(const TCHAR *setting, const TCHAR *value)
 void
 FlarmDevice::Restart()
 {
-  port.Write("$PFLAR,0\r\n");
+  Send("PFLAR,0");
 }
 
 bool

@@ -46,6 +46,11 @@ public:
   void Restart();
 
 private:
+  /**
+   * Sends the supplied sentence with a $ prepended and a line break appended
+   */
+  void Send(const char *sentence);
+
   bool SetConfig(const TCHAR *setting, const TCHAR *value);
 
   bool SetGet(char *buffer);
