@@ -23,6 +23,11 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
+#include "StatusPanels/FlightStatusPanel.hpp"
+#include "StatusPanels/TaskStatusPanel.hpp"
+#include "StatusPanels/RulesStatusPanel.hpp"
+#include "StatusPanels/SystemStatusPanel.hpp"
+#include "StatusPanels/TimesStatusPanel.hpp"
 #include "Screen/Key.h"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
@@ -49,6 +54,7 @@ Copyright_License {
 
 static WndForm *wf = NULL;
 static TabBarControl *wTabBar;
+static StatusPanel *system_panel;
 static int status_page = 0;
 
 static void
@@ -67,408 +73,10 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static void
-UpdateValuesSystem()
-{
-  const NMEAInfo &basic = CommonInterface::Basic();
-  const GPSState &gps = basic.gps;
-
-  TCHAR Temp[80];
-  TCHAR Temp2[80];
-
-  WndProperty* wp;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpGPS"));
-  assert(wp != NULL);
-  if (!basic.connected)
-    wp->SetText(_("Disconnected"));
-  else if (!basic.location_available)
-    wp->SetText(_("Fix invalid"));
-  else if (!basic.gps_altitude_available)
-    wp->SetText(_("2D fix"));
-  else
-    wp->SetText(_("3D fix"));
-
-  wp->RefreshDisplay();
-
-
-  wp = (WndProperty*)wf->FindByName(_T("prpNumSat"));
-  assert(wp != NULL);
-  if (!basic.connected)
-    wp->SetText(_T(""));
-  else if (gps.satellites_used >= 0) {
-    // known number of sats
-    _stprintf(Temp,_T("%d"), gps.satellites_used);
-    wp->SetText(Temp);
-  } else
-    // valid but unknown number of sats
-    wp->SetText(_("Unknown"));
-
-  wp->RefreshDisplay();
-
-
-  wp = (WndProperty*)wf->FindByName(_T("prpVario"));
-  assert(wp != NULL);
-  if (basic.total_energy_vario_available)
-    wp->SetText(_("Connected"));
-  else
-    wp->SetText(_("Disconnected"));
-
-  wp->RefreshDisplay();
-
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFLARM"));
-  assert(wp != NULL);
-  if (basic.flarm.available)
-    wp->SetText(_("Connected"));
-  else
-    wp->SetText(_("Disconnected"));
-
-  wp->RefreshDisplay();
-
-
-  wp = (WndProperty*)wf->FindByName(_T("prpLogger"));
-  assert(wp != NULL);
-  if (logger.IsLoggerActive())
-    wp->SetText(_("On"));
-  else
-    wp->SetText(_("Off"));
-
-  wp->RefreshDisplay();
-
-
-  wp = (WndProperty*)wf->FindByName(_T("prpDeclared"));
-  assert(wp != NULL);
-  if (logger.IsTaskDeclared())
-    wp->SetText(_("Yes"));
-  else
-    wp->SetText(_("No"));
-
-  wp->RefreshDisplay();
-
-
-  wp = (WndProperty*)wf->FindByName(_T("prpBattery"));
-  assert(wp != NULL);
-  Temp[0] = 0;
-#ifdef HAVE_BATTERY
-  if (Power::Battery::RemainingPercentValid) {
-    _stprintf(Temp2, _T("%d %% "), Power::Battery::RemainingPercent);
-    _tcscat(Temp, Temp2);
-  }
-#endif
-  if (basic.voltage_available) {
-    _stprintf(Temp2, _T("%.1f V"), (double)basic.voltage);
-    _tcscat(Temp, Temp2);
-  }
-
-  wp->SetText(Temp);
-  wp->RefreshDisplay();
-}
-
-
-static void
-UpdateValuesTimes(void)
-{
-  const NMEAInfo &basic = CommonInterface::Basic();
-  const DerivedInfo &calculated = CommonInterface::Calculated();
-  const FlyingState &flight = calculated.flight;
-
-  WndProperty *wp;
-  TCHAR Temp[1000];
-  fixed sunsettime;
-  int sunsethours;
-  int sunsetmins;
-
-  sunsettime = XCSoarInterface::Calculated().sunset_time;
-  sunsethours = (int)sunsettime;
-  sunsetmins = (int)((sunsettime - fixed(sunsethours)) * 60);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpSunset"));
-  assert(wp != NULL);
-  _stprintf(Temp, _T("%02d:%02d"), sunsethours, sunsetmins);
-  wp->SetText(Temp);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
-  assert(wp != NULL);
-  Units::TimeToTextHHMMSigned(Temp, DetectCurrentTime(basic));
-  wp->SetText(Temp);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTakeoffTime"));
-  assert(wp != NULL);
-  if (positive(flight.flight_time)) {
-    Units::TimeToTextHHMMSigned(Temp, TimeLocal((long)flight.takeoff_time));
-    wp->SetText(Temp);
-  } else {
-    wp->SetText(_T(""));
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpLandingTime"));
-  assert(wp != NULL);
-  if (!flight.flying && positive(flight.flight_time)) {
-    Units::TimeToTextHHMMSigned(Temp,
-                      TimeLocal((long)(flight.takeoff_time
-                                       + flight.flight_time)));
-    wp->SetText(Temp);
-  } else {
-    wp->SetText(_T(""));
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFlightTime"));
-  assert(wp != NULL);
-  if (positive(flight.flight_time)) {
-    Units::TimeToTextHHMMSigned(Temp, (int)flight.flight_time);
-    wp->SetText(Temp);
-  } else {
-    wp->SetText(_T(""));
-  }
-}
-
-static const Waypoint* nearest_waypoint;
-
-static void
-UpdateValuesFlight(void)
-{
-  const NMEAInfo &basic = CommonInterface::Basic();
-  const DerivedInfo &calculated = CommonInterface::Calculated();
-
-  WndProperty *wp;
-  TCHAR Temp[1000];
-  TCHAR sLongitude[16];
-  TCHAR sLatitude[16];
-
-  Units::LongitudeToString(basic.location.longitude,
-                           sLongitude, sizeof(sLongitude)-1);
-  Units::LatitudeToString(basic.location.latitude,
-                          sLatitude, sizeof(sLatitude)-1);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpLongitude"));
-  assert(wp != NULL);
-  wp->SetText(sLongitude);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpLatitude"));
-  assert(wp != NULL);
-  wp->SetText(sLatitude);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
-  assert(wp != NULL);
-  if (basic.gps_altitude_available) {
-    _stprintf(Temp, _T("%.0f %s"),
-              (double)Units::ToUserAltitude(basic.gps_altitude),
-              Units::GetAltitudeName());
-    wp->SetText(Temp);
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpMaxHeightGain"));
-  assert(wp != NULL);
-  _stprintf(Temp, _T("%d %s"),
-            (int)Units::ToUserAltitude(calculated.max_height_gain),
-            Units::GetAltitudeName());
-  wp->SetText(Temp);
-
-  if (nearest_waypoint) {
-    GeoVector vec(basic.location,
-                  nearest_waypoint->location);
-
-    wp = (WndProperty*)wf->FindByName(_T("prpNear"));
-    assert(wp != NULL);
-    wp->SetText(nearest_waypoint->name.c_str());
-
-    wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
-    assert(wp != NULL);
-    _stprintf(Temp, _T("%d")_T(DEG), (int)vec.bearing.Degrees());
-    wp->SetText(Temp);
-
-    wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
-    assert(wp != NULL);
-    TCHAR DistanceText[MAX_PATH];
-    Units::FormatUserDistance(vec.distance, DistanceText, 10);
-    wp->SetText(DistanceText);
-  } else {
-    wp = (WndProperty*)wf->FindByName(_T("prpNear"));
-    assert(wp != NULL);
-    wp->SetText(_T("-"));
-
-    wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
-    assert(wp != NULL);
-    wp->SetText(_T("-"));
-
-    wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
-    assert(wp != NULL);
-    wp->SetText(_T("-"));
-  }
-}
-
-static void
-UpdateValuesRules(void)
-{
-  if (protected_task_manager == NULL)
-    return;
-
-  WndProperty *wp;
-  TCHAR Temp[80];
-
-  const DerivedInfo &calculated = CommonInterface::Calculated();
-  const CommonStats &common_stats = calculated.common_stats;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpValidStart"));
-  assert(wp != NULL);
-  if (calculated.common_stats.task_started)
-    /// @todo proper task validity check
-    wp->SetText(_("Yes"));
-  else
-    wp->SetText(_("No"));
-
-  wp = (WndProperty*)wf->FindByName(_T("prpValidFinish"));
-  assert(wp != NULL);
-  if (common_stats.task_finished)
-    wp->SetText(_("Yes"));
-  else
-    wp->SetText(_("No"));
-
-  AircraftState start_state = protected_task_manager->GetStartState();
-
-  wp = (WndProperty*)wf->FindByName(_T("prpStartTime"));
-  assert(wp != NULL);
-  if (common_stats.task_started) {
-    Units::TimeToTextHHMMSigned(Temp, (int)TimeLocal((int)start_state.time));
-    wp->SetText(Temp);
-  } else {
-    wp->SetText(_T(""));
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpStartSpeed"));
-  assert(wp != NULL);
-  if (common_stats.task_started) {
-    _stprintf(Temp, _T("%d %s"),
-              (int)Units::ToUserTaskSpeed(start_state.ground_speed),
-              Units::GetTaskSpeedName());
-    wp->SetText(Temp);
-  } else {
-    wp->SetText(_T(""));
-  }
-
-  // StartMaxHeight, StartMaxSpeed;
-  wp = (WndProperty*)wf->FindByName(_T("prpStartHeight"));
-  assert(wp != NULL);
-  if (common_stats.task_started) {
-    _stprintf(Temp, _T("%.0f %s"),
-              (double)Units::ToUserAltitude(start_state.altitude),
-              Units::GetAltitudeName());
-    wp->SetText(Temp);
-  } else {
-    wp->SetText(_T(""));
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFinishAlt"));
-  assert(wp != NULL);
-  _stprintf(Temp, _T("%.0f %s"),
-            (double)Units::ToUserAltitude(protected_task_manager->GetFinishHeight()),
-            Units::GetAltitudeName());
-  wp->SetText(Temp);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpStartPoint"));
-  assert(wp != NULL);
-
-  TCHAR name[64];
-  {
-    ProtectedTaskManager::Lease task_manager(*protected_task_manager);
-    const OrderedTask &task = task_manager->GetOrderedTask();
-
-    if (task_manager->GetMode() == TaskManager::MODE_ORDERED &&
-        task.TaskSize() > 0)
-      CopyString(name, task.GetTaskPoint(0)->GetWaypoint().name.c_str(), 64);
-    else
-      name[0] = _T('\0');
-  }
-
-  wp->SetText(name);
-}
-
-static void
-UpdateValuesTask(void)
-{
-  if (protected_task_manager == NULL)
-    return;
-
-  const DerivedInfo &calculated = CommonInterface::Calculated();
-  const TaskStats &task_stats = calculated.task_stats;
-
-  WndProperty *wp;
-  TCHAR Temp[80];
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskTime"));
-  Units::TimeToTextHHMMSigned(Temp, (int)protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
-  assert(wp != NULL);
-  if (task_stats.has_targets)
-    wp->SetText(Temp);
-  else
-    wp->hide();
-
-  wp = (WndProperty*)wf->FindByName(_T("prpETETime"));
-  assert(wp != NULL);
-  int ete_time(task_stats.total.time_elapsed +
-               task_stats.total.time_remaining);
-  Units::TimeToTextHHMMSigned(Temp, ete_time);
-  wp->SetText(Temp);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpRemainingTime"));
-  assert(wp != NULL);
-  Units::TimeToTextHHMMSigned(Temp, (int)task_stats.total.time_remaining);
-  wp->SetText(Temp);
-
-  if (task_stats.total.planned.IsDefined()) {
-    wp = (WndProperty*)wf->FindByName(_T("prpTaskDistance"));
-    assert(wp != NULL);
-    _stprintf(Temp, _T("%.0f %s"),
-              (double)Units::ToUserDistance(task_stats.total.planned.get_distance()),
-              Units::GetDistanceName());
-    wp->SetText(Temp);
-  }
-
-  if (task_stats.total.remaining.IsDefined()) {
-    wp = (WndProperty*)wf->FindByName(_T("prpRemainingDistance"));
-    assert(wp != NULL);
-    _stprintf(Temp, _T("%.0f %s"),
-              (double)Units::ToUserDistance(task_stats.total.remaining.get_distance()),
-              Units::GetDistanceName());
-    wp->SetText(Temp);
-  }
-
-  if (task_stats.total.planned.IsDefined()) {
-    wp = (WndProperty*)wf->FindByName(_T("prpEstimatedSpeed"));
-    assert(wp != NULL);
-    if (task_stats.total.planned.IsDefined())
-      _stprintf(Temp, _T("%.0f %s"),
-                (double)Units::ToUserTaskSpeed(task_stats.total.planned.get_speed()),
-                Units::GetTaskSpeedName());
-    wp->SetText(Temp);
-  }
-
-  if (task_stats.total.travelled.IsDefined()) {
-    wp = (WndProperty*)wf->FindByName(_T("prpAverageSpeed"));
-    assert(wp != NULL);
-    _stprintf(Temp, _T("%.0f %s"),
-              (double)Units::ToUserTaskSpeed(task_stats.total.travelled.get_speed()),
-              Units::GetTaskSpeedName());
-    wp->SetText(Temp);
-  }
-}
-
-static void
 OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  UpdateValuesSystem();
-}
-
-static bool
-OnTabUpdate()
-{
-  UpdateValuesSystem();
-  UpdateValuesFlight();
-  UpdateValuesTask();
-  UpdateValuesRules();
-  UpdateValuesTimes();
-
-  return true;
+  if (wTabBar->GetCurrentWidget() == system_panel)
+    system_panel->Refresh();
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
@@ -488,8 +96,8 @@ dlgStatusShowModal(int start_page)
   assert(wTabBar != NULL);
   wTabBar->SetPageFlippedCallback(SetTitle);
 
-  nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().location,
-                                            fixed(100000));
+  const Waypoint *nearest_waypoint =
+    way_points.get_nearest(CommonInterface::Basic().location, fixed(100000));
 
   /* setup tabs */
 
@@ -507,40 +115,20 @@ dlgStatusShowModal(int start_page)
   const Bitmap *TimesIcon = ((IconsStyle == dtIcon) ?
                              &Graphics::hBmpTabTimes : NULL);
 
-  Window* wFlight = LoadWindow(NULL, wf, wTabBar->GetClientAreaWindow(),
-                               _T("IDR_XML_STATUS_FLIGHT"));
-  assert(wFlight);
+  Widget *flight_panel = new FlightStatusPanel(nearest_waypoint);
+  wTabBar->AddTab(flight_panel, _T("Flight"), false, FlightIcon);
 
-  Window* wSystem = LoadWindow(NULL, wf, wTabBar->GetClientAreaWindow(),
-                               _T("IDR_XML_STATUS_SYSTEM"));
-  assert(wSystem);
+  system_panel = new SystemStatusPanel();
+  wTabBar->AddTab(system_panel, _T("System"), false, SystemIcon);
 
-  Window* wTask = LoadWindow(NULL, wf, wTabBar->GetClientAreaWindow(),
-                             _T("IDR_XML_STATUS_TASK"));
-  assert(wTask);
+  Widget *task_panel = new TaskStatusPanel();
+  wTabBar->AddTab(task_panel, _T("Task"), false, TaskIcon);
 
-  Window* wRules = LoadWindow(NULL, wf, wTabBar->GetClientAreaWindow(),
-                              _T("IDR_XML_STATUS_RULES"));
-  assert(wRules);
+  Widget *rules_panel = new RulesStatusPanel();
+  wTabBar->AddTab(rules_panel, _T("Rules"), false, RulesIcon);
 
-  Window* wTimes = LoadWindow(NULL, wf, wTabBar->GetClientAreaWindow(),
-                              _T("IDR_XML_STATUS_TIMES"));
-  assert(wTimes);
-
-  wTabBar->AddClient(wFlight, _T("Flight"), false, FlightIcon, NULL,
-                     OnTabUpdate);
-
-  wTabBar->AddClient(wSystem, _T("System"), false, SystemIcon, NULL,
-                     OnTabUpdate);
-
-  wTabBar->AddClient(wTask, _T("Task"), false, TaskIcon, NULL,
-                     OnTabUpdate);
-
-  wTabBar->AddClient(wRules, _T("Rules"), false, RulesIcon, NULL,
-                     OnTabUpdate);
-
-  wTabBar->AddClient(wTimes, _T("Times"), false, TimesIcon, NULL,
-                     OnTabUpdate);
+  Widget *times_panel = new TimesStatusPanel();
+  wTabBar->AddTab(times_panel, _T("Times"), false, TimesIcon);
 
   /* restore previous page */
 

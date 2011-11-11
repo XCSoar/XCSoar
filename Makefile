@@ -145,7 +145,15 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgLoggerReplay.cpp \
 	$(SRC)/Dialogs/dlgSimulatorPrompt.cpp \
 	$(SRC)/Dialogs/dlgStartup.cpp \
+	\
 	$(SRC)/Dialogs/dlgStatus.cpp \
+	$(SRC)/Dialogs/StatusPanels/StatusPanel.cpp \
+	$(SRC)/Dialogs/StatusPanels/FlightStatusPanel.cpp \
+	$(SRC)/Dialogs/StatusPanels/SystemStatusPanel.cpp \
+	$(SRC)/Dialogs/StatusPanels/TaskStatusPanel.cpp \
+	$(SRC)/Dialogs/StatusPanels/RulesStatusPanel.cpp \
+	$(SRC)/Dialogs/StatusPanels/TimesStatusPanel.cpp \
+	\
 	$(SRC)/Dialogs/dlgSwitches.cpp \
 	\
 	$(SRC)/Dialogs/ConfigPanels/ConfigPanel.cpp \
