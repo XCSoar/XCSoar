@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.2.3 - not yet released
 * calculations
   - don't discard manual wind when auto wind is disabled
+  - fix memory leak
 * user interface
   - reduce menu flickering
   - fix crash in waypoint list dialog when waypoints have large comments

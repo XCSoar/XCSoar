@@ -289,10 +289,8 @@ MapTaskManager::index_of_point_in_task(const Waypoint &wp)
   TaskEvents task_events;
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   if (task_manager->get_mode() == TaskManager::MODE_ORDERED) {
-    OrderedTask *task = task_manager->clone(task_events,
-                                            GetTaskBehaviour(),
-                                            task_manager->get_glide_polar());
-    return index_of_point_in_task(*task, wp);
+    const OrderedTask &task = task_manager->get_ordered_task();
+    return index_of_point_in_task(task, wp);
   }
   return -1;
 }
