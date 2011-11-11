@@ -144,8 +144,7 @@ struct AbortRank :
 bool 
 AbortTask::is_reachable(const GlideResult &result, bool final_glide) const
 {
-  return !positive(result.vector.Distance) || 
-    (!negative(result.time_elapsed) && result.IsAchievable(final_glide));
+  return result.IsAchievable(final_glide) && !negative(result.time_elapsed);
 }
 
 bool
