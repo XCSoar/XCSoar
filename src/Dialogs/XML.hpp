@@ -30,6 +30,7 @@ Copyright_License {
 
 struct DialogLook;
 class Window;
+class SubForm;
 class WndForm;
 class SingleWindow;
 class ContainerWindow;
@@ -69,7 +70,7 @@ void
 SetXMLDialogLook(const DialogLook &dialog_look);
 
 Window *
-LoadWindow(const CallBackTableEntry *LookUpTable, WndForm *form,
+LoadWindow(const CallBackTableEntry *LookUpTable, SubForm *form,
            ContainerWindow &parent, const TCHAR *resource);
 
 WndForm *

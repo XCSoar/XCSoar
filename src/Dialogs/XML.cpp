@@ -93,12 +93,12 @@ typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
                                           const WindowStyle style);
 
 static Window *
-LoadChild(WndForm &form, ContainerWindow &parent,
+LoadChild(SubForm &form, ContainerWindow &parent,
           const CallBackTableEntry *lookup_table, XMLNode node,
           const DialogStyle dialog_style, int bottom_most = 0);
 
 static void
-LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
+LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
                     const CallBackTableEntry *lookup_table,
                     const XMLNode *node,
                     const DialogStyle dialog_style);
@@ -436,7 +436,7 @@ InitScaleWidth(const PixelSize size, const PixelRect rc,
 
 /**
  * Loads a stand-alone XML file as a single top-level XML node
- * into an existing WndForm object and sets its parent to the parent parameter
+ * into an existing SubForm object and sets its parent to the parent parameter
  * Ignores additional top-level XML nodes.
  * Scales based on the DialogStyle of the last XML form loaded by XCSoar.
  * The Window is destroyed by its Form's destructor
@@ -450,7 +450,7 @@ InitScaleWidth(const PixelSize size, const PixelRect rc,
  * @return the pointer to the Window added to the form
  */
 Window *
-LoadWindow(const CallBackTableEntry *lookup_table, WndForm *form,
+LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
            ContainerWindow &parent, const TCHAR *resource)
 {
   if (!form)
@@ -603,13 +603,13 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable,
  * Creates a control from the given XMLNode as a child of the given
  * parent.
  *
- * @param form the WndForm object
+ * @param form the SubForm object
  * @param LookUpTable The parent CallBackTable
  * @param node The XMLNode that represents the control
  * @param eDialogStyle The parent's dialog style
  */
 static Window *
-LoadChild(WndForm &form, ContainerWindow &parent,
+LoadChild(SubForm &form, ContainerWindow &parent,
           const CallBackTableEntry *lookup_table, XMLNode node,
           const DialogStyle dialog_style, int bottom_most)
 {
@@ -880,7 +880,11 @@ LoadChild(WndForm &form, ContainerWindow &parent,
     // Create the TabMenuControl
 
     style.control_parent();
-    TabMenuControl *tabmenu = new TabMenuControl(parent, form,
+    TabMenuControl *tabmenu = new TabMenuControl(parent,
+                                                 /* XXX this cast is
+                                                    an ugly hack!
+                                                    Please rewrite: */
+                                                 (WndForm &)form,
                                                  lookup_table,
                                                  *xml_dialog_look, caption,
                                                  pos.x, pos.y, size.cx, size.cy,
@@ -913,14 +917,14 @@ LoadChild(WndForm &form, ContainerWindow &parent,
 /**
  * Loads the Parent's children Controls from the given XMLNode
  *
- * @param form the WndForm object
+ * @param form the SubForm object
  * @param Parent The parent control
  * @param LookUpTable The parents CallBackTable
  * @param Node The XMLNode that represents the parent control
  * @param eDialogStyle The parent's dialog style
  */
 static void
-LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
+LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
                     const CallBackTableEntry *lookup_table,
                     const XMLNode *node,
                     const DialogStyle dialog_style)
