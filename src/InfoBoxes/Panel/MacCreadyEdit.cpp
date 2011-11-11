@@ -76,7 +76,7 @@ LoadMacCreadyEditPanel(SingleWindow &parent, TabBarControl *wTabBar,
   InfoBoxID = id;
 
   Window *wInfoBoxAccessEdit =
-    LoadWindow(call_back_table, wf, *wTabBar,
+    LoadWindow(call_back_table, wf, wTabBar->GetClientAreaWindow(),
                _T("IDR_XML_INFOBOXMACCREADYEDIT"));
   assert(wInfoBoxAccessEdit);
 

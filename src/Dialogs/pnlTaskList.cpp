@@ -441,7 +441,8 @@ pnlTaskList::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
   lazy_loaded = false;
 
   // Load the dialog
-  Window *wList = LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
+  Window *wList = LoadWindow(dlgTaskManager::CallBackTable, wf,
+                             wTabBar->GetClientAreaWindow(),
                              Layout::landscape ?
                              _T("IDR_XML_TASKLIST_L") : _T("IDR_XML_TASKLIST"));
   assert(wList);

@@ -244,7 +244,8 @@ pnlTaskProperties::Load(SingleWindow &parent, TabBarControl* wTabBar,
   wf = _wf;
 
   Window *wProp =
-      LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
+      LoadWindow(dlgTaskManager::CallBackTable, wf,
+                 wTabBar->GetClientAreaWindow(),
                  Layout::landscape ?
                  _T("IDR_XML_TASKPROPERTIES_L") : _T("IDR_XML_TASKPROPERTIES"));
 

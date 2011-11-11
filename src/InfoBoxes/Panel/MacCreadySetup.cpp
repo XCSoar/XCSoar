@@ -65,7 +65,8 @@ LoadMacCreadySetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
   InfoBoxID = id;
 
   Window *wInfoBoxAccessSetup =
-    LoadWindow(call_back_table, wf, *wTabBar, _T("IDR_XML_INFOBOXMACCREADYSETUP"));
+    LoadWindow(call_back_table, wf, wTabBar->GetClientAreaWindow(),
+               _T("IDR_XML_INFOBOXMACCREADYSETUP"));
   assert(wInfoBoxAccessSetup);
 
   return wInfoBoxAccessSetup;

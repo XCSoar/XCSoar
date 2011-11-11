@@ -81,7 +81,8 @@ LoadAltitudeSetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
   InfoBoxID = id;
 
   Window *wInfoBoxAccessSetup =
-      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXALTITUDESETUP"));
+    LoadWindow(CallBackTable, wf, wTabBar->GetClientAreaWindow(),
+               _T("IDR_XML_INFOBOXALTITUDESETUP"));
   assert(wInfoBoxAccessSetup);
 
   LoadFormProperty(*wf, _T("prpQNH"),

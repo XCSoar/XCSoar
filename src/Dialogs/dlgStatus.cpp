@@ -497,19 +497,24 @@ dlgStatusShowModal(int start_page)
   const Bitmap *TimesIcon = ((IconsStyle == dtIcon) ?
                              &Graphics::hBmpTabTimes : NULL);
 
-  Window* wFlight = LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_STATUS_FLIGHT"));
+  Window* wFlight = LoadWindow(NULL, wf, wTabBar->GetClientAreaWindow(),
+                               _T("IDR_XML_STATUS_FLIGHT"));
   assert(wFlight);
 
-  Window* wSystem = LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_STATUS_SYSTEM"));
+  Window* wSystem = LoadWindow(NULL, wf, wTabBar->GetClientAreaWindow(),
+                               _T("IDR_XML_STATUS_SYSTEM"));
   assert(wSystem);
 
-  Window* wTask = LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_STATUS_TASK"));
+  Window* wTask = LoadWindow(NULL, wf, wTabBar->GetClientAreaWindow(),
+                             _T("IDR_XML_STATUS_TASK"));
   assert(wTask);
 
-  Window* wRules = LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_STATUS_RULES"));
+  Window* wRules = LoadWindow(NULL, wf, wTabBar->GetClientAreaWindow(),
+                              _T("IDR_XML_STATUS_RULES"));
   assert(wRules);
 
-  Window* wTimes = LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_STATUS_TIMES"));
+  Window* wTimes = LoadWindow(NULL, wf, wTabBar->GetClientAreaWindow(),
+                              _T("IDR_XML_STATUS_TIMES"));
   assert(wTimes);
 
   wTabBar->AddClient(wFlight, _T("Flight"), false, FlightIcon, NULL,

@@ -294,7 +294,8 @@ pnlTaskCalculator::Load(gcc_unused SingleWindow &parent, TabBarControl* _wTabBar
   task_modified = _task_modified;
 
   Window *wCalc =
-      LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
+    LoadWindow(dlgTaskManager::CallBackTable, wf,
+               wTabBar->GetClientAreaWindow(),
                  Layout::landscape ?
                  _T("IDR_XML_TASKCALCULATOR_L") : _T("IDR_XML_TASKCALCULATOR"));
   assert(wCalc);

@@ -57,7 +57,8 @@ LoadWindSetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
   InfoBoxID = id;
 
   Window *wInfoBoxAccessSetup =
-      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXWINDSETUP"));
+    LoadWindow(CallBackTable, wf, wTabBar->GetClientAreaWindow(),
+               _T("IDR_XML_INFOBOXWINDSETUP"));
   assert(wInfoBoxAccessSetup);
 
   const NMEAInfo &basic = XCSoarInterface::Basic();

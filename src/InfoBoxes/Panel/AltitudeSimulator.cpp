@@ -98,7 +98,8 @@ LoadAltitudeSimulatorPanel(SingleWindow &parent, TabBarControl *wTabBar,
     return NULL;
 
   Window *wInfoBoxAccessSimulator =
-      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXALTITUDESIMULATOR"));
+    LoadWindow(CallBackTable, wf, wTabBar->GetClientAreaWindow(),
+               _T("IDR_XML_INFOBOXALTITUDESIMULATOR"));
   assert(wInfoBoxAccessSimulator);
 
   return wInfoBoxAccessSimulator;

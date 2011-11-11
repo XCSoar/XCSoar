@@ -100,7 +100,8 @@ pnlTaskManagerClose::Load(SingleWindow &parent, TabBarControl* wTabBar,
   task_modified = _task_modified;
 
   Window *wTaskManagerClose =
-      LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
+      LoadWindow(dlgTaskManager::CallBackTable, wf,
+                 wTabBar->GetClientAreaWindow(),
                  Layout::landscape ?
                      _T("IDR_XML_TASKMANAGERCLOSE_L") :
                      _T("IDR_XML_TASKMANAGERCLOSE"));

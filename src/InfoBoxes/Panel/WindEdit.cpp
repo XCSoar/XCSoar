@@ -74,7 +74,8 @@ LoadWindEditPanel(SingleWindow &parent, TabBarControl *wTabBar,
   assert(wf);
 
   Window *wInfoBoxAccessEdit =
-      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXWINDEDIT"));
+    LoadWindow(CallBackTable, wf, wTabBar->GetClientAreaWindow(),
+               _T("IDR_XML_INFOBOXWINDEDIT"));
   assert(wInfoBoxAccessEdit);
 
   return wInfoBoxAccessEdit;

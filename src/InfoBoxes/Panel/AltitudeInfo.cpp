@@ -101,7 +101,8 @@ LoadAltitudeInfoPanel(SingleWindow &parent, TabBarControl *wTabBar,
   assert(wf);
 
   Window *wInfoBoxAccessInfo =
-      LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_INFOBOXALTITUDEINFO"));
+    LoadWindow(NULL, wf, wTabBar->GetClientAreaWindow(),
+               _T("IDR_XML_INFOBOXALTITUDEINFO"));
   assert(wInfoBoxAccessInfo);
 
   wf->SetTimerNotify(OnTimerNotify);

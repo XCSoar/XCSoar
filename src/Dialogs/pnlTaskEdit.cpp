@@ -355,7 +355,8 @@ pnlTaskEdit::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
   task_modified = _task_modified;
 
   Window *wTps =
-      LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
+      LoadWindow(dlgTaskManager::CallBackTable, wf,
+                 wTabBar->GetClientAreaWindow(),
                  Layout::landscape ?
                  _T("IDR_XML_TASKEDIT_L") : _T("IDR_XML_TASKEDIT"));
   assert(wTps);

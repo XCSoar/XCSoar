@@ -162,7 +162,8 @@ dlgInfoBoxAccess::pnlCloseLoad(gcc_unused SingleWindow &parent, TabBarControl* w
   wf = _wf;
 
   Window *wInfoBoxAccessClose =
-      LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_INFOBOXACCESSCLOSE"));
+    LoadWindow(NULL, wf, wTabBar->GetClientAreaWindow(),
+               _T("IDR_XML_INFOBOXACCESSCLOSE"));
   assert(wInfoBoxAccessClose);
 
   return wInfoBoxAccessClose;
