@@ -295,14 +295,13 @@ TabBarControl::GetTabWidth() const
 TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
                        PixelScalar left, PixelScalar top,
                        UPixelScalar width, UPixelScalar height,
-                       bool _flipOrientation) :
-  PaintWindow(),
-  theTabBar(_theTabBar),
-  look(_look),
-  dragging(false),
-  downindex(-1),
-  dragoffbutton(false),
-  flipOrientation(_flipOrientation)
+                       bool _flipOrientation)
+  :theTabBar(_theTabBar),
+   look(_look),
+   dragging(false),
+   downindex(-1),
+   dragoffbutton(false),
+   flipOrientation(_flipOrientation)
 {
   WindowStyle mystyle;
   mystyle.tab_stop();

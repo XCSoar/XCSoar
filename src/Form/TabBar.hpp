@@ -69,14 +69,14 @@ private:
   bool setting_up;
 
 public:
-/**
- * Constructor used for stand-alone TabBarControl
- * @param parent
- * @param x, y Location of the tab bar (unused)
- * @param width, height.  Size of the tab bar
- * @param style
- * @return
- */
+  /**
+   * Constructor used for stand-alone TabBarControl
+   * @param parent
+   * @param x, y Location of the tab bar (unused)
+   * @param width, height.  Size of the tab bar
+   * @param style
+   * @return
+   */
   TabBarControl(ContainerWindow &parent, const DialogLook &look,
                 PixelScalar x, PixelScalar y,
                 UPixelScalar width, UPixelScalar height,
@@ -105,24 +105,24 @@ private:
 #define TabLineHeightInitUnscaled (unsigned)5
 
 public:
-/** adds a tab to the TabBar
- * @param w. The window (e.g. created by LoadWindow()
- * @param Caption. Caption for the tab display
- * @param IsButtonOnly.  The tab button will resemble look/feel of a button
- * @param bmp.  Pointer to a Bitmap to display instead of caption on tab
- * @param PreHideFunction client callback
- * @param PreShowFunction client callback
- * @param PostShowFunction client callback
- * @return index of added tab
- */
+  /** adds a tab to the TabBar
+   * @param w. The window (e.g. created by LoadWindow()
+   * @param Caption. Caption for the tab display
+   * @param IsButtonOnly.  The tab button will resemble look/feel of a button
+   * @param bmp.  Pointer to a Bitmap to display instead of caption on tab
+   * @param PreHideFunction client callback
+   * @param PreShowFunction client callback
+   * @param PostShowFunction client callback
+   * @return index of added tab
+   */
   unsigned AddClient(Window *w, const TCHAR* Caption,
-        bool IsButtonOnly = false,
-        const Bitmap *bmp = NULL,
-        PreHideNotifyCallback_t PreHideFunction = NULL,
-        PreShowNotifyCallback_t PreShowFunction = NULL,
-        PostShowNotifyCallback_t PostShowFunction = NULL,
+                     bool IsButtonOnly = false,
+                     const Bitmap *bmp = NULL,
+                     PreHideNotifyCallback_t PreHideFunction = NULL,
+                     PreShowNotifyCallback_t PreShowFunction = NULL,
+                     PostShowNotifyCallback_t PostShowFunction = NULL,
                      ClickNotifyCallback_t ClickFunction = NULL,
-        ReClickNotifyCallback_t ReClickFunction = NULL);
+                     ReClickNotifyCallback_t ReClickFunction = NULL);
 
 public:
   void SetCurrentPage(unsigned i,
@@ -136,12 +136,12 @@ public:
   gcc_pure
   UPixelScalar GetTabWidth() const;
 
-/**
- * calculates the size and position of ith button
- * works in landscape or portrait mode
- * @param i index of button
- * @return Rectangle of button coordinates
- */
+  /**
+   * calculates the size and position of ith button
+   * works in landscape or portrait mode
+   * @param i index of button
+   * @return Rectangle of button coordinates
+   */
   gcc_pure
   const PixelRect &GetButtonSize(unsigned i) const;
 
@@ -189,15 +189,15 @@ protected:
   bool flipOrientation;
 
 public:
-/**
- *
- * @param parent
- * @param _theTabBar. An existing TabBar object
- * @param left. Left position of the tab bar box in the parent window
- * @param top Top position of the tab bar box in the parent window
- * @param width Width of tab bar box in the parent window
- * @param height Height of tab bar box in the parent window
- */
+  /**
+   *
+   * @param parent
+   * @param _theTabBar. An existing TabBar object
+   * @param left. Left position of the tab bar box in the parent window
+   * @param top Top position of the tab bar box in the parent window
+   * @param width Width of tab bar box in the parent window
+   * @param height Height of tab bar box in the parent window
+   */
   TabDisplay(TabBarControl& _theTabBar, const DialogLook &look,
              PixelScalar left, PixelScalar top,
              UPixelScalar width, UPixelScalar height,
@@ -223,26 +223,26 @@ public:
   }
 
 protected:
-/**
- * paints the tab buttons
- * @param canvas
- */
+  /**
+   * paints the tab buttons
+   * @param canvas
+   */
   virtual void on_paint(Canvas &canvas);
   //ToDo: support function buttons
 
-/**
- * track key presses to navigate without mouse
- * @param key_code
- * @return
- */
+  /**
+   * track key presses to navigate without mouse
+   * @param key_code
+   * @return
+   */
   virtual bool on_killfocus();
   virtual bool on_setfocus();
   virtual bool on_key_check(unsigned key_code) const;
   virtual bool on_key_down(unsigned key_code);
 
-/**
- * track mouse clicks
- */
+  /**
+   * track mouse clicks
+   */
   virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
   virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
   virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
@@ -260,9 +260,9 @@ public:
   PixelRect butSize;
 
   /**
- * Called before the tab is hidden.
- * @returns  True if ok and tab may change.  False if click should be ignored
- */
+   * Called before the tab is hidden.
+   * @returns  True if ok and tab may change.  False if click should be ignored
+   */
   TabBarControl::PreHideNotifyCallback_t PreHideFunction;
 
   /**
