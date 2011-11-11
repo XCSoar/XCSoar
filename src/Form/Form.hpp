@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_FORM_HPP
 #define XCSOAR_FORM_FORM_HPP
 
+#include "SubForm.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/tstring.hpp"
@@ -31,9 +32,6 @@ Copyright_License {
 #ifdef EYE_CANDY
 #include "Screen/Bitmap.hpp"
 #endif
-
-#include <map>
-#include <forward_list>
 
 struct DialogLook;
 class SingleWindow;
@@ -49,18 +47,8 @@ enum ModalResult {
  * A WndForm represents a Window with a titlebar.
  * It is used to display the XML dialogs and MessageBoxes.
  */
-class WndForm: public ContainerWindow
+class WndForm : public ContainerWindow, public SubForm
 {
-  struct tstring_less_than {
-    bool operator()(const tstring &a, const tstring &b) const
-    {
-      return a.compare(b) < 0;
-    }
-  };
-
-  typedef std::forward_list<Window *> window_list_t;
-  typedef std::map<tstring, Window *, tstring_less_than> name_to_window_t;
-
   class ClientAreaWindow : public ContainerWindow {
     const DialogLook &look;
 
@@ -81,23 +69,6 @@ class WndForm: public ContainerWindow
 public:
   typedef void (*TimerNotifyCallback_t)(WndForm &Sender);
   typedef bool (*KeyDownNotifyCallback_t)(WndForm &Sender, unsigned key_code);
-
-private:
-  /**
-   * List of windows which will be deleted by the destructor of this
-   * class.
-   */
-  window_list_t destruct_windows;
-
-  /**
-   * Mapping of control names to #Window objects.
-   */
-  name_to_window_t name_to_window;
-
-  /**
-   * List of windows which should only be visible in "advanced" mode.
-   */
-  window_list_t expert_windows;
 
 protected:
   SingleWindow &main_window;
@@ -175,62 +146,6 @@ public:
   unsigned GetTitleHeight() const {
     return mTitleRect.bottom - mTitleRect.top;
   }
-
-  /**
-   * Add a #Window to the "destruct" list: the object will be deleted
-   * by the destructor of this class.  This means that the caller
-   * doesn't have to keep track of the specified Window, because this
-   * WndForm is now responsible for freeing memory.
-   */
-  void AddDestruct(Window *window) {
-    destruct_windows.push_front(window);
-  }
-
-  /**
-   * Adds a #Window to the name-to-window map.
-   */
-  void AddNamed(const TCHAR *name, Window *window) {
-    name_to_window[name] = window;
-  }
-
-  /**
-   * Finds the ancestor window with the specified name.
-   *
-   * @param name the name of the #Window that is searched
-   * @return the Window, or NULL if not found
-   */
-  Window *FindByName(const TCHAR *name);
-
-  /**
-   * Finds the ancestor window with the specified name.
-   *
-   * @param name the name of the #Window that is searched
-   * @return the Window, or NULL if not found
-   */
-  const Window *FindByName(const TCHAR *name) const {
-    return const_cast<WndForm *>(this)->FindByName(name);
-  }
-
-  /**
-   * Adds a #Window to the "advanced window list" (#advanced_windows).
-   */
-  void AddExpert(Window *window) {
-    expert_windows.push_front(window);
-  }
-
-  /**
-   * Removes a #Window from the "advanced window list" (#advanced_windows).
-   */
-  void RemoveExpert(Window *window) {
-    expert_windows.remove(window);
-  }
-
-  /**
-   * Shows/Hides the ClientControls depending on the given value of advanced and
-   * whether their caption includes an asterisk.
-   * @param advanced True if advanced mode activated
-   */
-  void FilterAdvanced(bool advanced);
 
   void SetForceOpen(bool _force) {
     force = _force;

@@ -7,6 +7,7 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/Internal.cpp \
 	$(FORM_SRC_DIR)/Control.cpp \
 	$(FORM_SRC_DIR)/Panel.cpp \
+	$(FORM_SRC_DIR)/SubForm.cpp \
 	$(FORM_SRC_DIR)/Form.cpp \
 	$(FORM_SRC_DIR)/Button.cpp \
 	$(FORM_SRC_DIR)/ButtonPanel.cpp \

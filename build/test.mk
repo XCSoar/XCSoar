@@ -1853,6 +1853,7 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/KineticManager.cpp \
+	$(SRC)/Form/SubForm.cpp \
 	$(SRC)/Form/Form.cpp \
 	$(SRC)/Form/List.cpp \
 	$(SRC)/Form/ScrollBar.cpp \
@@ -1980,6 +1981,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
+	$(SRC)/Form/SubForm.cpp \
 	$(SRC)/Form/Form.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \

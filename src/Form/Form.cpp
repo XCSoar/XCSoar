@@ -134,10 +134,6 @@ WndForm::~WndForm()
      our own on_destroy() method won't be called (during object
      destruction, this object loses its identity) */
   reset();
-
-  for (window_list_t::iterator i = destruct_windows.begin();
-       i != destruct_windows.end(); ++i)
-    delete *i;
 }
 
 void
@@ -162,24 +158,6 @@ ContainerWindow &
 WndForm::GetClientAreaWindow(void)
 {
   return client_area;
-}
-
-Window *
-WndForm::FindByName(const TCHAR *name)
-{
-  name_to_window_t::iterator i = name_to_window.find(name);
-  if (i == name_to_window.end())
-    return NULL;
-
-  return i->second;
-}
-
-void
-WndForm::FilterAdvanced(bool advanced)
-{
-  for (window_list_t::const_iterator i = expert_windows.begin();
-       i != expert_windows.end(); ++i)
-    (*i)->set_visible(advanced);
 }
 
 bool
