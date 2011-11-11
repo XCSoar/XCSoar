@@ -53,7 +53,7 @@ ElementStat::SetTimes(const fixed ts, const AircraftState& state)
   else
     time_elapsed = max(state.time - fixed(ts), fixed_zero);
 
-  if (solution_remaining.IsDefined()) {
+  if (solution_remaining.IsOk()) {
     time_remaining = solution_remaining.time_elapsed;
     time_planned = time_elapsed + time_remaining;
   } else {
