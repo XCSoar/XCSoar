@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_BYTE_ORDER_HPP
 #define XCSOAR_BYTE_ORDER_HPP
 
+#include "Compiler.h"
+
 #include <stdint.h>
 
 #ifdef __linux__
