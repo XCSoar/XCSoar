@@ -44,24 +44,23 @@ class SubForm {
     }
   };
 
-  typedef std::forward_list<Window *> window_list_t;
   typedef std::map<tstring, Window *, tstring_less_than> name_to_window_t;
 
   /**
    * List of windows which will be deleted by the destructor of this
    * class.
    */
-  window_list_t destruct_windows;
+  std::forward_list<Window *> destruct_windows;
 
   /**
    * Mapping of control names to #Window objects.
    */
-  name_to_window_t name_to_window;
+  std::map<tstring, Window *, tstring_less_than> name_to_window;
 
   /**
    * List of windows which should only be visible in "advanced" mode.
    */
-  window_list_t expert_windows;
+  std::forward_list<Window *> expert_windows;
 
 public:
   ~SubForm();

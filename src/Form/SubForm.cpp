@@ -26,15 +26,15 @@ Copyright_License {
 
 SubForm::~SubForm()
 {
-  for (window_list_t::iterator i = destruct_windows.begin();
-       i != destruct_windows.end(); ++i)
+  for (auto i = destruct_windows.begin(), end = destruct_windows.end();
+       i != end; ++i)
     delete *i;
 }
 
 Window *
 SubForm::FindByName(const TCHAR *name)
 {
-  name_to_window_t::iterator i = name_to_window.find(name);
+  auto i = name_to_window.find(name);
   if (i == name_to_window.end())
     return NULL;
 
@@ -44,7 +44,7 @@ SubForm::FindByName(const TCHAR *name)
 void
 SubForm::FilterAdvanced(bool advanced)
 {
-  for (window_list_t::const_iterator i = expert_windows.begin();
-       i != expert_windows.end(); ++i)
+  for (auto i = expert_windows.begin(), end = expert_windows.end();
+       i != end; ++i)
     (*i)->set_visible(advanced);
 }
