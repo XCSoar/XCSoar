@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_BYTE_ORDER_HPP
 #define XCSOAR_BYTE_ORDER_HPP
 
+#include "Compiler.h"
+
 #include <stdint.h>
 
 #ifdef __linux__
@@ -36,6 +38,12 @@ Copyright_License {
 #include <endian.h>
 #endif
 #endif /* !__linux__ */
+
+#if defined(__i386__) || defined(__x86_64__)
+#ifndef FORCE_ALIGNED_READ_WRITE
+#define CAN_READ_WRITE_UNALIGNED
+#endif
+#endif
 
 gcc_const
 static inline uint16_t
@@ -193,6 +201,54 @@ ToLE32(uint32_t value)
 #else
   /* generic big-endian */
   return ByteSwap32(value);
+#endif
+}
+
+gcc_pure
+static inline uint16_t
+ReadUnalignedLE16(const uint16_t *p)
+{
+#ifdef CAN_READ_WRITE_UNALIGNED
+  return *p;
+#else
+  const uint8_t *c = (const uint8_t *)p;
+  return c[0] | (c[1] << 8);
+#endif
+}
+
+gcc_pure
+static inline uint16_t
+ReadUnalignedBE16(const uint16_t *p)
+{
+#ifdef CAN_READ_WRITE_UNALIGNED
+  return *p;
+#else
+  const uint8_t *c = (const uint8_t *)p;
+  return c[1] | (c[0] << 8);
+#endif
+}
+
+static inline void
+WriteUnalignedLE16(uint16_t *p, uint16_t value)
+{
+#ifdef CAN_READ_WRITE_UNALIGNED
+  *p = value;
+#else
+  uint8_t *c = (uint8_t *)p;
+  c[0] = value;
+  c[1] = value >> 8;
+#endif
+}
+
+static inline void
+WriteUnalignedBE16(uint16_t *p, uint16_t value)
+{
+#ifdef CAN_READ_WRITE_UNALIGNED
+  *p = value;
+#else
+  uint8_t *c = (uint8_t *)p;
+  c[0] = value >> 8;
+  c[1] = value;
 #endif
 }
 
