@@ -305,6 +305,10 @@ AirspaceWarningManager::update_task(const AircraftState& state)
     return false;
   }
 
+  if (!m_task.get_stats().current_leg.solution_remaining.IsOk())
+    /* glide solver failed, cannot continue */
+    return false;
+
   AirspaceAircraftPerformanceTask perf_task(state, m_glide_polar, m_task);
   const GeoPoint location_tp = m_task.getActiveTaskPoint()->GetLocationRemaining();
   const fixed time_remaining = m_task.get_stats().current_leg.solution_remaining.time_elapsed; 

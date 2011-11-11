@@ -256,7 +256,7 @@ AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const AircraftS
   const fixed leg_distance = solution.vector.Distance;
   const fixed time_remaining = solution.time_elapsed;
 
-  if (positive(time_remaining)) {
+  if (solution.IsOk() && positive(time_remaining)) {
     m_v = leg_distance / time_remaining;
     if (positive(solution.height_climb)) {
       m_cruise_descent = -solution.height_climb / time_remaining;
