@@ -37,8 +37,7 @@
  * - Allow for other schemes or weightings in how much to adjust each
  *   target.
  */
-class TaskMinTarget: 
-  public ZeroFinder
+class TaskMinTarget : private ZeroFinder
 {
   TaskMacCreadyRemaining tm;
   GlideResult res;
@@ -66,6 +65,7 @@ public:
                 StartPoint *_ts);
   virtual ~TaskMinTarget() {};
 
+private:
   virtual fixed f(const fixed p);
 
 /** 
@@ -77,6 +77,7 @@ public:
  */
   bool valid(const fixed p);
 
+public:
 /** 
  * Search for target range to produce remaining time equal to
  * value specified in constructor.
