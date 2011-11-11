@@ -98,6 +98,25 @@ TabBarControl::~TabBarControl()
     delete *i;
 }
 
+void
+TabBarControl::SetClientOverlapTabs(bool value)
+{
+  if (clientOverlapTabs == value)
+    return;
+
+  clientOverlapTabs = value;
+
+  PixelRect rc = get_client_rect();
+  if (!clientOverlapTabs) {
+    if (Layout::landscape ^ flipOrientation)
+      rc.left += theTabDisplay->GetTabWidth();
+    else
+      rc.top += theTabDisplay->GetTabHeight();
+  }
+
+  pager.move(rc);
+}
+
 bool
 TabBarControl::GetButtonIsButtonOnly(unsigned i) const
 {

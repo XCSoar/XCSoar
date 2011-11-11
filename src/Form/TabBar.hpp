@@ -181,7 +181,7 @@ public:
     return TabLineHeight;
   }
 
-  void SetClientOverlapTabs(bool value) {clientOverlapTabs = value; }
+  void SetClientOverlapTabs(bool value);
 
 protected:
   /**
