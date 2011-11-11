@@ -29,16 +29,19 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(6);
+  plan_tests(12);
 
   uint8_t test1[] = { 0x42, 0x00 };
   ok1(ReadUnalignedLE16((const uint16_t *)(const void *)test1) == 0x0042);
+  ok1(ReadUnalignedBE16((const uint16_t *)(const void *)test1) == 0x4200);
 
   uint8_t test2[] = { 0x00, 0x42 };
   ok1(ReadUnalignedLE16((const uint16_t *)(const void *)test2) == 0x4200);
+  ok1(ReadUnalignedBE16((const uint16_t *)(const void *)test2) == 0x0042);
 
   uint8_t test3[] = { 0x37, 0x13 };
   ok1(ReadUnalignedLE16((const uint16_t *)(const void *)test3) == 0x1337);
+  ok1(ReadUnalignedBE16((const uint16_t *)(const void *)test3) == 0x3713);
 
   WriteUnalignedLE16((uint16_t *)(void *)test2, 0x0042);
   ok1(test2[0] == 0x42 && test2[1] == 0x00);
@@ -47,6 +50,15 @@ int main(int argc, char **argv)
   ok1(test3[0] == 0x00 && test3[1] == 0x42);
 
   WriteUnalignedLE16((uint16_t *)(void *)test1, 0x1337);
+  ok1(test1[0] == 0x37 && test1[1] == 0x13);
+
+  WriteUnalignedBE16((uint16_t *)(void *)test2, 0x4200);
+  ok1(test2[0] == 0x42 && test2[1] == 0x00);
+
+  WriteUnalignedBE16((uint16_t *)(void *)test3, 0x0042);
+  ok1(test3[0] == 0x00 && test3[1] == 0x42);
+
+  WriteUnalignedBE16((uint16_t *)(void *)test1, 0x3713);
   ok1(test1[0] == 0x37 && test1[1] == 0x13);
 
   return exit_status();
