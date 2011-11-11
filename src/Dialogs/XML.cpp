@@ -876,16 +876,16 @@ LoadChild(WndForm &form, ContainerWindow &parent,
     window = tabbar;
 
     // TabMenuControl (TabMenu)
-    } else if (_tcscmp(node.getName(), _T("TabMenu")) == 0) {
-      // Create the TabMenuControl
+  } else if (_tcscmp(node.getName(), _T("TabMenu")) == 0) {
+    // Create the TabMenuControl
 
-      style.control_parent();
-      TabMenuControl *tabmenu = new TabMenuControl(parent, form,
-                                                   lookup_table,
-                                                   *xml_dialog_look, caption,
-                                                   pos.x, pos.y, size.cx, size.cy,
-                                                   style);
-      window = tabmenu;
+    style.control_parent();
+    TabMenuControl *tabmenu = new TabMenuControl(parent, form,
+                                                 lookup_table,
+                                                 *xml_dialog_look, caption,
+                                                 pos.x, pos.y, size.cx, size.cy,
+                                                 style);
+    window = tabmenu;
 
   } else if (_tcscmp(node.getName(), _T("Custom")) == 0) {
     // Create a custom Window object with a callback
