@@ -79,8 +79,8 @@ protected:
                                       GlideResult &leg,
                               DistanceStat &total_remaining_effective,
                               DistanceStat &leg_remaining_effective,
-                                      const fixed total_t_elapsed,
-                                      const fixed leg_t_elapsed);
+                              const GlideResult &solution_remaining_total,
+                              const GlideResult &solution_remaining_leg);
 
   fixed scan_total_start_time(const AircraftState &state_now);
 

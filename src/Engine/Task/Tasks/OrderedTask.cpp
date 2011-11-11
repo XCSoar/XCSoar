@@ -727,18 +727,22 @@ OrderedTask::glide_solution_planned(const AircraftState &aircraft,
                                     GlideResult &leg,
                                     DistanceStat &total_remaining_effective,
                                     DistanceStat &leg_remaining_effective,
-                                    const fixed total_t_elapsed,
-                                    const fixed leg_t_elapsed)
+                                    const GlideResult &solution_remaining_total,
+                                    const GlideResult &solution_remaining_leg)
 {
   TaskMacCreadyTotal tm(task_points, activeTaskPoint, glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution(aircraft);
 
-  total_remaining_effective.set_distance(
-      tm.effective_distance(fixed(total_t_elapsed)));
+  if (solution_remaining_total.IsOk())
+    total_remaining_effective.set_distance(tm.effective_distance(solution_remaining_total.time_elapsed));
+  else
+    total_remaining_effective.Reset();
 
-  leg_remaining_effective.set_distance(
-      tm.effective_leg_distance(fixed(leg_t_elapsed)));
+  if (solution_remaining_leg.IsOk())
+    leg_remaining_effective.set_distance(tm.effective_leg_distance(solution_remaining_leg.time_elapsed));
+  else
+    leg_remaining_effective.Reset();
 }
 
 // Auxiliary glide functions

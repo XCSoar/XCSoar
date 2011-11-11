@@ -98,17 +98,21 @@ UnorderedTask::glide_solution_planned(const AircraftState &state,
                                       GlideResult &leg,
                                       DistanceStat &total_remaining_effective,
                                       DistanceStat &leg_remaining_effective,
-                                      const fixed total_t_elapsed,
-                                      const fixed leg_t_elapsed)
+                                      const GlideResult &solution_remaining_total,
+                                      const GlideResult &solution_remaining_leg)
 {
-  const GlideResult &res = stats.total.solution_remaining;
-  if (!res.IsDefined())
-    return;
+  total = solution_remaining_total;
+  leg = solution_remaining_leg;
 
-  total = res;
-  leg = res;
-  total_remaining_effective.set_distance(res.vector.Distance);
-  leg_remaining_effective.set_distance(res.vector.Distance);
+  if (total.IsOk())
+    total_remaining_effective.set_distance(total.vector.Distance);
+  else
+    total_remaining_effective.Reset();
+
+  if (leg.IsOk())
+    leg_remaining_effective.set_distance(leg.vector.Distance);
+  else
+    leg_remaining_effective.Reset();
 }
 
 
