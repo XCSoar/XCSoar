@@ -216,4 +216,16 @@ ReadUnalignedLE16(const uint16_t *p)
 #endif
 }
 
+static inline void
+WriteUnalignedLE16(uint16_t *p, uint16_t value)
+{
+#ifdef CAN_READ_WRITE_UNALIGNED
+  *p = ToLE16(value);
+#else
+  uint8_t *c = (uint8_t *)p;
+  c[0] = value;
+  c[1] = value >> 8;
+#endif
+}
+
 #endif
