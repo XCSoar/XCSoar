@@ -88,7 +88,7 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
 {
   GlideResult acc_gr, gr;
   AircraftState aircraft_predict = aircraft;
-  AircraftState aircraft_start = get_aircraft_start(aircraft);
+  const AircraftState &aircraft_start = get_aircraft_start(aircraft);
 
   clearance_heights(aircraft);
 

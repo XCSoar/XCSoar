@@ -194,7 +194,7 @@ private:
  * 
  * @return Aircraft state at start of task
  */
-  virtual const AircraftState 
+  virtual const AircraftState &
   get_aircraft_start(const AircraftState &state) const = 0;
 
 /** 

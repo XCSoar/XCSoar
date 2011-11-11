@@ -48,7 +48,7 @@ private:
                                    fixed minH) const;
   virtual fixed get_min_height(const AircraftState &aircraft) const;
 
-  virtual const AircraftState get_aircraft_start(const AircraftState &aircraft) const;
+  virtual const AircraftState &get_aircraft_start(const AircraftState &aircraft) const;
 };
 
 #endif

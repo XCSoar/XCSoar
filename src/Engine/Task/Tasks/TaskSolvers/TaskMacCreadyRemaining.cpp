@@ -45,7 +45,7 @@ TaskMacCreadyRemaining::tp_solution(const unsigned i,
 }
 
 
-const AircraftState 
+const AircraftState &
 TaskMacCreadyRemaining::get_aircraft_start(const AircraftState &aircraft) const
 {
   return aircraft;

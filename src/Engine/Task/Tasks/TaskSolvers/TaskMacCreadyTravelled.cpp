@@ -39,7 +39,7 @@ TaskMacCreadyTravelled::tp_solution(const unsigned i,
   return TaskSolution::glide_solution_travelled(*m_tps[i],aircraft, m_glide_polar, minH);
 }
 
-const AircraftState 
+const AircraftState &
 TaskMacCreadyTravelled::get_aircraft_start(const AircraftState &aircraft) const
 {
   if (m_tps[0]->HasEntered()) {
