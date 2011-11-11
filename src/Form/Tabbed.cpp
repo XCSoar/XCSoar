@@ -112,6 +112,36 @@ TabbedControl::PreviousPage()
 }
 
 bool
+TabbedControl::ClickPage(unsigned i)
+{
+  assert(i < tabs.size());
+
+  if (i == current) {
+    /* already visible: invoke ReClick() */
+    assert(tabs[i].prepared);
+
+    tabs[i].widget->ReClick();
+    return true;
+  } else if (tabs[i].widget->Click()) {
+    /* switch to that page after confirmation by Widget */
+    SetCurrentPage(i);
+    return true;
+  } else
+    /* cancelled by Widget */
+    return false;
+}
+
+bool
+TabbedControl::Save()
+{
+  for (auto i = tabs.begin(), end = tabs.end(); i != end; ++i)
+    if (i->prepared && !i->widget->Save())
+      return false;
+
+  return true;
+}
+
+bool
 TabbedControl::on_resize(UPixelScalar width, UPixelScalar height)
 {
   ContainerWindow::on_resize(width, height);

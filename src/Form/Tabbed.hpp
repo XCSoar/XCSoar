@@ -81,8 +81,27 @@ public:
   }
 
   void SetCurrentPage(unsigned i);
+
   void NextPage();
   void PreviousPage();
+
+  /**
+   * Call this to indicate that the user has clicked on the "handle
+   * area" of a page (e.g. a tab).  It will invoke Widget::ReClick()
+   * if the page was already visible, or Widget::Click() and switch to
+   * that page.
+   *
+   * @return true if the specified page is now visible
+   */
+  bool ClickPage(unsigned i);
+
+  /**
+   * Invoke Widget::Save() on all pages.  Stops when the first one
+   * returns false.
+   *
+   * @return true if all Widget::Save() were successful
+   */
+  bool Save();
 
 protected:
   virtual bool on_resize(UPixelScalar width, UPixelScalar height);
