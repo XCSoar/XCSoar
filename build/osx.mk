@@ -18,10 +18,12 @@ $(DMG_TMP): $(TARGET_BIN_DIR)/xcsoar build/Info.plist output/data/graphics/xcsoa
 	$(Q)cp $(TARGET_BIN_DIR)/xcsoar $(DMG_TMPDIR)/XCSoar.app/Contents/MacOS/
 	$(Q)mkdir -p $(DMG_TMPDIR)/XCSoar.app/Contents/Resources
 	$(Q)cp output/data/graphics/xcsoarswiftsplash_128.icns $(DMG_TMPDIR)/XCSoar.app/Contents/Resources/
+	$(Q)rm -f $@
 	$(Q)$(HDIUTIL) create $(HDIUTIL_OPTIONS) -fs HFS+ -volname "XCSoar" -srcfolder $(DMG_TMPDIR) $@
 
 $(TARGET_OUTPUT_DIR)/XCSoar.dmg: $(DMG_TMP)
 	@$(NQ)echo "  DMG     $@"
+	$(Q)rm -f $@
 	$(Q)$(HDIUTIL) convert $(HDIUTIL_OPTIONS) $< -format UDCO -o $@
 	$(Q)$(HDIUTIL) internet-enable $(HDIUTIL_OPTIONS) -yes $@
 
