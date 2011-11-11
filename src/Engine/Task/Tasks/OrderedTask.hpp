@@ -34,6 +34,8 @@
 #include "Task/TaskAdvanceSmart.hpp"
 #include "Task/TaskBehaviour.hpp"
 
+#include <assert.h>
+
 class OrderedTaskPoint;
 class AbstractTaskFactory;
 class Waypoints;
@@ -843,6 +845,22 @@ public:
    */
   gcc_pure
   OrderedTaskPoint* get_tp(const unsigned index);
+
+  gcc_pure
+  OrderedTaskPoint &GetPoint(const unsigned i) {
+    assert(i < task_points.size());
+    assert(task_points[i] != NULL);
+
+    return *task_points[i];
+  }
+
+  gcc_pure
+  const OrderedTaskPoint &GetPoint(const unsigned i) const {
+    assert(i < task_points.size());
+    assert(task_points[i] != NULL);
+
+    return *task_points[i];
+  }
 
   /**
    * @return number of optional start poitns
