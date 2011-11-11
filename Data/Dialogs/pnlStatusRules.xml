@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
-      <Panel Name="frmStatusRules">
-      <Edit Name="prpValidStart" Caption="Valid start" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpStartTime" Caption="Start time" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpStartHeight" Caption="Start alt." X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpStartPoint" Caption="Start point" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpStartSpeed" Caption="Start speed" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpFinishAlt" Caption="Finish min. alt." X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpValidFinish" Caption="Valid finish" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-    </Panel>
+
+<Panel Name="frmStatusRules">
+  <Edit Name="prpValidStart" Caption="Valid start" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpStartTime" Caption="Start time" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpStartHeight" Caption="Start alt." X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpStartPoint" Caption="Start point" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpStartSpeed" Caption="Start speed" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpFinishAlt" Caption="Finish min. alt." X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpValidFinish" Caption="Valid finish" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+</Panel>

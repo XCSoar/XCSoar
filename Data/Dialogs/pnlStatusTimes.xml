@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
-    <Panel Name="frmStatusTimes">
-      <Edit Name="prpLocalTime" Caption="Local time" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpFlightTime" Caption="Flight time" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpTakeoffTime" Caption="Takeoff time" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpLandingTime" Caption="Landing time" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpSunset" Caption="Sunset" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-    </Panel>
+
+<Panel Name="frmStatusTimes">
+  <Edit Name="prpLocalTime" Caption="Local time" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpFlightTime" Caption="Flight time" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpTakeoffTime" Caption="Takeoff time" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpLandingTime" Caption="Landing time" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpSunset" Caption="Sunset" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+</Panel>

@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
-    <Panel Name="frmStatusFlight" Border="0">
-      <Edit Name="prpLatitude" Caption="Latitude" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpLongitude" Caption="Longitude" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpAltitude" Caption="Altitude" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpMaxHeightGain" Caption="Max. height gain" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpNear" Caption="Near" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpBearing" Caption="Bearing" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpDistance" Caption="Distance" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
-    </Panel>
+
+<Panel Name="frmStatusFlight" Border="0">
+  <Edit Name="prpLatitude" Caption="Latitude" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpLongitude" Caption="Longitude" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpAltitude" Caption="Altitude" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpMaxHeightGain" Caption="Max. height gain" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpNear" Caption="Near" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpBearing" Caption="Bearing" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+  <Edit Name="prpDistance" Caption="Distance" X="2" Height="22" CaptionWidth="120" ReadOnly="1"/>
+</Panel>
