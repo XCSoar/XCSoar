@@ -70,6 +70,9 @@ TaskMacCready::clearance_heights(const AircraftState &aircraft)
       AircraftState aircraft_predict = aircraft;
       aircraft_predict.altitude = m_minHs[i];
       const GlideResult gr = tp_solution(i, aircraft_predict, m_minHs[i + 1]);
+      if (!gr.IsOk())
+        continue;
+
       const fixed dh = aircraft_predict.altitude - gr.height_glide;
       if (m_minHs[i + 1] + fixed_tolerance < dh) {
         m_minHs[i + 1] = dh;
@@ -103,7 +106,9 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
     // perform estimate, ensuring that alt is above previous taskpoint  
     gr = tp_solution(i, aircraft_predict, m_minHs[i]);
     m_gs[i] = gr;
-    excess_height -= gr.height_glide;
+
+    if (gr.IsOk())
+      excess_height -= gr.height_glide;
 
     // update state
     if (i == m_end)
@@ -126,9 +131,11 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
         min(alt_difference, aircraft_predict.altitude - m_minHs[i]);
   }
 
-  alt_difference -= acc_gr.height_climb;
-  acc_gr.altitude_difference = alt_difference;
-  acc_gr.CalcDeferred(aircraft);
+  if (acc_gr.IsOk()) {
+    alt_difference -= acc_gr.height_climb;
+    acc_gr.altitude_difference = alt_difference;
+    acc_gr.CalcDeferred(aircraft);
+  }
 
   return acc_gr;
 }

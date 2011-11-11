@@ -55,7 +55,7 @@ TaskMacCreadyTotal::effective_distance(const fixed time_remaining) const
   fixed t_total = fixed_zero;
   fixed d_total = fixed_zero;
   for (int i=m_end; i>=m_start; i--) {
-    if (positive(m_gs[i].time_elapsed)) {
+    if (m_gs[i].IsOk() && positive(m_gs[i].time_elapsed)) {
       fixed p = (time_remaining-t_total)/m_gs[i].time_elapsed;
       if ((p>=fixed_zero) && (p<=fixed_one)) {
         return d_total+p*m_gs[i].vector.Distance;
