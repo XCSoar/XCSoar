@@ -27,4 +27,6 @@ $(TARGET_OUTPUT_DIR)/XCSoar.dmg: $(DMG_TMP)
 	$(Q)$(HDIUTIL) convert $(HDIUTIL_OPTIONS) $< -format UDCO -o $@
 	$(Q)$(HDIUTIL) internet-enable $(HDIUTIL_OPTIONS) -yes $@
 
+dmg: $(TARGET_OUTPUT_DIR)/XCSoar.dmg
+
 endif
