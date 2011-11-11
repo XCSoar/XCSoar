@@ -59,6 +59,9 @@ MacCready::solve_vertical(const GlideState &task) const
 
   if (positive(task.altitude_difference)) {
     // immediate solution
+    result.height_climb = fixed_zero;
+    result.height_glide = fixed_zero;
+    result.time_elapsed = fixed_zero;
     result.validity = GlideResult::RESULT_OK;
     return result;
   }
@@ -191,6 +194,7 @@ MacCready::solve_glide(const GlideState &task, const fixed Vset, const fixed S,
 
   const fixed t_cr = result.vector.distance / Vn;
   result.time_elapsed = t_cr;
+  result.height_climb = fixed_zero;
   result.height_glide = t_cr * S;
   result.altitude_difference -= result.height_glide;
   result.distance_to_final = fixed_zero;

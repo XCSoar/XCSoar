@@ -28,12 +28,7 @@
 GlideResult::GlideResult(const GlideState &task, const fixed V):
   vector(task.vector),
   distance_to_final(task.vector.distance),
-  cruise_track_bearing(task.vector.bearing),
   v_opt(V),
-  height_climb(fixed_zero),
-  height_glide(fixed_zero),
-  time_elapsed(fixed_zero),
-  time_virtual(fixed_zero),
   altitude_difference(task.altitude_difference),
   altitude_required(task.altitude_difference),
   effective_wind_speed(task.wind.norm),
