@@ -62,10 +62,12 @@ ProtectedRoutePlanner::Intersection(const AGeoPoint &origin,
 }
 
 void
-ProtectedRoutePlanner::SolveReach(const AGeoPoint &origin, const bool do_solve)
+ProtectedRoutePlanner::SolveReach(const AGeoPoint &origin,
+                                  const RoutePlannerConfig &config,
+                                  const short h_ceiling, const bool do_solve)
 {
   ExclusiveLease lease(*this);
-  lease->solve_reach(origin, do_solve);
+  lease->solve_reach(origin, config, h_ceiling, do_solve);
 }
 
 void

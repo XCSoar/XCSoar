@@ -198,7 +198,8 @@ public:
    *
    * @return True if reach was scanned
    */
-  bool solve_reach(const AGeoPoint& origin, const bool do_solve=true);
+  bool solve_reach(const AGeoPoint &origin, const RoutePlannerConfig &config,
+                   short h_ceiling, bool do_solve=true);
 
   /**
    * Visit reach

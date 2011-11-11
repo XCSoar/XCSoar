@@ -127,8 +127,11 @@ GlideComputerRoute::Reach(const MoreData &basic, DerivedInfo &calculated,
 
   const AircraftState state = ToAircraftState(basic, calculated);
   const AGeoPoint start (state.location, state.altitude);
+  const short h_ceiling = (short)std::max((int)basic.NavAltitude+500,
+                                          (int)calculated.thermal_band.working_band_ceiling);
+
   if (reach_clock.check_advance(basic.time)) {
-    protected_route_planner.SolveReach(start, do_solve);
+    protected_route_planner.SolveReach(start, config, h_ceiling, do_solve);
 
     if (do_solve) {
       calculated.terrain_base = fixed(route_planner.get_terrain_base());

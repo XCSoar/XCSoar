@@ -58,13 +58,15 @@ RoutePlannerGlue::solve(const AGeoPoint& origin,
 }
 
 void
-RoutePlannerGlue::solve_reach(const AGeoPoint& origin, const bool do_solve)
+RoutePlannerGlue::solve_reach(const AGeoPoint &origin,
+                              const RoutePlannerConfig &config,
+                              const short h_ceiling, const bool do_solve)
 {
   if (terrain) {
     RasterTerrain::Lease lease(*terrain);
-    m_planner.solve_reach(origin, do_solve);
+    m_planner.solve_reach(origin, config, h_ceiling, do_solve);
   } else {
-    m_planner.solve_reach(origin, do_solve);
+    m_planner.solve_reach(origin, config, h_ceiling, do_solve);
   }
 }
 

@@ -52,7 +52,9 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
   short horigin = map.GetHeight(origin)+1000;
   AGeoPoint aorigin(origin, horigin);
 
-  retval = route.solve_reach(aorigin);
+  RoutePlannerConfig config;
+  config.SetDefaults();
+  retval = route.solve_reach(aorigin, config, SHRT_MAX);
 
   ok(retval, "reach solve", 0);
 
@@ -77,7 +79,7 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
         route.find_positive_arrival(adest, ha, hd);
         if ((i % 5 == 0) && (j % 5 == 0)) {
           AGeoPoint ao2(x, h+1000);
-          route.solve_reach(ao2);
+          route.solve_reach(ao2, config, SHRT_MAX);
         }
         fout << x.Longitude.value_degrees() << " " << x.Latitude.value_degrees() << " " << h << " " << ha << "\n";
       }
