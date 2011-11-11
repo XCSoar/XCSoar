@@ -80,10 +80,11 @@ RoutePolar::Initialise(const GlidePolar& polar, const SpeedVector& wind,
   for (unsigned i = 0; i < ROUTEPOLAR_POINTS; ++i) {
     const Angle ang = IndexToAngle(i);
     GlideResult res = SolveTask(polar, wind, ang, is_glide);
-    RoutePolarPoint point(res.time_elapsed, res.height_glide);
-    if (res.validity != GlideResult::RESULT_OK)
-      point.valid = false;
-    points[i] = point;
+    if (res.IsOk()) {
+      RoutePolarPoint point(res.time_elapsed, res.height_glide);
+      points[i] = point;
+    } else
+      points[i].valid = false;
   }
 }
 

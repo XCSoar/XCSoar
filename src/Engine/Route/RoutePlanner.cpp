@@ -50,8 +50,13 @@ RoutePlanner::Reset()
 }
 
 bool
-RoutePlanner::SolveReach(const AGeoPoint &origin, const bool do_solve)
+RoutePlanner::SolveReach(const AGeoPoint &origin,
+                         const RoutePlannerConfig &config,
+                         const RoughAltitude h_ceiling, const bool do_solve)
 {
+  rpolars_reach.SetConfig(config, origin.altitude, h_ceiling);
+  reach_polar_mode = config.reach_polar_mode;
+
   return reach.solve(origin, rpolars_reach, terrain, do_solve);
 }
 
@@ -62,10 +67,6 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
   OnSolve(origin, destination);
   rpolars_route.SetConfig(config, std::max(destination.altitude, origin.altitude),
                           h_ceiling);
-  rpolars_reach.SetConfig(config, std::max(destination.altitude, origin.altitude),
-                          h_ceiling);
-
-  reach_polar_mode = config.reach_polar_mode;
 
   {
     const AFlatGeoPoint s_origin(task_projection.project(origin),

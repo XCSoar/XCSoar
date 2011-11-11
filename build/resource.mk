@@ -56,6 +56,7 @@ PNG_SPLASH_160 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_160.png,$
 BMP_SPLASH_160 = $(PNG_SPLASH_160:.png=.bmp)
 PNG_SPLASH_80 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_80.png,$(SVG_SPLASH))
 BMP_SPLASH_80 = $(PNG_SPLASH_80:.png=.bmp)
+ICNS_SPLASH_128 = $(PNG_SPLASH_128:.png=.icns)
 
 # render from SVG to PNG
 $(PNG_SPLASH_160): output/data/graphics/%_160.png: Data/graphics/%.svg | output/data/graphics/dirstamp
@@ -64,6 +65,9 @@ $(PNG_SPLASH_160): output/data/graphics/%_160.png: Data/graphics/%.svg | output/
 $(PNG_SPLASH_80): output/data/graphics/%_80.png: Data/graphics/%.svg | output/data/graphics/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert --width=80 $< -o $@
+$(PNG_SPLASH_128): output/data/graphics/%_128.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+	@$(NQ)echo "  SVG     $@"
+	$(Q)rsvg-convert --width=128 $< -o $@
 
 # convert to uncompressed 8-bit BMP
 $(BMP_SPLASH_160): %.bmp: %.png
@@ -72,6 +76,11 @@ $(BMP_SPLASH_160): %.bmp: %.png
 $(BMP_SPLASH_80): %.bmp: %.png
 	@$(NQ)echo "  BMP     $@"
 	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
+
+# convert to icns (mac os x icon)
+$(ICNS_SPLASH_128): %.icns: %.png
+	@$(NQ)echo "  ICNS    $@"
+	$(Q)$(IM_PREFIX)png2icns $@ $<
 
 ####### version
 

@@ -62,6 +62,14 @@ For Android, you need:
 - Android NDK r6b (http://developer.android.com/sdk/ndk/)
 - Ogg Vorbis (http://www.vorbis.com/)
 
+For Mac OS X, you need:
+- Boost (http://www.boost.org/)
+- zlib (http://www.zlib.net/)
+- CURL (http://curl.haxx.se/)
+- SDL (http://www.libsdl.org/)
+- SDL_ttf (http://www.libsdl.org/projects/SDL_ttf/)
+- libicns (http://icns.sourceforge.net/)
+
 To compile, run:
 
  make TARGET=PC

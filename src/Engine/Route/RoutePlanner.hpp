@@ -208,7 +208,8 @@ public:
    *
    * @return True if reach was scanned
    */
-  bool SolveReach(const AGeoPoint &origin, const bool do_solve = true);
+  bool SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
+                  RoughAltitude h_ceiling, bool do_solve=true);
 
   /** Visit reach */
   void AcceptInRange(const GeoBounds &bounds,

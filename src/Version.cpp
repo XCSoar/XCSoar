@@ -35,6 +35,8 @@ Copyright_License {
   #define TARGET "Android"
 #elif defined(__linux__)
   #define TARGET "Linux"
+#elif defined(__APPLE__)
+  #define TARGET "MacOSX"
 #elif !defined(WIN32)
   #define TARGET "UNIX"
 #elif !defined(_WIN32_WCE)

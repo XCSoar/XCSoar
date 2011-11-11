@@ -59,7 +59,8 @@ public:
     return m_planner.GetSolution();
   }
 
-  void solve_reach(const AGeoPoint& origin, const bool do_solve);
+  void solve_reach(const AGeoPoint &origin, const RoutePlannerConfig &config,
+                   RoughAltitude h_ceiling, bool do_solve);
 
   bool find_positive_arrival(const AGeoPoint& dest,
                              RoughAltitude &arrival_height_reach,

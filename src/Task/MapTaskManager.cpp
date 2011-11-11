@@ -261,21 +261,20 @@ MapTaskManager::replace_in_task(const Waypoint &wp)
 }
 
 static int
-index_of_point_in_task(OrderedTask *task, const Waypoint &wp)
+index_of_point_in_task(const OrderedTask &task, const Waypoint &wp)
 {
-  if (task->TaskSize() == 0)
+  if (task.TaskSize() == 0)
     return -1;
 
-  unsigned i = task->GetActiveIndex();
-  if (i >= task->TaskSize())
+  unsigned i = task.GetActiveIndex();
+  if (i >= task.TaskSize())
     return -1;
 
   int TPindex = -1;
-  for (unsigned i = task->TaskSize(); i--;) {
-    const OrderedTaskPoint *tp = task->get_tp(i);
-    assert(tp != NULL);
+  for (unsigned i = task.TaskSize(); i--;) {
+    const OrderedTaskPoint &tp = task.GetPoint(i);
 
-    if (tp->GetWaypoint() == wp) {
+    if (tp.GetWaypoint() == wp) {
       TPindex = i;
       break;
     }
@@ -287,12 +286,9 @@ int
 MapTaskManager::index_of_point_in_task(const Waypoint &wp)
 {
   assert(protected_task_manager != NULL);
-  TaskEvents task_events;
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   if (task_manager->GetMode() == TaskManager::MODE_ORDERED) {
-    OrderedTask *task = task_manager->Clone(task_events,
-                                            GetTaskBehaviour(),
-                                            task_manager->GetGlidePolar());
+    const OrderedTask &task = task_manager->GetOrderedTask();
     return index_of_point_in_task(task, wp);
   }
   return -1;
@@ -304,7 +300,7 @@ remove_from_task(OrderedTask *task, const Waypoint &wp)
   if (task->TaskSize()==0)
     return MapTaskManager::NOTASK;
 
-  int TPIndex = index_of_point_in_task(task, wp);
+  int TPIndex = index_of_point_in_task(*task, wp);
   if (TPIndex >= 0)
     task->GetFactory().remove(TPIndex);
 

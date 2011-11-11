@@ -65,7 +65,8 @@ public:
                     const AGeoPoint &destination,
                     GeoPoint &intx) const;
 
-  void SolveReach(const AGeoPoint &origin, const bool do_solve);
+  void SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
+                  RoughAltitude h_ceiling, bool do_solve);
 
   void AcceptInRange(const GeoBounds &bounds,
                      TriangleFanVisitor &visitor) const;

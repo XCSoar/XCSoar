@@ -15,5 +15,7 @@
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
     <string>VERSION</string>
+    <key>CFBundleIconFile</key>
+    <string>xcsoarswiftsplash_128</string>
   </dict>
 </plist>
