@@ -170,8 +170,10 @@ AbortTask::fill_reachable(const AircraftState &state,
     }
 
     UnorderedTaskPoint t(v->waypoint, task_behaviour);
-    const GlideResult result =
+    GlideResult result =
         TaskSolution::glide_solution_remaining(t, state, polar);
+    /* calculate time_virtual, which is needed by AbortRank */
+    result.CalcVInvSpeed(polar.GetInvMC());
 
     if (is_reachable(result, final_glide)) {
       bool intersects = false;
