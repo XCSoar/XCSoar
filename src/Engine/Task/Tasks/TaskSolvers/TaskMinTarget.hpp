@@ -75,7 +75,7 @@ public:
  * 
  * @return True if solution is valid
  */
-  virtual bool valid(const fixed p);
+  bool valid(const fixed p);
 
 /** 
  * Search for target range to produce remaining time equal to
@@ -87,7 +87,8 @@ public:
  * 
  * @return Range value for solution
  */
-  virtual fixed search(const fixed p);
+  fixed search(const fixed p);
+
 private:
   void set_range(const fixed p);
 };
