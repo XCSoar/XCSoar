@@ -51,7 +51,7 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent,
    LookUpTable(_look_up_table)
 
 {
-  theTabDisplay = new TabMenuDisplay(*this, look,
+  theTabDisplay = new TabMenuDisplay(*this, look, *this,
                                      0, y, _width, _height,
                                      flipOrientation);
 }
@@ -378,10 +378,12 @@ TabMenuControl::GotoMenuPage()
 // TabMenuDisplay Functions
 TabMenuDisplay::TabMenuDisplay(TabBarControl& _theTabBar,
                                const DialogLook &_look,
+                               ContainerWindow &parent,
                                PixelScalar left, PixelScalar top,
                                UPixelScalar width, UPixelScalar height,
                                bool _flipOrientation)
-  :TabDisplay(_theTabBar, _look, left, top, width, height, _flipOrientation),
+  :TabDisplay(_theTabBar, _look,
+              parent, left, top, width, height, _flipOrientation),
    DownIndex(TabMenuControl::NO_MAIN_MENU, TabMenuControl::NO_SUB_MENU),
    SelectedIndex(TabMenuControl::NO_MAIN_MENU, TabMenuControl::NO_SUB_MENU)
 {

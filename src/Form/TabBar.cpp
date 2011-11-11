@@ -47,7 +47,7 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
    clientOverlapTabs(_clientOverlapTabs),
    setting_up(true)
 {
-  theTabDisplay = new TabDisplay(*this, look,
+  theTabDisplay = new TabDisplay(*this, look, *this,
                                  x, y, _width, _height,
                                  flipOrientation);
 }
@@ -293,6 +293,7 @@ TabBarControl::GetTabWidth() const
 
 // TabDisplay Functions
 TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
+                       ContainerWindow &parent,
                        PixelScalar left, PixelScalar top,
                        UPixelScalar width, UPixelScalar height,
                        bool _flipOrientation)
@@ -305,7 +306,7 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
 {
   WindowStyle mystyle;
   mystyle.tab_stop();
-  set(theTabBar, left, top, width, height, mystyle);
+  set(parent, left, top, width, height, mystyle);
 }
 
 void

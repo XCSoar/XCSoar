@@ -333,6 +333,7 @@ public:
 class TabMenuDisplay : public TabDisplay {
 public:
   TabMenuDisplay(TabBarControl& _theTabBar, const DialogLook &look,
+                 ContainerWindow &parent,
                  PixelScalar left, PixelScalar top,
                  UPixelScalar width, UPixelScalar height,
                  bool _flipOrientation = false);

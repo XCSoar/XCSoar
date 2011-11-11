@@ -199,6 +199,7 @@ public:
    * @param height Height of tab bar box in the parent window
    */
   TabDisplay(TabBarControl& _theTabBar, const DialogLook &look,
+             ContainerWindow &parent,
              PixelScalar left, PixelScalar top,
              UPixelScalar width, UPixelScalar height,
              bool _flipOrientation = false);
