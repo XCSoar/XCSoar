@@ -71,7 +71,8 @@ SetXMLDialogLook(const DialogLook &dialog_look);
 
 Window *
 LoadWindow(const CallBackTableEntry *LookUpTable, SubForm *form,
-           ContainerWindow &parent, const TCHAR *resource);
+           ContainerWindow &parent, const TCHAR *resource,
+           WindowStyle style=WindowStyle());
 
 WndForm *
 LoadDialog(const CallBackTableEntry *LookUpTable, SingleWindow &Parent,

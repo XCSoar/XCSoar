@@ -95,7 +95,8 @@ typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
 static Window *
 LoadChild(SubForm &form, ContainerWindow &parent,
           const CallBackTableEntry *lookup_table, XMLNode node,
-          const DialogStyle dialog_style, int bottom_most = 0);
+          const DialogStyle dialog_style, int bottom_most = 0,
+          WindowStyle style=WindowStyle());
 
 static void
 LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
@@ -451,7 +452,8 @@ InitScaleWidth(const PixelSize size, const PixelRect rc,
  */
 Window *
 LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
-           ContainerWindow &parent, const TCHAR *resource)
+           ContainerWindow &parent, const TCHAR *resource,
+           WindowStyle style)
 {
   if (!form)
     return NULL;
@@ -463,7 +465,8 @@ LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
   DialogStyle dialog_style = dialog_style_last;
 
   // load only one top-level control.
-  Window *window = LoadChild(*form, parent, lookup_table, *node, dialog_style, 0);
+  Window *window = LoadChild(*form, parent, lookup_table, *node,
+                             dialog_style, 0, style);
   delete node;
 
   assert(!XMLNode::GlobalError);
@@ -611,7 +614,8 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable,
 static Window *
 LoadChild(SubForm &form, ContainerWindow &parent,
           const CallBackTableEntry *lookup_table, XMLNode node,
-          const DialogStyle dialog_style, int bottom_most)
+          const DialogStyle dialog_style, int bottom_most,
+          WindowStyle style)
 {
   Window *window = NULL;
 
@@ -627,8 +631,6 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   ControlSize size = GetSize(node, rc, pos);
   if (!size.no_scaling)
     size.cx = ScaleWidth(size.cx, dialog_style);
-
-  WindowStyle style;
 
   if (!StringToIntDflt(node.getAttribute(_T("Visible")), 1))
     style.hide();
