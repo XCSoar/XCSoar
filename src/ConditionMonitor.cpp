@@ -256,6 +256,8 @@ protected:
       return false;
   
     const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
+    if (!res.IsOk())
+      return false;
 
     /// @todo should be destination location
 
