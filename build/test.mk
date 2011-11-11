@@ -69,9 +69,10 @@ TEST_NAMES = \
 	TestTaskPoint \
 	TestTaskWaypoint \
 	TestZeroFinder \
-  TestAirspaceParser \
-  TestMETARParser \
-  TestIGCParser
+	TestAirspaceParser \
+	TestMETARParser \
+	TestIGCParser \
+	TestByteOrder
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
 
@@ -91,6 +92,15 @@ TEST_IGC_PARSER_SOURCES = \
 TEST_IGC_PARSER_OBJS = $(call SRC_TO_OBJ,$(TEST_IGC_PARSER_SOURCES))
 TEST_IGC_PARSER_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestIGCParser$(TARGET_EXEEXT): $(TEST_IGC_PARSER_OBJS) $(TEST_IGC_PARSER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
+
+TEST_BYTE_ORDER_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestByteOrder.cpp
+TEST_BYTE_ORDER_OBJS = $(call SRC_TO_OBJ,$(TEST_BYTE_ORDER_SOURCES))
+TEST_BYTE_ORDER_LDADD =
+$(TARGET_BIN_DIR)/TestByteOrder$(TARGET_EXEEXT): $(TEST_BYTE_ORDER_OBJS) $(TEST_BYTE_ORDER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
 

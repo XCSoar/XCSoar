@@ -39,6 +39,12 @@ Copyright_License {
 #endif
 #endif /* !__linux__ */
 
+#if defined(__i386__) || defined(__x86_64__)
+#ifndef FORCE_ALIGNED_READ_WRITE
+#define CAN_READ_WRITE_UNALIGNED
+#endif
+#endif
+
 gcc_const
 static inline uint16_t
 ByteSwap16(uint16_t value)
@@ -195,6 +201,18 @@ ToLE32(uint32_t value)
 #else
   /* generic big-endian */
   return ByteSwap32(value);
+#endif
+}
+
+gcc_pure
+static inline uint16_t
+ReadUnalignedLE16(const uint16_t *p)
+{
+#ifdef CAN_READ_WRITE_UNALIGNED
+  return FromLE16(*p);
+#else
+  const uint8_t *c = (const uint8_t *)p;
+  return c[0] | (c[1] << 8);
 #endif
 }
 
