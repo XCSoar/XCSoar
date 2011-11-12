@@ -142,6 +142,21 @@ AbstractTask::update_stats_distances(const GeoPoint &location,
     stats.distance_scored = fixed_zero;
 }
 
+static void
+Copy(DistanceStat &stat, const GlideResult &solution)
+{
+  if (solution.IsDefined())
+    stat.set_distance(solution.vector.Distance);
+}
+
+static void
+CalculatePirker(DistanceStat &pirker, const DistanceStat &planned,
+                const DistanceStat &remaining_effective)
+{
+  pirker.set_distance(planned.get_distance() -
+                      remaining_effective.get_distance());
+}
+
 void
 AbstractTask::update_glide_solutions(const AircraftState &state)
 {
@@ -170,25 +185,15 @@ AbstractTask::update_glide_solutions(const AircraftState &state)
                          stats.total.solution_remaining,
                          stats.current_leg.solution_remaining);
 
-  stats.total.pirker.set_distance(
-      stats.total.planned.get_distance() -
-      stats.total.remaining_effective.get_distance());
+  CalculatePirker(stats.total.pirker, stats.total.planned,
+                  stats.total.remaining_effective);
 
-  stats.current_leg.pirker.set_distance(
-      stats.current_leg.planned.get_distance() -
-      stats.current_leg.remaining_effective.get_distance());
+  CalculatePirker(stats.current_leg.pirker, stats.current_leg.planned,
+                  stats.current_leg.remaining_effective);
 
-  if (stats.current_leg.solution_remaining.IsDefined())
-    stats.current_leg.remaining.set_distance(
-        stats.current_leg.solution_remaining.vector.Distance);
-
-  if (stats.current_leg.solution_travelled.IsDefined())
-    stats.current_leg.travelled.set_distance(
-        stats.current_leg.solution_travelled.vector.Distance);
-
-  if (stats.current_leg.solution_planned.IsDefined())
-    stats.current_leg.planned.set_distance(
-        stats.current_leg.solution_planned.vector.Distance);
+  Copy(stats.current_leg.remaining, stats.current_leg.solution_remaining);
+  Copy(stats.current_leg.travelled, stats.current_leg.solution_travelled);
+  Copy(stats.current_leg.planned, stats.current_leg.solution_planned);
 
   stats.total.gradient = ::AngleToGradient(calc_gradient(state));
   stats.current_leg.gradient = ::AngleToGradient(leg_gradient(state));
