@@ -108,7 +108,7 @@ public:
    * @return Vector for task leg
    */
   gcc_pure
-  virtual const GeoVector GetVectorRemaining(const AircraftState &) const = 0;
+  virtual const GeoVector GetVectorRemaining(const GeoPoint &reference) const = 0;
 
   /**
    * Calculate vector from aircraft to destination
@@ -124,7 +124,7 @@ public:
    * @return Vector for task leg
    */
   gcc_pure
-  virtual const GeoVector GetVectorTravelled(const AircraftState &) const = 0;
+  virtual const GeoVector GetVectorTravelled() const = 0;
 
   /**
    * Dummy null method.

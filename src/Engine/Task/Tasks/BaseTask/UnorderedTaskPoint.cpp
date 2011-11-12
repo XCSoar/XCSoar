@@ -36,9 +36,9 @@ UnorderedTaskPoint::SetTaskBehaviour(const TaskBehaviour &tb)
 }
 
 const GeoVector 
-UnorderedTaskPoint::GetVectorRemaining(const AircraftState &ref) const
+UnorderedTaskPoint::GetVectorRemaining(const GeoPoint &reference) const
 {
-  return GeoVector(ref.location, GetLocationRemaining());
+  return GeoVector(reference, GetLocationRemaining());
 }
 
 // These are dummies, never get called usually
@@ -50,7 +50,7 @@ UnorderedTaskPoint::GetVectorPlanned() const
 }
 
 const GeoVector 
-UnorderedTaskPoint::GetVectorTravelled(const AircraftState &ref) const
+UnorderedTaskPoint::GetVectorTravelled() const
 {
   return GeoVector(fixed_zero);
 }

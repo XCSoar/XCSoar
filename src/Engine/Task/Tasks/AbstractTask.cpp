@@ -285,7 +285,7 @@ AbstractTask::leg_gradient(const AircraftState &aircraft) const
     return fixed_zero;
 
   // Get the distance to the next turnpoint
-  const fixed d = tp->GetVectorRemaining(aircraft).Distance;
+  const fixed d = tp->GetVectorRemaining(aircraft.location).Distance;
   if (!d)
     return fixed_zero;
 

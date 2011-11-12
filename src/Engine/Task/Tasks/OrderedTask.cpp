@@ -830,7 +830,7 @@ OrderedTask::calc_gradient(const AircraftState &state) const
   fixed distance = fixed_zero;
   for (unsigned i = activeTaskPoint; i < task_points.size(); i++)
     // Sum up the leg distances
-    distance += task_points[i]->GetVectorRemaining(state).Distance;
+    distance += task_points[i]->GetVectorRemaining(state.location).Distance;
 
   if (!distance)
     return fixed_zero;

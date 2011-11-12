@@ -35,7 +35,7 @@ public:
                  const fixed _elevation)
     :TaskPoint(_type, _location, _elevation) {}
 
-  virtual const GeoVector GetVectorRemaining(const AircraftState &) const {
+  virtual const GeoVector GetVectorRemaining(const GeoPoint &reference) const {
     return GeoVector();
   }
 
@@ -43,7 +43,7 @@ public:
     return GeoVector();
   }
 
-  virtual const GeoVector GetVectorTravelled(const AircraftState &) const {
+  virtual const GeoVector GetVectorTravelled() const {
     return GeoVector();
   }
 
