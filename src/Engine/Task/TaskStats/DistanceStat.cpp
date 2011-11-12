@@ -58,10 +58,10 @@ DistanceStatComputer::reset_incremental_speed()
 }
 
 void
-DistanceStat::calc_speed(fixed time)
+DistanceStatComputer::calc_speed(fixed time)
 {
   if (positive(time))
-    speed = fixed(distance) / time;
+    data.speed = fixed(data.distance) / time;
   else
-    speed = fixed_zero;
+    data.speed = fixed_zero;
 }

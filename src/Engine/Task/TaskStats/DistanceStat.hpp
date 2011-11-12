@@ -92,13 +92,6 @@ public:
     return speed_incremental;
   }
 
-  /**
-   * Calculate bulk speed (distance/time), abstract base method
-   *
-   * @param es ElementStat (used for time access)
-   */
-  void calc_speed(fixed time);
-
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 
                                    const DistanceStat& ds);
@@ -125,9 +118,12 @@ public:
   /** Constructor; initialises all to zero */
   DistanceStatComputer(DistanceStat &_data, const bool is_positive=true);
 
-  void calc_speed(fixed time) {
-    data.calc_speed(time);
-  }
+  /**
+   * Calculate bulk speed (distance/time), abstract base method
+   *
+   * @param es ElementStat (used for time access)
+   */
+  void calc_speed(fixed time);
 
   /**
    * Calculate incremental speed from previous step.
