@@ -30,6 +30,7 @@ TabbedControl::TabbedControl(ContainerWindow &parent,
                              PixelScalar x, PixelScalar y,
                              UPixelScalar width, UPixelScalar height,
                              const WindowStyle style)
+  :page_flipped_callback(NULL)
 {
   set(parent, x, y, width, height, style);
 }
@@ -87,6 +88,9 @@ TabbedControl::SetCurrentPage(unsigned i)
   }
 
   tabs[current].widget->Show(get_client_rect());
+
+  if (page_flipped_callback != NULL)
+    page_flipped_callback();
 }
 
 void

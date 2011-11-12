@@ -30,6 +30,9 @@ Copyright_License {
 class Widget;
 
 class TabbedControl : public ContainerWindow {
+public:
+  typedef void (*PageFlippedCallback)();
+
 protected:
   struct Page {
     Widget *widget;
@@ -48,17 +51,26 @@ protected:
   unsigned current;
   StaticArray<Page, 32> tabs;
 
+  PageFlippedCallback page_flipped_callback;
+
 public:
   /**
    * Create an instance without actually creating the Window.  Call
    * set() to do that.
    */
-  TabbedControl() = default;
+  TabbedControl():page_flipped_callback(NULL) {};
 
   TabbedControl(ContainerWindow &parent,
                 PixelScalar x, PixelScalar y,
                 UPixelScalar width, UPixelScalar height,
                 const WindowStyle style=WindowStyle());
+
+  void SetPageFlippedCallback(PageFlippedCallback _page_flipped_callback) {
+    assert(page_flipped_callback == NULL);
+    assert(_page_flipped_callback != NULL);
+
+    page_flipped_callback = _page_flipped_callback;
+  }
 
   /**
    * Append a page to the end.  The program will abort when the list

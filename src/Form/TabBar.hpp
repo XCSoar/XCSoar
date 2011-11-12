@@ -103,6 +103,10 @@ public:
 
   ~TabBarControl();
 
+  void SetPageFlippedCallback(TabbedControl::PageFlippedCallback cb) {
+    pager.SetPageFlippedCallback(cb);
+  }
+
 private:
 #define TabLineHeightInitUnscaled (unsigned)5
 
