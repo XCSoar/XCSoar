@@ -39,36 +39,31 @@ Copyright_License {
 void
 InfoBoxContentBearing::Update(InfoBoxData &data)
 {
-  const GlideResult &solution_remaining =
-    XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
-  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      !solution_remaining.IsDefined() ||
-      solution_remaining.vector.distance <= fixed(10)) {
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
+  if (!task_stats.task_valid || !vector_remaining.IsValid() ||
+      vector_remaining.distance <= fixed(10)) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  data.SetValue(solution_remaining.vector.bearing, _T("T"));
+  data.SetValue(vector_remaining.bearing, _T("T"));
 }
 
 void
 InfoBoxContentBearingDiff::Update(InfoBoxData &data)
 {
-  const GlideResult &solution_remaining =
-    XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
-  if (!XCSoarInterface::Basic().track_available ||
-      !XCSoarInterface::Calculated().task_stats.task_valid ||
-      !solution_remaining.IsOk() ||
-      solution_remaining. vector.distance <= fixed(10)) {
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
+  if (!basic.track_available || !task_stats.task_valid ||
+      !vector_remaining.IsValid() || vector_remaining.distance <= fixed(10)) {
     data.SetInvalid();
     return;
   }
 
-  // Set Value
-  Angle Value =
-    solution_remaining.vector.bearing - XCSoarInterface::Basic().track;
-
+  Angle Value = vector_remaining.bearing - basic.track;
   SetValueBearingDifference(data, Value);
 }
 
@@ -97,20 +92,19 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
   else
     data.SetComment(way_point->comment.c_str());
 
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GlideResult &solution_remaining =
-    XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
-  if (!XCSoarInterface::Basic().track_available ||
-      !XCSoarInterface::Calculated().task_stats.task_valid ||
-      !solution_remaining.IsDefined() ||
-      solution_remaining.vector.distance <= fixed(10)) {
+    task_stats.current_leg.solution_remaining;
+  const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
+  if (!basic.track_available || !task_stats.task_valid ||
+      !vector_remaining.IsValid()) {
     data.SetValueInvalid();
     return;
   }
 
   // Set Value
-  Angle Value =
-    solution_remaining.vector.bearing - XCSoarInterface::Basic().track;
-
+  Angle Value = vector_remaining.bearing - basic.track;
   SetValueBearingDifference(data, Value);
 
   // Set Color (blue/black)
@@ -150,20 +144,19 @@ InfoBoxContentNextDistance::Update(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
 
+  const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  const GlideResult &solution_remaining =
-    XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
-  if (!task_stats.task_valid ||
-      !solution_remaining.IsDefined()) {
+  const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
+  if (!task_stats.task_valid || !vector_remaining.IsValid()) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromDistance(data, solution_remaining.vector.distance);
+  SetValueFromDistance(data, vector_remaining.distance);
 
-  if (XCSoarInterface::Basic().track_available) {
-    Angle bd = solution_remaining.vector.bearing - XCSoarInterface::Basic().track;
+  if (basic.track_available) {
+    Angle bd = vector_remaining.bearing - basic.track;
     SetCommentBearingDifference(data, bd);
   } else
     data.SetCommentInvalid();
@@ -174,18 +167,16 @@ InfoBoxContentNextETE::Update(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      !XCSoarInterface::Calculated().task_stats.current_leg.IsAchievable() ||
-      !positive(XCSoarInterface::Calculated().task_stats.
-                current_leg.time_remaining)) {
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable() ||
+      !positive(task_stats.current_leg.time_remaining)) {
     data.SetInvalid();
     return;
   }
 
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
-  const int dd = (int)XCSoarInterface::Calculated().
-      task_stats.current_leg.time_remaining;
+  const int dd = (int)task_stats.current_leg.time_remaining;
   Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
   data.SetValue(HHMMSSsmart);
@@ -197,15 +188,15 @@ InfoBoxContentNextETA::Update(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      !XCSoarInterface::Calculated().task_stats.current_leg.IsAchievable()) {
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable()) {
     data.SetInvalid();
     return;
   }
 
-  int dd = (int)(XCSoarInterface::Calculated().task_stats.current_leg.
-                 solution_remaining.time_elapsed) +
-    DetectCurrentTime(XCSoarInterface::Basic());
+  int dd = (int)(task_stats.current_leg.solution_remaining.time_elapsed) +
+    DetectCurrentTime(basic);
   const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
 
   // Set Value
@@ -310,7 +301,8 @@ InfoBoxContentFinalDistance::Update(InfoBoxData &data)
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
   if (!task_stats.task_valid ||
-      !task_stats.current_leg.solution_remaining.IsDefined()) {
+      !task_stats.current_leg.vector_remaining.IsValid() ||
+      !task_stats.total.remaining.IsDefined()) {
     data.SetInvalid();
     return;
   }
@@ -318,9 +310,9 @@ InfoBoxContentFinalDistance::Update(InfoBoxData &data)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   // Set Value
-  SetValueFromDistance(data, common_stats.task_finished ?
-                                task_stats.current_leg.solution_remaining.vector.distance :
-                                task_stats.total.remaining.get_distance());
+  SetValueFromDistance(data, common_stats.task_finished
+                       ? task_stats.current_leg.vector_remaining.distance
+                       : task_stats.total.remaining.get_distance());
 }
 
 void
@@ -407,7 +399,7 @@ void
 InfoBoxContentTaskSpeed::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  if (!task_stats.task_valid || !task_stats.total.travelled.IsDefined()) {
     data.SetInvalid();
     return;
   }
@@ -424,7 +416,8 @@ void
 InfoBoxContentTaskSpeedAchieved::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  if (!task_stats.task_valid ||
+      !task_stats.total.remaining_effective.IsDefined()) {
     data.SetInvalid();
     return;
   }
@@ -441,7 +434,7 @@ void
 InfoBoxContentTaskSpeedInstant::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  if (!task_stats.task_valid || !task_stats.IsPirkerSpeedAvailable()) {
     data.SetInvalid();
     return;
   }
@@ -501,6 +494,7 @@ InfoBoxContentFinalGR::Update(InfoBoxData &data)
 void
 InfoBoxContentHomeDistance::Update(InfoBoxData &data)
 {
+  const NMEAInfo &basic = CommonInterface::Basic();
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   if (!common_stats.vector_home.IsValid()) {
@@ -511,8 +505,8 @@ InfoBoxContentHomeDistance::Update(InfoBoxData &data)
   // Set Value
   SetValueFromDistance(data, common_stats.vector_home.distance);
 
-  if (XCSoarInterface::Basic().track_available) {
-    Angle bd = common_stats.vector_home.bearing - XCSoarInterface::Basic().track;
+  if (basic.track_available) {
+    Angle bd = common_stats.vector_home.bearing - basic.track;
     SetCommentBearingDifference(data, bd);
   } else
     data.SetCommentInvalid();
@@ -621,7 +615,8 @@ InfoBoxContentTaskAADistance::Update(InfoBoxData &data)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid) {
+      !task_stats.task_valid ||
+      !task_stats.total.planned.IsDefined()) {
     data.SetInvalid();
     return;
   }
@@ -751,16 +746,19 @@ InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxData &data)
 void
 InfoBoxContentNextETEVMG::Update(InfoBoxData &data)
 {
-  if (!XCSoarInterface::Basic().ground_speed_available) {
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+
+  if (!basic.ground_speed_available || task_stats.task_valid ||
+      !task_stats.current_leg.remaining.IsDefined()) {
     data.SetInvalid();
     return;
   }
 
-  const fixed d = XCSoarInterface::Calculated().task_stats.
-    current_leg.remaining.get_distance();
-  const fixed &v = XCSoarInterface::Basic().ground_speed;
+  const fixed d = task_stats.current_leg.remaining.get_distance();
+  const fixed v = basic.ground_speed;
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+  if (!task_stats.task_valid ||
       !positive(d) ||
       !positive(v)) {
     data.SetInvalid();
@@ -779,16 +777,19 @@ InfoBoxContentNextETEVMG::Update(InfoBoxData &data)
 void
 InfoBoxContentFinalETEVMG::Update(InfoBoxData &data)
 {
-  if (!XCSoarInterface::Basic().ground_speed_available) {
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+
+  if (!basic.ground_speed_available || task_stats.task_valid ||
+      task_stats.total.remaining.IsDefined()) {
     data.SetInvalid();
     return;
   }
 
-  const fixed d = XCSoarInterface::Calculated().task_stats.
-    total.remaining.get_distance();
-  const fixed &v = XCSoarInterface::Basic().ground_speed;
+  const fixed d = task_stats.total.remaining.get_distance();
+  const fixed &v = basic.ground_speed;
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+  if (!task_stats.task_valid ||
       !positive(d) ||
       !positive(v)) {
     data.SetInvalid();

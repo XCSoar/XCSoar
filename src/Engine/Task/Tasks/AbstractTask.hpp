@@ -448,8 +448,8 @@ protected:
                                     GlideResult &total, GlideResult &leg,
                                     DistanceStat &total_remaining_effective,
                                     DistanceStat &leg_remaining_effective,
-                                    const fixed total_t_elapsed,
-                                    const fixed leg_t_elapsed) = 0;
+                                    const GlideResult &solution_remaining_total,
+                                    const GlideResult &solution_remaining_leg) = 0;
 
   /** Determines whether the task has adjustable targets */
   gcc_pure

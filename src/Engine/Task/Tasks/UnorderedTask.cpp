@@ -98,17 +98,21 @@ UnorderedTask::GlideSolutionPlanned(const AircraftState &state,
                                       GlideResult &leg,
                                       DistanceStat &total_remaining_effective,
                                       DistanceStat &leg_remaining_effective,
-                                      const fixed total_t_elapsed,
-                                      const fixed leg_t_elapsed)
+                                      const GlideResult &solution_remaining_total,
+                                      const GlideResult &solution_remaining_leg)
 {
-  const GlideResult &res = stats.total.solution_remaining;
-  if (!res.IsDefined())
-    return;
+  total = solution_remaining_total;
+  leg = solution_remaining_leg;
 
-  total = res;
-  leg = res;
-  total_remaining_effective.set_distance(res.vector.distance);
-  leg_remaining_effective.set_distance(res.vector.distance);
+  if (total.IsOk())
+    total_remaining_effective.set_distance(total.vector.distance);
+  else
+    total_remaining_effective.Reset();
+
+  if (leg.IsOk())
+    leg_remaining_effective.set_distance(leg.vector.distance);
+  else
+    leg_remaining_effective.Reset();
 }
 
 
@@ -130,20 +134,25 @@ void
 UnorderedTask::ScanDistanceMinMax(const GeoPoint &location, bool full,
                                     fixed *dmin, fixed *dmax)
 {
-  *dmin = stats.total.remaining.get_distance();
-  *dmax = stats.total.remaining.get_distance();
+  *dmin = *dmax = stats.total.remaining.IsDefined()
+    ? stats.total.remaining.get_distance()
+    : fixed_zero;
 }
 
 fixed 
 UnorderedTask::ScanDistanceNominal()
 {
-  return fixed(stats.total.remaining.get_distance());
+  return stats.total.remaining.IsDefined()
+    ? stats.total.remaining.get_distance()
+    : fixed_zero;
 }
 
 fixed
 UnorderedTask::ScanDistancePlanned()
 {
-  return fixed(stats.total.remaining.get_distance());
+  return stats.total.remaining.IsDefined()
+    ? stats.total.remaining.get_distance()
+    : fixed_zero;
 }
 
 fixed 

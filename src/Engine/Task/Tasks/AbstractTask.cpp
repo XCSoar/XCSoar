@@ -121,6 +121,11 @@ void
 AbstractTask::UpdateStatsDistances(const GeoPoint &location,
                                    const bool full_update)
 {
+  const TaskPoint *active = GetActiveTaskPoint();
+  stats.current_leg.vector_remaining = active != NULL
+    ? active->GetVectorRemaining(location)
+    : GeoVector::Invalid();
+
   stats.total.remaining.set_distance(ScanDistanceRemaining(location));
 
   if (full_update)
@@ -139,6 +144,26 @@ AbstractTask::UpdateStatsDistances(const GeoPoint &location,
       stats.distance_scored = ScanDistanceScored(location);
   } else
     stats.distance_scored = fixed_zero;
+}
+
+static void
+Copy(DistanceStat &stat, const GlideResult &solution)
+{
+  if (solution.IsDefined())
+    stat.set_distance(solution.vector.distance);
+  else
+    stat.Reset();
+}
+
+static void
+CalculatePirker(DistanceStat &pirker, const DistanceStat &planned,
+                const DistanceStat &remaining_effective)
+{
+  if (planned.IsDefined() && remaining_effective.IsDefined())
+    pirker.set_distance(planned.get_distance() -
+                        remaining_effective.get_distance());
+  else
+    pirker.Reset();
 }
 
 void
@@ -166,28 +191,18 @@ AbstractTask::UpdateGlideSolutions(const AircraftState &state)
                          stats.current_leg.solution_planned,
                          stats.total.remaining_effective,
                          stats.current_leg.remaining_effective,
-                         stats.total.solution_remaining.time_elapsed,
-                         stats.current_leg.solution_remaining.time_elapsed);
+                         stats.total.solution_remaining,
+                         stats.current_leg.solution_remaining);
 
-  stats.total.pirker.set_distance(
-      stats.total.planned.get_distance() -
-      stats.total.remaining_effective.get_distance());
+  CalculatePirker(stats.total.pirker, stats.total.planned,
+                  stats.total.remaining_effective);
 
-  stats.current_leg.pirker.set_distance(
-      stats.current_leg.planned.get_distance() -
-      stats.current_leg.remaining_effective.get_distance());
+  CalculatePirker(stats.current_leg.pirker, stats.current_leg.planned,
+                  stats.current_leg.remaining_effective);
 
-  if (stats.current_leg.solution_remaining.IsDefined())
-    stats.current_leg.remaining.set_distance(
-        stats.current_leg.solution_remaining.vector.distance);
-
-  if (stats.current_leg.solution_travelled.IsDefined())
-    stats.current_leg.travelled.set_distance(
-        stats.current_leg.solution_travelled.vector.distance);
-
-  if (stats.current_leg.solution_planned.IsDefined())
-    stats.current_leg.planned.set_distance(
-        stats.current_leg.solution_planned.vector.distance);
+  Copy(stats.current_leg.remaining, stats.current_leg.solution_remaining);
+  Copy(stats.current_leg.travelled, stats.current_leg.solution_travelled);
+  Copy(stats.current_leg.planned, stats.current_leg.solution_planned);
 
   stats.total.gradient = ::AngleToGradient(CalcGradient(state));
   stats.current_leg.gradient = ::AngleToGradient(CalcLegGradient(state));
@@ -274,7 +289,7 @@ AbstractTask::CalcLegGradient(const AircraftState &aircraft) const
     return fixed_zero;
 
   // Get the distance to the next turnpoint
-  const fixed d = tp->GetVectorRemaining(aircraft).distance;
+  const fixed d = tp->GetVectorRemaining(aircraft.location).distance;
   if (!d)
     return fixed_zero;
 

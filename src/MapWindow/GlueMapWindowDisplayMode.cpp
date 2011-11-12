@@ -211,9 +211,9 @@ GlueMapWindow::UpdateScreenAngle()
           settings.circling_orientation : settings.cruise_orientation;
 
   if (orientation == TARGETUP &&
-      calculated.task_stats.current_leg.solution_remaining.IsDefined())
+      calculated.task_stats.current_leg.vector_remaining.IsValid())
     visible_projection.SetScreenAngle(calculated.task_stats.current_leg.
-                                      solution_remaining.vector.bearing);
+                                      vector_remaining.bearing);
   else if (orientation == NORTHUP || !basic.track_available)
     visible_projection.SetScreenAngle(Angle::Zero());
   else

@@ -727,18 +727,22 @@ OrderedTask::GlideSolutionPlanned(const AircraftState &aircraft,
                                     GlideResult &leg,
                                     DistanceStat &total_remaining_effective,
                                     DistanceStat &leg_remaining_effective,
-                                    const fixed total_t_elapsed,
-                                    const fixed leg_t_elapsed)
+                                    const GlideResult &solution_remaining_total,
+                                    const GlideResult &solution_remaining_leg)
 {
   TaskMacCreadyTotal tm(task_points, active_task_point, glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution(aircraft);
 
-  total_remaining_effective.set_distance(
-      tm.effective_distance(fixed(total_t_elapsed)));
+  if (solution_remaining_total.IsOk())
+    total_remaining_effective.set_distance(tm.effective_distance(solution_remaining_total.time_elapsed));
+  else
+    total_remaining_effective.Reset();
 
-  leg_remaining_effective.set_distance(
-      tm.effective_leg_distance(fixed(leg_t_elapsed)));
+  if (solution_remaining_leg.IsOk())
+    leg_remaining_effective.set_distance(tm.effective_leg_distance(solution_remaining_leg.time_elapsed));
+  else
+    leg_remaining_effective.Reset();
 }
 
 // Auxiliary glide functions
@@ -825,7 +829,7 @@ OrderedTask::CalcGradient(const AircraftState &state) const
   fixed distance = fixed_zero;
   for (auto i = task_points.cbegin(), end = task_points.cend(); i != end; ++i)
     // Sum up the leg distances
-    distance += (*i)->GetVectorRemaining(state).distance;
+    distance += (*i)->GetVectorRemaining(state.location).distance;
 
   if (!distance)
     return fixed_zero;
@@ -1407,8 +1411,10 @@ OrderedTask::update_summary(TaskSummary& ordered_summary) const
     }
     ordered_summary.append(tsp);
   }
-  ordered_summary.update(stats.total.remaining.get_distance(), 
-                         stats.total.planned.get_distance());
+
+  if (stats.total.remaining.IsDefined() && stats.total.planned.IsDefined())
+    ordered_summary.update(stats.total.remaining.get_distance(),
+                           stats.total.planned.get_distance());
 }
 
 unsigned 

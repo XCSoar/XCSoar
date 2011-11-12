@@ -61,6 +61,9 @@ GetCruiseEfficiency(void)
 static void
 RefreshCalculator(void)
 {
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+
   WndProperty* wp;
 
   // update outputs
@@ -68,15 +71,15 @@ RefreshCalculator(void)
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat((
-        XCSoarInterface::Calculated().common_stats.task_time_remaining +
-        XCSoarInterface::Calculated().common_stats.task_time_elapsed) / 60);
+        common_stats.task_time_remaining +
+        common_stats.task_time_elapsed) / 60);
     wp->RefreshDisplay();
   }
 
   // update outputs
   wp = (WndProperty*)wf->FindByName(_T("prpAATTime"));
   if (wp) {
-    if (XCSoarInterface::Calculated().task_stats.has_targets) {
+    if (task_stats.has_targets) {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
       df.SetAsFloat(
           protected_task_manager->GetOrderedTaskBehaviour().aat_min_time / 60);
@@ -86,8 +89,8 @@ RefreshCalculator(void)
     }
   }
 
-  fixed rPlanned = XCSoarInterface::Calculated().task_stats.total.solution_planned.IsDefined()
-    ? XCSoarInterface::Calculated().task_stats.total.solution_planned.vector.distance
+  fixed rPlanned = task_stats.total.solution_planned.IsDefined()
+    ? task_stats.total.solution_planned.vector.distance
     : fixed_zero;
 
   wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
@@ -117,8 +120,8 @@ RefreshCalculator(void)
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp != NULL && positive(rPlanned)) {
     wp->RefreshDisplay();
-    fixed rMax = XCSoarInterface::Calculated().task_stats.distance_max;
-    fixed rMin = XCSoarInterface::Calculated().task_stats.distance_min;
+    fixed rMax = task_stats.distance_max;
+    fixed rMin = task_stats.distance_min;
     fixed range = (fixed_two * (rPlanned - rMin) / (rMax - rMin)) - fixed_one;
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(range * fixed(100));
@@ -134,20 +137,22 @@ RefreshCalculator(void)
   }
   */
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
-  if (wp) {
+  if (task_stats.total.remaining_effective.IsDefined()) {
+    wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
+    assert(wp != NULL);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(Units::ToUserTaskSpeed(
-        XCSoarInterface::Calculated().task_stats.total.remaining_effective.get_speed()));
+        task_stats.total.remaining_effective.get_speed()));
     df.SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
-  if (wp) {
+  if (task_stats.total.travelled.IsDefined()) {
+    wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
+    assert(wp != NULL);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(Units::ToUserTaskSpeed(
-        XCSoarInterface::Calculated().task_stats.total.travelled.get_speed()));
+        task_stats.total.travelled.get_speed()));
     df.SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();
   }
@@ -155,7 +160,7 @@ RefreshCalculator(void)
   wp = (WndProperty*)wf->FindByName(_T("prpCruiseEfficiency"));
   if (wp) {
     DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
-    df->Set(XCSoarInterface::Calculated().task_stats.cruise_efficiency * fixed(100));
+    df->Set(task_stats.cruise_efficiency * fixed(100));
     wp->RefreshDisplay();
   }
 }

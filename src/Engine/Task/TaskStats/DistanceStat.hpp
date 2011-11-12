@@ -32,6 +32,8 @@
 #include "Util/AvFilter.hpp"
 #include "Util/DiffFilter.hpp"
 
+#include <assert.h>
+
 /**
  * Simple distance statistics with derived values (speed, incremental speed)
  * Incremental speeds track the short-term variation of distance with time,
@@ -51,9 +53,13 @@ protected:
 
 public:
   void Reset() {
-    distance = fixed_zero;
+    distance = fixed_minus_one;
     speed = fixed_zero;
     speed_incremental = fixed_zero;
+  }
+
+  bool IsDefined() const {
+    return !negative(distance);
   }
 
   /**
@@ -71,6 +77,8 @@ public:
    * @return Distance value (m)
    */
   fixed get_distance() const {
+    assert(IsDefined());
+
     return distance;
   }
 
@@ -80,6 +88,8 @@ public:
    * @return Speed (m/s)
    */
   fixed get_speed() const {
+    assert(IsDefined());
+
     return speed;
   }
 
@@ -90,15 +100,10 @@ public:
    * @return Speed incremental (m/s)
    */
   fixed get_speed_incremental() const {
+    assert(IsDefined());
+
     return speed_incremental;
   }
-
-  /**
-   * Calculate bulk speed (distance/time), abstract base method
-   *
-   * @param es ElementStat (used for time access)
-   */
-  void calc_speed(fixed time);
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 
@@ -122,6 +127,13 @@ private:
 public:
   /** Constructor; initialises all to zero */
   DistanceStatComputer(const bool is_positive=true);
+
+  /**
+   * Calculate bulk speed (distance/time), abstract base method
+   *
+   * @param es ElementStat (used for time access)
+   */
+  void calc_speed(DistanceStat &data, fixed time);
 
   /**
    * Calculate incremental speed from previous step.

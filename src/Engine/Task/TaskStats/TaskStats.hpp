@@ -72,6 +72,13 @@ public:
   /** Margin for final glide flight mode transition (m) */
   int flight_mode_height_margin;
 
+  /**
+   * Check whether get_pirker_speed() is available.
+   */
+  bool IsPirkerSpeedAvailable() const {
+    return total.pirker.IsDefined();
+  }
+
   /** Incremental task speed adjusted for mc, target changes */
   fixed get_pirker_speed() const {
     return total.pirker.get_speed_incremental();

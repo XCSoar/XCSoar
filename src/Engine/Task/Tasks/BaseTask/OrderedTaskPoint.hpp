@@ -183,10 +183,10 @@ public:
    *
    * (This uses memento values)
    *
-   * @param state Aircraft state
+   * @param reference the aircraft position
    * @return Vector remaining to this taskpoint (or next planned)
    */
-  const GeoVector GetVectorRemaining(const AircraftState &state) const {
+  const GeoVector GetVectorRemaining(const GeoPoint &reference) const {
     return vector_remaining;
   }
 
@@ -199,7 +199,7 @@ public:
    *
    * @return Vector from this taskpoint to aircraft (or next planned)
    */
-  const GeoVector GetVectorTravelled(const AircraftState &) const {
+  const GeoVector GetVectorTravelled() const {
     return vector_travelled;
   }
 

@@ -87,8 +87,9 @@ GlideComputerStats::DoLogging(const MoreData &basic,
       flightstats.AddAltitude(calculated.flight.flight_time,
                               basic.nav_altitude);
 
-    flightstats.AddTaskSpeed(calculated.flight.flight_time,
-                             calculated.task_stats.get_pirker_speed());
+    if (calculated.task_stats.IsPirkerSpeedAvailable())
+      flightstats.AddTaskSpeed(calculated.flight.flight_time,
+                               calculated.task_stats.get_pirker_speed());
   }
 
   return true;

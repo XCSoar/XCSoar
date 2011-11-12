@@ -27,6 +27,8 @@
 void
 ElementStat::Reset()
 {
+  vector_remaining = GeoVector::Invalid();
+
   time_started = fixed_minus_one;
   time_elapsed = time_remaining = time_planned = fixed_zero;
   gradient = fixed_zero;
@@ -74,11 +76,11 @@ ElementStatComputer::Reset(ElementStat &data)
 void 
 ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed dt)
 {
-  data.remaining_effective.calc_speed(data.time_remaining);
-  data.remaining.calc_speed(data.time_remaining);
-  data.planned.calc_speed(data.time_planned);
-  data.travelled.calc_speed(data.time_elapsed);
-  data.pirker.calc_speed(data.time_elapsed);
+  remaining_effective.calc_speed(data.remaining_effective, data.time_remaining);
+  remaining.calc_speed(data.remaining, data.time_remaining);
+  planned.calc_speed(data.planned, data.time_planned);
+  travelled.calc_speed(data.travelled, data.time_elapsed);
+  pirker.calc_speed(data.pirker, data.time_elapsed);
 
   if (!initialised) {
     if (positive(dt) && data.time_elapsed > fixed(15))

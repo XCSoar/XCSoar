@@ -48,11 +48,11 @@ public:
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb);
 
-  const GeoVector GetVectorRemaining(const AircraftState &) const;
+  const GeoVector GetVectorRemaining(const GeoPoint &reference) const;
 
   const GeoVector GetVectorPlanned() const;
 
-  const GeoVector GetVectorTravelled(const AircraftState &) const;
+  const GeoVector GetVectorTravelled() const;
 
   bool HasEntered() const {
     return false;
