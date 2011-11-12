@@ -53,6 +53,7 @@ public:
   void Reset() {
     distance = fixed_zero;
     speed = fixed_zero;
+    speed_incremental = fixed_zero;
   }
 
   /**
