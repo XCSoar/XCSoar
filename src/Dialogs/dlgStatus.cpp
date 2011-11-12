@@ -486,6 +486,7 @@ dlgStatusShowModal(int start_page)
 
   wTabBar = ((TabBarControl *)wf->FindByName(_T("TabBar")));
   assert(wTabBar != NULL);
+  wTabBar->SetPageFlippedCallback(SetTitle);
 
   nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().location,
                                             fixed(100000));
@@ -527,19 +528,19 @@ dlgStatusShowModal(int start_page)
   assert(wTimes);
 
   wTabBar->AddClient(wFlight, _T("Flight"), false, FlightIcon, NULL,
-                     OnTabUpdate, SetTitle);
+                     OnTabUpdate);
 
   wTabBar->AddClient(wSystem, _T("System"), false, SystemIcon, NULL,
-                     OnTabUpdate, SetTitle);
+                     OnTabUpdate);
 
   wTabBar->AddClient(wTask, _T("Task"), false, TaskIcon, NULL,
-                     OnTabUpdate, SetTitle);
+                     OnTabUpdate);
 
   wTabBar->AddClient(wRules, _T("Rules"), false, RulesIcon, NULL,
-                     OnTabUpdate, SetTitle);
+                     OnTabUpdate);
 
   wTabBar->AddClient(wTimes, _T("Times"), false, TimesIcon, NULL,
-                     OnTabUpdate, SetTitle);
+                     OnTabUpdate);
 
   /* restore previous page */
 
