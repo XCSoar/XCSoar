@@ -137,7 +137,8 @@ TaskManager::update_common_stats_times(const AircraftState &state)
         max(fixed_zero, task_ordered.get_ordered_task_behaviour().aat_min_time -
                         task_stats.total.time_elapsed);
 
-    if (positive(common_stats.aat_time_remaining))
+    if (task_stats.total.remaining.IsDefined() &&
+        positive(common_stats.aat_time_remaining))
       common_stats.aat_speed_remaining =
           fixed(task_stats.total.remaining.get_distance()) /
           common_stats.aat_time_remaining;

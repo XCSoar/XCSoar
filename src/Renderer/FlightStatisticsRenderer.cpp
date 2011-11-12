@@ -753,11 +753,12 @@ void
 FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) const
 {
   const CommonStats &common = derived.common_stats;
-  fixed d_remaining = derived.task_stats.total.remaining.get_distance();
 
-  if (!common.ordered_valid) {
+  if (!common.ordered_valid ||
+      !derived.task_stats.total.remaining.IsDefined()) {
     _tcscpy(sTmp, _("No task"));
   } else {
+    const fixed d_remaining = derived.task_stats.total.remaining.get_distance();
     TCHAR timetext1[100];
     TCHAR timetext2[100];
     if (common.ordered_has_targets) {

@@ -137,8 +137,9 @@ RefreshCalculator(void)
   }
   */
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
-  if (wp) {
+  if (task_stats.total.remaining_effective.IsDefined()) {
+    wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
+    assert(wp != NULL);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(Units::ToUserTaskSpeed(
         task_stats.total.remaining_effective.get_speed()));
@@ -146,8 +147,9 @@ RefreshCalculator(void)
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
-  if (wp) {
+  if (task_stats.total.travelled.IsDefined()) {
+    wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
+    assert(wp != NULL);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(Units::ToUserTaskSpeed(
         task_stats.total.travelled.get_speed()));

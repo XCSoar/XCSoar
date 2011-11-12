@@ -419,33 +419,42 @@ UpdateValuesTask(void)
   Units::TimeToTextHHMMSigned(Temp, task_stats.total.time_remaining);
   wp->SetText(Temp);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskDistance"));
-  assert(wp != NULL);
-  _stprintf(Temp, _T("%.0f %s"), (double)Units::ToUserDistance(
-            task_stats.total.planned.get_distance()),
-            Units::GetDistanceName());
-  wp->SetText(Temp);
+  if (task_stats.total.planned.IsDefined()) {
+    wp = (WndProperty*)wf->FindByName(_T("prpTaskDistance"));
+    assert(wp != NULL);
+    _stprintf(Temp, _T("%.0f %s"),
+              (double)Units::ToUserDistance(task_stats.total.planned.get_distance()),
+              Units::GetDistanceName());
+    wp->SetText(Temp);
+  }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpRemainingDistance"));
-  assert(wp != NULL);
-  _stprintf(Temp, _T("%.0f %s"), (double)Units::ToUserDistance(
-            task_stats.total.remaining.get_distance()),
-            Units::GetDistanceName());
-  wp->SetText(Temp);
+  if (task_stats.total.remaining.IsDefined()) {
+    wp = (WndProperty*)wf->FindByName(_T("prpRemainingDistance"));
+    assert(wp != NULL);
+    _stprintf(Temp, _T("%.0f %s"),
+              (double)Units::ToUserDistance(task_stats.total.remaining.get_distance()),
+              Units::GetDistanceName());
+    wp->SetText(Temp);
+  }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpEstimatedSpeed"));
-  assert(wp != NULL);
-  _stprintf(Temp, _T("%.0f %s"), (double)Units::ToUserTaskSpeed(
-            task_stats.total.planned.get_speed()),
-            Units::GetTaskSpeedName());
-  wp->SetText(Temp);
+  if (task_stats.total.planned.IsDefined()) {
+    wp = (WndProperty*)wf->FindByName(_T("prpEstimatedSpeed"));
+    assert(wp != NULL);
+    if (task_stats.total.planned.IsDefined())
+      _stprintf(Temp, _T("%.0f %s"),
+                (double)Units::ToUserTaskSpeed(task_stats.total.planned.get_speed()),
+                Units::GetTaskSpeedName());
+    wp->SetText(Temp);
+  }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAverageSpeed"));
-  assert(wp != NULL);
-  _stprintf(Temp, _T("%.0f %s"), (double)Units::ToUserTaskSpeed(
-            task_stats.total.travelled.get_speed()),
-            Units::GetTaskSpeedName());
-  wp->SetText(Temp);
+  if (task_stats.total.travelled.IsDefined()) {
+    wp = (WndProperty*)wf->FindByName(_T("prpAverageSpeed"));
+    assert(wp != NULL);
+    _stprintf(Temp, _T("%.0f %s"),
+              (double)Units::ToUserTaskSpeed(task_stats.total.travelled.get_speed()),
+              Units::GetTaskSpeedName());
+    wp->SetText(Temp);
+  }
 }
 
 static void

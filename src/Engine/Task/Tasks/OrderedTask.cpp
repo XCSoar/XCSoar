@@ -1407,8 +1407,10 @@ OrderedTask::update_summary(TaskSummary& ordered_summary) const
     }
     ordered_summary.append(tsp);
   }
-  ordered_summary.update(stats.total.remaining.get_distance(), 
-                         stats.total.planned.get_distance());
+
+  if (stats.total.remaining.IsDefined() && stats.total.planned.IsDefined())
+    ordered_summary.update(stats.total.remaining.get_distance(),
+                           stats.total.planned.get_distance());
 }
 
 unsigned 

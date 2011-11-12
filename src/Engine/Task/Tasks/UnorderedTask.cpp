@@ -134,20 +134,25 @@ void
 UnorderedTask::scan_distance_minmax(const GeoPoint &location, bool full,
                                     fixed *dmin, fixed *dmax)
 {
-  *dmin = stats.total.remaining.get_distance();
-  *dmax = stats.total.remaining.get_distance();
+  *dmin = *dmax = stats.total.remaining.IsDefined()
+    ? stats.total.remaining.get_distance()
+    : fixed_zero;
 }
 
 fixed 
 UnorderedTask::scan_distance_nominal()
 {
-  return fixed(stats.total.remaining.get_distance());
+  return stats.total.remaining.IsDefined()
+    ? stats.total.remaining.get_distance()
+    : fixed_zero;
 }
 
 fixed
 UnorderedTask::scan_distance_planned()
 {
-  return fixed(stats.total.remaining.get_distance());
+  return stats.total.remaining.IsDefined()
+    ? stats.total.remaining.get_distance()
+    : fixed_zero;
 }
 
 fixed 

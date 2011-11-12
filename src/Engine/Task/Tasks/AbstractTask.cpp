@@ -147,14 +147,19 @@ Copy(DistanceStat &stat, const GlideResult &solution)
 {
   if (solution.IsDefined())
     stat.set_distance(solution.vector.Distance);
+  else
+    stat.Reset();
 }
 
 static void
 CalculatePirker(DistanceStat &pirker, const DistanceStat &planned,
                 const DistanceStat &remaining_effective)
 {
-  pirker.set_distance(planned.get_distance() -
-                      remaining_effective.get_distance());
+  if (planned.IsDefined() && remaining_effective.IsDefined())
+    pirker.set_distance(planned.get_distance() -
+                        remaining_effective.get_distance());
+  else
+    pirker.Reset();
 }
 
 void

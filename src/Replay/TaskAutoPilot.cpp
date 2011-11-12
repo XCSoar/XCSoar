@@ -269,7 +269,7 @@ TaskAutoPilot::far_from_target(const TaskAccessor& task, const AircraftState& st
 {
   // are we considered close to the target?
 
-  if (task.is_empty())
+  if (task.is_empty() || !task.leg_stats().remaining.IsDefined())
     return w[0].distance(state.location)>state.ground_speed;
 
   bool d_far = (task.leg_stats().remaining.get_distance() > fixed(100));

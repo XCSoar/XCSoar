@@ -315,7 +315,8 @@ InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
   if (!task_stats.task_valid ||
-      !task_stats.current_leg.solution_remaining.IsDefined()) {
+      !task_stats.current_leg.solution_remaining.IsDefined() ||
+      !task_stats.total.remaining.IsDefined()) {
     infobox.SetInvalid();
     return;
   }
@@ -415,7 +416,7 @@ void
 InfoBoxContentTaskSpeed::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  if (!task_stats.task_valid || !task_stats.total.travelled.IsDefined()) {
     infobox.SetInvalid();
     return;
   }
@@ -432,7 +433,8 @@ void
 InfoBoxContentTaskSpeedAchieved::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  if (!task_stats.task_valid ||
+      !task_stats.total.remaining_effective.IsDefined()) {
     infobox.SetInvalid();
     return;
   }
@@ -449,7 +451,7 @@ void
 InfoBoxContentTaskSpeedInstant::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  if (!task_stats.task_valid || !task_stats.IsPirkerSpeedAvailable()) {
     infobox.SetInvalid();
     return;
   }
@@ -633,7 +635,8 @@ InfoBoxContentTaskAADistance::Update(InfoBoxWindow &infobox)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid) {
+      !task_stats.task_valid ||
+      !task_stats.total.planned.IsDefined()) {
     infobox.SetInvalid();
     return;
   }
@@ -766,7 +769,8 @@ InfoBoxContentNextETEVMG::Update(InfoBoxWindow &infobox)
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
-  if (!basic.ground_speed_available) {
+  if (!basic.ground_speed_available || task_stats.task_valid ||
+      !task_stats.current_leg.remaining.IsDefined()) {
     infobox.SetInvalid();
     return;
   }
@@ -796,7 +800,8 @@ InfoBoxContentFinalETEVMG::Update(InfoBoxWindow &infobox)
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
-  if (!basic.ground_speed_available) {
+  if (!basic.ground_speed_available || task_stats.task_valid ||
+      task_stats.total.remaining.IsDefined()) {
     infobox.SetInvalid();
     return;
   }

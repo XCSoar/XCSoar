@@ -285,10 +285,13 @@ RefreshCalculator()
   }
 
   const ElementStat &total = CommonInterface::Calculated().task_stats.total;
-  LoadFormProperty(*wf, _T("prpSpeedRemaining"), ugTaskSpeed,
-                   total.remaining_effective.get_speed());
-  LoadOptionalFormProperty(*wf, _T("prpSpeedAchieved"), ugTaskSpeed,
-                           total.travelled.get_speed());
+  if (total.remaining_effective.IsDefined())
+    LoadFormProperty(*wf, _T("prpSpeedRemaining"), ugTaskSpeed,
+                     total.remaining_effective.get_speed());
+
+  if (total.travelled.IsDefined())
+    LoadOptionalFormProperty(*wf, _T("prpSpeedAchieved"), ugTaskSpeed,
+                             total.travelled.get_speed());
 }
 
 static void
