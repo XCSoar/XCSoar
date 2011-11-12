@@ -126,18 +126,20 @@ void
 TaskManager::update_common_stats_times(const AircraftState &state)
 {
   if (task_ordered.TaskSize() > 1) {
-    common_stats.task_started = task_ordered.GetStats().task_started;
-    common_stats.task_finished = task_ordered.GetStats().task_finished;
+    const TaskStats &task_stats = task_ordered.GetStats();
+
+    common_stats.task_started = task_stats.task_started;
+    common_stats.task_finished = task_stats.task_finished;
 
     common_stats.ordered_has_targets = task_ordered.has_targets();
 
     common_stats.aat_time_remaining =
         max(fixed_zero, task_ordered.get_ordered_task_behaviour().aat_min_time -
-                        task_ordered.GetStats().total.time_elapsed);
+                        task_stats.total.time_elapsed);
 
     if (positive(common_stats.aat_time_remaining))
       common_stats.aat_speed_remaining =
-          fixed(task_ordered.GetStats().total.remaining.get_distance()) /
+          fixed(task_stats.total.remaining.get_distance()) /
           common_stats.aat_time_remaining;
     else
       common_stats.aat_speed_remaining = -fixed_one;
@@ -145,19 +147,15 @@ TaskManager::update_common_stats_times(const AircraftState &state)
     fixed aat_min_time = task_ordered.get_ordered_task_behaviour().aat_min_time;
 
     if (positive(aat_min_time)) {
-      common_stats.aat_speed_max =
-          task_ordered.GetStats().distance_max / aat_min_time;
-      common_stats.aat_speed_min =
-          task_ordered.GetStats().distance_min / aat_min_time;
+      common_stats.aat_speed_max = task_stats.distance_max / aat_min_time;
+      common_stats.aat_speed_min = task_stats.distance_min / aat_min_time;
     } else {
       common_stats.aat_speed_max = -fixed_one;
       common_stats.aat_speed_min = -fixed_one;
     }
 
-    common_stats.task_time_remaining =
-        task_ordered.GetStats().total.time_remaining;
-    common_stats.task_time_elapsed =
-        task_ordered.GetStats().total.time_elapsed;
+    common_stats.task_time_remaining = task_stats.total.time_remaining;
+    common_stats.task_time_elapsed = task_stats.total.time_elapsed;
 
     const fixed start_max_height =
         fixed(task_ordered.get_ordered_task_behaviour().start_max_height) +
