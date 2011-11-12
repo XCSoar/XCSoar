@@ -27,6 +27,8 @@
 void
 ElementStat::Reset()
 {
+  vector_remaining = GeoVector::Invalid();
+
   time_started = fixed_minus_one;
   time_elapsed = time_remaining = time_planned = fixed_zero;
   gradient = fixed_zero;

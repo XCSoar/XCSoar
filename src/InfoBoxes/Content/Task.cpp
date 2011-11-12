@@ -41,17 +41,15 @@ void
 InfoBoxContentBearing::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  const GlideResult &solution_remaining =
-    task_stats.current_leg.solution_remaining;
-  if (!task_stats.task_valid ||
-      !solution_remaining.IsDefined() ||
-      solution_remaining.vector.Distance <= fixed(10)) {
+  const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
+  if (!task_stats.task_valid || !vector_remaining.IsValid() ||
+      vector_remaining.Distance <= fixed(10)) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  infobox.SetValue(solution_remaining.vector.Bearing, _T("T"));
+  infobox.SetValue(vector_remaining.Bearing, _T("T"));
 }
 
 void
@@ -59,16 +57,14 @@ InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  const GlideResult &solution_remaining =
-    task_stats.current_leg.solution_remaining;
+  const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
   if (!basic.track_available || !task_stats.task_valid ||
-      !solution_remaining.IsOk() ||
-      solution_remaining. vector.Distance <= fixed(10)) {
+      !vector_remaining.IsValid() || vector_remaining.Distance <= fixed(10)) {
     infobox.SetInvalid();
     return;
   }
 
-  Angle Value = solution_remaining.vector.Bearing - basic.track;
+  Angle Value = vector_remaining.Bearing - basic.track;
   SetValueBearingDifference(infobox, Value);
 }
 
@@ -103,15 +99,15 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GlideResult &solution_remaining =
     task_stats.current_leg.solution_remaining;
+  const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
   if (!basic.track_available || !task_stats.task_valid ||
-      !solution_remaining.IsDefined() ||
-      solution_remaining.vector.Distance <= fixed(10)) {
+      !vector_remaining.IsValid()) {
     infobox.SetValueInvalid();
     return;
   }
 
   // Set Value
-  Angle Value = solution_remaining.vector.Bearing - basic.track;
+  Angle Value = vector_remaining.Bearing - basic.track;
   SetValueBearingDifference(infobox, Value);
 
   // Set Color (blue/black)
@@ -153,19 +149,17 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
 
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  const GlideResult &solution_remaining =
-    task_stats.current_leg.solution_remaining;
-  if (!task_stats.task_valid ||
-      !solution_remaining.IsDefined()) {
+  const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
+  if (!task_stats.task_valid || !vector_remaining.IsValid()) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromDistance(infobox, solution_remaining.vector.Distance);
+  SetValueFromDistance(infobox, vector_remaining.Distance);
 
   if (basic.track_available) {
-    Angle bd = solution_remaining.vector.Bearing - basic.track;
+    Angle bd = vector_remaining.Bearing - basic.track;
     SetCommentBearingDifference(infobox, bd);
   } else
     infobox.SetCommentInvalid();
@@ -315,7 +309,7 @@ InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
   if (!task_stats.task_valid ||
-      !task_stats.current_leg.solution_remaining.IsDefined() ||
+      !task_stats.current_leg.vector_remaining.IsValid() ||
       !task_stats.total.remaining.IsDefined()) {
     infobox.SetInvalid();
     return;
@@ -324,9 +318,9 @@ InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   // Set Value
-  SetValueFromDistance(infobox, common_stats.task_finished ?
-                                task_stats.current_leg.solution_remaining.vector.Distance :
-                                task_stats.total.remaining.get_distance());
+  SetValueFromDistance(infobox, common_stats.task_finished
+                       ? task_stats.current_leg.vector_remaining.Distance
+                       : task_stats.total.remaining.get_distance());
 }
 
 void

@@ -63,6 +63,14 @@ struct GeoVector {
    */
   GeoVector(const GeoPoint &source, const GeoPoint &target);
 
+  /**
+   * Create an invalid instance.
+   */
+  gcc_const
+  static GeoVector Invalid() {
+    return GeoVector(fixed_minus_one);
+  }
+
   /** Adds the distance component of a geovector */
   GeoVector& operator+= (const GeoVector &g1) {
     Distance += g1.Distance;

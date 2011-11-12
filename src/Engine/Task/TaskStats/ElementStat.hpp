@@ -22,6 +22,7 @@
 #ifndef ELEMENT_STAT_HPP
 #define ELEMENT_STAT_HPP
 
+#include "Navigation/Geometry/GeoVector.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 #ifdef DO_PRINT
 #include <iostream>
@@ -37,6 +38,13 @@ struct AircraftState;
  */
 struct ElementStat
 {
+  /**
+   * The remaining vector.  Always check GeoVector::IsValid() before
+   * using this attribute.  This is only implemented for one leg
+   * (TaskStats::current_leg).
+   */
+  GeoVector vector_remaining;
+
   /** Time (s) this element was started */
   fixed time_started;
   /** Time (s) since element was started */
