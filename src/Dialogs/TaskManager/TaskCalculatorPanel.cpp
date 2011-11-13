@@ -216,21 +216,9 @@ pnlTaskCalculator::OnCruiseEfficiencyData(DataField *Sender, DataField::DataAcce
   switch (Mode) {
   case DataField::daSpecial:
     GetCruiseEfficiency();
-#ifdef OLD_TASK
-    GlidePolar::SetCruiseEfficiency(cruise_efficiency);
-    if (fabs(cruise_efficiency-clast) > fixed_one / 100) {
-      RefreshCalculator();
-    }
-#endif
     break;
   case DataField::daChange:
     cruise_efficiency = df.GetAsFixed() / 100;
-#ifdef OLD_TASK
-    GlidePolar::SetCruiseEfficiency(cruise_efficiency);
-    if (fabs(cruise_efficiency-clast) > fixed_one / 100) {
-      RefreshCalculator();
-    }
-#endif
     break;
   }
 }
@@ -309,10 +297,6 @@ pnlTaskCalculator::Load(gcc_unused SingleWindow &parent, TabBarControl* _wTabBar
   assert(wCalc);
 
   lazy_loaded = false;
-
-#ifdef OLD_TASK
-    GlidePolar::SetCruiseEfficiency(CRUISE_EFFICIENCY_enter);
-#endif
 
     return wCalc;
 }
