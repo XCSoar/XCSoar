@@ -79,6 +79,12 @@ WaypointGlue::IsWritable(int file_number)
           MatchesExtension(file, _T(".xcw")));
 }
 
+bool
+WaypointGlue::IsWritable()
+{
+  return IsWritable(1) || IsWritable(2) || IsWritable(3);
+}
+
 /**
  * This functions checks if the home and teamcode waypoint
  * indices exist and if necessary tries to find new ones in the waypoint list
