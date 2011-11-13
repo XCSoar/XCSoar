@@ -193,6 +193,7 @@ TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
     if (buttons[GetCurrentPage()]->ReClickFunction)
       buttons[GetCurrentPage()]->ReClickFunction();
 
+    pager.ClickPage(GetCurrentPage());
   } else {
     if (!setting_up && buttons[GetCurrentPage()]->PreHideFunction) {
       if (!buttons[GetCurrentPage()]->PreHideFunction())
@@ -211,7 +212,13 @@ TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
     }
 
     if (Continue) {
-      pager.SetCurrentPage(i);
+      if (_EventType == MouseOrButton)
+        Continue = pager.ClickPage(i);
+      else
+        pager.SetCurrentPage(i);
+    }
+
+    if (Continue) {
       if (buttons[i]->PostShowFunction) {
         buttons[i]->PostShowFunction();
       }
