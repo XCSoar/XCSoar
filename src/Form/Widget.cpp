@@ -41,6 +41,11 @@ NullWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
 }
 
+void
+NullWidget::Unprepare()
+{
+}
+
 bool
 NullWidget::Save()
 {

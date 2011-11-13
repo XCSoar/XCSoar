@@ -63,6 +63,13 @@ public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) = 0;
 
   /**
+   * Called before a Widget is going to be deleted.  Unlike the
+   * destructor, this method will only be called if Prepare() has been
+   * called previously.
+   */
+  virtual void Unprepare() = 0;
+
+  /**
    * Save data that was modified by the user.  Will only be called if
    * Prepare() has been invoked previously.  Although this is likely
    * to be called just before destroying the widget, this should not
@@ -114,6 +121,7 @@ public:
 
   virtual void Initialise(ContainerWindow &parent, const PixelRect &rc);
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Unprepare();
   virtual bool Save();
   virtual bool Click();
   virtual void ReClick();
