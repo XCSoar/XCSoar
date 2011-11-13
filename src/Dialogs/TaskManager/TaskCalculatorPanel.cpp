@@ -25,6 +25,7 @@ Copyright_License {
 #include "Internal.hpp"
 #include "Dialogs/Task.hpp"
 #include "Dialogs/XML.hpp"
+#include "Dialogs/dlgTools.h"
 #include "Interface.hpp"
 #include "Protection.hpp"
 #include "Units/Units.hpp"
@@ -44,27 +45,18 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Language/Language.hpp"
 
-#include <math.h>
-#include <algorithm>
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static TaskCalculatorPanel *instance;
 
-using std::min;
-using std::max;
-
-static WndForm *wf = NULL;
-static TabBarControl* wTabBar = NULL;
-static fixed emc;
-static fixed cruise_efficiency;
-static bool lazy_loaded = false;
-static bool* task_modified = NULL;
-
-static void
-GetCruiseEfficiency(void)
+void
+TaskCalculatorPanel::GetCruiseEfficiency()
 {
   cruise_efficiency = XCSoarInterface::Calculated().task_stats.cruise_efficiency;
 }
 
-static void
-RefreshCalculator(void)
+void
+TaskCalculatorPanel::Refresh()
 {
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
@@ -72,7 +64,7 @@ RefreshCalculator(void)
   WndProperty* wp;
 
   // update outputs
-  wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));
+  wp = (WndProperty*)form.FindByName(_T("prpAATEst"));
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat((
@@ -82,7 +74,7 @@ RefreshCalculator(void)
   }
 
   // update outputs
-  wp = (WndProperty*)wf->FindByName(_T("prpAATTime"));
+  wp = (WndProperty*)form.FindByName(_T("prpAATTime"));
   if (wp) {
     if (task_stats.has_targets) {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
@@ -98,7 +90,7 @@ RefreshCalculator(void)
     ? task_stats.total.solution_planned.vector.distance
     : fixed_zero;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
+  wp = (WndProperty*)form.FindByName(_T("prpDistance"));
   if (wp != NULL && positive(rPlanned)) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(Units::ToUserDistance(rPlanned));
@@ -106,7 +98,7 @@ RefreshCalculator(void)
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpMacCready"));
+  wp = (WndProperty*)form.FindByName(_T("prpMacCready"));
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetUnits(Units::GetVerticalSpeedName());
@@ -114,7 +106,7 @@ RefreshCalculator(void)
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpEffectiveMacCready"));
+  wp = (WndProperty*)form.FindByName(_T("prpEffectiveMacCready"));
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetUnits(Units::GetVerticalSpeedName());
@@ -122,7 +114,7 @@ RefreshCalculator(void)
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpRange"));
+  wp = (WndProperty*)form.FindByName(_T("prpRange"));
   if (wp != NULL && positive(rPlanned)) {
     wp->RefreshDisplay();
     fixed rMax = task_stats.distance_max;
@@ -143,7 +135,7 @@ RefreshCalculator(void)
   */
 
   if (task_stats.total.remaining_effective.IsDefined()) {
-    wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
+    wp = (WndProperty*)form.FindByName(_T("prpSpeedRemaining"));
     assert(wp != NULL);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(Units::ToUserTaskSpeed(
@@ -153,7 +145,7 @@ RefreshCalculator(void)
   }
 
   if (task_stats.total.travelled.IsDefined()) {
-    wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
+    wp = (WndProperty*)form.FindByName(_T("prpSpeedAchieved"));
     assert(wp != NULL);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(Units::ToUserTaskSpeed(
@@ -162,7 +154,7 @@ RefreshCalculator(void)
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpCruiseEfficiency"));
+  wp = (WndProperty*)form.FindByName(_T("prpCruiseEfficiency"));
   if (wp) {
     DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
     df->Set(task_stats.cruise_efficiency * fixed(100));
@@ -170,20 +162,20 @@ RefreshCalculator(void)
   }
 }
 
-void
-pnlTaskCalculator::OnTargetClicked(gcc_unused WndButton &Sender)
+static void
+OnTargetClicked(gcc_unused WndButton &Sender)
 {
   dlgTargetShowModal();
 }
 
-void
-pnlTaskCalculator::OnTimerNotify(gcc_unused WndForm &Sender)
+static void
+OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  RefreshCalculator();
+  instance->Refresh();
 }
 
-void
-pnlTaskCalculator::OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
+static void
+OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat *df = (DataFieldFloat *)Sender;
 
@@ -195,19 +187,19 @@ pnlTaskCalculator::OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_
                   XCSoarInterface::Calculated().time_climb;
       df->Set(Units::ToUserVSpeed(MACCREADY));
       ActionInterface::SetMacCready(MACCREADY);
-      RefreshCalculator();
+      instance->Refresh();
     }
     break;
   case DataField::daChange:
     MACCREADY = Units::ToSysVSpeed(df->GetAsFixed());
     ActionInterface::SetMacCready(MACCREADY);
-    RefreshCalculator();
+    instance->Refresh();
     break;
   }
 }
 
-void
-pnlTaskCalculator::OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
+static void
+OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
   fixed clast = CommonInterface::SettingsComputer().glide_polar_task.GetCruiseEfficiency();
@@ -215,43 +207,18 @@ pnlTaskCalculator::OnCruiseEfficiencyData(DataField *Sender, DataField::DataAcce
 
   switch (Mode) {
   case DataField::daSpecial:
-    GetCruiseEfficiency();
+    instance->GetCruiseEfficiency();
     break;
   case DataField::daChange:
-    cruise_efficiency = df.GetAsFixed() / 100;
+    instance->SetCruiseEfficiency(df.GetAsFixed() / 100);
     break;
   }
 }
 
-bool
-pnlTaskCalculator::OnTabPreShow()
+static void
+OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
-  if (!lazy_loaded) {
-    lazy_loaded = true;
-    const GlidePolar& polar = CommonInterface::SettingsComputer().glide_polar_task;
-
-    fixed CRUISE_EFFICIENCY_enter = polar.GetCruiseEfficiency();
-//    fixed MACCREADY_enter = protected_task_manager->get_glide_polar().GetMC();
-
-    emc = XCSoarInterface::Calculated().task_stats.effective_mc;
-
-    cruise_efficiency = CRUISE_EFFICIENCY_enter;
-
-    if (!XCSoarInterface::Calculated().common_stats.ordered_has_targets) {
-      ((WndButton *)wf->FindByName(_T("prpRange")))->hide();
-    }
-    wf->SetTimerNotify(pnlTaskCalculator::OnTimerNotify);
-  }
-
-  RefreshCalculator();
-
-  return true;
-}
-
-void
-pnlTaskCalculator::OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
-{
-  if (*task_modified) {
+  if (instance->IsTaskModified()) {
     const TCHAR* message = _("Calculator excludes unsaved task changes!");
     canvas.select(Fonts::Title);
     const int textheight = canvas.text_height(message);
@@ -269,35 +236,51 @@ pnlTaskCalculator::OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &
                 message);
   }
   else {
-    canvas.clear(wf->GetLook().background_color);
+    canvas.clear(instance->GetLook().background_color);
   }
 }
 
-Window*
-pnlTaskCalculator::Load(gcc_unused SingleWindow &parent, TabBarControl* _wTabBar,
-    WndForm* _wf, bool* _task_modified)
+static gcc_constexpr_data CallBackTableEntry task_calculator_callbacks[] = {
+  DeclareCallBackEntry(OnMacCreadyData),
+  DeclareCallBackEntry(OnTargetClicked),
+  DeclareCallBackEntry(OnCruiseEfficiencyData),
+  DeclareCallBackEntry(OnWarningPaint),
+  DeclareCallBackEntry(NULL)
+};
+
+void
+TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  if (protected_task_manager == NULL)
-    return NULL;
+  assert(protected_task_manager != NULL);
 
-  assert(_wTabBar);
-  wTabBar = _wTabBar;
+  instance = this;
 
-  assert(_wf);
-  wf = _wf;
-
-  assert(_task_modified);
-  task_modified = _task_modified;
-
-  Window *wCalc =
-    LoadWindow(dlgTaskManager::CallBackTable, wf,
-               wTabBar->GetClientAreaWindow(),
-                 Layout::landscape ?
-                 _T("IDR_XML_TASKCALCULATOR_L") : _T("IDR_XML_TASKCALCULATOR"));
-  assert(wCalc);
-
-  lazy_loaded = false;
-
-    return wCalc;
+  LoadWindow(task_calculator_callbacks, parent,
+             Layout::landscape
+             ? _T("IDR_XML_TASKCALCULATOR_L") : _T("IDR_XML_TASKCALCULATOR"));
 }
 
+void
+TaskCalculatorPanel::Show(const PixelRect &rc)
+{
+  const GlidePolar& polar = CommonInterface::SettingsComputer().glide_polar_task;
+
+  cruise_efficiency = polar.GetCruiseEfficiency();
+  emc = XCSoarInterface::Calculated().task_stats.effective_mc;
+
+  if (!XCSoarInterface::Calculated().common_stats.ordered_has_targets)
+      ((WndButton *)form.FindByName(_T("prpRange")))->hide();
+
+  wf.SetTimerNotify(OnTimerNotify);
+
+  Refresh();
+
+  XMLWidget::Show(rc);
+}
+
+void
+TaskCalculatorPanel::Hide()
+{
+  wf.SetTimerNotify(NULL);
+  XMLWidget::Hide();
+}

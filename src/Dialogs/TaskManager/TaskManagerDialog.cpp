@@ -207,27 +207,10 @@ const CallBackTableEntry dlgTaskManager::CallBackTable[] = {
 
   DeclareCallBackEntry(pnlTaskProperties::OnTaskTypeData),
 
-  DeclareCallBackEntry(pnlTaskList::OnBrowseClicked),
-  DeclareCallBackEntry(pnlTaskList::OnNewTaskClicked),
-  DeclareCallBackEntry(pnlTaskList::OnSaveClicked),
-  DeclareCallBackEntry(pnlTaskList::OnManageClicked),
-  DeclareCallBackEntry(pnlTaskList::OnLoadClicked),
-  DeclareCallBackEntry(pnlTaskList::OnDeleteClicked),
-  DeclareCallBackEntry(pnlTaskList::OnDeclareClicked),
-  DeclareCallBackEntry(pnlTaskList::OnRenameClicked),
-  DeclareCallBackEntry(pnlTaskList::OnTaskPaint),
-  DeclareCallBackEntry(pnlTaskList::OnTabPreShow),
-
   DeclareCallBackEntry(pnlTaskProperties::OnFAIFinishHeightData),
 
   DeclareCallBackEntry(pnlTaskManagerClose::OnCloseClicked),
   DeclareCallBackEntry(pnlTaskManagerClose::OnRevertClicked),
-
-  DeclareCallBackEntry(pnlTaskCalculator::OnMacCreadyData),
-  DeclareCallBackEntry(pnlTaskCalculator::OnTargetClicked),
-  DeclareCallBackEntry(pnlTaskCalculator::OnCruiseEfficiencyData),
-  DeclareCallBackEntry(pnlTaskCalculator::OnWarningPaint),
-
 
   DeclareCallBackEntry(NULL)
 };
@@ -284,9 +267,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     pnlTaskManagerClose::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wClose);
 
-  Window* wCalculator =
-    pnlTaskCalculator::Load(parent, wTabBar, wf, &task_modified);
-  assert(wCalculator);
+  Widget *wCalculator = new TaskCalculatorPanel(*wf, &task_modified);
 
   Window* wEdit =
     pnlTaskEdit::Load(parent, wTabBar, wf, &active_task, &task_modified);
@@ -297,9 +278,8 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   assert(wTaskView);
   TaskViewRect = wTaskView->get_position();
 
-  Window* wLst =
-    pnlTaskList::Load(parent, wTabBar, wf, &active_task, &task_modified);
-  assert(wLst);
+  Widget *list_tab = new TaskListPanel(*wf, *wTabBar,
+                                       &active_task, &task_modified);
 
   const DialogTabStyle_t IconsStyle =
     CommonInterface::GetUISettings().dialog.tab_style;
@@ -312,18 +292,15 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   const Bitmap *PropertiesIcon = ((IconsStyle == dtIcon) ?
                                    &Graphics::hBmpTabSettings : NULL);
 
-  if (Layout::landscape) {
-    wTabBar->AddClient(wCalculator, _("Calculator"), false, CalcIcon, NULL,
-                       pnlTaskCalculator::OnTabPreShow);
+  wTabBar->AddTab(wCalculator, _("Calculator"), false, CalcIcon);
 
+  if (Layout::landscape) {
     wTabBar->AddClient(wEdit, _("Turn Points"), false, TurnPointIcon, NULL,
                        pnlTaskEdit::OnTabPreShow, NULL,
                        NULL, pnlTaskEdit::OnTabReClick);
     TurnpointTab = 1;
 
-    wTabBar->AddClient(wLst, _("Manage"), false, BrowseIcon, NULL,
-                       pnlTaskList::OnTabPreShow, NULL,
-                       NULL, pnlTaskList::OnTabReClick);
+    wTabBar->AddTab(list_tab, _("Manage"), false, BrowseIcon);
 
     wTabBar->AddClient(wProps, _("Rules"), false, PropertiesIcon,
                        pnlTaskProperties::OnTabPreHide,
@@ -338,9 +315,6 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
     wTabBar->SetCurrentPage(0);
   } else {
-    wTabBar->AddClient(wCalculator, _("Calculator"), false, CalcIcon, NULL,
-                       pnlTaskCalculator::OnTabPreShow);
-
     wTabBar->AddClient(wClose, _("Close"), false, NULL, NULL,
                        pnlTaskManagerClose::OnTabPreShow, NULL,
                        NULL, pnlTaskManagerClose::OnTabReClick);
@@ -350,9 +324,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                        NULL, pnlTaskEdit::OnTabReClick);
     TurnpointTab = 2;
 
-    wTabBar->AddClient(wLst, _("Manage"), false, BrowseIcon, NULL,
-                       pnlTaskList::OnTabPreShow, NULL,
-                       NULL, pnlTaskList::OnTabReClick);
+    wTabBar->AddTab(list_tab, _("Manage"), false, BrowseIcon);
 
     wTabBar->AddClient(wProps, _("Rules"), false, PropertiesIcon,
                        pnlTaskProperties::OnTabPreHide,
@@ -367,8 +339,6 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
   SetTitle();
   wf->ShowModal();
-
-  pnlTaskList::DestroyTab();
 
   delete wf;
   delete active_task;

@@ -24,62 +24,69 @@ Copyright_License {
 #ifndef XCSOAR_TASK_LIST_PANEL_HPP
 #define XCSOAR_TASK_LIST_PANEL_HPP
 
-#include "Screen/Point.hpp"
+#include "Form/XMLWidget.hpp"
 
-class Window;
-class SingleWindow;
 class WndForm;
 class TabBarControl;
-class WndButton;
+class WndListFrame;
 class WndOwnerDrawFrame;
+class TabbedControl;
 class Canvas;
 class OrderedTask;
+class TaskStore;
 
-class pnlTaskList
-{
+class TaskListPanel : public XMLWidget {
+  WndForm &wf;
+  TabBarControl &tab_bar;
+
+  OrderedTask **active_task;
+  bool *task_modified;
+
+  TaskStore *task_store;
+
+  bool lazy_loaded; // if store has been loaded first time tab displayed
+
+  WndListFrame *wTasks;
+  WndOwnerDrawFrame* wTaskView;
+  TabbedControl *browse_tabbed;
+  PixelRect TaskViewRect;
+  bool fullscreen;
+
 public:
-  /**
-   * creates the control from its XML file and does any init work
-   * @param parent
-   * @param task_modified Sets to True if changes it.
-   * @param wf
-   * @return Window* that points to the control created
-   */
-  static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
-                      WndForm* wf, OrderedTask** task, bool* _task_modified);
+  TaskListPanel(WndForm &_wf, TabBarControl &_tab_bar,
+                OrderedTask **_active_task, bool *_task_modified)
+    :wf(_wf), tab_bar(_tab_bar),
+     active_task(_active_task), task_modified(_task_modified) {}
 
-  static void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
-  static void OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
-                                  unsigned DrawListIndex);
-  static void OnManageClicked(WndButton &Sender);
-  static void OnBrowseClicked(WndButton &Sender);
-  static void OnNewTaskClicked(WndButton &Sender);
-  static void OnSaveClicked(WndButton &Sender);
-  static void OnLoadClicked(WndButton &Sender);
-  static bool OnDeclareClicked(WndButton &Sender);
-  static bool OnTaskViewClick(WndOwnerDrawFrame *Sender,
-                              PixelScalar x, PixelScalar y);
-  static void OnDeleteClicked(WndButton &Sender);
-  static void OnRenameClicked(WndButton &Sender);
-  static void OnTaskListEnter(unsigned ItemIndex);
-  static void OnTaskCursorCallback(unsigned i);
-  /**
-   * callback for Tab being clicked
-   * refreshes / reloads list
-   * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
-   * @return True
-   */
-  static bool OnTabPreShow();
+  void RefreshView();
 
-  /**
-   * unzooms the task view if it is maximized
-   */
-  static void OnTabReClick();
+  void SaveTask();
+  void LoadTask();
+  void DeleteTask();
+  void RenameTask();
 
-  /**
-   *  called when parent dialog closes
-   */
-  static void DestroyTab();
+  void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
+  void OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
+                           unsigned DrawListIndex);
+
+  void OnManageClicked();
+  void OnBrowseClicked();
+  void OnNewTaskClicked();
+  void OnDeclareClicked();
+  void OnTaskViewClick();
+
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Unprepare();
+  virtual void ReClick();
+  virtual void Show(const PixelRect &rc);
+
+protected:
+  OrderedTask *get_cursor_task();
+
+  gcc_pure
+  const TCHAR *get_cursor_name();
+
+  OrderedTask *get_task_to_display();
 };
 
 #endif

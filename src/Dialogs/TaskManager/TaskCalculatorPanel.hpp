@@ -24,55 +24,41 @@ Copyright_License {
 #ifndef XCSOAR_TASK_CALCULATOR_PANEL_HPP
 #define XCSOAR_TASK_CALCULATOR_PANEL_HPP
 
-#include "DataField/Base.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Form/Form.hpp"
+#include "Math/fixed.hpp"
 
-class Window;
-class SingleWindow;
-class WndForm;
-class TabBarControl;
-class WndButton;
-class WndOwnerDrawFrame;
-class Canvas;
+class TaskCalculatorPanel : public XMLWidget {
+  WndForm &wf;
 
-class pnlTaskCalculator
-{
+  const bool *task_modified;
+
+  fixed emc;
+  fixed cruise_efficiency;
+
 public:
-  /**
-   * creates the control from its XML file and does any init work
-   * @param parent
-   * @param wf
-   * @param _task_modified tells calc whether to display warning
-   * @return Window* that points to the control created
-   */
-  static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
-                      WndForm* wf, bool* _task_modified);
+  TaskCalculatorPanel(WndForm &_wf, const bool *_task_modified)
+    :wf(_wf), task_modified(_task_modified) {}
 
-  /**
-   * copies values from form to ordered_task
-   * @return true
-   */
-  static bool OnTabPreHide();
+  const DialogLook &GetLook() {
+    return wf.GetLook();
+  }
 
-  /**
-   * copies values from ordered_task to form
-   * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
-   * @return true
-   */
-  static bool OnTabPreShow();
+  bool IsTaskModified() const {
+    return *task_modified;
+  }
 
-  /**
-   * draws colored warning message if task has been modified
-   */
-  static void OnWarningPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
-  static void OnTargetClicked(WndButton &Sender);
+  void GetCruiseEfficiency();
 
-  static void OnTimerNotify(WndForm &Sender);
+  void SetCruiseEfficiency(fixed value) {
+    cruise_efficiency = value;
+  }
 
-  static void OnMacCreadyData(DataField *Sender,
-      DataField::DataAccessKind_t Mode);
+  void Refresh();
 
-  static void OnCruiseEfficiencyData(DataField *Sender,
-      DataField::DataAccessKind_t Mode);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
 };
 
 #endif

@@ -2,15 +2,15 @@
 
 
 <Panel Name="frmBrowse" Border="0">
-  <Canvas Name="frmTaskView1" X="0" Y="0" Width="80" Height="53" Border="0" OnPaint="pnlTaskList::OnTaskPaint" />
+  <Canvas Name="frmTaskView1" X="0" Y="0" Width="80" Height="53" Border="0" OnPaint="OnTaskPaint" />
   
   <Tabbed Name="tabbedManage" X="80" Y="0">
 
     <Panel Name="frmManageSub">
-      <Button Name="cmdNewTask" Caption="New Task" X="31" Y="12" Width="84" Height="60" OnClick="pnlTaskList::OnNewTaskClicked"/>
-      <Button Name="cmdDeclare" Caption="Declare" X="125" Y="12" Width="84" Height="60" OnClick="pnlTaskList::OnDeclareClicked"/>
-      <Button Name="cmdBrowse" Caption="Browse" X="31" Y="81" Width="84" Height="60" OnClick="pnlTaskList::OnBrowseClicked"/>
-      <Button Name="cmdSave" Caption="Save" X="125" Y="81" Width="84" Height="60" OnClick="pnlTaskList::OnSaveClicked"/>
+      <Button Name="cmdNewTask" Caption="New Task" X="31" Y="12" Width="84" Height="60" OnClick="OnNewTaskClicked"/>
+      <Button Name="cmdDeclare" Caption="Declare" X="125" Y="12" Width="84" Height="60" OnClick="OnDeclareClicked"/>
+      <Button Name="cmdBrowse" Caption="Browse" X="31" Y="81" Width="84" Height="60" OnClick="OnBrowseClicked"/>
+      <Button Name="cmdSave" Caption="Save" X="125" Y="81" Width="84" Height="60" OnClick="OnSaveClicked"/>
     </Panel>
 
     <Panel Name="frmBrowseSub">
@@ -18,10 +18,10 @@
 
       <Label Name="frmSummary1" X="80" Y="150" Height="38" Border="0"/>
 
-      <Button Name="cmdLoad" Caption="Load" X="2" Y="188" Width="58" Height="35" OnClick="pnlTaskList::OnLoadClicked"/>
-      <Button Name="cmdRename" Caption="Rename" X="62" Y="188" Width="58" Height="35" OnClick="pnlTaskList::OnRenameClicked"/>
-      <Button Name="cmdDelete" Caption="Delete" X="122" Y="188" Width="57" Height="35" OnClick="pnlTaskList::OnDeleteClicked"/>
-      <Button Name="cmdManage" Caption="Back" X="182" Y="188" Width="57" Height="35" OnClick="pnlTaskList::OnManageClicked"/>
+      <Button Name="cmdLoad" Caption="Load" X="2" Y="188" Width="58" Height="35" OnClick="OnLoadClicked"/>
+      <Button Name="cmdRename" Caption="Rename" X="62" Y="188" Width="58" Height="35" OnClick="OnRenameClicked"/>
+      <Button Name="cmdDelete" Caption="Delete" X="122" Y="188" Width="57" Height="35" OnClick="OnDeleteClicked"/>
+      <Button Name="cmdManage" Caption="Back" X="182" Y="188" Width="57" Height="35" OnClick="OnManageClicked"/>
     </Panel>
 
   </Tabbed>

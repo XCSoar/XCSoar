@@ -2,8 +2,8 @@
 
 <Panel Name="frmTaskCalculator" Border="0">
 
-  <Button Name="Target" Caption="Target" X="5" Y="18" Width="73" Height="33" OnClick="pnlTaskCalculator::OnTargetClicked"/>
-  <Canvas Name="lblTaskChangedWarning" X="0" Y="0" Height="17" Border="0" OnPaint="pnlTaskCalculator::OnWarningPaint"/>
+  <Button Name="Target" Caption="Target" X="5" Y="18" Width="73" Height="33" OnClick="OnTargetClicked"/>
+  <Canvas Name="lblTaskChangedWarning" X="0" Y="0" Height="17" Border="0" OnPaint="OnWarningPaint"/>
 
   <Panel Name="frmData" X="70" Y="0" Height="222">
 
@@ -22,7 +22,7 @@
   <Edit Name="prpMacCready" Caption="Set MacCready" X="2" Height="22" CaptionWidth="150" 
     Help="Adjusts MC value used in the calculator.  Use this to determine the effect on estimated task time due to changes in conditions.  This value will not affect the main computer's setting if the dialog is exited with the Cancel button.">
     <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" 
-    Max="10" Step="0.1" OnDataAccess="pnlTaskCalculator::OnMacCreadyData"/>
+    Max="10" Step="0.1" OnDataAccess="OnMacCreadyData"/>
   </Edit>
 
   <Edit Name="prpRange" Caption="AAT range" X="2" Height="22" CaptionWidth="150" ReadOnly="1" 

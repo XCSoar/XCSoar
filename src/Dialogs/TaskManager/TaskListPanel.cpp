@@ -24,6 +24,7 @@ Copyright_License {
 #include "TaskListPanel.hpp"
 #include "Internal.hpp"
 #include "Dialogs/XML.hpp"
+#include "Dialogs/dlgTools.h"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
@@ -51,37 +52,23 @@ Copyright_License {
 
 #include <assert.h>
 
-static WndForm *wf = NULL;
-static TabBarControl* wTabBar;
-static WndListFrame* wTasks = NULL;
-static WndOwnerDrawFrame* wTaskView = NULL;
-static TabbedControl *browse_tabbed = NULL;
-static TaskStore *task_store;
-static PixelRect TaskViewRect;
-static bool fullscreen;
-
-static OrderedTask** active_task = NULL;
-static bool* task_modified = NULL;
-bool lazy_loaded = false; // if store has been loaded first time tab displayed
-
-static unsigned
-get_cursor_index()
-{
-  return wTasks->GetCursorIndex();
-}
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static TaskListPanel *instance;
 
 /**
  * used for browsing saved tasks
  * must be valid (2 task points)
  * @return NULL if no valid task at cursor, else pointer to task;
  */
-static OrderedTask*
-get_cursor_task()
+OrderedTask *
+TaskListPanel::get_cursor_task()
 {
-  if (get_cursor_index() >= task_store->Size())
+  const unsigned cursor_index = wTasks->GetCursorIndex();
+  if (cursor_index >= task_store->Size())
     return NULL;
 
-  OrderedTask * ordered_task = task_store->GetTask(get_cursor_index());
+  OrderedTask *ordered_task = task_store->GetTask(cursor_index);
 
   if (!ordered_task)
     return NULL;
@@ -94,17 +81,18 @@ get_cursor_task()
   return ordered_task;
 }
 
-static const TCHAR *
-get_cursor_name()
+const TCHAR *
+TaskListPanel::get_cursor_name()
 {
-  if (get_cursor_index() >= task_store->Size())
+  const unsigned cursor_index = wTasks->GetCursorIndex();
+  if (cursor_index >= task_store->Size())
     return _T("");
 
-  return task_store->GetName(get_cursor_index());
+  return task_store->GetName(cursor_index);
 }
 
-static OrderedTask*
-get_task_to_display()
+OrderedTask *
+TaskListPanel::get_task_to_display()
 {
   return (browse_tabbed->GetCurrentPage() == 0) ?
           *active_task :
@@ -112,7 +100,7 @@ get_task_to_display()
 }
 
 void
-pnlTaskList::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
+TaskListPanel::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   OrderedTask* ordered_task = get_task_to_display();
 
@@ -134,9 +122,15 @@ pnlTaskList::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
             terrain);
 }
 
+static void
+OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
+{
+  instance->OnTaskPaint(Sender, canvas);
+}
+
 void
-pnlTaskList::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
-                                 unsigned DrawListIndex)
+TaskListPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
+                                   unsigned DrawListIndex)
 {
   assert(DrawListIndex <= task_store->Size());
 
@@ -147,12 +141,18 @@ pnlTaskList::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 }
 
 static void
-RefreshView()
+OnTaskPaintListItem(Canvas &canvas, const PixelRect rc, unsigned DrawListIndex)
+{
+  instance->OnTaskPaintListItem(canvas, rc, DrawListIndex);
+}
+
+void
+TaskListPanel::RefreshView()
 {
   wTasks->SetLength(task_store->Size());
   wTaskView->invalidate();
 
-  WndFrame* wSummary = (WndFrame*)wf->FindByName(_T("frmSummary1"));
+  WndFrame* wSummary = (WndFrame*)form.FindByName(_T("frmSummary1"));
   assert(wSummary != NULL);
 
   OrderedTask* ordered_task = get_task_to_display();
@@ -167,13 +167,13 @@ RefreshView()
   wSummary->SetCaption(text);
 }
 
-static void
-SaveTask()
+void
+TaskListPanel::SaveTask()
 {
   (*active_task)->GetFactory().CheckAddFinish();
 
   if ((*active_task)->CheckTask()) {
-    if (!OrderedTaskSave(*(SingleWindow *)wf->get_root_owner(), **active_task))
+    if (!OrderedTaskSave(*(SingleWindow *)wf.get_root_owner(), **active_task))
       return;
 
     task_store->Scan();
@@ -185,8 +185,8 @@ SaveTask()
   }
 }
 
-static void
-LoadTask()
+void
+TaskListPanel::LoadTask()
 {
   const OrderedTask* orig = get_cursor_task();
   if (orig == NULL)
@@ -208,12 +208,12 @@ LoadTask()
   RefreshView();
   *task_modified = true;
 
-  wTabBar->SetCurrentPage(dlgTaskManager::GetTurnpointTab());
-  wTabBar->set_focus();
+  tab_bar.SetCurrentPage(dlgTaskManager::GetTurnpointTab());
+  tab_bar.set_focus();
 }
 
-static void
-DeleteTask()
+void
+TaskListPanel::DeleteTask()
 {
   const TCHAR *fname = get_cursor_name();
   tstring upperstring = fname;
@@ -260,8 +260,8 @@ ClearSuffix(TCHAR *p, const TCHAR *suffix)
   return true;
 }
 
-static void
-RenameTask()
+void
+TaskListPanel::RenameTask()
 {
   const TCHAR *oldname = get_cursor_name();
   StaticString<40> newname(oldname);
@@ -274,7 +274,7 @@ RenameTask()
 
   ClearSuffix(newname.buffer(), _T(".tsk"));
 
-  if (!TextEntryDialog(*(SingleWindow *)wf->get_root_owner(), newname))
+  if (!TextEntryDialog(*(SingleWindow *)wf.get_root_owner(), newname))
     return;
 
   newname.append(_T(".tsk"));
@@ -291,15 +291,23 @@ RenameTask()
 }
 
 void
-pnlTaskList::OnManageClicked(gcc_unused WndButton &Sender)
+TaskListPanel::OnManageClicked()
 {
   dlgTaskManager::TaskViewRestore(wTaskView);
   browse_tabbed->SetCurrentPage(0);
   RefreshView();
 }
 
+class WndButton;
+
+static void
+OnManageClicked(gcc_unused WndButton &Sender)
+{
+  instance->OnManageClicked();
+}
+
 void
-pnlTaskList::OnBrowseClicked(gcc_unused WndButton &Sender)
+TaskListPanel::OnBrowseClicked()
 {
   if (!lazy_loaded) {
     lazy_loaded = true;
@@ -312,8 +320,14 @@ pnlTaskList::OnBrowseClicked(gcc_unused WndButton &Sender)
   RefreshView();
 }
 
+static void
+OnBrowseClicked(gcc_unused WndButton &Sender)
+{
+  instance->OnBrowseClicked();
+}
+
 void
-pnlTaskList::OnNewTaskClicked(gcc_unused WndButton &Sender)
+TaskListPanel::OnNewTaskClicked()
 {
   if (((*active_task)->TaskSize() < 2) ||
       (MessageBoxX(_("Create new task?"), _("Task New"),
@@ -321,72 +335,82 @@ pnlTaskList::OnNewTaskClicked(gcc_unused WndButton &Sender)
     (*active_task)->Clear();
     (*active_task)->SetFactory(XCSoarInterface::SettingsComputer().task.task_type_default);
     *task_modified = true;
-    wTabBar->SetCurrentPage(dlgTaskManager::GetPropertiesTab());
-    wTabBar->set_focus();
+    tab_bar.SetCurrentPage(dlgTaskManager::GetPropertiesTab());
+    tab_bar.set_focus();
   }
 }
 
-void
-pnlTaskList::OnSaveClicked(gcc_unused WndButton &Sender)
+static void
+OnNewTaskClicked(gcc_unused WndButton &Sender)
 {
-  SaveTask();
+  instance->OnNewTaskClicked();
+}
+
+static void
+OnSaveClicked(gcc_unused WndButton &Sender)
+{
+  instance->SaveTask();
+}
+
+static void
+OnLoadClicked(gcc_unused WndButton &Sender)
+{
+  instance->LoadTask();
+}
+
+static void
+OnDeleteClicked(gcc_unused WndButton &Sender)
+{
+  instance->DeleteTask();
+}
+
+static void
+OnRenameClicked(gcc_unused WndButton &Sender)
+{
+  instance->RenameTask();
+}
+
+static void
+OnTaskListEnter(gcc_unused unsigned ItemIndex)
+{
+  instance->LoadTask();
+}
+
+static void
+OnTaskCursorCallback(gcc_unused unsigned i)
+{
+  instance->RefreshView();
 }
 
 void
-pnlTaskList::OnLoadClicked(gcc_unused WndButton &Sender)
-{
-  LoadTask();
-}
-
-void
-pnlTaskList::OnDeleteClicked(gcc_unused WndButton &Sender)
-{
-  DeleteTask();
-}
-
-void
-pnlTaskList::OnRenameClicked(gcc_unused WndButton &Sender)
-{
-  RenameTask();
-}
-
-void
-pnlTaskList::OnTaskListEnter(gcc_unused unsigned ItemIndex)
-{
-  LoadTask();
-}
-
-void
-pnlTaskList::OnTaskCursorCallback(gcc_unused unsigned i)
-{
-  RefreshView();
-}
-
-bool
-pnlTaskList::OnDeclareClicked(gcc_unused WndButton &Sender)
+TaskListPanel::OnDeclareClicked()
 {
   if (!(*active_task)->CheckTask()) {
     const AbstractTaskFactory::TaskValidationErrorVector errors =
       (*active_task)->GetFactory().getValidationErrors();
     MessageBoxX(getTaskValidationErrors(errors), _("Declare task"),
                 MB_ICONEXCLAMATION);
-    return false;
+    return;
   }
 
   logger.LoggerDeviceDeclare(**active_task);
-  return false;
 }
 
-bool
-pnlTaskList::OnTaskViewClick(gcc_unused WndOwnerDrawFrame *Sender,
-                             gcc_unused PixelScalar x,
-                             gcc_unused PixelScalar y)
+static void
+OnDeclareClicked(gcc_unused WndButton &Sender)
+{
+  instance->OnDeclareClicked();
+}
+
+void
+TaskListPanel::OnTaskViewClick()
 {
   if (!fullscreen) {
-    const UPixelScalar xoffset = (Layout::landscape ? wTabBar->GetTabWidth() : 0);
-    const UPixelScalar yoffset = (!Layout::landscape ? wTabBar->GetTabHeight() : 0);
-    wTaskView->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
-                    wf->GetClientAreaWindow().get_height() - yoffset);
+    const UPixelScalar xoffset = (Layout::landscape ? tab_bar.GetTabWidth() : 0);
+    const UPixelScalar yoffset = (!Layout::landscape ? tab_bar.GetTabHeight() : 0);
+    wTaskView->move(xoffset, yoffset,
+                    wf.GetClientAreaWindow().get_width() - xoffset,
+                    wf.GetClientAreaWindow().get_height() - yoffset);
     fullscreen = true;
     wTaskView->show_on_top();
   } else {
@@ -396,21 +420,18 @@ pnlTaskList::OnTaskViewClick(gcc_unused WndOwnerDrawFrame *Sender,
     fullscreen = false;
   }
   wTaskView->invalidate();
-  return true;
 }
 
-bool
-pnlTaskList::OnTabPreShow()
+static bool
+OnTaskViewClick(gcc_unused WndOwnerDrawFrame *Sender,
+                gcc_unused PixelScalar x, gcc_unused PixelScalar y)
 {
-  browse_tabbed->SetCurrentPage(0);
-  wTasks->SetCursorIndex(0); // so Save & Declare are always available
-  dlgTaskManager::TaskViewRestore(wTaskView);
-  RefreshView();
+  instance->OnTaskViewClick();
   return true;
 }
 
 void
-pnlTaskList::OnTabReClick()
+TaskListPanel::ReClick()
 {
   if (browse_tabbed->GetCurrentPage() == 0) // manage page
     dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
@@ -421,61 +442,68 @@ pnlTaskList::OnTabReClick()
   RefreshView();
 }
 
+static gcc_constexpr_data CallBackTableEntry task_list_callbacks[] = {
+  DeclareCallBackEntry(OnBrowseClicked),
+  DeclareCallBackEntry(OnNewTaskClicked),
+  DeclareCallBackEntry(OnSaveClicked),
+  DeclareCallBackEntry(OnManageClicked),
+  DeclareCallBackEntry(OnLoadClicked),
+  DeclareCallBackEntry(OnDeleteClicked),
+  DeclareCallBackEntry(OnDeclareClicked),
+  DeclareCallBackEntry(OnRenameClicked),
+  DeclareCallBackEntry(OnTaskPaint),
+
+  DeclareCallBackEntry(NULL)
+};
+
 void
-pnlTaskList::DestroyTab()
+TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  delete task_store;
-}
+  LoadWindow(task_list_callbacks, parent,
+             Layout::landscape
+             ? _T("IDR_XML_TASKLIST_L") : _T("IDR_XML_TASKLIST"));
 
-Window*
-pnlTaskList::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
-                  OrderedTask** task, bool* _task_modified)
-{
-
-  assert(_wTabBar);
-  wTabBar = _wTabBar;
-
-  assert(_wf);
-  wf = _wf;
-
-  assert(task);
-  active_task = task;
-
-  assert(_task_modified);
-  task_modified = _task_modified;
+  instance = this;
 
   task_store = new TaskStore();
   lazy_loaded = false;
 
-  // Load the dialog
-  Window *wList = LoadWindow(dlgTaskManager::CallBackTable, wf,
-                             wTabBar->GetClientAreaWindow(),
-                             Layout::landscape ?
-                             _T("IDR_XML_TASKLIST_L") : _T("IDR_XML_TASKLIST"));
-  assert(wList);
-
-  browse_tabbed = ((TabbedControl *)wf->FindByName(_T("tabbedManage")));
+  browse_tabbed = ((TabbedControl *)form.FindByName(_T("tabbedManage")));
   assert(browse_tabbed != NULL);
 
   if (is_simulator())
     /* cannot communicate with real devices in simulator mode */
-    wf->FindByName(_T("cmdDeclare"))->set_enabled(false);
+    form.FindByName(_T("cmdDeclare"))->set_enabled(false);
 
   // Save important control pointers
-  wTaskView = (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskView1"));
+  wTaskView = (WndOwnerDrawFrame*)form.FindByName(_T("frmTaskView1"));
   assert(wTaskView != NULL);
 
   TaskViewRect = wTaskView->get_position();
-  wTaskView->SetOnMouseDownNotify(OnTaskViewClick);
+  wTaskView->SetOnMouseDownNotify(::OnTaskViewClick);
   fullscreen = false;
 
-  wTasks = (WndListFrame*)wf->FindByName(_T("frmTasks"));
+  wTasks = (WndListFrame*)form.FindByName(_T("frmTasks"));
   assert(wTasks != NULL);
 
   // Set callbacks
-  wTasks->SetActivateCallback(pnlTaskList::OnTaskListEnter);
-  wTasks->SetPaintItemCallback(pnlTaskList::OnTaskPaintListItem);
-  wTasks->SetCursorCallback(pnlTaskList::OnTaskCursorCallback);
+  wTasks->SetActivateCallback(OnTaskListEnter);
+  wTasks->SetPaintItemCallback(::OnTaskPaintListItem);
+  wTasks->SetCursorCallback(OnTaskCursorCallback);
+}
 
-  return wList;
+void
+TaskListPanel::Unprepare()
+{
+  delete task_store;
+}
+
+void
+TaskListPanel::Show(const PixelRect &rc)
+{
+  browse_tabbed->SetCurrentPage(0);
+  wTasks->SetCursorIndex(0); // so Save & Declare are always available
+  dlgTaskManager::TaskViewRestore(wTaskView);
+  RefreshView();
+  XMLWidget::Show(rc);
 }
