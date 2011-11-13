@@ -173,9 +173,7 @@ RefreshCalculator(void)
 void
 pnlTaskCalculator::OnTargetClicked(gcc_unused WndButton &Sender)
 {
-  wf->hide();
   dlgTargetShowModal();
-  wf->show();
 }
 
 void
