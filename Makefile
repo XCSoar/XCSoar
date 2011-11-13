@@ -180,12 +180,12 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/ConfigPanels/UnitsConfigPanel.cpp \
 	$(SRC)/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp \
 	\
-	$(SRC)/Dialogs/dlgTaskManager.cpp \
-	$(SRC)/Dialogs/pnlTaskManagerClose.cpp \
-	$(SRC)/Dialogs/pnlTaskEdit.cpp \
-	$(SRC)/Dialogs/pnlTaskProperties.cpp \
-	$(SRC)/Dialogs/pnlTaskList.cpp \
-	$(SRC)/Dialogs/pnlTaskCalculator.cpp \
+	$(SRC)/Dialogs/TaskManager/TaskManagerDialog.cpp \
+	$(SRC)/Dialogs/TaskManager/TaskClosePanel.cpp \
+	$(SRC)/Dialogs/TaskManager/TaskEditPanel.cpp \
+	$(SRC)/Dialogs/TaskManager/TaskPropertiesPanel.cpp \
+	$(SRC)/Dialogs/TaskManager/TaskListPanel.cpp \
+	$(SRC)/Dialogs/TaskManager/TaskCalculatorPanel.cpp \
 	$(SRC)/Dialogs/dlgTaskOptionalStarts.cpp \
 	$(SRC)/Dialogs/dlgTaskPoint.cpp \
 	$(SRC)/Dialogs/dlgTaskPointType.cpp \

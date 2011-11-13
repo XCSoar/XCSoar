@@ -21,15 +21,14 @@ Copyright_License {
 }
 */
 
+#include "TaskPropertiesPanel.hpp"
+#include "Internal.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Float.hpp"
-
 #include "Dialogs/dlgTaskHelpers.hpp"
-#include "Dialogs/dlgTaskManager.hpp"
-
 #include "Task/Tasks/OrderedTask.hpp"
 
 #include <assert.h>

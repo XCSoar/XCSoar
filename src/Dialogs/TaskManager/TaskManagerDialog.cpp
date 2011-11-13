@@ -21,7 +21,12 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/dlgTaskManager.hpp"
+#include "Internal.hpp"
+#include "TaskCalculatorPanel.hpp"
+#include "TaskEditPanel.hpp"
+#include "TaskPropertiesPanel.hpp"
+#include "TaskListPanel.hpp"
+#include "TaskClosePanel.hpp"
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"

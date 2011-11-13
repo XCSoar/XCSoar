@@ -21,12 +21,16 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Internal.hpp"
+#include "TaskListPanel.hpp"
+#include "Internal.hpp"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
-#include "Screen/Layout.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
-#include "Dialogs/dlgTaskManager.hpp"
-#include "Form/Tabbed.hpp"
+#include "Form/Frame.hpp"
+#include "Form/List.hpp"
+#include "Form/Draw.hpp"
+#include "Form/TabBar.hpp"
 #include "Task/TaskStore.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
@@ -37,6 +41,9 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "MainWindow.hpp"
 #include "Simulator.hpp"
+#include "Language/Language.hpp"
+#include "Interface.hpp"
+#include "Screen/Layout.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"

@@ -21,12 +21,18 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Internal.hpp"
-#include "Dialogs/dlgTaskManager.hpp"
+#include "TaskClosePanel.hpp"
+#include "Internal.hpp"
+#include "Dialogs/XML.hpp"
+#include "Form/Button.hpp"
+#include "Form/Draw.hpp"
+#include "Form/Frame.hpp"
+#include "Form/TabBar.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
+#include "Language/Language.hpp"
 
 #include <assert.h>
 #include <stdio.h> //debug

@@ -21,9 +21,11 @@ Copyright_License {
 }
 */
 
+#include "TaskCalculatorPanel.hpp"
+#include "Internal.hpp"
 #include "Dialogs/Task.hpp"
-#include "Dialogs/dlgTaskManager.hpp"
-#include "Dialogs/Internal.hpp"
+#include "Dialogs/XML.hpp"
+#include "Interface.hpp"
 #include "Protection.hpp"
 #include "Units/Units.hpp"
 #include "DataField/Float.hpp"
@@ -32,12 +34,15 @@ Copyright_License {
 #include "Components.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Screen/Layout.hpp"
+#include "Form/Edit.hpp"
+#include "Form/Button.hpp"
 #include "Form/TabBar.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Icon.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/Look.hpp"
 #include "MainWindow.hpp"
+#include "Language/Language.hpp"
 
 #include <math.h>
 #include <algorithm>

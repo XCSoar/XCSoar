@@ -21,24 +21,29 @@ Copyright_License {
 }
 */
 
+#include "TaskEditPanel.hpp"
+#include "Internal.hpp"
 #include "Dialogs/Task.hpp"
-#include "Dialogs/Internal.hpp"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/Message.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
-#include "Dialogs/dlgTaskManager.hpp"
 #include "Dialogs/Waypoint.hpp"
-
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Screen/Fonts.hpp"
 #include "Interface.hpp"
 #include "Screen/SingleWindow.hpp"
+#include "Form/Frame.hpp"
+#include "Form/List.hpp"
+#include "Form/Draw.hpp"
 #include "Form/TabBar.hpp"
+#include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Renderer/WaypointIconRenderer.hpp"
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
-
 #include "Task/Tasks/OrderedTask.hpp"
+#include "Language/Language.hpp"
 
 #include <assert.h>
 #include <stdio.h>
