@@ -167,6 +167,7 @@ void
 IGCWriter::header(const BrokenDateTime &DateTime,
                   const TCHAR *pilot_name, const TCHAR *aircraft_model,
                   const TCHAR *aircraft_registration,
+                  const TCHAR *competition_id,
                   const TCHAR *strAssetNumber, const TCHAR *driver_name)
 {
   /*
@@ -204,6 +205,7 @@ IGCWriter::header(const BrokenDateTime &DateTime,
   write_tstring("HFPLTPILOT:", pilot_name);
   write_tstring("HFGTYGLIDERTYPE:", aircraft_model);
   write_tstring("HFGIDGLIDERID:", aircraft_registration);
+  write_tstring("HFCIDCOMPETITIONID:", competition_id);
   write_tstring("HFFTYFR TYPE:XCSOAR,XCSOAR ", XCSoar_VersionStringOld);
   write_tstring("HFGPS: ", driver_name);
 

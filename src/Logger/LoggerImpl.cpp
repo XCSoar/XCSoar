@@ -427,7 +427,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   writer->header(gps_info.date_time_utc,
                  decl.pilot_name, decl.aircraft_type, decl.aircraft_registration,
-                 strAssetNumber, device_config.driver_name);
+                 decl.competition_id, strAssetNumber, device_config.driver_name);
 
   if (decl.Size()) {
     BrokenDateTime FirstDateTime = !PreTakeoffBuffer.empty()

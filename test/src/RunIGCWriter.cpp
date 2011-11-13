@@ -48,7 +48,7 @@ int main(int argc, char **argv)
   IGCWriter writer(igc_path, replay->Basic());
   writer.header(replay->Basic().date_time_utc,
                 _T("Manfred Mustermann"), _T("Ventus"),
-                _T("D-1234"), _T("Foo"), driver_name);
+                _T("D-1234"), _T("MM"), _T("Foo"), driver_name);
 
   GPSClock log_clock(fixed(1));
   while (replay->Next())

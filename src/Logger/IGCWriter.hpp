@@ -90,6 +90,7 @@ public:
   void header(const BrokenDateTime &DateTime,
               const TCHAR *pilot_name, const TCHAR *aircraft_model,
               const TCHAR *aircraft_registration,
+              const TCHAR *competition_id,
               const TCHAR *strAssetNumber, const TCHAR *driver_name);
 
   void AddDeclaration(const GeoPoint &location, const TCHAR *ID);
