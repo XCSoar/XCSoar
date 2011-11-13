@@ -262,6 +262,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   assert(wTabBar != NULL);
 
   wTabBar->SetClientOverlapTabs(true);
+  wTabBar->SetPageFlippedCallback(SetTitle);
 
   if (!Layout::landscape) {
     WndOwnerDrawFrame* wBlackRect =
@@ -313,58 +314,58 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
   if (Layout::landscape) {
     wTabBar->AddClient(wCalculator, _("Calculator"), false, CalcIcon, NULL,
-                       pnlTaskCalculator::OnTabPreShow, dlgTaskManager::SetTitle);
+                       pnlTaskCalculator::OnTabPreShow);
 
     wTabBar->AddClient(wEdit, _("Turn Points"), false, TurnPointIcon, NULL,
-                       pnlTaskEdit::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskEdit::OnTabPreShow, NULL,
                        NULL, pnlTaskEdit::OnTabReClick);
     TurnpointTab = 1;
 
     wTabBar->AddClient(wLst, _("Manage"), false, BrowseIcon, NULL,
-                       pnlTaskList::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskList::OnTabPreShow, NULL,
                        NULL, pnlTaskList::OnTabReClick);
 
     wTabBar->AddClient(wProps, _("Rules"), false, PropertiesIcon,
                        pnlTaskProperties::OnTabPreHide,
-                       pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskProperties::OnTabPreShow, NULL,
                        NULL, pnlTaskProperties::OnTabReClick);
     PropertiesTab = 3;
 
     wTabBar->AddClient(wClose, _("Close"), false, NULL, NULL,
-                       pnlTaskManagerClose::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskManagerClose::OnTabPreShow, NULL,
                        pnlTaskManagerClose::OnTabClick,
                        pnlTaskManagerClose::OnTabReClick);
 
     wTabBar->SetCurrentPage(0);
   } else {
     wTabBar->AddClient(wCalculator, _("Calculator"), false, CalcIcon, NULL,
-                       pnlTaskCalculator::OnTabPreShow, dlgTaskManager::SetTitle);
+                       pnlTaskCalculator::OnTabPreShow);
 
     wTabBar->AddClient(wClose, _("Close"), false, NULL, NULL,
-                       pnlTaskManagerClose::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskManagerClose::OnTabPreShow, NULL,
                        NULL, pnlTaskManagerClose::OnTabReClick);
 
     wTabBar->AddClient(wEdit, _("Turn Points"), false, TurnPointIcon, NULL,
-                       pnlTaskEdit::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskEdit::OnTabPreShow, NULL,
                        NULL, pnlTaskEdit::OnTabReClick);
     TurnpointTab = 2;
 
     wTabBar->AddClient(wLst, _("Manage"), false, BrowseIcon, NULL,
-                       pnlTaskList::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskList::OnTabPreShow, NULL,
                        NULL, pnlTaskList::OnTabReClick);
 
     wTabBar->AddClient(wProps, _("Rules"), false, PropertiesIcon,
                        pnlTaskProperties::OnTabPreHide,
-                       pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskProperties::OnTabPreShow, NULL,
                        NULL, pnlTaskProperties::OnTabReClick);
     PropertiesTab = 4;
 
     wTabBar->SetCurrentPage(0);
   }
 
-
   fullscreen = false;
 
+  SetTitle();
   wf->ShowModal();
 
   pnlTaskList::DestroyTab();
