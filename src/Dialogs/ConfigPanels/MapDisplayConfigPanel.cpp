@@ -47,7 +47,7 @@ static const StaticEnumChoice shift_bias_list[] = {
   { 0 }
 };
 
-static WndForm* wf = NULL;
+static SubForm* wf = NULL;
 
 void
 MapDisplayConfigPanel::UpdateVisibilities()
@@ -58,7 +58,7 @@ MapDisplayConfigPanel::UpdateVisibilities()
 }
 
 void
-MapDisplayConfigPanel::Init(WndForm *_wf)
+MapDisplayConfigPanel::Init(SubForm *_wf)
 {
   assert(_wf != NULL);
   wf = _wf;

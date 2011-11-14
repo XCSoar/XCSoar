@@ -29,7 +29,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name,
+LoadFormProperty(SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, int value)
 {
   assert(control_name != NULL);
@@ -47,7 +47,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
 }
 
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name,
+LoadFormProperty(SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, fixed value)
 {
   assert(control_name != NULL);
@@ -66,7 +66,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
 }
 
 void
-LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
+LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
                          UnitGroup unit_group, fixed value)
 {
   assert(control_name != NULL);
@@ -84,7 +84,7 @@ LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, unsigned &value,
                  const TCHAR *registry_name)
 {
@@ -98,7 +98,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, fixed &value)
 {
   assert(control_name != NULL);

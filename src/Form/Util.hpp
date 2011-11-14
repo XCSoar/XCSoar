@@ -32,32 +32,32 @@ Copyright_License {
 #include <stdint.h>
 
 struct StaticEnumChoice;
-class WndForm;
+class SubForm;
 
 /**
  * Show or hide a named form control.
  */
 void
-ShowFormControl(WndForm &form, const TCHAR *control_name, bool visible);
+ShowFormControl(SubForm &form, const TCHAR *control_name, bool visible);
 
 /**
  * Show or hide a named form control that may not exist in some layouts.
  */
 void
-ShowOptionalFormControl(WndForm &form, const TCHAR *control_name,
+ShowOptionalFormControl(SubForm &form, const TCHAR *control_name,
                         bool visible);
 
-void SetFormControlEnabled(WndForm &form, const TCHAR *control_name,
+void SetFormControlEnabled(SubForm &form, const TCHAR *control_name,
                            bool enabled);
 
 /**
  * Set a form control to the specified value (without a DataField).
  */
 void
-SetFormValue(WndForm &form, const TCHAR *control_name, const TCHAR *value);
+SetFormValue(SubForm &form, const TCHAR *control_name, const TCHAR *value);
 
 void
-SetFormMultiLineValue(WndForm &form, const TCHAR *control_name,
+SetFormMultiLineValue(SubForm &form, const TCHAR *control_name,
                       const TCHAR *value);
 
 /**
@@ -68,94 +68,94 @@ SetFormMultiLineValue(WndForm &form, const TCHAR *control_name,
  * @param value the new value
  */
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name, bool value);
+LoadFormProperty(SubForm &form, const TCHAR *control_name, bool value);
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name, int value);
+LoadFormProperty(SubForm &form, const TCHAR *control_name, int value);
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name, unsigned int value);
+LoadFormProperty(SubForm &form, const TCHAR *control_name, unsigned int value);
 
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name,
+LoadFormProperty(SubForm &form, const TCHAR *control_name,
                  const StaticEnumChoice *list, unsigned value);
 
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value);
+LoadFormProperty(SubForm &form, const TCHAR *control_name, fixed value);
 
 void
-LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
+LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
                          fixed value);
 
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name,
+LoadFormProperty(SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, int value);
 
 void
-LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
+LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
                          UnitGroup unit_group, fixed value);
 
 static inline void
-LoadFormProperty(WndForm &form, const TCHAR *control_name,
+LoadFormProperty(SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, unsigned value)
 {
   LoadFormProperty(form, control_name, unit_group, (int)value);
 }
 
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name,
+LoadFormProperty(SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, fixed value);
 
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name,
+LoadFormProperty(SubForm &form, const TCHAR *control_name,
                  const TCHAR *value);
 
 void
-LoadFormPropertyFromProfile(WndForm &form, const TCHAR *control_name,
+LoadFormPropertyFromProfile(SubForm &form, const TCHAR *control_name,
                             const TCHAR *profile_key);
 
 gcc_pure
 int
-GetFormValueInteger(const WndForm &form, const TCHAR *control_name);
+GetFormValueInteger(const SubForm &form, const TCHAR *control_name);
 
 gcc_pure
 bool
-GetFormValueBoolean(const WndForm &form, const TCHAR *control_name);
+GetFormValueBoolean(const SubForm &form, const TCHAR *control_name);
 
 gcc_pure
 fixed
-GetFormValueFixed(const WndForm &form, const TCHAR *control_name);
+GetFormValueFixed(const SubForm &form, const TCHAR *control_name);
 
 gcc_pure
 const TCHAR *
-GetFormValueString(const WndForm &form, const TCHAR *control_name);
+GetFormValueString(const SubForm &form, const TCHAR *control_name);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR* field, bool &value);
+SaveFormProperty(const SubForm &form, const TCHAR* field, bool &value);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR* field, unsigned int &value);
+SaveFormProperty(const SubForm &form, const TCHAR* field, unsigned int &value);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR* field, int &value);
+SaveFormProperty(const SubForm &form, const TCHAR* field, int &value);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR* field, short &value);
+SaveFormProperty(const SubForm &form, const TCHAR* field, short &value);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR* field, uint8_t &value);
+SaveFormProperty(const SubForm &form, const TCHAR* field, uint8_t &value);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR* field, uint16_t &value);
+SaveFormProperty(const SubForm &form, const TCHAR* field, uint16_t &value);
 
 bool
-SaveFormProperty(WndForm &form, const TCHAR *control_name, fixed &value);
+SaveFormProperty(SubForm &form, const TCHAR *control_name, fixed &value);
 
 #ifdef FIXED_MATH
 bool
-SaveFormProperty(WndForm &form, const TCHAR *control_name, double &value);
+SaveFormProperty(SubForm &form, const TCHAR *control_name, double &value);
 #endif
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, fixed &value);
 
 /**
@@ -168,58 +168,58 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
  * @return true if the value has been modified
  */
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  bool &value, const TCHAR *registry_name);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
                  bool &value);
 
 /**
  * Same as SaveFormProperty(), but negates the input value.
  */
 bool
-SaveFormPropertyNegated(const WndForm &form, const TCHAR *field,
+SaveFormPropertyNegated(const SubForm &form, const TCHAR *field,
                         const TCHAR *profile_key, bool &value);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
                  unsigned int &value);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
                  int &value);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
                  short &value);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
                  uint8_t &value);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
                  uint16_t &value);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, int &value,
                  const TCHAR *registry_name);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, unsigned &value,
                  const TCHAR *registry_name);
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, fixed &value,
                  const TCHAR *registry_name);
 
 template<typename T>
 static inline bool
-SaveFormPropertyEnum(const WndForm &form, const TCHAR *field,
+SaveFormPropertyEnum(const SubForm &form, const TCHAR *field,
                      T &value)
 {
   int value2 = (int)value;
@@ -232,7 +232,7 @@ SaveFormPropertyEnum(const WndForm &form, const TCHAR *field,
 
 template<typename T>
 static inline bool
-SaveFormPropertyEnum(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+SaveFormPropertyEnum(const SubForm &form, const TCHAR *field, const TCHAR *reg,
                      T &value)
 {
   int value2 = (int)value;
@@ -244,25 +244,25 @@ SaveFormPropertyEnum(const WndForm &form, const TCHAR *field, const TCHAR *reg,
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  TCHAR *buffer, size_t max_size);
 
 template<unsigned N>
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  StaticString<N> &value)
 {
   return SaveFormProperty(form, control_name, value.buffer(), value.MAX_SIZE);
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  TCHAR *buffer, size_t max_size,
                  const TCHAR *profile_key);
 
 template<unsigned N>
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  StaticString<N> &value,
                  const TCHAR *profile_key)
 {
@@ -271,7 +271,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
 }
 
 bool
-SaveFormPropertyToProfile(const WndForm &form, const TCHAR *control_name,
+SaveFormPropertyToProfile(const SubForm &form, const TCHAR *control_name,
                           const TCHAR *profile_key);
 
 #endif

@@ -26,11 +26,10 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "Interface.hpp"
 
-static WndForm* wf = NULL;
-
+static SubForm* wf = NULL;
 
 void
-GaugesConfigPanel::Init(WndForm *_wf)
+GaugesConfigPanel::Init(SubForm *_wf)
 {
   assert(_wf != NULL);
   wf = _wf;

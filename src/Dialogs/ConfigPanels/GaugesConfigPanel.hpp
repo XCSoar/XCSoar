@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef GAUGESCONFIGPANEL_HPP
 #define GAUGESCONFIGPANEL_HPP
 
-class WndForm;
+class SubForm;
 
 namespace GaugesConfigPanel
 {
-  void Init(WndForm *wf);
+  void Init(SubForm *wf);
   bool Save();
 };
 

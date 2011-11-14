@@ -28,7 +28,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-LoadFormPropertyFromProfile(WndForm &form, const TCHAR *control_name,
+LoadFormPropertyFromProfile(SubForm &form, const TCHAR *control_name,
                             const TCHAR *profile_key)
 {
   TCHAR buffer[512];
@@ -39,7 +39,7 @@ LoadFormPropertyFromProfile(WndForm &form, const TCHAR *control_name,
 }
 
 bool
-SaveFormPropertyNegated(const WndForm &form, const TCHAR *field,
+SaveFormPropertyNegated(const SubForm &form, const TCHAR *field,
                         const TCHAR *profile_key, bool &value)
 {
   bool new_value = !GetFormValueBoolean(form, field);
@@ -52,7 +52,7 @@ SaveFormPropertyNegated(const WndForm &form, const TCHAR *field,
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  bool &value, const TCHAR *registry_name)
 {
   assert(control_name != NULL);
@@ -66,7 +66,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
                  bool &value)
 {
   if (SaveFormProperty(form, field, value)) {
@@ -78,7 +78,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
                  unsigned int &value)
 {
   if (SaveFormProperty(form, field, value)) {
@@ -90,7 +90,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
                  int &value)
 {
   if (SaveFormProperty(form, field, value)) {
@@ -102,7 +102,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
                  short &value)
 {
   if (SaveFormProperty(form, field, value)) {
@@ -114,7 +114,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
                  uint8_t &value)
 {
   if (SaveFormProperty(form, field, value)) {
@@ -126,7 +126,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
                  uint16_t &value)
 {
   if (SaveFormProperty(form, field, value)) {
@@ -138,7 +138,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, int &value,
                  const TCHAR *registry_name)
 {
@@ -157,7 +157,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, fixed &value,
                  const TCHAR *registry_name)
 {
@@ -171,7 +171,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  TCHAR *buffer, size_t max_size,
                  const TCHAR *profile_key)
 {
@@ -196,7 +196,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
 }
 
 bool
-SaveFormPropertyToProfile(const WndForm &form, const TCHAR *control_name,
+SaveFormPropertyToProfile(const SubForm &form, const TCHAR *control_name,
                           const TCHAR *profile_key)
 {
   assert(profile_key != NULL);

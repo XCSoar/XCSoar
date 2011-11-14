@@ -26,11 +26,11 @@ Copyright_License {
 
 #include "DataField/Base.hpp"
 
-class WndForm;
+class SubForm;
 
 namespace MapDisplayConfigPanel
 {
-  void Init(WndForm *wf);
+  void Init(SubForm *wf);
   void UpdateVisibilities();
   void OnShiftTypeData(DataField *Sender, DataField::DataAccessKind_t Mode);
   bool Save();

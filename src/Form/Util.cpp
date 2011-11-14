@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Form/Util.hpp"
-#include "Form/Form.hpp"
+#include "Form/SubForm.hpp"
 #include "Form/Edit.hpp"
 #include "DataField/Base.hpp"
 #include "DataField/Boolean.hpp"
@@ -33,7 +33,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-ShowFormControl(WndForm &form, const TCHAR *control_name, bool visible)
+ShowFormControl(SubForm &form, const TCHAR *control_name, bool visible)
 {
   Window *window = form.FindByName(control_name);
   assert(window != NULL);
@@ -41,7 +41,7 @@ ShowFormControl(WndForm &form, const TCHAR *control_name, bool visible)
 }
 
 void
-ShowOptionalFormControl(WndForm &form, const TCHAR *control_name,
+ShowOptionalFormControl(SubForm &form, const TCHAR *control_name,
                         bool visible)
 {
   Window *window = form.FindByName(control_name);
@@ -50,7 +50,7 @@ ShowOptionalFormControl(WndForm &form, const TCHAR *control_name,
 }
 
 void
-SetFormControlEnabled(WndForm &form, const TCHAR *control_name, bool enabled)
+SetFormControlEnabled(SubForm &form, const TCHAR *control_name, bool enabled)
 {
   Window *window = form.FindByName(control_name);
   assert(window != NULL);
@@ -58,7 +58,7 @@ SetFormControlEnabled(WndForm &form, const TCHAR *control_name, bool enabled)
 }
 
 void
-SetFormValue(WndForm &form, const TCHAR *control_name, const TCHAR *value)
+SetFormValue(SubForm &form, const TCHAR *control_name, const TCHAR *value)
 {
   assert(control_name != NULL);
   assert(value != NULL);
@@ -70,7 +70,7 @@ SetFormValue(WndForm &form, const TCHAR *control_name, const TCHAR *value)
 }
 
 void
-SetFormMultiLineValue(WndForm &form, const TCHAR *control_name,
+SetFormMultiLineValue(SubForm &form, const TCHAR *control_name,
                       const TCHAR *value)
 {
   assert(control_name != NULL);
@@ -83,7 +83,7 @@ SetFormMultiLineValue(WndForm &form, const TCHAR *control_name,
 }
 
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name, bool value)
+LoadFormProperty(SubForm &form, const TCHAR *control_name, bool value)
 {
   assert(control_name != NULL);
 
@@ -98,7 +98,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, bool value)
 }
 
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name, int value)
+LoadFormProperty(SubForm &form, const TCHAR *control_name, int value)
 {
   assert(control_name != NULL);
 
@@ -111,7 +111,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, int value)
 }
 
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name, unsigned int value)
+LoadFormProperty(SubForm &form, const TCHAR *control_name, unsigned int value)
 {
   assert(control_name != NULL);
 
@@ -124,7 +124,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, unsigned int value)
 }
 
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name,
+LoadFormProperty(SubForm &form, const TCHAR *control_name,
                  const StaticEnumChoice *list, unsigned value)
 {
   assert(control_name != NULL);
@@ -144,7 +144,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
 }
 
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value)
+LoadFormProperty(SubForm &form, const TCHAR *control_name, fixed value)
 {
   assert(control_name != NULL);
 
@@ -158,7 +158,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value)
 }
 
 void
-LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
+LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
                          fixed value)
 {
   assert(control_name != NULL);
@@ -174,7 +174,7 @@ LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
 }
 
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name,
+LoadFormProperty(SubForm &form, const TCHAR *control_name,
                  const TCHAR *value)
 {
   assert(control_name != NULL);
@@ -191,7 +191,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
 }
 
 int
-GetFormValueInteger(const WndForm &form, const TCHAR *control_name)
+GetFormValueInteger(const SubForm &form, const TCHAR *control_name)
 {
   assert(control_name != NULL);
 
@@ -203,7 +203,7 @@ GetFormValueInteger(const WndForm &form, const TCHAR *control_name)
 }
 
 fixed
-GetFormValueFixed(const WndForm &form, const TCHAR *control_name)
+GetFormValueFixed(const SubForm &form, const TCHAR *control_name)
 {
   const WndProperty *control =
     (const WndProperty *)form.FindByName(control_name);
@@ -215,7 +215,7 @@ GetFormValueFixed(const WndForm &form, const TCHAR *control_name)
 }
 
 bool
-GetFormValueBoolean(const WndForm &form, const TCHAR *control_name)
+GetFormValueBoolean(const SubForm &form, const TCHAR *control_name)
 {
   assert(control_name != NULL);
 
@@ -230,7 +230,7 @@ GetFormValueBoolean(const WndForm &form, const TCHAR *control_name)
 }
 
 const TCHAR *
-GetFormValueString(const WndForm &form, const TCHAR *control_name)
+GetFormValueString(const SubForm &form, const TCHAR *control_name)
 {
   assert(control_name != NULL);
 
@@ -245,7 +245,7 @@ GetFormValueString(const WndForm &form, const TCHAR *control_name)
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, bool &value)
+SaveFormProperty(const SubForm &form, const TCHAR *field, bool &value)
 {
   bool new_value = GetFormValueBoolean(form, field);
   if (new_value == value)
@@ -256,7 +256,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, bool &value)
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, unsigned int &value)
+SaveFormProperty(const SubForm &form, const TCHAR *field, unsigned int &value)
 {
   unsigned new_value = (unsigned)GetFormValueInteger(form, field);
   if (new_value == value)
@@ -267,7 +267,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, unsigned int &value)
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, int &value)
+SaveFormProperty(const SubForm &form, const TCHAR *field, int &value)
 {
   int new_value = GetFormValueInteger(form, field);
   if (new_value == value)
@@ -278,7 +278,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, int &value)
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, short &value)
+SaveFormProperty(const SubForm &form, const TCHAR *field, short &value)
 {
   short new_value = (short)GetFormValueInteger(form, field);
   if (new_value == value)
@@ -289,7 +289,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, short &value)
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, uint8_t &value)
+SaveFormProperty(const SubForm &form, const TCHAR *field, uint8_t &value)
 {
   uint8_t new_value = (uint8_t)GetFormValueInteger(form, field);
   if (new_value == value)
@@ -300,7 +300,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, uint8_t &value)
 }
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, uint16_t &value)
+SaveFormProperty(const SubForm &form, const TCHAR *field, uint16_t &value)
 {
   uint16_t new_value = (uint16_t)GetFormValueInteger(form, field);
   if (new_value == value)
@@ -311,7 +311,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, uint16_t &value)
 }
 
 bool
-SaveFormProperty(WndForm &form, const TCHAR *control_name, fixed &value)
+SaveFormProperty(SubForm &form, const TCHAR *control_name, fixed &value)
 {
   fixed new_value = GetFormValueFixed(form, control_name);
   if (new_value == value)
@@ -323,7 +323,7 @@ SaveFormProperty(WndForm &form, const TCHAR *control_name, fixed &value)
 
 #ifdef FIXED_MATH
 bool
-SaveFormProperty(WndForm &form, const TCHAR *control_name, double &value)
+SaveFormProperty(SubForm &form, const TCHAR *control_name, double &value)
 {
   double new_value = (double)GetFormValueFixed(form, control_name);
   if (new_value == value)
@@ -335,7 +335,7 @@ SaveFormProperty(WndForm &form, const TCHAR *control_name, double &value)
 #endif
 
 bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  TCHAR *buffer, size_t max_size)
 {
   assert(max_size > 0);
