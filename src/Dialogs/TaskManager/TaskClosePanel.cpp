@@ -24,6 +24,7 @@ Copyright_License {
 #include "TaskClosePanel.hpp"
 #include "Internal.hpp"
 #include "Dialogs/XML.hpp"
+#include "Dialogs/dlgTools.h"
 #include "Form/Button.hpp"
 #include "Form/Draw.hpp"
 #include "Form/Frame.hpp"
@@ -37,15 +38,12 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h> //debug
 
-static WndForm* wf = NULL;
-static WndFrame* wStatus = NULL;
-static WndButton* cmdRevert = NULL;
-static WndButton* cmdClose = NULL;
-static bool* task_modified = NULL;
-static WndOwnerDrawFrame* wTaskView = NULL;
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static TaskClosePanel *instance;
 
-static void
-RefreshStatus()
+void
+TaskClosePanel::RefreshStatus()
 {
   wStatus->SetText(*task_modified ?
                    _("Task has been modified") : _("Task unchanged"));
@@ -53,21 +51,55 @@ RefreshStatus()
   cmdRevert->set_visible(*task_modified);
 }
 
-void
-pnlTaskManagerClose::OnCloseClicked(gcc_unused WndButton &Sender)
+static void
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
   dlgTaskManager::OnClose();
 }
 
-void
-pnlTaskManagerClose::OnRevertClicked(gcc_unused WndButton &Sender)
+static void
+OnRevertClicked(gcc_unused WndButton &Sender)
 {
   dlgTaskManager::RevertTask();
-  RefreshStatus();
+  instance->RefreshStatus();
+}
+
+static gcc_constexpr_data CallBackTableEntry task_close_callbacks[] = {
+  DeclareCallBackEntry(dlgTaskManager::OnTaskPaint),
+
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnRevertClicked),
+
+  DeclareCallBackEntry(NULL)
+};
+
+void
+TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  instance = this;
+
+  LoadWindow(task_close_callbacks, parent,
+             Layout::landscape
+             ? _T("IDR_XML_TASKMANAGERCLOSE_L") : _T("IDR_XML_TASKMANAGERCLOSE"));
+
+  wTaskView = (WndOwnerDrawFrame *)form.FindByName(_T("frmTaskViewClose"));
+  assert(wTaskView != NULL);
+  wTaskView->SetOnMouseDownNotify(dlgTaskManager::OnTaskViewClick);
+
+  wStatus = (WndFrame *)form.FindByName(_T("frmStatus"));
+  assert(wStatus);
+
+  cmdRevert = (WndButton *)form.FindByName(_T("cmdRevert"));
+  assert(cmdRevert);
+
+  cmdClose = (WndButton *)form.FindByName(_T("cmdClose"));
+  assert(cmdClose);
+
+  wStatus->SetAlignCenter();
 }
 
 bool
-pnlTaskManagerClose::OnTabClick()
+TaskClosePanel::Click()
 {
   if (!(*task_modified)) {
     dlgTaskManager::OnClose();
@@ -78,54 +110,16 @@ pnlTaskManagerClose::OnTabClick()
 }
 
 void
-pnlTaskManagerClose::OnTabReClick()
+TaskClosePanel::ReClick()
 {
   dlgTaskManager::OnClose();
 }
 
-bool
-pnlTaskManagerClose::OnTabPreShow()
+void
+TaskClosePanel::Show(const PixelRect &rc)
 {
   dlgTaskManager::TaskViewRestore(wTaskView);
-
   RefreshStatus();
-  return true;
-}
 
-Window*
-pnlTaskManagerClose::Load(SingleWindow &parent, TabBarControl* wTabBar,
-                          WndForm* _wf, OrderedTask** task,
-                          bool* _task_modified)
-{
-  assert(wTabBar);
-
-  assert(_wf);
-  wf = _wf;
-
-  assert(_task_modified);
-  task_modified = _task_modified;
-
-  Window *wTaskManagerClose =
-      LoadWindow(dlgTaskManager::CallBackTable, wf,
-                 wTabBar->GetClientAreaWindow(),
-                 Layout::landscape ?
-                     _T("IDR_XML_TASKMANAGERCLOSE_L") :
-                     _T("IDR_XML_TASKMANAGERCLOSE"));
-  assert(wTaskManagerClose);
-
-  wTaskView = (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskViewClose"));
-  assert(wTaskView != NULL);
-  wTaskView->SetOnMouseDownNotify(dlgTaskManager::OnTaskViewClick);
-
-  wStatus = (WndFrame *)wf->FindByName(_T("frmStatus"));
-  assert(wStatus);
-
-  cmdRevert = (WndButton *)wf->FindByName(_T("cmdRevert"));
-  assert(cmdRevert);
-
-  cmdClose = (WndButton *)wf->FindByName(_T("cmdClose"));
-  assert(cmdClose);
-
-  wStatus->SetAlignCenter();
-  return wTaskManagerClose;
+  XMLWidget::Show(rc);
 }

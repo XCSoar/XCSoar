@@ -24,61 +24,38 @@ Copyright_License {
 #ifndef XCSOAR_TASK_PROPERTIES_PANEL_HPP
 #define XCSOAR_TASK_PROPERTIES_PANEL_HPP
 
-#include "DataField/Base.hpp"
-#include "Screen/Point.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Engine/Task/TaskBehaviour.hpp"
 
-class Window;
-class SingleWindow;
-class WndForm;
-class TabBarControl;
+class WndOwnerDrawFrame;
 class OrderedTask;
+class DataFieldBoolean;
+class DataFieldEnum;
 
-class pnlTaskProperties
-{
+class TaskPropertiesPanel : public XMLWidget {
+  WndOwnerDrawFrame *wTaskView;
+
+  OrderedTask **ordered_task_pointer, *ordered_task;
+  bool *task_changed;
+
+  TaskBehaviour::FactoryType orig_taskType;
+
 public:
-  /**
-   * creates the control from its XML file and does any init work
-   * @param parent
-   * @param task_modified Sets to True if changes it.
-   * @param wf
-   * @return Window* that points to the control created
-   */
-  static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
-                      WndForm* wf, OrderedTask** task, bool* _task_modified);
+  TaskPropertiesPanel(OrderedTask **_active_task, bool *_task_modified)
+    :ordered_task_pointer(_active_task), task_changed(_task_modified) {}
 
-  /**
-   * copies values from form to ordered_task
-   * @return true
-   */
-  static bool OnTabPreHide();
+  void OnFAIFinishHeightChange(DataFieldBoolean &df);
+  void OnTaskTypeChange(DataFieldEnum &df);
 
-  /**
-   * Shows/Hides normal finish height depending on whether FAI
-   * Finish Height is on or off
-   * @param Sender
-   * @param Mode
-   */
-  static void OnFAIFinishHeightData(DataField *Sender, DataField::DataAccessKind_t Mode);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void ReClick();
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
 
-  /**
-   *
-   * Changes the task type and mutates the task points as necessary
-   * @param Sender datafield for prpTaskType
-   * @param Mode
-   */
-  static void OnTaskTypeData(DataField *Sender, DataField::DataAccessKind_t Mode);
-
-  /**
-   * copies values from ordered_task to form
-   * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
-   * @return true
-   */
-  static bool OnTabPreShow();
-
-  /**
-   * unzooms the task view if it is maximized
-   */
-  static void OnTabReClick();
+protected:
+  void InitView();
+  void RefreshView();
+  void ReadValues();
 };
 
 #endif

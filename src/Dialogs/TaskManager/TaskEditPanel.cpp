@@ -26,6 +26,7 @@ Copyright_License {
 #include "Dialogs/Task.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/dlgTools.h"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Screen/Layout.hpp"
@@ -48,38 +49,34 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-static WndForm* wf = NULL;
-static TabBarControl* wTabBar = NULL;
-static WndOwnerDrawFrame* wTaskView = NULL;
-static WndFrame* wSummary = NULL;
-static PixelRect TaskSummaryRect;
-static WndListFrame* wTaskPoints = NULL;
-static OrderedTask* ordered_task = NULL;
-static OrderedTask** ordered_task_pointer = NULL;
-static bool* task_modified = NULL;
+class WndButton;
 
-static void
-UpdateButtons()
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static TaskEditPanel *instance;
+
+void
+TaskEditPanel::UpdateButtons()
 {
   const unsigned index = wTaskPoints->GetCursorIndex();
   // Todo check if point is already finish
-  ShowFormControl(*wf, _T("cmdMakeFinish"),
+  ShowFormControl(form, _T("cmdMakeFinish"),
                   index > 0 &&
                   (index == ordered_task->TaskSize() - 1) &&
                   !ordered_task->HasFinish());
 
-  ShowFormControl(*wf, _T("cmdDown"),
+  ShowFormControl(form, _T("cmdDown"),
                   (int)index < ((int)(ordered_task->TaskSize()) - 1));
 
-  ShowFormControl(*wf, _T("cmdUp"),
+  ShowFormControl(form, _T("cmdUp"),
                   index > 0 && index < ordered_task->TaskSize());
 
-  ShowFormControl(*wf, _T("cmdEditTurnpoint"),
+  ShowFormControl(form, _T("cmdEditTurnpoint"),
                   index < ordered_task->TaskSize());
 }
 
 void
-pnlTaskEdit::RefreshView()
+TaskEditPanel::RefreshView()
 {
   UpdateButtons();
 
@@ -99,7 +96,7 @@ pnlTaskEdit::RefreshView()
 }
 
 void
-pnlTaskEdit::OnClearAllClicked(gcc_unused WndButton &Sender)
+TaskEditPanel::OnClearAllClicked()
 {
   if ((ordered_task->TaskSize() < 2) ||
       (MessageBoxX(_("Clear all points?"), _("Task edit"),
@@ -112,9 +109,15 @@ pnlTaskEdit::OnClearAllClicked(gcc_unused WndButton &Sender)
   }
 }
 
+static void
+OnClearAllClicked(gcc_unused WndButton &Sender)
+{
+  instance->OnClearAllClicked();
+}
+
 void
-pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
-                                 unsigned DrawListIndex)
+TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
+                                   unsigned DrawListIndex)
 {
   assert(DrawListIndex <= ordered_task->TaskSize());
 
@@ -187,17 +190,29 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
                       rc.right - leg_info_width - left, buffer);
 }
 
+static void
+OnTaskPaintListItem(Canvas &canvas, const PixelRect rc, unsigned DrawListIndex)
+{
+  instance->OnTaskPaintListItem(canvas, rc, DrawListIndex);
+}
+
 void
-pnlTaskEdit::OnEditTurnpointClicked(gcc_unused WndButton &Sender)
+TaskEditPanel::OnEditTurnpointClicked()
 {
   OnTaskListEnter(wTaskPoints->GetCursorIndex());
 }
 
+static void
+OnEditTurnpointClicked(gcc_unused WndButton &Sender)
+{
+  instance->OnEditTurnpointClicked();
+}
+
 void
-pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
+TaskEditPanel::OnTaskListEnter(unsigned ItemIndex)
 {
   if (ItemIndex < ordered_task->TaskSize()) {
-    if (dlgTaskPointShowModal(wf->GetMainWindow(), &ordered_task, ItemIndex)) {
+    if (dlgTaskPointShowModal(wf.GetMainWindow(), &ordered_task, ItemIndex)) {
       *task_modified = true;
       RefreshView();
     }
@@ -206,7 +221,7 @@ pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
     OrderedTaskPoint* point = NULL;
     AbstractTaskFactory &factory = ordered_task->GetFactory();
     const Waypoint* way_point =
-      dlgWaypointSelect(wf->GetMainWindow(),
+      dlgWaypointSelect(wf.GetMainWindow(),
                         ordered_task->TaskSize() > 0 ?
                           ordered_task->get_tp(ordered_task->
                               TaskSize() - 1)->GetLocation() :
@@ -232,20 +247,33 @@ pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
   }
 }
 
-void
-pnlTaskEdit::OnTaskCursorCallback(gcc_unused unsigned i)
+static void
+OnTaskListEnter(unsigned ItemIndex)
 {
-  UpdateButtons();
+  instance->OnTaskListEnter(ItemIndex);
 }
+
+static void
+OnTaskCursorCallback(gcc_unused unsigned i)
+{
+  instance->UpdateButtons();
+}
+
 void
-pnlTaskEdit::OnMakeFinish(gcc_unused WndButton &Sender)
+TaskEditPanel::OnMakeFinish()
 {
   ordered_task->GetFactory().CheckAddFinish();
   RefreshView();
 }
 
 static void
-MoveUp()
+OnMakeFinish(gcc_unused WndButton &Sender)
+{
+  instance->OnMakeFinish();
+}
+
+void
+TaskEditPanel::MoveUp()
 {
   if (!wTaskPoints)
     return;
@@ -259,17 +287,18 @@ MoveUp()
 
   wTaskPoints->SetCursorIndex(index - 1);
   *task_modified = true;
-  pnlTaskEdit::RefreshView();
-}
 
-void
-pnlTaskEdit::OnMoveUpClicked(gcc_unused WndButton &Sender)
-{
-  MoveUp();
+  RefreshView();
 }
 
 static void
-MoveDown()
+OnMoveUpClicked(gcc_unused WndButton &Sender)
+{
+  instance->MoveUp();
+}
+
+void
+TaskEditPanel::MoveDown()
 {
   if (!wTaskPoints)
     return;
@@ -283,22 +312,23 @@ MoveDown()
 
   wTaskPoints->SetCursorIndex(index + 1);
   *task_modified = true;
-  pnlTaskEdit::RefreshView();
+
+  RefreshView();
 }
 
-void
-pnlTaskEdit::OnMoveDownClicked(gcc_unused WndButton &Sender)
+static void
+OnMoveDownClicked(gcc_unused WndButton &Sender)
 {
-  MoveDown();
+  instance->MoveDown();
 }
 
 bool
-pnlTaskEdit::OnKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
+TaskEditPanel::OnKeyDown(unsigned key_code)
 {
   switch (key_code){
   case VK_ESCAPE:
     if (is_altair() && wTaskPoints->has_focus()){
-       wf->focus_first_control();
+       wf.focus_first_control();
       return true;
     }
     return false;
@@ -322,8 +352,61 @@ pnlTaskEdit::OnKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
   }
 }
 
-bool
-pnlTaskEdit::OnTabPreShow()
+static bool
+OnKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
+{
+  return instance->OnKeyDown(key_code);
+}
+
+static gcc_constexpr_data CallBackTableEntry task_edit_callbacks[] = {
+  DeclareCallBackEntry(dlgTaskManager::OnTaskPaint),
+
+  DeclareCallBackEntry(OnMakeFinish),
+  DeclareCallBackEntry(OnMoveUpClicked),
+  DeclareCallBackEntry(OnMoveDownClicked),
+  DeclareCallBackEntry(OnEditTurnpointClicked),
+  DeclareCallBackEntry(OnClearAllClicked),
+
+  DeclareCallBackEntry(NULL)
+};
+
+void
+TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  ordered_task = *ordered_task_pointer;;
+
+  LoadWindow(task_edit_callbacks, parent,
+             Layout::landscape
+             ? _T("IDR_XML_TASKEDIT_L") : _T("IDR_XML_TASKEDIT"));
+
+  instance = this;
+
+  wTaskPoints = (WndListFrame*)form.FindByName(_T("frmTaskPoints"));
+  assert(wTaskPoints != NULL);
+
+  wTaskView = (WndOwnerDrawFrame*)form.FindByName(_T("frmTaskView"));
+  assert(wTaskView != NULL);
+  wTaskView->SetOnMouseDownNotify(dlgTaskManager::OnTaskViewClick);
+
+  wSummary = (WndFrame *)form.FindByName(_T("frmSummary"));
+  assert(wSummary);
+
+  UPixelScalar line_height = Fonts::MapBold.GetHeight() + Layout::Scale(6) +
+    Fonts::MapLabel.GetHeight();
+  wTaskPoints->SetItemHeight(line_height);
+  wTaskPoints->SetActivateCallback(::OnTaskListEnter);
+  wTaskPoints->SetPaintItemCallback(::OnTaskPaintListItem);
+  wTaskPoints->SetCursorCallback(::OnTaskCursorCallback);
+}
+
+void
+TaskEditPanel::ReClick()
+{
+  dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
+}
+
+void
+TaskEditPanel::Show(const PixelRect &rc)
 {
   if (ordered_task != *ordered_task_pointer) {
     ordered_task = *ordered_task_pointer;
@@ -331,63 +414,16 @@ pnlTaskEdit::OnTabPreShow()
   }
   dlgTaskManager::TaskViewRestore(wTaskView);
   RefreshView();
-  return true;
+
+  wf.SetKeyDownNotify(::OnKeyDown);
+
+  XMLWidget::Show(rc);
 }
 
 void
-pnlTaskEdit::OnTabReClick()
+TaskEditPanel::Hide()
 {
-  dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
-}
+  wf.SetKeyDownNotify(NULL);
 
-Window*
-pnlTaskEdit::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
-                  OrderedTask** task, bool* _task_modified)
-{
-  assert(_wTabBar);
-  wTabBar = _wTabBar;
-
-  assert(_wf);
-  wf = _wf;
-
-  assert (task);
-  ordered_task_pointer = task;
-
-  assert(*task);
-  ordered_task = *ordered_task_pointer;;
-
-  assert(_task_modified);
-  task_modified = _task_modified;
-
-  Window *wTps =
-      LoadWindow(dlgTaskManager::CallBackTable, wf,
-                 wTabBar->GetClientAreaWindow(),
-                 Layout::landscape ?
-                 _T("IDR_XML_TASKEDIT_L") : _T("IDR_XML_TASKEDIT"));
-  assert(wTps);
-
-  wTaskPoints = (WndListFrame*)wf->FindByName(_T("frmTaskPoints"));
-  assert(wTaskPoints != NULL);
-
-  wTaskView = (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskView"));
-  assert(wTaskView != NULL);
-  wTaskView->SetOnMouseDownNotify(dlgTaskManager::OnTaskViewClick);
-
-  wSummary = (WndFrame *)wf->FindByName(_T("frmSummary"));
-  assert(wSummary);
-  TaskSummaryRect = wSummary->get_position();
-
-  UPixelScalar line_height = Fonts::MapBold.GetHeight() + Layout::Scale(6) +
-    Fonts::MapLabel.GetHeight();
-  wTaskPoints->SetItemHeight(line_height);
-  wTaskPoints->SetActivateCallback(OnTaskListEnter);
-  wTaskPoints->SetPaintItemCallback(OnTaskPaintListItem);
-  wTaskPoints->SetCursorCallback(OnTaskCursorCallback);
-
-  //Todo: fix onkey down.  release on hiding?
-  wf->SetKeyDownNotify(OnKeyDown);
-
-  RefreshView();
-
-  return wTps;
+  XMLWidget::Hide();
 }

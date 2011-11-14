@@ -24,46 +24,30 @@ Copyright_License {
 #ifndef XCSOAR_TASK_CLOSE_PANEL_HPP
 #define XCSOAR_TASK_CLOSE_PANEL_HPP
 
-class Window;
-class SingleWindow;
-class WndForm;
-class WndButton;
-class TabBarControl;
+#include "Form/XMLWidget.hpp"
+
 class OrderedTask;
+class WndOwnerDrawFrame;
+class WndFrame;
+class WndButton;
 
-class pnlTaskManagerClose
-{
+class TaskClosePanel : public XMLWidget {
+  bool *task_modified;
+
+  WndOwnerDrawFrame *wTaskView;
+  WndFrame *wStatus;
+  WndButton *cmdRevert, *cmdClose;
+
 public:
-  /**
-   * creates the control from its XML file and does any init work
-   * @param parent
-   * @param task_modified Sets to True if changes it.
-   * @param wf
-   * @return Window* that points to the control created
-   */
-  static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
-                      WndForm* wf, OrderedTask** task, bool* _task_modified);
+  TaskClosePanel(bool *_task_modified)
+    :task_modified(_task_modified) {}
 
-  static void OnCloseClicked(WndButton &Sender);
-  static void OnRevertClicked(WndButton &Sender);
+  void RefreshStatus();
 
-  /**
-   * callback
-   * sets status and buttons per task edit status
-   * Closes immediately if flying and task not changed and mouse click
-   * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
-   * @return True
-   */
-  static bool OnTabPreShow();
-
-  static bool OnTabClick();
-
-  /**
-   * Called when the Close tab is displayed and clicked a 2nd time
-   * Acts as if the user clicked the Fly button
-   */
-  static void OnTabReClick();
-
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Click();
+  virtual void ReClick();
+  virtual void Show(const PixelRect &rc);
 };
 
 #endif

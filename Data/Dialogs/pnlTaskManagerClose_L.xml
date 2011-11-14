@@ -3,9 +3,9 @@
 <Panel Name="frmTaskClose" Border="0">
   <Panel Name="frmProperties" X="100" Y="0">
 
-    <Button Name="cmdClose" Caption="Fly" X="30" Y="25" Width="120" Height="40" OnClick="pnlTaskManagerClose::OnCloseClicked"/>
+    <Button Name="cmdClose" Caption="Fly" X="30" Y="25" Width="120" Height="40" OnClick="OnCloseClicked"/>
     <Label Name="frmStatus" X="10" Y="86" Width="160" Height="20" Border="0"/>
-    <Button Name="cmdRevert" Caption="Revert Changes" X="30" Y="106" Width="120" Height="35" OnClick="pnlTaskManagerClose::OnRevertClicked"/>
+    <Button Name="cmdRevert" Caption="Revert Changes" X="30" Y="106" Width="120" Height="35" OnClick="OnRevertClicked"/>
   </Panel>
   <Canvas Name="frmTaskViewClose" X="0" Y="0" Width="80" Height="53" Border="0" OnPaint="dlgTaskManager::OnTaskPaint" />
 

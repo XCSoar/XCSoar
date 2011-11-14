@@ -35,11 +35,11 @@
 
   <Edit Name="prpFAIFinishHeight" Caption="FAI start / finish rules" X="2" Width="-2" Height="22" CaptionWidth="140"
     Help="If enabled, has no max start height or max start speed and requires the minimum height above ground for finish to be greater than 1000m below the start height.">
-    <DataField DataType="boolean" OnDataAccess="pnlTaskProperties::OnFAIFinishHeightData"/>
+    <DataField DataType="boolean" OnDataAccess="OnFAIFinishHeightData"/>
   </Edit>
   <Edit Name="prpTaskType" Caption="Task type" X="2" Width="-2" Height="22" CaptionWidth="140"
     Help="Sets the behaviour for the current task.">
-    <DataField DataType="enum" OnDataAccess="pnlTaskProperties::OnTaskTypeData"/>
+    <DataField DataType="enum" OnDataAccess="OnTaskTypeData"/>
   </Edit>  
   
   </Panel>

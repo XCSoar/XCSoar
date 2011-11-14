@@ -34,16 +34,12 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-static WndForm *wf = NULL;
-static OrderedTask* ordered_task = NULL;
-static WndOwnerDrawFrame* wTaskView = NULL;
-static bool* task_changed = NULL;
-static OrderedTask** ordered_task_pointer = NULL;
-static TaskBehaviour::FactoryType orig_taskType =
-    TaskBehaviour::FACTORY_RT;
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static TaskPropertiesPanel *instance;
 
-static void 
-InitView()
+void
+TaskPropertiesPanel::InitView()
 {
   WndProperty* wp;
 
@@ -52,16 +48,16 @@ InitView()
     { hrMSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level)") },
     { 0 }
   };
-  LoadFormProperty(*wf, _T("prpStartHeightRef"), start_max_height_ref_list, hrAGL);
+  LoadFormProperty(form, _T("prpStartHeightRef"), start_max_height_ref_list, hrAGL);
 
   static gcc_constexpr_data StaticEnumChoice finish_min_height_ref_list[] = {
     { hrAGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point)") },
     { hrMSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level)") },
     { 0 }
   };
-  LoadFormProperty(*wf, _T("prpFinishHeightRef"), finish_min_height_ref_list, hrAGL);
+  LoadFormProperty(form, _T("prpFinishHeightRef"), finish_min_height_ref_list, hrAGL);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskType"));
+  wp = (WndProperty *)form.FindByName(_T("prpTaskType"));
   if (wp) {
     const std::vector<TaskBehaviour::FactoryType> factory_types =
         ordered_task->GetFactoryTypes();
@@ -79,8 +75,8 @@ InitView()
   }
 }
 
-static void 
-RefreshView()
+void
+TaskPropertiesPanel::RefreshView()
 {
   const TaskBehaviour::FactoryType ftype = ordered_task->get_factory_type();
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
@@ -88,30 +84,30 @@ RefreshView()
   bool aat_types = (ftype == TaskBehaviour::FACTORY_AAT);
   bool fai_start_finish = p.fai_finish;
 
-  LoadFormProperty(*wf, _T("prpTaskType"),(int)ftype);
+  LoadFormProperty(form, _T("prpTaskType"),(int)ftype);
 
-  ShowFormControl(*wf, _T("prpMinTime"), aat_types);
-  LoadFormProperty(*wf, _T("prpMinTime"), p.aat_min_time / 60);
+  ShowFormControl(form, _T("prpMinTime"), aat_types);
+  LoadFormProperty(form, _T("prpMinTime"), p.aat_min_time / 60);
 
-  LoadFormProperty(*wf, _T("prpFAIFinishHeight"), p.fai_finish);
+  LoadFormProperty(form, _T("prpFAIFinishHeight"), p.fai_finish);
 
-  ShowFormControl(*wf, _T("prpStartMaxSpeed"), !fai_start_finish);
-  LoadFormProperty(*wf, _T("prpStartMaxSpeed"),
+  ShowFormControl(form, _T("prpStartMaxSpeed"), !fai_start_finish);
+  LoadFormProperty(form, _T("prpStartMaxSpeed"),
                    ugHorizontalSpeed, p.start_max_speed);
 
-  ShowFormControl(*wf, _T("prpStartMaxHeight"), !fai_start_finish);
-  LoadFormProperty(*wf, _T("prpStartMaxHeight"),
+  ShowFormControl(form, _T("prpStartMaxHeight"), !fai_start_finish);
+  LoadFormProperty(form, _T("prpStartMaxHeight"),
                    ugAltitude, p.start_max_height);
 
-  ShowFormControl(*wf, _T("prpFinishMinHeight"), !fai_start_finish);
-  LoadFormProperty(*wf, _T("prpFinishMinHeight"),
+  ShowFormControl(form, _T("prpFinishMinHeight"), !fai_start_finish);
+  LoadFormProperty(form, _T("prpFinishMinHeight"),
                    ugAltitude, p.finish_min_height);
 
-  ShowFormControl(*wf, _T("prpStartHeightRef"), !fai_start_finish);
-  LoadFormProperty(*wf, _T("prpStartHeightRef"), p.start_max_height_ref);
+  ShowFormControl(form, _T("prpStartHeightRef"), !fai_start_finish);
+  LoadFormProperty(form, _T("prpStartHeightRef"), p.start_max_height_ref);
 
-  ShowFormControl(*wf, _T("prpFinishHeightRef"), !fai_start_finish);
-  LoadFormProperty(*wf, _T("prpFinishHeightRef"), p.finish_min_height_ref);
+  ShowFormControl(form, _T("prpFinishHeightRef"), !fai_start_finish);
+  LoadFormProperty(form, _T("prpFinishHeightRef"), p.finish_min_height_ref);
 
   wTaskView->invalidate();
 
@@ -119,142 +115,145 @@ RefreshView()
   // finish_min_height
 }
 
-
-static void 
-ReadValues()
+void
+TaskPropertiesPanel::ReadValues()
 {
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
 
   TaskBehaviour::FactoryType newtype = ordered_task->get_factory_type();
-  *task_changed |= SaveFormPropertyEnum(*wf, _T("prpTaskType"), newtype);
+  *task_changed |= SaveFormPropertyEnum(form, _T("prpTaskType"), newtype);
 
-  fixed min_time = GetFormValueFixed(*wf, _T("prpMinTime")) * 60;
+  fixed min_time = GetFormValueFixed(form, _T("prpMinTime")) * 60;
   if (min_time != p.aat_min_time) {
     p.aat_min_time = min_time;
     *task_changed = true;
   }
 
   unsigned max_height =
-    iround(Units::ToSysAltitude(GetFormValueFixed(*wf, _T("prpStartMaxHeight"))));
+    iround(Units::ToSysAltitude(GetFormValueFixed(form, _T("prpStartMaxHeight"))));
   if (max_height != p.start_max_height) {
     p.start_max_height = max_height;
     *task_changed = true;
   }
 
   fixed max_speed =
-    Units::ToSysSpeed(GetFormValueFixed(*wf, _T("prpStartMaxSpeed")));
+    Units::ToSysSpeed(GetFormValueFixed(form, _T("prpStartMaxSpeed")));
   if (max_speed != p.start_max_speed) {
     p.start_max_speed = max_speed;
     *task_changed = true;
   }
 
   unsigned min_height =
-    iround(Units::ToSysAltitude(GetFormValueFixed(*wf, _T("prpFinishMinHeight"))));
+    iround(Units::ToSysAltitude(GetFormValueFixed(form, _T("prpFinishMinHeight"))));
   if (min_height != p.finish_min_height) {
     p.finish_min_height = min_height;
     *task_changed = true;
   }
 
   HeightReferenceType height_ref_start = (HeightReferenceType)
-      GetFormValueInteger(*wf, _T("prpStartHeightRef"));
+      GetFormValueInteger(form, _T("prpStartHeightRef"));
   if (height_ref_start != p.start_max_height_ref) {
     p.start_max_height_ref = height_ref_start;
     *task_changed = true;
   }
 
   HeightReferenceType height_ref_finish = (HeightReferenceType)
-      GetFormValueInteger(*wf, _T("prpFinishHeightRef"));
+      GetFormValueInteger(form, _T("prpFinishHeightRef"));
   if (height_ref_finish != p.finish_min_height_ref) {
     p.finish_min_height_ref = height_ref_finish;
     *task_changed = true;
   }
 }
 
-bool
-pnlTaskProperties::OnTabPreShow()
+void
+TaskPropertiesPanel::OnFAIFinishHeightChange(DataFieldBoolean &df)
 {
-  ordered_task = *ordered_task_pointer;
-  orig_taskType = ordered_task->get_factory_type();
-  LoadFormProperty(*wf, _T("prpTaskType"),
-      (unsigned)orig_taskType);
-  dlgTaskManager::TaskViewRestore(wTaskView);
-  RefreshView();
-  return true;
+  OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
+  bool newvalue = df.GetAsBoolean();
+  if (newvalue != p.fai_finish) {
+    p.fai_finish = newvalue;
+    *task_changed = true;
+    RefreshView();
+  }
 }
 
-bool
-pnlTaskProperties::OnTabPreHide()
+static void
+OnFAIFinishHeightData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  ReadValues();
-  if (orig_taskType != ordered_task->get_factory_type())
-    ordered_task->GetFactory().mutate_tps_to_task_type();
-
-  return true;
+  if (Mode == DataField::daChange)
+    instance->OnFAIFinishHeightChange(*(DataFieldBoolean*)Sender);
 }
 
 void
-pnlTaskProperties::OnTabReClick()
+TaskPropertiesPanel::OnTaskTypeChange(DataFieldEnum &df)
+{
+  const TaskBehaviour::FactoryType newtype =
+    (TaskBehaviour::FactoryType)df.GetAsInteger();
+  if (newtype != ordered_task->get_factory_type()) {
+    ReadValues();
+    ordered_task->SetFactory(newtype);
+    *task_changed =true;
+    RefreshView();
+  }
+}
+
+static void
+OnTaskTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  if (Mode == DataField::daChange)
+    instance->OnTaskTypeChange(*(DataFieldEnum *)Sender);
+}
+
+static gcc_constexpr_data CallBackTableEntry task_properties_callbacks[] = {
+  DeclareCallBackEntry(dlgTaskManager::OnTaskPaint),
+
+  DeclareCallBackEntry(OnTaskTypeData),
+  DeclareCallBackEntry(OnFAIFinishHeightData),
+
+  DeclareCallBackEntry(NULL)
+};
+
+void
+TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  instance = this;
+
+  LoadWindow(task_properties_callbacks, parent,
+             Layout::landscape
+             ? _T("IDR_XML_TASKPROPERTIES_L") : _T("IDR_XML_TASKPROPERTIES"));
+
+  wTaskView = (WndOwnerDrawFrame*)form.FindByName(_T("frmTaskViewProperties"));
+  assert(wTaskView != NULL);
+  wTaskView->SetOnMouseDownNotify(dlgTaskManager::OnTaskViewClick);
+
+  InitView();
+}
+
+void
+TaskPropertiesPanel::ReClick()
 {
   dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
 }
 
 void
-pnlTaskProperties::OnFAIFinishHeightData(DataField *Sender, DataField::DataAccessKind_t Mode)
+TaskPropertiesPanel::Show(const PixelRect &rc)
 {
-  OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
-  if (Mode == DataField::daChange) {
-    bool newvalue = ((DataFieldBoolean*)Sender)->GetAsBoolean();
-    if (newvalue != p.fai_finish) {
-      p.fai_finish = newvalue;
-      *task_changed = true;
-      RefreshView();
-    }
-  }
-}
+  ordered_task = *ordered_task_pointer;
+  orig_taskType = ordered_task->get_factory_type();
 
+  LoadFormProperty(form, _T("prpTaskType"), (unsigned)orig_taskType);
+  dlgTaskManager::TaskViewRestore(wTaskView);
+  RefreshView();
+
+  XMLWidget::Show(rc);
+}
 
 void
-pnlTaskProperties::OnTaskTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
+TaskPropertiesPanel::Hide()
 {
-  if (Mode == DataField::daChange) {
-    const DataFieldEnum &df = *(DataFieldEnum *)Sender;
-    const TaskBehaviour::FactoryType newtype =
-       (TaskBehaviour::FactoryType)df.GetAsInteger();
-    if (newtype != ordered_task->get_factory_type()) {
-      ReadValues();
-      ordered_task->SetFactory(newtype);
-      *task_changed =true;
-      RefreshView();
-    }
-  }
-}
+  ReadValues();
+  if (orig_taskType != ordered_task->get_factory_type())
+    ordered_task->GetFactory().mutate_tps_to_task_type();
 
-Window*
-pnlTaskProperties::Load(SingleWindow &parent, TabBarControl* wTabBar,
-                        WndForm* _wf, OrderedTask** task, bool* _task_modified)
-{
-  ordered_task_pointer = task;
-  ordered_task = *ordered_task_pointer;;
-
-  assert(_task_modified);
-  task_changed = _task_modified;
-
-  assert(_wf);
-  wf = _wf;
-
-  Window *wProp =
-      LoadWindow(dlgTaskManager::CallBackTable, wf,
-                 wTabBar->GetClientAreaWindow(),
-                 Layout::landscape ?
-                 _T("IDR_XML_TASKPROPERTIES_L") : _T("IDR_XML_TASKPROPERTIES"));
-
-  wTaskView = (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskViewProperties"));
-  assert(wTaskView != NULL);
-  wTaskView->SetOnMouseDownNotify(dlgTaskManager::OnTaskViewClick);
-
-  assert(wProp);
-
-  InitView();
-
-  return wProp;
+  XMLWidget::Hide();
 }

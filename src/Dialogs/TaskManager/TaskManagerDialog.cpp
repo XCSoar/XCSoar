@@ -90,6 +90,9 @@ bool
 dlgTaskManager::OnTaskViewClick(WndOwnerDrawFrame *Sender,
                                 PixelScalar x, PixelScalar y)
 {
+  if (TaskViewRect.right == 0)
+    TaskViewRect = Sender->get_position();
+
   if (!fullscreen) {
     const UPixelScalar xoffset = Layout::landscape ? wTabBar->GetTabWidth() : 0;
     const UPixelScalar yoffset = !Layout::landscape ? wTabBar->GetTabHeight() : 0;
@@ -110,6 +113,11 @@ dlgTaskManager::OnTaskViewClick(WndOwnerDrawFrame *Sender,
 void
 dlgTaskManager::TaskViewRestore(WndOwnerDrawFrame *wTaskView)
 {
+  if (TaskViewRect.right == 0) {
+    TaskViewRect = wTaskView->get_position();
+    return;
+  }
+
   fullscreen = false;
   wTaskView->move(TaskViewRect.left, TaskViewRect.top,
       TaskViewRect.right - TaskViewRect.left,
@@ -195,22 +203,7 @@ dlgTaskManagerShowModal(SingleWindow &parent)
 }
 
 const CallBackTableEntry dlgTaskManager::CallBackTable[] = {
-  DeclareCallBackEntry(dlgTaskManager::OnTaskPaint),
   DeclareCallBackEntry(dlgTaskManager::OnBlackBarPaint),
-
-  DeclareCallBackEntry(pnlTaskEdit::OnMakeFinish),
-  DeclareCallBackEntry(pnlTaskEdit::OnMoveUpClicked),
-  DeclareCallBackEntry(pnlTaskEdit::OnMoveDownClicked),
-  DeclareCallBackEntry(pnlTaskEdit::OnEditTurnpointClicked),
-  DeclareCallBackEntry(pnlTaskEdit::OnClearAllClicked),
-  DeclareCallBackEntry(pnlTaskEdit::OnTabPreShow),
-
-  DeclareCallBackEntry(pnlTaskProperties::OnTaskTypeData),
-
-  DeclareCallBackEntry(pnlTaskProperties::OnFAIFinishHeightData),
-
-  DeclareCallBackEntry(pnlTaskManagerClose::OnCloseClicked),
-  DeclareCallBackEntry(pnlTaskManagerClose::OnRevertClicked),
 
   DeclareCallBackEntry(NULL)
 };
@@ -259,24 +252,13 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     wBlackRect->show_on_top();
   }
 
-  Window* wProps =
-    pnlTaskProperties::Load(parent, wTabBar, wf, &active_task, &task_modified);
-  assert(wProps);
+  Widget *wProps = new TaskPropertiesPanel(&active_task, &task_modified);
 
-  Window* wClose =
-    pnlTaskManagerClose::Load(parent, wTabBar, wf, &active_task, &task_modified);
-  assert(wClose);
+  Widget *wClose = new TaskClosePanel(&task_modified);
 
   Widget *wCalculator = new TaskCalculatorPanel(*wf, &task_modified);
 
-  Window* wEdit =
-    pnlTaskEdit::Load(parent, wTabBar, wf, &active_task, &task_modified);
-  assert(wEdit);
-
-  WndOwnerDrawFrame* wTaskView =
-      (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskView"));
-  assert(wTaskView);
-  TaskViewRect = wTaskView->get_position();
+  Widget *wEdit = new TaskEditPanel(*wf, &active_task, &task_modified);
 
   Widget *list_tab = new TaskListPanel(*wf, *wTabBar,
                                        &active_task, &task_modified);
@@ -295,41 +277,26 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   wTabBar->AddTab(wCalculator, _("Calculator"), false, CalcIcon);
 
   if (Layout::landscape) {
-    wTabBar->AddClient(wEdit, _("Turn Points"), false, TurnPointIcon, NULL,
-                       pnlTaskEdit::OnTabPreShow, NULL,
-                       NULL, pnlTaskEdit::OnTabReClick);
+    wTabBar->AddTab(wEdit, _("Turn Points"), false, TurnPointIcon);
     TurnpointTab = 1;
 
     wTabBar->AddTab(list_tab, _("Manage"), false, BrowseIcon);
 
-    wTabBar->AddClient(wProps, _("Rules"), false, PropertiesIcon,
-                       pnlTaskProperties::OnTabPreHide,
-                       pnlTaskProperties::OnTabPreShow, NULL,
-                       NULL, pnlTaskProperties::OnTabReClick);
+    wTabBar->AddTab(wProps, _("Rules"), false, PropertiesIcon);
     PropertiesTab = 3;
 
-    wTabBar->AddClient(wClose, _("Close"), false, NULL, NULL,
-                       pnlTaskManagerClose::OnTabPreShow, NULL,
-                       pnlTaskManagerClose::OnTabClick,
-                       pnlTaskManagerClose::OnTabReClick);
+    wTabBar->AddTab(wClose, _("Close"), false);
 
     wTabBar->SetCurrentPage(0);
   } else {
-    wTabBar->AddClient(wClose, _("Close"), false, NULL, NULL,
-                       pnlTaskManagerClose::OnTabPreShow, NULL,
-                       NULL, pnlTaskManagerClose::OnTabReClick);
+    wTabBar->AddTab(wClose, _("Close"), false);
 
-    wTabBar->AddClient(wEdit, _("Turn Points"), false, TurnPointIcon, NULL,
-                       pnlTaskEdit::OnTabPreShow, NULL,
-                       NULL, pnlTaskEdit::OnTabReClick);
+    wTabBar->AddTab(wEdit, _("Turn Points"), false, TurnPointIcon);
     TurnpointTab = 2;
 
     wTabBar->AddTab(list_tab, _("Manage"), false, BrowseIcon);
 
-    wTabBar->AddClient(wProps, _("Rules"), false, PropertiesIcon,
-                       pnlTaskProperties::OnTabPreHide,
-                       pnlTaskProperties::OnTabPreShow, NULL,
-                       NULL, pnlTaskProperties::OnTabReClick);
+    wTabBar->AddTab(wProps, _("Rules"), false, PropertiesIcon);
     PropertiesTab = 4;
 
     wTabBar->SetCurrentPage(0);

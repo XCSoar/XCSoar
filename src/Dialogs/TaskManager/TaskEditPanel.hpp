@@ -24,89 +24,53 @@ Copyright_License {
 #ifndef XCSOAR_TASK_EDIT_PANEL_HPP
 #define XCSOAR_TASK_EDIT_PANEL_HPP
 
-#include "Screen/Point.hpp"
+#include "Form/XMLWidget.hpp"
 
-class Window;
-class SingleWindow;
 class WndForm;
-class TabBarControl;
-class WndButton;
-class Canvas;
 class OrderedTask;
+class WndListFrame;
+class WndOwnerDrawFrame;
+class WndFrame;
+class Canvas;
 
-class pnlTaskEdit
-{
+class TaskEditPanel : public XMLWidget {
+  WndForm &wf;
+
+  OrderedTask **ordered_task_pointer, *ordered_task;
+  bool *task_modified;
+
+  WndListFrame *wTaskPoints;
+  WndOwnerDrawFrame *wTaskView;
+  WndFrame *wSummary;
+
 public:
-  /**
-   * creates the control from its XML file and does any init work
-   * @param parent
-   * @param task_modified Sets to True if changes it.
-   * @param wf
-   * @return Window* that points to the control created
-   */
-  static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
-                      WndForm* wf, OrderedTask** task, bool* _task_modified);
+  TaskEditPanel(WndForm &_wf,
+                OrderedTask **_active_task, bool *_task_modified)
+    :wf(_wf),
+     ordered_task_pointer(_active_task), task_modified(_task_modified) {}
 
-  /**
-   * clears task points
-   * leaves task properies unchanged
-   * prompts if task has points already
-   * @param Sender
-   */
-  static void OnClearAllClicked(WndButton &Sender);
-  static void OnEditTurnpointClicked(WndButton &Sender);
+  void UpdateButtons();
 
-  static void OnMoveUpClicked(WndButton &Sender);
+  void MoveUp();
+  void MoveDown();
 
-  /* only visible if on last tp
-   * converts non-finish to finish point
-   * using finish defaults
-   */
-  static void OnMakeFinish(WndButton &Sender);
+  void OnClearAllClicked();
+  void OnEditTurnpointClicked();
+  void OnTaskListEnter(unsigned ItemIndex);
+  void OnMakeFinish();
 
+  bool OnKeyDown(unsigned key_code);
 
-  /**
-   * moves the task point up (down) in the task point list
-   * @param Sender
-   */
-  static void OnMoveDownClicked(WndButton &Sender);
-  static bool OnKeyDown(WndForm &Sender, unsigned key_code);
-  static void OnTaskCursorCallback(unsigned i);
+  void OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
+                           unsigned DrawListIndex);
 
-  /**
-   * Paints a single task list item in the listbox
-   * @param canvas
-   * @param rc
-   * @param DrawListIndex
-   */
-  static void OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
-                                  unsigned DrawListIndex);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void ReClick();
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
 
-  /**
-   * shows dlgTaskPoint to edit point's properties
-   * or adds new waypoint if (Add Waypoint) is clicked
-   * @param ItemIndex index of item
-   */
-  static void OnTaskListEnter(unsigned ItemIndex);
-
-  /**
-   * updates TaskView, TaskPoints and TaskSummary
-   * update
-   */
-  static void RefreshView();
-
-  /**
-   * callback to when tab is viewed
-   * loads task, refreshes view
-   * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
-   * @return True
-   */
-  static bool OnTabPreShow();
-
-  /**
-   * unzooms the task view if it is maximized
-   */
-  static void OnTabReClick();
+protected:
+  void RefreshView();
 };
 
 #endif
