@@ -26,7 +26,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Form/Edit.hpp"
+#include "Form/Util.hpp"
 
 gcc_pure
 static const TCHAR *
@@ -50,70 +50,38 @@ SystemStatusPanel::Refresh()
 
   TCHAR Temp[80];
 
-  WndProperty* wp;
+  SetFormValue(form, _T("prpGPS"), gettext(GetGPSStatus(basic)));
 
-  wp = (WndProperty*)form.FindByName(_T("prpGPS"));
-  assert(wp != NULL);
-  wp->SetText(gettext(GetGPSStatus(basic)));
-  wp->RefreshDisplay();
-
-  wp = (WndProperty*)form.FindByName(_T("prpNumSat"));
-  assert(wp != NULL);
   if (!basic.connected)
-    wp->SetText(_T(""));
+    SetFormValue(form, _T("prpNumSat"), _T(""));
   else if (gps.satellites_used >= 0) {
     // known number of sats
     _stprintf(Temp,_T("%d"), gps.satellites_used);
-    wp->SetText(Temp);
+    SetFormValue(form, _T("prpNumSat"), Temp);
   } else
     // valid but unknown number of sats
-    wp->SetText(_("Unknown"));
+    SetFormValue(form, _T("prpNumSat"), _("Unknown"));
 
-  wp->RefreshDisplay();
+  SetFormValue(form, _T("prpVario"),
+               basic.total_energy_vario_available
+               ? _("Connected")
+               : _("Disconnected"));
 
+  SetFormValue(form, _T("prpFLARM"),
+               basic.flarm.available
+               ? _("Connected")
+               : _("Disconnected"));
 
-  wp = (WndProperty*)form.FindByName(_T("prpVario"));
-  assert(wp != NULL);
-  if (basic.total_energy_vario_available)
-    wp->SetText(_("Connected"));
-  else
-    wp->SetText(_("Disconnected"));
+  SetFormValue(form, _T("prpLogger"),
+               logger.IsLoggerActive()
+               ? _("On")
+               : _("Off"));
 
-  wp->RefreshDisplay();
+  SetFormValue(form, _T("prpDeclared"),
+               logger.IsTaskDeclared()
+               ? _("Yes")
+               : _("No"));
 
-
-  wp = (WndProperty*)form.FindByName(_T("prpFLARM"));
-  assert(wp != NULL);
-  if (basic.flarm.available)
-    wp->SetText(_("Connected"));
-  else
-    wp->SetText(_("Disconnected"));
-
-  wp->RefreshDisplay();
-
-
-  wp = (WndProperty*)form.FindByName(_T("prpLogger"));
-  assert(wp != NULL);
-  if (logger.IsLoggerActive())
-    wp->SetText(_("On"));
-  else
-    wp->SetText(_("Off"));
-
-  wp->RefreshDisplay();
-
-
-  wp = (WndProperty*)form.FindByName(_T("prpDeclared"));
-  assert(wp != NULL);
-  if (logger.IsTaskDeclared())
-    wp->SetText(_("Yes"));
-  else
-    wp->SetText(_("No"));
-
-  wp->RefreshDisplay();
-
-
-  wp = (WndProperty*)form.FindByName(_T("prpBattery"));
-  assert(wp != NULL);
   Temp[0] = 0;
 #ifdef HAVE_BATTERY
   if (Power::Battery::RemainingPercentValid) {
@@ -125,8 +93,7 @@ SystemStatusPanel::Refresh()
     _stprintf(Temp + _tcslen(Temp), _T("%.1f V"), (double)basic.voltage);
   }
 
-  wp->SetText(Temp);
-  wp->RefreshDisplay();
+  SetFormValue(form, _T("prpBattery"), Temp);
 }
 
 void

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TimesStatusPanel.hpp"
 #include "Interface.hpp"
-#include "Form/Edit.hpp"
+#include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "LocalTime.hpp"
 
@@ -34,7 +34,6 @@ TimesStatusPanel::Refresh()
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const FlyingState &flight = calculated.flight;
 
-  WndProperty *wp;
   TCHAR Temp[64];
   fixed sunsettime;
   int sunsethours;
@@ -44,43 +43,33 @@ TimesStatusPanel::Refresh()
   sunsethours = (int)sunsettime;
   sunsetmins = (int)((sunsettime - fixed(sunsethours)) * 60);
 
-  wp = (WndProperty*)form.FindByName(_T("prpSunset"));
-  assert(wp != NULL);
   _stprintf(Temp, _T("%02d:%02d"), sunsethours, sunsetmins);
-  wp->SetText(Temp);
+  SetFormValue(form, _T("prpSunset"), Temp);
 
-  wp = (WndProperty*)form.FindByName(_T("prpLocalTime"));
-  assert(wp != NULL);
   Units::TimeToTextHHMMSigned(Temp, DetectCurrentTime(basic));
-  wp->SetText(Temp);
+  SetFormValue(form, _T("prpLocalTime"), Temp);
 
-  wp = (WndProperty*)form.FindByName(_T("prpTakeoffTime"));
-  assert(wp != NULL);
   if (positive(flight.flight_time)) {
     Units::TimeToTextHHMMSigned(Temp, TimeLocal((long)flight.takeoff_time));
-    wp->SetText(Temp);
+    SetFormValue(form, _T("prpTakeoffTime"), Temp);
   } else {
-    wp->SetText(_T(""));
+    SetFormValue(form, _T("prpTakeoffTime"), _T(""));
   }
 
-  wp = (WndProperty*)form.FindByName(_T("prpLandingTime"));
-  assert(wp != NULL);
   if (!flight.flying && positive(flight.flight_time)) {
     Units::TimeToTextHHMMSigned(Temp,
                       TimeLocal((long)(flight.takeoff_time
                                        + flight.flight_time)));
-    wp->SetText(Temp);
+    SetFormValue(form, _T("prpLandingTime"), Temp);
   } else {
-    wp->SetText(_T(""));
+    SetFormValue(form, _T("prpLandingTime"), _T(""));
   }
 
-  wp = (WndProperty*)form.FindByName(_T("prpFlightTime"));
-  assert(wp != NULL);
   if (positive(flight.flight_time)) {
     Units::TimeToTextHHMMSigned(Temp, (int)flight.flight_time);
-    wp->SetText(Temp);
+    SetFormValue(form, _T("prpFlightTime"), Temp);
   } else {
-    wp->SetText(_T(""));
+    SetFormValue(form, _T("prpFlightTime"), _T(""));
   }
 }
 

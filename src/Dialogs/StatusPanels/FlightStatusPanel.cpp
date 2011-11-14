@@ -25,7 +25,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Util/StaticString.hpp"
 #include "Interface.hpp"
-#include "Form/Edit.hpp"
+#include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 
@@ -35,64 +35,42 @@ FlightStatusPanel::Refresh()
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
-  WndProperty *wp;
   StaticString<32> buffer;
 
   Units::LongitudeToString(basic.location.longitude,
                            buffer.buffer(), buffer.MAX_SIZE);
-  wp = (WndProperty*)form.FindByName(_T("prpLongitude"));
-  assert(wp != NULL);
-  wp->SetText(buffer);
+  SetFormValue(form, _T("prpLongitude"), buffer);
 
   Units::LatitudeToString(basic.location.latitude,
                           buffer.buffer(), buffer.MAX_SIZE);
-  wp = (WndProperty*)form.FindByName(_T("prpLatitude"));
-  assert(wp != NULL);
-  wp->SetText(buffer);
+  SetFormValue(form, _T("prpLatitude"), buffer);
 
-  wp = (WndProperty*)form.FindByName(_T("prpAltitude"));
-  assert(wp != NULL);
   if (basic.gps_altitude_available) {
     Units::FormatUserAltitude(basic.gps_altitude,
                               buffer.buffer(), buffer.MAX_SIZE);
-    wp->SetText(buffer);
-  }
+    SetFormValue(form, _T("prpAltitude"), buffer);
+  } else
+    SetFormValue(form, _T("prpAltitude"), _T(""));
 
-  wp = (WndProperty*)form.FindByName(_T("prpMaxHeightGain"));
-  assert(wp != NULL);
   Units::FormatUserAltitude(calculated.max_height_gain,
                             buffer.buffer(), buffer.MAX_SIZE);
-  wp->SetText(buffer);
+  SetFormValue(form, _T("prpMaxHeightGain"), buffer);
 
   if (nearest_waypoint) {
     GeoVector vec(basic.location,
                   nearest_waypoint->location);
 
-    wp = (WndProperty*)form.FindByName(_T("prpNear"));
-    assert(wp != NULL);
-    wp->SetText(nearest_waypoint->name.c_str());
+    SetFormValue(form, _T("prpNear"), nearest_waypoint->name.c_str());
 
-    wp = (WndProperty*)form.FindByName(_T("prpBearing"));
-    assert(wp != NULL);
     buffer.UnsafeFormat(_T("%d")_T(DEG), (int)vec.bearing.Degrees());
-    wp->SetText(buffer);
+    SetFormValue(form, _T("prpBearing"), buffer);
 
-    wp = (WndProperty*)form.FindByName(_T("prpDistance"));
-    assert(wp != NULL);
     Units::FormatUserDistance(vec.distance, buffer.buffer(), buffer.MAX_SIZE);
-    wp->SetText(buffer);
+    SetFormValue(form, _T("prpDistance"), buffer);
   } else {
-    wp = (WndProperty*)form.FindByName(_T("prpNear"));
-    assert(wp != NULL);
-    wp->SetText(_T("-"));
-
-    wp = (WndProperty*)form.FindByName(_T("prpBearing"));
-    assert(wp != NULL);
-    wp->SetText(_T("-"));
-
-    wp = (WndProperty*)form.FindByName(_T("prpDistance"));
-    assert(wp != NULL);
-    wp->SetText(_T("-"));
+    SetFormValue(form, _T("prpNear"), _T("-"));
+    SetFormValue(form, _T("prpBearing"), _T("-"));
+    SetFormValue(form, _T("prpDistance"), _T("-"));
   }
 }
 

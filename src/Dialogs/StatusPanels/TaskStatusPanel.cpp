@@ -24,7 +24,7 @@ Copyright_License {
 #include "TaskStatusPanel.hpp"
 #include "Util/Macros.hpp"
 #include "Interface.hpp"
-#include "Form/Edit.hpp"
+#include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -38,61 +38,47 @@ TaskStatusPanel::Refresh()
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.task_stats;
 
-  WndProperty *wp;
   TCHAR Temp[80];
 
-  wp = (WndProperty*)form.FindByName(_T("prpTaskTime"));
   Units::TimeToTextHHMMSigned(Temp, (int)protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
-  assert(wp != NULL);
+  ShowFormControl(form, _T("prpTaskTime"), task_stats.has_targets);
   if (task_stats.has_targets)
-    wp->SetText(Temp);
-  else
-    wp->hide();
+    SetFormValue(form, _T("prpTaskTime"), Temp);
 
-  wp = (WndProperty*)form.FindByName(_T("prpETETime"));
-  assert(wp != NULL);
   int ete_time(task_stats.total.time_elapsed +
                task_stats.total.time_remaining);
   Units::TimeToTextHHMMSigned(Temp, ete_time);
-  wp->SetText(Temp);
+  SetFormValue(form, _T("prpETETime"), Temp);
 
-  wp = (WndProperty*)form.FindByName(_T("prpRemainingTime"));
-  assert(wp != NULL);
   Units::TimeToTextHHMMSigned(Temp, (int)task_stats.total.time_remaining);
-  wp->SetText(Temp);
+  SetFormValue(form, _T("prpRemainingTime"), Temp);
 
   if (task_stats.total.planned.IsDefined()) {
-    wp = (WndProperty*)form.FindByName(_T("prpTaskDistance"));
-    assert(wp != NULL);
     Units::FormatUserDistance(task_stats.total.planned.get_distance(),
                               Temp, ARRAY_SIZE(Temp));
-    wp->SetText(Temp);
-  }
+    SetFormValue(form, _T("prpTaskDistance"), Temp);
+  } else
+    SetFormValue(form, _T("prpTaskDistance"), _T(""));
 
   if (task_stats.total.remaining.IsDefined()) {
-    wp = (WndProperty*)form.FindByName(_T("prpRemainingDistance"));
-    assert(wp != NULL);
     Units::FormatUserDistance(task_stats.total.remaining.get_distance(),
                               Temp, ARRAY_SIZE(Temp));
-    wp->SetText(Temp);
+    SetFormValue(form, _T("prpRemainingDistance"), Temp);
   }
 
   if (task_stats.total.planned.IsDefined()) {
-    wp = (WndProperty*)form.FindByName(_T("prpEstimatedSpeed"));
-    assert(wp != NULL);
-    if (task_stats.total.planned.IsDefined())
-      Units::FormatUserTaskSpeed(task_stats.total.planned.get_speed(),
-                                 Temp, ARRAY_SIZE(Temp));
-    wp->SetText(Temp);
-  }
+    Units::FormatUserTaskSpeed(task_stats.total.planned.get_speed(),
+                               Temp, ARRAY_SIZE(Temp));
+    SetFormValue(form, _T("prpEstimatedSpeed"), Temp);
+  } else
+    SetFormValue(form, _T("prpEstimatedSpeed"), _T(""));
 
   if (task_stats.total.travelled.IsDefined()) {
-    wp = (WndProperty*)form.FindByName(_T("prpAverageSpeed"));
-    assert(wp != NULL);
     Units::FormatUserTaskSpeed(task_stats.total.travelled.get_speed(),
                                Temp, ARRAY_SIZE(Temp));
-    wp->SetText(Temp);
-  }
+    SetFormValue(form, _T("prpAverageSpeed"), Temp);
+  } else
+    SetFormValue(form, _T("prpAverageSpeed"), _T(""));
 }
 
 void

@@ -30,7 +30,7 @@ Copyright_License {
 #include "Units/UnitsFormatter.hpp"
 #include "Language/Language.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Form/Edit.hpp"
+#include "Form/Util.hpp"
 
 void
 RulesStatusPanel::Refresh()
@@ -38,66 +38,48 @@ RulesStatusPanel::Refresh()
   if (protected_task_manager == NULL)
     return;
 
-  WndProperty *wp;
   TCHAR Temp[80];
 
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const CommonStats &common_stats = calculated.common_stats;
 
-  wp = (WndProperty*)form.FindByName(_T("prpValidStart"));
-  assert(wp != NULL);
-  if (calculated.common_stats.task_started)
-    /// @todo proper task validity check
-    wp->SetText(_("Yes"));
-  else
-    wp->SetText(_("No"));
+  /// @todo proper task validity check
+  SetFormValue(form, _T("prpValidStart"),
+               calculated.common_stats.task_started
+               ? _("Yes") : _T("No"));
 
-  wp = (WndProperty*)form.FindByName(_T("prpValidFinish"));
-  assert(wp != NULL);
-  if (common_stats.task_finished)
-    wp->SetText(_("Yes"));
-  else
-    wp->SetText(_("No"));
+  SetFormValue(form, _T("prpValidFinish"),
+               calculated.common_stats.task_finished
+               ? _("Yes") : _T("No"));
 
   AircraftState start_state = protected_task_manager->GetStartState();
 
-  wp = (WndProperty*)form.FindByName(_T("prpStartTime"));
-  assert(wp != NULL);
   if (common_stats.task_started) {
     Units::TimeToTextHHMMSigned(Temp, (int)TimeLocal((int)start_state.time));
-    wp->SetText(Temp);
+    SetFormValue(form, _T("prpStartTime"), Temp);
   } else {
-    wp->SetText(_T(""));
+    SetFormValue(form, _T("prpStartTime"), _T(""));
   }
 
-  wp = (WndProperty*)form.FindByName(_T("prpStartSpeed"));
-  assert(wp != NULL);
   if (common_stats.task_started) {
     Units::FormatUserTaskSpeed(start_state.ground_speed,
                                Temp, ARRAY_SIZE(Temp));
-    wp->SetText(Temp);
+    SetFormValue(form, _T("prpStartSpeed"), Temp);
   } else {
-    wp->SetText(_T(""));
+    SetFormValue(form, _T("prpStartSpeed"), _T(""));
   }
 
   // StartMaxHeight, StartMaxSpeed;
-  wp = (WndProperty*)form.FindByName(_T("prpStartHeight"));
-  assert(wp != NULL);
   if (common_stats.task_started) {
     Units::FormatUserAltitude(start_state.altitude, Temp, ARRAY_SIZE(Temp));
-    wp->SetText(Temp);
+    SetFormValue(form, _T("prpStartHeight"), Temp);
   } else {
-    wp->SetText(_T(""));
+    SetFormValue(form, _T("prpStartHeight"), _T(""));
   }
 
-  wp = (WndProperty*)form.FindByName(_T("prpFinishAlt"));
-  assert(wp != NULL);
   Units::FormatUserAltitude(protected_task_manager->GetFinishHeight(),
                             Temp, ARRAY_SIZE(Temp));
-  wp->SetText(Temp);
-
-  wp = (WndProperty*)form.FindByName(_T("prpStartPoint"));
-  assert(wp != NULL);
+  SetFormValue(form, _T("prpFinishAlt"), Temp);
 
   {
     ProtectedTaskManager::Lease task_manager(*protected_task_manager);
@@ -111,7 +93,7 @@ RulesStatusPanel::Refresh()
       Temp[0] = _T('\0');
   }
 
-  wp->SetText(Temp);
+  SetFormValue(form, _T("prpStartPoint"), Temp);
 }
 
 void
