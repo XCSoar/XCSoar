@@ -465,11 +465,8 @@ public:
   OneMainMenuButton(const TCHAR* _Caption,
                     unsigned _FirstPageIndex,
                     unsigned _LastPageIndex,
-                    unsigned _MainMenuIndex,
-                    TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
-                    TabBarControl::PreShowNotifyCallback_t _PreShowFunction)
-    :OneTabButton(_Caption, false, NULL,
-                  _PreHideFunction, _PreShowFunction),
+                    unsigned _MainMenuIndex)
+    :OneTabButton(_Caption, false, NULL, NULL, NULL),
      FirstPageIndex(_FirstPageIndex),
      LastPageIndex(_LastPageIndex),
      MainMenuIndex(_MainMenuIndex)

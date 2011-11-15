@@ -369,8 +369,7 @@ TabMenuControl::CreateSubMenu(const PageItem pages[], unsigned NumPages,
   OneMainMenuButton *b =
       new OneMainMenuButton(main_menu_caption, firstPageIndex,
                             firstPageIndex + subMenuIndex - 1,
-                            main_menu_index,
-                            NULL, NULL);
+                            main_menu_index);
   MainMenuButtons.append(b);
 }
 
