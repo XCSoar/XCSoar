@@ -19,4 +19,12 @@ ifeq ($(USE_CCACHE),y)
   CCACHE := export CCACHE_CPP2=yes && $(CCACHE)
 endif
 
+ifeq ($(TARGET),ANDROID)
+  TARGET_ARCH := $(subst armv5te,armv5,$(TARGET_ARCH))
+  TARGET_ARCH := $(filter-out -mthumb-interwork,$(TARGET_ARCH))
+  TARGET_ARCH += -ccc-host-triple arm-android-eabi -integrated-as
+  TARGET_CPPFLAGS += -DBIONIC -DLIBCPP_NO_IOSTREAM
+  CXX_FEATURES := $(filter-out -frtti,$(CXX_FEATURES))
+endif # Android
+
 endif

@@ -9,4 +9,9 @@ LIBCXX_SOURCES = \
 	$(LIBCXX)/src/hash.cpp \
 	$(LIBCXX)/src/string.cpp
 
+ifeq ($(TARGET),ANDROID)
+LIBCXX_CPPFLAGS_INTERNAL += -D__APPLE__=0
+LIBCXX_SOURCES += $(LIBCXX)/src/new.cpp
+endif
+
 $(eval $(call link-library,libcxx,LIBCXX))
