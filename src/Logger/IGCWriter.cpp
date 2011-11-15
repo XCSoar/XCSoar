@@ -167,6 +167,7 @@ void
 IGCWriter::WriteHeader(const BrokenDateTime &DateTime,
                        const TCHAR *pilot_name, const TCHAR *aircraft_model,
                        const TCHAR *aircraft_registration,
+                       const TCHAR *competition_id,
                        const TCHAR *strAssetNumber, const TCHAR *driver_name)
 {
   /*
@@ -204,6 +205,7 @@ IGCWriter::WriteHeader(const BrokenDateTime &DateTime,
   WriteLine("HFPLTPILOT:", pilot_name);
   WriteLine("HFGTYGLIDERTYPE:", aircraft_model);
   WriteLine("HFGIDGLIDERID:", aircraft_registration);
+  WriteLine("HFCIDCOMPETITIONID:", competition_id);
   WriteLine("HFFTYFR TYPE:XCSOAR,XCSOAR ", XCSoar_VersionStringOld);
   WriteLine("HFGPS: ", driver_name);
 

@@ -48,6 +48,11 @@ OnCloseClicked(gcc_unused WndButton &button)
 static void
 OnWaypointNewClicked(gcc_unused WndButton &Sender)
 {
+  if (!WaypointGlue::IsWritable()) {
+    MessageBoxX(_("Waypoints not editable"), _("Error"), MB_OK);
+    return;
+  }
+
   Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().location);
   edit_waypoint.altitude = XCSoarInterface::Calculated().terrain_valid
     ? XCSoarInterface::Calculated().terrain_altitude
@@ -66,6 +71,11 @@ OnWaypointNewClicked(gcc_unused WndButton &Sender)
 static void
 OnWaypointEditClicked(gcc_unused WndButton &Sender)
 {
+  if (!WaypointGlue::IsWritable()) {
+    MessageBoxX(_("Waypoints not editable"), _("Error"), MB_OK);
+    return;
+  }
+
   const Waypoint *way_point = dlgWaypointSelect(XCSoarInterface::main_window,
                                                 XCSoarInterface::Basic().location);
   if (way_point) {
@@ -100,6 +110,11 @@ OnWaypointSaveClicked(gcc_unused WndButton &Sender)
 static void
 OnWaypointDeleteClicked(gcc_unused WndButton &Sender)
 {
+  if (!WaypointGlue::IsWritable()) {
+    MessageBoxX(_("Waypoints not editable"), _("Error"), MB_OK);
+    return;
+  }
+
 #ifdef OLD_TASK
   int res;
   res = dlgWaypointSelect(XCSoarInterface::Basic().location);

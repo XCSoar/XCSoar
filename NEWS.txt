@@ -24,8 +24,11 @@ Version 6.2.3 - not yet released
 * user interface
   - reduce menu flickering
   - fix crash in waypoint list dialog when waypoints have large comments
+  - prevent waypoint editing if waypoint file is read-only
 * data files
   - Automatically try to detect character encoding of airfield details file
+* logger
+  - Added competition id to IGC file output
 * Linux
   - display error message when fonts could not be loaded
 * Mac OS X

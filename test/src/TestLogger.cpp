@@ -64,6 +64,7 @@ static const char *const expect[] = {
   "HFPLTPILOT:Pilot Name",
   "HFGTYGLIDERTYPE:ASK-21",
   "HFGIDGLIDERID:D-1234",
+  "HFCIDCOMPETITIONID:34",
   "HFFTYFR TYPE:XCSOAR XCSOAR",
   "HFGPS: bar",
   "HFDTM100Datum: WGS-84",
@@ -84,7 +85,7 @@ static const char *const expect[] = {
 
 int main(int argc, char **argv)
 {
-  plan_tests(45);
+  plan_tests(47);
 
   const TCHAR *path = _T("output/test/test.igc");
   File::Delete(path);
@@ -113,7 +114,7 @@ int main(int argc, char **argv)
   IGCWriter writer(path, i);
 
   writer.WriteHeader(i.date_time_utc, _T("Pilot Name"), _T("ASK-21"),
-                     _T("D-1234"), _T("foo"), _T("bar"));
+                     _T("D-1234"), _T("34"), _T("foo"), _T("bar"));
   writer.StartDeclaration(i.date_time_utc, 3);
   writer.AddDeclaration(home, _T("Bergneustadt"));
   writer.AddDeclaration(tp, _T("Suhl"));

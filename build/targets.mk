@@ -140,7 +140,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r6b
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r7
 
   ANDROID_PLATFORM = android-8
   ANDROID_ARCH = arm
@@ -364,7 +364,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_LDLIBS += $(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/libs/$(ANDROID_ABI3)/libstdc++.a
+  TARGET_LDLIBS += $(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/libs/$(ANDROID_ABI3)/libgnustl_static.a
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libGLESv1_CM.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libc.so $(ANDROID_TARGET_ROOT)/usr/lib/libm.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/liblog.so
@@ -377,7 +377,6 @@ TARGET_EXEEXT = .exe
 NOSTRIP_SUFFIX = -ns
 
 ifeq ($(TARGET),WINE)
-  TARGET_EXEEXT :=
   NOSTRIP_SUFFIX :=
 endif
 

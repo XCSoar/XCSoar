@@ -417,6 +417,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name,
                       decl.aircraft_type, decl.aircraft_registration,
+                      decl.competition_id,
                       asset_number, device_config.driver_name);
 
   if (decl.Size()) {
