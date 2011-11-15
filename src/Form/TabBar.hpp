@@ -50,9 +50,6 @@ public:
   };
   typedef bool (*PreHideNotifyCallback_t)(void);
   typedef bool (*PreShowNotifyCallback_t)();
-  typedef void (*PostShowNotifyCallback_t)(void);
-  typedef bool (*ClickNotifyCallback_t)();
-  typedef void (*ReClickNotifyCallback_t)(void);
 
 protected:
   TabbedControl pager;
@@ -130,17 +127,13 @@ public:
    * @param bmp.  Pointer to a Bitmap to display instead of caption on tab
    * @param PreHideFunction client callback
    * @param PreShowFunction client callback
-   * @param PostShowFunction client callback
    * @return index of added tab
    */
   unsigned AddClient(Window *w, const TCHAR* Caption,
                      bool IsButtonOnly = false,
                      const Bitmap *bmp = NULL,
                      PreHideNotifyCallback_t PreHideFunction = NULL,
-                     PreShowNotifyCallback_t PreShowFunction = NULL,
-                     PostShowNotifyCallback_t PostShowFunction = NULL,
-                     ClickNotifyCallback_t ClickFunction = NULL,
-                     ReClickNotifyCallback_t ReClickFunction = NULL);
+                     PreShowNotifyCallback_t PreShowFunction = NULL);
 
 public:
   gcc_pure
@@ -305,37 +298,16 @@ public:
    */
   TabBarControl::PreShowNotifyCallback_t PreShowFunction;
 
-  /**
-   * Called immediately after tab is made active and shown
-   */
-  TabBarControl::PostShowNotifyCallback_t PostShowFunction;
-
-  /**
-   * Called when the tab is being clicked explicitly.
-   */
-  TabBarControl::ClickNotifyCallback_t ClickFunction;
-
-  /**
-   * Called if tab is clicked while it is the currently displayed tab
-   */
-  TabBarControl::ReClickNotifyCallback_t ReClickFunction;
-
 public:
   OneTabButton(const TCHAR* _Caption,
                bool _IsButtonOnly,
                const Bitmap *_bmp,
                TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
-               TabBarControl::PreShowNotifyCallback_t _PreShowFunction,
-               TabBarControl::PostShowNotifyCallback_t _PostShowFunction,
-               TabBarControl::ClickNotifyCallback_t _ClickFunction,
-               TabBarControl::ReClickNotifyCallback_t _ReClickFunction)
+               TabBarControl::PreShowNotifyCallback_t _PreShowFunction)
     :IsButtonOnly(_IsButtonOnly),
      bmp(_bmp),
      PreHideFunction(_PreHideFunction),
-     PreShowFunction(_PreShowFunction),
-     PostShowFunction(_PostShowFunction),
-     ClickFunction(_ClickFunction),
-     ReClickFunction(_ReClickFunction)
+     PreShowFunction(_PreShowFunction)
   {
     Caption = _Caption;
     butSize.left = 0;

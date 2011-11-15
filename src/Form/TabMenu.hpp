@@ -381,13 +381,9 @@ public:
                    unsigned _sub_menu_index,
                    unsigned _page_index,
                    TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
-                   TabBarControl::PreShowNotifyCallback_t _PreShowFunction,
-                   TabBarControl::PostShowNotifyCallback_t _PostShowFunction,
-                   TabBarControl::ClickNotifyCallback_t _ClickFunction,
-                   TabBarControl::ReClickNotifyCallback_t _ReClickFunction)
+                   TabBarControl::PreShowNotifyCallback_t _PreShowFunction)
     :OneTabButton(_Caption, false, NULL,
-                  _PreHideFunction, _PreShowFunction, _PostShowFunction,
-                  _ClickFunction, _ReClickFunction),
+                  _PreHideFunction, _PreShowFunction),
      Menu(TabMenuControl::menu_tab_index(_main_menu_index, _sub_menu_index)),
      PageIndex(_page_index)
   {
@@ -417,13 +413,9 @@ public:
                     unsigned _LastPageIndex,
                     unsigned _MainMenuIndex,
                     TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
-                    TabBarControl::PreShowNotifyCallback_t _PreShowFunction,
-                    TabBarControl::PostShowNotifyCallback_t _PostShowFunction,
-                    TabBarControl::ClickNotifyCallback_t _ClickFunction,
-                    TabBarControl::ReClickNotifyCallback_t _ReClickFunction)
+                    TabBarControl::PreShowNotifyCallback_t _PreShowFunction)
     :OneTabButton(_Caption, false, NULL,
-                  _PreHideFunction, _PreShowFunction, _PostShowFunction,
-                  _ClickFunction, _ReClickFunction),
+                  _PreHideFunction, _PreShowFunction),
      FirstPageIndex(_FirstPageIndex),
      LastPageIndex(_LastPageIndex),
      MainMenuIndex(_MainMenuIndex)

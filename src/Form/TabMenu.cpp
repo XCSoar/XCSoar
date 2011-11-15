@@ -76,8 +76,7 @@ TabMenuControl::AddClient(Window *w, const PageItem& item,
                            sub_menu_index,
                            page,
                            NULL,
-                           item.PreShowCallback,
-                           NULL, NULL, NULL);
+                           item.PreShowCallback);
   buttons.append(b);
   return buttons.size() - 1;
 }
@@ -345,7 +344,7 @@ TabMenuControl::CreateSubMenu(const TCHAR *main_menu_caption,
       new OneMainMenuButton(main_menu_caption, firstPageIndex,
                             firstPageIndex + subMenuIndex - 1,
                             main_menu_index,
-                            NULL, NULL, NULL, NULL, NULL);
+                            NULL, NULL);
   MainMenuButtons.append(b);
 }
 

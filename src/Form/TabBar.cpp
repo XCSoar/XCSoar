@@ -149,7 +149,7 @@ TabBarControl::AddTab(Widget *widget, const TCHAR *caption,
   pager.AddPage(widget);
 
   OneTabButton *b = new OneTabButton(caption, button_only, bmp,
-                                     NULL, NULL, NULL, NULL, NULL);
+                                     NULL, NULL);
   buttons.append(b);
 
   return buttons.size() - 1;
@@ -165,17 +165,13 @@ unsigned
 TabBarControl::AddClient(Window *w, const TCHAR* Caption,
                          bool IsButtonOnly, const Bitmap *bmp,
                          PreHideNotifyCallback_t PreHideFunction,
-                         PreShowNotifyCallback_t PreShowFunction,
-                         PostShowNotifyCallback_t PostShowFunction,
-                         ClickNotifyCallback_t ClickFunction,
-                         ReClickNotifyCallback_t ReClickFunction)
+                         PreShowNotifyCallback_t PreShowFunction)
 {
   AddClientWindow(w);
 
   OneTabButton *b = new OneTabButton(Caption, IsButtonOnly, bmp,
                                      PreHideFunction,
-                                     PreShowFunction, PostShowFunction,
-                                     ClickFunction, ReClickFunction);
+                                     PreShowFunction);
 
   buttons.append(b);
 
@@ -190,20 +186,12 @@ TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
   assert(i < buttons.size());
 
   if (ReClick) {
-    if (buttons[GetCurrentPage()]->ReClickFunction)
-      buttons[GetCurrentPage()]->ReClickFunction();
-
     pager.ClickPage(GetCurrentPage());
   } else {
     if (!setting_up && buttons[GetCurrentPage()]->PreHideFunction) {
       if (!buttons[GetCurrentPage()]->PreHideFunction())
           Continue = false;
     }
-
-    if (Continue && _EventType == MouseOrButton &&
-        buttons[i]->ClickFunction != NULL &&
-        !buttons[i]->ClickFunction())
-      Continue = false;
 
     if (Continue) {
       if (buttons[i]->PreShowFunction) {
@@ -216,12 +204,6 @@ TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
         Continue = pager.ClickPage(i);
       else
         pager.SetCurrentPage(i);
-    }
-
-    if (Continue) {
-      if (buttons[i]->PostShowFunction) {
-        buttons[i]->PostShowFunction();
-      }
     }
   }
 
