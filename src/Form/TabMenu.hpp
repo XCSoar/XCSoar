@@ -72,8 +72,6 @@ public:
       MAX_MAIN_MENU_ITEMS = 7, // excludes "Main Menu" which is a "super menu"
       LARGE_VALUE = 1000,
       MAIN_MENU_PAGE = 999,
-      NO_SUB_MENU = 998,
-      NO_MAIN_MENU = 997,
   };
 
   /* internally used structure for tracking menu down and selection status */
