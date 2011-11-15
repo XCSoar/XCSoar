@@ -124,8 +124,7 @@ TabBarControl::AddTab(Widget *widget, const TCHAR *caption,
 {
   pager.AddPage(widget);
 
-  OneTabButton *b = new OneTabButton(caption, button_only, bmp,
-                                     NULL, NULL);
+  OneTabButton *b = new OneTabButton(caption, button_only, bmp);
   buttons.append(b);
 
   return buttons.size() - 1;
@@ -141,17 +140,6 @@ TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
   if (ReClick) {
     pager.ClickPage(GetCurrentPage());
   } else {
-    if (!setting_up && buttons[GetCurrentPage()]->PreHideFunction) {
-      if (!buttons[GetCurrentPage()]->PreHideFunction())
-          Continue = false;
-    }
-
-    if (Continue) {
-      if (buttons[i]->PreShowFunction) {
-        Continue = buttons[i]->PreShowFunction();
-      }
-    }
-
     if (Continue) {
       if (_EventType == MouseOrButton)
         Continue = pager.ClickPage(i);

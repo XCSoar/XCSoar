@@ -244,28 +244,12 @@ public:
   const Bitmap *bmp;
   PixelRect butSize;
 
-  /**
-   * Called before the tab is hidden.
-   * @returns  True if ok and tab may change.  False if click should be ignored
-   */
-  TabBarControl::PreHideNotifyCallback_t PreHideFunction;
-
-  /**
-   * Called immediately after tab is clicked, before it is displayed.
-   * @returns  True if ok and tab may change.  False if click should be ignored
-   */
-  TabBarControl::PreShowNotifyCallback_t PreShowFunction;
-
 public:
   OneTabButton(const TCHAR* _Caption,
                bool _IsButtonOnly,
-               const Bitmap *_bmp,
-               TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
-               TabBarControl::PreShowNotifyCallback_t _PreShowFunction)
+               const Bitmap *_bmp)
     :IsButtonOnly(_IsButtonOnly),
-     bmp(_bmp),
-     PreHideFunction(_PreHideFunction),
-     PreShowFunction(_PreShowFunction)
+     bmp(_bmp)
   {
     Caption = _Caption;
     butSize.left = 0;

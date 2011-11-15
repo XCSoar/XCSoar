@@ -428,6 +428,18 @@ protected:
  */
 class OneSubMenuButton : public OneTabButton {
 public:
+  /**
+   * Called before the tab is hidden.
+   * @returns  True if ok and tab may change.  False if click should be ignored
+   */
+  TabBarControl::PreHideNotifyCallback_t PreHideFunction;
+
+  /**
+   * Called immediately after tab is clicked, before it is displayed.
+   * @returns  True if ok and tab may change.  False if click should be ignored
+   */
+  TabBarControl::PreShowNotifyCallback_t PreShowFunction;
+
   const TabMenuControl::menu_tab_index Menu;
   const unsigned PageIndex;
 
@@ -436,8 +448,8 @@ public:
                    unsigned _page_index,
                    TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
                    TabBarControl::PreShowNotifyCallback_t _PreShowFunction)
-    :OneTabButton(_Caption, false, NULL,
-                  _PreHideFunction, _PreShowFunction),
+    :OneTabButton(_Caption, false, NULL),
+     PreHideFunction(_PreHideFunction), PreShowFunction(_PreShowFunction),
      Menu(i),
      PageIndex(_page_index)
   {
@@ -462,7 +474,7 @@ public:
                     unsigned _FirstPageIndex,
                     unsigned _LastPageIndex,
                     unsigned _MainMenuIndex)
-    :OneTabButton(_Caption, false, NULL, NULL, NULL),
+    :OneTabButton(_Caption, false, NULL),
      FirstPageIndex(_FirstPageIndex),
      LastPageIndex(_LastPageIndex),
      MainMenuIndex(_MainMenuIndex)
