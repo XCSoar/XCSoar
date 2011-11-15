@@ -363,7 +363,6 @@ TARGET_EXEEXT = .exe
 NOSTRIP_SUFFIX = -ns
 
 ifeq ($(TARGET),WINE)
-  TARGET_EXEEXT :=
   NOSTRIP_SUFFIX :=
 endif
 
