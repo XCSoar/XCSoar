@@ -190,12 +190,5 @@ Units::LoadFromOSLanguage()
 {
   unsigned index = AutoDetect();
   Profile::Set(szProfileUnitsPresetName, Units::Store::GetName(index));
-  const UnitSetting& temp = Units::Store::Read(index);
-  Units::current.altitude_unit = temp.altitude_unit;
-  Units::current.distance_unit = temp.distance_unit;
-  Units::current.temperature_unit = temp.temperature_unit;
-  Units::current.speed_unit = temp.speed_unit;
-  Units::current.vertical_speed_unit = temp.vertical_speed_unit;
-  Units::current.wind_speed_unit = temp.wind_speed_unit;
-  Units::current.task_speed_unit = temp.task_speed_unit;
+  Units::current = Units::Store::Read(index);
 }
