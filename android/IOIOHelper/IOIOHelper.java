@@ -51,6 +51,12 @@ final class IOIOHelper {
   private IOIO ioio_;
   private XCSUart[] xuarts_;
 
+  /**
+   * Initializes the connection to the IOIO board.
+   * Waits up to 3000ms to connect to the IOIO board.
+   * @return: True if connection is successful. False if fails to 
+   * connect after 3000ms.
+   */
   public boolean open() {
     ioio_ = IOIOFactory.create();
     xuarts_ = new XCSUart [4];
@@ -63,6 +69,10 @@ final class IOIOHelper {
     return waitConnect();
   }
   
+  /**
+   * Disconnects the ioio board.
+   * The board can be reopened by calling waitConnect()
+   */
   public void close() {
     try {
       ioio_.disconnect();
@@ -74,7 +84,9 @@ final class IOIOHelper {
   }
 
   /**
-   * non-blocking connection to IOIO board
+   * Waits up to 3000ms for connection to IOIO.
+   * Does soft reset of IOIO Board and all ports
+   * @return: true if connection to board is successful
    */
   private boolean waitConnect() {
     boolean result = false;
@@ -143,10 +155,20 @@ final class IOIOHelper {
       }
     }
 
+    /**
+     * returns true if the Uart is not in use and can be opened
+     * returns false if Uart is already open
+     */
     public boolean isAvailable() {
       return isAvailable;
     }
 
+    /**
+     * opens the Uart
+     * sets isAvailable to false to indicate that it is no longer 
+     * available to open.
+     * @return: ID of uart if successful or -1 if fail
+     */
     public int openUart(IOIO ioio, int _baud) {
       if (!isAvailable) {
         Log.e("IOIOHelper", "IOIOJopenUart() is not available: " + ID);
@@ -173,34 +195,9 @@ final class IOIOHelper {
     }
 
     /**
-     * non-blocking connection to IOIO board
+     * closes the Uart on the ioio
+     * sets isAvailable to true to indicate it is available for reopening
      */
-    private boolean WaitConnect() {
-      boolean result = false;
-      Timer t = new Timer();
-      try {
-        t.schedule(new TimerTask() {
-            @Override
-            public void run() {
-              Log.w("IOIOHelper", "IOIOJWaitConnect() TimerDisconnecting...");
-              ioio_.disconnect();
-            }
-          }, 3000);
-        ioio_.waitForConnect();
-        ioio_.softReset();
-        result = true;
-      } catch (ConnectionLostException e) {
-        Log.w("IOIOHelper", "IOIOJWaitConnect() Connection Lost", e);
-      } catch (IncompatibilityException e) {
-        Log.e("IOIOHelper", "IOIOJWaitConnect() Incompatibility detected", e);
-      } catch (Exception e) {
-        Log.e("IOIOHelper", "IOIOJWaitConnect() Unexpected exception caught", e);
-      } finally {
-        t.cancel();
-        return result;
-      }
-    }
-
     private void closeUart() {
       try {
         input.close();
@@ -227,6 +224,12 @@ final class IOIOHelper {
       inputTimeout = timeout;
     }
 
+    /**
+     * reads one byte
+     * waits for up to 100 ms if no data is available to read
+     * after waiting, returns -1 if no data is available or
+     * character read if data is available.
+     */
     synchronized public int read() {
       try {
         final int step = 10;
@@ -281,31 +284,63 @@ final class IOIOHelper {
     return -1;
   }
 
+  /**
+   * wrapper function that closes 
+   * Uart specified by ID
+   */
   public void closeUart(int ID) {
     if (!xuarts_[ID].isAvailable())
       xuarts_[ID].closeUart();
   }
 
+  /**
+   * wrapper function that sets baud rate
+   * of Uart specified by ID
+   * @return: baud rate
+   */
   public int setBaudRate(int ID, int baud) {
     return xuarts_[ID].setBaudRate(baud);
   }
 
+  /**
+   * wrapper function that gets baud rate
+   * of Uart specified by ID
+   * @return: baud rate
+   */
   public int getBaudRate(int ID) {
     return xuarts_[ID].getBaudRate();
   }
 
+  /**
+   * wrapper function that sets the read
+   * timeout of Uart specified by ID
+   */
   public void setReadTimeout(int ID, int timeout) {
     xuarts_[ID].setReadTimeout(timeout);
   }
 
+  /**
+   * wrapper function that reads one byte from
+   * Uart specified by ID.  Waits up to 100ms
+   * if no data is available.
+   * @return: -1 if no data available else char
+   */
   public int read(int ID) {
     return xuarts_[ID].read();
   }
 
+  /**
+   * wrapper function that writes one byte
+   * to Uart specified by ID
+   */
   public void write(int ID, byte ch) {
     xuarts_[ID].write(ch);
   }
 
+  /**
+   * wrapper function that flushes
+   * input stream of Uart specified by ID
+   */
   public void flush(int ID) {
     xuarts_[ID].flush();
   }
