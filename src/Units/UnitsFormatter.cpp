@@ -329,42 +329,38 @@ Units::FormatUserMapScale(fixed Distance, TCHAR *buffer,
     _sntprintf(buffer, size, _T("%.*f"), prec, (double)value);
 }
 
+static void
+FormatSpeed(fixed value, TCHAR *buffer, size_t max_size,
+            bool include_unit, bool precision,
+            const UnitDescriptor &unit)
+{
+  value *= unit.factor_to_user;
+
+  const int prec = precision && value < fixed(100);
+  if (include_unit)
+    _sntprintf(buffer, max_size, _T("%.*f%s"),
+               prec, (double)value, unit.name);
+  else
+    _sntprintf(buffer, max_size, _T("%.*f"),
+               prec, (double)value);
+}
+
 void
 Units::FormatUserSpeed(fixed Speed, TCHAR *buffer, size_t size,
                        bool IncludeUnit, bool Precision)
 {
-  int prec;
-  const UnitDescriptor *pU = &unit_descriptors[current.speed_unit];
-
-  Speed = Speed * pU->factor_to_user;
-
-  prec = 0;
-  if (Precision && Speed < fixed(100))
-    prec = 1;
-
-  if (IncludeUnit)
-    _sntprintf(buffer, size, _T("%.*f%s"), prec, (double)Speed, pU->name);
-  else
-    _sntprintf(buffer, size, _T("%.*f"), prec, (double)Speed);
+  FormatSpeed(Speed, buffer, size,
+              IncludeUnit, Precision,
+              unit_descriptors[current.speed_unit]);
 }
 
 void
 Units::FormatUserWindSpeed(fixed Speed, TCHAR *buffer, size_t size,
                            bool IncludeUnit, bool Precision)
 {
-  int prec;
-  const UnitDescriptor *pU = &unit_descriptors[current.wind_speed_unit];
-
-  Speed = Speed * pU->factor_to_user;
-
-  prec = 0;
-  if (Precision && Speed < fixed(100))
-    prec = 1;
-
-  if (IncludeUnit)
-    _sntprintf(buffer, size, _T("%.*f%s"), prec, (double)Speed, pU->name);
-  else
-    _sntprintf(buffer, size, _T("%.*f"), prec, (double)Speed);
+  FormatSpeed(Speed, buffer, size,
+              IncludeUnit, Precision,
+              unit_descriptors[current.wind_speed_unit]);
 }
 
 void
