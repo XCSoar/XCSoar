@@ -24,22 +24,34 @@ Copyright_License {
 #include "AltitudeInfo.hpp"
 #include "Util/Macros.hpp"
 #include "Interface.hpp"
+#include "Language/Language.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Simulator.hpp"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Form/Util.hpp"
 #include "Form/TabBar.hpp"
+#include "Form/Form.hpp"
+#include "Form/XMLWidget.hpp"
 
-static bool
-PnlInfoUpdate()
+class AltitudeInfoPanel : public XMLWidget {
+public:
+  void Refresh();
+
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+};
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static AltitudeInfoPanel *instance;
+
+void
+AltitudeInfoPanel::Refresh()
 {
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const NMEAInfo &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
-
-  SubForm &form = *dlgInfoBoxAccess::GetWindowForm();
 
   if (!calculated.altitude_agl_valid) {
     SetFormValue(form, _T("prpAltAGL"), _("N/A"));
@@ -73,35 +85,40 @@ PnlInfoUpdate()
                               sTmp, ARRAY_SIZE(sTmp));
     SetFormValue(form, _T("prpTerrain"), sTmp);
   }
-
-  return true;
 }
 
 static void
 OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  PnlInfoUpdate();
+  instance->Refresh();
 }
 
-bool
-AltitudeInfoPreShow()
+void
+AltitudeInfoPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  return PnlInfoUpdate();
+  LoadWindow(NULL, parent, _T("IDR_XML_INFOBOXALTITUDEINFO"));
 }
 
-Window *
-LoadAltitudeInfoPanel(SingleWindow &parent, TabBarControl *wTabBar,
-                      WndForm *wf, int id)
+void
+AltitudeInfoPanel::Show(const PixelRect &rc)
 {
-  assert(wTabBar);
-  assert(wf);
-
-  Window *wInfoBoxAccessInfo =
-    LoadWindow(NULL, wf, wTabBar->GetClientAreaWindow(),
-               _T("IDR_XML_INFOBOXALTITUDEINFO"));
-  assert(wInfoBoxAccessInfo);
-
+  WndForm *wf = dlgInfoBoxAccess::GetWindowForm();
   wf->SetTimerNotify(OnTimerNotify);
+  Refresh();
+  XMLWidget::Show(rc);
+}
 
-  return wInfoBoxAccessInfo;
+void
+AltitudeInfoPanel::Hide()
+{
+  XMLWidget::Hide();
+
+  WndForm *wf = dlgInfoBoxAccess::GetWindowForm();
+  wf->SetTimerNotify(NULL);
+}
+
+Widget *
+LoadAltitudeInfoPanel(unsigned id)
+{
+  return instance = new AltitudeInfoPanel();
 }

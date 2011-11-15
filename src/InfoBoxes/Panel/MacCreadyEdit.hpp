@@ -24,15 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_MC_EDIT_PANEL_HPP
 #define XCSOAR_MC_EDIT_PANEL_HPP
 
-#include "Form/TabBar.hpp"
+class Widget;
 
-class Window;
-class SingleWindow;
-class WndForm;
-class TabBarControl;
-
-Window *
-LoadMacCreadyEditPanel(SingleWindow &parent, TabBarControl *wTabBar,
-                        WndForm *wf, int id);
+Widget *
+LoadMacCreadyEditPanel(unsigned id);
 
 #endif

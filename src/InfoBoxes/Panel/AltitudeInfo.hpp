@@ -24,18 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_ALTITUDE_INFO_PANEL_HPP
 #define XCSOAR_ALTITUDE_INFO_PANEL_HPP
 
-#include "Form/TabBar.hpp"
+class Widget;
 
-class Window;
-class SingleWindow;
-class WndForm;
-class TabBarControl;
-
-bool
-AltitudeInfoPreShow();
-
-Window *
-LoadAltitudeInfoPanel(SingleWindow &parent, TabBarControl *wTabBar,
-                      WndForm *wf, int id);
+Widget *
+LoadAltitudeInfoPanel(unsigned id);
 
 #endif

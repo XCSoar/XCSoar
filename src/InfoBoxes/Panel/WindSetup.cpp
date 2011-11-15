@@ -25,20 +25,44 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
+#include "Form/Util.hpp"
 #include "Form/TabBar.hpp"
-#include "DataField/Boolean.hpp"
+#include "Form/XMLWidget.hpp"
+#include "DataField/Enum.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Profile/ProfileKeys.hpp"
+#include "Interface.hpp"
 
 class WndButton;
 
-static int InfoBoxID;
+class WindSetupPanel : public XMLWidget {
+  unsigned id;
+
+public:
+  WindSetupPanel(unsigned _id):id(_id) {}
+
+  void Setup();
+
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+};
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static WindSetupPanel *instance;
+
+void
+WindSetupPanel::Setup()
+{
+  InfoBoxManager::SetupFocused(id);
+  dlgInfoBoxAccess::OnClose();
+}
 
 static void
 PnlSetupOnSetup(gcc_unused WndButton &Sender)
 {
-  InfoBoxManager::SetupFocused(InfoBoxID);
-  dlgInfoBoxAccess::OnClose();
+  instance->Setup();
 }
 
 static gcc_constexpr_data
@@ -47,20 +71,15 @@ CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-Window *
-LoadWindSetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
-                        WndForm *wf, const int id)
+void
+WindSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(wTabBar);
-  assert(wf);
+  LoadWindow(CallBackTable, parent, _T("IDR_XML_INFOBOXWINDSETUP"));
+}
 
-  InfoBoxID = id;
-
-  Window *wInfoBoxAccessSetup =
-    LoadWindow(CallBackTable, wf, wTabBar->GetClientAreaWindow(),
-               _T("IDR_XML_INFOBOXWINDSETUP"));
-  assert(wInfoBoxAccessSetup);
-
+void
+WindSetupPanel::Show(const PixelRect &rc)
+{
   const NMEAInfo &basic = XCSoarInterface::Basic();
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
@@ -73,8 +92,8 @@ LoadWindSetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
       { 0 }
     };
 
-    SetFormControlEnabled(*wf, _T("prpAutoWind"), false);
-    LoadFormProperty(*wf, _T("prpAutoWind"), external_wind_list, 0);
+    SetFormControlEnabled(form, _T("prpAutoWind"), false);
+    LoadFormProperty(form, _T("prpAutoWind"), external_wind_list, 0);
   } else {
     static gcc_constexpr_data StaticEnumChoice auto_wind_list[] = {
       { AUTOWIND_NONE, N_("Manual") },
@@ -84,18 +103,18 @@ LoadWindSetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
       { 0 }
     };
 
-    LoadFormProperty(*wf, _T("prpAutoWind"), auto_wind_list,
+    LoadFormProperty(form, _T("prpAutoWind"), auto_wind_list,
                      settings_computer.auto_wind_mode);
   }
 
-  LoadFormProperty(*wf, _T("prpTrailDrift"),
+  LoadFormProperty(form, _T("prpTrailDrift"),
                    XCSoarInterface::SettingsMap().trail_drift_enabled);
 
-  return wInfoBoxAccessSetup;
+  XMLWidget::Show(rc);
 }
 
-bool
-WindSetupPanelPreHide()
+void
+WindSetupPanel::Hide()
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
   SETTINGS_COMPUTER &settings_computer =
@@ -104,13 +123,19 @@ WindSetupPanelPreHide()
     settings_computer.use_external_wind;
 
   if (!external_wind) {
-    SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpAutoWind"), szProfileAutoWind,
+    SaveFormProperty(form, _T("prpAutoWind"), szProfileAutoWind,
                      settings_computer.auto_wind_mode);
   }
 
-  SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpTrailDrift"),
+  SaveFormProperty(form, _T("prpTrailDrift"),
                    XCSoarInterface::SetSettingsMap().trail_drift_enabled);
   ActionInterface::SendSettingsMap();
 
-  return true;
+  XMLWidget::Hide();
+}
+
+Widget *
+LoadWindSetupPanel(unsigned id)
+{
+  return instance = new WindSetupPanel(id);
 }

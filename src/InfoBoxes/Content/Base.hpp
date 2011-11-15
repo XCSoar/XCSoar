@@ -33,10 +33,7 @@ struct InfoBoxData;
 class InfoBoxWindow;
 struct Waypoint;
 class Angle;
-class Window;
-class SingleWindow;
-class WndForm;
-class TabBarControl;
+class Widget;
 class Canvas;
 struct CallBackTableEntry;
 
@@ -73,23 +70,11 @@ public:
   struct PanelContent {
     gcc_constexpr_ctor
     PanelContent(const TCHAR* _name,
-                        Window* (*_load)(SingleWindow&, TabBarControl*, WndForm*, int),
-                        bool (*_preHide)(void) = NULL,
-                        bool (*_preShow)() = NULL,
-                        void (*_postShow)(void) = NULL,
-                        void (*_reClick)(void) = NULL ) :
+                        Widget *(*_load)(unsigned id)) :
                         name(_name),
-                        load(_load),
-                        preHide(_preHide),
-                        preShow(_preShow),
-                        postShow(_postShow),
-                        reClick(_reClick) {};
+                        load(_load) {};
     const TCHAR* name;
-    Window* (*load)(SingleWindow&, TabBarControl*, WndForm*, int); // ptr to Load function
-    bool (*preHide)(void); // ptr to PreHideFunction
-    bool (*preShow)(); // ptr to PreShowFunction
-    void (*postShow)(void); // ptr to PostShowFunction
-    void (*reClick)(void); // ptr to ReClickFunction
+    Widget *(*load)(unsigned id); // ptr to Load function
   };
 
   struct DialogContent {

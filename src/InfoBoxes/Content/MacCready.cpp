@@ -60,9 +60,7 @@ static gcc_constexpr_data InfoBoxContentMacCready::PanelContent panels[] = {
 
   InfoBoxContentMacCready::PanelContent (
     N_("Setup"),
-    LoadMacCreadySetupPanel,
-    NULL,
-    MacCreadySetupPanelPreShow),
+    LoadMacCreadySetupPanel),
 };
 
 const InfoBoxContentMacCready::DialogContent InfoBoxContentMacCready::dlgContent = {

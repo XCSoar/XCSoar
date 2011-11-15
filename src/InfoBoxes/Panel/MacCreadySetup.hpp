@@ -24,18 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_MC_SETUP_PANEL_HPP
 #define XCSOAR_MC_SETUP_PANEL_HPP
 
-#include "Form/TabBar.hpp"
+class Widget;
 
-class Window;
-class SingleWindow;
-class WndForm;
-class TabBarControl;
-
-Window *
-LoadMacCreadySetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
-                        WndForm *wf, int id);
-
-bool
-MacCreadySetupPanelPreShow();
+Widget *
+LoadMacCreadySetupPanel(unsigned id);
 
 #endif

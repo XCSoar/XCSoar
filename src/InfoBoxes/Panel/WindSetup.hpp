@@ -24,16 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_WIND_SETUP_PANEL_HPP
 #define XCSOAR_WIND_SETUP_PANEL_HPP
 
-class Window;
-class SingleWindow;
-class WndForm;
-class TabBarControl;
+class Widget;
 
-Window *
-LoadWindSetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
-                   WndForm *wf, int id);
-
-bool
-WindSetupPanelPreHide();
+Widget *
+LoadWindSetupPanel(unsigned id);
 
 #endif

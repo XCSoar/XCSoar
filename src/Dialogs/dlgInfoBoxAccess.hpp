@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef DLGINFOBOXACCESS_HPP
 #define DLGINFOBOXACCESS_HPP
 
-#include "Dialogs/Internal.hpp"
-#include "DataField/Enum.hpp"
+class SingleWindow;
+class WndForm;
 
 class dlgInfoBoxAccess
 {
@@ -40,24 +40,6 @@ public:
   static void dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id);
 
   static WndForm* GetWindowForm();
-
-
-  /**
-   * creates the control from its XML file and does any init work
-   * @param parent
-   * @param wf
-   * @return Window* that points to the control created
-   */
-  static Window* pnlCloseLoad(SingleWindow &parent, TabBarControl* wTabBar,
-                              WndForm* wf);
-
-  static void pnlCloseOnCloseClicked(WndButton &Sender);
-  static bool pnlCloseOnTabClick();
-  /**
-   * callback
-   */
-  static void pnlCloseOnTabReClick();
-  static bool pnlCloseOnTabPreShow();
 };
 
 #endif /* DLGINFOBOXACCESS_H_ */

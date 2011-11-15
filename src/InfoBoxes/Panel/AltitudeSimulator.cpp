@@ -29,9 +29,16 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/dlgTools.h"
-#include "Form/TabBar.hpp"
+#include "Form/XMLWidget.hpp"
 
 class WndButton;
+
+class AltitudeSimulatorPanel : public XMLWidget {
+public:
+  void Refresh();
+
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+};
 
 static void
 ChangeAltitude(const fixed step)
@@ -87,20 +94,15 @@ CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-Window *
-LoadAltitudeSimulatorPanel(SingleWindow &parent, TabBarControl *wTabBar,
-                           WndForm *wf, const int id)
+void
+AltitudeSimulatorPanel::Prepare(ContainerWindow &parent,
+                                const PixelRect &rc)
 {
-  assert(wTabBar);
-  assert(wf);
+  LoadWindow(CallBackTable, parent, _T("IDR_XML_INFOBOXALTITUDESIMULATOR"));
+}
 
-  if (!is_simulator())
-    return NULL;
-
-  Window *wInfoBoxAccessSimulator =
-    LoadWindow(CallBackTable, wf, wTabBar->GetClientAreaWindow(),
-               _T("IDR_XML_INFOBOXALTITUDESIMULATOR"));
-  assert(wInfoBoxAccessSimulator);
-
-  return wInfoBoxAccessSimulator;
+Widget *
+LoadAltitudeSimulatorPanel(unsigned id)
+{
+  return new AltitudeSimulatorPanel();
 }

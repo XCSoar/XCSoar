@@ -24,13 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_ALTITUDE_SETUP_PANEL_HPP
 #define XCSOAR_ALTITUDE_SETUP_PANEL_HPP
 
-class Window;
-class SingleWindow;
-class WndForm;
-class TabBarControl;
+class Widget;
 
-Window *
-LoadAltitudeSetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
-                       WndForm *wf, int id);
+Widget *
+LoadAltitudeSetupPanel(unsigned id);
 
 #endif

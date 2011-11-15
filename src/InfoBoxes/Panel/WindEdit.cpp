@@ -26,7 +26,17 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Form/TabBar.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Form/Edit.hpp"
 #include "DataField/Float.hpp"
+#include "Interface.hpp"
+#include "Units/Units.hpp"
+
+class WindEditPanel : public XMLWidget {
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Show(const PixelRect &rc);
+};
 
 static void
 PnlEditOnWindSpeed(gcc_unused DataFieldFloat &Sender)
@@ -66,23 +76,14 @@ CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-Window *
-LoadWindEditPanel(SingleWindow &parent, TabBarControl *wTabBar,
-                  WndForm *wf, const int id)
+void
+WindEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(wTabBar);
-  assert(wf);
-
-  Window *wInfoBoxAccessEdit =
-    LoadWindow(CallBackTable, wf, wTabBar->GetClientAreaWindow(),
-               _T("IDR_XML_INFOBOXWINDEDIT"));
-  assert(wInfoBoxAccessEdit);
-
-  return wInfoBoxAccessEdit;
+  LoadWindow(CallBackTable, parent, _T("IDR_XML_INFOBOXWINDEDIT"));
 }
 
-bool
-WindEditPanelPreShow()
+void
+WindEditPanel::Show(const PixelRect &rc)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
   const SETTINGS_COMPUTER &settings_computer =
@@ -94,7 +95,7 @@ WindEditPanelPreShow()
 
   const SpeedVector wind = CommonInterface::Calculated().GetWindOrZero();
 
-  wp = (WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpSpeed"));
+  wp = (WndProperty *)form.FindByName(_T("prpSpeed"));
   if (wp) {
     wp->set_enabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
@@ -104,7 +105,7 @@ WindEditPanelPreShow()
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpDirection"));
+  wp = (WndProperty *)form.FindByName(_T("prpDirection"));
   if (wp) {
     wp->set_enabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
@@ -112,5 +113,11 @@ WindEditPanelPreShow()
     wp->RefreshDisplay();
   }
 
-  return true;
+  XMLWidget::Show(rc);
+}
+
+Widget *
+LoadWindEditPanel(unsigned id)
+{
+  return new WindEditPanel();
 }

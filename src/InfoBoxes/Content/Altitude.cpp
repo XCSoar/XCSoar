@@ -56,9 +56,7 @@ InfoBoxContentAltitude::PanelContent Panels[] = {
 
   InfoBoxContentAltitude::PanelContent (
     N_("Info"),
-    LoadAltitudeInfoPanel,
-    NULL,
-    AltitudeInfoPreShow),
+    LoadAltitudeInfoPanel),
 
   InfoBoxContentAltitude::PanelContent (
     N_("Setup"),

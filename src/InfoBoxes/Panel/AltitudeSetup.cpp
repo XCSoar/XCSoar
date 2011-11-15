@@ -31,12 +31,28 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
+#include "Form/Util.hpp"
 #include "Form/TabBar.hpp"
+#include "Form/XMLWidget.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 
 class WndButton;
 
-static int InfoBoxID;
+class AltitudeSetupPanel : public XMLWidget {
+  unsigned id;
+
+public:
+  AltitudeSetupPanel(unsigned _id):id(_id) {}
+
+  void Setup();
+
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Show(const PixelRect &rc);
+};
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static AltitudeSetupPanel *instance;
 
 static void
 PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode)
@@ -57,11 +73,17 @@ PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
+void
+AltitudeSetupPanel::Setup()
+{
+  InfoBoxManager::SetupFocused(id);
+  dlgInfoBoxAccess::OnClose();
+}
+
 static void
 PnlSetupOnSetup(gcc_unused WndButton &Sender)
 {
-  InfoBoxManager::SetupFocused(InfoBoxID);
-  dlgInfoBoxAccess::OnClose();
+  instance->Setup();
 }
 
 static gcc_constexpr_data
@@ -71,22 +93,23 @@ CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-Window *
-LoadAltitudeSetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
-                       WndForm *wf, const int id)
+void
+AltitudeSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(wTabBar);
-  assert(wf);
+  LoadWindow(CallBackTable, parent, _T("IDR_XML_INFOBOXALTITUDESETUP"));
+}
 
-  InfoBoxID = id;
-
-  Window *wInfoBoxAccessSetup =
-    LoadWindow(CallBackTable, wf, wTabBar->GetClientAreaWindow(),
-               _T("IDR_XML_INFOBOXALTITUDESETUP"));
-  assert(wInfoBoxAccessSetup);
-
-  LoadFormProperty(*wf, _T("prpQNH"),
+void
+AltitudeSetupPanel::Show(const PixelRect &rc)
+{
+  LoadFormProperty(form, _T("prpQNH"),
                    CommonInterface::SettingsComputer().pressure.GetHectoPascal());
 
-  return wInfoBoxAccessSetup;
+  XMLWidget::Show(rc);
+}
+
+Widget *
+LoadAltitudeSetupPanel(unsigned id)
+{
+  return instance = new AltitudeSetupPanel(id);
 }

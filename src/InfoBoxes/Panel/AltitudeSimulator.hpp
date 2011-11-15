@@ -24,13 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_ALTITUDE_SIMULATOR_PANEL_HPP
 #define XCSOAR_ALTITUDE_SIMULATOR_PANEL_HPP
 
-class Window;
-class SingleWindow;
-class WndForm;
-class TabBarControl;
+class Widget;
 
-Window *
-LoadAltitudeSimulatorPanel(SingleWindow &parent, TabBarControl *wTabBar,
-                           WndForm *wf, int id);
+Widget *
+LoadAltitudeSimulatorPanel(unsigned id);
 
 #endif

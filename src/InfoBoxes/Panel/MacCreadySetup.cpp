@@ -26,16 +26,43 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Form/TabBar.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Form/Button.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "Interface.hpp"
 
 class WndButton;
 
-static int InfoBoxID;
+class MacCreadySetupPanel : public XMLWidget {
+  unsigned id;
+
+public:
+  MacCreadySetupPanel(unsigned _id):id(_id) {}
+
+  void QuickAccess(const TCHAR *value) {
+    InfoBoxManager::ProcessQuickAccess(id, value);
+  }
+
+  void Setup();
+
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Show(const PixelRect &rc);
+};
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static MacCreadySetupPanel *instance;
+
+void
+MacCreadySetupPanel::Setup()
+{
+  InfoBoxManager::SetupFocused(id);
+  dlgInfoBoxAccess::OnClose();
+}
 
 static void
 PnlSetupOnSetup(gcc_unused WndButton &Sender) {
-  InfoBoxManager::SetupFocused(InfoBoxID);
-  dlgInfoBoxAccess::OnClose();
+  instance->Setup();
 }
 
 static void
@@ -46,7 +73,7 @@ PnlSetupOnMode(gcc_unused WndButton &Sender)
   else
     Sender.SetCaption(_("MANUAL"));
 
-  InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("mode"));
+  instance->QuickAccess(_T("mode"));
 }
 
 static gcc_constexpr_data CallBackTableEntry call_back_table[] = {
@@ -55,30 +82,25 @@ static gcc_constexpr_data CallBackTableEntry call_back_table[] = {
   DeclareCallBackEntry(NULL)
 };
 
-Window *
-LoadMacCreadySetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
-                        WndForm *wf, const int id)
+void
+MacCreadySetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(wTabBar);
-  assert(wf);
-
-  InfoBoxID = id;
-
-  Window *wInfoBoxAccessSetup =
-    LoadWindow(call_back_table, wf, wTabBar->GetClientAreaWindow(),
-               _T("IDR_XML_INFOBOXMACCREADYSETUP"));
-  assert(wInfoBoxAccessSetup);
-
-  return wInfoBoxAccessSetup;
+  LoadWindow(call_back_table, parent, _T("IDR_XML_INFOBOXMACCREADYSETUP"));
 }
 
-bool
-MacCreadySetupPanelPreShow()
+void
+MacCreadySetupPanel::Show(const PixelRect &rc)
 {
   if (XCSoarInterface::SettingsComputer().task.auto_mc)
-    ((WndButton *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("cmdMode")))->SetCaption(_("MANUAL"));
+    ((WndButton *)form.FindByName(_T("cmdMode")))->SetCaption(_("MANUAL"));
   else
-    ((WndButton *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("cmdMode")))->SetCaption(_("AUTO"));
+    ((WndButton *)form.FindByName(_T("cmdMode")))->SetCaption(_("AUTO"));
 
-  return true;
+  XMLWidget::Show(rc);
+}
+
+Widget *
+LoadMacCreadySetupPanel(unsigned id)
+{
+  return instance = new MacCreadySetupPanel(id);
 }

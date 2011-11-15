@@ -24,18 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_WIND_EDIT_PANEL_HPP
 #define XCSOAR_WIND_EDIT_PANEL_HPP
 
-#include "Form/TabBar.hpp"
+class Widget;
 
-class Window;
-class SingleWindow;
-class WndForm;
-class TabBarControl;
-
-Window *
-LoadWindEditPanel(SingleWindow &parent, TabBarControl *wTabBar,
-                  WndForm *wf, int id);
-
-bool
-WindEditPanelPreShow();
+Widget *
+LoadWindEditPanel(unsigned id);
 
 #endif

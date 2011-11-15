@@ -32,11 +32,19 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
-
 #include "Form/TabBar.hpp"
 #include "Form/Panel.hpp"
+#include "Form/XMLWidget.hpp"
+
 #include <assert.h>
 #include <stdio.h>
+
+class CloseInfoBoxAccess : public XMLWidget {
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Click();
+  virtual void ReClick();
+};
 
 static WndForm *wf = NULL;
 
@@ -76,33 +84,21 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
   wTabBar = (TabBarControl*)wf->FindByName(_T("TabBar"));
   assert(wTabBar != NULL);
 
-  Window* wPanel[dlgContent->PANELSIZE];
+  Widget *wPanel[dlgContent->PANELSIZE];
 
   for (int i = 0; i < dlgContent->PANELSIZE; i++) {
     assert(dlgContent->Panels[i].load);
 
-    wPanel[i] =
-      dlgContent->Panels[i].load(parent, wTabBar, wf, id);
+    wPanel[i] = dlgContent->Panels[i].load(id);
 
     if (wPanel[i] == NULL)
       continue;
 
-    wTabBar->AddClient(wPanel[i], gettext(dlgContent->Panels[i].name),
-                       false, NULL,
-                       dlgContent->Panels[i].preHide,
-                       dlgContent->Panels[i].preShow,
-                       dlgContent->Panels[i].postShow,
-                       NULL,
-                       dlgContent->Panels[i].reClick);
+    wTabBar->AddTab(wPanel[i], gettext(dlgContent->Panels[i].name));
   }
 
-  Window* wClose =
-    dlgInfoBoxAccess::pnlCloseLoad(parent, wTabBar, wf);
-  assert(wClose);
-  wTabBar->AddClient(wClose, _("Close"), false, NULL, NULL,  dlgInfoBoxAccess::pnlCloseOnTabPreShow,
-                     NULL,
-                     dlgInfoBoxAccess::pnlCloseOnTabClick,
-                     dlgInfoBoxAccess::pnlCloseOnTabReClick);
+  Widget *wClose = new CloseInfoBoxAccess();
+  wTabBar->AddTab(wClose, _("Close"));
 
   wTabBar->SetCurrentPage(0);
 
@@ -128,43 +124,20 @@ dlgInfoBoxAccess::OnClose()
 // panel close
 
 void
-dlgInfoBoxAccess::pnlCloseOnCloseClicked(gcc_unused WndButton &Sender)
+CloseInfoBoxAccess::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  dlgInfoBoxAccess::OnClose();
+  LoadWindow(NULL, parent, _T("IDR_XML_INFOBOXACCESSCLOSE"));
 }
 
 bool
-dlgInfoBoxAccess::pnlCloseOnTabClick()
+CloseInfoBoxAccess::Click()
 {
   dlgInfoBoxAccess::OnClose();
   return false;
 }
 
 void
-dlgInfoBoxAccess::pnlCloseOnTabReClick()
+CloseInfoBoxAccess::ReClick()
 {
   dlgInfoBoxAccess::OnClose();
-}
-
-bool
-dlgInfoBoxAccess::pnlCloseOnTabPreShow()
-{
-  return true;
-}
-
-Window*
-dlgInfoBoxAccess::pnlCloseLoad(gcc_unused SingleWindow &parent, TabBarControl* wTabBar,
-                               WndForm* _wf)
-{
-  assert(wTabBar);
-
-  assert(_wf);
-  wf = _wf;
-
-  Window *wInfoBoxAccessClose =
-    LoadWindow(NULL, wf, wTabBar->GetClientAreaWindow(),
-               _T("IDR_XML_INFOBOXACCESSCLOSE"));
-  assert(wInfoBoxAccessClose);
-
-  return wInfoBoxAccessClose;
 }

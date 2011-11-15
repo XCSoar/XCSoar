@@ -28,34 +28,50 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Form/TabBar.hpp"
+#include "Form/XMLWidget.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 
 class WndButton;
 
-int InfoBoxID;
+class MacCreadyEditPanel : public XMLWidget {
+  unsigned id;
+
+public:
+  MacCreadyEditPanel(unsigned _id):id(_id) {}
+
+  void QuickAccess(const TCHAR *value) {
+    InfoBoxManager::ProcessQuickAccess(id, value);
+  }
+
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+};
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static MacCreadyEditPanel *instance;
 
 static void
 PnlEditOnPlusSmall(gcc_unused WndButton &Sender)
 {
-  InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("+0.1"));
+  instance->QuickAccess(_T("+0.1"));
 }
 
 static void
 PnlEditOnPlusBig(gcc_unused WndButton &Sender)
 {
-  InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("+0.5"));
+  instance->QuickAccess(_T("+0.5"));
 }
 
 static void
 PnlEditOnMinusSmall(gcc_unused WndButton &Sender)
 {
-  InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("-0.1"));
+  instance->QuickAccess(_T("-0.1"));
 }
 
 static void
 PnlEditOnMinusBig(gcc_unused WndButton &Sender)
 {
-  InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("-0.5"));
+  instance->QuickAccess(_T("-0.5"));
 }
 
 static gcc_constexpr_data CallBackTableEntry call_back_table[] = {
@@ -66,19 +82,14 @@ static gcc_constexpr_data CallBackTableEntry call_back_table[] = {
   DeclareCallBackEntry(NULL)
 };
 
-Window *
-LoadMacCreadyEditPanel(SingleWindow &parent, TabBarControl *wTabBar,
-                       WndForm *wf, int id)
+void
+MacCreadyEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(wTabBar);
-  assert(wf);
+  LoadWindow(call_back_table, parent, _T("IDR_XML_INFOBOXMACCREADYEDIT"));
+}
 
-  InfoBoxID = id;
-
-  Window *wInfoBoxAccessEdit =
-    LoadWindow(call_back_table, wf, wTabBar->GetClientAreaWindow(),
-               _T("IDR_XML_INFOBOXMACCREADYEDIT"));
-  assert(wInfoBoxAccessEdit);
-
-  return wInfoBoxAccessEdit;
+Widget *
+LoadMacCreadyEditPanel(unsigned id)
+{
+  return instance = new MacCreadyEditPanel(id);
 }

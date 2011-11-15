@@ -93,14 +93,11 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
 static gcc_constexpr_data InfoBoxContentWind::PanelContent Panels[] = {
 InfoBoxContentWind::PanelContent (
   N_("Edit"),
-  LoadWindEditPanel,
-  NULL,
-  WindEditPanelPreShow),
+  LoadWindEditPanel),
 
 InfoBoxContentWind::PanelContent (
   N_("Setup"),
-  LoadWindSetupPanel,
-  WindSetupPanelPreHide),
+  LoadWindSetupPanel),
 };
 
 const InfoBoxContentWind::DialogContent InfoBoxContentWind::dlgContent = {
