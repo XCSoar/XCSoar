@@ -43,10 +43,8 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent,
                                UPixelScalar _width, UPixelScalar _height,
                                const WindowStyle style)
   :// tabLineHeight=1
-   NumPages(0),
    LastContent(NO_MAIN_MENU, NO_SUB_MENU),
    Caption(_caption),
-   CurrentPageNum(UNINITIALIZED),
    setting_up(true),
    form(_form),
    LookUpTable(_look_up_table)
@@ -95,7 +93,7 @@ TabMenuControl::AddClient(Window *w, const PageItem& item,
 void
 TabMenuControl::NextPage()
 {
-  const unsigned NumAllPages = NumPages + 1; // add one for menu page
+  const unsigned NumAllPages = pager.GetTabCount();
   if (NumAllPages < 2)
     return;
   SetCurrentPage((GetCurrentPage() + 1) % NumAllPages);
@@ -104,7 +102,7 @@ TabMenuControl::NextPage()
 void
 TabMenuControl::PreviousPage()
 {
-  const unsigned NumAllPages = NumPages + 1; // add one for menu page
+  const unsigned NumAllPages = pager.GetTabCount();
 
   if (NumAllPages < 2)
     return;
@@ -114,7 +112,7 @@ TabMenuControl::PreviousPage()
 void
 TabMenuControl::HideAllPageExtras()
 {
-  for (unsigned i = 0; i < NumPages; i++) {
+  for (unsigned i = 0; i < GetNumPages(); i++) {
     const PageItem& theitem = GetPageItem(i);
     if (theitem.PreHideCallback != NULL)
       theitem.PreHideCallback();
@@ -133,7 +131,7 @@ TabMenuControl::GetMainMenuButton(unsigned main_menu_index) const
 const OneSubMenuButton *
 TabMenuControl::GetSubMenuButton(unsigned page) const
 {
-  assert(page < NumPages && page < buttons.size());
+  assert(page < GetNumPages() && page < buttons.size());
   if (page >= buttons.size())
     return NULL;
   else
@@ -190,8 +188,6 @@ TabMenuControl::SetCurrentPage(unsigned page)
                gettext(butMain->Caption), theitem.menu_caption);
     form.SetCaption(caption);
   }
-
-  CurrentPageNum = page;
 }
 
 int
@@ -203,7 +199,7 @@ TabMenuControl::GetPageNum(const unsigned main_menu_index,
     return this->GetMenuPage();
 
   assert(main_menu_index < MainMenuButtons.size());
-  assert(sub_menu_index < NumPages);
+  assert(sub_menu_index < GetNumPages());
 
   const OneMainMenuButton *butMain = GetMainMenuButton(main_menu_index);
   if (butMain)
@@ -358,7 +354,8 @@ TabMenuControl::CreateSubMenuItem(const unsigned sub_menu_index,
 }
 
 void
-TabMenuControl::CreateSubMenu(const TCHAR *main_menu_caption,
+TabMenuControl::CreateSubMenu(const PageItem pages[], unsigned NumPages,
+                              const TCHAR *main_menu_caption,
                               const unsigned main_menu_index)
 {
   assert(main_menu_index < MAX_MAIN_MENU_ITEMS);
@@ -366,7 +363,7 @@ TabMenuControl::CreateSubMenu(const TCHAR *main_menu_caption,
   unsigned subMenuIndex = 0;
 
   for (unsigned i = 0; i < NumPages; i++) {
-    const PageItem& item = GetPageItem(i);
+    const PageItem& item = pages[i];
     if (item.main_menu_index == main_menu_index) {
       CreateSubMenuItem(subMenuIndex, item, i);
       firstPageIndex = min(i, firstPageIndex);
@@ -391,15 +388,14 @@ TabMenuControl::InitMenu(const PageItem pages[],
   assert(main_menu_captions);
 
   Pages = pages;
-  NumPages = num_pages;
 
   for (unsigned i = 0; i < num_menu_captions; i++)
-    CreateSubMenu(main_menu_captions[i], i);
-
-  CurrentPageNum = GetMenuPage();
+    CreateSubMenu(pages, num_pages, main_menu_captions[i], i);
 
   pager.AddClient(theTabDisplay);
   buttons.append(new OneTabButton(Caption, false, NULL, NULL, NULL));
+
+  assert(GetNumPages() == num_pages);
 }
 
 unsigned

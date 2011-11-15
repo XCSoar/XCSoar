@@ -74,7 +74,6 @@ public:
       MAIN_MENU_PAGE = 999,
       NO_SUB_MENU = 998,
       NO_MAIN_MENU = 997,
-      UNINITIALIZED = 996,
   };
 
   /* internally used structure for tracking menu down and selection status */
@@ -100,19 +99,9 @@ protected:
   /* holds pointer to array of menus info (must be sorted by MenuGroup) */
   PageItem const *Pages;
 
-  unsigned NumPages;
   menu_tab_index LastContent;
 
-  /* Index of last page selected by menu */
-  unsigned MainMenuIndex;
-
-  /* Sub index of last page selected by menu */
-  unsigned SubMenuIndex;
-
   StaticString<256u> Caption;
-
-  /* value of last displayed content (non-menu) page */
-  unsigned CurrentPageNum;
 
   // used to indicate initial state before tabs have changed
   bool setting_up;
@@ -218,13 +207,15 @@ public:
   /**
    * @return number of pages excluding the menu page
    */
-  unsigned GetNumPages() { return NumPages; }
+  unsigned GetNumPages() const{
+    return pager.GetTabCount() - 1;
+  }
 
   /**
    *  returns menu item from data array of pages
    */
   const PageItem &GetPageItem(unsigned page) const {
-    assert(page < NumPages);
+    assert(page < GetNumPages());
     return Pages[page];
   }
 
@@ -263,7 +254,7 @@ protected:
    * @returns Page Index being displayed (including NumPages for Menu)
    */
   unsigned GetCurrentPage() const {
-    return CurrentPageNum;
+    return pager.GetCurrentPage();
   }
 
 protected:
@@ -272,7 +263,7 @@ protected:
    * @return virtual menu page -- one greater than size of the menu array
    */
   unsigned GetMenuPage() const {
-    return NumPages;
+    return GetNumPages();
   }
 
   TabMenuDisplay *GetTabMenuDisplay() {
@@ -299,7 +290,8 @@ protected:
    * @param MainMenuIndex 0 to (MAX_SUB_MENUS-1)
    */
   void
-  CreateSubMenu(const TCHAR *main_menu_caption,
+  CreateSubMenu(const PageItem pages[], unsigned num_pages,
+                const TCHAR *main_menu_caption,
                 const unsigned main_menu_index);
 
   /**Adds a child tab to the menu
