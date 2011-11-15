@@ -78,12 +78,41 @@ public:
 
   /* internally used structure for tracking menu down and selection status */
   struct menu_tab_index {
+    static const unsigned NO_MAIN_MENU = 997;
+    static const unsigned NO_SUB_MENU = 998;
+
     unsigned MainIndex;
     unsigned SubIndex;
 
     gcc_constexpr_ctor
-    menu_tab_index(unsigned mainNum, unsigned subNum)
+    explicit menu_tab_index(unsigned mainNum, unsigned subNum=NO_SUB_MENU)
       :MainIndex(mainNum), SubIndex(subNum) {}
+
+    gcc_constexpr_function
+    static menu_tab_index None() {
+      return menu_tab_index(NO_MAIN_MENU, NO_SUB_MENU);
+    }
+
+    gcc_constexpr_method
+    bool IsNone() const {
+      return MainIndex == NO_MAIN_MENU;
+    }
+
+    gcc_constexpr_method
+    bool IsMain() const {
+      return MainIndex != NO_MAIN_MENU && SubIndex == NO_SUB_MENU;
+    }
+
+    gcc_constexpr_method
+    bool IsSub() const {
+      return SubIndex != NO_SUB_MENU;
+    }
+
+    gcc_constexpr_method
+    bool operator==(const menu_tab_index &other) const {
+      return MainIndex == other.MainIndex &&
+        SubIndex == other.SubIndex;
+    }
   };
 
 protected:
@@ -229,8 +258,7 @@ public:
    *  or GetMenuPage() if index is not a valid page
    */
   gcc_pure
-  int GetPageNum(const unsigned main_menu_index,
-                 const unsigned sub_menu_index) const;
+  int GetPageNum(menu_tab_index i) const;
 
   /**
    * overloads from TabBarControl.
@@ -243,7 +271,7 @@ public:
    */
   gcc_pure
   unsigned GetLastContentPage() const {
-    return GetPageNum(LastContent.MainIndex, LastContent.SubIndex);
+    return GetPageNum(LastContent);
   }
 
   const StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS>
