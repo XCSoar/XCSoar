@@ -271,8 +271,9 @@ pnlTaskCalculator::OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &
     const int offsety = canvas.get_height() - bmp->get_size().cy;
     canvas.clear(COLOR_YELLOW);
     bmp->draw(canvas, offsetx, offsety);
-    canvas.set_background_color(COLOR_YELLOW);
 
+    canvas.set_background_color(COLOR_YELLOW);
+    canvas.set_text_color(COLOR_BLACK);
     canvas.text(offsetx * 2 + Layout::Scale(2),
                 (int)(canvas.get_height() - textheight) / 2,
                 message);
