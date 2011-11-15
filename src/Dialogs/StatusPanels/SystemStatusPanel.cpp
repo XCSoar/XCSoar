@@ -28,6 +28,20 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Form/Edit.hpp"
 
+gcc_pure
+static const TCHAR *
+GetGPSStatus(const NMEAInfo &basic)
+{
+  if (!basic.connected)
+    return N_("Disconnected");
+  else if (!basic.location_available)
+    return N_("Fix invalid");
+  else if (!basic.gps_altitude_available)
+    return N_("2D fix");
+  else
+    return N_("3D fix");
+}
+
 void
 SystemStatusPanel::Refresh()
 {
@@ -40,17 +54,8 @@ SystemStatusPanel::Refresh()
 
   wp = (WndProperty*)form.FindByName(_T("prpGPS"));
   assert(wp != NULL);
-  if (!basic.connected)
-    wp->SetText(_("Disconnected"));
-  else if (!basic.location_available)
-    wp->SetText(_("Fix invalid"));
-  else if (!basic.gps_altitude_available)
-    wp->SetText(_("2D fix"));
-  else
-    wp->SetText(_("3D fix"));
-
+  wp->SetText(gettext(GetGPSStatus(basic)));
   wp->RefreshDisplay();
-
 
   wp = (WndProperty*)form.FindByName(_T("prpNumSat"));
   assert(wp != NULL);
