@@ -56,13 +56,13 @@ public:
 
      /* The main menu page Enter menu page into the array
       * 0 to (GetNumMainMenuCaptions() - 1) */
-    const unsigned main_menu_index;
+    unsigned main_menu_index;
 
     /* If the page needs to perform actions each time before it is displayed */
-    const TabBarControl::PreShowNotifyCallback_t PreShowCallback;
+    TabBarControl::PreShowNotifyCallback_t PreShowCallback;
 
     /* If the page needs to perform cleanup after each time it is hidden */
-    const TabBarControl::PreHideNotifyCallback_t PreHideCallback;
+    TabBarControl::PreHideNotifyCallback_t PreHideCallback;
 
     /* Portrait XML resource.  Assumes "_L" converts name to landscape */
     const TCHAR *XML_PortraitResource;
