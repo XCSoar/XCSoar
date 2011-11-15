@@ -64,18 +64,16 @@ TaskStatusPanel::Refresh()
   if (task_stats.total.planned.IsDefined()) {
     wp = (WndProperty*)form.FindByName(_T("prpTaskDistance"));
     assert(wp != NULL);
-    _stprintf(Temp, _T("%.0f %s"),
-              (double)Units::ToUserDistance(task_stats.total.planned.get_distance()),
-              Units::GetDistanceName());
+    Units::FormatUserDistance(task_stats.total.planned.get_distance(),
+                              Temp, ARRAY_SIZE(Temp));
     wp->SetText(Temp);
   }
 
   if (task_stats.total.remaining.IsDefined()) {
     wp = (WndProperty*)form.FindByName(_T("prpRemainingDistance"));
     assert(wp != NULL);
-    _stprintf(Temp, _T("%.0f %s"),
-              (double)Units::ToUserDistance(task_stats.total.remaining.get_distance()),
-              Units::GetDistanceName());
+    Units::FormatUserDistance(task_stats.total.remaining.get_distance(),
+                              Temp, ARRAY_SIZE(Temp));
     wp->SetText(Temp);
   }
 

@@ -84,9 +84,7 @@ RulesStatusPanel::Refresh()
   wp = (WndProperty*)form.FindByName(_T("prpStartHeight"));
   assert(wp != NULL);
   if (common_stats.task_started) {
-    _stprintf(Temp, _T("%.0f %s"),
-              (double)Units::ToUserAltitude(start_state.altitude),
-              Units::GetAltitudeName());
+    Units::FormatUserAltitude(start_state.altitude, Temp, ARRAY_SIZE(Temp));
     wp->SetText(Temp);
   } else {
     wp->SetText(_T(""));
@@ -94,9 +92,8 @@ RulesStatusPanel::Refresh()
 
   wp = (WndProperty*)form.FindByName(_T("prpFinishAlt"));
   assert(wp != NULL);
-  _stprintf(Temp, _T("%.0f %s"),
-            (double)Units::ToUserAltitude(protected_task_manager->GetFinishHeight()),
-            Units::GetAltitudeName());
+  Units::FormatUserAltitude(protected_task_manager->GetFinishHeight(),
+                            Temp, ARRAY_SIZE(Temp));
   wp->SetText(Temp);
 
   wp = (WndProperty*)form.FindByName(_T("prpStartPoint"));

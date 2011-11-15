@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "FlightStatusPanel.hpp"
+#include "Util/Macros.hpp"
 #include "Interface.hpp"
 #include "Form/Edit.hpp"
 #include "Units/UnitsFormatter.hpp"
@@ -54,17 +55,14 @@ FlightStatusPanel::Refresh()
   wp = (WndProperty*)form.FindByName(_T("prpAltitude"));
   assert(wp != NULL);
   if (basic.gps_altitude_available) {
-    _stprintf(Temp, _T("%.0f %s"),
-              (double)Units::ToUserAltitude(basic.gps_altitude),
-              Units::GetAltitudeName());
+    Units::FormatUserAltitude(basic.gps_altitude, Temp, ARRAY_SIZE(Temp));
     wp->SetText(Temp);
   }
 
   wp = (WndProperty*)form.FindByName(_T("prpMaxHeightGain"));
   assert(wp != NULL);
-  _stprintf(Temp, _T("%d %s"),
-            (int)Units::ToUserAltitude(calculated.max_height_gain),
-            Units::GetAltitudeName());
+  Units::FormatUserAltitude(calculated.max_height_gain,
+                            Temp, ARRAY_SIZE(Temp));
   wp->SetText(Temp);
 
   if (nearest_waypoint) {
