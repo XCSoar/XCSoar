@@ -22,8 +22,9 @@ Copyright_License {
 */
 
 #include "AltitudeInfo.hpp"
+#include "Util/Macros.hpp"
 #include "Interface.hpp"
-#include "Units/Units.hpp"
+#include "Units/UnitsFormatter.hpp"
 #include "Simulator.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/dlgTools.h"
@@ -42,8 +43,7 @@ PnlInfoUpdate()
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltAGL")))->SetText(_("N/A"));
   } else {
     // Set Value
-    _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(calculated.altitude_agl),
-                                   Units::GetAltitudeName());
+    Units::FormatUserAltitude(calculated.altitude_agl, sTmp, ARRAY_SIZE(sTmp));
 
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltAGL")))->SetText(sTmp);
   }
@@ -52,8 +52,7 @@ PnlInfoUpdate()
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltBaro")))->SetText(_("N/A"));
   } else {
     // Set Value
-    _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(basic.baro_altitude),
-                                       Units::GetAltitudeName());
+    Units::FormatUserAltitude(basic.baro_altitude, sTmp, ARRAY_SIZE(sTmp));
 
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltBaro")))->SetText(sTmp);
   }
@@ -62,8 +61,7 @@ PnlInfoUpdate()
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltGPS")))->SetText(_("N/A"));
   } else {
     // Set Value
-     _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(basic.gps_altitude),
-                                         Units::GetAltitudeName());
+    Units::FormatUserAltitude(basic.gps_altitude, sTmp, ARRAY_SIZE(sTmp));
 
       ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltGPS")))->SetText(sTmp);
   }
@@ -72,8 +70,8 @@ PnlInfoUpdate()
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpTerrain")))->SetText(_("N/A"));
   } else {
     // Set Value
-     _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(calculated.terrain_altitude),
-                                         Units::GetAltitudeName());
+    Units::FormatUserAltitude(calculated.terrain_altitude,
+                              sTmp, ARRAY_SIZE(sTmp));
 
       ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpTerrain")))->SetText(sTmp);
   }
