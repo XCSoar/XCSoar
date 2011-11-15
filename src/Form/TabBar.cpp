@@ -66,29 +66,6 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
             pager_style);
 }
 
-TabBarControl::TabBarControl(ContainerWindow &_parent,
-                             UPixelScalar _tabLineHeight,
-                             const DialogLook &look,
-                             PixelScalar x, PixelScalar y,
-                             UPixelScalar _width, UPixelScalar _height,
-                             const WindowStyle style)
-  :theTabDisplay(NULL),
-   TabLineHeight(Layout::Scale(_tabLineHeight)),
-   flipOrientation(!Layout::landscape),
-   clientOverlapTabs(true),
-   setting_up(true)
-{
-  set(_parent, x, 0, _parent.get_width() - x, _parent.get_height(), style);
-
-  WindowStyle pager_style;
-
-  const PixelRect rc = get_client_rect();
-
-  pager_style.control_parent();
-  pager.set(*this, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
-            pager_style);
-}
-
 TabBarControl::~TabBarControl()
 {
   delete theTabDisplay;
@@ -150,29 +127,6 @@ TabBarControl::AddTab(Widget *widget, const TCHAR *caption,
 
   OneTabButton *b = new OneTabButton(caption, button_only, bmp,
                                      NULL, NULL);
-  buttons.append(b);
-
-  return buttons.size() - 1;
-}
-
-void
-TabBarControl::AddClientWindow(Window *w)
-{
-  pager.AddClient(w);
-}
-
-unsigned
-TabBarControl::AddClient(Window *w, const TCHAR* Caption,
-                         bool IsButtonOnly, const Bitmap *bmp,
-                         PreHideNotifyCallback_t PreHideFunction,
-                         PreShowNotifyCallback_t PreShowFunction)
-{
-  AddClientWindow(w);
-
-  OneTabButton *b = new OneTabButton(Caption, IsButtonOnly, bmp,
-                                     PreHideFunction,
-                                     PreShowFunction);
-
   buttons.append(b);
 
   return buttons.size() - 1;

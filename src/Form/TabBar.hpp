@@ -83,21 +83,6 @@ public:
                 bool _flipOrientation = false,
                 bool _clientOverlapTabs = false);
 
-  /**
-   * Constructor called by inherited class TabMenuControl
-   * that creates its own TabDisplay object
-   * @param _parent
-   * @param _tabLineHeight
-   * @param look
-   * @param x, y, _width, _height
-   * @param style
-   */
-  TabBarControl(ContainerWindow &parent, UPixelScalar _tabLineHeight,
-                const DialogLook &look,
-                PixelScalar x, PixelScalar y,
-                UPixelScalar width, UPixelScalar height,
-                const WindowStyle style);
-
   ~TabBarControl();
 
   void SetPageFlippedCallback(TabbedControl::PageFlippedCallback cb) {
@@ -108,32 +93,9 @@ private:
 #define TabLineHeightInitUnscaled (unsigned)5
 
 public:
-  /**
-   * Returns the ContainerWindow that will be the parent window of all
-   * tab windows.
-   */
-  ContainerWindow &GetClientAreaWindow() {
-    return pager;
-  }
-
   unsigned AddTab(Widget *widget, const TCHAR *caption,
                   bool button_only=false,
                   const Bitmap *bmp=NULL);
-
-  /** adds a tab to the TabBar
-   * @param w. The window (e.g. created by LoadWindow()
-   * @param Caption. Caption for the tab display
-   * @param IsButtonOnly.  The tab button will resemble look/feel of a button
-   * @param bmp.  Pointer to a Bitmap to display instead of caption on tab
-   * @param PreHideFunction client callback
-   * @param PreShowFunction client callback
-   * @return index of added tab
-   */
-  unsigned AddClient(Window *w, const TCHAR* Caption,
-                     bool IsButtonOnly = false,
-                     const Bitmap *bmp = NULL,
-                     PreHideNotifyCallback_t PreHideFunction = NULL,
-                     PreShowNotifyCallback_t PreShowFunction = NULL);
 
 public:
   gcc_pure
@@ -188,14 +150,6 @@ public:
   }
 
   void SetClientOverlapTabs(bool value);
-
-protected:
-  /**
-   * adds the window the the tabbed control and sizes it
-   * @param w
-   */
-  void AddClientWindow(Window *w);
-
 };
 
 /**
