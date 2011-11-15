@@ -341,6 +341,20 @@ TabMenuControl::CreateSubMenuItem(const unsigned sub_menu_index,
 {
   assert(item.main_menu_index < MAX_MAIN_MENU_ITEMS);
 
+  if (item.Load != NULL) {
+    Widget *widget = item.Load();
+    pager.AddPage(widget);
+
+    OneSubMenuButton *b =
+      new OneSubMenuButton(item.menu_caption,
+                           menu_tab_index(item.main_menu_index,
+                                          sub_menu_index),
+                           page,
+                           NULL, NULL);
+    buttons.append(b);
+    return;
+  }
+
   TCHAR xml_resource[100];
   _sntprintf(xml_resource, 100, _T("%s%s"),
              item.XML_PortraitResource,

@@ -66,6 +66,8 @@ public:
 
     /* Portrait XML resource.  Assumes "_L" converts name to landscape */
     const TCHAR *XML_PortraitResource;
+
+    Widget *(*Load)();
   };
 
   enum tab_menu_values {  // fix indent
