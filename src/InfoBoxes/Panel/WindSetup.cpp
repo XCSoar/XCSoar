@@ -67,32 +67,29 @@ LoadWindSetupPanel(SingleWindow &parent, TabBarControl *wTabBar,
   const bool external_wind = basic.external_wind_available &&
     settings_computer.use_external_wind;
 
-  WndProperty* wp;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoWind"));
   if (external_wind) {
-    wp->set_enabled(false);
-    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
-    df.addEnumText(_("External"));
-    df.Set(0);
-    wp->RefreshDisplay();
+    static gcc_constexpr_data StaticEnumChoice external_wind_list[] = {
+      { 0, N_("External") },
+      { 0 }
+    };
+
+    SetFormControlEnabled(*wf, _T("prpAutoWind"), false);
+    LoadFormProperty(*wf, _T("prpAutoWind"), external_wind_list, 0);
   } else {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Manual"));
-    dfe->addEnumText(_("Circling"));
-    dfe->addEnumText(_("ZigZag"));
-    dfe->addEnumText(_("Both"));
-    dfe->Set(settings_computer.auto_wind_mode);
-    wp->RefreshDisplay();
+    static gcc_constexpr_data StaticEnumChoice auto_wind_list[] = {
+      { AUTOWIND_NONE, N_("Manual") },
+      { AUTOWIND_CIRCLING, N_("Circling") },
+      { AUTOWIND_ZIGZAG, N_("ZigZag") },
+      { AUTOWIND_CIRCLING | AUTOWIND_ZIGZAG, N_("Both") },
+      { 0 }
+    };
+
+    LoadFormProperty(*wf, _T("prpAutoWind"), auto_wind_list,
+                     settings_computer.auto_wind_mode);
   }
 
-  wp = (WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpTrailDrift"));
-  if (wp) {
-    DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
-    df.Set(XCSoarInterface::SettingsMap().trail_drift_enabled);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpTrailDrift"),
+                   XCSoarInterface::SettingsMap().trail_drift_enabled);
 
   return wInfoBoxAccessSetup;
 }
@@ -106,14 +103,10 @@ WindSetupPanelPreHide()
   const bool external_wind = basic.external_wind_available &&
     settings_computer.use_external_wind;
 
-  if (!external_wind)
+  if (!external_wind) {
     SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpAutoWind"), szProfileAutoWind,
                      settings_computer.auto_wind_mode);
-
-  DataFieldEnum* dfe = (DataFieldEnum*)((WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAutoWind")))->GetDataField();
-
-  if (_tcscmp(dfe->GetAsString(), _("Manual")) == 0)
-    settings_computer.manual_wind_available.Update(basic.clock);
+  }
 
   SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpTrailDrift"),
                    XCSoarInterface::SetSettingsMap().trail_drift_enabled);
