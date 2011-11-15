@@ -24,16 +24,9 @@ Copyright_License {
 #ifndef INTERFACECONFIGPANEL_HPP
 #define INTERFACECONFIGPANEL_HPP
 
-class WndForm;
+class Widget;
 
-namespace InterfaceConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save(bool &requirerestart);
-
-  void SetVisible(bool active);
-  bool PreHide();
-  bool PreShow();
-};
+Widget *
+CreateInterfaceConfigPanel();
 
 #endif /* INTERFACECONFIGPANEL_HPP */

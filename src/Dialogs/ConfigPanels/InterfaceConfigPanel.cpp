@@ -26,6 +26,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "Form/Button.hpp"
+#include "Form/XMLWidget.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/FileReader.hpp"
@@ -41,31 +42,30 @@ Copyright_License {
 #include "InterfaceConfigPanel.hpp"
 #include "Language/Language.hpp"
 
-static WndForm* wf = NULL;
-static WndButton *buttonFonts = NULL;
-
 using namespace ConfigPanel;
 
+class InterfaceConfigPanel : public XMLWidget {
+  WndButton *buttonFonts;
+
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+};
 
 void
-InterfaceConfigPanel::SetVisible(bool active)
+InterfaceConfigPanel::Show(const PixelRect &rc)
 {
-  if (buttonFonts != NULL)
-    buttonFonts->set_visible(active);
+  XMLWidget::Show(rc);
+  buttonFonts->show();
 }
 
-bool
-InterfaceConfigPanel::PreShow()
+void
+InterfaceConfigPanel::Hide()
 {
-  InterfaceConfigPanel::SetVisible(true);
-  return true;
-}
-
-bool
-InterfaceConfigPanel::PreHide()
-{
-  InterfaceConfigPanel::SetVisible(false);
-  return true;
+  XMLWidget::Hide();
+  buttonFonts->hide();
 }
 
 static void
@@ -74,19 +74,18 @@ OnFonts(gcc_unused WndButton &button)
   dlgConfigFontsShowModal();
 }
 
-
 void
-InterfaceConfigPanel::Init(WndForm *_wf)
+InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  LoadWindow(NULL, parent, N_("IDR_XML_INTERFACECONFIGPANEL"));
+
   WndProperty *wp;
 
-  buttonFonts = ((WndButton *)wf->FindByName(_T("cmdFonts")));
+  buttonFonts = ((WndButton *)ConfigPanel::GetForm().FindByName(_T("cmdFonts")));
   if (buttonFonts)
     buttonFonts->SetOnClickNotify(OnFonts);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoBlank"));
+  wp = (WndProperty*)form.FindByName(_T("prpAutoBlank"));
   if (wp) {
 #ifdef HAVE_BLANK
     DataFieldBoolean *df = (DataFieldBoolean *)wp->GetDataField();
@@ -97,9 +96,9 @@ InterfaceConfigPanel::Init(WndForm *_wf)
 #endif
   }
 
-  InitFileField(*wf, _T("prpInputFile"), szProfileInputFile, _T("*.xci\0"));
+  InitFileField(form, _T("prpInputFile"), szProfileInputFile, _T("*.xci\0"));
 
-  wp = (WndProperty *)wf->FindByName(_T("prpLanguageFile"));
+  wp = (WndProperty *)form.FindByName(_T("prpLanguageFile"));
   if (wp != NULL) {
 #ifdef HAVE_NATIVE_GETTEXT
     wp->hide();
@@ -144,15 +143,15 @@ InterfaceConfigPanel::Init(WndForm *_wf)
 #endif /* !HAVE_NATIVE_GETTEXT */
   }
 
-  InitFileField(*wf, _T("prpStatusFile"), szProfileStatusFile, _T("*.xcs\0"));
+  InitFileField(form, _T("prpStatusFile"), szProfileStatusFile, _T("*.xcs\0"));
 
-  LoadFormProperty(*wf, _T("prpMenuTimeout"),
+  LoadFormProperty(form, _T("prpMenuTimeout"),
                    XCSoarInterface::menu_timeout_max / 2);
 
-  LoadFormProperty(*wf, _T("prpDebounceTimeout"),
+  LoadFormProperty(form, _T("prpDebounceTimeout"),
                    XCSoarInterface::debounce_timeout);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTextInput"));
+  wp = (WndProperty*)form.FindByName(_T("prpTextInput"));
   assert(wp != NULL);
   if (has_pointer()) {
     DataFieldEnum* dfe;
@@ -170,26 +169,25 @@ InterfaceConfigPanel::Init(WndForm *_wf)
 
 }
 
-
 bool
-InterfaceConfigPanel::Save(bool &requirerestart)
+InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
-  bool changed = false;
+  bool changed = false, requirerestart = false;;
   WndProperty *wp;
 
 #ifdef HAVE_BLANK
-  changed |= SaveFormProperty(*wf, _T("prpAutoBlank"),
+  changed |= SaveFormProperty(form, _T("prpAutoBlank"),
                               szProfileAutoBlank,
                               XCSoarInterface::SetSettingsMap().EnableAutoBlank);
 #endif
 
-  if (FinishFileField(*wf, _T("prpInputFile"), szProfileInputFile)) {
+  if (FinishFileField(form, _T("prpInputFile"), szProfileInputFile)) {
     changed = true;
     requirerestart = true;
   }
 
 #ifndef HAVE_NATIVE_GETTEXT
-  wp = (WndProperty *)wf->FindByName(_T("prpLanguageFile"));
+  wp = (WndProperty *)form.FindByName(_T("prpLanguageFile"));
   if (wp != NULL) {
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
 
@@ -231,12 +229,12 @@ InterfaceConfigPanel::Save(bool &requirerestart)
   }
 #endif
 
-  if (FinishFileField(*wf, _T("prpStatusFile"), szProfileStatusFile)) {
+  if (FinishFileField(form, _T("prpStatusFile"), szProfileStatusFile)) {
     changed = true;
     requirerestart = true;
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpMenuTimeout"));
+  wp = (WndProperty*)form.FindByName(_T("prpMenuTimeout"));
   if (wp) {
     if ((int)XCSoarInterface::menu_timeout_max != wp->GetDataField()->GetAsInteger()*2) {
       XCSoarInterface::menu_timeout_max = wp->GetDataField()->GetAsInteger()*2;
@@ -245,14 +243,14 @@ InterfaceConfigPanel::Save(bool &requirerestart)
     }
   }
 
-  changed |= SaveFormProperty(*wf, _T("prpDebounceTimeout"),
+  changed |= SaveFormProperty(form, _T("prpDebounceTimeout"),
                               szProfileDebounceTimeout,
                               XCSoarInterface::debounce_timeout);
 
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
   if (has_pointer()) {
-    wp = (WndProperty*)wf->FindByName(_T("prpTextInput"));
+    wp = (WndProperty*)form.FindByName(_T("prpTextInput"));
     assert(wp != NULL);
     if (dialog_settings.text_input_style != (TextInputStyle_t)(wp->GetDataField()->GetAsInteger())) {
       dialog_settings.text_input_style =
@@ -263,5 +261,13 @@ InterfaceConfigPanel::Save(bool &requirerestart)
     }
   }
 
-  return changed;
+  _changed |= changed;
+  _require_restart |= requirerestart;
+  return true;
+}
+
+Widget *
+CreateInterfaceConfigPanel()
+{
+  return new InterfaceConfigPanel();
 }

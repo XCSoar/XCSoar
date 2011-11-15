@@ -3,7 +3,7 @@
 <Form Caption="Configuration">
   <CheckBox Name="Expert" Caption="Expert" X="5" Y="5" Width="60" Height="20" OnClick="OnUserLevel"/>
 
-  <Button Name="cmdFonts" Caption="Fonts" X="5" Y="84" Width="70" Height="35"/>
+  <Button Name="cmdFonts" Caption="Fonts" X="5" Y="84" Width="70" Height="35" Visible="0"/>
   <Button Name="cmdWaypoints" Caption="Waypts." X="5" Y="84" Width="70" Height="35"/>
 
   <Button Name="cmdLoadInternalPolar" Caption="List" X="5" Y="25" Width="70" Height="30" OnClick="PolarConfigPanel::OnLoadInternal" />

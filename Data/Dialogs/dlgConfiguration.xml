@@ -7,7 +7,7 @@
 
   <CheckBox Name="Expert" Caption="Expert" X="95" Y="-30" Width="65" Height="20" OnClick="OnUserLevel"/>
 
-  <Button Name="cmdFonts" Caption="Fonts" X="95" Y="-72" Width="80" Height="35" />
+  <Button Name="cmdFonts" Caption="Fonts" X="95" Y="-72" Width="80" Height="35" Visible="0"/>
   <Button Name="cmdWaypoints" Caption="Waypts." X="95" Y="-72" Width="80" Height="35" />
 
   <Button Name="cmdLoadPolarFile" Caption="Import" X="-144" Y="-72" Width="70" Height="35" OnClick="PolarConfigPanel::OnLoadFromFile" />

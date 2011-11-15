@@ -29,6 +29,11 @@ Copyright_License {
 class WndProperty;
 
 namespace ConfigPanel {
+  /**
+   * Hack - to be removed!
+   */
+  gcc_pure
+  WndForm &GetForm();
 
   void InitFileField(WndProperty &wp, const TCHAR *profile_key,
                      const TCHAR *filters);

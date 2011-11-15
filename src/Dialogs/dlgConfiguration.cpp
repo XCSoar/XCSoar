@@ -33,6 +33,7 @@ Copyright_License {
 #include "DataField/FileReader.hpp"
 #include "LogFile.hpp"
 #include "Util/Macros.hpp"
+#include "ConfigPanels/ConfigPanel.hpp"
 #include "ConfigPanels/PagesConfigPanel.hpp"
 #include "ConfigPanels/PolarConfigPanel.hpp"
 #include "ConfigPanels/UnitsConfigPanel.hpp"
@@ -91,7 +92,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Vario"), 3, NULL, NULL, N_("IDR_XML_VARIOCONFIGPANEL")},
   {N_("Task Rules"), 4, NULL, NULL, N_("IDR_XML_TASKRULESCONFIGPANEL")},
   {N_("Turnpoint Types"), 4, NULL, NULL, N_("IDR_XML_TASKDEFAULTSCONFIGPANEL")},
-  {N_("Language, Input"), 5, InterfaceConfigPanel::PreShow, InterfaceConfigPanel::PreHide, N_("IDR_XML_INTERFACECONFIGPANEL")},
+  {N_("Language, Input"), 5, NULL, NULL, NULL, CreateInterfaceConfigPanel },
   {N_("Screen Layout"), 5, NULL, NULL, N_("IDR_XML_LAYOUTCONFIGPANEL")},
   {N_("InfoBox Pages"), 5, NULL, NULL, N_("IDR_XML_PAGESCONFIGPANEL")},
   {N_("InfoBox Modes"), 5, NULL, NULL, N_("IDR_XML_INFOBOXESCONFIGPANEL")},
@@ -106,6 +107,14 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Experimental Features"), 6, NULL, NULL, N_("IDR_XML_EXPERIMENTALCONFIGPANEL")},
 #endif
 };
+
+WndForm &
+ConfigPanel::GetForm()
+{
+  assert(wf != NULL);
+
+  return *wf;
+}
 
 static void
 OnUserLevel(CheckBoxControl &control)
@@ -185,7 +194,6 @@ setVariables()
   GlideComputerConfigPanel::Init(wf);
   SafetyFactorsConfigPanel::Init(wf);
   RouteConfigPanel::Init(wf);
-  InterfaceConfigPanel::Init(wf);
   LayoutConfigPanel::Init(wf);
   GaugesConfigPanel::Init(wf);
   VarioConfigPanel::Init(wf);
@@ -310,7 +318,6 @@ void dlgConfigurationShowModal(void)
   changed |= GlideComputerConfigPanel::Save(requirerestart);
   changed |= SafetyFactorsConfigPanel::Save();
   changed |= RouteConfigPanel::Save();
-  changed |= InterfaceConfigPanel::Save(requirerestart);
   changed |= LayoutConfigPanel::Save(requirerestart);
   changed |= GaugesConfigPanel::Save();
   changed |= VarioConfigPanel::Save();
@@ -321,6 +328,8 @@ void dlgConfigurationShowModal(void)
   // Units need to be saved last to prevent
   // conversion problems with other values
   changed |= UnitsConfigPanel::Save();
+
+  wTabMenu->Save(changed, requirerestart);
 
   if (changed) {
     Profile::Save();
