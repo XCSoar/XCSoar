@@ -96,7 +96,7 @@ GDI_LDLIBS += -Wl,-subsystem,windows
 endif
 endif
 
-ifeq ($(OPENGL)$(findstring ANDROID,$(TARGET)),y)
+ifeq ($(OPENGL),y)
 # Needed for native VBO support
 OPENGL_CPPFLAGS = -DGL_GLEXT_PROTOTYPES
 endif
