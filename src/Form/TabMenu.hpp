@@ -331,6 +331,11 @@ public:
 };
 
 class TabMenuDisplay : public TabDisplay {
+  /* used to track mouse down/up clicks */
+  TabMenuControl::menu_tab_index DownIndex;
+  /* used to render which submenu is drawn and which item is highlighted */
+  TabMenuControl::menu_tab_index SelectedIndex;
+
 public:
   TabMenuDisplay(TabBarControl& _theTabBar, const DialogLook &look,
                  ContainerWindow &parent,
@@ -364,17 +369,16 @@ protected:
   void PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle);
   void PaintSubMenuBorder(Canvas &canvas, const OneMainMenuButton *butMain);
   void PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle);
-
-  /* used to track mouse down/up clicks */
-  TabMenuControl::menu_tab_index DownIndex;
-  /* used to render which submenu is drawn and which item is highlighted */
-  TabMenuControl::menu_tab_index SelectedIndex;
 };
 
 /**
  * class that holds the child menu button and info for the menu
  */
 class OneSubMenuButton : public OneTabButton {
+public:
+  const TabMenuControl::menu_tab_index Menu;
+  const unsigned PageIndex;
+
 public:
   OneSubMenuButton(const TCHAR* _Caption,
                    unsigned _main_menu_index,
@@ -388,10 +392,6 @@ public:
      PageIndex(_page_index)
   {
   }
-
-public:
-  const TabMenuControl::menu_tab_index Menu;
-  const unsigned PageIndex;
 };
 
 /**
