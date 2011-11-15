@@ -3,13 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Automatically generated, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-31 08:31+0100\n"
-"PO-Revision-Date: 2011-11-14 15:53+0100\n"
+"PO-Revision-Date: 2011-11-15 08:11+0100\n"
 "Last-Translator: Perapendio <Unknown>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
