@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "TaskStatusPanel.hpp"
+#include "Util/Macros.hpp"
 #include "Interface.hpp"
 #include "Form/Edit.hpp"
 #include "Units/UnitsFormatter.hpp"
@@ -82,18 +83,16 @@ TaskStatusPanel::Refresh()
     wp = (WndProperty*)form.FindByName(_T("prpEstimatedSpeed"));
     assert(wp != NULL);
     if (task_stats.total.planned.IsDefined())
-      _stprintf(Temp, _T("%.0f %s"),
-                (double)Units::ToUserTaskSpeed(task_stats.total.planned.get_speed()),
-                Units::GetTaskSpeedName());
+      Units::FormatUserTaskSpeed(task_stats.total.planned.get_speed(),
+                                 Temp, ARRAY_SIZE(Temp));
     wp->SetText(Temp);
   }
 
   if (task_stats.total.travelled.IsDefined()) {
     wp = (WndProperty*)form.FindByName(_T("prpAverageSpeed"));
     assert(wp != NULL);
-    _stprintf(Temp, _T("%.0f %s"),
-              (double)Units::ToUserTaskSpeed(task_stats.total.travelled.get_speed()),
-              Units::GetTaskSpeedName());
+    Units::FormatUserTaskSpeed(task_stats.total.travelled.get_speed(),
+                               Temp, ARRAY_SIZE(Temp));
     wp->SetText(Temp);
   }
 }

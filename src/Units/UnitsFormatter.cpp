@@ -364,6 +364,15 @@ Units::FormatUserWindSpeed(fixed Speed, TCHAR *buffer, size_t size,
 }
 
 void
+Units::FormatUserTaskSpeed(fixed value, TCHAR *buffer, size_t max_size,
+                           bool include_unit, bool precision)
+{
+  FormatSpeed(value, buffer, max_size,
+              include_unit, precision,
+              unit_descriptors[current.task_speed_unit]);
+}
+
+void
 Units::FormatUserVSpeed(fixed Speed, TCHAR *buffer, size_t size,
                         bool IncludeUnit)
 {

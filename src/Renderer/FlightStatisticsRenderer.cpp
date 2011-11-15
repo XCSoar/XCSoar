@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "FlightStatisticsRenderer.hpp"
 #include "FlightStatistics.hpp"
+#include "Util/Macros.hpp"
 #include "Look/MapLook.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Screen/Canvas.hpp"
@@ -388,15 +389,16 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
     Units::FormatUserDistance(result_classic.distance, distance_classic, 100);
     TCHAR distance_fai[100];
     Units::FormatUserDistance(result_fai.distance, distance_fai, 100);
+    TCHAR speed[100];
+    Units::FormatUserTaskSpeed(result.speed, speed, ARRAY_SIZE(speed));
     _stprintf(sTmp,
               (Layout::landscape
-               ? _T("%s:\r\n%s\r\n%s (FAI)\r\n%s:\r\n%.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
-               : _T("%s: %s\r\n%s (FAI)\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")),
+               ? _T("%s:\r\n%s\r\n%s (FAI)\r\n%s:\r\n%.1f %s\r\n%s: %s\r\n%s: %s\r\n")
+               : _T("%s: %s\r\n%s (FAI)\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %s\r\n")),
               _("Distance"), distance_classic, distance_fai,
               _("Score"), (double)result.score, _("pts"),
               _("Time"), timetext1,
-              _("Speed"), (int)Units::ToUserTaskSpeed(result.speed),
-              Units::GetTaskSpeedName());
+              _("Speed"), speed);
   } else if (task_behaviour.contest == OLC_DHVXC ||
              task_behaviour.contest == OLC_XContest) {
     const ContestResult& result_free =
@@ -411,15 +413,16 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
     Units::FormatUserDistance(result_free.distance, distance, 100);
     TCHAR distance_fai[100];
     Units::FormatUserDistance(result_triangle.distance, distance_fai, 100);
+    TCHAR speed[100];
+    Units::FormatUserTaskSpeed(result_free.speed, speed, ARRAY_SIZE(speed));
     _stprintf(sTmp,
               (Layout::landscape
-               ? _T("%s:\r\n%s (Free)\r\n%s (Triangle)\r\n%s:\r\n%.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
-               : _T("%s: %s (Free)\r\n%s (Triangle)\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")),
+               ? _T("%s:\r\n%s (Free)\r\n%s (Triangle)\r\n%s:\r\n%.1f %s\r\n%s: %s\r\n%s: %s\r\n")
+               : _T("%s: %s (Free)\r\n%s (Triangle)\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %s\r\n")),
               _("Distance"), distance, distance_fai,
               _("Score"), (double)result_free.score, _("pts"),
               _("Time"), timetext1,
-              _("Speed"), (int)Units::ToUserTaskSpeed(result_free.speed),
-              Units::GetTaskSpeedName());
+              _("Speed"), speed);
   } else {
     unsigned result_index;
     switch (task_behaviour.contest) {
@@ -438,15 +441,16 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
     Units::TimeToTextHHMMSigned(timetext1, (int)result_olc.time);
     TCHAR distance[100];
     Units::FormatUserDistance(result_olc.distance, distance, 100);
+    TCHAR speed[100];
+    Units::FormatUserTaskSpeed(result_olc.speed, speed, ARRAY_SIZE(speed));
     _stprintf(sTmp,
               (Layout::landscape
-               ? _T("%s:\r\n%s\r\n%s:\r\n%.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
-               : _T("%s: %s\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")),
+               ? _T("%s:\r\n%s\r\n%s:\r\n%.1f %s\r\n%s: %s\r\n%s: %s\r\n")
+               : _T("%s: %s\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %s\r\n")),
               _("Distance"), distance,
               _("Score"), (double)result_olc.score, _("pts"),
               _("Time"), timetext1,
-              _("Speed"), (int)Units::ToUserTaskSpeed(result_olc.speed),
-              Units::GetTaskSpeedName());
+              _("Speed"), speed);
   }
 }
 

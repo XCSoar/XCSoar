@@ -119,6 +119,15 @@ namespace Units
                            bool IncludeUnit = true, bool Precision = true);
 
   /**
+   * Convert a speed [m/s] to the user's task speed and format it into
+   * a string.
+   *
+   * @param value the speed value [m/s]
+   */
+  void FormatUserTaskSpeed(fixed value, TCHAR *buffer, size_t max_size,
+                           bool include_unit=true, bool precision=true);
+
+  /**
    * Converts a double-based vertical Speed into a formatted string
    * @param Speed The double-based vertical Speed
    * @param Buffer Buffer string to write to (pointer)
