@@ -245,8 +245,6 @@ public:
   int GetButtonIndexAt(RasterPoint p) const;
 
 public:
-  void trigger_invalidate() { invalidate(); }
-
   UPixelScalar GetTabHeight() const {
     return this->get_height();
   }
