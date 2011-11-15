@@ -238,6 +238,12 @@ public:
                           bool isButtonOnly, const Bitmap *bmp,
                           const bool isDown, bool inverse);
 
+  /**
+   * @return -1 if there is no button at the specified position
+   */
+  gcc_pure
+  int GetButtonIndexAt(RasterPoint p) const;
+
 public:
   void trigger_invalidate() { invalidate(); }
 

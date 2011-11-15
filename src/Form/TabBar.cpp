@@ -394,6 +394,18 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
   }
 }
 
+int
+TabDisplay::GetButtonIndexAt(RasterPoint p) const
+{
+  for (unsigned i = 0; i < theTabBar.GetTabCount(); i++) {
+    const PixelRect &rc = theTabBar.GetButtonSize(i);
+    if (PtInRect(&rc, p))
+      return i;
+  }
+
+  return -1;
+}
+
 void
 TabDisplay::on_paint(Canvas &canvas)
 {
@@ -551,16 +563,15 @@ TabDisplay::on_mouse_down(PixelScalar x, PixelScalar y)
   // If possible -> Give focus to the Control
   set_focus();
 
-  for (unsigned i = 0; i < theTabBar.GetTabCount(); i++) {
-    const PixelRect rc = theTabBar.GetButtonSize(i);
-    if (PtInRect(&rc, Pos)) {
-      dragging = true;
-      downindex = i;
-      set_capture();
-      invalidate();
-      return true;
-    }
+  int i = GetButtonIndexAt(Pos);
+  if (i >= 0) {
+    dragging = true;
+    downindex = i;
+    set_capture();
+    invalidate();
+    return true;
   }
+
   return PaintWindow::on_mouse_down(x, y);
 }
 
@@ -573,16 +584,12 @@ TabDisplay::on_mouse_up(PixelScalar x, PixelScalar y)
 
   if (dragging) {
     drag_end();
-    for (unsigned i = 0; i < theTabBar.GetTabCount(); i++) {
-      const PixelRect rc = theTabBar.GetButtonSize(i);
-      if (PtInRect(&rc, Pos)) {
-        if ((int)i == downindex) {
-          theTabBar.SetCurrentPage(i, TabBarControl::MouseOrButton,
-              theTabBar.GetCurrentPage() == i);
-          break;
-        }
-      }
-    }
+
+    int i = GetButtonIndexAt(Pos);
+    if (i == downindex)
+      theTabBar.SetCurrentPage(i, TabBarControl::MouseOrButton,
+                               theTabBar.GetCurrentPage() == (unsigned)i);
+
     if (downindex > -1)
       invalidate();
     downindex = -1;
