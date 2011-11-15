@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "FlightStatusPanel.hpp"
 #include "Util/Macros.hpp"
+#include "Util/StaticString.hpp"
 #include "Interface.hpp"
 #include "Form/Edit.hpp"
 #include "Units/UnitsFormatter.hpp"
@@ -35,35 +36,33 @@ FlightStatusPanel::Refresh()
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
   WndProperty *wp;
-  TCHAR Temp[1000];
-  TCHAR sLongitude[16];
-  TCHAR sLatitude[16];
+  StaticString<32> buffer;
 
   Units::LongitudeToString(basic.location.longitude,
-                           sLongitude, sizeof(sLongitude)-1);
-  Units::LatitudeToString(basic.location.latitude,
-                          sLatitude, sizeof(sLatitude)-1);
-
+                           buffer.buffer(), buffer.MAX_SIZE);
   wp = (WndProperty*)form.FindByName(_T("prpLongitude"));
   assert(wp != NULL);
-  wp->SetText(sLongitude);
+  wp->SetText(buffer);
 
+  Units::LatitudeToString(basic.location.latitude,
+                          buffer.buffer(), buffer.MAX_SIZE);
   wp = (WndProperty*)form.FindByName(_T("prpLatitude"));
   assert(wp != NULL);
-  wp->SetText(sLatitude);
+  wp->SetText(buffer);
 
   wp = (WndProperty*)form.FindByName(_T("prpAltitude"));
   assert(wp != NULL);
   if (basic.gps_altitude_available) {
-    Units::FormatUserAltitude(basic.gps_altitude, Temp, ARRAY_SIZE(Temp));
-    wp->SetText(Temp);
+    Units::FormatUserAltitude(basic.gps_altitude,
+                              buffer.buffer(), buffer.MAX_SIZE);
+    wp->SetText(buffer);
   }
 
   wp = (WndProperty*)form.FindByName(_T("prpMaxHeightGain"));
   assert(wp != NULL);
   Units::FormatUserAltitude(calculated.max_height_gain,
-                            Temp, ARRAY_SIZE(Temp));
-  wp->SetText(Temp);
+                            buffer.buffer(), buffer.MAX_SIZE);
+  wp->SetText(buffer);
 
   if (nearest_waypoint) {
     GeoVector vec(basic.location,
@@ -75,14 +74,13 @@ FlightStatusPanel::Refresh()
 
     wp = (WndProperty*)form.FindByName(_T("prpBearing"));
     assert(wp != NULL);
-    _stprintf(Temp, _T("%d")_T(DEG), (int)vec.bearing.Degrees());
-    wp->SetText(Temp);
+    buffer.UnsafeFormat(_T("%d")_T(DEG), (int)vec.bearing.Degrees());
+    wp->SetText(buffer);
 
     wp = (WndProperty*)form.FindByName(_T("prpDistance"));
     assert(wp != NULL);
-    TCHAR DistanceText[MAX_PATH];
-    Units::FormatUserDistance(vec.distance, DistanceText, 10);
-    wp->SetText(DistanceText);
+    Units::FormatUserDistance(vec.distance, buffer.buffer(), buffer.MAX_SIZE);
+    wp->SetText(buffer);
   } else {
     wp = (WndProperty*)form.FindByName(_T("prpNear"));
     assert(wp != NULL);

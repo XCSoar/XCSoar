@@ -35,7 +35,6 @@ SystemStatusPanel::Refresh()
   const GPSState &gps = basic.gps;
 
   TCHAR Temp[80];
-  TCHAR Temp2[80];
 
   WndProperty* wp;
 
@@ -113,13 +112,12 @@ SystemStatusPanel::Refresh()
   Temp[0] = 0;
 #ifdef HAVE_BATTERY
   if (Power::Battery::RemainingPercentValid) {
-    _stprintf(Temp2, _T("%d %% "), Power::Battery::RemainingPercent);
-    _tcscat(Temp, Temp2);
+    _stprintf(Temp + _tcslen(Temp), _T("%d %% "),
+              Power::Battery::RemainingPercent);
   }
 #endif
   if (basic.voltage_available) {
-    _stprintf(Temp2, _T("%.1f V"), (double)basic.voltage);
-    _tcscat(Temp, Temp2);
+    _stprintf(Temp + _tcslen(Temp), _T("%.1f V"), (double)basic.voltage);
   }
 
   wp->SetText(Temp);

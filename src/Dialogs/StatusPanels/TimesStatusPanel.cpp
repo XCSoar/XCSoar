@@ -35,7 +35,7 @@ TimesStatusPanel::Refresh()
   const FlyingState &flight = calculated.flight;
 
   WndProperty *wp;
-  TCHAR Temp[1000];
+  TCHAR Temp[64];
   fixed sunsettime;
   int sunsethours;
   int sunsetmins;

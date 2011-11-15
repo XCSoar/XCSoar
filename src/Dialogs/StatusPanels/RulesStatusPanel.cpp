@@ -99,19 +99,19 @@ RulesStatusPanel::Refresh()
   wp = (WndProperty*)form.FindByName(_T("prpStartPoint"));
   assert(wp != NULL);
 
-  TCHAR name[64];
   {
     ProtectedTaskManager::Lease task_manager(*protected_task_manager);
     const OrderedTask &task = task_manager->GetOrderedTask();
 
     if (task_manager->GetMode() == TaskManager::MODE_ORDERED &&
         task.TaskSize() > 0)
-      CopyString(name, task.GetTaskPoint(0)->GetWaypoint().name.c_str(), 64);
+      CopyString(Temp, task.GetTaskPoint(0)->GetWaypoint().name.c_str(),
+                 ARRAY_SIZE(Temp));
     else
-      name[0] = _T('\0');
+      Temp[0] = _T('\0');
   }
 
-  wp->SetText(name);
+  wp->SetText(Temp);
 }
 
 void
