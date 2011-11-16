@@ -68,11 +68,9 @@ public:
   MapDrawHelper(MapDrawHelper &_that);
 
 protected:
-  void draw_search_point_vector(Canvas& the_canvas,
-                                const SearchPointVector& points);
+  void draw_search_point_vector(const SearchPointVector& points);
 
-  void draw_circle(Canvas &the_canvas,
-                   const RasterPoint &center, unsigned radius);
+  void draw_circle(const RasterPoint &center, unsigned radius);
 
   void buffer_render_finish();
 

@@ -392,7 +392,7 @@ public:
 
     RasterPoint center = m_proj.GeoToScreen(airspace.GetCenter());
     unsigned radius = m_proj.GeoToScreenDistance(airspace.GetRadius());
-    draw_circle(m_buffer, center, radius);
+    draw_circle(center, radius);
   }
 
   void Visit(const AirspacePolygon& airspace) {
@@ -401,7 +401,7 @@ public:
 
     buffer_render_start();
     set_buffer_pens(airspace);
-    draw_search_point_vector(m_buffer, airspace.GetPoints());
+    draw_search_point_vector(airspace.GetPoints());
   }
 
   void draw_intercepts() {

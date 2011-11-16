@@ -57,8 +57,7 @@ MapDrawHelper::MapDrawHelper(MapDrawHelper &_that)
 }
 
 void 
-MapDrawHelper::draw_search_point_vector(Canvas& the_canvas, 
-                                        const SearchPointVector& points) 
+MapDrawHelper::draw_search_point_vector(const SearchPointVector& points)
 {
   size_t size = points.size();
   if (size < 3)
@@ -80,19 +79,18 @@ MapDrawHelper::draw_search_point_vector(Canvas& the_canvas,
   for (unsigned i = 0; i < size; ++i)
     screen[i] = m_proj.GeoToScreen(geo_points[i]);
 
-  if (!MapCanvas::visible(the_canvas, screen, size))
+  if (!MapCanvas::visible(m_canvas, screen, size))
     return;
 
-  the_canvas.polygon(&screen[0], size);
+  m_buffer.polygon(&screen[0], size);
   if (m_use_stencil)
     m_stencil.polygon(&screen[0], size);
 }
 
 void 
-MapDrawHelper::draw_circle(Canvas &the_canvas,
-                           const RasterPoint &center, unsigned radius)
+MapDrawHelper::draw_circle(const RasterPoint &center, unsigned radius)
 {
-  the_canvas.circle(center.x, center.y, radius);
+  m_buffer.circle(center.x, center.y, radius);
   if (m_use_stencil)
     m_stencil.circle(center.x, center.y, radius);
 }
