@@ -316,6 +316,8 @@ MainWindow::ReinitialiseLayout()
   if (map != NULL) {
     if (FullScreen)
       InfoBoxManager::Hide();
+    else
+      InfoBoxManager::Show();
 
     const PixelRect &current_map = FullScreen ? rc : map_rect;
     map->move(current_map.left, current_map.top,
