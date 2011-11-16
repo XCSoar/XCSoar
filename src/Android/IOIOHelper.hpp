@@ -40,18 +40,46 @@ public:
   ~IOIOHelper() {
   }
 
+  /**
+   * Open a connection to the IOIO board.
+   * Soft resets all ports on board.
+   * Waits for up to 3000ms, then fails if IOIO board does not respond
+   * @param env
+   * @return true if connection to IOIO is established, else false
+   */
   bool open(JNIEnv *env) {
     return env->CallBooleanMethod(get(), open_mid);
   }
 
+  /**
+   * Close the connection to the IOIO board.  It can be reopened
+   * by calling open().
+   * Should not be called until all open Uarts have been closed
+   * by calling closeUart();
+   * @param env
+   */
   void close() {
     call_void("close");
   }
 
+  /**
+   * Opens a single Uart.  Can only be called after connect()
+   * has been called.
+   * @param env
+   * @param ID Id of Uart (0, 1, 2, 3)
+   * @param baud
+   * @return True if Uart port on IOIO board is successfully
+   * opened.  Else false.
+   */
   int openUart(JNIEnv *env, unsigned ID, unsigned baud) {
     return env->CallIntMethod(get(), openUart_mid, ID, (int)baud);
   }
 
+  /**
+   * Closes a single Uart on the IOIO board
+   * @param env
+   * @param ID ID of Uart (0, 1, 2, 3)
+   */
   void closeUart(JNIEnv *env, unsigned ID) {
     env->CallVoidMethod(get(), closeUart_mid, ID);
   }
