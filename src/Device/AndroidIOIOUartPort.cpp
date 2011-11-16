@@ -63,7 +63,7 @@ AndroidIOIOUartPort::Open()
     return false;
 
   if (helper == NULL) {
-    helper = IOIOHelper::connect(Java::GetEnv());
+    helper = new IOIOHelper(Java::GetEnv());
   }
 
   if (helper == NULL) {

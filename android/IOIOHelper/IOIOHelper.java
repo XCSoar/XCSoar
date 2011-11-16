@@ -51,10 +51,6 @@ final class IOIOHelper {
   private IOIO ioio_;
   private XCSUart[] xuarts_;
 
-  static public IOIOHelper connect() {
-    return new IOIOHelper();
-  }
-
   IOIOHelper() {
     ioio_ = IOIOFactory.create();
     xuarts_ = new XCSUart [4];

@@ -28,30 +28,17 @@ Copyright_License {
 #include "Java/Ref.hpp"
 
 class IOIOHelper : protected Java::Object {
-  Java::GlobalRef<jclass> cls;
+private:
   jmethodID openUart_mid, resetInputThread_mid;
   jmethodID setReadTimeout_mid;
   jmethodID setBaudRate_mid, getBaudRate_mid;
   jmethodID read_mid, write_mid, flush_mid;
 
-  IOIOHelper(JNIEnv *env, jclass _cls, jobject obj)
-    :Java::Object(env, obj), cls(env, _cls) {
-    openUart_mid = env->GetMethodID(cls, "openUart", "(II)I");
-    setReadTimeout_mid = env->GetMethodID(cls, "setReadTimeout", "(II)V");
-    setBaudRate_mid = env->GetMethodID(cls, "setBaudRate", "(II)I");
-    getBaudRate_mid = env->GetMethodID(cls, "getBaudRate", "(I)I");
-    read_mid = env->GetMethodID(cls, "read", "(I)I");
-    write_mid = env->GetMethodID(cls, "write", "(IB)V");
-    flush_mid = env->GetMethodID(cls, "flush", "(I)V");
-  }
-
 public:
+  IOIOHelper(JNIEnv *env);
   ~IOIOHelper() {
     call_void("close");
   }
-
-  gcc_malloc
-  static IOIOHelper *connect(JNIEnv *env);
 
   int openUart(JNIEnv *env, unsigned ID, unsigned baud) {
     return env->CallIntMethod(get(), openUart_mid, ID, (int)baud);

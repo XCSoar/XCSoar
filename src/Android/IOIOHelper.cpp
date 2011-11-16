@@ -22,31 +22,30 @@ Copyright_License {
 */
 
 #include "Android/IOIOHelper.hpp"
-#include "Java/String.hpp"
 #include "Java/Class.hpp"
 
-IOIOHelper *
-IOIOHelper::connect(JNIEnv *env)
+IOIOHelper::IOIOHelper(JNIEnv *env)
 {
   jclass _cls = env->FindClass("org/xcsoar/IOIOHelper");
-  if (_cls == NULL) {
-    env->ExceptionClear();
-    return NULL;
-  }
+  assert(_cls != NULL);
 
   const Java::Class cls(env, _cls);
 
-  jmethodID cid = env->GetStaticMethodID(cls, "connect",
-                                         "()Lorg/xcsoar/IOIOHelper;");
+  jmethodID cid = env->GetMethodID(cls, "<init>", "()V");
   assert(cid != NULL);
 
-  jobject obj = env->CallStaticObjectMethod(cls, cid);
-  if (obj == NULL) {
-    return NULL;
-  }
+  jobject obj = env->NewObject(cls, cid);
+  assert(obj != NULL);
 
-  IOIOHelper *helper = new IOIOHelper(env, cls, obj);
+  set(env, obj);
+
   env->DeleteLocalRef(obj);
 
-  return helper;
+  openUart_mid = env->GetMethodID(cls, "openUart", "(II)I");
+  setReadTimeout_mid = env->GetMethodID(cls, "setReadTimeout", "(II)V");
+  setBaudRate_mid = env->GetMethodID(cls, "setBaudRate", "(II)I");
+  getBaudRate_mid = env->GetMethodID(cls, "getBaudRate", "(I)I");
+  read_mid = env->GetMethodID(cls, "read", "(I)I");
+  write_mid = env->GetMethodID(cls, "write", "(IB)V");
+  flush_mid = env->GetMethodID(cls, "flush", "(I)V");
 }
