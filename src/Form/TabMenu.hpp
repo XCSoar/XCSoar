@@ -357,6 +357,10 @@ public:
   /* assumes array is sorted by menugroup, then pagenum */
   void SetCurrentPage(unsigned page);
   void SetCurrentPage(menu_tab_index menuIndex);
+
+  bool Save() {
+    return pager.Save();
+  }
 };
 
 class TabMenuDisplay : public PaintWindow {
