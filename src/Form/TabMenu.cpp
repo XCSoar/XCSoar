@@ -66,10 +66,10 @@ TabMenuControl::~TabMenuControl()
   for (auto i = buttons.begin(), end = buttons.end(); i != end; ++i)
     delete *i;
 
-  StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS>::const_iterator i,
-      end = MainMenuButtons.end();
-  for (i = MainMenuButtons.begin(); i != end; ++i)
+  for (auto i = MainMenuButtons.begin(), end = MainMenuButtons.end();
+       i != end; ++i)
     delete *i;
+
   delete theTabDisplay;
 }
 
@@ -537,11 +537,8 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle)
   TabMenuControl &tb = GetTabMenuBar();
   PaintMainMenuBorder(canvas);
 
-  StaticArray<OneMainMenuButton *,
-      TabMenuControl::MAX_MAIN_MENU_ITEMS>::const_iterator i,
-      end = tb.GetMainMenuButtons().end();
-
-  for (i = tb.GetMainMenuButtons().begin(); i != end; ++i) {
+  for (auto i = tb.GetMainMenuButtons().begin(),
+         end = tb.GetMainMenuButtons().end(); i != end; ++i) {
     bool inverse = false;
     const bool isDown = (*i)->MainMenuIndex == DownIndex.MainIndex &&
       !DownIndex.IsSub() && !dragoffbutton;
@@ -608,10 +605,9 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle)
   assert(butMain->FirstPageIndex < tb.GetTabButtons().size());
   assert(butMain->LastPageIndex < tb.GetTabButtons().size());
 
-  StaticArray<OneTabButton *, 32>::const_iterator j,
-      end = &(tb.GetTabButtons())[butMain->LastPageIndex];
-
-  for (j = &(tb.GetTabButtons())[butMain->FirstPageIndex]; j <= end; ++j) {
+  for (auto j = std::next(tb.GetTabButtons().begin(), butMain->FirstPageIndex),
+         end = std::next(tb.GetTabButtons().begin(), butMain->LastPageIndex + 1);
+       j != end; ++j) {
     OneSubMenuButton *i = (OneSubMenuButton *)*j;
 
     bool inverse = false;

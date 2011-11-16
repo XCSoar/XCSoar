@@ -70,8 +70,7 @@ TabBarControl::~TabBarControl()
 {
   delete theTabDisplay;
 
-  StaticArray<OneTabButton *, 32>::const_iterator i, end = buttons.end();
-  for (i = buttons.begin(); i != end; ++i)
+  for (auto i = buttons.begin(), end = buttons.end(); i != end; ++i)
     delete *i;
 }
 
