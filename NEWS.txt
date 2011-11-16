@@ -13,6 +13,7 @@ Version 6.2.3 - not yet released
   - prevent waypoint editing if waypoint file is read-only
 * data files
   - Automatically try to detect character encoding of airfield details file
+  - speed up waypoint/airspace loading
 * logger
   - Added competition id to IGC file output
 * Linux

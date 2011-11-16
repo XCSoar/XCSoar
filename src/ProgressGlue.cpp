@@ -25,8 +25,14 @@ Copyright_License {
 #include "Screen/ProgressWindow.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
+#include "PeriodClock.hpp"
 
 static ProgressWindow *global_progress_window;
+
+/**
+ * This clock throttles screen updates.
+ */
+static PeriodClock throttle_clock;
 
 void
 ProgressGlue::Create(const TCHAR *text)
@@ -40,13 +46,17 @@ ProgressGlue::Create(const TCHAR *text)
   global_progress_window->set_pos(0);
 
   CommonInterface::main_window.refresh();
+  throttle_clock.reset();
 }
 
 void
 ProgressGlue::Resize(unsigned width, unsigned height)
 {
-  if (global_progress_window != NULL)
-    global_progress_window->move(0, 0, width, height);
+  if (global_progress_window == NULL)
+    return;
+
+  global_progress_window->move(0, 0, width, height);
+  throttle_clock.reset();
 }
 
 void
@@ -62,6 +72,9 @@ ProgressGlue::Step()
   if (global_progress_window == NULL)
     return;
 
+  if (!throttle_clock.check_update(200))
+    return;
+
   global_progress_window->step();
   CommonInterface::main_window.RefreshSize();
   CommonInterface::main_window.refresh();
@@ -73,6 +86,9 @@ ProgressGlue::SetValue(unsigned value)
   if (global_progress_window == NULL)
     return;
 
+  if (!throttle_clock.check_update(200))
+    return;
+
   global_progress_window->set_pos(value);
   CommonInterface::main_window.RefreshSize();
   CommonInterface::main_window.refresh();
@@ -81,13 +97,19 @@ ProgressGlue::SetValue(unsigned value)
 void
 ProgressGlue::SetRange(unsigned value)
 {
-  if (global_progress_window != NULL)
-    global_progress_window->set_range(0, value);
+  if (global_progress_window == NULL)
+    return;
+
+  global_progress_window->set_range(0, value);
+  throttle_clock.reset();
 }
 
 void
 ProgressGlue::SetStep(int step)
 {
-  if (global_progress_window != NULL)
-    global_progress_window->set_step(step);
+  if (global_progress_window == NULL)
+    return;
+
+  global_progress_window->set_step(step);
+  throttle_clock.reset();
 }
