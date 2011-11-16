@@ -30,6 +30,9 @@ class Context;
 class NativeView;
 class EventQueue;
 class SoundUtil;
+#ifdef IOIOLIB
+class IOIOManager;
+#endif
 
 extern Context *context;
 
@@ -38,5 +41,9 @@ extern NativeView *native_view;
 extern EventQueue *event_queue;
 
 extern SoundUtil *sound_util;
+
+#ifdef IOIOLIB
+extern IOIOManager *ioio_manager;
+#endif
 
 #endif
