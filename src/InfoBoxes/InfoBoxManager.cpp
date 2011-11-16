@@ -151,6 +151,8 @@ InfoBoxManager::Show()
 
   for (unsigned i = 0; i < layout.count; i++)
     InfoBoxes[i]->show();
+
+  SetDirty();
 }
 
 int
