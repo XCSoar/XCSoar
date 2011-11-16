@@ -540,7 +540,6 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
                                      Border, settings, look);
   }
 
-  SetDirty();
   InfoBoxesHidden = true;
 }
 
