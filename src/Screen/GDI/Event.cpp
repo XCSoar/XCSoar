@@ -83,16 +83,22 @@ DialogEventLoop::dispatch(MSG &msg)
   EventLoop::dispatch(msg);
 }
 
+static void
+HandleMessages(UINT wMsgFilterMin, UINT wMsgFilterMax)
+{
+  MSG msg;
+  while (::PeekMessage(&msg, NULL, wMsgFilterMin, wMsgFilterMax, PM_REMOVE)) {
+    ::TranslateMessage(&msg);
+    ::DispatchMessage(&msg);
+  }
+}
+
 void
 EventQueue::HandlePaintMessages()
 {
   assert_none_locked();
 
-  MSG msg;
-  while (::PeekMessage(&msg, NULL, WM_PAINT, WM_PAINT, PM_REMOVE)) {
-    ::TranslateMessage(&msg);
-    ::DispatchMessage(&msg);
-  }
+  HandleMessages(WM_PAINT, WM_PAINT);
 }
 
 unsigned
