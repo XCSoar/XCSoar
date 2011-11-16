@@ -135,7 +135,7 @@ TabMenuControl::GetSubMenuButton(unsigned page) const
   if (page >= buttons.size())
     return NULL;
   else
-    return (OneSubMenuButton *)buttons[page];
+    return buttons[page];
 }
 
 void
@@ -389,7 +389,8 @@ TabMenuControl::InitMenu(const PageItem pages[],
     CreateSubMenu(pages, num_pages, main_menu_captions[i], i);
 
   pager.AddClient(theTabDisplay);
-  buttons.append(new OneTabButton(Caption, false, NULL, NULL, NULL));
+  buttons.append(new OneSubMenuButton(Caption, menu_tab_index::None(), 0,
+                                      NULL, NULL));
 
   assert(GetNumPages() == num_pages);
 }
@@ -608,7 +609,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle)
   for (auto j = std::next(tb.GetTabButtons().begin(), butMain->FirstPageIndex),
          end = std::next(tb.GetTabButtons().begin(), butMain->LastPageIndex + 1);
        j != end; ++j) {
-    OneSubMenuButton *i = (OneSubMenuButton *)*j;
+    OneSubMenuButton *i = *j;
 
     bool inverse = false;
     if ((i->Menu.SubIndex == DownIndex.SubIndex)

@@ -116,7 +116,7 @@ public:
 protected:
   TabbedControl pager;
 
-  StaticArray<OneTabButton *, 32> buttons;
+  StaticArray<OneSubMenuButton *, 32> buttons;
 
   /* holds info and buttons for the main menu.  not on child menus */
   StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS> MainMenuButtons;
@@ -153,7 +153,7 @@ public:
                  const WindowStyle style = WindowStyle());
   ~TabMenuControl();
 
-  const StaticArray<OneTabButton *, 32> &GetTabButtons() {
+  const StaticArray<OneSubMenuButton *, 32> &GetTabButtons() {
     return buttons;
   }
 
