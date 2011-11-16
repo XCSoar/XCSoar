@@ -29,7 +29,7 @@ Copyright_License {
 
 class IOIOHelper : protected Java::Object {
 private:
-  jmethodID openUart_mid, resetInputThread_mid;
+  jmethodID openUart_mid, closeUart_mid, resetInputThread_mid;
   jmethodID setReadTimeout_mid;
   jmethodID setBaudRate_mid, getBaudRate_mid;
   jmethodID read_mid, write_mid, flush_mid;
@@ -42,6 +42,10 @@ public:
 
   int openUart(JNIEnv *env, unsigned ID, unsigned baud) {
     return env->CallIntMethod(get(), openUart_mid, ID, (int)baud);
+  }
+
+  void closeUart(JNIEnv *env, unsigned ID) {
+    env->CallVoidMethod(get(), closeUart_mid, ID);
   }
 
   unsigned setBaudRate(JNIEnv *env, unsigned ID, unsigned baud) {

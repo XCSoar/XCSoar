@@ -257,6 +257,11 @@ final class IOIOHelper {
     return -1;
   }
 
+  public void closeUart(int ID) {
+    if (!xuarts_[ID].isAvailable())
+      xuarts_[ID].closeUart();
+  }
+
   public int setBaudRate(int ID, int baud) {
     return xuarts_[ID].setBaudRate(baud);
   }

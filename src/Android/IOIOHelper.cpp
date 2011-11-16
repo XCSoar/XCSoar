@@ -42,6 +42,7 @@ IOIOHelper::IOIOHelper(JNIEnv *env)
   env->DeleteLocalRef(obj);
 
   openUart_mid = env->GetMethodID(cls, "openUart", "(II)I");
+  closeUart_mid = env->GetMethodID(cls, "closeUart", "(I)V");
   setReadTimeout_mid = env->GetMethodID(cls, "setReadTimeout", "(II)V");
   setBaudRate_mid = env->GetMethodID(cls, "setBaudRate", "(II)I");
   getBaudRate_mid = env->GetMethodID(cls, "getBaudRate", "(I)I");
