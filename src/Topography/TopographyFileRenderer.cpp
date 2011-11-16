@@ -152,8 +152,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   int iskip = file.GetSkipSteps(map_scale);
 #endif
 
-  for (TopographyFile::const_iterator it = file.begin(), end = file.end();
-       it != end; ++it) {
+  for (auto it = file.begin(), end = file.end(); it != end; ++it) {
     const XShape &shape = *it;
 
     if (!projection.GetScreenBounds().overlaps(shape.get_bounds()))
@@ -318,8 +317,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
 #endif
 
   // Iterate over all shapes in the file
-  for (TopographyFile::const_iterator it = file.begin(), end = file.end();
-       it != end; ++it) {
+  for (auto it = file.begin(), end = file.end(); it != end; ++it) {
     const XShape &shape = *it;
 
     // Skip shapes without a label
