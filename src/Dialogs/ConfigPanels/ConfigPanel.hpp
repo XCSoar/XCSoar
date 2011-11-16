@@ -33,12 +33,12 @@ namespace ConfigPanel {
   void InitFileField(WndProperty &wp, const TCHAR *profile_key,
                      const TCHAR *filters);
 
-  void InitFileField(WndForm &wf, const TCHAR *control_name,
+  void InitFileField(SubForm &form, const TCHAR *control_name,
                      const TCHAR *profile_key, const TCHAR *filters);
 
   bool FinishFileField(const WndProperty &wp, const TCHAR *profile_key);
 
-  bool FinishFileField(WndForm &wf, const TCHAR *control_name,
+  bool FinishFileField(SubForm &form, const TCHAR *control_name,
                        const TCHAR *profile_key);
 };
 

@@ -59,7 +59,7 @@ ConfigPanel::InitFileField(WndProperty &wp, const TCHAR *profile_key,
 
 
 void
-ConfigPanel::InitFileField(WndForm &wf, const TCHAR *control_name,
+ConfigPanel::InitFileField(SubForm &wf, const TCHAR *control_name,
                            const TCHAR *profile_key, const TCHAR *filters)
 {
   WndProperty *wp = (WndProperty *)wf.FindByName(control_name);
@@ -87,7 +87,7 @@ ConfigPanel::FinishFileField(const WndProperty &wp, const TCHAR *profile_key)
 
 
 bool
-ConfigPanel::FinishFileField(WndForm &wf, const TCHAR *control_name,
+ConfigPanel::FinishFileField(SubForm &wf, const TCHAR *control_name,
                              const TCHAR *profile_key)
 {
   const WndProperty *wp = (const WndProperty *)wf.FindByName(control_name);
