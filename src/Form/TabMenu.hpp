@@ -432,15 +432,13 @@ public:
   const unsigned PageIndex;
 
 public:
-  OneSubMenuButton(const TCHAR* _Caption,
-                   unsigned _main_menu_index,
-                   unsigned _sub_menu_index,
+  OneSubMenuButton(const TCHAR* _Caption, TabMenuControl::menu_tab_index i,
                    unsigned _page_index,
                    TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
                    TabBarControl::PreShowNotifyCallback_t _PreShowFunction)
     :OneTabButton(_Caption, false, NULL,
                   _PreHideFunction, _PreShowFunction),
-     Menu(TabMenuControl::menu_tab_index(_main_menu_index, _sub_menu_index)),
+     Menu(i),
      PageIndex(_page_index)
   {
   }

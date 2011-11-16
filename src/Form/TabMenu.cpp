@@ -80,8 +80,9 @@ TabMenuControl::AddClient(Window *w, const PageItem& item,
 {
   pager.AddClient(w);
   OneSubMenuButton *b =
-      new OneSubMenuButton(item.menu_caption, item.main_menu_index,
-                           sub_menu_index,
+      new OneSubMenuButton(item.menu_caption,
+                           menu_tab_index(item.main_menu_index,
+                                          sub_menu_index),
                            page,
                            NULL,
                            item.PreShowCallback);
