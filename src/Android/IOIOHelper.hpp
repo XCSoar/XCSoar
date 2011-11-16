@@ -29,6 +29,7 @@ Copyright_License {
 
 class IOIOHelper : protected Java::Object {
 private:
+  jmethodID open_mid;
   jmethodID openUart_mid, closeUart_mid, resetInputThread_mid;
   jmethodID setReadTimeout_mid;
   jmethodID setBaudRate_mid, getBaudRate_mid;
@@ -37,6 +38,14 @@ private:
 public:
   IOIOHelper(JNIEnv *env);
   ~IOIOHelper() {
+    close();
+  }
+
+  bool open(JNIEnv *env) {
+    return env->CallBooleanMethod(get(), open_mid);
+  }
+
+  void close() {
     call_void("close");
   }
 

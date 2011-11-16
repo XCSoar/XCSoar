@@ -25,6 +25,9 @@ Copyright_License {
 #include "Android/Context.hpp"
 #include "Android/NativeView.hpp"
 #include "Android/SoundUtil.hpp"
+#ifdef IOIOLIB
+#include "Android/IOIOManager.hpp"
+#endif
 #include "LocalPath.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Fonts.hpp"
@@ -53,6 +56,10 @@ EventQueue *event_queue;
 
 SoundUtil *sound_util;
 
+#ifdef IOIOLIB
+IOIOManager *ioio_manager;
+#endif
+
 JNIEXPORT jboolean JNICALL
 Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jobject _context,
@@ -75,6 +82,10 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   sound_util = new SoundUtil(env);
 
+#ifdef IOIOLIB
+  ioio_manager = new IOIOManager(env);
+#endif
+
   ScreenInitialized();
   return XCSoarInterface::Startup();
 }
@@ -93,6 +104,9 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   CommonInterface::main_window.reset();
   Fonts::Deinitialize();
   Graphics::Deinitialise();
+#ifdef IOIOLIB
+  delete ioio_manager;
+#endif
   delete sound_util;
   delete event_queue;
   event_queue = NULL;

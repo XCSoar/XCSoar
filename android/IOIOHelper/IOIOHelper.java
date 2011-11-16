@@ -62,6 +62,11 @@ final class IOIOHelper {
       }
   }
 
+  public boolean open() {
+    return true;
+    // TODO will connect to the ioio board
+  }
+  
   public void close() {
     for (int i = 0; i < 4; i++)
       if (!xuarts_[i].isAvailable())
