@@ -24,9 +24,7 @@ Copyright_License {
 #ifndef SITECONFIGPANEL_HPP
 #define SITECONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
-#include "Form/Button.hpp"
-#include "Form/TabBar.hpp"
+class WndForm;
 
 namespace SiteConfigPanel
 {

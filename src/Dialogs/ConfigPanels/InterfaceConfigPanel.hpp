@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef INTERFACECONFIGPANEL_HPP
 #define INTERFACECONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
-#include "Form/TabBar.hpp"
+class WndForm;
 
 namespace InterfaceConfigPanel
 {

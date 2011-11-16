@@ -26,6 +26,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Waypoint.hpp"
 #include "Form/Edit.hpp"
+#include "Form/Button.hpp"
 #include "LocalPath.hpp"
 #include "Protection.hpp"
 #include "ConfigPanel.hpp"

@@ -25,7 +25,6 @@ Copyright_License {
 #define POLARCONFIGPANEL_HPP
 
 #include "DataField/Base.hpp"
-#include "Form/TabBar.hpp"
 
 class WndForm;
 class WndButton;
