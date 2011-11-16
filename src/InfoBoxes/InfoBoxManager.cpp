@@ -80,6 +80,9 @@ InfoBoxWindow *InfoBoxes[InfoBoxSettings::Panel::MAX_CONTENTS];
 void
 InfoBoxManager::Hide()
 {
+  if (InfoBoxesHidden)
+    return;
+
   InfoBoxesHidden = true;
 
   for (unsigned i = 0; i < layout.count; i++)
@@ -89,10 +92,15 @@ InfoBoxManager::Hide()
 void
 InfoBoxManager::Show()
 {
+  if (!InfoBoxesHidden)
+    return;
+
   InfoBoxesHidden = false;
 
   for (unsigned i = 0; i < layout.count; i++)
     InfoBoxes[i]->show();
+
+  SetDirty();
 }
 
 int
@@ -465,7 +473,7 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
                                      Border, settings, look, style);
   }
 
-  SetDirty();
+  InfoBoxesHidden = true;
 }
 
 void

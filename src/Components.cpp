@@ -321,10 +321,6 @@ XCSoarInterface::Startup()
   marks = new Markers();
   protected_marks = new ProtectedMarkers(*marks);
 
-  // Show the main and map windows
-  LogStartUp(_T("Create map window"));
-  main_window.show();
-
 #ifdef HAVE_AYGSHELL_DLL
   const AYGShellDLL &ayg = main_window.ayg_shell_dll;
   ayg.SHSetAppKeyWndAssoc(VK_APP1, main_window);
