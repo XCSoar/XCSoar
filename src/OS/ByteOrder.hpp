@@ -209,7 +209,7 @@ static inline uint16_t
 ReadUnalignedLE16(const uint16_t *p)
 {
 #ifdef CAN_READ_WRITE_UNALIGNED
-  return *p;
+  return FromLE16(*p);
 #else
   const uint8_t *c = (const uint8_t *)p;
   return c[0] | (c[1] << 8);
@@ -221,7 +221,7 @@ static inline uint16_t
 ReadUnalignedBE16(const uint16_t *p)
 {
 #ifdef CAN_READ_WRITE_UNALIGNED
-  return *p;
+  return FromBE16(*p);
 #else
   const uint8_t *c = (const uint8_t *)p;
   return c[1] | (c[0] << 8);
@@ -232,7 +232,7 @@ static inline void
 WriteUnalignedLE16(uint16_t *p, uint16_t value)
 {
 #ifdef CAN_READ_WRITE_UNALIGNED
-  *p = value;
+  *p = ToLE16(value);
 #else
   uint8_t *c = (uint8_t *)p;
   c[0] = value;
@@ -244,7 +244,7 @@ static inline void
 WriteUnalignedBE16(uint16_t *p, uint16_t value)
 {
 #ifdef CAN_READ_WRITE_UNALIGNED
-  *p = value;
+  *p = ToBE16(value);
 #else
   uint8_t *c = (uint8_t *)p;
   c[0] = value >> 8;
