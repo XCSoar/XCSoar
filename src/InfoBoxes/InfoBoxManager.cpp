@@ -130,6 +130,9 @@ InfoBoxFullWindow::on_paint(Canvas &canvas)
 void
 InfoBoxManager::Hide()
 {
+  if (InfoBoxesHidden)
+    return;
+
   InfoBoxesHidden = true;
 
   for (unsigned i = 0; i < layout.count; i++)
@@ -141,6 +144,9 @@ InfoBoxManager::Hide()
 void
 InfoBoxManager::Show()
 {
+  if (!InfoBoxesHidden)
+    return;
+
   InfoBoxesHidden = false;
 
   for (unsigned i = 0; i < layout.count; i++)
@@ -533,6 +539,7 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
   }
 
   SetDirty();
+  InfoBoxesHidden = true;
 }
 
 void
