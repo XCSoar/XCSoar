@@ -51,7 +51,7 @@ final class IOIOHelper {
   private IOIO ioio_;
   private XCSUart[] xuarts_;
 
-  IOIOHelper() {
+  public boolean open() {
     ioio_ = IOIOFactory.create();
     xuarts_ = new XCSUart [4];
     for (int i = 0; i < 4; i++)
@@ -60,23 +60,45 @@ final class IOIOHelper {
       } catch (Exception e) {
         Log.e("IOIOHelper", "IOIOJIOIOHelper() fail " + i, e);
       }
-  }
-
-  public boolean open() {
-    return true;
-    // TODO will connect to the ioio board
+    return waitConnect();
   }
   
   public void close() {
-    for (int i = 0; i < 4; i++)
-      if (!xuarts_[i].isAvailable())
-        xuarts_[i].closeUart();
     try {
       ioio_.disconnect();
     } catch (Exception e) {
       Log.e("IOIOHelper", "IOIOJclose()/disconnect Unexpected exception caught", e);
     } finally {
       ioio_ = null;
+    }
+  }
+
+  /**
+   * non-blocking connection to IOIO board
+   */
+  private boolean waitConnect() {
+    boolean result = false;
+    Timer t = new Timer();
+    try {
+      t.schedule(new TimerTask() {
+          @Override
+          public void run() {
+            Log.w("IOIOHelper", "IOIOJWaitConnect() TimerDisconnecting...");
+            ioio_.disconnect();
+          }
+        }, 3000);
+      ioio_.waitForConnect();
+      ioio_.softReset();
+      result = true;
+    } catch (ConnectionLostException e) {
+      Log.w("IOIOHelper", "IOIOJWaitConnect() Connection Lost", e);
+    } catch (IncompatibilityException e) {
+      Log.e("IOIOHelper", "IOIOJWaitConnect() Incompatibility detected", e);
+    } catch (Exception e) {
+      Log.e("IOIOHelper", "IOIOJWaitConnect() Unexpected exception caught", e);
+    } finally {
+      t.cancel();
+      return result;
     }
   }
 
@@ -133,9 +155,6 @@ final class IOIOHelper {
 
       ioio_ = ioio;
       baudrate = _baud;
-      if (!WaitConnect()) {
-        return -1;
-      }
       try {
         uart = ioio_.openUart(inPin, outPin, baudrate, Uart.Parity.NONE,
                               Uart.StopBits.ONE);

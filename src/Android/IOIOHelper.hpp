@@ -38,7 +38,6 @@ private:
 public:
   IOIOHelper(JNIEnv *env);
   ~IOIOHelper() {
-    close();
   }
 
   bool open(JNIEnv *env) {
