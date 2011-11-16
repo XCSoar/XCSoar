@@ -113,7 +113,7 @@ public:
    *
    * @return true if all Widget::Save() were successful
    */
-  bool Save();
+  bool Save(bool &changed, bool &require_restart);
 
 protected:
   virtual bool on_resize(UPixelScalar width, UPixelScalar height);

@@ -136,10 +136,10 @@ TabbedControl::ClickPage(unsigned i)
 }
 
 bool
-TabbedControl::Save()
+TabbedControl::Save(bool &changed, bool &require_restart)
 {
   for (auto i = tabs.begin(), end = tabs.end(); i != end; ++i)
-    if (i->prepared && !i->widget->Save())
+    if (i->prepared && !i->widget->Save(changed, require_restart))
       return false;
 
   return true;

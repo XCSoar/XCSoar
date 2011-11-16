@@ -78,7 +78,7 @@ public:
    * @return true on success, false if saving did not succeed (the
    * method should display a message to the user prior to returning)
    */
-  virtual bool Save() = 0;
+  virtual bool Save(bool &changed, bool &require_restart) = 0;
 
   /**
    * The user has clicked on the activation area (within the
@@ -122,7 +122,7 @@ public:
   virtual void Initialise(ContainerWindow &parent, const PixelRect &rc);
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void Unprepare();
-  virtual bool Save();
+  virtual bool Save(bool &changed, bool &require_restart);
   virtual bool Click();
   virtual void ReClick();
 };

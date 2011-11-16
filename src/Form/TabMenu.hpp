@@ -360,8 +360,8 @@ public:
   void SetCurrentPage(unsigned page);
   void SetCurrentPage(menu_tab_index menuIndex);
 
-  bool Save() {
-    return pager.Save();
+  bool Save(bool &changed, bool &require_restart) {
+    return pager.Save(changed, require_restart);
   }
 };
 
