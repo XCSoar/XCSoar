@@ -25,7 +25,7 @@ Copyright_License {
 #include "FLARM/FlarmId.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/StaticString.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/TrivialArray.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "FLARM/FlarmNet.hpp"
@@ -39,7 +39,7 @@ struct FlarmIdNameCouple
   StaticString<21> name;
 };
 
-static StaticArray<FlarmIdNameCouple, 200> flarm_names;
+static TrivialArray<FlarmIdNameCouple, 200> flarm_names;
 
 void
 FlarmDetails::Load()

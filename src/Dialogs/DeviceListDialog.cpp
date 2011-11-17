@@ -25,7 +25,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/ManageCAI302Dialog.hpp"
 #include "Dialogs/PortMonitor.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/TrivialArray.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
 #include "DeviceBlackboard.hpp"
@@ -50,7 +50,7 @@ static UPixelScalar font_height;
 static WndButton *reconnect_button, *flight_button, *manage_button;
 static WndButton *monitor_button;
 
-static StaticArray<unsigned, NUMDEV> indices;
+static TrivialArray<unsigned, NUMDEV> indices;
 
 static void
 UpdateButtons()

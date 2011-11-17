@@ -40,7 +40,7 @@ Copyright_License {
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/METAR.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/TrivialArray.hpp"
 #include "MainWindow.hpp"
 #include "Compiler.h"
 
@@ -59,7 +59,7 @@ struct NOAAListItem
   }
 };
 
-static StaticArray<NOAAListItem, 20> list;
+static TrivialArray<NOAAListItem, 20> list;
 
 static void
 UpdateList()
