@@ -30,8 +30,7 @@ AirspaceInterceptSolution
 AirspaceNearestSort::solve_intercept(const AbstractAirspace &a) const
 {
   if (a.Inside(m_location)) {
-    AirspaceInterceptSolution null_sol;
-    return null_sol;
+    return AirspaceInterceptSolution::Invalid();
   } else {
     AirspaceInterceptSolution sol;
     sol.location = a.ClosestPoint(m_location);

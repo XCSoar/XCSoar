@@ -79,12 +79,11 @@ AbstractAirspace::InterceptHorizontal(const AircraftState &state,
                                        const fixed &distance_end,
                                        const bool lower) const
 {
-  AirspaceInterceptSolution solution;
-
   if (lower && altitude_base.IsTerrain())
     // impossible to be lower than terrain
-    return solution;
+    return AirspaceInterceptSolution::Invalid();
 
+  AirspaceInterceptSolution solution;
   solution.altitude = lower? altitude_base.GetAltitude(state): altitude_top.GetAltitude(state);
   solution.elapsed_time = perf.solution_horizontal(distance_start, 
                                                    distance_end,
@@ -112,11 +111,13 @@ AbstractAirspace::Intercept(const AircraftState &state,
       distance_start :
       (only_vertical ? fixed_zero : state.location.Distance(loc_end));
 
-  AirspaceInterceptSolution solution_this;
+  AirspaceInterceptSolution solution_this =
+    AirspaceInterceptSolution::Invalid();
 
   // need to scan at least three sides, top, far, bottom (if not terrain)
 
-  AirspaceInterceptSolution solution_candidate;
+  AirspaceInterceptSolution solution_candidate =
+    AirspaceInterceptSolution::Invalid();
 
   if (!only_vertical) {
     solution_candidate = InterceptVertical(state, perf, distance_start);
@@ -185,7 +186,8 @@ AbstractAirspace::Intercept(const AircraftState &state,
   if (vis.empty())
     return false;
 
-  AirspaceInterceptSolution this_solution;
+  AirspaceInterceptSolution this_solution =
+    AirspaceInterceptSolution::Invalid();
   for (AirspaceIntersectionVector::const_iterator it = vis.begin();
        it != vis.end(); ++it)
     Intercept(state, perf, this_solution, it->first, it->second);

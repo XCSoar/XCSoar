@@ -7,7 +7,8 @@ AirspaceIntersectionVisitor::intercept(const AbstractAirspace& as,
                                        const AirspaceAircraftPerformance &perf,
                                        bool all) const
 {
-  AirspaceInterceptSolution solution;
+  AirspaceInterceptSolution solution =
+    AirspaceInterceptSolution::Invalid();
   if (m_intersections.empty()) {
     return solution;
   }

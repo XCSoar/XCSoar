@@ -29,6 +29,7 @@ AirspaceWarning::AirspaceWarning(const AbstractAirspace& the_airspace):
   m_airspace(the_airspace),
   m_state(WARNING_CLEAR),
   m_state_last(WARNING_CLEAR),
+  m_solution(AirspaceInterceptSolution::Invalid()),
   m_acktime_warning(0),
   m_acktime_inside(0),
   m_debouncetime(60),

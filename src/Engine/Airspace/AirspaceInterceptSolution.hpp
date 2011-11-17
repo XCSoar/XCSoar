@@ -25,6 +25,7 @@
 
 #include "Navigation/GeoPoint.hpp"
 #include "Math/fixed.hpp"
+#include "Util/TypeTraits.hpp"
 
 /**
  *  Structure to hold data for intercepts between aircraft and airspace.
@@ -41,9 +42,21 @@ struct AirspaceInterceptSolution
   /** Estimated time (s) for observer to reach intercept point */
   fixed elapsed_time;
 
-  /** Constructor, initialises to invalid solution */
-  AirspaceInterceptSolution():
-    elapsed_time(-fixed_one) {}
+  AirspaceInterceptSolution() = default;
+
+private:
+  AirspaceInterceptSolution(fixed _distance, fixed _elapsed_time)
+    :distance(_distance), elapsed_time(_elapsed_time) {}
+
+public:
+  static AirspaceInterceptSolution Invalid() {
+    return AirspaceInterceptSolution(fixed_minus_one, fixed_minus_one);
+  }
+
+  void SetInvalid() {
+    distance = fixed_minus_one;
+    elapsed_time = fixed_minus_one;
+  }
 
   /**
    * Determine whether this solution is valid
@@ -54,5 +67,8 @@ struct AirspaceInterceptSolution
     return !negative(elapsed_time);
   };
 };
+
+static_assert(is_trivial<AirspaceInterceptSolution>::value,
+              "type is not trivial");
 
 #endif
