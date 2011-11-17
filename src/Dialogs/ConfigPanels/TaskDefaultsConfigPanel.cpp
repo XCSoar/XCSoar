@@ -76,16 +76,17 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartType"));
   if (wp) {
-    const AbstractTaskFactory::LegalPointVector point_types =
-        temptask->GetFactory().getValidStartTypes();
+    const auto point_types = temptask->GetFactory().getValidStartTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 
-    for (unsigned i = 0; i < point_types.size(); i++) {
-      dfe->addEnumText(OrderedTaskPointName(point_types[i]), (unsigned)point_types[i],
-          OrderedTaskPointDescription(point_types[i]));
-      if (point_types[i] == task_behaviour.sector_defaults.start_type)
-        dfe->Set((unsigned)point_types[i]);
+    for (auto i = point_types.begin(), end = point_types.end();
+         i != end; ++i) {
+      const AbstractTaskFactory::LegalPointType_t type = *i;
+      dfe->addEnumText(OrderedTaskPointName(type), (unsigned)type,
+                       OrderedTaskPointDescription(type));
+      if (type == task_behaviour.sector_defaults.start_type)
+        dfe->Set((unsigned)type);
     }
     wp->RefreshDisplay();
   }
@@ -95,16 +96,17 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
 
   wp = (WndProperty*)wf->FindByName(_T("prpFinishType"));
   if (wp) {
-    const AbstractTaskFactory::LegalPointVector point_types =
-        temptask->GetFactory().getValidFinishTypes();
+    const auto point_types = temptask->GetFactory().getValidFinishTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 
-    for (unsigned i = 0; i < point_types.size(); i++) {
-      dfe->addEnumText(OrderedTaskPointName(point_types[i]), (unsigned)point_types[i],
-          OrderedTaskPointDescription(point_types[i]));
-      if (point_types[i] == task_behaviour.sector_defaults.finish_type)
-        dfe->Set((unsigned)point_types[i]);
+    for (auto i = point_types.begin(), end = point_types.end();
+         i != end; ++i) {
+      const AbstractTaskFactory::LegalPointType_t type = *i;
+      dfe->addEnumText(OrderedTaskPointName(type), (unsigned)type,
+                       OrderedTaskPointDescription(type));
+      if (type == task_behaviour.sector_defaults.finish_type)
+        dfe->Set((unsigned)type);
     }
     wp->RefreshDisplay();
   }
@@ -114,17 +116,18 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
 
   wp = (WndProperty*)wf->FindByName(_T("prpTurnpointType"));
   if (wp) {
-    const AbstractTaskFactory::LegalPointVector point_types =
-        temptask->GetFactory().getValidIntermediateTypes();
+    const auto point_types =
+      temptask->GetFactory().getValidIntermediateTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 
-    for (unsigned i = 0; i < point_types.size(); i++) {
-      dfe->addEnumText(OrderedTaskPointName(point_types[i]),
-          (unsigned)point_types[i],
-          OrderedTaskPointDescription(point_types[i]));
-      if (point_types[i] == task_behaviour.sector_defaults.turnpoint_type) {
-        dfe->Set((unsigned)point_types[i]);
+    for (auto i = point_types.begin(), end = point_types.end();
+         i != end; ++i) {
+      const AbstractTaskFactory::LegalPointType_t type = *i;
+      dfe->addEnumText(OrderedTaskPointName(type), (unsigned)type,
+                       OrderedTaskPointDescription(type));
+      if (type == task_behaviour.sector_defaults.turnpoint_type) {
+        dfe->Set((unsigned)type);
       }
     }
     wp->RefreshDisplay();
