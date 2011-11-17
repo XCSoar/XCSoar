@@ -68,10 +68,10 @@ static WndButton *wbAck = NULL; // frmAck = Ack space
 static WndButton *wbEnable = NULL; // Enable
 
 static WndListFrame *wAirspaceList = NULL;
-static Brush hBrushInsideBk;
-static Brush hBrushNearBk;
-static Brush hBrushInsideAckBk;
-static Brush hBrushNearAckBk;
+static gcc_constexpr_data Color inside_color(254,50,50);
+static gcc_constexpr_data Color near_color(254,254,50);
+static gcc_constexpr_data Color inside_ack_color(254,100,100);
+static gcc_constexpr_data Color near_ack_color(254,254,100);
 static bool AutoClose = true;
 
 static WarningList warning_list;
@@ -380,30 +380,24 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
 
   /* draw the warning state indicator */
 
-  Brush *state_brush;
+  Color state_color;
   const TCHAR *state_text;
 
   if (warning.state == AirspaceWarning::WARNING_INSIDE) {
-    if (warning.ack_expired)
-      state_brush = &hBrushInsideBk;
-    else
-      state_brush = &hBrushInsideAckBk;
+    state_color = warning.ack_expired ? inside_color : inside_ack_color;
     state_text = _T("inside");
   } else if (warning.state > AirspaceWarning::WARNING_CLEAR) {
-    if (warning.ack_expired)
-      state_brush = &hBrushNearBk;
-    else
-      state_brush = &hBrushNearAckBk;
+    state_color = warning.ack_expired ? near_color : near_ack_color;
     state_text = _T("near");
   } else {
-    state_brush = NULL;
+    state_color = COLOR_WHITE;
     state_text = NULL;
   }
 
   const PixelSize state_text_size =
     canvas.text_size(state_text != NULL ? state_text : _T("W"));
 
-  if (state_brush != NULL) {
+  if (state_color != COLOR_WHITE) {
     /* colored background */
     PixelRect rc;
 
@@ -412,7 +406,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
     rc.right = paint_rc.right - Layout::FastScale(paint_rc_margin);
     rc.bottom = paint_rc.bottom - Layout::FastScale(paint_rc_margin);
 
-    canvas.fill_rectangle(rc, *state_brush);
+    canvas.fill_rectangle(rc, state_color);
   }
 
   if (state_text != NULL) {
@@ -510,11 +504,6 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close)
 
   wf->SetKeyDownNotify(OnKeyDown);
 
-  hBrushInsideBk.Set(Color(254,50,50));
-  hBrushNearBk.Set(Color(254,254,50));
-  hBrushInsideAckBk.Set(Color(254,100,100));
-  hBrushNearAckBk.Set(Color(254,254,100));
-
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceWarningList"));
   assert(wAirspaceList != NULL);
   wAirspaceList->SetPaintItemCallback(OnAirspaceListItemPaint);
@@ -539,9 +528,4 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close)
   wf = NULL;
 
   warning_list.clear();
-
-  hBrushInsideBk.Reset();
-  hBrushNearBk.Reset();
-  hBrushInsideAckBk.Reset();
-  hBrushNearAckBk.Reset();
 }
