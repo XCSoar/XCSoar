@@ -11,7 +11,9 @@ Version 6.2.3 - not yet released
   - reduce menu flickering
   - fix crash in waypoint list dialog when waypoints have large comments
   - prevent waypoint editing if waypoint file is read-only
+* map
   - speed up the map renderer
+  - reduce memory usage on PPC2000
 * data files
   - Automatically try to detect character encoding of airfield details file
   - speed up waypoint/airspace loading

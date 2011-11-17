@@ -38,6 +38,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Interface.hpp"
 #include "Computer/GlideComputer.hpp"
+#include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
@@ -376,7 +377,9 @@ TargetMapWindow::on_resize(unsigned width, unsigned height)
 
 #ifndef ENABLE_OPENGL
   buffer_canvas.grow(width, height);
-  stencil_canvas.grow(width, height);
+
+  if (!is_ancient_hardware())
+    stencil_canvas.grow(width, height);
 #endif
 
   projection.SetScreenSize(width, height);
@@ -397,7 +400,9 @@ TargetMapWindow::on_create()
 #ifndef ENABLE_OPENGL
   WindowCanvas canvas(*this);
   buffer_canvas.set(canvas);
-  stencil_canvas.set(canvas);
+
+  if (!is_ancient_hardware())
+    stencil_canvas.set(canvas);
 #endif
   return true;
 }
@@ -412,7 +417,9 @@ TargetMapWindow::on_destroy()
 
 #ifndef ENABLE_OPENGL
   buffer_canvas.reset();
-  stencil_canvas.reset();
+
+  if (!is_ancient_hardware())
+    stencil_canvas.reset();
 #endif
 
   BufferWindow::on_destroy();

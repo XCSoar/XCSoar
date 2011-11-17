@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
+#include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Protection.hpp"
@@ -41,7 +42,9 @@ MapWindow::on_resize(unsigned width, unsigned height)
   // We only grow() the buffer here because resizing it everytime has
   // a huge negative effect on the heap fragmentation
   buffer_canvas.grow(width, height);
-  stencil_canvas.grow(width, height);
+
+  if (!is_ancient_hardware())
+    stencil_canvas.grow(width, height);
 #endif
 
   visible_projection.SetScreenSize(width, height);
@@ -59,7 +62,9 @@ MapWindow::on_create()
 #ifndef ENABLE_OPENGL
   WindowCanvas canvas(*this);
   buffer_canvas.set(canvas);
-  stencil_canvas.set(canvas);
+
+  if (!is_ancient_hardware())
+    stencil_canvas.set(canvas);
 #endif
   return true;
 }
@@ -76,7 +81,9 @@ MapWindow::on_destroy()
 
 #ifndef ENABLE_OPENGL
   buffer_canvas.reset();
-  stencil_canvas.reset();
+
+  if (!is_ancient_hardware())
+    stencil_canvas.reset();
 #endif
 
   DoubleBufferWindow::on_destroy();
