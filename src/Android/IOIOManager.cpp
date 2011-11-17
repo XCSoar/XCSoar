@@ -48,8 +48,8 @@ IOIOManager::AddClient()
 void
 IOIOManager::RemoveClient()
 {
-  assert(ref_count > 0);
   ref_count_mutex.Lock();
+  assert(ref_count > 0);
   const unsigned temp_ref = --ref_count;
   ref_count_mutex.Unlock();
 
