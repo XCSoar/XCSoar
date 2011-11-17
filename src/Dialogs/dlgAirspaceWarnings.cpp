@@ -33,6 +33,7 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
+#include "Util/TrivialArray.hpp"
 
 #include "Compiler.h"
 
@@ -59,7 +60,7 @@ struct WarningItem {
   }
 };
 
-typedef std::vector<WarningItem> WarningList;
+typedef TrivialArray<WarningItem, 64u> WarningList;
 
 static WndForm *wf = NULL;
 static WndButton *wbAck1 = NULL; // frmAck1 = Ack warn
@@ -424,9 +425,11 @@ static void
 CopyList()
 {
   const ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
+
   warning_list.clear();
-  warning_list.reserve(lease->size());
-  std::copy(lease->begin(), lease->end(), std::back_inserter(warning_list));
+  for (auto i = lease->begin(), end = lease->end();
+       i != end && !warning_list.full(); ++i)
+    warning_list.push_back(*i);
 }
 
 static void
