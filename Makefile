@@ -452,7 +452,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Computer/AutoQNH.cpp \
 	$(SRC)/DeviceBlackboard.cpp \
 	$(SRC)/InterfaceBlackboard.cpp \
-	$(SRC)/MapProjectionBlackboard.cpp \
 	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/UIState.cpp \

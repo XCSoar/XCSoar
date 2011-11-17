@@ -73,7 +73,6 @@ CalculationThread::Tick()
     ScopeLock protect(mutex);
     // Copy settings form SettingsComputerBlackboard to GlideComputerBlackboard
     glide_computer.ReadSettingsComputer(settings_computer);
-    // Copy mapprojection from MapProjectionBlackboard to GlideComputerBlackboard
     glide_computer.SetScreenDistanceMeters(screen_distance_meters);
   }
 

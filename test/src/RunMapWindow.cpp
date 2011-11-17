@@ -63,11 +63,6 @@ Copyright_License {
 using std::min;
 #endif
 
-#ifdef ENABLE_OPENGL
-#include "MapProjectionBlackboard.hpp"
-void MapProjectionBlackboard::ReadMapProjection(const MapWindowProjection &) {}
-#endif
-
 DeviceBlackboard *device_blackboard;
 
 ProtectedTaskManager *protected_task_manager;
