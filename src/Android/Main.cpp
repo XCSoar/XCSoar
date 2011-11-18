@@ -59,7 +59,8 @@ gcc_visibility_default
 JNIEXPORT jboolean JNICALL
 Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jobject _context,
-                                            jint width, jint height)
+                                            jint width, jint height,
+                                            jint sdk_version, jstring product)
 {
   Java::Init(env);
 
@@ -70,7 +71,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   OpenGL::Initialise();
 
   assert(native_view == NULL);
-  native_view = new NativeView(env, obj, width, height);
+  native_view = new NativeView(env, obj, width, height, sdk_version, product);
 
   Profile::SetFiles(_T(""));
 

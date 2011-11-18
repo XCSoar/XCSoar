@@ -238,11 +238,15 @@ Display::Rotate(enum orientation orientation)
     break;
 
   case ORIENTATION_REVERSE_PORTRAIT:
-    android_orientation = NativeView::SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+    android_orientation = model_is_galaxy_tab22() ?
+                          NativeView::SCREEN_ORIENTATION_REVERSE_PORTRAIT_GT :
+                          NativeView::SCREEN_ORIENTATION_REVERSE_PORTRAIT;
     break;
 
   case ORIENTATION_REVERSE_LANDSCAPE:
-    android_orientation = NativeView::SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+    android_orientation = model_is_galaxy_tab22() ?
+                          NativeView::SCREEN_ORIENTATION_REVERSE_LANDSCAPE_GT :
+                          NativeView::SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
     break;
 
   default:

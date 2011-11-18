@@ -35,6 +35,8 @@ class NativeView {
   Java::Object obj;
 
   unsigned width, height;
+  unsigned sdk_version;
+  char product[20];
 
   jmethodID init_surface_method, deinit_surface_method;
   jmethodID setRequestedOrientationID;
@@ -46,6 +48,7 @@ public:
    * @see http://developer.android.com/reference/android/R.attr.html#screenOrientation
    */
   enum screen_orientation {
+    // API level 1
     SCREEN_ORIENTATION_UNSPECIFIED = -1,
     SCREEN_ORIENTATION_LANDSCAPE = 0,
     SCREEN_ORIENTATION_PORTRAIT = 1,
@@ -53,14 +56,21 @@ public:
     SCREEN_ORIENTATION_BEHIND = 3,
     SCREEN_ORIENTATION_SENSOR = 4,
     SCREEN_ORIENTATION_NOSENSOR = 5,
+    // API level 9
+    // see http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_REVERSE_LANDSCAPE
     SCREEN_ORIENTATION_REVERSE_LANDSCAPE = 8,
     SCREEN_ORIENTATION_REVERSE_PORTRAIT = 9,
+    // HACK for Galaxy Tab (FROYO = 2.2 = API level 8)
+    SCREEN_ORIENTATION_REVERSE_LANDSCAPE_GT = 7,
+    SCREEN_ORIENTATION_REVERSE_PORTRAIT_GT = 8,
   };
 
-  NativeView(JNIEnv *_env, jobject _obj,
-             unsigned _width, unsigned _height)
+  NativeView(JNIEnv *_env, jobject _obj, unsigned _width, unsigned _height,
+             unsigned _sdk_version, jstring _product)
     :env(_env), obj(env, _obj),
-     width(_width), height(_height) {
+     width(_width), height(_height), sdk_version(_sdk_version) {
+    Java::String product2(env, _product);
+    product2.CopyTo(env, product, sizeof(product));
     Java::Class cls(env, "org/xcsoar/NativeView");
     init_surface_method = env->GetMethodID(cls, "initSurface", "()Z");
     deinit_surface_method = env->GetMethodID(cls, "deinitSurface", "()V");
@@ -79,6 +89,14 @@ public:
   void SetSize(unsigned _width, unsigned _height) {
     width = _width;
     height = _height;
+  }
+
+  int GetAPILevel() {
+    return sdk_version;
+  }
+
+  const char *GetProduct() {
+    return product;
   }
 
   bool initSurface() {
