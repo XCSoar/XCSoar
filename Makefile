@@ -8,7 +8,7 @@
 # line:
 #
 #   TARGET      The name of the target platform.  See the TARGETS variable
-#               below for a list of valid target platforms.
+#               in build/targets.mk for a list of valid target platforms.
 #
 #   ENABLE_SDL  If set to "y", the UI is drawn with libSDL.
 #
