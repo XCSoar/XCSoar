@@ -28,6 +28,8 @@ Copyright_License {
 
 struct SETTINGS_MAP;
 class WndForm;
+class WndOwnerDrawFrame;
+class Canvas;
 
 namespace TerrainDisplayConfigPanel
 {
@@ -35,6 +37,8 @@ namespace TerrainDisplayConfigPanel
   bool Save(SETTINGS_MAP &settings_map);
 
   void OnEnableTerrain(DataField *Sender, DataField::DataAccessKind_t Mode);
+  void OnChangeTerrain(DataField *Sender, DataField::DataAccessKind_t Mode);
+  void OnPreviewPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
 };
 
 #endif /* TERRAINDISPLAYCONFIGPANEL_HPP */

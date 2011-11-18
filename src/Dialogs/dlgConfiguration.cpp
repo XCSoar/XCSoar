@@ -226,6 +226,8 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(SymbolsConfigPanel::OnTrailLength),
   DeclareCallBackEntry(TerrainDisplayConfigPanel::OnEnableTerrain),
+  DeclareCallBackEntry(TerrainDisplayConfigPanel::OnChangeTerrain),
+  DeclareCallBackEntry(TerrainDisplayConfigPanel::OnPreviewPaint),
   DeclareCallBackEntry(RouteConfigPanel::OnRouteMode),
   DeclareCallBackEntry(RouteConfigPanel::OnReachMode),
   DeclareCallBackEntry(TaskDefaultsConfigPanel::OnStartType),

@@ -128,6 +128,14 @@ gcc_pure
 const TCHAR *
 GetFormValueString(const SubForm &form, const TCHAR *control_name);
 
+template<typename T>
+static inline void
+GetFormValueEnum(const SubForm &form, const TCHAR *control_name,
+                 T &value)
+{
+  value = (T)GetFormValueInteger(form, control_name);
+}
+
 bool
 SaveFormProperty(const SubForm &form, const TCHAR* field, bool &value);
 

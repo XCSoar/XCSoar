@@ -31,16 +31,25 @@ Copyright_License {
 #include "DataField/Boolean.hpp"
 #include "Language/Language.hpp"
 #include "SettingsMap.hpp"
+#include "Terrain/TerrainRenderer.hpp"
+#include "Projection/MapWindowProjection.hpp"
+#include "Components.hpp"
+#include "Interface.hpp"
+#include "MainWindow.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 
 static WndForm* wf = NULL;
+static TerrainRendererSettings terrain_settings;
 
 static void
-ShowTerrainControls(bool show)
+ShowTerrainControls()
 {
+  bool show = terrain_settings.enable;
   ShowFormControl(*wf, _T("prpSlopeShadingType"), show);
   ShowFormControl(*wf, _T("prpTerrainContrast"), show);
   ShowFormControl(*wf, _T("prpTerrainBrightness"), show);
   ShowFormControl(*wf, _T("prpTerrainRamp"), show);
+  ShowFormControl(*wf, _T("frmPreview"), show);
 }
 
 static short
@@ -60,7 +69,47 @@ TerrainDisplayConfigPanel::OnEnableTerrain(DataField *Sender,
                                            DataField::DataAccessKind_t Mode)
 {
   const DataFieldBoolean &df = *(const DataFieldBoolean *)Sender;
-  ShowTerrainControls(df.GetAsBoolean());
+  terrain_settings.enable = df.GetAsBoolean();
+  ShowTerrainControls();
+}
+
+void
+TerrainDisplayConfigPanel::OnChangeTerrain(gcc_unused DataField *Sender,
+                                           gcc_unused DataField::DataAccessKind_t Mode)
+{
+  GetFormValueEnum(*wf, _T("prpSlopeShadingType"),
+                   terrain_settings.slope_shading);
+  terrain_settings.contrast =
+    PercentToByte(GetFormValueInteger(*wf, _T("prpTerrainContrast")));
+  terrain_settings.brightness =
+    PercentToByte(GetFormValueInteger(*wf, _T("prpTerrainBrightness")));
+  terrain_settings.ramp =
+    (short) GetFormValueInteger(*wf, _T("prpTerrainRamp"));
+
+  // invalidate terrain preview
+  PaintWindow *w = (PaintWindow *)wf->FindByName(_T("frmPreview"));
+  if (w)
+    w->invalidate();
+}
+
+void
+TerrainDisplayConfigPanel::OnPreviewPaint(gcc_unused WndOwnerDrawFrame *Sender,
+                                          Canvas &canvas)
+{
+  TerrainRenderer renderer(terrain);
+  renderer.SetSettings(terrain_settings);
+
+  MapWindowProjection projection =
+    XCSoarInterface::main_window.map->VisibleProjection();
+  projection.SetScreenSize(canvas.get_width(), canvas.get_height());
+  projection.SetScreenOrigin(canvas.get_width() / 2, canvas.get_height() / 2);
+
+  Angle sun_azimuth(Angle::Degrees(fixed(-45)));
+  if (terrain_settings.slope_shading == sstSun)
+    sun_azimuth = XCSoarInterface::Calculated().sun_azimuth;
+
+  renderer.Generate(projection, sun_azimuth);
+  renderer.Draw(canvas, projection);
 }
 
 void
@@ -111,50 +160,25 @@ TerrainDisplayConfigPanel::Init(WndForm *_wf, const SETTINGS_MAP &settings_map)
     wp->RefreshDisplay();
   }
 
-  ShowTerrainControls(terrain.enable);
+  terrain_settings = terrain;
+  ShowTerrainControls();
 }
-
 
 bool
 TerrainDisplayConfigPanel::Save(SETTINGS_MAP &settings_map)
 {
-  TerrainRendererSettings &terrain = settings_map.terrain;
+  bool changed = (settings_map.terrain != terrain_settings);
 
-  bool changed = false;
-  WndProperty *wp;
-
-  changed |= SaveFormProperty(*wf, _T("prpEnableTerrain"),
-                              szProfileDrawTerrain,
-                              terrain.enable);
+  settings_map.terrain = terrain_settings;
+  Profile::Set(szProfileDrawTerrain, terrain_settings.enable);
+  Profile::Set(szProfileTerrainContrast, terrain_settings.contrast);
+  Profile::Set(szProfileTerrainBrightness, terrain_settings.brightness);
+  Profile::Set(szProfileTerrainRamp, terrain_settings.ramp);
+  Profile::Set(szProfileSlopeShadingType, terrain_settings.slope_shading);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableTopography"),
                               szProfileDrawTopography,
                               settings_map.topography_enabled);
-
-  changed |= SaveFormPropertyEnum(*wf, _T("prpSlopeShadingType"),
-                                  szProfileSlopeShadingType,
-                                  terrain.slope_shading);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTerrainContrast"));
-  if (wp) {
-    if (ByteToPercent(terrain.contrast) != wp->GetDataField()->GetAsInteger()) {
-      terrain.contrast = PercentToByte(wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileTerrainContrast, terrain.contrast);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTerrainBrightness"));
-  if (wp) {
-    if (ByteToPercent(terrain.brightness) != wp->GetDataField()->GetAsInteger()) {
-      terrain.brightness = PercentToByte(wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileTerrainBrightness, terrain.brightness);
-      changed = true;
-    }
-  }
-
-  changed |= SaveFormProperty(*wf, _T("prpTerrainRamp"), szProfileTerrainRamp,
-                              terrain.ramp);
 
   return changed;
 }

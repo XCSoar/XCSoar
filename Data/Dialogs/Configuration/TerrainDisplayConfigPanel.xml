@@ -11,22 +11,23 @@
 
   <Edit Name="prpTerrainContrast" Caption="Terrain contrast" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
     Help="Defines the amount of Phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.">
-    <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="100" Step="5"/>
+    <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="100" Step="5" OnDataAccess="TerrainDisplayConfigPanel::OnChangeTerrain"/>
   </Edit>
 
   <Edit Name="prpTerrainBrightness" Caption="Terrain brightness" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
     Help="Defines the brightness (whiteness) of the terrain rendering.  This controls the average illumination of the terrain.">
-    <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="100" Step="5"/>
+    <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="100" Step="5" OnDataAccess="TerrainDisplayConfigPanel::OnChangeTerrain"/>
   </Edit>
 
   <Edit Name="prpTerrainRamp" Caption="Terrain colors" X="2" Width="-2" Height="22" CaptionWidth="150"
     Help="Defines the color ramp used in terrain rendering.">
-    <DataField DataType="enum"/>
+    <DataField DataType="enum" OnDataAccess="TerrainDisplayConfigPanel::OnChangeTerrain"/>
   </Edit>
 
   <Edit Name="prpSlopeShadingType" Caption="Slope shading" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
     Help="The terrain can be shaded among slopes to indicate either wind direction, sun position or a fixed shading from north-east.">
-    <DataField DataType="enum"/>
+    <DataField DataType="enum" OnDataAccess="TerrainDisplayConfigPanel::OnChangeTerrain"/>
   </Edit>
 
+  <Canvas Name="frmPreview" X="5" Width="-5" Height="-77" OnPaint="TerrainDisplayConfigPanel::OnPreviewPaint"/>
 </Panel>
