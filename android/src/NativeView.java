@@ -50,7 +50,7 @@ abstract class DifferentTouchInput
 {
   public static DifferentTouchInput getInstance()
   {
-    if (Integer.parseInt(Build.VERSION.SDK) <= 4)
+    if (Build.VERSION.SDK_INT <= 4)
       return SingleTouchInput.Holder.sInstance;
     else
       return MultiTouchInput.Holder.sInstance;
