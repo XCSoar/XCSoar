@@ -453,7 +453,13 @@ Units::TimeToTextHHMMSigned(TCHAR* text, int d)
 void
 Units::TimeToTextSmart(TCHAR* HHMMSSSmart, TCHAR* SSSmart,int d)
 {
-  const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(d));
+  if ((unsigned) abs(d) >= 24u * 3600u) {
+    _tcscpy(HHMMSSSmart, _T(">24h"));
+    SSSmart[0] = '\0';
+    return;
+  }
+
+  const BrokenTime t = BrokenTime::FromSecondOfDay(abs(d));
 
   if (t.hour > 0) { // hh:mm, ss
     // Set Value
