@@ -52,7 +52,7 @@ WindowProjection::ScreenVisible(const RasterPoint &P) const
 void
 WindowProjection::SetScaleFromRadius(fixed radius)
 {
-  SetScale(fixed(GetScreenDistance()) / (radius * 2));
+  SetScale(fixed(GetMinScreenDistance()) / (radius * 2));
 }
 
 fixed

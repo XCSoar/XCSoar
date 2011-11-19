@@ -150,6 +150,14 @@ public:
     return std::max(GetScreenHeight(), GetScreenWidth());
   }
 
+  /**
+   * Returns the length of the smaller edge of the map area in pixels.
+   */
+  long GetMinScreenDistance() const
+  {
+    return std::min(GetScreenHeight(), GetScreenWidth());
+  }
+
   gcc_pure
   fixed GetScreenDistanceMeters() const;
 
