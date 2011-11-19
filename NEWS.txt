@@ -6,6 +6,7 @@ Version 6.2.3 - not yet released
 * calculations
   - show correct "next distance" even if glide solver fails
   - don't discard manual wind when auto wind is disabled
+  - don't discard manual wind until a new estimate is calculated
   - fix memory leak
 * user interface
   - reduce menu flickering
