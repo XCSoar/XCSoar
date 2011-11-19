@@ -55,7 +55,7 @@ bool
 TaskOptTarget::valid(const fixed tp) 
 {
   f(tp);
-  return (res.validity== GlideResult::RESULT_OK);
+  return res.IsOk();
 }
 
 fixed 

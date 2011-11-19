@@ -59,7 +59,7 @@ TaskBestMc::f(const fixed mc)
 
 bool TaskBestMc::valid(const fixed mc) 
 {
-  return (res.validity == GlideResult::RESULT_OK) 
+  return res.IsOk()
     && (res.altitude_difference >= -tolerance*fixed_two*res.vector.distance);
 }
 

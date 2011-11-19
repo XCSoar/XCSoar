@@ -55,7 +55,7 @@ bool
 TaskMinTarget::valid(const fixed tp) 
 {
   //  const fixed ff = f(tp);
-  return (res.validity == GlideResult::RESULT_OK); // && (ff>= -tolerance*fixed_two);
+  return res.IsOk(); // && (ff>= -tolerance*fixed_two);
 }
 
 fixed 
