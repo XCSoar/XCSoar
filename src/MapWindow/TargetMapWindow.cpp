@@ -361,7 +361,7 @@ TargetMapWindow::SetTarget(unsigned index)
   }
 
   projection.SetGeoLocation(location);
-  projection.SetScale(fixed(projection.GetScreenDistance()) / (radius * 2));
+  projection.SetScaleFromRadius(radius);
   projection.SetScreenAngle(Angle::zero());
   projection.UpdateScreenBounds();
 

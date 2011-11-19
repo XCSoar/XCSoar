@@ -94,6 +94,12 @@ public:
   }
 
   /**
+   * Configure the scale so a centered circle with the specified
+   * radius is visible.
+   */
+  void SetScaleFromRadius(fixed radius);
+
+  /**
    * Returns the width of the map area in pixels.
    */
   gcc_pure

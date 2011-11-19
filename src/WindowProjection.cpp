@@ -49,6 +49,12 @@ WindowProjection::ScreenVisible(const RasterPoint &P) const
     P.y >= 0 && (unsigned)P.y < screen_height;
 }
 
+void
+WindowProjection::SetScaleFromRadius(fixed radius)
+{
+  SetScale(fixed(GetScreenDistance()) / (radius * 2));
+}
+
 fixed
 WindowProjection::GetScreenDistanceMeters() const
 {
