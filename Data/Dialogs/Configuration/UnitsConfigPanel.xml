@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Panel Name="frmUnits">
-  <Panel Name="pnlUnitsDetails" X="2" Y="2" Border="30" Height="156" Width="-2">
+  <Panel Name="pnlUnitsDetails" X="2" Y="2" Border="30" Height="178" Width="-2">
     <Label Name="lblUnitsSetting" Caption="Units" X="2" Y="2" Height="16" Width="-112" />
     <Button Name="cmdLoadUnitsPreset" Caption="Load Preset" X="-112" Y="2" Width="108" Height="20" OnClick="UnitsConfigPanel::OnLoadPreset" />
 
@@ -33,6 +33,10 @@
       Help="Units used for task speeds.">
       <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
     </Edit>
+    <Edit Name="prpUnitsPressure" Caption="Pressure" X="2" Width="-2" Height="22" CaptionWidth="150"
+      Help="Units used for pressures.">
+      <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
+      </Edit>
   </Panel>
 
   <Edit Name="prpUnitsLatLon" Caption="Lat./Lon." X="2" Width="-2" Height="22" CaptionWidth="150"

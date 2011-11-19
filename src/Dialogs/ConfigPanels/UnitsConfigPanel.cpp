@@ -86,6 +86,8 @@ UpdateUnitFields(const UnitSetting &units)
   LoadFormProperty(*wf, _T("prpUnitsLift"), index);
   if (loading)
     LiftUnits = index;
+
+  LoadFormProperty(*wf, _T("prpUnitsPressure"), units.pressure_unit);
 }
 
 
@@ -218,6 +220,16 @@ UnitsConfigPanel::Init(WndForm *_wf)
 
   UpdateUnitFields(Units::current);
 
+  static gcc_constexpr_data StaticEnumChoice pressure_labels_list[] = {
+    { unHectoPascal, N_("hPa") },
+    { unMilliBar, N_("mb") },
+    { unInchMercury, N_("inHg") },
+    { 0 }
+  };
+
+  LoadFormProperty(*wf, _T("prpUnitsPressure"), pressure_labels_list,
+                   Units::current.pressure_unit);
+
   loading = false;
 }
 
@@ -319,6 +331,10 @@ UnitsConfigPanel::Save()
       break;
     }
   }
+
+  changed |= SaveFormPropertyEnum(*wf, _T("prpUnitsPressure"),
+                              szProfilePressureUnitsValue,
+                              Units::current.pressure_unit);
 
   tmp = GetFormValueInteger(*wf, _T("prpUnitsAltitude"));
   if ((int)AltitudeUnits != tmp) {
