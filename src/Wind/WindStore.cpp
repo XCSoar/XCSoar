@@ -31,12 +31,6 @@ Copyright_License {
 
 #include <math.h>
 
-WindStore::WindStore()
-{
-  //create the lists
-  updated = true;
-}
-
 void
 WindStore::reset()
 {

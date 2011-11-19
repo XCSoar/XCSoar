@@ -41,8 +41,6 @@ class WindStore
   bool updated;
 
 public:
-  WindStore();
-
   /**
    * Called with new measurements. The quality is a measure for how good the
    * measurement is. Higher quality measurements are more important in the
