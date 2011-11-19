@@ -743,7 +743,7 @@ DEBUG_PROGRAM_NAMES = \
 	test_troute \
 	TestTrace \
 	FlightTable \
-	TestOLC \
+	RunOLCAnalysis \
 	BenchmarkProjection \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
 	RunXMLParser \
@@ -1587,7 +1587,7 @@ $(TARGET_BIN_DIR)/RunWindEKF$(TARGET_EXEEXT): $(RUN_WIND_EKF_OBJS) $(RUN_WIND_EK
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
 
-TEST_OLC_SOURCES = \
+RUN_OLC_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Math/fixed.cpp \
 	$(SRC)/Math/Angle.cpp \
@@ -1621,13 +1621,13 @@ TEST_OLC_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/ContestPrinting.cpp \
-	$(TEST_SRC_DIR)/TestOLC.cpp
-TEST_OLC_OBJS = $(call SRC_TO_OBJ,$(TEST_OLC_SOURCES))
-TEST_OLC_LDADD = $(UTIL_LIBS) $(MATH_LIBS) \
+	$(TEST_SRC_DIR)/RunOLCAnalysis.cpp
+RUN_OLC_OBJS = $(call SRC_TO_OBJ,$(RUN_OLC_SOURCES))
+RUN_OLC_LDADD = $(UTIL_LIBS) $(MATH_LIBS) \
 	$(DRIVER_LIBS) \
 	$(DEBUG_REPLAY_LDADD)
-$(TARGET_BIN_DIR)/TestOLC$(TARGET_EXEEXT): CPPFLAGS += -DDO_PRINT
-$(TARGET_BIN_DIR)/TestOLC$(TARGET_EXEEXT): $(TEST_OLC_OBJS) $(TEST_OLC_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+$(TARGET_BIN_DIR)/RunOLCAnalysis$(TARGET_EXEEXT): CPPFLAGS += -DDO_PRINT
+$(TARGET_BIN_DIR)/RunOLCAnalysis$(TARGET_EXEEXT): $(RUN_OLC_OBJS) $(RUN_OLC_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
 
