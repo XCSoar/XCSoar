@@ -375,7 +375,7 @@ ParseQNH(const TCHAR *token, ParsedMETAR &parsed)
       return false;
 
     parsed.qnh = AtmosphericPressure::HectoPascal(Units::ToSysUnit(fixed(inch_hg) / 100,
-                                                                   unInchMercurial));
+                                                                   unInchMercury));
     parsed.qnh_available = true;
     return true;
   }

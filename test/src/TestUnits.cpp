@@ -48,7 +48,7 @@ int main(int argc, char **argv)
   ok1(equals(Units::ToSysTemperature(fixed_zero), 255.37));
 
   ok1(equals(Units::ToUserUnit(fixed(1013.25), unTorr), 760));
-  ok1(equals(Units::ToUserUnit(fixed(1013.25), unInchMercurial), 29.92));
+  ok1(equals(Units::ToUserUnit(fixed(1013.25), unInchMercury), 29.92));
 
   return exit_status();
 }

@@ -58,7 +58,7 @@ enum Unit {
   unHectoPascal,
   unMilliBar,
   unTorr,
-  unInchMercurial,
+  unInchMercury,
 
   /**
    * The sentinel: the number of units in this enum.
