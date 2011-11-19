@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.2.3 - not yet released
+Version 6.2.3 - 2011/11/19
 * calculations
   - show correct "next distance" even if glide solver fails
   - don't discard manual wind when auto wind is disabled
