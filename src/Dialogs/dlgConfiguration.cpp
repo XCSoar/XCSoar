@@ -37,6 +37,7 @@ Copyright_License {
 #include "ConfigPanels/PagesConfigPanel.hpp"
 #include "ConfigPanels/PolarConfigPanel.hpp"
 #include "ConfigPanels/UnitsConfigPanel.hpp"
+#include "ConfigPanels/TimeConfigPanel.hpp"
 #include "ConfigPanels/LoggerConfigPanel.hpp"
 #include "ConfigPanels/DevicesConfigPanel.hpp"
 #include "ConfigPanels/AirspaceConfigPanel.hpp"
@@ -100,6 +101,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Polar"), 6, PolarConfigPanel::PreShow, PolarConfigPanel::PreHide, N_("IDR_XML_POLARCONFIGPANEL")},
   {N_("Logger"), 6, NULL, NULL, N_("IDR_XML_LOGGERCONFIGPANEL")},
   {N_("Units"), 6, NULL, NULL, N_("IDR_XML_UNITSCONFIGPANEL")},
+  {N_("Time"), 6, NULL, NULL, N_("IDR_XML_TIMECONFIGPANEL")},
 #ifdef HAVE_TRACKING
   {N_("Tracking"), 6, NULL, NULL, N_("IDR_XML_TRACKINGCONFIGPANEL")},
 #endif
@@ -190,6 +192,7 @@ setVariables()
 #endif
   PolarConfigPanel::Init(wf);
   UnitsConfigPanel::Init(wf);
+  TimeConfigPanel::Init(wf);
   LoggerConfigPanel::Init(wf);
   DevicesConfigPanel::Init(wf);
   AirspaceConfigPanel::Init(wf, CommonInterface::SettingsComputer().airspace,
@@ -244,7 +247,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(PolarConfigPanel::OnFieldData),
   DeclareCallBackEntry(UnitsConfigPanel::OnLoadPreset),
   DeclareCallBackEntry(UnitsConfigPanel::OnFieldData),
-  DeclareCallBackEntry(UnitsConfigPanel::OnUTCData),
+  DeclareCallBackEntry(TimeConfigPanel::OnUTCData),
   DeclareCallBackEntry(WaypointDisplayConfigPanel::OnRenderingTypeData),
 #ifdef HAVE_TRACKING
   DeclareCallBackEntry(TrackingConfigPanel::OnLT24Enabled),
@@ -305,6 +308,7 @@ void dlgConfigurationShowModal(void)
   changed |= TrackingConfigPanel::Save(CommonInterface::SetSettingsComputer().tracking);
 #endif
   changed |= PolarConfigPanel::Save();
+  changed |= TimeConfigPanel::Save();
   changed |= LoggerConfigPanel::Save();
   changed |= DevicesConfigPanel::Save();
   changed |= AirspaceConfigPanel::Save(requirerestart,

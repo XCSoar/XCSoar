@@ -32,7 +32,6 @@ Copyright_License {
 #include "Dialogs/ComboPicker.hpp"
 #include "Units/UnitsStore.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "LocalTime.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
@@ -148,39 +147,6 @@ UnitsConfigPanel::OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mod
   }
 }
 
-static void
-SetLocalTime(int utc_offset)
-{
-  WndProperty* wp;
-  TCHAR temp[20];
-  int time(XCSoarInterface::Basic().time);
-  Units::TimeToTextHHMMSigned(temp, TimeLocal(time, utc_offset));
-
-  wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
-  assert(wp != NULL);
-
-  wp->SetText(temp);
-  wp->RefreshDisplay();
-}
-
-
-void
-UnitsConfigPanel::OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  switch(Mode) {
-  case DataField::daChange:
-  {
-    DataFieldFloat &df = *(DataFieldFloat *)Sender;
-    int ival = iround(df.GetAsFixed() * 3600);
-    SetLocalTime(ival);
-    break;
-  }
-  case DataField::daSpecial:
-    return;
-  }
-}
-
-
 void
 UnitsConfigPanel::Init(WndForm *_wf)
 {
@@ -251,15 +217,6 @@ UnitsConfigPanel::Init(WndForm *_wf)
   wp->RefreshDisplay();
 
   UpdateUnitFields(Units::current);
-
-  int utc_offset = XCSoarInterface::SettingsComputer().utc_offset;
-  LoadFormProperty(*wf, _T("prpUTCOffset"),
-                   fixed(iround(fixed(utc_offset) / 1800)) / 2);
-#ifdef WIN32
-  if (IsEmbedded() && !IsAltair())
-    ((WndProperty*)wf->FindByName(_T("prpUTCOffset")))->set_enabled(false);
-#endif
-  SetLocalTime(utc_offset);
 
   loading = false;
 }
@@ -395,19 +352,6 @@ UnitsConfigPanel::Save()
       Units::SetUserTemperatureUnit(unGradFahrenheit);
       break;
     }
-  }
-
-  SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
-  int ival = iround(GetFormValueFixed(*wf, _T("prpUTCOffset")) * 3600);
-  if (settings_computer.utc_offset != ival) {
-    settings_computer.utc_offset = ival;
-
-    // have to do this because registry variables can't be negative!
-    if (ival < 0)
-      ival += 24 * 3600;
-
-    Profile::Set(szProfileUTCOffset, ival);
-    changed = true;
   }
 
   return changed;

@@ -327,6 +327,8 @@ IDR_XML_TRACKINGCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Config
 IDR_XML_TRACKINGCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TrackingConfigPanel_L.xml"
 IDR_XML_UNITSCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/UnitsConfigPanel.xml"
 IDR_XML_UNITSCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/UnitsConfigPanel_L.xml"
+IDR_XML_TIMECONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TimeConfigPanel.xml"
+IDR_XML_TIMECONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TimeConfigPanel_L.xml"
 IDR_XML_VARIOCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/VarioConfigPanel.xml"
 IDR_XML_VARIOCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/VarioConfigPanel_L.xml"
 IDR_XML_WAYPOINTDISPLAYCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/WaypointDisplayConfigPanel.xml"
