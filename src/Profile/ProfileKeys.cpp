@@ -111,6 +111,7 @@ const TCHAR szProfileExternalWind[] = _T("ExternalWind");
 const TCHAR szProfileHomeWaypoint[] = _T("HomeWaypoint");
 const TCHAR szProfileHomeLocation[] = _T("HomeLocation");
 const TCHAR szProfileLiftUnitsValue[] = _T("Lift");
+const TCHAR szProfilePressureUnitsValue[] = _T("Pressure");
 const TCHAR szProfileLatLonUnits[] = _T("LatLonUnits");
 const TCHAR szProfilePolarID[] = _T("Polar");
 const TCHAR szProfilePolar[] = _T("PolarInformation");
