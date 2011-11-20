@@ -42,7 +42,8 @@ class TaskPropertiesPanel : public XMLWidget {
 
 public:
   TaskPropertiesPanel(OrderedTask **_active_task, bool *_task_modified)
-    :ordered_task_pointer(_active_task), task_changed(_task_modified) {}
+    :ordered_task_pointer(_active_task), ordered_task(*ordered_task_pointer),
+     task_changed(_task_modified) {}
 
   void OnFAIFinishHeightChange(DataFieldBoolean &df);
   void OnTaskTypeChange(DataFieldEnum &df);
