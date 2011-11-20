@@ -88,6 +88,12 @@ public:
   }
 
   /**
+   * Configure the scale so a centered circle with the specified
+   * radius is visible.
+   */
+  void SetScaleFromRadius(fixed radius);
+
+  /**
    * Returns the width of the map area in pixels.
    */
   gcc_pure
@@ -141,6 +147,14 @@ public:
   long GetScreenDistance() const
   {
     return std::max(GetScreenHeight(), GetScreenWidth());
+  }
+
+  /**
+   * Returns the length of the smaller edge of the map area in pixels.
+   */
+  long GetMinScreenDistance() const
+  {
+    return std::min(GetScreenHeight(), GetScreenWidth());
   }
 
   gcc_pure

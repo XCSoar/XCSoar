@@ -18,15 +18,20 @@ Version 6.3 - not yet released
 * Android
   - support reverse screen modes for Galaxy Tab
 
-Version 6.2.3 - not yet released
+Version 6.2.3 - 2011/11/19
 * calculations
   - show correct "next distance" even if glide solver fails
   - don't discard manual wind when auto wind is disabled
+  - don't discard manual wind until a new estimate is calculated
   - fix memory leak
 * user interface
   - reduce menu flickering
   - fix crash in waypoint list dialog when waypoints have large comments
   - prevent waypoint editing if waypoint file is read-only
+  - fix clipped task display on wide screens
+* map
+  - speed up the map renderer
+  - reduce memory usage on PPC2000
 * data files
   - Automatically try to detect character encoding of airfield details file
   - speed up waypoint/airspace loading

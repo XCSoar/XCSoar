@@ -21,33 +21,38 @@ Copyright_License {
 }
 */
 
-#include "Android/IOIOHelper.hpp"
+#include "Android/IOIOManager.hpp"
+#include "Java/String.hpp"
 #include "Java/Class.hpp"
 
-IOIOHelper::IOIOHelper(JNIEnv *env)
+IOIOManager::IOIOManager(JNIEnv *env):
+  ref_count(0), helper(NULL)
 {
-  jclass _cls = env->FindClass("org/xcsoar/IOIOHelper");
-  assert(_cls != NULL);
+  helper = new IOIOHelper(env);
+  assert(helper != NULL);
+}
 
-  const Java::Class cls(env, _cls);
+IOIOHelper*
+IOIOManager::AddClient()
+{
+  ref_count_mutex.Lock();
+  const unsigned temp_ref = ++ref_count;
+  ref_count_mutex.Unlock();
 
-  jmethodID cid = env->GetMethodID(cls, "<init>", "()V");
-  assert(cid != NULL);
+  if (temp_ref == 1) {
+    helper->open(Java::GetEnv());
+  }
+  return helper;
+}
 
-  jobject obj = env->NewObject(cls, cid);
-  assert(obj != NULL);
+void
+IOIOManager::RemoveClient()
+{
+  ref_count_mutex.Lock();
+  assert(ref_count > 0);
+  const unsigned temp_ref = --ref_count;
+  ref_count_mutex.Unlock();
 
-  set(env, obj);
-
-  env->DeleteLocalRef(obj);
-
-  open_mid = env->GetMethodID(cls, "open", "()Z");
-  openUart_mid = env->GetMethodID(cls, "openUart", "(II)I");
-  closeUart_mid = env->GetMethodID(cls, "closeUart", "(I)V");
-  setReadTimeout_mid = env->GetMethodID(cls, "setReadTimeout", "(II)V");
-  setBaudRate_mid = env->GetMethodID(cls, "setBaudRate", "(II)I");
-  getBaudRate_mid = env->GetMethodID(cls, "getBaudRate", "(I)I");
-  read_mid = env->GetMethodID(cls, "read", "(I)I");
-  write_mid = env->GetMethodID(cls, "write", "(IB)V");
-  flush_mid = env->GetMethodID(cls, "flush", "(I)V");
+  if (temp_ref == 0)
+    helper->close();
 }

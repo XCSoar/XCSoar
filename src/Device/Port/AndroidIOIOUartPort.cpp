@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "AndroidIOIOUartPort.hpp"
 #include "Android/IOIOHelper.hpp"
+#include "Android/IOIOManager.hpp"
+#include "Android/Main.hpp"
 #include "OS/Sleep.h"
 
 #include <assert.h>
@@ -39,37 +41,16 @@ AndroidIOIOUartPort::AndroidIOIOUartPort(unsigned UartID_, unsigned _BaudRate, H
 AndroidIOIOUartPort::~AndroidIOIOUartPort()
 {
   Close();
-
-  /**
-   *  delete helper when ANY Uart port close
-   *  1) this triggers devRestart which will restart all Uarts
-   *  2) assumes that if bad connection caused Uart to fail, it
-   *  needs to restart all
-   *  3) this is independent of XCSoar's current model that always calls
-   *  devRestart() on all devices when any device setting changes or
-   *  when the GPS connection does not update for a while
-   */
-
-  if (helper) {
-    delete helper; // closes all attached Uarts
-    helper = NULL;
-  }
+  helper->closeUart(Java::GetEnv(), UartID);
+  ioio_manager->RemoveClient();
 }
 
 bool
 AndroidIOIOUartPort::Open()
 {
-  if (UartID < 0 || UartID >= (int)getNumberUarts())
-    return false;
+  assert(UartID >=0 && UartID < (int)getNumberUarts());
 
-  if (helper == NULL) {
-    helper = IOIOHelper::connect(Java::GetEnv());
-  }
-
-  if (helper == NULL) {
-    return false;
-  }
-
+  helper = ioio_manager->AddClient();
   if (helper->openUart(Java::GetEnv(), UartID, BaudRate) == -1) {
     return false;
   }
@@ -80,23 +61,15 @@ AndroidIOIOUartPort::Open()
 void
 AndroidIOIOUartPort::Flush(void)
 {
-  if (helper == NULL)
-    return;
-
   helper->flush(Java::GetEnv(), UartID);
 }
 
 void
 AndroidIOIOUartPort::Run()
 {
-  assert(helper != NULL);
-
   SetRxTimeout(500);
 
   while (!CheckStopped()) {
-    if (helper == NULL) {
-      break;
-    }
     int ch = helper->read(Java::GetEnv(), UartID);
     if (ch >= 0) {
       char ch2 = ch;
@@ -108,9 +81,6 @@ AndroidIOIOUartPort::Run()
 bool
 AndroidIOIOUartPort::Close()
 {
-  if (helper == NULL) {
-    return true;
-  }
   StopRxThread();
   return true;
 }
@@ -118,9 +88,6 @@ AndroidIOIOUartPort::Close()
 size_t
 AndroidIOIOUartPort::Write(const void *data, size_t length)
 {
-  if (helper == NULL)
-    return 0;
-
   JNIEnv *env = Java::GetEnv();
 
   size_t nbytes = 0;
@@ -157,10 +124,6 @@ AndroidIOIOUartPort::StartRxThread(void)
   // Make sure the thread isn't starting itself
   assert(!Thread::IsInside());
 
-  // Make sure the port was opened correctly
-  if (helper == NULL)
-    return false;
-
   // Start the receive thread
   StoppableThread::Start();
   return true;
@@ -169,8 +132,6 @@ AndroidIOIOUartPort::StartRxThread(void)
 bool
 AndroidIOIOUartPort::SetRxTimeout(unsigned Timeout)
 {
-  if (helper == NULL)
-    return false;
   helper->setReadTimeout(Java::GetEnv(), UartID, Timeout);
   return true;
 }
@@ -178,26 +139,18 @@ AndroidIOIOUartPort::SetRxTimeout(unsigned Timeout)
 unsigned
 AndroidIOIOUartPort::GetBaudrate() const
 {
-  if (helper == NULL)
-    return 0u;
-
   return helper->getBaudRate(Java::GetEnv(), UartID);
 }
 
 unsigned
 AndroidIOIOUartPort::SetBaudrate(unsigned BaudRate)
 {
-  if (helper == NULL)
-    return 0u;
   return helper->setBaudRate(Java::GetEnv(), UartID, BaudRate);
 }
 
 int
 AndroidIOIOUartPort::Read(void *Buffer, size_t Size)
 {
-  if (helper == NULL)
-    return -1;
-
   JNIEnv *env = Java::GetEnv();
   int ch = helper->read(env, UartID);
   if (ch < 0)

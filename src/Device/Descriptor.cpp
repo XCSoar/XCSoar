@@ -128,6 +128,9 @@ DeviceDescriptor::OpenInternalGPS()
 bool
 DeviceDescriptor::Open(OperationEnvironment &env)
 {
+  TCHAR buffer[64];
+  LogStartUp(_T("Open device %s"), config.GetPortName(buffer, 64));
+
   if (config.port_type == DeviceConfig::PortType::INTERNAL)
     return OpenInternalGPS();
 

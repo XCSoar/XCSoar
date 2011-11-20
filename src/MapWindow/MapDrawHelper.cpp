@@ -137,7 +137,9 @@ void
 MapDrawHelper::clear_buffer()
 {
   m_buffer.clear_white();
-  m_stencil.clear_white();
+
+  if (m_use_stencil)
+    m_stencil.clear_white();
 }
 
 #endif // !ENABLE_OPENGL

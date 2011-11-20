@@ -35,6 +35,7 @@ void
 WindStore::reset()
 {
   windlist.Reset();
+  update_clock = fixed_zero;
   updated = true;
   _lastAltitude = fixed_zero;
 }
@@ -45,6 +46,7 @@ WindStore::SlotMeasurement(const MoreData &info,
 {
   updated = true;
   windlist.addMeasurement(info.time, windvector, info.nav_altitude, quality);
+  update_clock = info.clock;
 }
 
 void
@@ -90,7 +92,7 @@ WindStore::NewWind(const NMEAInfo &info, DerivedInfo &derived,
 
   if (mag < fixed(30)) { // limit to reasonable values
     derived.estimated_wind = SpeedVector(bearing.AsBearing(), mag);
-    derived.estimated_wind_available.Update(info.clock);
+    derived.estimated_wind_available.Update(update_clock);
   } else {
     // TODO code: give warning, wind estimate bogus or very strong!
   }

@@ -24,18 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_ANDROID_IOIO_UART_PORT_HPP
 #define XCSOAR_DEVICE_ANDROID_IOIO_UART_PORT_HPP
 
-#if defined (IOIOLIB)
 #include "Android/IOIOHelper.hpp"
-#endif
 #include "Util/StaticString.hpp"
 #include "Thread/StoppableThread.hpp"
 #include "Thread/Trigger.hpp"
 #include "Port.hpp"
 #include "Java/Object.hpp"
-
-#if defined (IOIOLIB)
-class IOIOHelper;
-#endif
 
 /**
  * A #Port implementation which transmits data over a IOIOUart RFCOMM
@@ -91,7 +85,7 @@ protected:
    * Entry point for the receive thread
    */
   virtual void Run();
-
+  IOIOHelper* helper;
   unsigned BaudRate;
   int UartID;
 };

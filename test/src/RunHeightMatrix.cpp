@@ -65,7 +65,7 @@ int main(int argc, char **argv)
   fixed radius = fixed(50000);
   WindowProjection projection;
   projection.SetScreenSize(640, 480);
-  projection.SetScale(fixed(projection.GetScreenDistance()) / (radius * 2));
+  projection.SetScaleFromRadius(radius);
   projection.SetGeoLocation(map.GetMapCenter());
   projection.SetScreenOrigin(320, 240);
   projection.UpdateScreenBounds();

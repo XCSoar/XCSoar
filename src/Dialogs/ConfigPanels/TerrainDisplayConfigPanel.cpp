@@ -43,6 +43,18 @@ ShowTerrainControls(bool show)
   ShowFormControl(*wf, _T("prpTerrainRamp"), show);
 }
 
+static short
+ByteToPercent(short byte)
+{
+  return (byte * 200 + 100) / 510;
+}
+
+static short
+PercentToByte(short percent)
+{
+  return (percent * 510 + 255) / 200;
+}
+
 void
 TerrainDisplayConfigPanel::OnEnableTerrain(DataField *Sender,
                                            DataField::DataAccessKind_t Mode)
@@ -78,10 +90,10 @@ TerrainDisplayConfigPanel::Init(WndForm *_wf, const SETTINGS_MAP &settings_map)
   }
 
   LoadFormProperty(*wf, _T("prpTerrainContrast"),
-                   terrain.contrast * 100 / 255);
+                   ByteToPercent(terrain.contrast));
 
   LoadFormProperty(*wf, _T("prpTerrainBrightness"),
-                   terrain.brightness * 100 / 255);
+                   ByteToPercent(terrain.brightness));
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainRamp"));
   if (wp) {
@@ -125,8 +137,8 @@ TerrainDisplayConfigPanel::Save(SETTINGS_MAP &settings_map)
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainContrast"));
   if (wp) {
-    if (terrain.contrast * 100 / 255 != wp->GetDataField()->GetAsInteger()) {
-      terrain.contrast = (short)(wp->GetDataField()->GetAsInteger() * 255 / 100);
+    if (ByteToPercent(terrain.contrast) != wp->GetDataField()->GetAsInteger()) {
+      terrain.contrast = PercentToByte(wp->GetDataField()->GetAsInteger());
       Profile::Set(szProfileTerrainContrast, terrain.contrast);
       changed = true;
     }
@@ -134,8 +146,8 @@ TerrainDisplayConfigPanel::Save(SETTINGS_MAP &settings_map)
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainBrightness"));
   if (wp) {
-    if (terrain.brightness * 100 / 255 != wp->GetDataField()->GetAsInteger()) {
-      terrain.brightness = (short)(wp->GetDataField()->GetAsInteger() * 255 / 100);
+    if (ByteToPercent(terrain.brightness) != wp->GetDataField()->GetAsInteger()) {
+      terrain.brightness = PercentToByte(wp->GetDataField()->GetAsInteger());
       Profile::Set(szProfileTerrainBrightness, terrain.brightness);
       changed = true;
     }

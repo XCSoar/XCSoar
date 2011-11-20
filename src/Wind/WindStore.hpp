@@ -38,6 +38,13 @@ class WindStore
 {
   fixed _lastAltitude;
   WindMeasurementList windlist;
+
+  /**
+   * The time stamp (NMEAInfo::clock) of the last wind update.  It is
+   * used to update DerivedInfo::estimated_wind_available.
+   */
+  fixed update_clock;
+
   bool updated;
 
 public:

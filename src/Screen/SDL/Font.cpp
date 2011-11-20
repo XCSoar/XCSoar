@@ -31,7 +31,10 @@ Copyright_License {
 static const char *const all_font_paths[] = {
 #ifdef __APPLE__
   "/Library/Fonts/Tahoma.ttf",
+  "/Library/Fonts/Georgia.ttf",
   "/Library/Fonts/Arial Narrow.ttf",
+  "/Library/Fonts/Times New Roman.ttf",
+  "/Library/Fonts/Microsoft/Arial.ttf",
 #else
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/dejavu/DejaVuSansCondensed.ttf",

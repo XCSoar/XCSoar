@@ -40,6 +40,10 @@ Copyright_License {
 #include "Compiler.h"
 #include "org_xcsoar_NativeView.h"
 
+#ifdef IOIOLIB
+#include "Android/IOIOManager.hpp"
+#endif
+
 #ifndef NDEBUG
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Buffer.hpp"
@@ -54,6 +58,10 @@ NativeView *native_view;
 EventQueue *event_queue;
 
 SoundUtil *sound_util;
+
+#ifdef IOIOLIB
+IOIOManager *ioio_manager;
+#endif
 
 gcc_visibility_default
 JNIEXPORT jboolean JNICALL
@@ -79,6 +87,10 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   sound_util = new SoundUtil(env);
 
+#ifdef IOIOLIB
+  ioio_manager = new IOIOManager(env);
+#endif
+
   ScreenInitialized();
   AllowLanguage();
   return XCSoarInterface::Startup();
@@ -101,6 +113,9 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   DisallowLanguage();
   Fonts::Deinitialize();
   Graphics::Deinitialise();
+#ifdef IOIOLIB
+  delete ioio_manager;
+#endif
   delete sound_util;
   delete event_queue;
   event_queue = NULL;
