@@ -127,7 +127,7 @@ Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
 }
 
 bool
-Port::ExpectString(const char *token)
+Port::ExpectString(const char *token, unsigned timeout_ms)
 {
   if (inject_port_fault == 0)
     return false;

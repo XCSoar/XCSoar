@@ -151,7 +151,7 @@ public:
    */
   bool FullRead(void *buffer, size_t length, unsigned timeout_ms);
 
-  bool ExpectString(const char *token);
+  bool ExpectString(const char *token, unsigned timeout_ms = 2000);
 };
 
 #endif

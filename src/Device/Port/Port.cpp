@@ -101,7 +101,7 @@ Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
 }
 
 bool
-Port::ExpectString(const char *token)
+Port::ExpectString(const char *token, unsigned timeout_ms)
 {
   assert(token != NULL);
 
@@ -115,7 +115,7 @@ Port::ExpectString(const char *token)
       return false;
 
     if (ch != *p++) {
-      if (timeout.elapsed() > 2000)
+      if (timeout.check(timeout_ms))
         /* give up after 2 seconds (is that enough for all
            devices?) */
         return false;
