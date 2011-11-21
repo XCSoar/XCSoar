@@ -42,6 +42,8 @@ Copyright_License {
 #include "InterfaceConfigPanel.hpp"
 #include "Language/Language.hpp"
 
+#include <windef.h> /* for MAX_PATH */
+
 using namespace ConfigPanel;
 
 class InterfaceConfigPanel : public XMLWidget {

@@ -26,8 +26,6 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
-#include <windef.h>
-
 enum {
   DT_EXPANDTABS = 0x1,
   DT_LEFT = 0x2,
@@ -60,12 +58,6 @@ SetRectEmpty(PixelRect *rc)
 }
 
 static inline void
-CopyRect(PixelRect *dest, const PixelRect *src)
-{
-  *dest = *src;
-}
-
-static inline void
 InflateRect(PixelRect *rc, PixelScalar dx, PixelScalar dy)
 {
   rc->left -= dx;
@@ -88,13 +80,6 @@ PtInRect(const PixelRect *rc, const RasterPoint &pt)
 {
   return pt.x >= rc->left && pt.x < rc->right &&
     pt.y >= rc->top && pt.y < rc->bottom;
-}
-
-static inline bool
-EqualRect(const PixelRect *a, const PixelRect *b)
-{
-  return a->left == b->left && a->top == b->top &&
-    a->right == b->right && a->bottom == b->bottom;
 }
 
 static inline bool
