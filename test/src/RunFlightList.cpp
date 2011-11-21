@@ -90,38 +90,34 @@ int main(int argc, char **argv)
   assert(driver->CreateOnPort != NULL);
 
 #ifdef HAVE_POSIX
-  TTYPort *port = new TTYPort(port_name, config.baud_rate,
-                              *(Port::Handler *)NULL);
+  TTYPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
 #else
-  SerialPort *port = new SerialPort(port_name, config.baud_rate,
-                                    *(Port::Handler *)NULL);
+  SerialPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
 #endif
-  if (!port->Open()) {
-    delete port;
+  if (!port.Open()) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;
   }
 
-  Device *device = driver->CreateOnPort(config, port);
+  Device *device = driver->CreateOnPort(config, &port);
   assert(device != NULL);
 
   ConsoleOperationEnvironment env;
   if (!device->Open(env)) {
-    delete port;
+    delete device;
     fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
     return EXIT_FAILURE;
   }
 
   RecordedFlightList flight_list;
   if (!device->ReadFlightList(flight_list, env)) {
-    delete port;
+    delete device;
     fprintf(stderr, "Failed to download flight list\n");
     return EXIT_FAILURE;
   }
 
   delete device;
-  delete port;
-
+  
   for (RecordedFlightList::const_iterator i = flight_list.begin();
        i != flight_list.end(); ++i) {
     const RecordedFlightInfo &flight = *i;
