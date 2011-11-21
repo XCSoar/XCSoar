@@ -23,20 +23,36 @@ Copyright_License {
 
 #include "AATTaskFactory.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
+#include "Util/Macros.hpp"
 
-AATTaskFactory::AATTaskFactory(OrderedTask& _task, const TaskBehaviour &tb):
-  AbstractTaskFactory(_task, tb)
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t aat_start_types[] = {
+  AbstractTaskFactory::START_LINE,
+  AbstractTaskFactory::START_CYLINDER,
+  AbstractTaskFactory::START_SECTOR,
+  AbstractTaskFactory::START_BGA,
+};
+
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t aat_im_types[] = {
+  AbstractTaskFactory::AAT_CYLINDER,
+  AbstractTaskFactory::AAT_SEGMENT,
+  AbstractTaskFactory::AAT_ANNULAR_SECTOR,
+};
+
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t aat_finish_types[] = {
+  AbstractTaskFactory::FINISH_LINE,
+  AbstractTaskFactory::FINISH_CYLINDER,
+  AbstractTaskFactory::FINISH_SECTOR,
+};
+
+AATTaskFactory::AATTaskFactory(OrderedTask& _task, const TaskBehaviour &tb)
+  :AbstractTaskFactory(_task, tb,
+                       LegalPointConstArray(aat_start_types,
+                                            ARRAY_SIZE(aat_start_types)),
+                       LegalPointConstArray(aat_im_types,
+                                            ARRAY_SIZE(aat_im_types)),
+                       LegalPointConstArray(aat_finish_types,
+                                            ARRAY_SIZE(aat_finish_types)))
 {
-  m_start_types.push_back(START_LINE);
-  m_start_types.push_back(START_CYLINDER);
-  m_start_types.push_back(START_SECTOR);
-  m_start_types.push_back(START_BGA);
-  m_intermediate_types.push_back(AAT_CYLINDER);
-  m_intermediate_types.push_back(AAT_SEGMENT);
-  m_intermediate_types.push_back(AAT_ANNULAR_SECTOR);
-  m_finish_types.push_back(FINISH_LINE);
-  m_finish_types.push_back(FINISH_CYLINDER);
-  m_finish_types.push_back(FINISH_SECTOR);
 }
 
 void 

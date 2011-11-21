@@ -23,26 +23,42 @@
 #include "MixedTaskFactory.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/OrderedTaskBehaviour.hpp"
+#include "Util/Macros.hpp"
+
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t mixed_start_types[] = {
+  AbstractTaskFactory::START_LINE,
+  AbstractTaskFactory::START_CYLINDER,
+  AbstractTaskFactory::START_BGA,
+  AbstractTaskFactory::START_SECTOR,
+};
+
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t mixed_im_types[] = {
+  AbstractTaskFactory::FAI_SECTOR,
+  AbstractTaskFactory::AST_CYLINDER,
+  AbstractTaskFactory::AAT_CYLINDER,
+  AbstractTaskFactory::AAT_SEGMENT,
+  AbstractTaskFactory::AAT_ANNULAR_SECTOR,
+  AbstractTaskFactory::KEYHOLE_SECTOR,
+  AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR,
+  AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR,
+};
+
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t mixed_finish_types[] = {
+  AbstractTaskFactory::FINISH_SECTOR,
+  AbstractTaskFactory::FINISH_LINE,
+  AbstractTaskFactory::FINISH_CYLINDER,
+};
 
 MixedTaskFactory::MixedTaskFactory(OrderedTask& _task,
-                                   const TaskBehaviour &tb):
-  AbstractTaskFactory(_task, tb)
+                                   const TaskBehaviour &tb)
+  :AbstractTaskFactory(_task, tb,
+                       LegalPointConstArray(mixed_start_types,
+                                            ARRAY_SIZE(mixed_start_types)),
+                       LegalPointConstArray(mixed_im_types,
+                                            ARRAY_SIZE(mixed_im_types)),
+                       LegalPointConstArray(mixed_finish_types,
+                                            ARRAY_SIZE(mixed_finish_types)))
 {
-  m_start_types.push_back(START_LINE);
-  m_start_types.push_back(START_CYLINDER);
-  m_start_types.push_back(START_BGA);
-  m_start_types.push_back(START_SECTOR);
-  m_intermediate_types.push_back(FAI_SECTOR);
-  m_intermediate_types.push_back(AST_CYLINDER);
-  m_intermediate_types.push_back(AAT_CYLINDER);
-  m_intermediate_types.push_back(AAT_SEGMENT);
-  m_intermediate_types.push_back(AAT_ANNULAR_SECTOR);
-  m_intermediate_types.push_back(KEYHOLE_SECTOR);
-  m_intermediate_types.push_back(BGAFIXEDCOURSE_SECTOR);
-  m_intermediate_types.push_back(BGAENHANCEDOPTION_SECTOR);
-  m_finish_types.push_back(FINISH_SECTOR);
-  m_finish_types.push_back(FINISH_LINE);
-  m_finish_types.push_back(FINISH_CYLINDER);
 }
 
 void 

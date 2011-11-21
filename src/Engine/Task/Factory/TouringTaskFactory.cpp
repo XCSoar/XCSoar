@@ -23,14 +23,30 @@
 #include "TouringTaskFactory.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/OrderedTaskBehaviour.hpp"
+#include "Util/Macros.hpp"
+
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t touring_start_types[] = {
+  AbstractTaskFactory::START_CYLINDER,
+};
+
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t touring_im_types[] = {
+  AbstractTaskFactory::FAI_SECTOR,
+};
+
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t touring_finish_types[] = {
+  AbstractTaskFactory::FINISH_CYLINDER,
+};
 
 TouringTaskFactory::TouringTaskFactory(OrderedTask& _task,
-                               const TaskBehaviour &tb):
-  AbstractTaskFactory(_task, tb)
+                               const TaskBehaviour &tb)
+  :AbstractTaskFactory(_task, tb,
+                       LegalPointConstArray(touring_start_types,
+                                            ARRAY_SIZE(touring_start_types)),
+                       LegalPointConstArray(touring_im_types,
+                                            ARRAY_SIZE(touring_im_types)),
+                       LegalPointConstArray(touring_finish_types,
+                                            ARRAY_SIZE(touring_finish_types)))
 {
-  m_start_types.push_back(START_CYLINDER);
-  m_intermediate_types.push_back(FAI_SECTOR);
-  m_finish_types.push_back(FINISH_CYLINDER);
 }
 
 void 

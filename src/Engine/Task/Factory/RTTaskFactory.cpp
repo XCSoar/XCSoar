@@ -22,23 +22,39 @@
 
 #include "RTTaskFactory.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
+#include "Util/Macros.hpp"
+
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t rt_start_types[] = {
+  AbstractTaskFactory::START_LINE,
+  AbstractTaskFactory::START_CYLINDER,
+  AbstractTaskFactory::START_SECTOR,
+  AbstractTaskFactory::START_BGA,
+};
+
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t rt_im_types[] = {
+  AbstractTaskFactory::AST_CYLINDER,
+  AbstractTaskFactory::KEYHOLE_SECTOR,
+  AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR,
+  AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR,
+  AbstractTaskFactory::FAI_SECTOR,
+};
+
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t rt_finish_types[] = {
+  AbstractTaskFactory::FINISH_LINE,
+  AbstractTaskFactory::FINISH_CYLINDER,
+  AbstractTaskFactory::FINISH_SECTOR,
+};
 
 RTTaskFactory::RTTaskFactory(OrderedTask& _task,
-                               const TaskBehaviour &tb):
-  AbstractTaskFactory(_task, tb)
+                               const TaskBehaviour &tb)
+  :AbstractTaskFactory(_task, tb,
+                       LegalPointConstArray(rt_start_types,
+                                            ARRAY_SIZE(rt_start_types)),
+                       LegalPointConstArray(rt_im_types,
+                                            ARRAY_SIZE(rt_im_types)),
+                       LegalPointConstArray(rt_finish_types,
+                                            ARRAY_SIZE(rt_finish_types)))
 {
-  m_start_types.push_back(START_LINE);
-  m_start_types.push_back(START_CYLINDER);
-  m_start_types.push_back(START_SECTOR);
-  m_start_types.push_back(START_BGA);
-  m_intermediate_types.push_back(AST_CYLINDER);
-  m_intermediate_types.push_back(KEYHOLE_SECTOR);
-  m_intermediate_types.push_back(BGAFIXEDCOURSE_SECTOR);
-  m_intermediate_types.push_back(BGAENHANCEDOPTION_SECTOR);
-  m_intermediate_types.push_back(FAI_SECTOR);
-  m_finish_types.push_back(FINISH_LINE);
-  m_finish_types.push_back(FINISH_CYLINDER);
-  m_finish_types.push_back(FINISH_SECTOR);
 }
 
 bool 

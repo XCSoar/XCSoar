@@ -25,6 +25,7 @@ Copyright_License {
 #define ABSTRACT_TASK_FACTORY_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Util/ConstArray.hpp"
 #include "Compiler.h"
 #include "Math/fixed.hpp"
 
@@ -91,6 +92,8 @@ public:
   /** Vector of legal point types */
   typedef std::vector<LegalPointType_t> LegalPointVector;
 
+  typedef ConstArray<LegalPointType_t> LegalPointConstArray;
+
   /** Task Validation Error Types */
   enum TaskValidationErrorType_t {
     NO_VALID_START,
@@ -116,11 +119,11 @@ protected:
   const TaskBehaviour &m_behaviour;
 
   /** list of valid start types, for specialisation */
-  LegalPointVector m_start_types;
+  LegalPointConstArray m_start_types;
   /** list of valid intermediate types, for specialisation */
-  LegalPointVector m_intermediate_types;
+  LegalPointConstArray m_intermediate_types;
   /** list of valid finish types, for specialisation */
-  LegalPointVector m_finish_types;
+  LegalPointConstArray m_finish_types;
 
   /** list of errors returned by task validation */
   TaskValidationErrorVector m_validation_errors;
@@ -132,8 +135,14 @@ public:
    * @param task Ordered task to be managed by this factory
    * @param behaviour Behaviour (options)
    */
-  AbstractTaskFactory(OrderedTask& task, const TaskBehaviour &behaviour)
-    :m_task(task), m_behaviour(behaviour) {}
+  AbstractTaskFactory(OrderedTask& task, const TaskBehaviour &behaviour,
+                      const LegalPointConstArray _start_types,
+                      const LegalPointConstArray _intermediate_types,
+                      const LegalPointConstArray _finish_types)
+    :m_task(task), m_behaviour(behaviour),
+     m_start_types(_start_types),
+     m_intermediate_types(_intermediate_types),
+     m_finish_types(_finish_types) {}
 
   virtual ~AbstractTaskFactory() {}
 
@@ -245,7 +254,7 @@ public:
    *
    * @return list of valid start types
    */
-  const LegalPointVector& getStartTypes() const {
+  const LegalPointConstArray &getStartTypes() const {
     return m_start_types;
   }
 
@@ -254,7 +263,7 @@ public:
    *
    * @return list of valid intermediate types
    */
-  const LegalPointVector& getIntermediateTypes() const {
+  const LegalPointConstArray &getIntermediateTypes() const {
     return m_intermediate_types;
   }
 
@@ -263,7 +272,7 @@ public:
    *
    * @return list of valid finish types
    */
-  const LegalPointVector& getFinishTypes() const {
+  const LegalPointConstArray &getFinishTypes() const {
     return m_finish_types;
   }
 

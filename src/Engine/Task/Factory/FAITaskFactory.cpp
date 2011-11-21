@@ -22,17 +22,33 @@
 
 #include "FAITaskFactory.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
+#include "Util/Macros.hpp"
+
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t fai_start_types[] = {
+  AbstractTaskFactory::START_SECTOR,
+  AbstractTaskFactory::START_LINE,
+};
+
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t fai_im_types[] = {
+  AbstractTaskFactory::FAI_SECTOR,
+  AbstractTaskFactory::AST_CYLINDER,
+};
+
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t fai_finish_types[] = {
+  AbstractTaskFactory::FINISH_SECTOR,
+  AbstractTaskFactory::FINISH_LINE,
+};
 
 FAITaskFactory::FAITaskFactory(OrderedTask& _task,
-                               const TaskBehaviour &tb):
-  AbstractTaskFactory(_task, tb)
+                               const TaskBehaviour &tb)
+  :AbstractTaskFactory(_task, tb,
+                       LegalPointConstArray(fai_start_types,
+                                            ARRAY_SIZE(fai_start_types)),
+                       LegalPointConstArray(fai_im_types,
+                                            ARRAY_SIZE(fai_im_types)),
+                       LegalPointConstArray(fai_finish_types,
+                                            ARRAY_SIZE(fai_finish_types)))
 {
-  m_start_types.push_back(START_SECTOR);
-  m_start_types.push_back(START_LINE);
-  m_intermediate_types.push_back(FAI_SECTOR);
-  m_intermediate_types.push_back(AST_CYLINDER);
-  m_finish_types.push_back(FINISH_SECTOR);
-  m_finish_types.push_back(FINISH_LINE);
 }
 
 bool
