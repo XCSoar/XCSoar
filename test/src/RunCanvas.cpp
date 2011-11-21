@@ -224,8 +224,6 @@ protected:
 #ifndef ENABLE_OPENGL
     if (!buffered) {
 #endif
-      // due to a limitation of our PaintCanvas class, we cannot rely on
-      // background erasing with on_erase()
       canvas.clear_white();
 
       paint(canvas);

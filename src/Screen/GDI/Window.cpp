@@ -84,14 +84,6 @@ Window::created(HWND _hWnd)
   assert_thread();
 }
 
-bool
-Window::on_erase(Canvas &canvas)
-{
-  /* if on_paint() is implemented, then don't erase the background;
-     on_paint() will paint on top */
-  return custom_painting;
-}
-
 LRESULT
 Window::on_unhandled_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam)
@@ -228,14 +220,6 @@ Window::on_message(HWND _hWnd, UINT message,
   case WM_TIMER:
     if (on_timer(wParam))
       return 0;
-    break;
-
-  case WM_ERASEBKGND:
-    {
-      Canvas canvas((HDC)wParam, get_width(), get_height());
-      if (on_erase(canvas))
-        return 1;
-    }
     break;
 
   case WM_PAINT:

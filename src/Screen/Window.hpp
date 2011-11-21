@@ -905,10 +905,6 @@ public:
   virtual bool on_timer(timer_t id);
   virtual bool on_user(unsigned id);
 
-#ifdef USE_GDI
-  virtual bool on_erase(Canvas &canvas);
-#endif
-
   virtual void on_paint(Canvas &canvas);
   virtual void on_paint(Canvas &canvas, const PixelRect &dirty);
 
