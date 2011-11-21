@@ -56,7 +56,7 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdio.h>
-
+#include <windef.h> /* for MAX_PATH */
 
 static int page = 0;
 static WndForm *wf = NULL;

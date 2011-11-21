@@ -45,6 +45,8 @@
 #include "IO/FileLineReader.hpp"
 #include "Replay/IGCParser.hpp"
 
+#include <windef.h> /* for MAX_PATH */
+
 static bool DeclaredToDevice = false;
 
 bool

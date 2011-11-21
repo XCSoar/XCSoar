@@ -35,6 +35,8 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Compiler.h"
 
+#include <windef.h> /* for MAX_PATH */
+
 static WndForm *wf = NULL;
 static LogoView *logo;
 

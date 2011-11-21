@@ -53,6 +53,7 @@ Copyright_License {
 #include "Plane/PlaneGlue.hpp"
 
 #include <cstdio>
+#include <windef.h> /* for MAX_PATH */
 
 static WndForm* wf = NULL;
 static WndButton* buttonList = NULL;

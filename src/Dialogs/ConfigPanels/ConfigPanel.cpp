@@ -28,6 +28,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "LocalPath.hpp"
 
+#include <windef.h> /* for MAX_PATH */
 
 static bool
 ProfileStringModified(const TCHAR *key, const TCHAR *new_value)

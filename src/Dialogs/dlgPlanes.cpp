@@ -39,6 +39,7 @@ Copyright_License {
 
 #include <vector>
 #include <assert.h>
+#include <windef.h> /* for MAX_PATH */
 
 static WndForm *dialog = NULL;
 static WndListFrame *plane_list = NULL;

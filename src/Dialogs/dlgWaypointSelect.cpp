@@ -52,6 +52,7 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <windef.h> /* for MAX_PATH */
 
 class FAITrianglePointValidator;
 
