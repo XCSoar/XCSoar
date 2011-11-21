@@ -32,12 +32,6 @@ Copyright_License {
 #include <math.h>
 
 class FlytecDevice : public AbstractDevice {
-private:
-  Port *port;
-
-public:
-  FlytecDevice(Port *_port):port(_port) {}
-
 public:
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 };
@@ -190,7 +184,7 @@ FlytecDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 static Device *
 FlytecCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
-  return new FlytecDevice(com_port);
+  return new FlytecDevice();
 }
 
 const struct DeviceRegister flytec_device_driver = {
