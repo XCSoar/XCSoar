@@ -109,6 +109,11 @@ public:
    * visible already.
    */
   virtual void Hide() = 0;
+
+  /**
+   * Move the widget.  This will only be called while it is visible.
+   */
+  virtual void Move(const PixelRect &rc) = 0;
 };
 
 /**
@@ -125,6 +130,7 @@ public:
   virtual bool Save(bool &changed, bool &require_restart);
   virtual bool Click();
   virtual void ReClick();
+  virtual void Move(const PixelRect &rc);
 };
 
 #endif

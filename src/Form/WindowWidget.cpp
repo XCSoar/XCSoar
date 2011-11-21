@@ -47,3 +47,12 @@ WindowWidget::Hide()
 
   window->fast_hide();
 }
+
+void
+WindowWidget::Move(const PixelRect &rc)
+{
+  assert(window != NULL);
+  assert(window->is_visible());
+
+  window->move(rc);
+}

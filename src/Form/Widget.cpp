@@ -62,3 +62,10 @@ void
 NullWidget::ReClick()
 {
 }
+
+void
+NullWidget::Move(const PixelRect &rc)
+{
+  Hide();
+  Show(rc);
+}

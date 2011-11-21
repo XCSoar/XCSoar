@@ -155,8 +155,7 @@ TabbedControl::on_resize(UPixelScalar width, UPixelScalar height)
        dimensions */
     Page &tab = tabs[current];
     assert(tab.prepared);
-    tab.widget->Hide();
-    tab.widget->Show(get_client_rect());
+    tab.widget->Move(get_client_rect());
   }
 
   return true;
