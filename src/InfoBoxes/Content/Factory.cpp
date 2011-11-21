@@ -200,7 +200,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Arrival altitude at the next waypoint relative to the safety arrival height."),
     IBFHelper<InfoBoxContentNextAltitudeDiff>::Create,
     e_WP_H, // WP AltA
-    e_WP_Distance, // WP Dist
+    e_WP_MC0AltDiff, // WP MC0 AltD
   },
 
   // e_WP_AltReq
@@ -983,6 +983,17 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_NearestAirspaceHorizontal,
     e_NearestAirspaceHorizontal,
   },
+
+  // e_WP_MC0AltDiff
+  {
+    N_("Next MC0 altitude difference"),
+    N_("WP MC0 AltD"),
+    N_("Arrival altitude at the next waypoint with MC 0 setting relative to the safety arrival height."),
+    IBFHelper<InfoBoxContentNextMC0AltitudeDiff>::Create,
+    e_WP_AltDiff, // WP AltD
+    e_WP_Distance, // WP Dist
+  },
+
 };
 
 bool

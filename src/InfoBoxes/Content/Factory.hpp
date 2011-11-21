@@ -135,6 +135,7 @@ namespace InfoBoxFactory
 
     e_NearestAirspaceHorizontal,
     e_NearestAirspaceVertical,
+    e_WP_MC0AltDiff,
 
     e_NUM_TYPES /* Last item */
   };

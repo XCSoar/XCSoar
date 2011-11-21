@@ -69,6 +69,12 @@ public:
   virtual void Update(InfoBoxData &data);
 };
 
+class InfoBoxContentNextMC0AltitudeDiff : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxData &data);
+};
+
 class InfoBoxContentNextAltitudeRequire : public InfoBoxContent
 {
 public:

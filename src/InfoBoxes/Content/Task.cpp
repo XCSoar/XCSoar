@@ -229,6 +229,25 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxData &data)
 }
 
 void
+InfoBoxContentNextMC0AltitudeDiff::Update(InfoBoxData &data)
+{
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const GlideResult &next_solution = task_stats.current_leg.solution_mc0;
+  if (!task_stats.task_valid || !next_solution.IsDefined()) {
+    data.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  Units::FormatUserAltitude(next_solution.altitude_difference, tmp, 32, false);
+  data.SetValue(tmp);
+
+  // Set Unit
+  data.SetValueUnit(Units::current.altitude_unit);
+}
+
+void
 InfoBoxContentNextAltitudeRequire::Update(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
