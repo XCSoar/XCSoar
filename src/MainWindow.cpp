@@ -82,7 +82,7 @@ MainWindow::register_class(HINSTANCE hInstance)
   wc.hInstance                  = hInstance;
   wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOAR));
   wc.hCursor                    = 0;
-  wc.hbrBackground              = (HBRUSH) GetStockObject(WHITE_BRUSH);
+  wc.hbrBackground = NULL;
   wc.lpszMenuName               = 0;
   wc.lpszClassName = _T("XCSoarMain");
 
