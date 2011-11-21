@@ -48,15 +48,16 @@ static WndButton *buttonComment = NULL;
 static void
 UpdateButtons()
 {
-  TCHAR text[MAX_PATH];
+  StaticString<64> text;
 
-  _stprintf(text, _T("%s: %s"), _("Name"),
-            global_wpt->name.empty() ? _("(blank)") : global_wpt->name.c_str());
+  text.Format(_T("%s: %s"), _("Name"),
+              global_wpt->name.empty()
+              ? _("(blank)") : global_wpt->name.c_str());
   buttonName->SetCaption(text);
 
-  _stprintf(text, _T("%s: %s"), _("Comment"),
-            global_wpt->comment.empty() ?
-            _("(blank)") : global_wpt->comment.c_str());
+  text.Format(_T("%s: %s"), _("Comment"),
+              global_wpt->comment.empty()
+              ? _("(blank)") : global_wpt->comment.c_str());
   buttonComment->SetCaption(text);
 }
 
