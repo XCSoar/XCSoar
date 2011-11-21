@@ -517,12 +517,17 @@ public:
 #endif
   }
 
+  /**
+   * Determine whether this Window is visible.  This method disregards
+   * the visibility of parent windows, it just checks if the "visible"
+   * flag is set for this Window.
+   */
   gcc_pure
   bool is_visible() const {
 #ifndef USE_GDI
     return visible;
 #else
-    return ::IsWindowVisible(hWnd);
+    return (get_window_style() & WS_VISIBLE) != 0;
 #endif
   }
 
