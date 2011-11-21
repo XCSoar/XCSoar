@@ -32,12 +32,6 @@ Copyright_License {
 #include <math.h>
 
 class LeonardoDevice : public AbstractDevice {
-private:
-  Port *port;
-
-public:
-  LeonardoDevice(Port *_port):port(_port) {}
-
 public:
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 };
@@ -222,7 +216,7 @@ LeonardoDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 static Device *
 LeonardoCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
-  return new LeonardoDevice(com_port);
+  return new LeonardoDevice();
 }
 
 const struct DeviceRegister leonardo_device_driver = {
