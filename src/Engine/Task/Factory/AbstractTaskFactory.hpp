@@ -58,20 +58,6 @@ struct Waypoint;
 class AbstractTaskFactory: private NonCopyable
 {
 public:
-  /**
-   * Constructor
-   *
-   * @param task Ordered task to be managed by this factory
-   * @param behaviour Behaviour (options)
-   */
-  AbstractTaskFactory(OrderedTask& task, const TaskBehaviour &behaviour)
-    :m_task(task), m_behaviour(behaviour) {}
-
-  virtual ~AbstractTaskFactory() {}
-
-  /// @todo should be abstract
-  virtual void update_ordered_task_behaviour(OrderedTaskBehaviour& to); 
-
   /** Legal types based on position */
   enum LegalAbstractPointType_t {
     POINT_START,
@@ -122,6 +108,37 @@ public:
 
   /** Vector of errors returned by validation routine */
   typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
+
+protected:
+  /** task managed by this factory */
+  OrderedTask &m_task;
+  /** behaviour (settings) */
+  const TaskBehaviour &m_behaviour;
+
+  /** list of valid start types, for specialisation */
+  LegalPointVector m_start_types;
+  /** list of valid intermediate types, for specialisation */
+  LegalPointVector m_intermediate_types;
+  /** list of valid finish types, for specialisation */
+  LegalPointVector m_finish_types;
+
+  /** list of errors returned by task validation */
+  TaskValidationErrorVector m_validation_errors;
+
+public:
+  /**
+   * Constructor
+   *
+   * @param task Ordered task to be managed by this factory
+   * @param behaviour Behaviour (options)
+   */
+  AbstractTaskFactory(OrderedTask& task, const TaskBehaviour &behaviour)
+    :m_task(task), m_behaviour(behaviour) {}
+
+  virtual ~AbstractTaskFactory() {}
+
+  /// @todo should be abstract
+  virtual void update_ordered_task_behaviour(OrderedTaskBehaviour& to); 
 
   /**
    * Replace taskpoint in ordered task.
@@ -644,20 +661,6 @@ protected:
   gcc_pure
   virtual bool validType(const OrderedTaskPoint &new_tp,
                          unsigned position) const;
-
-  /** task managed by this factory */
-  OrderedTask &m_task;
-  /** behaviour (settings) */
-  const TaskBehaviour &m_behaviour;
-
-  /** list of valid start types, for specialisation */
-  LegalPointVector m_start_types;
-  /** list of valid intermediate types, for specialisation */
-  LegalPointVector m_intermediate_types;
-  /** list of valid finish types, for specialisation */
-  LegalPointVector m_finish_types;
-  /** list of errors returned by task validation */
-  TaskValidationErrorVector m_validation_errors;
 
   /** 
    * Check whether the supplied position can be a StartPoint
