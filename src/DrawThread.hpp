@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DRAW_THREAD_HPP
 #define XCSOAR_DRAW_THREAD_HPP
 
-#include "Thread/SuspensibleThread.hpp"
+#include "Thread/RecursivelySuspensibleThread.hpp"
 #include "Thread/Trigger.hpp"
 
 class GlueMapWindow;
@@ -37,7 +37,7 @@ class GlueMapWindow;
  * why it is not handled by this thread.
  * 
  */
-class DrawThread : public SuspensibleThread {
+class DrawThread : public RecursivelySuspensibleThread {
   enum {
     MIN_WAIT_TIME = 100,
   };
@@ -56,7 +56,7 @@ public:
 
   /** Locks the Mutex and "pauses" the drawing thread */
   void BeginSuspend() {
-    SuspensibleThread::BeginSuspend();
+    RecursivelySuspensibleThread::BeginSuspend();
     TriggerRedraw();
   }
 
@@ -84,7 +84,7 @@ public:
    * synchronously for the thread to exit.
    */
   void BeginStop() {
-    SuspensibleThread::BeginStop();
+    RecursivelySuspensibleThread::BeginStop();
     TriggerRedraw();
   }
 

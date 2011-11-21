@@ -195,6 +195,7 @@ SettingsLeave(const UISettings &old_ui_settings)
     main_window.SetLook().map.waypoint.Initialise(settings_map.waypoint);
 
   ResumeAllThreads();
+  CommonInterface::main_window.ResumeThreads();
   // allow map and calculations threads to continue
 
   ActionInterface::SendSettingsMap(true);
