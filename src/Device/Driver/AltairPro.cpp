@@ -49,9 +49,9 @@ private:
 
   bool DeclareInternal(const struct Declaration &declaration);
   void PutTurnPoint(const TCHAR *name, const Waypoint *waypoint);
-  bool PropertySetGet(Port *port, char *Buffer, size_t size);
+  bool PropertySetGet(char *Buffer, size_t size);
 #ifdef _UNICODE
-  bool PropertySetGet(Port *port, TCHAR *Buffer, size_t size);
+  bool PropertySetGet(TCHAR *Buffer, size_t size);
 #endif
 
 public:
@@ -116,15 +116,15 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration)
   TCHAR Buffer[256];
 
   _stprintf(Buffer, _T("PDVSC,S,Pilot,%s"), declaration.pilot_name.c_str());
-  if (!PropertySetGet(port, Buffer, ARRAY_SIZE(Buffer)))
+  if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer)))
     return false;
 
   _stprintf(Buffer, _T("PDVSC,S,GliderID,%s"), declaration.aircraft_registration.c_str());
-  if (!PropertySetGet(port, Buffer, ARRAY_SIZE(Buffer)))
+  if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer)))
     return false;
 
   _stprintf(Buffer, _T("PDVSC,S,GliderType,%s"), declaration.aircraft_type.c_str());
-  if (!PropertySetGet(port, Buffer, ARRAY_SIZE(Buffer)))
+  if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer)))
     return false;
 
   /* TODO currently not supported by XCSOAR
@@ -156,7 +156,7 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration)
   }
 
   _stprintf(Buffer, _T("PDVSC,S,DeclAction,DECLARE"));
-  if (!PropertySetGet(port, Buffer, ARRAY_SIZE(Buffer)))
+  if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer)))
     return false;
 
   if (_tcscmp(&Buffer[9], _T("LOCKED")) == 0)
@@ -173,7 +173,7 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration)
 
 
 bool
-AltairProDevice::PropertySetGet(Port *port, char *Buffer, size_t size)
+AltairProDevice::PropertySetGet(char *Buffer, size_t size)
 {
   assert(port != NULL);
   assert(Buffer != NULL);
@@ -214,7 +214,7 @@ AltairProDevice::PropertySetGet(Port *port, char *Buffer, size_t size)
 
 #ifdef _UNICODE
 bool
-AltairProDevice::PropertySetGet(Port *port, TCHAR *s, size_t size)
+AltairProDevice::PropertySetGet(TCHAR *s, size_t size)
 {
   assert(port != NULL);
   assert(s != NULL);
@@ -224,7 +224,7 @@ AltairProDevice::PropertySetGet(Port *port, TCHAR *s, size_t size)
                                NULL, NULL) <= 0)
     return false;
 
-  if (!PropertySetGet(port, buffer, _tcslen(s) * 4 + 1))
+  if (!PropertySetGet(buffer, _tcslen(s) * 4 + 1))
     return false;
 
   if (::MultiByteToWideChar(CP_ACP, 0, buffer, -1, s, size) <= 0)
@@ -290,7 +290,7 @@ AltairProDevice::PutTurnPoint(const TCHAR *propertyName, const Waypoint *waypoin
             DegLat, MinLat, NoS, DegLon, MinLon, EoW, Name
   );
 
-  PropertySetGet(port, Buffer, ARRAY_SIZE(Buffer));
+  PropertySetGet(Buffer, ARRAY_SIZE(Buffer));
 
 }
 
