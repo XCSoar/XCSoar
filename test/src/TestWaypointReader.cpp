@@ -382,6 +382,40 @@ TestOzi(wp_vector org_wp)
   }
 }
 
+static void
+TestCompeGPS(wp_vector org_wp)
+{
+  Waypoints way_points;
+  if (!TestWaypointFile(_T("test/data/waypoints_compe_geo.wpt"), way_points,
+                        org_wp.size())) {
+    skip(3 * org_wp.size(), 0, "opening waypoint file failed");
+    return;
+  }
+
+  wp_vector::iterator it;
+  for (it = org_wp.begin(); it < org_wp.end(); it++) {
+    trim_inplace(it->name);
+    GetWaypoint(*it, way_points);
+  }
+}
+
+static void
+TestCompeGPS_UTM(wp_vector org_wp)
+{
+  Waypoints way_points;
+  if (!TestWaypointFile(_T("test/data/waypoints_compe_utm.wpt"), way_points,
+                        org_wp.size())) {
+    skip(3 * org_wp.size(), 0, "opening waypoint file failed");
+    return;
+  }
+
+  wp_vector::iterator it;
+  for (it = org_wp.begin(); it < org_wp.end(); it++) {
+    trim_inplace(it->name);
+    GetWaypoint(*it, way_points);
+  }
+}
+
 static wp_vector
 CreateOriginalWaypoints()
 {
@@ -479,7 +513,7 @@ int main(int argc, char **argv)
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(63 + 6 * 4 + (9 + 10 + 8 + 3 + 3 + 3) * org_wp.size());
+  plan_tests(305);
 
   TestExtractParameters();
 
@@ -489,6 +523,8 @@ int main(int argc, char **argv)
   TestFS(org_wp);
   TestFS_UTM(org_wp);
   TestOzi(org_wp);
+  TestCompeGPS(org_wp);
+  TestCompeGPS_UTM(org_wp);
 
   return exit_status();
 }

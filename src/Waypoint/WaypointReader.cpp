@@ -28,6 +28,7 @@ Copyright_License {
 #include "WaypointReaderWinPilot.hpp"
 #include "WaypointReaderFS.hpp"
 #include "WaypointReaderOzi.hpp"
+#include "WaypointReaderCompeGPS.hpp"
 
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -93,6 +94,11 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
 
     delete reader;
     reader = new WaypointReaderOzi(filename, the_filenum, compressed);
+    if (reader->VerifyFormat())
+      return;
+
+    delete reader;
+    reader = new WaypointReaderCompeGPS(filename, the_filenum, compressed);
     if (reader->VerifyFormat())
       return;
 
