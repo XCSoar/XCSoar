@@ -51,7 +51,16 @@ public:
 };
 
 static bool
-GPWIN(NMEAInputLine &line, NMEAInfo &info);
+GPWIN(NMEAInputLine &line, NMEAInfo &info)
+{
+  line.skip(2);
+
+  fixed value;
+  if (line.read_checked(value))
+    info.ProvidePressureAltitude(value / 10);
+
+  return false;
+}
 
 bool
 PGDevice::ParseNMEA(const char *String, NMEAInfo &info)
@@ -80,18 +89,3 @@ const struct DeviceRegister pgDevice = {
   DeviceRegister::DECLARE | DeviceRegister::BULK_BAUD_RATE,
   PGCreateOnPort,
 };
-
-// *****************************************************************************
-// local stuff
-
-static bool
-GPWIN(NMEAInputLine &line, NMEAInfo &info)
-{
-  line.skip(2);
-
-  fixed value;
-  if (line.read_checked(value))
-    info.ProvidePressureAltitude(value / 10);
-
-  return false;
-}
