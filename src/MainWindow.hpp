@@ -36,6 +36,7 @@ struct SETTINGS_COMPUTER;
 struct SETTINGS_MAP;
 struct Look;
 class GlueMapWindow;
+class Widget;
 class GlueGaugeVario;
 class GaugeFLARM;
 class GaugeThermalAssistant;
@@ -65,6 +66,13 @@ class MainWindow : public SingleWindow {
   Look *look;
 
   GlueMapWindow *map;
+
+  /**
+   * A #Widget that is shown instead of the map.  The #GlueMapWindow
+   * is hidden and the DrawThread is suspended while this attribute is
+   * non-NULL.
+   */
+  Widget *widget;
 
   GlueGaugeVario *vario;
   GaugeFLARM *flarm;
@@ -104,6 +112,12 @@ protected:
        after the MapWindow has been created */
     return map != NULL;
   }
+
+  /**
+   * Destroy the current Widget, but don't reactivate the map.  The
+   * caller is responsible for reactivating the map or another Widget.
+   */
+  void KillWidget();
 
 public:
   void set(const TCHAR *text,
@@ -218,8 +232,7 @@ public:
    * Is the map active, i.e. currently visible?
    */
   bool IsMapActive() const {
-    /* not implemented yet, map is always active */
-    return true;
+    return widget == NULL;
   }
 
   /**
@@ -234,6 +247,13 @@ public:
    * there is no map.
    */
   GlueMapWindow *ActivateMap();
+
+  /**
+   * Replace the map with a #Widget.  The Widget instance gets deleted
+   * when the map gets reactivated with ActivateMap() or if another
+   * Widget gets set.
+   */
+  void SetWidget(Widget *_widget);
 
   void UpdateGaugeVisibility();
 

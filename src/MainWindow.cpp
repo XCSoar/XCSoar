@@ -44,6 +44,7 @@ Copyright_License {
 #include "Gauge/GlueGaugeVario.hpp"
 #include "MenuBar.hpp"
 #include "Form/Form.hpp"
+#include "Form/Widget.hpp"
 #include "UtilsSystem.hpp"
 #include "Look/Look.hpp"
 #include "Profile/ProfileKeys.hpp"
@@ -53,7 +54,7 @@ Copyright_License {
 
 MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(NULL),
-   map(NULL), vario(NULL), flarm(NULL), ta(NULL),
+   map(NULL), widget(NULL), vario(NULL), flarm(NULL), ta(NULL),
    popup(status_messages, *this, CommonInterface::GetUISettings()),
    FullScreen(false),
    airspace_warning_pending(false)
@@ -328,6 +329,11 @@ MainWindow::ReinitialiseLayout()
     map->FullRedraw();
   }
 
+  if (widget != NULL) {
+    const PixelRect &current_map = FullScreen ? rc : map_rect;
+    widget->Move(current_map);
+  }
+
 #ifdef ANDROID
   // move topmost dialog to fit into the current layout, or close it
   if (has_dialog())
@@ -585,6 +591,8 @@ bool MainWindow::on_create(void)
 bool MainWindow::on_destroy(void) {
   kill_timer(timer_id);
 
+  KillWidget();
+
   SingleWindow::on_destroy();
 
   return true;
@@ -668,8 +676,47 @@ MainWindow::GetMapIfActive()
 GlueMapWindow *
 MainWindow::ActivateMap()
 {
-  /* not implemented yet, map is always active */
+  if (map == NULL)
+    return NULL;
+
+  if (widget != NULL) {
+    KillWidget();
+    map->show();
+  }
+
   return map;
+}
+
+void
+MainWindow::KillWidget()
+{
+  if (widget == NULL)
+    return;
+
+  widget->Hide();
+  widget->Unprepare();
+  delete widget;
+  widget = NULL;
+}
+
+void
+MainWindow::SetWidget(Widget *_widget)
+{
+  assert(_widget != NULL);
+
+  /* delete the old widget */
+  KillWidget();
+
+  /* hide the map (might be hidden already) */
+  if (map != NULL)
+    map->fast_hide();
+
+  widget = _widget;
+
+  const PixelRect rc = FullScreen ? get_client_rect() : map_rect;
+  widget->Initialise(*this, rc);
+  widget->Prepare(*this, rc);
+  widget->Show(rc);
 }
 
 void
