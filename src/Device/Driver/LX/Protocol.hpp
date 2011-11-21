@@ -35,7 +35,7 @@ class OperationEnvironment;
 namespace LX {
   static const unsigned int NUMTPS = 12;
 
-  enum command {
+  enum Command {
     PREFIX = 0x02,
     ACK = 0x06,
     SYN = 0x16,
@@ -175,19 +175,19 @@ namespace LX {
   CommandModeQuick(Port &port, OperationEnvironment &env);
 
   static inline bool
-  SendCommand(Port &port, enum command command)
+  SendCommand(Port &port, Command command)
   {
     return port.Write(PREFIX) &&
       port.Write(command);
   }
 
   bool
-  SendPacket(Port &port, enum command command,
+  SendPacket(Port &port, Command command,
              const void *data, size_t length,
              unsigned timeout_ms=5000);
 
   bool
-  ReceivePacket(Port &port, enum command command,
+  ReceivePacket(Port &port, Command command,
                 void *data, size_t length,
                 unsigned timeout_ms=5000);
 

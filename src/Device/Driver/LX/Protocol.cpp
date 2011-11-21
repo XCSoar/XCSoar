@@ -54,7 +54,7 @@ LX::CommandModeQuick(Port &port, OperationEnvironment &env)
 }
 
 bool
-LX::SendPacket(Port &port, enum command command,
+LX::SendPacket(Port &port, Command command,
                const void *data, size_t length,
                unsigned timeout_ms)
 {
@@ -64,7 +64,7 @@ LX::SendPacket(Port &port, enum command command,
 }
 
 bool
-LX::ReceivePacket(Port &port, enum command command,
+LX::ReceivePacket(Port &port, Command command,
                   void *data, size_t length,
                   unsigned timeout_ms)
 {
