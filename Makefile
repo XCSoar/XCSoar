@@ -383,6 +383,11 @@ XCSOAR_SOURCES := \
 	$(SRC)/InputEvents.cpp \
 	$(SRC)/InputEventsActions.cpp \
 	$(SRC)/InputEventsDevice.cpp \
+	$(SRC)/InputEventsInfoBox.cpp \
+	$(SRC)/InputEventsMap.cpp \
+	$(SRC)/InputEventsAirspace.cpp \
+	$(SRC)/InputEventsTask.cpp \
+	$(SRC)/InputEventsSettings.cpp \
 	$(SRC)/InputParser.cpp \
 	$(SRC)/PageSettings.cpp \
 	$(SRC)/Pages.cpp \
