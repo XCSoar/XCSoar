@@ -55,9 +55,7 @@ void TriggerGPSUpdate()
 
 void TriggerVarioUpdate()
 {
-  GlueGaugeVario *gauge_vario = CommonInterface::main_window.vario;
-  if (gauge_vario != NULL)
-    gauge_vario->invalidate_blackboard();
+  CommonInterface::main_window.TriggerVarioUpdate();
 }
 
 void

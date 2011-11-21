@@ -145,7 +145,7 @@ TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
   RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
                      PixelScalar(rc.top + line_height / 2) };
   WaypointIconRenderer wir(CommonInterface::SettingsMap().waypoint,
-                           CommonInterface::main_window.look->map.waypoint,
+                           CommonInterface::main_window.GetLook().map.waypoint,
                            canvas);
 
   wir.Draw(tp.GetWaypoint(), pt, WaypointIconRenderer::Unreachable, true);

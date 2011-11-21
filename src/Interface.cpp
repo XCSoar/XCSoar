@@ -61,7 +61,8 @@ unsigned ActionInterface::menu_timeout_max = 8 * 4;
 bool
 CommonInterface::IsPanning()
 {
-  return main_window.map != NULL && main_window.map->IsPanning();
+  const GlueMapWindow *map = main_window.GetMapIfActive();
+  return map != NULL && map->IsPanning();
 
 }
 
@@ -92,11 +93,11 @@ void
 ActionInterface::SendSettingsComputer()
 {
   assert(calculation_thread != NULL);
-  assert(main_window.map != NULL);
 
-  main_window.map->SetSettingsComputer(SettingsComputer());
+  main_window.SetSettingsComputer(SettingsComputer());
+
   calculation_thread->SetSettingsComputer(SettingsComputer());
-  calculation_thread->SetScreenDistanceMeters(main_window.map->VisibleProjection().GetScreenDistanceMeters());
+  calculation_thread->SetScreenDistanceMeters(main_window.GetProjection().GetScreenDistanceMeters());
 }
 
 void
@@ -130,8 +131,6 @@ ActionInterface::SetMacCready(fixed mc, bool to_devices)
 void
 ActionInterface::SendSettingsMap(const bool trigger_draw)
 {
-  assert(main_window.map != NULL);
-
   // trigger_draw: asks for an immediate exchange of blackboard data
   // (via ProcessTimer()) rather than waiting for the idle timer every 500ms
 
@@ -140,7 +139,7 @@ ActionInterface::SendSettingsMap(const bool trigger_draw)
     InfoBoxManager::ProcessTimer();
   }
 
-  main_window.map->SetSettingsMap(SettingsMap());
+  main_window.SetSettingsMap(SettingsMap());
 
   if (trigger_draw)
     main_window.full_redraw();
@@ -188,18 +187,5 @@ XCSoarInterface::Debounce(void)
 void
 ActionInterface::DisplayModes()
 {
-  bool full_screen = main_window.GetFullScreen();
-
-  if (main_window.vario) {
-    // Determine whether the vario gauge should be drawn
-    main_window.vario->set_visible(!full_screen &&
-                                   InfoBoxLayout::has_vario() &&
-                                   !GetUIState().screen_blanked);
-  }
-
-  if (Basic().flarm.new_traffic) {
-    GaugeFLARM *gauge_flarm = main_window.flarm;
-    if (gauge_flarm != NULL)
-      gauge_flarm->Suppress = false;
-  }
+  main_window.UpdateGaugeVisibility();
 }

@@ -38,6 +38,6 @@ InputEvents::eventDevice(const TCHAR *misc)
 
   if (_tcscmp(misc, _T("list")) == 0)
     ShowDeviceList(CommonInterface::main_window,
-                   CommonInterface::main_window.look->dialog,
-                   CommonInterface::main_window.look->terminal);
+                   CommonInterface::main_window.GetLook().dialog,
+                   CommonInterface::main_window.GetLook().terminal);
 }

@@ -282,7 +282,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   GLCanvasScissor scissor(canvas);
 #endif
 
-  const Look &look = *CommonInterface::main_window.look;
+  const Look &look = CommonInterface::main_window.GetLook();
   PaintTaskPoint(canvas, rc, *ordered_task, *tp,
                  XCSoarInterface::Basic().location,
                  XCSoarInterface::SettingsMap(),

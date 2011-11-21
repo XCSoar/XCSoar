@@ -132,7 +132,7 @@ dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   GLCanvasScissor scissor(canvas);
 #endif
 
-  const Look &look = *CommonInterface::main_window.look;
+  const Look &look = CommonInterface::main_window.GetLook();
   PaintTask(canvas, Sender->get_client_rect(), *active_task,
             XCSoarInterface::Basic().location,
             XCSoarInterface::SettingsMap(),

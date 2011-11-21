@@ -60,7 +60,7 @@ InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
   if (var.empty())
     return;
 
-  const Look &look = *CommonInterface::main_window.look;
+  const Look &look = CommonInterface::main_window.GetLook();
   TraceHistoryRenderer renderer(look.trace_history, look.vario, look.chart);
   renderer.RenderVario(canvas, get_spark_rect(infobox), var, center,
                        CommonInterface::SettingsComputer().glide_polar_task.GetMC());
@@ -135,7 +135,7 @@ InfoBoxContentBarogram::Update(InfoBoxData &data)
 void
 InfoBoxContentBarogram::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  const Look &look = *CommonInterface::main_window.look;
+  const Look &look = CommonInterface::main_window.GetLook();
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
                               look.chart, look.map);
   fs.RenderBarographSpark(canvas, get_spark_rect(infobox),
@@ -150,7 +150,7 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
   switch (keycode) {
   case ibkEnter:
     dlgAnalysisShowModal(XCSoarInterface::main_window,
-                         *CommonInterface::main_window.look,
+                         CommonInterface::main_window.GetLook(),
                          CommonInterface::Full(), *glide_computer,
                          protected_task_manager, &airspace_database, terrain,
                          0);
@@ -169,7 +169,7 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  const Look &look = *CommonInterface::main_window.look;
+  const Look &look = CommonInterface::main_window.GetLook();
   ThermalBandRenderer renderer(look.thermal_band, look.chart);
   renderer.DrawThermalBandSpark(CommonInterface::Basic(),
                                 CommonInterface::Calculated(),
@@ -189,7 +189,7 @@ InfoBoxContentThermalBand::Update(InfoBoxData &data)
 void
 InfoBoxContentTaskProgress::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  const Look &look = *CommonInterface::main_window.look;
+  const Look &look = CommonInterface::main_window.GetLook();
   TaskProgressRenderer renderer(look.map.task);
   renderer.Draw(CommonInterface::Calculated().
                 common_stats.ordered_summary,

@@ -79,7 +79,7 @@ DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration)
 {
   DeclareJob job(device, declaration);
   JobDialog(CommonInterface::main_window,
-            CommonInterface::main_window.look->dialog,
+            CommonInterface::main_window.GetLook().dialog,
             _T(""), job, true);
   return job.GetResult();
 }
@@ -174,7 +174,7 @@ DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
   device.SetBusy(true);
   ReadFlightListJob job(device, flight_list);
   JobDialog(CommonInterface::main_window,
-            CommonInterface::main_window.look->dialog,
+            CommonInterface::main_window.GetLook().dialog,
             _T(""), job, true);
   device.SetBusy(false);
   return job.GetResult();
@@ -208,7 +208,7 @@ DoDownloadFlight(DeviceDescriptor &device,
   device.SetBusy(true);
   DownloadFlightJob job(device, flight, path);
   JobDialog(CommonInterface::main_window,
-            CommonInterface::main_window.look->dialog,
+            CommonInterface::main_window.GetLook().dialog,
             _T(""), job, true);
   device.SetBusy(false);
   return job.GetResult();

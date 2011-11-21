@@ -49,6 +49,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "ProgressGlue.hpp"
+#include "UIState.hpp"
 
 MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(NULL),
@@ -628,6 +629,83 @@ MainWindow::GetDisplayMode() const
   return map != NULL
     ? map->GetDisplayMode()
     : DM_NONE;
+}
+
+void
+MainWindow::SetSettingsComputer(const SETTINGS_COMPUTER &settings_computer)
+{
+  if (map != NULL)
+    map->SetSettingsComputer(settings_computer);
+}
+
+void
+MainWindow::SetSettingsMap(const SETTINGS_MAP &settings_map)
+{
+  if (map != NULL)
+    map->SetSettingsMap(settings_map);
+}
+
+GlueMapWindow *
+MainWindow::GetMapIfActive()
+{
+  /* not implemented yet, map is always active */
+  return map;
+}
+
+GlueMapWindow *
+MainWindow::ActivateMap()
+{
+  /* not implemented yet, map is always active */
+  return map;
+}
+
+void
+MainWindow::UpdateGaugeVisibility()
+{
+  bool full_screen = GetFullScreen();
+
+  if (vario != NULL)
+    vario->set_visible(!full_screen &&
+                       InfoBoxLayout::has_vario() &&
+                       !CommonInterface::GetUIState().screen_blanked);
+
+  if (flarm != NULL && CommonInterface::Basic().flarm.new_traffic)
+    flarm->Suppress = false;
+}
+
+void
+MainWindow::TriggerVarioUpdate()
+{
+  if (vario != NULL)
+    vario->invalidate_blackboard();
+}
+
+const MapWindowProjection &
+MainWindow::GetProjection() const
+{
+  assert_thread();
+  assert(map != NULL);
+
+  return map->VisibleProjection();
+}
+
+void
+MainWindow::ToggleSuppressFLARMRadar()
+{
+  if (flarm == NULL)
+    return;
+
+  flarm->Suppress = !flarm->Suppress;
+}
+
+void
+MainWindow::ToggleForceFLARMRadar()
+{
+  if (flarm == NULL)
+    return;
+
+  flarm->ForceVisible = !flarm->ForceVisible;
+  CommonInterface::SetUISettings().enable_flarm_gauge = flarm->ForceVisible;
 }
 
 #ifdef ANDROID

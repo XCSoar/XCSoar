@@ -100,7 +100,7 @@ TerrainDisplayConfigPanel::OnPreviewPaint(gcc_unused WndOwnerDrawFrame *Sender,
   renderer.SetSettings(terrain_settings);
 
   MapWindowProjection projection =
-    XCSoarInterface::main_window.map->VisibleProjection();
+    XCSoarInterface::main_window.GetProjection();
   projection.SetScreenSize(canvas.get_width(), canvas.get_height());
   projection.SetScreenOrigin(canvas.get_width() / 2, canvas.get_height() / 2);
 

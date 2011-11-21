@@ -30,6 +30,10 @@ Copyright_License {
 #include "BatteryTimer.hpp"
 #include "DisplayMode.hpp"
 
+#include <assert.h>
+
+struct SETTINGS_COMPUTER;
+struct SETTINGS_MAP;
 struct Look;
 class GlueMapWindow;
 class GlueGaugeVario;
@@ -38,6 +42,7 @@ class GaugeThermalAssistant;
 class StatusMessageList;
 class RasterTerrain;
 class TopographyStore;
+class MapWindowProjection;
 
 /**
  * The XCSoar main window.
@@ -57,7 +62,6 @@ class MainWindow : public SingleWindow {
     CMD_CALCULATED_UPDATE,
   };
 
-public:
   Look *look;
 
   GlueMapWindow *map;
@@ -65,6 +69,8 @@ public:
   GlueGaugeVario *vario;
   GaugeFLARM *flarm;
   GaugeThermalAssistant *ta;
+
+public:
   PopupMessage popup;
 
 private:
@@ -173,6 +179,53 @@ public:
 
   gcc_pure
   DisplayMode GetDisplayMode() const;
+
+  const Look &GetLook() const {
+    assert(look != NULL);
+
+    return *look;
+  }
+
+  Look &SetLook() {
+    assert(look != NULL);
+
+    return *look;
+  }
+
+  void SetSettingsComputer(const SETTINGS_COMPUTER &settings_computer);
+  void SetSettingsMap(const SETTINGS_MAP &settings_map);
+
+  /**
+   * Returns the map even if it is not active.  May return NULL if
+   * there is no map.
+   */
+  gcc_pure
+  GlueMapWindow *GetMap() {
+    return map;
+  }
+
+  /**
+   * Returns the map if it is active, or NULL if the map is not
+   * active.
+   */
+  gcc_pure
+  GlueMapWindow *GetMapIfActive();
+
+  /**
+   * Activate the map and return a pointer to it.  May return NULL if
+   * there is no map.
+   */
+  GlueMapWindow *ActivateMap();
+
+  void UpdateGaugeVisibility();
+
+  void TriggerVarioUpdate();
+
+  gcc_pure
+  const MapWindowProjection &GetProjection() const;
+
+  void ToggleSuppressFLARMRadar();
+  void ToggleForceFLARMRadar();
 
 protected:
   virtual bool on_resize(UPixelScalar width, UPixelScalar height);

@@ -392,7 +392,7 @@ OnRemoveFromTaskClicked(gcc_unused WndButton &button)
 static void
 OnActivatePanClicked(gcc_unused WndButton &button)
 {
-  GlueMapWindow *map_window = CommonInterface::main_window.map;
+  GlueMapWindow *map_window = CommonInterface::main_window.ActivateMap();
   if (map_window == NULL)
     return;
 

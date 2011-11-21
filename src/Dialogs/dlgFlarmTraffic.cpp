@@ -654,7 +654,7 @@ OnCreateFlarmTrafficControl(ContainerWindow &parent,
                             UPixelScalar width, UPixelScalar height,
                             const WindowStyle style)
 {
-  const Look &look = *CommonInterface::main_window.look;
+  const Look &look = CommonInterface::main_window.GetLook();
   wdf = new FlarmTrafficControl(look.flarm_dialog);
   wdf->set(parent, left, top, width, height, style);
 

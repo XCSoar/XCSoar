@@ -93,7 +93,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   style.hide();
   style.control_parent();
 
-  const DialogLook &dialog_look = CommonInterface::main_window.look->dialog;
+  const DialogLook &dialog_look = CommonInterface::main_window.GetLook().dialog;
   WndForm wf(XCSoarInterface::main_window, dialog_look,
              X, Y, Width, Height, lpCaption,
              style);

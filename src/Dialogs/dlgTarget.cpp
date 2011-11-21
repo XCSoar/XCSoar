@@ -63,7 +63,7 @@ OnCreateMap(ContainerWindow &parent, PixelScalar left, PixelScalar top,
             UPixelScalar width, UPixelScalar height,
             const WindowStyle style)
 {
-  const Look &look = *CommonInterface::main_window.look;
+  const Look &look = CommonInterface::main_window.GetLook();
 
   map = new TargetMapWindow(look.map.waypoint, look.map.airspace,
                             look.map.trail, look.map.task, look.map.aircraft);

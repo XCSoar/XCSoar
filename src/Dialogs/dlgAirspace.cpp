@@ -51,7 +51,7 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     CommonInterface::SettingsComputer().airspace;
   const AirspaceRendererSettings &renderer =
     CommonInterface::SettingsMap().airspace;
-  const AirspaceLook &look = CommonInterface::main_window.look->map.airspace;
+  const AirspaceLook &look = CommonInterface::main_window.GetLook().map.airspace;
 
   PixelScalar w0 = rc.right - rc.left - Layout::FastScale(4);
 
@@ -113,7 +113,8 @@ OnAirspaceListEnter(unsigned ItemIndex)
       Profile::SetAirspaceColor(ItemIndex, renderer.colours[ItemIndex]);
       changed = true;
 
-      AirspaceLook &look = CommonInterface::main_window.look->map.airspace;
+      AirspaceLook &look =
+        CommonInterface::main_window.SetLook().map.airspace;
       look.Initialise(renderer);
     }
 

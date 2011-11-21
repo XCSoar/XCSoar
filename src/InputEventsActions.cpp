@@ -499,17 +499,10 @@ InputEvents::eventClearStatusMessages(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventFLARMRadar(gcc_unused const TCHAR *misc)
 {
-  GaugeFLARM *gauge_flarm = XCSoarInterface::main_window.flarm;
-  if (gauge_flarm == NULL)
-    return;
-
   if (_tcscmp(misc, _T("ForceToggle")) == 0) {
-    gauge_flarm->ForceVisible = !gauge_flarm->ForceVisible;
-    CommonInterface::SetUISettings().enable_flarm_gauge =
-        gauge_flarm->ForceVisible;
+    CommonInterface::main_window.ToggleForceFLARMRadar();
   } else
-    gauge_flarm->Suppress = !gauge_flarm->Suppress;
-  // the result of this will get triggered by refreshslots
+    CommonInterface::main_window.ToggleSuppressFLARMRadar();
 }
 
 void
@@ -706,7 +699,7 @@ void
 InputEvents::eventAnalysis(gcc_unused const TCHAR *misc)
 {
   dlgAnalysisShowModal(XCSoarInterface::main_window,
-                       *CommonInterface::main_window.look,
+                       CommonInterface::main_window.GetLook(),
                        CommonInterface::Full(),
                        *glide_computer,
                        protected_task_manager, &airspace_database, terrain);
@@ -1267,19 +1260,14 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
 {
-  const NMEAInfo &basic = CommonInterface::Basic();
-  const GlueMapWindow *map_window = CommonInterface::main_window.map;
-  if (map_window == NULL)
-    return;
-
   if (_tcscmp(misc, _T("aircraft")) == 0)
     // big range..
-    PopupNearestWaypointDetails(way_points, basic.location,
+    PopupNearestWaypointDetails(way_points, CommonInterface::Basic().location,
                                 1.0e5);
   else if (_tcscmp(misc, _T("pan")) == 0)
     // big range..
     PopupNearestWaypointDetails(way_points,
-                                map_window->VisibleProjection().GetGeoLocation(),
+                                CommonInterface::main_window.GetProjection().GetGeoLocation(),
                                 1.0e5);
 }
 
@@ -1730,7 +1718,7 @@ InputEvents::sub_TerrainTopography(int vswitch)
 void
 InputEvents::sub_Pan(int vswitch)
 {
-  GlueMapWindow *map_window = CommonInterface::main_window.map;
+  GlueMapWindow *map_window = CommonInterface::main_window.ActivateMap();
   if (map_window == NULL)
     return;
 
@@ -1761,7 +1749,7 @@ InputEvents::sub_Pan(int vswitch)
 void
 InputEvents::sub_PanCursor(int dx, int dy)
 {
-  GlueMapWindow *map_window = CommonInterface::main_window.map;
+  GlueMapWindow *map_window = CommonInterface::main_window.GetMapIfActive();
   if (map_window == NULL || !map_window->IsPanning())
     return;
 
@@ -1789,8 +1777,8 @@ InputEvents::sub_AutoZoom(int vswitch)
   Profile::Set(szProfileAutoZoom, settings_map.auto_zoom_enabled);
 
   if (settings_map.auto_zoom_enabled &&
-      CommonInterface::main_window.map != NULL)
-    CommonInterface::main_window.map->SetPan(false);
+      CommonInterface::main_window.GetMap() != NULL)
+    CommonInterface::main_window.GetMap()->SetPan(false);
 
   ActionInterface::SendSettingsMap(true);
 }
@@ -1799,7 +1787,7 @@ void
 InputEvents::sub_SetZoom(fixed value)
 {
   SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
-  GlueMapWindow *map_window = CommonInterface::main_window.map;
+  GlueMapWindow *map_window = CommonInterface::main_window.ActivateMap();
   if (map_window == NULL)
     return;
 
@@ -1827,7 +1815,7 @@ InputEvents::sub_SetZoom(fixed value)
 void
 InputEvents::sub_ScaleZoom(int vswitch)
 {
-  const GlueMapWindow *map_window = CommonInterface::main_window.map;
+  const GlueMapWindow *map_window = CommonInterface::main_window.ActivateMap();
   if (map_window == NULL)
     return;
 

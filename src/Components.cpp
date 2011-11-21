@@ -285,7 +285,7 @@ XCSoarInterface::Startup()
   }
 #endif
 
-  SetXMLDialogLook(main_window.look->dialog);
+  SetXMLDialogLook(main_window.GetLook().dialog);
 
   SetSettingsComputer().SetDefaults();
   SetUISettings().SetDefaults();
@@ -439,7 +439,7 @@ XCSoarInterface::Startup()
 
   operation.SetText(_("Initialising display"));
 
-  GlueMapWindow *map_window = main_window.map;
+  GlueMapWindow *map_window = main_window.GetMap();
   if (map_window != NULL) {
     map_window->set_way_points(&way_points);
     map_window->set_task(protected_task_manager);
