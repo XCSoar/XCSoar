@@ -205,6 +205,14 @@ public:
   }
 
   /**
+   * Is the map active, i.e. currently visible?
+   */
+  bool IsMapActive() const {
+    /* not implemented yet, map is always active */
+    return true;
+  }
+
+  /**
    * Returns the map if it is active, or NULL if the map is not
    * active.
    */

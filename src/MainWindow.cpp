@@ -648,8 +648,7 @@ MainWindow::SetSettingsMap(const SETTINGS_MAP &settings_map)
 GlueMapWindow *
 MainWindow::GetMapIfActive()
 {
-  /* not implemented yet, map is always active */
-  return map;
+  return IsMapActive() ? map : NULL;
 }
 
 GlueMapWindow *
