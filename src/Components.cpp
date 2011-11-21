@@ -496,9 +496,7 @@ XCSoarInterface::Startup()
 
   operation.Hide();
 
-#ifndef ENABLE_OPENGL
-  draw_thread->Resume();
-#endif
+  main_window.ResumeThreads();
 
   return true;
 }

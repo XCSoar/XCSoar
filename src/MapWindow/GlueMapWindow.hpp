@@ -138,6 +138,16 @@ public:
   void ExchangeBlackboard();
 
   /**
+   * Suspend threads that are owned by this object.
+   */
+  void SuspendThreads();
+
+  /**
+   * Resumt threads that are owned by this object.
+   */
+  void ResumeThreads();
+
+  /**
    * Trigger a full redraw of the map.
    */
   void FullRedraw();

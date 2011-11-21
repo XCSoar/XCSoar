@@ -73,9 +73,7 @@ bool LanguageChanged = false;
 static void
 SettingsEnter()
 {
-#ifndef ENABLE_OPENGL
-  draw_thread->Suspend();
-#endif
+  CommonInterface::main_window.SuspendThreads();
 
   // This prevents the map and calculation threads from doing anything
   // with shared data while it is being changed (also prevents drawing)

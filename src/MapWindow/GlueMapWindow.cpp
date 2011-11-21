@@ -93,6 +93,24 @@ GlueMapWindow::ExchangeBlackboard()
 }
 
 void
+GlueMapWindow::SuspendThreads()
+{
+#ifndef ENABLE_OPENGL
+  if (draw_thread != NULL)
+    draw_thread->Suspend();
+#endif
+}
+
+void
+GlueMapWindow::ResumeThreads()
+{
+#ifndef ENABLE_OPENGL
+  if (draw_thread != NULL)
+    draw_thread->Resume();
+#endif
+}
+
+void
 GlueMapWindow::FullRedraw()
 {
   UpdateDisplayMode();

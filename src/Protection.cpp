@@ -101,9 +101,7 @@ SuspendAllThreads()
   /* not suspending MergeThread, because it does not access shared
      unprotected data structures */
 
-#ifndef ENABLE_OPENGL
-  draw_thread->Suspend();
-#endif
+  CommonInterface::main_window.SuspendThreads();
   calculation_thread->Suspend();
 }
 
@@ -111,7 +109,5 @@ void
 ResumeAllThreads()
 {
   calculation_thread->Resume();
-#ifndef ENABLE_OPENGL
-  draw_thread->Resume();
-#endif
+  CommonInterface::main_window.ResumeThreads();
 }

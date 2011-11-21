@@ -144,6 +144,16 @@ public:
   void reset();
 
   /**
+   * Suspend threads that are owned by this object.
+   */
+  void SuspendThreads();
+
+  /**
+   * Resumt threads that are owned by this object.
+   */
+  void ResumeThreads();
+
+  /**
    * Set the keyboard focus on the default element (i.e. the
    * MapWindow).
    */

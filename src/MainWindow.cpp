@@ -432,6 +432,20 @@ MainWindow::reset()
 }
 
 void
+MainWindow::SuspendThreads()
+{
+  if (map != NULL)
+    map->SuspendThreads();
+}
+
+void
+MainWindow::ResumeThreads()
+{
+  if (map != NULL)
+    map->ResumeThreads();
+}
+
+void
 MainWindow::SetDefaultFocus()
 {
   if (map != NULL)
