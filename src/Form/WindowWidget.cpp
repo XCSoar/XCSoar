@@ -36,8 +36,7 @@ WindowWidget::Show(const PixelRect &rc)
   assert(window != NULL);
   assert(!window->is_visible());
 
-  window->fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
-  window->show();
+  window->MoveAndShow(rc);
 }
 
 void

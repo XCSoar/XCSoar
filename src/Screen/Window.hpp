@@ -444,6 +444,25 @@ public:
 #endif
   }
 
+  /**
+   * Move the Window to the specified position within the parent
+   * ContainerWindow and make it visible.
+   */
+  void MoveAndShow(const PixelRect rc) {
+    assert_none_locked();
+    assert_thread();
+
+#ifdef USE_GDI
+    ::SetWindowPos(hWnd, NULL,
+                   rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
+                   SWP_SHOWWINDOW | SWP_NOACTIVATE |
+                   SWP_NOZORDER | SWP_NOOWNERZORDER);
+#else
+    move(rc);
+    show();
+#endif
+  }
+
   void resize(UPixelScalar width, UPixelScalar height) {
     assert_none_locked();
     assert_thread();
