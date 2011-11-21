@@ -54,6 +54,6 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& waypoint,
 bool
 PopupNearestWaypointDetails(const Waypoints &way_points,
                             const GeoPoint &location,
-                            double range, bool scalefilter = false);
+                            double range);
 
 #endif
