@@ -32,12 +32,6 @@ Copyright_License {
 #include <math.h>
 
 class ILECDevice : public AbstractDevice {
-private:
-  Port *port;
-
-public:
-  ILECDevice(Port *_port):port(_port) {}
-
 public:
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 };
@@ -108,7 +102,7 @@ ILECDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 static Device *
 ILECCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
-  return new ILECDevice(com_port);
+  return new ILECDevice();
 }
 
 const struct DeviceRegister ilec_device_driver = {
