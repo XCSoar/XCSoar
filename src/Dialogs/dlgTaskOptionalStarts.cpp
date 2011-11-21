@@ -70,22 +70,20 @@ OnOptionalStartPaintListItem(Canvas &canvas, const PixelRect rc,
     canvas.text(rc.left + Layout::FastScale(2),
                 rc.top + Layout::FastScale(2), _("(Add Alternate Start)"));
   } else {
+    RasterPoint pt = { PixelScalar(rc.left + Layout::FastScale(2)),
+                       PixelScalar(rc.top + Layout::FastScale(2)) };
 
-    TCHAR tmp[MAX_PATH];
+    const OrderedTaskPoint *tp;
     if (DrawListIndex == 0 && RealStartExists) {
-      const OrderedTaskPoint *tp = ordered_task->get_tp(0);
-      assert(tp);
-      _stprintf(tmp,_T("*%s"), tp->GetWaypoint().name.c_str());
+      tp = ordered_task->get_tp(0);
+      canvas.text(pt.x, pt.y, _T("*"));
+      pt.x += canvas.text_width(_T("*"));
+    } else
+      tp = ordered_task->get_optional_start(index_optional_starts);
 
-    } else {
-      const OrderedTaskPoint *tp =
-          ordered_task->get_optional_start(index_optional_starts);
-      assert(tp);
-      _tcscpy(tmp,tp->GetWaypoint().name.c_str());
-    }
+    assert(tp != NULL);
 
-    canvas.text(rc.left + Layout::FastScale(2),
-                rc.top + Layout::FastScale(2), tmp);
+    canvas.text(pt.x, pt.y, tp->GetWaypoint().name.c_str());
   }
 }
 
