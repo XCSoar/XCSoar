@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/DeviceListDialog.hpp"
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/Vega.hpp"
 #include "Dialogs/ManageCAI302Dialog.hpp"
 #include "Dialogs/PortMonitor.hpp"
 #include "Util/TrivialArray.hpp"

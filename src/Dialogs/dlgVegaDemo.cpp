@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/Vega.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Units/Units.hpp"
 #include "Device/device.hpp"

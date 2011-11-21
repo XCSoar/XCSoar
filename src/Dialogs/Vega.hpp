@@ -21,46 +21,13 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_DIALOGS_H)
-#define XCSOAR_DIALOGS_H
-
-#include <tchar.h>
-
-class SingleWindow;
-
-void dlgAlternatesListShowModal(SingleWindow &parent);
-
-void dlgBasicSettingsShowModal();
-void dlgBrightnessShowModal();
-void dlgHelpShowModal(SingleWindow &parent, const TCHAR* Caption,
-    const TCHAR* HelpText);
-
-void dlgChecklistShowModal();
-void dlgConfigurationShowModal();
-void dlgConfigFontsShowModal();
-
-void dlgLoggerReplayShowModal();
-
-/**
- * @return true on success, false if the user has pressed the "Quit"
- * button
- */
-bool
-dlgStartupShowModal();
-
-void dlgWindSettingsShowModal();
-
-void dlgStatusShowModal(int page);
-
-void dlgSwitchesShowModal();
+#ifndef XCSOAR_DIALOGS_VEGA_HPP
+#define XCSOAR_DIALOGS_VEGA_HPP
 
 void
-dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id);
+dlgVegaDemoShowModal();
 
-void dlgVoiceShowModal();
-
-void dlgThermalAssistantShowModal();
-
-void dlgCreditsShowModal(SingleWindow &parent);
+bool
+dlgConfigurationVarioShowModal();
 
 #endif
