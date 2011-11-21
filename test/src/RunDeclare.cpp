@@ -79,6 +79,8 @@ int main(int argc, char **argv)
       if (driver->CanDeclare())
         _ftprintf(stderr, _T("\t%s\n"), driver->name);
 
+    _ftprintf(stderr, _T("\tFLARM\n"));
+
     return EXIT_FAILURE;
   }
 
