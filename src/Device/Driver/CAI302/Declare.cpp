@@ -146,14 +146,14 @@ bool
 CAI302Device::Declare(const Declaration &declaration,
                       OperationEnvironment &env)
 {
-  bool success = DeclareInner(*port, declaration, env);
+  bool success = DeclareInner(port, declaration, env);
 
-  port->SetRxTimeout(500);
+  port.SetRxTimeout(500);
 
   if (success)
-    CAI302::LogMode(*port);
+    CAI302::LogMode(port);
   else
-    CAI302::LogModeQuick(*port);
+    CAI302::LogModeQuick(port);
 
   return success;
 }

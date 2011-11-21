@@ -182,7 +182,7 @@ FlytecDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 }
 
 static Device *
-FlytecCreateOnPort(const DeviceConfig &config, Port *com_port)
+FlytecCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
   return new FlytecDevice();
 }

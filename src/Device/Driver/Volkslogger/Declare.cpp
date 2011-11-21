@@ -148,18 +148,18 @@ VolksloggerDevice::Declare(const Declaration &declaration,
 
   env.SetText(_T("Comms with Volkslogger"));
 
-  port->SetRxTimeout(500);
+  port.SetRxTimeout(500);
 
   // change to IO mode baud rate
-  unsigned lLastBaudrate = port->SetBaudrate(9600L);
+  unsigned lLastBaudrate = port.SetBaudrate(9600L);
 
-  VLAPI vl(*port, env);
+  VLAPI vl(port, env);
 
   bool success = DeclareInner(vl, declaration);
 
   vl.close(1);
 
-  port->SetBaudrate(lLastBaudrate); // restore baudrate
+  port.SetBaudrate(lLastBaudrate); // restore baudrate
 
   return success;
 }

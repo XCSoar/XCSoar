@@ -34,7 +34,7 @@ LXDevice::PutMacCready(fixed MacCready)
   sprintf(szTmp, "$PFLX2,%1.1f,,,,,,", (double)MacCready);
   AppendNMEAChecksum(szTmp);
   strcat(szTmp, "\r\n");
-  port->Write(szTmp);
+  port.Write(szTmp);
 
   return true;
 }

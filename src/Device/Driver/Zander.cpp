@@ -157,7 +157,7 @@ ZanderDevice::ParseNMEA(const char *String, NMEAInfo &info)
 }
 
 static Device *
-ZanderCreateOnPort(const DeviceConfig &config, Port *com_port)
+ZanderCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
   return new ZanderDevice();
 }

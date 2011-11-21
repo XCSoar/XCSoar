@@ -59,7 +59,7 @@ using std::max;
 
 class VegaDevice : public AbstractDevice {
 private:
-  Port *port;
+  Port &port;
 
   /**
    * The most recent QNH value, written by SetQNH(), read by
@@ -70,7 +70,7 @@ private:
   bool detected;
 
 public:
-  VegaDevice(Port *_port)
+  VegaDevice(Port &_port)
     :port(_port), qnh(AtmosphericPressure::Standard()), detected(false) {}
 
 protected:
@@ -419,7 +419,7 @@ VegaDevice::OnSysTicker(const DerivedInfo &calculated)
 }
 
 static Device *
-VegaCreateOnPort(const DeviceConfig &config, Port *com_port)
+VegaCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
   return new VegaDevice(com_port);
 }

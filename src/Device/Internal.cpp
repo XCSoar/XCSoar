@@ -30,15 +30,14 @@ Copyright_License {
 #include <stdio.h>
 
 void
-PortWriteNMEA(Port *port, const char *line)
+PortWriteNMEA(Port &port, const char *line)
 {
-  assert(port != NULL);
   assert(line != NULL);
 
-  port->Write('$');
-  port->Write(line);
+  port.Write('$');
+  port.Write(line);
 
   char checksum[16];
   sprintf(checksum, "*%02X\r\n", NMEAChecksum(line));
-  port->Write(checksum);
+  port.Write(checksum);
 }

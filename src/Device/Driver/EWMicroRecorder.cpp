@@ -52,10 +52,10 @@ Copyright_License {
 
 class EWMicroRecorderDevice : public AbstractDevice {
 protected:
-  Port *port;
+  Port &port;
 
 public:
-  EWMicroRecorderDevice(Port *_port)
+  EWMicroRecorderDevice(Port &_port)
     :port(_port) {}
 
 public:
@@ -314,18 +314,18 @@ EWMicroRecorderDevice::Declare(const Declaration &declaration,
 
   /* during tests, the EW has taken up to one second to respond to
      the command \x18 */
-  port->SetRxTimeout(2500);
+  port.SetRxTimeout(2500);
 
-  bool success = DeclareInner(*port, declaration, env);
+  bool success = DeclareInner(port, declaration, env);
 
-  port->Write("!!\r\n");         // go back to NMEA mode
+  port.Write("!!\r\n");         // go back to NMEA mode
 
   return success;
 }
 
 
 static Device *
-EWMicroRecorderCreateOnPort(const DeviceConfig &config, Port *com_port)
+EWMicroRecorderCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
   return new EWMicroRecorderDevice(com_port);
 }

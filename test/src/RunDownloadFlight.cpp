@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  Device *device = driver->CreateOnPort(config, &port);
+  Device *device = driver->CreateOnPort(config, port);
   assert(device != NULL);
 
   ConsoleOperationEnvironment env;

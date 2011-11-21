@@ -43,7 +43,7 @@ Copyright_License {
 
 class PGDevice : public LXDevice {
 public:
-  PGDevice(Port *_port, unsigned _bulk_baud_rate)
+  PGDevice(Port &_port, unsigned _bulk_baud_rate)
     :LXDevice(_port, _bulk_baud_rate) {}
 
 public:
@@ -78,7 +78,7 @@ PGDevice::ParseNMEA(const char *String, NMEAInfo &info)
 }
 
 static Device *
-PGCreateOnPort(const DeviceConfig &config, Port *com_port)
+PGCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
   return new PGDevice(com_port, config.bulk_baud_rate);
 }

@@ -45,7 +45,7 @@ Copyright_License {
 
 class AltairProDevice : public AbstractDevice {
 private:
-  Port *port;
+  Port &port;
 
   bool DeclareInternal(const struct Declaration &declaration);
   void PutTurnPoint(const TCHAR *name, const Waypoint *waypoint);
@@ -55,7 +55,7 @@ private:
 #endif
 
 public:
-  AltairProDevice(Port *_port):port(_port){}
+  AltairProDevice(Port &_port):port(_port){}
 
 public:
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
@@ -103,7 +103,7 @@ bool
 AltairProDevice::Declare(const struct Declaration &declaration,
                          OperationEnvironment &env)
 {
-  port->SetRxTimeout(500); // set RX timeout to 500[ms]
+  port.SetRxTimeout(500); // set RX timeout to 500[ms]
 
   bool result = DeclareInternal(declaration);
 
@@ -175,7 +175,6 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration)
 bool
 AltairProDevice::PropertySetGet(char *Buffer, size_t size)
 {
-  assert(port != NULL);
   assert(Buffer != NULL);
 
   // eg $PDVSC,S,FOO,BAR*<cr>\r\n
@@ -188,11 +187,11 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size)
     comma[1] = '\0';
 
     // expect eg $PDVSC,A,FOO,
-    if (port->ExpectString(Buffer)){
+    if (port.ExpectString(Buffer)){
 
       // read value eg bar
       while(--size){
-        int ch = port->GetChar();
+        int ch = port.GetChar();
         if (ch == -1)
           break;
 
@@ -216,7 +215,6 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size)
 bool
 AltairProDevice::PropertySetGet(TCHAR *s, size_t size)
 {
-  assert(port != NULL);
   assert(s != NULL);
 
   char buffer[_tcslen(s) * 4 + 1];
@@ -295,7 +293,7 @@ AltairProDevice::PutTurnPoint(const TCHAR *propertyName, const Waypoint *waypoin
 }
 
 static Device *
-AltairProCreateOnPort(const DeviceConfig &config, Port *com_port)
+AltairProCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
   return new AltairProDevice(com_port);
 }

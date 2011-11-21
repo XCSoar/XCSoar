@@ -298,7 +298,7 @@ struct DeviceRegister {
   /**
    * Create an instance of this driver for the given NMEA port.
    */
-  Device *(*CreateOnPort)(const DeviceConfig &config, Port *com_port);
+  Device *(*CreateOnPort)(const DeviceConfig &config, Port &com_port);
 
   /**
    * Is this the NMEA out driver?

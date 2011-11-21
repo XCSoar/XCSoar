@@ -28,34 +28,34 @@ Copyright_License {
 bool
 CAI302Device::Reboot(OperationEnvironment &env)
 {
-  port->SetRxTimeout(500);
-  CAI302::CommandModeQuick(*port);
-  bool success = CAI302::Reboot(*port);
-  CAI302::LogModeQuick(*port);
+  port.SetRxTimeout(500);
+  CAI302::CommandModeQuick(port);
+  bool success = CAI302::Reboot(port);
+  CAI302::LogModeQuick(port);
   return success;
 }
 
 bool
 CAI302Device::PowerOff(OperationEnvironment &env)
 {
-  port->SetRxTimeout(500);
-  CAI302::CommandModeQuick(*port);
-  bool success = CAI302::PowerOff(*port);
-  CAI302::LogModeQuick(*port);
+  port.SetRxTimeout(500);
+  CAI302::CommandModeQuick(port);
+  bool success = CAI302::PowerOff(port);
+  CAI302::LogModeQuick(port);
   return success;
 }
 
 bool
 CAI302Device::StartLogging(OperationEnvironment &env)
 {
-  port->SetRxTimeout(500);
-  CAI302::CommandModeQuick(*port);
-  bool success = CAI302::StartLogging(*port);
+  port.SetRxTimeout(500);
+  CAI302::CommandModeQuick(port);
+  bool success = CAI302::StartLogging(port);
 
   if (success)
-    CAI302::LogMode(*port);
+    CAI302::LogMode(port);
   else
-    CAI302::LogModeQuick(*port);
+    CAI302::LogModeQuick(port);
 
   return success;
 }
@@ -63,14 +63,14 @@ CAI302Device::StartLogging(OperationEnvironment &env)
 bool
 CAI302Device::StopLogging(OperationEnvironment &env)
 {
-  port->SetRxTimeout(500);
-  CAI302::CommandModeQuick(*port);
-  bool success = CAI302::StopLogging(*port);
+  port.SetRxTimeout(500);
+  CAI302::CommandModeQuick(port);
+  bool success = CAI302::StopLogging(port);
 
   if (success)
-    CAI302::LogMode(*port);
+    CAI302::LogMode(port);
   else
-    CAI302::LogModeQuick(*port);
+    CAI302::LogModeQuick(port);
 
   return success;
 }
@@ -78,14 +78,14 @@ CAI302Device::StopLogging(OperationEnvironment &env)
 bool
 CAI302Device::SetVolume(unsigned volume, OperationEnvironment &env)
 {
-  port->SetRxTimeout(500);
-  CAI302::CommandModeQuick(*port);
-  bool success = CAI302::SetVolume(*port, volume);
+  port.SetRxTimeout(500);
+  CAI302::CommandModeQuick(port);
+  bool success = CAI302::SetVolume(port, volume);
 
   if (success)
-    CAI302::LogMode(*port);
+    CAI302::LogMode(port);
   else
-    CAI302::LogModeQuick(*port);
+    CAI302::LogModeQuick(port);
 
   return success;
 }
@@ -93,14 +93,14 @@ CAI302Device::SetVolume(unsigned volume, OperationEnvironment &env)
 bool
 CAI302Device::ClearPoints(OperationEnvironment &env)
 {
-  port->SetRxTimeout(500);
-  CAI302::CommandModeQuick(*port);
-  bool success = CAI302::ClearPoints(*port);
+  port.SetRxTimeout(500);
+  CAI302::CommandModeQuick(port);
+  bool success = CAI302::ClearPoints(port);
 
   if (success)
-    CAI302::LogMode(*port);
+    CAI302::LogMode(port);
   else
-    CAI302::LogModeQuick(*port);
+    CAI302::LogModeQuick(port);
 
   return success;
 }
@@ -109,14 +109,14 @@ CAI302Device::ClearPoints(OperationEnvironment &env)
 bool
 CAI302Device::ClearPilot(OperationEnvironment &env)
 {
-  port->SetRxTimeout(500);
-  CAI302::CommandModeQuick(*port);
-  bool success = CAI302::ClearPilot(*port);
+  port.SetRxTimeout(500);
+  CAI302::CommandModeQuick(port);
+  bool success = CAI302::ClearPilot(port);
 
   if (success)
-    CAI302::LogMode(*port);
+    CAI302::LogMode(port);
   else
-    CAI302::LogModeQuick(*port);
+    CAI302::LogModeQuick(port);
 
   return success;
 }
@@ -124,14 +124,14 @@ CAI302Device::ClearPilot(OperationEnvironment &env)
 bool
 CAI302Device::ClearLog(OperationEnvironment &env)
 {
-  port->SetRxTimeout(500);
-  CAI302::CommandModeQuick(*port);
-  bool success = CAI302::ClearLog(*port);
+  port.SetRxTimeout(500);
+  CAI302::CommandModeQuick(port);
+  bool success = CAI302::ClearLog(port);
 
   if (success)
-    CAI302::LogMode(*port);
+    CAI302::LogMode(port);
   else
-    CAI302::LogModeQuick(*port);
+    CAI302::LogModeQuick(port);
 
   return success;
 }

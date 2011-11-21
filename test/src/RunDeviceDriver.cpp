@@ -187,7 +187,7 @@ int main(int argc, char **argv)
 
   NullPort port;
   Device *device = driver->CreateOnPort != NULL
-    ? driver->CreateOnPort(config, &port)
+    ? driver->CreateOnPort(config, port)
     : NULL;
 
   NMEAParser parser;

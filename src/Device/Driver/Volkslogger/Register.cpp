@@ -25,7 +25,7 @@ Copyright_License {
 #include "Internal.hpp"
 
 static Device *
-VolksloggerCreateOnPort(const DeviceConfig &config, Port *com_port)
+VolksloggerCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
   return new VolksloggerDevice(com_port);
 }

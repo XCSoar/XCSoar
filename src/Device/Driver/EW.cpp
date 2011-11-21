@@ -48,12 +48,12 @@ Copyright_License {
 
 class EWDevice : public AbstractDevice {
 protected:
-  Port *port;
+  Port &port;
   unsigned lLastBaudrate;
   int ewDecelTpIndex;
 
 public:
-  EWDevice(Port *_port)
+  EWDevice(Port &_port)
     :port(_port),
      lLastBaudrate(0), ewDecelTpIndex(0) {}
 
@@ -70,13 +70,13 @@ public:
 };
 
 static void
-WriteWithChecksum(Port *port, const char *String)
+WriteWithChecksum(Port &port, const char *String)
 {
-  port->Write(String);
+  port.Write(String);
 
   char sTmp[8];
   sprintf(sTmp, "%02X\r\n", ::NMEAChecksum(String));
-  port->Write(sTmp);
+  port.Write(sTmp);
 }
 
 bool
@@ -86,11 +86,11 @@ EWDevice::TryConnect()
   while (--retries) {
 
     // send IO Mode command
-    port->Write("##\r\n");
-    if (port->ExpectString("IO Mode.\r"))
+    port.Write("##\r\n");
+    if (port.ExpectString("IO Mode.\r"))
       return true;
 
-    port->ExpectString("$$$"); // empty input buffer
+    port.ExpectString("$$$"); // empty input buffer
   }
 
   return false;
@@ -139,37 +139,37 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
   sprintf(sTmp, "%-12s%-8s%-8s%-12s%-12s%-6s\r", sPilot, sGliderType, sGliderID,
           "" /* GPS Model */, "" /* GPS Serial No. */, "" /* Flight Date */
           /* format unknown, left blank (GPS has a RTC) */);
-  port->Write(sTmp);
+  port.Write(sTmp);
 
-  if (!port->ExpectString("OK\r"))
+  if (!port.ExpectString("OK\r"))
     return false;
 
   /*
   sprintf(sTmp, "#SUI%02d", 0);           // send pilot name
   WriteWithChecksum(port, sTmp);
   env.Sleep(50);
-  port->Write(PilotsName);
-  port->Write('\r');
+  port.Write(PilotsName);
+  port.Write('\r');
 
-  if (!port->ExpectString("OK\r"))
+  if (!port.ExpectString("OK\r"))
     return false;
 
   sprintf(sTmp, "#SUI%02d", 1);           // send type of aircraft
   WriteWithChecksum(port, sTmp);
   env.Sleep(50);
-  port->Write(Class);
-  port->Write('\r');
+  port.Write(Class);
+  port.Write('\r');
 
-  if (!port->ExpectString("OK\r"))
+  if (!port.ExpectString("OK\r"))
     nDeclErrorCode = 1;
 
   sprintf(sTmp, "#SUI%02d", 2);           // send aircraft ID
   WriteWithChecksum(port, sTmp);
   env.Sleep(50);
-  port->Write(ID);
-  port->Write('\r');
+  port.Write(ID);
+  port.Write('\r');
 
-  if (!port->ExpectString("OK\r"))
+  if (!port.ExpectString("OK\r"))
     return false;
   */
 
@@ -177,7 +177,7 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
   for (int i = 0; i < 6; i++) {
     sprintf(sTmp, "#CTP%02d", i);
     WriteWithChecksum(port, sTmp);
-    if (!port->ExpectString("OK\r"))
+    if (!port.ExpectString("OK\r"))
       return false;
   }
 
@@ -193,18 +193,18 @@ EWDevice::Declare(const struct Declaration &declaration,
                   OperationEnvironment &env)
 {
   // change to IO Mode baudrate
-  lLastBaudrate = port->SetBaudrate(9600L);
+  lLastBaudrate = port.SetBaudrate(9600L);
 
   // set RX timeout to 500[ms]
-  port->SetRxTimeout(500);
+  port.SetRxTimeout(500);
 
   bool success = DeclareInner(declaration, env);
 
   // switch to NMEA mode
-  port->Write("NMEA\r\n");
+  port.Write("NMEA\r\n");
 
   // restore baudrate
-  port->SetBaudrate(lLastBaudrate);
+  port.SetBaudrate(lLastBaudrate);
 
   return success;
 }
@@ -284,7 +284,7 @@ EWDevice::AddWaypoint(const Waypoint &way_point)
   WriteWithChecksum(port, EWRecord);
 
   // wait for response
-  if (!port->ExpectString("OK\r"))
+  if (!port.ExpectString("OK\r"))
     return false;
 
   // increase TP index
@@ -296,11 +296,11 @@ EWDevice::AddWaypoint(const Waypoint &way_point)
 void
 EWDevice::LinkTimeout()
 {
-  port->Write("NMEA\r\n");
+  port.Write("NMEA\r\n");
 }
 
 static Device *
-EWCreateOnPort(const DeviceConfig &config, Port *com_port)
+EWCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
   return new EWDevice(com_port);
 }

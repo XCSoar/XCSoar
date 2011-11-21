@@ -216,15 +216,15 @@ LXDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
     return false;
 
   const unsigned old_baud_rate = bulk_baud_rate != 0
-    ? port->SetBaudrate(bulk_baud_rate)
+    ? port.SetBaudrate(bulk_baud_rate)
     : 0;
 
-  bool success = DeclareInner(*port, declaration, env);
+  bool success = DeclareInner(port, declaration, env);
 
-  LX::CommandModeQuick(*port, env);
+  LX::CommandModeQuick(port, env);
 
   if (old_baud_rate != 0)
-    port->SetBaudrate(old_baud_rate);
+    port.SetBaudrate(old_baud_rate);
 
   return success;
 }

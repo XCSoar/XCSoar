@@ -29,10 +29,10 @@ Copyright_License {
 
 class XCOM760Device : public AbstractDevice {
 private:
-  Port *port;
+  Port &port;
 
 public:
-  XCOM760Device(Port *_port):port(_port) {}
+  XCOM760Device(Port &_port):port(_port) {}
 
 public:
   virtual bool PutVolume(int volume);
@@ -45,7 +45,7 @@ XCOM760Device::PutVolume(int Volume)
 {
   char szTmp[32];
   sprintf(szTmp, "$RVOL=%d\r\n", Volume);
-  port->Write(szTmp);
+  port.Write(szTmp);
   return true;
 }
 
@@ -56,7 +56,7 @@ XCOM760Device::PutActiveFrequency(RadioFrequency frequency)
   sprintf(szTmp, "$TXAF=%u.%03u\r\n",
           frequency.GetKiloHertz() / 1000,
           frequency.GetKiloHertz() % 1000);
-  port->Write(szTmp);
+  port.Write(szTmp);
   return true;
 }
 
@@ -71,7 +71,7 @@ XCOM760Device::PutStandbyFrequency(RadioFrequency frequency)
 }
 
 static Device *
-XCOM760CreateOnPort(const DeviceConfig &config, Port *com_port)
+XCOM760CreateOnPort(const DeviceConfig &config, Port &com_port)
 {
   return new XCOM760Device(com_port);
 }

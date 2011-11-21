@@ -31,10 +31,10 @@ Copyright_License {
  */
 class CAI302Device : public AbstractDevice {
 private:
-  Port *port;
+  Port &port;
 
 public:
-  CAI302Device(Port *_port)
+  CAI302Device(Port &_port)
     :port(_port) {}
 
 public:

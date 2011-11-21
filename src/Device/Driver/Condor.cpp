@@ -133,7 +133,7 @@ CondorDevice::ParseNMEA(const char *String, NMEAInfo &info)
 }
 
 static Device *
-CondorCreateOnPort(const DeviceConfig &config, gcc_unused Port *com_port)
+CondorCreateOnPort(const DeviceConfig &config, gcc_unused Port &com_port)
 {
   return new CondorDevice();
 }

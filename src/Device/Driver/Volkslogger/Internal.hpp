@@ -28,10 +28,10 @@ Copyright_License {
 
 class VolksloggerDevice : public AbstractDevice {
 private:
-  Port *port;
+  Port &port;
 
 public:
-  VolksloggerDevice(Port *_port):port(_port) {}
+  VolksloggerDevice(Port &_port):port(_port) {}
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool Declare(const Declaration &declaration,

@@ -100,7 +100,7 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver,
   if (config.IsDriver(_T("Condor")))
     parser.DisableGeoid();
 
-  device = Driver->CreateOnPort(config, Com);
+  device = Driver->CreateOnPort(config, *Com);
   if (!device->Open(env) || !Com->StartRxThread()) {
     delete device;
     device = NULL;
@@ -300,7 +300,7 @@ DeviceDescriptor::WriteNMEA(const char *line)
   assert(line != NULL);
 
   if (Com != NULL)
-    PortWriteNMEA(Com, line);
+    PortWriteNMEA(*Com, line);
 }
 
 #ifdef _UNICODE

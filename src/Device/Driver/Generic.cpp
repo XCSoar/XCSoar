@@ -28,7 +28,7 @@ class GenericDevice : public AbstractDevice {
 };
 
 static Device *
-GenericCreateOnPort(const DeviceConfig &config, Port *com_port)
+GenericCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
   return new GenericDevice();
 }

@@ -39,10 +39,10 @@ static const char CtrlC = '\x03';
 
 class CaiGpsNavDevice : public AbstractDevice {
 private:
-  Port *port;
+  Port &port;
 
 public:
-  CaiGpsNavDevice(Port *_port):port(_port) {}
+  CaiGpsNavDevice(Port &_port):port(_port) {}
 
 public:
   virtual bool Open(OperationEnvironment &env);
@@ -51,20 +51,20 @@ public:
 bool
 CaiGpsNavDevice::Open(OperationEnvironment &env)
 {
-  port->Write(CtrlC);
+  port.Write(CtrlC);
   env.Sleep(50);
-  port->Write("NMEA\r");
+  port.Write("NMEA\r");
 
   // This is for a slightly different mode, that
   // apparently outputs pressure info too...
-  //port->Write("PNP\r\n");
-  //port->Write("LOG 0\r\n");
+  //port.Write("PNP\r\n");
+  //port.Write("LOG 0\r\n");
 
   return true;
 }
 
 static Device *
-CaiGpsNavCreateOnPort(const DeviceConfig &config, Port *com_port)
+CaiGpsNavCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
   return new CaiGpsNavDevice(com_port);
 }

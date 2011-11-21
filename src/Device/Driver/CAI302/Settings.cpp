@@ -31,7 +31,7 @@ Copyright_License {
 bool
 CAI302Device::Open(gcc_unused OperationEnvironment &env)
 {
-  CAI302::LogModeQuick(*port);
+  CAI302::LogModeQuick(port);
 
   return true;
 }
@@ -43,7 +43,7 @@ CAI302Device::PutMacCready(fixed MacCready)
 
   char szTmp[32];
   sprintf(szTmp, "!g,m%u\r", mac_cready);
-  port->Write(szTmp);
+  port.Write(szTmp);
 
   return true;
 }
@@ -55,7 +55,7 @@ CAI302Device::PutBugs(fixed Bugs)
 
   char szTmp[32];
   sprintf(szTmp, "!g,u%u\r", bugs);
-  port->Write(szTmp);
+  port.Write(szTmp);
 
   return true;
 }
@@ -67,7 +67,7 @@ CAI302Device::PutBallast(fixed Ballast)
 
   char szTmp[32];
   sprintf(szTmp, "!g,b%u\r", ballast);
-  port->Write(szTmp);
+  port.Write(szTmp);
 
   return true;
 }

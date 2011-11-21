@@ -95,14 +95,14 @@ bool
 CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
                              OperationEnvironment &env)
 {
-  bool success = ReadFlightListInner(*port, flight_list, env);
+  bool success = ReadFlightListInner(port, flight_list, env);
 
-  port->SetRxTimeout(500);
+  port.SetRxTimeout(500);
 
   if (success)
-    CAI302::LogMode(*port);
+    CAI302::LogMode(port);
   else
-    CAI302::LogModeQuick(*port);
+    CAI302::LogModeQuick(port);
 
   return success;
 }
@@ -189,14 +189,14 @@ CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
   if (writer.HasError())
     return false;
 
-  bool success = DownloadFlightInner(*port, flight, writer, env);
+  bool success = DownloadFlightInner(port, flight, writer, env);
 
-  port->SetRxTimeout(500);
+  port.SetRxTimeout(500);
 
   if (success)
-    CAI302::LogMode(*port);
+    CAI302::LogMode(port);
   else
-    CAI302::LogModeQuick(*port);
+    CAI302::LogModeQuick(port);
 
   return success;
 }

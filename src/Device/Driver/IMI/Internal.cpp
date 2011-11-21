@@ -29,15 +29,12 @@ Copyright_License {
 bool
 IMIDevice::Connect(OperationEnvironment &env)
 {
-  if (port == NULL)
-    return false;
-
   // set new Rx timeout
-  if (!port->SetRxTimeout(2000))
+  if (!port.SetRxTimeout(2000))
     return false;
 
   // connect to the device
-  if (!IMI::Connect(*port, env))
+  if (!IMI::Connect(port, env))
     return false;
 
   return true;
@@ -47,5 +44,5 @@ void
 IMIDevice::Disconnect()
 {
   // disconnect
-  IMI::Disconnect(*port);
+  IMI::Disconnect(port);
 }

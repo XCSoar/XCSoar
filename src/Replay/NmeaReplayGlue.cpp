@@ -61,7 +61,7 @@ NmeaReplayGlue::Start()
   if (driver->CreateOnPort != NULL) {
     DeviceConfig config;
     config.Clear();
-    device = driver->CreateOnPort(config, &port);
+    device = driver->CreateOnPort(config, port);
   }
 
   NmeaReplay::Start();

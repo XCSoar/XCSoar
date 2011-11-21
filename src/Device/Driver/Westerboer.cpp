@@ -44,10 +44,10 @@ Copyright_License {
  *
  */
 class WesterboerDevice : public AbstractDevice {
-  Port *port;
+  Port &port;
 
 public:
-  WesterboerDevice(Port *_port):port(_port) {}
+  WesterboerDevice(Port &_port):port(_port) {}
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool PutMacCready(fixed mac_cready);
@@ -154,7 +154,7 @@ WesterboerDevice::PutMacCready(fixed _mac_cready)
   sprintf(buffer, "$PWES4,,%02u,,,,,,,", mac_cready);
   AppendNMEAChecksum(buffer);
   strcat(buffer, "\r\n");
-  port->Write(buffer);
+  port.Write(buffer);
 
   return true;
 }
@@ -169,13 +169,13 @@ WesterboerDevice::PutBugs(fixed _bugs)
   sprintf(buffer, "$PWES4,,,,,%02u,,,,", bugs);
   AppendNMEAChecksum(buffer);
   strcat(buffer, "\r\n");
-  port->Write(buffer);
+  port.Write(buffer);
 
   return true;
 }
 
 static Device *
-WesterboerCreateOnPort(const DeviceConfig &config, Port *com_port)
+WesterboerCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
   return new WesterboerDevice(com_port);
 }

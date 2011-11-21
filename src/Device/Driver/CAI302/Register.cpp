@@ -25,7 +25,7 @@ Copyright_License {
 #include "Internal.hpp"
 
 static Device *
-CAI302CreateOnPort(const DeviceConfig &config, Port *port)
+CAI302CreateOnPort(const DeviceConfig &config, Port &port)
 {
   return new CAI302Device(port);
 }

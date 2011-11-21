@@ -86,7 +86,7 @@ DebugReplayNMEA::DebugReplayNMEA(NLineReader *_reader,
                                  const DeviceRegister *driver)
   :DebugReplay(_reader),
    device(driver->CreateOnPort != NULL
-          ? driver->CreateOnPort(config, &port)
+          ? driver->CreateOnPort(config, port)
           : NULL)
 {
 }

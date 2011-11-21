@@ -31,10 +31,10 @@ Copyright_License {
  */
 class IMIDevice : public AbstractDevice {
 private:
-  Port *port;
+  Port &port;
 
 public:
-  IMIDevice(Port *_port):port(_port) {}
+  IMIDevice(Port &_port):port(_port) {}
 
   virtual bool ReadFlightList(RecordedFlightList &flight_list,
                               OperationEnvironment &env);

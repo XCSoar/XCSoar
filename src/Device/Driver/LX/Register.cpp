@@ -26,7 +26,7 @@ Copyright_License {
 #include "Profile/DeviceConfig.hpp"
 
 static Device *
-LXCreateOnPort(const DeviceConfig &config, Port *com_port)
+LXCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
   return new LXDevice(com_port, config.bulk_baud_rate);
 }

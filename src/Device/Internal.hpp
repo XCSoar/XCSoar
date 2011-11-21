@@ -40,6 +40,6 @@ class Port;
  * @param line the line without asterisk, checksum and newline
  */
 void
-PortWriteNMEA(Port *port, const char *line);
+PortWriteNMEA(Port &port, const char *line);
 
 #endif

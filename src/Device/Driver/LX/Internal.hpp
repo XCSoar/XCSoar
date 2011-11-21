@@ -29,12 +29,12 @@ Copyright_License {
 
 class LXDevice: public AbstractDevice
 {
-  Port *port;
+  Port &port;
 
   unsigned bulk_baud_rate;
 
 public:
-  LXDevice(Port *_port, unsigned _bulk_baud_rate)
+  LXDevice(Port &_port, unsigned _bulk_baud_rate)
     :port(_port), bulk_baud_rate(_bulk_baud_rate) {}
 
 public:
