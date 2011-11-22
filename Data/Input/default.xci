@@ -1,4 +1,3 @@
-
 # -------------------
 # GlideComputerEvents
 # -------------------
@@ -27,88 +26,6 @@ data=ARM_READY
 event=Beep 1
 event=TaskTransition ready
 
-# -------------------
-# NMEA switches
-# -------------------
-
-#
-#mode=default
-#type=ne
-#data=UP_OUT_CIRCLING
-#event=StatusMessage Audio cruise
-#
-#mode=default
-#type=ne
-#data=DOWN_OUT_CIRCLING
-#event=StatusMessage Audio circling
-#
-#
-#mode=default
-#type=ne
-#data=DOWN_IN_FLAP_POS
-#event=StatusMessage Flap positive
-#
-#mode=default
-#type=ne
-#data=DOWN_IN_FLAP_ZERO
-#event=Zoom out
-#
-#mode=default
-#type=ne
-#data=DOWN_IN_FLAP_NEG
-#event=MarkLocation
-#
-#mode=default
-#type=ne
-#data=DOWN_IN_SC
-#event=StatusMessage SC switch
-#
-#mode=default
-#type=ne
-#data=DOWN_IN_GEAR_EXTENDED
-#event=ScreenModes toggle
-#
-#mode=default
-#type=ne
-#data=DOWN_IN_AUX
-#event=StatusMessage Aux. switch
-#
-#mode=default
-#type=ne
-#data=DOWN_IN_ACK
-#event=StatusMessage Acknowledge
-#
-#mode=default
-#type=ne
-#data=DOWN_IN_REP
-#event=StatusMessage Repeat
-#
-#mode=default
-#type=ne
-#data=DOWN_IN_AIRBRAKELOCKED
-#event=Zoom in
-#
-#mode=default
-#type=ne
-#data=DOWN_IN_USERSWUP
-#event=StatusMessage User switch up
-#
-#
-#mode=default
-#type=ne
-#data=DOWN_IN_USERSWMIDDLE
-#event=StatusMessage User switch middle
-#
-#
-#mode=default
-#type=ne
-#data=DOWN_IN_USERSWDOWN
-#event=StatusMessage User switch down
-#
-
-# -------------------
-# GlideComputerEvents
-# -------------------
 mode=default
 type=gce
 data=GPS_CONNECTION_WAIT
