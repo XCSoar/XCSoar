@@ -1,6 +1,7 @@
 # -------------------
 # GlideComputerEvents
 # -------------------
+
 mode=default
 type=gce
 data=TASK_START
@@ -63,6 +64,26 @@ data=LANDING
 event=StatusMessage Landing
 event=AutoLogger stop
 
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_ABOVE
+event=StatusMessage Above final glide
+
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_BELOW
+event=StatusMessage Below final glide
+
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_TERRAIN
+event=StatusMessage Final glide through terrain
+
+mode=default
+type=gce
+data=LANDABLE_UNREACHABLE
+event=Beep 1
+
 # ------------
 # mode=default
 # ------------
@@ -77,7 +98,7 @@ type=key
 data=ESCAPE
 event=Pan supertoggle
 
-################## Pan mode
+###### pan mode
 
 mode=pan
 type=key
@@ -110,14 +131,14 @@ mode=pan
 type=key
 data=APP2
 event=Zoom in
-label=Zoom\nin
+label=Zoom\nIn
 location=2
 
 mode=pan
 type=key
 data=APP3
 event=Zoom out
-label=Zoom\nout
+label=Zoom\nOut
 location=3
 
 mode=pan
@@ -126,8 +147,6 @@ data=APP4
 event=NearestWaypointDetails pan
 label=Nearest\nWaypoint
 location=4
-
-##################
 
 ###### main entry buttons
 
@@ -161,12 +180,19 @@ event=Mode Info1
 mode=default
 type=key
 data=DOWN
-event=Zoom slowout
+event=Zoom out
 
 mode=default
 type=key
 data=UP
-event=Zoom slowin
+event=Zoom in
+
+mode=default
+type=key
+data=RETURN
+event=FLARMRadar toggle
+event=ClearAirspaceWarnings
+event=ClearStatusMessages
 
 mode=default
 type=key
@@ -188,8 +214,6 @@ mode=default
 type=key
 data=7
 event=Calculator
-label=$(CheckTaskResumed)
-location=6
 
 #mode=default
 #type=key
@@ -207,13 +231,6 @@ event=Setup Target
 #data=0
 #event=ArmAdvance show
 #event=ArmAdvance toggle
-
-mode=default
-type=key
-data=RETURN
-event=FLARMRadar toggle
-event=ClearAirspaceWarnings
-event=ClearStatusMessages
 
 
 # ------------
@@ -595,6 +612,13 @@ event=Mode default
 label=Devices
 location=6
 
+mode=Config3
+type=key
+data=8
+event=Setup Plane
+event=Mode default
+label=Setup Plane
+location=7
 
 # -------------
 # mode=Vario1
@@ -633,9 +657,15 @@ mode=Vario1
 type=key
 data=9
 event=AdjustVarioFilter zero
-event=StatusMessage Not yet implemented
 label=Setup\nStall
 location=8
+
+mode=Vario1
+type=key
+data=0
+event=AdjustVarioFilter accel
+label=Accel
+location=9
 
 # -------------
 # mode=Vario2
@@ -744,7 +774,6 @@ event=Mode Info3
 label=Info
 location=4
 
-
 mode=Info2
 type=key
 data=6
@@ -826,4 +855,51 @@ type=key
 data=0
 event=RepeatStatusMessage
 label=Message\nRepeat
+location=9
+
+# -------------
+# mode=Menu
+# -------------
+
+mode=Menu
+type=key
+data=APP1
+event=Mode Nav1
+label=Nav
+location=1
+
+mode=Menu
+type=key
+data=APP2
+event=Mode Display1
+label=Display
+location=2
+
+mode=Menu
+type=key
+data=APP3
+event=Mode Config1
+label=Config
+location=3
+
+mode=Menu
+type=key
+data=APP4
+event=Mode Info1
+label=Info
+location=4
+
+mode=Menu
+type=key
+data=9
+event=Mode default
+label=Cancel
+location=8
+
+mode=Menu
+type=key
+data=0
+event=Exit system
+event=Mode default
+label=Quit
 location=9

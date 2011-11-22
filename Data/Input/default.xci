@@ -529,14 +529,14 @@ mode=Config1
 type=key
 data=6
 event=MacCready up
-label=MC\n+
+label=MacCready\n+
 location=5
 
 mode=Config1
 type=key
 data=7
 event=MacCready down
-label=MC\n-
+label=MacCready\n-
 location=6
 
 mode=Config1
@@ -544,7 +544,7 @@ type=key
 data=8
 event=MacCready auto show
 event=MacCready auto toggle
-label=$(CheckAutoMc)MC\n$(MacCreadyToggleActionName)
+label=$(CheckAutoMc)MacCready\n$(MacCreadyToggleActionName)
 location=7
 
 mode=Config1
