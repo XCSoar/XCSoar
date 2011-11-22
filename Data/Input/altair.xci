@@ -45,7 +45,6 @@ event=Beep
 mode=default
 type=gce
 data=STARTUP_SIMULATOR
-event=StatusMessage Simulation\r\nnothing is real!
 
 mode=default
 type=gce
