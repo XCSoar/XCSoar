@@ -25,10 +25,13 @@ sub get_mode($) {
     return $i;
 }
 
-sub commit(\%$) {
-    my ($rec, $line) = @_;
+sub commit(\%) {
+    my ($rec) = @_;
 
     return unless $rec->{type};
+
+    my $line = $rec->{line};
+    die unless $line;
 
     # Make event
     my $event_id = 0;
@@ -94,7 +97,7 @@ while (<>) {
     next if (/^#/);
 
     if (/^\s*$/) {
-        commit(%$current, $line);
+        commit(%$current);
         $current = { event => [] };
 
 	# We don't need the quotes - ignore for now
@@ -107,13 +110,14 @@ while (<>) {
         my $val = $2;
         $val =~ s/\s*$//;
         $current->{$key} = $val;
+        $current->{line} = $line unless exists $current->{line};
     } else {
         print STDERR "Error on $line - $_\n";
     }
 
 }
 
-commit(%$current, $line);
+commit(%$current);
 
 sub c_string($) {
     my $value = shift;
