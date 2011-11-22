@@ -365,6 +365,15 @@ InputEvents::setMode(const TCHAR *mode)
 }
 
 void
+InputEvents::LeaveMode(const TCHAR *mode)
+{
+  assert(mode != NULL);
+
+  if (_tcscmp(input_config.mode_map[current_mode], mode) == 0)
+    setMode(MODE_DEFAULT);
+}
+
+void
 InputEvents::drawButtons(mode Mode, bool full)
 {
   if (!globalRunningEvent.Test())

@@ -47,6 +47,13 @@ namespace InputEvents
   void readFile();
   void setMode(mode mode);
   void setMode(const TCHAR *mode);
+
+  /**
+   * Switch back to the default mode if the specified mode is
+   * currently set.  It is a no-op if any other mode is currently set.
+   */
+  void LeaveMode(const TCHAR *mode);
+
   mode getModeID();
   unsigned findKey(const TCHAR *data);
   int findGCE(const TCHAR *data);
