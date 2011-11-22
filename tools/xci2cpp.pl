@@ -85,38 +85,35 @@ sub commit(\%$) {
     }
 }
 
-my %rec = ();
+my $current = { event => [] };
 my $line = 0;
 
-%rec = ();
-$rec{event} = [];
 while (<>) {
     chomp;
     $line++;
     next if (/^#/);
 
     if (/^\s*$/) {
-        commit(%rec, $line);
-        %rec = ();
-        $rec{event} = [];
+        commit(%$current, $line);
+        $current = { event => [] };
 
 	# We don't need the quotes - ignore for now
     } elsif (/^event\s*=\s*"*([^"]*)"*$/) {
         my $val = $1;
         $val =~ s/\s*$//;
-        push @{$rec{event}}, $val;
+        push @{$current->{event}}, $val;
     } elsif (/^([a-z0-9]+)\s*=\s*"*([^"]*)"*$/) {
         my $key = $1;
         my $val = $2;
         $val =~ s/\s*$//;
-        $rec{$key} = $val;
+        $current->{$key} = $val;
     } else {
         print STDERR "Error on $line - $_\n";
     }
 
 }
 
-commit(%rec, $line);
+commit(%$current, $line);
 
 sub c_string($) {
     my $value = shift;
