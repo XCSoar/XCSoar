@@ -37,7 +37,6 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
-#include "ButtonLabel.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Language/Language.hpp"
 #include "Protection.hpp"

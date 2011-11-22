@@ -176,7 +176,6 @@ MainWindow::InitialiseConfigured()
 
   LogStartUp(_T("Create button labels"));
   ButtonLabel::CreateButtonLabels(*this);
-  ButtonLabel::SetLabelText(0,_T("MODE"));
   ButtonLabel::SetFont(Fonts::MapBold);
 
   WindowStyle hidden;

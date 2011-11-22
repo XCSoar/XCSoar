@@ -353,17 +353,6 @@ InputEvents::setMode(mode mode)
 
   current_mode = mode;
 
-  // TODO code: Enable this in debug modes
-  // for debugging at least, set mode indicator on screen
-  /*
-  if (thismode == 0) {
-    ButtonLabel::SetLabelText(0, NULL);
-  } else {
-    ButtonLabel::SetLabelText(0, mode);
-  }
-  */
-  ButtonLabel::SetLabelText(0, NULL);
-
   drawButtons(current_mode, true);
 }
 
