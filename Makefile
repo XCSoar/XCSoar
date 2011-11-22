@@ -405,6 +405,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InputEventsAirspace.cpp \
 	$(SRC)/InputEventsTask.cpp \
 	$(SRC)/InputEventsSettings.cpp \
+	$(SRC)/InputEventsTraffic.cpp \
 	$(SRC)/InputQueue.cpp \
 	$(SRC)/InputLookup.cpp \
 	$(SRC)/InputKeys.cpp \
@@ -633,6 +634,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/ProcessTimer.cpp \
 	$(SRC)/MainWindow.cpp \
 	$(SRC)/Components.cpp \
+	\
+	$(SRC)/Widgets/TrafficWidget.cpp \
 	\
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Declaration.cpp \

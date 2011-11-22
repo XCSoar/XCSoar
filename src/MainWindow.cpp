@@ -739,7 +739,11 @@ MainWindow::UpdateGaugeVisibility()
   vario.SetVisible(!full_screen &&
                    !CommonInterface::GetUIState().screen_blanked);
 
-  if (flarm != NULL && CommonInterface::Basic().flarm.new_traffic)
+  if (InputEvents::IsFlavour(_T("Traffic")))
+    /* hide the traffic gauge while the traffic widget is visible, to
+       avoid showing the same information twice */
+    flarm->Suppress = true;
+  else if (flarm != NULL && CommonInterface::Basic().flarm.new_traffic)
     flarm->Suppress = false;
 }
 

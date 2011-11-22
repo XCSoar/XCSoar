@@ -175,6 +175,7 @@ namespace InputEvents
   void eventGotoLookup(const TCHAR *misc);
   void eventAddWaypoint(const TCHAR *misc);
   void eventOrientation(const TCHAR *misc);
+  void eventTraffic(const TCHAR *misc);
   void eventFlarmTraffic(const TCHAR *misc);
   void eventFlarmDetails(const TCHAR *misc);
   void eventCredits(const TCHAR *misc);

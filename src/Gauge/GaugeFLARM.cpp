@@ -24,7 +24,7 @@ Copyright_License {
 
 #include "Gauge/GaugeFLARM.hpp"
 #include "NMEA/Info.hpp"
-#include "Dialogs/Traffic.hpp"
+#include "InputEvents.hpp"
 
 /**
  * Constructor of the GaugeFLARM class
@@ -75,6 +75,6 @@ GaugeFLARM::Update(bool enable, const NMEAInfo &gps_info,
 bool
 GaugeFLARM::on_mouse_down(PixelScalar x, PixelScalar y)
 {
-  dlgFlarmTrafficShowModal();
+  InputEvents::eventTraffic(_T("show"));
   return true;
 }
