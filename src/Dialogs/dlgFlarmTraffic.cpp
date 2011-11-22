@@ -545,12 +545,12 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 static void
 SetButtonsEnabled(bool enabled)
 {
-  ((WndButton *)wf->FindByName(_T("cmdSwitchData")))->set_enabled(enabled);
-  ((WndButton *)wf->FindByName(_T("cmdDetails")))->set_enabled(enabled);
-  ((WndButton *)wf->FindByName(_T("cmdZoomIn")))->set_enabled(enabled);
-  ((WndButton *)wf->FindByName(_T("cmdZoomOut")))->set_enabled(enabled);
-  ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_enabled(enabled);
-  ((WndButton *)wf->FindByName(_T("cmdNext")))->set_enabled(enabled);
+  SetFormControlEnabled(*wf, _T("cmdSwitchData"), enabled);
+  SetFormControlEnabled(*wf, _T("cmdDetails"), enabled);
+  SetFormControlEnabled(*wf, _T("cmdZoomIn"), enabled);
+  SetFormControlEnabled(*wf, _T("cmdZoomOut"), enabled);
+  SetFormControlEnabled(*wf, _T("cmdPrev"), enabled);
+  SetFormControlEnabled(*wf, _T("cmdNext"), enabled);
 }
 
 static void
