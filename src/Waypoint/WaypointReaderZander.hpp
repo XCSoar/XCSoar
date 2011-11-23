@@ -25,10 +25,6 @@ Copyright_License {
 #define WAYPOINTFILEZANDER_HPP
 
 #include "WaypointReaderBase.hpp"
-#include "Math/fixed.hpp"
-#include "tstring.hpp"
-
-class Angle;
 
 class WaypointReaderZander: 
   public WaypointReaderBase 
@@ -41,13 +37,6 @@ public:
 protected:
   bool ParseLine(const TCHAR* line, const unsigned linenum,
                  Waypoints &way_points);
-
-private:
-  static bool parseString(const TCHAR* src, tstring& dest, unsigned len);
-  static bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
-  static bool parseAltitude(const TCHAR* src, fixed& dest);
-  static bool parseFlags(const TCHAR* src, Waypoint &dest);
-  static bool parseFlagsFromDescription(const TCHAR* src, Waypoint &dest);
 };
 
 #endif

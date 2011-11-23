@@ -26,9 +26,6 @@ Copyright_License {
 #define WAYPOINTFILESEEYOU_HPP
 
 #include "WaypointReaderBase.hpp"
-#include "Math/fixed.hpp"
-
-class Angle;
 
 class WaypointReaderSeeYou: 
   public WaypointReaderBase 
@@ -46,12 +43,6 @@ protected:
    */
   bool ParseLine(const TCHAR* line, const unsigned linenum,
                  Waypoints &way_points);
-
-private:
-  static bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
-  static bool parseAltitude(const TCHAR* src, fixed& dest);
-  static bool parseDistance(const TCHAR* src, fixed& dest);
-  static bool parseStyle(const TCHAR* src, Waypoint &dest);
 };
 
 #endif
