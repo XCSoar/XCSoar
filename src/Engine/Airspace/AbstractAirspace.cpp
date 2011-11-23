@@ -171,6 +171,8 @@ AbstractAirspace::Intercept(const AircraftState &state,
     assert(!negative(solution.distance));
     return true;
   }
+  else
+    solution = AirspaceInterceptSolution::Invalid();
 
   return false;
 }
