@@ -32,6 +32,18 @@ Copyright_License {
  * @param extension Extension to check against (e.g. .xcm)
  * @return True if filename matches the given extension, False otherwise
  */
-bool MatchesExtension(const TCHAR *filename, const TCHAR* extension);
+bool MatchesExtension(const TCHAR *filename, const TCHAR *extension);
+
+#ifdef _UNICODE
+
+/**
+ * Checks whether the given filename matches the given extension
+ * @param filename Filename to check
+ * @param extension Extension to check against (e.g. .xcm)
+ * @return True if filename matches the given extension, False otherwise
+ */
+bool MatchesExtension(const char *filename, const char *extension);
+
+#endif
 
 #endif

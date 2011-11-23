@@ -26,7 +26,7 @@ Copyright_License {
 #include <string.h>
 
 bool
-MatchesExtension(const TCHAR *filename, const TCHAR* extension)
+MatchesExtension(const TCHAR *filename, const TCHAR *extension)
 {
   size_t filename_length = _tcslen(filename);
   size_t extension_length = _tcslen(extension);
@@ -34,3 +34,17 @@ MatchesExtension(const TCHAR *filename, const TCHAR* extension)
   return filename_length > extension_length &&
     _tcsicmp(filename + filename_length - extension_length, extension) == 0;
 }
+
+#ifdef _UNICODE
+
+bool
+MatchesExtension(const char *filename, const char *extension)
+{
+  size_t filename_length = strlen(filename);
+  size_t extension_length = strlen(extension);
+
+  return filename_length > extension_length &&
+    strcasecmp(filename + filename_length - extension_length, extension) == 0;
+}
+
+#endif
