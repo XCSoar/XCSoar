@@ -29,11 +29,19 @@ $(OUT)/include/InputEvents_Text2NE.cpp: $(SRC)/InputEvents.hpp \
 XCI_LIST = altair default
 XCI_HEADERS = $(patsubst %,$(OUT)/include/InputEvents_%.cpp,$(XCI_LIST))
 
-$(XCI_HEADERS): $(OUT)/include/InputEvents_%.cpp: \
-	$(topdir)/Data/Input/%.xci $(topdir)/tools/xci2cpp.pl \
+$(OUT)/include/InputEvents_default.cpp: $(topdir)/Data/Input/default.xci \
+	$(topdir)/tools/xci2cpp.pl \
 	$(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) $(topdir)/tools/xci2cpp.pl $< >$@.tmp
+	@mv $@.tmp $@
+
+$(OUT)/include/InputEvents_altair.cpp: $(topdir)/Data/Input/altair.xci \
+	$(topdir)/Data/Input/default.xci \
+	$(topdir)/tools/xci2cpp.pl \
+	$(OUT)/include/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(PERL) $(topdir)/tools/xci2cpp.pl $(topdir)/Data/Input/default.xci $(topdir)/Data/Input/altair.xci >$@.tmp
 	@mv $@.tmp $@
 
 T2E_OBJ = $(call SRC_TO_OBJ,$(SRC)/InputEvents.cpp)
