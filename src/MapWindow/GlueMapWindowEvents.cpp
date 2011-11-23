@@ -261,7 +261,6 @@ GlueMapWindow::on_key_down(unsigned key_code)
     return true;
   }
 
-  mouse_down_clock.reset();
   if (InputEvents::processKey(key_code)) {
     return true; // don't go to default handler
   }
