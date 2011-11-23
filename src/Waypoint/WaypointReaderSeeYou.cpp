@@ -28,9 +28,139 @@ Copyright_License {
 
 #include <stdio.h>
 
+static bool
+ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
+{
+  TCHAR *endptr;
+
+  long min = _tcstol(src, &endptr, 10);
+  if (endptr == src || *endptr != _T('.') || min < 0)
+    return false;
+
+  src = endptr + 1;
+
+  long deg = min / 100;
+  min = min % 100;
+  if (min >= 60)
+    return false;
+
+  // Limit angle to +/- 90 degrees for Latitude or +/- 180 degrees for Longitude
+  deg = std::min(deg, lat ? 90L : 180L);
+
+  long l = _tcstol(src, &endptr, 10);
+  if (endptr != src + 3 || l < 0 || l >= 1000)
+    return false;
+
+  fixed value = fixed(deg) + fixed(min) / 60 + fixed(l) / 60000;
+
+  TCHAR sign = *endptr;
+  if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')
+    value = -value;
+
+  // Save angle
+  dest = Angle::Degrees(value);
+  return true;
+}
+
+static bool
+ParseAltitude(const TCHAR* src, fixed& dest)
+{
+  // Parse string
+  TCHAR *endptr;
+  double value = _tcstod(src, &endptr);
+  if (endptr == src)
+    return false;
+
+  dest = fixed(value);
+
+  // Convert to system unit if necessary
+  TCHAR unit = *endptr;
+  if (unit == 'F' || unit == 'f')
+    dest = Units::ToSysUnit(dest, unFeet);
+
+  // Save altitude
+  return true;
+}
+
+static bool
+ParseDistance(const TCHAR* src, fixed& dest)
+{
+  // Parse string
+  TCHAR *endptr;
+  double value = _tcstod(src, &endptr);
+  if (endptr == src)
+    return false;
+
+  dest = fixed(value);
+
+  // Convert to system unit if necessary, assume m as default
+  TCHAR* unit = endptr;
+  if (_tcsicmp(unit, _T("ml")) == 0)
+    dest = Units::ToSysUnit(dest, unStatuteMiles);
+  else if (_tcsicmp(unit, _T("nm")) == 0)
+    dest = Units::ToSysUnit(dest, unNauticalMiles);
+
+  // Save distance
+  return true;
+}
+
+static bool
+ParseStyle(const TCHAR* src, Waypoint &dest)
+{
+  // 1 - Normal
+  // 2 - AirfieldGrass
+  // 3 - Outlanding
+  // 4 - GliderSite
+  // 5 - AirfieldSolid ...
+
+  // Parse string
+  TCHAR *endptr;
+  long style = _tcstol(src, &endptr, 10);
+  if (endptr == src)
+    return false;
+
+  // Update flags
+  switch (style) {
+  case 3:
+    dest.type = Waypoint::TYPE_OUTLANDING;
+    break;
+  case 2:
+  case 4:
+  case 5:
+    dest.type = Waypoint::TYPE_AIRFIELD;
+    break;
+  case 6:
+    dest.type = Waypoint::TYPE_MOUNTAIN_PASS;
+    break;
+  case 7:
+    dest.type = Waypoint::TYPE_MOUNTAIN_TOP;
+    break;
+  case 8:
+    dest.type = Waypoint::TYPE_OBSTACLE;
+    break;
+  case 11:
+  case 16:
+    dest.type = Waypoint::TYPE_TOWER;
+    break;
+  case 13:
+    dest.type = Waypoint::TYPE_TUNNEL;
+    break;
+  case 14:
+    dest.type = Waypoint::TYPE_BRIDGE;
+    break;
+  case 15:
+    dest.type = Waypoint::TYPE_POWERPLANT;
+    break;
+  }
+
+  dest.flags.turn_point = true;
+
+  return true;
+}
+
 bool
 WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
-                              Waypoints &way_points)
+                              Waypoints &waypoints)
 {
   TCHAR ctemp[4096];
   const TCHAR *params[20];
@@ -82,11 +212,11 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   GeoPoint location;
 
   // Latitude (e.g. 5115.900N)
-  if (!parseAngle(params[iLatitude], location.latitude, true))
+  if (!ParseAngle(params[iLatitude], location.latitude, true))
     return false;
 
   // Longitude (e.g. 00715.900W)
-  if (!parseAngle(params[iLongitude], location.longitude, false))
+  if (!ParseAngle(params[iLongitude], location.longitude, false))
     return false;
 
   location.Normalize(); // ensure longitude is within -180:180
@@ -103,13 +233,14 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   // Elevation (e.g. 458.0m)
   /// @todo configurable behaviour
   if (iElevation >= n_params ||
-      !parseAltitude(params[iElevation], new_waypoint.altitude))
-    CheckAltitude(new_waypoint);
+      !ParseAltitude(params[iElevation], new_waypoint.altitude) ||
+      !CheckAltitude(new_waypoint))
+    return false;
 
   // Style (e.g. 5)
   /// @todo include peaks with peak symbols etc.
   if (iStyle < n_params)
-    parseStyle(params[iStyle], new_waypoint);
+    ParseStyle(params[iStyle], new_waypoint);
 
   // Frequency & runway direction/length (for airports and landables)
   // and description (e.g. "Some Description")
@@ -119,7 +250,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
 
     // Runway length (e.g. 546.0m)
     fixed rwlen = fixed_minus_one;
-    if (iRWLen < n_params && parseDistance(params[iRWLen], rwlen) &&
+    if (iRWLen < n_params && ParseDistance(params[iRWLen], rwlen) &&
         positive(rwlen))
       new_waypoint.runway.SetLength(uround(rwlen));
 
@@ -139,136 +270,6 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   if (iDescription < n_params)
     new_waypoint.comment = params[iDescription];
 
-  way_points.append(new_waypoint);
-  return true;
-}
-
-bool
-WaypointReaderSeeYou::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
-{
-  TCHAR *endptr;
-
-  long min = _tcstol(src, &endptr, 10);
-  if (endptr == src || *endptr != _T('.') || min < 0)
-    return false;
-
-  src = endptr + 1;
-
-  long deg = min / 100;
-  min = min % 100;
-  if (min >= 60)
-    return false;
-
-  // Limit angle to +/- 90 degrees for Latitude or +/- 180 degrees for Longitude
-  deg = std::min(deg, lat ? 90L : 180L);
-
-  long l = _tcstol(src, &endptr, 10);
-  if (endptr != src + 3 || l < 0 || l >= 1000)
-    return false;
-
-  fixed value = fixed(deg) + fixed(min) / 60 + fixed(l) / 60000;
-
-  TCHAR sign = *endptr;
-  if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')
-    value = -value;
-
-  // Save angle
-  dest = Angle::Degrees(value);
-  return true;
-}
-
-bool
-WaypointReaderSeeYou::parseAltitude(const TCHAR* src, fixed& dest)
-{
-  // Parse string
-  TCHAR *endptr;
-  double value = _tcstod(src, &endptr);
-  if (endptr == src)
-    return false;
-
-  dest = fixed(value);
-
-  // Convert to system unit if necessary
-  TCHAR unit = *endptr;
-  if (unit == 'F' || unit == 'f')
-    dest = Units::ToSysUnit(dest, unFeet);
-
-  // Save altitude
-  return true;
-}
-
-bool
-WaypointReaderSeeYou::parseDistance(const TCHAR* src, fixed& dest)
-{
-  // Parse string
-  TCHAR *endptr;
-  double value = _tcstod(src, &endptr);
-  if (endptr == src)
-    return false;
-
-  dest = fixed(value);
-
-  // Convert to system unit if necessary, assume m as default
-  TCHAR* unit = endptr;
-  if (_tcsicmp(unit, _T("ml")) == 0)
-    dest = Units::ToSysUnit(dest, unStatuteMiles);
-  else if (_tcsicmp(unit, _T("nm")) == 0)
-    dest = Units::ToSysUnit(dest, unNauticalMiles);
-
-  // Save distance
-  return true;
-}
-
-bool
-WaypointReaderSeeYou::parseStyle(const TCHAR* src, Waypoint &dest)
-{
-  // 1 - Normal
-  // 2 - AirfieldGrass
-  // 3 - Outlanding
-  // 4 - GliderSite
-  // 5 - AirfieldSolid ...
-
-  // Parse string
-  TCHAR *endptr;
-  long style = _tcstol(src, &endptr, 10);
-  if (endptr == src)
-    return false;
-
-  // Update flags
-  switch (style) {
-  case 3:
-    dest.type = Waypoint::TYPE_OUTLANDING;
-    break;
-  case 2:
-  case 4:
-  case 5:
-    dest.type = Waypoint::TYPE_AIRFIELD;
-    break;
-  case 6:
-    dest.type = Waypoint::TYPE_MOUNTAIN_PASS;
-    break;
-  case 7:
-    dest.type = Waypoint::TYPE_MOUNTAIN_TOP;
-    break;
-  case 8:
-    dest.type = Waypoint::TYPE_OBSTACLE;
-    break;
-  case 11:
-  case 16:
-    dest.type = Waypoint::TYPE_TOWER;
-    break;
-  case 13:
-    dest.type = Waypoint::TYPE_TUNNEL;
-    break;
-  case 14:
-    dest.type = Waypoint::TYPE_BRIDGE;
-    break;
-  case 15:
-    dest.type = Waypoint::TYPE_POWERPLANT;
-    break;
-  }
-
-  dest.flags.turn_point = true;
-
+  waypoints.append(new_waypoint);
   return true;
 }

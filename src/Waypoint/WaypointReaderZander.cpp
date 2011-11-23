@@ -27,64 +27,8 @@ Copyright_License {
 
 #include <stdio.h>
 
-bool
-WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
-                              Waypoints &way_points)
-{
-  // If (end-of-file or comment)
-  if (line[0] == '\0' || line[0] == 0x1a ||
-      _tcsstr(line, _T("**")) == line ||
-      _tcsstr(line, _T("*")) == line)
-    // -> return without error condition
-    return true;
-
-  // Determine the length of the line
-  size_t len = _tcslen(line);
-  // If less then 34 characters -> something is wrong -> cancel
-  if (len < 34)
-    return false;
-
-  GeoPoint location;
-
-  // Latitude (Characters 13-20 // DDMMSS(N/S))
-  if (!parseAngle(line + 13, location.latitude, true))
-    return false;
-
-  // Longitude (Characters 21-29 // DDDMMSS(E/W))
-  if (!parseAngle(line + 21, location.longitude, false))
-    return false;
-
-  location.Normalize(); // ensure longitude is within -180:180
-
-  Waypoint new_waypoint(location);
-  new_waypoint.file_num = file_num;
-  new_waypoint.original_id = 0;
-
-  // Name (Characters 0-12)
-  if (!parseString(line, new_waypoint.name, 12))
-    return false;
-
-  // Altitude (Characters 30-34 // e.g. 1561 (in meters))
-  /// @todo configurable behaviour
-  if (!parseAltitude(line + 30, new_waypoint.altitude))
-    CheckAltitude(new_waypoint);
-
-  // Description (Characters 35-44)
-  if (len > 35)
-    parseString(line + 35, new_waypoint.comment, 9);
-
-  // Flags (Characters 45-49)
-  if (len < 46 || !parseFlags(line + 45, new_waypoint))
-    if (len < 36 || !parseFlagsFromDescription(line + 35, new_waypoint))
-      new_waypoint.flags.turn_point = true;
-
-  way_points.append(new_waypoint);
-  return true;
-}
-
-
-bool
-WaypointReaderZander::parseString(const TCHAR* src, tstring& dest, unsigned len)
+static bool
+ParseString(const TCHAR* src, tstring& dest, unsigned len)
 {
   if (src[0] == 0)
     return true;
@@ -101,8 +45,8 @@ WaypointReaderZander::parseString(const TCHAR* src, tstring& dest, unsigned len)
   return true;
 }
 
-bool
-WaypointReaderZander::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
+static bool
+ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
 {
   TCHAR *endptr;
 
@@ -134,8 +78,8 @@ WaypointReaderZander::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
   return true;
 }
 
-bool
-WaypointReaderZander::parseAltitude(const TCHAR* src, fixed& dest)
+static bool
+ParseAltitude(const TCHAR* src, fixed& dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -148,8 +92,8 @@ WaypointReaderZander::parseAltitude(const TCHAR* src, fixed& dest)
   return true;
 }
 
-bool
-WaypointReaderZander::parseFlags(const TCHAR* src, Waypoint &dest)
+static bool
+ParseFlags(const TCHAR* src, Waypoint &dest)
 {
   // WP = Waypoint
   // HA = Home Field
@@ -188,9 +132,8 @@ WaypointReaderZander::parseFlags(const TCHAR* src, Waypoint &dest)
   return true;
 }
 
-bool
-WaypointReaderZander::parseFlagsFromDescription(const TCHAR* src,
-                                              Waypoint &dest)
+static bool
+ParseFlagsFromDescription(const TCHAR* src, Waypoint &dest)
 {
   // If the description starts with 1 the waypoint is an airport
   // (usually the description of an airport is the frequency)
@@ -202,4 +145,60 @@ WaypointReaderZander::parseFlagsFromDescription(const TCHAR* src,
   }
 
   return false;
+}
+
+bool
+WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
+                              Waypoints &way_points)
+{
+  // If (end-of-file or comment)
+  if (line[0] == '\0' || line[0] == 0x1a ||
+      _tcsstr(line, _T("**")) == line ||
+      _tcsstr(line, _T("*")) == line)
+    // -> return without error condition
+    return true;
+
+  // Determine the length of the line
+  size_t len = _tcslen(line);
+  // If less then 34 characters -> something is wrong -> cancel
+  if (len < 34)
+    return false;
+
+  GeoPoint location;
+
+  // Latitude (Characters 13-20 // DDMMSS(N/S))
+  if (!ParseAngle(line + 13, location.latitude, true))
+    return false;
+
+  // Longitude (Characters 21-29 // DDDMMSS(E/W))
+  if (!ParseAngle(line + 21, location.longitude, false))
+    return false;
+
+  location.Normalize(); // ensure longitude is within -180:180
+
+  Waypoint new_waypoint(location);
+  new_waypoint.file_num = file_num;
+  new_waypoint.original_id = 0;
+
+  // Name (Characters 0-12)
+  if (!ParseString(line, new_waypoint.name, 12))
+    return false;
+
+  // Altitude (Characters 30-34 // e.g. 1561 (in meters))
+  /// @todo configurable behaviour
+  if (!ParseAltitude(line + 30, new_waypoint.altitude) ||
+      !CheckAltitude(new_waypoint))
+    return false;
+
+  // Description (Characters 35-44)
+  if (len > 35)
+    ParseString(line + 35, new_waypoint.comment, 9);
+
+  // Flags (Characters 45-49)
+  if (len < 46 || !ParseFlags(line + 45, new_waypoint))
+    if (len < 36 || !ParseFlagsFromDescription(line + 35, new_waypoint))
+      new_waypoint.flags.turn_point = true;
+
+  way_points.append(new_waypoint);
+  return true;
 }

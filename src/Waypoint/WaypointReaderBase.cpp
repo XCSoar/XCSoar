@@ -139,11 +139,11 @@ WaypointReaderBase::ExtractParameters(const TCHAR *src, TCHAR *dst,
   return i;
 }
 
-void
+bool
 WaypointReaderBase::CheckAltitude(Waypoint &new_waypoint) const
 {
   if (terrain == NULL)
-    return;
+    return false;
 
   // Load waypoint altitude from terrain
   const short t_alt = terrain->GetTerrainHeight(new_waypoint.location);
@@ -152,6 +152,8 @@ WaypointReaderBase::CheckAltitude(Waypoint &new_waypoint) const
   else
     // TERRAIN_VALID
     new_waypoint.altitude = (fixed)t_alt;
+
+  return true;
 }
 
 void

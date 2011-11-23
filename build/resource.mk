@@ -4,6 +4,18 @@ else
   IM_PREFIX :=
 endif
 
+####### market icons
+
+SVG_MARKET_ICONS = Data/graphics/xcsoarswiftsplash.svg Data/graphics/xcsoarswiftsplash_red.svg
+PNG_MARKET_ICONS = $(patsubst Data/graphics/%.svg,output/data/graphics/%_market.png,$(SVG_MARKET_ICONS))
+
+market-icons: $(PNG_MARKET_ICONS)
+
+# render from SVG to PNG
+$(PNG_MARKET_ICONS): output/data/graphics/%_market.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+	@$(NQ)echo "  SVG     $@"
+	$(Q)rsvg-convert --width=512 $< -o $@
+
 ####### icons
 
 SVG_ICONS = $(wildcard Data/icons/*.svg)

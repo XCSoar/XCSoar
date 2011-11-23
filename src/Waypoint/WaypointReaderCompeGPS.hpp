@@ -25,10 +25,6 @@ Copyright_License {
 #define WAYPOINTFILE_COMPEGPS_HPP
 
 #include "WaypointReaderBase.hpp"
-#include "Math/fixed.hpp"
-#include "tstring.hpp"
-
-class Angle;
 
 class WaypointReaderCompeGPS:
   public WaypointReaderBase 

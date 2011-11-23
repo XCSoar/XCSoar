@@ -213,8 +213,9 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
   waypoint.original_id = 0;
 
   // Parse altitude
-  if (!ParseAltitude(line, waypoint.altitude))
-    CheckAltitude(waypoint);
+  if (!ParseAltitude(line, waypoint.altitude) &&
+      !CheckAltitude(waypoint))
+    return false;
 
   // Skip whitespace
   while (*line == _T(' '))
