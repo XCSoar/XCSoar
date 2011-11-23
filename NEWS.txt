@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.2.4 - not yet released
+* Altair
+  - fix crash in InfoBox cursor movement
 
 Version 6.2.3 - 2011/11/19
 * calculations

@@ -180,9 +180,9 @@ InfoBoxManager::Event_Select(int i)
   }
 
   if (InfoFocus >= 0)
-    XCSoarInterface::main_window.SetDefaultFocus();
+    InfoBoxes[InfoFocus]->set_focus();
   else
-    InfoBoxes[i]->set_focus();
+    XCSoarInterface::main_window.SetDefaultFocus();
 }
 
 unsigned
