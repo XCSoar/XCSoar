@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Device/Driver.hpp"
+#include "Device/Driver/FLARM/Device.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
@@ -52,10 +53,22 @@ InputEvents::processNmea(unsigned key)
   return true;
 }
 
+static void
+PrintFlightList(const RecordedFlightList &flight_list)
+{
+  for (RecordedFlightList::const_iterator i = flight_list.begin();
+       i != flight_list.end(); ++i) {
+    const RecordedFlightInfo &flight = *i;
+    printf("%04u/%02u/%02u %02u:%02u-%02u:%02u\n",
+           flight.date.year, flight.date.month, flight.date.day,
+           flight.start_time.hour, flight.start_time.minute,
+           flight.end_time.hour, flight.end_time.minute);
+  }
+}
+
 /*
  * The actual code.
  */
-
 int main(int argc, char **argv)
 {
   if (argc < 5) {
@@ -66,6 +79,8 @@ int main(int argc, char **argv)
     for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i)
       if (driver->IsLogger())
         _ftprintf(stderr, _T("\t%s\n"), driver->name);
+
+    _ftprintf(stderr, _T("\tFLARM\n"));
 
     return EXIT_FAILURE;
   }
@@ -80,19 +95,6 @@ int main(int argc, char **argv)
 
   unsigned flight_id = (argc == 6 ? atoi(argv[5]) : 0);
 
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == NULL) {
-    fprintf(stderr, "No such driver: %s\n", argv[1]);
-    return EXIT_FAILURE;
-  }
-
-  if (!driver->IsLogger()) {
-    fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
-    return EXIT_FAILURE;
-  }
-
-  assert(driver->CreateOnPort != NULL);
-
 #ifdef HAVE_POSIX
   TTYPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
 #else
@@ -103,53 +105,96 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  Device *device = driver->CreateOnPort(config, port);
-  assert(device != NULL);
+  if (!strcmp(argv[1], "FLARM")) {
+    FlarmDevice flarm(port);
 
-  ConsoleOperationEnvironment env;
-  if (!device->Open(env)) {
+    if (!flarm.EnableBinaryMode()) {
+      fprintf(stderr, "Failed to switch transfer mode\n");
+      return EXIT_FAILURE;
+    }
+
+    RecordedFlightList flight_list;
+    if (!flarm.ReadFlightList(flight_list)) {
+      fprintf(stderr, "Failed to download flight list\n");
+      flarm.DisableBinaryMode();
+      return EXIT_FAILURE;
+    }
+
+    if (flight_list.empty()) {
+      fprintf(stderr, "Logger is empty\n");
+      flarm.DisableBinaryMode();
+      return EXIT_FAILURE;
+    }
+
+    PrintFlightList(flight_list);
+
+    if (flight_id >= flight_list.size()) {
+      fprintf(stderr, "Flight id not found\n");
+      flarm.DisableBinaryMode();
+      return EXIT_FAILURE;
+    }
+
+    if (!flarm.DownloadFlight(flight_list[flight_id], path)) {
+      fprintf(stderr, "Failed to download flight\n");
+      flarm.DisableBinaryMode();
+      return EXIT_FAILURE;
+    }
+
+    flarm.DisableBinaryMode();
+  } else {
+    const struct DeviceRegister *driver = FindDriverByName(driver_name);
+    if (driver == NULL) {
+      fprintf(stderr, "No such driver: %s\n", argv[1]);
+      return EXIT_FAILURE;
+    }
+
+    if (!driver->IsLogger()) {
+      fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
+      return EXIT_FAILURE;
+    }
+
+    assert(driver->CreateOnPort != NULL);
+    Device *device = driver->CreateOnPort(config, port);
+    assert(device != NULL);
+
+    ConsoleOperationEnvironment env;
+    if (!device->Open(env)) {
+      delete device;
+      fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
+      return EXIT_FAILURE;
+    }
+
+    RecordedFlightList flight_list;
+    if (!device->ReadFlightList(flight_list, env)) {
+      delete device;
+      fprintf(stderr, "Failed to download flight list\n");
+      return EXIT_FAILURE;
+    }
+
+    if (flight_list.empty()) {
+      delete device;
+      fprintf(stderr, "Logger is empty\n");
+      return EXIT_FAILURE;
+    }
+
+    PrintFlightList(flight_list);
+
+    if (flight_id >= flight_list.size()) {
+      delete device;
+      fprintf(stderr, "Flight id not found\n");
+      return EXIT_FAILURE;
+    }
+
+    if (!device->DownloadFlight(flight_list[flight_id], path, env)) {
+      delete device;
+      fprintf(stderr, "Failed to download flight\n");
+      return EXIT_FAILURE;
+    }
+
     delete device;
-    fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
-    return EXIT_FAILURE;
-  }
-
-  RecordedFlightList flight_list;
-  if (!device->ReadFlightList(flight_list, env)) {
-    delete device;
-    fprintf(stderr, "Failed to download flight list\n");
-    return EXIT_FAILURE;
-  }
-
-  if (flight_list.empty()) {
-    delete device;
-    fprintf(stderr, "Logger is empty\n");
-    return EXIT_FAILURE;
-  }
-
-  for (RecordedFlightList::const_iterator i = flight_list.begin();
-       i != flight_list.end(); ++i) {
-    const RecordedFlightInfo &flight = *i;
-    printf("%04u/%02u/%02u %02u:%02u-%02u:%02u\n",
-           flight.date.year, flight.date.month, flight.date.day,
-           flight.start_time.hour, flight.start_time.minute,
-           flight.end_time.hour, flight.end_time.minute);
-  }
-
-  if (flight_id >= flight_list.size()) {
-    delete device;
-    fprintf(stderr, "Flight id not found\n");
-    return EXIT_FAILURE;
-  }
-
-  if (!device->DownloadFlight(flight_list[flight_id], path, env)) {
-    delete device;
-    fprintf(stderr, "Failed to download flight\n");
-    return EXIT_FAILURE;
   }
 
   printf("Flight downloaded successfully\n");
-
-  delete device;
 
   return EXIT_SUCCESS;
 }
