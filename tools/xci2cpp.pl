@@ -16,6 +16,44 @@ my @gc;
 my @nmea;
 my @labels;
 
+# Generate a key for the %indices table, to check for duplicates
+sub get_key(\%) {
+    my $record = shift;
+
+    return unless defined $record->{type};
+
+    my $key = $record->{type};
+    $key .= '_' . $record->{mode} if defined $record->{mode};
+
+    if (defined $record->{location}) {
+        $key .= '_' . $record->{location};
+    } elsif (defined $record->{data}) {
+        $key .= '_' . $record->{data};
+    }
+
+    return $key;
+}
+
+sub append(\@\%\%) {
+    my ($all, $indices, $record) = @_;
+
+    my $key = get_key(%$record);
+    if (defined $key) {
+        if (exists $indices->{$key}) {
+            # this entry exists already - overwrite it
+            my $i = $indices->{$key};
+            $all->[$i] = $record;
+            return;
+        }
+
+        my $i = scalar @$all;
+        $indices->{$key} = $i;
+    }
+
+    # append new entry
+    push @$all, $record;
+}
+
 sub get_mode($) {
     my $name = shift;
     return $mode_map{$name} if exists $mode_map{$name};
@@ -88,6 +126,9 @@ sub commit(\%) {
     }
 }
 
+my @all;
+my %indices;
+
 my $current = { event => [] };
 my $line = 0;
 
@@ -97,7 +138,7 @@ while (<>) {
     next if (/^#/);
 
     if (/^\s*$/) {
-        commit(%$current);
+        append(@all, %indices, %$current);
         $current = { event => [] };
 
 	# We don't need the quotes - ignore for now
@@ -117,7 +158,11 @@ while (<>) {
 
 }
 
-commit(%$current);
+append(@all, %indices, %$current);
+
+foreach my $record (@all) {
+    commit(%$record);
+}
 
 sub c_string($) {
     my $value = shift;
