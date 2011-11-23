@@ -306,7 +306,8 @@ AirspaceWarningManager::update_task(const AircraftState& state)
     return false;
   }
 
-  if (!m_task.GetStats().current_leg.solution_remaining.IsOk())
+  const GlideResult &solution = m_task.GetStats().current_leg.solution_remaining;
+  if (!solution.IsOk() || !solution.IsAchievable())
     /* glide solver failed, cannot continue */
     return false;
 
