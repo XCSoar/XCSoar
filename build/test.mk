@@ -959,6 +959,7 @@ RUN_LIVETRACK24_SOURCES = \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/Net/ToBuffer.cpp \
 	$(SRC)/Units/Units.cpp \
+	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunLiveTrack24.cpp
 RUN_LIVETRACK24_OBJS = $(call SRC_TO_OBJ,$(RUN_LIVETRACK24_SOURCES))
 RUN_LIVETRACK24_BIN = $(TARGET_BIN_DIR)/RunLiveTrack24$(TARGET_EXEEXT)
@@ -1538,6 +1539,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation.cpp \
+	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunIGCWriter.cpp
 RUN_IGC_WRITER_OBJS = $(call SRC_TO_OBJ,$(RUN_IGC_WRITER_SOURCES))
 RUN_IGC_WRITER_LDADD = \
@@ -1553,6 +1555,7 @@ RUN_CIRCLING_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Wind/CirclingWind.cpp \
+	$(SRC)/UtilsFile.cpp\
 	$(TEST_SRC_DIR)/RunCirclingWind.cpp
 RUN_CIRCLING_WIND_OBJS = $(call SRC_TO_OBJ,$(RUN_CIRCLING_WIND_SOURCES))
 RUN_CIRCLING_WIND_LDADD = \
@@ -1566,6 +1569,7 @@ $(TARGET_BIN_DIR)/RunCirclingWind$(TARGET_EXEEXT): $(RUN_CIRCLING_WIND_OBJS) $(R
 RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Wind/WindZigZag.cpp \
+	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunWindZigZag.cpp
 RUN_WIND_ZIG_ZAG_OBJS = $(call SRC_TO_OBJ,$(RUN_WIND_ZIG_ZAG_SOURCES))
 RUN_WIND_ZIG_ZAG_LDADD = \
@@ -1579,6 +1583,7 @@ $(TARGET_BIN_DIR)/RunWindZigZag$(TARGET_EXEEXT): $(RUN_WIND_ZIG_ZAG_OBJS) $(RUN_
 RUN_WIND_EKF_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Wind/WindEKF.cpp \
+	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunWindEKF.cpp
 RUN_WIND_EKF_OBJS = $(call SRC_TO_OBJ,$(RUN_WIND_EKF_SOURCES))
 RUN_WIND_EKF_LDADD = \
@@ -1598,6 +1603,7 @@ RUN_OLC_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
+	$(SRC)/UtilsFile.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TracePoint.cpp \
@@ -2153,6 +2159,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
+	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \

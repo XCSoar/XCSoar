@@ -30,6 +30,7 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Replay/IGCParser.hpp"
+#include "UtilsFile.hpp"
 
 static DeviceConfig config;
 static NullPort port;
@@ -175,7 +176,7 @@ DebugReplayIGC::CopyFromFix(const IGCFix &fix)
 DebugReplay *
 CreateDebugReplay(Args &args)
 {
-  if (!args.IsEmpty() && strstr(args.PeekNext(), ".igc") != NULL) {
+  if (!args.IsEmpty() && MatchesExtension(args.PeekNext(), ".igc")) {
     const char *input_file = args.ExpectNext();
 
     FileLineReaderA *reader = new FileLineReaderA(input_file);
