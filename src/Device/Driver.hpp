@@ -62,6 +62,11 @@ struct RecordedFlightInfo {
       uint8_t start_address[3];
       uint8_t end_address[3];
     } lx;
+
+    /**
+     * Flight number, used by the FLARM driver.
+     */
+    uint8_t flarm;
   } internal;
 };
 
