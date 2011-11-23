@@ -29,7 +29,7 @@ Copyright_License {
 #include <stdio.h>
 
 static bool
-parseAngle(const TCHAR* src, Angle& dest, const bool lat)
+ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
 {
   TCHAR *endptr;
 
@@ -63,7 +63,7 @@ parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 }
 
 static bool
-parseAltitude(const TCHAR* src, fixed& dest)
+ParseAltitude(const TCHAR* src, fixed& dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -83,7 +83,7 @@ parseAltitude(const TCHAR* src, fixed& dest)
 }
 
 static bool
-parseDistance(const TCHAR* src, fixed& dest)
+ParseDistance(const TCHAR* src, fixed& dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -105,7 +105,7 @@ parseDistance(const TCHAR* src, fixed& dest)
 }
 
 static bool
-parseStyle(const TCHAR* src, Waypoint &dest)
+ParseStyle(const TCHAR* src, Waypoint &dest)
 {
   // 1 - Normal
   // 2 - AirfieldGrass
@@ -160,7 +160,7 @@ parseStyle(const TCHAR* src, Waypoint &dest)
 
 bool
 WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
-                              Waypoints &way_points)
+                              Waypoints &waypoints)
 {
   TCHAR ctemp[4096];
   const TCHAR *params[20];
@@ -212,11 +212,11 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   GeoPoint location;
 
   // Latitude (e.g. 5115.900N)
-  if (!parseAngle(params[iLatitude], location.latitude, true))
+  if (!ParseAngle(params[iLatitude], location.latitude, true))
     return false;
 
   // Longitude (e.g. 00715.900W)
-  if (!parseAngle(params[iLongitude], location.longitude, false))
+  if (!ParseAngle(params[iLongitude], location.longitude, false))
     return false;
 
   location.Normalize(); // ensure longitude is within -180:180
@@ -233,13 +233,13 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   // Elevation (e.g. 458.0m)
   /// @todo configurable behaviour
   if (iElevation >= n_params ||
-      !parseAltitude(params[iElevation], new_waypoint.altitude))
+      !ParseAltitude(params[iElevation], new_waypoint.altitude))
     CheckAltitude(new_waypoint);
 
   // Style (e.g. 5)
   /// @todo include peaks with peak symbols etc.
   if (iStyle < n_params)
-    parseStyle(params[iStyle], new_waypoint);
+    ParseStyle(params[iStyle], new_waypoint);
 
   // Frequency & runway direction/length (for airports and landables)
   // and description (e.g. "Some Description")
@@ -249,7 +249,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
 
     // Runway length (e.g. 546.0m)
     fixed rwlen = fixed_minus_one;
-    if (iRWLen < n_params && parseDistance(params[iRWLen], rwlen) &&
+    if (iRWLen < n_params && ParseDistance(params[iRWLen], rwlen) &&
         positive(rwlen))
       new_waypoint.runway.SetLength(uround(rwlen));
 
@@ -269,6 +269,6 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   if (iDescription < n_params)
     new_waypoint.comment = params[iDescription];
 
-  way_points.append(new_waypoint);
+  waypoints.append(new_waypoint);
   return true;
 }

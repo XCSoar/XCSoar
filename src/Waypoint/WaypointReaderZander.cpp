@@ -28,7 +28,7 @@ Copyright_License {
 #include <stdio.h>
 
 static bool
-parseString(const TCHAR* src, tstring& dest, unsigned len)
+ParseString(const TCHAR* src, tstring& dest, unsigned len)
 {
   if (src[0] == 0)
     return true;
@@ -46,7 +46,7 @@ parseString(const TCHAR* src, tstring& dest, unsigned len)
 }
 
 static bool
-parseAngle(const TCHAR* src, Angle& dest, const bool lat)
+ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
 {
   TCHAR *endptr;
 
@@ -79,7 +79,7 @@ parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 }
 
 static bool
-parseAltitude(const TCHAR* src, fixed& dest)
+ParseAltitude(const TCHAR* src, fixed& dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -93,7 +93,7 @@ parseAltitude(const TCHAR* src, fixed& dest)
 }
 
 static bool
-parseFlags(const TCHAR* src, Waypoint &dest)
+ParseFlags(const TCHAR* src, Waypoint &dest)
 {
   // WP = Waypoint
   // HA = Home Field
@@ -133,7 +133,7 @@ parseFlags(const TCHAR* src, Waypoint &dest)
 }
 
 static bool
-parseFlagsFromDescription(const TCHAR* src, Waypoint &dest)
+ParseFlagsFromDescription(const TCHAR* src, Waypoint &dest)
 {
   // If the description starts with 1 the waypoint is an airport
   // (usually the description of an airport is the frequency)
@@ -167,11 +167,11 @@ WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
   GeoPoint location;
 
   // Latitude (Characters 13-20 // DDMMSS(N/S))
-  if (!parseAngle(line + 13, location.latitude, true))
+  if (!ParseAngle(line + 13, location.latitude, true))
     return false;
 
   // Longitude (Characters 21-29 // DDDMMSS(E/W))
-  if (!parseAngle(line + 21, location.longitude, false))
+  if (!ParseAngle(line + 21, location.longitude, false))
     return false;
 
   location.Normalize(); // ensure longitude is within -180:180
@@ -181,21 +181,21 @@ WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
   new_waypoint.original_id = 0;
 
   // Name (Characters 0-12)
-  if (!parseString(line, new_waypoint.name, 12))
+  if (!ParseString(line, new_waypoint.name, 12))
     return false;
 
   // Altitude (Characters 30-34 // e.g. 1561 (in meters))
   /// @todo configurable behaviour
-  if (!parseAltitude(line + 30, new_waypoint.altitude))
+  if (!ParseAltitude(line + 30, new_waypoint.altitude))
     CheckAltitude(new_waypoint);
 
   // Description (Characters 35-44)
   if (len > 35)
-    parseString(line + 35, new_waypoint.comment, 9);
+    ParseString(line + 35, new_waypoint.comment, 9);
 
   // Flags (Characters 45-49)
-  if (len < 46 || !parseFlags(line + 45, new_waypoint))
-    if (len < 36 || !parseFlagsFromDescription(line + 35, new_waypoint))
+  if (len < 46 || !ParseFlags(line + 45, new_waypoint))
+    if (len < 36 || !ParseFlagsFromDescription(line + 35, new_waypoint))
       new_waypoint.flags.turn_point = true;
 
   way_points.append(new_waypoint);

@@ -30,7 +30,7 @@ Copyright_License {
 #include <stdlib.h>
 
 static bool
-parseAngle(const TCHAR* src, Angle& dest, const bool lat)
+ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
 {
   // Two format variants:
   // 51:47.841N (DD:MM.mmm // the usual)
@@ -85,7 +85,7 @@ parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 }
 
 static bool
-parseRunwayDirection(const TCHAR* src, Runway &dest)
+ParseRunwayDirection(const TCHAR* src, Runway &dest)
 {
   // WELT2000 written files contain a 4-digit runway direction specification
   // at the end of the comment, e.g. "123.50 0927"
@@ -122,7 +122,7 @@ parseRunwayDirection(const TCHAR* src, Runway &dest)
 }
 
 static bool
-parseAltitude(const TCHAR* src, fixed& dest)
+ParseAltitude(const TCHAR* src, fixed& dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -142,7 +142,7 @@ parseAltitude(const TCHAR* src, fixed& dest)
 }
 
 static bool
-parseFlags(const TCHAR* src, Waypoint &dest)
+ParseFlags(const TCHAR* src, Waypoint &dest)
 {
   // A = Airport
   // T = Turnpoint
@@ -189,7 +189,7 @@ parseFlags(const TCHAR* src, Waypoint &dest)
 
 bool
 WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
-                                Waypoints &way_points)
+                                Waypoints &waypoints)
 {
   TCHAR ctemp[4096];
   const TCHAR *params[20];
@@ -225,11 +225,11 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
     return false;
 
   // Latitude (e.g. 51:15.900N)
-  if (!parseAngle(params[1], location.latitude, true))
+  if (!ParseAngle(params[1], location.latitude, true))
     return false;
 
   // Longitude (e.g. 00715.900W)
-  if (!parseAngle(params[2], location.longitude, false))
+  if (!ParseAngle(params[2], location.longitude, false))
     return false;
   location.Normalize(); // ensure longitude is within -180:180
 
@@ -244,19 +244,19 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
 
   // Altitude (e.g. 458M)
   /// @todo configurable behaviour
-  if (!parseAltitude(params[3], new_waypoint.altitude))
+  if (!ParseAltitude(params[3], new_waypoint.altitude))
     CheckAltitude(new_waypoint);
 
   if (n_params > 6) {
     // Description (e.g. 119.750 Airport)
     new_waypoint.comment=params[6];
     if (welt2000_format)
-      parseRunwayDirection(params[6], new_waypoint.runway);
+      ParseRunwayDirection(params[6], new_waypoint.runway);
   }
 
   // Waypoint Flags (e.g. AT)
-  parseFlags(params[4], new_waypoint);
+  ParseFlags(params[4], new_waypoint);
 
-  way_points.append(new_waypoint);
+  waypoints.append(new_waypoint);
   return true;
 }
