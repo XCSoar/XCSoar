@@ -186,8 +186,9 @@ WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
 
   // Altitude (Characters 30-34 // e.g. 1561 (in meters))
   /// @todo configurable behaviour
-  if (!ParseAltitude(line + 30, new_waypoint.altitude))
-    CheckAltitude(new_waypoint);
+  if (!ParseAltitude(line + 30, new_waypoint.altitude) ||
+      !CheckAltitude(new_waypoint))
+    return false;
 
   // Description (Characters 35-44)
   if (len > 35)

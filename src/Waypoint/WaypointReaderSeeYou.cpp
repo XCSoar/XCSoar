@@ -233,8 +233,9 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   // Elevation (e.g. 458.0m)
   /// @todo configurable behaviour
   if (iElevation >= n_params ||
-      !ParseAltitude(params[iElevation], new_waypoint.altitude))
-    CheckAltitude(new_waypoint);
+      !ParseAltitude(params[iElevation], new_waypoint.altitude) ||
+      !CheckAltitude(new_waypoint))
+    return false;
 
   // Style (e.g. 5)
   /// @todo include peaks with peak symbols etc.
