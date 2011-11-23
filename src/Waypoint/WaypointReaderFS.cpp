@@ -193,7 +193,7 @@ WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
   if (!ParseString(line, new_waypoint.name, 8))
     return false;
 
-  if (!ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.altitude) ||
+  if (!ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.altitude) &&
       !CheckAltitude(new_waypoint))
     return false;
 
