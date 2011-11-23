@@ -32,11 +32,11 @@ Copyright_License {
 class TestWindow : public SingleWindow {
   TerminalWindow terminal;
 
-  timer_t timer;
+  WindowTimer timer;
 
 public:
   TestWindow(const TerminalLook &look)
-    :terminal(look) {}
+    :terminal(look), timer(*this) {}
 
 #ifdef USE_GDI
   static bool register_class(HINSTANCE hInstance) {
@@ -71,18 +71,18 @@ public:
 protected:
   virtual bool on_create() {
     SingleWindow::on_create();
-    timer = set_timer(1, 10);
+    timer.Schedule(10);
     return true;
   }
 
   virtual bool on_destroy() {
-    kill_timer(timer);
+    timer.Cancel();
     SingleWindow::on_destroy();
     return true;
   }
 
-  virtual bool on_timer(timer_t id) {
-    if (id == timer) {
+  virtual bool on_timer(WindowTimer &_timer) {
+    if (_timer == timer) {
       unsigned r = rand();
       char ch;
       if ((r % 16) == 0)
@@ -92,7 +92,7 @@ protected:
       terminal.Write(&ch, 1);
       return true;
     } else
-      return SingleWindow::on_timer(id);
+      return SingleWindow::on_timer(_timer);
   }
 };
 

@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "SubForm.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Timer.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/tstring.hpp"
 
@@ -103,7 +104,7 @@ protected:
    */
   virtual void on_paint(Canvas &canvas);
 
-  timer_t cbTimerID;
+  WindowTimer timer;
 
   StaticString<256> mCaption;
 
@@ -173,7 +174,7 @@ public:
   /** from class Window */
   virtual bool on_resize(UPixelScalar width, UPixelScalar height);
   virtual bool on_destroy();
-  virtual bool on_timer(timer_t id);
+  virtual bool on_timer(WindowTimer &timer);
 
 #ifdef WIN32
   virtual bool on_command(unsigned id, unsigned code);

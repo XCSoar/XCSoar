@@ -218,7 +218,7 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_TIMER:
-    if (on_timer(wParam))
+    if (on_timer(*(WindowTimer *)wParam))
       return 0;
     break;
 

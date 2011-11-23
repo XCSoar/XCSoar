@@ -30,7 +30,7 @@ Copyright_License {
 #include <SDL_events.h>
 
 class TopWindow;
-class SDLTimer;
+class WindowTimer;
 class Window;
 class Notify;
 
@@ -94,9 +94,9 @@ namespace EventQueue {
   void purge(Window &window);
 
   /**
-   * Purge all events for this SDLTimer from the event queue.
+   * Purge all events for this timer from the event queue.
    */
-  void purge(SDLTimer &timer);
+  void purge(WindowTimer &timer);
 };
 
 #endif

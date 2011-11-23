@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/Android/Event.hpp"
 #include "Screen/TopWindow.hpp"
 #include "Thread/Notify.hpp"
+#include "Android/Timer.hpp"
 
 void
 EventQueue::push(const Event &event)

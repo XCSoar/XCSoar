@@ -59,7 +59,7 @@ WndListFrame::WndListFrame(ContainerWindow &parent, const DialogLook &_look,
   CursorCallback(NULL),
   PaintItemCallback(NULL)
 #ifndef _WIN32_WCE
-  , kinetic_timer(0)
+  , kinetic_timer(*this)
 #endif
 {
   set(parent, X, Y, Width, Height, style);
@@ -341,10 +341,7 @@ WndListFrame::on_key_down(unsigned key_code)
   scroll_bar.drag_end(this);
 
 #ifndef _WIN32_WCE
-  if (kinetic_timer) {
-    kill_timer(kinetic_timer);
-    kinetic_timer = 0;
-  }
+  kinetic_timer.Cancel();
 #endif
 
   switch (key_code) {
@@ -422,7 +419,7 @@ WndListFrame::on_mouse_up(PixelScalar x, PixelScalar y)
 
 #ifndef _WIN32_WCE
     kinetic.MouseUp(GetPixelOrigin());
-    kinetic_timer = set_timer(1037, 30);
+    kinetic_timer.Schedule(30);
 #endif
 
     return true;
@@ -469,10 +466,7 @@ WndListFrame::on_mouse_down(PixelScalar x, PixelScalar y)
   drag_end();
 
 #ifndef _WIN32_WCE
-  if (kinetic_timer) {
-    kill_timer(kinetic_timer);
-    kinetic_timer = 0;
-  }
+  kinetic_timer.Cancel();
 #endif
 
   RasterPoint Pos;
@@ -540,10 +534,7 @@ WndListFrame::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
   drag_end();
 
 #ifndef _WIN32_WCE
-  if (kinetic_timer) {
-    kill_timer(kinetic_timer);
-    kinetic_timer = 0;
-  }
+  kinetic_timer.Cancel();
 #endif
 
   if (delta > 0) {
@@ -568,10 +559,7 @@ WndListFrame::on_cancel_mode()
   drag_end();
 
 #ifndef _WIN32_WCE
-  if (kinetic_timer) {
-    kill_timer(kinetic_timer);
-    kinetic_timer = 0;
-  }
+  kinetic_timer.Cancel();
 #endif
 
   return false;
@@ -580,26 +568,24 @@ WndListFrame::on_cancel_mode()
 #ifndef _WIN32_WCE
 
 bool
-WndListFrame::on_timer(timer_t id)
+WndListFrame::on_timer(WindowTimer &timer)
 {
-  if (id == kinetic_timer) {
+  if (timer == kinetic_timer) {
     if (kinetic.IsSteady()) {
-      kill_timer(kinetic_timer);
-      kinetic_timer = 0;
+      kinetic_timer.Cancel();
     } else
       SetPixelOrigin(kinetic.GetPosition());
 
     return true;
   }
 
-  return PaintWindow::on_timer(id);
+  return PaintWindow::on_timer(timer);
 }
 
 bool
 WndListFrame::on_destroy()
 {
-  if (kinetic_timer)
-    kill_timer(kinetic_timer);
+  kinetic_timer.Cancel();
 
   return PaintWindow::on_destroy();
 }

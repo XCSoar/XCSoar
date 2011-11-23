@@ -56,6 +56,7 @@ MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(NULL),
    map(NULL), widget(NULL), vario(NULL), flarm(NULL), ta(NULL),
    popup(status_messages, *this, CommonInterface::GetUISettings()),
+   timer(*this),
    FullScreen(false),
    airspace_warning_pending(false)
 {
@@ -520,10 +521,10 @@ MainWindow::on_setfocus()
 }
 
 bool
-MainWindow::on_timer(timer_t id)
+MainWindow::on_timer(WindowTimer &_timer)
 {
-  if (id != timer_id)
-    return SingleWindow::on_timer(id);
+  if (_timer != timer)
+    return SingleWindow::on_timer(_timer);
 
   if (globalRunningEvent.Test()) {
     battery_timer.Process();
@@ -582,13 +583,13 @@ bool MainWindow::on_create(void)
 {
   SingleWindow::on_create();
 
-  timer_id = set_timer(1000, 500); // 2 times per second
+  timer.Schedule(500); // 2 times per second
 
   return true;
 }
 
 bool MainWindow::on_destroy(void) {
-  kill_timer(timer_id);
+  timer.Cancel();
 
   KillWidget();
 

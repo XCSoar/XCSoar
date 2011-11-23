@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_MAIN_WINDOW_HXX
 
 #include "Screen/SingleWindow.hpp"
+#include "Screen/Timer.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "PopupMessage.hpp"
 #include "BatteryTimer.hpp"
@@ -82,7 +83,7 @@ public:
   PopupMessage popup;
 
 private:
-  timer_t timer_id;
+  WindowTimer timer;
 
   BatteryTimer battery_timer;
 
@@ -269,7 +270,7 @@ protected:
   virtual bool on_resize(UPixelScalar width, UPixelScalar height);
   bool on_activate();
   bool on_setfocus();
-  bool on_timer(timer_t id);
+  bool on_timer(WindowTimer &timer);
   virtual bool on_user(unsigned id);
   bool on_create();
   bool on_destroy();

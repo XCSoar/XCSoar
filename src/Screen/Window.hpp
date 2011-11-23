@@ -30,11 +30,7 @@ Copyright_License {
 #include "Thread/Debug.hpp"
 #include "Compiler.h"
 
-#ifdef ANDROID
-#include "Android/Timer.hpp"
-#elif defined(ENABLE_SDL)
-#include "Screen/SDL/Timer.hpp"
-#else /* GDI */
+#ifdef USE_GDI
 #include <windows.h>
 #endif /* GDI */
 
@@ -44,6 +40,7 @@ struct Event;
 
 class Canvas;
 class ContainerWindow;
+class WindowTimer;
 
 /**
  * A portable wrapper for describing a window's style settings on
@@ -183,16 +180,6 @@ public:
  */
 class Window : private NonCopyable {
   friend class ContainerWindow;
-
-public:
-#ifdef ANDROID
-  typedef AndroidTimer *timer_t;
-#elif defined(ENABLE_SDL)
-  friend class SDLTimer;
-  typedef SDLTimer *timer_t;
-#else
-  typedef UINT_PTR timer_t;
-#endif
 
 protected:
 #ifndef USE_GDI
@@ -698,33 +685,6 @@ public:
   }
 #endif /* USE_GDI */
 
-  timer_t set_timer(unsigned id, unsigned ms)
-  {
-    assert_thread();
-
-#ifdef ANDROID
-    return new AndroidTimer(*this, ms);
-#elif defined(ENABLE_SDL)
-    return new SDLTimer(*this, ms);
-#else
-    ::SetTimer(hWnd, id, ms, NULL);
-    return id;
-#endif
-  }
-
-  void kill_timer(timer_t id)
-  {
-    assert_thread();
-
-#ifdef ANDROID
-    id->disable();
-#elif defined(ENABLE_SDL)
-    delete id;
-#else
-    ::KillTimer(hWnd, id);
-#endif
-  }
-
 #ifndef USE_GDI
   void to_screen(PixelRect &rc) const;
 #endif
@@ -888,7 +848,7 @@ public:
 #endif
 
 #if defined(ENABLE_SDL) && !defined(ANDROID)
-  void send_timer(SDLTimer *timer);
+  void send_timer(WindowTimer &timer);
 #endif
 
 protected:
@@ -926,7 +886,7 @@ public:
   virtual bool on_cancel_mode();
   virtual bool on_setfocus();
   virtual bool on_killfocus();
-  virtual bool on_timer(timer_t id);
+  virtual bool on_timer(WindowTimer &timer);
   virtual bool on_user(unsigned id);
 
   virtual void on_paint(Canvas &canvas);

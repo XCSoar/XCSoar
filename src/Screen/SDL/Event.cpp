@@ -56,8 +56,8 @@ EventLoop::dispatch(SDL_Event &event)
     window->on_user(event.user.code);
   } else if (event.type == EVENT_TIMER && event.user.data1 != NULL) {
     Window *window = (Window *)event.user.data1;
-    SDLTimer *timer = (SDLTimer *)event.user.data2;
-    window->on_timer(timer);
+    WindowTimer *timer = (WindowTimer *)event.user.data2;
+    window->on_timer(*timer);
   } else if (event.type == EVENT_NOTIFY && event.user.data1 != NULL) {
     Notify *notify = (Notify *)event.user.data1;
     notify->RunNotification();
@@ -114,7 +114,7 @@ match_timer(const SDL_Event &event, void *ctx)
 }
 
 void
-EventQueue::purge(SDLTimer &timer)
+EventQueue::purge(WindowTimer &timer)
 {
   purge(SDL_EVENTMASK(EVENT_TIMER), match_timer, (void *)&timer);
 }

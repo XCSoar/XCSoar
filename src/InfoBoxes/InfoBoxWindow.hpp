@@ -27,6 +27,7 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "InfoBoxes/Content/Base.hpp"
 #include "Screen/PaintWindow.hpp"
+#include "Screen/Timer.hpp"
 #include "PeriodClock.hpp"
 #include "Data.hpp"
 
@@ -65,7 +66,7 @@ private:
   int id;
 
   /** a timer which returns keyboard focus back to the map window after a while */
-  timer_t focus_timer;
+  WindowTimer focus_timer;
 
   PixelRect title_rect;
   PixelRect value_rect;
@@ -206,7 +207,7 @@ protected:
    * This event handler is called when a timer is triggered
    * @param id Id of the timer that triggered the handler
    */
-  virtual bool on_timer(timer_t id);
+  virtual bool on_timer(WindowTimer &timer);
 };
 
 #endif

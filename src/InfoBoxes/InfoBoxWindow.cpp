@@ -55,7 +55,7 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent,
    parent(_parent),
    settings(_settings), look(_look),
    border_kind(border_flags),
-   focus_timer(0)
+   focus_timer(*this)
 {
   data.Clear();
 
@@ -435,10 +435,7 @@ InfoBoxWindow::on_key_down(unsigned key_code)
     InputEvents::processGo(event_id);
 
     // restart focus timer if not idle
-    if (focus_timer != 0)
-      kill_timer(focus_timer);
-
-    focus_timer = set_timer(100, FOCUS_TIMEOUT_MAX * 500);
+    focus_timer.Schedule(FOCUS_TIMEOUT_MAX * 500);
     return true;
   }
 
@@ -500,7 +497,7 @@ InfoBoxWindow::on_setfocus()
 
   // Start the focus-auto-return timer
   // to automatically return focus back to MapWindow if idle
-  focus_timer = set_timer(100, FOCUS_TIMEOUT_MAX * 500);
+  focus_timer.Schedule(FOCUS_TIMEOUT_MAX * 500);
 
   // Redraw fast to paint the selector
   invalidate();
@@ -515,10 +512,7 @@ InfoBoxWindow::on_killfocus()
   PaintWindow::on_killfocus();
 
   // Destroy the time if it exists
-  if (focus_timer != 0) {
-    kill_timer(focus_timer);
-    focus_timer = 0;
-  }
+  focus_timer.Cancel();
 
   // Redraw fast to remove the selector
   invalidate();
@@ -527,15 +521,12 @@ InfoBoxWindow::on_killfocus()
 }
 
 bool
-InfoBoxWindow::on_timer(timer_t id)
+InfoBoxWindow::on_timer(WindowTimer &timer)
 {
-  if (id != focus_timer)
-    return PaintWindow::on_timer(id);
-
-  kill_timer(focus_timer);
-  focus_timer = 0;
-
-  parent.set_focus();
-
-  return true;
+  if (timer == focus_timer) {
+    focus_timer.Cancel();
+    parent.set_focus();
+    return true;
+  } else
+    return PaintWindow::on_timer(timer);
 }

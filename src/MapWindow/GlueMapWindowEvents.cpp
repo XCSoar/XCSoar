@@ -58,10 +58,7 @@ GlueMapWindow::on_setfocus()
 bool
 GlueMapWindow::on_mouse_double(PixelScalar x, PixelScalar y)
 {
-  if (map_item_timer) {
-    kill_timer(map_item_timer);
-    map_item_timer = 0;
-  }
+  map_item_timer.Cancel();
 
   mouse_down_clock.update();
 
@@ -107,10 +104,7 @@ GlueMapWindow::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
 bool
 GlueMapWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 {
-  if (map_item_timer) {
-    kill_timer(map_item_timer);
-    map_item_timer = 0;
-  }
+  map_item_timer.Cancel();
 
   // Ignore single click event if double click detected
   if (ignore_single_click || drag_mode != DRAG_NONE)
@@ -219,7 +213,7 @@ GlueMapWindow::on_mouse_up(PixelScalar x, PixelScalar y)
   }
 
   if (!dragOverMinDist) {
-    map_item_timer = set_timer(1002, 200);
+    map_item_timer.Schedule(200);
     return true;
   }
 
@@ -229,10 +223,7 @@ GlueMapWindow::on_mouse_up(PixelScalar x, PixelScalar y)
 bool
 GlueMapWindow::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
 {
-  if (map_item_timer) {
-    kill_timer(map_item_timer);
-    map_item_timer = 0;
-  }
+  map_item_timer.Cancel();
 
   if (drag_mode != DRAG_NONE)
     return true;
@@ -256,10 +247,7 @@ GlueMapWindow::on_mouse_gesture(const TCHAR* gesture)
 bool
 GlueMapWindow::on_key_down(unsigned key_code)
 {
-  if (map_item_timer) {
-    kill_timer(map_item_timer);
-    map_item_timer = 0;
-  }
+  map_item_timer.Cancel();
 
   if (is_altair() && key_code == 0xF5) {
     XCSoarInterface::SignalShutdown(false);
@@ -313,15 +301,14 @@ GlueMapWindow::on_paint_buffer(Canvas &canvas)
 }
 
 bool
-GlueMapWindow::on_timer(timer_t id)
+GlueMapWindow::on_timer(WindowTimer &timer)
 {
-  if (id != map_item_timer)
-    return MapWindow::on_timer(id);
-
-  kill_timer(map_item_timer);
-  map_item_timer = 0;
-  ShowMapItems(drag_start_geopoint);
-  return true;
+  if (timer == map_item_timer) {
+    map_item_timer.Cancel();
+    ShowMapItems(drag_start_geopoint);
+    return true;
+  } else
+    return MapWindow::on_timer(timer);
 }
 
 void

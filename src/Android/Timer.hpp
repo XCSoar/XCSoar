@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <jni.h>
 
-class Window;
+class WindowTimer;
 
 class AndroidTimer {
   class Bridge : protected Java::Object {
@@ -44,13 +44,14 @@ class AndroidTimer {
     }
   };
 
-  Window &window;
+private:
+  WindowTimer &timer;
   Bridge bridge;
 
   bool disabled, running;
 
 public:
-  AndroidTimer(Window &window, unsigned ms);
+  AndroidTimer(WindowTimer &timer, unsigned ms);
 
   void disable();
 

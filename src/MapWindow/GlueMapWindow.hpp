@@ -29,6 +29,7 @@ Copyright_License {
 #include "GestureManager.hpp"
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
+#include "Screen/Timer.hpp"
 #include "DisplayMode.hpp"
 
 struct Look;
@@ -119,7 +120,7 @@ class GlueMapWindow : public MapWindow {
   ThermalBandRenderer thermal_band_renderer;
   FinalGlideBarRenderer final_glide_bar_renderer;
 
-  timer_t map_item_timer;
+  WindowTimer map_item_timer;
 
 public:
   GlueMapWindow(const Look &look);
@@ -203,7 +204,7 @@ protected:
   virtual bool on_cancel_mode();
   virtual void on_paint(Canvas &canvas);
   virtual void on_paint_buffer(Canvas& canvas);
-  bool on_timer(timer_t id);
+  bool on_timer(WindowTimer &timer);
 
 private:
   void DrawMapScale(Canvas &canvas, const PixelRect &rc,

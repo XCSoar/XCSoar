@@ -218,13 +218,13 @@ Window::send_user(unsigned id)
 #ifndef ANDROID
 
 void
-Window::send_timer(SDLTimer *timer)
+Window::send_timer(WindowTimer &timer)
 {
   SDL_Event event;
   event.user.type = EVENT_TIMER;
   event.user.code = 0;
   event.user.data1 = this;
-  event.user.data2 = timer;
+  event.user.data2 = &timer;
 
   ::SDL_PushEvent(&event);
 }

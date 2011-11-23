@@ -33,6 +33,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp
 ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/Android/Timer.cpp \
 	$(SCREEN_SRC_DIR)/Android/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/Android/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/Android/Font.cpp \
@@ -71,6 +72,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/Init.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Font.cpp \
 	$(SCREEN_SRC_DIR)/GDI/AlphaBlend.cpp \
+	$(SCREEN_SRC_DIR)/GDI/Timer.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Window.cpp \
 	$(SCREEN_SRC_DIR)/GDI/PaintWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/ContainerWindow.cpp \

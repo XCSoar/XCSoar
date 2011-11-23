@@ -22,32 +22,20 @@ Copyright_License {
 */
 
 #include "Screen/Timer.hpp"
-#include "Screen/SDL/Event.hpp"
 #include "Screen/Window.hpp"
 
 void
 WindowTimer::Schedule(unsigned ms)
 {
-  Cancel();
-
-  id = ::SDL_AddTimer(ms, Callback, this);
+  id = ::SetTimer(window, (UINT_PTR)this, ms, NULL);
 }
 
 void
 WindowTimer::Cancel()
 {
-  ::SDL_RemoveTimer(id);
-  id = NULL;
+  if (!IsActive())
+    return;
 
-  EventQueue::purge(*this);
-}
-
-Uint32
-WindowTimer::Callback(Uint32 interval, void *param)
-{
-  WindowTimer *timer = (WindowTimer *)param;
-
-  timer->window.send_timer(*timer);
-
-  return interval;
+  ::KillTimer(window, (UINT_PTR)this);
+  id = 0;
 }

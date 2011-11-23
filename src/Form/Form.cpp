@@ -94,7 +94,8 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
   :main_window(_main_window), look(_look),
    mModalResult(0), force(false),
    client_area(_look),
-   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL)
+   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL),
+   timer(*this)
 {
   mCaption = Caption;
 
@@ -121,9 +122,9 @@ void
 WndForm::SetTimerNotify(TimerNotifyCallback_t OnTimerNotify, unsigned ms)
 {
   if (mOnTimerNotify != NULL && OnTimerNotify == NULL)
-    kill_timer(cbTimerID);
+    timer.Cancel();
   else if (mOnTimerNotify == NULL && OnTimerNotify != NULL)
-    cbTimerID = set_timer(1001, ms);
+    timer.Schedule(ms);
 
   mOnTimerNotify = OnTimerNotify;
 }
@@ -174,22 +175,21 @@ WndForm::on_destroy()
   if (mModalResult == 0)
     mModalResult = mrCancel;
 
-  if (mOnTimerNotify != NULL)
-    kill_timer(cbTimerID);
+  timer.Cancel();
 
   ContainerWindow::on_destroy();
   return true;
 }
 
 bool
-WndForm::on_timer(timer_t id)
+WndForm::on_timer(WindowTimer &_timer)
 {
-  if (id == cbTimerID) {
+  if (_timer == timer) {
     if (mOnTimerNotify)
       mOnTimerNotify(*this);
     return true;
   } else
-    return ContainerWindow::on_timer(id);
+    return ContainerWindow::on_timer(_timer);
 }
 
 #ifdef WIN32

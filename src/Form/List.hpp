@@ -29,6 +29,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #ifndef _WIN32_WCE
+#include "Screen/Timer.hpp"
 #include "KineticManager.hpp"
 #endif
 
@@ -79,7 +80,7 @@ protected:
 
 #ifndef _WIN32_WCE
   KineticManager kinetic;
-  timer_t kinetic_timer;
+  WindowTimer kinetic_timer;
 #endif
 
 public:
@@ -270,7 +271,7 @@ protected:
   virtual void on_paint(Canvas &canvas, const PixelRect &dirty);
 
 #ifndef _WIN32_WCE
-  virtual bool on_timer(timer_t id);
+  virtual bool on_timer(WindowTimer &timer);
   virtual bool on_destroy();
 #endif
 };

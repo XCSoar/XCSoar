@@ -273,7 +273,7 @@ Window::on_killfocus()
 }
 
 bool
-Window::on_timer(timer_t id)
+Window::on_timer(WindowTimer &timer)
 {
   return false;
 }
