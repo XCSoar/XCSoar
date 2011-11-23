@@ -25,10 +25,6 @@ Copyright_License {
 #define WAYPOINTFILEFS_HPP
 
 #include "WaypointReaderBase.hpp"
-#include "Math/fixed.hpp"
-#include "tstring.hpp"
-
-class Angle;
 
 class WaypointReaderFS:
   public WaypointReaderBase 

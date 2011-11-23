@@ -27,7 +27,6 @@ Copyright_License {
 
 #include "WaypointReaderBase.hpp"
 #include "Math/fixed.hpp"
-#include "tstring.hpp"
 
 class Angle;
 
