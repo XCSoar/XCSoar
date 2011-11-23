@@ -450,6 +450,11 @@ InputEvents::key_to_event(mode mode, unsigned key_code)
 bool
 InputEvents::processKey(unsigned dWord)
 {
+  if (is_altair() && dWord == 0xF5) {
+    XCSoarInterface::SignalShutdown(false);
+    return true;
+  }
+
   if (!globalRunningEvent.Test())
     return false;
 
