@@ -455,9 +455,9 @@ MainWindow::ResumeThreads()
 void
 MainWindow::SetDefaultFocus()
 {
-  if (map != NULL)
+  if (map != NULL && widget == NULL)
     map->set_focus();
-  else
+  else if (widget == NULL || !widget->SetFocus())
     set_focus();
 }
 
@@ -513,8 +513,10 @@ MainWindow::on_setfocus()
     /* the main window should never have the keyboard focus; if we
        happen to get the focus despite of that, forward it to the map
        window to make keyboard shortcuts work */
-    if (map != NULL)
+    if (map != NULL && widget == NULL)
       map->set_focus();
+    else if (widget != NULL)
+      widget->SetFocus();
     return true;
   }
 
@@ -690,6 +692,7 @@ MainWindow::ActivateMap()
   if (widget != NULL) {
     KillWidget();
     map->show();
+    map->set_focus();
   }
 
   return map;
@@ -725,6 +728,9 @@ MainWindow::SetWidget(Widget *_widget)
   widget->Initialise(*this, rc);
   widget->Prepare(*this, rc);
   widget->Show(rc);
+
+  if (!widget->SetFocus())
+    set_focus();
 }
 
 void
