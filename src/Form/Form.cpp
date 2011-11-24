@@ -90,11 +90,11 @@ add_border(WindowStyle style)
 WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
                  int X, int Y, int Width, int Height,
                  const TCHAR *Caption,
-                 const WindowStyle style):
-  main_window(_main_window), look(_look),
-  mModalResult(0), force(false),
-  client_area(_look),
-  mOnTimerNotify(NULL), mOnKeyDownNotify(NULL)
+                 const WindowStyle style)
+  :main_window(_main_window), look(_look),
+   mModalResult(0), force(false),
+   client_area(_look),
+   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL)
 {
   mCaption = Caption;
 
