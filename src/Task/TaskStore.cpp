@@ -153,7 +153,7 @@ TaskStore::Item::get_name() const
 bool
 TaskStore::Item::operator<(const Item &i2) const
 {
-  return _tcscmp(get_name(), i2.get_name()) == -1;
+  return _tcscmp(get_name(), i2.get_name()) < 0;
 }
 
 const TCHAR *
