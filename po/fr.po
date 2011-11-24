@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-31 08:31+0100\n"
-"PO-Revision-Date: 2011-09-14 12:48+0000\n"
-"Last-Translator: Titi <Unknown>\n"
+"PO-Revision-Date: 2011-11-23 14:29+0000\n"
+"Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-31 07:28+0000\n"
-"X-Generator: Launchpad (build 14197)\n"
+"X-Launchpad-Export-Date: 2011-11-24 18:16+0000\n"
+"X-Generator: Launchpad (build 14376)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:532
 #: src/InputEventsActions.cpp:1467 src/Dialogs/dlgAnalysis.cpp:347
@@ -51,9 +51,8 @@ msgid "Airspace"
 msgstr "Espace aérien"
 
 #: src/Airspace/AirspaceParser.cpp:860
-#, fuzzy
 msgid "Unknown airspace filetype"
-msgstr "Type de fichier inconnu."
+msgstr "Type d'espace aérien inconnu"
 
 #: src/ConditionMonitor.cpp:165
 msgid "Significant wind change"
@@ -1014,23 +1013,23 @@ msgid "Indicated Airspeed reported by a supported external intelligent vario."
 msgstr "Vitesse air indiquée par un vario externe intelligent."
 
 #: src/InfoBoxes/Content/Factory.cpp:359
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Barometric altitude"
-msgstr "Altitude Maxi."
+msgstr "Altitude barométrique"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alt. Baro."
-msgstr "Alt Baro"
+msgstr "Alt. Baro."
 
 #: src/InfoBoxes/Content/Factory.cpp:361
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
 msgstr ""
-"Altitude barométrique obtenue à partir d'un récepteur GPS équippé d'une "
-"capsule barométrique, ou un variomètre intelligent externe."
+"Ceci est l'altitude barométrique obtenue à partir d'un appareil ayant un "
+"senseur de pression."
 
 #: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
@@ -1164,7 +1163,7 @@ msgstr "Heure UTC GPS"
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
 msgid "Task time to go"
-msgstr ""
+msgstr "Temps restant jusqu'à la fin du circuit"
 
 #: src/InfoBoxes/Content/Factory.cpp:432
 #, no-c-format
@@ -1183,7 +1182,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:440
 #, no-c-format
 msgid "Next time to go"
-msgstr ""
+msgstr "Temps restant vers prochain waypoint"
 
 #: src/InfoBoxes/Content/Factory.cpp:441
 #, no-c-format
@@ -1202,7 +1201,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:449
 #, no-c-format
 msgid "Speed dolphin"
-msgstr ""
+msgstr "Vitesse de vol en dauphin"
 
 #: src/InfoBoxes/Content/Factory.cpp:450
 #, no-c-format
@@ -1327,7 +1326,7 @@ msgstr "Température de l'air extérieur"
 #: src/InfoBoxes/Content/Factory.cpp:495
 #, no-c-format
 msgid "OAT"
-msgstr ""
+msgstr "OAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:496
 #, no-c-format
@@ -1533,6 +1532,8 @@ msgid ""
 "Instantaneous cross country speed while on current task, compensated for "
 "altitude. Equivalent to instantaneous Pirker cross-country speed."
 msgstr ""
+"Vitesse de croisère instantanée sur le circuit en cours, compensée en "
+"altitude. Equivaut à la vitesse de croisière dite de Pirker."
 
 #: src/InfoBoxes/Content/Factory.cpp:602
 #, no-c-format
@@ -1619,6 +1620,8 @@ msgid ""
 "Trend (or neg. of the variation) of the total required height to complete "
 "the task."
 msgstr ""
+"Tendance (ici opposé de la dérivée) de la hauteur totale nécessaire pour "
+"terminer le circuit."
 
 #: src/InfoBoxes/Content/Factory.cpp:648
 #, no-c-format
@@ -2054,6 +2057,9 @@ msgid ""
 "The vertical distance to the nearest airspace.  A positive value means the "
 "airspace is above you, and negative means the airspace is below you."
 msgstr ""
+"Distance verticale à l'espace aérien le plus proche. Une valeur positive "
+"signifie que l'espace aérien est au-dessus, une valeur négative signifie que "
+"l'espace aérien est au-dessous."
 
 #: src/InfoBoxes/Content/Altitude.cpp:95
 #: src/InfoBoxes/Content/Altitude.cpp:105
@@ -2127,7 +2133,7 @@ msgstr "BLOQUER"
 
 #: src/InfoBoxes/Content/Speed.cpp:159
 msgid "DOLPHIN"
-msgstr ""
+msgstr "Dauphin"
 
 #: src/InfoBoxes/Content/Task.cpp:762
 msgid "Time Below"
@@ -2174,7 +2180,7 @@ msgstr "Plané final"
 #: src/Dialogs/dlgConfigInfoboxes.cpp:209
 #: src/Dialogs/dlgConfigInfoboxes.cpp:371
 msgid "InfoBox"
-msgstr "Indication"
+msgstr "InfoBox"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:564 src/Dialogs/dlgConfigInfoboxes.cpp:213
 #: src/Dialogs/dlgWeather.cpp:60
@@ -2219,11 +2225,11 @@ msgstr "Mode plein écran"
 
 #: src/InputEventsActions.cpp:280
 msgid "Auxiliary InfoBoxes"
-msgstr "Indications auxiliaire"
+msgstr "InfoBoxes auxiliaires"
 
 #: src/InputEventsActions.cpp:282
 msgid "Default InfoBoxes"
-msgstr "Indication par défaut"
+msgstr "InfoBoxes par défaut"
 
 #: src/InputEventsActions.cpp:326
 msgid "Auto. zoom on"
@@ -2718,7 +2724,7 @@ msgstr "Désactivée"
 #: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:65
 #, no-c-format
 msgid "GPS Intermediate Driver"
-msgstr ""
+msgstr "Pilote intermédiaire pour GPS"
 
 #: src/Profile/DeviceConfig.cpp:86
 #: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:68
@@ -2789,7 +2795,7 @@ msgstr "Arrêt en cours, enregistrement du circuit..."
 
 #: src/Device/Descriptor.cpp:135
 msgid "No such driver"
-msgstr ""
+msgstr "Pas de pilote"
 
 #: src/Device/Descriptor.cpp:146
 msgid "Unable to open port"
@@ -2990,7 +2996,7 @@ msgstr "Pas d'Alerte"
 
 #: src/Dialogs/dlgAlternatesList.cpp:103 Data/Input/default.xci:457
 msgid "Alternates"
-msgstr ""
+msgstr "Déroutements"
 
 #: src/Dialogs/dlgFlarmDetailsList.cpp:100
 msgid "No further information"
@@ -3075,7 +3081,7 @@ msgstr "Créer xcsoar-checklist.txt\n"
 
 #: src/Dialogs/dlgPlanes.cpp:109
 msgid "Active"
-msgstr ""
+msgstr "Actif"
 
 #: src/Dialogs/dlgPlanes.cpp:148
 #, c-format
@@ -3261,7 +3267,7 @@ msgstr "Apparence de l'interface"
 #: src/Dialogs/dlgConfiguration.cpp:104
 #, no-c-format
 msgid "InfoBox Pages"
-msgstr "Pages des InfoBox"
+msgstr "Pages de InfoBoxes"
 
 #: src/Dialogs/dlgConfiguration.cpp:105
 #, no-c-format
@@ -3283,7 +3289,7 @@ msgstr "Écraser ?"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:100
 msgid "InfoBox paste"
-msgstr ""
+msgstr "Coller l'InfoBox"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:186
 #: Data/Dialogs/dlgConfiguration.xml:385
@@ -3378,9 +3384,8 @@ msgid "Fix invalid"
 msgstr "Fix invalide"
 
 #: src/Dialogs/dlgStatus.cpp:91
-#, fuzzy
 msgid "2D fix"
-msgstr "3D Fix"
+msgstr "Pos 2D"
 
 #: src/Dialogs/dlgStatus.cpp:93
 msgid "3D fix"
@@ -3539,7 +3544,7 @@ msgstr "24 Droite (Paysage)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:94
 msgid "Auto (follow infoboxes)"
-msgstr "Auto (suivre InfoBoxes)"
+msgstr "Auto (suit les InfoBoxes)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:95
 msgid "Top Left"
@@ -4522,9 +4527,8 @@ msgstr "Le circuit ne serait pas valide après modification."
 
 #: src/Dialogs/dlgWaypointDetails.cpp:262
 #: src/Dialogs/dlgWaypointDetails.cpp:295
-#, fuzzy
 msgid "Created Goto Task."
-msgstr "Créer nouveau circuit?"
+msgstr ""
 
 #: src/Dialogs/dlgWaypointDetails.cpp:262
 #: src/Dialogs/dlgWaypointDetails.cpp:267
@@ -5964,7 +5968,7 @@ msgstr "Quitter"
 #: Data/Dialogs/dlgConfiguration.xml:798
 #: Data/Dialogs/dlgConfiguration_L.xml:802
 msgid "Inverse InfoBoxes"
-msgstr "Inverser InfoBoxes"
+msgstr "Inverser les InfoBoxes"
 
 #: Data/Dialogs/dlgVario.xml:440 Data/Dialogs/dlgVario_L.xml:439
 msgid "LED bright"
@@ -6222,7 +6226,7 @@ msgstr "Polices"
 
 #: Data/Dialogs/dlgInfoBoxAccess.xml:3
 msgid "InfoBox Access"
-msgstr ""
+msgstr "Accès aux InfoBoxes"
 
 #: Data/Dialogs/dlgTarget_L.xml:29
 msgid "Delta T"
@@ -6620,6 +6624,8 @@ msgid ""
 "If true, certain InfoBoxes will have coloured text.  For example, the active "
 "waypoint infobox will be blue when the glider is above final glide."
 msgstr ""
+"Si activé, alors certaines InfoBoxes auront leur texte coloré. Par exemple "
+"le nom du waypoint actif sera bleu lorsque le planeur est au-dessus du plan."
 
 #: Data/Dialogs/dlgConfiguration.xml:204
 #: Data/Dialogs/dlgConfiguration_L.xml:204
@@ -6917,6 +6923,8 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:802
 msgid "If true, the InfoBoxes are white on black, otherwise black on white."
 msgstr ""
+"Si activé, alors les InfoBoxes seront affichées en blanc sur noir, sinon en "
+"noir sur blanc."
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "New waypoint"
@@ -7368,7 +7376,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:17 Data/Dialogs/dlgVario_L.xml:16
 msgid "Whether the Pitot port is connected."
-msgstr ""
+msgstr "Connection d'une sonde pitot"
 
 #: Data/Dialogs/dlgConfiguration.xml:374
 #: Data/Dialogs/dlgConfiguration_L.xml:375
@@ -7381,7 +7389,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:387 Data/Dialogs/dlgVario_L.xml:386
 msgid "Battery empty delay"
-msgstr ""
+msgstr "Temps restant de batterie"
 
 #: Data/Dialogs/dlgConfiguration.xml:654
 #: Data/Dialogs/dlgConfiguration_L.xml:658 Data/Dialogs/dlgVario.xml:347
@@ -7391,7 +7399,7 @@ msgstr "Type d'aéronef"
 
 #: Data/Dialogs/dlgFlarmTraffic.xml:14 Data/Dialogs/dlgFlarmTraffic_L.xml:14
 msgid "Auto. zoom"
-msgstr ""
+msgstr "Zoom auto."
 
 #: Data/Dialogs/dlgConfiguration.xml:452
 #: Data/Dialogs/dlgConfiguration_L.xml:453
@@ -7407,13 +7415,13 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:589
 #: Data/Dialogs/dlgConfiguration_L.xml:593
 msgid "Altair Pro users should set this to Port 3"
-msgstr ""
+msgstr "Les utilisateurs d'Altair Pro doivent sélectionner le Port 3"
 
 #: Data/Dialogs/dlgConfiguration.xml:473
 #: Data/Dialogs/dlgConfiguration_L.xml:474
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color"
-msgstr ""
+msgstr "Coutour noir des espaces aériens au lieu de la coloration de l'espace."
 
 #: Data/Dialogs/dlgVario.xml:33 Data/Dialogs/dlgVario_L.xml:32
 msgid ""
@@ -7425,7 +7433,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:773
 #: Data/Dialogs/dlgConfiguration_L.xml:777
 msgid "Infobox geometry"
-msgstr ""
+msgstr "Mise en page des InfoBoxes"
 
 #: Data/Dialogs/dlgVoice.xml:30
 msgid "In sector"
@@ -7547,7 +7555,7 @@ msgstr "Longueur Trace"
 #: Data/Dialogs/dlgConfiguration.xml:559
 #: Data/Dialogs/dlgConfiguration_L.xml:563
 msgid "Default turn point type for new tasks you create."
-msgstr ""
+msgstr "Type de point de virage par défaut à la création d'un circuit"
 
 #: Data/Dialogs/dlgConfiguration.xml:272
 #: Data/Dialogs/dlgConfiguration_L.xml:272
@@ -7567,7 +7575,7 @@ msgstr "Enregistrer"
 #: Data/Dialogs/dlgConfiguration.xml:803
 #: Data/Dialogs/dlgConfiguration_L.xml:807
 msgid "Colored InfoBoxes"
-msgstr "Couleur InfoBox"
+msgstr "InfoBoxes en couleur"
 
 #: Data/Dialogs/dlgTextEntry.xml:7
 msgid "A+"
@@ -7590,7 +7598,7 @@ msgstr "QNH"
 #: Data/Dialogs/dlgSimulatorPrompt.xml:4
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:4
 msgid "What do you want to do?"
-msgstr ""
+msgstr "Que voulez-vous faire ?"
 
 #: Data/Dialogs/dlgTaskPoint.xml:3 Data/Dialogs/dlgTaskPoint_L.xml:3
 msgid "Waypoint"
@@ -7602,7 +7610,7 @@ msgstr "Répéter"
 
 #: Data/Dialogs/dlgVario.xml:105 Data/Dialogs/dlgVario_L.xml:104
 msgid "Variometer low pass filter time constant in cruise mode."
-msgstr ""
+msgstr "Constante de temps du filtre du variomètre en mode transition"
 
 #: Data/Dialogs/dlgConfiguration.xml:705
 #: Data/Dialogs/dlgConfiguration_L.xml:709 Data/Dialogs/dlgVario.xml:33
@@ -7612,7 +7620,7 @@ msgstr "Température"
 
 #: Data/Dialogs/pnlTaskList.xml:20 Data/Dialogs/pnlTaskList_L.xml:24
 msgid "Back"
-msgstr ""
+msgstr "Précédent"
 
 #: Data/Dialogs/dlgConfiguration.xml:628
 #: Data/Dialogs/dlgConfiguration_L.xml:632
@@ -7625,7 +7633,7 @@ msgstr "Temps de vol"
 
 #: Data/Dialogs/dlgVario.xml:281 Data/Dialogs/dlgVario_L.xml:280
 msgid "Logger interval"
-msgstr ""
+msgstr "Intervalle d'enregistrement"
 
 #: Data/Dialogs/dlgConfiguration.xml:305
 #: Data/Dialogs/dlgConfiguration_L.xml:306
@@ -7633,6 +7641,9 @@ msgid ""
 "When Vega variometer is connected and this option is true, the positive flap "
 "setting switches the flight mode between circling and cruise."
 msgstr ""
+"Lorsqu'un vario Vega est connecté et cette option sélectionnée, alors le "
+"détecteur de position de volets en positif passe la phase de vol de "
+"transition à spirale (et inversement)."
 
 #: Data/Dialogs/dlgBasicSettings.xml:7
 msgid "Ballast"
@@ -7644,6 +7655,8 @@ msgid ""
 "Units used for airspeed and ground speed.  A separate unit is available for "
 "task speeds."
 msgstr ""
+"Unité utilisée pour les vitesses air et sol. Une unité différente est "
+"possible pour la vitesse sur circuit."
 
 #: Data/Dialogs/dlgConfiguration.xml:290
 #: Data/Dialogs/dlgConfiguration_L.xml:291
@@ -7824,6 +7837,9 @@ msgid ""
 "[Box] Draws boxes around each infobox.\n"
 "[Tab] Draws a tab at the top of the infobox across the title."
 msgstr ""
+"Deux types de contour des InfoBoxes sont disponibles :\n"
+"[Box] Dessine une boîte autour de chaque InfoBox.\n"
+"[Tab] Dessine un onglet au-dessus de l'InfoBox"
 
 #: Data/Dialogs/dlgVario.xml:277 Data/Dialogs/dlgVario_L.xml:276
 msgid "IGC logging"
@@ -8102,9 +8118,8 @@ msgstr ""
 "+"
 
 #: Data/Input/default.xci:736
-#, fuzzy
 msgid "Setup Plane"
-msgstr "Mode de configuration"
+msgstr ""
 
 #: Data/Input/default.xci:598
 msgid "Topo."
@@ -8411,79 +8426,6 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "Height barometric"
-#~ msgstr "Altitude barométrique"
-
-#~ msgid "The vertical distance to the nearest airspace"
-#~ msgstr "Distance verticale pour l'espace aérien le plus proche"
-
-#~ msgid "No METAR available"
-#~ msgstr "Pas de METAR disponible"
-
-#~ msgid ""
-#~ "The list of tracked stations is full. Please remove a station before "
-#~ "adding a new one."
-#~ msgstr ""
-#~ "La liste des stations de suivies est pleine. S'il vous plaît supprimez "
-#~ "une station avant d'en ajouter une autre."
-
-#~ msgid "Airport ICAO code"
-#~ msgstr "Code OACI de l'aérodrome"
-
-#~ msgid "Please enter the FOUR letter code of the desired station."
-#~ msgstr "S'il vous plaît entrez les QUATRE lettres de la station désirée."
-
-#~ msgid ""
-#~ "Please don't use special characters in the four letter code of the "
-#~ "desired station."
-#~ msgstr ""
-#~ "S'il vous plaît n'utilisez pas de caractères spéciaux des les quatre "
-#~ "lettres de la station désirée."
-
-#~ msgid "Download"
-#~ msgstr "Télécharger"
-
-#~ msgid "Do you want to remove station %s?"
-#~ msgstr "Voulez vous supprimer la station %s ?"
-
-#~ msgid "This function is not available on your platform yet."
-#~ msgstr ""
-#~ "Cette fonction n'est pas enore disponible sur votre plate-forme "
-#~ "actuellement."
-
-#~ msgid "No METAR available!"
-#~ msgstr "Pas de METAR disponible !"
-
-#~ msgid "No TAF available!"
-#~ msgstr "Pas de TAF disponible !"
-
-#~ msgid "No fix"
-#~ msgstr "Pas de Fix GPS"
-
-#~ msgid "Flap"
-#~ msgstr "Volet"
-
-#~ msgid "OLC_FAI"
-#~ msgstr "OLC_FAI"
-
-#~ msgid "OLC_Classic"
-#~ msgstr "OLC_Classic"
-
-#~ msgid "OLC_Plus"
-#~ msgstr "OLC_Plus"
-
-#~ msgid "OLC_XContest"
-#~ msgstr "OLC_XContest"
-
-#~ msgid "OLC_DHVXC"
-#~ msgstr "OLC_DHVXC"
-
-#~ msgid "OLC_SISAT"
-#~ msgstr "OLC_SISAT"
-
-#~ msgid "Locked"
-#~ msgstr "Verrouillé"
-
 #~ msgid "Declare Task?"
 #~ msgstr "Déclarer circuit ?"
 
@@ -8766,6 +8708,9 @@ msgstr ""
 #~ msgid "Insert in task"
 #~ msgstr "Ajouter dans circuit"
 
+#~ msgid "Locked"
+#~ msgstr "Verrouillé"
+
 #~ msgid "Lat/Lon"
 #~ msgstr "Lat/Lon"
 
@@ -9004,6 +8949,9 @@ msgstr ""
 #~ msgid "Task Rules"
 #~ msgstr "Règles"
 
+#~ msgid "No fix"
+#~ msgstr "Pas de Fix GPS"
+
 #~ msgid "FAI Sector"
 #~ msgstr "Secteur FAI"
 
@@ -9146,3 +9094,16 @@ msgstr ""
 
 #~ msgid "Flight"
 #~ msgstr "Vol"
+
+#~ msgid "Flap"
+#~ msgstr "Volet"
+
+#~ msgid ""
+#~ "This is the barometric altitude obtained from a GPS equipped with "
+#~ "pressure sensor, or a supported external intelligent vario."
+#~ msgstr ""
+#~ "Altitude barométrique obtenue à partir d'un récepteur GPS équippé d'une "
+#~ "capsule barométrique, ou un variomètre intelligent externe."
+
+#~ msgid "Unknown Filetype."
+#~ msgstr "Type de fichier inconnu."
