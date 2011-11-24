@@ -316,7 +316,7 @@ bool
 GlueMapWindow::on_timer(timer_t id)
 {
   if (id != map_item_timer)
-    return false;
+    return MapWindow::on_timer(id);
 
   kill_timer(map_item_timer);
   map_item_timer = 0;
