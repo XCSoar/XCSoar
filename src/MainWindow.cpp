@@ -633,6 +633,9 @@ MainWindow::SetFullScreen(bool _full_screen)
   else
     InfoBoxManager::Show();
 
+  if (widget != NULL)
+    widget->Move(FullScreen ? get_client_rect() : map_rect);
+
   if (map != NULL) {
     const PixelRect rc = FullScreen ? get_client_rect() : map_rect;
     map->fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
