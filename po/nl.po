@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-31 08:31+0100\n"
-"PO-Revision-Date: 2011-09-30 07:46+0000\n"
-"Last-Translator: Quint Segers <Unknown>\n"
+"PO-Revision-Date: 2011-11-18 14:31+0000\n"
+"Last-Translator: guy audenaerde <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-31 07:28+0000\n"
-"X-Generator: Launchpad (build 14197)\n"
+"X-Launchpad-Export-Date: 2011-11-24 18:16+0000\n"
+"X-Generator: Launchpad (build 14376)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:532
 #: src/InputEventsActions.cpp:1467 src/Dialogs/dlgAnalysis.cpp:347
@@ -51,9 +51,8 @@ msgid "Airspace"
 msgstr "Luchtruim"
 
 #: src/Airspace/AirspaceParser.cpp:860
-#, fuzzy
 msgid "Unknown airspace filetype"
-msgstr "Onbekend Bestandstype."
+msgstr "Luchtruim onbekend bestandstype"
 
 #: src/ConditionMonitor.cpp:165
 msgid "Significant wind change"
@@ -98,17 +97,19 @@ msgstr "Stop logger"
 
 #: src/Logger/ExternalLogger.cpp:91
 msgid "Declare task?"
-msgstr ""
+msgstr "Declareer opdracht?"
 
 #: src/Logger/ExternalLogger.cpp:94
 msgid "Task declared!"
-msgstr ""
+msgstr "Opdracht gedeclareerd!"
 
 #: src/Logger/ExternalLogger.cpp:98
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
+"Foutmelding,\n"
+"Opdracht NIET gedeclareerd!"
 
 #: src/Logger/ExternalLogger.cpp:123
 msgid "No logger connected"
@@ -128,20 +129,20 @@ msgstr "Opdracht ingelezen"
 
 #: src/Logger/ExternalLogger.cpp:282
 msgid "Failed to download flight list."
-msgstr ""
+msgstr "Vluchten-lijst niet gedownload."
 
 #: src/Logger/ExternalLogger.cpp:283 src/Logger/ExternalLogger.cpp:289
 #: src/Logger/ExternalLogger.cpp:317
 msgid "Download flight"
-msgstr ""
+msgstr "Download vlucht."
 
 #: src/Logger/ExternalLogger.cpp:288
 msgid "Logger is empty."
-msgstr ""
+msgstr "Geen logger-bestanden."
 
 #: src/Logger/ExternalLogger.cpp:316
 msgid "Failed to download flight."
-msgstr ""
+msgstr "Vlucht niet gedownload."
 
 #: src/Replay/IgcReplayGlue.cpp:78
 msgid "Could not open IGC file!"
@@ -230,12 +231,16 @@ msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
+"Volgende\n"
+"(manueel)"
 
 #: src/ExpandMacros.cpp:282
 msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
+"Volgende\n"
+"(automatisch)"
 
 #: src/ExpandMacros.cpp:287
 msgid ""
@@ -248,6 +253,8 @@ msgid ""
 "Arm\n"
 "Start"
 msgstr ""
+"Voorbereiden\n"
+"Start"
 
 #: src/ExpandMacros.cpp:297
 msgid ""
@@ -260,6 +267,8 @@ msgid ""
 "Arm\n"
 "Turn"
 msgstr ""
+"Voorbereiden\n"
+"Bocht"
 
 #: src/ExpandMacros.cpp:321 src/ExpandMacros.cpp:325
 msgid "Resume"
@@ -354,7 +363,7 @@ msgstr "Alles"
 #: src/ExpandMacros.cpp:531 src/InputEventsActions.cpp:1466
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Opdracht&Landingsplaatsen"
 
 #: src/ExpandMacros.cpp:533 src/InputEventsActions.cpp:1468
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:42
@@ -569,7 +578,7 @@ msgstr "McCready instelling"
 #: src/InfoBoxes/Content/Factory.cpp:153
 #, no-c-format
 msgid "MC"
-msgstr ""
+msgstr "MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:154
 #, no-c-format
@@ -591,7 +600,7 @@ msgstr "Afstand volgend keerpunt"
 #: src/InfoBoxes/Content/Factory.cpp:162
 #, no-c-format
 msgid "WP Dist"
-msgstr ""
+msgstr "Keerpunt Afstand"
 
 #: src/InfoBoxes/Content/Factory.cpp:163
 #, no-c-format
@@ -616,7 +625,7 @@ msgstr ""
 #, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height."
-msgstr ""
+msgstr "Aankomsthoogte bij volgende keerpunt t.o.v. de veilige-aankomsthoogte."
 
 #: src/InfoBoxes/Content/Factory.cpp:179
 #, no-c-format
@@ -631,7 +640,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:181
 #, no-c-format
 msgid "Additional altitude required to reach the next turn point."
-msgstr ""
+msgstr "Vereiste bijkomende hoogte om het volgende keerpunt te bereiken."
 
 #: src/InfoBoxes/Content/Factory.cpp:188
 #, no-c-format
@@ -673,6 +682,7 @@ msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
 msgstr ""
+"Aankomsthoogte bij het laatste keerpunt t.o.v. de veilige-aankomsthoogte."
 
 #: src/InfoBoxes/Content/Factory.cpp:206
 #, no-c-format
@@ -687,7 +697,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:208
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr ""
+msgstr "Bijkomende hoogte vereist om de taak te volbrengen."
 
 #: src/InfoBoxes/Content/Factory.cpp:215
 #, no-c-format
@@ -705,6 +715,7 @@ msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
 msgstr ""
+"Gemiddelde overlandsnelheid in deze opdracht, niet gecompenseerd voor hoogte."
 
 #: src/InfoBoxes/Content/Factory.cpp:224
 #, no-c-format
@@ -742,6 +753,14 @@ msgid ""
 "finish by the excess energy height of the glider if its true airspeed is "
 "greater than the MacCready and best LD speeds."
 msgstr ""
+"De vereiste finesse om de opdracht te volbrengen, berekend door de nog af te "
+"leggen afstand te delen door de hoogte welke vereist is om aan te komen op "
+"de veilige aankomsthoogte. Negatieve waarden duiden erop dat stijgen vereist "
+"is om aan te komen. Indien de vereiste hoogtewaarde dicht bij nul is, wordt "
+"dit aangeduid met '---'. Opgelet, deze berekening kan optimistisch zijn "
+"omdat het de vereiste hoogte om aan te komen vermindert met de overtollige "
+"energie-hoogte van de zwever indien de ware luchtsnelheid groter is dan de "
+"MacCready en de beste LD snelheden."
 
 #: src/InfoBoxes/Content/Factory.cpp:242
 #, no-c-format
@@ -970,12 +989,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:352
 #, no-c-format
 msgid "Indicated Airspeed reported by a supported external intelligent vario."
-msgstr ""
+msgstr "IAS volgens externe intelligente vario."
 
 #: src/InfoBoxes/Content/Factory.cpp:359
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Barometric altitude"
-msgstr "Doorsnijhoogte"
+msgstr "Barometrische hoogte."
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 #, no-c-format
@@ -988,6 +1007,8 @@ msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
 msgstr ""
+"Dit is de barometrische hoogte bekomen door een met druksensor uitgerust "
+"apparaat."
 
 #: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
@@ -1006,6 +1027,9 @@ msgid ""
 "cruise flight mode, this speed-to-fly is calculated for maintaining "
 "altitude. In final glide mode, this speed-to-fly is calculated for descent."
 msgstr ""
+"De MacCready vliegsnelheid voor beste vlucht naar het volgende keerpunt. In "
+"'cruise flight' is dit de snelheid berekend om de hoogte te handhaven. In "
+"'final glide' is dit de snelheid berekend voor een dalend vluchtpad."
 
 #: src/InfoBoxes/Content/Factory.cpp:377
 #, no-c-format
@@ -1023,6 +1047,8 @@ msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
 "starting the task."
 msgstr ""
+"Tijdspercentage doorgebracht in 'climb mode' (stijgmodus). Deze statistiek "
+"wordt genuld bij het starten van de opdracht."
 
 #: src/InfoBoxes/Content/Factory.cpp:386
 #, no-c-format
@@ -1047,7 +1073,7 @@ msgstr "g-belasting"
 #: src/InfoBoxes/Content/Factory.cpp:396
 #, no-c-format
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: src/InfoBoxes/Content/Factory.cpp:397
 #, no-c-format
@@ -1055,6 +1081,8 @@ msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
 msgstr ""
+"Grootte van de G-kracht aangeduid door een externe intelligente vario. Deze "
+"waarde is negatief voor maneuvers met negatieve aanvalshoek."
 
 #: src/InfoBoxes/Content/Factory.cpp:404
 #, no-c-format
@@ -1077,6 +1105,14 @@ msgid ""
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
+"De vereiste finesse om het volgende keerpunt te bereiken, berekend door de "
+"afstand tot het volgende keerpunt te delen door de vereiste hoogte om aan te "
+"komen op de veilige aankomsthoogte. Negatieve waarden duiden erop dat een "
+"klim nodig is om het keerpunt te bereiken. Indien de vereiste hoogte dicht "
+"bij nul is wordt dit aangeduid door '---'. Opgelet, deze berekening kan "
+"optimistisch zijn vermits het de vereiste hoogte om het keerpunt te bereiken "
+"vermindert met de overtollige energie-hoogte van de zwever indien de ware "
+"vliegsnelheid groter is dan de MacCready en de beste LD snelheden."
 
 #: src/InfoBoxes/Content/Factory.cpp:413
 #, no-c-format
@@ -1091,7 +1127,7 @@ msgstr "Loc Tijd"
 #: src/InfoBoxes/Content/Factory.cpp:415
 #, no-c-format
 msgid "GPS time expressed in local time zone."
-msgstr ""
+msgstr "GPS tijd uitgedrukt in plaatselijke tijd"
 
 #: src/InfoBoxes/Content/Factory.cpp:422 src/InfoBoxes/Content/Factory.cpp:423
 #, no-c-format
@@ -1101,12 +1137,12 @@ msgstr "UTC tijd"
 #: src/InfoBoxes/Content/Factory.cpp:424
 #, no-c-format
 msgid "GPS time expressed in UTC."
-msgstr ""
+msgstr "GPS tijd uitgedrukt in UTC/GMT"
 
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
 msgid "Task time to go"
-msgstr ""
+msgstr "Opdracht tijd vereist."
 
 #: src/InfoBoxes/Content/Factory.cpp:432
 #, no-c-format
@@ -1119,11 +1155,13 @@ msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
+"Geschatte tijd nodig om de opdracht te beeindigen, veronderstellend dat de "
+"ideale MacCready 'cruise/climb' cyclus uitgevoerd wordt."
 
 #: src/InfoBoxes/Content/Factory.cpp:440
 #, no-c-format
 msgid "Next time to go"
-msgstr ""
+msgstr "Volgende tijd nodig."
 
 #: src/InfoBoxes/Content/Factory.cpp:441
 #, no-c-format
@@ -1136,6 +1174,8 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
+"Geschatte tijd nodig om het volgende keerpunt te bereiken, veronderstellend "
+"dat de ideale MacCready 'cruise/climb' cyclus uitgevoerd wordt."
 
 #: src/InfoBoxes/Content/Factory.cpp:449
 #, no-c-format
@@ -1158,6 +1198,14 @@ msgid ""
 "the current load factor (if an accelerometer is connected). When Block mode "
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
+"De ogenblikkelijke ' MacReady speed-to-fly ', gebruik makend van de Netto "
+"Vario berekeningen om de dolphin cruise speed  te bepalen in de huidige "
+"voorligging van de zwever. In Cruise flight mode wordt deze snelheid "
+"berekend om de hoogte te handhaven; in Final glide mode wordt deze snelheid "
+"berekend voor een dalend glijpad. In Climb mode geeft dit de snelheid weer "
+"voor minimaal dalen bij de huidige beladingsfactor ( indien een "
+"accelerometer aangesloten is ). Wanneer Block mode is geselecteerd wordt de "
+"MacCready snelheid aangeduid in deze Infobox."
 
 #: src/InfoBoxes/Content/Factory.cpp:458
 #, no-c-format
@@ -1177,6 +1225,11 @@ msgid ""
 "vario are connected, otherwise calculations are based on GPS measurements "
 "and wind estimates."
 msgstr ""
+"Ogenblikkelijke verticale snelheid van de luchtmassa, gelijk aan de vario "
+"waarde verminderd met de geschatte daalsnelheid van de zwever. Wordt best "
+"gebruikt wanneer snelheidsmeter, accelerometer en vario aangesloten zijn, "
+"zoniet worden de berekeningen gebaseerd op de GPS -waarden en wind "
+"schattingen."
 
 #: src/InfoBoxes/Content/Factory.cpp:467
 #, no-c-format
@@ -1194,6 +1247,8 @@ msgid ""
 "Estimated arrival local time at task completion, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
+"Geschatte lokale aankomsttijd voor het beeindigen van de opdracht, in de "
+"veronderstelling dat de ideale MacCready cruise/climb cyclus gehaald wordt."
 
 #: src/InfoBoxes/Content/Factory.cpp:476
 #, no-c-format
@@ -1211,6 +1266,8 @@ msgid ""
 "Estimated arrival local time at next waypoint, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
+"Geschatte lokale aankomsttijd aan het volgende keerpunt, veronderstellend "
+"dat de ideale MacCready cruis/climb cyclus gehaald wordt."
 
 #: src/InfoBoxes/Content/Factory.cpp:485
 #, no-c-format
@@ -1550,6 +1607,8 @@ msgid ""
 "Displays percentage of device battery remaining (where applicable) and "
 "status/voltage of external power supply."
 msgstr ""
+"Toont de resterende batterijcapaciteit van het apparaat en de status/voltage "
+"van de aangesloten externe voeding."
 
 #: src/InfoBoxes/Content/Factory.cpp:660
 #, no-c-format
@@ -2673,7 +2732,7 @@ msgstr "initialiseren"
 #. Start the device thread(s)
 #: src/Components.cpp:420
 msgid "Starting devices"
-msgstr ""
+msgstr "starten apparaten A en B"
 
 #.
 #. -- Reset polar in case devices need the data
@@ -3299,9 +3358,8 @@ msgid "Fix invalid"
 msgstr "Peiling ongeldig"
 
 #: src/Dialogs/dlgStatus.cpp:91
-#, fuzzy
 msgid "2D fix"
-msgstr "3D peiling"
+msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:93
 msgid "3D fix"
@@ -4531,7 +4589,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:329 Data/Dialogs/dlgVario_L.xml:328
 msgid "Disable circling"
-msgstr ""
+msgstr "Cirkelen uitzetten"
 
 #: Data/Dialogs/dlgWaypointDetails.xml:18
 #: Data/Dialogs/dlgWaypointDetails_L.xml:18
@@ -4934,7 +4992,7 @@ msgstr "Profiel"
 
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:5
 msgid "H Baro"
-msgstr ""
+msgstr "Drukhoogte"
 
 #: Data/Dialogs/dlgStatusAircraft.xml:5 Data/Dialogs/dlgWaypointEdit_L.xml:34
 #: Data/Dialogs/pnlStatusFlight.xml:3
@@ -7708,7 +7766,7 @@ msgstr "Vervang in opdracht"
 #: Data/Dialogs/dlgConfiguration.xml:155
 #: Data/Dialogs/dlgConfiguration_L.xml:155
 msgid "Label style"
-msgstr ""
+msgstr "Label opmaak"
 
 #: Data/Dialogs/dlgConfiguration.xml:832
 #: Data/Dialogs/dlgConfiguration_L.xml:836
@@ -7889,9 +7947,8 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:736
-#, fuzzy
 msgid "Setup Plane"
-msgstr "Instelling"
+msgstr ""
 
 #: Data/Input/default.xci:598
 msgid "Topo."
@@ -8162,18 +8219,6 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
-
-#~ msgid "No fix"
-#~ msgstr "Geen peiling"
-
-#~ msgid "Flap"
-#~ msgstr "Flap"
-
-#~ msgid "SC"
-#~ msgstr "SC"
-
-#~ msgid "Locked"
-#~ msgstr "Vastgezet"
 
 #~ msgid "Thermal last 30 sec"
 #~ msgstr "stijgen laatste 30 sec"
@@ -8520,6 +8565,12 @@ msgstr ""
 #~ msgid "Alternate"
 #~ msgstr "Uitwijk"
 
+#~ msgid "Flap"
+#~ msgstr "Flap"
+
+#~ msgid "SC"
+#~ msgstr "SC"
+
 #~ msgid "Changes to configuration saved."
 #~ msgstr "Verandering in configuratie opgeslagen"
 
@@ -8549,6 +8600,9 @@ msgstr ""
 
 #~ msgid "Times"
 #~ msgstr "Aantal keer"
+
+#~ msgid "No fix"
+#~ msgstr "Geen peiling"
 
 #~ msgid "YES"
 #~ msgstr "JA"
@@ -8789,6 +8843,9 @@ msgstr ""
 
 #~ msgid "Font Face"
 #~ msgstr "Lettertype"
+
+#~ msgid "Locked"
+#~ msgstr "Vastgezet"
 
 #~ msgid "Pitch Scale"
 #~ msgstr "Schaal toonhoogte"
@@ -9239,3 +9296,6 @@ msgstr ""
 
 #~ msgid "Final Glide Through Terrain"
 #~ msgstr "Final Glide door terrein"
+
+#~ msgid "Unknown Filetype."
+#~ msgstr "Onbekend Bestandstype."
