@@ -69,3 +69,9 @@ NullWidget::Move(const PixelRect &rc)
   Hide();
   Show(rc);
 }
+
+bool
+NullWidget::SetFocus()
+{
+  return false;
+}

@@ -114,6 +114,13 @@ public:
    * Move the widget.  This will only be called while it is visible.
    */
   virtual void Move(const PixelRect &rc) = 0;
+
+  /**
+   * Grab keyboard focus.
+   *
+   * @return false if the Widget is not interested in keyboard focus
+   */
+  virtual bool SetFocus() = 0;
 };
 
 /**
@@ -131,6 +138,7 @@ public:
   virtual bool Click();
   virtual void ReClick();
   virtual void Move(const PixelRect &rc);
+  virtual bool SetFocus();
 };
 
 #endif
