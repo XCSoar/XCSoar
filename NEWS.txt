@@ -20,6 +20,10 @@ Version 6.3 - not yet released
 * Android
   - support reverse screen modes for Galaxy Tab
 
+Version 6.2.4 - not yet released
+* Altair
+  - fix crash in InfoBox cursor movement
+
 Version 6.2.3 - 2011/11/19
 * calculations
   - show correct "next distance" even if glide solver fails
