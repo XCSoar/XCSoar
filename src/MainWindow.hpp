@@ -270,6 +270,7 @@ protected:
   virtual bool on_resize(UPixelScalar width, UPixelScalar height);
   bool on_activate();
   bool on_setfocus();
+  virtual bool on_key_down(unsigned key_code);
   bool on_timer(WindowTimer &timer);
   virtual bool on_user(unsigned id);
   bool on_create();

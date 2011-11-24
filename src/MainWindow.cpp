@@ -28,6 +28,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Interface.hpp"
+#include "InputEvents.hpp"
 #include "ButtonLabel.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
@@ -518,6 +519,13 @@ MainWindow::on_setfocus()
   }
 
   return SingleWindow::on_setfocus();
+}
+
+bool
+MainWindow::on_key_down(unsigned key_code)
+{
+  return InputEvents::processKey(key_code) ||
+    SingleWindow::on_key_down(key_code);
 }
 
 bool
