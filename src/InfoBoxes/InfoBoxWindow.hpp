@@ -252,6 +252,9 @@ protected:
    * @param canvas The canvas to paint on
    */
   virtual void on_paint(Canvas &canvas);
+
+  virtual bool on_cancel_mode();
+
   /**
    * This event handler is called when the InfoBox is getting focused
    */
