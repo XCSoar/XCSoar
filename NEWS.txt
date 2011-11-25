@@ -21,8 +21,14 @@ Version 6.3 - not yet released
   - support reverse screen modes for Galaxy Tab
 
 Version 6.2.4 - not yet released
+* Android
+  - fix bogus long InfoBox clicks
 * Altair
   - fix crash in InfoBox cursor movement
+* user interface
+  - fix sorting by filename in file selector of task manager
+  - allow modification of some additional infobox values with up/down keys
+    (or volume keys on android devices).
 
 Version 6.2.3 - 2011/11/19
 * calculations

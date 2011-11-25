@@ -447,6 +447,7 @@ InfoBoxWindow::on_key_down(unsigned key_code)
 bool
 InfoBoxWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 {
+  set_capture();
   click_clock.update();
 
   // if single clicked -> focus the InfoBoxWindow
@@ -460,8 +461,14 @@ InfoBoxWindow::on_mouse_up(PixelScalar x, PixelScalar y)
   if (!has_focus())
     return PaintWindow::on_mouse_up(x, y);
 
-  if (click_clock.check(1000)) {
-    InfoBoxManager::ShowDlgInfoBox(id);
+  if (click_clock.IsDefined()) {
+    release_capture();
+
+    if ((unsigned)x < get_width() && (unsigned)y < get_height() &&
+        click_clock.check(1000))
+      InfoBoxManager::ShowDlgInfoBox(id);
+
+    click_clock.reset();
     return true;
   } else
     return PaintWindow::on_mouse_up(x, y);
@@ -489,6 +496,15 @@ InfoBoxWindow::on_paint(Canvas &canvas)
   // Paint the selector
   if (has_focus())
     PaintSelector(canvas);
+}
+
+bool
+InfoBoxWindow::on_cancel_mode()
+{
+  click_clock.reset();
+  release_capture();
+  PaintWindow::on_cancel_mode();
+  return false;
 }
 
 bool

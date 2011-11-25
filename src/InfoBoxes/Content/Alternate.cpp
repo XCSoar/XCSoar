@@ -84,10 +84,12 @@ InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
     dlgAlternatesListShowModal(XCSoarInterface::main_window);
     break;
   case ibkLeft:
+  case ibkUp:
     if (index > 0)
       index--;
     break;
   case ibkRight:
+  case ibkDown:
     index++;
     break;
   default:
@@ -156,10 +158,12 @@ InfoBoxContentAlternateGR::HandleKey(const InfoBoxKeyCodes keycode)
     dlgAlternatesListShowModal(XCSoarInterface::main_window);
     break;
   case ibkLeft:
+  case ibkUp:
     if (index > 0)
       index--;
     break;
   case ibkRight:
+  case ibkDown:
     index++;
     break;
   default:
