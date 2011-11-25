@@ -68,6 +68,7 @@ PNG_SPLASH_160 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_160.png,$
 BMP_SPLASH_160 = $(PNG_SPLASH_160:.png=.bmp)
 PNG_SPLASH_80 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_80.png,$(SVG_SPLASH))
 BMP_SPLASH_80 = $(PNG_SPLASH_80:.png=.bmp)
+PNG_SPLASH_128 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_128.png,$(SVG_SPLASH))
 ICNS_SPLASH_128 = $(PNG_SPLASH_128:.png=.icns)
 
 # render from SVG to PNG
