@@ -150,9 +150,6 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   LoadFormProperty(form, _T("prpMenuTimeout"),
                    XCSoarInterface::menu_timeout_max / 2);
 
-  LoadFormProperty(form, _T("prpDebounceTimeout"),
-                   XCSoarInterface::debounce_timeout);
-
   wp = (WndProperty*)form.FindByName(_T("prpTextInput"));
   assert(wp != NULL);
   if (has_pointer()) {
@@ -244,11 +241,6 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
       changed = true;
     }
   }
-
-  changed |= SaveFormProperty(form, _T("prpDebounceTimeout"),
-                              szProfileDebounceTimeout,
-                              XCSoarInterface::debounce_timeout);
-
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
   if (has_pointer()) {

@@ -74,10 +74,6 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   assert(lpText != NULL);
 
-  // JMW this makes the first key if pressed quickly, ignored
-  // TODO bug: doesn't work sometimes. buttons have to be pressed multiple times (TB)
-  XCSoarInterface::Debounce();
-
   const PixelRect rc = XCSoarInterface::main_window.get_client_rect();
 
   UPixelScalar Width = Layout::Scale(200);

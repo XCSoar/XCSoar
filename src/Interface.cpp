@@ -37,7 +37,6 @@ Copyright_License {
 #include "Gauge/GlueGaugeVario.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 #include "PeriodClock.hpp"
-#include "Screen/Blank.hpp"
 #include "LogFile.hpp"
 #include "DeviceBlackboard.hpp"
 #include "CalculationThread.hpp"
@@ -55,7 +54,6 @@ StatusMessageList CommonInterface::status_messages;
 MainWindow CommonInterface::main_window(status_messages);
 
 // settings used only by interface thread scope
-unsigned XCSoarInterface::debounce_timeout = 250;
 unsigned ActionInterface::menu_timeout_max = 8 * 4;
 
 bool
@@ -162,26 +160,6 @@ XCSoarInterface::CheckShutdown()
 
   return MessageBoxX(_("Quit program?"), _T("XCSoar"),
                      MB_YESNO | MB_ICONQUESTION) == IDYES;
-}
-
-// Debounce input buttons (does not matter which button is pressed)
-bool
-XCSoarInterface::Debounce(void)
-{
-#if defined(GNAV) || defined(PCGNAV)
-  return true;
-#else
-  static PeriodClock fps_last;
-
-  ResetDisplayTimeOut();
-
-  if (GetUIState().screen_blanked)
-    // prevent key presses working if screen is blanked,
-    // so a key press just triggers turning the display on again
-    return false;
-
-  return fps_last.check_update(debounce_timeout);
-#endif
 }
 
 void

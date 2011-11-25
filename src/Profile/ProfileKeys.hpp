@@ -100,7 +100,6 @@ extern const TCHAR szProfileNettoSpeed[];
 extern const TCHAR szProfileAutoBlank[];
 extern const TCHAR szProfileAverEffTime[]; // VENTA6
 extern const TCHAR szProfileVarioGauge[];
-extern const TCHAR szProfileDebounceTimeout[];
 extern const TCHAR szProfileAppIndLandable[];
 extern const TCHAR szProfileAppUseSWLandablesRendering[];
 extern const TCHAR szProfileAppLandableRenderingScale[];

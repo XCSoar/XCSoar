@@ -413,11 +413,6 @@ InputEvents::processButton(unsigned bindex)
   if (!item.defined())
     return false;
 
-  /* JMW illegal, should be done by gui handler loop
-  // JMW need a debounce method here..
-  if (!Debounce()) return true;
-  */
-
   processGo(item.event);
 
   // experimental: update button text, macro may change the label
@@ -460,9 +455,6 @@ InputEvents::ProcessKey(mode mode, unsigned key_code)
   int bindex = -1;
   InputEvents::mode lastMode = mode;
   const TCHAR *pLabelText = NULL;
-
-  // JMW should be done by gui handler
-  // if (!Debounce()) return true;
 
   const Menu &menu = input_config.menus[mode];
   int i = menu.FindByEvent(event_id);

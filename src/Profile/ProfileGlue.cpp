@@ -41,8 +41,6 @@ Profile::Use()
 
   LoadUnits();
 
-  Get(szProfileDebounceTimeout, XCSoarInterface::debounce_timeout);
-
   /* JMW broken
   if (Get(szProfileAccelerometerZero, Temp))
     AccelerometerZero = Temp;

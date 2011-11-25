@@ -184,12 +184,6 @@ public:
  */
 class XCSoarInterface: public ActionInterface {
 public:
-  // settings
-  static unsigned debounce_timeout;
-
-public:
-  static bool Debounce();
-
   static bool CheckShutdown();
 
   static void AfterStartup();
