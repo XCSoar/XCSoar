@@ -42,7 +42,6 @@ namespace InputEvents
   void ProcessTimer();
   void ShowMenu();
   void HideMenu();
-  void ResetMenuTimeOut();
 
   void readFile();
   void setMode(mode mode);

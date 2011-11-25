@@ -674,13 +674,6 @@ InputEvents::HideMenu()
 }
 
 void
-InputEvents::ResetMenuTimeOut()
-{
-  ResetDisplayTimeOut();
-  MenuTimeOut = 0;
-}
-
-void
 InputEvents::ShowMenu()
 {
   if (CommonInterface::IsPanning())
