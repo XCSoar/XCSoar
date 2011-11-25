@@ -441,16 +441,10 @@ InputEvents::key_to_event(mode mode, unsigned key_code)
   return event_id;
 }
 
-/*
-  InputEvent::processKey(KeyID);
-  Process keys normally brought in by hardware or keyboard presses
-  Future will also allow for long and double click presses...
-  Return = We had a valid key (even if nothing happens because of Bounce)
-*/
 bool
-InputEvents::processKey(unsigned dWord)
+InputEvents::ProcessKey(mode mode, unsigned key_code)
 {
-  if (is_altair() && dWord == 0xF5) {
+  if (is_altair() && key_code == 0xF5) {
     XCSoarInterface::SignalShutdown(false);
     return true;
   }
@@ -458,11 +452,8 @@ InputEvents::processKey(unsigned dWord)
   if (!globalRunningEvent.Test())
     return false;
 
-  // get current mode
-  InputEvents::mode mode = InputEvents::getModeID();
-
   // Which key - can be defined locally or at default (fall back to default)
-  unsigned event_id = key_to_event(mode, dWord);
+  unsigned event_id = key_to_event(mode, key_code);
   if (event_id == 0)
     return false;
 
@@ -488,6 +479,18 @@ InputEvents::processKey(unsigned dWord)
     drawButtons(lastMode);
 
   return true;
+}
+
+/*
+  InputEvent::processKey(KeyID);
+  Process keys normally brought in by hardware or keyboard presses
+  Future will also allow for long and double click presses...
+  Return = We had a valid key (even if nothing happens because of Bounce)
+*/
+bool
+InputEvents::processKey(unsigned key_code)
+{
+  return ProcessKey(getModeID(), key_code);
 }
 
 unsigned

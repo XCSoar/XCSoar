@@ -435,12 +435,7 @@ bool
 InfoBoxWindow::on_key_down(unsigned key_code)
 {
   // Get the input event_id of the event
-  unsigned event_id = InputEvents::key_to_event(InputEvents::MODE_INFOBOX,
-                                                key_code);
-  if (event_id > 0) {
-    // If input event exists -> process it
-    InputEvents::processGo(event_id);
-
+  if (InputEvents::ProcessKey(InputEvents::MODE_INFOBOX, key_code)) {
     // restart focus timer if not idle
     focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
     return true;

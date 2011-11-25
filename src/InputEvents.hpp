@@ -67,6 +67,11 @@ namespace InputEvents
   unsigned key_to_event(mode mode, unsigned key_code);
   unsigned gesture_to_event(mode mode, const TCHAR *data);
 
+  /**
+   * Process a hot key for the specified mode.
+   */
+  bool ProcessKey(mode mode, unsigned key_code);
+
   bool processKey(unsigned key);
   bool processGesture(const TCHAR *data);
   bool processNmea(unsigned key);
