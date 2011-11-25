@@ -161,7 +161,7 @@ TabbedControl::on_resize(UPixelScalar width, UPixelScalar height)
   return true;
 }
 
-bool
+void
 TabbedControl::on_destroy()
 {
   for (auto i = tabs.begin(), end = tabs.end(); i != end; ++i) {
@@ -174,5 +174,4 @@ TabbedControl::on_destroy()
   tabs.clear();
 
   ContainerWindow::on_destroy();
-  return true;
 }

@@ -60,10 +60,9 @@ SingleWindow::on_close()
   return TopWindow::on_close();
 }
 
-bool
+void
 SingleWindow::on_destroy()
 {
   TopWindow::on_destroy();
   post_quit();
-  return true;
 }

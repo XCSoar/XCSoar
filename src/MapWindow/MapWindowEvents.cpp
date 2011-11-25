@@ -53,11 +53,10 @@ MapWindow::on_resize(UPixelScalar width, UPixelScalar height)
   return true;
 }
 
-bool
+void
 MapWindow::on_create()
 {
-  if (!DoubleBufferWindow::on_create())
-    return false;
+  DoubleBufferWindow::on_create();
 
 #ifndef ENABLE_OPENGL
   WindowCanvas canvas(*this);
@@ -66,10 +65,9 @@ MapWindow::on_create()
   if (!is_ancient_hardware())
     stencil_canvas.set(canvas);
 #endif
-  return true;
 }
 
-bool
+void
 MapWindow::on_destroy()
 {
   set_marks(NULL);
@@ -87,7 +85,6 @@ MapWindow::on_destroy()
 #endif
 
   DoubleBufferWindow::on_destroy();
-  return true;
 }
 
 void

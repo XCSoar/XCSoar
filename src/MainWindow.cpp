@@ -589,23 +589,22 @@ MainWindow::on_user(unsigned id)
   return false;
 }
 
-bool MainWindow::on_create(void)
+void
+MainWindow::on_create()
 {
   SingleWindow::on_create();
 
   timer.Schedule(500); // 2 times per second
-
-  return true;
 }
 
-bool MainWindow::on_destroy(void) {
+void
+MainWindow::on_destroy()
+{
   timer.Cancel();
 
   KillWidget();
 
   SingleWindow::on_destroy();
-
-  return true;
 }
 
 bool MainWindow::on_close() {

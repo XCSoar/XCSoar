@@ -76,7 +76,7 @@ public:
 
 protected:
   virtual bool on_close();
-  virtual bool on_destroy();
+  virtual void on_destroy();
 };
 
 #endif

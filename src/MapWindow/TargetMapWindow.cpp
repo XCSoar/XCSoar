@@ -334,11 +334,10 @@ TargetMapWindow::on_resize(UPixelScalar width, UPixelScalar height)
   return true;
 }
 
-bool
+void
 TargetMapWindow::on_create()
 {
-  if (!BufferWindow::on_create())
-    return false;
+  BufferWindow::on_create();
 
   drag_mode = DRAG_NONE;
 
@@ -349,10 +348,9 @@ TargetMapWindow::on_create()
   if (!is_ancient_hardware())
     stencil_canvas.set(canvas);
 #endif
-  return true;
 }
 
-bool
+void
 TargetMapWindow::on_destroy()
 {
   SetTerrain(NULL);
@@ -368,5 +366,4 @@ TargetMapWindow::on_destroy()
 #endif
 
   BufferWindow::on_destroy();
-  return true;
 }

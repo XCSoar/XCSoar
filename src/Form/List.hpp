@@ -272,7 +272,7 @@ protected:
 
 #ifndef _WIN32_WCE
   virtual bool on_timer(WindowTimer &timer);
-  virtual bool on_destroy();
+  virtual void on_destroy();
 #endif
 };
 

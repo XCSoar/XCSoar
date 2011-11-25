@@ -69,16 +69,14 @@ public:
   }
 
 protected:
-  virtual bool on_create() {
+  virtual void on_create() {
     SingleWindow::on_create();
     timer.Schedule(10);
-    return true;
   }
 
-  virtual bool on_destroy() {
+  virtual void on_destroy() {
     timer.Cancel();
     SingleWindow::on_destroy();
-    return true;
   }
 
   virtual bool on_timer(WindowTimer &_timer) {

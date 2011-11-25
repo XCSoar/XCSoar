@@ -27,26 +27,23 @@ Copyright_License {
 
 #include "Screen/WindowCanvas.hpp"
 
-bool
+void
 DoubleBufferWindow::on_create()
 {
-  if (!PaintWindow::on_create())
-    return false;
+  PaintWindow::on_create();
 
   WindowCanvas a_canvas(*this);
   buffers[0].set(a_canvas);
   buffers[1].set(a_canvas);
-  return true;
 }
 
-bool
+void
 DoubleBufferWindow::on_destroy()
 {
   PaintWindow::on_destroy();
 
   buffers[0].reset();
   buffers[1].reset();
-  return true;
 }
 
 void

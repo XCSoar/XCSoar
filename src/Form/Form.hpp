@@ -173,7 +173,7 @@ public:
 
   /** from class Window */
   virtual bool on_resize(UPixelScalar width, UPixelScalar height);
-  virtual bool on_destroy();
+  virtual void on_destroy();
   virtual bool on_timer(WindowTimer &timer);
 
 #ifdef WIN32

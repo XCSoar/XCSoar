@@ -117,7 +117,7 @@ public:
 
 protected:
   virtual bool on_resize(UPixelScalar width, UPixelScalar height);
-  virtual bool on_destroy();
+  virtual void on_destroy();
 };
 
 #endif

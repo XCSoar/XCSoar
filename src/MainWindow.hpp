@@ -273,8 +273,8 @@ protected:
   virtual bool on_key_down(unsigned key_code);
   bool on_timer(WindowTimer &timer);
   virtual bool on_user(unsigned id);
-  bool on_create();
-  bool on_destroy();
+  void on_create();
+  void on_destroy();
   bool on_close();
 
 #ifdef ANDROID

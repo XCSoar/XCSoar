@@ -169,7 +169,7 @@ WndForm::on_resize(UPixelScalar width, UPixelScalar height)
   return true;
 }
 
-bool
+void
 WndForm::on_destroy()
 {
   if (mModalResult == 0)
@@ -178,7 +178,6 @@ WndForm::on_destroy()
   timer.Cancel();
 
   ContainerWindow::on_destroy();
-  return true;
 }
 
 bool

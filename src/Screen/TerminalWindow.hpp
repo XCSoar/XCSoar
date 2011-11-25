@@ -52,7 +52,7 @@ private:
   void Advance();
 
 protected:
-  virtual bool on_create();
+  virtual void on_create();
   virtual bool on_resize(UPixelScalar width, UPixelScalar height);
   virtual void on_paint(Canvas &canvas);
   virtual void on_paint(Canvas &canvas, const PixelRect &dirty);

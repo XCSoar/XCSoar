@@ -63,7 +63,7 @@ protected:
   virtual const Brush *on_color(Window &window, Canvas &canvas);
 
 #ifndef USE_GDI
-  virtual bool on_destroy();
+  virtual void on_destroy();
   virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
   virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
   virtual bool on_mouse_up(PixelScalar x, PixelScalar y);

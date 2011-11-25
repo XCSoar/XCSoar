@@ -100,7 +100,7 @@ protected:
   void PaintTaskDirection(Canvas &canvas) const;
 
 protected:
-  virtual bool on_create();
+  virtual void on_create();
   virtual void on_paint(Canvas &canvas);
   virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
   virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
@@ -112,7 +112,7 @@ static WndForm *wf = NULL;
 static FlarmTrafficControl *wdf;
 static CheckBox *auto_zoom, *north_up;
 
-bool
+void
 FlarmTrafficControl::on_create()
 {
   FlarmTrafficWindow::on_create();
@@ -120,8 +120,6 @@ FlarmTrafficControl::on_create()
   Profile::Get(szProfileFlarmSideData, side_display_type);
   Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);
   Profile::Get(szProfileFlarmNorthUp, enable_north_up);
-
-  return true;
 }
 
 unsigned

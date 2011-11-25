@@ -582,12 +582,12 @@ WndListFrame::on_timer(WindowTimer &timer)
   return PaintWindow::on_timer(timer);
 }
 
-bool
+void
 WndListFrame::on_destroy()
 {
   kinetic_timer.Cancel();
 
-  return PaintWindow::on_destroy();
+  PaintWindow::on_destroy();
 }
 
 #endif

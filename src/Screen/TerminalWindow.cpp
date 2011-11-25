@@ -91,14 +91,14 @@ TerminalWindow::Advance()
     NewLine();
 }
 
-bool
+void
 TerminalWindow::on_create()
 {
+  PaintWindow::on_create();
   cell_size = look.font->TextSize(_T("W"));
   cursor_x = 0;
   cursor_y = 0;
   data.Reset();
-  return true;
 }
 
 bool

@@ -286,8 +286,8 @@ protected:
   }
 
 protected:
-  virtual bool on_create();
-  virtual bool on_destroy();
+  virtual void on_create();
+  virtual void on_destroy();
   virtual bool on_resize(UPixelScalar width, UPixelScalar height);
 
   virtual void on_paint(Canvas& canvas);

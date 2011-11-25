@@ -209,7 +209,7 @@ ContainerWindow::focus_previous_control()
     control->set_focus();
 }
 
-bool
+void
 ContainerWindow::on_destroy()
 {
   /* destroy all child windows */
@@ -224,7 +224,6 @@ ContainerWindow::on_destroy()
   assert(children.empty());
 
   PaintWindow::on_destroy();
-  return true;
 }
 
 bool

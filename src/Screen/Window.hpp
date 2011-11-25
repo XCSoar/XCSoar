@@ -859,9 +859,8 @@ public:
    * @return true on success, false if the window should not be
    * created
    */
-  virtual bool on_create();
-
-  virtual bool on_destroy();
+  virtual void on_create();
+  virtual void on_destroy();
   virtual bool on_close();
   virtual bool on_resize(UPixelScalar width, UPixelScalar height);
   virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);

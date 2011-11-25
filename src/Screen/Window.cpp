@@ -130,13 +130,12 @@ Window::get_root_owner()
 #endif /* USE_GDI */
 }
 
-bool
+void
 Window::on_create()
 {
-  return true;
 }
 
-bool
+void
 Window::on_destroy()
 {
 #ifndef USE_GDI
@@ -158,8 +157,6 @@ Window::on_destroy()
 
   hWnd = NULL;
 #endif /* USE_GDI */
-
-  return true;
 }
 
 bool

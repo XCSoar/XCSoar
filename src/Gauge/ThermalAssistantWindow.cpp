@@ -51,7 +51,7 @@ ThermalAssistantWindow::ThermalAssistantWindow(unsigned _padding, bool _small)
   }
 }
 
-bool
+void
 ThermalAssistantWindow::on_create()
 {
   BufferWindow::on_create();
@@ -76,18 +76,15 @@ ThermalAssistantWindow::on_create()
 
   hfNoTraffic.Set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
   hfLabels.Set(Fonts::GetStandardFontFace(), Layout::FastScale(12));
-
-  return true;
 }
 
-bool
+void
 ThermalAssistantWindow::on_destroy()
 {
   hfNoTraffic.Reset();
   hfLabels.Reset();
 
   BufferWindow::on_destroy();
-  return true;
 }
 
 bool

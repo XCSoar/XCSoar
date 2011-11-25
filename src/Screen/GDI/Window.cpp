@@ -113,12 +113,12 @@ Window::on_message(HWND _hWnd, UINT message,
 
   switch (message) {
   case WM_CREATE:
-    return on_create() ? 0 : -1;
-    break;
+    on_create();
+    return 0;
 
   case WM_DESTROY:
-    if (on_destroy()) return 0;
-    break;
+    on_destroy();
+    return 0;
 
   case WM_CLOSE:
     if (on_close())
