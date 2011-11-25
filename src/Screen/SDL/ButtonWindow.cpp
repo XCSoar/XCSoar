@@ -140,13 +140,10 @@ ButtonWindow::on_killfocus()
 bool
 ButtonWindow::on_cancel_mode()
 {
-  release_capture();
   dragging = false;
   set_down(false);
 
-  PaintWindow::on_cancel_mode();
-
-  return true;
+  return PaintWindow::on_cancel_mode();
 }
 
 void

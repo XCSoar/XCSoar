@@ -143,13 +143,10 @@ CheckBox::on_killfocus()
 bool
 CheckBox::on_cancel_mode()
 {
-  release_capture();
   dragging = false;
   set_pressed(false);
 
-  PaintWindow::on_cancel_mode();
-
-  return true;
+  return PaintWindow::on_cancel_mode();
 }
 
 void

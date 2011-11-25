@@ -29,7 +29,6 @@ TargetMapWindow::on_cancel_mode()
   if (drag_mode != DRAG_NONE) {
     release_capture();
     drag_mode = DRAG_NONE;
-    return true;
   }
 
   return BufferWindow::on_cancel_mode();
