@@ -442,7 +442,7 @@ InfoBoxWindow::on_key_down(unsigned key_code)
     InputEvents::processGo(event_id);
 
     // restart focus timer if not idle
-    focus_timer.Schedule(FOCUS_TIMEOUT_MAX * 500);
+    focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
     return true;
   }
 
@@ -504,7 +504,7 @@ InfoBoxWindow::on_setfocus()
 
   // Start the focus-auto-return timer
   // to automatically return focus back to MapWindow if idle
-  focus_timer.Schedule(FOCUS_TIMEOUT_MAX * 500);
+  focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
 
   // Redraw fast to paint the selector
   invalidate();
