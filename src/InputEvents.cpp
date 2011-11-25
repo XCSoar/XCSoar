@@ -649,25 +649,16 @@ InputEvents::processGlideComputer_real(unsigned gce_id)
 void
 InputEvents::processGo(unsigned eventid)
 {
-  if (!globalRunningEvent.Test())
-    return;
+  /* eventid 0 is special for "noop" */
 
-  // TODO feature: event/macro recorder
-  /*
-  if (LoggerActive) {
-    LoggerNoteEvent(Events[eventid].);
-  }
-  */
-
-  // eventid 0 is special for "noop" - otherwise check event
-  // exists (pointer to function)
-  if (eventid) {
-    if (input_config.Events[eventid].event) {
-      input_config.Events[eventid].event(input_config.Events[eventid].misc);
+  while (globalRunningEvent.Test() && eventid > 0) {
+    const InputConfig::Event &event = input_config.Events[eventid];
+    if (event.event != NULL) {
+      event.event(event.misc);
       MenuTimeOut = 0;
     }
-    if (input_config.Events[eventid].next > 0)
-      InputEvents::processGo(input_config.Events[eventid].next);
+
+    eventid = event.next;
   }
 }
 
