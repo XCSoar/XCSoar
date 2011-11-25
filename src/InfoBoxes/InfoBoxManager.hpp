@@ -53,13 +53,6 @@ namespace InfoBoxManager
   void Event_Change(int i);
 
   /**
-   * The following two handle direct access to InfoBox values.
-   * ProcessKey takes an keycode and expects the target InfoBox
-   * to be focussed.
-   * @param keycode
-   */
-  void ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode);
-  /**
    * ProcessQuickAccess takes the id of the InfoBox where to pass the
    * value Value. It doesn't expect the target InfoBox to be focussed.
    * @param id

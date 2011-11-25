@@ -31,6 +31,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Key.h"
 #include "Interface.hpp"
 #include "Asset.hpp"
 
@@ -434,12 +435,36 @@ InfoBoxWindow::on_resize(UPixelScalar width, UPixelScalar height)
 bool
 InfoBoxWindow::on_key_down(unsigned key_code)
 {
-  // Get the input event_id of the event
-  if (InputEvents::ProcessKey(InputEvents::MODE_INFOBOX, key_code)) {
-    // restart focus timer if not idle
+  /* handle local hot key */
+
+  switch (key_code) {
+  case VK_UP:
     focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
-    return true;
+    return HandleKey(InfoBoxContent::ibkUp);
+
+  case VK_DOWN:
+    focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
+    return HandleKey(InfoBoxContent::ibkDown);
+
+  case VK_LEFT:
+    focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
+    return HandleKey(InfoBoxContent::ibkLeft);
+
+  case VK_RIGHT:
+    focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
+    return HandleKey(InfoBoxContent::ibkRight);
+
+  case VK_RETURN:
+    focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
+    return HandleKey(InfoBoxContent::ibkEnter);
   }
+
+  /* handle global hot key */
+
+  if (InputEvents::ProcessKey(InputEvents::MODE_INFOBOX, key_code))
+    return true;
+
+  /* call super class */
 
   return PaintWindow::on_key_down(key_code);
 }

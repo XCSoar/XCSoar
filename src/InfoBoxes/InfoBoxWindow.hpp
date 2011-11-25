@@ -141,8 +141,11 @@ public:
 
   void SetContentProvider(InfoBoxContent *_content);
   void UpdateContent();
+
+protected:
   bool HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode);
 
+public:
   /**
    * This passes a given value to the InfoBoxContent for further processing
    * and updates the InfoBox.

@@ -287,36 +287,6 @@ event=Setup Target
 #event=ArmAdvance toggle
 
 
-# ------------
-# mode=infobox
-# ------------
-
-mode=infobox
-type=key
-data=UP
-event=DoInfoKey up
-
-mode=infobox
-type=key
-data=DOWN
-event=DoInfoKey down
-
-mode=infobox
-type=key
-data=LEFT
-event=DoInfoKey left
-
-mode=infobox
-type=key
-data=RIGHT
-event=DoInfoKey right
-
-mode=infobox
-type=key
-data=RETURN
-event=DoInfoKey return
-
-
 # -------------
 # mode=Nav1
 # -------------

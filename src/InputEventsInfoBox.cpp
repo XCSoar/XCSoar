@@ -45,24 +45,3 @@ InputEvents::eventChangeInfoBoxType(const TCHAR *misc)
   else if (_tcscmp(misc, _T("previous")) == 0)
     InfoBoxManager::Event_Change(-1);
 }
-
-// DoInfoKey
-// Performs functions associated with the selected infobox
-//    up: triggers the up event
-//    etc.
-//    Functions associated with the infoboxes are described in the
-//    infobox section in the reference guide
-void InputEvents::eventDoInfoKey(const TCHAR *misc) {
-  if (_tcscmp(misc, _T("up")) == 0)
-    InfoBoxManager::ProcessKey(InfoBoxContent::ibkUp);
-  else if (_tcscmp(misc, _T("down")) == 0)
-    InfoBoxManager::ProcessKey(InfoBoxContent::ibkDown);
-  else if (_tcscmp(misc, _T("left")) == 0)
-    InfoBoxManager::ProcessKey(InfoBoxContent::ibkLeft);
-  else if (_tcscmp(misc, _T("right")) == 0)
-    InfoBoxManager::ProcessKey(InfoBoxContent::ibkRight);
-  else if (_tcscmp(misc, _T("return")) == 0)
-    InfoBoxManager::ProcessKey(InfoBoxContent::ibkEnter);
-  else if (_tcscmp(misc, _T("setup")) == 0)
-    InfoBoxManager::SetupFocused();
-}

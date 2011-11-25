@@ -262,21 +262,6 @@ InfoBoxManager::DisplayInfoBox()
   first = false;
 }
 
-void
-InfoBoxManager::ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode)
-{
-  int focus = GetFocused();
-  if (focus < 0)
-    return;
-
-  if (InfoBoxes[focus] != NULL)
-    InfoBoxes[focus]->HandleKey(keycode);
-
-  InputEvents::HideMenu();
-
-  SetDirty();
-}
-
 const InfoBoxContent::DialogContent *
 InfoBoxManager::GetDialogContent(const int id)
 {
