@@ -456,7 +456,9 @@ InfoBoxWindow::on_key_down(unsigned key_code)
 
   case VK_RETURN:
     focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
-    return HandleKey(InfoBoxContent::ibkEnter);
+    if (!HandleKey(InfoBoxContent::ibkEnter))
+      InfoBoxManager::ShowDlgInfoBox(id);
+    return true;
   }
 
   /* handle global hot key */
