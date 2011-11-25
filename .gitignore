@@ -31,3 +31,4 @@ test/data/private
 /.project
 /.cproject
 .DS_Store
+build/local-config.mk
