@@ -52,6 +52,10 @@ protected:
   }
 
 public:
+  bool IsDefined() const {
+    return last != 0;
+  }
+
   /**
    * Resets the clock.
    */
