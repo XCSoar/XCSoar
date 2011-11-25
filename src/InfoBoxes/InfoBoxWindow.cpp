@@ -388,6 +388,13 @@ InfoBoxWindow::GetDialogContent()
   return NULL;
 }
 
+void
+InfoBoxWindow::on_destroy()
+{
+  focus_timer.Cancel();
+  PaintWindow::on_destroy();
+}
+
 bool
 InfoBoxWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {

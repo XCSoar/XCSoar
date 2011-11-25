@@ -161,6 +161,8 @@ public:
   }
 
 protected:
+  virtual void on_destroy();
+
   /**
    * This event handler is called when a key is pressed down while the InfoBox
    * is focused
