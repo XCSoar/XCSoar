@@ -58,7 +58,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "MenuData.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "SettingsMap.hpp"
-#include "Screen/Blank.hpp"
 #include "Screen/Key.h"
 #include "Projection/MapWindowProjection.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
@@ -662,7 +661,6 @@ InputEvents::HideMenu()
 {
   MenuTimeOut = XCSoarInterface::menu_timeout_max;
   ProcessMenuTimer();
-  ResetDisplayTimeOut();
 }
 
 void
@@ -680,7 +678,6 @@ InputEvents::ShowMenu()
   setMode(MODE_MENU); // VENTA3
   #endif
 
-  ResetDisplayTimeOut();
   MenuTimeOut = 0;
   ProcessMenuTimer();
 }

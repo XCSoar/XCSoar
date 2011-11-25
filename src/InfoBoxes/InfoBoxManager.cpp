@@ -30,7 +30,6 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "InputEvents.hpp"
-#include "Screen/Blank.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
@@ -276,8 +275,6 @@ InfoBoxManager::ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode)
   InputEvents::HideMenu();
 
   SetDirty();
-
-  ResetDisplayTimeOut();
 }
 
 const InfoBoxContent::DialogContent *
@@ -303,8 +300,6 @@ InfoBoxManager::ProcessQuickAccess(const int id, const TCHAR *Value)
     InfoBoxes[id]->HandleQuickAccess(Value);
 
   SetDirty();
-
-  ResetDisplayTimeOut();
 }
 
 bool
