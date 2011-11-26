@@ -43,7 +43,6 @@ gcc:
 For Pocket PC / Windows CE / Windows Mobile, you need mingw32ce:
 
  http://max.kellermann.name/download/xcsoar/devel/cegcc/
- http://cegcc.sourceforge.net/
 
 For Linux/Unix, you need:
 
