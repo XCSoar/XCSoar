@@ -1222,13 +1222,6 @@ XMLNode::enumContent(const XMLNodeData *pEntry, unsigned i,
   return NULL;
 }
 
-static inline void
-charmemset(TCHAR *dest, TCHAR c, size_t l)
-{
-  while (l--)
-    *(dest++) = c;
-}
-
 static void
 write_indent(TextWriter &writer, unsigned n)
 {
