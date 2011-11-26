@@ -52,6 +52,7 @@ public:
    * often, because the variables that the label depends on may change
    * at any time.
    */
+  gcc_pure
   bool IsDynamic() const {
     return label != NULL && _tcsstr(label, _T("$(")) != NULL;
   }
@@ -78,6 +79,7 @@ public:
 
   void Add(const TCHAR *label, int location, unsigned event_id);
 
+  gcc_pure
   int FindByEvent(unsigned event) const;
 };
 
