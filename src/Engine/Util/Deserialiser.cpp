@@ -190,7 +190,7 @@ Deserialiser::deserialise_waypoint()
 
   if (waypoints != NULL) {
     // Try to find waypoint by name
-    const Waypoint *from_database = waypoints->lookup_name(name);
+    const Waypoint *from_database = waypoints->LookupName(name);
 
     // If waypoint by name found and closer than 10m to the original
     if (from_database != NULL &&
@@ -199,7 +199,7 @@ Deserialiser::deserialise_waypoint()
       return new Waypoint(*from_database);
 
     // Try finding the closest waypoint to the original one
-    from_database = waypoints->get_nearest(loc, fixed_ten);
+    from_database = waypoints->GetNearest(loc, fixed_ten);
 
     // If closest waypoint found and closer than 10m to the original
     if (from_database != NULL &&

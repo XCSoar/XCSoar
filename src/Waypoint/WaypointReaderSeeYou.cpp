@@ -270,6 +270,6 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   if (iDescription < n_params)
     new_waypoint.comment = params[iDescription];
 
-  waypoints.append(new_waypoint);
+  waypoints.Append(new_waypoint);
   return true;
 }

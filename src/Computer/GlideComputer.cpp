@@ -170,7 +170,7 @@ GlideComputer::DetermineTeamCodeRefLocation()
     return team_code_ref_found;
 
   team_code_ref_id = settings_computer.team_code_reference_waypoint;
-  const Waypoint *wp = waypoints.lookup_id(team_code_ref_id);
+  const Waypoint *wp = waypoints.LookupId(team_code_ref_id);
   if (wp == NULL)
     return team_code_ref_found = false;
 

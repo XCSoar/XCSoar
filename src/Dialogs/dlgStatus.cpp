@@ -97,7 +97,7 @@ dlgStatusShowModal(int start_page)
   wTabBar->SetPageFlippedCallback(SetTitle);
 
   const Waypoint *nearest_waypoint =
-    way_points.get_nearest(CommonInterface::Basic().location, fixed(100000));
+    way_points.GetNearest(CommonInterface::Basic().location, fixed(100000));
 
   /* setup tabs */
 

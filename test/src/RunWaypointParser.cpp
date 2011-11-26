@@ -66,11 +66,11 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  way_points.optimise();
+  way_points.Optimise();
   printf("Size %d\n", way_points.size());
 
   DumpVisitor visitor;
-  way_points.visit_name_prefix(_T(""), visitor);
+  way_points.VisitNamePrefix(_T(""), visitor);
 
   return 0;
 }

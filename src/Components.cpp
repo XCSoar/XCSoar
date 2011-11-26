@@ -214,7 +214,7 @@ XCSoarInterface::AfterStartup()
     {
       ScopeSuspendAllThreads suspend;
       defaultTask->CheckDuplicateWaypoints(way_points);
-      way_points.optimise();
+      way_points.Optimise();
     }
     protected_task_manager->TaskCommit(*defaultTask);
     delete defaultTask;
@@ -578,7 +578,7 @@ XCSoarInterface::Shutdown(void)
 
   // Clear waypoint database
   LogStartUp(_T("Close waypoints"));
-  way_points.clear();
+  way_points.Clear();
 
   operation.SetText(_("Shutdown, please wait..."));
 

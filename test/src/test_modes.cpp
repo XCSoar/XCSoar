@@ -78,10 +78,10 @@ test_goto(int n_wind, unsigned id, bool auto_mc)
 
   test_task(task_manager, waypoints, 1);
 
-  task_manager.DoGoto(*waypoints.lookup_id(id));
+  task_manager.DoGoto(*waypoints.LookupId(id));
   task_report(task_manager, "goto");
 
-  waypoints.clear(); // clear waypoints so abort wont do anything
+  waypoints.Clear(); // clear waypoints so abort wont do anything
 
   autopilot_parms.goto_target = true;
   return run_flight(task_manager, autopilot_parms, n_wind);
@@ -110,7 +110,7 @@ test_null()
 
   task_report(task_manager, "null");
 
-  waypoints.clear(); // clear waypoints so abort wont do anything
+  waypoints.Clear(); // clear waypoints so abort wont do anything
 
   autopilot_parms.goto_target = true;
   return run_flight(task_manager, autopilot_parms, 0);

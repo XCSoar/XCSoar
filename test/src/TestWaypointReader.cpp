@@ -192,9 +192,9 @@ TestWaypointFile(const TCHAR* filename, Waypoints &way_points, unsigned num_wps)
     return false;
   }
 
-  way_points.optimise();
+  way_points.Optimise();
 
-  ok1(!way_points.empty());
+  ok1(!way_points.IsEmpty());
   ok1(way_points.size() == num_wps);
 
   return true;
@@ -203,7 +203,7 @@ TestWaypointFile(const TCHAR* filename, Waypoints &way_points, unsigned num_wps)
 static const Waypoint*
 GetWaypoint(const Waypoint org_wp, const Waypoints &way_points)
 {
-  const Waypoint *wp = way_points.lookup_name(org_wp.name);
+  const Waypoint *wp = way_points.LookupName(org_wp.name);
   if (!ok1(wp != NULL)) {
     skip(2, 0, "waypoint not found");
     return NULL;

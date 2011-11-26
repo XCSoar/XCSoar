@@ -558,10 +558,10 @@ FillList(WaypointSelectInfoVector &dest, const Waypoints &src,
   FilterWaypointVisitor visitor(filter, location, heading, dest);
 
   if (filter.distance_index > 0)
-    src.visit_within_range(location, Units::ToSysDistance(
+    src.VisitWithinRange(location, Units::ToSysDistance(
         DistanceFilter[filter.distance_index]), visitor);
   else
-    src.visit_name_prefix(filter.name, visitor);
+    src.VisitNamePrefix(filter.name, visitor);
 
   if (filter.distance_index > 0 || filter.direction_index > 0)
     std::sort(dest.begin(), dest.end(), WaypointDistanceCompare);
@@ -579,7 +579,7 @@ FillLastUsedList(WaypointSelectInfoVector &dest,
 
   for (std::list<unsigned int>::const_reverse_iterator it = src.rbegin();
        it != src.rend(); it++) {
-    const Waypoint* wp = waypoints.lookup_id(*it);
+    const Waypoint* wp = waypoints.LookupId(*it);
     if (wp == NULL)
       continue;
 
@@ -607,7 +607,7 @@ static const TCHAR *
 WaypointNameAllowedCharacters(const TCHAR *prefix)
 {
   static TCHAR buffer[256];
-  return way_points.suggest_name_prefix(prefix, buffer, ARRAY_SIZE(buffer));
+  return way_points.SuggestNamePrefix(prefix, buffer, ARRAY_SIZE(buffer));
 }
 
 static void
@@ -732,7 +732,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     canvas.select(name_font);
     canvas.text(rc.left + line_height + Layout::FastScale(2),
                 rc.top + line_height / 2 - name_font.GetHeight() / 2,
-                filter_data.defined() || way_points.empty() ?
+                filter_data.defined() || way_points.IsEmpty() ?
                 _("No Match!") : _("Choose a filter or click here"));
     return;
   }

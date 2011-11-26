@@ -43,7 +43,7 @@ PopupNearestWaypointDetails(const Waypoints &way_points,
                             double range)
 {
   const Waypoint *way_point;
-  way_point = way_points.lookup_location(location, fixed(range));
+  way_point = way_points.LookupLocation(location, fixed(range));
 
   if (way_point) {
     dlgWaypointSelectAddToLastUsed(*way_point);

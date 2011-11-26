@@ -389,7 +389,7 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
                          const ProtectedTaskManager *task,
                          const ProtectedRoutePlanner *route_planner)
 {
-  if ((way_points == NULL) || way_points->empty())
+  if ((way_points == NULL) || way_points->IsEmpty())
     return;
 
   WaypointVisitorMap v(projection, settings, look, task_behaviour);
@@ -408,7 +408,7 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
       atask->AcceptTaskPointVisitor(v);
   }
 
-  way_points->visit_within_range(projection.GetGeoScreenCenter(),
+  way_points->VisitWithinRange(projection.GetGeoScreenCenter(),
                                  projection.GetScreenDistanceMeters(), v);
 
   if (route_planner != NULL)

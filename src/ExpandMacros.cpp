@@ -405,7 +405,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   }
 
   if (_tcsstr(OutBuffer, _T("$(CheckWaypointFile)"))) {
-    invalid |= way_points.empty();
+    invalid |= way_points.IsEmpty();
     ReplaceInString(OutBuffer, _T("$(CheckWaypointFile)"), _T(""), Size);
   }
 

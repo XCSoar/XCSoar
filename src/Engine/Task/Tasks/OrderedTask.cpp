@@ -1122,7 +1122,7 @@ OrderedTask::CheckDuplicateWaypoints(Waypoints& waypoints,
   for (auto begin = points.cbegin(), end = points.cend(), i = begin;
        i != end; ++i) {
     const Waypoint &wp =
-      waypoints.check_exists_or_append((*i)->GetWaypoint());
+      waypoints.CheckExistsOrAppend((*i)->GetWaypoint());
 
     const OrderedTaskPoint *new_tp = (*i)->clone(task_behaviour,
                                                  m_ordered_behaviour,

@@ -264,7 +264,7 @@ AbortTask::UpdateSample(const AircraftState &state, bool full_update)
   approx_waypoints.reserve(128);
 
   WaypointVisitorVector wvv(approx_waypoints);
-  waypoints.visit_within_range(state.location, abort_range(state), wvv);
+  waypoints.VisitWithinRange(state.location, abort_range(state), wvv);
   if (approx_waypoints.empty()) {
     /** @todo increase range */
     return false;

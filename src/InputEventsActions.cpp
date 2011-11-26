@@ -588,11 +588,11 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
   if (_tcscmp(misc, _T("takeoff")) == 0) {
     if (basic.location_available && calculated.terrain_valid) {
       ScopeSuspendAllThreads suspend;
-      way_points.add_takeoff_point(basic.location, calculated.terrain_altitude);
-      way_points.optimise();
+      way_points.AddTakeoffPoint(basic.location, calculated.terrain_altitude);
+      way_points.Optimise();
     }
   } else {
-    Waypoint edit_waypoint = way_points.create(basic.location);
+    Waypoint edit_waypoint = way_points.Create(basic.location);
     edit_waypoint.altitude = calculated.terrain_altitude;
     if (!dlgWaypointEditShowModal(edit_waypoint) || edit_waypoint.name.empty()) {
       trigger_redraw();
@@ -600,8 +600,8 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
     }
     {
       ScopeSuspendAllThreads suspend;
-      way_points.append(edit_waypoint);
-      way_points.optimise();
+      way_points.Append(edit_waypoint);
+      way_points.Optimise();
     }
   }
 

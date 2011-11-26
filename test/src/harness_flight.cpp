@@ -370,7 +370,7 @@ test_flight(TestFlightComponents components, int test_num, int n_wind,
   autopilot_parms.goto_target = goto_target;
   test_task(task_manager, waypoints, test_num);
 
-  waypoints.clear(); // clear waypoints so abort wont do anything
+  waypoints.Clear(); // clear waypoints so abort wont do anything
 
   return run_flight(components, task_manager, autopilot_parms, n_wind,
                     speed_factor);

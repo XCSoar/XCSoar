@@ -37,7 +37,7 @@ Copyright_License {
 static const Waypoint *
 find_waypoint(Waypoints &way_points, const TCHAR *name)
 {
-  const Waypoint *wp = way_points.lookup_name(name);
+  const Waypoint *wp = way_points.LookupName(name);
   if (wp != NULL)
     return wp;
 
@@ -45,18 +45,18 @@ find_waypoint(Waypoints &way_points, const TCHAR *name)
   TCHAR buffer[name_length + 4];
   _tcscpy(buffer, name);
   _tcscpy(buffer + name_length, _T(" AF"));
-  wp = way_points.lookup_name(buffer);
+  wp = way_points.LookupName(buffer);
   if (wp != NULL)
     return wp;
 
   _tcscpy(buffer + name_length, _T(" AD"));
-  wp = way_points.lookup_name(buffer);
+  wp = way_points.LookupName(buffer);
   if (wp != NULL)
     return wp;
 
   if (name_length > 5 && _tcscmp(name + name_length - 5, _T("=HOME")) == 0) {
     buffer[name_length - 5] = _T('\0');
-    wp = way_points.lookup_name(buffer);
+    wp = way_points.LookupName(buffer);
     if (wp != NULL) {
       XCSoarInterface::SetSettingsComputer().SetHome(*wp);
       return wp;
@@ -76,8 +76,8 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
 
   Waypoint new_wp(*wp);
   new_wp.details = Details.c_str();
-  way_points.replace(*wp, new_wp);
-  way_points.optimise();
+  way_points.Replace(*wp, new_wp);
+  way_points.Optimise();
 }
 
 /**

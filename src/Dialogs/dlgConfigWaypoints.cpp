@@ -53,7 +53,7 @@ OnWaypointNewClicked(gcc_unused WndButton &Sender)
     return;
   }
 
-  Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().location);
+  Waypoint edit_waypoint = way_points.Create(XCSoarInterface::Basic().location);
   edit_waypoint.altitude = XCSoarInterface::Calculated().terrain_valid
     ? XCSoarInterface::Calculated().terrain_altitude
     : XCSoarInterface::Basic().nav_altitude;
@@ -63,8 +63,8 @@ OnWaypointNewClicked(gcc_unused WndButton &Sender)
     WaypointsNeedSave = true;
 
     ScopeSuspendAllThreads suspend;
-    way_points.append(edit_waypoint);
-    way_points.optimise();
+    way_points.Append(edit_waypoint);
+    way_points.Optimise();
   }
 }
 
@@ -84,8 +84,8 @@ OnWaypointEditClicked(gcc_unused WndButton &Sender)
       WaypointsNeedSave = true;
 
       ScopeSuspendAllThreads suspend;
-      way_points.replace(*way_point, wp_copy);
-      way_points.optimise();
+      way_points.Replace(*way_point, wp_copy);
+      way_points.Optimise();
     }
   }
 }

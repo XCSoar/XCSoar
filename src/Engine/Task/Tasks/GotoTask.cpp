@@ -124,9 +124,9 @@ GotoTask::TakeoffAutotask(const GeoPoint& location, const fixed terrain_alt)
   if (tp)
     return false;
 
-  const Waypoint* wp = waypoints.get_nearest_landable(location, fixed(5000));
+  const Waypoint* wp = waypoints.GetNearestLandable(location, fixed(5000));
   if (wp)
     return DoGoto(*wp);
 
-  return DoGoto(waypoints.generate_takeoff_point(location, terrain_alt));
+  return DoGoto(waypoints.GenerateTakeoffPoint(location, terrain_alt));
 }

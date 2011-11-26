@@ -49,7 +49,7 @@ test_olc(int n_wind, Contests olc_type)
   task_manager.SetGlidePolar(glide_polar);
   test_task(task_manager, waypoints, 1);
 
-  waypoints.clear(); // clear waypoints so abort wont do anything
+  waypoints.Clear(); // clear waypoints so abort wont do anything
 
   autopilot_parms.goto_target = true;
   return run_flight(task_manager, autopilot_parms, n_wind);

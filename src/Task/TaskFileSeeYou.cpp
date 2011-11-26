@@ -450,7 +450,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     if (!waypoint_file.Parse(file_waypoints, operation))
       return NULL;
   }
-  file_waypoints.optimise();
+  file_waypoints.Optimise();
 
   // Create FileReader for reading the task
   FileLineReader reader(path);
@@ -495,12 +495,12 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 
   // mark task waypoints.  Skip takeoff and landing point
   for (unsigned i = 0; i < n_waypoints; i++) {
-    const Waypoint* file_wp = file_waypoints.lookup_name(wps[i + 2]);
+    const Waypoint* file_wp = file_waypoints.LookupName(wps[i + 2]);
     if (file_wp == NULL)
       return NULL;
 
     // Try to find waypoint by name
-    const Waypoint* wp = waypoints->lookup_name(file_wp->name);
+    const Waypoint* wp = waypoints->LookupName(file_wp->name);
 
     // If waypoint by name found and closer than 10m to the original
     if (wp != NULL &&
@@ -511,7 +511,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     }
 
     // Try finding the closest waypoint to the original one
-    wp = waypoints->get_nearest(file_wp->location, fixed_ten);
+    wp = waypoints->GetNearest(file_wp->location, fixed_ten);
 
     // If closest waypoint found and closer than 10m to the original
     if (wp != NULL &&

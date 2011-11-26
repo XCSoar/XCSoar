@@ -263,7 +263,7 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
       {
         ScopeSuspendAllThreads suspend;
         task->CheckDuplicateWaypoints(way_points);
-        way_points.optimise();
+        way_points.Optimise();
       }
       protected_task_manager->TaskCommit(*task);
       delete task;

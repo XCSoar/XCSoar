@@ -148,7 +148,7 @@ SettingsLeave(const UISettings &old_ui_settings)
       // this must be done in thread lock because it potentially changes the
       // waypoints database
       task->CheckDuplicateWaypoints(way_points);
-      way_points.optimise();
+      way_points.Optimise();
     }
   }
 

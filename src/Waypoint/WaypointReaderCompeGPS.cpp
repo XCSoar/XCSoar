@@ -224,7 +224,7 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
   // Parse waypoint name
   waypoint.name.assign(line);
 
-  waypoints.append(waypoint);
+  waypoints.Append(waypoint);
   return true;
 }
 

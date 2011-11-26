@@ -51,7 +51,7 @@ test_location(const Waypoints& waypoints, bool good)
   if (!good) {
     loc.longitude = Angle::Degrees(fixed(-23.4));
   }
-  const Waypoint *r = waypoints.lookup_location(loc);
+  const Waypoint *r = waypoints.LookupLocation(loc);
   if (r) {
     WaypointVisitorPrint v;
     v.Visit(*r);
@@ -65,10 +65,10 @@ test_location(const Waypoints& waypoints, bool good)
 static unsigned
 test_range(const Waypoints& waypoints, const double range)
 {
-  const Waypoint *r = waypoints.lookup_id(3);
+  const Waypoint *r = waypoints.LookupId(3);
   if (r) {
     WaypointVisitorPrint v;
-    waypoints.visit_within_range(r->location, fixed(range), v);
+    waypoints.VisitWithinRange(r->location, fixed(range), v);
     return v.count;
   } else {
     return 0;
@@ -78,11 +78,11 @@ test_range(const Waypoints& waypoints, const double range)
 static bool
 test_nearest(const Waypoints& waypoints)
 {
-  const Waypoint *r = waypoints.lookup_id(3);
+  const Waypoint *r = waypoints.LookupId(3);
   if (!r)
     return false;
 
-  r = waypoints.get_nearest(r->location, fixed_zero);
+  r = waypoints.GetNearest(r->location, fixed_zero);
   if (!r)
     return false;
 
@@ -92,7 +92,7 @@ test_nearest(const Waypoints& waypoints)
 static bool
 test_nearest_landable(const Waypoints& waypoints)
 {
-  const Waypoint *r = waypoints.get_nearest_landable(GeoPoint(Angle::Degrees(fixed(0.99)),
+  const Waypoint *r = waypoints.GetNearestLandable(GeoPoint(Angle::Degrees(fixed(0.99)),
                                                               Angle::Degrees(fixed(1.1))),
                                                      fixed(50000));
   if (!r)
@@ -104,15 +104,15 @@ test_nearest_landable(const Waypoints& waypoints)
 static unsigned
 test_copy(Waypoints& waypoints)
 {
-  const Waypoint *r = waypoints.lookup_id(5);
+  const Waypoint *r = waypoints.LookupId(5);
   if (!r) {
     return false;
   }
   unsigned size_old = waypoints.size();
   Waypoint wp = *r;
   wp.id = waypoints.size()+1;
-  waypoints.append(wp);
-  waypoints.optimise();
+  waypoints.Append(wp);
+  waypoints.Optimise();
   unsigned size_new = waypoints.size();
   return (size_new == size_old+1);
 }
@@ -121,7 +121,7 @@ static bool
 test_lookup(const Waypoints& waypoints, unsigned id)
 {
   const Waypoint* wp;
-  wp = waypoints.lookup_id(id);
+  wp = waypoints.LookupId(id);
   if (wp== NULL) {
     return false;
   }
@@ -131,16 +131,16 @@ test_lookup(const Waypoints& waypoints, unsigned id)
 static bool
 test_erase(Waypoints& waypoints, unsigned id)
 {
-  waypoints.optimise();
+  waypoints.Optimise();
   const Waypoint* wp;
-  wp = waypoints.lookup_id(id);
+  wp = waypoints.LookupId(id);
   if (wp== NULL) {
     return false;
   }
-  waypoints.erase(*wp);
-  waypoints.optimise();
+  waypoints.Erase(*wp);
+  waypoints.Optimise();
 
-  wp = waypoints.lookup_id(id);
+  wp = waypoints.LookupId(id);
   if (wp!= NULL) {
     return false;
   }
@@ -151,7 +151,7 @@ static bool
 test_replace(Waypoints& waypoints, unsigned id)
 {
   const Waypoint* wp;
-  wp = waypoints.lookup_id(id);
+  wp = waypoints.LookupId(id);
   if (wp== NULL) {
     return false;
   }
@@ -159,10 +159,10 @@ test_replace(Waypoints& waypoints, unsigned id)
 
   Waypoint copy = *wp;
   copy.name = _T("Fred");
-  waypoints.replace(*wp,copy);
-  waypoints.optimise();
+  waypoints.Replace(*wp,copy);
+  waypoints.Optimise();
 
-  wp = waypoints.lookup_id(id);
+  wp = waypoints.LookupId(id);
   if (wp== NULL) {
     return false;
   }
@@ -193,7 +193,7 @@ int main(int argc, char** argv)
   ok(test_range(waypoints,500000)== waypoints.size(),"waypoint range 500000m",0);
 
   // test clear
-  waypoints.clear();
+  waypoints.Clear();
   ok(waypoints.size()==0,"waypoint clear",0);
   setup_waypoints(waypoints);
   ok(size == waypoints.size(),"waypoint setup after clear",0);

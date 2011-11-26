@@ -161,7 +161,7 @@ void
 MapItemListBuilder::AddWaypoints(const Waypoints &waypoints)
 {
   WaypointListBuilderVisitor waypoint_list_builder(list);
-  waypoints.visit_within_range(location, range, waypoint_list_builder);
+  waypoints.VisitWithinRange(location, range, waypoint_list_builder);
 }
 
 void
