@@ -53,9 +53,6 @@ InterfaceBlackboard CommonInterface::blackboard;
 StatusMessageList CommonInterface::status_messages;
 MainWindow CommonInterface::main_window(status_messages);
 
-// settings used only by interface thread scope
-unsigned ActionInterface::menu_timeout_max = 8 * 4;
-
 bool
 CommonInterface::IsPanning()
 {

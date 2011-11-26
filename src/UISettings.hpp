@@ -40,6 +40,9 @@ enum StateMessageAlign_t {
  * User interface settings.
  */
 struct UISettings {
+  /** timeout in quarter seconds of menu button */
+  unsigned menu_timeout;
+
   bool custom_fonts;
 
   bool enable_auto_blank;

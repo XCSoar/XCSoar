@@ -27,6 +27,8 @@ Copyright_License {
 void
 UISettings::SetDefaults()
 {
+  menu_timeout = 8 * 4;
+
   custom_fonts = false;
   enable_auto_blank = false;
 

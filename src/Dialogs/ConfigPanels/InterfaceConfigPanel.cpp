@@ -144,8 +144,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   InitFileField(form, _T("prpStatusFile"), szProfileStatusFile, _T("*.xcs\0"));
 
-  LoadFormProperty(form, _T("prpMenuTimeout"),
-                   XCSoarInterface::menu_timeout_max / 2);
+  LoadFormProperty(form, _T("prpMenuTimeout"), settings.menu_timeout / 2);
 
   if (has_pointer()) {
     static gcc_constexpr_data StaticEnumChoice text_input_list[] = {
@@ -230,9 +229,9 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
   }
 
   unsigned menu_timeout = GetFormValueInteger(form, _T("prpMenuTimeout")) * 2;
-  if (XCSoarInterface::menu_timeout_max != menu_timeout) {
-    XCSoarInterface::menu_timeout_max = menu_timeout;
-    Profile::Set(szProfileMenuTimeout, XCSoarInterface::menu_timeout_max);
+  if (settings.menu_timeout != menu_timeout) {
+    settings.menu_timeout = menu_timeout;
+    Profile::Set(szProfileMenuTimeout, menu_timeout);
     changed = true;
   }
 

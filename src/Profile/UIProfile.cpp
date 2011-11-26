@@ -55,6 +55,8 @@ Profile::Load(DialogSettings &settings)
 void
 Profile::Load(UISettings &settings)
 {
+  Get(szProfileMenuTimeout, settings.menu_timeout);
+
   Get(szProfileUseCustomFonts, settings.custom_fonts);
   Get(szProfileAutoBlank, settings.enable_auto_blank);
 

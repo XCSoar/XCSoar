@@ -143,10 +143,6 @@ public:
 class ActionInterface: public CommonInterface {
   friend class ProcessTimer;
 
-public:
-  /** timeout in quarter seconds of menu button */
-  static unsigned menu_timeout_max;
-
 protected:
   /**
    * Determine whether vario gauge, FLARM radar and infoboxes should be drawn

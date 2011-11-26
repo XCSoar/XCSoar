@@ -52,9 +52,6 @@ Profile::Use()
   */
 
   GetEnum(szProfileAppDialogStyle, dialog_style_setting);
-
-  Get(szProfileMenuTimeout,
-      XCSoarInterface::menu_timeout_max);
 }
 
 void
