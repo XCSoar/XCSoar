@@ -71,6 +71,8 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 
 namespace InputEvents
 {
+  static const TCHAR *flavour;
+
   static Mode current_mode = InputEvents::MODE_DEFAULT;
 
   /**
@@ -153,6 +155,35 @@ InputEvents::LeaveMode(const TCHAR *mode)
 }
 
 void
+InputEvents::SetFlavour(const TCHAR *_flavour)
+{
+  if (flavour == NULL && _flavour == NULL)
+    /* optimised default case */
+    return;
+
+  flavour = _flavour;
+
+  const Mode old_overlay_mode = overlay_mode;
+  UpdateOverlayMode();
+
+  if (overlay_mode != old_overlay_mode)
+    /* the overlay_mode has changed, update the displayed menu */
+    drawButtons(current_mode, true);
+}
+
+bool
+InputEvents::IsFlavour(const TCHAR *_flavour)
+{
+  if (flavour == NULL)
+    return _flavour == NULL;
+
+  if (_flavour == NULL)
+    return false;
+
+  return _tcscmp(flavour, _flavour) == 0;
+}
+
+void
 InputEvents::drawButtons(Mode mode, bool full)
 {
   if (!globalRunningEvent.Test())
@@ -175,7 +206,24 @@ InputEvents::getModeID()
 void
 InputEvents::UpdateOverlayMode()
 {
-  overlay_mode = MODE_DEFAULT;
+  if (flavour != NULL) {
+    /* build the "flavoured" mode name from the current "major" mode
+       and the flavour name */
+    StaticString<InputConfig::MAX_MODE_STRING + 32> name;
+    name.Format(_T("%s.%s"), input_config.modes[current_mode].c_str(),
+                flavour);
+
+    /* see if it exists */
+    int new_mode = input_config.LookupMode(name);
+    if (new_mode >= 0)
+      /* yep, it does */
+      overlay_mode = (Mode)new_mode;
+    else
+      /* not defined, disable the overlay with the magic value
+         "MODE_DEFAULT" */
+      overlay_mode = MODE_DEFAULT;
+  } else
+    overlay_mode = MODE_DEFAULT;
 }
 
 // -----------------------------------------------------------------------

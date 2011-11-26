@@ -64,6 +64,24 @@ namespace InputEvents
   void LeaveMode(const TCHAR *mode);
 
   /**
+   * Set the "flavour" of the current mode.  It is an optional string
+   * that gets appended to the current mode name, separated with a
+   * dot, to build a new "overlay" mode.  This may be used to replace
+   * certain items in the menu.
+   *
+   * @param flavour the new flavour name; may be NULL
+   */
+  void SetFlavour(const TCHAR *flavour);
+
+  /**
+   * Is the specified flavour currently active?
+   *
+   * @return the current flavour mode; may be NULL
+   */
+  gcc_pure
+  bool IsFlavour(const TCHAR *flavour);
+
+  /**
    * Process an event chain.
    */
   void ProcessEvent(unsigned event_id);

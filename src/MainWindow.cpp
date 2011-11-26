@@ -713,6 +713,8 @@ MainWindow::KillWidget()
   widget->Unprepare();
   delete widget;
   widget = NULL;
+
+  InputEvents::SetFlavour(NULL);
 }
 
 void
