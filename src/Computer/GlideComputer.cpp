@@ -316,10 +316,6 @@ GlideComputer::OnSwitchClimbMode(bool isclimb, bool left)
   }
 }
 
-/**
- * Searches the FLARM_Traffic array for the TeamMate and updates TeamMate
- * position and TeamCode if found.
- */
 void
 GlideComputer::FLARM_ScanTraffic()
 {
