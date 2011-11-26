@@ -85,7 +85,7 @@ struct EventBuilder {
     while (token != NULL) {
 
       // All modes are valid at this point
-      int mode_id = config.make_mode(token);
+      int mode_id = config.MakeMode(token);
       assert(mode_id >= 0);
 
       // Make label event
@@ -96,8 +96,7 @@ struct EventBuilder {
           new_label = StringMallocParse(label);
         }
 
-        config.append_menu(mode_id, new_label,
-                           location, event_id);
+        config.AppendMenu(mode_id, new_label, location, event_id);
       }
 
       // Make key (Keyboard input)
@@ -184,7 +183,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
     // experimental: if the first line is "#CLEAR" then the whole default config is cleared
     //               and can be overwritten by file
     if (line == 1 && _tcscmp(buffer, _T("#CLEAR")) == 0) {
-      config.clear_all_events();
+      config.ClearAllEvents();
     } else if (buffer[0] == _T('\0')) {
       // Check valid line? If not valid, assume next record (primative, but works ok!)
       // General checks before continue...
@@ -232,11 +231,11 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
             pt2Event event = InputEvents::findEvent(d_event);
             if (event) {
               TCHAR *allocated = StringMallocParse(d_misc);
-              current.event_id = config.append_event(event, allocated,
-                                                     current.event_id);
+              current.event_id = config.AppendEvent(event, allocated,
+                                                    current.event_id);
 
               /* not freeing the string, because
-                 InputConfig::append_event() stores the string point
+                 InputConfig::AppendEvent() stores the string point
                  without duplicating it; strictly speaking, this is a
                  memory leak, but the input file is only loaded once
                  at startup, so this is acceptable; in return, we

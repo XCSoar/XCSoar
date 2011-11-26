@@ -89,18 +89,18 @@ struct InputConfig {
     _tcscpy(mode_map[3], _T("Menu"));
   }
 
-  void clear_all_events() {
+  void ClearAllEvents() {
     memset(Key2Event, 0, sizeof(Key2Event));
     memset(GC2Event, 0, sizeof(GC2Event));
     Events_count = 1;
   }
 
-  void clear_mode_map() {
+  void ClearModeMap() {
     mode_map_count = 0;
   }
 
   gcc_pure
-  int lookup_mode(const TCHAR *name) const {
+  int LookupMode(const TCHAR *name) const {
     for (unsigned i = 0; i < mode_map_count; ++i)
       if (_tcscmp(name, mode_map[i]) == 0)
         return i;
@@ -108,7 +108,7 @@ struct InputConfig {
     return -1;
   }
 
-  int append_mode(const TCHAR *name) {
+  int AppendMode(const TCHAR *name) {
     if (mode_map_count >= MAX_MODE)
       return -1;
 
@@ -118,16 +118,16 @@ struct InputConfig {
   }
 
   gcc_pure
-  int make_mode(const TCHAR *name) {
-    int mode = lookup_mode(name);
+  int MakeMode(const TCHAR *name) {
+    int mode = LookupMode(name);
     if (mode < 0)
-      mode = append_mode(name);
+      mode = AppendMode(name);
 
     return mode;
   }
 
-  unsigned append_event(pt2Event event, const TCHAR *misc,
-                    unsigned next) {
+  unsigned AppendEvent(pt2Event event, const TCHAR *misc,
+                       unsigned next) {
     if (Events_count >= MAX_EVENTS)
       return 0;
 
@@ -138,8 +138,8 @@ struct InputConfig {
     return Events_count++;
   }
 
-  void append_menu(unsigned mode_id, const TCHAR* label,
-                   unsigned location, unsigned event_id) {
+  void AppendMenu(unsigned mode_id, const TCHAR* label,
+                  unsigned location, unsigned event_id) {
     assert(mode_id < MAX_MODE);
 
     menus[mode_id].Add(label, location, event_id);

@@ -71,6 +71,12 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef WIN32
+/* we don't need that WIN32 API function, it's a macro that will
+   disallow using InputConfig::AppendMenu() */
+#undef AppendMenu
+#endif
+
 namespace InputEvents
 {
   static mode current_mode = InputEvents::MODE_DEFAULT;
@@ -190,9 +196,9 @@ apply_defaults(const TCHAR *const* default_modes,
 {
   assert(num_default_events <= InputConfig::MAX_EVENTS);
 
-  input_config.clear_mode_map();
+  input_config.ClearModeMap();
   while (*default_modes != NULL)
-    input_config.append_mode(*default_modes++);
+    input_config.AppendMode(*default_modes++);
 
   input_config.Events_count = num_default_events + 1;
   std::copy(default_events, default_events + num_default_events,
@@ -362,7 +368,7 @@ void
 InputEvents::makeLabel(mode mode_id, const TCHAR* label,
                        unsigned location, unsigned event_id)
 {
-  input_config.append_menu(mode_id, label, location, event_id);
+  input_config.AppendMenu(mode_id, label, location, event_id);
 }
 
 void
@@ -381,7 +387,7 @@ InputEvents::setMode(mode mode)
 void
 InputEvents::setMode(const TCHAR *mode)
 {
-  int m = input_config.lookup_mode(mode);
+  int m = input_config.LookupMode(mode);
   if (m >= 0)
     setMode((InputEvents::mode)m);
 }
