@@ -44,12 +44,12 @@ class ProtectedAirspaceWarningManager;
 // OR: just make them static?
 
 class GlideComputerAirData: virtual public GlideComputerBlackboard {
-  const Waypoints &way_points;
+  const Waypoints &waypoints;
   const RasterTerrain *terrain;
 
   AutoQNH auto_qnh;
 
-  GlideRatioCalculator rotaryLD;
+  GlideRatioCalculator gr_calculator;
 
   FlyingComputer flying_computer;
   CirclingComputer circling_computer;
@@ -63,7 +63,7 @@ class GlideComputerAirData: virtual public GlideComputerBlackboard {
 public:
   GlideComputerAirData(const Waypoints &way_points);
 
-  void set_terrain(const RasterTerrain* _terrain) {
+  void SetTerrain(const RasterTerrain* _terrain) {
     terrain = _terrain;
   }
 

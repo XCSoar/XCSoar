@@ -38,7 +38,7 @@ GlideComputerStats::GlideComputerStats() :
 void
 GlideComputerStats::ResetFlight(const bool full)
 {
-  FastLogNum = 0;
+  fast_log_num = 0;
   if (full)
     flightstats.Reset();
 }
@@ -70,9 +70,9 @@ GlideComputerStats::DoLogging(const MoreData &basic,
   else
     log_clock.set_dt(fixed(settings_logger.logger_time_step_cruise));
 
-  if (FastLogNum) {
+  if (fast_log_num) {
     log_clock.set_dt(fixed_one);
-    FastLogNum--;
+    fast_log_num--;
   }
 
   if (log_clock.check_advance(basic.time) && logger != NULL)
@@ -151,5 +151,5 @@ GlideComputerStats::ProcessClimbEvents(const DerivedInfo &calculated,
 void
 GlideComputerStats::SetFastLogging()
 {
-  FastLogNum = 5;
+  fast_log_num = 5;
 }

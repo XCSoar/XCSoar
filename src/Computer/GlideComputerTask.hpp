@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_GLIDECOMPUTER_TASK_HPP)
+#ifndef XCSOAR_GLIDECOMPUTER_TASK_HPP
 #define XCSOAR_GLIDECOMPUTER_TASK_HPP
 
 #include "GlideComputerRoute.hpp"
@@ -31,8 +31,9 @@ Copyright_License {
 struct NMEAInfo;
 class ProtectedTaskManager;
 
-class GlideComputerTask {
-  ProtectedTaskManager &m_task;
+class GlideComputerTask
+{
+  ProtectedTaskManager &task;
 
   GlideComputerRoute route;
 
@@ -41,7 +42,7 @@ class GlideComputerTask {
   ContestComputer contest;
 
 public:
-  GlideComputerTask(ProtectedTaskManager& task,
+  GlideComputerTask(ProtectedTaskManager &_task,
                     const Airspaces &airspace_database);
 
   const ProtectedRoutePlanner &GetProtectedRoutePlanner() const {
@@ -75,7 +76,7 @@ protected:
                        const SETTINGS_COMPUTER &settings_computer);
   void ResetFlight(const bool full=true);
 
-  void set_terrain(const RasterTerrain* _terrain);
+  void SetTerrain(const RasterTerrain* _terrain);
 
 public:
   /**

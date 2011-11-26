@@ -37,9 +37,9 @@ using std::max;
 // JMW TODO: abstract up to higher layer so a base copy of this won't
 // call any event
 
-GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task,
+GlideComputerTask::GlideComputerTask(ProtectedTaskManager &_task,
                                      const Airspaces &airspace_database):
-  m_task(task),
+  task(_task),
   route(airspace_database),
   contest(trace.GetFull(), trace.GetSprint())
 {
@@ -49,7 +49,7 @@ GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task,
 void
 GlideComputerTask::ResetFlight(const bool full)
 {
-  m_task.Reset();
+  task.Reset();
   route.ResetFlight();
   trace.Reset();
   contest.Reset();
@@ -65,28 +65,28 @@ GlideComputerTask::ProcessBasicTask(const MoreData &basic,
   if (basic.HasTimeAdvancedSince(last_basic) && basic.location_available)
     trace.Update(settings_computer, ToAircraftState(basic, calculated));
 
-  ProtectedTaskManager::ExclusiveLease task(m_task);
+  ProtectedTaskManager::ExclusiveLease _task(task);
 
-  task->SetTaskBehaviour(settings_computer.task);
+  _task->SetTaskBehaviour(settings_computer.task);
 
   if (basic.HasTimeAdvancedSince(last_basic) && basic.location_available) {
     const AircraftState current_as = ToAircraftState(basic, calculated);
     const AircraftState last_as = ToAircraftState(last_basic, last_calculated);
 
-    task->Update(current_as, last_as);
+    _task->Update(current_as, last_as);
 
     if (calculated.last_thermal.IsDefined()) {
-      if (task->UpdateAutoMC(current_as, std::max(fixed_zero,
+      if (_task->UpdateAutoMC(current_as, std::max(fixed_zero,
                                                   calculated.last_thermal_average_smooth))) {
-        calculated.auto_mac_cready = task->GetGlidePolar().GetMC();
+        calculated.auto_mac_cready = _task->GetGlidePolar().GetMC();
         calculated.auto_mac_cready_available.Update(basic.clock);
       }
     }
   }
 
-  calculated.task_stats = task->GetStats();
-  calculated.common_stats = task->GetCommonStats();
-  calculated.glide_polar_safety = task->GetSafetyPolar();
+  calculated.task_stats = _task->GetStats();
+  calculated.common_stats = _task->GetCommonStats();
+  calculated.glide_polar_safety = _task->GetSafetyPolar();
 }
 
 void
@@ -98,9 +98,9 @@ GlideComputerTask::ProcessMoreTask(const MoreData &basic,
   GlidePolar glide_polar, safety_polar;
 
   {
-    ProtectedTaskManager::Lease task(m_task);
-    glide_polar = task->GetGlidePolar();
-    safety_polar = task->GetSafetyPolar();
+    ProtectedTaskManager::Lease _task(task);
+    glide_polar = _task->GetGlidePolar();
+    safety_polar = _task->GetSafetyPolar();
   }
 
   route.ProcessRoute(basic, calculated, last_calculated,
@@ -132,8 +132,8 @@ GlideComputerTask::ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
 
   trace.Idle(settings_computer, as);
 
-  ProtectedTaskManager::ExclusiveLease task(m_task);
-  task->UpdateIdle(as);
+  ProtectedTaskManager::ExclusiveLease _task(task);
+  _task->UpdateIdle(as);
 }
 
 void 
@@ -149,11 +149,11 @@ GlideComputerTask::ProcessAutoTask(const NMEAInfo &basic,
       calculated.altitude_agl > fixed(500))
     return;
 
-  ProtectedTaskManager::ExclusiveLease task(m_task);
-  task->TakeoffAutotask(basic.location, calculated.terrain_altitude);
+  ProtectedTaskManager::ExclusiveLease _task(task);
+  _task->TakeoffAutotask(basic.location, calculated.terrain_altitude);
 }
 
 void 
-GlideComputerTask::set_terrain(const RasterTerrain* _terrain) {
+GlideComputerTask::SetTerrain(const RasterTerrain* _terrain) {
   route.set_terrain(_terrain);
 }

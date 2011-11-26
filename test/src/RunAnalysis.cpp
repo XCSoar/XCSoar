@@ -209,7 +209,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                                protected_task_manager,
                                airspace_warnings,
                                task_events);
-  glide_computer.set_terrain(terrain);
+  glide_computer.SetTerrain(terrain);
   glide_computer.Initialise();
   glide_computer.ReadSettingsComputer(blackboard.SettingsComputer());
   glide_computer.SetScreenDistanceMeters(fixed(50000));

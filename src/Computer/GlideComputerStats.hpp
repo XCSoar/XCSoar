@@ -40,7 +40,7 @@ class GlideComputerStats {
   GPSClock log_clock;
   GPSClock stats_clock;
   /** number of points to log at high rate */
-  unsigned FastLogNum;
+  unsigned fast_log_num;
 
 protected:
   Logger *logger;

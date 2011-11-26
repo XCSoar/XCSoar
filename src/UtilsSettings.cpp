@@ -121,14 +121,14 @@ SettingsLeave(const UISettings &old_ui_settings)
     operation.SetText(_("Loading Terrain File..."));
 
     main_window.SetTerrain(NULL);
-    glide_computer->set_terrain(NULL);
+    glide_computer->SetTerrain(NULL);
 
     // re-load terrain
     delete terrain;
     terrain = RasterTerrain::OpenTerrain(file_cache, operation);
 
     main_window.SetTerrain(terrain);
-    glide_computer->set_terrain(terrain);
+    glide_computer->SetTerrain(terrain);
   }
 
   if (WaypointFileChanged || AirfieldFileChanged) {

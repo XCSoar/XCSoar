@@ -50,11 +50,11 @@ class GlideComputer:
   CuComputer cu_computer;
   WarningComputer warning_computer;
 
-  const Waypoints &way_points;
+  const Waypoints &waypoints;
 
-  int TeamCodeRefId;
-  bool TeamCodeRefFound;
-  GeoPoint TeamCodeRefLocation;
+  int team_code_ref_id;
+  bool team_code_ref_found;
+  GeoPoint team_code_ref_location;
 
   PeriodClock idle_clock;
   VegaVoice vegavoice;
@@ -67,7 +67,7 @@ public:
                 GlideComputerTaskEvents& events);
   virtual ~GlideComputer() {}
 
-  void set_terrain(RasterTerrain* _terrain);
+  void SetTerrain(RasterTerrain *_terrain);
 
   void ResetFlight(const bool full=true);
   void Initialise();
@@ -110,7 +110,7 @@ private:
   void CheckTeammateRange();
   void CalculateTeammateBearingRange();
   void CalculateOwnTeamCode();
-  void FLARM_ScanTraffic();
+  void CheckTraffic();
 };
 
 #endif

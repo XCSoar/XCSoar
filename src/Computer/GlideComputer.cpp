@@ -50,8 +50,8 @@ GlideComputer::GlideComputer(const Waypoints &_way_points,
   GlideComputerAirData(_way_points),
   GlideComputerTask(task, _airspace_database),
   warning_computer(_airspace_database, airspace),
-  way_points(_way_points),
-  TeamCodeRefId(-1)
+  waypoints(_way_points),
+  team_code_ref_id(-1)
 {
   events.SetComputer(*this);
   idle_clock.update();
@@ -126,7 +126,7 @@ GlideComputer::ProcessGPS()
 
   // Calculate the bearing and range of the teammate
   // (if teammate is a FLARM target)
-  FLARM_ScanTraffic();
+  CheckTraffic();
 
   vegavoice.Update(basic, Calculated(), SettingsComputer());
 
@@ -166,16 +166,16 @@ GlideComputer::DetermineTeamCodeRefLocation()
   if (settings_computer.team_code_reference_waypoint < 0)
     return false;
 
-  if (settings_computer.team_code_reference_waypoint == TeamCodeRefId)
-    return TeamCodeRefFound;
+  if (settings_computer.team_code_reference_waypoint == team_code_ref_id)
+    return team_code_ref_found;
 
-  TeamCodeRefId = settings_computer.team_code_reference_waypoint;
-  const Waypoint *wp = way_points.lookup_id(TeamCodeRefId);
+  team_code_ref_id = settings_computer.team_code_reference_waypoint;
+  const Waypoint *wp = waypoints.lookup_id(team_code_ref_id);
   if (wp == NULL)
-    return TeamCodeRefFound = false;
+    return team_code_ref_found = false;
 
-  TeamCodeRefLocation = wp->location;
-  return TeamCodeRefFound = true;
+  team_code_ref_location = wp->location;
+  return team_code_ref_found = true;
 }
 
 /**
@@ -193,7 +193,7 @@ GlideComputer::CalculateOwnTeamCode()
     return;
 
   // Get bearing and distance to the reference waypoint
-  const GeoVector v = TeamCodeRefLocation.DistanceBearing(Basic().location);
+  const GeoVector v = team_code_ref_location.DistanceBearing(Basic().location);
 
   // Save teamcode to Calculated
   SetCalculated().own_teammate_code.Update(v.bearing, v.distance);
@@ -254,14 +254,14 @@ GlideComputer::CalculateTeammateBearingRange()
     return;
 
   if (settings_computer.team_flarm_tracking) {
-    ComputeFlarmTeam(basic.location, TeamCodeRefLocation,
+    ComputeFlarmTeam(basic.location, team_code_ref_location,
                      basic.flarm, settings_computer.team_flarm_id,
                      teamcode_info);
     CheckTeammateRange();
   } else if (settings_computer.team_code_valid) {
     teamcode_info.flarm_teammate_code_available = false;
 
-    ComputeTeamCode(basic.location, TeamCodeRefLocation,
+    ComputeTeamCode(basic.location, team_code_ref_location,
                     settings_computer.team_code,
                     teamcode_info);
     CheckTeammateRange();
@@ -316,7 +316,7 @@ GlideComputer::OnSwitchClimbMode(bool isclimb, bool left)
 }
 
 void
-GlideComputer::FLARM_ScanTraffic()
+GlideComputer::CheckTraffic()
 {
   const NMEAInfo &basic = Basic();
   const NMEAInfo &last_basic = LastBasic();
@@ -364,8 +364,8 @@ GlideComputer::OnTransitionEnter()
 
 
 void
-GlideComputer::set_terrain(RasterTerrain* _terrain)
+GlideComputer::SetTerrain(RasterTerrain* _terrain)
 {
-  GlideComputerAirData::set_terrain(_terrain);
-  GlideComputerTask::set_terrain(_terrain);
+  GlideComputerAirData::SetTerrain(_terrain);
+  GlideComputerTask::SetTerrain(_terrain);
 }

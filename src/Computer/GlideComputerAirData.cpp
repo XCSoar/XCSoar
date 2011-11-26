@@ -41,7 +41,7 @@ using std::max;
 static const fixed THERMAL_TIME_MIN(45);
 
 GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points)
-  :way_points(_way_points),
+  :waypoints(_way_points),
    terrain(NULL)
 {
   // JMW TODO enhancement: seed initial wind store with start conditions
@@ -60,7 +60,7 @@ GlideComputerAirData::ResetFlight(const bool full)
 
   thermallocator.Reset();
 
-  rotaryLD.Initialize(SettingsComputer());
+  gr_calculator.Initialize(SettingsComputer());
 
   flying_computer.Reset();
   wind_computer.Reset();
@@ -81,7 +81,7 @@ GlideComputerAirData::ProcessVertical()
   const NMEAInfo &basic = Basic();
   DerivedInfo &calculated = SetCalculated();
 
-  auto_qnh.Process(basic, calculated, SettingsComputer(), way_points);
+  auto_qnh.Process(basic, calculated, SettingsComputer(), waypoints);
 
   Heading();
   TurnRate();
@@ -101,7 +101,7 @@ GlideComputerAirData::ProcessVertical()
   CruiseLD();
 
   if (calculated.flight.flying && !calculated.circling)
-    calculated.average_ld = rotaryLD.Calculate();
+    calculated.average_ld = gr_calculator.Calculate();
 
   Average30s();
   AverageClimbRate();
@@ -354,7 +354,7 @@ GlideComputerAirData::LD()
                LastBasic().nav_altitude - Basic().nav_altitude, fixed(0.1));
 
     if (calculated.flight.flying && !calculated.circling)
-      rotaryLD.Add((int)DistanceFlown, (int)Basic().nav_altitude);
+      gr_calculator.Add((int)DistanceFlown, (int)Basic().nav_altitude);
   }
 
   // LD instantaneous from vario, updated every reading..
@@ -494,7 +494,7 @@ GlideComputerAirData::OnTakeoff()
 void
 GlideComputerAirData::OnSwitchClimbMode(bool isclimb, bool left)
 {
-  rotaryLD.Initialize(SettingsComputer());
+  gr_calculator.Initialize(SettingsComputer());
 }
 
 void
