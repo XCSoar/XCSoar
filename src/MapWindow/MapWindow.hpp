@@ -115,7 +115,7 @@ protected:
    */
   MapWindowProjection render_projection;
 
-  const Waypoints *way_points;
+  const Waypoints *waypoints;
   TopographyStore *topography;
   TopographyRenderer *topography_renderer;
 
@@ -127,8 +127,8 @@ protected:
 
   const TrafficLook &traffic_look;
 
-  BackgroundDrawHelper m_background;
-  WaypointRenderer way_point_renderer;
+  BackgroundDrawHelper background;
+  WaypointRenderer waypoint_renderer;
 
   AirspaceRenderer airspace_renderer;
 
@@ -184,12 +184,12 @@ public:
 
   virtual void set(ContainerWindow &parent, const PixelRect &rc);
 
-  void set_way_points(const Waypoints *_way_points) {
-    way_points = _way_points;
-    way_point_renderer.set_way_points(way_points);
+  void SetWaypoints(const Waypoints *_waypoints) {
+    waypoints = _waypoints;
+    waypoint_renderer.set_way_points(waypoints);
   }
 
-  void set_task(ProtectedTaskManager *_task) {
+  void SetTask(ProtectedTaskManager *_task) {
     task = _task;
   }
 
@@ -201,16 +201,16 @@ public:
     glide_computer = _gc;
   }
 
-  void set_airspaces(Airspaces *_airspace_database,
-                     ProtectedAirspaceWarningManager *_airspace_warnings) {
+  void SetAirspaces(Airspaces *_airspace_database,
+                    ProtectedAirspaceWarningManager *_airspace_warnings) {
     airspace_renderer.SetAirspaces(_airspace_database, _airspace_warnings);
   }
 
-  void set_topography(TopographyStore *_topography);
-  void set_terrain(RasterTerrain *_terrain);
-  void set_weather(RasterWeather *_weather);
+  void SetTopography(TopographyStore *_topography);
+  void SetTerrain(RasterTerrain *_terrain);
+  void SetWeather(RasterWeather *_weather);
 
-  void set_marks(ProtectedMarkers *_marks) {
+  void SetMarks(ProtectedMarkers *_marks) {
     marks = _marks;
   }
 

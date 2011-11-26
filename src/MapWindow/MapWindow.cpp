@@ -41,13 +41,13 @@ MapWindow::MapWindow(const MapLook &_look,
                      const TrafficLook &_traffic_look)
   :look(_look),
    follow_mode(FOLLOW_SELF),
-   way_points(NULL),
+   waypoints(NULL),
    topography(NULL), topography_renderer(NULL),
    terrain(NULL),
    terrain_radius(fixed_zero),
    weather(NULL),
    traffic_look(_traffic_look),
-   way_point_renderer(NULL, look.waypoint),
+   waypoint_renderer(NULL, look.waypoint),
    airspace_renderer(look.airspace),
    trail_renderer(look.trail),
    task(NULL), route_planner(NULL), glide_computer(NULL),
@@ -187,7 +187,7 @@ MapWindow::on_paint_buffer(Canvas &canvas)
 }
 
 void
-MapWindow::set_topography(TopographyStore *_topography)
+MapWindow::SetTopography(TopographyStore *_topography)
 {
   topography = _topography;
 
@@ -198,19 +198,19 @@ MapWindow::set_topography(TopographyStore *_topography)
 }
 
 void
-MapWindow::set_terrain(RasterTerrain *_terrain)
+MapWindow::SetTerrain(RasterTerrain *_terrain)
 {
   terrain = _terrain;
   terrain_center = GeoPoint(Angle::Zero(),
                             Angle::Zero());
-  m_background.SetTerrain(_terrain);
+  background.SetTerrain(_terrain);
 }
 
 void
-MapWindow::set_weather(RasterWeather *_weather)
+MapWindow::SetWeather(RasterWeather *_weather)
 {
   weather = _weather;
-  m_background.SetWeather(_weather);
+  background.SetWeather(_weather);
 }
 
 void

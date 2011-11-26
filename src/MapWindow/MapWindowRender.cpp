@@ -32,9 +32,9 @@ Copyright_License {
 void
 MapWindow::RenderTerrain(Canvas &canvas)
 {
-  m_background.SetSunAngle(render_projection, SettingsMap().terrain,
+  background.SetSunAngle(render_projection, SettingsMap().terrain,
                            Basic(), Calculated());
-  m_background.Draw(canvas, render_projection, SettingsMap().terrain);
+  background.Draw(canvas, render_projection, SettingsMap().terrain);
 }
 
 void
@@ -127,7 +127,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   draw_sw.Mark(_T("RenderMisc1"));
   // Render weather/terrain max/min values
-  if (!m_background.DrawSpotHeights(canvas, label_block))
+  if (!background.DrawSpotHeights(canvas, label_block))
     DrawTaskOffTrackIndicator(canvas);
 
   // Render the snail trail

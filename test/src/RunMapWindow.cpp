@@ -135,10 +135,10 @@ public:
 
     PixelRect rc = get_client_rect();
     map.set(*this, rc);
-    map.set_way_points(&way_points);
-    map.set_airspaces(&airspace_database, NULL);
-    map.set_topography(topography);
-    map.set_terrain(terrain);
+    map.SetWaypoints(&way_points);
+    map.SetAirspaces(&airspace_database, NULL);
+    map.SetTopography(topography);
+    map.SetTerrain(terrain);
     if (terrain != NULL)
       map.SetLocation(terrain->GetTerrainCenter());
 

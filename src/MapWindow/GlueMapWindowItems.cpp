@@ -58,8 +58,8 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
   if (render_projection.GetMapScale() <= fixed_int_constant(4000))
     builder.AddThermals(Calculated().thermal_locator, Basic(), Calculated());
 
-  if (way_points)
-    builder.AddWaypoints(*way_points);
+  if (waypoints)
+    builder.AddWaypoints(*waypoints);
 
   if (Basic().flarm.available)
     builder.AddTraffic(Basic().flarm);

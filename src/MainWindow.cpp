@@ -647,14 +647,14 @@ void
 MainWindow::SetTerrain(RasterTerrain *terrain)
 {
   if (map != NULL)
-    map->set_terrain(terrain);
+    map->SetTerrain(terrain);
 }
 
 void
 MainWindow::SetTopography(TopographyStore *topography)
 {
   if (map != NULL)
-    map->set_topography(topography);
+    map->SetTopography(topography);
 }
 
 DisplayMode

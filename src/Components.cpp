@@ -440,16 +440,16 @@ XCSoarInterface::Startup()
 
   GlueMapWindow *map_window = main_window.GetMap();
   if (map_window != NULL) {
-    map_window->set_way_points(&way_points);
-    map_window->set_task(protected_task_manager);
+    map_window->SetWaypoints(&way_points);
+    map_window->SetTask(protected_task_manager);
     map_window->SetRoutePlanner(&glide_computer->GetProtectedRoutePlanner());
     map_window->SetGlideComputer(glide_computer);
-    map_window->set_airspaces(&airspace_database, airspace_warnings);
+    map_window->SetAirspaces(&airspace_database, airspace_warnings);
 
-    map_window->set_topography(topography);
-    map_window->set_terrain(terrain);
-    map_window->set_weather(&RASP);
-    map_window->set_marks(protected_marks);
+    map_window->SetTopography(topography);
+    map_window->SetTerrain(terrain);
+    map_window->SetWeather(&RASP);
+    map_window->SetMarks(protected_marks);
     map_window->SetLogger(&logger);
   }
 

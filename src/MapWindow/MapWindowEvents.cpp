@@ -70,12 +70,12 @@ MapWindow::on_create()
 void
 MapWindow::on_destroy()
 {
-  set_marks(NULL);
-  set_airspaces(NULL, NULL);
-  set_way_points(NULL);
-  set_topography(NULL);
-  set_terrain(NULL);
-  set_weather(NULL);
+  SetMarks(NULL);
+  SetAirspaces(NULL, NULL);
+  SetWaypoints(NULL);
+  SetTopography(NULL);
+  SetTerrain(NULL);
+  SetWeather(NULL);
 
 #ifndef ENABLE_OPENGL
   buffer_canvas.reset();

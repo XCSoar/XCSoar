@@ -33,7 +33,7 @@ MapWindow::DrawWaypoints(Canvas &canvas)
     // if pan mode, show full names
     settings.display_text_type = DISPLAYNAME;
 
-  way_point_renderer.render(canvas, label_block,
+  waypoint_renderer.render(canvas, label_block,
                             render_projection, settings,
                             SettingsComputer().task,
                             task, route_planner);
