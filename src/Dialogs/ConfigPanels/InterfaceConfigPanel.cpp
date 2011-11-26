@@ -80,6 +80,8 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   LoadWindow(NULL, parent, N_("IDR_XML_INTERFACECONFIGPANEL"));
 
+  const UISettings &settings = CommonInterface::GetUISettings();
+
   WndProperty *wp;
 
   buttonFonts = ((WndButton *)ConfigPanel::GetForm().FindByName(_T("cmdFonts")));
@@ -88,7 +90,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
 #ifdef HAVE_BLANK
   LoadFormProperty(form, _T("prpAutoBlank"),
-                   XCSoarInterface::SettingsMap().EnableAutoBlank);
+                   settings.map.EnableAutoBlank);
 #else
   ShowFormControl(form, _T("prpAutoBlank"), false);
 #endif
@@ -154,7 +156,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     };
 
     LoadFormProperty(form, _T("prpTextInput"), text_input_list,
-                     CommonInterface::GetUISettings().dialog.text_input_style);
+                     settings.dialog.text_input_style);
   } else {
     /* on-screen keyboard doesn't work without a pointing device
        (mouse or touch screen), hide the option on Altair */
@@ -165,12 +167,13 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 bool
 InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
+  UISettings &settings = CommonInterface::SetUISettings();
   bool changed = false, requirerestart = false;;
 
 #ifdef HAVE_BLANK
   changed |= SaveFormProperty(form, _T("prpAutoBlank"),
                               szProfileAutoBlank,
-                              XCSoarInterface::SetSettingsMap().EnableAutoBlank);
+                              settings.map.EnableAutoBlank);
 #endif
 
   if (FinishFileField(form, _T("prpInputFile"), szProfileInputFile)) {
@@ -233,11 +236,10 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
     changed = true;
   }
 
-  DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
   if (has_pointer())
     changed |= SaveFormPropertyEnum(form, _T("prpTextInput"),
                                     szProfileAppTextInputStyle,
-                                    dialog_settings.text_input_style);
+                                    settings.dialog.text_input_style);
 
   _changed |= changed;
   _require_restart |= requirerestart;
