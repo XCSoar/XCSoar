@@ -24,9 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_INPUT_EVENTS_HPP
 #define XCSOAR_INPUT_EVENTS_HPP
 
-#include <tchar.h>
-
 #include "Math/fixed.hpp"
+#include "Compiler.h"
+
+#include <tchar.h>
 
 typedef void (*pt2Event)(const TCHAR *);
 
@@ -53,9 +54,16 @@ namespace InputEvents
    */
   void LeaveMode(const TCHAR *mode);
 
+  gcc_pure
   unsigned findKey(const TCHAR *data);
+
+  gcc_pure
   int findGCE(const TCHAR *data);
+
+  gcc_pure
   int findNE(const TCHAR *data);
+
+  gcc_pure
   pt2Event findEvent(const TCHAR *);
 
   /**
