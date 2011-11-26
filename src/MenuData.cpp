@@ -33,7 +33,7 @@ Menu::Clear()
 }
 
 void
-Menu::Add(const TCHAR *label, int location, int event_id)
+Menu::Add(const TCHAR *label, int location, unsigned event_id)
 {
   assert(location >= 0);
 
@@ -47,7 +47,7 @@ Menu::Add(const TCHAR *label, int location, int event_id)
 }
 
 int
-Menu::FindByEvent(int event) const
+Menu::FindByEvent(unsigned event) const
 {
   for (unsigned i = 0; i < MAX_ITEMS; ++i)
     if (items[i].event == event)

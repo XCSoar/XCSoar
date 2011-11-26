@@ -35,11 +35,11 @@ Copyright_License {
 class MenuItem {
 public:
   const TCHAR *label;
-  int event;
+  unsigned event;
 
   void Clear() {
     label = NULL;
-    event = -1;
+    event = 0;
   }
 
   gcc_constexpr_method
@@ -76,9 +76,9 @@ public:
     return items[i];
   }
 
-  void Add(const TCHAR *label, int location, int event_id);
+  void Add(const TCHAR *label, int location, unsigned event_id);
 
-  int FindByEvent(int event) const;
+  int FindByEvent(unsigned event) const;
 };
 
 #endif
