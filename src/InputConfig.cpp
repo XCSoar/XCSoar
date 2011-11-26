@@ -36,6 +36,7 @@ InputConfig::SetDefaults()
 
   std::fill(&Key2Event[0][0], &Key2Event[MAX_MODE][MAX_KEY], 0);
   std::fill(&GC2Event[0][0], &GC2Event[MAX_MODE][GCE_COUNT], 0);
+  std::fill(&N2Event[0][0], &N2Event[MAX_MODE][NE_COUNT], 0);
 
   /* This is initialized with 1 because event 0 is reserved - it
      stands for "no event" */
