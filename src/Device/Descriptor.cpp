@@ -63,11 +63,9 @@ DeviceDescriptor::DeviceDescriptor()
 }
 
 bool
-DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver,
+DeviceDescriptor::Open(Port &_port, const DeviceRegister &_driver,
                        OperationEnvironment &env)
 {
-  assert(_port != NULL);
-  assert(_driver != NULL);
   assert(port == NULL);
   assert(device == NULL);
   assert(!ticker);
@@ -83,8 +81,8 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver,
   settings_received.Clear();
   was_connected = false;
 
-  port = _port;
-  driver = _driver;
+  port = &_port;
+  driver = &_driver;
 
   assert(driver->CreateOnPort != NULL || driver->IsNMEAOut());
   if (driver->CreateOnPort == NULL)
@@ -148,7 +146,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
     return false;
   }
 
-  if (!Open(port, driver, env)) {
+  if (!Open(*port, *driver, env)) {
     delete port;
     return false;
   }

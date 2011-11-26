@@ -156,7 +156,7 @@ public:
    * When this method fails, the caller is responsible for freeing the
    * Port object.
    */
-  bool Open(Port *port, const struct DeviceRegister *driver,
+  bool Open(Port &port, const DeviceRegister &driver,
             OperationEnvironment &env);
 
   bool OpenInternalGPS();
