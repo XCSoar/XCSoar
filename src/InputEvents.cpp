@@ -679,12 +679,7 @@ InputEvents::ShowMenu()
        consistent */
     sub_Pan(0);
 
-  #if !defined(GNAV) && !defined(PCGNAV)
-  // Popup exit button if in .xci
-  // setMode(_T("Exit"));
-  setMode(MODE_MENU); // VENTA3
-  #endif
-
+  setMode(MODE_MENU);
   MenuTimeOut = 0;
   ProcessMenuTimer();
 }
