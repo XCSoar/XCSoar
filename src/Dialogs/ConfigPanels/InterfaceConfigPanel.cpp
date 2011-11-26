@@ -21,15 +21,15 @@ Copyright_License {
 }
 */
 
+#include "InterfaceConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "Form/Button.hpp"
 #include "Form/XMLWidget.hpp"
-#include "DataField/Enum.hpp"
-#include "DataField/Boolean.hpp"
 #include "DataField/FileReader.hpp"
+#include "DataField/Enum.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Util/StringUtil.hpp"
 #include "Interface.hpp"
@@ -39,7 +39,6 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Protection.hpp"
 #include "ConfigPanel.hpp"
-#include "InterfaceConfigPanel.hpp"
 #include "Language/Language.hpp"
 
 #include <windef.h> /* for MAX_PATH */
@@ -87,16 +86,12 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   if (buttonFonts)
     buttonFonts->SetOnClickNotify(OnFonts);
 
-  wp = (WndProperty*)form.FindByName(_T("prpAutoBlank"));
-  if (wp) {
 #ifdef HAVE_BLANK
-    DataFieldBoolean *df = (DataFieldBoolean *)wp->GetDataField();
-    df->Set(XCSoarInterface::SettingsMap().EnableAutoBlank);
-    wp->RefreshDisplay();
+  LoadFormProperty(form, _T("prpAutoBlank"),
+                   XCSoarInterface::SettingsMap().EnableAutoBlank);
 #else
-    wp->hide();
+  ShowFormControl(form, _T("prpAutoBlank"), false);
 #endif
-  }
 
   InitFileField(form, _T("prpInputFile"), szProfileInputFile, _T("*.xci\0"));
 
@@ -150,29 +145,27 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   LoadFormProperty(form, _T("prpMenuTimeout"),
                    XCSoarInterface::menu_timeout_max / 2);
 
-  wp = (WndProperty*)form.FindByName(_T("prpTextInput"));
-  assert(wp != NULL);
   if (has_pointer()) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Default"));
-    dfe->addEnumText(_("Keyboard"));
-    dfe->addEnumText(_("HighScore Style"));
-    dfe->Set(CommonInterface::GetUISettings().dialog.text_input_style);
-    wp->RefreshDisplay();
+    static gcc_constexpr_data StaticEnumChoice text_input_list[] = {
+      { tiDefault, N_("Default") },
+      { tiKeyboard, N_("Keyboard") },
+      { tiHighScore, N_("HighScore Style") },
+      { 0 }
+    };
+
+    LoadFormProperty(form, _T("prpTextInput"), text_input_list,
+                     CommonInterface::GetUISettings().dialog.text_input_style);
   } else {
     /* on-screen keyboard doesn't work without a pointing device
        (mouse or touch screen), hide the option on Altair */
-    wp->hide();
+    ShowFormControl(form, _T("prpTextInput"), false);
   }
-
 }
 
 bool
 InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, requirerestart = false;;
-  WndProperty *wp;
 
 #ifdef HAVE_BLANK
   changed |= SaveFormProperty(form, _T("prpAutoBlank"),
@@ -186,7 +179,7 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
   }
 
 #ifndef HAVE_NATIVE_GETTEXT
-  wp = (WndProperty *)form.FindByName(_T("prpLanguageFile"));
+  WndProperty *wp = (WndProperty *)form.FindByName(_T("prpLanguageFile"));
   if (wp != NULL) {
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
 
@@ -233,27 +226,18 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
     requirerestart = true;
   }
 
-  wp = (WndProperty*)form.FindByName(_T("prpMenuTimeout"));
-  if (wp) {
-    if ((int)XCSoarInterface::menu_timeout_max != wp->GetDataField()->GetAsInteger()*2) {
-      XCSoarInterface::menu_timeout_max = wp->GetDataField()->GetAsInteger()*2;
-      Profile::Set(szProfileMenuTimeout,XCSoarInterface::menu_timeout_max);
-      changed = true;
-    }
+  unsigned menu_timeout = GetFormValueInteger(form, _T("prpMenuTimeout")) * 2;
+  if (XCSoarInterface::menu_timeout_max != menu_timeout) {
+    XCSoarInterface::menu_timeout_max = menu_timeout;
+    Profile::Set(szProfileMenuTimeout, XCSoarInterface::menu_timeout_max);
+    changed = true;
   }
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
-  if (has_pointer()) {
-    wp = (WndProperty*)form.FindByName(_T("prpTextInput"));
-    assert(wp != NULL);
-    if (dialog_settings.text_input_style != (TextInputStyle_t)(wp->GetDataField()->GetAsInteger())) {
-      dialog_settings.text_input_style =
-        (TextInputStyle_t)(wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppTextInputStyle,
-                   dialog_settings.text_input_style);
-      changed = true;
-    }
-  }
+  if (has_pointer())
+    changed |= SaveFormPropertyEnum(form, _T("prpTextInput"),
+                                    szProfileAppTextInputStyle,
+                                    dialog_settings.text_input_style);
 
   _changed |= changed;
   _require_restart |= requirerestart;
