@@ -194,7 +194,7 @@ apply_defaults(const TCHAR *const* default_modes,
 {
   assert(num_default_events <= InputConfig::MAX_EVENTS);
 
-  input_config.ClearModeMap();
+  input_config.SetDefaults();
   while (*default_modes != NULL)
     input_config.AppendMode(*default_modes++);
 
@@ -246,6 +246,8 @@ InputEvents::readFile()
   mutexEventQueue.Unlock();
 
   // Get defaults
+  input_config.SetDefaults();
+
   if (is_altair()) {
 #include "InputEvents_altair.cpp"
     apply_defaults(default_modes,

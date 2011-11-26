@@ -1185,6 +1185,7 @@ $(RUN_HEIGHT_MATRIX_BIN): $(RUN_HEIGHT_MATRIX_OBJS) $(RUN_HEIGHT_MATRIX_LDADD) |
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) $(ZZIP_LDLIBS) -o $@
 
 RUN_INPUT_PARSER_SOURCES = \
+	$(SRC)/InputConfig.cpp \
 	$(SRC)/InputParser.cpp \
 	$(SRC)/MenuData.cpp \
 	$(SRC)/UtilsText.cpp \

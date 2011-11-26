@@ -183,7 +183,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
     // experimental: if the first line is "#CLEAR" then the whole default config is cleared
     //               and can be overwritten by file
     if (line == 1 && _tcscmp(buffer, _T("#CLEAR")) == 0) {
-      config.ClearAllEvents();
+      config.SetDefaults();
     } else if (buffer[0] == _T('\0')) {
       // Check valid line? If not valid, assume next record (primative, but works ok!)
       // General checks before continue...

@@ -29,7 +29,6 @@ Copyright_License {
 #include "Util/RadixTree.hpp"
 #include "Util/StringUtil.hpp"
 
-#include <algorithm>
 #include <assert.h>
 #include <tchar.h>
 
@@ -78,26 +77,7 @@ struct InputConfig {
 
   Menu menus[MAX_MODE];
 
-  InputConfig()
-    :mode_map_count(4),
-     /* This is initialized with 1 because event 0 is reserved - it
-        stands for "no event" */
-     Events_count(1) {
-    _tcscpy(mode_map[0], _T("default"));
-    _tcscpy(mode_map[1], _T("pan"));
-    _tcscpy(mode_map[2], _T("infobox"));
-    _tcscpy(mode_map[3], _T("Menu"));
-  }
-
-  void ClearAllEvents() {
-    std::fill(&Key2Event[0][0], &Key2Event[MAX_MODE][MAX_KEY], 0);
-    std::fill(&GC2Event[0][0], &GC2Event[MAX_MODE][GCE_COUNT], 0);
-    Events_count = 1;
-  }
-
-  void ClearModeMap() {
-    mode_map_count = 4;
-  }
+  void SetDefaults();
 
   gcc_pure
   int LookupMode(const TCHAR *name) const {
