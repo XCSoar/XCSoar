@@ -661,11 +661,7 @@ InputEvents::processGo(unsigned eventid)
 void
 InputEvents::HideMenu()
 {
-  if (CommonInterface::IsPanning()) {
-    setMode(MODE_PAN);
-  } else {
-    setMode(MODE_DEFAULT);
-  }
+  setMode(CommonInterface::IsPanning() ? MODE_PAN : MODE_DEFAULT);
 }
 
 void
