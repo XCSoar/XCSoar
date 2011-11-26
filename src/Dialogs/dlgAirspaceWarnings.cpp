@@ -50,10 +50,10 @@ struct WarningItem {
   WarningItem() = default;
 
   WarningItem(const AirspaceWarning &w)
-    :airspace(&w.get_airspace()),
-     state(w.get_warning_state()),
-     solution(w.get_solution()),
-     ack_expired(w.get_ack_expired()), ack_day(w.get_ack_day()) {}
+    :airspace(&w.GetAirspace()),
+     state(w.GetWarningState()),
+     solution(w.GetSolution()),
+     ack_expired(w.IsAckExpired()), ack_day(w.GetAckDay()) {}
 
   bool operator==(const AbstractAirspace &other) const {
     return &other == airspace;
@@ -105,9 +105,9 @@ UpdateButtons()
   {
     ProtectedAirspaceWarningManager::ExclusiveLease lease(*airspace_warnings);
     const AirspaceWarning &warning = lease->GetWarning(*airspace);
-    ack_expired = warning.get_ack_expired();
-    ack_day = warning.get_ack_day();
-    inside = warning.get_warning_state() == AirspaceWarning::WARNING_INSIDE;
+    ack_expired = warning.IsAckExpired();
+    ack_day = warning.GetAckDay();
+    inside = warning.GetWarningState() == AirspaceWarning::WARNING_INSIDE;
   }
 
   wbAck1->set_visible(ack_expired && !inside);
@@ -146,7 +146,7 @@ HasWarning()
   ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
   for (AirspaceWarningManager::const_iterator i = lease->begin(),
          end = lease->end(); i != end; ++i)
-    if (i->get_ack_expired())
+    if (i->IsAckExpired())
       return true;
 
   return false;
@@ -235,9 +235,9 @@ Enable()
     if (w == NULL)
       return;
 
-    w->acknowledge_inside(false);
-    w->acknowledge_warning(false);
-    w->acknowledge_day(false);
+    w->AcknowledgeInside(false);
+    w->AcknowledgeWarning(false);
+    w->AcknowledgeDay(false);
   }
 
  update_list();

@@ -353,9 +353,9 @@ public:
     delete fout;
   }
   virtual void Visit(const AirspaceWarning& as) {
-    if (as.get_warning_state() == m_state) {
+    if (as.GetWarningState() == m_state) {
     *fout << as;
-    *fout << as.get_airspace();
+    *fout << as.GetAirspace();
     }
   }
 private:

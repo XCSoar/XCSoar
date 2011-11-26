@@ -25,107 +25,107 @@ Copyright_License {
 
 #include <assert.h>
 
-AirspaceWarning::AirspaceWarning(const AbstractAirspace& the_airspace):
-  m_airspace(the_airspace),
-  m_state(WARNING_CLEAR),
-  m_state_last(WARNING_CLEAR),
-  m_solution(AirspaceInterceptSolution::Invalid()),
-  m_acktime_warning(0),
-  m_acktime_inside(0),
-  m_debouncetime(60),
-  m_ack_day(false),
-  m_expired(true),
-  m_expired_last(true)
+AirspaceWarning::AirspaceWarning(const AbstractAirspace &_airspace):
+  airspace(_airspace),
+  state(WARNING_CLEAR),
+  state_last(WARNING_CLEAR),
+  solution(AirspaceInterceptSolution::Invalid()),
+  acktime_warning(0),
+  acktime_inside(0),
+  debounce_time(60),
+  ack_day(false),
+  expired(true),
+  expired_last(true)
 {
 }
 
-void AirspaceWarning::save_state()
+void AirspaceWarning::SaveState()
 {
-  m_state_last = m_state;
-  m_state = WARNING_CLEAR;
-  m_expired_last = m_expired;
+  state_last = state;
+  state = WARNING_CLEAR;
+  expired_last = expired;
 }
 
 void 
-AirspaceWarning::update_solution(const State state,
-                                 AirspaceInterceptSolution& solution)
+AirspaceWarning::UpdateSolution(const State _state,
+                                 AirspaceInterceptSolution &_solution)
 {
-  if (state_accepted(state)) {
-    m_state = state;
-    m_solution = solution;
+  if (IsStateAccepted(_state)) {
+    state = _state;
+    solution = _solution;
   }
 }
 
 
 bool
-AirspaceWarning::warning_live(const unsigned ack_time, const unsigned dt)
+AirspaceWarning::WarningLive(const unsigned ack_time, const unsigned dt)
 {
   // propagate settings from manager
-  if (m_acktime_warning == null_acktime)
-    m_acktime_warning = ack_time;
+  if (acktime_warning == null_acktime)
+    acktime_warning = ack_time;
 
-  if (m_acktime_inside == null_acktime)
-    m_acktime_inside = ack_time;
+  if (acktime_inside == null_acktime)
+    acktime_inside = ack_time;
 
-  if ((m_state != WARNING_CLEAR) 
-      && (m_state < m_state_last) 
-      && (m_state_last == WARNING_INSIDE))
+  if ((state != WARNING_CLEAR) 
+      && (state < state_last) 
+      && (state_last == WARNING_INSIDE))
     // if inside was acknowledged, consider warning to be acknowledged
-    m_acktime_warning = max(m_acktime_warning, m_acktime_inside);
+    acktime_warning = max(acktime_warning, acktime_inside);
 
-  if (m_acktime_warning > dt)
-    m_acktime_warning-= dt;
+  if (acktime_warning > dt)
+    acktime_warning-= dt;
   else
-    m_acktime_warning = 0;
+    acktime_warning = 0;
 
-  if (m_acktime_inside > dt)
-    m_acktime_inside-= dt;
+  if (acktime_inside > dt)
+    acktime_inside-= dt;
   else
-    m_acktime_inside = 0;
+    acktime_inside = 0;
 
-  if (m_debouncetime > dt)
-    m_debouncetime-= dt;
+  if (debounce_time > dt)
+    debounce_time-= dt;
   else
-    m_debouncetime = 0;
+    debounce_time = 0;
 
-  m_expired = get_ack_expired();
+  expired = IsAckExpired();
 
-  if (m_state == WARNING_CLEAR)
-    return !m_expired;
+  if (state == WARNING_CLEAR)
+    return !expired;
 
   return true;
 }
 
 bool
-AirspaceWarning::changed_state() const
+AirspaceWarning::ChangedState() const
 {
-  if (m_expired > m_expired_last) 
+  if (expired > expired_last)
     return true;
 
-  if ((m_state_last == WARNING_CLEAR) && (m_state > WARNING_CLEAR)) 
-    return get_ack_expired();
+  if ((state_last == WARNING_CLEAR) && (state > WARNING_CLEAR)) 
+    return IsAckExpired();
 
-  if ((m_state_last < WARNING_INSIDE) && (m_state == WARNING_INSIDE))
-    return get_ack_expired();
+  if ((state_last < WARNING_INSIDE) && (state == WARNING_INSIDE))
+    return IsAckExpired();
 
   return false;
 }
 
 bool
-AirspaceWarning::get_ack_expired() const
+AirspaceWarning::IsAckExpired() const
 {
-  if (m_ack_day)
+  if (ack_day)
     // these ones persist
     return false;
 
-  switch (m_state) {
+  switch (state) {
   case WARNING_CLEAR:
   case WARNING_TASK:
   case WARNING_FILTER:
   case WARNING_GLIDE:
-    return !m_acktime_warning;
+    return !acktime_warning;
   case WARNING_INSIDE:
-    return !m_acktime_inside;
+    return !acktime_inside;
   };
   // unknown, should never get here
   assert(1);
@@ -133,36 +133,36 @@ AirspaceWarning::get_ack_expired() const
 }
 
 void 
-AirspaceWarning::acknowledge_inside(const bool set)
+AirspaceWarning::AcknowledgeInside(const bool set)
 {
   if (set)
-    m_acktime_inside = null_acktime;
+    acktime_inside = null_acktime;
   else
-    m_acktime_inside = 0;
+    acktime_inside = 0;
 }
 
 void 
-AirspaceWarning::acknowledge_warning(const bool set)
+AirspaceWarning::AcknowledgeWarning(const bool set)
 {
   if (set)
-    m_acktime_warning = null_acktime;
+    acktime_warning = null_acktime;
   else
-    m_acktime_warning = 0;
+    acktime_warning = 0;
 }
 
 bool 
 AirspaceWarning::operator<(const AirspaceWarning &other) const
 {
   // compare bother.ack
-  if (get_ack_expired() != other.get_ack_expired())
+  if (IsAckExpired() != other.IsAckExpired())
     // least expired top
-    return get_ack_expired() > other.get_ack_expired();
+    return IsAckExpired() > other.IsAckExpired();
 
   // compare bother.state
-  if (get_warning_state() != other.get_warning_state())
+  if (GetWarningState() != other.GetWarningState())
     // most severe top
-    return get_warning_state() > other.get_warning_state();
+    return GetWarningState() > other.GetWarningState();
 
   // state and ack equal, compare bother.time to intersect
-  return get_solution().elapsed_time < other.get_solution().elapsed_time;
+  return GetSolution().elapsed_time < other.GetSolution().elapsed_time;
 }

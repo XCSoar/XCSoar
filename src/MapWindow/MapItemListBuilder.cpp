@@ -52,10 +52,10 @@ class AirspaceWarningList
 
 public:
   void Add(const AirspaceWarning& as) {
-    if (as.get_warning_state() == AirspaceWarning::WARNING_INSIDE)
-      ids_inside.checked_append(&as.get_airspace());
-    else if (as.get_warning_state() > AirspaceWarning::WARNING_CLEAR)
-      ids_warning.checked_append(&as.get_airspace());
+    if (as.GetWarningState() == AirspaceWarning::WARNING_INSIDE)
+      ids_inside.checked_append(&as.GetAirspace());
+    else if (as.GetWarningState() > AirspaceWarning::WARNING_CLEAR)
+      ids_warning.checked_append(&as.GetAirspace());
   }
 
   void Fill(const AirspaceWarningManager &awm) {

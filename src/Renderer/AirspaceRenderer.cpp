@@ -52,15 +52,15 @@ private:
 
 public:
   void Visit(const AirspaceWarning& as) {
-    if (as.get_warning_state() == AirspaceWarning::WARNING_INSIDE) {
-      ids_inside.checked_append(&as.get_airspace());
-    } else if (as.get_warning_state() > AirspaceWarning::WARNING_CLEAR) {
-      ids_warning.checked_append(&as.get_airspace());
-      locs.checked_append(as.get_solution().location);
+    if (as.GetWarningState() == AirspaceWarning::WARNING_INSIDE) {
+      ids_inside.checked_append(&as.GetAirspace());
+    } else if (as.GetWarningState() > AirspaceWarning::WARNING_CLEAR) {
+      ids_warning.checked_append(&as.GetAirspace());
+      locs.checked_append(as.GetSolution().location);
     }
 
-    if (!as.get_ack_expired())
-      ids_acked.checked_append(&as.get_airspace());
+    if (!as.IsAckExpired())
+      ids_acked.checked_append(&as.GetAirspace());
   }
 
   void Visit(const AirspaceWarningManager &awm) {

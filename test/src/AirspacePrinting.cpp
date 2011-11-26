@@ -90,7 +90,7 @@ std::ostream& operator<< (std::ostream& f,
 std::ostream& operator<< (std::ostream& f, 
                           const AirspaceWarning& aw)
 {
-  AirspaceWarning::State state = aw.get_warning_state();
+  AirspaceWarning::State state = aw.GetWarningState();
   f << "# warning ";
   switch(state) {
   case AirspaceWarning::WARNING_CLEAR:
@@ -110,7 +110,7 @@ std::ostream& operator<< (std::ostream& f,
     break;
   };
 
-  const AirspaceInterceptSolution &solution = aw.get_solution();
+  const AirspaceInterceptSolution &solution = aw.GetSolution();
   f << "# intercept " << solution.location.longitude << " " << solution.location.latitude
     << " dist " << solution.distance << " alt " << solution.altitude << " time "
     << solution.elapsed_time << "\n";

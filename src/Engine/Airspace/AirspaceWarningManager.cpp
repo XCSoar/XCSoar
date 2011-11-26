@@ -97,7 +97,7 @@ AirspaceWarningManager::GetWarningPtr(const AbstractAirspace &airspace)
 {
   for (AirspaceWarningList::iterator it = warnings.begin();
        it != warnings.end(); ++it)
-    if (&(it->get_airspace()) == &airspace)
+    if (&(it->GetAirspace()) == &airspace)
       return &(*it);
 
   return NULL;
@@ -120,7 +120,7 @@ AirspaceWarningManager::Update(const AircraftState& state,
   // save old state
   for (AirspaceWarningList::iterator it = warnings.begin();
        it != warnings.end(); ++it)
-    it->save_state();
+    it->SaveState();
 
   // check from strongest to weakest alerts
   UpdateInside(state);
@@ -131,8 +131,8 @@ AirspaceWarningManager::Update(const AircraftState& state,
   // action changes
   for (AirspaceWarningList::iterator it = warnings.begin();
        it != warnings.end(); ) {
-    if (it->warning_live(config.AcknowledgementTime, dt)) {
-      if (it->changed_state())
+    if (it->WarningLive(config.AcknowledgementTime, dt)) {
+      if (it->ChangedState())
         changed = true;
 
       it++;
@@ -206,7 +206,7 @@ public:
       return;
 
     AirspaceWarning& warning = warning_manager.GetWarning(airspace);
-    if (warning.state_accepted(warning_state)) {
+    if (warning.IsStateAccepted(warning_state)) {
 
       AirspaceInterceptSolution solution;
 
@@ -220,7 +220,7 @@ public:
       if (solution.elapsed_time > max_time)
         return;
 
-      warning.update_solution(warning_state, solution);
+      warning.UpdateSolution(warning_state, solution);
       found = true;
     }
   }
@@ -375,13 +375,13 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state)
 
     AirspaceWarning& warning = GetWarning(airspace);
 
-    if (warning.state_accepted(AirspaceWarning::WARNING_INSIDE)) {
+    if (warning.IsStateAccepted(AirspaceWarning::WARNING_INSIDE)) {
       GeoPoint c = airspace.ClosestPoint(state.location);
       GeoVector vector_exit(state.location, c);
       AirspaceInterceptSolution solution;
       airspace.Intercept(state, vector_exit, perf_glide, solution); 
 
-      warning.update_solution(AirspaceWarning::WARNING_INSIDE, solution);
+      warning.UpdateSolution(AirspaceWarning::WARNING_INSIDE, solution);
       found = true;
     }
   }
@@ -404,28 +404,28 @@ void
 AirspaceWarningManager::AcknowledgeWarning(const AbstractAirspace& airspace,
                                             const bool set)
 {
-  GetWarning(airspace).acknowledge_warning(set);
+  GetWarning(airspace).AcknowledgeWarning(set);
 }
 
 void 
 AirspaceWarningManager::AcknowledgeInside(const AbstractAirspace& airspace,
                                            const bool set)
 {
-  GetWarning(airspace).acknowledge_inside(set);
+  GetWarning(airspace).AcknowledgeInside(set);
 }
 
 void 
 AirspaceWarningManager::AcknowledgeDay(const AbstractAirspace& airspace,
                                         const bool set)
 {
-  GetWarning(airspace).acknowledge_day(set);
+  GetWarning(airspace).AcknowledgeDay(set);
 }
 
 bool
 AirspaceWarningManager::GetAckDay(const AbstractAirspace& airspace)
 {
   AirspaceWarning* warning = GetWarningPtr(airspace);
-  return (warning != NULL ? warning->get_ack_day() : false);
+  return (warning != NULL ? warning->GetAckDay() : false);
 }
 
 
@@ -434,7 +434,7 @@ AirspaceWarningManager::AcknowledgeAll()
 {
   for (AirspaceWarningList::iterator it = warnings.begin();
        it != warnings.end(); ++it) {
-    (*it).acknowledge_warning(true);
-    (*it).acknowledge_inside(true);
+    (*it).AcknowledgeWarning(true);
+    (*it).AcknowledgeInside(true);
   }
 }

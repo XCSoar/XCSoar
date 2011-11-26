@@ -51,17 +51,17 @@ public:
   };
 
 private:
-  const AbstractAirspace& m_airspace;
-  TinyEnum<State> m_state;
-  TinyEnum<State> m_state_last;
-  AirspaceInterceptSolution m_solution;
+  const AbstractAirspace& airspace;
+  TinyEnum<State> state;
+  TinyEnum<State> state_last;
+  AirspaceInterceptSolution solution;
 
-  unsigned m_acktime_warning;
-  unsigned m_acktime_inside;
-  unsigned m_debouncetime;
-  bool m_ack_day;
-  bool m_expired;
-  bool m_expired_last;
+  unsigned acktime_warning;
+  unsigned acktime_inside;
+  unsigned debounce_time;
+  bool ack_day;
+  bool expired;
+  bool expired_last;
 
   static const unsigned null_acktime = -1;
 
@@ -76,7 +76,7 @@ public:
   /**
    * Save warning state prior to performing update
    */
-  void save_state();
+  void SaveState();
 
   /**
    * Update warning state and solution vector
@@ -85,8 +85,7 @@ public:
    * @param solution Intercept vector (to outside if currently inside,
    * otherwise to inside)
    */
-  void update_solution(const State state,
-                       AirspaceInterceptSolution& solution);
+  void UpdateSolution(const State state, AirspaceInterceptSolution &_solution);
 
   /**
    * Determine whether accepting a warning of the supplied state
@@ -95,8 +94,8 @@ public:
    * @param state New warning state
    */
   gcc_pure
-  bool state_accepted(const State state) const {
-    return state >= m_state;
+  bool IsStateAccepted(const State _state) const {
+    return _state >= state;
   }
 
   /**
@@ -106,15 +105,15 @@ public:
    * @return True if state upgraded/downgraded
    */
   gcc_pure
-  bool changed_state() const;
+  bool ChangedState() const;
 
   /**
    * Access airspace managed by this object
    *
    * @return Airspace
    */
-  const AbstractAirspace& get_airspace() const {
-    return m_airspace;
+  const AbstractAirspace& GetAirspace() const {
+    return airspace;
   }
 
   /**
@@ -122,8 +121,8 @@ public:
    *
    * @return Warning state
    */
-  State get_warning_state() const {
-    return m_state;
+  State GetWarningState() const {
+    return state;
   }
 
   /**
@@ -135,15 +134,15 @@ public:
    *
    * @return True if warning is still active
    */
-  bool warning_live(const unsigned ack_time, const unsigned dt);
+  bool WarningLive(const unsigned ack_time, const unsigned dt);
 
   /**
    * Access solution (nearest to enter, if outside, or to exit, if inside)
    *
    * @return Reference to solution
    */
-  const AirspaceInterceptSolution& get_solution() const {
-    return m_solution;
+  const AirspaceInterceptSolution& GetSolution() const {
+    return solution;
   }
 
   /**
@@ -152,7 +151,7 @@ public:
    * @return True if acknowledgement is expired
    */
   gcc_pure
-  bool get_ack_expired() const;
+  bool IsAckExpired() const;
 
   /**
    * Determine if acknowledgement is acknowledged for whole day
@@ -160,8 +159,8 @@ public:
    * @return True if acknowledged
    */
   gcc_pure
-  bool get_ack_day() const {
-    return m_ack_day;
+  bool GetAckDay() const {
+    return ack_day;
   }
 
   /**
@@ -169,22 +168,22 @@ public:
    *
    * @param set Whether to set or cancel acknowledgement
    */
-  void acknowledge_warning(const bool set=true);
+  void AcknowledgeWarning(const bool set=true);
 
   /**
    * Acknowledge an airspace inside
    *
    * @param set Whether to set or cancel acknowledgement
    */
-  void acknowledge_inside(const bool set=true);
+  void AcknowledgeInside(const bool set=true);
 
   /**
    * Acknowledge all warnings for airspace for whole day
    *
    * @param set Whether to set or cancel acknowledgement
    */
-  void acknowledge_day(const bool set=true) {
-    m_ack_day = set;
+  void AcknowledgeDay(const bool set=true) {
+    ack_day = set;
   }
 
   /**
