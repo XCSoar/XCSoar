@@ -29,9 +29,9 @@ Copyright_License {
 #include "Util/RadixTree.hpp"
 #include "Util/StringUtil.hpp"
 
+#include <algorithm>
 #include <assert.h>
 #include <tchar.h>
-#include <string.h>
 
 struct InputConfig {
   // Sensible maximums
@@ -90,8 +90,8 @@ struct InputConfig {
   }
 
   void ClearAllEvents() {
-    memset(Key2Event, 0, sizeof(Key2Event));
-    memset(GC2Event, 0, sizeof(GC2Event));
+    std::fill(&Key2Event[0][0], &Key2Event[MAX_MODE][MAX_KEY], 0);
+    std::fill(&GC2Event[0][0], &GC2Event[MAX_MODE][GCE_COUNT], 0);
     Events_count = 1;
   }
 
