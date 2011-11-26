@@ -171,6 +171,7 @@ sub c_string($) {
 }
 
 print "static const TCHAR *const default_modes[] = {\n";
+splice @modes, 0, 4;
 foreach my $m (@modes) {
     $m = c_string($m);
     print "  $m,\n";

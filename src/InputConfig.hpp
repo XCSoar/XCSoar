@@ -96,7 +96,7 @@ struct InputConfig {
   }
 
   void ClearModeMap() {
-    mode_map_count = 0;
+    mode_map_count = 4;
   }
 
   gcc_pure
