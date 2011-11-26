@@ -85,7 +85,7 @@ int main(int argc, char **argv)
   ParseInputFile(config, reader);
 
   for (unsigned mode = 0; mode < config.mode_map_count; ++mode) {
-    _tprintf(_T("Mode '%s'\n"), config.mode_map[mode]);
+    _tprintf(_T("Mode '%s'\n"), config.mode_map[mode].c_str());
 
     for (unsigned key = 0; key < InputConfig::MAX_KEY; ++key) {
       unsigned event = config.Key2Event[mode][key];

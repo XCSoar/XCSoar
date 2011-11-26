@@ -27,7 +27,7 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "MenuData.hpp"
 #include "Util/RadixTree.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StaticString.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -58,7 +58,7 @@ struct InputConfig {
   };
 
   /** Map mode to location */
-  TCHAR mode_map[MAX_MODE][MAX_MODE_STRING];
+  StaticString<MAX_MODE_STRING> mode_map[MAX_MODE];
   unsigned mode_map_count;
 
   // Key map to Event - Keys (per mode) mapped to events
@@ -82,7 +82,7 @@ struct InputConfig {
   gcc_pure
   int LookupMode(const TCHAR *name) const {
     for (unsigned i = 0; i < mode_map_count; ++i)
-      if (_tcscmp(name, mode_map[i]) == 0)
+      if (mode_map[i] == name)
         return i;
 
     return -1;
@@ -92,8 +92,7 @@ struct InputConfig {
     if (mode_map_count >= MAX_MODE)
       return -1;
 
-    CopyString(mode_map[mode_map_count], name, MAX_MODE_STRING);
-
+    mode_map[mode_map_count] = name;
     return mode_map_count++;
   }
 
