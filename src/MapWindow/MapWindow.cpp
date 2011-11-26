@@ -203,14 +203,14 @@ MapWindow::set_terrain(RasterTerrain *_terrain)
   terrain = _terrain;
   terrain_center = GeoPoint(Angle::Zero(),
                             Angle::Zero());
-  m_background.set_terrain(_terrain);
+  m_background.SetTerrain(_terrain);
 }
 
 void
 MapWindow::set_weather(RasterWeather *_weather)
 {
   weather = _weather;
-  m_background.set_weather(_weather);
+  m_background.SetWeather(_weather);
 }
 
 void

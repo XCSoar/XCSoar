@@ -43,11 +43,11 @@ BackgroundDrawHelper::BackgroundDrawHelper():
 
 BackgroundDrawHelper::~BackgroundDrawHelper()
 {
-  reset();
+  Reset();
 }
 
 void
-BackgroundDrawHelper::reset()
+BackgroundDrawHelper::Reset()
 {
   delete renderer;
   renderer = NULL;
@@ -55,17 +55,17 @@ BackgroundDrawHelper::reset()
 
 
 void 
-BackgroundDrawHelper::set_terrain(const RasterTerrain *_terrain)
+BackgroundDrawHelper::SetTerrain(const RasterTerrain *_terrain)
 {
   terrain = _terrain;
-  reset();
+  Reset();
 }
 
 void 
-BackgroundDrawHelper::set_weather(const RasterWeather *_weather)
+BackgroundDrawHelper::SetWeather(const RasterWeather *_weather)
 {
   weather = _weather;
-  reset();
+  Reset();
 }
 
 void 
@@ -75,7 +75,7 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
 {
   if (terrain == NULL) {
     // terrain may have been re-set, so may need new renderer
-    reset();
+    Reset();
     canvas.clear_white();
     return;
   }
@@ -101,18 +101,18 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
 }
 
 void
-BackgroundDrawHelper::sun_from_wind(const WindowProjection& projection,
+BackgroundDrawHelper::SetSunFromWind(const WindowProjection& projection,
                                     const SpeedVector& wind)
 {
   // draw sun from constant angle if very low wind speed
   if (wind.norm < fixed_half)
-    set_sun_angle(projection, Angle::Degrees(fixed(-45.0)));
+    SetSunAngle(projection, Angle::Degrees(fixed(-45.0)));
   else
-    set_sun_angle(projection, wind.bearing);
+    SetSunAngle(projection, wind.bearing);
 }
 
 void
-BackgroundDrawHelper::set_sun_angle(const WindowProjection& projection,
+BackgroundDrawHelper::SetSunAngle(const WindowProjection& projection,
                                     const Angle& angle)
 {
   sun_azimuth = angle - projection.GetScreenAngle();
@@ -120,44 +120,43 @@ BackgroundDrawHelper::set_sun_angle(const WindowProjection& projection,
 
 void
 BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas, LabelBlock &block,
-                                     const TCHAR *Buffer, RasterPoint pt)
+                                     const TCHAR *buffer, RasterPoint pt)
 {
-  if (string_is_empty(Buffer))
+  if (string_is_empty(buffer))
     return;
 
-  PixelRect brect;
-  PixelSize tsize = canvas.text_size(Buffer);
+  PixelRect block_rect;
+  PixelSize text_size = canvas.text_size(buffer);
 
   pt.x += 2;
   pt.y += 2;
-  brect.left = pt.x;
-  brect.right = brect.left + tsize.cx;
-  brect.top = pt.y;
-  brect.bottom = brect.top + tsize.cy;
+  block_rect.left = pt.x;
+  block_rect.right = block_rect.left + text_size.cx;
+  block_rect.top = pt.y;
+  block_rect.bottom = block_rect.top + text_size.cy;
 
-  if (!block.check(brect))
+  if (!block.check(block_rect))
     return;
 
-  canvas.text(pt.x, pt.y, Buffer);
+  canvas.text(pt.x, pt.y, buffer);
 }
 
 bool
 BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas, 
                                       LabelBlock& block)
 {
-  if (weather == NULL || weather->GetParameter() == 0 ||
-      renderer == NULL)
+  if (weather == NULL || weather->GetParameter() == 0 || renderer == NULL)
     return false;
 
   canvas.select(Fonts::Title);
   canvas.set_text_color(COLOR_BLACK);
   canvas.background_transparent();
 
-  TCHAR Buffer[20];
-  weather->ValueToText(Buffer, renderer->spot_max_val);
-  DrawSpotHeight(canvas, block, Buffer, renderer->spot_max_pt);
+  TCHAR buffer[20];
+  weather->ValueToText(buffer, renderer->spot_max_val);
+  DrawSpotHeight(canvas, block, buffer, renderer->spot_max_pt);
 
-  weather->ValueToText(Buffer, renderer->spot_min_val);
-  DrawSpotHeight(canvas, block, Buffer, renderer->spot_min_pt);
+  weather->ValueToText(buffer, renderer->spot_min_val);
+  DrawSpotHeight(canvas, block, buffer, renderer->spot_min_pt);
   return true;
 }

@@ -41,7 +41,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
           const RasterTerrain *terrain)
 {
   BackgroundDrawHelper background;
-  background.set_terrain(terrain);
+  background.SetTerrain(terrain);
   background.Draw(canvas, projection, settings_map.terrain);
 
   OZRenderer ozv(task_look, airspace_look, settings_map.airspace);

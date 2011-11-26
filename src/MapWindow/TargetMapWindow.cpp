@@ -112,9 +112,9 @@ TargetMapWindow::RenderTerrain(Canvas &canvas)
 {
   if (SettingsMap().terrain.slope_shading == sstWind &&
       Calculated().wind_available)
-    background.sun_from_wind(projection, Calculated().wind);
+    background.SetSunFromWind(projection, Calculated().wind);
   else
-    background.set_sun_angle(projection,
+    background.SetSunAngle(projection,
                              (Basic().location_available &&
                               SettingsMap().terrain.slope_shading == sstSun) ?
                              Calculated().sun_azimuth :
@@ -250,7 +250,7 @@ TargetMapWindow::on_paint(Canvas &canvas)
 void
 TargetMapWindow::SetTerrain(RasterTerrain *terrain)
 {
-  background.set_terrain(terrain);
+  background.SetTerrain(terrain);
 }
 
 void

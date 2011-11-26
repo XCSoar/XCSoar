@@ -59,13 +59,11 @@ public:
 
   bool DrawSpotHeights(Canvas& canvas, LabelBlock& block);
 
-  void sun_from_wind(const WindowProjection& proj,
-                     const SpeedVector& wind);
-  void set_sun_angle(const WindowProjection& proj,
-                     const Angle &angle);
-  void reset();
-  void set_terrain(const RasterTerrain *terrain);
-  void set_weather(const RasterWeather *weather);
+  void SetSunFromWind(const WindowProjection& proj, const SpeedVector& wind);
+  void SetSunAngle(const WindowProjection& proj, const Angle &angle);
+  void Reset();
+  void SetTerrain(const RasterTerrain *terrain);
+  void SetWeather(const RasterWeather *weather);
 
 private:
   static void DrawSpotHeight(Canvas &canvas,  LabelBlock &block,
