@@ -81,6 +81,7 @@ int main(int argc, char **argv)
   }
 
   InputConfig config;
+  config.SetDefaults();
   ParseInputFile(config, reader);
 
   for (unsigned mode = 0; mode < config.mode_map_count; ++mode) {
