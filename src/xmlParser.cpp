@@ -1347,37 +1347,18 @@ XMLNode::XMLNode(const XMLNode &A)
 }
 
 const XMLNode *
-XMLNode::getChildNode(const TCHAR *name, unsigned *j) const
+XMLNode::getChildNode(const TCHAR *name) const
 {
   if (!d)
     return NULL;
 
-  unsigned i = 0, n = d->pChild.size();
-  if (j)
-    i = *j;
-  for (; i < n; i++) {
-    const XMLNode *pc = &d->pChild[i];
-    if (_tcsicmp(pc->d->lpszName, name) == 0) {
-      if (j)
-        *j = i + 1;
-      return pc;
-    }
+  for (auto i = d->begin(), end = d->end(); i != end; ++i) {
+    const XMLNode &node = *i;
+    if (_tcsicmp(node.d->lpszName, name) == 0)
+      return &node;
   }
 
   return NULL;
-}
-
-const XMLNode *
-XMLNode::getChildNode(const TCHAR *name, unsigned j) const
-{
-  if (!d)
-    return NULL;
-
-  unsigned i = 0;
-  while (j-- > 0)
-    getChildNode(name, &i);
-
-  return getChildNode(name, &i);
 }
 
 const TCHAR *

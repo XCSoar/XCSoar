@@ -181,13 +181,7 @@ public:
    * if failing)
    */
   gcc_pure
-  const XMLNode *getChildNode(const TCHAR *name, unsigned i) const;
-
-  /**
-   * @return next child node with specific name (return an empty node
-   * if failing)
-   */
-  const XMLNode *getChildNode(const TCHAR *name, unsigned *i=NULL) const;
+  const XMLNode *getChildNode(const TCHAR *name) const;
 
   /**
    * @return ith attribute content with specific name (return a NULL

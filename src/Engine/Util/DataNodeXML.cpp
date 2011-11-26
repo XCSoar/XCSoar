@@ -78,7 +78,7 @@ DataNodeXML::add_child(const TCHAR *name)
 DataNode *
 DataNodeXML::GetChildNamed(const TCHAR *name) const
 {
-  const XMLNode *child = m_xml_node->getChildNode(name, 0u);
+  const XMLNode *child = m_xml_node->getChildNode(name);
   if (child == NULL)
     return NULL;
 

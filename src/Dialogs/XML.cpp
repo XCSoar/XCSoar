@@ -702,7 +702,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     property->SetHelpText(StringToStringDflt(node.getAttribute(_T("Help")), _T("")));
 
     // If the control has (at least) one DataField child control
-    const XMLNode *data_field_node = node.getChildNode(_T("DataField"), 0u);
+    const XMLNode *data_field_node = node.getChildNode(_T("DataField"));
     if (data_field_node != NULL) {
       // -> Load the first DataField control
       DataField *data_field =
