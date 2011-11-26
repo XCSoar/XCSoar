@@ -26,6 +26,13 @@ Copyright_License {
 #include <assert.h>
 
 void
+Menu::Clear()
+{
+  for (auto i = items, end = items + MAX_ITEMS; i != end; ++i)
+    i->Clear();
+}
+
+void
 Menu::Add(const TCHAR *label, int location, int event_id)
 {
   assert(location >= 0);

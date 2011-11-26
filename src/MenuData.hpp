@@ -37,8 +37,10 @@ public:
   const TCHAR *label;
   int event;
 
-  gcc_constexpr_ctor
-  MenuItem():label(NULL), event(-1) {}
+  void Clear() {
+    label = NULL;
+    event = -1;
+  }
 
   gcc_constexpr_method
   bool defined() const {
@@ -68,6 +70,8 @@ protected:
   MenuItem items[MAX_ITEMS];
 
 public:
+  void Clear();
+
   const MenuItem &operator[](unsigned i) const {
     return items[i];
   }

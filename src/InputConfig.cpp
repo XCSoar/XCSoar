@@ -41,4 +41,7 @@ InputConfig::SetDefaults()
   /* This is initialized with 1 because event 0 is reserved - it
      stands for "no event" */
   events.resize(1);
+
+  for (auto i = menus, end = menus + MAX_MODE; i != end; ++i)
+    i->Clear();
 }
