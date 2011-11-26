@@ -47,11 +47,6 @@ GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task,
 }
 
 void
-GlideComputerTask::Initialise()
-{
-}
-
-void
 GlideComputerTask::ResetFlight(const bool full)
 {
   m_task.Reset();

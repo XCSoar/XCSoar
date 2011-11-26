@@ -66,8 +66,6 @@ public:
   }
 
 protected:
-
-  void Initialise();
   void ProcessBasicTask(const MoreData &basic, const MoreData &last_basic,
                         DerivedInfo &calculated,
                         const DerivedInfo &last_calculated,
