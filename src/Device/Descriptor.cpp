@@ -62,11 +62,6 @@ DeviceDescriptor::DeviceDescriptor()
 {
 }
 
-DeviceDescriptor::~DeviceDescriptor()
-{
-  assert(!busy);
-}
-
 bool
 DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver,
                        OperationEnvironment &env)

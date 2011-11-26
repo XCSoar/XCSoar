@@ -105,7 +105,9 @@ class DeviceDescriptor : public PortLineHandler
 
 public:
   DeviceDescriptor();
-  ~DeviceDescriptor();
+  ~DeviceDescriptor() {
+    assert(!IsBusy());
+  }
 
   unsigned GetIndex() const {
     return index;
