@@ -565,7 +565,7 @@ XMLNode::addToOrder(unsigned index, unsigned type)
   d->pOrder.push_back((index << 2) + type);
 }
 
-XMLNode
+XMLNode &
 XMLNode::AddChild(const TCHAR *lpszName, bool isDeclaration)
 {
   assert(lpszName != NULL);
