@@ -1041,7 +1041,7 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
   error = xml.error;
 
   // If the document node does not have childnodes
-  const XMLNode *child = xnode.getChildNode(0u);
+  const XMLNode *child = xnode.GetFirstChild();
   if (child == NULL) {
     // If XMLResults object exists
     if (pResults) {
@@ -1062,7 +1062,7 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
   // -> try to take the first childnode again
   if (xnode.isDeclaration()) {
     // If the declaration does not have childnodes
-    child = xnode.getChildNode(0u);
+    child = xnode.GetFirstChild();
     if (child == NULL) {
       // If XMLResults object exists
       if (pResults) {
@@ -1373,15 +1373,4 @@ XMLNode::getAttribute(const TCHAR *lpszAttrib) const
       return i->lpszValue;
 
   return NULL;
-}
-
-const XMLNode *
-XMLNode::getChildNode(unsigned i) const
-{
-  if (!d)
-    return NULL;
-  if (i >= d->pChild.size())
-    return NULL;
-
-  return &d->pChild[i];
 }

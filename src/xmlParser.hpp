@@ -172,9 +172,15 @@ public:
     return d->end();
   }
 
-  /** @return ith child node */
+  /**
+   * @return the first child node, or NULL if there is none
+   */
   gcc_pure
-  const XMLNode *getChildNode(unsigned i) const;
+  const XMLNode *GetFirstChild() const {
+    return d != NULL && !d->pChild.empty()
+      ? &d->pChild.front()
+      : NULL;
+  }
 
   /**
    * @return ith child node with specific name (return an empty node
