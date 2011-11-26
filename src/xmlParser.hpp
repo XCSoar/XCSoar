@@ -29,6 +29,7 @@
 #define __INCLUDE_XML_NODE__
 
 #include "Util/NonCopyable.hpp"
+#include "Util/tstring.hpp"
 #include "Compiler.h"
 
 #include <vector>
@@ -52,12 +53,6 @@ enum XMLError {
   eXMLErrorInvalidTag,
   eXMLErrorNoElements,
   eXMLErrorFileNotFound
-};
-
-/** Enumeration used to manage type of data. */
-enum XMLElementType {
-  eNodeChild = 0,
-  eNodeText = 2,
 };
 
 /** Structure used to obtain error details if the parse fails. */
@@ -91,14 +86,11 @@ protected:
     /** Array of child nodes */
     std::vector<XMLNode> pChild;
 
-    /** Array of text fields */
-    std::vector<const TCHAR *> pText;
+    /** A concatentation of all text nodes */
+    tstring text;
 
     /** Array of attributes */
     std::forward_list<XMLAttribute> pAttribute;
-
-    /** order in which the child_nodes,text_fields,clear_fields and */
-    std::vector<unsigned> pOrder;
 
     unsigned ref_count;
 
@@ -112,11 +104,7 @@ protected:
     void Unref();
 
     bool HasChildren() const {
-      return !pChild.empty() || !pText.empty();
-    }
-
-    unsigned Size() const {
-      return pChild.size() + pText.size();
+      return !pChild.empty() || !text.empty();
     }
 
     typedef std::vector<XMLNode>::const_iterator const_iterator;
@@ -217,16 +205,6 @@ public:
    */
   void serialise(TextWriter &writer, int nFormat) const;
 
-  /**
-   * nbr of different contents for current node
-   */
-  gcc_pure
-  unsigned nElement() const {
-    assert(d != NULL);
-
-    return d->Size();
-  }
-
   gcc_pure
   bool isDeclaration() const {
     assert(d != NULL);
@@ -279,10 +257,11 @@ public:
    */
   void AddText(const TCHAR *lpszValue);
 
+  void AddText(const TCHAR *text, size_t length);
+
 private:
   // these are functions used internally (don't bother about them):
   bool ParseXMLElement(XML *pXML);
-  void addToOrder(unsigned index, unsigned type);
 
   /**
    * Creates an user friendly XML string from a given element with
@@ -293,13 +272,6 @@ private:
    */
   static void serialiseR(const XMLNodeData *pEntry, TextWriter &writer,
                          int nFormat);
-  static const void *enumContent(const XMLNodeData *pEntry, unsigned i,
-                                 XMLElementType *nodeType);
-
-  gcc_pure
-  static unsigned nElement(const XMLNodeData *pEntry) {
-    return pEntry->Size();
-  }
 };
 
 #endif

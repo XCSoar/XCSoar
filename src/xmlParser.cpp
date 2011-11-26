@@ -115,9 +115,6 @@ XMLNode::XMLNodeData::~XMLNodeData()
 {
   assert(ref_count == 0);
 
-  for (auto i = pText.begin(), end = pText.end(); i != end; ++i)
-    free((void*)*i);
-
   for (auto i = pAttribute.begin(), end = pAttribute.end(); i != end; ++i) {
     XMLAttribute &attribute = *i;
     free((void*)attribute.lpszName);
@@ -559,18 +556,11 @@ XMLNode::XMLNode(const TCHAR *lpszName, bool isDeclaration)
   assert(d);
 }
 
-void
-XMLNode::addToOrder(unsigned index, unsigned type)
-{
-  d->pOrder.push_back((index << 2) + type);
-}
-
 XMLNode &
 XMLNode::AddChild(const TCHAR *lpszName, bool isDeclaration)
 {
   assert(lpszName != NULL);
 
-  addToOrder(d->pChild.size(), eNodeChild);
   d->pChild.push_back(XMLNode(lpszName, isDeclaration));
   return d->pChild.back();
 }
@@ -588,8 +578,15 @@ XMLNode::AddText(const TCHAR *lpszValue)
 {
   assert(lpszValue != NULL);
 
-  addToOrder(d->pText.size(), eNodeText);
-  d->pText.push_back(lpszValue);
+  d->text.append(lpszValue);
+}
+
+void
+XMLNode::AddText(const TCHAR *text, size_t length)
+{
+  assert(text != NULL);
+
+  d->text.append(text, length);
 }
 
 /**
@@ -697,7 +694,7 @@ XMLNode::ParseXMLElement(XML *pXML)
         if (lpszText) {
           cbTemp = token.pStr - lpszText;
           FindEndOfText(lpszText, &cbTemp);
-          AddText(stringDup(lpszText, cbTemp));
+          AddText(lpszText, cbTemp);
           lpszText = NULL;
         }
 
@@ -798,6 +795,7 @@ XMLNode::ParseXMLElement(XML *pXML)
           }
 
           AddText(text);
+          free(text);
           lpszText = NULL;
         }
 
@@ -1204,24 +1202,6 @@ XMLNode::openFileHelper(const char *lpszXML)
   return xnode;
 }
 
-const void *
-XMLNode::enumContent(const XMLNodeData *pEntry, unsigned i,
-                     XMLElementType *nodeType)
-{
-  XMLElementType j = (XMLElementType)(pEntry->pOrder[i] & 3);
-  *nodeType = j;
-  i = (pEntry->pOrder[i]) >> 2;
-  switch (j) {
-  case eNodeChild:
-    return pEntry->pChild[i].d;
-  case eNodeText:
-    return (void*)(pEntry->pText[i]);
-  }
-
-  assert(false);
-  return NULL;
-}
-
 static void
 write_indent(TextWriter &writer, unsigned n)
 {
@@ -1233,10 +1213,8 @@ void
 XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
 {
   unsigned cb;
-  unsigned nIndex;
   int nChildFormat = -1;
   bool bHasChildren = false;
-  unsigned i;
 
   assert(pEntry);
 
@@ -1289,33 +1267,18 @@ XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
       nChildFormat = nFormat;
   }
 
-  // Enumerate through remaining children
-  nIndex = nElement(pEntry);
-  XMLElementType nodeType;
-  const void *pChild;
-  for (i = 0; i < nIndex; i++) {
-    pChild = enumContent(pEntry, i, &nodeType);
-    switch (nodeType) {
-    // Text nodes
-    case eNodeText:
-      // "Text"
-      if (!string_is_empty((const TCHAR *)pChild)) {
-        if (nFormat != -1) {
-          write_indent(writer, nFormat + 1);
-          write_xml_string(writer, (const TCHAR *)pChild);
-          writer.newline();
-        } else {
-          write_xml_string(writer, (const TCHAR *)pChild);
-        }
-      }
-      break;
+  /* write the child elements */
+  for (auto i = pEntry->begin(), end = pEntry->end(); i != end; ++i)
+    serialiseR(i->d, writer, nChildFormat);
 
-      // Element nodes
-    case eNodeChild:
-
-      // Recursively add child nodes
-      serialiseR((const XMLNodeData*)pChild, writer, nChildFormat);
-      break;
+  /* write the text */
+  if (!pEntry->text.empty()) {
+    if (nFormat != -1) {
+      write_indent(writer, nFormat + 1);
+      write_xml_string(writer, pEntry->text.c_str());
+      writer.newline();
+    } else {
+      write_xml_string(writer, pEntry->text.c_str());
     }
   }
 
