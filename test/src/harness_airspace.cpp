@@ -374,8 +374,8 @@ print_warnings(const AirspaceWarningManager &airspace_warnings)
                                       AirspaceWarning::WARNING_FILTER);
   AirspaceWarningPrint visitor_task("results/res-as-warnings-task.txt",
                                     AirspaceWarning::WARNING_TASK);
-  airspace_warnings.visit_warnings(visitor_inside);
-  airspace_warnings.visit_warnings(visitor_glide);
-  airspace_warnings.visit_warnings(visitor_filter);
-  airspace_warnings.visit_warnings(visitor_task);
+  airspace_warnings.VisitWarnings(visitor_inside);
+  airspace_warnings.VisitWarnings(visitor_glide);
+  airspace_warnings.VisitWarnings(visitor_filter);
+  airspace_warnings.VisitWarnings(visitor_task);
 }

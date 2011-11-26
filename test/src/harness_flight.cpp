@@ -216,7 +216,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
   AirspaceWarningManager *airspace_warnings;
   if (airspaces) {
     airspace_warnings = new AirspaceWarningManager(*airspaces, task_manager);
-    airspace_warnings->reset(aircraft.GetState());
+    airspace_warnings->Reset(aircraft.GetState());
   } else {
     airspace_warnings = NULL;
   }
@@ -261,7 +261,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
     }
     if (airspace_warnings) {
       if (verbose > 1) {
-        bool warnings_updated = airspace_warnings->update(aircraft.GetState(),
+        bool warnings_updated = airspace_warnings->Update(aircraft.GetState(),
                                                           false, 1);
         if (warnings_updated) {
           printf("# airspace warnings updated, size %d\n",

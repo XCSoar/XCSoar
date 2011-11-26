@@ -34,14 +34,14 @@ void
 ProtectedAirspaceWarningManager::reset(const AircraftState &as)
 {
   ExclusiveLease lease(*this);
-  lease->reset(as);
+  lease->Reset(as);
 }
 
 void
 ProtectedAirspaceWarningManager::clear_warnings()
 {
   ExclusiveLease lease(*this);
-  lease->acknowledge_all();
+  lease->AcknowledgeAll();
 }
 
 bool
@@ -55,7 +55,7 @@ bool
 ProtectedAirspaceWarningManager::get_ack_day(const AbstractAirspace& airspace)
 {
   ExclusiveLease lease(*this);
-  return lease->get_ack_day(airspace);
+  return lease->GetAckDay(airspace);
 }
 
 void
@@ -63,7 +63,7 @@ ProtectedAirspaceWarningManager::acknowledge_day(const AbstractAirspace& airspac
                                                  const bool set)
 {
   ExclusiveLease lease(*this);
-  lease->acknowledge_day(airspace, set);
+  lease->AcknowledgeDay(airspace, set);
 }
 
 void
@@ -71,7 +71,7 @@ ProtectedAirspaceWarningManager::acknowledge_warning(const AbstractAirspace& air
                                                      const bool set)
 {
   ExclusiveLease lease(*this);
-  lease->acknowledge_warning(airspace, set);
+  lease->AcknowledgeWarning(airspace, set);
 }
 
 void
@@ -79,14 +79,14 @@ ProtectedAirspaceWarningManager::acknowledge_inside(const AbstractAirspace& airs
                                                     const bool set)
 {
   ExclusiveLease lease(*this);
-  lease->acknowledge_inside(airspace, set);
+  lease->AcknowledgeInside(airspace, set);
 }
 
 void
 ProtectedAirspaceWarningManager::reset_warning(const AircraftState &as)
 {
   ExclusiveLease lease(*this);
-  lease->reset(as);
+  lease->Reset(as);
 }
 
 bool
@@ -95,5 +95,5 @@ ProtectedAirspaceWarningManager::update_warning(const AircraftState &as,
                                                 const unsigned dt)
 {
   ExclusiveLease lease(*this);
-  return lease->update(as, circling, dt);
+  return lease->Update(as, circling, dt);
 }

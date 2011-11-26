@@ -190,7 +190,7 @@ dlgAirspaceShowModal(bool coloredit)
   if (changed) {
     if (!colormode && airspace_warnings != NULL) {
       ProtectedAirspaceWarningManager::ExclusiveLease awm(*airspace_warnings);
-      awm->set_config(CommonInterface::SetSettingsComputer().airspace.warnings);
+      awm->SetConfig(CommonInterface::SetSettingsComputer().airspace.warnings);
     }
 
     Profile::Save();

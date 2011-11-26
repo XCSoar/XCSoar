@@ -107,7 +107,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   AirspaceInterceptSolution ais;
   for (unsigned i = 0; i < 5 && it != airspace_database.end(); ++i, ++it)
-    airspace_warning.get_warning(*it->get_airspace())
+    airspace_warning.GetWarning(*it->get_airspace())
       .update_solution((AirspaceWarning::State)i, ais);
 
   SingleWindow main_window;

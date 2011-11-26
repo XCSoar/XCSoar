@@ -403,8 +403,8 @@ XCSoarInterface::Startup()
   const AircraftState aircraft_state =
     ToAircraftState(device_blackboard->Basic(),
                     device_blackboard->Calculated());
-  airspace_warning->reset(aircraft_state);
-  airspace_warning->set_config(CommonInterface::SettingsComputer().airspace.warnings);
+  airspace_warning->Reset(aircraft_state);
+  airspace_warning->SetConfig(CommonInterface::SettingsComputer().airspace.warnings);
 
   // Read the FLARM details file
   FlarmDetails::Load();

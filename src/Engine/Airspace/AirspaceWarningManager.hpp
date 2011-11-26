@@ -50,24 +50,24 @@ class AirspaceWarningManager:
 {
   AirspaceWarningConfig config;
 
-  const Airspaces& m_airspaces;
+  const Airspaces &airspaces;
 
-  fixed m_prediction_time_glide;
-  fixed m_prediction_time_filter;
+  fixed prediction_time_glide;
+  fixed prediction_time_filter;
 
-  AirspaceAircraftPerformanceGlide m_perf_glide;
-  AircraftStateFilter m_cruise_filter;
-  AircraftStateFilter m_circling_filter;
-  AirspaceAircraftPerformanceStateFilter m_perf_cruise;  
-  AirspaceAircraftPerformanceStateFilter m_perf_circling;  
+  AirspaceAircraftPerformanceGlide perf_glide;
+  AircraftStateFilter cruise_filter;
+  AircraftStateFilter circling_filter;
+  AirspaceAircraftPerformanceStateFilter perf_cruise;  
+  AirspaceAircraftPerformanceStateFilter perf_circling;  
 
-  const TaskManager& m_task;
+  const TaskManager &task;
 
-  const GlidePolar& m_glide_polar;
+  const GlidePolar &glide_polar;
 
   typedef std::list<AirspaceWarning> AirspaceWarningList;
 
-  AirspaceWarningList m_warnings;
+  AirspaceWarningList warnings;
 
 public:
   typedef AirspaceWarningList::const_iterator const_iterator;
@@ -82,23 +82,23 @@ public:
    *
    * @return Initialised object
    */
-  AirspaceWarningManager(const Airspaces& airspaces,
-                         const TaskManager &task_manager,
-                         const fixed& prediction_time_glide=fixed(15.0),
-                         const fixed& prediction_time_filter=fixed(60.0));
+  AirspaceWarningManager(const Airspaces &_airspaces,
+                         const TaskManager &_task,
+                         const fixed _prediction_time_glide = fixed(15.0),
+                         const fixed _prediction_time_filter = fixed(60.0));
 
-  const AirspaceWarningConfig &get_config() const {
+  const AirspaceWarningConfig &GetConfig() const {
     return config;
   }
 
-  void set_config(const AirspaceWarningConfig &_config);
+  void SetConfig(const AirspaceWarningConfig &_config);
 
 /** 
  * Reset warning list and filter (as in new flight)
  * 
  * @param state State to reset filter to
  */
-  void reset(const AircraftState& state);
+  void Reset(const AircraftState& state);
 
 /** 
  * Perform predictions and interior search to update warning list If
@@ -112,21 +112,21 @@ public:
  * 
  * @return True if warnings changed
  */
-  bool update(const AircraftState &state, const bool circling, const unsigned dt);
+  bool Update(const AircraftState &state, const bool circling, const unsigned dt);
 
 /** 
  * Adjust time of glide predictor
  * 
  * @param the_time New time (s)
  */
-  void set_prediction_time_glide(const fixed& the_time);
+  void SetPredictionTimeGlide(const fixed& the_time);
 
 /** 
  * Adjust time of state predictor.  Also updates filter time constant
  * 
  * @param the_time New time (s)
  */
-  void set_prediction_time_filter(const fixed& the_time);
+  void SetPredictionTimeFilter(const fixed& the_time);
 
 /** 
  * Find corresponding airspace warning item in store for an airspace
@@ -135,7 +135,7 @@ public:
  * 
  * @return Reference to airspace warning item
  */
-  AirspaceWarning& get_warning(const AbstractAirspace& airspace);
+  AirspaceWarning& GetWarning(const AbstractAirspace& airspace);
 
 /** 
  * Find corresponding airspace warning item in store by airspace 
@@ -144,7 +144,7 @@ public:
  * 
  * @return Pointer to airspace warning item (or NULL if not found)
  */
-  AirspaceWarning* get_warning_ptr(const AbstractAirspace& airspace);
+  AirspaceWarning* GetWarningPtr(const AbstractAirspace& airspace);
 
 /** 
  * Test whether warning list is empty
@@ -153,20 +153,20 @@ public:
  */
   gcc_pure
   bool empty() const {
-    return m_warnings.empty();
+    return warnings.empty();
   }
 
 /** 
  * Clear all warnings
  */
   void clear() {
-    m_warnings.clear();
+    warnings.clear();
   }
 
 /**
  * Acknowledge all active warnings
  */
-  void acknowledge_all();
+  void AcknowledgeAll();
 
 /** 
  * Return size of warning list
@@ -174,17 +174,17 @@ public:
  * @return Number of items in warning list
  */
   size_t size() const {
-    return m_warnings.size();
+    return warnings.size();
   }
 
   gcc_pure
   const_iterator begin() const {
-    return m_warnings.begin();
+    return warnings.begin();
   }
 
   gcc_pure
   const_iterator end() const {
-    return m_warnings.end();
+    return warnings.end();
   }
 
 /** 
@@ -192,7 +192,7 @@ public:
  * 
  * @param visitor Visitor for warnings
  */
-  void visit_warnings(AirspaceWarningVisitor& visitor) const;
+  void VisitWarnings(AirspaceWarningVisitor& visitor) const;
 
 /** 
  * Acknowledge an airspace warning
@@ -200,8 +200,8 @@ public:
  * @param airspace The airspace subject
  * @param set Whether to set or cancel acknowledgement
  */
-  void acknowledge_warning(const AbstractAirspace& airspace,
-                           const bool set=true);
+  void AcknowledgeWarning(const AbstractAirspace& airspace,
+                          const bool set = true);
 
 /** 
  * Acknowledge an airspace inside
@@ -209,8 +209,8 @@ public:
  * @param airspace The airspace subject
  * @param set Whether to set or cancel acknowledgement
  */
-  void acknowledge_inside(const AbstractAirspace& airspace,
-                          const bool set=true);
+  void AcknowledgeInside(const AbstractAirspace& airspace,
+                         const bool set = true);
 
 /** 
  * Acknowledge all warnings for airspace for whole day
@@ -218,27 +218,27 @@ public:
  * @param airspace The airspace subject
  * @param set Whether to set or cancel acknowledgement
  */
-  void acknowledge_day(const AbstractAirspace& airspace,
-                       const bool set=true);
+  void AcknowledgeDay(const AbstractAirspace& airspace,
+                      const bool set = true);
 
   /**
    * Returns whether the given airspace is acknowledged for the whole day
    *
    * @param airspace The airspace subject
    */
-  bool get_ack_day(const AbstractAirspace& airspace);
+  bool GetAckDay(const AbstractAirspace& airspace);
 
 private:
-  bool update_task(const AircraftState& state);
-  bool update_filter(const AircraftState& state, const bool circling);
-  bool update_glide(const AircraftState& state);
-  bool update_inside(const AircraftState& state);
+  bool UpdateTask(const AircraftState& state);
+  bool UpdateFilter(const AircraftState& state, const bool circling);
+  bool UpdateGlide(const AircraftState& state);
+  bool UpdateInside(const AircraftState& state);
 
-  bool update_predicted(const AircraftState& state, 
-                        const GeoPoint &location_predicted,
-                        const AirspaceAircraftPerformance &perf,
-                        const AirspaceWarning::State warning_state,
-                        const fixed max_time);
+  bool UpdatePredicted(const AircraftState& state, 
+                       const GeoPoint &location_predicted,
+                       const AirspaceAircraftPerformance &perf,
+                       const AirspaceWarning::State warning_state,
+                       const fixed max_time);
 };
 
 #endif

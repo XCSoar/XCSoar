@@ -104,7 +104,7 @@ UpdateButtons()
 
   {
     ProtectedAirspaceWarningManager::ExclusiveLease lease(*airspace_warnings);
-    const AirspaceWarning &warning = lease->get_warning(*airspace);
+    const AirspaceWarning &warning = lease->GetWarning(*airspace);
     ack_expired = warning.get_ack_expired();
     ack_day = warning.get_ack_day();
     inside = warning.get_warning_state() == AirspaceWarning::WARNING_INSIDE;
@@ -231,7 +231,7 @@ Enable()
 
   {
     ProtectedAirspaceWarningManager::ExclusiveLease lease(*airspace_warnings);
-    AirspaceWarning *w = lease->get_warning_ptr(*airspace);
+    AirspaceWarning *w = lease->GetWarningPtr(*airspace);
     if (w == NULL)
       return;
 

@@ -31,72 +31,72 @@
 
 #define CRUISE_FILTER_FACT fixed_half
 
-AirspaceWarningManager::AirspaceWarningManager(const Airspaces& airspaces,
-                                               const TaskManager &task_manager,
-                                               const fixed& prediction_time_glide,
-                                               const fixed& prediction_time_filter):
-  m_airspaces(airspaces),
-  m_prediction_time_glide(prediction_time_glide),
-  m_prediction_time_filter(prediction_time_filter),
-  m_perf_glide(task_manager.GetGlidePolar()),
-  m_cruise_filter(prediction_time_filter*CRUISE_FILTER_FACT),
-  m_circling_filter(prediction_time_filter),
-  m_perf_cruise(m_cruise_filter),
-  m_perf_circling(m_circling_filter),
-  m_task(task_manager),
-  m_glide_polar(task_manager.GetGlidePolar())
+AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces,
+                                               const TaskManager &_task,
+                                               fixed prediction_time_glide,
+                                               fixed prediction_time_filter):
+  airspaces(_airspaces),
+  prediction_time_glide(prediction_time_glide),
+  prediction_time_filter(prediction_time_filter),
+  perf_glide(_task.GetGlidePolar()),
+  cruise_filter(prediction_time_filter*CRUISE_FILTER_FACT),
+  circling_filter(prediction_time_filter),
+  perf_cruise(cruise_filter),
+  perf_circling(circling_filter),
+  task(_task),
+  glide_polar(_task.GetGlidePolar())
 {
 }
 
 void
-AirspaceWarningManager::set_config(const AirspaceWarningConfig &_config)
+AirspaceWarningManager::SetConfig(const AirspaceWarningConfig &_config)
 {
   config = _config;
 
-  set_prediction_time_glide(fixed(config.WarningTime));
-  set_prediction_time_filter(fixed(config.WarningTime));
+  SetPredictionTimeGlide(fixed(config.WarningTime));
+  SetPredictionTimeFilter(fixed(config.WarningTime));
 }
 
 void
-AirspaceWarningManager::reset(const AircraftState& state)
+AirspaceWarningManager::Reset(const AircraftState& state)
 {
-  m_warnings.clear();
-  m_cruise_filter.Reset(state);
-  m_circling_filter.Reset(state);
+  warnings.clear();
+  cruise_filter.Reset(state);
+  circling_filter.Reset(state);
 }
 
 void 
-AirspaceWarningManager::set_prediction_time_glide(const fixed& the_time)
+AirspaceWarningManager::SetPredictionTimeGlide(const fixed& the_time)
 {
-  m_prediction_time_glide = the_time;
+  prediction_time_glide = the_time;
 }
 
 void 
-AirspaceWarningManager::set_prediction_time_filter(const fixed& the_time)
+AirspaceWarningManager::SetPredictionTimeFilter(const fixed& the_time)
 {
-  m_prediction_time_filter = the_time;
-  m_cruise_filter.Design(max(fixed(10),m_prediction_time_filter*CRUISE_FILTER_FACT));
-  m_circling_filter.Design(max(fixed(10),m_prediction_time_filter));
+  prediction_time_filter = the_time;
+  cruise_filter.Design(max(fixed(10),prediction_time_filter*CRUISE_FILTER_FACT));
+  circling_filter.Design(max(fixed(10),prediction_time_filter));
 }
 
 AirspaceWarning& 
-AirspaceWarningManager::get_warning(const AbstractAirspace& airspace)
+AirspaceWarningManager::GetWarning(const AbstractAirspace& airspace)
 {
-  AirspaceWarning* warning = get_warning_ptr(airspace);
+  AirspaceWarning* warning = GetWarningPtr(airspace);
   if (warning)
     return *warning;
 
   // not found, create new entry
-  m_warnings.push_back(AirspaceWarning(airspace));
-  return m_warnings.back();
+  warnings.push_back(AirspaceWarning(airspace));
+  return warnings.back();
 }
 
 
 AirspaceWarning* 
-AirspaceWarningManager::get_warning_ptr(const AbstractAirspace& airspace) 
+AirspaceWarningManager::GetWarningPtr(const AbstractAirspace& airspace) 
 {
-  for (AirspaceWarningList::iterator it = m_warnings.begin();
-       it != m_warnings.end(); ++it)
+  for (AirspaceWarningList::iterator it = warnings.begin();
+       it != warnings.end(); ++it)
     if (&(it->get_airspace()) == &airspace)
       return &(*it);
 
@@ -104,33 +104,33 @@ AirspaceWarningManager::get_warning_ptr(const AbstractAirspace& airspace)
 }
 
 bool 
-AirspaceWarningManager::update(const AircraftState& state,
+AirspaceWarningManager::Update(const AircraftState& state,
                                const bool circling,
                                const unsigned dt)
 {
   bool changed = false;
 
   // update warning states
-  if (m_airspaces.empty()) {
+  if (airspaces.empty()) {
     // no airspaces, no warnings possible
-    assert(m_warnings.empty());
+    assert(warnings.empty());
     return false;
   }
 
   // save old state
-  for (AirspaceWarningList::iterator it = m_warnings.begin();
-       it != m_warnings.end(); ++it)
+  for (AirspaceWarningList::iterator it = warnings.begin();
+       it != warnings.end(); ++it)
     it->save_state();
 
   // check from strongest to weakest alerts
-  update_inside(state);
-  update_glide(state);
-  update_filter(state, circling);
-  update_task(state);
+  UpdateInside(state);
+  UpdateGlide(state);
+  UpdateFilter(state, circling);
+  UpdateTask(state);
 
   // action changes
-  for (AirspaceWarningList::iterator it = m_warnings.begin();
-       it != m_warnings.end(); ) {
+  for (AirspaceWarningList::iterator it = warnings.begin();
+       it != warnings.end(); ) {
     if (it->warning_live(config.AcknowledgementTime, dt)) {
       if (it->changed_state())
         changed = true;
@@ -140,12 +140,12 @@ AirspaceWarningManager::update(const AircraftState& state,
       if (!it->trivial()) {
         //changed = true; // was downgraded to eliminate
       }
-      it = m_warnings.erase(it);
+      it = warnings.erase(it);
     }
   }
 
   // sort by importance, most severe top
-  m_warnings.sort();
+  warnings.sort();
 
   return changed;
 }
@@ -194,11 +194,11 @@ public:
     if (!airspace.IsActive())
       return; // ignore inactive airspaces completely
 
-    if (!m_warning_manager.get_config().class_enabled(airspace.GetType()) ||
+    if (!m_warning_manager.GetConfig().class_enabled(airspace.GetType()) ||
         exclude_alt(airspace))
       return;
 
-    AirspaceWarning& warning = m_warning_manager.get_warning(airspace);
+    AirspaceWarning& warning = m_warning_manager.GetWarning(airspace);
     if (warning.state_accepted(m_warning_state)) {
 
       AirspaceInterceptSolution solution;
@@ -261,7 +261,7 @@ private:
 
 
 bool 
-AirspaceWarningManager::update_predicted(const AircraftState& state, 
+AirspaceWarningManager::UpdatePredicted(const AircraftState& state, 
                                          const GeoPoint &location_predicted,
                                          const AirspaceAircraftPerformance &perf,
                                          const AirspaceWarning::State warning_state,
@@ -289,79 +289,79 @@ AirspaceWarningManager::update_predicted(const AircraftState& state,
                                              ceiling);
 
   GeoVector vector_predicted(state.location, location_predicted);
-  m_airspaces.visit_intersecting(state.location, vector_predicted, visitor);
+  airspaces.visit_intersecting(state.location, vector_predicted, visitor);
 
   visitor.set_mode(true);
-  m_airspaces.visit_inside(state.location, visitor);
+  airspaces.visit_inside(state.location, visitor);
 
   return visitor.found();
 }
 
 
 bool 
-AirspaceWarningManager::update_task(const AircraftState& state)
+AirspaceWarningManager::UpdateTask(const AircraftState& state)
 {
-  if (!m_task.GetActiveTaskPoint()) {
+  if (!task.GetActiveTaskPoint()) {
     // empty task, nothing to do
     return false;
   }
 
-  const GlideResult &solution = m_task.GetStats().current_leg.solution_remaining;
+  const GlideResult &solution = task.GetStats().current_leg.solution_remaining;
   if (!solution.IsOk() || !solution.IsAchievable())
     /* glide solver failed, cannot continue */
     return false;
 
-  AirspaceAircraftPerformanceTask perf_task(state, m_glide_polar, m_task);
-  const GeoPoint location_tp = m_task.GetActiveTaskPoint()->GetLocationRemaining();
-  const fixed time_remaining = m_task.GetStats().current_leg.solution_remaining.time_elapsed; 
+  AirspaceAircraftPerformanceTask perf_task(state, glide_polar, task);
+  const GeoPoint location_tp = task.GetActiveTaskPoint()->GetLocationRemaining();
+  const fixed time_remaining = task.GetStats().current_leg.solution_remaining.time_elapsed; 
 
-  return update_predicted(state, location_tp, perf_task,
+  return UpdatePredicted(state, location_tp, perf_task,
                           AirspaceWarning::WARNING_TASK, time_remaining);
 }
 
 
 bool 
-AirspaceWarningManager::update_filter(const AircraftState& state, const bool circling)
+AirspaceWarningManager::UpdateFilter(const AircraftState& state, const bool circling)
 {
   // update both filters even though we are using only one
-  m_cruise_filter.Update(state);
-  m_circling_filter.Update(state);
+  cruise_filter.Update(state);
+  circling_filter.Update(state);
 
   const GeoPoint location_predicted = circling?
-    m_circling_filter.GetPredictedState(m_prediction_time_filter).location:
-    m_cruise_filter.GetPredictedState(m_prediction_time_filter).location;
+    circling_filter.GetPredictedState(prediction_time_filter).location:
+    cruise_filter.GetPredictedState(prediction_time_filter).location;
 
   if (circling) 
-    return update_predicted(state, location_predicted,
-                            m_perf_circling,
-                            AirspaceWarning::WARNING_FILTER, m_prediction_time_filter);
+    return UpdatePredicted(state, location_predicted,
+                            perf_circling,
+                            AirspaceWarning::WARNING_FILTER, prediction_time_filter);
   else
-    return update_predicted(state, location_predicted,
-                            m_perf_cruise,
-                            AirspaceWarning::WARNING_FILTER, m_prediction_time_filter);
+    return UpdatePredicted(state, location_predicted,
+                            perf_cruise,
+                            AirspaceWarning::WARNING_FILTER, prediction_time_filter);
 }
 
 
 bool 
-AirspaceWarningManager::update_glide(const AircraftState& state)
+AirspaceWarningManager::UpdateGlide(const AircraftState& state)
 {
   const GeoPoint location_predicted = 
-    state.GetPredictedState(m_prediction_time_glide).location;
+    state.GetPredictedState(prediction_time_glide).location;
 
-  return update_predicted(state, location_predicted,
-                          m_perf_glide,
-                          AirspaceWarning::WARNING_GLIDE, m_prediction_time_glide);
+  return UpdatePredicted(state, location_predicted,
+                          perf_glide,
+                          AirspaceWarning::WARNING_GLIDE, prediction_time_glide);
 }
 
 
 bool 
-AirspaceWarningManager::update_inside(const AircraftState& state)
+AirspaceWarningManager::UpdateInside(const AircraftState& state)
 {
   bool found = false;
 
   AirspacePredicateAircraftInside condition(state);
 
-  Airspaces::AirspaceVector results = m_airspaces.find_inside(state, condition);
+  Airspaces::AirspaceVector results = airspaces.find_inside(state, condition);
   for (Airspaces::AirspaceVector::iterator it = results.begin();
        it != results.end(); ++it) {
 
@@ -373,13 +373,13 @@ AirspaceWarningManager::update_inside(const AircraftState& state)
     if (!config.class_enabled(airspace.GetType()))
       continue;
 
-    AirspaceWarning& warning = get_warning(airspace);
+    AirspaceWarning& warning = GetWarning(airspace);
 
     if (warning.state_accepted(AirspaceWarning::WARNING_INSIDE)) {
       GeoPoint c = airspace.ClosestPoint(state.location);
       GeoVector vector_exit(state.location, c);
       AirspaceInterceptSolution solution;
-      airspace.Intercept(state, vector_exit, m_perf_glide, solution); 
+      airspace.Intercept(state, vector_exit, perf_glide, solution); 
 
       warning.update_solution(AirspaceWarning::WARNING_INSIDE, solution);
       found = true;
@@ -391,49 +391,49 @@ AirspaceWarningManager::update_inside(const AircraftState& state)
 
 
 void
-AirspaceWarningManager::visit_warnings(AirspaceWarningVisitor& visitor) const
+AirspaceWarningManager::VisitWarnings(AirspaceWarningVisitor& visitor) const
 {
-  for (AirspaceWarningList::const_iterator it = m_warnings.begin();
-       it != m_warnings.end(); ++it) {
+  for (AirspaceWarningList::const_iterator it = warnings.begin();
+       it != warnings.end(); ++it) {
     visitor.Visit(*it);
   }
 }
 
 
 void 
-AirspaceWarningManager::acknowledge_warning(const AbstractAirspace& airspace,
+AirspaceWarningManager::AcknowledgeWarning(const AbstractAirspace& airspace,
                                             const bool set)
 {
-  get_warning(airspace).acknowledge_warning(set);
+  GetWarning(airspace).acknowledge_warning(set);
 }
 
 void 
-AirspaceWarningManager::acknowledge_inside(const AbstractAirspace& airspace,
+AirspaceWarningManager::AcknowledgeInside(const AbstractAirspace& airspace,
                                            const bool set)
 {
-  get_warning(airspace).acknowledge_inside(set);
+  GetWarning(airspace).acknowledge_inside(set);
 }
 
 void 
-AirspaceWarningManager::acknowledge_day(const AbstractAirspace& airspace,
+AirspaceWarningManager::AcknowledgeDay(const AbstractAirspace& airspace,
                                         const bool set)
 {
-  get_warning(airspace).acknowledge_day(set);
+  GetWarning(airspace).acknowledge_day(set);
 }
 
 bool
-AirspaceWarningManager::get_ack_day(const AbstractAirspace& airspace)
+AirspaceWarningManager::GetAckDay(const AbstractAirspace& airspace)
 {
-  AirspaceWarning* warning = get_warning_ptr(airspace);
+  AirspaceWarning* warning = GetWarningPtr(airspace);
   return (warning != NULL ? warning->get_ack_day() : false);
 }
 
 
 void 
-AirspaceWarningManager::acknowledge_all()
+AirspaceWarningManager::AcknowledgeAll()
 {
-  for (AirspaceWarningList::iterator it = m_warnings.begin();
-       it != m_warnings.end(); ++it) {
+  for (AirspaceWarningList::iterator it = warnings.begin();
+       it != warnings.end(); ++it) {
     (*it).acknowledge_warning(true);
     (*it).acknowledge_inside(true);
   }
