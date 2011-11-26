@@ -70,6 +70,16 @@ public:
   }
 
   /**
+   * Forcibly set the specified size, without initialising or freeing
+   * new/excess elements.
+   */
+  void resize(size_type new_size) {
+    assert(new_size <= max_size());
+
+    the_size = new_size;
+  }
+
+  /**
    * Returns the number of allocated elements.
    */
   gcc_constexpr_method
