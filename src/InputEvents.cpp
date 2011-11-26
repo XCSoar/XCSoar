@@ -73,10 +73,11 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 
 namespace InputEvents
 {
-  mode current_mode = InputEvents::MODE_DEFAULT;
-  Mutex mutexEventQueue;
+  static mode current_mode = InputEvents::MODE_DEFAULT;
+  static Mutex mutexEventQueue;
 
-  unsigned MenuTimeOut = 0;
+  static unsigned MenuTimeOut = 0;
+
   void ProcessMenuTimer();
   void DoQueuedEvents(void);
 
