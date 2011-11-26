@@ -138,15 +138,6 @@ public:
   bool warning_live(const unsigned ack_time, const unsigned dt);
 
   /**
-   * Determine if airspace warning was a dummy one created for testing but otherwise
-   * can be removed without reporting.  This also applies to warnings that have
-   * expired.
-   *
-   * @return True if airspace warning has effectively always been clear.
-   */
-  bool trivial() const;
-
-  /**
    * Access solution (nearest to enter, if outside, or to exit, if inside)
    *
    * @return Reference to solution
