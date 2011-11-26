@@ -53,18 +53,10 @@ namespace InputEvents
    */
   void LeaveMode(const TCHAR *mode);
 
-  mode getModeID();
   unsigned findKey(const TCHAR *data);
   int findGCE(const TCHAR *data);
   int findNE(const TCHAR *data);
   pt2Event findEvent(const TCHAR *);
-
-  /**
-   * Looks up the specified key code, and returns the associated event
-   * id.  Returns 0 if the key was not found.
-   */
-  unsigned key_to_event(mode mode, unsigned key_code);
-  unsigned gesture_to_event(mode mode, const TCHAR *data);
 
   /**
    * Process a hot key for the specified mode.
@@ -76,15 +68,6 @@ namespace InputEvents
   bool processNmea(unsigned key);
   bool processButton(unsigned bindex);
   bool processGlideComputer(unsigned gce_id);
-  void processGo(unsigned event_id);
-  void makeLabel(mode mode_id, const TCHAR *label,
-                        unsigned location, unsigned event_id);
-
-  /**
-   * @param full if false, update only the dynamic labels
-   */
-  void drawButtons(mode Mode, bool full=false);
-
 
   // helpers (temporary)
 

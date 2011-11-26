@@ -78,11 +78,33 @@ namespace InputEvents
 
   static unsigned MenuTimeOut = 0;
 
+  gcc_pure
+  static mode getModeID();
+
+  /**
+   * Looks up the specified key code, and returns the associated event
+   * id.  Returns 0 if the key was not found.
+   */
+  gcc_pure
+  static unsigned key_to_event(mode mode, unsigned key_code);
+
+  gcc_pure
+  static unsigned gesture_to_event(mode mode, const TCHAR *data);
+
+  static void makeLabel(mode mode_id, const TCHAR *label,
+                        unsigned location, unsigned event_id);
+
+  /**
+   * @param full if false, update only the dynamic labels
+   */
+  static void drawButtons(mode Mode, bool full=false);
+
   static void ProcessMenuTimer();
   static void DoQueuedEvents(void);
 
   static bool processGlideComputer_real(unsigned gce_id);
   static bool processNmea_real(unsigned key);
+  static void processGo(unsigned event_id);
 };
 
 /**
