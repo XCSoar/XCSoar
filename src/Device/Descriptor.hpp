@@ -47,17 +47,18 @@ class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
 
-class DeviceDescriptor : public PortLineHandler {
+class DeviceDescriptor : public PortLineHandler
+{
   /** the index of this device in the global list */
   unsigned index;
 
   DeviceConfig config;
 
-  Port *Com;
+  Port *port;
   Port::Handler *monitor;
 
-  DeviceDescriptor *pDevPipeTo;
-  const struct DeviceRegister *Driver;
+  DeviceDescriptor *pipe_to_device;
+  const DeviceRegister *driver;
 
   Device *device;
 
@@ -122,8 +123,8 @@ public:
     return config;
   }
 
-  void SetPipeTo(DeviceDescriptor *other) {
-    pDevPipeTo = other;
+  void SetPipeTo(DeviceDescriptor *_pipe_to_device) {
+    pipe_to_device = _pipe_to_device;
   }
 
   bool IsConfigured() const {
@@ -131,7 +132,7 @@ public:
   }
 
   bool IsOpen() const {
-    return Com != NULL
+    return port != NULL
 #ifdef ANDROID
       || internal_gps != NULL;
 #endif
