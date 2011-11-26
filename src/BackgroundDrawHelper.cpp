@@ -32,6 +32,8 @@ Copyright_License {
 #include "Screen/LabelBlock.hpp"
 #include "Screen/Fonts.hpp"
 #include "Util/StringUtil.hpp"
+#include "NMEA/Info.hpp"
+#include "NMEA/Derived.hpp"
 
 BackgroundDrawHelper::BackgroundDrawHelper():
   terrain(NULL),
@@ -98,6 +100,22 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
   renderer->SetSettings(terrain_settings);
   renderer->Generate(proj, sun_azimuth);
   renderer->Draw(canvas, proj);
+}
+
+void
+BackgroundDrawHelper::SetSunAngle(const WindowProjection& projection,
+                                  const TerrainRendererSettings &settings,
+                                  const NMEAInfo &basic,
+                                  const DerivedInfo &calculated)
+{
+  if (settings.slope_shading == sstWind && calculated.wind_available)
+    SetSunFromWind(projection, calculated.wind);
+  else
+    SetSunAngle(projection, (basic.location_available &&
+                             settings.slope_shading == sstSun) ?
+                             calculated.sun_azimuth :
+                             Angle::Degrees(fixed(-45.0)));
+
 }
 
 void

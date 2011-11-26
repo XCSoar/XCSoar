@@ -110,16 +110,8 @@ TargetMapWindow::set(ContainerWindow &parent,
 void
 TargetMapWindow::RenderTerrain(Canvas &canvas)
 {
-  if (SettingsMap().terrain.slope_shading == sstWind &&
-      Calculated().wind_available)
-    background.SetSunFromWind(projection, Calculated().wind);
-  else
-    background.SetSunAngle(projection,
-                             (Basic().location_available &&
-                              SettingsMap().terrain.slope_shading == sstSun) ?
-                             Calculated().sun_azimuth :
-                             Angle::Degrees(fixed(-45.0)));
-
+  background.SetSunAngle(projection, SettingsMap().terrain,
+                         Basic(), Calculated());
   background.Draw(canvas, projection, SettingsMap().terrain);
 }
 

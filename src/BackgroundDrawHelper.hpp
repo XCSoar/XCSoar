@@ -34,6 +34,8 @@ struct SpeedVector;
 class RasterTerrain;
 class RasterWeather;
 class LabelBlock;
+struct NMEAInfo;
+struct DerivedInfo;
 
 #include "Math/Angle.hpp"
 
@@ -59,13 +61,16 @@ public:
 
   bool DrawSpotHeights(Canvas& canvas, LabelBlock& block);
 
-  void SetSunFromWind(const WindowProjection& proj, const SpeedVector& wind);
-  void SetSunAngle(const WindowProjection& proj, const Angle &angle);
+  void SetSunAngle(const WindowProjection &projection,
+                   const TerrainRendererSettings &settings,
+                   const NMEAInfo &basic, const DerivedInfo &calculated);
   void Reset();
   void SetTerrain(const RasterTerrain *terrain);
   void SetWeather(const RasterWeather *weather);
 
 private:
+  void SetSunFromWind(const WindowProjection& proj, const SpeedVector& wind);
+  void SetSunAngle(const WindowProjection& proj, const Angle &angle);
   static void DrawSpotHeight(Canvas &canvas,  LabelBlock &block,
                              const TCHAR *Buffer, RasterPoint pt);
 };
