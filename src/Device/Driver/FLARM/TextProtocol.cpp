@@ -33,6 +33,7 @@ Copyright_License {
 void
 FlarmDevice::Send(const char *sentence)
 {
+  assert(!in_binary_mode);
   assert(sentence != NULL);
 
   port.Write('$');
@@ -43,6 +44,7 @@ FlarmDevice::Send(const char *sentence)
 bool
 FlarmDevice::SetGet(char *buffer)
 {
+  assert(!in_binary_mode);
   assert(buffer != NULL);
 
   Send(buffer);
@@ -55,6 +57,7 @@ FlarmDevice::SetGet(char *buffer)
 bool
 FlarmDevice::SetGet(TCHAR *s)
 {
+  assert(!in_binary_mode);
   assert(s != NULL);
 
   char buffer[_tcslen(s) * 4 + 1];

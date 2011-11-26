@@ -29,6 +29,8 @@ Copyright_License {
 bool
 FlarmDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
 {
+  assert(!in_binary_mode);
+
   port.SetRxTimeout(500); // set RX timeout to 500[ms]
 
   bool result = DeclareInternal(declaration, env);

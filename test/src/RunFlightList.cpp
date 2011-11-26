@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Device/Driver.hpp"
+#include "Device/Driver/FLARM/Device.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
@@ -67,6 +68,8 @@ int main(int argc, char **argv)
       if (driver->IsLogger())
         _ftprintf(stderr, _T("\t%s\n"), driver->name);
 
+    _ftprintf(stderr, _T("\tFLARM\n"));
+
     return EXIT_FAILURE;
   }
 
@@ -76,19 +79,6 @@ int main(int argc, char **argv)
   DeviceConfig config;
   config.Clear();
   config.baud_rate = atoi(argv[3]);
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == NULL) {
-    fprintf(stderr, "No such driver: %s\n", argv[1]);
-    return EXIT_FAILURE;
-  }
-
-  if (!driver->IsLogger()) {
-    fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
-    return EXIT_FAILURE;
-  }
-
-  assert(driver->CreateOnPort != NULL);
 
 #ifdef HAVE_POSIX
   TTYPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
@@ -100,24 +90,53 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  Device *device = driver->CreateOnPort(config, port);
-  assert(device != NULL);
-
-  ConsoleOperationEnvironment env;
-  if (!device->Open(env)) {
-    delete device;
-    fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
-    return EXIT_FAILURE;
-  }
-
   RecordedFlightList flight_list;
-  if (!device->ReadFlightList(flight_list, env)) {
-    delete device;
-    fprintf(stderr, "Failed to download flight list\n");
-    return EXIT_FAILURE;
-  }
+  if (!strcmp(argv[1], "FLARM")) {
+    FlarmDevice flarm(port);
 
-  delete device;
+    if (!flarm.EnableBinaryMode()) {
+      fprintf(stderr, "Failed to switch transfer mode\n");
+      return EXIT_FAILURE;
+    }
+
+    if (!flarm.ReadFlightList(flight_list)) {
+      fprintf(stderr, "Failed to download flight list\n");
+      flarm.DisableBinaryMode();
+      return EXIT_FAILURE;
+    }
+
+    flarm.DisableBinaryMode();
+  } else {
+    const struct DeviceRegister *driver = FindDriverByName(driver_name);
+    if (driver == NULL) {
+      fprintf(stderr, "No such driver: %s\n", argv[1]);
+      return EXIT_FAILURE;
+    }
+
+    if (!driver->IsLogger()) {
+      fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
+      return EXIT_FAILURE;
+    }
+
+    assert(driver->CreateOnPort != NULL);
+    Device *device = driver->CreateOnPort(config, port);
+    assert(device != NULL);
+
+    ConsoleOperationEnvironment env;
+    if (!device->Open(env)) {
+      delete device;
+      fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
+      return EXIT_FAILURE;
+    }
+
+    if (!device->ReadFlightList(flight_list, env)) {
+      delete device;
+      fprintf(stderr, "Failed to download flight list\n");
+      return EXIT_FAILURE;
+    }
+
+    delete device;
+  }
   
   for (RecordedFlightList::const_iterator i = flight_list.begin();
        i != flight_list.end(); ++i) {

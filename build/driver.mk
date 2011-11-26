@@ -51,6 +51,8 @@ LX_SOURCES = \
 FLARM_SOURCES = \
 	$(DRIVER_SRC_DIR)/FLARM/Device.cpp \
 	$(DRIVER_SRC_DIR)/FLARM/Declare.cpp \
+	$(DRIVER_SRC_DIR)/FLARM/Logger.cpp \
+	$(DRIVER_SRC_DIR)/FLARM/BinaryProtocol.cpp \
 	$(DRIVER_SRC_DIR)/FLARM/TextProtocol.cpp
 
 DRIVER_SOURCES = \
