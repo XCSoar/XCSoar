@@ -67,10 +67,10 @@ struct InputConfig {
   RadixTree<unsigned> Gesture2Event[MAX_MODE];
 
   // Glide Computer Events
-  unsigned short GC2Event[MAX_MODE][GCE_COUNT];
+  unsigned short GC2Event[GCE_COUNT];
 
   // NMEA Triggered Events
-  unsigned short N2Event[MAX_MODE][NE_COUNT];
+  unsigned short N2Event[NE_COUNT];
 
   TrivialArray<Event, MAX_EVENTS> events;
 

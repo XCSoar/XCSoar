@@ -214,13 +214,13 @@ apply_defaults(const TCHAR *const* default_modes,
   }
 
   while (default_gc2event->event > 0) {
-    input_config.GC2Event[default_gc2event->mode][default_gc2event->key] =
+    input_config.GC2Event[default_gc2event->key] =
       default_gc2event->event;
     ++default_gc2event;
   }
 
   while (default_n2event->event > 0) {
-    input_config.N2Event[default_n2event->mode][default_n2event->key] =
+    input_config.N2Event[default_n2event->key] =
       default_n2event->event;
     ++default_n2event;
   }
@@ -566,16 +566,7 @@ InputEvents::processNmea_real(unsigned ne_id)
   if (ne_id >= NE_COUNT)
     return false;
 
-  // get current mode
-  InputEvents::mode mode = InputEvents::getModeID();
-
-  // Which key - can be defined locally or at default (fall back to default)
-  event_id = input_config.N2Event[mode][ne_id];
-  if (event_id == 0) {
-    // go with default key..
-    event_id = input_config.N2Event[0][ne_id];
-  }
-
+  event_id = input_config.N2Event[ne_id];
   if (event_id > 0) {
     InputEvents::processGo(event_id);
     return true;
@@ -646,16 +637,7 @@ InputEvents::processGlideComputer_real(unsigned gce_id)
   if (gce_id >= GCE_COUNT)
     return false;
 
-  // get current mode
-  InputEvents::mode mode = InputEvents::getModeID();
-
-  // Which key - can be defined locally or at default (fall back to default)
-  event_id = input_config.GC2Event[mode][gce_id];
-  if (event_id == 0) {
-    // go with default key..
-    event_id = input_config.GC2Event[0][gce_id];
-  }
-
+  event_id = input_config.GC2Event[gce_id];
   if (event_id > 0) {
     InputEvents::processGo(event_id);
     return true;

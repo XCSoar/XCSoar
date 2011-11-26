@@ -115,7 +115,7 @@ struct EventBuilder {
         // Get the int key (eg: APP1 vs 'a')
         int key = InputEvents::findGCE(data);
         if (key >= 0)
-          config.GC2Event[mode_id][key] = event_id;
+          config.GC2Event[key] = event_id;
         else
           LogStartUp(_T("Invalid GCE data: %s at %u"), data.c_str(), line);
 
@@ -144,7 +144,7 @@ struct EventBuilder {
         // Get the int key (eg: APP1 vs 'a')
         int key = InputEvents::findNE(data);
         if (key >= 0)
-          config.N2Event[mode_id][key] = event_id;
+          config.N2Event[key] = event_id;
         else
           LogStartUp(_T("Invalid GCE data: %s at %u"), data.c_str(), line);
 
