@@ -32,7 +32,7 @@
 #include "Util/tstring.hpp"
 #include "Compiler.h"
 
-#include <vector>
+#include <list>
 #include <forward_list>
 
 #include <assert.h>
@@ -84,7 +84,7 @@ protected:
     bool isDeclaration;
 
     /** Array of child nodes */
-    std::vector<XMLNode> pChild;
+    std::list<XMLNode> pChild;
 
     /** A concatentation of all text nodes */
     tstring text;
@@ -107,7 +107,7 @@ protected:
       return !pChild.empty() || !text.empty();
     }
 
-    typedef std::vector<XMLNode>::const_iterator const_iterator;
+    typedef std::list<XMLNode>::const_iterator const_iterator;
 
     const_iterator begin() const {
       return pChild.begin();
