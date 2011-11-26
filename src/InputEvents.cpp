@@ -159,8 +159,6 @@ static int NMEA_Queue[MAX_NMEA_QUEUE];
 // Initialisation and Defaults
 // -----------------------------------------------------------------------
 
-bool InitONCE = false;
-
 // Mapping text names of events to the real thing
 struct Text2EventSTRUCT {
   const TCHAR *text;
@@ -248,26 +246,22 @@ InputEvents::readFile()
   mutexEventQueue.Unlock();
 
   // Get defaults
-  if (!InitONCE) {
-    if (is_altair()) {
-      #include "InputEvents_altair.cpp"
-      apply_defaults(default_modes,
-                     default_events,
-                     ARRAY_SIZE(default_events),
-                     default_gesture2event,
-                     default_key2event, default_gc2event, default_n2event,
-                     default_labels);
-    } else {
-      #include "InputEvents_default.cpp"
-      apply_defaults(default_modes,
-                     default_events,
-                     ARRAY_SIZE(default_events),
-                     default_gesture2event,
-                     default_key2event, default_gc2event, default_n2event,
-                     default_labels);
-    }
-
-    InitONCE = true;
+  if (is_altair()) {
+#include "InputEvents_altair.cpp"
+    apply_defaults(default_modes,
+                   default_events,
+                   ARRAY_SIZE(default_events),
+                   default_gesture2event,
+                   default_key2event, default_gc2event, default_n2event,
+                   default_labels);
+  } else {
+#include "InputEvents_default.cpp"
+    apply_defaults(default_modes,
+                   default_events,
+                   ARRAY_SIZE(default_events),
+                   default_gesture2event,
+                   default_key2event, default_gc2event, default_n2event,
+                   default_labels);
   }
 
   // Read in user defined configuration file
