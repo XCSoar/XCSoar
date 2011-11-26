@@ -84,8 +84,8 @@ int main(int argc, char **argv)
   config.SetDefaults();
   ParseInputFile(config, reader);
 
-  for (unsigned mode = 0; mode < config.mode_map_count; ++mode) {
-    _tprintf(_T("Mode '%s'\n"), config.mode_map[mode].c_str());
+  for (unsigned mode = 0; mode < config.modes.size(); ++mode) {
+    _tprintf(_T("Mode '%s'\n"), config.modes[mode].c_str());
 
     for (unsigned key = 0; key < InputConfig::MAX_KEY; ++key) {
       unsigned event = config.Key2Event[mode][key];
@@ -95,9 +95,9 @@ int main(int argc, char **argv)
 
       printf("  Key 0x%x\n", key);
       do {
-        Dump(config.Events[event], event);
-        assert(config.Events[event].next < InputConfig::MAX_EVENTS);
-        event = config.Events[event].next;
+        Dump(config.events[event], event);
+        assert(config.events[event].next < InputConfig::MAX_EVENTS);
+        event = config.events[event].next;
       } while (event > 0);
     }
 
@@ -108,9 +108,9 @@ int main(int argc, char **argv)
         unsigned event = mi.event;
         assert(event < InputConfig::MAX_EVENTS);
         do {
-          Dump(config.Events[event], event);
-          assert(config.Events[event].next < InputConfig::MAX_EVENTS);
-          event = config.Events[event].next;
+          Dump(config.events[event], event);
+          assert(config.events[event].next < InputConfig::MAX_EVENTS);
+          event = config.events[event].next;
         } while (event > 0);
       }
     }

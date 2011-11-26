@@ -28,11 +28,11 @@ Copyright_License {
 void
 InputConfig::SetDefaults()
 {
-  mode_map[0] = _T("default");
-  mode_map[1] = _T("pan");
-  mode_map[2] = _T("infobox");
-  mode_map[3] = _T("Menu");
-  mode_map_count = 4;
+  modes.resize(4);
+  modes[0] = _T("default");
+  modes[1] = _T("pan");
+  modes[2] = _T("infobox");
+  modes[3] = _T("Menu");
 
   std::fill(&Key2Event[0][0], &Key2Event[MAX_MODE][MAX_KEY], 0);
   std::fill(&GC2Event[0][0], &GC2Event[MAX_MODE][GCE_COUNT], 0);
@@ -40,5 +40,5 @@ InputConfig::SetDefaults()
 
   /* This is initialized with 1 because event 0 is reserved - it
      stands for "no event" */
-  Events_count = 1;
+  events.resize(1);
 }

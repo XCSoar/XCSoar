@@ -198,9 +198,9 @@ apply_defaults(const TCHAR *const* default_modes,
   while (*default_modes != NULL)
     input_config.AppendMode(*default_modes++);
 
-  input_config.Events_count = num_default_events + 1;
+  input_config.events.resize(num_default_events + 1);
   std::copy(default_events, default_events + num_default_events,
-            input_config.Events + 1);
+            input_config.events.begin() + 1);
 
   while (default_gesture2event->event > 0) {
     input_config.Gesture2Event[default_gesture2event->mode].add(default_gesture2event->data,default_gesture2event->event);
@@ -370,7 +370,7 @@ InputEvents::makeLabel(mode mode_id, const TCHAR* label,
 void
 InputEvents::setMode(mode mode)
 {
-  assert((unsigned)mode < input_config.mode_map_count);
+  assert((unsigned)mode < input_config.modes.size());
 
   if (mode == current_mode)
     return;
@@ -393,7 +393,7 @@ InputEvents::LeaveMode(const TCHAR *mode)
 {
   assert(mode != NULL);
 
-  if (_tcscmp(input_config.mode_map[current_mode], mode) == 0)
+  if (input_config.modes[current_mode] == mode)
     setMode(MODE_DEFAULT);
 }
 
@@ -671,7 +671,7 @@ InputEvents::processGo(unsigned eventid)
   /* eventid 0 is special for "noop" */
 
   while (globalRunningEvent.Test() && eventid > 0) {
-    const InputConfig::Event &event = input_config.Events[eventid];
+    const InputConfig::Event &event = input_config.events[eventid];
     if (event.event != NULL) {
       event.event(event.misc);
       MenuTimeOut = 0;

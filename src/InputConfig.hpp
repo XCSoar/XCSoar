@@ -28,6 +28,7 @@ Copyright_License {
 #include "MenuData.hpp"
 #include "Util/RadixTree.hpp"
 #include "Util/StaticString.hpp"
+#include "Util/TrivialArray.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -58,8 +59,7 @@ struct InputConfig {
   };
 
   /** Map mode to location */
-  StaticString<MAX_MODE_STRING> mode_map[MAX_MODE];
-  unsigned mode_map_count;
+  TrivialArray<StaticString<MAX_MODE_STRING>, MAX_MODE> modes;
 
   // Key map to Event - Keys (per mode) mapped to events
   unsigned short Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
@@ -72,8 +72,7 @@ struct InputConfig {
   // NMEA Triggered Events
   unsigned short N2Event[MAX_MODE][NE_COUNT];
 
-  Event Events[MAX_EVENTS];
-  unsigned Events_count;
+  TrivialArray<Event, MAX_EVENTS> events;
 
   Menu menus[MAX_MODE];
 
@@ -81,19 +80,19 @@ struct InputConfig {
 
   gcc_pure
   int LookupMode(const TCHAR *name) const {
-    for (unsigned i = 0; i < mode_map_count; ++i)
-      if (mode_map[i] == name)
+    for (unsigned i = 0, size = modes.size(); i < size; ++i)
+      if (modes[i] == name)
         return i;
 
     return -1;
   }
 
   int AppendMode(const TCHAR *name) {
-    if (mode_map_count >= MAX_MODE)
+    if (modes.full())
       return -1;
 
-    mode_map[mode_map_count] = name;
-    return mode_map_count++;
+    modes.append() = name;
+    return modes.size() - 1;
   }
 
   gcc_pure
@@ -105,16 +104,17 @@ struct InputConfig {
     return mode;
   }
 
-  unsigned AppendEvent(pt2Event event, const TCHAR *misc,
+  unsigned AppendEvent(pt2Event handler, const TCHAR *misc,
                        unsigned next) {
-    if (Events_count >= MAX_EVENTS)
+    if (events.full())
       return 0;
 
-    Events[Events_count].event = event;
-    Events[Events_count].misc = misc;
-    Events[Events_count].next = next;
+    Event &event = events.append();
+    event.event = handler;
+    event.misc = misc;
+    event.next = next;
 
-    return Events_count++;
+    return events.size() - 1;
   }
 
   void AppendMenu(unsigned mode_id, const TCHAR* label,
