@@ -78,11 +78,11 @@ namespace InputEvents
 
   static unsigned MenuTimeOut = 0;
 
-  void ProcessMenuTimer();
-  void DoQueuedEvents(void);
+  static void ProcessMenuTimer();
+  static void DoQueuedEvents(void);
 
-  bool processGlideComputer_real(unsigned gce_id);
-  bool processNmea_real(unsigned key);
+  static bool processGlideComputer_real(unsigned gce_id);
+  static bool processNmea_real(unsigned key);
 };
 
 /**
