@@ -661,8 +661,11 @@ InputEvents::processGo(unsigned eventid)
 void
 InputEvents::HideMenu()
 {
-  MenuTimeOut = CommonInterface::GetUISettings().menu_timeout;
-  ProcessMenuTimer();
+  if (CommonInterface::IsPanning()) {
+    setMode(MODE_PAN);
+  } else {
+    setMode(MODE_DEFAULT);
+  }
 }
 
 void
@@ -686,13 +689,9 @@ InputEvents::ProcessMenuTimer()
     /* no menu updates while a dialog is visible */
     return;
 
-  if (MenuTimeOut == CommonInterface::GetUISettings().menu_timeout) {
-    if (CommonInterface::IsPanning()) {
-      setMode(MODE_PAN);
-    } else {
-      setMode(MODE_DEFAULT);
-    }
-  }
+  if (MenuTimeOut == CommonInterface::GetUISettings().menu_timeout)
+    HideMenu();
+
   // refresh visible buttons if still visible
   drawButtons(getModeID());
 
