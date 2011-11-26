@@ -93,86 +93,86 @@ public:
 
   void SetConfig(const AirspaceWarningConfig &_config);
 
-/** 
- * Reset warning list and filter (as in new flight)
- * 
- * @param state State to reset filter to
- */
+  /**
+   * Reset warning list and filter (as in new flight)
+   *
+   * @param state State to reset filter to
+   */
   void Reset(const AircraftState& state);
 
-/** 
- * Perform predictions and interior search to update warning list If
- * not in circling mode, the prediction based on the state filter
- * predictor not used, since a long term prediction is not valid
- * if in cruise mode.
- * 
- * @param state Current aircraft state
- * @param circling Whether aircraft is circling
- * @param dt Time step since last update
- * 
- * @return True if warnings changed
- */
+  /**
+   * Perform predictions and interior search to update warning list If
+   * not in circling mode, the prediction based on the state filter
+   * predictor not used, since a long term prediction is not valid
+   * if in cruise mode.
+   *
+   * @param state Current aircraft state
+   * @param circling Whether aircraft is circling
+   * @param dt Time step since last update
+   *
+   * @return True if warnings changed
+   */
   bool Update(const AircraftState &state, const bool circling, const unsigned dt);
 
-/** 
- * Adjust time of glide predictor
- * 
- * @param the_time New time (s)
- */
-  void SetPredictionTimeGlide(const fixed& the_time);
+  /**
+   * Adjust time of glide predictor
+   *
+   * @param the_time New time (s)
+   */
+  void SetPredictionTimeGlide(fixed time);
 
-/** 
- * Adjust time of state predictor.  Also updates filter time constant
- * 
- * @param the_time New time (s)
- */
-  void SetPredictionTimeFilter(const fixed& the_time);
+  /**
+   * Adjust time of state predictor.  Also updates filter time constant
+   *
+   * @param the_time New time (s)
+   */
+  void SetPredictionTimeFilter(fixed time);
 
-/** 
- * Find corresponding airspace warning item in store for an airspace
- * 
- * @param airspace Airspace to find warning for
- * 
- * @return Reference to airspace warning item
- */
+  /**
+   * Find corresponding airspace warning item in store for an airspace
+   *
+   * @param airspace Airspace to find warning for
+   *
+   * @return Reference to airspace warning item
+   */
   AirspaceWarning& GetWarning(const AbstractAirspace& airspace);
 
-/** 
- * Find corresponding airspace warning item in store by airspace 
- * 
- * @param airspace Airspace to find warning for
- * 
- * @return Pointer to airspace warning item (or NULL if not found)
- */
+  /**
+   * Find corresponding airspace warning item in store by airspace
+   *
+   * @param airspace Airspace to find warning for
+   *
+   * @return Pointer to airspace warning item (or NULL if not found)
+   */
   AirspaceWarning* GetWarningPtr(const AbstractAirspace& airspace);
 
-/** 
- * Test whether warning list is empty
- * 
- * @return True if no warnings in list
- */
+  /**
+   * Test whether warning list is empty
+   *
+   * @return True if no warnings in list
+   */
   gcc_pure
   bool empty() const {
     return warnings.empty();
   }
 
-/** 
- * Clear all warnings
- */
+  /**
+   * Clear all warnings
+   */
   void clear() {
     warnings.clear();
   }
 
-/**
- * Acknowledge all active warnings
- */
+  /**
+   * Acknowledge all active warnings
+   */
   void AcknowledgeAll();
 
-/** 
- * Return size of warning list
- * 
- * @return Number of items in warning list
- */
+  /**
+   * Return size of warning list
+   *
+   * @return Number of items in warning list
+   */
   size_t size() const {
     return warnings.size();
   }
@@ -187,37 +187,37 @@ public:
     return warnings.end();
   }
 
-/** 
- * Visit each warnings in the store
- * 
- * @param visitor Visitor for warnings
- */
+  /**
+   * Visit each warnings in the store
+   *
+   * @param visitor Visitor for warnings
+   */
   void VisitWarnings(AirspaceWarningVisitor& visitor) const;
 
-/** 
- * Acknowledge an airspace warning
- * 
- * @param airspace The airspace subject
- * @param set Whether to set or cancel acknowledgement
- */
+  /**
+   * Acknowledge an airspace warning
+   *
+   * @param airspace The airspace subject
+   * @param set Whether to set or cancel acknowledgement
+   */
   void AcknowledgeWarning(const AbstractAirspace& airspace,
                           const bool set = true);
 
-/** 
- * Acknowledge an airspace inside
- * 
- * @param airspace The airspace subject
- * @param set Whether to set or cancel acknowledgement
- */
+  /**
+   * Acknowledge an airspace inside
+   *
+   * @param airspace The airspace subject
+   * @param set Whether to set or cancel acknowledgement
+   */
   void AcknowledgeInside(const AbstractAirspace& airspace,
                          const bool set = true);
 
-/** 
- * Acknowledge all warnings for airspace for whole day
- * 
- * @param airspace The airspace subject
- * @param set Whether to set or cancel acknowledgement
- */
+  /**
+   * Acknowledge all warnings for airspace for whole day
+   *
+   * @param airspace The airspace subject
+   * @param set Whether to set or cancel acknowledgement
+   */
   void AcknowledgeDay(const AbstractAirspace& airspace,
                       const bool set = true);
 

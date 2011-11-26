@@ -34,17 +34,17 @@
 AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces,
                                                const TaskManager &_task,
                                                fixed prediction_time_glide,
-                                               fixed prediction_time_filter):
-  airspaces(_airspaces),
-  prediction_time_glide(prediction_time_glide),
-  prediction_time_filter(prediction_time_filter),
-  perf_glide(_task.GetGlidePolar()),
-  cruise_filter(prediction_time_filter*CRUISE_FILTER_FACT),
-  circling_filter(prediction_time_filter),
-  perf_cruise(cruise_filter),
-  perf_circling(circling_filter),
-  task(_task),
-  glide_polar(_task.GetGlidePolar())
+                                               fixed prediction_time_filter)
+  :airspaces(_airspaces),
+   prediction_time_glide(prediction_time_glide),
+   prediction_time_filter(prediction_time_filter),
+   perf_glide(_task.GetGlidePolar()),
+   cruise_filter(prediction_time_filter * CRUISE_FILTER_FACT),
+   circling_filter(prediction_time_filter),
+   perf_cruise(cruise_filter),
+   perf_circling(circling_filter),
+   task(_task),
+   glide_polar(_task.GetGlidePolar())
 {
 }
 
@@ -58,7 +58,7 @@ AirspaceWarningManager::SetConfig(const AirspaceWarningConfig &_config)
 }
 
 void
-AirspaceWarningManager::Reset(const AircraftState& state)
+AirspaceWarningManager::Reset(const AircraftState &state)
 {
   warnings.clear();
   cruise_filter.Reset(state);
@@ -66,21 +66,21 @@ AirspaceWarningManager::Reset(const AircraftState& state)
 }
 
 void 
-AirspaceWarningManager::SetPredictionTimeGlide(const fixed& the_time)
+AirspaceWarningManager::SetPredictionTimeGlide(fixed time)
 {
-  prediction_time_glide = the_time;
+  prediction_time_glide = time;
 }
 
 void 
-AirspaceWarningManager::SetPredictionTimeFilter(const fixed& the_time)
+AirspaceWarningManager::SetPredictionTimeFilter(fixed time)
 {
-  prediction_time_filter = the_time;
+  prediction_time_filter = time;
   cruise_filter.Design(max(fixed(10),prediction_time_filter*CRUISE_FILTER_FACT));
   circling_filter.Design(max(fixed(10),prediction_time_filter));
 }
 
 AirspaceWarning& 
-AirspaceWarningManager::GetWarning(const AbstractAirspace& airspace)
+AirspaceWarningManager::GetWarning(const AbstractAirspace &airspace)
 {
   AirspaceWarning* warning = GetWarningPtr(airspace);
   if (warning)
@@ -93,7 +93,7 @@ AirspaceWarningManager::GetWarning(const AbstractAirspace& airspace)
 
 
 AirspaceWarning* 
-AirspaceWarningManager::GetWarningPtr(const AbstractAirspace& airspace) 
+AirspaceWarningManager::GetWarningPtr(const AbstractAirspace &airspace)
 {
   for (AirspaceWarningList::iterator it = warnings.begin();
        it != warnings.end(); ++it)
