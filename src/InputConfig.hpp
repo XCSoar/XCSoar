@@ -64,7 +64,7 @@ struct InputConfig {
   // Key map to Event - Keys (per mode) mapped to events
   unsigned short Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
 
-  RadixTree<unsigned> Gesture2Event[MAX_MODE];
+  RadixTree<unsigned> Gesture2Event;
 
   // Glide Computer Events
   unsigned short GC2Event[GCE_COUNT];

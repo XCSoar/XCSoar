@@ -95,7 +95,7 @@ namespace InputEvents
   static unsigned key_to_event(mode mode, unsigned key_code);
 
   gcc_pure
-  static unsigned gesture_to_event(mode mode, const TCHAR *data);
+  static unsigned gesture_to_event(const TCHAR *data);
 
   static void makeLabel(mode mode_id, const TCHAR *label,
                         unsigned location, unsigned event_id);
@@ -203,7 +203,8 @@ apply_defaults(const TCHAR *const* default_modes,
             input_config.events.begin() + 1);
 
   while (default_gesture2event->event > 0) {
-    input_config.Gesture2Event[default_gesture2event->mode].add(default_gesture2event->data,default_gesture2event->event);
+    input_config.Gesture2Event.add(default_gesture2event->data,
+                                   default_gesture2event->event);
     ++default_gesture2event;
   }
   
@@ -510,22 +511,16 @@ InputEvents::processKey(unsigned key_code)
 }
 
 unsigned
-InputEvents::gesture_to_event(mode mode, const TCHAR *data)
+InputEvents::gesture_to_event(const TCHAR *data)
 {
-  unsigned event_id = input_config.Gesture2Event[mode].get(data, 0);
-  if (event_id == 0)
-    /* not found in this mode - try the default binding */
-    event_id = input_config.Gesture2Event[0].get(data, 0);
-  
-  return event_id;
+  return input_config.Gesture2Event.get(data, 0);
 }
 
 bool
 InputEvents::processGesture(const TCHAR *data)
 {
   // get current mode
-  InputEvents::mode mode = InputEvents::getModeID();
-  unsigned event_id = gesture_to_event(mode, data);
+  unsigned event_id = gesture_to_event(data);
   if (event_id)
   {
     InputEvents::processGo(event_id);
