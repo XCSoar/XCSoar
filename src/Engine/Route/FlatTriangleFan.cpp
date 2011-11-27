@@ -27,7 +27,7 @@ FlatTriangleFan::CalcBoundingBox()
 {
   assert(!vs.empty());
 
-  VertexVector::const_iterator it = vs.begin(), end = vs.end();
+  auto it = vs.begin(), end = vs.end();
   bounding_box = FlatBoundingBox(*it);
   for (++it; it != end; ++it)
     bounding_box.Expand(*it);
@@ -50,8 +50,8 @@ FlatTriangleFan::IsInside(const FlatGeoPoint &p) const
     return false;
 
   bool inside = false;
-  for (VertexVector::const_iterator i = vs.begin(), j = vs.end() - 1;
-       i != vs.end(); j = i++) {
+  for (auto i = vs.begin(), j = vs.end() - 1, end = vs.end();
+       i != end; j = i++) {
     if ((i->Latitude > p.Latitude) == (j->Latitude > p.Latitude))
       continue;
 
