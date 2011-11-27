@@ -51,9 +51,9 @@ too_close(const FlatGeoPoint &p1, const FlatGeoPoint &p2)
 void
 FlatTriangleFanTree::CalcBB()
 {
-  FlatTriangleFan::calc_bb();
+  FlatTriangleFan::CalcBoundingBox();
 
-  bb_children = bb_self;
+  bb_children = bounding_box;
 
   for (LeafVector::iterator it = children.begin(), end = children.end();
       it != end; ++it) {
@@ -70,11 +70,11 @@ FlatTriangleFanTree::IsInsideTree(const FlatGeoPoint &p,
     if (!bb_children.IsInside(p))
       return false;
   } else {
-    if (!bb_self.IsInside(p))
+    if (!bounding_box.IsInside(p))
       return false;
   }
 
-  if (is_inside(p))
+  if (IsInside(p))
     return true;
 
   if (!include_children)
@@ -110,7 +110,7 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin,
 void
 FlatTriangleFanTree::DummyReach(const AFlatGeoPoint &ao)
 {
-  add_point(ao);
+  AddPoint(ao);
   CalcBB();
   height = ao.altitude;
 }
@@ -156,10 +156,10 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
 
   assert(vs.empty());
   vs.reserve(index_high - index_low + 1);
-  add_point(origin);
+  AddPoint(origin);
   for (int index = index_low; index < index_high; ++index) {
     const FlatGeoPoint x = parms.reach_intercept(index, ao);
-    add_point(x);
+    AddPoint(x);
   }
 }
 
@@ -296,7 +296,7 @@ FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint &n,
   if (!bb_children.IsInside(n))
     return false; // not in scope
 
-  if (is_inside(n)) { // found in this segment
+  if (IsInside(n)) { // found in this segment
     const AFlatGeoPoint nn(vs[0], height);
     const RoughAltitude h =
       parms.rpolars.CalcGlideArrival(nn, n, parms.task_proj);
@@ -323,7 +323,7 @@ FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
   if (!bb.Overlaps(bb_children))
     return;
 
-  if (bb.Overlaps(bb_self)) {
+  if (bb.Overlaps(bounding_box)) {
     visitor.StartFan();
     for (VertexVector::const_iterator it = vs.begin(), end = vs.end();
          it != end; ++it)

@@ -66,7 +66,7 @@ public:
      gaps_filled(false) {}
 
   void Clear() {
-    FlatTriangleFan::clear();
+    FlatTriangleFan::Clear();
     children.clear();
   }
 

@@ -34,32 +34,32 @@ public:
 
 protected:
   VertexVector vs;
-  FlatBoundingBox bb_self;
+  FlatBoundingBox bounding_box;
   RoughAltitude height;
 
 public:
   FlatTriangleFan()
-    :bb_self(FlatGeoPoint(0, 0)), height(0) {}
+    :bounding_box(FlatGeoPoint(0, 0)), height(0) {}
 
   friend class PrintHelper;
 
-  void calc_bb();
+  void CalcBoundingBox();
 
-  void add_point(const FlatGeoPoint &p);
+  void AddPoint(const FlatGeoPoint &p);
 
   gcc_pure
-  bool is_inside(const FlatGeoPoint &p) const;
+  bool IsInside(const FlatGeoPoint &p) const;
 
-  void clear() {
+  void Clear() {
     vs.clear();
   }
 
   gcc_pure
-  bool empty() const {
+  bool IsEmpty() const {
     return vs.empty();
   }
 
-  RoughAltitude get_height() const {
+  RoughAltitude GetHeight() const {
     return height;
   }
 };

@@ -23,18 +23,18 @@
 #include "FlatTriangleFan.hpp"
 
 void
-FlatTriangleFan::calc_bb()
+FlatTriangleFan::CalcBoundingBox()
 {
   assert(!vs.empty());
 
   VertexVector::const_iterator it = vs.begin(), end = vs.end();
-  bb_self = FlatBoundingBox(*it);
+  bounding_box = FlatBoundingBox(*it);
   for (++it; it != end; ++it)
-    bb_self.Expand(*it);
+    bounding_box.Expand(*it);
 }
 
 void
-FlatTriangleFan::add_point(const FlatGeoPoint &p)
+FlatTriangleFan::AddPoint(const FlatGeoPoint &p)
 {
   // avoid duplicates
   if (!vs.empty() && p == vs.back())
@@ -44,9 +44,9 @@ FlatTriangleFan::add_point(const FlatGeoPoint &p)
 }
 
 bool
-FlatTriangleFan::is_inside(const FlatGeoPoint &p) const
+FlatTriangleFan::IsInside(const FlatGeoPoint &p) const
 {
-  if (!bb_self.IsInside(p))
+  if (!bounding_box.IsInside(p))
     return false;
 
   bool inside = false;

@@ -79,7 +79,7 @@ bool
 ReachFan::is_inside(const GeoPoint origin, const bool turning) const
 {
   // no data? probably not solved yet
-  if (root.empty())
+  if (root.IsEmpty())
     return false;
   const FlatGeoPoint p = task_proj.project(origin);
   return root.IsInsideTree(p, turning);
@@ -94,7 +94,7 @@ ReachFan::find_positive_arrival(const AGeoPoint dest,
   arrival_height_reach = -1;
   arrival_height_direct = -1;
 
-  if (root.empty())
+  if (root.IsEmpty())
     return true;
 
   const FlatGeoPoint d (task_proj.project(dest));
@@ -106,7 +106,7 @@ ReachFan::find_positive_arrival(const AGeoPoint dest,
 
   // if can't reach even with no terrain, exit early
 
-  if (std::min(root.get_height(), arrival_height_direct) < dest.altitude) {
+  if (std::min(root.GetHeight(), arrival_height_direct) < dest.altitude) {
     arrival_height_reach = arrival_height_direct;
     return true;
   }
@@ -123,7 +123,7 @@ void
 ReachFan::accept_in_range(const GeoBounds& bounds,
                           TriangleFanVisitor& visitor) const
 {
-  if (root.empty())
+  if (root.IsEmpty())
     return;
 
   const FlatBoundingBox bb = task_proj.project(bounds);
