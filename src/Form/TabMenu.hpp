@@ -384,13 +384,13 @@ class TabMenuDisplay : public PaintWindow {
   TabMenuControl &menu;
   const DialogLook &look;
   bool dragging; // tracks that mouse is down and captured
-  bool dragoffbutton; // set by mouse_move
+  bool drag_off_button; // set by mouse_move
 
 public:
   /* used to track mouse down/up clicks */
-  TabMenuControl::menu_tab_index DownIndex;
+  TabMenuControl::menu_tab_index down_index;
   /* used to render which submenu is drawn and which item is highlighted */
-  TabMenuControl::menu_tab_index SelectedIndex;
+  TabMenuControl::menu_tab_index selected_index;
 
 public:
   TabMenuDisplay(TabMenuControl &_menu, const DialogLook &look,
@@ -412,7 +412,7 @@ public:
    * Returns index of selected (highlighted) tab
    * @return
    */
-  const TabMenuControl::menu_tab_index GetSelectedIndex() { return SelectedIndex; }
+  const TabMenuControl::menu_tab_index GetSelectedIndex() { return selected_index; }
 
 protected:
   TabMenuControl &GetTabMenuBar() {
