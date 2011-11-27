@@ -26,20 +26,18 @@
 
 class RasterMap;
 
-class TerrainRoute: public RoutePlanner {
+class TerrainRoute: public RoutePlanner
+{
+  mutable RoutePoint m_inx_terrain;
+
 public:
   TerrainRoute();
 
   friend class PrintHelper;
 
-protected:
-
 private:
-
   bool CheckClearance(const RouteLink &e, RoutePoint& inp) const;
   void AddNearby(const RouteLink& e);
-
-  mutable RoutePoint m_inx_terrain;
 };
 
 #endif
