@@ -38,13 +38,13 @@ public:
   AirspaceRoute(const Airspaces& master);
   virtual ~AirspaceRoute();
 
-  void synchronise(const Airspaces& master,
+  void Synchronise(const Airspaces& master,
                    const AGeoPoint& origin,
                    const AGeoPoint& destination);
 
   virtual void Reset();
 
-  unsigned airspace_size() const;
+  unsigned AirspaceSize() const;
 
 protected:
 
@@ -60,26 +60,26 @@ private:
   virtual void AddNearby(const RouteLink& e);
   virtual bool CheckSecondary(const RouteLink &e);
 
-  void add_nearby_airspace(const RouteAirspaceIntersection &inx, const RouteLink& e);
+  void AddNearbyAirspace(const RouteAirspaceIntersection &inx, const RouteLink& e);
 
   RouteAirspaceIntersection
-  first_intersecting(const RouteLink& e) const;
+  FirstIntersecting(const RouteLink& e) const;
 
   const AbstractAirspace*
-  inside_others(const AGeoPoint& origin) const;
+  InsideOthers(const AGeoPoint& origin) const;
 
-  ClearingPair find_clearing_pair(const SearchPointVector& spv,
-                                  const SearchPointVector::const_iterator start,
-                                  const SearchPointVector::const_iterator end,
-                                  const AFlatGeoPoint &dest) const;
+  ClearingPair FindClearingPair(const SearchPointVector& spv,
+                                const SearchPointVector::const_iterator start,
+                                const SearchPointVector::const_iterator end,
+                                const AFlatGeoPoint &dest) const;
 
-  ClearingPair get_pairs(const SearchPointVector& spv,
-                         const RoutePoint& start,
-                         const RoutePoint& dest) const;
+  ClearingPair GetPairs(const SearchPointVector& spv,
+                        const RoutePoint& start,
+                        const RoutePoint& dest) const;
 
-  ClearingPair get_backup_pairs(const SearchPointVector& spv,
-                                const RoutePoint& start,
-                                const RoutePoint& intc) const;
+  ClearingPair GetBackupPairs(const SearchPointVector& spv,
+                              const RoutePoint& start,
+                              const RoutePoint& intc) const;
 };
 
 #endif

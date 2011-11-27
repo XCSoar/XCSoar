@@ -136,7 +136,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     for (int i = 0; i < NUM_SOL; i++) {
       loc_end.latitude += Angle::Degrees(fixed(0.1));
       loc_end.altitude = map.GetHeight(loc_end) + 100;
-      route.synchronise(airspaces, loc_start, loc_end);
+      route.Synchronise(airspaces, loc_start, loc_end);
       if (route.Solve(loc_start, loc_end, config)) {
         sol = true;
         if (verbose) {

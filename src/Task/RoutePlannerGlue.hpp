@@ -45,7 +45,7 @@ public:
   void synchronise(const Airspaces& master,
                    const AGeoPoint& origin,
                    const AGeoPoint& destination) {
-    m_planner.synchronise(master, origin, destination);
+    m_planner.Synchronise(master, origin, destination);
   }
   void reset() {
     m_planner.Reset();
