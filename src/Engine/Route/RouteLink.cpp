@@ -42,17 +42,10 @@ AngleToIndex(Angle a)
 }
 
 gcc_const
-static Angle
-XYToAngle(fixed x, fixed y)
-{
-  return Angle::Radians(atan2(x, y));
-}
-
-gcc_const
 static unsigned
 XYToIndex(fixed x, fixed y)
 {
-  return AngleToIndex(XYToAngle(x, y));
+  return AngleToIndex(Angle::FromXY(y, x));
 }
 
 RouteLink::RouteLink (const RouteLinkBase& _link, const TaskProjection &proj)
