@@ -214,7 +214,7 @@ public:
   /** Visit reach */
   void AcceptInRange(const GeoBounds &bounds,
                      TriangleFanVisitor &visitor) const {
-    reach.accept_in_range(bounds, visitor);
+    reach.AcceptInRange(bounds, visitor);
   }
 
   /**
@@ -265,12 +265,12 @@ public:
   bool FindPositiveArrival(const AGeoPoint &dest,
                            RoughAltitude &arrival_height_reach,
                            RoughAltitude &arrival_height_direct) const {
-    return reach.find_positive_arrival(dest, rpolars_reach, arrival_height_reach,
+    return reach.FindPositiveArrival(dest, rpolars_reach, arrival_height_reach,
                                        arrival_height_direct);
   }
 
   RoughAltitude GetTerrainBase() const {
-    return reach.get_terrain_base();
+    return reach.GetTerrainBase();
   }
 
 protected:

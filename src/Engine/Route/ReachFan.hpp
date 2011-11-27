@@ -31,34 +31,32 @@ class RoutePolars;
 class RasterMap;
 struct GeoBounds;
 
-class ReachFan {
+class ReachFan
+{
   TaskProjection task_proj;
   FlatTriangleFanTree root;
   RoughAltitude terrain_base;
 
 public:
-  ReachFan():terrain_base(0) {};
+  ReachFan():terrain_base(0) {}
 
   friend class PrintHelper;
 
-  void reset();
+  void Reset();
 
-  bool solve(const AGeoPoint origin,
-             const RoutePolars &rpolars,
-             const RasterMap *terrain,
-             const bool do_solve=true);
+  bool Solve(const AGeoPoint origin, const RoutePolars &rpolars,
+             const RasterMap *terrain, const bool do_solve = true);
 
-  bool find_positive_arrival(const AGeoPoint dest,
-                             const RoutePolars &rpolars,
-                             RoughAltitude &arrival_height_reach,
-                             RoughAltitude &arrival_height_direct) const;
+  bool FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
+                           RoughAltitude &arrival_height_reach,
+                           RoughAltitude &arrival_height_direct) const;
 
-  bool is_inside(const GeoPoint origin, const bool turning=true) const;
+  bool IsInside(const GeoPoint origin, const bool turning = true) const;
 
-  void accept_in_range(const GeoBounds& bounds,
-                       TriangleFanVisitor& visitor) const;
+  void AcceptInRange(const GeoBounds& bounds,
+                     TriangleFanVisitor& visitor) const;
 
-  RoughAltitude get_terrain_base() const {
+  RoughAltitude GetTerrainBase() const {
     return terrain_base;
   }
 };

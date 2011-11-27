@@ -25,16 +25,18 @@
 #include "Terrain/RasterMap.hpp"
 #include "ReachFanParms.hpp"
 
-void ReachFan::reset() {
+void
+ReachFan::Reset()
+{
   root.Clear();
   terrain_base = 0;
 }
 
-bool ReachFan::solve(const AGeoPoint origin,
-                     const RoutePolars &rpolars,
-                     const RasterMap* terrain,
-                     const bool do_solve) {
-  reset();
+bool
+ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
+                const RasterMap* terrain, const bool do_solve)
+{
+  Reset();
 
   // initialise task_proj
   task_proj.reset(origin);
@@ -76,7 +78,7 @@ bool ReachFan::solve(const AGeoPoint origin,
 }
 
 bool
-ReachFan::is_inside(const GeoPoint origin, const bool turning) const
+ReachFan::IsInside(const GeoPoint origin, const bool turning) const
 {
   // no data? probably not solved yet
   if (root.IsEmpty())
@@ -86,10 +88,9 @@ ReachFan::is_inside(const GeoPoint origin, const bool turning) const
 }
 
 bool
-ReachFan::find_positive_arrival(const AGeoPoint dest,
-                                const RoutePolars &rpolars,
-                                RoughAltitude &arrival_height_reach,
-                                RoughAltitude &arrival_height_direct) const
+ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
+                              RoughAltitude &arrival_height_reach,
+                              RoughAltitude &arrival_height_direct) const
 {
   arrival_height_reach = -1;
   arrival_height_direct = -1;
@@ -120,7 +121,7 @@ ReachFan::find_positive_arrival(const AGeoPoint dest,
 }
 
 void
-ReachFan::accept_in_range(const GeoBounds& bounds,
+ReachFan::AcceptInRange(const GeoBounds& bounds,
                           TriangleFanVisitor& visitor) const
 {
   if (root.IsEmpty())

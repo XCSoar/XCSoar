@@ -46,7 +46,7 @@ RoutePlanner::Reset()
   h_min = RoughAltitude(-1);
   h_max = RoughAltitude(0);
   search_hull.clear();
-  reach.reset();
+  reach.Reset();
 }
 
 bool
@@ -57,7 +57,7 @@ RoutePlanner::SolveReach(const AGeoPoint &origin,
   rpolars_reach.SetConfig(config, origin.altitude, h_ceiling);
   reach_polar_mode = config.reach_polar_mode;
 
-  return reach.solve(origin, rpolars_reach, terrain, do_solve);
+  return reach.Solve(origin, rpolars_reach, terrain, do_solve);
 }
 
 bool
