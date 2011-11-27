@@ -43,11 +43,11 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent,
                                PixelScalar x, PixelScalar y,
                                UPixelScalar _width, UPixelScalar _height,
                                const WindowStyle style)
-  :LastContent(menu_tab_index::None()),
-   Caption(_caption),
+  :last_content(menu_tab_index::None()),
+   caption(_caption),
    setting_up(true),
    form(_form),
-   LookUpTable(_look_up_table)
+   look_up_table(_look_up_table)
 
 {
   set(_parent, x, 0, _parent.get_width() - x, _parent.get_height(), style);
@@ -193,15 +193,15 @@ TabMenuControl::SetCurrentPage(unsigned page)
   setting_up = false;
 
   if (page == GetMenuPage()) {
-    form.SetCaption(Caption);
-    const menu_tab_index di = LastContent;
+    form.SetCaption(caption);
+    const menu_tab_index di = last_content;
     this->GetTabMenuDisplay()->SetSelectedIndex(di);
 
   } else {
     const PageItem& theitem = GetPageItem(page);
     SetLastContentPage(page);
     const OneMainMenuButton *butMain =
-      GetMainMenuButton(LastContent.MainIndex);
+      GetMainMenuButton(last_content.MainIndex);
     assert(butMain);
     TCHAR caption[128];
     _sntprintf(caption, 128, _T("%s > %s"),
@@ -213,13 +213,13 @@ TabMenuControl::SetCurrentPage(unsigned page)
 void TabMenuControl::SetLastContentPage(unsigned page)
 {
   if (page == GetMenuPage())
-    LastContent = menu_tab_index::None();
+    last_content = menu_tab_index::None();
   else {
     const PageItem& theitem = GetPageItem(page);
-    LastContent.MainIndex = theitem.main_menu_index;
-    LastContent.SubIndex = GetSubMenuButton(page)->Menu.SubIndex;
+    last_content.MainIndex = theitem.main_menu_index;
+    last_content.SubIndex = GetSubMenuButton(page)->Menu.SubIndex;
   }
-  GetTabMenuDisplay()->SetSelectedIndex(LastContent);
+  GetTabMenuDisplay()->SetSelectedIndex(last_content);
 }
 
 int
@@ -393,7 +393,7 @@ TabMenuControl::CreateSubMenuItem(const unsigned sub_menu_index,
              item.xml_portrait_resource,
              Layout::landscape ? _T("_L") : _T(""));
 
-  Window *w = LoadWindow(LookUpTable, &form, pager, xml_resource);
+  Window *w = LoadWindow(look_up_table, &form, pager, xml_resource);
   AddClient(w, item, sub_menu_index, page);
 }
 
@@ -436,7 +436,7 @@ TabMenuControl::InitMenu(const PageItem pages_in[],
     CreateSubMenu(pages_in, num_pages, main_menu_captions[i], i);
 
   pager.AddClient(tab_display);
-  buttons.append(new OneSubMenuButton(Caption, menu_tab_index::None(), 0,
+  buttons.append(new OneSubMenuButton(caption, menu_tab_index::None(), 0,
                                       NULL, NULL));
 
   assert(GetNumPages() == num_pages);

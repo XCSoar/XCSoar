@@ -128,15 +128,15 @@ protected:
   /* holds pointer to array of menus info (must be sorted by MenuGroup) */
   PageItem const *pages;
 
-  menu_tab_index LastContent;
+  menu_tab_index last_content;
 
-  StaticString<256u> Caption;
+  StaticString<256u> caption;
 
   // used to indicate initial state before tabs have changed
   bool setting_up;
 
   WndForm &form;
-  const CallBackTableEntry *LookUpTable;
+  const CallBackTableEntry *look_up_table;
 
 public:
   /**
@@ -271,7 +271,7 @@ public:
    */
   gcc_pure
   unsigned GetLastContentPage() const {
-    return GetPageNum(LastContent);
+    return GetPageNum(last_content);
   }
 
   const StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS>
