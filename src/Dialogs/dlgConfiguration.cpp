@@ -298,10 +298,7 @@ void dlgConfigurationShowModal(void)
 {
   PrepareConfigurationDialog();
 
-  if (wf->ShowModal() != mrOK) {
-    delete wf;
-    return;
-  }
+  wf->ShowModal();
 
   /* save page number for next time this dialog is opened */
   current_page = wTabMenu->GetLastContentPage();
