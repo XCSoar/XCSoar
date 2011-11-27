@@ -398,7 +398,7 @@ TabMenuControl::CreateSubMenuItem(const unsigned sub_menu_index,
 }
 
 void
-TabMenuControl::CreateSubMenu(const PageItem pages[], unsigned NumPages,
+TabMenuControl::CreateSubMenu(const PageItem pages_in[], unsigned NumPages,
                               const TCHAR *main_menu_caption,
                               const unsigned main_menu_index)
 {
@@ -407,7 +407,7 @@ TabMenuControl::CreateSubMenu(const PageItem pages[], unsigned NumPages,
   unsigned subMenuIndex = 0;
 
   for (unsigned i = 0; i < NumPages; i++) {
-    const PageItem& item = pages[i];
+    const PageItem& item = pages_in[i];
     if (item.main_menu_index == main_menu_index) {
       CreateSubMenuItem(subMenuIndex, item, i);
       firstPageIndex = min(i, firstPageIndex);
@@ -422,18 +422,18 @@ TabMenuControl::CreateSubMenu(const PageItem pages[], unsigned NumPages,
 }
 
 void
-TabMenuControl::InitMenu(const PageItem pages[],
+TabMenuControl::InitMenu(const PageItem pages_in[],
                          unsigned num_pages,
                          const TCHAR *main_menu_captions[],
                          unsigned num_menu_captions)
 {
-  assert(pages);
+  assert(pages_in);
   assert(main_menu_captions);
 
-  Pages = pages;
+  pages = pages_in;
 
   for (unsigned i = 0; i < num_menu_captions; i++)
-    CreateSubMenu(pages, num_pages, main_menu_captions[i], i);
+    CreateSubMenu(pages_in, num_pages, main_menu_captions[i], i);
 
   pager.AddClient(tab_display);
   buttons.append(new OneSubMenuButton(Caption, menu_tab_index::None(), 0,

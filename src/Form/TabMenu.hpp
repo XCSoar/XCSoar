@@ -126,7 +126,7 @@ protected:
   TabMenuDisplay *tab_display;
 
   /* holds pointer to array of menus info (must be sorted by MenuGroup) */
-  PageItem const *Pages;
+  PageItem const *pages;
 
   menu_tab_index LastContent;
 
@@ -245,7 +245,7 @@ public:
    */
   const PageItem &GetPageItem(unsigned page) const {
     assert(page < GetNumPages());
-    return Pages[page];
+    return pages[page];
   }
 
   /**
@@ -318,7 +318,7 @@ protected:
    * @param MainMenuIndex 0 to (MAX_SUB_MENUS-1)
    */
   void
-  CreateSubMenu(const PageItem pages[], unsigned num_pages,
+  CreateSubMenu(const PageItem pages_in[], unsigned num_pages,
                 const TCHAR *main_menu_caption,
                 const unsigned main_menu_index);
 
