@@ -55,8 +55,7 @@ FlatTriangleFanTree::CalcBB()
 
   bb_children = bounding_box;
 
-  for (LeafVector::iterator it = children.begin(), end = children.end();
-      it != end; ++it) {
+  for (auto it = children.begin(), end = children.end(); it != end; ++it) {
     it->CalcBB();
     bb_children.Merge(it->bb_children);
   }
@@ -80,8 +79,7 @@ FlatTriangleFanTree::IsInsideTree(const FlatGeoPoint &p,
   if (!include_children)
     return false;
 
-  for (LeafVector::const_iterator it = children.begin(), end = children.end();
-       it != end; ++it)
+  for (auto it = children.cbegin(), end = children.cend(); it != end; ++it)
     if (it->IsInsideTree(p, true))
       return true;
 
@@ -131,8 +129,7 @@ FlatTriangleFanTree::FillDepth(const AFlatGeoPoint &origin,
 
     FillGaps(origin, parms);
   } else if (depth < parms.set_depth) {
-    for (LeafVector::iterator it = children.begin(), end = children.end();
-         it != end; ++it)
+    for (auto it = children.begin(), end = children.end(); it != end; ++it)
       if (!it->FillDepth(origin, parms))
         return false; // stop searching
   }
@@ -173,7 +170,7 @@ FlatTriangleFanTree::FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms)
     const RoutePoint o(origin, RoughAltitude(0));
     RouteLink e_last(RoutePoint(*vs.begin(), RoughAltitude(0)),
                      o, parms.task_proj);
-    for (VertexVector::const_iterator x_last = vs.begin(), end = vs.end(),
+    for (auto x_last = vs.cbegin(), end = vs.cend(),
          x = x_last + 1; x != end; x_last = x++) {
       if (too_close(*x, origin) || too_close(*x_last, origin))
         continue;
@@ -196,8 +193,7 @@ FlatTriangleFanTree::UpdateTerrainBase(const FlatGeoPoint &o,
     return;
   }
 
-  for (VertexVector::const_iterator x = vs.begin(), end = vs.end();
-       x != end; ++x) {
+  for (auto x = vs.cbegin(), end = vs.cend(); x != end; ++x) {
     const FlatGeoPoint av = (o + (*x)) * fixed_half;
     const GeoPoint p = parms.task_proj.unproject(av);
     short h = parms.terrain->GetHeight(p);
@@ -307,8 +303,7 @@ FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint &n,
   }
 
   bool retval = false;
-  for (LeafVector::const_iterator it = children.begin(), end = children.end();
-      it != end; ++it)
+  for (auto it = children.cbegin(), end = children.cend(); it != end; ++it)
     if (it->FindPositiveArrival(n, parms, arrival_height))
       retval = true;
 
@@ -325,14 +320,12 @@ FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
 
   if (bb.Overlaps(bounding_box)) {
     visitor.StartFan();
-    for (VertexVector::const_iterator it = vs.begin(), end = vs.end();
-         it != end; ++it)
+    for (auto it = vs.cbegin(), end = vs.cend(); it != end; ++it)
       visitor.AddPoint(task_proj.unproject(*it));
 
     visitor.EndFan();
   }
 
-  for (LeafVector::const_iterator it = children.begin(), end = children.end();
-       it != end; ++it)
+  for (auto it = children.cbegin(), end = children.cend(); it != end; ++it)
     it->AcceptInRange(bb, task_proj, visitor);
 }
