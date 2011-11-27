@@ -59,13 +59,13 @@ public:
     unsigned main_menu_index;
 
     /* If the page needs to perform actions each time before it is displayed */
-    TabBarControl::PreShowNotifyCallback_t PreShowCallback;
+    TabBarControl::PreShowNotifyCallback_t pre_show_callback;
 
     /* If the page needs to perform cleanup after each time it is hidden */
-    TabBarControl::PreHideNotifyCallback_t PreHideCallback;
+    TabBarControl::PreHideNotifyCallback_t pre_hide_callback;
 
     /* Portrait XML resource.  Assumes "_L" converts name to landscape */
-    const TCHAR *XML_PortraitResource;
+    const TCHAR *xml_portrait_resource;
 
     Widget *(*Load)();
   };

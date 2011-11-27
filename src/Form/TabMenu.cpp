@@ -86,7 +86,7 @@ TabMenuControl::AddClient(Window *w, const PageItem& item,
                                           sub_menu_index),
                            page,
                            NULL,
-                           item.PreShowCallback);
+                           item.pre_show_callback);
   buttons.append(b);
   return buttons.size() - 1;
 }
@@ -136,8 +136,8 @@ TabMenuControl::HideAllPageExtras()
 {
   for (unsigned i = 0; i < GetNumPages(); i++) {
     const PageItem& theitem = GetPageItem(i);
-    if (theitem.PreHideCallback != NULL)
-      theitem.PreHideCallback();
+    if (theitem.pre_hide_callback != NULL)
+      theitem.pre_hide_callback();
   }
 }
 
@@ -390,7 +390,7 @@ TabMenuControl::CreateSubMenuItem(const unsigned sub_menu_index,
 
   TCHAR xml_resource[100];
   _sntprintf(xml_resource, 100, _T("%s%s"),
-             item.XML_PortraitResource,
+             item.xml_portrait_resource,
              Layout::landscape ? _T("_L") : _T(""));
 
   Window *w = LoadWindow(LookUpTable, &form, pager, xml_resource);
