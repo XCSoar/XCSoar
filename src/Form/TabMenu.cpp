@@ -58,7 +58,7 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent,
   pager.set(*this, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
             pager_style);
 
-  theTabDisplay = new TabMenuDisplay(*this, look, pager,
+  tab_display = new TabMenuDisplay(*this, look, pager,
                                      0, y, _width, _height);
 }
 
@@ -67,11 +67,11 @@ TabMenuControl::~TabMenuControl()
   for (auto i = buttons.begin(), end = buttons.end(); i != end; ++i)
     delete *i;
 
-  for (auto i = MainMenuButtons.begin(), end = MainMenuButtons.end();
+  for (auto i = main_menu_buttons.begin(), end = main_menu_buttons.end();
        i != end; ++i)
     delete *i;
 
-  delete theTabDisplay;
+  delete tab_display;
 }
 
 unsigned
@@ -144,10 +144,10 @@ TabMenuControl::HideAllPageExtras()
 const OneMainMenuButton *
 TabMenuControl::GetMainMenuButton(unsigned main_menu_index) const
 {
-  if (main_menu_index >= MainMenuButtons.size())
+  if (main_menu_index >= main_menu_buttons.size())
     return NULL;
   else
-    return MainMenuButtons[main_menu_index];
+    return main_menu_buttons[main_menu_index];
 }
 
 const OneSubMenuButton *
@@ -228,7 +228,7 @@ TabMenuControl::GetPageNum(menu_tab_index i) const
   if (!i.IsSub())
     return this->GetMenuPage();
 
-  assert(i.MainIndex < MainMenuButtons.size());
+  assert(i.MainIndex < main_menu_buttons.size());
   assert(i.SubIndex < GetNumPages());
 
   const OneMainMenuButton *butMain = GetMainMenuButton(i.MainIndex);
@@ -272,7 +272,7 @@ TabMenuControl::GetButtonVerticalOffset() const
 UPixelScalar
 TabMenuControl::GetMenuButtonWidth() const
 {
-  return (theTabDisplay->GetTabWidth() - GetTabLineHeight()) / 2;
+  return (tab_display->GetTabWidth() - GetTabLineHeight()) / 2;
 }
 
 const PixelRect&
@@ -280,12 +280,12 @@ TabMenuControl::GetMainMenuButtonSize(unsigned i) const
 {
   const static PixelRect rcFallback = {0, 0, 0, 0};
 
-  if (i >= MainMenuButtons.size())
+  if (i >= main_menu_buttons.size())
     return rcFallback;
 
-  if (MainMenuButtons[i]->butSize.left < MainMenuButtons[i]->butSize.right)
-    return MainMenuButtons[i]->butSize;
-  PixelRect &rc = MainMenuButtons[i]->butSize;
+  if (main_menu_buttons[i]->butSize.left < main_menu_buttons[i]->butSize.right)
+    return main_menu_buttons[i]->butSize;
+  PixelRect &rc = main_menu_buttons[i]->butSize;
   const UPixelScalar margin = Layout::Scale(1);
   const UPixelScalar finalmargin = Layout::Scale(1);
   const UPixelScalar butHeight = GetMenuButtonHeight();
@@ -296,7 +296,7 @@ TabMenuControl::GetMainMenuButtonSize(unsigned i) const
   rc.left = 0;
   rc.right = GetMenuButtonWidth();
 
-  return MainMenuButtons[i]->butSize;
+  return main_menu_buttons[i]->butSize;
 }
 
 const PixelRect&
@@ -418,7 +418,7 @@ TabMenuControl::CreateSubMenu(const PageItem pages[], unsigned NumPages,
       new OneMainMenuButton(main_menu_caption, firstPageIndex,
                             firstPageIndex + subMenuIndex - 1,
                             main_menu_index);
-  MainMenuButtons.append(b);
+  main_menu_buttons.append(b);
 }
 
 void
@@ -435,7 +435,7 @@ TabMenuControl::InitMenu(const PageItem pages[],
   for (unsigned i = 0; i < num_menu_captions; i++)
     CreateSubMenu(pages, num_pages, main_menu_captions[i], i);
 
-  pager.AddClient(theTabDisplay);
+  pager.AddClient(tab_display);
   buttons.append(new OneSubMenuButton(Caption, menu_tab_index::None(), 0,
                                       NULL, NULL));
 

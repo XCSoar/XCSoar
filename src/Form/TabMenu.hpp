@@ -121,9 +121,9 @@ protected:
   StaticArray<OneSubMenuButton *, 32> buttons;
 
   /* holds info and buttons for the main menu.  not on child menus */
-  StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS> MainMenuButtons;
+  StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS> main_menu_buttons;
 
-  TabMenuDisplay *theTabDisplay;
+  TabMenuDisplay *tab_display;
 
   /* holds pointer to array of menus info (must be sorted by MenuGroup) */
   PageItem const *Pages;
@@ -188,7 +188,7 @@ public:
   unsigned GotoMenuPage();
 
   unsigned GetNumMainMenuItems() const {
-    return MainMenuButtons.size();
+    return main_menu_buttons.size();
   }
 
   /**
@@ -275,7 +275,7 @@ public:
   }
 
   const StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS>
-      &GetMainMenuButtons() { return MainMenuButtons; }
+      &GetMainMenuButtons() { return main_menu_buttons; }
 
 protected:
   /**
@@ -295,7 +295,7 @@ protected:
   }
 
   TabMenuDisplay *GetTabMenuDisplay() {
-    return theTabDisplay;
+    return tab_display;
   }
 
   /**
