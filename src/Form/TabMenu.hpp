@@ -467,8 +467,8 @@ public:
    */
   TabBarControl::PreShowNotifyCallback_t PreShowFunction;
 
-  const TabMenuControl::menu_tab_index Menu;
-  const unsigned PageIndex;
+  const TabMenuControl::menu_tab_index menu;
+  const unsigned page_index;
 
 public:
   OneSubMenuButton(const TCHAR* _Caption, TabMenuControl::menu_tab_index i,
@@ -477,8 +477,8 @@ public:
                    TabBarControl::PreShowNotifyCallback_t _PreShowFunction)
     :OneTabButton(_Caption, false, NULL),
      PreHideFunction(_PreHideFunction), PreShowFunction(_PreShowFunction),
-     Menu(i),
-     PageIndex(_page_index)
+     menu(i),
+     page_index(_page_index)
   {
   }
 };
@@ -489,26 +489,26 @@ public:
 class OneMainMenuButton : public OneTabButton {
 public:
   /* index to Pages array of first page in submenu */
-  const unsigned FirstPageIndex;
+  const unsigned first_page_index;
 
   /* index to Pages array of last page in submenu */
-  const unsigned LastPageIndex;
+  const unsigned last_page_index;
 
   /* index of button in MainMenu */
-  const unsigned MainMenuIndex;
+  const unsigned main_menu_index;
 
   OneMainMenuButton(const TCHAR* _Caption,
-                    unsigned _FirstPageIndex,
-                    unsigned _LastPageIndex,
-                    unsigned _MainMenuIndex)
+                    unsigned _first_page_index,
+                    unsigned _last_page_index,
+                    unsigned _main_menu_index)
     :OneTabButton(_Caption, false, NULL),
-     FirstPageIndex(_FirstPageIndex),
-     LastPageIndex(_LastPageIndex),
-     MainMenuIndex(_MainMenuIndex)
+     first_page_index(_first_page_index),
+     last_page_index(_last_page_index),
+     main_menu_index(_main_menu_index)
   {
   }
 
 public:
-  unsigned NumSubMenus() const { return LastPageIndex - FirstPageIndex + 1; };
+  unsigned NumSubMenus() const { return last_page_index - first_page_index + 1; };
 };
 #endif
