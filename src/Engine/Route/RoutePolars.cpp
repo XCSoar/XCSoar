@@ -109,7 +109,7 @@ bool
 RoutePolars::CheckClearance(const RouteLink &e, const RasterMap* map,
                              const TaskProjection &proj, RoutePoint& inp) const
 {
-  if (!config.terrain_enabled())
+  if (!config.IsTerrainEnabled())
     return true;
 
   GeoPoint int_x;

@@ -90,7 +90,7 @@ struct VisibleWaypoint {
 
     if (!arrival_height_glide.IsPositive())
       reachable = WaypointRenderer::Unreachable;
-    else if (task_behaviour.route_planner.reach_enabled() &&
+    else if (task_behaviour.route_planner.IsReachEnabled() &&
              !arrival_height_terrain.IsPositive())
       reachable = WaypointRenderer::ReachableStraight;
     else

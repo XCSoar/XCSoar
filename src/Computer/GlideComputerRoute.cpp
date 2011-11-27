@@ -128,7 +128,7 @@ GlideComputerRoute::Reach(const MoreData &basic, DerivedInfo &calculated,
     return;
   }
 
-  const bool do_solve = config.reach_enabled() && terrain != NULL;
+  const bool do_solve = config.IsReachEnabled() && terrain != NULL;
 
   const AircraftState state = ToAircraftState(basic, calculated);
   const AGeoPoint start (state.location, state.altitude);

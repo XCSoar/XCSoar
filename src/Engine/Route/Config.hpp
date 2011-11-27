@@ -25,7 +25,8 @@
 
 #include "Math/fixed.hpp"
 
-struct RoutePlannerConfig {
+struct RoutePlannerConfig
+{
   enum Mode {
     rpNone=0,
     rpTerrain,
@@ -61,13 +62,13 @@ struct RoutePlannerConfig {
 
   void SetDefaults();
 
-  bool terrain_enabled() const {
-    return (mode== rpTerrain) || (mode== rpBoth);
+  bool IsTerrainEnabled() const {
+    return mode== rpTerrain || mode== rpBoth;
   }
-  bool airspace_enabled() const {
-    return (mode== rpAirspace) || (mode== rpBoth);
+  bool IsAirspaceEnabled() const {
+    return mode== rpAirspace || mode== rpBoth;
   }
-  bool reach_enabled() const {
+  bool IsReachEnabled() const {
     return reach_calc_mode != rmOff;
   }
 };

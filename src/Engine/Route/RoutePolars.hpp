@@ -175,7 +175,7 @@ public:
    * @return True if airspace tests are required
    */
   bool IsAirspaceEnabled() const {
-    return config.airspace_enabled();
+    return config.IsAirspaceEnabled();
   }
 
   /**
@@ -184,7 +184,7 @@ public:
    * @return True if terrain tests are required
    */
   bool IsTerrainEnabled() const {
-    return config.terrain_enabled();
+    return config.IsTerrainEnabled();
   }
 
   /**
