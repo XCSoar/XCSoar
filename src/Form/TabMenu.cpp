@@ -458,7 +458,6 @@ TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
   :menu(_theTabBar),
    look(_look),
    dragging(false),
-   downindex(-1),
    dragoffbutton(false),
    DownIndex(TabMenuControl::menu_tab_index::None()),
    SelectedIndex(TabMenuControl::menu_tab_index::None())

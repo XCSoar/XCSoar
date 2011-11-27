@@ -384,7 +384,6 @@ class TabMenuDisplay : public PaintWindow {
   TabMenuControl &menu;
   const DialogLook &look;
   bool dragging; // tracks that mouse is down and captured
-  int downindex; // index of tab where mouse down occurred
   bool dragoffbutton; // set by mouse_move
 
 public:
