@@ -43,7 +43,7 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent,
                                PixelScalar x, PixelScalar y,
                                UPixelScalar _width, UPixelScalar _height,
                                const WindowStyle style)
-  :last_content(menu_tab_index::None()),
+  :last_content(MenuTabIndex::None()),
    caption(_caption),
    setting_up(true),
    form(_form),
@@ -82,7 +82,7 @@ TabMenuControl::AddClient(Window *w, const PageItem& item,
   pager.AddClient(w);
   OneSubMenuButton *b =
       new OneSubMenuButton(item.menu_caption,
-                           menu_tab_index(item.main_menu_index,
+                           MenuTabIndex(item.main_menu_index,
                                           sub_menu_index),
                            page,
                            NULL,
@@ -161,7 +161,7 @@ TabMenuControl::GetSubMenuButton(unsigned page) const
 }
 
 void
-TabMenuControl::SetCurrentPage(TabMenuControl::menu_tab_index menuIndex)
+TabMenuControl::SetCurrentPage(TabMenuControl::MenuTabIndex menuIndex)
 {
   assert(!menuIndex.IsNone());
 
@@ -194,7 +194,7 @@ TabMenuControl::SetCurrentPage(unsigned page)
 
   if (page == GetMenuPage()) {
     form.SetCaption(caption);
-    const menu_tab_index di = last_content;
+    const MenuTabIndex di = last_content;
     this->GetTabMenuDisplay()->SetSelectedIndex(di);
 
   } else {
@@ -213,7 +213,7 @@ TabMenuControl::SetCurrentPage(unsigned page)
 void TabMenuControl::SetLastContentPage(unsigned page)
 {
   if (page == GetMenuPage())
-    last_content = menu_tab_index::None();
+    last_content = MenuTabIndex::None();
   else {
     const PageItem& theitem = GetPageItem(page);
     last_content.main_index = theitem.main_menu_index;
@@ -223,7 +223,7 @@ void TabMenuControl::SetLastContentPage(unsigned page)
 }
 
 int
-TabMenuControl::GetPageNum(menu_tab_index i) const
+TabMenuControl::GetPageNum(MenuTabIndex i) const
 {
   if (!i.IsSub())
     return this->GetMenuPage();
@@ -344,13 +344,13 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page) const
   return buttons[page]->butSize;
 }
 
-TabMenuControl::menu_tab_index
+TabMenuControl::MenuTabIndex
 TabMenuControl::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
 {
   // scan main menu buttons
   for (unsigned i = 0; i < GetNumMainMenuItems(); i++)
     if (PtInRect(&GetMainMenuButtonSize(i), Pos))
-      return menu_tab_index(i);
+      return MenuTabIndex(i);
 
 
   // scan visible submenu
@@ -360,12 +360,12 @@ TabMenuControl::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
       for (unsigned i = butMain->first_page_index; i <= butMain->last_page_index;
            i++) {
         if (PtInRect(&GetSubMenuButtonSize(i), Pos))
-          return menu_tab_index(mainIndex, i - butMain->first_page_index);
+          return MenuTabIndex(mainIndex, i - butMain->first_page_index);
       }
     }
   }
 
-  return menu_tab_index::None();
+  return MenuTabIndex::None();
 }
 
 void
@@ -380,7 +380,7 @@ TabMenuControl::CreateSubMenuItem(const unsigned sub_menu_index,
 
     OneSubMenuButton *b =
       new OneSubMenuButton(item.menu_caption,
-                           menu_tab_index(item.main_menu_index,
+                           MenuTabIndex(item.main_menu_index,
                                           sub_menu_index),
                            page,
                            NULL, NULL);
@@ -436,7 +436,7 @@ TabMenuControl::InitMenu(const PageItem pages_in[],
     CreateSubMenu(pages_in, num_pages, main_menu_captions[i], i);
 
   pager.AddClient(tab_display);
-  buttons.append(new OneSubMenuButton(caption, menu_tab_index::None(), 0,
+  buttons.append(new OneSubMenuButton(caption, MenuTabIndex::None(), 0,
                                       NULL, NULL));
 
   assert(GetNumPages() == num_pages);
@@ -459,8 +459,8 @@ TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
    look(_look),
    dragging(false),
    drag_off_button(false),
-   down_index(TabMenuControl::menu_tab_index::None()),
-   selected_index(TabMenuControl::menu_tab_index::None())
+   down_index(TabMenuControl::MenuTabIndex::None()),
+   selected_index(TabMenuControl::MenuTabIndex::None())
 {
   WindowStyle mystyle;
   mystyle.tab_stop();
@@ -468,7 +468,7 @@ TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
 }
 
 void
-TabMenuDisplay::SetSelectedIndex(TabMenuControl::menu_tab_index di)
+TabMenuDisplay::SetSelectedIndex(TabMenuControl::MenuTabIndex di)
 {
   selected_index = di;
   invalidate();
@@ -545,7 +545,7 @@ TabMenuDisplay::on_mouse_up(PixelScalar x, PixelScalar y)
 
   if (dragging) {
     drag_end();
-    const TabMenuControl::menu_tab_index di =
+    const TabMenuControl::MenuTabIndex di =
         GetTabMenuBar().IsPointOverButton(Pos, selected_index.main_index);
 
     if (di == down_index) {
@@ -560,7 +560,7 @@ TabMenuDisplay::on_mouse_up(PixelScalar x, PixelScalar y)
       invalidate();
     }
 
-    down_index = TabMenuControl::menu_tab_index::None();
+    down_index = TabMenuControl::MenuTabIndex::None();
 
     return true;
   } else {

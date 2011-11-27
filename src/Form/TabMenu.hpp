@@ -77,7 +77,7 @@ public:
   };
 
   /* internally used structure for tracking menu down and selection status */
-  struct menu_tab_index {
+  struct MenuTabIndex {
     static const unsigned NO_MAIN_MENU = 997;
     static const unsigned NO_SUB_MENU = 998;
 
@@ -85,12 +85,12 @@ public:
     unsigned sub_index;
 
     gcc_constexpr_ctor
-    explicit menu_tab_index(unsigned mainNum, unsigned subNum=NO_SUB_MENU)
+    explicit MenuTabIndex(unsigned mainNum, unsigned subNum=NO_SUB_MENU)
       :main_index(mainNum), sub_index(subNum) {}
 
     gcc_constexpr_function
-    static menu_tab_index None() {
-      return menu_tab_index(NO_MAIN_MENU, NO_SUB_MENU);
+    static MenuTabIndex None() {
+      return MenuTabIndex(NO_MAIN_MENU, NO_SUB_MENU);
     }
 
     gcc_constexpr_method
@@ -109,7 +109,7 @@ public:
     }
 
     gcc_constexpr_method
-    bool operator==(const menu_tab_index &other) const {
+    bool operator==(const MenuTabIndex &other) const {
       return main_index == other.main_index &&
         sub_index == other.sub_index;
     }
@@ -128,7 +128,7 @@ protected:
   /* holds pointer to array of menus info (must be sorted by MenuGroup) */
   PageItem const *pages;
 
-  menu_tab_index last_content;
+  MenuTabIndex last_content;
 
   StaticString<256u> caption;
 
@@ -228,10 +228,10 @@ public:
   /**
    * @param Pos position of pointer
    * @param mainIndex main menu whose submenu buttons are visible
-   * @return menu_tab_index w/ location of item
+   * @return MenuTabIndex w/ location of item
    */
   gcc_pure
-  menu_tab_index IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const;
+  MenuTabIndex IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const;
 
   /**
    * @return number of pages excluding the menu page
@@ -258,7 +258,7 @@ public:
    *  or GetMenuPage() if index is not a valid page
    */
   gcc_pure
-  int GetPageNum(menu_tab_index i) const;
+  int GetPageNum(MenuTabIndex i) const;
 
   /**
    * overloads from TabBarControl.
@@ -357,7 +357,7 @@ public:
   void NextPage();
   void PreviousPage();
   void SetCurrentPage(unsigned page);
-  void SetCurrentPage(menu_tab_index menuIndex);
+  void SetCurrentPage(MenuTabIndex menuIndex);
 
   bool Save(bool &changed, bool &require_restart) {
     return pager.Save(changed, require_restart);
@@ -388,9 +388,9 @@ class TabMenuDisplay : public PaintWindow {
 
 public:
   /* used to track mouse down/up clicks */
-  TabMenuControl::menu_tab_index down_index;
+  TabMenuControl::MenuTabIndex down_index;
   /* used to render which submenu is drawn and which item is highlighted */
-  TabMenuControl::menu_tab_index selected_index;
+  TabMenuControl::MenuTabIndex selected_index;
 
 public:
   TabMenuDisplay(TabMenuControl &_menu, const DialogLook &look,
@@ -398,7 +398,7 @@ public:
                  PixelScalar left, PixelScalar top,
                  UPixelScalar width, UPixelScalar height);
 
-  void SetSelectedIndex(TabMenuControl::menu_tab_index di);
+  void SetSelectedIndex(TabMenuControl::MenuTabIndex di);
 
   UPixelScalar GetTabHeight() const {
     return this->get_height();
@@ -412,7 +412,7 @@ public:
    * Returns index of selected (highlighted) tab
    * @return
    */
-  const TabMenuControl::menu_tab_index GetSelectedIndex() { return selected_index; }
+  const TabMenuControl::MenuTabIndex GetSelectedIndex() { return selected_index; }
 
 protected:
   TabMenuControl &GetTabMenuBar() {
@@ -467,11 +467,11 @@ public:
    */
   TabBarControl::PreShowNotifyCallback_t PreShowFunction;
 
-  const TabMenuControl::menu_tab_index menu;
+  const TabMenuControl::MenuTabIndex menu;
   const unsigned page_index;
 
 public:
-  OneSubMenuButton(const TCHAR* _Caption, TabMenuControl::menu_tab_index i,
+  OneSubMenuButton(const TCHAR* _Caption, TabMenuControl::MenuTabIndex i,
                    unsigned _page_index,
                    TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
                    TabBarControl::PreShowNotifyCallback_t _PreShowFunction)
