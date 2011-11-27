@@ -270,15 +270,6 @@ DoubleDistance(const GeoPoint loc1, const GeoPoint loc2, const GeoPoint loc3)
     (earth_distance_function(a12) + earth_distance_function(a23));
 }
 
-/**
- * Calculates the location (loc_out) you would have, after being at
- * a certain start location (loc) with a certain Bearing and going straight
- * forward for a certain Distance.
- * @param loc Current location
- * @param Bearing Current bearing
- * @param Distance Distance to predict
- * @param loc_out Future location
- */
 GeoPoint
 FindLatitudeLongitude(const GeoPoint loc, const Angle bearing,
                       fixed distance)
@@ -316,12 +307,6 @@ FindLatitudeLongitude(const GeoPoint loc, const Angle bearing,
   return loc_out;
 }
 
-/**
- * Calculates the distance between two locations
- * @param loc1 Location 1
- * @param loc2 Location 2
- * @return The distance
- */
 fixed
 Distance(const GeoPoint loc1, const GeoPoint loc2)
 {
@@ -330,12 +315,6 @@ Distance(const GeoPoint loc1, const GeoPoint loc2)
   return distance;
 }
 
-/**
- * Calculates the bearing between two locations
- * @param loc1 Location 1
- * @param loc2 Location 2
- * @return The bearing
- */
 Angle
 Bearing(const GeoPoint loc1, const GeoPoint loc2)
 {

@@ -55,9 +55,21 @@ fixed ProjectedDistance(const GeoPoint loc1, const GeoPoint loc2,
 void DistanceBearing(const GeoPoint loc1, const GeoPoint loc2,
                      fixed *distance, Angle *bearing);
 
+/**
+ * Calculates the distance between two locations
+ * @param loc1 Location 1
+ * @param loc2 Location 2
+ * @return The distance
+ */
 gcc_const
 fixed Distance(const GeoPoint loc1, const GeoPoint loc2);
 
+/**
+ * Calculates the bearing between two locations
+ * @param loc1 Location 1
+ * @param loc2 Location 2
+ * @return The bearing
+ */
 gcc_const
 Angle Bearing(const GeoPoint loc1, const GeoPoint loc2);
 
@@ -84,6 +96,15 @@ gcc_const
 fixed DoubleDistance(const GeoPoint loc1, const GeoPoint loc2,
                      const GeoPoint loc3);
 
+/**
+ * Calculates the location (loc_out) you would have, after being at
+ * a certain start location (loc) with a certain Bearing and going straight
+ * forward for a certain Distance.
+ * @param loc Current location
+ * @param Bearing Current bearing
+ * @param Distance Distance to predict
+ * @param loc_out Future location
+ */
 gcc_const
 GeoPoint FindLatitudeLongitude(const GeoPoint loc,
                                const Angle bearing, const fixed distance);
