@@ -38,26 +38,26 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                              UPixelScalar _width, UPixelScalar _height,
                              const WindowStyle style, bool _flipOrientation,
                              bool _clientOverlapTabs)
-  :theTabDisplay(NULL),
-   TabLineHeight((Layout::landscape ^ _flipOrientation)
+  :tab_display(NULL),
+   tab_line_height((Layout::landscape ^ _flipOrientation)
                  ? (Layout::Scale(TabLineHeightInitUnscaled) * 0.75)
                  : Layout::Scale(TabLineHeightInitUnscaled)),
-   flipOrientation(_flipOrientation),
-   clientOverlapTabs(_clientOverlapTabs),
+   flip_orientation(_flipOrientation),
+   client_overlap_tabs(_clientOverlapTabs),
    setting_up(true)
 {
   set(_parent, 0, 0, _parent.get_width(), _parent.get_height(), style),
 
-  theTabDisplay = new TabDisplay(*this, look, *this,
+  tab_display = new TabDisplay(*this, look, *this,
                                  x, y, _width, _height,
-                                 flipOrientation);
+                                 flip_orientation);
 
   PixelRect rc = get_client_rect();
   if (!_clientOverlapTabs) {
-    if (Layout::landscape ^ flipOrientation)
-      rc.left += theTabDisplay->GetTabWidth();
+    if (Layout::landscape ^ flip_orientation)
+      rc.left += tab_display->GetTabWidth();
     else
-      rc.top += theTabDisplay->GetTabHeight();
+      rc.top += tab_display->GetTabHeight();
   }
 
   WindowStyle pager_style;
@@ -68,7 +68,7 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
 
 TabBarControl::~TabBarControl()
 {
-  delete theTabDisplay;
+  delete tab_display;
 
   for (auto i = buttons.begin(), end = buttons.end(); i != end; ++i)
     delete *i;
@@ -77,17 +77,17 @@ TabBarControl::~TabBarControl()
 void
 TabBarControl::SetClientOverlapTabs(bool value)
 {
-  if (clientOverlapTabs == value)
+  if (client_overlap_tabs == value)
     return;
 
-  clientOverlapTabs = value;
+  client_overlap_tabs = value;
 
   PixelRect rc = get_client_rect();
-  if (!clientOverlapTabs) {
-    if (Layout::landscape ^ flipOrientation)
-      rc.left += theTabDisplay->GetTabWidth();
+  if (!client_overlap_tabs) {
+    if (Layout::landscape ^ flip_orientation)
+      rc.left += tab_display->GetTabWidth();
     else
-      rc.top += theTabDisplay->GetTabHeight();
+      rc.top += tab_display->GetTabHeight();
   }
 
   pager.move(rc);
@@ -99,7 +99,7 @@ TabBarControl::GetButtonIsButtonOnly(unsigned i) const
 
   assert(i < buttons.size());
 
-  return buttons[i]->IsButtonOnly;
+  return buttons[i]->is_button_only;
 }
 
 const TCHAR*
@@ -107,7 +107,7 @@ TabBarControl::GetButtonCaption(unsigned i) const
 {
   assert(i < buttons.size());
 
-  return buttons[i]->Caption.c_str();
+  return buttons[i]->caption.c_str();
 }
 
 const Bitmap *
@@ -148,8 +148,8 @@ TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
     }
   }
 
-  if (theTabDisplay != NULL)
-    theTabDisplay->invalidate();
+  if (tab_display != NULL)
+    tab_display->invalidate();
 
   setting_up = false;
 }
@@ -194,30 +194,30 @@ TabBarControl::GetButtonSize(unsigned i) const
   if (i >= buttons.size())
     return rcFallback; // should never be used
 
-  if (buttons[i]->butSize.left < buttons[i]->butSize.right)
-    return buttons[i]->butSize;
+  if (buttons[i]->but_size.left < buttons[i]->but_size.right)
+    return buttons[i]->but_size;
 
   const UPixelScalar margin = 1;
 
   /*
   bool partialTab = false;
-  if ( ((Layout::landscape ^ flipOrientation) && theTabDisplay->GetTabHeight() < get_height()) ||
-      ((!Layout::landscape ^ flipOrientation) && theTabDisplay->GetTabWidth() < get_width()) )
+  if ( ((Layout::landscape ^ flip_orientation) && tab_display->GetTabHeight() < get_height()) ||
+      ((!Layout::landscape ^ flip_orientation) && tab_display->GetTabWidth() < get_width()) )
     partialTab = true;
   */
 
-  const UPixelScalar finalmargin = 1; //partialTab ? TabLineHeight - 1 * margin : margin;
+  const UPixelScalar finalmargin = 1; //partialTab ? tab_line_height - 1 * margin : margin;
   // Todo make the final margin display on either beginning or end of tab bar
   // depending on position of tab bar
 
   PixelRect rc;
 
-  if (Layout::landscape ^ flipOrientation) {
+  if (Layout::landscape ^ flip_orientation) {
     const UPixelScalar but_height =
-       (theTabDisplay->GetTabHeight() - finalmargin) / buttons.size() - margin;
+       (tab_display->GetTabHeight() - finalmargin) / buttons.size() - margin;
 
     rc.left = 0;
-    rc.right = theTabDisplay->GetTabWidth() - TabLineHeight;
+    rc.right = tab_display->GetTabWidth() - tab_line_height;
 
     rc.top = finalmargin + (margin + but_height) * i;
     rc.bottom = rc.top + but_height;
@@ -232,11 +232,11 @@ TabBarControl::GetButtonSize(unsigned i) const
 
     const unsigned row = (i > (portraitColumnsRow0 - 1)) ? 1 : 0;
 
-    const UPixelScalar rowheight = (theTabDisplay->GetTabHeight() - TabLineHeight)
+    const UPixelScalar rowheight = (tab_display->GetTabHeight() - tab_line_height)
         / portraitRows - margin;
 
     const UPixelScalar but_width =
-          (theTabDisplay->GetTabWidth() - finalmargin) /
+          (tab_display->GetTabWidth() - finalmargin) /
           ((row == 0) ? portraitColumnsRow0 : portraitColumnsRow1) - margin;
 
     rc.top = row * (rowheight + margin);
@@ -246,20 +246,20 @@ TabBarControl::GetButtonSize(unsigned i) const
     rc.right = rc.left + but_width;
   }
 
-  buttons[i]->butSize = rc;
-  return buttons[i]->butSize;
+  buttons[i]->but_size = rc;
+  return buttons[i]->but_size;
 }
 
 UPixelScalar
 TabBarControl::GetTabHeight() const
 {
-  return theTabDisplay->GetTabHeight();
+  return tab_display->GetTabHeight();
 }
 
 UPixelScalar
 TabBarControl::GetTabWidth() const
 {
-  return theTabDisplay->GetTabWidth();
+  return tab_display->GetTabWidth();
 }
 
 // TabDisplay Functions
@@ -268,12 +268,12 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
                        PixelScalar left, PixelScalar top,
                        UPixelScalar width, UPixelScalar height,
                        bool _flipOrientation)
-  :theTabBar(_theTabBar),
+  :tab_bar(_theTabBar),
    look(_look),
    dragging(false),
-   downindex(-1),
-   dragoffbutton(false),
-   flipOrientation(_flipOrientation)
+   down_index(-1),
+   drag_off_button(false),
+   flip_orientation(_flipOrientation)
 {
   WindowStyle mystyle;
   mystyle.tab_stop();
@@ -338,8 +338,8 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
 int
 TabDisplay::GetButtonIndexAt(RasterPoint p) const
 {
-  for (unsigned i = 0; i < theTabBar.GetTabCount(); i++) {
-    const PixelRect &rc = theTabBar.GetButtonSize(i);
+  for (unsigned i = 0; i < tab_bar.GetTabCount(); i++) {
+    const PixelRect &rc = tab_bar.GetButtonSize(i);
     if (PtInRect(&rc, p))
       return i;
   }
@@ -356,13 +356,13 @@ TabDisplay::on_paint(Canvas &canvas)
   const unsigned CaptionStyle = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;
 
-  for (unsigned i = 0; i < theTabBar.GetTabCount(); i++) {
+  for (unsigned i = 0; i < tab_bar.GetTabCount(); i++) {
     bool inverse = false;
-    if (((int)i == downindex) && (dragoffbutton == false)) {
+    if (((int)i == down_index) && (drag_off_button == false)) {
       canvas.set_text_color(COLOR_BLACK);
       canvas.set_background_color(COLOR_YELLOW);
 
-    } else if (i == theTabBar.GetCurrentPage()) {
+    } else if (i == tab_bar.GetCurrentPage()) {
         canvas.set_text_color(COLOR_WHITE);
         if (has_focus() && !has_pointer()) {
           canvas.set_background_color(COLOR_GRAY.Highlight());
@@ -375,13 +375,13 @@ TabDisplay::on_paint(Canvas &canvas)
       canvas.set_text_color(COLOR_BLACK);
       canvas.set_background_color(COLOR_WHITE);
     }
-    const PixelRect &rc = theTabBar.GetButtonSize(i);
+    const PixelRect &rc = tab_bar.GetButtonSize(i);
     PaintButton(canvas, CaptionStyle,
-                theTabBar.GetButtonCaption(i),
+                tab_bar.GetButtonCaption(i),
                 rc,
-                theTabBar.GetButtonIsButtonOnly(i),
-                theTabBar.GetButtonIcon(i),
-                (int)i == downindex, inverse);
+                tab_bar.GetButtonIsButtonOnly(i),
+                tab_bar.GetButtonIcon(i),
+                (int)i == down_index, inverse);
   }
   if (has_focus()) {
     PixelRect rcFocus;
@@ -424,10 +424,10 @@ TabDisplay::on_key_check(unsigned key_code) const
     return true;
 
   case VK_LEFT:
-    return (theTabBar.GetCurrentPage() > 0);
+    return (tab_bar.GetCurrentPage() > 0);
 
   case VK_RIGHT:
-    return theTabBar.GetCurrentPage() < theTabBar.GetTabCount() - 1;
+    return tab_bar.GetCurrentPage() < tab_bar.GetTabCount() - 1;
 
   case VK_DOWN:
     return false;
@@ -447,31 +447,31 @@ TabDisplay::on_key_down(unsigned key_code)
   switch (key_code) {
 
   case VK_APP1:
-    if (theTabBar.GetTabCount() > 0)
-      theTabBar.SetCurrentPage(0, TabBarControl::MouseOrButton,
-          theTabBar.GetCurrentPage() == 0);
+    if (tab_bar.GetTabCount() > 0)
+      tab_bar.SetCurrentPage(0, TabBarControl::MouseOrButton,
+          tab_bar.GetCurrentPage() == 0);
     return true;
 
   case VK_APP2:
-    if (theTabBar.GetTabCount() > 1)
-      theTabBar.SetCurrentPage(1, TabBarControl::MouseOrButton,
-          theTabBar.GetCurrentPage() == 1);
+    if (tab_bar.GetTabCount() > 1)
+      tab_bar.SetCurrentPage(1, TabBarControl::MouseOrButton,
+          tab_bar.GetCurrentPage() == 1);
     return true;
 
   case VK_APP3:
-    if (theTabBar.GetTabCount() > 2)
-      theTabBar.SetCurrentPage(2, TabBarControl::MouseOrButton,
-          theTabBar.GetCurrentPage() == 2);
+    if (tab_bar.GetTabCount() > 2)
+      tab_bar.SetCurrentPage(2, TabBarControl::MouseOrButton,
+          tab_bar.GetCurrentPage() == 2);
     return true;
 
   case VK_APP4:
-    if (theTabBar.GetTabCount() > 3)
-      theTabBar.SetCurrentPage(3, TabBarControl::MouseOrButton,
-          theTabBar.GetCurrentPage() == 3);
+    if (tab_bar.GetTabCount() > 3)
+      tab_bar.SetCurrentPage(3, TabBarControl::MouseOrButton,
+          tab_bar.GetCurrentPage() == 3);
     return true;
 
   case VK_RETURN:
-    theTabBar.SetCurrentPage(theTabBar.GetCurrentPage(),
+    tab_bar.SetCurrentPage(tab_bar.GetCurrentPage(),
         TabBarControl::MouseOrButton, true);
     return true;
 
@@ -479,14 +479,14 @@ TabDisplay::on_key_down(unsigned key_code)
     break;
 
   case VK_RIGHT:
-    theTabBar.NextPage();
+    tab_bar.NextPage();
     return true;
 
   case VK_UP:
     break;
 
   case VK_LEFT:
-    theTabBar.PreviousPage();
+    tab_bar.PreviousPage();
     return true;
   }
   return PaintWindow::on_key_down(key_code);
@@ -507,7 +507,7 @@ TabDisplay::on_mouse_down(PixelScalar x, PixelScalar y)
   int i = GetButtonIndexAt(Pos);
   if (i >= 0) {
     dragging = true;
-    downindex = i;
+    down_index = i;
     set_capture();
     invalidate();
     return true;
@@ -527,13 +527,13 @@ TabDisplay::on_mouse_up(PixelScalar x, PixelScalar y)
     drag_end();
 
     int i = GetButtonIndexAt(Pos);
-    if (i == downindex)
-      theTabBar.SetCurrentPage(i, TabBarControl::MouseOrButton,
-                               theTabBar.GetCurrentPage() == (unsigned)i);
+    if (i == down_index)
+      tab_bar.SetCurrentPage(i, TabBarControl::MouseOrButton,
+                               tab_bar.GetCurrentPage() == (unsigned)i);
 
-    if (downindex > -1)
+    if (down_index > -1)
       invalidate();
-    downindex = -1;
+    down_index = -1;
     return true;
   } else {
     return PaintWindow::on_mouse_up(x, y);
@@ -543,17 +543,17 @@ TabDisplay::on_mouse_up(PixelScalar x, PixelScalar y)
 bool
 TabDisplay::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
 {
-  if (downindex == -1)
+  if (down_index == -1)
     return false;
 
-  const PixelRect rc = theTabBar.GetButtonSize(downindex);
+  const PixelRect rc = tab_bar.GetButtonSize(down_index);
   RasterPoint Pos;
   Pos.x = x;
   Pos.y = y;
 
   const bool tmp = !PtInRect(&rc, Pos);
-  if (dragoffbutton != tmp) {
-    dragoffbutton = tmp;
+  if (drag_off_button != tmp) {
+    drag_off_button = tmp;
     invalidate(rc);
   }
   return true;
@@ -564,7 +564,7 @@ TabDisplay::drag_end()
 {
   if (dragging) {
     dragging = false;
-    dragoffbutton = false;
+    drag_off_button = false;
     release_capture();
   }
 }

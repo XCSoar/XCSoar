@@ -205,7 +205,7 @@ TabMenuControl::SetCurrentPage(unsigned page)
     assert(butMain);
     TCHAR caption[128];
     _sntprintf(caption, 128, _T("%s > %s"),
-               gettext(butMain->Caption), theitem.menu_caption);
+               gettext(butMain->caption), theitem.menu_caption);
     form.SetCaption(caption);
   }
 }
@@ -283,9 +283,9 @@ TabMenuControl::GetMainMenuButtonSize(unsigned i) const
   if (i >= main_menu_buttons.size())
     return rcFallback;
 
-  if (main_menu_buttons[i]->butSize.left < main_menu_buttons[i]->butSize.right)
-    return main_menu_buttons[i]->butSize;
-  PixelRect &rc = main_menu_buttons[i]->butSize;
+  if (main_menu_buttons[i]->but_size.left < main_menu_buttons[i]->but_size.right)
+    return main_menu_buttons[i]->but_size;
+  PixelRect &rc = main_menu_buttons[i]->but_size;
   const UPixelScalar margin = Layout::Scale(1);
   const UPixelScalar finalmargin = Layout::Scale(1);
   const UPixelScalar butHeight = GetMenuButtonHeight();
@@ -296,7 +296,7 @@ TabMenuControl::GetMainMenuButtonSize(unsigned i) const
   rc.left = 0;
   rc.right = GetMenuButtonWidth();
 
-  return main_menu_buttons[i]->butSize;
+  return main_menu_buttons[i]->but_size;
 }
 
 const PixelRect&
@@ -307,8 +307,8 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page) const
   if (page >= buttons.size())
     return rcFallback;
 
-  if (buttons[page]->butSize.left < buttons[page]->butSize.right)
-    return buttons[page]->butSize;
+  if (buttons[page]->but_size.left < buttons[page]->but_size.right)
+    return buttons[page]->but_size;
 
   const PageItem &item = this->GetPageItem(page);
   const OneMainMenuButton *butMain = GetMainMenuButton(item.main_menu_index);
@@ -317,7 +317,7 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page) const
   if (!butMain || !butSub)
     return rcFallback;
 
-  PixelRect &rc = buttons[page]->butSize;
+  PixelRect &rc = buttons[page]->but_size;
 
   const UPixelScalar margin = Layout::Scale(1);
   const UPixelScalar finalmargin = Layout::Scale(1);
@@ -341,7 +341,7 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page) const
   rc.left = GetMenuButtonWidth() + GetTabLineHeight();
   rc.right = rc.left + GetMenuButtonWidth();
 
-  return buttons[page]->butSize;
+  return buttons[page]->but_size;
 }
 
 TabMenuControl::MenuTabIndex
@@ -646,7 +646,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle)
       canvas.set_background_color(COLOR_WHITE);
     }
     const PixelRect rc = tb.GetMainMenuButtonSize((*i)->main_menu_index);
-    TabDisplay::PaintButton(canvas, CaptionStyle, gettext((*i)->Caption), rc,
+    TabDisplay::PaintButton(canvas, CaptionStyle, gettext((*i)->caption), rc,
                             false, NULL, isDown, inverse);
   }
   if (has_focus()) {
@@ -716,7 +716,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle)
       canvas.set_background_color(COLOR_WHITE);
     }
     const PixelRect &rc = tb.GetSubMenuButtonSize(i->page_index);
-    TabDisplay::PaintButton(canvas, CaptionStyle, gettext(i->Caption), rc,
+    TabDisplay::PaintButton(canvas, CaptionStyle, gettext(i->caption), rc,
                             false, NULL,
                             i->menu.sub_index == selected_index.sub_index,
                             inverse);

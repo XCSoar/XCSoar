@@ -54,14 +54,14 @@ public:
 protected:
   TabbedControl pager;
 
-  TabDisplay * theTabDisplay;
+  TabDisplay * tab_display;
   StaticArray<OneTabButton *, 32> buttons;
-  const UPixelScalar TabLineHeight;
-  bool flipOrientation;
+  const UPixelScalar tab_line_height;
+  bool flip_orientation;
   /** if false (default) Client rectangle is adjacent to tabs
    *  if true, Client rectangle overlaps tabs (for advanced drawing)
    */
-  bool clientOverlapTabs;
+  bool client_overlap_tabs;
 
 private:
   // used to indicate initial state before tabs have changed
@@ -146,7 +146,7 @@ public:
       &GetTabButtons() { return buttons; }
 
   UPixelScalar GetTabLineHeight() const {
-    return TabLineHeight;
+    return tab_line_height;
   }
 
   void SetClientOverlapTabs(bool value);
@@ -161,12 +161,12 @@ public:
 class TabDisplay: public PaintWindow
 {
 protected:
-  TabBarControl& theTabBar;
+  TabBarControl& tab_bar;
   const DialogLook &look;
   bool dragging; // tracks that mouse is down and captured
-  int downindex; // index of tab where mouse down occurred
-  bool dragoffbutton; // set by mouse_move
-  bool flipOrientation;
+  int down_index; // index of tab where mouse down occurred
+  bool drag_off_button; // set by mouse_move
+  bool flip_orientation;
 
 public:
   /**
@@ -239,23 +239,23 @@ protected:
  */
 class OneTabButton {
 public:
-  StaticString<32> Caption;
-  bool IsButtonOnly;
+  StaticString<32> caption;
+  bool is_button_only;
   const Bitmap *bmp;
-  PixelRect butSize;
+  PixelRect but_size;
 
 public:
   OneTabButton(const TCHAR* _Caption,
                bool _IsButtonOnly,
                const Bitmap *_bmp)
-    :IsButtonOnly(_IsButtonOnly),
+    :is_button_only(_IsButtonOnly),
      bmp(_bmp)
   {
-    Caption = _Caption;
-    butSize.left = 0;
-    butSize.top = 0;
-    butSize.right = 0;
-    butSize.bottom = 0;
+    caption = _Caption;
+    but_size.left = 0;
+    but_size.top = 0;
+    but_size.right = 0;
+    but_size.bottom = 0;
   };
 };
 
