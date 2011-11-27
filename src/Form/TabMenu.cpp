@@ -201,7 +201,7 @@ TabMenuControl::SetCurrentPage(unsigned page)
     const PageItem& theitem = GetPageItem(page);
     SetLastContentPage(page);
     const OneMainMenuButton *butMain =
-      GetMainMenuButton(last_content.MainIndex);
+      GetMainMenuButton(last_content.main_index);
     assert(butMain);
     TCHAR caption[128];
     _sntprintf(caption, 128, _T("%s > %s"),
@@ -216,8 +216,8 @@ void TabMenuControl::SetLastContentPage(unsigned page)
     last_content = menu_tab_index::None();
   else {
     const PageItem& theitem = GetPageItem(page);
-    last_content.MainIndex = theitem.main_menu_index;
-    last_content.SubIndex = GetSubMenuButton(page)->menu.SubIndex;
+    last_content.main_index = theitem.main_menu_index;
+    last_content.sub_index = GetSubMenuButton(page)->menu.sub_index;
   }
   GetTabMenuDisplay()->SetSelectedIndex(last_content);
 }
@@ -228,12 +228,12 @@ TabMenuControl::GetPageNum(menu_tab_index i) const
   if (!i.IsSub())
     return this->GetMenuPage();
 
-  assert(i.MainIndex < main_menu_buttons.size());
-  assert(i.SubIndex < GetNumPages());
+  assert(i.main_index < main_menu_buttons.size());
+  assert(i.sub_index < GetNumPages());
 
-  const OneMainMenuButton *butMain = GetMainMenuButton(i.MainIndex);
+  const OneMainMenuButton *butMain = GetMainMenuButton(i.main_index);
   if (butMain)
-    return butMain->first_page_index + i.SubIndex;
+    return butMain->first_page_index + i.sub_index;
   else
     return GetMenuPage();
 }
@@ -334,7 +334,7 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page) const
       (topMainMenuItemWOffset + SubMenuHeight <= tabHeight) ?
        topMainMenuItemWOffset : tabHeight - SubMenuHeight - offset;
 
-  rc.top = subMenuTop + butSub->menu.SubIndex * itemHeight;
+  rc.top = subMenuTop + butSub->menu.sub_index * itemHeight;
   rc.top += GetButtonVerticalOffset();
   rc.bottom = rc.top + butHeight;
 
@@ -525,7 +525,7 @@ TabMenuDisplay::on_mouse_down(PixelScalar x, PixelScalar y)
   set_focus();
 
   down_index = GetTabMenuBar().IsPointOverButton(Pos,
-                                                selected_index.MainIndex);
+                                                selected_index.main_index);
 
   if (!down_index.IsNone()) {
     dragging = true;
@@ -546,7 +546,7 @@ TabMenuDisplay::on_mouse_up(PixelScalar x, PixelScalar y)
   if (dragging) {
     drag_end();
     const TabMenuControl::menu_tab_index di =
-        GetTabMenuBar().IsPointOverButton(Pos, selected_index.MainIndex);
+        GetTabMenuBar().IsPointOverButton(Pos, selected_index.main_index);
 
     if (di == down_index) {
 
@@ -578,7 +578,7 @@ TabMenuDisplay::GetDownButtonRC()
     return tb.GetSubMenuButtonSize(page);
   }
   else
-    return tb.GetMainMenuButtonSize(down_index.MainIndex);
+    return tb.GetMainMenuButtonSize(down_index.main_index);
 }
 
 bool
@@ -626,13 +626,13 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle)
   for (auto i = tb.GetMainMenuButtons().begin(),
          end = tb.GetMainMenuButtons().end(); i != end; ++i) {
     bool inverse = false;
-    const bool isDown = (*i)->main_menu_index == down_index.MainIndex &&
+    const bool isDown = (*i)->main_menu_index == down_index.main_index &&
       !down_index.IsSub() && !drag_off_button;
     if (isDown) {
       canvas.set_text_color(COLOR_BLACK);
       canvas.set_background_color(COLOR_YELLOW);
 
-    } else if ((*i)->main_menu_index == selected_index.MainIndex) {
+    } else if ((*i)->main_menu_index == selected_index.main_index) {
         canvas.set_text_color(COLOR_WHITE);
         if (has_focus() && !has_pointer()) {
           canvas.set_background_color(COLOR_GRAY.Highlight());
@@ -682,7 +682,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle)
     return;
 
   const OneMainMenuButton *butMain =
-    tb.GetMainMenuButton(selected_index.MainIndex);
+    tb.GetMainMenuButton(selected_index.main_index);
   if (!butMain)
     return;
 
@@ -697,12 +697,12 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle)
     OneSubMenuButton *i = *j;
 
     bool inverse = false;
-    if ((i->menu.SubIndex == down_index.SubIndex)
+    if ((i->menu.sub_index == down_index.sub_index)
         && (drag_off_button == false)) {
       canvas.set_text_color(COLOR_BLACK);
       canvas.set_background_color(COLOR_YELLOW);
 
-    } else if (i->menu.SubIndex == selected_index.SubIndex) {
+    } else if (i->menu.sub_index == selected_index.sub_index) {
         canvas.set_text_color(COLOR_WHITE);
         if (has_focus() && !has_pointer()) {
           canvas.set_background_color(COLOR_GRAY.Highlight());
@@ -718,7 +718,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle)
     const PixelRect &rc = tb.GetSubMenuButtonSize(i->page_index);
     TabDisplay::PaintButton(canvas, CaptionStyle, gettext(i->Caption), rc,
                             false, NULL,
-                            i->menu.SubIndex == selected_index.SubIndex,
+                            i->menu.sub_index == selected_index.sub_index,
                             inverse);
   }
 }
