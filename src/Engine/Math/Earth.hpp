@@ -53,7 +53,7 @@ fixed ProjectedDistance(const GeoPoint loc1, const GeoPoint loc2,
                         const GeoPoint loc3);
 
 void DistanceBearing(const GeoPoint loc1, const GeoPoint loc2,
-                     fixed *Distance, Angle *Bearing);
+                     fixed *distance, Angle *bearing);
 
 gcc_const
 fixed Distance(const GeoPoint loc1, const GeoPoint loc2);
@@ -86,6 +86,6 @@ fixed DoubleDistance(const GeoPoint loc1, const GeoPoint loc2,
 
 gcc_const
 GeoPoint FindLatitudeLongitude(const GeoPoint loc,
-                               const Angle Bearing, const fixed Distance);
+                               const Angle bearing, const fixed distance);
 
 #endif
