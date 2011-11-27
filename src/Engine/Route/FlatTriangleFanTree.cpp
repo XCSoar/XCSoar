@@ -41,7 +41,7 @@
 #define REACH_MAX_VERTICES 2000
 
 static bool
-too_close(const FlatGeoPoint &p1, const FlatGeoPoint &p2)
+TooClose(const FlatGeoPoint &p1, const FlatGeoPoint &p2)
 {
   const FlatGeoPoint k = p1 - p2;
   const int dmax = std::max(abs(k.Longitude), abs(k.Latitude));
@@ -147,7 +147,7 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
   if (depth) {
     const int index_mid = (index_high + index_low) / 2;
     const FlatGeoPoint x_mid = parms.reach_intercept(index_mid, ao);
-    if (too_close(x_mid, origin))
+    if (TooClose(x_mid, origin))
       return;
   }
 
@@ -172,7 +172,7 @@ FlatTriangleFanTree::FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms)
                      o, parms.task_proj);
     for (auto x_last = vs.cbegin(), end = vs.cend(),
          x = x_last + 1; x != end; x_last = x++) {
-      if (too_close(*x, origin) || too_close(*x_last, origin))
+      if (TooClose(*x, origin) || TooClose(*x_last, origin))
         continue;
 
       const RouteLink e(RoutePoint(*x, RoughAltitude(0)), o, parms.task_proj);
