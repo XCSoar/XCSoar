@@ -38,7 +38,7 @@ class ProtectedTaskManager;
 
 class Logger {
 private:
-  LoggerImpl _logger;
+  LoggerImpl logger;
   mutable Poco::RWLock lock;
   void LogEvent(const NMEAInfo &gps_info, const char*);
 

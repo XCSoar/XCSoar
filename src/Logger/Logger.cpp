@@ -40,7 +40,7 @@ Logger::LogPoint(const NMEAInfo &gps_info)
   // by another process (most likely the logger gui message)
 
   if (lock.tryWriteLock()) {
-    _logger.LogPoint(gps_info);
+    logger.LogPoint(gps_info);
     lock.unlock();
   }
 }
@@ -49,7 +49,7 @@ void
 Logger::LogEvent(const NMEAInfo &gps_info, const char* event)
 {
   if (lock.tryWriteLock()) {
-    _logger.LogEvent(gps_info, event);
+    logger.LogEvent(gps_info, event);
     lock.unlock();
   }
 }
@@ -82,14 +82,14 @@ bool
 Logger::IsLoggerActive() const
 {
   Poco::ScopedRWLock protect(lock, false);
-  return _logger.IsActive();
+  return logger.IsActive();
 }
 
 bool
 Logger::LoggerClearFreeSpace(const NMEAInfo &gps_info)
 {
   Poco::ScopedRWLock protect(lock, true);
-  return _logger.LoggerClearFreeSpace(gps_info);
+  return logger.LoggerClearFreeSpace(gps_info);
 }
 
 void
@@ -135,7 +135,7 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
   }
 
   Poco::ScopedRWLock protect(lock, true);
-  _logger.StartLogger(gps_info, settings, strAssetNumber, decl);
+  logger.StartLogger(gps_info, settings, strAssetNumber, decl);
 }
 
 void
@@ -160,7 +160,7 @@ Logger::GUIStopLogger(const NMEAInfo &gps_info,
   if (noAsk || (MessageBoxX(_("Stop Logger"), _("Stop Logger"),
                             MB_YESNO | MB_ICONQUESTION) == IDYES)) {
     Poco::ScopedRWLock protect(lock, true);
-    _logger.StopLogger(gps_info);
+    logger.StopLogger(gps_info);
   }
 }
 
@@ -168,12 +168,12 @@ void
 Logger::LoggerNote(const TCHAR *text)
 {
   Poco::ScopedRWLock protect(lock, true);
-  _logger.LoggerNote(text);
+  logger.LoggerNote(text);
 }
 
 void
 Logger::ClearBuffer()
 {
   Poco::ScopedRWLock protect(lock, true);
-  _logger.ClearBuffer();
+  logger.ClearBuffer();
 }
