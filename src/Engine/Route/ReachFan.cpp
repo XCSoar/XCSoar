@@ -57,11 +57,10 @@ ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
     return false;
   }
 
-  if (do_solve) {
+  if (do_solve)
     root.FillReach(ao, parms);
-  } else {
+  else
     root.DummyReach(ao);
-  }
 
   if (!RasterBuffer::is_invalid(h)) {
     parms.terrain_base = (int)h2;
@@ -70,9 +69,10 @@ ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
     parms.terrain_base = 0;
     parms.terrain_counter = 0;
   }
-  if (parms.terrain) {
+
+  if (parms.terrain)
     root.UpdateTerrainBase(ao, parms);
-  }
+
   terrain_base = parms.terrain_base;
   return true;
 }
@@ -83,6 +83,7 @@ ReachFan::IsInside(const GeoPoint origin, const bool turning) const
   // no data? probably not solved yet
   if (root.IsEmpty())
     return false;
+
   const FlatGeoPoint p = task_proj.project(origin);
   return root.IsInsideTree(p, turning);
 }
@@ -98,22 +99,19 @@ ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
   if (root.IsEmpty())
     return true;
 
-  const FlatGeoPoint d (task_proj.project(dest));
+  const FlatGeoPoint d(task_proj.project(dest));
   const ReachFanParms parms(rpolars, task_proj, (int)terrain_base);
 
   // first calculate direct (terrain-independent height)
-
   arrival_height_direct = root.DirectArrival(d, parms);
 
   // if can't reach even with no terrain, exit early
-
   if (std::min(root.GetHeight(), arrival_height_direct) < dest.altitude) {
     arrival_height_reach = arrival_height_direct;
     return true;
   }
 
   // now calculate turning solution
-
   arrival_height_reach = dest.altitude - RoughAltitude(1);
   root.FindPositiveArrival(d, parms, arrival_height_reach);
 
@@ -121,8 +119,8 @@ ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
 }
 
 void
-ReachFan::AcceptInRange(const GeoBounds& bounds,
-                          TriangleFanVisitor& visitor) const
+ReachFan::AcceptInRange(const GeoBounds &bounds,
+                        TriangleFanVisitor &visitor) const
 {
   if (root.IsEmpty())
     return;
