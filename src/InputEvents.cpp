@@ -667,11 +667,10 @@ InputEvents::HideMenu()
 void
 InputEvents::ShowMenu()
 {
-  if (CommonInterface::IsPanning())
-    /* disable pan mode before displaying the normal menu; leaving pan
-       mode enabled would be confusing for the user, and doesn't look
-       consistent */
-    sub_Pan(0);
+  /* disable pan mode before displaying the normal menu; leaving pan
+     mode enabled would be confusing for the user, and doesn't look
+     consistent */
+  LeavePan();
 
   setMode(MODE_MENU);
   MenuTimeOut = 0;

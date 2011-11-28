@@ -80,7 +80,15 @@ namespace InputEvents
   // helpers (temporary)
 
   void sub_TerrainTopography(int vswitch);
-  void sub_Pan(int vswitch);
+  void SetPan(bool enable);
+  void TogglePan();
+
+  /**
+   * Leave pan mode, but only if the map is visible and currently
+   * panning.
+   */
+  void LeavePan();
+
   void sub_PanCursor(int dx, int dy);
   void sub_AutoZoom(int vswitch);
   void sub_ScaleZoom(int vswitch);

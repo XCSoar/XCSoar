@@ -126,13 +126,13 @@ InputEvents::eventPan(const TCHAR *misc)
 {
   if (_tcscmp(misc, _T("toggle")) == 0 ||
       /* deprecated: */ _tcscmp(misc, _T("supertoggle")) == 0)
-    sub_Pan(-1);
+    TogglePan();
 
   else if (_tcscmp(misc, _T("on")) == 0)
-    sub_Pan(1);
+    SetPan(true);
 
   else if (_tcscmp(misc, _T("off")) == 0)
-    sub_Pan(0);
+    SetPan(false);
 
   else if (_tcscmp(misc, _T("up")) == 0)
     if (model_is_hp31x())
@@ -157,41 +157,46 @@ InputEvents::eventPan(const TCHAR *misc)
   XCSoarInterface::SendSettingsMap(true);
 }
 
-/**
- * This function switches the pan mode on and off
- * @param vswitch This parameter determines what to do:
- * -2 supertoogle
- * -1 toogle
- * 1  on
- * 0  off
- * @see InputEvents::eventPan()
- */
 void
-InputEvents::sub_Pan(int vswitch)
+InputEvents::SetPan(bool enable)
 {
   GlueMapWindow *map_window = CommonInterface::main_window.ActivateMap();
   if (map_window == NULL)
     return;
 
-  bool oldPan = map_window->IsPanning();
+  if (enable == map_window->IsPanning())
+    return;
 
-  if (vswitch == -1)
-    // toogle, toogle pan mode only
-    map_window->TogglePan();
-  else
-    // 1 = enable pan mode
-    // 0 = disable pan mode
-    map_window->SetPan(vswitch != 0);
+  map_window->SetPan(enable);
 
-  if (map_window->IsPanning() != oldPan) {
-    if (map_window->IsPanning()) {
-      setMode(MODE_PAN);
-      XCSoarInterface::main_window.SetFullScreen(true);
-    } else {
-      setMode(MODE_DEFAULT);
-      Pages::Update();
-    }
+  if (enable) {
+    setMode(MODE_PAN);
+    XCSoarInterface::main_window.SetFullScreen(true);
+  } else {
+    setMode(MODE_DEFAULT);
+    Pages::Update();
   }
+}
+
+void
+InputEvents::TogglePan()
+{
+  const GlueMapWindow *map_window = CommonInterface::main_window.ActivateMap();
+  if (map_window == NULL)
+    return;
+
+  SetPan(!map_window->IsPanning());
+}
+
+void
+InputEvents::LeavePan()
+{
+  const GlueMapWindow *map_window =
+    CommonInterface::main_window.GetMapIfActive();
+  if (map_window == NULL)
+    return;
+
+  SetPan(!map_window->IsPanning());
 }
 
 void
