@@ -66,18 +66,6 @@ Logger::LogFinishEvent(const NMEAInfo &gps_info)
   LogEvent(gps_info, "FIN");
 }
 
-void
-Logger::LogPilotEvent(const NMEAInfo &gps_info)
-{
-  LogEvent(gps_info, "PEV");
-}
-
-void
-Logger::LogTurnpointEvent(const NMEAInfo &gps_info)
-{
-  LogEvent(gps_info, "TPC");
-}
-
 bool
 Logger::IsLoggerActive() const
 {
