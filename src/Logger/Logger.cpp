@@ -79,12 +79,6 @@ Logger::LogTurnpointEvent(const NMEAInfo &gps_info)
 }
 
 bool
-Logger::CheckDeclaration(void)
-{
-  return ExternalLogger::CheckDeclaration();
-}
-
-bool
 Logger::IsTaskDeclared() const
 {
   return ExternalLogger::IsDeclared();

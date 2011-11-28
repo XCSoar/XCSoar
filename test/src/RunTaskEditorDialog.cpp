@@ -59,7 +59,6 @@ InterfaceBlackboard CommonInterface::blackboard;
 Logger::Logger() {}
 Logger::~Logger() {}
 void Logger::LoggerDeviceDeclare() {}
-bool Logger::CheckDeclaration() { return true; }
 
 void RasterTerrain::Lock(void) {}
 void RasterTerrain::Unlock(void) {}

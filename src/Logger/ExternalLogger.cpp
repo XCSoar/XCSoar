@@ -126,28 +126,6 @@ ExternalLogger::Declare(const OrderedTask& task)
                 _("Declare task"), MB_OK | MB_ICONINFORMATION);
 }
 
-/**
- * Checks whether a Task is declared to the Logger.
- * If so, asks whether to invalidate the declaration.
- * @return True if a Task is NOT declared to the Logger, False otherwise
- */
-bool
-ExternalLogger::CheckDeclaration(void)
-{
-  // if (Task is not declared) -> return true;
-  if (!IsDeclared())
-    return true;
-
-  if (MessageBoxX(_("OK to invalidate declaration?"),
-                  _("Task declared"),
-     MB_YESNO| MB_ICONQUESTION) == IDYES){
-    DeclaredToDevice = false;
-    return true;
-  }
-
-  return false;
-}
-
 class ReadFlightListJob : public Job {
   DeviceDescriptor &device;
   RecordedFlightList &flight_list;
