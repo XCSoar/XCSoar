@@ -218,5 +218,5 @@ InitAsset()
   int Temp = (int)MODELTYPE_PNA_PNA;
   Profile::Get(szProfileAppInfoBoxModel, Temp);
   GlobalModelType = (ModelType)Temp;
-  #endif
+#endif
 }
