@@ -79,12 +79,6 @@ Logger::LogTurnpointEvent(const NMEAInfo &gps_info)
 }
 
 bool
-Logger::IsTaskDeclared() const
-{
-  return ExternalLogger::IsDeclared();
-}
-
-bool
 Logger::IsLoggerActive() const
 {
   Poco::ScopedRWLock protect(lock, false);

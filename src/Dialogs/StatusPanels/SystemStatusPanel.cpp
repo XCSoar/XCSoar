@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "SystemStatusPanel.hpp"
 #include "Logger/Logger.hpp"
+#include "Logger/ExternalLogger.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -78,7 +79,7 @@ SystemStatusPanel::Refresh()
                : _("Off"));
 
   SetFormValue(form, _T("prpDeclared"),
-               logger.IsTaskDeclared()
+               ExternalLogger::IsDeclared()
                ? _("Yes")
                : _("No"));
 

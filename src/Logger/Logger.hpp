@@ -51,9 +51,6 @@ public:
   void LogPilotEvent(const NMEAInfo &gps_info);
 
   gcc_pure
-  bool IsTaskDeclared() const;
-
-  gcc_pure
   bool IsLoggerActive() const;
 
   bool LoggerClearFreeSpace(const NMEAInfo &gps_info);
