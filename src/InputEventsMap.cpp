@@ -124,11 +124,9 @@ InputEvents::eventZoom(const TCHAR* misc)
 void
 InputEvents::eventPan(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("toggle")) == 0)
+  if (_tcscmp(misc, _T("toggle")) == 0 ||
+      /* deprecated: */ _tcscmp(misc, _T("supertoggle")) == 0)
     sub_Pan(-1);
-
-  else if (_tcscmp(misc, _T("supertoggle")) == 0)
-    sub_Pan(-2);
 
   else if (_tcscmp(misc, _T("on")) == 0)
     sub_Pan(1);
@@ -177,10 +175,7 @@ InputEvents::sub_Pan(int vswitch)
 
   bool oldPan = map_window->IsPanning();
 
-  if (vswitch == -2) {
-    // supertoogle, toogle pan mode and fullscreen
-    map_window->TogglePan();
-  } else if (vswitch == -1)
+  if (vswitch == -1)
     // toogle, toogle pan mode only
     map_window->TogglePan();
   else

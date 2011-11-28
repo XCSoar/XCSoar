@@ -15,7 +15,7 @@ while ( <@ARGV> ) {
     # mode=pan
     # type=key
     # data=6
-    # event=Pan supertoggle
+    # event=Pan off
     # label=Pan\nOff          -> Pick these labals and dump them in pot format,
     # location=5                 except they are $( ) enclosed
     # ...
