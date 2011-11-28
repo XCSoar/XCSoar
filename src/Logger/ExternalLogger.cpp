@@ -47,14 +47,6 @@
 
 #include <windef.h> /* for MAX_PATH */
 
-static bool DeclaredToDevice = false;
-
-bool
-ExternalLogger::IsDeclared()
-{
-  return DeclaredToDevice;
-}
-
 class DeclareJob : public Job {
   DeviceDescriptor &device;
   const struct Declaration &declaration;
@@ -95,7 +87,6 @@ DeviceDeclare(DeviceDescriptor *dev, const Declaration &declaration)
     if (DoDeviceDeclare(*dev, declaration)) {
       MessageBoxX(_("Task declared!"),
                   dev->GetDisplayName(), MB_OK| MB_ICONINFORMATION);
-      DeclaredToDevice = true;
     } else {
       MessageBoxX(_("Error occured,\nTask NOT declared!"),
                   dev->GetDisplayName(), MB_OK| MB_ICONERROR);
@@ -108,7 +99,6 @@ DeviceDeclare(DeviceDescriptor *dev, const Declaration &declaration)
 void
 ExternalLogger::Declare(const OrderedTask& task)
 {
-  DeclaredToDevice = false;
   bool found_logger = false;
 
   // don't do anything if task is not valid

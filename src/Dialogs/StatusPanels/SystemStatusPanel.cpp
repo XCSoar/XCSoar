@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "SystemStatusPanel.hpp"
 #include "Logger/Logger.hpp"
-#include "Logger/ExternalLogger.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -77,11 +76,6 @@ SystemStatusPanel::Refresh()
                logger.IsLoggerActive()
                ? _("On")
                : _("Off"));
-
-  SetFormValue(form, _T("prpDeclared"),
-               ExternalLogger::IsDeclared()
-               ? _("Yes")
-               : _("No"));
 
   Temp.clear();
 #ifdef HAVE_BATTERY

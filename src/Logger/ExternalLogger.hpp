@@ -30,13 +30,6 @@ class DeviceDescriptor;
 class OrderedTask;
 
 namespace ExternalLogger {
-  /**
-   * Returns whether a task is declared to the device
-   * @return True if a task is declared to the device, False otherwise
-   */
-  gcc_pure
-  bool IsDeclared();
-
   void Declare(const OrderedTask& task);
 
   void
