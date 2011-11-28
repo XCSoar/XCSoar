@@ -113,10 +113,12 @@ ButtonLabel::SetLabelText(unsigned index, const TCHAR *text, unsigned event)
 }
 
 void
-ButtonLabel::Set(const Menu &menu, bool full)
+ButtonLabel::Set(const Menu &menu, const Menu *overlay, bool full)
 {
   for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
-    const MenuItem &item = menu[i];
+    const MenuItem &item = overlay != NULL && (*overlay)[i].IsDefined()
+      ? (*overlay)[i]
+      : menu[i];
 
     if (full || item.IsDynamic())
       SetLabelText(i, item.label, item.event);

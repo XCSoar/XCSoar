@@ -73,10 +73,19 @@ namespace InputEvents
 {
   static Mode current_mode = InputEvents::MODE_DEFAULT;
 
+  /**
+   * A mode that overrides the #current_mode.  Only if a value does
+   * not exist in this mode, it will be taken from the #current_mode.
+   * The special value #MODE_DEFAULT means there is no overlay mode.
+   */
+  static Mode overlay_mode = MODE_DEFAULT;
+
   static unsigned MenuTimeOut = 0;
 
   gcc_pure
   static Mode getModeID();
+
+  static void UpdateOverlayMode();
 
   gcc_pure
   static unsigned gesture_to_event(const TCHAR *data);
@@ -121,6 +130,7 @@ InputEvents::setMode(Mode mode)
     return;
 
   current_mode = mode;
+  UpdateOverlayMode();
 
   drawButtons(current_mode, true);
 }
@@ -149,7 +159,11 @@ InputEvents::drawButtons(Mode mode, bool full)
     return;
 
   const Menu &menu = input_config.menus[mode];
-  ButtonLabel::Set(menu, full);
+  const Menu *const overlay_menu = overlay_mode != MODE_DEFAULT
+    ? &input_config.menus[overlay_mode]
+    : NULL;
+
+  ButtonLabel::Set(menu, overlay_menu, full);
 }
 
 InputEvents::Mode
@@ -158,9 +172,38 @@ InputEvents::getModeID()
   return current_mode;
 }
 
+void
+InputEvents::UpdateOverlayMode()
+{
+  overlay_mode = MODE_DEFAULT;
+}
+
 // -----------------------------------------------------------------------
 // Processing functions - which one to do
 // -----------------------------------------------------------------------
+
+gcc_pure
+static int
+FindMenuItemByEvent(InputEvents::Mode mode, InputEvents::Mode overlay_mode,
+                    unsigned event_id)
+{
+  const Menu *const overlay_menu = overlay_mode != InputEvents::MODE_DEFAULT
+    ? &input_config.menus[overlay_mode]
+    : NULL;
+  if (overlay_menu != NULL) {
+    int i = overlay_menu->FindByEvent(event_id);
+    if (i >= 0)
+      return i;
+  }
+
+  const Menu &menu = input_config.menus[mode];
+  int i = menu.FindByEvent(event_id);
+  if (i >= 0 && overlay_menu != NULL && (*overlay_menu)[i].IsDefined())
+    /* this location is in use by the overlay */
+    i = -1;
+
+  return i;
+}
 
 void
 InputEvents::ProcessEvent(unsigned event_id)
@@ -169,9 +212,7 @@ InputEvents::ProcessEvent(unsigned event_id)
 
   InputEvents::Mode lastMode = getModeID();
 
-  const Menu &menu = input_config.menus[lastMode];
-  int bindex = menu.FindByEvent(event_id);
-
+  int bindex = FindMenuItemByEvent(lastMode, overlay_mode, event_id);
   if (bindex < 0 || ButtonLabel::IsEnabled(bindex))
     InputEvents::processGo(event_id);
 
@@ -191,6 +232,20 @@ key_to_event(InputEvents::Mode mode, unsigned key_code)
   return input_config.GetKeyEvent(mode, key_code);
 }
 
+gcc_pure
+static unsigned
+key_to_event(InputEvents::Mode mode, InputEvents::Mode overlay_mode,
+             unsigned key_code)
+{
+  if (overlay_mode != InputEvents::MODE_DEFAULT) {
+    unsigned event_id = key_to_event(overlay_mode, key_code);
+    if (event_id > 0)
+      return event_id;
+  }
+
+  return key_to_event(mode, key_code);
+}
+
 bool
 InputEvents::ProcessKey(Mode mode, unsigned key_code)
 {
@@ -203,7 +258,7 @@ InputEvents::ProcessKey(Mode mode, unsigned key_code)
     return false;
 
   // Which key - can be defined locally or at default (fall back to default)
-  unsigned event_id = key_to_event(mode, key_code);
+  unsigned event_id = key_to_event(mode, overlay_mode, key_code);
   if (event_id == 0)
     return false;
 
