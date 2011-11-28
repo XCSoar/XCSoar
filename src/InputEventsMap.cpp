@@ -187,7 +187,6 @@ InputEvents::sub_Pan(int vswitch)
   if (vswitch == -2) {
     // supertoogle, toogle pan mode and fullscreen
     map_window->TogglePan();
-    XCSoarInterface::main_window.SetFullScreen(true);
   } else if (vswitch == -1)
     // toogle, toogle pan mode only
     map_window->TogglePan();
@@ -199,6 +198,7 @@ InputEvents::sub_Pan(int vswitch)
   if (map_window->IsPanning() != oldPan) {
     if (map_window->IsPanning()) {
       setMode(MODE_PAN);
+      XCSoarInterface::main_window.SetFullScreen(true);
     } else {
       setMode(MODE_DEFAULT);
       Pages::Update();
