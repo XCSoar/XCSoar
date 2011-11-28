@@ -165,10 +165,9 @@ DeviceDescriptor::Close()
   delete device;
   device = NULL;
 
-  Port *OldCom = port;
+  Port *old_port = port;
   port = NULL;
-
-  delete OldCom;
+  delete old_port;
 
   driver = NULL;
   pipe_to_device = NULL;
