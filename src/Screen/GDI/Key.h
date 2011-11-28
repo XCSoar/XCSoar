@@ -24,13 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_GDI_KEY_H
 #define XCSOAR_SCREEN_GDI_KEY_H
 
-#if defined(__WINE__) || defined(__CYGWIN__)
-/* the WINE 1.1.32 headers are broken, the definition of
-   LPSECURITY_ATTRIBUTES is missing in winuser.h */
 #include <windows.h>
-#endif
-
-#include <winuser.h>
 
 #ifndef _WIN32_WCE
 enum {
