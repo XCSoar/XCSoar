@@ -381,6 +381,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Panel/WindEdit.cpp \
 	$(SRC)/InfoBoxes/Panel/WindSetup.cpp \
 	$(SRC)/InputConfig.cpp \
+	$(SRC)/InputDefaults.cpp \
 	$(SRC)/InputEvents.cpp \
 	$(SRC)/InputEventsActions.cpp \
 	$(SRC)/InputEventsDevice.cpp \

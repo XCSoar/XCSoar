@@ -29,6 +29,8 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct InputConfig;
+
 typedef void (*pt2Event)(const TCHAR *);
 
 namespace InputEvents
@@ -43,6 +45,11 @@ namespace InputEvents
   void ProcessTimer();
   void ShowMenu();
   void HideMenu();
+
+  /**
+   * Load the default input file (Data/Input/default.xci).
+   */
+  void LoadDefaults(InputConfig &input_config);
 
   void readFile();
   void setMode(mode mode);
