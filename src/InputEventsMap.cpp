@@ -156,13 +156,6 @@ InputEvents::eventPan(const TCHAR *misc)
   else if (_tcscmp(misc, _T("right")) == 0)
     sub_PanCursor(-1, 0);
 
-  else if (_tcscmp(misc, _T("show")) == 0) {
-    if (CommonInterface::IsPanning())
-      Message::AddMessage(_("Pan mode on"));
-    else
-      Message::AddMessage(_("Pan mode off"));
-  }
-
   XCSoarInterface::SendSettingsMap(true);
 }
 

@@ -431,7 +431,6 @@ location=8
 mode=Display1
 type=key
 data=0
-event=Pan show
 event=Pan supertoggle
 label=Pan\nOn
 location=9
