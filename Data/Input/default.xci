@@ -96,7 +96,7 @@ event=Mode default
 mode=pan
 type=key
 data=ESCAPE
-event=Pan supertoggle
+event=Pan off
 
 ###### pan mode
 
@@ -123,7 +123,7 @@ event=Pan right
 mode=pan
 type=key
 data=APP1
-event=Pan supertoggle
+event=Pan off
 label=Pan\nOff
 location=1
 
@@ -249,7 +249,7 @@ event=Analysis
 mode=default
 type=gesture
 data=URDL
-event=Pan supertoggle
+event=Pan on
 
 mode=default
 type=gesture
@@ -431,7 +431,7 @@ location=8
 mode=Display1
 type=key
 data=0
-event=Pan supertoggle
+event=Pan on
 label=Pan\nOn
 location=9
 
