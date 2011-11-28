@@ -196,7 +196,7 @@ InputEvents::LeavePan()
   if (map_window == NULL)
     return;
 
-  SetPan(!map_window->IsPanning());
+  SetPan(false);
 }
 
 void
