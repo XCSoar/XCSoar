@@ -44,16 +44,16 @@ static bool loading = false;
 static void
 UpdateCaption()
 {
-  TCHAR tmp[128];
-  _stprintf(tmp, _("%s: %s"), _("Plane Polar"), plane.registration.c_str());
+  StaticString<128> tmp;
+  tmp.Format(_("%s: %s"), _("Plane Polar"), plane.registration.c_str());
   dialog->SetCaption(tmp);
 }
 
 static void
 UpdatePolarLabel()
 {
-  TCHAR tmp[128];
-  _stprintf(tmp, _("%s: %s"), _("Polar"), plane.polar_name.c_str());
+  StaticString<128> tmp;
+  tmp.Format(_("%s: %s"), _("Polar"), plane.polar_name.c_str());
 
   WndFrame *label = ((WndFrame *)dialog->FindByName(_T("PolarLabel")));
   assert(label != NULL);

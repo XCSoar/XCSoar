@@ -28,9 +28,8 @@ InfoBoxData::SetValue(Angle _value, const TCHAR *suffix)
 {
   assert(suffix != NULL);
 
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%d")_T(DEG)_T("%s"),
-            iround(_value.Degrees()), suffix);
+  StaticString<32> tmp;
+  tmp.Format(_T("%d" DEG "%s"), iround(_value.Degrees()), suffix);
   SetValue(tmp);
 }
 
@@ -39,8 +38,7 @@ InfoBoxData::SetComment(Angle _value, const TCHAR *suffix)
 {
   assert(suffix != NULL);
 
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%d")_T(DEG)_T("%s"),
-            iround(_value.Degrees()), suffix);
+  StaticString<32> tmp;
+  tmp.Format(_T("%d" DEG "%s"), iround(_value.Degrees()), suffix);
   SetComment(tmp);
 }

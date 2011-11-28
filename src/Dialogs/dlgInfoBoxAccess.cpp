@@ -102,10 +102,10 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
 
   wTabBar->SetCurrentPage(0);
 
-  TCHAR sTmp[32];
-  _stprintf(sTmp, _T("InfoBox: %s"), InfoBoxManager::GetTitle(id));
+  StaticString<32> buffer;
+  buffer.Format(_T("InfoBox: %s"), InfoBoxManager::GetTitle(id));
 
-  wf->SetCaption(sTmp);
+  wf->SetCaption(buffer);
   wf->ShowModal();
 
   delete wf;

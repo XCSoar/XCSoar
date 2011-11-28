@@ -22,8 +22,7 @@ Copyright_License {
 */
 
 #include "Device.hpp"
-
-#include <cstdio>
+#include "Util/StaticString.hpp"
 
 bool
 FlarmDevice::SetStealthMode(bool enabled)
@@ -34,8 +33,8 @@ FlarmDevice::SetStealthMode(bool enabled)
 bool
 FlarmDevice::SetRange(unsigned range)
 {
-  TCHAR buffer[32];
-  _stprintf(buffer, _T("%d"), range);
+  StaticString<32> buffer;
+  buffer.Format(_T("%d"), range);
   return SetConfig(_T("RANGE"), buffer);
 }
 

@@ -180,12 +180,12 @@ PlaneGlue::ReadFile(Plane &plane, const TCHAR *path)
 void
 PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
 {
-  TCHAR tmp[255];
+  StaticString<255> tmp;
   writer.Write(_T("Registration"), plane.registration);
   writer.Write(_T("CompetitionID"), plane.competition_id);
   writer.Write(_T("Type"), plane.type);
 
-  _sntprintf(tmp, 255, _T("%u"), plane.handicap);
+  tmp.Format(_T("%u"), plane.handicap);
   writer.Write(_T("Handicap"), tmp);
 
   writer.Write(_T("PolarName"), plane.polar_name);
@@ -193,23 +193,23 @@ PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
   fixed V1 = Units::ToUserUnit(plane.v1, unKiloMeterPerHour);
   fixed V2 = Units::ToUserUnit(plane.v2, unKiloMeterPerHour);
   fixed V3 = Units::ToUserUnit(plane.v3, unKiloMeterPerHour);
-  _sntprintf(tmp, 255, _T("%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
+  tmp.Format(_T("%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
              (double)V1, (double)plane.w1,
              (double)V2, (double)plane.w2,
              (double)V3, (double)plane.w3);
   writer.Write(_T("PolarInformation"), tmp);
 
-  _sntprintf(tmp, 255, _T("%f"), (double)plane.reference_mass);
+  tmp.Format(_T("%f"), (double)plane.reference_mass);
   writer.Write(_T("PolarReferenceMass"), tmp);
-  _sntprintf(tmp, 255, _T("%f"), (double)plane.dry_mass);
+  tmp.Format(_T("%f"), (double)plane.dry_mass);
   writer.Write(_T("PolarDryMass"), tmp);
-  _sntprintf(tmp, 255, _T("%f"), (double)plane.max_ballast);
+  tmp.Format(_T("%f"), (double)plane.max_ballast);
   writer.Write(_T("MaxBallast"), tmp);
-  _sntprintf(tmp, 255, _T("%f"), (double)plane.dump_time);
+  tmp.Format(_T("%f"), (double)plane.dump_time);
   writer.Write(_T("DumpTime"), tmp);
-  _sntprintf(tmp, 255, _T("%f"), (double)plane.max_speed);
+  tmp.Format(_T("%f"), (double)plane.max_speed);
   writer.Write(_T("MaxSpeed"), tmp);
-  _sntprintf(tmp, 255, _T("%f"), (double)plane.wing_area);
+  tmp.Format(_T("%f"), (double)plane.wing_area);
   writer.Write(_T("WingArea"), tmp);
 }
 

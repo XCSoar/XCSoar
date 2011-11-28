@@ -58,27 +58,25 @@ public:
     // For each task in the task file
     for (unsigned i = 0; i < count; i++) {
       // Copy base name of the file into task name
-      TCHAR name[255];
-      _tcscpy(name, (base_name != NULL) ? base_name : path);
+      StaticString<256> name;
+      name = (base_name != NULL) ? base_name : path;
 
       // If the task file holds more than one task
       if (count > 1) {
         if (i < task_file->namesuffixes.size() &&
             task_file->namesuffixes[i]) {
 
-          _tcscat(name, _T(": "));
-          _tcscat(name, task_file->namesuffixes[i]);
+          name += _T(": ");
+          name += task_file->namesuffixes[i];
 
         } else {
           // .. append " - Task #[n]" suffix to the task name
-          TCHAR suffix[255];
-          _stprintf(suffix, _T(": %s #%2d"), _("Task"), i + 1);
-          _tcscat(name, suffix);
+          name.AppendFormat(_T(": %s #%2d"), _("Task"), i + 1);
         }
       }
 
       // Add the task to the TaskStore
-      store.push_back(TaskStore::Item(path, (name == NULL) ? path : name, i));
+      store.push_back(TaskStore::Item(path, name.empty() ? path : name, i));
     }
 
     // Remove temporary TaskFile instance

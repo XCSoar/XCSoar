@@ -110,11 +110,12 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.select(small_font);
 
   // Draw distance and arrival altitude
-  TCHAR buffer[255], dist[20], alt[20];
+  StaticString<256> buffer;
+  TCHAR dist[20], alt[20];
   Units::FormatUserDistance(distance, dist, 20, true);
   Units::FormatUserArrival(arrival_altitude, alt, 20, true);
-  _stprintf(buffer, _T("%s: %s - %s: %s"), _("Distance"), dist,
-            _("Arrival Alt"), alt);
+  buffer.Format(_T("%s: %s - %s: %s"), _("Distance"), dist,
+                _("Arrival Alt"), alt);
 
   UPixelScalar left = rc.left + line_height + Layout::FastScale(2);
   canvas.text_clipped(left, top2, rc, buffer);

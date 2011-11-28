@@ -60,9 +60,9 @@ static int status_page = 0;
 static void
 SetTitle()
 {
-  TCHAR title[99];
-  _stprintf(title, _T("%s: %s"), _("Status"),
-            wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
+  StaticString<128> title;
+  title.Format(_T("%s: %s"), _("Status"),
+               wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
   wf->SetCaption(title);
 }
 

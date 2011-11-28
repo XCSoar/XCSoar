@@ -203,9 +203,9 @@ TabMenuControl::SetCurrentPage(unsigned page)
     const OneMainMenuButton *butMain =
       GetMainMenuButton(last_content.main_index);
     assert(butMain);
-    TCHAR caption[128];
-    _sntprintf(caption, 128, _T("%s > %s"),
-               gettext(butMain->caption), theitem.menu_caption);
+    StaticString<128> caption;
+    caption.Format(_T("%s > %s"),
+                   gettext(butMain->caption), theitem.menu_caption);
     form.SetCaption(caption);
   }
 }
@@ -388,10 +388,9 @@ TabMenuControl::CreateSubMenuItem(const unsigned sub_menu_index,
     return;
   }
 
-  TCHAR xml_resource[100];
-  _sntprintf(xml_resource, 100, _T("%s%s"),
-             item.xml_portrait_resource,
-             Layout::landscape ? _T("_L") : _T(""));
+  StaticString<100> xml_resource;
+  xml_resource.Format(_T("%s%s"), item.xml_portrait_resource,
+                      Layout::landscape ? _T("_L") : _T(""));
 
   Window *w = LoadWindow(look_up_table, &form, pager, xml_resource);
   AddClient(w, item, sub_menu_index, page);

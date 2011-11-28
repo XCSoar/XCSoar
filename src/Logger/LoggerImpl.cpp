@@ -209,7 +209,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   LocalPath(filename, _T("logs"));
   Directory::Create(filename);
 
-  TCHAR name[64];
+  StaticString<64> name;
   for (i = 1; i < 99; i++) {
     // 2003-12-31-XXX-987-01.igc
     // long filename form of IGC file.
@@ -217,15 +217,13 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
     if (!settings.logger_short_name) {
       // Long file name
-      _stprintf(name,
-                _T("%04u-%02u-%02u-XCS-%c%c%c-%02d.igc"),
-                gps_info.date_time_utc.year,
-                gps_info.date_time_utc.month,
-                gps_info.date_time_utc.day,
-          strAssetNumber[0],
-          strAssetNumber[1],
-          strAssetNumber[2],
-          i);
+      name.Format(_T("%04u-%02u-%02u-XCS-%c%c%c-%02d.igc"),
+                  gps_info.date_time_utc.year,
+                  gps_info.date_time_utc.month,
+                  gps_info.date_time_utc.day,
+                  strAssetNumber[0],
+                  strAssetNumber[1],
+                  strAssetNumber[2], i);
     } else {
       // Short file name
       TCHAR cyear, cmonth, cday, cflight;
@@ -233,16 +231,9 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
       cmonth = NumToIGCChar(gps_info.date_time_utc.month);
       cday = NumToIGCChar(gps_info.date_time_utc.day);
       cflight = NumToIGCChar(i);
-      _stprintf(name,
-                _T("%c%c%cX%c%c%c%c.igc"),
-          cyear,
-          cmonth,
-          cday,
-          strAssetNumber[0],
-          strAssetNumber[1],
-          strAssetNumber[2],
-          cflight);
-
+      name.Format(_T("%c%c%cX%c%c%c%c.igc"), cyear, cmonth, cday,
+                  strAssetNumber[0], strAssetNumber[1], strAssetNumber[2],
+                  cflight);
     }
 
     LocalPath(filename, _T("logs"), name);
@@ -337,8 +328,7 @@ LogFileIsOlder(const NMEAInfo &gps_info,
 static bool
 DeleteOldestIGCFile(const NMEAInfo &gps_info, const TCHAR *pathname)
 {
-  TCHAR oldest_name[MAX_PATH];
-  TCHAR full_name[MAX_PATH];
+  StaticString<MAX_PATH> oldest_name, full_name;
 
   _TDIR *dir = _topendir(pathname);
   if (dir == NULL)
@@ -349,19 +339,19 @@ DeleteOldestIGCFile(const NMEAInfo &gps_info, const TCHAR *pathname)
     if (!MatchesExtension(ent->d_name, _T(".igc")))
       continue;
 
-    _tcscpy(full_name, pathname);
-    _tcscpy(full_name, ent->d_name);
+    full_name = pathname;
+    full_name += ent->d_name;
 
     if (File::Exists(full_name) &&
         LogFileIsOlder(gps_info, oldest_name, ent->d_name))
       // we have a new oldest name
-      _tcscpy(oldest_name, ent->d_name);
+      oldest_name = ent->d_name;
   }
 
   _tclosedir(dir);
 
   // now, delete the file...
-  _stprintf(full_name, _T("%s%s"), pathname, oldest_name);
+  full_name.Format(_T("%s%s"), pathname, oldest_name.c_str());
   File::Delete(full_name);
 
   // did delete one

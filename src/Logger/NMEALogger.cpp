@@ -51,11 +51,10 @@ NMEALogger::Start()
   BrokenDateTime dt = XCSoarInterface::Basic().date_time_utc;
   assert(dt.Plausible());
 
-  TCHAR name[64];
-  _sntprintf(name, 64,
-             _T("%04u-%02u-%02u_%02u-%02u.nmea"),
-             dt.year, dt.month, dt.day,
-             dt.hour, dt.minute);
+  StaticString<64> name;
+  name.Format(_T("%04u-%02u-%02u_%02u-%02u.nmea"),
+              dt.year, dt.month, dt.day,
+              dt.hour, dt.minute);
 
   TCHAR path[MAX_PATH];
   LocalPath(path, _T("logs"));

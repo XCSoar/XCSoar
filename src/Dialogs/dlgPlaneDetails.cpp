@@ -36,8 +36,8 @@ static Plane plane;
 static void
 UpdateCaption()
 {
-  TCHAR tmp[128];
-  _stprintf(tmp, _("%s: %s"), _("Plane Details"), plane.registration.c_str());
+  StaticString<128> tmp;
+  tmp.Format(_("%s: %s"), _("Plane Details"), plane.registration.c_str());
   dialog->SetCaption(tmp);
 }
 

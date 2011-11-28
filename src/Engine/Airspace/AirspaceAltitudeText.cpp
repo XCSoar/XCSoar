@@ -22,42 +22,42 @@
 #include "AirspaceAltitude.hpp"
 #include "AbstractAirspace.hpp"
 #include "Units/Units.hpp"
+#include "Util/StaticString.hpp"
 
 #include <stdio.h>
 
 const tstring 
 AirspaceAltitude::GetAsTextUnits(const bool concise) const
 {
-  TCHAR buffer[64];
+  StaticString<64> buffer;
 
   switch (type) {
   case AGL:
-    if (!positive(altitude_above_terrain)) {
-      _tcscpy(buffer, _T("GND"));
-    } else {
-      _stprintf(buffer, _T("%d %s AGL"),
-                iround(Units::ToUserAltitude(altitude_above_terrain)), Units::GetAltitudeName());
-    }
+    if (!positive(altitude_above_terrain))
+      buffer = _T("GND");
+    else
+      buffer.Format(_T("%d %s AGL"),
+                    iround(Units::ToUserAltitude(altitude_above_terrain)),
+                    Units::GetAltitudeName());
     break;
   case FL:
-    _stprintf(buffer, _T("FL%d"), (int)flight_level);
+    buffer.Format(_T("FL%d"), (int)flight_level);
     break;
   case MSL:
-    _stprintf(buffer, _T("%d %s"),
-              iround(Units::ToUserAltitude(altitude)), Units::GetAltitudeName());
+    buffer.Format(_T("%d %s"), iround(Units::ToUserAltitude(altitude)),
+                  Units::GetAltitudeName());
     break;
   case UNDEFINED:
   default:
-    buffer[0] = _T('\0');
+    buffer.clear();
     break;
-  };
-  if (!concise && type != MSL && positive(altitude)) {
-    TCHAR second[64];
-    _stprintf(second, _T(" %d %s"),
-              iround(Units::ToUserAltitude(altitude)), Units::GetAltitudeName());
-    return tstring(buffer) + second;
-  } else
-    return tstring(buffer);
+  }
+
+  if (!concise && type != MSL && positive(altitude))
+    buffer.AppendFormat(_T(" %d %s"), iround(Units::ToUserAltitude(altitude)),
+                        Units::GetAltitudeName());
+
+  return tstring(buffer);
 }
 
 

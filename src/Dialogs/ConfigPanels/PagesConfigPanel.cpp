@@ -61,9 +61,9 @@ PagesConfigPanel::Init(WndForm *_wf)
   assert(_wf != NULL);
   wf = _wf;
 
-  TCHAR prpName[64];
+  StaticString<64> prpName;
   for (unsigned i = 0; i < PageSettings::MAX_PAGES; i++) {
-    _stprintf(prpName, _T("prpPageLayout%u"), i);
+    prpName.Format(_T("prpPageLayout%u"), i);
     WndProperty* wp = (WndProperty*)wf->FindByName(prpName);
     if (wp) {
       DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
@@ -77,12 +77,12 @@ PagesConfigPanel::Init(WndForm *_wf)
 bool
 PagesConfigPanel::Save()
 {
-  TCHAR prpName[64];
+  StaticString<64> prpName;
   bool changed = false;
 
   PageSettings &settings = CommonInterface::SetUISettings().pages;
   for (unsigned int i = 0; i < PageSettings::MAX_PAGES; i++) {
-     _stprintf(prpName, _T("prpPageLayout%u"), i);
+    prpName.Format(_T("prpPageLayout%u"), i);
     WndProperty* wp = (WndProperty*)wf->FindByName(prpName);
     if (wp) {
       PageSettings::PageLayout *currentPL = &settings.pages[i];

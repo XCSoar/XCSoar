@@ -37,6 +37,7 @@ Copyright_License {
 #include "Engine/Navigation/Geometry/GeoVector.hpp"
 #include "Compatibility/string.h"
 #include "Engine/Airspace/AirspaceClass.hpp"
+#include "Util/StaticString.hpp"
 
 #include <math.h>
 #include <tchar.h>
@@ -234,11 +235,10 @@ struct TempAirspaceType
 static bool
 ShowParseWarning(int line, const TCHAR* str)
 {
-  TCHAR sTmp[MAX_PATH];
-  _stprintf(sTmp, _T("%s: %d\r\n\"%s\"\r\n%s."),
-            _("Parse Error at Line"), line, str,
-            _("Line skipped."));
-  return (MessageBoxX(sTmp, _("Airspace"), MB_OKCANCEL) == IDOK);
+  StaticString<256> buffer;
+  buffer.Format(_T("%s: %d\r\n\"%s\"\r\n%s."),
+                _("Parse Error at Line"), line, str, _("Line skipped."));
+  return (MessageBoxX(buffer, _("Airspace"), MB_OKCANCEL) == IDOK);
 
 }
 

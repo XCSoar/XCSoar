@@ -47,23 +47,23 @@ Update()
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TeamInfo &teamcode_info = CommonInterface::Calculated();
-  TCHAR Text[100];
+  StaticString<100> buffer;
 
   if (teamcode_info.teammate_available && basic.track_available) {
     fixed Value = (teamcode_info.teammate_vector.bearing - basic.track)
       .AsDelta().Degrees();
 
     if (Value > fixed_one)
-      _stprintf(Text, _T("%2.0f")_T(DEG)_T(">"), (double)Value);
+      buffer.Format(_T("%2.0f" DEG ">"), (double)Value);
     else if (Value < fixed_minus_one)
-      _stprintf(Text, _T("<%2.0f")_T(DEG), (double)-Value);
+      buffer.Format(_T("<%2.0f" DEG), (double)-Value);
     else
-      _tcscpy(Text, _T("<>"));
+      buffer = _T("<>");
   } else {
-    _tcscpy(Text, _T("---"));
+    buffer = _T("---");
   }
 
-  SetFormValue(*wf, _T("prpRelBearing"), Text);
+  SetFormValue(*wf, _T("prpRelBearing"), buffer);
 
   if (teamcode_info.teammate_available) {
     LoadFormProperty(*wf, _T("prpBearing"),

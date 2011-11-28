@@ -48,7 +48,7 @@ SystemStatusPanel::Refresh()
   const NMEAInfo &basic = CommonInterface::Basic();
   const GPSState &gps = basic.gps;
 
-  TCHAR Temp[80];
+  StaticString<80> Temp;
 
   SetFormValue(form, _T("prpGPS"), gettext(GetGPSStatus(basic)));
 
@@ -56,7 +56,7 @@ SystemStatusPanel::Refresh()
     SetFormValue(form, _T("prpNumSat"), _T(""));
   else if (gps.satellites_used >= 0) {
     // known number of sats
-    _stprintf(Temp,_T("%d"), gps.satellites_used);
+    Temp.Format(_T("%d"), gps.satellites_used);
     SetFormValue(form, _T("prpNumSat"), Temp);
   } else
     // valid but unknown number of sats
@@ -82,15 +82,14 @@ SystemStatusPanel::Refresh()
                ? _("Yes")
                : _("No"));
 
-  Temp[0] = 0;
+  Temp.clear();
 #ifdef HAVE_BATTERY
   if (Power::Battery::RemainingPercentValid) {
-    _stprintf(Temp + _tcslen(Temp), _T("%d %% "),
-              Power::Battery::RemainingPercent);
+    Temp.Format(_T("%d %% "), Power::Battery::RemainingPercent);
   }
 #endif
   if (basic.voltage_available) {
-    _stprintf(Temp + _tcslen(Temp), _T("%.1f V"), (double)basic.voltage);
+    Temp.AppendFormat(_T("%.1f V"), (double)basic.voltage);
   }
 
   SetFormValue(form, _T("prpBattery"), Temp);

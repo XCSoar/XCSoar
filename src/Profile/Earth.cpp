@@ -53,9 +53,9 @@ Profile::GetGeoPoint(const TCHAR *key, GeoPoint &value)
 bool
 Profile::SetGeoPoint(const TCHAR *key, const GeoPoint &value)
 {
-  TCHAR buffer[128];
-  _sntprintf(buffer, 128, _T("%f %f"),
-             (double)value.longitude.Degrees(),
-             (double)value.latitude.Degrees());
+  StaticString<128> buffer;
+  buffer.Format(_T("%f %f"),
+                (double)value.longitude.Degrees(),
+                (double)value.latitude.Degrees());
   return Set(key, buffer);
 }

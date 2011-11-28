@@ -55,9 +55,9 @@ dlgHelpShowModal(SingleWindow &parent,
   if (wf == NULL)
     return;
 
-  TCHAR fullcaption[100];
-  _stprintf(fullcaption,_T("%s: %s"), _("Help"), Caption);
-  wf->SetCaption(fullcaption);
+  StaticString<100> full_caption;
+  full_caption.Format(_T("%s: %s"), _("Help"), Caption);
+  wf->SetCaption(full_caption);
 
   SetFormMultiLineValue(*wf, _T("prpHelpText"), HelpText);
 

@@ -21,6 +21,7 @@
  */
 
 #include "DataNode.hpp"
+#include "Util/StaticString.hpp"
 
 #include <stdio.h>
 
@@ -37,32 +38,32 @@ DataNode::set_attribute(const TCHAR *name, Angle value)
 void
 DataNode::set_attribute(const TCHAR *name, fixed value)
 {
-  TCHAR buf[100];
-  _stprintf(buf, _T("%g"), (double)value);
+  StaticString<100> buf;
+  buf.Format(_T("%g"), (double)value);
   set_attribute(name, buf);
 }
 
 void
 DataNode::set_attribute(const TCHAR *name, int value)
 {
-  TCHAR buf[100];
-  _stprintf(buf, _T("%d"), value);
+  StaticString<100> buf;
+  buf.Format(_T("%d"), value);
   set_attribute(name, buf);
 }
 
 void
 DataNode::set_attribute(const TCHAR *name, unsigned value)
 {
-  TCHAR buf[100];
-  _stprintf(buf, _T("%d"), value);
+  StaticString<100> buf;
+  buf.Format(_T("%d"), value);
   set_attribute(name, buf);
 }
 
 void
 DataNode::set_attribute(const TCHAR *name, bool &value)
 {
-  TCHAR buf[100];
-  _stprintf(buf, _T("%d"), (int)value);
+  StaticString<100> buf;
+  buf.Format(_T("%d"), (int)value);
   set_attribute(name, buf);
 }
 

@@ -82,8 +82,8 @@ InfoBoxesConfigPanel::Init(WndForm *_wf)
   for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; i++) {
     const InfoBoxSettings::Panel &data = settings.panels[i];
 
-    TCHAR buffer[32];
-    _stprintf(buffer, _T("cmdInfoBoxesPanel%u"), i);
+    StaticString<32> buffer;
+    buffer.Format(_T("cmdInfoBoxesPanel%u"), i);
     buttons[i] = (WndButton*) wf->FindByName(buffer);
     if (buttons[i]) {
       buttons[i]->SetOnClickNotify(OnInfoBoxesButton);

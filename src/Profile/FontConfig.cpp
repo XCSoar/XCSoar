@@ -131,13 +131,14 @@ Profile::GetFont(const TCHAR *key, LOGFONT* lplf)
 void
 Profile::SetFont(const TCHAR *key, LOGFONT &logfont)
 {
-  TCHAR Buffer[256];
+  StaticString<256> buffer;
 
   assert(key != NULL);
   assert(key[0] != '\0');
 
-  _stprintf(Buffer, _T("%d,%d,0,0,%d,%d,0,0,0,0,0,%d,%d,%s"),
-            logfont.lfHeight, logfont.lfWidth, logfont.lfWeight, logfont.lfItalic,
-            logfont.lfQuality, logfont.lfPitchAndFamily, logfont.lfFaceName);
-  Profile::Set(key, Buffer);
+  buffer.Format(_T("%d,%d,0,0,%d,%d,0,0,0,0,0,%d,%d,%s"), logfont.lfHeight,
+                logfont.lfWidth, logfont.lfWeight, logfont.lfItalic,
+                logfont.lfQuality, logfont.lfPitchAndFamily,
+                logfont.lfFaceName);
+  Profile::Set(key, buffer);
 }

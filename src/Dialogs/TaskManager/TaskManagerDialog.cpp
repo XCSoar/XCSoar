@@ -79,10 +79,9 @@ dlgTaskManager::GetPropertiesTab()
 void
 dlgTaskManager::SetTitle()
 {
-  TCHAR title[99];
-
-  _stprintf(title, _T("%s - %s"), _("Task Manager"),
-            wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
+  StaticString<128> title;
+  title.Format(_T("%s - %s"), _("Task Manager"),
+               wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
   wf->SetCaption(title);
 }
 

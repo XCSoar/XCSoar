@@ -155,13 +155,12 @@ void
 GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                             const MapWindowProjection &projection) const
 {
-  TCHAR buffer[80];
+  StaticString<80> buffer;
 
   fixed MapWidth = projection.GetScreenWidthMeters();
 
   canvas.select(Fonts::MapBold);
-  Units::FormatUserMapScale(MapWidth, buffer,
-                            sizeof(buffer) / sizeof(TCHAR), true);
+  Units::FormatUserMapScale(MapWidth, buffer.buffer(), buffer.MAX_SIZE, true);
   PixelSize TextSize = canvas.text_size(buffer);
 
   UPixelScalar Height = Fonts::MapBold.GetCapitalHeight() + Layout::Scale(2);
@@ -182,46 +181,44 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   look.hBmpMapScaleRight.Draw(canvas, Layout::Scale(9) + TextSize.cx,
                                    rc.bottom - Height);
 
-  buffer[0] = '\0';
+  buffer.clear();
   if (SettingsMap().auto_zoom_enabled)
-    _tcscat(buffer, _T("AUTO "));
+    buffer = _T("AUTO ");
 
   switch (follow_mode) {
   case FOLLOW_SELF:
     break;
 
   case FOLLOW_PAN:
-    _tcscat(buffer, _T("PAN "));
+    buffer += _T("PAN ");
     break;
   }
 
   const UIState &ui_state = CommonInterface::GetUIState();
   if (ui_state.auxiliary_enabled) {
-    _tcscat(buffer, InfoBoxManager::GetCurrentPanelName());
-    _tcscat(buffer, _T(" "));
+    buffer += InfoBoxManager::GetCurrentPanelName();
+    buffer += _T(" ");
   }
 
   if (Basic().gps.replay)
-    _tcscat(buffer, _T("REPLAY "));
+    buffer += _T("REPLAY ");
   else if (Basic().gps.simulator) {
-    _tcscat(buffer, _("Simulator"));
-    _tcscat(buffer, _T(" "));
+    buffer += _("Simulator");
+    buffer += _T(" ");
   }
 
-  if (SettingsComputer().ballast_timer_active) {
-    TCHAR TEMP[20];
-    _stprintf(TEMP, _T("BALLAST %d LITERS "),
-              (int)SettingsComputer().glide_polar_task.GetBallastLitres());
-    _tcscat(buffer, TEMP);
-  }
+  if (SettingsComputer().ballast_timer_active)
+    buffer.AppendFormat(
+        _T("BALLAST %d LITERS "),
+        (int)SettingsComputer().glide_polar_task.GetBallastLitres());
 
   if (weather != NULL && weather->GetParameter() > 0) {
     const TCHAR *label = weather->ItemLabel(weather->GetParameter());
     if (label != NULL)
-      _tcscat(buffer, label);
+      buffer += label;
   }
 
-  if (buffer[0]) {
+  if (!buffer.empty()) {
     int y = rc.bottom - Height;
 
     canvas.select(Fonts::Title);

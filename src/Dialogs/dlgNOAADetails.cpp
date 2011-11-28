@@ -81,9 +81,9 @@ UpdateClicked(gcc_unused WndButton &Sender)
 static void
 RemoveClicked(gcc_unused WndButton &Sender)
 {
-  TCHAR tmp[256];
-  _stprintf(tmp, _("Do you want to remove station %s?"),
-            station_iterator->GetCodeT());
+  StaticString<256> tmp;
+  tmp.Format(_("Do you want to remove station %s?"),
+             station_iterator->GetCodeT());
 
   if (MessageBoxX(tmp, _("Remove"), MB_YESNO) == IDNO)
     return;
@@ -116,9 +116,9 @@ dlgNOAADetailsShowModal(SingleWindow &parent, NOAAStore::iterator iterator)
                   _T("IDR_XML_NOAA_DETAILS_L") : _T("IDR_XML_NOAA_DETAILS"));
   assert(wf != NULL);
 
-  TCHAR caption[100];
-  _stprintf(caption, _T("%s: %s"), _("METAR and TAF"),
-            station_iterator->GetCodeT());
+  StaticString<100> caption;
+  caption.Format(_T("%s: %s"), _("METAR and TAF"),
+                 station_iterator->GetCodeT());
   wf->SetCaption(caption);
 
   Update();

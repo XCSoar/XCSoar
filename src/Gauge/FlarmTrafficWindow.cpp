@@ -409,8 +409,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       return;
 
     // Write the relativ altitude devided by 100 to the Buffer
-    TCHAR buffer[10];
-    _stprintf(buffer, _T("%d"), abs(relalt));
+    StaticString<10> buffer;
+    buffer.Format(_T("%d"), abs(relalt));
 
     // Select font
     canvas.background_transparent();

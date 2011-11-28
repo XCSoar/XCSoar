@@ -104,10 +104,10 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
     DegLon = (int)tmp;
     MinLon = (tmp - fixed(DegLon)) * 60 * 1000;
 
-    TCHAR buffer[256];
-    _stprintf(buffer, _T("%02d%05.0f%c,%03d%05.0f%c,%s"), DegLat,
-              (double)MinLat, NoS, DegLon, (double)MinLon, EoW,
-              declaration.GetName(i));
+    StaticString<256> buffer;
+    buffer.Format(_T("%02d%05.0f%c,%03d%05.0f%c,%s"), DegLat,
+                  (double)MinLat, NoS, DegLon, (double)MinLon, EoW,
+                  declaration.GetName(i));
 
     if (!SetConfig(_T("ADDWP"), buffer))
       return false;

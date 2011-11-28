@@ -472,8 +472,9 @@ OnInfoBoxHelp(unsigned item)
 {
   t_InfoBox type = (t_InfoBox)(*info_box_combo_list)[item].DataFieldIndex;
 
-  TCHAR caption[100];
-  _stprintf(caption, _T("%s: %s"), _("InfoBox"), gettext(InfoBoxFactory::GetName(type)));
+  StaticString<100> caption;
+  caption.Format(_T("%s: %s"), _("InfoBox"),
+                 gettext(InfoBoxFactory::GetName(type)));
 
   const TCHAR* text = InfoBoxFactory::GetDescription(type);
   if (text)
@@ -517,8 +518,8 @@ InfoBoxManager::SetupFocused(const int id)
 
   /* let the user select */
 
-  TCHAR caption[20];
-  _stprintf(caption, _T("%s: %d"), _("InfoBox"), i + 1);
+  StaticString<20> caption;
+  caption.Format(_T("%s: %d"), _("InfoBox"), i + 1);
   info_box_combo_list = &list;
   int result = ComboPicker(XCSoarInterface::main_window, caption, list,
                            OnInfoBoxHelp);

@@ -39,32 +39,32 @@ static inline void
 HexDumpLine(const TCHAR *prefix, unsigned offset,
             const uint8_t *data, size_t length)
 {
-  TCHAR line[128] = _T("");
+  StaticString<128> line;
+  line.clear();
 
   for (size_t i = 0; i < length; ++i) {
     if ((i & 0x7) == 0)
-      _tcscat(line, _T(" "));
+      line += _T(" ");
 
-    TCHAR byte[8];
-    _stprintf(byte, _T(" %02x"), data[i]);
-    _tcscat(line, byte);
+    line.AppendFormat(_T(" %02x"), data[i]);
   }
 
   for (size_t i = length; i < 0x10; ++i) {
     if ((i & 0x7) == 0)
-      _tcscat(line, _T(" "));
-    _tcscat(line, _T("   "));
+      line += _T(" ");
+
+    line += _T("   ");
   }
 
-  _tcscat(line, _T(" "));
+  line += _T(" ");
   for (size_t i = 0; i < length; ++i) {
     if ((i & 0x7) == 0)
-      _tcscat(line, _T(" "));
+      line += _T(" ");
 
     TCHAR byte[2];
     byte[0] = IsPrintable(data[i]) ? (TCHAR)data[i] : '.';
     byte[1] = _T('\0');
-    _tcscat(line, byte);
+    line += byte;
   }
 
   LogStartUp(_T("%s%04x%s"), prefix, offset, line);

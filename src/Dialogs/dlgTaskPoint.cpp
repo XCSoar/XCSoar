@@ -150,36 +150,35 @@ RefreshView()
   if (ordered_task->optional_start_points_size() == 0)
     wb->SetCaption(_("Enable Alternate Starts"));
   else {
-    TCHAR tmp[50];
-    _stprintf(tmp, _T("%s (%d)"), _("Edit Alternates"),
-        ordered_task->optional_start_points_size());
+    StaticString<50> tmp;
+    tmp.Format(_T("%s (%d)"), _("Edit Alternates"),
+               ordered_task->optional_start_points_size());
     wb->SetCaption(tmp);
   }
 
   EnableSizeEdit(ordered_task->get_factory_type() != TaskBehaviour::FACTORY_FAI_GENERAL);
 
-  TCHAR bufType[100];
-  TCHAR bufNamePrefix[100];
+  StaticString<100> name_prefix_buffer, type_buffer;
 
   switch (tp->GetType()) {
   case TaskPoint::START:
-    _tcscpy(bufType, _T("Start point"));
-    _tcscpy(bufNamePrefix, _T("Start: "));
+    type_buffer = _T("Start point");
+    name_prefix_buffer = _T("Start: ");
     break;
 
   case TaskPoint::AST:
-    _tcscpy(bufType, _T("Task point"));
-    _stprintf(bufNamePrefix, _T("%d: "), active_index);
+    type_buffer = _T("Task point");
+    name_prefix_buffer.Format(_T("%d: "), active_index);
     break;
 
   case TaskPoint::AAT:
-    _tcscpy(bufType, _T("Assigned area point"));
-    _stprintf(bufNamePrefix, _T("%d: "), active_index);
+    type_buffer = _T("Assigned area point");
+    name_prefix_buffer.Format(_T("%d: "), active_index);
     break;
 
   case TaskPoint::FINISH:
-    _tcscpy(bufType, _T("Finish point"));
-    _tcscpy(bufNamePrefix, _T("Finish: "));
+    type_buffer = _T("Finish point");
+    name_prefix_buffer = _T("Finish: ");
     break;
 
   default:
@@ -187,13 +186,14 @@ RefreshView()
     break;
   }
 
-  wf->SetCaption(bufType);
+  wf->SetCaption(type_buffer);
 
   wfrm = ((WndFrame*)wf->FindByName(_T("lblLocation")));
   if (wfrm) {
-    TCHAR buff[100];
-    _stprintf(buff, _T("%s %s"), bufNamePrefix, tp->GetWaypoint().name.c_str());
-    wfrm->SetCaption(buff);
+    StaticString<100> buffer;
+    buffer.Format(_T("%s %s"), name_prefix_buffer.c_str(),
+                  tp->GetWaypoint().name.c_str());
+    wfrm->SetCaption(buffer);
   }
 
   Refreshing = false; // reactivate onChange routines

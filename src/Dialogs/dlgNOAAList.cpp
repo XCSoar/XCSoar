@@ -153,9 +153,9 @@ RemoveClicked(gcc_unused WndButton &Sender)
   unsigned index = station_list->GetCursorIndex();
   assert(index < list.size());
 
-  TCHAR tmp[256];
-  _stprintf(tmp, _("Do you want to remove station %s?"),
-            list[index].code.c_str());
+  StaticString<256> tmp;
+  tmp.Format(_("Do you want to remove station %s?"),
+             list[index].code.c_str());
 
   if (MessageBoxX(tmp, _("Remove"), MB_YESNO) == IDNO)
     return;

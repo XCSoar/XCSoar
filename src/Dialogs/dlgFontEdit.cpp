@@ -109,16 +109,11 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 static void
 InitGUI(const TCHAR * FontDescription)
 {
-  #define FONTEDIT_GUI_MAX_TITLE 128
+  StaticString<128> title;
+  title.Format(_T("%s: %s"), _("Edit Font"), FontDescription);
+  wf->SetCaption(title);
 
-  WndProperty* wp;
-
-  TCHAR sTitle[FONTEDIT_GUI_MAX_TITLE];
-  _sntprintf(sTitle, FONTEDIT_GUI_MAX_TITLE,
-             _T("%s: %s"), _("Edit Font"), FontDescription);
-  wf->SetCaption(sTitle);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
+  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
   if (wp) {
 #ifndef USE_GDI
     /* we cannot obtain a list of fonts on SDL/OpenGL currently */

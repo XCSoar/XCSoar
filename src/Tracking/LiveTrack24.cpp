@@ -28,6 +28,7 @@ Copyright_License {
 #include "Net/Request.hpp"
 #include "Net/ToBuffer.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
+#include "Util/StaticString.hpp"
 #include "DateTime.hpp"
 #include "Version.hpp"
 
@@ -53,8 +54,8 @@ LiveTrack24::GetUserID(const TCHAR *username, const TCHAR *password)
   assert(password != NULL);
   assert(!string_is_empty(password));
 
-  TCHAR url[1024];
-  _sntprintf(url, 1024, _T("http://%s/client.php?op=login&user=%s&pass=%s"),
+  StaticString<1024> url;
+  url.Format(_T("http://%s/client.php?op=login&user=%s&pass=%s"),
              GetServer(), username, password);
 
   // Open download session
@@ -106,9 +107,9 @@ LiveTrack24::StartTracking(SessionID session, const TCHAR *username,
   //   vname=vehicle name and model
 
 
-  TCHAR url[2048];
-  _sntprintf(url, 2048, _T("http://%s/track.php?leolive=2&sid=%u&pid=%u&"
-                           "client=%s&v=%s&user=%s&pass=%s&vtype=%u&vname=%s"),
+  StaticString<2048> url;
+  url.Format(_T("http://%s/track.php?leolive=2&sid=%u&pid=%u&"
+                "client=%s&v=%s&user=%s&pass=%s&vtype=%u&vname=%s"),
              GetServer(), session, 1, _T("XCSoar"), XCSoar_VersionLong,
              username, password, vtype, vname);
 
@@ -124,9 +125,9 @@ LiveTrack24::SendPosition(SessionID session, unsigned packet_id,
   // http://www.livetrack24.com/track.php?leolive=4&sid=42664778&pid=321&
   //   lat=22.3&lon=40.2&alt=23&sog=40&cog=160&tm=1241422845
 
-  TCHAR url[2048];
-  _sntprintf(url, 2048, _T("http://%s/track.php?leolive=4&sid=%u&pid=%u&"
-                           "lat=%f&lon=%f&alt=%d&sog=%d&cog=%d&tm=%lld"),
+  StaticString<2048> url;
+  url.Format(_T("http://%s/track.php?leolive=4&sid=%u&pid=%u&"
+                "lat=%f&lon=%f&alt=%d&sog=%d&cog=%d&tm=%lld"),
              GetServer(), session, packet_id,
              (double)position.latitude.Degrees(),
              (double)position.longitude.Degrees(),
@@ -142,8 +143,8 @@ LiveTrack24::EndTracking(SessionID session, unsigned packet_id)
 {
   // http://www.livetrack24.com/track.php?leolive=3&sid=42664778&pid=453&prid=0
 
-  TCHAR url[1024];
-  _sntprintf(url, 1024, _T("http://%s/track.php?leolive=3&sid=%u&pid=%u&prid=0"),
+  StaticString<1024> url;
+  url.Format(_T("http://%s/track.php?leolive=3&sid=%u&pid=%u&prid=0"),
              GetServer(), session, packet_id);
 
   return SendRequest(url);

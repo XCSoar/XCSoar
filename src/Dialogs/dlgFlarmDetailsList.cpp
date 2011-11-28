@@ -48,7 +48,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
 
-  TCHAR tmp[255], tmp_id[10];
+  TCHAR tmp_id[10];
   id.Format(tmp_id);
 
   const FlarmNet::Record *record = FlarmNet::FindRecordById(id);
@@ -56,48 +56,41 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   canvas.select(name_font);
 
+  StaticString<256> tmp;
   if (record != NULL)
-    _stprintf(tmp, _T("%s - %s - %s"), callsign, record->registration, tmp_id);
+    tmp.Format(_T("%s - %s - %s"), callsign, record->registration, tmp_id);
   else if (callsign != NULL)
-    _stprintf(tmp, _T("%s - %s"), callsign, tmp_id);
+    tmp.Format(_T("%s - %s"), callsign, tmp_id);
   else
-    _stprintf(tmp, _T("%s"), tmp_id);
+    tmp.Format(_T("%s"), tmp_id);
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2), rc, tmp);
 
   canvas.select(small_font);
 
-  int offset = 0;
+  tmp.clear();
   if (record != NULL) {
-    if (!string_is_empty(record->pilot)) {
-      _tcscpy(tmp, record->pilot);
-      offset = _tcslen(record->pilot);
-    }
+    if (!string_is_empty(record->pilot))
+      tmp = record->pilot;
 
     if (!string_is_empty(record->plane_type)) {
-      if (offset > 0) {
-        _tcscpy(tmp + offset, _T(" - "));
-        offset += 3;
-      }
+      if (!tmp.empty())
+        tmp.append(_T(" - "));
 
-      _tcscpy(tmp + offset, record->plane_type);
-      offset += _tcslen(record->plane_type);
+      tmp.append(record->plane_type);
     }
 
     if (!string_is_empty(record->airfield)) {
-      if (offset > 0) {
-        _tcscpy(tmp + offset, _T(" - "));
-        offset += 3;
-      }
+      if (!tmp.empty())
+        tmp.append(_T(" - "));
 
-      _tcscpy(tmp + offset, record->airfield);
-      offset = 1;
+      tmp.append(record->airfield);
     }
   }
 
-  if (offset == 0)
-    _tcscpy(tmp, _("No further information"));
+  if (tmp.empty())
+    tmp = _("No further information");
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),

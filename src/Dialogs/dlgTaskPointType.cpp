@@ -79,17 +79,17 @@ OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
 {
   assert(DrawListIndex < point_types.size());
 
-  TCHAR sTmp[120];
+  StaticString<120> buffer;
 
   const TCHAR* text = OrderedTaskPointName(point_types[DrawListIndex]);
 
   if (point && (point_types[DrawListIndex] == get_point_type()))
-    _stprintf(sTmp, _T("*%s"), text);
+    buffer.Format(_T("*%s"), text);
   else
-    _stprintf(sTmp, _T(" %s"), text);
+    buffer.Format(_T(" %s"), text);
 
   canvas.text(rc.left + Layout::FastScale(2),
-              rc.top + Layout::FastScale(2), sTmp);
+              rc.top + Layout::FastScale(2), buffer);
 }
 
 static bool

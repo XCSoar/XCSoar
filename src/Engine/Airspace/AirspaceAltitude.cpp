@@ -24,6 +24,7 @@
 #include "Atmosphere/Pressure.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "FastMath.h"
+#include "Util/StaticString.hpp"
 #include <stdio.h>
 
 void
@@ -44,33 +45,30 @@ AirspaceAltitude::SetGroundLevel(const fixed alt)
 const tstring
 AirspaceAltitude::GetAsText(const bool concise) const
 {
-  TCHAR buffer[64];
+  StaticString<64> buffer;
 
   switch (type) {
   case AGL:
     if (!positive(altitude_above_terrain))
-      _tcscpy(buffer, _T("GND"));
+      buffer = _T("GND");
     else
-      _stprintf(buffer, _T("%d AGL"), iround(altitude_above_terrain));
+      buffer.Format(_T("%d AGL"), iround(altitude_above_terrain));
 
     break;
   case FL:
-    _stprintf(buffer, _T("FL%d"), iround(flight_level));
+    buffer.Format(_T("FL%d"), iround(flight_level));
     break;
   case MSL:
-    _stprintf(buffer, _T("%d"), iround(altitude));
+    buffer.Format(_T("%d"), iround(altitude));
     break;
   case UNDEFINED:
   default:
-    buffer[0] = _T('\0');
+    buffer.clear();
     break;
   }
 
-  if (!concise && type != MSL && positive(altitude)) {
-    TCHAR second[64];
-    _stprintf(second, _T(" %d"), iround(altitude));
-    return tstring(buffer) + second;
-  }
+  if (!concise && type != MSL && positive(altitude))
+    buffer.AppendFormat(_T(" %d"), iround(altitude));
 
   return tstring(buffer);
 }

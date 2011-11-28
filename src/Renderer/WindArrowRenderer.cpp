@@ -80,8 +80,8 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
     canvas.line(tail[0], tail[1]);
   }
 
-  TCHAR sTmp[12];
-  _stprintf(sTmp, _T("%i"), iround(Units::ToUserWindSpeed(wind.norm)));
+  StaticString<12> buffer;
+  buffer.Format(_T("%i"), iround(Units::ToUserWindSpeed(wind.norm)));
 
   canvas.set_text_color(COLOR_BLACK);
 
@@ -90,9 +90,9 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   style.mode = RM_OUTLINED;
 
   if (arrow[5].y >= arrow[6].y)
-    TextInBox(canvas, sTmp, arrow[5].x - kx, arrow[5].y, style, rc);
+    TextInBox(canvas, buffer, arrow[5].x - kx, arrow[5].y, style, rc);
   else
-    TextInBox(canvas, sTmp, arrow[6].x - kx, arrow[6].y, style, rc);
+    TextInBox(canvas, buffer, arrow[6].x - kx, arrow[6].y, style, rc);
 }
 
 void

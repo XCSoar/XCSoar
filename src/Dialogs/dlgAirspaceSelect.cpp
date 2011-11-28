@@ -245,18 +245,18 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   canvas.text(rc.left + x1, rc.top + Layout::FastScale(2), 
               airspace.GetTypeText(true));
     
-  TCHAR sTmp[12];
+  StaticString<12> sTmp;
 
   // right justified after airspace type
-  _stprintf(sTmp, _T("%d%s"),
-            (int)AirspaceSelectInfo[i].Distance,
-            Units::GetDistanceName());
+  sTmp.Format(_T("%d%s"),
+              (int)AirspaceSelectInfo[i].Distance,
+              Units::GetDistanceName());
   x2 = w0 - w3 - canvas.text_width(sTmp);
   canvas.text(rc.left + x2, rc.top + Layout::FastScale(2), sTmp);
     
   // right justified after distance
-  _stprintf(sTmp, _T("%d")_T(DEG),  
-            (int)AirspaceSelectInfo[i].Direction.Degrees());
+  sTmp.Format(_T("%d")_T(DEG),
+              (int)AirspaceSelectInfo[i].Direction.Degrees());
   x3 = w0 - canvas.text_width(sTmp);
   canvas.text(rc.left + x3, rc.top + Layout::FastScale(2), sTmp);
 }

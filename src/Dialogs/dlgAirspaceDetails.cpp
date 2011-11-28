@@ -124,9 +124,9 @@ SetValues(void)
   const GeoPoint &ac_loc = XCSoarInterface::Basic().location;
   const GeoPoint closest_loc = airspace->ClosestPoint(ac_loc);
   const GeoVector vec(ac_loc, closest_loc);
-  TCHAR buf[80];
-  _stprintf(buf, _T("%d%s"), (int)Units::ToUserDistance(vec.distance),
-            Units::GetDistanceName());
+  StaticString<80> buf;
+  buf.Format(_T("%d%s"), (int)Units::ToUserDistance(vec.distance),
+             Units::GetDistanceName());
   wp->SetText(buf);
   wp->RefreshDisplay();
 }

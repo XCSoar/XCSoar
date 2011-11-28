@@ -174,14 +174,14 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
 
-  TCHAR buffer[256];
-  _stprintf(buffer, _T("%s #%d"), _("Marker"), item.id + 1);
+  StaticString<256> buffer;
+  buffer.Format(_T("%s #%d"), _("Marker"), item.id + 1);
   canvas.select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, buffer);
 
   TCHAR time_buffer[32];
   Units::TimeToTextHHMMSigned(time_buffer, TimeLocal(marker.time.GetSecondOfDay()));
-  _stprintf(buffer, _("dropped at %s"), time_buffer);
+  buffer.Format(_("dropped at %s"), time_buffer);
   canvas.select(small_font);
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
@@ -210,10 +210,11 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, _("Thermal"));
 
-  TCHAR buffer[256], lift_buffer[32], time_buffer[32];
+  StaticString<256> buffer;
+  TCHAR lift_buffer[32], time_buffer[32];
   Units::FormatUserVSpeed(thermal.lift_rate, lift_buffer, 32);
   Units::TimeToTextHHMMSigned(time_buffer, TimeLocal((int)thermal.time));
-  _stprintf(buffer, _("Avg. lift: %s - left at %s"), lift_buffer, time_buffer);
+  buffer.Format(_("Avg. lift: %s - left at %s"), lift_buffer, time_buffer);
   canvas.select(small_font);
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),

@@ -106,8 +106,8 @@ OnPlaneListPaint(Canvas &canvas, const PixelRect rc, unsigned i)
   canvas.select(name_font);
 
   if (Profile::GetPathIsEqual(_T("PlanePath"), list[i].path)) {
-    TCHAR buffer[256];
-    _stprintf(buffer, _T("%s - %s"), list[i].name.c_str(), _("Active"));
+    StaticString<256> buffer;
+    buffer.Format(_T("%s - %s"), list[i].name.c_str(), _("Active"));
     canvas.text_clipped(rc.left + Layout::FastScale(2),
                         rc.top + Layout::FastScale(2), rc, buffer);
   } else
@@ -142,18 +142,21 @@ Load(unsigned i)
 static bool
 LoadWithDialog(unsigned i)
 {
-  TCHAR tmp[256];
+  const TCHAR *title;
+  StaticString<256> text;
 
   bool result = Load(i);
   if (!result) {
-    _stprintf(tmp, _("Loading of plane profile \"%s\" failed!"),
-              list[i].name.c_str());
-    MessageBoxX(tmp, _("Error"), MB_OK);
+    title = _("Error");
+    text.Format(_("Loading of plane profile \"%s\" failed!"),
+                list[i].name.c_str());
   } else {
-    _stprintf(tmp, _("Plane profile \"%s\" activated."),
-              list[i].name.c_str());
-    MessageBoxX(tmp, _("Load"), MB_OK);
+    title = _("Load");
+    text.Format(_("Plane profile \"%s\" activated."),
+                list[i].name.c_str());
   }
+
+  MessageBoxX(text, title, MB_OK);
 
   return result;
 }
@@ -190,9 +193,10 @@ NewClicked(gcc_unused WndButton &button)
     LocalPath(path.buffer(), filename);
 
     if (File::Exists(path)) {
-      TCHAR tmp[256];
-      _stprintf(tmp, _("A plane profile \"%s\" already exists. Do you want to overwrite it?"),
-                filename.c_str());
+      StaticString<256> tmp;
+      tmp.Format(_("A plane profile \"%s\" already exists. "
+                   "Do you want to overwrite it?"),
+                   filename.c_str());
       if (MessageBoxX(tmp, _("Overwrite"), MB_YESNO) != IDYES)
         continue;
     }
@@ -232,9 +236,10 @@ EditClicked(gcc_unused WndButton &button)
       path += filename;
 
       if (File::Exists(path)) {
-        TCHAR tmp[256];
-        _stprintf(tmp, _("A plane profile \"%s\" already exists. Do you want to overwrite it?"),
-                  filename.c_str());
+        StaticString<256> tmp;
+        tmp.Format(_("A plane profile \"%s\" already exists. "
+                     "Do you want to overwrite it?"),
+                     filename.c_str());
         if (MessageBoxX(tmp, _("Overwrite"), MB_YESNO) != IDYES)
           continue;
       }
@@ -262,9 +267,9 @@ DeleteClicked(gcc_unused WndButton &button)
 {
   assert(plane_list->GetCursorIndex() < list.size());
 
-  TCHAR tmp[256];
-  _stprintf(tmp, _("Do you really want to delete plane profile \"%s\"?"),
-            list[plane_list->GetCursorIndex()].name.c_str());
+  StaticString<256> tmp;
+  tmp.Format(_("Do you really want to delete plane profile \"%s\"?"),
+             list[plane_list->GetCursorIndex()].name.c_str());
   if (MessageBoxX(tmp, _("Delete"), MB_YESNO) != IDYES)
     return;
 
@@ -277,9 +282,9 @@ ListItemSelected(unsigned i)
 {
   assert(i < list.size());
 
-  TCHAR tmp[256];
-  _stprintf(tmp, _("Do you want to load plane profile \"%s\"?"),
-            list[i].name.c_str());
+  StaticString<256> tmp;
+  tmp.Format(_("Do you want to load plane profile \"%s\"?"),
+             list[i].name.c_str());
 
   if (MessageBoxX(tmp, _("Load"), MB_YESNO) == IDYES)
     if (LoadWithDialog(i))
