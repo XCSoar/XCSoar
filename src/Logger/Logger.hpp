@@ -74,7 +74,6 @@ public:
                        bool noAsk = false);
   void GUIStopLogger(const NMEAInfo &gps_info,
                      bool noAsk = false);
-  void LoggerDeviceDeclare(const OrderedTask& task);
   void LoggerNote(const TCHAR *text);
   void ClearBuffer();
 };

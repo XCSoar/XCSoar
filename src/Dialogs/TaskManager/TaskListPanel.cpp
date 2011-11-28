@@ -38,7 +38,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Gauge/TaskView.hpp"
 #include "OS/FileUtil.hpp"
-#include "Logger/Logger.hpp"
+#include "Logger/ExternalLogger.hpp"
 #include "Look/Look.hpp"
 #include "MainWindow.hpp"
 #include "Simulator.hpp"
@@ -51,6 +51,7 @@ Copyright_License {
 #endif
 
 #include <assert.h>
+#include <windef.h>
 
 /** XXX this hack is needed because the form callbacks don't get a
     context pointer - please refactor! */
@@ -393,7 +394,7 @@ TaskListPanel::OnDeclareClicked()
     return;
   }
 
-  logger.LoggerDeviceDeclare(**active_task);
+  ExternalLogger::Declare(**active_task);
 }
 
 static void

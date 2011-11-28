@@ -177,12 +177,6 @@ Logger::GUIStopLogger(const NMEAInfo &gps_info,
 }
 
 void
-Logger::LoggerDeviceDeclare(const OrderedTask& task)
-{
-  ExternalLogger::Declare(task);
-}
-
-void
 Logger::LoggerNote(const TCHAR *text)
 {
   Poco::ScopedRWLock protect(lock, true);
