@@ -29,7 +29,6 @@ Copyright_License {
 struct PixelSize;
 class GLTexture;
 class Font;
-struct Color;
 
 namespace TextCache {
   gcc_pure
@@ -39,8 +38,7 @@ namespace TextCache {
   PixelSize LookupSize(const Font &font, const char *text);
 
   gcc_pure
-  GLTexture *get(const Font *font, Color background_color, Color text_color,
-                 const char *text);
+  GLTexture *get(const Font *font, const char *text);
 
   void flush();
 };

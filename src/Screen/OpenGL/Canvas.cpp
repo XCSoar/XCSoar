@@ -392,7 +392,7 @@ Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
   if (font == NULL)
     return;
 
-  GLTexture *texture = TextCache::get(font, COLOR_BLACK, COLOR_WHITE, text);
+  GLTexture *texture = TextCache::get(font, text);
   if (texture == NULL)
     return;
 
@@ -431,7 +431,7 @@ Canvas::text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text)
   if (font == NULL)
     return;
 
-  GLTexture *texture = TextCache::get(font, COLOR_BLACK, COLOR_WHITE, text);
+  GLTexture *texture = TextCache::get(font, text);
   if (texture == NULL)
     return;
 
@@ -464,7 +464,7 @@ Canvas::text_clipped(PixelScalar x, PixelScalar y, UPixelScalar width,
   if (font == NULL)
     return;
 
-  GLTexture *texture = TextCache::get(font, COLOR_BLACK, COLOR_WHITE, text);
+  GLTexture *texture = TextCache::get(font, text);
   if (texture == NULL)
     return;
 

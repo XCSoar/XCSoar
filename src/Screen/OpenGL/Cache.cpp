@@ -57,7 +57,7 @@ TextCache::GetSize(const Font &font, const char *text)
 {
   char key_buffer[4096];
   snprintf(key_buffer, sizeof(key_buffer),
-           "%s_%u_%u_000000_ffffff_%s",
+           "%s_%u_%u_%s",
            font.GetFacename(),
            font.GetStyle(),
            font.GetHeight(),
@@ -83,7 +83,7 @@ TextCache::LookupSize(const Font &font, const char *text)
 
   char key[4096];
   snprintf(key, sizeof(key),
-           "%s_%u_%u_000000_ffffff_%s",
+           "%s_%u_%u_%s",
            font.GetFacename(),
            font.GetStyle(),
            font.GetHeight(),
@@ -100,8 +100,7 @@ TextCache::LookupSize(const Font &font, const char *text)
 }
 
 GLTexture *
-TextCache::get(const Font *font, Color background_color, Color text_color,
-               const char *text)
+TextCache::get(const Font *font, const char *text)
 {
   assert(pthread_equal(pthread_self(), OpenGL::thread));
   assert(font != NULL);
@@ -112,16 +111,10 @@ TextCache::get(const Font *font, Color background_color, Color text_color,
 
   char key[4096];
   snprintf(key, sizeof(key),
-           "%s_%u_%u_%02x%02x%02x_%02x%02x%02x_%s",
+           "%s_%u_%u_%s",
            font->GetFacename(),
            font->GetStyle(),
            font->GetHeight(),
-           background_color.Red(),
-           background_color.Green(),
-           background_color.Blue(),
-           text_color.Red(),
-           text_color.Green(),
-           text_color.Blue(),
            text);
 
   /* look it up */
@@ -148,6 +141,9 @@ TextCache::get(const Font *font, Color background_color, Color text_color,
   }
 
   /* render the text into a OpenGL texture */
+
+  const Color background_color = COLOR_BLACK;
+  const Color text_color = COLOR_WHITE;
 
 #ifdef ANDROID
   PixelSize size;
