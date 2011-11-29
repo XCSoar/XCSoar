@@ -37,6 +37,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Dialogs/XML.hpp"
+
 class TaskDefaultsConfigPanel : public XMLWidget {
 
 public:
