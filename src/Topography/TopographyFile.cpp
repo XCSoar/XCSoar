@@ -146,7 +146,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
   }
 
   ShapeList::NotNull not_null;
-  XShapePointerArray::iterator end = shapes.end(), it = shapes.begin();
+  auto end = shapes.end(), it = shapes.begin();
   it = std::find_if(it, end, not_null);
   if (it != shapes.end()) {
     ShapeList *current = &*it;

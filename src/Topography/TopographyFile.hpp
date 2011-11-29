@@ -59,13 +59,11 @@ class TopographyFile : private NonCopyable {
     ShapeList(const XShape *_shape):shape(_shape) {}
   };
 
-  typedef AllocatedArray<ShapeList> XShapePointerArray;
-
   struct zzip_dir *dir;
 
   shapefileObj file;
 
-  XShapePointerArray shapes;
+  AllocatedArray<ShapeList> shapes;
   const ShapeList *first;
 
   int label_field, icon, pen_width;
