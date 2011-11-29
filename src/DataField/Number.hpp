@@ -33,6 +33,9 @@ protected:
   StaticString<32> edit_format;
   StaticString<32> display_format;
 
+public:
+  void SetFormat(const TCHAR *text);
+
 protected:
   NumberDataField(Type type,
                   const TCHAR *edit_format, const TCHAR *display_format,

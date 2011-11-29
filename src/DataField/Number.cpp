@@ -31,3 +31,11 @@ NumberDataField::NumberDataField(Type type,
    edit_format(_edit_format), display_format(_display_format)
 {
 }
+
+void
+NumberDataField::SetFormat(const TCHAR *text)
+{
+  edit_format = text;
+  display_format = text;
+  display_format += _T(" %s") ;
+}
