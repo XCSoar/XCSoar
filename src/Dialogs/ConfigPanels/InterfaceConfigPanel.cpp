@@ -167,7 +167,7 @@ bool
 InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   UISettings &settings = CommonInterface::SetUISettings();
-  bool changed = false, requirerestart = false;;
+  bool changed = false, require_restart = false;;
 
 #ifdef HAVE_BLANK
   changed |= SaveFormProperty(form, _T("prpAutoBlank"),
@@ -177,7 +177,7 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   if (FinishFileField(form, _T("prpInputFile"), szProfileInputFile)) {
     changed = true;
-    requirerestart = true;
+    require_restart = true;
   }
 
 #ifndef HAVE_NATIVE_GETTEXT
@@ -225,7 +225,7 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   if (FinishFileField(form, _T("prpStatusFile"), szProfileStatusFile)) {
     changed = true;
-    requirerestart = true;
+    require_restart = true;
   }
 
   unsigned menu_timeout = GetFormValueInteger(form, _T("prpMenuTimeout")) * 2;
@@ -241,7 +241,7 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
                                     settings.dialog.text_input_style);
 
   _changed |= changed;
-  _require_restart |= requirerestart;
+  _require_restart |= require_restart;
   return true;
 }
 

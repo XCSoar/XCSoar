@@ -24,14 +24,9 @@ Copyright_License {
 #ifndef TASKDEFAULTSCONFIGPANEL_HPP
 #define TASKDEFAULTSCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
+class Widget;
 
-namespace TaskDefaultsConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save();
-  void OnStartType(DataField *Sender, DataField::DataAccessKind_t Mode);
-  void OnFinishType(DataField *Sender, DataField::DataAccessKind_t Mode);
-};
+Widget *
+CreateTaskDefaultsConfigPanel();
 
 #endif /* TASKDEFAULTSCONFIGPANEL_HPP */
