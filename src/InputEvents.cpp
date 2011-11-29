@@ -109,33 +109,6 @@ static int GCE_Queue[MAX_GCE_QUEUE];
 #define MAX_NMEA_QUEUE 10
 static int NMEA_Queue[MAX_NMEA_QUEUE];
 
-// -----------------------------------------------------------------------
-// Initialisation and Defaults
-// -----------------------------------------------------------------------
-
-// Mapping text names of events to the real thing
-struct Text2EventSTRUCT {
-  const TCHAR *text;
-  pt2Event event;
-};
-
-static gcc_constexpr_data Text2EventSTRUCT Text2Event[] = {
-#include "InputEvents_Text2Event.cpp"
-  { NULL, NULL }
-};
-
-// Mapping text names of events to the real thing
-static const TCHAR *const Text2GCE[] = {
-#include "InputEvents_Text2GCE.cpp"
-  NULL
-};
-
-// Mapping text names of events to the real thing
-static const TCHAR *const Text2NE[] = {
-#include "InputEvents_Text2NE.cpp"
-  NULL
-};
-
 // Read the data files
 void
 InputEvents::readFile()
@@ -156,40 +129,6 @@ InputEvents::readFile()
     ::ParseInputFile(input_config, *reader);
     delete reader;
   }
-}
-
-pt2Event
-InputEvents::findEvent(const TCHAR *data)
-{
-  for (unsigned i = 0; Text2Event[i].text != NULL; ++i)
-    if (_tcscmp(data, Text2Event[i].text) == 0)
-      return Text2Event[i].event;
-
-  return NULL;
-}
-
-int
-InputEvents::findGCE(const TCHAR *data)
-{
-  int i;
-  for (i = 0; i < GCE_COUNT; i++) {
-    if (_tcscmp(data, Text2GCE[i]) == 0)
-      return i;
-  }
-
-  return -1;
-}
-
-int
-InputEvents::findNE(const TCHAR *data)
-{
-  int i;
-  for (i = 0; i < NE_COUNT; i++) {
-    if (_tcscmp(data, Text2NE[i]) == 0)
-      return i;
-  }
-
-  return -1;
 }
 
 void
