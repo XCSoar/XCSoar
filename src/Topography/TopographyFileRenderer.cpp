@@ -45,6 +45,34 @@ TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file)
     icon.Load(IDB_TOWN, IDB_TOWN_HD);
 }
 
+void
+TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection)
+{
+  if (file.GetSerial() == visible_serial &&
+      visible_bounds.inside(projection.GetScreenBounds()) &&
+      projection.GetScreenBounds().scale(fixed_two).inside(visible_bounds))
+    /* cache is clean */
+    return;
+
+  visible_serial = file.GetSerial();
+  visible_bounds = projection.GetScreenBounds().scale(fixed(1.2));
+  visible_shapes.clear();
+  visible_labels.clear();
+
+  for (auto it = file.begin(), end = file.end(); it != end; ++it) {
+    const XShape &shape = *it;
+
+    if (!visible_bounds.overlaps(shape.get_bounds()))
+      continue;
+
+    if (shape.get_type() != MS_SHAPE_NULL)
+      visible_shapes.push_back(&shape);
+
+    if (shape.get_label() != NULL)
+      visible_labels.push_back(&shape);
+  }
+}
+
 #ifdef ENABLE_OPENGL
 
 void
@@ -98,10 +126,15 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
 
 void
 TopographyFileRenderer::Paint(Canvas &canvas,
-                            const WindowProjection &projection) const
+                              const WindowProjection &projection)
 {
   fixed map_scale = projection.GetMapScale();
   if (!file.IsVisible(map_scale))
+    return;
+
+  UpdateVisibleShapes(projection);
+
+  if (visible_shapes.empty())
     return;
 
   // TODO code: only draw inside screen!
@@ -152,11 +185,9 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   int iskip = file.GetSkipSteps(map_scale);
 #endif
 
-  for (auto it = file.begin(), end = file.end(); it != end; ++it) {
-    const XShape &shape = *it;
-
-    if (!projection.GetScreenBounds().overlaps(shape.get_bounds()))
-      continue;
+  for (auto it = visible_shapes.begin(), end = visible_shapes.end();
+       it != end; ++it) {
+    const XShape &shape = **it;
 
 #ifdef ENABLE_OPENGL
     const ShapePoint *points = shape.get_points();
@@ -288,11 +319,16 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
 void
 TopographyFileRenderer::PaintLabels(Canvas &canvas,
-                                  const WindowProjection &projection,
-                                  LabelBlock &label_block) const
+                                    const WindowProjection &projection,
+                                    LabelBlock &label_block)
 {
   fixed map_scale = projection.GetMapScale();
   if (!file.IsVisible(map_scale) || !file.IsLabelVisible(map_scale))
+    return;
+
+  UpdateVisibleShapes(projection);
+
+  if (visible_labels.empty())
     return;
 
   // TODO code: only draw inside screen!
@@ -317,16 +353,13 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
 #endif
 
   // Iterate over all shapes in the file
-  for (auto it = file.begin(), end = file.end(); it != end; ++it) {
-    const XShape &shape = *it;
+  for (auto it = visible_labels.begin(), end = visible_labels.end();
+       it != end; ++it) {
+    const XShape &shape = **it;
 
     // Skip shapes without a label
     const TCHAR *label = shape.get_label();
     if (label == NULL)
-      continue;
-
-    // Skip shapes that are not inside the screen
-    if (!projection.GetScreenBounds().overlaps(shape.get_bounds()))
       continue;
 
     const unsigned short *lines = shape.get_lines();

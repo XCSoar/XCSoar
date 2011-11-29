@@ -28,10 +28,14 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Icon.hpp"
 #include "Util/NonCopyable.hpp"
+#include "Util/Serial.hpp"
+#include "Geo/GeoBounds.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "Topography/ShapeRenderer.hpp"
 #endif
+
+#include <vector>
 
 class TopographyFile;
 class Canvas;
@@ -55,6 +59,11 @@ class TopographyFileRenderer : private NonCopyable {
 
   MaskedIcon icon;
 
+  Serial visible_serial;
+  GeoBounds visible_bounds;
+
+  std::vector<const XShape *> visible_shapes, visible_labels;
+
 public:
   TopographyFileRenderer(const TopographyFile &file);
 
@@ -64,7 +73,7 @@ public:
    * @param bitmap_canvas Temporary canvas for the icon
    * @param projection
    */
-  void Paint(Canvas &canvas, const WindowProjection &projection) const;
+  void Paint(Canvas &canvas, const WindowProjection &projection);
 
   /**
    * Paints a topography label if the space is available in the LabelBlock
@@ -74,9 +83,11 @@ public:
    * @param settings_map
    */
   void PaintLabels(Canvas &canvas,
-                   const WindowProjection &projection, LabelBlock &label_block) const;
+                   const WindowProjection &projection, LabelBlock &label_block);
 
 private:
+  void UpdateVisibleShapes(const WindowProjection &projection);
+
 #ifdef ENABLE_OPENGL
   void PaintPoint(Canvas &canvas, const WindowProjection &projection,
                   const XShape &shape, float *opengl_matrix) const;
