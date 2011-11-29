@@ -61,7 +61,7 @@ UpdateButtons()
     manage_button->set_enabled(false);
     monitor_button->set_enabled(false);
   } else {
-    const DeviceDescriptor &device = DeviceList[indices[current]];
+    const DeviceDescriptor &device = device_list[indices[current]];
 
     reconnect_button->set_enabled(device.IsConfigured());
     flight_button->set_enabled(device.IsLogger());
@@ -75,7 +75,7 @@ RefreshList()
 {
   indices.clear();
   for (unsigned i = 0; i < NUMDEV; ++i)
-    if (DeviceList[i].IsConfigured())
+    if (device_list[i].IsConfigured())
       indices.append(i);
 
   list->SetLength(indices.size());
@@ -91,7 +91,7 @@ IsFlarm(unsigned index)
 static void
 PaintDevice(Canvas &canvas, const PixelRect rc, unsigned i)
 {
-  const DeviceDescriptor &device = DeviceList[indices[i]];
+  const DeviceDescriptor &device = device_list[indices[i]];
 
   const UPixelScalar margin = Layout::Scale(1);
 
@@ -169,7 +169,7 @@ OnReconnectClicked(gcc_unused WndButton &button)
   if (current >= indices.size())
     return;
 
-  DeviceDescriptor &device = DeviceList[indices[current]];
+  DeviceDescriptor &device = device_list[indices[current]];
   MessageOperationEnvironment env;
   device.Reopen(env);
 }
@@ -180,7 +180,7 @@ OnFlightDownloadClicked(gcc_unused WndButton &button)
   if (current >= indices.size())
     return;
 
-  DeviceDescriptor &device = DeviceList[indices[current]];
+  DeviceDescriptor &device = device_list[indices[current]];
   ExternalLogger::DownloadFlightFrom(device);
 }
 
@@ -190,7 +190,7 @@ OnManageClicked(gcc_unused WndButton &button)
   if (current >= indices.size())
     return;
 
-  DeviceDescriptor &descriptor = DeviceList[indices[current]];
+  DeviceDescriptor &descriptor = device_list[indices[current]];
   if (!descriptor.IsManageable() || descriptor.IsBusy())
     return;
 
@@ -212,7 +212,7 @@ OnMonitorClicked(gcc_unused WndButton &button)
   if (current >= indices.size())
     return;
 
-  DeviceDescriptor &descriptor = DeviceList[indices[current]];
+  DeviceDescriptor &descriptor = device_list[indices[current]];
   ShowPortMonitor(dialog->GetMainWindow(), dialog->GetLook(), *terminal_look,
                   descriptor);
 }

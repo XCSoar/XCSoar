@@ -36,7 +36,7 @@ devTick(const DerivedInfo &calculated)
   int i;
 
   for (i = 0; i < NUMDEV; i++) {
-    DeviceDescriptor *d = &DeviceList[i];
+    DeviceDescriptor *d = &device_list[i];
     d->OnSysTicker(calculated);
   }
 }
@@ -45,7 +45,7 @@ void
 AllDevicesAutoReopen(OperationEnvironment &env)
 {
   for (unsigned i = 0; i < NUMDEV; i++) {
-    DeviceDescriptor &d = DeviceList[i];
+    DeviceDescriptor &d = device_list[i];
     d.AutoReopen(env);
   }
 }
@@ -57,7 +57,7 @@ AllDevicesPutMacCready(fixed MacCready)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutMacCready(MacCready);
+    device_list[i].PutMacCready(MacCready);
 }
 
 void
@@ -67,7 +67,7 @@ AllDevicesPutBugs(fixed bugs)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutBugs(bugs);
+    device_list[i].PutBugs(bugs);
 }
 
 void
@@ -77,7 +77,7 @@ AllDevicesPutBallast(fixed ballast)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutBallast(ballast);
+    device_list[i].PutBallast(ballast);
 }
 
 void
@@ -87,7 +87,7 @@ AllDevicesPutVolume(int volume)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutVolume(volume);
+    device_list[i].PutVolume(volume);
 }
 
 void
@@ -97,7 +97,7 @@ AllDevicesPutActiveFrequency(RadioFrequency frequency)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutActiveFrequency(frequency);
+    device_list[i].PutActiveFrequency(frequency);
 }
 
 void
@@ -107,7 +107,7 @@ AllDevicesPutStandbyFrequency(RadioFrequency frequency)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutStandbyFrequency(frequency);
+    device_list[i].PutStandbyFrequency(frequency);
 }
 
 void
@@ -117,7 +117,7 @@ AllDevicesPutQNH(const AtmosphericPressure &pres)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutQNH(pres);
+    device_list[i].PutQNH(pres);
 }
 
 void
@@ -127,7 +127,7 @@ AllDevicesPutVoice(const TCHAR *sentence)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutVoice(sentence);
+    device_list[i].PutVoice(sentence);
 }
 
 bool
@@ -136,7 +136,7 @@ AllDevicesIsBusy()
   assert(!is_simulator());
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    if (DeviceList[i].IsBusy())
+    if (device_list[i].IsBusy())
       return true;
 
   return false;

@@ -106,9 +106,9 @@ ExternalLogger::Declare(const OrderedTask& task)
   Profile::GetDeclarationConfig(decl, CommonInterface::SettingsComputer().plane);
 
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    if (DeviceList[i].CanDeclare()) {
+    if (device_list[i].CanDeclare()) {
       found_logger = true;
-      DeviceDeclare(DeviceList[i], decl);
+      DeviceDeclare(device_list[i], decl);
     }
   }
 

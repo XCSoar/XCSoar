@@ -41,6 +41,6 @@ enum {
 
 class DeviceDescriptor;
 
-extern DeviceDescriptor DeviceList[NUMDEV];
+extern DeviceDescriptor device_list[NUMDEV];
 
 #endif

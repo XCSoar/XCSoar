@@ -24,4 +24,4 @@ Copyright_License {
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
 
-DeviceDescriptor DeviceList[NUMDEV];
+DeviceDescriptor device_list[NUMDEV];
