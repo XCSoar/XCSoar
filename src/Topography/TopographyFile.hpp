@@ -29,6 +29,7 @@ Copyright_License {
 #include "Geo/GeoBounds.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/AllocatedArray.hpp"
+#include "Util/Serial.hpp"
 #include "Math/fixed.hpp"
 #include "Screen/Color.hpp"
 
@@ -58,6 +59,11 @@ class TopographyFile : private NonCopyable {
     ShapeList() {}
     ShapeList(const XShape *_shape):shape(_shape) {}
   };
+
+  /**
+   * This gets incremented by Update().
+   */
+  Serial serial;
 
   struct zzip_dir *dir;
 
@@ -158,6 +164,10 @@ public:
    * The destructor clears the cache and closes the shapefile
    */
   ~TopographyFile();
+
+  const Serial &GetSerial() const {
+    return serial;
+  }
 
   bool IsEmpty() const {
     return shapes.empty();

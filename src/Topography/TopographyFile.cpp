@@ -167,6 +167,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
   } else
     first = NULL;
 
+  ++serial;
   return true;
 }
 
