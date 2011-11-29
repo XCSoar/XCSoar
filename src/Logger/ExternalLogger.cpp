@@ -248,6 +248,7 @@ GetFlightNumber(RecordedFlightList &flight_list, const RecordedFlightInfo &theFl
 void
 ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 {
+  // Download the list of flights that the logger contains
   RecordedFlightList flight_list;
   if (!DoReadFlightList(device, flight_list)) {
     MessageBoxX(_("Failed to download flight list."),
@@ -255,12 +256,14 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     return;
   }
 
+  // The logger seems to be empty -> cancel
   if (flight_list.empty()) {
     MessageBoxX(_("Logger is empty."),
                 _("Download flight"), MB_OK | MB_ICONINFORMATION);
     return;
   }
 
+  // Prepare list of the flights for displaying
   ComboList combo;
   for (unsigned i = 0; i < flight_list.size(); ++i) {
     const RecordedFlightInfo &flight = flight_list[i];
@@ -274,15 +277,17 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     combo.Append(i, buffer);
   }
 
+  // Show list of the flights
   int i = ComboPicker(CommonInterface::main_window, _T("Choose a flight"),
                       combo, NULL, false);
   if (i < 0)
     return;
 
+  // Download chosen IGC file into temporary file
   TCHAR path[MAX_PATH];
   LocalPath(path, _T("logs"), _T("temp.igc"));
-
   if (!DoDownloadFlight(device, flight_list[i], path)) {
+    // Delete temporary file
     File::Delete(path);
     MessageBoxX(_("Failed to download flight."),
                 _("Download flight"), MB_OK | MB_ICONINFORMATION);
@@ -296,13 +301,16 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
   ReadIGCMetaData(path, header, date);
   if (header.flight == 0)
     header.flight = GetFlightNumber(flight_list, flight_list[i]);
+
   TCHAR name[64];
   TCHAR final_path[MAX_PATH];
   BuildIGCFileName(name, header, date);
   LocalPath(final_path, _T("logs"), name);
 
+  // Remove a file with the same name if it exists
   if (File::Exists(final_path))
     File::Delete(final_path);
 
+  // Rename the temporary file to the actual filename
   File::Rename(path, final_path);
 }
