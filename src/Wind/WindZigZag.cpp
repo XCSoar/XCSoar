@@ -122,9 +122,8 @@ WindZigZag::ZZBeta
 WindZigZag::optimise(int &res_quality, const SpeedVector start,
                      const bool circling)
 {
-
-  fixed sin, cos;
-  start.bearing.SinCos(sin, cos);
+  const auto sc = start.bearing.SinCos();
+  fixed sin = sc.first, cos = sc.second;
 
   double x[] = {
     double(sin * start.norm),

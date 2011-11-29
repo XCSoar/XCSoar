@@ -253,8 +253,9 @@ CirclingWind::_calcWind()
   fixed rthis = fixed_zero;
 
   for (unsigned i = 0; i < windsamples.size(); i++) {
-    fixed wx, wy;
-    ::sin_cos(((i + jmax) % windsamples.size()) * fixed_two_pi / windsamples.size(), &wy, &wx);
+    const auto sc = ::sin_cos(((i + jmax) % windsamples.size()) * fixed_two_pi
+                              / windsamples.size());
+    fixed wx = sc.second, wy = sc.first;
     wx = wx * av + mag;
     wy *= av;
     fixed cmag = hypot(wx, wy) - windsamples[i].mag;

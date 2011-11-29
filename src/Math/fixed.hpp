@@ -55,7 +55,19 @@ using std::min;
 #define FIXED_INT(x) ((int)x)
 typedef double fixed;
 
-void sin_cos(const double&theta, double*s, double*c);
+gcc_const
+static inline std::pair<fixed, fixed>
+sin_cos(const fixed thetha)
+{
+#if defined(__GLIBC__) && defined(_GNU_SOURCE)
+  double s, c;
+  sincos(thetha, &s, &c);
+  return std::make_pair(s, c);
+#else
+  return std::make_pair(sin(thetha), cos(thetha));
+#endif
+}
+
 #define positive(x) (x > 0)
 #define negative(x) (x < 0)
 #define sigmoid(x) (2.0 / (1.0 + exp(-x)) - 1.0)
@@ -602,7 +614,9 @@ public:
   gcc_pure
   fixed atan() const;
 
-  static void sin_cos(fixed const& theta,fixed* s,fixed*c);
+  gcc_const
+  static std::pair<fixed, fixed> sin_cos(fixed theta);
+
   static void to_polar(fixed const& x,fixed const& y,fixed* r,fixed*theta);
 
   gcc_pure
@@ -612,13 +626,22 @@ public:
   static fixed sigmoid(fixed const& x);
 
   gcc_pure
-  fixed sin() const;
+  fixed sin() const {
+    return sin_cos(*this).first;
+  }
 
   gcc_pure
-  fixed cos() const;
+  fixed cos() const {
+    return sin_cos(*this).second;
+  }
 
   gcc_pure
-  fixed tan() const;
+  fixed tan() const {
+    const auto sc = sin_cos(*this);
+    fixed result = sc.first;
+    result /= sc.second;
+    return result;
+  }
 
   gcc_pure
   fixed accurate_half_sin() const;
@@ -871,27 +894,6 @@ inline fixed fixed::floor() const
   return res;
 }
 
-inline fixed fixed::sin() const
-{
-  fixed res;
-  sin_cos(*this,&res,0);
-  return res;
-}
-
-inline fixed fixed::cos() const
-{
-  fixed res;
-  sin_cos(*this,0,&res);
-  return res;
-}
-
-inline fixed fixed::tan() const
-{
-  fixed s,c;
-  sin_cos(*this,&s,&c);
-  return s/c;
-}
-
 gcc_constexpr_method
 inline fixed fixed::operator-() const
 {
@@ -915,9 +917,11 @@ inline fixed fixed::modf(fixed*integral_part) const
   return fixed(internal(),fractional_part);
 }
 
-inline void sin_cos(fixed const& theta,fixed* s,fixed*c)
+gcc_const
+static inline std::pair<fixed, fixed>
+sin_cos(const fixed theta)
 {
-  ::fixed::sin_cos(theta, s, c);
+  return ::fixed::sin_cos(theta);
 }
 
 gcc_pure
@@ -939,9 +943,8 @@ inline fixed sigmoid(fixed const& x)
    template<>
    inline complex< ::fixed> polar(::fixed const& rho,::fixed const& theta)
    {
-     ::fixed s,c;
-     ::fixed::sin_cos(theta,&s,&c);
-     return complex< ::fixed>(rho * c, rho * s);
+     const auto sc = ::fixed::sin_cos(theta);
+     return complex< ::fixed>(rho * sc.second, rho * sc.first);
    }
  }
 

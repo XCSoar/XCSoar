@@ -292,12 +292,19 @@ GlueMapWindow::UpdateProjection()
       if (settings_map.map_shift_bias == MAP_SHIFT_BIAS_TRACK) {
         if (basic.track_available &&
             basic.ground_speed_available &&
-            basic.ground_speed > fixed_int_constant(8)) /* 8 m/s ~ 30 km/h */
-          basic.track.Reciprocal().SinCos(x, y);
+             /* 8 m/s ~ 30 km/h */
+            basic.ground_speed > fixed_int_constant(8)) {
+          const auto sc = basic.track.Reciprocal().SinCos();
+          x = sc.first;
+          y = sc.second;
+        }
       } else if (settings_map.map_shift_bias == MAP_SHIFT_BIAS_TARGET) {
-        if (calculated.task_stats.current_leg.solution_remaining.IsDefined())
-          calculated.task_stats.current_leg.solution_remaining
-                      .vector.bearing.Reciprocal().SinCos(x, y);
+        if (calculated.task_stats.current_leg.solution_remaining.IsDefined()) {
+          const auto sc =calculated.task_stats.current_leg.solution_remaining
+            .vector.bearing.Reciprocal().SinCos();
+          x = sc.first;
+          y = sc.second;
+        }
       }
       fixed gspFactor = (fixed) (50 - settings_map.glider_screen_position) / 100;
       offset.x = PixelScalar(x * (rc.right - rc.left) * gspFactor);

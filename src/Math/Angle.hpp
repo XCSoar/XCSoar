@@ -169,10 +169,10 @@ public:
   gcc_pure
   int Sign(const fixed &tolerance) const;
 
-  inline void SinCos(fixed& s, fixed& c) const {
-    ::sin_cos(Radians(), &s, &c);
+  gcc_pure
+  std::pair<fixed, fixed> SinCos() const {
+    return ::sin_cos(Radians());
   }
-  
 
   gcc_pure
   fixed AbsoluteDegrees() const;

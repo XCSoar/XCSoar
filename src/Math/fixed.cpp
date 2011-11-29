@@ -5,19 +5,7 @@
 #include "fixed.hpp"
 #include "Compiler.h"
 
-#ifndef FIXED_MATH
-
-void sin_cos(const double&theta, double*s, double*c)
-{
-#if defined(__GLIBC__) && defined(_GNU_SOURCE)
-  sincos(theta, s, c);
-#else
-  *s = sin(theta);
-  *c = cos(theta);
-#endif
-}
-
-#else
+#ifdef FIXED_MATH
 
 static fixed::value_t const internal_pi=0x3243f6a8;
 static fixed::value_t const internal_two_pi=0x6487ed51;
@@ -384,7 +372,8 @@ fixed::accurate_half_sin() const
                (negate_sin? -x_sin:x_sin) );
 }
 
-void fixed::sin_cos(fixed const& theta,fixed* s,fixed*c)
+std::pair<fixed, fixed>
+fixed::sin_cos(fixed theta)
 {
     value_t x=theta.m_nVal%internal_two_pi;
     if( x < 0 )
@@ -407,14 +396,8 @@ void fixed::sin_cos(fixed const& theta,fixed* s,fixed*c)
 
     perform_cordic_rotation(x_cos,x_sin,(long)x);
 
-    if(s)
-    {
-        s->m_nVal=negate_sin?-x_sin:x_sin;
-    }
-    if(c)
-    {
-        c->m_nVal=negate_cos?-x_cos:x_cos;
-    }
+    return std::make_pair(fixed(internal(), negate_sin ? -x_sin : x_sin),
+                          fixed(internal(), negate_cos ? -x_cos : x_cos));
 }
 
 fixed fixed::atan() const

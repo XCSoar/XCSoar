@@ -67,8 +67,8 @@ FlatEllipse::Parametric(const fixed t) const
 {
   const Angle at = (Angle::Radians(fixed_two_pi * t) + theta_initial).AsDelta();
 
-  fixed cat, sat;
-  at.SinCos(sat, cat);
+  const auto sc = at.SinCos();
+  fixed sat = sc.first, cat = sc.second;
 
   FlatPoint res(a * cat, b * sat);
   res.Rotate(theta);
@@ -113,8 +113,8 @@ FlatEllipse::IntersectExtended(const FlatPoint &pe, FlatPoint &i1,
 
   const fixed d = l_pf2.d() + max(a, b); // max line length
 
-  fixed can, san;
-  ang.SinCos(san, can);
+  const auto sc = ang.SinCos();
+  fixed san = sc.first, can = sc.second;
 
   FlatLine e_l(pe, FlatPoint(pe.x + d * can, pe.y + d * san));
   // e_l is the line extended from p in direction of f1-p 

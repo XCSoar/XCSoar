@@ -175,8 +175,8 @@ int main(int argc, char **argv)
   ok1(Angle::Degrees(-fixed_90).Sign(fixed_one) == -1);
 
   // Test SinCos()
-  fixed sin, cos;
-  Angle::Degrees(fixed(45)).SinCos(sin, cos);
+  const auto sc = Angle::Degrees(fixed(45)).SinCos();
+  fixed sin = sc.first, cos = sc.second;
   ok1(equals(sin, Angle::Degrees(fixed(45)).sin()));
   ok1(equals(cos, Angle::Degrees(fixed(45)).cos()));
 

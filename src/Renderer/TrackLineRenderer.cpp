@@ -33,8 +33,8 @@ void
 TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const Angle track_angle, const RasterPoint pos)
 {
-  fixed x, y;
-  (track_angle - screen_angle).SinCos(x, y);
+  const auto sc = (track_angle - screen_angle).SinCos();
+  const fixed x = sc.first, y = sc.second;
 
   RasterPoint end;
   end.x = pos.x + iround(x * fixed_int_constant(400));

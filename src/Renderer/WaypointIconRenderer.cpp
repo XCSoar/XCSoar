@@ -91,8 +91,8 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
   if (radius <= fixed_zero)
     return;
 
-  fixed x, y;
-  angle.SinCos(x, y);
+  const auto sc = angle.SinCos();
+  const fixed x = sc.first, y = sc.second;
   int lx = iround(x * radius * fixed_two) & ~0x1;  // make it a even number
   int ly = iround(y * radius * fixed_two) & ~0x1;
   int wx = iround(-y * width);
