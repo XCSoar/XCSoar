@@ -62,9 +62,6 @@ namespace InputEvents
   void LeaveMode(const TCHAR *mode);
 
   gcc_pure
-  unsigned findKey(const TCHAR *data);
-
-  gcc_pure
   int findGCE(const TCHAR *data);
 
   gcc_pure

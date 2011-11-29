@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "InputParser.hpp"
 #include "InputConfig.hpp"
+#include "InputKeys.hpp"
 #include "InputEvents.hpp"
 #include "IO/LineReader.hpp"
 #include "Util/StringUtil.hpp"
@@ -103,7 +104,7 @@ struct EventBuilder {
       // key - Hardware key or keyboard
       if (type.equals(_T("key"))) {
         // Get the int key (eg: APP1 vs 'a')
-        unsigned key = InputEvents::findKey(data);
+        unsigned key = ParseKeyCode(data);
         if (key > 0)
           config.Key2Event[mode_id][key] = event_id;
         else

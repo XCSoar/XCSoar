@@ -58,7 +58,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "MenuData.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "SettingsMap.hpp"
-#include "Screen/Key.h"
 #include "Projection/MapWindowProjection.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Language/Language.hpp"
@@ -157,55 +156,6 @@ InputEvents::readFile()
     ::ParseInputFile(input_config, *reader);
     delete reader;
   }
-}
-
-struct string_to_key {
-  const TCHAR *name;
-  unsigned key;
-};
-
-static gcc_constexpr_data struct string_to_key string_to_key[] = {
-  { _T("APP1"), VK_APP1 },
-  { _T("APP2"), VK_APP2 },
-  { _T("APP3"), VK_APP3 },
-  { _T("APP4"), VK_APP4 },
-  { _T("APP5"), VK_APP5 },
-  { _T("APP6"), VK_APP6 },
-  { _T("F1"), VK_F1 },
-  { _T("F2"), VK_F2 },
-  { _T("F3"), VK_F3 },
-  { _T("F4"), VK_F4 },
-  { _T("F5"), VK_F5 },
-  { _T("F6"), VK_F6 },
-  { _T("F7"), VK_F7 },
-  { _T("F8"), VK_F8 },
-  { _T("F9"), VK_F9 },
-  { _T("F10"), VK_F10 },
-  { _T("F11"), VK_F11 },
-  { _T("F12"), VK_F12 },
-  { _T("LEFT"), VK_LEFT },
-  { _T("RIGHT"), VK_RIGHT },
-  { _T("UP"), VK_UP },
-  { _T("DOWN"), VK_DOWN },
-  { _T("RETURN"), VK_RETURN },
-  { _T("ESCAPE"), VK_ESCAPE },
-  { _T("MENU"), VK_MENU },
-  { NULL }
-};
-
-unsigned
-InputEvents::findKey(const TCHAR *data)
-{
-  for (const struct string_to_key *p = &string_to_key[0]; p->name != NULL; ++p)
-    if (_tcscmp(data, p->name) == 0)
-      return p->key;
-
-  if (_tcslen(data) == 1)
-    return _totupper(data[0]);
-
-  else
-    return 0;
-
 }
 
 pt2Event

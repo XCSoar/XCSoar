@@ -30,12 +30,6 @@ Copyright_License {
 #include <stdio.h>
 #include <tchar.h>
 
-unsigned
-InputEvents::findKey(const TCHAR *data)
-{
-  return 42;
-}
-
 pt2Event
 InputEvents::findEvent(const TCHAR *data)
 {
