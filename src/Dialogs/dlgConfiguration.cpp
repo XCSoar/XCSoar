@@ -90,7 +90,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Route"), 2, NULL, NULL, N_("IDR_XML_ROUTECONFIGPANEL")},
   {N_("FLARM, Other"), 3, NULL, NULL, N_("IDR_XML_GAUGESCONFIGPANEL")},
   {N_("Vario"), 3, NULL, NULL, N_("IDR_XML_VARIOCONFIGPANEL")},
-  {N_("Task Rules"), 4, NULL, NULL, N_("IDR_XML_TASKRULESCONFIGPANEL")},
+  {N_("Task Rules"), 4, NULL, NULL, NULL, CreateTaskRulesConfigPanel },
   {N_("Turnpoint Types"), 4, NULL, NULL, NULL, CreateTaskDefaultsConfigPanel },
   {N_("Language, Input"), 5, NULL, NULL, NULL, CreateInterfaceConfigPanel },
   {N_("Screen Layout"), 5, NULL, NULL, N_("IDR_XML_LAYOUTCONFIGPANEL")},
@@ -205,7 +205,6 @@ setVariables()
   LayoutConfigPanel::Init(wf);
   GaugesConfigPanel::Init(wf);
   VarioConfigPanel::Init(wf);
-  TaskRulesConfigPanel::Init(wf);
   InfoBoxesConfigPanel::Init(wf);
   ExperimentalConfigPanel::Init(wf);
   PagesConfigPanel::Init(wf);
@@ -325,7 +324,6 @@ void dlgConfigurationShowModal(void)
   changed |= LayoutConfigPanel::Save(requirerestart);
   changed |= GaugesConfigPanel::Save();
   changed |= VarioConfigPanel::Save();
-  changed |= TaskRulesConfigPanel::Save();
   changed |= InfoBoxesConfigPanel::Save(requirerestart);
   changed |= ExperimentalConfigPanel::Save(requirerestart);
   // Units need to be saved last to prevent

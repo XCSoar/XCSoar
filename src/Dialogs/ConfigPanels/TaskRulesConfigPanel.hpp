@@ -24,12 +24,9 @@ Copyright_License {
 #ifndef TASKRULESCONFIGPANEL_HPP
 #define TASKRULESCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
+class Widget;
 
-namespace TaskRulesConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save();
-};
+Widget *
+CreateTaskRulesConfigPanel();
 
 #endif /* TASKRULESCONFIGPANEL_HPP */

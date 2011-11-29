@@ -29,22 +29,45 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
 
-static WndForm* wf = NULL;
 
+class TaskRulesConfigPanel : public XMLWidget {
+
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+};
 
 void
-TaskRulesConfigPanel::Init(WndForm *_wf)
+TaskRulesConfigPanel::Show(const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  XMLWidget::Show(rc);
+}
+
+void
+TaskRulesConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
+
+void
+TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  LoadWindow(NULL, parent,
+             Layout::landscape ? _T("IDR_XML_TASKRULESCONFIGPANEL") :
+                               _T("IDR_XML_TASKRULESCONFIGPANEL_L"));
+
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
   const TaskBehaviour &task_behaviour = settings_computer.task;
 
-  LoadFormProperty(*wf, _T("prpStartMaxSpeed"), ugHorizontalSpeed,
+  LoadFormProperty(form, _T("prpStartMaxSpeed"), ugHorizontalSpeed,
                    task_behaviour.ordered_defaults.start_max_speed);
 
-  LoadFormProperty(*wf, _T("prpStartMaxSpeedMargin"), ugHorizontalSpeed,
+  LoadFormProperty(form, _T("prpStartMaxSpeedMargin"), ugHorizontalSpeed,
                    task_behaviour.start_max_speed_margin);
 
   static gcc_constexpr_data StaticEnumChoice start_max_height_ref_list[] = {
@@ -52,13 +75,13 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
     { hrMSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level)") },
     { 0 }
   };
-  LoadFormProperty(*wf, _T("prpStartHeightRef"), start_max_height_ref_list,
+  LoadFormProperty(form, _T("prpStartHeightRef"), start_max_height_ref_list,
                    task_behaviour.ordered_defaults.start_max_height_ref);
 
-  LoadFormProperty(*wf, _T("prpStartMaxHeight"), ugAltitude,
+  LoadFormProperty(form, _T("prpStartMaxHeight"), ugAltitude,
                    task_behaviour.ordered_defaults.start_max_height);
 
-  LoadFormProperty(*wf, _T("prpStartMaxHeightMargin"), ugAltitude,
+  LoadFormProperty(form, _T("prpStartMaxHeightMargin"), ugAltitude,
                    task_behaviour.start_max_height_margin);
 
   static gcc_constexpr_data StaticEnumChoice finish_min_height_ref_list[] = {
@@ -66,10 +89,10 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
     { hrMSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level)") },
     { 0 }
   };
-  LoadFormProperty(*wf, _T("prpFinishHeightRef"), finish_min_height_ref_list,
+  LoadFormProperty(form, _T("prpFinishHeightRef"), finish_min_height_ref_list,
                    task_behaviour.ordered_defaults.finish_min_height_ref);
 
-  LoadFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
+  LoadFormProperty(form, _T("prpFinishMinHeight"), ugAltitude,
                    task_behaviour.ordered_defaults.finish_min_height);
 
   const StaticEnumChoice contests_list[] = {
@@ -82,51 +105,61 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
     { OLC_SISAT, ContestToString(OLC_SISAT) },
     { 0 }
   };
-  LoadFormProperty(*wf, _T("prpContests"), contests_list,
+  LoadFormProperty(form, _T("prpContests"), contests_list,
                    task_behaviour.contest);
 }
 
 
 bool
-TaskRulesConfigPanel::Save()
+TaskRulesConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
-  bool changed = false;
+  bool changed = false, require_restart = false;
+
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
   TaskBehaviour &task_behaviour = settings_computer.task;
 
   OrderedTaskBehaviour &otb = task_behaviour.ordered_defaults;
-  changed |= SaveFormProperty(*wf, _T("prpStartMaxSpeed"),
+  changed |= SaveFormProperty(form, _T("prpStartMaxSpeed"),
                               ugHorizontalSpeed,
                               otb.start_max_speed,
                               szProfileStartMaxSpeed);
 
-  changed |= SaveFormProperty(*wf, _T("prpStartMaxSpeedMargin"),
+  changed |= SaveFormProperty(form, _T("prpStartMaxSpeedMargin"),
                               ugHorizontalSpeed,
                               task_behaviour.start_max_speed_margin,
                               szProfileStartMaxSpeedMargin);
 
-  changed |= SaveFormProperty(*wf, _T("prpStartMaxHeight"), ugAltitude,
+  changed |= SaveFormProperty(form, _T("prpStartMaxHeight"), ugAltitude,
                               otb.start_max_height,
                               szProfileStartMaxHeight);
 
-  changed |= SaveFormProperty(*wf, _T("prpStartMaxHeightMargin"), ugAltitude,
+  changed |= SaveFormProperty(form, _T("prpStartMaxHeightMargin"), ugAltitude,
                               task_behaviour.start_max_height_margin,
                               szProfileStartMaxHeightMargin);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpStartHeightRef"),
+  changed |= SaveFormPropertyEnum(form, _T("prpStartHeightRef"),
                                   szProfileStartHeightRef,
                                   otb.start_max_height_ref);
 
-  changed |= SaveFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
+  changed |= SaveFormProperty(form, _T("prpFinishMinHeight"), ugAltitude,
                               otb.finish_min_height,
                               szProfileFinishMinHeight);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpFinishHeightRef"),
+  changed |= SaveFormPropertyEnum(form, _T("prpFinishHeightRef"),
                                   szProfileFinishHeightRef,
                                   otb.finish_min_height_ref);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpContests"), szProfileOLCRules,
+  changed |= SaveFormPropertyEnum(form, _T("prpContests"), szProfileOLCRules,
                                   task_behaviour.contest);
 
-  return changed;
+  _changed |= changed;
+  _require_restart |= require_restart;
+
+  return true;
+}
+
+Widget *
+CreateTaskRulesConfigPanel()
+{
+  return new TaskRulesConfigPanel();
 }
