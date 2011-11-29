@@ -26,13 +26,6 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#ifdef ANDROID
-#include <GLES/gl.h>
-#else
-#include <SDL_opengl.h>
-#include <SDL_ttf.h>
-#endif
-
 struct PixelSize;
 class GLTexture;
 class Font;
