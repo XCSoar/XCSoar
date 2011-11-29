@@ -34,13 +34,13 @@
 #include "Util/DebugFlag.hpp"
 #include "Compiler.h"
 
-#include <map>
+#include <unordered_map>
 #include <assert.h>
 
 template<typename Key, typename Data,
          unsigned capacity,
-         typename Compare=std::less<Key>,
-         typename Alloc=std::allocator<Data> >
+         typename Hash=std::hash<Key>,
+         typename KeyEqual=std::equal_to<Key>>
 class Cache {
 
   /**
@@ -135,7 +135,7 @@ class Cache {
     }
   };
 
-  typedef std::map<Key, Item *, Compare, Alloc> KeyMap;
+  typedef std::unordered_map<Key, Item *, Hash, KeyEqual> KeyMap;
 
   /**
    * The number of cached items.

@@ -30,7 +30,7 @@ Copyright_License {
 #include "Util/ListHead.hpp"
 #include "Util/Cache.hpp"
 
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <assert.h>
 
@@ -47,16 +47,15 @@ struct TextCacheKey {
     return font == other.font && height == other.height && text == other.text;
   }
 
-  gcc_pure
-  bool operator<(const TextCacheKey &other) const {
-    if (font != other.font)
-      return font < other.font;
+  struct Hash {
+    std::hash<std::string> string_hash;
 
-    if (height != other.height)
-      return height < other.height;
-
-    return text < other.text;
-  }
+    gcc_pure
+    size_t operator()(const TextCacheKey &key) const {
+      return (size_t)(const void *)key.font ^ key.height
+        ^ string_hash(key.text);
+    }
+  };
 };
 
 struct RenderedText : public ListHead {
@@ -72,8 +71,8 @@ struct RenderedText : public ListHead {
 #endif
 };
 
-static Cache<TextCacheKey, PixelSize, 1024u> size_cache;
-static std::map<TextCacheKey, RenderedText *> text_cache_map;
+static Cache<TextCacheKey, PixelSize, 1024u, TextCacheKey::Hash> size_cache;
+static std::unordered_map<TextCacheKey, RenderedText *, TextCacheKey::Hash> text_cache_map;
 static ListHead text_cache_head = ListHead(ListHead::empty());
 static unsigned text_cache_size = 0;
 
