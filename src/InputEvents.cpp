@@ -72,7 +72,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 namespace InputEvents
 {
   static mode current_mode = InputEvents::MODE_DEFAULT;
-  static Mutex mutexEventQueue;
 
   static unsigned MenuTimeOut = 0;
 
@@ -95,19 +94,11 @@ namespace InputEvents
   static void drawButtons(mode Mode, bool full=false);
 
   static void ProcessMenuTimer();
-  static void DoQueuedEvents(void);
 
-  static bool processGlideComputer_real(unsigned gce_id);
-  static bool processNmea_real(unsigned key);
   static void processGo(unsigned event_id);
 };
 
 static InputConfig input_config;
-
-#define MAX_GCE_QUEUE 10
-static int GCE_Queue[MAX_GCE_QUEUE];
-#define MAX_NMEA_QUEUE 10
-static int NMEA_Queue[MAX_NMEA_QUEUE];
 
 // Read the data files
 void
@@ -116,10 +107,7 @@ InputEvents::readFile()
   LogStartUp(_T("Loading input events file"));
 
   // clear the GCE and NMEA queues
-  mutexEventQueue.Lock();
-  std::fill(GCE_Queue, GCE_Queue + MAX_GCE_QUEUE, -1);
-  std::fill(NMEA_Queue, NMEA_Queue + MAX_NMEA_QUEUE, -1);
-  mutexEventQueue.Unlock();
+  ClearQueues();
 
   LoadDefaults(input_config);
 
@@ -292,21 +280,6 @@ InputEvents::processGesture(const TCHAR *data)
   return false;
 }
 
-bool
-InputEvents::processNmea(unsigned ne_id)
-{
-  // add an event to the bottom of the queue
-  mutexEventQueue.Lock();
-  for (int i = 0; i < MAX_NMEA_QUEUE; i++) {
-    if (NMEA_Queue[i] == -1) {
-      NMEA_Queue[i] = ne_id;
-      break;
-    }
-  }
-  mutexEventQueue.Unlock();
-  return true; // ok.
-}
-
 /*
   InputEvent::processNmea(TCHAR* data)
   Take hard coded inputs from NMEA processor.
@@ -331,51 +304,6 @@ InputEvents::processNmea_real(unsigned ne_id)
   }
 
   return false;
-}
-
-
-// This should be called ONLY by the GUI thread.
-void
-InputEvents::DoQueuedEvents(void)
-{
-  int GCE_Queue_copy[MAX_GCE_QUEUE];
-  int NMEA_Queue_copy[MAX_NMEA_QUEUE];
-  int i;
-
-  // copy the queue first, blocking
-  mutexEventQueue.Lock();
-  std::copy(GCE_Queue, GCE_Queue + MAX_GCE_QUEUE, GCE_Queue_copy);
-  std::fill(GCE_Queue, GCE_Queue + MAX_GCE_QUEUE, -1);
-  std::copy(NMEA_Queue, NMEA_Queue + MAX_NMEA_QUEUE, NMEA_Queue_copy);
-  std::fill(NMEA_Queue, NMEA_Queue + MAX_NMEA_QUEUE, -1);
-  mutexEventQueue.Unlock();
-
-  // process each item in the queue
-  for (i = 0; i < MAX_GCE_QUEUE; i++) {
-    if (GCE_Queue_copy[i] != -1) {
-      processGlideComputer_real(GCE_Queue_copy[i]);
-    }
-  }
-  for (i = 0; i < MAX_NMEA_QUEUE; i++) {
-    if (NMEA_Queue_copy[i] != -1) {
-      processNmea_real(NMEA_Queue_copy[i]);
-    }
-  }
-}
-
-bool
-InputEvents::processGlideComputer(unsigned gce_id)
-{
-  // add an event to the bottom of the queue
-  mutexEventQueue.Lock();
-  for (int i = 0; i < MAX_GCE_QUEUE; i++) {
-    if (GCE_Queue[i] == -1) {
-      GCE_Queue[i] = gce_id;
-      break;
-    }
-  }
-  mutexEventQueue.Unlock();
-  return true;
 }
 
 /*

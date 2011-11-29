@@ -390,6 +390,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InputEventsAirspace.cpp \
 	$(SRC)/InputEventsTask.cpp \
 	$(SRC)/InputEventsSettings.cpp \
+	$(SRC)/InputQueue.cpp \
 	$(SRC)/InputLookup.cpp \
 	$(SRC)/InputKeys.cpp \
 	$(SRC)/InputParser.cpp \
