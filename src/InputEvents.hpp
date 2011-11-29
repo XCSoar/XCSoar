@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Compiler.h"
+#include "MenuData.hpp"
 
 #include <tchar.h>
 
@@ -45,6 +46,7 @@ namespace InputEvents
   void ProcessTimer();
   void ShowMenu();
   void HideMenu();
+  Menu *GetMenu(const TCHAR *mode);
 
   /**
    * Load the default input file (Data/Input/default.xci).
@@ -159,6 +161,7 @@ namespace InputEvents
   void eventFlarmDetails(const TCHAR *misc);
   void eventCredits(const TCHAR *misc);
   void eventWeather(const TCHAR *misc);
+  void eventQuickMenu(const TCHAR *misc);
   // -------
 };
 

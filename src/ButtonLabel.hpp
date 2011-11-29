@@ -34,6 +34,8 @@ namespace ButtonLabel {
   void CreateButtonLabels(ContainerWindow &parent);
   void SetFont(const Font &Font);
   void Destroy();
+  bool GetLabelText(const TCHAR *text, TCHAR *labelText, unsigned size);
+  bool IsLabelTextEnabled(const TCHAR *text);
   void SetLabelText(unsigned i, const TCHAR *text, unsigned event);
   bool IsEnabled(unsigned i);
 

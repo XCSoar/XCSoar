@@ -95,6 +95,7 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
    mModalResult(0), force(false),
    client_area(_look),
    mOnTimerNotify(NULL), mOnKeyDownNotify(NULL),
+   defaultFocus(NULL),
    timer(*this)
 {
   mCaption = Caption;
@@ -372,7 +373,10 @@ WndForm::ShowModal()
     ::SendMessage(oldFocusHwnd, WM_CANCELMODE, 0, 0);
 #endif /* USE_GDI */
   set_focus();
-  focus_first_control();
+  if (defaultFocus)
+    defaultFocus->set_focus();
+  else
+    focus_first_control();
 
   bool hastimed = false;
   WndForm::timeAnyOpenClose.update(); // when current dlg opens or child closes

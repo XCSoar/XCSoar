@@ -98,6 +98,11 @@ protected:
   TimerNotifyCallback_t mOnTimerNotify;
   KeyDownNotifyCallback_t mOnKeyDownNotify;
 
+  /*
+   * Control which should get the focus by default
+   */
+  Window *defaultFocus;
+
   /**
    * The on_paint event is called when the button needs to be drawn
    * (derived from PaintWindow)
@@ -188,6 +193,14 @@ public:
 
   void SetCommandCallback(ClientAreaWindow::CommandCallback_t CommandCallback) {
     client_area.mCommandCallback = CommandCallback;
+  }
+
+  void SetDefaultFocus(Window *_defaultFocus) {
+    defaultFocus = _defaultFocus;
+  }
+
+  Window *GetDefaultFocus() {
+    return defaultFocus;
   }
 
 #ifdef ANDROID

@@ -28,6 +28,7 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
 
+#include <assert.h>
 #include <algorithm>
 
 static MenuBar *bar;
@@ -49,6 +50,80 @@ ButtonLabel::Destroy()
 {
   delete bar;
   bar = NULL;
+}
+
+bool
+ButtonLabel::GetLabelText(const TCHAR *text, TCHAR *labelText, unsigned size)
+{
+  assert(size >= 256);
+
+  const TCHAR *dollar;
+
+  if ((text == NULL) || (*text == _T('\0')) || (*text == _T(' ')))
+    return false;
+  else if ((dollar = _tcschr(text, '$')) == NULL) {
+    /* no macro, we can just translate the text */
+    _tcscpy(labelText, gettext(text));
+    return true;
+  } else {
+      const TCHAR *macros = dollar;
+      /* backtrack until the first non-whitespace character, because we
+         don't want to translate whitespace between the text and the
+         macro */
+      while (macros > text && _istspace(macros[-1]))
+        --macros;
+
+      TCHAR s[100];
+
+      ExpandMacros(text, s, ARRAY_SIZE(s));
+
+      if ((s[0] == _T('\0')) || (s[0] == _T(' ')))
+        return false;
+
+      /* copy the text (without trailing whitespace) to a new buffer
+         and translate it */
+      TCHAR translatable[256];
+      std::copy(text, macros, translatable);
+      translatable[macros - text] = _T('\0');
+
+      const TCHAR *translated = string_is_empty(translatable) ? _T("") : gettext(translatable);
+
+      /* concatenate the translated text and the macro output */
+      _tcscpy(labelText, translated);
+      _tcscat(labelText, s + (macros - text));
+
+      return true;
+  }
+}
+
+bool
+ButtonLabel::IsLabelTextEnabled(const TCHAR *text)
+{
+  const TCHAR *dollar;
+
+  if ((text == NULL) || (*text == _T('\0')) || (*text == _T(' ')))
+    return false;
+  else if ((dollar = _tcschr(text, '$')) == NULL)
+    return true;
+  else {
+    const TCHAR *macros = dollar;
+    /* backtrack until the first non-whitespace character, because we
+       don't want to translate whitespace between the text and the
+       macro */
+    while (macros > text && _istspace(macros[-1]))
+    {
+      --macros;
+    }
+
+    TCHAR s[100];
+
+    bool isDisabled = ExpandMacros(text, s, ARRAY_SIZE(s));
+
+    if ((s[0] == _T('\0')) || (s[0] == _T(' ')))
+      return false;
+    else
+      return !isDisabled;
+  }
 }
 
 void

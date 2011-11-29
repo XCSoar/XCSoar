@@ -644,3 +644,9 @@ InputEvents::eventWeather(const TCHAR *misc)
     dlgNOAAListShowModal(XCSoarInterface::main_window);
 #endif
 }
+
+void
+InputEvents::eventQuickMenu(gcc_unused const TCHAR *misc)
+{
+ dlgQuickMenuShowModal(XCSoarInterface::main_window);
+}

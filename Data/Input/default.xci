@@ -152,6 +152,11 @@ location=4
 
 mode=default
 type=key
+data=F1
+event=QuickMenu
+
+mode=default
+type=key
 data=MENU
 event=Mode Menu
 
@@ -897,3 +902,261 @@ event=Exit system
 event=Mode default
 label=Quit
 location=9
+
+
+# -------------
+# mode=RemoteStick
+# -------------
+
+mode=RemoteStick
+type=key
+data=0
+event=Calculator
+event=Mode default
+label=Task
+location=0
+
+mode=RemoteStick
+type=key
+data=0
+event=AdjustWaypoint previousarm
+label=$(WaypointPreviousArm)
+location=1
+
+mode=RemoteStick
+type=key
+data=0
+event=AdjustWaypoint nextarm
+label=$(WaypointNextArm)
+location=2
+
+mode=RemoteStick
+type=key
+data=0
+event=WaypointDetails select
+event=Mode default
+label=Waypoint\nList$(CheckWaypointFile)
+location=3
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup Alternates
+event=Mode default
+label=Alternates$(CheckWaypointFile)
+location=4
+
+mode=RemoteStick
+type=key
+data=0
+event=Mode default
+event=AbortTask toggle
+label=Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)
+location=5
+
+mode=RemoteStick
+type=key
+data=0
+event=GotoLookup
+event=Mode default
+label=GoTo$(CheckWaypointFile)
+location=6
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup Target
+event=Mode default
+label=$(CheckTask)$(CheckTaskResumed)Target
+location=7
+
+mode=RemoteStick
+type=key
+data=0
+event=WaypointDetails current
+event=Mode default
+label=Waypoint\nDetails$(CheckTask)
+location=8
+
+
+mode=RemoteStick
+type=key
+data=0
+event=Zoom auto show
+event=Zoom auto toggle
+label=Zoom\n$(ZoomAutoToggleActionName)
+location=9
+
+mode=RemoteStick
+type=key
+data=0
+event=Mode default
+event=StatusMessage Dropped marker
+event=Logger note Mark
+event=MarkLocation
+label=Mark\nDrop
+location=10
+
+mode=RemoteStick
+type=key
+data=0
+event=Pan on
+label=Pan\nOn
+location=11
+
+mode=RemoteStick
+type=key
+data=0
+event=DeclutterLabels show
+event=DeclutterLabels toggle
+label=Labels\n$(MapLabelsToggleActionName)
+location=12
+
+mode=RemoteStick
+type=key
+data=0
+event=SnailTrail show
+event=SnailTrail toggle
+label=Trail\n$(SnailTrailToggleName)
+location=13
+
+mode=RemoteStick
+type=key
+data=0
+event=TerrainTopography terrain toggle
+label=Terrain\n$(TerrainToggleActionName)
+location=14
+
+mode=RemoteStick
+type=key
+data=0
+event=TerrainTopography topography toggle
+label=Topo.\n$(TopographyToggleActionName)
+location=15
+
+
+mode=RemoteStick
+type=key
+data=0
+event=MacCready auto show
+event=MacCready auto toggle
+label=$(CheckAutoMc)MC\n$(MacCreadyToggleActionName)
+location=16
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup Basic
+event=Mode default
+label=Flight\nSetup
+location=17
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup Wind
+event=Mode default
+label=Setup\nWind
+location=18
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup System
+event=Mode default
+label=Setup\nSystem
+location=19
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup Airspace
+event=Mode default
+label=Settings\nAirspace$(CheckAirspace)
+location=20
+
+mode=RemoteStick
+type=key
+data=0
+event=Logger show
+event=Logger toggle ask
+label=Logger\n$(LoggerActive)$(CheckLogger)
+location=21
+
+mode=RemoteStick
+type=key
+data=0
+event=Logger nmea
+label=Raw Logger$(CheckLogger)
+location=22
+
+mode=RemoteStick
+type=key
+data=0
+event=Device list
+event=Mode default
+label=Devices
+location=23
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup Plane
+event=Mode default
+label=Setup Plane
+location=24
+
+mode=RemoteStick
+type=key
+data=0
+event=FlarmTraffic
+label=FLARM Radar$(CheckFLARM)
+location=25
+
+mode=RemoteStick
+type=key
+data=0
+event=Weather list
+event=Mode default
+label=METAR\nTAF$(CheckNet)
+location=26
+
+mode=RemoteStick
+type=key
+data=0
+event=NearestAirspaceDetails
+event=Mode default
+label=Nearest\nAirspace$(CheckAirspace)
+location=27
+
+mode=RemoteStick
+type=key
+data=0
+event=Checklist
+event=Mode default
+label=Check\nlist
+location=28
+
+mode=RemoteStick
+type=key
+data=0
+event=Analysis
+event=Mode default
+label=Analysis
+location=29
+
+mode=RemoteStick
+type=key
+data=0
+event=Status all
+event=Mode default
+label=Status
+location=30
+
+mode=RemoteStick
+type=key
+data=0
+event=ThermalAssistant
+event=Mode default
+label=Thermal Assistant$(CheckCircling)
+location=31

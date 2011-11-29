@@ -218,6 +218,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgWindSettings.cpp \
 	$(SRC)/Dialogs/dlgFontEdit.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
+	$(SRC)/Dialogs/dlgQuickMenu.cpp \
 
 ifeq ($(HAVE_NET),y)
 DIALOG_SOURCES += \

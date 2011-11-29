@@ -338,6 +338,16 @@ InputEvents::ShowMenu()
   ProcessMenuTimer();
 }
 
+Menu *
+InputEvents::GetMenu(const TCHAR *mode)
+{
+ int m = input_config.LookupMode(mode);
+ if (m >= 0)
+   return &input_config.menus[m];
+ else
+   return NULL;
+}
+
 void
 InputEvents::ProcessMenuTimer()
 {
