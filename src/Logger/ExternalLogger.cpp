@@ -79,19 +79,19 @@ DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration)
 static bool
 DeviceDeclare(DeviceDescriptor &dev, const Declaration &declaration)
 {
-  if (MessageBoxX(_("Declare task?"),
-                  dev.GetDisplayName(), MB_YESNO | MB_ICONQUESTION) == IDYES) {
-    if (DoDeviceDeclare(dev, declaration)) {
-      MessageBoxX(_("Task declared!"),
-                  dev.GetDisplayName(), MB_OK | MB_ICONINFORMATION);
-      return true;
-    } else {
-      MessageBoxX(_("Error occured,\nTask NOT declared!"),
-                  dev.GetDisplayName(), MB_OK | MB_ICONERROR);
-    }
+  if (MessageBoxX(_("Declare task?"), dev.GetDisplayName(),
+                  MB_YESNO | MB_ICONQUESTION) != IDYES)
+    return false;
+
+  if (!DoDeviceDeclare(dev, declaration)) {
+    MessageBoxX(_("Error occured,\nTask NOT declared!"),
+                dev.GetDisplayName(), MB_OK | MB_ICONERROR);
+    return false;
   }
 
-  return false;
+  MessageBoxX(_("Task declared!"),
+              dev.GetDisplayName(), MB_OK | MB_ICONINFORMATION);
+  return true;
 }
 
 void
