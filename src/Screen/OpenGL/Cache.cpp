@@ -34,36 +34,53 @@ Copyright_License {
 #include <string>
 #include <assert.h>
 
+struct TextCacheKey {
+  const Font *font;
+  UPixelScalar height;
+  std::string text;
+
+  TextCacheKey(const Font &_font, const char *_text)
+    :font(&_font), height(_font.GetHeight()), text(_text) {}
+
+  gcc_pure
+  bool operator==(const TextCacheKey &other) const {
+    return font == other.font && height == other.height && text == other.text;
+  }
+
+  gcc_pure
+  bool operator<(const TextCacheKey &other) const {
+    if (font != other.font)
+      return font < other.font;
+
+    if (height != other.height)
+      return height < other.height;
+
+    return text < other.text;
+  }
+};
+
 struct RenderedText : public ListHead {
-  std::string key;
+  TextCacheKey key;
   GLTexture texture;
 
 #ifdef ANDROID
-  RenderedText(const char *_key, int id, unsigned width, unsigned height)
+  RenderedText(TextCacheKey &_key, int id, unsigned width, unsigned height)
     :key(_key), texture(id, width, height) {}
 #else
-  RenderedText(const char *_key, SDL_Surface *surface)
+  RenderedText(TextCacheKey &_key, SDL_Surface *surface)
     :key(_key), texture(surface) {}
 #endif
 };
 
-static Cache<std::string, PixelSize, 1024u> size_cache;
-static std::map<std::string, RenderedText *> text_cache_map;
+static Cache<TextCacheKey, PixelSize, 1024u> size_cache;
+static std::map<TextCacheKey, RenderedText *> text_cache_map;
 static ListHead text_cache_head = ListHead(ListHead::empty());
 static unsigned text_cache_size = 0;
 
 PixelSize
 TextCache::GetSize(const Font &font, const char *text)
 {
-  char key_buffer[4096];
-  snprintf(key_buffer, sizeof(key_buffer),
-           "%s_%u_%u_%s",
-           font.GetFacename(),
-           font.GetStyle(),
-           font.GetHeight(),
-           text);
-
-  const std::string key(key_buffer);
+  TextCacheKey key(font, text);
   const PixelSize *cached = size_cache.Get(key);
   if (cached != NULL)
     return *cached;
@@ -81,14 +98,7 @@ TextCache::LookupSize(const Font &font, const char *text)
   if (*text == 0)
     return size;
 
-  char key[4096];
-  snprintf(key, sizeof(key),
-           "%s_%u_%u_%s",
-           font.GetFacename(),
-           font.GetStyle(),
-           font.GetHeight(),
-           text);
-
+  TextCacheKey key(font, text);
   auto i = text_cache_map.find(key);
   if (i == text_cache_map.end())
     return size;
@@ -109,13 +119,7 @@ TextCache::get(const Font *font, const char *text)
   if (*text == 0)
     return NULL;
 
-  char key[4096];
-  snprintf(key, sizeof(key),
-           "%s_%u_%u_%s",
-           font->GetFacename(),
-           font->GetStyle(),
-           font->GetHeight(),
-           text);
+  TextCacheKey key(*font, text);
 
   /* look it up */
 
