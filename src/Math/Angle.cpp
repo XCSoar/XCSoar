@@ -117,13 +117,13 @@ Angle::Reciprocal() const
 }
 
 Angle
-Angle::BiSector(const Angle &out_bound) const
+Angle::BiSector(const Angle out_bound) const
 {
   return Reciprocal().HalfAngle(out_bound);
 }
 
 Angle
-Angle::HalfAngle(const Angle &end) const
+Angle::HalfAngle(const Angle end) const
 {
   if (value == end.value) {
     return Reciprocal();
@@ -141,7 +141,7 @@ Angle::HalfAngle(const Angle &end) const
 }
 
 Angle
-Angle::Fraction(const Angle &end, const fixed fraction) const
+Angle::Fraction(const Angle end, const fixed fraction) const
 {
   if (value == end.value)
     return Angle(value);
@@ -156,7 +156,7 @@ Angle::Fraction(const Angle &end, const fixed fraction) const
 
 gcc_pure
 bool
-Angle::Between(const Angle &start, const Angle &end) const
+Angle::Between(const Angle start, const Angle end) const
 {
   Angle width = (end - start).AsBearing();
   Angle delta = (*this - start).AsBearing();

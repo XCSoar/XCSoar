@@ -215,13 +215,13 @@ public:
   Angle Reciprocal() const;
 
   gcc_pure
-  Angle BiSector(const Angle &out_bound) const;
+  Angle BiSector(const Angle out_bound) const;
 
   gcc_pure
-  Angle HalfAngle(const Angle &end) const;
+  Angle HalfAngle(const Angle end) const;
 
   gcc_pure
-  Angle Fraction(const Angle &end, const fixed fraction) const;
+  Angle Fraction(const Angle end, const fixed fraction) const;
 
   gcc_pure
   Angle
@@ -246,14 +246,14 @@ public:
 
   gcc_pure
   Angle
-  operator+(const Angle &x) const
+  operator+(const Angle x) const
   {
     return Angle(value + x.value);
   }
 
   gcc_pure
   Angle
-  operator-(const Angle &x) const
+  operator-(const Angle x) const
   {
     return Angle(value - x.value);
   }
@@ -327,7 +327,7 @@ public:
    * than "start", then wraparound is calculated correctly.
    */
   gcc_pure
-  bool Between(const Angle &start, const Angle &end) const;
+  bool Between(const Angle start, const Angle end) const;
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, const Angle& a);

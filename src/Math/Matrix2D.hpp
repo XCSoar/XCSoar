@@ -84,7 +84,7 @@ public:
     m[2][1] += mul(x, m[0][1]) + mul(y, m[1][1]);
   }
 
-  void Rotate(const Angle &alpha) {
+  void Rotate(const Angle alpha) {
     fixed sin, cos;
     alpha.SinCos(sin, cos);
 #ifdef FIXED_MATH

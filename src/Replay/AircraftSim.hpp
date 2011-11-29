@@ -46,16 +46,16 @@ public:
              const GeoPoint& location_last,
              const fixed& altitude);
 
-  bool Update(const Angle &heading, const fixed timestep=fixed_one);
+  bool Update(const Angle heading, const fixed timestep=fixed_one);
 
   fixed GetTime() const {
     return state.time;
   }
 
 private:
-  void Integrate(const Angle& heading, const fixed timestep);
+  void Integrate(const Angle heading, const fixed timestep);
 
-  GeoPoint GetEndPoint(const Angle& heading, const fixed timestep) const;
+  GeoPoint GetEndPoint(const Angle heading, const fixed timestep) const;
 };
 
 #endif

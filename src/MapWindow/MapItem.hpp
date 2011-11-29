@@ -56,7 +56,7 @@ struct SelfMapItem: public MapItem
   GeoPoint location;
   Angle bearing;
 
-  SelfMapItem(const GeoPoint &_location, const Angle &_bearing)
+  SelfMapItem(const GeoPoint &_location, const Angle _bearing)
     :MapItem(SELF), location(_location), bearing(_bearing) {}
 };
 
