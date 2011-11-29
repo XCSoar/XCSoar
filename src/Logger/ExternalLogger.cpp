@@ -232,7 +232,8 @@ BuildIGCFileName(TCHAR *name, const IGCHeader &header, const BrokenDate &date)
  * (spec says 35 flights - this handles up to 99 flights per day)
  */
 static unsigned
-GetFlightNumber(RecordedFlightList &flight_list, const RecordedFlightInfo &flight)
+GetFlightNumber(const RecordedFlightList &flight_list,
+                const RecordedFlightInfo &flight)
 {
   unsigned flight_number = 1;
   for (auto it = flight_list.begin(), end = flight_list.end(); it != end; ++it) {
