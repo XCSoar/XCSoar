@@ -22,7 +22,6 @@
 */
 
 #include "Logger/ExternalLogger.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
 #include "DataField/ComboList.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/ComboPicker.hpp"
@@ -32,7 +31,6 @@
 #include "Device/Descriptor.hpp"
 #include "Device/List.hpp"
 #include "Device/Driver.hpp"
-#include "Profile/DeclarationConfig.hpp"
 #include "LocalPath.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
@@ -95,15 +93,9 @@ DeviceDeclare(DeviceDescriptor &dev, const Declaration &declaration)
 }
 
 void
-ExternalLogger::Declare(const OrderedTask& task)
+ExternalLogger::Declare(const Declaration &decl)
 {
   bool found_logger = false;
-
-  // don't do anything if task is not valid
-  assert(task.CheckTask());
-
-  Declaration decl(&task);
-  Profile::GetDeclarationConfig(decl, CommonInterface::SettingsComputer().plane);
 
   for (unsigned i = 0; i < NUMDEV; ++i) {
     if (device_list[i].CanDeclare()) {

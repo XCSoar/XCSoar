@@ -24,16 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_EXTERNAL_LOGGER_HPP
 #define XCSOAR_EXTERNAL_LOGGER_HPP
 
-#include "Compiler.h"
-
 class DeviceDescriptor;
-class OrderedTask;
+struct Declaration;
 
 namespace ExternalLogger {
-  void Declare(const OrderedTask& task);
-
-  void
-  DownloadFlightFrom(DeviceDescriptor &device);
+  void Declare(const Declaration &decl);
+  void DownloadFlightFrom(DeviceDescriptor &device);
 }
 
 #endif
