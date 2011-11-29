@@ -79,21 +79,19 @@ DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration)
 static bool
 DeviceDeclare(DeviceDescriptor &dev, const Declaration &declaration)
 {
-  if (!dev.CanDeclare())
-    return false;
-
   if (MessageBoxX(_("Declare task?"),
                   dev.GetDisplayName(), MB_YESNO | MB_ICONQUESTION) == IDYES) {
     if (DoDeviceDeclare(dev, declaration)) {
       MessageBoxX(_("Task declared!"),
                   dev.GetDisplayName(), MB_OK | MB_ICONINFORMATION);
+      return true;
     } else {
       MessageBoxX(_("Error occured,\nTask NOT declared!"),
                   dev.GetDisplayName(), MB_OK | MB_ICONERROR);
     }
   }
 
-  return true;
+  return false;
 }
 
 void
@@ -107,9 +105,12 @@ ExternalLogger::Declare(const OrderedTask& task)
   Declaration decl(&task);
   Profile::GetDeclarationConfig(decl, CommonInterface::SettingsComputer().plane);
 
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    if (DeviceDeclare(DeviceList[i], decl))
+  for (unsigned i = 0; i < NUMDEV; ++i) {
+    if (DeviceList[i].CanDeclare()) {
       found_logger = true;
+      DeviceDeclare(DeviceList[i], decl);
+    }
+  }
 
   if (!found_logger)
     MessageBoxX(_("No logger connected"),
