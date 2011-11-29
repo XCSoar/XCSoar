@@ -47,12 +47,8 @@ struct RenderedText : public ListHead {
 #endif
 };
 
-namespace TextCache {
-  typedef std::map<std::string, RenderedText *> Map;
-};
-
 static Cache<std::string, PixelSize, 1024u> size_cache;
-static TextCache::Map text_cache_map;
+static std::map<std::string, RenderedText *> text_cache_map;
 static ListHead text_cache_head = ListHead(ListHead::empty());
 static unsigned text_cache_size = 0;
 
@@ -93,7 +89,7 @@ TextCache::LookupSize(const Font &font, const char *text)
            font.GetHeight(),
            text);
 
-  Map::const_iterator i = text_cache_map.find(key);
+  auto i = text_cache_map.find(key);
   if (i == text_cache_map.end())
     return size;
 
@@ -130,7 +126,7 @@ TextCache::get(const Font *font, Color background_color, Color text_color,
 
   /* look it up */
 
-  Map::const_iterator i = text_cache_map.find(key);
+  auto i = text_cache_map.find(key);
   if (i != text_cache_map.end()) {
     /* found in the cache */
     RenderedText *rt = i->second;
