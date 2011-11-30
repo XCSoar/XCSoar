@@ -289,8 +289,9 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
 
   PixelRect rcTextFinal = rc;
   const UPixelScalar buttonheight = rc.bottom - rc.top;
-  const int textwidth = canvas.CalcTextWidth(caption);
-  const int textheight = canvas.CalcTextHeight(caption);
+  const PixelSize text_size = canvas.CalcTextSize(caption);
+  const int textwidth = text_size.cx;
+  const int textheight = text_size.cy;
   UPixelScalar textheightoffset = 0;
 
   if (textwidth > (rc.right - rc.left)) // assume 2 lines
