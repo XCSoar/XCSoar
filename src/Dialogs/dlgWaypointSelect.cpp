@@ -249,6 +249,21 @@ PrepareData(void)
  */
 class FAITrianglePointValidator
 {
+  OrderedTask *task;
+  unsigned t_index;
+  unsigned t_size;
+  fixed leg1;
+  fixed leg2;
+  fixed leg3;
+
+  /** min distance for any FAI Leg -- derived from circular FAI sector radius */
+  const fixed minFAILeg;
+  /** min angle allowable in a FAI Triangle 31.5 degrees */
+  const fixed minFAIAngle;
+  /** max angle allowable in a FAI Triangle 113.2 degrees */
+  const fixed maxFAIAngle;
+  bool FAITrianglePointInvalid;
+
 public:
   FAITrianglePointValidator(OrderedTask *ordered_task,
                             const unsigned ordered_task_index) :
@@ -433,22 +448,6 @@ private:
     if (t_index > 3)
       FAITrianglePointInvalid = true;
   }
-
-private:
-  OrderedTask *task;
-  unsigned t_index;
-  unsigned t_size;
-  fixed leg1;
-  fixed leg2;
-  fixed leg3;
-
-  /** min distance for any FAI Leg -- derived from circular FAI sector radius */
-  const fixed minFAILeg;
-  /** min angle allowable in a FAI Triangle 31.5 degrees */
-  const fixed minFAIAngle;
-  /** max angle allowable in a FAI Triangle 113.2 degrees */
-  const fixed maxFAIAngle;
-  bool FAITrianglePointInvalid;
 };
 
 class FilterWaypointVisitor:
