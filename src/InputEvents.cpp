@@ -185,7 +185,7 @@ InputEvents::processButton(unsigned bindex)
     return false;
 
   Mode lastMode = getModeID();
-  const MenuItem &item = input_config.menus[lastMode][bindex];
+  const MenuItem &item = input_config.GetMenuItem(lastMode, bindex);
   if (!item.defined())
     return false;
 
@@ -201,15 +201,7 @@ InputEvents::processButton(unsigned bindex)
 unsigned
 InputEvents::key_to_event(Mode mode, unsigned key_code)
 {
-  if (key_code >= InputConfig::MAX_KEY)
-    return 0;
-
-  unsigned event_id = input_config.Key2Event[mode][key_code];
-  if (event_id == 0)
-    /* not found in this mode - try the default binding */
-    event_id = input_config.Key2Event[0][key_code];
-
-  return event_id;
+  return input_config.GetKeyEvent(mode, key_code);
 }
 
 bool

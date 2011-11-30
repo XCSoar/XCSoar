@@ -123,6 +123,28 @@ struct InputConfig {
 
     menus[mode_id].Add(label, location, event_id);
   }
+
+  gcc_pure
+  unsigned GetKeyEvent(unsigned mode, unsigned key_code) const {
+    assert(mode < MAX_MODE);
+
+    if (key_code >= MAX_KEY)
+      return 0;
+
+    if (mode > 0 && Key2Event[mode][key_code] != 0)
+      return Key2Event[mode][key_code];
+
+    /* fall back to the default mode */
+    return Key2Event[0][key_code];
+  }
+
+  gcc_pure
+  const MenuItem &GetMenuItem(unsigned mode, unsigned location) const {
+    assert(mode < MAX_MODE);
+    assert(location < Menu::MAX_ITEMS);
+
+    return menus[mode][location];
+  }
 };
 
 #endif
