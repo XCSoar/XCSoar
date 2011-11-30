@@ -238,6 +238,30 @@ GetFlightNumber(const RecordedFlightList &flight_list,
   return flight_number;
 }
 
+static const RecordedFlightInfo *
+ShowFlightList(const RecordedFlightList &flight_list)
+{
+  // Prepare list of the flights for displaying
+  ComboList combo;
+  for (unsigned i = 0; i < flight_list.size(); ++i) {
+    const RecordedFlightInfo &flight = flight_list[i];
+
+    TCHAR buffer[64];
+    _sntprintf(buffer, 64, _T("%04u/%02u/%02u %02u:%02u-%02u:%02u"),
+           flight.date.year, flight.date.month, flight.date.day,
+           flight.start_time.hour, flight.start_time.minute,
+           flight.end_time.hour, flight.end_time.minute);
+
+    combo.Append(i, buffer);
+  }
+
+  // Show list of the flights
+  int i = ComboPicker(CommonInterface::main_window, _T("Choose a flight"),
+                      combo, NULL, false);
+
+  return (i < 0) ? NULL : &flight_list[i];
+}
+
 void
 ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 {
@@ -256,30 +280,15 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     return;
   }
 
-  // Prepare list of the flights for displaying
-  ComboList combo;
-  for (unsigned i = 0; i < flight_list.size(); ++i) {
-    const RecordedFlightInfo &flight = flight_list[i];
-
-    TCHAR buffer[64];
-    _sntprintf(buffer, 64, _T("%04u/%02u/%02u %02u:%02u-%02u:%02u"),
-           flight.date.year, flight.date.month, flight.date.day,
-           flight.start_time.hour, flight.start_time.minute,
-           flight.end_time.hour, flight.end_time.minute);
-
-    combo.Append(i, buffer);
-  }
-
   // Show list of the flights
-  int i = ComboPicker(CommonInterface::main_window, _T("Choose a flight"),
-                      combo, NULL, false);
-  if (i < 0)
+  const RecordedFlightInfo *flight = ShowFlightList(flight_list);
+  if (!flight)
     return;
 
   // Download chosen IGC file into temporary file
   TCHAR path[MAX_PATH];
   LocalPath(path, _T("logs"), _T("temp.igc"));
-  if (!DoDownloadFlight(device, flight_list[i], path)) {
+  if (!DoDownloadFlight(device, *flight, path)) {
     // Delete temporary file
     File::Delete(path);
     MessageBoxX(_("Failed to download flight."),
@@ -293,7 +302,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
   BrokenDate date;
   ReadIGCMetaData(path, header, date);
   if (header.flight == 0)
-    header.flight = GetFlightNumber(flight_list, flight_list[i]);
+    header.flight = GetFlightNumber(flight_list, *flight);
 
   TCHAR name[64];
   TCHAR final_path[MAX_PATH];
