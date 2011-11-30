@@ -118,8 +118,8 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   instance = this;
   LoadWindow(task_defaults_config_panel_callbacks, parent,
-             Layout::landscape ? _T("IDR_XML_TASKDEFAULTSCONFIGPANEL") :
-                               _T("IDR_XML_TASKDEFAULTSCONFIGPANEL_L"));
+             Layout::landscape ? _T("IDR_XML_TASKDEFAULTSCONFIGPANEL_L") :
+                               _T("IDR_XML_TASKDEFAULTSCONFIGPANEL"));
 
   WndProperty *wp;
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
