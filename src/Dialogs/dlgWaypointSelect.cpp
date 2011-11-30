@@ -56,24 +56,24 @@ Copyright_License {
 
 class FAITrianglePointValidator;
 
-static GeoPoint g_location;
-static FAITrianglePointValidator *FAITriPtVali = NULL;
-static WndForm *wf = NULL;
-static WndListFrame *wWaypointList = NULL;
-static WndButton *wbName;
-static WndProperty *wpDistance;
-static WndProperty *wpDirection;
-static WndProperty *wpType;
+static GeoPoint location;
+static FAITrianglePointValidator *triangle_validator = NULL;
+static WndForm *dialog = NULL;
+static WndListFrame *waypoint_list = NULL;
+static WndButton *name_button;
+static WndProperty *distance_filter;
+static WndProperty *direction_filter;
+static WndProperty *type_filter;
 
-static const fixed DistanceFilter[] = {
+static const fixed distance_filter_items[] = {
   fixed_zero, fixed(25.0), fixed(50.0),
   fixed(75.0), fixed(100.0), fixed(150.0),
   fixed(250.0), fixed(500.0), fixed(1000.0),
 };
 
-#define DirHDG -1
-static int DirectionFilter[] = {
-  0, DirHDG, 360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
+#define HEADING_DIRECTION -1
+static int direction_filter_items[] = {
+  0, HEADING_DIRECTION, 360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
 };
 
 static Angle last_heading = Angle::Zero();
@@ -81,9 +81,9 @@ static Angle last_heading = Angle::Zero();
 /**
  * used for single-letter name search with Left/Right keys
  */
-static int NameFilterIdx = -1;
+static int name_filter_index = -1;
 
-static const TCHAR *const TypeFilter[] = {
+static const TCHAR *const type_filter_items[] = {
   _T("*"), _T("Airport"), _T("Landable"),
   _T("Turnpoint"), 
   _T("Start"), 
@@ -95,31 +95,31 @@ static const TCHAR *const TypeFilter[] = {
   NULL
 };
 
-enum type_filter {
-  tfAll = 0,
-  tfAirport,
-  tfLandable,
-  tfTurnpoint,
-  tfStart,
-  tfFinish,
-  tfFAITriangleLeft,
-  tfFAITriangleRight,
-  tfFile1,
-  tfFile2,
-  tfLastUsed,
+enum TypeFilter {
+  TF_ALL = 0,
+  TF_AIRPORT,
+  TF_LANDABLE,
+  TF_TURNPOINT,
+  TF_START,
+  TF_FINISH,
+  TF_FAI_TRIANGLE_LEFT,
+  TF_FAI_TRIANGLE_RIGHT,
+  TF_FILE_1,
+  TF_FILE_2,
+  TF_LAST_USED,
 };
 
 enum {
-  NAMEFILTERLEN = 10,
+  NAME_FILTER_LENGTH = 10,
 };
 
 struct WaypointFilterData
 {
-  TCHAR name[NAMEFILTERLEN + 1];
+  TCHAR name[NAME_FILTER_LENGTH + 1];
 
   int distance_index;
   int direction_index;
-  type_filter type_index;
+  TypeFilter type_index;
 
   bool defined() const {
     return !string_is_empty(name) || distance_index > 0 ||
@@ -135,111 +135,109 @@ static WaypointFilterData filter_data;
 struct WaypointSelectInfo
 {
   /** Pointer to actual waypoint (unprotected!) */
-  const Waypoint* way_point;
+  const Waypoint* waypoint;
   /** Distance in user units from observer to waypoint */
-  fixed Distance;
+  fixed distance;
   /** Bearing (deg true north) from observer to waypoint */
-  Angle Direction;
+  Angle direction;
 };
 
 struct WaypointSelectInfoVector :
   public std::vector<WaypointSelectInfo>
 {
-  void push_back(const Waypoint &way_point, const GeoPoint &Location) {
+  void push_back(const Waypoint &waypoint, const GeoPoint &location) {
     WaypointSelectInfo info;
 
-    info.way_point = &way_point;
+    info.waypoint = &waypoint;
 
-    const GeoVector vec(Location, way_point.location);
+    const GeoVector vec(location, waypoint.location);
 
-    info.Distance = vec.distance;
-    info.Direction = vec.bearing;
+    info.distance = vec.distance;
+    info.direction = vec.bearing;
 
     std::vector<WaypointSelectInfo>::push_back(info);
   }
 };
 
-static WaypointSelectInfoVector WaypointSelectInfo;
-static std::list<unsigned int> LastUsedWaypointNames;
+static WaypointSelectInfoVector waypoint_select_info;
+static std::list<unsigned int> last_used_waypoint_ids;
 
 static TCHAR *
-GetDirectionData(int DirectionFilterIdx)
+GetDirectionData(int direction_filter_index)
 {
-  static TCHAR sTmp[12];
+  static TCHAR buffer[12];
 
-  if (DirectionFilterIdx == 0)
-    _stprintf(sTmp, _T("%c"), '*');
-  else if (DirectionFilterIdx == 1)
-    _stprintf(sTmp, _T("HDG(%u")_T(DEG)_T(")"),
+  if (direction_filter_index == 0)
+    _stprintf(buffer, _T("%c"), '*');
+  else if (direction_filter_index == 1)
+    _stprintf(buffer, _T("HDG(%u")_T(DEG)_T(")"),
               uround(last_heading.AsBearing().Degrees()));
   else
-    _stprintf(sTmp, _T("%d")_T(DEG), DirectionFilter[DirectionFilterIdx]);
+    _stprintf(buffer, _T("%d")_T(DEG),
+              direction_filter_items[direction_filter_index]);
 
-  return sTmp;
+  return buffer;
 }
 
 static void
-InitializeDirection(bool bOnlyHeading)
+InitializeDirection(bool only_heading)
 {
   // initialize datafieldenum for Direction
-  if (wpDirection) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wpDirection->GetDataField();
-    if (!bOnlyHeading) {
-      for (unsigned int i = 0; i < ARRAY_SIZE(DirectionFilter); i++)
-        dfe->addEnumText(GetDirectionData(i));
+  if (direction_filter) {
+    DataFieldEnum* data_field = (DataFieldEnum*)direction_filter->GetDataField();
+    if (!only_heading) {
+      for (unsigned int i = 0; i < ARRAY_SIZE(direction_filter_items); i++)
+        data_field->addEnumText(GetDirectionData(i));
 
-      dfe->SetAsInteger(filter_data.direction_index);
+      data_field->SetAsInteger(filter_data.direction_index);
     }
     // update heading value to current heading
-    dfe->replaceEnumText(1,GetDirectionData(1));
-    wpDirection->RefreshDisplay();
+    data_field->replaceEnumText(1,GetDirectionData(1));
+    direction_filter->RefreshDisplay();
   }
 }
 
 static void
 PrepareData(void)
 {
-  TCHAR sTmp[15];
+  TCHAR buffer[15];
 
   filter_data.name[0] = _T('\0');
 
-  wbName->SetCaption(_T("*"));
+  name_button->SetCaption(_T("*"));
 
   // initialize datafieldenum for Distance
-  if (wpDistance) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wpDistance->GetDataField();
-    dfe->addEnumText(_T("*"));
-    for (unsigned i = 1; i < ARRAY_SIZE(DistanceFilter); i++) {
-      _stprintf(sTmp, _T("%.0f%s"), (double)DistanceFilter[i],
+  if (distance_filter) {
+    DataFieldEnum* data_field = (DataFieldEnum*)distance_filter->GetDataField();
+    data_field->addEnumText(_T("*"));
+    for (unsigned i = 1; i < ARRAY_SIZE(distance_filter_items); i++) {
+      _stprintf(buffer, _T("%.0f%s"), (double)distance_filter_items[i],
                 Units::GetDistanceName());
-      dfe->addEnumText(sTmp);
+      data_field->addEnumText(buffer);
     }
-    dfe->SetAsInteger(filter_data.distance_index);
-    wpDistance->RefreshDisplay();
+    data_field->SetAsInteger(filter_data.distance_index);
+    distance_filter->RefreshDisplay();
   }
 
   InitializeDirection(false);
 
   // initialize datafieldenum for Type
-  if (wpType) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wpType->GetDataField();
-    dfe->addEnumTexts(TypeFilter);
+  if (type_filter) {
+    DataFieldEnum* data_field = (DataFieldEnum*)type_filter->GetDataField();
+    data_field->addEnumTexts(type_filter_items);
 
-    TCHAR szFile[MAX_PATH];
+    TCHAR path[MAX_PATH];
     const TCHAR * t;
-    if (Profile::GetPath(szProfileWaypointFile, szFile)) {
-      t = BaseName(szFile);
-      dfe->replaceEnumText(tfFile1, t);
+    if (Profile::GetPath(szProfileWaypointFile, path)) {
+      t = BaseName(path);
+      data_field->replaceEnumText(TF_FILE_1, t);
     }
-    if (Profile::GetPath(szProfileAdditionalWaypointFile, szFile)) {
-      t = BaseName(szFile);
-      dfe->replaceEnumText(tfFile2, t);
+    if (Profile::GetPath(szProfileAdditionalWaypointFile, path)) {
+      t = BaseName(path);
+      data_field->replaceEnumText(TF_FILE_2, t);
     }
-    dfe->SetAsInteger(filter_data.type_index);
-    wpType->RefreshDisplay();
+    data_field->SetAsInteger(filter_data.type_index);
+    type_filter->RefreshDisplay();
   }
 }
 
@@ -257,12 +255,12 @@ class FAITrianglePointValidator
   fixed leg3;
 
   /** min distance for any FAI Leg -- derived from circular FAI sector radius */
-  const fixed minFAILeg;
+  const fixed min_fai_leg;
   /** min angle allowable in a FAI Triangle 31.5 degrees */
-  const fixed minFAIAngle;
+  const fixed min_fai_angle;
   /** max angle allowable in a FAI Triangle 113.2 degrees */
-  const fixed maxFAIAngle;
-  bool FAITrianglePointInvalid;
+  const fixed max_fai_angle;
+  bool fai_triangle_point_invalid;
 
 public:
   FAITrianglePointValidator(OrderedTask *ordered_task,
@@ -273,10 +271,10 @@ public:
                             leg1(fixed_zero),
                             leg2(fixed_zero),
                             leg3(fixed_zero),
-                            minFAILeg(fixed(2000)),
-                            minFAIAngle(fixed(31.5)),
-                            maxFAIAngle(fixed(114)),
-                            FAITrianglePointInvalid(false)
+                            min_fai_leg(fixed(2000)),
+                            min_fai_angle(fixed(31.5)),
+                            max_fai_angle(fixed(114)),
+                            fai_triangle_point_invalid(false)
   {
     PrepareFAITest(ordered_task, ordered_task_index);
   }
@@ -285,7 +283,7 @@ public:
   bool
   TestFAITriangle(const fixed d1, const fixed d2, const fixed d3)
   {
-    if ((d1 < minFAILeg) || (d2 < minFAILeg) || (d3 < minFAILeg))
+    if ((d1 < min_fai_leg) || (d2 < min_fai_leg) || (d3 < min_fai_leg))
       return false;
 
     return AbstractTaskFactory::TestFAITriangle(d1, d2, d3);
@@ -302,7 +300,7 @@ public:
    * an FAI triangle.
    */
   bool
-  isFAIAngle(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
+  IsFAIAngle(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
              const fixed right)
   {
     const Angle a01 = p0.Bearing(p1);
@@ -310,10 +308,10 @@ public:
     const fixed diff = (a01 - a21).AsDelta().Degrees();
 
     if (positive(right))
-      return (diff > minFAIAngle) && (diff < maxFAIAngle);
+      return (diff > min_fai_angle) && (diff < max_fai_angle);
     else
-      return (diff < fixed(-1) * minFAIAngle) && (diff > fixed(-1)
-              * maxFAIAngle);
+      return (diff < fixed(-1) * min_fai_angle) && (diff > fixed(-1)
+              * max_fai_angle);
   }
 
   /** Test whether wp could be a point in an FAI triangle based on the other
@@ -324,9 +322,9 @@ public:
    * @return True if point would be valid in an FAI Triangle
    */
   bool
-  isFAITrianglePoint(const Waypoint& wp, const fixed right)
+  IsFAITrianglePoint(const Waypoint& wp, const fixed right)
   {
-    if (FAITrianglePointInvalid)
+    if (fai_triangle_point_invalid)
       return false;
 
     if (!task)
@@ -345,10 +343,10 @@ public:
         return true;
 
       case 2:
-        return p.Distance(task->get_tp(1)->GetLocation()) > minFAILeg;
+        return p.Distance(task->get_tp(1)->GetLocation()) > min_fai_leg;
 
       default: // size == 3 or 4
-        if (!isFAIAngle(p, task->get_tp(1)->GetLocation(),
+        if (!IsFAIAngle(p, task->get_tp(1)->GetLocation(),
                         task->get_tp(2)->GetLocation(), right))
           return false;
         if (t_size == 3) {
@@ -368,10 +366,10 @@ public:
       assert(t_size > 0);
 
       if (t_size <= 2)
-        return p.Distance(task->get_tp(0)->GetLocation()) > minFAILeg;
+        return p.Distance(task->get_tp(0)->GetLocation()) > min_fai_leg;
 
       // size == 3 or 4
-      if (!isFAIAngle(task->get_tp(0)->GetLocation(),
+      if (!IsFAIAngle(task->get_tp(0)->GetLocation(),
                       p,
                       task->get_tp(2)->GetLocation(), right))
         return false;
@@ -390,7 +388,7 @@ public:
     // append or replace point #2
     if (t_index == 2) {
       assert(t_size >= 2);
-      if (!isFAIAngle(task->get_tp(0)->GetLocation(),
+      if (!IsFAIAngle(task->get_tp(0)->GetLocation(),
                       task->get_tp(1)->GetLocation(),
                       p, right))
         return false;
@@ -426,7 +424,7 @@ private:
     task = ordered_task;
     t_index = ordered_task_index;
 
-    FAITrianglePointInvalid = false;
+    fai_triangle_point_invalid = false;
 
     if (ordered_task) {
       t_size = task->TaskSize();
@@ -443,10 +441,10 @@ private:
     }
 
     if (t_size > 4)
-      FAITrianglePointInvalid = true;
+      fai_triangle_point_invalid = true;
 
     if (t_index > 3)
-      FAITrianglePointInvalid = true;
+      fai_triangle_point_invalid = true;
   }
 };
 
@@ -460,40 +458,40 @@ class FilterWaypointVisitor:
 
 private:
   static bool
-  compare_type(const Waypoint &wp, type_filter type_index)
+  CompareType(const Waypoint &waypoint, TypeFilter type)
   {
-    switch (type_index) {
-    case tfAll:
+    switch (type) {
+    case TF_ALL:
       return true;
 
-    case tfAirport:
-      return wp.IsAirport();
+    case TF_AIRPORT:
+      return waypoint.IsAirport();
 
-    case tfLandable:
-      return wp.IsLandable();
+    case TF_LANDABLE:
+      return waypoint.IsLandable();
 
-    case tfTurnpoint:
-      return wp.IsTurnpoint();
+    case TF_TURNPOINT:
+      return waypoint.IsTurnpoint();
 
-    case tfStart:
-      return wp.IsStartpoint();
+    case TF_START:
+      return waypoint.IsStartpoint();
 
-    case tfFinish:
-      return wp.IsFinishpoint();
+    case TF_FINISH:
+      return waypoint.IsFinishpoint();
 
-    case tfFAITriangleLeft:
-      return FAITriPtVali->isFAITrianglePoint(wp, fixed(-1));
+    case TF_FAI_TRIANGLE_LEFT:
+      return triangle_validator->IsFAITrianglePoint(waypoint, fixed(-1));
 
-    case tfFAITriangleRight:
-      return FAITriPtVali->isFAITrianglePoint(wp, fixed_one);
+    case TF_FAI_TRIANGLE_RIGHT:
+      return triangle_validator->IsFAITrianglePoint(waypoint, fixed_one);
 
-    case tfFile1:
-      return wp.file_num == 1;
+    case TF_FILE_1:
+      return waypoint.file_num == 1;
 
-    case tfFile2:
-      return wp.file_num == 2;
+    case TF_FILE_2:
+      return waypoint.file_num == 2;
 
-    case tfLastUsed:
+    case TF_LAST_USED:
       return false;
     }
 
@@ -502,25 +500,25 @@ private:
   }
 
   static bool
-  compare_direction(const Waypoint &wp, int direction_index,
+  CompareDirection(const Waypoint &waypoint, int direction_index,
                     GeoPoint location, Angle heading)
   {
     if (direction_index <= 0)
       return true;
 
-    int a = DirectionFilter[filter_data.direction_index];
-    Angle angle = (a == DirHDG) ? heading : Angle::Degrees(fixed(a));
+    int a = direction_filter_items[filter_data.direction_index];
+    Angle angle = (a == HEADING_DIRECTION) ? heading : Angle::Degrees(fixed(a));
 
-    const GeoVector vec(location, wp.location);
-    fixed DirectionErr = (vec.bearing - angle).AsDelta().AbsoluteDegrees();
+    const GeoVector vec(location, waypoint.location);
+    fixed direction_error = (vec.bearing - angle).AsDelta().AbsoluteDegrees();
 
-    return DirectionErr < fixed(18);
+    return direction_error < fixed(18);
   }
 
   static bool
-  compare_name(const Waypoint &wp, const TCHAR *name)
+  CompareName(const Waypoint &waypoint, const TCHAR *name)
   {
-    return _tcsnicmp(wp.name.c_str(), name, _tcslen(name)) == 0;
+    return _tcsnicmp(waypoint.name.c_str(), name, _tcslen(name)) == 0;
   }
 
 public:
@@ -530,11 +528,11 @@ public:
     :WaypointFilterData(filter), location(_location), heading(_heading),
      vector(_vector) {}
 
-  void Visit(const Waypoint &wp) {
-    if (compare_type(wp, type_index) &&
-        (filter_data.distance_index == 0 || compare_name(wp, name)) &&
-        compare_direction(wp, direction_index, location, heading))
-      vector.push_back(wp, location);
+  void Visit(const Waypoint &waypoint) {
+    if (CompareType(waypoint, type_index) &&
+        (filter_data.distance_index == 0 || CompareName(waypoint, name)) &&
+        CompareDirection(waypoint, direction_index, location, heading))
+      vector.push_back(waypoint, location);
   }
 };
 
@@ -542,63 +540,63 @@ static bool
 WaypointDistanceCompare(const struct WaypointSelectInfo &a,
                         const struct WaypointSelectInfo &b)
 {
-  return a.Distance < b.Distance;
+  return a.distance < b.distance;
 }
 
 static void
-FillList(WaypointSelectInfoVector &dest, const Waypoints &src,
+FillList(WaypointSelectInfoVector &list, const Waypoints &src,
          GeoPoint location, Angle heading, const WaypointFilterData &filter)
 {
-  dest.clear();
+  list.clear();
 
   if (!filter.defined() && src.size() >= 500)
     return;
 
-  FilterWaypointVisitor visitor(filter, location, heading, dest);
+  FilterWaypointVisitor visitor(filter, location, heading, list);
 
   if (filter.distance_index > 0)
     src.VisitWithinRange(location, Units::ToSysDistance(
-        DistanceFilter[filter.distance_index]), visitor);
+        distance_filter_items[filter.distance_index]), visitor);
   else
     src.VisitNamePrefix(filter.name, visitor);
 
   if (filter.distance_index > 0 || filter.direction_index > 0)
-    std::sort(dest.begin(), dest.end(), WaypointDistanceCompare);
+    std::sort(list.begin(), list.end(), WaypointDistanceCompare);
 }
 
 static void
-FillLastUsedList(WaypointSelectInfoVector &dest,
-                 const std::list<unsigned int> src, const Waypoints &waypoints,
-                 GeoPoint location)
+FillLastUsedList(WaypointSelectInfoVector &list,
+                 const std::list<unsigned int> last_used_ids,
+                 const Waypoints &waypoints, const GeoPoint location)
 {
-  dest.clear();
+  list.clear();
 
-  if (src.empty())
+  if (last_used_ids.empty())
     return;
 
-  for (auto it = src.rbegin(); it != src.rend(); it++) {
-    const Waypoint* wp = waypoints.LookupId(*it);
-    if (wp == NULL)
+  for (auto it = last_used_ids.rbegin(); it != last_used_ids.rend(); it++) {
+    const Waypoint* waypoint = waypoints.LookupId(*it);
+    if (waypoint == NULL)
       continue;
 
-    dest.push_back(*wp, location);
+    list.push_back(*waypoint, location);
   }
 }
 
 static void
 UpdateList()
 {
-  if (filter_data.type_index == tfLastUsed)
-    FillLastUsedList(WaypointSelectInfo, LastUsedWaypointNames,
-                     way_points, g_location);
+  if (filter_data.type_index == TF_LAST_USED)
+    FillLastUsedList(waypoint_select_info, last_used_waypoint_ids,
+                     way_points, location);
   else
-    FillList(WaypointSelectInfo, way_points, g_location,
-             last_heading, filter_data);
+    FillList(waypoint_select_info, way_points, location, last_heading,
+             filter_data);
 
-  wWaypointList->SetLength(std::max(1, (int)WaypointSelectInfo.size()));
-  wWaypointList->SetOrigin(0);
-  wWaypointList->SetCursorIndex(0);
-  wWaypointList->invalidate();
+  waypoint_list->SetLength(std::max(1, (int)waypoint_select_info.size()));
+  waypoint_list->SetOrigin(0);
+  waypoint_list->SetCursorIndex(0);
+  waypoint_list->invalidate();
 }
 
 static const TCHAR *
@@ -611,14 +609,14 @@ WaypointNameAllowedCharacters(const TCHAR *prefix)
 static void
 NameButtonUpdateChar()
 {
-  const TCHAR * NameFilter = WaypointNameAllowedCharacters(_T(""));
-  if (NameFilterIdx == -1) {
+  const TCHAR *name_filter = WaypointNameAllowedCharacters(_T(""));
+  if (name_filter_index == -1) {
     filter_data.name[0] = '\0';
-    wbName->SetCaption(_T("*"));
+    name_button->SetCaption(_T("*"));
   } else {
-    filter_data.name[0] = NameFilter[NameFilterIdx];
+    filter_data.name[0] = name_filter[name_filter_index];
     filter_data.name[1] = '\0';
-    wbName->SetCaption(filter_data.name);
+    name_button->SetCaption(filter_data.name);
   }
 
   UpdateList();
@@ -627,10 +625,10 @@ NameButtonUpdateChar()
 static void
 OnFilterNameButtonRight(gcc_unused WndButton &button)
 {
-  const TCHAR * NameFilter = WaypointNameAllowedCharacters(_T(""));
-  NameFilterIdx++;
-  if (NameFilterIdx > (int)(_tcslen(NameFilter) - 2))
-    NameFilterIdx = -1;
+  const TCHAR * name_filter = WaypointNameAllowedCharacters(_T(""));
+  name_filter_index++;
+  if (name_filter_index > (int)(_tcslen(name_filter) - 2))
+    name_filter_index = -1;
 
   NameButtonUpdateChar();
 }
@@ -638,11 +636,11 @@ OnFilterNameButtonRight(gcc_unused WndButton &button)
 static void
 OnFilterNameButtonLeft(gcc_unused WndButton &button)
 {
-  const TCHAR * NameFilter = WaypointNameAllowedCharacters(_T(""));
-  if (NameFilterIdx == -1)
-    NameFilterIdx = (int)(_tcslen(NameFilter)-1);
+  const TCHAR * name_filter = WaypointNameAllowedCharacters(_T(""));
+  if (name_filter_index == -1)
+    name_filter_index = (int)(_tcslen(name_filter)-1);
   else
-    NameFilterIdx--;
+    name_filter_index--;
 
   NameButtonUpdateChar();
 }
@@ -650,39 +648,39 @@ OnFilterNameButtonLeft(gcc_unused WndButton &button)
 static void
 OnFilterNameButton(gcc_unused WndButton &button)
 {
-  TCHAR newNameFilter[NAMEFILTERLEN + 1];
-  CopyString(newNameFilter, filter_data.name, NAMEFILTERLEN + 1);
+  TCHAR new_name_filter[NAME_FILTER_LENGTH + 1];
+  CopyString(new_name_filter, filter_data.name, NAME_FILTER_LENGTH + 1);
   dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                        newNameFilter, NAMEFILTERLEN, _("Waypoint name"),
+                        new_name_filter, NAME_FILTER_LENGTH, _("Waypoint name"),
                         WaypointNameAllowedCharacters);
 
-  int i = _tcslen(newNameFilter) - 1;
+  int i = _tcslen(new_name_filter) - 1;
   while (i >= 0) {
-    if (newNameFilter[i] != _T(' '))
+    if (new_name_filter[i] != _T(' '))
       break;
 
-    newNameFilter[i] = 0;
+    new_name_filter[i] = 0;
     i--;
   }
 
-  CopyString(filter_data.name, newNameFilter, NAMEFILTERLEN + 1);
+  CopyString(filter_data.name, new_name_filter, NAME_FILTER_LENGTH + 1);
 
-  if (wbName) {
+  if (name_button) {
     if (string_is_empty(filter_data.name))
-      wbName->SetCaption(_T("*"));
+      name_button->SetCaption(_T("*"));
     else
-      wbName->SetCaption(filter_data.name);
+      name_button->SetCaption(filter_data.name);
   }
 
   UpdateList();
 }
 
 static void
-OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnFilterDistance(DataField *sender, DataField::DataAccessKind_t mode)
 {
-  switch (Mode) {
+  switch (mode) {
   case DataField::daChange:
-    filter_data.distance_index = Sender->GetAsInteger();
+    filter_data.distance_index = sender->GetAsInteger();
     UpdateList();
     break;
 
@@ -692,11 +690,11 @@ OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnFilterDirection(DataField *sender, DataField::DataAccessKind_t mode)
 {
-  switch (Mode) {
+  switch (mode) {
   case DataField::daChange:
-    filter_data.direction_index = Sender->GetAsInteger();
+    filter_data.direction_index = sender->GetAsInteger();
     UpdateList();
     break;
 
@@ -706,11 +704,11 @@ OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnFilterType(DataField *sender, DataField::DataAccessKind_t mode)
 {
-  switch (Mode) {
+  switch (mode) {
   case DataField::daChange:
-    filter_data.type_index = (type_filter)Sender->GetAsInteger();
+    filter_data.type_index = (TypeFilter)sender->GetAsInteger();
     UpdateList();
     break;
 
@@ -722,7 +720,7 @@ OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
-  if (WaypointSelectInfo.empty()) {
+  if (waypoint_select_info.empty()) {
     assert(i == 0);
 
     const UPixelScalar line_height = rc.bottom - rc.top;
@@ -735,12 +733,12 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     return;
   }
 
-  assert(i < WaypointSelectInfo.size());
+  assert(i < waypoint_select_info.size());
 
-  const struct WaypointSelectInfo &info = WaypointSelectInfo[i];
+  const struct WaypointSelectInfo &info = waypoint_select_info[i];
 
-  WaypointListRenderer::Draw(canvas, rc, *info.way_point,
-                             GeoVector(info.Distance, info.Direction),
+  WaypointListRenderer::Draw(canvas, rc, *info.waypoint,
+                             GeoVector(info.distance, info.direction),
                              CommonInterface::main_window.GetLook().map.waypoint,
                              CommonInterface::SettingsMap().waypoint);
 }
@@ -748,10 +746,10 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 static void
 OnWaypointListEnter(gcc_unused unsigned i)
 {
-  if (WaypointSelectInfo.size() > 0)
-    wf->SetModalResult(mrOK);
+  if (waypoint_select_info.size() > 0)
+    dialog->SetModalResult(mrOK);
   else
-    OnFilterNameButton(*wbName);
+    OnFilterNameButton(*name_button);
 }
 
 static void
@@ -763,11 +761,11 @@ OnSelectClicked(gcc_unused WndButton &button)
 static void
 OnCloseClicked(gcc_unused WndButton &button)
 {
-  wf->SetModalResult(mrCancel);
+  dialog->SetModalResult(mrCancel);
 }
 
 static void
-OnTimerNotify(gcc_unused WndForm &Sender)
+OnTimerNotify(gcc_unused WndForm &sender)
 {
   if (filter_data.direction_index == 1 && !XCSoarInterface::Calculated().circling) {
     Angle a = last_heading - CommonInterface::Calculated().heading;
@@ -775,7 +773,7 @@ OnTimerNotify(gcc_unused WndForm &Sender)
       last_heading = CommonInterface::Calculated().heading;
       UpdateList();
       InitializeDirection(true);
-      wpDirection->RefreshDisplay();
+      direction_filter->RefreshDisplay();
     }
   }
 }
@@ -783,32 +781,32 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 #ifdef GNAV
 
 static bool
-FormKeyDown(WndForm &Sender, unsigned key_code)
+FormKeyDown(WndForm &sender, unsigned key_code)
 {
-  type_filter NewIndex = filter_data.type_index;
+  TypeFilter new_index = filter_data.type_index;
 
   switch (key_code) {
   case VK_F1:
-    NewIndex = tfAll;
+    new_index = TF_ALL;
     break;
 
   case VK_F2:
-    NewIndex = tfLandable;
+    new_index = TF_LANDABLE;
     break;
 
   case VK_F3:
-    NewIndex = tfTurnpoint;
+    new_index = TF_TURNPOINT;
     break;
 
   default:
     return false;
   }
 
-  if (filter_data.type_index != NewIndex) {
-    filter_data.type_index = NewIndex;
+  if (filter_data.type_index != new_index) {
+    filter_data.type_index = new_index;
     UpdateList();
-    wpType->GetDataField()->SetAsInteger(filter_data.type_index);
-    wpType->RefreshDisplay();
+    type_filter->GetDataField()->SetAsInteger(filter_data.type_index);
+    type_filter->RefreshDisplay();
   }
 
   return true;
@@ -817,13 +815,13 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 #endif /* GNAV */
 
 void
-dlgWaypointSelectAddToLastUsed(const Waypoint &wp)
+dlgWaypointSelectAddToLastUsed(const Waypoint &waypoint)
 {
-  LastUsedWaypointNames.remove(wp.id);
-  LastUsedWaypointNames.push_back(wp.id);
+  last_used_waypoint_ids.remove(waypoint.id);
+  last_used_waypoint_ids.push_back(waypoint.id);
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry callback_table[] = {
   DeclareCallBackEntry(OnFilterDistance),
   DeclareCallBackEntry(OnFilterDirection),
   DeclareCallBackEntry(OnFilterType),
@@ -834,59 +832,59 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 };
 
 const Waypoint*
-dlgWaypointSelect(SingleWindow &parent, const GeoPoint &location,
+dlgWaypointSelect(SingleWindow &parent, const GeoPoint &_location,
                   OrderedTask *ordered_task,
                   const unsigned ordered_task_index)
 {
-  wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
+  dialog = LoadDialog(callback_table, parent, Layout::landscape ?
       _T("IDR_XML_WAYPOINTSELECT_L") : _T("IDR_XML_WAYPOINTSELECT"));
-  assert(wf != NULL);
+  assert(dialog != NULL);
 
 #ifdef GNAV
-  wf->SetKeyDownNotify(FormKeyDown);
+  dialog->SetKeyDownNotify(FormKeyDown);
 #endif
 
-  wWaypointList = (WndListFrame*)wf->FindByName(_T("frmWaypointList"));
-  assert(wWaypointList != NULL);
-  wWaypointList->SetActivateCallback(OnWaypointListEnter);
-  wWaypointList->SetPaintItemCallback(OnPaintListItem);
+  waypoint_list = (WndListFrame*)dialog->FindByName(_T("frmWaypointList"));
+  assert(waypoint_list != NULL);
+  waypoint_list->SetActivateCallback(OnWaypointListEnter);
+  waypoint_list->SetPaintItemCallback(OnPaintListItem);
   UPixelScalar line_height = Fonts::MapBold.GetHeight() + Layout::Scale(6) +
                          Fonts::MapLabel.GetHeight();
-  wWaypointList->SetItemHeight(line_height);
+  waypoint_list->SetItemHeight(line_height);
 
-  wbName = (WndButton*)wf->FindByName(_T("cmdFltName"));
-  wbName->SetOnLeftNotify(OnFilterNameButtonLeft);
-  wbName->SetOnRightNotify(OnFilterNameButtonRight);
+  name_button = (WndButton*)dialog->FindByName(_T("cmdFltName"));
+  name_button->SetOnLeftNotify(OnFilterNameButtonLeft);
+  name_button->SetOnRightNotify(OnFilterNameButtonRight);
 
-  wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
-  wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
-  wpType = (WndProperty *)wf->FindByName(_T("prpFltType"));
+  distance_filter = (WndProperty*)dialog->FindByName(_T("prpFltDistance"));
+  direction_filter = (WndProperty*)dialog->FindByName(_T("prpFltDirection"));
+  type_filter = (WndProperty *)dialog->FindByName(_T("prpFltType"));
 
-  g_location = location;
-  FAITriPtVali = new FAITrianglePointValidator(ordered_task,
-                                               ordered_task_index);
+  location = _location;
+  triangle_validator =
+      new FAITrianglePointValidator(ordered_task, ordered_task_index);
   last_heading = CommonInterface::Calculated().heading;
 
   PrepareData();
   UpdateList();
 
-  wf->SetTimerNotify(OnTimerNotify);
+  dialog->SetTimerNotify(OnTimerNotify);
 
-  if (wf->ShowModal() != mrOK) {
-    delete wf;
-    delete FAITriPtVali;
+  if (dialog->ShowModal() != mrOK) {
+    delete dialog;
+    delete triangle_validator;
     return NULL;
   }
 
-  unsigned ItemIndex = wWaypointList->GetCursorIndex();
+  unsigned index = waypoint_list->GetCursorIndex();
 
-  delete wf;
-  delete FAITriPtVali;
+  delete dialog;
+  delete triangle_validator;
 
   const Waypoint* retval = NULL;
 
-  if (ItemIndex < WaypointSelectInfo.size())
-    retval = WaypointSelectInfo[ItemIndex].way_point;
+  if (index < waypoint_select_info.size())
+    retval = waypoint_select_info[index].waypoint;
 
   if (retval != NULL)
     dlgWaypointSelectAddToLastUsed(*retval);
