@@ -44,8 +44,8 @@ $(OUT)/include/InputEvents_altair.cpp: $(topdir)/Data/Input/altair.xci \
 	$(Q)$(PERL) $(topdir)/tools/xci2cpp.pl $(topdir)/Data/Input/default.xci $(topdir)/Data/Input/altair.xci >$@.tmp
 	@mv $@.tmp $@
 
-T2E_OBJ = $(call SRC_TO_OBJ,$(SRC)/InputEvents.cpp)
-$(T2E_OBJ): $(XCI_HEADERS) $(OUT)/include/InputEvents_Text2Event.cpp $(OUT)/include/InputEvents_Text2GCE.cpp $(OUT)/include/InputEvents_Text2NE.cpp
+$(call SRC_TO_OBJ,$(SRC)/InputDefaults.cpp): $(XCI_HEADERS)
+$(call SRC_TO_OBJ,$(SRC)/InputLookup.cpp): $(OUT)/include/InputEvents_Text2Event.cpp $(OUT)/include/InputEvents_Text2GCE.cpp $(OUT)/include/InputEvents_Text2NE.cpp
 
 $(OUT)/include/Status_defaults.cpp: Data/Status/default.xcs \
 	tools/xcs2cpp.pl $(OUT)/include/dirstamp
