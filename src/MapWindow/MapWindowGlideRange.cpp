@@ -321,24 +321,24 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     Canvas &buffer = buffer_canvas;
 
     // Set the pattern colors
-    buffer.background_opaque();
-    buffer.set_background_color(COLOR_WHITE);
-    buffer.set_text_color(Color(0xd0, 0xd0, 0xd0));
+    buffer.SetBackgroundOpaque();
+    buffer.SetBackgroundColor(COLOR_WHITE);
+    buffer.SetTextColor(Color(0xd0, 0xd0, 0xd0));
 
     // Paint the whole buffer canvas with a pattern brush (small dots)
     buffer.clear(look.hAboveTerrainBrush);
 
     // Select the TerrainLine pen
-    buffer.hollow_brush();
-    buffer.select(look.hpTerrainLineThick);
-    buffer.set_background_color(Color(0xf0, 0xf0, 0xf0));
+    buffer.SelectHollowBrush();
+    buffer.Select(look.hpTerrainLineThick);
+    buffer.SetBackgroundColor(Color(0xf0, 0xf0, 0xf0));
 
     // Draw the TerrainLine polygons
     visitor.fans.DrawOutline(buffer);
 
     // Select a white brush (will later be transparent)
-    buffer.null_pen();
-    buffer.white_brush();
+    buffer.SelectNullPen();
+    buffer.SelectWhiteBrush();
 
     // Draw the TerrainLine polygons to remove the
     // brush pattern from the polygon areas
@@ -363,10 +363,10 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     look.hpTerrainLine.Set();
 #else
     // Select the TerrainLine pen
-    canvas.hollow_brush();
-    canvas.select(look.hpTerrainLine);
-    canvas.background_opaque();
-    canvas.set_background_color(COLOR_WHITE);
+    canvas.SelectHollowBrush();
+    canvas.Select(look.hpTerrainLine);
+    canvas.SetBackgroundOpaque();
+    canvas.SetBackgroundColor(COLOR_WHITE);
 
     // drop out extraneous line from origin
 #endif
@@ -407,20 +407,20 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   Canvas &buffer = buffer_canvas;
 
   // Paint the whole buffer canvas white ( = transparent)
-  buffer.clear_white();
+  buffer.ClearWhite();
 
   // Select the TerrainLine pen
-  buffer.hollow_brush();
-  buffer.select(look.hpTerrainLineThick);
-  buffer.background_opaque();
-  buffer.set_background_color(Color(0xf0, 0xf0, 0xf0));
+  buffer.SelectHollowBrush();
+  buffer.Select(look.hpTerrainLineThick);
+  buffer.SetBackgroundOpaque();
+  buffer.SetBackgroundColor(Color(0xf0, 0xf0, 0xf0));
 
   // Draw the TerrainLine polygons
   visitor.fans.DrawOutline(buffer);
 
   // Select a white brush (will later be transparent)
-  buffer.null_pen();
-  buffer.white_brush();
+  buffer.SelectNullPen();
+  buffer.SelectWhiteBrush();
 
   // Draw the TerrainLine polygons again to remove
   // the lines connecting all the polygons

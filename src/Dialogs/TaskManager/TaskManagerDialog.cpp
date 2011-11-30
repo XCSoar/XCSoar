@@ -148,7 +148,7 @@ dlgTaskManager::OnBlackBarPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
     rcFocus.top = rcFocus.left = 0;
     rcFocus.right = canvas.get_width();
     rcFocus.bottom = canvas.get_height();
-    canvas.draw_focus(rcFocus);
+    canvas.DrawFocusRectangle(rcFocus);
   }
 }
 

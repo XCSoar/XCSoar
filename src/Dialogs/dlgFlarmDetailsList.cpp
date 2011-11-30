@@ -54,7 +54,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
   const FlarmNet::Record *record = FlarmNet::FindRecordById(id);
   const TCHAR *callsign = FlarmDetails::LookupCallsign(id);
 
-  canvas.select(name_font);
+  canvas.Select(name_font);
 
   StaticString<256> tmp;
   if (record != NULL)
@@ -67,7 +67,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
   canvas.text_clipped(rc.left + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2), rc, tmp);
 
-  canvas.select(small_font);
+  canvas.Select(small_font);
 
   tmp.clear();
   if (record != NULL) {

@@ -113,109 +113,109 @@ public:
     return HWColor(color);
   }
 
-  HGDIOBJ select_object(HGDIOBJ handle) {
+  HGDIOBJ SelectObject(HGDIOBJ handle) {
     assert(defined());
     assert(handle != INVALID_HANDLE_VALUE);
 
     return ::SelectObject(dc, handle);
   }
 
-  void select_stock(int fnObject) {
-    select_object(::GetStockObject(fnObject));
+  void SelectStockObject(int fnObject) {
+    SelectObject(::GetStockObject(fnObject));
   }
 
-  void null_pen() {
-    select_stock(NULL_PEN);
+  void SelectNullPen() {
+    SelectStockObject(NULL_PEN);
   }
 
-  void white_pen() {
-    select_stock(WHITE_PEN);
+  void SelectWhitePen() {
+    SelectStockObject(WHITE_PEN);
   }
 
-  void black_pen() {
-    select_stock(BLACK_PEN);
+  void SelectBlackPen() {
+    SelectStockObject(BLACK_PEN);
   }
 
-  void hollow_brush() {
-    select_stock(HOLLOW_BRUSH);
+  void SelectHollowBrush() {
+    SelectStockObject(HOLLOW_BRUSH);
   }
 
-  void white_brush() {
-    select_stock(WHITE_BRUSH);
+  void SelectWhiteBrush() {
+    SelectStockObject(WHITE_BRUSH);
   }
 
-  void black_brush() {
-    select_stock(BLACK_BRUSH);
+  void SelectBlackBrush() {
+    SelectStockObject(BLACK_BRUSH);
   }
 
-  void select(const Pen &pen) {
-    select_object(pen.Native());
+  void Select(const Pen &pen) {
+    SelectObject(pen.Native());
   }
 
-  void select(const Brush &brush) {
-    select_object(brush.Native());
+  void Select(const Brush &brush) {
+    SelectObject(brush.Native());
   }
 
-  void select(const Font &font) {
-    select_object(font.Native());
+  void Select(const Font &font) {
+    SelectObject(font.Native());
   }
 
-  void set_text_color(const Color c) {
+  void SetTextColor(const Color c) {
     assert(defined());
 
     ::SetTextColor(dc, c);
   }
 
   gcc_pure
-  Color get_text_color() const {
+  Color GetTextColor() const {
     assert(defined());
 
     return Color(::GetTextColor(dc));
   }
 
-  void set_background_color(const Color c) {
+  void SetBackgroundColor(const Color c) {
     assert(defined());
 
     ::SetBkColor(dc, c);
   }
 
   gcc_pure
-  Color get_background_color() const {
+  Color GetBackgroundColor() const {
     return Color(::GetBkColor(dc));
   }
 
-  void background_opaque() {
+  void SetBackgroundOpaque() {
     assert(defined());
 
     ::SetBkMode(dc, OPAQUE);
   }
 
-  void background_transparent() {
+  void SetBackgroundTransparent() {
     assert(defined());
 
     ::SetBkMode(dc, TRANSPARENT);
   }
 
-  void mix_copy() {
+  void SetMixCopy() {
     assert(defined());
 
     ::SetROP2(dc, R2_COPYPEN);
   }
 
-  void mix_mask() {
+  void SetMixMask() {
     assert(defined());
 
     ::SetROP2(dc, R2_MASKPEN);
   }
 
-  void rectangle(PixelScalar left, PixelScalar top,
+  void Rectangle(PixelScalar left, PixelScalar top,
                  PixelScalar right, PixelScalar bottom) {
     assert(defined());
 
     ::Rectangle(dc, left, top, right, bottom);
   }
 
-  void fill_rectangle(PixelScalar left, PixelScalar top,
+  void DrawFilledRectangle(PixelScalar left, PixelScalar top,
                       PixelScalar right, PixelScalar bottom,
                       const HWColor color) {
     PixelRect rc;
@@ -224,16 +224,16 @@ public:
     rc.right = right;
     rc.bottom = bottom;
 
-    fill_rectangle(rc, color);
+    DrawFilledRectangle(rc, color);
   }
 
-  void fill_rectangle(PixelScalar left, PixelScalar top,
+  void DrawFilledRectangle(PixelScalar left, PixelScalar top,
                       PixelScalar right, PixelScalar bottom,
                       const Color color) {
-    fill_rectangle(left, top, right, bottom, map(color));
+    DrawFilledRectangle(left, top, right, bottom, map(color));
   }
 
-  void fill_rectangle(const PixelRect &rc, const HWColor color) {
+  void DrawFilledRectangle(const PixelRect &rc, const HWColor color) {
     assert(defined());
 
     /* this hack allows filling a rectangle with a solid color,
@@ -242,17 +242,17 @@ public:
     ::ExtTextOut(dc, rc.left, rc.top, ETO_OPAQUE, &rc, _T(""), 0, NULL);
   }
 
-  void fill_rectangle(const PixelRect &rc, const Color color) {
-    fill_rectangle(rc, map(color));
+  void DrawFilledRectangle(const PixelRect &rc, const Color color) {
+    DrawFilledRectangle(rc, map(color));
   }
 
-  void fill_rectangle(const PixelRect rc, const Brush &brush) {
+  void DrawFilledRectangle(const PixelRect rc, const Brush &brush) {
     assert(defined());
 
     ::FillRect(dc, &rc, brush.Native());
   }
 
-  void fill_rectangle(PixelScalar left, PixelScalar top,
+  void DrawFilledRectangle(PixelScalar left, PixelScalar top,
                       PixelScalar right, PixelScalar bottom,
                       const Brush &brush) {
     PixelRect rc;
@@ -260,32 +260,32 @@ public:
     rc.top = top;
     rc.right = right;
     rc.bottom = bottom;
-    fill_rectangle(rc, brush);
+    DrawFilledRectangle(rc, brush);
   }
 
   void clear() {
-    rectangle(0, 0, width, height);
+    Rectangle(0, 0, width, height);
   }
 
   void clear(const HWColor color) {
-    fill_rectangle(0, 0, width, height, color);
+    DrawFilledRectangle(0, 0, width, height, color);
   }
 
   void clear(const Color color) {
-    fill_rectangle(0, 0, width, height, color);
+    DrawFilledRectangle(0, 0, width, height, color);
   }
 
   void clear(const Brush &brush) {
-    fill_rectangle(0, 0, width, height, brush);
+    DrawFilledRectangle(0, 0, width, height, brush);
   }
 
-  void clear_white() {
+  void ClearWhite() {
     assert(defined());
 
     ::BitBlt(dc, 0, 0, width, height, NULL, 0, 0, WHITENESS);
   }
 
-  void round_rectangle(PixelScalar left, PixelScalar top,
+  void DrawRoundRectangle(PixelScalar left, PixelScalar top,
                        PixelScalar right, PixelScalar bottom,
                        UPixelScalar ellipse_width,
                        UPixelScalar ellipse_height) {
@@ -294,13 +294,13 @@ public:
     ::RoundRect(dc, left, top, right, bottom, ellipse_width, ellipse_height);
   }
 
-  void raised_edge(PixelRect &rc) {
+  void DrawRaisedEdge(PixelRect &rc) {
     assert(defined());
 
     ::DrawEdge(dc, &rc, EDGE_RAISED, BF_ADJUST | BF_FLAT | BF_RECT);
   }
 
-  void polyline(const RasterPoint *lppt, unsigned cPoints) {
+  void DrawPolyline(const RasterPoint *lppt, unsigned cPoints) {
     assert(defined());
 
     ::Polyline(dc, lppt, cPoints);
@@ -312,7 +312,7 @@ public:
     ::Polygon(dc, lppt, cPoints);
   }
 
-  void TriangleFan(const RasterPoint *points, unsigned num_points) {
+  void DrawTriangleFan(const RasterPoint *points, unsigned num_points) {
     polygon(points, num_points);
   }
 
@@ -325,12 +325,12 @@ public:
     line(a.x, a.y, b.x, b.y);
   }
 
-  void two_lines(PixelScalar ax, PixelScalar ay,
-                 PixelScalar bx, PixelScalar by,
-                 PixelScalar cx, PixelScalar cy);
-  void two_lines(const RasterPoint a, const RasterPoint b,
-                 const RasterPoint c) {
-    two_lines(a.x, a.y, b.x, b.y, c.x, c.y);
+  void DrawTwoLines(PixelScalar ax, PixelScalar ay,
+                    PixelScalar bx, PixelScalar by,
+                    PixelScalar cx, PixelScalar cy);
+  void DrawTwoLines(const RasterPoint a, const RasterPoint b,
+                    const RasterPoint c) {
+    DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 
   void circle(PixelScalar x, PixelScalar y, UPixelScalar radius) {
@@ -339,24 +339,22 @@ public:
     ::Ellipse(dc, x - radius, y - radius, x + radius, y + radius);
   }
 
-  void segment(PixelScalar x, PixelScalar y, UPixelScalar radius,
-               Angle start, Angle end, bool horizon=false);
+  void DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
+                   Angle start, Angle end, bool horizon = false);
 
-  void annulus(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
-               UPixelScalar big_radius,
-               Angle start, Angle end);
+  void DrawAnnulus(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
+                   UPixelScalar big_radius, Angle start, Angle end);
 
-  void keyhole(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
-               UPixelScalar big_radius,
-               Angle start, Angle end);
+  void DrawKeyhole(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
+                   UPixelScalar big_radius, Angle start, Angle end);
 
-  void draw_focus(PixelRect rc) {
+  void DrawFocusRectangle(PixelRect rc) {
     assert(defined());
 
     ::DrawFocusRect(dc, &rc);
   }
 
-  void draw_button(PixelRect rc, bool down) {
+  void DrawButton(PixelRect rc, bool down) {
     assert(defined());
 
     ::DrawFrameControl(dc, &rc, DFC_BUTTON,
@@ -364,18 +362,18 @@ public:
   }
 
   gcc_pure
-  const PixelSize text_size(const TCHAR *text, size_t length) const;
+  const PixelSize CalcTextSize(const TCHAR *text, size_t length) const;
 
   gcc_pure
-  const PixelSize text_size(const TCHAR *text) const;
+  const PixelSize CalcTextSize(const TCHAR *text) const;
 
   gcc_pure
-  UPixelScalar text_width(const TCHAR *text) const {
-    return text_size(text).cx;
+  UPixelScalar CalcTextWidth(const TCHAR *text) const {
+    return CalcTextSize(text).cx;
   }
 
   gcc_pure
-  UPixelScalar text_height(const TCHAR *text) const;
+  UPixelScalar CalcTextHeight(const TCHAR *text) const;
 
   void text(PixelScalar x, PixelScalar y, const TCHAR *text);
   void text(PixelScalar x, PixelScalar y, const TCHAR *text, size_t length);

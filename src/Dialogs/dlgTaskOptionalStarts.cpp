@@ -77,7 +77,7 @@ OnOptionalStartPaintListItem(Canvas &canvas, const PixelRect rc,
     if (DrawListIndex == 0 && RealStartExists) {
       tp = ordered_task->get_tp(0);
       canvas.text(pt.x, pt.y, _T("*"));
-      pt.x += canvas.text_width(_T("*"));
+      pt.x += canvas.CalcTextWidth(_T("*"));
     } else
       tp = ordered_task->get_optional_start(index_optional_starts);
 

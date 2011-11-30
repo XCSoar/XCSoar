@@ -110,91 +110,91 @@ public:
     return height;
   }
 
-  void null_pen() {
+  void SelectNullPen() {
     pen = Pen(0, COLOR_BLACK);
   }
 
-  void white_pen() {
+  void SelectWhitePen() {
     pen = Pen(1, COLOR_WHITE);
   }
 
-  void black_pen() {
+  void SelectBlackPen() {
     pen = Pen(1, COLOR_BLACK);
   }
 
-  void hollow_brush() {
+  void SelectHollowBrush() {
     brush.Reset();
   }
 
-  void white_brush() {
+  void SelectWhiteBrush() {
     brush = Brush(COLOR_WHITE);
   }
 
-  void black_brush() {
+  void SelectBlackBrush() {
     brush = Brush(COLOR_BLACK);
   }
 
-  void select(const Pen &_pen) {
+  void Select(const Pen &_pen) {
     pen = _pen;
   }
 
-  void select(const Brush &_brush) {
+  void Select(const Brush &_brush) {
     brush = _brush;
   }
 
-  void select(const Font &_font) {
+  void Select(const Font &_font) {
     font = &_font;
   }
 
-  void set_text_color(const Color c) {
+  void SetTextColor(const Color c) {
     text_color = c;
   }
 
-  Color get_text_color() const {
+  Color GetTextColor() const {
     return text_color;
   }
 
-  void set_background_color(const Color c) {
+  void SetBackgroundColor(const Color c) {
     background_color = c;
   }
 
-  Color get_background_color() const {
+  Color GetBackgroundColor() const {
     return background_color;
   }
 
-  void background_opaque() {
+  void SetBackgroundOpaque() {
     background_mode = OPAQUE;
   }
 
-  void background_transparent() {
+  void SetBackgroundTransparent() {
     background_mode = TRANSPARENT;
   }
 
-  void rectangle(PixelScalar left, PixelScalar top,
+  void Rectangle(PixelScalar left, PixelScalar top,
                  PixelScalar right, PixelScalar bottom) {
-    fill_rectangle(left, top, right, bottom, brush);
+    DrawFilledRectangle(left, top, right, bottom, brush);
 
     if (pen_over_brush())
-      outline_rectangle(left, top, right, bottom);
+      DrawOutlineRectangle(left, top, right, bottom);
   }
 
-  void fill_rectangle(PixelScalar left, PixelScalar top,
+  void DrawFilledRectangle(PixelScalar left, PixelScalar top,
                       PixelScalar right, PixelScalar bottom,
                       const Color color);
 
-  void fill_rectangle(PixelScalar left, PixelScalar top,
+  void DrawFilledRectangle(PixelScalar left, PixelScalar top,
                       PixelScalar right, PixelScalar bottom,
                       const Brush &brush) {
     if (!brush.IsHollow())
-      fill_rectangle(left, top, right, bottom, brush.GetColor());
+      DrawFilledRectangle(left, top, right, bottom, brush.GetColor());
   }
 
-  void fill_rectangle(const PixelRect &rc, const Color color) {
-    fill_rectangle(rc.left, rc.top, rc.right, rc.bottom, color);
+  void DrawFilledRectangle(const PixelRect &rc, const Color color) {
+    DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, color);
   }
 
-  void fill_rectangle(const PixelRect rc, const Brush &brush) {
-    fill_rectangle(rc.left, rc.top, rc.right, rc.bottom, brush);
+  void DrawFilledRectangle(const PixelRect rc, const Brush &brush) {
+    DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, brush);
   }
 
   /**
@@ -204,13 +204,13 @@ public:
   void OutlineRectangleGL(PixelScalar left, PixelScalar top,
                           PixelScalar right, PixelScalar bottom);
 
-  void outline_rectangle(PixelScalar left, PixelScalar top,
+  void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
                          PixelScalar right, PixelScalar bottom) {
     pen.Set();
     OutlineRectangleGL(left, top, right, bottom);
   }
 
-  void outline_rectangle(PixelScalar left, PixelScalar top,
+  void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
                          PixelScalar right, PixelScalar bottom,
                          Color color) {
     color.Set();
@@ -224,29 +224,29 @@ public:
   }
 
   void clear() {
-    rectangle(0, 0, get_width(), get_height());
+    Rectangle(0, 0, get_width(), get_height());
   }
 
   void clear(const Color color) {
-    fill_rectangle(0, 0, get_width(), get_height(), color);
+    DrawFilledRectangle(0, 0, get_width(), get_height(), color);
   }
 
   void clear(const Brush &brush) {
-    fill_rectangle(0, 0, get_width(), get_height(), brush);
+    DrawFilledRectangle(0, 0, get_width(), get_height(), brush);
   }
 
-  void clear_white() {
+  void ClearWhite() {
     clear(COLOR_WHITE);
   }
 
-  void round_rectangle(PixelScalar left, PixelScalar top,
+  void DrawRoundRectangle(PixelScalar left, PixelScalar top,
                        PixelScalar right, PixelScalar bottom,
                        UPixelScalar ellipse_width,
                        UPixelScalar ellipse_height);
 
-  void raised_edge(PixelRect &rc);
+  void DrawRaisedEdge(PixelRect &rc);
 
-  void polyline(const RasterPoint *points, unsigned num_points);
+  void DrawPolyline(const RasterPoint *points, unsigned num_points);
 
   void polygon(const RasterPoint *points, unsigned num_points);
 
@@ -254,7 +254,7 @@ public:
    * Draw a triangle fan (GL_TRIANGLE_FAN).  The first point is the
    * origin of the fan.
    */
-  void TriangleFan(const RasterPoint *points, unsigned num_points);
+  void DrawTriangleFan(const RasterPoint *points, unsigned num_points);
 
   void line(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by);
 
@@ -264,44 +264,44 @@ public:
 
   void line_piece(const RasterPoint a, const RasterPoint b);
 
-  void two_lines(PixelScalar ax, PixelScalar ay,
+  void DrawTwoLines(PixelScalar ax, PixelScalar ay,
                  PixelScalar bx, PixelScalar by,
                  PixelScalar cx, PixelScalar cy);
-  void two_lines(const RasterPoint a, const RasterPoint b,
+  void DrawTwoLines(const RasterPoint a, const RasterPoint b,
                  const RasterPoint c) {
-    two_lines(a.x, a.y, b.x, b.y, c.x, c.y);
+    DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 
   void circle(PixelScalar x, PixelScalar y, UPixelScalar radius);
 
-  void segment(PixelScalar x, PixelScalar y, UPixelScalar radius,
+  void DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
                Angle start, Angle end, bool horizon=false);
 
-  void annulus(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
+  void DrawAnnulus(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
                UPixelScalar big_radius,
                Angle start, Angle end);
 
-  void keyhole(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
+  void DrawKeyhole(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
                UPixelScalar big_radius,
                Angle start, Angle end);
 
-  void draw_focus(PixelRect rc);
+  void DrawFocusRectangle(PixelRect rc);
 
-  void draw_button(PixelRect rc, bool down);
-
-  gcc_pure
-  const PixelSize text_size(const TCHAR *text, size_t length) const;
+  void DrawButton(PixelRect rc, bool down);
 
   gcc_pure
-  const PixelSize text_size(const TCHAR *text) const;
+  const PixelSize CalcTextSize(const TCHAR *text, size_t length) const;
 
   gcc_pure
-  UPixelScalar text_width(const TCHAR *text) const {
-    return text_size(text).cx;
+  const PixelSize CalcTextSize(const TCHAR *text) const;
+
+  gcc_pure
+  UPixelScalar CalcTextWidth(const TCHAR *text) const {
+    return CalcTextSize(text).cx;
   }
 
   gcc_pure
-  UPixelScalar text_height(const TCHAR *text) const {
+  UPixelScalar CalcTextHeight(const TCHAR *text) const {
     return font != NULL ? font->GetHeight() : 0;
   }
 

@@ -65,8 +65,8 @@ WndForm::ClientAreaWindow::on_color(Window &window, Canvas &canvas)
     return ContainerWindow::on_color(window, canvas);
 #endif
 
-  canvas.set_text_color(COLOR_BLACK);
-  canvas.set_background_color(look.background_color);
+  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetBackgroundColor(look.background_color);
   return &look.background_brush;
 }
 
@@ -501,19 +501,19 @@ WndForm::on_paint(Canvas &canvas)
   PixelRect rcClient = get_client_rect();
 
   // Draw the borders
-  canvas.raised_edge(rcClient);
+  canvas.DrawRaisedEdge(rcClient);
 
   if (!mCaption.empty()) {
     // Set the colors
-    canvas.set_text_color(COLOR_WHITE);
+    canvas.SetTextColor(COLOR_WHITE);
 
     // Set the titlebar font and font-size
-    canvas.select(*look.caption.font);
+    canvas.Select(*look.caption.font);
 
     // JMW todo add here icons?
 
 #ifdef EYE_CANDY
-    canvas.background_transparent();
+    canvas.SetBackgroundTransparent();
     canvas.stretch(mTitleRect.left, mTitleRect.top,
                    mTitleRect.right - mTitleRect.left,
                    mTitleRect.bottom - mTitleRect.top,
@@ -523,7 +523,7 @@ WndForm::on_paint(Canvas &canvas)
     canvas.text(mTitleRect.left + Layout::FastScale(2), mTitleRect.top,
                 mCaption.c_str());
 #else
-    canvas.set_background_color(look.caption.background_color);
+    canvas.SetBackgroundColor(look.caption.background_color);
     canvas.text_opaque(mTitleRect.left + Layout::FastScale(2),
                        mTitleRect.top, mTitleRect, mCaption.c_str());
 #endif

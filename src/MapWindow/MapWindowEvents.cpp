@@ -122,21 +122,21 @@ MapWindow::on_paint(Canvas &canvas)
 
     /* clear the areas around the buffer */
 
-    canvas.null_pen();
-    canvas.white_brush();
+    canvas.SelectNullPen();
+    canvas.SelectWhiteBrush();
 
     if (top_left.x > 0)
-      canvas.rectangle(0, 0, top_left.x, canvas.get_height());
+      canvas.Rectangle(0, 0, top_left.x, canvas.get_height());
 
     if (bottom_right.x < (int)canvas.get_width())
-      canvas.rectangle(bottom_right.x, 0,
+      canvas.Rectangle(bottom_right.x, 0,
                        canvas.get_width(), canvas.get_height());
 
     if (top_left.y > 0)
-      canvas.rectangle(top_left.x, 0, bottom_right.x, top_left.y);
+      canvas.Rectangle(top_left.x, 0, bottom_right.x, top_left.y);
 
     if (bottom_right.y < (int)canvas.get_height())
-      canvas.rectangle(top_left.x, bottom_right.y,
+      canvas.Rectangle(top_left.x, bottom_right.y,
                        bottom_right.x, canvas.get_height());
 
     /* now stretch the buffer into the window Canvas */
@@ -150,6 +150,6 @@ MapWindow::on_paint(Canvas &canvas)
     /* the UI has changed since the last DrawThread iteration has
        started: the buffer has invalid data, paint a white window
        instead */
-    canvas.clear_white();
+    canvas.ClearWhite();
 #endif /* !ENABLE_OPENGL */
 }

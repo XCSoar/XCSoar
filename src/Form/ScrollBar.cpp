@@ -124,16 +124,16 @@ void
 ScrollBar::paint(Canvas &canvas) const
 {
   // Prepare Pen
-  canvas.black_pen();
+  canvas.SelectBlackPen();
 
   // ###################
   // #### ScrollBar ####
   // ###################
 
   // draw rectangle around entire scrollbar area
-  canvas.two_lines(rc.left, rc.top, rc.left, rc.bottom,
+  canvas.DrawTwoLines(rc.left, rc.top, rc.left, rc.bottom,
                    rc.right, rc.bottom);
-  canvas.two_lines(rc.right, rc.bottom, rc.right, rc.top,
+  canvas.DrawTwoLines(rc.right, rc.bottom, rc.right, rc.top,
                    rc.left, rc.top);
 
   // ###################
@@ -142,14 +142,14 @@ ScrollBar::paint(Canvas &canvas) const
 
   UPixelScalar arrow_padding = max(UPixelScalar(get_width() / 4),
                                    UPixelScalar(4));
-  canvas.black_brush();
+  canvas.SelectBlackBrush();
 
   PixelRect up_arrow_rect = rc;
   ++up_arrow_rect.left;
   up_arrow_rect.bottom = up_arrow_rect.top + get_width();
   canvas.line(up_arrow_rect.left, up_arrow_rect.bottom,
               up_arrow_rect.right, up_arrow_rect.bottom);
-  canvas.draw_button(up_arrow_rect, false);
+  canvas.DrawButton(up_arrow_rect, false);
 
   RasterPoint up_arrow[3] = {
     { PixelScalar((up_arrow_rect.left + rc.right) / 2),
@@ -159,14 +159,14 @@ ScrollBar::paint(Canvas &canvas) const
     { PixelScalar(rc.right - arrow_padding),
       PixelScalar(up_arrow_rect.bottom - arrow_padding) },
   };
-  canvas.TriangleFan(up_arrow, ARRAY_SIZE(up_arrow));
+  canvas.DrawTriangleFan(up_arrow, ARRAY_SIZE(up_arrow));
 
   PixelRect down_arrow_rect = rc;
   ++down_arrow_rect.left;
   down_arrow_rect.top = down_arrow_rect.bottom - get_width();
   canvas.line(down_arrow_rect.left, down_arrow_rect.top - 1,
               down_arrow_rect.right, down_arrow_rect.top - 1);
-  canvas.draw_button(down_arrow_rect, false);
+  canvas.DrawButton(down_arrow_rect, false);
 
   RasterPoint down_arrow[3] = {
     { PixelScalar((down_arrow_rect.left + rc.right) / 2),
@@ -176,7 +176,7 @@ ScrollBar::paint(Canvas &canvas) const
     { PixelScalar(rc.right - arrow_padding),
       PixelScalar(down_arrow_rect.top + arrow_padding) },
   };
-  canvas.TriangleFan(down_arrow, ARRAY_SIZE(down_arrow));
+  canvas.DrawTriangleFan(down_arrow, ARRAY_SIZE(down_arrow));
 
   // ###################
   // ####  Slider   ####
@@ -190,12 +190,12 @@ ScrollBar::paint(Canvas &canvas) const
   PixelRect rc_slider2 = rc_slider;
   ++rc_slider2.left;
   ++rc_slider2.top;
-  canvas.draw_button(rc_slider2, false);
+  canvas.DrawButton(rc_slider2, false);
 
   // fill the rest with darker gray
-  canvas.fill_rectangle(rc.left + 1, up_arrow_rect.bottom + 1,
+  canvas.DrawFilledRectangle(rc.left + 1, up_arrow_rect.bottom + 1,
                         rc.right, rc_slider.top, COLOR_GRAY);
-  canvas.fill_rectangle(rc.left + 1, rc_slider.bottom,
+  canvas.DrawFilledRectangle(rc.left + 1, rc_slider.bottom,
                         rc.right, down_arrow_rect.top, COLOR_GRAY);
 }
 

@@ -44,18 +44,18 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   Pen pen_f(1, inverse ? COLOR_WHITE : COLOR_BLACK);
 
   if (summary.p_remaining < fixed(0.99)) {
-    canvas.select(look.hbGray);
-    canvas.null_pen();
-    canvas.segment(center.x, center.y, radius, Angle::Radians(fixed_zero),
+    canvas.Select(look.hbGray);
+    canvas.SelectNullPen();
+    canvas.DrawSegment(center.x, center.y, radius, Angle::Radians(fixed_zero),
                    Angle::Radians(sweep * (fixed_one -  summary.p_remaining)));
   }
 
-  canvas.select(pen_f);
-  canvas.hollow_brush();
+  canvas.Select(pen_f);
+  canvas.SelectHollowBrush();
   canvas.circle(center.x, center.y, radius);
 
   unsigned i = 0;
-  canvas.select(pen_f);
+  canvas.Select(pen_f);
   for (TaskSummary::TaskSummaryPointVector::const_iterator it = summary.pts.begin();
        it != summary.pts.end(); ++it, ++i) {
     Angle a = Angle::Radians(it->p * sweep);
@@ -64,27 +64,27 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
     int w;
     if (i == summary.active) {
       if (it->achieved)
-        canvas.select(look.hbGreen);
+        canvas.Select(look.hbGreen);
       else
-        canvas.select(look.hbOrange);
+        canvas.Select(look.hbOrange);
 
       w = Layout::Scale(3);
     } else if (i < summary.active) {
       if (it->achieved)
-        canvas.select(look.hbGreen);
+        canvas.Select(look.hbGreen);
       else
-        canvas.select(look.hbNotReachableTerrain);
+        canvas.Select(look.hbNotReachableTerrain);
 
       w = Layout::Scale(2);
     } else {
       if (it->achieved)
-        canvas.select(look.hbGreen);
+        canvas.Select(look.hbGreen);
       else
-        canvas.select(look.hbLightGray);
+        canvas.Select(look.hbLightGray);
 
       w = Layout::Scale(1);
     }
     
-    canvas.rectangle(x - w, y - w, x + w, y + w);
+    canvas.Rectangle(x - w, y - w, x + w, y + w);
   }
 }

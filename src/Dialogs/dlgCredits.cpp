@@ -85,7 +85,7 @@ OnLogoPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
   const UPixelScalar width = canvas.get_width();
   PixelScalar x = Layout::FastScale(10), y = x;
 
-  canvas.clear_white();
+  canvas.ClearWhite();
 
   Bitmap title(width > 360 ? IDB_TITLE_HD : IDB_TITLE);
 
@@ -98,9 +98,9 @@ OnLogoPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 
   Font font;
   font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(16));
-  canvas.select(font);
-  canvas.set_text_color(COLOR_BLACK);
-  canvas.background_transparent();
+  canvas.Select(font);
+  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetBackgroundTransparent();
 
   canvas.text(x, y, _T("version: "));
   canvas.text(x + Layout::FastScale(80), y, XCSoar_VersionString);
@@ -120,7 +120,7 @@ OnLogoPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
   y += Layout::FastScale(22);
 
   Color link(0x3E, 0x73, 0xA7);
-  canvas.set_text_color(link);
+  canvas.SetTextColor(link);
   canvas.text(x, y, _T("http://www.xcsoar.org"));
 }
 

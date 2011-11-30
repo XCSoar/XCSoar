@@ -345,10 +345,10 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
   // we already do an outer visibility test, but may need a test
   // in screen coords
 
-  canvas.select(file.IsLabelImportant(map_scale) ?
+  canvas.Select(file.IsLabelImportant(map_scale) ?
                 Fonts::MapLabelImportant : Fonts::MapLabel);
-  canvas.set_text_color(Color(0x20, 0x20, 0x20));
-  canvas.background_transparent();
+  canvas.SetTextColor(Color(0x20, 0x20, 0x20));
+  canvas.SetBackgroundTransparent();
 
   // get drawing info
 
@@ -412,7 +412,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
       minx += 2;
       miny += 2;
 
-      PixelSize tsize = canvas.text_size(label);
+      PixelSize tsize = canvas.CalcTextSize(label);
       PixelRect brect;
       brect.left = minx;
       brect.right = brect.left + tsize.cx;

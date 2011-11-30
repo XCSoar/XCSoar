@@ -371,13 +371,13 @@ WndProperty::on_paint(Canvas &canvas)
      used by the polar configuration panel.  This concept needs to be
      redesigned. */
   if (mCaptionWidth != 0 && !mCaption.empty()) {
-    canvas.set_text_color(focused
+    canvas.SetTextColor(focused
                           ? look.focused.text_color
                           : look.text_color);
-    canvas.background_transparent();
-    canvas.select(*look.text_font);
+    canvas.SetBackgroundTransparent();
+    canvas.Select(*look.text_font);
 
-    PixelSize tsize = canvas.text_size(mCaption.c_str());
+    PixelSize tsize = canvas.CalcTextSize(mCaption.c_str());
 
     RasterPoint org;
     if (mCaptionWidth < 0) {

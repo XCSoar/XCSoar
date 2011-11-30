@@ -55,12 +55,12 @@ void
 TextWindow::on_paint(Canvas &canvas)
 {
 #ifndef ENABLE_OPENGL
-  canvas.clear_white();
+  canvas.ClearWhite();
 #endif
 
   if (!text.empty()) {
-    canvas.set_text_color(COLOR_BLACK);
-    canvas.background_transparent();
+    canvas.SetTextColor(COLOR_BLACK);
+    canvas.SetBackgroundTransparent();
     canvas.text(1, 1, text.c_str());
   }
 }

@@ -69,11 +69,11 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
     RasterPoint buffer[2 * AIRCRAFT_POINTS];
 
     if (!inverse) {
-      canvas.white_brush();
-      canvas.select(look.aircraft_pen);
+      canvas.SelectWhiteBrush();
+      canvas.Select(look.aircraft_pen);
     } else {
-      canvas.black_brush();
-      canvas.white_pen();
+      canvas.SelectBlackBrush();
+      canvas.SelectWhitePen();
     }
 
     DrawMirroredPolygon(Aircraft, buffer, AIRCRAFT_POINTS,
@@ -90,8 +90,8 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
     const unsigned CANOPY_POINTS = ARRAY_SIZE(Canopy);
     RasterPoint buffer[2 * CANOPY_POINTS];
 
-    canvas.select(look.canopy_pen);
-    canvas.select(look.canopy_brush);
+    canvas.Select(look.canopy_pen);
+    canvas.Select(look.canopy_brush);
     DrawMirroredPolygon(Canopy, buffer, CANOPY_POINTS,
                         canvas, angle, aircraft_pos);
   }
@@ -154,11 +154,11 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
   std::copy(Aircraft, Aircraft + AircraftPoints, aircraft);
   PolygonRotateShift(aircraft, AircraftPoints,
                      aircraft_pos.x, aircraft_pos.y, angle, true);
-  canvas.hollow_brush();
-  canvas.select(look.aircraft_simple2_pen);
+  canvas.SelectHollowBrush();
+  canvas.Select(look.aircraft_simple2_pen);
   canvas.polygon(aircraft, AircraftPoints);
-  canvas.black_brush();
-  canvas.select(look.aircraft_simple1_pen);
+  canvas.SelectBlackBrush();
+  canvas.Select(look.aircraft_simple1_pen);
   canvas.polygon(aircraft, AircraftPoints);
 }
 

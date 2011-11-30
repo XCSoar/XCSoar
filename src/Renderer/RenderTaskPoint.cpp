@@ -106,7 +106,7 @@ RenderTaskPoint::DrawBearing(const TaskPoint &tp)
   if (!draw_bearing || !PointCurrent())
     return;
 
-  canvas.select(task_look.bearing_pen);
+  canvas.Select(task_look.bearing_pen);
   map_canvas.offset_line(location, tp.GetLocationRemaining());
 }
 
@@ -124,11 +124,11 @@ RenderTaskPoint::DrawTarget(const TaskPoint &tp)
 void 
 RenderTaskPoint::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
 {
-  canvas.select(LegActive() ? task_look.leg_active_pen :
+  canvas.Select(LegActive() ? task_look.leg_active_pen :
                               task_look.leg_inactive_pen);
-  canvas.background_transparent();
+  canvas.SetBackgroundTransparent();
   map_canvas.line(start, end);
-  canvas.background_opaque();
+  canvas.SetBackgroundOpaque();
   
   // draw small arrow along task direction
   RasterPoint p_p;
@@ -145,8 +145,8 @@ RenderTaskPoint::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
   Arrow[2] = Arrow[1];
   Arrow[1] = p_p;
   
-  canvas.select(task_look.arrow_pen);
-  canvas.polyline(Arrow, 3);
+  canvas.Select(task_look.arrow_pen);
+  canvas.DrawPolyline(Arrow, 3);
 }
 
 void 
@@ -177,10 +177,10 @@ RenderTaskPoint::DrawIsoline(const AATPoint &tp)
     screen[i] = m_proj.GeoToScreen(ga);
   }
 
-  canvas.select(task_look.isoline_pen);
-  canvas.background_transparent();
-  canvas.polyline(screen, 21);
-  canvas.background_opaque();
+  canvas.Select(task_look.isoline_pen);
+  canvas.SetBackgroundTransparent();
+  canvas.DrawPolyline(screen, 21);
+  canvas.SetBackgroundOpaque();
 }
 
 void

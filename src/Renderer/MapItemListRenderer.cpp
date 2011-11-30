@@ -86,17 +86,17 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
-  canvas.set_text_color(COLOR_BLACK);
+  canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
-  canvas.select(name_font);
+  canvas.Select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
                       _("Your Position"));
 
   TCHAR buffer[128];
   Units::FormatGeoPoint(item.location, buffer, 128);
 
-  canvas.select(small_font);
+  canvas.Select(small_font);
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, buffer);
@@ -122,26 +122,26 @@ MapItemListRenderer::Draw(
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
-  canvas.set_text_color(COLOR_BLACK);
+  canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
-  canvas.select(name_font);
+  canvas.Select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
                       airspace.GetName());
 
-  canvas.select(small_font);
+  canvas.Select(small_font);
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, airspace.GetTypeText(false));
 
   PixelScalar altitude_width =
-    canvas.text_width(airspace.GetTopText(true).c_str());
+    canvas.CalcTextWidth(airspace.GetTopText(true).c_str());
   canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
                       rc.top + name_font.GetHeight() -
                       small_font.GetHeight() + Layout::FastScale(2), rc,
                       airspace.GetTopText(true).c_str());
 
-  altitude_width = canvas.text_width(airspace.GetBaseText(true).c_str());
+  altitude_width = canvas.CalcTextWidth(airspace.GetBaseText(true).c_str());
   canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, airspace.GetBaseText(true).c_str());
@@ -170,19 +170,19 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
-  canvas.set_text_color(COLOR_BLACK);
+  canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
 
   StaticString<256> buffer;
   buffer.Format(_T("%s #%d"), _("Marker"), item.id + 1);
-  canvas.select(name_font);
+  canvas.Select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, buffer);
 
   TCHAR time_buffer[32];
   Units::TimeToTextHHMMSigned(time_buffer, TimeLocal(marker.time.GetSecondOfDay()));
   buffer.Format(_("dropped at %s"), time_buffer);
-  canvas.select(small_font);
+  canvas.Select(small_font);
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, buffer);
@@ -203,11 +203,11 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
-  canvas.set_text_color(COLOR_BLACK);
+  canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
 
-  canvas.select(name_font);
+  canvas.Select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, _("Thermal"));
 
   StaticString<256> buffer;
@@ -215,7 +215,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   Units::FormatUserVSpeed(thermal.lift_rate, lift_buffer, 32);
   Units::TimeToTextHHMMSigned(time_buffer, TimeLocal((int)thermal.time));
   buffer.Format(_("Avg. lift: %s - left at %s"), lift_buffer, time_buffer);
-  canvas.select(small_font);
+  canvas.Select(small_font);
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, buffer);
@@ -242,7 +242,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
-  canvas.set_text_color(COLOR_BLACK);
+  canvas.SetTextColor(COLOR_BLACK);
 
   TCHAR buffer[256];
 
@@ -250,7 +250,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   UPixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
 
   // Use small font for details
-  canvas.select(small_font);
+  canvas.Select(small_font);
 
   // Draw details line
   UPixelScalar left = rc.left + line_height + Layout::FastScale(2);
@@ -259,7 +259,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     canvas.text_clipped(left, top2, rc.right - left, buffer);
 
   // Draw waypoint name
-  canvas.select(name_font);
+  canvas.Select(name_font);
   OrderedTaskPointLabel(item.tp_type, waypoint.name.c_str(),
                         item.index, buffer);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2),
@@ -285,7 +285,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const Font &small_font = Fonts::MapLabel;
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
 
-  canvas.set_text_color(COLOR_BLACK);
+  canvas.SetTextColor(COLOR_BLACK);
 
   StaticString<26> title_string(_("FLARM Traffic"));
   // Append name to the title, if it exists
@@ -293,7 +293,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     title_string.append(_(" - "));
     title_string.append(traffic.name);
   }
-  canvas.select(name_font);
+  canvas.Select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, title_string);
 
   StaticString<60> info_string(FlarmTraffic::GetTypeString(item.traffic.type));
@@ -310,7 +310,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     info_string += _(" - Vario: ");
     info_string += tmp;
   }
-  canvas.select(small_font);
+  canvas.Select(small_font);
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, info_string);

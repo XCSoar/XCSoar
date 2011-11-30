@@ -40,11 +40,11 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const SpeedVector wind, const RasterPoint pos,
                         const PixelRect rc, bool with_tail)
 {
-  canvas.select(Fonts::MapBold);
-  UPixelScalar text_width = canvas.text_size(_T("99")).cx / 2;
+  canvas.Select(Fonts::MapBold);
+  UPixelScalar text_width = canvas.CalcTextSize(_T("99")).cx / 2;
 
-  canvas.select(look.hpWind);
-  canvas.select(look.hbWind);
+  canvas.Select(look.hpWind);
+  canvas.Select(look.hbWind);
 
   PixelScalar wmag = iround(4 * wind.norm);
 
@@ -76,14 +76,14 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
     PolygonRotateShift(tail, 2, pos.x, pos.y, wind.bearing - screen_angle);
 
     // optionally draw dashed line
-    canvas.select(look.hpWindTail);
+    canvas.Select(look.hpWindTail);
     canvas.line(tail[0], tail[1]);
   }
 
   StaticString<12> buffer;
   buffer.Format(_T("%i"), iround(Units::ToUserWindSpeed(wind.norm)));
 
-  canvas.set_text_color(COLOR_BLACK);
+  canvas.SetTextColor(COLOR_BLACK);
 
   TextInBoxMode style;
   style.align = A_CENTER;

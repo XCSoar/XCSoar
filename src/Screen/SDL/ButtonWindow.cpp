@@ -152,9 +152,9 @@ ButtonWindow::on_paint(Canvas &canvas)
 {
   if (has_focus()) {
     Pen pen(Layout::Scale(1), COLOR_BLACK);
-    canvas.select(pen);
-    canvas.hollow_brush();
-    canvas.rectangle(-1, -1, canvas.get_width(), canvas.get_height());
+    canvas.Select(pen);
+    canvas.SelectHollowBrush();
+    canvas.Rectangle(-1, -1, canvas.get_width(), canvas.get_height());
   }
 
   PixelRect rc = { 2, 2, PixelScalar(canvas.get_width() - 4),
@@ -164,10 +164,10 @@ ButtonWindow::on_paint(Canvas &canvas)
     rc.top += Layout::FastScale(1);
   }
 
-  canvas.draw_button(get_client_rect(), down);
+  canvas.DrawButton(get_client_rect(), down);
 
-  canvas.set_text_color(is_enabled() ? COLOR_BLACK : COLOR_GRAY);
-  canvas.background_transparent();
+  canvas.SetTextColor(is_enabled() ? COLOR_BLACK : COLOR_GRAY);
+  canvas.SetBackgroundTransparent();
   canvas.formatted_text(&rc, text.c_str(), get_text_style());
 }
 

@@ -151,19 +151,19 @@ void
 Chart::StyleLine(const RasterPoint l1, const RasterPoint l2, const Pen &pen)
 {
   assert(pen.IsDefined());
-  canvas.select(pen);
+  canvas.Select(pen);
   canvas.line(l1, l2);
 }
 
 void
 Chart::DrawLabel(const TCHAR *text, const fixed xv, const fixed yv)
 {
-  PixelSize tsize = canvas.text_size(text);
+  PixelSize tsize = canvas.CalcTextSize(text);
 
   PixelScalar x = PixelScalar((xv - x_min) * xscale) + rc.left - tsize.cx / 2 + PaddingLeft;
   PixelScalar y = PixelScalar((y_max - yv) * yscale) + rc.top - tsize.cy / 2;
 
-  canvas.background_transparent();
+  canvas.SetBackgroundTransparent();
   canvas.text(x, y, text);
 }
 
@@ -172,38 +172,38 @@ Chart::DrawNoData()
 {
   const TCHAR *text = _("No data");
 
-  PixelSize tsize = canvas.text_size(text);
+  PixelSize tsize = canvas.CalcTextSize(text);
 
   PixelScalar x = (rc.left + rc.right - tsize.cx) / 2;
   PixelScalar y = (rc.top + rc.bottom - tsize.cy) / 2;
 
-  canvas.background_transparent();
+  canvas.SetBackgroundTransparent();
   canvas.text(x, y, text);
 }
 
 void
 Chart::DrawXLabel(const TCHAR *text)
 {
-  canvas.select(*look.axis_label_font);
+  canvas.Select(*look.axis_label_font);
 
-  PixelSize tsize = canvas.text_size(text);
+  PixelSize tsize = canvas.CalcTextSize(text);
   PixelScalar x = rc.right - tsize.cx - Layout::Scale(3);
   PixelScalar y = rc.bottom - tsize.cy;
 
-  canvas.background_transparent();
+  canvas.SetBackgroundTransparent();
   canvas.text(x, y, text);
 }
 
 void
 Chart::DrawYLabel(const TCHAR *text)
 {
-  canvas.select(*look.axis_label_font);
+  canvas.Select(*look.axis_label_font);
 
-  PixelSize tsize = canvas.text_size(text);
+  PixelSize tsize = canvas.CalcTextSize(text);
   PixelScalar x = max(PixelScalar(2), PixelScalar(rc.left - tsize.cx));
   PixelScalar y = rc.top;
 
-  canvas.background_transparent();
+  canvas.SetBackgroundTransparent();
   canvas.text(x, y, text);
 }
 
@@ -297,9 +297,9 @@ Chart::DrawFilledLine(const fixed xmin, const fixed ymin,
   line[3].x = line[0].x;
   line[3].y = (int)((y_max) * yscale) + rc.top;
 
-  canvas.select(brush);
-  canvas.null_pen();
-  canvas.TriangleFan(line, 4);
+  canvas.Select(brush);
+  canvas.SelectNullPen();
+  canvas.DrawTriangleFan(line, 4);
 }
 
 void
@@ -316,8 +316,8 @@ Chart::DrawBarChart(const LeastSquares &lsdata)
     return;
 
   Brush green_brush(COLOR_GREEN);
-  canvas.select(green_brush);
-  canvas.null_pen();
+  canvas.Select(green_brush);
+  canvas.SelectNullPen();
 
   for (int i = 0; i < lsdata.sum_n; i++) {
     PixelScalar xmin((fixed(i) + fixed(1.2)) * xscale
@@ -326,7 +326,7 @@ Chart::DrawBarChart(const LeastSquares &lsdata)
     PixelScalar xmax((fixed(i) + fixed(1.8)) * xscale
                      + fixed(rc.left + PaddingLeft));
     PixelScalar ymax((y_max - lsdata.ystore[i]) * yscale + fixed(rc.top));
-    canvas.rectangle(xmin, ymin, xmax, ymax);
+    canvas.Rectangle(xmin, ymin, xmax, ymax);
   }
 }
 
@@ -344,7 +344,7 @@ Chart::DrawFilledLineGraph(const LeastSquares &lsdata)
     line[2].y = rc.bottom - PaddingBottom;
     line[3].x = line[0].x;
     line[3].y = rc.bottom - PaddingBottom;
-    canvas.TriangleFan(line, 4);
+    canvas.DrawTriangleFan(line, 4);
   }
 }
 
@@ -428,10 +428,10 @@ Chart::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
-        canvas.background_transparent();
+        canvas.SetBackgroundTransparent();
         canvas.text(xmin, ymax - Layout::Scale(17), unit_text);
 
-        next_text = xmin + canvas.text_size(unit_text).cx + Layout::FastScale(2);
+        next_text = xmin + canvas.CalcTextSize(unit_text).cx + Layout::FastScale(2);
       }
     }
   }
@@ -456,7 +456,7 @@ Chart::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
-        canvas.background_transparent();
+        canvas.SetBackgroundTransparent();
         canvas.text(xmin, ymax - Layout::Scale(17), unit_text);
       }
     }
@@ -506,7 +506,7 @@ Chart::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
 
-        canvas.background_transparent();
+        canvas.SetBackgroundTransparent();
         canvas.text(xmin + Layout::Scale(8), ymin, unit_text);
       }
     }
@@ -531,7 +531,7 @@ Chart::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
 
-        canvas.background_transparent();
+        canvas.SetBackgroundTransparent();
         canvas.text(xmin + Layout::Scale(8), ymin, unit_text);
       }
     }
@@ -642,11 +642,11 @@ Chart::DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals,
   line[1].x = rc.left + PaddingLeft;
   line[1].y = line[2].y;
   
-  canvas.select(brush);
+  canvas.Select(brush);
   if (pen == NULL) {
-    canvas.null_pen();
+    canvas.SelectNullPen();
   } else {
-    canvas.select(*pen);
+    canvas.Select(*pen);
   }
   canvas.polygon(line, fsize);
 }
@@ -661,6 +661,6 @@ Chart::DrawDot(const fixed x, const fixed y, const PixelScalar width)
                           { PixelScalar(p.x - width), p.y },
                           { p.x, PixelScalar(p.y + width) },
                           { PixelScalar(p.x + width), p.y } };
-  canvas.null_pen();
-  canvas.TriangleFan(line, 4);
+  canvas.SelectNullPen();
+  canvas.DrawTriangleFan(line, 4);
 }

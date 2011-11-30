@@ -69,7 +69,7 @@ WndFrame::GetTextHeight()
   ::InflateRect(&rc, -2, -2); // todo border width
 
   AnyCanvas canvas;
-  canvas.select(*font);
+  canvas.Select(*font);
   canvas.formatted_text(&rc, text.c_str(), mCaptionStyle | DT_CALCRECT);
 
   return rc.bottom - rc.top;
@@ -82,10 +82,10 @@ WndFrame::on_paint(Canvas &canvas)
   canvas.clear(look.background_brush);
 #endif
 
-  canvas.set_text_color(caption_color);
-  canvas.background_transparent();
+  canvas.SetTextColor(caption_color);
+  canvas.SetBackgroundTransparent();
 
-  canvas.select(*font);
+  canvas.Select(*font);
 
   PixelRect rc = get_client_rect();
   InflateRect(&rc, -2, -2); // todo border width

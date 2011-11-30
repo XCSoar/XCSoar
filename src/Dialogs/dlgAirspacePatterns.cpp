@@ -42,10 +42,10 @@ OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
   const AirspaceLook &look =
     CommonInterface::main_window.GetLook().map.airspace;
 
-  canvas.background_transparent();
-  canvas.select(look.brushes[i]);
-  canvas.set_text_color(COLOR_BLACK);
-  canvas.rectangle(rc.left + Layout::FastScale(2),
+  canvas.SetBackgroundTransparent();
+  canvas.Select(look.brushes[i]);
+  canvas.SetTextColor(COLOR_BLACK);
+  canvas.Rectangle(rc.left + Layout::FastScale(2),
                    rc.top + Layout::FastScale(2),
                    rc.right - Layout::FastScale(2),
                    rc.bottom - Layout::FastScale(2));

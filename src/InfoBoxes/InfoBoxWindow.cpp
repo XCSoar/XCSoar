@@ -85,12 +85,12 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
   if (data.title.empty())
     return;
 
-  canvas.set_text_color(look.get_title_color(data.title_color));
+  canvas.SetTextColor(look.get_title_color(data.title_color));
 
   const Font &font = *look.title.font;
-  canvas.select(font);
+  canvas.Select(font);
 
-  PixelSize tsize = canvas.text_size(data.title);
+  PixelSize tsize = canvas.CalcTextSize(data.title);
 
   PixelScalar halftextwidth = (title_rect.left + title_rect.right - tsize.cx) / 2;
   PixelScalar x = max(PixelScalar(1),
@@ -106,7 +106,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
     PixelScalar ybottom = title_rect.top + Layout::Scale(6)
       + font.GetCapitalHeight();
 
-    canvas.select(look.border_pen);
+    canvas.Select(look.border_pen);
 
     RasterPoint tab[8];
     tab[0].x = tab[1].x = title_rect.left;
@@ -119,8 +119,8 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
     tab[3].x = title_rect.left + halftextwidth - Layout::Scale(1);
     tab[4].x = title_rect.right - halftextwidth + Layout::Scale(1);
 
-    canvas.polyline(tab, 4);
-    canvas.polyline(tab + 4, 4);
+    canvas.DrawPolyline(tab, 4);
+    canvas.DrawPolyline(tab + 4, 4);
   }
 }
 
@@ -130,22 +130,22 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   if (data.value.empty())
     return;
 
-  canvas.set_text_color(look.get_value_color(data.value_color));
+  canvas.SetTextColor(look.get_value_color(data.value_color));
 
 #ifndef GNAV
   // Do text-based unit rendering on higher resolutions
   if (Layout::FastScale(10) > 18) {
-    canvas.select(*look.unit_font);
+    canvas.Select(*look.unit_font);
     PixelSize unit_size = UnitSymbolRenderer::GetSize(canvas, data.value_unit);
 
-    canvas.select(*look.value.font);
+    canvas.Select(*look.value.font);
     UPixelScalar ascent_height = look.value.font->GetAscentHeight();
 
-    PixelSize tsize = canvas.text_size(data.value);
+    PixelSize tsize = canvas.CalcTextSize(data.value);
     if (tsize.cx > value_rect.right - value_rect.left) {
-      canvas.select(*look.small_font);
+      canvas.Select(*look.small_font);
       ascent_height = look.small_font->GetAscentHeight();
-      tsize = canvas.text_size(data.value);
+      tsize = canvas.CalcTextSize(data.value);
     }
 
     PixelScalar x = max(PixelScalar(0),
@@ -161,7 +161,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
           UnitSymbolRenderer::GetAscentHeight(*look.unit_font,
                                               data.value_unit);
 
-      canvas.select(*look.unit_font);
+      canvas.Select(*look.unit_font);
       UnitSymbolRenderer::Draw(canvas,
                                { PixelScalar(x + tsize.cx),
                                  PixelScalar(y + ascent_height - unit_height) },
@@ -171,16 +171,16 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   }
 #endif
 
-  canvas.select(*look.value.font);
+  canvas.Select(*look.value.font);
   UPixelScalar ascent_height = look.value.font->GetAscentHeight();
   UPixelScalar capital_height = look.value.font->GetCapitalHeight();
 
-  PixelSize tsize = canvas.text_size(data.value);
+  PixelSize tsize = canvas.CalcTextSize(data.value);
   if (tsize.cx > value_rect.right - value_rect.left) {
-    canvas.select(*look.small_font);
+    canvas.Select(*look.small_font);
     ascent_height = look.small_font->GetAscentHeight();
     capital_height = look.small_font->GetCapitalHeight();
-    tsize = canvas.text_size(data.value);
+    tsize = canvas.CalcTextSize(data.value);
   }
 
   PixelSize unit_size;
@@ -227,12 +227,12 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
   if (data.comment.empty())
     return;
 
-  canvas.set_text_color(look.get_comment_color(data.comment_color));
+  canvas.SetTextColor(look.get_comment_color(data.comment_color));
 
   const Font &font = *look.comment.font;
-  canvas.select(font);
+  canvas.Select(font);
 
-  PixelSize tsize = canvas.text_size(data.comment);
+  PixelSize tsize = canvas.CalcTextSize(data.comment);
 
   PixelScalar x = max(PixelScalar(1),
                       PixelScalar((comment_rect.left + comment_rect.right
@@ -246,23 +246,23 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
 void
 InfoBoxWindow::PaintSelector(Canvas &canvas)
 {
-  canvas.select(look.selector_pen);
+  canvas.Select(look.selector_pen);
 
   const UPixelScalar width = canvas.get_width(), height = canvas.get_height();
 
-  canvas.two_lines(width - SELECTORWIDTH - 1, 0,
+  canvas.DrawTwoLines(width - SELECTORWIDTH - 1, 0,
                    width - 1, 0,
                    width - 1, SELECTORWIDTH + 1);
 
-  canvas.two_lines(width - 1, height - SELECTORWIDTH - 2,
+  canvas.DrawTwoLines(width - 1, height - SELECTORWIDTH - 2,
                    width - 1, height - 1,
                    width - SELECTORWIDTH - 1, height - 1);
 
-  canvas.two_lines(SELECTORWIDTH + 1, height - 1,
+  canvas.DrawTwoLines(SELECTORWIDTH + 1, height - 1,
                    0, height - 1,
                    0, height - SELECTORWIDTH - 2);
 
-  canvas.two_lines(0, SELECTORWIDTH + 1,
+  canvas.DrawTwoLines(0, SELECTORWIDTH + 1,
                    0, 0,
                    SELECTORWIDTH + 1, 0);
 }
@@ -275,14 +275,14 @@ InfoBoxWindow::Paint(Canvas &canvas)
   if (data.GetCustom() && content != NULL)
     content->on_custom_paint(*this, canvas);
 
-  canvas.background_transparent();
+  canvas.SetBackgroundTransparent();
 
   PaintTitle(canvas);
   PaintComment(canvas);
   PaintValue(canvas);
 
   if (border_kind != 0) {
-    canvas.select(look.border_pen);
+    canvas.Select(look.border_pen);
 
     const UPixelScalar width = canvas.get_width(),
       height = canvas.get_height();

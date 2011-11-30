@@ -103,7 +103,7 @@ OnPlaneListPaint(Canvas &canvas, const PixelRect rc, unsigned i)
   const Font &name_font = Fonts::MapBold;
   const Font &details_font = Fonts::MapLabel;
 
-  canvas.select(name_font);
+  canvas.Select(name_font);
 
   if (Profile::GetPathIsEqual(_T("PlanePath"), list[i].path)) {
     StaticString<256> buffer;
@@ -114,7 +114,7 @@ OnPlaneListPaint(Canvas &canvas, const PixelRect rc, unsigned i)
     canvas.text_clipped(rc.left + Layout::FastScale(2),
                         rc.top + Layout::FastScale(2), rc, list[i].name);
 
-  canvas.select(details_font);
+  canvas.Select(details_font);
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),

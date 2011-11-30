@@ -135,16 +135,16 @@ ProgressBar::on_paint(Canvas &canvas)
   }
 
 #ifdef EYE_CANDY
-  canvas.hollow_brush();
-  canvas.white_pen();
-  canvas.round_rectangle(0, 0, get_width(), get_height(),
+  canvas.SelectHollowBrush();
+  canvas.SelectWhitePen();
+  canvas.DrawRoundRectangle(0, 0, get_width(), get_height(),
                          get_height(), get_height());
-  canvas.white_brush();
-  canvas.round_rectangle(0, 0, position, get_height(),
+  canvas.SelectWhiteBrush();
+  canvas.DrawRoundRectangle(0, 0, position, get_height(),
                          get_height(), get_height());
 #else
-  canvas.fill_rectangle(0, 0, position, get_height(), COLOR_GREEN);
-  canvas.fill_rectangle(position, 0, get_width(), get_height(), COLOR_WHITE);
+  canvas.DrawFilledRectangle(0, 0, position, get_height(), COLOR_GREEN);
+  canvas.DrawFilledRectangle(position, 0, get_width(), get_height(), COLOR_WHITE);
 #endif
 }
 #endif

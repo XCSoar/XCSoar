@@ -64,18 +64,18 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc, const NMEAInfo &Basic
   Angle alpha2 = Angle::Degrees(sphi + alpha);
 
   // draw sky part
-  canvas.select(hpHorizonSky);
-  canvas.select(hbHorizonSky);
-  canvas.segment(center.x, center.y, radius, alpha2, alpha1, true);
+  canvas.Select(hpHorizonSky);
+  canvas.Select(hbHorizonSky);
+  canvas.DrawSegment(center.x, center.y, radius, alpha2, alpha1, true);
 
   // draw ground part
-  canvas.select(hpHorizonGround);
-  canvas.select(Graphics::hbGround);
-  canvas.segment(center.x, center.y, radius, alpha1, alpha2, true);
+  canvas.Select(hpHorizonGround);
+  canvas.Select(Graphics::hbGround);
+  canvas.DrawSegment(center.x, center.y, radius, alpha1, alpha2, true);
 
   // draw aircraft symbol
   Pen aircraft_pen(Layout::Scale(2), COLOR_BLACK);
-  canvas.select(aircraft_pen);
+  canvas.Select(aircraft_pen);
   canvas.line(center.x + radius / 2, center.y, center.x - radius / 2, center.y);
   canvas.line(center.x, center.y - radius / 4, center.x, center.y);
 

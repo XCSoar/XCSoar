@@ -230,7 +230,7 @@ GaugeVario::RenderClimb(Canvas &canvas)
   if (Basic().switch_state.flight_mode == SwitchInfo::MODE_CIRCLING)
     canvas.scale_copy(x, y, look.climb_bitmap, 12, 0, 12, 12);
   else if (is_persistent())
-    canvas.fill_rectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12),
+    canvas.DrawFilledRectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12),
                           look.background_color);
 }
 
@@ -238,9 +238,9 @@ void
 GaugeVario::RenderZero(Canvas &canvas)
 {
   if (look.inverse)
-    canvas.white_pen();
+    canvas.SelectWhitePen();
   else
-    canvas.black_pen();
+    canvas.SelectBlackPen();
 
   canvas.line(0, yoffset, Layout::Scale(17), yoffset);
   canvas.line(0, yoffset + 1, Layout::Scale(17), yoffset + 1);
@@ -268,26 +268,26 @@ GaugeVario::RenderVarioLine(Canvas &canvas, int i, int sink, bool clear)
   if (i == sink)
     return;
 
-  canvas.select(clear
+  canvas.Select(clear
                 ? look.thick_background_pen
                 : (i > sink ? look.thick_lift_pen : look.thick_sink_pen));
 
   if (i > sink)
-    canvas.polyline(lines + gmax + sink, i - sink);
+    canvas.DrawPolyline(lines + gmax + sink, i - sink);
   else
-    canvas.polyline(lines + gmax + i, sink - i);
+    canvas.DrawPolyline(lines + gmax + i, sink - i);
 
   if (!clear) {
-    canvas.null_pen();
+    canvas.SelectNullPen();
 
     // clear up naked (sink) edge of polygon, this gives it a nice
     // taper look
     if (look.inverse) {
-      canvas.black_brush();
+      canvas.SelectBlackBrush();
     } else {
-      canvas.white_brush();
+      canvas.SelectWhiteBrush();
     }
-    canvas.TriangleFan(getPolygon(sink), 3);
+    canvas.DrawTriangleFan(getPolygon(sink), 3);
   }
 }
 
@@ -296,19 +296,19 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
 {
   dirty = true;
 
-  canvas.null_pen();
+  canvas.SelectNullPen();
 
   // legacy behaviour
   if (clear ^ look.inverse) {
-    canvas.white_brush();
+    canvas.SelectWhiteBrush();
   } else {
-    canvas.black_brush();
+    canvas.SelectBlackBrush();
   }
 
   if (average)
-    canvas.polyline(getPolygon(i), 3);
+    canvas.DrawPolyline(getPolygon(i), 3);
   else
-    canvas.TriangleFan(getPolygon(i), 3);
+    canvas.DrawTriangleFan(getPolygon(i), 3);
 }
 
 // TODO code: Optimise vario rendering, this is slow
@@ -366,16 +366,16 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
     diLabel->InitDone = true;
   }
 
-  canvas.background_transparent();
+  canvas.SetBackgroundTransparent();
 
   if (!is_persistent() || (dirty && _tcscmp(diLabel->lastText, Label) != 0)) {
-    canvas.set_text_color(look.dimmed_text_color);
-    canvas.select(*look.text_font);
-    tsize = canvas.text_size(Label);
+    canvas.SetTextColor(look.dimmed_text_color);
+    canvas.Select(*look.text_font);
+    tsize = canvas.CalcTextSize(Label);
     diLabel->orgText.x = diLabel->recBkg.right - tsize.cx;
 
     if (is_persistent()) {
-      canvas.set_background_color(look.background_color);
+      canvas.SetBackgroundColor(look.background_color);
       canvas.text_opaque(diLabel->orgText.x, diLabel->orgText.y,
                          diLabel->recBkg, Label);
       diLabel->recBkg.left = diLabel->orgText.x;
@@ -387,11 +387,11 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
 
   if (!is_persistent() || (dirty && diValue->lastValue != Value)) {
     TCHAR Temp[18];
-    canvas.set_background_color(look.background_color);
-    canvas.set_text_color(look.text_color);
+    canvas.SetBackgroundColor(look.background_color);
+    canvas.SetTextColor(look.text_color);
     _stprintf(Temp, _T("%.1f"), (double)Value);
-    canvas.select(*look.value_font);
-    tsize = canvas.text_size(Temp);
+    canvas.Select(*look.value_font);
+    tsize = canvas.CalcTextSize(Temp);
     diValue->orgText.x = diValue->recBkg.right - tsize.cx;
 
     if (is_persistent()) {
@@ -459,14 +459,14 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
 
     if (is_persistent()) {
       // bottom (too slow)
-      canvas.fill_rectangle(x, ybottom + YOFFSET,
+      canvas.DrawFilledRectangle(x, ybottom + YOFFSET,
                             x + ARROWXSIZE * 2 + 1,
                             ybottom + YOFFSET + nary + ARROWYSIZE +
                             Layout::FastScale(2),
                             look.background_color);
 
       // top (too fast)
-      canvas.fill_rectangle(x, ytop - YOFFSET + 1,
+      canvas.DrawFilledRectangle(x, ytop - YOFFSET + 1,
                             x + ARROWXSIZE * 2  +1,
                             ytop - YOFFSET - nary + 1 - ARROWYSIZE -
                             Layout::FastScale(2),
@@ -475,20 +475,20 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
 
     RenderClimb(canvas);
 
-    canvas.null_pen();
+    canvas.SelectNullPen();
 
     if (look.colors) {
       if (positive(vdiff)) {
         // too slow
-        canvas.select(look.sink_brush);
+        canvas.Select(look.sink_brush);
       } else {
-        canvas.select(look.lift_brush);
+        canvas.Select(look.lift_brush);
       }
     } else {
       if (look.inverse)
-        canvas.white_brush();
+        canvas.SelectWhiteBrush();
       else
-        canvas.black_brush();
+        canvas.SelectBlackBrush();
     }
 
     if (positive(vdiff)) {
@@ -498,7 +498,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
 
       while (positive(vdiff)) {
         if (vdiff > DeltaVstep) {
-          canvas.rectangle(x, y, x + ARROWXSIZE * 2 + 1, y + ARROWYSIZE - 1);
+          canvas.Rectangle(x, y, x + ARROWXSIZE * 2 + 1, y + ARROWYSIZE - 1);
         } else {
           RasterPoint Arrow[3];
           Arrow[0].x = x;
@@ -507,7 +507,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
           Arrow[1].y = y + ARROWYSIZE - 1;
           Arrow[2].x = x + 2 * ARROWXSIZE;
           Arrow[2].y = y;
-          canvas.TriangleFan(Arrow, 3);
+          canvas.DrawTriangleFan(Arrow, 3);
         }
         vdiff -= DeltaVstep;
         y += ARROWYSIZE;
@@ -519,7 +519,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
 
       while (negative(vdiff)) {
         if (vdiff < -DeltaVstep) {
-          canvas.rectangle(x, y + 1, x + ARROWXSIZE * 2 + 1, y - ARROWYSIZE + 2);
+          canvas.Rectangle(x, y + 1, x + ARROWXSIZE * 2 + 1, y - ARROWYSIZE + 2);
         } else {
           RasterPoint Arrow[3];
           Arrow[0].x = x;
@@ -528,7 +528,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
           Arrow[1].y = y - ARROWYSIZE + 1;
           Arrow[2].x = x + 2 * ARROWXSIZE;
           Arrow[2].y = y;
-          canvas.TriangleFan(Arrow, 3);
+          canvas.DrawTriangleFan(Arrow, 3);
         }
         vdiff += DeltaVstep;
         y -= ARROWYSIZE;
@@ -576,8 +576,8 @@ GaugeVario::RenderBallast(Canvas &canvas)
       - look.text_font->GetCapitalHeight();
 
     // get max label size
-    canvas.select(*look.text_font);
-    tSize = canvas.text_size(TextBal);
+    canvas.Select(*look.text_font);
+    tSize = canvas.CalcTextSize(TextBal);
 
     // update back rect with max label size
     recLabelBk.right = recLabelBk.left + tSize.cx;
@@ -585,7 +585,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
       look.text_font->GetCapitalHeight();
 
     // get max value size
-    tSize = canvas.text_size(_T("100%"));
+    tSize = canvas.CalcTextSize(_T("100%"));
 
     recValueBk.right = recValueBk.left + tSize.cx;
     // update back rect with max label size
@@ -600,38 +600,38 @@ GaugeVario::RenderBallast(Canvas &canvas)
   if (!is_persistent() || BALLAST != lastBallast) {
     // ballast hase been changed
 
-    canvas.select(*look.text_font);
+    canvas.Select(*look.text_font);
 
     if (is_persistent())
-      canvas.set_background_color(look.background_color);
+      canvas.SetBackgroundColor(look.background_color);
     else
-      canvas.background_transparent();
+      canvas.SetBackgroundTransparent();
 
     if (is_persistent() || lastBallast == 0 || BALLAST == 0) {
       // new ballast is 0, hide label
       if (BALLAST > 0) {
-        canvas.set_text_color(look.dimmed_text_color);
+        canvas.SetTextColor(look.dimmed_text_color);
         // ols ballast was 0, show label
         if (is_persistent())
           canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBal);
         else
           canvas.text(orgLabel.x, orgLabel.y, TextBal);
       } else if (is_persistent())
-        canvas.fill_rectangle(recLabelBk, look.background_color);
+        canvas.DrawFilledRectangle(recLabelBk, look.background_color);
     }
 
     // new ballast 0, hide value
     if (BALLAST > 0) {
       TCHAR Temp[18];
       _stprintf(Temp, _T("%u%%"), BALLAST);
-      canvas.set_text_color(look.text_color);
+      canvas.SetTextColor(look.text_color);
 
       if (is_persistent())
         canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
       else
         canvas.text(orgValue.x, orgValue.y, Temp);
     } else if (is_persistent())
-      canvas.fill_rectangle(recValueBk, look.background_color);
+      canvas.DrawFilledRectangle(recValueBk, look.background_color);
 
     if (is_persistent())
       lastBallast = BALLAST;
@@ -669,8 +669,8 @@ GaugeVario::RenderBugs(Canvas &canvas)
       + look.text_font->GetAscentHeight()
       - look.text_font->GetCapitalHeight();
 
-    canvas.select(*look.text_font);
-    tSize = canvas.text_size(TextBug);
+    canvas.Select(*look.text_font);
+    tSize = canvas.CalcTextSize(TextBug);
 
     recLabelBk.right = recLabelBk.left + tSize.cx;
     recLabelBk.bottom = recLabelBk.top
@@ -678,7 +678,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
       + look.text_font->GetHeight()
       - look.text_font->GetAscentHeight();
 
-    tSize = canvas.text_size(_T("100%"));
+    tSize = canvas.CalcTextSize(_T("100%"));
 
     recValueBk.right = recValueBk.left + tSize.cx;
     recValueBk.bottom = recValueBk.top +
@@ -690,34 +690,34 @@ GaugeVario::RenderBugs(Canvas &canvas)
   int BUGS = iround((fixed_one - Calculated().common_stats.current_bugs) * 100);
   if (is_persistent() || BUGS != lastBugs) {
 
-    canvas.select(*look.text_font);
+    canvas.Select(*look.text_font);
 
     if (is_persistent())
-      canvas.set_background_color(look.background_color);
+      canvas.SetBackgroundColor(look.background_color);
     else
-      canvas.background_transparent();
+      canvas.SetBackgroundTransparent();
 
     if (is_persistent() || lastBugs < 1 || BUGS < 1) {
       if (BUGS > 0) {
-        canvas.set_text_color(look.dimmed_text_color);
+        canvas.SetTextColor(look.dimmed_text_color);
         if (is_persistent())
           canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBug);
         else
           canvas.text(orgLabel.x, orgLabel.y, TextBug);
       } else if (is_persistent())
-        canvas.fill_rectangle(recLabelBk, look.background_color);
+        canvas.DrawFilledRectangle(recLabelBk, look.background_color);
     }
 
     if (BUGS > 0) {
       TCHAR Temp[18];
       _stprintf(Temp, _T("%d%%"), BUGS);
-      canvas.set_text_color(look.text_color);
+      canvas.SetTextColor(look.text_color);
       if (is_persistent())
         canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
       else 
         canvas.text(orgValue.x, orgValue.y, Temp);
     } else if (is_persistent())
-      canvas.fill_rectangle(recValueBk, look.background_color);
+      canvas.DrawFilledRectangle(recValueBk, look.background_color);
 
     if (is_persistent())
       lastBugs = BUGS;

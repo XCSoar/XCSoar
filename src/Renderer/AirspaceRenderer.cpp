@@ -175,8 +175,8 @@ public:
         // draw a ring inside the circle
         Color color = airspace_look.colors[settings.colours[airspace.GetType()]];
         Pen pen_donut(pen_thick.GetWidth() / 2, color.WithAlpha(90));
-        canvas.hollow_brush();
-        canvas.select(pen_donut);
+        canvas.SelectHollowBrush();
+        canvas.Select(pen_donut);
         canvas.circle(screen_center.x, screen_center.y,
                       screen_radius - pen_thick.GetWidth() / 4);
       }
@@ -230,10 +230,10 @@ private:
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     if (settings.black_outline)
-      canvas.black_pen();
+      canvas.SelectBlackPen();
     else
-      canvas.select(airspace_look.pens[airspace.GetType()]);
-    canvas.hollow_brush();
+      canvas.Select(airspace_look.pens[airspace.GetType()]);
+    canvas.SelectHollowBrush();
   }
 
   void setup_interior(const AbstractAirspace &airspace,
@@ -247,8 +247,8 @@ private:
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
     Color color = airspace_look.colors[settings.colours[airspace.GetType()]];
-    canvas.select(Brush(color.WithAlpha(90)));
-    canvas.null_pen();
+    canvas.Select(Brush(color.WithAlpha(90)));
+    canvas.SelectNullPen();
   }
 
   void set_fillstencil() {
@@ -257,8 +257,8 @@ private:
     glStencilMask(1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-    canvas.hollow_brush();
-    canvas.select(pen_thick);
+    canvas.SelectHollowBrush();
+    canvas.Select(pen_thick);
   }
 
   void clear_fillstencil() {
@@ -267,8 +267,8 @@ private:
     glStencilMask(1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_ZERO);
 
-    canvas.hollow_brush();
-    canvas.select(pen_thick);
+    canvas.SelectHollowBrush();
+    canvas.Select(pen_thick);
   }
 };
 
@@ -329,16 +329,16 @@ public:
 private:
   void setup_outline(const AbstractAirspace &airspace) {
     if (settings.black_outline)
-      canvas.black_pen();
+      canvas.SelectBlackPen();
     else
-      canvas.select(airspace_look.pens[airspace.GetType()]);
-    canvas.hollow_brush();
+      canvas.Select(airspace_look.pens[airspace.GetType()]);
+    canvas.SelectHollowBrush();
   }
 
   void setup_interior(const AbstractAirspace &airspace) {
     Color color = airspace_look.colors[settings.colours[airspace.GetType()]];
-    canvas.select(Brush(color.WithAlpha(90)));
-    canvas.null_pen();
+    canvas.Select(Brush(color.WithAlpha(90)));
+    canvas.SelectNullPen();
   }
 };
 
@@ -413,34 +413,34 @@ private:
     const unsigned color_index = settings.colours[airspace.GetType()];
 
 #ifndef HAVE_HATCHED_BRUSH
-    m_buffer.select(airspace_look.solid_brushes[color_index]);
+    m_buffer.Select(airspace_look.solid_brushes[color_index]);
 #else /* HAVE_HATCHED_BRUSH */
 
 #ifdef HAVE_ALPHA_BLEND
     if (settings.transparency && AlphaBlendAvailable()) {
-      m_buffer.select(airspace_look.solid_brushes[color_index]);
+      m_buffer.Select(airspace_look.solid_brushes[color_index]);
     } else {
 #endif
       // this color is used as the black bit
-      m_buffer.set_text_color(LightColor(airspace_look.colors[color_index]));
+      m_buffer.SetTextColor(LightColor(airspace_look.colors[color_index]));
 
       // get brush, can be solid or a 1bpp bitmap
-      m_buffer.select(airspace_look.brushes[settings.brushes[airspace.GetType()]]);
+      m_buffer.Select(airspace_look.brushes[settings.brushes[airspace.GetType()]]);
 
-      m_buffer.background_opaque();
-      m_buffer.set_background_color(COLOR_WHITE);
+      m_buffer.SetBackgroundOpaque();
+      m_buffer.SetBackgroundColor(COLOR_WHITE);
 #ifdef HAVE_ALPHA_BLEND
     }
 #endif
 
-    m_buffer.null_pen();
+    m_buffer.SelectNullPen();
 
     if (m_warnings.is_warning(airspace) || m_warnings.is_inside(airspace)) {
-      m_stencil.black_brush();
-      m_stencil.select(pen_medium);
+      m_stencil.SelectBlackBrush();
+      m_stencil.Select(pen_medium);
     } else {
-      m_stencil.select(pen_thick);
-      m_stencil.hollow_brush();
+      m_stencil.Select(pen_thick);
+      m_stencil.SelectHollowBrush();
     }
 
 #endif /* HAVE_HATCHED_BRUSH */
@@ -467,14 +467,14 @@ public:
      airspace_look(_airspace_look),
      black(_black) {
     if (black)
-      canvas.black_pen();
-    canvas.hollow_brush();
+      canvas.SelectBlackPen();
+    canvas.SelectHollowBrush();
   }
 
 protected:
   void setup_canvas(const AbstractAirspace &airspace) {
     if (!black)
-      canvas.select(airspace_look.pens[airspace.GetType()]);
+      canvas.Select(airspace_look.pens[airspace.GetType()]);
   }
 
 public:

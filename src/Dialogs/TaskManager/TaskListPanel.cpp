@@ -108,7 +108,7 @@ TaskListPanel::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   OrderedTask* ordered_task = get_task_to_display();
 
   if (ordered_task == NULL) {
-    canvas.clear_white();
+    canvas.ClearWhite();
     return;
   }
 

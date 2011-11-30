@@ -38,12 +38,12 @@ Canvas::line(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by)
   ::LineTo(dc, bx, by);
 #else
   RasterPoint p[2] = {{ax, ay}, {bx, by}};
-  polyline(p, 2);
+  DrawPolyline(p, 2);
 #endif
 }
 
 void
-Canvas::two_lines(PixelScalar ax, PixelScalar ay,
+Canvas::DrawTwoLines(PixelScalar ax, PixelScalar ay,
                   PixelScalar bx, PixelScalar by,
                   PixelScalar cx, PixelScalar cy)
 {
@@ -60,16 +60,16 @@ Canvas::two_lines(PixelScalar ax, PixelScalar ay,
   p[0].y = ay;
   p[1].x = bx;
   p[1].y = by;
-  polyline(p, 2);
+  DrawPolyline(p, 2);
 
   p[0].x = cx;
   p[0].y = cy;
-  polyline(p, 2);
+  DrawPolyline(p, 2);
 #endif
 }
 
 void
-Canvas::segment(PixelScalar x, PixelScalar y, UPixelScalar radius,
+Canvas::DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
                 Angle start, Angle end, bool horizon)
 {
   assert(defined());
@@ -78,7 +78,7 @@ Canvas::segment(PixelScalar x, PixelScalar y, UPixelScalar radius,
 }
 
 void
-Canvas::annulus(PixelScalar x, PixelScalar y,
+Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
                 UPixelScalar small_radius, UPixelScalar big_radius,
                 Angle start, Angle end)
 {
@@ -88,7 +88,7 @@ Canvas::annulus(PixelScalar x, PixelScalar y,
 }
 
 void
-Canvas::keyhole(PixelScalar x, PixelScalar y,
+Canvas::DrawKeyhole(PixelScalar x, PixelScalar y,
                 UPixelScalar small_radius, UPixelScalar big_radius,
                 Angle start, Angle end)
 {
@@ -98,7 +98,7 @@ Canvas::keyhole(PixelScalar x, PixelScalar y,
 }
 
 const PixelSize
-Canvas::text_size(const TCHAR *text, size_t length) const
+Canvas::CalcTextSize(const TCHAR *text, size_t length) const
 {
   assert(defined());
 
@@ -108,13 +108,13 @@ Canvas::text_size(const TCHAR *text, size_t length) const
 }
 
 const PixelSize
-Canvas::text_size(const TCHAR *text) const
+Canvas::CalcTextSize(const TCHAR *text) const
 {
-  return text_size(text, _tcslen(text));
+  return CalcTextSize(text, _tcslen(text));
 }
 
 UPixelScalar
-Canvas::text_height(const TCHAR *text) const
+Canvas::CalcTextHeight(const TCHAR *text) const
 {
   assert(defined());
 
@@ -161,7 +161,7 @@ void
 Canvas::text_clipped(PixelScalar x, PixelScalar y, UPixelScalar width,
                      const TCHAR *text)
 {
-  const PixelSize size = text_size(text);
+  const PixelSize size = CalcTextSize(text);
 
   PixelRect rc;
   ::SetRect(&rc, x, y, x + min(width, (UPixelScalar)size.cx), y + size.cy);

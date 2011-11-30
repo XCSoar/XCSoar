@@ -45,7 +45,7 @@ static LogoView *logo;
 static void
 OnLogoPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
-  canvas.clear_white();
+  canvas.ClearWhite();
   logo->draw(canvas, Sender->get_client_rect());
 }
 

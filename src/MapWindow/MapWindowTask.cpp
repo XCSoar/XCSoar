@@ -93,8 +93,8 @@ MapWindow::DrawRoute(Canvas &canvas)
 
   ScreenClosestPoint(p[r_size-1], p[r_size-2], p[r_size-1], &p[r_size-1], Layout::Scale(20));
 
-  canvas.select(look.task.bearing_pen);
-  canvas.polyline(p, r_size);
+  canvas.Select(look.task.bearing_pen);
+  canvas.DrawPolyline(p, r_size);
 }
 
 void
@@ -131,9 +131,9 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
 
   GeoPoint start = Basic().location;
   
-  canvas.select(Fonts::Title);
-  canvas.set_text_color(COLOR_BLACK);
-  canvas.background_transparent();
+  canvas.Select(Fonts::Title);
+  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetBackgroundTransparent();
   
   GeoPoint dloc;
   int ilast = 0;
@@ -149,7 +149,7 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
       TCHAR Buffer[5];
       _stprintf(Buffer, _T("%d"), idist);
       RasterPoint sc = render_projection.GeoToScreen(dloc);
-      PixelSize tsize = canvas.text_size(Buffer);
+      PixelSize tsize = canvas.CalcTextSize(Buffer);
       canvas.text(sc.x - tsize.cx / 2, sc.y - tsize.cy / 2, Buffer);
       ilast = idist;
     }

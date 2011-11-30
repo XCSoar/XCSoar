@@ -79,19 +79,19 @@ public:
 
   void FinishPolyline(Canvas &canvas) {
     if (mode != OUTLINE) {
-      canvas.select(*pen);
+      canvas.Select(*pen);
       mode = OUTLINE;
     }
 
-    canvas.polyline(points.begin(), num_points);
+    canvas.DrawPolyline(points.begin(), num_points);
 
     num_points = 0;
   }
 
   void FinishPolygon(Canvas &canvas) {
     if (mode != SOLID) {
-      canvas.null_pen();
-      canvas.select(*brush);
+      canvas.SelectNullPen();
+      canvas.Select(*brush);
       mode = SOLID;
     }
 

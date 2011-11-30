@@ -52,32 +52,32 @@ OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    canvas.select(Brush(color.WithAlpha(64)));
+    canvas.Select(Brush(color.WithAlpha(64)));
 #elif defined(USE_GDI)
-    canvas.mix_mask();
+    canvas.SetMixMask();
 
     // this color is used as the black bit
-    canvas.set_text_color(color);
+    canvas.SetTextColor(color);
     // get brush, can be solid or a 1bpp bitmap
-    canvas.select(airspace_look.brushes[settings.brushes[AATASK]]);
+    canvas.Select(airspace_look.brushes[settings.brushes[AATASK]]);
 #else /* !GDI */
-    canvas.select(Brush(color));
+    canvas.Select(Brush(color));
 #endif /* !GDI */
 
-    canvas.null_pen();
+    canvas.SelectNullPen();
     
     return;
   }
 
-  canvas.hollow_brush();
+  canvas.SelectHollowBrush();
 
   if (layer != LAYER_ACTIVE || offset < 0)
-    canvas.select(task_look.oz_inactive_pen);
+    canvas.Select(task_look.oz_inactive_pen);
   else if (offset == 0)
     /* current task point */
-    canvas.select(task_look.oz_current_pen);
+    canvas.Select(task_look.oz_current_pen);
   else
-    canvas.select(task_look.oz_active_pen);
+    canvas.Select(task_look.oz_active_pen);
 }
 
 void
@@ -87,7 +87,7 @@ OZRenderer::Finish(Canvas &canvas, Layer layer) const
 #ifdef ENABLE_OPENGL
     glDisable(GL_BLEND);
 #elif defined(USE_GDI)
-    canvas.mix_copy();
+    canvas.SetMixCopy();
 #endif /* GDI */
   }
 }
@@ -109,7 +109,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer,
 
     RasterPoint p_center = projection.GeoToScreen(oz.get_location());
     if (layer != LAYER_ACTIVE)
-      canvas.segment(p_center.x, p_center.y,
+      canvas.DrawSegment(p_center.x, p_center.y,
                      projection.GeoToScreenDistance(oz.getRadius()),
                      oz.getStartRadial() - projection.GetScreenAngle(),
                      oz.getEndRadial() - projection.GetScreenAngle());
@@ -117,7 +117,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer,
       RasterPoint p_start = projection.GeoToScreen(oz.get_SectorStart());
       RasterPoint p_end = projection.GeoToScreen(oz.get_SectorEnd());
 
-      canvas.two_lines(p_start, p_center, p_end);
+      canvas.DrawTwoLines(p_start, p_center, p_end);
     }
 
     break;
@@ -142,14 +142,14 @@ OZRenderer::Draw(Canvas &canvas, Layer layer,
     if (layer != LAYER_INACTIVE) {
       RasterPoint p_center = projection.GeoToScreen(oz.get_location());
 
-      canvas.segment(p_center.x, p_center.y,
+      canvas.DrawSegment(p_center.x, p_center.y,
                      projection.GeoToScreenDistance(oz.getRadius()),
                      oz.getStartRadial() - projection.GetScreenAngle(),
                      oz.getEndRadial() - projection.GetScreenAngle());
 
       RasterPoint p_start = projection.GeoToScreen(oz.get_SectorStart());
       RasterPoint p_end = projection.GeoToScreen(oz.get_SectorEnd());
-      canvas.two_lines(p_start, p_center, p_end);
+      canvas.DrawTwoLines(p_start, p_center, p_end);
     }
 
     break;
@@ -160,7 +160,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer,
   case ObservationZonePoint::BGAENHANCEDOPTION: {
     const SectorZone &oz = (const SectorZone &)_oz;
     RasterPoint p_center = projection.GeoToScreen(oz.get_location());
-    canvas.keyhole(p_center.x, p_center.y,
+    canvas.DrawKeyhole(p_center.x, p_center.y,
                    projection.GeoToScreenDistance(fixed(500)),
                    projection.GeoToScreenDistance(oz.getRadius()),
                    oz.getStartRadial() - projection.GetScreenAngle(),
@@ -172,7 +172,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer,
   case ObservationZonePoint::ANNULAR_SECTOR: {
     const AnnularSectorZone &oz = (const AnnularSectorZone &)_oz;
     RasterPoint p_center = projection.GeoToScreen(oz.get_location());
-    canvas.annulus(p_center.x, p_center.y,
+    canvas.DrawAnnulus(p_center.x, p_center.y,
                    projection.GeoToScreenDistance(oz.getInnerRadius()),
                    projection.GeoToScreenDistance(oz.getRadius()),
                    oz.getStartRadial() - projection.GetScreenAngle(),

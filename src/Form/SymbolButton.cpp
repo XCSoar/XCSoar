@@ -40,13 +40,13 @@ WndSymbolButton::on_paint(Canvas &canvas)
   PixelRect rc = get_client_rect();
 
   // Draw button to the background
-  canvas.draw_button(rc, is_down());
+  canvas.DrawButton(rc, is_down());
 
   // Draw focus rectangle
   if (has_focus()) {
     PixelRect focus_rc = rc;
     InflateRect(&focus_rc, -3, -3);
-    canvas.draw_focus(focus_rc);
+    canvas.DrawFocusRectangle(focus_rc);
   }
 
   // If button has text on it
@@ -58,11 +58,11 @@ WndSymbolButton::on_paint(Canvas &canvas)
   if (is_down())
     OffsetRect(&rc, 1, 1);
 
-  canvas.null_pen();
+  canvas.SelectNullPen();
   if (is_enabled())
-    canvas.black_brush();
+    canvas.SelectBlackBrush();
   else
-    canvas.select(disabled_brush);
+    canvas.Select(disabled_brush);
 
   const char ch = (char)caption[0];
 
@@ -78,7 +78,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
     Arrow[2].x = (rc.left + rc.right) / 2 + (ch == '<' ? size : -size);
     Arrow[2].y = (rc.top + rc.bottom) / 2 - size;
 
-    canvas.TriangleFan(Arrow, 3);
+    canvas.DrawTriangleFan(Arrow, 3);
   }
 
   // Draw arrow symbols instead of v and ^
@@ -97,20 +97,20 @@ WndSymbolButton::on_paint(Canvas &canvas)
     Arrow[2].y = (rc.top + rc.bottom) / 2 +
                  (ch == '^' ? size : -size);
 
-    canvas.TriangleFan(Arrow, 3);
+    canvas.DrawTriangleFan(Arrow, 3);
   }
 
   // Draw symbols instead of + and -
   else if (ch == '+' || ch == '-') {
     int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
 
-    canvas.rectangle((rc.left + rc.right) / 2 - size,
+    canvas.Rectangle((rc.left + rc.right) / 2 - size,
                      (rc.top + rc.bottom) / 2 - size / 3,
                      (rc.left + rc.right) / 2 + size,
                      (rc.top + rc.bottom) / 2 + size / 3);
 
     if (ch == '+')
-      canvas.rectangle((rc.left + rc.right) / 2 - size / 3,
+      canvas.Rectangle((rc.left + rc.right) / 2 - size / 3,
                        (rc.top + rc.bottom) / 2 - size,
                        (rc.left + rc.right) / 2 + size / 3,
                        (rc.top + rc.bottom) / 2 + size);
@@ -119,7 +119,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
   // Draw Fly bitmap
   else if (caption == _T("Fly")) {
     Bitmap launcher1_bitmap(IDB_LAUNCHER1);
-    canvas.clear_white();
+    canvas.ClearWhite();
     if (is_down())
       canvas.invert_stretch_transparent(launcher1_bitmap, COLOR_YELLOW);
     else
@@ -129,7 +129,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
   // Draw Simulator bitmap
   else if (caption == _T("Simulator")) {
     Bitmap launcher2_bitmap(IDB_LAUNCHER2);
-    canvas.clear_white();
+    canvas.ClearWhite();
     if (is_down())
       canvas.invert_stretch_transparent(launcher2_bitmap, COLOR_YELLOW);
     else
@@ -138,15 +138,15 @@ WndSymbolButton::on_paint(Canvas &canvas)
 
   else if (caption == _T("Green")) {
     InflateRect(&rc, -3, -3);
-    canvas.fill_rectangle(rc, Color(0x74, 0xFF, 0));
+    canvas.DrawFilledRectangle(rc, Color(0x74, 0xFF, 0));
   } else if (caption == _T("Blue")) {
     InflateRect(&rc, -3, -3);
-    canvas.fill_rectangle(rc, Color(0, 0x90, 0xFF));
+    canvas.DrawFilledRectangle(rc, Color(0, 0x90, 0xFF));
   } else if (caption == _T("Magenta")) {
     InflateRect(&rc, -3, -3);
-    canvas.fill_rectangle(rc, Color(0xFF, 0, 0xCB));
+    canvas.DrawFilledRectangle(rc, Color(0xFF, 0, 0xCB));
   } else if (caption == _T("Yellow")) {
     InflateRect(&rc, -3, -3);
-    canvas.fill_rectangle(rc, Color(0xFF, 0xE8, 0));
+    canvas.DrawFilledRectangle(rc, Color(0xFF, 0xE8, 0));
   }
 }

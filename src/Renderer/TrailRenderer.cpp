@@ -149,16 +149,16 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
         unsigned index((it->GetAltitude() - value_min) / (value_max - value_min)
                        * (TrailLook::NUMSNAILCOLORS - 1));
         index = max(0u, min(TrailLook::NUMSNAILCOLORS - 1, index));
-        canvas.select(look.hpSnail[index]);
+        canvas.Select(look.hpSnail[index]);
       } else {
         const fixed colour_vario = negative(it->GetVario())
           ? - it->GetVario() / value_min
           : it->GetVario() / value_max ;
 
         if (!scaled_trail)
-          canvas.select(look.hpSnail[GetSnailColorIndex(colour_vario)]);
+          canvas.Select(look.hpSnail[GetSnailColorIndex(colour_vario)]);
         else
-          canvas.select(look.hpSnailVario[GetSnailColorIndex(colour_vario)]);
+          canvas.Select(look.hpSnailVario[GetSnailColorIndex(colour_vario)]);
       }
       canvas.line_piece(last_point, pt);
     }
@@ -180,13 +180,13 @@ TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
        i != end; ++i)
     points[n++] = projection.GeoToScreen(i->get_location());
 
-  canvas.polyline(points.begin(), n);
+  canvas.DrawPolyline(points.begin(), n);
 }
 
 void
 TrailRenderer::Draw(Canvas &canvas, const WindowProjection &projection)
 {
-  canvas.select(look.trace_pen);
+  canvas.Select(look.trace_pen);
   DrawTraceVector(canvas, projection, trace);
 }
 
@@ -209,6 +209,6 @@ TrailRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
   for (auto i = trace.begin(), end = trace.end(); i != end; ++i)
     points[n++] = projection.GeoToScreen(i->get_location());
 
-  canvas.polyline(points.begin(), n);
+  canvas.DrawPolyline(points.begin(), n);
 }
 

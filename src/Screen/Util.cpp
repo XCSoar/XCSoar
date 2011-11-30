@@ -101,7 +101,7 @@ Segment(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
 
   assert(npoly <= 66);
   if (npoly) {
-    canvas.TriangleFan(pt, npoly);
+    canvas.DrawTriangleFan(pt, npoly);
   }
 
   return true;

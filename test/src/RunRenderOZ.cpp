@@ -165,7 +165,7 @@ protected:
 void
 OZWindow::on_paint(Canvas &canvas)
 {
-  canvas.clear_white();
+  canvas.ClearWhite();
   if (oz == NULL)
     return;
 

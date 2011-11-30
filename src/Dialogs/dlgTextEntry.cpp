@@ -69,11 +69,11 @@ OnTextPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
   canvas.clear(Color(0x40, 0x40, 0x00));
 
   // Do the actual painting of the text
-  canvas.select(Fonts::Map);
+  canvas.Select(Fonts::Map);
 
-  PixelSize tsize = canvas.text_size(edittext);
-  PixelSize tsizec = canvas.text_size(edittext, cursor);
-  PixelSize tsizea = canvas.text_size(edittext, cursor + 1);
+  PixelSize tsize = canvas.CalcTextSize(edittext);
+  PixelSize tsizec = canvas.CalcTextSize(edittext, cursor);
+  PixelSize tsizea = canvas.CalcTextSize(edittext, cursor + 1);
 
   RasterPoint p[5];
   p[0].x = 10;
@@ -91,11 +91,11 @@ OnTextPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
   p[4].x = p[3].x;
   p[4].y = p[3].y - 2;
 
-  canvas.white_pen();
-  canvas.polyline(p + 1, 4);
+  canvas.SelectWhitePen();
+  canvas.DrawPolyline(p + 1, 4);
 
-  canvas.background_transparent();
-  canvas.set_text_color(COLOR_WHITE);
+  canvas.SetBackgroundTransparent();
+  canvas.SetTextColor(COLOR_WHITE);
   canvas.text(p[0].x, p[0].y, edittext);
 }
 

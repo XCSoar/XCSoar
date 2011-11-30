@@ -50,19 +50,19 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
   // Select brush depending on AlarmLevel
   switch (traffic.alarm_level) {
   case FlarmTraffic::ALARM_LOW:
-    canvas.select(traffic_look.warning_brush);
+    canvas.Select(traffic_look.warning_brush);
     break;
   case FlarmTraffic::ALARM_IMPORTANT:
   case FlarmTraffic::ALARM_URGENT:
-    canvas.select(traffic_look.alarm_brush);
+    canvas.Select(traffic_look.alarm_brush);
     break;
   case FlarmTraffic::ALARM_NONE:
-    canvas.select(traffic_look.safe_brush);
+    canvas.Select(traffic_look.safe_brush);
     break;
   }
 
   // Select black pen
-  canvas.black_pen();
+  canvas.SelectBlackPen();
 
   // Rotate and shift the arrow to the right position and angle
   PolygonRotateShift(Arrow, 5, pt.x, pt.y, angle);

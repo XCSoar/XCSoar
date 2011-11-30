@@ -220,9 +220,9 @@ FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
     return;
 
   const TCHAR* str = _("No Traffic");
-  canvas.select(look.no_traffic_font);
-  PixelSize ts = canvas.text_size(str);
-  canvas.set_text_color(look.default_color);
+  canvas.Select(look.no_traffic_font);
+  PixelSize ts = canvas.CalcTextSize(str);
+  canvas.SetTextColor(look.default_color);
   canvas.text(radar_mid.x - (ts.cx / 2), radar_mid.y - (radius / 2), str);
 }
 
@@ -349,8 +349,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   }
 
   if (circles > 0) {
-    canvas.hollow_brush();
-    canvas.select(*circle_pen);
+    canvas.SelectHollowBrush();
+    canvas.Select(*circle_pen);
     canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
     if (circles == 2)
       canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 10 : 19));
@@ -388,11 +388,11 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
                                              Angle::Zero() : heading));
 
   // Select pen and brush
-  canvas.select(*target_pen);
+  canvas.Select(*target_pen);
   if (hollow_brush)
-    canvas.hollow_brush();
+    canvas.SelectHollowBrush();
   else
-    canvas.select(*target_brush);
+    canvas.Select(*target_brush);
 
   // Draw the polygon
   canvas.polygon(Arrow, 5);
@@ -413,12 +413,12 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     buffer.Format(_T("%d"), abs(relalt));
 
     // Select font
-    canvas.background_transparent();
-    canvas.select(look.side_info_font);
-    canvas.set_text_color(*text_color);
+    canvas.SetBackgroundTransparent();
+    canvas.Select(look.side_info_font);
+    canvas.SetTextColor(*text_color);
 
     // Calculate size of the output string
-    PixelSize tsize = canvas.text_size(buffer);
+    PixelSize tsize = canvas.CalcTextSize(buffer);
 
     UPixelScalar dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
 
@@ -426,8 +426,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     canvas.text(sc[i].x + dist, sc[i].y - tsize.cy / 2, buffer);
 
     // Set target_brush for the up/down arrow
-    canvas.select(*arrow_brush);
-    canvas.null_pen();
+    canvas.Select(*arrow_brush);
+    canvas.SelectNullPen();
 
     // Prepare the triangular polygon
     RasterPoint triangle[4];
@@ -455,7 +455,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     triangle[3].y = triangle[0].y;
 
     // Draw the arrow
-    canvas.TriangleFan(triangle, 4);
+    canvas.DrawTriangleFan(triangle, 4);
 
     return;
   }
@@ -474,8 +474,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       return;
 
   // Select font
-  canvas.background_transparent();
-  canvas.select(look.side_info_font);
+  canvas.SetBackgroundTransparent();
+  canvas.Select(look.side_info_font);
 
   // Format string
   TCHAR tmp[10];
@@ -485,17 +485,17 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   else
     Units::FormatUserArrival(traffic.relative_altitude, tmp, 10, true);
 
-  PixelSize sz = canvas.text_size(tmp);
+  PixelSize sz = canvas.CalcTextSize(tmp);
 
   // Draw vertical speed shadow
-  canvas.set_text_color(COLOR_WHITE);
+  canvas.SetTextColor(COLOR_WHITE);
   canvas.text(sc[i].x + Layout::FastScale(11) + 1,
               sc[i].y - sz.cy / 2 + 1, tmp);
   canvas.text(sc[i].x + Layout::FastScale(11) - 1,
               sc[i].y - sz.cy / 2 - 1, tmp);
 
   // Select color
-  canvas.set_text_color(*text_color);
+  canvas.SetTextColor(*text_color);
 
   // Draw vertical speed
   canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy / 2, tmp);
@@ -548,7 +548,7 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
 void
 FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 {
-  canvas.select(look.plane_pen);
+  canvas.Select(look.plane_pen);
 
   PixelScalar x1 = Layout::FastScale(small ? 5 : 10);
   PixelScalar y1 = -Layout::FastScale(small ? 1 : 2);
@@ -616,13 +616,13 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
     y = p.second;
   }
 
-  canvas.set_text_color(look.background_color);
-  canvas.select(look.radar_pen);
-  canvas.select(look.radar_brush);
-  canvas.background_transparent();
-  canvas.select(look.label_font);
+  canvas.SetTextColor(look.background_color);
+  canvas.Select(look.radar_pen);
+  canvas.Select(look.radar_brush);
+  canvas.SetBackgroundTransparent();
+  canvas.Select(look.label_font);
 
-  PixelSize s = canvas.text_size(_T("N"));
+  PixelSize s = canvas.CalcTextSize(_T("N"));
   canvas.circle(radar_mid.x + iround(x * radius),
                 radar_mid.y + iround(y * radius), s.cy * 0.65);
   canvas.text(radar_mid.x + iround(x * radius) - s.cx / 2,
@@ -636,9 +636,9 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
 void
 FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
 {
-  canvas.hollow_brush();
-  canvas.select(look.radar_pen);
-  canvas.set_text_color(look.radar_color);
+  canvas.SelectHollowBrush();
+  canvas.Select(look.radar_pen);
+  canvas.SetTextColor(look.radar_color);
 
   // Paint circles
   canvas.circle(radar_mid.x, radar_mid.y, radius);
@@ -650,24 +650,24 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
     return;
 
   // Paint zoom strings
-  canvas.select(look.label_font);
-  canvas.background_opaque();
-  canvas.set_background_color(look.background_color);
+  canvas.Select(look.label_font);
+  canvas.SetBackgroundOpaque();
+  canvas.SetBackgroundColor(look.background_color);
 
   TCHAR distance_string[10];
   Units::FormatUserDistance(distance, distance_string,
                             ARRAY_SIZE(distance_string));
-  PixelSize s = canvas.text_size(distance_string);
+  PixelSize s = canvas.CalcTextSize(distance_string);
   canvas.text(radar_mid.x - s.cx / 2,
               radar_mid.y + radius - s.cy * 0.75, distance_string);
 
   Units::FormatUserDistance(distance / 2, distance_string,
                             ARRAY_SIZE(distance_string));
-  s = canvas.text_size(distance_string);
+  s = canvas.CalcTextSize(distance_string);
   canvas.text(radar_mid.x - s.cx / 2,
               radar_mid.y + radius / 2 - s.cy * 0.75, distance_string);
 
-  canvas.background_transparent();
+  canvas.SetBackgroundTransparent();
 
   PaintNorth(canvas);
 }
@@ -696,7 +696,7 @@ FlarmTrafficWindow::Paint(Canvas &canvas)
 void
 FlarmTrafficWindow::on_paint(Canvas &canvas)
 {
-  canvas.clear_white();
+  canvas.ClearWhite();
   Paint(canvas);
 }
 

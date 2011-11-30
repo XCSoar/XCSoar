@@ -72,15 +72,15 @@ PixelSize
 Font::TextSize(const TCHAR *text) const
 {
   AnyCanvas canvas;
-  canvas.select(*this);
-  return canvas.text_size(text);
+  canvas.Select(*this);
+  return canvas.CalcTextSize(text);
 }
 
 void
 Font::CalculateHeights()
 {
   VirtualCanvas canvas(1, 1);
-  canvas.select(*this);
+  canvas.Select(*this);
 
   TEXTMETRIC tm;
   ::GetTextMetrics(canvas, &tm);
@@ -94,10 +94,10 @@ Font::CalculateHeights()
     BufferCanvas buffer(canvas, tm.tmAveCharWidth, tm.tmHeight);
     const HWColor white = buffer.map(COLOR_WHITE);
 
-    buffer.background_opaque();
-    buffer.set_background_color(COLOR_WHITE);
-    buffer.set_text_color(COLOR_BLACK);
-    buffer.select(*this);
+    buffer.SetBackgroundOpaque();
+    buffer.SetBackgroundColor(COLOR_WHITE);
+    buffer.SetTextColor(COLOR_BLACK);
+    buffer.Select(*this);
 
     RECT rec;
     rec.left = 0;

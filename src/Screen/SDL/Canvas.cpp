@@ -52,7 +52,7 @@ Canvas::reset()
 }
 
 void
-Canvas::polyline(const RasterPoint *lppt, unsigned cPoints)
+Canvas::DrawPolyline(const RasterPoint *lppt, unsigned cPoints)
 {
   for (unsigned i = 1; i < cPoints; ++i)
     line(lppt[i - 1].x, lppt[i - 1].y, lppt[i].x, lppt[i].y);
@@ -94,7 +94,7 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
 }
 
 void
-Canvas::segment(PixelScalar x, PixelScalar y, UPixelScalar radius,
+Canvas::DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
                 Angle start, Angle end, bool horizon)
 {
   // XXX horizon
@@ -116,7 +116,7 @@ Canvas::segment(PixelScalar x, PixelScalar y, UPixelScalar radius,
 }
 
 void
-Canvas::annulus(PixelScalar x, PixelScalar y,
+Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
                 UPixelScalar small_radius, UPixelScalar big_radius,
                 Angle start, Angle end)
 {
@@ -126,7 +126,7 @@ Canvas::annulus(PixelScalar x, PixelScalar y,
 }
 
 void
-Canvas::keyhole(PixelScalar x, PixelScalar y,
+Canvas::DrawKeyhole(PixelScalar x, PixelScalar y,
                 UPixelScalar small_radius, UPixelScalar big_radius,
                 Angle start, Angle end)
 {
@@ -138,45 +138,45 @@ Canvas::keyhole(PixelScalar x, PixelScalar y,
 #endif /* !OPENGL */
 
 void
-Canvas::draw_button(PixelRect rc, bool down)
+Canvas::DrawButton(PixelRect rc, bool down)
 {
   const Pen old_pen = pen;
 
   Brush gray(Color(192, 192, 192));
-  fill_rectangle(rc, gray);
+  DrawFilledRectangle(rc, gray);
 
   Pen bright(1, Color(240, 240, 240));
   Pen dark(1, Color(128, 128, 128));
 
-  select(down ? dark : bright);
-  two_lines(rc.left, rc.bottom - 2, rc.left, rc.top,
+  Select(down ? dark : bright);
+  DrawTwoLines(rc.left, rc.bottom - 2, rc.left, rc.top,
             rc.right - 2, rc.top);
-  two_lines(rc.left + 1, rc.bottom - 3, rc.left + 1, rc.top + 1,
+  DrawTwoLines(rc.left + 1, rc.bottom - 3, rc.left + 1, rc.top + 1,
             rc.right - 3, rc.top + 1);
 
-  select(down ? bright : dark);
-  two_lines(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
+  Select(down ? bright : dark);
+  DrawTwoLines(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
             rc.right - 1, rc.top + 1);
-  two_lines(rc.left + 2, rc.bottom - 2, rc.right - 2, rc.bottom - 2,
+  DrawTwoLines(rc.left + 2, rc.bottom - 2, rc.right - 2, rc.bottom - 2,
             rc.right - 2, rc.top + 2);
 
   pen = old_pen;
 }
 
 const PixelSize
-Canvas::text_size(const TCHAR *text, size_t length) const
+Canvas::CalcTextSize(const TCHAR *text, size_t length) const
 {
   TCHAR *duplicated = _tcsdup(text);
   duplicated[length] = 0;
 
-  const PixelSize size = text_size(duplicated);
+  const PixelSize size = CalcTextSize(duplicated);
   free(duplicated);
 
   return size;
 }
 
 const PixelSize
-Canvas::text_size(const TCHAR *text) const
+Canvas::CalcTextSize(const TCHAR *text) const
 {
   PixelSize size = { 0, 0 };
 
@@ -291,7 +291,7 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
   // no grouping of multiple spaces
   if (format & DT_WORDBREAK) {
     for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
-      PixelSize sz = text_size(duplicated + i);
+      PixelSize sz = CalcTextSize(duplicated + i);
       TCHAR *prev_p = NULL;
 
       // remove words from behind till line fits or no more space is found
@@ -301,7 +301,7 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
           *prev_p = _T(' ');
         *p = _T('\0');
         prev_p = p;
-        sz = text_size(duplicated + i);
+        sz = CalcTextSize(duplicated + i);
       }
 
       if (prev_p) {
@@ -325,7 +325,7 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
     if (duplicated[i] != _T('\0')) {
       PixelScalar x;
       if (format & (DT_RIGHT | DT_CENTER)) {
-        PixelSize sz = text_size(duplicated + i);
+        PixelSize sz = CalcTextSize(duplicated + i);
         x = (format & DT_CENTER) ? (rc->left + rc->right - sz.cx)/2 :
                                     rc->right - sz.cx;  // DT_RIGHT
       } else {  // default is DT_LEFT
@@ -353,7 +353,7 @@ void
 Canvas::text_opaque(PixelScalar x, PixelScalar y, const PixelRect &rc,
                     const TCHAR *_text)
 {
-  fill_rectangle(rc, background_color);
+  DrawFilledRectangle(rc, background_color);
   text_transparent(x, y, _text);
 }
 
@@ -843,7 +843,7 @@ Canvas::copy_and(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::round_rectangle(PixelScalar left, PixelScalar top,
+Canvas::DrawRoundRectangle(PixelScalar left, PixelScalar top,
                         PixelScalar right, PixelScalar bottom,
                         UPixelScalar ellipse_width,
                         UPixelScalar ellipse_height)

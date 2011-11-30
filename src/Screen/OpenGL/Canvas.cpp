@@ -39,7 +39,7 @@ Copyright_License {
 AllocatedArray<RasterPoint> Canvas::vertex_buffer;
 
 void
-Canvas::fill_rectangle(PixelScalar left, PixelScalar top,
+Canvas::DrawFilledRectangle(PixelScalar left, PixelScalar top,
                        PixelScalar right, PixelScalar bottom,
                        const Color color)
 {
@@ -76,16 +76,16 @@ Canvas::OutlineRectangleGL(PixelScalar left, PixelScalar top,
 }
 
 void
-Canvas::raised_edge(PixelRect &rc)
+Canvas::DrawRaisedEdge(PixelRect &rc)
 {
   Pen bright(1, Color(240, 240, 240));
-  select(bright);
-  two_lines(rc.left, rc.bottom - 2, rc.left, rc.top,
+  Select(bright);
+  DrawTwoLines(rc.left, rc.bottom - 2, rc.left, rc.top,
             rc.right - 2, rc.top);
 
   Pen dark(1, Color(128, 128, 128));
-  select(dark);
-  two_lines(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
+  Select(dark);
+  DrawTwoLines(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
             rc.right - 1, rc.top + 1);
 
   ++rc.left;
@@ -95,7 +95,7 @@ Canvas::raised_edge(PixelRect &rc)
 }
 
 void
-Canvas::polyline(const RasterPoint *points, unsigned num_points)
+Canvas::DrawPolyline(const RasterPoint *points, unsigned num_points)
 {
   glVertexPointer(2, GL_VALUE, 0, points);
 
@@ -138,7 +138,7 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
 }
 
 void
-Canvas::TriangleFan(const RasterPoint *points, unsigned num_points)
+Canvas::DrawTriangleFan(const RasterPoint *points, unsigned num_points)
 {
   if (brush.IsHollow() && !pen.IsDefined())
     return;
@@ -199,7 +199,7 @@ Canvas::line_piece(const RasterPoint a, const RasterPoint b)
 }
 
 void
-Canvas::two_lines(PixelScalar ax, PixelScalar ay,
+Canvas::DrawTwoLines(PixelScalar ax, PixelScalar ay,
                   PixelScalar bx, PixelScalar by,
                   PixelScalar cx, PixelScalar cy)
 {
@@ -300,7 +300,7 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
 }
 
 void
-Canvas::segment(PixelScalar x, PixelScalar y, UPixelScalar radius,
+Canvas::DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
                 Angle start, Angle end, bool horizon)
 {
   ::Segment(*this, x, y, radius, start, end, horizon);
@@ -314,7 +314,7 @@ AngleToDonutVertex(Angle angle)
 }
 
 void
-Canvas::annulus(PixelScalar x, PixelScalar y,
+Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
                 UPixelScalar small_radius, UPixelScalar big_radius,
                 Angle start, Angle end)
 {
@@ -368,7 +368,7 @@ Canvas::annulus(PixelScalar x, PixelScalar y,
 }
 
 void
-Canvas::keyhole(PixelScalar x, PixelScalar y,
+Canvas::DrawKeyhole(PixelScalar x, PixelScalar y,
                 UPixelScalar small_radius, UPixelScalar big_radius,
                 Angle start, Angle end)
 {
@@ -376,9 +376,9 @@ Canvas::keyhole(PixelScalar x, PixelScalar y,
 }
 
 void
-Canvas::draw_focus(PixelRect rc)
+Canvas::DrawFocusRectangle(PixelRect rc)
 {
-  outline_rectangle(rc.left, rc.top, rc.right, rc.bottom, COLOR_DARK_GRAY);
+  DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom, COLOR_DARK_GRAY);
 }
 
 void
@@ -398,7 +398,7 @@ Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
 
   if (background_mode == OPAQUE)
     /* draw the opaque background */
-    fill_rectangle(x, y, x + texture->get_width(), y + texture->get_height(),
+    DrawFilledRectangle(x, y, x + texture->get_width(), y + texture->get_height(),
                    background_color);
 
   GLEnable scope(GL_TEXTURE_2D);
@@ -626,7 +626,7 @@ Canvas::copy_not(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::round_rectangle(PixelScalar left, PixelScalar top,
+Canvas::DrawRoundRectangle(PixelScalar left, PixelScalar top,
                         PixelScalar right, PixelScalar bottom,
                         UPixelScalar ellipse_width,
                         UPixelScalar ellipse_height)

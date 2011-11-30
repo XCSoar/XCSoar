@@ -109,10 +109,10 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 {
   PixelRect rc = item_rect(start);
 
-  canvas.set_text_color(look.list.text_color);
-  canvas.set_background_color(look.list.background_color);
-  canvas.background_transparent();
-  canvas.select(*look.list.font);
+  canvas.SetTextColor(look.list.text_color);
+  canvas.SetBackgroundColor(look.list.background_color);
+  canvas.SetBackgroundTransparent();
+  canvas.Select(*look.list.font);
 
 #ifdef ENABLE_OPENGL
   /* enable clipping */
@@ -125,14 +125,14 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 
   for (unsigned i = start; i < last_item; i++) {
     if (i == cursor)
-      canvas.fill_rectangle(rc, look.list.selected.background_color);
+      canvas.DrawFilledRectangle(rc, look.list.selected.background_color);
     else
-      canvas.fill_rectangle(rc, look.list.background_color);
+      canvas.DrawFilledRectangle(rc, look.list.background_color);
 
     PaintItemCallback(canvas, rc, i);
 
     if (has_focus() && i == cursor)
-      canvas.draw_focus(rc);
+      canvas.DrawFocusRectangle(rc);
 
     ::OffsetRect(&rc, 0, rc.bottom - rc.top);
   }
@@ -140,7 +140,7 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   /* paint the bottom part below the last item */
   rc.bottom = canvas.get_height();
   if (rc.bottom > rc.top)
-    canvas.fill_rectangle(rc, look.list.background_color);
+    canvas.DrawFilledRectangle(rc, look.list.background_color);
 }
 
 void

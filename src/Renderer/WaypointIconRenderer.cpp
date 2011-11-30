@@ -80,7 +80,7 @@ DrawLandableBase(Canvas &canvas, const RasterPoint& pt, bool airport,
     diamond[2].y = pt.y + iradius;
     diamond[3].x = pt.x - iradius;
     diamond[3].y = pt.y - 0;
-    canvas.TriangleFan(diamond, ARRAY_SIZE(diamond));
+    canvas.DrawTriangleFan(diamond, ARRAY_SIZE(diamond));
   }
 }
 
@@ -107,7 +107,7 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
   runway[2].y = runway[1].y - ly;
   runway[3].x = runway[2].x            + wx;
   runway[3].y = runway[2].y            - wy;
-  canvas.TriangleFan(runway, ARRAY_SIZE(runway));
+  canvas.DrawTriangleFan(runway, ARRAY_SIZE(runway));
 }
 
 
@@ -142,33 +142,33 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
                 fixed_int_constant(150);
   fixed radius = fixed_int_constant(10) * scale;
 
-  canvas.black_pen();
+  canvas.SelectBlackPen();
   if (settings.landable_style == wpLandableWinPilot) {
     // Render landable with reachable state
     if (reachable != Unreachable) {
-      canvas.select(reachable == ReachableTerrain
+      canvas.Select(reachable == ReachableTerrain
                     ? look.reachable_brush
                     : look.terrain_unreachable_brush);
       DrawLandableBase(canvas, point, waypoint.IsAirport(),
                        radius + radius / fixed_two);
     }
-    canvas.select(look.magenta_brush);
+    canvas.Select(look.magenta_brush);
   } else if (settings.landable_style == wpLandableAltB) {
     if (reachable != Unreachable)
-      canvas.select(reachable == ReachableTerrain
+      canvas.Select(reachable == ReachableTerrain
                     ? look.reachable_brush
                     : look.orange_brush);
     else
-      canvas.select(look.unreachable_brush);
+      canvas.Select(look.unreachable_brush);
   } else {
     if (reachable != Unreachable)
-      canvas.select(reachable == ReachableTerrain
+      canvas.Select(reachable == ReachableTerrain
                     ? look.reachable_brush
                     : look.terrain_unreachable_brush);
     else if (waypoint.IsAirport())
-      canvas.select(look.white_brush);
+      canvas.Select(look.white_brush);
     else
-      canvas.select(look.light_gray_brush);
+      canvas.Select(look.light_gray_brush);
   }
   DrawLandableBase(canvas, point, waypoint.IsAirport(), radius);
 
@@ -183,7 +183,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
       len = radius;
     len += fixed_two * scale;
     Angle runwayDrawingAngle = runway.GetDirection() - screen_rotation;
-    canvas.select(look.white_brush);
+    canvas.Select(look.white_brush);
     DrawLandableRunway(canvas, point, runwayDrawingAngle, len,
                        fixed_int_constant(5) * scale);
   }

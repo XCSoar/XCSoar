@@ -87,12 +87,12 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
   const Font &code_font = Fonts::MapBold;
   const Font &details_font = Fonts::MapLabel;
 
-  canvas.select(code_font);
+  canvas.Select(code_font);
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2), rc, list[index].code);
 
-  canvas.select(details_font);
+  canvas.Select(details_font);
 
   METAR metar;
   const TCHAR *tmp;

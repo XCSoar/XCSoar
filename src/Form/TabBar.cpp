@@ -289,8 +289,8 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
 
   PixelRect rcTextFinal = rc;
   const UPixelScalar buttonheight = rc.bottom - rc.top;
-  const int textwidth = canvas.text_width(caption);
-  const int textheight = canvas.text_height(caption);
+  const int textwidth = canvas.CalcTextWidth(caption);
+  const int textheight = canvas.CalcTextHeight(caption);
   UPixelScalar textheightoffset = 0;
 
   if (textwidth > (rc.right - rc.left)) // assume 2 lines
@@ -303,10 +303,10 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
   //button-only formatting
   if (isButtonOnly
       && !isDown) {
-    canvas.draw_button(rc, false);
-    canvas.background_transparent();
+    canvas.DrawButton(rc, false);
+    canvas.SetBackgroundTransparent();
   } else {
-    canvas.fill_rectangle(rc, canvas.get_background_color());
+    canvas.DrawFilledRectangle(rc, canvas.GetBackgroundColor());
   }
   if (bmp != NULL) {
 
@@ -351,7 +351,7 @@ void
 TabDisplay::on_paint(Canvas &canvas)
 {
   canvas.clear(COLOR_BLACK);
-  canvas.select(*look.button_font);
+  canvas.Select(*look.button_font);
 
   const unsigned CaptionStyle = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;
@@ -359,21 +359,21 @@ TabDisplay::on_paint(Canvas &canvas)
   for (unsigned i = 0; i < tab_bar.GetTabCount(); i++) {
     bool inverse = false;
     if (((int)i == down_index) && (drag_off_button == false)) {
-      canvas.set_text_color(COLOR_BLACK);
-      canvas.set_background_color(COLOR_YELLOW);
+      canvas.SetTextColor(COLOR_BLACK);
+      canvas.SetBackgroundColor(COLOR_YELLOW);
 
     } else if (i == tab_bar.GetCurrentPage()) {
-        canvas.set_text_color(COLOR_WHITE);
+        canvas.SetTextColor(COLOR_WHITE);
         if (has_focus() && !has_pointer()) {
-          canvas.set_background_color(COLOR_GRAY.Highlight());
+          canvas.SetBackgroundColor(COLOR_GRAY.Highlight());
         } else {
-          canvas.set_background_color(COLOR_BLACK);
+          canvas.SetBackgroundColor(COLOR_BLACK);
         }
         inverse = true;
 
     } else {
-      canvas.set_text_color(COLOR_BLACK);
-      canvas.set_background_color(COLOR_WHITE);
+      canvas.SetTextColor(COLOR_BLACK);
+      canvas.SetBackgroundColor(COLOR_WHITE);
     }
     const PixelRect &rc = tab_bar.GetButtonSize(i);
     PaintButton(canvas, CaptionStyle,
@@ -388,7 +388,7 @@ TabDisplay::on_paint(Canvas &canvas)
     rcFocus.top = rcFocus.left = 0;
     rcFocus.right = canvas.get_width();
     rcFocus.bottom = canvas.get_height();
-    canvas.draw_focus(rcFocus);
+    canvas.DrawFocusRectangle(rcFocus);
   }
 }
 

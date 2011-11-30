@@ -55,28 +55,28 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   PixelScalar w0 = rc.right - rc.left - Layout::FastScale(4);
 
-  PixelScalar w1 = canvas.text_width(_("Warn")) + Layout::FastScale(10);
-  PixelScalar w2 = canvas.text_width(_("Display")) + Layout::FastScale(10);
+  PixelScalar w1 = canvas.CalcTextWidth(_("Warn")) + Layout::FastScale(10);
+  PixelScalar w2 = canvas.CalcTextWidth(_("Display")) + Layout::FastScale(10);
   PixelScalar x0 = w0 - w1 - w2;
 
   if (colormode) {
-    canvas.white_pen();
+    canvas.SelectWhitePen();
 #ifndef HAVE_HATCHED_BRUSH
-    canvas.select(look.solid_brushes[renderer.colours[i]]);
+    canvas.Select(look.solid_brushes[renderer.colours[i]]);
 #else
 #ifdef HAVE_ALPHA_BLEND
     if (renderer.transparency && AlphaBlendAvailable()) {
-      canvas.select(look.solid_brushes[renderer.colours[i]]);
+      canvas.Select(look.solid_brushes[renderer.colours[i]]);
     } else {
 #endif
-      canvas.set_text_color(look.colors[renderer.colours[i]]);
-      canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
-      canvas.select(look.brushes[renderer.brushes[i]]);
+      canvas.SetTextColor(look.colors[renderer.colours[i]]);
+      canvas.SetBackgroundColor(Color(0xFF, 0xFF, 0xFF));
+      canvas.Select(look.brushes[renderer.brushes[i]]);
 #ifdef HAVE_ALPHA_BLEND
     }
 #endif
 #endif
-    canvas.rectangle(rc.left + x0, rc.top + Layout::FastScale(2),
+    canvas.Rectangle(rc.left + x0, rc.top + Layout::FastScale(2),
         rc.right - Layout::FastScale(2), rc.bottom - Layout::FastScale(2));
   } else {
     if (computer.warnings.class_warnings[i])

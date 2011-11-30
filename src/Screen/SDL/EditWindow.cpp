@@ -45,20 +45,20 @@ EditWindow::on_paint(Canvas &canvas)
     if (is_read_only())
       canvas.clear(Color(0xe0, 0xe0, 0xe0));
     else
-      canvas.clear_white();
-    canvas.set_text_color(COLOR_BLACK);
+      canvas.ClearWhite();
+    canvas.SetTextColor(COLOR_BLACK);
   } else {
     canvas.clear(COLOR_LIGHT_GRAY);
-    canvas.set_text_color(COLOR_DARK_GRAY);
+    canvas.SetTextColor(COLOR_DARK_GRAY);
   }
 
-  canvas.outline_rectangle(0, 0, canvas.get_width() - 1,
+  canvas.DrawOutlineRectangle(0, 0, canvas.get_width() - 1,
                            canvas.get_height() - 1, COLOR_BLACK);
 
   if (value.empty())
     return;
 
-  canvas.background_transparent();
+  canvas.SetBackgroundTransparent();
 
   if (have_clipping() || (get_text_style() & DT_WORDBREAK) != 0)
     canvas.formatted_text(&rc, value.c_str(), get_text_style());

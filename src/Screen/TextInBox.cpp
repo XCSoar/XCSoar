@@ -77,15 +77,15 @@ RenderShadowedText(Canvas &canvas, const TCHAR* text,
                    PixelScalar x, PixelScalar y,
                    bool inverted)
 {
-  canvas.background_transparent();
+  canvas.SetBackgroundTransparent();
 
-  canvas.set_text_color(inverted ? COLOR_BLACK : COLOR_WHITE);
+  canvas.SetTextColor(inverted ? COLOR_BLACK : COLOR_WHITE);
   canvas.text(x + Layout::FastScale(1), y, text);
   canvas.text(x - Layout::FastScale(1), y, text);
   canvas.text(x, y + 1, text);
   canvas.text(x, y - 1, text);
 
-  canvas.set_text_color(inverted ? COLOR_WHITE : COLOR_BLACK);
+  canvas.SetTextColor(inverted ? COLOR_WHITE : COLOR_BLACK);
   canvas.text(x, y, text);
 }
 
@@ -104,9 +104,9 @@ TextInBox(Canvas &canvas, const TCHAR* text, PixelScalar x, PixelScalar y,
 
   // landable waypoint label inside white box
 
-  canvas.select(mode.bold ? Fonts::MapBold : Fonts::Map);
+  canvas.Select(mode.bold ? Fonts::MapBold : Fonts::Map);
 
-  PixelSize tsize = canvas.text_size(text);
+  PixelSize tsize = canvas.CalcTextSize(text);
 
   if (mode.align == A_RIGHT) {
     x -= tsize.cx;
@@ -130,31 +130,31 @@ TextInBox(Canvas &canvas, const TCHAR* text, PixelScalar x, PixelScalar y,
 
   if (mode.mode == RM_ROUNDED_BLACK || mode.mode == RM_ROUNDED_WHITE) {
     if (mode.mode == RM_ROUNDED_BLACK)
-      canvas.black_pen();
+      canvas.SelectBlackPen();
     else
-      canvas.white_pen();
+      canvas.SelectWhitePen();
 
-    canvas.white_brush();
-    canvas.round_rectangle(rc.left, rc.top, rc.right, rc.bottom,
+    canvas.SelectWhiteBrush();
+    canvas.DrawRoundRectangle(rc.left, rc.top, rc.right, rc.bottom,
                            Layout::Scale(8), Layout::Scale(8));
 
-    canvas.background_transparent();
-    canvas.set_text_color(COLOR_BLACK);
+    canvas.SetBackgroundTransparent();
+    canvas.SetTextColor(COLOR_BLACK);
     canvas.text(x, y, text);
-    canvas.background_opaque();
+    canvas.SetBackgroundOpaque();
   } else if (mode.mode == RM_FILLED) {
-    canvas.set_background_color(COLOR_WHITE);
-    canvas.set_text_color(COLOR_BLACK);
+    canvas.SetBackgroundColor(COLOR_WHITE);
+    canvas.SetTextColor(COLOR_BLACK);
     canvas.text_opaque(x, y, rc, text);
   } else if (mode.mode == RM_OUTLINED) {
     RenderShadowedText(canvas, text, x, y, false);
   } else if (mode.mode == RM_OUTLINED_INVERTED) {
     RenderShadowedText(canvas, text, x, y, true);
   } else {
-    canvas.background_transparent();
-    canvas.set_text_color(COLOR_BLACK);
+    canvas.SetBackgroundTransparent();
+    canvas.SetTextColor(COLOR_BLACK);
     canvas.text(x, y, text);
-    canvas.background_opaque();
+    canvas.SetBackgroundOpaque();
   }
 
   return true;

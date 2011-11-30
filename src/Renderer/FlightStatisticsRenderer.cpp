@@ -139,12 +139,12 @@ FlightStatisticsRenderer::RenderBarographSpark(Canvas &canvas,
 
   if (_task != NULL) {
     ProtectedTaskManager::Lease task(*_task);
-    canvas.hollow_brush();
+    canvas.SelectHollowBrush();
     DrawLegs(chart, task, nmea_info, derived_info, false);
   }
 
-  canvas.null_pen();
-  canvas.select(Graphics::hbGround);
+  canvas.SelectNullPen();
+  canvas.Select(Graphics::hbGround);
 
   chart.DrawFilledLineGraph(fs.Altitude_Terrain);
 
@@ -176,12 +176,12 @@ FlightStatisticsRenderer::RenderBarograph(Canvas &canvas, const PixelRect rc,
     DrawLegs(chart, task, nmea_info, derived_info, false);
   }
 
-  canvas.null_pen();
-  canvas.select(Graphics::hbGround);
+  canvas.SelectNullPen();
+  canvas.Select(Graphics::hbGround);
 
   chart.DrawFilledLineGraph(fs.Altitude_Terrain);
-  canvas.white_pen();
-  canvas.white_brush();
+  canvas.SelectWhitePen();
+  canvas.SelectWhiteBrush();
 
   chart.DrawXGrid(fixed_half, fs.Altitude.x_min,
                   ChartLook::STYLE_THINDASHPAPER,
@@ -322,7 +322,7 @@ FlightStatisticsRenderer::RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   chart.DrawYLabel(_T("w"));
 
   StaticString<80> text;
-  canvas.background_transparent();
+  canvas.SetBackgroundTransparent();
 
   text.Format(_T("%s: %d kg"), _("Mass"),
               (int)glide_polar.GetTotalMass());
@@ -362,7 +362,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
 
   for (unsigned i=0; i< 3; ++i) {
     if (contest.GetResult(i).IsDefined()) {
-      canvas.select(map_look.ContestPen[i]);
+      canvas.Select(map_look.ContestPen[i]);
       trail_renderer.Draw(canvas, proj, contest.GetSolution(i));
     }
   }

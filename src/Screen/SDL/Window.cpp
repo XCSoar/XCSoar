@@ -137,7 +137,7 @@ void
 Window::setup(Canvas &canvas)
 {
   if (font != NULL)
-    canvas.select(*font);
+    canvas.Select(*font);
 }
 
 void

@@ -171,7 +171,7 @@ ThermalAssistantWindow::RangeScale(fixed lift) const
 void
 ThermalAssistantWindow::PaintRadarPlane(Canvas &canvas) const
 {
-  canvas.select(hpPlane);
+  canvas.Select(hpPlane);
 
   PixelScalar x = mid.x + (LeftTurn() ? radius : -radius);
 
@@ -193,33 +193,33 @@ void
 ThermalAssistantWindow::PaintRadarBackground(Canvas &canvas) const
 {
   canvas.clear(hbBackground);
-  canvas.hollow_brush();
+  canvas.SelectHollowBrush();
 
-  canvas.select(hpInnerCircle);
+  canvas.Select(hpInnerCircle);
   canvas.circle(mid.x, mid.y, radius / 2);
-  canvas.select(hpOuterCircle);
+  canvas.Select(hpOuterCircle);
   canvas.circle(mid.x, mid.y, radius);
 
   if (small)
     return;
 
-  canvas.set_text_color(hcCircles);
-  canvas.select(hfLabels);
-  canvas.set_background_color(hcBackground);
-  canvas.background_opaque();
+  canvas.SetTextColor(hcCircles);
+  canvas.Select(hfLabels);
+  canvas.SetBackgroundColor(hcBackground);
+  canvas.SetBackgroundOpaque();
 
   TCHAR lift_string[10];
   Units::FormatUserVSpeed(max_lift, lift_string, ARRAY_SIZE(lift_string));
-  PixelSize s = canvas.text_size(lift_string);
+  PixelSize s = canvas.CalcTextSize(lift_string);
   canvas.text(mid.x - s.cx / 2,
               mid.y + radius - s.cy * 0.75, lift_string);
 
   Units::FormatUserVSpeed(fixed_zero, lift_string, ARRAY_SIZE(lift_string));
-  s = canvas.text_size(lift_string);
+  s = canvas.CalcTextSize(lift_string);
   canvas.text(mid.x - s.cx / 2,
               mid.y + radius / 2 - s.cy * 0.75, lift_string);
 
-  canvas.background_transparent();
+  canvas.SetBackgroundTransparent();
 }
 
 void
@@ -228,11 +228,11 @@ ThermalAssistantWindow::PaintPoints(Canvas &canvas) const
 #ifdef ENABLE_OPENGL
   GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 #elif defined(USE_GDI)
-  canvas.mix_mask();
+  canvas.SetMixMask();
 #endif /* GDI */
 
-  canvas.select(hbPolygon);
-  canvas.select(hpPolygon);
+  canvas.Select(hbPolygon);
+  canvas.Select(hpPolygon);
   canvas.polygon(lift_points, 36);
 }
 
@@ -249,9 +249,9 @@ ThermalAssistantWindow::PaintNotCircling(Canvas &canvas) const
     return;
 
   const TCHAR* str = _("Not Circling");
-  canvas.select(hfNoTraffic);
-  PixelSize ts = canvas.text_size(str);
-  canvas.set_text_color(hcStandard);
+  canvas.Select(hfNoTraffic);
+  PixelSize ts = canvas.CalcTextSize(str);
+  canvas.SetTextColor(hcStandard);
   canvas.text(mid.x - (ts.cx / 2), mid.y - (radius / 2), str);
 }
 

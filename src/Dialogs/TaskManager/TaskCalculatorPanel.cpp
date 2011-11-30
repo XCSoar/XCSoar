@@ -220,8 +220,8 @@ OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   if (instance->IsTaskModified()) {
     const TCHAR* message = _("Calculator excludes unsaved task changes!");
-    canvas.select(Fonts::Title);
-    const int textheight = canvas.text_height(message);
+    canvas.Select(Fonts::Title);
+    const int textheight = canvas.CalcTextHeight(message);
 
     const AirspaceLook &look =
       CommonInterface::main_window.GetLook().map.airspace;
@@ -231,8 +231,8 @@ OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
     canvas.clear(COLOR_YELLOW);
     bmp->Draw(canvas, offsetx, offsety);
 
-    canvas.set_background_color(COLOR_YELLOW);
-    canvas.set_text_color(COLOR_BLACK);
+    canvas.SetBackgroundColor(COLOR_YELLOW);
+    canvas.SetTextColor(COLOR_BLACK);
     canvas.text(offsetx * 2 + Layout::Scale(2),
                 (int)(canvas.get_height() - textheight) / 2,
                 message);

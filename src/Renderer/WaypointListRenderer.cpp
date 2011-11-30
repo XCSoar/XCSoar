@@ -90,7 +90,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
-  canvas.set_text_color(COLOR_BLACK);
+  canvas.SetTextColor(COLOR_BLACK);
 
   // Draw icon
   RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
@@ -107,7 +107,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   PixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
 
   // Use small font for details
-  canvas.select(small_font);
+  canvas.Select(small_font);
 
   // Draw distance and arrival altitude
   StaticString<256> buffer;
@@ -121,7 +121,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.text_clipped(left, top2, rc, buffer);
 
   // Draw waypoint name
-  canvas.select(name_font);
+  canvas.Select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
                       waypoint.name.c_str());
 }
@@ -136,7 +136,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
-  canvas.set_text_color(COLOR_BLACK);
+  canvas.SetTextColor(COLOR_BLACK);
 
   Buffer buffer;
 
@@ -150,14 +150,14 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   PixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
 
   // Use small font for details
-  canvas.select(small_font);
+  canvas.Select(small_font);
 
   // Draw leg distance
   UPixelScalar leg_info_width = 0;
   if (vector) {
     Units::FormatUserDistance(vector->distance, buffer.buffer(),
                               buffer.MAX_SIZE, true);
-    UPixelScalar width = leg_info_width = canvas.text_width(buffer.c_str());
+    UPixelScalar width = leg_info_width = canvas.CalcTextWidth(buffer.c_str());
     canvas.text(rc.right - Layout::FastScale(2) - width,
                 rc.top + Layout::FastScale(2) +
                 (name_font.GetHeight() - small_font.GetHeight()) / 2,
@@ -166,7 +166,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     // Draw leg bearing
     buffer.UnsafeFormat(_T(" %.0f" DEG " T"),
                         (double)vector->bearing.Degrees());
-    width = canvas.text_width(buffer.c_str());
+    width = canvas.CalcTextWidth(buffer.c_str());
     canvas.text(rc.right - Layout::FastScale(2) - width, top2, buffer.c_str());
 
     if (width > leg_info_width)
@@ -183,7 +183,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                       buffer.c_str());
 
   // Draw waypoint name
-  canvas.select(name_font);
+  canvas.Select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2),
                       rc.right - leg_info_width - left, waypoint.name.c_str());
 }

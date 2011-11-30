@@ -100,7 +100,7 @@ MapDrawHelper::buffer_render_finish()
 {
   if (m_buffer_drawn) {
     // need to do this to prevent drawing of colored outline
-    m_buffer.white_pen();
+    m_buffer.SelectWhitePen();
     
     if (m_use_stencil) {
 #ifdef ENABLE_SDL
@@ -136,10 +136,10 @@ MapDrawHelper::buffer_render_start()
 void 
 MapDrawHelper::clear_buffer()
 {
-  m_buffer.clear_white();
+  m_buffer.ClearWhite();
 
   if (m_use_stencil)
-    m_stencil.clear_white();
+    m_stencil.ClearWhite();
 }
 
 #endif // !ENABLE_OPENGL

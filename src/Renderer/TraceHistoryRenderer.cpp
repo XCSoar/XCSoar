@@ -126,9 +126,9 @@ TraceHistoryRenderer::render_filled_posneg(Chart &chart,
     y_last = y;
   }
   if (look.inverse)
-    chart.get_canvas().white_brush();
+    chart.get_canvas().SelectWhiteBrush();
   else
-    chart.get_canvas().black_brush();
+    chart.get_canvas().SelectBlackBrush();
   chart.DrawDot(x_last, y_last, Layout::Scale(2));
 }
 
@@ -145,7 +145,7 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
   // render_line(chart, var);
 
   if (positive(mc)) {
-    canvas.background_transparent();
+    canvas.SetBackgroundTransparent();
     chart.DrawLine(fixed_zero, mc, 
                    fixed(var.capacity()-1), mc, 
                    ChartLook::STYLE_DASHGREEN);

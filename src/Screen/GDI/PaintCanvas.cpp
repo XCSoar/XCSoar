@@ -38,9 +38,9 @@ PaintCanvas::~PaintCanvas()
      PPC2000/2002) are known to be leaky when the DC is not cleaned
      up.  We don't need to change the bitmap selection, because a
      PaintCanvas should never have a selected bitmap. */
-  white_brush();
-  black_pen();
-  select_stock(SYSTEM_FONT);
+  SelectWhiteBrush();
+  SelectBlackPen();
+  SelectStockObject(SYSTEM_FONT);
 
   window.EndPaint(&ps);
 }

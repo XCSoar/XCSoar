@@ -273,7 +273,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
 
   if (!tp) {
-    canvas.clear_white();
+    canvas.ClearWhite();
     return;
   }
 

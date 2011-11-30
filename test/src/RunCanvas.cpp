@@ -96,8 +96,8 @@ public:
 
 private:
   void paint(Canvas &canvas) {
-    canvas.hollow_brush();
-    canvas.black_pen();
+    canvas.SelectHollowBrush();
+    canvas.SelectBlackPen();
 
     Brush red_brush(COLOR_RED);
 
@@ -122,7 +122,7 @@ private:
     const TCHAR *label;
     switch (page) {
     case 0:
-      canvas.segment(hmiddle, vmiddle,
+      canvas.DrawSegment(hmiddle, vmiddle,
                      min(width, height) / 3,
                      Angle::Degrees(fixed_zero), Angle::Degrees(fixed(90)),
                      false);
@@ -130,7 +130,7 @@ private:
       break;
 
     case 1:
-      canvas.segment(hmiddle, vmiddle,
+      canvas.DrawSegment(hmiddle, vmiddle,
                      min(width, height) / 3,
                      Angle::Degrees(fixed(45)), Angle::Degrees(fixed_180),
                      true);
@@ -150,25 +150,25 @@ private:
       rc.top = vmiddle - 20;
       rc.right = hmiddle + 50;
       rc.bottom = vmiddle + 20;
-      canvas.draw_button(rc, page == 4);
+      canvas.DrawButton(rc, page == 4);
       label = page == 4
         ? _T("button down=true") : _T("button down=false");
       break;
 
     case 5:
-      canvas.select(red_brush);
+      canvas.Select(red_brush);
       canvas.polygon(p1, 3);
       label = _T("big polygon");
       break;
 
     case 6:
-      canvas.select(red_brush);
+      canvas.Select(red_brush);
       canvas.polygon(p2, 3);
       label = _T("huge polygon");
       break;
     }
 
-    canvas.set_text_color(Color(0, 0, 128));
+    canvas.SetTextColor(Color(0, 0, 128));
     canvas.text(5, 5, label);
 #ifndef ENABLE_OPENGL
     canvas.text(5, 25,
@@ -179,7 +179,7 @@ private:
   void update() {
 #ifndef ENABLE_OPENGL
     if (buffered) {
-      buffer.clear_white();
+      buffer.ClearWhite();
 
       paint(buffer);
     }
@@ -224,7 +224,7 @@ protected:
 #ifndef ENABLE_OPENGL
     if (!buffered) {
 #endif
-      canvas.clear_white();
+      canvas.ClearWhite();
 
       paint(canvas);
 #ifndef ENABLE_OPENGL

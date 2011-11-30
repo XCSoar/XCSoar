@@ -231,9 +231,9 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     
   int w0, w1, w2, w3, x1, x2, x3;
   w0 = rc.right - rc.left - Layout::FastScale(4);
-  w1 = canvas.text_width(_T("XXX"));
-  w2 = canvas.text_width(_T(" 000km"));
-  w3 = canvas.text_width(_T(" 000")_T(DEG));
+  w1 = canvas.CalcTextWidth(_T("XXX"));
+  w2 = canvas.CalcTextWidth(_T(" 000km"));
+  w3 = canvas.CalcTextWidth(_T(" 000")_T(DEG));
   
   x1 = w0-w1-w2-w3;
     
@@ -251,13 +251,13 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   sTmp.Format(_T("%d%s"),
               (int)AirspaceSelectInfo[i].Distance,
               Units::GetDistanceName());
-  x2 = w0 - w3 - canvas.text_width(sTmp);
+  x2 = w0 - w3 - canvas.CalcTextWidth(sTmp);
   canvas.text(rc.left + x2, rc.top + Layout::FastScale(2), sTmp);
     
   // right justified after distance
   sTmp.Format(_T("%d")_T(DEG),
               (int)AirspaceSelectInfo[i].Direction.Degrees());
-  x3 = w0 - canvas.text_width(sTmp);
+  x3 = w0 - canvas.CalcTextWidth(sTmp);
   canvas.text(rc.left + x3, rc.top + Layout::FastScale(2), sTmp);
 }
 

@@ -405,7 +405,7 @@ OnActivatePanClicked(gcc_unused WndButton &button)
 static void
 OnImagePaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
-  canvas.clear_white();
+  canvas.ClearWhite();
   if (page == 3) {
     canvas.copy(jpgimage1);
   } else if (page == 4) {

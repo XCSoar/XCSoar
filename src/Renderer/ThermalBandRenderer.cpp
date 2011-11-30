@@ -137,9 +137,9 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
                  settings_computer.glide_polar_task.GetMC(), h, pen);
 
   if (is_infobox && look.inverse)
-    chart.get_canvas().white_brush();
+    chart.get_canvas().SelectWhiteBrush();
   else
-    chart.get_canvas().black_brush();
+    chart.get_canvas().SelectBlackBrush();
   chart.DrawDot(settings_computer.glide_polar_task.GetMC(), h, Layout::Scale(2));
 
   /*
@@ -156,16 +156,16 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   GliderBand[4].x = GliderBand[1].x - Layout::Scale(4);
   GliderBand[4].y = GliderBand[0].y + Layout::Scale(4);
 
-  canvas.select(look.pen);
+  canvas.Select(look.pen);
 
-  canvas.polyline(GliderBand, 2);
-  canvas.polyline(GliderBand + 2, 3); // arrow head
+  canvas.DrawPolyline(GliderBand, 2);
+  canvas.DrawPolyline(GliderBand + 2, 3); // arrow head
 
   if (draw_start_height) {
-    canvas.select(Graphics::hpFinalGlideBelow);
+    canvas.Select(Graphics::hpFinalGlideBelow);
     GliderBand[0].y = Layout::Scale(4) + iround(TBSCALEY * (fixed_one - hstart)) + rc.top;
     GliderBand[1].y = GliderBand[0].y;
-    canvas.polyline(GliderBand, 2);
+    canvas.DrawPolyline(GliderBand, 2);
   }
   */
 }

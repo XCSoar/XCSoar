@@ -613,7 +613,7 @@ TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas)
                                     PixelScalar(rcFirst.right + bwidth),
                                     PixelScalar(menuBottom + bwidth) };
 
-  canvas.fill_rectangle(rcBlackBorder, COLOR_BLACK);
+  canvas.DrawFilledRectangle(rcBlackBorder, COLOR_BLACK);
 }
 
 void
@@ -628,21 +628,21 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle)
     const bool isDown = (*i)->main_menu_index == down_index.main_index &&
       !down_index.IsSub() && !drag_off_button;
     if (isDown) {
-      canvas.set_text_color(COLOR_BLACK);
-      canvas.set_background_color(COLOR_YELLOW);
+      canvas.SetTextColor(COLOR_BLACK);
+      canvas.SetBackgroundColor(COLOR_YELLOW);
 
     } else if ((*i)->main_menu_index == selected_index.main_index) {
-        canvas.set_text_color(COLOR_WHITE);
+        canvas.SetTextColor(COLOR_WHITE);
         if (has_focus() && !has_pointer()) {
-          canvas.set_background_color(COLOR_GRAY.Highlight());
+          canvas.SetBackgroundColor(COLOR_GRAY.Highlight());
         } else {
-          canvas.set_background_color(COLOR_BLACK);
+          canvas.SetBackgroundColor(COLOR_BLACK);
         }
         inverse = true;
 
     } else {
-      canvas.set_text_color(COLOR_BLACK);
-      canvas.set_background_color(COLOR_WHITE);
+      canvas.SetTextColor(COLOR_BLACK);
+      canvas.SetBackgroundColor(COLOR_WHITE);
     }
     const PixelRect rc = tb.GetMainMenuButtonSize((*i)->main_menu_index);
     TabDisplay::PaintButton(canvas, CaptionStyle, gettext((*i)->caption), rc,
@@ -653,7 +653,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle)
     rcFocus.top = rcFocus.left = 0;
     rcFocus.right = canvas.get_width();
     rcFocus.bottom = canvas.get_height();
-    canvas.draw_focus(rcFocus);
+    canvas.DrawFocusRectangle(rcFocus);
   }
 }
 
@@ -669,7 +669,7 @@ TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas, const OneMainMenuButton *butM
                                     PixelScalar(bLast.right + bwidth),
                                     PixelScalar(bLast.bottom + bwidth) };
 
-  canvas.fill_rectangle(rcBlackBorder, COLOR_BLACK);
+  canvas.DrawFilledRectangle(rcBlackBorder, COLOR_BLACK);
 }
 
 void
@@ -698,21 +698,21 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle)
     bool inverse = false;
     if ((i->menu.sub_index == down_index.sub_index)
         && (drag_off_button == false)) {
-      canvas.set_text_color(COLOR_BLACK);
-      canvas.set_background_color(COLOR_YELLOW);
+      canvas.SetTextColor(COLOR_BLACK);
+      canvas.SetBackgroundColor(COLOR_YELLOW);
 
     } else if (i->menu.sub_index == selected_index.sub_index) {
-        canvas.set_text_color(COLOR_WHITE);
+        canvas.SetTextColor(COLOR_WHITE);
         if (has_focus() && !has_pointer()) {
-          canvas.set_background_color(COLOR_GRAY.Highlight());
+          canvas.SetBackgroundColor(COLOR_GRAY.Highlight());
         } else {
-          canvas.set_background_color(COLOR_BLACK);
+          canvas.SetBackgroundColor(COLOR_BLACK);
         }
         inverse = true;
 
     } else {
-      canvas.set_text_color(COLOR_BLACK);
-      canvas.set_background_color(COLOR_WHITE);
+      canvas.SetTextColor(COLOR_BLACK);
+      canvas.SetBackgroundColor(COLOR_WHITE);
     }
     const PixelRect &rc = tb.GetSubMenuButtonSize(i->page_index);
     TabDisplay::PaintButton(canvas, CaptionStyle, gettext(i->caption), rc,
@@ -726,7 +726,7 @@ void
 TabMenuDisplay::on_paint(Canvas &canvas)
 {
   canvas.clear(look.background_color);
-  canvas.select(*look.button_font);
+  canvas.Select(*look.button_font);
 
   const unsigned CaptionStyle = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;

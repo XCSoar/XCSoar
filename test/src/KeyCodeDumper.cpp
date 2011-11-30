@@ -90,14 +90,14 @@ protected:
   }
 
   virtual void on_paint(Canvas &canvas) {
-    canvas.white_brush();
+    canvas.SelectWhiteBrush();
     if (has_focus())
-      canvas.black_pen();
+      canvas.SelectBlackPen();
     else
-      canvas.white_pen();
+      canvas.SelectWhitePen();
     canvas.clear();
 
-    unsigned text_height = canvas.text_size(_T("W")).cy;
+    unsigned text_height = canvas.CalcTextSize(_T("W")).cy;
     for (int i = num_events - 1, y = 4; i >= 0; --i, y += text_height) {
       const struct key_event &event = events[i];
       TCHAR buffer[64];

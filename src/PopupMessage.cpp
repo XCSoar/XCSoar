@@ -147,8 +147,8 @@ PopupMessage::Resize()
     set_text(msgText);
 
     AnyCanvas canvas;
-    canvas.select(Fonts::MapBold);
-    PixelSize tsize = canvas.text_size(msgText);
+    canvas.Select(Fonts::MapBold);
+    PixelSize tsize = canvas.CalcTextSize(msgText);
 
     int linecount = max((unsigned)nvisible, max((unsigned)1, get_row_count()));
 

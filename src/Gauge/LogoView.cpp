@@ -103,10 +103,10 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   // Draw full XCSoar version number
 
 #ifndef USE_GDI
-  canvas.select(font);
+  canvas.Select(font);
 #endif
 
-  canvas.set_text_color(COLOR_BLACK);
-  canvas.background_transparent();
+  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetBackgroundTransparent();
   canvas.text(2, 2, XCSoar_ProductToken);
 }

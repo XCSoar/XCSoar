@@ -173,11 +173,11 @@ InfoBoxPreview::on_paint(Canvas &canvas)
   if (is_current)
     canvas.clear(COLOR_BLACK);
   else
-    canvas.clear_white();
+    canvas.ClearWhite();
 
-  canvas.hollow_brush();
-  canvas.black_pen();
-  canvas.rectangle(0, 0, canvas.get_width() - 1, canvas.get_height() - 1);
+  canvas.SelectHollowBrush();
+  canvas.SelectBlackPen();
+  canvas.Rectangle(0, 0, canvas.get_width() - 1, canvas.get_height() - 1);
 
   InfoBoxFactory::t_InfoBox type = data.contents[i];
   const TCHAR *caption = type < InfoBoxFactory::NUM_TYPES
@@ -188,9 +188,9 @@ InfoBoxPreview::on_paint(Canvas &canvas)
   else
     caption = gettext(caption);
 
-  canvas.select(Fonts::Title);
-  canvas.background_transparent();
-  canvas.set_text_color(is_current ? COLOR_WHITE : COLOR_BLACK);
+  canvas.Select(Fonts::Title);
+  canvas.SetBackgroundTransparent();
+  canvas.SetTextColor(is_current ? COLOR_WHITE : COLOR_BLACK);
   canvas.text(2, 2, caption);
 }
 

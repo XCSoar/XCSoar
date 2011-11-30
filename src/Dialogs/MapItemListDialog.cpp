@@ -165,8 +165,8 @@ ShowMapItemListDialog(SingleWindow &parent)
   }
 
   AnyCanvas canvas;
-  canvas.select(info_label->GetFont());
-  UPixelScalar text_width = canvas.text_width(info_buffer);
+  canvas.Select(info_label->GetFont());
+  UPixelScalar text_width = canvas.CalcTextWidth(info_buffer);
   if (text_width > info_label->get_width()) {
     if (vector.IsValid())
       _stprintf(info_buffer, _T("%s - %s"), distance_buffer, direction_buffer);

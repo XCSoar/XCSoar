@@ -50,7 +50,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   text_height = font.GetHeight();
 #else
   VirtualCanvas canvas(1, 1);
-  text_height = canvas.text_height(_T("W"));
+  text_height = canvas.CalcTextHeight(_T("W"));
 #endif
 
   // Make progress bar height proportional to window height
@@ -178,7 +178,7 @@ ProgressWindow::on_paint(Canvas &canvas)
 const Brush *
 ProgressWindow::on_color(Window &window, Canvas &canvas)
 {
-  canvas.set_text_color(COLOR_BLACK);
-  canvas.set_background_color(background_color);
+  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetBackgroundColor(background_color);
   return &background_brush;
 }

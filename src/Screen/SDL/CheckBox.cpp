@@ -154,29 +154,29 @@ void
 CheckBox::on_paint(Canvas &canvas)
 {
   Brush brush(pressed ? COLOR_GRAY : COLOR_WHITE);
-  canvas.select(brush);
+  canvas.Select(brush);
 
   if (has_focus())
-    canvas.select(Pen(Layout::Scale(1) + 1, COLOR_BLACK));
+    canvas.Select(Pen(Layout::Scale(1) + 1, COLOR_BLACK));
   else if (is_enabled())
-    canvas.black_pen();
+    canvas.SelectBlackPen();
   else
-    canvas.select(Pen(1, COLOR_GRAY));
-  canvas.rectangle(2, 2, canvas.get_height() - 4, canvas.get_height() - 4);
+    canvas.Select(Pen(1, COLOR_GRAY));
+  canvas.Rectangle(2, 2, canvas.get_height() - 4, canvas.get_height() - 4);
 
   if (checked) {
     canvas.line(4, 4, canvas.get_height() - 8, canvas.get_height() - 8);
     canvas.line(canvas.get_height() - 8, 4, 4, canvas.get_height() - 8);
   }
 
-  canvas.set_text_color(is_enabled() ? COLOR_BLACK : COLOR_GRAY);
-  canvas.background_transparent();
+  canvas.SetTextColor(is_enabled() ? COLOR_BLACK : COLOR_GRAY);
+  canvas.SetBackgroundTransparent();
   canvas.text(canvas.get_height() + 2, 2, text.c_str());
 
   if (has_focus()) {
     PixelRect rc = { 0, 0, PixelScalar(canvas.get_width() - 1),
                      PixelScalar(canvas.get_height() - 1) };
-    canvas.draw_focus(rc);
+    canvas.DrawFocusRectangle(rc);
   }
 }
 

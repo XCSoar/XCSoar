@@ -122,8 +122,8 @@ SizeLogFont(LOGFONT &logfont, UPixelScalar width, const TCHAR* str)
     if (!font.Set(logfont))
       break;
 
-    canvas.select(font);
-    tsize = canvas.text_size(str);
+    canvas.Select(font);
+    tsize = canvas.CalcTextSize(str);
   } while ((unsigned)tsize.cx > width);
 
   ++logfont.lfHeight;

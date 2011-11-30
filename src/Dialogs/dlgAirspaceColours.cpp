@@ -42,15 +42,15 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   const AirspaceLook &look =
     CommonInterface::main_window.GetLook().map.airspace;
 
-  canvas.black_pen();
+  canvas.SelectBlackPen();
 #ifndef HAVE_HATCHED_BRUSH
-  canvas.select(look.solid_brushes[i]);
+  canvas.Select(look.solid_brushes[i]);
 #else
-  canvas.background_transparent();
-  canvas.select(look.brushes[1]); // this is the solid brush
-  canvas.set_text_color(look.colors[i]);
+  canvas.SetBackgroundTransparent();
+  canvas.Select(look.brushes[1]); // this is the solid brush
+  canvas.SetTextColor(look.colors[i]);
 #endif
-  canvas.rectangle(rc.left + Layout::FastScale(2),
+  canvas.Rectangle(rc.left + Layout::FastScale(2),
                    rc.top + Layout::FastScale(2),
                    rc.right - Layout::FastScale(2),
                    rc.bottom - Layout::FastScale(2));

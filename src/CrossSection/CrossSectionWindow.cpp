@@ -95,12 +95,12 @@ public:
 #ifdef ENABLE_OPENGL
     GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 #elif defined(USE_GDI)
-    canvas.mix_mask();
+    canvas.SetMixMask();
 #endif /* GDI */
 
     // Use filling brush without outline
-    canvas.select(brush);
-    canvas.null_pen();
+    canvas.Select(brush);
+    canvas.SelectNullPen();
 
     // Draw thick brushed outlines
     PixelScalar border_width = Layout::Scale(10);
@@ -113,37 +113,37 @@ public:
       border.bottom -= border_width;
 
       // Left border
-      canvas.rectangle(rc.left, rc.top, border.left, rc.bottom);
+      canvas.Rectangle(rc.left, rc.top, border.left, rc.bottom);
 
       // Right border
-      canvas.rectangle(border.right, rc.top, rc.right, rc.bottom);
+      canvas.Rectangle(border.right, rc.top, rc.right, rc.bottom);
 
       // Bottom border
-      canvas.rectangle(border.left, border.bottom, border.right, rc.bottom);
+      canvas.Rectangle(border.left, border.bottom, border.right, rc.bottom);
 
       // Top border
-      canvas.rectangle(border.left, rc.top, border.right, border.top);
+      canvas.Rectangle(border.left, rc.top, border.right, border.top);
     } else {
       // .. or fill the entire rect if the outlines would overlap
-      canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+      canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
     }
 
     // Disable "transparency" effect
 #ifdef ENABLE_OPENGL
     glDisable(GL_BLEND);
 #elif defined(USE_GDI)
-    canvas.mix_copy();
+    canvas.SetMixCopy();
 #endif /* GDI */
 
     // Use transparent brush and type-dependent pen for the outlines
-    canvas.hollow_brush();
+    canvas.SelectHollowBrush();
     if (black)
-      canvas.black_pen();
+      canvas.SelectBlackPen();
     else
-      canvas.select(airspace_look.pens[type]);
+      canvas.Select(airspace_look.pens[type]);
 
     // Draw thin outlines
-    canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+    canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
   }
 
   /**
@@ -170,7 +170,7 @@ public:
     Brush brush(color);
 #else
     const Brush &brush = airspace_look.brushes[settings.brushes[type]];
-    canvas.set_text_color(LightColor(airspace_look.colors[settings.colours[type]]));
+    canvas.SetTextColor(LightColor(airspace_look.colors[settings.colours[type]]));
 #endif
 
     PixelRect rcd;
@@ -320,8 +320,8 @@ CrossSectionWindow::PaintTerrain(Canvas &canvas, Chart &chart)
   }
 
   if (i >= 4) {
-    canvas.null_pen();
-    canvas.select(look.terrain_brush);
+    canvas.SelectNullPen();
+    canvas.Select(look.terrain_brush);
     canvas.polygon(&points[0], i);
   }
 }
@@ -341,8 +341,8 @@ void
 CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
                                   const PixelRect rc)
 {
-  canvas.select(look.aircraft_brush);
-  canvas.null_pen();
+  canvas.Select(look.aircraft_brush);
+  canvas.SelectNullPen();
 
   RasterPoint line[4];
   line[0].x = chart.screenX(fixed_zero);
@@ -353,13 +353,13 @@ CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
   line[2].y = line[0].y - (line[0].x - line[1].x) / 2;
   line[3].x = (line[1].x + line[0].x) / 2;
   line[3].y = line[0].y;
-  canvas.TriangleFan(line, 4);
+  canvas.DrawTriangleFan(line, 4);
 }
 
 void
 CrossSectionWindow::PaintGrid(Canvas &canvas, Chart &chart)
 {
-  canvas.set_text_color(look.text_color);
+  canvas.SetTextColor(look.text_color);
 
   chart.DrawXGrid(Units::ToSysDistance(fixed(5)), fixed_zero,
                   look.grid_pen, fixed(5), true);
@@ -374,8 +374,8 @@ void
 CrossSectionWindow::on_paint(Canvas &canvas)
 {
   canvas.clear(look.background_color);
-  canvas.set_text_color(look.text_color);
-  canvas.select(Fonts::Map);
+  canvas.SetTextColor(look.text_color);
+  canvas.Select(Fonts::Map);
 
   const PixelRect rc = get_client_rect();
 

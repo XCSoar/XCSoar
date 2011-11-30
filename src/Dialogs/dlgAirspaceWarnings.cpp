@@ -318,8 +318,8 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
 
   const UPixelScalar TextHeight = 12, TextTop = 1;
 
-  const int statusColWidth = canvas.text_width(_T("inside"));     //<-- word "inside" is used as the etalon, because it is longer than "near" and currently (9.4.2011) there is no other possibility for the status text.
-  const int heightColWidth = canvas.text_width(_T("1888 m AGL")); // <-- "1888" is used in order to have enough space for 4-digit heights with "AGL"
+  const int statusColWidth = canvas.CalcTextWidth(_T("inside"));     //<-- word "inside" is used as the etalon, because it is longer than "near" and currently (9.4.2011) there is no other possibility for the status text.
+  const int heightColWidth = canvas.CalcTextWidth(_T("1888 m AGL")); // <-- "1888" is used in order to have enough space for 4-digit heights with "AGL"
 
 
   /// Dynamic columns scaling - "name" column is flexible, altitude and state columns are fixed-width.
@@ -332,9 +332,9 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
   rcTextClip = paint_rc;
   rcTextClip.right = Col1LeftScreenCoords - Layout::FastScale(paint_rc_margin);
 
-  Color old_text_color = canvas.get_text_color();
+  Color old_text_color = canvas.GetTextColor();
   if (!warning.ack_expired)
-    canvas.set_text_color(COLOR_GRAY);
+    canvas.SetTextColor(COLOR_GRAY);
 
   { // name, altitude info
     _stprintf(sTmp, _T("%-20s"), sName.c_str());
@@ -396,7 +396,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
   }
 
   const PixelSize state_text_size =
-    canvas.text_size(state_text != NULL ? state_text : _T("W"));
+    canvas.CalcTextSize(state_text != NULL ? state_text : _T("W"));
 
   if (state_color != COLOR_WHITE) {
     /* colored background */
@@ -407,18 +407,18 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
     rc.right = paint_rc.right - Layout::FastScale(paint_rc_margin);
     rc.bottom = paint_rc.bottom - Layout::FastScale(paint_rc_margin);
 
-    canvas.fill_rectangle(rc, state_color);
+    canvas.DrawFilledRectangle(rc, state_color);
   }
 
   if (state_text != NULL) {
     // -- status text will be centered inside its table cell:
-    canvas.text(paint_rc.left + Col2LeftScreenCoords + Layout::FastScale(paint_rc_margin) + (statusColWidth / 2)  - (canvas.text_width(state_text) / 2),
+    canvas.text(paint_rc.left + Col2LeftScreenCoords + Layout::FastScale(paint_rc_margin) + (statusColWidth / 2)  - (canvas.CalcTextWidth(state_text) / 2),
                 (paint_rc.bottom + paint_rc.top - state_text_size.cy) / 2,
                 state_text);
   }
 
   if (!warning.ack_expired)
-    canvas.set_text_color(old_text_color);
+    canvas.SetTextColor(old_text_color);
 }
 
 static void

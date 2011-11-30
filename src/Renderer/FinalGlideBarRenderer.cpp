@@ -121,30 +121,30 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   // draw actual glide bar
   if (Offset <= 0) {
     if (calculated.common_stats.landable_reachable) {
-      canvas.select(look.hpFinalGlideBelowLandable);
-      canvas.select(look.hbFinalGlideBelowLandable);
+      canvas.Select(look.hpFinalGlideBelowLandable);
+      canvas.Select(look.hbFinalGlideBelowLandable);
     } else {
-      canvas.select(look.hpFinalGlideBelow);
-      canvas.select(look.hbFinalGlideBelow);
+      canvas.Select(look.hpFinalGlideBelow);
+      canvas.Select(look.hbFinalGlideBelow);
     }
   } else {
-    canvas.select(look.hpFinalGlideAbove);
-    canvas.select(look.hbFinalGlideAbove);
+    canvas.Select(look.hpFinalGlideAbove);
+    canvas.Select(look.hbFinalGlideAbove);
   }
   canvas.polygon(GlideBar, 6);
 
   // draw glide bar at mc 0
   if (Offset0 <= 0) {
     if (calculated.common_stats.landable_reachable) {
-      canvas.select(look.hpFinalGlideBelowLandable);
-      canvas.hollow_brush();
+      canvas.Select(look.hpFinalGlideBelowLandable);
+      canvas.SelectHollowBrush();
     } else {
-      canvas.select(look.hpFinalGlideBelow);
-      canvas.hollow_brush();
+      canvas.Select(look.hpFinalGlideBelow);
+      canvas.SelectHollowBrush();
     }
   } else {
-    canvas.select(look.hpFinalGlideAbove);
-    canvas.hollow_brush();
+    canvas.Select(look.hpFinalGlideAbove);
+    canvas.SelectHollowBrush();
   }
 
   if (Offset != Offset0)
@@ -160,7 +160,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     cross_sign = -1;
 
   if (cross_sign != 0) {
-    canvas.select(task_look.bearing_pen);
+    canvas.Select(task_look.bearing_pen);
     canvas.line(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 - 5),
                 Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 + 5));
     canvas.line(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 + 5),
@@ -178,8 +178,8 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   else
     Offset = GlideBar[2].y + Offset - Layout::Scale(15);
 
-  canvas.set_text_color(COLOR_BLACK);
-  canvas.set_background_color(COLOR_WHITE);
+  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetBackgroundColor(COLOR_WHITE);
 
   TextInBoxMode style;
   style.mode = RM_ROUNDED_BLACK;

@@ -38,7 +38,7 @@ DrawPolygon(Canvas &canvas, const AirspacePolygon &airspace,
             const RasterPoint pt, unsigned radius)
 {
   if (is_ancient_hardware()) {
-    canvas.rectangle(pt.x - radius, pt.y - radius,
+    canvas.Rectangle(pt.x - radius, pt.y - radius,
                      pt.x + radius, pt.y + radius);
     return;
   }
@@ -78,12 +78,12 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
                               const AirspaceRendererSettings &settings,
                               const AirspaceLook &look)
 {
-  canvas.hollow_brush();
+  canvas.SelectHollowBrush();
 
   if (settings.black_outline)
-    canvas.black_pen();
+    canvas.SelectBlackPen();
   else
-    canvas.select(look.pens[airspace.GetType()]);
+    canvas.Select(look.pens[airspace.GetType()]);
 
   if (airspace.shape == AbstractAirspace::CIRCLE)
     canvas.circle(pt.x, pt.y, radius);

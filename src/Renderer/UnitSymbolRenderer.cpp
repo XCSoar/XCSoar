@@ -72,10 +72,10 @@ UnitSymbolRenderer::GetSize(const Canvas &canvas, const Unit unit)
   assert(strings.line2 != NULL);
 
   if (!strings.line1)
-    return canvas.text_size(strings.line2);
+    return canvas.CalcTextSize(strings.line2);
 
-  PixelSize size1 = canvas.text_size(strings.line1);
-  PixelSize size2 = canvas.text_size(strings.line2);
+  PixelSize size1 = canvas.CalcTextSize(strings.line1);
+  PixelSize size2 = canvas.CalcTextSize(strings.line2);
 
   PixelSize size;
   size.cy = size1.cy + size2.cy;
@@ -126,8 +126,8 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const RasterPoint pos,
     return;
   }
 
-  PixelSize size1 = canvas.text_size(strings.line1);
-  PixelSize size2 = canvas.text_size(strings.line2);
+  PixelSize size1 = canvas.CalcTextSize(strings.line1);
+  PixelSize size2 = canvas.CalcTextSize(strings.line2);
 
   if (size1.cx > size2.cx) {
     canvas.text(pos.x, pos.y, strings.line1);

@@ -46,7 +46,7 @@ void
 GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
 {
   Pen dash_pen(Pen::DASH, 1, COLOR_DARK_GRAY);
-  canvas.select(dash_pen);
+  canvas.Select(dash_pen);
 
   const RasterPoint Orig_Screen = render_projection.GetScreenOrigin();
 
@@ -159,19 +159,19 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   fixed MapWidth = projection.GetScreenWidthMeters();
 
-  canvas.select(Fonts::MapBold);
+  canvas.Select(Fonts::MapBold);
   Units::FormatUserMapScale(MapWidth, buffer.buffer(), buffer.MAX_SIZE, true);
-  PixelSize TextSize = canvas.text_size(buffer);
+  PixelSize TextSize = canvas.CalcTextSize(buffer);
 
   UPixelScalar Height = Fonts::MapBold.GetCapitalHeight() + Layout::Scale(2);
   // 2: add 1pix border
 
-  canvas.fill_rectangle(Layout::Scale(4), rc.bottom - Height,
+  canvas.DrawFilledRectangle(Layout::Scale(4), rc.bottom - Height,
                         TextSize.cx + Layout::Scale(11), rc.bottom,
                         COLOR_WHITE);
 
-  canvas.background_transparent();
-  canvas.set_text_color(COLOR_BLACK);
+  canvas.SetBackgroundTransparent();
+  canvas.SetTextColor(COLOR_BLACK);
 
   canvas.text(Layout::Scale(7),
               rc.bottom - Fonts::MapBold.GetAscentHeight() - Layout::Scale(1),
@@ -221,11 +221,11 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   if (!buffer.empty()) {
     int y = rc.bottom - Height;
 
-    canvas.select(Fonts::Title);
-    canvas.background_opaque();
-    canvas.set_background_color(COLOR_WHITE);
+    canvas.Select(Fonts::Title);
+    canvas.SetBackgroundOpaque();
+    canvas.SetBackgroundColor(COLOR_WHITE);
 
-    canvas.text(0, y - canvas.text_size(buffer).cy, buffer);
+    canvas.text(0, y - canvas.CalcTextSize(buffer).cy, buffer);
   }
 }
 
@@ -317,7 +317,7 @@ GlueMapWindow::DrawStallRatio(Canvas &canvas, const PixelRect &rc) const
     fixed s = max(fixed_zero, min(fixed_one, Basic().stall_ratio));
     PixelScalar m((rc.bottom - rc.top) * s * s);
 
-    canvas.black_pen();
+    canvas.SelectBlackPen();
     canvas.line(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);
   }
 }

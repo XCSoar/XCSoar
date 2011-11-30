@@ -78,11 +78,11 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
   if (terrain == NULL) {
     // terrain may have been re-set, so may need new renderer
     Reset();
-    canvas.clear_white();
+    canvas.ClearWhite();
     return;
   }
   if (!terrain_settings.enable) {
-    canvas.clear_white();
+    canvas.ClearWhite();
     return;
   }
 
@@ -144,7 +144,7 @@ BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas, LabelBlock &block,
     return;
 
   PixelRect block_rect;
-  PixelSize text_size = canvas.text_size(buffer);
+  PixelSize text_size = canvas.CalcTextSize(buffer);
 
   pt.x += 2;
   pt.y += 2;
@@ -166,9 +166,9 @@ BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas,
   if (weather == NULL || weather->GetParameter() == 0 || renderer == NULL)
     return false;
 
-  canvas.select(Fonts::Title);
-  canvas.set_text_color(COLOR_BLACK);
-  canvas.background_transparent();
+  canvas.Select(Fonts::Title);
+  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetBackgroundTransparent();
 
   TCHAR buffer[20];
   weather->ValueToText(buffer, renderer->spot_max_val);

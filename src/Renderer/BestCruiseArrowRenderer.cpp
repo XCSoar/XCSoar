@@ -36,8 +36,8 @@ BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
                               const Angle best_cruise_angle,
                               const RasterPoint pos)
 {
-  canvas.select(look.best_cruise_track_pen);
-  canvas.select(look.best_cruise_track_brush);
+  canvas.Select(look.best_cruise_track_pen);
+  canvas.Select(look.best_cruise_track_brush);
 
   RasterPoint arrow[] = { { -1, -40 }, { -1, -62 }, { -6, -62 }, {  0, -70 },
                           {  6, -62 }, {  1, -62 }, {  1, -40 }, { -1, -40 } };

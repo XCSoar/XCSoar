@@ -128,9 +128,9 @@ TerminalWindow::on_paint(Canvas &canvas)
 void
 TerminalWindow::on_paint(Canvas &canvas, const PixelRect &p_dirty)
 {
-  canvas.background_transparent();
-  canvas.set_text_color(look.text_color);
-  canvas.select(*look.font);
+  canvas.SetBackgroundTransparent();
+  canvas.SetTextColor(look.text_color);
+  canvas.Select(*look.font);
 
   const PixelRect cell_dirty = {
     PixelScalar(p_dirty.left / cell_size.cx),
@@ -148,7 +148,7 @@ TerminalWindow::on_paint(Canvas &canvas, const PixelRect &p_dirty)
   for (int cell_y = cell_dirty.top, p_y = cell_y * cell_size.cy;
        cell_y < cell_dirty.bottom;
        ++cell_y, p_y += cell_size.cy, text += data.GetWidth()) {
-    canvas.fill_rectangle(p_dirty.left, p_y,
+    canvas.DrawFilledRectangle(p_dirty.left, p_y,
                           p_dirty.right, p_y + cell_size.cy,
                           look.background_color);
     canvas.text(x, p_y, text, length);
@@ -156,7 +156,7 @@ TerminalWindow::on_paint(Canvas &canvas, const PixelRect &p_dirty)
 
   PixelScalar cell_bottom_y(cell_dirty.bottom * cell_size.cy);
   if (cell_bottom_y < p_dirty.bottom)
-    canvas.fill_rectangle(p_dirty.left, cell_bottom_y,
+    canvas.DrawFilledRectangle(p_dirty.left, cell_bottom_y,
                           p_dirty.right, p_dirty.bottom,
                           look.background_color);
 }
