@@ -75,7 +75,7 @@ struct flat_gesture_map {
 // without taking up more data - but when loading from file must copy string
 static void
 makeLabel(InputConfig &input_config,
-          InputEvents::mode mode_id, const TCHAR* label,
+          InputEvents::Mode mode_id, const TCHAR* label,
           unsigned location, unsigned event_id)
 {
   input_config.AppendMenu(mode_id, label, location, event_id);
@@ -128,7 +128,7 @@ apply_defaults(InputConfig &input_config,
 
   while (default_labels->label != NULL) {
     makeLabel(input_config,
-              (InputEvents::mode)default_labels->mode,
+              (InputEvents::Mode)default_labels->mode,
               default_labels->label,
               default_labels->location, default_labels->event);
     ++default_labels;

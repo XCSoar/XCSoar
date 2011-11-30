@@ -71,19 +71,19 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 
 namespace InputEvents
 {
-  static mode current_mode = InputEvents::MODE_DEFAULT;
+  static Mode current_mode = InputEvents::MODE_DEFAULT;
 
   static unsigned MenuTimeOut = 0;
 
   gcc_pure
-  static mode getModeID();
+  static Mode getModeID();
 
   /**
    * Looks up the specified key code, and returns the associated event
    * id.  Returns 0 if the key was not found.
    */
   gcc_pure
-  static unsigned key_to_event(mode mode, unsigned key_code);
+  static unsigned key_to_event(Mode mode, unsigned key_code);
 
   gcc_pure
   static unsigned gesture_to_event(const TCHAR *data);
@@ -91,7 +91,7 @@ namespace InputEvents
   /**
    * @param full if false, update only the dynamic labels
    */
-  static void drawButtons(mode Mode, bool full=false);
+  static void drawButtons(Mode mode, bool full=false);
 
   static void ProcessMenuTimer();
 
@@ -120,7 +120,7 @@ InputEvents::readFile()
 }
 
 void
-InputEvents::setMode(mode mode)
+InputEvents::setMode(Mode mode)
 {
   assert((unsigned)mode < input_config.modes.size());
 
@@ -137,7 +137,7 @@ InputEvents::setMode(const TCHAR *mode)
 {
   int m = input_config.LookupMode(mode);
   if (m >= 0)
-    setMode((InputEvents::mode)m);
+    setMode((InputEvents::Mode)m);
 }
 
 void
@@ -150,12 +150,12 @@ InputEvents::LeaveMode(const TCHAR *mode)
 }
 
 void
-InputEvents::drawButtons(mode Mode, bool full)
+InputEvents::drawButtons(Mode mode, bool full)
 {
   if (!globalRunningEvent.Test())
     return;
 
-  const Menu &menu = input_config.menus[Mode];
+  const Menu &menu = input_config.menus[mode];
   for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
     const MenuItem &item = menu[i];
 
@@ -164,7 +164,7 @@ InputEvents::drawButtons(mode Mode, bool full)
   }
 }
 
-InputEvents::mode
+InputEvents::Mode
 InputEvents::getModeID()
 {
   return current_mode;
@@ -184,7 +184,7 @@ InputEvents::processButton(unsigned bindex)
   if (bindex >= Menu::MAX_ITEMS)
     return false;
 
-  mode lastMode = getModeID();
+  Mode lastMode = getModeID();
   const MenuItem &item = input_config.menus[lastMode][bindex];
   if (!item.defined())
     return false;
@@ -199,7 +199,7 @@ InputEvents::processButton(unsigned bindex)
 }
 
 unsigned
-InputEvents::key_to_event(mode mode, unsigned key_code)
+InputEvents::key_to_event(Mode mode, unsigned key_code)
 {
   if (key_code >= InputConfig::MAX_KEY)
     return 0;
@@ -213,7 +213,7 @@ InputEvents::key_to_event(mode mode, unsigned key_code)
 }
 
 bool
-InputEvents::ProcessKey(mode mode, unsigned key_code)
+InputEvents::ProcessKey(Mode mode, unsigned key_code)
 {
   if (is_altair() && key_code == 0xF5) {
     XCSoarInterface::SignalShutdown(false);
@@ -229,7 +229,7 @@ InputEvents::ProcessKey(mode mode, unsigned key_code)
     return false;
 
   int bindex = -1;
-  InputEvents::mode lastMode = mode;
+  InputEvents::Mode lastMode = mode;
   const TCHAR *pLabelText = NULL;
 
   const Menu &menu = input_config.menus[mode];

@@ -35,7 +35,7 @@ typedef void (*pt2Event)(const TCHAR *);
 
 namespace InputEvents
 {
-  enum mode {
+  enum Mode {
     MODE_DEFAULT,
     MODE_PAN,
     MODE_INFOBOX,
@@ -52,7 +52,7 @@ namespace InputEvents
   void LoadDefaults(InputConfig &input_config);
 
   void readFile();
-  void setMode(mode mode);
+  void setMode(Mode mode);
   void setMode(const TCHAR *mode);
 
   /**
@@ -73,7 +73,7 @@ namespace InputEvents
   /**
    * Process a hot key for the specified mode.
    */
-  bool ProcessKey(mode mode, unsigned key_code);
+  bool ProcessKey(Mode mode, unsigned key_code);
 
   bool processKey(unsigned key);
   bool processGesture(const TCHAR *data);
