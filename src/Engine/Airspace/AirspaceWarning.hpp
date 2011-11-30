@@ -71,7 +71,7 @@ public:
    *
    * @param the_airspace Airspace that this object will manage warnings for
    */
-  AirspaceWarning(const AbstractAirspace& the_airspace);
+  explicit AirspaceWarning(const AbstractAirspace& the_airspace);
 
   /**
    * Save warning state prior to performing update
