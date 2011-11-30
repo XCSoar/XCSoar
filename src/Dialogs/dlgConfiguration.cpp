@@ -83,7 +83,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Orientation"), 1, NULL, NULL, N_("IDR_XML_MAPDISPLAYCONFIGPANEL")},
   {N_("Elements"), 1, NULL, NULL, N_("IDR_XML_SYMBOLSCONFIGPANEL")},
   {N_("Waypoint"), 1, NULL, NULL, N_("IDR_XML_WAYPOINTDISPLAYCONFIGPANEL")},
-  {N_("Terrain"), 1, NULL, NULL, N_("IDR_XML_TERRAINDISPLAYCONFIGPANEL")},
+  {N_("Terrain"), 1, NULL, NULL, NULL, CreateTerrainDisplayConfigPanel },
   {N_("Airspace"), 1, NULL, NULL, N_("IDR_XML_AIRSPACECONFIGPANEL")},
   {N_("Safety Factors"), 2, NULL, NULL, N_("IDR_XML_SAFETYFACTORSCONFIGPANEL")},
   {N_("Glide Computer"), 2, NULL, NULL, N_("IDR_XML_GLIDECOMPUTERCONFIGPANEL")},
@@ -198,7 +198,6 @@ setVariables()
   MapDisplayConfigPanel::Init(wf);
   WaypointDisplayConfigPanel::Init(wf);
   SymbolsConfigPanel::Init(wf);
-  TerrainDisplayConfigPanel::Init(wf, CommonInterface::SettingsMap());
   GlideComputerConfigPanel::Init(wf);
   SafetyFactorsConfigPanel::Init(wf);
   RouteConfigPanel::Init(wf);
@@ -231,9 +230,6 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(SymbolsConfigPanel::OnTrailLength),
-  DeclareCallBackEntry(TerrainDisplayConfigPanel::OnEnableTerrain),
-  DeclareCallBackEntry(TerrainDisplayConfigPanel::OnChangeTerrain),
-  DeclareCallBackEntry(TerrainDisplayConfigPanel::OnPreviewPaint),
   DeclareCallBackEntry(RouteConfigPanel::OnRouteMode),
   DeclareCallBackEntry(RouteConfigPanel::OnReachMode),
   DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAPort),
@@ -317,7 +313,6 @@ void dlgConfigurationShowModal(void)
   changed |= MapDisplayConfigPanel::Save();
   changed |= WaypointDisplayConfigPanel::Save();
   changed |= SymbolsConfigPanel::Save();
-  changed |= TerrainDisplayConfigPanel::Save(CommonInterface::SetSettingsMap());
   changed |= GlideComputerConfigPanel::Save(requirerestart);
   changed |= SafetyFactorsConfigPanel::Save();
   changed |= RouteConfigPanel::Save();

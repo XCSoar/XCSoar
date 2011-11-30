@@ -24,21 +24,9 @@ Copyright_License {
 #ifndef TERRAINDISPLAYCONFIGPANEL_HPP
 #define TERRAINDISPLAYCONFIGPANEL_HPP
 
-#include "DataField/Base.hpp"
+class Widget;
 
-struct SETTINGS_MAP;
-class WndForm;
-class WndOwnerDrawFrame;
-class Canvas;
-
-namespace TerrainDisplayConfigPanel
-{
-  void Init(WndForm *wf, const SETTINGS_MAP &settings_map);
-  bool Save(SETTINGS_MAP &settings_map);
-
-  void OnEnableTerrain(DataField *Sender, DataField::DataAccessKind_t Mode);
-  void OnChangeTerrain(DataField *Sender, DataField::DataAccessKind_t Mode);
-  void OnPreviewPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
-};
+Widget *
+CreateTerrainDisplayConfigPanel();
 
 #endif /* TERRAINDISPLAYCONFIGPANEL_HPP */
