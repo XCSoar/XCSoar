@@ -28,6 +28,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "SettingsComputer.hpp"
 #include "Units/Units.hpp"
+#include "Units/UnitsFormatter.hpp"
 #include "Atmosphere/CuSonde.hpp"
 #include "DataField/Base.hpp"
 #include "DataField/Float.hpp"
@@ -136,9 +137,10 @@ OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
   switch (Mode) {
   case DataField::daChange:
     settings_computer.pressure =
-      AtmosphericPressure::HectoPascal(Sender->GetAsFixed());
+      AtmosphericPressure::HectoPascal(Units::ToSysPressure(Sender->GetAsFixed()))
+;
     settings_computer.pressure_available.Update(basic.clock);
-    device_blackboard->SetQNH(Sender->GetAsFixed());
+    device_blackboard->SetQNH(Units::ToSysPressure(Sender->GetAsFixed()));
     RefreshAltitudeControl();
     break;
 
@@ -264,9 +266,21 @@ dlgBasicSettingsShowModal()
 
   SetBallast();
   LoadFormProperty(*wf, _T("prpBugs"), glide_polar.GetBugs() * 100);
-  LoadFormProperty(*wf, _T("prpQNH"), settings.pressure.GetHectoPascal());
+  LoadFormProperty(*wf, _T("prpQNH"), Units::ToUserPressure(settings.pressure.GetHectoPascal()));
 
   WndProperty* wp;
+  wp = (WndProperty*)wf->FindByName(_T("prpQNH"));
+  if (wp) {
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+
+    df.SetMin(Units::ToUserPressure(Units::ToSysUnit(fixed(850), unHectoPascal)));
+    df.SetMax(Units::ToUserPressure(Units::ToSysUnit(fixed(1300), unHectoPascal)));
+    df.SetStep(Units::ToUserPressure(Units::ToSysUnit(fixed_one, unHectoPascal)));
+    df.SetUnits(Units::GetPressureName());
+    df.SetStep(Units::PressureStep());
+    df.SetFormat( Units::GetFormatUserPressure());
+    wp->RefreshDisplay();
+}
   wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
