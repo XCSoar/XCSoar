@@ -40,7 +40,7 @@ static bool
 CanEditInPlace()
 {
   /* disabled for now, because we don't handle this yet properly:
-     return has_keyboard(); */
+     return HasKeyboard(); */
   return false;
 }
 

@@ -359,7 +359,7 @@ WndForm::ShowModal()
 #endif /* USE_GDI */
 
   PeriodClock enter_clock;
-  if (is_embedded() && !is_altair())
+  if (IsEmbedded() && !IsAltair())
     enter_clock.update();
 
   show_on_top();
@@ -406,7 +406,7 @@ WndForm::ShowModal()
       continue;
 
     // hack to stop exiting immediately
-    if (is_embedded() && !is_altair() && !hastimed &&
+    if (IsEmbedded() && !IsAltair() && !hastimed &&
         is_user_input(event)) {
       if (!enter_clock.check(200))
         /* ignore user input in the first 200ms */
@@ -415,7 +415,7 @@ WndForm::ShowModal()
         hastimed = true;
     }
 
-    if (is_embedded() && is_mouse_up(event) &&
+    if (IsEmbedded() && is_mouse_up(event) &&
         !timeAnyOpenClose.check(OPENCLOSESUPPRESSTIME))
       /* prevents child click from being repeat-handled by parent if
          buttons overlap */
@@ -466,7 +466,7 @@ WndForm::ShowModal()
 
     /* map VK_ESCAPE to mrOK on Altair, because the Escape key is expected to 
        be the one that saves and closes a dialog */
-    if (is_altair() && is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
+    if (IsAltair() && is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
       mModalResult = mrOK;
       continue;
     }

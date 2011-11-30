@@ -97,7 +97,7 @@ LRESULT
 Window::on_message(HWND _hWnd, UINT message,
                        WPARAM wParam, LPARAM lParam)
 {
-  if (is_embedded() && !is_altair()) {
+  if (IsEmbedded() && !IsAltair()) {
     /* some older iPaqs such as the H3900 send only WM_KEYUP for
        VK_APP*, but never VK_KEYDOWN; the hx4700 has an additional set
        of undocumented key codes (0xca..0xcd) for the APP keys, but

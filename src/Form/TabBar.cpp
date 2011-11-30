@@ -162,7 +162,7 @@ TabBarControl::NextPage()
 
   assert(GetCurrentPage() < buttons.size());
 
-  if (!has_pointer() && (GetCurrentPage()+1 >= buttons.size()))
+  if (!HasPointer() && (GetCurrentPage()+1 >= buttons.size()))
     // prevent wraparound
     return;
 
@@ -178,7 +178,7 @@ TabBarControl::PreviousPage()
 
   assert(GetCurrentPage() < buttons.size());
 
-  if (!has_pointer() && (GetCurrentPage() == 0))
+  if (!HasPointer() && (GetCurrentPage() == 0))
     // prevent wraparound
     return;
 
@@ -365,7 +365,7 @@ TabDisplay::on_paint(Canvas &canvas)
 
     } else if (i == tab_bar.GetCurrentPage()) {
         canvas.SetTextColor(COLOR_WHITE);
-        if (has_focus() && !has_pointer()) {
+        if (has_focus() && !HasPointer()) {
           canvas.SetBackgroundColor(COLOR_GRAY.Highlight());
         } else {
           canvas.SetBackgroundColor(COLOR_BLACK);

@@ -298,7 +298,7 @@ SerialPort::Close()
     if (!CloseHandle(hPort)) {
       return false;
     } else {
-      if (!is_embedded())
+      if (!IsEmbedded())
         Sleep(2000); // needed for windows bug
 
       hPort = INVALID_HANDLE_VALUE;
@@ -319,7 +319,7 @@ SerialPort::Write(const void *data, size_t length)
 
 #ifdef _WIN32_WCE
 
-  if (is_windows_ce() && !is_altair())
+  if (IsWindowsCE() && !IsAltair())
     /* this is needed to work around a driver bug on the HP31x -
        without it, the second consecutive write without a task switch
        will hang the whole PNA; this Sleep() call enforces a task
@@ -444,7 +444,7 @@ SerialPort::SetRxTimeout(unsigned Timeout)
     CloseHandle(hPort);
     hPort = INVALID_HANDLE_VALUE;
 
-    if (!is_embedded())
+    if (!IsEmbedded())
       Sleep(2000); // needed for windows bug
 
     return false;

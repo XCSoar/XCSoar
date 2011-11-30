@@ -359,7 +359,7 @@ WndListFrame::on_key_down(unsigned key_code)
 
   case VK_UP:
   case VK_LEFT:
-    if (!has_pointer() ^ (key_code == VK_LEFT)) {
+    if (!HasPointer() ^ (key_code == VK_LEFT)) {
       // page up
       MoveCursor(-(int)items_visible);
       return true;
@@ -374,7 +374,7 @@ WndListFrame::on_key_down(unsigned key_code)
 
   case VK_DOWN:
   case VK_RIGHT:
-    if (!has_pointer() ^ (key_code == VK_RIGHT)) {
+    if (!HasPointer() ^ (key_code == VK_RIGHT)) {
       // page down
       MoveCursor(items_visible);
       return true;

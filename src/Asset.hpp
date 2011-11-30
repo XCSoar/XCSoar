@@ -33,7 +33,7 @@ Copyright_License {
 #include <tchar.h>
 
 // asset/registration data
-extern TCHAR strAssetNumber[];
+extern TCHAR asset_number[];
 
 void ReadAssetNumber(void);
 
@@ -51,17 +51,17 @@ enum ModelType {
 #if defined(_WIN32_WCE) && !defined(GNAV)
 #define HAVE_MODEL_TYPE
 
-extern ModelType GlobalModelType;
+extern ModelType global_model_type;
 
 #else
 
-#define GlobalModelType MODELTYPE_PNA_PNA
+#define global_model_type MODELTYPE_PNA_PNA
 
 #endif
 
 gcc_constexpr_function
 static inline bool
-have_model_type()
+HasModelType()
 {
 #ifdef HAVE_MODEL_TYPE
   return true;
@@ -75,7 +75,7 @@ have_model_type()
  */
 gcc_constexpr_function
 static inline bool
-is_debug()
+IsDebug()
 {
 #ifdef NDEBUG
   return false;
@@ -90,7 +90,7 @@ is_debug()
  */
 gcc_constexpr_function
 static inline bool
-is_embedded()
+IsEmbedded()
 {
 #if defined(_WIN32_WCE) || defined(ANDROID)
   return true;
@@ -105,7 +105,7 @@ is_embedded()
  */
 gcc_constexpr_function
 static inline bool
-is_windows_ce()
+IsWindowsCE()
 {
 #ifdef _WIN32_WCE
   return true;
@@ -121,7 +121,7 @@ is_windows_ce()
  */
 gcc_constexpr_function
 static inline bool
-is_old_ce()
+IsOldWindowsCE()
 {
 #if defined(_WIN32_WCE) && _WIN32_WCE < 0x0500
   return true;
@@ -136,7 +136,7 @@ is_old_ce()
  */
 gcc_constexpr_function
 static inline bool
-is_ancient_hardware()
+IsAncientHardware()
 {
 #if defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
   /* Windows CE 3.0 (PPC2000 & PPC2002) */
@@ -152,9 +152,9 @@ is_ancient_hardware()
  * @return True if host hardware is a HP31x, False otherwise
  */
 static inline bool
-model_is_hp31x()
+IsHP31X()
 {
-  return GlobalModelType == MODELTYPE_PNA_HP31X;
+  return global_model_type == MODELTYPE_PNA_HP31X;
 }
 
 /**
@@ -162,9 +162,9 @@ model_is_hp31x()
  * @return True if host hardware is a Medion P5, False otherwise
  */
 static inline bool
-model_is_medion_p5()
+IsMedionP5()
 {
-  return GlobalModelType == MODELTYPE_PNA_MEDION_P5;
+  return global_model_type == MODELTYPE_PNA_MEDION_P5;
 }
 
 /**
@@ -173,7 +173,7 @@ model_is_medion_p5()
  */
 gcc_constexpr_function
 static inline bool
-is_altair()
+IsAltair()
 {
 #if defined(GNAV)
   return true;
@@ -187,7 +187,7 @@ is_altair()
  */
 gcc_constexpr_function
 static inline bool
-is_android()
+IsAndroid()
 {
 #if defined(ANDROID)
   return true;
@@ -200,7 +200,7 @@ is_android()
  * Returns whether the application is running on Galaxy Tab with Android 2.2
  */
 static inline bool
-model_is_galaxy_tab22()
+IsGalaxyTab22()
 {
 #if defined(ANDROID)
   assert(native_view);
@@ -220,7 +220,7 @@ gcc_constexpr_function
 static inline bool
 HasLittleMemory()
 {
-  return is_ancient_hardware() || is_altair();
+  return IsAncientHardware() || IsAltair();
 }
 
 /**
@@ -228,9 +228,9 @@ HasLittleMemory()
  */
 gcc_constexpr_function
 static inline bool
-is_ioiolib()
+HasIOIOLib()
 {
-#if defined(IOIOLIB)
+#ifdef IOIOLIB
   return true;
 #else
   return false;
@@ -244,9 +244,9 @@ is_ioiolib()
  */
 gcc_constexpr_function
 static inline bool
-has_pointer()
+HasPointer()
 {
-  return !is_altair();
+  return !IsAltair();
 }
 
 /**
@@ -256,9 +256,9 @@ has_pointer()
  */
 gcc_constexpr_function
 static inline bool
-has_keyboard()
+HasKeyboard()
 {
-  return !is_embedded();
+  return !IsEmbedded();
 }
 
 /**
@@ -268,12 +268,12 @@ has_keyboard()
  */
 gcc_constexpr_function
 static inline bool
-has_colors()
+HasColors()
 {
   return true;
 }
 
-#if !defined(_WIN32_WCE)
+#ifndef _WIN32_WCE
 extern int SCREENWIDTH;
 extern int SCREENHEIGHT;
 #endif

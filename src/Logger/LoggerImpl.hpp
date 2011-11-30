@@ -117,7 +117,7 @@ public:
    */
   static bool LoggerClearFreeSpace(const NMEAInfo &gps_info);
   void StartLogger(const NMEAInfo &gps_info, const SETTINGS_COMPUTER &settings,
-                   const TCHAR *strAssetNumber, const Declaration &decl);
+                   const TCHAR *asset_number, const Declaration &decl);
 
   /**
    * Stops the logger
@@ -129,7 +129,7 @@ public:
 
 private:
   void StartLogger(const NMEAInfo &gps_info, const SETTINGS_COMPUTER &settings,
-                   const TCHAR *strAssetNumber);
+                   const TCHAR *asset_number);
   
 private:
   void LogPointToBuffer(const NMEAInfo &gps_info);

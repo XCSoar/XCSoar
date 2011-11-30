@@ -215,7 +215,7 @@ InputEvents::key_to_event(Mode mode, unsigned key_code)
 bool
 InputEvents::ProcessKey(Mode mode, unsigned key_code)
 {
-  if (is_altair() && key_code == 0xF5) {
+  if (IsAltair() && key_code == 0xF5) {
     XCSoarInterface::SignalShutdown(false);
     return true;
   }

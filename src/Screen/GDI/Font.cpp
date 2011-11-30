@@ -40,7 +40,7 @@ Font::Set(const TCHAR* facename, UPixelScalar height, bool bold, bool italic)
   font.lfHeight = (long)height;
   font.lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
   font.lfItalic = italic;
-  if (is_altair()) // better would be: if (screen.dpi() < 100)
+  if (IsAltair()) // better would be: if (screen.dpi() < 100)
     font.lfQuality = NONANTIALIASED_QUALITY;
   else
     font.lfQuality = ANTIALIASED_QUALITY;
@@ -88,7 +88,7 @@ Font::CalculateHeights()
   height = tm.tmHeight;
   ascent_height = tm.tmAscent;
 
-  if (is_altair()) {
+  if (IsAltair()) {
     // JMW: don't know why we need this in GNAV, but we do.
 
     BufferCanvas buffer(canvas, tm.tmAveCharWidth, tm.tmHeight);

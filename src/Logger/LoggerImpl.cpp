@@ -197,14 +197,15 @@ IsAlphaNum (TCHAR c)
 
 void
 LoggerImpl::StartLogger(const NMEAInfo &gps_info,
-    const SETTINGS_COMPUTER &settings, const TCHAR *asset_number)
+    const SETTINGS_COMPUTER &settings, const TCHAR *_asset_number)
 {
   int i;
 
   // chars must be legal in file names
+  TCHAR asset_number[3];
   for (i = 0; i < 3; i++)
-    strAssetNumber[i] = IsAlphaNum(strAssetNumber[i]) ?
-                        strAssetNumber[i] : _T('A');
+    asset_number[i] = IsAlphaNum(_asset_number[i]) ?
+                      _asset_number[i] : _T('A');
 
   LocalPath(filename, _T("logs"));
   Directory::Create(filename);
@@ -221,9 +222,9 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
                   gps_info.date_time_utc.year,
                   gps_info.date_time_utc.month,
                   gps_info.date_time_utc.day,
-                  strAssetNumber[0],
-                  strAssetNumber[1],
-                  strAssetNumber[2], i);
+                  asset_number[0],
+                  asset_number[1],
+                  asset_number[2], i);
     } else {
       // Short file name
       TCHAR cyear, cmonth, cday, cflight;
@@ -232,7 +233,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
       cday = NumToIGCChar(gps_info.date_time_utc.day);
       cflight = NumToIGCChar(i);
       name.Format(_T("%c%c%cX%c%c%c%c.igc"), cyear, cmonth, cday,
-                  strAssetNumber[0], strAssetNumber[1], strAssetNumber[2],
+                  asset_number[0], asset_number[1], asset_number[2],
                   cflight);
     }
 

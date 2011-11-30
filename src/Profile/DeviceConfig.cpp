@@ -40,16 +40,16 @@ DeviceConfig::IsAvailable() const
     return true;
 
   case PortType::RFCOMM:
-    return is_android();
+    return IsAndroid();
 
   case PortType::IOIOUART:
-    return is_android() && is_ioiolib();
+    return IsAndroid() && HasIOIOLib();
 
   case PortType::AUTO:
-    return is_windows_ce();
+    return IsWindowsCE();
 
   case PortType::INTERNAL:
-    return is_android();
+    return IsAndroid();
 
   case PortType::TCP_LISTENER:
     return true;
@@ -132,7 +132,7 @@ StringToPortType(const TCHAR *value)
   if (_tcscmp(value, _T("tcp_listener")) == 0)
     return DeviceConfig::PortType::TCP_LISTENER;
 
-  if (is_android())
+  if (IsAndroid())
     return DeviceConfig::PortType::INTERNAL;
 
   return DeviceConfig::PortType::SERIAL;
@@ -146,7 +146,7 @@ ReadPortType(unsigned n)
   MakeDeviceSettingName(name, _T("Port"), n, _T("Type"));
   if (!Profile::Get(name, value, ARRAY_SIZE(value)))
     return n == 0
-      ? (is_android()
+      ? (IsAndroid()
          ? DeviceConfig::PortType::INTERNAL
          : DeviceConfig::PortType::SERIAL)
       : DeviceConfig::PortType::DISABLED;
@@ -199,9 +199,9 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   config.path.clear();
   if (config.port_type == DeviceConfig::PortType::SERIAL &&
       !LoadPath(config, n) && !LoadPortIndex(config, n)) {
-    if (is_altair() && n == 0)
+    if (IsAltair() && n == 0)
       config.path = _T("COM3:");
-    else if (is_altair() && n == 2)
+    else if (IsAltair() && n == 2)
       config.path = _T("COM2:");
   }
 
@@ -226,7 +226,7 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
     if (Get(buffer, speed_index) &&
         speed_index < ARRAY_SIZE(speed_index_table))
       config.baud_rate = speed_index_table[speed_index];
-    else if (is_altair())
+    else if (IsAltair())
       config.baud_rate = 38400;
     else
       config.baud_rate = 4800;
@@ -239,11 +239,11 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   _tcscpy(buffer, _T("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
   if (!Get(buffer, config.driver_name)) {
-    if (is_altair() && n == 0)
+    if (IsAltair() && n == 0)
       config.driver_name = _T("Altair RU");
-    else if (is_altair() && n == 1)
+    else if (IsAltair() && n == 1)
       config.driver_name = _T("Vega");
-    else if (is_altair() && n == 2)
+    else if (IsAltair() && n == 2)
       config.driver_name = _T("NmeaOut");
     else
       config.driver_name.clear();

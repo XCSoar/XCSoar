@@ -43,7 +43,7 @@ OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
   fixed scale;
   GeoPoint center;
 
-  if (is_ancient_hardware()) {
+  if (IsAncientHardware()) {
     scale = fixed(radius) / ((const CylinderZone &)oz).getRadius();
     center = oz.get_location();
   } else {

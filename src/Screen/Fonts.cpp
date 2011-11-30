@@ -62,7 +62,7 @@ static LOGFONT log_monospace;
 static const TCHAR *
 GetStandardMonospaceFontFace()
 {
-  if (is_android())
+  if (IsAndroid())
     return _T("Droid Sans Mono");
 
   return _T("Courier");
@@ -85,7 +85,7 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, UPixelScalar height,
   font->lfItalic = italic;
 
 #ifdef WIN32
-  if (is_altair())
+  if (IsAltair())
     font->lfQuality = NONANTIALIASED_QUALITY;
   else
     font->lfQuality = ANTIALIASED_QUALITY;
@@ -132,13 +132,13 @@ SizeLogFont(LOGFONT &logfont, UPixelScalar width, const TCHAR* str)
 static void
 InitialiseLogFonts()
 {
-  if (is_altair()) {
+  if (IsAltair()) {
     LoadAltairLogFonts();
     return;
   }
 
 #ifndef USE_GDI
-  UPixelScalar FontHeight = Layout::SmallScale(is_android() ? 30 : 24);
+  UPixelScalar FontHeight = Layout::SmallScale(IsAndroid() ? 30 : 24);
 #else
   UPixelScalar FontHeight = Layout::SmallScale(35);
 #endif
@@ -208,7 +208,7 @@ Fonts::SizeInfoboxFont(UPixelScalar control_width)
 {
   LOGFONT lf = log_infobox;
 
-  if (!is_altair())
+  if (!IsAltair())
     SizeLogFont(lf, control_width, _T("1234m"));
   infobox.Set(lf);
 
@@ -220,7 +220,7 @@ Fonts::SizeInfoboxFont(UPixelScalar control_width)
 #endif
 
   lf = log_infobox_small;
-  if (!is_altair())
+  if (!IsAltair())
     SizeLogFont(lf, control_width, _T("12345m"));
   infobox_small.Set(lf);
 }
@@ -245,10 +245,10 @@ Fonts::Deinitialize()
 const TCHAR*
 Fonts::GetStandardFontFace()
 {
-  if (is_altair())
+  if (IsAltair())
     return _T("RasterGothicFourteenCond");
 
-  if (is_android())
+  if (IsAndroid())
     return _T("Droid Sans");
 
   return _T("Tahoma");

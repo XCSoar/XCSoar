@@ -43,7 +43,7 @@ MapWindow::on_resize(UPixelScalar width, UPixelScalar height)
   // a huge negative effect on the heap fragmentation
   buffer_canvas.grow(width, height);
 
-  if (!is_ancient_hardware())
+  if (!IsAncientHardware())
     stencil_canvas.grow(width, height);
 #endif
 
@@ -62,7 +62,7 @@ MapWindow::on_create()
   WindowCanvas canvas(*this);
   buffer_canvas.set(canvas);
 
-  if (!is_ancient_hardware())
+  if (!IsAncientHardware())
     stencil_canvas.set(canvas);
 #endif
 }
@@ -80,7 +80,7 @@ MapWindow::on_destroy()
 #ifndef ENABLE_OPENGL
   buffer_canvas.reset();
 
-  if (!is_ancient_hardware())
+  if (!IsAncientHardware())
     stencil_canvas.reset();
 #endif
 

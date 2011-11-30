@@ -49,7 +49,7 @@ ScrollBar::set(const PixelSize size)
   UPixelScalar width;
 
   // if the device has a pointer (mouse/touchscreen/etc.)
-  if (has_pointer()) {
+  if (HasPointer()) {
     width = (unsigned)Layout::Scale(SCROLLBARWIDTH_INITIAL);
   } else {
     // thin for ALTAIR b/c no touch screen

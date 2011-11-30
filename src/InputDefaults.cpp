@@ -142,7 +142,7 @@ InputEvents::LoadDefaults(InputConfig &input_config)
   // Get defaults
   input_config.SetDefaults();
 
-  if (is_altair()) {
+  if (IsAltair()) {
 #include "InputEvents_altair.cpp"
     apply_defaults(input_config,
                    default_modes,

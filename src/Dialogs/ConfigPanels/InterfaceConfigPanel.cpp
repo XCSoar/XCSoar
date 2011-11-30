@@ -146,7 +146,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   LoadFormProperty(form, _T("prpMenuTimeout"), settings.menu_timeout / 2);
 
-  if (has_pointer()) {
+  if (HasPointer()) {
     static gcc_constexpr_data StaticEnumChoice text_input_list[] = {
       { tiDefault, N_("Default") },
       { tiKeyboard, N_("Keyboard") },
@@ -235,7 +235,7 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
     changed = true;
   }
 
-  if (has_pointer())
+  if (HasPointer())
     changed |= SaveFormPropertyEnum(form, _T("prpTextInput"),
                                     szProfileAppTextInputStyle,
                                     settings.dialog.text_input_style);

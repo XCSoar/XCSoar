@@ -120,7 +120,7 @@ SETTINGS_COMPUTER::SetDefaults()
 
   external_trigger_cruise_enabled =false;
   average_eff_time = ae30seconds;
-  set_system_time_from_gps = is_altair() && is_embedded();
+  set_system_time_from_gps = IsAltair() && IsEmbedded();
   utc_offset = GetSystemUTCOffset();
   forecast_temperature = fixed(25);
   pressure = AtmosphericPressure::Standard();

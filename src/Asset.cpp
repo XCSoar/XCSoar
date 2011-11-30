@@ -37,10 +37,10 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 // Registration Data
-TCHAR strAssetNumber[MAX_LOADSTRING] = _T(""); //4G17DW31L0HY");
+TCHAR asset_number[MAX_LOADSTRING] = _T(""); //4G17DW31L0HY");
 
 #ifdef HAVE_MODEL_TYPE
-ModelType GlobalModelType = MODELTYPE_PNA_PNA;
+ModelType global_model_type = MODELTYPE_PNA_PNA;
 #endif
 
 static void
@@ -49,7 +49,7 @@ ReadCompaqID(void)
 #if defined(_WIN32_WCE)
   PROCESS_INFORMATION pi;
 
-  if(strAssetNumber[0] != '\0')
+  if(asset_number[0] != '\0')
     return;
 
   if (CreateProcess(_T("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL,
@@ -65,8 +65,8 @@ ReadCompaqID(void)
     return;
   }
   fseek(file, 976, SEEK_SET);
-  memset(strAssetNumber, 0, 64 * sizeof(TCHAR));
-  fread(&strAssetNumber, 64, 1, file);
+  memset(asset_number, 0, 64 * sizeof(TCHAR));
+  fread(&asset_number, 64, 1, file);
   fclose(file);
 #endif
 }
@@ -94,7 +94,7 @@ ReadUUID(void)
   // 3) take first 16 bytes of buffer and process.  Buffer returned may be any size
   // First try exactly 16 bytes, some older PDAs require exactly 16 byte buffer
 
-    strAssetNumber[0]= '\0';
+    asset_number[0]= '\0';
 
     iBuffSizeIn = sizeof(Guid);
     memset(GUIDbuffer, 0, iBuffSizeIn);
@@ -143,7 +143,7 @@ ReadUUID(void)
 
     Asset = Asset ^ temp;
 
-    _stprintf(strAssetNumber, _T("%08X%08X"), Asset, Guid.Data1);
+    _stprintf(asset_number, _T("%08X%08X"), Asset, Guid.Data1);
 #endif
 }
 
@@ -156,7 +156,7 @@ void ReadAssetNumber(void)
 
   val[0]= _T('\0');
 
-  memset(strAssetNumber, 0, MAX_LOADSTRING * sizeof(TCHAR));
+  memset(asset_number, 0, MAX_LOADSTRING * sizeof(TCHAR));
   // JMW clear this first just to be safe.
 
 #ifndef _WIN32_WCE
@@ -169,37 +169,37 @@ void ReadAssetNumber(void)
   for (int i = 0; i < len; i++) {
     if (((val[i] >= _T('A')) && (val[i] <= _T('Z')))
         || ((val[i] >= _T('0')) && (val[i] <= _T('9')))) {
-      strAssetNumber[ifound]= val[i];
+      asset_number[ifound]= val[i];
       ifound++;
     }
     if (ifound >= 3) {
-      LogStartUp(_T("Asset ID: %s (reg)"), strAssetNumber);
+      LogStartUp(_T("Asset ID: %s (reg)"), asset_number);
       return;
     }
   }
 
-  if(strAssetNumber[0] != '\0') {
-    LogStartUp(_T("Asset ID: %s (?)"), strAssetNumber);
+  if(asset_number[0] != '\0') {
+    LogStartUp(_T("Asset ID: %s (?)"), asset_number);
     return;
   }
 
   ReadCompaqID();
-  if(strAssetNumber[0] != '\0') {
-    LogStartUp(_T("Asset ID: %s (compaq)"), strAssetNumber);
+  if(asset_number[0] != '\0') {
+    LogStartUp(_T("Asset ID: %s (compaq)"), asset_number);
     return;
   }
 
   ReadUUID();
-  if(strAssetNumber[0] != '\0') {
-    LogStartUp(_T("Asset ID: %s (uuid)"), strAssetNumber);
+  if(asset_number[0] != '\0') {
+    LogStartUp(_T("Asset ID: %s (uuid)"), asset_number);
     return;
   }
 
-  strAssetNumber[0]= _T('A');
-  strAssetNumber[1]= _T('A');
-  strAssetNumber[2]= _T('A');
+  asset_number[0]= _T('A');
+  asset_number[1]= _T('A');
+  asset_number[2]= _T('A');
 
-  LogStartUp(_T("Asset ID: %s (fallback)"), strAssetNumber);
+  LogStartUp(_T("Asset ID: %s (fallback)"), asset_number);
 
   return;
 }
@@ -217,6 +217,6 @@ InitAsset()
 
   int Temp = (int)MODELTYPE_PNA_PNA;
   Profile::Get(szProfileAppInfoBoxModel, Temp);
-  GlobalModelType = (ModelType)Temp;
+  global_model_type = (ModelType)Temp;
 #endif
 }

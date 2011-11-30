@@ -123,7 +123,7 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
   }
 
   Poco::ScopedRWLock protect(lock, true);
-  logger.StartLogger(gps_info, settings, strAssetNumber, decl);
+  logger.StartLogger(gps_info, settings, asset_number, decl);
 }
 
 void

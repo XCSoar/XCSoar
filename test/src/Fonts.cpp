@@ -47,7 +47,7 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
   font->lfItalic = italic;
 
 #ifdef WIN32
-  if (is_altair())
+  if (IsAltair())
     font->lfQuality = NONANTIALIASED_QUALITY;
   else
     font->lfQuality = ANTIALIASED_QUALITY;
@@ -60,7 +60,7 @@ InitialiseFonts()
   const TCHAR *face = _T("Tahoma");
 
 #ifndef USE_GDI
-  UPixelScalar FontHeight = Layout::SmallScale(is_android() ? 30 : 24);
+  UPixelScalar FontHeight = Layout::SmallScale(IsAndroid() ? 30 : 24);
 #else
   UPixelScalar FontHeight = Layout::SmallScale(35);
 #endif

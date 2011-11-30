@@ -83,7 +83,7 @@ static const AbstractAirspace* FocusAirspace = NULL;  // Current action airspace
 static const AbstractAirspace *
 GetSelectedAirspace()
 {
-  return has_pointer() || FocusAirspace == NULL
+  return HasPointer() || FocusAirspace == NULL
     ? CursorAirspace
     : FocusAirspace;
 }
@@ -132,7 +132,7 @@ AirspaceWarningCursorCallback(unsigned i)
 static void
 OnAirspaceListEnter(gcc_unused unsigned i)
 {
-  if (!has_pointer())
+  if (!HasPointer())
     /* on platforms without a pointing device (e.g. ALTAIR), allow
        "focusing" an airspace by pressing enter */
     FocusAirspace = CursorAirspace;

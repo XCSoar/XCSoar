@@ -65,7 +65,7 @@ RasterRenderer::RasterRenderer()
    image(NULL)
 {
   // scale quantisation_pixels so resolution is not too high on large displays
-  if (is_embedded())
+  if (IsEmbedded())
     quantisation_pixels = Layout::FastScale(quantisation_pixels);
 }
 

@@ -97,7 +97,7 @@ DataFieldInteger::SpeedUp(bool keyup)
 {
   int res = 1;
 
-  if (is_altair())
+  if (IsAltair())
     return res;
 
   if (GetDisableSpeedUp() == true)

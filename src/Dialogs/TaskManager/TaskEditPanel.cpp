@@ -327,21 +327,21 @@ TaskEditPanel::OnKeyDown(unsigned key_code)
 {
   switch (key_code){
   case VK_ESCAPE:
-    if (is_altair() && wTaskPoints->has_focus()){
+    if (IsAltair() && wTaskPoints->has_focus()){
        wf.focus_first_control();
       return true;
     }
     return false;
 
   case '6': /* F5 */
-    if (is_altair()) {
+    if (IsAltair()) {
       MoveUp();
       return true;
     } else
       return false;
 
   case '7': /* F6 */
-    if (is_altair()) {
+    if (IsAltair()) {
       MoveDown();
       return true;
     } else

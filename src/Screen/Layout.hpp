@@ -63,7 +63,7 @@ namespace Layout
   static inline bool
   ScaleSupported()
   {
-    return !is_altair();
+    return !IsAltair();
   }
 
   /**

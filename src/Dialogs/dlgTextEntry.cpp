@@ -142,7 +142,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
   switch (key_code) {
   case VK_UP:
   case VK_LEFT:
-    if ((key_code == VK_LEFT) ^ is_altair()) {
+    if ((key_code == VK_LEFT) ^ IsAltair()) {
       if (cursor < 1)
         return true; // min width
 
@@ -157,7 +157,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 
   case VK_DOWN:
   case VK_RIGHT:
-    if ((key_code == VK_RIGHT) ^ is_altair()) {
+    if ((key_code == VK_RIGHT) ^ IsAltair()) {
       if ((int)cursor >= (max_width - 2))
         return true; // max width
 
@@ -181,25 +181,25 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 static void
 OnLeftClicked(gcc_unused WndButton &button)
 {
-  FormKeyDown(*wf, is_altair()? VK_UP : VK_LEFT);
+  FormKeyDown(*wf, IsAltair()? VK_UP : VK_LEFT);
 }
 
 static void
 OnRightClicked(gcc_unused WndButton &button)
 {
-  FormKeyDown(*wf, is_altair()? VK_DOWN : VK_RIGHT);
+  FormKeyDown(*wf, IsAltair()? VK_DOWN : VK_RIGHT);
 }
 
 static void
 OnUpClicked(gcc_unused WndButton &button)
 {
-  FormKeyDown(*wf, !is_altair()? VK_UP : VK_LEFT);
+  FormKeyDown(*wf, !IsAltair()? VK_UP : VK_LEFT);
 }
 
 static void
 OnDownClicked(gcc_unused WndButton &button)
 {
-  FormKeyDown(*wf, !is_altair()? VK_DOWN : VK_RIGHT);
+  FormKeyDown(*wf, !IsAltair()? VK_DOWN : VK_RIGHT);
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
@@ -265,7 +265,7 @@ dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text, int width,
   switch (CommonInterface::GetUISettings().dialog.text_input_style) {
   case tiDefault:
   case tiKeyboard:
-    if (has_pointer())
+    if (HasPointer())
       return dlgTextEntryKeyboardShowModal(parent, text, width, caption, accb);
     else {
       dlgTextEntryHighscoreType(parent, text, width, caption);

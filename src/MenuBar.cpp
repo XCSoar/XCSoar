@@ -63,7 +63,7 @@ GetButtonPosition(unsigned i, PixelRect rc,
       *x = rc.right - hwidth + margin;
       PixelScalar k = rc.bottom - rc.top - Layout::Scale(46);
 
-      if (is_altair()) {
+      if (IsAltair()) {
         k = rc.bottom - rc.top;
         // JMW need upside down button order for rotated Altair
         *y = rc.bottom - (i - 5) * k / 5 - (*sizey) - Layout::Scale(20);

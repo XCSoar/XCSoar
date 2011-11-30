@@ -40,7 +40,7 @@ ContainerWindow::focus_next_control()
   if (hControl == NULL)
     return;
 
-  if (is_altair()) { // detect and block wraparound 
+  if (IsAltair()) { // detect and block wraparound 
     HWND hControl_first = ::GetNextDlgTabItem(hWnd, hWnd, false);
     if (hControl == hControl_first)
       return;
@@ -54,7 +54,7 @@ ContainerWindow::focus_previous_control()
 {
   HWND hFocus = ::GetFocus();
 
-  if (is_altair()) { // detect and block wraparound 
+  if (IsAltair()) { // detect and block wraparound 
     HWND hControl_first = ::GetNextDlgTabItem(hWnd, hWnd, false);
     if (hFocus == hControl_first) 
       return;

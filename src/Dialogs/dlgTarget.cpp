@@ -507,14 +507,14 @@ drawBtnNext()
   btnNext = (WndSymbolButton*)wf->FindByName(_T("btnNext"));
   assert(btnNext != NULL);
 
-  if (is_altair())
+  if (IsAltair())
     // altair already has < and > buttons on WndProperty
     btnNext->set_visible(false);
 
   btnPrev = (WndSymbolButton*)wf->FindByName(_T("btnNext"));
   assert(btnPrev != NULL);
 
-  if (is_altair())
+  if (IsAltair())
     // altair already has < and > buttons on WndProperty
     btnPrev->set_visible(false);
 }

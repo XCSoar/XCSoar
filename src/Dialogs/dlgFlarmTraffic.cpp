@@ -512,13 +512,13 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
   switch (key_code) {
   case VK_UP:
-    if (!has_pointer())
+    if (!HasPointer())
       break;
 
     wdf->ZoomIn();
     return true;
   case VK_DOWN:
-    if (!has_pointer())
+    if (!HasPointer())
       break;
 
     wdf->ZoomOut();

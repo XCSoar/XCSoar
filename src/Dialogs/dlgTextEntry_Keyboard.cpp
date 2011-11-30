@@ -102,7 +102,7 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
     return true;
   }
 
-  if (!has_keyboard())
+  if (!HasKeyboard())
     return false;
 
   if ((key_code >= 'A' && key_code <= 'Z') ||

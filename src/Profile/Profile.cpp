@@ -107,7 +107,7 @@ Profile::SetFiles(const TCHAR* override)
   // Set the default profile file
   LocalPath(startProfileFile, _T(XCSPROFILE));
 
-  if (is_altair() && !File::Exists(startProfileFile)) {
+  if (IsAltair() && !File::Exists(startProfileFile)) {
     /* backwards compatibility with old Altair firmware */
     LocalPath(startProfileFile, _T("config/")_T(XCSPROFILE));
     if (!File::Exists(startProfileFile))

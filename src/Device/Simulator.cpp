@@ -127,7 +127,7 @@ Simulator::Process(NMEAInfo &basic)
     BrokenTime::FromSecondOfDayChecked((unsigned)basic.time);
 
   // use this to test FLARM parsing/display
-  if (is_debug() && !is_altair())
+  if (IsDebug() && !IsAltair())
     GenerateFLARMTraffic(basic);
 
   // clear Airspeed as it is not available in simulation mode

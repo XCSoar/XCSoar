@@ -271,7 +271,7 @@ fgrep(const char *fname, const char *string)
 static const TCHAR *
 GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
 {
-  if (is_android())
+  if (IsAndroid())
     /* hard-coded path for Android */
     return NULL;
 
@@ -292,13 +292,13 @@ GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
   } else
     return _T("/etc/xcsoar");
 #else
-  if (is_windows_ce())
+  if (IsWindowsCE())
     /* clear the buffer, just in case we evaluate it after
        SHGetSpecialFolderPath() failure, see below */
     buffer[0] = _T('\0');
 
   bool success = SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, create);
-  if (is_windows_ce() && !success && !string_is_empty(buffer))
+  if (IsWindowsCE() && !success && !string_is_empty(buffer))
     /* MSDN: "If you are using the AYGShell extensions, then this
        function returns FALSE even if successful. If the folder
        represented by the CSIDL does not exist and is not created, a
@@ -317,7 +317,7 @@ GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
 static TCHAR *
 FindDataPath()
 {
-  if (is_altair() && is_embedded()) {
+  if (IsAltair() && IsEmbedded()) {
     /* if XCSoarData exists on USB drive, use that, because the
        internal memory is extremely small */
     const TCHAR *usb = _T("\\USB HD\\" XCSDATADIR);
@@ -328,7 +328,7 @@ FindDataPath()
     return _tcsdup(_T("\\NOR Flash"));
   }
 
-  if (is_android()) {
+  if (IsAndroid()) {
 #ifdef ANDROID
     /* hack for Samsung Galaxy S and Samsung Galaxy Tab (which has a
        build-in and an external SD card) */

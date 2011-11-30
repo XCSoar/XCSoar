@@ -135,14 +135,14 @@ InputEvents::eventPan(const TCHAR *misc)
     SetPan(false);
 
   else if (_tcscmp(misc, _T("up")) == 0)
-    if (model_is_hp31x())
+    if (IsHP31X())
       // Scroll wheel on the HP31x series should zoom in pan mode
       sub_ScaleZoom(1);
     else
       sub_PanCursor(0, 1);
 
   else if (_tcscmp(misc, _T("down")) == 0)
-    if (model_is_hp31x())
+    if (IsHP31X())
       // Scroll wheel on the HP31x series should zoom in pan mode
       sub_ScaleZoom(-1);
     else

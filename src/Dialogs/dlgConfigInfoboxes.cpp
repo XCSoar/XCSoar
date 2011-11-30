@@ -317,7 +317,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
                    rc.right - rc.left, rc.bottom - rc.top);
 
 #ifdef _WIN32_WCE
-  if (is_altair())
+  if (IsAltair())
     wf->SetKeyDownNotify(OnKeyDown);
 #endif
 
@@ -344,7 +344,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   EditWindowStyle edit_style;
   edit_style.tab_stop();
 
-  if (is_embedded() || Layout::scale_1024 < 2048)
+  if (IsEmbedded() || Layout::scale_1024 < 2048)
     /* sunken edge doesn't fit well on the tiny screen of an
        embedded device */
     edit_style.border();

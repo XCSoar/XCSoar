@@ -96,7 +96,7 @@ SetHP31XBacklight()
 bool
 Display::SetBacklight()
 {
-  switch (GlobalModelType) {
+  switch (global_model_type) {
   case MODELTYPE_PNA_HP31X:
     return SetHP31XBacklight();
 
@@ -238,13 +238,13 @@ Display::Rotate(enum orientation orientation)
     break;
 
   case ORIENTATION_REVERSE_PORTRAIT:
-    android_orientation = model_is_galaxy_tab22() ?
+    android_orientation = IsGalaxyTab22() ?
                           NativeView::SCREEN_ORIENTATION_REVERSE_PORTRAIT_GT :
                           NativeView::SCREEN_ORIENTATION_REVERSE_PORTRAIT;
     break;
 
   case ORIENTATION_REVERSE_LANDSCAPE:
-    android_orientation = model_is_galaxy_tab22() ?
+    android_orientation = IsGalaxyTab22() ?
                           NativeView::SCREEN_ORIENTATION_REVERSE_LANDSCAPE_GT :
                           NativeView::SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
     break;

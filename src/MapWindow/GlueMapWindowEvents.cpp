@@ -70,7 +70,7 @@ bool
 GlueMapWindow::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
 {
   /* allow a bigger threshold on touch screens */
-  const int threshold = is_embedded() ? 50 : 10;
+  const int threshold = IsEmbedded() ? 50 : 10;
   if (drag_mode != DRAG_NONE && !dragOverMinDist &&
       (abs(drag_start.x - x) + abs(drag_start.y - y)) > Layout::Scale(threshold))
     dragOverMinDist = true;

@@ -369,7 +369,7 @@ public:
   {
     switch (settings.fill_mode) {
     case AirspaceRendererSettings::AS_FILL_DEFAULT:
-      m_use_stencil = !is_ancient_hardware();
+      m_use_stencil = !IsAncientHardware();
       break;
 
     case AirspaceRendererSettings::AS_FILL_ALL:

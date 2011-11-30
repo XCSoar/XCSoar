@@ -315,7 +315,7 @@ TargetMapWindow::on_resize(UPixelScalar width, UPixelScalar height)
 #ifndef ENABLE_OPENGL
   buffer_canvas.grow(width, height);
 
-  if (!is_ancient_hardware())
+  if (!IsAncientHardware())
     stencil_canvas.grow(width, height);
 #endif
 
@@ -337,7 +337,7 @@ TargetMapWindow::on_create()
   WindowCanvas canvas(*this);
   buffer_canvas.set(canvas);
 
-  if (!is_ancient_hardware())
+  if (!IsAncientHardware())
     stencil_canvas.set(canvas);
 #endif
 }
@@ -353,7 +353,7 @@ TargetMapWindow::on_destroy()
 #ifndef ENABLE_OPENGL
   buffer_canvas.reset();
 
-  if (!is_ancient_hardware())
+  if (!IsAncientHardware())
     stencil_canvas.reset();
 #endif
 

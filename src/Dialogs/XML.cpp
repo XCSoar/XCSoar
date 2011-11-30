@@ -677,7 +677,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     else
       edit_style.tab_stop();
 
-    if (is_embedded() || Layout::scale_1024 < 2048)
+    if (IsEmbedded() || Layout::scale_1024 < 2048)
       /* sunken edge doesn't fit well on the tiny screen of an
          embedded device */
       edit_style.border();
@@ -829,7 +829,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     style.tab_stop();
 
-    if (is_embedded() || Layout::scale_1024 < 2048)
+    if (IsEmbedded() || Layout::scale_1024 < 2048)
       /* sunken edge doesn't fit well on the tiny screen of an
          embedded device */
       style.border();

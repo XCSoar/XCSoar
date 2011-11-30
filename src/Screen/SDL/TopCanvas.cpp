@@ -51,7 +51,7 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height)
   /* double buffering temporarily disabled on Android because
      Android's SDL port doesn't allow locking it then (which we need
      for SDL_gfx) */
-  if (!is_android())
+  if (!IsAndroid())
     flags |= SDL_DOUBLEBUF;
 
   /* we need async screen updates as long as we don't have a global
@@ -64,13 +64,13 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height)
   /* hardware surface temporarily disabled on Android because
      Android's SDL port doesn't allow locking it then (which we need
      for SDL_gfx) */
-  if (!is_android() && info->hw_available)
+  if (!IsAndroid() && info->hw_available)
     flags |= SDL_HWSURFACE;
   else
     flags |= SDL_SWSURFACE;
 #endif /* !ENABLE_OPENGL */
 
-  if (is_embedded()) {
+  if (IsEmbedded()) {
 #if defined(ANDROID)
     width = native_view->get_width();
     height = native_view->get_height();

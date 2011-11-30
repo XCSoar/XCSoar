@@ -40,7 +40,7 @@ ExperimentalConfigPanel::Init(WndForm *_wf)
   wf = _wf;
   WndProperty *wp;
 
-  if (!have_model_type()) {
+  if (!HasModelType()) {
     wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
     if (wp) {
       wp->hide();
@@ -59,7 +59,7 @@ ExperimentalConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_T("MIO"));
     dfe->addEnumText(_T("Nokia500")); // VENTA3
     dfe->addEnumText(_T("PN6000"));
-    dfe->Set((int)GlobalModelType);
+    dfe->Set((int)global_model_type);
     wp->RefreshDisplay();
   }
 #endif
@@ -76,10 +76,10 @@ ExperimentalConfigPanel::Save(bool &requirerestart)
   WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
   if (wp) {
-    if (GlobalModelType != (ModelType)wp->GetDataField()->GetAsInteger()) {
-      GlobalModelType = (ModelType)wp->GetDataField()->GetAsInteger();
+    if (global_model_type != (ModelType)wp->GetDataField()->GetAsInteger()) {
+      global_model_type = (ModelType)wp->GetDataField()->GetAsInteger();
       Profile::Set(szProfileAppInfoBoxModel,
-                    GlobalModelType);
+                    global_model_type);
       changed = true;
       requirerestart = true;
     }

@@ -633,7 +633,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle)
 
     } else if ((*i)->main_menu_index == selected_index.main_index) {
         canvas.SetTextColor(COLOR_WHITE);
-        if (has_focus() && !has_pointer()) {
+        if (has_focus() && !HasPointer()) {
           canvas.SetBackgroundColor(COLOR_GRAY.Highlight());
         } else {
           canvas.SetBackgroundColor(COLOR_BLACK);
@@ -703,7 +703,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle)
 
     } else if (i->menu.sub_index == selected_index.sub_index) {
         canvas.SetTextColor(COLOR_WHITE);
-        if (has_focus() && !has_pointer()) {
+        if (has_focus() && !HasPointer()) {
           canvas.SetBackgroundColor(COLOR_GRAY.Highlight());
         } else {
           canvas.SetBackgroundColor(COLOR_BLACK);

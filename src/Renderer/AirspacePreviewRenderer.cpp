@@ -37,7 +37,7 @@ static void
 DrawPolygon(Canvas &canvas, const AirspacePolygon &airspace,
             const RasterPoint pt, unsigned radius)
 {
-  if (is_ancient_hardware()) {
+  if (IsAncientHardware()) {
     canvas.Rectangle(pt.x - radius, pt.y - radius,
                      pt.x + radius, pt.y + radius);
     return;

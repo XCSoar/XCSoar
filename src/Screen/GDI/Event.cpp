@@ -56,7 +56,7 @@ AllowDialogMessage(const MSG &msg)
   /* this hack disallows the dialog manager to handle VK_LEFT/VK_RIGHT
      on the Altair; some dialogs use the knob as a hot key, and they
      can't implement Window::on_key_check() */
-  if (is_altair() && (msg.message == WM_KEYDOWN || msg.message == WM_KEYUP) &&
+  if (IsAltair() && (msg.message == WM_KEYDOWN || msg.message == WM_KEYUP) &&
       (msg.wParam == VK_LEFT || msg.wParam == VK_RIGHT))
     return false;
 
@@ -73,7 +73,7 @@ DialogEventLoop::dispatch(MSG &msg)
     return;
   }
 
-  if (is_altair() && msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE) {
+  if (IsAltair() && msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE) {
     /* the Windows CE dialog manager does not handle VK_ESCAPE, but
        the Altair needs it - let's roll our own */
     ::SendMessage(dialog, WM_COMMAND, IDCANCEL, 0);
@@ -111,10 +111,10 @@ TranscodeKey(unsigned key_code)
     return VK_RETURN;
 #endif
 
-  if (GlobalModelType == MODELTYPE_PNA_HP31X) {
+  if (global_model_type == MODELTYPE_PNA_HP31X) {
     if (key_code == 0x7b)
       key_code = 0x1b;
-  } else if (GlobalModelType == MODELTYPE_PNA_PN6000) {
+  } else if (global_model_type == MODELTYPE_PNA_PN6000) {
     switch(key_code) {
     case 0x79: // Upper Silver key short press
       key_code = 0xc1; // F10 -> APP1
@@ -135,7 +135,7 @@ TranscodeKey(unsigned key_code)
       key_code = 0x71; // F13 -> F2
       break;
     }
-  } else if (GlobalModelType == MODELTYPE_PNA_NOKIA_500) {
+  } else if (global_model_type == MODELTYPE_PNA_NOKIA_500) {
     switch(key_code) {
     case 0xc1:
       key_code = 0x0d; // middle key = enter
@@ -147,7 +147,7 @@ TranscodeKey(unsigned key_code)
       key_code = 0x28; // - key = pg Down
       break;
     }
-  } else if (GlobalModelType == MODELTYPE_PNA_MEDION_P5) {
+  } else if (global_model_type == MODELTYPE_PNA_MEDION_P5) {
     switch(key_code) {
     case 0x79:
       key_code = 0x0d; // middle key = enter
@@ -159,7 +159,7 @@ TranscodeKey(unsigned key_code)
       key_code = 0x28; // - key = pg Down
       break;
     }
-  } else if (is_altair()){  // handles new keypad driver button codes
+  } else if (IsAltair()){  // handles new keypad driver button codes
     switch(key_code) {
     case VK_F1:
       return VK_APP1;

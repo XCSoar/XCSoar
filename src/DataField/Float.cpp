@@ -138,7 +138,7 @@ DataFieldFloat::Dec(void)
 fixed
 DataFieldFloat::SpeedUp(bool keyup)
 {
-  if (is_altair())
+  if (IsAltair())
     return fixed_one;
 
   if (GetDisableSpeedUp() == true)
