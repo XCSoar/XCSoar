@@ -26,12 +26,14 @@ Copyright_License {
 #include "Components.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Units/Units.hpp"
+#include "Units/UnitsFormatter.hpp"
 #include "Simulator.hpp"
 #include "DataField/Float.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Form/Util.hpp"
+#include "Form/Edit.hpp"
 #include "Form/TabBar.hpp"
 #include "Form/XMLWidget.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
@@ -63,9 +65,9 @@ PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daChange:
-    settings_computer.pressure = AtmosphericPressure::HectoPascal(Sender->GetAsFixed());
+    settings_computer.pressure = AtmosphericPressure::HectoPascal(Units::ToSysPressure(Sender->GetAsFixed()));
     settings_computer.pressure_available.Update(CommonInterface::Basic().clock);
-    device_blackboard->SetQNH(Sender->GetAsFixed());
+    device_blackboard->SetQNH(Units::ToSysPressure(Sender->GetAsFixed()));
     break;
 
   case DataField::daSpecial:
@@ -103,7 +105,21 @@ void
 AltitudeSetupPanel::Show(const PixelRect &rc)
 {
   LoadFormProperty(form, _T("prpQNH"),
-                   CommonInterface::SettingsComputer().pressure.GetHectoPascal());
+                   Units::ToUserPressure(CommonInterface::SettingsComputer().pressure.GetHectoPascal()));
+
+  WndProperty* wp;
+  wp = (WndProperty*)form.FindByName(_T("prpQNH"));
+  if (wp) {
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+
+    df.SetMin(Units::ToUserPressure(Units::ToSysUnit(fixed(850), unHectoPascal)));
+    df.SetMax(Units::ToUserPressure(Units::ToSysUnit(fixed(1300), unHectoPascal)));
+    df.SetStep(Units::ToUserPressure(Units::ToSysUnit(fixed_one, unHectoPascal)));
+    df.SetUnits(Units::GetPressureName());
+    df.SetStep(Units::PressureStep());
+    df.SetFormat(Units::GetFormatUserPressure());
+    wp->RefreshDisplay();
+}
 
   XMLWidget::Show(rc);
 }
