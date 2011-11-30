@@ -32,25 +32,19 @@ Copyright_License {
 
 static WndForm* wf = NULL;
 
-
 void
 ExperimentalConfigPanel::Init(WndForm *_wf)
 {
   assert(_wf != NULL);
   wf = _wf;
-  WndProperty *wp;
+
+  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
+  assert(wp != NULL);
 
   if (!HasModelType()) {
-    wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
-    if (wp) {
-      wp->hide();
-    }
-  }
-
-#ifdef HAVE_MODEL_TYPE
-// VENTA-ADDON Model change config menu 11
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
-  if (wp) {
+    wp->hide();
+  } else {
+    // VENTA-ADDON Model change config menu 11
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Generic"));
@@ -62,7 +56,6 @@ ExperimentalConfigPanel::Init(WndForm *_wf)
     dfe->Set((int)global_model_type);
     wp->RefreshDisplay();
   }
-#endif
 }
 
 
