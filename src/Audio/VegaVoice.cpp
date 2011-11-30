@@ -222,8 +222,6 @@ void VegaVoiceMessage::SendMessage() {
 
 
 
-//  AllDevicesPutVoice(messageText);
-
 }
 
 

@@ -55,8 +55,6 @@ AllDevicesPutStandbyFrequency(RadioFrequency frequency);
 void
 AllDevicesPutQNH(const AtmosphericPressure &pres);
 
-void AllDevicesPutVoice(const TCHAR *sentence);
-
 /**
  * Is any device currently declaring a task?
  */

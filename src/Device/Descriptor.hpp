@@ -239,7 +239,6 @@ public:
   bool PutActiveFrequency(RadioFrequency frequency);
   bool PutStandbyFrequency(RadioFrequency frequency);
   bool PutQNH(const AtmosphericPressure &pres);
-  bool PutVoice(const TCHAR *sentence);
 
   bool Declare(const struct Declaration &declaration,
                OperationEnvironment &env);

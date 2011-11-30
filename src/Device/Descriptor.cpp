@@ -400,12 +400,6 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure &value)
 }
 
 bool
-DeviceDescriptor::PutVoice(const TCHAR *sentence)
-{
-  return device != NULL ? device->PutVoice(sentence) : true;
-}
-
-bool
 DeviceDescriptor::Declare(const struct Declaration &declaration,
                           OperationEnvironment &env)
 {

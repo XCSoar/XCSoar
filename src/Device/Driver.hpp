@@ -136,14 +136,6 @@ public:
   virtual bool PutQNH(const AtmosphericPressure &pressure) = 0;
 
   /**
-   * Send a "voice" sentence to the device (proprietary Vega feature).
-   *
-   * @param sentence the sentence (XXX define this)
-   * @return true on success
-   */
-  virtual bool PutVoice(const TCHAR *sentence) = 0;
-
-  /**
    * Set the radio volume.
    *
    * @param volume the new volume (XXX define this)
@@ -220,7 +212,6 @@ public:
   virtual bool PutBugs(fixed bugs);
   virtual bool PutBallast(fixed ballast);
   virtual bool PutQNH(const AtmosphericPressure &pres);
-  virtual bool PutVoice(const TCHAR *sentence);
   virtual bool PutVolume(int volume);
   virtual bool PutActiveFrequency(RadioFrequency frequency);
   virtual bool PutStandbyFrequency(RadioFrequency frequency);

@@ -120,16 +120,6 @@ AllDevicesPutQNH(const AtmosphericPressure &pres)
     device_list[i].PutQNH(pres);
 }
 
-void
-AllDevicesPutVoice(const TCHAR *sentence)
-{
-  if (is_simulator())
-    return;
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutVoice(sentence);
-}
-
 bool
 AllDevicesIsBusy()
 {

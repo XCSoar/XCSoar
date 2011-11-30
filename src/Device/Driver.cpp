@@ -67,12 +67,6 @@ AbstractDevice::PutQNH(const AtmosphericPressure &pres)
 }
 
 bool
-AbstractDevice::PutVoice(const TCHAR *sentence)
-{
-  return true;
-}
-
-bool
 AbstractDevice::PutVolume(int volume)
 {
   return true;

@@ -80,7 +80,6 @@ public:
   virtual void LinkTimeout();
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool PutQNH(const AtmosphericPressure& pres);
-  virtual bool PutVoice(const TCHAR *sentence);
   virtual void OnSysTicker(const DerivedInfo &calculated);
 };
 
@@ -357,22 +356,6 @@ VegaDevice::ParseNMEA(const char *String, NMEAInfo &info)
     return PDTSM(line, info);
   else
     return false;
-}
-
-bool
-VegaDevice::PutVoice(const TCHAR *Sentence)
-{
-#ifdef _UNICODE
-  char buffer[_tcslen(Sentence) * 4 + 1];
-  if (::WideCharToMultiByte(CP_ACP, 0, Sentence, -1, buffer, sizeof(buffer),
-                            NULL, NULL) <= 0)
-    return false;
-#else
-  const char *buffer = Sentence;
-#endif
-
-  PortWriteNMEA(port, buffer);
-  return true;
 }
 
 void
