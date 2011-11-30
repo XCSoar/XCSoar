@@ -45,8 +45,8 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   const FlarmId &id = *array[index];
 
-  const Font &name_font = Fonts::MapBold;
-  const Font &small_font = Fonts::MapLabel;
+  const Font &name_font = Fonts::map_bold;
+  const Font &small_font = Fonts::map_label;
 
   TCHAR tmp_id[10];
   id.Format(tmp_id);
@@ -104,8 +104,8 @@ dlgFlarmDetailsListShowModal(SingleWindow &parent, const TCHAR *title,
   assert(count > 0);
 
   array = _array;
-  UPixelScalar line_height = Fonts::MapBold.GetHeight() + Layout::Scale(6) +
-                         Fonts::MapLabel.GetHeight();
+  UPixelScalar line_height = Fonts::map_bold.GetHeight() + Layout::Scale(6) +
+                         Fonts::map_label.GetHeight();
   int index = ListPicker(parent, title, count, 0, line_height, PaintListItem, true);
   return (index < 0 || index >= (int)count) ? NULL : array[index];
 }

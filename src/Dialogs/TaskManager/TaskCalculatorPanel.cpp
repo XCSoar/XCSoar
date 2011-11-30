@@ -220,7 +220,7 @@ OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   if (instance->IsTaskModified()) {
     const TCHAR* message = _("Calculator excludes unsaved task changes!");
-    canvas.Select(Fonts::Title);
+    canvas.Select(Fonts::title);
     const int textheight = canvas.CalcTextHeight(message);
 
     const AirspaceLook &look =

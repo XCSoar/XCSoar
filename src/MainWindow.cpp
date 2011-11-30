@@ -178,7 +178,7 @@ MainWindow::InitialiseConfigured()
 
   LogStartUp(_T("Create button labels"));
   ButtonLabel::CreateButtonLabels(*this);
-  ButtonLabel::SetFont(Fonts::MapBold);
+  ButtonLabel::SetFont(Fonts::map_bold);
 
   WindowStyle hidden;
   hidden.hide();
@@ -216,7 +216,7 @@ MainWindow::InitialiseConfigured()
   map->SetSettingsComputer(CommonInterface::SettingsComputer());
   map->SetSettingsMap(CommonInterface::SettingsMap());
   map->set(*this, map_rect);
-  map->set_font(Fonts::Map);
+  map->set_font(Fonts::map);
 
   LogStartUp(_T("Initialise message system"));
   popup.set(rc);
@@ -486,7 +486,7 @@ MainWindow::on_resize(UPixelScalar width, UPixelScalar height)
 
     ButtonLabel::Destroy();
     ButtonLabel::CreateButtonLabels(*this);
-    ButtonLabel::SetFont(Fonts::MapBold);
+    ButtonLabel::SetFont(Fonts::map_bold);
 
     map->BringToBottom();
   }

@@ -188,7 +188,7 @@ InfoBoxPreview::on_paint(Canvas &canvas)
   else
     caption = gettext(caption);
 
-  canvas.Select(Fonts::Title);
+  canvas.Select(Fonts::title);
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(is_current ? COLOR_WHITE : COLOR_BLACK);
   canvas.text(2, 2, caption);

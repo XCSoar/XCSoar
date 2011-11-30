@@ -346,7 +346,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
   // in screen coords
 
   canvas.Select(file.IsLabelImportant(map_scale) ?
-                Fonts::MapLabelImportant : Fonts::MapLabel);
+                Fonts::map_label_important : Fonts::map_label);
   canvas.SetTextColor(Color(0x20, 0x20, 0x20));
   canvas.SetBackgroundTransparent();
 

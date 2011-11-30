@@ -172,7 +172,7 @@ ChartControl::on_paint(Canvas &canvas)
 
   canvas.clear(COLOR_WHITE);
   canvas.SetTextColor(COLOR_BLACK);
-  canvas.Select(Fonts::Map);
+  canvas.Select(Fonts::map);
 
   PixelRect rcgfx = get_client_rect();
 

@@ -84,8 +84,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                      (PixelScalar)(rc.top + line_height / 2) };
   AircraftRenderer::Draw(canvas, settings, look, item.bearing, pt);
 
-  const Font &name_font = Fonts::MapBold;
-  const Font &small_font = Fonts::MapLabel;
+  const Font &name_font = Fonts::map_bold;
+  const Font &small_font = Fonts::map_label;
   canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
@@ -120,8 +120,8 @@ MapItemListRenderer::Draw(
   AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
                                 renderer_settings, look);
 
-  const Font &name_font = Fonts::MapBold;
-  const Font &small_font = Fonts::MapLabel;
+  const Font &name_font = Fonts::map_bold;
+  const Font &small_font = Fonts::map_label;
   canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
@@ -168,8 +168,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   look.icon.Draw(canvas, pt);
 
-  const Font &name_font = Fonts::MapBold;
-  const Font &small_font = Fonts::MapLabel;
+  const Font &name_font = Fonts::map_bold;
+  const Font &small_font = Fonts::map_label;
   canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
@@ -201,8 +201,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   look.hBmpThermalSource.Draw(canvas, pt);
 
-  const Font &name_font = Fonts::MapBold;
-  const Font &small_font = Fonts::MapLabel;
+  const Font &name_font = Fonts::map_bold;
+  const Font &small_font = Fonts::map_label;
   canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
@@ -240,8 +240,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   OZPreviewRenderer::Draw(canvas, oz, pt, radius, look,
                           airspace_settings, airspace_look);
 
-  const Font &name_font = Fonts::MapBold;
-  const Font &small_font = Fonts::MapLabel;
+  const Font &name_font = Fonts::map_bold;
+  const Font &small_font = Fonts::map_label;
   canvas.SetTextColor(COLOR_BLACK);
 
   TCHAR buffer[256];
@@ -281,8 +281,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   TrafficRenderer::Draw(canvas, traffic_look, traffic, traffic.track, pt);
 
   // Now render the text information
-  const Font &name_font = Fonts::MapBold;
-  const Font &small_font = Fonts::MapLabel;
+  const Font &name_font = Fonts::map_bold;
+  const Font &small_font = Fonts::map_label;
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
 
   canvas.SetTextColor(COLOR_BLACK);

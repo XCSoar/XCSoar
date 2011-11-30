@@ -98,8 +98,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Fonts::Initialize();
 
   DialogLook dialog_look;
-  dialog_look.Initialise(Fonts::MapBold, Fonts::Map,
-                         Fonts::MapBold, Fonts::MapBold);
+  dialog_look.Initialise(Fonts::map_bold, Fonts::map,
+                         Fonts::map_bold, Fonts::map_bold);
   SetXMLDialogLook(dialog_look);
 
   WndForm *form = LoadDialog(NULL, main_window, argv[1]);

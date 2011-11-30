@@ -33,18 +33,20 @@ class Font;
 
 namespace Fonts
 {
-  extern Font InfoBox;
+  extern Font infobox;
+  extern Font infobox_small;
 #ifndef GNAV
-  extern Font InfoBoxUnits;
+  extern Font infobox_units;
 #endif
-  extern Font Title;
-  extern Font Map;
-  extern Font InfoBoxSmall;
-  extern Font MapBold;
-  extern Font CDI;
-  extern Font MapLabel;
-  extern Font MapLabelImportant;
+
+  extern Font title;
+  extern Font cdi;
   extern Font monospace;
+
+  extern Font map;
+  extern Font map_bold;
+  extern Font map_label;
+  extern Font map_label_important;
 
   /**
    * Load all fonts.

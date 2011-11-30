@@ -40,7 +40,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const SpeedVector wind, const RasterPoint pos,
                         const PixelRect rc, bool with_tail)
 {
-  canvas.Select(Fonts::MapBold);
+  canvas.Select(Fonts::map_bold);
   UPixelScalar text_width = canvas.CalcTextSize(_T("99")).cx / 2;
 
   canvas.Select(look.hpWind);

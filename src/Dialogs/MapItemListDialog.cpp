@@ -115,8 +115,8 @@ ShowMapItemListDialog(SingleWindow &parent)
 {
   unsigned num_items = list->size();
 
-  UPixelScalar item_height = Fonts::MapBold.GetHeight() + Layout::Scale(6) +
-                             Fonts::MapLabel.GetHeight();
+  UPixelScalar item_height = Fonts::map_bold.GetHeight() + Layout::Scale(6) +
+                             Fonts::map_label.GetHeight();
 
   assert(num_items <= 0x7fffffff);
   assert(item_height > 0);

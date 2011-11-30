@@ -159,11 +159,11 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   fixed MapWidth = projection.GetScreenWidthMeters();
 
-  canvas.Select(Fonts::MapBold);
+  canvas.Select(Fonts::map_bold);
   Units::FormatUserMapScale(MapWidth, buffer.buffer(), buffer.MAX_SIZE, true);
   PixelSize TextSize = canvas.CalcTextSize(buffer);
 
-  UPixelScalar Height = Fonts::MapBold.GetCapitalHeight() + Layout::Scale(2);
+  UPixelScalar Height = Fonts::map_bold.GetCapitalHeight() + Layout::Scale(2);
   // 2: add 1pix border
 
   canvas.DrawFilledRectangle(Layout::Scale(4), rc.bottom - Height,
@@ -174,7 +174,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   canvas.SetTextColor(COLOR_BLACK);
 
   canvas.text(Layout::Scale(7),
-              rc.bottom - Fonts::MapBold.GetAscentHeight() - Layout::Scale(1),
+              rc.bottom - Fonts::map_bold.GetAscentHeight() - Layout::Scale(1),
               buffer);
 
   look.hBmpMapScaleLeft.Draw(canvas, 0, rc.bottom - Height);
@@ -221,7 +221,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   if (!buffer.empty()) {
     int y = rc.bottom - Height;
 
-    canvas.Select(Fonts::Title);
+    canvas.Select(Fonts::title);
     canvas.SetBackgroundOpaque();
     canvas.SetBackgroundColor(COLOR_WHITE);
 

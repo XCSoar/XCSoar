@@ -28,8 +28,8 @@ Copyright_License {
 void
 Look::Initialise()
 {
-  dialog.Initialise(Fonts::MapBold, Fonts::Map,
-                    Fonts::MapBold, Fonts::MapBold);
+  dialog.Initialise(Fonts::map_bold, Fonts::map,
+                    Fonts::map_bold, Fonts::map_bold);
   traffic.Initialise();
   flarm_dialog.Initialise(traffic, false);
   flarm_gauge.Initialise(traffic, true);
@@ -38,13 +38,13 @@ Look::Initialise()
 void
 Look::InitialiseConfigured(const UISettings &settings)
 {
-  dialog.Initialise(Fonts::MapBold, Fonts::Map,
-                    Fonts::MapBold, Fonts::MapBold);
+  dialog.Initialise(Fonts::map_bold, Fonts::map,
+                    Fonts::map_bold, Fonts::map_bold);
   terminal.Initialise(Fonts::monospace);
   vario.Initialise(settings.info_boxes.inverse,
                    settings.info_boxes.use_colors,
-                   Fonts::Title, Fonts::CDI);
-  chart.Initialise(Fonts::MapLabel);
+                   Fonts::title, Fonts::cdi);
+  chart.Initialise(Fonts::map_label);
   thermal_band.Initialise(settings.info_boxes.inverse);
   trace_history.Initialise(settings.info_boxes.inverse);
   cross_section.Initialise();

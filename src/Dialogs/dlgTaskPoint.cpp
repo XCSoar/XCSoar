@@ -411,11 +411,11 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
 
   WndFrame* wType = (WndFrame*) wf->FindByName(_T("lblType"));
   assert (wType);
-  wType->SetFont(Fonts::MapBold);
+  wType->SetFont(Fonts::map_bold);
 
   WndFrame* wLocation = (WndFrame*) wf->FindByName(_T("lblLocation"));
   assert (wLocation);
-  wLocation->SetFont(Fonts::MapBold);
+  wLocation->SetFont(Fonts::map_bold);
 
   do {
     RefreshView();

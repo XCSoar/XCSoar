@@ -26,37 +26,37 @@ Copyright_License {
 #include "Screen/AnyCanvas.hpp"
 
 /// values inside infoboxes  like numbers, etc.
-Font Fonts::InfoBox;
-Font Fonts::InfoBoxSmall;
+Font Fonts::infobox;
+Font Fonts::infobox_small;
 #ifndef GNAV
-Font Fonts::InfoBoxUnits;
+Font Fonts::infobox_units;
 #endif
 /// Titles of infoboxes like Next, WP L/D etc.
-Font Fonts::Title;
-/// text names on the map
-Font Fonts::Map;
-/// menu buttons, waypoint selection, messages, etc.
-Font Fonts::MapBold;
+Font Fonts::title;
 /// vario display, runway informations
-Font Fonts::CDI;
-/// Flarm Traffic draweing and stats, map labels in italic
-Font Fonts::MapLabel;
-/// font labels for important labels (e.g. big/medium cities)
-Font Fonts::MapLabelImportant;
+Font Fonts::cdi;
 Font Fonts::monospace;
+/// text names on the map
+Font Fonts::map;
+/// menu buttons, waypoint selection, messages, etc.
+Font Fonts::map_bold;
+/// Flarm Traffic draweing and stats, map labels in italic
+Font Fonts::map_label;
+/// font labels for important labels (e.g. big/medium cities)
+Font Fonts::map_label_important;
 
 // these are the non-custom parameters
-LOGFONT LogInfoBox;
+LOGFONT log_infobox;
 #ifndef GNAV
-LOGFONT LogInfoBoxUnits;
+LOGFONT log_infobox_units;
 #endif
-LOGFONT LogTitle;
-LOGFONT LogMap;
-LOGFONT LogInfoBoxSmall;
-LOGFONT LogMapBold;
-LOGFONT LogCDI;
-LOGFONT LogMapLabel;
-LOGFONT LogMapLabelImportant;
+LOGFONT log_title;
+LOGFONT log_map;
+LOGFONT log_infobox_small;
+LOGFONT log_map_bold;
+LOGFONT log_cdi;
+LOGFONT log_map_label;
+LOGFONT log_map_label_important;
 static LOGFONT log_monospace;
 
 static const TCHAR *
@@ -95,15 +95,15 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, UPixelScalar height,
 static void
 LoadAltairLogFonts()
 {
-  InitialiseLogfont(&LogInfoBox, _T("RasterGothicTwentyFourCond"), 24, true);
-  InitialiseLogfont(&LogTitle, _T("RasterGothicNineCond"), 10);
-  InitialiseLogfont(&LogCDI, _T("RasterGothicEighteenCond"), 19, true);
-  InitialiseLogfont(&LogMapLabel, _T("RasterGothicTwelveCond"), 13);
-  InitialiseLogfont(&LogMapLabelImportant,
+  InitialiseLogfont(&log_infobox, _T("RasterGothicTwentyFourCond"), 24, true);
+  InitialiseLogfont(&log_title, _T("RasterGothicNineCond"), 10);
+  InitialiseLogfont(&log_cdi, _T("RasterGothicEighteenCond"), 19, true);
+  InitialiseLogfont(&log_map_label, _T("RasterGothicTwelveCond"), 13);
+  InitialiseLogfont(&log_map_label_important,
                     _T("RasterGothicTwelveCond"), 13, true);
-  InitialiseLogfont(&LogMap, _T("RasterGothicFourteenCond"), 15);
-  InitialiseLogfont(&LogMapBold, _T("RasterGothicFourteenCond"), 15, true);
-  InitialiseLogfont(&LogInfoBoxSmall, _T("RasterGothicEighteenCond"), 19, true);
+  InitialiseLogfont(&log_map, _T("RasterGothicFourteenCond"), 15);
+  InitialiseLogfont(&log_map_bold, _T("RasterGothicFourteenCond"), 15, true);
+  InitialiseLogfont(&log_infobox_small, _T("RasterGothicEighteenCond"), 19, true);
   InitialiseLogfont(&log_monospace, GetStandardMonospaceFontFace(),
                     10, false, false, false);
 }
@@ -144,40 +144,40 @@ InitialiseLogFonts()
 #endif
 
   // oversize first so can then scale down
-  InitialiseLogfont(&LogInfoBox, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_infobox, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 1.4), true, false, true);
 
 #ifdef WIN32
-  LogInfoBox.lfCharSet = ANSI_CHARSET;
+  log_infobox.lfCharSet = ANSI_CHARSET;
 #endif
 
-  InitialiseLogfont(&LogTitle, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_title, Fonts::GetStandardFontFace(),
                     FontHeight / 3, true);
 
   // new font for CDI Scale
-  InitialiseLogfont(&LogCDI, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_cdi, Fonts::GetStandardFontFace(),
                     UPixelScalar(FontHeight * 0.6), false, false, false);
 
   // new font for map labels
-  InitialiseLogfont(&LogMapLabel, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_map_label, Fonts::GetStandardFontFace(),
                     UPixelScalar(FontHeight * 0.39), false, true);
 
   // new font for map labels big/medium cities
-  InitialiseLogfont(&LogMapLabelImportant, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_map_label_important, Fonts::GetStandardFontFace(),
                     UPixelScalar(FontHeight * 0.39), true, true);
 
   // new font for map labels
-  InitialiseLogfont(&LogMap, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_map, Fonts::GetStandardFontFace(),
                     UPixelScalar(FontHeight * 0.507));
 
   // Font for map bold text
-  InitialiseLogfont(&LogMapBold, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_map_bold, Fonts::GetStandardFontFace(),
                     UPixelScalar(FontHeight * 0.507), true);
 
-  InitialiseLogfont(&LogInfoBoxSmall, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_infobox_small, Fonts::GetStandardFontFace(),
                     Layout::Scale(20));
 
-  InitialiseLogfont(&LogInfoBoxSmall, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_infobox_small, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.56), true);
 
   InitialiseLogfont(&log_monospace, GetStandardMonospaceFontFace(),
@@ -189,56 +189,56 @@ Fonts::Initialize()
 {
   InitialiseLogFonts();
 
-  Title.Set(LogTitle);
-  CDI.Set(LogCDI);
-  MapLabel.Set(LogMapLabel);
-  MapLabelImportant.Set(LogMapLabelImportant);
-  Map.Set(LogMap);
-  MapBold.Set(LogMapBold);
+  title.Set(log_title);
+  cdi.Set(log_cdi);
+  map_label.Set(log_map_label);
+  map_label_important.Set(log_map_label_important);
+  map.Set(log_map);
+  map_bold.Set(log_map_bold);
   monospace.Set(log_monospace);
 
-  return Title.IsDefined() && CDI.IsDefined() &&
-    MapLabel.IsDefined() && MapLabelImportant.IsDefined() &&
-    Map.IsDefined() && MapBold.IsDefined() &&
+  return title.IsDefined() && cdi.IsDefined() &&
+    map_label.IsDefined() && map_label_important.IsDefined() &&
+    map.IsDefined() && map_bold.IsDefined() &&
     monospace.IsDefined();
 }
 
 void
 Fonts::SizeInfoboxFont(UPixelScalar control_width)
 {
-  LOGFONT lf = LogInfoBox;
+  LOGFONT lf = log_infobox;
 
   if (!is_altair())
     SizeLogFont(lf, control_width, _T("1234m"));
-  InfoBox.Set(lf);
+  infobox.Set(lf);
 
 #ifndef GNAV
   unsigned height = lf.lfHeight;
-  lf = LogInfoBoxUnits;
+  lf = log_infobox_units;
   lf.lfHeight = (height * 2) / 5;
-  InfoBoxUnits.Set(lf);
+  infobox_units.Set(lf);
 #endif
 
-  lf = LogInfoBoxSmall;
+  lf = log_infobox_small;
   if (!is_altair())
     SizeLogFont(lf, control_width, _T("12345m"));
-  InfoBoxSmall.Set(lf);
+  infobox_small.Set(lf);
 }
 
 void
 Fonts::Deinitialize()
 {
-  InfoBox.Reset();
-  InfoBoxSmall.Reset();
+  infobox.Reset();
+  infobox_small.Reset();
 #ifndef GNAV
-  InfoBoxUnits.Reset();
+  infobox_units.Reset();
 #endif
-  Title.Reset();
-  Map.Reset();
-  MapBold.Reset();
-  CDI.Reset();
-  MapLabel.Reset();
-  MapLabelImportant.Reset();
+  title.Reset();
+  map.Reset();
+  map_bold.Reset();
+  cdi.Reset();
+  map_label.Reset();
+  map_label_important.Reset();
   monospace.Reset();
 }
 

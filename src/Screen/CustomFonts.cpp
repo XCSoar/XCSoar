@@ -38,16 +38,16 @@ LoadCustomFont(Font *theFont, const TCHAR FontRegKey[])
 bool
 Fonts::LoadCustom()
 {
-  LoadCustomFont(&InfoBox, szProfileFontInfoWindowFont);
-  LoadCustomFont(&InfoBoxSmall, szProfileFontTitleSmallWindowFont);
-  LoadCustomFont(&Title, szProfileFontTitleWindowFont);
-  LoadCustomFont(&CDI, szProfileFontCDIWindowFont);
-  LoadCustomFont(&MapLabel, szProfileFontMapLabelFont);
-  LoadCustomFont(&MapLabelImportant, szProfileFontMapLabelImportantFont);
-  LoadCustomFont(&Map, szProfileFontMapWindowFont);
-  LoadCustomFont(&MapBold, szProfileFontMapWindowBoldFont);
+  LoadCustomFont(&infobox, szProfileFontInfoWindowFont);
+  LoadCustomFont(&infobox_small, szProfileFontTitleSmallWindowFont);
+  LoadCustomFont(&title, szProfileFontTitleWindowFont);
+  LoadCustomFont(&cdi, szProfileFontCDIWindowFont);
+  LoadCustomFont(&map_label, szProfileFontMapLabelFont);
+  LoadCustomFont(&map_label_important, szProfileFontMapLabelImportantFont);
+  LoadCustomFont(&map, szProfileFontMapWindowFont);
+  LoadCustomFont(&map_bold, szProfileFontMapWindowBoldFont);
 
-  return Title.IsDefined() && CDI.IsDefined() &&
-    MapLabel.IsDefined() && MapLabelImportant.IsDefined() &&
-    Map.IsDefined() && MapBold.IsDefined();
+  return title.IsDefined() && cdi.IsDefined() &&
+    map_label.IsDefined() && map_label_important.IsDefined() &&
+    map.IsDefined() && map_bold.IsDefined();
 }

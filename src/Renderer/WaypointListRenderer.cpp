@@ -88,8 +88,8 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
-  const Font &name_font = Fonts::MapBold;
-  const Font &small_font = Fonts::MapLabel;
+  const Font &name_font = Fonts::map_bold;
+  const Font &small_font = Fonts::map_label;
   canvas.SetTextColor(COLOR_BLACK);
 
   // Draw icon
@@ -134,8 +134,8 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
-  const Font &name_font = Fonts::MapBold;
-  const Font &small_font = Fonts::MapLabel;
+  const Font &name_font = Fonts::map_bold;
+  const Font &small_font = Fonts::map_label;
   canvas.SetTextColor(COLOR_BLACK);
 
   Buffer buffer;

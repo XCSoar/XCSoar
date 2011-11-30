@@ -43,14 +43,14 @@ static Font TempCDIWindowFont;
 static Font TempMapLabelFont;
 static Font TempMapLabelImportantFont;
 
-extern LOGFONT LogInfoBox;
-extern LOGFONT LogTitle;
-extern LOGFONT LogMap;
-extern LOGFONT LogInfoBoxSmall;
-extern LOGFONT LogMapBold;
-extern LOGFONT LogCDI;
-extern LOGFONT LogMapLabel;
-extern LOGFONT LogMapLabelImportant;
+extern LOGFONT log_infobox;
+extern LOGFONT log_title;
+extern LOGFONT log_map;
+extern LOGFONT log_infobox_small;
+extern LOGFONT log_map_bold;
+extern LOGFONT log_cdi;
+extern LOGFONT log_map_label;
+extern LOGFONT log_map_label_important;
 
 static bool changed = false;
 static bool FontRegistryChanged = false;
@@ -71,21 +71,21 @@ static void
 ResetFonts(bool bUseCustom)
 {
   ResetFont(TempInfoWindowFont, bUseCustom,
-            szProfileFontInfoWindowFont, LogInfoBox);
+            szProfileFontInfoWindowFont, log_infobox);
   ResetFont(TempTitleWindowFont, bUseCustom,
-            szProfileFontTitleWindowFont, LogTitle);
+            szProfileFontTitleWindowFont, log_title);
   ResetFont(TempMapWindowFont, bUseCustom,
-            szProfileFontMapWindowFont, LogMap);
+            szProfileFontMapWindowFont, log_map);
   ResetFont(TempTitleSmallWindowFont, bUseCustom,
-            szProfileFontTitleSmallWindowFont, LogInfoBoxSmall);
+            szProfileFontTitleSmallWindowFont, log_infobox_small);
   ResetFont(TempMapWindowBoldFont, bUseCustom,
-            szProfileFontMapWindowBoldFont, LogMapBold);
+            szProfileFontMapWindowBoldFont, log_map_bold);
   ResetFont(TempCDIWindowFont, bUseCustom,
-            szProfileFontCDIWindowFont, LogCDI);
+            szProfileFontCDIWindowFont, log_cdi);
   ResetFont(TempMapLabelFont, bUseCustom,
-            szProfileFontMapLabelFont, LogMapLabel);
+            szProfileFontMapLabelFont, log_map_label);
   ResetFont(TempMapLabelImportantFont, bUseCustom,
-            szProfileFontMapLabelImportantFont, LogMapLabelImportant);
+            szProfileFontMapLabelImportantFont, log_map_label_important);
 }
 
 static void
@@ -195,52 +195,52 @@ EditFont(const TCHAR *prp_name, const TCHAR *profile_key,
 static void
 OnEditInfoWindowFontClicked(gcc_unused WndButton &button)
 {
-  EditFont(_T("prpInfoWindowFont"), szProfileFontInfoWindowFont, LogInfoBox);
+  EditFont(_T("prpInfoWindowFont"), szProfileFontInfoWindowFont, log_infobox);
 }
 
 static void
 OnEditTitleWindowFontClicked(gcc_unused WndButton &button)
 {
-  EditFont(_T("prpTitleWindowFont"), szProfileFontTitleWindowFont, LogTitle);
+  EditFont(_T("prpTitleWindowFont"), szProfileFontTitleWindowFont, log_title);
 }
 
 static void
 OnEditMapWindowFontClicked(gcc_unused WndButton &button)
 {
-  EditFont(_T("prpMapWindowFont"), szProfileFontMapWindowFont, LogMap);
+  EditFont(_T("prpMapWindowFont"), szProfileFontMapWindowFont, log_map);
 }
 
 static void
 OnEditTitleSmallWindowFontClicked(gcc_unused WndButton &button)
 {
   EditFont(_T("prpTitleSmallWindowFont"), szProfileFontTitleSmallWindowFont,
-           LogInfoBoxSmall);
+           log_infobox_small);
 }
 
 static void
 OnEditMapWindowBoldFontClicked(gcc_unused WndButton &button)
 {
   EditFont(_T("prpMapWindowBoldFont"), szProfileFontMapWindowBoldFont,
-           LogMapBold);
+           log_map_bold);
 }
 
 static void
 OnEditCDIWindowFontClicked(gcc_unused WndButton &button)
 {
-  EditFont(_T("prpCDIWindowFont"), szProfileFontCDIWindowFont, LogCDI);
+  EditFont(_T("prpCDIWindowFont"), szProfileFontCDIWindowFont, log_cdi);
 }
 
 static void
 OnEditMapLabelFontClicked(gcc_unused WndButton &button)
 {
-  EditFont(_T("prpMapLabelFont"), szProfileFontMapLabelFont, LogMapLabel);
+  EditFont(_T("prpMapLabelFont"), szProfileFontMapLabelFont, log_map_label);
 }
 
 static void
 OnEditMapLabelImportantFontClicked(gcc_unused WndButton &button)
 {
   EditFont(_T("prpMapLabelImportantFont"), szProfileFontMapLabelImportantFont,
-           LogMapLabelImportant);
+           log_map_label_important);
 }
 
 static void

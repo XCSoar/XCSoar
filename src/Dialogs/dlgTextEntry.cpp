@@ -69,7 +69,7 @@ OnTextPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
   canvas.clear(Color(0x40, 0x40, 0x00));
 
   // Do the actual painting of the text
-  canvas.Select(Fonts::Map);
+  canvas.Select(Fonts::map);
 
   PixelSize tsize = canvas.CalcTextSize(edittext);
   PixelSize tsizec = canvas.CalcTextSize(edittext, cursor);

@@ -724,7 +724,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     assert(i == 0);
 
     const UPixelScalar line_height = rc.bottom - rc.top;
-    const Font &name_font = Fonts::MapBold;
+    const Font &name_font = Fonts::map_bold;
     canvas.Select(name_font);
     canvas.text(rc.left + line_height + Layout::FastScale(2),
                 rc.top + line_height / 2 - name_font.GetHeight() / 2,
@@ -848,8 +848,8 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &_location,
   assert(waypoint_list != NULL);
   waypoint_list->SetActivateCallback(OnWaypointListEnter);
   waypoint_list->SetPaintItemCallback(OnPaintListItem);
-  UPixelScalar line_height = Fonts::MapBold.GetHeight() + Layout::Scale(6) +
-                         Fonts::MapLabel.GetHeight();
+  UPixelScalar line_height = Fonts::map_bold.GetHeight() + Layout::Scale(6) +
+                         Fonts::map_label.GetHeight();
   waypoint_list->SetItemHeight(line_height);
 
   name_button = (WndButton*)dialog->FindByName(_T("cmdFltName"));

@@ -104,7 +104,7 @@ TextInBox(Canvas &canvas, const TCHAR* text, PixelScalar x, PixelScalar y,
 
   // landable waypoint label inside white box
 
-  canvas.Select(mode.bold ? Fonts::MapBold : Fonts::Map);
+  canvas.Select(mode.bold ? Fonts::map_bold : Fonts::map);
 
   PixelSize tsize = canvas.CalcTextSize(text);
 

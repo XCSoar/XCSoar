@@ -84,8 +84,8 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 {
   assert(index < list.size());
 
-  const Font &code_font = Fonts::MapBold;
-  const Font &details_font = Fonts::MapLabel;
+  const Font &code_font = Fonts::map_bold;
+  const Font &details_font = Fonts::map_label;
 
   canvas.Select(code_font);
 
@@ -213,8 +213,8 @@ dlgNOAAListShowModal(SingleWindow &parent)
                   _T("IDR_XML_NOAA_LIST"));
   assert(wf != NULL);
 
-  UPixelScalar item_height = Fonts::MapBold.GetHeight() + Layout::Scale(6) +
-                         Fonts::MapLabel.GetHeight();
+  UPixelScalar item_height = Fonts::map_bold.GetHeight() + Layout::Scale(6) +
+                         Fonts::map_label.GetHeight();
 
   station_list = (WndListFrame *)wf->FindByName(_T("StationList"));
   assert(station_list != NULL);

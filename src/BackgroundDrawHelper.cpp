@@ -166,7 +166,7 @@ BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas,
   if (weather == NULL || weather->GetParameter() == 0 || renderer == NULL)
     return false;
 
-  canvas.Select(Fonts::Title);
+  canvas.Select(Fonts::title);
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();
 

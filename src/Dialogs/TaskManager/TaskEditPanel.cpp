@@ -125,8 +125,8 @@ TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 
   TCHAR buffer[120];
 
-  const Font &name_font = Fonts::MapBold;
-  const Font &small_font = Fonts::MapLabel;
+  const Font &name_font = Fonts::map_bold;
+  const Font &small_font = Fonts::map_label;
 
   // Draw "Add turnpoint" label
   if (DrawListIndex == ordered_task->TaskSize()) {
@@ -391,8 +391,8 @@ TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wSummary = (WndFrame *)form.FindByName(_T("frmSummary"));
   assert(wSummary);
 
-  UPixelScalar line_height = Fonts::MapBold.GetHeight() + Layout::Scale(6) +
-    Fonts::MapLabel.GetHeight();
+  UPixelScalar line_height = Fonts::map_bold.GetHeight() + Layout::Scale(6) +
+    Fonts::map_label.GetHeight();
   wTaskPoints->SetItemHeight(line_height);
   wTaskPoints->SetActivateCallback(::OnTaskListEnter);
   wTaskPoints->SetPaintItemCallback(::OnTaskPaintListItem);

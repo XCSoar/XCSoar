@@ -374,7 +374,7 @@ CrossSectionWindow::on_paint(Canvas &canvas)
 {
   canvas.clear(look.background_color);
   canvas.SetTextColor(look.text_color);
-  canvas.Select(Fonts::Map);
+  canvas.Select(Fonts::map);
 
   const PixelRect rc = get_client_rect();
 

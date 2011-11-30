@@ -123,7 +123,7 @@ PopupMessage::set(const PixelRect _rc)
                   rc.right - rc.left, rc.bottom - rc.top,
                   style);
 
-  set_font(Fonts::MapBold);
+  set_font(Fonts::map_bold);
   install_wndproc();
 }
 
@@ -147,7 +147,7 @@ PopupMessage::Resize()
     set_text(msgText);
 
     AnyCanvas canvas;
-    canvas.Select(Fonts::MapBold);
+    canvas.Select(Fonts::map_bold);
     PixelSize tsize = canvas.CalcTextSize(msgText);
 
     int linecount = max((unsigned)nvisible, max((unsigned)1, get_row_count()));

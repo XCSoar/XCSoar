@@ -46,12 +46,12 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors)
   border_pen.Set(BORDER_WIDTH, border_color);
   selector_pen.Set(Layout::Scale(1) + 2, value.fg_color);
 
-  value.font = &Fonts::InfoBox;
-  title.font = &Fonts::Title;
-  comment.font = &Fonts::Title;
-  small_font = &Fonts::InfoBoxSmall;
+  value.font = &Fonts::infobox;
+  title.font = &Fonts::title;
+  comment.font = &Fonts::title;
+  small_font = &Fonts::infobox_small;
 #ifndef GNAV
-  unit_font = &Fonts::InfoBoxUnits;
+  unit_font = &Fonts::infobox_units;
 #endif
 
   colors[0] = border_color;
