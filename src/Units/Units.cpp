@@ -54,6 +54,7 @@ const UnitDescriptor Units::unit_descriptors[] = {
   { _T(DEG)_T("F"), fixed_constant(1.8, 0x1cccccccLL),
     fixed_constant(-459.67, -123391726059LL) },
   { _T("hPa"), fixed_one, fixed_zero },
+  { _T("mb"), fixed_one, fixed_zero },
   { _T("mmHg"), fixed(0.7500616827041698), fixed_zero },
   { _T("inHg"), fixed(0.0295287441401431), fixed_zero },
 };
