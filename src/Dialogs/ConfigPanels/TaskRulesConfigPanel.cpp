@@ -58,8 +58,8 @@ void
 TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   LoadWindow(NULL, parent,
-             Layout::landscape ? _T("IDR_XML_TASKRULESCONFIGPANEL") :
-                               _T("IDR_XML_TASKRULESCONFIGPANEL_L"));
+             Layout::landscape ? _T("IDR_XML_TASKRULESCONFIGPANEL_L") :
+                               _T("IDR_XML_TASKRULESCONFIGPANEL"));
 
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
   const TaskBehaviour &task_behaviour = settings_computer.task;
