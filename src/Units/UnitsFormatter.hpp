@@ -138,6 +138,31 @@ namespace Units
                         bool IncludeUnit = true);
 
   /**
+   * Converts a double-based Pressure into a formatted string
+   * @param Pressure The double-based Pressure
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   * @return True if Buffer long enough, False otherwise
+   */
+  bool FormatUserPressure(fixed Pressure, TCHAR *Buffer, size_t size,
+                        bool IncludeUnit = true);
+  /**
+   * Give the proper format to display the pressure
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   * @return True if Buffer long enough, False otherwise
+   */
+
+  const TCHAR* GetFormatUserPressure();
+
+  /**
+   * Give the basic step for pressure editing
+   * @return the step
+   */
+
+  fixed PressureStep();
+
+  /**
    * precedes with "-" if time is negative
    * @param text returns HHMM
    * @param d input seconds

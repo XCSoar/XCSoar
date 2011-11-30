@@ -386,6 +386,50 @@ Units::FormatUserVSpeed(fixed Speed, TCHAR *buffer, size_t size,
     _sntprintf(buffer, size, _T("%+.1f"), (double)Speed);
 }
 
+bool
+Units::FormatUserPressure(fixed Pressure, TCHAR *Buffer, size_t size,
+                        bool IncludeUnit)
+{
+  TCHAR sTmp[16];
+  const UnitDescriptor *pU = &unit_descriptors[current.pressure_unit];
+
+  Pressure = Pressure * pU->factor_to_user;
+
+  if (IncludeUnit) {
+    TCHAR sFormat[8];
+    _tcscpy( sFormat, GetFormatUserPressure());
+    _tcscat( sFormat, _T(" %s") );
+    _stprintf(sTmp, sFormat, (double)Pressure, pU->name);
+  } else
+    _stprintf(sTmp, GetFormatUserPressure(),  (double)Pressure);
+
+  if (_tcslen(sTmp) < size - 1) {
+    _tcscpy(Buffer, sTmp);
+    return true;
+  } else {
+    CopyString(Buffer, sTmp, size);
+    return false;
+  }
+}
+
+const TCHAR*
+Units::GetFormatUserPressure()
+{
+  if (current.pressure_unit == unInchMercury)
+    return _T("%.2f");
+  else
+    return _T("%.f");
+}
+
+fixed
+Units::PressureStep()
+{
+  if (current.pressure_unit == unInchMercury)
+    return fixed(0.01);
+  else
+    return fixed_one;
+}
+
 void
 Units::TimeToTextHHMMSigned(TCHAR* text, int d)
 {

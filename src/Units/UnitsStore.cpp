@@ -41,7 +41,8 @@ static gcc_constexpr_data UnitStoreItem Presets[] =
     unKiloMeterPerHour,
     unMeterPerSecond,
     unKiloMeterPerHour,
-    unKiloMeterPerHour
+    unKiloMeterPerHour,
+    unHectoPascal,
   } },
   { N_("British"), {
     unKiloMeter,
@@ -50,7 +51,8 @@ static gcc_constexpr_data UnitStoreItem Presets[] =
     unKnots,
     unKnots,
     unKnots,
-    unKiloMeterPerHour
+    unKiloMeterPerHour,
+    unMilliBar,
   } },
   { N_("American"), {
     unStatuteMiles,
@@ -59,7 +61,8 @@ static gcc_constexpr_data UnitStoreItem Presets[] =
     unKnots,
     unKnots,
     unKnots,
-    unStatuteMilesPerHour
+    unStatuteMilesPerHour,
+    unInchMercury,
   } },
   { N_("Australian"), {
     unKiloMeter,
@@ -68,7 +71,8 @@ static gcc_constexpr_data UnitStoreItem Presets[] =
     unKnots,
     unKnots,
     unKnots,
-    unKiloMeterPerHour
+    unKiloMeterPerHour,
+    unHectoPascal,
   } }
 };
 

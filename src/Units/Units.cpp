@@ -66,7 +66,8 @@ UnitSetting Units::current = {
   unKiloMeterPerHour,
   unMeterPerSecond,
   unKiloMeterPerHour,
-  unKiloMeterPerHour
+  unKiloMeterPerHour,
+  unHectoPascal,
 };
 
 void
@@ -208,6 +209,18 @@ Units::SetUserWindSpeedUnit(Unit unit)
 }
 
 Unit
+Units::GetUserPressureUnit()
+{
+  return current.pressure_unit;
+}
+
+void
+Units::SetUserPressureUnit(Unit unit)
+{
+  current.pressure_unit = unit;
+}
+
+Unit
 Units::GetUserUnitByGroup(UnitGroup group)
 {
   switch (group) {
@@ -227,6 +240,8 @@ Units::GetUserUnitByGroup(UnitGroup group)
     return GetUserWindSpeedUnit();
   case ugTaskSpeed:
     return GetUserTaskSpeedUnit();
+  case ugPressure:
+    return GetUserPressureUnit();
   default:
     return unUndef;
   }
@@ -266,6 +281,12 @@ const TCHAR *
 Units::GetTaskSpeedName()
 {
   return GetUnitName(GetUserTaskSpeedUnit());
+}
+
+const TCHAR *
+Units::GetPressureName()
+{
+  return GetUnitName(GetUserPressureUnit());
 }
 
 fixed

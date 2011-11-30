@@ -75,7 +75,8 @@ enum UnitGroup
   ugHorizontalSpeed,
   ugVerticalSpeed,
   ugWindSpeed,
-  ugTaskSpeed
+  ugTaskSpeed,
+  ugPressure,
 };
 
 struct UnitDescriptor
@@ -101,6 +102,8 @@ struct UnitSetting
   Unit wind_speed_unit;
   /** Unit for task speeds */
   Unit task_speed_unit;
+  /** Unit for pressures */
+  Unit pressure_unit;
 };
 
 /**
@@ -225,6 +228,19 @@ namespace Units
    */
   void SetUserWindSpeedUnit(Unit unit);
 
+  /**
+   * Returns the user-specified unit for a pressure
+   * @return The user-specified unit for a pressure
+   */
+  gcc_pure
+  Unit GetUserPressureUnit();
+
+  /**
+   * Sets the user-specified unit for pressure
+   * @param unit The new unit
+   */
+  void SetUserPressureUnit(Unit unit);
+
   gcc_pure
   Unit GetUserUnitByGroup(UnitGroup group);
 
@@ -269,6 +285,9 @@ namespace Units
 
   gcc_pure
   const TCHAR *GetTaskSpeedName();
+
+  gcc_pure
+  const TCHAR *GetPressureName();
 
   /**
    * Converts a value from the system unit to the user-specified unit
@@ -370,6 +389,18 @@ namespace Units
   ToSysWindSpeed(fixed value)
   {
     return ToSysUnit(value, current.wind_speed_unit);
+  }
+
+  static inline fixed
+  ToUserPressure(fixed Value)
+  {
+    return ToUserUnit(Value, current.pressure_unit);
+  }
+
+  static inline fixed
+  ToSysPressure(fixed Value)
+  {
+    return ToSysUnit(Value, current.pressure_unit);
   }
 };
 
