@@ -61,6 +61,8 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
 
   cache_bounds.west = cache_bounds.east =
     cache_bounds.south = cache_bounds.north = Angle::Zero();
+
+  ++serial;
 }
 
 TopographyFile::~TopographyFile()
