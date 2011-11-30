@@ -40,6 +40,13 @@ VARIO(NMEAInputLine &line, NMEAInfo &info)
 {
   // $VARIO,fPressure,fVario,Bat1Volts,Bat2Volts,BatBank,TempSensor1,TempSensor2*CS
 
+  // fVario = the variometer in decimeters per second
+  // Bat1Volts = the voltage of the battery in bank 1
+  // Bat2Volts = the voltage of the battery in bank 2
+  // BatBank = the battery bank in use.
+  // TempSensor1 = temperature in ºC of external wireless sensor 1
+  // TempSensor2 = temperature in ºC of external wireless sensor 2
+
   fixed value;
   if (line.read_checked(value))
     info.ProvideStaticPressure(AtmosphericPressure::HectoPascal(value));
