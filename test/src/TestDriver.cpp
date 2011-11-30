@@ -51,6 +51,7 @@
 #include "FaultInjectionPort.hpp"
 #include "TestUtil.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Units/Units.hpp"
 
 static const DeviceConfig dummy_config = DeviceConfig();
 
@@ -279,21 +280,29 @@ TestFlymasterF1()
   nmea_info.Reset();
   nmea_info.clock = fixed_one;
 
-  /* baro altitude disabled */
   ok1(device->ParseNMEA("$VARIO,999.98,-12,12.4,12.7,0,21.3,25.5*CS",
                         nmea_info));
   ok1(!nmea_info.airspeed_available);
   ok1(nmea_info.total_energy_vario_available);
   ok1(equals(nmea_info.total_energy_vario, -1.2));
-  ok1(!nmea_info.temperature_available);
-
-  /* baro altitude enabled */
-  ok1(device->ParseNMEA("$VARIO,999.98,-1.2,12.4,12.7,0,21.3,25.5*CS",
-                        nmea_info));
+  ok1(!nmea_info.voltage_available);
+  ok1(nmea_info.temperature_available);
+  ok1(equals(nmea_info.temperature,
+             Units::ToSysUnit(fixed(21.3), unGradCelcius)));
   ok1(!nmea_info.baro_altitude_available);
   ok1(!nmea_info.pressure_altitude_available);
   ok1(nmea_info.static_pressure_available);
   ok1(equals(nmea_info.static_pressure.GetPascal(), 99998));
+
+  ok1(device->ParseNMEA("$VARIO,999.98,-12,12.4,12.7,1,21.3,25.5*CS",
+                        nmea_info));
+  ok1(nmea_info.voltage_available);
+  ok1(equals(nmea_info.voltage, 12.4));
+
+  ok1(device->ParseNMEA("$VARIO,999.98,-12,12.4,12.7,2,21.3,25.5*CS",
+                        nmea_info));
+  ok1(nmea_info.voltage_available);
+  ok1(equals(nmea_info.voltage, 12.7));
 
   delete device;
 }
@@ -765,7 +774,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(374);
+  plan_tests(381);
 
   TestGeneric();
   TestFLARM();

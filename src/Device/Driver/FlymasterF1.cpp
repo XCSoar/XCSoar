@@ -26,6 +26,7 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "Units/Units.hpp"
 
 #include <stdlib.h>
 #include <math.h>
@@ -53,6 +54,22 @@ VARIO(NMEAInputLine &line, NMEAInfo &info)
 
   if (line.read_checked(value))
     info.ProvideTotalEnergyVario(value / 10);
+
+  unsigned battery_bank;
+  fixed voltage[2];
+  if (line.read_checked(voltage[0]) &&
+      line.read_checked(voltage[1]) &&
+      line.read_checked(battery_bank) &&
+      battery_bank != 0 &&
+      battery_bank <= 2) {
+    info.voltage = voltage[battery_bank - 1];
+    info.voltage_available.Update(info.clock);
+  }
+
+  if (line.read_checked(value)) {
+    info.temperature = Units::ToSysUnit(value, unGradCelcius);
+    info.temperature_available = true;
+  }
 
   return true;
 }
