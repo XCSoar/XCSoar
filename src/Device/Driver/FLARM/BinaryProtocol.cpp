@@ -308,7 +308,7 @@ FlarmDevice::BinaryReset(unsigned timeout_ms)
 }
 
 bool
-FlarmDevice::EnableBinaryMode()
+FlarmDevice::EnableDownloadMode()
 {
   assert(!in_binary_mode);
 
@@ -334,7 +334,7 @@ FlarmDevice::EnableBinaryMode()
 }
 
 bool
-FlarmDevice::DisableBinaryMode()
+FlarmDevice::DisableDownloadMode()
 {
   assert(in_binary_mode);
 

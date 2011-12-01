@@ -108,7 +108,7 @@ int main(int argc, char **argv)
   if (!strcmp(argv[1], "FLARM")) {
     FlarmDevice flarm(port);
 
-    if (!flarm.EnableBinaryMode()) {
+    if (!flarm.EnableDownloadMode()) {
       fprintf(stderr, "Failed to switch transfer mode\n");
       return EXIT_FAILURE;
     }
@@ -116,13 +116,13 @@ int main(int argc, char **argv)
     RecordedFlightList flight_list;
     if (!flarm.ReadFlightList(flight_list, env)) {
       fprintf(stderr, "Failed to download flight list\n");
-      flarm.DisableBinaryMode();
+      flarm.DisableDownloadMode();
       return EXIT_FAILURE;
     }
 
     if (flight_list.empty()) {
       fprintf(stderr, "Logger is empty\n");
-      flarm.DisableBinaryMode();
+      flarm.DisableDownloadMode();
       return EXIT_FAILURE;
     }
 
@@ -130,17 +130,17 @@ int main(int argc, char **argv)
 
     if (flight_id >= flight_list.size()) {
       fprintf(stderr, "Flight id not found\n");
-      flarm.DisableBinaryMode();
+      flarm.DisableDownloadMode();
       return EXIT_FAILURE;
     }
 
     if (!flarm.DownloadFlight(flight_list[flight_id], path, env)) {
       fprintf(stderr, "Failed to download flight\n");
-      flarm.DisableBinaryMode();
+      flarm.DisableDownloadMode();
       return EXIT_FAILURE;
     }
 
-    flarm.DisableBinaryMode();
+    flarm.DisableDownloadMode();
   } else {
     const struct DeviceRegister *driver = FindDriverByName(driver_name);
     if (driver == NULL) {
