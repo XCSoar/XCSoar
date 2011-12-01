@@ -28,6 +28,7 @@
 struct AircraftState;
 class AirspaceWarningManager;
 class AbstractAirspace;
+class GlidePolar;
 class TaskStats;
 
 class ProtectedAirspaceWarningManager : public Guard<AirspaceWarningManager> {
@@ -50,7 +51,9 @@ public:
   bool warning_empty() const;
 
   void reset_warning(const AircraftState& as);
-  bool update_warning(const AircraftState &state, const TaskStats &task_stats,
+  bool update_warning(const AircraftState &state,
+                      const GlidePolar &glide_polar,
+                      const TaskStats &task_stats,
                       const bool circling, const unsigned dt);
 };
 

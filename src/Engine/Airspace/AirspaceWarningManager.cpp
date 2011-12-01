@@ -26,13 +26,12 @@
 #include "AirspacePolygon.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
 #include "AirspaceWarningVisitor.hpp"
+#include "Task/TaskStats/TaskStats.hpp"
 #include "Predicate/AirspacePredicateAircraftInside.hpp"
-#include "Task/TaskManager.hpp"
 
 #define CRUISE_FILTER_FACT fixed_half
 
 AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces,
-                                               const TaskManager &_task,
                                                fixed prediction_time_glide,
                                                fixed prediction_time_filter)
   :airspaces(_airspaces),
@@ -41,8 +40,7 @@ AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces,
    cruise_filter(prediction_time_filter * CRUISE_FILTER_FACT),
    circling_filter(prediction_time_filter),
    perf_cruise(cruise_filter),
-   perf_circling(circling_filter),
-   glide_polar(_task.GetGlidePolar())
+   perf_circling(circling_filter)
 {
 }
 
@@ -102,6 +100,7 @@ AirspaceWarningManager::GetWarningPtr(const AbstractAirspace &airspace)
 
 bool 
 AirspaceWarningManager::Update(const AircraftState& state,
+                               const GlidePolar &glide_polar,
                                const TaskStats &task_stats,
                                const bool circling,
                                const unsigned dt)
@@ -120,10 +119,10 @@ AirspaceWarningManager::Update(const AircraftState& state,
     it->SaveState();
 
   // check from strongest to weakest alerts
-  UpdateInside(state);
-  UpdateGlide(state);
+  UpdateInside(state, glide_polar);
+  UpdateGlide(state, glide_polar);
   UpdateFilter(state, circling);
-  UpdateTask(state, task_stats);
+  UpdateTask(state, glide_polar, task_stats);
 
   // action changes
   for (auto it = warnings.begin(), end = warnings.end(); it != end;) {
@@ -296,6 +295,7 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
 
 bool 
 AirspaceWarningManager::UpdateTask(const AircraftState &state,
+                                   const GlidePolar &glide_polar,
                                    const TaskStats &task_stats)
 {
   const ElementStat &current_leg = task_stats.current_leg;
@@ -341,7 +341,8 @@ AirspaceWarningManager::UpdateFilter(const AircraftState& state, const bool circ
 
 
 bool 
-AirspaceWarningManager::UpdateGlide(const AircraftState& state)
+AirspaceWarningManager::UpdateGlide(const AircraftState &state,
+                                    const GlidePolar &glide_polar)
 {
   const GeoPoint location_predicted = 
     state.GetPredictedState(prediction_time_glide).location;
@@ -354,7 +355,8 @@ AirspaceWarningManager::UpdateGlide(const AircraftState& state)
 
 
 bool 
-AirspaceWarningManager::UpdateInside(const AircraftState& state)
+AirspaceWarningManager::UpdateInside(const AircraftState& state,
+                                     const GlidePolar &glide_polar)
 {
   bool found = false;
 

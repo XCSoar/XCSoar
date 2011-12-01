@@ -195,8 +195,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TaskManager task_manager(task_events, way_points);
 
   Airspaces airspace_database;
-  AirspaceWarningManager airspace_warning(airspace_database,
-                                          task_manager);
+  AirspaceWarningManager airspace_warning(airspace_database);
   ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
 
   ProtectedTaskManager protected_task_manager(task_manager,

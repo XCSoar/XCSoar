@@ -31,7 +31,7 @@
 #include <list>
 
 class TaskStats;
-class TaskManager;
+class GlidePolar;
 class Airspaces;
 class AirspaceWarningVisitor;
 
@@ -61,8 +61,6 @@ class AirspaceWarningManager:
   AirspaceAircraftPerformanceStateFilter perf_cruise;  
   AirspaceAircraftPerformanceStateFilter perf_circling;  
 
-  const GlidePolar &glide_polar;
-
   typedef std::list<AirspaceWarning> AirspaceWarningList;
 
   AirspaceWarningList warnings;
@@ -81,7 +79,6 @@ public:
    * @return Initialised object
    */
   AirspaceWarningManager(const Airspaces &_airspaces,
-                         const TaskManager &_task,
                          const fixed _prediction_time_glide = fixed(15.0),
                          const fixed _prediction_time_filter = fixed(60.0));
 
@@ -110,7 +107,8 @@ public:
    *
    * @return True if warnings changed
    */
-  bool Update(const AircraftState &state, const TaskStats &task_stats,
+  bool Update(const AircraftState &state, const GlidePolar &glide_polar,
+              const TaskStats &task_stats,
               const bool circling, const unsigned dt);
 
   /**
@@ -228,10 +226,11 @@ public:
   bool GetAckDay(const AbstractAirspace& airspace);
 
 private:
-  bool UpdateTask(const AircraftState &state, const TaskStats &task_stats);
+  bool UpdateTask(const AircraftState &state, const GlidePolar &glide_polar,
+                  const TaskStats &task_stats);
   bool UpdateFilter(const AircraftState& state, const bool circling);
-  bool UpdateGlide(const AircraftState& state);
-  bool UpdateInside(const AircraftState& state);
+  bool UpdateGlide(const AircraftState& state, const GlidePolar &glide_polar);
+  bool UpdateInside(const AircraftState& state, const GlidePolar &glide_polar);
 
   bool UpdatePredicted(const AircraftState& state, 
                        const GeoPoint &location_predicted,

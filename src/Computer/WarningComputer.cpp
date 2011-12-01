@@ -60,7 +60,8 @@ WarningComputer::Update(const SETTINGS_COMPUTER &settings_computer,
   airspaces.set_activity(day);
 
   const AircraftState as = ToAircraftState(basic, calculated);
-  if (warnings.update_warning(as, calculated.task_stats, calculated.circling,
+  if (warnings.update_warning(as, settings_computer.glide_polar_task,
+                              calculated.task_stats, calculated.circling,
                               uround(basic.time - last_basic.time)))
     result.latest.Update(basic.clock);
 }

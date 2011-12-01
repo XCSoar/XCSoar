@@ -35,10 +35,6 @@ Copyright_License {
 #include "Airspace/AirspaceParser.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
-#include "Waypoint/Waypoints.hpp"
-#include "Computer/GlideComputerInterface.hpp"
-#include "Task/TaskManager.hpp"
-#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"
 #include "ResourceLoader.hpp"
 #include "IO/FileLineReader.hpp"
@@ -84,12 +80,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
-  Waypoints way_points;
-  TaskEvents task_events;
-  TaskManager task_manager(task_events, way_points);
-
   Airspaces airspace_database;
-  AirspaceWarningManager airspace_warning(airspace_database, task_manager);
+  AirspaceWarningManager airspace_warning(airspace_database);
   airspace_warnings = new ProtectedAirspaceWarningManager(airspace_warning);
 
   InitialiseDataPath();

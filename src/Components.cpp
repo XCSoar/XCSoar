@@ -344,8 +344,7 @@ XCSoarInterface::Startup()
                              XCSoarInterface::SettingsComputer().task,
                              task_events);
 
-  airspace_warning = new AirspaceWarningManager(airspace_database,
-                                                *task_manager);
+  airspace_warning = new AirspaceWarningManager(airspace_database);
   airspace_warnings = new ProtectedAirspaceWarningManager(*airspace_warning);
 
   // Read the terrain file
