@@ -182,6 +182,7 @@ public:
 
   void Flip();
 
+  gcc_pure
   Angle Flipped() const;
 
   /**
@@ -244,21 +245,21 @@ public:
     return Angle(value / x);
   }
 
-  gcc_pure
+  gcc_constexpr_method
   Angle
   operator+(const Angle x) const
   {
     return Angle(value + x.value);
   }
 
-  gcc_pure
+  gcc_constexpr_method
   Angle
   operator-(const Angle x) const
   {
     return Angle(value - x.value);
   }
 
-  gcc_pure
+  gcc_constexpr_method
   Angle
   operator-() const
   {
