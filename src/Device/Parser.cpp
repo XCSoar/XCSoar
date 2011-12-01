@@ -59,7 +59,6 @@ NMEAParser::Reset(void)
 {
   real = true;
   use_geoid = true;
-  gga_available = false;
   last_time = fixed_zero;
 }
 
@@ -529,8 +528,6 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
    * 15) Checksum
    */
   GPSState &gps = info.gps;
-
-  gga_available = true;
 
   fixed this_time = TimeModify(line.read(fixed_zero), info.date_time_utc,
                                info.date_available);

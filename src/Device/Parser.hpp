@@ -38,8 +38,6 @@ public:
 
 private:
   static int start_day;
-
-  bool gga_available;
   fixed last_time;
 
 public:
