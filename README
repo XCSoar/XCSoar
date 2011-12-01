@@ -78,7 +78,7 @@ make TARGET=UNIX
 
 To compile, run:
 
- make TARGET=PC
+ make TARGET=<target>
 
 Supported targets:
 
