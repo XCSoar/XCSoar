@@ -43,7 +43,6 @@ AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces,
    circling_filter(prediction_time_filter),
    perf_cruise(cruise_filter),
    perf_circling(circling_filter),
-   task(_task),
    glide_polar(_task.GetGlidePolar())
 {
 }
@@ -104,6 +103,7 @@ AirspaceWarningManager::GetWarningPtr(const AbstractAirspace &airspace)
 
 bool 
 AirspaceWarningManager::Update(const AircraftState& state,
+                               const TaskStats &task_stats,
                                const bool circling,
                                const unsigned dt)
 {
@@ -124,7 +124,7 @@ AirspaceWarningManager::Update(const AircraftState& state,
   UpdateInside(state);
   UpdateGlide(state);
   UpdateFilter(state, circling);
-  UpdateTask(state);
+  UpdateTask(state, task_stats);
 
   // action changes
   for (auto it = warnings.begin(), end = warnings.end(); it != end;) {
@@ -296,22 +296,23 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
 
 
 bool 
-AirspaceWarningManager::UpdateTask(const AircraftState& state)
+AirspaceWarningManager::UpdateTask(const AircraftState &state,
+                                   const TaskStats &task_stats)
 {
-  if (!task.GetActiveTaskPoint()) {
-    // empty task, nothing to do
-    return false;
-  }
+  const ElementStat &current_leg = task_stats.current_leg;
 
-  const GlideResult &solution = task.GetStats().current_leg.solution_remaining;
+  if (!task_stats.task_valid || !current_leg.location_remaining.IsValid())
+    return false;
+
+  const GlideResult &solution = current_leg.solution_remaining;
   if (!solution.IsOk() || !solution.IsAchievable())
     /* glide solver failed, cannot continue */
     return false;
 
   AirspaceAircraftPerformanceTask perf_task(state, glide_polar,
-                                            task.GetStats().current_leg.solution_remaining);
-  const GeoPoint location_tp = task.GetActiveTaskPoint()->GetLocationRemaining();
-  const fixed time_remaining = task.GetStats().current_leg.solution_remaining.time_elapsed; 
+                                            current_leg.solution_remaining);
+  const GeoPoint location_tp = current_leg.location_remaining;
+  const fixed time_remaining = solution.time_elapsed;
 
   return UpdatePredicted(state, location_tp, perf_task,
                           AirspaceWarning::WARNING_TASK, time_remaining);

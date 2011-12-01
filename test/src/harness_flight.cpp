@@ -262,6 +262,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
     if (airspace_warnings) {
       if (verbose > 1) {
         bool warnings_updated = airspace_warnings->Update(aircraft.GetState(),
+                                                          task_manager.GetStats(),
                                                           false, 1);
         if (warnings_updated) {
           printf("# airspace warnings updated, size %d\n",

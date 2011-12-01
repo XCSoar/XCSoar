@@ -30,6 +30,7 @@
 
 #include <list>
 
+class TaskStats;
 class TaskManager;
 class Airspaces;
 class AirspaceWarningVisitor;
@@ -60,8 +61,6 @@ class AirspaceWarningManager:
   AircraftStateFilter circling_filter;
   AirspaceAircraftPerformanceStateFilter perf_cruise;  
   AirspaceAircraftPerformanceStateFilter perf_circling;  
-
-  const TaskManager &task;
 
   const GlidePolar &glide_polar;
 
@@ -112,7 +111,8 @@ public:
    *
    * @return True if warnings changed
    */
-  bool Update(const AircraftState &state, const bool circling, const unsigned dt);
+  bool Update(const AircraftState &state, const TaskStats &task_stats,
+              const bool circling, const unsigned dt);
 
   /**
    * Adjust time of glide predictor
@@ -229,7 +229,7 @@ public:
   bool GetAckDay(const AbstractAirspace& airspace);
 
 private:
-  bool UpdateTask(const AircraftState& state);
+  bool UpdateTask(const AircraftState &state, const TaskStats &task_stats);
   bool UpdateFilter(const AircraftState& state, const bool circling);
   bool UpdateGlide(const AircraftState& state);
   bool UpdateInside(const AircraftState& state);
