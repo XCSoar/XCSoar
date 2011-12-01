@@ -11,6 +11,8 @@ Version 6.2.4 - not yet released
   - fix sorting by filename in file selector of task manager
   - allow modification of some additional infobox values with up/down keys
     (or volume keys on android devices).
+* settings
+  - load configured METAR/TAF stations on startup
 
 Version 6.2.3 - 2011/11/19
 * calculations
