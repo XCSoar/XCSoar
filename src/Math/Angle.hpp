@@ -56,6 +56,45 @@ public:
     return Angle(_value);
   }
 
+  /**
+   * Construct an instance that describes a "full circle" (360
+   * degrees).
+   */
+  gcc_constexpr_function
+  static Angle FullCircle() {
+#ifdef RADIANS
+    return Native(fixed_two_pi);
+#else
+    return Native(fixed_360);
+#endif
+  }
+
+  /**
+   * Construct an instance that describes a "half circle" (180
+   * degrees).
+   */
+  gcc_constexpr_function
+  static Angle HalfCircle() {
+#ifdef RADIANS
+    return Native(fixed_pi);
+#else
+    return Native(fixed_180);
+#endif
+  }
+
+  /**
+   * Construct an instance that describes a "quarter circle" 90
+   * degrees).
+   */
+  gcc_constexpr_function
+  static Angle QuarterCircle() {
+#ifdef RADIANS
+    return Native(fixed_half_pi);
+#else
+    return Native(fixed_90);
+#endif
+  }
+
   gcc_constexpr_method
   fixed Native() const {
     return value;

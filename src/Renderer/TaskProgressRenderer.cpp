@@ -46,7 +46,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   if (summary.p_remaining < fixed(0.99)) {
     canvas.Select(look.hbGray);
     canvas.SelectNullPen();
-    canvas.DrawSegment(center.x, center.y, radius, Angle::Radians(fixed_zero),
+    canvas.DrawSegment(center.x, center.y, radius, Angle::Zero(),
                    Angle::Radians(sweep * (fixed_one -  summary.p_remaining)));
   }
 

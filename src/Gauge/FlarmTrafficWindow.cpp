@@ -43,7 +43,7 @@ FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
    padding(_padding),
    small(_small),
    enable_north_up(false),
-   heading(Angle::Radians(fixed_zero)),
+   heading(Angle::Zero()),
    side_display_type(1)
 {
   data.Clear();

@@ -24,14 +24,6 @@ Copyright_License {
 #include "Angle.hpp"
 #include <assert.h>
 
-#ifdef RADIANS
-#define fixed_circle fixed_two_pi
-#define fixed_half_circle fixed_pi
-#else
-#define fixed_circle fixed_360
-#define fixed_half_circle fixed_180
-#endif
-
 int
 Angle::Sign(const fixed& tolerance) const
 {
@@ -83,14 +75,15 @@ Angle::Flipped() const
 Angle
 Angle::AsBearing() const
 {
-  assert(fabs(value) < fixed(100) * fixed_circle);
+  assert(fabs(value) < fixed(100) * FullCircle().Native());
+
   Angle retval(value);
 
-  while (retval.value < fixed_zero)
-    retval.value += fixed_circle;
+  while (retval < Zero())
+    retval += FullCircle();
 
-  while (retval.value >= fixed_circle)
-    retval.value -= fixed_circle;
+  while (retval >= FullCircle())
+    retval -= FullCircle();
 
   return retval;
 }
@@ -98,13 +91,15 @@ Angle::AsBearing() const
 Angle
 Angle::AsDelta() const
 {
-  assert(fabs(value) < fixed(100) * fixed_circle);
-  Angle retval(value);
-  while (retval.value <= -fixed_half_circle)
-    retval.value += fixed_circle;
+  assert(fabs(value) < fixed(100) * FullCircle().Native());
 
-  while (retval.value > fixed_half_circle)
-    retval.value -= fixed_circle;
+  Angle retval(value);
+
+  while (retval <= -HalfCircle())
+    retval += FullCircle();
+
+  while (retval > HalfCircle())
+    retval -= FullCircle();
 
   return retval;
 }
@@ -112,8 +107,7 @@ Angle::AsDelta() const
 Angle
 Angle::Reciprocal() const
 {
-  Angle retval(value + fixed_half_circle);
-  return retval.AsBearing();
+  return (*this + HalfCircle()).AsBearing();
 }
 
 Angle
@@ -128,12 +122,12 @@ Angle::HalfAngle(const Angle end) const
   if (value == end.value) {
     return Reciprocal();
   } else if (value > end.value) {
-    if ((value - end.value) < fixed_half_circle)
+    if ((*this - end) < HalfCircle())
       return (*this + end).Half().Reciprocal();
     else
       return (*this + end).Half();
   } else {
-    if ((end.value - value) < fixed_half_circle)
+    if ((end - *this) < HalfCircle())
       return (*this + end).Half().Reciprocal();
     else
       return (*this + end).Half();

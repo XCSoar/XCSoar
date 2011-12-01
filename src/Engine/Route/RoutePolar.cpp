@@ -36,7 +36,8 @@ IndexToAngle(unsigned i)
 {
   assert(i < ROUTEPOLAR_POINTS);
 
-  return Angle::Radians(fixed_half_pi - i * fixed_two_pi / ROUTEPOLAR_POINTS);
+  return Angle::QuarterCircle()
+    - Angle::FullCircle() * (fixed(i) / ROUTEPOLAR_POINTS);
 }
 
 GlideResult

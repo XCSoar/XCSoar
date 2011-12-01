@@ -65,7 +65,7 @@ FlatEllipse::ba() const
 FlatPoint
 FlatEllipse::Parametric(const fixed t) const
 {
-  const Angle at = (Angle::Radians(fixed_two_pi * t) + theta_initial).AsDelta();
+  const Angle at = (Angle::FullCircle() * t + theta_initial).AsDelta();
 
   const auto sc = at.SinCos();
   fixed sat = sc.first, cat = sc.second;
