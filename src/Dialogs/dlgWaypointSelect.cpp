@@ -566,7 +566,7 @@ FillList(WaypointSelectInfoVector &list, const Waypoints &src,
 
 static void
 FillLastUsedList(WaypointSelectInfoVector &list,
-                 const std::list<unsigned int> last_used_ids,
+                 const std::list<unsigned int> &last_used_ids,
                  const Waypoints &waypoints, const GeoPoint location)
 {
   list.clear();
