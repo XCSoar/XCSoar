@@ -44,6 +44,7 @@ Copyright_License {
 #include "Device/Driver/Flytec.hpp"
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Driver/Westerboer.hpp"
+#include "Device/Driver/FLARM.hpp"
 #include "Util/Macros.hpp"
 
 /** NULL terminated array of available device drivers. */
@@ -70,6 +71,7 @@ static const struct DeviceRegister *const DeviceRegister[] = {
   &ilec_device_driver,
   &westerboer_device_driver,
   &imi_device_driver,
+  &flarm_device,
   NULL
 };
 
