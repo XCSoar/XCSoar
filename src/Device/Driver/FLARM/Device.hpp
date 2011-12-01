@@ -29,6 +29,7 @@ Copyright_License {
 #include "OS/ByteOrder.hpp"
 #include "Compiler.h"
 #include "tchar.h"
+#include "Device/Driver.hpp"
 
 #include <stdint.h>
 #include <assert.h>
@@ -39,7 +40,7 @@ class OperationEnvironment;
 class RecordedFlightList;
 struct RecordedFlightInfo;
 
-class FlarmDevice
+class FlarmDevice: public AbstractDevice
 {
   Port &port;
 
