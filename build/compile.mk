@@ -23,7 +23,12 @@ endif
 
 ####### paths
 
+ifeq ($(LLVM),y)
+# generate LLVM bitcode
+OBJ_SUFFIX = .bc
+else
 OBJ_SUFFIX = .o
+endif
 
 # Converts a list of source file names to *.o
 SRC_TO_OBJ = $(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(addprefix $(TARGET_OUTPUT_DIR)/,$(1))))

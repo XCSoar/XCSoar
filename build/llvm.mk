@@ -1,5 +1,3 @@
-CLANG ?= n
-
 ifeq ($(CLANG),y)
 CXX = clang++
 CC = clang

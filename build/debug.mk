@@ -26,6 +26,11 @@ OPTIMIZE += -flto -fwhole-program
 OPTIMIZE := $(filter-out -ggdb -gstabs,$(OPTIMIZE))
 endif
 
+ifeq ($(LLVM),y)
+# generate LLVM bitcode
+OPTIMIZE += -emit-llvm
+endif
+
 ifeq ($(PROFILE),y)
 FLAGS_PROFILE := -pg
 else

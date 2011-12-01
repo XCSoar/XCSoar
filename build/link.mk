@@ -52,10 +52,35 @@ $(2)_OBJS = $$(call SRC_TO_OBJ,$$($(2)_SOURCES))
 $$($(2)_OBJS): CPPFLAGS += $$($(2)_CPPFLAGS)
 $$($(2)_OBJS): CPPFLAGS += $(patsubst %,$$(%_CPPFLAGS),$($(2)_DEPENDS))
 
+ifeq ($$(LLVM),y)
+
+# Link all LLVM bitcode files together
+$$($(2)_NOSTRIP).bc: $$($(2)_OBJS) $$($(2)_LDADD) | $$(TARGET_BIN_DIR)/dirstamp
+	@$$(NQ)echo "  LINK    $$@"
+	$$(Q)llvm-link -o $$@ $$^
+
+# Optimise the large bitcode file
+$$($(2)_NOSTRIP)-opt.bc: $$($(2)_NOSTRIP).bc
+	@$$(NQ)echo "  OPT     $$@"
+	$$(Q)opt -o $$@ $$^ -std-compile-opts -std-link-opts -O2
+
+# Compile to native CPU assembly
+$$($(2)_NOSTRIP).s: $$($(2)_NOSTRIP)-opt.bc
+	@$$(NQ)echo "  LLC     $$@"
+	$$(Q)llc -o $$@ $$^ -O2
+
+# Link the unstripped binary
+$$($(2)_NOSTRIP): $$($(2)_NOSTRIP).s
+	@$$(NQ)echo "  CLANG   $$@"
+	$$(Q)$$(LINK) $$(LDFLAGS) -o $$@ $$^ $$(LDLIBS) $$($(2)_LDLIBS)
+else
+
 # Link the unstripped binary
 $$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) | $$(TARGET_BIN_DIR)/dirstamp
 	@$$(NQ)echo "  LINK    $$@"
 	$$(Q)$$(LINK) $$(LDFLAGS) $$(TARGET_ARCH) -o $$@ $$^ $$(LDLIBS) $$($(2)_LDLIBS)
+
+endif
 
 # Strip the binary (optional)
 ifeq ($$($(2)_STRIP),y)
@@ -74,7 +99,11 @@ endef
 # Arguments: NAME, PREFIX
 define link-library
 
+ifeq ($$(LLVM),y)
+$(2)_BIN = $$(TARGET_OUTPUT_DIR)/$(1).bc
+else
 $(2)_BIN = $$(TARGET_OUTPUT_DIR)/$(1).a
+endif
 
 # Compile
 $(2)_OBJS = $$(call SRC_TO_OBJ,$$($(2)_SOURCES))
@@ -84,8 +113,13 @@ $$($(2)_OBJS): CPPFLAGS += $$($(2)_CPPFLAGS) $$($(2)_CPPFLAGS_INTERNAL)
 
 # Link
 $$($(2)_BIN): $$($(2)_OBJS)
+ifeq ($$(LLVM),y)
+	@$$(NQ)echo "  LINK    $$@"
+	$$(Q)llvm-link -o $$@ $$^
+else
 	@$$(NQ)echo "  AR      $$@"
 	$$(Q)$$(AR) $$(ARFLAGS) $$@ $$^
+endif
 
 $(2)_LIBS = $$($(2)_BIN)
 $(2)_LDADD = $$($(2)_BIN)

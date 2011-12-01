@@ -31,6 +31,8 @@
 #
 #   CLANG       "y" to use clang instead of gcc
 #
+#   LLVM        "y" to compile LLVM bitcode with clang
+#
 
 .DEFAULT_GOAL := all
 
