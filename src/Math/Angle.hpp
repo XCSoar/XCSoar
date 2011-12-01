@@ -47,6 +47,11 @@ public:
   Angle() = default;
 
   gcc_constexpr_function
+  static Angle Zero() {
+    return Native(fixed_zero);
+  }
+
+  gcc_constexpr_function
   static Angle Native(const fixed _value) {
     return Angle(_value);
   }
@@ -54,11 +59,6 @@ public:
   gcc_constexpr_method
   fixed Native() const {
     return value;
-  }
-
-  gcc_constexpr_method
-  static Angle Zero() {
-    return Native(fixed_zero);
   }
 
 #ifdef RADIANS
