@@ -122,9 +122,13 @@ AbstractTask::UpdateStatsDistances(const GeoPoint &location,
                                    const bool full_update)
 {
   const TaskPoint *active = GetActiveTaskPoint();
-  stats.current_leg.vector_remaining = active != NULL
-    ? active->GetVectorRemaining(location)
-    : GeoVector::Invalid();
+  if (active != NULL) {
+    stats.current_leg.location_remaining = active->GetLocationRemaining();
+    stats.current_leg.vector_remaining = active->GetVectorRemaining(location);
+  } else {
+    stats.current_leg.location_remaining = GeoPoint::Invalid();
+    stats.current_leg.vector_remaining = GeoVector::Invalid();
+  }
 
   stats.total.remaining.set_distance(ScanDistanceRemaining(location));
 

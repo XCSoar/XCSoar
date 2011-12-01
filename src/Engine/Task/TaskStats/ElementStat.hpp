@@ -22,6 +22,7 @@
 #ifndef ELEMENT_STAT_HPP
 #define ELEMENT_STAT_HPP
 
+#include "Navigation/GeoPoint.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 #ifdef DO_PRINT
@@ -39,6 +40,14 @@ struct AircraftState;
  */
 struct ElementStat
 {
+  /**
+   * The remaining location, i.e. the result of
+   * ScoredTaskPoint::GetLocationRemaining().  Always check
+   * GeoPoint::IsValid() before using this attribute.  This is only
+   * implemented for one leg (TaskStats::current_leg).
+   */
+  GeoPoint location_remaining;
+
   /**
    * The remaining vector.  Always check GeoVector::IsValid() before
    * using this attribute.  This is only implemented for one leg
