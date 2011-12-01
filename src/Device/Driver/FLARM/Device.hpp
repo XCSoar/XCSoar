@@ -313,7 +313,7 @@ private:
    * @param path Path to the IGC file to write into
    * @return True if received and written successfully, otherwise False
    */
-  bool DownloadFlight(const TCHAR *path);
+  bool DownloadFlight(const TCHAR *path, OperationEnvironment &env);
 
 public:
   /**
@@ -335,7 +335,8 @@ public:
    * @param flight_list RecordedFlightList that should be filled
    * @return True if received and parsed successfully, otherwise False
    */
-  bool ReadFlightList(RecordedFlightList &flight_list);
+  bool ReadFlightList(RecordedFlightList &flight_list,
+                      OperationEnvironment &env);
 
   /**
    * Downloads a flight from the Flarm into an IGC file
@@ -343,7 +344,8 @@ public:
    * @param path Path to the IGC file to write into
    * @return True if received and written successfully, otherwise False
    */
-  bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path);
+  bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
+                      OperationEnvironment &env);
 };
 
 #endif

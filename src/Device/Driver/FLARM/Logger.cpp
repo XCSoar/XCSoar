@@ -25,6 +25,7 @@
 #include "Device/Driver.hpp"
 #include "IO/BinaryWriter.hpp"
 #include "OS/FileUtil.hpp"
+#include "Operation.hpp"
 
 #include <cstdlib>
 #include <cstring>
@@ -269,12 +270,16 @@ FlarmDevice::SelectFlight(uint8_t record_number)
 }
 
 bool
-FlarmDevice::ReadFlightList(RecordedFlightList &flight_list)
+FlarmDevice::ReadFlightList(RecordedFlightList &flight_list,
+                            OperationEnvironment &env)
 {
   assert(in_binary_mode);
 
   // Try to receive flight information until the list is full
+  env.SetProgressRange(10);
   for (uint8_t i = 0; !flight_list.full(); ++i) {
+    env.SetProgressPosition(i % 10);
+
     MessageType ack_result = SelectFlight(i);
 
     // Last record reached -> bail out and return list
@@ -282,7 +287,7 @@ FlarmDevice::ReadFlightList(RecordedFlightList &flight_list)
       break;
 
     // If neither ACK nor NACK was received
-    if (ack_result != MT_ACK)
+    if (ack_result != MT_ACK || env.IsCancelled())
       return false;
 
     RecordedFlightInfo flight_info;
@@ -295,21 +300,23 @@ FlarmDevice::ReadFlightList(RecordedFlightList &flight_list)
 }
 
 bool
-FlarmDevice::DownloadFlight(const TCHAR *path)
+FlarmDevice::DownloadFlight(const TCHAR *path, OperationEnvironment &env)
 {
   assert(in_binary_mode);
 
   BinaryWriter writer(path);
-  if (writer.HasError())
+  if (writer.HasError() || env.IsCancelled())
     return false;
 
+  env.SetProgressRange(100);
   while (true) {
     // Create header for getting IGC file data
     FrameHeader header = PrepareFrameHeader(MT_GETIGCDATA);
 
     // Send request
     if (!SendStartByte() ||
-        !SendFrameHeader(header, 1000))
+        !SendFrameHeader(header, 1000) ||
+        env.IsCancelled())
       return false;
 
     // Wait for an answer and save the payload for further processing
@@ -319,13 +326,14 @@ FlarmDevice::DownloadFlight(const TCHAR *path)
                                 length, 3000) == MT_ACK;
 
     // If no ACK was received
-    if (!ack || length <= 3)
+    if (!ack || length <= 3 || env.IsCancelled())
       return false;
 
     length -= 3;
 
     // Read progress (in percent)
-    //uint8_t progress = *(data.begin() + 2);
+    uint8_t progress = *(data.begin() + 2);
+    env.SetProgressPosition(std::min((unsigned)progress, 100u));
 
     const char *last_char = (const char *)data.end() - 1;
     bool is_last_packet = (*last_char == 0x1A);
@@ -346,17 +354,17 @@ FlarmDevice::DownloadFlight(const TCHAR *path)
 
 bool
 FlarmDevice::DownloadFlight(const RecordedFlightInfo &flight,
-                            const TCHAR *path)
+                            const TCHAR *path, OperationEnvironment &env)
 {
   assert(in_binary_mode);
 
   MessageType ack_result = SelectFlight(flight.internal.flarm);
 
   // If no ACK was received -> cancel
-  if (ack_result != MT_ACK)
+  if (ack_result != MT_ACK || env.IsCancelled())
     return false;
 
-  if (DownloadFlight(path))
+  if (DownloadFlight(path, env))
     return true;
 
   File::Delete(path);

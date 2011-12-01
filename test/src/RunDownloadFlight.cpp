@@ -104,6 +104,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
+  ConsoleOperationEnvironment env;
   if (!strcmp(argv[1], "FLARM")) {
     FlarmDevice flarm(port);
 
@@ -113,7 +114,7 @@ int main(int argc, char **argv)
     }
 
     RecordedFlightList flight_list;
-    if (!flarm.ReadFlightList(flight_list)) {
+    if (!flarm.ReadFlightList(flight_list, env)) {
       fprintf(stderr, "Failed to download flight list\n");
       flarm.DisableBinaryMode();
       return EXIT_FAILURE;
@@ -133,7 +134,7 @@ int main(int argc, char **argv)
       return EXIT_FAILURE;
     }
 
-    if (!flarm.DownloadFlight(flight_list[flight_id], path)) {
+    if (!flarm.DownloadFlight(flight_list[flight_id], path, env)) {
       fprintf(stderr, "Failed to download flight\n");
       flarm.DisableBinaryMode();
       return EXIT_FAILURE;
@@ -156,7 +157,6 @@ int main(int argc, char **argv)
     Device *device = driver->CreateOnPort(config, port);
     assert(device != NULL);
 
-    ConsoleOperationEnvironment env;
     if (!device->Open(env)) {
       delete device;
       fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
