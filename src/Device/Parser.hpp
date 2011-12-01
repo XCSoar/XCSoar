@@ -49,6 +49,10 @@ public:
 
 public:
   NMEAParser();
+
+  /**
+   * Resets the NMEAParser
+   */
   void Reset(void);
 
   void SetReal(bool _real) {
@@ -59,16 +63,26 @@ public:
     use_geoid = true;
   }
 
+  /**
+   * Parses a provided NMEA String into a NMEA_INFO struct
+   * @param String NMEA string
+   * @param info NMEA_INFO output struct
+   * @return Parsing success
+   */
   bool ParseLine(const char *line, NMEAInfo &info);
 
 public:
-  // these routines can be used by other parsers.
-
   /**
    * Reads an altitude value, and the unit from a second volumn.
    */
   static bool ReadAltitude(NMEAInputLine &line, fixed &value_r);
 
+  /**
+   * Calculates the checksum of the provided NMEA string and
+   * compares it to the provided checksum
+   * @param String NMEA string
+   * @return True if checksum correct
+   */
   static bool NMEAChecksum(const char *string);
 
 private:
@@ -86,22 +100,124 @@ private:
   gcc_pure
   fixed TimeAdvanceTolerance(fixed time) const;
 
+  /**
+   * Checks whether time has advanced since last call and
+   * updates the GPS_info if necessary
+   * @param ThisTime Current time
+   * @param info NMEA_INFO struct to update
+   * @return True if time has advanced since last call
+   */
   bool TimeHasAdvanced(fixed this_time, NMEAInfo &info);
+
+  /**
+   * Calculates a seconds-based FixTime and corrects it
+   * in case over passing the UTC midnight mark
+   * @param FixTime NMEA format fix time (HHMMSS)
+   * @param info NMEA_INFO struct to parse into
+   * @return Seconds-based FixTime
+   */
   static fixed TimeModify(fixed fix_time, BrokenDateTime &date_time,
                           bool date_available);
 
+  /**
+   * Parses a GLL sentence
+   *
+   * @param String Input string
+   * @param params Parameter array
+   * @param nparams Number of parameters
+   * @param info NMEA_INFO struct to parse into
+   * @return Parsing success
+   */
   bool GLL(NMEAInputLine &line, NMEAInfo &info);
+
+  /**
+   * Parses a GGA sentence
+   *
+   * @param String Input string
+   * @param params Parameter array
+   * @param nparams Number of parameters
+   * @param info NMEA_INFO struct to parse into
+   * @return Parsing success
+   */
   bool GGA(NMEAInputLine &line, NMEAInfo &info);
+
+  /**
+   * Parses a GSA sentence
+   *
+   * @param String Input string
+   * @param params Parameter array
+   * @param nparams Number of parameters
+   * @param info NMEA_INFO struct to parse into
+   * @return Parsing success
+   */
   bool GSA(NMEAInputLine &line, NMEAInfo &info);
+
+  /**
+   * Parses a RMC sentence
+   *
+   * @param String Input string
+   * @param params Parameter array
+   * @param nparams Number of parameters
+   * @param info NMEA_INFO struct to parse into
+   * @return Parsing success
+   */
   bool RMC(NMEAInputLine &line, NMEAInfo &info);
+
+  /**
+   * Parses a RMB sentence (not used anymore)
+   *
+   * @param String Input string
+   * @param params Parameter array
+   * @param nparams Number of parameters
+   * @param info NMEA_INFO struct to parse into
+   * @return Parsing success
+   */
   static bool RMB(NMEAInputLine &line, NMEAInfo &info);
+
+  /**
+   * Parses a PGRMZ sentence (Garmin proprietary).
+   *
+   * @param String Input string
+   * @param params Parameter array
+   * @param nparams Number of parameters
+   * @param info NMEA_INFO struct to parse into
+   * @return Parsing success
+   */
   bool RMZ(NMEAInputLine &line, NMEAInfo &info);
 
-  // Additional sentences
-  static bool PTAS1(NMEAInputLine &line, NMEAInfo &info); // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
+  /**
+   * Parses a PTAS1 sentence (Tasman Instruments proprietary).
+   *
+   * @param String Input string
+   * @param params Parameter array
+   * @param nparams Number of parameters
+   * @param info NMEA_INFO struct to parse into
+   * @return Parsing success
+   */
+  static bool PTAS1(NMEAInputLine &line, NMEAInfo &info);
 
-  // FLARM sentences
+  /**
+   * Parses a PFLAU sentence
+   * (Operating status and priority intruder and obstacle data)
+   * @param String Input string
+   * @param params Parameter array
+   * @param nparams Number of parameters
+   * @param info NMEA_INFO struct to parse into
+   * @return Parsing success
+   * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
+   */
   bool PFLAU(NMEAInputLine &line, FlarmState &flarm, fixed time);
+
+  /**
+   * Parses a PFLAA sentence
+   * (Data on other moving objects around)
+   * @param String Input string
+   * @param params Parameter array
+   * @param nparams Number of parameters
+   * @param info NMEA_INFO struct to parse into
+   * @return Parsing success
+   * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
+   */
   bool PFLAA(NMEAInputLine &line, NMEAInfo &info);
 };
 

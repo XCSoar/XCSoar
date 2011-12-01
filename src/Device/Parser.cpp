@@ -49,17 +49,11 @@ bool NMEAParser::ignore_checksum;
 
 int NMEAParser::start_day = -1;
 
-/**
- * Constructor of the NMEAParser class
- * @return NMEAParser object
- */
-NMEAParser::NMEAParser() {
+NMEAParser::NMEAParser()
+{
   Reset();
 }
 
-/**
- * Resets the NMEAParser
- */
 void
 NMEAParser::Reset(void)
 {
@@ -69,12 +63,6 @@ NMEAParser::Reset(void)
   last_time = fixed_zero;
 }
 
-/**
- * Parses a provided NMEA String into a NMEA_INFO struct
- * @param String NMEA string
- * @param info NMEA_INFO output struct
- * @return Parsing success
- */
 bool
 NMEAParser::ParseLine(const char *string, NMEAInfo &info)
 {
@@ -232,13 +220,6 @@ NMEAParser::ReadAltitude(NMEAInputLine &line, fixed &value_r)
   return true;
 }
 
-/**
- * Calculates a seconds-based FixTime and corrects it
- * in case over passing the UTC midnight mark
- * @param FixTime NMEA format fix time (HHMMSS)
- * @param info NMEA_INFO struct to parse into
- * @return Seconds-based FixTime
- */
 fixed
 NMEAParser::TimeModify(fixed fix_time, BrokenDateTime &date_time,
                        bool date_available)
@@ -292,13 +273,6 @@ NMEAParser::TimeAdvanceTolerance(fixed time) const
     : time;
 }
 
-/**
- * Checks whether time has advanced since last call and
- * updates the GPS_info if necessary
- * @param ThisTime Current time
- * @param info NMEA_INFO struct to update
- * @return True if time has advanced since last call
- */
 bool
 NMEAParser::TimeHasAdvanced(fixed this_time, NMEAInfo &info)
 {
@@ -314,33 +288,27 @@ NMEAParser::TimeHasAdvanced(fixed this_time, NMEAInfo &info)
   }
 }
 
-/**
- * Parses a GSA sentence
- *
- * $--GSA,a,a,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x.x,x.x,x.x*hh
- *
- * Field Number:
- *  1) Selection mode
- *	       M=Manual, forced to operate in 2D or 3D
- *	       A=Automatic, 3D/2D
- *  2) Mode (1 = no fix, 2 = 2D fix, 3 = 3D fix)
- *  3) ID of 1st satellite used for fix
- *  4) ID of 2nd satellite used for fix
- *  ...
- *  14) ID of 12th satellite used for fix
- *  15) PDOP
- *  16) HDOP
- *  17) VDOP
- *  18) checksum
- * @param String Input string
- * @param params Parameter array
- * @param nparams Number of parameters
- * @param info NMEA_INFO struct to parse into
- * @return Parsing success
- */
 bool
 NMEAParser::GSA(NMEAInputLine &line, NMEAInfo &info)
 {
+  /*
+   * $--GSA,a,a,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x.x,x.x,x.x*hh
+   *
+   * Field Number:
+   *  1) Selection mode
+   *         M=Manual, forced to operate in 2D or 3D
+   *         A=Automatic, 3D/2D
+   *  2) Mode (1 = no fix, 2 = 2D fix, 3 = 3D fix)
+   *  3) ID of 1st satellite used for fix
+   *  4) ID of 2nd satellite used for fix
+   *  ...
+   *  14) ID of 12th satellite used for fix
+   *  15) PDOP
+   *  16) HDOP
+   *  17) VDOP
+   *  18) checksum
+   */
+
   line.skip();
 
   if (line.read(0) == 1)
@@ -353,29 +321,23 @@ NMEAParser::GSA(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-/**
- * Parses a GLL sentence
- *
- * $--GLL,llll.ll,a,yyyyy.yy,a,hhmmss.ss,a,m,*hh
- *
- * Field Number:
- *  1) Latitude
- *  2) N or S (North or South)
- *  3) Longitude
- *  4) E or W (East or West)
- *  5) Universal Time Coordinated (UTC)
- *  6) Status A - Data Valid, V - Data Invalid
- *  7) FAA mode indicator (NMEA 2.3 and later)
- *  8) Checksum
- * @param String Input string
- * @param params Parameter array
- * @param nparams Number of parameters
- * @param info NMEA_INFO struct to parse into
- * @return Parsing success
- */
 bool
 NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
 {
+  /*
+   * $--GLL,llll.ll,a,yyyyy.yy,a,hhmmss.ss,a,m,*hh
+   *
+   * Field Number:
+   *  1) Latitude
+   *  2) N or S (North or South)
+   *  3) Longitude
+   *  4) E or W (East or West)
+   *  5) Universal Time Coordinated (UTC)
+   *  6) Status A - Data Valid, V - Data Invalid
+   *  7) FAA mode indicator (NMEA 2.3 and later)
+   *  8) Checksum
+   */
+
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
@@ -404,37 +366,29 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-/**
- * Parses a RMB sentence
- * (not used anymore)
- *
- * $--RMB,A,x.x,a,c--c,c--c,llll.ll,a,yyyyy.yy,a,x.x,x.x,x.x,A,m,*hh
- *
- * Field Number:
- *  1) Status, A= Active, V = Void
- *  2) Cross Track error - nautical miles
- *  3) Direction to Steer, Left or Right
- *  4) TO Waypoint ID
- *  5) FROM Waypoint ID
- *  6) Destination Waypoint Latitude
- *  7) N or S
- *  8) Destination Waypoint Longitude
- *  9) E or W
- * 10) Range to destination in nautical miles
- * 11) Bearing to destination in degrees True
- * 12) Destination closing velocity in knots
- * 13) Arrival Status, A = Arrival Circle Entered
- * 14) FAA mode indicator (NMEA 2.3 and later)
- * 15) Checksum
- * @param String Input string
- * @param params Parameter array
- * @param nparams Number of parameters
- * @param info NMEA_INFO struct to parse into
- * @return Parsing success
- */
 bool
 NMEAParser::RMB(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
 {
+  /*
+   * $--RMB,A,x.x,a,c--c,c--c,llll.ll,a,yyyyy.yy,a,x.x,x.x,x.x,A,m,*hh
+   *
+   * Field Number:
+   *  1) Status, A= Active, V = Void
+   *  2) Cross Track error - nautical miles
+   *  3) Direction to Steer, Left or Right
+   *  4) TO Waypoint ID
+   *  5) FROM Waypoint ID
+   *  6) Destination Waypoint Latitude
+   *  7) N or S
+   *  8) Destination Waypoint Longitude
+   *  9) E or W
+   * 10) Range to destination in nautical miles
+   * 11) Bearing to destination in degrees True
+   * 12) Destination closing velocity in knots
+   * 13) Arrival Status, A = Arrival Circle Entered
+   * 14) FAA mode indicator (NMEA 2.3 and later)
+   * 15) Checksum
+   */
   return true;
 }
 
@@ -461,34 +415,28 @@ ReadDate(NMEAInputLine &line, BrokenDate &date)
   return true;
 }
 
-/**
- * Parses a RMC sentence
- *
- * $--RMC,hhmmss.ss,A,llll.ll,a,yyyyy.yy,a,x.x,x.x,xxxx,x.x,a,m,*hh
- *
- * Field Number:
- *  1) UTC Time
- *  2) Status, V=Navigation receiver warning A=Valid
- *  3) Latitude
- *  4) N or S
- *  5) Longitude
- *  6) E or W
- *  7) Speed over ground, knots
- *  8) Track made good, degrees true
- *  9) Date, ddmmyy
- * 10) Magnetic Variation, degrees
- * 11) E or W
- * 12) FAA mode indicator (NMEA 2.3 and later)
- * 13) Checksum
- * @param String Input string
- * @param params Parameter array
- * @param nparams Number of parameters
- * @param info NMEA_INFO struct to parse into
- * @return Parsing success
- */
 bool
 NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
 {
+  /*
+   * $--RMC,hhmmss.ss,A,llll.ll,a,yyyyy.yy,a,x.x,x.x,xxxx,x.x,a,m,*hh
+   *
+   * Field Number:
+   *  1) UTC Time
+   *  2) Status, V=Navigation receiver warning A=Valid
+   *  3) Latitude
+   *  4) N or S
+   *  5) Longitude
+   *  6) E or W
+   *  7) Speed over ground, knots
+   *  8) Track made good, degrees true
+   *  9) Date, ddmmyy
+   * 10) Magnetic Variation, degrees
+   * 11) E or W
+   * 12) FAA mode indicator (NMEA 2.3 and later)
+   * 13) Checksum
+   */
+
   fixed this_time = line.read(fixed_zero);
 
   bool gps_valid = !NAVWarn(line.read_first_char());
@@ -546,49 +494,42 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-/**
- * Parses a GGA sentence
- *
- * $--GGA,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx*hh
- *
- * Field Number:
- *  1) Universal Time Coordinated (UTC)
- *  2) Latitude
- *  3) N or S (North or South)
- *  4) Longitude
- *  5) E or W (East or West)
- *  6) GPS Quality Indicator,
- *     0 - fix not available,
- *     1 - GPS fix,
- *     2 - Differential GPS fix
- *     (values above 2 are 2.3 features)
- *     3 = PPS fix
- *     4 = Real Time Kinematic
- *     5 = Float RTK
- *     6 = estimated (dead reckoning)
- *     7 = Manual input mode
- *     8 = Simulation mode
- *  7) Number of satellites in view, 00 - 12
- *  8) Horizontal Dilution of precision (meters)
- *  9) Antenna Altitude above/below mean-sea-level (geoid) (in meters)
- * 10) Units of antenna altitude, meters
- * 11) Geoidal separation, the difference between the WGS-84 earth
- *     ellipsoid and mean-sea-level (geoid), "-" means mean-sea-level
- *     below ellipsoid
- * 12) Units of geoidal separation, meters
- * 13) Age of differential GPS data, time in seconds since last SC104
- *     type 1 or 9 update, null field when DGPS is not used
- * 14) Differential reference station ID, 0000-1023
- * 15) Checksum
- * @param String Input string
- * @param params Parameter array
- * @param nparams Number of parameters
- * @param info NMEA_INFO struct to parse into
- * @return Parsing success
- */
 bool
 NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
 {
+  /*
+   * $--GGA,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx*hh
+   *
+   * Field Number:
+   *  1) Universal Time Coordinated (UTC)
+   *  2) Latitude
+   *  3) N or S (North or South)
+   *  4) Longitude
+   *  5) E or W (East or West)
+   *  6) GPS Quality Indicator,
+   *     0 - fix not available,
+   *     1 - GPS fix,
+   *     2 - Differential GPS fix
+   *     (values above 2 are 2.3 features)
+   *     3 = PPS fix
+   *     4 = Real Time Kinematic
+   *     5 = Float RTK
+   *     6 = estimated (dead reckoning)
+   *     7 = Manual input mode
+   *     8 = Simulation mode
+   *  7) Number of satellites in view, 00 - 12
+   *  8) Horizontal Dilution of precision (meters)
+   *  9) Antenna Altitude above/below mean-sea-level (geoid) (in meters)
+   * 10) Units of antenna altitude, meters
+   * 11) Geoidal separation, the difference between the WGS-84 earth
+   *     ellipsoid and mean-sea-level (geoid), "-" means mean-sea-level
+   *     below ellipsoid
+   * 12) Units of geoidal separation, meters
+   * 13) Age of differential GPS data, time in seconds since last SC104
+   *     type 1 or 9 update, null field when DGPS is not used
+   * 14) Differential reference station ID, 0000-1023
+   * 15) Checksum
+   */
   GPSState &gps = info.gps;
 
   gga_available = true;
@@ -666,15 +607,6 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-/**
- * Parses a PGRMZ sentence (Garmin proprietary).
- *
- * @param String Input string
- * @param params Parameter array
- * @param nparams Number of parameters
- * @param info NMEA_INFO struct to parse into
- * @return Parsing success
- */
 bool
 NMEAParser::RMZ(NMEAInputLine &line, NMEAInfo &info)
 {
@@ -704,27 +636,12 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-/**
- * Calculates the checksum of the provided NMEA string and
- * compares it to the provided checksum
- * @param String NMEA string
- * @return True if checksum correct
- */
 bool
 NMEAParser::NMEAChecksum(const char *string)
 {
   return ignore_checksum || VerifyNMEAChecksum(string);
 }
 
-/**
- * Parses a PTAS1 sentence (Tasman Instruments proprietary).
- *
- * @param String Input string
- * @param params Parameter array
- * @param nparams Number of parameters
- * @param info NMEA_INFO struct to parse into
- * @return Parsing success
- */
 bool
 NMEAParser::PTAS1(NMEAInputLine &line, NMEAInfo &info)
 {
@@ -748,16 +665,6 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-/**
- * Parses a PFLAU sentence
- * (Operating status and priority intruder and obstacle data)
- * @param String Input string
- * @param params Parameter array
- * @param nparams Number of parameters
- * @param info NMEA_INFO struct to parse into
- * @return Parsing success
- * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
- */
 bool
 NMEAParser::PFLAU(NMEAInputLine &line, FlarmState &flarm, fixed time)
 {
@@ -775,16 +682,6 @@ NMEAParser::PFLAU(NMEAInputLine &line, FlarmState &flarm, fixed time)
   return true;
 }
 
-/**
- * Parses a PFLAA sentence
- * (Data on other moving objects around)
- * @param String Input string
- * @param params Parameter array
- * @param nparams Number of parameters
- * @param info NMEA_INFO struct to parse into
- * @return Parsing success
- * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
- */
 bool
 NMEAParser::PFLAA(NMEAInputLine &line, NMEAInfo &info)
 {
