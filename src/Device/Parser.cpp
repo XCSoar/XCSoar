@@ -639,19 +639,42 @@ NMEAParser::NMEAChecksum(const char *string)
 bool
 NMEAParser::PTAS1(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed wnet;
-  if (line.read_checked(wnet))
-    info.ProvideTotalEnergyVario(Units::ToSysUnit((wnet - fixed(200)) / 10,
-                                                       unKnots));
+  /*
+   * $PTAS1,xxx,yyy,zzzzz,aaa*CS<CR><LF>
+   *
+   * xxx
+   * CV or current vario. =vario*10+200 range 0-400(display +/-20.0 knots)
+   *
+   * yyy
+   * AV or average vario. =vario*10+200 range 0-400(display +/-20.0 knots)
+   *
+   * zzzzz
+   * Barometric altitude in feet +2000
+   *
+   * aaa
+   * TAS knots 0-200
+   */
 
-  line.skip(); // average vario +200
-
-  fixed baralt;
-  if (line.read_checked(baralt)) {
-    baralt = max(fixed_zero, Units::ToSysUnit(baralt - fixed(2000), unFeet));
-    info.ProvidePressureAltitude(baralt);
+  // Parse current vario data
+  fixed vario;
+  if (line.read_checked(vario)) {
+    // Properly convert to m/s
+    vario = Units::ToSysUnit((vario - fixed(200)) / 10, unKnots);
+    info.ProvideTotalEnergyVario(vario);
   }
 
+  // Skip average vario data
+  line.skip();
+
+  // Parse barometric altitude
+  fixed baro_altitude;
+  if (line.read_checked(baro_altitude)) {
+    // Properly convert to meter
+    baro_altitude = Units::ToSysUnit(baro_altitude - fixed(2000), unFeet);
+    info.ProvidePressureAltitude(baro_altitude);
+  }
+
+  // Parse true airspeed
   fixed vtas;
   if (line.read_checked(vtas))
     info.ProvideTrueAirspeed(Units::ToSysUnit(vtas, unKnots));
