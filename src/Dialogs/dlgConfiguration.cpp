@@ -205,7 +205,8 @@ setVariables()
   GaugesConfigPanel::Init(wf);
   VarioConfigPanel::Init(wf);
   InfoBoxesConfigPanel::Init(wf);
-  ExperimentalConfigPanel::Init(wf);
+  if (HasModelType())
+    ExperimentalConfigPanel::Init(wf);
   PagesConfigPanel::Init(wf);
 }
 
@@ -320,7 +321,8 @@ void dlgConfigurationShowModal(void)
   changed |= GaugesConfigPanel::Save();
   changed |= VarioConfigPanel::Save();
   changed |= InfoBoxesConfigPanel::Save(requirerestart);
-  changed |= ExperimentalConfigPanel::Save(requirerestart);
+  if (HasModelType())
+    changed |= ExperimentalConfigPanel::Save(requirerestart);
   // Units need to be saved last to prevent
   // conversion problems with other values
   changed |= UnitsConfigPanel::Save();
