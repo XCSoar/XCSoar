@@ -416,7 +416,7 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
 
   bool result = device != NULL && device->Declare(declaration, env);
 
-  if (device_blackboard->IsFLARM(index)) {
+  if (device_blackboard->IsFLARM(index) && !IsDriver(_T("FLARM"))) {
     text.Format(_T("%s: FLARM."), _("Sending declaration"));
     env.SetText(text);
     FlarmDevice flarm(*port);
