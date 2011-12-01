@@ -7,8 +7,8 @@ SYSTEM=`uname -s 2>/dev/null`
 
 case "${SYSTEM}" in
 "Darwin")
-    ${DIR}/build/configure-mac.sh
-    echo "Now run
+    ${DIR}/build/configure-mac.sh \
+    && echo "Now run
      make TARGET=UNIX
 to build XCSoar for Mac OS X."
 ;;

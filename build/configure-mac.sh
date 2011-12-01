@@ -70,7 +70,7 @@ done
 
 # we must set TARGET_LDFLAGS, as  -Wl,--gc-sections seems to be unknown to the linker.
 
-cat >${DEST} <<FINISHED
+cat >${DEST} <<FINISHED || exit 1;
 
 ifeq (\$(TARGET),)
 TARGET=UNIX
