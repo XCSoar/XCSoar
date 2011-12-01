@@ -65,7 +65,7 @@ public:
 
   /**
    * Parses a provided NMEA String into a NMEA_INFO struct
-   * @param String NMEA string
+   * @param line NMEA string
    * @param info NMEA_INFO output struct
    * @return Parsing success
    */
@@ -122,9 +122,7 @@ private:
   /**
    * Parses a GLL sentence
    *
-   * @param String Input string
-   * @param params Parameter array
-   * @param nparams Number of parameters
+   * @param line A NMEAInputLine instance that can be used for parsing
    * @param info NMEA_INFO struct to parse into
    * @return Parsing success
    */
@@ -133,9 +131,7 @@ private:
   /**
    * Parses a GGA sentence
    *
-   * @param String Input string
-   * @param params Parameter array
-   * @param nparams Number of parameters
+   * @param line A NMEAInputLine instance that can be used for parsing
    * @param info NMEA_INFO struct to parse into
    * @return Parsing success
    */
@@ -144,9 +140,7 @@ private:
   /**
    * Parses a GSA sentence
    *
-   * @param String Input string
-   * @param params Parameter array
-   * @param nparams Number of parameters
+   * @param line A NMEAInputLine instance that can be used for parsing
    * @param info NMEA_INFO struct to parse into
    * @return Parsing success
    */
@@ -155,9 +149,7 @@ private:
   /**
    * Parses a RMC sentence
    *
-   * @param String Input string
-   * @param params Parameter array
-   * @param nparams Number of parameters
+   * @param line A NMEAInputLine instance that can be used for parsing
    * @param info NMEA_INFO struct to parse into
    * @return Parsing success
    */
@@ -166,9 +158,7 @@ private:
   /**
    * Parses a RMB sentence (not used anymore)
    *
-   * @param String Input string
-   * @param params Parameter array
-   * @param nparams Number of parameters
+   * @param line A NMEAInputLine instance that can be used for parsing
    * @param info NMEA_INFO struct to parse into
    * @return Parsing success
    */
@@ -177,9 +167,7 @@ private:
   /**
    * Parses a PGRMZ sentence (Garmin proprietary).
    *
-   * @param String Input string
-   * @param params Parameter array
-   * @param nparams Number of parameters
+   * @param line A NMEAInputLine instance that can be used for parsing
    * @param info NMEA_INFO struct to parse into
    * @return Parsing success
    */
@@ -188,9 +176,7 @@ private:
   /**
    * Parses a PTAS1 sentence (Tasman Instruments proprietary).
    *
-   * @param String Input string
-   * @param params Parameter array
-   * @param nparams Number of parameters
+   * @param line A NMEAInputLine instance that can be used for parsing
    * @param info NMEA_INFO struct to parse into
    * @return Parsing success
    */
@@ -199,9 +185,7 @@ private:
   /**
    * Parses a PFLAU sentence
    * (Operating status and priority intruder and obstacle data)
-   * @param String Input string
-   * @param params Parameter array
-   * @param nparams Number of parameters
+   * @param line A NMEAInputLine instance that can be used for parsing
    * @param info NMEA_INFO struct to parse into
    * @return Parsing success
    * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
@@ -211,9 +195,7 @@ private:
   /**
    * Parses a PFLAA sentence
    * (Data on other moving objects around)
-   * @param String Input string
-   * @param params Parameter array
-   * @param nparams Number of parameters
+   * @param line A NMEAInputLine instance that can be used for parsing
    * @param info NMEA_INFO struct to parse into
    * @return Parsing success
    * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
