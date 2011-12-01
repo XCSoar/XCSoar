@@ -114,6 +114,32 @@ TestGeneric()
 }
 
 static void
+TestTasman()
+{
+  NMEAParser parser;
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = fixed_one;
+
+  ok1(parser.ParseLine("$PTAS1,200,200,02426,000*25", nmea_info));
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, fixed_zero));
+  ok1(nmea_info.pressure_altitude_available);
+  ok1(equals(nmea_info.pressure_altitude, Units::ToSysUnit(fixed(426), unFeet)));
+  ok1(nmea_info.airspeed_available);
+  ok1(equals(nmea_info.true_airspeed, fixed_zero));
+
+  ok1(parser.ParseLine("$PTAS1,234,000,00426,062*26", nmea_info));
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, Units::ToSysUnit(fixed(3.4), unKnots)));
+  ok1(nmea_info.pressure_altitude_available);
+  ok1(equals(nmea_info.pressure_altitude, Units::ToSysUnit(fixed(-1574), unFeet)));
+  ok1(nmea_info.airspeed_available);
+  ok1(equals(nmea_info.true_airspeed, Units::ToSysUnit(fixed(62), unKnots)));
+}
+
+static void
 TestFLARM()
 {
   NMEAParser parser;
@@ -774,9 +800,10 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(381);
+  plan_tests(395);
 
   TestGeneric();
+  TestTasman();
   TestFLARM();
   TestBorgeltB50();
   TestCAI302();
