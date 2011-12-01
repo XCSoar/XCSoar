@@ -59,8 +59,7 @@ public:
   }
 
   void Fill(const AirspaceWarningManager &awm) {
-    for (AirspaceWarningManager::const_iterator i = awm.begin(),
-           end = awm.end(); i != end; ++i)
+    for (auto i = awm.begin(), end = awm.end(); i != end; ++i)
       Add(*i);
   }
 
@@ -213,8 +212,7 @@ MapItemListBuilder::AddMarkers(const ProtectedMarkers &marks)
 {
   ProtectedMarkers::Lease lease(marks);
   unsigned i = 0;
-  for (Markers::const_iterator it = lease->begin(), it_end = lease->end();
-       it != it_end; ++it) {
+  for (auto it = lease->begin(), it_end = lease->end(); it != it_end; ++it) {
     if (location.Distance(it->location) < range)
       list.checked_append(new MarkerMapItem(i, *it));
 

@@ -68,8 +68,7 @@ void
 MapCanvas::project(const Projection &projection,
                    const SearchPointVector &points, RasterPoint *screen)
 {
-  for (SearchPointVector::const_iterator it = points.begin();
-       it != points.end(); ++it)
+  for (auto it = points.begin(); it != points.end(); ++it)
     *screen++ = projection.GeoToScreen(it->get_location());
 }
 

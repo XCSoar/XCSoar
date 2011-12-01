@@ -182,8 +182,7 @@ public:
       rcd.bottom = chart.screenY(as.GetBaseAltitude(state));
 
     // Iterate through the intersections
-    for (AirspaceIntersectionVector::const_iterator it = m_intersections.begin();
-         it != m_intersections.end(); ++it) {
+    for (auto it = m_intersections.begin(); it != m_intersections.end(); ++it) {
       const GeoPoint p_start = it->first;
       const GeoPoint p_end = it->second;
       const fixed distance_start = start.Distance(p_start);

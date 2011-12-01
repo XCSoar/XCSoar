@@ -151,15 +151,13 @@ struct ProjectedFans {
 #ifdef ENABLE_OPENGL
     unsigned start = 0;
     const RasterPoint *points = &this->points[0];
-    const ProjectedFanVector::const_iterator end = fans.end();
-    for (ProjectedFanVector::const_iterator i = fans.begin(); i != end; ++i) {
+    for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
       i->DrawFill(points, start);
       start += i->size;
     }
 #else
     const RasterPoint *points = &this->points[0];
-    const ProjectedFanVector::const_iterator end = fans.end();
-    for (ProjectedFanVector::const_iterator i = fans.begin(); i != end; ++i) {
+    for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
       i->DrawFill(canvas, points);
       points += i->size;
     }
@@ -171,15 +169,13 @@ struct ProjectedFans {
 
 #ifdef ENABLE_OPENGL
     unsigned start = 0;
-    const ProjectedFanVector::const_iterator end = fans.end();
-    for (ProjectedFanVector::const_iterator i = fans.begin(); i != end; ++i) {
+    for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
       i->DrawOutline(start);
       start += i->size;
     }
 #else
     const RasterPoint *points = &this->points[0];
-    const ProjectedFanVector::const_iterator end = fans.end();
-    for (ProjectedFanVector::const_iterator i = fans.begin(); i != end; ++i) {
+    for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
       i->DrawOutline(canvas, points);
       points += i->size;
     }

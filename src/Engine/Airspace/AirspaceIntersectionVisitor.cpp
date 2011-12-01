@@ -13,8 +13,7 @@ AirspaceIntersectionVisitor::intercept(const AbstractAirspace& as,
     return solution;
   }
 
-  for (AirspaceIntersectionVector::const_iterator it = m_intersections.begin();
-       it != m_intersections.end(); ++it) {
+  for (auto it = m_intersections.begin(); it != m_intersections.end(); ++it) {
 
     as.Intercept(state, perf, solution, it->first, it->second);
 

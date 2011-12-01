@@ -88,8 +88,7 @@ TestOpenAir()
 
   ok1(airspaces.size() == 23);
 
-  for (Airspaces::AirspaceTree::const_iterator it = airspaces.begin();
-       it != airspaces.end(); ++it) {
+  for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
     const AbstractAirspace &airspace = *it->get_airspace();
     if (_tcscmp(_T("Circle-Test"), airspace.GetName()) == 0) {
       if (!ok1(airspace.shape == AbstractAirspace::CIRCLE))
@@ -194,8 +193,7 @@ TestTNP()
 
   ok1(airspaces.size() == 22);
 
-  for (Airspaces::AirspaceTree::const_iterator it = airspaces.begin();
-       it != airspaces.end(); ++it) {
+  for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
     const AbstractAirspace &airspace = *it->get_airspace();
     if (_tcscmp(_T("Circle-Test"), airspace.GetName()) == 0) {
       if (!ok1(airspace.shape == AbstractAirspace::CIRCLE))

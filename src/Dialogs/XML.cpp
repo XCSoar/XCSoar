@@ -853,8 +853,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     window = tabbed;
 
-    for (XMLNode::const_iterator i = node.begin(), end = node.end();
-         i != end; ++i) {
+    for (auto i = node.begin(), end = node.end(); i != end; ++i) {
       // Load each child control from the child nodes
       Window *child = LoadChild(form, *tabbed,
                                 lookup_table,
@@ -934,8 +933,7 @@ LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
   unsigned bottom_most = 0;
 
   // Iterate through the childnodes
-  for (XMLNode::const_iterator i = node->begin(), end = node->end();
-       i != end; ++i) {
+  for (auto i = node->begin(), end = node->end(); i != end; ++i) {
     // Load each child control from the child nodes
     Window *window = LoadChild(form, parent, lookup_table,
                                *i, dialog_style,

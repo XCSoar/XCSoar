@@ -89,8 +89,7 @@ DataNode::List
 DataNodeXML::ListChildren() const
 {
   List list;
-  for (XMLNode::const_iterator i = m_xml_node->begin(),
-         end = m_xml_node->end(); i != end; ++i)
+  for (auto i = m_xml_node->begin(), end = m_xml_node->end(); i != end; ++i)
     list.push_back(new DataNodeXML(*i));
   return list;
 }
@@ -99,8 +98,7 @@ DataNode::List
 DataNodeXML::ListChildrenNamed(const TCHAR *name) const
 {
   List list;
-  for (XMLNode::const_iterator i = m_xml_node->begin(),
-         end = m_xml_node->end(); i != end; ++i)
+  for (auto i = m_xml_node->begin(), end = m_xml_node->end(); i != end; ++i)
     if (_tcsicmp(i->getName(), name) == 0)
       list.push_back(new DataNodeXML(*i));
   return list;

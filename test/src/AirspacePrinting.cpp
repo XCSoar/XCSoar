@@ -50,13 +50,13 @@ std::ostream& operator<< (std::ostream& f,
                           const AirspacePolygon& as)
 {
   f << "# polygon\n";
-  for (std::vector<SearchPoint>::const_iterator v = as.m_border.begin();
+  for (auto v = as.m_border.begin();
        v != as.m_border.end(); ++v) {
     GeoPoint l = v->get_location();
     f << l.longitude << " " << l.latitude << " " << as.GetBase().altitude << "\n";
   }
   f << "\n";
-  for (std::vector<SearchPoint>::const_iterator v = as.m_border.begin();
+  for (auto v = as.m_border.begin();
        v != as.m_border.end(); ++v) {
     GeoPoint l = v->get_location();
     f << l.longitude << " " << l.latitude << " " << as.GetTop().altitude << "\n";
@@ -121,10 +121,9 @@ std::ostream& operator<< (std::ostream& f,
 void write_border (const AbstractAirspace& as)
 {
   const SearchPointVector& spv = as.GetPoints();
-  for (std::vector<SearchPoint>::const_iterator v = spv.begin();
-       v != spv.end(); ++v) {
+  for (auto v = spv.begin(); v != spv.end(); ++v)
     write_point(*v, v->get_flatLocation(), "polygon");
-  }
+
   printf("polygon\n");
   write_spv(as.GetClearance());
   fflush(stdout);

@@ -40,7 +40,7 @@ namespace FlarmNet
 void
 FlarmNet::Destroy()
 {
-  for (RecordMap::iterator i = record_map.begin(); i != record_map.end(); ++i)
+  for (auto i = record_map.begin(); i != record_map.end(); ++i)
     delete i->second;
 }
 

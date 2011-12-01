@@ -106,16 +106,14 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   if (settings.snail_type == stAltitude) {
     value_max = fixed(1000);
     value_min = fixed(500);
-    for (TracePointVector::const_iterator it = trace.begin();
-         it != trace.end(); ++it) {
+    for (auto it = trace.begin(); it != trace.end(); ++it) {
       value_max = max(it->GetAltitude(), value_max);
       value_min = min(it->GetAltitude(), value_min);
     }
   } else {
     value_max = fixed(0.75);
     value_min = fixed(-2.0);
-    for (TracePointVector::const_iterator it = trace.begin();
-         it != trace.end(); ++it) {
+    for (auto it = trace.begin(); it != trace.end(); ++it) {
       value_max = max(it->GetVario(), value_max);
       value_min = min(it->GetVario(), value_min);
     }
@@ -130,8 +128,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
   RasterPoint last_point;
   bool last_valid = false;
-  for (TracePointVector::const_iterator it = trace.begin(), end = trace.end();
-       it != end; ++it) {
+  for (auto it = trace.begin(), end = trace.end(); it != end; ++it) {
     const fixed dt = basic.time - fixed(it->time);
     const GeoPoint gp = enable_traildrift ?
       it->get_location().Parametric(traildrift, dt * it->drift_factor / 256) :
@@ -176,8 +173,7 @@ TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
   points.GrowDiscard(trace.size());
 
   unsigned n = 0;
-  for (TracePointVector::const_iterator i = trace.begin(), end = trace.end();
-       i != end; ++i)
+  for (auto i = trace.begin(), end = trace.end(); i != end; ++i)
     points[n++] = projection.GeoToScreen(i->get_location());
 
   canvas.DrawPolyline(points.begin(), n);

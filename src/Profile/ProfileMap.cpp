@@ -65,8 +65,7 @@ void
 ProfileMap::Export(KeyValueFileWriter &writer)
 {
   // Iterate through the profile maps
-  for (map_t::const_iterator it_str = map.begin();
-       it_str != map.end(); it_str++)
+  for (auto it_str = map.begin(); it_str != map.end(); it_str++)
     writer.Write(it_str->first.c_str(), it_str->second.c_str());
 }
 

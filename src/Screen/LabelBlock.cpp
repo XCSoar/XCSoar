@@ -40,8 +40,7 @@ CheckRectOverlap(const PixelRect& rc1, const PixelRect& rc2)
 bool
 LabelBlock::Bucket::Check(const PixelRect rc) const
 {
-  for (BlockArray::const_iterator i = blocks.begin(), end = blocks.end();
-       i != end; ++i)
+  for (auto i = blocks.begin(), end = blocks.end(); i != end; ++i)
     if (CheckRectOverlap(*i, rc))
       return false;
 

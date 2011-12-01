@@ -81,15 +81,13 @@ void GrahamScan::partition_points()
   upper_partition_points.reserve(size);
   lower_partition_points.reserve(size);
 
-  for (std::list<SearchPoint>::iterator i = raw_points.begin(); 
-       i != raw_points.end(); ) {
+  for (auto i = raw_points.begin(); i != raw_points.end();) {
+    if ((loclast.longitude != i->get_location().longitude)
+        ||(loclast.latitude != i->get_location().latitude)) {
+      loclast = i->get_location();
 
-    if ((loclast.longitude != (*i).get_location().longitude)
-        ||(loclast.latitude != (*i).get_location().latitude)) {
-      loclast = (*i).get_location();
-
-      int dir = direction( left->get_location(), right->get_location(), 
-                           (*i).get_location(), tolerance );
+      int dir = direction(left->get_location(), right->get_location(),
+                          i->get_location(), tolerance );
       SearchPoint* sp = &(*i);
       if ( dir < 0 )
         upper_partition_points.push_back( sp );
@@ -144,8 +142,7 @@ void GrahamScan::build_half_hull( std::vector< SearchPoint* > input,
   //
   // The construction loop runs until the input is exhausted
   //
-  for (std::vector<SearchPoint *>::const_iterator i = input.begin();
-       i != input.end(); ++i) {
+  for (auto i = input.begin(); i != input.end(); ++i) {
     //
     // Repeatedly add the leftmost point to the hull, then test to see
     // if a convexity violation has occured. If it has, fix things up

@@ -64,8 +64,7 @@ public:
   }
 
   void Visit(const AirspaceWarningManager &awm) {
-    for (AirspaceWarningManager::const_iterator i = awm.begin(),
-           end = awm.end(); i != end; ++i)
+    for (auto i = awm.begin(), end = awm.end(); i != end; ++i)
       Visit(*i);
   }
 

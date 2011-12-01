@@ -18,9 +18,7 @@ AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
 {
   m_airspaces_all.reserve(airspaces.size());
 
-  for (Airspaces::AirspaceTree::const_iterator it = airspaces.begin();
-       it != airspaces.end(); ++it) {
-
+  for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
     AirspaceSelectInfo info;
 
     const AbstractAirspace &airspace = *it->get_airspace();

@@ -54,9 +54,7 @@ static void
 SetTaskBehaviour(OrderedTask::OrderedTaskPointVector &vector,
                  const TaskBehaviour &tb)
 {
-  OrderedTask::OrderedTaskPointVector::iterator end = vector.end();
-  for (OrderedTask::OrderedTaskPointVector::iterator i = vector.begin();
-       i != end; ++i)
+  for (auto i = vector.begin(), end = vector.end(); i != end; ++i)
     (*i)->SetTaskBehaviour(tb);
 }
 
@@ -73,9 +71,7 @@ static void
 UpdateObservationZones(OrderedTask::OrderedTaskPointVector &points,
                        const TaskProjection &task_projection)
 {
-  OrderedTask::OrderedTaskPointVector::iterator end = points.end();
-  for (OrderedTask::OrderedTaskPointVector::iterator i = points.begin();
-       i != end; ++i)
+  for (auto i = points.begin(), end = points.end(); i != end; ++i)
     (*i)->UpdateOZ(task_projection);
 }
 
@@ -842,14 +838,16 @@ OrderedTask::CalcGradient(const AircraftState &state) const
 
 OrderedTask::~OrderedTask()
 {
-  for (OrderedTaskPointVector::iterator v = task_points.begin(); v != task_points.end();) {
+  for (auto v = task_points.begin(); v != task_points.end();) {
     delete *v;
     task_points.erase(v);
   }
-  for (OrderedTaskPointVector::iterator v = optional_start_points.begin(); v != optional_start_points.end();) {
+
+  for (auto v = optional_start_points.begin(); v != optional_start_points.end();) {
     delete *v;
     optional_start_points.erase(v);
   }
+
   delete active_factory;
 }
 
@@ -875,20 +873,16 @@ static void
 Visit(const OrderedTask::OrderedTaskPointVector &points,
       TaskPointConstVisitor &visitor)
 {
-    const OrderedTask::OrderedTaskPointVector::const_iterator end = points.end();
-    for (OrderedTask::OrderedTaskPointVector::const_iterator it = points.begin();
-         it != end; ++it)
-      visitor.Visit(**it);
+  for (auto it = points.begin(), end = points.end(); it != end; ++it)
+    visitor.Visit(**it);
 }
 
 static void
 VisitReverse(const OrderedTask::OrderedTaskPointVector &points,
              TaskPointConstVisitor &visitor)
 {
-    const OrderedTask::OrderedTaskPointVector::const_reverse_iterator end = points.rend();
-    for (OrderedTask::OrderedTaskPointVector::const_reverse_iterator it = points.rbegin();
-         it != end; ++it)
-      visitor.Visit(**it);
+  for (auto it = points.rbegin(), end = points.rend(); it != end; ++it)
+    visitor.Visit(**it);
 }
 
 void 
@@ -914,10 +908,8 @@ OrderedTask::AcceptStartPointVisitor(TaskPointConstVisitor& visitor, const bool 
 static void
 ResetPoints(OrderedTask::OrderedTaskPointVector &points)
 {
-    const OrderedTask::OrderedTaskPointVector::iterator end = points.end();
-    for (OrderedTask::OrderedTaskPointVector::iterator it = points.begin();
-         it != end; ++it)
-      (*it)->Reset();
+  for (auto it = points.begin(), end = points.end(); it != end; ++it)
+    (*it)->Reset();
 }
 
 void

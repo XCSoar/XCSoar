@@ -60,7 +60,7 @@ SearchPointVector::IsConvex() const
 void 
 SearchPointVector::Project(const TaskProjection& tp)
 {
-  for (iterator i = begin(); i != end(); ++i)
+  for (auto i = begin(); i != end(); ++i)
     i->project(tp);
 }
 
@@ -107,8 +107,7 @@ NearestPointNonConvex(const SearchPointVector& spv, const FlatGeoPoint &p3)
 {
   unsigned distance_min = 0-1;
   FlatGeoPoint point_best;
-  for (SearchPointVector::const_iterator i = spv.begin(); 
-       i!= spv.end(); ++i) {
+  for (auto i = spv.begin(); i!= spv.end(); ++i) {
 
     FlatGeoPoint pa = SegmentNearestPoint(spv,i,p3);
     unsigned d_this = p3.DistanceSquared(pa);
@@ -128,7 +127,7 @@ SearchPointVector::NearestIndexConvex(const FlatGeoPoint &p3) const
   const_iterator i_best = end();
 
   // find nearest point in vector
-  for (const_iterator i = begin(); i != end(); ++i) {
+  for (auto i = begin(); i != end(); ++i) {
     unsigned d_this = p3.DistanceSquared(i->get_flatLocation());
     if (d_this < distance_min) {
       distance_min = d_this;
@@ -154,7 +153,7 @@ SearchPointVector::NearestPoint(const FlatGeoPoint &p3) const
 bool
 SearchPointVector::IntersectsWith(const FlatRay &ray) const
 {
-  for (const_iterator it = begin(); it + 1 != end(); ++it) {
+  for (auto it = begin(); it + 1 != end(); ++it) {
     const FlatRay r_seg(it->get_flatLocation(), (it + 1)->get_flatLocation());
 
     if (r_seg.IntersectsDistinct(ray))
@@ -170,7 +169,7 @@ SearchPointVector::CalculateBoundingbox() const
     return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
 
   FlatBoundingBox bb((*this)[0].get_flatLocation());
-  for (const_iterator v = begin(); v != end(); ++v)
+  for (auto v = begin(); v != end(); ++v)
     bb.Expand(v->get_flatLocation());
   bb.ExpandByOne(); // add 1 to fix rounding
   return bb;
@@ -183,7 +182,7 @@ SearchPointVector::CalculateGeoBounds() const
     return GeoBounds(GeoPoint(Angle::Zero(), Angle::Zero()));
 
   GeoBounds bb((*this)[0].get_location());
-  for (const_iterator v = begin(); v != end(); ++v)
+  for (auto v = begin(); v != end(); ++v)
     bb.extend(v->get_location());
 
   return bb;

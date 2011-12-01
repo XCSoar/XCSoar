@@ -56,8 +56,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
 
   unsigned i = 0;
   canvas.Select(pen_f);
-  for (TaskSummary::TaskSummaryPointVector::const_iterator it = summary.pts.begin();
-       it != summary.pts.end(); ++it, ++i) {
+  for (auto it = summary.pts.begin(); it != summary.pts.end(); ++it, ++i) {
     Angle a = Angle::Radians(it->p * sweep);
     int x = center.x + (int)(radius * a.fastsine());
     int y = center.y - (int)(radius * a.fastcosine());

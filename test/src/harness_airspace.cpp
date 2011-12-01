@@ -174,8 +174,7 @@ public:
   }
   virtual void intersection(const AbstractAirspace& as) {
     *fout << "# intersection point\n";
-    for (AirspaceIntersectionVector::const_iterator it = m_intersections.begin();
-         it != m_intersections.end(); ++it) {
+    for (auto it = m_intersections.begin(); it != m_intersections.end(); ++it) {
       const GeoPoint start = (it->first);
       const GeoPoint end = (it->second);
       *fout << start.longitude << " " << start.latitude << " " << "\n";

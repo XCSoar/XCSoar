@@ -33,12 +33,10 @@ PrintHelper::contestmanager_print(const ContestManager& man)
     TracePointVector v;
     man.trace_full.get_trace_points(v);
 
-    for (TracePointVector::const_iterator it = v.begin();
-         it != v.end(); ++it) {
+    for (auto it = v.begin(); it != v.end(); ++it)
       fs << it->get_location().longitude << " " << it->get_location().latitude
          << " " << it->GetAltitude() << " " << it->time
          << "\n";
-    }
   }
 
   {
@@ -47,12 +45,10 @@ PrintHelper::contestmanager_print(const ContestManager& man)
     TracePointVector v;
     man.trace_sprint.get_trace_points(v);
 
-    for (TracePointVector::const_iterator it = v.begin();
-         it != v.end(); ++it) {
+    for (auto it = v.begin(); it != v.end(); ++it)
       fs << it->get_location().longitude << " " << it->get_location().latitude
          << " " << it->GetAltitude() << " " << it->time
          << "\n";
-    }
   }
 
   std::ofstream fs("results/res-olc-solution.txt");

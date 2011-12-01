@@ -12,8 +12,7 @@ AirspaceNearestSort::populate_queue(const Airspaces &airspaces,
                          range,
                          m_condition);
 
-  for (AirspacesInterface::AirspaceVector::iterator v=vectors.begin();
-       v != vectors.end(); ++v) {
+  for (auto v = vectors.begin(); v != vectors.end(); ++v) {
     const AbstractAirspace *as = v->get_airspace();
     if (as != NULL) {
       const AirspaceInterceptSolution ais = solve_intercept(*as);

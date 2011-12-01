@@ -60,8 +60,7 @@ struct TaskSummary {
 
     p_remaining = d_remaining/d_planned;
     fixed p = fixed_zero;
-    for (TaskSummaryPointVector::iterator it= pts.begin();
-         it != pts.end(); ++it) {
+    for (auto it = pts.begin(); it != pts.end(); ++it) {
       p+= it->d_planned / d_planned;
       it->p = p;
     }

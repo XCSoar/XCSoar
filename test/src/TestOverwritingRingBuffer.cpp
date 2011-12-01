@@ -42,8 +42,7 @@ int main(int argc, char **argv)
   buffer.push(5);
   ok1(!buffer.empty());
 
-  OverwritingRingBuffer<unsigned,4>::const_iterator i = buffer.begin();
-  OverwritingRingBuffer<unsigned,4>::const_iterator end = buffer.end();
+  auto i = buffer.begin(), end = buffer.end();
   ok1(*i == 3);
   ++i;
   ok1(*i == 4);

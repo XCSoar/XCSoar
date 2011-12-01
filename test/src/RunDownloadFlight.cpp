@@ -56,8 +56,7 @@ InputEvents::processNmea(unsigned key)
 static void
 PrintFlightList(const RecordedFlightList &flight_list)
 {
-  for (RecordedFlightList::const_iterator i = flight_list.begin();
-       i != flight_list.end(); ++i) {
+  for (auto i = flight_list.begin(); i != flight_list.end(); ++i) {
     const RecordedFlightInfo &flight = *i;
     printf("%04u/%02u/%02u %02u:%02u-%02u:%02u\n",
            flight.date.year, flight.date.month, flight.date.day,

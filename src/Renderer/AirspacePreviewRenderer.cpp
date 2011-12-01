@@ -65,8 +65,7 @@ DrawPolygon(Canvas &canvas, const AirspacePolygon &airspace,
 
   std::vector<RasterPoint> pts;
   pts.reserve(border.size());
-  for (SearchPointVector::const_iterator it = border.begin(),
-       it_end = border.end(); it != it_end; ++it)
+  for (auto it = border.begin(), it_end = border.end(); it != it_end; ++it)
     pts.push_back(projection.GeoToScreen(it->get_location()));
 
   canvas.polygon(&pts[0], (unsigned)pts.size());

@@ -95,8 +95,7 @@ AirspaceWarningManager::GetWarning(const AbstractAirspace &airspace)
 AirspaceWarning* 
 AirspaceWarningManager::GetWarningPtr(const AbstractAirspace &airspace)
 {
-  for (AirspaceWarningList::iterator it = warnings.begin();
-       it != warnings.end(); ++it)
+  for (auto it = warnings.begin(); it != warnings.end(); ++it)
     if (&(it->GetAirspace()) == &airspace)
       return &(*it);
 
@@ -118,8 +117,7 @@ AirspaceWarningManager::Update(const AircraftState& state,
   }
 
   // save old state
-  for (AirspaceWarningList::iterator it = warnings.begin();
-       it != warnings.end(); ++it)
+  for (auto it = warnings.begin(); it != warnings.end(); ++it)
     it->SaveState();
 
   // check from strongest to weakest alerts
@@ -129,8 +127,7 @@ AirspaceWarningManager::Update(const AircraftState& state,
   UpdateTask(state);
 
   // action changes
-  for (AirspaceWarningList::iterator it = warnings.begin();
-       it != warnings.end(); ) {
+  for (auto it = warnings.begin(); it != warnings.end(); ) {
     if (it->WarningLive(config.AcknowledgementTime, dt)) {
       if (it->ChangedState())
         changed = true;
@@ -362,9 +359,7 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state)
   AirspacePredicateAircraftInside condition(state);
 
   Airspaces::AirspaceVector results = airspaces.find_inside(state, condition);
-  for (Airspaces::AirspaceVector::iterator it = results.begin();
-       it != results.end(); ++it) {
-
+  for (auto it = results.begin(); it != results.end(); ++it) {
     const AbstractAirspace& airspace = *it->get_airspace();
 
     if (!airspace.IsActive())
@@ -393,10 +388,8 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state)
 void
 AirspaceWarningManager::VisitWarnings(AirspaceWarningVisitor& visitor) const
 {
-  for (AirspaceWarningList::const_iterator it = warnings.begin();
-       it != warnings.end(); ++it) {
+  for (auto it = warnings.begin(); it != warnings.end(); ++it)
     visitor.Visit(*it);
-  }
 }
 
 
@@ -432,9 +425,8 @@ AirspaceWarningManager::GetAckDay(const AbstractAirspace& airspace)
 void 
 AirspaceWarningManager::AcknowledgeAll()
 {
-  for (AirspaceWarningList::iterator it = warnings.begin();
-       it != warnings.end(); ++it) {
-    (*it).AcknowledgeWarning(true);
-    (*it).AcknowledgeInside(true);
+  for (auto it = warnings.begin(); it != warnings.end(); ++it) {
+    it->AcknowledgeWarning(true);
+    it->AcknowledgeInside(true);
   }
 }

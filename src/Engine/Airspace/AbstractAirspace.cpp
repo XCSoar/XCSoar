@@ -190,8 +190,7 @@ AbstractAirspace::Intercept(const AircraftState &state,
 
   AirspaceInterceptSolution this_solution =
     AirspaceInterceptSolution::Invalid();
-  for (AirspaceIntersectionVector::const_iterator it = vis.begin();
-       it != vis.end(); ++it)
+  for (auto it = vis.begin(); it != vis.end(); ++it)
     Intercept(state, perf, this_solution, it->first, it->second);
 
   if (!this_solution.IsValid())
@@ -282,8 +281,7 @@ AbstractAirspace::GetClearance() const
   FlatBoundingBox bb = m_clearance.CalculateBoundingbox();
   FlatGeoPoint center = bb.GetCenter();
 
-  for (SearchPointVector::iterator i= m_clearance.begin();
-       i != m_clearance.end(); ++i) {
+  for (auto i= m_clearance.begin(); i != m_clearance.end(); ++i) {
     FlatGeoPoint p = i->get_flatLocation();
     FlatRay r(center, p);
     int mag = hypot(r.vector.Longitude, r.vector.Latitude);

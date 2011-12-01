@@ -576,8 +576,7 @@ FillLastUsedList(WaypointSelectInfoVector &dest,
   if (src.empty())
     return;
 
-  for (std::list<unsigned int>::const_reverse_iterator it = src.rbegin();
-       it != src.rend(); it++) {
+  for (auto it = src.rbegin(); it != src.rend(); it++) {
     const Waypoint* wp = waypoints.LookupId(*it);
     if (wp == NULL)
       continue;

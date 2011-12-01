@@ -19,8 +19,7 @@ TaskProjection get_bounds(const TracePointVector& trace,
   TaskProjection task_projection;
 
   task_projection.reset(fallback_location);
-  for (TracePointVector::const_iterator it = trace.begin(); 
-       it != trace.end(); ++it)
+  for (auto it = trace.begin(); it != trace.end(); ++it)
     task_projection.scan_location(it->get_location());
 
   task_projection.update_fast();

@@ -99,7 +99,7 @@ CompareMapItems(const MapItem *a, const MapItem *b)
 
 MapItemList::~MapItemList()
 {
-  for (iterator it = begin(), it_end = end(); it != it_end; ++it)
+  for (auto it = begin(), it_end = end(); it != it_end; ++it)
     delete *it;
 }
 

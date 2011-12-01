@@ -43,8 +43,7 @@ TraceHistoryRenderer::scale_chart(Chart &chart,
 
   fixed vmin = fixed_zero;
   fixed vmax = fixed_zero;
-  for (TraceVariableHistory::const_iterator it = var.begin();
-       it != var.end(); ++it) {
+  for (auto it = var.begin(); it != var.end(); ++it) {
     vmin = std::min(*it, vmin);
     vmax = std::max(*it, vmax);
   }
@@ -75,8 +74,7 @@ TraceHistoryRenderer::render_line(Chart &chart,
 {
   fixed x_last, y_last;
   unsigned i=0;
-  for (TraceVariableHistory::const_iterator it = var.begin();
-       it != var.end(); ++it, ++i) {
+  for (auto it = var.begin(); it != var.end(); ++it, ++i) {
     fixed x= fixed(i);
     fixed y= *it;
     if (i)
@@ -100,8 +98,7 @@ TraceHistoryRenderer::render_filled_posneg(Chart &chart,
 {
   fixed x_last(fixed_zero), y_last(fixed_zero);
   unsigned i=0;
-  for (TraceVariableHistory::const_iterator it = var.begin();
-       it != var.end(); ++it, ++i) {
+  for (auto it = var.begin(); it != var.end(); ++it, ++i) {
     fixed x= fixed(i);
     fixed y= *it;
     if (i) {

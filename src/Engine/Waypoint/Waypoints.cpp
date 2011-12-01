@@ -128,8 +128,7 @@ Waypoints::Optimise()
 
   task_projection.update_fast();
 
-  for (WaypointTree::iterator it = waypoint_tree.begin();
-       it != waypoint_tree.end(); ++it)
+  for (auto it = waypoint_tree.begin(); it != waypoint_tree.end(); ++it)
     it->Project(task_projection);
 
   waypoint_tree.Optimise();
@@ -229,7 +228,7 @@ Waypoints::LookupLocation(const GeoPoint &loc, const fixed range) const
 const Waypoint*
 Waypoints::FindHome()
 {
-  for (const_iterator found = waypoint_tree.begin();
+  for (auto found = waypoint_tree.begin();
        found != waypoint_tree.end(); ++found) {
     const Waypoint &wp = *found;
     if (wp.flags.home) {
@@ -246,7 +245,7 @@ Waypoints::SetHome(const unsigned id)
 {
   home = NULL;
 
-  for (WaypointTree::iterator found = waypoint_tree.begin();
+  for (auto found = waypoint_tree.begin();
        found != waypoint_tree.end(); ++found) {
     Waypoint &wp = *found;
 
@@ -263,7 +262,7 @@ Waypoints::SetHome(const unsigned id)
 const Waypoint*
 Waypoints::LookupId(const unsigned id) const
 {
-  for (const_iterator found = waypoint_tree.begin();
+  for (auto found = waypoint_tree.begin();
        found != waypoint_tree.end(); ++found)
     if (found->id == id)
       return &*found;

@@ -144,8 +144,7 @@ static bool
 HasWarning()
 {
   ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
-  for (AirspaceWarningManager::const_iterator i = lease->begin(),
-         end = lease->end(); i != end; ++i)
+  for (auto i = lease->begin(), end = lease->end(); i != end; ++i)
     if (i->IsAckExpired())
       return true;
 
@@ -442,9 +441,8 @@ update_list()
 
     int i = -1;
     if (CursorAirspace != NULL) {
-      WarningList::const_iterator it = std::find(warning_list.begin(),
-                                                 warning_list.end(),
-                                                 *CursorAirspace);
+      auto it = std::find(warning_list.begin(), warning_list.end(),
+                          *CursorAirspace);
       if (it != warning_list.end()) {
         i = it - warning_list.begin();
         wAirspaceList->SetCursorIndex(i);

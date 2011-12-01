@@ -175,7 +175,7 @@ WindZigZag::correlation(const ZZBeta& beta) const
   fixed y_av(0);
 
   unsigned n = 0;
-  for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
+  for (auto it = obs.begin(); it != obs.end(); ++it) {
     x_av += it->Phi(beta);
     y_av += it->mag();
     n++;
@@ -190,7 +190,7 @@ WindZigZag::correlation(const ZZBeta& beta) const
   fixed acc_xy(0);
   fixed acc_xx(0);
   fixed acc_yy(0);
-  for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
+  for (auto it = obs.begin(); it != obs.end(); ++it) {
     fixed xd = it->Phi(beta) - y_av;
     fixed yd = it->mag() - x_av;
     acc_xy += xd * yd;
@@ -209,7 +209,7 @@ fixed
 WindZigZag::fmin(const ZZBeta& beta) const
 {
   fixed acc(0);
-  for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it)
+  for (auto it = obs.begin(); it != obs.end(); ++it)
     acc += sqr(it->f(beta) / it->mag());
 
   return acc;
@@ -248,8 +248,8 @@ WindZigZag::find_worst(const ZZBeta& beta)
 {
   fixed worst(0);
 
-  ObsList::iterator i_worst = obs.end();
-  for (ObsList::iterator it = obs.begin(); it != obs.end(); ++it) {
+  auto i_worst = obs.end();
+  for (auto it = obs.begin(); it != obs.end(); ++it) {
     fixed fthis = it->f(beta) / it->mag();
     if (fthis > worst) {
       i_worst = it;

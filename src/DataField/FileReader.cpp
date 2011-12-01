@@ -369,8 +369,8 @@ DataFieldFileReader::EnsureLoaded()
 
   loaded = true;
 
-  for (PatternList::const_iterator i = postponed_patterns.begin(),
-         end = postponed_patterns.end(); i != end; ++i)
+  for (auto i = postponed_patterns.begin(), end = postponed_patterns.end();
+       i != end; ++i)
     ScanDirectoryTop(*i);
 
   if (postponed_sort)

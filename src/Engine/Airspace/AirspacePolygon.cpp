@@ -38,8 +38,7 @@ AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint> &pts,
   } else {
     m_border.reserve(pts.size() + 1);
 
-    for (std::vector<GeoPoint>::const_iterator v = pts.begin();
-         v != pts.end(); ++v)
+    for (auto v = pts.begin(); v != pts.end(); ++v)
       m_border.push_back(SearchPoint(*v));
 
     // ensure airspace is closed
@@ -83,8 +82,7 @@ AirspacePolygon::Intersects(const GeoPoint &start, const GeoVector &vec) const
 
   AirspaceIntersectSort sorter(start, end, *this);
 
-  for (SearchPointVector::const_iterator it = m_border.begin();
-       it + 1 != m_border.end(); ++it) {
+  for (auto it = m_border.begin(); it + 1 != m_border.end(); ++it) {
 
     const FlatRay r_seg(it->get_flatLocation(), (it + 1)->get_flatLocation());
     fixed t;

@@ -108,7 +108,7 @@ PrintHelper::trace_print(const Trace& trace, const GeoPoint &loc)
 {
   std::ofstream fs("results/res-trace.txt");
 
-  for (Trace::const_iterator it = trace.begin(); it != trace.end(); ++it)
+  for (auto it = trace.begin(); it != trace.end(); ++it)
     PrintTracePoint(*it, fs);
 }
 
@@ -135,8 +135,7 @@ void write_point(const SearchPoint& sp, const FlatGeoPoint& p, const char* name)
 
 void write_spv (const SearchPointVector& spv)
 {
-  for (std::vector<SearchPoint>::const_iterator v = spv.begin();
-       v != spv.end(); ++v) {
+  for (auto v = spv.begin(); v != spv.end(); ++v) {
     write_point(*v, v->get_flatLocation(), "spv");
   }
   printf("spv\n");
@@ -147,16 +146,14 @@ void write_spv (const SearchPointVector& spv)
 
 void PrintHelper::print_route(RoutePlanner& r)
 {
-  for (Route::const_iterator i = r.solution_route.begin();
-       i!= r.solution_route.end(); ++i) {
+  for (auto i = r.solution_route.begin(); i != r.solution_route.end(); ++i) {
     printf("%.6g %.6g %d # solution\n",
            (double)i->longitude.Degrees(),
            (double)i->latitude.Degrees(),
            0);
   }
   printf("# solution\n");
-  for (Route::const_iterator i = r.solution_route.begin();
-       i!= r.solution_route.end(); ++i) {
+  for (auto i = r.solution_route.begin(); i != r.solution_route.end(); ++i) {
     printf("%.6g %.6g %d # solution\n",
            (double)i->longitude.Degrees(),
            (double)i->latitude.Degrees(),
@@ -190,8 +187,7 @@ void
 PrintHelper::print(const FlatTriangleFanTree& r) {
   print((const FlatTriangleFan&)r, r.depth);
 
-  for (FlatTriangleFanTree::LeafVector::const_iterator it = r.children.begin();
-       it != r.children.end(); ++it) {
+  for (auto it = r.children.begin(); it != r.children.end(); ++it) {
     print(*it);
   }
 };
@@ -205,8 +201,7 @@ PrintHelper::print(const FlatTriangleFan& r, const unsigned depth) {
     printf("%d %d # fcorner\n", r.vs[0].Longitude, r.vs[0].Latitude);
   }
 
-  for (FlatTriangleFan::VertexVector::const_iterator it = r.vs.begin();
-       it != r.vs.end(); ++it) {
+  for (auto it = r.vs.begin(); it != r.vs.end(); ++it) {
     const FlatGeoPoint p = (*it);
     printf("%d %d # ftri\n", p.Longitude, p.Latitude);
   }

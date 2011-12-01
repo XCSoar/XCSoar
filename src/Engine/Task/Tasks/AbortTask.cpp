@@ -54,10 +54,8 @@ AbortTask::SetTaskBehaviour(const TaskBehaviour &tb)
 {
   UnorderedTask::SetTaskBehaviour(tb);
 
-  AlternateTaskVector::iterator end = task_points.end();
-  for (AlternateTaskVector::iterator i = task_points.begin(); i != end; ++i)
+  for (auto i = task_points.begin(), end = task_points.end(); i != end; ++i)
     i->SetTaskBehaviour(tb);
-
 }
 
 void 
@@ -162,8 +160,7 @@ AbortTask::fill_reachable(const AircraftState &state,
   reservable_priority_queue<Alternate, AlternateVector, AbortRank> q;
   q.reserve(32);
 
-  for (AlternateVector::iterator v = approx_waypoints.begin();
-       v != approx_waypoints.end();) {
+  for (auto v = approx_waypoints.begin(); v != approx_waypoints.end();) {
     if (only_airfield && !v->waypoint.IsAirport()) {
       ++v;
       continue;
@@ -324,14 +321,10 @@ void
 AbortTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor, bool reverse) const
 {
   if (!reverse) {
-    const AlternateTaskVector::const_iterator end = task_points.end();
-    for (AlternateTaskVector::const_iterator i = task_points.begin();
-         i != end; ++i)
+    for (auto i = task_points.begin(), end = task_points.end(); i != end; ++i)
       visitor.Visit((const TaskPoint &)*i);
   } else {
-    const AlternateTaskVector::const_reverse_iterator end = task_points.rend();
-    for (AlternateTaskVector::const_reverse_iterator i = task_points.rbegin();
-         i != end; ++i)
+    for (auto i = task_points.rbegin(), end = task_points.rend(); i != end; ++i)
       visitor.Visit((const TaskPoint &)*i);
   }
 }
