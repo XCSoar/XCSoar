@@ -22,7 +22,8 @@
 
 #include "AirspaceAircraftPerformance.hpp"
 #include "Util/ZeroFinder.hpp"
-#include "Task/TaskManager.hpp"
+#include "GlideSolvers/GlideResult.hpp"
+
 #include <assert.h>
 
 #define fixed_big fixed_int_constant(1000000)
@@ -248,11 +249,8 @@ AirspaceAircraftPerformance::solution_exists(const fixed &distance_max,
 
 AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const AircraftState &state,
                                                                  const GlidePolar &polar,
-                                                                 const TaskManager &task)
+                                                                 const GlideResult &solution)
 {
-  assert(task.GetActiveTaskPoint());
-
-  const GlideResult &solution = task.GetStats().current_leg.solution_remaining;
   const fixed leg_distance = solution.vector.distance;
   const fixed time_remaining = solution.time_elapsed;
 

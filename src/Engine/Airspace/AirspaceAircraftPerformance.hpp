@@ -285,8 +285,6 @@ public:
   }
 };
 
-class TaskManager;
-
 /**
  * Specialisation of AirspaceAircraftPerformance
  * for tasks where part of the path is in cruise, part in
@@ -315,7 +313,7 @@ public:
    */
   AirspaceAircraftPerformanceTask(const AircraftState &state,
                                   const GlidePolar& polar,
-                                  const TaskManager& task);
+                                  const GlideResult &solution);
 
   fixed get_cruise_speed() const;
 
