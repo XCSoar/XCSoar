@@ -171,7 +171,7 @@ ReadLatitude(NMEAInputLine &line, Angle &value_r)
     return false;
 
   if (line.read_first_char() == 'S')
-    value = -value;
+    value.Flip();
 
   value_r = value;
   return true;
@@ -185,7 +185,7 @@ ReadLongitude(NMEAInputLine &line, Angle &value_r)
     return false;
 
   if (line.read_first_char() == 'W')
-    value = -value;
+    value.Flip();
 
   value_r = value;
   return true;
