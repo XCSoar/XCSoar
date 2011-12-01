@@ -68,8 +68,6 @@ int main(int argc, char **argv)
       if (driver->IsLogger())
         _ftprintf(stderr, _T("\t%s\n"), driver->name);
 
-    _ftprintf(stderr, _T("\tFLARM\n"));
-
     return EXIT_FAILURE;
   }
 
@@ -92,52 +90,43 @@ int main(int argc, char **argv)
 
   ConsoleOperationEnvironment env;
   RecordedFlightList flight_list;
-  if (!strcmp(argv[1], "FLARM")) {
-    FlarmDevice flarm(port);
-
-    if (!flarm.EnableDownloadMode()) {
-      fprintf(stderr, "Failed to switch transfer mode\n");
-      return EXIT_FAILURE;
-    }
-
-    if (!flarm.ReadFlightList(flight_list, env)) {
-      fprintf(stderr, "Failed to download flight list\n");
-      flarm.DisableDownloadMode();
-      return EXIT_FAILURE;
-    }
-
-    flarm.DisableDownloadMode();
-  } else {
-    const struct DeviceRegister *driver = FindDriverByName(driver_name);
-    if (driver == NULL) {
-      fprintf(stderr, "No such driver: %s\n", argv[1]);
-      return EXIT_FAILURE;
-    }
-
-    if (!driver->IsLogger()) {
-      fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
-      return EXIT_FAILURE;
-    }
-
-    assert(driver->CreateOnPort != NULL);
-    Device *device = driver->CreateOnPort(config, port);
-    assert(device != NULL);
-
-    if (!device->Open(env)) {
-      delete device;
-      fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
-      return EXIT_FAILURE;
-    }
-
-    if (!device->ReadFlightList(flight_list, env)) {
-      delete device;
-      fprintf(stderr, "Failed to download flight list\n");
-      return EXIT_FAILURE;
-    }
-
-    delete device;
+  const struct DeviceRegister *driver = FindDriverByName(driver_name);
+  if (driver == NULL) {
+    fprintf(stderr, "No such driver: %s\n", argv[1]);
+    return EXIT_FAILURE;
   }
-  
+
+  if (!driver->IsLogger()) {
+    fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
+    return EXIT_FAILURE;
+  }
+
+  assert(driver->CreateOnPort != NULL);
+  Device *device = driver->CreateOnPort(config, port);
+  assert(device != NULL);
+
+  if (!device->Open(env)) {
+    delete device;
+    fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
+    return EXIT_FAILURE;
+  }
+
+  if (!device->EnableDownloadMode()) {
+    delete device;
+    fprintf(stderr, "Failed to enable download mode\n");
+    return EXIT_FAILURE;
+  }
+
+  if (!device->ReadFlightList(flight_list, env)) {
+    device->DisableDownloadMode();
+    delete device;
+    fprintf(stderr, "Failed to download flight list\n");
+    return EXIT_FAILURE;
+  }
+
+  device->DisableDownloadMode();
+  delete device;
+
   for (auto i = flight_list.begin(); i != flight_list.end(); ++i) {
     const RecordedFlightInfo &flight = *i;
     printf("%04u/%02u/%02u %02u:%02u-%02u:%02u\n",
