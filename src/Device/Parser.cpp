@@ -205,8 +205,11 @@ ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
     return false;
 }
 
-bool
-NMEAParser::ReadAltitude(NMEAInputLine &line, fixed &value_r)
+/**
+ * Reads an altitude value, and the unit from a second volumn.
+ */
+static bool
+ReadAltitude(NMEAInputLine &line, fixed &value_r)
 {
   fixed value;
   char format;

@@ -73,11 +73,6 @@ public:
 
 public:
   /**
-   * Reads an altitude value, and the unit from a second volumn.
-   */
-  static bool ReadAltitude(NMEAInputLine &line, fixed &value_r);
-
-  /**
    * Calculates the checksum of the provided NMEA string and
    * compares it to the provided checksum
    * @param String NMEA string
