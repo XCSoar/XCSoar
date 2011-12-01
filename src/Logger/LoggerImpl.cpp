@@ -63,7 +63,11 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
 
   nav_warning = !src.location_available;
   fix_quality = src.gps.fix_quality;
-  satellites_used = src.gps.satellites_used;
+
+  satellites_used_available = src.gps.satellites_used_available;
+  if (satellites_used_available)
+    satellites_used = src.gps.satellites_used;
+
   hdop = src.gps.hdop;
   real = src.gps.real;
 
@@ -171,7 +175,14 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
       tmp_info.location_available.Update(tmp_info.clock);
 
     tmp_info.gps.fix_quality = src.fix_quality;
-    tmp_info.gps.satellites_used = src.satellites_used;
+
+    if (!src.satellites_used_available)
+      tmp_info.gps.satellites_used_available.Clear();
+    else {
+      tmp_info.gps.satellites_used_available.Update(tmp_info.clock);
+      tmp_info.gps.satellites_used = src.satellites_used;
+    }
+
     tmp_info.gps.hdop = src.hdop;
     tmp_info.gps.real = src.real;
 

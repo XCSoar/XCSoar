@@ -132,6 +132,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.date_time_utc = date_time;
 
   basic.gps.satellites_used = n_satellites;
+  basic.gps.satellites_used_available.Update(basic.clock);
   basic.gps.real = true;
   basic.gps.android_internal_gps = true;
   basic.location = GeoPoint(Angle::Degrees(fixed(longitude)),

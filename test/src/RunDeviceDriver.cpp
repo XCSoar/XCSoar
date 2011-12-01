@@ -96,6 +96,8 @@ Dump(const NMEAInfo &basic)
 
   if (!basic.connected)
     printf("GPS not connected\n");
+  else if (!basic.gps.satellites_used_available)
+    printf("GPS connected\n");
   else
     printf("GPS connected, %d satellites\n", basic.gps.satellites_used);
 

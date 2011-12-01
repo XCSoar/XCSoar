@@ -49,8 +49,14 @@ GPSState::Reset()
 #ifdef ANDROID
   android_internal_gps = false;
 #endif
-  satellites_used = -1;
+  satellites_used_available.Clear();
   replay = false;
+}
+
+void
+GPSState::Expire(fixed now)
+{
+  satellites_used_available.Expire(now, fixed(5));
 }
 
 void
@@ -182,6 +188,7 @@ NMEAInfo::Expire()
   engine_noise_level_available.Expire(clock, fixed(30));
   voltage_available.Expire(clock, fixed(300));
   flarm.Refresh(clock);
+  gps.Expire(clock);
 }
 
 void

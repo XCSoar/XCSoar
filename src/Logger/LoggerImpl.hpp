@@ -75,6 +75,7 @@ public:
     int fix_quality;
     /** GPS fix state */
     int satellites_used;
+    bool satellites_used_available;
     /** GPS Horizontal Dilution of precision */
     fixed hdop;
 

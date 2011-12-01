@@ -157,7 +157,7 @@ IGCWriter::GetSIU(const NMEAInfo& gps_info)
   switch (gps_info.gps.fix_quality) {
   case 1:
   case 2:
-    if (gps_info.gps.satellites_used >= 0)
+    if (gps_info.gps.satellites_used_available)
       return gps_info.gps.satellites_used;
   }
 

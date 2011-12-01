@@ -93,6 +93,7 @@ struct GPSState
    * Number of satellites used for gps fix.  -1 means "unknown".
    */
   int satellites_used;
+  Validity satellites_used_available;
 
   /** GPS Satellite ids */
   int satellite_ids[MAXSATELLITES];
@@ -123,6 +124,7 @@ struct GPSState
 #endif
 
   void Reset();
+  void Expire(fixed now);
 };
 
 /**

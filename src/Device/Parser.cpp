@@ -447,8 +447,6 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  GPSState &gps = info.gps;
-
   fixed speed;
   bool ground_speed_available = line.read_checked(speed);
 
@@ -482,11 +480,6 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
     // JMW don't update bearing unless we're moving
     info.track = Angle::Degrees(track).AsBearing();
     info.track_available.Update(info.clock);
-  }
-
-  if (!gga_available) {
-    // update SatInUse, some GPS receiver don't emit GGA sentence
-    gps.satellites_used = -1;
   }
 
   info.gps.real = real;
@@ -545,6 +538,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   bool valid_location = ReadGeoPoint(line, location);
 
   gps.fix_quality = line.read(0);
+  gps.satellites_used_available.Update(info.clock);
   gps.satellites_used = min(16, line.read(-1));
 
   if (!TimeHasAdvanced(this_time, info))

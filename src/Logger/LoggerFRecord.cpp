@@ -79,7 +79,7 @@ LoggerFRecord::Update(const GPSState &gps, const BrokenTime &broken_time,
   detect_f_record_change = detect_f_record_change ||
     strcmp(f_record + 7, last_f_record + 7);
   
-  if (gps.satellites_used < 3 || nav_warning)
+  if (!gps.satellites_used_available || gps.satellites_used < 3 || nav_warning)
     clock.set_dt(fixed(30)); // accelerate to 30 seconds if bad signal
    
   if (!clock.check_advance(fixed(time)) || !detect_f_record_change)

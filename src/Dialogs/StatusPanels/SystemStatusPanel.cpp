@@ -54,7 +54,7 @@ SystemStatusPanel::Refresh()
 
   if (!basic.connected)
     SetFormValue(form, _T("prpNumSat"), _T(""));
-  else if (gps.satellites_used >= 0) {
+  else if (gps.satellites_used_available) {
     // known number of sats
     Temp.Format(_T("%d"), gps.satellites_used);
     SetFormValue(form, _T("prpNumSat"), Temp);
