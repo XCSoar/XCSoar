@@ -451,7 +451,7 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
                                  const TCHAR *path,
                                  OperationEnvironment &env)
 {
-  if (driver == NULL || device == NULL)
+  if (port == NULL || driver == NULL || device == NULL)
     return false;
 
   StaticString<60> text;
