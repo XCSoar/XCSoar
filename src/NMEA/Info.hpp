@@ -97,6 +97,7 @@ struct GPSState
 
   /** GPS Satellite ids */
   int satellite_ids[MAXSATELLITES];
+  Validity satellite_ids_available;
 
   /** Horizontal dilution of precision */
   fixed hdop;

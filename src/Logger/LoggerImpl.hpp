@@ -67,6 +67,7 @@ public:
     BrokenDateTime date_time_utc;
     /** IDs of satellites in fix */
     int satellite_ids[GPSState::MAXSATELLITES];
+    bool satellite_ids_available;
     /** Time of fix (s) */
     fixed time;
     /** GPS fix state */

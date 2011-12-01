@@ -69,10 +69,12 @@ LoggerFRecord::Update(const GPSState &gps, const BrokenTime &broken_time,
           broken_time.hour, broken_time.minute, broken_time.second);
   unsigned length = 7;
 
-  for (unsigned i = 0; i < GPSState::MAXSATELLITES; ++i) {
-    if (gps.satellite_ids[i] > 0){
-      sprintf(f_record + length, "%02d", gps.satellite_ids[i]);
-      length += 2;
+  if (gps.satellite_ids_available) {
+    for (unsigned i = 0; i < GPSState::MAXSATELLITES; ++i) {
+      if (gps.satellite_ids[i] > 0){
+        sprintf(f_record + length, "%02d", gps.satellite_ids[i]);
+        length += 2;
+      }
     }
   }
 

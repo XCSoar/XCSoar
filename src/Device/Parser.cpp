@@ -321,6 +321,8 @@ NMEAParser::GSA(NMEAInputLine &line, NMEAInfo &info)
   for (unsigned i = 0; i < GPSState::MAXSATELLITES; i++)
     info.gps.satellite_ids[i] = line.read(0);
 
+  info.gps.satellite_ids_available.Update(info.clock);
+
   return true;
 }
 

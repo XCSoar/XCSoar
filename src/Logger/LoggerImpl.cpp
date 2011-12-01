@@ -71,9 +71,11 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
   hdop = src.gps.hdop;
   real = src.gps.real;
 
-  std::copy(src.gps.satellite_ids,
-            src.gps.satellite_ids + GPSState::MAXSATELLITES,
-            satellite_ids);
+  satellite_ids_available = src.gps.satellite_ids_available;
+  if (satellite_ids_available)
+    std::copy(src.gps.satellite_ids,
+              src.gps.satellite_ids + GPSState::MAXSATELLITES,
+              satellite_ids);
 
   return *this;
 }
@@ -186,8 +188,13 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
     tmp_info.gps.hdop = src.hdop;
     tmp_info.gps.real = src.real;
 
-    for (unsigned iSat = 0; iSat < GPSState::MAXSATELLITES; iSat++)
-      tmp_info.gps.satellite_ids[iSat] = src.satellite_ids[iSat];
+    if (!src.satellite_ids_available)
+      tmp_info.gps.satellite_ids_available.Clear();
+    else {
+      tmp_info.gps.satellite_ids_available.Update(tmp_info.clock);
+      for (unsigned i = 0; i < GPSState::MAXSATELLITES; i++)
+        tmp_info.gps.satellite_ids[i] = src.satellite_ids[i];
+    }
 
     writer->LogPoint(tmp_info);
   }

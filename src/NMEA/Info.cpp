@@ -50,6 +50,7 @@ GPSState::Reset()
   android_internal_gps = false;
 #endif
   satellites_used_available.Clear();
+  satellite_ids_available.Clear();
   replay = false;
 }
 
@@ -57,6 +58,7 @@ void
 GPSState::Expire(fixed now)
 {
   satellites_used_available.Expire(now, fixed(5));
+  satellite_ids_available.Expire(now, fixed(5));
 }
 
 void
