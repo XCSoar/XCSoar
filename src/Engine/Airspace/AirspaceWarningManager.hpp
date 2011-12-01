@@ -56,7 +56,6 @@ class AirspaceWarningManager:
   fixed prediction_time_glide;
   fixed prediction_time_filter;
 
-  AirspaceAircraftPerformanceGlide perf_glide;
   AircraftStateFilter cruise_filter;
   AircraftStateFilter circling_filter;
   AirspaceAircraftPerformanceStateFilter perf_cruise;  

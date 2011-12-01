@@ -38,7 +38,6 @@ AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces,
   :airspaces(_airspaces),
    prediction_time_glide(prediction_time_glide),
    prediction_time_filter(prediction_time_filter),
-   perf_glide(_task.GetGlidePolar()),
    cruise_filter(prediction_time_filter * CRUISE_FILTER_FACT),
    circling_filter(prediction_time_filter),
    perf_cruise(cruise_filter),
@@ -347,6 +346,7 @@ AirspaceWarningManager::UpdateGlide(const AircraftState& state)
   const GeoPoint location_predicted = 
     state.GetPredictedState(prediction_time_glide).location;
 
+  const AirspaceAircraftPerformanceGlide perf_glide(glide_polar);
   return UpdatePredicted(state, location_predicted,
                           perf_glide,
                           AirspaceWarning::WARNING_GLIDE, prediction_time_glide);
@@ -375,6 +375,7 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state)
     if (warning.IsStateAccepted(AirspaceWarning::WARNING_INSIDE)) {
       GeoPoint c = airspace.ClosestPoint(state.location);
       GeoVector vector_exit(state.location, c);
+      const AirspaceAircraftPerformanceGlide perf_glide(glide_polar);
       AirspaceInterceptSolution solution;
       airspace.Intercept(state, vector_exit, perf_glide, solution); 
 
