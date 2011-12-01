@@ -557,8 +557,11 @@ MainWindow::on_timer(WindowTimer &_timer)
 bool
 MainWindow::on_user(unsigned id)
 {
+  ProtectedAirspaceWarningManager *airspace_warnings;
+
   switch ((enum cmd)id) {
   case CMD_AIRSPACE_WARNING:
+    airspace_warnings = GetAirspaceWarnings();
     if (!airspace_warning_pending || airspace_warnings == NULL)
       return true;
 

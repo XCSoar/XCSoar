@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_COMPONENTS_HPP
 #define XCSOAR_COMPONENTS_HPP
 
+#include "Compiler.h"
+
 class FileCache;
 class ProtectedMarkers;
 class TopographyStore;
@@ -46,7 +48,6 @@ class TrackingGlue;
 // other global objects
 extern FileCache *file_cache;
 extern Airspaces airspace_database;
-extern ProtectedAirspaceWarningManager *airspace_warnings;
 extern Waypoints way_points;
 extern ProtectedTaskManager *protected_task_manager;
 extern Replay *replay;
@@ -69,5 +70,13 @@ extern TrackingGlue *tracking;
 #ifdef GNAV
 extern AltairControl altair_control;
 #endif
+
+/**
+ * Returns the global ProtectedAirspaceWarningManager instance.  May
+ * be NULL if disabled.
+ */
+gcc_pure
+ProtectedAirspaceWarningManager *
+GetAirspaceWarnings();
 
 #endif

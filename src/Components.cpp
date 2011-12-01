@@ -133,9 +133,6 @@ ProtectedTaskManager *protected_task_manager;
 
 Airspaces airspace_database;
 
-static AirspaceWarningManager *airspace_warning;
-ProtectedAirspaceWarningManager *airspace_warnings;
-
 GlideComputer *glide_computer;
 
 #ifdef GNAV
@@ -344,9 +341,6 @@ XCSoarInterface::Startup()
                              XCSoarInterface::SettingsComputer().task,
                              task_events);
 
-  airspace_warning = new AirspaceWarningManager(airspace_database);
-  airspace_warnings = new ProtectedAirspaceWarningManager(*airspace_warning);
-
   // Read the terrain file
   operation.SetText(_("Loading Terrain File..."));
   LogStartUp(_T("OpenTerrain"));
@@ -354,7 +348,6 @@ XCSoarInterface::Startup()
 
   glide_computer = new GlideComputer(way_points, airspace_database,
                                      *protected_task_manager,
-                                     *airspace_warnings,
                                      task_events);
   glide_computer->ReadSettingsComputer(SettingsComputer());
   glide_computer->SetTerrain(terrain);
@@ -399,11 +392,14 @@ XCSoarInterface::Startup()
   ReadAirspace(airspace_database, terrain, SettingsComputer().pressure,
                operation);
 
-  const AircraftState aircraft_state =
-    ToAircraftState(device_blackboard->Basic(),
-                    device_blackboard->Calculated());
-  airspace_warning->Reset(aircraft_state);
-  airspace_warning->SetConfig(CommonInterface::SettingsComputer().airspace.warnings);
+  {
+    const AircraftState aircraft_state =
+      ToAircraftState(device_blackboard->Basic(),
+                      device_blackboard->Calculated());
+    ProtectedAirspaceWarningManager::ExclusiveLease lease(glide_computer->GetAirspaceWarnings());
+    lease->Reset(aircraft_state);
+    lease->SetConfig(CommonInterface::SettingsComputer().airspace.warnings);
+  }
 
   // Read the FLARM details file
   FlarmDetails::Load();
@@ -444,7 +440,6 @@ XCSoarInterface::Startup()
     map_window->SetRoutePlanner(&glide_computer->GetProtectedRoutePlanner());
     map_window->SetGlideComputer(glide_computer);
     map_window->SetAirspaces(&airspace_database);
-    map_window->SetAirspaceWarnings(airspace_warnings);
 
     map_window->SetTopography(topography);
     map_window->SetTerrain(terrain);
@@ -634,11 +629,7 @@ XCSoarInterface::Shutdown(void)
 
   // Clear airspace database
   LogStartUp(_T("Close airspace"));
-  airspace_warnings->clear();
   airspace_database.clear();
-
-  delete airspace_warnings;
-  delete airspace_warning;
 
   // Destroy FlarmNet records
   FlarmNet::Destroy();
@@ -656,3 +647,12 @@ XCSoarInterface::Shutdown(void)
 
   LogStartUp(_T("Finished shutdown"));
 }
+
+ProtectedAirspaceWarningManager *
+GetAirspaceWarnings()
+{
+  return glide_computer != NULL
+    ? &glide_computer->GetAirspaceWarnings()
+    : NULL;
+}
+

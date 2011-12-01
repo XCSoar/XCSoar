@@ -566,7 +566,6 @@ InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
                          CommonInterface::Full(), *glide_computer,
                          protected_task_manager,
                          &airspace_database,
-                         airspace_warnings,
                          terrain, 8);
     return true;
 

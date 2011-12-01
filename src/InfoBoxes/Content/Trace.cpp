@@ -154,7 +154,6 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
                          CommonInterface::Full(), *glide_computer,
                          protected_task_manager,
                          &airspace_database,
-                         airspace_warnings,
                          terrain, 0);
     return true;
 

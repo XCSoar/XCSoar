@@ -69,10 +69,9 @@ class ChartControl;
 
 static const Look *look;
 static const FullBlackboard *blackboard;
-static const GlideComputer *glide_computer;
+static GlideComputer *glide_computer;
 static const ProtectedTaskManager *protected_task_manager;
 static const Airspaces *airspaces;
-static ProtectedAirspaceWarningManager *airspace_warnings;
 static const RasterTerrain *terrain;
 
 static enum analysis_page page = ANALYSIS_PAGE_BAROGRAPH;
@@ -535,8 +534,9 @@ OnCalcClicked(gcc_unused WndButton &Sender)
     wf->show();
   }
 
-  if (page == ANALYSIS_PAGE_AIRSPACE && airspace_warnings != NULL)
-    dlgAirspaceWarningsShowModal(wf->GetMainWindow(), *airspace_warnings);
+  if (page == ANALYSIS_PAGE_AIRSPACE)
+    dlgAirspaceWarningsShowModal(wf->GetMainWindow(),
+                                 glide_computer->GetAirspaceWarnings());
 
   Update();
 }
@@ -587,10 +587,9 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 void
 dlgAnalysisShowModal(SingleWindow &parent, const Look &_look,
                      const FullBlackboard &_blackboard,
-                     const GlideComputer &_glide_computer,
+                     GlideComputer &_glide_computer,
                      const ProtectedTaskManager *_protected_task_manager,
                      const Airspaces *_airspaces,
-                     ProtectedAirspaceWarningManager *_airspace_warnings,
                      const RasterTerrain *_terrain,
                      int _page)
 {
@@ -599,7 +598,6 @@ dlgAnalysisShowModal(SingleWindow &parent, const Look &_look,
   glide_computer = &_glide_computer;
   protected_task_manager = _protected_task_manager;
   airspaces = _airspaces;
-  airspace_warnings = _airspace_warnings;
   terrain = _terrain;
 
   wf = LoadDialog(CallBackTable, parent,

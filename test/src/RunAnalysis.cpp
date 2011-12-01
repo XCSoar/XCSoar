@@ -40,7 +40,6 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/AirspaceWarningDialog.hpp"
 #include "Airspace/AirspaceParser.hpp"
-#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceGlue.hpp"
 #include "Profile/Profile.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
@@ -202,7 +201,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   Airspaces airspace_database;
   AirspaceWarningManager airspace_warning(airspace_database);
-  ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
 
   ProtectedTaskManager protected_task_manager(task_manager,
                                               blackboard.SettingsComputer().task,
@@ -212,7 +210,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   GlideComputer glide_computer(way_points, airspace_database,
                                protected_task_manager,
-                               airspace_warnings,
                                task_events);
   glide_computer.SetTerrain(terrain);
   glide_computer.Initialise();
@@ -247,7 +244,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   dlgAnalysisShowModal(main_window, *look, blackboard, glide_computer,
                        &protected_task_manager,
                        &airspace_database,
-                       &airspace_warnings,
                        terrain);
 
   delete look;

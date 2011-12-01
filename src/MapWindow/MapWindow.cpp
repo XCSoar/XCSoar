@@ -28,7 +28,7 @@ Copyright_License {
 #include "Topography/TopographyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
-#include "Task/ProtectedTaskManager.hpp"
+#include "Computer/GlideComputer.hpp"
 #include "Units/Units.hpp"
 #include "Operation.hpp"
 
@@ -82,6 +82,15 @@ MapWindow::set(ContainerWindow &parent, const PixelRect &rc)
 #ifndef ENABLE_OPENGL
   buffer_projection = visible_projection;
 #endif
+}
+
+void
+MapWindow::SetGlideComputer(GlideComputer *_gc)
+{
+  glide_computer = _gc;
+  airspace_renderer.SetAirspaceWarnings(glide_computer != NULL
+                                        ? &glide_computer->GetAirspaceWarnings()
+                                        : NULL);
 }
 
 void

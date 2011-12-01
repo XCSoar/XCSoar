@@ -24,10 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_WARNING_COMPUTER_HPP
 #define XCSOAR_WARNING_COMPUTER_HPP
 
+#include "Engine/Airspace/AirspaceWarningManager.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "GPSClock.hpp"
 
 class Airspaces;
-class ProtectedAirspaceWarningManager;
 struct SETTINGS_COMPUTER;
 struct MoreData;
 struct DerivedInfo;
@@ -40,11 +41,20 @@ class WarningComputer {
   GPSClock clock;
 
   Airspaces &airspaces;
-  ProtectedAirspaceWarningManager &warnings;
+
+  AirspaceWarningManager manager;
+  ProtectedAirspaceWarningManager protected_manager;
 
 public:
-  WarningComputer(Airspaces &_airspaces,
-                  ProtectedAirspaceWarningManager &_warnings);
+  WarningComputer(Airspaces &_airspaces);
+
+  ProtectedAirspaceWarningManager &GetManager() {
+    return protected_manager;
+  }
+
+  const ProtectedAirspaceWarningManager &GetManager() const {
+    return protected_manager;
+  }
 
   void Reset(const MoreData &basic, const DerivedInfo &calculated);
 

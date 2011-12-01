@@ -52,7 +52,6 @@ class ProtectedMarkers;
 class Waypoints;
 struct Waypoint;
 class Airspaces;
-class ProtectedAirspaceWarningManager;
 class ProtectedTaskManager;
 class GlideComputer;
 class GlidePolar;
@@ -136,7 +135,7 @@ protected:
 
   ProtectedTaskManager *task;
   const ProtectedRoutePlanner *route_planner;
-  const GlideComputer *glide_computer;
+  GlideComputer *glide_computer;
 
   ProtectedMarkers *marks;
 
@@ -197,16 +196,10 @@ public:
     route_planner = _route_planner;
   }
 
-  void SetGlideComputer(const GlideComputer *_gc) {
-    glide_computer = _gc;
-  }
+  void SetGlideComputer(GlideComputer *_gc);
 
   void SetAirspaces(Airspaces *airspaces) {
     airspace_renderer.SetAirspaces(airspaces);
-  }
-
-  void SetAirspaceWarnings(const ProtectedAirspaceWarningManager *airspace_warnings) {
-    airspace_renderer.SetAirspaceWarnings(airspace_warnings);
   }
 
   void SetTopography(TopographyStore *_topography);

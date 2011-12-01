@@ -29,10 +29,11 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 
-WarningComputer::WarningComputer(Airspaces &_airspaces,
-                                 ProtectedAirspaceWarningManager &_warnings)
+WarningComputer::WarningComputer(Airspaces &_airspaces)
   :clock(fixed_one), // scan airspace every second
-   airspaces(_airspaces), warnings(_warnings)
+   airspaces(_airspaces),
+   manager(airspaces),
+   protected_manager(manager)
 {
 }
 
@@ -40,7 +41,7 @@ void
 WarningComputer::Reset(const MoreData &basic, const DerivedInfo &calculated)
 {
   const AircraftState as = ToAircraftState(basic, calculated);
-  warnings.reset_warning(as);
+  protected_manager.reset_warning(as);
 }
 
 void
@@ -60,8 +61,9 @@ WarningComputer::Update(const SETTINGS_COMPUTER &settings_computer,
   airspaces.set_activity(day);
 
   const AircraftState as = ToAircraftState(basic, calculated);
-  if (warnings.update_warning(as, settings_computer.glide_polar_task,
-                              calculated.task_stats, calculated.circling,
-                              uround(basic.time - last_basic.time)))
+  if (protected_manager.update_warning(as, settings_computer.glide_polar_task,
+                                       calculated.task_stats,
+                                       calculated.circling,
+                                       uround(basic.time - last_basic.time)))
     result.latest.Update(basic.clock);
 }

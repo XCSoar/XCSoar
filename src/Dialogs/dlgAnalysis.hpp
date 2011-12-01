@@ -30,16 +30,14 @@ class FullBlackboard;
 class GlideComputer;
 class ProtectedTaskManager;
 class Airspaces;
-class ProtectedAirspaceWarningManager;
 class RasterTerrain;
 
 void
 dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
                      const FullBlackboard &blackboard,
-                     const GlideComputer &glide_computer,
+                     GlideComputer &glide_computer,
                      const ProtectedTaskManager *protected_task_manager,
                      const Airspaces *airspaces,
-                     ProtectedAirspaceWarningManager *airspace_warnings,
                      const RasterTerrain *terrain,
                      int page=-1);
 

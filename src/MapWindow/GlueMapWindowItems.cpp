@@ -29,6 +29,7 @@ Copyright_License {
 #include "MapWindow/MapItemList.hpp"
 #include "MapWindow/MapItemListBuilder.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "Computer/GlideComputer.hpp"
 
 bool
 GlueMapWindow::ShowMapItems(const GeoPoint &location)
@@ -83,8 +84,8 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
 
   ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), vector, list,
                         elevation, look, traffic_look, SettingsMap(),
-                        /* XXX: the const_cast is a temporary hack */
-                        const_cast<ProtectedAirspaceWarningManager *>(airspace_renderer.GetAirspaceWarnings()));
+                        glide_computer != NULL
+                        ? &glide_computer->GetAirspaceWarnings() : NULL);
 
   // Save function result for later
   return !list.empty();

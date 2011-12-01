@@ -71,7 +71,6 @@ void
 MapWindow::on_destroy()
 {
   SetMarks(NULL);
-  SetAirspaces(NULL);
   airspace_renderer.Clear();
   SetWaypoints(NULL);
   SetTopography(NULL);

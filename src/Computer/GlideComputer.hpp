@@ -63,7 +63,6 @@ public:
   GlideComputer(const Waypoints &_way_points,
                 Airspaces &_airspace_database,
                 ProtectedTaskManager& task,
-                ProtectedAirspaceWarningManager &_awm,
                 GlideComputerTaskEvents& events);
   virtual ~GlideComputer() {}
 
@@ -89,6 +88,14 @@ public:
 
   const CuSonde &GetCuSonde() const {
     return cu_computer.GetCuSonde();
+  }
+
+  ProtectedAirspaceWarningManager &GetAirspaceWarnings() {
+    return warning_computer.GetManager();
+  }
+
+  const ProtectedAirspaceWarningManager &GetAirspaceWarnings() const {
+    return warning_computer.GetManager();
   }
 
 protected:

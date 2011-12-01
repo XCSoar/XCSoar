@@ -34,6 +34,7 @@ Copyright_License {
 #include "Airspace/AirspaceClass.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Components.hpp"
+#include "Computer/GlideComputer.hpp"
 
 #include <assert.h>
 
@@ -157,7 +158,7 @@ OnCloseClicked(gcc_unused WndButton &Sender)
 static void
 OnLookupClicked(gcc_unused WndButton &Sender)
 {
-  dlgAirspaceSelect(airspace_database, airspace_warnings);
+  dlgAirspaceSelect(airspace_database, GetAirspaceWarnings());
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
@@ -188,8 +189,8 @@ dlgAirspaceShowModal(bool coloredit)
 
   // now retrieve back the properties...
   if (changed) {
-    if (!colormode && airspace_warnings != NULL) {
-      ProtectedAirspaceWarningManager::ExclusiveLease awm(*airspace_warnings);
+    if (!colormode && glide_computer != NULL) {
+      ProtectedAirspaceWarningManager::ExclusiveLease awm(glide_computer->GetAirspaceWarnings());
       awm->SetConfig(CommonInterface::SetSettingsComputer().airspace.warnings);
     }
 

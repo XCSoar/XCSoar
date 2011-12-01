@@ -301,7 +301,6 @@ InputEvents::eventAnalysis(gcc_unused const TCHAR *misc)
                        *glide_computer,
                        protected_task_manager,
                        &airspace_database,
-                       airspace_warnings,
                        terrain);
 }
 

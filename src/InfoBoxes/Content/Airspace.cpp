@@ -31,7 +31,7 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceVisitor.hpp"
 #include "Engine/Airspace/AirspaceCircle.hpp"
 #include "Engine/Airspace/AirspacePolygon.hpp"
-#include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Computer/GlideComputer.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Util/Macros.hpp"
 
@@ -57,7 +57,8 @@ gcc_pure
 static bool
 IsAcked(const AbstractAirspace &airspace)
 {
-  return airspace_warnings != NULL && airspace_warnings->get_ack_day(airspace);
+  return glide_computer == NULL ||
+    glide_computer->GetAirspaceWarnings().get_ack_day(airspace);
 }
 
 gcc_pure
