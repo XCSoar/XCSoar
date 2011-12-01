@@ -41,7 +41,8 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
-struct WarningItem {
+struct WarningItem
+{
   const AbstractAirspace *airspace;
   AirspaceWarning::State state;
   AirspaceInterceptSolution solution;
@@ -49,11 +50,11 @@ struct WarningItem {
 
   WarningItem() = default;
 
-  WarningItem(const AirspaceWarning &w)
-    :airspace(&w.GetAirspace()),
-     state(w.GetWarningState()),
-     solution(w.GetSolution()),
-     ack_expired(w.IsAckExpired()), ack_day(w.GetAckDay()) {}
+  WarningItem(const AirspaceWarning &warning)
+    :airspace(&warning.GetAirspace()),
+     state(warning.GetWarningState()),
+     solution(warning.GetSolution()),
+     ack_expired(warning.IsAckExpired()), ack_day(warning.GetAckDay()) {}
 
   bool operator==(const AbstractAirspace &other) const {
     return &other == airspace;
@@ -62,30 +63,30 @@ struct WarningItem {
 
 typedef TrivialArray<WarningItem, 64u> WarningList;
 
-static WndForm *wf = NULL;
-static WndButton *wbAck1 = NULL; // frmAck1 = Ack warn
-static WndButton *wbAck2 = NULL; // frmAck2 = Ack day
-static WndButton *wbAck = NULL; // frmAck = Ack space
-static WndButton *wbEnable = NULL; // Enable
+static WndForm *dialog = NULL;
+static WndButton *ack_warn_button = NULL;
+static WndButton *ack_day_button = NULL;
+static WndButton *ack_space_button = NULL;
+static WndButton *enable_button = NULL; // Enable
 
-static WndListFrame *wAirspaceList = NULL;
+static WndListFrame *warning_list_frame = NULL;
 static gcc_constexpr_data Color inside_color(254,50,50);
 static gcc_constexpr_data Color near_color(254,254,50);
 static gcc_constexpr_data Color inside_ack_color(254,100,100);
 static gcc_constexpr_data Color near_ack_color(254,254,100);
-static bool AutoClose = true;
+static bool auto_close = true;
 
 static WarningList warning_list;
 
-static const AbstractAirspace* CursorAirspace = NULL; // Current list cursor airspace
-static const AbstractAirspace* FocusAirspace = NULL;  // Current action airspace
+static const AbstractAirspace* selected_airspace = NULL; // Current list cursor airspace
+static const AbstractAirspace* focused_airspace = NULL;  // Current action airspace
 
 static const AbstractAirspace *
 GetSelectedAirspace()
 {
-  return HasPointer() || FocusAirspace == NULL
-    ? CursorAirspace
-    : FocusAirspace;
+  return HasPointer() || focused_airspace == NULL
+    ? selected_airspace
+    : focused_airspace;
 }
 
 static void
@@ -93,10 +94,10 @@ UpdateButtons()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace == NULL) {
-    wbAck1->set_visible(false);
-    wbAck2->set_visible(false);
-    wbAck->set_visible(false);
-    wbEnable->set_visible(false);
+    ack_warn_button->set_visible(false);
+    ack_day_button->set_visible(false);
+    ack_space_button->set_visible(false);
+    enable_button->set_visible(false);
     return;
   }
 
@@ -110,19 +111,19 @@ UpdateButtons()
     inside = warning.GetWarningState() == AirspaceWarning::WARNING_INSIDE;
   }
 
-  wbAck1->set_visible(ack_expired && !inside);
-  wbAck2->set_visible(!ack_day);
-  wbAck->set_visible(ack_expired && inside);
-  wbEnable->set_visible(!ack_expired);
+  ack_warn_button->set_visible(ack_expired && !inside);
+  ack_day_button->set_visible(!ack_day);
+  ack_space_button->set_visible(ack_expired && inside);
+  enable_button->set_visible(!ack_expired);
 }
 
 static void
-update_list();
+UpdateList();
 
 static void
 AirspaceWarningCursorCallback(unsigned i)
 {
-  CursorAirspace = i < warning_list.size()
+  selected_airspace = i < warning_list.size()
     ? warning_list[i].airspace
     : NULL;
 
@@ -135,9 +136,9 @@ OnAirspaceListEnter(gcc_unused unsigned i)
   if (!HasPointer())
     /* on platforms without a pointing device (e.g. ALTAIR), allow
        "focusing" an airspace by pressing enter */
-    FocusAirspace = CursorAirspace;
-  else if (CursorAirspace != NULL)
-    dlgAirspaceDetails(*CursorAirspace);
+    focused_airspace = selected_airspace;
+  else if (selected_airspace != NULL)
+    dlgAirspaceDetails(*selected_airspace);
 }
 
 static bool
@@ -154,26 +155,25 @@ HasWarning()
 static void
 Hide()
 {
-  wf->hide();
-  wf->SetModalResult(mrOK);
+  dialog->hide();
+  dialog->SetModalResult(mrOK);
 }
 
 static void
 AutoHide()
 {
   // Close the dialog if no warning exists and AutoClose is set
-  if (!HasWarning() && AutoClose)
+  if (!HasWarning() && auto_close)
     Hide();
 }
 
-/** ack inside */
 static void
-Ack()
+AckInside()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
     airspace_warnings->acknowledge_inside(*airspace, true);
-    update_list();
+    UpdateList();
     AutoHide();
   }
 }
@@ -181,17 +181,16 @@ Ack()
 static void
 OnAckClicked(gcc_unused WndButton &Sender)
 {
-  Ack();
+  AckInside();
 }
 
-/** ack warn */
 static void
-Ack1()
+AckWarning()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
     airspace_warnings->acknowledge_warning(*airspace, true);
-    update_list();
+    UpdateList();
     AutoHide();
   }
 }
@@ -199,17 +198,16 @@ Ack1()
 static void
 OnAck1Clicked(gcc_unused WndButton &Sender)
 {
-  Ack1();
+  AckWarning();
 }
 
-/** ack day */
 static void
-Ack2()
+AckDay()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
     airspace_warnings->acknowledge_day(*airspace, true);
-    update_list();
+    UpdateList();
     AutoHide();
   }
 }
@@ -217,10 +215,9 @@ Ack2()
 static void
 OnAck2Clicked(gcc_unused WndButton &Sender)
 {
-  Ack2();
+  AckDay();
 }
 
-/** unack */
 static void
 Enable()
 {
@@ -230,16 +227,16 @@ Enable()
 
   {
     ProtectedAirspaceWarningManager::ExclusiveLease lease(*airspace_warnings);
-    AirspaceWarning *w = lease->GetWarningPtr(*airspace);
-    if (w == NULL)
+    AirspaceWarning *warning = lease->GetWarningPtr(*airspace);
+    if (warning == NULL)
       return;
 
-    w->AcknowledgeInside(false);
-    w->AcknowledgeWarning(false);
-    w->AcknowledgeDay(false);
+    warning->AcknowledgeInside(false);
+    warning->AcknowledgeWarning(false);
+    warning->AcknowledgeDay(false);
   }
 
- update_list();
+  UpdateList();
 }
 
 static void
@@ -265,17 +262,17 @@ OnKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 #ifdef GNAV
     case VK_APP1:
     case '6':
-      Ack1();
+      AckWarning();
     return true;
 
     case VK_APP2:
     case '7':
-      Ack();
+      AckInside();
     return true;
 
     case VK_APP3:
     case '8':
-      Ack2();
+      AckDay();
     return true;
 
     case VK_APP4:
@@ -292,90 +289,94 @@ OnKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 static void
 OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
 {
-  TCHAR sTmp[128];
-  const int paint_rc_margin = 2;   ///< This constant defines the margin that should be respected for renderring within the paint_rc area.
+  TCHAR buffer[128];
+
+  // This constant defines the margin that should be respected
+  // for renderring within the paint_rc area.
+  const int padding = 2;
 
   if (i == 0 && warning_list.empty()) {
     /* the warnings were emptied between the opening of the dialog and
        this refresh, so only need to display "No Warnings" for top
        item, otherwise exit immediately */
-    canvas.text(paint_rc.left + Layout::Scale(paint_rc_margin),
-                paint_rc.top + Layout::Scale(paint_rc_margin), _("No Warnings"));
+    canvas.text(paint_rc.left + Layout::Scale(padding),
+                paint_rc.top + Layout::Scale(padding), _("No Warnings"));
     return;
   }
 
   assert(i < warning_list.size());
 
   const WarningItem &warning = warning_list[i];
-  const AbstractAirspace &as = *warning.airspace;
+  const AbstractAirspace &airspace = *warning.airspace;
   const AirspaceInterceptSolution &solution = warning.solution;
 
-  tstring sName = as.GetNameText();
-  tstring sTop = as.GetTopText(true);
-  tstring sBase = as.GetBaseText(true);
-  tstring sType = as.GetTypeText(true);
+  tstring name = airspace.GetNameText();
+  tstring top = airspace.GetTopText(true);
+  tstring base = airspace.GetBaseText(true);
+  tstring type = airspace.GetTypeText(true);
 
-  const UPixelScalar TextHeight = 12, TextTop = 1;
+  const UPixelScalar text_height = 12, text_top = 1;
 
-  const int statusColWidth = canvas.CalcTextWidth(_T("inside"));     //<-- word "inside" is used as the etalon, because it is longer than "near" and currently (9.4.2011) there is no other possibility for the status text.
-  const int heightColWidth = canvas.CalcTextWidth(_T("1888 m AGL")); // <-- "1888" is used in order to have enough space for 4-digit heights with "AGL"
+  // word "inside" is used as the etalon, because it is longer than "near" and
+  // currently (9.4.2011) there is no other possibility for the status text.
+  const int status_width = canvas.CalcTextWidth(_T("inside"));
+  // "1888" is used in order to have enough space for 4-digit heights with "AGL"
+  const int altitude_width = canvas.CalcTextWidth(_T("1888 m AGL"));
 
+  // Dynamic columns scaling - "name" column is flexible, altitude and state
+  // columns are fixed-width.
+  const PixelScalar left0 = Layout::FastScale(padding),
+    left2 = paint_rc.right - Layout::FastScale(padding) - (status_width + 2 * Layout::FastScale(padding)),
+    left1 = left2 - Layout::FastScale(padding) - altitude_width;
 
-  /// Dynamic columns scaling - "name" column is flexible, altitude and state columns are fixed-width.
-  const PixelScalar Col0LeftScreenCoords = Layout::FastScale(paint_rc_margin),
-    Col2LeftScreenCoords = paint_rc.right - Layout::FastScale(paint_rc_margin) - (statusColWidth + 2 * Layout::FastScale(paint_rc_margin)),
-    Col1LeftScreenCoords = Col2LeftScreenCoords - Layout::FastScale(paint_rc_margin) - heightColWidth;
-
-  PixelRect rcTextClip;
-
-  rcTextClip = paint_rc;
-  rcTextClip.right = Col1LeftScreenCoords - Layout::FastScale(paint_rc_margin);
+  PixelRect rc_text_clip = paint_rc;
+  rc_text_clip.right = left1 - Layout::FastScale(padding);
 
   Color old_text_color = canvas.GetTextColor();
   if (!warning.ack_expired)
     canvas.SetTextColor(COLOR_GRAY);
 
   { // name, altitude info
-    _stprintf(sTmp, _T("%-20s"), sName.c_str());
+    _stprintf(buffer, _T("%-20s"), name.c_str());
 
-    canvas.text_clipped(paint_rc.left + Col0LeftScreenCoords,
-                        paint_rc.top + Layout::Scale(TextTop),
-                        rcTextClip, sTmp);
+    canvas.text_clipped(paint_rc.left + left0,
+                        paint_rc.top + Layout::Scale(text_top),
+                        rc_text_clip, buffer);
 
-    _stprintf(sTmp, _T("%-20s"), sTop.c_str());
-    canvas.text(paint_rc.left + Col1LeftScreenCoords,
-                paint_rc.top + Layout::Scale(TextTop), sTmp);
+    _stprintf(buffer, _T("%-20s"), top.c_str());
+    canvas.text(paint_rc.left + left1,
+                paint_rc.top + Layout::Scale(text_top), buffer);
 
-    _stprintf(sTmp, _T("%-20s"), sBase.c_str());
-    canvas.text(paint_rc.left + Col1LeftScreenCoords,
-                paint_rc.top + Layout::Scale(TextTop + TextHeight),
-                sTmp);
+    _stprintf(buffer, _T("%-20s"), base.c_str());
+    canvas.text(paint_rc.left + left1,
+                paint_rc.top + Layout::Scale(text_top + text_height),
+                buffer);
   }
 
   if (warning.state != AirspaceWarning::WARNING_INSIDE &&
       warning.state > AirspaceWarning::WARNING_CLEAR &&
       solution.IsValid()) {
 
-    _stprintf(sTmp, _T("%d secs"),
+    _stprintf(buffer, _T("%d secs"),
               (int)solution.elapsed_time);
 
     if (positive(solution.distance))
-      _stprintf(sTmp + _tcslen(sTmp), _T(" dist %d m"),
+      _stprintf(buffer + _tcslen(buffer), _T(" dist %d m"),
                 (int)solution.distance);
     else {
       /* the airspace is right above or below us - show the vertical
          distance */
-      _tcscat(sTmp, _T(" vertical "));
+      _tcscat(buffer, _T(" vertical "));
 
       fixed delta = solution.altitude - CommonInterface::Basic().nav_altitude;
       Units::FormatUserArrival(delta,
-                               sTmp + _tcslen(sTmp), 128 - _tcslen(sTmp),
+                               buffer + _tcslen(buffer), 128 - _tcslen(buffer),
                                true);
     }
 
-    canvas.text_clipped(paint_rc.left + Col0LeftScreenCoords,
-                        paint_rc.top + Layout::Scale(TextTop + TextHeight),
-                        rcTextClip, sTmp);
+    canvas.text_clipped(paint_rc.left + left0,
+                        paint_rc.top + Layout::Scale(text_top + text_height),
+                        rc_text_clip, buffer);
   }
 
   /* draw the warning state indicator */
@@ -401,17 +402,17 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
     /* colored background */
     PixelRect rc;
 
-    rc.left = paint_rc.left + Col2LeftScreenCoords;
-    rc.top = paint_rc.top + Layout::FastScale(paint_rc_margin);
-    rc.right = paint_rc.right - Layout::FastScale(paint_rc_margin);
-    rc.bottom = paint_rc.bottom - Layout::FastScale(paint_rc_margin);
+    rc.left = paint_rc.left + left2;
+    rc.top = paint_rc.top + Layout::FastScale(padding);
+    rc.right = paint_rc.right - Layout::FastScale(padding);
+    rc.bottom = paint_rc.bottom - Layout::FastScale(padding);
 
     canvas.DrawFilledRectangle(rc, state_color);
   }
 
   if (state_text != NULL) {
     // -- status text will be centered inside its table cell:
-    canvas.text(paint_rc.left + Col2LeftScreenCoords + Layout::FastScale(paint_rc_margin) + (statusColWidth / 2)  - (canvas.CalcTextWidth(state_text) / 2),
+    canvas.text(paint_rc.left + left2 + Layout::FastScale(padding) + (status_width / 2)  - (canvas.CalcTextWidth(state_text) / 2),
                 (paint_rc.bottom + paint_rc.top - state_text_size.cy) / 2,
                 state_text);
   }
@@ -432,31 +433,31 @@ CopyList()
 }
 
 static void
-update_list()
+UpdateList()
 {
   CopyList();
 
   if (!warning_list.empty()) {
-    wAirspaceList->SetLength(warning_list.size());
+    warning_list_frame->SetLength(warning_list.size());
 
     int i = -1;
-    if (CursorAirspace != NULL) {
+    if (selected_airspace != NULL) {
       auto it = std::find(warning_list.begin(), warning_list.end(),
-                          *CursorAirspace);
+                          *selected_airspace);
       if (it != warning_list.end()) {
         i = it - warning_list.begin();
-        wAirspaceList->SetCursorIndex(i);
+        warning_list_frame->SetCursorIndex(i);
       }
     }
 
     if (i < 0)
       /* the selection may have changed, update CursorAirspace */
-      AirspaceWarningCursorCallback(wAirspaceList->GetCursorIndex());
+      AirspaceWarningCursorCallback(warning_list_frame->GetCursorIndex());
   } else {
-    wAirspaceList->SetLength(1);
-    CursorAirspace = NULL;
+    warning_list_frame->SetLength(1);
+    selected_airspace = NULL;
   }
-  wAirspaceList->invalidate();
+  warning_list_frame->invalidate();
   UpdateButtons();
   AutoHide();
 }
@@ -464,13 +465,13 @@ update_list()
 static void
 OnTimer(gcc_unused WndForm &Sender)
 {
-  update_list();
+  UpdateList();
 }
 
 bool
 dlgAirspaceWarningVisible()
 {
-  return (wf != NULL);
+  return (dialog != NULL);
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
@@ -483,7 +484,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close)
+dlgAirspaceWarningsShowModal(SingleWindow &parent, bool _auto_close)
 {
   if (dlgAirspaceWarningVisible())
     return;
@@ -491,42 +492,43 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close)
   assert(airspace_warnings != NULL);
   assert(warning_list.empty());
 
-  wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_AIRSPACEWARNINGS"));
-  assert(wf != NULL);
+  dialog = LoadDialog(CallBackTable, parent, _T("IDR_XML_AIRSPACEWARNINGS"));
+  assert(dialog != NULL);
 
-  wbAck1 = (WndButton *)wf->FindByName(_T("frmAck1"));
-  wbAck2 = (WndButton *)wf->FindByName(_T("frmAck2"));
-  wbAck = (WndButton *)wf->FindByName(_T("frmAck"));
-  wbEnable = (WndButton *)wf->FindByName(_T("frmEnable"));
-  assert(wbAck1 != NULL);
-  assert(wbAck2 != NULL);
-  assert(wbAck != NULL);
-  assert(wbEnable != NULL);
+  ack_warn_button = (WndButton *)dialog->FindByName(_T("frmAck1"));
+  ack_day_button = (WndButton *)dialog->FindByName(_T("frmAck2"));
+  ack_space_button = (WndButton *)dialog->FindByName(_T("frmAck"));
+  enable_button = (WndButton *)dialog->FindByName(_T("frmEnable"));
+  assert(ack_warn_button != NULL);
+  assert(ack_day_button != NULL);
+  assert(ack_space_button != NULL);
+  assert(enable_button != NULL);
 
-  wf->SetKeyDownNotify(OnKeyDown);
+  dialog->SetKeyDownNotify(OnKeyDown);
 
-  wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceWarningList"));
-  assert(wAirspaceList != NULL);
-  wAirspaceList->SetPaintItemCallback(OnAirspaceListItemPaint);
-  wAirspaceList->SetCursorCallback(AirspaceWarningCursorCallback);
-  wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
+  warning_list_frame =
+    (WndListFrame*)dialog->FindByName(_T("frmAirspaceWarningList"));
+  assert(warning_list_frame != NULL);
+  warning_list_frame->SetPaintItemCallback(OnAirspaceListItemPaint);
+  warning_list_frame->SetCursorCallback(AirspaceWarningCursorCallback);
+  warning_list_frame->SetActivateCallback(OnAirspaceListEnter);
 
-  AutoClose = auto_close;
-  update_list();
+  auto_close = _auto_close;
+  UpdateList();
 
   // JMW need to deselect everything on new reopening of dialog
-  CursorAirspace = NULL;
-  FocusAirspace = NULL;
+  selected_airspace = NULL;
+  focused_airspace = NULL;
 
-  wf->SetTimerNotify(OnTimer);
-  wAirspaceList->SetCursorIndex(0);
-  wf->ShowModal();
-  wf->SetTimerNotify(NULL);
+  dialog->SetTimerNotify(OnTimer);
+  warning_list_frame->SetCursorIndex(0);
+  dialog->ShowModal();
+  dialog->SetTimerNotify(NULL);
 
-  delete wf;
+  delete dialog;
 
   // Needed for dlgAirspaceWarningVisible()
-  wf = NULL;
+  dialog = NULL;
 
   warning_list.clear();
 }
