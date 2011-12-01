@@ -57,6 +57,28 @@ struct GeoPoint {
     longitude(_longitude), latitude(_latitude) {}
 
   /**
+   * Construct an instance that is "invalid", i.e. IsValid() will
+   * return false.  The return value must not be used in any
+   * calculation.  This method may be used to explicitly declare a
+   * GeoPoint attribute as "invalid".
+   */
+  gcc_constexpr_function
+  static GeoPoint Invalid() {
+    return GeoPoint(Angle::Zero(), Angle::FullCircle());
+  }
+
+  /**
+   * Check if this object is "valid".  Returns false when it was
+   * constructed by Invalid().  This is not an extensive plausibility
+   * check; it is only designed to catch instances created by
+   * Invalid().
+   */
+  gcc_constexpr_method
+  bool IsValid() const {
+    return latitude >= Angle::HalfCircle();
+  }
+
+  /**
    * Normalize the values, so this object can be used properly in
    * calculations, without unintended side effects (such as -1 degrees
    * vs 359 degrees).  This modification is in-place.
