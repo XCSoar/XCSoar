@@ -103,19 +103,16 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
   if (Calculated().circling 
       || !Basic().location_available
       || !Basic().track_available
-      || !SettingsMap().detour_cost_markers_enabled
-      || (task == NULL)) 
+      || !SettingsMap().detour_cost_markers_enabled)
     return;
 
-  ProtectedTaskManager::Lease task_manager(*task);
-  if (!task_manager->CheckTask())
+  const TaskStats &task_stats = Calculated().task_stats;
+  const ElementStat &current_leg = task_stats.current_leg;
+
+  if (!task_stats.task_valid || !current_leg.location_remaining.IsValid())
     return;
 
-  const TaskPoint* tp = task_manager->GetActiveTaskPoint();
-  if (!tp) 
-    return;
-
-  GeoPoint target = tp->GetLocationRemaining();
+  const GeoPoint target = current_leg.location_remaining;
   GeoVector vec(Basic().location, target);
 
   if ((Basic().track - vec.bearing).AsDelta().AbsoluteDegrees() < fixed(10))
