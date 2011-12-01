@@ -567,10 +567,8 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   bool altitude_available = ReadAltitude(line, info.gps_altitude);
   if (altitude_available)
     info.gps_altitude_available.Update(info.clock);
-  else {
-    info.gps_altitude = fixed_zero;
+  else
     info.gps_altitude_available.Clear();
-  }
 
   fixed geoid_separation;
   if (ReadAltitude(line, geoid_separation)) {
