@@ -243,6 +243,9 @@ public:
   bool Declare(const struct Declaration &declaration,
                OperationEnvironment &env);
 
+  bool EnableDownloadMode();
+  bool DisableDownloadMode();
+
   bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env);
   bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,

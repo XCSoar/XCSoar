@@ -265,9 +265,16 @@ ShowFlightList(const RecordedFlightList &flight_list)
 void
 ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 {
+  if (!device.EnableDownloadMode()) {
+    MessageBoxX(_("Failed to enable download mode."),
+                _("Download flight"), MB_OK | MB_ICONERROR);
+    return;
+  }
+
   // Download the list of flights that the logger contains
   RecordedFlightList flight_list;
   if (!DoReadFlightList(device, flight_list)) {
+    device.DisableDownloadMode();
     MessageBoxX(_("Failed to download flight list."),
                 _("Download flight"), MB_OK | MB_ICONERROR);
     return;
@@ -275,6 +282,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 
   // The logger seems to be empty -> cancel
   if (flight_list.empty()) {
+    device.DisableDownloadMode();
     MessageBoxX(_("Logger is empty."),
                 _("Download flight"), MB_OK | MB_ICONINFORMATION);
     return;
@@ -282,8 +290,10 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 
   // Show list of the flights
   const RecordedFlightInfo *flight = ShowFlightList(flight_list);
-  if (!flight)
+  if (!flight) {
+    device.DisableDownloadMode();
     return;
+  }
 
   // Download chosen IGC file into temporary file
   TCHAR path[MAX_PATH];
@@ -291,10 +301,13 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
   if (!DoDownloadFlight(device, *flight, path)) {
     // Delete temporary file
     File::Delete(path);
+    device.DisableDownloadMode();
     MessageBoxX(_("Failed to download flight."),
                 _("Download flight"), MB_OK | MB_ICONERROR);
     return;
   }
+
+  device.DisableDownloadMode();
 
   /* read the IGC header and build the final IGC file name with it */
 

@@ -430,6 +430,30 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
 }
 
 bool
+DeviceDescriptor::EnableDownloadMode()
+{
+  if (port == NULL || device == NULL)
+    return false;
+
+  port->StopRxThread();
+  bool result = device->EnableDownloadMode();
+  port->StartRxThread();
+  return result;
+}
+
+bool
+DeviceDescriptor::DisableDownloadMode()
+{
+  if (port == NULL || device == NULL)
+    return false;
+
+  port->StopRxThread();
+  bool result = device->DisableDownloadMode();
+  port->StartRxThread();
+  return result;
+}
+
+bool
 DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
                                  OperationEnvironment &env)
 {
