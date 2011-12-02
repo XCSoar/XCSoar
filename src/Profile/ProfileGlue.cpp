@@ -42,16 +42,6 @@ Profile::Use()
 
   LoadUnits(Units::current);
 
-  /* JMW broken
-  if (Get(szProfileAccelerometerZero, Temp))
-    AccelerometerZero = Temp;
-  if (AccelerometerZero==0.0) {
-    AccelerometerZero= 100.0;
-    Temp = 100;
-    Set(szProfileAccelerometerZero, Temp);
-  }
-  */
-
   GetEnum(szProfileAppDialogStyle, dialog_style_setting);
 }
 
