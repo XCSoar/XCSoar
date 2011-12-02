@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_UNITS_SETTINGS_HPP
 #define XCSOAR_UNITS_SETTINGS_HPP
 
+#include "Compiler.h"
+
 enum CoordinateFormats {
   CF_DDMMSS = 0,
   CF_DDMMSS_SS,
@@ -92,6 +94,12 @@ struct UnitSetting
 
   /** Unit for lat/lon */
   CoordinateFormats coordinate_format;
+
+  /**
+   * Return the configured unit for a given group.
+   */
+  gcc_pure
+  Unit GetByGroup(UnitGroup group) const;
 };
 
 #endif

@@ -101,28 +101,7 @@ Units::GetUserPressureUnit()
 Unit
 Units::GetUserUnitByGroup(UnitGroup group)
 {
-  switch (group) {
-  case ugNone:
-    return unUndef;
-  case ugDistance:
-    return GetUserDistanceUnit();
-  case ugAltitude:
-    return GetUserAltitudeUnit();
-  case ugTemperature:
-    return GetUserTemperatureUnit();
-  case ugHorizontalSpeed:
-    return GetUserSpeedUnit();
-  case ugVerticalSpeed:
-    return GetUserVerticalSpeedUnit();
-  case ugWindSpeed:
-    return GetUserWindSpeedUnit();
-  case ugTaskSpeed:
-    return GetUserTaskSpeedUnit();
-  case ugPressure:
-    return GetUserPressureUnit();
-  default:
-    return unUndef;
-  }
+  return current.GetByGroup(group);
 }
 
 const TCHAR *

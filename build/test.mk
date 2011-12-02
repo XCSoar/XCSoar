@@ -409,6 +409,7 @@ $(TARGET_BIN_DIR)/TestProjection$(TARGET_EXEEXT): $(TEST_PROJECTION_OBJS) $(TEST
 
 TEST_UNITS_SOURCES = \
 	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -971,6 +972,7 @@ RUN_LIVETRACK24_SOURCES = \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/Net/ToBuffer.cpp \
 	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunLiveTrack24.cpp
@@ -1125,6 +1127,7 @@ LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Screen/Layout.cpp \
@@ -1794,6 +1797,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Topography/TopographyGlue.cpp \
 	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
@@ -2085,6 +2089,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
@@ -2223,6 +2228,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
@@ -2307,6 +2313,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Geo/UTM.cpp \
