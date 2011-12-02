@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Point.hpp"
 #include "resource.h"
 
 #include <assert.h>

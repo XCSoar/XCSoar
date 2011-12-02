@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Math/FastRotation.hpp"
 #include "LogFile.hpp"
+#include "Units/Units.hpp"
 
 #include <assert.h>
 #include <stdio.h>
