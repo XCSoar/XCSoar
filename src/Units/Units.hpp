@@ -50,9 +50,6 @@ namespace Units
 
   extern UnitSetting current;
 
-  /** Unit for lat/lon */
-  extern CoordinateFormats coordinate_format;
-
   /**
    * Returns the name of the given Unit
    * @return The name of the given Unit (e.g. "km" or "ft")

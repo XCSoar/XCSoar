@@ -32,8 +32,6 @@ Copyright_License {
 #include <math.h>
 #include <tchar.h>
 
-CoordinateFormats Units::coordinate_format;
-
 //SI to Local Units
 
 const UnitDescriptor Units::unit_descriptors[] = {
@@ -115,13 +113,13 @@ Units::GetUnitName(Unit unit)
 CoordinateFormats
 Units::GetCoordinateFormat()
 {
-  return coordinate_format;
+  return current.coordinate_format;
 }
 
 void
 Units::SetCoordinateFormat(CoordinateFormats format)
 {
-  coordinate_format = format;
+  current.coordinate_format = format;
 }
 
 Unit

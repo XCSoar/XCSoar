@@ -89,6 +89,9 @@ struct UnitSetting
   Unit task_speed_unit;
   /** Unit for pressures */
   Unit pressure_unit;
+
+  /** Unit for lat/lon */
+  CoordinateFormats coordinate_format;
 };
 
 #endif
