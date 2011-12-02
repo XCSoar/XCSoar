@@ -559,7 +559,7 @@ MainWindow::on_user(unsigned id)
 {
   switch ((enum cmd)id) {
   case CMD_AIRSPACE_WARNING:
-    if (!airspace_warning_pending)
+    if (!airspace_warning_pending || airspace_warnings == NULL)
       return true;
 
     airspace_warning_pending = false;
@@ -572,7 +572,7 @@ MainWindow::on_user(unsigned id)
 #ifndef GNAV
     PlayResource(_T("IDR_WAV_BEEPBWEEP"));
 #endif
-    dlgAirspaceWarningsShowModal(*this, true);
+    dlgAirspaceWarningsShowModal(*this, *airspace_warnings, true);
     return true;
 
   case CMD_CALCULATED_UPDATE:

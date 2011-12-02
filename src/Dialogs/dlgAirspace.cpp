@@ -157,7 +157,7 @@ OnCloseClicked(gcc_unused WndButton &Sender)
 static void
 OnLookupClicked(gcc_unused WndButton &Sender)
 {
-  dlgAirspaceSelect();
+  dlgAirspaceSelect(airspace_database, airspace_warnings);
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {

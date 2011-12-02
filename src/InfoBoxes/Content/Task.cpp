@@ -564,8 +564,10 @@ InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
     dlgAnalysisShowModal(XCSoarInterface::main_window,
                          CommonInterface::main_window.GetLook(),
                          CommonInterface::Full(), *glide_computer,
-                         protected_task_manager, &airspace_database, terrain,
-                         8);
+                         protected_task_manager,
+                         &airspace_database,
+                         airspace_warnings,
+                         terrain, 8);
     return true;
 
   default:

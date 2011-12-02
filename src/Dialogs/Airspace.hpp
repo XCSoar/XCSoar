@@ -25,11 +25,19 @@ Copyright_License {
 #define XCSOAR_DIALOGS_AIRSPACE_HPP
 
 class AbstractAirspace;
+class Airspaces;
+class ProtectedAirspaceWarningManager;
 
-void dlgAirspaceDetails(const AbstractAirspace& the_airspace);
+void
+dlgAirspaceDetails(const AbstractAirspace& the_airspace,
+                   ProtectedAirspaceWarningManager *_airspace_warnings);
+
 int dlgAirspaceColoursShowModal();
 int dlgAirspacePatternsShowModal();
 void dlgAirspaceShowModal(bool colored);
-void dlgAirspaceSelect();
+
+void
+dlgAirspaceSelect(const Airspaces &airspace_database,
+                  ProtectedAirspaceWarningManager *airspace_warnings);
 
 #endif

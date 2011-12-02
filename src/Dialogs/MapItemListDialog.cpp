@@ -48,6 +48,7 @@ Copyright_License {
 static const MapLook *look;
 static const TrafficLook *traffic_look;
 static const SETTINGS_MAP *settings;
+static ProtectedAirspaceWarningManager *airspace_warnings;
 static GeoVector vector;
 static const MapItemList *list;
 static short elevation;
@@ -197,7 +198,8 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
     break;
 
   case MapItem::AIRSPACE:
-    dlgAirspaceDetails(*((const AirspaceMapItem &)item).airspace);
+    dlgAirspaceDetails(*((const AirspaceMapItem &)item).airspace,
+                       airspace_warnings);
     break;
   case MapItem::WAYPOINT:
     dlgWaypointDetailsShowModal(parent,
@@ -218,7 +220,8 @@ ShowMapItemListDialog(SingleWindow &parent,
                       const MapItemList &_list, short _elevation,
                       const MapLook &_look,
                       const TrafficLook &_traffic_look,
-                      const SETTINGS_MAP &_settings)
+                      const SETTINGS_MAP &_settings,
+                      ProtectedAirspaceWarningManager *_airspace_warnings)
 {
   switch (_list.size()) {
   case 0:
@@ -239,6 +242,7 @@ ShowMapItemListDialog(SingleWindow &parent,
     look = &_look;
     traffic_look = &_traffic_look;
     settings = &_settings;
+    airspace_warnings = _airspace_warnings;
 
     int i = ShowMapItemListDialog(parent);
     assert(i >= -1 && i < (int)_list.size());

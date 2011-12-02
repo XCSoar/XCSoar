@@ -82,7 +82,9 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
 
 
   ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), vector, list,
-                        elevation, look, traffic_look, SettingsMap());
+                        elevation, look, traffic_look, SettingsMap(),
+                        /* XXX: the const_cast is a temporary hack */
+                        const_cast<ProtectedAirspaceWarningManager *>(airspace_renderer.GetAirspaceWarnings()));
 
   // Save function result for later
   return !list.empty();

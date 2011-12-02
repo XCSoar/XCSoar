@@ -31,14 +31,17 @@ struct GeoVector;
 struct MapLook;
 struct TrafficLook;
 struct SETTINGS_MAP;
+class ProtectedAirspaceWarningManager;
 
 void ShowMapItemDialog(const MapItem &item, SingleWindow &parent);
 
-void ShowMapItemListDialog(SingleWindow &parent,
-                           const GeoVector &_vector,
-                           const MapItemList &_list, short _elevation,
-                           const MapLook &_look,
-                           const TrafficLook &_traffic_look,
-                           const SETTINGS_MAP &_settings);
+void
+ShowMapItemListDialog(SingleWindow &parent,
+                      const GeoVector &_vector,
+                      const MapItemList &_list, short _elevation,
+                      const MapLook &_look,
+                      const TrafficLook &_traffic_look,
+                      const SETTINGS_MAP &_settings,
+                      ProtectedAirspaceWarningManager *airspace_warnings);
 
 #endif

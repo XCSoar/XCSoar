@@ -50,7 +50,11 @@ InterfaceBlackboard CommonInterface::blackboard;
 
 ProtectedAirspaceWarningManager *airspace_warnings;
 
-void dlgAirspaceDetails(const AbstractAirspace& the_airspace) {}
+void
+dlgAirspaceDetails(const AbstractAirspace &the_airspace,
+                   ProtectedAirspaceWarningManager *airspace_warnings)
+{
+}
 
 static void
 LoadFiles(Airspaces &airspace_database)
@@ -116,7 +120,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                          Fonts::map_bold, Fonts::map_bold);
   SetXMLDialogLook(dialog_look);
 
-  dlgAirspaceWarningsShowModal(main_window);
+  dlgAirspaceWarningsShowModal(main_window, *airspace_warnings);
 
   Fonts::Deinitialize();
   DeinitialiseDataPath();

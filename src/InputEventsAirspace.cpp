@@ -93,11 +93,12 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
   const SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SettingsComputer();
 
-  if (!airspace_warnings->warning_empty()) {
+  if (airspace_warnings != NULL && !airspace_warnings->warning_empty()) {
     // Prevent the dialog from closing itself without active warning
     // This is relevant if there are only acknowledged airspaces in the list
     // AutoClose will be reset when the dialog is closed again by hand
-    dlgAirspaceWarningsShowModal(XCSoarInterface::main_window);
+    dlgAirspaceWarningsShowModal(XCSoarInterface::main_window,
+                                 *airspace_warnings);
     return;
   }
 
@@ -116,7 +117,7 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
     return;
   } 
 
-  dlgAirspaceDetails(*as);
+  dlgAirspaceDetails(*as, airspace_warnings);
 
   // clear previous warning if any
   XCSoarInterface::main_window.popup.Acknowledge(PopupMessage::MSG_AIRSPACE);

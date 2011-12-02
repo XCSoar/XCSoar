@@ -152,8 +152,10 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
     dlgAnalysisShowModal(XCSoarInterface::main_window,
                          CommonInterface::main_window.GetLook(),
                          CommonInterface::Full(), *glide_computer,
-                         protected_task_manager, &airspace_database, terrain,
-                         0);
+                         protected_task_manager,
+                         &airspace_database,
+                         airspace_warnings,
+                         terrain, 0);
     return true;
 
   case ibkUp:

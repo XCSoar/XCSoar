@@ -31,7 +31,6 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "DataField/String.hpp"
 #include "DataField/Enum.hpp"
-#include "Components.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Screen/Layout.hpp"
@@ -47,6 +46,8 @@ Copyright_License {
  * Special enum integer value for "filter disabled".
  */
 static gcc_constexpr_data unsigned WILDCARD = 0x7fff;
+
+static ProtectedAirspaceWarningManager *airspace_warnings;
 
 static WndForm *wf=NULL;
 static WndProperty *wpName;
@@ -93,7 +94,7 @@ OnAirspaceListEnter(unsigned i)
 
   assert(i < AirspaceSelectInfo.size());
 
-  dlgAirspaceDetails(*AirspaceSelectInfo[i].airspace);
+  dlgAirspaceDetails(*AirspaceSelectInfo[i].airspace, airspace_warnings);
 }
 
 
@@ -412,8 +413,11 @@ PrepareAirspaceSelectDialog()
 }
 
 void
-dlgAirspaceSelect()
+dlgAirspaceSelect(const Airspaces &airspace_database,
+                  ProtectedAirspaceWarningManager *_airspace_warnings)
 {
+  airspace_warnings = _airspace_warnings;
+
   PrepareAirspaceSelectDialog();
 
   GeoPoint Location = XCSoarInterface::Basic().location;

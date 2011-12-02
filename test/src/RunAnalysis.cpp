@@ -83,7 +83,13 @@ TaskFile::Create(const TCHAR* path)
 
 void dlgBasicSettingsShowModal() {}
 void dlgWindSettingsShowModal() {}
-void dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close) {}
+
+void
+dlgAirspaceWarningsShowModal(SingleWindow &parent,
+                             ProtectedAirspaceWarningManager &warnings,
+                             bool auto_close)
+{
+}
 
 void dlgTaskManagerShowModal(SingleWindow &parent) {}
 void ConditionMonitorsUpdate(const GlideComputer &cmp) {}
@@ -239,7 +245,10 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.show();
 
   dlgAnalysisShowModal(main_window, *look, blackboard, glide_computer,
-                       &protected_task_manager, &airspace_database, terrain);
+                       &protected_task_manager,
+                       &airspace_database,
+                       &airspace_warnings,
+                       terrain);
 
   delete look;
   Fonts::Deinitialize();

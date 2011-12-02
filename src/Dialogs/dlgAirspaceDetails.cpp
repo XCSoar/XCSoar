@@ -30,7 +30,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "MainWindow.hpp"
-#include "Components.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
 #include "Compiler.h"
@@ -38,6 +37,7 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
+static ProtectedAirspaceWarningManager *airspace_warnings;
 static const AbstractAirspace* airspace;
 static WndForm *wf = NULL;
 
@@ -132,9 +132,11 @@ SetValues(void)
 }
 
 void
-dlgAirspaceDetails(const AbstractAirspace& the_airspace)
+dlgAirspaceDetails(const AbstractAirspace& the_airspace,
+                   ProtectedAirspaceWarningManager *_airspace_warnings)
 {
   airspace = &the_airspace;
+  airspace_warnings = _airspace_warnings;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   _T("IDR_XML_AIRSPACEDETAILS"));

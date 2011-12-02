@@ -26,7 +26,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Components.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Airspace/AirspaceWarning.hpp"
@@ -63,6 +62,7 @@ struct WarningItem
 
 typedef TrivialArray<WarningItem, 64u> WarningList;
 
+static ProtectedAirspaceWarningManager *airspace_warnings;
 static WndForm *dialog = NULL;
 static WndButton *ack_warn_button = NULL;
 static WndButton *ack_day_button = NULL;
@@ -138,7 +138,7 @@ OnAirspaceListEnter(gcc_unused unsigned i)
        "focusing" an airspace by pressing enter */
     focused_airspace = selected_airspace;
   else if (selected_airspace != NULL)
-    dlgAirspaceDetails(*selected_airspace);
+    dlgAirspaceDetails(*selected_airspace, airspace_warnings);
 }
 
 static bool
@@ -484,13 +484,16 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgAirspaceWarningsShowModal(SingleWindow &parent, bool _auto_close)
+dlgAirspaceWarningsShowModal(SingleWindow &parent,
+                             ProtectedAirspaceWarningManager &_warnings,
+                             bool _auto_close)
 {
   if (dlgAirspaceWarningVisible())
     return;
 
-  assert(airspace_warnings != NULL);
   assert(warning_list.empty());
+
+  airspace_warnings = &_warnings;
 
   dialog = LoadDialog(CallBackTable, parent, _T("IDR_XML_AIRSPACEWARNINGS"));
   assert(dialog != NULL);

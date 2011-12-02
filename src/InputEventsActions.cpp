@@ -299,7 +299,10 @@ InputEvents::eventAnalysis(gcc_unused const TCHAR *misc)
                        CommonInterface::main_window.GetLook(),
                        CommonInterface::Full(),
                        *glide_computer,
-                       protected_task_manager, &airspace_database, terrain);
+                       protected_task_manager,
+                       &airspace_database,
+                       airspace_warnings,
+                       terrain);
 }
 
 // WaypointDetails
