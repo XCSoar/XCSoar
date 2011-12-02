@@ -116,22 +116,10 @@ Units::GetCoordinateFormat()
   return current.coordinate_format;
 }
 
-void
-Units::SetCoordinateFormat(CoordinateFormats format)
-{
-  current.coordinate_format = format;
-}
-
 Unit
 Units::GetUserDistanceUnit()
 {
   return current.distance_unit;
-}
-
-void
-Units::SetUserDistanceUnit(Unit unit)
-{
-  current.distance_unit = unit;
 }
 
 Unit
@@ -140,22 +128,10 @@ Units::GetUserAltitudeUnit()
   return current.altitude_unit;
 }
 
-void
-Units::SetUserAltitudeUnit(Unit unit)
-{
-  current.altitude_unit = unit;
-}
-
 Unit
 Units::GetUserTemperatureUnit()
 {
   return current.temperature_unit;
-}
-
-void
-Units::SetUserTemperatureUnit(Unit unit)
-{
-  current.temperature_unit = unit;
 }
 
 Unit
@@ -164,22 +140,10 @@ Units::GetUserSpeedUnit()
   return current.speed_unit;
 }
 
-void
-Units::SetUserSpeedUnit(Unit unit)
-{
-  current.speed_unit = unit;
-}
-
 Unit
 Units::GetUserTaskSpeedUnit()
 {
   return current.task_speed_unit;
-}
-
-void
-Units::SetUserTaskSpeedUnit(Unit unit)
-{
-  current.task_speed_unit = unit;
 }
 
 Unit
@@ -188,34 +152,16 @@ Units::GetUserVerticalSpeedUnit()
   return current.vertical_speed_unit;
 }
 
-void
-Units::SetUserVerticalSpeedUnit(Unit unit)
-{
-  current.vertical_speed_unit = unit;
-}
-
 Unit
 Units::GetUserWindSpeedUnit()
 {
   return current.wind_speed_unit;
 }
 
-void
-Units::SetUserWindSpeedUnit(Unit unit)
-{
-  current.wind_speed_unit = unit;
-}
-
 Unit
 Units::GetUserPressureUnit()
 {
   return current.pressure_unit;
-}
-
-void
-Units::SetUserPressureUnit(Unit unit)
-{
-  current.pressure_unit = unit;
 }
 
 Unit

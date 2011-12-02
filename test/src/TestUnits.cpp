@@ -27,23 +27,25 @@ int main(int argc, char **argv)
 {
   plan_tests(12);
 
-  Units::SetUserDistanceUnit(unMeter);
+  UnitSetting &config = Units::current;
+
+  config.distance_unit = unMeter;
   ok1(equals(Units::ToUserDistance(fixed_one), 1));
 
-  Units::SetUserDistanceUnit(unKiloMeter);
+  config.distance_unit = unKiloMeter;
   ok1(equals(Units::ToUserDistance(fixed_one), 0.001));
 
-  Units::SetUserTemperatureUnit(unKelvin);
+  config.temperature_unit = unKelvin;
   ok1(equals(Units::ToUserTemperature(fixed_zero), fixed_zero));
   ok1(equals(Units::ToSysTemperature(fixed_zero), fixed_zero));
 
-  Units::SetUserTemperatureUnit(unGradCelcius);
+  config.temperature_unit = unGradCelcius;
   ok1(equals(Units::ToUserTemperature(fixed_zero), -273.15));
   ok1(equals(Units::ToUserTemperature(fixed(20)), -253.15));
   ok1(equals(Units::ToSysTemperature(fixed_zero), 273.15));
   ok1(equals(Units::ToSysTemperature(fixed(20)), 293.15));
 
-  Units::SetUserTemperatureUnit(unGradFahrenheit);
+  config.temperature_unit = unGradFahrenheit;
   ok1(equals(Units::ToUserTemperature(fixed_zero), -459.67));
   ok1(equals(Units::ToSysTemperature(fixed_zero), 255.37));
 

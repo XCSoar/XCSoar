@@ -63,11 +63,6 @@ namespace Units
    */
   gcc_pure
   CoordinateFormats GetCoordinateFormat();
-  /**
-   * Sets the user-specified coordinate format
-   * @param NewUnit The new coordinate format
-   */
-  void SetCoordinateFormat(CoordinateFormats format);
 
   /**
    * Returns the user-specified unit for a horizontal distance
@@ -75,11 +70,6 @@ namespace Units
    */
   gcc_pure
   Unit GetUserDistanceUnit();
-  /**
-   * Sets the user-specified unit for a horizontal distance
-   * @param NewUnit The new unit
-   */
-  void SetUserDistanceUnit(Unit unit);
 
   /**
    * Returns the user-specified unit for an altitude
@@ -89,23 +79,11 @@ namespace Units
   Unit GetUserAltitudeUnit();
 
   /**
-   * Sets the user-specified unit for an altitude
-   * @param NewUnit The new unit
-   */
-  void SetUserAltitudeUnit(Unit unit);
-
-  /**
    * Returns the user-specified unit for a temperature
    * @return The user-specified unit for a temperature
    */
   gcc_pure
   Unit GetUserTemperatureUnit();
-
-  /**
-   * Sets the user-specified unit for a temperature
-   * @param NewUnit The new unit
-   */
-  void SetUserTemperatureUnit(Unit unit);
 
   /**
    * Returns the user-specified unit for a horizontal speed
@@ -115,23 +93,11 @@ namespace Units
   Unit GetUserSpeedUnit();
 
   /**
-   * Sets the user-specified unit for a horizontal speed
-   * @param NewUnit The new unit
-   */
-  void SetUserSpeedUnit(Unit unit);
-
-  /**
    * Returns the user-specified unit for a task speed
    * @return The user-specified unit for a task speed
    */
   gcc_pure
   Unit GetUserTaskSpeedUnit();
-
-  /**
-   * Sets the user-specified unit for a task speed
-   * @param NewUnit The new unit
-   */
-  void SetUserTaskSpeedUnit(Unit unit);
 
   /**
    * Returns the user-specified unit for a vertical speed
@@ -141,12 +107,6 @@ namespace Units
   Unit GetUserVerticalSpeedUnit();
 
   /**
-   * Sets the user-specified unit for a vertical speed
-   * @param NewUnit The new unit
-   */
-  void SetUserVerticalSpeedUnit(Unit unit);
-
-  /**
    * Returns the user-specified unit for a wind speed
    * @return The user-specified unit for a wind speed
    */
@@ -154,23 +114,11 @@ namespace Units
   Unit GetUserWindSpeedUnit();
 
   /**
-   * Sets the user-specified unit for a wind speed
-   * @param NewUnit The new unit
-   */
-  void SetUserWindSpeedUnit(Unit unit);
-
-  /**
    * Returns the user-specified unit for a pressure
    * @return The user-specified unit for a pressure
    */
   gcc_pure
   Unit GetUserPressureUnit();
-
-  /**
-   * Sets the user-specified unit for pressure
-   * @param unit The new unit
-   */
-  void SetUserPressureUnit(Unit unit);
 
   gcc_pure
   Unit GetUserUnitByGroup(UnitGroup group);
