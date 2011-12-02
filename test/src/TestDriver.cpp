@@ -27,6 +27,7 @@
 #include "Device/Driver/Condor.hpp"
 #include "Device/Driver/EW.hpp"
 #include "Device/Driver/EWMicroRecorder.hpp"
+#include "Device/Driver/FLARM.hpp"
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver/Flytec.hpp"
 #include "Device/Driver/Leonardo.hpp"
@@ -800,7 +801,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(395);
+  plan_tests(398);
 
   TestGeneric();
   TestTasman();
@@ -826,6 +827,7 @@ int main(int argc, char **argv)
   TestDeclare(pgDevice);
   TestDeclare(lxDevice);
   TestDeclare(imi_device_driver);
+  TestDeclare(flarm_device);
   //TestDeclare(vgaDevice);
 
   /* XXX Volkslogger doesn't do well with this test case */

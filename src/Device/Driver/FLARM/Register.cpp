@@ -31,5 +31,5 @@ FlarmCreateOnPort(const DeviceConfig &config, Port &com_port)
 }
 
 const struct DeviceRegister flarm_device = {
-  _T("FLARM"), _T("FLARM"), 0, FlarmCreateOnPort,
+  _T("FLARM"), _T("FLARM"), DeviceRegister::DECLARE, FlarmCreateOnPort,
 };

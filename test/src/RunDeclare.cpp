@@ -79,8 +79,6 @@ int main(int argc, char **argv)
       if (driver->CanDeclare())
         _ftprintf(stderr, _T("\t%s\n"), driver->name);
 
-    _ftprintf(stderr, _T("\tFLARM\n"));
-
     return EXIT_FAILURE;
   }
 
@@ -114,42 +112,33 @@ int main(int argc, char **argv)
   declaration.Append(MakeWaypoint(_T("Bergneustadt"), 488,
                                   7.7061111111111114, 51.051944444444445));
 
-  if (!strcmp(argv[1], "FLARM")) {
-    ConsoleOperationEnvironment env;
-    FlarmDevice flarm(port);
-    if (flarm.Declare(declaration, env))
-      fprintf(stderr, "Declaration ok\n");
-    else
-      fprintf(stderr, "Declaration failed\n");
-  } else {
-    const struct DeviceRegister *driver = FindDriverByName(driver_name);
-    if (driver == NULL) {
-      fprintf(stderr, "No such driver: %s\n", argv[1]);
-      return EXIT_FAILURE;
-    }
-
-    if (!driver->CanDeclare()) {
-      fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
-      return EXIT_FAILURE;
-    }
-
-    assert(driver->CreateOnPort != NULL);
-    Device *device = driver->CreateOnPort(config, port);
-    assert(device != NULL);
-
-    ConsoleOperationEnvironment env;
-    if (!device->Open(env)) {
-      fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
-      return EXIT_FAILURE;
-    }
-
-    if (device->Declare(declaration, env))
-      fprintf(stderr, "Declaration ok\n");
-    else
-      fprintf(stderr, "Declaration failed\n");
-
-    delete device;
+  const struct DeviceRegister *driver = FindDriverByName(driver_name);
+  if (driver == NULL) {
+    fprintf(stderr, "No such driver: %s\n", argv[1]);
+    return EXIT_FAILURE;
   }
+
+  if (!driver->CanDeclare()) {
+    fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
+    return EXIT_FAILURE;
+  }
+
+  assert(driver->CreateOnPort != NULL);
+  Device *device = driver->CreateOnPort(config, port);
+  assert(device != NULL);
+
+  ConsoleOperationEnvironment env;
+  if (!device->Open(env)) {
+    fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
+    return EXIT_FAILURE;
+  }
+
+  if (device->Declare(declaration, env))
+    fprintf(stderr, "Declaration ok\n");
+  else
+    fprintf(stderr, "Declaration failed\n");
+
+  delete device;
 
   return EXIT_SUCCESS;
 }

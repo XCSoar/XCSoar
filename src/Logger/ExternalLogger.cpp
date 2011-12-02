@@ -269,7 +269,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
   RecordedFlightList flight_list;
   if (!DoReadFlightList(device, flight_list)) {
     MessageBoxX(_("Failed to download flight list."),
-                _("Download flight"), MB_OK | MB_ICONINFORMATION);
+                _("Download flight"), MB_OK | MB_ICONERROR);
     return;
   }
 
@@ -292,7 +292,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     // Delete temporary file
     File::Delete(path);
     MessageBoxX(_("Failed to download flight."),
-                _("Download flight"), MB_OK | MB_ICONINFORMATION);
+                _("Download flight"), MB_OK | MB_ICONERROR);
     return;
   }
 
