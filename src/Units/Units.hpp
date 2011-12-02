@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_UNITS_HPP
 #define XCSOAR_UNITS_HPP
 
+#include "Units/Settings.hpp"
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
@@ -32,78 +33,11 @@ class Angle;
 
 #define DEG "°"
 
-enum CoordinateFormats {
-  CF_DDMMSS = 0,
-  CF_DDMMSS_SS,
-  CF_DDMM_MMM,
-  CF_DD_DDDD,
-};
-
-enum Unit {
-  unUndef,
-  unKiloMeter,
-  unNauticalMiles,
-  unStatuteMiles,
-  unKiloMeterPerHour,
-  unKnots,
-  unStatuteMilesPerHour,
-  unMeterPerSecond,
-  unFeetPerMinute,
-  unMeter,
-  unFeet,
-  unFlightLevel,
-  unKelvin,
-  unGradCelcius, // K = C° + 273,15
-  unGradFahrenheit, // K = (°F + 459,67) / 1,8
-  unHectoPascal,
-  unMilliBar,
-  unTorr,
-  unInchMercury,
-
-  /**
-   * The sentinel: the number of units in this enum.
-   */
-  unCount
-};
-
-enum UnitGroup
-{
-  ugNone,
-  ugDistance,
-  ugAltitude,
-  ugTemperature,
-  ugHorizontalSpeed,
-  ugVerticalSpeed,
-  ugWindSpeed,
-  ugTaskSpeed,
-  ugPressure,
-};
-
 struct UnitDescriptor
 {
   const TCHAR *name;
   fixed factor_to_user;
   fixed offset_to_user;
-};
-
-struct UnitSetting
-{
-  /** Unit for distances */
-  Unit distance_unit;
-  /** Unit for altitudes, heights */
-  Unit altitude_unit;
-  /** Unit for temperature */
-  Unit temperature_unit;
-  /** Unit for aircraft speeds */
-  Unit speed_unit;
-  /** Unit for vertical speeds, varios */
-  Unit vertical_speed_unit;
-  /** Unit for wind speeds */
-  Unit wind_speed_unit;
-  /** Unit for task speeds */
-  Unit task_speed_unit;
-  /** Unit for pressures */
-  Unit pressure_unit;
 };
 
 /**
