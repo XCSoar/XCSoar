@@ -33,29 +33,13 @@ class Angle;
 
 #define DEG "°"
 
-struct UnitDescriptor
-{
-  const TCHAR *name;
-  fixed factor_to_user;
-  fixed offset_to_user;
-};
-
 /**
  * Namespace to manage unit conversions.
  * internal system units are (metric SI).
  */
 namespace Units
 {
-  extern const UnitDescriptor unit_descriptors[];
-
   extern UnitSetting current;
-
-  /**
-   * Returns the name of the given Unit
-   * @return The name of the given Unit (e.g. "km" or "ft")
-   */
-  gcc_const
-  const TCHAR *GetUnitName(Unit unit);
 
   /**
    * Returns the user-specified coordinate format

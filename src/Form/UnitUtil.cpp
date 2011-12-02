@@ -26,6 +26,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "DataField/Float.hpp"
 #include "Units/Units.hpp"
+#include "Units/Descriptor.hpp"
 
 #include <assert.h>
 

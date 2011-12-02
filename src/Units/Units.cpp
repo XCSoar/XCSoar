@@ -26,36 +26,12 @@ Copyright_License {
 // - unit dialog support
 
 #include "Units/Units.hpp"
+#include "Units/Descriptor.hpp"
 #include "Math/Angle.hpp"
 
 #include <stdlib.h>
 #include <math.h>
 #include <tchar.h>
-
-//SI to Local Units
-
-const UnitDescriptor Units::unit_descriptors[] = {
-  { NULL, fixed_one, fixed_zero },
-  { _T("km"), fixed_constant(0.001, 0x41893LL), fixed_zero },
-  { _T("nm"), fixed_constant(0.000539956803, 0x2362fLL), fixed_zero },
-  { _T("sm"), fixed_constant(0.000621371192, 0x28b8eLL), fixed_zero },
-  { _T("km/h"), fixed_constant(3.6, 0x39999999LL), fixed_zero },
-  { _T("kt"), fixed_constant(1.94384449, 0x1f19fcaeLL), fixed_zero },
-  { _T("mph"), fixed_constant(2.23693629, 0x23ca7db5LL), fixed_zero },
-  { _T("m/s"), fixed_one, fixed_zero },
-  { _T("fpm"), fixed_constant(196.850394, 0xc4d9b36bdLL), fixed_zero },
-  { _T("m"), fixed_one, fixed_zero },
-  { _T("ft"), fixed_constant(3.2808399, 0x347e51faLL), fixed_zero },
-  { _T("FL"), fixed_constant(0.032808399, 0x866219LL), fixed_zero },
-  { _T("K"), fixed_one, fixed_zero },
-  { _T(DEG)_T("C"), fixed_one, fixed_constant(-273.15, -73323144806LL) },
-  { _T(DEG)_T("F"), fixed_constant(1.8, 0x1cccccccLL),
-    fixed_constant(-459.67, -123391726059LL) },
-  { _T("hPa"), fixed_one, fixed_zero },
-  { _T("mb"), fixed_one, fixed_zero },
-  { _T("mmHg"), fixed(0.7500616827041698), fixed_zero },
-  { _T("inHg"), fixed(0.0295287441401431), fixed_zero },
-};
 
 UnitSetting Units::current = {
   unKiloMeter,
@@ -102,12 +78,6 @@ Units::LatitudeToDMS(Angle latitude, int *dd, int *mm, int *ss, bool *north)
   value /= 60;
 
   *dd = value;
-}
-
-const TCHAR *
-Units::GetUnitName(Unit unit)
-{
-  return unit_descriptors[unit].name;
 }
 
 CoordinateFormats
