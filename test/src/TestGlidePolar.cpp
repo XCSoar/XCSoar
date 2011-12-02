@@ -21,9 +21,8 @@
 */
 
 #include "TestUtil.hpp"
-
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Units/Units.hpp"
+#include "Units/System.hpp"
 
 #include <cstdio>
 

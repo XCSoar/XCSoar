@@ -24,7 +24,7 @@
 #include "Waypoint/WaypointReaderBase.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Terrain/RasterMap.hpp"
-#include "Units/Units.hpp"
+#include "Units/System.hpp"
 #include "TestUtil.hpp"
 #include "tstring.hpp"
 #include "Operation.hpp"

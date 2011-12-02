@@ -32,7 +32,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "StringUtil.hpp"
 #include "Compatibility/string.h" /* for _ttoi() */
-#include "Units/Units.hpp"
+#include "Units/System.hpp"
 #include "OS/Clock.hpp"
 
 #include <math.h>

@@ -25,7 +25,6 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation.hpp"
-#include "Units/Units.hpp"
 #include "OS/ByteOrder.hpp"
 
 #include <tchar.h>

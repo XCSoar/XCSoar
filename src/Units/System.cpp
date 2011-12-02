@@ -21,53 +21,19 @@ Copyright_License {
 }
 */
 
-#include "Internal.hpp"
-#include "Protocol.hpp"
-#include "Device/Port/Port.hpp"
 #include "Units/System.hpp"
+#include "Units/Descriptor.hpp"
 
-#include <stdio.h>
-
-bool
-CAI302Device::Open(gcc_unused OperationEnvironment &env)
+fixed
+Units::ToUserUnit(fixed value, Unit unit)
 {
-  CAI302::LogModeQuick(port);
-
-  return true;
+  const UnitDescriptor *ud = &unit_descriptors[unit];
+  return value * ud->factor_to_user + ud->offset_to_user;
 }
 
-bool
-CAI302Device::PutMacCready(fixed MacCready)
+fixed
+Units::ToSysUnit(fixed value, Unit unit)
 {
-  unsigned mac_cready = uround(Units::ToUserUnit(MacCready * 10, unKnots));
-
-  char szTmp[32];
-  sprintf(szTmp, "!g,m%u\r", mac_cready);
-  port.Write(szTmp);
-
-  return true;
-}
-
-bool
-CAI302Device::PutBugs(fixed Bugs)
-{
-  unsigned bugs = uround(Bugs * 100);
-
-  char szTmp[32];
-  sprintf(szTmp, "!g,u%u\r", bugs);
-  port.Write(szTmp);
-
-  return true;
-}
-
-bool
-CAI302Device::PutBallast(fixed Ballast)
-{
-  unsigned ballast = uround(Ballast * 100);
-
-  char szTmp[32];
-  sprintf(szTmp, "!g,b%u\r", ballast);
-  port.Write(szTmp);
-
-  return true;
+  const UnitDescriptor *ud = &unit_descriptors[unit];
+  return (value - ud->offset_to_user) / ud->factor_to_user;
 }

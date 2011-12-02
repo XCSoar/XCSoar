@@ -21,53 +21,37 @@ Copyright_License {
 }
 */
 
-#include "Internal.hpp"
-#include "Protocol.hpp"
-#include "Device/Port/Port.hpp"
-#include "Units/System.hpp"
+#ifndef XCSOAR_UNITS_SYSTEM_HPP
+#define XCSOAR_UNITS_SYSTEM_HPP
 
-#include <stdio.h>
+#include "Units/Settings.hpp"
+#include "Math/fixed.hpp"
+#include "Compiler.h"
 
-bool
-CAI302Device::Open(gcc_unused OperationEnvironment &env)
+#include <tchar.h>
+class Angle;
+
+#define DEG "°"
+
+namespace Units
 {
-  CAI302::LogModeQuick(port);
+  /**
+   * Converts a value from the system unit to the user-specified unit
+   * @param value The value in system unit
+   * @param Unit The destination unit
+   * @return The value in user-specified unit
+   */
+  gcc_const
+  fixed ToUserUnit(fixed value, Unit unit);
 
-  return true;
-}
+  /**
+   * Converts a value from the user-specified unit to the system unit
+   * @param value The value in user-specified unit
+   * @param Unit The source unit
+   * @return The value in system unit
+   */
+  gcc_const
+  fixed ToSysUnit(fixed value, Unit unit);
+};
 
-bool
-CAI302Device::PutMacCready(fixed MacCready)
-{
-  unsigned mac_cready = uround(Units::ToUserUnit(MacCready * 10, unKnots));
-
-  char szTmp[32];
-  sprintf(szTmp, "!g,m%u\r", mac_cready);
-  port.Write(szTmp);
-
-  return true;
-}
-
-bool
-CAI302Device::PutBugs(fixed Bugs)
-{
-  unsigned bugs = uround(Bugs * 100);
-
-  char szTmp[32];
-  sprintf(szTmp, "!g,u%u\r", bugs);
-  port.Write(szTmp);
-
-  return true;
-}
-
-bool
-CAI302Device::PutBallast(fixed Ballast)
-{
-  unsigned ballast = uround(Ballast * 100);
-
-  char szTmp[32];
-  sprintf(szTmp, "!g,b%u\r", ballast);
-  port.Write(szTmp);
-
-  return true;
-}
+#endif

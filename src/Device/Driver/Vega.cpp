@@ -30,7 +30,6 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "LogFile.hpp"
 #include "NMEA/InputLine.hpp"
-#include "Units/Units.hpp"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
 

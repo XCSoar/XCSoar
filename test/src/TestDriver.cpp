@@ -52,7 +52,7 @@
 #include "FaultInjectionPort.hpp"
 #include "TestUtil.hpp"
 #include "Profile/DeviceConfig.hpp"
-#include "Units/Units.hpp"
+#include "Units/System.hpp"
 
 static const DeviceConfig dummy_config = DeviceConfig();
 

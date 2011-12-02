@@ -23,7 +23,7 @@
 #include "Weather/METARParser.hpp"
 #include "Weather/METAR.hpp"
 #include "Weather/ParsedMETAR.hpp"
-#include "Units/Units.hpp"
+#include "Units/System.hpp"
 #include "TestUtil.hpp"
 
 int

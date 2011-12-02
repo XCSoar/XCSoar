@@ -116,8 +116,8 @@ $(TARGET_BIN_DIR)/TestByteOrder2$(TARGET_EXEEXT): $(TEST_BYTE_ORDER2_OBJS) $(TES
 
 TEST_METAR_PARSER_SOURCES = \
 	$(SRC)/Weather/METARParser.cpp \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -130,8 +130,8 @@ $(TARGET_BIN_DIR)/TestMETARParser$(TARGET_EXEEXT): $(TEST_METAR_PARSER_OBJS) $(T
 
 TEST_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
@@ -178,8 +178,8 @@ $(TARGET_BIN_DIR)/TestProfile$(TARGET_EXEEXT): $(TEST_PROFILE_OBJS) $(TEST_PROFI
 
 TEST_PLANES_SOURCES = \
 	$(SRC)/Plane/PlaneFileGlue.cpp \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -410,6 +410,7 @@ $(TARGET_BIN_DIR)/TestProjection$(TARGET_EXEEXT): $(TEST_PROJECTION_OBJS) $(TEST
 TEST_UNITS_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestUnits.cpp
 TEST_UNITS_OBJS = $(call SRC_TO_OBJ,$(TEST_UNITS_SOURCES))
@@ -421,8 +422,8 @@ $(TARGET_BIN_DIR)/TestUnits$(TARGET_EXEEXT): $(TEST_UNITS_OBJS) $(TEST_UNITS_LDA
 TEST_POLARS_SOURCES = \
 	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Polar/Polar.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/PolarCoefficients.cpp \
 	$(SRC)/Polar/PolarFileGlue.cpp \
@@ -445,8 +446,8 @@ TEST_GLIDE_POLAR_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
 	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestGlidePolar.cpp
 TEST_GLIDE_POLAR_OBJS = $(call SRC_TO_OBJ,$(TEST_GLIDE_POLAR_SOURCES))
@@ -647,8 +648,8 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/Math/fixed.cpp \
 	$(SRC)/Math/Angle.cpp \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Util/StringUtil.cpp \
@@ -672,8 +673,8 @@ $(TARGET_BIN_DIR)/TestDriver$(TARGET_EXEEXT): $(TEST_DRIVER_OBJS) $(TEST_DRIVER_
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
 
 TEST_WAY_POINT_FILE_SOURCES = \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Util/UTF8.cpp \
@@ -807,8 +808,8 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceWarningConfig.cpp \
@@ -946,8 +947,8 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Weather/NOAAStore.cpp \
 	$(SRC)/Weather/METARParser.cpp \
 	$(SRC)/Engine/Atmosphere/Pressure.cpp \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Operation.cpp \
 	$(SRC)/Net/ToBuffer.cpp \
 	$(TEST_SRC_DIR)/ConsoleJobRunner.cpp \
@@ -1125,6 +1126,7 @@ LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
 	$(SRC)/Operation.cpp \
@@ -1228,8 +1230,8 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
@@ -1251,8 +1253,8 @@ $(TARGET_BIN_DIR)/RunWaypointParser$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS
 
 RUN_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
@@ -1323,8 +1325,8 @@ $(TARGET_BIN_DIR)/RunPortHandler$(TARGET_EXEEXT): $(RUN_PORT_HANDLER_OBJS) $(RUN
 RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/UtilsText.cpp \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Port/NullPort.cpp \
 	$(SRC)/Device/Driver.cpp \
@@ -1361,8 +1363,8 @@ $(TARGET_BIN_DIR)/RunDeviceDriver$(TARGET_EXEEXT): $(RUN_DEVICE_DRIVER_OBJS) $(R
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
 
 RUN_DECLARE_SOURCES = \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
@@ -1444,8 +1446,8 @@ $(TARGET_BIN_DIR)/RunFlarmUtils$(TARGET_EXEEXT): $(RUN_FLARM_UTILS_OBJS) $(RUN_F
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
 
 RUN_FLIGHT_LIST_SOURCES = \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
@@ -1491,8 +1493,8 @@ $(TARGET_BIN_DIR)/RunFlightList$(TARGET_EXEEXT): $(RUN_FLIGHT_LIST_OBJS) $(RUN_F
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
 
 RUN_DOWNLOAD_FLIGHT_SOURCES = \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
@@ -1793,6 +1795,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFile.cpp \
@@ -2083,6 +2086,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/LocalPath.cpp \
@@ -2220,6 +2224,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Dialogs/XML.cpp \

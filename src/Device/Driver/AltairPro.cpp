@@ -27,7 +27,7 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
-#include "Units/Units.hpp"
+#include "Units/System.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"

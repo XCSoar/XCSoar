@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_UNITS_HPP
 
 #include "Units/Settings.hpp"
+#include "Units/System.hpp"
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
@@ -127,24 +128,6 @@ namespace Units
 
   gcc_pure
   const TCHAR *GetPressureName();
-
-  /**
-   * Converts a value from the system unit to the user-specified unit
-   * @param value The value in system unit
-   * @param Unit The destination unit
-   * @return The value in user-specified unit
-   */
-  gcc_const
-  fixed ToUserUnit(fixed value, Unit unit);
-
-  /**
-   * Converts a value from the user-specified unit to the system unit
-   * @param value The value in user-specified unit
-   * @param Unit The source unit
-   * @return The value in system unit
-   */
-  gcc_const
-  fixed ToSysUnit(fixed value, Unit unit);
 
   static inline fixed
   ToUserAltitude(fixed value)

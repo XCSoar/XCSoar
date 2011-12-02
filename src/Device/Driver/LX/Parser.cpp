@@ -25,7 +25,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
-#include "Units/Units.hpp"
+#include "Units/System.hpp"
 
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)

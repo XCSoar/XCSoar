@@ -513,6 +513,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Units/UnitsStore.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/FLARM/FlarmDetails.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsSettings.cpp \
