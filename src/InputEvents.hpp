@@ -120,7 +120,6 @@ namespace InputEvents
   void eventChecklist(const TCHAR *misc);
   void eventClearAirspaceWarnings(const TCHAR *misc);
   void eventClearStatusMessages(const TCHAR *misc);
-  void eventClearWarningsOrTerrainTopology(const TCHAR *misc);
   void eventLogger(const TCHAR *misc);
   void eventMacCready(const TCHAR *misc);
   void eventMainMenu(const TCHAR *misc);

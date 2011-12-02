@@ -81,7 +81,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Logger/NMEALogger.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "DeviceBlackboard.hpp"
 #include "UtilsSettings.hpp"
 #include "Pages.hpp"
@@ -178,20 +177,6 @@ InputEvents::eventScreenModes(const TCHAR *misc)
 
 
   trigger_redraw();
-}
-
-// Do clear warnings IF NONE Toggle Terrain/Topography
-void
-InputEvents::eventClearWarningsOrTerrainTopology(gcc_unused const TCHAR *misc)
-{
-  if (airspace_warnings != NULL && !airspace_warnings->warning_empty()) {
-    airspace_warnings->clear_warnings();
-    return;
-  }
-  // Else toggle TerrainTopography - and show the results
-  sub_TerrainTopography(-1);
-  sub_TerrainTopography(0);
-  XCSoarInterface::SendSettingsMap(true);
 }
 
 // ClearStatusMessages
