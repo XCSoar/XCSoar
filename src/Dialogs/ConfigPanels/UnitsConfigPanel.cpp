@@ -52,6 +52,8 @@ static bool loading = false;
 static void
 UpdateUnitFields(const UnitSetting &units)
 {
+  LoadFormProperty(*wf, _T("prpUnitsLatLon"), units.coordinate_format);
+
   unsigned index;
   index = (units.speed_unit == unStatuteMilesPerHour) ? 0 :
           (units.speed_unit == unKnots) ? 1 : 2;
@@ -177,8 +179,6 @@ UnitsConfigPanel::Init(WndForm *_wf)
   };
 
   dfe->addEnumTexts(units_lat_lon);
-  dfe->Set(Units::GetCoordinateFormat());
-  wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsTaskSpeed"));
   assert(wp != NULL);
@@ -237,6 +237,7 @@ UnitsConfigPanel::Init(WndForm *_wf)
 bool
 UnitsConfigPanel::Save()
 {
+  UnitSetting &config = Units::current;
   bool changed = false;
 
   /* the Units settings affect how other form values are read and translated
@@ -250,25 +251,22 @@ UnitsConfigPanel::Save()
 
     switch (SpeedUnits) {
     case 0:
-      Units::SetUserSpeedUnit(unStatuteMilesPerHour);
-      Units::SetUserWindSpeedUnit(unStatuteMilesPerHour);
+      config.speed_unit = config.wind_speed_unit = unStatuteMilesPerHour;
       break;
     case 1:
-      Units::SetUserSpeedUnit(unKnots);
-      Units::SetUserWindSpeedUnit(unKnots);
+      config.speed_unit = config.wind_speed_unit = unKnots;
       break;
     case 2:
     default:
-      Units::SetUserSpeedUnit(unKiloMeterPerHour);
-      Units::SetUserWindSpeedUnit(unKiloMeterPerHour);
+      config.speed_unit = config.wind_speed_unit = unKiloMeterPerHour;
       break;
     }
   }
 
   tmp = GetFormValueInteger(*wf, _T("prpUnitsLatLon"));
-  if ((int)Units::GetCoordinateFormat() != tmp) {
-    Units::SetCoordinateFormat((CoordinateFormats)tmp);
-    Profile::Set(szProfileLatLonUnits, Units::GetCoordinateFormat());
+  if ((int)config.coordinate_format != tmp) {
+    config.coordinate_format = (CoordinateFormats)tmp;
+    Profile::Set(szProfileLatLonUnits, config.coordinate_format);
     changed = true;
   }
 
@@ -280,14 +278,14 @@ UnitsConfigPanel::Save()
 
     switch (TaskSpeedUnits) {
     case 0:
-      Units::SetUserTaskSpeedUnit(unStatuteMilesPerHour);
+      config.task_speed_unit = unStatuteMilesPerHour;
       break;
     case 1:
-      Units::SetUserTaskSpeedUnit(unKnots);
+      config.task_speed_unit = unKnots;
       break;
     case 2:
     default:
-      Units::SetUserTaskSpeedUnit(unKiloMeterPerHour);
+      config.task_speed_unit = unKiloMeterPerHour;
       break;
     }
   }
@@ -300,14 +298,14 @@ UnitsConfigPanel::Save()
 
     switch (DistanceUnits) {
     case 0:
-      Units::SetUserDistanceUnit(unStatuteMiles);
+      config.distance_unit = unStatuteMiles;
       break;
     case 1:
-      Units::SetUserDistanceUnit(unNauticalMiles);
+      config.distance_unit = unNauticalMiles;
       break;
     case 2:
     default:
-      Units::SetUserDistanceUnit(unKiloMeter);
+      config.distance_unit = unKiloMeter;
       break;
     }
   }
@@ -320,21 +318,21 @@ UnitsConfigPanel::Save()
 
     switch (LiftUnits) {
     case 0:
-      Units::SetUserVerticalSpeedUnit(unKnots);
+      config.vertical_speed_unit = unKnots;
       break;
     case 1:
     default:
-      Units::SetUserVerticalSpeedUnit(unMeterPerSecond);
+      config.vertical_speed_unit = unMeterPerSecond;
       break;
     case 2:
-      Units::SetUserVerticalSpeedUnit(unFeetPerMinute);
+      config.vertical_speed_unit = unFeetPerMinute;
       break;
     }
   }
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpUnitsPressure"),
-                              szProfilePressureUnitsValue,
-                              Units::current.pressure_unit);
+                                  szProfilePressureUnitsValue,
+                                  config.pressure_unit);
 
   tmp = GetFormValueInteger(*wf, _T("prpUnitsAltitude"));
   if ((int)AltitudeUnits != tmp) {
@@ -344,11 +342,11 @@ UnitsConfigPanel::Save()
 
     switch (AltitudeUnits) {
     case 0:
-      Units::SetUserAltitudeUnit(unFeet);
+      config.altitude_unit = unFeet;
       break;
     case 1:
     default:
-      Units::SetUserAltitudeUnit(unMeter);
+      config.altitude_unit = unMeter;
       break;
     }
   }
@@ -361,11 +359,11 @@ UnitsConfigPanel::Save()
 
     switch (TemperatureUnits) {
     case 0:
-      Units::SetUserTemperatureUnit(unGradCelcius);
+      config.temperature_unit = unGradCelcius;
       break;
     case 1:
     default:
-      Units::SetUserTemperatureUnit(unGradFahrenheit);
+      config.temperature_unit = unGradFahrenheit;
       break;
     }
   }
