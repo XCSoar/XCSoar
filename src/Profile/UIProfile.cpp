@@ -26,6 +26,7 @@ Copyright_License {
 #include "Profile/InfoBoxConfig.hpp"
 #include "Profile/PageProfile.hpp"
 #include "Profile/Profile.hpp"
+#include "Profile/UnitsConfig.hpp"
 #include "UISettings.hpp"
 
 namespace Profile {
@@ -66,6 +67,7 @@ Profile::Load(UISettings &settings)
 
   GetEnum(szProfileAppStatusMessageAlignment, settings.popup_message_position);
 
+  LoadUnits(settings.units);
   Load(settings.map);
   Load(settings.info_boxes);
   Load(settings.vario);

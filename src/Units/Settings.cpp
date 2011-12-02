@@ -23,6 +23,20 @@ Copyright_License {
 
 #include "Settings.hpp"
 
+void
+UnitSetting::SetDefaults()
+{
+  distance_unit = unKiloMeter;
+  altitude_unit = unMeter;
+  temperature_unit = unGradCelcius;
+  speed_unit = unKiloMeterPerHour;
+  vertical_speed_unit = unMeterPerSecond;
+  wind_speed_unit = unKiloMeterPerHour;
+  task_speed_unit = unKiloMeterPerHour;
+  pressure_unit = unHectoPascal;
+  coordinate_format = CF_DDMMSS;
+}
+
 Unit
 UnitSetting::GetByGroup(UnitGroup group) const
 {

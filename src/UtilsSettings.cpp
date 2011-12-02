@@ -52,6 +52,7 @@ Copyright_License {
 #include "Computer/GlideComputer.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Screen/Graphics.hpp"
+#include "Units/Units.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
@@ -183,6 +184,8 @@ SettingsLeave(const UISettings &old_ui_settings)
     devRestart();
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
+
+  Units::SetConfig(ui_settings.units);
 
   const SETTINGS_MAP &old_settings_map = old_ui_settings.map;
   const SETTINGS_MAP &settings_map = ui_settings.map;

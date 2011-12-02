@@ -38,6 +38,7 @@ UISettings::SetDefaults()
 
   popup_message_position = smAlignCenter;
 
+  units.SetDefaults();
   map.SetDefaults();
   info_boxes.SetDefaults();
   vario.SetDefaults();

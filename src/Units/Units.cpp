@@ -44,6 +44,12 @@ UnitSetting Units::current = {
   unHectoPascal,
 };
 
+void
+Units::SetConfig(const UnitSetting &new_config)
+{
+  current = new_config;
+}
+
 CoordinateFormats
 Units::GetCoordinateFormat()
 {

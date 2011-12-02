@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_UI_SETTINGS_HPP
 #define XCSOAR_UI_SETTINGS_HPP
 
+#include "Units/Settings.hpp"
 #include "SettingsMap.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Gauge/VarioSettings.hpp"
@@ -58,6 +59,7 @@ struct UISettings {
 
   StateMessageAlign_t popup_message_position;
 
+  UnitSetting units;
   SETTINGS_MAP map;
   InfoBoxSettings info_boxes;
   VarioSettings vario;

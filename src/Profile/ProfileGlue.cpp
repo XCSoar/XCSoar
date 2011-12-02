@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Profile/Profile.hpp"
-#include "Profile/UnitsConfig.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Profile/ComputerProfile.hpp"
 #include "Profile/UIProfile.hpp"
@@ -30,7 +29,6 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Interface.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-#include "Units/Units.hpp"
 
 void
 Profile::Use()
@@ -39,8 +37,6 @@ Profile::Use()
 
   Load(CommonInterface::SetSettingsComputer());
   Load(CommonInterface::SetUISettings());
-
-  LoadUnits(Units::current);
 
   GetEnum(szProfileAppDialogStyle, dialog_style_setting);
 }

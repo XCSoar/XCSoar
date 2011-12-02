@@ -31,14 +31,12 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Units/UnitsStore.hpp"
-#include "Units/UnitsFormatter.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Asset.hpp"
 #include "Language/Language.hpp"
-#include "Units/Units.hpp"
 
 static WndForm* wf = NULL;
 static unsigned SpeedUnits = 1; // default is knots
@@ -219,7 +217,7 @@ UnitsConfigPanel::Init(WndForm *_wf)
   dfe->addEnumText(_("ft/min"));
   wp->RefreshDisplay();
 
-  UpdateUnitFields(Units::current);
+  UpdateUnitFields(CommonInterface::GetUISettings().units);
 
   static gcc_constexpr_data StaticEnumChoice pressure_labels_list[] = {
     { unHectoPascal, N_("hPa") },
@@ -229,7 +227,7 @@ UnitsConfigPanel::Init(WndForm *_wf)
   };
 
   LoadFormProperty(*wf, _T("prpUnitsPressure"), pressure_labels_list,
-                   Units::current.pressure_unit);
+                   CommonInterface::GetUISettings().units.pressure_unit);
 
   loading = false;
 }
@@ -238,7 +236,7 @@ UnitsConfigPanel::Init(WndForm *_wf)
 bool
 UnitsConfigPanel::Save()
 {
-  UnitSetting &config = Units::current;
+  UnitSetting &config = CommonInterface::SetUISettings().units;
   bool changed = false;
 
   /* the Units settings affect how other form values are read and translated

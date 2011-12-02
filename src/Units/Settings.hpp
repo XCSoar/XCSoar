@@ -95,6 +95,8 @@ struct UnitSetting
   /** Unit for lat/lon */
   CoordinateFormats coordinate_format;
 
+  void SetDefaults();
+
   /**
    * Return the configured unit for a given group.
    */

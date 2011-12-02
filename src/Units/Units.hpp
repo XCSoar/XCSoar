@@ -42,6 +42,8 @@ namespace Units
 {
   extern UnitSetting current;
 
+  void SetConfig(const UnitSetting &new_config);
+
   /**
    * Returns the user-specified coordinate format
    * @return The user-specified coordinate format
