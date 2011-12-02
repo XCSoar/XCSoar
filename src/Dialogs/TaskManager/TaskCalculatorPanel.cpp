@@ -27,23 +27,20 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Interface.hpp"
-#include "Protection.hpp"
 #include "Units/Units.hpp"
 #include "DataField/Float.hpp"
-#include "Screen/SingleWindow.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
-#include "DeviceBlackboard.hpp"
 #include "Screen/Layout.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Button.hpp"
-#include "Form/TabBar.hpp"
+#include "Form/Util.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Icon.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/Look.hpp"
 #include "MainWindow.hpp"
 #include "Language/Language.hpp"
+
+class WndButton;
 
 /** XXX this hack is needed because the form callbacks don't get a
     context pointer - please refactor! */
@@ -61,69 +58,37 @@ TaskCalculatorPanel::Refresh()
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
-  WndProperty* wp;
+  ShowFormControl(form, _T("Target"), common_stats.ordered_has_targets);
 
-  // update outputs
-  wp = (WndProperty*)form.FindByName(_T("prpAATEst"));
-  if (wp) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat((
-        common_stats.task_time_remaining +
-        common_stats.task_time_elapsed) / 60);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(form, _T("prpAATEst"),
+                   (common_stats.task_time_remaining
+                    + common_stats.task_time_elapsed) / 60);
 
-  // update outputs
-  wp = (WndProperty*)form.FindByName(_T("prpAATTime"));
-  if (wp) {
-    if (task_stats.has_targets) {
-      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-      df.SetAsFloat(
-          protected_task_manager->GetOrderedTaskBehaviour().aat_min_time / 60);
-      wp->RefreshDisplay();
-    } else {
-      wp->hide();
-    }
+  if (task_stats.has_targets) {
+    LoadFormProperty(form, _T("prpAATTime"),
+                     protected_task_manager->GetOrderedTaskBehaviour().aat_min_time / 60);
+  } else {
+    ShowFormControl(form, _T("prpAATTime"), false);
   }
 
   fixed rPlanned = task_stats.total.solution_planned.IsDefined()
     ? task_stats.total.solution_planned.vector.distance
     : fixed_zero;
 
-  wp = (WndProperty*)form.FindByName(_T("prpDistance"));
-  if (wp != NULL && positive(rPlanned)) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(Units::ToUserDistance(rPlanned));
-    df.SetUnits(Units::GetDistanceName());
-    wp->RefreshDisplay();
-  }
+  if (positive(rPlanned))
+    LoadFormProperty(form, _T("prpDistance"), ugDistance, rPlanned);
 
-  wp = (WndProperty*)form.FindByName(_T("prpMacCready"));
-  if (wp) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetUnits(Units::GetVerticalSpeedName());
-    df.Set(Units::ToUserVSpeed(CommonInterface::SettingsComputer().glide_polar_task.GetMC()));
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(form, _T("prpMacCready"), ugVerticalSpeed,
+                   CommonInterface::SettingsComputer().glide_polar_task.GetMC());
+  LoadFormProperty(form, _T("prpEffectiveMacCready"), emc);
 
-  wp = (WndProperty*)form.FindByName(_T("prpEffectiveMacCready"));
-  if (wp) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetUnits(Units::GetVerticalSpeedName());
-    df.SetAsFloat(Units::ToUserVSpeed(emc));
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)form.FindByName(_T("prpRange"));
-  if (wp != NULL && positive(rPlanned)) {
-    wp->RefreshDisplay();
+  if (positive(rPlanned)) {
     fixed rMax = task_stats.distance_max;
     fixed rMin = task_stats.distance_min;
     fixed range = (fixed_two * (rPlanned - rMin) / (rMax - rMin)) - fixed_one;
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(range * fixed(100));
-    wp->RefreshDisplay();
+    LoadFormProperty(form, _T("prpRange"), range * 100);
   }
+
 /*
   fixed v1;
   if (XCSoarInterface::Calculated().TaskTimeToGo>0) {
@@ -134,32 +99,16 @@ TaskCalculatorPanel::Refresh()
   }
   */
 
-  if (task_stats.total.remaining_effective.IsDefined()) {
-    wp = (WndProperty*)form.FindByName(_T("prpSpeedRemaining"));
-    assert(wp != NULL);
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(Units::ToUserTaskSpeed(
-        task_stats.total.remaining_effective.get_speed()));
-    df.SetUnits(Units::GetTaskSpeedName());
-    wp->RefreshDisplay();
-  }
+  if (task_stats.total.remaining_effective.IsDefined())
+    LoadFormProperty(form, _T("prpSpeedRemaining"), ugTaskSpeed,
+                     task_stats.total.remaining_effective.get_speed());
 
-  if (task_stats.total.travelled.IsDefined()) {
-    wp = (WndProperty*)form.FindByName(_T("prpSpeedAchieved"));
-    assert(wp != NULL);
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(Units::ToUserTaskSpeed(
-        task_stats.total.travelled.get_speed()));
-    df.SetUnits(Units::GetTaskSpeedName());
-    wp->RefreshDisplay();
-  }
+  if (task_stats.total.travelled.IsDefined())
+    LoadFormProperty(form, _T("prpSpeedAchieved"), ugTaskSpeed,
+                     task_stats.total.travelled.get_speed());
 
-  wp = (WndProperty*)form.FindByName(_T("prpCruiseEfficiency"));
-  if (wp) {
-    DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
-    df->Set(task_stats.cruise_efficiency * fixed(100));
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(form, _T("prpCruiseEfficiency"),
+                   task_stats.cruise_efficiency * 100);
 }
 
 static void
@@ -269,9 +218,6 @@ TaskCalculatorPanel::Show(const PixelRect &rc)
 
   cruise_efficiency = polar.GetCruiseEfficiency();
   emc = XCSoarInterface::Calculated().task_stats.effective_mc;
-
-  if (!XCSoarInterface::Calculated().common_stats.ordered_has_targets)
-      ((WndButton *)form.FindByName(_T("prpRange")))->hide();
 
   wf.SetTimerNotify(OnTimerNotify);
 

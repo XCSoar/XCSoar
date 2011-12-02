@@ -30,6 +30,7 @@ Copyright_License {
 #include "DataField/Float.hpp"
 #include "MainWindow.hpp"
 #include "PeriodClock.hpp"
+#include "Form/Util.hpp"
 
 static WndForm *wf;
 
@@ -117,35 +118,14 @@ dlgVegaDemoShowModal()
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   _T("IDR_XML_VEGADEMO"));
 
-  WndProperty* wp;
-
   if (!wf) return;
 
   VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"));
   VarioWriteNMEA(_T("PDVSC,S,DemoMode,3"));
 
-  wp = (WndProperty*)wf->FindByName(_T("prpVegaDemoW"));
-  if (wp) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(Units::ToUserVSpeed(fixed(VegaDemoW)));
-    df.SetUnits(Units::GetVerticalSpeedName());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpVegaDemoV"));
-  if (wp) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(Units::ToUserVSpeed(fixed(VegaDemoV)));
-    df.SetUnits(Units::GetSpeedName());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpVegaDemoAudioClimb"));
-  if (wp) {
-    DataFieldBoolean *df = (DataFieldBoolean *)wp->GetDataField();
-    df->Set(VegaDemoAudioClimb);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpVegaDemoW"), ugVerticalSpeed, VegaDemoW);
+  LoadFormProperty(*wf, _T("prpVegaDemoV"), ugVerticalSpeed, VegaDemoV);
+  LoadFormProperty(*wf, _T("prpVegaDemoAudioClimb"), VegaDemoAudioClimb);
 
   wf->ShowModal();
 
