@@ -142,6 +142,10 @@ public:
    */
   AirspaceWarning* GetWarningPtr(const AbstractAirspace& airspace);
 
+  const AirspaceWarning *GetWarningPtr(const AbstractAirspace &airspace) const {
+    return const_cast<AirspaceWarningManager *>(this)->GetWarningPtr(airspace);
+  }
+
   /**
    * Test whether warning list is empty
    *
@@ -215,7 +219,8 @@ public:
    *
    * @param airspace The airspace subject
    */
-  bool GetAckDay(const AbstractAirspace& airspace);
+  gcc_pure
+  bool GetAckDay(const AbstractAirspace& airspace) const;
 
 private:
   bool UpdateTask(const AircraftState &state, const GlidePolar &glide_polar,

@@ -410,9 +410,9 @@ AirspaceWarningManager::AcknowledgeDay(const AbstractAirspace& airspace,
 }
 
 bool
-AirspaceWarningManager::GetAckDay(const AbstractAirspace& airspace)
+AirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const
 {
-  AirspaceWarning* warning = GetWarningPtr(airspace);
+  const AirspaceWarning *warning = GetWarningPtr(airspace);
   return (warning != NULL ? warning->GetAckDay() : false);
 }
 

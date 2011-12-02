@@ -52,9 +52,9 @@ ProtectedAirspaceWarningManager::warning_empty() const
 }
 
 bool
-ProtectedAirspaceWarningManager::get_ack_day(const AbstractAirspace& airspace)
+ProtectedAirspaceWarningManager::get_ack_day(const AbstractAirspace& airspace) const
 {
-  ExclusiveLease lease(*this);
+  Lease lease(*this);
   return lease->GetAckDay(airspace);
 }
 

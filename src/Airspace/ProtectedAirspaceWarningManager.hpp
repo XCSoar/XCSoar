@@ -24,6 +24,7 @@
 #define XCSOAR_PROTECTED_AIRSPACE_WARNING_MANAGER_HPP
 
 #include "Thread/Guard.hpp"
+#include "Compiler.h"
 
 struct AircraftState;
 class AirspaceWarningManager;
@@ -40,7 +41,9 @@ public:
   void reset(const AircraftState& as);
   void clear_warnings();
 
-  bool get_ack_day(const AbstractAirspace& airspace);
+  gcc_pure
+  bool get_ack_day(const AbstractAirspace& airspace) const;
+
   void acknowledge_day(const AbstractAirspace& airspace,
                        const bool set=true);
   void acknowledge_warning(const AbstractAirspace& airspace,
@@ -48,6 +51,7 @@ public:
   void acknowledge_inside(const AbstractAirspace& airspace,
                           const bool set=true);
 
+  gcc_pure
   bool warning_empty() const;
 
   void reset_warning(const AircraftState& as);
