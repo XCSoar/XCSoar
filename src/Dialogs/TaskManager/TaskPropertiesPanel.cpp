@@ -30,6 +30,7 @@ Copyright_License {
 #include "DataField/Float.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
+#include "Units/Units.hpp"
 
 #include <assert.h>
 #include <stdio.h>

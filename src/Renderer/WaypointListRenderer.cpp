@@ -30,6 +30,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Navigation/Geometry/GeoVector.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/Units.hpp"
 #include "Language/Language.hpp"
 #include "SettingsMap.hpp"
 #include "Util/StaticString.hpp"

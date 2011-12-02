@@ -30,6 +30,7 @@ Copyright_License {
 #include "DataField/Float.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Units/Units.hpp"
 
 static WndForm* wf = NULL;
 

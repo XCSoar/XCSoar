@@ -51,6 +51,7 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "Language/Language.hpp"
 #include "Plane/PlaneGlue.hpp"
+#include "Units/Units.hpp"
 
 #include <cstdio>
 #include <windef.h> /* for MAX_PATH */

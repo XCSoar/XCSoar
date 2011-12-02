@@ -38,6 +38,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Asset.hpp"
 #include "Language/Language.hpp"
+#include "Units/Units.hpp"
 
 static WndForm* wf = NULL;
 static unsigned SpeedUnits = 1; // default is knots

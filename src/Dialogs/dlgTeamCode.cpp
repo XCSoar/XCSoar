@@ -37,6 +37,7 @@
 #include "Compiler.h"
 #include "Profile/Profile.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
+#include "Units/Units.hpp"
 
 #include <stdio.h>
 

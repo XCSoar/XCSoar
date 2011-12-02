@@ -27,6 +27,7 @@
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/Units.hpp"
 #include "Math/Screen.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Graphics.hpp"

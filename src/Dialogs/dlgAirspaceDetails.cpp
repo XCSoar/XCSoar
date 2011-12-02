@@ -31,6 +31,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "MainWindow.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
+#include "Units/Units.hpp"
 
 #include "Compiler.h"
 

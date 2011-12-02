@@ -53,6 +53,7 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/Units.hpp"
 
 #include <assert.h>
 #include <stdio.h>

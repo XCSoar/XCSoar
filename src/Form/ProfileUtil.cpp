@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Form/Util.hpp"
 #include "Profile/Profile.hpp"
+#include "Units/Units.hpp"
 #include "Math/FastMath.h"
 
 #include <assert.h>

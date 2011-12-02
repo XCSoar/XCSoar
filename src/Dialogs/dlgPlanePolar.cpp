@@ -34,6 +34,7 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "LocalPath.hpp"
 #include "MainWindow.hpp"
+#include "Units/Units.hpp"
 
 #include <cstdio>
 

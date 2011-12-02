@@ -42,6 +42,7 @@
 #include "MainWindow.hpp"
 #include "Components.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/Units.hpp"
 #include "Util/StringUtil.hpp"
 #include "Language/Language.hpp"
 #include "Compiler.h"

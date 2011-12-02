@@ -36,6 +36,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/Units.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Wind/WindStore.hpp"
 #include "Language/Language.hpp"

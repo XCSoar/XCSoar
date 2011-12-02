@@ -45,6 +45,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "Util/Macros.hpp"
 #include "Renderer/WaypointListRenderer.hpp"
+#include "Units/Units.hpp"
 
 #include <algorithm>
 #include <list>

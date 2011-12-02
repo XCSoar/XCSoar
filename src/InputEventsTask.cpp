@@ -30,6 +30,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Protection.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/Units.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "LocalPath.hpp"

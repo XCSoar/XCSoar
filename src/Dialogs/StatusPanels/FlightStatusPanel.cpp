@@ -27,6 +27,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/Units.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 
 void

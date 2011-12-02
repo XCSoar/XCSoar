@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Units/UnitsFormatter.hpp"
+#include "Units/Units.hpp"
 #include "Math/Angle.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "DateTime.hpp"

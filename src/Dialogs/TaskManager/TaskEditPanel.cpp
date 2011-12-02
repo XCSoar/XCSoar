@@ -40,6 +40,7 @@ Copyright_License {
 #include "Form/TabBar.hpp"
 #include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/Units.hpp"
 #include "Renderer/WaypointIconRenderer.hpp"
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"

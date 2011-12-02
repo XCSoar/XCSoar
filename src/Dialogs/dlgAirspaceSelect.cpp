@@ -37,6 +37,7 @@ Copyright_License {
 #include "Screen/Busy.hpp"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
+#include "Units/Units.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
