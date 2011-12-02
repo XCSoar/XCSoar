@@ -443,7 +443,8 @@ XCSoarInterface::Startup()
     map_window->SetTask(protected_task_manager);
     map_window->SetRoutePlanner(&glide_computer->GetProtectedRoutePlanner());
     map_window->SetGlideComputer(glide_computer);
-    map_window->SetAirspaces(&airspace_database, airspace_warnings);
+    map_window->SetAirspaces(&airspace_database);
+    map_window->SetAirspaceWarnings(airspace_warnings);
 
     map_window->SetTopography(topography);
     map_window->SetTerrain(terrain);

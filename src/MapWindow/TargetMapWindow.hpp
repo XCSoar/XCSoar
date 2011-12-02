@@ -100,7 +100,7 @@ public:
   void SetTopograpgy(TopographyStore *topography);
 
   void SetAirspaces(Airspaces *airspace_database) {
-    airspace_renderer.SetAirspaces(airspace_database, NULL);
+    airspace_renderer.SetAirspaces(airspace_database);
   }
 
   void SetWaypoints(const Waypoints *way_points) {

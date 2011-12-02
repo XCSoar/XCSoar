@@ -201,9 +201,12 @@ public:
     glide_computer = _gc;
   }
 
-  void SetAirspaces(Airspaces *_airspace_database,
-                    ProtectedAirspaceWarningManager *_airspace_warnings) {
-    airspace_renderer.SetAirspaces(_airspace_database, _airspace_warnings);
+  void SetAirspaces(Airspaces *airspaces) {
+    airspace_renderer.SetAirspaces(airspaces);
+  }
+
+  void SetAirspaceWarnings(const ProtectedAirspaceWarningManager *airspace_warnings) {
+    airspace_renderer.SetAirspaceWarnings(airspace_warnings);
   }
 
   void SetTopography(TopographyStore *_topography);

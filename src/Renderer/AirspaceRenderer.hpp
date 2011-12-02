@@ -64,10 +64,17 @@ public:
     return airspace_warnings;
   }
 
-  void SetAirspaces(const Airspaces *_airspace_database,
-                    const ProtectedAirspaceWarningManager *_airspace_warnings) {
+  void SetAirspaces(const Airspaces *_airspace_database) {
     airspace_database = _airspace_database;
+  }
+
+  void SetAirspaceWarnings(const ProtectedAirspaceWarningManager *_airspace_warnings) {
     airspace_warnings = _airspace_warnings;
+  }
+
+  void Clear() {
+    airspace_database = NULL;
+    airspace_warnings = NULL;
   }
 
   void Draw(Canvas &canvas,
