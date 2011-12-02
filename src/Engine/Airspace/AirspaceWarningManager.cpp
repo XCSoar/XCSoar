@@ -25,7 +25,6 @@
 #include "AirspaceCircle.hpp"
 #include "AirspacePolygon.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
-#include "AirspaceWarningVisitor.hpp"
 #include "Task/TaskStats/TaskStats.hpp"
 #include "Predicate/AirspacePredicateAircraftInside.hpp"
 
@@ -388,15 +387,6 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
 
   return found;
 }
-
-
-void
-AirspaceWarningManager::VisitWarnings(AirspaceWarningVisitor& visitor) const
-{
-  for (auto it = warnings.begin(), end = warnings.end(); it != end; ++it)
-    visitor.Visit(*it);
-}
-
 
 void 
 AirspaceWarningManager::AcknowledgeWarning(const AbstractAirspace& airspace,

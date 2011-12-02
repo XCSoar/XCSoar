@@ -337,44 +337,31 @@ void scan_airspaces(const AircraftState state,
   }
 }
 
-
-
-#include "Airspace/AirspaceWarningVisitor.hpp"
-
-class AirspaceWarningPrint: public AirspaceWarningVisitor
+static void
+PrintAirspaceWarnings(const char *path,
+                      const AirspaceWarningManager &warnings,
+                      const AirspaceWarning::State state)
 {
-public:
-  AirspaceWarningPrint(const char* fname,
-                       const AirspaceWarning::State state):m_state(state) {
-    fout = new std::ofstream(fname);
-  }
-  ~AirspaceWarningPrint() {
-    delete fout;
-  }
-  virtual void Visit(const AirspaceWarning& as) {
-    if (as.GetWarningState() == m_state) {
-    *fout << as;
-    *fout << as.GetAirspace();
+  std::ofstream fout(path);
+
+  for (auto i = warnings.begin(), end = warnings.end(); i != end; ++i) {
+    const AirspaceWarning &warning = *i;
+    if (warning.GetWarningState() == state) {
+      fout << warning;
+      fout << warning.GetAirspace();
     }
   }
-private:
-  std::ofstream *fout;
-  AirspaceWarning::State m_state;
-};
+}
 
 void
 print_warnings(const AirspaceWarningManager &airspace_warnings)
 {
-  AirspaceWarningPrint visitor_inside("results/res-as-warnings-inside.txt",
-                                      AirspaceWarning::WARNING_INSIDE);
-  AirspaceWarningPrint visitor_glide("results/res-as-warnings-glide.txt",
-                                     AirspaceWarning::WARNING_GLIDE);
-  AirspaceWarningPrint visitor_filter("results/res-as-warnings-filter.txt",
-                                      AirspaceWarning::WARNING_FILTER);
-  AirspaceWarningPrint visitor_task("results/res-as-warnings-task.txt",
-                                    AirspaceWarning::WARNING_TASK);
-  airspace_warnings.VisitWarnings(visitor_inside);
-  airspace_warnings.VisitWarnings(visitor_glide);
-  airspace_warnings.VisitWarnings(visitor_filter);
-  airspace_warnings.VisitWarnings(visitor_task);
+  PrintAirspaceWarnings("results/res-as-warnings-inside.txt",
+                        airspace_warnings, AirspaceWarning::WARNING_INSIDE);
+  PrintAirspaceWarnings("results/res-as-warnings-glide.txt",
+                        airspace_warnings, AirspaceWarning::WARNING_GLIDE);
+  PrintAirspaceWarnings("results/res-as-warnings-filter.txt",
+                        airspace_warnings, AirspaceWarning::WARNING_FILTER);
+  PrintAirspaceWarnings("results/res-as-warnings-task.txt",
+                        airspace_warnings, AirspaceWarning::WARNING_TASK);
 }

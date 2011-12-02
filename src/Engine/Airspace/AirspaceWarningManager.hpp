@@ -33,7 +33,6 @@
 class TaskStats;
 class GlidePolar;
 class Airspaces;
-class AirspaceWarningVisitor;
 
 /**
  * Class to detect and track airspace warnings
@@ -183,13 +182,6 @@ public:
   const_iterator end() const {
     return warnings.end();
   }
-
-  /**
-   * Visit each warnings in the store
-   *
-   * @param visitor Visitor for warnings
-   */
-  void VisitWarnings(AirspaceWarningVisitor& visitor) const;
 
   /**
    * Acknowledge an airspace warning
