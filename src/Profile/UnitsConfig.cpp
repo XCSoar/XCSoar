@@ -185,23 +185,16 @@ void
 Profile::LoadUnits()
 {
   UnitSetting &config = Units::current;
-
-  bool found = false;
+  config = Units::LoadFromOSLanguage();
 
   GetEnum(szProfileLatLonUnits, config.coordinate_format);
 
-  found |= GetSpeedUnit(szProfileSpeedUnitsValue, config.speed_unit);
-  found |= GetSpeedUnit(szProfileSpeedUnitsValue, config.wind_speed_unit);
-  found |= GetSpeedUnit(szProfileTaskSpeedUnitsValue, config.task_speed_unit);
-  found |= GetDistanceUnit(szProfileDistanceUnitsValue, config.distance_unit);
-  found |= GetAltitudeUnit(szProfileAltitudeUnitsValue, config.altitude_unit);
-  found |= GetTemperatureUnit(szProfileTemperatureUnitsValue,
-                              config.temperature_unit);
-  found |= GetVerticalSpeedUnit(szProfileLiftUnitsValue,
-                                config.vertical_speed_unit);
-  found |= GetPressureUnit(szProfilePressureUnitsValue,
-                           config.pressure_unit);
-
-  if (!found)
-    config = Units::LoadFromOSLanguage();
+  GetSpeedUnit(szProfileSpeedUnitsValue, config.speed_unit);
+  GetSpeedUnit(szProfileSpeedUnitsValue, config.wind_speed_unit);
+  GetSpeedUnit(szProfileTaskSpeedUnitsValue, config.task_speed_unit);
+  GetDistanceUnit(szProfileDistanceUnitsValue, config.distance_unit);
+  GetAltitudeUnit(szProfileAltitudeUnitsValue, config.altitude_unit);
+  GetTemperatureUnit(szProfileTemperatureUnitsValue, config.temperature_unit);
+  GetVerticalSpeedUnit(szProfileLiftUnitsValue, config.vertical_speed_unit);
+  GetPressureUnit(szProfilePressureUnitsValue, config.pressure_unit);
 }
