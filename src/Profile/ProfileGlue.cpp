@@ -30,6 +30,7 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Interface.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "Units/Units.hpp"
 
 void
 Profile::Use()
@@ -39,7 +40,7 @@ Profile::Use()
   Load(CommonInterface::SetSettingsComputer());
   Load(CommonInterface::SetUISettings());
 
-  LoadUnits();
+  LoadUnits(Units::current);
 
   /* JMW broken
   if (Get(szProfileAccelerometerZero, Temp))

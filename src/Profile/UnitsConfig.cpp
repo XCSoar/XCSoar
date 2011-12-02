@@ -22,9 +22,8 @@ Copyright_License {
 */
 
 #include "Profile/UnitsConfig.hpp"
-
 #include "Profile/Profile.hpp"
-#include "Units/Units.hpp"
+#include "Units/Settings.hpp"
 #include "Units/UnitsGlue.hpp"
 
 static bool
@@ -182,9 +181,8 @@ GetPressureUnit(const TCHAR *key, Unit &value)
 }
 
 void
-Profile::LoadUnits()
+Profile::LoadUnits(UnitSetting &config)
 {
-  UnitSetting &config = Units::current;
   config = Units::LoadFromOSLanguage();
 
   GetEnum(szProfileLatLonUnits, config.coordinate_format);

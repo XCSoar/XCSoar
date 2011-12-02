@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_UNITS_CONFIG_HPP
 #define XCSOAR_PROFILE_UNITS_CONFIG_HPP
 
+struct UnitSetting;
+
 namespace Profile
 {
-  void LoadUnits();
+  void LoadUnits(UnitSetting &config);
 };
 
 #endif
