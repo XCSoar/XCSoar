@@ -27,100 +27,180 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Units/UnitsGlue.hpp"
 
+static bool
+ApplyUnit(Unit &value, Unit new_value)
+{
+  if (new_value == unUndef)
+    return false;
+
+  value = new_value;
+  return true;
+}
+
+gcc_const
+static Unit
+ImportSpeedUnit(unsigned tmp)
+{
+  switch (tmp) {
+  case 0:
+    return unStatuteMilesPerHour;
+
+  case 1:
+    return unKnots;
+
+  case 2:
+    return unKiloMeterPerHour;
+
+  default:
+    return unUndef;
+  }
+}
+
+static bool
+GetSpeedUnit(const TCHAR *key, Unit &value)
+{
+  unsigned tmp;
+  return Profile::Get(key, tmp) && ApplyUnit(value, ImportSpeedUnit(tmp));
+}
+
+gcc_const
+static Unit
+ImportVerticalSpeedUnit(unsigned tmp)
+{
+  switch (tmp) {
+  case 0:
+    return unKnots;
+
+  case 1:
+    return unFeetPerMinute;
+
+  case 2:
+    return unMeterPerSecond;
+
+  default:
+    return unUndef;
+  }
+}
+
+static bool
+GetVerticalSpeedUnit(const TCHAR *key, Unit &value)
+{
+  unsigned tmp;
+  return Profile::Get(key, tmp) && ApplyUnit(value, ImportVerticalSpeedUnit(tmp));
+}
+
+gcc_const
+static Unit
+ImportDistanceUnit(unsigned tmp)
+{
+  switch (tmp) {
+  case 0:
+    return unStatuteMiles;
+
+  case 1:
+    return unNauticalMiles;
+
+  case 2:
+    return unKiloMeter;
+
+  default:
+    return unUndef;
+  }
+}
+
+static bool
+GetDistanceUnit(const TCHAR *key, Unit &value)
+{
+  unsigned tmp;
+  return Profile::Get(key, tmp) && ApplyUnit(value, ImportDistanceUnit(tmp));
+}
+
+gcc_const
+static Unit
+ImportAltitudeUnit(unsigned tmp)
+{
+  switch (tmp) {
+  case 0:
+    return unFeet;
+
+  case 1:
+    return unMeter;
+
+  default:
+    return unUndef;
+  }
+}
+
+static bool
+GetAltitudeUnit(const TCHAR *key, Unit &value)
+{
+  unsigned tmp;
+  return Profile::Get(key, tmp) && ApplyUnit(value, ImportAltitudeUnit(tmp));
+}
+
+gcc_const
+static Unit
+ImportTemperatureUnit(unsigned tmp)
+{
+  switch (tmp) {
+  case 0:
+    return unGradCelcius;
+
+  case 1:
+    return unGradFahrenheit;
+
+  default:
+    return unUndef;
+  }
+}
+
+static bool
+GetTemperatureUnit(const TCHAR *key, Unit &value)
+{
+  unsigned tmp;
+  return Profile::Get(key, tmp) &&
+    ApplyUnit(value, ImportTemperatureUnit(tmp));
+}
+
+gcc_const
+static bool
+ValidPressureUnit(Unit unit)
+{
+  return unit == unHectoPascal || unit == unMilliBar ||
+    unit == unTorr || unit == unInchMercury;
+}
+
+static bool
+GetPressureUnit(const TCHAR *key, Unit &value)
+{
+  Unit tmp;
+  if (!Profile::GetEnum(key, tmp) || !ValidPressureUnit(tmp))
+    return false;
+
+  value = tmp;
+  return true;
+}
+
 void
 Profile::LoadUnits()
 {
   UnitSetting &config = Units::current;
 
   bool found = false;
-  unsigned Lift = 0;
-  unsigned Altitude = 0;
-  unsigned Temperature = 0;
 
   GetEnum(szProfileLatLonUnits, config.coordinate_format);
 
-  unsigned Speed = 1;
-  found |= Get(szProfileSpeedUnitsValue, Speed);
-  switch (Speed) {
-  case 0:
-    config.speed_unit = config.wind_speed_unit = unStatuteMilesPerHour;
-    break;
-  case 1:
-    config.speed_unit = config.wind_speed_unit = unKnots;
-    break;
-  case 2:
-  default:
-    config.speed_unit = config.wind_speed_unit = unKiloMeterPerHour;
-    break;
-  }
-
-  unsigned TaskSpeed = 2;
-  found |= Get(szProfileTaskSpeedUnitsValue, TaskSpeed);
-  switch (TaskSpeed) {
-  case 0:
-    config.task_speed_unit = unStatuteMilesPerHour;
-    break;
-  case 1:
-    config.task_speed_unit = unKnots;
-    break;
-  case 2:
-  default:
-    config.task_speed_unit = unKiloMeterPerHour;
-    break;
-  }
-
-  unsigned Distance = 2;
-  found |= Get(szProfileDistanceUnitsValue,Distance);
-  switch (Distance) {
-  case 0:
-    config.distance_unit = unStatuteMiles;
-    break;
-  case 1:
-    config.distance_unit = unNauticalMiles;
-    break;
-  case 2:
-  default:
-    config.distance_unit = unKiloMeter;
-    break;
-  }
-
-  found |= Get(szProfileAltitudeUnitsValue, Altitude);
-  switch (Altitude) {
-  case 0:
-    config.altitude_unit = unFeet;
-    break;
-  case 1:
-  default:
-    config.altitude_unit = unMeter;
-    break;
-  }
-
-  found |= Get(szProfileTemperatureUnitsValue, Temperature);
-  switch (Temperature) {
-  default:
-  case 0:
-    config.temperature_unit = unGradCelcius;
-    break;
-  case 1:
-    config.temperature_unit = unGradFahrenheit;
-    break;
-  }
-
-  found |= Get(szProfileLiftUnitsValue, Lift);
-  switch (Lift) {
-  case 0:
-    config.vertical_speed_unit = unKnots;
-    break;
-  case 2:
-    config.vertical_speed_unit = unFeetPerMinute;
-    break;
-  case 1:
-  default:
-    config.vertical_speed_unit = unMeterPerSecond;
-    break;
-  }
-
-  found |= GetEnum(szProfilePressureUnitsValue, Units::current.pressure_unit);
+  found |= GetSpeedUnit(szProfileSpeedUnitsValue, config.speed_unit);
+  found |= GetSpeedUnit(szProfileSpeedUnitsValue, config.wind_speed_unit);
+  found |= GetSpeedUnit(szProfileTaskSpeedUnitsValue, config.task_speed_unit);
+  found |= GetDistanceUnit(szProfileDistanceUnitsValue, config.distance_unit);
+  found |= GetAltitudeUnit(szProfileAltitudeUnitsValue, config.altitude_unit);
+  found |= GetTemperatureUnit(szProfileTemperatureUnitsValue,
+                              config.temperature_unit);
+  found |= GetVerticalSpeedUnit(szProfileLiftUnitsValue,
+                                config.vertical_speed_unit);
+  found |= GetPressureUnit(szProfilePressureUnitsValue,
+                           config.pressure_unit);
 
   if (!found)
     config = Units::LoadFromOSLanguage();
