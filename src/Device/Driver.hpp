@@ -169,6 +169,23 @@ public:
                        OperationEnvironment &env) = 0;
 
   /**
+   * Set the device into download mode.
+   * Should be done before a downloading operation is started
+   * (e.g. ReadFlightList() or DownloadFlight()).
+   * are called.
+   * @return true on success
+   */
+  virtual bool EnableDownloadMode() = 0;
+
+  /**
+   * Leave the download mode.
+   * Should be done after all downloading operations are finished
+   * (e.g. ReadFlightList() or DownloadFlight()).
+   * @return true on success
+   */
+  virtual bool DisableDownloadMode() = 0;
+
+  /**
    * Read the list of recorded flights.
    *
    * @param flight_list the flights will be appended to this list
@@ -218,6 +235,14 @@ public:
 
   virtual bool Declare(const struct Declaration &declaration,
                        OperationEnvironment &env);
+
+  virtual bool EnableDownloadMode() {
+    return true;
+  }
+
+  virtual bool DisableDownloadMode() {
+    return true;
+  }
 
   virtual bool ReadFlightList(RecordedFlightList &flight_list,
                               OperationEnvironment &env) {
