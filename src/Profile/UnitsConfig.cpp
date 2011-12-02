@@ -126,5 +126,5 @@ Profile::LoadUnits()
   found |= GetEnum(szProfilePressureUnitsValue, Units::current.pressure_unit);
 
   if (!found)
-    Units::LoadFromOSLanguage();
+    Units::current = Units::LoadFromOSLanguage();
 }

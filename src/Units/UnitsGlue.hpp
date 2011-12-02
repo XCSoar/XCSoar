@@ -24,9 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_UNITS_GLUE_HPP
 #define XCSOAR_UNITS_GLUE_HPP
 
+#include "Compiler.h"
+
+struct UnitSetting;
+
 namespace Units
 {
-  void LoadFromOSLanguage();
+  gcc_const
+  const UnitSetting &LoadFromOSLanguage();
 }
 
 #endif

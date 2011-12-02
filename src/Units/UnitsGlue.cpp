@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Units/UnitsGlue.hpp"
-#include "Units/Units.hpp"
+#include "Units/Settings.hpp"
 #include "Units/UnitsStore.hpp"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
@@ -185,10 +185,10 @@ AutoDetect()
 #endif
 }
 
-void
+const UnitSetting &
 Units::LoadFromOSLanguage()
 {
   unsigned index = AutoDetect();
   Profile::Set(szProfileUnitsPresetName, Units::Store::GetName(index));
-  Units::current = Units::Store::Read(index);
+  return Units::Store::Read(index);
 }
