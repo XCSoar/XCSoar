@@ -71,10 +71,10 @@ ImportVerticalSpeedUnit(unsigned tmp)
     return unKnots;
 
   case 1:
-    return unFeetPerMinute;
+    return unMeterPerSecond;
 
   case 2:
-    return unMeterPerSecond;
+    return unFeetPerMinute;
 
   default:
     return unUndef;
