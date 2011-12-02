@@ -30,30 +30,27 @@ Copyright_License {
 void
 Profile::LoadUnits()
 {
+  UnitSetting &config = Units::current;
+
   bool found = false;
   unsigned Lift = 0;
   unsigned Altitude = 0;
   unsigned Temperature = 0;
-  unsigned Temp = 0;
 
-  if (Get(szProfileLatLonUnits, Temp))
-    Units::SetCoordinateFormat((CoordinateFormats)Temp);
+  GetEnum(szProfileLatLonUnits, config.coordinate_format);
 
   unsigned Speed = 1;
   found |= Get(szProfileSpeedUnitsValue, Speed);
   switch (Speed) {
   case 0:
-    Units::SetUserSpeedUnit(unStatuteMilesPerHour);
-    Units::SetUserWindSpeedUnit(unStatuteMilesPerHour);
+    config.speed_unit = config.wind_speed_unit = unStatuteMilesPerHour;
     break;
   case 1:
-    Units::SetUserSpeedUnit(unKnots);
-    Units::SetUserWindSpeedUnit(unKnots);
+    config.speed_unit = config.wind_speed_unit = unKnots;
     break;
   case 2:
   default:
-    Units::SetUserSpeedUnit(unKiloMeterPerHour);
-    Units::SetUserWindSpeedUnit(unKiloMeterPerHour);
+    config.speed_unit = config.wind_speed_unit = unKiloMeterPerHour;
     break;
   }
 
@@ -61,14 +58,14 @@ Profile::LoadUnits()
   found |= Get(szProfileTaskSpeedUnitsValue, TaskSpeed);
   switch (TaskSpeed) {
   case 0:
-    Units::SetUserTaskSpeedUnit(unStatuteMilesPerHour);
+    config.task_speed_unit = unStatuteMilesPerHour;
     break;
   case 1:
-    Units::SetUserTaskSpeedUnit(unKnots);
+    config.task_speed_unit = unKnots;
     break;
   case 2:
   default:
-    Units::SetUserTaskSpeedUnit(unKiloMeterPerHour);
+    config.task_speed_unit = unKiloMeterPerHour;
     break;
   }
 
@@ -76,25 +73,25 @@ Profile::LoadUnits()
   found |= Get(szProfileDistanceUnitsValue,Distance);
   switch (Distance) {
   case 0:
-    Units::SetUserDistanceUnit(unStatuteMiles);
+    config.distance_unit = unStatuteMiles;
     break;
   case 1:
-    Units::SetUserDistanceUnit(unNauticalMiles);
+    config.distance_unit = unNauticalMiles;
     break;
   case 2:
   default:
-    Units::SetUserDistanceUnit(unKiloMeter);
+    config.distance_unit = unKiloMeter;
     break;
   }
 
   found |= Get(szProfileAltitudeUnitsValue, Altitude);
   switch (Altitude) {
   case 0:
-    Units::SetUserAltitudeUnit(unFeet);
+    config.altitude_unit = unFeet;
     break;
   case 1:
   default:
-    Units::SetUserAltitudeUnit(unMeter);
+    config.altitude_unit = unMeter;
     break;
   }
 
@@ -102,29 +99,29 @@ Profile::LoadUnits()
   switch (Temperature) {
   default:
   case 0:
-    Units::SetUserTemperatureUnit(unGradCelcius);
+    config.temperature_unit = unGradCelcius;
     break;
   case 1:
-    Units::SetUserTemperatureUnit(unGradFahrenheit);
+    config.temperature_unit = unGradFahrenheit;
     break;
   }
 
   found |= Get(szProfileLiftUnitsValue, Lift);
   switch (Lift) {
   case 0:
-    Units::SetUserVerticalSpeedUnit(unKnots);
+    config.vertical_speed_unit = unKnots;
     break;
   case 2:
-    Units::SetUserVerticalSpeedUnit(unFeetPerMinute);
+    config.vertical_speed_unit = unFeetPerMinute;
     break;
   case 1:
   default:
-    Units::SetUserVerticalSpeedUnit(unMeterPerSecond);
+    config.vertical_speed_unit = unMeterPerSecond;
     break;
   }
 
   found |= GetEnum(szProfilePressureUnitsValue, Units::current.pressure_unit);
 
   if (!found)
-    Units::current = Units::LoadFromOSLanguage();
+    config = Units::LoadFromOSLanguage();
 }
