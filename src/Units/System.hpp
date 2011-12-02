@@ -31,8 +31,6 @@ Copyright_License {
 #include <tchar.h>
 class Angle;
 
-#define DEG "°"
-
 namespace Units
 {
   /**

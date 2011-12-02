@@ -46,6 +46,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Units/Units.hpp"
+#include "Units/AngleFormatter.hpp"
 
 #include <algorithm>
 #include <list>
@@ -170,12 +171,13 @@ GetDirectionData(int direction_filter_index)
 
   if (direction_filter_index == 0)
     _stprintf(buffer, _T("%c"), '*');
-  else if (direction_filter_index == 1)
-    _stprintf(buffer, _T("HDG(%u")_T(DEG)_T(")"),
-              uround(last_heading.AsBearing().Degrees()));
-  else
-    _stprintf(buffer, _T("%d")_T(DEG),
-              direction_filter_items[direction_filter_index]);
+  else if (direction_filter_index == 1) {
+    TCHAR bearing[8];
+    FormatBearing(bearing, ARRAY_SIZE(bearing), last_heading);
+    _stprintf(buffer, _T("HDG(%s)"), bearing);
+  } else
+    FormatBearing(buffer, ARRAY_SIZE(buffer),
+                  direction_filter_items[direction_filter_index]);
 
   return buffer;
 }

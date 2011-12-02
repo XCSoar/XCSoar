@@ -42,8 +42,9 @@
 #include "MainWindow.hpp"
 #include "Components.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Units/Units.hpp"
+#include "Units/AngleFormatter.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Compiler.h"
 
@@ -73,13 +74,8 @@ UpdateChanging()
   ((WndProperty *)wf->FindByName(_T("prpDistance")))->SetText(tmp);
 
   // Fill horizontal direction field
-  Angle bearing = (target->Bearing() - XCSoarInterface::Basic().track).AsDelta();
-  if (bearing.Degrees() > fixed_one)
-    _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)bearing.Degrees());
-  else if (bearing.Degrees() < fixed_minus_one)
-    _stprintf(tmp, _T("« ")_T("%2.0f")_T(DEG), (double)-bearing.Degrees());
-  else
-    _tcscpy(tmp, _T("«»"));
+  FormatAngleDelta(tmp, ARRAY_SIZE(tmp),
+                   target->Bearing() - CommonInterface::Basic().track);
   ((WndProperty *)wf->FindByName(_T("prpDirectionH")))->SetText(tmp);
 
   // Fill altitude field
@@ -92,10 +88,7 @@ UpdateChanging()
   // Fill vertical direction field
   Angle dir = Angle::Radians((fixed)atan2(target->relative_altitude,
                                           target->distance)).AsDelta();
-  if (dir.AbsoluteDegrees() > fixed_one)
-    _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir.Degrees());
-  else
-    _tcscpy(tmp, _T("--"));
+  FormatVerticalAngleDelta(tmp, ARRAY_SIZE(tmp), dir);
   ((WndProperty *)wf->FindByName(_T("prpDirectionV")))->SetText(tmp);
 
   // Fill climb speed field

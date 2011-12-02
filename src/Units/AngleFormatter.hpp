@@ -21,21 +21,26 @@ Copyright_License {
 }
 */
 
-#include "Data.hpp"
-#include "Units/AngleFormatter.hpp"
+#ifndef XCSOAR_ANGLE_FORMATTER_HPP
+#define XCSOAR_ANGLE_FORMATTER_HPP
+
+#include <tchar.h>
+#include <stddef.h>
+
+class Angle;
 
 void
-InfoBoxData::SetValue(Angle _value, const TCHAR *suffix)
-{
-  assert(suffix != NULL);
-
-  FormatBearing(value.buffer(), value.MAX_SIZE, _value, suffix);
-}
+FormatBearing(TCHAR *buffer, size_t size, unsigned degrees_value,
+              const TCHAR *suffix=_T(""));
 
 void
-InfoBoxData::SetComment(Angle _value, const TCHAR *suffix)
-{
-  assert(suffix != NULL);
+FormatBearing(TCHAR *buffer, size_t size, Angle value,
+              const TCHAR *suffix=_T(""));
 
-  FormatBearing(comment.buffer(), comment.MAX_SIZE, _value, suffix);
-}
+void
+FormatAngleDelta(TCHAR *buffer, size_t size, Angle value);
+
+void
+FormatVerticalAngleDelta(TCHAR *buffer, size_t size, Angle value);
+
+#endif

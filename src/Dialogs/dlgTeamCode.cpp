@@ -37,7 +37,7 @@
 #include "Compiler.h"
 #include "Profile/Profile.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "Units/Units.hpp"
+#include "Units/AngleFormatter.hpp"
 
 #include <stdio.h>
 
@@ -51,15 +51,8 @@ Update()
   StaticString<100> buffer;
 
   if (teamcode_info.teammate_available && basic.track_available) {
-    fixed Value = (teamcode_info.teammate_vector.bearing - basic.track)
-      .AsDelta().Degrees();
-
-    if (Value > fixed_one)
-      buffer.Format(_T("%2.0f" DEG ">"), (double)Value);
-    else if (Value < fixed_minus_one)
-      buffer.Format(_T("<%2.0f" DEG), (double)-Value);
-    else
-      buffer = _T("<>");
+    FormatAngleDelta(buffer.buffer(), buffer.MAX_SIZE,
+                     teamcode_info.teammate_vector.bearing - basic.track);
   } else {
     buffer = _T("---");
   }

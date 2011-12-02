@@ -54,6 +54,8 @@ Copyright_License {
 #include "NMEA/Aircraft.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Units/Units.hpp"
+#include "Units/AngleFormatter.hpp"
+#include "Util/Macros.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -517,9 +519,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
     TCHAR DistanceText[MAX_PATH];
     Units::FormatUserDistance(gv.distance, DistanceText, 10);
 
-    _sntprintf(sTmp, 128, _T("%d")_T(DEG)_T(" %s"),
-               iround(gv.bearing.Degrees()),
-               DistanceText);
+    FormatBearing(sTmp, ARRAY_SIZE(sTmp), gv.bearing, DistanceText);
     ((WndProperty *)wf->FindByName(_T("BearingDistance")))->SetText(sTmp);
   }
 

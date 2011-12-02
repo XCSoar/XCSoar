@@ -40,7 +40,7 @@ Copyright_License {
 #include "Form/TabBar.hpp"
 #include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Units/Units.hpp"
+#include "Units/AngleFormatter.hpp"
 #include "Renderer/WaypointIconRenderer.hpp"
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
@@ -167,7 +167,7 @@ TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
                 (name_font.GetHeight() - small_font.GetHeight()) / 2, buffer);
 
     // Draw leg bearing
-    _stprintf(buffer, _T("%.0f" DEG " T"), (double)leg.bearing.Degrees());
+    FormatBearing(buffer, ARRAY_SIZE(buffer), leg.bearing, _T("T"));
     width = canvas.CalcTextWidth(buffer);
     canvas.text(rc.right - Layout::FastScale(2) - width, top2, buffer);
 

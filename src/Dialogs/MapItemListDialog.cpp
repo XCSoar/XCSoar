@@ -44,6 +44,8 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/AngleFormatter.hpp"
+#include "Util/Macros.hpp"
 
 static const MapLook *look;
 static const TrafficLook *traffic_look;
@@ -148,8 +150,8 @@ ShowMapItemListDialog(SingleWindow &parent)
   TCHAR info_buffer[256], distance_buffer[32], direction_buffer[32];
   if (vector.IsValid()) {
     Units::FormatUserDistance(vector.distance, distance_buffer, 32);
-    _stprintf(direction_buffer, _T("%.0f " DEG "T"),
-              (double)vector.bearing.Degrees());
+    FormatBearing(direction_buffer, ARRAY_SIZE(direction_buffer),
+                  vector.bearing, _T("T"));
     _stprintf(info_buffer, _T("%s: %s - %s: %s"),
               _("Distance"), distance_buffer,
               _("Direction"), direction_buffer);

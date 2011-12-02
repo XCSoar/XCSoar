@@ -30,7 +30,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Navigation/Geometry/GeoVector.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Units/Units.hpp"
+#include "Units/AngleFormatter.hpp"
 #include "Language/Language.hpp"
 #include "SettingsMap.hpp"
 #include "Util/StaticString.hpp"
@@ -165,8 +165,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                 buffer.c_str());
 
     // Draw leg bearing
-    buffer.UnsafeFormat(_T(" %.0f" DEG " T"),
-                        (double)vector->bearing.Degrees());
+    FormatBearing(buffer.buffer(), buffer.MAX_SIZE, vector->bearing);
     width = canvas.CalcTextWidth(buffer.c_str());
     canvas.text(rc.right - Layout::FastScale(2) - width, top2, buffer.c_str());
 

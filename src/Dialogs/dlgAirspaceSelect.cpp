@@ -38,6 +38,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "Util/Macros.hpp"
 #include "Units/Units.hpp"
+#include "Units/AngleFormatter.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -257,8 +258,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   canvas.text(rc.left + x2, rc.top + Layout::FastScale(2), sTmp);
     
   // right justified after distance
-  sTmp.Format(_T("%d")_T(DEG),
-              (int)AirspaceSelectInfo[i].Direction.Degrees());
+  FormatBearing(sTmp.buffer(), sTmp.MAX_SIZE, AirspaceSelectInfo[i].Direction);
   x3 = w0 - canvas.CalcTextWidth(sTmp);
   canvas.text(rc.left + x3, rc.top + Layout::FastScale(2), sTmp);
 }
@@ -274,8 +274,11 @@ gcc_pure
 static const TCHAR *
 GetHeadingString(TCHAR *buffer)
 {
-  _stprintf(buffer, _T("%s (%u")_T(DEG)_T(")"), _("Heading"),
-            uround(CommonInterface::Calculated().heading.AsBearing().Degrees()));
+  TCHAR heading[32];
+  FormatBearing(heading, ARRAY_SIZE(heading),
+                CommonInterface::Calculated().heading);
+
+  _stprintf(buffer, _T("%s (%s)"), _("Heading"), heading);
   return buffer;
 }
 
@@ -373,7 +376,7 @@ FillDirectionEnum(DataFieldEnum &df)
   };
 
   for (unsigned i = 0; i < ARRAY_SIZE(directions); ++i) {
-    _stprintf(buffer, _T("%d")_T(DEG), directions[i]);
+    FormatBearing(buffer, ARRAY_SIZE(buffer), directions[i]);
     df.AddChoice(directions[i], buffer);
   }
 

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Units/Units.hpp"
+#include "Units/AngleFormatter.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 
 void
@@ -63,7 +63,7 @@ FlightStatusPanel::Refresh()
 
     SetFormValue(form, _T("prpNear"), nearest_waypoint->name.c_str());
 
-    buffer.UnsafeFormat(_T("%d")_T(DEG), (int)vec.bearing.Degrees());
+    FormatBearing(buffer.buffer(), buffer.MAX_SIZE, vec.bearing, _T(""));
     SetFormValue(form, _T("prpBearing"), buffer);
 
     Units::FormatUserDistance(vec.distance, buffer.buffer(), buffer.MAX_SIZE);
