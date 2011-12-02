@@ -107,30 +107,6 @@ namespace Units
   gcc_pure
   Unit GetUserUnitByGroup(UnitGroup group);
 
-  /**
-   * Converts a double-based Longitude to degrees, minute, seconds and a
-   * bool-based east variable
-   * @param Longitude The double-based Longitude to convert
-   * @param dd Degrees (pointer)
-   * @param mm Minutes (pointer)
-   * @param ss Seconds (pointer)
-   * @param east True if East, False if West (pointer)
-   */
-  void LongitudeToDMS(Angle longitude,
-                      int *dd, int *mm, int *ss, bool *east);
-
-  /**
-   * Converts a double-based Latitude to degrees, minute, seconds and a
-   * bool-based north variable
-   * @param Latitude The double-based Latitude to convert
-   * @param dd Degrees (pointer)
-   * @param mm Minutes (pointer)
-   * @param ss Seconds (pointer)
-   * @param north True if North, False if South (pointer)
-   */
-  void LatitudeToDMS(Angle latitude,
-                     int *dd, int *mm, int *ss, bool *north);
-
   gcc_pure
   const TCHAR *GetSpeedName();
 

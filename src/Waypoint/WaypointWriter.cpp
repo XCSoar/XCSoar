@@ -25,7 +25,6 @@ Copyright_License {
 
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "IO/TextWriter.hpp"
-#include "Units/Units.hpp"
 
 void
 WaypointWriter::Save(TextWriter &writer)
@@ -77,10 +76,7 @@ WaypointWriter::WriteAngle(TextWriter &writer, const Angle &angle,
   // Calculate degrees, minutes and seconds
   int deg, min, sec;
   bool is_positive;
-  if (is_latitude)
-    Units::LatitudeToDMS(angle, &deg, &min, &sec, &is_positive);
-  else
-    Units::LongitudeToDMS(angle, &deg, &min, &sec, &is_positive);
+  angle.ToDMS(deg, min, sec, is_positive);
 
   // Save them into the buffer string
   writer.printf(is_latitude ? "%02d:%02d:%02d" : "%03d:%02d:%02d", deg, min, sec);

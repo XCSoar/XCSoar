@@ -24,6 +24,22 @@ Copyright_License {
 #include "Angle.hpp"
 #include <assert.h>
 
+void
+Angle::ToDMS(int &dd, int &mm, int &ss, bool &is_positive) const
+{
+  is_positive = !negative(value);
+
+  unsigned value = uround(AbsoluteDegrees() * 3600);
+
+  ss = value % 60;
+  value /= 60;
+
+  mm = value % 60;
+  value /= 60;
+
+  dd = value;
+}
+
 int
 Angle::Sign(const fixed& tolerance) const
 {

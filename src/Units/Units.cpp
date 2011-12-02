@@ -44,42 +44,6 @@ UnitSetting Units::current = {
   unHectoPascal,
 };
 
-void
-Units::LongitudeToDMS(Angle longitude, int *dd, int *mm, int *ss, bool *east)
-{
-  // if (Longitude is negative) -> Longitude is West otherwise East
-  *east = (longitude.Sign() >= 0);
-
-  unsigned value = (unsigned)(longitude.AbsoluteDegrees() * 3600 +
-                              fixed_half);
-
-  *ss = value % 60;
-  value /= 60;
-
-  *mm = value % 60;
-  value /= 60;
-
-  *dd = value;
-}
-
-void
-Units::LatitudeToDMS(Angle latitude, int *dd, int *mm, int *ss, bool *north)
-{
-  // if (Latitude is negative) -> Latitude is South otherwise North
-  *north = (latitude.Sign() >= 0);
-
-  unsigned value = (unsigned)(latitude.AbsoluteDegrees() * 3600 +
-                              fixed_half);
-
-  *ss = value % 60;
-  value /= 60;
-
-  *mm = value % 60;
-  value /= 60;
-
-  *dd = value;
-}
-
 CoordinateFormats
 Units::GetCoordinateFormat()
 {

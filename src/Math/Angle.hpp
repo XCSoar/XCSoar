@@ -157,6 +157,17 @@ public:
     return Angle::Degrees(d + m / 60 + s / 3600);
   }
 
+  /**
+   * Converts this Angle to degrees, minute, seconds and a
+   * bool-based east/north variable
+   *
+   * @param dd Degrees (pointer)
+   * @param mm Minutes (pointer)
+   * @param ss Seconds (pointer)
+   * @param east True if East, False if West (pointer)
+   */
+  void ToDMS(int &dd, int &mm, int &ss, bool &is_positive) const;
+
   gcc_pure
   inline fixed tan() const {
     return ::tan(Radians());

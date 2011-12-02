@@ -166,7 +166,7 @@ SetValues()
   bool sign;
   int dd,mm,ss;
 
-  Units::LongitudeToDMS(global_wpt->location.longitude, &dd, &mm, &ss, &sign);
+  global_wpt->location.longitude.ToDMS(dd, mm, ss, sign);
 
   wp = (WndProperty*)wf->FindByName(_T("prpLongitudeSign"));
   assert(wp != NULL);
@@ -196,7 +196,7 @@ SetValues()
     break;
   }
 
-  Units::LatitudeToDMS(global_wpt->location.latitude, &dd, &mm, &ss, &sign);
+  global_wpt->location.latitude.ToDMS(dd, mm, ss, sign);
 
   LoadFormProperty(*wf, _T("prpLatitudeD"), dd);
 
