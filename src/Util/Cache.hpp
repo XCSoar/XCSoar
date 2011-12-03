@@ -92,6 +92,15 @@ class Cache {
       constructed = true;
     }
 
+    void Construct(T &&value) {
+      assert(!constructed);
+
+      void *p = static_cast<void *>(buffer);
+      new (p) T(std::move(value));
+
+      constructed = true;
+    }
+
     void Destruct() {
       assert(constructed);
 
@@ -126,12 +135,20 @@ class Cache {
       data.Construct(_data);
     }
 
+    void Construct(Data &&_data) {
+      data.Construct(std::move(_data));
+    }
+
     void Destruct() {
       data.Destruct();
     }
 
     void Replace(const Data &_data) {
       data.Get() = _data;
+    }
+
+    void Replace(Data &&_data) {
+      data.Get() = std::move(_data);
     }
   };
 
@@ -208,6 +225,29 @@ class Cache {
     }
   }
 
+  Item &Make(const Key &key, Data &&data) {
+    typename KeyMap::iterator i = map.find(key);
+    if (i != map.end()) {
+      /* already exists: replace it */
+      Item &item = *i->second;
+      item.Remove();
+      item.Replace(std::move(data));
+      return item;
+    }
+
+    if (unallocated_list.IsEmpty()) {
+      /* cache is full: delete oldest */
+      Item &item = RemoveOldest();
+      item.Replace(std::move(data));
+      return item;
+    } else {
+      /* cache is not full: allocate new item */
+      Item &item = Allocate();
+      item.Construct(std::move(data));
+      return item;
+    }
+  }
+
 public:
   Cache()
     :size(0),
@@ -267,6 +307,19 @@ public:
     Item &item = Make(key, data);
     item.InsertAfter(chronological_list);
     auto iterator = map.insert(std::make_pair(key, &item)).first;
+    item.SetIterator(iterator);
+
+#ifndef NDEBUG
+    ++size;
+#endif
+  }
+
+  void Put(Key &&key, Data &&data) {
+    assert(map.find((const Key &)key) == map.end());
+
+    Item &item = Make((const Key &)key, std::move(data));
+    item.InsertAfter(chronological_list);
+    auto iterator = map.insert(std::make_pair(std::move(key), &item)).first;
     item.SetIterator(iterator);
 
 #ifndef NDEBUG
