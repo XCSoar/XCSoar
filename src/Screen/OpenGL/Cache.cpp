@@ -59,22 +59,40 @@ struct TextCacheKey {
 };
 
 struct RenderedText : public ListHead {
-  TextCacheKey key;
-  GLTexture texture;
+  GLTexture *texture;
+
+  RenderedText(const RenderedText &other) = delete;
+  RenderedText(RenderedText &&other)
+    :texture(other.texture) {
+    other.texture = NULL;
+  }
 
 #ifdef ANDROID
-  RenderedText(TextCacheKey &_key, int id, unsigned width, unsigned height)
-    :key(_key), texture(id, width, height) {}
+  RenderedText(int id, unsigned width, unsigned height)
+    :texture(new GLTexture(id, width, height)) {}
 #else
-  RenderedText(TextCacheKey &_key, SDL_Surface *surface)
-    :key(_key), texture(surface) {}
+  RenderedText(SDL_Surface *surface)
+    :texture(new GLTexture(surface)) {}
+#endif
+
+  ~RenderedText() {
+    delete texture;
+  }
+
+  RenderedText &operator=(const RenderedText &other) = delete;
+
+#if GCC_VERSION >= 40500
+  RenderedText &operator=(RenderedText &&other) = default;
+#else
+  RenderedText &operator=(RenderedText &&other) {
+    std::swap(texture, other.texture);
+    return *this;
+  }
 #endif
 };
 
 static Cache<TextCacheKey, PixelSize, 1024u, TextCacheKey::Hash> size_cache;
-static std::unordered_map<TextCacheKey, RenderedText *, TextCacheKey::Hash> text_cache_map;
-static ListHead text_cache_head = ListHead(ListHead::empty());
-static unsigned text_cache_size = 0;
+static Cache<TextCacheKey, RenderedText, 256u, TextCacheKey::Hash> text_cache;
 
 PixelSize
 TextCache::GetSize(const Font &font, const char *text)
@@ -98,13 +116,13 @@ TextCache::LookupSize(const Font &font, const char *text)
     return size;
 
   TextCacheKey key(font, text);
-  auto i = text_cache_map.find(key);
-  if (i == text_cache_map.end())
+  const RenderedText *cached = text_cache.Get(key);
+  if (cached == NULL)
     return size;
 
-  const RenderedText &rendered = *i->second;
-  size.cx = rendered.texture.get_width();
-  size.cy = rendered.texture.get_height();
+  const RenderedText &rendered = *cached;
+  size.cx = rendered.texture->get_width();
+  size.cy = rendered.texture->get_height();
   return size;
 }
 
@@ -122,26 +140,9 @@ TextCache::get(const Font *font, const char *text)
 
   /* look it up */
 
-  auto i = text_cache_map.find(key);
-  if (i != text_cache_map.end()) {
-    /* found in the cache */
-    RenderedText *rt = i->second;
-
-    /* move to the front, so it gets flushed last */
-    rt->MoveAfter(text_cache_head);
-
-    return &rt->texture;
-  }
-
-  /* remove old entries from cache */
-
-  if (text_cache_size >= 256) {
-    RenderedText *rt = (RenderedText *)text_cache_head.GetPrevious();
-    text_cache_map.erase(rt->key);
-    rt->Remove();
-    delete rt;
-    --text_cache_size;
-  }
+  const RenderedText *cached = text_cache.Get(key);
+  if (cached != NULL)
+    return cached->texture;
 
   /* render the text into a OpenGL texture */
 
@@ -154,7 +155,7 @@ TextCache::get(const Font *font, const char *text)
   if (texture_id == 0)
     return NULL;
 
-  RenderedText *rt = new RenderedText(key, texture_id, size.cx, size.cy);
+  RenderedText rt(texture_id, size.cx, size.cy);
 #else
   SDL_Surface *surface = ::TTF_RenderUTF8_Solid(font->Native(), text,
                                                 COLOR_BLACK);
@@ -170,19 +171,16 @@ TextCache::get(const Font *font, const char *text)
 
   /* insert into cache */
 
-  RenderedText *rt = new RenderedText(key, surface);
+  RenderedText rt(surface);
   SDL_FreeSurface(surface);
 #endif
 
-  rt->InsertAfter(text_cache_head);
-
-  text_cache_map.insert(std::make_pair(key, rt));
-
-  ++text_cache_size;
+  GLTexture *texture = rt.texture;
+  text_cache.Put(std::move(key), std::move(rt));
 
   /* done */
 
-  return &rt->texture;
+  return texture;
 }
 
 void
@@ -191,15 +189,5 @@ TextCache::flush()
   assert(pthread_equal(pthread_self(), OpenGL::thread));
 
   size_cache.Clear();
-  text_cache_map.clear();
-
-  for (RenderedText *rt = (RenderedText *)text_cache_head.GetNext();
-       rt != &text_cache_head;) {
-    RenderedText *next = (RenderedText *)rt->GetNext();
-    delete rt;
-    rt = next;
-  }
-
-  text_cache_head.Clear();
-  text_cache_size = 0;
+  text_cache.Clear();
 }
