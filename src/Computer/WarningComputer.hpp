@@ -45,6 +45,8 @@ class WarningComputer {
   AirspaceWarningManager manager;
   ProtectedAirspaceWarningManager protected_manager;
 
+  bool initialised;
+
 public:
   WarningComputer(Airspaces &_airspaces);
 

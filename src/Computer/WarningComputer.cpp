@@ -40,8 +40,7 @@ WarningComputer::WarningComputer(Airspaces &_airspaces)
 void
 WarningComputer::Reset(const MoreData &basic, const DerivedInfo &calculated)
 {
-  const AircraftState as = ToAircraftState(basic, calculated);
-  protected_manager.reset_warning(as);
+  initialised = false;
 }
 
 void
@@ -59,13 +58,27 @@ WarningComputer::Update(const SETTINGS_COMPUTER &settings_computer,
   AirspaceActivity day(calculated.date_time_local.day_of_week);
   airspaces.set_activity(day);
 
-  if (!settings_computer.airspace.enable_warnings)
+  if (!settings_computer.airspace.enable_warnings ||
+      !basic.location_available || !basic.NavAltitudeAvailable()) {
+    if (initialised) {
+      initialised = false;
+      protected_manager.clear();
+    }
+
     return;
+  }
 
   const AircraftState as = ToAircraftState(basic, calculated);
-  if (protected_manager.update_warning(as, settings_computer.glide_polar_task,
-                                       calculated.task_stats,
-                                       calculated.circling,
-                                       uround(basic.time - last_basic.time)))
+  ProtectedAirspaceWarningManager::ExclusiveLease lease(protected_manager);
+
+  if (!initialised) {
+    initialised = true;
+    lease->Reset(as);
+  }
+
+  if (lease->Update(as, settings_computer.glide_polar_task,
+                    calculated.task_stats,
+                    calculated.circling,
+                    uround(basic.time - last_basic.time)))
     result.latest.Update(basic.clock);
 }

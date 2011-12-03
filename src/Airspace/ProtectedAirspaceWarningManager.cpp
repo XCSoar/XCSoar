@@ -31,13 +31,6 @@ ProtectedAirspaceWarningManager::clear()
 }
 
 void
-ProtectedAirspaceWarningManager::reset(const AircraftState &as)
-{
-  ExclusiveLease lease(*this);
-  lease->Reset(as);
-}
-
-void
 ProtectedAirspaceWarningManager::clear_warnings()
 {
   ExclusiveLease lease(*this);
@@ -80,22 +73,4 @@ ProtectedAirspaceWarningManager::acknowledge_inside(const AbstractAirspace& airs
 {
   ExclusiveLease lease(*this);
   lease->AcknowledgeInside(airspace, set);
-}
-
-void
-ProtectedAirspaceWarningManager::reset_warning(const AircraftState &as)
-{
-  ExclusiveLease lease(*this);
-  lease->Reset(as);
-}
-
-bool
-ProtectedAirspaceWarningManager::update_warning(const AircraftState &as,
-                                                const GlidePolar &glide_polar,
-                                                const TaskStats &task_stats,
-                                                const bool circling,
-                                                const unsigned dt)
-{
-  ExclusiveLease lease(*this);
-  return lease->Update(as, glide_polar, task_stats, circling, dt);
 }
