@@ -85,7 +85,7 @@ TextCache::GetSize(const Font &font, const char *text)
     return *cached;
 
   PixelSize size = font.TextSize(text);
-  size_cache.Put(key, size);
+  size_cache.Put(std::move(key), std::move(size));
   return size;
 }
 
