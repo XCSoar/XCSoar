@@ -64,6 +64,8 @@ public:
 void
 TerrainDisplayConfigPanel::Show(const PixelRect &rc)
 {
+  ShowFormControl(form, _T("frmPreview"), terrain != NULL);
+
   XMLWidget::Show(rc);
 }
 
