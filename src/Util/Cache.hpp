@@ -275,6 +275,7 @@ public:
       return NULL;
 
     Item &item = *i->second;
+    assert(item.GetIterator() == i);
 
     /* move to the front of the chronological list */
     item.Remove();
