@@ -202,16 +202,7 @@ class Cache {
     return item;
   }
 
-  Item &Make(const Key &key, const Data &data) {
-    typename KeyMap::iterator i = map.find(key);
-    if (i != map.end()) {
-      /* already exists: replace it */
-      Item &item = *i->second;
-      item.Remove();
-      item.Replace(data);
-      return item;
-    }
-
+  Item &Make(const Data &data) {
     if (unallocated_list.IsEmpty()) {
       /* cache is full: delete oldest */
       Item &item = RemoveOldest();
@@ -225,16 +216,7 @@ class Cache {
     }
   }
 
-  Item &Make(const Key &key, Data &&data) {
-    typename KeyMap::iterator i = map.find(key);
-    if (i != map.end()) {
-      /* already exists: replace it */
-      Item &item = *i->second;
-      item.Remove();
-      item.Replace(std::move(data));
-      return item;
-    }
-
+  Item &Make(Data &&data) {
     if (unallocated_list.IsEmpty()) {
       /* cache is full: delete oldest */
       Item &item = RemoveOldest();
@@ -304,7 +286,7 @@ public:
   void Put(const Key &key, const Data &data) {
     assert(map.find(key) == map.end());
 
-    Item &item = Make(key, data);
+    Item &item = Make(data);
     item.InsertAfter(chronological_list);
     auto iterator = map.insert(std::make_pair(key, &item)).first;
     item.SetIterator(iterator);
@@ -317,7 +299,7 @@ public:
   void Put(Key &&key, Data &&data) {
     assert(map.find((const Key &)key) == map.end());
 
-    Item &item = Make((const Key &)key, std::move(data));
+    Item &item = Make(std::move(data));
     item.InsertAfter(chronological_list);
     auto iterator = map.insert(std::make_pair(std::move(key), &item)).first;
     item.SetIterator(iterator);
