@@ -102,40 +102,38 @@ class Cache {
     }
   };
 
+  class Item;
+  typedef std::unordered_map<Key, class Item *, Hash, KeyEqual> KeyMap;
+
   class Item : public ListHead {
-    Constructible<Key> key;
+    typename KeyMap::iterator iterator;
     Constructible<Data> data;
 
   public:
-    const Key &GetKey() const {
-      return key.Get();
+    typename KeyMap::iterator GetIterator() {
+      return iterator;
+    }
+
+    void SetIterator(typename KeyMap::iterator _iterator) {
+      iterator = _iterator;
     }
 
     const Data &GetData() const {
       return data.Get();
     }
 
-    void Construct(const Key &_key, const Data &_data) {
-      key.Construct(_key);
+    void Construct(const Data &_data) {
       data.Construct(_data);
     }
 
     void Destruct() {
-      key.Destruct();
       data.Destruct();
-    }
-
-    void Replace(const Key &_key, const Data &_data) {
-      key.Get() = _key;
-      data.Get() = _data;
     }
 
     void Replace(const Data &_data) {
       data.Get() = _data;
     }
   };
-
-  typedef std::unordered_map<Key, Item *, Hash, KeyEqual> KeyMap;
 
   /**
    * The number of cached items.
@@ -166,10 +164,7 @@ class Cache {
   Item &RemoveOldest() {
     Item &item = GetOldest();
 
-    typename KeyMap::iterator i = map.find(item.GetKey());
-    assert(i != map.end());
-    map.erase(i);
-
+    map.erase(item.GetIterator());
     item.Remove();
 
 #ifndef NDEBUG
@@ -203,12 +198,12 @@ class Cache {
     if (unallocated_list.IsEmpty()) {
       /* cache is full: delete oldest */
       Item &item = RemoveOldest();
-      item.Replace(key, data);
+      item.Replace(data);
       return item;
     } else {
       /* cache is not full: allocate new item */
       Item &item = Allocate();
-      item.Construct(key, data);
+      item.Construct(data);
       return item;
     }
   }
@@ -271,7 +266,8 @@ public:
 
     Item &item = Make(key, data);
     item.InsertAfter(chronological_list);
-    map.insert(std::make_pair(key, &item));
+    auto iterator = map.insert(std::make_pair(key, &item)).first;
+    item.SetIterator(iterator);
 
 #ifndef NDEBUG
     ++size;
