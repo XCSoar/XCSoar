@@ -50,8 +50,7 @@ WarningComputer::Update(const SETTINGS_COMPUTER &settings_computer,
                         const DerivedInfo &calculated,
                         AirspaceWarningsInfo &result)
 {
-  if (!settings_computer.airspace.enable_warnings ||
-      !basic.HasTimeAdvancedSince(last_basic) ||
+  if (!basic.HasTimeAdvancedSince(last_basic) ||
       !clock.check_advance(basic.time))
     return;
 
@@ -59,6 +58,9 @@ WarningComputer::Update(const SETTINGS_COMPUTER &settings_computer,
 
   AirspaceActivity day(calculated.date_time_local.day_of_week);
   airspaces.set_activity(day);
+
+  if (!settings_computer.airspace.enable_warnings)
+    return;
 
   const AircraftState as = ToAircraftState(basic, calculated);
   if (protected_manager.update_warning(as, settings_computer.glide_polar_task,
