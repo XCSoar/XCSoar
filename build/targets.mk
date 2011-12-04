@@ -83,6 +83,10 @@ ifeq ($(TARGET),PC)
     TCPATH := i686-w64-mingw32-
     TARGET_ARCH += -march=i586
   endif
+  
+  ifneq ($(MINGWPATH),"")
+    TCPATH := $(MINGWPATH)
+  endif
 
   ifeq ($(WINHOST),y)
     TCPATH :=
