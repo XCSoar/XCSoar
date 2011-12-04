@@ -169,6 +169,11 @@ public:
                        OperationEnvironment &env) = 0;
 
   /**
+   * Returns whether the device is in download mode.
+   */
+  virtual bool InDownloadMode() = 0;
+
+  /**
    * Set the device into download mode.
    * Should be done before a downloading operation is started
    * (e.g. ReadFlightList() or DownloadFlight()).
@@ -235,6 +240,10 @@ public:
 
   virtual bool Declare(const struct Declaration &declaration,
                        OperationEnvironment &env);
+
+  virtual bool InDownloadMode() {
+    return false;
+  }
 
   virtual bool EnableDownloadMode(OperationEnvironment &env) {
     return true;

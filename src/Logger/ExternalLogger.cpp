@@ -297,7 +297,8 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
   // Download the list of flights that the logger contains
   RecordedFlightList flight_list;
   if (!DoReadFlightList(device, flight_list)) {
-    DisableDownloadMode(device);
+    if (device.InDownloadMode())
+      DisableDownloadMode(device);
     MessageBoxX(_("Failed to download flight list."),
                 _("Download flight"), MB_OK | MB_ICONERROR);
     return;

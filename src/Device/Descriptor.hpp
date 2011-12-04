@@ -243,6 +243,7 @@ public:
   bool Declare(const struct Declaration &declaration,
                OperationEnvironment &env);
 
+  bool InDownloadMode();
   bool EnableDownloadMode(OperationEnvironment &env);
   bool DisableDownloadMode(OperationEnvironment &env);
 

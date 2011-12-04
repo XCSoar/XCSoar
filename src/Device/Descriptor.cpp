@@ -447,6 +447,15 @@ DeviceDescriptor::EnableDownloadMode(OperationEnvironment &env)
 }
 
 bool
+DeviceDescriptor::InDownloadMode()
+{
+  if (device == NULL)
+    return false;
+
+  return device->InDownloadMode();
+}
+
+bool
 DeviceDescriptor::DisableDownloadMode(OperationEnvironment &env)
 {
   if (port == NULL || device == NULL)

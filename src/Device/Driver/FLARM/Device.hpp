@@ -317,6 +317,10 @@ private:
   bool DownloadFlight(const TCHAR *path, OperationEnvironment &env);
 
 public:
+  bool InDownloadMode() {
+    return in_binary_mode;
+  }
+
   /**
    * Tries to enable the binary transfer mode of the connected FLARM device
    * @return True if binary mode was enabled and confirmed, False otherwise
