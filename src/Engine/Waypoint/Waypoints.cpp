@@ -157,6 +157,8 @@ Waypoints::Append(const Waypoint &_wp)
   const Waypoint &new_wp = waypoint_tree.Add(wp);
   name_tree.Add(new_wp);
 
+  ++serial;
+
   return new_wp;
 }
 
@@ -300,6 +302,7 @@ Waypoints::VisitNamePrefix(const TCHAR *prefix,
 void
 Waypoints::Clear()
 {
+  ++serial;
   home = NULL;
   name_tree.clear();
   waypoint_tree.clear();
@@ -317,6 +320,7 @@ Waypoints::Erase(const Waypoint& wp)
 
   name_tree.Remove(wp);
   waypoint_tree.erase(it);
+  ++serial;
 }
 
 void
@@ -343,6 +347,7 @@ Waypoints::Replace(const Waypoint &orig, const Waypoint &replacement)
   waypoint_tree.Replace(it, new_waypoint);
 
   name_tree.Add(orig);
+  ++serial;
 }
 
 Waypoint

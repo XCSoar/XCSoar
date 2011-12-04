@@ -26,6 +26,7 @@
 #include "Util/SliceAllocator.hpp"
 #include "Util/RadixTree.hpp"
 #include "Util/QuadTree.hpp"
+#include "Util/Serial.hpp"
 #include "Waypoint.hpp"
 
 #include "Navigation/TaskProjection.hpp"
@@ -68,6 +69,11 @@ class Waypoints: private NonCopyable
     void Remove(const Waypoint &wp);
   };
 
+  /**
+   * This gets incremented each time the object is modified.
+   */
+  Serial serial;
+
   unsigned next_id;
 
   WaypointTree waypoint_tree;
@@ -87,6 +93,9 @@ public:
    */
   Waypoints();
 
+  const Serial &GetSerial() const {
+    return serial;
+  }
 
   /**
    * Add waypoint to internal store.  Internal copy is made.
