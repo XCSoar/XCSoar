@@ -35,6 +35,7 @@
 #include "Compiler.h"
 
 #include <unordered_map>
+#include <limits>
 #include <assert.h>
 
 template<typename Key, typename Data,
@@ -112,10 +113,20 @@ class Cache {
   };
 
   class Item;
+
+  /* This is a multimap, even though we use at most one cache item for
+     a key.  A multimap means less overhead, because insert() does not
+     need to do a full lookup, and this class  */
   typedef std::unordered_multimap<Key, class Item *, Hash, KeyEqual> KeyMap;
 
   class Item : public ListHead {
+    /**
+     * This iterator is stored to allow quick removal of outdated
+     * cache items.  This is safe, because rehashing is disabled in
+     * #KeyMap.
+     */
     typename KeyMap::iterator iterator;
+
     Constructible<Data> data;
 
   public:
@@ -237,6 +248,14 @@ public:
      chronological_list(ListHead::empty()) {
     for (unsigned i = 0; i < capacity; ++i)
       buffer[i].InsertAfter(unallocated_list);
+
+    /* allocate enough buckets for the whole lifetime of this
+       object */
+    map.rehash(capacity);
+
+    /* forcibly disable rehashing, as that would invalidate existing
+       iterators */
+    map.max_load_factor(std::numeric_limits<decltype(map.max_load_factor())>::infinity());
   }
 
   ~Cache() {
