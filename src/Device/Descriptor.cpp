@@ -430,25 +430,35 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
 }
 
 bool
-DeviceDescriptor::EnableDownloadMode()
+DeviceDescriptor::EnableDownloadMode(OperationEnvironment &env)
 {
   if (port == NULL || device == NULL)
     return false;
 
+  StaticString<60> text;
+  text.Format(_T("%s: %s."), _("Activating download mode"),
+              driver->display_name);
+  env.SetText(text);
+
   port->StopRxThread();
-  bool result = device->EnableDownloadMode();
+  bool result = device->EnableDownloadMode(env);
   port->StartRxThread();
   return result;
 }
 
 bool
-DeviceDescriptor::DisableDownloadMode()
+DeviceDescriptor::DisableDownloadMode(OperationEnvironment &env)
 {
   if (port == NULL || device == NULL)
     return false;
 
+  StaticString<60> text;
+  text.Format(_T("%s: %s."), _("Deactivating download mode"),
+              driver->display_name);
+  env.SetText(text);
+
   port->StopRxThread();
-  bool result = device->DisableDownloadMode();
+  bool result = device->DisableDownloadMode(env);
   port->StartRxThread();
   return result;
 }

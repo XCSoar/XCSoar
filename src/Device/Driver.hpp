@@ -175,7 +175,7 @@ public:
    * are called.
    * @return true on success
    */
-  virtual bool EnableDownloadMode() = 0;
+  virtual bool EnableDownloadMode(OperationEnvironment &env) = 0;
 
   /**
    * Leave the download mode.
@@ -183,7 +183,7 @@ public:
    * (e.g. ReadFlightList() or DownloadFlight()).
    * @return true on success
    */
-  virtual bool DisableDownloadMode() = 0;
+  virtual bool DisableDownloadMode(OperationEnvironment &env) = 0;
 
   /**
    * Read the list of recorded flights.
@@ -236,11 +236,11 @@ public:
   virtual bool Declare(const struct Declaration &declaration,
                        OperationEnvironment &env);
 
-  virtual bool EnableDownloadMode() {
+  virtual bool EnableDownloadMode(OperationEnvironment &env) {
     return true;
   }
 
-  virtual bool DisableDownloadMode() {
+  virtual bool DisableDownloadMode(OperationEnvironment &env) {
     return true;
   }
 

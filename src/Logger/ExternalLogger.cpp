@@ -125,7 +125,8 @@ public:
   }
 
   virtual void Run(OperationEnvironment &env) {
-    result = device.ReadFlightList(flight_list, env);
+    result = device.EnableDownloadMode(env) &&
+             device.ReadFlightList(flight_list, env);
   }
 };
 
@@ -137,7 +138,6 @@ DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
   JobDialog(CommonInterface::main_window,
             CommonInterface::main_window.GetLook().dialog,
             _T(""), job, true);
-  device.SetBusy(false);
   return job.GetResult();
 }
 
@@ -159,6 +159,10 @@ public:
 
   virtual void Run(OperationEnvironment &env) {
     result = device.DownloadFlight(flight, path, env);
+    if (!result) {
+      device.DisableDownloadMode(env);
+      device.SetBusy(false);
+    }
   }
 };
 
@@ -166,12 +170,10 @@ static bool
 DoDownloadFlight(DeviceDescriptor &device,
                  const RecordedFlightInfo &flight, const TCHAR *path)
 {
-  device.SetBusy(true);
   DownloadFlightJob job(device, flight, path);
   JobDialog(CommonInterface::main_window,
             CommonInterface::main_window.GetLook().dialog,
             _T(""), job, true);
-  device.SetBusy(false);
   return job.GetResult();
 }
 
@@ -262,19 +264,40 @@ ShowFlightList(const RecordedFlightList &flight_list)
   return (i < 0) ? NULL : &flight_list[i];
 }
 
+class DisableDownloadModeJob : public Job {
+  DeviceDescriptor &device;
+  bool result;
+
+public:
+  DisableDownloadModeJob(DeviceDescriptor &_device):device(_device) {}
+
+  bool GetResult() const {
+    return result;
+  }
+
+  virtual void Run(OperationEnvironment &env) {
+    result = device.DisableDownloadMode(env);
+  }
+};
+
+static bool
+DisableDownloadMode(DeviceDescriptor &device)
+{
+  DisableDownloadModeJob job(device);
+  JobDialog(CommonInterface::main_window,
+            CommonInterface::main_window.GetLook().dialog,
+            _T(""), job, true);
+  device.SetBusy(false);
+  return job.GetResult();
+}
+
 void
 ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 {
-  if (!device.EnableDownloadMode()) {
-    MessageBoxX(_("Failed to enable download mode."),
-                _("Download flight"), MB_OK | MB_ICONERROR);
-    return;
-  }
-
   // Download the list of flights that the logger contains
   RecordedFlightList flight_list;
   if (!DoReadFlightList(device, flight_list)) {
-    device.DisableDownloadMode();
+    DisableDownloadMode(device);
     MessageBoxX(_("Failed to download flight list."),
                 _("Download flight"), MB_OK | MB_ICONERROR);
     return;
@@ -282,7 +305,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 
   // The logger seems to be empty -> cancel
   if (flight_list.empty()) {
-    device.DisableDownloadMode();
+    DisableDownloadMode(device);
     MessageBoxX(_("Logger is empty."),
                 _("Download flight"), MB_OK | MB_ICONINFORMATION);
     return;
@@ -291,7 +314,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
   // Show list of the flights
   const RecordedFlightInfo *flight = ShowFlightList(flight_list);
   if (!flight) {
-    device.DisableDownloadMode();
+    DisableDownloadMode(device);
     return;
   }
 
@@ -301,13 +324,12 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
   if (!DoDownloadFlight(device, *flight, path)) {
     // Delete temporary file
     File::Delete(path);
-    device.DisableDownloadMode();
     MessageBoxX(_("Failed to download flight."),
                 _("Download flight"), MB_OK | MB_ICONERROR);
     return;
   }
 
-  device.DisableDownloadMode();
+  DisableDownloadMode(device);
 
   /* read the IGC header and build the final IGC file name with it */
 

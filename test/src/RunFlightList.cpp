@@ -111,20 +111,20 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  if (!device->EnableDownloadMode()) {
+  if (!device->EnableDownloadMode(env)) {
     delete device;
     fprintf(stderr, "Failed to enable download mode\n");
     return EXIT_FAILURE;
   }
 
   if (!device->ReadFlightList(flight_list, env)) {
-    device->DisableDownloadMode();
+    device->DisableDownloadMode(env);
     delete device;
     fprintf(stderr, "Failed to download flight list\n");
     return EXIT_FAILURE;
   }
 
-  device->DisableDownloadMode();
+  device->DisableDownloadMode(env);
   delete device;
 
   for (auto i = flight_list.begin(); i != flight_list.end(); ++i) {

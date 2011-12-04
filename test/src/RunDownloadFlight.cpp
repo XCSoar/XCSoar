@@ -124,7 +124,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  if (!device->EnableDownloadMode()) {
+  if (!device->EnableDownloadMode(env)) {
     delete device;
     fprintf(stderr, "Failed to enable download mode\n");
     return EXIT_FAILURE;
@@ -132,14 +132,14 @@ int main(int argc, char **argv)
 
   RecordedFlightList flight_list;
   if (!device->ReadFlightList(flight_list, env)) {
-    device->DisableDownloadMode();
+    device->DisableDownloadMode(env);
     delete device;
     fprintf(stderr, "Failed to download flight list\n");
     return EXIT_FAILURE;
   }
 
   if (flight_list.empty()) {
-    device->DisableDownloadMode();
+    device->DisableDownloadMode(env);
     delete device;
     fprintf(stderr, "Logger is empty\n");
     return EXIT_FAILURE;
@@ -148,20 +148,20 @@ int main(int argc, char **argv)
   PrintFlightList(flight_list);
 
   if (flight_id >= flight_list.size()) {
-    device->DisableDownloadMode();
+    device->DisableDownloadMode(env);
     delete device;
     fprintf(stderr, "Flight id not found\n");
     return EXIT_FAILURE;
   }
 
   if (!device->DownloadFlight(flight_list[flight_id], path, env)) {
-    device->DisableDownloadMode();
+    device->DisableDownloadMode(env);
     delete device;
     fprintf(stderr, "Failed to download flight\n");
     return EXIT_FAILURE;
   }
 
-  device->DisableDownloadMode();
+  device->DisableDownloadMode(env);
   delete device;
 
   printf("Flight downloaded successfully\n");

@@ -321,7 +321,7 @@ public:
    * Tries to enable the binary transfer mode of the connected FLARM device
    * @return True if binary mode was enabled and confirmed, False otherwise
    */
-  bool EnableDownloadMode();
+  bool EnableDownloadMode(OperationEnvironment &env);
 
   /**
    * Tries to disable the binary transfer mode of the connected FLARM device.
@@ -329,7 +329,7 @@ public:
    * binary transfer mode!
    * @return True if binary mode was disabled, False otherwise
    */
-  bool DisableDownloadMode();
+  bool DisableDownloadMode(OperationEnvironment &env);
 
   /**
    * Reads a RecordedFlightList from the Flarm
