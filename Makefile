@@ -36,6 +36,8 @@
 
 topdir = .
 
+-include $(topdir)/build/local-config.mk
+
 include $(topdir)/build/bool.mk
 include $(topdir)/build/common.mk
 include $(topdir)/build/pkgconfig.mk
@@ -82,6 +84,10 @@ include $(topdir)/build/vali.mk
 include $(topdir)/build/test.mk
 include $(topdir)/build/hot.mk
 
+# Load local-config a second time
+# to set (override) choices for GXX and friends.
+-include $(topdir)/build/local-config.mk
+
 ######## output files
 
 ifeq ($(HAVE_POSIX),y)
@@ -104,6 +110,10 @@ INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR) -I$(SRC)/Waypoint
 
 LDFLAGS = $(TARGET_LDFLAGS) $(FLAGS_PROFILE) $(OPTIMIZE)
 LDLIBS = $(TARGET_LDLIBS) $(COVERAGE_LDLIBS)
+ifneq ($(TARGET_AR),)
+AR = $(TARGET_AR)
+ARFLAGS = $(TARGET_ARFLAGS)
+endif
 
 ####### sources
 

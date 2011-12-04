@@ -70,9 +70,15 @@ For Mac OS X, you need:
 - SDL_ttf (http://www.libsdl.org/projects/SDL_ttf/)
 - libicns (http://icns.sourceforge.net/)
 
+To compile for the Mac, run
+
+./configure
+make TARGET=UNIX
+
+
 To compile, run:
 
- make TARGET=PC
+ make TARGET=<target>
 
 Supported targets:
 

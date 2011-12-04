@@ -1,0 +1,19 @@
+#!/bin/sh
+
+DIR=`dirname $0`
+SYSTEM=`uname -s 2>/dev/null`
+
+# Test if running on a Mac
+
+case "${SYSTEM}" in
+"Darwin")
+    ${DIR}/build/configure-mac.sh \
+    && echo "Now run
+     make TARGET=UNIX
+to build XCSoar for Mac OS X."
+;;
+*)
+    echo "Now run
+     make TARGET=<t>
+to build XCSoar.  See README for valid targets."
+esac

@@ -283,7 +283,7 @@ ifeq ($(HAVE_WIN32),y)
   endif
 
   WINDRESFLAGS := -I$(SRC) $(TARGET_CPPFLAGS)
-endif # UNIX
+endif # HAVE_WIN32
 
 ifeq ($(TARGET),PC)
   TARGET_ARCH += -mwindows -mms-bitfields
@@ -362,6 +362,8 @@ endif
 ifeq ($(TARGET),UNIX)
   ifeq ($(shell uname -s),Darwin)
   TARGET_LDLIBS += $(shell $(CXX) -print-file-name=libstdc++.a)
+  TARGET_AR = "libtool"
+  TARGET_ARFLAGS = -static -o
   else
   TARGET_LDLIBS += -lm
   endif
