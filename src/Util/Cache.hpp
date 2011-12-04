@@ -112,7 +112,7 @@ class Cache {
   };
 
   class Item;
-  typedef std::unordered_map<Key, class Item *, Hash, KeyEqual> KeyMap;
+  typedef std::unordered_multimap<Key, class Item *, Hash, KeyEqual> KeyMap;
 
   class Item : public ListHead {
     typename KeyMap::iterator iterator;
@@ -289,7 +289,7 @@ public:
 
     Item &item = Make(data);
     item.InsertAfter(chronological_list);
-    auto iterator = map.insert(std::make_pair(key, &item)).first;
+    auto iterator = map.insert(std::make_pair(key, &item));
     item.SetIterator(iterator);
 
 #ifndef NDEBUG
@@ -302,7 +302,7 @@ public:
 
     Item &item = Make(std::move(data));
     item.InsertAfter(chronological_list);
-    auto iterator = map.insert(std::make_pair(std::move(key), &item)).first;
+    auto iterator = map.insert(std::make_pair(std::move(key), &item));
     item.SetIterator(iterator);
 
 #ifndef NDEBUG
