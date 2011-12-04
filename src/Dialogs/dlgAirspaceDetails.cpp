@@ -134,6 +134,9 @@ SetValues(void)
 void
 dlgAirspaceDetails(const AbstractAirspace& the_airspace)
 {
+  if (wf)
+    return;
+
   airspace = &the_airspace;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
@@ -146,4 +149,5 @@ dlgAirspaceDetails(const AbstractAirspace& the_airspace)
   wf->ShowModal();
 
   delete wf;
+  wf = NULL;
 }
