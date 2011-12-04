@@ -81,14 +81,10 @@ struct RenderedText : public ListHead {
 
   RenderedText &operator=(const RenderedText &other) = delete;
 
-#if GCC_VERSION >= 40500
-  RenderedText &operator=(RenderedText &&other) = default;
-#else
   RenderedText &operator=(RenderedText &&other) {
     std::swap(texture, other.texture);
     return *this;
   }
-#endif
 };
 
 static Cache<TextCacheKey, PixelSize, 1024u, TextCacheKey::Hash> size_cache;
