@@ -45,8 +45,8 @@ include $(topdir)/build/dirs.mk
 include $(topdir)/build/verbose.mk
 include $(topdir)/build/util.mk
 include $(topdir)/build/detect.mk
-include $(topdir)/build/pkgconfig.mk
 include $(topdir)/build/targets.mk
+include $(topdir)/build/pkgconfig.mk
 include $(topdir)/build/resource.mk
 include $(topdir)/build/android.mk
 include $(topdir)/build/debug.mk
