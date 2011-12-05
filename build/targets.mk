@@ -325,11 +325,11 @@ endif
 ifeq ($(HAVE_POSIX),y)
 ifneq ($(TARGET),ANDROID)
   TARGET_LDLIBS += -lpthread
-  ifeq ($(shell uname -s),Linux)
+  ifeq ($(UNAME_S),Linux)
   TARGET_LDLIBS += -lrt # for clock_gettime()
   endif
 endif
-  ifeq ($(shell uname -s),Darwin)
+  ifeq ($(UNAME_S),Darwin)
     TARGET_LDFLAGS += -static-libgcc
   endif
 endif
@@ -360,7 +360,7 @@ ifeq ($(HAVE_CE),y)
 endif
 
 ifeq ($(TARGET),UNIX)
-  ifeq ($(shell uname -s),Darwin)
+  ifeq ($(UNAME_S),Darwin)
   TARGET_LDLIBS += $(shell $(CXX) -print-file-name=libstdc++.a)
   else
   TARGET_LDLIBS += -lm

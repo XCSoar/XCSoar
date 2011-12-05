@@ -1,4 +1,4 @@
-ifeq ($(shell uname -s),Darwin)
+ifeq ($(UNAME_S),Darwin)
 
 HDIUTIL = hdiutil
 HDIUTIL_OPTIONS =

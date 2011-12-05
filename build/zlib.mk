@@ -2,7 +2,7 @@ ifeq ($(TARGET),UNIX)
 
 # use the native zlib on UNIX
 
-ifeq ($(shell uname -s),Darwin)
+ifeq ($(UNAME_S),Darwin)
 ZLIB_LDADD = /opt/local/lib/libz.a
 ZLIB_LDLIBS =
 else

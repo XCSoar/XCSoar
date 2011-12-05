@@ -43,6 +43,7 @@ include $(topdir)/build/bool.mk
 include $(topdir)/build/dirs.mk
 include $(topdir)/build/verbose.mk
 include $(topdir)/build/util.mk
+include $(topdir)/build/detect.mk
 include $(topdir)/build/pkgconfig.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/resource.mk

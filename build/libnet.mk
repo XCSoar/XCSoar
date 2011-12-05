@@ -14,7 +14,7 @@ endif
 
 # don't link with CURL on Mac OS X, to keep the dynamic library
 # dependencies low
-ifeq ($(TARGET)$(findstring $(shell uname -s),Darwin),UNIX)
+ifeq ($(TARGET)$(findstring $(UNAME_S),Darwin),UNIX)
 HAVE_NET := y
 
 LIBNET_SOURCES += \

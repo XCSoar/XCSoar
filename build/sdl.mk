@@ -21,7 +21,7 @@ SDL_CPPFLAGS += -DENABLE_SDL
 ifeq ($(OPENGL),y)
 SDL_CPPFLAGS += -DENABLE_OPENGL
 ifneq ($(TARGET),ANDROID)
-ifeq ($(shell uname -s),Darwin)
+ifeq ($(UNAME_S),Darwin)
 SDL_LDLIBS += -framework OpenGL
 else
 SDL_LDLIBS += -lGL
@@ -31,7 +31,7 @@ else # !OPENGL
 SDL_LDLIBS += -lSDL_gfx
 endif # !OPENGL
 ifneq ($(TARGET),ANDROID)
-ifeq ($(shell uname -s),Darwin)
+ifeq ($(UNAME_S),Darwin)
 # the pkg-config file on MacPorts is broken, we must filter out the
 # -lSDL flag manually
 SDL_LDLIBS := $(filter-out -l%,$(SDL_LDLIBS))
