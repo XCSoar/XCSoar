@@ -169,6 +169,30 @@ InputEvents::getModeID()
 // Processing functions - which one to do
 // -----------------------------------------------------------------------
 
+void
+InputEvents::ProcessEvent(unsigned event_id)
+{
+  assert(event_id != 0);
+
+  int bindex = -1;
+  InputEvents::Mode lastMode = getModeID();
+  const TCHAR *pLabelText = NULL;
+
+  const Menu &menu = input_config.menus[lastMode];
+  int i = menu.FindByEvent(event_id);
+  if (i >= 0 && menu[i].IsDefined()) {
+    bindex = i;
+    pLabelText = menu[i].label;
+  }
+
+  if (bindex < 0 || ButtonLabel::IsEnabled(bindex))
+    InputEvents::processGo(event_id);
+
+  // experimental: update button text, macro may change the value
+  if (lastMode == getModeID() && bindex > 0 && pLabelText != NULL)
+    drawButtons(lastMode);
+}
+
 // Input is a via the user touching the label on a touch screen / mouse
 bool
 InputEvents::processButton(unsigned bindex)
@@ -184,12 +208,7 @@ InputEvents::processButton(unsigned bindex)
   if (!item.IsDefined())
     return false;
 
-  processGo(item.event);
-
-  // experimental: update button text, macro may change the label
-  if (lastMode == getModeID() && item.IsDynamic())
-    drawButtons(lastMode);
-
+  ProcessEvent(item.event);
   return true;
 }
 
@@ -215,24 +234,7 @@ InputEvents::ProcessKey(Mode mode, unsigned key_code)
   if (event_id == 0)
     return false;
 
-  int bindex = -1;
-  InputEvents::Mode lastMode = mode;
-  const TCHAR *pLabelText = NULL;
-
-  const Menu &menu = input_config.menus[mode];
-  int i = menu.FindByEvent(event_id);
-  if (i >= 0 && menu[i].IsDefined()) {
-    bindex = i;
-    pLabelText = menu[i].label;
-  }
-
-  if (bindex < 0 || ButtonLabel::IsEnabled(bindex))
-    InputEvents::processGo(event_id);
-
-  // experimental: update button text, macro may change the value
-  if (lastMode == getModeID() && bindex > 0 && pLabelText != NULL)
-    drawButtons(lastMode);
-
+  ProcessEvent(event_id);
   return true;
 }
 

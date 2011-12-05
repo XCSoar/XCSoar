@@ -62,6 +62,11 @@ namespace InputEvents
   void LeaveMode(const TCHAR *mode);
 
   /**
+   * Process an event chain.
+   */
+  void ProcessEvent(unsigned event_id);
+
+  /**
    * Process a hot key for the specified mode.
    */
   bool ProcessKey(Mode mode, unsigned key_code);
