@@ -13,9 +13,12 @@ PO_FILES = $(wildcard po/*.po)
 MO_FILES = $(patsubst po/%.po,$(OUT)/po/%.mo,$(PO_FILES))
 LINGUAS = $(patsubst po/%.po,%,$(PO_FILES))
 
+GETTEXT_LDLIBS =
+GETTEXT_LDADD =
+
 ifeq ($(TARGET),UNIX)
 ifeq ($(shell uname -s),Darwin)
-GETTEXT_LDLIBS = /opt/local/lib/libintl.a /opt/local/lib/libiconv.a
+GETTEXT_LDADD := /opt/local/lib/libintl.a /opt/local/lib/libiconv.a
 endif
 endif
 
