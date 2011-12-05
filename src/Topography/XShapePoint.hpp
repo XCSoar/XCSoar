@@ -38,7 +38,12 @@ typedef PixelScalar ShapeScalar;
 
 typedef int32_t ShapeScalar;
 struct ShapePoint {
-  int32_t x, y;
+  /**
+   * Type to be used by vector math, where a range of
+   * max(ShapeScalar)*max(ShapeScalar) is needed.
+   */
+  typedef float SquareType;
+  ShapeScalar x, y;
 };
 
 static inline unsigned
