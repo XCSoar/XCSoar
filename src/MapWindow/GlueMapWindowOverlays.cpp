@@ -250,23 +250,19 @@ GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
 void
 GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos)
 {
-  unsigned min_time = 0;
-  if (GetDisplayMode() == DM_CIRCLING) {
+  unsigned min_time;
+  switch(SettingsMap().trail_length) {
+  case TRAIL_OFF:
+    return;
+  case TRAIL_LONG:
+    min_time = max(0, (int)Basic().time - 3600);
+    break;
+  case TRAIL_SHORT:
     min_time = max(0, (int)Basic().time - 600);
-  } else {
-    switch(SettingsMap().trail_length) {
-    case TRAIL_OFF:
-      return;
-    case TRAIL_LONG:
-      min_time = max(0, (int)Basic().time - 3600);
-      break;
-    case TRAIL_SHORT:
-      min_time = max(0, (int)Basic().time - 600);
-      break;
-    case TRAIL_FULL:
-      min_time = 0; // full
-      break;
-    }
+    break;
+  case TRAIL_FULL:
+    min_time = 0; // full
+    break;
   }
 
   DrawTrail(canvas, aircraft_pos, min_time,
