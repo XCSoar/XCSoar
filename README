@@ -72,9 +72,8 @@ For Mac OS X, you need:
 
 To compile for the Mac, run
 
-./configure
-make TARGET=UNIX
-
+ ./configure
+ make
 
 To compile, run:
 

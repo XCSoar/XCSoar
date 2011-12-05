@@ -2402,11 +2402,4 @@ $(TODAY_INSTALL_BIN): $(TODAY_INSTALL_OBJS) $(TODAY_INSTALL_LDADD) | $(TARGET_BI
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
 
-
-debug-: $(addprefix call-debug-,$(DEFAULT_TARGETS))
-call-debug-%:
-	$(MAKE) debug TARGET=$(patsubst call-debug-%,%,$@) DEBUG=$(DEBUG) V=$(V)
-
-$(addprefix debug-,$(TARGETS)): debug-%: $(DEBUG_PROGRAMS)
-
-debug: debug-$(TARGET)
+debug: $(DEBUG_PROGRAMS)

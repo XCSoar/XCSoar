@@ -1,5 +1,17 @@
 TARGETS = PC WIN64 PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX ANDROID ANDROID7 ANDROIDFAT CYGWIN
 
+ifeq ($(TARGET),)
+  ifeq ($(HOST_IS_UNIX),y)
+    TARGET = UNIX
+  else
+    TARGET = PC
+  endif
+else
+  ifeq ($(filter $(TARGET),$(TARGETS)),)
+    $(error Unknown target: $(TARGET))
+  endif
+endif
+
 # These targets are built when you don't specify the TARGET variable.
 DEFAULT_TARGETS = PC PPC2000 PPC2003 WM5 ALTAIR WINE
 

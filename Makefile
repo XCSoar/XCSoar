@@ -753,24 +753,8 @@ endif
 include $(topdir)/build/gettext.mk
 include $(topdir)/build/cab.mk
 
-all: all-$(TARGET)
-
-# if no TARGET is set, build all targets
-all-: $(addprefix call-all-,$(DEFAULT_TARGETS))
-call-all-%:
-	$(MAKE) TARGET=$(patsubst call-all-%,%,$@) DEBUG=$(DEBUG) V=$(V)
-
-$(addprefix all-,$(TARGETS)): all-%: $(OUTPUTS)
-
-EVERYTHING = $(OUTPUTS) debug-$(TARGET) build-check build-harness
-
-everything-: $(addprefix call-everything-,$(DEFAULT_TARGETS))
-call-everything-%:
-	$(MAKE) everything TARGET=$(patsubst call-everything-%,%,$@) EVERYTHING=$(EVERYTHING) V=$(V)
-
-$(addprefix everything-,$(TARGETS)): everything-%: $(EVERYTHING)
-
-everything: everything-$(TARGET)
+all: $(OUTPUTS)
+everything: $(OUTPUTS) debug build-check build-harness
 
 ####### products
 
