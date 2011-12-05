@@ -14,13 +14,13 @@ $(OUT)/include/InputEvents_Text2Event.cpp: $(SRC)/InputEvents.hpp \
 	$(Q)$(PERL) $(topdir)/tools/Text2Event.pl $< >$@.tmp
 	@mv $@.tmp $@
 
-$(OUT)/include/InputEvents_Text2GCE.cpp: $(SRC)/InputEvents.hpp \
+$(OUT)/include/InputEvents_Text2GCE.cpp: $(SRC)/InputQueue.hpp \
 	$(topdir)/tools/Text2GCE.pl | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) $(topdir)/tools/Text2GCE.pl $< >$@.tmp
 	@mv $@.tmp $@
 
-$(OUT)/include/InputEvents_Text2NE.cpp: $(SRC)/InputEvents.hpp \
+$(OUT)/include/InputEvents_Text2NE.cpp: $(SRC)/InputQueue.hpp \
 	$(topdir)/tools/Text2NE.pl | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) $(topdir)/tools/Text2NE.pl $< >$@.tmp

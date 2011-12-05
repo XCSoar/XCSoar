@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "InputQueue.hpp"
 #include "InputEvents.hpp"
 #include "Protection.hpp"
 #include "Thread/Mutex.hpp"

@@ -39,7 +39,7 @@ Copyright_License {
 #include "OS/Clock.hpp"
 #include "../Simulator.hpp"
 #include "Asset.hpp"
-#include "InputEvents.hpp"
+#include "InputQueue.hpp"
 #include "LogFile.hpp"
 
 #ifdef ANDROID

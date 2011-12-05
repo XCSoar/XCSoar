@@ -24,7 +24,7 @@ Copyright_License {
 
 #include "ConditionMonitorFinalGlide.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "InputEvents.hpp"
+#include "InputQueue.hpp"
 
 bool
 ConditionMonitorFinalGlide::CheckCondition(const GlideComputer& cmp)

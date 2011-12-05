@@ -68,7 +68,7 @@ Copyright_License {
 /* fake symbols: */
 
 #include "ConditionMonitor/ConditionMonitors.hpp"
-#include "InputEvents.hpp"
+#include "InputQueue.hpp"
 #include "Logger/Logger.hpp"
 #include "ThermalBase.hpp"
 #include "ThermalLocator.hpp"

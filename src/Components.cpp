@@ -33,6 +33,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "InputEvents.hpp"
+#include "InputQueue.hpp"
 #include "Geo/Geoid.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/Dialogs.h"

@@ -19,33 +19,28 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-
 */
 
-#include "ConditionMonitorLandableReachable.hpp"
-#include "Computer/GlideComputer.hpp"
-#include "InputQueue.hpp"
+#ifndef XCSOAR_INPUT_LOOKUP_HPP
+#define XCSOAR_INPUT_LOOKUP_HPP
 
-bool
-ConditionMonitorLandableReachable::CheckCondition(const GlideComputer& cmp)
+#include "Math/fixed.hpp"
+#include "Compiler.h"
+
+#include <tchar.h>
+
+typedef void (*pt2Event)(const TCHAR *);
+
+namespace InputEvents
 {
-  if (!cmp.Calculated().flight.flying)
-    return false;
+  gcc_pure
+  int findGCE(const TCHAR *data);
 
-  now_reachable = cmp.Calculated().common_stats.landable_reachable;
+  gcc_pure
+  int findNE(const TCHAR *data);
 
-  // warn when becoming unreachable
-  return (!now_reachable && last_reachable);
-}
+  gcc_pure
+  pt2Event findEvent(const TCHAR *);
+};
 
-void
-ConditionMonitorLandableReachable::Notify()
-{
-  InputEvents::processGlideComputer(GCE_LANDABLE_UNREACHABLE);
-}
-
-void
-ConditionMonitorLandableReachable::SaveLast()
-{
-  last_reachable = now_reachable;
-}
+#endif

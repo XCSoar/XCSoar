@@ -24,7 +24,7 @@ Copyright_License {
 #include "InputParser.hpp"
 #include "InputConfig.hpp"
 #include "InputKeys.hpp"
-#include "InputEvents.hpp"
+#include "InputLookup.hpp"
 #include "IO/LineReader.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/StaticString.hpp"

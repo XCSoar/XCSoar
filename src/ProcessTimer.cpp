@@ -24,6 +24,7 @@ Copyright_License {
 #include "ProcessTimer.hpp"
 #include "Interface.hpp"
 #include "Protection.hpp"
+#include "InputQueue.hpp"
 #include "InputEvents.hpp"
 #include "Device/device.hpp"
 #include "Device/All.hpp"

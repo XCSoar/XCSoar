@@ -29,7 +29,7 @@ Copyright_License {
 #include "TeamCodeCalculation.hpp"
 #include "PeriodClock.hpp"
 #include "GlideComputerInterface.hpp"
-#include "InputEvents.hpp"
+#include "InputQueue.hpp"
 #include "SettingsComputer.hpp"
 #include "Math/Earth.hpp"
 #include "Logger/Logger.hpp"
