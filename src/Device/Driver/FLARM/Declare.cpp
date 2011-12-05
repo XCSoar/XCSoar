@@ -27,7 +27,9 @@ Copyright_License {
 #include "Operation.hpp"
 
 bool
-FlarmDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
+FlarmDevice::Declare(const Declaration &declaration,
+                     gcc_unused const Waypoint *home,
+                     OperationEnvironment &env)
 {
   assert(!in_binary_mode);
 

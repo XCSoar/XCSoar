@@ -65,7 +65,7 @@ protected:
 
 public:
   virtual void LinkTimeout();
-  virtual bool Declare(const struct Declaration &declaration,
+  virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
 };
 
@@ -190,6 +190,7 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
 
 bool
 EWDevice::Declare(const struct Declaration &declaration,
+                  gcc_unused const Waypoint *home,
                   OperationEnvironment &env)
 {
   // change to IO Mode baudrate

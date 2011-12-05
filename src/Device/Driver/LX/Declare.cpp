@@ -210,7 +210,9 @@ DeclareInner(Port &port, const Declaration &declaration,
 }
 
 bool
-LXDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
+LXDevice::Declare(const Declaration &declaration,
+                  gcc_unused const Waypoint *home,
+                  OperationEnvironment &env)
 {
   if (declaration.Size() < 2 || declaration.Size() > 12)
     return false;

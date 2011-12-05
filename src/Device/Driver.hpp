@@ -35,6 +35,7 @@ Copyright_License {
 struct NMEAInfo;
 struct DerivedInfo;
 struct DeviceConfig;
+struct Waypoint;
 class Port;
 class AtmosphericPressure;
 class OperationEnvironment;
@@ -163,9 +164,12 @@ public:
    * Declare a task.
    *
    * @param declaration the task declaration
+   * @param home the home waypoint, or NULL if not known/configured;
+   * this is not part of the task declaration, but some drivers might
+   * want to send it to the logger during the declaration process
    * @return true on success
    */
-  virtual bool Declare(const struct Declaration &declaration,
+  virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env) = 0;
 
   /**
@@ -233,7 +237,7 @@ public:
   virtual bool PutActiveFrequency(RadioFrequency frequency);
   virtual bool PutStandbyFrequency(RadioFrequency frequency);
 
-  virtual bool Declare(const struct Declaration &declaration,
+  virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
 
   virtual bool EnableDownloadMode() {

@@ -60,6 +60,7 @@ public:
 public:
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool Declare(const struct Declaration &declaration,
+                       const Waypoint *home,
                        OperationEnvironment &env);
 };
 
@@ -101,6 +102,7 @@ AltairProDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
 bool
 AltairProDevice::Declare(const struct Declaration &declaration,
+                         gcc_unused const Waypoint *home,
                          OperationEnvironment &env)
 {
   port.SetRxTimeout(500); // set RX timeout to 500[ms]

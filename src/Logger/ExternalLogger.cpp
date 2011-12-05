@@ -48,26 +48,29 @@
 class DeclareJob : public Job {
   DeviceDescriptor &device;
   const struct Declaration &declaration;
+  const Waypoint *home;
 
   bool result;
 
 public:
-  DeclareJob(DeviceDescriptor &_device, const struct Declaration &_declaration)
-    :device(_device), declaration(_declaration) {}
+  DeclareJob(DeviceDescriptor &_device, const struct Declaration &_declaration,
+             const Waypoint *_home)
+    :device(_device), declaration(_declaration), home(_home) {}
 
   bool GetResult() const {
     return result;
   }
 
   virtual void Run(OperationEnvironment &env) {
-    result = device.Declare(declaration, env);
+    result = device.Declare(declaration, home, env);
   }
 };
 
 static bool
-DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration)
+DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration,
+                const Waypoint *home)
 {
-  DeclareJob job(device, declaration);
+  DeclareJob job(device, declaration, home);
   JobDialog(CommonInterface::main_window,
             CommonInterface::main_window.GetLook().dialog,
             _T(""), job, true);
@@ -75,13 +78,14 @@ DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration)
 }
 
 static bool
-DeviceDeclare(DeviceDescriptor &dev, const Declaration &declaration)
+DeviceDeclare(DeviceDescriptor &dev, const Declaration &declaration,
+              const Waypoint *home)
 {
   if (MessageBoxX(_("Declare task?"), dev.GetDisplayName(),
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
     return false;
 
-  if (!DoDeviceDeclare(dev, declaration)) {
+  if (!DoDeviceDeclare(dev, declaration, home)) {
     MessageBoxX(_("Error occured,\nTask NOT declared!"),
                 dev.GetDisplayName(), MB_OK | MB_ICONERROR);
     return false;
@@ -93,14 +97,14 @@ DeviceDeclare(DeviceDescriptor &dev, const Declaration &declaration)
 }
 
 void
-ExternalLogger::Declare(const Declaration &decl)
+ExternalLogger::Declare(const Declaration &decl, const Waypoint *home)
 {
   bool found_logger = false;
 
   for (unsigned i = 0; i < NUMDEV; ++i) {
     if (device_list[i].CanDeclare()) {
       found_logger = true;
-      DeviceDeclare(device_list[i], decl);
+      DeviceDeclare(device_list[i], decl, home);
     }
   }
 

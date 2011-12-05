@@ -26,9 +26,10 @@ Copyright_License {
 
 class DeviceDescriptor;
 struct Declaration;
+struct Waypoint;
 
 namespace ExternalLogger {
-  void Declare(const Declaration &decl);
+  void Declare(const Declaration &decl, const Waypoint *home);
   void DownloadFlightFrom(DeviceDescriptor &device);
 }
 

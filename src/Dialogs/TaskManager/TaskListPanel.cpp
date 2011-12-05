@@ -398,7 +398,7 @@ TaskListPanel::OnDeclareClicked()
 
   Declaration decl(*active_task);
   Profile::GetDeclarationConfig(decl, CommonInterface::SettingsComputer().plane);
-  ExternalLogger::Declare(decl);
+  ExternalLogger::Declare(decl, way_points.GetHome());
 }
 
 static void

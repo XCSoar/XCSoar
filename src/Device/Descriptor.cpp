@@ -401,6 +401,7 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure &value)
 
 bool
 DeviceDescriptor::Declare(const struct Declaration &declaration,
+                          const Waypoint *home,
                           OperationEnvironment &env)
 {
   if (port == NULL)
@@ -414,13 +415,13 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
 
   port->StopRxThread();
 
-  bool result = device != NULL && device->Declare(declaration, env);
+  bool result = device != NULL && device->Declare(declaration, home, env);
 
   if (device_blackboard->IsFLARM(index) && !IsDriver(_T("FLARM"))) {
     text.Format(_T("%s: FLARM."), _("Sending declaration"));
     env.SetText(text);
     FlarmDevice flarm(*port);
-    result = flarm.Declare(declaration, env) || result;
+    result = flarm.Declare(declaration, home, env) || result;
   }
 
   port->StartRxThread();

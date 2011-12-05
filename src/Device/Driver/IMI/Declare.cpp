@@ -27,7 +27,9 @@ Copyright_License {
 #include "Operation.hpp"
 
 bool
-IMIDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
+IMIDevice::Declare(const Declaration &declaration,
+                   gcc_unused const Waypoint *home,
+                   OperationEnvironment &env)
 {
   // verify WP number
   unsigned size = declaration.Size();

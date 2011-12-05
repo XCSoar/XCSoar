@@ -25,9 +25,7 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Operation.hpp"
 #include "vlapi2.h"
-#include "Components.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "Engine/Waypoint/Waypoints.hpp"
 
 #ifdef _UNICODE
 #include <windows.h>
@@ -93,7 +91,7 @@ CopyTurnPoint(VLAPI_DATA::DCLWPT &dest, const Declaration::TurnPoint &src)
 }
 
 static bool
-DeclareInner(VLAPI &vl, const Declaration &declaration)
+DeclareInner(VLAPI &vl, const Declaration &declaration, const Waypoint *home)
 {
   assert(declaration.Size() >= 2);
 
@@ -116,7 +114,6 @@ DeclareInner(VLAPI &vl, const Declaration &declaration)
                      sizeof(vl.declaration.flightinfo.glidertype),
                      declaration.aircraft_type);
 
-  const Waypoint *home = way_points.GetHome();
   if (home != NULL)
     CopyWaypoint(vl.declaration.flightinfo.homepoint, *home);
 
@@ -141,6 +138,7 @@ DeclareInner(VLAPI &vl, const Declaration &declaration)
 
 bool
 VolksloggerDevice::Declare(const Declaration &declaration,
+                           const Waypoint *home,
                            OperationEnvironment &env)
 {
   if (declaration.Size() < 2)
@@ -155,7 +153,7 @@ VolksloggerDevice::Declare(const Declaration &declaration,
 
   VLAPI vl(port, env);
 
-  bool success = DeclareInner(vl, declaration);
+  bool success = DeclareInner(vl, declaration, home);
 
   vl.close(1);
 

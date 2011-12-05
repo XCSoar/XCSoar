@@ -41,8 +41,6 @@ Copyright_License {
 
 #include <stdio.h>
 
-Waypoints way_points;
-
 /*
  * Fake InputEvents.cpp
  */

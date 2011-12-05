@@ -41,8 +41,6 @@ Copyright_License {
 
 #include <stdio.h>
 
-Waypoints way_points;
-
 /*
  * Fake InputEvents.cpp
  */
@@ -133,7 +131,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  if (device->Declare(declaration, env))
+  if (device->Declare(declaration, NULL, env))
     fprintf(stderr, "Declaration ok\n");
   else
     fprintf(stderr, "Declaration failed\n");

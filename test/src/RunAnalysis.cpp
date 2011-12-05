@@ -109,8 +109,6 @@ ThermalLocator::Process(const bool circling,
                         const SpeedVector wind,
                         ThermalLocatorInfo& therm) {}
 
-Waypoints way_points;
-
 bool
 InputEvents::processNmea(unsigned key)
 {

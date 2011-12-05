@@ -40,7 +40,7 @@ public:
 public:
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool PutMacCready(fixed MacCready);
-  virtual bool Declare(const Declaration &declaration,
+  virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
 
   virtual bool ReadFlightList(RecordedFlightList &flight_list,

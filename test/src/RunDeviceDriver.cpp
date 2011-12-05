@@ -37,9 +37,6 @@ Copyright_License {
 
 const struct DeviceRegister *driver;
 
-Waypoints way_points;
-Waypoints::Waypoints() {}
-
 /*
  * Fake InputEvents.cpp
  */

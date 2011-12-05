@@ -21,11 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Engine/Waypoint/Waypoints.hpp"
 #include "InputEvents.hpp"
-
-Waypoints way_points;
-Waypoints::Waypoints() {}
 
 bool
 InputEvents::processNmea(unsigned key)

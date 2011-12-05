@@ -63,14 +63,6 @@ InputEvents::processNmea(unsigned ne_id)
 }
 
 /*
- * Fake Waypoints
- */
-
-Waypoints way_points;
-
-Waypoints::Waypoints() {}
-
-/*
  * Unit tests
  */
 
@@ -764,7 +756,7 @@ TestDeclare(const struct DeviceRegister &driver)
   for (unsigned i = 0; i < 1024; ++i) {
     inject_port_fault = i;
     NullOperationEnvironment env;
-    bool success = device->Declare(declaration, env);
+    bool success = device->Declare(declaration, NULL, env);
     if (success || !port.running || port.timeout != 0 ||
         port.baud_rate != FaultInjectionPort::DEFAULT_BAUD_RATE)
       break;

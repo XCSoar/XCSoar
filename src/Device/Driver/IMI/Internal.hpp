@@ -41,7 +41,7 @@ public:
   virtual bool DownloadFlight(const RecordedFlightInfo &flight,
                               const TCHAR *path, OperationEnvironment &env);
 
-  virtual bool Declare(const Declaration &declaration,
+  virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
 private:
   bool Connect(OperationEnvironment &env);

@@ -38,6 +38,8 @@ Copyright_License {
 
 struct NMEAInfo;
 struct DerivedInfo;
+struct Declaration;
+struct Waypoint;
 class Port;
 class Device;
 class AtmosphericPressure;
@@ -240,7 +242,7 @@ public:
   bool PutStandbyFrequency(RadioFrequency frequency);
   bool PutQNH(const AtmosphericPressure &pres);
 
-  bool Declare(const struct Declaration &declaration,
+  bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env);
 
   bool EnableDownloadMode();

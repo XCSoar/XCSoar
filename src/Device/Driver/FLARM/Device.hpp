@@ -55,7 +55,8 @@ public:
     assert(!in_binary_mode);
   }
 
-  bool Declare(const Declaration &declaration, OperationEnvironment &env);
+  bool Declare(const Declaration &declaration, const Waypoint *home,
+               OperationEnvironment &env);
 
   bool SetPilot(const TCHAR *pilot_name);
   bool SetCoPilot(const TCHAR *copilot_name);

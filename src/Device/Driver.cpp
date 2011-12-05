@@ -85,7 +85,7 @@ AbstractDevice::PutStandbyFrequency(RadioFrequency frequency)
 }
 
 bool
-AbstractDevice::Declare(const struct Declaration &declaration,
+AbstractDevice::Declare(const Declaration &declaration, const Waypoint *home,
                         OperationEnvironment &env)
 {
   return false;

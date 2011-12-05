@@ -43,7 +43,7 @@ public:
   virtual bool PutMacCready(fixed MacCready);
   virtual bool PutBugs(fixed bugs);
   virtual bool PutBallast(fixed ballast);
-  virtual bool Declare(const Declaration &declaration,
+  virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
 
   virtual bool ReadFlightList(RecordedFlightList &flight_list,

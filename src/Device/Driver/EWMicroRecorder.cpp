@@ -60,7 +60,7 @@ public:
 
 public:
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
-  virtual bool Declare(const Declaration &declaration,
+  virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
 };
 
@@ -306,6 +306,7 @@ DeclareInner(Port &port, const Declaration &declaration,
 
 bool
 EWMicroRecorderDevice::Declare(const Declaration &declaration,
+                               const Waypoint *home,
                                OperationEnvironment &env)
 {
   // Must have at least two, max 12 waypoints

@@ -143,6 +143,7 @@ DeclareInner(Port &port, const Declaration &declaration,
 
 bool
 CAI302Device::Declare(const Declaration &declaration,
+                      gcc_unused const Waypoint *home,
                       OperationEnvironment &env)
 {
   bool success = DeclareInner(port, declaration, env);

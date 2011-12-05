@@ -34,7 +34,7 @@ public:
   VolksloggerDevice(Port &_port):port(_port) {}
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
-  virtual bool Declare(const Declaration &declaration,
+  virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
 };
 
