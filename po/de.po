@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-31 08:31+0100\n"
-"PO-Revision-Date: 2011-10-13 23:28+0000\n"
-"Last-Translator: Folken Van Vanel <Unknown>\n"
+"PO-Revision-Date: 2011-12-04 11:40+0000\n"
+"Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-31 07:28+0000\n"
-"X-Generator: Launchpad (build 14197)\n"
+"X-Launchpad-Export-Date: 2011-12-05 22:08+0000\n"
+"X-Generator: Launchpad (build 14435)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -53,9 +53,8 @@ msgid "Airspace"
 msgstr "Luftraum"
 
 #: src/Airspace/AirspaceParser.cpp:860
-#, fuzzy
 msgid "Unknown airspace filetype"
-msgstr "Unbekannter Dateityp."
+msgstr "Unbekannter Luftraumdateityp"
 
 #: src/ConditionMonitor.cpp:165
 msgid "Significant wind change"
@@ -1016,17 +1015,17 @@ msgstr ""
 "Angezeigte Geschwindigkeit gegenüber Luft, laut angeschlossenem Sensor."
 
 #: src/InfoBoxes/Content/Factory.cpp:359
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Barometric altitude"
-msgstr "Max. Höhe"
+msgstr "Barometrische Höhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alt. Baro."
-msgstr "H Baro"
+msgstr "H Baro."
 
 #: src/InfoBoxes/Content/Factory.cpp:361
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
@@ -3130,7 +3129,7 @@ msgstr "Erstelle xcsoar-checklist.txt\n"
 
 #: src/Dialogs/dlgPlanes.cpp:109
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #: src/Dialogs/dlgPlanes.cpp:148
 #, c-format
@@ -3436,9 +3435,8 @@ msgid "Fix invalid"
 msgstr "Positionsbestimmung ungültig"
 
 #: src/Dialogs/dlgStatus.cpp:91
-#, fuzzy
 msgid "2D fix"
-msgstr "3D Positionsbestimmung"
+msgstr "2D Positionsbestimmung"
 
 #: src/Dialogs/dlgStatus.cpp:93
 msgid "3D fix"
@@ -4597,21 +4595,20 @@ msgstr "Die Aufgabe wäre mit diesen Änderungen fehlerhaft."
 
 #: src/Dialogs/dlgWaypointDetails.cpp:262
 #: src/Dialogs/dlgWaypointDetails.cpp:295
-#, fuzzy
 msgid "Created Goto Task."
-msgstr "Erzeuge neue Aufgabe?"
+msgstr "Zielflug angelegt."
 
 #: src/Dialogs/dlgWaypointDetails.cpp:262
 #: src/Dialogs/dlgWaypointDetails.cpp:267
 #: src/Dialogs/dlgWaypointDetails.cpp:295
 #: src/Dialogs/dlgWaypointDetails.cpp:300
 msgid "Success"
-msgstr ""
+msgstr "Erfolg"
 
 #: src/Dialogs/dlgWaypointDetails.cpp:267
 #: src/Dialogs/dlgWaypointDetails.cpp:300
 msgid "Created 2-point task from Goto Task."
-msgstr ""
+msgstr "Zwei Wegpunkt Aufgabe aus Zielflug angelegt."
 
 #: src/Dialogs/dlgWaypointDetails.cpp:343
 msgid "Clear current task?"
@@ -6879,7 +6876,7 @@ msgstr "Dialogstil"
 
 #: Data/Dialogs/dlgTarget.xml:32 Data/Dialogs/dlgTarget_L.xml:12
 msgid "Optimized"
-msgstr ""
+msgstr "Optimiert"
 
 #: Data/Dialogs/dlgWaypointDetails.xml:14
 #: Data/Dialogs/dlgWaypointDetails_L.xml:14
@@ -8437,9 +8434,8 @@ msgstr ""
 "+"
 
 #: Data/Input/default.xci:736
-#, fuzzy
 msgid "Setup Plane"
-msgstr "Einstellungs Modus"
+msgstr "Flugzeug"
 
 #: Data/Input/default.xci:598
 msgid "Topo."
@@ -8777,83 +8773,6 @@ msgstr ""
 #~ "Wenn \"Externe Polare\" als Polarentyp ausgewählt ist, muss hier die "
 #~ "Datei mit der Polare ausgewählt werden (im WinPilot Format)."
 
-#~ msgid "Height barometric"
-#~ msgstr "Höhe - barometrisch"
-
-#~ msgid "The vertical distance to the nearest airspace"
-#~ msgstr "Die vertikale Distanz zum nächsten Luftraum"
-
-#~ msgid "No METAR available"
-#~ msgstr "Kein METAR verfügbar"
-
-#~ msgid ""
-#~ "The list of tracked stations is full. Please remove a station before "
-#~ "adding a new one."
-#~ msgstr ""
-#~ "Die Liste der verfolgten Stationen ist voll. Bitte lösche erst eine "
-#~ "Station und füge dann eine Neue hinzu."
-
-#~ msgid "Airport ICAO code"
-#~ msgstr "Flughafen ICAO code"
-
-#~ msgid "Please enter the FOUR letter code of the desired station."
-#~ msgstr "Bitte gebe die vier Buchstaben Kennung der gewünschten Station ein."
-
-#~ msgid ""
-#~ "Please don't use special characters in the four letter code of the "
-#~ "desired station."
-#~ msgstr ""
-#~ "Bitte verwende keine Umlaute im Vier-Buchstabenkode der gewünschten "
-#~ "Station."
-
-#~ msgid "Download"
-#~ msgstr "Herunterladen"
-
-#~ msgid "Do you want to remove station %s?"
-#~ msgstr "Möchtest Du die Station \"%s\" verwerfen?"
-
-#~ msgid "This function is not available on your platform yet."
-#~ msgstr "Die Funktion ist noch nicht für diese Plattform verfügbar."
-
-#~ msgid "No METAR available!"
-#~ msgstr "Kein METAR verfügbar!"
-
-#~ msgid "No TAF available!"
-#~ msgstr "j"
-
-#~ msgid "No fix"
-#~ msgstr "Keine Positionsbestimmung"
-
-#~ msgid "Flap"
-#~ msgstr "Wölbklappe"
-
-#~ msgid "SC"
-#~ msgstr "man. Schalter"
-
-#~ msgid "OLC_FAI"
-#~ msgstr "OLC_FAI"
-
-#~ msgid "OLC_Classic"
-#~ msgstr "OLC_Classic"
-
-#~ msgid "OLC_League"
-#~ msgstr "OLC_League"
-
-#~ msgid "OLC_Plus"
-#~ msgstr "OLC_Plus"
-
-#~ msgid "OLC_XContest"
-#~ msgstr "OLC_XContest"
-
-#~ msgid "OLC_DHVXC"
-#~ msgstr "OLC_DHVXC"
-
-#~ msgid "OLC_SISAT"
-#~ msgstr "OLC_SISAT"
-
-#~ msgid "Locked"
-#~ msgstr "Gesperrt"
-
 #~ msgid "Task Declared!"
 #~ msgstr "Aufgabe deklariert!"
 
@@ -9001,6 +8920,9 @@ msgstr ""
 #~ msgid "30 seconds"
 #~ msgstr "30 Sekunden"
 
+#~ msgid "Flap"
+#~ msgstr "Wölbklappe"
+
 #~ msgid "Changes to configuration saved."
 #~ msgstr "Änderungen an der Konfiguration gespeichert."
 
@@ -9105,6 +9027,9 @@ msgstr ""
 
 #~ msgid "LED Bright"
 #~ msgstr "LED Helligkeit"
+
+#~ msgid "Locked"
+#~ msgstr "Gesperrt"
 
 #~ msgid "FLARM map"
 #~ msgstr "FLARM Karte"
@@ -9252,6 +9177,9 @@ msgstr ""
 
 #~ msgid "Rel. Alt.:"
 #~ msgstr "Relative Höhe:"
+
+#~ msgid "No fix"
+#~ msgstr "Keine Positionsbestimmung"
 
 #~ msgid "Active task modified"
 #~ msgstr "Aktuelle Aufgabe geändert"
@@ -9463,6 +9391,11 @@ msgstr ""
 #~ "Average cross country speed while on current task, compensated for "
 #~ "altitude."
 #~ msgstr "Mittlere Geschwindigkeit über die Aufgabe, höhenkompensiert."
+
+#~ msgid ""
+#~ "This is the barometric altitude obtained from a GPS equipped with "
+#~ "pressure sensor, or a supported external intelligent vario."
+#~ msgstr "Barometrische Höhe laut dem angeschlossenem Drucksensor."
 
 #~ msgid "V Mc"
 #~ msgstr "V Mc"
@@ -9680,6 +9613,9 @@ msgstr ""
 
 #~ msgid "SnailTrail ON Short"
 #~ msgstr "Kurze Flugspur"
+
+#~ msgid "SC"
+#~ msgstr "man. Schalter"
 
 #~ msgid "Avg/Alt"
 #~ msgstr "Vario/Höhe"
@@ -10046,6 +9982,9 @@ msgstr ""
 
 #~ msgid "Aircraft/wind speed"
 #~ msgstr "Flug- u. Windgeschwindigkeit"
+
+#~ msgid "Unknown Filetype."
+#~ msgstr "Unbekannter Dateityp."
 
 #~ msgid "InfoBoxes"
 #~ msgstr "InfoBoxen"
