@@ -37,20 +37,6 @@ Copyright_License {
 
 const struct DeviceRegister *driver;
 
-/*
- * Fake InputEvents.cpp
- */
-
-bool
-InputEvents::processNmea(unsigned key)
-{
-  return true;
-}
-
-/*
- * The actual code.
- */
-
 static void
 Dump(GeoPoint location)
 {

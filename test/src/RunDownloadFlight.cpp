@@ -28,7 +28,6 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "InputEvents.hpp"
 #include "OS/PathName.hpp"
 #include "ConsoleOperationEnvironment.hpp"
 #include "Profile/DeviceConfig.hpp"
@@ -40,16 +39,6 @@ Copyright_License {
 #endif
 
 #include <stdio.h>
-
-/*
- * Fake InputEvents.cpp
- */
-
-bool
-InputEvents::processNmea(unsigned key)
-{
-  return true;
-}
 
 static void
 PrintFlightList(const RecordedFlightList &flight_list)
@@ -63,9 +52,6 @@ PrintFlightList(const RecordedFlightList &flight_list)
   }
 }
 
-/*
- * The actual code.
- */
 int main(int argc, char **argv)
 {
   if (argc < 5) {

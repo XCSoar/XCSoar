@@ -56,12 +56,6 @@
 
 static const DeviceConfig dummy_config = DeviceConfig();
 
-bool
-InputEvents::processNmea(unsigned ne_id)
-{
-  return false;
-}
-
 /*
  * Unit tests
  */

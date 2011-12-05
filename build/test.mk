@@ -528,6 +528,7 @@ TEST_DRIVER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/TestDriver.cpp
 TEST_DRIVER_LDADD = $(MATH_LIBS) $(IO_LIBS)
 $(eval $(call link-program,TestDriver,TEST_DRIVER))
@@ -1116,6 +1117,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/RunDeviceDriver.cpp
 RUN_DEVICE_DRIVER_LDADD = \
 	$(DRIVER_LIBS) \
@@ -1147,6 +1149,7 @@ RUN_DECLARE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/RunDeclare.cpp
 ifeq ($(HAVE_POSIX),y)
 RUN_DECLARE_SOURCES += \
@@ -1219,6 +1222,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/RunFlightList.cpp
 ifeq ($(HAVE_POSIX),y)
 RUN_FLIGHT_LIST_SOURCES += \
@@ -1261,6 +1265,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/RunDownloadFlight.cpp
 ifeq ($(HAVE_POSIX),y)
 RUN_DOWNLOAD_FLIGHT_SOURCES += \
