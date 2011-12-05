@@ -35,9 +35,8 @@ ifeq ($(TARGET_IS_DARWIN),y)
 # the pkg-config file on MacPorts is broken, we must filter out the
 # -lSDL flag manually
 SDL_LDLIBS := $(filter-out -l%,$(SDL_LDLIBS))
-SDL_LDLIBS += /opt/local/lib/libSDL_ttf.a /opt/local/lib/libfreetype.a
-SDL_LDLIBS += /opt/local/lib/libbz2.a
-SDL_LDLIBS += /opt/local/lib/libz.a
+SDL_LDADD = /opt/local/lib/libSDL_ttf.a /opt/local/lib/libfreetype.a
+SDL_LDADD += /opt/local/lib/libbz2.a /opt/local/lib/libz.a
 else
 SDL_LDLIBS += -lSDL_ttf
 endif

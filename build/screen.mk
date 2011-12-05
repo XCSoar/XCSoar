@@ -113,3 +113,5 @@ $(SCREEN_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(SCREEN_LIBS): $(SCREEN_OBJS)
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^
+
+SCREEN_LIBS += $(SDL_LDADD)
