@@ -28,21 +28,15 @@ Copyright_License {
 
 class Font;
 class ContainerWindow;
-class MenuBar;
 
-class ButtonLabel
-{
-protected:
-  static MenuBar *bar;
+namespace ButtonLabel {
+  void CreateButtonLabels(ContainerWindow &parent);
+  void SetFont(const Font &Font);
+  void Destroy();
+  void SetLabelText(unsigned i, const TCHAR *text);
+  bool IsEnabled(unsigned i);
 
-public:
-  static void CreateButtonLabels(ContainerWindow &parent);
-  static void SetFont(const Font &Font);
-  static void Destroy();
-  static void SetLabelText(unsigned i, const TCHAR *text);
-  static bool IsEnabled(unsigned i);
-
-  static bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
+  bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
 };
 
 #endif

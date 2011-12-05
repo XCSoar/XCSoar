@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <algorithm>
 
-MenuBar *ButtonLabel::bar;
+static MenuBar *bar;
 
 void
 ButtonLabel::CreateButtonLabels(ContainerWindow &parent)
