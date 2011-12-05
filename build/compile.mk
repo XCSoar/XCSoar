@@ -7,8 +7,8 @@ endif
 
 EXE := $(findstring .exe,$(MAKE))
 AR = $(TCPATH)ar$(EXE)
-CXX = $(CCACHE) $(TCPATH)g++$(EXE)
-CC = $(CCACHE) $(TCPATH)gcc$(EXE)
+CXX = $(TCPATH)g++$(EXE)
+CC = $(TCPATH)gcc$(EXE)
 LINK = $(CXX)
 DLLTOOL = $(TCPATH)dlltool$(EXE)
 SIZE = $(TCPATH)size$(EXE)
