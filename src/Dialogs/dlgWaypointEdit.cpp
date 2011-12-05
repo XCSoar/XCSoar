@@ -25,7 +25,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Units/Units.hpp"
-#include "InputEvents.hpp"
 #include "Screen/Layout.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Math/FastMath.h"
