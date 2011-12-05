@@ -9,11 +9,7 @@ EXE := $(findstring .exe,$(MAKE))
 AR = $(TCPATH)ar$(EXE)
 CXX = $(CCACHE) $(TCPATH)g++$(EXE)
 CC = $(CCACHE) $(TCPATH)gcc$(EXE)
-ifeq ($(WINHOST),y)
-  LINK = $(TCPATH)g++$(EXE)
-else
-  LINK = $(CCACHE) $(TCPATH)g++$(EXE)
-endif
+LINK = $(CXX)
 DLLTOOL = $(TCPATH)dlltool$(EXE)
 SIZE = $(TCPATH)size$(EXE)
 STRIP = $(TCPATH)strip$(EXE)
@@ -59,10 +55,13 @@ $(TARGET_OUTPUT_DIR)/%.i: %.c FORCE
 # Provide our own rules for building...
 #
 
+WRAPPED_CC = $(CCACHE) $(CC)
+WRAPPED_CXX = $(CCACHE) $(CXX)
+
 $(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.c $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  CC      $@"
-	$(Q)$(CC) -c -o $@ $(cc-flags) $<
+	$(Q)$(WRAPPED_CC) -c -o $@ $(cc-flags) $<
 
 $(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cpp $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  CXX     $@"
-	$(Q)$(CXX) -c -o $@ $(cxx-flags) $<
+	$(Q)$(WRAPPED_CXX) -c -o $@ $(cxx-flags) $<

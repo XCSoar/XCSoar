@@ -96,7 +96,6 @@ Copyright_License {
 #include "UIState.hpp"
 #include "Net/Features.hpp"
 #include "Tracking/TrackingGlue.hpp"
-#include "Units/Units.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "DrawThread.hpp"

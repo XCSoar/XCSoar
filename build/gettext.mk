@@ -13,8 +13,11 @@ PO_FILES = $(wildcard po/*.po)
 MO_FILES = $(patsubst po/%.po,$(OUT)/po/%.mo,$(PO_FILES))
 LINGUAS = $(patsubst po/%.po,%,$(PO_FILES))
 
+GETTEXT_LDLIBS =
+GETTEXT_LDADD =
+
 ifeq ($(TARGET_IS_DARWIN),y)
-GETTEXT_LDLIBS = /opt/local/lib/libintl.a /opt/local/lib/libiconv.a
+GETTEXT_LDADD := /opt/local/lib/libintl.a /opt/local/lib/libiconv.a
 endif
 
 $(OUT)/po/cpp.pot: $(GETTEXT_SOURCES) | $(OUT)/po/dirstamp

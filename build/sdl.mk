@@ -37,6 +37,7 @@ ifeq ($(TARGET_IS_DARWIN),y)
 SDL_LDLIBS := $(filter-out -l%,$(SDL_LDLIBS))
 SDL_LDLIBS += /opt/local/lib/libSDL_ttf.a /opt/local/lib/libfreetype.a
 SDL_LDLIBS += /opt/local/lib/libbz2.a
+SDL_LDLIBS += /opt/local/lib/libz.a
 else
 SDL_LDLIBS += -lSDL_ttf
 endif

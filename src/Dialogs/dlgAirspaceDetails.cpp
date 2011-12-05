@@ -136,6 +136,9 @@ void
 dlgAirspaceDetails(const AbstractAirspace& the_airspace,
                    ProtectedAirspaceWarningManager *_airspace_warnings)
 {
+  if (wf)
+    return;
+
   airspace = &the_airspace;
   airspace_warnings = _airspace_warnings;
 
@@ -149,4 +152,5 @@ dlgAirspaceDetails(const AbstractAirspace& the_airspace,
   wf->ShowModal();
 
   delete wf;
+  wf = NULL;
 }
