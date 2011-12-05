@@ -32,9 +32,11 @@ Copyright_License {
 #if RASTER_POINT_SIZE == SHAPE_POINT_SIZE
 
 typedef RasterPoint ShapePoint;
+typedef PixelScalar ShapeScalar;
 
 #else
 
+typedef int32_t ShapeScalar;
 struct ShapePoint {
   int32_t x, y;
 };
