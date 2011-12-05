@@ -27,8 +27,8 @@ Copyright_License {
 #define WINDZIGZAG_HPP
 
 #include "Engine/Navigation/SpeedVector.hpp"
-#include "Angle.hpp"
-#include "fixed.hpp"
+#include "Math/Angle.hpp"
+#include "Math/fixed.hpp"
 
 #include <list>
 

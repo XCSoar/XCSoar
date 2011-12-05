@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_CONDITION_MONITOR_HPP
 #define XCSOAR_CONDITION_MONITOR_HPP
 
-#include "fixed.hpp"
+#include "Math/fixed.hpp"
 
 class GlideComputer;
 

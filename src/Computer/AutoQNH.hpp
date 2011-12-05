@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_AUTO_QNH_HPP
 #define XCSOAR_AUTO_QNH_HPP
 
-#include "fixed.hpp"
+#include "Math/fixed.hpp"
 
 struct NMEAInfo;
 struct DerivedInfo;

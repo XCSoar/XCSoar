@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_INFOBOX_CONTENT_HPP
 
 #include "Language/Language.hpp"
-#include "fixed.hpp"
+#include "Math/fixed.hpp"
 
 #include <tchar.h>
 

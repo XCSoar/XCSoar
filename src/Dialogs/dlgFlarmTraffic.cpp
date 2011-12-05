@@ -33,7 +33,7 @@
 #include "Dialogs/Traffic.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Dialogs.h"
-#include "Screen.hpp"
+#include "Math/Screen.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Form/CheckBox.hpp"

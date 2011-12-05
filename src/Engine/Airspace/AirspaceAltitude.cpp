@@ -23,8 +23,9 @@
 #include "AirspaceAltitude.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "FastMath.h"
+#include "Math/FastMath.h"
 #include "Util/StaticString.hpp"
+
 #include <stdio.h>
 
 void

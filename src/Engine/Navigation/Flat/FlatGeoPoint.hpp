@@ -23,8 +23,8 @@
 #ifndef FlatGeoPoint_HPP
 #define FlatGeoPoint_HPP
 
-#include "fixed.hpp"
-#include "FastMath.h"
+#include "Math/fixed.hpp"
+#include "Math/FastMath.h"
 #include "Rough/RoughAltitude.hpp"
 #include "Compiler.h"
 

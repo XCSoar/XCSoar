@@ -1,7 +1,6 @@
 # Build rules for the generic math library
 
 MATH_SRC_DIR = $(SRC)/Math
-INCLUDES += -I$(MATH_SRC_DIR)
 
 MATH_SOURCES = \
 	$(MATH_SRC_DIR)/Angle.cpp \

@@ -21,11 +21,10 @@ Copyright_License {
 }
 */
 
-
 #ifndef WAYPOINT_WRITER_HPP
 #define WAYPOINT_WRITER_HPP
 
-#include "fixed.hpp"
+#include "Math/fixed.hpp"
 
 struct Waypoint;
 class Waypoints;

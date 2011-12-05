@@ -25,7 +25,7 @@ Copyright_License {
 #define PLANE_HPP
 
 #include "Util/StaticString.hpp"
-#include "fixed.hpp"
+#include "Math/fixed.hpp"
 
 struct Plane
 {
