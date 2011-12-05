@@ -43,7 +43,7 @@ public:
   }
 
   gcc_constexpr_method
-  bool defined() const {
+  bool IsDefined() const {
     return event > 0;
   }
 

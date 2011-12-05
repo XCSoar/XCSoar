@@ -181,7 +181,7 @@ InputEvents::processButton(unsigned bindex)
 
   Mode lastMode = getModeID();
   const MenuItem &item = input_config.GetMenuItem(lastMode, bindex);
-  if (!item.defined())
+  if (!item.IsDefined())
     return false;
 
   processGo(item.event);
@@ -221,7 +221,7 @@ InputEvents::ProcessKey(Mode mode, unsigned key_code)
 
   const Menu &menu = input_config.menus[mode];
   int i = menu.FindByEvent(event_id);
-  if (i >= 0 && menu[i].defined()) {
+  if (i >= 0 && menu[i].IsDefined()) {
     bindex = i;
     pLabelText = menu[i].label;
   }

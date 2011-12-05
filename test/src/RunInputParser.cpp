@@ -97,7 +97,7 @@ int main(int argc, char **argv)
 
     for (unsigned i = 0; i < Menu::MAX_ITEMS; ++i) {
       const MenuItem &mi = config.menus[mode][i];
-      if (mi.defined()) {
+      if (mi.IsDefined()) {
         _tprintf(_T("  Menu[%u] = '%s'\n"), i, mi.label);
         unsigned event = mi.event;
         assert(event < InputConfig::MAX_EVENTS);
