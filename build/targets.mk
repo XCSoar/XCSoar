@@ -13,6 +13,8 @@ ARMV7 := n
 X86 := n
 FAT_BINARY := n
 
+TARGET_IS_DARWIN := n
+TARGET_IS_LINUX := n
 HAVE_POSIX := n
 HAVE_WIN32 := y
 HAVE_MSVCRT := y
@@ -143,6 +145,15 @@ ifeq ($(TARGET),UNIX)
   HAVE_VASPRINTF := y
 endif
 
+ifeq ($(filter $(TARGET),UNIX WINE),$(TARGET))
+  ifeq ($(HOST_IS_LINUX),y)
+    TARGET_IS_LINUX := y
+  endif
+  ifeq ($(HOST_IS_DARWIN),y)
+    TARGET_IS_DARWIN := y
+  endif
+endif
+
 ifeq ($(TARGET),ANDROID)
   ANDROID_NDK ?= $(HOME)/opt/android-ndk-r7
 
@@ -182,6 +193,7 @@ ifeq ($(TARGET),ANDROID)
 
   TARGET_ARCH += -fpic -funwind-tables
 
+  TARGET_IS_LINUX := y
   HAVE_POSIX := y
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
@@ -325,13 +337,14 @@ endif
 ifeq ($(HAVE_POSIX),y)
 ifneq ($(TARGET),ANDROID)
   TARGET_LDLIBS += -lpthread
-  ifeq ($(UNAME_S),Linux)
+  ifeq ($(TARGET_IS_LINUX),y)
   TARGET_LDLIBS += -lrt # for clock_gettime()
   endif
 endif
-  ifeq ($(UNAME_S),Darwin)
-    TARGET_LDFLAGS += -static-libgcc
-  endif
+endif
+
+ifeq ($(TARGET_IS_DARWIN),y)
+  TARGET_LDFLAGS += -static-libgcc
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -360,7 +373,7 @@ ifeq ($(HAVE_CE),y)
 endif
 
 ifeq ($(TARGET),UNIX)
-  ifeq ($(UNAME_S),Darwin)
+  ifeq ($(TARGET_IS_DARWIN),y)
   TARGET_LDLIBS += $(shell $(CXX) -print-file-name=libstdc++.a)
   else
   TARGET_LDLIBS += -lm

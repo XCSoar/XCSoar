@@ -1,7 +1,5 @@
 PKG_CONFIG = pkg-config
 
-ifeq ($(TARGET),UNIX)
-  ifeq ($(UNAME_S),Darwin)
-    PKG_CONFIG += --static
-  endif
+ifeq ($(TARGET_IS_DARWIN),y)
+  PKG_CONFIG += --static
 endif

@@ -1,4 +1,4 @@
-ifeq ($(UNAME_S),Darwin)
+ifeq ($(TARGET_IS_DARWIN),y)
 
 HDIUTIL = hdiutil
 HDIUTIL_OPTIONS =

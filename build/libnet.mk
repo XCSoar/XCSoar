@@ -14,7 +14,8 @@ endif
 
 # don't link with CURL on Mac OS X, to keep the dynamic library
 # dependencies low
-ifeq ($(TARGET)$(findstring $(UNAME_S),Darwin),UNIX)
+ifeq ($(TARGET_IS_DARWIN),n)
+ifeq ($(TARGET),UNIX)
 HAVE_NET := y
 
 LIBNET_SOURCES += \
@@ -27,6 +28,7 @@ CURL_LDLIBS := $(shell $(PKG_CONFIG) libcurl --libs)
 
 LIBNET_CPPFLAGS = $(CURL_CPPFLAGS)
 LIBNET_LDLIBS = $(CURL_LDLIBS)
+endif
 endif
 
 ifeq ($(TARGET),ANDROID)

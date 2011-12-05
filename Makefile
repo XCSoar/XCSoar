@@ -40,6 +40,7 @@ topdir = .
 
 include $(topdir)/build/make.mk
 include $(topdir)/build/bool.mk
+include $(topdir)/build/string.mk
 include $(topdir)/build/dirs.mk
 include $(topdir)/build/verbose.mk
 include $(topdir)/build/util.mk
