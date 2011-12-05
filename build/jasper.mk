@@ -1,5 +1,5 @@
 JASSRC = $(SRC)/jasper
-JASPER = \
+JASPER_SOURCES = \
 	$(JASSRC)/base/jas_debug.c \
 	$(JASSRC)/base/jas_malloc.c \
 	$(JASSRC)/base/jas_seq.c 	$(JASSRC)/base/jas_stream.c \
@@ -16,15 +16,12 @@ JASPER = \
 	$(JASSRC)/jpc/jpc_tagtree.c	$(JASSRC)/jpc/jpc_tsfb.c \
 	$(JASSRC)/jpc/jpc_util.c
 
+JASPER_CFLAGS = -Wno-type-limits
+
 ifneq ($(CLANG),y)
 ifneq ($(TARGET),CYGWIN)
-$(call SRC_TO_OBJ,$(JASPER)): CFLAGS += -Wno-unused-but-set-parameter -Wno-unused-but-set-variable
+JASPER_CFLAGS += -Wno-unused-but-set-parameter -Wno-unused-but-set-variable
 endif
 endif
 
-JASPER_LIBS = $(TARGET_OUTPUT_DIR)/jasper.a
-
-$(JASPER_LIBS): CFLAGS += -Wno-type-limits
-$(JASPER_LIBS): $(call SRC_TO_OBJ,$(JASPER))
-	@$(NQ)echo "  AR      $@"
-	$(Q)$(AR) $(ARFLAGS) $@ $^
+$(eval $(call link-library,jasper,JASPER))

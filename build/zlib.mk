@@ -10,7 +10,7 @@ ZLIB_LDADD =
 ZLIB_LDLIBS = -lz
 endif
 
-ZLIB_INCLUDES =
+ZLIB_CPPFLAGS =
 
 else
 
@@ -28,13 +28,11 @@ ZLIB_SOURCES = \
 	$(ZLIB_SRC_DIR)/uncompr.c \
 	$(ZLIB_SRC_DIR)/zutil.c
 
-ZLIB_LDADD = $(TARGET_OUTPUT_DIR)/zlib.a
 ZLIB_LDLIBS =
-ZLIB_INCLUDES = -I$(ZLIB_SRC_DIR)
 
-$(ZLIB_LDADD): CPPFLAGS += -DNO_VIZ -DHAVE_UNISTD_H
-$(ZLIB_LDADD): $(call SRC_TO_OBJ,$(ZLIB_SOURCES))
-	@$(NQ)echo "  AR      $@"
-	$(Q)$(AR) $(ARFLAGS) $@ $^
+ZLIB_CPPFLAGS_INTERNAL = -DNO_VIZ -DHAVE_UNISTD_H
+ZLIB_CPPFLAGS = -I$(ZLIB_SRC_DIR)
+
+$(eval $(call link-library,zlip,ZLIB))
 
 endif

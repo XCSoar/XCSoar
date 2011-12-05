@@ -1,4 +1,4 @@
-TEST_SRC = \
+HARNESS_SOURCES = \
 	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
@@ -25,9 +25,6 @@ TEST_SRC = \
 	$(TEST_SRC_DIR)/TaskEventsPrint.cpp \
 	$(TEST_SRC_DIR)/tap.c
 
-HARNESS_LIBS = $(TARGET_OUTPUT_DIR)/harness.a
+HARNESS_CPPFLAGS_INTERNAL = -DDO_PRINT
 
-$(HARNESS_LIBS): CPPFLAGS += -DDO_PRINT
-$(HARNESS_LIBS): $(call SRC_TO_OBJ,$(TEST_SRC))
-	@$(NQ)echo "  AR      $@"
-	$(Q)$(AR) $(ARFLAGS) $@ $^
+$(eval $(call link-library,harness,HARNESS))

@@ -13,8 +13,4 @@ DATA_FIELD_SOURCES = \
 	$(DATA_FIELD_SRC_DIR)/Integer.cpp \
 	$(DATA_FIELD_SRC_DIR)/String.cpp \
 
-DATA_FIELD_LIBS = $(TARGET_OUTPUT_DIR)/datafield.a
-
-$(DATA_FIELD_LIBS): $(call SRC_TO_OBJ,$(DATA_FIELD_SOURCES))
-	@$(NQ)echo "  AR      $@"
-	$(Q)$(AR) $(ARFLAGS) $@ $^
+$(eval $(call link-library,datafield,DATA_FIELD))

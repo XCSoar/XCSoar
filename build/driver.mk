@@ -80,8 +80,4 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/Westerboer.cpp \
 	$(DRIVER_SRC_DIR)/Zander.cpp
 
-DRIVER_LIBS = $(TARGET_OUTPUT_DIR)/driver.a
-
-$(DRIVER_LIBS): $(call SRC_TO_OBJ,$(DRIVER_SOURCES))
-	@$(NQ)echo "  AR      $@"
-	$(Q)$(AR) $(ARFLAGS) $@ $^
+$(eval $(call link-library,driver,DRIVER))

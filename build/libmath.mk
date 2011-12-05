@@ -11,9 +11,4 @@ MATH_SOURCES = \
 	$(MATH_SRC_DIR)/LeastSquares.cpp \
 	$(MATH_SRC_DIR)/LowPassFilter.cpp
 
-MATH_OBJS = $(call SRC_TO_OBJ,$(MATH_SOURCES))
-MATH_LIBS = $(TARGET_OUTPUT_DIR)/math.a
-
-$(MATH_LIBS): $(MATH_OBJS)
-	@$(NQ)echo "  AR      $@"
-	$(Q)$(AR) $(ARFLAGS) $@ $^
+$(eval $(call link-library,math,MATH))

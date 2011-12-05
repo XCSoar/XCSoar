@@ -1,6 +1,6 @@
 SHPSRC = $(SRC)/Topography/shapelib
 
-SHAPELIB = \
+SHAPELIB_SOURCES = \
 	$(SHPSRC)/mapstring.c \
 	$(SHPSRC)/mapbits.c 	\
 	$(SHPSRC)/mapfile.c \
@@ -10,8 +10,4 @@ SHAPELIB = \
 	$(SHPSRC)/maptree.c 	\
 	$(SHPSRC)/mapxbase.c 	
 
-SHAPELIB_LIBS = $(TARGET_OUTPUT_DIR)/shapelib.a
-
-$(SHAPELIB_LIBS): $(call SRC_TO_OBJ,$(SHAPELIB))
-	@$(NQ)echo "  AR      $@"
-	$(Q)$(AR) $(ARFLAGS) $@ $^
+$(eval $(call link-library,shapelib,SHAPELIB))

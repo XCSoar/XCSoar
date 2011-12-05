@@ -58,6 +58,7 @@ include $(topdir)/build/flags.mk
 include $(topdir)/build/charset.mk
 include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
+include $(topdir)/build/link.mk
 include $(topdir)/build/llvm.mk
 include $(topdir)/build/tools.mk
 include $(topdir)/build/version.mk
@@ -719,7 +720,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Tracking/TrackingGlue.cpp
 endif
 
-XCSOAR_OBJS = $(call SRC_TO_OBJ,$(XCSOAR_SOURCES))
+XCSOAR_CPPFLAGS += $(SCREEN_CPPFLAGS) $(NET_CPPFLAGS)
+
 XCSOAR_LDADD = \
 	$(GETTEXT_LDADD) \
 	$(PROFILE_LIBS) \
@@ -751,6 +753,10 @@ XCSOAR_LDLIBS += -lws2_32
 endif
 endif
 
+XCSOAR_STRIP = y
+
+$(eval $(call link-program,$(PROGRAM_NAME),XCSOAR))
+
 include $(topdir)/build/gettext.mk
 include $(topdir)/build/cab.mk
 
@@ -768,18 +774,6 @@ install: XCSoar.exe
 	$(SYNCE_PCP) -f XCSoar.exe ':/Program Files/XCSoar/XCSoar.exe'
 
 endif
-
-ifneq ($(NOSTRIP_SUFFIX),)
-$(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(TARGET_EXEEXT): $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
-	@$(NQ)echo "  STRIP   $@"
-	$(Q)$(STRIP) $< -o $@
-	$(Q)$(SIZE) $@
-endif
-
-$(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): CPPFLAGS += $(SCREEN_CPPFLAGS) $(NET_CPPFLAGS)
-$(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
-	@$(NQ)echo "  LINK    $@"
-	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) $(XCSOAR_LDLIBS) -o $@
 
 $(TARGET_OUTPUT_DIR)/$(SRC)/Version.o: $(topdir)/VERSION.txt
 
