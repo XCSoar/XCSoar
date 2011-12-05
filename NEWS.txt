@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.2.4 - not yet released
 * Android
   - fix bogus long InfoBox clicks
+  - fix crash after resuming
 * Altair
   - fix crash in InfoBox cursor movement
 * user interface

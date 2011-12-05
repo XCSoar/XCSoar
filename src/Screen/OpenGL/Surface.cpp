@@ -61,10 +61,10 @@ SurfaceCreated()
 void
 SurfaceDestroyed()
 {
-  assert(!surface_valid);
-
   const GLSurfaceListenerList copy(surface_listeners);
   for (GLSurfaceListenerList::const_iterator i = copy.begin();
        i != copy.end(); ++i)
     (*i)->surface_destroyed();
+
+  surface_valid = false;
 }
