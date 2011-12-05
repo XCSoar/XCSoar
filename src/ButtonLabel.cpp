@@ -52,7 +52,7 @@ ButtonLabel::Destroy()
 }
 
 void
-ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
+ButtonLabel::SetLabelText(unsigned index, const TCHAR *text, unsigned event)
 {
   const TCHAR *dollar;
 
@@ -60,7 +60,7 @@ ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
     bar->HideButton(index);
   } else if ((dollar = _tcschr(text, '$')) == NULL) {
     /* no macro, we can just translate the text */
-    bar->ShowButton(index, true, gettext(text));
+    bar->ShowButton(index, true, gettext(text), event);
   } else {
     const TCHAR *macros = dollar;
     /* backtrack until the first non-whitespace character, because we
@@ -90,7 +90,7 @@ ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
       _tcscpy(buffer, translated);
       _tcscat(buffer, s + (macros - text));
 
-      bar->ShowButton(index, !greyed, buffer);
+      bar->ShowButton(index, !greyed, buffer, event);
     }
   }
 }
@@ -102,7 +102,7 @@ ButtonLabel::Set(const Menu &menu, bool full)
     const MenuItem &item = menu[i];
 
     if (full || item.IsDynamic())
-      SetLabelText(i, item.label);
+      SetLabelText(i, item.label, item.event);
   }
 }
 

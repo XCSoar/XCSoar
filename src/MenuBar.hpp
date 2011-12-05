@@ -42,20 +42,14 @@ public:
 
 protected:
   class Button : public ButtonWindow {
-    unsigned index;
+    unsigned event;
 
   public:
-    virtual bool on_clicked();
-
-  public:
-    void set(ContainerWindow &parent, const TCHAR *text, unsigned _index,
-             PixelScalar left, PixelScalar top,
-             UPixelScalar width, UPixelScalar height,
-             ButtonWindowStyle style=ButtonWindowStyle()) {
-      index = _index;
-
-      ButtonWindow::set(parent, text, left, top, width, height, style);
+    void SetEvent(unsigned _event) {
+      event = _event;
     }
+
+    virtual bool on_clicked();
 
 #ifdef USE_GDI
   protected:
@@ -71,7 +65,8 @@ public:
 
 public:
   void SetFont(const Font &font);
-  void ShowButton(unsigned i, bool enabled, const TCHAR *text);
+  void ShowButton(unsigned i, bool enabled, const TCHAR *text,
+                  unsigned event);
   void HideButton(unsigned i);
 
   bool IsButtonEnabled(unsigned i) const {

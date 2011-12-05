@@ -74,8 +74,6 @@ namespace InputEvents
   bool processKey(unsigned key);
   bool processGesture(const TCHAR *data);
 
-  bool processButton(unsigned bindex);
-
   bool processNmea_real(unsigned key);
   bool processGlideComputer_real(unsigned gce_id);
 

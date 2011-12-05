@@ -96,7 +96,8 @@ GetButtonPosition(unsigned i, PixelRect rc,
 bool
 MenuBar::Button::on_clicked()
 {
-  InputEvents::processButton(index);
+  if (event > 0)
+    InputEvents::ProcessEvent(event);
   return true;
 }
 
@@ -145,14 +146,16 @@ MenuBar::SetFont(const Font &font)
 }
 
 void
-MenuBar::ShowButton(unsigned i, bool enabled, const TCHAR *text)
+MenuBar::ShowButton(unsigned i, bool enabled, const TCHAR *text,
+                    unsigned event)
 {
   assert(i < MAX_BUTTONS);
 
-  ButtonWindow &button = buttons[i];
+  Button &button = buttons[i];
 
   button.set_text(text);
-  button.set_enabled(enabled);
+  button.set_enabled(enabled && event > 0);
+  button.SetEvent(event);
   button.show_on_top();
 }
 

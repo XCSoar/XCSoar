@@ -193,25 +193,6 @@ InputEvents::ProcessEvent(unsigned event_id)
     drawButtons(lastMode);
 }
 
-// Input is a via the user touching the label on a touch screen / mouse
-bool
-InputEvents::processButton(unsigned bindex)
-{
-  if (!globalRunningEvent.Test())
-    return false;
-
-  if (bindex >= Menu::MAX_ITEMS)
-    return false;
-
-  Mode lastMode = getModeID();
-  const MenuItem &item = input_config.GetMenuItem(lastMode, bindex);
-  if (!item.IsDefined())
-    return false;
-
-  ProcessEvent(item.event);
-  return true;
-}
-
 unsigned
 InputEvents::key_to_event(Mode mode, unsigned key_code)
 {

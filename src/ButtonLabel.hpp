@@ -34,7 +34,7 @@ namespace ButtonLabel {
   void CreateButtonLabels(ContainerWindow &parent);
   void SetFont(const Font &Font);
   void Destroy();
-  void SetLabelText(unsigned i, const TCHAR *text);
+  void SetLabelText(unsigned i, const TCHAR *text, unsigned event);
   bool IsEnabled(unsigned i);
 
   bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
