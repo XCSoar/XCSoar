@@ -28,6 +28,7 @@ Copyright_License {
 
 class Font;
 class ContainerWindow;
+class Menu;
 
 namespace ButtonLabel {
   void CreateButtonLabels(ContainerWindow &parent);
@@ -37,6 +38,14 @@ namespace ButtonLabel {
   bool IsEnabled(unsigned i);
 
   bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
+
+  /**
+   * Show the specified menu.
+   *
+   * @param full do a full update; if false, then only dynamic buttons
+   * are updated (to reduce flickering)
+   */
+  void Set(const Menu &menu, bool full=true);
 };
 
 #endif

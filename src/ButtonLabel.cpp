@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "ButtonLabel.hpp"
 #include "MenuBar.hpp"
+#include "MenuData.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
@@ -91,6 +92,17 @@ ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
 
       bar->ShowButton(index, !greyed, buffer);
     }
+  }
+}
+
+void
+ButtonLabel::Set(const Menu &menu, bool full)
+{
+  for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
+    const MenuItem &item = menu[i];
+
+    if (full || item.IsDynamic())
+      SetLabelText(i, item.label);
   }
 }
 

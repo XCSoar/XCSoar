@@ -156,12 +156,7 @@ InputEvents::drawButtons(Mode mode, bool full)
     return;
 
   const Menu &menu = input_config.menus[mode];
-  for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
-    const MenuItem &item = menu[i];
-
-    if (full || item.IsDynamic())
-      ButtonLabel::SetLabelText(i, item.label);
-  }
+  ButtonLabel::Set(menu, full);
 }
 
 InputEvents::Mode
