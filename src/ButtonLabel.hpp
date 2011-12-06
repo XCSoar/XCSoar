@@ -24,18 +24,28 @@ Copyright_License {
 #ifndef BUTTON_LABEL_HPP
 #define BUTTON_LABEL_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
+#include <stddef.h>
 
 class Font;
 class ContainerWindow;
 class Menu;
 
 namespace ButtonLabel {
+  struct Expanded {
+    bool visible, enabled;
+    const TCHAR *text;
+  };
+
   void CreateButtonLabels(ContainerWindow &parent);
   void SetFont(const Font &Font);
   void Destroy();
-  bool GetLabelText(const TCHAR *text, TCHAR *labelText, unsigned size);
-  bool IsLabelTextEnabled(const TCHAR *text);
+
+  gcc_pure
+  Expanded Expand(const TCHAR *text, TCHAR *buffer, size_t size);
+
   void SetLabelText(unsigned i, const TCHAR *text, unsigned event);
   bool IsEnabled(unsigned i);
 

@@ -158,24 +158,27 @@ dlgQuickMenuShowModal(SingleWindow &parent)
   buttonStyle.tab_stop();
 
   for (unsigned i = 0; i < menu->MAX_ITEMS; ++i) {
+    if (buttons.full())
+      continue;
+
     const MenuItem &menuItem = (*menu)[i];
     if (!menuItem.IsDefined())
       continue;
 
-    TCHAR labelText[256];
-    if (ButtonLabel::GetLabelText(menuItem.label, labelText, 256)) {
-      WndButton *button =
-        new WndCustomButton(*grid_view, dialog_look, labelText,
-                            0, 0, 80, 30,
-                            buttonStyle, OnButtonClicked);
+    TCHAR buffer[100];
+    ButtonLabel::Expanded expanded =
+      ButtonLabel::Expand(menuItem.label, buffer, ARRAY_SIZE(buffer));
+    if (!expanded.visible)
+      continue;
 
-      button->set_enabled(ButtonLabel::IsLabelTextEnabled(menuItem.label));
+    WndButton *button =
+      new WndCustomButton(*grid_view, dialog_look, expanded.text,
+                          0, 0, 80, 30,
+                          buttonStyle, OnButtonClicked);
+    button->set_enabled(expanded.enabled);
 
-      if (buttons.size() < GridView::MAX_ITEMS) {
-        buttons.append(button);
-        events.append(menuItem.event);
-      }
-    }
+    buttons.append(button);
+    events.append(menuItem.event);
   }
 
   grid_view->SetItems(buttons);
