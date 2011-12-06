@@ -7,37 +7,37 @@ endif
 ####### market icons
 
 SVG_MARKET_ICONS = Data/graphics/xcsoarswiftsplash.svg Data/graphics/xcsoarswiftsplash_red.svg
-PNG_MARKET_ICONS = $(patsubst Data/graphics/%.svg,output/data/graphics/%_market.png,$(SVG_MARKET_ICONS))
+PNG_MARKET_ICONS = $(patsubst Data/graphics/%.svg,$(OUT)/data/graphics/%_market.png,$(SVG_MARKET_ICONS))
 
 market-icons: $(PNG_MARKET_ICONS)
 
 # render from SVG to PNG
-$(PNG_MARKET_ICONS): output/data/graphics/%_market.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+$(PNG_MARKET_ICONS): $(OUT)/data/graphics/%_market.png: Data/graphics/%.svg | $(OUT)/data/graphics/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert --width=512 $< -o $@
 
 ####### icons
 
 SVG_ICONS = $(wildcard Data/icons/*.svg)
-SVG_NOALIAS_ICONS = $(patsubst Data/icons/%.svg,output/data/icons/%.svg,$(SVG_ICONS))
-PNG_ICONS = $(patsubst Data/icons/%.svg,output/data/icons/%.png,$(SVG_ICONS))
+SVG_NOALIAS_ICONS = $(patsubst Data/icons/%.svg,$(OUT)/data/icons/%.svg,$(SVG_ICONS))
+PNG_ICONS = $(patsubst Data/icons/%.svg,$(OUT)/data/icons/%.png,$(SVG_ICONS))
 BMP_ICONS = $(PNG_ICONS:.png=.bmp)
-PNG_ICONS_160 = $(patsubst Data/icons/%.svg,output/data/icons/%_160.png,$(SVG_ICONS))
+PNG_ICONS_160 = $(patsubst Data/icons/%.svg,$(OUT)/data/icons/%_160.png,$(SVG_ICONS))
 BMP_ICONS_160 = $(PNG_ICONS_160:.png=.bmp)
 
 # modify working copy of SVG to improve rendering
-$(SVG_NOALIAS_ICONS): output/data/icons/%.svg: build/svg_preprocess.xsl Data/icons/%.svg | output/data/icons/dirstamp
+$(SVG_NOALIAS_ICONS): $(OUT)/data/icons/%.svg: build/svg_preprocess.xsl Data/icons/%.svg | $(OUT)/data/icons/dirstamp
 	@$(NQ)echo "  XSLT    $@"
 	$(Q)xsltproc --stringparam DisableAA_Select "MASK_NOAA_" --output $@ $^
 
 # render from SVG to PNG
 # Default 100PPI (eg 320x240 4" display)
-$(PNG_ICONS): output/data/icons/%.png: output/data/icons/%.svg | output/data/icons/dirstamp
+$(PNG_ICONS): $(OUT)/data/icons/%.png: $(OUT)/data/icons/%.svg | $(OUT)/data/icons/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert --x-zoom=1.0 --y-zoom=1.0 $< -o $@
 
 #160PPI (eg 640x480 5" display)
-$(PNG_ICONS_160): output/data/icons/%_160.png: output/data/icons/%.svg | output/data/icons/dirstamp
+$(PNG_ICONS_160): $(OUT)/data/icons/%_160.png: $(OUT)/data/icons/%.svg | $(OUT)/data/icons/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert --x-zoom=1.6316 --y-zoom=1.6316 $< -o $@
 
@@ -64,21 +64,21 @@ $(BMP_ICONS_160): %.bmp: %_tile.png
 ####### splash logo
 
 SVG_SPLASH = Data/graphics/xcsoarswiftsplash.svg Data/graphics/xcsoarswiftsplash_red.svg
-PNG_SPLASH_160 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_160.png,$(SVG_SPLASH))
+PNG_SPLASH_160 = $(patsubst Data/graphics/%.svg,$(OUT)/data/graphics/%_160.png,$(SVG_SPLASH))
 BMP_SPLASH_160 = $(PNG_SPLASH_160:.png=.bmp)
-PNG_SPLASH_80 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_80.png,$(SVG_SPLASH))
+PNG_SPLASH_80 = $(patsubst Data/graphics/%.svg,$(OUT)/data/graphics/%_80.png,$(SVG_SPLASH))
 BMP_SPLASH_80 = $(PNG_SPLASH_80:.png=.bmp)
-PNG_SPLASH_128 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_128.png,$(SVG_SPLASH))
+PNG_SPLASH_128 = $(patsubst Data/graphics/%.svg,$(OUT)/data/graphics/%_128.png,$(SVG_SPLASH))
 ICNS_SPLASH_128 = $(PNG_SPLASH_128:.png=.icns)
 
 # render from SVG to PNG
-$(PNG_SPLASH_160): output/data/graphics/%_160.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+$(PNG_SPLASH_160): $(OUT)/data/graphics/%_160.png: Data/graphics/%.svg | $(OUT)/data/graphics/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert --width=160 $< -o $@
-$(PNG_SPLASH_80): output/data/graphics/%_80.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+$(PNG_SPLASH_80): $(OUT)/data/graphics/%_80.png: Data/graphics/%.svg | $(OUT)/data/graphics/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert --width=80 $< -o $@
-$(PNG_SPLASH_128): output/data/graphics/%_128.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+$(PNG_SPLASH_128): $(OUT)/data/graphics/%_128.png: Data/graphics/%.svg | $(OUT)/data/graphics/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert --width=128 $< -o $@
 
@@ -98,13 +98,13 @@ $(ICNS_SPLASH_128): %.icns: %.png
 ####### version
 
 SVG_TITLE = Data/graphics/title.svg Data/graphics/title_red.svg
-PNG_TITLE_110 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_110.png,$(SVG_TITLE))
+PNG_TITLE_110 = $(patsubst Data/graphics/%.svg,$(OUT)/data/graphics/%_110.png,$(SVG_TITLE))
 BMP_TITLE_110 = $(PNG_TITLE_110:.png=.bmp)
-PNG_TITLE_320 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_320.png,$(SVG_TITLE))
+PNG_TITLE_320 = $(patsubst Data/graphics/%.svg,$(OUT)/data/graphics/%_320.png,$(SVG_TITLE))
 BMP_TITLE_320 = $(PNG_TITLE_320:.png=.bmp)
 
 # render from SVG to PNG
-$(PNG_TITLE_110): output/data/graphics/%_110.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+$(PNG_TITLE_110): $(OUT)/data/graphics/%_110.png: Data/graphics/%.svg | $(OUT)/data/graphics/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert --width=110 $< -o $@
 
@@ -114,7 +114,7 @@ $(BMP_TITLE_110): %.bmp: %.png
 	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
 
 # render from SVG to PNG
-$(PNG_TITLE_320): output/data/graphics/%_320.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+$(PNG_TITLE_320): $(OUT)/data/graphics/%_320.png: Data/graphics/%.svg | $(OUT)/data/graphics/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert --width=320 $< -o $@
 
@@ -126,11 +126,11 @@ $(BMP_TITLE_320): %.bmp: %.png
 ####### dialog title
 
 SVG_DIALOG_TITLE = Data/graphics/dialog_title.svg Data/graphics/dialog_title_red.svg
-PNG_DIALOG_TITLE = $(patsubst Data/graphics/%.svg,output/data/graphics/%.png,$(SVG_DIALOG_TITLE))
+PNG_DIALOG_TITLE = $(patsubst Data/graphics/%.svg,$(OUT)/data/graphics/%.png,$(SVG_DIALOG_TITLE))
 BMP_DIALOG_TITLE = $(PNG_DIALOG_TITLE:.png=.bmp)
 
 # render from SVG to PNG
-$(PNG_DIALOG_TITLE): output/data/graphics/%.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+$(PNG_DIALOG_TITLE): $(OUT)/data/graphics/%.png: Data/graphics/%.svg | $(OUT)/data/graphics/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert $< -o $@
 
@@ -142,11 +142,11 @@ $(BMP_DIALOG_TITLE): %.bmp: %.png
 ####### progress bar border
 
 SVG_PROGRESS_BORDER = Data/graphics/progress_border.svg Data/graphics/progress_border_red.svg
-PNG_PROGRESS_BORDER = $(patsubst Data/graphics/%.svg,output/data/graphics/%.png,$(SVG_PROGRESS_BORDER))
+PNG_PROGRESS_BORDER = $(patsubst Data/graphics/%.svg,$(OUT)/data/graphics/%.png,$(SVG_PROGRESS_BORDER))
 BMP_PROGRESS_BORDER = $(PNG_PROGRESS_BORDER:.png=.bmp)
 
 # render from SVG to PNG
-$(PNG_PROGRESS_BORDER): output/data/graphics/%.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+$(PNG_PROGRESS_BORDER): $(OUT)/data/graphics/%.png: Data/graphics/%.svg | $(OUT)/data/graphics/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert $< -o $@
 
@@ -158,14 +158,14 @@ $(BMP_PROGRESS_BORDER): %.bmp: %.png
 ####### launcher graphics
 
 SVG_LAUNCH = Data/graphics/launcher.svg Data/graphics/launcher_red.svg
-PNG_LAUNCH_224 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_224.png,$(SVG_LAUNCH))
+PNG_LAUNCH_224 = $(patsubst Data/graphics/%.svg,$(OUT)/data/graphics/%_224.png,$(SVG_LAUNCH))
 BMP_LAUNCH_FLY_224 = $(PNG_LAUNCH_224:.png=_1.bmp)
 BMP_LAUNCH_SIM_224 = $(PNG_LAUNCH_224:.png=_2.bmp)
 BMP_LAUNCH_DLL_FLY_224 = $(PNG_LAUNCH_224:.png=_dll_1.bmp)
 BMP_LAUNCH_DLL_SIM_224 = $(PNG_LAUNCH_224:.png=_dll_2.bmp)
 
 # render from SVG to PNG
-$(PNG_LAUNCH_224): output/data/graphics/%_224.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+$(PNG_LAUNCH_224): $(OUT)/data/graphics/%_224.png: Data/graphics/%.svg | $(OUT)/data/graphics/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert --width=224 $< -o $@
 
@@ -195,9 +195,9 @@ DIALOG_FILES = $(wildcard Data/Dialogs/*.xml)
 DIALOG_FILES += $(wildcard Data/Dialogs/Infobox/*.xml)
 DIALOG_FILES += $(wildcard Data/Dialogs/Configuration/*.xml)
 
-DIALOG_COMPRESSED = $(patsubst Data/Dialogs/%.xml,output/data/dialogs/%.xml,$(DIALOG_FILES))
-$(DIALOG_COMPRESSED): output/data/dialogs/%.xml: Data/Dialogs/%.xml \
-	| output/data/dialogs/Configuration/dirstamp output/data/dialogs/Infobox/dirstamp
+DIALOG_COMPRESSED = $(patsubst Data/Dialogs/%.xml,$(OUT)/data/dialogs/%.xml,$(DIALOG_FILES))
+$(DIALOG_COMPRESSED): $(OUT)/data/dialogs/%.xml: Data/Dialogs/%.xml \
+	| $(OUT)/data/dialogs/Configuration/dirstamp $(OUT)/data/dialogs/Infobox/dirstamp
 	@$(NQ)echo "  GZIP    $@"
 	$(Q)gzip --best <$< >$@.tmp
 	$(Q)mv $@.tmp $@
