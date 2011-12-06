@@ -79,7 +79,6 @@ struct EventBuilder {
 
     // General errors - these should be true
     assert(location < 1024);
-    assert(mode != NULL);
 
     const TCHAR *new_label = NULL;
     while (token != NULL) {
