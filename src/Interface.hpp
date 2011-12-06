@@ -107,6 +107,11 @@ public:
   }
 
   gcc_const
+  static LiveBlackboard &GetLiveBlackboard() {
+    return blackboard;
+  }
+
+  gcc_const
   static UISettings &SetUISettings() {
     return blackboard.SetUISettings();
   }
@@ -133,6 +138,30 @@ public:
   }
   static void ReadBlackboardCalculated(const DerivedInfo& derived_info) {
     blackboard.ReadBlackboardCalculated(derived_info);
+  }
+
+  static void AddListener(BlackboardListener &listener) {
+    blackboard.AddListener(listener);
+  }
+
+  static void RemoveListener(BlackboardListener &listener) {
+    blackboard.RemoveListener(listener);
+  }
+
+  static void BroadcastGPSUpdate() {
+    blackboard.BroadcastGPSUpdate();
+  }
+
+  static void BroadcastCalculatedUpdate() {
+    blackboard.BroadcastCalculatedUpdate();
+  }
+
+  static void BroadcastComputerSettingsUpdate() {
+    blackboard.BroadcastComputerSettingsUpdate();
+  }
+
+  static void BroadcastUISettingsUpdate() {
+    blackboard.BroadcastUISettingsUpdate();
   }
 };
 

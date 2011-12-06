@@ -21,27 +21,30 @@ Copyright_License {
 }
 */
 
-#ifndef INTERFACE_BLACKBOARD_H
-#define INTERFACE_BLACKBOARD_H
+#ifndef XCSOAR_LIVE_BLACKBOARD_HPP
+#define XCSOAR_LIVE_BLACKBOARD_HPP
 
-#include "LiveBlackboard.hpp"
-#include "Compiler.h"
+#include "FullBlackboard.hpp"
 
-class InterfaceBlackboard : public LiveBlackboard
-{
+#include <list>
+
+class BlackboardListener;
+
+/**
+ * A blackboard that supports #BlackboardListener.
+ */
+class LiveBlackboard : public FullBlackboard {
+  std::list<BlackboardListener *> listeners;
+  DebugFlag calling_listeners;
+
 public:
-  void ReadBlackboardBasic(const MoreData &nmea_info);
-  void ReadBlackboardCalculated(const DerivedInfo &derived_info);
+  void AddListener(BlackboardListener &listener);
+  void RemoveListener(BlackboardListener &listener);
 
-  gcc_const
-  SETTINGS_COMPUTER& SetSettingsComputer() { return settings_computer; }
-
-  gcc_const
-  UISettings &SetUISettings() {
-    return ui_settings;
-  }
-
-  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
+  void BroadcastGPSUpdate();
+  void BroadcastCalculatedUpdate();
+  void BroadcastComputerSettingsUpdate();
+  void BroadcastUISettingsUpdate();
 };
 
 #endif
