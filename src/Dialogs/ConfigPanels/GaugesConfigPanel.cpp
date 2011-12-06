@@ -25,53 +25,85 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Form/Util.hpp"
 #include "Interface.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 
-static SubForm* wf = NULL;
+class GaugesConfigPanel : public XMLWidget {
+
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+};
 
 void
-GaugesConfigPanel::Init(SubForm *_wf)
+GaugesConfigPanel::Show(const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  XMLWidget::Show(rc);
+}
+
+void
+GaugesConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
+
+void
+GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  LoadWindow(NULL, parent,
+             Layout::landscape ? _T("IDR_XML_GAUGESCONFIGPANEL") :
+                               _T("IDR_XML_GAUGESCONFIGPANEL_L"));
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
-  LoadFormProperty(*wf, _T("prpEnableFLARMGauge"),
+  LoadFormProperty(form, _T("prpEnableFLARMGauge"),
                    ui_settings.enable_flarm_gauge);
 
-  LoadFormProperty(*wf, _T("prpAutoCloseFlarmDialog"),
+  LoadFormProperty(form, _T("prpAutoCloseFlarmDialog"),
                    ui_settings.auto_close_flarm_dialog);
 
-  LoadFormProperty(*wf, _T("prpEnableTAGauge"),
+  LoadFormProperty(form, _T("prpEnableTAGauge"),
                    ui_settings.enable_thermal_assistant_gauge);
 
-  LoadFormProperty(*wf, _T("prpEnableThermalProfile"),
+  LoadFormProperty(form, _T("prpEnableThermalProfile"),
                    XCSoarInterface::SettingsMap().show_thermal_profile);
 }
 
-
 bool
-GaugesConfigPanel::Save()
+GaugesConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
+  bool changed = false, require_restart = false;
+
   UISettings &ui_settings = CommonInterface::SetUISettings();
 
-  bool changed = false;
-
-  changed |= SaveFormProperty(*wf, _T("prpEnableFLARMGauge"),
+  changed |= SaveFormProperty(form, _T("prpEnableFLARMGauge"),
                               szProfileEnableFLARMGauge,
                               ui_settings.enable_flarm_gauge);
 
-  changed |= SaveFormProperty(*wf, _T("prpAutoCloseFlarmDialog"),
+  changed |= SaveFormProperty(form, _T("prpAutoCloseFlarmDialog"),
                               szProfileAutoCloseFlarmDialog,
                               ui_settings.auto_close_flarm_dialog);
 
-  changed |= SaveFormProperty(*wf, _T("prpEnableTAGauge"),
+  changed |= SaveFormProperty(form, _T("prpEnableTAGauge"),
                               szProfileEnableTAGauge,
                               ui_settings.enable_thermal_assistant_gauge);
 
-  changed |= SaveFormProperty(*wf, _T("prpEnableThermalProfile"),
+  changed |= SaveFormProperty(form, _T("prpEnableThermalProfile"),
                               szProfileEnableThermalProfile,
                               XCSoarInterface::SetSettingsMap().show_thermal_profile);
 
-  return changed;
+  _changed |= changed;
+  _require_restart |= require_restart;
+
+  return true;
+}
+
+Widget *
+CreateGaugesConfigPanel()
+{
+  return new GaugesConfigPanel();
 }

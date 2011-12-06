@@ -24,12 +24,9 @@ Copyright_License {
 #ifndef GAUGESCONFIGPANEL_HPP
 #define GAUGESCONFIGPANEL_HPP
 
-class SubForm;
+class Widget;
 
-namespace GaugesConfigPanel
-{
-  void Init(SubForm *wf);
-  bool Save();
-};
+Widget *
+CreateGaugesConfigPanel();
 
 #endif /* GAUGESCONFIGPANEL_HPP */

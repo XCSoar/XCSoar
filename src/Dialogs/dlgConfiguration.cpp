@@ -89,7 +89,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Safety Factors"), 2, NULL, NULL, N_("IDR_XML_SAFETYFACTORSCONFIGPANEL")},
   {N_("Glide Computer"), 2, NULL, NULL, N_("IDR_XML_GLIDECOMPUTERCONFIGPANEL")},
   {N_("Route"), 2, NULL, NULL, N_("IDR_XML_ROUTECONFIGPANEL")},
-  {N_("FLARM, Other"), 3, NULL, NULL, N_("IDR_XML_GAUGESCONFIGPANEL")},
+  {N_("FLARM, Other"), 3, NULL, NULL, NULL, CreateGaugesConfigPanel },
   {N_("Vario"), 3, NULL, NULL, N_("IDR_XML_VARIOCONFIGPANEL")},
   {N_("Task Rules"), 4, NULL, NULL, NULL, CreateTaskRulesConfigPanel },
   {N_("Turnpoint Types"), 4, NULL, NULL, NULL, CreateTaskDefaultsConfigPanel },
@@ -202,7 +202,6 @@ setVariables()
   SafetyFactorsConfigPanel::Init(wf);
   RouteConfigPanel::Init(wf);
   LayoutConfigPanel::Init(wf);
-  GaugesConfigPanel::Init(wf);
   VarioConfigPanel::Init(wf);
   InfoBoxesConfigPanel::Init(wf);
   if (HasModelType())
@@ -307,7 +306,6 @@ void dlgConfigurationShowModal(void)
   changed |= SafetyFactorsConfigPanel::Save();
   changed |= RouteConfigPanel::Save();
   changed |= LayoutConfigPanel::Save(requirerestart);
-  changed |= GaugesConfigPanel::Save();
   changed |= VarioConfigPanel::Save();
   changed |= InfoBoxesConfigPanel::Save(requirerestart);
   if (HasModelType())
