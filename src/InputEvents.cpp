@@ -174,22 +174,16 @@ InputEvents::ProcessEvent(unsigned event_id)
 {
   assert(event_id != 0);
 
-  int bindex = -1;
   InputEvents::Mode lastMode = getModeID();
-  const TCHAR *pLabelText = NULL;
 
   const Menu &menu = input_config.menus[lastMode];
-  int i = menu.FindByEvent(event_id);
-  if (i >= 0 && menu[i].IsDefined()) {
-    bindex = i;
-    pLabelText = menu[i].label;
-  }
+  int bindex = menu.FindByEvent(event_id);
 
   if (bindex < 0 || ButtonLabel::IsEnabled(bindex))
     InputEvents::processGo(event_id);
 
   // experimental: update button text, macro may change the value
-  if (lastMode == getModeID() && bindex > 0 && pLabelText != NULL)
+  if (lastMode == getModeID() && bindex > 0)
     drawButtons(lastMode);
 }
 
