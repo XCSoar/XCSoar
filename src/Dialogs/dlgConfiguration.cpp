@@ -87,7 +87,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Terrain"), 1, NULL, NULL, NULL, CreateTerrainDisplayConfigPanel },
   {N_("Airspace"), 1, NULL, NULL, NULL, CreateAirspaceConfigPanel },
   {N_("Safety Factors"), 2, NULL, NULL, N_("IDR_XML_SAFETYFACTORSCONFIGPANEL")},
-  {N_("Glide Computer"), 2, NULL, NULL, N_("IDR_XML_GLIDECOMPUTERCONFIGPANEL")},
+  {N_("Glide Computer"), 2, NULL, NULL, NULL, CreateGlideComputerConfigPanel },
   {N_("Route"), 2, NULL, NULL, N_("IDR_XML_ROUTECONFIGPANEL")},
   {N_("FLARM, Other"), 3, NULL, NULL, NULL, CreateGaugesConfigPanel },
   {N_("Vario"), 3, NULL, NULL, N_("IDR_XML_VARIOCONFIGPANEL")},
@@ -198,7 +198,6 @@ setVariables()
   MapDisplayConfigPanel::Init(wf);
   WaypointDisplayConfigPanel::Init(wf);
   SymbolsConfigPanel::Init(wf);
-  GlideComputerConfigPanel::Init(wf);
   SafetyFactorsConfigPanel::Init(wf);
   RouteConfigPanel::Init(wf);
   LayoutConfigPanel::Init(wf);
@@ -302,7 +301,6 @@ void dlgConfigurationShowModal(void)
   changed |= MapDisplayConfigPanel::Save();
   changed |= WaypointDisplayConfigPanel::Save();
   changed |= SymbolsConfigPanel::Save();
-  changed |= GlideComputerConfigPanel::Save(requirerestart);
   changed |= SafetyFactorsConfigPanel::Save();
   changed |= RouteConfigPanel::Save();
   changed |= LayoutConfigPanel::Save(requirerestart);

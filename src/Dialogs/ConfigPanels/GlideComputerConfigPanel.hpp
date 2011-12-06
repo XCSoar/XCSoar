@@ -24,12 +24,9 @@ Copyright_License {
 #ifndef GLIDECOMPUTERCONFIGPANEL_HPP
 #define GLIDECOMPUTERCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
+class Widget;
 
-namespace GlideComputerConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save(bool &requirerestart);
-};
+Widget *
+CreateGlideComputerConfigPanel();
 
 #endif /* GLIDECOMPUTERCONFIGPANEL_HPP */

@@ -29,15 +29,41 @@ Copyright_License {
 #include "Interface.hpp"
 #include "GlideComputerConfigPanel.hpp"
 #include "Language/Language.hpp"
+#include "Form/Form.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 
-static WndForm* wf = NULL;
 
+class GlideComputerConfigPanel : public XMLWidget {
+
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+};
 
 void
-GlideComputerConfigPanel::Init(WndForm *_wf)
+GlideComputerConfigPanel::Show(const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  XMLWidget::Show(rc);
+}
+
+void
+GlideComputerConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
+
+void
+GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  LoadWindow(NULL, parent,
+             Layout::landscape ? _T("IDR_XML_GLIDECOMPUTERCONFIGPANEL") :
+                               _T("IDR_XML_GLIDECOMPUTERCONFIGPANEL_L"));
+
 
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
 
@@ -49,10 +75,10 @@ GlideComputerConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
 
-  LoadFormProperty(*wf, _T("prpAutoWind"), auto_wind_list,
+  LoadFormProperty(form, _T("prpAutoWind"), auto_wind_list,
                    settings_computer.auto_wind_mode);
 
-  LoadFormProperty(*wf, _T("prpExternalWind"), settings_computer.use_external_wind);
+  LoadFormProperty(form, _T("prpExternalWind"), settings_computer.use_external_wind);
 
   static gcc_constexpr_data StaticEnumChoice auto_mc_list[] = {
     { TaskBehaviour::AUTOMC_FINALGLIDE, N_("Final glide") },
@@ -61,16 +87,16 @@ GlideComputerConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
 
-  LoadFormProperty(*wf, _T("prpAutoMcMode"), auto_mc_list,
+  LoadFormProperty(form, _T("prpAutoMcMode"), auto_mc_list,
                    settings_computer.task.auto_mc_mode);
 
-  LoadFormProperty(*wf, _T("prpBlockSTF"),
+  LoadFormProperty(form, _T("prpBlockSTF"),
                    settings_computer.block_stf_enabled);
 
-  LoadFormProperty(*wf, _T("prpEnableNavBaroAltitude"),
+  LoadFormProperty(form, _T("prpEnableNavBaroAltitude"),
                    settings_computer.nav_baro_altitude_enabled);
 
-  LoadFormProperty(*wf, _T("prpEnableExternalTriggerCruise"),
+  LoadFormProperty(form, _T("prpEnableExternalTriggerCruise"),
                    settings_computer.external_trigger_cruise_enabled);
 
   static gcc_constexpr_data StaticEnumChoice aver_eff_list[] = {
@@ -83,43 +109,52 @@ GlideComputerConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
 
-  LoadFormProperty(*wf, _T("prpAverEffTime"), aver_eff_list,
+  LoadFormProperty(form, _T("prpAverEffTime"), aver_eff_list,
                    settings_computer.average_eff_time);
 }
 
-
 bool
-GlideComputerConfigPanel::Save(bool &requirerestart)
+GlideComputerConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
-  bool changed = false;
+  bool changed = false, require_restart = false;
+
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
 
-  changed |= SaveFormProperty(*wf, _T("prpAutoWind"), szProfileAutoWind,
+  changed |= SaveFormProperty(form, _T("prpAutoWind"), szProfileAutoWind,
                               settings_computer.auto_wind_mode);
 
-  changed |= SaveFormProperty(*wf, _T("prpExternalWind"),
+  changed |= SaveFormProperty(form, _T("prpExternalWind"),
                               szProfileExternalWind,
                               settings_computer.use_external_wind);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpAutoMcMode"),
+  changed |= SaveFormPropertyEnum(form, _T("prpAutoMcMode"),
                                   szProfileAutoMcMode,
                                   settings_computer.task.auto_mc_mode);
 
-  changed |= SaveFormProperty(*wf, _T("prpBlockSTF"),
+  changed |= SaveFormProperty(form, _T("prpBlockSTF"),
                               szProfileBlockSTF,
                               settings_computer.block_stf_enabled);
 
-  changed |= SaveFormProperty(*wf, _T("prpEnableNavBaroAltitude"),
+  changed |= SaveFormProperty(form, _T("prpEnableNavBaroAltitude"),
                               szProfileEnableNavBaroAltitude,
                               settings_computer.nav_baro_altitude_enabled);
 
-  changed |= SaveFormProperty(*wf, _T("prpEnableExternalTriggerCruise"),
+  changed |= SaveFormProperty(form, _T("prpEnableExternalTriggerCruise"),
                               szProfileEnableExternalTriggerCruise,
                               settings_computer.external_trigger_cruise_enabled);
 
-  changed |= requirerestart |=
-    SaveFormPropertyEnum(*wf, _T("prpAverEffTime"),
+  changed |= require_restart |=
+    SaveFormPropertyEnum(form, _T("prpAverEffTime"),
                          szProfileAverEffTime, settings_computer.average_eff_time);
 
-  return changed;
+  _changed |= changed;
+  _require_restart |= require_restart;
+
+  return true;
+}
+
+Widget *
+CreateGlideComputerConfigPanel()
+{
+  return new GlideComputerConfigPanel();
 }
