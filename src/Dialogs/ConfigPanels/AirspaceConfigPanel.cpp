@@ -22,9 +22,11 @@ Copyright_License {
 */
 
 #include "AirspaceConfigPanel.hpp"
+#include "DataField/Base.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/ComboList.hpp"
+#include "Form/Button.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
@@ -34,65 +36,108 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
+#include "Interface.hpp"
 
-static WndForm* wf = NULL;
+class AirspaceConfigPanel : public XMLWidget {
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+  void ShowDisplayControls(AirspaceDisplayMode_t mode);
+  void ShowWarningControls(bool visible);
+};
 
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static AirspaceConfigPanel *instance;
 
 void
-AirspaceConfigPanel::OnAirspaceColoursClicked(gcc_unused WndButton &button)
+AirspaceConfigPanel::Show(const PixelRect &rc)
+{
+  XMLWidget::Show(rc);
+}
+
+void
+AirspaceConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
+
+static void
+OnAirspaceColoursClicked(gcc_unused WndButton &button)
 {
   dlgAirspaceShowModal(true);
 }
 
-
-void
-AirspaceConfigPanel::OnAirspaceModeClicked(gcc_unused WndButton &button)
+static void
+OnAirspaceModeClicked(gcc_unused WndButton &button)
 {
   dlgAirspaceShowModal(false);
 }
 
-static void
-ShowDisplayControls(AirspaceDisplayMode_t mode)
+void
+AirspaceConfigPanel::ShowDisplayControls(AirspaceDisplayMode_t mode)
 {
-  ShowFormControl(*wf, _T("prpClipAltitude"), mode == CLIP);
-  ShowFormControl(*wf, _T("prpAltWarningMargin"),
-                  mode == AUTO || mode == ALLBELOW);
-}
-
-static void
-ShowWarningControls(bool visible)
-{
-  ShowFormControl(*wf, _T("prpWarningTime"), visible);
-  ShowFormControl(*wf, _T("prpAcknowledgementTime"), visible);
+  ShowFormControl(form, _T("prpClipAltitude"), mode == CLIP);
+  ShowFormControl(form, _T("prpAltWarningMargin"),
+                            mode == AUTO || mode == ALLBELOW);
 }
 
 void
-AirspaceConfigPanel::OnAirspaceDisplay(DataField *Sender,
-                                       DataField::DataAccessKind_t Mode)
+AirspaceConfigPanel::ShowWarningControls(bool visible)
+{
+  ShowFormControl(form, _T("prpWarningTime"), visible);
+  ShowFormControl(form, _T("prpAcknowledgementTime"), visible);
+}
+
+static void
+OnAirspaceDisplay(DataField *Sender,
+                  DataField::DataAccessKind_t Mode)
 {
   const DataFieldEnum &df = *(const DataFieldEnum *)Sender;
   AirspaceDisplayMode_t mode = (AirspaceDisplayMode_t)df.GetAsInteger();
-  ShowDisplayControls(mode);
+  instance->ShowDisplayControls(mode);
 }
 
-void
-AirspaceConfigPanel::OnAirspaceWarning(DataField *Sender,
-                                       DataField::DataAccessKind_t Mode)
+static void
+OnAirspaceWarning(DataField *Sender,
+                  DataField::DataAccessKind_t Mode)
 {
   const DataFieldBoolean &df = *(const DataFieldBoolean *)Sender;
-  ShowWarningControls(df.GetAsBoolean());
+  instance->ShowWarningControls(df.GetAsBoolean());
 }
 
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnAirspaceColoursClicked),
+  DeclareCallBackEntry(OnAirspaceModeClicked),
+  DeclareCallBackEntry(OnAirspaceDisplay),
+  DeclareCallBackEntry(OnAirspaceWarning),
+  DeclareCallBackEntry(NULL)
+};
+
 void
-AirspaceConfigPanel::Init(WndForm *_wf,
-                          const AirspaceComputerSettings &computer,
-                          const AirspaceRendererSettings &renderer)
+AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  const AirspaceComputerSettings &computer =
+    CommonInterface::SettingsComputer().airspace;
+  const AirspaceRendererSettings &renderer =
+    CommonInterface::SettingsMap().airspace;
+
+  instance = this;
+
+  LoadWindow(CallBackTable, parent,
+             Layout::landscape ? _T("IDR_XML_AIRSPACECONFIGPANEL") :
+                               _T("IDR_XML_AIRSPACECONFIGPANEL_L"));
+
   WndProperty *wp;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAirspaceDisplay"));
+  wp = (WndProperty*)form.FindByName(_T("prpAirspaceDisplay"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
@@ -104,20 +149,20 @@ AirspaceConfigPanel::Init(WndForm *_wf,
     wp->RefreshDisplay();
   }
 
-  LoadFormProperty(*wf, _T("prpClipAltitude"), ugAltitude,
+  LoadFormProperty(form, _T("prpClipAltitude"), ugAltitude,
                    renderer.clip_altitude);
 
-  LoadFormProperty(*wf, _T("prpAltWarningMargin"), ugAltitude,
+  LoadFormProperty(form, _T("prpAltWarningMargin"), ugAltitude,
                    computer.warnings.AltWarningMargin);
 
-  LoadFormProperty(*wf, _T("prpAirspaceWarnings"), computer.enable_warnings);
-  LoadFormProperty(*wf, _T("prpWarningTime"), computer.warnings.WarningTime);
-  LoadFormProperty(*wf, _T("prpAcknowledgementTime"),
+  LoadFormProperty(form, _T("prpAirspaceWarnings"), computer.enable_warnings);
+  LoadFormProperty(form, _T("prpWarningTime"), computer.warnings.WarningTime);
+  LoadFormProperty(form, _T("prpAcknowledgementTime"),
                    computer.warnings.AcknowledgementTime);
 
-  LoadFormProperty(*wf, _T("prpAirspaceOutline"), renderer.black_outline);
+  LoadFormProperty(form, _T("prpAirspaceOutline"), renderer.black_outline);
 
-  wp = (WndProperty *)wf->FindByName(_T("prpAirspaceFillMode"));
+  wp = (WndProperty *)form.FindByName(_T("prpAirspaceFillMode"));
   {
     DataFieldEnum &dfe = *(DataFieldEnum *)wp->GetDataField();
     dfe.addEnumText(_("Default"), AirspaceRendererSettings::AS_FILL_DEFAULT);
@@ -130,14 +175,14 @@ AirspaceConfigPanel::Init(WndForm *_wf,
 
 #if !defined(ENABLE_OPENGL) && defined(HAVE_ALPHA_BLEND)
   if (AlphaBlendAvailable())
-    LoadFormProperty(*wf, _T("prpAirspaceTransparency"),
+    LoadFormProperty(form, _T("prpAirspaceTransparency"),
                      renderer.transparency);
   else
 #endif
   {
-    wp = (WndProperty *)wf->FindByName(_T("prpAirspaceTransparency"));
+    wp = (WndProperty *)form.FindByName(_T("prpAirspaceTransparency"));
     wp->hide();
-    wf->RemoveExpert(wp);  // prevent unhiding with expert-switch
+    form.RemoveExpert(wp);  // prevent unhiding with expert-switch
   }
 
   ShowDisplayControls(renderer.altitude_mode);
@@ -146,57 +191,70 @@ AirspaceConfigPanel::Init(WndForm *_wf,
 
 
 bool
-AirspaceConfigPanel::Save(bool &requirerestart,
-                          AirspaceComputerSettings &computer,
-                          AirspaceRendererSettings &renderer)
+AirspaceConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
-  bool changed = false;
+  bool changed = false, require_restart = false;
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpAirspaceDisplay"),
+  AirspaceComputerSettings &computer =
+    CommonInterface::SetSettingsComputer().airspace;
+  AirspaceRendererSettings &renderer =
+    CommonInterface::SetSettingsMap().airspace;
+
+  changed |= SaveFormPropertyEnum(form, _T("prpAirspaceDisplay"),
                                   szProfileAltMode, renderer.altitude_mode);
 
-  changed |= SaveFormProperty(*wf, _T("prpClipAltitude"), ugAltitude,
+  changed |= SaveFormProperty(form, _T("prpClipAltitude"), ugAltitude,
                               renderer.clip_altitude,
                               szProfileClipAlt);
 
-  changed |= SaveFormProperty(*wf, _T("prpAltWarningMargin"),
+  changed |= SaveFormProperty(form, _T("prpAltWarningMargin"),
                               ugAltitude, computer.warnings.AltWarningMargin,
                               szProfileAltMargin);
 
-  changed |= SaveFormProperty(*wf, _T("prpAirspaceWarnings"),
+  changed |= SaveFormProperty(form, _T("prpAirspaceWarnings"),
                               szProfileAirspaceWarning,
                               computer.enable_warnings);
 
-  if (SaveFormProperty(*wf, _T("prpWarningTime"),
+  if (SaveFormProperty(form, _T("prpWarningTime"),
                        szProfileWarningTime,
                        computer.warnings.WarningTime)) {
     changed = true;
-    requirerestart = true;
+    require_restart = true;
   }
 
-  if (SaveFormProperty(*wf, _T("prpAcknowledgementTime"),
+  if (SaveFormProperty(form, _T("prpAcknowledgementTime"),
                        szProfileAcknowledgementTime,
                        computer.warnings.AcknowledgementTime)) {
     changed = true;
-    requirerestart = true;
+    require_restart = true;
   }
 
-  changed |= SaveFormProperty(*wf, _T("prpAirspaceOutline"),
+  changed |= SaveFormProperty(form, _T("prpAirspaceOutline"),
                               szProfileAirspaceBlackOutline,
                               renderer.black_outline);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpAirspaceFillMode"),
+  changed |= SaveFormPropertyEnum(form, _T("prpAirspaceFillMode"),
                                   szProfileAirspaceFillMode,
                                   renderer.fill_mode);
 
 #ifndef ENABLE_OPENGL
 #ifdef HAVE_ALPHA_BLEND
   if (AlphaBlendAvailable())
-    changed |= SaveFormProperty(*wf, _T("prpAirspaceTransparency"),
+    changed |= SaveFormProperty(form, _T("prpAirspaceTransparency"),
                                 szProfileAirspaceTransparency,
                                 renderer.transparency);
 #endif
 #endif /* !OpenGL */
 
-  return changed;
+  _changed |= changed;
+  _require_restart |= require_restart;
+
+  return true;
+}
+
+
+Widget *
+CreateAirspaceConfigPanel()
+{
+  return new AirspaceConfigPanel();
 }

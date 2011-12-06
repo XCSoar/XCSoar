@@ -85,7 +85,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Elements"), 1, NULL, NULL, N_("IDR_XML_SYMBOLSCONFIGPANEL")},
   {N_("Waypoint"), 1, NULL, NULL, N_("IDR_XML_WAYPOINTDISPLAYCONFIGPANEL")},
   {N_("Terrain"), 1, NULL, NULL, NULL, CreateTerrainDisplayConfigPanel },
-  {N_("Airspace"), 1, NULL, NULL, N_("IDR_XML_AIRSPACECONFIGPANEL")},
+  {N_("Airspace"), 1, NULL, NULL, NULL, CreateAirspaceConfigPanel },
   {N_("Safety Factors"), 2, NULL, NULL, N_("IDR_XML_SAFETYFACTORSCONFIGPANEL")},
   {N_("Glide Computer"), 2, NULL, NULL, N_("IDR_XML_GLIDECOMPUTERCONFIGPANEL")},
   {N_("Route"), 2, NULL, NULL, N_("IDR_XML_ROUTECONFIGPANEL")},
@@ -195,8 +195,6 @@ setVariables()
   TimeConfigPanel::Init(wf);
   LoggerConfigPanel::Init(wf);
   DevicesConfigPanel::Init(wf);
-  AirspaceConfigPanel::Init(wf, CommonInterface::SettingsComputer().airspace,
-                            CommonInterface::SettingsMap().airspace);
   SiteConfigPanel::Init(wf);
   MapDisplayConfigPanel::Init(wf);
   WaypointDisplayConfigPanel::Init(wf);
@@ -227,10 +225,6 @@ PrepareConfigurationMenu()
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceColoursClicked),
-  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceModeClicked),
-  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceDisplay),
-  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceWarning),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(SymbolsConfigPanel::OnTrailLength),
@@ -311,9 +305,6 @@ void dlgConfigurationShowModal(void)
   changed |= TimeConfigPanel::Save();
   changed |= LoggerConfigPanel::Save();
   changed |= DevicesConfigPanel::Save();
-  changed |= AirspaceConfigPanel::Save(requirerestart,
-                                       CommonInterface::SetSettingsComputer().airspace,
-                                       CommonInterface::SetSettingsMap().airspace);
   changed |= SiteConfigPanel::Save();
   changed |= MapDisplayConfigPanel::Save();
   changed |= WaypointDisplayConfigPanel::Save();

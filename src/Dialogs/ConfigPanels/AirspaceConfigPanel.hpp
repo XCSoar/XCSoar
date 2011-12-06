@@ -24,27 +24,9 @@ Copyright_License {
 #ifndef AIRSPACECONFIGPANEL_HPP
 #define AIRSPACECONFIGPANEL_HPP
 
-#include "DataField/Base.hpp"
+class Widget;
 
-struct AirspaceComputerSettings;
-struct AirspaceRendererSettings;
-class WndForm;
-class WndButton;
-
-namespace AirspaceConfigPanel
-{
-  void Init(WndForm *wf,
-            const AirspaceComputerSettings &computer,
-            const AirspaceRendererSettings &renderer);
-  bool Save(bool &requirerestart,
-            AirspaceComputerSettings &computer,
-            AirspaceRendererSettings &renderer);
-
-  void OnAirspaceColoursClicked(gcc_unused WndButton &button);
-  void OnAirspaceModeClicked(gcc_unused WndButton &button);
-
-  void OnAirspaceDisplay(DataField *Sender, DataField::DataAccessKind_t Mode);
-  void OnAirspaceWarning(DataField *Sender, DataField::DataAccessKind_t Mode);
-};
+Widget *
+CreateAirspaceConfigPanel();
 
 #endif /* AIRSPACECONFIGPANEL_HPP */
