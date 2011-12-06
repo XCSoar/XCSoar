@@ -97,7 +97,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Screen Layout"), 5, NULL, NULL, N_("IDR_XML_LAYOUTCONFIGPANEL")},
   {N_("InfoBox Pages"), 5, NULL, NULL, N_("IDR_XML_PAGESCONFIGPANEL")},
   {N_("InfoBox Modes"), 5, NULL, NULL, N_("IDR_XML_INFOBOXESCONFIGPANEL")},
-  {N_("Devices"), 6, NULL, NULL, N_("IDR_XML_DEVICESCONFIGPANEL")},
+  {N_("Devices"), 6, NULL, NULL, NULL, CreateDevicesConfigPanel },
   {N_("Polar"), 6, PolarConfigPanel::PreShow, PolarConfigPanel::PreHide, N_("IDR_XML_POLARCONFIGPANEL")},
   {N_("Logger"), 6, NULL, NULL, N_("IDR_XML_LOGGERCONFIGPANEL")},
   {N_("Units"), 6, NULL, NULL, N_("IDR_XML_UNITSCONFIGPANEL")},
@@ -194,7 +194,6 @@ setVariables()
   UnitsConfigPanel::Init(wf);
   TimeConfigPanel::Init(wf);
   LoggerConfigPanel::Init(wf);
-  DevicesConfigPanel::Init(wf);
   SiteConfigPanel::Init(wf);
   MapDisplayConfigPanel::Init(wf);
   WaypointDisplayConfigPanel::Init(wf);
@@ -230,10 +229,6 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(SymbolsConfigPanel::OnTrailLength),
   DeclareCallBackEntry(RouteConfigPanel::OnRouteMode),
   DeclareCallBackEntry(RouteConfigPanel::OnReachMode),
-  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAPort),
-  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceBPort),
-  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAData),
-  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceBData),
   DeclareCallBackEntry(MapDisplayConfigPanel::OnShiftTypeData),
   DeclareCallBackEntry(PolarConfigPanel::OnLoadInternal),
   DeclareCallBackEntry(PolarConfigPanel::OnLoadFromFile),
@@ -304,7 +299,6 @@ void dlgConfigurationShowModal(void)
   changed |= PolarConfigPanel::Save();
   changed |= TimeConfigPanel::Save();
   changed |= LoggerConfigPanel::Save();
-  changed |= DevicesConfigPanel::Save();
   changed |= SiteConfigPanel::Save();
   changed |= MapDisplayConfigPanel::Save();
   changed |= WaypointDisplayConfigPanel::Save();

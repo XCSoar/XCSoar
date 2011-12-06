@@ -24,18 +24,9 @@ Copyright_License {
 #ifndef DEVICESCONFIGPANEL_HPP
 #define DEVICESCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
-#include "Form/Button.hpp"
+class Widget;
 
-namespace DevicesConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save();
-
-  void OnDeviceAPort(DataField *Sender, DataField::DataAccessKind_t Mode);
-  void OnDeviceBPort(DataField *Sender, DataField::DataAccessKind_t Mode);
-  void OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode);
-  void OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode);
-};
+Widget *
+CreateDevicesConfigPanel();
 
 #endif /* DEVICESCONFIGPANEL_HPP */

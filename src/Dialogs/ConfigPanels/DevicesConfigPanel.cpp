@@ -26,6 +26,8 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
+#include "Form/Form.hpp"
+#include "Form/Button.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Dialogs/Dialogs.h"
@@ -41,6 +43,10 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Compatibility/string.h"
 #include "Util/Macros.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 
 #ifdef _WIN32_WCE
 #include "Device/Windows/Enumerator.hpp"
@@ -53,8 +59,6 @@ Copyright_License {
 #endif
 #endif
 
-static WndForm* wf = NULL;
-static bool changed = false;
 
 static const struct {
   DeviceConfig::PortType type;
@@ -78,7 +82,36 @@ static const struct {
 /** the number of fixed port types (excludes Serial, Bluetooth and IOIOUart) */
 static const unsigned num_port_types = ARRAY_SIZE(port_types) - 1;
 
-static DeviceConfig device_config[NUMDEV];
+class DevicesConfigPanel : public XMLWidget {
+
+private:
+  DeviceConfig device_config[NUMDEV];
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+  void OnDeviceAPort();
+  void OnDeviceBPort();
+  void OnDeviceAData();
+  void OnDeviceBData();
+};
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static DevicesConfigPanel *instance;
+
+void
+DevicesConfigPanel::Show(const PixelRect &rc)
+{
+  XMLWidget::Show(rc);
+}
+
+void
+DevicesConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
 
 gcc_pure
 static bool
@@ -123,34 +156,52 @@ UpdateDeviceControlVisibility(WndProperty &port_field,
 }
 
 void
-DevicesConfigPanel::OnDeviceAPort(DataField *Sender,
-                                  DataField::DataAccessKind_t Mode)
+DevicesConfigPanel::OnDeviceAPort()
 {
-  UpdateDeviceControlVisibility(*(WndProperty *)wf->FindByName(_T("prpComPort1")),
-                                *(WndProperty *)wf->FindByName(_T("prpComSpeed1")),
-                                *(WndProperty *)wf->FindByName(_T("BulkBaudRate1")),
-                                *(WndProperty *)wf->FindByName(_T("prpComDevice1")));
+  UpdateDeviceControlVisibility(*(WndProperty *)form.FindByName(_T("prpComPort1")),
+                                *(WndProperty *)form.FindByName(_T("prpComSpeed1")),
+                                *(WndProperty *)form.FindByName(_T("BulkBaudRate1")),
+                                *(WndProperty *)form.FindByName(_T("prpComDevice1")));
+}
+
+static void
+OnDeviceAPort (gcc_unused DataField *Sender,
+               gcc_unused DataField::DataAccessKind_t Mode)
+{
+  instance->OnDeviceAPort();
 }
 
 void
-DevicesConfigPanel::OnDeviceBPort(DataField *Sender,
-                                  DataField::DataAccessKind_t Mode)
+DevicesConfigPanel::OnDeviceBPort()
 {
-  UpdateDeviceControlVisibility(*(WndProperty *)wf->FindByName(_T("prpComPort2")),
-                                *(WndProperty *)wf->FindByName(_T("prpComSpeed2")),
-                                *(WndProperty *)wf->FindByName(_T("BulkBaudRate2")),
-                                *(WndProperty *)wf->FindByName(_T("prpComDevice2")));
+  UpdateDeviceControlVisibility(*(WndProperty *)form.FindByName(_T("prpComPort2")),
+                                *(WndProperty *)form.FindByName(_T("prpComSpeed2")),
+                                *(WndProperty *)form.FindByName(_T("BulkBaudRate2")),
+                                *(WndProperty *)form.FindByName(_T("prpComDevice2")));
+}
+
+static void
+OnDeviceBPort(gcc_unused DataField *Sender,
+              gcc_unused DataField::DataAccessKind_t Mode)
+{
+  instance->OnDeviceBPort();
 }
 
 void
-DevicesConfigPanel::OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode)
+DevicesConfigPanel::OnDeviceAData()
+{
+  UpdateDeviceControlVisibility(*(WndProperty *)form.FindByName(_T("prpComPort1")),
+                                *(WndProperty *)form.FindByName(_T("prpComSpeed1")),
+                                *(WndProperty *)form.FindByName(_T("BulkBaudRate1")),
+                                *(WndProperty *)form.FindByName(_T("prpComDevice1")));
+}
+
+static void
+OnDeviceAData(gcc_unused  DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
   case DataField::daChange:
-    UpdateDeviceControlVisibility(*(WndProperty *)wf->FindByName(_T("prpComPort1")),
-                                  *(WndProperty *)wf->FindByName(_T("prpComSpeed1")),
-                                  *(WndProperty *)wf->FindByName(_T("BulkBaudRate1")),
-                                  *(WndProperty *)wf->FindByName(_T("prpComDevice1")));
+    instance->OnDeviceAData();
     break;
 
   case DataField::daSpecial:
@@ -158,16 +209,22 @@ DevicesConfigPanel::OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t
   }
 }
 
-
 void
-DevicesConfigPanel::OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode)
+DevicesConfigPanel::OnDeviceBData()
+{
+
+  UpdateDeviceControlVisibility(*(WndProperty *)form.FindByName(_T("prpComPort2")),
+                                *(WndProperty *)form.FindByName(_T("prpComSpeed2")),
+                                *(WndProperty *)form.FindByName(_T("BulkBaudRate2")),
+                                *(WndProperty *)form.FindByName(_T("prpComDevice2")));
+}
+
+static void
+OnDeviceBData(gcc_unused DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
   case DataField::daChange:
-    UpdateDeviceControlVisibility(*(WndProperty *)wf->FindByName(_T("prpComPort2")),
-                                  *(WndProperty *)wf->FindByName(_T("prpComSpeed2")),
-                                  *(WndProperty *)wf->FindByName(_T("BulkBaudRate2")),
-                                  *(WndProperty *)wf->FindByName(_T("prpComDevice2")));
+    instance->OnDeviceBData();
     break;
 
   case DataField::daSpecial:
@@ -527,60 +584,70 @@ FinishDeviceFields(DeviceConfig &config,
   return changed;
 }
 
+gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnDeviceAPort),
+  DeclareCallBackEntry(OnDeviceBPort),
+  DeclareCallBackEntry(OnDeviceAData),
+  DeclareCallBackEntry(OnDeviceBData),
+  DeclareCallBackEntry(NULL),
+};
 
 void
-DevicesConfigPanel::Init(WndForm *_wf)
+DevicesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
-  changed = false;
+  instance = this;
+  LoadWindow(CallBackTable, parent,
+             Layout::landscape ? _T("IDR_XML_DEVICESCONFIGPANEL") :
+                               _T("IDR_XML_DEVICESCONFIGPANEL_L"));
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     Profile::GetDeviceConfig(i, device_config[i]);
 
   SetupDeviceFields(device_config[0],
-                    (WndProperty*)wf->FindByName(_T("prpComPort1")),
-                    (WndProperty*)wf->FindByName(_T("prpComSpeed1")),
-                    *(WndProperty *)wf->FindByName(_T("BulkBaudRate1")),
-                    (WndProperty*)wf->FindByName(_T("prpComDevice1")));
+                    (WndProperty*)form.FindByName(_T("prpComPort1")),
+                    (WndProperty*)form.FindByName(_T("prpComSpeed1")),
+                    *(WndProperty *)form.FindByName(_T("BulkBaudRate1")),
+                    (WndProperty*)form.FindByName(_T("prpComDevice1")));
 
   SetupDeviceFields(device_config[1],
-                    (WndProperty*)wf->FindByName(_T("prpComPort2")),
-                    (WndProperty*)wf->FindByName(_T("prpComSpeed2")),
-                    *(WndProperty *)wf->FindByName(_T("BulkBaudRate2")),
-                    (WndProperty*)wf->FindByName(_T("prpComDevice2")));
+                    (WndProperty*)form.FindByName(_T("prpComPort2")),
+                    (WndProperty*)form.FindByName(_T("prpComSpeed2")),
+                    *(WndProperty *)form.FindByName(_T("BulkBaudRate2")),
+                    (WndProperty*)form.FindByName(_T("prpComDevice2")));
 
-  LoadFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
+  LoadFormProperty(form, _T("prpSetSystemTimeFromGPS"),
                    CommonInterface::SettingsComputer().set_system_time_from_gps);
 
-  LoadFormProperty(*wf, _T("prpIgnoreNMEAChecksum"),
+  LoadFormProperty(form, _T("prpIgnoreNMEAChecksum"),
                    NMEAParser::ignore_checksum);
 }
 
 
 bool
-DevicesConfigPanel::Save()
+DevicesConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
+  bool changed = false, require_restart = false;
+
   DevicePortChanged =
     FinishDeviceFields(device_config[0],
-                       (WndProperty*)wf->FindByName(_T("prpComPort1")),
-                       (WndProperty*)wf->FindByName(_T("prpComSpeed1")),
-                       *(const WndProperty *)wf->FindByName(_T("BulkBaudRate1")),
-                       (WndProperty*)wf->FindByName(_T("prpComDevice1")));
+                       (WndProperty*)form.FindByName(_T("prpComPort1")),
+                       (WndProperty*)form.FindByName(_T("prpComSpeed1")),
+                       *(const WndProperty *)form.FindByName(_T("BulkBaudRate1")),
+                       (WndProperty*)form.FindByName(_T("prpComDevice1")));
 
   DevicePortChanged =
     FinishDeviceFields(device_config[1],
-                       (WndProperty*)wf->FindByName(_T("prpComPort2")),
-                       (WndProperty*)wf->FindByName(_T("prpComSpeed2")),
-                       *(const WndProperty *)wf->FindByName(_T("BulkBaudRate2")),
-                       (WndProperty*)wf->FindByName(_T("prpComDevice2"))) ||
+                       (WndProperty*)form.FindByName(_T("prpComPort2")),
+                       (WndProperty*)form.FindByName(_T("prpComSpeed2")),
+                       *(const WndProperty *)form.FindByName(_T("BulkBaudRate2")),
+                       (WndProperty*)form.FindByName(_T("prpComDevice2"))) ||
     DevicePortChanged;
 
-  changed |= SaveFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
+  changed |= SaveFormProperty(form, _T("prpSetSystemTimeFromGPS"),
                               szProfileSetSystemTimeFromGPS,
                               CommonInterface::SetSettingsComputer().set_system_time_from_gps);
 
-  changed |= SaveFormProperty(*wf, _T("prpIgnoreNMEAChecksum"),
+  changed |= SaveFormProperty(form, _T("prpIgnoreNMEAChecksum"),
                               szProfileIgnoreNMEAChecksum,
                               NMEAParser::ignore_checksum);
 
@@ -590,5 +657,15 @@ DevicesConfigPanel::Save()
       Profile::SetDeviceConfig(i, device_config[i]);
   }
 
-  return changed;
+  _changed |= changed;
+  _require_restart |= require_restart;
+
+  return true;
 }
+
+Widget *
+CreateDevicesConfigPanel()
+{
+  return new DevicesConfigPanel();
+}
+
