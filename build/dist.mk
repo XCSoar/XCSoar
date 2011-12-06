@@ -16,7 +16,7 @@ dist: $(OUTPUTS)
 ifeq ($(TARGET),ALTAIR)
 # Build a ZIP file to be unpacked on a USB stick.  The Altair will
 # automatically pick up the EXE file with the "magic" file name
-$(TARGET_OUTPUT_DIR)/XCSoarAltair.zip: $(TARGET_OUTPUT_DIR)/bin/XCSoar.exe
+$(TARGET_OUTPUT_DIR)/XCSoarAltair.zip: $(TARGET_BIN_DIR)/XCSoar.exe
 	rm -rf $(@D)/ToAltair
 	mkdir -p $(@D)/ToAltair
 	cp $< $(@D)/ToAltair/

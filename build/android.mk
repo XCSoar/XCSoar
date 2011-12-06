@@ -16,7 +16,7 @@ JARSIGNER = jarsigner
 ANDROID_KEYSTORE = $(HOME)/.android/mk.keystore
 ANDROID_KEY_ALIAS = mk
 ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/build
-ANDROID_BIN = $(TARGET_OUTPUT_DIR)/bin
+ANDROID_BIN = $(TARGET_BIN_DIR)
 ANDROID_JNI = $(TARGET_OUTPUT_DIR)/jni
 
 ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux_x86
@@ -97,7 +97,7 @@ endif
 
 # symlink some important files to $(ANDROID_BUILD) and let the Android
 # SDK generate build.xml
-$(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) build/r.sed | $(TARGET_OUTPUT_DIR)/bin/dirstamp
+$(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) build/r.sed | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  ANDROID $@"
 	$(Q)rm -r -f $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
 	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src
@@ -154,7 +154,7 @@ $(TARGET_OUTPUT_DIR)/$(SRC)/Android/Timer.o: $(NATIVE_HEADERS)
 $(TARGET_OUTPUT_DIR)/$(SRC)/Android/InternalGPS.o: $(NATIVE_HEADERS)
 $(TARGET_OUTPUT_DIR)/$(SRC)/Android/Battery.o: $(NATIVE_HEADERS)
 
-$(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libapplication.so: $(TARGET_OUTPUT_DIR)/bin/xcsoar.so | $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/dirstamp
+$(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libapplication.so: $(TARGET_BIN_DIR)/xcsoar.so | $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/dirstamp
 	cp $< $@
 
 $(ANDROID_SO_FILES): $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/lib%.so: $(ANDROID_LIB_DIR)/lib%.so
