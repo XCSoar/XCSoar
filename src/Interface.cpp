@@ -158,8 +158,10 @@ ActionInterface::SendSettingsMap(const bool trigger_draw)
 
   main_window.SetSettingsMap(SettingsMap());
 
-  if (trigger_draw)
+  if (trigger_draw) {
     main_window.full_redraw();
+    BroadcastUISettingsUpdate();
+  }
 
   // TODO: trigger refresh if the settings are changed
 }
