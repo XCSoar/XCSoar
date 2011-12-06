@@ -475,6 +475,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Computer/BasicComputer.cpp \
 	$(SRC)/Computer/AutoQNH.cpp \
+	$(SRC)/BlackboardListener.cpp \
 	$(SRC)/DeviceBlackboard.cpp \
 	$(SRC)/InterfaceBlackboard.cpp \
 	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
