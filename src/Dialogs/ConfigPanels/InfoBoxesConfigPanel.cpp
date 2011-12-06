@@ -34,13 +34,45 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Dialogs/dlgConfigInfoboxes.hpp"
+#include "Form/Form.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
+#include "ConfigPanel.hpp"
 
-static WndForm* wf = NULL;
-static WndButton *buttons[InfoBoxSettings::MAX_PANELS];
 
+class InfoBoxesConfigPanel : public XMLWidget {
 
-static unsigned
-buttonIndex(const WndButton *button)
+private:
+  WndButton *buttons[InfoBoxSettings::MAX_PANELS];
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+  void OnInfoBoxesButton(WndButton &button);
+  unsigned ButtonIndex(const WndButton *button);
+};
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static InfoBoxesConfigPanel *instance;
+
+void
+InfoBoxesConfigPanel::Show(const PixelRect &rc)
+{
+  XMLWidget::Show(rc);
+}
+
+void
+InfoBoxesConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
+
+unsigned
+InfoBoxesConfigPanel::ButtonIndex(const WndButton *button)
 {
   for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; i++)
     if (button == buttons[i])
@@ -49,17 +81,17 @@ buttonIndex(const WndButton *button)
   return 0;
 }
 
-
-static void
-OnInfoBoxesButton(WndButton &button)
+void
+InfoBoxesConfigPanel::OnInfoBoxesButton(WndButton &button)
 {
   InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
 
-  unsigned i = buttonIndex(&button);
+  unsigned i = ButtonIndex(&button);
   InfoBoxSettings::Panel &data = settings.panels[i];
 
   bool changed =
-    dlgConfigInfoboxesShowModal(wf->GetMainWindow(), wf->GetLook(),
+    dlgConfigInfoboxesShowModal(ConfigPanel::GetForm().GetMainWindow(),
+                                ConfigPanel::GetForm().GetLook(),
                                 InfoBoxLayout::InfoBoxGeometry, data,
                                 i >= InfoBoxSettings::PREASSIGNED_PANELS);
   if (changed) {
@@ -70,12 +102,19 @@ OnInfoBoxesButton(WndButton &button)
   }
 }
 
+static void
+OnInfoBoxesButton(WndButton &button)
+{
+  instance->OnInfoBoxesButton(button);
+}
 
 void
-InfoBoxesConfigPanel::Init(WndForm *_wf)
+InfoBoxesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  instance = this;
+  LoadWindow(NULL, parent,
+             Layout::landscape ? _T("IDR_XML_INFOBOXESCONFIGPANEL") :
+                               _T("IDR_XML_INFOBOXESCONFIGPANEL_L"));
 
   const InfoBoxSettings &settings = CommonInterface::GetUISettings().info_boxes;
 
@@ -84,17 +123,22 @@ InfoBoxesConfigPanel::Init(WndForm *_wf)
 
     StaticString<32> buffer;
     buffer.Format(_T("cmdInfoBoxesPanel%u"), i);
-    buttons[i] = (WndButton*) wf->FindByName(buffer);
+    buttons[i] = (WndButton*) form.FindByName(buffer);
     if (buttons[i]) {
-      buttons[i]->SetOnClickNotify(OnInfoBoxesButton);
+      buttons[i]->SetOnClickNotify(::OnInfoBoxesButton);
       buttons[i]->SetCaption(gettext(data.name));
     }
   }
 }
 
-
 bool
-InfoBoxesConfigPanel::Save(bool &requirerestart)
+InfoBoxesConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
-  return false;
+  return true;
+}
+
+Widget *
+CreateInfoBoxesConfigPanel()
+{
+  return new InfoBoxesConfigPanel();
 }

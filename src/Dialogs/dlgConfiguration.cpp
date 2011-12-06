@@ -96,7 +96,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Language, Input"), 5, NULL, NULL, NULL, CreateInterfaceConfigPanel },
   {N_("Screen Layout"), 5, NULL, NULL, N_("IDR_XML_LAYOUTCONFIGPANEL")},
   {N_("InfoBox Pages"), 5, NULL, NULL, N_("IDR_XML_PAGESCONFIGPANEL")},
-  {N_("InfoBox Modes"), 5, NULL, NULL, N_("IDR_XML_INFOBOXESCONFIGPANEL")},
+  {N_("InfoBox Modes"), 5, NULL, NULL, NULL, CreateInfoBoxesConfigPanel },
   {N_("Devices"), 6, NULL, NULL, NULL, CreateDevicesConfigPanel },
   {N_("Polar"), 6, PolarConfigPanel::PreShow, PolarConfigPanel::PreHide, N_("IDR_XML_POLARCONFIGPANEL")},
   {N_("Logger"), 6, NULL, NULL, N_("IDR_XML_LOGGERCONFIGPANEL")},
@@ -202,7 +202,6 @@ setVariables()
   RouteConfigPanel::Init(wf);
   LayoutConfigPanel::Init(wf);
   VarioConfigPanel::Init(wf);
-  InfoBoxesConfigPanel::Init(wf);
   if (HasModelType())
     ExperimentalConfigPanel::Init(wf);
   PagesConfigPanel::Init(wf);
@@ -305,7 +304,6 @@ void dlgConfigurationShowModal(void)
   changed |= RouteConfigPanel::Save();
   changed |= LayoutConfigPanel::Save(requirerestart);
   changed |= VarioConfigPanel::Save();
-  changed |= InfoBoxesConfigPanel::Save(requirerestart);
   if (HasModelType())
     changed |= ExperimentalConfigPanel::Save(requirerestart);
   // Units need to be saved last to prevent

@@ -24,12 +24,10 @@ Copyright_License {
 #ifndef INFOBOXESCONFIGPANEL_HPP
 #define INFOBOXESCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
 
-namespace InfoBoxesConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save(bool &requirerestart);
-};
+class Widget;
+
+Widget *
+CreateInfoBoxesConfigPanel();
 
 #endif /* INFOBOXESCONFIGPANEL_HPP */
