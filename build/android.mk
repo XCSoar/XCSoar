@@ -51,10 +51,10 @@ DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
 RAW_DIR = $(ANDROID_BUILD)/res/raw
 
 ifeq ($(TESTING),y)
-$(ANDROID_BUILD)/res/drawable/icon.png: $(OUT)/data/graphics/xcsoarswiftsplash_red_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
+$(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/xcsoarswiftsplash_red_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
 	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
 else
-$(ANDROID_BUILD)/res/drawable/icon.png: $(OUT)/data/graphics/xcsoarswiftsplash_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
+$(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/xcsoarswiftsplash_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
 	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
 endif
 
@@ -71,20 +71,20 @@ PNG1 := $(patsubst Data/bitmaps/%.bmp,$(DRAWABLE_DIR)/%.png,$(wildcard Data/bitm
 $(PNG1): $(DRAWABLE_DIR)/%.png: Data/bitmaps/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_PREFIX)convert $< $@
 
-PNG2 := $(patsubst $(OUT)/data/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_LAUNCH_FLY_224) $(BMP_LAUNCH_SIM_224))
-$(PNG2): $(DRAWABLE_DIR)/%.png: $(OUT)/data/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
+PNG2 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_LAUNCH_FLY_224) $(BMP_LAUNCH_SIM_224))
+$(PNG2): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_PREFIX)convert $< $@
 
-PNG3 := $(patsubst $(OUT)/data/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_SPLASH_80) $(BMP_SPLASH_160) $(BMP_TITLE_110) $(BMP_TITLE_320))
-$(PNG3): $(DRAWABLE_DIR)/%.png: $(OUT)/data/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
+PNG3 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_SPLASH_80) $(BMP_SPLASH_160) $(BMP_TITLE_110) $(BMP_TITLE_320))
+$(PNG3): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_PREFIX)convert $< $@
 
-PNG4 := $(patsubst $(OUT)/data/icons/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_ICONS) $(BMP_ICONS_160))
-$(PNG4): $(DRAWABLE_DIR)/%.png: $(OUT)/data/icons/%.bmp | $(DRAWABLE_DIR)/dirstamp
+PNG4 := $(patsubst $(DATA)/icons/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_ICONS) $(BMP_ICONS_160))
+$(PNG4): $(DRAWABLE_DIR)/%.png: $(DATA)/icons/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_PREFIX)convert $< $@
 
-PNG5 := $(patsubst $(OUT)/data/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER))
-$(PNG5): $(DRAWABLE_DIR)/%.png: $(OUT)/data/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
+PNG5 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER))
+$(PNG5): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_PREFIX)convert $< $@
 
 PNG_FILES = $(DRAWABLE_DIR)/icon.png $(PNG1) $(PNG2) $(PNG3) $(PNG4) $(PNG5)
