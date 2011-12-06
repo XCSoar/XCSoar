@@ -26,35 +26,30 @@ Copyright_License {
 
 #include "Form/WindowWidget.hpp"
 #include "GaugeVario.hpp"
-#include "Thread/Notify.hpp"
+#include "BlackboardListener.hpp"
+
+class LiveBlackboard;
 
 /**
  * A variant of GaugeVario which auto-updates its data from the device
  * blackboard.
  */
 class GlueGaugeVario
-  : public WindowWidget, private Notify {
-  const FullBlackboard &blackboard;
+  : public WindowWidget, private NullBlackboardListener {
+  LiveBlackboard &blackboard;
   const VarioLook &look;
 
 public:
-  GlueGaugeVario(const FullBlackboard &_blackboard, const VarioLook &_look)
+  GlueGaugeVario(LiveBlackboard &_blackboard, const VarioLook &_look)
     :blackboard(_blackboard), look(_look) {}
-
-  /**
-   * Indicate that vario data in the device blackboard has been
-   * updated, and trigger a redraw.  This method may be called from
-   * any thread.
-   */
-  void invalidate_blackboard() {
-    SendNotification();
-  }
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void Unprepare();
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
 
 private:
-  virtual void OnNotification();
+  virtual void OnGPSUpdate(const MoreData &basic);
 };
 
 #endif

@@ -249,7 +249,8 @@ MainWindow::ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout)
   }
 
   if (!vario.IsDefined())
-    vario.Set(new GlueGaugeVario(CommonInterface::Full(), look->vario));
+    vario.Set(new GlueGaugeVario(CommonInterface::GetLiveBlackboard(),
+                                 look->vario));
 
   vario.Move(layout.vario);
   vario.Show();
@@ -740,13 +741,6 @@ MainWindow::UpdateGaugeVisibility()
 
   if (flarm != NULL && CommonInterface::Basic().flarm.new_traffic)
     flarm->Suppress = false;
-}
-
-void
-MainWindow::TriggerVarioUpdate()
-{
-  if (vario.IsPrepared())
-    ((GlueGaugeVario *)vario.Get())->invalidate_blackboard();
 }
 
 const MapWindowProjection &

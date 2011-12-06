@@ -268,8 +268,6 @@ public:
 
   void UpdateGaugeVisibility();
 
-  void TriggerVarioUpdate();
-
   gcc_pure
   const MapWindowProjection &GetProjection() const;
 

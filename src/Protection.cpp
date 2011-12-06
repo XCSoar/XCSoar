@@ -56,7 +56,6 @@ void TriggerGPSUpdate()
 void TriggerVarioUpdate()
 {
   CommonInterface::main_window.SendGPSUpdate();
-  CommonInterface::main_window.TriggerVarioUpdate();
 }
 
 void

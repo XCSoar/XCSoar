@@ -46,15 +46,23 @@ GlueGaugeVario::Unprepare()
 }
 
 void
-GlueGaugeVario::OnNotification()
+GlueGaugeVario::Show(const PixelRect &rc)
 {
-  if (!IsDefined())
-    return;
+  WindowWidget::Show(rc);
 
-  {
-    const ScopeLock protect(device_blackboard->mutex);
-    CommonInterface::ReadBlackboardBasic(device_blackboard->Basic());
-  }
+  blackboard.AddListener(*this);
+}
 
+void
+GlueGaugeVario::Hide()
+{
+  blackboard.RemoveListener(*this);
+
+  WindowWidget::Hide();
+}
+
+void
+GlueGaugeVario::OnGPSUpdate(const MoreData &basic)
+{
   ((GaugeVario *)GetWindow())->invalidate();
 }
