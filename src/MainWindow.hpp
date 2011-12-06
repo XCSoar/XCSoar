@@ -148,7 +148,7 @@ public:
   /**
    * Adjust vario
    */
-  void ReinitialiseLayout_vario();
+  void ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout);
 
   /**
    * Adjust the window position and size, to make it full-screen again

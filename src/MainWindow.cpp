@@ -180,16 +180,7 @@ MainWindow::InitialiseConfigured()
   ButtonLabel::CreateButtonLabels(*this);
   ButtonLabel::SetFont(Fonts::map_bold);
 
-  WindowStyle hidden;
-  hidden.hide();
-
-  vario = new GlueGaugeVario(CommonInterface::Full(),
-                             *this, look->vario,
-                             rc.right - ib_layout.control_width, 0,
-                             ib_layout.control_width,
-                             ib_layout.control_height * 3,
-                             hidden);
-  ReinitialiseLayout_vario();
+  ReinitialiseLayout_vario(ib_layout);
 
   WindowStyle hidden_border;
   hidden_border.hide();
@@ -251,24 +242,29 @@ MainWindow::Deinitialise()
 }
 
 void
-MainWindow::ReinitialiseLayout_vario()
+MainWindow::ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout)
 {
-  PixelRect rc = get_client_rect();
-  InfoBoxLayout::Init(rc);
-  const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, InfoBoxLayout::InfoBoxGeometry);
-
-  if (vario != NULL) {
-    if (InfoBoxLayout::InfoBoxGeometry == InfoBoxLayout::ibBottom8Vario)
-      vario->move(rc.right - ib_layout.control_width, rc.bottom - ib_layout.control_height * 2,
-                  ib_layout.control_width,
-                  ib_layout.control_height * 2);
-    else
-      vario->move(rc.right - ib_layout.control_width, 0,
-                  ib_layout.control_width,
-                  ib_layout.control_height * 3);
-    vario->bring_to_top();
+  if (!layout.HasVario()) {
+    delete vario;
+    vario = NULL;
+    return;
   }
+
+  if (vario == NULL) {
+    WindowStyle hidden;
+    hidden.hide();
+
+    vario = new GlueGaugeVario(CommonInterface::Full(),
+                               *this, look->vario,
+                               layout.vario.left,
+                               layout.vario.top,
+                               layout.vario.right - layout.vario.left,
+                               layout.vario.bottom - layout.vario.top,
+                               hidden);
+  } else
+    vario->move(layout.vario);
+
+  vario->bring_to_top();
 }
 
 void
@@ -307,7 +303,7 @@ MainWindow::ReinitialiseLayout()
   popup.reset();
   popup.set(rc);
 
-  ReinitialiseLayout_vario();
+  ReinitialiseLayout_vario(ib_layout);
 
   ReinitialiseLayout_flarm(rc, ib_layout);
 
@@ -747,7 +743,6 @@ MainWindow::UpdateGaugeVisibility()
 
   if (vario != NULL)
     vario->set_visible(!full_screen &&
-                       InfoBoxLayout::has_vario() &&
                        !CommonInterface::GetUIState().screen_blanked);
 
   if (flarm != NULL && CommonInterface::Basic().flarm.new_traffic)

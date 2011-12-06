@@ -126,6 +126,8 @@ InfoBoxLayout::Calculate(PixelRect rc, Geometry geometry)
 
   CalcInfoBoxSizes(layout, rc, geometry);
 
+  layout.ClearVario();
+
   switch (geometry) {
   case ibTop4Bottom4:
     layout.count = 8;
@@ -135,6 +137,13 @@ InfoBoxLayout::Calculate(PixelRect rc, Geometry geometry)
     break;
 
   case ibBottom8Vario:
+    layout.vario.left = rc.right - layout.control_width;
+    layout.vario.right = rc.right;
+    layout.vario.top = rc.bottom - layout.control_height * 2;
+    layout.vario.bottom = rc.bottom;
+
+    /* fall through */
+
   case ibBottom8:
     assert(layout.count == 8);
 
@@ -161,6 +170,11 @@ InfoBoxLayout::Calculate(PixelRect rc, Geometry geometry)
 
   case ibGNav2:
     assert(layout.count == 9);
+
+    layout.vario.left = rc.right - layout.control_width;
+    layout.vario.right = rc.right;
+    layout.vario.top = 0;
+    layout.vario.bottom = layout.vario.top + layout.control_height * 3;
 
     rc.left = MakeLeftColumn(layout, layout.positions, 6, rc.left, rc.top);
     rc.right = MakeRightColumn(layout, layout.positions + 6, 3, rc.right,
@@ -218,6 +232,11 @@ InfoBoxLayout::Calculate(PixelRect rc, Geometry geometry)
 
   case ibGNav:
     assert(layout.count == 9);
+
+    layout.vario.left = rc.right - layout.control_width;
+    layout.vario.right = rc.right;
+    layout.vario.top = 0;
+    layout.vario.bottom = layout.vario.top + layout.control_height * 3;
 
     rc.right = MakeRightColumn(layout, layout.positions + 6, 3,
                                rc.right, rc.top + 3 * layout.control_height);
@@ -373,11 +392,4 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout,
     layout.control_width = layout.control_height * 1.44;
     break;
   }
-}
-
-bool InfoBoxLayout::has_vario()
-{
-  return (InfoBoxGeometry == ibGNav) 
-      || (InfoBoxGeometry == ibGNav2)
-      || (InfoBoxGeometry == ibBottom8Vario);
 }

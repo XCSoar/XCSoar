@@ -69,7 +69,17 @@ namespace InfoBoxLayout
     unsigned count;
     PixelRect positions[InfoBoxSettings::Panel::MAX_CONTENTS];
 
+    PixelRect vario;
+
     PixelRect remaining;
+
+    bool HasVario() const {
+      return vario.right > vario.left && vario.bottom > vario.top;
+    }
+
+    void ClearVario() {
+      vario.left = vario.top = vario.right = vario.bottom = 0;
+    }
   };
 
   extern Geometry InfoBoxGeometry;
@@ -79,8 +89,6 @@ namespace InfoBoxLayout
   Calculate(PixelRect rc, Geometry geometry);
 
   void Init(PixelRect rc);
-
-  bool has_vario();
 };
 
 #endif
