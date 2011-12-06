@@ -78,13 +78,6 @@ namespace InputEvents
   gcc_pure
   static Mode getModeID();
 
-  /**
-   * Looks up the specified key code, and returns the associated event
-   * id.  Returns 0 if the key was not found.
-   */
-  gcc_pure
-  static unsigned key_to_event(Mode mode, unsigned key_code);
-
   gcc_pure
   static unsigned gesture_to_event(const TCHAR *data);
 
@@ -187,8 +180,13 @@ InputEvents::ProcessEvent(unsigned event_id)
     drawButtons(lastMode);
 }
 
-unsigned
-InputEvents::key_to_event(Mode mode, unsigned key_code)
+/**
+ * Looks up the specified key code, and returns the associated event
+ * id.  Returns 0 if the key was not found.
+ */
+gcc_pure
+static unsigned
+key_to_event(InputEvents::Mode mode, unsigned key_code)
 {
   return input_config.GetKeyEvent(mode, key_code);
 }
