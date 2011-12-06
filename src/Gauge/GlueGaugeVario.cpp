@@ -27,30 +27,34 @@ Copyright_License {
 #include "Interface.hpp"
 
 void
-GlueGaugeVario::invalidate_blackboard()
+GlueGaugeVario::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  /* protecting the flag with a Mutex would be correct, but not
-     worth the overhead */
+  WindowStyle style;
+  style.hide();
 
-  if (!blackboard_valid)
-    return;
-
-  blackboard_valid = false;
-  invalidate();
+  GaugeVario *gauge =
+    new GaugeVario(blackboard, parent, look, rc.left, rc.top,
+                   rc.right - rc.left, rc.bottom - rc.top,
+                   style);
+  SetWindow(gauge);
 }
 
 void
-GlueGaugeVario::on_paint_buffer(Canvas &canvas)
+GlueGaugeVario::Unprepare()
 {
-  if (!blackboard_valid) {
+  delete GetWindow();
+}
+
+void
+GlueGaugeVario::OnNotification()
+{
+  if (!IsDefined())
+    return;
+
+  {
     const ScopeLock protect(device_blackboard->mutex);
     CommonInterface::ReadBlackboardBasic(device_blackboard->Basic());
   }
 
-  GaugeVario::on_paint_buffer(canvas);
-
-  // wait until finish drawing until we declare we've drawn this frame.
-  // This allows frames for the vario gauge to be dropped if the update
-  // rate is too high for the load.
-  blackboard_valid = true;
+  ((GaugeVario *)GetWindow())->invalidate();
 }

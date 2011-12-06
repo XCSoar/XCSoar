@@ -55,7 +55,7 @@ Copyright_License {
 
 MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(NULL),
-   map(NULL), widget(NULL), vario(NULL), flarm(NULL), ta(NULL),
+   map(NULL), widget(NULL), vario(*this), flarm(NULL), ta(NULL),
    popup(status_messages, *this, CommonInterface::GetUISettings()),
    timer(*this),
    FullScreen(false),
@@ -228,8 +228,7 @@ MainWindow::Deinitialise()
   map = NULL;
   delete temp_map;
 
-  delete vario;
-  vario = NULL;
+  vario.Clear();
 
   delete flarm;
   flarm = NULL;
@@ -245,26 +244,17 @@ void
 MainWindow::ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout)
 {
   if (!layout.HasVario()) {
-    delete vario;
-    vario = NULL;
+    vario.Clear();
     return;
   }
 
-  if (vario == NULL) {
-    WindowStyle hidden;
-    hidden.hide();
+  if (!vario.IsDefined())
+    vario.Set(new GlueGaugeVario(CommonInterface::Full(), look->vario));
 
-    vario = new GlueGaugeVario(CommonInterface::Full(),
-                               *this, look->vario,
-                               layout.vario.left,
-                               layout.vario.top,
-                               layout.vario.right - layout.vario.left,
-                               layout.vario.bottom - layout.vario.top,
-                               hidden);
-  } else
-    vario->move(layout.vario);
+  vario.Move(layout.vario);
+  vario.Show();
 
-  vario->bring_to_top();
+  // XXX vario->bring_to_top();
 }
 
 void
@@ -741,9 +731,8 @@ MainWindow::UpdateGaugeVisibility()
 {
   bool full_screen = GetFullScreen();
 
-  if (vario != NULL)
-    vario->set_visible(!full_screen &&
-                       !CommonInterface::GetUIState().screen_blanked);
+  vario.SetVisible(!full_screen &&
+                   !CommonInterface::GetUIState().screen_blanked);
 
   if (flarm != NULL && CommonInterface::Basic().flarm.new_traffic)
     flarm->Suppress = false;
@@ -752,8 +741,8 @@ MainWindow::UpdateGaugeVisibility()
 void
 MainWindow::TriggerVarioUpdate()
 {
-  if (vario != NULL)
-    vario->invalidate_blackboard();
+  if (vario.IsPrepared())
+    ((GlueGaugeVario *)vario.Get())->invalidate_blackboard();
 }
 
 const MapWindowProjection &

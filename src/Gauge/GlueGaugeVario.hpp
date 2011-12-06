@@ -24,36 +24,37 @@ Copyright_License {
 #ifndef GLUE_GAUGE_VARIO_H
 #define GLUE_GAUGE_VARIO_H
 
+#include "Form/WindowWidget.hpp"
 #include "GaugeVario.hpp"
+#include "Thread/Notify.hpp"
 
 /**
  * A variant of GaugeVario which auto-updates its data from the device
  * blackboard.
  */
-class GlueGaugeVario : public GaugeVario {
-  /**
-   * Is our InstrumentBlackboard up to date?
-   */
-  bool blackboard_valid;
+class GlueGaugeVario
+  : public WindowWidget, private Notify {
+  const FullBlackboard &blackboard;
+  const VarioLook &look;
 
 public:
-  GlueGaugeVario(const FullBlackboard &blackboard,
-                 ContainerWindow &parent, const VarioLook &look,
-                 PixelScalar left, PixelScalar top,
-                 UPixelScalar width, UPixelScalar height,
-                 const WindowStyle style=WindowStyle())
-    :GaugeVario(blackboard, parent, look, left, top, width, height, style),
-     blackboard_valid(false) {}
+  GlueGaugeVario(const FullBlackboard &_blackboard, const VarioLook &_look)
+    :blackboard(_blackboard), look(_look) {}
 
   /**
    * Indicate that vario data in the device blackboard has been
    * updated, and trigger a redraw.  This method may be called from
    * any thread.
    */
-  void invalidate_blackboard();
+  void invalidate_blackboard() {
+    SendNotification();
+  }
 
-protected:
-  virtual void on_paint_buffer(Canvas &canvas);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Unprepare();
+
+private:
+  virtual void OnNotification();
 };
 
 #endif

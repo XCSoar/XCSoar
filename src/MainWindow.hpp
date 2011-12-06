@@ -30,6 +30,7 @@ Copyright_License {
 #include "PopupMessage.hpp"
 #include "BatteryTimer.hpp"
 #include "DisplayMode.hpp"
+#include "Form/ManagedWidget.hpp"
 
 #include <assert.h>
 
@@ -38,7 +39,6 @@ struct SETTINGS_MAP;
 struct Look;
 class GlueMapWindow;
 class Widget;
-class GlueGaugeVario;
 class GaugeFLARM;
 class GaugeThermalAssistant;
 class StatusMessageList;
@@ -75,7 +75,8 @@ class MainWindow : public SingleWindow {
    */
   Widget *widget;
 
-  GlueGaugeVario *vario;
+  ManagedWidget vario;
+
   GaugeFLARM *flarm;
   GaugeThermalAssistant *ta;
 
