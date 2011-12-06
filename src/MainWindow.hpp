@@ -58,6 +58,11 @@ class MainWindow : public SingleWindow {
     CMD_AIRSPACE_WARNING,
 
     /**
+     * Called by the #MergeThread when new GPS data is available.
+     */
+    CMD_GPS_UPDATE,
+
+    /**
      * Called by the calculation thread when new calculation results
      * are available.  This updates the map and the info boxes.
      */
@@ -194,6 +199,10 @@ public:
   void SendAirspaceWarning() {
     airspace_warning_pending = true;
     send_user(CMD_AIRSPACE_WARNING);
+  }
+
+  void SendGPSUpdate() {
+    send_user(CMD_GPS_UPDATE);
   }
 
   void SendCalculatedUpdate() {

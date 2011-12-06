@@ -564,6 +564,10 @@ MainWindow::on_user(unsigned id)
     dlgAirspaceWarningsShowModal(*this, *airspace_warnings, true);
     return true;
 
+  case CMD_GPS_UPDATE:
+    XCSoarInterface::ReceiveGPS();
+    return true;
+
   case CMD_CALCULATED_UPDATE:
     if (map != NULL)
       map->FullRedraw();

@@ -62,6 +62,22 @@ CommonInterface::IsPanning()
 }
 
 void
+XCSoarInterface::ReceiveGPS()
+{
+  {
+    ScopeLock protect(device_blackboard->mutex);
+
+    ReadBlackboardBasic(device_blackboard->Basic());
+
+    const NMEAInfo &real = device_blackboard->RealState();
+    movement_detected = real.connected && real.gps.real &&
+      real.MovementDetected();
+  }
+
+  BroadcastGPSUpdate();
+}
+
+void
 XCSoarInterface::ExchangeBlackboard()
 {
   ExchangeDeviceBlackboard();
@@ -73,12 +89,6 @@ void
 XCSoarInterface::ExchangeDeviceBlackboard()
 {
   ScopeLock protect(device_blackboard->mutex);
-  ReadBlackboardBasic(device_blackboard->Basic());
-
-  const NMEAInfo &real = device_blackboard->RealState();
-  movement_detected = real.connected && real.gps.real &&
-    real.MovementDetected();
-
   ReadBlackboardCalculated(device_blackboard->Calculated());
 
   device_blackboard->ReadSettingsComputer(SettingsComputer());

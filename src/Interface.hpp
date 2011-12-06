@@ -215,6 +215,11 @@ public:
   static void Shutdown();
   static bool Startup();
 
+  /**
+   * Receive GPS data (#MoreData) from the DeviceBlackboard.
+   */
+  static void ReceiveGPS();
+
   static void ExchangeBlackboard();
 
   /**
