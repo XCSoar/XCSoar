@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
-#include "Blackboard.hpp"
 #include "SettingsMap.hpp"
 #include "SettingsComputer.hpp"
 #include "Units/Units.hpp"

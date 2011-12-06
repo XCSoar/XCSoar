@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef BLACKBOARD_H
-#define BLACKBOARD_H
+#ifndef XCSOAR_BASE_BLACKBOARD_HPP
+#define XCSOAR_BASE_BLACKBOARD_HPP
 
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"

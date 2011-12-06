@@ -25,7 +25,7 @@
 #define CROSS_SECTION_WINDOW_HPP
 
 #include "Screen/PaintWindow.hpp"
-#include "Blackboard.hpp"
+#include "BaseBlackboard.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 
 struct MoreData;

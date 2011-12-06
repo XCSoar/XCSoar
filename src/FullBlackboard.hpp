@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FULL_BLACKBOARD_HPP
 #define XCSOAR_FULL_BLACKBOARD_HPP
 
-#include "Blackboard.hpp"
+#include "BaseBlackboard.hpp"
 #include "SettingsComputerBlackboard.hpp"
 #include "UISettings.hpp"
 

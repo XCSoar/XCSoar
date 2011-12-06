@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef MAP_WINDOW_BLACKBOARD_H
 #define MAP_WINDOW_BLACKBOARD_H
 
-#include "Blackboard.hpp"
+#include "BaseBlackboard.hpp"
 #include "SettingsComputerBlackboard.hpp"
 #include "SettingsMapBlackboard.hpp"
 

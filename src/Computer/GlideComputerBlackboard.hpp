@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef GLIDECOMPUTER_BLACKBOARD_HPP
 #define GLIDECOMPUTER_BLACKBOARD_HPP
 
-#include "Blackboard.hpp"
+#include "BaseBlackboard.hpp"
 #include "SettingsComputerBlackboard.hpp"
 
 class ProtectedTaskManager;

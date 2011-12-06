@@ -30,7 +30,6 @@ Copyright_License {
 #include "StatusPanels/TimesStatusPanel.hpp"
 #include "Screen/Key.h"
 #include "Protection.hpp"
-#include "Blackboard.hpp"
 #include "Math/Earth.hpp"
 #include "Hardware/Battery.hpp"
 #include "Units/UnitsFormatter.hpp"

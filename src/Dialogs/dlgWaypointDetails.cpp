@@ -32,7 +32,6 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "OS/PathName.hpp"
 #include "Math/SunEphemeris.hpp"
-#include "Blackboard.hpp"
 #include "SettingsComputer.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"

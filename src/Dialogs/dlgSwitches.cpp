@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
-#include "Blackboard.hpp"
 #include "Units/Units.hpp"
 #include "DataField/Boolean.hpp"
 #include "MainWindow.hpp"

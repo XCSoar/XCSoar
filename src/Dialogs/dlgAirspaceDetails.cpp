@@ -24,7 +24,6 @@ Copyright_License {
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Message.hpp"
-#include "Blackboard.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Math/FastMath.h"

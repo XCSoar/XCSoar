@@ -619,7 +619,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Polar/Polar.cpp \
 	$(SRC)/Polar/PolarStore.cpp \
 	\
-	$(SRC)/Blackboard.cpp \
 	$(SRC)/Protection.cpp \
 	$(SRC)/BatteryTimer.cpp \
 	$(SRC)/ProcessTimer.cpp \

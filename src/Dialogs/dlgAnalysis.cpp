@@ -36,7 +36,6 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "Blackboard.hpp"
 #include "Protection.hpp"
 #include "StringUtil.hpp"
 #include "Compiler.h"
