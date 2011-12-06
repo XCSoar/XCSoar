@@ -20,6 +20,7 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/Edit.cpp \
 	$(FORM_SRC_DIR)/Widget.cpp \
 	$(FORM_SRC_DIR)/WindowWidget.cpp \
+	$(FORM_SRC_DIR)/ManagedWidget.cpp \
 	$(FORM_SRC_DIR)/Tabbed.cpp \
 	$(FORM_SRC_DIR)/TabBar.cpp \
 	$(FORM_SRC_DIR)/TabMenu.cpp \
