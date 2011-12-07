@@ -39,6 +39,7 @@ Copyright_License {
 #include "Form/SymbolButton.hpp"
 #include "Form/CheckBox.hpp"
 #include "Asset.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 
 #include <stdio.h>
 
@@ -293,12 +294,6 @@ RefreshCalculator()
 }
 
 static void
-OnTimerNotify(gcc_unused WndForm &Sender)
-{
-  RefreshCalculator();
-}
-
-static void
 OnOptimized(CheckBoxControl &control)
 {
   IsLocked = !control.get_checked();
@@ -544,17 +539,21 @@ dlgTargetShowModal(int TargetPoint)
   drawBtnNext();
 
   wf->SetKeyDownNotify(FormKeyDown);
-  wf->SetTimerNotify(OnTimerNotify);
+
+  struct TargetDialogUpdateListener : public NullBlackboardListener {
+    virtual void OnCalculatedUpdate(const MoreData &basic,
+                                    const DerivedInfo &calculated) {
+      map->invalidate();
+      RefreshCalculator();
+    }
+  };
+
+  TargetDialogUpdateListener blackboard_listener;
+  //WindowBlackboardListener
+  CommonInterface::GetLiveBlackboard().AddListener(blackboard_listener);
 
   wf->ShowModal();
+  CommonInterface::GetLiveBlackboard().RemoveListener(blackboard_listener);
 
   delete wf;
-  map = NULL;
-}
-
-void
-TargetDialogUpdate()
-{
-  if (map != NULL)
-    map->invalidate();
 }
