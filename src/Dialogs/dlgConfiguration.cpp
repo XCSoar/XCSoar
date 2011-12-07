@@ -109,7 +109,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Tracking"), 6, NULL, NULL, NULL, CreateTrackingConfigPanel },
 #endif
 #ifdef HAVE_MODEL_TYPE
-  {N_("Experimental Features"), 6, NULL, NULL, N_("IDR_XML_EXPERIMENTALCONFIGPANEL")},
+  {N_("Experimental Features"), 6, NULL, NULL, NULL, CreateExperimentalConfigPanel, },
 #endif
 };
 
@@ -189,8 +189,6 @@ static void
 setVariables()
 {
   PolarConfigPanel::Init(wf);
-  if (HasModelType())
-    ExperimentalConfigPanel::Init(wf);
 }
 
 static void
@@ -265,8 +263,6 @@ void dlgConfigurationShowModal(void)
   bool changed = false;
   bool requirerestart = false;
   changed |= PolarConfigPanel::Save();
-  if (HasModelType())
-    changed |= ExperimentalConfigPanel::Save(requirerestart);
   wTabMenu->Save(changed, requirerestart);
 
   if (changed) {

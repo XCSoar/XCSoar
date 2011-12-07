@@ -23,22 +23,29 @@ Copyright_License {
 
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
+#include "Form/XMLWidget.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
 #include "Asset.hpp"
 #include "ExperimentalConfigPanel.hpp"
 #include "Language/Language.hpp"
+#include "Screen/Layout.hpp"
 
-static WndForm* wf = NULL;
+class ExperimentalConfigPanel : public XMLWidget {
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+};
 
 void
-ExperimentalConfigPanel::Init(WndForm *_wf)
+ExperimentalConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  LoadWindow(NULL, parent,
+             Layout::landscape ? _T("IDR_XML_EXPERIMENTALCONFIGPANEL_L") :
+                               _T("IDR_XML_EXPERIMENTALCONFIGPANEL"));
 
-  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
+  WndProperty *wp = (WndProperty*)form.FindByName(_T("prpAppInfoBoxModel"));
   assert(wp != NULL);
 
   if (!HasModelType()) {
@@ -58,26 +65,34 @@ ExperimentalConfigPanel::Init(WndForm *_wf)
   }
 }
 
-
 bool
-ExperimentalConfigPanel::Save(bool &requirerestart)
+ExperimentalConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
-  bool changed = false;
+  bool changed = false, require_restart = false;
 
 #ifdef HAVE_MODEL_TYPE
   // VENTA-ADDON MODEL CHANGE
   WndProperty *wp;
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
+  wp = (WndProperty*)form.FindByName(_T("prpAppInfoBoxModel"));
   if (wp) {
     if (global_model_type != (ModelType)wp->GetDataField()->GetAsInteger()) {
       global_model_type = (ModelType)wp->GetDataField()->GetAsInteger();
       Profile::Set(szProfileAppInfoBoxModel,
                     global_model_type);
       changed = true;
-      requirerestart = true;
+      require_restart = true;
     }
   }
 #endif
 
-  return changed;
+  _changed |= changed;
+  _require_restart |= require_restart;
+
+  return true;
+}
+
+Widget *
+CreateExperimentalConfigPanel()
+{
+  return new ExperimentalConfigPanel();
 }

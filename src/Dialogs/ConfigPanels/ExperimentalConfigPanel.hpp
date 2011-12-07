@@ -24,12 +24,9 @@ Copyright_License {
 #ifndef EXPERIMENTALCONFIGPANEL_HPP
 #define EXPERIMENTALCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
+class Widget;
 
-namespace ExperimentalConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save(bool &requirerestart);
-};
+Widget *
+CreateExperimentalConfigPanel();
 
 #endif /* EXPERIMENTALCONFIGPANEL_HPP */
