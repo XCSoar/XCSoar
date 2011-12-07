@@ -110,8 +110,8 @@ match_pause_and_resume(const Event &event, void *ctx)
 void
 TopWindow::pause()
 {
-  event_queue->purge(match_pause_and_resume, NULL);
-  event_queue->push(Event::PAUSE);
+  event_queue->Purge(match_pause_and_resume, NULL);
+  event_queue->Push(Event::PAUSE);
 
   paused_mutex.Lock();
   while (!paused)
@@ -122,8 +122,8 @@ TopWindow::pause()
 void
 TopWindow::resume()
 {
-  event_queue->purge(match_pause_and_resume, NULL);
-  event_queue->push(Event::RESUME);
+  event_queue->Purge(match_pause_and_resume, NULL);
+  event_queue->Push(Event::RESUME);
 }
 
 bool
@@ -201,8 +201,8 @@ TopWindow::event_loop()
 
   EventLoop loop(*event_queue, *this);
   Event event;
-  while (defined() && loop.get(event))
-    loop.dispatch(event);
+  while (defined() && loop.Get(event))
+    loop.Dispatch(event);
 
   return 0;
 }
@@ -210,5 +210,5 @@ TopWindow::event_loop()
 void
 TopWindow::post_quit()
 {
-  event_queue->push(Event::QUIT);
+  event_queue->Push(Event::QUIT);
 }

@@ -177,8 +177,8 @@ TopWindow::event_loop()
 {
   EventLoop loop;
   MSG msg;
-  while (loop.get(msg))
-    loop.dispatch(msg);
+  while (loop.Get(msg))
+    loop.Dispatch(msg);
 
   return msg.wParam;
 }

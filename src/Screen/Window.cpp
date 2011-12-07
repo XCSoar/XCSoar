@@ -148,9 +148,9 @@ Window::on_destroy()
   }
 
 #ifdef ANDROID
-  event_queue->purge(*this);
+  event_queue->Purge(*this);
 #else
-  EventQueue::purge(*this);
+  EventQueue::Purge(*this);
 #endif
 #else /* USE_GDI */
   assert(hWnd != NULL);

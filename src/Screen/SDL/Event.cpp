@@ -29,7 +29,7 @@ Copyright_License {
 #include "Screen/TopWindow.hpp"
 
 bool
-EventLoop::get(SDL_Event &event)
+EventLoop::Get(SDL_Event &event)
 {
   if (bulk) {
     if (::SDL_PollEvent(&event))
@@ -49,7 +49,7 @@ EventLoop::get(SDL_Event &event)
 }
 
 void
-EventLoop::dispatch(SDL_Event &event)
+EventLoop::Dispatch(SDL_Event &event)
 {
   if (event.type == EVENT_USER && event.user.data1 != NULL) {
     Window *window = (Window *)event.user.data1;
@@ -66,7 +66,7 @@ EventLoop::dispatch(SDL_Event &event)
 }
 
 void
-EventQueue::purge(Uint32 mask,
+EventQueue::Purge(Uint32 mask,
                   bool (*match)(const SDL_Event &event, void *ctx),
                   void *ctx)
 {
@@ -87,9 +87,9 @@ match_notify(const SDL_Event &event, void *ctx)
 }
 
 void
-EventQueue::purge(Notify &notify)
+EventQueue::Purge(Notify &notify)
 {
-  purge(SDL_EVENTMASK(EVENT_NOTIFY), match_notify, (void *)&notify);
+  Purge(SDL_EVENTMASK(EVENT_NOTIFY), match_notify, (void *)&notify);
 }
 
 static bool
@@ -101,9 +101,9 @@ match_window(const SDL_Event &event, void *ctx)
 }
 
 void
-EventQueue::purge(Window &window)
+EventQueue::Purge(Window &window)
 {
-  purge(SDL_EVENTMASK(EVENT_USER) | SDL_EVENTMASK(EVENT_TIMER),
+  Purge(SDL_EVENTMASK(EVENT_USER) | SDL_EVENTMASK(EVENT_TIMER),
         match_window, (void *)&window);
 }
 
@@ -114,7 +114,7 @@ match_timer(const SDL_Event &event, void *ctx)
 }
 
 void
-EventQueue::purge(WindowTimer &timer)
+EventQueue::Purge(WindowTimer &timer)
 {
-  purge(SDL_EVENTMASK(EVENT_TIMER), match_timer, (void *)&timer);
+  Purge(SDL_EVENTMASK(EVENT_TIMER), match_timer, (void *)&timer);
 }

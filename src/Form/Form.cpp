@@ -398,7 +398,7 @@ WndForm::ShowModal()
   MSG event;
 #endif
 
-  while ((mModalResult == 0 || force) && loop.get(event)) {
+  while ((mModalResult == 0 || force) && loop.Get(event)) {
 #if defined(ENABLE_SDL) && !defined(ANDROID)
     if (event.type == SDL_QUIT) {
       mModalResult = mrCancel;
@@ -411,7 +411,7 @@ WndForm::ShowModal()
 
     // hack to stop exiting immediately
     if (IsEmbedded() && !IsAltair() && !hastimed &&
-        is_user_input(event)) {
+        IsUserInput(event)) {
       if (!enter_clock.check(200))
         /* ignore user input in the first 200ms */
         continue;
@@ -475,7 +475,7 @@ WndForm::ShowModal()
       continue;
     }
 
-    loop.dispatch(event);
+    loop.Dispatch(event);
   } // End Modal Loop
 
   main_window.remove_dialog(this);

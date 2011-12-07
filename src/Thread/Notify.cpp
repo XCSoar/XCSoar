@@ -41,9 +41,9 @@ Notify::Notify()
 Notify::~Notify()
 {
 #ifdef ANDROID
-  event_queue->purge(*this);
+  event_queue->Purge(*this);
 #elif defined(ENABLE_SDL)
-  EventQueue::purge(*this);
+  EventQueue::Purge(*this);
 #endif
 }
 
@@ -54,7 +54,7 @@ Notify::SendNotification()
     return;
 
 #ifdef ANDROID
-  event_queue->push(Event(Event::NOTIFY, this));
+  event_queue->Push(Event(Event::NOTIFY, this));
 #elif defined(ENABLE_SDL)
   SDL_Event event;
   event.type = EVENT_NOTIFY;

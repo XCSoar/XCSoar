@@ -92,7 +92,7 @@ struct Event {
 };
 
 static inline bool
-is_user_input(enum Event::type type)
+IsUserInput(enum Event::type type)
 {
   return type == Event::KEY_DOWN || type == Event::KEY_UP ||
     type == Event::MOUSE_MOTION ||
@@ -100,9 +100,9 @@ is_user_input(enum Event::type type)
 }
 
 static inline bool
-is_user_input(const Event &event)
+IsUserInput(const Event &event)
 {
-  return is_user_input(event.type);
+  return IsUserInput(event.type);
 }
 
 class EventQueue : private NonCopyable {
@@ -116,22 +116,22 @@ class EventQueue : private NonCopyable {
 public:
   EventQueue():running(true) {}
 
-  void quit() {
+  void Quit() {
     running = false;
   }
 
-  void push(const Event &event);
+  void Push(const Event &event);
 
-  bool pop(Event &event);
+  bool Pop(Event &event);
 
-  bool wait(Event &event);
+  bool Wait(Event &event);
 
-  void purge(bool (*match)(const Event &event, void *ctx), void *ctx);
+  void Purge(bool (*match)(const Event &event, void *ctx), void *ctx);
 
-  void purge(enum Event::type type);
-  void purge(Notify &notify);
-  void purge(Window &window);
-  void purge(AndroidTimer &timer);
+  void Purge(enum Event::type type);
+  void Purge(Notify &notify);
+  void Purge(Window &window);
+  void Purge(AndroidTimer &timer);
 };
 
 class EventLoop : private NonCopyable {
@@ -148,8 +148,8 @@ public:
   EventLoop(EventQueue &_queue, TopWindow &_top_window)
     :queue(_queue), top_window(_top_window), bulk(true) {}
 
-  bool get(Event &event);
-  void dispatch(const Event &event);
+  bool Get(Event &event);
+  void Dispatch(const Event &event);
 };
 
 #endif

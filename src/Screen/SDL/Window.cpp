@@ -203,7 +203,7 @@ void
 Window::send_user(unsigned id)
 {
 #ifdef ANDROID
-  event_queue->push(Event(Event::USER, id, this));
+  event_queue->Push(Event(Event::USER, id, this));
 #else
   SDL_Event event;
   event.user.type = EVENT_USER;

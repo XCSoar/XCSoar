@@ -30,7 +30,7 @@ Copyright_License {
 #include <windows.h>
 
 static inline bool
-is_user_input(UINT message)
+IsUserInput(UINT message)
 {
   return message == WM_KEYDOWN || message == WM_KEYUP ||
     message == WM_LBUTTONDOWN || message == WM_LBUTTONUP ||
@@ -38,15 +38,15 @@ is_user_input(UINT message)
 }
 
 static inline bool
-is_user_input(const MSG &msg)
+IsUserInput(const MSG &msg)
 {
-  return is_user_input(msg.message);
+  return IsUserInput(msg.message);
 }
 
 class EventLoop : private NonCopyable {
 public:
-  bool get(MSG &msg);
-  void dispatch(const MSG &msg);
+  bool Get(MSG &msg);
+  void Dispatch(const MSG &msg);
 };
 
 class DialogEventLoop : public EventLoop {
@@ -55,7 +55,7 @@ class DialogEventLoop : public EventLoop {
 public:
   DialogEventLoop(HWND _dialog):dialog(_dialog) {}
 
-  void dispatch(MSG &msg);
+  void Dispatch(MSG &msg);
 };
 
 namespace EventQueue {

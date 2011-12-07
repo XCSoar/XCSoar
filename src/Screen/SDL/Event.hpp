@@ -52,7 +52,7 @@ enum {
 };
 
 static inline bool
-is_user_input(const SDL_Event &event)
+IsUserInput(const SDL_Event &event)
 {
   return event.type == SDL_KEYDOWN || event.type == SDL_KEYUP ||
     event.type == SDL_MOUSEMOTION ||
@@ -72,31 +72,31 @@ public:
   EventLoop(TopWindow &_top_window)
     :top_window(_top_window), bulk(true) {}
 
-  bool get(SDL_Event &event);
-  void dispatch(SDL_Event &event);
+  bool Get(SDL_Event &event);
+  void Dispatch(SDL_Event &event);
 };
 
 namespace EventQueue {
   /**
    * Purge all matching events from the event queue.
    */
-  void purge(Uint32 mask,
+  void Purge(Uint32 mask,
              bool (*match)(const SDL_Event &event, void *ctx), void *ctx);
 
   /**
    * Purge all events for this #Notify from the event queue.
    */
-  void purge(Notify &notify);
+  void Purge(Notify &notify);
 
   /**
    * Purge all events for this Window from the event queue.
    */
-  void purge(Window &window);
+  void Purge(Window &window);
 
   /**
    * Purge all events for this timer from the event queue.
    */
-  void purge(WindowTimer &timer);
+  void Purge(WindowTimer &timer);
 };
 
 #endif

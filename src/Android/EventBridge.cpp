@@ -54,14 +54,14 @@ gcc_visibility_default
 void
 Java_org_xcsoar_EventBridge_onKeyDown(JNIEnv *env, jclass cls, jint key_code)
 {
-  event_queue->push(Event(Event::KEY_DOWN, TranslateKeyCode(key_code)));
+  event_queue->Push(Event(Event::KEY_DOWN, TranslateKeyCode(key_code)));
 }
 
 gcc_visibility_default
 void
 Java_org_xcsoar_EventBridge_onKeyUp(JNIEnv *env, jclass cls, jint key_code)
 {
-  event_queue->push(Event(Event::KEY_UP, TranslateKeyCode(key_code)));
+  event_queue->Push(Event(Event::KEY_UP, TranslateKeyCode(key_code)));
 }
 
 gcc_visibility_default
@@ -69,7 +69,7 @@ void
 Java_org_xcsoar_EventBridge_onMouseDown(JNIEnv *env, jclass cls,
                                         jint x, jint y)
 {
-  event_queue->push(Event(Event::MOUSE_DOWN, x, y));
+  event_queue->Push(Event(Event::MOUSE_DOWN, x, y));
 }
 
 gcc_visibility_default
@@ -77,7 +77,7 @@ void
 Java_org_xcsoar_EventBridge_onMouseUp(JNIEnv *env, jclass cls,
                                       jint x, jint y)
 {
-  event_queue->push(Event(Event::MOUSE_UP, x, y));
+  event_queue->Push(Event(Event::MOUSE_UP, x, y));
 }
 
 gcc_visibility_default
@@ -85,6 +85,6 @@ void
 Java_org_xcsoar_EventBridge_onMouseMove(JNIEnv *env, jclass cls,
                                         jint x, jint y)
 {
-  event_queue->purge(Event::MOUSE_MOTION);
-  event_queue->push(Event(Event::MOUSE_MOTION, x, y));
+  event_queue->Purge(Event::MOUSE_MOTION);
+  event_queue->Push(Event(Event::MOUSE_MOTION, x, y));
 }

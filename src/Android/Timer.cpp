@@ -63,7 +63,7 @@ AndroidTimer::disable()
   assert(!disabled);
 
   bridge.uninstall();
-  event_queue->purge(match_timer, (void *)this);
+  event_queue->Purge(match_timer, (void *)this);
 
   if (running)
     disabled = true;
@@ -94,5 +94,5 @@ Java_org_xcsoar_Timer_run(JNIEnv *env, jobject obj, jlong ptr)
 {
   AndroidTimer *timer = (AndroidTimer *)(void *)ptr;
 
-  event_queue->push(Event(Event::TIMER, (void *)timer));
+  event_queue->Push(Event(Event::TIMER, (void *)timer));
 }

@@ -138,10 +138,10 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
 
   CommonInterface::main_window.AnnounceResize(width, height);
 
-  event_queue->purge(Event::RESIZE);
+  event_queue->Purge(Event::RESIZE);
 
   Event event(Event::RESIZE, width, height);
-  event_queue->push(event);
+  event_queue->Push(event);
 }
 
 gcc_visibility_default

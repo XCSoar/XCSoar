@@ -39,7 +39,7 @@ WindowTimer::Cancel()
   ::SDL_RemoveTimer(id);
   id = NULL;
 
-  EventQueue::purge(*this);
+  EventQueue::Purge(*this);
 }
 
 Uint32

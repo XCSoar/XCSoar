@@ -97,7 +97,7 @@ TopWindow::invalidate()
 
   /* wake up the event loop */
 #ifdef ANDROID
-  event_queue->push(Event::NOP);
+  event_queue->Push(Event::NOP);
 #else
   /* note that SDL_NOEVENT is not documented, but since we just want
      to wake up without actually sending an event, I hope this works
@@ -248,8 +248,8 @@ TopWindow::event_loop()
 
   EventLoop loop(*this);
   SDL_Event event;
-  while (defined() && loop.get(event))
-    loop.dispatch(event);
+  while (defined() && loop.Get(event))
+    loop.Dispatch(event);
 
   return 0;
 }

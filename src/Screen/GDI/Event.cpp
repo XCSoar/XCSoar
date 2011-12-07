@@ -27,7 +27,7 @@ Copyright_License {
 #include "Asset.hpp"
 
 bool
-EventLoop::get(MSG &msg)
+EventLoop::Get(MSG &msg)
 {
   assert_none_locked();
 
@@ -38,7 +38,7 @@ EventLoop::get(MSG &msg)
 }
 
 void
-EventLoop::dispatch(const MSG &msg)
+EventLoop::Dispatch(const MSG &msg)
 {
   assert_none_locked();
   ::TranslateMessage(&msg);
@@ -64,7 +64,7 @@ AllowDialogMessage(const MSG &msg)
 }
 
 void
-DialogEventLoop::dispatch(MSG &msg)
+DialogEventLoop::Dispatch(MSG &msg)
 {
   assert_none_locked();
 
@@ -80,7 +80,7 @@ DialogEventLoop::dispatch(MSG &msg)
     return;
   }
 
-  EventLoop::dispatch(msg);
+  EventLoop::Dispatch(msg);
 }
 
 static void

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Android/Timer.hpp"
 
 void
-EventQueue::push(const Event &event)
+EventQueue::Push(const Event &event)
 {
   ScopeLock protect(mutex);
   if (!running)
@@ -38,7 +38,7 @@ EventQueue::push(const Event &event)
 }
 
 bool
-EventQueue::pop(Event &event)
+EventQueue::Pop(Event &event)
 {
   ScopeLock protect(mutex);
   if (!running || events.empty())
@@ -48,13 +48,13 @@ EventQueue::pop(Event &event)
   events.pop();
 
   if (event.type == Event::QUIT)
-    quit();
+    Quit();
 
   return true;
 }
 
 bool
-EventQueue::wait(Event &event)
+EventQueue::Wait(Event &event)
 {
   ScopeLock protect(mutex);
   if (!running)
@@ -67,13 +67,13 @@ EventQueue::wait(Event &event)
   events.pop();
 
   if (event.type == Event::QUIT)
-    quit();
+    Quit();
 
   return true;
 }
 
 void
-EventQueue::purge(bool (*match)(const Event &event, void *ctx), void *ctx)
+EventQueue::Purge(bool (*match)(const Event &event, void *ctx), void *ctx)
 {
   ScopeLock protect(mutex);
   size_t n = events.size();
@@ -92,9 +92,9 @@ match_type(const Event &event, void *ctx)
 }
 
 void
-EventQueue::purge(enum Event::type type)
+EventQueue::Purge(enum Event::type type)
 {
-  purge(match_type, &type);
+  Purge(match_type, &type);
 }
 
 static bool
@@ -104,9 +104,9 @@ match_notify(const Event &event, void *ctx)
 }
 
 void
-EventQueue::purge(Notify &notify)
+EventQueue::Purge(Notify &notify)
 {
-  purge(match_notify, (void *)&notify);
+  Purge(match_notify, (void *)&notify);
 }
 
 static bool
@@ -116,9 +116,9 @@ match_window(const Event &event, void *ctx)
 }
 
 void
-EventQueue::purge(Window &window)
+EventQueue::Purge(Window &window)
 {
-  purge(match_window, (void *)&window);
+  Purge(match_window, (void *)&window);
 }
 
 static bool
@@ -128,16 +128,16 @@ match_timer(const Event &event, void *ctx)
 }
 
 void
-EventQueue::purge(AndroidTimer &timer)
+EventQueue::Purge(AndroidTimer &timer)
 {
-  purge(match_timer, (void *)&timer);
+  Purge(match_timer, (void *)&timer);
 }
 
 bool
-EventLoop::get(Event &event)
+EventLoop::Get(Event &event)
 {
   if (bulk) {
-    if (queue.pop(event))
+    if (queue.Pop(event))
       return event.type != Event::QUIT;
 
     /* that was the last event for now, refresh the screen now */
@@ -145,7 +145,7 @@ EventLoop::get(Event &event)
     bulk = false;
   }
 
-  if (queue.wait(event)) {
+  if (queue.Wait(event)) {
     bulk = true;
     return event.type != Event::QUIT;
   }
@@ -154,7 +154,7 @@ EventLoop::get(Event &event)
 }
 
 void
-EventLoop::dispatch(const Event &event)
+EventLoop::Dispatch(const Event &event)
 {
   if (event.type == Event::USER) {
     Window *window = (Window *)event.ptr;
