@@ -26,10 +26,9 @@ Copyright_License {
 
 #include "Form/Form.hpp"
 
-namespace SafetyFactorsConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save();
-};
+class Widget;
+
+Widget *
+CreateSafetyFactorsConfigPanel();
 
 #endif /* SAFETYFACTORSCONFIGPANEL_HPP */

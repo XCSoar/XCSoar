@@ -86,7 +86,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Waypoint"), 1, NULL, NULL, N_("IDR_XML_WAYPOINTDISPLAYCONFIGPANEL")},
   {N_("Terrain"), 1, NULL, NULL, NULL, CreateTerrainDisplayConfigPanel },
   {N_("Airspace"), 1, NULL, NULL, NULL, CreateAirspaceConfigPanel },
-  {N_("Safety Factors"), 2, NULL, NULL, N_("IDR_XML_SAFETYFACTORSCONFIGPANEL")},
+  {N_("Safety Factors"), 2, NULL, NULL, NULL, CreateSafetyFactorsConfigPanel },
   {N_("Glide Computer"), 2, NULL, NULL, NULL, CreateGlideComputerConfigPanel },
   {N_("Route"), 2, NULL, NULL, NULL, CreateRouteConfigPanel },
   {N_("FLARM, Other"), 3, NULL, NULL, NULL, CreateGaugesConfigPanel },
@@ -195,7 +195,6 @@ setVariables()
   SiteConfigPanel::Init(wf);
   WaypointDisplayConfigPanel::Init(wf);
   SymbolsConfigPanel::Init(wf);
-  SafetyFactorsConfigPanel::Init(wf);
   VarioConfigPanel::Init(wf);
   if (HasModelType())
     ExperimentalConfigPanel::Init(wf);
@@ -288,7 +287,6 @@ void dlgConfigurationShowModal(void)
   changed |= SiteConfigPanel::Save();
   changed |= WaypointDisplayConfigPanel::Save();
   changed |= SymbolsConfigPanel::Save();
-  changed |= SafetyFactorsConfigPanel::Save();
   changed |= VarioConfigPanel::Save();
   if (HasModelType())
     changed |= ExperimentalConfigPanel::Save(requirerestart);

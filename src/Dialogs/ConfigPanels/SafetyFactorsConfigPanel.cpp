@@ -31,22 +31,47 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 
-static WndForm* wf = NULL;
 
+class SafetyFactorsConfigPanel : public XMLWidget {
+
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+};
 
 void
-SafetyFactorsConfigPanel::Init(WndForm *_wf)
+SafetyFactorsConfigPanel::Show(const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  XMLWidget::Show(rc);
+}
+
+void
+SafetyFactorsConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
+
+void
+SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  LoadWindow(NULL, parent,
+             Layout::landscape ? _T("IDR_XML_SAFETYFACTORSCONFIGPANEL") :
+                               _T("IDR_XML_SAFETYFACTORSCONFIGPANEL_L"));
+
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
   const TaskBehaviour &task_behaviour = settings_computer.task;
 
-  LoadFormProperty(*wf, _T("prpSafetyAltitudeArrival"), ugAltitude,
+  LoadFormProperty(form, _T("prpSafetyAltitudeArrival"), ugAltitude,
                    task_behaviour.safety_height_arrival);
 
-  LoadFormProperty(*wf, _T("prpSafetyAltitudeTerrain"), ugAltitude,
+  LoadFormProperty(form, _T("prpSafetyAltitudeTerrain"), ugAltitude,
                    task_behaviour.route_planner.safety_height_terrain);
 
   static gcc_constexpr_data StaticEnumChoice abort_task_mode_list[] = {
@@ -56,37 +81,37 @@ SafetyFactorsConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
 
-  LoadFormProperty(*wf, _T("prpAbortTaskMode"), abort_task_mode_list,
+  LoadFormProperty(form, _T("prpAbortTaskMode"), abort_task_mode_list,
                    task_behaviour.abort_task_mode);
 
-  LoadFormProperty(*wf, _T("prpSafetyMacCready"), ugVerticalSpeed,
+  LoadFormProperty(form, _T("prpSafetyMacCready"), ugVerticalSpeed,
                    task_behaviour.safety_mc);
 
-  LoadFormProperty(*wf, _T("prpRiskGamma"), task_behaviour.risk_gamma);
+  LoadFormProperty(form, _T("prpRiskGamma"), task_behaviour.risk_gamma);
 }
 
-
 bool
-SafetyFactorsConfigPanel::Save()
+SafetyFactorsConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
-  bool changed = false;
+  bool changed = false, require_restart = false;
+
   WndProperty *wp;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
   TaskBehaviour &task_behaviour = settings_computer.task;
 
-  changed |= SaveFormProperty(*wf, _T("prpSafetyAltitudeArrival"), ugAltitude,
+  changed |= SaveFormProperty(form, _T("prpSafetyAltitudeArrival"), ugAltitude,
                               task_behaviour.safety_height_arrival,
                               szProfileSafetyAltitudeArrival);
 
-  changed |= SaveFormProperty(*wf, _T("prpSafetyAltitudeTerrain"), ugAltitude,
+  changed |= SaveFormProperty(form, _T("prpSafetyAltitudeTerrain"), ugAltitude,
                               task_behaviour.route_planner.safety_height_terrain,
                               szProfileSafetyAltitudeTerrain);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpAbortTaskMode"),
+  changed |= SaveFormPropertyEnum(form, _T("prpAbortTaskMode"),
                                   szProfileAbortTaskMode,
                                   task_behaviour.abort_task_mode);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
+  wp = (WndProperty*)form.FindByName(_T("prpSafetyMacCready"));
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     fixed val = Units::ToSysVSpeed(df.GetAsFixed());
@@ -98,7 +123,7 @@ SafetyFactorsConfigPanel::Save()
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpRiskGamma"));
+  wp = (WndProperty*)form.FindByName(_T("prpRiskGamma"));
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     fixed val = df.GetAsFixed();
@@ -109,5 +134,14 @@ SafetyFactorsConfigPanel::Save()
     }
   }
 
-  return changed;
+  _changed |= changed;
+  _require_restart |= require_restart;
+
+  return true;
+}
+
+Widget *
+CreateSafetyFactorsConfigPanel()
+{
+  return new SafetyFactorsConfigPanel();
 }
