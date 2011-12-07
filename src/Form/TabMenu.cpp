@@ -74,23 +74,6 @@ TabMenuControl::~TabMenuControl()
   delete tab_display;
 }
 
-unsigned
-TabMenuControl::AddClient(Window *w, const PageItem& item,
-                          const unsigned sub_menu_index,
-                          const unsigned page)
-{
-  pager.AddClient(w);
-  OneSubMenuButton *b =
-      new OneSubMenuButton(item.menu_caption,
-                           MenuTabIndex(item.main_menu_index,
-                                          sub_menu_index),
-                           page,
-                           NULL,
-                           item.pre_show_callback);
-  buttons.append(b);
-  return buttons.size() - 1;
-}
-
 void
 TabMenuControl::NextPage()
 {
@@ -131,16 +114,6 @@ TabMenuControl::HighlightPreviousMenuItem()
  }
 }
 
-void
-TabMenuControl::HideAllPageExtras()
-{
-  for (unsigned i = 0; i < GetNumPages(); i++) {
-    const PageItem& theitem = GetPageItem(i);
-    if (theitem.pre_hide_callback != NULL)
-      theitem.pre_hide_callback();
-  }
-}
-
 const OneMainMenuButton *
 TabMenuControl::GetMainMenuButton(unsigned main_menu_index) const
 {
@@ -171,23 +144,9 @@ TabMenuControl::SetCurrentPage(TabMenuControl::MenuTabIndex menuIndex)
 void
 TabMenuControl::SetCurrentPage(unsigned page)
 {
-  HideAllPageExtras();
-
-  bool Continue = true;
   assert(page < buttons.size());
 
-  if (!setting_up && buttons[pager.GetCurrentPage()]->PreHideFunction) {
-    if (!buttons[pager.GetCurrentPage()]->PreHideFunction())
-      Continue = false;
-  }
-
-  if (Continue) {
-    if (buttons[page]->PreShowFunction) {
-      Continue = buttons[page]->PreShowFunction();
-    }
-  }
-
-  if (Continue && !pager.ClickPage(page)) {
+  if (!pager.ClickPage(page)) {
     assert(!setting_up);
     return;
   }
@@ -376,26 +335,17 @@ TabMenuControl::CreateSubMenuItem(const unsigned sub_menu_index,
 {
   assert(item.main_menu_index < MAX_MAIN_MENU_ITEMS);
 
-  if (item.Load != NULL) {
-    Widget *widget = item.Load();
-    pager.AddPage(widget);
+  assert(item.Load != NULL);
 
-    OneSubMenuButton *b =
-      new OneSubMenuButton(item.menu_caption,
-                           MenuTabIndex(item.main_menu_index,
-                                          sub_menu_index),
-                           page,
-                           NULL, NULL);
-    buttons.append(b);
-    return;
-  }
+  Widget *widget = item.Load();
+  pager.AddPage(widget);
 
-  StaticString<100> xml_resource;
-  xml_resource.Format(_T("%s%s"), item.xml_portrait_resource,
-                      Layout::landscape ? _T("_L") : _T(""));
-
-  Window *w = LoadWindow(look_up_table, &form, pager, xml_resource);
-  AddClient(w, item, sub_menu_index, page);
+  OneSubMenuButton *b =
+    new OneSubMenuButton(item.menu_caption,
+                         MenuTabIndex(item.main_menu_index,
+                                      sub_menu_index),
+                         page);
+  buttons.append(b);
 }
 
 void
@@ -437,8 +387,7 @@ TabMenuControl::InitMenu(const PageItem pages_in[],
     CreateSubMenu(pages_in, num_pages, main_menu_captions[i], i);
 
   pager.AddClient(tab_display);
-  buttons.append(new OneSubMenuButton(caption, MenuTabIndex::None(), 0,
-                                      NULL, NULL));
+  buttons.append(new OneSubMenuButton(caption, MenuTabIndex::None(), 0));
 
   assert(GetNumPages() == num_pages);
 }

@@ -48,8 +48,6 @@ public:
     MouseOrButton = 0,
     NextPreviousKey
   };
-  typedef bool (*PreHideNotifyCallback_t)(void);
-  typedef bool (*PreShowNotifyCallback_t)();
 
 protected:
   TabbedControl pager;

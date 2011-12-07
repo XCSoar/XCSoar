@@ -80,36 +80,36 @@ const TCHAR *main_menu_captions[] = {
 };
 
 static const TabMenuControl::PageItem pages[] = {
-  {N_("Site Files"), 0, NULL, NULL, NULL, CreateSiteConfigPanel },
-  {N_("Orientation"), 1, NULL, NULL, NULL, CreateMapDisplayConfigPanel },
-  {N_("Elements"), 1, NULL, NULL, NULL, CreateSymbolsConfigPanel },
-  {N_("Waypoints"), 1, NULL, NULL, NULL, CreateWaypointDisplayConfigPanel },
-  {N_("Terrain"), 1, NULL, NULL, NULL, CreateTerrainDisplayConfigPanel },
-  {N_("Airspace"), 1, NULL, NULL, NULL, CreateAirspaceConfigPanel },
-  {N_("Safety Factors"), 2, NULL, NULL, NULL, CreateSafetyFactorsConfigPanel },
-  {N_("Glide Computer"), 2, NULL, NULL, NULL, CreateGlideComputerConfigPanel },
-  {N_("Route"), 2, NULL, NULL, NULL, CreateRouteConfigPanel },
-  {N_("FLARM, Other"), 3, NULL, NULL, NULL, CreateGaugesConfigPanel },
-  {N_("Vario"), 3, NULL, NULL, NULL, CreateVarioConfigPanel },
-  {N_("Task Rules"), 4, NULL, NULL, NULL, CreateTaskRulesConfigPanel },
-  {N_("Turnpoint Types"), 4, NULL, NULL, NULL, CreateTaskDefaultsConfigPanel },
-  {N_("Language, Input"), 5, NULL, NULL, NULL, CreateInterfaceConfigPanel },
-  {N_("Screen Layout"), 5, NULL, NULL, NULL, CreateLayoutConfigPanel },
-  {N_("InfoBox Pages"), 5, NULL, NULL, NULL, CreatePagesConfigPanel },
-  {N_("InfoBox Modes"), 5, NULL, NULL, NULL, CreateInfoBoxesConfigPanel },
-  {N_("Devices"), 6, NULL, NULL, NULL, CreateDevicesConfigPanel },
-  {N_("Polar"), 6, NULL, NULL, NULL, CreatePolarConfigPanel },
-  {N_("Logger"), 6, NULL, NULL, NULL, CreateLoggerConfigPanel },
-  {N_("Units"), 6, NULL, NULL, NULL, CreateUnitsConfigPanel },
+  {N_("Site Files"), 0, CreateSiteConfigPanel },
+  {N_("Orientation"), 1, CreateMapDisplayConfigPanel },
+  {N_("Elements"), 1, CreateSymbolsConfigPanel },
+  {N_("Waypoints"), 1, CreateWaypointDisplayConfigPanel },
+  {N_("Terrain"), 1, CreateTerrainDisplayConfigPanel },
+  {N_("Airspace"), 1, CreateAirspaceConfigPanel },
+  {N_("Safety Factors"), 2, CreateSafetyFactorsConfigPanel },
+  {N_("Glide Computer"), 2, CreateGlideComputerConfigPanel },
+  {N_("Route"), 2, CreateRouteConfigPanel },
+  {N_("FLARM, Other"), 3, CreateGaugesConfigPanel },
+  {N_("Vario"), 3, CreateVarioConfigPanel },
+  {N_("Task Rules"), 4, CreateTaskRulesConfigPanel },
+  {N_("Turnpoint Types"), 4, CreateTaskDefaultsConfigPanel },
+  {N_("Language, Input"), 5, CreateInterfaceConfigPanel },
+  {N_("Screen Layout"), 5, CreateLayoutConfigPanel },
+  {N_("InfoBox Pages"), 5, CreatePagesConfigPanel },
+  {N_("InfoBox Modes"), 5, CreateInfoBoxesConfigPanel },
+  {N_("Devices"), 6, CreateDevicesConfigPanel },
+  {N_("Polar"), 6, CreatePolarConfigPanel },
+  {N_("Logger"), 6, CreateLoggerConfigPanel },
+  {N_("Units"), 6, CreateUnitsConfigPanel },
   // Important: all pages after Units in this list must not have data fields that are
   // unit-dependent because they will be saved after their units may have changed.
   // ToDo: implement API that controls order in which pages are saved
-  {N_("Time"), 6, NULL, NULL, NULL, CreateTimeConfigPanel },
+  {N_("Time"), 6, CreateTimeConfigPanel },
 #ifdef HAVE_TRACKING
-  {N_("Tracking"), 6, NULL, NULL, NULL, CreateTrackingConfigPanel },
+  {N_("Tracking"), 6, CreateTrackingConfigPanel },
 #endif
 #ifdef HAVE_MODEL_TYPE
-  {N_("Experimental Features"), 6, NULL, NULL, NULL, CreateExperimentalConfigPanel, },
+  {N_("Experimental Features"), 6, CreateExperimentalConfigPanel, },
 #endif
 };
 

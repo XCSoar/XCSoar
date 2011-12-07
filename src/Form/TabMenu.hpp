@@ -58,15 +58,6 @@ public:
       * 0 to (GetNumMainMenuCaptions() - 1) */
     unsigned main_menu_index;
 
-    /* If the page needs to perform actions each time before it is displayed */
-    TabBarControl::PreShowNotifyCallback_t pre_show_callback;
-
-    /* If the page needs to perform cleanup after each time it is hidden */
-    TabBarControl::PreHideNotifyCallback_t pre_hide_callback;
-
-    /* Portrait XML resource.  Assumes "_L" converts name to landscape */
-    const TCHAR *xml_portrait_resource;
-
     Widget *(*Load)();
   };
 
@@ -322,17 +313,6 @@ protected:
                 const TCHAR *main_menu_caption,
                 const unsigned main_menu_index);
 
-  /**Adds a child tab to the menu
-   * Same as TabBarControls verions except that
-   * creates a OneTabMenuButton instead of a OneTabButton
-   * and positions the windows differently
-   * @param sub_menu_index Index with submenu
-   * @param page Index to page array
-   */
-  unsigned AddClient(Window *w, const PageItem& item,
-                     const unsigned sub_menu_index,
-                     const unsigned page);
-
   /**
    * @return Height of any item in Main or Sub menu
    */
@@ -347,11 +327,6 @@ protected:
    * @return for portrait mode, puts menu near vertical center of screen
    */
   UPixelScalar GetButtonVerticalOffset() const;
-
-  /**
-   * hides all buttons etc for all content pages
-   */
-  void HideAllPageExtras();
 
 public:
   void NextPage();
@@ -455,28 +430,13 @@ protected:
  */
 class OneSubMenuButton : public OneTabButton {
 public:
-  /**
-   * Called before the tab is hidden.
-   * @returns  True if ok and tab may change.  False if click should be ignored
-   */
-  TabBarControl::PreHideNotifyCallback_t PreHideFunction;
-
-  /**
-   * Called immediately after tab is clicked, before it is displayed.
-   * @returns  True if ok and tab may change.  False if click should be ignored
-   */
-  TabBarControl::PreShowNotifyCallback_t PreShowFunction;
-
   const TabMenuControl::MenuTabIndex menu;
   const unsigned page_index;
 
 public:
   OneSubMenuButton(const TCHAR* _Caption, TabMenuControl::MenuTabIndex i,
-                   unsigned _page_index,
-                   TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
-                   TabBarControl::PreShowNotifyCallback_t _PreShowFunction)
+                   unsigned _page_index)
     :OneTabButton(_Caption, false, NULL),
-     PreHideFunction(_PreHideFunction), PreShowFunction(_PreShowFunction),
      menu(i),
      page_index(_page_index)
   {
