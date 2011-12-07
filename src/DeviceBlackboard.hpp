@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef DEVICE_BLACKBOARD_H
 #define DEVICE_BLACKBOARD_H
 
-#include "BaseBlackboard.hpp"
-#include "SettingsComputerBlackboard.hpp"
+#include "Blackboard/BaseBlackboard.hpp"
+#include "Blackboard/SettingsComputerBlackboard.hpp"
 #include "Device/Simulator.hpp"
 #include "Device/List.hpp"
 #include "Thread/Mutex.hpp"

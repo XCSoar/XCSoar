@@ -1710,7 +1710,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/SettingsMap.cpp \
-	$(SRC)/InterfaceBlackboard.cpp \
+	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \
 	$(SRC)/TeamCodeCalculation.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \

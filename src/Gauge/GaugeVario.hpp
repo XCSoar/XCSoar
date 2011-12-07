@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/BufferWindow.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Point.hpp"
-#include "FullBlackboard.hpp"
+#include "Blackboard/FullBlackboard.hpp"
 
 struct VarioLook;
 class ContainerWindow;

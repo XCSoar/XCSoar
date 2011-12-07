@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Gauge/GlueGaugeVario.hpp"
 #include "Gauge/GaugeVario.hpp"
-#include "LiveBlackboard.hpp"
+#include "Blackboard/LiveBlackboard.hpp"
 
 void
 GlueGaugeVario::Prepare(ContainerWindow &parent, const PixelRect &rc)

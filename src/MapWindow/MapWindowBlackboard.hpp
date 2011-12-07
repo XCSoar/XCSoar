@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef MAP_WINDOW_BLACKBOARD_H
 #define MAP_WINDOW_BLACKBOARD_H
 
-#include "BaseBlackboard.hpp"
-#include "SettingsComputerBlackboard.hpp"
-#include "SettingsMapBlackboard.hpp"
+#include "Blackboard/BaseBlackboard.hpp"
+#include "Blackboard/SettingsComputerBlackboard.hpp"
+#include "Blackboard/SettingsMapBlackboard.hpp"
 
 /**
  * Blackboard used by map window: provides read-only access to local

@@ -54,7 +54,7 @@ Copyright_License {
 #include "Task/ProtectedRoutePlanner.hpp"
 #include "Task/TaskFile.hpp"
 #include "LocalPath.hpp"
-#include "InterfaceBlackboard.hpp"
+#include "Blackboard/InterfaceBlackboard.hpp"
 #include "DebugReplay.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Operation.hpp"

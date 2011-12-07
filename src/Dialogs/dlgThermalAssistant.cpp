@@ -30,8 +30,8 @@
 #include "Compiler.h"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
-#include "BlackboardListener.hpp"
-#include "LiveBlackboard.hpp"
+#include "Blackboard/BlackboardListener.hpp"
+#include "Blackboard/LiveBlackboard.hpp"
 
 class ThermalAssistantListener : NullBlackboardListener {
   LiveBlackboard &blackboard;

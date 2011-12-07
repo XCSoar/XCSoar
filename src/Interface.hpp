@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_INTERFACE_HPP
 #define XCSOAR_INTERFACE_HPP
 
-#include "InterfaceBlackboard.hpp"
+#include "Blackboard/InterfaceBlackboard.hpp"
 #include "Compiler.h"
 
 struct UIState;
