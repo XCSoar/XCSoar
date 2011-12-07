@@ -85,8 +85,8 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   WndProperty *wp;
 
   buttonFonts = ((WndButton *)ConfigPanel::GetForm().FindByName(_T("cmdFonts")));
-  if (buttonFonts)
-    buttonFonts->SetOnClickNotify(OnFonts);
+  assert(buttonFonts);
+  buttonFonts->SetOnClickNotify(OnFonts);
 
 #ifdef HAVE_BLANK
   LoadFormProperty(form, _T("prpAutoBlank"),
