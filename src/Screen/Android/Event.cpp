@@ -98,6 +98,21 @@ EventQueue::Purge(enum Event::type type)
 }
 
 static bool
+MatchCallback(const Event &event, void *ctx)
+{
+  const Event *match = (const Event *)ctx;
+  return event.type == Event::CALLBACK && event.callback == match->callback &&
+    event.ptr == match->ptr;
+}
+
+void
+EventQueue::Purge(Event::Callback callback, void *ctx)
+{
+  Event match(callback, ctx);
+  Purge(MatchCallback, (void *)&match);
+}
+
+static bool
 match_notify(const Event &event, void *ctx)
 {
   return event.type == Event::NOTIFY && event.ptr == ctx;
@@ -162,6 +177,8 @@ EventLoop::Dispatch(const Event &event)
   } else if (event.type == Event::TIMER) {
     AndroidTimer *timer = (AndroidTimer *)event.ptr;
     timer->run();
+  } else if (event.type == Event::CALLBACK) {
+    event.callback(event.ptr);
   } else if (event.type == Event::NOTIFY) {
     Notify *notify = (Notify *)event.ptr;
     notify->RunNotification();

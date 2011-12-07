@@ -43,6 +43,8 @@ struct Event {
     TIMER,
     USER,
 
+    CALLBACK,
+
     /**
      * @see #Notify
      */
@@ -73,11 +75,15 @@ struct Event {
     RESUME,
   };
 
+  typedef void (*Callback)(void *ctx);
+
   enum type type;
 
   unsigned param;
 
   void *ptr;
+
+  Callback callback;
 
   PixelScalar x, y;
 
@@ -87,6 +93,8 @@ struct Event {
   Event(enum type _type, unsigned _param, void *_ptr)
     :type(_type), param(_param), ptr(_ptr) {}
   Event(enum type _type, void *_ptr):type(_type), ptr(_ptr) {}
+  Event(Callback _callback, void *_ptr)
+    :type(CALLBACK), ptr(_ptr), callback(_callback) {}
   Event(enum type _type, PixelScalar _x, PixelScalar _y)
     :type(_type), x(_x), y(_y) {}
 };
@@ -129,6 +137,7 @@ public:
   void Purge(bool (*match)(const Event &event, void *ctx), void *ctx);
 
   void Purge(enum Event::type type);
+  void Purge(Event::Callback callback, void *ctx);
   void Purge(Notify &notify);
   void Purge(Window &window);
   void Purge(AndroidTimer &timer);
