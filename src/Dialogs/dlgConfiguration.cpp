@@ -95,7 +95,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Turnpoint Types"), 4, NULL, NULL, NULL, CreateTaskDefaultsConfigPanel },
   {N_("Language, Input"), 5, NULL, NULL, NULL, CreateInterfaceConfigPanel },
   {N_("Screen Layout"), 5, NULL, NULL, NULL, CreateLayoutConfigPanel },
-  {N_("InfoBox Pages"), 5, NULL, NULL, N_("IDR_XML_PAGESCONFIGPANEL")},
+  {N_("InfoBox Pages"), 5, NULL, NULL, NULL, CreatePagesConfigPanel },
   {N_("InfoBox Modes"), 5, NULL, NULL, NULL, CreateInfoBoxesConfigPanel },
   {N_("Devices"), 6, NULL, NULL, NULL, CreateDevicesConfigPanel },
   {N_("Polar"), 6, PolarConfigPanel::PreShow, PolarConfigPanel::PreHide, N_("IDR_XML_POLARCONFIGPANEL")},
@@ -202,7 +202,6 @@ setVariables()
   VarioConfigPanel::Init(wf);
   if (HasModelType())
     ExperimentalConfigPanel::Init(wf);
-  PagesConfigPanel::Init(wf);
 }
 
 static void
@@ -287,7 +286,6 @@ void dlgConfigurationShowModal(void)
   // below after exit.
   bool changed = false;
   bool requirerestart = false;
-  changed |= PagesConfigPanel::Save();
 #ifdef HAVE_TRACKING
   changed |= TrackingConfigPanel::Save(CommonInterface::SetSettingsComputer().tracking);
 #endif

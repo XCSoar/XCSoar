@@ -24,12 +24,9 @@ Copyright_License {
 #ifndef PAGESCONFIGPANEL_HPP
 #define PAGESCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
+class Widget;
 
-namespace PagesConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save();
-};
+Widget *
+CreatePagesConfigPanel();
 
 #endif /* PAGESCONFIGPANEL_HPP */

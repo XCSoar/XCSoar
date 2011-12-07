@@ -28,11 +28,35 @@ Copyright_License {
 #include "Pages.hpp"
 #include "Profile/PageProfile.hpp"
 #include "Interface.hpp"
+#include "Form/Form.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 
 using namespace Pages;
 
-static WndForm* wf = NULL;
 
+class PagesConfigPanel : public XMLWidget {
+
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+};
+
+void
+PagesConfigPanel::Show(const PixelRect &rc)
+{
+  XMLWidget::Show(rc);
+}
+
+void
+PagesConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
 
 static void
 UpdateComboBox(DataFieldEnum* dfe, unsigned page)
@@ -54,17 +78,17 @@ UpdateComboBox(DataFieldEnum* dfe, unsigned page)
   }
 }
 
-
 void
-PagesConfigPanel::Init(WndForm *_wf)
+PagesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  LoadWindow(NULL, parent,
+             Layout::landscape ? _T("IDR_XML_PAGESCONFIGPANEL") :
+                               _T("IDR_XML_PAGESCONFIGPANEL_L"));
 
   StaticString<64> prpName;
   for (unsigned i = 0; i < PageSettings::MAX_PAGES; i++) {
     prpName.Format(_T("prpPageLayout%u"), i);
-    WndProperty* wp = (WndProperty*)wf->FindByName(prpName);
+    WndProperty* wp = (WndProperty*)form.FindByName(prpName);
     if (wp) {
       DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
       UpdateComboBox(dfe, i);
@@ -73,17 +97,16 @@ PagesConfigPanel::Init(WndForm *_wf)
   }
 }
 
-
 bool
-PagesConfigPanel::Save()
+PagesConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
+  bool changed = false, require_restart = false;
   StaticString<64> prpName;
-  bool changed = false;
 
   PageSettings &settings = CommonInterface::SetUISettings().pages;
   for (unsigned int i = 0; i < PageSettings::MAX_PAGES; i++) {
     prpName.Format(_T("prpPageLayout%u"), i);
-    WndProperty* wp = (WndProperty*)wf->FindByName(prpName);
+    WndProperty* wp = (WndProperty*)form.FindByName(prpName);
     if (wp) {
       PageSettings::PageLayout *currentPL = &settings.pages[i];
       const PageSettings::PageLayout *setPL =
@@ -98,6 +121,14 @@ PagesConfigPanel::Save()
       }
     }
   }
+  _changed |= changed;
+  _require_restart |= require_restart;
 
-  return changed;
+  return true;
+}
+
+Widget *
+CreatePagesConfigPanel()
+{
+  return new PagesConfigPanel();
 }
