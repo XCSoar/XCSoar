@@ -187,8 +187,10 @@ TabMenuControl::SetCurrentPage(unsigned page)
     }
   }
 
-  if (Continue)
-    Continue = pager.ClickPage(page);
+  if (Continue && !pager.ClickPage(page)) {
+    assert(!setting_up);
+    return;
+  }
 
   setting_up = false;
 
