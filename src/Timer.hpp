@@ -98,14 +98,6 @@ public:
 #endif
   }
 
-  bool operator==(const Timer &other) const {
-    return this == &other;
-  }
-
-  bool operator!=(const Timer &other) const {
-    return !(*this == other);
-  }
-
   /**
    * Schedule the timer.  Cancels the previous setting if there was
    * one.
