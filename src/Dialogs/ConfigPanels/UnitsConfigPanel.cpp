@@ -26,6 +26,7 @@ Copyright_License {
 #include "DataField/ComboList.hpp"
 #include "DataField/Float.hpp"
 #include "Form/Form.hpp"
+#include "Form/Button.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
@@ -37,83 +38,117 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Asset.hpp"
 #include "Language/Language.hpp"
-
-static WndForm* wf = NULL;
-static unsigned SpeedUnits = 1; // default is knots
-static unsigned TaskSpeedUnits = 2; // default is kph
-static unsigned DistanceUnits = 2; // default is km
-static unsigned LiftUnits = 0;
-static unsigned AltitudeUnits = 0; //default ft
-static unsigned TemperatureUnits = 0; //default is celcius
-static bool loading = false;
+#include "DataField/Base.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 
 
-static void
-UpdateUnitFields(const UnitSetting &units)
+class UnitsConfigPanel : public XMLWidget {
+
+private:
+  unsigned SpeedUnits; // default is knots
+  unsigned TaskSpeedUnits; // default is kph
+  unsigned DistanceUnits; // default is km
+  unsigned LiftUnits;
+  unsigned AltitudeUnits; //default ft
+  unsigned TemperatureUnits; //default is celcius
+  bool loading;
+
+public:
+  UnitsConfigPanel() : SpeedUnits(1), TaskSpeedUnits(2), DistanceUnits(3),
+    LiftUnits(0), AltitudeUnits(0), TemperatureUnits(0), loading(false) {
+  }
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+  void UpdateUnitsTitle();
+  void SetUnitsTitle(const TCHAR* title);
+  void UpdateUnitFields(const UnitSetting &units);
+  void OnFieldData(DataField::DataAccessKind_t mode);
+};
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static UnitsConfigPanel *instance;
+
+void
+UnitsConfigPanel::Show(const PixelRect &rc)
 {
-  LoadFormProperty(*wf, _T("prpUnitsLatLon"), units.coordinate_format);
+  XMLWidget::Show(rc);
+}
+
+void
+UnitsConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
+
+void
+UnitsConfigPanel::UpdateUnitFields(const UnitSetting &units)
+{
+  LoadFormProperty(form, _T("prpUnitsLatLon"), units.coordinate_format);
 
   unsigned index;
   index = (units.speed_unit == unStatuteMilesPerHour) ? 0 :
           (units.speed_unit == unKnots) ? 1 : 2;
-  LoadFormProperty(*wf, _T("prpUnitsSpeed"), index);
+  LoadFormProperty(form, _T("prpUnitsSpeed"), index);
   if (loading)
     SpeedUnits = index;
 
   index = (units.task_speed_unit == unStatuteMilesPerHour) ? 0 :
           (units.task_speed_unit == unKnots) ? 1 : 2;
-  LoadFormProperty(*wf, _T("prpUnitsTaskSpeed"), index);
+  LoadFormProperty(form, _T("prpUnitsTaskSpeed"), index);
   if (loading)
     TaskSpeedUnits = index;
 
   index = (units.distance_unit == unStatuteMiles) ? 0 :
           (units.distance_unit == unNauticalMiles) ? 1 : 2;
-  LoadFormProperty(*wf, _T("prpUnitsDistance"), index);
+  LoadFormProperty(form, _T("prpUnitsDistance"), index);
   if (loading)
     DistanceUnits = index;
 
   index = (units.altitude_unit == unFeet) ? 0 : 1;
-  LoadFormProperty(*wf, _T("prpUnitsAltitude"), index);
+  LoadFormProperty(form, _T("prpUnitsAltitude"), index);
   if (loading)
     AltitudeUnits = index;
 
   index = (units.temperature_unit == unGradFahrenheit) ? 1 : 0;
-  LoadFormProperty(*wf, _T("prpUnitsTemperature"), index);
+  LoadFormProperty(form, _T("prpUnitsTemperature"), index);
   if (loading)
     TemperatureUnits = index;
 
   index = (units.vertical_speed_unit == unKnots) ? 0 :
           (units.vertical_speed_unit == unFeetPerMinute) ? 2 : 1;
-  LoadFormProperty(*wf, _T("prpUnitsLift"), index);
+  LoadFormProperty(form, _T("prpUnitsLift"), index);
   if (loading)
     LiftUnits = index;
 
-  LoadFormProperty(*wf, _T("prpUnitsPressure"), units.pressure_unit);
+  LoadFormProperty(form, _T("prpUnitsPressure"), units.pressure_unit);
 }
 
-
-static void
-SetUnitsTitle(const TCHAR* title)
+void
+UnitsConfigPanel::SetUnitsTitle(const TCHAR* title)
 {
   TCHAR caption[255];
   _tcscpy(caption,  _("Units"));
   _tcscat(caption, _T(": "));
   _tcscat(caption, title);
-  ((WndFrame *)wf->FindByName(_T("lblUnitsSetting")))->SetCaption(caption);
+  ((WndFrame *)form.FindByName(_T("lblUnitsSetting")))->SetCaption(caption);
 }
 
-
-static void
-UpdateUnitsTitle()
+void
+UnitsConfigPanel::UpdateUnitsTitle()
 {
   TCHAR title[255];
   if (Profile::Get(szProfileUnitsPresetName, title, 255))
     SetUnitsTitle(title);
 }
 
-
-void
-UnitsConfigPanel::OnLoadPreset(WndButton &button)
+static void
+OnLoadPreset(WndButton &button)
 {
   ComboList list;
   unsigned len = Units::Store::Count();
@@ -127,18 +162,17 @@ UnitsConfigPanel::OnLoadPreset(WndButton &button)
   int result = ComboPicker(XCSoarInterface::main_window, _("Unit Presets"), list, NULL);
   if (result >= 0) {
     const UnitSetting& units = Units::Store::Read(list[result].DataFieldIndex);
-    UpdateUnitFields(units);
+    instance->UpdateUnitFields(units);
 
     Profile::Set(szProfileUnitsPresetName, list[result].StringValue);
-    UpdateUnitsTitle();
+    instance->UpdateUnitsTitle();
   }
 }
 
-
 void
-UnitsConfigPanel::OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
+UnitsConfigPanel::OnFieldData(DataField::DataAccessKind_t mode)
 {
-  switch (Mode) {
+  switch (mode) {
   case DataField::daChange:
     if (!loading)
       Profile::Set(szProfileUnitsPresetName, _T("Custom"));
@@ -150,15 +184,29 @@ UnitsConfigPanel::OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mod
   }
 }
 
-void
-UnitsConfigPanel::Init(WndForm *_wf)
+static void
+OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  instance->OnFieldData(Mode);
+}
+
+gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnLoadPreset),
+  DeclareCallBackEntry(OnFieldData),
+  DeclareCallBackEntry(NULL)
+};
+
+void
+UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  instance = this;
+  LoadWindow(CallBackTable, parent,
+             Layout::landscape ? _T("IDR_XML_UNITSCONFIGPANEL") :
+                               _T("IDR_XML_UNITSCONFIGPANEL_L"));
 
   loading = true;
 
-  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpUnitsSpeed"));
+  WndProperty *wp = (WndProperty*)form.FindByName(_T("prpUnitsSpeed"));
   assert(wp != NULL);
   DataFieldEnum *dfe = (DataFieldEnum*)wp->GetDataField();
   dfe->addEnumText(_("mph"));
@@ -166,7 +214,7 @@ UnitsConfigPanel::Init(WndForm *_wf)
   dfe->addEnumText(_("km/h"));
   wp->RefreshDisplay();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsLatLon"));
+  wp = (WndProperty*)form.FindByName(_T("prpUnitsLatLon"));
   assert(wp != NULL);
   dfe = (DataFieldEnum*)wp->GetDataField();
   const TCHAR *const units_lat_lon[] = {
@@ -179,7 +227,7 @@ UnitsConfigPanel::Init(WndForm *_wf)
 
   dfe->addEnumTexts(units_lat_lon);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsTaskSpeed"));
+  wp = (WndProperty*)form.FindByName(_T("prpUnitsTaskSpeed"));
   assert(wp != NULL);
   dfe = (DataFieldEnum*)wp->GetDataField();
   dfe->addEnumText(_("mph"));
@@ -187,7 +235,7 @@ UnitsConfigPanel::Init(WndForm *_wf)
   dfe->addEnumText(_("km/h"));
   wp->RefreshDisplay();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsDistance"));
+  wp = (WndProperty*)form.FindByName(_T("prpUnitsDistance"));
   assert(wp != NULL);
   dfe = (DataFieldEnum*)wp->GetDataField();
   dfe->addEnumText(_("sm"));
@@ -195,21 +243,21 @@ UnitsConfigPanel::Init(WndForm *_wf)
   dfe->addEnumText(_("km"));
   wp->RefreshDisplay();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsAltitude"));
+  wp = (WndProperty*)form.FindByName(_T("prpUnitsAltitude"));
   assert(wp != NULL);
   dfe = (DataFieldEnum*)wp->GetDataField();
   dfe->addEnumText(_("foot"));
   dfe->addEnumText(_("meter"));
   wp->RefreshDisplay();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsTemperature"));
+  wp = (WndProperty*)form.FindByName(_T("prpUnitsTemperature"));
   assert(wp != NULL);
   dfe = (DataFieldEnum*)wp->GetDataField();
   dfe->addEnumText(_("C"));
   dfe->addEnumText(_("F"));
   wp->RefreshDisplay();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsLift"));
+  wp = (WndProperty*)form.FindByName(_T("prpUnitsLift"));
   assert(wp != NULL);
   dfe = (DataFieldEnum*)wp->GetDataField();
   dfe->addEnumText(_("knots"));
@@ -226,23 +274,23 @@ UnitsConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
 
-  LoadFormProperty(*wf, _T("prpUnitsPressure"), pressure_labels_list,
+  LoadFormProperty(form, _T("prpUnitsPressure"), pressure_labels_list,
                    CommonInterface::GetUISettings().units.pressure_unit);
 
   loading = false;
 }
 
-
 bool
-UnitsConfigPanel::Save()
+UnitsConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
+  bool changed = false, require_restart = false;
+
   UnitSetting &config = CommonInterface::SetUISettings().units;
-  bool changed = false;
 
   /* the Units settings affect how other form values are read and translated
    * so changes to Units settings should be processed after all other form settings
    */
-  int tmp = GetFormValueInteger(*wf, _T("prpUnitsSpeed"));
+  int tmp = GetFormValueInteger(form, _T("prpUnitsSpeed"));
   if ((int)SpeedUnits != tmp) {
     SpeedUnits = tmp;
     Profile::Set(szProfileSpeedUnitsValue, SpeedUnits);
@@ -262,14 +310,14 @@ UnitsConfigPanel::Save()
     }
   }
 
-  tmp = GetFormValueInteger(*wf, _T("prpUnitsLatLon"));
+  tmp = GetFormValueInteger(form, _T("prpUnitsLatLon"));
   if ((int)config.coordinate_format != tmp) {
     config.coordinate_format = (CoordinateFormats)tmp;
     Profile::Set(szProfileLatLonUnits, config.coordinate_format);
     changed = true;
   }
 
-  tmp = GetFormValueInteger(*wf, _T("prpUnitsTaskSpeed"));
+  tmp = GetFormValueInteger(form, _T("prpUnitsTaskSpeed"));
   if ((int)TaskSpeedUnits != tmp) {
     TaskSpeedUnits = tmp;
     Profile::Set(szProfileTaskSpeedUnitsValue, TaskSpeedUnits);
@@ -289,7 +337,7 @@ UnitsConfigPanel::Save()
     }
   }
 
-  tmp = GetFormValueInteger(*wf, _T("prpUnitsDistance"));
+  tmp = GetFormValueInteger(form, _T("prpUnitsDistance"));
   if ((int)DistanceUnits != tmp) {
     DistanceUnits = tmp;
     Profile::Set(szProfileDistanceUnitsValue, DistanceUnits);
@@ -309,7 +357,7 @@ UnitsConfigPanel::Save()
     }
   }
 
-  tmp = GetFormValueInteger(*wf, _T("prpUnitsLift"));
+  tmp = GetFormValueInteger(form, _T("prpUnitsLift"));
   if ((int)LiftUnits != tmp) {
     LiftUnits = tmp;
     Profile::Set(szProfileLiftUnitsValue, LiftUnits);
@@ -329,11 +377,11 @@ UnitsConfigPanel::Save()
     }
   }
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpUnitsPressure"),
+  changed |= SaveFormPropertyEnum(form, _T("prpUnitsPressure"),
                                   szProfilePressureUnitsValue,
                                   config.pressure_unit);
 
-  tmp = GetFormValueInteger(*wf, _T("prpUnitsAltitude"));
+  tmp = GetFormValueInteger(form, _T("prpUnitsAltitude"));
   if ((int)AltitudeUnits != tmp) {
     AltitudeUnits = tmp;
     Profile::Set(szProfileAltitudeUnitsValue, AltitudeUnits);
@@ -350,7 +398,7 @@ UnitsConfigPanel::Save()
     }
   }
 
-  tmp = GetFormValueInteger(*wf, _T("prpUnitsTemperature"));
+  tmp = GetFormValueInteger(form, _T("prpUnitsTemperature"));
   if ((int)TemperatureUnits != tmp) {
     TemperatureUnits = tmp;
     Profile::Set(szProfileTemperatureUnitsValue, TemperatureUnits);
@@ -367,5 +415,15 @@ UnitsConfigPanel::Save()
     }
   }
 
-  return changed;
+  _changed |= changed;
+  _require_restart |= require_restart;
+
+  return true;
 }
+
+Widget *
+CreateUnitsConfigPanel()
+{
+  return new UnitsConfigPanel();
+}
+

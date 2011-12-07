@@ -24,19 +24,10 @@ Copyright_License {
 #ifndef UNITSCONFIGPANEL_HPP
 #define UNITSCONFIGPANEL_HPP
 
-#include "DataField/Base.hpp"
 
-class WndForm;
-class WndButton;
-class DataField;
+class Widget;
 
-namespace UnitsConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save();
-
-  void OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mode);
-  void OnLoadPreset(WndButton &button);
-};
+Widget *
+CreateUnitsConfigPanel();
 
 #endif /* UNITSCONFIGPANEL_HPP */

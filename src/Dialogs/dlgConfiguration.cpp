@@ -100,7 +100,10 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Devices"), 6, NULL, NULL, NULL, CreateDevicesConfigPanel },
   {N_("Polar"), 6, PolarConfigPanel::PreShow, PolarConfigPanel::PreHide, N_("IDR_XML_POLARCONFIGPANEL")},
   {N_("Logger"), 6, NULL, NULL, NULL, CreateLoggerConfigPanel },
-  {N_("Units"), 6, NULL, NULL, N_("IDR_XML_UNITSCONFIGPANEL")},
+  {N_("Units"), 6, NULL, NULL, NULL, CreateUnitsConfigPanel },
+  // Important: all pages after Units in this list must not have data fields that are
+  // unit-dependent because they will be saved after their units may have changed.
+  // ToDo: implement API that controls order in which pages are saved
   {N_("Time"), 6, NULL, NULL, NULL, CreateTimeConfigPanel },
 #ifdef HAVE_TRACKING
   {N_("Tracking"), 6, NULL, NULL, NULL, CreateTrackingConfigPanel },
@@ -187,7 +190,6 @@ static void
 setVariables()
 {
   PolarConfigPanel::Init(wf);
-  UnitsConfigPanel::Init(wf);
   SiteConfigPanel::Init(wf);
   WaypointDisplayConfigPanel::Init(wf);
   VarioConfigPanel::Init(wf);
@@ -215,8 +217,6 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(PolarConfigPanel::OnLoadFromFile),
   DeclareCallBackEntry(PolarConfigPanel::OnExport),
   DeclareCallBackEntry(PolarConfigPanel::OnFieldData),
-  DeclareCallBackEntry(UnitsConfigPanel::OnLoadPreset),
-  DeclareCallBackEntry(UnitsConfigPanel::OnFieldData),
   DeclareCallBackEntry(WaypointDisplayConfigPanel::OnRenderingTypeData),
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(OnCloseClicked),
@@ -275,10 +275,6 @@ void dlgConfigurationShowModal(void)
   changed |= VarioConfigPanel::Save();
   if (HasModelType())
     changed |= ExperimentalConfigPanel::Save(requirerestart);
-  // Units need to be saved last to prevent
-  // conversion problems with other values
-  changed |= UnitsConfigPanel::Save();
-
   wTabMenu->Save(changed, requirerestart);
 
   if (changed) {
