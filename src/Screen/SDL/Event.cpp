@@ -58,11 +58,24 @@ EventLoop::Dispatch(SDL_Event &event)
     Window *window = (Window *)event.user.data1;
     WindowTimer *timer = (WindowTimer *)event.user.data2;
     window->on_timer(*timer);
+  } else if (event.type == EVENT_CALLBACK) {
+    Callback callback = (Callback)event.user.data1;
+    callback(event.user.data2);
   } else if (event.type == EVENT_NOTIFY && event.user.data1 != NULL) {
     Notify *notify = (Notify *)event.user.data1;
     notify->RunNotification();
   } else
     top_window.on_event(event);
+}
+
+void
+EventQueue::Push(EventLoop::Callback callback, void *ctx)
+{
+  SDL_Event event;
+  event.type = EVENT_CALLBACK;
+  event.user.data1 = (void *)callback;
+  event.user.data2 = ctx;
+  ::SDL_PushEvent(&event);
 }
 
 void
@@ -78,6 +91,25 @@ EventQueue::Purge(Uint32 mask,
     if (!match(events[i], ctx))
       std::copy(events + i + 1, events + count--, events + i);
   SDL_PeepEvents(events, count, SDL_ADDEVENT, mask);
+}
+
+struct MatchCallbackData {
+  void *data1, *data2;
+};
+
+static bool
+MatchCallback(const SDL_Event &event, void *ctx)
+{
+  const MatchCallbackData *data = (const MatchCallbackData *)ctx;
+  return event.type == EVENT_CALLBACK && event.user.data1 == data->data1 &&
+    event.user.data2 == data->data2;
+}
+
+void
+EventQueue::Purge(EventLoop::Callback callback, void *ctx)
+{
+  MatchCallbackData data { (void *)callback, ctx };
+  Purge(SDL_EVENTMASK(EVENT_CALLBACK), MatchCallback, (void *)&data);
 }
 
 static bool

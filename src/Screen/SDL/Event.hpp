@@ -46,6 +46,11 @@ enum {
   EVENT_TIMER,
 
   /**
+   * A function pointer with a pointer argument gets called.
+   */
+  EVENT_CALLBACK,
+
+  /**
    * An event for class #Notify.
    */
   EVENT_NOTIFY,
@@ -69,6 +74,8 @@ class EventLoop : private NonCopyable {
   bool bulk;
 
 public:
+  typedef void (*Callback)(void *ctx);
+
   EventLoop(TopWindow &_top_window)
     :top_window(_top_window), bulk(true) {}
 
@@ -77,11 +84,18 @@ public:
 };
 
 namespace EventQueue {
+  void Push(EventLoop::Callback callback, void *ctx);
+
   /**
    * Purge all matching events from the event queue.
    */
   void Purge(Uint32 mask,
              bool (*match)(const SDL_Event &event, void *ctx), void *ctx);
+
+  /**
+   * Purge all events for this callback from the event queue.
+   */
+  void Purge(EventLoop::Callback callback, void *ctx);
 
   /**
    * Purge all events for this #Notify from the event queue.
