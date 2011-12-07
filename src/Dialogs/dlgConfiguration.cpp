@@ -83,7 +83,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Site Files"), 0, NULL, NULL, NULL, CreateSiteConfigPanel },
   {N_("Orientation"), 1, NULL, NULL, NULL, CreateMapDisplayConfigPanel },
   {N_("Elements"), 1, NULL, NULL, NULL, CreateSymbolsConfigPanel },
-  {N_("Waypoint"), 1, NULL, NULL, NULL, CreateWaypointDisplayConfigPanel },
+  {N_("Waypoints"), 1, NULL, NULL, NULL, CreateWaypointDisplayConfigPanel },
   {N_("Terrain"), 1, NULL, NULL, NULL, CreateTerrainDisplayConfigPanel },
   {N_("Airspace"), 1, NULL, NULL, NULL, CreateAirspaceConfigPanel },
   {N_("Safety Factors"), 2, NULL, NULL, NULL, CreateSafetyFactorsConfigPanel },
