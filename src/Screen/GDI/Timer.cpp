@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Timer.hpp"
 #include "Screen/Window.hpp"
+#include "Timer.hpp"
 
 void
 WindowTimer::Schedule(unsigned ms)
@@ -38,4 +39,13 @@ WindowTimer::Cancel()
 
   ::KillTimer(window, (UINT_PTR)this);
   id = 0;
+}
+
+bool
+Timer::on_timer(WindowTimer &timer)
+{
+  assert(timer == *(WindowTimer *)this);
+
+  OnTimer();
+  return true;
 }

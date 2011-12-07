@@ -30,6 +30,7 @@ Copyright_License {
 #include <SDL_timer.h>
 #else
 #include "Screen/Window.hpp"
+#include "Screen/Timer.hpp"
 #endif
 
 #include <assert.h>
@@ -53,7 +54,7 @@ class AndroidTimer;
  */
 class Timer
 #ifdef USE_GDI
-  : private Window
+  : private Window, private WindowTimer
 #endif
 {
 #ifdef ANDROID
@@ -61,8 +62,6 @@ class Timer
   AndroidTimer *timer;
 #elif defined(ENABLE_SDL)
   SDL_TimerID id;
-#else
-  UINT_PTR id;
 #endif
 
 public:
@@ -74,7 +73,9 @@ public:
 #elif defined(ENABLE_SDL)
   Timer():id(NULL) {}
 #else
-  Timer():id(0) {}
+  Timer():WindowTimer(*(Window *)this) {
+    Window::CreateMessageWindow();
+  }
 #endif
 
   Timer(const Timer &other) = delete;
@@ -83,6 +84,13 @@ public:
     /* timer must be cleaned up explicitly */
     assert(!IsActive());
   }
+
+#ifdef USE_GDI
+  /* inherit WindowTimer's methods */
+  using WindowTimer::IsActive;
+  using WindowTimer::Schedule;
+  using WindowTimer::Cancel;
+#else
 
   /**
    * Is the timer active, i.e. is it waiting for the current period to
@@ -93,8 +101,6 @@ public:
     return timer != NULL;
 #elif defined(ENABLE_SDL)
     return id != NULL;
-#else
-    return id != 0;
 #endif
   }
 
@@ -109,6 +115,8 @@ public:
    * while the timer is running.
    */
   void Cancel();
+
+#endif /* !GDI */
 
 protected:
   /**
@@ -126,6 +134,9 @@ public:
 private:
   static void Invoke(void *ctx);
   static Uint32 Callback(Uint32 interval, void *param);
+#else
+private:
+  virtual bool on_timer(WindowTimer &timer);
 #endif
 };
 
