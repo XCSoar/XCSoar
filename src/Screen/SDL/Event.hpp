@@ -30,7 +30,6 @@ Copyright_License {
 #include <SDL_events.h>
 
 class TopWindow;
-class WindowTimer;
 class Window;
 class Notify;
 
@@ -39,11 +38,6 @@ enum {
    * A "user" event for a #Window.
    */
   EVENT_USER = SDL_USEREVENT,
-
-  /**
-   * A "timer" event for a #Window.
-   */
-  EVENT_TIMER,
 
   /**
    * A function pointer with a pointer argument gets called.
@@ -106,11 +100,6 @@ namespace EventQueue {
    * Purge all events for this Window from the event queue.
    */
   void Purge(Window &window);
-
-  /**
-   * Purge all events for this timer from the event queue.
-   */
-  void Purge(WindowTimer &timer);
 };
 
 #endif

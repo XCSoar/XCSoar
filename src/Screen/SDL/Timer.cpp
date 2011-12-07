@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Window.hpp"
 
 void
-WindowTimer::Schedule(unsigned ms)
+Timer::Schedule(unsigned ms)
 {
   Cancel();
 
@@ -34,20 +34,32 @@ WindowTimer::Schedule(unsigned ms)
 }
 
 void
-WindowTimer::Cancel()
+Timer::Cancel()
 {
   ::SDL_RemoveTimer(id);
   id = NULL;
 
-  EventQueue::Purge(*this);
+  EventQueue::Purge(Invoke, (void *)this);
+}
+
+void
+Timer::Invoke(void *ctx)
+{
+  Timer *timer = (Timer *)ctx;
+  timer->OnTimer();
 }
 
 Uint32
-WindowTimer::Callback(Uint32 interval, void *param)
+Timer::Callback(Uint32 interval, void *param)
 {
-  WindowTimer *timer = (WindowTimer *)param;
+  Timer *timer = (Timer *)param;
 
-  timer->window.send_timer(*timer);
-
+  EventQueue::Push(Invoke, (void *)timer);
   return interval;
+}
+
+void
+WindowTimer::OnTimer()
+{
+  window.on_timer(*this);
 }

@@ -21,43 +21,47 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_TIMER_HXX
-#define XCSOAR_SCREEN_TIMER_HXX
+#ifndef XCSOAR_TIMER_HPP
+#define XCSOAR_TIMER_HPP
 
-#ifdef USE_GDI
-#include <windows.h>
+#ifdef ANDROID
+#include "Android/Timer.hpp"
+#elif defined(ENABLE_SDL)
+#include <SDL_timer.h>
 #else
-#include "../Timer.hpp"
+#include "Screen/Window.hpp"
 #endif
 
 #include <assert.h>
 #include <stddef.h>
-
-class Window;
 
 #ifdef ANDROID
 class AndroidTimer;
 #endif
 
 /**
- * A timer that, once initialized, periodically calls
- * Window::on_timer() after a specified amount of time, until Cancel()
- * gets called.
+ * A timer that, once initialized, periodically calls OnTimer() after
+ * a specified amount of time, until Cancel() gets called.
  *
- * Initially, this class does not schedule a timer.  It is supposed to
- * be used as an attribute of a Window class that uses it, being
- * reused as often as desired.
+ * Initially, this class does not schedule a timer.
  *
  * This class is not thread safe; all of the methods must be called
  * from the main thread.
+ *
+ * The class #WindowTimer is cheaper on WIN32; use it instead of this
+ * class if you are implementing a #Window.
  */
-class WindowTimer
-#ifndef USE_GDI
-  : private Timer
+class Timer
+#ifdef USE_GDI
+  : private Window
 #endif
 {
-  Window &window;
-#ifdef USE_GDI
+#ifdef ANDROID
+  friend class AndroidTimer;
+  AndroidTimer *timer;
+#elif defined(ENABLE_SDL)
+  SDL_TimerID id;
+#else
   UINT_PTR id;
 #endif
 
@@ -65,17 +69,17 @@ public:
   /**
    * Construct a Timer object that is not set initially.
    */
-#ifdef USE_GDI
-  WindowTimer(Window &_window)
-    :window(_window), id(0) {}
+#ifdef ANDROID
+  Timer():timer(NULL) {}
+#elif defined(ENABLE_SDL)
+  Timer():id(NULL) {}
 #else
-  WindowTimer(Window &_window)
-    :window(_window) {}
+  Timer():id(0) {}
 #endif
 
-  WindowTimer(const WindowTimer &other) = delete;
+  Timer(const Timer &other) = delete;
 
-  ~WindowTimer() {
+  ~Timer() {
     /* timer must be cleaned up explicitly */
     assert(!IsActive());
   }
@@ -85,22 +89,23 @@ public:
    * end?
    */
   bool IsActive() const {
-#ifdef USE_GDI
-    return id != 0;
+#ifdef ANDROID
+    return timer != NULL;
+#elif defined(ENABLE_SDL)
+    return id != NULL;
 #else
-    return Timer::IsActive();
+    return id != 0;
 #endif
   }
 
-  bool operator==(const WindowTimer &other) const {
+  bool operator==(const Timer &other) const {
     return this == &other;
   }
 
-  bool operator!=(const WindowTimer &other) const {
+  bool operator!=(const Timer &other) const {
     return !(*this == other);
   }
 
-#ifdef USE_GDI
   /**
    * Schedule the timer.  Cancels the previous setting if there was
    * one.
@@ -112,12 +117,23 @@ public:
    * while the timer is running.
    */
   void Cancel();
-#else
-  using Timer::Schedule;
-  using Timer::Cancel;
 
 protected:
-  virtual void OnTimer();
+  /**
+   * This method gets called after the configured time has elapsed.
+   * Implement it.
+   */
+  virtual void OnTimer() = 0;
+
+#ifdef ANDROID
+public:
+  void Invoke() {
+    OnTimer();
+  }
+#elif defined(ENABLE_SDL)
+private:
+  static void Invoke(void *ctx);
+  static Uint32 Callback(Uint32 interval, void *param);
 #endif
 };
 

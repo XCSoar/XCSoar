@@ -54,10 +54,6 @@ EventLoop::Dispatch(SDL_Event &event)
   if (event.type == EVENT_USER && event.user.data1 != NULL) {
     Window *window = (Window *)event.user.data1;
     window->on_user(event.user.code);
-  } else if (event.type == EVENT_TIMER && event.user.data1 != NULL) {
-    Window *window = (Window *)event.user.data1;
-    WindowTimer *timer = (WindowTimer *)event.user.data2;
-    window->on_timer(*timer);
   } else if (event.type == EVENT_CALLBACK) {
     Callback callback = (Callback)event.user.data1;
     callback(event.user.data2);
@@ -127,26 +123,13 @@ EventQueue::Purge(Notify &notify)
 static bool
 match_window(const SDL_Event &event, void *ctx)
 {
-  return (event.type == EVENT_USER ||
-          event.type == EVENT_TIMER) &&
+  return event.type == EVENT_USER &&
     event.user.data1 == ctx;
 }
 
 void
 EventQueue::Purge(Window &window)
 {
-  Purge(SDL_EVENTMASK(EVENT_USER) | SDL_EVENTMASK(EVENT_TIMER),
+  Purge(SDL_EVENTMASK(EVENT_USER),
         match_window, (void *)&window);
-}
-
-static bool
-match_timer(const SDL_Event &event, void *ctx)
-{
-  return event.type == EVENT_TIMER && event.user.data2 == ctx;
-}
-
-void
-EventQueue::Purge(WindowTimer &timer)
-{
-  Purge(SDL_EVENTMASK(EVENT_TIMER), match_timer, (void *)&timer);
 }

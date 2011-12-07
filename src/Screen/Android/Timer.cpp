@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Window.hpp"
 
 void
-WindowTimer::Schedule(unsigned ms)
+Timer::Schedule(unsigned ms)
 {
   Cancel();
 
@@ -34,11 +34,17 @@ WindowTimer::Schedule(unsigned ms)
 }
 
 void
-WindowTimer::Cancel()
+Timer::Cancel()
 {
   if (!IsActive())
     return;
 
   timer->disable();
   timer = NULL;
+}
+
+void
+WindowTimer::OnTimer()
+{
+  window.on_timer(*this);
 }

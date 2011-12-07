@@ -25,8 +25,7 @@ Copyright_License {
 #include "Android/Main.hpp"
 #include "Java/Global.hpp"
 #include "Java/Class.hpp"
-#include "Screen/Window.hpp"
-#include "Screen/Timer.hpp"
+#include "../Timer.hpp"
 #include "Screen/Android/Event.hpp"
 #include "org_xcsoar_Timer.h"
 #include "Compiler.h"
@@ -45,7 +44,7 @@ AndroidTimer::Bridge::Bridge(JNIEnv *env, jlong ptr, jint period)
   env->DeleteLocalRef(obj);
 }
 
-AndroidTimer::AndroidTimer(WindowTimer &_timer, unsigned ms)
+AndroidTimer::AndroidTimer(Timer &_timer, unsigned ms)
   :timer(_timer), bridge(Java::GetEnv(), (jlong)this, ms),
    disabled(false), running(false)
 {
@@ -79,7 +78,7 @@ AndroidTimer::run()
   assert(timer.IsActive());
 
   running = true;
-  timer.window.on_timer(timer);
+  timer.Invoke();
   running = false;
 
   if (disabled)

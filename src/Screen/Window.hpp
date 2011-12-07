@@ -847,10 +847,6 @@ public:
   }
 #endif
 
-#if defined(ENABLE_SDL) && !defined(ANDROID)
-  void send_timer(WindowTimer &timer);
-#endif
-
 protected:
 #ifndef USE_GDI
 public:
