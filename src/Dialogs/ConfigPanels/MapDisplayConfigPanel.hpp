@@ -24,16 +24,9 @@ Copyright_License {
 #ifndef MAPDISPLAYCONFIGPANEL_HPP
 #define MAPDISPLAYCONFIGPANEL_HPP
 
-#include "DataField/Base.hpp"
+class Widget;
 
-class SubForm;
-
-namespace MapDisplayConfigPanel
-{
-  void Init(SubForm *wf);
-  void UpdateVisibilities();
-  void OnShiftTypeData(DataField *Sender, DataField::DataAccessKind_t Mode);
-  bool Save();
-};
+Widget *
+CreateMapDisplayConfigPanel();
 
 #endif /* MAPDISPLAYCONFIGPANEL_HPP */

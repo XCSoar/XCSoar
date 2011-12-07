@@ -27,6 +27,11 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
+
 
 static const StaticEnumChoice orientation_list[] = {
   { TRACKUP, N_("Track up"),
@@ -47,49 +52,46 @@ static const StaticEnumChoice shift_bias_list[] = {
   { 0 }
 };
 
-static SubForm* wf = NULL;
+class MapDisplayConfigPanel : public XMLWidget {
+
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+  void UpdateVisibilities();
+};
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static MapDisplayConfigPanel *instance;
+
+void
+MapDisplayConfigPanel::Show(const PixelRect &rc)
+{
+  XMLWidget::Show(rc);
+}
+
+void
+MapDisplayConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
 
 void
 MapDisplayConfigPanel::UpdateVisibilities()
 {
-  bool northup = GetFormValueInteger(*wf, _T("prpOrientationCruise")) == NORTHUP;
+  bool northup = GetFormValueInteger(form, _T("prpOrientationCruise")) == NORTHUP;
 
-  ShowFormControl(*wf, _T("prpMapShiftBias"), northup);
+  ShowFormControl(form, _T("prpMapShiftBias"), northup);
 }
 
-void
-MapDisplayConfigPanel::Init(SubForm *_wf)
-{
-  assert(_wf != NULL);
-  wf = _wf;
-
-  const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
-
-  LoadFormProperty(*wf, _T("prpOrientationCruise"), orientation_list,
-                   settings_map.cruise_orientation);
-  LoadFormProperty(*wf, _T("prpOrientationCircling"), orientation_list,
-                   settings_map.circling_orientation);
-  LoadFormProperty(*wf, _T("prpMapShiftBias"), shift_bias_list,
-                   settings_map.map_shift_bias);
-
-  LoadFormProperty(*wf, _T("prpGliderScreenPosition"),
-                   XCSoarInterface::SettingsMap().glider_screen_position);
-
-  LoadFormProperty(*wf, _T("prpCirclingZoom"),
-                   XCSoarInterface::SettingsMap().circle_zoom_enabled);
-
-  LoadFormProperty(*wf, _T("prpMaxAutoZoomDistance"), ugDistance,
-                   XCSoarInterface::SettingsMap().max_auto_zoom_distance);
-
-  UpdateVisibilities();
-}
-
-void
-MapDisplayConfigPanel::OnShiftTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
+static void
+OnShiftTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
   case DataField::daChange: {
-    UpdateVisibilities();
+    instance->UpdateVisibilities();
     break;
   }
   case DataField::daSpecial:
@@ -97,36 +99,81 @@ MapDisplayConfigPanel::OnShiftTypeData(DataField *Sender, DataField::DataAccessK
   }
 }
 
-bool
-MapDisplayConfigPanel::Save()
-{
-  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
-  bool changed = false;
+gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnShiftTypeData),
+  DeclareCallBackEntry(NULL)
+};
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpOrientationCruise"),
+void
+MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  instance = this;
+  LoadWindow(CallBackTable, parent,
+             Layout::landscape ? _T("IDR_XML_MAPDISPLAYCONFIGPANEL") :
+                               _T("IDR_XML_MAPDISPLAYCONFIGPANEL_L"));
+
+
+  const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
+
+  LoadFormProperty(form, _T("prpOrientationCruise"), orientation_list,
+                   settings_map.cruise_orientation);
+  LoadFormProperty(form, _T("prpOrientationCircling"), orientation_list,
+                   settings_map.circling_orientation);
+  LoadFormProperty(form, _T("prpMapShiftBias"), shift_bias_list,
+                   settings_map.map_shift_bias);
+
+  LoadFormProperty(form, _T("prpGliderScreenPosition"),
+                   XCSoarInterface::SettingsMap().glider_screen_position);
+
+  LoadFormProperty(form, _T("prpCirclingZoom"),
+                   XCSoarInterface::SettingsMap().circle_zoom_enabled);
+
+  LoadFormProperty(form, _T("prpMaxAutoZoomDistance"), ugDistance,
+                   XCSoarInterface::SettingsMap().max_auto_zoom_distance);
+
+  UpdateVisibilities();
+}
+
+bool
+MapDisplayConfigPanel::Save(bool &_changed, bool &_require_restart)
+{
+  bool changed = false, require_restart = false;
+
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+
+  changed |= SaveFormPropertyEnum(form, _T("prpOrientationCruise"),
                                   szProfileOrientationCruise,
                                   settings_map.cruise_orientation);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpOrientationCircling"),
+  changed |= SaveFormPropertyEnum(form, _T("prpOrientationCircling"),
                                   szProfileOrientationCircling,
                                   settings_map.circling_orientation);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpMapShiftBias"),
+  changed |= SaveFormPropertyEnum(form, _T("prpMapShiftBias"),
                                   szProfileMapShiftBias,
                                   settings_map.map_shift_bias);
 
-  changed |= SaveFormProperty(*wf, _T("prpGliderScreenPosition"),
+  changed |= SaveFormProperty(form, _T("prpGliderScreenPosition"),
                               szProfileGliderScreenPosition,
                               XCSoarInterface::SetSettingsMap().glider_screen_position);
 
-  changed |= SaveFormProperty(*wf, _T("prpCirclingZoom"),
+  changed |= SaveFormProperty(form, _T("prpCirclingZoom"),
                               szProfileCircleZoom,
                               XCSoarInterface::SetSettingsMap().circle_zoom_enabled);
 
-  changed |= SaveFormProperty(*wf, _T("prpMaxAutoZoomDistance"),
+  changed |= SaveFormProperty(form, _T("prpMaxAutoZoomDistance"),
                               ugDistance,
                               XCSoarInterface::SetSettingsMap().max_auto_zoom_distance,
                               szProfileMaxAutoZoomDistance);
 
-  return changed;
+  _changed |= changed;
+  _require_restart |= require_restart;
+
+  return true;
+}
+
+Widget *
+CreateMapDisplayConfigPanel()
+{
+  return new MapDisplayConfigPanel();
 }

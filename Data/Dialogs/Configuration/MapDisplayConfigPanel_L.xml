@@ -3,7 +3,7 @@
 <Panel Name="frmDisplay">
   <Edit Name="prpOrientationCruise" Caption="Cruise orientation" X="2" Width="-2" Height="22" CaptionWidth="150"
     Help="Determines how the screen is rotated with the glider in cruise">
-    <DataField DataType="enum" OnDataAccess="MapDisplayConfigPanel::OnShiftTypeData" />
+    <DataField DataType="enum" OnDataAccess="OnShiftTypeData" />
   </Edit>
 
   <Edit Name="prpOrientationCircling" Caption="Circling orientation" X="2" Width="-2" Height="22" CaptionWidth="150"
@@ -18,7 +18,7 @@
 
   <Edit Name="prpMapShiftBias" Caption="Map shift reference" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
     Help="Determines what is used to shift the glider from the map center">
-    <DataField DataType="enum" OnDataAccess="MapDisplayConfigPanel::OnShiftTypeData" />
+    <DataField DataType="enum" OnDataAccess="OnShiftTypeData" />
   </Edit>
 
   <Edit Name="prpGliderScreenPosition" Caption="Glider position offset" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"

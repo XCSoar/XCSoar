@@ -81,7 +81,7 @@ const TCHAR *main_menu_captions[] = {
 
 static const TabMenuControl::PageItem pages[] = {
   {N_("Site Files"), 0, SiteConfigPanel::PreShow, SiteConfigPanel::PreHide, N_("IDR_XML_SITECONFIGPANEL")},
-  {N_("Orientation"), 1, NULL, NULL, N_("IDR_XML_MAPDISPLAYCONFIGPANEL")},
+  {N_("Orientation"), 1, NULL, NULL, NULL, CreateMapDisplayConfigPanel },
   {N_("Elements"), 1, NULL, NULL, N_("IDR_XML_SYMBOLSCONFIGPANEL")},
   {N_("Waypoint"), 1, NULL, NULL, N_("IDR_XML_WAYPOINTDISPLAYCONFIGPANEL")},
   {N_("Terrain"), 1, NULL, NULL, NULL, CreateTerrainDisplayConfigPanel },
@@ -123,7 +123,6 @@ OnUserLevel(CheckBoxControl &control)
 {
   Profile::Set(szProfileUserLevel, control.get_checked());
   wf->FilterAdvanced(control.get_checked());
-  MapDisplayConfigPanel::UpdateVisibilities();
   WaypointDisplayConfigPanel::UpdateVisibilities();
 }
 
@@ -194,7 +193,6 @@ setVariables()
   UnitsConfigPanel::Init(wf);
   TimeConfigPanel::Init(wf);
   SiteConfigPanel::Init(wf);
-  MapDisplayConfigPanel::Init(wf);
   WaypointDisplayConfigPanel::Init(wf);
   SymbolsConfigPanel::Init(wf);
   SafetyFactorsConfigPanel::Init(wf);
@@ -223,7 +221,6 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(SymbolsConfigPanel::OnTrailLength),
   DeclareCallBackEntry(RouteConfigPanel::OnRouteMode),
   DeclareCallBackEntry(RouteConfigPanel::OnReachMode),
-  DeclareCallBackEntry(MapDisplayConfigPanel::OnShiftTypeData),
   DeclareCallBackEntry(PolarConfigPanel::OnLoadInternal),
   DeclareCallBackEntry(PolarConfigPanel::OnLoadFromFile),
   DeclareCallBackEntry(PolarConfigPanel::OnExport),
@@ -292,7 +289,6 @@ void dlgConfigurationShowModal(void)
   changed |= PolarConfigPanel::Save();
   changed |= TimeConfigPanel::Save();
   changed |= SiteConfigPanel::Save();
-  changed |= MapDisplayConfigPanel::Save();
   changed |= WaypointDisplayConfigPanel::Save();
   changed |= SymbolsConfigPanel::Save();
   changed |= SafetyFactorsConfigPanel::Save();
