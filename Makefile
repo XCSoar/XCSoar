@@ -580,6 +580,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Thread/Operation.cpp \
 	$(SRC)/Thread/JobThread.cpp \
+	$(SRC)/RateLimiter.cpp \
 	\
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	\
