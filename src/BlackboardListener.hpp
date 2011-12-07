@@ -64,7 +64,7 @@ public:
  * Inherit this class and only implement the methods you're interested
  * in.
  */
-class NullBlackboardListener {
+class NullBlackboardListener : public BlackboardListener {
 public:
   virtual void OnGPSUpdate(const MoreData &basic);
 
