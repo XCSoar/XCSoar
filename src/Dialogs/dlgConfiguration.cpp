@@ -103,7 +103,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Units"), 6, NULL, NULL, N_("IDR_XML_UNITSCONFIGPANEL")},
   {N_("Time"), 6, NULL, NULL, NULL, CreateTimeConfigPanel },
 #ifdef HAVE_TRACKING
-  {N_("Tracking"), 6, NULL, NULL, N_("IDR_XML_TRACKINGCONFIGPANEL")},
+  {N_("Tracking"), 6, NULL, NULL, NULL, CreateTrackingConfigPanel },
 #endif
 #ifdef HAVE_MODEL_TYPE
   {N_("Experimental Features"), 6, NULL, NULL, N_("IDR_XML_EXPERIMENTALCONFIGPANEL")},
@@ -186,9 +186,6 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 static void
 setVariables()
 {
-#ifdef HAVE_TRACKING
-  TrackingConfigPanel::Init(wf, CommonInterface::SettingsComputer().tracking);
-#endif
   PolarConfigPanel::Init(wf);
   UnitsConfigPanel::Init(wf);
   SiteConfigPanel::Init(wf);
@@ -221,9 +218,6 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(UnitsConfigPanel::OnLoadPreset),
   DeclareCallBackEntry(UnitsConfigPanel::OnFieldData),
   DeclareCallBackEntry(WaypointDisplayConfigPanel::OnRenderingTypeData),
-#ifdef HAVE_TRACKING
-  DeclareCallBackEntry(TrackingConfigPanel::OnLT24Enabled),
-#endif
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
@@ -275,9 +269,6 @@ void dlgConfigurationShowModal(void)
   // below after exit.
   bool changed = false;
   bool requirerestart = false;
-#ifdef HAVE_TRACKING
-  changed |= TrackingConfigPanel::Save(CommonInterface::SetSettingsComputer().tracking);
-#endif
   changed |= PolarConfigPanel::Save();
   changed |= SiteConfigPanel::Save();
   changed |= WaypointDisplayConfigPanel::Save();

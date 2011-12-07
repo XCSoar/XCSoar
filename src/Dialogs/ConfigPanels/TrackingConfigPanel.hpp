@@ -24,18 +24,9 @@ Copyright_License {
 #ifndef TRACKING_CONFIGPANEL_HPP
 #define TRACKING_CONFIGPANEL_HPP
 
-#include "DataField/Base.hpp"
+class Widget;
 
-struct TrackingSettings;
-class WndForm;
-class CheckBoxControl;
-
-namespace TrackingConfigPanel
-{
-  void Init(WndForm *form, const TrackingSettings &settings);
-  bool Save(TrackingSettings &settings);
-
-  void OnLT24Enabled(CheckBoxControl &control);
-};
+Widget *
+CreateTrackingConfigPanel();
 
 #endif /* TRACKING_CONFIGPANEL_HPP */
