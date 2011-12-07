@@ -38,36 +38,67 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Asset.hpp"
 #include "Language/Language.hpp"
+#include "DataField/Base.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 
-static WndForm* wf = NULL;
-static bool loading = false;
 
+class TimeConfigPanel : public XMLWidget {
+private:
+  bool loading;
 
-static void
-SetLocalTime(int utc_offset)
+public:
+  TimeConfigPanel() : loading(false) {
+  }
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+  void SetLocalTime(int utc_offset);
+};
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static TimeConfigPanel *instance;
+
+void
+TimeConfigPanel::Show(const PixelRect &rc)
+{
+  XMLWidget::Show(rc);
+}
+
+void
+TimeConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
+
+void
+TimeConfigPanel::SetLocalTime(int utc_offset)
 {
   WndProperty* wp;
   TCHAR temp[20];
   int time(XCSoarInterface::Basic().time);
   Units::TimeToTextHHMMSigned(temp, TimeLocal(time, utc_offset));
 
-  wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
+  wp = (WndProperty*)form.FindByName(_T("prpLocalTime"));
   assert(wp != NULL);
 
   wp->SetText(temp);
   wp->RefreshDisplay();
 }
 
-
-void
-TimeConfigPanel::OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
+static void
+OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch(Mode) {
   case DataField::daChange:
   {
     DataFieldFloat &df = *(DataFieldFloat *)Sender;
     int ival = iround(df.GetAsFixed() * 3600);
-    SetLocalTime(ival);
+    instance->SetLocalTime(ival);
     break;
   }
   case DataField::daSpecial:
@@ -75,35 +106,40 @@ TimeConfigPanel::OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
+gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnUTCData),
+  DeclareCallBackEntry(NULL)
+};
 
 void
-TimeConfigPanel::Init(WndForm *_wf)
+TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  instance = this;
+  LoadWindow(CallBackTable, parent,
+             Layout::landscape ? _T("IDR_XML_TIMECONFIGPANEL") :
+                               _T("IDR_XML_TIMECONFIGPANEL_L"));
 
   loading = true;
 
   int utc_offset = XCSoarInterface::SettingsComputer().utc_offset;
-  LoadFormProperty(*wf, _T("prpUTCOffset"),
+  LoadFormProperty(form, _T("prpUTCOffset"),
                    fixed(iround(fixed(utc_offset) / 1800)) / 2);
 #ifdef WIN32
   if (IsEmbedded() && !IsAltair())
-    ((WndProperty*)wf->FindByName(_T("prpUTCOffset")))->set_enabled(false);
+    ((WndProperty*)form.FindByName(_T("prpUTCOffset")))->set_enabled(false);
 #endif
   SetLocalTime(utc_offset);
 
   loading = false;
 }
 
-
 bool
-TimeConfigPanel::Save()
+TimeConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
-  bool changed = false;
+  bool changed = false, require_restart = false;
 
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
-  int ival = iround(GetFormValueFixed(*wf, _T("prpUTCOffset")) * 3600);
+  int ival = iround(GetFormValueFixed(form, _T("prpUTCOffset")) * 3600);
   if (settings_computer.utc_offset != ival) {
     settings_computer.utc_offset = ival;
 
@@ -114,6 +150,14 @@ TimeConfigPanel::Save()
     Profile::Set(szProfileUTCOffset, ival);
     changed = true;
   }
+  _changed |= changed;
+  _require_restart |= require_restart;
 
-  return changed;
+  return true;
+}
+
+Widget *
+CreateTimeConfigPanel()
+{
+  return new TimeConfigPanel();
 }

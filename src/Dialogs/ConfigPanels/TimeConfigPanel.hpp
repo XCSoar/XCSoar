@@ -24,19 +24,9 @@ Copyright_License {
 #ifndef TIMECONFIGPANEL_HPP
 #define TIMECONFIGPANEL_HPP
 
-#include "DataField/Base.hpp"
+class Widget;
 
-class WndForm;
-class WndButton;
-class DataField;
-
-namespace TimeConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save();
-
-  void OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode);
-  void OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mode);
-};
+Widget *
+CreateTimeConfigPanel();
 
 #endif /* TIMECONFIGPANEL_HPP */

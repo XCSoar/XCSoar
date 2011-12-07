@@ -101,7 +101,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Polar"), 6, PolarConfigPanel::PreShow, PolarConfigPanel::PreHide, N_("IDR_XML_POLARCONFIGPANEL")},
   {N_("Logger"), 6, NULL, NULL, NULL, CreateLoggerConfigPanel },
   {N_("Units"), 6, NULL, NULL, N_("IDR_XML_UNITSCONFIGPANEL")},
-  {N_("Time"), 6, NULL, NULL, N_("IDR_XML_TIMECONFIGPANEL")},
+  {N_("Time"), 6, NULL, NULL, NULL, CreateTimeConfigPanel },
 #ifdef HAVE_TRACKING
   {N_("Tracking"), 6, NULL, NULL, N_("IDR_XML_TRACKINGCONFIGPANEL")},
 #endif
@@ -191,7 +191,6 @@ setVariables()
 #endif
   PolarConfigPanel::Init(wf);
   UnitsConfigPanel::Init(wf);
-  TimeConfigPanel::Init(wf);
   SiteConfigPanel::Init(wf);
   WaypointDisplayConfigPanel::Init(wf);
   VarioConfigPanel::Init(wf);
@@ -221,7 +220,6 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(PolarConfigPanel::OnFieldData),
   DeclareCallBackEntry(UnitsConfigPanel::OnLoadPreset),
   DeclareCallBackEntry(UnitsConfigPanel::OnFieldData),
-  DeclareCallBackEntry(TimeConfigPanel::OnUTCData),
   DeclareCallBackEntry(WaypointDisplayConfigPanel::OnRenderingTypeData),
 #ifdef HAVE_TRACKING
   DeclareCallBackEntry(TrackingConfigPanel::OnLT24Enabled),
@@ -281,7 +279,6 @@ void dlgConfigurationShowModal(void)
   changed |= TrackingConfigPanel::Save(CommonInterface::SetSettingsComputer().tracking);
 #endif
   changed |= PolarConfigPanel::Save();
-  changed |= TimeConfigPanel::Save();
   changed |= SiteConfigPanel::Save();
   changed |= WaypointDisplayConfigPanel::Save();
   changed |= VarioConfigPanel::Save();
