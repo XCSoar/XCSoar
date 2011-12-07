@@ -29,7 +29,7 @@ Compiling from source
 To compile from source, you need:
 
 - GNU make
-- GNU compiler collection (gcc), version 4.4 or later
+- GNU compiler collection (gcc), version 4.6.2 or later
 - rsvg (http://librsvg.sourceforge.net/)
 - ImageMagick 6.4 (http://www.imagemagick.org/)
 - xsltproc (http://xmlsoft.org/XSLT/xsltproc2.html)
@@ -62,7 +62,7 @@ For Android, you need:
 - Ogg Vorbis (http://www.vorbis.com/)
 
 For Mac OS X, you need:
-- GCC 4.4 or newer (http://hpc.sourceforge.net/, or homebrew, or Macports)
+- GCC 4.6.2 or newer (http://hpc.sourceforge.net/, or homebrew, or Macports)
 - Boost (http://www.boost.org/)
 - zlib (http://www.zlib.net/)
 - CURL (http://curl.haxx.se/)
