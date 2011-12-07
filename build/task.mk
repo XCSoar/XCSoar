@@ -152,4 +152,4 @@ ENGINE_CORE_SOURCES = \
 $(eval $(call link-library,task,ENGINE_CORE))
 $(eval $(call link-library,taskglue,ENGINE_GLUE))
 
-ENGINE_LIBS = $(ENGINE_CORE_LDADD) $(ENGINE_GLUE_LDADD)
+ENGINE_LDADD = $(ENGINE_CORE_LDADD) $(ENGINE_GLUE_LDADD)

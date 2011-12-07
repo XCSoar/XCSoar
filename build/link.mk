@@ -21,6 +21,9 @@ LINK = $(CXX)
 #
 #  _LDFLAGS: linker flags
 #
+#  _DEPENDS: a list of library names this executable depends on; it
+#  will use its CPPFLAGS, LDADD and LDFLAGS
+#
 #  _STRIP: if "y", then the program will be stripped
 #
 define link-program
@@ -41,9 +44,13 @@ else
 $(2)_NOSTRIP = $$($(2)_BIN)
 endif
 
+$(2)_LDADD += $(patsubst %,$$(%_LDADD),$($(2)_DEPENDS))
+$(2)_LDLIBS += $(patsubst %,$$(%_LDLIBS),$($(2)_DEPENDS))
+
 # Compile
 $(2)_OBJS = $$(call SRC_TO_OBJ,$$($(2)_SOURCES))
 $$($(2)_OBJS): CPPFLAGS += $$($(2)_CPPFLAGS)
+$$($(2)_OBJS): CPPFLAGS += $(patsubst %,$$(%_CPPFLAGS),$($(2)_DEPENDS))
 
 # Link the unstripped binary
 $$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) | $$(TARGET_BIN_DIR)/dirstamp

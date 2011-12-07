@@ -108,4 +108,4 @@ SCREEN_LDLIBS = $(SDL_LDLIBS) $(GDI_LDLIBS)
 
 $(eval $(call link-library,screen,SCREEN))
 
-SCREEN_LIBS += $(SDL_LDADD)
+SCREEN_LDADD += $(SDL_LDADD)
