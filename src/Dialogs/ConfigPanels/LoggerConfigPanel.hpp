@@ -24,13 +24,10 @@ Copyright_License {
 #ifndef LOGGERCONFIGPANEL_HPP
 #define LOGGERCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
-#include "Form/Button.hpp"
 
-namespace LoggerConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save();
-};
+class Widget;
+
+Widget *
+CreateLoggerConfigPanel();
 
 #endif /* LOGGERCONFIGPANEL_HPP */

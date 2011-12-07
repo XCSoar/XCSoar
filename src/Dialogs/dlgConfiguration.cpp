@@ -99,7 +99,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("InfoBox Modes"), 5, NULL, NULL, NULL, CreateInfoBoxesConfigPanel },
   {N_("Devices"), 6, NULL, NULL, NULL, CreateDevicesConfigPanel },
   {N_("Polar"), 6, PolarConfigPanel::PreShow, PolarConfigPanel::PreHide, N_("IDR_XML_POLARCONFIGPANEL")},
-  {N_("Logger"), 6, NULL, NULL, N_("IDR_XML_LOGGERCONFIGPANEL")},
+  {N_("Logger"), 6, NULL, NULL, NULL, CreateLoggerConfigPanel },
   {N_("Units"), 6, NULL, NULL, N_("IDR_XML_UNITSCONFIGPANEL")},
   {N_("Time"), 6, NULL, NULL, N_("IDR_XML_TIMECONFIGPANEL")},
 #ifdef HAVE_TRACKING
@@ -193,7 +193,6 @@ setVariables()
   PolarConfigPanel::Init(wf);
   UnitsConfigPanel::Init(wf);
   TimeConfigPanel::Init(wf);
-  LoggerConfigPanel::Init(wf);
   SiteConfigPanel::Init(wf);
   MapDisplayConfigPanel::Init(wf);
   WaypointDisplayConfigPanel::Init(wf);
@@ -294,7 +293,6 @@ void dlgConfigurationShowModal(void)
 #endif
   changed |= PolarConfigPanel::Save();
   changed |= TimeConfigPanel::Save();
-  changed |= LoggerConfigPanel::Save();
   changed |= SiteConfigPanel::Save();
   changed |= MapDisplayConfigPanel::Save();
   changed |= WaypointDisplayConfigPanel::Save();

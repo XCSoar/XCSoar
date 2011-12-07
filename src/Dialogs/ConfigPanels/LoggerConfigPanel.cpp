@@ -26,74 +26,109 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Interface.hpp"
 #include "Plane/PlaneGlue.hpp"
+#include "Form/Form.hpp"
+#include "Form/Button.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 
-static WndForm* wf = NULL;
+
+class LoggerConfigPanel : public XMLWidget {
+
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+};
 
 void
-LoggerConfigPanel::Init(WndForm *_wf)
+LoggerConfigPanel::Show(const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  XMLWidget::Show(rc);
+}
+
+void
+LoggerConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
+
+void
+LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  LoadWindow(NULL, parent,
+             Layout::landscape ? _T("IDR_XML_LOGGERCONFIGPANEL") :
+                               _T("IDR_XML_LOGGERCONFIGPANEL_L"));
 
   const SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SettingsComputer();
   const Plane &plane = settings_computer.plane;
 
-  LoadFormProperty(*wf, _T("prpLoggerTimeStepCruise"),
+  LoadFormProperty(form, _T("prpLoggerTimeStepCruise"),
                    settings_computer.logger_time_step_cruise);
 
-  LoadFormProperty(*wf, _T("prpLoggerTimeStepCircling"),
+  LoadFormProperty(form, _T("prpLoggerTimeStepCircling"),
                    settings_computer.logger_time_step_circling);
 
-  LoadFormPropertyFromProfile(*wf, _T("PilotName"), szProfilePilotName);
-  LoadFormProperty(*wf, _T("AircraftType"), plane.type);
-  LoadFormProperty(*wf, _T("AircraftReg"), plane.registration);
-  LoadFormProperty(*wf, _T("CompetitionID"), plane.competition_id);
-  LoadFormPropertyFromProfile(*wf, _T("LoggerID"), szProfileLoggerID);
+  LoadFormPropertyFromProfile(form, _T("PilotName"), szProfilePilotName);
+  LoadFormProperty(form, _T("AircraftType"), plane.type);
+  LoadFormProperty(form, _T("AircraftReg"), plane.registration);
+  LoadFormProperty(form, _T("CompetitionID"), plane.competition_id);
+  LoadFormPropertyFromProfile(form, _T("LoggerID"), szProfileLoggerID);
 
-  LoadFormProperty(*wf, _T("prpLoggerShortName"),
+  LoadFormProperty(form, _T("prpLoggerShortName"),
                    settings_computer.logger_short_name);
 
-  LoadFormProperty(*wf, _T("prpDisableAutoLogger"),
+  LoadFormProperty(form, _T("prpDisableAutoLogger"),
                    !settings_computer.auto_logger_disabled);
 }
 
-
 bool
-LoggerConfigPanel::Save()
+LoggerConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
+  bool changed = false, require_restart = false;
+
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
   Plane &plane = settings_computer.plane;
 
-  bool changed = false;
-
-  changed |= SaveFormProperty(*wf, _T("prpLoggerTimeStepCruise"),
+  changed |= SaveFormProperty(form, _T("prpLoggerTimeStepCruise"),
                               szProfileLoggerTimeStepCruise,
                               settings_computer.logger_time_step_cruise);
 
-  changed |= SaveFormProperty(*wf, _T("prpLoggerTimeStepCircling"),
+  changed |= SaveFormProperty(form, _T("prpLoggerTimeStepCircling"),
                               szProfileLoggerTimeStepCircling,
                               settings_computer.logger_time_step_circling);
 
-  changed |= SaveFormPropertyToProfile(*wf, _T("PilotName"),
+  changed |= SaveFormPropertyToProfile(form, _T("PilotName"),
                                        szProfilePilotName);
-  changed |= SaveFormProperty(*wf, _T("AircraftType"), plane.type);
-  changed |= SaveFormProperty(*wf, _T("AircraftReg"), plane.registration);
-  changed |= SaveFormProperty(*wf, _T("CompetitionID"), plane.competition_id);
-  changed |= SaveFormPropertyToProfile(*wf, _T("LoggerID"), szProfileLoggerID);
+  changed |= SaveFormProperty(form, _T("AircraftType"), plane.type);
+  changed |= SaveFormProperty(form, _T("AircraftReg"), plane.registration);
+  changed |= SaveFormProperty(form, _T("CompetitionID"), plane.competition_id);
+  changed |= SaveFormPropertyToProfile(form, _T("LoggerID"), szProfileLoggerID);
 
-  changed |= SaveFormProperty(*wf, _T("prpLoggerShortName"),
+  changed |= SaveFormProperty(form, _T("prpLoggerShortName"),
                               szProfileLoggerShort,
                               settings_computer.logger_short_name);
 
   /* GUI label is "Enable Auto Logger" */
-  changed |= SaveFormPropertyNegated(*wf, _T("prpDisableAutoLogger"),
+  changed |= SaveFormPropertyNegated(form, _T("prpDisableAutoLogger"),
                                      szProfileDisableAutoLogger,
                                      settings_computer.auto_logger_disabled);
 
   if (changed)
     PlaneGlue::ToProfile(settings_computer.plane);
 
-  return changed;
+  _changed |= changed;
+  _require_restart |= require_restart;
+
+  return true;
+}
+
+Widget *
+CreateLoggerConfigPanel()
+{
+  return new LoggerConfigPanel();
 }
