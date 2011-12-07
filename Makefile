@@ -52,6 +52,7 @@ include $(topdir)/build/android.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/coverage.mk
 include $(topdir)/build/options.mk
+include $(topdir)/build/libintl.mk
 include $(topdir)/build/boost.mk
 include $(topdir)/build/sdl.mk
 include $(topdir)/build/flags.mk
