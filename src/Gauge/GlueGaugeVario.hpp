@@ -25,9 +25,9 @@ Copyright_License {
 #define GLUE_GAUGE_VARIO_H
 
 #include "Form/WindowWidget.hpp"
-#include "GaugeVario.hpp"
 #include "BlackboardListener.hpp"
 
+struct VarioLook;
 class LiveBlackboard;
 
 /**
