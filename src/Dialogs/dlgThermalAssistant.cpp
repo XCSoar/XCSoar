@@ -30,7 +30,35 @@
 #include "Compiler.h"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
+#include "BlackboardListener.hpp"
+#include "LiveBlackboard.hpp"
 
+class ThermalAssistantListener : NullBlackboardListener {
+  LiveBlackboard &blackboard;
+  ThermalAssistantWindow &window;
+
+public:
+  ThermalAssistantListener(LiveBlackboard &_blackboard,
+                           ThermalAssistantWindow &_window)
+    :blackboard(_blackboard), window(_window) {
+    blackboard.AddListener(*this);
+    Update(blackboard.Calculated());
+  }
+
+  ~ThermalAssistantListener() {
+    blackboard.RemoveListener(*this);
+  }
+
+private:
+  void Update(const DerivedInfo &calculated) {
+    window.Update(calculated.heading, calculated);
+  }
+
+  virtual void OnCalculatedUpdate(const MoreData &basic,
+                                  const DerivedInfo &calculated) {
+    Update(calculated);
+  }
+};
 
 static WndForm *wf = NULL;
 static ThermalAssistantWindow *wta;
@@ -55,19 +83,6 @@ OnCreateThermalAssistantControl(ContainerWindow &parent,
   return wta;
 }
 
-static void
-Update()
-{
-  wta->Update(CommonInterface::Calculated().heading,
-              CommonInterface::Calculated());
-}
-
-static void
-OnTimerNotify(gcc_unused WndForm &Sender)
-{
-  Update();
-}
-
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCreateThermalAssistantControl),
   DeclareCallBackEntry(OnCloseClicked),
@@ -86,12 +101,13 @@ dlgThermalAssistantShowModal()
   if (!wf)
     return;
 
-  wf->SetTimerNotify(OnTimerNotify);
+  {
+    ThermalAssistantListener listener(CommonInterface::GetLiveBlackboard(),
+                                      *wta);
 
-  Update();
-
-  // Show the dialog
-  wf->ShowModal();
+    // Show the dialog
+    wf->ShowModal();
+  }
 
   // After dialog closed -> delete it
   delete wf;
