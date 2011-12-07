@@ -80,7 +80,7 @@ const TCHAR *main_menu_captions[] = {
 };
 
 static const TabMenuControl::PageItem pages[] = {
-  {N_("Site Files"), 0, SiteConfigPanel::PreShow, SiteConfigPanel::PreHide, N_("IDR_XML_SITECONFIGPANEL")},
+  {N_("Site Files"), 0, NULL, NULL, NULL, CreateSiteConfigPanel },
   {N_("Orientation"), 1, NULL, NULL, NULL, CreateMapDisplayConfigPanel },
   {N_("Elements"), 1, NULL, NULL, NULL, CreateSymbolsConfigPanel },
   {N_("Waypoint"), 1, NULL, NULL, N_("IDR_XML_WAYPOINTDISPLAYCONFIGPANEL")},
@@ -190,7 +190,6 @@ static void
 setVariables()
 {
   PolarConfigPanel::Init(wf);
-  SiteConfigPanel::Init(wf);
   WaypointDisplayConfigPanel::Init(wf);
   if (HasModelType())
     ExperimentalConfigPanel::Init(wf);
@@ -269,7 +268,6 @@ void dlgConfigurationShowModal(void)
   bool changed = false;
   bool requirerestart = false;
   changed |= PolarConfigPanel::Save();
-  changed |= SiteConfigPanel::Save();
   changed |= WaypointDisplayConfigPanel::Save();
   if (HasModelType())
     changed |= ExperimentalConfigPanel::Save(requirerestart);

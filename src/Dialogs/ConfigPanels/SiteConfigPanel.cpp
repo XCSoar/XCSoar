@@ -31,32 +31,37 @@ Copyright_License {
 #include "Protection.hpp"
 #include "ConfigPanel.hpp"
 #include "SiteConfigPanel.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 
-static WndForm* wf = NULL;
-static WndButton *buttonWaypoints = NULL;
 
 using namespace ConfigPanel;
 
+class SiteConfigPanel : public XMLWidget {
+private:
+  WndButton *buttonWaypoints;
+
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+};
 
 void
-SiteConfigPanel::SetVisible(bool active)
+SiteConfigPanel::Show(const PixelRect &rc)
 {
-  if (buttonWaypoints != NULL)
-    buttonWaypoints->set_visible(active);
+  buttonWaypoints->set_visible(true);
+  XMLWidget::Show(rc);
 }
 
-bool
-SiteConfigPanel::PreShow()
+void
+SiteConfigPanel::Hide()
 {
-  SiteConfigPanel::SetVisible(true);
-  return true;
-}
-
-bool
-SiteConfigPanel::PreHide()
-{
-  SiteConfigPanel::SetVisible(false);
-  return true;
+  buttonWaypoints->set_visible(false);
+  XMLWidget::Hide();
 }
 
 static void
@@ -65,72 +70,85 @@ OnWaypoints(gcc_unused WndButton &button)
   dlgConfigWaypointsShowModal();
 }
 
-
 void
-SiteConfigPanel::Init(WndForm *_wf)
+SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  LoadWindow(NULL, parent,
+             Layout::landscape ? _T("IDR_XML_SITECONFIGPANEL") :
+                               _T("IDR_XML_SITECONFIGPANEL_L"));
 
-  buttonWaypoints = ((WndButton *)wf->FindByName(_T("cmdWaypoints")));
-  if (buttonWaypoints)
-    buttonWaypoints->SetOnClickNotify(OnWaypoints);
+  buttonWaypoints = ((WndButton *)ConfigPanel::GetForm().
+    FindByName(_T("cmdWaypoints")));
+  assert (buttonWaypoints);
+  buttonWaypoints->SetOnClickNotify(OnWaypoints);
 
-  InitFileField(*wf, _T("prpAirspaceFile"),
+  InitFileField(form, _T("prpAirspaceFile"),
                 szProfileAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
-  InitFileField(*wf, _T("prpAdditionalAirspaceFile"),
+  InitFileField(form, _T("prpAdditionalAirspaceFile"),
                 szProfileAdditionalAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
-  InitFileField(*wf, _T("prpWaypointFile"),
+  InitFileField(form, _T("prpWaypointFile"),
                 szProfileWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
-  InitFileField(*wf, _T("prpAdditionalWaypointFile"),
+  InitFileField(form, _T("prpAdditionalWaypointFile"),
                 szProfileAdditionalWaypointFile,
                 _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
-  InitFileField(*wf, _T("prpWatchedWaypointFile"),
+  InitFileField(form, _T("prpWatchedWaypointFile"),
                 szProfileWatchedWaypointFile,
                 _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
 
-  WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpDataPath"));
+  WndProperty *wp = (WndProperty *)form.FindByName(_T("prpDataPath"));
   wp->set_enabled(false);
   wp->SetText(GetPrimaryDataPath());
 
-  InitFileField(*wf, _T("prpMapFile"),
+  InitFileField(form, _T("prpMapFile"),
                 szProfileMapFile, _T("*.xcm\0*.lkm\0"));
-  InitFileField(*wf, _T("prpTerrainFile"),
+  InitFileField(form, _T("prpTerrainFile"),
                 szProfileTerrainFile, _T("*.jp2\0"));
-  InitFileField(*wf, _T("prpTopographyFile"),
+  InitFileField(form, _T("prpTopographyFile"),
                 szProfileTopographyFile, _T("*.tpl\0"));
-  InitFileField(*wf, _T("prpAirfieldFile"),
+  InitFileField(form, _T("prpAirfieldFile"),
                 szProfileAirfieldFile, _T("*.txt\0"));
 }
 
-
 bool
-SiteConfigPanel::Save()
+SiteConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
+  bool changed = false, require_restart = false;
+
   WaypointFileChanged = WaypointFileChanged |
-    FinishFileField(*wf, _T("prpWaypointFile"), szProfileWaypointFile) |
-    FinishFileField(*wf, _T("prpAdditionalWaypointFile"),
+    FinishFileField(form, _T("prpWaypointFile"), szProfileWaypointFile) |
+    FinishFileField(form, _T("prpAdditionalWaypointFile"),
                     szProfileAdditionalWaypointFile) |
-    FinishFileField(*wf, _T("prpWatchedWaypointFile"),
+    FinishFileField(form, _T("prpWatchedWaypointFile"),
                     szProfileWatchedWaypointFile);
 
   AirspaceFileChanged =
-    FinishFileField(*wf, _T("prpAirspaceFile"), szProfileAirspaceFile) |
-    FinishFileField(*wf, _T("prpAdditionalAirspaceFile"),
+    FinishFileField(form, _T("prpAirspaceFile"), szProfileAirspaceFile) |
+    FinishFileField(form, _T("prpAdditionalAirspaceFile"),
                     szProfileAdditionalAirspaceFile);
 
-  MapFileChanged = FinishFileField(*wf, _T("prpMapFile"), szProfileMapFile);
+  MapFileChanged = FinishFileField(form, _T("prpMapFile"), szProfileMapFile);
 
-  TerrainFileChanged = FinishFileField(*wf, _T("prpTerrainFile"),
+  TerrainFileChanged = FinishFileField(form, _T("prpTerrainFile"),
                                        szProfileTerrainFile);
 
-  TopographyFileChanged = FinishFileField(*wf, _T("prpTopographyFile"),
+  TopographyFileChanged = FinishFileField(form, _T("prpTopographyFile"),
                                         szProfileTopographyFile);
 
-  AirfieldFileChanged = FinishFileField(*wf, _T("prpAirfieldFile"),
+  AirfieldFileChanged = FinishFileField(form, _T("prpAirfieldFile"),
                                         szProfileAirfieldFile);
 
 
-  return WaypointFileChanged || AirfieldFileChanged || MapFileChanged ||
+  changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged ||
          TerrainFileChanged || TopographyFileChanged || AirfieldFileChanged;
+
+  _changed |= changed;
+  _require_restart |= require_restart;
+
+  return true;
+}
+
+Widget *
+CreateSiteConfigPanel()
+{
+  return new SiteConfigPanel();
 }

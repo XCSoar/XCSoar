@@ -24,16 +24,9 @@ Copyright_License {
 #ifndef SITECONFIGPANEL_HPP
 #define SITECONFIGPANEL_HPP
 
-class WndForm;
+class Widget;
 
-namespace SiteConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save();
-
-  void SetVisible(bool active);
-  bool PreShow();
-  bool PreHide();
-};
+Widget *
+CreateSiteConfigPanel();
 
 #endif /* SITECONFIGPANEL_HPP */
