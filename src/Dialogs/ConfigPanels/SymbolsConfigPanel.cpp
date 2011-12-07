@@ -29,37 +29,75 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Form/Form.hpp"
+#include "DataField/Base.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 
-static WndForm* wf = NULL;
 
-static void
-ShowTrailControls(bool show)
+class SymbolsConfigPanel : public XMLWidget {
+
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+  void ShowTrailControls(bool show);
+};
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static SymbolsConfigPanel *instance;
+
+void
+SymbolsConfigPanel::Show(const PixelRect &rc)
 {
-  ShowFormControl(*wf, _T("prpTrailDrift"), show);
-  ShowFormControl(*wf, _T("prpSnailType"), show);
-  ShowFormControl(*wf, _T("prpSnailWidthScale"), show);
+  XMLWidget::Show(rc);
 }
 
 void
-SymbolsConfigPanel::OnTrailLength(DataField *Sender,
-                                  DataField::DataAccessKind_t Mode)
+SymbolsConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
+
+void
+SymbolsConfigPanel::ShowTrailControls(bool show)
+{
+  ShowFormControl(form, _T("prpTrailDrift"), show);
+  ShowFormControl(form, _T("prpSnailType"), show);
+  ShowFormControl(form, _T("prpSnailWidthScale"), show);
+}
+
+static void
+OnTrailLength(DataField *Sender,
+              DataField::DataAccessKind_t Mode)
 {
   const DataFieldEnum &df = *(const DataFieldEnum *)Sender;
   TrailLength trail_length = (TrailLength)df.GetAsInteger();
-  ShowTrailControls(trail_length != TRAIL_OFF);
+  instance->ShowTrailControls(trail_length != TRAIL_OFF);
 }
 
+gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnTrailLength),
+  DeclareCallBackEntry(NULL)
+};
+
 void
-SymbolsConfigPanel::Init(WndForm *_wf)
+SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  instance = this;
+  LoadWindow(CallBackTable, parent,
+             Layout::landscape ? _T("IDR_XML_SYMBOLSCONFIGPANEL") :
+                               _T("IDR_XML_SYMBOLSCONFIGPANEL_L"));
 
   const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
 
   WndProperty *wp;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpWindArrowStyle"));
+  wp = (WndProperty*)form.FindByName(_T("prpWindArrowStyle"));
   assert(wp != NULL);
   DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
   dfe->addEnumText(_("Arrow head"));
@@ -67,7 +105,7 @@ SymbolsConfigPanel::Init(WndForm *_wf)
   dfe->Set(settings_map.wind_arrow_style);
   wp->RefreshDisplay();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTrail"));
+  wp = (WndProperty*)form.FindByName(_T("prpTrail"));
   assert(wp != NULL);
   dfe = (DataFieldEnum*)wp->GetDataField();
   dfe->addEnumText(_("Off"), TRAIL_OFF);
@@ -77,10 +115,10 @@ SymbolsConfigPanel::Init(WndForm *_wf)
   dfe->Set(settings_map.trail_length);
   wp->RefreshDisplay();
 
-  LoadFormProperty(*wf, _T("prpTrailDrift"),
+  LoadFormProperty(form, _T("prpTrailDrift"),
                    settings_map.trail_drift_enabled);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
+  wp = (WndProperty*)form.FindByName(_T("prpSnailType"));
   assert(wp != NULL);
   dfe = (DataFieldEnum*)wp->GetDataField();
   TCHAR tmp_text[30];
@@ -94,13 +132,13 @@ SymbolsConfigPanel::Init(WndForm *_wf)
   dfe->Set((int)settings_map.snail_type);
   wp->RefreshDisplay();
 
-  LoadFormProperty(*wf, _T("prpSnailWidthScale"),
+  LoadFormProperty(form, _T("prpSnailWidthScale"),
                    settings_map.snail_scaling_enabled);
 
-  LoadFormProperty(*wf, _T("prpDetourCostMarker"),
+  LoadFormProperty(form, _T("prpDetourCostMarker"),
                    settings_map.detour_cost_markers_enabled);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpDisplayTrackBearing"));
+  wp = (WndProperty*)form.FindByName(_T("prpDisplayTrackBearing"));
   assert(wp != NULL);
   dfe = (DataFieldEnum*)wp->GetDataField();
   dfe->addEnumText(_("Off"));
@@ -109,10 +147,10 @@ SymbolsConfigPanel::Init(WndForm *_wf)
   dfe->Set(settings_map.display_track_bearing);
   wp->RefreshDisplay();
 
-  LoadFormProperty(*wf, _T("prpEnableFLARMMap"),
+  LoadFormProperty(form, _T("prpEnableFLARMMap"),
                    settings_map.show_flarm_on_map);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAircraftSymbol"));
+  wp = (WndProperty*)form.FindByName(_T("prpAircraftSymbol"));
   assert(wp != NULL);
   dfe = (DataFieldEnum*)wp->GetDataField();
   dfe->addEnumText(_("Simple"), acSimple);
@@ -124,48 +162,57 @@ SymbolsConfigPanel::Init(WndForm *_wf)
   ShowTrailControls(settings_map.trail_length != TRAIL_OFF);
 }
 
-
 bool
-SymbolsConfigPanel::Save()
+SymbolsConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
-  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
-  bool changed = false;
+  bool changed = false, require_restart = false;
 
-  changed |= SaveFormProperty(*wf, _T("prpWindArrowStyle"),
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+
+  changed |= SaveFormProperty(form, _T("prpWindArrowStyle"),
                               szProfileWindArrowStyle,
                               settings_map.wind_arrow_style);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpTrail"),
+  changed |= SaveFormPropertyEnum(form, _T("prpTrail"),
                                   szProfileSnailTrail,
                                   settings_map.trail_length);
 
-  changed |= SaveFormProperty(*wf, _T("prpTrailDrift"),
+  changed |= SaveFormProperty(form, _T("prpTrailDrift"),
                               szProfileTrailDrift,
                               settings_map.trail_drift_enabled);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpSnailType"),
+  changed |= SaveFormPropertyEnum(form, _T("prpSnailType"),
                                   szProfileSnailType,
                                   settings_map.snail_type);
 
-  changed |= SaveFormProperty(*wf, _T("prpSnailWidthScale"),
+  changed |= SaveFormProperty(form, _T("prpSnailWidthScale"),
                               szProfileSnailWidthScale,
                               settings_map.snail_scaling_enabled);
 
-  changed |= SaveFormProperty(*wf, _T("prpDetourCostMarker"),
+  changed |= SaveFormProperty(form, _T("prpDetourCostMarker"),
                               szProfileDetourCostMarker,
                               settings_map.detour_cost_markers_enabled);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpDisplayTrackBearing"),
+  changed |= SaveFormPropertyEnum(form, _T("prpDisplayTrackBearing"),
                               szProfileDisplayTrackBearing,
                               settings_map.display_track_bearing);
 
-  changed |= SaveFormProperty(*wf, _T("prpEnableFLARMMap"),
+  changed |= SaveFormProperty(form, _T("prpEnableFLARMMap"),
                               szProfileEnableFLARMMap,
                               settings_map.show_flarm_on_map);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpAircraftSymbol"),
+  changed |= SaveFormPropertyEnum(form, _T("prpAircraftSymbol"),
                                   szProfileAircraftSymbol,
                                   settings_map.aircraft_symbol);
 
-  return changed;
+  _changed |= changed;
+  _require_restart |= require_restart;
+
+  return true;
+}
+
+Widget *
+CreateSymbolsConfigPanel()
+{
+  return new SymbolsConfigPanel();
 }
