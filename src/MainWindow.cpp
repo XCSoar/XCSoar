@@ -570,6 +570,8 @@ MainWindow::on_user(unsigned id)
     return true;
 
   case CMD_CALCULATED_UPDATE:
+    XCSoarInterface::ReceiveCalculated();
+
     if (map != NULL)
       map->FullRedraw();
 

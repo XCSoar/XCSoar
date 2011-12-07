@@ -220,6 +220,11 @@ public:
    */
   static void ReceiveGPS();
 
+  /**
+   * Receive calculated data (#DerivedInfo) from the DeviceBlackboard.
+   */
+  static void ReceiveCalculated();
+
   static void ExchangeBlackboard();
 
   /**

@@ -78,6 +78,19 @@ XCSoarInterface::ReceiveGPS()
 }
 
 void
+XCSoarInterface::ReceiveCalculated()
+{
+  {
+    ScopeLock protect(device_blackboard->mutex);
+
+    ReadBlackboardCalculated(device_blackboard->Calculated());
+    device_blackboard->ReadSettingsComputer(SettingsComputer());
+  }
+
+  BroadcastCalculatedUpdate();
+}
+
+void
 XCSoarInterface::ExchangeBlackboard()
 {
   ExchangeDeviceBlackboard();
@@ -89,7 +102,6 @@ void
 XCSoarInterface::ExchangeDeviceBlackboard()
 {
   ScopeLock protect(device_blackboard->mutex);
-  ReadBlackboardCalculated(device_blackboard->Calculated());
 
   device_blackboard->ReadSettingsComputer(SettingsComputer());
 }
