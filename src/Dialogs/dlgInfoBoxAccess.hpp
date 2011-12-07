@@ -38,8 +38,6 @@ public:
   static bool OnClose();
 
   static void dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id);
-
-  static WndForm* GetWindowForm();
 };
 
 #endif /* DLGINFOBOXACCESS_H_ */

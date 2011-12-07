@@ -29,22 +29,19 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Form/Util.hpp"
-#include "Form/TabBar.hpp"
-#include "Form/Form.hpp"
 #include "Form/XMLWidget.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 
-class AltitudeInfoPanel : public XMLWidget {
+class AltitudeInfoPanel : public XMLWidget, NullBlackboardListener {
 public:
   void Refresh();
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void Show(const PixelRect &rc);
   virtual void Hide();
-};
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static AltitudeInfoPanel *instance;
+  virtual void OnGPSUpdate(const MoreData &basic);
+};
 
 void
 AltitudeInfoPanel::Refresh()
@@ -87,12 +84,6 @@ AltitudeInfoPanel::Refresh()
   }
 }
 
-static void
-OnTimerNotify(gcc_unused WndForm &Sender)
-{
-  instance->Refresh();
-}
-
 void
 AltitudeInfoPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
@@ -102,23 +93,28 @@ AltitudeInfoPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 AltitudeInfoPanel::Show(const PixelRect &rc)
 {
-  WndForm *wf = dlgInfoBoxAccess::GetWindowForm();
-  wf->SetTimerNotify(OnTimerNotify);
   Refresh();
   XMLWidget::Show(rc);
+
+  CommonInterface::GetLiveBlackboard().AddListener(*this);
 }
 
 void
 AltitudeInfoPanel::Hide()
 {
-  XMLWidget::Hide();
+  CommonInterface::GetLiveBlackboard().RemoveListener(*this);
 
-  WndForm *wf = dlgInfoBoxAccess::GetWindowForm();
-  wf->SetTimerNotify(NULL);
+  XMLWidget::Hide();
+}
+
+void
+AltitudeInfoPanel::OnGPSUpdate(const MoreData &basic)
+{
+  Refresh();
 }
 
 Widget *
 LoadAltitudeInfoPanel(unsigned id)
 {
-  return instance = new AltitudeInfoPanel();
+  return new AltitudeInfoPanel();
 }
