@@ -40,6 +40,7 @@ Copyright_License {
 #include "Form/CheckBox.hpp"
 #include "Asset.hpp"
 #include "Blackboard/BlackboardListener.hpp"
+#include "RateLimiter.hpp"
 
 #include <stdio.h>
 
@@ -540,9 +541,17 @@ dlgTargetShowModal(int TargetPoint)
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  struct TargetDialogUpdateListener : public NullBlackboardListener {
+  struct TargetDialogUpdateListener : public NullBlackboardListener,
+                                      private RateLimiter {
+    TargetDialogUpdateListener()
+      :RateLimiter(1800, 300) {}
+
     virtual void OnCalculatedUpdate(const MoreData &basic,
                                     const DerivedInfo &calculated) {
+      Trigger();
+    }
+
+    virtual void Run() {
       map->invalidate();
       RefreshCalculator();
     }
