@@ -25,12 +25,25 @@ Copyright_License {
 #define XCSOAR_SYSTEM_STATUS_PANEL_HPP
 
 #include "StatusPanel.hpp"
+#include "Blackboard/BlackboardListener.hpp"
+#include "RateLimiter.hpp"
 
-class SystemStatusPanel : public StatusPanel {
+class SystemStatusPanel
+  : public StatusPanel,
+    private NullBlackboardListener, private RateLimiter {
 public:
+  SystemStatusPanel()
+    :RateLimiter(2000, 500) {}
+
   virtual void Refresh();
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+
+private:
+  virtual void Run();
+  virtual void OnGPSUpdate(const MoreData &basic);
 };
 
 #endif

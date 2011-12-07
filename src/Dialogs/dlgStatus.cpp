@@ -53,7 +53,6 @@ Copyright_License {
 
 static WndForm *wf = NULL;
 static TabBarControl *wTabBar;
-static StatusPanel *system_panel;
 static int status_page = 0;
 
 static void
@@ -69,13 +68,6 @@ static void
 OnCloseClicked(gcc_unused WndButton &button)
 {
   wf->SetModalResult(mrOK);
-}
-
-static void
-OnTimerNotify(gcc_unused WndForm &Sender)
-{
-  if (wTabBar->GetCurrentWidget() == system_panel)
-    system_panel->Refresh();
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
@@ -117,7 +109,7 @@ dlgStatusShowModal(int start_page)
   Widget *flight_panel = new FlightStatusPanel(nearest_waypoint);
   wTabBar->AddTab(flight_panel, _T("Flight"), false, FlightIcon);
 
-  system_panel = new SystemStatusPanel();
+  Widget *system_panel = new SystemStatusPanel();
   wTabBar->AddTab(system_panel, _T("System"), false, SystemIcon);
 
   Widget *task_panel = new TaskStatusPanel();
@@ -136,8 +128,6 @@ dlgStatusShowModal(int start_page)
   }
 
   wTabBar->SetCurrentPage(status_page);
-
-  wf->SetTimerNotify(OnTimerNotify);
 
   SetTitle();
 
