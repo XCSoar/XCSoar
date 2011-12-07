@@ -90,7 +90,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Glide Computer"), 2, NULL, NULL, NULL, CreateGlideComputerConfigPanel },
   {N_("Route"), 2, NULL, NULL, NULL, CreateRouteConfigPanel },
   {N_("FLARM, Other"), 3, NULL, NULL, NULL, CreateGaugesConfigPanel },
-  {N_("Vario"), 3, NULL, NULL, N_("IDR_XML_VARIOCONFIGPANEL")},
+  {N_("Vario"), 3, NULL, NULL, NULL, CreateVarioConfigPanel },
   {N_("Task Rules"), 4, NULL, NULL, NULL, CreateTaskRulesConfigPanel },
   {N_("Turnpoint Types"), 4, NULL, NULL, NULL, CreateTaskDefaultsConfigPanel },
   {N_("Language, Input"), 5, NULL, NULL, NULL, CreateInterfaceConfigPanel },
@@ -192,7 +192,6 @@ setVariables()
   PolarConfigPanel::Init(wf);
   SiteConfigPanel::Init(wf);
   WaypointDisplayConfigPanel::Init(wf);
-  VarioConfigPanel::Init(wf);
   if (HasModelType())
     ExperimentalConfigPanel::Init(wf);
 }
@@ -272,7 +271,6 @@ void dlgConfigurationShowModal(void)
   changed |= PolarConfigPanel::Save();
   changed |= SiteConfigPanel::Save();
   changed |= WaypointDisplayConfigPanel::Save();
-  changed |= VarioConfigPanel::Save();
   if (HasModelType())
     changed |= ExperimentalConfigPanel::Save(requirerestart);
   wTabMenu->Save(changed, requirerestart);

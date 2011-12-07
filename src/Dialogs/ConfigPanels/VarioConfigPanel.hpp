@@ -24,12 +24,10 @@ Copyright_License {
 #ifndef VARIOCONFIGPANEL_HPP
 #define VARIOCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
 
-namespace VarioConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save();
-};
+class Widget;
+
+Widget *
+CreateVarioConfigPanel();
 
 #endif /* VARIOCONFIGPANEL_HPP */

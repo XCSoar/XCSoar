@@ -26,74 +26,107 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "Interface.hpp"
+#include "Form/Form.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 
-static WndForm* wf = NULL;
 
+class VarioConfigPanel : public XMLWidget {
+
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+};
 
 void
-VarioConfigPanel::Init(WndForm *_wf)
+VarioConfigPanel::Show(const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  XMLWidget::Show(rc);
+}
+
+void
+VarioConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
+
+void
+VarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  LoadWindow(NULL, parent,
+             Layout::landscape ? _T("IDR_XML_VARIOCONFIGPANEL") :
+                               _T("IDR_XML_VARIOCONFIGPANEL_L"));
 
   const VarioSettings &settings = CommonInterface::GetUISettings().vario;
 
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioSpeedToFly"),
+  LoadFormProperty(form, _T("prpAppGaugeVarioSpeedToFly"),
                    settings.ShowSpeedToFly);
 
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioAvgText"),
+  LoadFormProperty(form, _T("prpAppGaugeVarioAvgText"),
                    settings.ShowAvgText);
 
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioMc"),
+  LoadFormProperty(form, _T("prpAppGaugeVarioMc"),
                    settings.ShowMc);
 
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioBugs"),
+  LoadFormProperty(form, _T("prpAppGaugeVarioBugs"),
                    settings.ShowBugs);
 
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioBallast"),
+  LoadFormProperty(form, _T("prpAppGaugeVarioBallast"),
                    settings.ShowBallast);
 
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioGross"),
+  LoadFormProperty(form, _T("prpAppGaugeVarioGross"),
                    settings.ShowGross);
 
-  LoadFormProperty(*wf, _T("prpAppAveNeedle"),
+  LoadFormProperty(form, _T("prpAppAveNeedle"),
                    settings.ShowAveNeedle);
 }
 
-
 bool
-VarioConfigPanel::Save()
+VarioConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
-  bool changed = false;
+  bool changed = false, require_restart = false;
 
   VarioSettings &settings = CommonInterface::SetUISettings().vario;
 
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioSpeedToFly"),
+  changed |= SaveFormProperty(form, _T("prpAppGaugeVarioSpeedToFly"),
                               szProfileAppGaugeVarioSpeedToFly,
                               settings.ShowSpeedToFly);
 
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioAvgText"),
+  changed |= SaveFormProperty(form, _T("prpAppGaugeVarioAvgText"),
                               szProfileAppGaugeVarioAvgText,
                               settings.ShowAvgText);
 
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioMc"),
+  changed |= SaveFormProperty(form, _T("prpAppGaugeVarioMc"),
                               szProfileAppGaugeVarioMc,
                               settings.ShowMc);
 
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioBugs"),
+  changed |= SaveFormProperty(form, _T("prpAppGaugeVarioBugs"),
                               szProfileAppGaugeVarioBugs,
                               settings.ShowBugs);
 
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioBallast"),
+  changed |= SaveFormProperty(form, _T("prpAppGaugeVarioBallast"),
                               szProfileAppGaugeVarioBallast,
                               settings.ShowBallast);
 
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioGross"),
+  changed |= SaveFormProperty(form, _T("prpAppGaugeVarioGross"),
                               szProfileAppGaugeVarioGross,
                               settings.ShowGross);
 
-  changed |= SaveFormProperty(*wf, _T("prpAppAveNeedle"), szProfileAppAveNeedle,
+  changed |= SaveFormProperty(form, _T("prpAppAveNeedle"), szProfileAppAveNeedle,
                               settings.ShowAveNeedle);
 
-  return changed;
+  _changed |= changed;
+  _require_restart |= require_restart;
+
+  return true;
+}
+
+Widget *
+CreateVarioConfigPanel()
+{
+  return new VarioConfigPanel();
 }
