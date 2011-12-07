@@ -133,7 +133,7 @@ MenuBar::MenuBar(ContainerWindow &parent)
     PixelScalar x, y;
     UPixelScalar xsize, ysize;
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
-    buttons[i].set(parent, _T(""), i, x, y, xsize, ysize,
+    buttons[i].set(parent, _T(""), x, y, xsize, ysize,
                    style);
   }
 }
