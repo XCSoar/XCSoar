@@ -97,7 +97,7 @@ const TCHAR *
 GetDriverDisplayNameByIndex(unsigned i)
 {
   return i < DeviceRegisterCount
-    ? DeviceRegister[i]->name
+    ? DeviceRegister[i]->display_name
     : NULL;
 }
 

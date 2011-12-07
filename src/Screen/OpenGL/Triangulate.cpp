@@ -35,11 +35,11 @@ template <typename PT>
 static inline bool
 PolygonRotatesLeft(const PT *points, unsigned num_points)
 {
-  int area = 0;
+  typename PT::SquareType area = 0;
 
   for (unsigned a = num_points - 1, b = 0; b < num_points; a = b++)
-    area += points[a].x * (int)points[b].y -
-            points[a].y * (int)points[b].x;
+    area += points[a].x * (typename PT::SquareType)points[b].y -
+            points[a].y * (typename PT::SquareType)points[b].x;
 
   // we actually calculated area * 2
   return area > 0;
@@ -52,8 +52,8 @@ template <typename PT>
 static inline bool
 TriangleEmpty(const PT &a, const PT &b, const PT &c)
 {
-  return ((b.x - a.x) * (int)(c.y - b.y) -
-          (b.y - a.y) * (int)(c.x - b.x)) == 0;
+  return ((b.x - a.x) * (typename PT::SquareType)(c.y - b.y) -
+          (b.y - a.y) * (typename PT::SquareType)(c.x - b.x)) == 0;
 }
 
 /**
@@ -64,11 +64,11 @@ static inline bool
 PointLeftOfLine(const PT &p, const PT &a, const PT &b)
 {
   // normal vector of the line
-  int nx = a.y - b.y;
-  int ny = b.x - a.x;
+  typename PT::SquareType nx = a.y - b.y;
+  typename PT::SquareType ny = b.x - a.x;
   // vector ap
-  int apx = p.x - a.x;
-  int apy = p.y - a.y;
+  typename PT::SquareType apx = p.x - a.x;
+  typename PT::SquareType apy = p.y - a.y;
 
   // almost distance point from line (normal has to be normalized for that)
   return (nx * apx + ny * apy) >= 0;
@@ -94,8 +94,8 @@ template <typename PT>
 static inline bool
 LeftBend(const PT &a, const PT &b, const PT &c)
 {
-  return ((b.x - a.x) * (int)(c.y - b.y) -
-          (b.y - a.y) * (int)(c.x - b.x)) > 0;
+  return ((b.x - a.x) * (typename PT::SquareType)(c.y - b.y) -
+          (b.y - a.y) * (typename PT::SquareType)(c.x - b.x)) > 0;
 }
 
 /**
@@ -105,7 +105,9 @@ static inline void
 Normalize(RasterPoint *v, float length)
 {
   // TODO: optimize!
-  float scale = length / sqrt(v->x * (float)v->x + v->y * (float)v->y);
+  double squared_length = v->x * (RasterPoint::SquareType)v->x +
+                          v->y * (RasterPoint::SquareType)v->y;
+  float scale = length / sqrt(squared_length);
   v->x = floor(v->x * scale + 0.5f);
   v->y = floor(v->y * scale + 0.5f);
 }

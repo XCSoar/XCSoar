@@ -22,14 +22,18 @@ Version 6.3 - not yet released
   - support reverse screen modes for Galaxy Tab
 
 Version 6.2.4 - not yet released
+* devices
+  - Borgelt: send MacCready to B800 with CAI302 protocol
 * Android
   - fix bogus long InfoBox clicks
+  - fix crash after resuming
 * Altair
   - fix crash in InfoBox cursor movement
 * user interface
   - fix sorting by filename in file selector of task manager
   - allow modification of some additional infobox values with up/down keys
     (or volume keys on android devices).
+  - fix crash in the .xci file parser
 * settings
   - load configured METAR/TAF stations on startup
 

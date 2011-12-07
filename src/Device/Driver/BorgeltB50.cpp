@@ -24,16 +24,23 @@ Copyright_License {
 #include "Device/Driver/BorgeltB50.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Port/Port.hpp"
 #include "Units/System.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 
 class B50Device : public AbstractDevice {
+  Port &port;
+
 public:
+  B50Device(Port &_port):port(_port) {}
+
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
+  virtual bool PutMacCready(fixed mc);
 };
 
 /*
@@ -139,15 +146,30 @@ B50Device::ParseNMEA(const char *String, NMEAInfo &info)
     return false;
 }
 
+bool
+B50Device::PutMacCready(fixed mac_cready)
+{
+  /* the Borgelt B800 understands the CAI302 "!g" command for
+     MacCready, ballast and bugs */
+
+  unsigned mac_cready2 = uround(Units::ToUserUnit(mac_cready * 10, unKnots));
+
+  char buffer[32];
+  sprintf(buffer, "!g,m%u\r", mac_cready2);
+  port.Write(buffer);
+
+  return true;
+}
+
 static Device *
 B50CreateOnPort(const DeviceConfig &config, Port &com_port)
 {
-  return new B50Device();
+  return new B50Device(com_port);
 }
 
 const struct DeviceRegister b50Device = {
   _T("Borgelt B50"),
-  _T("Borgelt B50"),
+  _T("Borgelt B50/B800"),
   0,
   B50CreateOnPort,
 };
