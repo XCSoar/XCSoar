@@ -24,15 +24,10 @@ Copyright_License {
 #ifndef WAYPOINTDISPLAYCONFIGPANEL_HPP
 #define WAYPOINTDISPLAYCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
-#include "DataField/Base.hpp"
 
-namespace WaypointDisplayConfigPanel
-{
-  void Init(WndForm *wf);
-  void UpdateVisibilities();
-  void OnRenderingTypeData(DataField *Sender, DataField::DataAccessKind_t Mode);
-  bool Save();
-};
+class Widget;
+
+Widget *
+CreateWaypointDisplayConfigPanel();
 
 #endif /* WAYPOINTDISPLAYCONFIGPANEL_HPP */

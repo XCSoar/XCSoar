@@ -28,23 +28,75 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Form/Form.hpp"
+#include "DataField/Base.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 
-static WndForm* wf = NULL;
+
+class WaypointDisplayConfigPanel : public XMLWidget {
+
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+  void UpdateVisibilities();
+};
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static WaypointDisplayConfigPanel *instance;
+
+void
+WaypointDisplayConfigPanel::Show(const PixelRect &rc)
+{
+  XMLWidget::Show(rc);
+}
+
+void
+WaypointDisplayConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
 
 void
 WaypointDisplayConfigPanel::UpdateVisibilities()
 {
-  bool visible = GetFormValueBoolean(*wf, _T("prpAppUseSWLandablesRendering"));
+  bool visible = GetFormValueBoolean(form, _T("prpAppUseSWLandablesRendering"));
 
-  ShowFormControl(*wf, _T("prpAppLandableRenderingScale"), visible);
-  ShowFormControl(*wf, _T("prpAppScaleRunwayLength"), visible);
+  ShowFormControl(form, _T("prpAppLandableRenderingScale"), visible);
+  ShowFormControl(form, _T("prpAppScaleRunwayLength"), visible);
 }
 
-void
-WaypointDisplayConfigPanel::Init(WndForm *_wf)
+static void
+OnRenderingTypeData(gcc_unused DataField *Sender,
+                    DataField::DataAccessKind_t Mode)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  switch (Mode) {
+  case DataField::daChange: {
+    instance->UpdateVisibilities();
+    break;
+  }
+  case DataField::daSpecial:
+    return;
+  }
+}
+
+gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnRenderingTypeData),
+  DeclareCallBackEntry(NULL)
+};
+
+void
+WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  instance = this;
+  LoadWindow(CallBackTable, parent,
+             Layout::landscape ? _T("IDR_XML_WAYPOINTDISPLAYCONFIGPANEL") :
+                               _T("IDR_XML_WAYPOINTDISPLAYCONFIGPANEL_L"));
 
   const WaypointRendererSettings &settings =
     CommonInterface::SettingsMap().waypoint;
@@ -62,7 +114,7 @@ WaypointDisplayConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
 
-  LoadFormProperty(*wf, _T("prpWaypointLabels"), wp_labels_list,
+  LoadFormProperty(form, _T("prpWaypointLabels"), wp_labels_list,
                    settings.display_text_type);
 
   static gcc_constexpr_data StaticEnumChoice wp_arrival_list[] = {
@@ -77,7 +129,7 @@ WaypointDisplayConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
 
-  LoadFormProperty(*wf, _T("prpWaypointArrivalHeightDisplay"), wp_arrival_list,
+  LoadFormProperty(form, _T("prpWaypointArrivalHeightDisplay"), wp_arrival_list,
                    settings.arrival_height_display);
 
   static gcc_constexpr_data StaticEnumChoice wp_label_list[] = {
@@ -86,7 +138,7 @@ WaypointDisplayConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
 
-  LoadFormProperty(*wf, _T("prpWaypointLabelStyle"), wp_label_list,
+  LoadFormProperty(form, _T("prpWaypointLabelStyle"), wp_label_list,
                    settings.landable_render_mode);
 
   static gcc_constexpr_data StaticEnumChoice wp_selection_list[] = {
@@ -99,7 +151,7 @@ WaypointDisplayConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
 
-  LoadFormProperty(*wf, _T("prpWaypointLabelSelection"), wp_selection_list,
+  LoadFormProperty(form, _T("prpWaypointLabelSelection"), wp_selection_list,
                    settings.label_selection);
 
   static gcc_constexpr_data StaticEnumChoice wp_style_list[] = {
@@ -112,75 +164,69 @@ WaypointDisplayConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
 
-  LoadFormProperty(*wf, _T("prpAppIndLandable"), wp_style_list,
+  LoadFormProperty(form, _T("prpAppIndLandable"), wp_style_list,
                    settings.landable_style);
 
-  LoadFormProperty(*wf, _T("prpAppUseSWLandablesRendering"),
+  LoadFormProperty(form, _T("prpAppUseSWLandablesRendering"),
                    settings.vector_landable_rendering);
 
-  LoadFormProperty(*wf, _T("prpAppLandableRenderingScale"),
+  LoadFormProperty(form, _T("prpAppLandableRenderingScale"),
                    settings.landable_rendering_scale);
 
-  LoadFormProperty(*wf, _T("prpAppScaleRunwayLength"),
+  LoadFormProperty(form, _T("prpAppScaleRunwayLength"),
                    settings.scale_runway_length);
 
   UpdateVisibilities();
 }
 
-void
-WaypointDisplayConfigPanel::OnRenderingTypeData(DataField *Sender,
-                                                DataField::DataAccessKind_t Mode)
-{
-  switch (Mode) {
-  case DataField::daChange: {
-    UpdateVisibilities();
-    break;
-  }
-  case DataField::daSpecial:
-    return;
-  }
-}
-
 bool
-WaypointDisplayConfigPanel::Save()
+WaypointDisplayConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
+  bool changed = false, require_restart = false;
+
   WaypointRendererSettings &settings =
     CommonInterface::SetSettingsMap().waypoint;
 
-  bool changed = false;
-
-  changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabels"),
+  changed |= SaveFormPropertyEnum(form, _T("prpWaypointLabels"),
                                   szProfileDisplayText,
                                   settings.display_text_type);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointArrivalHeightDisplay"),
+  changed |= SaveFormPropertyEnum(form, _T("prpWaypointArrivalHeightDisplay"),
                                   szProfileWaypointArrivalHeightDisplay,
                                   settings.arrival_height_display);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabelStyle"),
+  changed |= SaveFormPropertyEnum(form, _T("prpWaypointLabelStyle"),
                                   szProfileWaypointLabelStyle,
                                   settings.landable_render_mode);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabelSelection"),
+  changed |= SaveFormPropertyEnum(form, _T("prpWaypointLabelSelection"),
                                   szProfileWaypointLabelSelection,
                                   settings.label_selection);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpAppIndLandable"),
+  changed |= SaveFormPropertyEnum(form, _T("prpAppIndLandable"),
                                   szProfileAppIndLandable,
                                   settings.landable_style);
 
-  changed |= SaveFormProperty(*wf, _T("prpAppUseSWLandablesRendering"),
+  changed |= SaveFormProperty(form, _T("prpAppUseSWLandablesRendering"),
                               szProfileAppUseSWLandablesRendering,
                               settings.vector_landable_rendering);
 
-  changed |= SaveFormProperty(*wf, _T("prpAppLandableRenderingScale"),
+  changed |= SaveFormProperty(form, _T("prpAppLandableRenderingScale"),
                               szProfileAppLandableRenderingScale,
                               settings.landable_rendering_scale);
 
-  changed |= SaveFormProperty(*wf, _T("prpAppScaleRunwayLength"),
+  changed |= SaveFormProperty(form, _T("prpAppScaleRunwayLength"),
                               szProfileAppScaleRunwayLength,
                               settings.scale_runway_length);
 
+  _changed |= changed;
+  _require_restart |= require_restart;
 
-  return changed;
+  return true;
+}
+
+Widget *
+CreateWaypointDisplayConfigPanel()
+{
+  return new WaypointDisplayConfigPanel();
 }
