@@ -24,12 +24,9 @@ Copyright_License {
 #ifndef LAYOUTCONFIGPANEL_HPP
 #define LAYOUTCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
+class Widget;
 
-namespace LayoutConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save(bool &requirerestart);
-};
+Widget *
+CreateLayoutConfigPanel();
 
 #endif /* LAYOUTCONFIGPANEL_HPP */

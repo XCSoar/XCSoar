@@ -94,7 +94,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Task Rules"), 4, NULL, NULL, NULL, CreateTaskRulesConfigPanel },
   {N_("Turnpoint Types"), 4, NULL, NULL, NULL, CreateTaskDefaultsConfigPanel },
   {N_("Language, Input"), 5, NULL, NULL, NULL, CreateInterfaceConfigPanel },
-  {N_("Screen Layout"), 5, NULL, NULL, N_("IDR_XML_LAYOUTCONFIGPANEL")},
+  {N_("Screen Layout"), 5, NULL, NULL, NULL, CreateLayoutConfigPanel },
   {N_("InfoBox Pages"), 5, NULL, NULL, N_("IDR_XML_PAGESCONFIGPANEL")},
   {N_("InfoBox Modes"), 5, NULL, NULL, NULL, CreateInfoBoxesConfigPanel },
   {N_("Devices"), 6, NULL, NULL, NULL, CreateDevicesConfigPanel },
@@ -200,7 +200,6 @@ setVariables()
   SymbolsConfigPanel::Init(wf);
   SafetyFactorsConfigPanel::Init(wf);
   RouteConfigPanel::Init(wf);
-  LayoutConfigPanel::Init(wf);
   VarioConfigPanel::Init(wf);
   if (HasModelType())
     ExperimentalConfigPanel::Init(wf);
@@ -302,7 +301,6 @@ void dlgConfigurationShowModal(void)
   changed |= SymbolsConfigPanel::Save();
   changed |= SafetyFactorsConfigPanel::Save();
   changed |= RouteConfigPanel::Save();
-  changed |= LayoutConfigPanel::Save(requirerestart);
   changed |= VarioConfigPanel::Save();
   if (HasModelType())
     changed |= ExperimentalConfigPanel::Save(requirerestart);

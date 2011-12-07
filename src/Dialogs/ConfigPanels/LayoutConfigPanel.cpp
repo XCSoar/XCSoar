@@ -36,6 +36,11 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Language/Language.hpp"
 #include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+
 
 static const StaticEnumChoice display_orientation_list[] = {
   { Display::ORIENTATION_DEFAULT, N_("Default") },
@@ -64,30 +69,50 @@ static const StaticEnumChoice info_box_geometry_list[] = {
   { 0 }
 };
 
-static WndForm* wf = NULL;
+class LayoutConfigPanel : public XMLWidget {
 
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+};
 
 void
-LayoutConfigPanel::Init(WndForm *_wf)
+LayoutConfigPanel::Show(const PixelRect &rc)
 {
+  XMLWidget::Show(rc);
+}
+
+void
+LayoutConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
+
+void
+LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  LoadWindow(NULL, parent,
+             Layout::landscape ? _T("IDR_XML_LAYOUTCONFIGPANEL") :
+                               _T("IDR_XML_LAYOUTCONFIGPANEL_L"));
+
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
-  assert(_wf != NULL);
-  wf = _wf;
   WndProperty *wp;
 
   if (Display::RotateSupported()) {
-    LoadFormProperty(*wf, _T("prpDisplayOrientation"),
+    LoadFormProperty(form, _T("prpDisplayOrientation"),
                      display_orientation_list,
                      Profile::GetDisplayOrientation());
   } else {
-    ShowFormControl(*wf, _T("prpDisplayOrientation"), false);
+    ShowFormControl(form, _T("prpDisplayOrientation"), false);
   }
 
-  LoadFormProperty(*wf, _T("prpAppInfoBoxGeom"),
+  LoadFormProperty(form, _T("prpAppInfoBoxGeom"),
                    info_box_geometry_list, InfoBoxLayout::InfoBoxGeometry);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppFlarmLocation"));
+  wp = (WndProperty*)form.FindByName(_T("prpAppFlarmLocation"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
@@ -104,7 +129,7 @@ LayoutConfigPanel::Init(WndForm *_wf)
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppStatusMessageAlignment"));
+  wp = (WndProperty*)form.FindByName(_T("prpAppStatusMessageAlignment"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
@@ -114,7 +139,7 @@ LayoutConfigPanel::Init(WndForm *_wf)
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpDialogStyle"));
+  wp = (WndProperty*)form.FindByName(_T("prpDialogStyle"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
@@ -126,13 +151,13 @@ LayoutConfigPanel::Init(WndForm *_wf)
     wp->RefreshDisplay();
   }
 
-  LoadFormProperty(*wf, _T("prpAppInverseInfoBox"),
+  LoadFormProperty(form, _T("prpAppInverseInfoBox"),
                    ui_settings.info_boxes.inverse);
 
-  LoadFormProperty(*wf, _T("prpAppInfoBoxColors"),
+  LoadFormProperty(form, _T("prpAppInfoBoxColors"),
                    ui_settings.info_boxes.use_colors);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxBorder"));
+  wp = (WndProperty*)form.FindByName(_T("prpAppInfoBoxBorder"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
@@ -142,7 +167,7 @@ LayoutConfigPanel::Init(WndForm *_wf)
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTabDialogStyle"));
+  wp = (WndProperty*)form.FindByName(_T("prpTabDialogStyle"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
@@ -154,19 +179,19 @@ LayoutConfigPanel::Init(WndForm *_wf)
 
 }
 
-
 bool
-LayoutConfigPanel::Save(bool &requirerestart)
+LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
+  bool changed = false, require_restart = false;
+
   UISettings &ui_settings = CommonInterface::SetUISettings();
 
-  bool changed = false;
   WndProperty *wp;
 
   bool orientation_changed = false;
 
   if (Display::RotateSupported()) {
-    wp = (WndProperty*)wf->FindByName(_T("prpDisplayOrientation"));
+    wp = (WndProperty*)form.FindByName(_T("prpDisplayOrientation"));
     assert(wp != NULL);
 
     const DataFieldEnum *dfe = (const DataFieldEnum *)wp->GetDataField();
@@ -182,11 +207,11 @@ LayoutConfigPanel::Save(bool &requirerestart)
   bool info_box_geometry_changed = false;
 
   info_box_geometry_changed |=
-    SaveFormPropertyEnum(*wf, _T("prpAppInfoBoxGeom"),
+    SaveFormPropertyEnum(form, _T("prpAppInfoBoxGeom"),
                          szProfileInfoBoxGeometry,
                          InfoBoxLayout::InfoBoxGeometry);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppFlarmLocation"));
+  wp = (WndProperty*)form.FindByName(_T("prpAppFlarmLocation"));
   if (wp) {
     unsigned newval = (unsigned)wp->GetDataField()->GetAsInteger();
     unsigned oldval = 0;
@@ -199,31 +224,31 @@ LayoutConfigPanel::Save(bool &requirerestart)
 
   changed |= info_box_geometry_changed;
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpAppStatusMessageAlignment"),
+  changed |= SaveFormPropertyEnum(form, _T("prpAppStatusMessageAlignment"),
                                   szProfileAppStatusMessageAlignment,
                                   ui_settings.popup_message_position);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpDialogStyle"),
+  changed |= SaveFormPropertyEnum(form, _T("prpDialogStyle"),
                                   szProfileAppDialogStyle,
                                   dialog_style_setting);
 
-  changed |= requirerestart |=
-    SaveFormPropertyEnum(*wf, _T("prpAppInfoBoxBorder"),
+  changed |= require_restart |=
+    SaveFormPropertyEnum(form, _T("prpAppInfoBoxBorder"),
                          szProfileAppInfoBoxBorder,
                          ui_settings.info_boxes.border_style);
 
-  changed |= requirerestart |=
-    SaveFormProperty(*wf, _T("prpAppInverseInfoBox"),
+  changed |= require_restart |=
+    SaveFormProperty(form, _T("prpAppInverseInfoBox"),
                      szProfileAppInverseInfoBox,
                      ui_settings.info_boxes.inverse);
 
-  changed |= requirerestart |=
-    SaveFormProperty(*wf, _T("prpAppInfoBoxColors"),
+  changed |= require_restart |=
+    SaveFormProperty(form, _T("prpAppInfoBoxColors"),
                      szProfileAppInfoBoxColors,
                      ui_settings.info_boxes.use_colors);
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
-  changed |= SaveFormPropertyEnum(*wf, _T("prpTabDialogStyle"),
+  changed |= SaveFormPropertyEnum(form, _T("prpTabDialogStyle"),
                                   szProfileAppDialogTabStyle,
                                   dialog_settings.tab_style);
 
@@ -240,5 +265,14 @@ LayoutConfigPanel::Save(bool &requirerestart)
   } else if (info_box_geometry_changed)
     XCSoarInterface::main_window.ReinitialiseLayout();
 
-  return changed;
+  _changed |= changed;
+  _require_restart |= require_restart;
+
+  return true;
+}
+
+Widget *
+CreateLayoutConfigPanel()
+{
+  return new LayoutConfigPanel();
 }
