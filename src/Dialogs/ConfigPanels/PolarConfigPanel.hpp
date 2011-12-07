@@ -24,24 +24,9 @@ Copyright_License {
 #ifndef POLARCONFIGPANEL_HPP
 #define POLARCONFIGPANEL_HPP
 
-#include "DataField/Base.hpp"
+class Widget;
 
-class WndForm;
-class WndButton;
-
-namespace PolarConfigPanel
-{
-  void Init(WndForm *wf);
-  bool Save();
-
-  void SetVisible(bool active);
-  bool PreShow();
-  bool PreHide();
-
-  void OnLoadInternal(WndButton &button);
-  void OnLoadFromFile(WndButton &button);
-  void OnExport(WndButton &button);
-  void OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mode);
-};
+Widget *
+CreatePolarConfigPanel();
 
 #endif /* POLARCONFIGPANEL_HPP */

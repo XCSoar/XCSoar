@@ -6,39 +6,39 @@
     <Label Name="lblPolarInvalid" Caption="Invalid" X="-50" Y="2" Height="16" CaptionColor="0xFF0000" />
 
     <Edit Name="prpPolarV1" Caption="Polar V" Expert="1" X="2" Y="18" Width="130" Height="22" CaptionWidth="80">
-      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="1" OnDataAccess="PolarConfigPanel::OnFieldData" />
+      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="1" OnDataAccess="OnFieldData" />
     </Edit>
     <Edit Name="prpPolarV2" Caption=" " Expert="1" X="132" Y="18" Width="50" Height="22">
-      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="1" OnDataAccess="PolarConfigPanel::OnFieldData" />
+      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="1" OnDataAccess="OnFieldData" />
     </Edit>
     <Edit Name="prpPolarV3" Caption=" " Expert="1" X="182" Y="18" Width="50" Height="22">
-      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="1" OnDataAccess="PolarConfigPanel::OnFieldData" />
+      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="1" OnDataAccess="OnFieldData" />
     </Edit>
 
     <Edit Name="prpPolarW1" Caption="Polar W" Expert="1" X="2" Y="40" Width="130" Height="22" CaptionWidth="80">
-      <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
+      <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="OnFieldData" />
     </Edit>
     <Edit Name="prpPolarW2" Caption=" " Expert="1" X="132" Y="40" Width="50" Height="22">
-      <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
+      <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="OnFieldData" />
     </Edit>
     <Edit Name="prpPolarW3" Caption=" " Expert="1" X="182" Y="40" Width="50" Height="22">
-      <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
+      <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="OnFieldData" />
     </Edit>
 
     <Edit Name="prpPolarReferenceMass" Caption="Reference mass" Expert="1" Y="62" Width="-2" Height="22" CaptionWidth="139"
       Help="Reference weight at which the given polar is valid.">
-      <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
+      <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="OnFieldData" />
     </Edit>
     
     <Edit Name="prpPolarDryMass" Caption="Dry mass" Expert="1" Y="84" Width="-2" Height="22" CaptionWidth="139"
       Help="Dry mass of the glider (pilot + empty mass).">
-      <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
+      <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="OnFieldData" />
     </Edit>
   </Panel>
 
   <Edit Name="prpPolarWingArea" Caption="Wing area" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
     Help="Optional specification of the wing area.">
-    <DataField DataType="double" DisplayFormat="%.1f m&#178;" EditFormat="%.1f" Min="0" Max="20" Step="0.1" OnDataAccess="PolarConfigPanel::OnFieldData" />
+    <DataField DataType="double" DisplayFormat="%.1f m&#178;" EditFormat="%.1f" Min="0" Max="20" Step="0.1" OnDataAccess="OnFieldData" />
   </Edit>
 
   <Edit Name="prpMaxManoeuveringSpeed" Caption="V rough air" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
@@ -53,7 +53,7 @@
 
   <Edit Name="prpPolarMaxBallast" Caption="Max. ballast" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
     Help="Optional the amount of water ballast XCSoar refers to as 100% ballast. Set to zero if it does not apply.">
-    <DataField DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" Min="0" Max="500" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
+    <DataField DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" Min="0" Max="500" Step="5" OnDataAccess="OnFieldData" />
   </Edit>
 
   <Edit Name="prpBallastSecsToEmpty" Caption="Dump time" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"

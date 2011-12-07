@@ -22,18 +22,22 @@ Copyright_License {
 */
 
 #include "PolarConfigPanel.hpp"
+#include "ConfigPanel.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Float.hpp"
 #include "DataField/ComboList.hpp"
 #include "DataField/FileReader.hpp"
-#include "Form/Form.hpp"
+#include "Form/XMLWidget.hpp"
 #include "Form/Button.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/TextEntry.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 #include "Screen/SingleWindow.hpp"
+#include "Screen/Layout.hpp"
 #include "Polar/PolarStore.hpp"
 #include "Polar/PolarFileGlue.hpp"
 #include "Polar/PolarGlue.hpp"
@@ -56,16 +60,37 @@ Copyright_License {
 #include <cstdio>
 #include <windef.h> /* for MAX_PATH */
 
-static WndForm* wf = NULL;
-static WndButton* buttonList = NULL;
-static WndButton* buttonImport = NULL;
-static WndButton* buttonExport = NULL;
-static bool loading = false;
+class PolarConfigPanel : public XMLWidget {
+  bool loading;
+  WndButton *buttonList, *buttonImport, *buttonExport;
 
-static void
-SetLiftFieldStepAndMax(const TCHAR *control)
+  void SetLiftFieldStepAndMax(const TCHAR *control);
+  void UpdatePolarPoints(fixed v1, fixed v2, fixed v3,
+                         fixed w1, fixed w2, fixed w3);
+  void UpdatePolarTitle();
+  void UpdatePolarInvalidLabel();
+  void SetVisible(bool active);
+
+public:
+  void LoadInternal();
+  void LoadFromFile();
+  void Export();
+  void DataChanged();
+
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+};
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static PolarConfigPanel *instance;
+
+void
+PolarConfigPanel::SetLiftFieldStepAndMax(const TCHAR *control)
 {
-  WndProperty *ctl = (WndProperty *)wf->FindByName(control);
+  WndProperty *ctl = (WndProperty *)form.FindByName(control);
   DataFieldFloat* df = (DataFieldFloat*)ctl->GetDataField();
   switch (Units::current.vertical_speed_unit) {
     case unFeetPerMinute:
@@ -85,66 +110,66 @@ SetLiftFieldStepAndMax(const TCHAR *control)
   }
 }
 
-static void
-UpdatePolarPoints(fixed v1, fixed v2, fixed v3,
-                  fixed w1, fixed w2, fixed w3)
+void
+PolarConfigPanel::UpdatePolarPoints(fixed v1, fixed v2, fixed v3,
+                                    fixed w1, fixed w2, fixed w3)
 {
-  LoadFormProperty(*wf, _T("prpPolarV1"), ugHorizontalSpeed, v1);
-  LoadFormProperty(*wf, _T("prpPolarV2"), ugHorizontalSpeed, v2);
-  LoadFormProperty(*wf, _T("prpPolarV3"), ugHorizontalSpeed, v3);
+  LoadFormProperty(form, _T("prpPolarV1"), ugHorizontalSpeed, v1);
+  LoadFormProperty(form, _T("prpPolarV2"), ugHorizontalSpeed, v2);
+  LoadFormProperty(form, _T("prpPolarV3"), ugHorizontalSpeed, v3);
 
-  LoadFormProperty(*wf, _T("prpPolarW1"), ugVerticalSpeed, w1);
-  LoadFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed, w2);
-  LoadFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, w3);
+  LoadFormProperty(form, _T("prpPolarW1"), ugVerticalSpeed, w1);
+  LoadFormProperty(form, _T("prpPolarW2"), ugVerticalSpeed, w2);
+  LoadFormProperty(form, _T("prpPolarW3"), ugVerticalSpeed, w3);
 }
 
-static void
-UpdatePolarTitle()
+void
+PolarConfigPanel::UpdatePolarTitle()
 {
   StaticString<100> caption(_("Polar"));
   caption += _T(": ");
   caption += CommonInterface::SettingsComputer().plane.polar_name;
 
-  ((WndFrame *)wf->FindByName(_T("lblPolar")))->SetCaption(caption);
+  ((WndFrame *)form.FindByName(_T("lblPolar")))->SetCaption(caption);
 }
 
 static bool
-SaveFormToPolar(PolarInfo &polar)
+SaveFormToPolar(SubForm &form, PolarInfo &polar)
 {
-  bool changed = SaveFormProperty(*wf, _T("prpPolarV1"), ugHorizontalSpeed, polar.v1);
-  changed |= SaveFormProperty(*wf, _T("prpPolarV2"), ugHorizontalSpeed, polar.v2);
-  changed |= SaveFormProperty(*wf, _T("prpPolarV3"), ugHorizontalSpeed, polar.v3);
+  bool changed = SaveFormProperty(form, _T("prpPolarV1"), ugHorizontalSpeed, polar.v1);
+  changed |= SaveFormProperty(form, _T("prpPolarV2"), ugHorizontalSpeed, polar.v2);
+  changed |= SaveFormProperty(form, _T("prpPolarV3"), ugHorizontalSpeed, polar.v3);
 
-  changed |= SaveFormProperty(*wf, _T("prpPolarW1"), ugVerticalSpeed, polar.w1);
-  changed |= SaveFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed, polar.w2);
-  changed |= SaveFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, polar.w3);
+  changed |= SaveFormProperty(form, _T("prpPolarW1"), ugVerticalSpeed, polar.w1);
+  changed |= SaveFormProperty(form, _T("prpPolarW2"), ugVerticalSpeed, polar.w2);
+  changed |= SaveFormProperty(form, _T("prpPolarW3"), ugVerticalSpeed, polar.w3);
 
-  changed |= SaveFormProperty(*wf, _T("prpPolarReferenceMass"), polar.reference_mass);
-  changed |= SaveFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);
+  changed |= SaveFormProperty(form, _T("prpPolarReferenceMass"), polar.reference_mass);
+  changed |= SaveFormProperty(form, _T("prpPolarMaxBallast"), polar.max_ballast);
 
-  changed |= SaveFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);
-  changed |= SaveFormProperty(*wf, _T("prpMaxManoeuveringSpeed"),
+  changed |= SaveFormProperty(form, _T("prpPolarWingArea"), polar.wing_area);
+  changed |= SaveFormProperty(form, _T("prpMaxManoeuveringSpeed"),
                               ugHorizontalSpeed, polar.v_no);
 
   return changed;
 }
 
-static void
-UpdatePolarInvalidLabel()
+void
+PolarConfigPanel::UpdatePolarInvalidLabel()
 {
-  fixed v1 = GetFormValueFixed(*wf, _T("prpPolarV1"));
-  fixed v2 = GetFormValueFixed(*wf, _T("prpPolarV2"));
-  fixed v3 = GetFormValueFixed(*wf, _T("prpPolarV3"));
-  fixed w1 = GetFormValueFixed(*wf, _T("prpPolarW1"));
-  fixed w2 = GetFormValueFixed(*wf, _T("prpPolarW2"));
-  fixed w3 = GetFormValueFixed(*wf, _T("prpPolarW3"));
+  fixed v1 = GetFormValueFixed(form, _T("prpPolarV1"));
+  fixed v2 = GetFormValueFixed(form, _T("prpPolarV2"));
+  fixed v3 = GetFormValueFixed(form, _T("prpPolarV3"));
+  fixed w1 = GetFormValueFixed(form, _T("prpPolarW1"));
+  fixed w2 = GetFormValueFixed(form, _T("prpPolarW2"));
+  fixed w3 = GetFormValueFixed(form, _T("prpPolarW3"));
 
   PolarCoefficients coeff = PolarCoefficients::From3VW(v1, v2, v3, w1, w2, w3);
-  ((WndFrame *)wf->FindByName(_T("lblPolarInvalid")))->set_visible(!coeff.IsValid());
+  ((WndFrame *)form.FindByName(_T("lblPolarInvalid")))->set_visible(!coeff.IsValid());
 }
 
 void
-PolarConfigPanel::OnLoadInternal(WndButton &button)
+PolarConfigPanel::LoadInternal()
 {
   ComboList list;
   unsigned len = PolarStore::Count();
@@ -164,24 +189,30 @@ PolarConfigPanel::OnLoadInternal(WndButton &button)
                       Units::ToSysUnit(fixed(item.v3), unKiloMeterPerHour),
                       fixed(item.w1), fixed(item.w2), fixed(item.w3));
 
-    LoadFormProperty(*wf, _T("prpPolarReferenceMass"), fixed(item.reference_mass));
-    LoadFormProperty(*wf, _T("prpPolarDryMass"), fixed(item.reference_mass));
-    LoadFormProperty(*wf, _T("prpPolarMaxBallast"), fixed(item.max_ballast));
+    LoadFormProperty(form, _T("prpPolarReferenceMass"), fixed(item.reference_mass));
+    LoadFormProperty(form, _T("prpPolarDryMass"), fixed(item.reference_mass));
+    LoadFormProperty(form, _T("prpPolarMaxBallast"), fixed(item.max_ballast));
 
     if (item.wing_area > 0.0)
-      LoadFormProperty(*wf, _T("prpPolarWingArea"), fixed(item.wing_area));
+      LoadFormProperty(form, _T("prpPolarWingArea"), fixed(item.wing_area));
 
     if (item.v_no > 0.0)
-      LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
+      LoadFormProperty(form, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
                        fixed(item.v_no));
 
     if (item.contest_handicap > 0)
-      LoadFormProperty(*wf, _T("prpHandicap"), item.contest_handicap);
+      LoadFormProperty(form, _T("prpHandicap"), item.contest_handicap);
 
     CommonInterface::SetSettingsComputer().plane.polar_name = item.name;
     UpdatePolarTitle();
     UpdatePolarInvalidLabel();
   }
+}
+
+static void
+OnLoadInternal(WndButton &button)
+{
+  instance->LoadInternal();
 }
 
 class PolarFileVisitor: public File::Visitor
@@ -198,7 +229,7 @@ public:
 };
 
 void
-PolarConfigPanel::OnLoadFromFile(WndButton &button)
+PolarConfigPanel::LoadFromFile()
 {
   ComboList list;
   PolarFileVisitor fv(list);
@@ -219,15 +250,15 @@ PolarConfigPanel::OnLoadFromFile(WndButton &button)
 
     UpdatePolarPoints(polar.v1, polar.v2, polar.v3, polar.w1, polar.w2, polar.w3);
 
-    LoadFormProperty(*wf, _T("prpPolarReferenceMass"), polar.reference_mass);
-    LoadFormProperty(*wf, _T("prpPolarDryMass"), polar.reference_mass);
-    LoadFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);
+    LoadFormProperty(form, _T("prpPolarReferenceMass"), polar.reference_mass);
+    LoadFormProperty(form, _T("prpPolarDryMass"), polar.reference_mass);
+    LoadFormProperty(form, _T("prpPolarMaxBallast"), polar.max_ballast);
 
     if (positive(polar.wing_area))
-      LoadFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);
+      LoadFormProperty(form, _T("prpPolarWingArea"), polar.wing_area);
 
     if (positive(polar.v_no))
-      LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
+      LoadFormProperty(form, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
                        polar.v_no);
 
     CommonInterface::SetSettingsComputer().plane.polar_name =
@@ -237,11 +268,17 @@ PolarConfigPanel::OnLoadFromFile(WndButton &button)
   }
 }
 
+static void
+OnLoadFromFile(WndButton &button)
+{
+  instance->LoadFromFile();
+}
+
 void
-PolarConfigPanel::OnExport(WndButton &button)
+PolarConfigPanel::Export()
 {
   TCHAR filename[69] = _T("");
-  if (!dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
+  if (!dlgTextEntryShowModal(*(SingleWindow *)GetWindow()->get_root_owner(),
                              filename, 64, _("Polar name")))
     return;
 
@@ -250,28 +287,34 @@ PolarConfigPanel::OnExport(WndButton &button)
   LocalPath(path, filename);
 
   PolarInfo polar;
-  SaveFormToPolar(polar);
+  SaveFormToPolar(form, polar);
   if (PolarGlue::SaveToFile(polar, path)) {
     CommonInterface::SetSettingsComputer().plane.polar_name = filename;
     UpdatePolarTitle();
   }
 }
 
-void
-PolarConfigPanel::OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
+static void
+OnExport(WndButton &button)
 {
-  switch (Mode) {
-  case DataField::daChange:
-    if (!loading)
-      CommonInterface::SetSettingsComputer().plane.polar_name = _T("Custom");
+  instance->Export();
+}
 
-    UpdatePolarTitle();
-    UpdatePolarInvalidLabel();
-    break;
+void
+PolarConfigPanel::DataChanged()
+{
+  if (!loading)
+    CommonInterface::SetSettingsComputer().plane.polar_name = _T("Custom");
 
-  case DataField::daSpecial:
-    return;
-  }
+  UpdatePolarTitle();
+  UpdatePolarInvalidLabel();
+}
+
+static void
+OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  if (Mode == DataField::daChange)
+    instance->DataChanged();
 }
 
 void
@@ -287,30 +330,50 @@ PolarConfigPanel::SetVisible(bool active)
     buttonExport->set_visible(active);
 }
 
-bool
-PolarConfigPanel::PreShow()
+void
+PolarConfigPanel::Show(const PixelRect &rc)
 {
   PolarConfigPanel::SetVisible(true);
-  return true;
-}
-
-bool
-PolarConfigPanel::PreHide()
-{
-  PolarConfigPanel::SetVisible(false);
-  return true;
+  XMLWidget::Show(rc);
 }
 
 void
-PolarConfigPanel::Init(WndForm *_wf)
+PolarConfigPanel::Hide()
 {
+  XMLWidget::Hide();
+  PolarConfigPanel::SetVisible(false);
+}
+
+static gcc_constexpr_data CallBackTableEntry polar_callbacks[] = {
+  DeclareCallBackEntry(OnFieldData),
+  DeclareCallBackEntry(NULL)
+};
+
+void
+PolarConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  instance = this;
   loading = true;
 
-  assert(_wf != NULL);
-  wf = _wf;
-  buttonList = ((WndButton *)wf->FindByName(_T("cmdLoadInternalPolar")));
-  buttonImport = ((WndButton *)wf->FindByName(_T("cmdLoadPolarFile")));
-  buttonExport = ((WndButton *)wf->FindByName(_T("cmdSavePolarFile")));
+  LoadWindow(polar_callbacks, parent,
+             Layout::landscape
+             ? _T("IDR_XML_POLARCONFIGPANEL_L")
+             : _T("IDR_XML_POLARCONFIGPANEL"));
+
+  buttonList = (WndButton *)ConfigPanel::GetForm()
+    .FindByName(_T("cmdLoadInternalPolar"));
+  assert(buttonList != NULL);
+  buttonList->SetOnClickNotify(OnLoadInternal);
+
+  buttonImport = (WndButton *)ConfigPanel::GetForm()
+    .FindByName(_T("cmdLoadPolarFile"));
+  assert(buttonImport != NULL);
+  buttonImport->SetOnClickNotify(OnLoadFromFile);
+
+  buttonExport = (WndButton *)ConfigPanel::GetForm()
+    .FindByName(_T("cmdSavePolarFile"));
+  assert(buttonExport != NULL);
+  buttonExport->SetOnClickNotify(OnExport);
 
   SetLiftFieldStepAndMax(_T("prpPolarW1"));
   SetLiftFieldStepAndMax(_T("prpPolarW2"));
@@ -320,69 +383,70 @@ PolarConfigPanel::Init(WndForm *_wf)
   UpdatePolarPoints(settings.plane.v1, settings.plane.v2, settings.plane.v3,
                     settings.plane.w1, settings.plane.w2, settings.plane.w3);
 
-  LoadFormProperty(*wf, _T("prpPolarReferenceMass"), settings.plane.reference_mass);
-  LoadFormProperty(*wf, _T("prpPolarDryMass"), settings.plane.dry_mass);
-  LoadFormProperty(*wf, _T("prpPolarMaxBallast"), settings.plane.max_ballast);
+  LoadFormProperty(form, _T("prpPolarReferenceMass"),
+                   settings.plane.reference_mass);
+  LoadFormProperty(form, _T("prpPolarDryMass"), settings.plane.dry_mass);
+  LoadFormProperty(form, _T("prpPolarMaxBallast"), settings.plane.max_ballast);
 
-  LoadFormProperty(*wf, _T("prpPolarWingArea"), settings.plane.wing_area);
-  LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
+  LoadFormProperty(form, _T("prpPolarWingArea"), settings.plane.wing_area);
+  LoadFormProperty(form, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
                    settings.plane.max_speed);
 
   UpdatePolarTitle();
   UpdatePolarInvalidLabel();
 
-
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
 
-  LoadFormProperty(*wf, _T("prpHandicap"),
+  LoadFormProperty(form, _T("prpHandicap"),
                    settings_computer.plane.handicap);
 
-  LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
+  LoadFormProperty(form, _T("prpBallastSecsToEmpty"),
                    settings_computer.plane.dump_time);
 
   loading = false;
 }
 
 bool
-PolarConfigPanel::Save()
+PolarConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false;
+
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
 
-  changed |= SaveFormProperty(*wf, _T("prpPolarV1"), ugHorizontalSpeed,
+  changed |= SaveFormProperty(form, _T("prpPolarV1"), ugHorizontalSpeed,
                               settings_computer.plane.v1);
-  changed |= SaveFormProperty(*wf, _T("prpPolarV2"), ugHorizontalSpeed,
+  changed |= SaveFormProperty(form, _T("prpPolarV2"), ugHorizontalSpeed,
                               settings_computer.plane.v2);
-  changed |= SaveFormProperty(*wf, _T("prpPolarV3"), ugHorizontalSpeed,
+  changed |= SaveFormProperty(form, _T("prpPolarV3"), ugHorizontalSpeed,
                               settings_computer.plane.v3);
 
-  changed |= SaveFormProperty(*wf, _T("prpPolarW1"), ugVerticalSpeed,
+  changed |= SaveFormProperty(form, _T("prpPolarW1"), ugVerticalSpeed,
                               settings_computer.plane.w1);
-  changed |= SaveFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed,
+  changed |= SaveFormProperty(form, _T("prpPolarW2"), ugVerticalSpeed,
                               settings_computer.plane.w2);
-  changed |= SaveFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed,
+  changed |= SaveFormProperty(form, _T("prpPolarW3"), ugVerticalSpeed,
                               settings_computer.plane.w3);
 
-  changed |= SaveFormProperty(*wf, _T("prpPolarReferenceMass"),
+  changed |= SaveFormProperty(form, _T("prpPolarReferenceMass"),
                               settings_computer.plane.reference_mass);
 
-  changed |= SaveFormProperty(*wf, _T("prpPolarDryMass"),
+  changed |= SaveFormProperty(form, _T("prpPolarDryMass"),
                               settings_computer.plane.dry_mass);
 
-  changed |= SaveFormProperty(*wf, _T("prpPolarMaxBallast"),
+  changed |= SaveFormProperty(form, _T("prpPolarMaxBallast"),
                               settings_computer.plane.max_ballast);
 
-  changed |= SaveFormProperty(*wf, _T("prpPolarWingArea"),
+  changed |= SaveFormProperty(form, _T("prpPolarWingArea"),
                               settings_computer.plane.wing_area);
 
-  changed |= SaveFormProperty(*wf, _T("prpMaxManoeuveringSpeed"),
+  changed |= SaveFormProperty(form, _T("prpMaxManoeuveringSpeed"),
                               ugHorizontalSpeed,
                               settings_computer.plane.max_speed);
 
-  changed |= SaveFormProperty(*wf, _T("prpHandicap"),
+  changed |= SaveFormProperty(form, _T("prpHandicap"),
                               settings_computer.plane.handicap);
 
-  changed |= SaveFormProperty(*wf, _T("prpBallastSecsToEmpty"),
+  changed |= SaveFormProperty(form, _T("prpBallastSecsToEmpty"),
                               settings_computer.plane.dump_time);
 
   if (changed) {
@@ -394,5 +458,12 @@ PolarConfigPanel::Save()
       protected_task_manager->SetGlidePolar(settings_computer.glide_polar_task);
   }
 
-  return changed;
+  _changed |= changed;
+  return true;
+}
+
+Widget *
+CreatePolarConfigPanel()
+{
+  return new PolarConfigPanel();
 }

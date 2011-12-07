@@ -98,7 +98,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("InfoBox Pages"), 5, NULL, NULL, NULL, CreatePagesConfigPanel },
   {N_("InfoBox Modes"), 5, NULL, NULL, NULL, CreateInfoBoxesConfigPanel },
   {N_("Devices"), 6, NULL, NULL, NULL, CreateDevicesConfigPanel },
-  {N_("Polar"), 6, PolarConfigPanel::PreShow, PolarConfigPanel::PreHide, N_("IDR_XML_POLARCONFIGPANEL")},
+  {N_("Polar"), 6, NULL, NULL, NULL, CreatePolarConfigPanel },
   {N_("Logger"), 6, NULL, NULL, NULL, CreateLoggerConfigPanel },
   {N_("Units"), 6, NULL, NULL, NULL, CreateUnitsConfigPanel },
   // Important: all pages after Units in this list must not have data fields that are
@@ -186,12 +186,6 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 }
 
 static void
-setVariables()
-{
-  PolarConfigPanel::Init(wf);
-}
-
-static void
 PrepareConfigurationMenu()
 {
   assert (wf != NULL);
@@ -207,10 +201,6 @@ PrepareConfigurationMenu()
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
-  DeclareCallBackEntry(PolarConfigPanel::OnLoadInternal),
-  DeclareCallBackEntry(PolarConfigPanel::OnLoadFromFile),
-  DeclareCallBackEntry(PolarConfigPanel::OnExport),
-  DeclareCallBackEntry(PolarConfigPanel::OnFieldData),
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
@@ -238,8 +228,6 @@ PrepareConfigurationDialog()
 
   PrepareConfigurationMenu();
 
-  setVariables();
-
   wTabMenu->GotoMenuPage();
   /* restore last selected menu item */
   static bool Initialized = false;
@@ -262,7 +250,6 @@ void dlgConfigurationShowModal(void)
   // below after exit.
   bool changed = false;
   bool requirerestart = false;
-  changed |= PolarConfigPanel::Save();
   wTabMenu->Save(changed, requirerestart);
 
   if (changed) {
