@@ -29,47 +29,88 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Form/Form.hpp"
+#include "DataField/Base.hpp"
+#include "Form/XMLWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 
-static WndForm* wf = NULL;
 
-static void
-ShowRouteControls(bool show)
+class RouteConfigPanel : public XMLWidget {
+
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+  void ShowRouteControls(bool show);
+  void ShowReachControls(bool show);
+
+};
+
+/** XXX this hack is needed because the form callbacks don't get a
+    context pointer - please refactor! */
+static RouteConfigPanel *instance;
+
+void
+RouteConfigPanel::Show(const PixelRect &rc)
 {
-  ShowFormControl(*wf, _T("prpRoutePlannerAllowClimb"), show);
-  ShowFormControl(*wf, _T("prpRoutePlannerUseCeiling"), show);
-}
-
-static void
-ShowReachControls(bool show)
-{
-  ShowFormControl(*wf, _T("prpFinalGlideTerrain"), show);
-  ShowFormControl(*wf, _T("prpReachPolarMode"), show);
+  XMLWidget::Show(rc);
 }
 
 void
-RouteConfigPanel::OnRouteMode(DataField *Sender,
-                              DataField::DataAccessKind_t Mode)
+RouteConfigPanel::Hide()
+{
+  XMLWidget::Hide();
+}
+
+void
+RouteConfigPanel::ShowRouteControls(bool show)
+{
+  ShowFormControl(form, _T("prpRoutePlannerAllowClimb"), show);
+  ShowFormControl(form, _T("prpRoutePlannerUseCeiling"), show);
+}
+
+void
+RouteConfigPanel::ShowReachControls(bool show)
+{
+  ShowFormControl(form, _T("prpFinalGlideTerrain"), show);
+  ShowFormControl(form, _T("prpReachPolarMode"), show);
+}
+
+static void
+OnRouteMode(DataField *Sender,
+            DataField::DataAccessKind_t Mode)
 {
   const DataFieldEnum &df = *(const DataFieldEnum *)Sender;
   RoutePlannerConfig::Mode mode = (RoutePlannerConfig::Mode)df.GetAsInteger();
-  ShowRouteControls(mode != RoutePlannerConfig::rpNone);
+  instance->ShowRouteControls(mode != RoutePlannerConfig::rpNone);
 }
 
-void
-RouteConfigPanel::OnReachMode(DataField *Sender,
-                              DataField::DataAccessKind_t Mode)
+static void
+OnReachMode(DataField *Sender,
+            DataField::DataAccessKind_t Mode)
 {
   const DataFieldEnum &df = *(const DataFieldEnum *)Sender;
   RoutePlannerConfig::ReachMode mode =
     (RoutePlannerConfig::ReachMode)df.GetAsInteger();
-  ShowReachControls(mode != RoutePlannerConfig::rmOff);
+  instance->ShowReachControls(mode != RoutePlannerConfig::rmOff);
 }
 
+gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnRouteMode),
+  DeclareCallBackEntry(OnReachMode),
+  DeclareCallBackEntry(NULL)
+};
+
 void
-RouteConfigPanel::Init(WndForm *_wf)
+RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(_wf != NULL);
-  wf = _wf;
+  instance = this;
+  LoadWindow(CallBackTable, parent,
+             Layout::landscape ? _T("IDR_XML_ROUTECONFIGPANEL") :
+                               _T("IDR_XML_ROUTECONFIGPANEL_L"));
 
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
   const RoutePlannerConfig &route_planner =
@@ -82,7 +123,7 @@ RouteConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
 
-  LoadFormProperty(*wf, _T("prpFinalGlideTerrain"), final_glide_terrain_list,
+  LoadFormProperty(form, _T("prpFinalGlideTerrain"), final_glide_terrain_list,
                    settings_computer.final_glide_terrain);
 
   static gcc_constexpr_data StaticEnumChoice route_mode_list[] = {
@@ -93,13 +134,13 @@ RouteConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
 
-  LoadFormProperty(*wf, _T("prpRoutePlannerMode"), route_mode_list,
+  LoadFormProperty(form, _T("prpRoutePlannerMode"), route_mode_list,
                    route_planner.mode);
 
-  LoadFormProperty(*wf, _T("prpRoutePlannerAllowClimb"),
+  LoadFormProperty(form, _T("prpRoutePlannerAllowClimb"),
                    route_planner.allow_climb);
 
-  LoadFormProperty(*wf, _T("prpRoutePlannerUseCeiling"),
+  LoadFormProperty(form, _T("prpRoutePlannerUseCeiling"),
                    route_planner.use_ceiling);
 
   static gcc_constexpr_data StaticEnumChoice turning_reach_list[] = {
@@ -109,7 +150,7 @@ RouteConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
 
-  LoadFormProperty(*wf, _T("prpTurningReach"), turning_reach_list,
+  LoadFormProperty(form, _T("prpTurningReach"), turning_reach_list,
                    route_planner.reach_calc_mode);
 
   static gcc_constexpr_data StaticEnumChoice reach_polar_list[] = {
@@ -118,44 +159,51 @@ RouteConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
 
-  LoadFormProperty(*wf, _T("prpReachPolarMode"), reach_polar_list,
+  LoadFormProperty(form, _T("prpReachPolarMode"), reach_polar_list,
                    route_planner.reach_polar_mode);
 
   ShowRouteControls(route_planner.mode != RoutePlannerConfig::rpNone);
   ShowReachControls(route_planner.reach_calc_mode != RoutePlannerConfig::rmOff);
 }
 
-
 bool
-RouteConfigPanel::Save()
+RouteConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
-  bool changed = false;
+  bool changed = false, require_restart = false;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
   RoutePlannerConfig &route_planner = settings_computer.task.route_planner;
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpRoutePlannerMode"),
+  changed |= SaveFormPropertyEnum(form, _T("prpRoutePlannerMode"),
                                   szProfileRoutePlannerMode,
                                   route_planner.mode);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpReachPolarMode"),
+  changed |= SaveFormPropertyEnum(form, _T("prpReachPolarMode"),
                                   szProfileReachPolarMode,
                                   route_planner.reach_polar_mode);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpFinalGlideTerrain"),
+  changed |= SaveFormPropertyEnum(form, _T("prpFinalGlideTerrain"),
                                   szProfileFinalGlideTerrain,
                                   settings_computer.final_glide_terrain);
 
-  changed |= SaveFormProperty(*wf, _T("prpRoutePlannerAllowClimb"),
+  changed |= SaveFormProperty(form, _T("prpRoutePlannerAllowClimb"),
                               szProfileRoutePlannerAllowClimb,
                               route_planner.allow_climb);
 
-  changed |= SaveFormProperty(*wf, _T("prpRoutePlannerUseCeiling"),
+  changed |= SaveFormProperty(form, _T("prpRoutePlannerUseCeiling"),
                               szProfileRoutePlannerUseCeiling,
                               route_planner.use_ceiling);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpTurningReach"),
+  changed |= SaveFormPropertyEnum(form, _T("prpTurningReach"),
                                   szProfileTurningReach,
                                   route_planner.reach_calc_mode);
+  _changed |= changed;
+  _require_restart |= require_restart;
 
-  return changed;
+  return true;
+}
+
+Widget *
+CreateRouteConfigPanel()
+{
+  return new RouteConfigPanel();
 }

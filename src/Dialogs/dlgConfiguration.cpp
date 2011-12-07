@@ -88,7 +88,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Airspace"), 1, NULL, NULL, NULL, CreateAirspaceConfigPanel },
   {N_("Safety Factors"), 2, NULL, NULL, N_("IDR_XML_SAFETYFACTORSCONFIGPANEL")},
   {N_("Glide Computer"), 2, NULL, NULL, NULL, CreateGlideComputerConfigPanel },
-  {N_("Route"), 2, NULL, NULL, N_("IDR_XML_ROUTECONFIGPANEL")},
+  {N_("Route"), 2, NULL, NULL, NULL, CreateRouteConfigPanel },
   {N_("FLARM, Other"), 3, NULL, NULL, NULL, CreateGaugesConfigPanel },
   {N_("Vario"), 3, NULL, NULL, N_("IDR_XML_VARIOCONFIGPANEL")},
   {N_("Task Rules"), 4, NULL, NULL, NULL, CreateTaskRulesConfigPanel },
@@ -196,7 +196,6 @@ setVariables()
   WaypointDisplayConfigPanel::Init(wf);
   SymbolsConfigPanel::Init(wf);
   SafetyFactorsConfigPanel::Init(wf);
-  RouteConfigPanel::Init(wf);
   VarioConfigPanel::Init(wf);
   if (HasModelType())
     ExperimentalConfigPanel::Init(wf);
@@ -219,8 +218,6 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(SymbolsConfigPanel::OnTrailLength),
-  DeclareCallBackEntry(RouteConfigPanel::OnRouteMode),
-  DeclareCallBackEntry(RouteConfigPanel::OnReachMode),
   DeclareCallBackEntry(PolarConfigPanel::OnLoadInternal),
   DeclareCallBackEntry(PolarConfigPanel::OnLoadFromFile),
   DeclareCallBackEntry(PolarConfigPanel::OnExport),
@@ -292,7 +289,6 @@ void dlgConfigurationShowModal(void)
   changed |= WaypointDisplayConfigPanel::Save();
   changed |= SymbolsConfigPanel::Save();
   changed |= SafetyFactorsConfigPanel::Save();
-  changed |= RouteConfigPanel::Save();
   changed |= VarioConfigPanel::Save();
   if (HasModelType())
     changed |= ExperimentalConfigPanel::Save(requirerestart);
