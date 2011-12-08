@@ -29,7 +29,6 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Interface.hpp"
-#include "MainWindow.hpp"
 #include "InfoBoxesConfigPanel.hpp"
 #include "LogFile.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"

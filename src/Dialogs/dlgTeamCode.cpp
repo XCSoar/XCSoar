@@ -25,12 +25,12 @@
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/Waypoint.hpp"
+#include "UIGlobals.hpp"
 #include "DataField/Float.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "SettingsComputer.hpp"
 #include "Screen/Layout.hpp"
 #include "DataField/Base.hpp"
-#include "MainWindow.hpp"
 #include "StringUtil.hpp"
 #include "TeamCodeCalculation.hpp"
 #include "Compiler.h"
@@ -80,7 +80,7 @@ Update()
 static void
 OnSetWaypointClicked(gcc_unused WndButton &button)
 {
-  const Waypoint* wp = dlgWaypointSelect(XCSoarInterface::main_window,
+  const Waypoint* wp = dlgWaypointSelect(UIGlobals::GetMainWindow(),
                                          XCSoarInterface::Basic().location);
   if (wp != NULL) {
     XCSoarInterface::SetSettingsComputer().team_code_reference_waypoint = wp->id;
@@ -136,8 +136,9 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
       XCSoarInterface::SettingsComputer().team_flarm_callsign, ids, 30);
 
   if (count > 0) {
-    const FlarmId *id = dlgFlarmDetailsListShowModal(
-        XCSoarInterface::main_window, _("Set new teammate:"), ids, count);
+    const FlarmId *id =
+      dlgFlarmDetailsListShowModal(UIGlobals::GetMainWindow(),
+                                   _("Set new teammate:"), ids, count);
 
     if (id != NULL && id->IsDefined()) {
       settings.team_flarm_id = *id;
@@ -177,7 +178,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 void
 dlgTeamCodeShowModal(void)
 {
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_TEAMCODE_L") :
                                       _T("IDR_XML_TEAMCODE"));
 

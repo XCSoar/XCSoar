@@ -30,7 +30,6 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "StringUtil.hpp"
 

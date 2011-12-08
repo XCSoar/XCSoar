@@ -23,12 +23,12 @@ Copyright_License {
 
 #include "Dialogs/Vega.hpp"
 #include "Dialogs/Internal.hpp"
+#include "UIGlobals.hpp"
 #include "Units/Units.hpp"
 #include "Device/device.hpp"
 #include "Math/FastMath.h"
 #include "DataField/Boolean.hpp"
 #include "DataField/Float.hpp"
-#include "MainWindow.hpp"
 #include "PeriodClock.hpp"
 #include "Form/Util.hpp"
 
@@ -115,7 +115,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[]={
 void
 dlgVegaDemoShowModal()
 {
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   _T("IDR_XML_VEGADEMO"));
 
   if (!wf) return;

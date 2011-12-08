@@ -29,7 +29,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Draw.hpp"
 #include "Form/Button.hpp"
-#include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "SettingsMap.hpp"
 #include "Asset.hpp"

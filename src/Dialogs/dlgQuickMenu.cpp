@@ -26,11 +26,12 @@ Copyright_License {
 #include "Form/CustomButton.hpp"
 #include "InputEvents.hpp"
 #include "Screen/Key.h"
-#include "Look/Look.hpp"
-#include "MainWindow.hpp"
-#include "Interface.hpp"
+#include "Screen/SingleWindow.hpp"
+#include "Form/Form.hpp"
 #include "Util/TrivialArray.hpp"
+#include "Util/Macros.hpp"
 #include "ButtonLabel.hpp"
+#include "UIGlobals.hpp"
 
 #include <stdio.h>
 
@@ -132,7 +133,7 @@ dlgQuickMenuShowModal(SingleWindow &parent)
   if (menu == NULL)
     return;
 
-  const DialogLook &dialog_look = CommonInterface::main_window.GetLook().dialog;
+  const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
   WindowStyle dialogStyle;
   dialogStyle.hide();

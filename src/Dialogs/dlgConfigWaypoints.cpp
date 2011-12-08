@@ -24,9 +24,9 @@ Copyright_License {
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Dialogs.h"
+#include "UIGlobals.hpp"
 #include "Protection.hpp"
 #include "Screen/Layout.hpp"
-#include "MainWindow.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Components.hpp"
@@ -76,7 +76,7 @@ OnWaypointEditClicked(gcc_unused WndButton &Sender)
     return;
   }
 
-  const Waypoint *way_point = dlgWaypointSelect(XCSoarInterface::main_window,
+  const Waypoint *way_point = dlgWaypointSelect(UIGlobals::GetMainWindow(),
                                                 XCSoarInterface::Basic().location);
   if (way_point) {
     Waypoint wp_copy = *way_point;
@@ -144,7 +144,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 void
 dlgConfigWaypointsShowModal()
 {
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_CONFIG_WAYPOINTS_L") :
                                       _T("IDR_XML_CONFIG_WAYPOINTS"));
   assert(wf != NULL);

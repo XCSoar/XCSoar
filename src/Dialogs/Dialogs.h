@@ -55,7 +55,7 @@ void dlgStatusShowModal(int page);
 void dlgSwitchesShowModal();
 
 void
-dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id);
+dlgInfoBoxAccessShowModal(const int id);
 
 void dlgVoiceShowModal();
 

@@ -21,22 +21,19 @@ Copyright_License {
 }
 */
 
-#ifndef DLGINFOBOXACCESS_HPP
-#define DLGINFOBOXACCESS_HPP
+#include "UIGlobals.hpp"
+#include "Interface.hpp"
+#include "MainWindow.hpp"
+#include "Look/Look.hpp"
 
-class WndForm;
-
-class dlgInfoBoxAccess
+SingleWindow &
+UIGlobals::GetMainWindow()
 {
-public:
-  dlgInfoBoxAccess();
+  return CommonInterface::main_window;
+}
 
-  /**
-   * @returns True if validated, False if window shall remain open
-   */
-  static bool OnClose();
-
-  static void dlgInfoBoxAccessShowModal(const int id);
-};
-
-#endif /* DLGINFOBOXACCESS_H_ */
+const DialogLook &
+UIGlobals::GetDialogLook()
+{
+  return CommonInterface::main_window.GetLook().dialog;
+}

@@ -23,12 +23,12 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
+#include "UIGlobals.hpp"
 #include "Units/Units.hpp"
 #include "Components.hpp"
 #include "Replay/Replay.hpp"
 #include "DataField/FileReader.hpp"
 #include "DataField/Float.hpp"
-#include "MainWindow.hpp"
 
 static WndForm *wf = NULL;
 
@@ -83,8 +83,8 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 void
 dlgLoggerReplayShowModal(void)
 {
-  wf = LoadDialog(CallBackTable,
-                      XCSoarInterface::main_window, _T("IDR_XML_LOGGERREPLAY"));
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+                  _T("IDR_XML_LOGGERREPLAY"));
   if (!wf)
     return;
 

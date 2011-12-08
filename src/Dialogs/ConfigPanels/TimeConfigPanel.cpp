@@ -35,7 +35,6 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
-#include "MainWindow.hpp"
 #include "Asset.hpp"
 #include "Language/Language.hpp"
 #include "DataField/Base.hpp"
@@ -43,7 +42,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Dialogs/XML.hpp"
-
 
 class TimeConfigPanel : public XMLWidget {
 private:

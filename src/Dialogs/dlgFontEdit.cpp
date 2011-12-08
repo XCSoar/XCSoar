@@ -22,11 +22,12 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Screen/SingleWindow.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Integer.hpp"
-#include "MainWindow.hpp"
 #include "Util/StringUtil.hpp"
+#include "UIGlobals.hpp"
 #include "Compiler.h"
 
 #include <stdio.h>
@@ -198,8 +199,8 @@ dlgFontEditShowModal(const TCHAR * FontDescription,
 {
   bool bRetVal = false;
 
-  wf = LoadDialog(CallBackTable,
-                      XCSoarInterface::main_window, _T("IDR_XML_FONTEDIT"));
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+                  _T("IDR_XML_FONTEDIT"));
   if (wf == NULL)
     return false;
 

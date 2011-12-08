@@ -23,12 +23,12 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
+#include "UIGlobals.hpp"
 #include "Form/TabMenu.hpp"
 #include "Screen/Busy.hpp"
 #include "Screen/Key.h"
 #include "Form/CheckBox.hpp"
 #include "Screen/Layout.hpp"
-#include "MainWindow.hpp"
 #include "Profile/Profile.hpp"
 #include "DataField/FileReader.hpp"
 #include "LogFile.hpp"
@@ -211,7 +211,7 @@ PrepareConfigurationDialog()
 {
   gcc_unused ScopeBusyIndicator busy;
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_CONFIGURATION_L") :
                                       _T("IDR_XML_CONFIGURATION"));
   if (wf == NULL)

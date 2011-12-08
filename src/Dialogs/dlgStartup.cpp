@@ -22,13 +22,17 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/Internal.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
+#include "UIGlobals.hpp"
 #include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
+#include "Form/Draw.hpp"
+#include "Form/Edit.hpp"
+#include "DataField/Enum.hpp"
 #include "Gauge/LogoView.hpp"
 #include "DataField/FileReader.hpp"
 #include "LogFile.hpp"
-#include "MainWindow.hpp"
 #include "Asset.hpp"
 #include "StringUtil.hpp"
 #include "LocalPath.hpp"
@@ -36,6 +40,8 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <windef.h> /* for MAX_PATH */
+
+class WndButton;
 
 static WndForm *wf = NULL;
 static LogoView *logo;
@@ -87,7 +93,7 @@ dlgStartupShowModal()
 
   logo = new LogoView();
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_STARTUP_L") :
                                       _T("IDR_XML_STARTUP"));
   assert(wf != NULL);

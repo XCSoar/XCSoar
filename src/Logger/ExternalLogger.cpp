@@ -32,9 +32,7 @@
 #include "Device/List.hpp"
 #include "Device/Driver.hpp"
 #include "LocalPath.hpp"
-#include "Interface.hpp"
-#include "MainWindow.hpp"
-#include "Look/Look.hpp"
+#include "UIGlobals.hpp"
 #include "Operation.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Thread/JobThread.hpp"
@@ -71,8 +69,7 @@ DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration,
                 const Waypoint *home)
 {
   DeclareJob job(device, declaration, home);
-  JobDialog(CommonInterface::main_window,
-            CommonInterface::main_window.GetLook().dialog,
+  JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   return job.GetResult();
 }
@@ -138,8 +135,7 @@ DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
 {
   device.SetBusy(true);
   ReadFlightListJob job(device, flight_list);
-  JobDialog(CommonInterface::main_window,
-            CommonInterface::main_window.GetLook().dialog,
+  JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   device.SetBusy(false);
   return job.GetResult();
@@ -172,8 +168,7 @@ DoDownloadFlight(DeviceDescriptor &device,
 {
   device.SetBusy(true);
   DownloadFlightJob job(device, flight, path);
-  JobDialog(CommonInterface::main_window,
-            CommonInterface::main_window.GetLook().dialog,
+  JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   device.SetBusy(false);
   return job.GetResult();
@@ -260,7 +255,7 @@ ShowFlightList(const RecordedFlightList &flight_list)
   }
 
   // Show list of the flights
-  int i = ComboPicker(CommonInterface::main_window, _T("Choose a flight"),
+  int i = ComboPicker(UIGlobals::GetMainWindow(), _T("Choose a flight"),
                       combo, NULL, false);
 
   return (i < 0) ? NULL : &flight_list[i];

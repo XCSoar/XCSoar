@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "Dialogs/dlgSimulatorPrompt.hpp"
+#include "UIGlobals.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Gauge/LogoView.hpp"
 #include "Dialogs/Internal.hpp"
 #include "resource.h"
 #include "Screen/Layout.hpp"
-#include "MainWindow.hpp"
 #include "Simulator.hpp"
 
 #include <stdio.h>
@@ -85,7 +85,7 @@ dlgSimulatorPromptShowModal()
 
   logo = new LogoView();
   do {
-    wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+    wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                     Layout::landscape ? _T("IDR_XML_SIMULATORPROMPT_L") :
                                         _T("IDR_XML_SIMULATORPROMPT"));
     assert(wf != NULL);

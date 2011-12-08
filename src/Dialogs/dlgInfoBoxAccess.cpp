@@ -24,10 +24,10 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Dialogs/Internal.hpp"
+#include "UIGlobals.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Components.hpp"
-#include "MainWindow.hpp"
 #include "Look/Look.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -50,13 +50,13 @@ static WndForm *wf = NULL;
 static TabBarControl* wTabBar = NULL;
 
 void
-dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
+dlgInfoBoxAccessShowModal(const int id)
 {
-  dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(parent, id);
+  dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(id);
 }
 
 void
-dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
+dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(const int id)
 {
   // check for another instance of this window
   if (wf != NULL) return;
@@ -68,9 +68,9 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
     return;
 
   const PixelRect targetRect = InfoBoxManager::layout.remaining;
-  const DialogLook &look = ((MainWindow &)parent).GetLook().dialog;
+  const DialogLook &look = UIGlobals::GetDialogLook();
 
-  wf = new WndForm(parent, look,
+  wf = new WndForm(UIGlobals::GetMainWindow(), look,
                    targetRect.left, targetRect.bottom - Layout::Scale(107),
                    targetRect.right - targetRect.left, Layout::Scale(107));
 

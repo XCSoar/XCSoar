@@ -21,22 +21,31 @@ Copyright_License {
 }
 */
 
-#ifndef DLGINFOBOXACCESS_HPP
-#define DLGINFOBOXACCESS_HPP
+#ifndef XCSOAR_UI_GLOBALS_HPP
+#define XCSOAR_UI_GLOBALS_HPP
 
-class WndForm;
+#include "Compiler.h"
 
-class dlgInfoBoxAccess
-{
-public:
-  dlgInfoBoxAccess();
+class SingleWindow;
+struct DialogLook;
 
-  /**
-   * @returns True if validated, False if window shall remain open
-   */
-  static bool OnClose();
+/**
+ * This namespace provides helper functions to access generic global
+ * UI objects.  Use them when you don't know where else to get them.
+ * This is a last resort only, don't use it if you have a better way
+ * to do it.
+ *
+ * This namespace exists to avoid direct access to #CommonInterface
+ * and #MainWindow, because that would mean the code is not reusable
+ * in other applications, while the functions in this namespace can
+ * easily be replaced in another program.
+ */
+namespace UIGlobals {
+  gcc_const
+  SingleWindow &GetMainWindow();
 
-  static void dlgInfoBoxAccessShowModal(const int id);
+  gcc_const
+  const DialogLook &GetDialogLook();
 };
 
-#endif /* DLGINFOBOXACCESS_H_ */
+#endif

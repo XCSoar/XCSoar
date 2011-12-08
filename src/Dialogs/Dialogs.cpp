@@ -23,8 +23,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Waypoint.hpp"
-#include "MainWindow.hpp"
-#include "Interface.hpp"
+#include "UIGlobals.hpp"
 #include "Waypoint/Waypoints.hpp"
 
 /**
@@ -47,7 +46,7 @@ PopupNearestWaypointDetails(const Waypoints &way_points,
 
   if (way_point) {
     dlgWaypointSelectAddToLastUsed(*way_point);
-    dlgWaypointDetailsShowModal(XCSoarInterface::main_window, *way_point);
+    dlgWaypointDetailsShowModal(UIGlobals::GetMainWindow(), *way_point);
     return true;
   }
   return false;

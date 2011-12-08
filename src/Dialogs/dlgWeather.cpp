@@ -22,17 +22,24 @@ Copyright_License {
 */
 
 #include "Dialogs/Weather.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 #include "Units/Units.hpp"
 #include "LocalTime.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Screen/Layout.hpp"
+#include "Form/Form.hpp"
+#include "Form/Edit.hpp"
 #include "DataField/Enum.hpp"
-#include "MainWindow.hpp"
 #include "Components.hpp"
+#include "UIGlobals.hpp"
+#include "Language/Language.hpp"
 
 #include <stdio.h>
+
+class WindowControl;
+class WndButton;
 
 static WndForm *wf = NULL;
 
@@ -59,7 +66,7 @@ OnWeatherHelp(WindowControl * Sender)
   if (help == NULL)
     help = _("No help available on this item");
 
-  dlgHelpShowModal(XCSoarInterface::main_window, caption, help);
+  dlgHelpShowModal(UIGlobals::GetMainWindow(), caption, help);
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
@@ -72,7 +79,7 @@ void
 dlgWeatherShowModal(void)
 {
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   _T("IDR_XML_WEATHER"));
   if (wf == NULL)
     return;

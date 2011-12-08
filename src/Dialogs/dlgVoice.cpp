@@ -23,12 +23,12 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
+#include "UIGlobals.hpp"
 #include "Units/Units.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Audio/VegaVoice.hpp"
 #include "DataField/Base.hpp"
-#include "MainWindow.hpp"
 #include "LogFile.hpp"
 
 static WndForm *wf=NULL;
@@ -90,8 +90,7 @@ SaveFromForm(const WndForm &form, SETTINGS_COMPUTER &settings)
 
 
 void dlgVoiceShowModal(void){
-  wf = LoadDialog(CallBackTable,
-		      XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
 		      _T("IDR_XML_VOICE"));
 
   

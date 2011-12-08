@@ -31,11 +31,11 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
 #include "DataField/Boolean.hpp"
-#include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
 #include "Components.hpp"
 #include "Hardware/AltairControl.hpp"
+#include "UIGlobals.hpp"
 
 static WndForm *wf=NULL;
 
@@ -99,8 +99,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[]={
 
 
 void dlgBrightnessShowModal(void){
-  wf = LoadDialog(CallBackTable,
-		      XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
 		      _T("IDR_XML_BRIGHTNESS"));
   if (wf == NULL)
     return;

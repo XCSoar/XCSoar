@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
+#include "UIGlobals.hpp"
 #include "StatusPanels/FlightStatusPanel.hpp"
 #include "StatusPanels/TaskStatusPanel.hpp"
 #include "StatusPanels/RulesStatusPanel.hpp"
@@ -36,7 +37,6 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "Math/FastMath.h"
 #include "LocalTime.hpp"
-#include "MainWindow.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
@@ -78,7 +78,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 void
 dlgStatusShowModal(int start_page)
 {
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ?
                   _T("IDR_XML_STATUS_L") : _T("IDR_XML_STATUS"));
   assert(wf);

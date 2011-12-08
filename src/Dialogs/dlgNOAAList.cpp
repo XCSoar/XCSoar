@@ -41,7 +41,6 @@ Copyright_License {
 #include "Weather/NOAAStore.hpp"
 #include "Weather/METAR.hpp"
 #include "Util/TrivialArray.hpp"
-#include "MainWindow.hpp"
 #include "Compiler.h"
 
 #include <stdio.h>

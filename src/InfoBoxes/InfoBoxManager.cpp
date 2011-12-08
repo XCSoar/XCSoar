@@ -487,7 +487,7 @@ void
 InfoBoxManager::ShowDlgInfoBox(const int id)
 {
   if (GetDialogContent(id))
-    dlgInfoBoxAccessShowModal(XCSoarInterface::main_window, id);
+    dlgInfoBoxAccessShowModal(id);
   else SetupFocused(id);
 }
 

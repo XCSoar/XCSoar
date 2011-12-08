@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "UnitsConfigPanel.hpp"
+#include "UIGlobals.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/ComboList.hpp"
 #include "DataField/Float.hpp"
@@ -35,7 +36,6 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
-#include "MainWindow.hpp"
 #include "Asset.hpp"
 #include "Language/Language.hpp"
 #include "DataField/Base.hpp"
@@ -43,7 +43,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Dialogs/XML.hpp"
-
 
 class UnitsConfigPanel : public XMLWidget {
 
@@ -159,7 +158,7 @@ OnLoadPreset(WndButton &button)
 
   /* let the user select */
 
-  int result = ComboPicker(XCSoarInterface::main_window, _("Unit Presets"), list, NULL);
+  int result = ComboPicker(UIGlobals::GetMainWindow(), _("Unit Presets"), list, NULL);
   if (result >= 0) {
     const UnitSetting& units = Units::Store::Read(list[result].DataFieldIndex);
     instance->UpdateUnitFields(units);

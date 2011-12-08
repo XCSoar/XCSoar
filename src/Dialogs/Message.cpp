@@ -27,10 +27,9 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Edit.hpp"
-#include "MainWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Interface.hpp"
-#include "Look/Look.hpp"
+#include "Screen/SingleWindow.hpp"
+#include "UIGlobals.hpp"
 
 #include <assert.h>
 #include <limits.h>
@@ -74,7 +73,8 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   assert(lpText != NULL);
 
-  const PixelRect rc = XCSoarInterface::main_window.get_client_rect();
+  SingleWindow &main_window = UIGlobals::GetMainWindow();
+  const PixelRect rc = main_window.get_client_rect();
 
   UPixelScalar Width = Layout::Scale(200);
   UPixelScalar Height = Layout::Scale(160);
@@ -89,8 +89,8 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   style.hide();
   style.control_parent();
 
-  const DialogLook &dialog_look = CommonInterface::main_window.GetLook().dialog;
-  WndForm wf(XCSoarInterface::main_window, dialog_look,
+  const DialogLook &dialog_look = UIGlobals::GetDialogLook();
+  WndForm wf(main_window, dialog_look,
              X, Y, Width, Height, lpCaption,
              style);
   ContainerWindow &client_area = wf.GetClientAreaWindow();

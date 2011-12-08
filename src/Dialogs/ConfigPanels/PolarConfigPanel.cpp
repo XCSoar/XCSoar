@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "PolarConfigPanel.hpp"
 #include "ConfigPanel.hpp"
+#include "UIGlobals.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Float.hpp"
 #include "DataField/ComboList.hpp"
@@ -51,7 +52,6 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
-#include "MainWindow.hpp"
 #include "OS/FileUtil.hpp"
 #include "Language/Language.hpp"
 #include "Plane/PlaneGlue.hpp"
@@ -180,7 +180,7 @@ PolarConfigPanel::LoadInternal()
 
   /* let the user select */
 
-  int result = ComboPicker(XCSoarInterface::main_window, _("Load Polar"), list, NULL);
+  int result = ComboPicker(UIGlobals::GetMainWindow(), _("Load Polar"), list, NULL);
   if (result >= 0) {
     const PolarStore::Item &item = PolarStore::GetItem(list[result].DataFieldIndex);
 
@@ -241,7 +241,7 @@ PolarConfigPanel::LoadFromFile()
   list.Sort();
 
   // Show selection dialog
-  int result = ComboPicker(XCSoarInterface::main_window,
+  int result = ComboPicker(UIGlobals::GetMainWindow(),
                            _("Load Polar From File"), list, NULL);
   if (result >= 0) {
     const TCHAR* path = list[result].StringValue;
