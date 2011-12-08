@@ -137,10 +137,8 @@ LoadGUI()
   assert(!locked);
   locked = true;
 
-  WndProperty* wp;
-
 #ifdef USE_GDI
-  wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
+  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
   if (wp) {
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     if (dfe) {
@@ -162,30 +160,9 @@ LoadGUI()
   }
 #endif
 
-  wp = (WndProperty*)wf->FindByName(_T("prpFontHeight"));
-  if (wp) {
-    DataFieldInteger* dfi = (DataFieldInteger*)wp->GetDataField();
-    if (dfi)
-      dfi->Set(NewLogFont.lfHeight);
-
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpFontWeight"));
-  if (wp) {
-    DataFieldBoolean* dfi = (DataFieldBoolean*)wp->GetDataField();
-    if (dfi)
-      dfi->Set(NewLogFont.lfWeight > 500);
-
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpFontItalic"));
-  if (wp) {
-    DataFieldBoolean* dfb = (DataFieldBoolean*)wp->GetDataField();
-    if (dfb)
-      dfb->Set(NewLogFont.lfItalic);
-
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpFontHeight"), (unsigned)NewLogFont.lfHeight);
+  LoadFormProperty(*wf, _T("prpFontWeight"), NewLogFont.lfWeight > 500);
+  LoadFormProperty(*wf, _T("prpFontItalic"), !!NewLogFont.lfItalic);
 
   locked = false;
 
