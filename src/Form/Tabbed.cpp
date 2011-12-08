@@ -164,6 +164,11 @@ TabbedControl::on_resize(UPixelScalar width, UPixelScalar height)
 void
 TabbedControl::on_destroy()
 {
+  if (!tabs.empty()) {
+    assert(tabs[current].prepared);
+    tabs[current].widget->Hide();
+  }
+
   for (auto i = tabs.begin(), end = tabs.end(); i != end; ++i) {
     if (i->prepared)
       i->widget->Unprepare();
