@@ -627,8 +627,8 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxData &data)
 
   // Set Color (red/blue/black)
   data.SetValueColor(negative(diff) ? 1 :
-                   task_stats.total.time_remaining <
-                       common_stats.aat_time_remaining + fixed(5) ? 2 : 0);
+                   task_stats.total.time_remaining >
+                       common_stats.aat_time_remaining + fixed(5*60) ? 2 : 0);
 }
 
 void
