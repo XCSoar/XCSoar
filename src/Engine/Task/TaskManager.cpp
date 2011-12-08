@@ -134,8 +134,8 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
     common_stats.ordered_has_targets = task_ordered.HasTargets();
 
     common_stats.aat_time_remaining =
-        max(fixed_zero, task_ordered.get_ordered_task_behaviour().aat_min_time -
-                        task_stats.total.time_elapsed);
+        task_ordered.get_ordered_task_behaviour().aat_min_time -
+        task_stats.total.time_elapsed;
 
     if (task_stats.total.remaining.IsDefined() &&
         positive(common_stats.aat_time_remaining))

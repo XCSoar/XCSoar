@@ -583,18 +583,20 @@ InfoBoxContentTaskAATime::Update(InfoBoxData &data)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid || !task_stats.total.IsAchievable() ||
-      !positive(common_stats.aat_time_remaining)) {
+      !task_stats.task_valid || !task_stats.total.IsAchievable()) {
     data.SetInvalid();
     return;
   }
 
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
-  const int dd = abs((int)common_stats.aat_time_remaining);
-  Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+  Units::TimeToTextSmart(HHMMSSsmart, SSsmart,
+                         abs((int) common_stats.aat_time_remaining));
 
-  data.SetValue(HHMMSSsmart);
+  data.UnsafeFormatValue(negative(common_stats.aat_time_remaining) ?
+                            _T("-%s") : _T("%s"), HHMMSSsmart);
+  data.SetValueColor(negative(common_stats.aat_time_remaining) ? 1 : 0);
+
   data.SetComment(SSsmart);
 }
 
@@ -606,8 +608,7 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxData &data)
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !task_stats.total.IsAchievable() ||
-      !positive(task_stats.total.time_remaining) ||
-      !positive(common_stats.aat_time_remaining)) {
+      !positive(task_stats.total.time_remaining)) {
     data.SetInvalid();
     return;
   }
