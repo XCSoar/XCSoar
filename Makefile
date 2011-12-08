@@ -478,6 +478,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Computer/AutoQNH.cpp \
 	\
 	$(SRC)/Blackboard/BlackboardListener.cpp \
+	$(SRC)/Blackboard/ProxyBlackboardListener.cpp \
 	$(SRC)/Blackboard/LiveBlackboard.cpp \
 	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
 	\
