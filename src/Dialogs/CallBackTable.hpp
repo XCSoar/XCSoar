@@ -21,10 +21,19 @@ Copyright_License {
 }
 */
 
-#if !defined(__DLGTOOLS_H)
-#define __DLGTOOLS_H
+#ifndef XCSOAR_DIALOGS_CALL_BACK_TABLE_HPP
+#define XCSOAR_DIALOGS_CALL_BACK_TABLE_HPP
 
 #include <tchar.h>
+
+/**
+ * Class to hold callback entries for dialogs
+ */
+struct CallBackTableEntry
+{
+  const TCHAR *name;
+  void *callback;
+};
 
 #define DeclareCallBackEntry(x) { _T(#x), (void *)x }
 

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Vega.hpp"
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "UIGlobals.hpp"
 #include "Units/Units.hpp"
 #include "Device/device.hpp"

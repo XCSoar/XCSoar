@@ -39,8 +39,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/dlgTools.h"
-
 
 static const StaticEnumChoice display_orientation_list[] = {
   { Display::ORIENTATION_DEFAULT, N_("Default") },

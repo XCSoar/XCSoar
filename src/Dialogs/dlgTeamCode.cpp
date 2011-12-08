@@ -25,6 +25,7 @@
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/Waypoint.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "UIGlobals.hpp"
 #include "DataField/Float.hpp"
 #include "FLARM/FlarmDetails.hpp"

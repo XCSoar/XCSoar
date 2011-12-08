@@ -33,9 +33,6 @@ Copyright_License {
 #include "SiteConfigPanel.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-
 
 using namespace ConfigPanel;
 

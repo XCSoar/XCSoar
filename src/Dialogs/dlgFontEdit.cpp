@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"

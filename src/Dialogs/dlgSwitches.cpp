@@ -22,10 +22,15 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/Internal.hpp"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/CallBackTable.hpp"
+#include "UIGlobals.hpp"
+#include "Form/Util.hpp"
 #include "Units/Units.hpp"
 #include "DataField/Boolean.hpp"
-#include "MainWindow.hpp"
+#include "Interface.hpp"
+
+class WndButton;
 
 static WndForm *wf = NULL;
 
@@ -76,7 +81,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 void
 dlgSwitchesShowModal(void)
 {
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
 		              _T("IDR_XML_SWITCHES"));
   if (wf == NULL)
     return;

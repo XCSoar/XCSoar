@@ -33,9 +33,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-
+#include "Dialogs/CallBackTable.hpp"
 
 class SymbolsConfigPanel : public XMLWidget {
 

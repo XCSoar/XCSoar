@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Vega.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Message.hpp"
 #include "Form/Tabbed.hpp"

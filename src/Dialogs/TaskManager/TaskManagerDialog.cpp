@@ -30,6 +30,7 @@ Copyright_License {
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Components.hpp"

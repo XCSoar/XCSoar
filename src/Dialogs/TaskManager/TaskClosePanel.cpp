@@ -23,8 +23,7 @@ Copyright_License {
 
 #include "TaskClosePanel.hpp"
 #include "Internal.hpp"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgTools.h"
+#include "Dialogs/CallBackTable.hpp"
 #include "Form/Button.hpp"
 #include "Form/Draw.hpp"
 #include "Form/Frame.hpp"

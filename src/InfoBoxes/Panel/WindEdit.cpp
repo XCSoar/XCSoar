@@ -22,8 +22,7 @@ Copyright_License {
 */
 
 #include "WindEdit.hpp"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgTools.h"
+#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Form/TabBar.hpp"
 #include "Form/XMLWidget.hpp"

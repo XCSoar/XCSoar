@@ -25,6 +25,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/JobDialog.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Language/Language.hpp"
 #include "Net/Features.hpp"
 
@@ -32,7 +33,6 @@ Copyright_License {
 
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/XML.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Form/List.hpp"
 #include "Form/Button.hpp"
 #include "Screen/Layout.hpp"

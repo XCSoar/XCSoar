@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/XML.hpp"
-#include "Dialogs/dlgTools.h"
+#include "Dialogs/CallBackTable.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Key.h"
 #include "Form/Form.hpp"

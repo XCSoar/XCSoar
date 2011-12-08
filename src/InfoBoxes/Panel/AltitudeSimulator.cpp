@@ -27,8 +27,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Units/Units.hpp"
 #include "Simulator.hpp"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgTools.h"
+#include "Dialogs/CallBackTable.hpp"
 #include "Form/XMLWidget.hpp"
 
 class WndButton;

@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "Dialogs/Weather.hpp"
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/dlgTools.h"
 #include "Dialogs/XML.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Units/Units.hpp"
 #include "LocalTime.hpp"
 #include "Terrain/RasterWeather.hpp"

@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/Weather.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/JobDialog.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Language/Language.hpp"
 #include "Net/Features.hpp"
 

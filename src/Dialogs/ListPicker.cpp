@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Dialogs/ListPicker.hpp"
 #include "Dialogs/XML.hpp"
-#include "Dialogs/dlgTools.h"
+#include "Dialogs/CallBackTable.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Button.hpp"

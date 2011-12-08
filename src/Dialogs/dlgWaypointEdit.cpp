@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/TextEntry.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Units/Units.hpp"
 #include "Screen/Layout.hpp"
 #include "Terrain/RasterTerrain.hpp"

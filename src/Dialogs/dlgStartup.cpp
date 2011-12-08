@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/dlgTools.h"
+#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
 #include "UIGlobals.hpp"
 #include "Profile/Profile.hpp"

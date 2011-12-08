@@ -23,8 +23,7 @@ Copyright_License {
 
 #include "TaskListPanel.hpp"
 #include "Internal.hpp"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgTools.h"
+#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"

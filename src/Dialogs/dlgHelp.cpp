@@ -22,9 +22,14 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/Internal.hpp"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/CallBackTable.hpp"
+#include "Form/Util.hpp"
 #include "Screen/Layout.hpp"
 #include "Units/Units.hpp"
+#include "Language/Language.hpp"
+
+class WndButton;
 
 #include <stdio.h>
 

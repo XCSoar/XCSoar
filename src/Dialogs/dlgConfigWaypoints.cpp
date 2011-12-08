@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Waypoint.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Dialogs.h"
 #include "UIGlobals.hpp"

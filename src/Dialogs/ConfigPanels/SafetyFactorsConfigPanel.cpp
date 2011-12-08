@@ -33,9 +33,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-
 
 class SafetyFactorsConfigPanel : public XMLWidget {
 

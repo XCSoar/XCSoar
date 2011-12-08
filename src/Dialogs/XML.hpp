@@ -29,20 +29,12 @@ Copyright_License {
 #include <tchar.h>
 
 struct DialogLook;
+struct CallBackTableEntry;
 class Window;
 class SubForm;
 class WndForm;
 class SingleWindow;
 class ContainerWindow;
-
-/**
- * Class to hold callback entries for dialogs
- */
-struct CallBackTableEntry
-{
-  const TCHAR *name;
-  void *callback;
-};
 
 /**
  * Dialog display styles

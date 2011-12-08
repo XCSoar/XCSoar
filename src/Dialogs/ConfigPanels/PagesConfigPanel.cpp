@@ -21,7 +21,6 @@ Copyright_License {
 }
 */
 
-#include <stdio.h>
 #include "PagesConfigPanel.hpp"
 #include "DataField/Enum.hpp"
 #include "Form/Edit.hpp"
@@ -31,8 +30,8 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
+
+#include <stdio.h>
 
 using namespace Pages;
 

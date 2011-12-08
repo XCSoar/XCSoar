@@ -30,6 +30,7 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
 #include "Dialogs/ComboPicker.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "LocalTime.hpp"
 #include "Profile/ProfileKeys.hpp"
@@ -40,8 +41,6 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
 
 class TimeConfigPanel : public XMLWidget {
 private:

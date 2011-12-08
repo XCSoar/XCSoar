@@ -29,9 +29,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-
 
 class VarioConfigPanel : public XMLWidget {
 

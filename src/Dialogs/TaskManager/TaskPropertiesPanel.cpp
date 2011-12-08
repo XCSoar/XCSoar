@@ -23,14 +23,18 @@ Copyright_License {
 
 #include "TaskPropertiesPanel.hpp"
 #include "Internal.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Float.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
+#include "Form/Util.hpp"
+#include "Form/Edit.hpp"
+#include "Form/Draw.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Units/Units.hpp"
+#include "Language/Language.hpp"
 
 #include <assert.h>
 #include <stdio.h>

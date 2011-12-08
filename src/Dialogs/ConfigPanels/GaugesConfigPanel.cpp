@@ -27,8 +27,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
 
 class GaugesConfigPanel : public XMLWidget {
 

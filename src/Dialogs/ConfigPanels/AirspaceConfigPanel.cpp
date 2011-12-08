@@ -38,8 +38,7 @@ Copyright_License {
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Interface.hpp"
 
 class AirspaceConfigPanel : public XMLWidget {

@@ -22,15 +22,20 @@ Copyright_License {
 */
 
 #include "Dialogs/Airspace.hpp"
-#include "Dialogs/Internal.hpp"
+#include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/XML.hpp"
+#include "Form/List.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
+#include "Interface.hpp"
 
 #include <assert.h>
 
 /* brush patterns are only available on GDI */
 #ifdef HAVE_HATCHED_BRUSH
+
+class WndButton;
 
 static WndForm *wf = NULL;
 

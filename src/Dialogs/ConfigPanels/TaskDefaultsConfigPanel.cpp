@@ -30,13 +30,12 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Components.hpp"
 #include "Form/XMLWidget.hpp"
 #include "TaskDefaultsConfigPanel.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
 
 class TaskDefaultsConfigPanel : public XMLWidget {
 

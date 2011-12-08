@@ -39,8 +39,7 @@ Copyright_License {
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgTools.h"
+#include "Dialogs/CallBackTable.hpp"
 
 class WndOwnerDrawFrame;
 

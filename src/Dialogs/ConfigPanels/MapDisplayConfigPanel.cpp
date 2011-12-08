@@ -29,9 +29,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-
+#include "Dialogs/CallBackTable.hpp"
 
 static const StaticEnumChoice orientation_list[] = {
   { TRACKUP, N_("Track up"),

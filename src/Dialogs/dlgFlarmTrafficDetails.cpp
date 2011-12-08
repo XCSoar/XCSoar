@@ -32,6 +32,7 @@
 #include "Dialogs/Traffic.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/TextEntry.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "FLARM/FlarmNet.hpp"
 #include "FLARM/Traffic.hpp"
 #include "FLARM/FlarmDetails.hpp"

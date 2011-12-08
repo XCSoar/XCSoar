@@ -23,6 +23,7 @@
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Screen/Layout.hpp"
 #include "Gauge/ThermalAssistantWindow.hpp"
 #include "Math/fixed.hpp"

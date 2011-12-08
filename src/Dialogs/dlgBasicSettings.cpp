@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"

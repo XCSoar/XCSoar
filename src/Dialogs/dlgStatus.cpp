@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "UIGlobals.hpp"
 #include "StatusPanels/FlightStatusPanel.hpp"
 #include "StatusPanels/TaskStatusPanel.hpp"

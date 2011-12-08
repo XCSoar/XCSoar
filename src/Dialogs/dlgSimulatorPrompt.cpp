@@ -22,10 +22,13 @@ Copyright_License {
 */
 
 #include "Dialogs/dlgSimulatorPrompt.hpp"
+#include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
+#include "Form/Draw.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Gauge/LogoView.hpp"
-#include "Dialogs/Internal.hpp"
 #include "resource.h"
 #include "Screen/Layout.hpp"
 #include "Simulator.hpp"
@@ -33,6 +36,8 @@ Copyright_License {
 #include <stdio.h>
 
 #ifdef SIMULATOR_AVAILABLE
+
+class WndButton;
 
 enum {
   mrFly = 1000,

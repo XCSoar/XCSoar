@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/XML.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 #include "xmlParser.hpp"

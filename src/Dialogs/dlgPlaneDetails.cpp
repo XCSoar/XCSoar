@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Planes.hpp"
+#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Screen/Layout.hpp"

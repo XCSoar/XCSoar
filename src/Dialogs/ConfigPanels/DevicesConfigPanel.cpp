@@ -45,8 +45,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
+#include "Dialogs/CallBackTable.hpp"
 
 #ifdef _WIN32_WCE
 #include "Device/Windows/Enumerator.hpp"
