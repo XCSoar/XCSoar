@@ -27,9 +27,8 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Components.hpp"
-#include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
-
+#include "MainWindow.hpp"
+#include "Look/Look.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Form/TabBar.hpp"
@@ -69,15 +68,19 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
     return;
 
   const PixelRect targetRect = InfoBoxManager::layout.remaining;
+  const DialogLook &look = ((MainWindow &)parent).GetLook().dialog;
 
-  wf = LoadDialog(NULL, parent,
-                  _T("IDR_XML_INFOBOXACCESS"), &targetRect);
+  wf = new WndForm(parent, look,
+                   targetRect.left, targetRect.bottom - Layout::Scale(107),
+                   targetRect.right - targetRect.left, Layout::Scale(107));
 
-  assert(wf != NULL);
-
-  // Load tabs
-  wTabBar = (TabBarControl*)wf->FindByName(_T("TabBar"));
-  assert(wTabBar != NULL);
+  WindowStyle tab_style;
+  tab_style.control_parent();
+  ContainerWindow &client_area = wf->GetClientAreaWindow();
+  const PixelRect rc = client_area.get_client_rect();
+  wTabBar = new TabBarControl(client_area, look, rc.left, rc.top,
+                              rc.right - rc.left, Layout::Scale(45),
+                              tab_style, Layout::landscape);
 
   Widget *wPanel[dlgContent->PANELSIZE];
 
@@ -103,6 +106,7 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
   wf->SetCaption(buffer);
   wf->ShowModal();
 
+  delete wTabBar;
   delete wf;
   // unset wf because wf is still static and public
   wf = NULL;

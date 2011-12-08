@@ -335,7 +335,6 @@ IDR_XML_WAYPOINTDISPLAYCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs
 IDR_XML_WAYPOINTDISPLAYCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/WaypointDisplayConfigPanel_L.xml"
 
 // infobox access
-IDR_XML_INFOBOXACCESS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgInfoBoxAccess.xml"
 IDR_XML_INFOBOXACCESSCLOSE XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxAccessClose.xml"
 IDR_XML_INFOBOXMACCREADYEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxMacCreadyEdit.xml"
 IDR_XML_INFOBOXMACCREADYSETUP XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxMacCreadySetup.xml"
