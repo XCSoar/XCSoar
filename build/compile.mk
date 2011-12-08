@@ -32,7 +32,6 @@ SRC_TO_OBJ = $(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(add
 
 DEPFILE = $(@:.o=.d)
 DEPFLAGS = -Wp,-MD,$(DEPFILE),-MT,$@
-dirtarget = $(subst \\,_,$(subst /,_,$(dir $@)))
 cc-flags = $(DEPFLAGS) $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)
 cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)
 
