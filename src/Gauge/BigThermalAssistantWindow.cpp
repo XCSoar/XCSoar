@@ -21,23 +21,12 @@ Copyright_License {
 }
 */
 
+#include "BigThermalAssistantWindow.hpp"
 #include "InputEvents.hpp"
-#include "Interface.hpp"
-#include "MainWindow.hpp"
-#include "Widgets/BigThermalAssistantWidget.hpp"
 
-/**
- * Evil global variable - please refactor!
- */
-static BigThermalAssistantWidget *ta_widget;
-
-void
-InputEvents::eventThermalAssistant(gcc_unused const TCHAR *misc)
+bool
+BigThermalAssistantWindow::on_mouse_double(PixelScalar x, PixelScalar y)
 {
-  if (IsFlavour(_T("TA")))
-    return;
-
-  ta_widget = new BigThermalAssistantWidget(CommonInterface::GetLiveBlackboard());
-  CommonInterface::main_window.SetWidget(ta_widget);
-  SetFlavour(_T("TA"));
+  InputEvents::ShowMenu();
+  return true;
 }

@@ -533,7 +533,8 @@ MainWindow::on_timer(WindowTimer &_timer)
                     CommonInterface::SettingsComputer());
 
     if (ta != NULL)
-      ta->Update(CommonInterface::GetUISettings().enable_thermal_assistant_gauge,
+      ta->Update(CommonInterface::GetUISettings().enable_thermal_assistant_gauge &&
+                 !InputEvents::IsFlavour(_T("TA")),
                  CommonInterface::Calculated().heading,
                  CommonInterface::Calculated());
   }

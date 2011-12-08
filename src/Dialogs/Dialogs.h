@@ -59,8 +59,6 @@ dlgInfoBoxAccessShowModal(const int id);
 
 void dlgVoiceShowModal();
 
-void dlgThermalAssistantShowModal();
-
 void dlgCreditsShowModal(SingleWindow &parent);
 
 void dlgQuickMenuShowModal(SingleWindow &parent);

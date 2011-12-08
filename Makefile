@@ -209,7 +209,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgTeamCode.cpp \
 	$(SRC)/Dialogs/dlgTextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
-	$(SRC)/Dialogs/dlgThermalAssistant.cpp \
 	$(SRC)/Dialogs/dlgVegaDemo.cpp \
 	$(SRC)/Dialogs/dlgVoice.cpp \
 	$(SRC)/Dialogs/dlgWeather.cpp \
@@ -350,6 +349,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
 	\
 	$(SRC)/Gauge/ThermalAssistantWindow.cpp \
+	$(SRC)/Gauge/BigThermalAssistantWindow.cpp \
 	$(SRC)/Gauge/FlarmTrafficWindow.cpp \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \
 	$(SRC)/Gauge/GaugeFLARM.cpp \
@@ -637,6 +637,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Components.cpp \
 	\
 	$(SRC)/Widgets/TrafficWidget.cpp \
+	$(SRC)/Widgets/BigThermalAssistantWidget.cpp \
 	\
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Declaration.cpp \

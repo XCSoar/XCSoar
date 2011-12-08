@@ -270,7 +270,6 @@ IDR_XML_TEAMCODE_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTeamCode_L.x
 IDR_XML_TEXTENTRY XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTextEntry.xml"
 IDR_XML_TEXTENTRY_KEYBOARD XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTextEntry_Keyboard.xml"
 IDR_XML_TEXTENTRY_KEYBOARD_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTextEntry_Keyboard_L.xml"
-IDR_XML_THERMALASSISTANT XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgThermalAssistant.xml"
 IDR_XML_VARIO XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgVario.xml"
 IDR_XML_VARIO_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgVario_L.xml"
 IDR_XML_VEGADEMO XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgVegaDemo.xml"

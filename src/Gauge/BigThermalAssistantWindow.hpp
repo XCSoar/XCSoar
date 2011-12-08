@@ -21,23 +21,24 @@ Copyright_License {
 }
 */
 
-#include "InputEvents.hpp"
-#include "Interface.hpp"
-#include "MainWindow.hpp"
-#include "Widgets/BigThermalAssistantWidget.hpp"
+#ifndef XCSOAR_BIG_THERMAL_ASSISTENT_WINDOW_HPP
+#define XCSOAR_BIG_THERMAL_ASSISTENT_WINDOW_HPP
 
-/**
- * Evil global variable - please refactor!
- */
-static BigThermalAssistantWidget *ta_widget;
+#include "ThermalAssistantWindow.hpp"
 
-void
-InputEvents::eventThermalAssistant(gcc_unused const TCHAR *misc)
-{
-  if (IsFlavour(_T("TA")))
-    return;
+class BigThermalAssistantWindow : public ThermalAssistantWindow {
+public:
+  BigThermalAssistantWindow(UPixelScalar padding)
+    :ThermalAssistantWindow(padding, false) {}
 
-  ta_widget = new BigThermalAssistantWidget(CommonInterface::GetLiveBlackboard());
-  CommonInterface::main_window.SetWidget(ta_widget);
-  SetFlavour(_T("TA"));
-}
+  void set(ContainerWindow &parent, PixelRect rc,
+           WindowStyle window_style=WindowStyle()) {
+    window_style.enable_double_clicks();
+    ThermalAssistantWindow::set(parent, rc, window_style);
+  }
+
+protected:
+  virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
+};
+
+#endif

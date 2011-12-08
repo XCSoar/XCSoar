@@ -21,23 +21,33 @@ Copyright_License {
 }
 */
 
-#include "InputEvents.hpp"
-#include "Interface.hpp"
-#include "MainWindow.hpp"
-#include "Widgets/BigThermalAssistantWidget.hpp"
+#ifndef XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
+#define XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
 
-/**
- * Evil global variable - please refactor!
- */
-static BigThermalAssistantWidget *ta_widget;
+#include "Form/WindowWidget.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 
-void
-InputEvents::eventThermalAssistant(gcc_unused const TCHAR *misc)
-{
-  if (IsFlavour(_T("TA")))
-    return;
+class LiveBlackboard;
 
-  ta_widget = new BigThermalAssistantWidget(CommonInterface::GetLiveBlackboard());
-  CommonInterface::main_window.SetWidget(ta_widget);
-  SetFlavour(_T("TA"));
-}
+class BigThermalAssistantWidget
+  : public WindowWidget, private NullBlackboardListener {
+  LiveBlackboard &blackboard;
+
+public:
+  BigThermalAssistantWidget(LiveBlackboard &_blackboard)
+    :blackboard(_blackboard) {}
+
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Unprepare();
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+  virtual bool SetFocus();
+
+private:
+  void Update(const DerivedInfo &calculated);
+
+  virtual void OnCalculatedUpdate(const MoreData &basic,
+                                  const DerivedInfo &calculated);
+};
+
+#endif
