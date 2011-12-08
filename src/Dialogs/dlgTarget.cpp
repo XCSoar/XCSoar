@@ -39,8 +39,7 @@ Copyright_License {
 #include "Form/SymbolButton.hpp"
 #include "Form/CheckBox.hpp"
 #include "Asset.hpp"
-#include "Blackboard/BlackboardListener.hpp"
-#include "RateLimiter.hpp"
+#include "Blackboard/RateLimitedBlackboardListener.hpp"
 
 #include <stdio.h>
 
@@ -541,28 +540,23 @@ dlgTargetShowModal(int TargetPoint)
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  struct TargetDialogUpdateListener : public NullBlackboardListener,
-                                      private RateLimiter {
-    TargetDialogUpdateListener()
-      :RateLimiter(1800, 300) {}
-
+  struct TargetDialogUpdateListener : public NullBlackboardListener {
     virtual void OnCalculatedUpdate(const MoreData &basic,
                                     const DerivedInfo &calculated) {
-      Trigger();
-    }
-
-    virtual void Run() {
       map->invalidate();
       RefreshCalculator();
     }
   };
 
   TargetDialogUpdateListener blackboard_listener;
+  RateLimitedBlackboardListener rate_limited_bl(blackboard_listener,
+                                                1800, 300);
+
   //WindowBlackboardListener
-  CommonInterface::GetLiveBlackboard().AddListener(blackboard_listener);
+  CommonInterface::GetLiveBlackboard().AddListener(rate_limited_bl);
 
   wf->ShowModal();
-  CommonInterface::GetLiveBlackboard().RemoveListener(blackboard_listener);
+  CommonInterface::GetLiveBlackboard().RemoveListener(rate_limited_bl);
 
   delete wf;
 }

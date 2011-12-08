@@ -21,29 +21,35 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SYSTEM_STATUS_PANEL_HPP
-#define XCSOAR_SYSTEM_STATUS_PANEL_HPP
+#include "RateLimitedBlackboardListener.hpp"
 
-#include "StatusPanel.hpp"
-#include "Blackboard/RateLimitedBlackboardListener.hpp"
+void
+RateLimitedBlackboardListener::OnGPSUpdate(const MoreData &_basic)
+{
+  basic = &_basic;
+  Trigger();
+}
 
-class SystemStatusPanel
-  : public StatusPanel,
-    private NullBlackboardListener {
-  RateLimitedBlackboardListener rate_limiter;
+void
+RateLimitedBlackboardListener::OnCalculatedUpdate(const MoreData &_basic,
+                                                  const DerivedInfo &_calculated)
+{
+  basic2 = &_basic;
+  calculated = &_calculated;
+  Trigger();
+}
 
-public:
-  SystemStatusPanel()
-    :rate_limiter(*this, 2000, 500) {}
+void
+RateLimitedBlackboardListener::Run()
+{
+  if (basic != NULL) {
+    next.OnGPSUpdate(*basic);
+    basic = NULL;
+  }
 
-  virtual void Refresh();
-
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
-
-private:
-  virtual void OnGPSUpdate(const MoreData &basic);
-};
-
-#endif
+  if (calculated != NULL){
+    next.OnCalculatedUpdate(*basic2, *calculated);
+    basic2 = NULL;
+    calculated = NULL;
+  }
+}

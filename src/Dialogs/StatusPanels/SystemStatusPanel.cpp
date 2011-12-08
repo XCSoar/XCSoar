@@ -91,12 +91,6 @@ SystemStatusPanel::Refresh()
 }
 
 void
-SystemStatusPanel::Run()
-{
-  Refresh();
-}
-
-void
 SystemStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   LoadWindow(NULL, parent, _T("IDR_XML_STATUS_SYSTEM"));
@@ -106,7 +100,7 @@ void
 SystemStatusPanel::Show(const PixelRect &rc)
 {
   Refresh();
-  CommonInterface::GetLiveBlackboard().AddListener(*this);
+  CommonInterface::GetLiveBlackboard().AddListener(rate_limiter);
   WindowWidget::Show(rc);
 }
 
@@ -114,12 +108,12 @@ void
 SystemStatusPanel::Hide()
 {
   WindowWidget::Hide();
-  CommonInterface::GetLiveBlackboard().RemoveListener(*this);
-  RateLimiter::Cancel();
+  CommonInterface::GetLiveBlackboard().RemoveListener(rate_limiter);
+  rate_limiter.Cancel();
 }
 
 void
 SystemStatusPanel::OnGPSUpdate(const MoreData &basic)
 {
-  RateLimiter::Trigger();
+  Refresh();
 }

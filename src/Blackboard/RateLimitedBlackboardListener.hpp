@@ -21,29 +21,37 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SYSTEM_STATUS_PANEL_HPP
-#define XCSOAR_SYSTEM_STATUS_PANEL_HPP
+#ifndef XCSOAR_RATE_LIMITED_BLACKBOARD_LISTENER_HPP
+#define XCSOAR_RATE_LIMITED_BLACKBOARD_LISTENER_HPP
 
-#include "StatusPanel.hpp"
-#include "Blackboard/RateLimitedBlackboardListener.hpp"
+#include "ProxyBlackboardListener.hpp"
+#include "RateLimiter.hpp"
 
-class SystemStatusPanel
-  : public StatusPanel,
-    private NullBlackboardListener {
-  RateLimitedBlackboardListener rate_limiter;
+/**
+ * A proxy #BlackboardListener that limits the rate of GPS and
+ * Calculated updates.
+ */
+class RateLimitedBlackboardListener
+  : public ProxyBlackboardListener, private RateLimiter {
+  const MoreData *basic, *basic2;
+  const DerivedInfo *calculated;
 
 public:
-  SystemStatusPanel()
-    :rate_limiter(*this, 2000, 500) {}
+  RateLimitedBlackboardListener(BlackboardListener &_next,
+                                unsigned period_ms, unsigned delay_ms)
+    :ProxyBlackboardListener(_next),
+     RateLimiter(period_ms, delay_ms),
+     basic(NULL), basic2(NULL), calculated(NULL) {}
 
-  virtual void Refresh();
-
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+  using RateLimiter::Cancel;
 
 private:
   virtual void OnGPSUpdate(const MoreData &basic);
+
+  virtual void OnCalculatedUpdate(const MoreData &basic,
+                                  const DerivedInfo &calculated);
+
+  virtual void Run();
 };
 
 #endif
