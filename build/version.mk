@@ -11,4 +11,4 @@ CPPFLAGS += -DGIT_COMMIT_ID=\"$(GIT_COMMIT_ID)\"
 FULL_VERSION := $(FULL_VERSION)~$(GIT_COMMIT_ID)
 endif
 
-$(TARGET_OUTPUT_DIR)/$(SRC)/Version.o: $(topdir)/VERSION.txt
+$(call SRC_TO_OBJ,$(SRC)/Version.cpp): $(topdir)/VERSION.txt

@@ -82,10 +82,10 @@ $(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/XCSoar-dra
 	$(Q)$(PERL) tools/GenerateAndroidResources.pl $< >$@.tmp
 	@mv $@.tmp $@
 
-$(TARGET_OUTPUT_DIR)/$(SRC)/ResourceLoader.o: $(TARGET_OUTPUT_DIR)/include/resource_data.h
+$(call SRC_TO_OBJ,$(SRC)/ResourceLoader.cpp): $(TARGET_OUTPUT_DIR)/include/resource_data.h
 
 ifeq ($(TARGET),ANDROID)
-$(TARGET_OUTPUT_DIR)/$(SRC)/Screen/OpenGL/Bitmap.o: $(TARGET_OUTPUT_DIR)/include/android_drawable.h
+$(call SRC_TO_OBJ,$(SRC)/Screen/OpenGL/Bitmap.cpp): $(TARGET_OUTPUT_DIR)/include/android_drawable.h
 endif
 
 endif

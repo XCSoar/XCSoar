@@ -43,7 +43,7 @@ TEST1_LDLIBS = \
 	$(ZZIP_LDLIBS)
 
 TESTLIBS = $(TEST1_LDADD) \
-	$(TARGET_OUTPUT_DIR)/test/src/FakeTerrain.o
+	$(call SRC_TO_OBJ,$(TEST_SRC_DIR)/FakeTerrain.cpp)
 
 $(HARNESS_PROGRAMS): $(TARGET_BIN_DIR)/%$(TARGET_EXEEXT): $(TARGET_OUTPUT_DIR)/test/src/%.o $(TESTLIBS) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
