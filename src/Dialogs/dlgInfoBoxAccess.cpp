@@ -82,17 +82,15 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
                               rc.right - rc.left, Layout::Scale(45),
                               tab_style, Layout::landscape);
 
-  Widget *wPanel[dlgContent->PANELSIZE];
-
   for (int i = 0; i < dlgContent->PANELSIZE; i++) {
     assert(dlgContent->Panels[i].load);
 
-    wPanel[i] = dlgContent->Panels[i].load(id);
+    Widget *widget = dlgContent->Panels[i].load(id);
 
-    if (wPanel[i] == NULL)
+    if (widget == NULL)
       continue;
 
-    wTabBar->AddTab(wPanel[i], gettext(dlgContent->Panels[i].name));
+    wTabBar->AddTab(widget, gettext(dlgContent->Panels[i].name));
   }
 
   Widget *wClose = new CloseInfoBoxAccess();
