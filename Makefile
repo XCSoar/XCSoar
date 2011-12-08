@@ -776,8 +776,6 @@ install: XCSoar.exe
 
 endif
 
-$(TARGET_OUTPUT_DIR)/$(SRC)/Version.o: $(topdir)/VERSION.txt
-
 clean: FORCE
 	@$(NQ)echo "cleaning all"
 	$(Q)rm -rf $(OUT)
