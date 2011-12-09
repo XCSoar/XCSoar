@@ -31,6 +31,15 @@ WindowWidget::WindowWidget(Window *_window)
 }
 
 void
+WindowWidget::Raise()
+{
+  assert(window != NULL);
+  assert(window->is_visible());
+
+  window->bring_to_top();
+}
+
+void
 WindowWidget::Show(const PixelRect &rc)
 {
   assert(window != NULL);
