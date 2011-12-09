@@ -195,7 +195,6 @@ TEST_TASKWAYPOINT_DEPENDS = MATH IO
 $(eval $(call link-program,TestTaskWaypoint,TEST_TASKWAYPOINT))
 
 TEST_TROUTE_SOURCES = \
-	$(SRC)/Engine/Util/DataNodeXML.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
@@ -204,14 +203,12 @@ TEST_TROUTE_SOURCES = \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
-	$(SRC)/Engine/Math/Earth.cpp \
 	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/test_troute.cpp
 TEST_TROUTE_DEPENDS = TEST1 JASPER
 $(eval $(call link-program,test_troute,TEST_TROUTE))
 
 TEST_REACH_SOURCES = \
-	$(SRC)/Engine/Util/DataNodeXML.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
@@ -220,14 +217,12 @@ TEST_REACH_SOURCES = \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
-	$(SRC)/Engine/Math/Earth.cpp \
 	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/test_reach.cpp
 TEST_REACH_DEPENDS = TEST1 JASPER
 $(eval $(call link-program,test_reach,TEST_REACH))
 
 TEST_ROUTE_SOURCES = \
-	$(SRC)/Engine/Util/DataNodeXML.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
@@ -236,7 +231,6 @@ TEST_ROUTE_SOURCES = \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
-	$(SRC)/Engine/Math/Earth.cpp \
 	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/test_route.cpp
 TEST_ROUTE_DEPENDS = TEST1 JASPER
@@ -244,7 +238,6 @@ $(eval $(call link-program,test_route,TEST_ROUTE))
 
 TEST_REPLAY_TASK_SOURCES = \
 	$(SRC)/Util/UTF8.cpp \
-	$(SRC)/Engine/Util/DataNodeXML.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(TEST_SRC_DIR)/test_replay_task.cpp
 TEST_REPLAY_TASK_DEPENDS = TEST1
@@ -257,7 +250,6 @@ TEST_MATH_TABLES_DEPENDS = MATH
 $(eval $(call link-program,TestMathTables,TEST_MATH_TABLES))
 
 TEST_LOAD_TASK_SOURCES = \
-	$(SRC)/Engine/Util/DataNodeXML.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(TEST_SRC_DIR)/test_load_task.cpp
 TEST_LOAD_TASK_DEPENDS = TEST1
@@ -456,8 +448,6 @@ TEST_LOGGER_SOURCES = \
 	$(SRC)/Logger/LoggerEPE.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Version.cpp \
-	$(SRC)/Math/fixed.cpp \
-	$(SRC)/Math/Angle.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
@@ -466,7 +456,7 @@ TEST_LOGGER_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestLogger.cpp
-TEST_LOGGER_DEPENDS = IO
+TEST_LOGGER_DEPENDS = IO MATH
 $(eval $(call link-program,TestLogger,TEST_LOGGER))
 
 TEST_DRIVER_SOURCES = \
@@ -499,10 +489,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
-	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/FLARM/State.cpp \
-	$(SRC)/Math/fixed.cpp \
-	$(SRC)/Math/Angle.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
@@ -530,7 +517,6 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsFile.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -555,35 +541,26 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestWaypointReader.cpp
-TEST_WAY_POINT_FILE_DEPENDS = UTIL MATH IO ZZIP
+TEST_WAY_POINT_FILE_DEPENDS = MATH IO UTIL ZZIP
 $(eval $(call link-program,TestWaypointReader,TEST_WAY_POINT_FILE))
 
 TEST_TRACE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
-	$(SRC)/Math/fixed.cpp \
-	$(SRC)/Math/Angle.cpp \
-	$(SRC)/Math/FastMath.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
-	$(SRC)/Util/StringUtil.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TestTrace.cpp 
-TEST_TRACE_DEPENDS = UTIL MATH IO ENGINE
+TEST_TRACE_DEPENDS = IO ENGINE MATH UTIL
 TEST_TRACE_CPPFLAGS = -DDO_PRINT
 $(eval $(call link-program,TestTrace,TEST_TRACE))
 
 FLIGHT_TABLE_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Math/fixed.cpp \
-	$(SRC)/Math/Angle.cpp \
-	$(SRC)/Math/FastMath.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(TEST_SRC_DIR)/FlightTable.cpp
-FLIGHT_TABLE_DEPENDS = UTIL MATH IO
+FLIGHT_TABLE_DEPENDS = MATH IO UTIL
 $(eval $(call link-program,FlightTable,FLIGHT_TABLE))
 
 build-check: $(TESTS)
@@ -671,7 +648,6 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/NMEA/CirclingInfo.cpp \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
-	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Operation.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
@@ -892,9 +868,8 @@ LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
 	$(SRC)/Operation.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/LoadTopography.cpp
-LOAD_TOPOGRAPHY_DEPENDS = UTIL MATH IO SHAPELIB ZZIP
+LOAD_TOPOGRAPHY_DEPENDS = MATH IO UTIL SHAPELIB ZZIP
 LOAD_TOPOGRAPHY_CPPFLAGS = $(SCREEN_CPPFLAGS)
 $(eval $(call link-program,LoadTopography,LOAD_TOPOGRAPHY))
 
@@ -1043,7 +1018,6 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
-	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/Compatibility/string.c \
@@ -1070,7 +1044,6 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
-	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
@@ -1134,7 +1107,6 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
-	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
@@ -1172,7 +1144,6 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
-	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
@@ -1253,12 +1224,7 @@ $(eval $(call link-program,RunWindEKF,RUN_WIND_EKF))
 
 RUN_OLC_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
-	$(SRC)/Math/fixed.cpp \
-	$(SRC)/Math/Angle.cpp \
-	$(SRC)/Math/FastMath.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
-	$(SRC)/Util/StringUtil.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
