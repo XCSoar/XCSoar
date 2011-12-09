@@ -83,7 +83,7 @@ class MainWindow : public SingleWindow {
   ManagedWidget vario;
 
   GaugeFLARM *flarm;
-  GaugeThermalAssistant *ta;
+  ManagedWidget thermal_assistant;
 
 public:
   PopupMessage popup;
@@ -155,6 +155,8 @@ public:
    * Adjust vario
    */
   void ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout);
+
+  void ReinitialiseLayoutTA(PixelRect rc, const InfoBoxLayout::Layout &layout);
 
   /**
    * Adjust the window position and size, to make it full-screen again

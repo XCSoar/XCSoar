@@ -23,37 +23,23 @@ Copyright_License {
 */
 
 #include "Gauge/GaugeThermalAssistant.hpp"
+#include "Gauge/ThermalAssistantWindow.hpp"
+#include "Blackboard/LiveBlackboard.hpp"
 #include "InputEvents.hpp"
 
-/**
- * Constructor of the GaugeFLARM class
- * @param parent Parent window
- * @param left Left edge of window pixel location
- * @param top Top edge of window pixel location
- * @param width Width of window (pixels)
- * @param height Height of window (pixels)
- */
-GaugeThermalAssistant::GaugeThermalAssistant(ContainerWindow &parent,
-                                             PixelScalar left, PixelScalar top,
-                                             UPixelScalar width,
-                                             UPixelScalar height,
-                                             WindowStyle style)
-  :ThermalAssistantWindow(5, true)
-{
-  set(parent, left, top, width, height, style);
-}
-
-void
-GaugeThermalAssistant::Update(const bool enabled, const Angle direction,
-                              const DerivedInfo &derived)
-{
-  if (enabled && derived.circling) {
-    ThermalAssistantWindow::Update(direction, derived);
-    show();
-  } else {
-    hide();
+class GaugeThermalAssistantWindow : public ThermalAssistantWindow {
+public:
+  GaugeThermalAssistantWindow(ContainerWindow &parent,
+                              PixelRect rc,
+                              WindowStyle style=WindowStyle())
+    :ThermalAssistantWindow(5, true)
+  {
+    set(parent, rc, style);
   }
-}
+
+protected:
+  bool on_mouse_down(PixelScalar x, PixelScalar y);
+};
 
 /**
  * This function is called when the mouse is pressed on the FLARM gauge and
@@ -63,8 +49,68 @@ GaugeThermalAssistant::Update(const bool enabled, const Angle direction,
  * @return
  */
 bool
-GaugeThermalAssistant::on_mouse_down(PixelScalar x, PixelScalar y)
+GaugeThermalAssistantWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   InputEvents::eventThermalAssistant(_T(""));
   return true;
+}
+
+void
+GaugeThermalAssistant::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  WindowStyle style;
+  style.hide();
+
+  GaugeThermalAssistantWindow *window =
+    new GaugeThermalAssistantWindow(parent, rc, style);
+  SetWindow(window);
+}
+
+void
+GaugeThermalAssistant::Unprepare()
+{
+  GaugeThermalAssistantWindow *window =
+    (GaugeThermalAssistantWindow *)WindowWidget::GetWindow();
+  delete window;
+
+  WindowWidget::Unprepare();
+}
+
+void
+GaugeThermalAssistant::Show(const PixelRect &rc)
+{
+  Update(blackboard.Calculated());
+
+  WindowWidget::Show(rc);
+
+  blackboard.AddListener(*this);
+}
+
+void
+GaugeThermalAssistant::Hide()
+{
+  blackboard.RemoveListener(*this);
+  WindowWidget::Hide();
+}
+
+bool
+GaugeThermalAssistant::SetFocus()
+{
+  return false;
+}
+
+void
+GaugeThermalAssistant::OnCalculatedUpdate(const MoreData &basic,
+                                          const DerivedInfo &calculated)
+{
+  Update(calculated);
+}
+
+void
+GaugeThermalAssistant::Update(const DerivedInfo &calculated)
+{
+  ThermalAssistantWindow *window =
+    (ThermalAssistantWindow *)GetWindow();
+
+  window->Update(calculated.heading, calculated);
 }

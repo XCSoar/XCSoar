@@ -24,27 +24,33 @@ Copyright_License {
 #ifndef GAUGE_THERMAL_ASSISTENT_HPP
 #define GAUGE_THERMAL_ASSISTENT_HPP
 
-#include "Gauge/ThermalAssistantWindow.hpp"
+#include "Form/WindowWidget.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 
-struct DerivedInfo;
-class Angle;
-class ContainerWindow;
+class LiveBlackboard;
 
 /**
  * Widget to display a FLARM gauge
  */
-class GaugeThermalAssistant : public ThermalAssistantWindow {
+class GaugeThermalAssistant
+  : public WindowWidget, private NullBlackboardListener {
+  LiveBlackboard &blackboard;
+
 public:
-  GaugeThermalAssistant(ContainerWindow &parent,
-                        PixelScalar left, PixelScalar top,
-                        UPixelScalar width, UPixelScalar height,
-                        WindowStyle style=WindowStyle());
+  GaugeThermalAssistant(LiveBlackboard &_blackboard)
+    :blackboard(_blackboard) {}
 
-  void Update(const bool enabled, const Angle direction,
-              const DerivedInfo &derived);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Unprepare();
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+  virtual bool SetFocus();
 
-protected:
-  bool on_mouse_down(PixelScalar x, PixelScalar y);
+private:
+  void Update(const DerivedInfo &calculated);
+
+  virtual void OnCalculatedUpdate(const MoreData &basic,
+                                  const DerivedInfo &calculated);
 };
 
 #endif

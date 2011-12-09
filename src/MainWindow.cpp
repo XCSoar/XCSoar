@@ -54,7 +54,8 @@ Copyright_License {
 
 MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(NULL),
-   map(NULL), widget(NULL), vario(*this), flarm(NULL), ta(NULL),
+   map(NULL), widget(NULL), vario(*this),
+   flarm(NULL), thermal_assistant(*this),
    popup(status_messages, *this, CommonInterface::GetUISettings()),
    timer(*this),
    FullScreen(false),
@@ -181,6 +182,8 @@ MainWindow::InitialiseConfigured()
 
   ReinitialiseLayout_vario(ib_layout);
 
+  ReinitialiseLayoutTA(rc, ib_layout);
+
   WindowStyle hidden_border;
   hidden_border.hide();
   hidden_border.border();
@@ -194,13 +197,6 @@ MainWindow::InitialiseConfigured()
                          hidden_border);
   flarm->bring_to_top();
   ReinitialiseLayout_flarm(rc, ib_layout);
-
-  UPixelScalar sz = std::min(ib_layout.control_height,
-                             ib_layout.control_width) * 2;
-
-  ta = new GaugeThermalAssistant(*this, 0, rc.bottom - sz, sz, sz,
-                                 hidden_border);
-  ta->bring_to_top();
 
   map = new GlueMapWindow(*look);
   map->SetSettingsComputer(CommonInterface::SettingsComputer());
@@ -232,8 +228,7 @@ MainWindow::Deinitialise()
   delete flarm;
   flarm = NULL;
 
-  delete ta;
-  ta = NULL;
+  thermal_assistant.Clear();
 
   delete look;
   look = NULL;
@@ -255,6 +250,17 @@ MainWindow::ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout)
   vario.Show();
 
   // XXX vario->bring_to_top();
+}
+
+void
+MainWindow::ReinitialiseLayoutTA(PixelRect rc,
+                                 const InfoBoxLayout::Layout &layout)
+{
+  UPixelScalar sz = std::min(layout.control_height,
+                             layout.control_width) * 2;
+  rc.right = rc.left + sz;
+  rc.top = rc.bottom - sz;
+  thermal_assistant.Move(rc);
 }
 
 void
@@ -297,11 +303,7 @@ MainWindow::ReinitialiseLayout()
 
   ReinitialiseLayout_flarm(rc, ib_layout);
 
-  if (ta != NULL) {
-    UPixelScalar sz = std::min(ib_layout.control_height,
-                               ib_layout.control_width) * 2;
-    ta->move(0, rc.bottom - sz, sz, sz);
-  }
+  ReinitialiseLayoutTA(rc, ib_layout);
 
   if (map != NULL) {
     if (FullScreen)
@@ -532,12 +534,25 @@ MainWindow::on_timer(WindowTimer &_timer)
                     CommonInterface::Basic(),
                     CommonInterface::SettingsComputer());
 
-    if (ta != NULL)
-      ta->Update(CommonInterface::GetUISettings().enable_thermal_assistant_gauge &&
-                 !InputEvents::IsFlavour(_T("TA")),
-                 CommonInterface::Calculated().heading,
-                 CommonInterface::Calculated());
+    if (!CommonInterface::GetUISettings().enable_thermal_assistant_gauge) {
+      thermal_assistant.Clear();
+    } else if (!CommonInterface::Calculated().circling ||
+               InputEvents::IsFlavour(_T("TA"))) {
+      thermal_assistant.Hide();
+    } else if (!has_dialog()) {
+      if (!thermal_assistant.IsDefined())
+        thermal_assistant.Set(new GaugeThermalAssistant(CommonInterface::GetLiveBlackboard()));
+
+      if (!thermal_assistant.IsVisible()) {
+        thermal_assistant.Show();
+
+        GaugeThermalAssistant *widget =
+          (GaugeThermalAssistant *)thermal_assistant.Get();
+        widget->Raise();
+      }
+    }
   }
+
   return true;
 }
 
