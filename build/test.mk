@@ -1,3 +1,5 @@
+name-to-bin = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(1))
+
 TESTFAST = \
 	$(TARGET_BIN_DIR)/test_normalise$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_fixed$(TARGET_EXEEXT) \
@@ -77,7 +79,7 @@ TEST_NAMES = \
 	TestByteOrder \
 	TestByteOrder2
 
-TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
+TESTS = $(call name-to-bin,$(TEST_NAMES))
 
 TEST_OVERWRITING_RING_BUFFER_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
@@ -636,7 +638,7 @@ ifeq ($(HAVE_CE)$(findstring $(TARGET),ALTAIR),y)
 DEBUG_PROGRAM_NAMES += TodayInstall
 endif
 
-DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRAM_NAMES))
+DEBUG_PROGRAMS = $(call name-to-bin,$(DEBUG_PROGRAM_NAMES))
 
 DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Device/Port/Port.cpp \
