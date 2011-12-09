@@ -1,38 +1,38 @@
 name-to-bin = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(1))
 
 TESTFAST = \
-	$(TARGET_BIN_DIR)/test_normalise$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_fixed$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_waypoints$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_pressure$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_mc$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_task$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_modes$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_automc$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_acfilter$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_trees$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_vopt$(TARGET_EXEEXT)
+	test_normalise \
+	test_fixed \
+	test_waypoints \
+	test_pressure \
+	test_mc \
+	test_task \
+	test_modes \
+	test_automc \
+	test_acfilter \
+	test_trees \
+	test_vopt
 
 TESTSLOW = \
-	$(TARGET_BIN_DIR)/test_bestcruisetrack$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_airspace$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_effectivemc$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_cruiseefficiency$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_highterrain$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_randomtask$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_flight$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_olc$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_aat$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_replay_olc$(TARGET_EXEEXT)
+	test_bestcruisetrack \
+	test_airspace \
+	test_effectivemc \
+	test_cruiseefficiency \
+	test_highterrain \
+	test_randomtask \
+	test_flight \
+	test_olc \
+	test_aat \
+	test_replay_olc
 
 HARNESS_PROGRAMS = $(TESTFAST) $(TESTSLOW)
 
-build-harness: $(HARNESS_PROGRAMS)
+build-harness: $(call name-to-bin,$(HARNESS_PROGRAMS))
 
-testslow: $(TESTSLOW)
+testslow: $(call name-to-bin,$(TESTSLOW))
 	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTSLOW)
 
-testfast: $(TESTFAST)
+testfast: $(call name-to-bin,$(TESTFAST))
 	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTFAST)
 
 TEST1_LDADD = $(HARNESS_LIBS) \
@@ -44,12 +44,16 @@ TEST1_LDADD = $(HARNESS_LIBS) \
 TEST1_LDLIBS = \
 	$(ZZIP_LDLIBS)
 
-TESTLIBS = $(TEST1_LDADD) \
-	$(call SRC_TO_OBJ,$(TEST_SRC_DIR)/FakeTerrain.cpp)
+define link-harness-program
+$(1)_SOURCES = \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/$(1).cpp
+$(1)_LDADD = $(TEST1_LDADD)
+$(1)_LDLIBS = $(TEST1_LDLIBS)
+$(call link-program,$(1),$(1))
+endef
 
-$(HARNESS_PROGRAMS): $(TARGET_BIN_DIR)/%$(TARGET_EXEEXT): $(TARGET_OUTPUT_DIR)/test/src/%.o $(TESTLIBS) | $(TARGET_BIN_DIR)/dirstamp
-	@$(NQ)echo "  LINK    $@"
-	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) $(TEST1_LDLIBS) -o $@
+$(foreach name,$(HARNESS_PROGRAMS),$(eval $(call link-harness-program,$(name))))
 
 TEST_NAMES = \
 	test_fixed \
