@@ -30,6 +30,7 @@ Copyright_License {
 #include "TaskLook.hpp"
 #include "MarkerLook.hpp"
 #include "TrailLook.hpp"
+#include "WindArrowLook.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Pen.hpp"
@@ -45,6 +46,7 @@ struct MapLook {
   TaskLook task;
   MarkerLook marker;
   TrailLook trail;
+  WindArrowLook wind;
 
 #ifdef HAVE_HATCHED_BRUSH
   Bitmap hAboveTerrainBitmap;
@@ -52,9 +54,6 @@ struct MapLook {
 #endif
 
   MaskedIcon hTerrainWarning;
-
-  Pen hpWind, hpWindTail;
-  Brush hbWind;
 
   Pen hpCompass;
   Brush hbCompass;

@@ -21,30 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_WIND_ARROW_RENDERER_HPP
-#define XCSOAR_WIND_ARROW_RENDERER_HPP
+#include "WindArrowLook.hpp"
+#include "Screen/Layout.hpp"
 
-#include "Screen/Point.hpp"
-
-class Canvas;
-class Angle;
-struct WindArrowLook;
-struct SpeedVector;
-struct DerivedInfo;
-struct SETTINGS_MAP;
-
-class WindArrowRenderer {
-  const WindArrowLook &look;
-
-public:
-  WindArrowRenderer(const WindArrowLook &_look):look(_look) {}
-
-  void Draw(Canvas &canvas, const Angle screen_angle, const SpeedVector wind,
-            const RasterPoint pos, const PixelRect rc, bool with_tail);
-
-  void Draw(Canvas &canvas, const Angle screen_angle, const RasterPoint pos,
-            const PixelRect rc, const DerivedInfo &calculated,
-            const SETTINGS_MAP &settings);
-};
-
-#endif
+void
+WindArrowLook::Initialise()
+{
+  hpWind.Set(Layout::Scale(1), DarkColor(COLOR_GRAY));
+  hpWindTail.Set(Pen::DASH, 1, COLOR_BLACK);
+  hbWind.Set(COLOR_GRAY);
+}

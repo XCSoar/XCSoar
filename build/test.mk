@@ -1354,6 +1354,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Look/MapLook.cpp \
+	$(SRC)/Look/WindArrowLook.cpp \
 	$(SRC)/Look/WaypointLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Look/TrailLook.cpp \
@@ -1620,6 +1621,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Look/Look.cpp \
 	$(SRC)/Look/MapLook.cpp \
+	$(SRC)/Look/WindArrowLook.cpp \
 	$(SRC)/Look/VarioLook.cpp \
 	$(SRC)/Look/ChartLook.cpp \
 	$(SRC)/Look/ThermalBandLook.cpp \

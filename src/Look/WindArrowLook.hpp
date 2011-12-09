@@ -21,30 +21,18 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_WIND_ARROW_RENDERER_HPP
-#define XCSOAR_WIND_ARROW_RENDERER_HPP
+#ifndef XCSOAR_WIND_ARROW_LOOK_HPP
+#define XCSOAR_WIND_ARROW_LOOK_HPP
 
-#include "Screen/Point.hpp"
+#include "Screen/Pen.hpp"
+#include "Screen/Brush.hpp"
 
-class Canvas;
-class Angle;
-struct WindArrowLook;
-struct SpeedVector;
-struct DerivedInfo;
-struct SETTINGS_MAP;
+struct WindArrowLook
+{
+  Pen hpWind, hpWindTail;
+  Brush hbWind;
 
-class WindArrowRenderer {
-  const WindArrowLook &look;
-
-public:
-  WindArrowRenderer(const WindArrowLook &_look):look(_look) {}
-
-  void Draw(Canvas &canvas, const Angle screen_angle, const SpeedVector wind,
-            const RasterPoint pos, const PixelRect rc, bool with_tail);
-
-  void Draw(Canvas &canvas, const Angle screen_angle, const RasterPoint pos,
-            const PixelRect rc, const DerivedInfo &calculated,
-            const SETTINGS_MAP &settings);
+  void Initialise();
 };
 
 #endif

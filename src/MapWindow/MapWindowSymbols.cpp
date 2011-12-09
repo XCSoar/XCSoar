@@ -35,7 +35,7 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
   if (IsPanning())
     return;
 
-  WindArrowRenderer wind_arrow_renderer(look);
+  WindArrowRenderer wind_arrow_renderer(look.wind);
   wind_arrow_renderer.Draw(canvas, render_projection.GetScreenAngle(),
                            Start, rc, Calculated(), SettingsMap());
 }

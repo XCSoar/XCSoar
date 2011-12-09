@@ -35,6 +35,7 @@ MapLook::Initialise(const struct SETTINGS_MAP &settings)
   task.Initialise();
   marker.Initialise();
   trail.Initialise(settings);
+  wind.Initialise();
 
 #ifdef HAVE_HATCHED_BRUSH
   hAboveTerrainBitmap.load(IDB_ABOVETERRAIN);
@@ -42,10 +43,6 @@ MapLook::Initialise(const struct SETTINGS_MAP &settings)
 #endif
 
   hTerrainWarning.Load(IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD);
-
-  hpWind.Set(Layout::Scale(1), DarkColor(COLOR_GRAY));
-  hpWindTail.Set(Pen::DASH, 1, COLOR_BLACK);
-  hbWind.Set(COLOR_GRAY);
 
   hbCompass.Set(Color(207, 207, 207));
   hpCompass.Set(Layout::Scale(1), COLOR_GRAY);
