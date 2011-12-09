@@ -23,7 +23,7 @@ Copyright_License {
 */
 
 #include "Gauge/GaugeThermalAssistant.hpp"
-#include "Dialogs/Dialogs.h"
+#include "InputEvents.hpp"
 
 /**
  * Constructor of the GaugeFLARM class
@@ -65,6 +65,6 @@ GaugeThermalAssistant::Update(const bool enabled, const Angle direction,
 bool
 GaugeThermalAssistant::on_mouse_down(PixelScalar x, PixelScalar y)
 {
-  dlgThermalAssistantShowModal();
+  InputEvents::eventThermalAssistant(_T(""));
   return true;
 }
