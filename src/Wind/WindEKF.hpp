@@ -64,12 +64,22 @@ public:
   void Init();
   void StatePrediction(float gps_vel[2], float dT);
   void Correction(fixed dynamic_pressure, float gps_vel[2]);
+
+  /**
+   * Does the prediction step of the Kalman filter for the covariance matrix
+   */
   void CovariancePrediction(float dT);
   const float* get_state() const { return X; };
 
 private:
+  /**
+   * Does the update step of the Kalman filter for the covariance and estimate
+   */
   void SerialUpdate(float Z[NUMV], float Y[NUMV]);
 
+  /**
+   * Does a 4th order Runge Kutta numerical integration step
+   */
   void RungeKutta(float U[NUMU], float dT);
   void StateEq(float U[NUMU], float Xdot[NUMX]);
 

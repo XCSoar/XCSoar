@@ -30,10 +30,8 @@ Copyright_License {
 
 #include <math.h>
 
-//  *************  Exposed Functions ****************
-//  *************************************************
-
-void WindEKF::StatePrediction(float gps_vel[2], float dT)
+void
+WindEKF::StatePrediction(float gps_vel[2], float dT)
 {
   float U[2];
 
@@ -45,7 +43,8 @@ void WindEKF::StatePrediction(float gps_vel[2], float dT)
   RungeKutta(U, dT);
 }
 
-void WindEKF::Correction(fixed dynamic_pressure, float gps_vel[2])
+void
+WindEKF::Correction(fixed dynamic_pressure, float gps_vel[2])
 {
   float Z[1], Y[1];
 
@@ -57,17 +56,15 @@ void WindEKF::Correction(fixed dynamic_pressure, float gps_vel[2])
   SerialUpdate(Z, Y);
 }
 
-//  *************  CovariancePrediction *************
-//  Does the prediction step of the Kalman filter for the covariance matrix
-//  Output, Pnew, overwrites P, the input covariance
-//  Pnew = (I+F*T)*P*(I+F*T)' + T^2*G*Q*G'
-//  Q is the discrete time covariance of process noise
-//  Q is vector of the diagonal for a square matrix with
-//    dimensions equal to the number of disturbance noise variables
-//  ************************************************
-
-void WindEKF::CovariancePrediction(float dT)
+void
+WindEKF::CovariancePrediction(float dT)
 {
+  //  Output, Pnew, overwrites P, the input covariance
+  //  Pnew = (I+F*T)*P*(I+F*T)' + T^2*G*Q*G'
+  //  Q is the discrete time covariance of process noise
+  //  Q is vector of the diagonal for a square matrix with
+  //    dimensions equal to the number of disturbance noise variables
+
   float Dummy[NUMX][NUMX], dTsq;
   uint8_t i, j, k;
 
@@ -92,22 +89,20 @@ void WindEKF::CovariancePrediction(float dT)
     }
 }
 
-//  *************  SerialUpdate *******************
-//  Does the update step of the Kalman filter for the covariance and estimate
-//  Outputs are Xnew & Pnew, and are written over P and X
-//  Z is actual measurement, Y is predicted measurement
-//  Xnew = X + K*(Z-Y), Pnew=(I-K*H)*P,
-//    where K=P*H'*inv[H*P*H'+R]
-//  NOTE the algorithm assumes R (measurement covariance matrix) is diagonal
-//    i.e. the measurment noises are uncorrelated.
-//  It therefore uses a serial update that requires no matrix inversion by
-//    processing the measurements one at a time.
-//  Algorithm - see Grewal and Andrews, "Kalman Filtering,2nd Ed" p.121 & p.253
-//            - or see Simon, "Optimal State Estimation," 1st Ed, p.150
-//  ************************************************
-
-void WindEKF::SerialUpdate(float Z[NUMV], float Y[NUMV])
+void
+WindEKF::SerialUpdate(float Z[NUMV], float Y[NUMV])
 {
+  //  Outputs are Xnew & Pnew, and are written over P and X
+  //  Z is actual measurement, Y is predicted measurement
+  //  Xnew = X + K*(Z-Y), Pnew=(I-K*H)*P,
+  //    where K=P*H'*inv[H*P*H'+R]
+  //  NOTE the algorithm assumes R (measurement covariance matrix) is diagonal
+  //    i.e. the measurment noises are uncorrelated.
+  //  It therefore uses a serial update that requires no matrix inversion by
+  //    processing the measurements one at a time.
+  //  Algorithm - see Grewal and Andrews, "Kalman Filtering,2nd Ed" p.121 & p.253
+  //            - or see Simon, "Optimal State Estimation," 1st Ed, p.150
+
   float HP[NUMX], HPHR, Error;
   uint8_t i, j, k, m;
 
@@ -141,15 +136,13 @@ void WindEKF::SerialUpdate(float Z[NUMV], float Y[NUMV])
   }
 }
 
-//  *************  RungeKutta **********************
-//  Does a 4th order Runge Kutta numerical integration step
-//  Output, Xnew, is written over X
-//  NOTE the algorithm assumes time invariant state equations and
-//    constant inputs over integration step
-//  ************************************************
-
-void WindEKF::RungeKutta(float U[NUMU], float dT)
+void
+WindEKF::RungeKutta(float U[NUMU], float dT)
 {
+  //  Output, Xnew, is written over X
+  //  NOTE the algorithm assumes time invariant state equations and
+  //    constant inputs over integration step
+
   float dT2 =
     dT / 2, K1[NUMX], K2[NUMX], K3[NUMX], K4[NUMX], Xlast[NUMX];
   uint8_t i;
