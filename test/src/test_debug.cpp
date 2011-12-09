@@ -29,7 +29,6 @@
 
 int n_samples = 0;
 int interactive = 0;
-int verbose = 0;
 int output_skip = 5;
 
 AutopilotParameters autopilot_parms;

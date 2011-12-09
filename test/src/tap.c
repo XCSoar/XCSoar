@@ -36,7 +36,7 @@
 
 #include "tap.h"
 
-extern int verbose;
+int verbose;
 
 static int no_plan = 0;
 static int skip_all = 0;
