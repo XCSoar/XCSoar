@@ -60,8 +60,8 @@ struct SpeedVector {
   /** 
    * Constructor given two magnitudes (east and north)
    * 
-   * @param _x East speed
-   * @param _x North speed
+   * @param x East speed
+   * @param y North speed
    * @return Initialised object
    */
   SpeedVector(fixed x, fixed y):bearing(Angle::FromXY(y,x).AsBearing()), norm(sqrt(x*x+y*y)) {}
