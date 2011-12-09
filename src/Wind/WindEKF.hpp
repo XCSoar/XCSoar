@@ -33,15 +33,29 @@ struct DerivedInfo;
 
 class WindEKF {
   // constants/macros/typdefs
-#define NUMX 3			
-#define NUMW 3			// number of plant noise inputs, w is disturbance noise vector
-#define NUMV 1			// number of measurements, v is the measurement noise vector
-#define NUMU 2			// number of deterministic inputs, U is the input vector
 
-  float F[NUMX][NUMX], G[NUMX][NUMW], H[NUMV][NUMX];	// linearized system matrices
-  float P[NUMX][NUMX], X[NUMX];	// covariance matrix and state vector
-  float Q[NUMW], R[NUMV];		// input noise and measurement noise variances
-  float K[NUMX][NUMV];		// feedback gain matrix
+  #define NUMX 3
+
+  /// number of plant noise inputs, w is disturbance noise vector
+  #define NUMW 3
+
+  /// number of measurements, v is the measurement noise vector
+  #define NUMV 1
+
+  /// number of deterministic inputs, U is the input vector
+  #define NUMU 2
+
+  /// linearized system matrices
+  float F[NUMX][NUMX], G[NUMX][NUMW], H[NUMV][NUMX];
+
+  /// covariance matrix and state vector
+  float P[NUMX][NUMX], X[NUMX];
+
+  /// input noise and measurement noise variances
+  float Q[NUMW], R[NUMV];
+
+  /// feedback gain matrix
+  float K[NUMX][NUMV];
 
 public:
   WindEKF() {
