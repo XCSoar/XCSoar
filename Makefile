@@ -405,6 +405,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InputEventsAirspace.cpp \
 	$(SRC)/InputEventsTask.cpp \
 	$(SRC)/InputEventsSettings.cpp \
+	$(SRC)/InputEventsThermalAssistant.cpp \
 	$(SRC)/InputEventsTraffic.cpp \
 	$(SRC)/InputQueue.cpp \
 	$(SRC)/InputLookup.cpp \

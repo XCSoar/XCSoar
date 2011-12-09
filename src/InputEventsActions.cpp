@@ -197,12 +197,6 @@ InputEvents::eventFLARMRadar(gcc_unused const TCHAR *misc)
     CommonInterface::main_window.ToggleSuppressFLARMRadar();
 }
 
-void
-InputEvents::eventThermalAssistant(gcc_unused const TCHAR *misc)
-{
-  dlgThermalAssistantShowModal();
-}
-
 // Mode
 // Sets the current event mode.
 //  The argument is the label of the mode to activate.
