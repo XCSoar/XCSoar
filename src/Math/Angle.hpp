@@ -384,6 +384,14 @@ public:
   friend std::ostream& operator<< (std::ostream& o, const Angle& a);
 #endif
 
+  /**
+   * Returns the angle based on the input of both a x- and y-coordinate.
+   * This is the mathematical angle where zero means along x axis and
+   * the positive direction is counter-clockwise!
+   * @param x x-coordinate
+   * @param y y-coordinate
+   * @return Counter-clockwise angle between the x-axis and the given coordinate
+   */
   static Angle FromXY(const fixed& x, const fixed& y) {
     return Angle::Radians(atan2(y,x));
   }
