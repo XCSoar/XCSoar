@@ -296,3 +296,10 @@ InputEvents::sub_ScaleZoom(int vswitch)
 
   sub_SetZoom(value);
 }
+
+void
+InputEvents::eventMap(const TCHAR *misc)
+{
+  if (_tcscmp(misc, _T("show")) == 0)
+    CommonInterface::main_window.ActivateMap();
+}
