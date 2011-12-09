@@ -33,6 +33,14 @@ class Angle;
 void ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
                         const RasterPoint &p3, RasterPoint *p4, int offset);
 
+/**
+ * Shifts and rotates the given polygon and also sizes it via FastScale()
+ * @param poly Points specifying the polygon
+ * @param n Number of points of the polygon
+ * @param xs Pixels to shift in the x-direction
+ * @param ys Pixels to shift in the y-direction
+ * @param angle Angle of rotation
+ */
 void PolygonRotateShift(RasterPoint *poly, int n, PixelScalar x, PixelScalar y,
                         Angle angle, const bool scale = true);
 

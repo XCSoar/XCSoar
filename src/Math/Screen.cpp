@@ -77,14 +77,6 @@ roundshift(int x)
   return x >> 10;
 }
 
-/**
- * Shifts and rotates the given polygon and also sizes it via FastScale()
- * @param poly Points specifying the polygon
- * @param n Number of points of the polygon
- * @param xs Pixels to shift in the x-direction
- * @param ys Pixels to shift in the y-direction
- * @param angle Angle of rotation
- */
 void
 PolygonRotateShift(RasterPoint *poly, const int n,
                    const PixelScalar xs, const PixelScalar ys,
