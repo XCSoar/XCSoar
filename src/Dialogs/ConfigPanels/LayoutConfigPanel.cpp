@@ -121,9 +121,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     dfe->addEnumText(_("Bottom Right"), flBottomRight);
     dfe->addEnumText(_("Centre Top"), flCentreTop);
     dfe->addEnumText(_("Centre Bottom"), flCentreBottom);
-    unsigned val = 0;
-    if(!Profile::Get(szProfileFlarmLocation, val)) val = 0;
-    dfe->Set(val);
+    dfe->Set(ui_settings.flarm_location);
     wp->RefreshDisplay();
   }
 
@@ -209,16 +207,9 @@ LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
                          szProfileInfoBoxGeometry,
                          InfoBoxLayout::InfoBoxGeometry);
 
-  wp = (WndProperty*)form.FindByName(_T("prpAppFlarmLocation"));
-  if (wp) {
-    unsigned newval = (unsigned)wp->GetDataField()->GetAsInteger();
-    unsigned oldval = 0;
-    if(!Profile::Get(szProfileFlarmLocation, oldval)) oldval = 0;
-    if (newval != oldval) {
-      Profile::Set(szProfileFlarmLocation, newval);
-      info_box_geometry_changed = true;
-    }
-  }
+  info_box_geometry_changed |=
+    SaveFormPropertyEnum(form, _T("prpAppFlarmLocation"),
+                         szProfileFlarmLocation, ui_settings.flarm_location);
 
   changed |= info_box_geometry_changed;
 

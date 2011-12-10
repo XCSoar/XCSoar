@@ -66,6 +66,7 @@ Profile::Load(UISettings &settings)
   Get(szProfileEnableTAGauge, settings.enable_thermal_assistant_gauge);
 
   GetEnum(szProfileAppStatusMessageAlignment, settings.popup_message_position);
+  GetEnum(szProfileFlarmLocation, settings.flarm_location);
 
   LoadUnits(settings.units);
   Load(settings.map);

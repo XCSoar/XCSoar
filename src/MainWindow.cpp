@@ -339,8 +339,7 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout i
   if (flarm == NULL)
     return;
 
-  unsigned val = 0;
-  if (!Profile::Get(szProfileFlarmLocation, val)) val = flAuto;
+  FlarmLocation val = CommonInterface::GetUISettings().flarm_location;
 
   // Automatic mode - follow info boxes
   if (val == flAuto) {

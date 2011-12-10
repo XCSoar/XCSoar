@@ -69,17 +69,6 @@ enum DisplayTrackBearing {
   dtbAuto
 };
 
-/** Location of Flarm radar */
-enum FlarmLocation {
-  flAuto,
-  flTopLeft,
-  flTopRight,
-  flBottomLeft,
-  flBottomRight,
-  flCentreTop,
-  flCentreBottom,
-};
-
 // user interface options
 
 // where using these from Calculations or MapWindow thread, should

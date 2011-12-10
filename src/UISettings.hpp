@@ -37,6 +37,17 @@ enum StateMessageAlign_t {
   smAlignTopLeft,
 };
 
+/** Location of Flarm radar */
+enum FlarmLocation {
+  flAuto,
+  flTopLeft,
+  flTopRight,
+  flBottomLeft,
+  flBottomRight,
+  flCentreTop,
+  flCentreBottom,
+};
+
 /**
  * User interface settings.
  */
@@ -58,6 +69,8 @@ struct UISettings {
   bool enable_thermal_assistant_gauge;
 
   StateMessageAlign_t popup_message_position;
+
+  FlarmLocation flarm_location;
 
   UnitSetting units;
   SETTINGS_MAP map;

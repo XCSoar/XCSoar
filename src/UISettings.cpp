@@ -37,6 +37,7 @@ UISettings::SetDefaults()
   enable_thermal_assistant_gauge = true;
 
   popup_message_position = smAlignCenter;
+  flarm_location = flAuto;
 
   units.SetDefaults();
   map.SetDefaults();
