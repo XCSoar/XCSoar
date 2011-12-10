@@ -32,6 +32,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Units/Units.hpp"
 #include "SettingsMap.hpp"
+#include "Util/Macros.hpp"
 
 #include <tchar.h>
 #include <cstdio>
@@ -51,7 +52,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 
   PixelScalar kx = text_width / Layout::FastScale(1) / 2;
 
-  RasterPoint arrow[7] = {
+  RasterPoint arrow[] = {
       { 0, -20 },
       { -6, (PixelScalar)(-26 - wmag) },
       { 0, (PixelScalar)(-20 - wmag) },
@@ -61,17 +62,19 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
       { (PixelScalar)(-8 - kx), -24 }
   };
 
-  PolygonRotateShift(arrow, 7, pos.x, pos.y, wind.bearing - screen_angle);
+  PolygonRotateShift(arrow, ARRAY_SIZE(arrow),
+                     pos.x, pos.y, wind.bearing - screen_angle);
 
   canvas.polygon(arrow, 5);
 
   if (with_tail) {
-    RasterPoint tail[2] = {
+    RasterPoint tail[] = {
       { 0, Layout::FastScale(-20) },
       { 0, Layout::FastScale(-26 - min(PixelScalar(20), wmag) * 3) },
     };
 
-    PolygonRotateShift(tail, 2, pos.x, pos.y, wind.bearing - screen_angle);
+    PolygonRotateShift(tail, ARRAY_SIZE(tail),
+                       pos.x, pos.y, wind.bearing - screen_angle);
 
     // optionally draw dashed line
     canvas.Select(look.hpWindTail);
