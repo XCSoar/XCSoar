@@ -97,4 +97,6 @@ struct SpeedVector {
   }
 };
 
+static_assert(is_trivial<SpeedVector>::value, "type is not trivial");
+
 #endif
