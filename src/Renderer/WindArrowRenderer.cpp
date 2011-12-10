@@ -42,15 +42,9 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const SpeedVector wind, const RasterPoint pos,
                         const PixelRect rc, bool with_tail)
 {
-  canvas.Select(Fonts::map_bold);
-  UPixelScalar text_width = canvas.CalcTextSize(_T("99")).cx / 2;
-
-  canvas.Select(look.hpWind);
-  canvas.Select(look.hbWind);
+  // Draw arrow
 
   PixelScalar wmag = iround(4 * wind.norm);
-
-  PixelScalar kx = text_width / Layout::FastScale(1) / 2;
 
   RasterPoint arrow[] = {
       { 0, -20 },
@@ -58,14 +52,17 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
       { 0, (PixelScalar)(-20 - wmag) },
       { 6, (PixelScalar)(-26 - wmag) },
       { 0, -20 },
-      { (PixelScalar)(8 + kx), -24 },
-      { (PixelScalar)(-8 - kx), -24 }
   };
 
   PolygonRotateShift(arrow, ARRAY_SIZE(arrow),
                      pos.x, pos.y, wind.bearing - screen_angle);
 
+  canvas.Select(look.hpWind);
+  canvas.Select(look.hbWind);
   canvas.polygon(arrow, 5);
+
+
+  // Draw arrow tail
 
   if (with_tail) {
     RasterPoint tail[] = {
@@ -76,24 +73,36 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
     PolygonRotateShift(tail, ARRAY_SIZE(tail),
                        pos.x, pos.y, wind.bearing - screen_angle);
 
-    // optionally draw dashed line
     canvas.Select(look.hpWindTail);
     canvas.line(tail[0], tail[1]);
   }
+
+
+  // Draw wind speed label
 
   StaticString<12> buffer;
   buffer.Format(_T("%i"), iround(Units::ToUserWindSpeed(wind.norm)));
 
   canvas.SetTextColor(COLOR_BLACK);
+  canvas.Select(Fonts::map_bold);
+
+  UPixelScalar text_width = canvas.CalcTextSize(buffer).cx / 2;
+  UPixelScalar kx = text_width / Layout::FastScale(1) / 2;
+  RasterPoint label[] = {
+      { (PixelScalar)(8 + kx), -24 },
+      { (PixelScalar)(-8 - kx), -24 }
+  };
+  PolygonRotateShift(label, ARRAY_SIZE(label),
+                     pos.x, pos.y, wind.bearing - screen_angle);
 
   TextInBoxMode style;
   style.align = A_CENTER;
   style.mode = RM_OUTLINED;
 
-  if (arrow[5].y >= arrow[6].y)
-    TextInBox(canvas, buffer, arrow[5].x - kx, arrow[5].y, style, rc);
+  if (label[0].y >= label[1].y)
+    TextInBox(canvas, buffer, label[0].x - kx, label[0].y, style, rc);
   else
-    TextInBox(canvas, buffer, arrow[6].x - kx, arrow[6].y, style, rc);
+    TextInBox(canvas, buffer, label[1].x - kx, label[1].y, style, rc);
 }
 
 void
