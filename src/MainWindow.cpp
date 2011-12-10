@@ -361,54 +361,44 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout i
 
   switch (val) {
   case flTopLeft:
-    flarm->move(
-                rc.left + 1,
-                rc.top + 1,
-                ib_layout.control_width * 2 - 1,
-                ib_layout.control_height * 2 - 1
-                );
+    rc.right = rc.left + ib_layout.control_width * 2;
+    ++rc.left;
+    rc.bottom = rc.top + ib_layout.control_height * 2;
+    ++rc.top;
     break;
+
   case flTopRight:
-    flarm->move(
-                rc.right - ib_layout.control_width * 2 + 1,
-                rc.top + 1,
-                ib_layout.control_width * 2 - 1,
-                ib_layout.control_height * 2 - 1
-                );
+    rc.left = rc.right - ib_layout.control_width * 2 + 1;
+    rc.bottom = rc.top + ib_layout.control_height * 2;
+    ++rc.top;
     break;
+
   case flBottomLeft:
-    flarm->move(
-                rc.left + 1,
-                rc.bottom - ib_layout.control_height * 2 + 1,
-                ib_layout.control_width * 2 - 1,
-                ib_layout.control_height * 2 - 1
-                );
+    rc.right = rc.left + ib_layout.control_width * 2;
+    ++rc.left;
+    rc.top = rc.bottom - ib_layout.control_height * 2 + 1;
     break;
+
   case flCentreTop:
-    flarm->move(
-                rc.left + ((rc.right - rc.left) / 2) - ib_layout.control_width,
-                1,
-                ib_layout.control_width * 2 - 1,
-                ib_layout.control_height * 2 - 1
-                );
+    rc.left = (rc.left + rc.right) / 2 - ib_layout.control_width;
+    rc.right = rc.left + ib_layout.control_width * 2 - 1;
+    rc.bottom = rc.top + ib_layout.control_height * 2;
+    ++rc.top;
     break;
+
   case flCentreBottom:
-    flarm->move(
-                rc.left + ((rc.right - rc.left) / 2) - ib_layout.control_width,
-                rc.bottom - ib_layout.control_height * 2 + 1,
-                ib_layout.control_width * 2 - 1,
-                ib_layout.control_height * 2 - 1
-                );
+    rc.left = (rc.left + rc.right) / 2 - ib_layout.control_width;
+    rc.right = rc.left + ib_layout.control_width * 2 - 1;
+    rc.top = rc.bottom - ib_layout.control_height * 2 + 1;
     break;
+
   default:    // aka flBottomRight
-    flarm->move(
-                rc.right - ib_layout.control_width * 2 + 1,
-                rc.bottom - ib_layout.control_height * 2 + 1,
-                ib_layout.control_width * 2 - 1,
-                ib_layout.control_height * 2 - 1
-                );
+    rc.left = rc.right - ib_layout.control_width * 2 + 1;
+    rc.top = rc.bottom - ib_layout.control_height * 2 + 1;
     break;
   }
+
+  flarm->move(rc);
 }
 
 void
