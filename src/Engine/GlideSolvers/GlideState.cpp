@@ -103,20 +103,26 @@ GlideState::CalcSpeedups(const SpeedVector _wind)
 }
 
 fixed
-GlideState::DriftedDistance(const fixed t_cl) const
+GlideState::DriftedDistance(const fixed time) const
 {
   if (wind.is_zero())
     return vector.distance;
 
-  auto sc_wd = wind.bearing.Reciprocal().SinCos();
-  const fixed sinwd = sc_wd.first, coswd = sc_wd.second;
+  // Distance that the wine travels in the given #time
+  const fixed distance_wind = wind.norm * time;
+  // Direction of the wind
+  auto sc_wind = wind.bearing.Reciprocal().SinCos();
+  const fixed sin_wind = sc_wind.first, cos_wind = sc_wind.second;
 
-  auto sc_tb = vector.bearing.SinCos();
-  const fixed sintb = sc_tb.first, costb = sc_tb.second;
+  // Distance to the target
+  const fixed distance_task = vector.distance;
+  // Direction to the target
+  auto sc_task = vector.bearing.SinCos();
+  const fixed sin_task = sc_task.first, cos_task = sc_task.second;
 
-  const fixed aw = wind.norm * t_cl;
-  const fixed dx = vector.distance * sintb - aw * sinwd;
-  const fixed dy = vector.distance * costb - aw * coswd;
+  // X-/Y-Components of the resulting vector
+  const fixed dx = distance_task * sin_task - distance_wind * sin_wind;
+  const fixed dy = distance_task * cos_task - distance_wind * cos_wind;
 
   return hypot(dx, dy);
 
