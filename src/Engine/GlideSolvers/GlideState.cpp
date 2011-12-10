@@ -108,12 +108,10 @@ GlideState::DriftedDistance(const fixed t_cl) const
   if (wind.is_zero())
     return vector.distance;
 
-  const Angle wd = wind.bearing.Reciprocal();
-  auto sc_wd = wd.SinCos();
+  auto sc_wd = wind.bearing.Reciprocal().SinCos();
   const fixed sinwd = sc_wd.first, coswd = sc_wd.second;
 
-  const Angle tb = vector.bearing;
-  auto sc_tb = tb.SinCos();
+  auto sc_tb = vector.bearing.SinCos();
   const fixed sintb = sc_tb.first, costb = sc_tb.second;
 
   const fixed aw = wind.norm * t_cl;
