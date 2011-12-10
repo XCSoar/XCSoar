@@ -163,7 +163,7 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
   fixed TrueAirspeedEstimated = fixed_zero;
 
   const SpeedVector wind = calculated.wind;
-  if (positive(basic.ground_speed) || wind.is_non_zero()) {
+  if (positive(basic.ground_speed) || wind.IsNonZero()) {
     fixed x0 = basic.track.fastsine() * basic.ground_speed;
     fixed y0 = basic.track.fastcosine() * basic.ground_speed;
     x0 += wind.bearing.fastsine() * wind.norm;
@@ -255,7 +255,7 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 {
   if (calculated.flight.flying &&
       (positive(basic.ground_speed) ||
-       (calculated.wind_available && calculated.wind.is_non_zero()))) {
+       (calculated.wind_available && calculated.wind.IsNonZero()))) {
 
     // estimate bank angle (assuming balanced turn)
     if (basic.airspeed_available) {

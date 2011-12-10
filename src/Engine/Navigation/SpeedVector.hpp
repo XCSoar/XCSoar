@@ -77,14 +77,14 @@ struct SpeedVector {
   /**
    * Returns true if the norm of the vector is zero.
    */
-  bool is_zero() const {
-    return !is_non_zero();
+  bool IsZero() const {
+    return !IsNonZero();
   }
 
   /**
    * Returns true if the norm of the vector is non-zero.
    */
-  bool is_non_zero() const {
+  bool IsNonZero() const {
     return positive(norm);
   }
 

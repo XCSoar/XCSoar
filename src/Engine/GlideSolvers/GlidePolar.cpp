@@ -390,7 +390,7 @@ GlidePolar::GetVTakeoff() const
 fixed
 GlidePolar::GetLDOverGround(const AircraftState &state) const
 {
-  if (state.wind.is_zero())
+  if (state.wind.IsZero())
     return bestLD;
 
   const fixed c_theta = (state.wind.bearing.Reciprocal() - state.track).cos();

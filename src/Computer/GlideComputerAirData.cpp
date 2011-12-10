@@ -131,7 +131,7 @@ GlideComputerAirData::Heading()
   const SpeedVector wind = calculated.wind;
 
   if (calculated.wind_available &&
-      (positive(basic.ground_speed) || wind.is_non_zero()) &&
+      (positive(basic.ground_speed) || wind.IsNonZero()) &&
       calculated.flight.flying) {
     fixed x0 = basic.track.fastsine() * basic.ground_speed;
     fixed y0 = basic.track.fastcosine() * basic.ground_speed;

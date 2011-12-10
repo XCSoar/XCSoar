@@ -66,7 +66,7 @@ public:
 fixed
 GlideState::CalcAverageSpeed(const fixed Veff) const
 {
-  if (wind.is_non_zero()) {
+  if (wind.IsNonZero()) {
     // only need to solve if positive wind speed
     return AverageSpeedSolver(head_wind_doubled, wind_speed_squared, Veff).Solve();
   }
@@ -87,7 +87,7 @@ GlideState::GlideState(const GeoVector &vector, const fixed htarget,
 void
 GlideState::CalcSpeedups(const SpeedVector _wind)
 {
-  if (_wind.is_non_zero()) {
+  if (_wind.IsNonZero()) {
     wind = _wind;
     effective_wind_angle = wind.bearing.Reciprocal() - vector.bearing;
     wind_speed_squared = wind.norm * wind.norm;
@@ -105,7 +105,7 @@ GlideState::CalcSpeedups(const SpeedVector _wind)
 fixed
 GlideState::DriftedDistance(const fixed time) const
 {
-  if (wind.is_zero())
+  if (wind.IsZero())
     return vector.distance;
 
   // Distance that the wine travels in the given #time
