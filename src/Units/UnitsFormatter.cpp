@@ -326,7 +326,7 @@ Units::FormatUserMapScale(fixed Distance, TCHAR *buffer,
   }
 
   if (IncludeUnit)
-    _sntprintf(buffer, size, _T("%.*f%s"), prec, (double)value, pU->name);
+    _sntprintf(buffer, size, _T("%.*f %s"), prec, (double)value, pU->name);
   else
     _sntprintf(buffer, size, _T("%.*f"), prec, (double)value);
 }
@@ -340,7 +340,7 @@ FormatSpeed(fixed value, TCHAR *buffer, size_t max_size,
 
   const int prec = precision && value < fixed(100);
   if (include_unit)
-    _sntprintf(buffer, max_size, _T("%.*f%s"),
+    _sntprintf(buffer, max_size, _T("%.*f %s"),
                prec, (double)value, unit.name);
   else
     _sntprintf(buffer, max_size, _T("%.*f"),
@@ -383,7 +383,7 @@ Units::FormatUserVSpeed(fixed Speed, TCHAR *buffer, size_t size,
   Speed = Speed * pU->factor_to_user;
 
   if (IncludeUnit)
-    _sntprintf(buffer, size, _T("%+.1f%s"), (double)Speed, pU->name);
+    _sntprintf(buffer, size, _T("%+.1f %s"), (double)Speed, pU->name);
   else
     _sntprintf(buffer, size, _T("%+.1f"), (double)Speed);
 }
