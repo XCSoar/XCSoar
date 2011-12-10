@@ -71,12 +71,6 @@ struct GeoVector {
     return GeoVector(fixed_minus_one);
   }
 
-  /** Adds the distance component of a geovector */
-  GeoVector& operator+= (const GeoVector &g1) {
-    distance += g1.distance;
-    return *this;
-  }
-
   /**
    * Returns the end point of the geovector projected from the start point.  
    * Assumes constant bearing. 
