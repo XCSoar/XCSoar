@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef GAUGE_THERMAL_ASSISTENT_HPP
 #define GAUGE_THERMAL_ASSISTENT_HPP
 
-#include "Form/WindowWidget.hpp"
+#include "Form/OverlappedWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 
 class LiveBlackboard;
@@ -33,7 +33,7 @@ class LiveBlackboard;
  * Widget to display a FLARM gauge
  */
 class GaugeThermalAssistant
-  : public WindowWidget, private NullBlackboardListener {
+  : public OverlappedWidget, private NullBlackboardListener {
   LiveBlackboard &blackboard;
 
 public:

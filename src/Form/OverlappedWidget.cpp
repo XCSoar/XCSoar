@@ -21,33 +21,30 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
-#define XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
+#include "OverlappedWidget.hpp"
+#include "Screen/Window.hpp"
 
-#include "Form/OverlappedWidget.hpp"
-#include "Blackboard/BlackboardListener.hpp"
+void
+OverlappedWidget::Raise()
+{
+  assert(IsDefined());
+  assert(GetWindow()->is_visible());
 
-class LiveBlackboard;
+  GetWindow()->bring_to_top();
+}
 
-class BigThermalAssistantWidget
-  : public OverlappedWidget, private NullBlackboardListener {
-  LiveBlackboard &blackboard;
+#ifdef USE_GDI
 
-public:
-  BigThermalAssistantWidget(LiveBlackboard &_blackboard)
-    :blackboard(_blackboard) {}
+void
+OverlappedWidget::Hide()
+{
+  assert(IsDefined());
+  assert(GetWindow()->is_visible());
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare();
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
-  virtual bool SetFocus();
-
-private:
-  void Update(const DerivedInfo &calculated);
-
-  virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated);
-};
+  /* WindowWidget::Hide() uses Window::fast_hide() to reduce overhead,
+     but that doesn't work well for overlapped windows, because hiding
+     an overlapped Widget must redraw the area behind it */
+  GetWindow()->hide();
+}
 
 #endif

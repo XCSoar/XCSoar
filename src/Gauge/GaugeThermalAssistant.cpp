@@ -70,10 +70,10 @@ void
 GaugeThermalAssistant::Unprepare()
 {
   GaugeThermalAssistantWindow *window =
-    (GaugeThermalAssistantWindow *)WindowWidget::GetWindow();
+    (GaugeThermalAssistantWindow *)OverlappedWidget::GetWindow();
   delete window;
 
-  WindowWidget::Unprepare();
+  OverlappedWidget::Unprepare();
 }
 
 void
@@ -81,7 +81,7 @@ GaugeThermalAssistant::Show(const PixelRect &rc)
 {
   Update(blackboard.Calculated());
 
-  WindowWidget::Show(rc);
+  OverlappedWidget::Show(rc);
 
   blackboard.AddListener(*this);
 }
@@ -90,7 +90,7 @@ void
 GaugeThermalAssistant::Hide()
 {
   blackboard.RemoveListener(*this);
-  WindowWidget::Hide();
+  OverlappedWidget::Hide();
 }
 
 bool

@@ -41,12 +41,6 @@ public:
 
   WindowWidget(Window *_window);
 
-  /**
-   * Bring this #Widget to the top of the z-order.  This is a hack to
-   * allow overlapped widgets.
-   */
-  void Raise();
-
 protected:
   bool IsDefined() const {
     return window != NULL;

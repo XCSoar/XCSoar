@@ -21,33 +21,29 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
-#define XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
+#ifndef XCSOAR_OVERLAPPED_WIDGET_HPP
+#define XCSOAR_OVERLAPPED_WIDGET_HPP
 
-#include "Form/OverlappedWidget.hpp"
-#include "Blackboard/BlackboardListener.hpp"
+#include "WindowWidget.hpp"
 
-class LiveBlackboard;
-
-class BigThermalAssistantWidget
-  : public OverlappedWidget, private NullBlackboardListener {
-  LiveBlackboard &blackboard;
-
+/**
+ * Base class for widgets that are designed to be "overlapped" windows
+ * (in contrast to "tiled" windows): they obscur an area of another
+ * #Window behind it.  That brings a few new aspects: the Z-order of
+ * windows, and when the Widget gets hidden, the area "behind" it must
+ * be redrawn.
+ */
+class OverlappedWidget : public WindowWidget {
 public:
-  BigThermalAssistantWidget(LiveBlackboard &_blackboard)
-    :blackboard(_blackboard) {}
+  /**
+   * Bring this #Widget to the top of the z-order.  This is a hack to
+   * allow overlapped widgets.
+   */
+  void Raise();
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare();
-  virtual void Show(const PixelRect &rc);
+#ifdef USE_GDI
   virtual void Hide();
-  virtual bool SetFocus();
-
-private:
-  void Update(const DerivedInfo &calculated);
-
-  virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated);
+#endif
 };
 
 #endif
