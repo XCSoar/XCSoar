@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
-#include "Sizes.h" /* for WPCIRCLESIZE */
 
 static RasterPoint
 TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
@@ -94,14 +93,6 @@ bool
 TextInBox(Canvas &canvas, const TCHAR* text, PixelScalar x, PixelScalar y,
           TextInBoxMode mode, const PixelRect &map_rc, LabelBlock *label_block)
 {
-  PixelRect rc;
-
-  if ((x < map_rc.left - WPCIRCLESIZE)
-      || (x > map_rc.right + (WPCIRCLESIZE * 3))
-      || (y < map_rc.top - WPCIRCLESIZE)
-      || (y > map_rc.bottom + WPCIRCLESIZE))
-    return false; // FIX Not drawn really
-
   // landable waypoint label inside white box
 
   canvas.Select(mode.bold ? Fonts::map_bold : Fonts::map);
@@ -114,6 +105,7 @@ TextInBox(Canvas &canvas, const TCHAR* text, PixelScalar x, PixelScalar y,
     x -= tsize.cx / 2;
   }
 
+  PixelRect rc;
   rc.left = x - Layout::FastScale(2) - 1;
   rc.right = x + tsize.cx + Layout::FastScale(2);
   rc.top = y;
