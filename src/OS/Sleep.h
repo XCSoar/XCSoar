@@ -35,8 +35,8 @@ static inline void
 Sleep(unsigned ms)
 {
   const struct timespec ts = {
-	  ms / 1000,
-	  (ms % 1000L) * 1000000L,
+    static_cast<time_t>(ms / 1000),
+    static_cast<long>((ms % 1000L) * 1000000L),
   };
 
   nanosleep(&ts, NULL);
