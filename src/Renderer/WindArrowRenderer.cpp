@@ -54,8 +54,12 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
       { 0, -20 },
   };
 
-  PolygonRotateShift(arrow, ARRAY_SIZE(arrow),
+  // Rotate the arrow (exclude duplicate last point)
+  PolygonRotateShift(arrow, ARRAY_SIZE(arrow) - 1,
                      pos.x, pos.y, wind.bearing - screen_angle);
+
+  // Copy first point to last point to close polygon
+  arrow[4] = arrow[0];
 
   canvas.Select(look.hpWind);
   canvas.Select(look.hbWind);
