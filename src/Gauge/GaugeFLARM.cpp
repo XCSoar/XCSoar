@@ -23,47 +23,49 @@ Copyright_License {
 */
 
 #include "Gauge/GaugeFLARM.hpp"
-#include "NMEA/Info.hpp"
+#include "FlarmTrafficWindow.hpp"
+#include "Blackboard/LiveBlackboard.hpp"
+#include "NMEA/MoreData.hpp"
+#include "SettingsComputer.hpp"
 #include "InputEvents.hpp"
 
 /**
- * Constructor of the GaugeFLARM class
+ * Widget to display a FLARM gauge
+ */
+class SmallTrafficWindow : public FlarmTrafficWindow {
+public:
+  SmallTrafficWindow(ContainerWindow &parent, const PixelRect &rc,
+                     const FlarmTrafficLook &look,
+                     const WindowStyle style=WindowStyle());
+
+  void Update(const NMEAInfo &gps_info, const TeamCodeSettings &settings);
+
+protected:
+  bool on_mouse_down(PixelScalar x, PixelScalar y);
+};
+
+/**
+ * Constructor of the SmallTrafficWindow class
  * @param parent Parent window
  * @param left Left edge of window pixel location
  * @param top Top edge of window pixel location
  * @param width Width of window (pixels)
  * @param height Height of window (pixels)
  */
-GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
-                       PixelScalar left, PixelScalar top,
-                       UPixelScalar width, UPixelScalar height,
-                       const FlarmTrafficLook &look,
-                       const WindowStyle style)
-  :FlarmTrafficWindow(look, 1, true),
-   ForceVisible(false), Suppress(false)
+SmallTrafficWindow::SmallTrafficWindow(ContainerWindow &parent,
+                                       const PixelRect &rc,
+                                       const FlarmTrafficLook &look,
+                                       const WindowStyle style)
+  :FlarmTrafficWindow(look, 1, true)
 {
-  set(parent, left, top, width, height, style);
+  set(parent, rc, style);
 }
 
 void
-GaugeFLARM::Update(bool enable, const NMEAInfo &gps_info,
-                   const TeamCodeSettings &settings)
+SmallTrafficWindow::Update(const NMEAInfo &gps_info,
+                           const TeamCodeSettings &settings)
 {
-  const FlarmState &flarm = gps_info.flarm;
-
-  // If FLARM alarm level higher then 0
-  if (flarm.available && flarm.alarm_level > 0)
-    // Show FLARM gauge and do not care about suppression
-    Suppress = false;
-
-  bool visible = ForceVisible ||
-    (flarm.available && !flarm.traffic.empty() && enable && !Suppress);
-  if (visible) {
-    FlarmTrafficWindow::Update(gps_info.track, flarm,
-                               settings);
-    show();
-  } else
-    hide();
+  FlarmTrafficWindow::Update(gps_info.track, gps_info.flarm, settings);
 }
 
 /**
@@ -73,8 +75,59 @@ GaugeFLARM::Update(bool enable, const NMEAInfo &gps_info,
  * @param y y-Coordinate of the click
  */
 bool
-GaugeFLARM::on_mouse_down(PixelScalar x, PixelScalar y)
+SmallTrafficWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   InputEvents::eventTraffic(_T("show"));
   return true;
+}
+
+void
+GaugeFLARM::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  WindowStyle style;
+  style.hide();
+
+  SetWindow(new SmallTrafficWindow(parent, rc, look, style));
+}
+
+void
+GaugeFLARM::Unprepare()
+{
+  SmallTrafficWindow *window =
+    (SmallTrafficWindow *)OverlappedWidget::GetWindow();
+  delete window;
+
+  OverlappedWidget::Unprepare();
+}
+
+void
+GaugeFLARM::Show(const PixelRect &rc)
+{
+  Update(blackboard.Basic());
+
+  OverlappedWidget::Show(rc);
+
+  blackboard.AddListener(*this);
+}
+
+void
+GaugeFLARM::Hide()
+{
+  blackboard.RemoveListener(*this);
+  OverlappedWidget::Hide();
+}
+
+void
+GaugeFLARM::OnGPSUpdate(const MoreData &basic)
+{
+  Update(basic);
+}
+
+void
+GaugeFLARM::Update(const NMEAInfo &basic)
+{
+  SmallTrafficWindow *window =
+    (SmallTrafficWindow *)GetWindow();
+
+  window->Update(basic, blackboard.SettingsComputer());
 }

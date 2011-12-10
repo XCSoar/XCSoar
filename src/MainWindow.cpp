@@ -55,7 +55,9 @@ Copyright_License {
 MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(NULL),
    map(NULL), widget(NULL), vario(*this),
-   flarm(NULL), thermal_assistant(*this),
+   traffic_gauge(*this),
+   suppress_traffic_gauge(false), force_traffic_gauge(false),
+   thermal_assistant(*this),
    popup(status_messages, *this, CommonInterface::GetUISettings()),
    timer(*this),
    FullScreen(false),
@@ -188,14 +190,6 @@ MainWindow::InitialiseConfigured()
   hidden_border.hide();
   hidden_border.border();
 
-  flarm = new GaugeFLARM(*this,
-                         0, // assume top left, moved in layout
-                         0,
-                         ib_layout.control_width * 2 - 1,
-                         ib_layout.control_height * 2 - 1,
-                         look->flarm_gauge,
-                         hidden_border);
-  flarm->bring_to_top();
   ReinitialiseLayout_flarm(rc, ib_layout);
 
   map = new GlueMapWindow(*look);
@@ -224,10 +218,7 @@ MainWindow::Deinitialise()
   delete temp_map;
 
   vario.Clear();
-
-  delete flarm;
-  flarm = NULL;
-
+  traffic_gauge.Clear();
   thermal_assistant.Clear();
 
   delete look;
@@ -336,9 +327,6 @@ MainWindow::ReinitialiseLayout()
 void 
 MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout ib_layout)
 {
-  if (flarm == NULL)
-    return;
-
   FlarmLocation val = CommonInterface::GetUISettings().flarm_location;
 
   // Automatic mode - follow info boxes
@@ -398,7 +386,7 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout i
     break;
   }
 
-  flarm->move(rc);
+  traffic_gauge.Move(rc);
 }
 
 void
@@ -518,11 +506,6 @@ MainWindow::on_timer(WindowTimer &_timer)
     battery_timer.Process();
 
     ProcessTimer::Process();
-
-    if (flarm != NULL)
-      flarm->Update(CommonInterface::GetUISettings().enable_flarm_gauge,
-                    CommonInterface::Basic(),
-                    CommonInterface::SettingsComputer());
 
     if (!CommonInterface::GetUISettings().enable_thermal_assistant_gauge) {
       thermal_assistant.Clear();
@@ -745,12 +728,36 @@ MainWindow::UpdateGaugeVisibility()
   vario.SetVisible(!full_screen &&
                    !CommonInterface::GetUIState().screen_blanked);
 
-  if (InputEvents::IsFlavour(_T("Traffic")))
+  const FlarmState &flarm = CommonInterface::Basic().flarm;
+  bool traffic_visible =
+    (force_traffic_gauge ||
+     (CommonInterface::GetUISettings().enable_flarm_gauge &&
+      flarm.available && !flarm.traffic.empty())) &&
+    !CommonInterface::GetUIState().screen_blanked &&
     /* hide the traffic gauge while the traffic widget is visible, to
        avoid showing the same information twice */
-    flarm->Suppress = true;
-  else if (flarm != NULL && CommonInterface::Basic().flarm.new_traffic)
-    flarm->Suppress = false;
+    !InputEvents::IsFlavour(_T("Traffic"));
+
+  if (traffic_visible && suppress_traffic_gauge) {
+    if (flarm.available && flarm.alarm_level > 0)
+      suppress_traffic_gauge = false;
+    else
+      traffic_visible = false;
+  }
+
+  if (traffic_visible) {
+    if (!traffic_gauge.IsDefined())
+      traffic_gauge.Set(new GaugeFLARM(CommonInterface::GetLiveBlackboard(),
+                                       GetLook().flarm_gauge));
+
+    if (!traffic_gauge.IsVisible()) {
+      traffic_gauge.Show();
+
+      GaugeFLARM *widget = (GaugeFLARM *)traffic_gauge.Get();
+      widget->Raise();
+    }
+  } else
+    traffic_gauge.Hide();
 }
 
 const MapWindowProjection &
@@ -765,20 +772,14 @@ MainWindow::GetProjection() const
 void
 MainWindow::ToggleSuppressFLARMRadar()
 {
-  if (flarm == NULL)
-    return;
-
-  flarm->Suppress = !flarm->Suppress;
+  suppress_traffic_gauge = !suppress_traffic_gauge;
 }
 
 void
 MainWindow::ToggleForceFLARMRadar()
 {
-  if (flarm == NULL)
-    return;
-
-  flarm->ForceVisible = !flarm->ForceVisible;
-  CommonInterface::SetUISettings().enable_flarm_gauge = flarm->ForceVisible;
+  force_traffic_gauge = !force_traffic_gauge;
+  CommonInterface::SetUISettings().enable_flarm_gauge = force_traffic_gauge;
 }
 
 #ifdef ANDROID

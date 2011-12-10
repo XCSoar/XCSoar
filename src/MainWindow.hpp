@@ -39,8 +39,6 @@ struct SETTINGS_MAP;
 struct Look;
 class GlueMapWindow;
 class Widget;
-class GaugeFLARM;
-class GaugeThermalAssistant;
 class StatusMessageList;
 class RasterTerrain;
 class TopographyStore;
@@ -82,7 +80,9 @@ class MainWindow : public SingleWindow {
 
   ManagedWidget vario;
 
-  GaugeFLARM *flarm;
+  ManagedWidget traffic_gauge;
+  bool suppress_traffic_gauge, force_traffic_gauge;
+
   ManagedWidget thermal_assistant;
 
 public:

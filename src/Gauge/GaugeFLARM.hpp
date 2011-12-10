@@ -24,31 +24,33 @@ Copyright_License {
 #ifndef GAUGE_FLARM_HPP
 #define GAUGE_FLARM_HPP
 
-#include "FlarmTrafficWindow.hpp"
+#include "Form/OverlappedWidget.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 
+class LiveBlackboard;
+struct FlarmTrafficLook;
 struct NMEAInfo;
-struct TeamCodeSettings;
-class ContainerWindow;
 
 /**
  * Widget to display a FLARM gauge
  */
-class GaugeFLARM : public FlarmTrafficWindow {
-public:
-  bool ForceVisible, Suppress;
+class GaugeFLARM : public OverlappedWidget, NullBlackboardListener {
+  LiveBlackboard &blackboard;
+  const FlarmTrafficLook &look;
 
 public:
-  GaugeFLARM(ContainerWindow &parent,
-             PixelScalar left, PixelScalar top,
-             UPixelScalar width, UPixelScalar height,
-             const FlarmTrafficLook &look,
-             const WindowStyle style=WindowStyle());
+  GaugeFLARM(LiveBlackboard &_blackboard, const FlarmTrafficLook &_look)
+    :blackboard(_blackboard), look(_look) {}
 
-  void Update(bool enable, const NMEAInfo &gps_info,
-              const TeamCodeSettings &settings);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Unprepare();
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
 
-protected:
-  bool on_mouse_down(PixelScalar x, PixelScalar y);
+private:
+  void Update(const NMEAInfo &basic);
+
+  virtual void OnGPSUpdate(const MoreData &basic);
 };
 
 #endif
