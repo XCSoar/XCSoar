@@ -95,23 +95,19 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   canvas.SetTextColor(COLOR_BLACK);
   canvas.Select(Fonts::map_bold);
 
-  UPixelScalar text_width = canvas.CalcTextSize(buffer).cx / 2;
-  UPixelScalar kx = text_width / Layout::FastScale(1) / 2;
+  PixelScalar offset = iround(fixed_sqrt_two * wind.norm);
   RasterPoint label[] = {
-      { (PixelScalar)(8 + kx), -24 },
-      { (PixelScalar)(-8 - kx), -24 }
+      { 18, (PixelScalar)(-26 - offset) },
   };
   PolygonRotateShift(label, ARRAY_SIZE(label),
                      pos.x, pos.y, wind.bearing - screen_angle);
 
   TextInBoxMode style;
   style.align = A_CENTER;
+  style.vertical_position = VerticalPosition::CENTERED;
   style.mode = RM_OUTLINED;
 
-  if (label[0].y >= label[1].y)
-    TextInBox(canvas, buffer, label[0].x - kx, label[0].y, style, rc);
-  else
-    TextInBox(canvas, buffer, label[1].x - kx, label[1].y, style, rc);
+  TextInBox(canvas, buffer, label[0].x, label[0].y, style, rc);
 }
 
 void
