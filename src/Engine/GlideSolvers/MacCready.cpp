@@ -114,14 +114,42 @@ MacCready::solve_sink(const GlidePolar &glide_polar, const GlideState &task,
 GlideResult
 MacCready::solve_cruise(const GlideState &task) const
 {
+  // cruise speed for current MC (m/s)
   const fixed VOpt = glide_polar.GetVBestLD();
+
   GlideResult result(task, VOpt);
 
+  // sink rate at current MC speed (m/s)
   const fixed S = glide_polar.GetSBestLD();
+
+  // MC value (m/s)
   const fixed mc = glide_polar.GetMC();
+
+  // Inverse MC value (s/m)
   const fixed inv_mc = glide_polar.GetInvMC();
+
+  /*
+      |      rho = S / MC
+      *..                       cruise speed
+   MC |  ´--..                 /
+    --+-------´´*-..-----------+------------
+      |        /    ´´--..     | S
+      |       /   ..---...´´-..|
+      |      /  .´        ´´´--*.
+      |     /                    ´´-.
+      |    /                         ´.
+      |   /
+      |  resulting speed
+  */
+
+  // Sink rate divided by MC value
+  // same as (cruise speed - resulting speed) / resulting speed
   const fixed rho = S * inv_mc;
+
+  // quotient of cruise speed over resulting speed (> 1.0)
   const fixed rhoplusone = fixed_one + rho;
+
+  // quotient of resulting speed over cruise speed (0 .. 1)
   const fixed invrhoplusone = fixed_one / rhoplusone;
 
   const fixed Vn = task.CalcAverageSpeed(VOpt * cruise_efficiency * invrhoplusone);
@@ -138,6 +166,7 @@ MacCready::solve_cruise(const GlideState &task) const
     distance = task.DriftedDistance(t_cl1);
   }
 
+  // Estimated time to finish the task
   const fixed t = distance / Vn;
   const fixed t_cr = t * invrhoplusone;
   const fixed t_cl = t_cr * rho +
