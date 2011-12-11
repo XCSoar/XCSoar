@@ -99,11 +99,15 @@ TextInBox(Canvas &canvas, const TCHAR* text, PixelScalar x, PixelScalar y,
 
   PixelSize tsize = canvas.CalcTextSize(text);
 
-  if (mode.align == A_RIGHT) {
+  if (mode.align == A_RIGHT)
     x -= tsize.cx;
-  } else if (mode.align == A_CENTER) {
+  else if (mode.align == A_CENTER)
     x -= tsize.cx / 2;
-  }
+
+  if (mode.vertical_position == VerticalPosition::ABOVE)
+    y -= tsize.cy;
+  else if (mode.vertical_position == VerticalPosition::CENTERED)
+    y -= tsize.cy / 2;
 
   PixelRect rc;
   rc.left = x - Layout::FastScale(2) - 1;

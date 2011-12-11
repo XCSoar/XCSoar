@@ -38,6 +38,13 @@ enum TextAlign
   A_RIGHT,
 };
 
+enum VerticalPosition
+{
+  ABOVE,
+  CENTERED,
+  BELOW,
+};
+
 enum RenderMode
 {
   RM_SIMPLE,
@@ -52,11 +59,13 @@ struct TextInBoxMode
 {
   RenderMode mode;
   TextAlign align;
+  VerticalPosition vertical_position;
   bool bold;
   bool move_in_view;
 
   TextInBoxMode() :
-    mode(RM_SIMPLE), align(A_LEFT), bold(false), move_in_view(false) {}
+    mode(RM_SIMPLE), align(A_LEFT), vertical_position(VerticalPosition::BELOW),
+    bold(false), move_in_view(false) {}
 };
 
 bool TextInBox(Canvas &canvas, const TCHAR *value,
