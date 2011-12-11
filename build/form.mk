@@ -21,6 +21,7 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/Widget.cpp \
 	$(FORM_SRC_DIR)/WindowWidget.cpp \
 	$(FORM_SRC_DIR)/OverlappedWidget.cpp \
+	$(FORM_SRC_DIR)/RowFormWidget.cpp \
 	$(FORM_SRC_DIR)/ManagedWidget.cpp \
 	$(FORM_SRC_DIR)/Tabbed.cpp \
 	$(FORM_SRC_DIR)/TabBar.cpp \
