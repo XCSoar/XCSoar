@@ -125,27 +125,9 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
 }
 
 void 
-AlternateTask::SetTaskDestination(const AircraftState &state_now,
-                                    const TaskPoint* _target) 
+AlternateTask::SetTaskDestination(const GeoPoint &_destination)
 {
-  // if we have a target, use that, otherwise use the aircraft location
-  // (which ends up equivalent to sorting by distance)
-  if (_target)
-    destination = _target->GetLocationRemaining();
-  else
-    destination = state_now.location;
-}
-
-void
-AlternateTask::SetTaskDestinationHome(const AircraftState &state_now)
-{
-  // if we have a home, use that, otherwise use the aircraft location
-  // (which ends up equivalent to sorting by distance)
-  const Waypoint *home_waypoint = waypoints.GetHome();
-  if (home_waypoint)
-    destination = home_waypoint->location;
-  else
-    destination = state_now.location;
+  destination = _destination;
 }
 
 bool 

@@ -69,18 +69,10 @@ public:
   void Reset();
 
   /**
-   * Sets the target of the task (if any) or fallback to aircraft location.  
+   * Sets the target of the task.
    * Must be called before running update_sample!
    */
-  void SetTaskDestination(const AircraftState &state_now,
-                          const TaskPoint *_target);
-
-  /**
-   * Sets the target of the task to the home waypoint or fallback to
-   * aircraft location.
-   * Must be called before running update_sample!
-   */
-  void SetTaskDestinationHome(const AircraftState &state_now);
+  void SetTaskDestination(const GeoPoint &_destination);
 
   /**
    * Retrieve a copy of the task alternates

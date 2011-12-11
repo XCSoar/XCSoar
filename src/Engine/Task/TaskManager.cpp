@@ -292,13 +292,21 @@ TaskManager::Update(const AircraftState &state,
 
   // inform the abort task whether it is running as the task or not  
   task_abort.SetActive(active_task == &task_abort);
+
   // and tell it where the task destination is (if any)
-  if (task_behaviour.abort_task_mode == atmSimple)
-    task_abort.SetTaskDestination(state, NULL);
-  else if (task_behaviour.abort_task_mode == atmHome)
-    task_abort.SetTaskDestinationHome(state);
-  else
-    task_abort.SetTaskDestination(state, GetActiveTaskPoint());
+  const GeoPoint *destination = &state.location;
+
+  if (task_behaviour.abort_task_mode == atmHome) {
+    const Waypoint *home = task_abort.GetHome();
+    if (home)
+      destination = &home->location;
+  } else if (task_behaviour.abort_task_mode == atmTask) {
+    const TaskWaypoint *twp = GetActiveTaskPoint();
+    if (twp)
+      destination = &(twp->GetLocationRemaining());
+  }
+
+  task_abort.SetTaskDestination(*destination);
 
   retval |= task_abort.Update(state, state_last);
 
