@@ -54,26 +54,48 @@ struct PolarInfo;
  */
 class GlidePolar
 {
-  fixed mc;                  /**< MacCready ring setting (m/s) */
-  fixed inv_mc;              /**< Inverse of MC setting (s/m) */
-  fixed bugs;                /**< Clean ratio (1=clean, 0=100% bugs) */
-  fixed ballast;             /**< Ballast ratio (litres) */
-  fixed cruise_efficiency;   /**< Cruise efficiency */
-  fixed bestLD;              /**< Best lift to drag ratio */
-  fixed VbestLD;             /**< Speed for best L/D (m/s) */
-  fixed SbestLD;             /**< Sink rate at best L/D (m/s, positive down) */
-  fixed Vmax;                /**< Maximum cruise speed (m/s) */
-  fixed Smax;                /**< Sink rate at maximum cruise speed (m/s, positive down) */
-  fixed Vmin;                /**< Speed for minimum sink (m/s) */
-  fixed Smin;                /**< Minimum sink rate (m/s, positive down) */
+  /** MacCready ring setting (m/s) */
+  fixed mc;
+  /** Inverse of MC setting (s/m) */
+  fixed inv_mc;
 
-  PolarCoefficients ideal_polar;  /**< coefficients of glide polar empty/clean */
-  PolarCoefficients polar;        /**< coefficients of glide polar at bug/ballast */
+  /** Clean ratio (1=clean, 0=100% bugs) */
+  fixed bugs;
+  /** Ballast ratio (litres) */
+  fixed ballast;
+  /** Cruise efficiency */
+  fixed cruise_efficiency;
 
-  fixed ballast_ratio;       /**< Ratio of mass of ballast to glider empty weight */
-  fixed reference_mass;      /**< Reference mass of polar, kg */
-  fixed dry_mass;            /**< Dry/unballasted mass of glider, kg */
-  fixed wing_area;           /**< Reference wing area, m^2 */
+  /** Best lift to drag ratio */
+  fixed bestLD;
+  /** Speed for best L/D (m/s) */
+  fixed VbestLD;
+  /** Sink rate at best L/D (m/s, positive down) */
+  fixed SbestLD;
+
+  /** Maximum cruise speed (m/s) */
+  fixed Vmax;
+  /** Sink rate at maximum cruise speed (m/s, positive down) */
+  fixed Smax;
+
+  /** Speed for minimum sink (m/s) */
+  fixed Vmin;
+  /** Minimum sink rate (m/s, positive down) */
+  fixed Smin;
+
+  /** coefficients of glide polar empty/clean */
+  PolarCoefficients ideal_polar;
+  /** coefficients of glide polar at bug/ballast */
+  PolarCoefficients polar;
+
+  /** Ratio of mass of ballast to glider empty weight */
+  fixed ballast_ratio;
+  /** Reference mass of polar, kg */
+  fixed reference_mass;
+  /** Dry/unballasted mass of glider, kg */
+  fixed dry_mass;
+  /** Reference wing area, m^2 */
+  fixed wing_area;
 
   friend class GlidePolarTest;
 
@@ -390,7 +412,8 @@ public:
    * risk as the aircraft gets low.
    *
    * @param height_fraction Ratio of height to climb ceiling
-   * @param riskGamma Risk adjustment factor.  Lower gamma, MC is uniform with height.  High gamma, MC scales almost uniformly with height
+   * @param riskGamma Risk adjustment factor.  Lower gamma, MC is uniform
+   * with height.  High gamma, MC scales almost uniformly with height
    *
    * @return MC value adjusted for risk (m/s)
    */
