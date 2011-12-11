@@ -76,7 +76,7 @@ struct Color {
   }
 
   gcc_constexpr_method
-  operator const SDL_Color() const {
+  operator const SDL_Color&() const {
     return value;
   }
 
