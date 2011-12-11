@@ -204,6 +204,7 @@ public:
    * @return Vector to home waypoint
    */
   GeoVector GetHomeVector(const AircraftState &state) const;
+  const Waypoint *GetHome() const;
 
   /**
    * Retrieve copy of safety glide polar used by task system

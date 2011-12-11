@@ -338,10 +338,16 @@ AbortTask::Reset()
   UnorderedTask::Reset();
 }
 
+const Waypoint *
+AbortTask::GetHome() const
+{
+  return waypoints.GetHome();
+}
+
 GeoVector 
 AbortTask::GetHomeVector(const AircraftState &state) const
 {
-  const Waypoint *home_waypoint = waypoints.GetHome();
+  const Waypoint *home_waypoint = GetHome();
   if (home_waypoint)
     return GeoVector(state.location, home_waypoint->location);
 
