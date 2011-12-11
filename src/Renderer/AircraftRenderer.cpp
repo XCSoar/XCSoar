@@ -39,7 +39,7 @@ DrawMirroredPolygon(const RasterPoint *src, RasterPoint *dst, unsigned points,
     dst[2 * points - i - 1].x = -dst[i].x;
     dst[2 * points - i - 1].y = dst[i].y;
   }
-  PolygonRotateShift(dst, 2 * points, pos.x, pos.y, angle, false);
+  PolygonRotateShift(dst, 2 * points, pos.x, pos.y, angle, 50);
   canvas.polygon(dst, 2 * points);
 }
 

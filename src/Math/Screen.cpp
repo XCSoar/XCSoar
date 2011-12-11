@@ -80,22 +80,22 @@ roundshift(int x)
 void
 PolygonRotateShift(RasterPoint *poly, const int n,
                    const PixelScalar xs, const PixelScalar ys,
-                   Angle angle, const bool scale)
+                   Angle angle, const int scale)
 {
   static Angle lastangle = Angle::Native(-fixed_one);
   static int cost = 1024, sint = 0;
-  static bool last_scale = false;
+  static int last_scale = 0;
   angle = angle.AsBearing();
 
   if ((angle != lastangle) || (last_scale != scale)) {
     lastangle = angle;
     last_scale = scale;
-    if (scale) {
+    if (scale == 100) {
       cost = Layout::FastScale(angle.ifastcosine());
       sint = Layout::FastScale(angle.ifastsine());
     } else {
-      cost = Layout::FastScale(angle.ifastcosine()) / 2;
-      sint = Layout::FastScale(angle.ifastsine()) / 2;
+      cost = Layout::FastScale(angle.ifastcosine() * scale) / 100;
+      sint = Layout::FastScale(angle.ifastsine() * scale) / 100;
     }
   }
 

@@ -40,8 +40,9 @@ void ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
  * @param xs Pixels to shift in the x-direction
  * @param ys Pixels to shift in the y-direction
  * @param angle Angle of rotation
+ * @param scale Additional scaling in percent (100 = 100%, 150 = 150%, ...)
  */
 void PolygonRotateShift(RasterPoint *poly, int n, PixelScalar x, PixelScalar y,
-                        Angle angle, const bool scale = true);
+                        Angle angle, const int scale = 100);
 
 #endif
