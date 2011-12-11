@@ -251,10 +251,10 @@ AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const AircraftS
                                                                  const GlidePolar &polar,
                                                                  const GlideResult &solution)
 {
-  const fixed leg_distance = solution.vector.distance;
   const fixed time_remaining = solution.time_elapsed;
 
   if (solution.IsOk() && positive(time_remaining)) {
+    const fixed leg_distance = solution.vector.distance;
     m_v = leg_distance / time_remaining;
     if (positive(solution.height_climb)) {
       m_cruise_descent = -solution.height_climb / time_remaining;
