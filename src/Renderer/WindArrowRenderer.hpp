@@ -45,6 +45,10 @@ public:
   void Draw(Canvas &canvas, const Angle screen_angle, const RasterPoint pos,
             const PixelRect rc, const DerivedInfo &calculated,
             const SETTINGS_MAP &settings);
+
+private:
+  void DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
+                 PixelScalar length, bool with_tail);
 };
 
 #endif

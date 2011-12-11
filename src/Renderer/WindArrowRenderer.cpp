@@ -38,25 +38,21 @@ Copyright_License {
 #include <cstdio>
 
 void
-WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
-                        const SpeedVector wind, const RasterPoint pos,
-                        const PixelRect rc, bool with_tail)
+WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
+                             PixelScalar length, bool with_tail)
 {
   // Draw arrow
 
-  PixelScalar wmag = iround(4 * wind.norm);
-
   RasterPoint arrow[] = {
-      { 0, -20 },
-      { -6, (PixelScalar)(-26 - wmag) },
-      { 0, (PixelScalar)(-20 - wmag) },
-      { 6, (PixelScalar)(-26 - wmag) },
-      { 0, -20 },
+    { 0, -20 },
+    { -6, (PixelScalar)(-26 - length) },
+    { 0, (PixelScalar)(-20 - length) },
+    { 6, (PixelScalar)(-26 - length) },
+    { 0, -20 },
   };
 
   // Rotate the arrow (exclude duplicate last point)
-  PolygonRotateShift(arrow, ARRAY_SIZE(arrow) - 1,
-                     pos.x, pos.y, wind.bearing - screen_angle);
+  PolygonRotateShift(arrow, ARRAY_SIZE(arrow) - 1, pos.x, pos.y, angle);
 
   // Copy first point to last point to close polygon
   arrow[4] = arrow[0];
@@ -65,22 +61,31 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   canvas.Select(look.arrow_brush);
   canvas.polygon(arrow, 5);
 
-
   // Draw arrow tail
 
   if (with_tail) {
     RasterPoint tail[] = {
       { 0, Layout::FastScale(-20) },
-      { 0, Layout::FastScale(-26 - min(PixelScalar(20), wmag) * 3) },
+      { 0, Layout::FastScale(-26 - min(PixelScalar(20), length) * 3) },
     };
 
     PolygonRotateShift(tail, ARRAY_SIZE(tail),
-                       pos.x, pos.y, wind.bearing - screen_angle);
+                       pos.x, pos.y, angle);
 
     canvas.Select(look.tail_pen);
     canvas.line(tail[0], tail[1]);
   }
+}
 
+void
+WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
+                        const SpeedVector wind, const RasterPoint pos,
+                        const PixelRect rc, bool with_tail)
+{
+  // Draw arrow (and tail)
+
+  PixelScalar wmag = iround(4 * wind.norm);
+  DrawArrow(canvas, pos, wind.bearing - screen_angle, wmag, with_tail);
 
   // Draw wind speed label
 
