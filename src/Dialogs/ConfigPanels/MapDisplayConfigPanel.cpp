@@ -27,9 +27,19 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Dialogs/CallBackTable.hpp"
+#include "UIGlobals.hpp"
+
+enum ControlIndex {
+  OrientationCruise,
+  OrientationCircling,
+  CirclingZoom,
+  MapShiftBias,
+  GliderScreenPosition,
+  MaxAutoZoomDistance,
+};
 
 static const StaticEnumChoice orientation_list[] = {
   { TRACKUP, N_("Track up"),
@@ -50,13 +60,14 @@ static const StaticEnumChoice shift_bias_list[] = {
   { 0 }
 };
 
-class MapDisplayConfigPanel : public XMLWidget {
+class MapDisplayConfigPanel : public RowFormWidget {
 
 public:
+  MapDisplayConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
   void UpdateVisibilities();
 };
 
@@ -65,23 +76,11 @@ public:
 static MapDisplayConfigPanel *instance;
 
 void
-MapDisplayConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
-
-void
-MapDisplayConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
-
-void
 MapDisplayConfigPanel::UpdateVisibilities()
 {
-  bool northup = GetFormValueInteger(form, _T("prpOrientationCruise")) == NORTHUP;
+  bool northup = GetValueInteger(OrientationCruise) == NORTHUP;
 
-  ShowFormControl(form, _T("prpMapShiftBias"), northup);
+  GetControl(MapShiftBias).set_visible(northup);
 }
 
 static void
@@ -106,66 +105,73 @@ void
 MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   instance = this;
-  LoadWindow(CallBackTable, parent,
-             Layout::landscape ? _T("IDR_XML_MAPDISPLAYCONFIGPANEL") :
-                               _T("IDR_XML_MAPDISPLAYCONFIGPANEL_L"));
 
+  RowFormWidget::Prepare(parent, rc);
 
   const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
 
-  LoadFormProperty(form, _T("prpOrientationCruise"), orientation_list,
-                   settings_map.cruise_orientation);
-  LoadFormProperty(form, _T("prpOrientationCircling"), orientation_list,
-                   settings_map.circling_orientation);
-  LoadFormProperty(form, _T("prpMapShiftBias"), shift_bias_list,
-                   settings_map.map_shift_bias);
+  AddEnum(_("Cruise orientation"),
+          _("Determines how the screen is rotated with the glider"),
+          orientation_list,
+          settings_map.cruise_orientation,
+          OnShiftTypeData);
 
-  LoadFormProperty(form, _T("prpGliderScreenPosition"),
-                   XCSoarInterface::SettingsMap().glider_screen_position);
+  AddEnum(_("Circling orientation"),
+          _("Determines how the screen is rotated with the glider while circling"),
+          orientation_list,
+          settings_map.cruise_orientation,
+          OnShiftTypeData);
 
-  LoadFormProperty(form, _T("prpCirclingZoom"),
-                   XCSoarInterface::SettingsMap().circle_zoom_enabled);
+  AddBoolean(_("Circling zoom"),
+             _("If enabled, then the map will zoom in automatically when entering circling mode and zoom out automatically when leaving circling mode."),
+             settings_map.circle_zoom_enabled);
 
-  LoadFormProperty(form, _T("prpMaxAutoZoomDistance"), ugDistance,
-                   XCSoarInterface::SettingsMap().max_auto_zoom_distance);
+  AddEnum(_("Map shift reference"),
+          _("Determines what is used to shift the glider from the map center"),
+          shift_bias_list,
+          settings_map.map_shift_bias,
+          OnShiftTypeData);
+
+  AddInteger(_("Glider position offset"),
+             _("Defines the location of the glider drawn on the screen in percent from the screen edge."),
+             _T("%d %%"), _T("%d"), 10, 50, 5,
+             settings_map.glider_screen_position);
+
+  AddFloat(_("Max. auto zoom distance"),
+           _("The upper limit for auto zoom distance."),
+           _T("%.0f %s"), _T("%.0f"), fixed(20), fixed(250), fixed(10), false,
+           ugDistance, settings_map.max_auto_zoom_distance);
 
   UpdateVisibilities();
 }
 
 bool
-MapDisplayConfigPanel::Save(bool &_changed, bool &_require_restart)
+MapDisplayConfigPanel::Save(bool &_changed, bool &require_restart)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
   SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
 
-  changed |= SaveFormPropertyEnum(form, _T("prpOrientationCruise"),
-                                  szProfileOrientationCruise,
-                                  settings_map.cruise_orientation);
+  changed |= SaveValueEnum(OrientationCruise, szProfileOrientationCruise,
+                           settings_map.cruise_orientation);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpOrientationCircling"),
-                                  szProfileOrientationCircling,
-                                  settings_map.circling_orientation);
+  changed |= SaveValueEnum(OrientationCircling, szProfileOrientationCircling,
+                           settings_map.circling_orientation);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpMapShiftBias"),
-                                  szProfileMapShiftBias,
-                                  settings_map.map_shift_bias);
+  changed |= SaveValueEnum(MapShiftBias, szProfileMapShiftBias,
+                           settings_map.map_shift_bias);
 
-  changed |= SaveFormProperty(form, _T("prpGliderScreenPosition"),
-                              szProfileGliderScreenPosition,
-                              XCSoarInterface::SetSettingsMap().glider_screen_position);
+  changed |= SaveValue(GliderScreenPosition, szProfileGliderScreenPosition,
+                       settings_map.glider_screen_position);
 
-  changed |= SaveFormProperty(form, _T("prpCirclingZoom"),
-                              szProfileCircleZoom,
-                              XCSoarInterface::SetSettingsMap().circle_zoom_enabled);
+  changed |= SaveValue(CirclingZoom, szProfileCircleZoom,
+                       settings_map.circle_zoom_enabled);
 
-  changed |= SaveFormProperty(form, _T("prpMaxAutoZoomDistance"),
-                              ugDistance,
-                              XCSoarInterface::SetSettingsMap().max_auto_zoom_distance,
-                              szProfileMaxAutoZoomDistance);
+  changed |= SaveValue(MaxAutoZoomDistance, ugDistance,
+                       szProfileMaxAutoZoomDistance,
+                       settings_map.max_auto_zoom_distance);
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }
