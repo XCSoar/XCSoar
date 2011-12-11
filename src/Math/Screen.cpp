@@ -94,8 +94,8 @@ PolygonRotateShift(RasterPoint *poly, const int n,
       cost = Layout::FastScale(angle.ifastcosine());
       sint = Layout::FastScale(angle.ifastsine());
     } else {
-      cost = Layout::FastScale(angle.ifastcosine() / 2);
-      sint = Layout::FastScale(angle.ifastsine() / 2);
+      cost = Layout::FastScale(angle.ifastcosine()) / 2;
+      sint = Layout::FastScale(angle.ifastsine()) / 2;
     }
   }
 
