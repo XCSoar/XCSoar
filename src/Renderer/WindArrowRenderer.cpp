@@ -53,16 +53,13 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 
   RasterPoint arrow[7] = {
       { 0, -20 },
-      { -6, -26 },
-      { 0, -20 },
-      { 6, -26 },
+      { -6, (PixelScalar)(-26 - wmag) },
+      { 0, (PixelScalar)(-20 - wmag) },
+      { 6, (PixelScalar)(-26 - wmag) },
       { 0, -20 },
       { (PixelScalar)(8 + kx), -24 },
       { (PixelScalar)(-8 - kx), -24 }
   };
-
-  for (int i = 1; i < 4; i++)
-    arrow[i].y -= wmag;
 
   PolygonRotateShift(arrow, 7, pos.x, pos.y, wind.bearing - screen_angle);
 
