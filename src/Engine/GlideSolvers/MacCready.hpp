@@ -64,15 +64,15 @@ public:
    * of this artificial sink rate.  The result includes error conditions.
    * 
    * @param task The task for which a solution is desired
-   * @param S The sink rate 
+   * @param sink_rate The sink rate
    * @return Returns the glide result containing data about the optimal solution
    */
   gcc_pure
-  GlideResult solve_sink(const GlideState &task, const fixed S) const;
+  GlideResult SolveSink(const GlideState &task, const fixed sink_rate) const;
 
   gcc_pure
-  static GlideResult solve_sink(const GlidePolar &glide_polar,
-                                const GlideState &task, const fixed S);
+  static GlideResult SolveSink(const GlidePolar &glide_polar,
+                               const GlideState &task, const fixed sink_rate);
 
   /** 
    * Calculates the glide solution for a classical MacCready theory task.
@@ -84,10 +84,10 @@ public:
    * @return Returns the glide result containing data about the optimal solution
    */
   gcc_pure
-  GlideResult solve(const GlideState &task) const;
+  GlideResult Solve(const GlideState &task) const;
 
   gcc_pure
-  static GlideResult solve(const GlidePolar &glide_polar,
+  static GlideResult Solve(const GlidePolar &glide_polar,
                            const GlideState &task);
 
   /**
@@ -103,13 +103,13 @@ public:
    * (result.altitude_difference may be negative).
 
    * @param task The task for which a solution is desired
-   * @param V The airspeed the glider will be travelling
+   * @param v_set The airspeed the glider will be travelling
    * @param allow_partial Return after glide exhausted
    * @return Returns the glide result containing data about the optimal solution
    */
   gcc_pure
-  GlideResult solve_glide(const GlideState &task, const fixed V,
-                          const bool allow_partial = false) const;
+  GlideResult SolveGlide(const GlideState &task, const fixed v_set,
+                         const bool allow_partial = false) const;
 
 private:
   /**
@@ -118,15 +118,15 @@ private:
    * determine the optimum speed for this glide component.
    *
    * @param task The task for which a solution is desired
-   * @param V The airspeed the glider will be travelling
-   * @param S The sinkrate of the glider in cruise
+   * @param v_set The airspeed the glider will be travelling
+   * @param sink_rate The sinkrate of the glider in cruise
    * @param allow_partial Return after glide exhausted
    * @return Returns the glide result containing data about the optimal solution
    */
   gcc_pure
   GlideResult
-  solve_glide(const GlideState &task, const fixed V, const fixed S,
-              const bool allow_partial = false) const;
+  SolveGlide(const GlideState &task, const fixed v_set, const fixed sink_rate,
+             const bool allow_partial = false) const;
 
   /**
    * Solve a task which is known to be pure glide,
@@ -138,8 +138,8 @@ private:
    * @return Solution
    */
   gcc_pure
-  GlideResult optimise_glide(const GlideState &task,
-                             const bool allow_partial = false) const;
+  GlideResult OptimiseGlide(const GlideState &task,
+                            const bool allow_partial = false) const;
 
   /**
    * Solve a task which is known to be pure climb (no distance
@@ -153,7 +153,7 @@ private:
    * @return Solution
    */
   gcc_pure
-  GlideResult solve_vertical(const GlideState &task) const;
+  GlideResult SolveVertical(const GlideState &task) const;
 
   /**
    * Solve a task which is known to be pure climb-cruise
@@ -164,7 +164,7 @@ private:
    * @return Solution
    */
   gcc_pure
-  GlideResult solve_cruise(const GlideState &task) const;
+  GlideResult SolveCruise(const GlideState &task) const;
 };
 
 #endif

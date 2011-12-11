@@ -36,7 +36,7 @@ TaskSolution::glide_solution_remaining(const TaskPoint& taskpoint,
   GlideState gs(taskpoint.GetVectorRemaining(ac.location),
                 max(minH,taskpoint.GetElevation()),
                 ac.altitude, ac.wind);
-  return MacCready::solve(polar, gs);
+  return MacCready::Solve(polar, gs);
 }
 
 GlideResult 
@@ -48,7 +48,7 @@ TaskSolution::glide_solution_planned(const TaskPoint& taskpoint,
   GlideState gs(taskpoint.GetVectorPlanned(),
                 max(minH,taskpoint.GetElevation()),
                 ac.altitude, ac.wind);
-  return MacCready::solve(polar, gs);
+  return MacCready::Solve(polar, gs);
 }
 
 GlideResult 
@@ -60,7 +60,7 @@ TaskSolution::glide_solution_travelled(const TaskPoint& taskpoint,
   GlideState gs(taskpoint.GetVectorTravelled(),
                 max(minH,taskpoint.GetElevation()),
                 ac.altitude, ac.wind);
-  return MacCready::solve(polar, gs);
+  return MacCready::Solve(polar, gs);
 }
 
 GlideResult 
@@ -72,5 +72,5 @@ TaskSolution::glide_solution_sink(const TaskPoint& taskpoint,
   GlideState gs(taskpoint.GetVectorRemaining(ac.location),
                 taskpoint.GetElevation(),
                 ac.altitude, ac.wind);
-  return MacCready::solve_sink(polar, gs, S);
+  return MacCready::SolveSink(polar, gs, S);
 }
