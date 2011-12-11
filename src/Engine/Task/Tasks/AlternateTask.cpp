@@ -48,9 +48,9 @@ AlternateTask::Reset()
 }
 
 void
-AlternateTask::clear()
+AlternateTask::Clear()
 {
-  AbortTask::clear();
+  AbortTask::Clear();
   alternates.clear();
 }
 
@@ -84,7 +84,7 @@ AlternateTask::check_alternate_changed()
 }
 
 void 
-AlternateTask::client_update(const AircraftState &state_now,
+AlternateTask::ClientUpdate(const AircraftState &state_now,
                              const bool reachable)
 {
   // build a list of alternates, sorted by distance.

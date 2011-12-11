@@ -107,7 +107,7 @@ protected:
 private:
   unsigned active_waypoint;
   GlidePolar polar_safety;
-  bool m_landable_reachable;
+  bool reachable_landable;
 
 public:
   /** 
@@ -151,7 +151,7 @@ public:
    *
    * @return Index of active task point sequence
    */
-  unsigned getActiveIndex() const {
+  unsigned GetActiveIndex() const {
     return active_task_point;
   }
 
@@ -191,8 +191,8 @@ public:
    *
    * @return True if a landable waypoint was found
    */
-  bool has_landable_reachable() const {
-    return m_landable_reachable;
+  bool HasReachableLandable() const {
+    return reachable_landable;
   }
 
   virtual void Reset();
@@ -203,21 +203,21 @@ public:
    * @param state State of aircraft
    * @return Vector to home waypoint
    */
-  GeoVector get_vector_home(const AircraftState &state) const;
+  GeoVector GetHomeVector(const AircraftState &state) const;
 
   /**
    * Retrieve copy of safety glide polar used by task system
    *
    * @return Copy of safety glide polar
    */
-  GlidePolar get_safety_polar() const;
+  GlidePolar GetSafetyPolar() const;
 
-  GeoPoint GetTaskCenter(const GeoPoint& fallback_location) const;
-  fixed GetTaskRadius(const GeoPoint& fallback_location) const;
+  GeoPoint GetTaskCenter(const GeoPoint &fallback_location) const;
+  fixed GetTaskRadius(const GeoPoint &fallback_location) const;
 
 protected:
   gcc_pure
-  bool is_reachable(const GlideResult &result, bool final_glide) const;
+  bool IsReachable(const GlideResult &result, bool final_glide) const;
 
   /**
    * Test whether (and how) transitioning into/out of task points should occur, typically
@@ -228,14 +228,13 @@ protected:
    *
    * @return True if transition occurred
    */
-  bool CheckTransitions(const AircraftState& state_now, 
-                         const AircraftState& state_last);
+  bool CheckTransitions(const AircraftState &state_now,
+                        const AircraftState &state_last);
 
   /**
    * Clears task points in list
-   *
    */
-  virtual void clear();
+  virtual void Clear();
 
   /**
    * Check whether abort task list is full
@@ -243,7 +242,7 @@ protected:
    * @return True if no more task points can be added
    */
   gcc_pure
-  bool task_full() const;
+  bool IsTaskFull() const;
 
   /**
    * Calculate distance to search for landable waypoints for aircraft.
@@ -253,14 +252,14 @@ protected:
    * @return Distance (m) of approximate glide range of aircraft
    */
   gcc_pure
-  fixed abort_range(const AircraftState &state_now) const;
+  fixed GetAbortRange(const AircraftState &state_now) const;
 
   /**
    * Propagate changes to safety glide polar from global glide polar.
    *
    * @param wind Wind at aircraft
    */
-  void update_polar(const SpeedVector& wind);
+  void UpdatePolar(const SpeedVector& wind);
 
   /**
    * Fill abort task list with candidate waypoints given a list of
@@ -276,10 +275,10 @@ protected:
    *
    * @return True if a landpoint within final glide was found
    */
-  bool fill_reachable(const AircraftState &state,
-                      AlternateVector &approx_waypoints,
-                      const GlidePolar &polar, bool only_airfield,
-                      bool final_glide, bool safety);
+  bool FillReachable(const AircraftState &state,
+                     AlternateVector &approx_waypoints,
+                     const GlidePolar &polar, bool only_airfield,
+                     bool final_glide, bool safety);
 
 protected:
   /**
@@ -288,23 +287,22 @@ protected:
    * It's first called after the reachable scan, then may be called again after scanning
    * for unreachable.
    */
-  virtual void client_update(const AircraftState &state_now, bool reachable);
+  virtual void ClientUpdate(const AircraftState &state_now, bool reachable);
 
 public:
   /**
    * Specify whether the task is active or not.  If it's active, it will
    * notify the user about the abort task point being changed via the events.
-   *
    */
-  void set_active(bool _active) {
+  void SetActive(bool _active) {
     is_active = _active;
   }
 
   /**
    * Set external test function to be used for additional intersection tests
    */
-  void set_intersection_test(AbortIntersectionTest* _test) {
-    intersection_test = _test;
+  void SetIntersectionTest(AbortIntersectionTest *test) {
+    intersection_test = test;
   }
 
   /**
@@ -313,9 +311,9 @@ public:
    *
    * @param visitor Visitor to accept
    * @param reverse Visit task points in reverse order
-   *
    */
-  void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor, bool reverse = false) const;
+  void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor,
+                              bool reverse = false) const;
 };
 
 #endif

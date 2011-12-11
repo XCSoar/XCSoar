@@ -34,7 +34,7 @@ TaskRenderer::TaskRenderer(RenderTaskPoint &_tpv, GeoBounds _screen_bounds)
 void 
 TaskRenderer::Draw(const AbortTask &task)
 {
-  tpv.SetActiveIndex(task.getActiveIndex());
+  tpv.SetActiveIndex(task.GetActiveIndex());
   for (unsigned i = 0; i < 4; i++) {
     tpv.ResetIndex();
 

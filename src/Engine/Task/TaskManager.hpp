@@ -371,7 +371,7 @@ public:
    */
   gcc_pure
   GlidePolar GetSafetyPolar() const {
-    return task_abort.get_safety_polar();
+    return task_abort.GetSafetyPolar();
   }
 
   /**
@@ -538,7 +538,7 @@ public:
    * Set external test function to be used for additional intersection tests
    */
   void SetIntersectionTest(AbortIntersectionTest *test) {
-    task_abort.set_intersection_test(test);
+    task_abort.SetIntersectionTest(test);
   }
 
   /**

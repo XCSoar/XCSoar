@@ -94,8 +94,8 @@ public:
   }
 
 protected:
-  void clear();
-  void client_update(const AircraftState &state_now, const bool reachable);
+  void Clear();
+  void ClientUpdate(const AircraftState &state_now, const bool reachable);
   void check_alternate_changed();
 
 private:

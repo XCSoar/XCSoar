@@ -184,9 +184,9 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
 void
 TaskManager::UpdateCommonStatsWaypoints(const AircraftState &state)
 {
-  common_stats.vector_home = task_abort.get_vector_home(state);
+  common_stats.vector_home = task_abort.GetHomeVector(state);
 
-  common_stats.landable_reachable = task_abort.has_landable_reachable();
+  common_stats.landable_reachable = task_abort.HasReachableLandable();
 
   common_stats.next_solution.Reset();
   if (active_task) {
@@ -291,7 +291,7 @@ TaskManager::Update(const AircraftState &state,
     retval |= task_ordered.Update(state, state_last);
 
   // inform the abort task whether it is running as the task or not  
-  task_abort.set_active(active_task == &task_abort);
+  task_abort.SetActive(active_task == &task_abort);
   // and tell it where the task destination is (if any)
   if (task_behaviour.abort_task_mode == atmSimple)
     task_abort.set_task_destination(state, NULL);
