@@ -45,7 +45,8 @@ public:
 
   typedef std::vector<Divert> DivertVector;
 
-  static const unsigned max_alternates; /// number of alternates
+  /// number of alternates
+  static const unsigned max_alternates;
 
 private:
   AlternateVector alternates;
