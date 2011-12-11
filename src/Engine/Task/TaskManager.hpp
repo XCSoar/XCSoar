@@ -144,7 +144,7 @@ public:
    * @return Vector of alternates
    */
   const AbortTask::AlternateVector &GetAlternates() const {
-    return task_abort.getAlternates();
+    return task_abort.GetAlternates();
   }
 
   /** Reset the tasks (as if never flown) */

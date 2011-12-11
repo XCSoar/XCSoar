@@ -72,15 +72,15 @@ public:
    * Sets the target of the task (if any) or fallback to aircraft location.  
    * Must be called before running update_sample!
    */
-  void set_task_destination(const AircraftState &state_now,
-                            const TaskPoint* _target);
+  void SetTaskDestination(const AircraftState &state_now,
+                          const TaskPoint *_target);
 
   /**
    * Sets the target of the task to the home waypoint or fallback to
    * aircraft location.
    * Must be called before running update_sample!
    */
-  void set_task_destination_home(const AircraftState &state_now);
+  void SetTaskDestinationHome(const AircraftState &state_now);
 
   /**
    * Retrieve a copy of the task alternates
@@ -89,21 +89,21 @@ public:
    *
    * @return Vector of alternates
    */
-  const AlternateVector &getAlternates() const {
+  const AlternateVector &GetAlternates() const {
     return alternates;
   }
 
 protected:
   void Clear();
   void ClientUpdate(const AircraftState &state_now, const bool reachable);
-  void check_alternate_changed();
+  void CheckAlternateChanged();
 
 private:
   /**
    * Determine if the candidate waypoint is already in the
    * alternate list.
    */
-  bool is_waypoint_in_alternates(const Waypoint& waypoint) const;
+  bool IsWaypointInAlternates(const Waypoint &waypoint) const;
 };
 
 #endif //ALTERNATETASK_HPP

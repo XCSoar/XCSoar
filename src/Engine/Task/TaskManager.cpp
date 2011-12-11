@@ -294,11 +294,11 @@ TaskManager::Update(const AircraftState &state,
   task_abort.SetActive(active_task == &task_abort);
   // and tell it where the task destination is (if any)
   if (task_behaviour.abort_task_mode == atmSimple)
-    task_abort.set_task_destination(state, NULL);
+    task_abort.SetTaskDestination(state, NULL);
   else if (task_behaviour.abort_task_mode == atmHome)
-    task_abort.set_task_destination_home(state);
+    task_abort.SetTaskDestinationHome(state);
   else
-    task_abort.set_task_destination(state, GetActiveTaskPoint());
+    task_abort.SetTaskDestination(state, GetActiveTaskPoint());
 
   retval |= task_abort.Update(state, state_last);
 

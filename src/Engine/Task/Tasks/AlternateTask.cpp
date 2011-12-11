@@ -71,7 +71,7 @@ struct AlternateRank:
 };
 
 void
-AlternateTask::check_alternate_changed()
+AlternateTask::CheckAlternateChanged()
 {
   // remember previous value (or invalid)
   unsigned id = (alternates.empty() ? UINT_MAX : alternates[0].waypoint.id);
@@ -95,16 +95,17 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
   reservable_priority_queue<Divert, DivertVector, AlternateRank> q;
   q.reserve(task_points.size());
 
-  const fixed dist_straight = state_now.location.Distance(destination);
+  const fixed straight_distance = state_now.location.Distance(destination);
 
   for (auto i = task_points.begin(), end = task_points.end(); i != end; ++i) {
-    const TaskWaypoint& tp = *i;
-    const Waypoint& wp_alt = tp.GetWaypoint();
-    const fixed dist_divert =
-        ::DoubleDistance(state_now.location, wp_alt.location, destination);
-    const fixed delta = dist_straight - dist_divert;
+    const TaskWaypoint &tp = *i;
+    const Waypoint &wp = tp.GetWaypoint();
 
-    q.push(Divert(wp_alt, i->solution, delta));
+    const fixed diversion_distance =
+        ::DoubleDistance(state_now.location, wp.location, destination);
+    const fixed delta = straight_distance - diversion_distance;
+
+    q.push(Divert(wp, i->solution, delta));
   }
 
   // now push results onto the list, best first.
@@ -113,19 +114,18 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
 
     // only add if not already in the list (from previous stage in two
     // stage process)
-    if (!is_waypoint_in_alternates(top.waypoint)) {
+    if (!IsWaypointInAlternates(top.waypoint))
       alternates.push_back(top);
-    }
 
     q.pop();
   }
 
   // check for notifications
-  check_alternate_changed();
+  CheckAlternateChanged();
 }
 
 void 
-AlternateTask::set_task_destination(const AircraftState &state_now,
+AlternateTask::SetTaskDestination(const AircraftState &state_now,
                                     const TaskPoint* _target) 
 {
   // if we have a target, use that, otherwise use the aircraft location
@@ -137,7 +137,7 @@ AlternateTask::set_task_destination(const AircraftState &state_now,
 }
 
 void
-AlternateTask::set_task_destination_home(const AircraftState &state_now)
+AlternateTask::SetTaskDestinationHome(const AircraftState &state_now)
 {
   // if we have a home, use that, otherwise use the aircraft location
   // (which ends up equivalent to sorting by distance)
@@ -149,7 +149,7 @@ AlternateTask::set_task_destination_home(const AircraftState &state_now)
 }
 
 bool 
-AlternateTask::is_waypoint_in_alternates(const Waypoint& waypoint) const
+AlternateTask::IsWaypointInAlternates(const Waypoint& waypoint) const
 {
   for (auto it = alternates.begin(), end = alternates.end(); it != end; ++it)
     if (it->waypoint == waypoint)
