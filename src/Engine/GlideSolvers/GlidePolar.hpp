@@ -417,7 +417,7 @@ public:
    *
    * @return MC value adjusted for risk (m/s)
    */
-  fixed GetRiskMC(const fixed height_fraction, const fixed riskGamma) const;
+  fixed GetRiskMC(fixed height_fraction, const fixed riskGamma) const;
 
   /**
    * Find LD relative to ground for specified track bearing

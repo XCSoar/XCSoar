@@ -365,20 +365,20 @@ FRiskFunction(const fixed x, const fixed k)
 }
 
 fixed
-GlidePolar::GetRiskMC(const fixed height_fraction, const fixed riskGamma) const
+GlidePolar::GetRiskMC(fixed height_fraction, const fixed riskGamma) const
 {
 #define fixed_low_limit fixed(0.1)
 #define fixed_up_limit fixed(0.9)
 
-  fixed x = max(fixed_zero, min(fixed_one, height_fraction));
+  height_fraction = max(fixed_zero, min(fixed_one, height_fraction));
 
   if (riskGamma < fixed_low_limit)
     return mc;
   else if (riskGamma > fixed_up_limit)
-    return x * mc;
+    return height_fraction * mc;
 
   const fixed k = fixed_one / (riskGamma * riskGamma) - fixed_one;
-  return mc * FRiskFunction(x, k) / FRiskFunction(fixed_one, k);
+  return mc * FRiskFunction(height_fraction, k) / FRiskFunction(fixed_one, k);
 }
 
 fixed
