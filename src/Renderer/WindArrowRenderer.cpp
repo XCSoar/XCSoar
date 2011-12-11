@@ -61,8 +61,8 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   // Copy first point to last point to close polygon
   arrow[4] = arrow[0];
 
-  canvas.Select(look.hpWind);
-  canvas.Select(look.hbWind);
+  canvas.Select(look.arrow_pen);
+  canvas.Select(look.arrow_brush);
   canvas.polygon(arrow, 5);
 
 
@@ -77,7 +77,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
     PolygonRotateShift(tail, ARRAY_SIZE(tail),
                        pos.x, pos.y, wind.bearing - screen_angle);
 
-    canvas.Select(look.hpWindTail);
+    canvas.Select(look.tail_pen);
     canvas.line(tail[0], tail[1]);
   }
 

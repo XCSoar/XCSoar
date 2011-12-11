@@ -29,8 +29,8 @@ Copyright_License {
 
 struct WindArrowLook
 {
-  Pen hpWind, hpWindTail;
-  Brush hbWind;
+  Pen arrow_pen, tail_pen;
+  Brush arrow_brush;
 
   void Initialise();
 };

@@ -27,7 +27,7 @@ Copyright_License {
 void
 WindArrowLook::Initialise()
 {
-  hpWind.Set(Layout::Scale(1), DarkColor(COLOR_GRAY));
-  hpWindTail.Set(Pen::DASH, 1, COLOR_BLACK);
-  hbWind.Set(COLOR_GRAY);
+  arrow_pen.Set(Layout::Scale(1), DarkColor(COLOR_GRAY));
+  tail_pen.Set(Pen::DASH, 1, COLOR_BLACK);
+  arrow_brush.Set(COLOR_GRAY);
 }
