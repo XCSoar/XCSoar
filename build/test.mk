@@ -598,6 +598,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunDialog RunListControl \
 	RunTerminal \
 	RunRenderOZ \
+	RunWindArrowRenderer \
 	RunProgressWindow \
 	RunJobDialog \
 	RunAnalysis \
@@ -1514,6 +1515,35 @@ RUN_RENDER_OZ_SOURCES = \
 RUN_RENDER_OZ_LDADD = $(RESOURCE_BINARY)
 RUN_RENDER_OZ_DEPENDS = ENGINE_CORE FORM SCREEN MATH
 $(eval $(call link-program,RunRenderOZ,RUN_RENDER_OZ))
+
+RUN_WIND_ARROW_RENDERER_SOURCES = \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Notify.cpp \
+	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Math/Screen.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Screen/LabelBlock.cpp \
+	$(SRC)/Screen/TextInBox.cpp \
+	$(SRC)/Look/WindArrowLook.cpp \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/Settings.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
+	$(SRC)/Renderer/WindArrowRenderer.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/RunWindArrowRenderer.cpp
+RUN_WIND_ARROW_RENDERER_LDADD = $(RESOURCE_BINARY)
+RUN_WIND_ARROW_RENDERER_DEPENDS = ENGINE_CORE FORM SCREEN MATH
+$(eval $(call link-program,RunWindArrowRenderer,RUN_WIND_ARROW_RENDERER))
 
 RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Version.cpp \
