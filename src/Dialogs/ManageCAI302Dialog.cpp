@@ -105,40 +105,46 @@ ManageCAI302Dialog(SingleWindow &parent, const DialogLook &look,
   ButtonWindowStyle button_style;
   button_style.tab_stop();
 
-  PixelScalar y = rc.top + margin;
   WndButton *button;
 
+  PixelRect brc = rc;
+  brc.left += margin;
+  brc.top += margin;
+  brc.right -= margin;
+  brc.bottom = brc.top + height;
+
   button = new WndButton(client_area, look, _("Start Logger"),
-                         rc.left + margin, y,
-                         rc.right - rc.left - 2 * margin, height,
+                         brc,
                          button_style,
                          OnStartLogging);
   dialog->AddDestruct(button);
-  y += height + margin;
+
+  brc.top += height + margin;
+  brc.bottom += height + margin;
 
   button = new WndButton(client_area, look, _("Stop Logger"),
-                         rc.left + margin, y,
-                         rc.right - rc.left - 2 * margin, height,
+                         brc,
                          button_style,
                          OnStopLogging);
   dialog->AddDestruct(button);
-  y += height + margin;
+
+  brc.top += height + margin;
+  brc.bottom += height + margin;
 
   button = new WndButton(client_area, look, _("Delete all flights"),
-                         rc.left + margin, y,
-                         rc.right - rc.left - 2 * margin, height,
+                         brc,
                          button_style,
                          OnClearLogClicked);
   dialog->AddDestruct(button);
-  y += height + margin;
+
+  brc.top += height + margin;
+  brc.bottom += height + margin;
 
   button = new WndButton(client_area, look, _("Reboot"),
-                         rc.left + margin, y,
-                         rc.right - rc.left - 2 * margin, height,
+                         brc,
                          button_style,
                          OnRebootClicked);
   dialog->AddDestruct(button);
-  y += height + margin;
 
   /* run it */
 

@@ -70,7 +70,7 @@ public:
    */
   WndButton(ContainerWindow &parent, const DialogLook &look,
             const TCHAR *Caption,
-      int X, int Y, int Width, int Height,
+            const PixelRect &rc,
             const ButtonWindowStyle style,
       ClickNotifyCallback_t Function = NULL,
       LeftRightNotifyCallback_t LeftFunction = NULL,

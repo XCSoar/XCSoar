@@ -690,8 +690,14 @@ LoadChild(SubForm &form, ContainerWindow &parent,
       edit_style.vscroll();
     }
 
+    PixelRect rc;
+    rc.left = pos.x;
+    rc.top = pos.y;
+    rc.right = rc.left + size.cx;
+    rc.bottom = rc.top + size.cy;
+
     window = property = new WndProperty(parent, *xml_dialog_look, caption,
-                                 pos.x, pos.y, size.cx, size.cy,
+                                        rc,
                                  caption_width,
                                  style, edit_style,
                                  data_notify_callback);
@@ -728,8 +734,14 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     button_style.tab_stop();
     button_style.multiline();
 
+    PixelRect rc;
+    rc.left = pos.x;
+    rc.top = pos.y;
+    rc.right = rc.left + size.cx;
+    rc.bottom = rc.top + size.cy;
+
     window = new WndButton(parent, *xml_dialog_look, caption,
-                           pos.x, pos.y, size.cx, size.cy,
+                           rc,
                            button_style, click_callback);
 
   } else if (_tcscmp(node.getName(), _T("CheckBox")) == 0) {
@@ -742,8 +754,14 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     style.tab_stop();
 
+    PixelRect rc;
+    rc.left = pos.x;
+    rc.top = pos.y;
+    rc.right = rc.left + size.cx;
+    rc.bottom = rc.top + size.cy;
+
     window = new CheckBoxControl(parent, *xml_dialog_look, caption,
-                                 pos.x, pos.y, size.cx, size.cy,
+                                 rc,
                                  style, click_callback);
 
   // SymbolButtonControl (WndSymbolButton) not used yet
@@ -757,8 +775,14 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     style.tab_stop();
 
+    PixelRect rc;
+    rc.left = pos.x;
+    rc.top = pos.y;
+    rc.right = rc.left + size.cx;
+    rc.bottom = rc.top + size.cy;
+
     window = new WndSymbolButton(parent, *xml_dialog_look, caption,
-                                 pos.x, pos.y, size.cx, size.cy,
+                                 rc,
                                  style, click_callback);
 
   // PanelControl (WndPanel)
@@ -767,8 +791,14 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     style.control_parent();
 
+    PixelRect rc;
+    rc.left = pos.x;
+    rc.top = pos.y;
+    rc.right = rc.left + size.cx;
+    rc.bottom = rc.top + size.cy;
+
     PanelControl *frame = new PanelControl(parent, *xml_dialog_look,
-                                           pos.x, pos.y, size.cx, size.cy,
+                                           rc,
                                            style);
 
     window = frame;

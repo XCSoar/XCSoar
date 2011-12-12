@@ -87,11 +87,21 @@ public:
 
     PixelRect rc = get_client_rect();
 
+    PixelRect button_rc = rc;
+    button_rc.bottom -= 5;
+    button_rc.top = button_rc.bottom - 25;
+
 #ifndef ENABLE_OPENGL
-    buffer_button.set(*this, _T("Buffer"), ID_BUFFER, 5, rc.bottom - 30, 65, 25);
+    button_rc.left += 5;
+    button_rc.right = button_rc.left + 65;
+
+    buffer_button.set(*this, _T("Buffer"), ID_BUFFER, button_rc);
 #endif
 
-    close_button.set(*this, _T("Close"), ID_CLOSE, rc.right - 70, rc.bottom - 30, 65, 25);
+    button_rc.right = rc.right - 5;
+    button_rc.left = button_rc.right - 65;
+
+    close_button.set(*this, _T("Close"), ID_CLOSE, button_rc);
   }
 
 private:

@@ -142,7 +142,11 @@ public:
     if (terrain != NULL)
       map.SetLocation(terrain->GetTerrainCenter());
 
-    close_button.set(*this, _T("Close"), ID_CLOSE, 5, 5, 65, 25);
+    rc.left = 5;
+    rc.top = 5;
+    rc.right = rc.left + 60;
+    rc.bottom = rc.top + 20;
+    close_button.set(*this, _T("Close"), ID_CLOSE, rc);
     close_button.set_font(Fonts::map);
     close_button.bring_to_top();
   }

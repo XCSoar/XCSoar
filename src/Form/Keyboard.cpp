@@ -212,8 +212,14 @@ KeyboardControl::add_button(const TCHAR* caption)
   assert(num_buttons < MAX_BUTTONS);
 
   button_values[num_buttons] = caption[0];
+
+  PixelRect rc;
+  rc.left = 0;
+  rc.top = 0;
+  rc.right = button_width;
+  rc.bottom = button_height;
+
   ButtonWindow *button = &buttons[num_buttons++];
-  button->set(*this, caption, (unsigned)caption[0],
-              0, 0, button_width, button_height);
+  button->set(*this, caption, (unsigned)caption[0], rc);
   button->set_font(*look.button_font);
 }

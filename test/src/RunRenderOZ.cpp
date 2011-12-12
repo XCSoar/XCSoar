@@ -252,8 +252,10 @@ public:
     type_list->SetCursorCallback(oz_type_cursor_callback);
     type_list->SetLength(NUM_OZ_TYPES);
 
-    close_button.set(*this, _T("Close"), ID_CLOSE,
-                     0, rc.bottom - 30, rc.right / 2, 30);
+    PixelRect button_rc = rc;
+    button_rc.right = (rc.left + rc.right) / 2;
+    button_rc.top = button_rc.bottom - 30;
+    close_button.set(*this, _T("Close"), ID_CLOSE, button_rc);
 
     oz.set_shape(ObservationZonePoint::LINE);
 

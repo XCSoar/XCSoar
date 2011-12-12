@@ -25,14 +25,13 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 
 PanelControl::PanelControl(ContainerWindow &parent, const DialogLook &look,
-                           PixelScalar x, PixelScalar y,
-                           UPixelScalar width, UPixelScalar height,
+                           const PixelRect &rc,
                            const WindowStyle style)
 #ifdef HAVE_CLIPPING
   :background_color(look.background_color)
 #endif
 {
-  set(parent, x, y, width, height, style);
+  set(parent, rc, style);
 }
 
 /* don't need to erase the background when it has been done by the

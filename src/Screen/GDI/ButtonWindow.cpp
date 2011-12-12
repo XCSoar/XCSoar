@@ -28,13 +28,10 @@ Copyright_License {
 
 void
 BaseButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-                      PixelScalar left, PixelScalar top,
-                      UPixelScalar width, UPixelScalar height,
+                      const PixelRect &rc,
                       const WindowStyle style)
 {
-  Window::set(&parent, WC_BUTTON, text,
-              left, top, width, height,
-              style);
+  Window::set(&parent, WC_BUTTON, text, rc, style);
 
   ::SetWindowLong(hWnd, GWL_ID, id);
 

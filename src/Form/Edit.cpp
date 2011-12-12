@@ -147,8 +147,7 @@ WndProperty::Editor::on_killfocus()
 
 WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
                          const TCHAR *Caption,
-                         PixelScalar X, PixelScalar Y,
-                         int Width, int Height,
+                         const PixelRect &rc,
                          int CaptionWidth,
                          const WindowStyle style,
                          const EditWindowStyle edit_style,
@@ -161,7 +160,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
 {
   mCaption = Caption;
 
-  set(parent, X, Y, Width, Height, style);
+  set(parent, rc, style);
 
   edit.set(*this, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y, edit_style);
   edit.install_wndproc();

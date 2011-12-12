@@ -146,10 +146,11 @@ public:
 
     key_code_dumper.set(*this, rc.left, rc.top,
                         rc.right - rc.left, (rc.bottom - rc.top + 1) / 2);
-    close_button.set(*this, _T("Close"), ID_CLOSE,
-                     rc.left, (rc.top + rc.bottom + 1) / 2,
-                     rc.right - rc.left,
-                     (rc.top + rc.bottom) / 2);
+
+    PixelRect button_rc = rc;
+    button_rc.top = (rc.top + rc.bottom + 1) / 2;
+
+    close_button.set(*this, _T("Close"), ID_CLOSE, button_rc);
 
     key_code_dumper.set_focus();
   }

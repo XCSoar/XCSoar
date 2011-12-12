@@ -103,9 +103,11 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
     style.tab_stop();
 
     PixelRect rc = client_area.get_client_rect();
-    cancel_button.set(client_area, _("Cancel"),
-                      rc.right - Layout::Scale(80), rc.top + Layout::Scale(2),
-                      Layout::Scale(78), Layout::Scale(35),
+    rc.right -= Layout::Scale(2);
+    rc.left = rc.right - Layout::Scale(78);
+    rc.top += Layout::Scale(2);
+    rc.bottom = rc.top + Layout::Scale(35);
+    cancel_button.set(client_area, _("Cancel"), rc,
                       style);
     cancel_button.set_font(*dialog_look.button_font);
     cancel_button.bring_to_top();

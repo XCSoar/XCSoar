@@ -27,7 +27,8 @@ Copyright_License {
 #include "Asset.hpp"
 
 WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
-    const TCHAR *Caption, int X, int Y, int Width, int Height,
+                     const TCHAR *Caption,
+                     const PixelRect &rc,
                      const ButtonWindowStyle style,
     ClickNotifyCallback_t Function,
     LeftRightNotifyCallback_t LeftFunction,
@@ -37,7 +38,7 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
     mOnLeftNotify(LeftFunction),
     mOnRightNotify(RightFunction)
 {
-  set(parent, Caption, X, Y, Width, Height, style);
+  set(parent, Caption, rc, style);
   set_font(*look.button_font);
 }
 

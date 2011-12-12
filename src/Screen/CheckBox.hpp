@@ -62,15 +62,13 @@ public:
   CheckBox():checked(false), dragging(false), pressed(false) {}
 
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
+           const PixelRect &rc,
            const CheckBoxStyle style=CheckBoxStyle());
 
   void set(ContainerWindow &parent, const TCHAR *text,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
+           const PixelRect &rc,
            const CheckBoxStyle style=CheckBoxStyle()) {
-    set(parent, text, 0, left, top, width, height, style);
+    set(parent, text, 0, rc, style);
   }
 
   bool get_checked() const {
@@ -104,17 +102,15 @@ protected:
 class CheckBox : public BaseButtonWindow {
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
+           const PixelRect &rc,
            const CheckBoxStyle style=CheckBoxStyle()) {
-    BaseButtonWindow::set(parent, text, id, left, top, width, height, style);
+    BaseButtonWindow::set(parent, text, id, rc, style);
   }
 
   void set(ContainerWindow &parent, const TCHAR *text,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
+           const PixelRect &rc,
            const CheckBoxStyle style=CheckBoxStyle()) {
-    BaseButtonWindow::set(parent, text, left, top, width, height, style);
+    BaseButtonWindow::set(parent, text, rc, style);
   }
 
   bool get_checked() const {

@@ -351,26 +351,27 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   else
     edit_style.sunken_edge();
 
-  const PixelScalar x = rc.left;
-  const UPixelScalar width = rc.right - rc.left - Layout::FastScale(2);
+  PixelRect control_rc = rc;
+  control_rc.right -= Layout::FastScale(2);
+
   const UPixelScalar height = Layout::Scale(22);
   const UPixelScalar caption_width = Layout::Scale(60);
-
-  PixelScalar y = rc.top;
 
   ButtonWindowStyle button_style;
   button_style.tab_stop();
 
+  control_rc.bottom = control_rc.top + height;
   buttonPanelName =
     new WndButton(client_area, dialog_look, _T(""),
-                  x, y, width, height, button_style, OnNameAccess);
+                  control_rc, button_style, OnNameAccess);
   buttonPanelName->set_enabled(allow_name_change);
   UpdatePanelName();
 
-  y += height;
+  control_rc.top = control_rc.bottom;
+  control_rc.bottom = control_rc.top + height;
 
   edit_select = new WndProperty(client_area, dialog_look, _("InfoBox"),
-                                x, y, width, height, caption_width,
+                                rc, caption_width,
                                 style, edit_style,
                                 NULL);
 
@@ -383,10 +384,11 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   edit_select->SetDataField(dfe);
 
-  y += height;
+  control_rc.top += height;
+  control_rc.bottom += height;
 
   edit_content = new WndProperty(client_area, dialog_look, _("Content"),
-                                 x, y, width, height, caption_width,
+                                 rc, caption_width,
                                  style, edit_style,
                                  NULL);
 
@@ -406,22 +408,26 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   const UPixelScalar button_width = Layout::Scale(60);
   const UPixelScalar button_height = Layout::Scale(28);
-  const PixelScalar button_y = rc.bottom - button_height;
-  PixelScalar button_x = rc.left;
+
+  PixelRect button_rc = rc;
+  button_rc.right = button_rc.left + button_width;
+  button_rc.top = button_rc.bottom - button_height;
+
   WndButton *close_button =
     new WndButton(client_area, dialog_look, _("Close"),
-                  button_x, button_y, button_width, button_height,
-                  button_style, OnCloseClicked);
-  button_x += button_width + Layout::Scale(2);
+                  button_rc, button_style, OnCloseClicked);
+
+  button_rc.left += button_width + Layout::Scale(2);
+  button_rc.right += button_width + Layout::Scale(2);
   WndButton *copy_button =
     new WndButton(client_area, dialog_look, _("Copy"),
-                  button_x, button_y, button_width, button_height,
-                  button_style, OnCopy);
-  button_x += button_width + Layout::Scale(2);
+                  button_rc, button_style, OnCopy);
+
+  button_rc.left += button_width + Layout::Scale(2);
+  button_rc.right += button_width + Layout::Scale(2);
   buttonPaste =
     new WndButton(client_area, dialog_look, _("Paste"),
-                  button_x, button_y, button_width, button_height,
-                  button_style, OnPaste);
+                  button_rc, button_style, OnPaste);
 
   RefreshPasteButton();
 

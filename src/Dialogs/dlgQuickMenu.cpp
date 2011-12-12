@@ -172,10 +172,14 @@ dlgQuickMenuShowModal(SingleWindow &parent)
     if (!expanded.visible)
       continue;
 
+    PixelRect button_rc;
+    button_rc.left = 0;
+    button_rc.top = 0;
+    button_rc.right = 80;
+    button_rc.bottom = 30;
     WndButton *button =
       new WndCustomButton(*grid_view, dialog_look, expanded.text,
-                          0, 0, 80, 30,
-                          buttonStyle, OnButtonClicked);
+                          button_rc, buttonStyle, OnButtonClicked);
     button->set_enabled(expanded.enabled);
 
     buttons.append(button);

@@ -125,9 +125,7 @@ ButtonPanel::Add(const TCHAR *caption,
 
   const PixelRect r = GetButtonRect(buttons.size());
   WndButton *button = new WndButton(parent, look, caption,
-                                    r.left, r.top,
-                                    r.right - r.left, r.bottom - r.top,
-                                    style, callback);
+                                    r, style, callback);
   buttons.append(button);
 
   return button;

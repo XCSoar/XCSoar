@@ -28,10 +28,9 @@ Copyright_License {
 
 #include <assert.h>
 
-static void
-GetButtonPosition(unsigned i, PixelRect rc,
-                  PixelScalar *x, PixelScalar *y,
-                  UPixelScalar *sizex, UPixelScalar *sizey)
+gcc_pure
+static PixelRect
+GetButtonPosition(unsigned i, PixelRect rc)
 {
   UPixelScalar hwidth = rc.right - rc.left;
   UPixelScalar hheight = rc.bottom - rc.top;
@@ -43,54 +42,53 @@ GetButtonPosition(unsigned i, PixelRect rc,
 
     hheight /= 6;
 
-    *sizey = hheight - margin * 2;
-
     if (i == 0) {
-      *sizex = Layout::Scale(52);
-      *sizey = Layout::Scale(37);
-      *x = rc.left - (*sizex); // JMW make it offscreen for now
-      *y = rc.bottom - (*sizey);
+      rc.left = rc.right;
+      rc.top = rc.bottom;
     } else if (i < 5) {
       hwidth /= 4;
 
-      *sizex = hwidth - margin * 2;
-      *x = rc.left + margin + hwidth * (i - 1);
-      *y = rc.bottom - hheight + margin;
+      rc.left += margin + hwidth * (i - 1);
+      rc.top = rc.bottom - hheight + margin;
     } else {
       hwidth /= 3;
 
-      *sizex = hwidth - margin * 2;
-      *x = rc.right - hwidth + margin;
+      rc.left = rc.right - hwidth + margin;
       PixelScalar k = rc.bottom - rc.top - Layout::Scale(46);
 
       if (IsAltair()) {
         k = rc.bottom - rc.top;
         // JMW need upside down button order for rotated Altair
-        *y = rc.bottom - (i - 5) * k / 5 - (*sizey) - Layout::Scale(20);
+        rc.top = rc.bottom - (i - 5) * k / 5 - (hheight - margin * 2) - Layout::Scale(20);
       } else {
-        *y = rc.top + (i - 5) * hheight + margin;
+        rc.top += (i - 5) * hheight + margin;
       }
     }
+
+    rc.right = rc.left + hwidth - margin * 2;
+    rc.bottom = rc.top + hheight - margin * 2;
   } else {
     // landscape
 
     hwidth /= 5;
     hheight /= 5;
 
-    *sizex = hwidth - margin * 2;
-    *sizey = hheight - margin * 2;
-
     if (i == 0) {
-      *x = rc.left - (*sizex); // JMW make it offscreen for now
-      *y = (rc.top);
+      rc.left = rc.right;
+      rc.top = rc.bottom;
     } else if (i < 5) {
-      *x = rc.left + margin;
-      *y = rc.top + margin + hheight * (i - 1);
+      rc.left += margin;
+      rc.top += margin + hheight * (i - 1);
     } else {
-      *x = rc.left + hwidth * (i - 5);
-      *y = rc.bottom - hheight + margin;
+      rc.left += hwidth * (i - 5);
+      rc.top = rc.bottom - hheight + margin;
     }
+
+    rc.right = rc.left + hwidth - margin * 2;
+    rc.bottom = rc.top + hheight - margin * 2;
   }
+
+  return rc;
 }
 
 bool
@@ -130,11 +128,8 @@ MenuBar::MenuBar(ContainerWindow &parent)
   style.multiline();
 
   for (unsigned i = 0; i < MAX_BUTTONS; ++i) {
-    PixelScalar x, y;
-    UPixelScalar xsize, ysize;
-    GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
-    buttons[i].set(parent, _T(""), x, y, xsize, ysize,
-                   style);
+    PixelRect button_rc = GetButtonPosition(i, rc);
+    buttons[i].set(parent, _T(""), button_rc, style);
   }
 }
 

@@ -128,8 +128,9 @@ public:
 
     wind.set(*this, rc.left, rc.top, rc.right, rc.bottom, with_border);
 
-    close_button.set(*this, _T("Close"), ID_CLOSE,
-                     rc.left, rc.bottom - 30, rc.right - rc.left, 30);
+    PixelRect button_rc = rc;
+    button_rc.top = button_rc.bottom - 30;
+    close_button.set(*this, _T("Close"), ID_CLOSE, button_rc);
   }
 
 protected:

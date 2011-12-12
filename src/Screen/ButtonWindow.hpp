@@ -79,15 +79,13 @@ public:
 
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
+           const PixelRect &rc,
            const ButtonWindowStyle style=ButtonWindowStyle());
 
   void set(ContainerWindow &parent, const TCHAR *text,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
+           const PixelRect &rc,
            const ButtonWindowStyle style=ButtonWindowStyle()) {
-    set(parent, text, 0, left, top, width, height, style);
+    set(parent, text, 0, rc, style);
   }
 
   void set_text(const TCHAR *_text) {
@@ -150,16 +148,13 @@ public:
 
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
+           const PixelRect &rc,
            const WindowStyle style);
 
   void set(ContainerWindow &parent, const TCHAR *text,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
+           const PixelRect &rc,
            const WindowStyle style) {
-    set(parent, text, COMMAND_BOUNCE_ID,
-        left, top, width, height, style);
+    set(parent, text, COMMAND_BOUNCE_ID, rc, style);
   }
 
   gcc_pure
@@ -185,17 +180,15 @@ protected:
 class ButtonWindow : public BaseButtonWindow {
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
+           const PixelRect &rc,
            const ButtonWindowStyle style=ButtonWindowStyle()) {
-    BaseButtonWindow::set(parent, text, id, left, top, width, height, style);
+    BaseButtonWindow::set(parent, text, id, rc, style);
   }
 
   void set(ContainerWindow &parent, const TCHAR *text,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
+           const PixelRect &rc,
            const ButtonWindowStyle style=ButtonWindowStyle()) {
-    BaseButtonWindow::set(parent, text, left, top, width, height, style);
+    BaseButtonWindow::set(parent, text, rc, style);
   }
 
   bool is_down() const {

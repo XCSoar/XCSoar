@@ -126,8 +126,7 @@ public:
    */
   WndProperty(ContainerWindow &parent, const DialogLook &look,
               const TCHAR *Caption,
-              PixelScalar x, PixelScalar y,
-              int Width, int Height, int CaptionWidth,
+              const PixelRect &rc, int CaptionWidth,
               const WindowStyle style,
               const EditWindowStyle edit_style,
               DataChangeCallback_t DataChangeNotify);

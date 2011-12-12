@@ -47,8 +47,7 @@ public:
    * @param height Height of the Control
    */
   PanelControl(ContainerWindow &parent, const DialogLook &look,
-               PixelScalar x, PixelScalar y,
-               UPixelScalar width, UPixelScalar height,
+               const PixelRect &rc,
                const WindowStyle style=WindowStyle());
 
 #ifdef HAVE_CLIPPING

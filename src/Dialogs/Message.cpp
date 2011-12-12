@@ -41,10 +41,10 @@ class ModalResultButton : public WndButton {
 public:
   ModalResultButton(ContainerWindow &parent, const DialogLook &look,
                     const TCHAR *Caption,
-                    int X, int Y, int Width, int Height,
+                    const PixelRect &rc,
                     const WindowStyle style,
                     WndForm &_form, int _result)
-    :WndButton(parent, look, Caption, X, Y, Width, Height,
+    :WndButton(parent, look, Caption, rc,
                style),
      form(_form), result(_result) {}
 
@@ -110,7 +110,11 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   Y = ((rc.bottom - rc.top) - Height) / 2;
   wf.move(X, Y, Width, Height);
 
-  PixelScalar y = Layout::Scale(6) + text_height;
+  PixelRect button_rc;
+  button_rc.left = 0;
+  button_rc.top = Layout::Scale(6) + text_height;
+  button_rc.right = button_rc.left + w;
+  button_rc.bottom = button_rc.top + h;
 
   // Create buttons
   WindowStyle button_style;
@@ -119,7 +123,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   uType = uType & 0x000f;
   if (uType == MB_OK || uType == MB_OKCANCEL) {
     wButtons[ButtonCount] =
-      new ModalResultButton(client_area, dialog_look, _("OK"), 0, y, w, h,
+      new ModalResultButton(client_area, dialog_look, _("OK"), button_rc,
                             button_style, wf, IDOK);
 
     ButtonCount++;
@@ -127,13 +131,13 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   if (uType == MB_YESNO || uType == MB_YESNOCANCEL) {
     wButtons[ButtonCount] =
-      new ModalResultButton(client_area, dialog_look, _("Yes"), 0, y, w, h,
+      new ModalResultButton(client_area, dialog_look, _("Yes"), button_rc,
                             button_style, wf, IDYES);
 
     ButtonCount++;
 
     wButtons[ButtonCount] =
-      new ModalResultButton(client_area, dialog_look, _("No"), 0, y, w, h,
+      new ModalResultButton(client_area, dialog_look, _("No"), button_rc,
                             button_style, wf, IDNO);
 
     ButtonCount++;
@@ -141,7 +145,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   if (uType == MB_ABORTRETRYIGNORE || uType == MB_RETRYCANCEL) {
     wButtons[ButtonCount] =
-      new ModalResultButton(client_area, dialog_look, _("Retry"), 0, y, w, h,
+      new ModalResultButton(client_area, dialog_look, _("Retry"), button_rc,
                             button_style, wf, IDRETRY);
 
     ButtonCount++;
@@ -149,7 +153,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   if (uType == MB_OKCANCEL || uType == MB_RETRYCANCEL || uType == MB_YESNOCANCEL) {
     wButtons[ButtonCount] =
-      new ModalResultButton(client_area, dialog_look, _("Cancel"), 0, y, w, h,
+      new ModalResultButton(client_area, dialog_look, _("Cancel"), button_rc,
                             button_style, wf, IDCANCEL);
 
     ButtonCount++;
@@ -157,13 +161,13 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   if (uType == MB_ABORTRETRYIGNORE) {
     wButtons[ButtonCount] =
-      new ModalResultButton(client_area, dialog_look, _("Abort"), 0, y, w, h,
+      new ModalResultButton(client_area, dialog_look, _("Abort"), button_rc,
                             button_style, wf, IDABORT);
 
     ButtonCount++;
 
     wButtons[ButtonCount] =
-      new ModalResultButton(client_area, dialog_look, _("Ignore"), 0, y, w, h,
+      new ModalResultButton(client_area, dialog_look, _("Ignore"), button_rc,
                             button_style, wf, IDIGNORE);
 
     ButtonCount++;
@@ -174,7 +178,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   // Move buttons to the right positions
   for (i = 0; i < ButtonCount; i++) {
-    wButtons[i]->move(x, y);
+    wButtons[i]->move(x, button_rc.top);
     x += d;
   }
 
