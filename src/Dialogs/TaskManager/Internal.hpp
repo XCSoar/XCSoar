@@ -46,6 +46,8 @@ public:
   static bool CommitTaskChanges();
 
   /**
+   * Commits the temporary task to the system and closes
+   * the task manager dialog it the commit succeeds.
    * @returns True if validated, False if window shall remain open
    */
   static bool OnClose();
