@@ -253,12 +253,26 @@ TaskPropertiesPanel::Show(const PixelRect &rc)
   XMLWidget::Show(rc);
 }
 
-void
-TaskPropertiesPanel::Hide()
+bool
+TaskPropertiesPanel::Save(bool &changed, bool &require_restart)
 {
   ReadValues();
   if (orig_taskType != ordered_task->get_factory_type())
     ordered_task->GetFactory().mutate_tps_to_task_type();
 
+  return true;
+}
+
+bool
+TaskPropertiesPanel::Leave()
+{
+  bool changed = false;
+  bool requirerestart = false;
+  return Save(changed, requirerestart);
+}
+
+void
+TaskPropertiesPanel::Hide()
+{
   XMLWidget::Hide();
 }
