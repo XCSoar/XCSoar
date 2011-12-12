@@ -29,7 +29,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "UIGlobals.hpp"
 
 enum ControlIndex {
@@ -95,11 +94,6 @@ OnShiftTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
     return;
   }
 }
-
-gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnShiftTypeData),
-  DeclareCallBackEntry(NULL)
-};
 
 void
 MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
