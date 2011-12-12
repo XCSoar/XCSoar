@@ -36,7 +36,7 @@ private:
   fixed mMax;
   fixed mStep;
   PeriodClock last_step;
-  int mSpeedup;
+  uint8_t mSpeedup;
   bool mFine;
 
   StaticString<8> unit;
@@ -52,7 +52,8 @@ public:
                  fixed Min, fixed Max, fixed Default,
                  fixed Step, bool Fine, DataAccessCallback_t OnDataAccess)
     :NumberDataField(TYPE_REAL, EditFormat, DisplayFormat, OnDataAccess),
-     mValue(Default), mMin(Min), mMax(Max), mStep(Step), mFine(Fine),
+     mValue(Default), mMin(Min), mMax(Max), mStep(Step),
+     mSpeedup(0), mFine(Fine),
      unit(_T(""))
   {
     SupportCombo=true;
