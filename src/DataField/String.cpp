@@ -26,10 +26,10 @@ Copyright_License {
 void
 DataFieldString::SetAsString(const TCHAR *Value)
 {
-  if (_tcscmp(mValue, Value) == 0)
+  if (mValue == Value)
     return;
 
-  _tcscpy(mValue, Value);
+  mValue = Value;
 
   if (!GetDetachGUI() && mOnDataAccess != NULL)
     (mOnDataAccess)(this, daChange);
@@ -38,7 +38,7 @@ DataFieldString::SetAsString(const TCHAR *Value)
 void
 DataFieldString::Set(const TCHAR *Value)
 {
-  _tcscpy(mValue, Value);
+  mValue = Value;
 }
 
 const TCHAR *

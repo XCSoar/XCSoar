@@ -25,19 +25,18 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_STRING_HPP
 
 #include "DataField/Base.hpp"
+#include "Util/StaticString.hpp"
 
 #define EDITSTRINGSIZE 32
 
 class DataFieldString: public DataField
 {
-private:
-  TCHAR mValue[EDITSTRINGSIZE];
+  StaticString<EDITSTRINGSIZE> mValue;
 
 public:
   DataFieldString(const TCHAR *Default,
                   DataAccessCallback_t OnDataAccess) :
-    DataField(TYPE_STRING, OnDataAccess) {
-    _tcscpy(mValue, Default);
+    DataField(TYPE_STRING, OnDataAccess), mValue(Default) {
     SupportCombo = false;
   }
 
