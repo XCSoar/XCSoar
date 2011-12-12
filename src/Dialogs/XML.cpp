@@ -563,7 +563,7 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable,
   TCHAR display_format[32];
   TCHAR edit_format[32];
   double step;
-  int fine;
+  bool fine;
 
   _tcscpy(data_type,
           StringToStringDflt(node.getAttribute(_T("DataType")), _T("")));
@@ -575,7 +575,7 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable,
   fixed min = fixed(StringToFloatDflt(node.getAttribute(_T("Min")), INT_MIN));
   fixed max = fixed(StringToFloatDflt(node.getAttribute(_T("Max")), INT_MAX));
   step = StringToFloatDflt(node.getAttribute(_T("Step")), 1);
-  fine = StringToIntDflt(node.getAttribute(_T("Fine")), 0);
+  fine = StringToIntDflt(node.getAttribute(_T("Fine")), false);
 
   DataField::DataAccessCallback_t callback = (DataField::DataAccessCallback_t)
     GetCallBack(LookUpTable, node, _T("OnDataAccess"));

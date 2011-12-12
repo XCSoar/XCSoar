@@ -37,7 +37,7 @@ private:
   fixed mStep;
   PeriodClock last_step;
   int mSpeedup;
-  int mFine;
+  bool mFine;
 
   StaticString<8> unit;
 
@@ -50,7 +50,7 @@ protected:
 public:
   DataFieldFloat(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
                  fixed Min, fixed Max, fixed Default,
-                 fixed Step, int Fine, DataAccessCallback_t OnDataAccess)
+                 fixed Step, bool Fine, DataAccessCallback_t OnDataAccess)
     :NumberDataField(TYPE_REAL, EditFormat, DisplayFormat, OnDataAccess),
      mValue(Default), mMin(Min), mMax(Max), mStep(Step), mFine(Fine),
      unit(_T(""))
