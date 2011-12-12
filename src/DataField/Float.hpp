@@ -77,6 +77,9 @@ public:
   fixed SetMin(fixed Value);
   fixed SetMax(fixed Value);
   fixed SetStep(fixed Value);
+  fixed GetStep() const {
+    return mStep;
+  }
 
   virtual void SetAsInteger(int Value);
   void SetAsFloat(fixed Value);
