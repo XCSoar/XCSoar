@@ -78,6 +78,7 @@ TabbedControl::SetCurrentPage(unsigned i)
     return;
 
   assert(tabs[current].prepared);
+  tabs[current].widget->Leave();
   tabs[current].widget->Hide();
 
   current = i;
@@ -166,6 +167,7 @@ TabbedControl::on_destroy()
 {
   if (!tabs.empty()) {
     assert(tabs[current].prepared);
+    tabs[current].widget->Leave();
     tabs[current].widget->Hide();
   }
 

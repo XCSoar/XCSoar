@@ -63,6 +63,12 @@ NullWidget::ReClick()
 {
 }
 
+bool
+NullWidget::Leave()
+{
+  return true;
+}
+
 void
 NullWidget::Move(const PixelRect &rc)
 {

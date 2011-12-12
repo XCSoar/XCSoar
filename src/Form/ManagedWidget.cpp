@@ -31,8 +31,10 @@ ManagedWidget::Clear()
     return;
 
   if (prepared) {
-    if (visible)
+    if (visible) {
+      widget->Leave();
       widget->Hide();
+    }
     widget->Unprepare();
   }
 
@@ -83,6 +85,7 @@ void
 ManagedWidget::Hide()
 {
   if (widget != NULL && prepared && visible) {
+    widget->Leave();
     visible = false;
     widget->Hide();
   }
