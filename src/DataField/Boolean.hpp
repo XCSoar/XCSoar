@@ -61,15 +61,7 @@ public:
       Set(false);
   }
 
-  #if defined(__BORLANDC__)
-  #pragma warn -hid
-  #endif
-
   void Set(bool Value);
-
-  #if defined(__BORLANDC__)
-  #pragma warn +hid
-  #endif
 
   void SetAsBoolean(bool Value);
   virtual void SetAsInteger(int Value);

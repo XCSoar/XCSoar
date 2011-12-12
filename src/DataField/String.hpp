@@ -43,15 +43,7 @@ public:
 
   virtual void SetAsString(const TCHAR *Value);
 
-  #if defined(__BORLANDC__)
-  #pragma warn -hid
-  #endif
-
   void Set(const TCHAR *Value);
-
-  #if defined(__BORLANDC__)
-  #pragma warn +hid
-  #endif
 
   virtual const TCHAR *GetAsString(void) const;
 };

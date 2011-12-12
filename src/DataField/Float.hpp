@@ -73,16 +73,11 @@ public:
   virtual const TCHAR *GetAsString(void) const;
   virtual const TCHAR *GetAsDisplayString(void) const;
 
-  #if defined(__BORLANDC__)
-  #pragma warn -hid
-  #endif
   void Set(fixed Value);
   fixed SetMin(fixed Value);
   fixed SetMax(fixed Value);
   fixed SetStep(fixed Value);
-  #if defined(__BORLANDC__)
-  #pragma warn +hid
-  #endif
+
   virtual void SetAsInteger(int Value);
   void SetAsFloat(fixed Value);
   virtual void SetAsString(const TCHAR *Value);

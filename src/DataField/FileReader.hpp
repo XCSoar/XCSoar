@@ -158,19 +158,11 @@ public:
   gcc_pure
   const TCHAR *GetPathFile(void) const;
 
-  #if defined(__BORLANDC__)
-  #pragma warn -hid
-  #endif
-
   /**
    * Sets the selection to the given index
    * @param Value The array index to select
    */
   void Set(int Value);
-
-  #if defined(__BORLANDC__)
-  #pragma warn +hid
-  #endif
 
   /**
    * @see Set()

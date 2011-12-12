@@ -126,16 +126,7 @@ public:
    */
   void EnableItemHelp(bool value) { mItemHelp = value; }
 
-
-  #if defined(__BORLANDC__)
-  #pragma warn -hid
-  #endif
-
   void Set(int Value);
-
-  #if defined(__BORLANDC__)
-  #pragma warn +hid
-  #endif
 
   virtual void SetAsInteger(int Value);
   virtual void SetAsString(const TCHAR *Value);

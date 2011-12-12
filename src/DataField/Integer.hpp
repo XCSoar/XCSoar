@@ -59,17 +59,9 @@ public:
   virtual const TCHAR *GetAsString(void) const;
   virtual const TCHAR *GetAsDisplayString(void) const;
 
-  #if defined(__BORLANDC__)
-  #pragma warn -hid
-  #endif
-
   void Set(int Value);
   int SetMin(int Value) { mMin = Value; return mMin; }
   int SetMax(int Value) { mMax = Value; return mMax; }
-
-  #if defined(__BORLANDC__)
-  #pragma warn +hid
-  #endif
 
   virtual void SetAsInteger(int Value);
   virtual void SetAsString(const TCHAR *Value);
