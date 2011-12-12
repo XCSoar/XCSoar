@@ -27,7 +27,7 @@ void
 SETTINGS_MAP::SetDefaults()
 {
   circle_zoom_enabled = true;
-  max_auto_zoom_distance = fixed(10000); /* 100 km */
+  max_auto_zoom_distance = fixed(100000); /* 100 km */
   topography_enabled = true;
   terrain.SetDefaults();
   aircraft_symbol = acSimple;
