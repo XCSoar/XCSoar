@@ -116,6 +116,10 @@ public:
   void NextPage();
   void PreviousPage();
 
+  bool Save(bool &changed, bool &require_restart) {
+    return pager.Save(changed, require_restart);
+  }
+
   gcc_pure
   UPixelScalar GetTabHeight() const;
 

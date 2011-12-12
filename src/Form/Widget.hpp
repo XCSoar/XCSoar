@@ -105,6 +105,16 @@ public:
   virtual void Show(const PixelRect &rc) = 0;
 
   /**
+   * Perform operations prior to hiding.
+   * Shall be called prior to calling Hide().
+   * The caller can decide whether to call Hide() if Leave() returns
+   * false.
+   * @return true if the condition of the widget is in the
+   * expected state for Hide().  Else false.
+   */
+  virtual bool Leave() = 0;
+
+  /**
    * Make the widget invisible.  This will only be called when it is
    * visible already.
    */
@@ -137,6 +147,7 @@ public:
   virtual bool Save(bool &changed, bool &require_restart);
   virtual bool Click();
   virtual void ReClick();
+  virtual bool Leave();
   virtual void Move(const PixelRect &rc);
   virtual bool SetFocus();
 };

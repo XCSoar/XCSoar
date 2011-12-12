@@ -689,6 +689,7 @@ MainWindow::KillWidget()
   if (widget == NULL)
     return;
 
+  widget->Leave();
   widget->Hide();
   widget->Unprepare();
   delete widget;

@@ -134,18 +134,15 @@ void
 TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
                               bool ReClick)
 {
-  bool Continue = true;
   assert(i < buttons.size());
 
   if (ReClick) {
     pager.ClickPage(GetCurrentPage());
   } else {
-    if (Continue) {
-      if (_EventType == MouseOrButton)
-        Continue = pager.ClickPage(i);
-      else
-        pager.SetCurrentPage(i);
-    }
+    if (_EventType == MouseOrButton)
+      pager.ClickPage(i);
+    else
+      pager.SetCurrentPage(i);
   }
 
   if (tab_display != NULL)

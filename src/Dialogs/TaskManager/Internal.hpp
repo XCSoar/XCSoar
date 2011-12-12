@@ -46,9 +46,19 @@ public:
   static bool CommitTaskChanges();
 
   /**
+   * Commits the temporary task to the system and closes
+   * the task manager dialog it the commit succeeds.
    * @returns True if validated, False if window shall remain open
    */
   static bool OnClose();
+
+  /**
+   * Calls TabBar's Save() function to save
+   * all panels (to the temporary task).
+   * The TaskProperties is currently the
+   * only task panel that implements Save().
+   */
+  static void SaveToTempTask();
   static void dlgTaskManagerShowModal(SingleWindow &parent);
   static void RevertTask();
   static const CallBackTableEntry CallBackTable[];
