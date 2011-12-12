@@ -42,7 +42,8 @@ protected:
   int SpeedUp(bool keyup);
 
 public:
-  DataFieldInteger(TCHAR *EditFormat, TCHAR *DisplayFormat, int Min, int Max,
+  DataFieldInteger(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
+                   int Min, int Max,
                    int Default, int Step, DataAccessCallback_t OnDataAccess)
     :NumberDataField(TYPE_INTEGER, EditFormat, DisplayFormat, OnDataAccess),
      mValue(Default), mMin(Min), mMax(Max), mStep(Step) {
