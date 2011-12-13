@@ -52,7 +52,7 @@ struct InfoBoxLook {
 
   void Initialise(bool inverse, bool use_colors);
 
-  Color get_color(int i, Color default_color) const {
+  Color GetColor(int i, Color default_color) const {
     if (i < 0)
       return colors[0];
     else if (i >= 1 && (unsigned)i < ARRAY_SIZE(colors))
@@ -61,16 +61,16 @@ struct InfoBoxLook {
       return default_color;
   }
 
-  Color get_title_color(int i) const {
-    return get_color(i, title.fg_color);
+  Color GetTitleColor(int i) const {
+    return GetColor(i, title.fg_color);
   }
 
-  Color get_value_color(int i) const {
-    return get_color(i, value.fg_color);
+  Color GetValueColor(int i) const {
+    return GetColor(i, value.fg_color);
   }
 
-  Color get_comment_color(int i) const {
-    return get_color(i, comment.fg_color);
+  Color GetCommentColor(int i) const {
+    return GetColor(i, comment.fg_color);
   }
 };
 

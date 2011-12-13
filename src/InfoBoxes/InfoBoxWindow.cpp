@@ -85,7 +85,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
   if (data.title.empty())
     return;
 
-  canvas.SetTextColor(look.get_title_color(data.title_color));
+  canvas.SetTextColor(look.GetTitleColor(data.title_color));
 
   const Font &font = *look.title.font;
   canvas.Select(font);
@@ -130,7 +130,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   if (data.value.empty())
     return;
 
-  canvas.SetTextColor(look.get_value_color(data.value_color));
+  canvas.SetTextColor(look.GetValueColor(data.value_color));
 
 #ifndef GNAV
   // Do text-based unit rendering on higher resolutions
@@ -227,7 +227,7 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
   if (data.comment.empty())
     return;
 
-  canvas.SetTextColor(look.get_comment_color(data.comment_color));
+  canvas.SetTextColor(look.GetCommentColor(data.comment_color));
 
   const Font &font = *look.comment.font;
   canvas.Select(font);
