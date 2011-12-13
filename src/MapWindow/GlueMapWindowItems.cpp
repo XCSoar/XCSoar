@@ -34,6 +34,12 @@ Copyright_License {
 bool
 GlueMapWindow::ShowMapItems(const GeoPoint &location)
 {
+  return ShowMapItems(*(SingleWindow *)get_root_owner(), location);
+}
+
+bool
+GlueMapWindow::ShowMapItems(SingleWindow &parent, const GeoPoint &location) const
+{
   fixed range = visible_projection.DistancePixelsToMeters(Layout::Scale(10));
 
   MapItemList list;
@@ -84,7 +90,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
   if (list.empty())
     return false;
 
-  ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), vector, list,
+  ShowMapItemListDialog(parent, vector, list,
                         elevation, look, traffic_look, SettingsMap(),
                         glide_computer != NULL
                         ? &glide_computer->GetAirspaceWarnings() : NULL);

@@ -34,6 +34,7 @@ Copyright_License {
 
 struct Look;
 class Logger;
+class SingleWindow;
 
 struct ZoomClimb_t
 {
@@ -177,6 +178,8 @@ public:
    *        if tp index >= task's ActiveIndex
    */
   int isInAnyActiveSector(const GeoPoint &gp);
+
+  bool ShowMapItems(SingleWindow &parent, const GeoPoint &location) const;
 
 private:
   bool ShowMapItems(const GeoPoint &location);
