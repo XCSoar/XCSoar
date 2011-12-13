@@ -1217,6 +1217,7 @@ $(eval $(call link-program,RunWindZigZag,RUN_WIND_ZIG_ZAG))
 RUN_WIND_EKF_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Wind/WindEKF.cpp \
+	$(SRC)/Wind/WindEKFGlue.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunWindEKF.cpp
 RUN_WIND_EKF_LDADD = $(DEBUG_REPLAY_LDADD)
@@ -1624,6 +1625,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Wind/WindStore.cpp \
 	$(SRC)/Wind/WindMeasurementList.cpp \
 	$(SRC)/Wind/WindEKF.cpp \
+	$(SRC)/Wind/WindEKFGlue.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Projection/MapWindowProjection.cpp \

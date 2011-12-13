@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_WIND_COMPUTER_HPP
 
 #include "Wind/CirclingWind.hpp"
-#include "Wind/WindEKF.hpp"
+#include "Wind/WindEKFGlue.hpp"
 #include "Wind/WindStore.hpp"
 
 struct SETTINGS_COMPUTER;

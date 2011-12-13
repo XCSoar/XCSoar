@@ -21,38 +21,40 @@ Copyright_License {
 }
 */
 
-#include "Wind/WindEKFGlue.hpp"
-#include "Args.hpp"
-#include "DebugReplay.hpp"
+#ifndef WINDEKF_GLUE_HPP
+#define WINDEKF_GLUE_HPP
 
-#include <stdio.h>
+#include "WindEKF.hpp"
+#include "Engine/Navigation/SpeedVector.hpp"
 
-int main(int argc, char **argv)
+struct NMEAInfo;
+struct DerivedInfo;
+
+class WindEKFGlue: protected WindEKF
 {
-  Args args(argc, argv, "DRIVER FILE");
-  DebugReplay *replay = CreateDebugReplay(args);
-  if (replay == NULL)
-    return EXIT_FAILURE;
+  unsigned time_blackout;
 
-  args.ExpectEnd();
+public:
+  struct Result
+  {
+    SpeedVector wind;
+    int quality;
 
-  printf("# time quality wind_bearing (deg) wind_speed (m/s) grndspeed (m/s) tas (m/s) bearing (deg)\n");
+    Result() {}
+    Result(int _quality):quality(_quality) {}
+  };
 
-  WindEKFGlue wind_ekf;
+  WindEKFGlue();
 
-  while (replay->Next()) {
-    const MoreData &data = replay->Basic();
+  Result Update(const NMEAInfo &basic, const DerivedInfo &derived);
 
-    WindEKFGlue::Result result =
-      wind_ekf.Update(data, replay->Calculated());
-    if (result.quality > 0)
-      printf("%d %d %d %g %g %g %d\n", (int)data.time, result.quality,
-             (int)result.wind.bearing.Degrees(),
-             (double)result.wind.norm,
-             (double)data.ground_speed,
-             (double)data.true_airspeed,
-             (int)data.track.Degrees());
+  void reset() {
+    time_blackout = (unsigned)-1;
   }
 
-  delete replay;
-}
+private:
+  bool in_blackout(const unsigned time) const;
+  void blackout(const unsigned time);
+};
+
+#endif

@@ -24,12 +24,7 @@ Copyright_License {
 #ifndef WINDEKF_HPP
 #define WINDEKF_HPP
 
-#include "Engine/Navigation/SpeedVector.hpp"
-#include "Math/Angle.hpp"
 #include "Math/fixed.hpp"
-
-struct NMEAInfo;
-struct DerivedInfo;
 
 class WindEKF {
   // constants/macros/typdefs
@@ -86,32 +81,6 @@ private:
   void LinearizeFG(float U[NUMU]);
   void MeasurementEq(float gps_vel[2], float Y[NUMV]);
   void LinearizeH(float gps_vel[2]);
-};
-
-class WindEKFGlue: protected WindEKF
-{
-  unsigned time_blackout;
-
-public:
-  struct Result {
-    SpeedVector wind;
-    int quality;
-
-    Result() {}
-    Result(int _quality):quality(_quality) {}
-  };
-
-  WindEKFGlue();
-
-  Result Update(const NMEAInfo &basic, const DerivedInfo &derived);
-
-  void reset() {
-    time_blackout = (unsigned)-1;
-  }
-
-private:
-  bool in_blackout(const unsigned time) const;
-  void blackout(const unsigned time);
 };
 
 #endif

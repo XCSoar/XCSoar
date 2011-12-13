@@ -24,9 +24,6 @@ Copyright_License {
 
 #include "Wind/WindEKF.hpp"
 #include "Math/FastMath.h"
-#include "Math/Angle.hpp"
-#include "NMEA/Info.hpp"
-#include "NMEA/Derived.hpp"
 
 #include <math.h>
 
@@ -243,83 +240,4 @@ void WindEKF::Init()
   Q[2] = 1.0e-4;
 
   R[0] = 10.0;	// dynamic pressure noise variance ((m/s)^2)
-}
-
-/**
- * time to not add points after flight condition is false
- */
-#define BLACKOUT_TIME 3
-
-WindEKFGlue::Result
-WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
-{
-  // @todo accuracy: correct TAS for vertical speed if dynamic pullup
-
-  // reset if flight hasnt started or airspeed instrument not available
-  if (!derived.flight.flying ||
-      !basic.airspeed_available || !basic.airspeed_real ||
-      basic.true_airspeed < fixed_one) {
-    reset();
-    return Result(0);
-  }
-
-  // temporary manoeuvering, dont append this point
-  unsigned time(basic.time);
-  if ((fabs(derived.turn_rate) > fixed(20)) ||
-      (fabs(basic.acceleration.g_load - fixed_one) > fixed(0.3))) {
-
-    blackout(time);
-    return Result(0);
-  }
-
-  if (in_blackout(time))
-    return Result(0);
-
-  // clear blackout
-  blackout((unsigned)-1);
-
-  fixed V = basic.true_airspeed;
-  fixed dynamic_pressure = sqr(V);
-  float gps_vel[2];
-  const auto sc = basic.track.SinCos();
-  const fixed gps_east = sc.first, gps_north = sc.second;
-  gps_vel[0] = (float)(gps_east * basic.ground_speed);
-  gps_vel[1] = (float)(gps_north * basic.ground_speed);
-
-  float dT = 1.0;
-
-  StatePrediction(gps_vel, dT);
-  Correction(dynamic_pressure, gps_vel);
-  // CovariancePrediction(dT);
-  const float* x = get_state();
-
-  Result res;
-  static int j=0;
-  j++;
-  if (j%10==0)
-    res.quality = 1;
-  else
-    res.quality = 0;
-
-  res.wind = SpeedVector(fixed(-x[0]), fixed(-x[1]));
-
-  return res;
-}
-
-void
-WindEKFGlue::blackout(const unsigned time)
-{
-  time_blackout = time;
-}
-
-bool
-WindEKFGlue::in_blackout(const unsigned time) const
-{
-  return (time < time_blackout + BLACKOUT_TIME);
-}
-
-WindEKFGlue::WindEKFGlue()
-{
-  reset();
-  Init();
 }
