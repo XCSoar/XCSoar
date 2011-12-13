@@ -29,9 +29,6 @@ Copyright_License {
 
 template<class T, unsigned size>
 class BufferedSource : public Source<T> {
-public:
-  typedef std::pair<T*, unsigned> Range;
-
 private:
   FifoBuffer<T, size> buffer;
   long position;
@@ -43,7 +40,7 @@ protected:
   virtual unsigned read(T *p, unsigned n) = 0;
 
 public:
-  virtual Range read() {
+  virtual typename Source<T>::Range read() {
     auto r = buffer.Write();
     if (!r.IsEmpty()) {
       unsigned n = read(r.data, r.length);
@@ -51,7 +48,7 @@ public:
     }
 
     r = buffer.Read();
-    return Range(r.data, r.length);
+    return typename Source<T>::Range(r.data, r.length);
   }
 
   virtual void consume(unsigned n) {
