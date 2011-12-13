@@ -144,8 +144,8 @@ location=3
 mode=pan
 type=key
 data=APP4
-event=NearestWaypointDetails pan
-label=Nearest\nWaypoint
+event=NearestMapItems pan
+label=What's\nhere?
 location=4
 
 ###### main entry buttons
@@ -742,9 +742,9 @@ location=6
 mode=Info1
 type=key
 data=8
-event=NearestAirspaceDetails
+event=NearestMapItems aircraft
 event=Mode default
-label=Nearest\nAirspace$(CheckAirspace)
+label=What's\nhere?
 location=7
 
 mode=Info1
@@ -844,9 +844,6 @@ location=7
 mode=Info3
 type=key
 data=9
-event=NearestWaypointDetails aircraft
-event=Mode default
-label=Nearest\nWaypoint$(CheckWaypointFile)
 location=8
 
 mode=Info3
