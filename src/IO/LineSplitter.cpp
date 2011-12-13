@@ -45,38 +45,38 @@ char *
 LineSplitter::read()
 {
   /* is there enough data left in the buffer to read another line? */
-  if (memchr(remaining.first, '\n', remaining.second) == NULL) {
+  if (memchr(remaining.data, '\n', remaining.length) == NULL) {
     /* no: read more data from the Source */
     remaining = source.read();
-    if (remaining.second == 0)
+    if (remaining.IsEmpty())
       /* end of file */
       return NULL;
   }
 
-  assert(remaining.second > 0);
+  assert(!remaining.IsEmpty());
 
   Source<char>::Range range = remaining;
   std::pair<unsigned, unsigned> bounds =
-    extract_line(range.first, range.second);
+    extract_line(range.data, range.length);
   source.consume(bounds.second);
-  remaining.first += bounds.second;
-  remaining.second -= bounds.second;
+  remaining.data += bounds.second;
+  remaining.length -= bounds.second;
 
-  if (bounds.first >= range.second) {
+  if (bounds.first >= range.length) {
     /* last line, not terminated by a line feed: copy to local buffer,
        because we want to append the null byte */
-    char *line = last.get(range.second + 1);
+    char *line = last.get(range.length + 1);
     if (line == NULL)
       /* allocation has failed */
       return NULL;
 
-    memcpy(line, range.first, range.second);
-    line[range.second] = 0;
+    memcpy(line, range.data, range.length);
+    line[range.length] = 0;
     return line;
   } else {
     /* there is space left for the null byte */
-    range.first[bounds.first] = 0;
-    return range.first;
+    range.data[bounds.first] = 0;
+    return range.data;
   }
 }
 

@@ -40,7 +40,21 @@ public:
    * of the buffer, and the second item is the number of available
    * words.
    */
-  typedef std::pair<T*, unsigned> Range;
+  struct Range {
+    T *data;
+
+    unsigned length;
+
+    Range() = default;
+
+    gcc_constexpr_ctor
+    Range(T *_data, unsigned _length):data(_data), length(_length) {}
+
+    gcc_constexpr_method
+    bool IsEmpty() const {
+      return length == 0;
+    }
+  };
 
 public:
   virtual ~Source() {}
