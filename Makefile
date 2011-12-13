@@ -642,6 +642,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Widgets/TrafficWidget.cpp \
 	$(SRC)/Widgets/BigThermalAssistantWidget.cpp \
+	$(SRC)/Widgets/DeviceEditWidget.cpp \
 	\
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Declaration.cpp \

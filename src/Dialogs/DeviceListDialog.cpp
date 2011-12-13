@@ -25,6 +25,9 @@ Copyright_License {
 #include "Dialogs/Vega.hpp"
 #include "Dialogs/ManageCAI302Dialog.hpp"
 #include "Dialogs/PortMonitor.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widgets/DeviceEditWidget.hpp"
+#include "UIGlobals.hpp"
 #include "Util/TrivialArray.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
@@ -40,6 +43,7 @@ Copyright_License {
 #include "Operation.hpp"
 #include "Simulator.hpp"
 #include "Logger/ExternalLogger.hpp"
+#include "Profile/Profile.hpp"
 
 static const TerminalLook *terminal_look;
 static WndForm *dialog;
@@ -48,6 +52,7 @@ static unsigned current;
 static UPixelScalar font_height;
 
 static WndButton *reconnect_button, *flight_button, *manage_button;
+static WndButton *edit_button;
 static WndButton *monitor_button;
 
 static TrivialArray<unsigned, NUMDEV> indices;
@@ -68,6 +73,8 @@ UpdateButtons()
     manage_button->set_enabled(device.IsManageable());
     monitor_button->set_enabled(device.GetConfig().UsesPort());
   }
+
+  edit_button->set_enabled(current < indices.size());
 }
 
 static void
@@ -185,6 +192,34 @@ OnFlightDownloadClicked(gcc_unused WndButton &button)
 }
 
 static void
+OnEditClicked(gcc_unused WndButton &button)
+{
+  if (current >= indices.size())
+    return;
+
+  DeviceDescriptor &descriptor = device_list[indices[current]];
+  DeviceEditWidget widget(descriptor.GetConfig());
+
+  if (!WidgetDialog(_("Edit device"),
+                    UIGlobals::GetMainWindow().get_client_rect(),
+                    widget))
+    /* not modified */
+    return;
+
+  /* save new config to profile .. */
+
+  Profile::SetDeviceConfig(descriptor.GetIndex(),
+                           widget.GetConfig());
+  Profile::Save();
+
+  /* .. and reopen the device */
+
+  descriptor.SetConfig() = widget.GetConfig();
+  MessageOperationEnvironment env;
+  descriptor.Reopen(env);
+}
+
+static void
 OnManageClicked(gcc_unused WndButton &button)
 {
   if (current >= indices.size())
@@ -241,6 +276,7 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look,
   buttons.Add(_("Refresh"), OnRefreshClicked);
   reconnect_button = buttons.Add(_("Reconnect"), OnReconnectClicked);
   flight_button = buttons.Add(_("Flight download"), OnFlightDownloadClicked);
+  edit_button = buttons.Add(_("Edit"), OnEditClicked);
   manage_button = buttons.Add(_("Manage"), OnManageClicked);
   monitor_button = buttons.Add(_("Monitor"), OnMonitorClicked);
 
