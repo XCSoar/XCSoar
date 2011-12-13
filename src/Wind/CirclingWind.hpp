@@ -88,13 +88,6 @@ public:
    */
   void reset();
 
-  // Signals
-  /**
-   * Send if a new windmeasurement has been made. The result is included in wind,
-   * the quality of the measurement (1-5; 1 is bad, 5 is excellent) in quality.
-   */
-  void newMeasurement(Vector wind, int quality);
-
   // Public slots
   /**
    * Called if the flightmode changes
