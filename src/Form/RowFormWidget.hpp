@@ -56,6 +56,9 @@ public:
   WndProperty *Add(const TCHAR *label, const TCHAR *help=NULL,
                    bool read_only=false);
 
+  WndProperty *Add(const TCHAR *label, const TCHAR *help,
+                   DataField *df);
+
   WndProperty *AddBoolean(const TCHAR *label, const TCHAR *help,
                           bool value=false,
                           DataField::DataAccessCallback_t callback=NULL);

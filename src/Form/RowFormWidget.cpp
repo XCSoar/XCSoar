@@ -98,6 +98,15 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
 }
 
 WndProperty *
+RowFormWidget::Add(const TCHAR *label, const TCHAR *help,
+                   DataField *df)
+{
+  WndProperty *edit = Add(label, help);
+  edit->SetDataField(df);
+  return edit;
+}
+
+WndProperty *
 RowFormWidget::AddBoolean(const TCHAR *label, const TCHAR *help,
                           bool value,
                           DataField::DataAccessCallback_t callback)
