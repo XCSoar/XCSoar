@@ -46,8 +46,8 @@ CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 {
   RasterPoint arrow[5] = { { 0, -13 }, { -6, 10 }, { 0, 4 }, { 6, 10 }, { 0, -13 } };
 
-  canvas.Select(look.hpCompass);
-  canvas.Select(look.hbCompass);
+  canvas.Select(look.compass_pen);
+  canvas.Select(look.compass_brush);
 
   // North arrow
   PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos.x, pos.y, -screen_angle);

@@ -54,6 +54,6 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
     // draw if it is in the field of view
     RasterPoint pt;
     if (render_projection.GeoToScreenIfVisible(loc, pt))
-      look.hBmpThermalSource.Draw(canvas, pt);
+      look.thermal_source_icon.Draw(canvas, pt);
   }
 }

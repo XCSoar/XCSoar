@@ -199,7 +199,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
                      PixelScalar(rc.top + line_height / 2) };
 
-  look.hBmpThermalSource.Draw(canvas, pt);
+  look.thermal_source_icon.Draw(canvas, pt);
 
   const Font &name_font = Fonts::map_bold;
   const Font &small_font = Fonts::map_label;

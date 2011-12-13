@@ -363,7 +363,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
 
   for (unsigned i=0; i< 3; ++i) {
     if (contest.GetResult(i).IsDefined()) {
-      canvas.Select(map_look.ContestPen[i]);
+      canvas.Select(map_look.contest_pens[i]);
       trail_renderer.Draw(canvas, proj, contest.GetSolution(i));
     }
   }

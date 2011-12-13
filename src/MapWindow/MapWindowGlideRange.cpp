@@ -322,11 +322,11 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     buffer.SetTextColor(Color(0xd0, 0xd0, 0xd0));
 
     // Paint the whole buffer canvas with a pattern brush (small dots)
-    buffer.clear(look.hAboveTerrainBrush);
+    buffer.clear(look.above_terrain_brush);
 
     // Select the TerrainLine pen
     buffer.SelectHollowBrush();
-    buffer.Select(look.hpTerrainLineThick);
+    buffer.Select(look.reach_pen_thick);
     buffer.SetBackgroundColor(Color(0xf0, 0xf0, 0xf0));
 
     // Draw the TerrainLine polygons
@@ -356,11 +356,11 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
 #ifdef ENABLE_OPENGL
     visitor.fans.Prepare();
-    look.hpTerrainLine.Set();
+    look.reach_pen.Set();
 #else
     // Select the TerrainLine pen
     canvas.SelectHollowBrush();
-    canvas.Select(look.hpTerrainLine);
+    canvas.Select(look.reach_pen);
     canvas.SetBackgroundOpaque();
     canvas.SetBackgroundColor(COLOR_WHITE);
 
@@ -392,7 +392,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   glStencilFunc(GL_NOTEQUAL, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-  look.hpTerrainLineThick.Set();
+  look.reach_pen_thick.Set();
   visitor.fans.DrawOutline(canvas);
 
   glDisable(GL_STENCIL_TEST);
@@ -407,7 +407,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   // Select the TerrainLine pen
   buffer.SelectHollowBrush();
-  buffer.Select(look.hpTerrainLineThick);
+  buffer.Select(look.reach_pen_thick);
   buffer.SetBackgroundOpaque();
   buffer.SetBackgroundColor(Color(0xf0, 0xf0, 0xf0));
 

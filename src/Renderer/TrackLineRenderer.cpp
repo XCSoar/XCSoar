@@ -40,7 +40,7 @@ TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   end.x = pos.x + iround(x * fixed_int_constant(400));
   end.y = pos.y - iround(y * fixed_int_constant(400));
 
-  canvas.Select(look.hpTrackBearingLine);
+  canvas.Select(look.track_line_pen);
   canvas.line(pos, end);
 }
 

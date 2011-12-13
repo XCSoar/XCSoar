@@ -128,14 +128,14 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 
   switch (flarm.alarm_level) {
   case 0:
-    bmp = &look.hBmpTrafficSafe;
+    bmp = &look.traffic_safe_icon;
     break;
   case 1:
-    bmp = &look.hBmpTrafficWarning;
+    bmp = &look.traffic_warning_icon;
     break;
   case 2:
   case 3:
-    bmp = &look.hBmpTrafficAlarm;
+    bmp = &look.traffic_alarm_icon;
     break;
   };
 
@@ -177,8 +177,8 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
               rc.bottom - Fonts::map_bold.GetAscentHeight() - Layout::Scale(1),
               buffer);
 
-  look.hBmpMapScaleLeft.Draw(canvas, 0, rc.bottom - Height);
-  look.hBmpMapScaleRight.Draw(canvas, Layout::Scale(9) + TextSize.cx,
+  look.map_scale_left_icon.Draw(canvas, 0, rc.bottom - Height);
+  look.map_scale_right_icon.Draw(canvas, Layout::Scale(9) + TextSize.cx,
                                    rc.bottom - Height);
 
   buffer.clear();
@@ -239,7 +239,7 @@ GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
     if (thermal_locator.estimate_valid) {
       RasterPoint sc;
       if (projection.GeoToScreenIfVisible(thermal_locator.estimate_location, sc)) {
-        look.hBmpThermalSource.Draw(canvas, sc);
+        look.thermal_source_icon.Draw(canvas, sc);
       }
     }
   } else {

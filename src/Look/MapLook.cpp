@@ -38,35 +38,35 @@ MapLook::Initialise(const struct SETTINGS_MAP &settings)
   wind.Initialise();
 
 #ifdef HAVE_HATCHED_BRUSH
-  hAboveTerrainBitmap.load(IDB_ABOVETERRAIN);
-  hAboveTerrainBrush.Set(hAboveTerrainBitmap);
+  above_terrain_bitmap.load(IDB_ABOVETERRAIN);
+  above_terrain_brush.Set(above_terrain_bitmap);
 #endif
 
   hTerrainWarning.Load(IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD);
 
-  hbCompass.Set(Color(207, 207, 207));
-  hpCompass.Set(Layout::Scale(1), COLOR_GRAY);
+  compass_brush.Set(Color(207, 207, 207));
+  compass_pen.Set(Layout::Scale(1), COLOR_GRAY);
 
-  hBmpTrafficSafe.Load(IDB_TRAFFIC_SAFE, IDB_TRAFFIC_SAFE_HD, false);
-  hBmpTrafficWarning.Load(IDB_TRAFFIC_WARNING, IDB_TRAFFIC_WARNING_HD, false);
-  hBmpTrafficAlarm.Load(IDB_TRAFFIC_ALARM, IDB_TRAFFIC_ALARM_HD, false);
+  traffic_safe_icon.Load(IDB_TRAFFIC_SAFE, IDB_TRAFFIC_SAFE_HD, false);
+  traffic_warning_icon.Load(IDB_TRAFFIC_WARNING, IDB_TRAFFIC_WARNING_HD, false);
+  traffic_alarm_icon.Load(IDB_TRAFFIC_ALARM, IDB_TRAFFIC_ALARM_HD, false);
 
   static gcc_constexpr_data Color clrSepia(0x78,0x31,0x18);
-  hpTerrainLine.Set(Pen::DASH, Layout::Scale(1), clrSepia);
-  hpTerrainLineThick.Set(Pen::DASH, Layout::Scale(2), clrSepia);
+  reach_pen.Set(Pen::DASH, Layout::Scale(1), clrSepia);
+  reach_pen_thick.Set(Pen::DASH, Layout::Scale(2), clrSepia);
 
-  hpTrackBearingLine.Set(3, COLOR_GRAY);
+  track_line_pen.Set(3, COLOR_GRAY);
 
-  ContestPen[0].Set(Layout::Scale(1)+2, COLOR_RED);
-  ContestPen[1].Set(Layout::Scale(1)+1, COLOR_ORANGE);
-  ContestPen[2].Set(Layout::Scale(1), COLOR_BLUE);
+  contest_pens[0].Set(Layout::Scale(1)+2, COLOR_RED);
+  contest_pens[1].Set(Layout::Scale(1)+1, COLOR_ORANGE);
+  contest_pens[2].Set(Layout::Scale(1), COLOR_BLUE);
 
-  hBmpThermalSource.Load(IDB_THERMALSOURCE, IDB_THERMALSOURCE_HD);
+  thermal_source_icon.Load(IDB_THERMALSOURCE, IDB_THERMALSOURCE_HD);
 
-  hBmpTrafficSafe.Load(IDB_TRAFFIC_SAFE, IDB_TRAFFIC_SAFE_HD, false);
-  hBmpTrafficWarning.Load(IDB_TRAFFIC_WARNING, IDB_TRAFFIC_WARNING_HD, false);
-  hBmpTrafficAlarm.Load(IDB_TRAFFIC_ALARM, IDB_TRAFFIC_ALARM_HD, false);
+  traffic_safe_icon.Load(IDB_TRAFFIC_SAFE, IDB_TRAFFIC_SAFE_HD, false);
+  traffic_warning_icon.Load(IDB_TRAFFIC_WARNING, IDB_TRAFFIC_WARNING_HD, false);
+  traffic_alarm_icon.Load(IDB_TRAFFIC_ALARM, IDB_TRAFFIC_ALARM_HD, false);
 
-  hBmpMapScaleLeft.Load(IDB_MAPSCALE_LEFT, IDB_MAPSCALE_LEFT_HD, false);
-  hBmpMapScaleRight.Load(IDB_MAPSCALE_RIGHT, IDB_MAPSCALE_RIGHT_HD, false);
+  map_scale_left_icon.Load(IDB_MAPSCALE_LEFT, IDB_MAPSCALE_LEFT_HD, false);
+  map_scale_right_icon.Load(IDB_MAPSCALE_RIGHT, IDB_MAPSCALE_RIGHT_HD, false);
 }

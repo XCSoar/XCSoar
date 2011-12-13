@@ -49,30 +49,30 @@ struct MapLook {
   WindArrowLook wind;
 
 #ifdef HAVE_HATCHED_BRUSH
-  Bitmap hAboveTerrainBitmap;
-  Brush hAboveTerrainBrush;
+  Bitmap above_terrain_bitmap;
+  Brush above_terrain_brush;
 #endif
 
   MaskedIcon hTerrainWarning;
 
-  Pen hpCompass;
-  Brush hbCompass;
+  Pen compass_pen;
+  Brush compass_brush;
 
-  Pen hpTerrainLine;
-  Pen hpTerrainLineThick;
+  Pen reach_pen;
+  Pen reach_pen_thick;
 
-  Pen hpTrackBearingLine;
+  Pen track_line_pen;
 
-  Pen ContestPen[3];
+  Pen contest_pens[3];
 
-  MaskedIcon hBmpThermalSource;
+  MaskedIcon thermal_source_icon;
 
-  MaskedIcon hBmpTrafficSafe;
-  MaskedIcon hBmpTrafficWarning;
-  MaskedIcon hBmpTrafficAlarm;
+  MaskedIcon traffic_safe_icon;
+  MaskedIcon traffic_warning_icon;
+  MaskedIcon traffic_alarm_icon;
 
-  MaskedIcon hBmpMapScaleLeft;
-  MaskedIcon hBmpMapScaleRight;
+  MaskedIcon map_scale_left_icon;
+  MaskedIcon map_scale_right_icon;
 
   void Initialise(const struct SETTINGS_MAP &settings);
 };
