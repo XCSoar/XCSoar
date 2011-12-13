@@ -313,8 +313,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   data = data_r;
 
   PixelRect rc = parent.get_client_rect();
-  wf = new WndForm(parent, dialog_look, rc.left, rc.top,
-                   rc.right - rc.left, rc.bottom - rc.top);
+  wf = new WndForm(parent, dialog_look, rc);
 
 #ifdef _WIN32_WCE
   if (IsAltair())

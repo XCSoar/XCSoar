@@ -540,8 +540,13 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   style.hide();
   style.control_parent();
 
-  form = new WndForm(parent, *xml_dialog_look,
-                     pos.x, pos.y, size.cx, size.cy, caption, style);
+  PixelRect form_rc;
+  form_rc.left = pos.x;
+  form_rc.top = pos.y;
+  form_rc.right = form_rc.left + size.cx;
+  form_rc.bottom = form_rc.top + size.cy;
+
+  form = new WndForm(parent, *xml_dialog_look, form_rc, caption, style);
 
   // Load the children controls
   LoadChildrenFromXML(*form, form->GetClientAreaWindow(),

@@ -118,14 +118,12 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
   dialog_style.hide();
   dialog_style.control_parent();
 
-  PixelSize size = parent.get_size();
-
   TCHAR buffer[64];
   StaticString<128> caption;
   caption.Format(_T("%s: %s"), _("Port monitor"),
                  device->GetConfig().GetPortName(buffer, ARRAY_SIZE(buffer)));
 
-  dialog = new WndForm(parent, dialog_look, 0, 0, size.cx, size.cy,
+  dialog = new WndForm(parent, dialog_look, parent.get_client_rect(),
                        caption, dialog_style);
 
   ContainerWindow &client_area = dialog->GetClientAreaWindow();

@@ -124,7 +124,7 @@ public:
    * @param Height Height of the Window
    */
   WndForm(SingleWindow &_main_window, const DialogLook &_look,
-          int X, int Y, int Width, int Height,
+          const PixelRect &rc,
           const TCHAR *Caption = _T(""),
           const WindowStyle style = WindowStyle());
 

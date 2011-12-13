@@ -88,7 +88,7 @@ add_border(WindowStyle style)
 }
 
 WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
-                 int X, int Y, int Width, int Height,
+                 const PixelRect &rc,
                  const TCHAR *Caption,
                  const WindowStyle style)
   :main_window(_main_window), look(_look),
@@ -100,7 +100,7 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
 {
   mCaption = Caption;
 
-  set(main_window, X, Y, Width, Height, add_border(style));
+  set(main_window, rc, add_border(style));
 
   // Create ClientWindow
 

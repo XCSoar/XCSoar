@@ -64,8 +64,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                   0, 0, screen_width, screen_height);
   main_window.show();
 
-  WndForm form(main_window, *dialog_look, 0, 0,
-               main_window.get_width(), main_window.get_height(),
+  WndForm form(main_window, *dialog_look, main_window.get_client_rect(),
                _T("RunListControl"));
   ContainerWindow &client_area = form.GetClientAreaWindow();
 

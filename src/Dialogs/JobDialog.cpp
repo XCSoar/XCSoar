@@ -88,7 +88,7 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
   WindowStyle form_style;
   form_style.hide();
   WndForm form(parent, dialog_look,
-               0, 0, parent.get_width(), parent.get_height(),
+               parent.get_client_rect(),
                caption);
 
   ContainerWindow &client_area = form.GetClientAreaWindow();

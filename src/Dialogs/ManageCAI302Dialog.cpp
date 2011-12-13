@@ -84,8 +84,7 @@ ManageCAI302Dialog(SingleWindow &parent, const DialogLook &look,
   dialog_style.hide();
   dialog_style.control_parent();
 
-  PixelSize size = parent.get_size();
-  dialog = new WndForm(parent, look, 0, 0, size.cx, size.cy,
+  dialog = new WndForm(parent, look, parent.get_client_rect(),
                        _T("CAI 302"), dialog_style);
 
   ContainerWindow &client_area = dialog->GetClientAreaWindow();

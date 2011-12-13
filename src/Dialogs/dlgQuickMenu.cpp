@@ -139,8 +139,7 @@ dlgQuickMenuShowModal(SingleWindow &parent)
   dialogStyle.hide();
   dialogStyle.control_parent();
 
-  PixelSize size = parent.get_size();
-  wf = new WndForm(parent, dialog_look, 0, 0, size.cx, size.cy,
+  wf = new WndForm(parent, dialog_look, parent.get_client_rect(),
                    _T("Quick Menu"), dialogStyle);
 
   ContainerWindow &client_area = wf->GetClientAreaWindow();

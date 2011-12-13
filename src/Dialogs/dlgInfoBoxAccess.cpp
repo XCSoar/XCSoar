@@ -67,12 +67,12 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(const int id)
   if (!dlgContent)
     return;
 
-  const PixelRect targetRect = InfoBoxManager::layout.remaining;
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  wf = new WndForm(UIGlobals::GetMainWindow(), look,
-                   targetRect.left, targetRect.bottom - Layout::Scale(107),
-                   targetRect.right - targetRect.left, Layout::Scale(107));
+  PixelRect form_rc = InfoBoxManager::layout.remaining;
+  form_rc.top = form_rc.bottom - Layout::Scale(107);
+
+  wf = new WndForm(UIGlobals::GetMainWindow(), look, form_rc);
 
   WindowStyle tab_style;
   tab_style.control_parent();

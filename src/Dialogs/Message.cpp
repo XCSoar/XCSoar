@@ -90,8 +90,13 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   style.control_parent();
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
+  PixelRect form_rc;
+  form_rc.left = X;
+  form_rc.top = Y;
+  form_rc.right = form_rc.left + Width;
+  form_rc.bottom = form_rc.top + Height;
   WndForm wf(main_window, dialog_look,
-             X, Y, Width, Height, lpCaption,
+             form_rc, lpCaption,
              style);
   ContainerWindow &client_area = wf.GetClientAreaWindow();
 
