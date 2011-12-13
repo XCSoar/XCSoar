@@ -41,7 +41,7 @@ WindComputer::Compute(const SETTINGS_COMPUTER &settings,
                       const MoreData &basic, const NMEAInfo &last_basic,
                       DerivedInfo &calculated)
 {
-  if ((settings.auto_wind_mode & AUTOWIND_CIRCLING) != 0 &&
+  if (settings.CirclingWindEnabled() &&
       calculated.circling != last_circling)
     circling_wind.slot_newFlightMode(calculated, calculated.TurningLeft(), 0);
 
@@ -50,14 +50,14 @@ last_circling = calculated.circling;
   if (!calculated.flight.flying || !basic.HasTimeAdvancedSince(last_basic))
     return;
 
-  if ((settings.auto_wind_mode & AUTOWIND_CIRCLING) != 0 &&
+  if (settings.CirclingWindEnabled() &&
       calculated.turn_mode == CLIMB) {
     CirclingWind::Result result = circling_wind.NewSample(basic);
     if (result.IsValid())
       wind_store.SlotMeasurement(basic, result.wind, result.quality);
   }
 
-  if ((settings.auto_wind_mode & AUTOWIND_ZIGZAG) != 0 &&
+  if (settings.ZigZagWindEnabled() &&
       basic.airspeed_available && basic.airspeed_real &&
       basic.true_airspeed > settings.glide_polar_task.GetVTakeoff()) {
     WindEKFGlue::Result result = wind_ekf.Update(basic, calculated);

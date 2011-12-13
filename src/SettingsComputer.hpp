@@ -86,6 +86,14 @@ struct WindSettings {
   Validity manual_wind_available;
 
   void SetDefaults();
+
+  bool CirclingWindEnabled() const {
+    return (auto_wind_mode & AUTOWIND_CIRCLING) != 0;
+  }
+
+  bool ZigZagWindEnabled() const {
+    return (auto_wind_mode & AUTOWIND_ZIGZAG) != 0;
+  }
 };
 
 static_assert(is_trivial<WindSettings>::value, "type is not trivial");
