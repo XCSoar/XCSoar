@@ -55,7 +55,7 @@ int main(int argc, char **argv)
          replay->Calculated().turn_mode == CLIMB) ||
         (replay->LastCalculated().turn_mode == WAITCRUISE &&
          replay->Calculated().turn_mode == CRUISE))
-      circling_wind.slot_newFlightMode(replay->Calculated(),
+      circling_wind.NewFlightMode(replay->Calculated(),
                                        negative(replay->Calculated().turn_rate_smoothed),
                                        0);
 

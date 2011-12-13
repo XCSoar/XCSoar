@@ -66,15 +66,15 @@ a number of windmeasurements and calculates a weighted average based on quality.
 */
 
 void
-CirclingWind::reset()
+CirclingWind::Reset()
 {
-  circleCount = 0;
-  circleLeft = false;
+  circle_count = 0;
+  circling_left = false;
   active = false;
-  circleDeg = 0;
+  circle_deg = 0;
   last_track = Angle::Zero();
-  pastHalfway = false;
-  curModeOK = false;
+  past_halfway = false;
+  current_mode_ok = false;
   first = true;
 }
 
@@ -91,65 +91,65 @@ CirclingWind::NewSample(const MoreData &info)
 
   // Circle detection
   int diff = (int)(info.track - last_track).AsDelta().AbsoluteDegrees();
-  circleDeg += diff;
+  circle_deg += diff;
   last_track = info.track;
 
-  if (circleDeg >= 360) {
+  if (circle_deg >= 360) {
     //full circle made!
 
     fullCircle = true;
-    circleDeg = 0;
-    circleCount++; //increase the number of circles flown (used
+    circle_deg = 0;
+    circle_count++; //increase the number of circles flown (used
     //to determine the quality)
   }
 
   curVector = Vector(SpeedVector(info.track, info.ground_speed));
 
-  if (!windsamples.full()) {
-    Sample &sample = windsamples.append();
+  if (!samples.full()) {
+    Sample &sample = samples.append();
     sample.v = curVector;
-    sample.t = info.time;
+    sample.time = info.time;
     sample.mag = info.ground_speed;
   } else {
     // TODO code: give error, too many wind samples
     // or use circular buffer
   }
 
-  if (first || (info.ground_speed < minVector.Magnitude()))
-    minVector = curVector;
+  if (first || (info.ground_speed < min_vector.Magnitude()))
+    min_vector = curVector;
 
-  if (first || (info.ground_speed > maxVector.Magnitude()))
-    maxVector = curVector;
+  if (first || (info.ground_speed > max_vector.Magnitude()))
+    max_vector = curVector;
 
   Result result(0);
   if (fullCircle) { //we have completed a full circle!
-    if (!windsamples.full())
+    if (!samples.full())
       // calculate the wind for this circle, only if it is valid
-      result = _calcWind();
+      result = CalcWind();
 
     fullCircle = false;
 
     // should set each vector to average
 
-    minVector = maxVector = Vector((maxVector.x - minVector.x) / 2,
-                                   (maxVector.y - minVector.y) / 2);
+    min_vector = max_vector = Vector((max_vector.x - min_vector.x) / 2,
+                                   (max_vector.y - min_vector.y) / 2);
 
     first = true;
-    windsamples.clear();
+    samples.clear();
 
-    if (startcircle > 1)
-      startcircle--;
+    if (start_circle > 1)
+      start_circle--;
 
-    if (startcircle == 1) {
-      climbstartpos = GeoPoint(info.location.longitude,
+    if (start_circle == 1) {
+      climb_startpos = GeoPoint(info.location.longitude,
                                info.location.latitude);
-      climbstarttime = info.time;
-      startcircle = 0;
+      climb_starttime = info.time;
+      start_circle = 0;
     }
 
-    climbendpos = GeoPoint(info.location.longitude,
+    climb_endpos = GeoPoint(info.location.longitude,
                            info.location.latitude);
-    climbendtime = info.time;
+    climb_endtime = info.time;
 
     //no need to reset fullCircle, it will automaticly be reset in the next itteration.
   }
@@ -160,7 +160,7 @@ CirclingWind::NewSample(const MoreData &info)
 }
 
 void
-CirclingWind::slot_newFlightMode(const DerivedInfo &derived,
+CirclingWind::NewFlightMode(const DerivedInfo &derived,
                                  bool left, int marker)
 {
   // we are inactive by default
@@ -169,42 +169,42 @@ CirclingWind::slot_newFlightMode(const DerivedInfo &derived,
   // reset the circlecounter for each flightmode
   // change. The important thing to measure is the
   // number of turns in this thermal only.
-  circleCount = 0;
+  circle_count = 0;
 
   // ignore first two circles in thermal drift calcs
-  startcircle = 3;
+  start_circle = 3;
 
-  circleDeg = 0;
-  curModeOK = derived.circling;
+  circle_deg = 0;
+  current_mode_ok = derived.circling;
 
   // we are not circling? Exit function!
-  if (!curModeOK)
+  if (!current_mode_ok)
     return;
 
-  circleLeft = left;
+  circling_left = left;
 
   // initialize analyser-parameters
   active = true;
   first = true;
-  windsamples.clear();
+  samples.clear();
 }
 
 CirclingWind::Result
-CirclingWind::_calcWind()
+CirclingWind::CalcWind()
 {
-  if (windsamples.empty())
+  if (samples.empty())
     return Result(0);
 
   // reject if average time step greater than 2.0 seconds
-  if ((windsamples.last().t - windsamples[0].t) / (windsamples.size() - 1) > fixed_two)
+  if ((samples.last().time - samples[0].time) / (samples.size() - 1) > fixed_two)
     return Result(0);
 
   // find average
   fixed av = fixed_zero;
-  for (unsigned i = 0; i < windsamples.size(); i++)
-    av += windsamples[i].mag;
+  for (unsigned i = 0; i < samples.size(); i++)
+    av += samples[i].mag;
 
-  av /= windsamples.size();
+  av /= samples.size();
 
   // find zero time for times above average
   fixed rthisp;
@@ -214,20 +214,20 @@ CirclingWind::_calcWind()
   int jmax = -1;
   int jmin = -1;
 
-  for (unsigned j = 0; j < windsamples.size(); j++) {
+  for (unsigned j = 0; j < samples.size(); j++) {
     rthisp = fixed_zero;
 
-    for (unsigned i = 0; i < windsamples.size(); i++) {
+    for (unsigned i = 0; i < samples.size(); i++) {
       if (i == j)
         continue;
 
-      ithis = (i + j) % windsamples.size();
+      ithis = (i + j) % samples.size();
       unsigned idiff = i;
 
-      if (idiff > windsamples.size() / 2)
-        idiff = windsamples.size() - idiff;
+      if (idiff > samples.size() / 2)
+        idiff = samples.size() - idiff;
 
-      rthisp += (windsamples[ithis].mag) * idiff;
+      rthisp += (samples[ithis].mag) * idiff;
     }
 
     if ((rthisp < rthismax) || (jmax == -1)) {
@@ -242,27 +242,27 @@ CirclingWind::_calcWind()
   }
 
   // jmax is the point where most wind samples are below
-  // jmin is the point where most wind samples are above
+  max_vector = samples[jmax].v;
 
-  maxVector = windsamples[jmax].v;
-  minVector = windsamples[jmin].v;
+  // jmin is the point where most wind samples are above
+  min_vector = samples[jmin].v;
 
   // attempt to fit cycloid
 
-  fixed mag = half(windsamples[jmax].mag - windsamples[jmin].mag);
+  fixed mag = half(samples[jmax].mag - samples[jmin].mag);
   fixed rthis = fixed_zero;
 
-  for (unsigned i = 0; i < windsamples.size(); i++) {
-    const auto sc = ::sin_cos(((i + jmax) % windsamples.size()) * fixed_two_pi
-                              / windsamples.size());
+  for (unsigned i = 0; i < samples.size(); i++) {
+    const auto sc = ::sin_cos(((i + jmax) % samples.size()) * fixed_two_pi
+                              / samples.size());
     fixed wx = sc.second, wy = sc.first;
     wx = wx * av + mag;
     wy *= av;
-    fixed cmag = hypot(wx, wy) - windsamples[i].mag;
+    fixed cmag = hypot(wx, wy) - samples[i].mag;
     rthis += cmag * cmag;
   }
 
-  rthis /= windsamples.size();
+  rthis /= samples.size();
   rthis = sqrt(rthis);
 
   int quality;
@@ -272,11 +272,11 @@ CirclingWind::_calcWind()
   else
     quality = 5 - iround(rthis);
 
-  if (circleCount < 3)
+  if (circle_count < 3)
     quality--;
-  if (circleCount < 2)
+  if (circle_count < 2)
     quality--;
-  if (circleCount < 1)
+  if (circle_count < 1)
     return Result(0);
 
   quality = min(quality, 5); //5 is maximum quality, make sure we honour that.
@@ -285,8 +285,8 @@ CirclingWind::_calcWind()
     //measurment quality too low
     return Result(0);
 
-  Vector a(-mag * maxVector.x / windsamples[jmax].mag,
-           -mag * maxVector.y / windsamples[jmax].mag);
+  Vector a(-mag * max_vector.x / samples[jmax].mag,
+           -mag * max_vector.y / samples[jmax].mag);
 
   if (a.SquareMagnitude() >= fixed(30 * 30))
     // limit to reasonable values (60 knots), reject otherwise

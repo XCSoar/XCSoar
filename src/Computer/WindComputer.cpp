@@ -31,7 +31,7 @@ WindComputer::Reset()
 {
   last_circling = false;
 
-  circling_wind.reset();
+  circling_wind.Reset();
   wind_ekf.reset();
   wind_store.reset();
 }
@@ -43,7 +43,7 @@ WindComputer::Compute(const SETTINGS_COMPUTER &settings,
 {
   if (settings.CirclingWindEnabled() &&
       calculated.circling != last_circling)
-    circling_wind.slot_newFlightMode(calculated, calculated.TurningLeft(), 0);
+    circling_wind.NewFlightMode(calculated, calculated.TurningLeft(), 0);
 
 last_circling = calculated.circling;
 

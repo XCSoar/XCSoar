@@ -40,43 +40,44 @@ class CirclingWind
    * The windanalyser analyses the list of flightsamples looking for
    * windspeed and direction.
    */
-  struct Sample {
+  struct Sample
+  {
     Vector v;
-    fixed t;
+    fixed time;
     fixed mag;
   };
 
-  //we are counting the number of circles, the first onces are probably not very round
-  int circleCount;
-  //true=left, false=right
-  bool circleLeft;
-  //active is set to true or false by the slot_newFlightMode slot
+  // we are counting the number of circles, the first onces are probably not very round
+  int circle_count;
+  // true = left, false = right
+  bool circling_left;
+  // active is set to true or false by the slot_newFlightMode slot
   bool active;
-  int circleDeg;
+  int circle_deg;
   Angle last_track;
-  bool pastHalfway;
-  Vector minVector;
-  Vector maxVector;
-  bool curModeOK;
+  bool past_halfway;
+  Vector min_vector;
+  Vector max_vector;
+  bool current_mode_ok;
   bool first;
-  int startcircle;
+  int start_circle;
 
-  GeoPoint climbstartpos;
-  GeoPoint climbendpos;
-  fixed climbstarttime;
-  fixed climbendtime;
+  GeoPoint climb_startpos;
+  GeoPoint climb_endpos;
+  fixed climb_starttime;
+  fixed climb_endtime;
 
-  StaticArray<Sample, 50> windsamples;
+  StaticArray<Sample, 50> samples;
 
 public:
-  struct Result {
+  struct Result
+  {
     unsigned quality;
     Vector wind;
 
     Result() {}
     Result(int _quality):quality(_quality) {}
-    Result(int _quality, Vector _wind)
-      :quality(_quality), wind(_wind) {}
+    Result(int _quality, Vector _wind):quality(_quality), wind(_wind) {}
 
     bool IsValid() const {
       return quality > 0;
@@ -86,14 +87,12 @@ public:
   /**
    * Clear as if never flown
    */
-  void reset();
+  void Reset();
 
-  // Public slots
   /**
    * Called if the flightmode changes
    */
-  void slot_newFlightMode(const DerivedInfo &derived,
-                          bool left, int marker);
+  void NewFlightMode(const DerivedInfo &derived, bool left, int marker);
 
   /**
    * Called if a new sample is available in the samplelist.
@@ -101,7 +100,7 @@ public:
   Result NewSample(const MoreData &info);
 
 private:
-  Result _calcWind();
+  Result CalcWind();
 };
 
 #endif
