@@ -81,12 +81,12 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
   else
     elevation = RasterBuffer::TERRAIN_INVALID;
 
+  if (list.empty())
+    return false;
 
   ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), vector, list,
                         elevation, look, traffic_look, SettingsMap(),
                         glide_computer != NULL
                         ? &glide_computer->GetAirspaceWarnings() : NULL);
-
-  // Save function result for later
-  return !list.empty();
+  return true;
 }
