@@ -131,6 +131,7 @@ public:
   bool SaveValue(unsigned i, bool &value) const;
   bool SaveValue(unsigned i, int &value) const;
   bool SaveValue(unsigned i, fixed &value) const;
+  bool SaveValue(unsigned i, TCHAR *string, size_t max_size) const;
 
   bool SaveValue(unsigned i, unsigned &value) const {
     return SaveValue(i, (int &)value);

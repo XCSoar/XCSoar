@@ -248,6 +248,19 @@ RowFormWidget::SaveValue(unsigned i, fixed &value) const
 }
 
 bool
+RowFormWidget::SaveValue(unsigned i, TCHAR *string, size_t max_size) const
+{
+  const TCHAR *new_value = GetDataField(i).GetAsString();
+  assert(new_value != NULL);
+
+  if (_tcscmp(string, new_value) == 0)
+    return false;
+
+  CopyString(string, new_value, max_size);
+  return true;
+}
+
+bool
 RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
                          bool &value) const
 {
