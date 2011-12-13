@@ -58,6 +58,8 @@ public:
                const MoreData &basic, const NMEAInfo &last_basic,
                DerivedInfo &calculated);
 
+  void ComputeHeadWind(const NMEAInfo &basic, DerivedInfo &calculated);
+
   /**
    * Select one of the wind values and write it into
    * DerivedInfo::wind, according to the configuration.

@@ -70,6 +70,7 @@ DerivedInfo::Reset()
 
   estimated_wind_available.Clear();
   wind_available.Clear();
+  head_wind_available.Clear();
   task_stats.reset();
   common_stats.reset();
   contest_stats.Reset();
@@ -93,6 +94,8 @@ DerivedInfo::Expire(fixed Time)
   /* the estimated wind remains valid for an hour */
   estimated_wind_available.Expire(Time, fixed(3600));
   wind_available.Expire(Time, fixed(600));
+
+  head_wind_available.Expire(Time, fixed(3));
 
   auto_mac_cready_available.Expire(Time, fixed(300));
 }

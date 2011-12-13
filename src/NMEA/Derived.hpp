@@ -168,6 +168,9 @@ struct DerivedInfo:
    */
   SpeedVector wind;
 
+  Validity head_wind_available;
+  fixed head_wind;
+
   /** Distance to zoom to for autozoom */
   fixed auto_zoom_distance;
 

@@ -72,6 +72,22 @@ last_circling = calculated.circling;
 }
 
 void
+WindComputer::ComputeHeadWind(const NMEAInfo &basic, DerivedInfo &info)
+{
+  if (info.wind_available) {
+    // If any wind information available
+    // .. calculate headwind from given wind information
+
+    info.head_wind =
+        (info.wind.bearing - info.heading).fastcosine() * info.wind.norm;
+    info.head_wind_available.Update(basic.clock);
+  } else {
+    // No information available that let us calculate the head wind
+    info.head_wind_available.Clear();
+  }
+}
+
+void
 WindComputer::Select(const SETTINGS_COMPUTER &settings,
                      const NMEAInfo &basic, DerivedInfo &calculated)
 {
