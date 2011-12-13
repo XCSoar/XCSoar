@@ -321,6 +321,7 @@ RowFormWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 
   WindowStyle style;
   style.hide();
+  style.control_parent();
 
   SetWindow(new PanelControl(parent, look, rc, style));
 }
