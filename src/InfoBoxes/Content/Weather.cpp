@@ -141,3 +141,20 @@ InfoBoxContentWindBearing::Update(InfoBoxData &data)
 
   data.SetValue(info.wind.bearing, _T("T"));
 }
+
+void
+InfoBoxContentHeadWind::Update(InfoBoxData &data)
+{
+  const DerivedInfo &info = CommonInterface::Calculated();
+  if (!info.head_wind_available) {
+    data.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  SetValueFromFixed(data, _T("%2.0f"),
+                    Units::ToUserWindSpeed(info.head_wind));
+
+  // Set Unit
+  data.SetValueUnit(Units::current.wind_speed_unit);
+}

@@ -994,6 +994,15 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_WP_Distance, // WP Dist
   },
 
+  // e_HeadWind
+  {
+    N_("Head wind component"),
+    N_("Head wind"),
+    N_("The current head wind component. Head wind is calculated from TAS and GPS ground speed if airspeed is available from external device. Otherwise the estimated wind is used for the calculation."),
+    IBFHelper<InfoBoxContentHeadWind>::Create,
+    e_HeadWind,
+    e_HeadWind,
+  },
 };
 
 bool

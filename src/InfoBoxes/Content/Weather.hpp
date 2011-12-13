@@ -65,4 +65,10 @@ public:
   virtual void Update(InfoBoxData &data);
 };
 
+class InfoBoxContentHeadWind: public InfoBoxContentWind
+{
+public:
+  virtual void Update(InfoBoxData &data);
+};
+
 #endif
