@@ -138,6 +138,7 @@ namespace InputEvents
   void eventMode(const TCHAR *misc);
   void eventNearestAirspaceDetails(const TCHAR *misc);
   void eventNearestWaypointDetails(const TCHAR *misc);
+  void eventNearestMapItems(const TCHAR *misc);
   void eventNull(const TCHAR *misc);
   void eventPan(const TCHAR *misc);
   void eventPlaySound(const TCHAR *misc);

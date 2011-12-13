@@ -89,6 +89,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "FLARM/FlarmDetails.hpp"
 #include "Compiler.h"
 #include "Net/Features.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -437,6 +438,23 @@ InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
     PopupNearestWaypointDetails(way_points,
                                 CommonInterface::main_window.GetProjection().GetGeoLocation(),
                                 1.0e5);
+}
+
+// NearestMapItems
+// Displays the map item list dialog
+//  aircraft: the map items to nearest the aircraft
+//  pan: the map items nearest to the pan cursor
+void
+InputEvents::eventNearestMapItems(const TCHAR *misc)
+{
+  if (_tcscmp(misc, _T("aircraft")) == 0)
+    CommonInterface::main_window.GetMap()->ShowMapItems(
+        XCSoarInterface::main_window, CommonInterface::Basic().location);
+
+  else if (_tcscmp(misc, _T("pan")) == 0)
+    CommonInterface::main_window.GetMap()->ShowMapItems(
+        XCSoarInterface::main_window,
+        CommonInterface::main_window.GetProjection().GetGeoLocation());
 }
 
 // Null
