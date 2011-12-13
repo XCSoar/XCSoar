@@ -331,7 +331,7 @@ RowFormWidget::Show(const PixelRect &rc)
   PanelControl &panel = *(PanelControl *)GetWindow();
   panel.move(rc);
 
-  PixelRect current_rect = rc;
+  PixelRect current_rect = panel.get_client_rect();
   current_rect.bottom = current_rect.top;
 
   for (auto i = controls.begin(), end = controls.end(); i != end; ++i) {
@@ -355,7 +355,7 @@ RowFormWidget::Move(const PixelRect &rc)
   PanelControl &panel = *(PanelControl *)GetWindow();
   panel.move(rc);
 
-  PixelRect current_rect = rc;
+  PixelRect current_rect = panel.get_client_rect();
   current_rect.bottom = current_rect.top;
 
   for (auto i = controls.begin(), end = controls.end(); i != end; ++i) {
