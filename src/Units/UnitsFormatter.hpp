@@ -30,6 +30,7 @@ Copyright_License {
 
 class Angle;
 struct GeoPoint;
+class AtmosphericPressure;
 
 /**
  * Namespace to manage unit display.
@@ -143,7 +144,7 @@ namespace Units
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  bool FormatUserPressure(fixed Pressure, TCHAR *Buffer, size_t size,
+  bool FormatUserPressure(AtmosphericPressure pressure, TCHAR *Buffer, size_t size,
                         bool IncludeUnit = true);
   /**
    * Give the proper format to display the pressure

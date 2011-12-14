@@ -26,6 +26,7 @@ Copyright_License {
 #include "Units/Descriptor.hpp"
 #include "Math/Angle.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
+#include "Engine/Atmosphere/Pressure.hpp"
 #include "DateTime.hpp"
 #include "Util/StringUtil.hpp"
 
@@ -389,21 +390,21 @@ Units::FormatUserVSpeed(fixed Speed, TCHAR *buffer, size_t size,
 }
 
 bool
-Units::FormatUserPressure(fixed Pressure, TCHAR *Buffer, size_t size,
-                        bool IncludeUnit)
+Units::FormatUserPressure(AtmosphericPressure pressure, TCHAR *Buffer,
+                          size_t size, bool IncludeUnit)
 {
   TCHAR sTmp[16];
   const UnitDescriptor *pU = &unit_descriptors[current.pressure_unit];
 
-  Pressure = Pressure * pU->factor_to_user;
+  fixed _pressure = pressure.GetHectoPascal() * pU->factor_to_user;
 
   if (IncludeUnit) {
     TCHAR sFormat[8];
     _tcscpy( sFormat, GetFormatUserPressure());
     _tcscat( sFormat, _T(" %s") );
-    _stprintf(sTmp, sFormat, (double)Pressure, pU->name);
+    _stprintf(sTmp, sFormat, (double)_pressure, pU->name);
   } else
-    _stprintf(sTmp, GetFormatUserPressure(),  (double)Pressure);
+    _stprintf(sTmp, GetFormatUserPressure(),  (double)_pressure);
 
   if (_tcslen(sTmp) < size - 1) {
     _tcscpy(Buffer, sTmp);
