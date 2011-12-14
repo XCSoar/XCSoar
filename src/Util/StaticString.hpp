@@ -132,6 +132,13 @@ public:
     CopyString(data, new_value, MAX_SIZE);
   }
 
+  void set(const TCHAR *new_value, size_type length) {
+    assert(new_value != NULL);
+
+    size_type max_length = (MAX_SIZE < length + 1) ? MAX_SIZE : length + 1;
+    CopyString(data, new_value, max_length);
+  }
+
   void append(const TCHAR *new_value) {
     assert(new_value != NULL);
 
