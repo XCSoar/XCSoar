@@ -62,7 +62,7 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
                              const NMEAInfo &info) const
 {
   const TCHAR *txt;
-  MaskedIcon *icon = NULL;
+  MaskedIcon *icon;
 
   if (!info.connected) {
     icon = &Graphics::hGPSStatus2;
@@ -70,9 +70,9 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
   } else if (!info.location_available) {
     icon = &Graphics::hGPSStatus1;
     txt = _("GPS waiting for fix");
-  } else {
-    return; // early exit
-  }
+  } else
+    // early exit
+    return;
 
   PixelScalar x = rc.left + Layout::FastScale(2);
   PixelScalar y = rc.bottom - Layout::FastScale(35);
