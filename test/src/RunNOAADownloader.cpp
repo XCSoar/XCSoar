@@ -28,16 +28,14 @@ Copyright_License {
 #include "ConsoleJobRunner.hpp"
 
 #include <cstdio>
-#include <iostream>
 
-using namespace std;
 
 static void
 DisplayMETAR(const NOAAStore::Item &station)
 {
   METAR metar;
   if (!station.GetMETAR(metar)) {
-    cout << "METAR Download failed!" << endl;
+    printf("METAR Download failed!\n");;
     return;
   }
 
@@ -61,7 +59,7 @@ DisplayTAF(const NOAAStore::Item &station)
 {
   TAF taf;
   if (!station.GetTAF(taf)) {
-    cout << "TAF Download failed!" << endl;
+    printf("TAF Download failed!\n");;
     return;
   }
 
@@ -81,28 +79,28 @@ int
 main(int argc, char *argv[])
 {
   if (argc < 2) {
-    cout << "Usage: " << argv[0] << " <code>[ <code> ...]" << endl;
-    cout << "   <code> is the four letter ICAO code (upper case)" << endl;
-    cout << "          of the airport(s) you are requesting" << endl << endl;
-    cout << "   Example: " << argv[0] << " EDDL" << endl;
+    printf("Usage: %s <code>[ <code> ...]\n", argv[0]);
+    printf("   <code> is the four letter ICAO code (upper case)\n");
+    printf("          of the airport(s) you are requesting\n\n");
+    printf("   Example: %s EDDL\n", argv[0]);
     return 1;
   }
 
   NOAAStore store;
   for (int i = 1; i < argc; i++) {
-    cout << "Adding station " << argv[i] << endl;
+    printf("Adding station %s\n", argv[i]);
     store.AddStation(argv[i]);
   }
 
   Net::Initialise();
 
-  cout << "Updating METAR and TAF ..." << endl;
+  printf("Updating METAR and TAF ...\n");
   ConsoleJobRunner runner;
   store.Update(runner);
 
   for (auto i = store.begin(), end = store.end(); i != end; ++i) {
-    cout << "---" << endl;
-    cout << "Station " << i->code << ":" << endl << endl;
+    printf("---\n");
+    printf("Station %s:\n\n", i->code);
     DisplayMETAR(*i);
     DisplayTAF(*i);
   }
