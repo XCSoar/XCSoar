@@ -44,13 +44,14 @@ protected:
 
 public:
   virtual Range read() {
-    Range r = buffer.Write();
-    if (r.second > 0) {
-      unsigned n = read(r.first, r.second);
+    auto r = buffer.Write();
+    if (!r.IsEmpty()) {
+      unsigned n = read(r.data, r.length);
       buffer.Append(n);
     }
 
-    return buffer.Read();
+    r = buffer.Read();
+    return Range(r.data, r.length);
   }
 
   virtual void consume(unsigned n) {

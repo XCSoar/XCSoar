@@ -70,11 +70,11 @@ size_t
 Net::Request::ResponseData(const uint8_t *ptr, size_t size)
 {
   Buffer::Range range = buffer.Write();
-  if ((size_t)range.second < size)
+  if ((size_t)range.length < size)
     /* buffer is full, pause CURL */
     return CURL_WRITEFUNC_PAUSE;
 
-  std::copy(ptr, ptr + size, range.first);
+  std::copy(ptr, ptr + size, range.data);
   buffer.Append(size);
   return size;
 }
@@ -104,7 +104,7 @@ Net::Request::Read(void *_buffer, size_t buffer_size, unsigned long timeout)
   CURLMcode mcode = CURLM_CALL_MULTI_PERFORM;
   while (true) {
     range = buffer.Read();
-    if (range.second > 0)
+    if (!range.IsEmpty())
       break;
 
     CURLcode code = session.InfoRead(handle);
@@ -121,11 +121,11 @@ Net::Request::Read(void *_buffer, size_t buffer_size, unsigned long timeout)
   }
 
   --buffer_size;
-  if (buffer_size > range.second)
-    buffer_size = range.second;
+  if (buffer_size > range.length)
+    buffer_size = range.length;
 
   uint8_t *p = (uint8_t *)_buffer;
-  std::copy(range.first, range.first + buffer_size, p);
+  std::copy(range.data, range.data + buffer_size, p);
   p[buffer_size] = 0;
 
   buffer.Consume(buffer_size);

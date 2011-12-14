@@ -46,7 +46,21 @@
 template<class T, unsigned size>
 class FifoBuffer : private NonCopyable {
 public:
-  typedef std::pair<T*, unsigned> Range;
+  struct Range {
+    T *data;
+
+    unsigned length;
+
+    Range() = default;
+
+    gcc_constexpr_ctor
+    Range(T *_data, unsigned _length):data(_data), length(_length) {}
+
+    gcc_constexpr_method
+    bool IsEmpty() const {
+      return length == 0;
+    }
+  };
 
 protected:
   unsigned head, tail;

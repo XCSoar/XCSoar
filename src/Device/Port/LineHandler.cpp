@@ -37,14 +37,14 @@ PortLineHandler::DataReceived(const void *_data, size_t length)
   do {
     /* append new data to buffer, as much as fits there */
     auto range = buffer.Write();
-    if (range.second == 0) {
+    if (range.IsEmpty()) {
       /* overflow: reset buffer to recover quickly */
       buffer.Clear();
       continue;
     }
 
-    size_t nbytes = std::min(size_t(range.second), size_t(end - data));
-    memcpy(range.first, data, nbytes);
+    size_t nbytes = std::min(size_t(range.length), size_t(end - data));
+    memcpy(range.data, data, nbytes);
     data += nbytes;
     buffer.Append(nbytes);
 
@@ -52,23 +52,23 @@ PortLineHandler::DataReceived(const void *_data, size_t length)
       /* read data from the buffer, to see if there's a newline
          character */
       range = buffer.Read();
-      if (range.second == 0)
+      if (range.IsEmpty())
         break;
 
-      char *newline = (char *)memchr(range.first, '\n', range.second);
+      char *newline = (char *)memchr(range.data, '\n', range.length);
       if (newline == NULL)
         /* no newline here: wait for more data */
         break;
 
       /* remove trailing whitespace, such as '\r' */
       char *end = newline;
-      while (end > range.first && IsWhitespaceOrNull(end[-1]))
+      while (end > range.data && IsWhitespaceOrNull(end[-1]))
         --end;
 
       *end = '\0';
-      LineReceived(range.first);
+      LineReceived(range.data);
 
-      buffer.Consume(newline - range.first + 1);
+      buffer.Consume(newline - range.data + 1);
     }
   } while (data < end);
 }

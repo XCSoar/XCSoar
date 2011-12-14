@@ -54,9 +54,9 @@ public:
   virtual void DataReceived(const void *data, size_t length) {
     mutex.Lock();
     auto range = buffer.Write();
-    if (range.second < length)
-      length = range.second;
-    memcpy(range.first, data, length);
+    if (range.length < length)
+      length = range.length;
+    memcpy(range.data, data, length);
     buffer.Append(length);
     mutex.Unlock();
     SendNotification();
@@ -71,11 +71,11 @@ private:
       {
         ScopeLock protect(mutex);
         auto range = buffer.Read();
-        if (range.second == 0)
+        if (range.IsEmpty())
           break;
 
-        length = std::min(ARRAY_SIZE(data), size_t(range.second));
-        memcpy(data, range.first, length);
+        length = std::min(ARRAY_SIZE(data), size_t(range.length));
+        memcpy(data, range.data, length);
         buffer.Consume(length);
       }
 
