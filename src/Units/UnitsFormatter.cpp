@@ -389,6 +389,19 @@ Units::FormatUserVSpeed(fixed Speed, TCHAR *buffer, size_t size,
     _sntprintf(buffer, size, _T("%+.1f"), (double)Speed);
 }
 
+void
+Units::FormatUserTemperature(fixed temperature, TCHAR *buffer, size_t size,
+                             bool include_unit)
+{
+  temperature = ToUserTemperature(temperature);
+
+  if (include_unit)
+    _sntprintf(buffer, size, _T("%.0f %s"), (double)temperature,
+               GetTemperatureName());
+  else
+    _sntprintf(buffer, size, _T("%.0f"), (double)temperature);
+}
+
 bool
 Units::FormatUserPressure(AtmosphericPressure pressure, TCHAR *Buffer,
                           size_t size, bool IncludeUnit)

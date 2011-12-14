@@ -138,6 +138,15 @@ namespace Units
                         bool IncludeUnit = true);
 
   /**
+   * Converts a temperature into a formatted string
+   * @param temperature The double-based vertical Speed
+   * @param buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   */
+  void FormatUserTemperature(fixed temperature, TCHAR *buffer, size_t size,
+                             bool include_unit = true);
+
+  /**
    * Converts a double-based Pressure into a formatted string
    * @param Pressure The double-based Pressure
    * @param Buffer Buffer string to write to (pointer)
