@@ -50,7 +50,7 @@ Copyright_License {
 #include <unistd.h>
 #endif
 
-#define XCSDATADIR _T("XCSoarData")
+#define XCSDATADIR "XCSoarData"
 
 /**
  * The default mount point of the SD card on Android.
@@ -228,7 +228,7 @@ ExistingDataOnFlash(TCHAR *buffer)
   FlashCardEnumerator enumerator;
   const TCHAR *name;
   while ((name = enumerator.next()) != NULL) {
-    _stprintf(buffer, _T(DIR_SEPARATOR_S"%s"DIR_SEPARATOR_S) XCSDATADIR, name);
+    _stprintf(buffer, _T(DIR_SEPARATOR_S "%s" DIR_SEPARATOR_S XCSDATADIR), name);
     if (Directory::Exists(buffer))
       return buffer;
   }
@@ -309,7 +309,7 @@ GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
     return NULL;
 
   _tcscat(buffer, _T(DIR_SEPARATOR_S));
-  _tcscat(buffer, XCSDATADIR);
+  _tcscat(buffer, _T(XCSDATADIR));
   return buffer;
 #endif
 }
@@ -378,7 +378,7 @@ FindDataPath()
     TCHAR buffer[MAX_PATH];
     if (ModuleInFlash(NULL, buffer) != NULL) {
       _tcscat(buffer, _T(DIR_SEPARATOR_S));
-      _tcscat(buffer, XCSDATADIR);
+      _tcscat(buffer, _T(XCSDATADIR));
       if (Directory::Exists(buffer))
         return _tcsdup(buffer);
     }
@@ -417,7 +417,7 @@ VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
   FlashCardEnumerator enumerator;
   const TCHAR *name;
   while ((name = enumerator.next()) != NULL) {
-    _stprintf(FlashPath, _T(DIR_SEPARATOR_S"%s"DIR_SEPARATOR_S"%s"), name, XCSDATADIR);
+    _stprintf(FlashPath, _T(DIR_SEPARATOR_S "%s" DIR_SEPARATOR_S XCSDATADIR), name);
     if (_tcscmp(data_path, FlashPath) == 0)
       /* don't scan primary data path twice */
       continue;
