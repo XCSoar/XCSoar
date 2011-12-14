@@ -153,7 +153,7 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
   RasterPoint aircraft[AIRCRAFT_POINTS_MAX];
   std::copy(Aircraft, Aircraft + AircraftPoints, aircraft);
   PolygonRotateShift(aircraft, AircraftPoints,
-                     aircraft_pos.x, aircraft_pos.y, angle, true);
+                     aircraft_pos.x, aircraft_pos.y, angle);
   canvas.SelectHollowBrush();
   canvas.Select(look.aircraft_simple2_pen);
   canvas.polygon(aircraft, AircraftPoints);
