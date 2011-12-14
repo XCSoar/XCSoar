@@ -55,16 +55,20 @@ InfoBoxContentTemperature::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromFixed(data, _T("%2.1f")_T(DEG),
+  SetValueFromFixed(data, _T("%2.1f"),
                     Units::ToUserTemperature(basic.temperature));
+
+  data.SetValueUnit(Units::current.temperature_unit);
 }
 
 void
 InfoBoxContentTemperatureForecast::Update(InfoBoxData &data)
 {
   fixed temperature = CommonInterface::SettingsComputer().forecast_temperature;
-  SetValueFromFixed(data, _T("%2.1f")_T(DEG),
+  SetValueFromFixed(data, _T("%2.1f"),
                     Units::ToUserTemperature(temperature));
+
+  data.SetValueUnit(Units::current.temperature_unit);
 }
 
 bool
