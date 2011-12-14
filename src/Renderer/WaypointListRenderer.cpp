@@ -113,11 +113,16 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   // Draw distance and arrival altitude
   StaticString<256> buffer;
-  TCHAR dist[20], alt[20];
+  TCHAR dist[20], alt[20], radio[20];
   Units::FormatUserDistance(distance, dist, ARRAY_SIZE(dist), true);
   Units::FormatUserArrival(arrival_altitude, alt, ARRAY_SIZE(alt), true);
   buffer.Format(_T("%s: %s - %s: %s"), _("Distance"), dist,
                 _("Arrival Alt"), alt);
+
+  if (waypoint.radio_frequency.IsDefined()) {
+    waypoint.radio_frequency.Format(radio, ARRAY_SIZE(radio));
+    buffer.AppendFormat(_T(" - %s MHz"), radio);
+  }
 
   UPixelScalar left = rc.left + line_height + Layout::FastScale(2);
   canvas.text_clipped(left, top2, rc, buffer);
