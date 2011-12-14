@@ -116,8 +116,8 @@ Profile::Load(SETTINGS_COMPUTER &settings)
 
   Get(szProfileSetSystemTimeFromGPS, settings.SetSystemTimeFromGPS);
   Get(szProfileUTCOffset, settings.UTCOffset);
-  if (settings.UTCOffset > 12 * 3600)
-    settings.UTCOffset -= 24 * 3600;
+  if (settings.UTCOffset > 13 * 3600 || settings.UTCOffset < -13 * 3600)
+    settings.UTCOffset = 0;
 
   Load(settings.task);
 }
