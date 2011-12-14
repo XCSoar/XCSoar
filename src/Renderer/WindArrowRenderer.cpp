@@ -48,18 +48,14 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
     { -6, (PixelScalar)(-26 - length) },
     { 0, (PixelScalar)(-20 - length) },
     { 6, (PixelScalar)(-26 - length) },
-    { 0, -20 },
   };
 
-  // Rotate the arrow (exclude duplicate last point)
-  PolygonRotateShift(arrow, ARRAY_SIZE(arrow) - 1, pos.x, pos.y, angle);
-
-  // Copy first point to last point to close polygon
-  arrow[4] = arrow[0];
+  // Rotate the arrow
+  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos.x, pos.y, angle);
 
   canvas.Select(look.arrow_pen);
   canvas.Select(look.arrow_brush);
-  canvas.polygon(arrow, 5);
+  canvas.polygon(arrow, ARRAY_SIZE(arrow));
 
   // Draw arrow tail
 
