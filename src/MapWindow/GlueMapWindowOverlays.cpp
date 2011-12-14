@@ -39,6 +39,8 @@ Copyright_License {
 #include "UIState.hpp"
 #include "Interface.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
+#include "Units/Units.hpp"
+#include "Terrain/RasterTerrain.hpp"
 
 #include <stdio.h>
 
@@ -55,6 +57,54 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
   canvas.line(center.x, center.y + 20,
               center.x, center.y - 20);
 }
+
+void
+GlueMapWindow::DrawPanInfo(Canvas &canvas) const
+{
+  GeoPoint location = render_projection.GetGeoLocation();
+  RasterPoint center = render_projection.GetScreenOrigin();
+
+  TextInBoxMode mode;
+  mode.mode = RenderMode::RM_OUTLINED_INVERTED;
+  mode.bold = true;
+
+  UPixelScalar padding = Layout::FastScale(4);
+  UPixelScalar height = Fonts::map_bold.GetHeight();
+
+  StaticString<64> latitude, longitude;
+  Units::LatitudeToString(location.latitude,
+                          latitude.buffer(), latitude.MAX_SIZE);
+  Units::LongitudeToString(location.longitude,
+                           longitude.buffer(), longitude.MAX_SIZE);
+
+  TextInBox(canvas, latitude,
+            center.x + padding, center.y + padding, mode,
+            render_projection.GetScreenWidth(),
+            render_projection.GetScreenHeight());
+
+  TextInBox(canvas, longitude,
+            center.x + padding, center.y + height + padding, mode,
+            render_projection.GetScreenWidth(),
+            render_projection.GetScreenHeight());
+
+  if (!terrain)
+    return;
+
+  short elevation = terrain->GetTerrainHeight(location);
+  if (RasterBuffer::is_special(elevation))
+    return;
+
+  StaticString<64> elevation_short, elevation_long;
+  Units::FormatUserAltitude(fixed(elevation),
+                            elevation_short.buffer(), elevation_short.MAX_SIZE);
+
+  elevation_long = _("Elevation: ");
+  elevation_long += elevation_short;
+
+  TextInBox(canvas, elevation_long,
+            center.x + padding, center.y + 2 * height + padding, mode,
+            render_projection.GetScreenWidth(),
+            render_projection.GetScreenHeight());
 }
 
 void
