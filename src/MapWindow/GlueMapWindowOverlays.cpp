@@ -48,12 +48,13 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
   Pen dash_pen(Pen::DASH, 1, COLOR_DARK_GRAY);
   canvas.Select(dash_pen);
 
-  const RasterPoint Orig_Screen = render_projection.GetScreenOrigin();
+  const RasterPoint center = render_projection.GetScreenOrigin();
 
-  canvas.line(Orig_Screen.x + 20, Orig_Screen.y,
-              Orig_Screen.x - 20, Orig_Screen.y);
-  canvas.line(Orig_Screen.x, Orig_Screen.y + 20,
-              Orig_Screen.x, Orig_Screen.y - 20);
+  canvas.line(center.x + 20, center.y,
+              center.x - 20, center.y);
+  canvas.line(center.x, center.y + 20,
+              center.x, center.y - 20);
+}
 }
 
 void
