@@ -77,6 +77,16 @@ roundshift(int x)
   return x >> 10;
 }
 
+gcc_const
+static int
+FastScale(int x)
+{
+  if (!Layout::ScaleSupported())
+    return x;
+
+  return x * Layout::scale;
+}
+
 void
 PolygonRotateShift(RasterPoint *poly, const int n,
                    const PixelScalar xs, const PixelScalar ys,
@@ -91,11 +101,11 @@ PolygonRotateShift(RasterPoint *poly, const int n,
     lastangle = angle;
     last_scale = scale;
     if (scale == 100) {
-      cost = Layout::FastScale(angle.ifastcosine());
-      sint = Layout::FastScale(angle.ifastsine());
+      cost = FastScale(angle.ifastcosine());
+      sint = FastScale(angle.ifastsine());
     } else {
-      cost = Layout::FastScale(angle.ifastcosine() * scale) / 100;
-      sint = Layout::FastScale(angle.ifastsine() * scale) / 100;
+      cost = FastScale(angle.ifastcosine() * scale) / 100;
+      sint = FastScale(angle.ifastsine() * scale) / 100;
     }
   }
 
