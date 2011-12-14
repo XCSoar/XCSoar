@@ -52,6 +52,10 @@ Copyright_License {
 #include "ProgressGlue.hpp"
 #include "UIState.hpp"
 
+#if !defined(WIN32) && !defined(ANDROID)
+#include <unistd.h>
+#endif
+
 MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(NULL),
    map(NULL), widget(NULL), vario(*this),
