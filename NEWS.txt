@@ -18,6 +18,8 @@ Version 6.3 - not yet released
   - added support for CompeGPS waypoint files
 * internet
   - added LiveTrack24 live tracking
+* Windows
+  - use XCSoarData folder on removable drives/cards if available
 * Android
   - support reverse screen modes for Galaxy Tab
 

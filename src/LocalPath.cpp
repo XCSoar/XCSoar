@@ -236,7 +236,26 @@ ExistingDataOnFlash(TCHAR *buffer)
   return NULL;
 }
 
-#endif /* _WIN32_WCE */
+#elif defined(WIN32)
+
+static const TCHAR *
+ModuleInFlash(HMODULE module, TCHAR *buffer)
+{
+  if (GetModuleFileName(module, buffer, MAX_PATH) <= 0)
+    return NULL;
+
+  // At least "C:\"
+  if (_tcslen(buffer) < 3 ||
+      buffer[1] != _T(':') ||
+      buffer[2] != _T('\\'))
+    return NULL;
+
+  // Trim the module path to the drive letter plus colon
+  buffer[2] = _T('\0');
+  return buffer;
+}
+
+#endif
 
 #ifdef ANDROID
 
@@ -371,7 +390,7 @@ FindDataPath()
     return _tcsdup(_T(ANDROID_SDCARD "/" XCSDATADIR));
   }
 
-#ifdef _WIN32_WCE
+#ifdef WIN32
   /* if XCSoar was started from a flash disk, put the XCSoarData onto
      it, too */
   {
@@ -383,9 +402,11 @@ FindDataPath()
         return _tcsdup(buffer);
     }
 
+#ifdef _WIN32_WCE
     /* if a flash disk with XCSoarData exists, use it */
     if (ExistingDataOnFlash(buffer) != NULL)
       return _tcsdup(buffer);
+#endif
   }
 #endif
 
