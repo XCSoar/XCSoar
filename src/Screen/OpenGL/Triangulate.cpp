@@ -448,21 +448,19 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
 
   if (!loop) {
     // add flat or triangle cap at beginning of line
-    RasterPoint p;
-    if (tcap) {
-      // add triangle cap coordinate to the output array
-      p.x = a->x - b->x;
-      p.y = a->y - b->y;
-      Normalize(&p, half_line_width);
+    RasterPoint ba;
+    ba.x = a->x - b->x;
+    ba.y = a->y - b->y;
+    Normalize(&ba, half_line_width);
 
-      AppendPoint(s, a->x + p.x, a->y + p.y);
-    }
+    if (tcap)
+      // add triangle cap coordinate to the output array
+      AppendPoint(s, a->x + ba.x, a->y + ba.y);
 
     // add flat cap coordinates to the output array
-    p.x = a->y - b->y;
-    p.y = b->x - a->x;
-    Normalize(&p, half_line_width);
-
+    RasterPoint p;
+    p.x = ba.y;
+    p.y = -ba.x;
     AppendPoint(s, a->x - p.x, a->y - p.y);
     AppendPoint(s, a->x + p.x, a->y + p.y);
   }
@@ -525,20 +523,19 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
     }
   } else {
     // add flat or triangle cap at end of line
-    RasterPoint p;
-    p.x = sign * (a->y - b->y);
-    p.y = sign * (b->x - a->x);
-    Normalize(&p, half_line_width);
+    RasterPoint ab;
+    ab.x = b->x - a->x;
+    ab.y = b->y - a->y;
+    Normalize(&ab, half_line_width);
 
+    RasterPoint p;
+    p.x = sign * -ab.y;
+    p.y = sign * ab.x;
     AppendPoint(s, b->x - p.x, b->y - p.y);
     AppendPoint(s, b->x + p.x, b->y + p.y);
 
-    if (tcap) {
-      p.x = b->x - a->x;
-      p.y = b->y - a->y;
-      Normalize(&p, half_line_width);
-      AppendPoint(s, b->x + p.x, b->y + p.y);
-    }
+    if (tcap)
+      AppendPoint(s, b->x + ab.x, b->y + ab.y);
   }
 
   return s - strip.begin();
