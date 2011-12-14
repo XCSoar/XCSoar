@@ -59,7 +59,7 @@ public:
       ::FindClose(handle);
   }
 
-  const TCHAR *next() {
+  const TCHAR *Next() {
     if (handle == INVALID_HANDLE_VALUE)
       return NULL;
 
