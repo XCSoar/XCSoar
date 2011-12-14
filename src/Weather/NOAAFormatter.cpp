@@ -27,6 +27,8 @@ Copyright_License {
 void
 NOAAFormatter::Format(NOAAStore::Item &station, tstring &output)
 {
+  output.reserve(2048);
+
   METAR metar;
   if (!station.GetMETAR(metar)) {
     output += _("No METAR available!");
