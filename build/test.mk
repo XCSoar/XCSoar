@@ -735,9 +735,13 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Weather/NOAAStore.cpp \
 	$(SRC)/Weather/METARParser.cpp \
 	$(SRC)/Engine/Atmosphere/Pressure.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Operation.cpp \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/Net/ToBuffer.cpp \
 	$(TEST_SRC_DIR)/ConsoleJobRunner.cpp \
 	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \

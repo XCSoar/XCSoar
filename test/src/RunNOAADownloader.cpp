@@ -26,9 +26,63 @@ Copyright_License {
 #include "Weather/NOAAStore.hpp"
 #include "Net/Init.hpp"
 #include "ConsoleJobRunner.hpp"
+#include "Units/Units.hpp"
+#include "Units/UnitsFormatter.hpp"
+#include "Util/Macros.hpp"
 
 #include <cstdio>
 
+static void
+DisplayParsedMETAR(const NOAAStore::Item &station)
+{
+  ParsedMETAR parsed;
+  if (!station.GetParsedMETAR(parsed)) {
+    printf("METAR parsing failed!\n");;
+    return;
+  }
+
+  printf("Parsed Data:\n");
+
+  if (parsed.location_available) {
+    TCHAR buffer[256];
+    Units::FormatGeoPoint(parsed.location, buffer, ARRAY_SIZE(buffer));
+    _tprintf(_T("Location: %s\n"), buffer);
+  }
+
+  if (parsed.qnh_available) {
+    TCHAR buffer[256];
+    Units::FormatUserPressure(parsed.qnh, buffer, ARRAY_SIZE(buffer));
+    _tprintf(_T("QNH: %s\n"), buffer);
+  }
+
+  if (parsed.wind_available) {
+    TCHAR buffer[256];
+    Units::FormatUserWindSpeed(parsed.wind.norm, buffer, ARRAY_SIZE(buffer));
+    _tprintf(_T("Wind: %.0f" DEG " %s\n"),
+             (double)parsed.wind.bearing.Degrees(), buffer);
+  }
+
+  if (parsed.temperatures_available) {
+    TCHAR buffer[256];
+    Units::FormatUserTemperature(parsed.temperature, buffer, ARRAY_SIZE(buffer));
+    _tprintf(_T("Temperature: %s\n"), buffer);
+    Units::FormatUserTemperature(parsed.dew_point, buffer, ARRAY_SIZE(buffer));
+    _tprintf(_T("Dew point: %s\n"), buffer);
+  }
+
+  if (parsed.visibility_available) {
+    TCHAR buffer[256];
+    if (parsed.visibility >= 9999)
+      _tcscpy(buffer, _T("unlimited"));
+    else {
+      fixed visibility(parsed.visibility);
+      Units::FormatUserDistance(visibility, buffer, ARRAY_SIZE(buffer));
+    }
+    _tprintf(_T("Visibility: %s\n"), buffer);
+  }
+
+  printf("\n");
+}
 
 static void
 DisplayMETAR(const NOAAStore::Item &station)
@@ -52,6 +106,8 @@ DisplayMETAR(const NOAAStore::Item &station)
 
   if (!metar.decoded.empty())
     _tprintf(_T("%s\n\n"), metar.decoded.c_str());
+
+  DisplayParsedMETAR(station);
 }
 
 static void
