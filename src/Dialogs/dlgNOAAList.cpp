@@ -88,8 +88,15 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   canvas.Select(code_font);
 
+  StaticString<256> title;
+  title = list[index].code;
+  ParsedMETAR parsed;
+  if (list[index].iterator->GetParsedMETAR(parsed) &&
+      parsed.name_available)
+    title.AppendFormat(_T(": %s"), parsed.name.c_str());
+
   canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + Layout::FastScale(2), rc, list[index].code);
+                      rc.top + Layout::FastScale(2), rc, title);
 
   canvas.Select(details_font);
 

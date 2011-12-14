@@ -68,6 +68,19 @@ Update()
 
   WndProperty* wp = (WndProperty*)wf->FindByName(_T("DetailsText"));
   wp->SetText(metar_taf.c_str());
+
+  StaticString<100> caption;
+  caption.Format(_T("%s: "), _("METAR and TAF"));
+
+  ParsedMETAR parsed;
+  if (!station_iterator->GetParsedMETAR(parsed) ||
+      !parsed.name_available)
+    caption += station_iterator->GetCodeT();
+  else
+    caption.AppendFormat(_T("%s (%s)"), parsed.name.c_str(),
+                         station_iterator->GetCodeT());
+
+  wf->SetCaption(caption);
 }
 
 static void
@@ -116,11 +129,6 @@ dlgNOAADetailsShowModal(SingleWindow &parent, NOAAStore::iterator iterator)
   wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
                   _T("IDR_XML_NOAA_DETAILS_L") : _T("IDR_XML_NOAA_DETAILS"));
   assert(wf != NULL);
-
-  StaticString<100> caption;
-  caption.Format(_T("%s: %s"), _("METAR and TAF"),
-                 station_iterator->GetCodeT());
-  wf->SetCaption(caption);
 
   Update();
 
