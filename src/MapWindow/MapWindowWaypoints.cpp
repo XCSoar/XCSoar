@@ -27,14 +27,8 @@ Copyright_License {
 void
 MapWindow::DrawWaypoints(Canvas &canvas)
 {
-  const SETTINGS_MAP &settings_map = SettingsMap();
-  WaypointRendererSettings settings = settings_map.waypoint;
-  if (!IsNearSelf())
-    // if pan mode, show full names
-    settings.display_text_type = DISPLAYNAME;
-
   waypoint_renderer.render(canvas, label_block,
-                            render_projection, settings,
+                            render_projection, SettingsMap().waypoint,
                             SettingsComputer().task,
                             task, route_planner);
 }
