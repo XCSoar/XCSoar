@@ -531,14 +531,24 @@ METARParser::ParseDecoded(const METAR::ContentString &decoded,
 
   const TCHAR *start = decoded.begin();
   const TCHAR *end = start + _tcslen(start);
+  const TCHAR *opening_brace = _tcschr(start, _T('('));
   const TCHAR *closing_brace = _tcschr(start, _T(')'));
   const TCHAR *line_break = _tcschr(start, _T('\n'));
 
-  if (line_break == NULL || line_break >= end)
+  if (line_break == NULL || line_break >= end ||
+      opening_brace == NULL || opening_brace >= line_break ||
+      closing_brace == NULL || closing_brace >= line_break)
     return;
 
-  if (closing_brace == NULL || closing_brace >= line_break)
-    return;
+  while (opening_brace >= start &&
+         (*opening_brace == _T('(') || *opening_brace == _T(' ')))
+    opening_brace--;
+
+  unsigned name_length = opening_brace - start + 1;
+  if (name_length > 0) {
+    parsed.name.set(start, name_length);
+    parsed.name_available = true;
+  }
 
   do
     closing_brace++;

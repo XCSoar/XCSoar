@@ -40,6 +40,7 @@ struct ParsedMETAR
   /** Hour and minute of the METAR release time in UTC */
   uint8_t hour, minute;
 
+  bool name_available;
   bool qnh_available;
   bool wind_available;
   bool temperatures_available;
@@ -48,6 +49,7 @@ struct ParsedMETAR
 
   bool cavok;
 
+  StaticString<128> name;
   AtmosphericPressure qnh;
   SpeedVector wind;
   fixed temperature, dew_point;
@@ -55,6 +57,7 @@ struct ParsedMETAR
   GeoPoint location;
 
   void Reset() {
+    name_available = false;
     qnh_available = false;
     wind_available = false;
     temperatures_available = false;

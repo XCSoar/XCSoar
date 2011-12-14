@@ -43,6 +43,9 @@ DisplayParsedMETAR(const NOAAStore::Item &station)
 
   printf("Parsed Data:\n");
 
+  if (parsed.name_available)
+    _tprintf(_T("Name: %s\n"), parsed.name.c_str());
+
   if (parsed.location_available) {
     TCHAR buffer[256];
     Units::FormatGeoPoint(parsed.location, buffer, ARRAY_SIZE(buffer));
