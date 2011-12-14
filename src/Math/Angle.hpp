@@ -168,11 +168,17 @@ public:
    */
   void ToDMS(int &dd, int &mm, int &ss, bool &is_positive) const;
 
+  /**
+   * Calculates the tangent of the Angle.
+   */
   gcc_pure
   inline fixed tan() const {
     return ::tan(Radians());
   }
 
+  /**
+   * Calculates the sine of the Angle.
+   */
   gcc_pure
   inline fixed sin() const {
     return ::sin(Radians());
@@ -183,16 +189,25 @@ public:
     return ::accurate_half_sin(Radians());
   }
 
+  /**
+   * Calculates the cosine of the Angle.
+   */
   gcc_pure
   inline fixed cos() const {
     return ::cos(Radians());
   }
 
+  /**
+   * Faster but more inaccurate version of sin()
+   */
   gcc_pure
   inline fixed fastsine() const {
     return (::fastsine(Native()));
   }
 
+  /**
+   * Faster but more inaccurate version of cos()
+   */
   gcc_pure
   inline fixed fastcosine() const {
     return (::fastcosine(Native()));
@@ -203,11 +218,19 @@ public:
     return (::invfastcosine(Native()));
   }
 
+  /**
+   * Returns the sine of the Angle as an integer
+   * in the range between -1024 and 1024.
+   */
   gcc_pure
   inline int ifastsine() const {
     return (::ifastsine(Native()));
   }
 
+  /**
+   * Returns the cosine of the Angle as an integer
+   * in the range between -1024 and 1024.
+   */
   gcc_pure
   inline int ifastcosine() const {
     return (::ifastcosine(Native()));
