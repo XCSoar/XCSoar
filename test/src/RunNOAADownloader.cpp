@@ -50,10 +50,10 @@ DisplayMETAR(const NOAAStore::Item &station)
          (unsigned)metar.last_update.second);
 
   if (!metar.content.empty())
-    _tprintf(_T("%s\n"), metar.content.c_str());
+    _tprintf(_T("%s\n\n"), metar.content.c_str());
 
   if (!metar.decoded.empty())
-    _tprintf(_T("%s\n"), metar.decoded.c_str());
+    _tprintf(_T("%s\n\n"), metar.decoded.c_str());
 }
 
 static void
@@ -73,9 +73,8 @@ DisplayTAF(const NOAAStore::Item &station)
          (unsigned)taf.last_update.minute,
          (unsigned)taf.last_update.second);
 
-  if (!taf.content.empty()) {
-    _tprintf(_T("%s\n"), taf.content.c_str());
-  }
+  if (!taf.content.empty())
+    _tprintf(_T("%s\n\n"), taf.content.c_str());
 }
 
 int
@@ -103,7 +102,7 @@ main(int argc, char *argv[])
 
   for (auto i = store.begin(), end = store.end(); i != end; ++i) {
     cout << "---" << endl;
-    cout << "Station " << i->code << ":" << endl;
+    cout << "Station " << i->code << ":" << endl << endl;
     DisplayMETAR(*i);
     DisplayTAF(*i);
   }
