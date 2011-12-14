@@ -56,6 +56,16 @@ NOAAStore::Item::GetMETAR(METAR &_metar) const
 }
 
 bool
+NOAAStore::Item::GetParsedMETAR(ParsedMETAR &_parsed_metar) const
+{
+  if (!parsed_metar_available)
+    return false;
+
+  _parsed_metar = parsed_metar;
+  return true;
+}
+
+bool
 NOAAStore::Item::GetTAF(TAF &_taf) const
 {
   if (!taf_available)

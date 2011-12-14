@@ -73,6 +73,15 @@ public:
     bool GetMETAR(METAR &metar) const;
 
     /**
+     * Transfers the parsed METAR into the given reference if available
+     *
+     * @param metar Destination ParsedMETAR struct
+     * @return True if the data was available,
+     * False if no parsed METAR data was available
+     */
+    bool GetParsedMETAR(ParsedMETAR &parsed_metar) const;
+
+    /**
      * Transfers the downloaded TAF into the given reference if available
      * @param index Index of the station in the array
      * @param metar Destination TAF struct
