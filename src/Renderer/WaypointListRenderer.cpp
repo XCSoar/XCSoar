@@ -34,6 +34,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "SettingsMap.hpp"
 #include "Util/StaticString.hpp"
+#include "Util/Macros.hpp"
 
 #include <cstdio>
 
@@ -113,8 +114,8 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Draw distance and arrival altitude
   StaticString<256> buffer;
   TCHAR dist[20], alt[20];
-  Units::FormatUserDistance(distance, dist, 20, true);
-  Units::FormatUserArrival(arrival_altitude, alt, 20, true);
+  Units::FormatUserDistance(distance, dist, ARRAY_SIZE(dist), true);
+  Units::FormatUserArrival(arrival_altitude, alt, ARRAY_SIZE(alt), true);
   buffer.Format(_T("%s: %s - %s: %s"), _("Distance"), dist,
                 _("Arrival Alt"), alt);
 
