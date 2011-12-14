@@ -35,6 +35,7 @@ Copyright_License {
 #include "Weather/METAR.hpp"
 #include "Weather/ParsedMETAR.hpp"
 #include "Weather/TAF.hpp"
+#include "Weather/NOAAFormatter.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Screen/Layout.hpp"
 
@@ -48,24 +49,7 @@ Update()
 {
   tstring metar_taf = _T("");
 
-  METAR metar;
-  if (!station_iterator->GetMETAR(metar)) {
-    metar_taf += _("No METAR available!");
-  } else {
-    metar_taf += metar.decoded.c_str();
-    metar_taf += _T("\n\n");
-    metar_taf += metar.content.c_str();
-  }
-
-  metar_taf += _T("\n\n");
-
-  TAF taf;
-  if (!station_iterator->GetTAF(taf)) {
-    metar_taf += _("No TAF available!");
-  } else {
-    metar_taf += taf.content.c_str();
-  }
-
+  NOAAFormatter::Format(*station_iterator, metar_taf);
   WndProperty* wp = (WndProperty*)wf->FindByName(_T("DetailsText"));
   wp->SetText(metar_taf.c_str());
 

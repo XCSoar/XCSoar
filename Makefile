@@ -732,6 +732,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Net/ToBuffer.cpp \
 	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Weather/METARParser.cpp \
+	$(SRC)/Weather/NOAAFormatter.cpp \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp
 
