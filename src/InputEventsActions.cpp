@@ -449,11 +449,10 @@ InputEvents::eventNearestMapItems(const TCHAR *misc)
 {
   if (_tcscmp(misc, _T("aircraft")) == 0)
     CommonInterface::main_window.GetMap()->ShowMapItems(
-        XCSoarInterface::main_window, CommonInterface::Basic().location);
+        CommonInterface::Basic().location);
 
   else if (_tcscmp(misc, _T("pan")) == 0)
     CommonInterface::main_window.GetMap()->ShowMapItems(
-        XCSoarInterface::main_window,
         CommonInterface::main_window.GetProjection().GetGeoLocation());
 }
 

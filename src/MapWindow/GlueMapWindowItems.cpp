@@ -24,7 +24,7 @@ Copyright_License {
 #include "GlueMapWindow.hpp"
 #include "Look/MapLook.hpp"
 #include "Dialogs/MapItemListDialog.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "UIGlobals.hpp"
 #include "Screen/Layout.hpp"
 #include "MapWindow/MapItemList.hpp"
 #include "MapWindow/MapItemListBuilder.hpp"
@@ -32,13 +32,7 @@ Copyright_License {
 #include "Computer/GlideComputer.hpp"
 
 bool
-GlueMapWindow::ShowMapItems(const GeoPoint &location)
-{
-  return ShowMapItems(*(SingleWindow *)get_root_owner(), location);
-}
-
-bool
-GlueMapWindow::ShowMapItems(SingleWindow &parent, const GeoPoint &location) const
+GlueMapWindow::ShowMapItems(const GeoPoint &location) const
 {
   fixed range = visible_projection.DistancePixelsToMeters(Layout::Scale(10));
 
@@ -90,7 +84,7 @@ GlueMapWindow::ShowMapItems(SingleWindow &parent, const GeoPoint &location) cons
   if (list.empty())
     return false;
 
-  ShowMapItemListDialog(parent, vector, list,
+  ShowMapItemListDialog(UIGlobals::GetMainWindow(), vector, list,
                         elevation, look, traffic_look, SettingsMap(),
                         glide_computer != NULL
                         ? &glide_computer->GetAirspaceWarnings() : NULL);

@@ -179,10 +179,7 @@ public:
    */
   int isInAnyActiveSector(const GeoPoint &gp);
 
-  bool ShowMapItems(SingleWindow &parent, const GeoPoint &location) const;
-
-private:
-  bool ShowMapItems(const GeoPoint &location);
+  bool ShowMapItems(const GeoPoint &location) const;
 
 protected:
   // events
