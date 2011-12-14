@@ -87,7 +87,9 @@ Trace::update_delta(TraceDelta &td)
   td.Replace(temp_td);
 
   // erase old one
-  delta_list.erase(td.delta_list_iterator);
+  auto i = delta_list.find(td);
+  assert(i != delta_list.end());
+  delta_list.erase(i);
 
   // insert new in sorted position
   temp_td.update(previous.point, next.point);
@@ -159,7 +161,11 @@ Trace::erase_earlier_than(const unsigned p_time)
   do {
     TraceDelta &td = GetFront();
     td.Remove();
-    delta_list.erase(td.delta_list_iterator);
+
+    auto i = delta_list.find(td);
+    assert(i != delta_list.end());
+    delta_list.erase(i);
+
     --cached_size;
   } while (!empty() && GetFront().point.time < p_time);
 
@@ -178,7 +184,6 @@ Trace::insert(const TraceDelta &td) {
   /* std::set doesn't allow modification of an item, but we
      override that */
   TraceDelta &new_td = const_cast<TraceDelta &>(*it);
-  new_td.delta_list_iterator = it;
   return new_td;
 }
 
@@ -191,8 +196,10 @@ Trace::erase_start(TraceDelta &td_start) {
   temp_td.SetDisconnected();
   td_start.Replace(temp_td);
 
-  TraceDelta::iterator i_start = td_start.delta_list_iterator;
+  auto i_start = delta_list.find(td_start);
+  assert(i_start != delta_list.end());
   delta_list.erase(i_start);
+
   temp_td.elim_distance = null_delta;
   temp_td.elim_time = null_time;
 

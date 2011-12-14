@@ -102,8 +102,6 @@ class Trace : private NonCopyable
     unsigned elim_distance;
     unsigned delta_distance;
 
-    iterator delta_list_iterator;
-
     TraceDelta(const TracePoint &p)
       :point(p),
        elim_time(null_time), elim_distance(null_delta),
