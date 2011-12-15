@@ -394,6 +394,14 @@ public:
                   const Bitmap &src,
                   PixelScalar src_x, PixelScalar src_y,
                   UPixelScalar src_width, UPixelScalar src_height);
+
+  /**
+   * Copy pixels from this object to a texture.  The texture must be
+   * initialised already.  Note that the texture will be flipped
+   * vertically, and to draw it back to the screen, you need
+   * GLTexture::DrawFlipped().
+   */
+  void CopyToTexture(GLTexture &texture, PixelRect src_rc) const;
 };
 
 #endif

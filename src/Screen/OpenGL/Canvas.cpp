@@ -627,6 +627,24 @@ Canvas::copy_not(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
+Canvas::CopyToTexture(GLTexture &texture, PixelRect src_rc) const
+{
+#ifdef HAVE_GLES
+  assert(x_offset == OpenGL::translate_x);
+  assert(y_offset == OpenGL::translate_y);
+#endif
+
+  GLEnable scope(GL_TEXTURE_2D);
+  texture.Bind();
+  glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
+                      OpenGL::translate_x + src_rc.left,
+                      OpenGL::screen_height - OpenGL::translate_y - src_rc.bottom,
+                      src_rc.right - src_rc.left,
+                      src_rc.bottom - src_rc.top);
+
+}
+
+void
 Canvas::DrawRoundRectangle(PixelScalar left, PixelScalar top,
                         PixelScalar right, PixelScalar bottom,
                         UPixelScalar ellipse_width,
