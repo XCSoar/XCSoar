@@ -157,12 +157,12 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
    * W ShortName A 41.234234N 7.234424W 27-MAR-62 00:00:00 0 Comments
    */
 
-  // Skip first line
-  if (linenum == 0)
+  // Skip projection and file encoding information
+  if (*line == _T('G') || *line == _T('B'))
     return true;
 
   // Check for format: UTM or LatLon
-  if (linenum == 1 && _tcsstr(line, _T("U  0")) == line) {
+  if (*line == _T('U') && _tcsstr(line, _T("U  0")) == line) {
     is_utm = true;
     return true;
   }
@@ -234,6 +234,11 @@ WaypointReaderCompeGPS::VerifyFormat(TLineReader &reader) const
   TCHAR* line = reader.read();
   if (line == NULL)
     return false;
+
+  // Ignore optional line with encoding information
+  if (line[0] == _T('B') && line[1] == _T(' '))
+    if ((line = reader.read()) == NULL)
+      return false;
 
   return (_tcsstr(line, _T("G  WGS 84")) == line);
 }
