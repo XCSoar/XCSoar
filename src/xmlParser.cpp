@@ -242,19 +242,14 @@ fromXMLString(const TCHAR *ss, size_t lo)
   return result;
 }
 
-/**
- * !!!! WARNING strange convention&:
- *
- * @return 0 if equals, 1 if different
- */
-static char
+static bool
 myTagCompare(const TCHAR *cclose, const TCHAR *copen)
 {
   if (!cclose)
-    return 1;
+    return false;
   size_t l = _tcslen(cclose);
   if (_tcsnicmp(cclose, copen, l) != 0)
-    return 1;
+    return false;
 
   const TCHAR c = copen[l];
   if ((c == _T('\n')) ||
@@ -265,9 +260,9 @@ myTagCompare(const TCHAR *cclose, const TCHAR *copen)
       (c == _T('<')) ||
       (c == _T('>')) ||
       (c == _T('=')))
-    return 0;
+    return true;
 
-  return 1;
+  return false;
 }
 
 /**
@@ -701,7 +696,7 @@ XMLNode::ParseXMLElement(XML *pXML)
         // element then we need to pass this back to the caller..
 
 #ifdef APPROXIMATE_PARSING
-        if (d->lpszName && myTagCompare(d->lpszName, token.pStr) == 0) {
+        if (d->lpszName && myTagCompare(d->lpszName, token.pStr)) {
           // Indicate to the caller that it needs to create a
           // new element.
           pXML->lpNewElement = token.pStr;
@@ -741,7 +736,7 @@ XMLNode::ParseXMLElement(XML *pXML)
               // element then we only need to unwind
               // once more...
 
-              if (myTagCompare(d->lpszName, pXML->lpEndTag) == 0) {
+              if (myTagCompare(d->lpszName, pXML->lpEndTag)) {
                 pXML->cbEndTag = 0;
               }
 
@@ -755,7 +750,7 @@ XMLNode::ParseXMLElement(XML *pXML)
               // then we need to return to the caller
               // and let it process the element.
 
-              if (myTagCompare(d->lpszName, pXML->lpNewElement) == 0)
+              if (myTagCompare(d->lpszName, pXML->lpNewElement))
                 return true;
 
               // Add the new element and recurse
@@ -808,7 +803,7 @@ XMLNode::ParseXMLElement(XML *pXML)
         // We need to return to the previous caller.  If the name
         // of the tag cannot be found we need to keep returning to
         // caller until we find a match
-        if (myTagCompare(d->lpszName, lpszTemp) != 0) {
+        if (!myTagCompare(d->lpszName, lpszTemp)) {
           pXML->lpEndTag = lpszTemp;
           pXML->cbEndTag = cbTemp;
         }
