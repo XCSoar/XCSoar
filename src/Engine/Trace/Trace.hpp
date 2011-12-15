@@ -28,6 +28,7 @@ Copyright_License {
 #include "Util/SliceAllocator.hpp"
 #include "Util/ListHead.hpp"
 #include "Util/CastIterator.hpp"
+#include "Util/Serial.hpp"
 #include "Navigation/TracePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Compiler.h"
@@ -199,6 +200,8 @@ class Trace : private NonCopyable
   unsigned m_average_delta_time;
   unsigned m_average_delta_distance;
 
+  Serial append_serial, modify_serial;
+
 public:
   /**
    * Constructor.  Task projection is updated after first call to append().
@@ -356,6 +359,22 @@ private:
     assert(!empty());
 
     return *static_cast<TraceDelta *>(chronological_list.GetNext());
+  }
+
+  /**
+   * Returns a #Serial that gets incremented when data gets appended
+   * to the #Trace.
+   */
+  const Serial &GetAppendSerial() const {
+    return append_serial;
+  }
+
+  /**
+   * Returns a #Serial that gets incremented when iterators get
+   * invalidated (e.g. when the #Trace gets cleared or optimised).
+   */
+  const Serial &GetModifySerial() const {
+    return modify_serial;
   }
 
   gcc_pure

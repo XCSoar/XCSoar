@@ -54,6 +54,8 @@ Trace::clear()
 
   assert(cached_size == delta_list.size());
   assert(cached_size == chronological_list.Count());
+
+  ++modify_serial;
 }
 
 unsigned
@@ -237,6 +239,8 @@ Trace::append(const AircraftState& state)
 
   if (!chronological_list.IsFirst(td))
     update_delta(td.GetPrevious());
+
+  ++append_serial;
 }
 
 unsigned
@@ -320,6 +324,8 @@ Trace::optimise_if_old()
 
   m_average_delta_distance = calc_average_delta_distance(no_thin_time);
   m_average_delta_time = calc_average_delta_time(no_thin_time);
+
+  ++modify_serial;
 
   return true;
 }
