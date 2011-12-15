@@ -36,7 +36,7 @@ Copyright_License {
 #include "Screen/StopWatch.hpp"
 #include "MapWindowBlackboard.hpp"
 #include "NMEA/Derived.hpp"
-#include "BackgroundDrawHelper.hpp"
+#include "Renderer/BackgroundRenderer.hpp"
 #include "Renderer/WaypointRenderer.hpp"
 #include "Renderer/TrailRenderer.hpp"
 #include "Compiler.h"
@@ -126,7 +126,7 @@ protected:
 
   const TrafficLook &traffic_look;
 
-  BackgroundDrawHelper background;
+  BackgroundRenderer background;
   WaypointRenderer waypoint_renderer;
 
   AirspaceRenderer airspace_renderer;

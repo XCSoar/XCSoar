@@ -1300,6 +1300,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceWarningConfig.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
+	$(SRC)/Renderer/BackgroundRenderer.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
@@ -1307,7 +1308,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Projection/CompareProjection.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
-	$(SRC)/BackgroundDrawHelper.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \
 	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \

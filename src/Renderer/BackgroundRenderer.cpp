@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "BackgroundDrawHelper.hpp"
+#include "BackgroundRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Terrain/WeatherTerrainRenderer.hpp"
@@ -35,7 +35,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
-BackgroundDrawHelper::BackgroundDrawHelper():
+BackgroundRenderer::BackgroundRenderer():
   terrain(NULL),
   weather(NULL),
   renderer(NULL),
@@ -43,13 +43,13 @@ BackgroundDrawHelper::BackgroundDrawHelper():
 {
 }
 
-BackgroundDrawHelper::~BackgroundDrawHelper()
+BackgroundRenderer::~BackgroundRenderer()
 {
   Reset();
 }
 
 void
-BackgroundDrawHelper::Reset()
+BackgroundRenderer::Reset()
 {
   delete renderer;
   renderer = NULL;
@@ -57,23 +57,23 @@ BackgroundDrawHelper::Reset()
 
 
 void 
-BackgroundDrawHelper::SetTerrain(const RasterTerrain *_terrain)
+BackgroundRenderer::SetTerrain(const RasterTerrain *_terrain)
 {
   terrain = _terrain;
   Reset();
 }
 
 void 
-BackgroundDrawHelper::SetWeather(const RasterWeather *_weather)
+BackgroundRenderer::SetWeather(const RasterWeather *_weather)
 {
   weather = _weather;
   Reset();
 }
 
 void 
-BackgroundDrawHelper::Draw(Canvas& canvas,
-                           const WindowProjection& proj,
-                           const TerrainRendererSettings &terrain_settings)
+BackgroundRenderer::Draw(Canvas& canvas,
+                         const WindowProjection& proj,
+                         const TerrainRendererSettings &terrain_settings)
 {
   if (terrain == NULL) {
     // terrain may have been re-set, so may need new renderer
@@ -103,10 +103,10 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
 }
 
 void
-BackgroundDrawHelper::SetSunAngle(const WindowProjection& projection,
-                                  const TerrainRendererSettings &settings,
-                                  const NMEAInfo &basic,
-                                  const DerivedInfo &calculated)
+BackgroundRenderer::SetSunAngle(const WindowProjection& projection,
+                                const TerrainRendererSettings &settings,
+                                const NMEAInfo &basic,
+                                const DerivedInfo &calculated)
 {
   if (settings.slope_shading == sstWind && calculated.wind_available)
     SetSunFromWind(projection, calculated.wind);
@@ -119,7 +119,7 @@ BackgroundDrawHelper::SetSunAngle(const WindowProjection& projection,
 }
 
 void
-BackgroundDrawHelper::SetSunFromWind(const WindowProjection& projection,
+BackgroundRenderer::SetSunFromWind(const WindowProjection& projection,
                                     const SpeedVector& wind)
 {
   // draw sun from constant angle if very low wind speed
@@ -130,15 +130,15 @@ BackgroundDrawHelper::SetSunFromWind(const WindowProjection& projection,
 }
 
 void
-BackgroundDrawHelper::SetSunAngle(const WindowProjection& projection,
-                                    const Angle& angle)
+BackgroundRenderer::SetSunAngle(const WindowProjection& projection,
+                                const Angle& angle)
 {
   sun_azimuth = angle - projection.GetScreenAngle();
 }
 
 void
-BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas, LabelBlock &block,
-                                     const TCHAR *buffer, RasterPoint pt)
+BackgroundRenderer::DrawSpotHeight(Canvas &canvas, LabelBlock &block,
+                                   const TCHAR *buffer, RasterPoint pt)
 {
   if (string_is_empty(buffer))
     return;
@@ -160,8 +160,7 @@ BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas, LabelBlock &block,
 }
 
 bool
-BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas, 
-                                      LabelBlock& block)
+BackgroundRenderer::DrawSpotHeights(Canvas &canvas, LabelBlock& block)
 {
   if (weather == NULL || weather->GetParameter() == 0 || renderer == NULL)
     return false;

@@ -24,7 +24,7 @@
 #include "Gauge/TaskView.hpp"
 #include "Screen/Canvas.hpp"
 #include "Projection/ChartProjection.hpp"
-#include "BackgroundDrawHelper.hpp"
+#include "Renderer/BackgroundRenderer.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/RenderTaskPoint.hpp"
 #include "Renderer/TaskRenderer.hpp"
@@ -40,7 +40,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
           const AirspaceLook &airspace_look,
           const RasterTerrain *terrain)
 {
-  BackgroundDrawHelper background;
+  BackgroundRenderer background;
   background.SetTerrain(terrain);
   background.Draw(canvas, projection, settings_map.terrain);
 

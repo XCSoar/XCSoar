@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef BACKGROUND_DRAW_HELPER_HPP
-#define BACKGROUND_DRAW_HELPER_HPP
+#ifndef XCSOAR_BACKGROUND_RENDERER_HPP
+#define XCSOAR_BACKGROUND_RENDERER_HPP
 
 #include "Screen/Point.hpp"
 
@@ -44,16 +44,15 @@ struct DerivedInfo;
 /**
  * Utility class to draw terrain, topography (not implemented yet)
  */
-class BackgroundDrawHelper 
-{
+class BackgroundRenderer {
   const RasterTerrain *terrain;
   const RasterWeather *weather;
   TerrainRenderer *renderer;
   Angle sun_azimuth;
 
 public:
-  BackgroundDrawHelper();
-  ~BackgroundDrawHelper();
+  BackgroundRenderer();
+  ~BackgroundRenderer();
 
   void Draw(Canvas& canvas,
             const WindowProjection& proj,

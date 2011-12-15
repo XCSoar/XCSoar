@@ -428,10 +428,10 @@ XCSOAR_SOURCES := \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/MapWindow/MapDrawHelper.cpp \
-	$(SRC)/BackgroundDrawHelper.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Projection/CompareProjection.cpp \
+	$(SRC)/Renderer/BackgroundRenderer.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/RenderTaskPoint.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \

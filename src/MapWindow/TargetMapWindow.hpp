@@ -29,7 +29,7 @@ Copyright_License {
 #include "Screen/BufferWindow.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "MapWindowBlackboard.hpp"
-#include "BackgroundDrawHelper.hpp"
+#include "Renderer/BackgroundRenderer.hpp"
 #include "Renderer/WaypointRenderer.hpp"
 #include "Renderer/TrailRenderer.hpp"
 #include "Compiler.h"
@@ -64,7 +64,7 @@ class TargetMapWindow : public BufferWindow {
 
   LabelBlock label_block;
 
-  BackgroundDrawHelper background;
+  BackgroundRenderer background;
   TopographyRenderer *topography_renderer;
 
   AirspaceRenderer airspace_renderer;
