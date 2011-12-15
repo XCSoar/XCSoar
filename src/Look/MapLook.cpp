@@ -38,7 +38,7 @@ MapLook::Initialise(const struct SETTINGS_MAP &settings)
   wind.Initialise();
 
 #ifdef HAVE_HATCHED_BRUSH
-  above_terrain_bitmap.load(IDB_ABOVETERRAIN);
+  above_terrain_bitmap.Load(IDB_ABOVETERRAIN);
   above_terrain_brush.Set(above_terrain_bitmap);
 #endif
 

@@ -307,7 +307,7 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
     canvas.DrawFilledRectangle(rc, canvas.GetBackgroundColor());
   }
   if (bmp != NULL) {
-    const PixelSize bitmap_size = bmp->get_size();
+    const PixelSize bitmap_size = bmp->GetSize();
     const int offsetx = (rc.right - rc.left - bitmap_size.cx / 2) / 2;
     const int offsety = (rc.bottom - rc.top - bitmap_size.cy) / 2;
 

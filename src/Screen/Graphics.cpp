@@ -75,15 +75,15 @@ Graphics::Initialise()
   hFinalGlide.Load(IDB_FINALGLIDE, IDB_FINALGLIDE_HD, false);
   hAbort.Load(IDB_ABORT, IDB_ABORT_HD, false);
 
-  hBmpTabTask.load((Layout::scale > 1) ? IDB_TASK_HD : IDB_TASK);
-  hBmpTabWrench.load((Layout::scale > 1) ? IDB_WRENCH_HD : IDB_WRENCH);
-  hBmpTabSettings.load((Layout::scale > 1) ? IDB_SETTINGS_HD : IDB_SETTINGS);
-  hBmpTabCalculator.load((Layout::scale > 1) ? IDB_CALCULATOR_HD : IDB_CALCULATOR);
+  hBmpTabTask.Load((Layout::scale > 1) ? IDB_TASK_HD : IDB_TASK);
+  hBmpTabWrench.Load((Layout::scale > 1) ? IDB_WRENCH_HD : IDB_WRENCH);
+  hBmpTabSettings.Load((Layout::scale > 1) ? IDB_SETTINGS_HD : IDB_SETTINGS);
+  hBmpTabCalculator.Load((Layout::scale > 1) ? IDB_CALCULATOR_HD : IDB_CALCULATOR);
 
-  hBmpTabFlight.load((Layout::scale > 1) ? IDB_GLOBE_HD : IDB_GLOBE);
-  hBmpTabSystem.load((Layout::scale > 1) ? IDB_DEVICE_HD : IDB_DEVICE);
-  hBmpTabRules.load((Layout::scale > 1) ? IDB_RULES_HD : IDB_RULES);
-  hBmpTabTimes.load((Layout::scale > 1) ? IDB_CLOCK_HD : IDB_CLOCK);
+  hBmpTabFlight.Load((Layout::scale > 1) ? IDB_GLOBE_HD : IDB_GLOBE);
+  hBmpTabSystem.Load((Layout::scale > 1) ? IDB_DEVICE_HD : IDB_DEVICE);
+  hBmpTabRules.Load((Layout::scale > 1) ? IDB_RULES_HD : IDB_RULES);
+  hBmpTabTimes.Load((Layout::scale > 1) ? IDB_CLOCK_HD : IDB_CLOCK);
 
   hbGround.Set(GroundColor);
 }
@@ -103,15 +103,15 @@ Graphics::Deinitialise()
   hFinalGlide.Reset();
   hAbort.Reset();
 
-  hBmpTabTask.reset();
-  hBmpTabWrench.reset();
-  hBmpTabSettings.reset();
-  hBmpTabCalculator.reset();
+  hBmpTabTask.Reset();
+  hBmpTabWrench.Reset();
+  hBmpTabSettings.Reset();
+  hBmpTabCalculator.Reset();
 
-  hBmpTabFlight.reset();
-  hBmpTabSystem.reset();
-  hBmpTabRules.reset();
-  hBmpTabTimes.reset();
+  hBmpTabFlight.Reset();
+  hBmpTabSystem.Reset();
+  hBmpTabRules.Reset();
+  hBmpTabTimes.Reset();
 
   hbGround.Reset();
 }

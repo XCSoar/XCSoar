@@ -36,11 +36,11 @@ MaskedIcon::Load(unsigned id, unsigned big_id, bool center)
 {
   if (Layout::ScaleEnabled()) {
     if (big_id > 0)
-      bitmap.load(big_id);
+      bitmap.Load(big_id);
     else
-      bitmap.load_stretch(id, Layout::FastScale(1));
+      bitmap.LoadStretch(id, Layout::FastScale(1));
   } else
-    bitmap.load(id);
+    bitmap.Load(id);
 
 #ifdef ENABLE_OPENGL
   /* postpone CalculateLayout() call, because the OpenGL surface may
@@ -57,7 +57,7 @@ MaskedIcon::Load(unsigned id, unsigned big_id, bool center)
 void
 MaskedIcon::CalculateLayout(bool center)
 {
-  size = bitmap.get_size();
+  size = bitmap.GetSize();
   /* left half is mask, right half is icon */
   size.cx /= 2;
 
@@ -80,7 +80,7 @@ MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
     /* hack: do the postponed layout calcuation now */
     const_cast<MaskedIcon *>(this)->CalculateLayout((bool)size.cy);
 
-  GLTexture &texture = *bitmap.native();
+  GLTexture &texture = *bitmap.GetNative();
 
   GLEnable scope(GL_TEXTURE_2D);
   texture.Bind();

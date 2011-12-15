@@ -527,13 +527,13 @@ Canvas::copy(PixelScalar dest_x, PixelScalar dest_y,
 void
 Canvas::copy(const Bitmap &src)
 {
-  copy(0, 0, src.get_width(), src.get_height(), src, 0, 0);
+  copy(0, 0, src.GetWidth(), src.GetHeight(), src, 0, 0);
 }
 
 void
 Canvas::stretch_transparent(const Bitmap &src, Color key)
 {
-  assert(src.defined());
+  assert(src.IsDefined());
 
   // XXX
   stretch(src);
@@ -542,7 +542,7 @@ Canvas::stretch_transparent(const Bitmap &src, Color key)
 void
 Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
 {
-  assert(src.defined());
+  assert(src.IsDefined());
 
   // XXX
   GLLogicOp invert(GL_COPY_INVERTED);
@@ -559,11 +559,11 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
   assert(x_offset == OpenGL::translate_x);
   assert(y_offset == OpenGL::translate_y);
 #endif
-  assert(src.defined());
+  assert(src.IsDefined());
 
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
-  GLTexture &texture = *src.native();
+  GLTexture &texture = *src.GetNative();
   GLEnable scope(GL_TEXTURE_2D);
   texture.Bind();
   texture.Draw(dest_x, dest_y, dest_width, dest_height,
@@ -579,15 +579,15 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
   assert(x_offset == OpenGL::translate_x);
   assert(y_offset == OpenGL::translate_y);
 #endif
-  assert(src.defined());
+  assert(src.IsDefined());
 
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
-  GLTexture &texture = *src.native();
+  GLTexture &texture = *src.GetNative();
   GLEnable scope(GL_TEXTURE_2D);
   texture.Bind();
   texture.Draw(dest_x, dest_y, dest_width, dest_height,
-               0, 0, src.get_width(), src.get_height());
+               0, 0, src.GetWidth(), src.GetHeight());
 }
 
 void
@@ -595,7 +595,7 @@ Canvas::copy_or(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
 {
-  assert(src.defined());
+  assert(src.IsDefined());
 
   GLLogicOp logic_op(GL_OR);
   copy(dest_x, dest_y, dest_width, dest_height,
@@ -607,7 +607,7 @@ Canvas::copy_and(PixelScalar dest_x, PixelScalar dest_y,
                  UPixelScalar dest_width, UPixelScalar dest_height,
                  const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
 {
-  assert(src.defined());
+  assert(src.IsDefined());
 
   GLLogicOp logic_op(GL_AND);
   copy(dest_x, dest_y, dest_width, dest_height,
@@ -619,7 +619,7 @@ Canvas::copy_not(PixelScalar dest_x, PixelScalar dest_y,
                  UPixelScalar dest_width, UPixelScalar dest_height,
                  const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
 {
-  assert(src.defined());
+  assert(src.IsDefined());
 
   GLLogicOp logic_op(GL_COPY_INVERTED);
   copy(dest_x, dest_y, dest_width, dest_height,

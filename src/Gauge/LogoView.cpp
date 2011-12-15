@@ -66,10 +66,10 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
       big_title : title;
 
   // Determine logo size
-  PixelSize logo_size = bitmap_logo.get_size();
+  PixelSize logo_size = bitmap_logo.GetSize();
 
   // Determine title image size
-  PixelSize title_size = bitmap_title.get_size();
+  PixelSize title_size = bitmap_title.GetSize();
 
   PixelScalar logox, logoy, titlex, titley;
 

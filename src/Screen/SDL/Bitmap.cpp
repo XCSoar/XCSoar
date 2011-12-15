@@ -42,7 +42,7 @@ Copyright_License {
 #include <assert.h>
 
 bool
-Bitmap::load(SDL_Surface *_surface)
+Bitmap::Load(SDL_Surface *_surface)
 {
   assert(IsScreenInitialized());
   assert(_surface != NULL);
@@ -74,16 +74,16 @@ Bitmap::Reload()
 
   /* XXX this is no real implementation; we currently support OpenGL
      surface reinitialisation only on Android */
-  return load(id);
+  return Load(id);
 }
 #endif
 
 bool
-Bitmap::load(unsigned id)
+Bitmap::Load(unsigned id)
 {
   assert(IsScreenInitialized());
 
-  reset();
+  Reset();
 
   ResourceLoader::Data data = ResourceLoader::Load(id);
   if (data.first == NULL)
@@ -125,7 +125,7 @@ Bitmap::load(unsigned id)
   if (original == NULL)
     return false;
 
-  load(original);
+  Load(original);
 
 #ifdef WIN32
   free(header);
@@ -135,29 +135,29 @@ Bitmap::load(unsigned id)
 }
 
 bool
-Bitmap::load_stretch(unsigned id, unsigned zoom)
+Bitmap::LoadStretch(unsigned id, unsigned zoom)
 {
   assert(zoom > 0);
 
   // XXX
-  return load(id);
+  return Load(id);
 }
 
 bool
-Bitmap::load_file(const TCHAR *path)
+Bitmap::LoadFile(const TCHAR *path)
 {
   NarrowPathName narrow_path(path);
   SDL_Surface *original = ::SDL_LoadBMP(narrow_path);
-  return original != NULL && load(original);
+  return original != NULL && Load(original);
 }
 
 void
-Bitmap::reset()
+Bitmap::Reset()
 {
-  assert(!defined() || IsScreenInitialized());
+  assert(!IsDefined() || IsScreenInitialized());
 
 #ifdef ENABLE_OPENGL
-  assert(!defined() || pthread_equal(pthread_self(), OpenGL::thread));
+  assert(!IsDefined() || pthread_equal(pthread_self(), OpenGL::thread));
 
   delete texture;
   texture = NULL;
@@ -170,9 +170,9 @@ Bitmap::reset()
 }
 
 const PixelSize
-Bitmap::get_size() const
+Bitmap::GetSize() const
 {
-  assert(defined());
+  assert(IsDefined());
 
 #ifdef ENABLE_OPENGL
   const PixelSize size = { PixelScalar(width), PixelScalar(height) };

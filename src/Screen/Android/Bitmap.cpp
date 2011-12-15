@@ -81,11 +81,11 @@ Bitmap::Reload()
 }
 
 bool
-Bitmap::load(unsigned _id)
+Bitmap::Load(unsigned _id)
 {
   assert(_id != 0);
 
-  reset();
+  Reset();
 
   id = _id;
   AddSurfaceListener(*this);
@@ -97,20 +97,20 @@ Bitmap::load(unsigned _id)
 }
 
 bool
-Bitmap::load_stretch(unsigned id, unsigned zoom)
+Bitmap::LoadStretch(unsigned id, unsigned zoom)
 {
   assert(zoom > 0);
 
   // XXX
-  return load(id);
+  return Load(id);
 }
 
 bool
-Bitmap::load_file(const TCHAR *path)
+Bitmap::LoadFile(const TCHAR *path)
 {
   assert(path != NULL && *path != _T('\0'));
 
-  reset();
+  Reset();
 
   pathName = path;
   AddSurfaceListener(*this);
@@ -122,7 +122,7 @@ Bitmap::load_file(const TCHAR *path)
 }
 
 void
-Bitmap::reset()
+Bitmap::Reset()
 {
   if (id != 0 || !pathName.empty()) {
     RemoveSurfaceListener(*this);
@@ -135,9 +135,9 @@ Bitmap::reset()
 }
 
 const PixelSize
-Bitmap::get_size() const
+Bitmap::GetSize() const
 {
-  assert(defined());
+  assert(IsDefined());
 
   const PixelSize size = { width, height };
   return size;

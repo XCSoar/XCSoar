@@ -54,11 +54,11 @@ VarioLook::Initialise(bool _inverse, bool _colors,
   thick_sink_pen.Set(Layout::Scale(5), sink_color);
   thick_lift_pen.Set(Layout::Scale(5), lift_color);
 
-  background_bitmap.load(Units::GetUserVerticalSpeedUnit() == unKnots
+  background_bitmap.Load(Units::GetUserVerticalSpeedUnit() == unKnots
                          ? IDB_VARIOSCALEC : IDB_VARIOSCALEA);
   background_x = inverse ? 58 : 0;
 
-  climb_bitmap.load(inverse ? IDB_CLIMBSMALLINV : IDB_CLIMBSMALL);
+  climb_bitmap.Load(inverse ? IDB_CLIMBSMALLINV : IDB_CLIMBSMALL);
 
   text_font = &_text_font;
   value_font = &_value_font;

@@ -72,26 +72,26 @@ public:
 #ifdef ENABLE_OPENGL
   Bitmap():id(0), texture(NULL) {}
   explicit Bitmap(unsigned id):texture(NULL) {
-    load(id);
+    Load(id);
   }
 #elif defined(ENABLE_SDL)
   Bitmap():surface(NULL) {}
   explicit Bitmap(unsigned id):surface(NULL) {
-    load(id);
+    Load(id);
   }
 #else
   Bitmap():bitmap(NULL) {}
   explicit Bitmap(unsigned id):bitmap(NULL) {
-    load(id);
+    Load(id);
   }
 #endif
 
   ~Bitmap() {
-    reset();
+    Reset();
   }
 
 public:
-  bool defined() const {
+  bool IsDefined() const {
 #ifdef ENABLE_OPENGL
     return texture != NULL;
 #elif defined(ENABLE_SDL)
@@ -102,45 +102,45 @@ public:
   }
 
 #ifdef ENABLE_OPENGL
-  UPixelScalar get_width() const {
+  UPixelScalar GetWidth() const {
     return width;
   }
 
-  UPixelScalar get_height() const {
+  UPixelScalar GetHeight() const {
     return height;
   }
 #endif
 
 #ifndef ANDROID
 #ifdef ENABLE_SDL
-  bool load(SDL_Surface *_surface);
+  bool Load(SDL_Surface *_surface);
 #endif
 #endif
 
-  bool load(unsigned id);
+  bool Load(unsigned id);
 
   /**
    * Load a bitmap and stretch it by the specified zoom factor.
    */
-  bool load_stretch(unsigned id, unsigned zoom);
+  bool LoadStretch(unsigned id, unsigned zoom);
 
-  bool load_file(const TCHAR *path);
+  bool LoadFile(const TCHAR *path);
 
-  void reset();
+  void Reset();
 
-  const PixelSize get_size() const;
+  const PixelSize GetSize() const;
 
 #ifdef ENABLE_OPENGL
-  GLTexture *native() const {
+  GLTexture *GetNative() const {
     return texture;
   }
 #elif defined(ENABLE_SDL)
-  SDL_Surface* native() const {
+  SDL_Surface* GetNative() const {
     return surface;
   }
 #else
-  HBITMAP native() const {
-    assert(defined());
+  HBITMAP GetNative() const {
+    assert(IsDefined());
 
     return bitmap;
   }

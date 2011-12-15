@@ -42,7 +42,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   UPixelScalar width = rc.right - rc.left, height = rc.bottom - rc.top;
 
   // Load progress bar background
-  bitmap_progress_border.load(IDB_PROGRESSBORDER);
+  bitmap_progress_border.Load(IDB_PROGRESSBORDER);
 
   // Determine text height
 #ifndef USE_GDI

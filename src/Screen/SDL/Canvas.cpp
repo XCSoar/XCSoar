@@ -417,13 +417,13 @@ Canvas::copy(PixelScalar dest_x, PixelScalar dest_y,
              const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
 {
   copy(dest_x, dest_y, dest_width, dest_height,
-       src.native(), src_x, src_y);
+       src.GetNative(), src_x, src_y);
 }
 
 void
 Canvas::copy(const Bitmap &src)
 {
-  SDL_Surface *surface = src.native();
+  SDL_Surface *surface = src.GetNative();
   copy(0, 0, surface->w, surface->h, surface, 0, 0);
 }
 
@@ -450,9 +450,9 @@ Canvas::copy_transparent_black(const Canvas &src)
 void
 Canvas::stretch_transparent(const Bitmap &src, Color key)
 {
-  assert(src.defined());
+  assert(src.IsDefined());
 
-  SDL_Surface *surface = src.native();
+  SDL_Surface *surface = src.GetNative();
 
   ::SDL_SetColorKey(surface, SDL_SRCCOLORKEY,
                     ::SDL_MapRGB(surface->format, key.value.r,
@@ -464,9 +464,9 @@ Canvas::stretch_transparent(const Bitmap &src, Color key)
 void
 Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
 {
-  assert(src.defined());
+  assert(src.IsDefined());
 
-  SDL_Surface *src_surface = src.native();
+  SDL_Surface *src_surface = src.GetNative();
   const UPixelScalar src_x = 0, src_y = 0;
   const UPixelScalar src_width = src_surface->w;
   const UPixelScalar src_height = src_surface->h;
@@ -541,10 +541,10 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar src_width, UPixelScalar src_height)
 {
   assert(defined());
-  assert(src.defined());
+  assert(src.IsDefined());
 
   stretch(dest_x, dest_y, dest_width, dest_height,
-          src.native(),
+          src.GetNative(),
           src_x, src_y, src_width, src_height);
 }
 
@@ -554,9 +554,9 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
                 const Bitmap &src)
 {
   assert(defined());
-  assert(src.defined());
+  assert(src.IsDefined());
 
-  SDL_Surface *surface = src.native();
+  SDL_Surface *surface = src.GetNative();
   stretch(dest_x, dest_y, dest_width, dest_height,
           surface, 0, 0, surface->w, surface->h);
 }
@@ -814,10 +814,10 @@ Canvas::copy_not(PixelScalar dest_x, PixelScalar dest_y,
                  UPixelScalar dest_width, UPixelScalar dest_height,
                  const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
 {
-  assert(src.defined());
+  assert(src.IsDefined());
 
   copy_not(dest_x, dest_y, dest_width, dest_height,
-           src.native(), src_x, src_y);
+           src.GetNative(), src_x, src_y);
 }
 
 void
@@ -825,10 +825,10 @@ Canvas::copy_or(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
 {
-  assert(src.defined());
+  assert(src.IsDefined());
 
   copy_or(dest_x, dest_y, dest_width, dest_height,
-          src.native(), src_x, src_y);
+          src.GetNative(), src_x, src_y);
 }
 
 void
@@ -836,10 +836,10 @@ Canvas::copy_and(PixelScalar dest_x, PixelScalar dest_y,
                  UPixelScalar dest_width, UPixelScalar dest_height,
                  const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
 {
-  assert(src.defined());
+  assert(src.IsDefined());
 
   copy_and(dest_x, dest_y, dest_width, dest_height,
-           src.native(), src_x, src_y);
+           src.GetNative(), src_x, src_y);
 }
 
 void

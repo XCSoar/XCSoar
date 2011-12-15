@@ -598,11 +598,11 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
 
   _stprintf(path, _T("%s" DIR_SEPARATOR_S "modis-%03d.jpg"),
             Directory, selected_waypoint->original_id);
-  hasimage1 = jpgimage1.load_file(path);
+  hasimage1 = jpgimage1.LoadFile(path);
 
   _stprintf(path, _T("%s" DIR_SEPARATOR_S "google-%03d.jpg"),
             Directory, selected_waypoint->original_id);
-  hasimage2 = jpgimage2.load_file(path);
+  hasimage2 = jpgimage2.LoadFile(path);
 
   page = 0;
 
@@ -612,6 +612,6 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
 
   delete wf;
 
-  jpgimage1.reset();
-  jpgimage2.reset();
+  jpgimage1.Reset();
+  jpgimage2.Reset();
 }

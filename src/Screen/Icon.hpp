@@ -46,13 +46,13 @@ public:
   }
 
   bool IsDefined() const {
-    return bitmap.defined();
+    return bitmap.IsDefined();
   }
 
   void Load(unsigned id, unsigned big_id = 0, bool center=true);
 
   void Reset() {
-    bitmap.reset();
+    bitmap.Reset();
   }
 
   void Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const;

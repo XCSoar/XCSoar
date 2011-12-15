@@ -58,14 +58,14 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
 
   // airspace brushes and colors
 #ifdef HAVE_HATCHED_BRUSH
-  bitmaps[0].load(IDB_AIRSPACE0);
-  bitmaps[1].load(IDB_AIRSPACE1);
-  bitmaps[2].load(IDB_AIRSPACE2);
-  bitmaps[3].load(IDB_AIRSPACE3);
-  bitmaps[4].load(IDB_AIRSPACE4);
-  bitmaps[5].load(IDB_AIRSPACE5);
-  bitmaps[6].load(IDB_AIRSPACE6);
-  bitmaps[7].load(IDB_AIRSPACE7);
+  bitmaps[0].Load(IDB_AIRSPACE0);
+  bitmaps[1].Load(IDB_AIRSPACE1);
+  bitmaps[2].Load(IDB_AIRSPACE2);
+  bitmaps[3].Load(IDB_AIRSPACE3);
+  bitmaps[4].Load(IDB_AIRSPACE4);
+  bitmaps[5].Load(IDB_AIRSPACE5);
+  bitmaps[6].Load(IDB_AIRSPACE6);
+  bitmaps[7].Load(IDB_AIRSPACE7);
 
   for (int i = 0; i < NUMAIRSPACEBRUSHES; i++)
     brushes[i].Set(bitmaps[i]);

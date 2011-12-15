@@ -46,18 +46,18 @@ protected:
 
 public:
   void load(unsigned id, UPixelScalar width, UPixelScalar height) {
-    bitmap.load(id);
+    bitmap.Load(id);
     size.cx = width;
     size.cy = height;
   }
 
   void reset() {
-    bitmap.reset();
+    bitmap.Reset();
   }
 
   gcc_pure
   bool defined() const {
-    return bitmap.defined();
+    return bitmap.IsDefined();
   }
 
   const Bitmap &get_bitmap() const {

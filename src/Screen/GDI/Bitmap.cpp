@@ -38,26 +38,26 @@ Copyright_License {
 #include <assert.h>
 
 bool
-Bitmap::load(unsigned id)
+Bitmap::Load(unsigned id)
 {
-  reset();
+  Reset();
 
   bitmap = ResourceLoader::LoadBitmap2(id);
   return bitmap != NULL;
 }
 
 bool
-Bitmap::load_stretch(unsigned id, unsigned zoom)
+Bitmap::LoadStretch(unsigned id, unsigned zoom)
 {
   assert(zoom > 0);
 
-  if (!load(id))
+  if (!Load(id))
     return false;
 
   if (zoom <= 1)
     return true;
 
-  PixelSize src_size = get_size();
+  const PixelSize src_size = GetSize();
   PixelSize dest_size;
   dest_size.cx = src_size.cx * zoom;
   dest_size.cy = src_size.cy * zoom;
@@ -146,7 +146,7 @@ load_imgdecmp_file(const TCHAR *path)
 #endif /* HAVE_IMGDECMP_DLL */
 
 bool
-Bitmap::load_file(const TCHAR *path)
+Bitmap::LoadFile(const TCHAR *path)
 {
 #ifdef HAVE_AYGSHELL_DLL
   AYGShellDLL ayg;
@@ -165,7 +165,7 @@ Bitmap::load_file(const TCHAR *path)
 }
 
 void
-Bitmap::reset()
+Bitmap::Reset()
 {
   if (bitmap != NULL) {
     assert(IsScreenInitialized());
@@ -176,9 +176,9 @@ Bitmap::reset()
 }
 
 const PixelSize
-Bitmap::get_size() const
+Bitmap::GetSize() const
 {
-  assert(defined());
+  assert(IsDefined());
 
   BITMAP bm;
   ::GetObject(bitmap, sizeof(bm), &bm);

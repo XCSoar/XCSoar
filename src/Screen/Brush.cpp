@@ -47,7 +47,7 @@ void
 Brush::Set(const Bitmap &bitmap)
 {
   Reset();
-  brush = ::CreatePatternBrush(bitmap.native());
+  brush = ::CreatePatternBrush(bitmap.GetNative());
 }
 
 #endif

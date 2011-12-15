@@ -194,7 +194,7 @@ Canvas::copy(PixelScalar dest_x, PixelScalar dest_y,
              DWORD dwRop)
 {
   copy(dest_x, dest_y, dest_width, dest_height,
-       src.native(), src_x, src_y,
+       src.GetNative(), src_x, src_y,
        dwRop);
 }
 
@@ -213,7 +213,7 @@ Canvas::copy(const Canvas &src)
 void
 Canvas::copy(const Bitmap &src)
 {
-  PixelSize size = src.get_size();
+  const PixelSize size = src.GetSize();
   copy(0, 0, size.cx, size.cy, src, 0, 0);
 }
 
@@ -255,14 +255,14 @@ void
 Canvas::stretch_transparent(const Bitmap &src, Color key)
 {
   assert(defined());
-  assert(src.defined());
+  assert(src.IsDefined());
 
   if (compatible_dc == NULL)
     compatible_dc = ::CreateCompatibleDC(dc);
 
-  HBITMAP old = (HBITMAP)::SelectObject(compatible_dc, src.native());
+  HBITMAP old = (HBITMAP)::SelectObject(compatible_dc, src.GetNative());
 
-  PixelSize size = src.get_size();
+  const PixelSize size = src.GetSize();
 #ifdef _WIN32_WCE
   ::TransparentImage(dc, 0, 0, get_width(), get_height(),
                      compatible_dc, 0, 0, size.cx, size.cy,
@@ -280,13 +280,13 @@ void
 Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
 {
   assert(defined());
-  assert(src.defined());
+  assert(src.IsDefined());
 
   if (compatible_dc == NULL)
     compatible_dc = ::CreateCompatibleDC(dc);
 
-  HBITMAP old = (HBITMAP)::SelectObject(compatible_dc, src.native());
-  const PixelSize size = src.get_size();
+  HBITMAP old = (HBITMAP)::SelectObject(compatible_dc, src.GetNative());
+  const PixelSize size = src.GetSize();
 
   BufferCanvas inverted(*this, size.cx, size.cy);
   ::BitBlt(inverted, 0, 0, size.cx, size.cy,
@@ -339,10 +339,10 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar src_width, UPixelScalar src_height)
 {
   assert(defined());
-  assert(src.defined());
+  assert(src.IsDefined());
 
   stretch(dest_x, dest_y, dest_width, dest_height,
-          src.native(), src_x, src_y, src_width, src_height);
+          src.GetNative(), src_x, src_y, src_width, src_height);
 }
 
 void
@@ -350,9 +350,9 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src)
 {
-  assert(src.defined());
+  assert(src.IsDefined());
 
-  PixelSize size = src.get_size();
+  const PixelSize size = src.GetSize();
   stretch(dest_x, dest_y, dest_width, dest_height,
           src, 0, 0, size.cx, size.cy);
 }
@@ -360,8 +360,8 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
 void
 Canvas::stretch(const Bitmap &src)
 {
-  assert(src.defined());
+  assert(src.IsDefined());
 
-  PixelSize size = src.get_size();
+  const PixelSize size = src.GetSize();
   stretch(src, 0, 0, size.cx, size.cy);
 }

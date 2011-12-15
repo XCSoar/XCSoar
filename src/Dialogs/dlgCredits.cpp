@@ -91,7 +91,7 @@ OnLogoPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
   Bitmap title(width > 360 ? IDB_TITLE_HD : IDB_TITLE);
 
   // Determine title image size
-  PixelSize title_size = title.get_size();
+  PixelSize title_size = title.GetSize();
 
   // Draw 'XCSoar N.N' title
   canvas.copy(x, y, title_size.cx, title_size.cy, title, 0, 0);
