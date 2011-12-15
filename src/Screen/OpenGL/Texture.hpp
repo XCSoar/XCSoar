@@ -96,6 +96,12 @@ public:
     return height;
   }
 
+  gcc_pure
+  PixelSize GetSize() const {
+    const PixelSize size{ PixelScalar(width), PixelScalar(height) };
+    return size;
+  }
+
 protected:
   void Initialise(bool mag_linear=false) {
 #ifndef NDEBUG
