@@ -117,8 +117,8 @@ Profile::Load(SETTINGS_COMPUTER &settings)
 
   Get(szProfileSetSystemTimeFromGPS, settings.set_system_time_from_gps);
   Get(szProfileUTCOffset, settings.utc_offset);
-  if (settings.utc_offset > 12 * 3600)
-    settings.utc_offset -= 24 * 3600;
+  if (settings.utc_offset > 13 * 3600 || settings.utc_offset < -13 * 3600)
+    settings.utc_offset = 0;
 
   Load(settings.task);
 

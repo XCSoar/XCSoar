@@ -380,6 +380,52 @@ TestFlytec()
 
   ok1(!device->ParseNMEA("$FLYSEN,,,,,,,,,,,,,,,,,,,,*5e", nmea_info));
 
+  nmea_info.Reset();
+  nmea_info.clock = fixed_one;
+
+  ok1(device->ParseNMEA("$FLYSEN,241211,201500,4700.840,N,00818.457,E,092,"
+                        "01100,01234,A,09,097517,01321,-001,01030,P,023,,038,"
+                        "088,00090,00088,800,,*38", nmea_info));
+  ok1(nmea_info.location_available);
+  ok1(equals(nmea_info.location, 47.014, 8.307616667));
+  ok1(nmea_info.track_available);
+  ok1(equals(nmea_info.track, 92));
+  ok1(nmea_info.ground_speed_available);
+  ok1(equals(nmea_info.ground_speed, 11));
+  ok1(nmea_info.gps_altitude_available);
+  ok1(equals(nmea_info.gps_altitude, 1234));
+  ok1(nmea_info.gps.satellites_used_available);
+  ok1(nmea_info.gps.satellites_used == 9);
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure.GetPascal(), 97517));
+  ok1(nmea_info.pressure_altitude_available);
+  ok1(equals(nmea_info.pressure_altitude, 1321));
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, -0.01));
+  ok1(nmea_info.airspeed_available);
+  ok1(equals(nmea_info.true_airspeed, 10.3));
+
+  nmea_info.Reset();
+  nmea_info.clock = fixed_one;
+
+  ok1(device->ParseNMEA("$FLYSEN,241211,201500,4700.840,N,00818.457,E,092,"
+                        "01100,01234,V,09,097517,01321,-001,01030,P,023,,038,"
+                        "088,00090,00088,800,,*38", nmea_info));
+  ok1(!nmea_info.location_available);
+  ok1(!nmea_info.track_available);
+  ok1(!nmea_info.ground_speed_available);
+  ok1(!nmea_info.gps_altitude_available);
+  ok1(nmea_info.gps.satellites_used_available);
+  ok1(nmea_info.gps.satellites_used == 9);
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure.GetPascal(), 97517));
+  ok1(nmea_info.pressure_altitude_available);
+  ok1(equals(nmea_info.pressure_altitude, 1321));
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, -0.01));
+  ok1(nmea_info.airspeed_available);
+  ok1(equals(nmea_info.true_airspeed, 10.3));
+
   delete device;
 }
 
@@ -787,7 +833,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(398);
+  plan_tests(432);
 
   TestGeneric();
   TestTasman();

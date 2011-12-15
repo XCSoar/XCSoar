@@ -40,6 +40,12 @@ Copyright_License {
 
 #include <stdio.h>
 
+bool
+NMEAParser::ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
+{
+  return false;
+}
+
 static Waypoint
 MakeWaypoint(const TCHAR *name, int altitude,
              double longitude, double latitude)

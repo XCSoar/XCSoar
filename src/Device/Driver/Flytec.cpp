@@ -105,50 +105,99 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEAInfo &info)
 static bool
 FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  // Detect firmware/sentence version
+  //
+  // V or A in field 9  -> 3.31-
+  // V or A in field 10 -> 3.32+
+
+  NMEAInputLine line_copy(line.rest());
+
+  line_copy.skip(8);
+
+  bool has_date_field = false;
+  char validity = line_copy.read_first_char();
+  if (validity != 'A' && validity != 'V') {
+    validity = line_copy.read_first_char();
+    if (validity != 'A' && validity != 'V')
+      return false;
+
+    has_date_field = true;
+  }
+
+  //  Date(ddmmyy),   6 Digits (only in firmware version 3.32+)
+  if (has_date_field)
+    line.skip();
 
   //  Time(hhmmss),   6 Digits
   line.skip();
 
-  //  Latitude(ddmm.mmm),   8 Digits incl. decimal
-  //  N (or S),   1 Digit
-  line.skip(2);
+  if (validity == 'V') {
+    // In case of V (void=not valid) GPS data should not be used.
+    // GPS altitude, position and speed should be ignored.
+    line.skip(7);
 
-  //  Longitude(dddmm.mmm),   9 Digits inc. decimal
-  //  E (or W),   1 Digit
-  line.skip(2);
+  } else {
+    //  Latitude(ddmm.mmm),   8 Digits incl. decimal
+    //  N (or S),   1 Digit
+    //  Longitude(dddmm.mmm),   9 Digits inc. decimal
+    //  E (or W),   1 Digit
+    GeoPoint location;
+    if (NMEAParser::ReadGeoPoint(line, location)) {
+      info.location = location;
+      info.location_available.Update(info.clock);
+    }
 
-  //  Track (xxx Deg),   3 Digits
-  //  Speed over Ground (xxxxx cm/s)        5 Digits
-  //  GPS altitude (xxxxx meter),           5 Digits
-  line.skip(3);
+    //  Track (xxx Deg),   3 Digits
+    fixed track;
+    if (line.read_checked(track)) {
+      info.track = Angle::Degrees(track);
+      info.track_available.Update(info.clock);
+    }
 
-  //  Validity of 3 D fix A or V,           1 Digit
-  char validity = line.read_first_char();
-  if (validity != 'A' && validity != 'V') {
-    validity = line.read_first_char();
-    if (validity != 'A' && validity != 'V')
-      return false;
+    //  Speed over Ground (xxxxx cm/s)        5 Digits
+    fixed ground_speed;
+    if (line.read_checked(ground_speed)) {
+      info.ground_speed = ground_speed / 100;
+      info.ground_speed_available.Update(info.clock);
+    }
+
+    //  GPS altitude (xxxxx meter),           5 Digits
+    fixed gps_altitude;
+    if (line.read_checked(gps_altitude)) {
+      info.gps_altitude = gps_altitude;
+      info.gps_altitude_available.Update(info.clock);
+    }
   }
 
-  //  Satellites in Use (0 to 12),          2 Digits
+  //  Validity of 3 D fix A or V,           1 Digit
   line.skip();
 
+  //  Satellites in Use (0 to 12),          2 Digits
+  unsigned satellites_used;
+  if (line.read_checked(satellites_used)) {
+    info.gps.satellites_used = satellites_used;
+    info.gps.satellites_used_available.Update(info.clock);
+  }
+
   //  Raw pressure (xxxxxx Pa),  6 Digits
-  if (line.read_checked(value))
-    info.ProvideStaticPressure(AtmosphericPressure::Pascal(value));
+  fixed pressure;
+  if (line.read_checked(pressure))
+    info.ProvideStaticPressure(AtmosphericPressure::Pascal(pressure));
 
   //  Baro Altitude (xxxxx meter),          5 Digits (-xxxx to xxxxx) (Based on 1013.25hPa)
-  if (line.read_checked(value))
-    info.ProvidePressureAltitude(value);
+  fixed baro_altitude;
+  if (line.read_checked(baro_altitude))
+    info.ProvidePressureAltitude(baro_altitude);
 
   //  Variometer (xxxx cm/s),   4 or 5 Digits (-9999 to 9999)
-  if (line.read_checked(value))
-    info.ProvideTotalEnergyVario(value / 100);
+  fixed vario;
+  if (line.read_checked(vario))
+    info.ProvideTotalEnergyVario(vario / 100);
 
-  //  true airspeed (xxxxx cm/s),           5 Digits (0 to 99999cm/s = 3600km/h)
-  if (line.read_checked(value))
-    info.ProvideTrueAirspeed(value / 100);
+  //  True airspeed (xxxxx cm/s),           5 Digits (0 to 99999cm/s = 3600km/h)
+  fixed tas;
+  if (line.read_checked(tas))
+    info.ProvideTrueAirspeed(tas / 100);
 
   //  Airspeed source P or V,   1 Digit P= pitot, V = Vane wheel
   //  Temp. PCB (xxx �C),   3 Digits

@@ -40,6 +40,12 @@ Copyright_License {
 
 #include <stdio.h>
 
+bool
+NMEAParser::ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
+{
+  return false;
+}
+
 static void
 PrintFlightList(const RecordedFlightList &flight_list)
 {

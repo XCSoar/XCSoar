@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-31 08:31+0100\n"
-"PO-Revision-Date: 2011-03-31 22:53+0200\n"
-"Last-Translator: Max Kellermann <max@duempel.org>\n"
+"PO-Revision-Date: 2011-12-09 12:43+0000\n"
+"Last-Translator: Kostas Hellas <Unknown>\n"
 "Language-Team: none\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-13 22:56+0000\n"
-"X-Generator: Launchpad (build 12351)\n"
+"X-Launchpad-Export-Date: 2011-12-12 08:28+0000\n"
+"X-Generator: Launchpad (build 14458)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:532
 #: src/InputEventsActions.cpp:1467 src/Dialogs/dlgAnalysis.cpp:347
@@ -31,15 +31,15 @@ msgstr "Διαδρομή"
 
 #: src/Airspace/AirspaceGlue.cpp:41
 msgid "Loading Airspace File..."
-msgstr ""
+msgstr "Το αρχείο Εναέριου Χώρου φορτώνεται ..."
 
 #: src/Airspace/AirspaceParser.cpp:228
 msgid "Parse Error at Line"
-msgstr ""
+msgstr "Σφάλμα ανάλυσης στη γραμμή"
 
 #: src/Airspace/AirspaceParser.cpp:229
 msgid "Line skipped."
-msgstr ""
+msgstr "H γραμμή παραλείπεται"
 
 #: src/Airspace/AirspaceParser.cpp:230 src/Dialogs/dlgAnalysis.cpp:365
 #: src/Dialogs/dlgConfiguration.cpp:96
@@ -48,12 +48,11 @@ msgstr ""
 #: Data/Dialogs/dlgVoice.xml:34
 #, no-c-format
 msgid "Airspace"
-msgstr "Εναέριος χώρος"
+msgstr "Εναέριος Χώρος"
 
 #: src/Airspace/AirspaceParser.cpp:860
-#, fuzzy
 msgid "Unknown airspace filetype"
-msgstr "Εμφάνιση εναέριου χώρου OFF"
+msgstr "Άγνωστος τύπος αρχείου Εναέριου Χώρου"
 
 #: src/ConditionMonitor.cpp:165
 msgid "Significant wind change"
@@ -61,220 +60,233 @@ msgstr "Σημαντική αλλαγή ανέμου"
 
 #: src/ConditionMonitor.cpp:274
 msgid "Expect arrival past sunset"
-msgstr ""
+msgstr "Αναμένεται άφιξη μετά το ηλιοβασίλεμα"
 
 #: src/ConditionMonitor.cpp:315
 msgid "Expect early task arrival"
-msgstr ""
+msgstr "Αναμένεται πρόωρη άφιξη"
 
 #: src/ConditionMonitor.cpp:367
 msgid ""
 "Start rules slightly violated\n"
 "but within margin"
 msgstr ""
+"Οι κανόνες έναρξης έχουν ελαφρώς παραβιαστεί\n"
+"αλλά εντός των ορίων"
 
 #: src/ConditionMonitor.cpp:369
 msgid "Start rules violated"
-msgstr "Παραβίαση κανόνων έναρξης"
+msgstr "Παραβίαση των κανόνων Έναρξης"
 
 #: src/Logger/Logger.cpp:136 src/Dialogs/ManageCAI302Dialog.cpp:111
 msgid "Start Logger"
-msgstr "Εκκίνηση Καταγραφέα"
+msgstr "Εκκίνηση Καταγραφής"
 
 #: src/Logger/Logger.cpp:143
 msgid "Logger inactive, insufficient storage!"
-msgstr ""
+msgstr "Καταγραφή ανενεργή, ανεπαρκής χώρος αποθήκευσης!"
 
 #: src/Logger/Logger.cpp:144
 msgid "Logger Error"
-msgstr ""
+msgstr "Σφάλμα καταγραφής"
 
 #: src/Logger/Logger.cpp:173 src/Logger/Logger.cpp:174
 #: src/Dialogs/ManageCAI302Dialog.cpp:119
 msgid "Stop Logger"
-msgstr "Stop Καταγραφέα"
+msgstr "Διακοπή καταγραφής"
 
 #: src/Logger/ExternalLogger.cpp:91
-#, fuzzy
 msgid "Declare task?"
-msgstr "Αντικατάστασει Διαδρομής"
+msgstr "Επιβεβαίωση Διαδρομής;"
 
 #: src/Logger/ExternalLogger.cpp:94
-#, fuzzy
 msgid "Task declared!"
-msgstr "Δήλωση Διαδρομής"
+msgstr "Η [Διαδρομή] επιβεβαιώθηκε!"
 
 #: src/Logger/ExternalLogger.cpp:98
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
+"Παρουσιάστηκε σφάλμα.\n"
+"Η Διαδρομή ΔΕΝ επιβεβαιώθηκε!"
 
 #: src/Logger/ExternalLogger.cpp:123
 msgid "No logger connected"
-msgstr ""
+msgstr "Δεν ενεργοποιήθηκε η καταγραφή"
 
 #: src/Logger/ExternalLogger.cpp:124 src/Dialogs/pnlTaskList.cpp:364
 msgid "Declare task"
-msgstr ""
+msgstr "Δήλωσε Διαδρομή"
 
 #: src/Logger/ExternalLogger.cpp:139
 msgid "OK to invalidate declaration?"
-msgstr ""
+msgstr "Ακύρωση της δήλωσης;"
 
 #: src/Logger/ExternalLogger.cpp:140
 msgid "Task declared"
-msgstr "Δήλωση Διαδρομής"
+msgstr "Η Διαδρομή δηλώθηκε"
 
 #: src/Logger/ExternalLogger.cpp:282
 msgid "Failed to download flight list."
-msgstr ""
+msgstr "Απέτυχε το \"κατέβασμα\" της λίστας πτήσεων"
 
 #: src/Logger/ExternalLogger.cpp:283 src/Logger/ExternalLogger.cpp:289
 #: src/Logger/ExternalLogger.cpp:317
 msgid "Download flight"
-msgstr ""
+msgstr "\"κατέβασμα\" πτήσης"
 
 #: src/Logger/ExternalLogger.cpp:288
 msgid "Logger is empty."
-msgstr ""
+msgstr "Το αρχείο καταγραφής είναι άδειο"
 
 #: src/Logger/ExternalLogger.cpp:316
 msgid "Failed to download flight."
-msgstr ""
+msgstr "Απέτυχε το \"κατέβασμα\" της πτήσης"
 
 #: src/Replay/IgcReplayGlue.cpp:78
 msgid "Could not open IGC file!"
-msgstr ""
+msgstr "Το IGC αρχείο δεν μπορεί να \"ανοίξει\"!"
 
 #: src/Replay/IgcReplayGlue.cpp:79 src/Replay/NmeaReplayGlue.cpp:102
 msgid "Flight replay"
-msgstr ""
+msgstr "Επανάληψη της πτήσης"
 
 #: src/Replay/NmeaReplayGlue.cpp:101
 msgid "Could not open NMEA file!"
-msgstr ""
+msgstr "Το ΝΜΕΑ αρχείο δεν μπορεί να \"ανοίξει\" !"
 
 #: src/Waypoint/WaypointGlue.cpp:222
 msgid "Loading Waypoints..."
-msgstr ""
+msgstr "\"Φορτώνονται\" τα Σημεία Διέλευσης..."
 
 #: src/Gauge/ThermalAssistantWindow.cpp:254
 msgid "Not Circling"
-msgstr ""
+msgstr "Χωρίς περιστροφή (κύκλωση)"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:222
 msgid "No Traffic"
-msgstr ""
+msgstr "Χωρίς κυκλοφορία"
 
 #: src/Waypoint/WaypointDetailsReader.cpp:144
 msgid "Loading Airfield Details File..."
-msgstr ""
+msgstr "\"Φόρτωση\" λεπτομερειών Εναερίου Χώρου  Αρχείο..."
 
 #: src/ExpandMacros.cpp:122 src/ExpandMacros.cpp:132 src/ExpandMacros.cpp:198
 #: src/ExpandMacros.cpp:228
 msgid "Next Turnpoint"
-msgstr "Επόμενο Σημείο"
+msgstr "Επόμενο Σημείο Στροφής"
 
 #: src/ExpandMacros.cpp:127 src/ExpandMacros.cpp:137 src/ExpandMacros.cpp:210
 #: src/ExpandMacros.cpp:256
 msgid "Previous Turnpoint"
-msgstr ""
+msgstr "Προηγούμενο Σημείο Στροφής"
 
 #: src/ExpandMacros.cpp:149 src/ExpandMacros.cpp:169
 msgid "Furthest Landpoint"
-msgstr ""
+msgstr "Μακρινότερο Σημείο Προσγείωσης"
 
 #: src/ExpandMacros.cpp:150 src/ExpandMacros.cpp:170
 msgid "Next Landpoint"
-msgstr ""
+msgstr "Επόμενο Σημείο Προσγείωσης"
 
 #: src/ExpandMacros.cpp:159 src/ExpandMacros.cpp:179
 msgid "Closest Landpoint"
-msgstr ""
+msgstr "Κοντινότερο Σημείο Προσγείωσης"
 
 #: src/ExpandMacros.cpp:160 src/ExpandMacros.cpp:180
 msgid "Previous Landpoint"
-msgstr ""
+msgstr "Προηγούμενο Σημείο Προσγείωσης"
 
 #: src/ExpandMacros.cpp:197 src/ExpandMacros.cpp:227
 msgid "Finish Turnpoint"
-msgstr ""
+msgstr "Τελικό Σημείο Στροφής"
 
 #: src/ExpandMacros.cpp:203 src/ExpandMacros.cpp:249
-#, fuzzy
 msgid "Next Startpoint"
-msgstr "Επόμενο Σημείο"
+msgstr "Επόμενο Σημείο Εναρξης"
 
 #: src/ExpandMacros.cpp:209 src/ExpandMacros.cpp:255
 msgid "Start Turnpoint"
-msgstr ""
+msgstr "Αρχικό Σημείο Στροφής"
 
 #: src/ExpandMacros.cpp:233
 msgid "Arm start"
-msgstr ""
+msgstr "\"Όπλιση\" Έναρξης"
 
 #: src/ExpandMacros.cpp:236
 msgid "Arm turn"
-msgstr ""
+msgstr "\"Όπλιση\" Στροφής"
 
 #: src/ExpandMacros.cpp:264
 msgid "Disarm start"
-msgstr ""
+msgstr "\"Αφόπλιση\" Έναρξης"
 
 #: src/ExpandMacros.cpp:267
 msgid "Disarm turn"
-msgstr ""
+msgstr "\"Αφόπλιση\" Στροφής"
 
 #: src/ExpandMacros.cpp:277
 msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
+"προηγμένη λειτουργία\n"
+"(χειροκίνητα)"
 
 #: src/ExpandMacros.cpp:282
 msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
+"προηγμένη λειτουργία\n"
+"(αυτόματα)"
 
 #: src/ExpandMacros.cpp:287
 msgid ""
 "Abort\n"
 "Start"
 msgstr ""
+"Ματαίωση\n"
+"Έναρξης"
 
 #: src/ExpandMacros.cpp:292
 msgid ""
 "Arm\n"
 "Start"
 msgstr ""
+"\"Όπλιση\"\n"
+"Έναρξης"
 
 #: src/ExpandMacros.cpp:297
 msgid ""
 "Abort\n"
 "Turn"
 msgstr ""
+"Ματαίωση\n"
+"Στροφής"
 
 #: src/ExpandMacros.cpp:302
 msgid ""
 "Arm\n"
 "Turn"
 msgstr ""
+"\"Όπλιση\"\n"
+"Στροφής"
 
 #: src/ExpandMacros.cpp:321 src/ExpandMacros.cpp:325
 msgid "Resume"
-msgstr ""
+msgstr "Συνέχεια"
 
 #: src/ExpandMacros.cpp:321 src/ExpandMacros.cpp:325
 #: src/Dialogs/Message.cpp:165
 msgid "Abort"
-msgstr "Άκυρο"
+msgstr "Ματαίωση"
 
 #: src/ExpandMacros.cpp:432 src/Dialogs/dlgBasicSettings.cpp:56
 #: Data/Dialogs/dlgLoggerReplay.xml:12
 msgid "Stop"
-msgstr ""
+msgstr "Διακοπή"
 
 #: src/ExpandMacros.cpp:433 Data/Dialogs/dlgLoggerReplay.xml:10
 msgid "Start"
@@ -282,15 +294,15 @@ msgstr "Έναρξη"
 
 #: src/ExpandMacros.cpp:439 src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:78
 msgid "Long"
-msgstr ""
+msgstr "Μεγάλη"
 
 #: src/ExpandMacros.cpp:443 src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:79
 msgid "Short"
-msgstr ""
+msgstr "Μικρή"
 
 #: src/ExpandMacros.cpp:447 src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:80
 msgid "Full"
-msgstr ""
+msgstr "Ολόκληρη"
 
 #: src/ExpandMacros.cpp:451 src/ExpandMacros.cpp:458 src/ExpandMacros.cpp:515
 #: src/ExpandMacros.cpp:521 src/ExpandMacros.cpp:524 src/ExpandMacros.cpp:527
@@ -304,7 +316,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:72
 #, no-c-format
 msgid "Off"
-msgstr ""
+msgstr "Ανενεργό"
 
 #: src/ExpandMacros.cpp:458 src/ExpandMacros.cpp:515 src/ExpandMacros.cpp:521
 #: src/ExpandMacros.cpp:524 src/ExpandMacros.cpp:527 src/ExpandMacros.cpp:545
@@ -313,23 +325,23 @@ msgstr ""
 #: src/Dialogs/dlgStatus.cpp:136
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:115
 msgid "On"
-msgstr ""
+msgstr "Ενεργό"
 
 #: src/ExpandMacros.cpp:470 src/ExpandMacros.cpp:496
 msgid "Topography On"
-msgstr ""
+msgstr "Τοπογραφικό Ενεργό"
 
 #: src/ExpandMacros.cpp:474 src/ExpandMacros.cpp:500
 msgid "Terrain On"
-msgstr ""
+msgstr "Έδαφος Ενεργό"
 
 #: src/ExpandMacros.cpp:478 src/ExpandMacros.cpp:504
 msgid "Terrain + Topography"
-msgstr ""
+msgstr "Έδαφος + Τοπογραφικό"
 
 #: src/ExpandMacros.cpp:482 src/ExpandMacros.cpp:508
 msgid "Terrain Off"
-msgstr ""
+msgstr "Έδαφος Ανενεργό"
 
 #: src/ExpandMacros.cpp:518 src/ExpandMacros.cpp:542
 #: src/InfoBoxes/Content/Weather.cpp:218 src/InfoBoxes/Content/Weather.cpp:251
@@ -337,25 +349,25 @@ msgstr ""
 #: src/Dialogs/dlgWindSettings.cpp:99
 #, no-c-format
 msgid "Manual"
-msgstr ""
+msgstr "Χειροκίνητα"
 
 #: src/ExpandMacros.cpp:518 src/ExpandMacros.cpp:542
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:100
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:116
 #: Data/Dialogs/dlgBrightness.xml:6
 msgid "Auto"
-msgstr ""
+msgstr "Αυτόματα"
 
 #: src/ExpandMacros.cpp:530 src/InputEventsActions.cpp:1465
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:101
 #, no-c-format
 msgid "All"
-msgstr ""
+msgstr "Όλα"
 
 #: src/ExpandMacros.cpp:531 src/InputEventsActions.cpp:1466
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Διαδρομή & Πιθανές Προσγειώσεις"
 
 #: src/ExpandMacros.cpp:533 src/InputEventsActions.cpp:1468
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:42
@@ -370,13 +382,13 @@ msgstr "Κανένα"
 #: src/InfoBoxes/Content/Factory.cpp:62
 #, no-c-format
 msgid "Height GPS"
-msgstr ""
+msgstr "Ύψος GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:63
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:4
 #, no-c-format
 msgid "H GPS"
-msgstr ""
+msgstr "Υψ GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:64
 #, no-c-format
@@ -385,17 +397,21 @@ msgid ""
 "only: in simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
+"Αυτό είναι το ύψος πάνω από τη μέση στάθμη της θάλασσας που αναφέρθηκε από "
+"το GPS. Για οθόνες αφής και ΗΥ μόνο: σε λειτουργία προσομοίωσης, αυτή η τιμή "
+"είναι ρυθμιζόμενη με τα πάνω / κάτω και δεξιά / αριστερά βέλη, επίσης "
+"προκαλεί κλήση στο ανεμόπτερο."
 
 #: src/InfoBoxes/Content/Factory.cpp:71
 #, no-c-format
 msgid "Height AGL"
-msgstr ""
+msgstr "Ύψος AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:72
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:7
 #, no-c-format
 msgid "H AGL"
-msgstr ""
+msgstr "Yψ AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:73
 #, no-c-format
@@ -404,16 +420,19 @@ msgid ""
 "terrain file. The value is coloured red when the glider is below the terrain "
 "safety clearance height."
 msgstr ""
+"Αυτό είναι το υψόμετρο πλοήγηση μείον το ανάγλυφο του ύψους που λαμβάνεται "
+"από το αρχείο εδάφους. Η τιμή είναι χρωματισμένη κόκκινη όταν το ανεμόπτερο "
+"βρίσκεται κάτω από το ύψος ασφαλείας εδάφους."
 
 #: src/InfoBoxes/Content/Factory.cpp:80
 #, no-c-format
 msgid "Thermal last 30 s"
-msgstr ""
+msgstr "Θερμικό τα τελευταία 30 δευτ"
 
 #: src/InfoBoxes/Content/Factory.cpp:81
 #, no-c-format
 msgid "TC 30s"
-msgstr ""
+msgstr "Θερ 30δ"
 
 #: src/InfoBoxes/Content/Factory.cpp:82
 #, no-c-format
@@ -421,13 +440,15 @@ msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
 "or vario if available."
 msgstr ""
+"Ένας μέσος ρυθμός ανόδου 30 δευτερολέπτων βάση των αναφερθέντων υψομέτρων "
+"του GPS, ή του βαρόμετρου αν υπάρχει."
 
 #: src/InfoBoxes/Content/Factory.cpp:89 src/InfoBoxes/Content/Factory.cpp:90
 #: Data/Dialogs/dlgStatusAircraft.xml:10 Data/Dialogs/dlgTeamCode.xml:14
 #: Data/Dialogs/dlgTeamCode_L.xml:15 Data/Dialogs/pnlStatusFlight.xml:8
 #, no-c-format
 msgid "Bearing"
-msgstr ""
+msgstr "Αζιμούθιο"
 
 #: src/InfoBoxes/Content/Factory.cpp:91
 #, no-c-format
@@ -435,16 +456,19 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
+"Η πραγματική - μαγνητική κατεύθυνση (αζιμούθιο) στο επόμενο Σημείο "
+"Διέλευσης. Για ΑΑΤ διαδρομές αυτή είναι η πραγματική κατεύθυνση προς τον "
+"στόχο εντός του ΑΑΤ τομέα."
 
 #: src/InfoBoxes/Content/Factory.cpp:98
 #, no-c-format
 msgid "L/D instantaneous"
-msgstr ""
+msgstr "Στιγμιαίος Λόγο Κατολίσθησης"
 
 #: src/InfoBoxes/Content/Factory.cpp:99
 #, no-c-format
 msgid "L/D Inst"
-msgstr ""
+msgstr "Στιγμ ΛΚ"
 
 #: src/InfoBoxes/Content/Factory.cpp:100
 #, no-c-format
@@ -454,16 +478,20 @@ msgid ""
 "climbing cruise. If the vertical speed is close to zero, the displayed value "
 "is '---'."
 msgstr ""
+"Στιγμιαίος Λόγο Κατολίσθησης, δίνεται από την ταχύτητα εδάφους διαιρούμενη "
+"με την κάθετη ταχύτητα (GPS) κατά τα τελευταία 20 δευτερόλεπτα. Αρνητικές "
+"τιμές υποδηλώνουν ανοδική πορεία. Εάν η κάθετη ταχύτητα είναι κοντά στο "
+"μηδέν, η τιμή που εμφανίζεται είναι'---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:107
 #, no-c-format
 msgid "L/D cruise"
-msgstr ""
+msgstr "Λόγο Κατολίσθησης μεταξύ θερμικών"
 
 #: src/InfoBoxes/Content/Factory.cpp:108
 #, no-c-format
 msgid "L/D Cru"
-msgstr ""
+msgstr "ΛΚ Θερμ"
 
 #: src/InfoBoxes/Content/Factory.cpp:109
 #, no-c-format
@@ -473,16 +501,21 @@ msgid ""
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
 msgstr ""
+"Η απόσταση από την κορυφή του τελευταίου θερμικού, διαιρούμενη με το ύψος "
+"που χάθηκε μέχρι την κορυφή του επόμενου θερμικού. Οι αρνητικές τιμές "
+"δείχνουν ανοδική πορεία (κέρδος ύψους μετά την αποχώρησή από το τελευταίο "
+"θερμικό). Εάν η κάθετη ταχύτητα είναι κοντά στο μηδέν, η τιμή που "
+"εμφανίζεται είναι'---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:116
 #, no-c-format
 msgid "Speed ground"
-msgstr ""
+msgstr "Ταχύτητα εδάφους"
 
 #: src/InfoBoxes/Content/Factory.cpp:117
 #, no-c-format
 msgid "V Gnd"
-msgstr ""
+msgstr "Ταχ Εδαφ"
 
 #: src/InfoBoxes/Content/Factory.cpp:118
 #, no-c-format
@@ -491,16 +524,19 @@ msgid ""
 "mode, pressing the up and down arrows adjusts the speed, and left and right "
 "turn the glider."
 msgstr ""
+"Η ταχύτητα εδάφους μετράται από το GPS. Εάν αυτό το πεδίο είναι ενεργό σε "
+"λειτουργία προσομοίωσης, πατώντας τα πάνω και κάτω βέλη ρυθμίζετε την "
+"ταχύτητα, και με τα αριστερά και δεξιά περιστρέφετε το αιωρόπτερο."
 
 #: src/InfoBoxes/Content/Factory.cpp:125
 #, no-c-format
 msgid "Last thermal average"
-msgstr ""
+msgstr "Μέσος όρος ύψους στο Τελευταίο θερμικό"
 
 #: src/InfoBoxes/Content/Factory.cpp:126
 #, no-c-format
 msgid "TL Avg"
-msgstr ""
+msgstr "ΜΟ Υψ ΤΘ"
 
 #: src/InfoBoxes/Content/Factory.cpp:127
 #, no-c-format
@@ -508,46 +544,49 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
+"Το συνολικό υψόμετρο μου κερδήθηκε / χάθηκε μέσα στο τελευταίο θερμικό "
+"διαιρεμένο με το χρόνο που σπαταλήθηκε κυκλώνοντας."
 
 #: src/InfoBoxes/Content/Factory.cpp:134
 #, no-c-format
 msgid "Last thermal gain"
-msgstr ""
+msgstr "Κέρδος ύψους στο Τελευταίο θερμικό"
 
 #: src/InfoBoxes/Content/Factory.cpp:135
 #, no-c-format
 msgid "TL Gain"
-msgstr ""
+msgstr "Υψ ΤΘ"
 
 #: src/InfoBoxes/Content/Factory.cpp:136
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
 msgstr ""
+"Το συνολικό υψόμετρο που κερδήθηκε / χάθηκε μέσα στο τελευταίο θερμικό."
 
 #: src/InfoBoxes/Content/Factory.cpp:143
 #, no-c-format
 msgid "Last thermal time"
-msgstr ""
+msgstr "Χρόνος στο τελευταίο θερμικό"
 
 #: src/InfoBoxes/Content/Factory.cpp:144
 #, no-c-format
 msgid "TL Time"
-msgstr ""
+msgstr "Χρν ΤΘ"
 
 #: src/InfoBoxes/Content/Factory.cpp:145
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr ""
+msgstr "Ο χρόνος που ξοδεύτηκε κυκλώνοντας μέσα στο τελευταίο θερμικό."
 
 #: src/InfoBoxes/Content/Factory.cpp:152
 #, no-c-format
 msgid "MacCready setting"
-msgstr ""
+msgstr "Ρυθμίσεις MacCready"
 
 #: src/InfoBoxes/Content/Factory.cpp:153
 #, no-c-format
 msgid "MC"
-msgstr ""
+msgstr "MacCrd"
 
 #: src/InfoBoxes/Content/Factory.cpp:154
 #, no-c-format
@@ -556,16 +595,19 @@ msgid ""
 "manual or auto. (Touchscreen/PC only) Also used to adjust the MacCready "
 "Setting if the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
+"H τρέχουσα ρύθμιση MacCready. Αυτό το πεδίο δείχνει επίσης εάν η λειτουργία "
+"MacCready είναι χειροκίνητη ή αυτόματη. (Οθόνη Αφής / PC μόνο) Επίσης, "
+"χρησιμοποιείται για να προσαρμόσετε τη ρύθμιση MacCready."
 
 #: src/InfoBoxes/Content/Factory.cpp:161
 #, no-c-format
 msgid "Next distance"
-msgstr ""
+msgstr "Απόσταση από το επόμενο ΣΔ"
 
 #: src/InfoBoxes/Content/Factory.cpp:162
 #, no-c-format
 msgid "WP Dist"
-msgstr ""
+msgstr "ΑποστΕπομΣΔ"
 
 #: src/InfoBoxes/Content/Factory.cpp:163
 #, no-c-format
@@ -573,48 +615,53 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
+"Η απόσταση από το επόμενο επιλεγμένο Σημείο Διέλευσης. Για Διαδρομές AAT, "
+"αυτή είναι η απόσταση από το στόχο εντός του AAT τομέα."
 
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
 msgid "Next altitude difference"
-msgstr ""
+msgstr "Διαφορά ύψους από το επόμενο ΣΔ"
 
 #: src/InfoBoxes/Content/Factory.cpp:171
 #, no-c-format
 msgid "WP AltD"
-msgstr ""
+msgstr "ΥψΑποΕπομΣΔ"
 
 #: src/InfoBoxes/Content/Factory.cpp:172
 #, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height."
 msgstr ""
+"Υψόμετρο άφιξης στο επόμενο Σημείο Διέλευσης σε σχέση με το ύψος ασφαλούς "
+"άφιξης."
 
 #: src/InfoBoxes/Content/Factory.cpp:179
 #, no-c-format
 msgid "Next altitude required"
-msgstr ""
+msgstr "Απαιτούμενο ύψος για το επόμενο ΣΔ"
 
 #: src/InfoBoxes/Content/Factory.cpp:180
 #, no-c-format
 msgid "WP AltR"
-msgstr ""
+msgstr "ΥψΓιαΕπομΣΔ"
 
 #: src/InfoBoxes/Content/Factory.cpp:181
 #, no-c-format
 msgid "Additional altitude required to reach the next turn point."
 msgstr ""
+"Απαιτούμενο επιπλέον υψόμετρο για να φτάσετε στο επόμενο Σημείο Στροφής."
 
 #: src/InfoBoxes/Content/Factory.cpp:188
 #, no-c-format
 msgid "Next waypoint"
-msgstr ""
+msgstr "Επόμενο Σημείο Διέλευσης"
 
 #: src/InfoBoxes/Content/Factory.cpp:189 src/InfoBoxes/Content/Task.cpp:86
 #: Data/Dialogs/dlgTaskPoint.xml:6 Data/Dialogs/dlgTaskPoint_L.xml:5
 #, no-c-format
 msgid "Next"
-msgstr ""
+msgstr "Επόμενο"
 
 #: src/InfoBoxes/Content/Factory.cpp:190
 #, no-c-format
@@ -624,16 +671,20 @@ msgid ""
 "task. (Touchscreen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
+"Το όνομα του επιλεγμένου Σημείου Στροφής. Όταν αυτό το πεδίο είναι ενεργό, "
+"χρησιμοποιώντας τα πάνω / κάτω βέλη επιλέγουμε το επόμενο / προηγούμενο "
+"Σημείο Διέλευσης στην Διαδρομή. (Οθόνη Αφής / PC μόνο) Πατώντας το πλήκτρο "
+"enter δρομέα εμφανίζει τις λεπτομέρειες σημείο."
 
 #: src/InfoBoxes/Content/Factory.cpp:197
 #, no-c-format
 msgid "Final altitude difference"
-msgstr ""
+msgstr "Τελική υψομετρική διαφορά"
 
 #: src/InfoBoxes/Content/Factory.cpp:198
 #, no-c-format
 msgid "Fin AltD"
-msgstr ""
+msgstr "ΤελΥψΔιαφ"
 
 #: src/InfoBoxes/Content/Factory.cpp:199
 #, no-c-format
@@ -641,31 +692,33 @@ msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
 msgstr ""
+"Υψόμετρο άφιξης στο τελικό Σημείο Στροφής της διαδρομής σε σχέση με το ύψος "
+"ασφαλούς άφιξης."
 
 #: src/InfoBoxes/Content/Factory.cpp:206
 #, no-c-format
 msgid "Final altitude required"
-msgstr ""
+msgstr "Τελικό απαιτούμενο ύψος"
 
 #: src/InfoBoxes/Content/Factory.cpp:207
 #, no-c-format
 msgid "Fin AltR"
-msgstr ""
+msgstr "ΤελΑπαιτΥψ"
 
 #: src/InfoBoxes/Content/Factory.cpp:208
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr ""
+msgstr "Επιπλέον απαιτούμενο ύψος για το τέλος της Διαδρομής."
 
 #: src/InfoBoxes/Content/Factory.cpp:215
 #, no-c-format
 msgid "Speed task average"
-msgstr ""
+msgstr "Μέση ταχύτητα Διαδρομής"
 
 #: src/InfoBoxes/Content/Factory.cpp:216
 #, no-c-format
 msgid "VTask Avg"
-msgstr ""
+msgstr "ΜεσΤαχΔ"
 
 #: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
@@ -673,31 +726,33 @@ msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
 msgstr ""
+"Μέση ταχύτητα Ταξιδιού (Cross Country) εντός της Διαδρομής, χωρίς "
+"αντιστάθμιση του παρόντος υψόμετρου."
 
 #: src/InfoBoxes/Content/Factory.cpp:224
 #, no-c-format
 msgid "Final distance"
-msgstr ""
+msgstr "Τελική απόσταση"
 
 #: src/InfoBoxes/Content/Factory.cpp:225
 #, no-c-format
 msgid "Fin Dist"
-msgstr ""
+msgstr "ΤελικΑποστ"
 
 #: src/InfoBoxes/Content/Factory.cpp:226
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr ""
+msgstr "Απόσταση για ολοκλήρωση διαμέσου των υπολοίπων Σημείων Στροφής"
 
 #: src/InfoBoxes/Content/Factory.cpp:233
 #, no-c-format
 msgid "Final L/D"
-msgstr ""
+msgstr "ΤελικόςΛΚ"
 
 #: src/InfoBoxes/Content/Factory.cpp:234
 #, no-c-format
 msgid "Fin LD"
-msgstr ""
+msgstr "ΤελικόςΛΚ"
 
 #: src/InfoBoxes/Content/Factory.cpp:235
 #, no-c-format
@@ -710,17 +765,27 @@ msgid ""
 "finish by the excess energy height of the glider if its true airspeed is "
 "greater than the MacCready and best LD speeds."
 msgstr ""
+"Ο απαιτούμενος Λόγος Καθόδου για να ολοκληρωθεί η Διαδρομή, που δίνεται από "
+"την απόσταση για να πάει στον προορισμό διαιρούμενη με το ύψος που "
+"χρειάζεται για να φτάσει στο ασφαλές ύψος άφιξης. Οι αρνητικές τιμές "
+"δείχνουν ότι μια ανύψωση είναι απαραίτητη για να ολοκληρωθεί η Διαδρομή. Εάν "
+"το απαιτούμενο ύψος είναι κοντά στο μηδέν, η τιμή εμφανίζεται με '---'. "
+"Σημειώστε δε ότι ο υπολογισμός αυτός μπορεί να είναι αισιόδοξος, διότι "
+"μειώνει το ύψος που απαιτείται για να ολοκληρωθεί η Διαδρομή από την "
+"περίσσεια ενέργειας ύψους του ανεμόπτερου αν η πραγματική Ταχύτητα Ανέμου "
+"είναι μεγαλύτερη από την MacCready και καλύτερη των ταχυτήτων Μεγάλης "
+"Απόστασης (LD)."
 
 #: src/InfoBoxes/Content/Factory.cpp:242
 #, no-c-format
 msgid "Terrain elevation"
-msgstr ""
+msgstr "Υψόμετρο εδάφους"
 
 #: src/InfoBoxes/Content/Factory.cpp:243
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:8
 #, no-c-format
 msgid "H GND"
-msgstr ""
+msgstr "ΥψΕδαφ"
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
@@ -728,16 +793,18 @@ msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
 msgstr ""
+"Αυτό είναι το υψόμετρο του εδάφους πάνω από τη μέση στάθμη της θάλασσας, που "
+"λαμβάνεται από το αρχείο έδαφος στην παρούσα GPS θέση."
 
 #: src/InfoBoxes/Content/Factory.cpp:251
 #, no-c-format
 msgid "Thermal average"
-msgstr ""
+msgstr "Μέσος Όρος ύψους στο Θερμικό"
 
 #: src/InfoBoxes/Content/Factory.cpp:252
 #, no-c-format
 msgid "TC Avg"
-msgstr ""
+msgstr "ΜΟ Υψ Θ"
 
 #: src/InfoBoxes/Content/Factory.cpp:253
 #, no-c-format
@@ -745,27 +812,29 @@ msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermaling."
 msgstr ""
+"Υψόμετρο που κερδήθηκε / χάθηκε στο παρόν θερμικό, διαιρούμενο με το χρόνο "
+"που δαπανήθηκε κυκλώνοντας."
 
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
 msgid "Thermal gain"
-msgstr ""
+msgstr "Θερμικό κέρδος ύψους"
 
 #: src/InfoBoxes/Content/Factory.cpp:261
 #, no-c-format
 msgid "TC Gain"
-msgstr ""
+msgstr "ΚερδΘερΥψ"
 
 #: src/InfoBoxes/Content/Factory.cpp:262
 #, no-c-format
 msgid "The altitude gained/lost in the current thermal."
-msgstr ""
+msgstr "Το υψόμετρο που κερδήθηκε / χάθηκε στο παρόν θερμικό."
 
 #: src/InfoBoxes/Content/Factory.cpp:269 src/InfoBoxes/Content/Factory.cpp:270
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:43
 #, no-c-format
 msgid "Track"
-msgstr ""
+msgstr "Ίχνος"
 
 #: src/InfoBoxes/Content/Factory.cpp:271
 #, no-c-format
@@ -774,6 +843,9 @@ msgid ""
 "active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
+"Tο μαγνητικό ίχνος που αναφέρθηκε από το GPS. (Οθόνη Αφής / PC μόνο) Εάν "
+"αυτό το πεδίο είναι ενεργό σε λειτουργία προσομοίωσης, πατώντας τα βέλη πάνω "
+"και κάτω ρυθμίζετε το ίχνος."
 
 #: src/InfoBoxes/Content/Factory.cpp:278 src/InfoBoxes/Content/Factory.cpp:279
 #: src/InfoBoxes/Content/Factory.cpp:787 src/Dialogs/DeviceListDialog.cpp:126
@@ -785,7 +857,7 @@ msgstr ""
 #: Data/Input/default.xci:747 Data/Input/default.xci:794
 #, no-c-format
 msgid "Vario"
-msgstr ""
+msgstr "Βαρόμετρο"
 
 #: src/InfoBoxes/Content/Factory.cpp:280
 #, no-c-format
@@ -793,16 +865,18 @@ msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
 "vario total energy vario value if connected to one."
 msgstr ""
+"Η στιγμιαία κάθετη ταχύτητα, όπως αναφέρθηκε από το GPS, υποστηριζόμενη από "
+"βαρόμετρο αν υπάρχει συνδεδεμένο."
 
 #: src/InfoBoxes/Content/Factory.cpp:287
 #, no-c-format
 msgid "Wind speed"
-msgstr ""
+msgstr "Ταχύτητα ανέμου"
 
 #: src/InfoBoxes/Content/Factory.cpp:288
 #, no-c-format
 msgid "Wind V"
-msgstr ""
+msgstr "ΤαχΑνεμ"
 
 #: src/InfoBoxes/Content/Factory.cpp:289
 #, no-c-format
@@ -813,16 +887,21 @@ msgid ""
 "enter cursor key saves the wind value as the initial value when XCSoar next "
 "starts."
 msgstr ""
+"Η ταχύτητα ανέμου όπως εκτιμάται από το XCSoar. (Οθόνη Αφής / PC μόνο) "
+"Χειροκίνητη ρύθμιση είναι δυνατή με το πάτημα των πάνω / κάτω πλήκτρων για "
+"να ρυθμίσετε το μέγεθος και αριστερά / δεξιά για να ρυθμίσετε την "
+"κατεύθυνση , όταν το πεδίο αυτό είναι ενεργό. Πατώντας το πλήκτρο enter "
+"αποθηκεύει την τιμή ανέμου ως αρχική τιμή για την επόμενη εκκίνηση XCSoar."
 
 #: src/InfoBoxes/Content/Factory.cpp:296
 #, no-c-format
 msgid "Wind bearing"
-msgstr ""
+msgstr "Κατεύθυνση ανέμου"
 
 #: src/InfoBoxes/Content/Factory.cpp:297
 #, no-c-format
 msgid "Wind B"
-msgstr ""
+msgstr "ΚατΑνεμ"
 
 #: src/InfoBoxes/Content/Factory.cpp:298
 #, no-c-format
@@ -831,62 +910,65 @@ msgid ""
 "possible by pressing the up/down cursor keys to adjust bearing when the "
 "InfoBox is active."
 msgstr ""
+"Η κατεύθυνση του ανέμου όπως εκτιμάται από το XCSoar. (Οθόνη Αφής / PC μόνο) "
+"Χειροκίνητη ρύθμιση είναι δυνατή με το πάτημα των πάνω / κάτω πλήκτρων για "
+"να ρυθμίσετε Κατεύθηνση, όταν το πεδίο είναι ενεργό.."
 
 #: src/InfoBoxes/Content/Factory.cpp:305
 #, no-c-format
 msgid "AA time"
-msgstr ""
+msgstr "ΥπολΧρονΔ"
 
 #: src/InfoBoxes/Content/Factory.cpp:306
 #, no-c-format
 msgid "AA Time"
-msgstr ""
+msgstr "ΥπολΧρονΔ"
 
 #: src/InfoBoxes/Content/Factory.cpp:307
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
-msgstr ""
+msgstr "Χρόνος που υπολείπεται για την καθορισμένης Διαδρομής"
 
 #: src/InfoBoxes/Content/Factory.cpp:314
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "AA max. distance "
-msgstr "Απόσταση Διαδρομής"
+msgstr "Μέγιστη υπόλοιπη απόσταση Διαδρομής. "
 
 #: src/InfoBoxes/Content/Factory.cpp:315
 #, no-c-format
 msgid "AA Dmax"
-msgstr ""
+msgstr "ΥπολΜεγΑποστΔ"
 
 #: src/InfoBoxes/Content/Factory.cpp:316
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
-msgstr ""
+msgstr "Η μέγιστη υπόλοιπη απόσταση της καθορισμένης Διαδρομής."
 
 #: src/InfoBoxes/Content/Factory.cpp:323
 #, no-c-format
 msgid "AA min. distance"
-msgstr ""
+msgstr "Ελάχιστη υπόλοιπη απόσταση Διαδρομής"
 
 #: src/InfoBoxes/Content/Factory.cpp:324
 #, no-c-format
 msgid "AA Dmin"
-msgstr ""
+msgstr "ΥπολΕλαχΑποστΔ"
 
 #: src/InfoBoxes/Content/Factory.cpp:325
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr ""
+msgstr "Η ελάχιστη υπόλοιπη απόσταση της καθορισμένης Διαδρομής."
 
 #: src/InfoBoxes/Content/Factory.cpp:332
 #, no-c-format
 msgid "AA speed max. distance"
-msgstr ""
+msgstr "Ταχύτητα για μέγιστη απόσταση"
 
 #: src/InfoBoxes/Content/Factory.cpp:333
 #, no-c-format
 msgid "AA Vmax"
-msgstr ""
+msgstr "ΤαχΜεγΑποστ"
 
 #: src/InfoBoxes/Content/Factory.cpp:334
 #, no-c-format
@@ -894,6 +976,8 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"Η μέση εφικτή ταχύτητα, για τη μέγιστη δυνατή απόσταση που απομένει στον "
+"ελάχιστο χρόνο της καθορισμένης Διαδρομής."
 
 #: src/InfoBoxes/Content/Factory.cpp:341
 #, no-c-format
@@ -997,12 +1081,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:395
 #, no-c-format
 msgid "G load"
-msgstr ""
+msgstr "Φορτίο G"
 
 #: src/InfoBoxes/Content/Factory.cpp:396
 #, no-c-format
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: src/InfoBoxes/Content/Factory.cpp:397
 #, no-c-format
@@ -1843,9 +1927,9 @@ msgid "Nearest airspace horizontal"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:866
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Near AS H"
-msgstr "Κοντά"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:867
 #, no-c-format
@@ -1858,9 +1942,9 @@ msgid "Nearest airspace vertical"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:874
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Near AS V"
-msgstr "Κοντά"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:875
 #, no-c-format
@@ -1980,9 +2064,9 @@ msgid "Cruise"
 msgstr ""
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:71
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "FinalGlide"
-msgstr "Τελική Πορεία"
+msgstr ""
 
 #: src/InfoBoxes/InfoBoxManager.cpp:557 src/InfoBoxes/InfoBoxManager.cpp:602
 #: src/Dialogs/dlgConfigInfoboxes.cpp:209
@@ -2184,18 +2268,16 @@ msgid "Next turnpoint"
 msgstr "Επόμενο Σημείο"
 
 #: src/InputEventsActions.cpp:1879
-#, fuzzy
 msgid "Task finished"
-msgstr "Τέλος Διαδρομής"
+msgstr ""
 
 #: src/InputEventsActions.cpp:1881
 msgid "In sector, arm advance when ready"
 msgstr ""
 
 #: src/Pages.cpp:182
-#, fuzzy
 msgid "Info Hide"
-msgstr "Πληρ/ρίες "
+msgstr ""
 
 #: src/Pages.cpp:184
 msgid "Map (Full screen)"
@@ -2210,9 +2292,8 @@ msgid "Map and InfoBoxes "
 msgstr ""
 
 #: src/Pages.cpp:199
-#, fuzzy
 msgid "Info Auto"
-msgstr "Πληρ/ρίες "
+msgstr ""
 
 #: src/Pages.cpp:201
 msgid "Map and InfoBoxes (Auto)"
@@ -2231,9 +2312,8 @@ msgid "GPS waiting for fix"
 msgstr ""
 
 #: src/Topography/TopographyGlue.cpp:99
-#, fuzzy
 msgid "Loading Topography File..."
-msgstr "Φόρτωση Αρχείου Τοπολογίας..."
+msgstr ""
 
 #: src/Terrain/RasterWeather.cpp:50
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:90
@@ -2668,23 +2748,20 @@ msgid "Connected"
 msgstr "Σύνδεση"
 
 #: src/Dialogs/DeviceListDialog.cpp:111
-#, fuzzy
 msgid "GPS fix"
-msgstr "Ορισμός 3D"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:116
-#, fuzzy
 msgid "Baro"
-msgstr "Βαρογράφος"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:121 Data/Dialogs/dlgVegaDemo.xml:10
 msgid "Airspeed"
 msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:136
-#, fuzzy
 msgid "Not connected"
-msgstr "Σύνδεση"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:216 src/Dialogs/dlgConfiguration.cpp:99
 #: Data/Input/default.xci:728
@@ -2740,9 +2817,8 @@ msgid "Refresh"
 msgstr "Ανανέωση"
 
 #: src/Dialogs/DeviceListDialog.cpp:223
-#, fuzzy
 msgid "Reconnect"
-msgstr "Σύνδεση"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:224
 msgid "Flight download"
@@ -2797,9 +2873,8 @@ msgid "No Match!"
 msgstr ""
 
 #: src/Dialogs/dlgAirspaceSelect.cpp:275
-#, fuzzy
 msgid "Heading"
-msgstr "Προσγείωση"
+msgstr ""
 
 #: src/Dialogs/dlgAirspaceWarnings.cpp:303
 msgid "No Warnings"
@@ -2934,9 +3009,8 @@ msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
 msgstr ""
 
 #: src/Dialogs/dlgPlanes.cpp:195 src/Dialogs/dlgPlanes.cpp:237
-#, fuzzy
 msgid "Overwrite"
-msgstr "Αντικατάσταση?"
+msgstr ""
 
 #: src/Dialogs/dlgPlanes.cpp:265
 #, c-format
@@ -2963,9 +3037,8 @@ msgstr ""
 
 #: src/Dialogs/dlgPlaneDetails.cpp:40 Data/Dialogs/dlgPlaneDetails.xml:3
 #: Data/Dialogs/dlgPlaneDetails_L.xml:3
-#, fuzzy
 msgid "Plane Details"
-msgstr "Λεπτομέριες Εναέριου χώρου"
+msgstr ""
 
 #: src/Dialogs/dlgPlanePolar.cpp:48 Data/Dialogs/dlgPlanePolar.xml:3
 #: Data/Dialogs/dlgPlanePolar_L.xml:3
@@ -3120,9 +3193,8 @@ msgid "Name"
 msgstr "Όνομα"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:241
-#, fuzzy
 msgid "Panel name"
-msgstr "Όνομα Πιλότου"
+msgstr ""
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:387
 msgid "Content"
@@ -3198,9 +3270,8 @@ msgid "Fix invalid"
 msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:91
-#, fuzzy
 msgid "2D fix"
-msgstr "Ορισμός 3D"
+msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:93
 msgid "3D fix"
@@ -3378,9 +3449,8 @@ msgid "Bottom Right"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:99
-#, fuzzy
 msgid "Centre Top"
-msgstr "Κέντρο"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:100
 msgid "Centre Bottom"
@@ -3486,9 +3556,8 @@ msgid "Use the current target waypoint as basis."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:243
-#, fuzzy
 msgid "Polar name"
-msgstr "Όνομα Πιλότου"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:80
 #: src/Dialogs/dlgTaskHelpers.cpp:242
@@ -3502,14 +3571,14 @@ msgid "Shade"
 msgstr "Σκιά"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:107
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Straight"
-msgstr "Αρχικό max ύψος"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:108
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turning"
-msgstr "Προειδοποίηση"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:117
 #: Data/Dialogs/dlgConfiguration.xml:332
@@ -3691,9 +3760,8 @@ msgid "ft/min"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:63
-#, fuzzy
 msgid "Full name"
-msgstr "Όνομα Πιλότου"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:63
 msgid "The full name of each waypoint is displayed."
@@ -3708,18 +3776,16 @@ msgid "The first word of the waypoint name is displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:65
-#, fuzzy
 msgid "First 3 letters"
-msgstr "Πρώτα 3"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:65
 msgid "The first 3 letters of the waypoint name are displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:66
-#, fuzzy
 msgid "First 5 letters"
-msgstr "Πρώτα 5"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:66
 msgid "The first 5 letters of the waypoint name are displayed."
@@ -3770,18 +3836,16 @@ msgid "All waypoint labels will be displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:103
-#, fuzzy
 msgid "Task waypoints & landables"
-msgstr "Σημεία"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:105
 msgid "All waypoints part of a task and all landables will be displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:106
-#, fuzzy
 msgid "Task waypoints"
-msgstr "Σημεία Χάρτη"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:107
 msgid "All waypoints part of a task will be displayed."
@@ -3815,9 +3879,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:123
-#, fuzzy
 msgid "Traffic lights"
-msgstr "Υψόμετρο Εδάφους"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:124
 msgid ""
@@ -3842,42 +3905,36 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:309 src/Dialogs/dlgTaskManager.cpp:333
-#, fuzzy
 msgid "Calculator"
-msgstr "Υπολογιστής Διαδρομής"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:312 src/Dialogs/dlgTaskManager.cpp:340
-#, fuzzy
 msgid "Turn Points"
-msgstr "Σημείο Διαδρομής"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:321 src/Dialogs/dlgTaskManager.cpp:349
-#, fuzzy
 msgid "Rules"
-msgstr "Κανόνες Διαδρομής"
+msgstr ""
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
 msgstr ""
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
-#, fuzzy
 msgid "Task unchanged"
-msgstr "Δήλωση Διαδρομής"
+msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:100
-#, fuzzy
 msgid "Clear all points?"
-msgstr "Σημεία Χάρτη"
+msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:100
 msgid "Task edit"
 msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:126
-#, fuzzy
 msgid "Add Turnpoint"
-msgstr "Επόμενο Σημείο"
+msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:176
 msgid "Task not saved"
@@ -3912,14 +3969,12 @@ msgid "Rename Error"
 msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:312
-#, fuzzy
 msgid "Create new task?"
-msgstr "Αντικατάστασει Διαδρομής"
+msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:312
-#, fuzzy
 msgid "Task New"
-msgstr "Ταχύτητα Διαδρομής"
+msgstr ""
 
 #: src/Dialogs/pnlTaskCalculator.cpp:259
 msgid "Calculator excludes unsaved task changes!"
@@ -3930,19 +3985,16 @@ msgid "(Add Alternate Start)"
 msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:151
-#, fuzzy
 msgid "Enable Alternate Starts"
-msgstr "Εναλλαντικά αρχικά σημεία"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:154
-#, fuzzy
 msgid "Edit Alternates"
-msgstr "Εναλλακτικά"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:296
-#, fuzzy
 msgid "Remove task point?"
-msgstr "Αφαίρεση από Διαδρομή"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:297 src/Dialogs/dlgTaskPointType.cpp:108
 msgid "Task Point"
@@ -4332,9 +4384,8 @@ msgstr ""
 
 #: src/Dialogs/dlgWaypointDetails.cpp:262
 #: src/Dialogs/dlgWaypointDetails.cpp:295
-#, fuzzy
 msgid "Created Goto Task."
-msgstr "Αντικατάστασει Διαδρομής"
+msgstr ""
 
 #: src/Dialogs/dlgWaypointDetails.cpp:262
 #: src/Dialogs/dlgWaypointDetails.cpp:267
@@ -4379,9 +4430,8 @@ msgid "Comment"
 msgstr "Σχόλια"
 
 #: src/Dialogs/dlgWaypointSelect.cpp:658
-#, fuzzy
 msgid "Waypoint name"
-msgstr "Σημεία"
+msgstr ""
 
 #: src/Dialogs/dlgWaypointSelect.cpp:739
 msgid "Choose a filter or click here"
@@ -4455,9 +4505,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgWaypointDetails.xml:18
 #: Data/Dialogs/dlgWaypointDetails_L.xml:18
-#, fuzzy
 msgid "Bearing and Distance"
-msgstr "Υπολοιπόμενη Απόσταση"
+msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:18
 msgid ""
@@ -5082,9 +5131,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:190
 #: Data/Dialogs/dlgConfiguration_L.xml:190
-#, fuzzy
 msgid "Topography display"
-msgstr "Οθόνη Τοπολογίας"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:670
 #: Data/Dialogs/dlgConfiguration_L.xml:674
@@ -5401,9 +5449,8 @@ msgid "Clear"
 msgstr "Ακύρωση"
 
 #: Data/Dialogs/dlgConfigFonts.xml:22 Data/Dialogs/dlgConfigFonts_L.xml:22
-#, fuzzy
 msgid "Topography labels, normal"
-msgstr "Στοιχεία Τοπολογίας"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskCalculator.xml:22
 #: Data/Dialogs/pnlTaskCalculator_L.xml:22
@@ -6143,9 +6190,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:233
 #: Data/Dialogs/dlgConfiguration_L.xml:233
-#, fuzzy
 msgid "Thermal band"
-msgstr "Υψος Θερμικού"
+msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:23
 msgid "Gear down"
@@ -6434,9 +6480,8 @@ msgid "V manoeuvering"
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
-#, fuzzy
 msgid "Topography labels, important"
-msgstr "Στοιχεία Τοπολογίας"
+msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:27
 msgid "Acknowledge"
@@ -6599,14 +6644,12 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:527
 #: Data/Dialogs/pnlTaskProperties.xml:30
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
-#, fuzzy
 msgid "Finish height ref."
-msgstr "Αναφορά αρχικού ύψ."
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:90 Data/Dialogs/dlgConfiguration_L.xml:90
-#, fuzzy
 msgid "Max. auto zoom distance"
-msgstr "Απόσταση Διαδρομής"
+msgstr ""
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid ""
@@ -6624,9 +6667,8 @@ msgid "Trail scaled"
 msgstr ""
 
 #: Data/Dialogs/dlgPlaneDetails.xml:39 Data/Dialogs/dlgPlaneDetails_L.xml:33
-#, fuzzy
 msgid "Max. Ballast"
-msgstr "Έρμα"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:798
 #: Data/Dialogs/dlgConfiguration_L.xml:802
@@ -6712,9 +6754,8 @@ msgid "Aircraft symbol"
 msgstr ""
 
 #: Data/Dialogs/pnlTaskEdit.xml:13 Data/Dialogs/pnlTaskEdit_L.xml:12
-#, fuzzy
 msgid "Clear All"
-msgstr "Ακύρωση"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:80 Data/Dialogs/dlgConfiguration_L.xml:80
 msgid "Determines what is used to shift the glider from the map center"
@@ -6932,9 +6973,8 @@ msgid "Browse"
 msgstr ""
 
 #: Data/Dialogs/pnlTaskList.xml:6 Data/Dialogs/pnlTaskList_L.xml:10
-#, fuzzy
 msgid "New Task"
-msgstr "Ακύρωση Διαδρομής"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:730
 #: Data/Dialogs/dlgConfiguration_L.xml:734
@@ -7686,9 +7726,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:369
 #: Data/Dialogs/dlgConfiguration_L.xml:370
-#, fuzzy
 msgid "Reach display"
-msgstr "Οθόνη Εδάφους"
+msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
@@ -7818,9 +7857,8 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:736
-#, fuzzy
 msgid "Setup Plane"
-msgstr "Ρυθμίσεις"
+msgstr ""
 
 #: Data/Input/default.xci:598
 msgid "Topo."
@@ -8092,44 +8130,11 @@ msgid ""
 "TAF"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Dew point"
-#~ msgstr "Νέο Σημείο"
-
-#, fuzzy
-#~ msgid "Declaring to %s"
-#~ msgstr "Αντικατάστασει Διαδρομής"
-
-#~ msgid "Setup ..."
-#~ msgstr "Ρυθμίσεις ..."
-
-#~ msgid "Configuration saved"
-#~ msgstr "Εγκατάσταση Αποθηκέυτηκε"
-
-#~ msgid "System"
-#~ msgstr "Σύστημα"
-
-#~ msgid "Task Rules"
-#~ msgstr "Κανόνες Διαδρομής"
-
-#~ msgid "Add Waypoint"
-#~ msgstr "Πρόσθεση Σημείου"
-
-#~ msgid "Volume"
-#~ msgstr "Ένταση"
-
 #~ msgid "Task Declared!"
 #~ msgstr "Δήλωση Διαδρομής!"
 
-#~ msgid "Set speed remaining"
-#~ msgstr "Ορισμ. υπολ/νης ταχ/τας"
-
-#, fuzzy
-#~ msgid "Topography"
-#~ msgstr "Τοπολογία"
-
-#~ msgid "None "
-#~ msgstr "Κανένα "
+#~ msgid "No Active Waypoint!"
+#~ msgstr "Ανενεργό Σημείο!"
 
 #~ msgid "Logger ON"
 #~ msgstr "Καταγραφέας ON"
@@ -8137,14 +8142,38 @@ msgstr ""
 #~ msgid "Logger OFF"
 #~ msgstr "Καταγραφέας OFF"
 
+#~ msgid "Task Finish"
+#~ msgstr "Τέλος Διαδρομής"
+
+#~ msgid "Loading Topology File..."
+#~ msgstr "Φόρτωση Αρχείου Τοπολογίας..."
+
+#~ msgid "Configuration saved"
+#~ msgstr "Εγκατάσταση Αποθηκέυτηκε"
+
+#~ msgid "Wind at Altitude"
+#~ msgstr "Άνεμος σε Υψόμετρο"
+
 #~ msgid "Site"
 #~ msgstr "Τοποθεσία"
+
+#~ msgid "Map Display"
+#~ msgstr "Εμφάνιση Χάρτη"
+
+#~ msgid "Safety factors"
+#~ msgstr "Παράγοντες ασφαλείας"
 
 #~ msgid "Names"
 #~ msgstr "Ονόματα"
 
 #~ msgid "Numbers"
 #~ msgstr "Νούμερα"
+
+#~ msgid "First 5"
+#~ msgstr "Πρώτα 5"
+
+#~ msgid "First 3"
+#~ msgstr "Πρώτα 3"
 
 #~ msgid "Names in task"
 #~ msgstr "Ονόματα διαδρομών"
@@ -8173,5 +8202,101 @@ msgstr ""
 #~ msgid "White outline"
 #~ msgstr "Λευκό περίγραμμα"
 
+#~ msgid "Alternate"
+#~ msgstr "Εναλλακτικά"
+
 #~ msgid "Changes to configuration saved."
 #~ msgstr "Αλλαγές στη διαμόρφωση αποθηκεύτηκαν."
+
+#~ msgid "System"
+#~ msgstr "Σύστημα"
+
+#~ msgid "Task Rules"
+#~ msgstr "Κανόνες Διαδρομής"
+
+#~ msgid "add waypoint"
+#~ msgstr "Πρόσθεση Σημείου"
+
+#~ msgid "Append to task"
+#~ msgstr "Προσάρτηση στην Διαδρομή"
+
+#~ msgid "Aircraft/wind speed"
+#~ msgstr "Ταχύτητα ανέμου"
+
+#~ msgid "Start max height"
+#~ msgstr "Αρχικό max ύψος"
+
+#~ msgid "Start max speed"
+#~ msgstr "Αρχική max ταχύτητα"
+
+#~ msgid "Max height gain"
+#~ msgstr "Max κερδ/μένο ύψος"
+
+#~ msgid "Map waypoints"
+#~ msgstr "Σημεία Χάρτη"
+
+#~ msgid "New Waypoint"
+#~ msgstr "Νέο Σημείο"
+
+#~ msgid "Acknowledge time*"
+#~ msgstr "Αναγνώριση Χρόνου*"
+
+#~ msgid "Achieved Speed"
+#~ msgstr "Επίτευξη Ταχύτητας"
+
+#~ msgid "Volume"
+#~ msgstr "Ένταση"
+
+#~ msgid "Set speed remaining"
+#~ msgstr "Ορισμ. υπολ/νης ταχ/τας"
+
+#~ msgid "Select colour"
+#~ msgstr "Επιλογή Χρώματος"
+
+#~ msgid "Start alt"
+#~ msgstr "Αρχικό υψομ."
+
+#~ msgid "Select pattern"
+#~ msgstr "Επιλογή Υποδείγματος"
+
+#~ msgid "Setup ..."
+#~ msgstr "Ρυθμίσεις ..."
+
+#~ msgid "Topology labels"
+#~ msgstr "Στοιχεία Τοπολογίας"
+
+#~ msgid "Insert in task"
+#~ msgstr "Εισαγωγή σε Διαδρομή"
+
+#~ msgid "Warning time*"
+#~ msgstr "Προειδοποίηση Χρόνου*"
+
+#~ msgid "Topology display"
+#~ msgstr "Οθόνη Τοπολογίας"
+
+#~ msgid "Start height ref"
+#~ msgstr "Αναφορά αρχικού ύψ."
+
+#~ msgid "Safety lock"
+#~ msgstr "Κλείδωμα Ασφαλείας"
+
+#~ msgid "Task Calculator"
+#~ msgstr "Υπολογιστής Διαδρομής"
+
+#~ msgid "Below Final Glide"
+#~ msgstr "Κάτωθεν Final Glide"
+
+#~ msgid "Waiting for GPS Connection"
+#~ msgstr "Αναμονή για επικοινωνία GPS"
+
+#~ msgid "Above Final Glide"
+#~ msgstr "Ανωθεν Final Glide"
+
+#~ msgid "Restarting Comm Ports"
+#~ msgstr "Επανεκκίνηση Θυρών επικοινωνίας"
+
+#~ msgid "Waiting for GPS Fix"
+#~ msgstr "Αναμονή για επανασύνδεση GPS"
+
+#~ msgid "Final Glide Through Terrain"
+#~ msgstr "Τελική Πορεία Μέσω Εδάφους"

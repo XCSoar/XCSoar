@@ -27,6 +27,7 @@ Version 6.3 - not yet released
 Version 6.2.4 - not yet released
 * devices
   - Borgelt: send MacCready to B800 with CAI302 protocol
+  - Flytec: fixed the $FLYSEN parser (more data, including GPS)
 * Android
   - fix bogus long InfoBox clicks
   - fix crash after resuming
@@ -39,6 +40,7 @@ Version 6.2.4 - not yet released
   - fix crash in the .xci file parser
 * settings
   - load configured METAR/TAF stations on startup
+  - remember UTC offsets > +12 hours.
 
 Version 6.2.3 - 2011/11/19
 * calculations

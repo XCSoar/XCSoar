@@ -308,10 +308,10 @@ OnNextClicked(gcc_unused WndButton &Sender)
   if (target_point < (TaskSize - 1))
     target_point++;
   else
-    target_point = 0;
+    target_point = ActiveTaskPointOnEntry;
   WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
   DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->Set(target_point);
+  dfe->Set(target_point - ActiveTaskPointOnEntry);
   RefreshTargetPoint();
   wp->RefreshDisplay();
 }

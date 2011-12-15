@@ -30,6 +30,7 @@ struct FlarmState;
 struct NMEAInfo;
 struct BrokenDateTime;
 class NMEAInputLine;
+struct GeoPoint;
 
 class NMEAParser
 {
@@ -77,6 +78,8 @@ public:
    * @return True if checksum correct
    */
   static bool NMEAChecksum(const char *string);
+
+  static bool ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r);
 
 private:
 
