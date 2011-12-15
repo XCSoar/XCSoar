@@ -70,13 +70,13 @@ $$($(2)_NOSTRIP).s: $$($(2)_NOSTRIP)-opt.bc
 	$$(Q)llc -o $$@ $$^ -O2
 
 # Link the unstripped binary
-$$($(2)_NOSTRIP): $$($(2)_NOSTRIP).s
+$$($(2)_NOSTRIP): $$($(2)_NOSTRIP).s $$(TARGET_LDADD)
 	@$$(NQ)echo "  CLANG   $$@"
 	$$(Q)$$(LINK) $$(LDFLAGS) -o $$@ $$^ $$(LDLIBS) $$($(2)_LDLIBS)
 else
 
 # Link the unstripped binary
-$$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) | $$(TARGET_BIN_DIR)/dirstamp
+$$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) $$(TARGET_LDADD) | $$(TARGET_BIN_DIR)/dirstamp
 	@$$(NQ)echo "  LINK    $$@"
 	$$(Q)$$(LINK) $$(LDFLAGS) $$(TARGET_ARCH) -o $$@ $$^ $$(LDLIBS) $$($(2)_LDLIBS)
 

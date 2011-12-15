@@ -12,4 +12,4 @@ endif
 
 # Add the C++ standard library to every library and every program
 TARGET_CPPFLAGS += $(LIBSTDCXX_CPPFLAGS)
-TARGET_LDLIBS := $(LIBSTDCXX_LDADD) $(TARGET_LDLIBS)
+TARGET_LDADD := $(LIBSTDCXX_LDADD) $(TARGET_LDADD)

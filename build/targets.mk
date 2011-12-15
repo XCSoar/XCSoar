@@ -319,6 +319,7 @@ endif
 
 TARGET_LDFLAGS =
 TARGET_LDLIBS =
+TARGET_LDADD =
 
 ifeq ($(TARGET),PC)
   TARGET_LDFLAGS += -Wl,--major-subsystem-version=5
@@ -392,7 +393,7 @@ ifeq ($(TARGET),ANDROID)
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libGLESv1_CM.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libc.so $(ANDROID_TARGET_ROOT)/usr/lib/libm.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/liblog.so
-  TARGET_LDLIBS += $(ANDROID_TOOLCHAIN)/lib/gcc/$(ANDROID_ABI4)/$(ANDROID_GCC_VERSION)/libgcc.a
+  TARGET_LDADD += $(ANDROID_TOOLCHAIN)/lib/gcc/$(ANDROID_ABI4)/$(ANDROID_GCC_VERSION)/libgcc.a
 endif
 
 ######## output files
