@@ -25,6 +25,9 @@ Copyright_License {
 #define XCSOAR_BACKGROUND_RENDERER_HPP
 
 #include "Screen/Point.hpp"
+#include "Math/Angle.hpp"
+
+#include <tchar.h>
 
 class Canvas;
 class WindowProjection;
@@ -36,10 +39,6 @@ class RasterWeather;
 class LabelBlock;
 struct NMEAInfo;
 struct DerivedInfo;
-
-#include "Math/Angle.hpp"
-
-#include <tchar.h>
 
 /**
  * Utility class to draw terrain, topography (not implemented yet)
@@ -69,7 +68,7 @@ public:
 
 private:
   void SetSunFromWind(const WindowProjection& proj, const SpeedVector& wind);
-  void SetSunAngle(const WindowProjection& proj, const Angle &angle);
+  void SetSunAngle(const WindowProjection& proj, Angle angle);
   static void DrawSpotHeight(Canvas &canvas,  LabelBlock &block,
                              const TCHAR *Buffer, RasterPoint pt);
 };

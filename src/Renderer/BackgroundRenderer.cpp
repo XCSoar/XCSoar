@@ -31,7 +31,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "Screen/Fonts.hpp"
-#include "Util/StringUtil.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
@@ -131,7 +130,7 @@ BackgroundRenderer::SetSunFromWind(const WindowProjection& projection,
 
 void
 BackgroundRenderer::SetSunAngle(const WindowProjection& projection,
-                                const Angle& angle)
+                                Angle angle)
 {
   sun_azimuth = angle - projection.GetScreenAngle();
 }
