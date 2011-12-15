@@ -25,6 +25,9 @@ package org.xcsoar;
 import android.os.Build;
 import android.view.MotionEvent;
 
+/**
+ * Forward MotionEvent object to EventBridge.
+ */
 abstract class DifferentTouchInput {
   public static DifferentTouchInput getInstance() {
     if (Build.VERSION.SDK_INT <= 4)
@@ -35,6 +38,10 @@ abstract class DifferentTouchInput {
 
   public abstract void process(final MotionEvent event);
 
+  /**
+   * Implementation for Android versions that are not capable of
+   * MultiTouch.
+   */
   private static class SingleTouchInput extends DifferentTouchInput {
     private static class Holder {
       private static final SingleTouchInput sInstance = new SingleTouchInput();
@@ -57,6 +64,9 @@ abstract class DifferentTouchInput {
     }
   }
 
+  /**
+   * Implementation for Android versions with MultiTouch support.
+   */
   private static class MultiTouchInput extends DifferentTouchInput {
     private static class Holder {
       private static final MultiTouchInput sInstance = new MultiTouchInput();
