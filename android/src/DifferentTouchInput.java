@@ -30,9 +30,11 @@ import android.view.MotionEvent;
  */
 abstract class DifferentTouchInput {
   public static DifferentTouchInput getInstance() {
-    if (Build.VERSION.SDK_INT <= 4)
+    if (Build.VERSION.SDK_INT < 8)
+      /* up to Android 2.1 Eclair */
       return SingleTouchInput.Holder.sInstance;
     else
+      /* Android 2.2 Froyo or newer */
       return MultiTouchInput.Holder.sInstance;
   }
 
@@ -73,7 +75,7 @@ abstract class DifferentTouchInput {
     }
 
     public void process(final MotionEvent event) {
-      switch (event.getAction()) {
+      switch (event.getActionMasked()) {
       case MotionEvent.ACTION_DOWN:
         EventBridge.onMouseDown((int)event.getX(), (int)event.getY());
         break;
