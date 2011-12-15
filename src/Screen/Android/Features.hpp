@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2011 The XCSoar Project
@@ -20,14 +21,9 @@
 }
 */
 
-package org.xcsoar;
+#ifndef XCSOAR_SCREEN_ANDROID_FEATURES_HPP
+#define XCSOAR_SCREEN_ANDROID_FEATURES_HPP
 
-class EventBridge {
-  public static native void onKeyDown(int keyCode);
-  public static native void onKeyUp(int keyCode);
-  public static native void onMouseDown(int x, int y);
-  public static native void onMouseUp(int x, int y);
-  public static native void onMouseMove(int x, int y);
-  public static native void onPointerDown();
-  public static native void onPointerUp();
-}
+#define HAVE_MULTI_TOUCH
+
+#endif

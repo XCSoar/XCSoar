@@ -88,3 +88,17 @@ Java_org_xcsoar_EventBridge_onMouseMove(JNIEnv *env, jclass cls,
   event_queue->Purge(Event::MOUSE_MOTION);
   event_queue->Push(Event(Event::MOUSE_MOTION, x, y));
 }
+
+gcc_visibility_default
+void
+Java_org_xcsoar_EventBridge_onPointerDown(JNIEnv *env, jclass cls)
+{
+  event_queue->Push(Event(Event::POINTER_DOWN));
+}
+
+gcc_visibility_default
+void
+Java_org_xcsoar_EventBridge_onPointerUp(JNIEnv *env, jclass cls)
+{
+  event_queue->Push(Event(Event::POINTER_UP));
+}

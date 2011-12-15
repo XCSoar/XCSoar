@@ -167,6 +167,12 @@ TopWindow::on_event(const Event &event)
   case Event::MOUSE_UP:
     return on_mouse_up(event.x, event.y);
 
+  case Event::POINTER_DOWN:
+    return OnMultiTouchDown();
+
+  case Event::POINTER_UP:
+    return OnMultiTouchUp();
+
   case Event::RESIZE:
     if (!surface_valid)
       /* postpone the resize if we're paused; the real resize will be

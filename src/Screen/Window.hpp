@@ -27,6 +27,7 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Point.hpp"
+#include "Screen/Features.hpp"
 #include "Thread/Debug.hpp"
 #include "Compiler.h"
 
@@ -864,6 +865,18 @@ public:
   virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
   virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
   virtual bool on_mouse_wheel(PixelScalar x, PixelScalar y, int delta);
+
+#ifdef HAVE_MULTI_TOUCH
+  /**
+   * A secondary pointer is being pressed.
+   */
+  virtual bool OnMultiTouchDown();
+
+  /**
+   * A secondary pointer is being released.
+   */
+  virtual bool OnMultiTouchUp();
+#endif
 
   /**
    * Checks if the window wishes to handle a special key, like cursor

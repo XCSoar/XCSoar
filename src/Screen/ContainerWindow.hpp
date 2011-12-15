@@ -69,6 +69,12 @@ protected:
   virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
   virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
   virtual bool on_mouse_wheel(PixelScalar x, PixelScalar y, int delta);
+
+#ifdef HAVE_MULTI_TOUCH
+  virtual bool OnMultiTouchDown();
+  virtual bool OnMultiTouchUp();
+#endif
+
   virtual void on_paint(Canvas &canvas);
 #else /* USE_GDI */
   virtual LRESULT on_message(HWND hWnd, UINT message,

@@ -286,6 +286,32 @@ ContainerWindow::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
   return PaintWindow::on_mouse_wheel(x, y, delta);
 }
 
+#ifdef HAVE_MULTI_TOUCH
+
+bool
+ContainerWindow::OnMultiTouchDown()
+{
+  if (!capture && capture_child != NULL) {
+    capture_child->OnMultiTouchDown();
+    return true;
+  }
+
+  return PaintWindow::OnMultiTouchDown();
+}
+
+bool
+ContainerWindow::OnMultiTouchUp()
+{
+  if (!capture && capture_child != NULL) {
+    capture_child->OnMultiTouchUp();
+    return true;
+  }
+
+  return PaintWindow::OnMultiTouchUp();
+}
+
+#endif /* HAVE_MULTI_TOUCH */
+
 void
 ContainerWindow::on_paint(Canvas &canvas)
 {

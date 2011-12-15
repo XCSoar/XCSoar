@@ -207,6 +207,22 @@ Window::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
   return false;
 }
 
+#ifdef HAVE_MULTI_TOUCH
+
+bool
+Window::OnMultiTouchDown()
+{
+  return false;
+}
+
+bool
+Window::OnMultiTouchUp()
+{
+  return false;
+}
+
+#endif /* HAVE_MULTI_TOUCH */
+
 bool
 Window::on_key_check(unsigned key_code) const
 {

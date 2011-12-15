@@ -87,6 +87,14 @@ abstract class DifferentTouchInput {
       case MotionEvent.ACTION_MOVE:
         EventBridge.onMouseMove((int)event.getX(), (int)event.getY());
         break;
+
+      case MotionEvent.ACTION_POINTER_DOWN:
+        EventBridge.onPointerDown();
+        break;
+
+      case MotionEvent.ACTION_POINTER_UP:
+        EventBridge.onPointerUp();
+        break;
       }
     }
   }

@@ -56,6 +56,9 @@ struct Event {
     MOUSE_DOWN,
     MOUSE_UP,
 
+    POINTER_DOWN,
+    POINTER_UP,
+
     /**
      * The NativeView was resized (e.g. by changing the screen
      * orientation).
