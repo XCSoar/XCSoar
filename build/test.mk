@@ -575,6 +575,7 @@ DEBUG_PROGRAM_NAMES = \
 	test_troute \
 	TestTrace \
 	FlightTable \
+	RunTrace \
 	RunOLCAnalysis \
 	BenchmarkProjection \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
@@ -1227,6 +1228,22 @@ RUN_WIND_EKF_SOURCES = \
 RUN_WIND_EKF_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_EKF_DEPENDS = MATH UTIL
 $(eval $(call link-program,RunWindEKF,RUN_WIND_EKF))
+
+RUN_TRACE_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/NMEA/Aircraft.cpp \
+	$(SRC)/UtilsFile.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/TracePoint.cpp \
+	$(TEST_SRC_DIR)/Printing.cpp \
+	$(TEST_SRC_DIR)/RunTrace.cpp
+RUN_TRACE_LDADD = $(DEBUG_REPLAY_LDADD)
+RUN_TRACE_DEPENDS = UTIL MATH
+$(eval $(call link-program,RunTrace,RUN_TRACE))
 
 RUN_OLC_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
