@@ -23,6 +23,7 @@ that have native methods, to prepare for calling "javah".
            bootclasspathref="android.target.classpath"
            verbose="${verbose}">
       <src path="${src.dir}" />
+      <include name="DifferentTouchInput.java"/>
       <include name="NativeView.java"/>
       <include name="EventBridge.java"/>
       <include name="Timer.java"/>
