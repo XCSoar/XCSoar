@@ -41,12 +41,19 @@ abstract class DifferentTouchInput {
     }
 
     public void process(final MotionEvent event) {
-      if( event.getAction() == MotionEvent.ACTION_DOWN )
+      switch (event.getAction()) {
+      case MotionEvent.ACTION_DOWN:
         EventBridge.onMouseDown((int)event.getX(), (int)event.getY());
-      if( event.getAction() == MotionEvent.ACTION_UP )
+        break;
+
+      case MotionEvent.ACTION_UP:
         EventBridge.onMouseUp((int)event.getX(), (int)event.getY());
-      if( event.getAction() == MotionEvent.ACTION_MOVE )
+        break;
+
+      case MotionEvent.ACTION_MOVE:
         EventBridge.onMouseMove((int)event.getX(), (int)event.getY());
+        break;
+      }
     }
   }
 
@@ -56,13 +63,19 @@ abstract class DifferentTouchInput {
     }
 
     public void process(final MotionEvent event) {
-      int action = -1;
-      if( event.getAction() == MotionEvent.ACTION_DOWN )
+      switch (event.getAction()) {
+      case MotionEvent.ACTION_DOWN:
         EventBridge.onMouseDown((int)event.getX(), (int)event.getY());
-      if( event.getAction() == MotionEvent.ACTION_UP )
+        break;
+
+      case MotionEvent.ACTION_UP:
         EventBridge.onMouseUp((int)event.getX(), (int)event.getY());
-      if( event.getAction() == MotionEvent.ACTION_MOVE )
+        break;
+
+      case MotionEvent.ACTION_MOVE:
         EventBridge.onMouseMove((int)event.getX(), (int)event.getY());
+        break;
+      }
     }
   }
 }
