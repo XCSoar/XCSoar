@@ -42,6 +42,12 @@ Copyright_License {
 
 Waypoints way_points;
 
+bool
+NMEAParser::ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
+{
+  return false;
+}
+
 /*
  * Fake InputEvents.cpp
  */
