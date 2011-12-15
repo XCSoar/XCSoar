@@ -111,7 +111,30 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEAInfo &info)
 static bool
 FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
 {
+  // Detect firmware/sentence version
+  //
+  // V or A in field 9  -> 3.31-
+  // V or A in field 10 -> 3.32+
+
+  NMEAInputLine line_copy(line.rest());
+
+  line_copy.skip(8);
+
+  bool has_date_field = false;
+  char validity = line_copy.read_first_char();
+  if (validity != 'A' && validity != 'V') {
+    validity = line_copy.read_first_char();
+    if (validity != 'A' && validity != 'V')
+      return false;
+
+    has_date_field = true;
+  }
+
   fixed value;
+
+  //  Date(ddmmyy),   6 Digits (only in firmware version 3.32+)
+  if (has_date_field)
+    line.skip();
 
   //  Time(hhmmss),   6 Digits
   line.skip();
@@ -130,12 +153,7 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
   line.skip(3);
 
   //  Validity of 3 D fix A or V,           1 Digit
-  char validity = line.read_first_char();
-  if (validity != 'A' && validity != 'V') {
-    validity = line.read_first_char();
-    if (validity != 'A' && validity != 'V')
-      return false;
-  }
+  line.skip();
 
   //  Satellites in Use (0 to 12),          2 Digits
   line.skip();
