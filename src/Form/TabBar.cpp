@@ -307,25 +307,25 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
     canvas.DrawFilledRectangle(rc, canvas.GetBackgroundColor());
   }
   if (bmp != NULL) {
-
-    const int offsetx = (rc.right - rc.left - bmp->get_size().cx / 2) / 2;
-    const int offsety = (rc.bottom - rc.top - bmp->get_size().cy) / 2;
+    const PixelSize bitmap_size = bmp->get_size();
+    const int offsetx = (rc.right - rc.left - bitmap_size.cx / 2) / 2;
+    const int offsety = (rc.bottom - rc.top - bitmap_size.cy) / 2;
 
     if (inverse) // black background
       canvas.copy_not(rc.left + offsetx,
                   rc.top + offsety,
-                  bmp->get_size().cx / 2,
-                  bmp->get_size().cy,
+                  bitmap_size.cx / 2,
+                  bitmap_size.cy,
                   *bmp,
-                  bmp->get_size().cx / 2, 0);
+                  bitmap_size.cx / 2, 0);
 
     else
       canvas.copy(rc.left + offsetx,
                   rc.top + offsety,
-                  bmp->get_size().cx / 2,
-                  bmp->get_size().cy,
+                  bitmap_size.cx / 2,
+                  bitmap_size.cy,
                   *bmp,
-                  bmp->get_size().cx / 2, 0);
+                  bitmap_size.cx / 2, 0);
 
   } else {
     canvas.formatted_text(&rcTextFinal, caption,
