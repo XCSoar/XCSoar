@@ -30,6 +30,7 @@ struct FLARM_STATE;
 struct NMEAInfo;
 struct BrokenDateTime;
 class NMEAInputLine;
+struct GeoPoint;
 
 class NMEAParser
 {
@@ -68,6 +69,8 @@ public:
    * Reads an altitude value, and the unit from a second volumn.
    */
   static bool ReadAltitude(NMEAInputLine &line, fixed &value_r);
+
+  static bool ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r);
 
   static bool NMEAChecksum(const char *String);
 

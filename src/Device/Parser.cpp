@@ -203,8 +203,8 @@ ReadLongitude(NMEAInputLine &line, Angle &value_r)
   return true;
 }
 
-static bool
-ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
+bool
+NMEAParser::ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
 {
   GeoPoint value;
 
