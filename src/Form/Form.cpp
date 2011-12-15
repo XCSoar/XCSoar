@@ -105,7 +105,7 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
   // Create ClientWindow
 
 #ifdef EYE_CANDY
-  bitmap_title.load(IDB_DIALOGTITLE);
+  bitmap_title.Load(IDB_DIALOGTITLE);
 #endif
 
   WindowStyle client_style;
