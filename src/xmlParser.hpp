@@ -61,12 +61,6 @@ struct XMLResults {
   unsigned nLine, nColumn;
 };
 
-/** Structure for XML attribute. */
-struct XMLAttribute {
-  const TCHAR *lpszName;
-  const TCHAR *lpszValue;
-};
-
 struct XML;
 
 struct XMLNode {
@@ -77,6 +71,12 @@ protected:
    * delete).
    */
   struct XMLNodeData : private NonCopyable {
+    /** Structure for XML attribute. */
+    struct Attribute {
+      const TCHAR *lpszName;
+      const TCHAR *lpszValue;
+    };
+
     /** Element name (=NULL if root) */
     const TCHAR *lpszName;
 
@@ -90,7 +90,7 @@ protected:
     tstring text;
 
     /** Array of attributes */
-    std::forward_list<XMLAttribute> pAttribute;
+    std::forward_list<Attribute> pAttribute;
 
     unsigned ref_count;
 
@@ -108,7 +108,7 @@ protected:
     }
 
     void AddAttribute(const TCHAR *name, const TCHAR *value) {
-      pAttribute.push_front((XMLAttribute){name, value});
+      pAttribute.push_front((Attribute){name, value});
     }
 
     typedef std::list<XMLNode>::const_iterator const_iterator;

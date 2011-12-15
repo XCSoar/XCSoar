@@ -45,11 +45,6 @@
  ****************************************************************************
  */
 
-#if defined(WIN32)
-#include <windows.h> // to have IsTextUnicode, MultiByteToWideChar, WideCharToMultiByte
-                     // to handle unicode files
-#endif
-
 #include "xmlParser.hpp"
 #include "Compatibility/string.h"
 #include "IO/TextWriter.hpp"
@@ -116,7 +111,7 @@ XMLNode::XMLNodeData::~XMLNodeData()
   assert(ref_count == 0);
 
   for (auto i = pAttribute.begin(), end = pAttribute.end(); i != end; ++i) {
-    XMLAttribute &attribute = *i;
+    Attribute &attribute = *i;
     free((void*)attribute.lpszName);
     free((void*)attribute.lpszValue);
   }
@@ -1232,7 +1227,7 @@ XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
     // Enumerate attributes and add them to the string
     for (auto i = pEntry->pAttribute.begin(), end = pEntry->pAttribute.end();
          i != end; ++i) {
-      const XMLAttribute *pAttr = &*i;
+      const XMLNodeData::Attribute *pAttr = &*i;
       writer.write(' ');
       writer.write(pAttr->lpszName);
       writer.write('=');
