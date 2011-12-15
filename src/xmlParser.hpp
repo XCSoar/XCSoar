@@ -107,6 +107,10 @@ protected:
       return !pChild.empty() || !text.empty();
     }
 
+    void AddAttribute(const TCHAR *name, const TCHAR *value) {
+      pAttribute.push_front((XMLAttribute){name, value});
+    }
+
     typedef std::list<XMLNode>::const_iterator const_iterator;
 
     const_iterator begin() const {
