@@ -79,6 +79,9 @@ GlueMapWindow::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
   case DRAG_NONE:
     break;
 
+#ifdef HAVE_MULTI_TOUCH
+  case DRAG_MULTI_TOUCH_PAN:
+#endif
   case DRAG_PAN:
     visible_projection.SetGeoLocation(drag_projection.GetGeoLocation()
                                       + drag_start_geopoint
@@ -164,6 +167,13 @@ GlueMapWindow::on_mouse_up(PixelScalar x, PixelScalar y)
   case DRAG_NONE:
     break;
 
+#ifdef HAVE_MULTI_TOUCH
+  case DRAG_MULTI_TOUCH_PAN:
+    follow_mode = FOLLOW_SELF;
+    InputEvents::SetPan(true);
+    break;
+#endif
+
   case DRAG_PAN:
 #ifndef ENABLE_OPENGL
     /* allow the use of the stretched last buffer for the next two
@@ -234,6 +244,24 @@ GlueMapWindow::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
   return true;
 }
 
+#ifdef HAVE_MULTI_TOUCH
+
+bool
+GlueMapWindow::OnMultiTouchDown()
+{
+  if (drag_mode != DRAG_GESTURE || follow_mode != FOLLOW_SELF)
+    return false;
+
+  /* start panning on MultiTouch event */
+
+  drag_mode = DRAG_MULTI_TOUCH_PAN;
+  drag_projection = visible_projection;
+  follow_mode = FOLLOW_PAN;
+  return true;
+}
+
+#endif /* HAVE_MULTI_TOUCH */
+
 bool
 GlueMapWindow::on_mouse_gesture(const TCHAR* gesture)
 {
@@ -258,6 +286,11 @@ GlueMapWindow::on_cancel_mode()
   MapWindow::on_cancel_mode();
 
   if (drag_mode != DRAG_NONE) {
+#ifdef HAVE_MULTI_TOUCH
+    if (drag_mode == DRAG_MULTI_TOUCH_PAN)
+      follow_mode = FOLLOW_SELF;
+#endif
+
     release_capture();
     drag_mode = DRAG_NONE;
   }

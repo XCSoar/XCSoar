@@ -30,6 +30,7 @@ Copyright_License {
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Screen/Timer.hpp"
+#include "Screen/Features.hpp"
 #include "DisplayMode.hpp"
 
 struct Look;
@@ -73,6 +74,15 @@ class GlueMapWindow : public MapWindow {
 
   enum DragMode {
     DRAG_NONE,
+
+#ifdef HAVE_MULTI_TOUCH
+    /**
+     * Dragging the map with two fingers; enters the "real" pan mode
+     * as soon as the user releases the finger press.
+     */
+    DRAG_MULTI_TOUCH_PAN,
+#endif
+
     DRAG_PAN,
     DRAG_GESTURE,
     DRAG_SIMULATOR,
@@ -188,6 +198,10 @@ protected:
   virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
   virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
   virtual bool on_mouse_wheel(PixelScalar x, PixelScalar y, int delta);
+
+#ifdef HAVE_MULTI_TOUCH
+  virtual bool OnMultiTouchDown();
+#endif
 
   /**
    * This event handler gets called when a gesture has
