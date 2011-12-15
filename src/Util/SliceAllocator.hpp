@@ -199,9 +199,9 @@ public:
     /* unreachable */
   }
 
-  template<typename... Args>
-  void construct(pointer p, Args&&... args) {
-    ::new((void *)p) T(std::forward<Args>(args)...);
+  template<typename U, typename... Args>
+  void construct(U *p, Args&&... args) {
+    ::new((void *)p) U(std::forward<Args>(args)...);
   }
 
   void destroy(T *t) {
@@ -250,8 +250,8 @@ public:
     allocator.deallocate(t, n);
   }
 
-  template<typename... Args>
-  void construct(pointer p, Args&&... args) {
+  template<typename U, typename... Args>
+  void construct(U *p, Args&&... args) {
     allocator.construct(p, std::forward<Args>(args)...);
   }
 
