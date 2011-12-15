@@ -25,24 +25,22 @@ package org.xcsoar;
 import android.os.Build;
 import android.view.MotionEvent;
 
-abstract class DifferentTouchInput
-{
-  public static DifferentTouchInput getInstance()
-  {
+abstract class DifferentTouchInput {
+  public static DifferentTouchInput getInstance() {
     if (Build.VERSION.SDK_INT <= 4)
       return SingleTouchInput.Holder.sInstance;
     else
       return MultiTouchInput.Holder.sInstance;
   }
+
   public abstract void process(final MotionEvent event);
-  private static class SingleTouchInput extends DifferentTouchInput
-  {
-    private static class Holder
-    {
+
+  private static class SingleTouchInput extends DifferentTouchInput {
+    private static class Holder {
       private static final SingleTouchInput sInstance = new SingleTouchInput();
     }
-    public void process(final MotionEvent event)
-    {
+
+    public void process(final MotionEvent event) {
       if( event.getAction() == MotionEvent.ACTION_DOWN )
         EventBridge.onMouseDown((int)event.getX(), (int)event.getY());
       if( event.getAction() == MotionEvent.ACTION_UP )
@@ -51,21 +49,20 @@ abstract class DifferentTouchInput
         EventBridge.onMouseMove((int)event.getX(), (int)event.getY());
     }
   }
-  private static class MultiTouchInput extends DifferentTouchInput
-  {
-    private static class Holder
-    {
+
+  private static class MultiTouchInput extends DifferentTouchInput {
+    private static class Holder {
       private static final MultiTouchInput sInstance = new MultiTouchInput();
     }
-    public void process(final MotionEvent event)
-    {
-        int action = -1;
-        if( event.getAction() == MotionEvent.ACTION_DOWN )
-          EventBridge.onMouseDown((int)event.getX(), (int)event.getY());
-        if( event.getAction() == MotionEvent.ACTION_UP )
-          EventBridge.onMouseUp((int)event.getX(), (int)event.getY());
-        if( event.getAction() == MotionEvent.ACTION_MOVE )
-          EventBridge.onMouseMove((int)event.getX(), (int)event.getY());
+
+    public void process(final MotionEvent event) {
+      int action = -1;
+      if( event.getAction() == MotionEvent.ACTION_DOWN )
+        EventBridge.onMouseDown((int)event.getX(), (int)event.getY());
+      if( event.getAction() == MotionEvent.ACTION_UP )
+        EventBridge.onMouseUp((int)event.getX(), (int)event.getY());
+      if( event.getAction() == MotionEvent.ACTION_MOVE )
+        EventBridge.onMouseMove((int)event.getX(), (int)event.getY());
     }
   }
 }
