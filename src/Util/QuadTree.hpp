@@ -545,7 +545,7 @@ protected:
       assert(IsSplitted());
       assert(bounds.IsInside(location));
 
-      std::pair<bool,bool> xy = bounds.Split(location);
+      const auto xy = bounds.Split(location);
       return children->Get(xy.first, xy.second);
     }
 
@@ -703,7 +703,7 @@ protected:
         return children->FindNearestIf(bounds, location, square_range,
                                        predicate);
       } else {
-        std::pair<const Leaf *, distance_type> result =
+        const auto result =
           leaves.FindNearestIf(location, square_range, predicate);
         if (result.first == NULL)
           return std::make_pair(const_iterator(), max_distance());
@@ -805,13 +805,13 @@ protected:
                   const P &predicate) const {
       const Point middle = bounds.GetMiddle();
 
-      std::pair<const_iterator, distance_type> result =
+      auto result =
         buckets[0].FindNearestIf(GetTopLeft(bounds, middle),
                                  location, square_range,
                                  predicate);
 
       square_range = result.second;
-      std::pair<const_iterator, distance_type> tmp =
+      auto tmp =
         buckets[1].FindNearestIf(GetTopRight(bounds, middle),
                                  location, square_range,
                                  predicate);
