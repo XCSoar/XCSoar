@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.2.4 - not yet released
 * devices
   - Borgelt: send MacCready to B800 with CAI302 protocol
+  - Flytec: fixed the $FLYSEN parser (more data, including GPS)
 * Android
   - fix bogus long InfoBox clicks
   - fix crash after resuming
