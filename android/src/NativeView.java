@@ -46,51 +46,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 
-abstract class DifferentTouchInput
-{
-  public static DifferentTouchInput getInstance()
-  {
-    if (Build.VERSION.SDK_INT <= 4)
-      return SingleTouchInput.Holder.sInstance;
-    else
-      return MultiTouchInput.Holder.sInstance;
-  }
-  public abstract void process(final MotionEvent event);
-  private static class SingleTouchInput extends DifferentTouchInput
-  {
-    private static class Holder
-    {
-      private static final SingleTouchInput sInstance = new SingleTouchInput();
-    }
-    public void process(final MotionEvent event)
-    {
-      if( event.getAction() == MotionEvent.ACTION_DOWN )
-        EventBridge.onMouseDown((int)event.getX(), (int)event.getY());
-      if( event.getAction() == MotionEvent.ACTION_UP )
-        EventBridge.onMouseUp((int)event.getX(), (int)event.getY());
-      if( event.getAction() == MotionEvent.ACTION_MOVE )
-        EventBridge.onMouseMove((int)event.getX(), (int)event.getY());
-    }
-  }
-  private static class MultiTouchInput extends DifferentTouchInput
-  {
-    private static class Holder
-    {
-      private static final MultiTouchInput sInstance = new MultiTouchInput();
-    }
-    public void process(final MotionEvent event)
-    {
-        int action = -1;
-        if( event.getAction() == MotionEvent.ACTION_DOWN )
-          EventBridge.onMouseDown((int)event.getX(), (int)event.getY());
-        if( event.getAction() == MotionEvent.ACTION_UP )
-          EventBridge.onMouseUp((int)event.getX(), (int)event.getY());
-        if( event.getAction() == MotionEvent.ACTION_MOVE )
-          EventBridge.onMouseMove((int)event.getX(), (int)event.getY());
-    }
-  }
-}
-
 /**
  * A #View which calls the native part of XCSoar.
  */
