@@ -180,7 +180,7 @@ Trace::erase_earlier_than(const unsigned p_time)
 
 Trace::TraceDelta &
 Trace::insert(const TraceDelta &td) {
-  TraceDelta::iterator it = delta_list.insert(td).first;
+  TraceDelta::iterator it = delta_list.insert(td);
 
   /* std::set doesn't allow modification of an item, but we
      override that */

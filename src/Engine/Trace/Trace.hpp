@@ -88,8 +88,11 @@ class Trace : private NonCopyable
       }
     };
 
-    typedef std::set<TraceDelta, DeltaRankOp,
-                     GlobalSliceAllocator<TraceDelta, 256u> > List;
+    /* using std::multiset, not because we need multiple values (we
+       don't), but to avoid std::set's overhead for duplicate
+       elimination */
+    typedef std::multiset<TraceDelta, DeltaRankOp,
+                          GlobalSliceAllocator<TraceDelta, 256u> > List;
     typedef List::iterator iterator;
     typedef List::const_iterator const_iterator;
 
