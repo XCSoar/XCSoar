@@ -105,13 +105,22 @@ class AStar
   typedef typename node_parent_map::iterator node_parent_iterator;
   typedef typename node_parent_map::const_iterator node_parent_const_iterator;
 
-  typedef std::pair<AStarPriorityValue, node_value_iterator> NodeValue;
+  struct NodeValue {
+    AStarPriorityValue priority;
+
+    node_value_iterator iterator;
+
+    gcc_constexpr_ctor
+    NodeValue(const AStarPriorityValue &_priority,
+              node_value_iterator _iterator)
+      :priority(_priority), iterator(_iterator) {}
+  };
 
   struct Rank: public std::binary_function<NodeValue, NodeValue, bool>
   {
     gcc_pure
     bool operator()(const NodeValue &x, const NodeValue &y) const {
-      return x.first.f() > y.first.f();
+      return x.priority.f() > y.priority.f();
     }
   };
 
@@ -205,11 +214,11 @@ public:
    * @return Node for processing
    */
   const Node &Pop() {
-    cur = q.top().second;
+    cur = q.top().iterator;
 
     do // remove this item
       q.pop();
-    while (!q.empty() && (q.top().first > q.top().second->second));
+    while (!q.empty() && (q.top().priority > q.top().iterator->second));
     // and all lower rank than this
 
     return cur->first;
@@ -307,7 +316,7 @@ private:
       // -> Don't use this new leg
       return;
 
-    q.push(std::make_pair(edge_value, it));
+    q.push(NodeValue(edge_value, it));
   }
 
   void SetPredecessor(const Node &node, const Node &parent) {
