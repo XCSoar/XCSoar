@@ -146,6 +146,15 @@ public:
     CopyString(data + len, new_value, MAX_SIZE - len);
   }
 
+  void append(const TCHAR *new_value, size_type _length) {
+    assert(new_value != NULL);
+
+    size_type len = length();
+    size_type max_length = (MAX_SIZE - len < _length + 1) ?
+                           MAX_SIZE - len : _length + 1;
+    CopyString(data + len, new_value, max_length);
+  }
+
   bool Append(TCHAR ch) {
     size_t l = length();
     if (l >= MAX_SIZE - 1)
