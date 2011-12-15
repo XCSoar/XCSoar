@@ -32,15 +32,15 @@ typedef Sint16 PixelScalar;
 typedef Uint16 UPixelScalar;
 
 struct RasterPoint {
-  Sint16 x, y;
+  PixelScalar x, y;
 };
 
 struct PixelSize {
-  Sint16 cx, cy;
+  PixelScalar cx, cy;
 };
 
 struct PixelRect {
-  Sint16 left, top, right, bottom;
+  PixelScalar left, top, right, bottom;
 };
 
 #endif

@@ -46,15 +46,15 @@ struct RasterPoint {
 #else
   typedef float SquareType;
 #endif
-  GLvalue x, y;
+  PixelScalar x, y;
 };
 
 struct PixelSize {
-  GLvalue cx, cy;
+  PixelScalar cx, cy;
 };
 
 struct PixelRect {
-  GLvalue left, top, right, bottom;
+  PixelScalar left, top, right, bottom;
 };
 
 #endif
