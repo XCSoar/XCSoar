@@ -110,12 +110,6 @@ XMLNode::XMLNodeData::~XMLNodeData()
 {
   assert(ref_count == 0);
 
-  for (auto i = pAttribute.begin(), end = pAttribute.end(); i != end; ++i) {
-    Attribute &attribute = *i;
-    free((void*)attribute.lpszName);
-    free((void*)attribute.lpszValue);
-  }
-
   free((void*)lpszName);
 }
 
@@ -561,7 +555,7 @@ XMLNode::AddChild(const TCHAR *lpszName, bool isDeclaration)
 }
 
 void
-XMLNode::AddAttribute(const TCHAR *lpszName, const TCHAR *lpszValuev)
+XMLNode::AddAttribute(TCHAR *lpszName, TCHAR *lpszValuev)
 {
   assert(lpszName != NULL);
 

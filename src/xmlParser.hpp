@@ -72,9 +72,17 @@ protected:
    */
   struct XMLNodeData : private NonCopyable {
     /** Structure for XML attribute. */
-    struct Attribute {
-      const TCHAR *lpszName;
-      const TCHAR *lpszValue;
+    struct Attribute : private NonCopyable {
+      TCHAR *lpszName;
+      TCHAR *lpszValue;
+
+      Attribute(TCHAR *_name, TCHAR *_value)
+        :lpszName(_name), lpszValue(_value) {}
+
+      ~Attribute() {
+        free(lpszName);
+        free(lpszValue);
+      }
     };
 
     /** Element name (=NULL if root) */
@@ -107,8 +115,8 @@ protected:
       return !pChild.empty() || !text.empty();
     }
 
-    void AddAttribute(const TCHAR *name, const TCHAR *value) {
-      pAttribute.push_front((Attribute){name, value});
+    void AddAttribute(TCHAR *name, TCHAR *value) {
+      pAttribute.emplace_front(name, value);
     }
 
     typedef std::list<XMLNode>::const_iterator const_iterator;
@@ -254,7 +262,7 @@ public:
   /**
    * Add an attribute to an element.
    */
-  void AddAttribute(const TCHAR *lpszName, const TCHAR *lpszValuev);
+  void AddAttribute(TCHAR *name, TCHAR *value);
 
   /**
    * Add text to the element.
