@@ -286,8 +286,6 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_CPPFLAGS += -I$(ANDROID_TARGET_ROOT)/usr/include
-  TARGET_CPPFLAGS += -isystem $(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/include
-  TARGET_CPPFLAGS += -isystem $(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/libs/$(ANDROID_ABI3)/include
   TARGET_CPPFLAGS += -DANDROID
   CXXFLAGS += -D__STDC_VERSION__=199901L
 
@@ -385,15 +383,12 @@ ifeq ($(HAVE_CE),y)
 endif
 
 ifeq ($(TARGET),UNIX)
-  ifeq ($(TARGET_IS_DARWIN),y)
-  TARGET_LDLIBS += $(shell $(CXX) -print-file-name=libstdc++.a)
-  else
+  ifeq ($(TARGET_IS_DARWIN),n)
   TARGET_LDLIBS += -lm
   endif
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_LDLIBS += $(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/libs/$(ANDROID_ABI3)/libgnustl_static.a
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libGLESv1_CM.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libc.so $(ANDROID_TARGET_ROOT)/usr/lib/libm.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/liblog.so
