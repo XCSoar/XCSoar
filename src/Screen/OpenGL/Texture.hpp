@@ -74,8 +74,8 @@ public:
 
 #ifndef ANDROID
   GLTexture(SDL_Surface *surface) {
-    init();
-    load(surface);
+    Initialise();
+    Load(surface);
   }
 #endif
 
@@ -88,26 +88,26 @@ public:
 #endif
   }
 
-  UPixelScalar get_width() const {
+  UPixelScalar GetWidth() const {
     return width;
   }
 
-  UPixelScalar get_height() const {
+  UPixelScalar GetHeight() const {
     return height;
   }
 
 protected:
-  void init(bool mag_linear=false) {
+  void Initialise(bool mag_linear=false) {
 #ifndef NDEBUG
     ++num_textures;
 #endif
 
     glGenTextures(1, &id);
-    bind();
-    configure(mag_linear);
+    Bind();
+    Configure(mag_linear);
   }
 
-  static inline void configure(bool mag_linear=false) {
+  static inline void Configure(bool mag_linear=false) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
@@ -122,21 +122,21 @@ protected:
   }
 
 #ifndef ANDROID
-  void load(SDL_Surface *surface);
+  void Load(SDL_Surface *surface);
 #endif
 
 public:
-  void bind() {
+  void Bind() {
     glBindTexture(GL_TEXTURE_2D, id);
   }
 
-  void draw(PixelScalar dest_x, PixelScalar dest_y,
+  void Draw(PixelScalar dest_x, PixelScalar dest_y,
             UPixelScalar dest_width, UPixelScalar dest_height,
             PixelScalar src_x, PixelScalar src_y,
             UPixelScalar src_width, UPixelScalar src_height) const;
 
-  void draw(PixelScalar dest_x, PixelScalar dest_y) const {
-    draw(dest_x, dest_y, width, height,
+  void Draw(PixelScalar dest_x, PixelScalar dest_y) const {
+    Draw(dest_x, dest_y, width, height,
          0, 0, width, height);
   }
 };

@@ -75,8 +75,8 @@ Bitmap::Reload()
   if (texture == NULL)
     return false;
 
-  width = texture->get_width();
-  height = texture->get_height();
+  width = texture->GetWidth();
+  height = texture->GetHeight();
   return true;
 }
 

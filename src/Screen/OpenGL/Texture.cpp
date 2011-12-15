@@ -39,7 +39,7 @@ unsigned num_textures;
 
 gcc_const gcc_unused
 static GLsizei
-next_power_of_two(GLsizei i)
+NextPowerOfTwo(GLsizei i)
 {
   GLsizei p = 1;
   while (p < i)
@@ -49,9 +49,9 @@ next_power_of_two(GLsizei i)
 
 gcc_const
 static inline GLsizei
-validate_texture_size(GLsizei i)
+ValidateTextureSize(GLsizei i)
 {
-  return OpenGL::texture_non_power_of_two ? i : next_power_of_two(i);
+  return OpenGL::texture_non_power_of_two ? i : NextPowerOfTwo(i);
 }
 
 #ifndef ANDROID
@@ -61,12 +61,12 @@ validate_texture_size(GLsizei i)
  * power of two if needed.
  */
 static void
-load_texture_auto_align(GLint internal_format,
-                        GLsizei width, GLsizei height,
-                        GLenum format, GLenum type, const GLvoid *pixels)
+LoadTextureAutoAlign(GLint internal_format,
+                     GLsizei width, GLsizei height,
+                     GLenum format, GLenum type, const GLvoid *pixels)
 {
-  GLsizei width2 = validate_texture_size(width);
-  GLsizei height2 = validate_texture_size(height);
+  GLsizei width2 = ValidateTextureSize(width);
+  GLsizei height2 = ValidateTextureSize(height);
 
   if (width2 == width && height2 == height)
     glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width, height, 0,
@@ -86,7 +86,7 @@ load_texture_auto_align(GLint internal_format,
  * @return false if the pixel format is not supported
  */
 static bool
-load_surface_into_texture(const SDL_Surface *surface)
+LoadSurfaceIntoTexture(const SDL_Surface *surface)
 {
 
   assert(surface != NULL);
@@ -126,8 +126,8 @@ load_surface_into_texture(const SDL_Surface *surface)
     return false;
 
   UPixelScalar pitch = surface->pitch / fmt->BytesPerPixel;
-  load_texture_auto_align(GL_RGB, pitch, surface->h,
-                          format, type, surface->pixels);
+  LoadTextureAutoAlign(GL_RGB, pitch, surface->h,
+                       format, type, surface->pixels);
   return true;
 }
 
@@ -136,36 +136,36 @@ load_surface_into_texture(const SDL_Surface *surface)
 GLTexture::GLTexture(UPixelScalar _width, UPixelScalar _height)
   :width(_width), height(_height)
 #ifndef HAVE_OES_DRAW_TEXTURE
-  , allocated_width(validate_texture_size(_width)),
-   allocated_height(validate_texture_size(_height))
+  , allocated_width(ValidateTextureSize(_width)),
+   allocated_height(ValidateTextureSize(_height))
 #endif
 {
   /* enable linear filtering for the terrain texture */
-  init(true);
+  Initialise(true);
 
   GLenum type = have_gles()
     ? GL_UNSIGNED_SHORT_5_6_5
     : GL_UNSIGNED_BYTE;
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-               validate_texture_size(width), validate_texture_size(height),
+               ValidateTextureSize(width), ValidateTextureSize(height),
                0, GL_RGB, type, NULL);
 }
 
 #ifndef ANDROID
 
 void
-GLTexture::load(SDL_Surface *src)
+GLTexture::Load(SDL_Surface *src)
 {
   width = src->w;
   height = src->h;
 
 #ifndef HAVE_OES_DRAW_TEXTURE
-  allocated_width = validate_texture_size(width);
-  allocated_height = validate_texture_size(src->h);
+  allocated_width = ValidateTextureSize(width);
+  allocated_height = ValidateTextureSize(src->h);
 #endif
 
-  if (!load_surface_into_texture(src)) {
+  if (!LoadSurfaceIntoTexture(src)) {
     /* try again after conversion */
     SDL_PixelFormat format;
     format.palette = NULL;
@@ -201,7 +201,7 @@ GLTexture::load(SDL_Surface *src)
     SDL_Surface *surface = ::SDL_ConvertSurface(src, &format, SDL_SWSURFACE);
     assert(surface != NULL);
 
-    load_surface_into_texture(surface);
+    LoadSurfaceIntoTexture(surface);
     SDL_FreeSurface(surface);
   }
 }
@@ -209,7 +209,7 @@ GLTexture::load(SDL_Surface *src)
 #endif
 
 void
-GLTexture::draw(PixelScalar dest_x, PixelScalar dest_y,
+GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 PixelScalar src_x, PixelScalar src_y,
                 UPixelScalar src_width, UPixelScalar src_height) const

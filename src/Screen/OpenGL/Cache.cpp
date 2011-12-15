@@ -186,8 +186,8 @@ TextCache::LookupSize(const Font &font, const char *text)
     return size;
 
   const RenderedText &rendered = *cached;
-  size.cx = rendered.texture->get_width();
-  size.cy = rendered.texture->get_height();
+  size.cx = rendered.texture->GetWidth();
+  size.cy = rendered.texture->GetHeight();
   return size;
 }
 

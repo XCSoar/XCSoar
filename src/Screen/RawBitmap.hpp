@@ -206,7 +206,7 @@ public:
   void stretch_to(UPixelScalar width, UPixelScalar height, Canvas &dest_canvas,
                   UPixelScalar dest_width, UPixelScalar dest_height) const {
 #ifdef ENABLE_OPENGL
-    texture->bind();
+    texture->Bind();
 
     if (dirty) {
 #ifdef HAVE_GLES

@@ -398,17 +398,18 @@ Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
 
   if (background_mode == OPAQUE)
     /* draw the opaque background */
-    DrawFilledRectangle(x, y, x + texture->get_width(), y + texture->get_height(),
-                   background_color);
+    DrawFilledRectangle(x, y,
+                        x + texture->GetWidth(), y + texture->GetHeight(),
+                        background_color);
 
   GLEnable scope(GL_TEXTURE_2D);
-  texture->bind();
+  texture->Bind();
   GLLogicOp logic_op(GL_AND_INVERTED);
 
   if (background_mode != OPAQUE || background_color != COLOR_BLACK) {
     /* cut out the shape in black */
     OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-    texture->draw(x, y);
+    texture->Draw(x, y);
   }
 
   if (text_color != COLOR_BLACK) {
@@ -416,7 +417,7 @@ Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
     OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     logic_op.set(GL_OR);
     text_color.Set();
-    texture->draw(x, y);
+    texture->Draw(x, y);
   }
 }
 
@@ -436,19 +437,19 @@ Canvas::text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text)
     return;
 
   GLEnable scope(GL_TEXTURE_2D);
-  texture->bind();
+  texture->Bind();
   GLLogicOp logic_op(GL_AND_INVERTED);
 
   /* cut out the shape in black */
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-  texture->draw(x, y);
+  texture->Draw(x, y);
 
   if (text_color != COLOR_BLACK) {
     /* draw the text color on top */
     OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     logic_op.set(GL_OR);
     text_color.Set();
-    texture->draw(x, y);
+    texture->Draw(x, y);
   }
 }
 
@@ -469,23 +470,23 @@ Canvas::text_clipped(PixelScalar x, PixelScalar y, UPixelScalar width,
     return;
 
   GLEnable scope(GL_TEXTURE_2D);
-  texture->bind();
+  texture->Bind();
   GLLogicOp logic_op(GL_AND_INVERTED);
 
-  UPixelScalar height = texture->get_height();
-  if (texture->get_width() < width)
-    width = texture->get_width();
+  UPixelScalar height = texture->GetHeight();
+  if (texture->GetWidth() < width)
+    width = texture->GetWidth();
 
   /* cut out the shape in black */
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-  texture->draw(x, y, width, height, 0, 0, width, height);
+  texture->Draw(x, y, width, height, 0, 0, width, height);
 
   if (text_color != COLOR_BLACK) {
     /* draw the text color on top */
     OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     logic_op.set(GL_OR);
     text_color.Set();
-    texture->draw(x, y, width, height, 0, 0, width, height);
+    texture->Draw(x, y, width, height, 0, 0, width, height);
   }
 }
 
@@ -501,7 +502,7 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
   assert(y_offset == OpenGL::translate_y);
 #endif
 
-  texture.draw(dest_x, dest_y, dest_width, dest_height,
+  texture.Draw(dest_x, dest_y, dest_width, dest_height,
                src_x, src_y, src_width, src_height);
 }
 
@@ -511,7 +512,7 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
                 const GLTexture &texture)
 {
   stretch(dest_x, dest_y, dest_width, dest_height,
-          texture, 0, 0, texture.get_width(), texture.get_height());
+          texture, 0, 0, texture.GetWidth(), texture.GetHeight());
 }
 
 void
@@ -564,8 +565,8 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
 
   GLTexture &texture = *src.native();
   GLEnable scope(GL_TEXTURE_2D);
-  texture.bind();
-  texture.draw(dest_x, dest_y, dest_width, dest_height,
+  texture.Bind();
+  texture.Draw(dest_x, dest_y, dest_width, dest_height,
                src_x, src_y, src_width, src_height);
 }
 
@@ -584,8 +585,8 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
 
   GLTexture &texture = *src.native();
   GLEnable scope(GL_TEXTURE_2D);
-  texture.bind();
-  texture.draw(dest_x, dest_y, dest_width, dest_height,
+  texture.Bind();
+  texture.Draw(dest_x, dest_y, dest_width, dest_height,
                0, 0, src.get_width(), src.get_height());
 }
 

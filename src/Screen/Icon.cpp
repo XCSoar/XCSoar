@@ -83,16 +83,16 @@ MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
   GLTexture &texture = *bitmap.native();
 
   GLEnable scope(GL_TEXTURE_2D);
-  texture.bind();
+  texture.Bind();
 
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
   GLLogicOp logic_op(GL_OR);
-  texture.draw(x - origin.x, y - origin.y, size.cx, size.cy,
+  texture.Draw(x - origin.x, y - origin.y, size.cx, size.cy,
                0, 0, size.cx, size.cy);
 
   logic_op.set(GL_AND);
-  texture.draw(x - origin.x, y - origin.y, size.cx, size.cy,
+  texture.Draw(x - origin.x, y - origin.y, size.cx, size.cy,
                size.cx, 0, size.cx, size.cy);
 #else
   canvas.copy_or(x - origin.x, y - origin.y, size.cx, size.cy,
