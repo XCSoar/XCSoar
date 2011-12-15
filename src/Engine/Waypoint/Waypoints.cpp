@@ -171,8 +171,7 @@ Waypoints::GetNearest(const GeoPoint &loc, fixed range) const
   Waypoint bb_target(loc);
   bb_target.Project(task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
-  std::pair<WaypointTree::const_iterator, WaypointTree::distance_type> found =
-    waypoint_tree.FindNearest(bb_target, mrange);
+  const auto found = waypoint_tree.FindNearest(bb_target, mrange);
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
@@ -193,8 +192,8 @@ Waypoints::GetNearestLandable(const GeoPoint &loc, fixed range) const
   Waypoint bb_target(loc);
   bb_target.Project(task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
-  std::pair<WaypointTree::const_iterator, WaypointTree::distance_type> found =
-      waypoint_tree.FindNearestIf(bb_target, mrange, LandablePredicate());
+  const auto found =
+    waypoint_tree.FindNearestIf(bb_target, mrange, LandablePredicate());
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
@@ -315,7 +314,7 @@ Waypoints::Erase(const Waypoint& wp)
   if (home != NULL && home->id == wp.id)
     home = NULL;
 
-  WaypointTree::const_iterator it = waypoint_tree.FindPointer(&wp);
+  const auto it = waypoint_tree.FindPointer(&wp);
   assert(it != waypoint_tree.end());
 
   name_tree.Remove(wp);
@@ -342,7 +341,7 @@ Waypoints::Replace(const Waypoint &orig, const Waypoint &replacement)
     }
   }
 
-  WaypointTree::const_iterator it = waypoint_tree.FindPointer(&orig);
+  const auto it = waypoint_tree.FindPointer(&orig);
   assert(it != waypoint_tree.end());
   waypoint_tree.Replace(it, new_waypoint);
 
