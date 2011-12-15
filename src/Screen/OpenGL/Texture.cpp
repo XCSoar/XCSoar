@@ -54,6 +54,14 @@ ValidateTextureSize(GLsizei i)
   return OpenGL::texture_non_power_of_two ? i : NextPowerOfTwo(i);
 }
 
+gcc_const
+static inline PixelSize
+ValidateTextureSize(PixelSize size)
+{
+  return { PixelScalar(ValidateTextureSize(size.cx)),
+      PixelScalar(ValidateTextureSize(size.cy)) };
+}
+
 #ifndef ANDROID
 
 /**
@@ -146,6 +154,31 @@ GLTexture::GLTexture(UPixelScalar _width, UPixelScalar _height)
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
                ValidateTextureSize(width), ValidateTextureSize(height),
                0, GL_RGB, GetType(), NULL);
+}
+
+void
+GLTexture::ResizeDiscard(PixelSize new_size)
+{
+  const PixelSize validated_size = ValidateTextureSize(new_size);
+  const PixelSize old_size = GetAllocatedSize();
+
+  width = new_size.cx;
+  height = new_size.cy;
+
+  if (validated_size == old_size)
+    return;
+
+#ifndef HAVE_OES_DRAW_TEXTURE
+  allocated_width = validated_size.cx;
+  allocated_height = validated_size.cy;
+#endif
+
+  Bind();
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+               validated_size.cx, validated_size.cy,
+               0, GL_RGB, GetType(), NULL);
+
 }
 
 #ifndef ANDROID

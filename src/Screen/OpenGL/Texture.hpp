@@ -124,6 +124,11 @@ public:
 #endif
   }
 
+  /**
+   * Change the size of the texture, discarding any previous contents.
+   */
+  void ResizeDiscard(PixelSize new_size);
+
 protected:
   void Initialise(bool mag_linear=false) {
 #ifndef NDEBUG
