@@ -177,11 +177,18 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
     line++;
 
   // Find next space delimiter, skip shortname
-  line = _tcsstr(line, _T(" "));
-  if (line == NULL)
+  const TCHAR *name = line;
+  const TCHAR *space = _tcsstr(line, _T(" "));
+  if (space == NULL)
     return false;
 
-  line++;
+  unsigned name_length = space - line;
+  if (name_length == 0)
+    return false;
+
+  line = space;
+  while (*line == _T(' '))
+    line++;
 
   // Parse location
   GeoPoint location;
@@ -211,6 +218,7 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
   Waypoint waypoint(location);
   waypoint.file_num = file_num;
   waypoint.original_id = 0;
+  waypoint.name.assign(name, name_length);
 
   // Parse altitude
   if (!ParseAltitude(line, waypoint.altitude) &&
@@ -222,7 +230,7 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
     line++;
 
   // Parse waypoint name
-  waypoint.name.assign(line);
+  waypoint.comment.assign(line);
 
   waypoints.Append(waypoint);
   return true;

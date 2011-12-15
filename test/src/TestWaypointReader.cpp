@@ -394,8 +394,16 @@ TestCompeGPS(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
+    size_t pos;
+    while ((pos = it->name.find_first_of(_T(' '))) != tstring::npos)
+      it->name.erase(pos, 1);
+
+    if (it->name.length() > 6)
+      it->name = it->name.erase(6);
+
     trim_inplace(it->name);
-    GetWaypoint(*it, way_points);
+    const Waypoint *wp = GetWaypoint(*it, way_points);
+    ok1(wp->comment == it->comment);
   }
 }
 
@@ -411,8 +419,16 @@ TestCompeGPS_UTM(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
+    size_t pos;
+    while ((pos = it->name.find_first_of(_T(' '))) != tstring::npos)
+      it->name.erase(pos, 1);
+
+    if (it->name.length() > 6)
+      it->name = it->name.erase(6);
+
     trim_inplace(it->name);
-    GetWaypoint(*it, way_points);
+    const Waypoint *wp = GetWaypoint(*it, way_points);
+    ok1(wp->comment == it->comment);
   }
 }
 
@@ -513,7 +529,7 @@ int main(int argc, char **argv)
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(305);
+  plan_tests(315);
 
   TestExtractParameters();
 
