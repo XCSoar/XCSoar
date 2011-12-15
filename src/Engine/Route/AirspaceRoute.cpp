@@ -125,7 +125,7 @@ AirspaceRoute::FirstIntersecting(const RouteLink& e) const
   m_airspaces.visit_intersecting(origin, v, visitor);
   const AIV::AIVResult res (visitor.get_nearest());
   count_airspace++;
-  return std::make_pair(res.first, res.second);
+  return RouteAirspaceIntersection(res.first, res.second);
 }
 
 const AbstractAirspace*
@@ -265,9 +265,9 @@ void
 AirspaceRoute::AddNearbyAirspace(const RouteAirspaceIntersection &inx,
                                    const RouteLink &e)
 {
-  const SearchPointVector& fat = inx.first->GetClearance();
+  const SearchPointVector& fat = inx.airspace->GetClearance();
   const ClearingPair p = GetPairs(fat, e.first, e.second);
-  const ClearingPair pb = GetBackupPairs(fat, e.first, inx.second);
+  const ClearingPair pb = GetBackupPairs(fat, e.first, inx.point);
 
   // process all options
   AddCandidate(RouteLinkBase(e.first, p.first));
@@ -279,9 +279,8 @@ AirspaceRoute::AddNearbyAirspace(const RouteAirspaceIntersection &inx,
 void
 AirspaceRoute::AddNearby(const RouteLink &e)
 {
-  RoutePoint ptmp = m_inx.second;
-  if (m_inx.first == NULL)
-    AddNearbyTerrain(ptmp, e);
+  if (m_inx.airspace == NULL)
+    AddNearbyTerrain(m_inx.point, e);
   else
     AddNearbyAirspace(m_inx, e);
 }
@@ -293,7 +292,7 @@ AirspaceRoute::CheckSecondary(const RouteLink &e)
     return true; // trivial
 
   m_inx = FirstIntersecting(e);
-  if (m_inx.first!=NULL)  {
+  if (m_inx.airspace != NULL)  {
     AddCandidate(e);
     return false;
   };
@@ -306,8 +305,8 @@ AirspaceRoute::CheckClearance(const RouteLink &e, RoutePoint& inp) const
   // attempt terrain clearance first
 
   if (!CheckClearanceTerrain(e, inp)) {
-    m_inx.first = NULL;
-    m_inx.second = inp;
+    m_inx.airspace = NULL;
+    m_inx.point = inp;
     return false;
   }
 
@@ -317,8 +316,8 @@ AirspaceRoute::CheckClearance(const RouteLink &e, RoutePoint& inp) const
   // passes terrain, so now check airspace clearance
 
   m_inx = FirstIntersecting(e);
-  if (m_inx.first!=NULL)  {
-    inp = m_inx.second;
+  if (m_inx.airspace != NULL)  {
+    inp = m_inx.point;
     return false;
   }
 

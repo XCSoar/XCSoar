@@ -28,8 +28,19 @@
 class AirspaceRoute: public RoutePlanner {
   Airspaces m_airspaces;
 
-  typedef std::pair<const AbstractAirspace*,
-                    RoutePoint> RouteAirspaceIntersection;
+  struct RouteAirspaceIntersection {
+    const AbstractAirspace *airspace;
+
+    RoutePoint point;
+
+    RouteAirspaceIntersection() = default;
+
+    gcc_constexpr_ctor
+    RouteAirspaceIntersection(const AbstractAirspace *_airspace,
+                              RoutePoint _point)
+      :airspace(_airspace), point(_point) {}
+  };
+
   mutable RouteAirspaceIntersection m_inx;
 
 public:
