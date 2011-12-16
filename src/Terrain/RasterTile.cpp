@@ -1172,7 +1172,16 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_
     // outside overall bounds
     return RasterBuffer::TERRAIN_INVALID;
 
-  return Overview.get(px >> OVERVIEW_BITS, py >> OVERVIEW_BITS);
+  // The overview might not cover the whole tile, if width or height are not
+  // a multiple of 2^OVERVIEW_BITS.
+  unsigned x_overview = px >> OVERVIEW_BITS;
+  unsigned y_overview = py >> OVERVIEW_BITS;
+  if (x_overview == Overview.get_width())
+    x_overview--;
+  if (y_overview == Overview.get_height())
+    y_overview--;
+
+  return Overview.get(x_overview, y_overview);
 }
 
 RasterLocation
