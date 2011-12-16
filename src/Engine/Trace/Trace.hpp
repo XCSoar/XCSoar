@@ -316,7 +316,7 @@ public:
    * @return True if no traces stored
    */
   bool empty() const {
-    return chronological_list.IsEmpty();
+    return cached_size == 0;
   }
 
   /**
