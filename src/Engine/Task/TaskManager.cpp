@@ -188,17 +188,15 @@ TaskManager::UpdateCommonStatsWaypoints(const AircraftState &state)
 
   common_stats.landable_reachable = task_abort.HasReachableLandable();
 
-  common_stats.next_solution.Reset();
-  if (active_task) {
-    const TaskWaypoint* tp= active_task->GetActiveTaskPoint();
-    if (tp != NULL) {
-      // must make an UnorderedTaskPoint here so we pick up arrival height requirements
-      UnorderedTaskPoint fp(tp->GetWaypoint(), task_behaviour);
-      // @todo: consider change to task_abort.get_safety_polar(); 
-      common_stats.next_solution =
-        TaskSolution::glide_solution_remaining(fp, state, GetGlidePolar());
-    }
-  }
+  const TaskWaypoint *tp = GetActiveTaskPoint();
+  if (tp != NULL) {
+    // must make an UnorderedTaskPoint here so we pick up arrival height requirements
+    const UnorderedTaskPoint fp(tp->GetWaypoint(), task_behaviour);
+    // @todo: consider change to task_abort.get_safety_polar();
+    common_stats.next_solution =
+      TaskSolution::glide_solution_remaining(fp, state, GetGlidePolar());
+  } else
+    common_stats.next_solution.Reset();
 }
 
 void
