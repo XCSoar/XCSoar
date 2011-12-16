@@ -79,7 +79,7 @@ Font::TextSize(const TCHAR *text) const
 void
 Font::CalculateHeights()
 {
-  VirtualCanvas canvas(1, 1);
+  AnyCanvas canvas;
   canvas.Select(*this);
 
   TEXTMETRIC tm;
