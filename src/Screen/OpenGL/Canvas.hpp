@@ -55,6 +55,7 @@ class GLTexture;
  */
 class Canvas : private NonCopyable {
   friend class SubCanvas;
+  friend class BufferCanvas;
 
 protected:
   PixelScalar x_offset, y_offset;

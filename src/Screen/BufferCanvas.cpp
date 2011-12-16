@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "Screen/BufferCanvas.hpp"
 
-#ifndef ENABLE_OPENGL
-
 #include <algorithm>
 
 void
@@ -32,5 +30,3 @@ BufferCanvas::grow(UPixelScalar _width, UPixelScalar _height)
 {
   resize(std::max(get_width(), _width), std::max(get_height(), _height));
 }
-
-#endif
