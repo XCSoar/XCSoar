@@ -200,9 +200,23 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
     info.ProvideTrueAirspeed(tas / 100);
 
   //  Airspeed source P or V,   1 Digit P= pitot, V = Vane wheel
+  line.skip();
+
   //  Temp. PCB (xxx �C),   3 Digits
+  fixed pcb_temperature;
+  bool pcb_temperature_available = line.read_checked(pcb_temperature);
+
   //  Temp. Balloon Envelope (xxx �C),      3 Digits
-  line.skip(3);
+  fixed balloon_temperature;
+  bool balloon_temperature_available = line.read_checked(balloon_temperature);
+
+  if (balloon_temperature_available) {
+    info.temperature = Units::ToSysUnit(balloon_temperature, unGradCelcius);
+    info.temperature_available = true;
+  } else if (pcb_temperature_available) {
+    info.temperature = Units::ToSysUnit(pcb_temperature, unGradCelcius);
+    info.temperature_available = true;
+  }
 
   //  Battery Capacity Bank 1 (0 to 100%)   3 Digits
   fixed battery_level_1;
