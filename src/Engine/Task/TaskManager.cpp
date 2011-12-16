@@ -194,9 +194,9 @@ TaskManager::UpdateCommonStatsWaypoints(const AircraftState &state)
     if (tp != NULL) {
       // must make an UnorderedTaskPoint here so we pick up arrival height requirements
       UnorderedTaskPoint fp(tp->GetWaypoint(), task_behaviour);
-      GlidePolar polar = glide_polar; 
       // @todo: consider change to task_abort.get_safety_polar(); 
-      common_stats.next_solution = TaskSolution::glide_solution_remaining(fp, state, polar);
+      common_stats.next_solution =
+        TaskSolution::glide_solution_remaining(fp, state, GetGlidePolar());
     }
   }
 }
