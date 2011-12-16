@@ -158,8 +158,7 @@ Trace::erase_earlier_than(const unsigned p_time)
 
   bool modified = false;
 
-  while (!empty() &&
-         ((TraceDelta *)chronological_list.GetNext())->point.time < p_time) {
+  while (!empty() && front().time < p_time) {
     TraceDelta &td = *(TraceDelta *)chronological_list.GetNext();
     td.Remove();
     delta_list.erase(td.delta_list_iterator);
@@ -286,7 +285,7 @@ Trace::calc_average_delta_time(const unsigned no_thin) const
   --it;
   --counter;
 
-  unsigned start_time = static_cast<const TraceDelta *>(chronological_list.GetNext())->point.time;
+  unsigned start_time = front().time;
   unsigned end_time = it->point.time;
   return (end_time - start_time) / counter;
 }
