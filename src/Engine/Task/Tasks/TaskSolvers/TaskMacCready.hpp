@@ -90,8 +90,6 @@ public:
   TaskMacCready(const std::vector<TaskPoint*> &_tps,
                 const GlidePolar &gp);
 
-  virtual ~TaskMacCready() {};
-
 /** 
  * Calculate glide solution
  * 
