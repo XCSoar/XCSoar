@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef ARGS_HPP
 #define ARGS_HPP
 
+#include "Compiler.h"
+
 #if defined(_UNICODE) || defined(WIN32)
 #include "OS/PathName.hpp"
 #endif
