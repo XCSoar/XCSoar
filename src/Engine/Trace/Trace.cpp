@@ -132,14 +132,12 @@ Trace::erase_delta(const unsigned target_size, const unsigned recent)
   bool modified = false;
 
   const unsigned recent_time = get_recent_time(recent);
-  unsigned lsize = size();
 
   TraceDelta::iterator candidate = delta_list.begin();
-  while (lsize > target_size) {
+  while (size() > target_size) {
     const TraceDelta &td = *candidate;
     if (!td.IsEdge() && td.point.time < recent_time) {
       erase_inside(candidate);
-      lsize--;
       candidate = delta_list.begin(); // find new top
       modified = true;
     } else {
