@@ -134,6 +134,7 @@ NMEAInfo::Reset()
   engine_noise_level_available.Clear();
 
   voltage_available.Clear();
+  battery_level_available.Clear();
 
   switch_state_available = false;
   switch_state.Reset();
@@ -189,6 +190,7 @@ NMEAInfo::Expire()
   external_wind_available.Expire(clock, fixed(600));
   engine_noise_level_available.Expire(clock, fixed(30));
   voltage_available.Expire(clock, fixed(300));
+  battery_level_available.Expire(clock, fixed(300));
   flarm.Refresh(clock);
   gps.Expire(clock);
 }
@@ -266,6 +268,9 @@ NMEAInfo::Complement(const NMEAInfo &add)
 
   if (voltage_available.Complement(add.voltage_available))
     voltage = add.voltage;
+
+  if (battery_level_available.Complement(add.battery_level_available))
+    battery_level = add.battery_level;
 
   if (!switch_state_available && add.switch_state_available)
     switch_state = add.switch_state;

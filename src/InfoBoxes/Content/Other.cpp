@@ -101,8 +101,10 @@ InfoBoxContentBattery::Update(InfoBoxData &data)
 #endif
 
   if (XCSoarInterface::Basic().voltage_available) {
-    SetValueFromFixed(data, _T("%2.1fV"),
-                      XCSoarInterface::Basic().voltage);
+    SetValueFromFixed(data, _T("%2.1fV"), XCSoarInterface::Basic().voltage);
+    return;
+  } else if (XCSoarInterface::Basic().battery_level_available) {
+    SetValueFromFixed(data, _T("%.0f%%"), XCSoarInterface::Basic().battery_level);
     return;
   }
 

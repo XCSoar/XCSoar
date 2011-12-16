@@ -83,9 +83,10 @@ SystemStatusPanel::Refresh()
     Temp.Format(_T("%d %% "), Power::Battery::RemainingPercent);
   }
 #endif
-  if (basic.voltage_available) {
+  if (basic.voltage_available)
     Temp.AppendFormat(_T("%.1f V"), (double)basic.voltage);
-  }
+  else if (basic.battery_level_available)
+    Temp.AppendFormat(_T("%.0f%%"), (double)basic.battery_level);
 
   SetFormValue(form, _T("prpBattery"), Temp);
 }

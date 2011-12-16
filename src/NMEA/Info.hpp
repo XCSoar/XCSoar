@@ -360,6 +360,11 @@ struct NMEAInfo {
   /** Battery supply voltage information (if available) */
   fixed voltage;
 
+  Validity battery_level_available;
+
+  /** Battery supply information in percent (0.0 - 100.0; if available) */
+  fixed battery_level;
+
   bool switch_state_available;
 
   /** Switch state of the user inputs */
