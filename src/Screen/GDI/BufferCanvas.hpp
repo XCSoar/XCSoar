@@ -21,17 +21,35 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_BUFFER_CANVAS_HPP
-#define XCSOAR_SCREEN_BUFFER_CANVAS_HPP
+#ifndef XCSOAR_SCREEN_GDI_BUFFER_CANVAS_HPP
+#define XCSOAR_SCREEN_GDI_BUFFER_CANVAS_HPP
 
 #include "Screen/VirtualCanvas.hpp"
 
-#ifdef ENABLE_OPENGL
-// No buffered Canvas on pure OpenGL
-#elif defined(ENABLE_SDL)
-#define BufferCanvas VirtualCanvas
-#else /* GDI */
-#include "GDI/BufferCanvas.hpp"
-#endif
+/**
+ * An off-screen #Canvas implementation.  The constructor allocates
+ * memory for the specified dimensions.
+ */
+class BufferCanvas : public VirtualCanvas {
+protected:
+  HBITMAP bitmap;
+
+public:
+  BufferCanvas():bitmap(NULL) {}
+  BufferCanvas(const Canvas &canvas,
+               UPixelScalar _width, UPixelScalar _height);
+  ~BufferCanvas();
+
+  void set(const Canvas &canvas, UPixelScalar _width, UPixelScalar _height);
+  void set(const Canvas &canvas);
+  void reset();
+
+  void resize(UPixelScalar _width, UPixelScalar _height);
+
+  /**
+   * Similar to resize(), but never shrinks the buffer.
+   */
+  void grow(UPixelScalar _width, UPixelScalar _height);
+};
 
 #endif
