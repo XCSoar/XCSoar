@@ -202,8 +202,28 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
   //  Airspeed source P or V,   1 Digit P= pitot, V = Vane wheel
   //  Temp. PCB (xxx �C),   3 Digits
   //  Temp. Balloon Envelope (xxx �C),      3 Digits
+  line.skip(3);
+
   //  Battery Capacity Bank 1 (0 to 100%)   3 Digits
+  fixed battery_level_1;
+  bool battery_level_1_available = line.read_checked(battery_level_1);
+
   //  Battery Capacity Bank 2 (0 to 100%)   3 Digits
+  fixed battery_level_2;
+  bool battery_level_2_available = line.read_checked(battery_level_2);
+
+  if (battery_level_1_available) {
+    if (battery_level_2_available)
+      info.battery_level = (battery_level_1 + battery_level_2) / 2;
+    else
+      info.battery_level = battery_level_1;
+
+    info.battery_level_available.Update(info.clock);
+  } else if (battery_level_2_available) {
+    info.battery_level = battery_level_2;
+    info.battery_level_available.Update(info.clock);
+  }
+
   //  Dist. to WP (xxxxxx m),   6 Digits (Max 200000m)
   //  Bearing (xxx Deg),   3 Digits
   //  Speed to fly1 (MC0 xxxxx cm/s),       5 Digits

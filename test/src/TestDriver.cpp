@@ -377,6 +377,7 @@ TestFlytec()
   ok1(equals(nmea_info.total_energy_vario, 3.34));
   ok1(nmea_info.airspeed_available);
   ok1(equals(nmea_info.true_airspeed, 20.0));
+  ok1(!nmea_info.battery_level_available);
 
   ok1(!device->ParseNMEA("$FLYSEN,,,,,,,,,,,,,,,,,,,,*5e", nmea_info));
 
@@ -404,13 +405,15 @@ TestFlytec()
   ok1(equals(nmea_info.total_energy_vario, -0.01));
   ok1(nmea_info.airspeed_available);
   ok1(equals(nmea_info.true_airspeed, 10.3));
+  ok1(nmea_info.battery_level_available);
+  ok1(equals(nmea_info.battery_level, (88.0 + 38.0) / 2));
 
   nmea_info.Reset();
   nmea_info.clock = fixed_one;
 
   ok1(device->ParseNMEA("$FLYSEN,241211,201500,4700.840,N,00818.457,E,092,"
                         "01100,01234,V,09,097517,01321,-001,01030,P,023,,038,"
-                        "088,00090,00088,800,,*38", nmea_info));
+                        ",00090,00088,800,,*38", nmea_info));
   ok1(!nmea_info.location_available);
   ok1(!nmea_info.track_available);
   ok1(!nmea_info.ground_speed_available);
@@ -425,6 +428,8 @@ TestFlytec()
   ok1(equals(nmea_info.total_energy_vario, -0.01));
   ok1(nmea_info.airspeed_available);
   ok1(equals(nmea_info.true_airspeed, 10.3));
+  ok1(nmea_info.battery_level_available);
+  ok1(equals(nmea_info.battery_level, 38.0));
 
   delete device;
 }
@@ -833,7 +838,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(432);
+  plan_tests(437);
 
   TestGeneric();
   TestTasman();
