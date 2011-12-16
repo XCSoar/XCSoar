@@ -32,6 +32,7 @@
 
 #include "Compiler.h"
 
+#include <stddef.h>
 #include <iterator>
 #include <cassert>
 
