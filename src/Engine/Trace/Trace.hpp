@@ -354,6 +354,12 @@ public:
   }
 
 private:
+  TraceDelta &GetFront() {
+    assert(!empty());
+
+    return *static_cast<TraceDelta *>(chronological_list.GetNext());
+  }
+
   gcc_pure
   unsigned get_min_time() const;
 

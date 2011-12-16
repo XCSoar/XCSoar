@@ -158,8 +158,8 @@ Trace::erase_earlier_than(const unsigned p_time)
 
   bool modified = false;
 
-  while (!empty() && front().time < p_time) {
-    TraceDelta &td = *(TraceDelta *)chronological_list.GetNext();
+  while (!empty() && GetFront().point.time < p_time) {
+    TraceDelta &td = GetFront();
     td.Remove();
     delta_list.erase(td.delta_list_iterator);
     --cached_size;
@@ -170,7 +170,7 @@ Trace::erase_earlier_than(const unsigned p_time)
   // need to set deltas for first point, only one of these
   // will occur (have to search for this point)
   if (modified && !empty())
-    erase_start(*(TraceDelta *)chronological_list.GetNext());
+    erase_start(GetFront());
 
   return modified;
 }
