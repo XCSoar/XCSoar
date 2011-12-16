@@ -220,6 +220,13 @@ MacCready::solve_sink(const GlideState &task, const fixed S) const
 GlideResult
 MacCready::solve(const GlideState &task) const
 {
+  if (!glide_polar.IsValid()) {
+    /* can't solve without a valid GlidePolar() */
+    GlideResult result;
+    result.Reset();
+    return result;
+  }
+
   if (!positive(task.vector.Distance))
     return solve_vertical(task);
 
