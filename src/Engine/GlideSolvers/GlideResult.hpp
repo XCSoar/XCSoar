@@ -52,26 +52,50 @@ struct GlideResult {
     RESULT_NOSOLUTION
   };
 
-  /** Distance/bearing of task achievable */
+  /**
+   * Cruise vector of this result.  Usually, this equals the remaining
+   * vector (see ElementStat::vector_remaining), but if a solution is
+   * not achievable, this is the portion of the remaining vector that
+   * is achievable with straight cruise (may be an empty vector).
+   */
   GeoVector vector;
+
   /** Distance to go before final glide (m) */
   fixed distance_to_final;
   /** Track bearing in cruise for optimal drift compensation (deg true) */
   Angle cruise_track_bearing;
   /** Optimal speed to fly in cruise (m/s) */
   fixed v_opt;
-  /** Height to be climbed (m) */
+
+  /**
+   * Total height to be climbed [m relative].
+   */
   fixed height_climb;
-  /** Height that will be glided (m) */
+
+  /**
+   * Height that will lost during straight glide [m relative,
+   * non-negative] before the first estimated climb.  Zero when the
+   * aircraft starts off below the minimum altitude of the
+   * destination.
+   */
   fixed height_glide;
+
   /** Time to complete task (s) */
   fixed time_elapsed;
   /** Equivalent time to recover glided height (s) at MC */
   fixed time_virtual;
-  /** Height above/below final glide for this task (m) */
+
+  /**
+   * Height above/below final glide for this task [m relative].
+   */
   fixed altitude_difference;
-  /** Height required to solve this task (m) */
+
+  /**
+   * Absolute altitude required to solve this task [m MSL].  This is
+   * the current aircraft altitude plus #altitude_difference.
+   */
   fixed altitude_required;
+
   fixed effective_wind_speed;
   Angle effective_wind_angle;
   /** Head wind component (m/s) in cruise */
