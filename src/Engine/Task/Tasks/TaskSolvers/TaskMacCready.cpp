@@ -56,30 +56,11 @@ TaskMacCready::TaskMacCready(const std::vector<TaskPoint*> &_tps,
 void
 TaskMacCready::clearance_heights(const AircraftState &aircraft)
 {
-  #define fixed_tolerance fixed(0.01)
-
   // set min heights (earliest climb possible)
   fixed minH = get_min_height(aircraft);
   for (int i = m_end; i >= m_start; --i) {
     minH = max(minH, m_tps[i]->GetElevation());
     m_minHs[i] = minH;
-  }
-  // set min heights (ensure clearance possible for latest glide)
-  for (int i = m_start; i < m_end; ++i) {
-    if (m_minHs[i] > m_minHs[i + 1]) {
-      AircraftState aircraft_predict = aircraft;
-      aircraft_predict.altitude = m_minHs[i];
-      const GlideResult gr = tp_solution(i, aircraft_predict, m_minHs[i + 1]);
-      if (!gr.IsOk())
-        continue;
-
-      const fixed dh = aircraft_predict.altitude - gr.height_glide;
-      if (m_minHs[i + 1] + fixed_tolerance < dh) {
-        m_minHs[i + 1] = dh;
-        // recalculate again for remainder
-        i--;
-      }
-    }
   }
 }
 
