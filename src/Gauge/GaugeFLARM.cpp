@@ -27,7 +27,7 @@ Copyright_License {
 #include "Blackboard/LiveBlackboard.hpp"
 #include "NMEA/MoreData.hpp"
 #include "SettingsComputer.hpp"
-#include "InputEvents.hpp"
+#include "Dialogs/Traffic.hpp"
 
 /**
  * Widget to display a FLARM gauge
@@ -77,7 +77,7 @@ SmallTrafficWindow::Update(const NMEAInfo &gps_info,
 bool
 SmallTrafficWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 {
-  InputEvents::eventTraffic(_T("show"));
+  dlgFlarmTrafficShowModal();
   return true;
 }
 
