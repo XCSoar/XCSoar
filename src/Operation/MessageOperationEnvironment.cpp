@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Operation/Operation.hpp"
+#include "MessageOperationEnvironment.hpp"
 #include "Dialogs/Message.hpp"
 
 void

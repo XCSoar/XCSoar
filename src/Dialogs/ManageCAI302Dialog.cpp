@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Language/Language.hpp"
-#include "Operation/Operation.hpp"
+#include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/Driver/CAI302/Internal.hpp"
 
 static WndForm *dialog;

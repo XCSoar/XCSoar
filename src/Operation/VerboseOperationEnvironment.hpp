@@ -21,36 +21,23 @@ Copyright_License {
 }
 */
 
-#include "VerboseOperationEnvironment.hpp"
-#include "ProgressGlue.hpp"
+#ifndef XCSOAR_VERBOSE_OPERATION_HPP
+#define XCSOAR_VERBOSE_OPERATION_HPP
 
-void
-VerboseOperationEnvironment::SetText(const TCHAR *text)
-{
-  ProgressGlue::Create(text);
-}
+#include "MessageOperationEnvironment.hpp"
 
-void
-VerboseOperationEnvironment::SetProgressRange(unsigned range)
-{
-  ProgressGlue::SetRange(range);
-}
+class VerboseOperationEnvironment : public MessageOperationEnvironment {
+public:
+  virtual void SetText(const TCHAR *text);
+  virtual void SetProgressRange(unsigned range);
+  virtual void SetProgressPosition(unsigned position);
 
-void
-VerboseOperationEnvironment::SetProgressPosition(unsigned position)
-{
-  ProgressGlue::SetValue(position);
-}
+  /**
+   * Call after the main window has been resized.
+   */
+  void UpdateLayout();
 
-void
-VerboseOperationEnvironment::UpdateLayout()
-{
-  ProgressGlue::Close();
-  ProgressGlue::Create(NULL);
-}
+  void Hide();
+};
 
-void
-VerboseOperationEnvironment::Hide()
-{
-  ProgressGlue::Close();
-}
+#endif

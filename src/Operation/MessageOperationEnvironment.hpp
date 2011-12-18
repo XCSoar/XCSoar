@@ -21,36 +21,18 @@ Copyright_License {
 }
 */
 
-#include "VerboseOperationEnvironment.hpp"
-#include "ProgressGlue.hpp"
+#ifndef XCSOAR_MESSAGE_OPERATION_HPP
+#define XCSOAR_MESSAGE_OPERATION_HPP
 
-void
-VerboseOperationEnvironment::SetText(const TCHAR *text)
-{
-  ProgressGlue::Create(text);
-}
+#include "Operation.hpp"
 
-void
-VerboseOperationEnvironment::SetProgressRange(unsigned range)
-{
-  ProgressGlue::SetRange(range);
-}
+/**
+ * A #OperationEnvironment implementation that displays error messages
+ * with MessageBoxX().
+ */
+class MessageOperationEnvironment : public QuietOperationEnvironment {
+public:
+  virtual void SetErrorMessage(const TCHAR *text);
+};
 
-void
-VerboseOperationEnvironment::SetProgressPosition(unsigned position)
-{
-  ProgressGlue::SetValue(position);
-}
-
-void
-VerboseOperationEnvironment::UpdateLayout()
-{
-  ProgressGlue::Close();
-  ProgressGlue::Create(NULL);
-}
-
-void
-VerboseOperationEnvironment::Hide()
-{
-  ProgressGlue::Close();
-}
+#endif

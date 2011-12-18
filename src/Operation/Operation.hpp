@@ -87,36 +87,4 @@ public:
   virtual void Sleep(unsigned ms);
 };
 
-/**
- * A #OperationEnvironment implementation that displays error messages
- * with the #PopupMessage class.
- */
-class PopupOperationEnvironment : public QuietOperationEnvironment {
-public:
-  virtual void SetErrorMessage(const TCHAR *text);
-};
-
-/**
- * A #OperationEnvironment implementation that displays error messages
- * with MessageBoxX().
- */
-class MessageOperationEnvironment : public QuietOperationEnvironment {
-public:
-  virtual void SetErrorMessage(const TCHAR *text);
-};
-
-class VerboseOperationEnvironment : public MessageOperationEnvironment {
-public:
-  virtual void SetText(const TCHAR *text);
-  virtual void SetProgressRange(unsigned range);
-  virtual void SetProgressPosition(unsigned position);
-
-  /**
-   * Call after the main window has been resized.
-   */
-  void UpdateLayout();
-
-  void Hide();
-};
-
 #endif
