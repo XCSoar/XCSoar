@@ -57,7 +57,7 @@ MacCready::solve_vertical(const GlideState &task) const
   //     t_cl*mc*(V-W)= -dh*(V-W)+W*t_cl
   //     t_cl*(mc*(V-W)-W) = -dh*(V-W) .... (2)
 
-  if (positive(task.altitude_difference)) {
+  if (!negative(task.altitude_difference)) {
     // immediate solution
     result.validity = GlideResult::RESULT_OK;
     return result;
@@ -234,7 +234,7 @@ MacCready::solve(const GlideState &task) const
     // whole task must be glide
     return optimise_glide(task, false);
 
-  if (!positive(task.altitude_difference))
+  if (negative(task.altitude_difference))
     // whole task climb-cruise
     return solve_cruise(task);
 

@@ -150,7 +150,7 @@ GlideResult::IsAchievable(const bool final_glide) const
 {
   if (final_glide)
     return (validity == RESULT_OK)
-            && positive(altitude_difference)
+            && !negative(altitude_difference)
             && !positive(height_climb);
 
   return (validity == RESULT_OK);
