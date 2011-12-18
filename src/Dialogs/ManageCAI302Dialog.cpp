@@ -92,9 +92,9 @@ ManageCAI302Dialog(SingleWindow &parent, const DialogLook &look,
   /* create buttons */
 
   ButtonPanel buttons(client_area, look);
-  const PixelRect rc = buttons.GetRemainingRect();
-
   buttons.Add(_("Close"), OnCloseClicked);
+
+  const PixelRect rc = buttons.GetRemainingRect();
 
   /* create the command buttons */
 
