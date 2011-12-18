@@ -48,7 +48,7 @@
 #include "Input/InputEvents.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "FaultInjectionPort.hpp"
 #include "TestUtil.hpp"
 #include "Profile/DeviceConfig.hpp"

@@ -26,7 +26,7 @@ Copyright_License {
 #include "Device/Driver/LX/Protocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "OS/ByteOrder.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 /**
  * fills dest with src and appends spaces to end

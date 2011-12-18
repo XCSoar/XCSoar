@@ -29,7 +29,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Util/Macros.hpp"
 #include "IO/FileLineReader.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "TestUtil.hpp"
 
 #include <tchar.h>

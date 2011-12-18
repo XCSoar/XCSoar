@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Init.hpp"
 #include "Screen/Layout.hpp"
 #include "Job.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "ResourceLoader.hpp"
 
 class TestJob : public Job {

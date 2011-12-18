@@ -123,7 +123,7 @@ TEST_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -203,7 +203,7 @@ TEST_TROUTE_SOURCES = \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/test_troute.cpp
 TEST_TROUTE_DEPENDS = TEST1 JASPER
 $(eval $(call link-program,test_troute,TEST_TROUTE))
@@ -217,7 +217,7 @@ TEST_REACH_SOURCES = \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/test_reach.cpp
 TEST_REACH_DEPENDS = TEST1 JASPER
 $(eval $(call link-program,test_reach,TEST_REACH))
@@ -231,7 +231,7 @@ TEST_ROUTE_SOURCES = \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/test_route.cpp
 TEST_ROUTE_DEPENDS = TEST1 JASPER
 $(eval $(call link-program,test_route,TEST_ROUTE))
@@ -495,7 +495,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Util/StringUtil.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
@@ -530,7 +530,7 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
@@ -651,7 +651,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/OS/Clock.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
@@ -741,7 +741,7 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/Net/ToBuffer.cpp \
 	$(TEST_SRC_DIR)/ConsoleJobRunner.cpp \
@@ -873,7 +873,7 @@ LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/LoadTopography.cpp
 LOAD_TOPOGRAPHY_DEPENDS = MATH IO UTIL SHAPELIB ZZIP
 LOAD_TOPOGRAPHY_CPPFLAGS = $(SCREEN_CPPFLAGS)
@@ -887,7 +887,7 @@ LOAD_TERRAIN_SOURCES = \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
 	$(SRC)/Engine/Navigation/GeoPoint.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/LoadTerrain.cpp
 LOAD_TERRAIN_CPPFLAGS = $(SCREEN_CPPFLAGS)
@@ -906,7 +906,7 @@ RUN_HEIGHT_MATRIX_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(TEST_SRC_DIR)/RunHeightMatrix.cpp
@@ -945,7 +945,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunWaypointParser.cpp
@@ -957,7 +957,7 @@ RUN_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -1028,7 +1028,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/OS/Clock.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -1054,7 +1054,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Compatibility/string.c \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
@@ -1085,7 +1085,7 @@ RUN_FLARM_UTILS_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunFlarmUtils.cpp
 ifeq ($(HAVE_POSIX),y)
@@ -1117,7 +1117,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Compatibility/string.c \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -1154,7 +1154,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Compatibility/string.c \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -1193,7 +1193,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Logger/LoggerEPE.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Compatibility/string.c \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunIGCWriter.cpp
 RUN_IGC_WRITER_LDADD = $(DEBUG_REPLAY_LDADD)
@@ -1428,7 +1428,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/xmlParser.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
@@ -1591,12 +1591,12 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ThreadedOperationEnvironment.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Thread/Thread.cpp \
-	$(SRC)/Thread/Operation.cpp \
 	$(SRC)/Thread/JobThread.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/Screen/ProgressBar.cpp \
@@ -1751,7 +1751,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/IO/ConfiguredFile.cpp \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Port/NullPort.cpp \
 	$(SRC)/Device/Register.cpp \
@@ -1810,7 +1810,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Compatibility/string.c \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
@@ -1869,7 +1869,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Compatibility/string.c \
-	$(SRC)/Operation.cpp \
+	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \

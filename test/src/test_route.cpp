@@ -31,7 +31,7 @@
 #include "Terrain/RasterMap.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 #define NUM_SOL 15
 

@@ -29,7 +29,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/DeviceConfig.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 #include <assert.h>
 

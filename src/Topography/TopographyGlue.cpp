@@ -26,7 +26,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "IO/FileLineReader.hpp"

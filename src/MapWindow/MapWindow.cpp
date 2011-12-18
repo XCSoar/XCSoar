@@ -30,7 +30,7 @@ Copyright_License {
 #include "Terrain/RasterWeather.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Units/Units.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 #include <tchar.h>
 

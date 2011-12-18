@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_OPERATION_HPP
 #define XCSOAR_THREAD_OPERATION_HPP
 
-#include "../Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Thread/Notify.hpp"
 #include "Thread/Mutex.hpp"
 #include "Thread/Trigger.hpp"

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_CONSOLE_OPERATION_ENVIRONMENT_HPP
 #define XCSOAR_CONSOLE_OPERATION_ENVIRONMENT_HPP
 
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 class ConsoleOperationEnvironment : public QuietOperationEnvironment {
   unsigned range;

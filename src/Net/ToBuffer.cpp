@@ -24,7 +24,7 @@ Copyright_License {
 #include "Net/ToBuffer.hpp"
 #include "Net/Features.hpp"
 #include "Net/Request.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 #include <stdint.h>
 

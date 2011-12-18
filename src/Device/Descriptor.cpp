@@ -35,7 +35,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "Language/Language.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "OS/Clock.hpp"
 #include "../Simulator.hpp"
 #include "Asset.hpp"

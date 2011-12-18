@@ -32,7 +32,7 @@
 #include "Navigation/TaskProjection.hpp"
 #include "Navigation/SpeedVector.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
 {

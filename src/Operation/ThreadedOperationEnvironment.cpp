@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Thread/Operation.hpp"
+#include "ThreadedOperationEnvironment.hpp"
 #include "OS/Sleep.h"
 
 ThreadedOperationEnvironment::ThreadedOperationEnvironment(OperationEnvironment &_other)

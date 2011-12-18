@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Thread/JobThread.hpp"
 #include "Language/Language.hpp"
 

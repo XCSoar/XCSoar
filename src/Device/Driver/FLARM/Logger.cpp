@@ -25,7 +25,7 @@
 #include "Device/Driver.hpp"
 #include "IO/BinaryWriter.hpp"
 #include "OS/FileUtil.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 #include <cstdlib>
 #include <cstring>

@@ -26,7 +26,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "IO/LineReader.hpp"
 #include "OS/PathName.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Compatibility/path.h"
 #include "Asset.hpp"
 

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Device/Driver/LX/Protocol.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 bool
 LX::CommandMode(Port &port)

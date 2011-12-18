@@ -26,7 +26,7 @@ Copyright_License {
 #include "Conversion.hpp"
 #include "IGC.hpp"
 #include "Communication.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Device/Declaration.hpp"
 #include "Device/Driver.hpp"
 #include "MessageParser.hpp"

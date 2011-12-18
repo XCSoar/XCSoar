@@ -28,7 +28,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 #include <assert.h>
 

@@ -24,7 +24,7 @@ Copyright_License {
 #include "Internal.hpp"
 #include "Protocol/Protocol.hpp"
 #include "Device/Port/Port.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 bool
 IMIDevice::Declare(const Declaration &declaration,

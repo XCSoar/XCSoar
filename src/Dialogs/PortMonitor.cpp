@@ -31,7 +31,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Util/FifoBuffer.hpp"
 #include "Language/Language.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Thread/Notify.hpp"
 
 static DeviceDescriptor *device;

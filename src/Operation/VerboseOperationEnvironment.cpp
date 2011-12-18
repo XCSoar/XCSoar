@@ -21,42 +21,36 @@ Copyright_License {
 }
 */
 
-#include "Operation.hpp"
-#include "OS/Sleep.h"
+#include "Operation/Operation.hpp"
+#include "ProgressGlue.hpp"
 
-bool
-NullOperationEnvironment::IsCancelled() const
+void
+VerboseOperationEnvironment::SetText(const TCHAR *text)
 {
-  return false;
+  ProgressGlue::Create(text);
 }
 
 void
-NullOperationEnvironment::Sleep(unsigned ms)
+VerboseOperationEnvironment::SetProgressRange(unsigned range)
 {
+  ProgressGlue::SetRange(range);
 }
 
 void
-NullOperationEnvironment::SetErrorMessage(const TCHAR *text)
+VerboseOperationEnvironment::SetProgressPosition(unsigned position)
 {
+  ProgressGlue::SetValue(position);
 }
 
 void
-NullOperationEnvironment::SetText(const TCHAR *text)
+VerboseOperationEnvironment::UpdateLayout()
 {
+  ProgressGlue::Close();
+  ProgressGlue::Create(NULL);
 }
 
 void
-NullOperationEnvironment::SetProgressRange(unsigned range)
+VerboseOperationEnvironment::Hide()
 {
-}
-
-void
-NullOperationEnvironment::SetProgressPosition(unsigned position)
-{
-}
-
-void
-QuietOperationEnvironment::Sleep(unsigned ms)
-{
-  ::Sleep(ms);
+  ProgressGlue::Close();
 }

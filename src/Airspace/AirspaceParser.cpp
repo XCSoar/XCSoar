@@ -24,7 +24,7 @@ Copyright_License {
 
 #include "AirspaceParser.hpp"
 #include "Airspace/Airspaces.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Units/System.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"

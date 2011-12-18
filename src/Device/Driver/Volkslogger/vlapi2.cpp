@@ -24,7 +24,7 @@
 #include "Util.hpp"
 #include "Protocol.hpp"
 #include "PeriodClock.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 #include <memory.h>
 #include <string.h>

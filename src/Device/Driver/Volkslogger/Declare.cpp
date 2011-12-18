@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Device/Port/Port.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "vlapi2.h"
 #include "Engine/Waypoint/Waypoint.hpp"
 

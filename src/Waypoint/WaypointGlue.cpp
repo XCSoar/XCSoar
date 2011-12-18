@@ -37,7 +37,7 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "IO/TextWriter.hpp"
 #include "Waypoint/WaypointWriter.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 

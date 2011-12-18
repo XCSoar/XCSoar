@@ -40,7 +40,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Language/Language.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Simulator.hpp"
 #include "Logger/ExternalLogger.hpp"
 #include "Profile/Profile.hpp"

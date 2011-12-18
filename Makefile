@@ -259,10 +259,11 @@ XCSOAR_SOURCES := \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	\
-	$(SRC)/Operation.cpp \
-	$(SRC)/PopupOperationEnvironment.cpp \
-	$(SRC)/MessageOperationEnvironment.cpp \
-	$(SRC)/VerboseOperationEnvironment.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/PopupOperationEnvironment.cpp \
+	$(SRC)/Operation/MessageOperationEnvironment.cpp \
+	$(SRC)/Operation/ThreadedOperationEnvironment.cpp \
+	$(SRC)/Operation/VerboseOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/ConditionMonitor/ConditionMonitor.cpp \
@@ -588,7 +589,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Notify.cpp \
-	$(SRC)/Thread/Operation.cpp \
 	$(SRC)/Thread/JobThread.cpp \
 	$(SRC)/RateLimiter.cpp \
 	\

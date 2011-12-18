@@ -27,7 +27,7 @@
 #include "Units/System.hpp"
 #include "TestUtil.hpp"
 #include "tstring.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 #include <vector>
 

@@ -29,7 +29,7 @@ Copyright_License {
 #include "Terrain/RasterTile.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 #include <stdio.h>
 #include <tchar.h>

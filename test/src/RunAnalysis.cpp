@@ -57,7 +57,7 @@ Copyright_License {
 #include "Blackboard/InterfaceBlackboard.hpp"
 #include "DebugReplay.hpp"
 #include "IO/FileLineReader.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Look/Look.hpp"
 #include "Args.hpp"
 

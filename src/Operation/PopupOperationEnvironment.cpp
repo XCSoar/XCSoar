@@ -21,36 +21,11 @@ Copyright_License {
 }
 */
 
-#include "Operation.hpp"
-#include "ProgressGlue.hpp"
+#include "Operation/Operation.hpp"
+#include "Message.hpp"
 
 void
-VerboseOperationEnvironment::SetText(const TCHAR *text)
+PopupOperationEnvironment::SetErrorMessage(const TCHAR *text)
 {
-  ProgressGlue::Create(text);
-}
-
-void
-VerboseOperationEnvironment::SetProgressRange(unsigned range)
-{
-  ProgressGlue::SetRange(range);
-}
-
-void
-VerboseOperationEnvironment::SetProgressPosition(unsigned position)
-{
-  ProgressGlue::SetValue(position);
-}
-
-void
-VerboseOperationEnvironment::UpdateLayout()
-{
-  ProgressGlue::Close();
-  ProgressGlue::Create(NULL);
-}
-
-void
-VerboseOperationEnvironment::Hide()
-{
-  ProgressGlue::Close();
+  Message::AddMessage(text);
 }

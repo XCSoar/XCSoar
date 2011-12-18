@@ -89,7 +89,7 @@ Copyright_License {
 #include "Task/TaskManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Pages.hpp"
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"

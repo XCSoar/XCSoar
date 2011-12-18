@@ -41,7 +41,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "GPSClock.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Tracking/TrackingGlue.hpp"
 
 #ifdef _WIN32_WCE

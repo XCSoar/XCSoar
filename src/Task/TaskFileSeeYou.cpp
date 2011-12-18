@@ -35,7 +35,7 @@
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/BGAFixedCourseZone.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Units/System.hpp"
 
 struct SeeYouTaskInformation {

@@ -30,7 +30,7 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
 #include "NMEA/Checksum.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Util/StringUtil.hpp"
 
 #include <tchar.h>

@@ -32,7 +32,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "IO/ConfiguredFile.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 static const Waypoint *
 find_waypoint(Waypoints &way_points, const TCHAR *name)

@@ -24,7 +24,7 @@ Copyright_License {
 #include "Airspace/AirspaceParser.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "IO/FileLineReader.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 #include <stdio.h>
 #include <tchar.h>

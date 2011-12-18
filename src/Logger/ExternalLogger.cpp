@@ -33,7 +33,7 @@
 #include "Device/Driver.hpp"
 #include "LocalPath.hpp"
 #include "UIGlobals.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Thread/JobThread.hpp"
 #include "Job.hpp"

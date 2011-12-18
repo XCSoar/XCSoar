@@ -35,7 +35,7 @@ Copyright_License {
 #include "Waypoint/Waypoint.hpp"
 #include "Units/System.hpp"
 #include "PeriodClock.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 #include <tchar.h>
 #include <assert.h>

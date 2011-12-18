@@ -54,7 +54,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ConfiguredFile.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/TrafficLook.hpp"
 

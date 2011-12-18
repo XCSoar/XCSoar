@@ -24,7 +24,7 @@ Copyright_License {
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 bool
 FlarmDevice::Declare(const Declaration &declaration,

@@ -30,7 +30,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 
 #include <zzip/zzip.h>
 

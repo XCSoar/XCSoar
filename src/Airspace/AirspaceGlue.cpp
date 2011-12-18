@@ -26,7 +26,7 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Operation.hpp"
+#include "Operation/Operation.hpp"
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
 #include "IO/ConfiguredFile.hpp"
