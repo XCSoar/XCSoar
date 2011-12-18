@@ -108,6 +108,15 @@ public:
     return data[i];
   }
 
+  /**
+   * Returns one writable character.  No bounds checking.
+   */
+  TCHAR &operator[](size_type i) {
+    assert(i <= length());
+
+    return data[i];
+  }
+
   const TCHAR *begin() const {
     return data;
   }
