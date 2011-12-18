@@ -34,6 +34,7 @@ StartPoint::StartPoint(ObservationZonePoint* _oz,
                        const TaskBehaviour& tb,
                        const OrderedTaskBehaviour& to): 
   OrderedTaskPoint(START, _oz, wp, to),
+  safety_height_terrain(tb.route_planner.safety_height_terrain),
   margins(tb),
   enabled(true) 
 {
@@ -42,14 +43,14 @@ StartPoint::StartPoint(ObservationZonePoint* _oz,
 void
 StartPoint::SetTaskBehaviour(const TaskBehaviour &tb)
 {
+  safety_height_terrain = tb.route_planner.safety_height_terrain;
   margins = tb;
 }
 
 fixed
 StartPoint::GetElevation() const
 {
-  // no need for safety height at start?
-  return GetBaseElevation();
+  return GetBaseElevation() + safety_height_terrain;
 }
 
 
