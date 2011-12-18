@@ -160,12 +160,12 @@ struct GlideResult {
   /**
    * Check whether task is achievable (optionally entirely on final glide)
    *
-   * @param final_glide Whether no further climb allowed
-   *
    * @return True if target is reachable
    */
   gcc_pure
-  bool IsAchievable(const bool final_glide=false) const;
+  bool IsAchievable(const bool final_glide=false) const {
+    return IsOk();
+  }
 
   /**
    * Adds another GlideResult to this.  This is used to

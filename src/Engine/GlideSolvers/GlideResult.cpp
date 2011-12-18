@@ -145,15 +145,6 @@ GlideResult::DestinationAngleGround() const
   return fixed_int_constant(1000);
 }
 
-bool
-GlideResult::IsAchievable(const bool final_glide) const
-{
-  if (final_glide)
-    return IsFinalGlide();
-
-  return (validity == RESULT_OK);
-}
-
 bool 
 GlideResult::IsFinalGlide() const 
 {
