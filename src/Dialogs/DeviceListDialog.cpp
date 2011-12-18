@@ -100,7 +100,7 @@ PaintDevice(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   const DeviceDescriptor &device = device_list[indices[i]];
 
-  const UPixelScalar margin = Layout::Scale(1);
+  const UPixelScalar margin = Layout::Scale(2);
 
   TCHAR buffer1[256], buffer2[256];
   const DeviceConfig &config = device.GetConfig();
@@ -142,10 +142,10 @@ PaintDevice(Canvas &canvas, const PixelRect rc, unsigned i)
     if (IsFlarm(i))
       _tcscat(buffer1, _T("; FLARM"));
 
-    canvas.text(rc.left + margin, rc.top + margin + font_height,
+    canvas.text(rc.left + margin, rc.top + 2 * margin + font_height,
                 buffer1);
   } else {
-    canvas.text(rc.left + margin, rc.top + margin + font_height,
+    canvas.text(rc.left + margin, rc.top + 2 * margin + font_height,
                 _("Not connected"));
   }
 }
