@@ -29,7 +29,7 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "OS/PathName.hpp"
-#include "ConsoleOperationEnvironment.hpp"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Profile/DeviceConfig.hpp"
 
 #ifdef HAVE_POSIX

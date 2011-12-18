@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ConsoleJobRunner.hpp"
-#include "ConsoleOperationEnvironment.hpp"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 
 bool
 ConsoleJobRunner::Run(Job &job)

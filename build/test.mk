@@ -745,7 +745,7 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/Net/ToBuffer.cpp \
 	$(TEST_SRC_DIR)/ConsoleJobRunner.cpp \
-	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunNOAADownloader.cpp
 RUN_NOAA_DOWNLOADER_DEPENDS = IO MATH LIBNET
 $(eval $(call link-program,RunNOAADownloader,RUN_NOAA_DOWNLOADER))
@@ -1055,7 +1055,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
-	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -1086,7 +1086,7 @@ RUN_FLARM_UTILS_SOURCES = \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Operation/Operation.cpp \
-	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunFlarmUtils.cpp
 ifeq ($(HAVE_POSIX),y)
 RUN_FLARM_UTILS_SOURCES += \
@@ -1118,7 +1118,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
-	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
@@ -1155,7 +1155,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
-	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \

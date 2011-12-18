@@ -26,7 +26,6 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Driver/FLARM/Device.hpp"
 #include "OS/PathName.hpp"
-#include "ConsoleOperationEnvironment.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Util/StringUtil.hpp"
 
