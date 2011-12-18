@@ -102,7 +102,7 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(const int id)
   buffer.Format(_T("InfoBox: %s"), InfoBoxManager::GetTitle(id));
 
   wf->SetCaption(buffer);
-  wf->ShowModal();
+  wf->ShowModeless();
 
   delete wTabBar;
   delete wf;
