@@ -28,7 +28,6 @@ TaskMacCready::TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
                              const GlidePolar &gp):
   m_tps(_tps.begin(), _tps.end()),
   m_gs(_tps.size()),
-  m_minHs(_tps.size(), fixed_zero),
   m_activeTaskPoint(_activeTaskPoint),
   m_start(0),
   m_end(max((int)_tps.size(), 1) - 1),
@@ -37,7 +36,6 @@ TaskMacCready::TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
 TaskMacCready::TaskMacCready(TaskPoint* tp, const GlidePolar &gp):
   m_tps(1, tp),
   m_gs(1),
-  m_minHs(1, fixed_zero),
   m_activeTaskPoint(0),
   m_start(0),
   m_end(0),
@@ -47,34 +45,24 @@ TaskMacCready::TaskMacCready(const std::vector<TaskPoint*> &_tps,
                              const GlidePolar &gp):
   m_tps(_tps.begin(), _tps.end()),
   m_gs(_tps.size()),
-  m_minHs(_tps.size(), fixed_zero),
   m_activeTaskPoint(0),
   m_start(0),
   m_end(max((int)_tps.size(), 1) - 1),
   m_glide_polar(gp) {}
 
-void
-TaskMacCready::clearance_heights(const AircraftState &aircraft)
-{
-  // set min heights (earliest climb possible)
-  fixed minH = get_min_height(aircraft);
-  for (int i = m_end; i >= m_start; --i) {
-    minH = max(minH, m_tps[i]->GetElevation());
-    m_minHs[i] = minH;
-  }
-}
-
 GlideResult 
 TaskMacCready::glide_solution(const AircraftState &aircraft) 
 {
+  const fixed aircraft_min_height = get_min_height(aircraft);
   GlideResult acc_gr, gr;
   AircraftState aircraft_predict = get_aircraft_start(aircraft);
 
-  clearance_heights(aircraft);
-
   for (int i = m_start; i <= m_end; ++i) {
+    const fixed tp_min_height = std::max(aircraft_min_height,
+                                         m_tps[i]->GetElevation());
+
     // perform estimate, ensuring that alt is above previous taskpoint  
-    gr = tp_solution(i, aircraft_predict, m_minHs[i]);
+    gr = tp_solution(i, aircraft_predict, tp_min_height);
     m_gs[i] = gr;
 
     // update state
@@ -86,7 +74,7 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
     /* make sure the next leg doesn't start below the safety altitude
        of the current turn point, because we assume that the pilot
        will never progress to the next leg if he's too low */
-    aircraft_predict.altitude = m_minHs[i];
+    aircraft_predict.altitude = tp_min_height;
     if (positive(gr.altitude_difference))
       /* .. but start higher if the last calculation allows it */
       aircraft_predict.altitude += gr.altitude_difference;
