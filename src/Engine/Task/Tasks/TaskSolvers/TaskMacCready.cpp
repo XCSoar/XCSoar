@@ -87,34 +87,28 @@ GlideResult
 TaskMacCready::glide_solution(const AircraftState &aircraft) 
 {
   GlideResult acc_gr, gr;
-  AircraftState aircraft_predict = aircraft;
-  AircraftState aircraft_start = get_aircraft_start(aircraft);
+  AircraftState aircraft_predict = get_aircraft_start(aircraft);
 
   clearance_heights(aircraft);
 
-  fixed excess_height = aircraft_start.altitude - m_minHs[m_end];
-
-  for (int i = m_end; i >= m_start; --i) {
-    if (i > m_start)
-      aircraft_predict.altitude =
-          m_minHs[i - 1] + max(excess_height, fixed_zero);
-    else
-      aircraft_predict.altitude =
-          min(aircraft_start.altitude,
-              m_minHs[i] + max(excess_height, fixed_zero));
-
+  for (int i = m_start; i <= m_end; ++i) {
     // perform estimate, ensuring that alt is above previous taskpoint  
     gr = tp_solution(i, aircraft_predict, m_minHs[i]);
     m_gs[i] = gr;
 
-    if (gr.IsOk())
-      excess_height -= gr.height_glide;
-
     // update state
-    if (i == m_end)
+    if (i == m_start)
       acc_gr = gr;
     else
       acc_gr.Add(gr);
+
+    /* make sure the next leg doesn't start below the safety altitude
+       of the current turn point, because we assume that the pilot
+       will never progress to the next leg if he's too low */
+    aircraft_predict.altitude = m_minHs[i];
+    if (positive(gr.altitude_difference))
+      /* .. but start higher if the last calculation allows it */
+      aircraft_predict.altitude += gr.altitude_difference;
   }
 
   if (!acc_gr.IsOk())

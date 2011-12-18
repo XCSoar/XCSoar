@@ -254,9 +254,9 @@ MacCready::solve(const GlideState &task) const
   sub_task.altitude_difference -= result_fg.height_glide;
 
   GlideResult result_cc = solve_cruise(sub_task);
-  result_cc.Add(result_fg);
+  result_fg.Add(result_cc);
 
-  return result_cc;
+  return result_fg;
 }
 
 /**
