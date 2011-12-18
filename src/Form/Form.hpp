@@ -84,6 +84,12 @@ protected:
    */
   bool force;
 
+  /**
+   * Show in modeless mode.  Close if screen is clicked
+   * outside dialog
+   */
+  bool modeless;
+
   /** Font of the titlebar */
 #ifdef EYE_CANDY
   Bitmap bitmap_title;
@@ -168,6 +174,12 @@ public:
    * input, even though the dialog is modal (a hack for dlgTarget)
    */
   int ShowModal();
+
+  /**
+   * Opens modeless dialog.  Dialog will close if mouse is clicked
+   * anywhere on screen outside the dialog
+   */
+  int ShowModeless();
 
   const TCHAR *GetCaption() const {
     return mCaption.c_str();

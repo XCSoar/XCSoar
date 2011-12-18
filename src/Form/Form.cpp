@@ -93,6 +93,7 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
                  const WindowStyle style)
   :main_window(_main_window), look(_look),
    mModalResult(0), force(false),
+   modeless(false),
    client_area(_look),
    mOnTimerNotify(NULL), mOnKeyDownNotify(NULL),
    defaultFocus(NULL),
@@ -240,6 +241,12 @@ is_mouse_up(const Event &event)
   return event.type == Event::MOUSE_UP;
 }
 
+static bool
+is_mouse_down(const Event &event)
+{
+  return event.type == Event::MOUSE_DOWN;
+}
+
 gcc_pure
 static bool
 check_key(ContainerWindow *container, const Event &event)
@@ -278,6 +285,12 @@ static bool
 is_mouse_up(const SDL_Event &event)
 {
   return event.type == SDL_MOUSEBUTTONUP;
+}
+
+static bool
+is_mouse_down(const SDL_Event &event)
+{
+  return event.type == SDL_MOUSEBUTTONDOWN;
 }
 
 gcc_pure
@@ -320,6 +333,12 @@ is_mouse_up(const MSG &msg)
   return msg.message == WM_LBUTTONUP;
 }
 
+static bool
+is_mouse_down(const MSG &msg)
+{
+  return msg.message == WM_LBUTTONDOWN;
+}
+
 /**
  * Is this key handled by the focused control? (bypassing the dialog
  * manager)
@@ -345,6 +364,12 @@ check_special_key(ContainerWindow *container, const MSG &msg)
 }
 
 #endif /* !ENABLE_SDL */
+
+int WndForm::ShowModeless()
+{
+  modeless = true;
+  return ShowModal();
+}
 
 int
 WndForm::ShowModal()
@@ -406,8 +431,12 @@ WndForm::ShowModal()
     }
 #endif
 
-    if (!main_window.FilterEvent(event, this))
-      continue;
+    if (!main_window.FilterEvent(event, this)) {
+      if (modeless && is_mouse_down(event))
+        break;
+      else
+        continue;
+    }
 
     // hack to stop exiting immediately
     if (IsEmbedded() && !IsAltair() && !hastimed &&
