@@ -54,7 +54,7 @@ static WindSetupPanel *instance;
 void
 WindSetupPanel::Setup()
 {
-  InfoBoxManager::SetupFocused(id);
+  InfoBoxManager::ShowInfoBoxPicker(id);
   dlgInfoBoxAccess::OnClose();
 }
 

@@ -87,9 +87,12 @@ namespace InfoBoxManager
   void ShowDlgInfoBox(const int id);
 
   /**
-   * Opens a configuration dialog for the focused InfoBox.
+   * Opens a dialog to select the InfoBox contents for
+   * the InfoBox indicated by id, or the focused InfoBox.
+   * @param id The id of the InfoBox to configure.  If negative,
+   * then it configures the focused InfoBox if there is one.
    */
-  void SetupFocused(const int id = -1);
+  void ShowInfoBoxPicker(const int id = -1);
 };
 
 #endif

@@ -55,7 +55,7 @@ static MacCreadySetupPanel *instance;
 void
 MacCreadySetupPanel::Setup()
 {
-  InfoBoxManager::SetupFocused(id);
+  InfoBoxManager::ShowInfoBoxPicker(id);
   dlgInfoBoxAccess::OnClose();
 }
 

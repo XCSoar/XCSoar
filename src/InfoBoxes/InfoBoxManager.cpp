@@ -488,11 +488,11 @@ InfoBoxManager::ShowDlgInfoBox(const int id)
 {
   if (GetDialogContent(id))
     dlgInfoBoxAccessShowModal(id);
-  else SetupFocused(id);
+  else ShowInfoBoxPicker(id);
 }
 
 void
-InfoBoxManager::SetupFocused(const int id)
+InfoBoxManager::ShowInfoBoxPicker(const int id)
 {
   int i;
 

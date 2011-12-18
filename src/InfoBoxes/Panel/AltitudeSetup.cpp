@@ -77,7 +77,7 @@ PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode)
 void
 AltitudeSetupPanel::Setup()
 {
-  InfoBoxManager::SetupFocused(id);
+  InfoBoxManager::ShowInfoBoxPicker(id);
   dlgInfoBoxAccess::OnClose();
 }
 
