@@ -149,9 +149,7 @@ bool
 GlideResult::IsAchievable(const bool final_glide) const
 {
   if (final_glide)
-    return (validity == RESULT_OK)
-            && !negative(altitude_difference)
-            && !positive(height_climb);
+    return IsFinalGlide();
 
   return (validity == RESULT_OK);
 }
@@ -159,7 +157,7 @@ GlideResult::IsAchievable(const bool final_glide) const
 bool 
 GlideResult::IsFinalGlide() const 
 {
-  return (validity == RESULT_OK) && !positive(distance_to_final);
+  return IsOk() && !negative(altitude_difference) && !positive(height_climb);
 }
 
 GeoPoint 
