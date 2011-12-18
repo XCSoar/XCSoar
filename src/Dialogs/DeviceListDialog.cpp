@@ -292,10 +292,8 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look,
   list_style.tab_stop();
   list_style.border();
 
-  list = new WndListFrame(client_area, look,
-                          rc.left + margin, rc.top + margin,
-                          rc.right - rc.left - 2 * margin,
-                          rc.bottom - rc.top - 2 * margin,
+  list = new WndListFrame(client_area, look, rc.left, rc.top,
+                          rc.right - rc.left, rc.bottom - rc.top,
                           list_style, 3 * margin + 2 * font_height);
   list->SetPaintItemCallback(PaintDevice);
   list->SetCursorCallback(OnCursor);

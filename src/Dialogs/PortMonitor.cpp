@@ -110,8 +110,6 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
 {
   device = &_device;
 
-  UPixelScalar margin = Layout::Scale(2);
-
   /* create the dialog */
 
   WindowStyle dialog_style;
@@ -138,10 +136,8 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
   /* create the terminal */
 
   terminal = new TerminalWindow(terminal_look);
-  terminal->set(dialog->GetClientAreaWindow(),
-                rc.left + margin, rc.top + margin,
-                rc.right - rc.left - 2 * margin,
-                rc.bottom - rc.top - 2 * margin);
+  terminal->set(dialog->GetClientAreaWindow(), rc.left, rc.top,
+                rc.right - rc.left, rc.bottom - rc.top);
 
   PortTerminalBridge *bridge = new PortTerminalBridge(*terminal);
   device->SetMonitor(bridge);
