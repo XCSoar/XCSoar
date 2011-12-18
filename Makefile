@@ -133,6 +133,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/DeviceListDialog.cpp \
 	$(SRC)/Dialogs/PortMonitor.cpp \
 	$(SRC)/Dialogs/ManageCAI302Dialog.cpp \
+	$(SRC)/Dialogs/ManageFlarmDialog.cpp \
 	$(SRC)/Dialogs/MapItemListDialog.cpp \
 	$(SRC)/Dialogs/dlgAirspace.cpp \
 	$(SRC)/Dialogs/dlgAirspaceColours.cpp \

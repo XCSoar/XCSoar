@@ -21,17 +21,11 @@ Copyright_License {
 }
 */
 
-#include "Device/Driver/FLARM.hpp"
-#include "Device.hpp"
+#ifndef XCSOAR_MANAGE_FLARM_DIALOG_HPP
+#define XCSOAR_MANAGE_FLARM_DIALOG_HPP
 
-static Device *
-FlarmCreateOnPort(const DeviceConfig &config, Port &com_port)
-{
-  return new FlarmDevice(com_port);
-}
+class Device;
 
-const struct DeviceRegister flarm_device = {
-  _T("FLARM"), _T("FLARM"),
-  DeviceRegister::DECLARE | DeviceRegister::LOGGER | DeviceRegister::MANAGE,
-  FlarmCreateOnPort,
-};
+void ManageFlarmDialog(Device &device);
+
+#endif
