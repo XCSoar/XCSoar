@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
+#include "Util/StaticString.hpp"
 
 #include <assert.h>
 
@@ -42,20 +43,21 @@ FlarmDevice::Send(const char *sentence)
 }
 
 bool
-FlarmDevice::SetGet(char *buffer)
+FlarmDevice::SetGet(const char *buffer)
 {
   assert(!in_binary_mode);
   assert(buffer != NULL);
 
-  Send(buffer);
+  NarrowString<256> expected_answer(buffer);
+  expected_answer[6u] = 'A';
 
-  buffer[6] = _T('A');
-  return port.ExpectString(buffer);
+  Send(buffer);
+  return port.ExpectString(expected_answer);
 }
 
 #ifdef _UNICODE
 bool
-FlarmDevice::SetGet(TCHAR *s)
+FlarmDevice::SetGet(const TCHAR *s)
 {
   assert(!in_binary_mode);
   assert(s != NULL);

@@ -78,9 +78,9 @@ private:
 
   bool SetConfig(const TCHAR *setting, const TCHAR *value);
 
-  bool SetGet(char *buffer);
+  bool SetGet(const char *buffer);
 #ifdef _UNICODE
-  bool SetGet(TCHAR *s);
+  bool SetGet(const TCHAR *s);
 #endif
 
   bool DeclareInternal(const Declaration &declaration,
