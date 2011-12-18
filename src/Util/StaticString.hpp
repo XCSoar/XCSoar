@@ -161,7 +161,7 @@ public:
       return false;
 
     data[l] = ch;
-    data[l + 1] = _T('\0');
+    data[l + 1] = SENTINEL;
     return true;
   }
 
