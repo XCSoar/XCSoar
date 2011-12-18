@@ -24,7 +24,7 @@ Copyright_License {
 
 #include "GlideComputerInterface.hpp"
 #include "GlideComputer.hpp"
-#include "InputQueue.hpp"
+#include "Input/InputQueue.hpp"
 
 void
 GlideComputerTaskEvents::SetComputer(GlideComputer &_computer)

@@ -400,22 +400,22 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Panel/MacCreadySetup.cpp \
 	$(SRC)/InfoBoxes/Panel/WindEdit.cpp \
 	$(SRC)/InfoBoxes/Panel/WindSetup.cpp \
-	$(SRC)/InputConfig.cpp \
-	$(SRC)/InputDefaults.cpp \
-	$(SRC)/InputEvents.cpp \
-	$(SRC)/InputEventsActions.cpp \
-	$(SRC)/InputEventsDevice.cpp \
-	$(SRC)/InputEventsInfoBox.cpp \
-	$(SRC)/InputEventsMap.cpp \
-	$(SRC)/InputEventsAirspace.cpp \
-	$(SRC)/InputEventsTask.cpp \
-	$(SRC)/InputEventsSettings.cpp \
-	$(SRC)/InputEventsThermalAssistant.cpp \
-	$(SRC)/InputEventsTraffic.cpp \
-	$(SRC)/InputQueue.cpp \
-	$(SRC)/InputLookup.cpp \
-	$(SRC)/InputKeys.cpp \
-	$(SRC)/InputParser.cpp \
+	$(SRC)/Input/InputConfig.cpp \
+	$(SRC)/Input/InputDefaults.cpp \
+	$(SRC)/Input/InputEvents.cpp \
+	$(SRC)/Input/InputEventsActions.cpp \
+	$(SRC)/Input/InputEventsDevice.cpp \
+	$(SRC)/Input/InputEventsInfoBox.cpp \
+	$(SRC)/Input/InputEventsMap.cpp \
+	$(SRC)/Input/InputEventsAirspace.cpp \
+	$(SRC)/Input/InputEventsTask.cpp \
+	$(SRC)/Input/InputEventsSettings.cpp \
+	$(SRC)/Input/InputEventsThermalAssistant.cpp \
+	$(SRC)/Input/InputEventsTraffic.cpp \
+	$(SRC)/Input/InputQueue.cpp \
+	$(SRC)/Input/InputLookup.cpp \
+	$(SRC)/Input/InputKeys.cpp \
+	$(SRC)/Input/InputParser.cpp \
 	$(SRC)/PageSettings.cpp \
 	$(SRC)/Pages.cpp \
 	$(SRC)/StatusMessage.cpp \

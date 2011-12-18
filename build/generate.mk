@@ -8,19 +8,19 @@ $(OUT)/include/MathTables.h: $(HOST_OUTPUT_DIR)/tools/GenerateSineTables$(HOST_E
 
 $(call SRC_TO_OBJ,$(SRC)/Math/FastMath.c): $(OUT)/include/MathTables.h
 
-$(OUT)/include/InputEvents_Text2Event.cpp: $(SRC)/InputEvents.hpp \
+$(OUT)/include/InputEvents_Text2Event.cpp: $(SRC)/Input/InputEvents.hpp \
 	$(topdir)/tools/Text2Event.pl | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) $(topdir)/tools/Text2Event.pl $< >$@.tmp
 	@mv $@.tmp $@
 
-$(OUT)/include/InputEvents_Text2GCE.cpp: $(SRC)/InputQueue.hpp \
+$(OUT)/include/InputEvents_Text2GCE.cpp: $(SRC)/Input/InputQueue.hpp \
 	$(topdir)/tools/Text2GCE.pl | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) $(topdir)/tools/Text2GCE.pl $< >$@.tmp
 	@mv $@.tmp $@
 
-$(OUT)/include/InputEvents_Text2NE.cpp: $(SRC)/InputQueue.hpp \
+$(OUT)/include/InputEvents_Text2NE.cpp: $(SRC)/Input/InputQueue.hpp \
 	$(topdir)/tools/Text2NE.pl | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) $(topdir)/tools/Text2NE.pl $< >$@.tmp
@@ -44,8 +44,8 @@ $(OUT)/include/InputEvents_altair.cpp: $(topdir)/Data/Input/altair.xci \
 	$(Q)$(PERL) $(topdir)/tools/xci2cpp.pl $(topdir)/Data/Input/default.xci $(topdir)/Data/Input/altair.xci >$@.tmp
 	@mv $@.tmp $@
 
-$(call SRC_TO_OBJ,$(SRC)/InputDefaults.cpp): $(XCI_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/InputLookup.cpp): $(OUT)/include/InputEvents_Text2Event.cpp $(OUT)/include/InputEvents_Text2GCE.cpp $(OUT)/include/InputEvents_Text2NE.cpp
+$(call SRC_TO_OBJ,$(SRC)/Input/InputDefaults.cpp): $(XCI_HEADERS)
+$(call SRC_TO_OBJ,$(SRC)/Input/InputLookup.cpp): $(OUT)/include/InputEvents_Text2Event.cpp $(OUT)/include/InputEvents_Text2GCE.cpp $(OUT)/include/InputEvents_Text2NE.cpp
 
 $(OUT)/include/Status_defaults.cpp: Data/Status/default.xcs \
 	tools/xcs2cpp.pl $(OUT)/include/dirstamp

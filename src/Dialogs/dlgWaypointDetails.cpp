@@ -50,7 +50,7 @@ Copyright_License {
 #include "Waypoint/WaypointGlue.hpp"
 #include "Compiler.h"
 #include "Compatibility/path.h"
-#include "InputEvents.hpp"
+#include "Input/InputEvents.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Units/Units.hpp"

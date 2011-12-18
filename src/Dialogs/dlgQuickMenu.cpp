@@ -24,7 +24,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Form/GridView.hpp"
 #include "Form/CustomButton.hpp"
-#include "InputEvents.hpp"
+#include "Input/InputEvents.hpp"
 #include "Screen/Key.h"
 #include "Screen/SingleWindow.hpp"
 #include "Form/Form.hpp"

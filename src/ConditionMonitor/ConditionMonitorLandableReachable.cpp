@@ -24,7 +24,7 @@ Copyright_License {
 
 #include "ConditionMonitorLandableReachable.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "InputQueue.hpp"
+#include "Input/InputQueue.hpp"
 
 bool
 ConditionMonitorLandableReachable::CheckCondition(const GlideComputer& cmp)

@@ -45,7 +45,7 @@
 #include "Device/Port/NullPort.hpp"
 #include "NMEA/Info.hpp"
 #include "Protection.hpp"
-#include "InputEvents.hpp"
+#include "Input/InputEvents.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Operation.hpp"

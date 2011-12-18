@@ -39,7 +39,7 @@
 #include "Language/Language.hpp"
 #include "GestureManager.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "InputEvents.hpp"
+#include "Input/InputEvents.hpp"
 #include "Interface.hpp"
 
 /**

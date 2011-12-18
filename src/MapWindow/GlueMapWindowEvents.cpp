@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "GlueMapWindow.hpp"
 #include "Message.hpp"
-#include "InputEvents.hpp"
+#include "Input/InputEvents.hpp"
 #include "Screen/Key.h"
 #include "Screen/Layout.hpp"
 #include "Simulator.hpp"

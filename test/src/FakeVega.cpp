@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "InputQueue.hpp"
+#include "Input/InputQueue.hpp"
 
 bool
 InputEvents::processNmea(unsigned key)

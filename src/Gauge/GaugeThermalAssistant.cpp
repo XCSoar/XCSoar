@@ -25,7 +25,7 @@ Copyright_License {
 #include "Gauge/GaugeThermalAssistant.hpp"
 #include "Gauge/ThermalAssistantWindow.hpp"
 #include "Blackboard/LiveBlackboard.hpp"
-#include "InputEvents.hpp"
+#include "Input/InputEvents.hpp"
 
 class GaugeThermalAssistantWindow : public ThermalAssistantWindow {
 public:

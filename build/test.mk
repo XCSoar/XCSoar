@@ -915,9 +915,9 @@ RUN_HEIGHT_MATRIX_DEPENDS = MATH IO JASPER ZZIP
 $(eval $(call link-program,RunHeightMatrix,RUN_HEIGHT_MATRIX))
 
 RUN_INPUT_PARSER_SOURCES = \
-	$(SRC)/InputKeys.cpp \
-	$(SRC)/InputConfig.cpp \
-	$(SRC)/InputParser.cpp \
+	$(SRC)/Input/InputKeys.cpp \
+	$(SRC)/Input/InputConfig.cpp \
+	$(SRC)/Input/InputParser.cpp \
 	$(SRC)/MenuData.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/Compatibility/string.c \

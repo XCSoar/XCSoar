@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "BigThermalAssistantWindow.hpp"
-#include "InputEvents.hpp"
+#include "Input/InputEvents.hpp"
 
 bool
 BigThermalAssistantWindow::on_mouse_double(PixelScalar x, PixelScalar y)

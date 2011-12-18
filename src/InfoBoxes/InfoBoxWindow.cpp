@@ -24,7 +24,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Look/InfoBoxLook.hpp"
-#include "InputEvents.hpp"
+#include "Input/InputEvents.hpp"
 #include "Compatibility/string.h"
 #include "Renderer/UnitSymbolRenderer.hpp"
 #include "Screen/UnitSymbol.hpp"

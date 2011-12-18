@@ -24,7 +24,7 @@ Copyright_License {
 
 #include "ConditionMonitorGlideTerrain.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "InputQueue.hpp"
+#include "Input/InputQueue.hpp"
 
 bool
 ConditionMonitorGlideTerrain::CheckCondition(const GlideComputer& cmp)
