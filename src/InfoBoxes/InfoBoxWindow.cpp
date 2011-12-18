@@ -136,34 +136,34 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   // Do text-based unit rendering on higher resolutions
   if (Layout::FastScale(10) > 18) {
     canvas.Select(*look.unit_font);
-    PixelSize unit_size = UnitSymbolRenderer::GetSize(canvas, data.value_unit);
+    PixelScalar unit_width =
+        UnitSymbolRenderer::GetSize(canvas, data.value_unit).cx;
 
     canvas.Select(*look.value.font);
     UPixelScalar ascent_height = look.value.font->GetAscentHeight();
 
-    PixelSize tsize = canvas.CalcTextSize(data.value);
-    if (tsize.cx > value_rect.right - value_rect.left) {
+    PixelSize value_size = canvas.CalcTextSize(data.value);
+    if (value_size.cx > value_rect.right - value_rect.left) {
       canvas.Select(*look.small_font);
       ascent_height = look.small_font->GetAscentHeight();
-      tsize = canvas.CalcTextSize(data.value);
+      value_size = canvas.CalcTextSize(data.value);
     }
 
-    PixelScalar x = max(PixelScalar(0),
-                        PixelScalar((value_rect.left + value_rect.right - tsize.cx
-                                     - unit_size.cx) / 2));
+    PixelScalar x = max(
+        PixelScalar(0),
+        PixelScalar((value_rect.left + value_rect.right - value_size.cx - unit_width) / 2));
 
-    PixelScalar y = (value_rect.top + value_rect.bottom - tsize.cy) / 2;
+    PixelScalar y = (value_rect.top + value_rect.bottom - value_size.cy) / 2;
 
     canvas.TextAutoClipped(x, y, data.value);
 
-    if (unit_size.cx != 0) {
+    if (unit_width != 0) {
       UPixelScalar unit_height =
-          UnitSymbolRenderer::GetAscentHeight(*look.unit_font,
-                                              data.value_unit);
+          UnitSymbolRenderer::GetAscentHeight(*look.unit_font, data.value_unit);
 
       canvas.Select(*look.unit_font);
       UnitSymbolRenderer::Draw(canvas,
-                               { PixelScalar(x + tsize.cx),
+                               { PixelScalar(x + value_size.cx),
                                  PixelScalar(y + ascent_height - unit_height) },
                                data.value_unit);
     }
@@ -175,12 +175,12 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   UPixelScalar ascent_height = look.value.font->GetAscentHeight();
   UPixelScalar capital_height = look.value.font->GetCapitalHeight();
 
-  PixelSize tsize = canvas.CalcTextSize(data.value);
-  if (tsize.cx > value_rect.right - value_rect.left) {
+  PixelSize value_size = canvas.CalcTextSize(data.value);
+  if (value_size.cx > value_rect.right - value_rect.left) {
     canvas.Select(*look.small_font);
     ascent_height = look.small_font->GetAscentHeight();
     capital_height = look.small_font->GetCapitalHeight();
-    tsize = canvas.CalcTextSize(data.value);
+    value_size = canvas.CalcTextSize(data.value);
   }
 
   PixelSize unit_size;
@@ -193,7 +193,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   }
 
   PixelScalar x = max(PixelScalar(1),
-                      PixelScalar((value_rect.left + value_rect.right - tsize.cx
+                      PixelScalar((value_rect.left + value_rect.right - value_size.cx
                                    - Layout::FastScale(unit_size.cx)) / 2));
 
   PixelScalar y = value_rect.top + 1 - ascent_height +
@@ -204,7 +204,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   if (unit_symbol != NULL) {
 #ifndef HAVE_CLIPPING
     /* sort-of clipping */
-    if (x + tsize.cx >= (int)canvas.get_width())
+    if (x + value_size.cx >= (int)canvas.get_width())
       return;
 #endif
 
@@ -212,7 +212,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
                                            ? UnitSymbol::INVERSE
                                            : UnitSymbol::NORMAL);
 
-    canvas.scale_copy(x + tsize.cx,
+    canvas.scale_copy(x + value_size.cx,
                       y + ascent_height
                       - Layout::FastScale(unit_size.cy),
                       *unit_symbol,
