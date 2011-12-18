@@ -70,6 +70,19 @@ string_after_prefix_ci(const TCHAR *string, const TCHAR *prefix);
 TCHAR *
 CopyString(TCHAR *dest, const TCHAR *src, size_t size);
 
+#ifdef _UNICODE
+/**
+ * Copy a string.  If the buffer is too small, then the string is
+ * truncated.  This is a safer version of strncpy().
+ *
+ * @param size the size of the destination buffer (including the null
+ * terminator)
+ * @return a pointer to the null terminator
+ */
+char *
+CopyString(char *dest, const char *src, size_t size);
+#endif
+
 /**
  * Skips whitespace at the beginning of the string, and returns the
  * first non-whitespace character.  If the string has no

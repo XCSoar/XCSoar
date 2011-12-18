@@ -68,6 +68,20 @@ CopyString(TCHAR *gcc_restrict dest, const TCHAR *gcc_restrict src,
   return p;
 }
 
+#ifdef _UNICODE
+char *
+CopyString(char *gcc_restrict dest, const char *gcc_restrict src, size_t size)
+{
+  size_t length = strlen(src);
+  if (length >= size)
+    length = size - 1;
+
+  char *p = std::copy(src, src + length, dest);
+  *p = '\0';
+  return p;
+}
+#endif
+
 const TCHAR *
 TrimLeft(const TCHAR *p)
 {
