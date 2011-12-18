@@ -73,10 +73,8 @@ struct GlideResult {
   fixed height_climb;
 
   /**
-   * Height that will lost during straight glide [m relative,
-   * non-negative] before the first estimated climb.  Zero when the
-   * aircraft starts off below the minimum altitude of the
-   * destination.
+   * Total height that will lost during straight glide along this
+   * solution.
    */
   fixed height_glide;
 

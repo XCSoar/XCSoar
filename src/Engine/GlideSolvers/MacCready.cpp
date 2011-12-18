@@ -144,7 +144,7 @@ MacCready::solve_cruise(const GlideState &task) const
 
   result.time_elapsed = t;
   result.height_climb = t_cl * mc;
-  result.height_glide = std::max(sink_glide - result.height_climb, fixed_zero);
+  result.height_glide = sink_glide;
   result.altitude_difference -= sink_glide;
   result.effective_wind_speed *= rhoplusone;
 
