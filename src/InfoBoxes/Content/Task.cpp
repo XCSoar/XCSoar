@@ -171,11 +171,12 @@ InfoBoxContentNextETE::Update(InfoBoxWindow &infobox)
   // use proper non-terminal next task stats
 
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable() ||
-      !positive(task_stats.current_leg.time_remaining)) {
+  if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable()) {
     infobox.SetInvalid();
     return;
   }
+
+  assert(!negative(task_stats.current_leg.time_remaining));
 
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
@@ -328,11 +329,12 @@ InfoBoxContentFinalETE::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
-  if (!task_stats.task_valid || !task_stats.total.IsAchievable() ||
-      !positive(task_stats.total.time_remaining)) {
+  if (!task_stats.task_valid || !task_stats.total.IsAchievable()) {
     infobox.SetInvalid();
     return;
   }
+
+  assert(!negative(task_stats.total.time_remaining));
 
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
@@ -596,11 +598,12 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxWindow &infobox)
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !task_stats.total.IsAchievable() ||
-      !positive(task_stats.total.time_remaining) ||
       !positive(common_stats.aat_time_remaining)) {
     infobox.SetInvalid();
     return;
   }
+
+  assert(!negative(task_stats.total.time_remaining));
 
   fixed diff = task_stats.total.time_remaining -
     common_stats.aat_time_remaining;
