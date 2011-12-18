@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef OS_PATH_HPP
 #define OS_PATH_HPP
 
+#include "Util/Macros.hpp"
+
 #ifdef _UNICODE
 #include "Util/StringUtil.hpp"
 
@@ -63,7 +65,7 @@ protected:
       return _tcsdup(_T(""));
 
     TCHAR dest[MAX_PATH];
-    int length = ::MultiByteToWideChar(CP_ACP, 0, src, -1, dest, MAX_PATH);
+    int length = ::MultiByteToWideChar(CP_ACP, 0, src, -1, dest, ARRAY_SIZE(dest));
     if (length == 0)
       return NULL;
 
@@ -116,7 +118,7 @@ protected:
       return strdup("");
 
     char dest[MAX_PATH];
-    int length = ::WideCharToMultiByte(CP_ACP, 0, src, -1, dest, MAX_PATH,
+    int length = ::WideCharToMultiByte(CP_ACP, 0, src, -1, dest, ARRAY_SIZE(dest),
                                        NULL, NULL);
     if (length == 0)
       return NULL;
