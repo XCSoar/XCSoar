@@ -141,8 +141,9 @@ struct AbortRank :
   }
 };
 
-bool 
-AbortTask::is_reachable(const GlideResult &result, bool final_glide) const
+gcc_pure
+static bool
+is_reachable(const GlideResult &result, bool final_glide)
 {
   return result.IsAchievable(final_glide) && !negative(result.time_elapsed);
 }
