@@ -35,8 +35,6 @@ GetButtonPosition(unsigned i, PixelRect rc)
   UPixelScalar hwidth = rc.right - rc.left;
   UPixelScalar hheight = rc.bottom - rc.top;
 
-  const UPixelScalar margin = Layout::FastScale(2);
-
   if (hheight > hwidth) {
     // portrait
 
@@ -48,25 +46,25 @@ GetButtonPosition(unsigned i, PixelRect rc)
     } else if (i < 5) {
       hwidth /= 4;
 
-      rc.left += margin + hwidth * (i - 1);
-      rc.top = rc.bottom - hheight + margin;
+      rc.left += hwidth * (i - 1);
+      rc.top = rc.bottom - hheight;
     } else {
       hwidth /= 3;
 
-      rc.left = rc.right - hwidth + margin;
+      rc.left = rc.right - hwidth;
       PixelScalar k = rc.bottom - rc.top - Layout::Scale(46);
 
       if (IsAltair()) {
         k = rc.bottom - rc.top;
         // JMW need upside down button order for rotated Altair
-        rc.top = rc.bottom - (i - 5) * k / 5 - (hheight - margin * 2) - Layout::Scale(20);
+        rc.top = rc.bottom - (i - 5) * k / 5 - hheight - Layout::Scale(20);
       } else {
-        rc.top += (i - 5) * hheight + margin;
+        rc.top += (i - 5) * hheight;
       }
     }
 
-    rc.right = rc.left + hwidth - margin * 2;
-    rc.bottom = rc.top + hheight - margin * 2;
+    rc.right = rc.left + hwidth;
+    rc.bottom = rc.top + hheight;
   } else {
     // landscape
 
@@ -77,15 +75,14 @@ GetButtonPosition(unsigned i, PixelRect rc)
       rc.left = rc.right;
       rc.top = rc.bottom;
     } else if (i < 5) {
-      rc.left += margin;
-      rc.top += margin + hheight * (i - 1);
+      rc.top += hheight * (i - 1);
     } else {
       rc.left += hwidth * (i - 5);
-      rc.top = rc.bottom - hheight + margin;
+      rc.top = rc.bottom - hheight;
     }
 
-    rc.right = rc.left + hwidth - margin * 2;
-    rc.bottom = rc.top + hheight - margin * 2;
+    rc.right = rc.left + hwidth;
+    rc.bottom = rc.top + hheight;
   }
 
   return rc;
