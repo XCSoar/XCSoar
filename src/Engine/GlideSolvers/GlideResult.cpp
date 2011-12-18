@@ -89,11 +89,16 @@ GlideResult::Add(const GlideResult &s2)
   distance_to_final += s2.distance_to_final;
   time_virtual += s2.time_virtual;
 
-  if (negative(altitude_difference) || negative(s2.altitude_difference))
-    altitude_difference =
-        min(s2.altitude_difference + altitude_difference, altitude_difference);
-  else
-    altitude_difference = min(s2.altitude_difference, altitude_difference);
+  if (negative(s2.altitude_difference))
+    /* below first leg */
+    altitude_difference += s2.altitude_difference;
+  else if (negative(altitude_difference))
+    /* below second leg, above first leg */
+    ; /* no-op */
+  else if (s2.altitude_difference < altitude_difference)
+    /* above both: choose the smaller of both altitude_difference
+       values */
+    altitude_difference = s2.altitude_difference;
 }
 
 #define fixed_bignum fixed_int_constant(1000000) // error condition
