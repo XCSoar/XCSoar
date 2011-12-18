@@ -165,7 +165,7 @@ struct GlideResult {
    * @return True if target is reachable
    */
   gcc_pure
-  bool IsAchievable(const bool final_glide=true) const;
+  bool IsAchievable(const bool final_glide=false) const;
 
   /**
    * Adds another GlideResult to this.  This is used to

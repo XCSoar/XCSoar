@@ -98,7 +98,7 @@ struct ElementStat
    * @return True if can finish the task
    */
   bool IsAchievable() const {
-    return solution_remaining.validity == GlideResult::RESULT_OK;
+    return solution_remaining.IsAchievable();
   }
 
 #ifdef DO_PRINT

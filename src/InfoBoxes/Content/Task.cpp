@@ -220,7 +220,7 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult &next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
-  if (!task_stats.task_valid || !next_solution.IsAchievable(false)) {
+  if (!task_stats.task_valid || !next_solution.IsAchievable()) {
     infobox.SetInvalid();
     return;
   }
@@ -241,7 +241,7 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult &next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
-  if (!task_stats.task_valid || !next_solution.IsAchievable(false)) {
+  if (!task_stats.task_valid || !next_solution.IsAchievable()) {
     infobox.SetInvalid();
     return;
   }
