@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
+#include "PeriodClock.hpp"
 
 #include <assert.h>
 
@@ -35,4 +36,47 @@ FlarmDevice::Send(const char *sentence)
   port.Write('$');
   port.Write(sentence);
   port.Write("\r\n");
+}
+
+bool
+FlarmDevice::Receive(const char *prefix, char *buffer, size_t length,
+                     unsigned timeout_ms)
+{
+  assert(!in_binary_mode);
+  assert(prefix != NULL);
+
+  PeriodClock timeout;
+  timeout.update();
+
+  if (!port.ExpectString(prefix, timeout_ms))
+    return false;
+
+  char *p = (char *)buffer, *end = p + length;
+  while (p < end) {
+    if (timeout.check(timeout_ms))
+      return false;
+
+    // Read single character from port
+    int c = port.GetChar();
+
+    // On failure try again until timed out
+    if (c == -1)
+      continue;
+
+    // Break on line break or checksum
+    if (c == '*' || c == '\n') {
+      *p = '\0';
+      break;
+    }
+
+    // Skip carriage return
+    if (c == '\r')
+      continue;
+
+    // Write received character to buffer
+    *p = c;
+    p++;
+  }
+
+  return true;
 }

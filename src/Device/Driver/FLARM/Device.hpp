@@ -75,6 +75,8 @@ private:
    * Sends the supplied sentence with a $ prepended and a line break appended
    */
   void Send(const char *sentence);
+  bool Receive(const char *prefix, char *buffer, size_t length,
+               unsigned timeout_ms);
 
   bool SetConfig(const char *setting, const TCHAR *value);
 
