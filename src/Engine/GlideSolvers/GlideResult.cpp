@@ -40,7 +40,6 @@ GlideResult::GlideResult(const GlideState &task, const fixed V):
   time_elapsed(fixed_zero),
   time_virtual(fixed_zero),
   altitude_difference(task.altitude_difference),
-  altitude_required(task.altitude_difference),
   effective_wind_speed(task.wind.norm),
   effective_wind_angle(task.effective_wind_angle),
   validity(RESULT_NOSOLUTION)
@@ -48,9 +47,8 @@ GlideResult::GlideResult(const GlideState &task, const fixed V):
 }
 
 void
-GlideResult::CalcDeferred(const AircraftState& state)
+GlideResult::CalcDeferred()
 {
-  altitude_required = state.altitude - altitude_difference;
   CalcCruiseBearing();
 }
 
@@ -97,9 +95,7 @@ GlideResult::Add(const GlideResult &s2)
     /* must meet the safety height of the second leg */
 
     /* apply the increased altitude requirement */
-    const fixed delta = s2.GetRequiredAltitude() - min_height;
-    altitude_difference -= delta;
-    altitude_required += delta;
+    altitude_difference -= s2.GetRequiredAltitude() - min_height;
 
     /* adopt the minimum height of the second leg */
     min_height = s2.min_height;

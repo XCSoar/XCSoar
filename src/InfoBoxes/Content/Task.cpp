@@ -248,7 +248,7 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserAltitude(next_solution.altitude_required, tmp, 32, false);
+  Units::FormatUserAltitude(next_solution.GetRequiredAltitude(), tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -400,7 +400,7 @@ InfoBoxContentFinalAltitudeRequire::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserAltitude(task_stats.total.solution_remaining.altitude_required,
+  Units::FormatUserAltitude(task_stats.total.solution_remaining.GetRequiredAltitude(),
                             tmp, 32, false);
   infobox.SetValue(tmp);
 

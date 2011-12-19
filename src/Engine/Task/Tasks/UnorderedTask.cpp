@@ -73,7 +73,7 @@ UnorderedTask::glide_solution_remaining(const AircraftState &state,
   TaskPoint* tp = GetActiveTaskPoint();
   if (tp) {
     res = TaskSolution::glide_solution_remaining(*tp, state, polar);
-    res.CalcDeferred(state);
+    res.CalcDeferred();
   } else
     res.Reset();
 

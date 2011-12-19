@@ -85,8 +85,8 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
        out */
     return acc_gr;
 
-  m_gs[m_activeTaskPoint].CalcDeferred(aircraft);
-  acc_gr.CalcDeferred(aircraft);
+  m_gs[m_activeTaskPoint].CalcDeferred();
+  acc_gr.CalcDeferred();
   return acc_gr;
 }
 

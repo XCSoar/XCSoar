@@ -112,12 +112,6 @@ struct GlideResult {
    */
   fixed altitude_difference;
 
-  /**
-   * Absolute altitude required to solve this task [m MSL].  This is
-   * the current aircraft altitude plus #altitude_difference.
-   */
-  fixed altitude_required;
-
   fixed effective_wind_speed;
   Angle effective_wind_angle;
 
@@ -147,9 +141,8 @@ struct GlideResult {
   /**
    * Calculate additional items (CruiseTrackBearing and AltitudeRequired) that were
    * deferred.
-   * @param state State from which this solution was obtained
    */
-  void CalcDeferred(const AircraftState &state);
+  void CalcDeferred();
 
   /**
    * Check whether aircraft can finish this task without

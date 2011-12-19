@@ -107,7 +107,7 @@ CheckLeg(const TaskWaypoint &tp, const AircraftState &aircraft,
   ok1(equals(solution_remaining.height_glide, height_consumption));
   ok1(equals(solution_remaining.altitude_difference,
              height_above_min - height_consumption));
-  ok1(equals(solution_remaining.altitude_required,
+  ok1(equals(solution_remaining.GetRequiredAltitude(),
              min_arrival_alt + height_consumption));
 
   if (height_above_min >= height_consumption) {
@@ -166,7 +166,7 @@ CheckTotal(const AircraftState &aircraft, const TaskStats &stats,
   fixed alt_required_at_1 = std::max(min_arrival_alt1,
                                      min_arrival_alt2 + height_consumption2);
   fixed alt_required_at_aircraft = alt_required_at_1 + height_consumption1;
-  ok1(equals(solution_remaining.altitude_required,
+  ok1(equals(solution_remaining.GetRequiredAltitude(),
              alt_required_at_aircraft));
   ok1(equals(solution_remaining.altitude_difference,
              aircraft.altitude - alt_required_at_aircraft));
@@ -184,7 +184,7 @@ CheckLegEqualsTotal(const GlideResult &leg, const GlideResult &total)
   ok1(equals(total.height_glide, leg.height_glide));
   ok1(equals(total.distance_to_final, leg.distance_to_final));
   ok1(equals(total.altitude_difference, leg.altitude_difference));
-  ok1(equals(total.altitude_required, leg.altitude_required));
+  ok1(equals(total.GetRequiredAltitude(), leg.GetRequiredAltitude()));
 }
 
 static void
