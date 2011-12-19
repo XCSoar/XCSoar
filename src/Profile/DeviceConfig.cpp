@@ -75,7 +75,7 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
     return buffer;
 
   case PortType::IOIOUART:
-    _sntprintf(buffer, max_size, _T("IOIO UArt %d"),
+    _sntprintf(buffer, max_size, _T("IOIO UART %d"),
                ioio_uart_id);
     return buffer;
 
