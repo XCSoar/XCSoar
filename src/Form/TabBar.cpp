@@ -43,8 +43,7 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                  ? (Layout::Scale(TabLineHeightInitUnscaled) * 0.75)
                  : Layout::Scale(TabLineHeightInitUnscaled)),
    flip_orientation(_flipOrientation),
-   client_overlap_tabs(_clientOverlapTabs),
-   setting_up(true)
+   client_overlap_tabs(_clientOverlapTabs)
 {
   set(_parent, 0, 0, _parent.get_width(), _parent.get_height(), style),
 
@@ -147,8 +146,6 @@ TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
 
   if (tab_display != NULL)
     tab_display->invalidate();
-
-  setting_up = false;
 }
 
 void

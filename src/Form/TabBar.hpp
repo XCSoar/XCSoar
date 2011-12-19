@@ -61,10 +61,6 @@ protected:
    */
   bool client_overlap_tabs;
 
-private:
-  // used to indicate initial state before tabs have changed
-  bool setting_up;
-
 public:
   /**
    * Constructor used for stand-alone TabBarControl
