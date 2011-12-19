@@ -96,8 +96,6 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(const int id)
   Widget *wClose = new CloseInfoBoxAccess();
   wTabBar->AddTab(wClose, _("Close"));
 
-  wTabBar->SetCurrentPage(0);
-
   StaticString<32> buffer;
   buffer.Format(_T("InfoBox: %s"), InfoBoxManager::GetTitle(id));
 
