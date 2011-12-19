@@ -36,7 +36,7 @@ public:
    */
   static bool OnClose();
 
-  static void dlgInfoBoxAccessShowModal(const int id);
+  static void dlgInfoBoxAccessShowModeless(const int id);
 };
 
 #endif /* DLGINFOBOXACCESS_H_ */

@@ -50,13 +50,13 @@ static WndForm *wf = NULL;
 static TabBarControl* wTabBar = NULL;
 
 void
-dlgInfoBoxAccessShowModal(const int id)
+dlgInfoBoxAccessShowModeless(const int id)
 {
-  dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(id);
+  dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(id);
 }
 
 void
-dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(const int id)
+dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(const int id)
 {
   // check for another instance of this window
   if (wf != NULL) return;

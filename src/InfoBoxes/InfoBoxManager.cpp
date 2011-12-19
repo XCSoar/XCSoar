@@ -487,7 +487,7 @@ void
 InfoBoxManager::ShowDlgInfoBox(const int id)
 {
   if (GetDialogContent(id))
-    dlgInfoBoxAccessShowModal(id);
+    dlgInfoBoxAccessShowModeless(id);
   else ShowInfoBoxPicker(id);
 }
 
