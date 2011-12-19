@@ -53,6 +53,21 @@ struct GlideResult {
   };
 
   /**
+   * Head wind component [m/s] in cruise.  Immutable input value.
+   */
+  fixed head_wind;
+
+  /**
+   * Optimal speed to fly in cruise [m/s].  Immutable input value.
+   */
+  fixed v_opt;
+
+  /**
+   * Altitude [m above MSL] of target.  Immutable input value.
+   */
+  fixed min_height;
+
+  /**
    * Cruise vector of this result.  Usually, this equals the remaining
    * vector (see ElementStat::vector_remaining), but if a solution is
    * not achievable, this is the portion of the remaining vector that
@@ -64,8 +79,6 @@ struct GlideResult {
   fixed distance_to_final;
   /** Track bearing in cruise for optimal drift compensation (deg true) */
   Angle cruise_track_bearing;
-  /** Optimal speed to fly in cruise (m/s) */
-  fixed v_opt;
 
   /**
    * Total height to be climbed [m relative].
@@ -96,12 +109,9 @@ struct GlideResult {
 
   fixed effective_wind_speed;
   Angle effective_wind_angle;
-  /** Head wind component (m/s) in cruise */
-  fixed head_wind;
+
   /** Solution validity */
   GlideResultValidity validity;
-  /** Height (m above MSL) of end */
-  fixed min_height;
 
   /** Construct an uninitialised object. */
   GlideResult() {}

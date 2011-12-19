@@ -26,10 +26,12 @@
 #include "Navigation/Aircraft.hpp"
 
 GlideResult::GlideResult(const GlideState &task, const fixed V):
+  head_wind(task.head_wind),
+  v_opt(V),
+  min_height(task.min_height),
   vector(task.vector),
   distance_to_final(task.vector.Distance),
   cruise_track_bearing(task.vector.Bearing),
-  v_opt(V),
   height_climb(fixed_zero),
   height_glide(fixed_zero),
   time_elapsed(fixed_zero),
@@ -38,9 +40,7 @@ GlideResult::GlideResult(const GlideState &task, const fixed V):
   altitude_required(task.altitude_difference),
   effective_wind_speed(task.wind.norm),
   effective_wind_angle(task.effective_wind_angle),
-  head_wind(task.head_wind),
-  validity(RESULT_NOSOLUTION),
-  min_height(task.min_height)
+  validity(RESULT_NOSOLUTION)
 {
 }
 
