@@ -133,8 +133,14 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(const int id)
   Widget *wClose = new CloseInfoBoxAccess(*wf);
   wTabBar->AddTab(wClose, _("Close"));
 
+  InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
+  const unsigned panel_index = InfoBoxManager::GetCurrentPanel();
+  InfoBoxSettings::Panel &panel = settings.panels[panel_index];
+  const InfoBoxFactory::t_InfoBox old_type = panel.contents[id];
+
   StaticString<32> buffer;
-  buffer.Format(_T("InfoBox: %s"), InfoBoxManager::GetTitle(id));
+  buffer.Format(_T("%s: %s"), _("InfoBox"),
+                gettext(InfoBoxFactory::GetName(old_type)));
 
   wf->SetCaption(buffer);
   wf->ShowModeless();
