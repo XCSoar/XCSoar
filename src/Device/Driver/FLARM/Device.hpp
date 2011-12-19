@@ -78,6 +78,7 @@ private:
   bool Receive(const char *prefix, char *buffer, size_t length,
                unsigned timeout_ms);
 
+  bool GetConfig(const char *setting, TCHAR *buffer, size_t length);
   bool SetConfig(const char *setting, const TCHAR *value);
 
   bool DeclareInternal(const Declaration &declaration,

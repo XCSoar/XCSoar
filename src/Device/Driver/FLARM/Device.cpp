@@ -77,6 +77,26 @@ FlarmDevice::SetCompetitionClass(const TCHAR *competition_class)
 }
 
 bool
+FlarmDevice::GetConfig(const char *setting, TCHAR *buffer, size_t length)
+{
+  NarrowString<256> request;
+  request.Format("PFLAC,R,%s", setting);
+
+  NarrowString<256> expected_answer(request);
+  expected_answer[6u] = 'A';
+  expected_answer += ',';
+
+  char narrow_buffer[length];
+
+  Send(request);
+  if (!Receive(expected_answer, narrow_buffer, length, 1000))
+    return false;
+
+  _tcscpy(buffer, PathName(narrow_buffer));
+  return true;
+}
+
+bool
 FlarmDevice::SetConfig(const char *setting, const TCHAR *value)
 {
   NarrowPathName narrow_value(value);
