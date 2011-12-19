@@ -189,13 +189,22 @@ struct GlideResult {
   }
 
   /**
+   * Absolute altitude required to solve this task [m MSL].  This is
+   * the current aircraft altitude plus #altitude_difference.
+   */
+  gcc_pure
+  fixed GetRequiredAltitude() const {
+    return min_height + height_glide;
+  }
+
+  /**
    * Returns the altitude of the aircraft at the beginning of this leg
    * [m MSL], as specified in the MacCready calculation input
    * parameters.
    */
   gcc_pure
   fixed GetStartAltitude() const {
-    return altitude_required + altitude_difference;
+    return GetRequiredAltitude() + altitude_difference;
   }
 
   /**

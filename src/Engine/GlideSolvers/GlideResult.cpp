@@ -86,22 +86,27 @@ GlideResult::Add(const GlideResult &s2)
        PARTIAL */
     return;
 
+  if (GetRequiredAltitude() < s2.min_height) {
+    /* must meet the safety height of the first leg */
+    assert(min_height < GetArrivalAltitude(s2.min_height));
+
+    /* calculate a new minimum arrival height that considers the
+       "mountain top" in the middle */
+    min_height = GetArrivalAltitude(s2.min_height);
+
+    /* copy from the first leg */
+    altitude_difference = s2.altitude_difference;
+  } else {
+    /* must meet the safety height of the second leg */
+
+    altitude_difference = s2.GetArrivalAltitude() - GetRequiredAltitude();
+  }
+
   time_elapsed += s2.time_elapsed;
   height_glide += s2.height_glide;
   height_climb += s2.height_climb;
   distance_to_final += s2.distance_to_final;
   time_virtual += s2.time_virtual;
-
-  if (negative(s2.altitude_difference))
-    /* below first leg */
-    altitude_difference += s2.altitude_difference;
-  else if (negative(altitude_difference))
-    /* below second leg, above first leg */
-    ; /* no-op */
-  else if (s2.altitude_difference < altitude_difference)
-    /* above both: choose the smaller of both altitude_difference
-       values */
-    altitude_difference = s2.altitude_difference;
 }
 
 #define fixed_bignum fixed_int_constant(1000000) // error condition
