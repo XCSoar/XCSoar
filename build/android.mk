@@ -95,7 +95,7 @@ endif
 # SDK generate build.xml
 $(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) build/r.sed | $(TARGET_OUTPUT_DIR)/bin/dirstamp
 	@$(NQ)echo "  ANDROID $@"
-	$(Q)rm -r -f $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
+	$(Q)rm -r -f $@ $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
 	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src
 	$(Q)ln -s ../../../$(MANIFEST) ../bin $(@D)/
 	$(Q)ln -s ../../../../android/src $(@D)/src/xcsoar
