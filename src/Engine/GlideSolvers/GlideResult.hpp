@@ -173,7 +173,7 @@ struct GlideResult {
    * @return True if target is reachable
    */
   gcc_pure
-  bool IsAchievable(const bool final_glide=false) const {
+  bool IsAchievable() const {
     return IsOk();
   }
 
