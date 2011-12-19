@@ -19,6 +19,7 @@ Version 6.2.4 - not yet released
   - allow modification of some additional infobox values with up/down keys
     (or volume keys on android devices).
   - fix crash in the .xci file parser
+  - new translation: Korean
 * settings
   - load configured METAR/TAF stations on startup
   - remember UTC offsets > +12 hours.
