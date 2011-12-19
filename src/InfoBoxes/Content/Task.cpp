@@ -269,7 +269,7 @@ InfoBoxContentNextAltitudeArrival::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  fixed alt = XCSoarInterface::Basic().NavAltitude-next_solution.height_glide;
+  fixed alt = next_solution.GetArrivalAltitude(XCSoarInterface::Basic().NavAltitude);
   Units::FormatUserAltitude(alt, tmp, 32, false);
   infobox.SetValue(tmp);
 

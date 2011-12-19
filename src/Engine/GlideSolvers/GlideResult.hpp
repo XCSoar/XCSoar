@@ -178,6 +178,38 @@ struct GlideResult {
   }
 
   /**
+   * Returns the altitude of the aircraft at the beginning of this leg
+   * [m MSL], as specified in the MacCready calculation input
+   * parameters.
+   */
+  gcc_pure
+  fixed GetStartAltitude() const {
+    return altitude_required + altitude_difference;
+  }
+
+  /**
+   * Returns the calculated altitude of the aircraft at the end of
+   * this leg, not assuming any climbs [m MSL].  It may be below the
+   * safety altitude or even below terrain.
+   *
+   * @param start_altitude the current aircraft altitude
+   */
+  gcc_pure
+  fixed GetArrivalAltitude(fixed start_altitude) const {
+    return start_altitude - height_glide;
+  }
+
+  /**
+   * Returns the calculated altitude of the aircraft at the end of
+   * this leg, not assuming any climbs [m MSL].  It may be below the
+   * safety altitude or even below terrain.
+   */
+  gcc_pure
+  fixed GetArrivalAltitude() const {
+    return GetArrivalAltitude(GetStartAltitude());
+  }
+
+  /**
    * Adds another GlideResult to this.  This is used to
    * accumulate GlideResults for a sequence of task segments.
    * The order is important.
