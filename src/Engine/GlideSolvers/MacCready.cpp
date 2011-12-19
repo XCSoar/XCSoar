@@ -251,7 +251,6 @@ MacCready::solve(const GlideState &task) const
 
   GlideState sub_task = task;
   sub_task.vector.Distance -= result_fg.vector.Distance;
-  sub_task.min_height += result_fg.height_glide;
   sub_task.altitude_difference -= result_fg.height_glide;
 
   GlideResult result_cc = solve_cruise(sub_task);
