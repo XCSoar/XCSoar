@@ -708,7 +708,7 @@ OrderedTask::glide_solution_remaining(const AircraftState &aircraft,
 {
   TaskMacCreadyRemaining tm(task_points, activeTaskPoint, polar);
   total = tm.glide_solution(aircraft);
-  leg = tm.get_active_solution(aircraft);
+  leg = tm.get_active_solution();
 }
 
 void
@@ -718,7 +718,7 @@ OrderedTask::glide_solution_travelled(const AircraftState &aircraft,
 {
   TaskMacCreadyTravelled tm(task_points, activeTaskPoint, glide_polar);
   total = tm.glide_solution(aircraft);
-  leg = tm.get_active_solution(aircraft);
+  leg = tm.get_active_solution();
 }
 
 void
@@ -732,7 +732,7 @@ OrderedTask::glide_solution_planned(const AircraftState &aircraft,
 {
   TaskMacCreadyTotal tm(task_points, activeTaskPoint, glide_polar);
   total = tm.glide_solution(aircraft);
-  leg = tm.get_active_solution(aircraft);
+  leg = tm.get_active_solution();
 
   if (solution_remaining_total.IsOk())
     total_remaining_effective.set_distance(tm.effective_distance(solution_remaining_total.time_elapsed));

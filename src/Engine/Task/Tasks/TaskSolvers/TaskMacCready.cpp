@@ -122,6 +122,7 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
        out */
     return acc_gr;
 
+  m_gs[m_activeTaskPoint].CalcDeferred(aircraft);
   acc_gr.CalcDeferred(aircraft);
   return acc_gr;
 }
@@ -152,11 +153,4 @@ TaskMacCready::tp_sink(const unsigned i,
                        const fixed S) const
 {
   return TaskSolution::glide_solution_sink(*m_tps[i], aircraft, m_glide_polar, S);
-}
-
-const GlideResult&
-TaskMacCready::get_active_solution(const AircraftState &aircraft) 
-{
-  m_gs[m_activeTaskPoint].CalcDeferred(aircraft);
-  return m_gs[m_activeTaskPoint];
 }

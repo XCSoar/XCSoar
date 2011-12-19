@@ -137,7 +137,10 @@ public:
  * 
  * @return Glide solution of current leg
  */
-  const GlideResult& get_active_solution(const AircraftState &aircraft);
+  gcc_pure
+  const GlideResult& get_active_solution() const {
+    return m_gs[m_activeTaskPoint];
+  }
 
 protected:
 
