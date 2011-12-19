@@ -56,6 +56,7 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent,
    parent(_parent),
    settings(_settings), look(_look),
    border_kind(border_flags),
+   force_draw_selector(false),
    focus_timer(*this)
 {
   data.Clear();
@@ -492,8 +493,11 @@ InfoBoxWindow::on_mouse_up(PixelScalar x, PixelScalar y)
     release_capture();
 
     if ((unsigned)x < get_width() && (unsigned)y < get_height() &&
-        click_clock.check(1000))
+        click_clock.check(1000)) {
+      force_draw_selector = true;
       InfoBoxManager::ShowDlgInfoBox(id);
+      force_draw_selector = false;
+    }
 
     click_clock.reset();
     return true;
@@ -521,7 +525,7 @@ InfoBoxWindow::on_paint(Canvas &canvas)
   Paint(canvas);
 
   // Paint the selector
-  if (has_focus())
+  if (has_focus() || force_draw_selector)
     PaintSelector(canvas);
 }
 

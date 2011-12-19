@@ -65,6 +65,11 @@ private:
 
   int id;
 
+  /**
+   * draw the selector event if the InfoBox window is not the system focus
+   */
+  bool force_draw_selector;
+
   /** a timer which returns keyboard focus back to the map window after a while */
   WindowTimer focus_timer;
 
