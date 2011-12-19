@@ -486,9 +486,7 @@ OnInfoBoxHelp(unsigned item)
 void
 InfoBoxManager::ShowDlgInfoBox(const int id)
 {
-  if (GetDialogContent(id))
-    dlgInfoBoxAccessShowModeless(id);
-  else ShowInfoBoxPicker(id);
+  dlgInfoBoxAccessShowModeless(id);
 }
 
 void

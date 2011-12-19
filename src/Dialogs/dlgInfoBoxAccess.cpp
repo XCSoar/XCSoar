@@ -32,8 +32,10 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Form/TabBar.hpp"
+#include "Form/Form.hpp"
 #include "Form/Panel.hpp"
 #include "Form/XMLWidget.hpp"
+#include "Form/PanelWidget.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -41,6 +43,27 @@ Copyright_License {
 class CloseInfoBoxAccess : public XMLWidget {
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Click();
+  virtual void ReClick();
+};
+
+class SwitchInfoBox : public PanelWidget {
+protected:
+
+  /**
+   * The parent form that needs to be closed
+   * after the SwitchInfoBox popup routine is called
+   */
+  WndForm &wf;
+
+  /**
+   * id of the InfoBox
+   */
+  int id;
+public:
+  SwitchInfoBox(int _id, WndForm &_wf) :
+    wf(_wf), id(_id) {
+  }
   virtual bool Click();
   virtual void ReClick();
 };
@@ -60,12 +83,10 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(const int id)
 {
   // check for another instance of this window
   if (wf != NULL) return;
+  assert (id > -1);
 
   const InfoBoxContent::DialogContent *dlgContent;
   dlgContent = InfoBoxManager::GetDialogContent(id);
-
-  if (!dlgContent)
-    return;
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -82,15 +103,25 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(const int id)
                               rc.right - rc.left, Layout::Scale(45),
                               tab_style, Layout::landscape);
 
-  for (int i = 0; i < dlgContent->PANELSIZE; i++) {
-    assert(dlgContent->Panels[i].load);
+  if (dlgContent != NULL) {
+    for (int i = 0; i < dlgContent->PANELSIZE; i++) {
+      assert(dlgContent->Panels[i].load != NULL);
 
-    Widget *widget = dlgContent->Panels[i].load(id);
+      Widget *widget = dlgContent->Panels[i].load(id);
 
-    if (widget == NULL)
-      continue;
+      if (widget == NULL)
+        continue;
 
-    wTabBar->AddTab(widget, gettext(dlgContent->Panels[i].name));
+      wTabBar->AddTab(widget, gettext(dlgContent->Panels[i].name));
+    }
+  }
+
+  if (!wTabBar->GetTabCount()) {
+    form_rc.top = form_rc.bottom - Layout::Scale(58);
+    wf->move(form_rc.left, form_rc.top, form_rc.right - form_rc.left, form_rc.bottom - form_rc.top);
+
+    Widget *wSwitch = new SwitchInfoBox(id, *wf);
+    wTabBar->AddTab(wSwitch, _("Switch InfoBox"));
   }
 
   Widget *wClose = new CloseInfoBoxAccess();
@@ -135,4 +166,18 @@ void
 CloseInfoBoxAccess::ReClick()
 {
   dlgInfoBoxAccess::OnClose();
+}
+
+bool
+SwitchInfoBox::Click()
+{
+  ReClick();
+  return false;
+}
+
+void
+SwitchInfoBox::ReClick()
+{
+  InfoBoxManager::ShowInfoBoxPicker(id);
+  wf.SetModalResult(mrOK);
 }
