@@ -43,7 +43,7 @@ int verbose;
 static inline bool
 is_zero(const fixed value)
 {
-  return (long)fabs(value * ACCURACY) == 0;
+  return (long)(fabs(value) * ACCURACY) == 0;
 }
 
 static inline bool
