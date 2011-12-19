@@ -212,7 +212,7 @@ MacCready::solve_sink(const GlideState &task, const fixed S) const
   const fixed h_offset = fixed_1mil;
   GlideState virt_task = task;
   virt_task.altitude_difference += h_offset;
-  GlideResult res = solve_glide(task, glide_polar.GetVBestLD(), S);
+  GlideResult res = solve_glide(virt_task, glide_polar.GetVBestLD(), S);
   res.altitude_difference -= h_offset;
   return res;
 }
