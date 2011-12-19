@@ -5,5 +5,5 @@
     <DataField DataType="double" OnDataAccess="PnlSetupOnQNH"/>
   </Edit>
 
-  <Button Name="cmdSetup" Caption="Setup InfoBox" X="-85" Y="2" Width="80" Height="45" onClick="PnlSetupOnSetup"/>
+  <Button Name="cmdSetup" Caption="Switch InfoBox" X="-85" Y="2" Width="80" Height="45" onClick="PnlSetupOnSetup"/>
 </Panel>
