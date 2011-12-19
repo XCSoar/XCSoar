@@ -73,7 +73,10 @@ struct DeviceConfig {
     TCP_LISTENER,
   };
 
-  PortType port_type;          /**< Type of the port */
+  /**
+   * Type of the port
+   */
+  PortType port_type;
 
   /**
    * The baud rate of the device in NMEA mode.
@@ -118,8 +121,7 @@ struct DeviceConfig {
   }
 
   /**
-   * Checks if the specified DeviceConfig is available on this
-   * platform.
+   * Checks if the specified DeviceConfig is available on this platform.
    */
   gcc_pure
   bool IsAvailable() const;
