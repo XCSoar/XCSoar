@@ -296,7 +296,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.Select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, title_string);
 
-  StaticString<60> info_string(FlarmTraffic::GetTypeString(item.traffic.type));
+  StaticString<256> info_string(FlarmTraffic::GetTypeString(item.traffic.type));
   // Generate the line of info about the target, if it's available
   if (traffic.altitude_available) {
     TCHAR tmp[15];
