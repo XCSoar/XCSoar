@@ -3,6 +3,7 @@
 
 #include "Util/TypeTraits.hpp"
 #include "SearchPoint.hpp"
+#include "Rough/RoughAltitude.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -26,9 +27,9 @@ class TracePoint : public SearchPoint
   unsigned short drift_factor;
 
   /**
-   * The NavAltitude [m].  This is a "short" integer to save memory.
+   * The NavAltitude [m].
    */
-  signed short altitude;
+  RoughAltitude altitude;
 
   /**
    * The NettoVario value [m/256s].  This is a "short" fixed-point
@@ -92,7 +93,7 @@ public:
   }
 
   fixed GetAltitude() const {
-    return fixed(altitude);
+    return altitude;
   }
 
   /**
@@ -100,7 +101,7 @@ public:
    * need the fractional part.
    */
   int GetIntegerAltitude() const {
-    return altitude;
+    return (int)altitude;
   }
 
   fixed GetVario() const {
