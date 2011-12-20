@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-20 09:21+0100\n"
+"POT-Creation-Date: 2011-12-20 19:28+0100\n"
 "PO-Revision-Date: 2011-08-30 17:15+0000\n"
 "Last-Translator: samid <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -833,7 +833,8 @@ msgstr ""
 "симулятора, нажимая стрелки вверх и вниз можно управлять планером."
 
 #: src/InfoBoxes/Content/Factory.cpp:318 src/InfoBoxes/Content/Factory.cpp:319
-#: src/InfoBoxes/Content/Factory.cpp:883 src/Widgets/TrafficWidget.cpp:316
+#: src/InfoBoxes/Content/Factory.cpp:883
+#: src/Renderer/MapItemListRenderer.cpp:311 src/Widgets/TrafficWidget.cpp:316
 #: src/Widgets/TrafficWidget.cpp:317 src/Dialogs/DeviceListDialog.cpp:140
 #: src/Dialogs/dlgConfiguration.cpp:94 src/Dialogs/dlgFlarmTraffic.cpp:312
 #: src/Dialogs/dlgFlarmTraffic.cpp:313
@@ -2417,29 +2418,21 @@ msgid "Thermal"
 msgstr "Набор за поток"
 
 #: src/Renderer/MapItemListRenderer.cpp:217
+#, fuzzy
+msgid "Avg. lift"
+msgstr "Средн Набор"
+
+#: src/Renderer/MapItemListRenderer.cpp:219
 #, c-format
-msgid "Avg. lift: %s - left at %s"
+msgid "left at %s"
 msgstr ""
 
-#: src/Renderer/MapItemListRenderer.cpp:290 Data/Dialogs/dlgFlarmTraffic.xml:3
+#: src/Renderer/MapItemListRenderer.cpp:292 Data/Dialogs/dlgFlarmTraffic.xml:3
 #: Data/Dialogs/dlgFlarmTraffic_L.xml:3
 msgid "FLARM Traffic"
 msgstr ""
 
-#: src/Renderer/MapItemListRenderer.cpp:293
-msgid " - "
-msgstr ""
-
-#: src/Renderer/MapItemListRenderer.cpp:304
-#, fuzzy
-msgid " - Altitude: "
-msgstr "Высота"
-
-#: src/Renderer/MapItemListRenderer.cpp:310
-#, fuzzy
-msgid " - Vario: "
-msgstr "Варио"
-
+#: src/Renderer/MapItemListRenderer.cpp:306
 #: src/Renderer/WaypointListRenderer.cpp:55
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:129
 #: Data/Dialogs/dlgBasicSettings.xml:23
@@ -3407,7 +3400,7 @@ msgid "Logger"
 msgstr "Логгер"
 
 #: src/Dialogs/dlgConfiguration.cpp:104
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:134
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:135
 #, no-c-format
 msgid "Units"
 msgstr "Единицы измерения"
@@ -3599,11 +3592,6 @@ msgstr "долет"
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:82
 #, no-c-format
 msgid "Trending average climb"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:81
-#, no-c-format
-msgid "IDR_XML_INTERFACECONFIGPANEL"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:106
@@ -4032,76 +4020,23 @@ msgid "Grey"
 msgstr "Серый"
 
 #. let the user select
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:160
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:161
 msgid "Unit Presets"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:210
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:231
-msgid "mph"
-msgstr "миль/ч"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:211
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:232
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:261
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:212
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:233
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:262
 msgid "knots"
 msgstr "узлы"
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:212
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:233
-msgid "km/h"
-msgstr "км/час"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:239
-msgid "sm"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:240
-msgid "nm"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:241
-msgid "km"
-msgstr "километры"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:247
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:248
 msgid "foot"
 msgstr "фут"
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:248
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:249
 msgid "meter"
 msgstr "метр"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:254
-msgid "C"
-msgstr "C"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:255
-msgid "F"
-msgstr "F"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:262
-msgid "m/s"
-msgstr "м/с"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:263
-msgid "ft/min"
-msgstr "фут/мин"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:269
-#, no-c-format
-msgid "hPa"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:270
-#, no-c-format
-msgid "mb"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:271
-#, no-c-format
-msgid "inHg"
-msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:103
 #, no-c-format
@@ -6976,6 +6911,35 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+
+#, fuzzy
+#~ msgid " - Altitude: "
+#~ msgstr "Высота"
+
+#, fuzzy
+#~ msgid " - Vario: "
+#~ msgstr "Варио"
+
+#~ msgid "mph"
+#~ msgstr "миль/ч"
+
+#~ msgid "km/h"
+#~ msgstr "км/час"
+
+#~ msgid "km"
+#~ msgstr "километры"
+
+#~ msgid "C"
+#~ msgstr "C"
+
+#~ msgid "F"
+#~ msgstr "F"
+
+#~ msgid "m/s"
+#~ msgstr "м/с"
+
+#~ msgid "ft/min"
+#~ msgstr "фут/мин"
 
 #~ msgid "OK to invalidate declaration?"
 #~ msgstr "Ок для аннулирования объявленной задачи"

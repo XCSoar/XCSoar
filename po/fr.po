@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-20 09:21+0100\n"
+"POT-Creation-Date: 2011-12-20 19:28+0100\n"
 "PO-Revision-Date: 2011-11-23 14:29+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -845,7 +845,8 @@ msgstr ""
 "active en mode simulation, alors les flèches haut et bas ajustent la route."
 
 #: src/InfoBoxes/Content/Factory.cpp:318 src/InfoBoxes/Content/Factory.cpp:319
-#: src/InfoBoxes/Content/Factory.cpp:883 src/Widgets/TrafficWidget.cpp:316
+#: src/InfoBoxes/Content/Factory.cpp:883
+#: src/Renderer/MapItemListRenderer.cpp:311 src/Widgets/TrafficWidget.cpp:316
 #: src/Widgets/TrafficWidget.cpp:317 src/Dialogs/DeviceListDialog.cpp:140
 #: src/Dialogs/dlgConfiguration.cpp:94 src/Dialogs/dlgFlarmTraffic.cpp:312
 #: src/Dialogs/dlgFlarmTraffic.cpp:313
@@ -2463,29 +2464,21 @@ msgid "Thermal"
 msgstr "Gain du thermique."
 
 #: src/Renderer/MapItemListRenderer.cpp:217
+#, fuzzy
+msgid "Avg. lift"
+msgstr "Taux de montée moyen"
+
+#: src/Renderer/MapItemListRenderer.cpp:219
 #, c-format
-msgid "Avg. lift: %s - left at %s"
+msgid "left at %s"
 msgstr ""
 
-#: src/Renderer/MapItemListRenderer.cpp:290 Data/Dialogs/dlgFlarmTraffic.xml:3
+#: src/Renderer/MapItemListRenderer.cpp:292 Data/Dialogs/dlgFlarmTraffic.xml:3
 #: Data/Dialogs/dlgFlarmTraffic_L.xml:3
 msgid "FLARM Traffic"
 msgstr "Trafic FLARM"
 
-#: src/Renderer/MapItemListRenderer.cpp:293
-msgid " - "
-msgstr ""
-
-#: src/Renderer/MapItemListRenderer.cpp:304
-#, fuzzy
-msgid " - Altitude: "
-msgstr "Altitude"
-
-#: src/Renderer/MapItemListRenderer.cpp:310
-#, fuzzy
-msgid " - Vario: "
-msgstr "Vario:"
-
+#: src/Renderer/MapItemListRenderer.cpp:306
 #: src/Renderer/WaypointListRenderer.cpp:55
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:129
 #: Data/Dialogs/dlgBasicSettings.xml:23
@@ -3456,7 +3449,7 @@ msgid "Logger"
 msgstr "Enregistreur"
 
 #: src/Dialogs/dlgConfiguration.cpp:104
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:134
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:135
 #, no-c-format
 msgid "Units"
 msgstr "Unités"
@@ -3646,11 +3639,6 @@ msgstr "Plané Final"
 #, no-c-format
 msgid "Trending average climb"
 msgstr "Tendance montée moyenne"
-
-#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:81
-#, no-c-format
-msgid "IDR_XML_INTERFACECONFIGPANEL"
-msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:106
 msgid "Automatic"
@@ -4092,76 +4080,23 @@ msgid "Grey"
 msgstr "Gris"
 
 #. let the user select
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:160
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:161
 msgid "Unit Presets"
 msgstr "Choix de l'unité"
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:210
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:231
-msgid "mph"
-msgstr "milles/h"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:211
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:232
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:261
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:212
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:233
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:262
 msgid "knots"
 msgstr "nœuds"
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:212
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:233
-msgid "km/h"
-msgstr "Km/h"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:239
-msgid "sm"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:240
-msgid "nm"
-msgstr "nm"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:241
-msgid "km"
-msgstr "km"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:247
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:248
 msgid "foot"
 msgstr "pied"
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:248
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:249
 msgid "meter"
 msgstr "mètre"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:254
-msgid "C"
-msgstr "℃"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:255
-msgid "F"
-msgstr "℉"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:262
-msgid "m/s"
-msgstr "m/s"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:263
-msgid "ft/min"
-msgstr "pieds/min"
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:269
-#, no-c-format
-msgid "hPa"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:270
-#, no-c-format
-msgid "mb"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:271
-#, no-c-format
-msgid "inHg"
-msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:103
 #, no-c-format
@@ -7093,6 +7028,38 @@ msgid ""
 msgstr ""
 "METAR\n"
 "TAF"
+
+#, fuzzy
+#~ msgid " - Altitude: "
+#~ msgstr "Altitude"
+
+#, fuzzy
+#~ msgid " - Vario: "
+#~ msgstr "Vario:"
+
+#~ msgid "mph"
+#~ msgstr "milles/h"
+
+#~ msgid "km/h"
+#~ msgstr "Km/h"
+
+#~ msgid "nm"
+#~ msgstr "nm"
+
+#~ msgid "km"
+#~ msgstr "km"
+
+#~ msgid "C"
+#~ msgstr "℃"
+
+#~ msgid "F"
+#~ msgstr "℉"
+
+#~ msgid "m/s"
+#~ msgstr "m/s"
+
+#~ msgid "ft/min"
+#~ msgstr "pieds/min"
 
 #~ msgid "OK to invalidate declaration?"
 #~ msgstr "OK pour invalider la déclaration?"
