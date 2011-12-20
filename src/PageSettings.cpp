@@ -53,9 +53,14 @@ PageSettings::PageLayout::MakeTitle(TCHAR* buffer, const bool concise) const
     }
     else {
       if (concise) {
-        _tcscpy(buffer, _("Info Auto"));
+        _tcscpy(buffer, _("Info"));
+        _tcscat(buffer, _T(" "));
+        _tcscat(buffer, _("Auto"));
       } else {
-        _tcscpy(buffer, _("Map and InfoBoxes (Auto)"));
+        _tcscpy(buffer, _("Map and InfoBoxes"));
+        _tcscat(buffer, _T(" ("));
+        _tcscat(buffer, _("Auto"));
+        _tcscat(buffer, _T("("));
       }
     }
     break;

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-20 19:31+0100\n"
-"PO-Revision-Date: 2011-12-20 19:34+0100\n"
+"POT-Creation-Date: 2011-12-20 19:41+0100\n"
+"PO-Revision-Date: 2011-12-20 19:39+0100\n"
 "Last-Translator: Turbo <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -361,7 +361,8 @@ msgstr "Gelände aus"
 msgid "Manual"
 msgstr "Manuell"
 
-#: src/ExpandMacros.cpp:524 src/ExpandMacros.cpp:548
+#: src/ExpandMacros.cpp:524 src/ExpandMacros.cpp:548 src/PageSettings.cpp:58
+#: src/PageSettings.cpp:62
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:145
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:144
 #: Data/Dialogs/dlgBrightness.xml:6
@@ -2110,8 +2111,9 @@ msgid "Simulator"
 msgstr "Simulator"
 
 #: src/InfoBoxes/Content/Altitude.cpp:58 src/PageSettings.cpp:45
-#: Data/Input/default.xci:724 Data/Input/default.xci:773
-#: Data/Input/default.xci:822 Data/Input/default.xci:885
+#: src/PageSettings.cpp:56 Data/Input/default.xci:724
+#: Data/Input/default.xci:773 Data/Input/default.xci:822
+#: Data/Input/default.xci:885
 #, no-c-format
 msgid "Info"
 msgstr "Info"
@@ -2427,17 +2429,9 @@ msgstr "Info ausblenden"
 msgid "Map (Full screen)"
 msgstr "Ganzer Bildsch."
 
-#: src/PageSettings.cpp:49
+#: src/PageSettings.cpp:49 src/PageSettings.cpp:60
 msgid "Map and InfoBoxes"
 msgstr "Karte und InfoBoxen"
-
-#: src/PageSettings.cpp:56
-msgid "Info Auto"
-msgstr "Info Auto"
-
-#: src/PageSettings.cpp:58
-msgid "Map and InfoBoxes (Auto)"
-msgstr "Karte und InfoBoxen (Auto)"
 
 #: src/Renderer/MapItemListRenderer.cpp:94
 msgid "Your Position"
