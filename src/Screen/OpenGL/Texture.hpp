@@ -102,6 +102,18 @@ public:
     return size;
   }
 
+  /**
+   * Returns the physical size of the texture.
+   */
+  gcc_pure
+  PixelSize GetAllocatedSize() const {
+#ifdef HAVE_OES_DRAW_TEXTURE
+    return GetSize();
+#else
+    return { PixelScalar(allocated_width), PixelScalar(allocated_height) };
+#endif
+  }
+
 protected:
   void Initialise(bool mag_linear=false) {
 #ifndef NDEBUG
