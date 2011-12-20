@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-20 09:21+0100\n"
-"PO-Revision-Date: 2011-12-19 13:32+0000\n"
+"PO-Revision-Date: 2011-12-20 11:12+0000\n"
 "Last-Translator: Mike Myungha Kuh <Unknown>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-19 20:24+0000\n"
+"X-Launchpad-Export-Date: 2011-12-20 14:40+0000\n"
 "X-Generator: Launchpad (build 14538)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -119,9 +119,8 @@ msgid "Declare task"
 msgstr "타스크 성립 or 태스크 성립"
 
 #: src/Logger/ExternalLogger.cpp:268
-#, fuzzy
 msgid "Failed to enable download mode."
-msgstr "비행 파일 다운로드 실패"
+msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:269 src/Logger/ExternalLogger.cpp:278
 #: src/Logger/ExternalLogger.cpp:286 src/Logger/ExternalLogger.cpp:305
@@ -1881,14 +1880,14 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:989
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr "다음 고도차"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:990
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP MC0 AltD"
-msgstr "다음 WP까지 필요한 고도"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:991
 #, no-c-format
@@ -1903,9 +1902,9 @@ msgid "Head wind component"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1000
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Head wind"
-msgstr "방향"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1001
 #, no-c-format
@@ -2271,9 +2270,8 @@ msgid "dropped at %s"
 msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:211
-#, fuzzy
 msgid "Thermal"
-msgstr "써멀 획득"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:217
 #, c-format
@@ -2294,9 +2292,8 @@ msgid " - Altitude: "
 msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:310
-#, fuzzy
 msgid " - Vario: "
-msgstr "L/D 바리오"
+msgstr ""
 
 #: src/Renderer/WaypointListRenderer.cpp:55
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:129
@@ -2896,9 +2893,8 @@ msgid "Monitor"
 msgstr ""
 
 #: src/Dialogs/PortMonitor.cpp:121
-#, fuzzy
 msgid "Port monitor"
-msgstr "세로 방향"
+msgstr ""
 
 #: src/Dialogs/PortMonitor.cpp:131 Data/Dialogs/dlgFlarmTrafficDetails.xml:11
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:12
@@ -3167,9 +3163,9 @@ msgid "Site Files"
 msgstr "사이트 파일들"
 
 #: src/Dialogs/dlgConfiguration.cpp:75
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Map Display"
-msgstr "화면"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:76 src/Dialogs/dlgConfiguration.cpp:91
 #, no-c-format
@@ -3183,9 +3179,9 @@ msgid "Gauges"
 msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:78
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task Defaults"
-msgstr "기본값"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:79
 #, no-c-format
@@ -3198,9 +3194,9 @@ msgid "Orientation"
 msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:86
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Elements"
-msgstr "지도 요소"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:87
 #, no-c-format
@@ -3223,14 +3219,14 @@ msgid "FLARM, Other"
 msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:95
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task Rules"
-msgstr "기본 타스크 규정"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:96
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoint Types"
-msgstr "기본 타스크 턴 포인트 타입"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:97
 #, no-c-format
@@ -3238,9 +3234,9 @@ msgid "Language, Input"
 msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:98
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Screen Layout"
-msgstr "풀 스크린 모드"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:99
 #, no-c-format
@@ -3266,9 +3262,9 @@ msgid "Units"
 msgstr "단위"
 
 #: src/Dialogs/dlgConfiguration.cpp:110
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tracking"
-msgstr "트랙"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:113
 #, no-c-format
@@ -3598,7 +3594,7 @@ msgstr "중앙"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:133
 msgid "Topleft"
-msgstr ""
+msgstr "왼쪽 위"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:142
 msgid "Full width"
@@ -3606,7 +3602,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:143
 msgid "Scaled"
-msgstr ""
+msgstr "비율 유지"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:144
 msgid "Scaled centered"
@@ -3684,7 +3680,7 @@ msgstr ""
 #: Data/Dialogs/pnlTaskCalculator.xml:4 Data/Dialogs/pnlTaskCalculator_L.xml:5
 #, no-c-format
 msgid "Target"
-msgstr ""
+msgstr "대상"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
@@ -3701,7 +3697,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:113
 msgid "Circling orientation"
-msgstr ""
+msgstr "써클링 방향"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:114
 msgid "Determines how the screen is rotated with the glider while circling"
@@ -3709,7 +3705,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:119
 msgid "Circling zoom"
-msgstr ""
+msgstr "써클링 확대"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:120
 msgid ""
@@ -3727,7 +3723,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:129
 msgid "Glider position offset"
-msgstr ""
+msgstr "글라이더 위치 오프셋"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:130
 msgid ""
@@ -3737,31 +3733,31 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:134
 msgid "Max. auto zoom distance"
-msgstr ""
+msgstr "최대 자동줌 거리"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:135
 msgid "The upper limit for auto zoom distance."
-msgstr ""
+msgstr "자동 줌 거리의 상한"
 
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:281
 msgid "Polar name"
-msgstr ""
+msgstr "폴라 이름"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:119
 #: src/Dialogs/dlgTaskHelpers.cpp:243
 #, no-c-format
 msgid "Line"
-msgstr ""
+msgstr "라인"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:120
 #, no-c-format
 msgid "Shade"
-msgstr ""
+msgstr "음영"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:146
 #, no-c-format
 msgid "Straight"
-msgstr ""
+msgstr "곧은"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:147
 #, no-c-format
@@ -3771,22 +3767,22 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:156
 #, no-c-format
 msgid "Safety MC"
-msgstr ""
+msgstr "안전 맥크레디"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:75
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:154
 #, no-c-format
 msgid "Simple"
-msgstr ""
+msgstr "간단"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:77
 #, no-c-format
 msgid "Home"
-msgstr ""
+msgstr "홈"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:101
 msgid "Arrow head"
-msgstr ""
+msgstr "화살표 머리"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:102
 msgid "Full arrow"
@@ -3794,11 +3790,11 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:155
 msgid "Simple (large)"
-msgstr ""
+msgstr "간단 (크게)"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:156
 msgid "Detailed"
-msgstr ""
+msgstr "상세한"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:74
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:88
@@ -3842,12 +3838,12 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:202
 msgid "Sun"
-msgstr ""
+msgstr "태양"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:203
 #: src/Weather/NOAAFormatter.cpp:95 src/Weather/NOAAFormatter.cpp:102
 msgid "Wind"
-msgstr ""
+msgstr "바람"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:218
 msgid "Low lands"
@@ -3879,7 +3875,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:225
 msgid "Grey"
-msgstr ""
+msgstr "회색"
 
 #. let the user select
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:160
@@ -3889,18 +3885,18 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:210
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:231
 msgid "mph"
-msgstr ""
+msgstr "마일"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:211
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:232
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:261
 msgid "knots"
-msgstr ""
+msgstr "노트"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:212
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:233
 msgid "km/h"
-msgstr ""
+msgstr "km/h"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:239
 msgid "sm"
@@ -3908,31 +3904,31 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:240
 msgid "nm"
-msgstr ""
+msgstr "nm,해리"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:241
 msgid "km"
-msgstr ""
+msgstr "km"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:247
 msgid "foot"
-msgstr ""
+msgstr "피트"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:248
 msgid "meter"
-msgstr ""
+msgstr "미터"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:254
 msgid "C"
-msgstr ""
+msgstr "온도"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:255
 msgid "F"
-msgstr ""
+msgstr "화씨"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:262
 msgid "m/s"
-msgstr ""
+msgstr "m/s"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:263
 msgid "ft/min"
@@ -3946,7 +3942,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:270
 #, no-c-format
 msgid "mb"
-msgstr ""
+msgstr "명박"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:271
 #, no-c-format
@@ -3996,7 +3992,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:111
 #, no-c-format
 msgid "No waypoint name is displayed."
-msgstr ""
+msgstr "표시된 웨이포인트 이름이 없습니다."
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:120
 #, no-c-format
@@ -4036,17 +4032,17 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:134
 #, no-c-format
 msgid "Rounded rectangle"
-msgstr ""
+msgstr "모서리가 둥근 사각형"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:135
 #, no-c-format
 msgid "Outlined"
-msgstr ""
+msgstr "외각선"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:143
 #, no-c-format
 msgid "All waypoint labels will be displayed."
-msgstr ""
+msgstr "모든 웨이포인트 라벨이 표시됨"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:144
 #, no-c-format
@@ -4061,7 +4057,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:146
 #, no-c-format
 msgid "Task waypoints"
-msgstr ""
+msgstr "타스크 웨이포인트"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:147
 #, no-c-format
@@ -4076,7 +4072,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:156
 #, no-c-format
 msgid "Purple circle"
-msgstr ""
+msgstr "자주색 써클"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:157
 #, no-c-format
@@ -4090,7 +4086,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:158
 #, no-c-format
 msgid "B/W"
-msgstr ""
+msgstr "검정/흰색"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:159
 #, no-c-format
@@ -4103,7 +4099,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:160
 #, no-c-format
 msgid "Traffic lights"
-msgstr ""
+msgstr "교통 신호"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:161
 #, no-c-format
@@ -4131,21 +4127,21 @@ msgstr ""
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:285
 msgid "Calculator"
-msgstr ""
+msgstr "계산기"
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:288
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:302
 msgid "Turn Points"
-msgstr ""
+msgstr "턴 포인트"
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:293
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:307
 msgid "Rules"
-msgstr ""
+msgstr "규정"
 
 #: src/Dialogs/TaskManager/TaskClosePanel.cpp:48
 msgid "Task has been modified"
-msgstr ""
+msgstr "타스크는 수정되었습니다."
 
 #: src/Dialogs/TaskManager/TaskClosePanel.cpp:48
 msgid "Task unchanged"
@@ -4157,15 +4153,15 @@ msgstr ""
 
 #: src/Dialogs/TaskManager/TaskEditPanel.cpp:102
 msgid "Task edit"
-msgstr ""
+msgstr "타스크 편집"
 
 #: src/Dialogs/TaskManager/TaskEditPanel.cpp:134
 msgid "Add Turnpoint"
-msgstr ""
+msgstr "턴포인트 추가"
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:185
 msgid "Task not saved"
-msgstr ""
+msgstr "타스크 저장되지 않음"
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:197
 msgid "Load the selected task?"
@@ -4174,15 +4170,15 @@ msgstr ""
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:202
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:237
 msgid "Task Browser"
-msgstr ""
+msgstr "타스크 브라우저"
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:226
 msgid "Can't delete .CUP files"
-msgstr ""
+msgstr ".CUP 파일을 지울수 없습니다."
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:226
 msgid "Delete Error"
-msgstr ""
+msgstr "삭제 에러"
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:232
 msgid "Delete the selected task?"
@@ -4190,19 +4186,19 @@ msgstr ""
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:272
 msgid "Can't rename .CUP files"
-msgstr ""
+msgstr ".CUP  파일 이름을 변경 할 수 없습니다."
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:272
 msgid "Rename Error"
-msgstr ""
+msgstr "이름변경 오류"
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:335
 msgid "Create new task?"
-msgstr ""
+msgstr "새 타스크 생성?"
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:335
 msgid "Task New"
-msgstr ""
+msgstr "새 타스크"
 
 #: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:170
 msgid "Calculator excludes unsaved task changes!"
@@ -4222,11 +4218,11 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:297
 msgid "Remove task point?"
-msgstr ""
+msgstr "타스크 포인트를 삭제하시겠습니까?"
 
 #: src/Dialogs/dlgTaskPoint.cpp:298 src/Dialogs/dlgTaskPointType.cpp:109
 msgid "Task Point"
-msgstr ""
+msgstr "타스크 포인트"
 
 #: src/Dialogs/dlgTaskPointType.cpp:109
 msgid "Change point type?"
@@ -4697,9 +4693,8 @@ msgstr ""
 
 #: src/Dialogs/dlgNOAAList.cpp:141 src/Dialogs/dlgNOAAList.cpp:151
 #: src/Dialogs/dlgNOAADetails.cpp:74
-#, fuzzy
 msgid "Download"
-msgstr "비행 파일 다운로드"
+msgstr ""
 
 #: src/Dialogs/dlgNOAAList.cpp:163 src/Dialogs/dlgNOAADetails.cpp:83
 #, c-format
@@ -4735,9 +4730,8 @@ msgid "Dew Point"
 msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
-#, fuzzy
 msgid "Pressure"
-msgstr "진행"
+msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:166
 msgid "Visibility"
@@ -5391,9 +5385,8 @@ msgid "Clear All"
 msgstr ""
 
 #: Data/Dialogs/dlgMapItemList.xml:3 Data/Dialogs/dlgMapItemList_L.xml:3
-#, fuzzy
 msgid "Map elements at this location"
-msgstr "지금 위치의 공역"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:273 Data/Dialogs/dlgVario_L.xml:272
 msgid "UTC offset"
@@ -6604,11 +6597,10 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:513
-#, fuzzy
 msgid ""
 "MacCready\n"
 "-"
-msgstr "맥크레디 "
+msgstr ""
 
 #: Data/Input/default.xci:384 Data/Input/default.xci:1019
 msgid ""
@@ -6797,11 +6789,10 @@ msgstr ""
 "규정"
 
 #: Data/Input/default.xci:506
-#, fuzzy
 msgid ""
 "MacCready\n"
 "+"
-msgstr "맥크레디 "
+msgstr ""
 
 #: Data/Input/default.xci:64
 msgid "Landing"
@@ -6813,16 +6804,28 @@ msgid ""
 "TAF"
 msgstr ""
 
-#~ msgid "Waypoint Display"
-#~ msgstr "웨이포인트 표시"
-
-#~ msgid "Vario Gauge"
-#~ msgstr "바리오 게이지"
-
-#~ msgid "User Interface"
-#~ msgstr "사용자 인터페이스"
-
 #~ msgid ""
 #~ "Simulation\r\n"
 #~ "nothing is real!"
 #~ msgstr "시뮬레이션"
+
+#~ msgid "Airspaces at this location"
+#~ msgstr "지금 위치의 공역"
+
+#~ msgid "Map Elements"
+#~ msgstr "지도 요소"
+
+#~ msgid "Vario Gauge"
+#~ msgstr "바리오 게이지"
+
+#~ msgid "Waypoint Display"
+#~ msgstr "웨이포인트 표시"
+
+#~ msgid "User Interface"
+#~ msgstr "사용자 인터페이스"
+
+#~ msgid "Default Task Rules"
+#~ msgstr "기본 타스크 규정"
+
+#~ msgid "Default Task Turnpoint Types"
+#~ msgstr "기본 타스크 턴 포인트 타입"
