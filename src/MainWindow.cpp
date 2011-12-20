@@ -50,6 +50,10 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "ProgressGlue.hpp"
 
+#if !defined(WIN32) && !defined(ANDROID)
+#include <unistd.h> /* for execl() */
+#endif
+
 MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(NULL),
    map(NULL), vario(NULL), flarm(NULL), ta(NULL),
