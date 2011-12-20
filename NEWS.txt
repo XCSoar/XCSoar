@@ -15,6 +15,7 @@ Version 6.3 - not yet released
   - show METAR data in natural language
   - sort METAR stations by name
   - added kinetic scrolling for non-WinCE platforms
+  - enable font anti-aliasing on Linux and Mac OS X
 * data files
   - added support for CompeGPS waypoint files
 * internet

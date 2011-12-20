@@ -219,17 +219,10 @@ TextCache::get(const Font *font, const char *text)
 
   RenderedText rt(texture_id, size.cx, size.cy);
 #else
-  SDL_Surface *surface = ::TTF_RenderUTF8_Solid(font->Native(), text,
-                                                COLOR_BLACK);
+  SDL_Surface *surface = ::TTF_RenderUTF8_Shaded(font->Native(), text,
+                                                 text_color, background_color);
   if (surface == NULL)
     return NULL;
-
-  surface->flags &= ~SDL_SRCCOLORKEY;
-  if (surface->format->palette != NULL &&
-      surface->format->palette->ncolors >= 2) {
-    surface->format->palette->colors[0] = background_color;
-    surface->format->palette->colors[1] = text_color;
-  }
 
   /* insert into cache */
 
