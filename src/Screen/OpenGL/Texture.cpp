@@ -65,6 +65,39 @@ ValidateTextureSize(PixelSize size)
 #ifndef ANDROID
 
 /**
+ * Checks if the specified palette consists of gray shades 0x00..0xff.
+ */
+gcc_pure
+static bool
+IsLuminancePalette(const SDL_Palette *palette)
+{
+  if (palette->ncolors != 0x100)
+    return false;
+
+  for (unsigned i = 0; i < 0x100; ++i)
+    if (palette->colors[i].r != i ||
+        palette->colors[i].g != i ||
+        palette->colors[i].b != i)
+      return false;
+
+  return true;
+}
+
+/**
+ * Checks if the specified format is a 8 bit grayscale format.
+ */
+gcc_pure
+static bool
+IsLuminanceFormat(const SDL_PixelFormat *format)
+{
+  return format->palette != NULL && format->BitsPerPixel == 8 &&
+    format->Rloss == 8 && format->Gloss == 8 && format->Bloss == 8 &&
+    format->Rshift == 0 && format->Gshift == 0 && format->Bshift == 0 &&
+    format->Rmask == 0 && format->Gmask == 0 && format->Bmask == 0 &&
+    IsLuminancePalette(format->palette);
+}
+
+/**
  * Load data into the current texture.  Fixes alignment to the next
  * power of two if needed.
  */
@@ -87,6 +120,18 @@ LoadTextureAutoAlign(GLint internal_format,
   }
 }
 
+static bool
+LoadLuminanceTexture(const SDL_Surface *surface)
+{
+  assert(IsLuminanceFormat(surface->format));
+
+  UPixelScalar pitch = surface->pitch / surface->format->BytesPerPixel;
+  LoadTextureAutoAlign(GL_LUMINANCE, pitch, surface->h,
+                       GL_LUMINANCE, GL_UNSIGNED_BYTE,
+                       surface->pixels);
+  return true;
+}
+
 /**
  * Loads a SDL_Surface into the current texture.  Attempts to
  * auto-detect the pixel format.
@@ -101,6 +146,9 @@ LoadSurfaceIntoTexture(const SDL_Surface *surface)
   assert(surface->format != NULL);
 
   const SDL_PixelFormat *fmt = surface->format;
+  if (IsLuminanceFormat(fmt))
+    return LoadLuminanceTexture(surface);
+
   if (fmt->palette != NULL)
     /* OpenGL does not support a hardware palette */
     return false;
