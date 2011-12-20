@@ -103,5 +103,10 @@ AltitudeSimulatorPanel::Prepare(ContainerWindow &parent,
 Widget *
 LoadAltitudeSimulatorPanel(unsigned id)
 {
+  const NMEAInfo &basic = CommonInterface::Basic();
+
+  if (!basic.gps.simulator)
+    return NULL;
+
   return new AltitudeSimulatorPanel();
 }
