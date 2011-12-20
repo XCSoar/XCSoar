@@ -272,3 +272,34 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
   glEnd();
 #endif
 }
+
+void
+GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
+{
+#ifdef HAVE_OES_DRAW_TEXTURE
+  const GLint rect[4] = { src.left, src.top, src.right, src.bottom };
+  glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, rect);
+
+  /* glDrawTexiOES() circumvents the projection settings, thus we must
+     roll our own translation */
+  glDrawTexiOES(OpenGL::translate_x + dest.left,
+                OpenGL::screen_height - OpenGL::translate_y - dest.bottom,
+                0, dest.right - dest.left, dest.bottom - dest.top);
+#else
+  GLfloat x0 = (GLfloat)src.left / allocated_width;
+  GLfloat y0 = (GLfloat)src.top / allocated_height;
+  GLfloat x1 = (GLfloat)src.right / allocated_width;
+  GLfloat y1 = (GLfloat)src.bottom / allocated_height;
+
+  glBegin(GL_QUADS);
+  glTexCoord2f(x0, y1);
+  glVertex2i(dest.left, dest.top);
+  glTexCoord2f(x1, y1);
+  glVertex2i(dest.right, dest.top);
+  glTexCoord2f(x1, y0);
+  glVertex2i(dest.right, dest.bottom);
+  glTexCoord2f(x0, y0);
+  glVertex2i(dest.left, dest.bottom);
+  glEnd();
+#endif
+}

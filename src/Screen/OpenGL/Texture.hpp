@@ -172,6 +172,12 @@ public:
     Draw(dest_x, dest_y, width, height,
          0, 0, width, height);
   }
+
+  /**
+   * Just like Draw(), but flip the texture vertically.  This is used
+   * for textures that were recorded with glCopyTexSubImage2D().
+   */
+  void DrawFlipped(PixelRect dest, PixelRect src) const;
 };
 
 #endif
