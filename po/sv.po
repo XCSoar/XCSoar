@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-20 09:21+0100\n"
-"PO-Revision-Date: 2011-04-08 15:32+0000\n"
-"Last-Translator: Rolf Lindgren <Unknown>\n"
+"PO-Revision-Date: 2011-12-20 15:56+0000\n"
+"Last-Translator: 113Bom <Unknown>\n"
 "Language-Team: none\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-09 07:04+0000\n"
-"X-Generator: Launchpad (build 12757)\n"
+"X-Launchpad-Export-Date: 2011-12-20 16:36+0000\n"
+"X-Generator: Launchpad (build 14538)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -28,7 +28,7 @@ msgstr ""
 #: Data/Input/default.xci:957 Data/Input/default.xci:995
 #, no-c-format
 msgid "Task"
-msgstr "Bana"
+msgstr "Uppgift"
 
 #: src/Airspace/AirspaceGlue.cpp:41
 msgid "Loading Airspace File..."
@@ -52,9 +52,8 @@ msgid "Airspace"
 msgstr "Luftrum"
 
 #: src/Airspace/AirspaceParser.cpp:875
-#, fuzzy
 msgid "Unknown airspace filetype"
-msgstr "Visa Luftrum Av"
+msgstr ""
 
 #: src/ConditionMonitor/ConditionMonitorAATTime.cpp:50
 msgid "Expect early task arrival"
@@ -97,23 +96,18 @@ msgid "Stop Logger"
 msgstr "Stoppa loggern"
 
 #: src/Logger/ExternalLogger.cpp:81
-#, fuzzy
 msgid "Declare task?"
-msgstr "Deklarera bana"
+msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:86
-#, fuzzy
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
-"Ett fel har uppstått\n"
-"Ingen bana deklarerad"
 
 #: src/Logger/ExternalLogger.cpp:91
-#, fuzzy
 msgid "Task declared!"
-msgstr "Bana deklarerad"
+msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:109
 msgid "No logger connected"
@@ -204,9 +198,8 @@ msgid "Finish Turnpoint"
 msgstr ""
 
 #: src/ExpandMacros.cpp:203 src/ExpandMacros.cpp:249
-#, fuzzy
 msgid "Next Startpoint"
-msgstr "Nästa Brytpunkt"
+msgstr ""
 
 #: src/ExpandMacros.cpp:209 src/ExpandMacros.cpp:255
 msgid "Start Turnpoint"
@@ -858,9 +851,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:358
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "AA max. distance "
-msgstr "Total Sträcka"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 #, no-c-format
@@ -937,9 +930,9 @@ msgid "Indicated Airspeed reported by a supported external intelligent vario."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:408
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Barometric altitude"
-msgstr "Luftrum Tak"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:409
 #, no-c-format
@@ -1852,9 +1845,9 @@ msgid "Nearest airspace horizontal"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:971
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Near AS H"
-msgstr "Nära"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:972
 #, no-c-format
@@ -1867,9 +1860,9 @@ msgid "Nearest airspace vertical"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:980
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Near AS V"
-msgstr "Nära"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:981
 #, no-c-format
@@ -1901,9 +1894,9 @@ msgid "Head wind component"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1000
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Head wind"
-msgstr "Landning"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1001
 #, no-c-format
@@ -2001,9 +1994,9 @@ msgid "Cruise"
 msgstr ""
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:77
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "FinalGlide"
-msgstr "Finalglidning"
+msgstr ""
 
 #: src/InfoBoxes/InfoBoxManager.cpp:475 src/InfoBoxes/InfoBoxManager.cpp:521
 #: src/Dialogs/dlgConfigInfoboxes.cpp:210
@@ -2062,9 +2055,8 @@ msgid "Competition ID"
 msgstr ""
 
 #: src/Input/InputEventsActions.cpp:255
-#, fuzzy
 msgid "Show details:"
-msgstr "Detaljer"
+msgstr ""
 
 #: src/Input/InputEventsActions.cpp:260
 msgid "Unknown competition number"
@@ -2233,9 +2225,8 @@ msgid "Topography/Terrain"
 msgstr ""
 
 #: src/PageSettings.cpp:36
-#, fuzzy
 msgid "Info Hide"
-msgstr "Info box titlar"
+msgstr ""
 
 #: src/PageSettings.cpp:38
 msgid "Map (Full screen)"
@@ -2250,23 +2241,20 @@ msgid "Map and InfoBoxes "
 msgstr ""
 
 #: src/PageSettings.cpp:54
-#, fuzzy
 msgid "Info Auto"
-msgstr "auto"
+msgstr ""
 
 #: src/PageSettings.cpp:56
 msgid "Map and InfoBoxes (Auto)"
 msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:94
-#, fuzzy
 msgid "Your Position"
-msgstr "Flygplanssymbol"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:178
-#, fuzzy
 msgid "Marker"
-msgstr "Markeringar rensade"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:184
 #, c-format
@@ -2274,9 +2262,8 @@ msgid "dropped at %s"
 msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:211
-#, fuzzy
 msgid "Thermal"
-msgstr "Termik höjd"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:217
 #, c-format
@@ -2293,9 +2280,8 @@ msgid " - "
 msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:304
-#, fuzzy
 msgid " - Altitude: "
-msgstr "Höjd"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:310
 msgid " - Vario: "
@@ -2331,9 +2317,8 @@ msgid "Arrival Alt"
 msgstr ""
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:101
-#, fuzzy
 msgid "Elevation: "
-msgstr "Höjd"
+msgstr ""
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:119
 msgid "GPS not connected"
@@ -2806,28 +2791,24 @@ msgid "Connected"
 msgstr "Ansluten"
 
 #: src/Dialogs/DeviceListDialog.cpp:125
-#, fuzzy
 msgid "GPS fix"
-msgstr "Ingen fix"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:130
-#, fuzzy
 msgid "Baro"
-msgstr "Barograf"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:135 Data/Dialogs/dlgVegaDemo.xml:10
 msgid "Airspeed"
 msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:150
-#, fuzzy
 msgid "Not connected"
-msgstr "Ingen logger ansluten"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:204
-#, fuzzy
 msgid "Edit device"
-msgstr "Ändra text"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:273 src/Dialogs/dlgConfiguration.cpp:101
 #: Data/Input/default.xci:611 Data/Input/default.xci:1139
@@ -2884,14 +2865,12 @@ msgid "Refresh"
 msgstr "Förnya"
 
 #: src/Dialogs/DeviceListDialog.cpp:280 src/Dialogs/PortMonitor.cpp:132
-#, fuzzy
 msgid "Reconnect"
-msgstr "Frånkopplad"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:281
-#, fuzzy
 msgid "Flight download"
-msgstr "Spela upp flygning"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:283
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:291
@@ -2973,9 +2952,8 @@ msgid "No Match!"
 msgstr "Ingen träff!"
 
 #: src/Dialogs/dlgAirspaceSelect.cpp:281
-#, fuzzy
 msgid "Heading"
-msgstr "Landning"
+msgstr ""
 
 #: src/Dialogs/dlgAirspaceWarnings.cpp:304
 msgid "No Warnings"
@@ -3114,9 +3092,8 @@ msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
 msgstr ""
 
 #: src/Dialogs/dlgPlanes.cpp:201 src/Dialogs/dlgPlanes.cpp:244
-#, fuzzy
 msgid "Overwrite"
-msgstr "Skriv över?"
+msgstr ""
 
 #: src/Dialogs/dlgPlanes.cpp:272
 #, c-format
@@ -3143,15 +3120,13 @@ msgstr ""
 
 #: src/Dialogs/dlgPlaneDetails.cpp:41 Data/Dialogs/dlgPlaneDetails.xml:3
 #: Data/Dialogs/dlgPlaneDetails_L.xml:3
-#, fuzzy
 msgid "Plane Details"
-msgstr "Detaljer"
+msgstr ""
 
 #: src/Dialogs/dlgPlanePolar.cpp:50 Data/Dialogs/dlgPlanePolar.xml:3
 #: Data/Dialogs/dlgPlanePolar_L.xml:3
-#, fuzzy
 msgid "Plane Polar"
-msgstr "Glid Polar"
+msgstr ""
 
 #: src/Dialogs/dlgPlanePolar.cpp:58 src/Dialogs/dlgConfiguration.cpp:102
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:128
@@ -3194,24 +3169,24 @@ msgid "Gauges"
 msgstr "Visare"
 
 #: src/Dialogs/dlgConfiguration.cpp:78
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task Defaults"
-msgstr "Ursprunglig"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:79
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Look"
-msgstr "Hitta"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:85
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Orientation"
-msgstr "Höjd"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:86
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Elements"
-msgstr "Händelser"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:87
 #, no-c-format
@@ -3239,14 +3214,14 @@ msgid "Task Rules"
 msgstr "Regler"
 
 #: src/Dialogs/dlgConfiguration.cpp:96
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoint Types"
-msgstr "VARNING"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:97
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Language, Input"
-msgstr "Språk"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:98
 #, no-c-format
@@ -3277,9 +3252,9 @@ msgid "Units"
 msgstr "Enheter"
 
 #: src/Dialogs/dlgConfiguration.cpp:110
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tracking"
-msgstr "Färdlinje Upp"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:113
 #, no-c-format
@@ -3312,9 +3287,8 @@ msgid "Name"
 msgstr "Namn"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:242
-#, fuzzy
 msgid "Panel name"
-msgstr "Pilot Namn"
+msgstr ""
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:389
 msgid "Content"
@@ -3379,9 +3353,8 @@ msgid "Do you want to set this FLARM contact as your new teammate?"
 msgstr ""
 
 #: src/Dialogs/dlgFlarmTrafficDetails.cpp:206
-#, fuzzy
 msgid "New Teammate"
-msgstr "Ingen Bana"
+msgstr ""
 
 #: src/Dialogs/dlgHelp.cpp:63 Data/Dialogs/dlgComboPicker.xml:8
 #: Data/Dialogs/dlgComboPicker_L.xml:7 Data/Dialogs/dlgHelp.xml:3
@@ -3408,9 +3381,9 @@ msgid "Fix invalid"
 msgstr "Felaktig Position"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:40
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "2D fix"
-msgstr "Ingen fix"
+msgstr ""
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:42
 #, no-c-format
@@ -3749,18 +3722,16 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:134
-#, fuzzy
 msgid "Max. auto zoom distance"
-msgstr "Total Sträcka"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:135
 msgid "The upper limit for auto zoom distance."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:281
-#, fuzzy
 msgid "Polar name"
-msgstr "Polar fil"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:119
 #: src/Dialogs/dlgTaskHelpers.cpp:243
@@ -3774,14 +3745,14 @@ msgid "Shade"
 msgstr "Skugga"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:146
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Straight"
-msgstr "Max Starthöjd"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:147
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turning"
-msgstr "VARNING"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:156
 #, no-c-format
@@ -3969,9 +3940,9 @@ msgid "inHg"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:103
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Full name"
-msgstr "Pilot Namn"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:104
 #, no-c-format
@@ -3989,9 +3960,9 @@ msgid "The first word of the waypoint name is displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:107
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "First 3 letters"
-msgstr "Första 3"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:108
 #, no-c-format
@@ -3999,9 +3970,9 @@ msgid "The first 3 letters of the waypoint name are displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:109
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "First 5 letters"
-msgstr "Första 5"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:110
 #, no-c-format
@@ -4039,9 +4010,9 @@ msgid "Arrival height considering terrain avoidance"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:125
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Straight & terrain glide"
-msgstr "Räckviddsområde"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:126
 #, no-c-format
@@ -4074,9 +4045,9 @@ msgid "All waypoints part of a task and all landables will be displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:146
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task waypoints"
-msgstr "Kartbrytpunkter"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:147
 #, no-c-format
@@ -4116,9 +4087,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:160
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Traffic lights"
-msgstr "Terräng höjd"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:161
 #, no-c-format
@@ -4145,44 +4116,38 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:285
-#, fuzzy
 msgid "Calculator"
-msgstr "Uppgiftskalkylator"
+msgstr ""
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:288
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:302
-#, fuzzy
 msgid "Turn Points"
-msgstr "VARNING"
+msgstr ""
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:293
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:307
-#, fuzzy
 msgid "Rules"
-msgstr "Regler"
+msgstr ""
 
 #: src/Dialogs/TaskManager/TaskClosePanel.cpp:48
 msgid "Task has been modified"
 msgstr ""
 
 #: src/Dialogs/TaskManager/TaskClosePanel.cpp:48
-#, fuzzy
 msgid "Task unchanged"
-msgstr "Bana deklarerad"
+msgstr ""
 
 #: src/Dialogs/TaskManager/TaskEditPanel.cpp:102
-#, fuzzy
 msgid "Clear all points?"
-msgstr "Radera Brytpunkt?"
+msgstr ""
 
 #: src/Dialogs/TaskManager/TaskEditPanel.cpp:102
 msgid "Task edit"
 msgstr ""
 
 #: src/Dialogs/TaskManager/TaskEditPanel.cpp:134
-#, fuzzy
 msgid "Add Turnpoint"
-msgstr "Nästa brytpunkt"
+msgstr ""
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:185
 msgid "Task not saved"
@@ -4218,14 +4183,12 @@ msgid "Rename Error"
 msgstr ""
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:335
-#, fuzzy
 msgid "Create new task?"
-msgstr "Ersätt i Bana"
+msgstr ""
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:335
-#, fuzzy
 msgid "Task New"
-msgstr "Hastighet Bana"
+msgstr ""
 
 #: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:170
 msgid "Calculator excludes unsaved task changes!"
@@ -4236,14 +4199,12 @@ msgid "(Add Alternate Start)"
 msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:152
-#, fuzzy
 msgid "Enable Alternate Starts"
-msgstr "Alternativ startpunkt"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:155
-#, fuzzy
 msgid "Edit Alternates"
-msgstr "Alternativ"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:297
 msgid "Remove task point?"
@@ -4409,9 +4370,8 @@ msgid "BGA Enhanced Option"
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:267
-#, fuzzy
 msgid "BGA Start Sector"
-msgstr "FAI Sektor"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:277
 msgid ""
@@ -4636,9 +4596,8 @@ msgstr ""
 
 #: src/Dialogs/dlgWaypointDetails.cpp:265
 #: src/Dialogs/dlgWaypointDetails.cpp:298
-#, fuzzy
 msgid "Created Goto Task."
-msgstr "Ersätt i Bana"
+msgstr ""
 
 #: src/Dialogs/dlgWaypointDetails.cpp:265
 #: src/Dialogs/dlgWaypointDetails.cpp:270
@@ -4683,9 +4642,8 @@ msgid "Comment"
 msgstr "Kommentar"
 
 #: src/Dialogs/dlgWaypointSelect.cpp:658
-#, fuzzy
 msgid "Waypoint name"
-msgstr "Brytpunkt Info"
+msgstr ""
 
 #: src/Dialogs/dlgWaypointSelect.cpp:736
 msgid "Choose a filter or click here"
@@ -4725,9 +4683,8 @@ msgstr ""
 
 #: src/Dialogs/dlgNOAAList.cpp:141 src/Dialogs/dlgNOAAList.cpp:151
 #: src/Dialogs/dlgNOAADetails.cpp:74
-#, fuzzy
 msgid "Download"
-msgstr "Spela upp flygning"
+msgstr ""
 
 #: src/Dialogs/dlgNOAAList.cpp:163 src/Dialogs/dlgNOAADetails.cpp:83
 #, c-format
@@ -4759,9 +4716,8 @@ msgid "Temperature"
 msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:132 src/Weather/NOAAFormatter.cpp:139
-#, fuzzy
 msgid "Dew Point"
-msgstr "Ny Brytpunkt"
+msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
 msgid "Pressure"
@@ -4887,9 +4843,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgWaypointDetails.xml:18
 #: Data/Dialogs/dlgWaypointDetails_L.xml:18
-#, fuzzy
 msgid "Bearing and Distance"
-msgstr "Återstående distans"
+msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:18
 msgid ""
@@ -5084,9 +5039,8 @@ msgid "GPS lock"
 msgstr "GPS-låsning"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:46 Data/Dialogs/dlgPlaneDetails_L.xml:38
-#, fuzzy
 msgid "Dump Time"
-msgstr "Tömningstid"
+msgstr ""
 
 #: Data/Dialogs/dlgTextEntry.xml:8
 msgid "A-"
@@ -5161,9 +5115,8 @@ msgid "V manoeuvering"
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
-#, fuzzy
 msgid "Topography labels, important"
-msgstr "Topologi etiketter"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:287 Data/Dialogs/dlgVario_L.xml:286
 msgid "Mute vario on voice"
@@ -5223,9 +5176,8 @@ msgid "Speed remaining"
 msgstr "Återstående Hast"
 
 #: Data/Dialogs/dlgConfigFonts.xml:16 Data/Dialogs/dlgConfigFonts_L.xml:16
-#, fuzzy
 msgid "InfoBox values, small"
-msgstr "Info box värden små"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:119 Data/Dialogs/dlgVario_L.xml:118
 msgid "Circling hi cutoff"
@@ -5317,9 +5269,8 @@ msgstr ""
 
 #: Data/Dialogs/pnlTaskProperties.xml:30
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
-#, fuzzy
 msgid "Finish height ref."
-msgstr "FAI Målgångshöjd"
+msgstr ""
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid ""
@@ -5340,9 +5291,8 @@ msgid "Clean"
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:28 Data/Dialogs/dlgConfigFonts_L.xml:28
-#, fuzzy
 msgid "Dialog text"
-msgstr "Dialogrutor"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskCalculator.xml:45
 #: Data/Dialogs/pnlTaskCalculator_L.xml:45
@@ -5373,9 +5323,8 @@ msgid "Landing time"
 msgstr "Landningstid"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:39 Data/Dialogs/dlgPlaneDetails_L.xml:33
-#, fuzzy
 msgid "Max. Ballast"
-msgstr "Tankar"
+msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "New waypoint"
@@ -5422,9 +5371,8 @@ msgid "Wing Area"
 msgstr ""
 
 #: Data/Dialogs/pnlTaskEdit.xml:13 Data/Dialogs/pnlTaskEdit_L.xml:12
-#, fuzzy
 msgid "Clear All"
-msgstr "Rensa"
+msgstr ""
 
 #: Data/Dialogs/dlgMapItemList.xml:3 Data/Dialogs/dlgMapItemList_L.xml:3
 msgid "Map elements at this location"
@@ -5576,9 +5524,8 @@ msgid ""
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
-#, fuzzy
 msgid "InfoBox values, normal"
-msgstr "Info box värden små"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:29 Data/Dialogs/dlgVario_L.xml:28
 msgid "Accelerometer"
@@ -5660,14 +5607,12 @@ msgid "AVG/ALT"
 msgstr ""
 
 #: Data/Dialogs/pnlTaskList.xml:8 Data/Dialogs/pnlTaskList_L.xml:12
-#, fuzzy
 msgid "Browse"
-msgstr "Filutforskare"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskList.xml:6 Data/Dialogs/pnlTaskList_L.xml:10
-#, fuzzy
 msgid "New Task"
-msgstr "Ingen Bana"
+msgstr ""
 
 #: Data/Dialogs/dlgTarget.xml:4 Data/Dialogs/dlgTarget_L.xml:6
 msgid "This sets the task point for review."
@@ -5841,9 +5786,8 @@ msgid "V flap"
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:22 Data/Dialogs/dlgConfigFonts_L.xml:22
-#, fuzzy
 msgid "Topography labels, normal"
-msgstr "Topologi etiketter"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskCalculator.xml:22
 #: Data/Dialogs/pnlTaskCalculator_L.xml:22
@@ -5933,18 +5877,16 @@ msgid "Trail drift"
 msgstr "Spår Avdrift"
 
 #: Data/Dialogs/dlgConfiguration.xml:16 Data/Dialogs/dlgConfiguration_L.xml:16
-#, fuzzy
 msgid "Configuration Menu"
-msgstr "Konfiguration"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:353 Data/Dialogs/dlgVario_L.xml:352
 msgid "Interval; info"
 msgstr ""
 
 #: Data/Dialogs/dlgPlanePolar.xml:57 Data/Dialogs/dlgPlanePolar_L.xml:45
-#, fuzzy
 msgid "Dry Mass"
-msgstr "Vikt"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskCalculator.xml:41
 #: Data/Dialogs/pnlTaskCalculator_L.xml:41
@@ -6578,9 +6520,8 @@ msgid "Setup Plane"
 msgstr ""
 
 #: Data/Input/default.xci:481 Data/Input/default.xci:1075
-#, fuzzy
 msgid "Topo."
-msgstr "Topologi"
+msgstr ""
 
 #: Data/Input/default.xci:333 Data/Input/default.xci:979
 msgid ""
@@ -6646,11 +6587,10 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:513
-#, fuzzy
 msgid ""
 "MacCready\n"
 "-"
-msgstr "Ställ MC"
+msgstr ""
 
 #: Data/Input/default.xci:384 Data/Input/default.xci:1019
 msgid ""
@@ -6797,11 +6737,10 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:804
-#, fuzzy
 msgid ""
 "FLARM\n"
 "Details"
-msgstr "Detaljer"
+msgstr ""
 
 #: Data/Input/default.xci:134 Data/Input/default.xci:408
 #: Data/Input/default.xci:924
@@ -6836,11 +6775,10 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:506
-#, fuzzy
 msgid ""
 "MacCready\n"
 "+"
-msgstr "Ställ MC"
+msgstr ""
 
 #: Data/Input/default.xci:64
 msgid "Landing"
@@ -6852,204 +6790,14 @@ msgid ""
 "TAF"
 msgstr ""
 
-#~ msgid "OK to invalidate declaration?"
-#~ msgstr "OK att ogiltigförklara deklarationen?"
-
-#~ msgid "Task declared"
-#~ msgstr "Bana deklarerad"
-
-#~ msgid "Pan mode on"
-#~ msgstr "Panorera På"
-
-#~ msgid "Pan mode off"
-#~ msgstr "Panorera Av"
-
-#~ msgid "Terrain Display"
-#~ msgstr "Terräng"
-
-#~ msgid "V rough air"
-#~ msgstr "Max Manöverfart"
-
-#~ msgid "Time step circling"
-#~ msgstr "Tidsstegring kurvläge"
-
-#~ msgid "Dump time"
-#~ msgstr "Tömningstid"
-
-#~ msgid "Start Anyway"
-#~ msgstr "Starta ändå"
-
-#~ msgid "Terrain file"
-#~ msgstr "Terrängfil"
-
-#~ msgid "Auto wind"
-#~ msgstr "Auto Vind"
-
-#~ msgid "Time step cruise"
-#~ msgstr "Tidsstegring cruise"
-
-#, fuzzy
-#~ msgid "Reach mode"
-#~ msgstr "Enhet typ"
-
-#~ msgid "Terrain contrast"
-#~ msgstr "Terräng kontrast"
-
-#~ msgid "Use black outline"
-#~ msgstr "Svart kontur"
-
-#~ msgid "Task Start"
-#~ msgstr "Startpunkt"
-
-#~ msgid "Status message"
-#~ msgstr "Status meddelande"
-
-#~ msgid "Device A"
-#~ msgstr "Enhet A"
-
-#~ msgid "Warning time"
-#~ msgstr "Varningstid"
-
-#~ msgid "Lift"
-#~ msgstr "Stig"
-
-#~ msgid "Device B"
-#~ msgstr "Enhet B"
-
-#~ msgid "Terrain brightness"
-#~ msgstr "Terräng ljusstyrka"
-
-#~ msgid "Declared"
-#~ msgstr "Deklarerad"
-
-#~ msgid "Device model"
-#~ msgstr "Enhet typ"
-
-#~ msgid "Airspace display"
-#~ msgstr "Visa luftrum"
-
-#~ msgid "STF risk factor"
-#~ msgstr "STF risk faktor"
-
-#~ msgid "Acknowledge time"
-#~ msgstr "Bekr. Tid"
-
-#~ msgid "Terrain height"
-#~ msgstr "Terräng höjd"
-
-#~ msgid "Terrain colors"
-#~ msgstr "Terräng färg"
-
-#~ msgid "Task speed"
-#~ msgstr "Hastighet Bana"
-
-#~ msgid "Wind arrow"
-#~ msgstr "Vindpil"
-
-#~ msgid "Colours"
-#~ msgstr "Färger"
-
-#~ msgid "Block speed to fly"
-#~ msgstr "Blocka rek. Fart"
-
-#~ msgid "Menu timeout"
-#~ msgstr "Meny timeout"
-
-#~ msgid "Short file name"
-#~ msgstr "Kort filnamn"
-
-#~ msgid "Clip altitude"
-#~ msgstr "Luftrum Tak"
-
-#~ msgid "Infobox geometry"
-#~ msgstr "Infobox Geometri"
-
-#~ msgid "Trail length"
-#~ msgstr "Spår Längd"
-
-#~ msgid "Use GPS time"
-#~ msgstr "Använd GPS tid"
-
-#, fuzzy
-#~ msgid "Auto MC mode"
-#~ msgstr "Auto MacCready På"
-
-#~ msgid "Terrain display"
-#~ msgstr "Terräng"
-
-#~ msgid "L/D average period"
-#~ msgstr "L/D Genomsnitt"
-
-#~ msgid "Aircraft/Wind speed"
-#~ msgstr "Vindstyrka"
-
-#~ msgid "V ach."
-#~ msgstr "Uppnådd Hast"
-
-#~ msgid "Text input style"
-#~ msgstr "Text Input utseende"
-
-#~ msgid "Lat./Lon."
-#~ msgstr "Lat/Long"
-
-#~ msgid "Pilot name"
-#~ msgstr "Pilot Namn"
-
-#, fuzzy
-#~ msgid "Reach display"
-#~ msgstr "Terräng"
-
-#~ msgid "Margin"
-#~ msgstr "Marginal"
-
-#~ msgid "Locked"
-#~ msgstr "Låst"
-
-#, fuzzy
-#~ msgid "Declaring to %s"
-#~ msgstr "Deklarera bana"
-
-#~ msgid "Configuration saved"
-#~ msgstr "Inställning sparad"
-
-#~ msgid "Add Waypoint"
-#~ msgstr "Lägg till brytpunkt"
-
-#~ msgid "File Browser"
-#~ msgstr "Filutforskare"
-
-#~ msgid "Volume"
-#~ msgstr "Volym"
-
-#~ msgid "Free"
-#~ msgstr "Ledig"
-
-#~ msgid "File type"
-#~ msgstr "Filtyp"
-
 #~ msgid "Declare Task?"
 #~ msgstr "Deklarera Bana?"
 
 #~ msgid "Task Declared!"
 #~ msgstr "Bana Deklarerad!"
 
-#~ msgid "Clear Task"
-#~ msgstr "Rensa Bana"
-
-#~ msgid "True"
-#~ msgstr "Ja"
-
-#~ msgid "False"
-#~ msgstr "Nej"
-
-#~ msgid "Set speed remaining"
-#~ msgstr "Återstående Hastighet"
-
-#~ msgid "InfoBox values"
-#~ msgstr "Info box värden"
-
-#~ msgid "None "
-#~ msgstr "Inget "
+#~ msgid "Task declared"
+#~ msgstr "Bana deklarerad"
 
 #~ msgid "ON"
 #~ msgstr "På"
@@ -7093,6 +6841,9 @@ msgstr ""
 #~ msgid "Auto MacCready OFF"
 #~ msgstr "Auto MacCready Av"
 
+#~ msgid "No Task"
+#~ msgstr "Ingen Bana"
+
 #~ msgid "NMEA Log ON"
 #~ msgstr "NMEA Log På"
 
@@ -7111,6 +6862,9 @@ msgstr ""
 #~ msgid "Map labels OFF"
 #~ msgstr "Kartetiketter Av"
 
+#~ msgid "Task Start"
+#~ msgstr "Startpunkt"
+
 #~ msgid "Task Finish"
 #~ msgstr "MåL"
 
@@ -7126,6 +6880,9 @@ msgstr ""
 #~ msgid "Min sink"
 #~ msgstr "Min sjunk"
 
+#~ msgid "Configuration saved"
+#~ msgstr "Inställning sparad"
+
 #~ msgid "Wind at Altitude"
 #~ msgstr "Vind på höjd"
 
@@ -7135,17 +6892,26 @@ msgstr ""
 #~ msgid "Temp trace"
 #~ msgstr "Temp kurva"
 
+#~ msgid "Task speed"
+#~ msgstr "Hastighet Bana"
+
 #~ msgid "OnLine Contest"
 #~ msgstr "OLC"
 
 #~ msgid "Site"
 #~ msgstr "Data"
 
+#~ msgid "Terrain Display"
+#~ msgstr "Terräng"
+
 #~ msgid "Safety factors"
 #~ msgstr "Säkerhetsparametrar"
 
 #~ msgid "Interface"
 #~ msgstr "Gräsnitt"
+
+#~ msgid "Pilot name"
+#~ msgstr "Pilot Namn"
 
 #~ msgid "ON/Fixed"
 #~ msgstr "På/Låst"
@@ -7158,6 +6924,12 @@ msgstr ""
 
 #~ msgid "Numbers"
 #~ msgstr "Nummer"
+
+#~ msgid "First 5"
+#~ msgstr "Första 5"
+
+#~ msgid "First 3"
+#~ msgstr "Första 3"
 
 #~ msgid "Names in task"
 #~ msgstr "Namn i Bana"
@@ -7189,8 +6961,14 @@ msgstr ""
 #~ msgid "White outline"
 #~ msgstr "Vit kontur"
 
+#~ msgid "Alternate"
+#~ msgstr "Alternativ"
+
 #~ msgid "Changes to configuration saved."
 #~ msgstr "Ändring sparad."
+
+#~ msgid "No fix"
+#~ msgstr "Ingen fix"
 
 #~ msgid "TRUE"
 #~ msgstr "Ja"
@@ -7201,26 +6979,47 @@ msgstr ""
 #~ msgid "add waypoint"
 #~ msgstr "Lägg till brytpunkt"
 
+#~ msgid "FAI Sector"
+#~ msgstr "FAI Sektor"
+
 #~ msgid "Append to task"
 #~ msgstr "Lägg till i Bana"
 
 #~ msgid "Info box titles"
 #~ msgstr "Info box titlar"
 
+#~ msgid "V rough air"
+#~ msgstr "Max Manöverfart"
+
 #~ msgid "Aircraft/wind speed"
 #~ msgstr "Vindstyrka"
+
+#~ msgid "Start max height"
+#~ msgstr "Max Starthöjd"
 
 #~ msgid "Info box values"
 #~ msgstr "Info box värden"
 
+#~ msgid "Dump time"
+#~ msgstr "Tömningstid"
+
 #~ msgid "Start max speed"
 #~ msgstr "Max StartHast"
+
+#~ msgid "Start Anyway"
+#~ msgstr "Starta ändå"
+
+#~ msgid "Auto wind"
+#~ msgstr "Auto Vind"
 
 #~ msgid "File browser"
 #~ msgstr "Filutforskare"
 
 #~ msgid "Infobox Geometry"
 #~ msgstr "Infobox Geometri"
+
+#~ msgid "Terrain contrast"
+#~ msgstr "Terräng kontrast"
 
 #~ msgid "Max height gain"
 #~ msgstr "Max höjdvinst"
@@ -7231,14 +7030,29 @@ msgstr ""
 #~ msgid "Online contest"
 #~ msgstr "OLC"
 
+#~ msgid "Map waypoints"
+#~ msgstr "Kartbrytpunkter"
+
+#~ msgid "Locked"
+#~ msgstr "Låst"
+
 #~ msgid "Lat/Lon"
 #~ msgstr "Lat/Long"
 
 #~ msgid "New Waypoint"
 #~ msgstr "Ny Brytpunkt"
 
+#~ msgid "Device A"
+#~ msgstr "Enhet A"
+
 #~ msgid "Acknowledge time*"
 #~ msgstr "Bekr. Tid*"
+
+#~ msgid "Lift"
+#~ msgstr "Stig"
+
+#~ msgid "Device B"
+#~ msgstr "Enhet B"
 
 #~ msgid "Finish alt min"
 #~ msgstr "Min Målgångshöjd"
@@ -7249,6 +7063,24 @@ msgstr ""
 #~ msgid "Achieved Speed"
 #~ msgstr "Uppnådd Hast"
 
+#~ msgid "Terrain brightness"
+#~ msgstr "Terräng ljusstyrka"
+
+#~ msgid "Volume"
+#~ msgstr "Volym"
+
+#~ msgid "Declared"
+#~ msgstr "Deklarerad"
+
+#~ msgid "Set speed remaining"
+#~ msgstr "Återstående Hastighet"
+
+#~ msgid "Device model"
+#~ msgstr "Enhet typ"
+
+#~ msgid "Airspace display"
+#~ msgstr "Visa luftrum"
+
 #~ msgid "Finish min height"
 #~ msgstr "Min Målgångshöjd"
 
@@ -7258,14 +7090,38 @@ msgstr ""
 #~ msgid "Customize Fonts"
 #~ msgstr "Anpassa Typsnitt"
 
+#~ msgid "Polar file"
+#~ msgstr "Polar fil"
+
 #~ msgid "Start alt"
 #~ msgstr "Starthöjd"
+
+#~ msgid "FAI finish height"
+#~ msgstr "FAI Målgångshöjd"
 
 #~ msgid "Goto"
 #~ msgstr "Gå Till"
 
+#~ msgid "Terrain height"
+#~ msgstr "Terräng höjd"
+
+#~ msgid "Terrain colors"
+#~ msgstr "Terräng färg"
+
+#~ msgid "Free"
+#~ msgstr "Ledig"
+
 #~ msgid "Select pattern"
 #~ msgstr "Välj Mönster"
+
+#~ msgid "Dialog boxes"
+#~ msgstr "Dialogrutor"
+
+#~ msgid "Colours"
+#~ msgstr "Färger"
+
+#~ msgid "Topology labels"
+#~ msgstr "Topologi etiketter"
 
 #~ msgid "Insert in task"
 #~ msgstr "Infoga i Bana"
@@ -7273,11 +7129,32 @@ msgstr ""
 #~ msgid "Warning time*"
 #~ msgstr "Varningstid*"
 
+#~ msgid "Short file name"
+#~ msgstr "Kort filnamn"
+
 #~ msgid "Topology display"
 #~ msgstr "Topologi display"
 
+#~ msgid "File type"
+#~ msgstr "Filtyp"
+
+#~ msgid "Clip altitude"
+#~ msgstr "Luftrum Tak"
+
 #~ msgid "Start height ref"
 #~ msgstr "Starthöjd ref"
+
+#~ msgid "Trail length"
+#~ msgstr "Spår Längd"
+
+#~ msgid "Use GPS time"
+#~ msgstr "Använd GPS tid"
+
+#~ msgid "Terrain display"
+#~ msgstr "Terräng"
+
+#~ msgid "Glide terrain line"
+#~ msgstr "Räckviddsområde"
 
 #~ msgid "Safety lock"
 #~ msgstr "Säkerhetslås"
@@ -7291,6 +7168,18 @@ msgstr ""
 #~ msgid "V ach"
 #~ msgstr "Uppnådd Hast"
 
+#~ msgid "Task Calculator"
+#~ msgstr "Uppgiftskalkylator"
+
+#~ msgid "Info box values small"
+#~ msgstr "Info box värden små"
+
+#~ msgid "Glider position"
+#~ msgstr "Flygplanssymbol"
+
+#~ msgid "Margin"
+#~ msgstr "Marginal"
+
 #~ msgid "Below Final Glide"
 #~ msgstr "Under Glidbanan!"
 
@@ -7303,8 +7192,84 @@ msgstr ""
 #~ msgid "Restarting Comm Ports"
 #~ msgstr "Startar om Com-portar"
 
+#~ msgid "Marks cleared"
+#~ msgstr "Markeringar rensade"
+
 #~ msgid "Waiting for GPS Fix"
 #~ msgstr "Väntar på GPS-låsning"
 
 #~ msgid "Final Glide Through Terrain"
 #~ msgstr "Finalglidning genom terräng!"
+
+#~ msgid "Pan mode on"
+#~ msgstr "Panorera På"
+
+#~ msgid "Pan mode off"
+#~ msgstr "Panorera Av"
+
+#~ msgid "Use black outline"
+#~ msgstr "Svart kontur"
+
+#~ msgid "Warning time"
+#~ msgstr "Varningstid"
+
+#~ msgid "Acknowledge time"
+#~ msgstr "Bekr. Tid"
+
+#~ msgid "Infobox geometry"
+#~ msgstr "Infobox Geometri"
+
+#~ msgid "V ach."
+#~ msgstr "Uppnådd Hast"
+
+#~ msgid "Lat./Lon."
+#~ msgstr "Lat/Long"
+
+#~ msgid ""
+#~ "Error occured,\n"
+#~ "Task NOT Declared!"
+#~ msgstr ""
+#~ "Ett fel har uppstått\n"
+#~ "Ingen bana deklarerad"
+
+#~ msgid "OK to invalidate declaration?"
+#~ msgstr "OK att ogiltigförklara deklarationen?"
+
+#~ msgid "Time step circling"
+#~ msgstr "Tidsstegring kurvläge"
+
+#~ msgid "Terrain file"
+#~ msgstr "Terrängfil"
+
+#~ msgid "Time step cruise"
+#~ msgstr "Tidsstegring cruise"
+
+#~ msgid "Language"
+#~ msgstr "Språk"
+
+#~ msgid "Events"
+#~ msgstr "Händelser"
+
+#~ msgid "Status message"
+#~ msgstr "Status meddelande"
+
+#~ msgid "STF risk factor"
+#~ msgstr "STF risk faktor"
+
+#~ msgid "Wind arrow"
+#~ msgstr "Vindpil"
+
+#~ msgid "Block speed to fly"
+#~ msgstr "Blocka rek. Fart"
+
+#~ msgid "Menu timeout"
+#~ msgstr "Meny timeout"
+
+#~ msgid "L/D average period"
+#~ msgstr "L/D Genomsnitt"
+
+#~ msgid "Aircraft/Wind speed"
+#~ msgstr "Vindstyrka"
+
+#~ msgid "Text input style"
+#~ msgstr "Text Input utseende"
