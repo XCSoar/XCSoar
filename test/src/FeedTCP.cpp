@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 
   server_addr.sin_family = AF_INET;
   server_addr.sin_port = htons(tcp_port);
-  bzero(&(server_addr.sin_zero),8);
+  memset(&(server_addr.sin_zero), 0, 8);
 
   if (connect(sock, (struct sockaddr *)&server_addr,
               sizeof(struct sockaddr)) == -1)
