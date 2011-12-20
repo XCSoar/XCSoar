@@ -40,10 +40,10 @@ OpenGL::IsExtensionSupported(const char *extension)
 
   const GLubyte *extensions = NULL;
   const GLubyte *start;
-  GLubyte *where, *terminator;
+  const GLubyte *where, *terminator;
 
   /* Extension names should not have spaces. */
-  where = (GLubyte *) strchr(extension, ' ');
+  where = (const GLubyte *) strchr(extension, ' ');
   if (where || *extension == '\0')
     return 0;
   extensions = glGetString(GL_EXTENSIONS);
@@ -52,7 +52,7 @@ OpenGL::IsExtensionSupported(const char *extension)
      etc. */
   start = extensions;
   for (;;) {
-    where = (GLubyte *) strstr((const char *) start, extension);
+    where = (const GLubyte *) strstr((const char *) start, extension);
     if (!where)
       break;
     terminator = where + strlen(extension);
