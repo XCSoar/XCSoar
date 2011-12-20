@@ -747,8 +747,11 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   const Waypoint &waypoint = *info.way_point;
 
   // Draw icon
-  RasterPoint pt = { rc.left + line_height / 2,
-                     rc.top + line_height / 2};
+  const RasterPoint pt = {
+    PixelScalar(rc.left + line_height / 2),
+    PixelScalar(rc.top + line_height / 2),
+  };
+
   WaypointIconRenderer wir(CommonInterface::SettingsMap().waypoint,
                            CommonInterface::main_window.look->waypoint,
                            canvas);

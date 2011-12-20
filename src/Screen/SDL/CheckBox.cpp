@@ -173,7 +173,11 @@ CheckBox::on_paint(Canvas &canvas)
   canvas.text(canvas.get_height() + 2, 2, text.c_str());
 
   if (has_focus()) {
-    PixelRect rc = { 0, 0, canvas.get_width()-1, canvas.get_height()-1 };
+    const PixelRect rc = {
+      0, 0, PixelScalar(canvas.get_width() - 1),
+      PixelScalar(canvas.get_height() - 1),
+    };
+
     canvas.draw_focus(rc);
   }
 }

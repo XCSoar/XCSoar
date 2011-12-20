@@ -103,19 +103,19 @@ private:
     const PixelRect rc = get_client_rect();
     const unsigned width = rc.right - rc.left;
     const unsigned height = rc.bottom - rc.top;
-    const unsigned hmiddle = (rc.left + rc.right) / 2;
-    const unsigned vmiddle = (rc.top + rc.bottom) / 2;
+    const PixelScalar hmiddle = (rc.left + rc.right) / 2;
+    const PixelScalar vmiddle = (rc.top + rc.bottom) / 2;
 
     RasterPoint p1[3] = {
       { -100, vmiddle },
-      { (width * 2) / 3, -100 },
-      { hmiddle, height * 2 },
+      { PixelScalar((width * 2) / 3), -100 },
+      { hmiddle, PixelScalar(height * 2) },
     };
 
     RasterPoint p2[3] = {
       { -2000, vmiddle },
-      { width * 10, -3000 },
-      { width * 5, 3000 },
+      { PixelScalar(width * 10), -3000 },
+      { PixelScalar(width * 5), 3000 },
     };
 
     const TCHAR *label;
