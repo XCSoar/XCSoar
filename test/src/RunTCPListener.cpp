@@ -21,7 +21,6 @@ Copyright_License {
 }
 */
 
-#include "OS/PathName.hpp"
 #include "OS/Sleep.h"
 
 #include "Device/Port/TCPPort.hpp"
