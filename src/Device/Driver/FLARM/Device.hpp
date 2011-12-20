@@ -76,12 +76,7 @@ private:
    */
   void Send(const char *sentence);
 
-  bool SetConfig(const TCHAR *setting, const TCHAR *value);
-
-  bool SetGet(const char *buffer);
-#ifdef _UNICODE
-  bool SetGet(const TCHAR *s);
-#endif
+  bool SetConfig(const char *setting, const TCHAR *value);
 
   bool DeclareInternal(const Declaration &declaration,
                        OperationEnvironment &env);

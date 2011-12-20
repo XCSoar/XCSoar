@@ -23,13 +23,8 @@ Copyright_License {
 
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
-#include "Util/StaticString.hpp"
 
 #include <assert.h>
-
-#ifdef _UNICODE
-#include <windows.h>
-#endif
 
 void
 FlarmDevice::Send(const char *sentence)
@@ -41,29 +36,3 @@ FlarmDevice::Send(const char *sentence)
   port.Write(sentence);
   port.Write("\r\n");
 }
-
-bool
-FlarmDevice::SetGet(const char *buffer)
-{
-  assert(!in_binary_mode);
-  assert(buffer != NULL);
-
-  NarrowString<256> expected_answer(buffer);
-  expected_answer[6u] = 'A';
-
-  Send(buffer);
-  return port.ExpectString(expected_answer);
-}
-
-#ifdef _UNICODE
-bool
-FlarmDevice::SetGet(const TCHAR *s)
-{
-  assert(!in_binary_mode);
-  assert(s != NULL);
-
-  char buffer[_tcslen(s) * 4 + 1];
-  return ::WideCharToMultiByte(CP_ACP, 0, s, -1, buffer, sizeof(buffer), NULL,
-                               NULL) > 0 && SetGet(buffer);
-}
-#endif
