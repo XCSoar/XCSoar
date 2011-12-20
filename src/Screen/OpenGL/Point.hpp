@@ -51,6 +51,14 @@ struct RasterPoint {
 
 struct PixelSize {
   PixelScalar cx, cy;
+
+  bool operator==(const PixelSize &other) const {
+    return cx == other.cx && cy == other.cy;
+  }
+
+  bool operator!=(const PixelSize &other) const {
+    return !(*this == other);
+  }
 };
 
 struct PixelRect {
