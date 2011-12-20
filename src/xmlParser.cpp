@@ -1293,7 +1293,7 @@ XMLNode::enumContent(const XMLNodeData *pEntry, unsigned i,
   case eNodeAttribute:
     return pEntry->pAttribute + i;
   case eNodeText:
-    return (void*)(pEntry->pText[i]);
+    return (const void *)(pEntry->pText[i]);
   default:
     break;
   }
@@ -1476,16 +1476,16 @@ XMLNode::destroyCurrentBuffer(XMLNodeData *d)
     }
     free(d->pChild);
     for (i = 0; i < d->nText; i++)
-      free((void*)d->pText[i]);
+      free((void *)const_cast<TCHAR *>(d->pText[i]));
     free(d->pText);
     for (i = 0; i < d->nAttribute; i++) {
-      free((void*)d->pAttribute[i].lpszName);
+      free((void*)const_cast<TCHAR *>(d->pAttribute[i].lpszName));
       if (d->pAttribute[i].lpszValue)
-        free((void*)d->pAttribute[i].lpszValue);
+        free((void*)const_cast<TCHAR *>(d->pAttribute[i].lpszValue));
     }
     free(d->pAttribute);
     free(d->pOrder);
-    free((void*)d->lpszName);
+    free((void*)const_cast<TCHAR *>(d->lpszName));
     free(d);
   }
 }
