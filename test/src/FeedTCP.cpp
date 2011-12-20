@@ -38,6 +38,15 @@ Copyright_License {
 
 int main(int argc, char **argv)
 {
+  int tcp_port;
+  if (argc < 2) {
+    fprintf(stderr, "Usage: %s PORT\n", argv[0]);
+    fprintf(stderr, "Defaulting to port 4353\n");
+    tcp_port = 4353;
+  } else {
+    tcp_port = atoi(argv[1]);
+  }
+
   int sock;
   struct sockaddr_in server_addr;
 
@@ -49,7 +58,7 @@ int main(int argc, char **argv)
   }
 
   server_addr.sin_family = AF_INET;
-  server_addr.sin_port = htons(4353);
+  server_addr.sin_port = htons(tcp_port);
   bzero(&(server_addr.sin_zero),8);
 
   if (connect(sock, (struct sockaddr *)&server_addr,
