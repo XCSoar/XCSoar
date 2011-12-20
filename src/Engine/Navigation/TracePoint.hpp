@@ -109,29 +109,6 @@ public:
   }
 
   /**
-   * Function object used to provide access to coordinate values by kd-tree
-   */
-  struct kd_get_location {    
-    typedef int result_type; /**< type of returned value */
-    /**
-     * Retrieve coordinate value from object given coordinate index
-     * @param d WaypointEnvelope object
-     * @param k index of coordinate
-     *
-     * @return Coordinate value
-     */
-    int operator() ( const TracePoint &d, const unsigned k) const {
-      switch(k) {
-      case 0:
-        return d.get_flatLocation().Longitude;
-      case 1:
-        return d.get_flatLocation().Latitude;
-      };
-      return 0; 
-    }
-  };
-
-  /**
    * Structure for STL sorting by time
    */
   struct time_sort {
