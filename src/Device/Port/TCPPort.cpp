@@ -60,12 +60,7 @@ TCPPort::Open()
     return false;
   }
 
-  struct sockaddr_in address;
-  memset(&address, 0, sizeof(address));
-  address.sin_family = AF_INET;
-  address.sin_addr.s_addr = INADDR_ANY;
-  address.sin_port = htons((uint16_t)port);
-
+  // Set socket options
   const int reuse = 1;
 #ifdef HAVE_POSIX
   const void *optval = &reuse;
@@ -73,6 +68,13 @@ TCPPort::Open()
   const char *optval = (const char *)&reuse;
 #endif
   setsockopt(listener_fd, SOL_SOCKET, SO_REUSEADDR, optval, sizeof(reuse));
+
+  // Bind socket to specified port number
+  struct sockaddr_in address;
+  memset(&address, 0, sizeof(address));
+  address.sin_family = AF_INET;
+  address.sin_addr.s_addr = INADDR_ANY;
+  address.sin_port = htons((uint16_t)port);
 
   if (bind(listener_fd, (const struct sockaddr *)&address,
            sizeof(address)) < 0) {
