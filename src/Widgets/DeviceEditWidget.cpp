@@ -44,7 +44,7 @@
 #endif
 
 enum ControlIndex {
-  Port, BaudRate, BulkBaudRate, Driver,
+  Port, BaudRate, BulkBaudRate, TCPPort, Driver,
 };
 
 static gcc_constexpr_data struct {
@@ -61,7 +61,7 @@ static gcc_constexpr_data struct {
 
   /* label not translated for now, until we have a TCP port
      selection UI */
-  { DeviceConfig::PortType::TCP_LISTENER, _T("TCP port 4353") },
+  { DeviceConfig::PortType::TCP_LISTENER, _T("TCP port") },
 
   { DeviceConfig::PortType::SERIAL, NULL } /* sentinel */
 };
@@ -302,6 +302,13 @@ FillBaudRates(DataFieldEnum &dfe)
   dfe.addEnumText(_T("115200"), 115200);
 }
 
+static void
+FillTCPPorts(DataFieldEnum &dfe)
+{
+  dfe.addEnumText(_T("4353"), 4353);
+  dfe.addEnumText(_T("10110"), 10110);
+}
+
 DeviceEditWidget::DeviceEditWidget(const DeviceConfig &_config)
   :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(80)),
    config(_config) {}
@@ -342,6 +349,7 @@ DeviceEditWidget::UpdateVisibilities()
   GetControl(BulkBaudRate).set_visible(DeviceConfig::UsesSpeed(type) &&
                                        DeviceConfig::UsesDriver(type) &&
                                        SupportsBulkBaudRate(GetDataField(Driver)));
+  GetControl(TCPPort).set_visible(DeviceConfig::UsesTCPPort(type));
   GetControl(Driver).set_visible(DeviceConfig::UsesDriver(type));
 }
 
@@ -376,6 +384,11 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   Add(_("Bulk baud rate"),
       _("The baud rate used for bulk transfers, such as task declaration or flight download."),
       bulk_baud_rate_df);
+
+  DataFieldEnum *tcp_port_df = new DataFieldEnum(NULL);
+  FillTCPPorts(*tcp_port_df);
+  tcp_port_df->Set(config.tcp_port);
+  Add(_("TCP Port"), NULL, tcp_port_df);
 
   DataFieldEnum *driver_df = new DataFieldEnum(OnDataField);
   driver_df->SetDetachGUI(true);
@@ -465,6 +478,10 @@ DeviceEditWidget::Save(bool &_changed, bool &require_restart)
     changed |= SaveValue(BaudRate, config.baud_rate);
     changed |= SaveValue(BulkBaudRate, config.bulk_baud_rate);
   }
+
+  if (config.UsesTCPPort())
+    changed |= SaveValue(TCPPort, config.tcp_port);
+
 
   if (config.UsesDriver())
     changed |= SaveValue(Driver, config.driver_name.buffer(),

@@ -12,6 +12,10 @@
       <DataField DataType="enum" />
     </Edit>
 
+    <Edit Name="TCPPort1" Caption="TCP Port" X="72" Y="23" Width="-2" Height="22" CaptionWidth="80">
+      <DataField DataType="enum" />
+    </Edit>
+
     <Edit Name="BulkBaudRate1" Caption="Bulk baud rate" X="72" Width="-2" Height="22" CaptionWidth="80" Help="The baud rate used for bulk transfers, such as task declaration or flight download.">
       <DataField DataType="enum"/>
     </Edit>
@@ -30,6 +34,10 @@
 
     <Edit Name="prpComSpeed2" Caption="Baudrate" X="72" Width="-2" Height="22" CaptionWidth="80"
       Help="Altair Pro or Vega users should set this to 38400.">
+      <DataField DataType="enum" />
+    </Edit>
+
+    <Edit Name="TCPPort2" Caption="TCP Port" X="72" Y="23" Width="-2" Height="22" CaptionWidth="80">
       <DataField DataType="enum" />
     </Edit>
 

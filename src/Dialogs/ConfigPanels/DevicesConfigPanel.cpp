@@ -73,7 +73,7 @@ static const struct {
 
   /* label not translated for now, until we have a TCP port
      selection UI */
-  { DeviceConfig::PortType::TCP_LISTENER, _T("TCP port 4353") },
+  { DeviceConfig::PortType::TCP_LISTENER, _T("TCP port") },
 
   { DeviceConfig::PortType::SERIAL, NULL } /* sentinel */
 };
@@ -143,6 +143,7 @@ static void
 UpdateDeviceControlVisibility(WndProperty &port_field,
                               WndProperty &speed_field,
                               WndProperty &bulk_baud_rate_field,
+                              WndProperty &tcp_port_field,
                               WndProperty &driver_field)
 {
   const DeviceConfig::PortType type = GetPortType(port_field);
@@ -152,6 +153,7 @@ UpdateDeviceControlVisibility(WndProperty &port_field,
                                    DeviceConfig::UsesDriver(type) &&
                                    SupportsBulkBaudRate(*driver_field.GetDataField()));
   driver_field.set_visible(DeviceConfig::UsesDriver(type));
+  tcp_port_field.set_visible(DeviceConfig::UsesTCPPort(type));
 }
 
 void
@@ -160,6 +162,7 @@ DevicesConfigPanel::OnDeviceAPort()
   UpdateDeviceControlVisibility(*(WndProperty *)form.FindByName(_T("prpComPort1")),
                                 *(WndProperty *)form.FindByName(_T("prpComSpeed1")),
                                 *(WndProperty *)form.FindByName(_T("BulkBaudRate1")),
+                                *(WndProperty *)form.FindByName(_T("TCPPort1")),
                                 *(WndProperty *)form.FindByName(_T("prpComDevice1")));
 }
 
@@ -176,6 +179,7 @@ DevicesConfigPanel::OnDeviceBPort()
   UpdateDeviceControlVisibility(*(WndProperty *)form.FindByName(_T("prpComPort2")),
                                 *(WndProperty *)form.FindByName(_T("prpComSpeed2")),
                                 *(WndProperty *)form.FindByName(_T("BulkBaudRate2")),
+                                *(WndProperty *)form.FindByName(_T("TCPPort2")),
                                 *(WndProperty *)form.FindByName(_T("prpComDevice2")));
 }
 
@@ -192,6 +196,7 @@ DevicesConfigPanel::OnDeviceAData()
   UpdateDeviceControlVisibility(*(WndProperty *)form.FindByName(_T("prpComPort1")),
                                 *(WndProperty *)form.FindByName(_T("prpComSpeed1")),
                                 *(WndProperty *)form.FindByName(_T("BulkBaudRate1")),
+                                *(WndProperty *)form.FindByName(_T("TCPPort1")),
                                 *(WndProperty *)form.FindByName(_T("prpComDevice1")));
 }
 
@@ -215,6 +220,7 @@ DevicesConfigPanel::OnDeviceBData()
   UpdateDeviceControlVisibility(*(WndProperty *)form.FindByName(_T("prpComPort2")),
                                 *(WndProperty *)form.FindByName(_T("prpComSpeed2")),
                                 *(WndProperty *)form.FindByName(_T("BulkBaudRate2")),
+                                *(WndProperty *)form.FindByName(_T("TCPPort2")),
                                 *(WndProperty *)form.FindByName(_T("prpComDevice2")));
 }
 
@@ -361,9 +367,16 @@ FillBaudRates(DataFieldEnum &dfe)
 }
 
 static void
+FillTCPPorts(DataFieldEnum &dfe)
+{
+  dfe.addEnumText(_T("4353"), 4353);
+  dfe.addEnumText(_T("10110"), 10110);
+}
+
+static void
 SetupDeviceFields(const DeviceConfig &config,
                   WndProperty &port_field, WndProperty &speed_field,
-                  WndProperty &bulk_baud_rate_field,
+                  WndProperty &bulk_baud_rate_field, WndProperty &tcp_port_field,
                   WndProperty &driver_field)
 {
   {
@@ -471,6 +484,13 @@ SetupDeviceFields(const DeviceConfig &config,
   bulk_baud_rate_field.RefreshDisplay();
 
   {
+    DataFieldEnum &dfe = *(DataFieldEnum *)tcp_port_field.GetDataField();
+    FillTCPPorts(dfe);
+    dfe.Set(config.tcp_port);
+    tcp_port_field.RefreshDisplay();
+  }
+
+  {
     DataFieldEnum *dfe = (DataFieldEnum *)driver_field.GetDataField();
 
     const TCHAR *DeviceName;
@@ -484,7 +504,7 @@ SetupDeviceFields(const DeviceConfig &config,
   }
 
   UpdateDeviceControlVisibility(port_field, speed_field, bulk_baud_rate_field,
-                                driver_field);
+                                tcp_port_field, driver_field);
 }
 
 
@@ -554,6 +574,7 @@ static bool
 FinishDeviceFields(DeviceConfig &config,
                    const WndProperty &port_field, const WndProperty &speed_field,
                    const WndProperty &bulk_baud_rate_field,
+                   const WndProperty &tcp_port_field,
                    const WndProperty &driver_field)
 {
   bool changed = false;
@@ -570,6 +591,12 @@ FinishDeviceFields(DeviceConfig &config,
   if (config.UsesSpeed() &&
       config.bulk_baud_rate != (unsigned)bulk_baud_rate_field.GetDataField()->GetAsInteger()) {
     config.bulk_baud_rate = (unsigned)bulk_baud_rate_field.GetDataField()->GetAsInteger();
+    changed = true;
+  }
+
+  if (config.UsesTCPPort() &&
+      config.tcp_port != (unsigned)tcp_port_field.GetDataField()->GetAsInteger()) {
+    config.tcp_port = (unsigned)tcp_port_field.GetDataField()->GetAsInteger();
     changed = true;
   }
 
@@ -605,12 +632,14 @@ DevicesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                     *(WndProperty *)form.FindByName(_T("prpComPort1")),
                     *(WndProperty *)form.FindByName(_T("prpComSpeed1")),
                     *(WndProperty *)form.FindByName(_T("BulkBaudRate1")),
+                    *(WndProperty *)form.FindByName(_T("TCPPort1")),
                     *(WndProperty *)form.FindByName(_T("prpComDevice1")));
 
   SetupDeviceFields(device_config[1],
                     *(WndProperty *)form.FindByName(_T("prpComPort2")),
                     *(WndProperty *)form.FindByName(_T("prpComSpeed2")),
                     *(WndProperty *)form.FindByName(_T("BulkBaudRate2")),
+                    *(WndProperty *)form.FindByName(_T("TCPPort2")),
                     *(WndProperty *)form.FindByName(_T("prpComDevice2")));
 
   LoadFormProperty(form, _T("prpSetSystemTimeFromGPS"),
@@ -631,6 +660,7 @@ DevicesConfigPanel::Save(bool &_changed, bool &_require_restart)
                        *(WndProperty *)form.FindByName(_T("prpComPort1")),
                        *(WndProperty *)form.FindByName(_T("prpComSpeed1")),
                        *(WndProperty *)form.FindByName(_T("BulkBaudRate1")),
+                       *(WndProperty *)form.FindByName(_T("TCPPort1")),
                        *(WndProperty *)form.FindByName(_T("prpComDevice1")));
 
   DevicePortChanged =
@@ -638,6 +668,7 @@ DevicesConfigPanel::Save(bool &_changed, bool &_require_restart)
                        *(WndProperty *)form.FindByName(_T("prpComPort2")),
                        *(WndProperty *)form.FindByName(_T("prpComSpeed2")),
                        *(WndProperty *)form.FindByName(_T("BulkBaudRate2")),
+                       *(WndProperty *)form.FindByName(_T("TCPPort2")),
                        *(WndProperty *)form.FindByName(_T("prpComDevice2"))) ||
     DevicePortChanged;
 

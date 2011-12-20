@@ -86,7 +86,8 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
     return _("Built-in GPS");
 
   case PortType::TCP_LISTENER:
-    return _T("TCP port 4353");
+    _sntprintf(buffer, max_size, _T("TCP port %d"), tcp_port);
+    return buffer;
   }
 
   /* unreachable */
@@ -195,6 +196,10 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("IOIOUartID"));
   Get(buffer, config.ioio_uart_id);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("TCPPort"));
+  if (!Get(buffer, config.tcp_port))
+    config.tcp_port = 4353;
 
   config.path.clear();
   if (config.port_type == DeviceConfig::PortType::SERIAL &&
@@ -313,6 +318,9 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("BulkBaudRate"));
   Set(buffer, config.bulk_baud_rate);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("TCPPort"));
+  Set(buffer, config.tcp_port);
 
   _tcscpy(buffer, _T("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;

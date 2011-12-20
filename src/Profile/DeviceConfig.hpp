@@ -113,6 +113,11 @@ struct DeviceConfig {
   StaticString<32> driver_name;
 
   /**
+   * The TCP server port number.
+   */
+  unsigned tcp_port;
+
+  /**
    * Does this port type use a baud rate?
    */
   static bool UsesSpeed(PortType port_type) {
@@ -143,6 +148,17 @@ struct DeviceConfig {
     return UsesDriver(port_type);
   }
 
+  /**
+   * Does this port type use a tcp port?
+   */
+  static bool UsesTCPPort(PortType port_type) {
+    return port_type == PortType::TCP_LISTENER;
+  }
+
+  bool UsesTCPPort() const {
+    return UsesDriver(port_type);
+  }
+
   bool IsDriver(const TCHAR *name) const {
     return UsesDriver() && driver_name.equals(name);
   }
@@ -158,6 +174,7 @@ struct DeviceConfig {
   void Clear() {
     port_type = PortType::DISABLED;
     baud_rate = 4800u;
+    tcp_port = 4353u;
     path.clear();
     bluetooth_mac.clear();
     driver_name.clear();

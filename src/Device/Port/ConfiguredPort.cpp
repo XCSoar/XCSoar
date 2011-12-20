@@ -150,7 +150,7 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
     break;
 
   case DeviceConfig::PortType::TCP_LISTENER: {
-    TCPPort *port = new TCPPort(4353, handler);
+    TCPPort *port = new TCPPort(config.tcp_port, handler);
     if (!port->Open()) {
       delete port;
       return NULL;
