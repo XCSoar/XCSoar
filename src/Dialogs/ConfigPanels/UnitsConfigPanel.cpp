@@ -32,6 +32,7 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
 #include "Dialogs/ComboPicker.hpp"
+#include "Units/Units.hpp"
 #include "Units/UnitsStore.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
@@ -207,9 +208,9 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   WndProperty *wp = (WndProperty*)form.FindByName(_T("prpUnitsSpeed"));
   assert(wp != NULL);
   DataFieldEnum *dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->addEnumText(_("mph"));
+  dfe->addEnumText(_T("mph"));
   dfe->addEnumText(_("knots"));
-  dfe->addEnumText(_("km/h"));
+  dfe->addEnumText(_T("km/h"));
   wp->RefreshDisplay();
 
   wp = (WndProperty*)form.FindByName(_T("prpUnitsLatLon"));
@@ -228,17 +229,17 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wp = (WndProperty*)form.FindByName(_T("prpUnitsTaskSpeed"));
   assert(wp != NULL);
   dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->addEnumText(_("mph"));
+  dfe->addEnumText(_T("mph"));
   dfe->addEnumText(_("knots"));
-  dfe->addEnumText(_("km/h"));
+  dfe->addEnumText(_T("km/h"));
   wp->RefreshDisplay();
 
   wp = (WndProperty*)form.FindByName(_T("prpUnitsDistance"));
   assert(wp != NULL);
   dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->addEnumText(_("sm"));
-  dfe->addEnumText(_("nm"));
-  dfe->addEnumText(_("km"));
+  dfe->addEnumText(_T("sm"));
+  dfe->addEnumText(_T("nm"));
+  dfe->addEnumText(_T("km"));
   wp->RefreshDisplay();
 
   wp = (WndProperty*)form.FindByName(_T("prpUnitsAltitude"));
@@ -251,24 +252,24 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wp = (WndProperty*)form.FindByName(_T("prpUnitsTemperature"));
   assert(wp != NULL);
   dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->addEnumText(_("C"));
-  dfe->addEnumText(_("F"));
+  dfe->addEnumText(_T(DEG "C"));
+  dfe->addEnumText(_T(DEG "F"));
   wp->RefreshDisplay();
 
   wp = (WndProperty*)form.FindByName(_T("prpUnitsLift"));
   assert(wp != NULL);
   dfe = (DataFieldEnum*)wp->GetDataField();
   dfe->addEnumText(_("knots"));
-  dfe->addEnumText(_("m/s"));
-  dfe->addEnumText(_("ft/min"));
+  dfe->addEnumText(_T("m/s"));
+  dfe->addEnumText(_T("ft/min"));
   wp->RefreshDisplay();
 
   UpdateUnitFields(CommonInterface::GetUISettings().units);
 
   static gcc_constexpr_data StaticEnumChoice pressure_labels_list[] = {
-    { unHectoPascal, N_("hPa") },
-    { unMilliBar, N_("mb") },
-    { unInchMercury, N_("inHg") },
+    { unHectoPascal, _T("hPa") },
+    { unMilliBar, _T("mb") },
+    { unInchMercury, _T("inHg") },
     { 0 }
   };
 
