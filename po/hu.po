@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-20 19:50+0100\n"
-"PO-Revision-Date: 2011-12-20 19:55+0100\n"
+"PO-Revision-Date: 2011-12-20 20:02+0000\n"
 "Last-Translator: Úr Balázs <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-31 07:28+0000\n"
-"X-Generator: Launchpad (build 14197)\n"
+"X-Launchpad-Export-Date: 2011-12-20 22:28+0000\n"
+"X-Generator: Launchpad (build 14538)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -52,9 +52,8 @@ msgid "Airspace"
 msgstr "Légtér"
 
 #: src/Airspace/AirspaceParser.cpp:875
-#, fuzzy
 msgid "Unknown airspace filetype"
-msgstr "Ismeretlen file típus."
+msgstr ""
 
 #: src/ConditionMonitor/ConditionMonitorAATTime.cpp:50
 msgid "Expect early task arrival"
@@ -122,9 +121,8 @@ msgid "Declare task"
 msgstr "Feladat deklarálása"
 
 #: src/Logger/ExternalLogger.cpp:268
-#, fuzzy
 msgid "Failed to enable download mode."
-msgstr "Hiba a repülés letöltésekor."
+msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:269 src/Logger/ExternalLogger.cpp:278
 #: src/Logger/ExternalLogger.cpp:286 src/Logger/ExternalLogger.cpp:305
@@ -1010,23 +1008,21 @@ msgid "Indicated Airspeed reported by a supported external intelligent vario."
 msgstr "A külső intelligens variométer által jelzett műszer szerinti sebesség."
 
 #: src/InfoBoxes/Content/Factory.cpp:408
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Barometric altitude"
-msgstr "Vágási magasság"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:409
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alt. Baro."
-msgstr "Mgsg baro"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:410
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
 msgstr ""
-"Nyomásmérővel ellátott GPS vagy intelligens variométer által jelzett "
-"barometrikus magasság."
 
 #: src/InfoBoxes/Content/Factory.cpp:418
 #, no-c-format
@@ -2062,22 +2058,21 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:989
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr "FP magasság többlet"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:990
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP MC0 AltD"
-msgstr "FP többlet"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:991
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
-"A következő fordulópontba érkezés magassága a biztonsági magassághoz képest."
 
 #: src/InfoBoxes/Content/Factory.cpp:999
 #, no-c-format
@@ -2085,9 +2080,9 @@ msgid "Head wind component"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1000
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Head wind"
-msgstr "Irányszög"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1001
 #, no-c-format
@@ -2429,16 +2424,12 @@ msgid "Map and InfoBoxes"
 msgstr "Térkép és kijelzők"
 
 #: src/Renderer/MapItemListRenderer.cpp:94
-#, fuzzy
 msgid "Your Position"
-msgstr "Gép poziciója"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:178
-#, fuzzy
 msgid "Marker"
 msgstr ""
-"Jelet\n"
-"tesz"
 
 #: src/Renderer/MapItemListRenderer.cpp:184
 #, c-format
@@ -2446,14 +2437,12 @@ msgid "dropped at %s"
 msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:211
-#, fuzzy
 msgid "Thermal"
-msgstr "Termik nyereség"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:217
-#, fuzzy
 msgid "Avg. lift"
-msgstr "Átlag emelés"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:219
 #, c-format
@@ -2492,14 +2481,12 @@ msgid "Distance"
 msgstr "Táv"
 
 #: src/Renderer/WaypointListRenderer.cpp:120
-#, fuzzy
 msgid "Arrival Alt"
-msgstr "Érkezési magasság"
+msgstr ""
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:101
-#, fuzzy
 msgid "Elevation: "
-msgstr "Magasság"
+msgstr ""
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:119
 msgid "GPS not connected"
@@ -2938,9 +2925,8 @@ msgid ""
 msgstr ""
 
 #: src/Widgets/DeviceEditWidget.cpp:391
-#, fuzzy
 msgid "TCP Port"
-msgstr "Port"
+msgstr ""
 
 #: src/Widgets/DeviceEditWidget.cpp:402
 msgid "Driver"
@@ -3035,9 +3021,8 @@ msgid "Not connected"
 msgstr "Nincs kapcsolat"
 
 #: src/Dialogs/DeviceListDialog.cpp:204
-#, fuzzy
 msgid "Edit device"
-msgstr "Szöveg szerkesztése"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:273 src/Dialogs/dlgConfiguration.cpp:101
 #: Data/Input/default.xci:611 Data/Input/default.xci:1139
@@ -3112,9 +3097,8 @@ msgid "Monitor"
 msgstr ""
 
 #: src/Dialogs/PortMonitor.cpp:121
-#, fuzzy
 msgid "Port monitor"
-msgstr "Álló"
+msgstr ""
 
 #: src/Dialogs/PortMonitor.cpp:131 Data/Dialogs/dlgFlarmTrafficDetails.xml:11
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:12
@@ -3393,24 +3377,24 @@ msgid "Gauges"
 msgstr "Műszerek"
 
 #: src/Dialogs/dlgConfiguration.cpp:78
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task Defaults"
-msgstr "Alapértelmezett"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:79
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Look"
-msgstr "Keresés"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:85
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Orientation"
-msgstr "Tájolás siklásban"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:86
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Elements"
-msgstr "Térképelemek"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:87
 #, no-c-format
@@ -3428,9 +3412,9 @@ msgid "Route"
 msgstr "Útvonal"
 
 #: src/Dialogs/dlgConfiguration.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "FLARM, Other"
-msgstr "FLARM és más műszerek"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:95
 #, no-c-format
@@ -3438,19 +3422,19 @@ msgid "Task Rules"
 msgstr "Feladat szabályok"
 
 #: src/Dialogs/dlgConfiguration.cpp:96
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoint Types"
-msgstr "Fordulópont"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:97
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Language, Input"
-msgstr "Nyelv"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:98
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Screen Layout"
-msgstr "Elrendezés"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:99
 #, no-c-format
@@ -3476,9 +3460,9 @@ msgid "Units"
 msgstr "Mértékegységek"
 
 #: src/Dialogs/dlgConfiguration.cpp:110
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tracking"
-msgstr "Repirány"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:113
 #, no-c-format
@@ -3577,9 +3561,8 @@ msgid "Do you want to set this FLARM contact as your new teammate?"
 msgstr ""
 
 #: src/Dialogs/dlgFlarmTrafficDetails.cpp:206
-#, fuzzy
 msgid "New Teammate"
-msgstr "Az új csapattárs:"
+msgstr ""
 
 #: src/Dialogs/dlgHelp.cpp:63 Data/Dialogs/dlgComboPicker.xml:8
 #: Data/Dialogs/dlgComboPicker_L.xml:7 Data/Dialogs/dlgHelp.xml:3
@@ -3606,9 +3589,9 @@ msgid "Fix invalid"
 msgstr "Érvénytelen pozíció"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:40
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "2D fix"
-msgstr "3D pozíció"
+msgstr ""
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:42
 #, no-c-format
@@ -4579,9 +4562,8 @@ msgstr ""
 "élek valamelyikét a terület belsejéből."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:279
-#, fuzzy
 msgid "A straight line start gate.  Cross start gate from inside area to start"
-msgstr "Egy egyenes vonal. Startoláshoz keresztezze a terület belsejéből."
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:281
 msgid "A cylinder.  Exit area to start"
@@ -4660,9 +4642,8 @@ msgstr ""
 "Negyedkör alakú 1km sugarú szektor. Keresztezze egyik élét a befutáshoz."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:303
-#, fuzzy
 msgid "Cross finish gate line into area to finish"
-msgstr "Keresztezze a vonalat a befutáshoz."
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:305
 msgid "Enter cylinder to finish"
@@ -4816,9 +4797,8 @@ msgstr "A feladat így érvénytelen lesz."
 
 #: src/Dialogs/dlgWaypointDetails.cpp:265
 #: src/Dialogs/dlgWaypointDetails.cpp:298
-#, fuzzy
 msgid "Created Goto Task."
-msgstr "Új feladatot hoz létre?"
+msgstr ""
 
 #: src/Dialogs/dlgWaypointDetails.cpp:265
 #: src/Dialogs/dlgWaypointDetails.cpp:270
@@ -4939,19 +4919,16 @@ msgid "Temperature"
 msgstr "Hőmérséklet"
 
 #: src/Weather/NOAAFormatter.cpp:132 src/Weather/NOAAFormatter.cpp:139
-#, fuzzy
 msgid "Dew Point"
-msgstr "Új Fordulópont"
+msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
-#, fuzzy
 msgid "Pressure"
-msgstr "Nyomás magasság"
+msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:166
-#, fuzzy
 msgid "Visibility"
-msgstr "Címke láthatóság"
+msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:175
 #, c-format
@@ -5643,9 +5620,8 @@ msgid "Clear All"
 msgstr "Az összes törlése"
 
 #: Data/Dialogs/dlgMapItemList.xml:3 Data/Dialogs/dlgMapItemList_L.xml:3
-#, fuzzy
 msgid "Map elements at this location"
-msgstr "Légterek ezen a helyen"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:273 Data/Dialogs/dlgVario_L.xml:272
 msgid "UTC offset"
@@ -6018,9 +5994,8 @@ msgstr "Frekv."
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeSetup.xml:8
 #: Data/Dialogs/Infobox/pnlInfoBoxMacCreadySetup.xml:5
 #: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:12
-#, fuzzy
 msgid "Switch InfoBox"
-msgstr "Kijelzők beállítása"
+msgstr ""
 
 #: Data/Dialogs/dlgPlanePolar.xml:10 Data/Dialogs/dlgPlanePolar_L.xml:10
 msgid "Polar V"
@@ -6176,9 +6151,8 @@ msgid "Trail drift"
 msgstr "Sodrás"
 
 #: Data/Dialogs/dlgConfiguration.xml:16 Data/Dialogs/dlgConfiguration_L.xml:16
-#, fuzzy
 msgid "Configuration Menu"
-msgstr "Beállítások"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:353 Data/Dialogs/dlgVario_L.xml:352
 msgid "Interval; info"
@@ -6848,9 +6822,8 @@ msgid "Aircraft Status"
 msgstr "Repülőgép Státusz"
 
 #: Data/Input/default.xci:619 Data/Input/default.xci:1147
-#, fuzzy
 msgid "Setup Plane"
-msgstr "Beállítás mód"
+msgstr ""
 
 #: Data/Input/default.xci:481 Data/Input/default.xci:1075
 msgid "Topo."
@@ -6932,11 +6905,10 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:513
-#, fuzzy
 msgid ""
 "MacCready\n"
 "-"
-msgstr "MacCready"
+msgstr ""
 
 #: Data/Input/default.xci:384 Data/Input/default.xci:1019
 msgid ""
@@ -7122,9 +7094,8 @@ msgid ""
 msgstr "Közelít"
 
 #: Data/Input/default.xci:913
-#, fuzzy
 msgid "Return"
-msgstr "Fordulásra kész"
+msgstr ""
 
 #: Data/Input/default.xci:303 Data/Input/default.xci:352
 #: Data/Input/default.xci:864
@@ -7152,11 +7123,10 @@ msgstr ""
 "kód"
 
 #: Data/Input/default.xci:506
-#, fuzzy
 msgid ""
 "MacCready\n"
 "+"
-msgstr "MacCready"
+msgstr ""
 
 #: Data/Input/default.xci:64
 msgid "Landing"
@@ -7168,1285 +7138,11 @@ msgid ""
 "TAF"
 msgstr ""
 
-#~ msgid "mph"
-#~ msgstr "mérföld/óra"
-
-#~ msgid "km/h"
-#~ msgstr "km/óra"
-
-#~ msgid "sm"
-#~ msgstr "angol mérföld"
-
-#~ msgid "nm"
-#~ msgstr "tengeri mérföld"
-
-#~ msgid "km"
-#~ msgstr "km"
-
-#~ msgid "C"
-#~ msgstr "Celsius"
-
-#~ msgid "F"
-#~ msgstr "Fahrenheit"
-
-#~ msgid "m/s"
-#~ msgstr "méter/mp"
-
-#~ msgid "ft/min"
-#~ msgstr "láb/perc"
+#~ msgid "Unknown Filetype."
+#~ msgstr "Ismeretlen file típus."
 
 #~ msgid "OK to invalidate declaration?"
 #~ msgstr "Törli a feladatot?"
-
-#~ msgid "Task declared"
-#~ msgstr "Feladat deklarálva"
-
-#~ msgid "Pan mode on"
-#~ msgstr "Görgetés BE"
-
-#~ msgid "Pan mode off"
-#~ msgstr "Görgetés KI"
-
-#~ msgid "Map Projection"
-#~ msgstr "Térkép megjelenítés"
-
-#~ msgid "Waypoint Display"
-#~ msgstr "Fordulópont megjelenítés"
-
-#~ msgid "Terrain Display"
-#~ msgstr "Terep megjelenítés"
-
-#~ msgid "Vario Gauge"
-#~ msgstr "Varió kijelző"
-
-#~ msgid "Default Task Rules"
-#~ msgstr "Feladatszabályok alapértékei"
-
-#~ msgid "Default Task Turnpoint Types"
-#~ msgstr "Fordulópont típusok alapértékei"
-
-#~ msgid "User Interface"
-#~ msgstr "Kezelőfelület"
-
-#~ msgid "Interface Appearance"
-#~ msgstr "Kezelőfelület külleme"
-
-#~ msgid "Length"
-#~ msgstr "Hossz"
-
-#~ msgid "V rough air"
-#~ msgstr "Megengedett seb."
-
-#~ msgid ""
-#~ "If set to ON the snail trail width is scaled according to the vario "
-#~ "signal."
-#~ msgstr ""
-#~ "Bekapcsolt állapotban a nyomvonal szélessége arányos lesz a varió jelével."
-
-#~ msgid "Time step circling"
-#~ msgstr "Mintavétel körözésben"
-
-#~ msgid "Logger ID"
-#~ msgstr "Logger azonosító"
-
-#~ msgid ""
-#~ "The STF risk factor reduces the MacCready setting used to calculate speed "
-#~ "to fly as the glider gets low, in order to compensate for risk.  Set to "
-#~ "0.0 for no compensation, 1.0 scales MC linearly with height."
-#~ msgstr ""
-#~ "A kockázati tényező csökkenti a tartandó sebesség számításához használt "
-#~ "MacCready értéket amikor a gép alacsonyra került, kompenzálva ezzel a "
-#~ "kockázatot. Állítsa 0.0-ra a kompenzálás elnyomásához, 1.0-ra a magasság "
-#~ "és a MC közötti lineáris összefüggéshez."
-
-#~ msgid "Filter"
-#~ msgstr "Szűrő"
-
-#~ msgid "Ignore checksum"
-#~ msgstr "Kontrollszám érdektelen"
-
-#~ msgid "Scale runway length"
-#~ msgstr "Futópálya méretében"
-
-#~ msgid "Defines the color ramp used in terrain rendering."
-#~ msgstr "A terep megjelenítése során használt színskála."
-
-#~ msgid "Dump time"
-#~ msgstr "Kiengedési idő"
-
-#~ msgid "Page 1"
-#~ msgstr "1. oldal"
-
-#~ msgid "The file name of the primary airspace file."
-#~ msgstr "Az elsődleges légtér fájl neve."
-
-#~ msgid "Start Anyway"
-#~ msgstr "Start bárhogyan"
-
-#~ msgid "Speed arrows"
-#~ msgstr "Sebesség nyilak"
-
-#~ msgid ""
-#~ "Defines the brightness (whiteness) of the terrain rendering.  This "
-#~ "controls the average illumination of the terrain."
-#~ msgstr ""
-#~ "A terep megjelenítésének fényességét (fehérségét) állítja. Ettől függ a "
-#~ "terep átlagos megvilágítottsága."
-
-#~ msgid "Show bugs"
-#~ msgstr "Bogárpiszok kijelzése"
-
-#~ msgid ""
-#~ "Optional the amount of water ballast XCSoar refers to as 100% ballast. "
-#~ "Set to zero if it does not apply."
-#~ msgstr ""
-#~ "Az XCSoar által 100%-nak jelölt vízballaszt mennyisége. Állítsa nullára, "
-#~ "ha nincs ilyen."
-
-#~ msgid "Page 8"
-#~ msgstr "8. oldal"
-
-#~ msgid "Terrain file"
-#~ msgstr "Domborzat"
-
-#~ msgid "Specifies the mode for filling the airspace area."
-#~ msgstr "Légtér kiszínezésének módja."
-
-#~ msgid "Auto wind"
-#~ msgstr "Aut. szél számítás"
-
-#~ msgid ""
-#~ "The UTC offset field allows the UTC local time offset to be specified.  "
-#~ "The local time is displayed below in order to make it easier to verify "
-#~ "the correct offset has been entered."
-#~ msgstr ""
-#~ "A helyi időzóna, az UTC-hez képesti eltolás beállítása. Alul látszik a "
-#~ "számított helyi idő, ami segít a megfelelő eltolást beállítani."
-
-#~ msgid "Debounce time"
-#~ msgstr "Billentyűismétlés"
-
-#~ msgid "Time step cruise"
-#~ msgstr "Mintavétel siklásban"
-
-#~ msgid ""
-#~ "If set to \"None\", neither airspace or terrain is used for route "
-#~ "planning.  If set to \"Terrain\", routes will avoid terrain; if set to "
-#~ "\"Airspace\", routes will avoid airspace.  If set to \"Both\", routes "
-#~ "will avoid airspace and terrain."
-#~ msgstr ""
-#~ "\"Semmi\" esetén sem a légterek, sem a domborzat nem lesz figyelembe véve "
-#~ "az útvonaltervezésnél. \"Terep\" esetén az útvonal elkerüli a "
-#~ "domborzatot, \"Légtér\" esetén a légtereket. \"Minden\" esetén kikerüli "
-#~ "mindezeket."
-
-#~ msgid "On-Line Contest"
-#~ msgstr "OnLine Verseny"
-
-#~ msgid ""
-#~ "This determines how long menus will appear on screen if the user does not "
-#~ "make any button presses or interacts with the computer."
-#~ msgstr ""
-#~ "Ez határozza meg, hogy a menük milyen hosszú ideig maradjanak a "
-#~ "képernyőn, ha a kezelő nem nyom meg egy gombot sem."
-
-#~ msgid "Reach mode"
-#~ msgstr "Elérhető"
-
-#~ msgid "Terrain contrast"
-#~ msgstr "Kontraszt"
-
-#~ msgid ""
-#~ "This is the minimum interval between the system recognising key presses. "
-#~ "Set this to a low value for a more responsive user interface; if it is "
-#~ "too low, then accidental multiple key presses can occur."
-#~ msgstr ""
-#~ "Ez a minimális időtartam két billentyűleütés felismerése között. Alacsony "
-#~ "értékre állítva fürgébb kezelőfelületet kap, túl alacsony érték esetén "
-#~ "véletlen többszörözés fordulhat elő."
-
-#~ msgid "Topography file"
-#~ msgstr "Térképjelek"
-
-#~ msgid "Page 2"
-#~ msgstr "2. oldal"
-
-#~ msgid "Events"
-#~ msgstr "Eseménykezelés"
-
-#~ msgid ""
-#~ "[Off] Display fixed icons for landables.\n"
-#~ "[On] Show landables with variable information like runway length and "
-#~ "heading."
-#~ msgstr ""
-#~ "[KI] Egy ikont jelenít meg a leszállóhelyeken.\n"
-#~ "[BE] A leszállóhelyeket különféle információkkal együtt jeleníti meg, "
-#~ "mint pálya hossza, iránya."
-
-#~ msgid ""
-#~ "This is the time before an airspace incursion is estimated at which the "
-#~ "system will warn the pilot."
-#~ msgstr "Egy légtér megsértése előtt ennyi idővel figyelmezteti a pilótát."
-
-#~ msgid ""
-#~ "Three styles are available: Purple circles (WinPilot style), a high "
-#~ "contrast (monochrome) style, or orange. The rendering differs for "
-#~ "landable field and airport. All styles mark the waypoints within reach "
-#~ "green."
-#~ msgstr ""
-#~ "Három stílus létezik: lila pontok (WinPilot stílus), kontrasztos (fekete-"
-#~ "fehér) vagy narancs. A leszállóhelyek másképp jelennek meg mint a "
-#~ "repülőterek. Mindegyik stílusban az elérhető helyeket zöld színnel "
-#~ "keretezi."
-
-#~ msgid "The file name of the secondary airspace file."
-#~ msgstr ""
-#~ "A másodlagos légtérfájl neve. Ezzel egy versenyen időleges légtereket "
-#~ "adhat a többihez."
-
-#~ msgid "Reference weight at which the given polar is valid."
-#~ msgstr ""
-#~ "Az a referenciasúly, amely mellett a megadott sebességpoláris érvényes."
-
-#~ msgid "The handicap factor used for the OnLine Contest scoring."
-#~ msgstr "Az OnLine verseny értékelése során alkalmazandó handicap faktor."
-
-#~ msgid "Use black outline"
-#~ msgstr "Fekete keret"
-
-#~ msgid "Default radius or length of the start zone for new tasks."
-#~ msgstr "Az startzóna új feladatokban felkínált sugara vagy hossza."
-
-#~ msgid ""
-#~ "How calculations are performed of the reach of the glider with respect to "
-#~ "terrain.\n"
-#~ "[Off] Reach calculations disabled.\n"
-#~ "[Straight] The reach is from straight line paths from the glider.\n"
-#~ "[Turning] The reach is calculated allowing turns around terrain obstacles."
-#~ msgstr ""
-#~ "Az elérhető terület kiszámításának módja.\n"
-#~ "[KI] Számítások letiltva.\n"
-#~ "[EGYENESEN] Az egyenes vonalú repülésben elérhető terület.\n"
-#~ "[KERÜLŐKKEL] A terepakadályok megkerülésével elérhető terület."
-
-#~ msgid ""
-#~ "This determines whether the glide reach is drawn as a line on the map "
-#~ "area:\n"
-#~ "[Off] Disables display\n"
-#~ "[Line] Draws a dashed line at the glide reach\n"
-#~ "[Shade] Shades terrain outside glide reach"
-#~ msgstr ""
-#~ "A siklásban elérhető terület kirajzolásának módja.\n"
-#~ "[KI] Kirajzolás letiltva\n"
-#~ "[VONAL] A terület peremét szaggatott vonal jelzi.\n"
-#~ "[ÁRNYÉK] A területen kívüli terep árnyékolva lesz."
-
-#~ msgid ""
-#~ "The file may contain extracts from enroute supplements or other "
-#~ "contributed information about individual waypoints and airfields."
-#~ msgstr ""
-#~ "A fájl kiegészítő információkat tartalmazhat fordulópontokról és "
-#~ "repülőterekről."
-
-#~ msgid ""
-#~ "Here you can decide on how many seconds of flight this calculation must "
-#~ "be done. Normally for gliders a good value is 90-120 seconds, and for "
-#~ "paragliders 15 seconds."
-#~ msgstr ""
-#~ "Itt eldöntheti, hogy a repülés hanyadik másodpercében történjen meg ez a "
-#~ "számítás. Vitorlázógépek esetében a 90-120 mp., siklóernyők esetében a 15 "
-#~ "mp. általában a megfelelő érték."
-
-#~ msgid "Topography display"
-#~ msgstr "Topográfia"
-
-#~ msgid ""
-#~ "This determines whether the logger uses the short IGC file name or the "
-#~ "long IGC file name. Example short name (81HXABC1.IGC), long name "
-#~ "(2008-01-18-XXX-ABC-01.IGC)."
-#~ msgstr ""
-#~ "Ez határozza meg, hogy a logger a rövid vagy a hosszú IGC fájlnevet "
-#~ "használja. Példa rövid fájlnév: (81HXABC1.IGC), hosszú fájlnév: "
-#~ "(2008-01-18-XXX-ABC-01.IGC)"
-
-#~ msgid "Route ceiling"
-#~ msgstr "Útvonal teteje"
-
-#~ msgid "Draw topographical features (roads, rivers, lakes etc.) on the map."
-#~ msgstr "Topográfia (utak, folyók, tavak, stb) megjelenítése a térképen."
-
-#~ msgid ""
-#~ "Sets the symbol used for the aircraft.\n"
-#~ "[Simple] Simplified line graphics, black with white contours.\n"
-#~ "[Simple (large)] Enlarged simple graphics.\n"
-#~ "[Detailed] Rendered aircraft graphics."
-#~ msgstr ""
-#~ "A repülőgépet megjelenítő szimbólum beállítása.\n"
-#~ "[Egyszerű] Egyszerűsített vonalas grafika, fekete szín fehér "
-#~ "körvonallal.\n"
-#~ "[Egyszerű (nagy)] Felnagyított egyszerű grafika.\n"
-#~ "[Részletes] Finom rajzolatú, számított grafika."
-
-#~ msgid "Show average"
-#~ msgstr "Átlag kijelzése"
-
-#~ msgid "Page 7"
-#~ msgstr "7. oldal"
-
-#~ msgid "Finish point"
-#~ msgstr "Célpont"
-
-#~ msgid ""
-#~ "Determines the way the wind arrow is drawn on the map.\n"
-#~ "[Arrow head] Draws an arrow head only\n"
-#~ "[Full arrow] Draws an arrow head with a dashed arrow line"
-#~ msgstr "Meghatározza a szél megjelenítésének módját a térképen."
-
-#~ msgid "This is the time interval between logged points when not circling."
-#~ msgstr "Ez a naplózás üteme, amikor nincs körözés."
-
-#~ msgid ""
-#~ "Safety margin for AAT task optimisation.  Optimisation seeks to complete "
-#~ "the task at the minimum time plus this margin time."
-#~ msgstr ""
-#~ "Biztonsági időtartalék a hozzárendelt területes (HT) feladatok "
-#~ "optimizálásához. Az optimumszámítás a legrövidebb időnek ezzel a "
-#~ "tartalékkal megnövelt értékéhez igazítja a feladat végrehajtását."
-
-#~ msgid ""
-#~ "Enables the automatic starting and stopping of logger on takeoff and "
-#~ "landing respectively. Disable when flying paragliders."
-#~ msgstr ""
-#~ "A logger automatikus elindulását és leállását engedélyezi fel- és "
-#~ "leszálláskor. Függővitorlákon ki kell kapcsolni."
-
-#~ msgid ""
-#~ "For clip airspace mode, this is the altitude below which airspace is "
-#~ "displayed."
-#~ msgstr ""
-#~ "Amikor a légterek megjelenítése vágásra van állítva, az itt megadott "
-#~ "szint alatti légterek lesznek megjelenítve."
-
-#~ msgid "Waypoint details"
-#~ msgstr "FP részletek"
-
-#~ msgid "Start max. height margin"
-#~ msgstr "Magasság tűrése"
-
-#~ msgid "Determines display size of dialogs."
-#~ msgstr "A párbeszédablakok méretét, helyét határozza meg."
-
-#~ msgid "Landable symbols"
-#~ msgstr "Szimbólum"
-
-#~ msgid ""
-#~ "The MacCready setting used, when safety MC is enabled for reach "
-#~ "calculations, in task abort mode and for determining arrival altitude at "
-#~ "airfields."
-#~ msgstr ""
-#~ "Ezzel a MacCready értékkel kerülnek meghatározásra feladat megszakítása "
-#~ "esetén az elérhető leszállóhelyek és érkezési magasságok."
-
-#~ msgid "FLARM traffic"
-#~ msgstr "FLARM forgalom"
-
-#~ msgid "Rotate the display on devices that support it."
-#~ msgstr ""
-#~ "Automatikusan elforgatja a kijelző tájolását az ezt támogató készülékeken."
-
-#~ msgid "Airspace fill mode"
-#~ msgstr "Légtér kiszínezésének módja"
-
-#~ msgid "Determines whether tabbed dialogs use text or icons"
-#~ msgstr ""
-#~ "Meghatározza, hogy a többfüles dialógusablakok szöveget vagy ikonokat "
-#~ "használjanak."
-
-#~ msgid "Task Start"
-#~ msgstr "Feladat Start"
-
-#~ msgid ""
-#~ "Display the track bearing (ground track projection) on the map.\n"
-#~ "[Off] Disable display of track bearing.\n"
-#~ "[On] Always display track bearing.\n"
-#~ "[Auto] Display track bearing if there is a significant difference to "
-#~ "plane heading."
-#~ msgstr ""
-#~ "Megjeleníti a haladás irányát (annak felszíni vetületét) a térképen.\n"
-#~ "[KI] Nem jeleníti meg.\n"
-#~ "[BE] Mindig megjeleníti.\n"
-#~ "[AUTOMATA] Akkor jeleníti meg, ha lényegesen eltér az orriránytól."
-
-#~ msgid ""
-#~ "The name of the file (.xcm) containing terrain, topography, and "
-#~ "optionally waypoints, their details and airspaces."
-#~ msgstr ""
-#~ "A domborzatot, térképjeleket, esetleg fordulópontokat és részleteit "
-#~ "tartalmazófájl (.xcm) neve."
-
-#~ msgid "Status message"
-#~ msgstr "Üzenetek stílusa"
-
-#~ msgid "Wing area"
-#~ msgstr "Szárnyfelület"
-
-#~ msgid "Default radius of turnpoint cylinders and sectors in new tasks."
-#~ msgstr "Új feladatok henger alakú fordulópontjainál ekkora lesz a sugár."
-
-#~ msgid "Device A"
-#~ msgstr "Eszköz A"
-
-#~ msgid "Warning time"
-#~ msgstr "Riasztás időzítése"
-
-#~ msgid "Whether to show the ballast percentage."
-#~ msgstr "A vízballaszt arányának megjelenítése"
-
-#~ msgid ""
-#~ "The terrain can be shaded among slopes to indicate either wind direction, "
-#~ "sun position or a fixed shading from north-east."
-#~ msgstr ""
-#~ "A domborzat lejtői árnyalhatók vagy észak-dél irányban vagy a szél vagy a "
-#~ "Nap irányától függően."
-
-#~ msgid "Dry mass"
-#~ msgstr "Száraz tömeg"
-
-#~ msgid "The name of the file containing digital elevation terrain data."
-#~ msgstr "A terep digitális magasságadatait tartalmazó fájl neve."
-
-#~ msgid "Lift"
-#~ msgstr "Emelkedés"
-
-#~ msgid ""
-#~ "Type of primary device. The primary device should be the most reliable "
-#~ "GPS data source."
-#~ msgstr ""
-#~ "Az elsődleges eszköz típusa. A legmegbízhatóbb GPS jelforrás legyen az "
-#~ "elsődleges eszköz."
-
-#~ msgid ""
-#~ "The status file can be used to define sounds to be played when certain "
-#~ "events occur, and how long various status messages will appear on screen."
-#~ msgstr ""
-#~ "A státusz fájlban adható meg, hogy milyen hangok kerüljenek lejátszásra "
-#~ "bizonyos események esetén és hogy különféle állapotjelzések mennyi ideig "
-#~ "jelenjenek meg a képernyőn."
-
-#~ msgid "Device B"
-#~ msgstr "Eszköz B"
-
-#~ msgid "Watched waypoints"
-#~ msgstr "Kiszemelt FP"
-
-#~ msgid "Auto. logger"
-#~ msgstr "Automatikus logger"
-
-#~ msgid "Default AAT min. time for new AAT tasks."
-#~ msgstr "Alap HT minimum idő, új hozzárendelt területes (HT) feladatokhoz."
-
-#~ msgid "More waypoints"
-#~ msgstr "Alkalmi FP"
-
-#~ msgid "Determines how labels are displayed with each waypoint"
-#~ msgstr "Fordulópont címke megjelenítés megadása"
-
-#~ msgid ""
-#~ "Maximum speed above maximum start speed to tolerate.  Set to 0 for no "
-#~ "tolerance."
-#~ msgstr ""
-#~ "A maximális startsebesség tűréshatára. Állítsa nullára ha nincs tűrés."
-
-#~ msgid "Trail type"
-#~ msgstr "Nyomvonal típusa"
-
-#~ msgid "Length of the OZ line."
-#~ msgstr "A megfigyelési vonal hossza."
-
-#~ msgid "Track bearing"
-#~ msgstr "Repülési irány"
-
-#~ msgid "Inverse InfoBoxes"
-#~ msgstr "Inverz kijelzők"
-
-#~ msgid ""
-#~ "Waypoint file containing special waypoints for which additional "
-#~ "computations like calculation of arrival height in map display always "
-#~ "takes place. Useful for waypoints like known reliable thermal sources (e."
-#~ "g. powerplants) or mountain passes."
-#~ msgstr ""
-#~ "Különleges fordulópontokat tartalmazó fájl, melyeket további számítások "
-#~ "használhatnak fel, mint például az érkezési magasság számítása. "
-#~ "Megbízható termiklelőhelyek (pl. erőművek), hágók, ilyesmik esetében "
-#~ "hasznos."
-
-#~ msgid ""
-#~ "Maximum height above maximum start height to tolerate.  Set to 0 for no "
-#~ "tolerance."
-#~ msgstr ""
-#~ "A maximális startmagasság tűréshatára. Állítsa nullára, ha nincs tűrés."
-
-#~ msgid ""
-#~ "The MacCready setting used, when safety MC is enabled for reach "
-#~ "calculations, in task abort mode, for determining arrival altitude at "
-#~ "airfields."
-#~ msgstr ""
-#~ "A leszállóhelyek elérhetőségének, érkezési magasságának számításakor ez a "
-#~ "MacCready érték kerül felhasználásra, ha a feladatmegszakításhoz "
-#~ "engedélyezve van a biztonsági MC használata."
-
-#~ msgid "InfoBox border"
-#~ msgstr "Kijelző keret"
-
-#~ msgid "Route climb"
-#~ msgstr "Emelések az útvonalon"
-
-#~ msgid "Sets the type of the snail trail display."
-#~ msgstr "A nyomvonal megjelenítésének típusát állítja be."
-
-#~ msgid "Units used for task speeds."
-#~ msgstr "Feladat sebességéhez használt mértékegységek."
-
-#~ msgid ""
-#~ "When enabled and MC is positive, route planning allows climbs between the "
-#~ "aircraft location and destination."
-#~ msgstr ""
-#~ "Ha bekapcsoljuk és az MC érték pozitív, az útvonaltervező emelésekkel "
-#~ "számol a gép helyzete és az úticél között."
-
-#~ msgid ""
-#~ "Whether to show the average climb rate.  In cruise mode, this switches to "
-#~ "showing the average netto airmass rate."
-#~ msgstr ""
-#~ "Az átlagos emelkedés arányának kijelzését szabályozza. Siklásban ez az "
-#~ "átlagos nettó légtömegre kapcsol."
-
-#~ msgid "Auto. blank"
-#~ msgstr "Auto elsötétítés"
-
-#~ msgid "Detour cost markers"
-#~ msgstr "Eltérés költsége"
-
-#~ msgid "Terrain brightness"
-#~ msgstr "Fényerő"
-
-#~ msgid ""
-#~ "If the aircraft heading deviates from the current waypoint, markers are "
-#~ "displayed at points ahead of the aircraft. The value of each marker is "
-#~ "the extra distance required to reach that point as a percentage of "
-#~ "straight-line distance to the waypoint."
-#~ msgstr ""
-#~ "Ha az orrirány eltér az útiránytól, akkor jelzések jelennek meg a gép "
-#~ "előtti pontokon. Mindegyik jelzés azt mutatja, hogy mennyivel hosszabb út "
-#~ "kell annak a pontnak az eléréshez a fordulóponthoz vezető egyenes út "
-#~ "hosszához képest."
-
-#~ msgid ""
-#~ "A list of possible InfoBox layouts. Do some trials to find the best for "
-#~ "your screen size."
-#~ msgstr ""
-#~ "A lehetséges kijelző-elrendezések listája. Végezzen néhány próbát a "
-#~ "képernyőmérethez legalkalmasabb elrendezés megtalálásához."
-
-#~ msgid "External wind"
-#~ msgstr "Külső széladat"
-
-#~ msgid "InfoBox Access"
-#~ msgstr "Hozzáférés a kijelzőkhöz"
-
-#~ msgid ""
-#~ "Whether to show speed command arrows on the vario gauge.  When shown, in "
-#~ "cruise mode, arrows point up to command slow down; arrows point down to "
-#~ "command speed up."
-#~ msgstr ""
-#~ "A sebességi utasítások variométerben történő megjelenítését szabályozza. "
-#~ "Megjelenítéskor, siklásban, a felfele mutató nyíl lassításra, a lefele "
-#~ "mutató nyíl gyorsításra utasít."
-
-#~ msgid "Declared"
-#~ msgstr "Deklarálva"
-
-#~ msgid ""
-#~ "AA Speed - Assigned Area Task average speed achievable around target "
-#~ "points remaining in minimum AAT time."
-#~ msgstr ""
-#~ "HT seb - hozzárendelt területes feladatban a maradék minimum HT időben a "
-#~ "pontok körberepülésével elérhető átlagsebesség."
-
-#~ msgid "Device model"
-#~ msgstr "Eszköz tipus"
-
-#~ msgid ""
-#~ "If enabled, then the wind vector received from external devices overrides "
-#~ "XCSoar's internal wind calculation."
-#~ msgstr ""
-#~ "Ha engedélyezve van, a külső eszközből származó széladat felülírja az "
-#~ "XCSoar saját számításait."
-
-#~ msgid "Airspace display"
-#~ msgstr "Légterek kijelzése"
-
-#~ msgid "The time in seconds to dump full ballast."
-#~ msgstr "A vízballaszt kieresztésének időszükséglete másodpercben."
-
-#~ msgid "Tab dialog style"
-#~ msgstr "Füles ablakok stílusa"
-
-#~ msgid "Specifies the file defining the topographical features."
-#~ msgstr "A topográfiai adatokat tartalmazó fájl."
-
-#~ msgid ""
-#~ "If enabled sets the clock of the computer to the GPS time once a fix is "
-#~ "set. This is only necessary if your computer does not have a real-time "
-#~ "clock with battery backup or your computer frequently runs out of battery "
-#~ "power or otherwise loses time."
-#~ msgstr ""
-#~ "Az eszköz óráját a GPS-ből vett időhöz igazítja. Ez csak akkor szükséges, "
-#~ "ha az eszköznek nincs elemről táplált órája vagy az gyakran lemerül vagy "
-#~ "más ok miatt elfelejti a pontos időt."
-
-#~ msgid "This enables the display of the thermal assistant gauge."
-#~ msgstr "A termiksegéd megjelenését szabályozza."
-
-#~ msgid "A percentage to select the size landables are displayed on the map."
-#~ msgstr ""
-#~ "A leszállóhelyek térképen történő kirajzolásának méretét szabályozza."
-
-#~ msgid ""
-#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
-#~ "data to be used anyway"
-#~ msgstr ""
-#~ "Ez engedélyezi az adatok felhasználását akkor is, ha a GPS eszköz "
-#~ "érvénytelen NMEA kontrollszámot ad."
-
-#~ msgid "Enable/disable all airspace warnings."
-#~ msgstr "Engedélyezi vagy letiltja az összes légtér-riasztást."
-
-#~ msgid "Auto close FLARM"
-#~ msgstr "FLARM autmata bezárása"
-
-#~ msgid "Default start type for new tasks you create."
-#~ msgstr "Új feladatok alap starttípusa."
-
-#~ msgid ""
-#~ "When enabled and if connected to a barometric altimeter, barometric "
-#~ "altitude is used for all navigation functions. Otherwise GPS altitude is "
-#~ "used."
-#~ msgstr ""
-#~ "Ha engedélyezve van és egy barometrikus magasságmérő csatlakozik, a "
-#~ "barometrikus magasság lesz felhasználva minden navigációs számításhoz. "
-#~ "Ellenkező esetben a GPS magasságot használja."
-
-#~ msgid "Route mode"
-#~ msgstr "Útvonaltervezés módja"
-
-#~ msgid ""
-#~ "This enables the display of the FLARM radar gauge. The track bearing of "
-#~ "the target relative to the track bearing of the aircraft is displayed as "
-#~ "an arrow head, and a triangle pointing up or down shows the relative "
-#~ "altitude of the target relative to you. In all modes, the color of the "
-#~ "target indicates the threat level."
-#~ msgstr ""
-#~ "Ez engedélyezi a FLARM radarkijelzőt. Nyílhegy formában kerül kijelzésre "
-#~ "az útirány eltérése a gép haladási irányától és egy fel vagy lefele "
-#~ "mutató háromszög utal a cél relatív magasságára a géphez képest. A cél "
-#~ "színe minden üzemmódban a fenyegetettség szintjére utal."
-
-#~ msgid "STF risk factor"
-#~ msgstr "Magasságvesztés kockázata"
-
-#~ msgid "Acknowledge time"
-#~ msgstr "Nyugtázás érvénye"
-
-#~ msgid ""
-#~ "The height above terrain that the glider must clear during final glide."
-#~ msgstr "A végsiklás közben a terep felett megőrizendő magasság."
-
-#~ msgid ""
-#~ "If enabled, the command speed in cruise is set to the MacCready speed to "
-#~ "fly in no vertical air-mass movement. If disabled, the command speed in "
-#~ "cruise is set to the dolphin speed to fly, equivalent to the MacCready "
-#~ "speed with vertical air-mass movement."
-#~ msgstr ""
-#~ "Ha engedélyezve van, a siklás közbeni sebesség utasítások a függőleges "
-#~ "légmozgás nélküli MacCready sebességre utasítanak. Ha nincs engedélyezve, "
-#~ "delfinezésre utasítanak, ami a függőleges légmozgás szerinti MacCready "
-#~ "sebesség."
-
-#~ msgid "Reference mass"
-#~ msgstr "Referencia tömeg"
-
-#~ msgid "Terrain height"
-#~ msgstr "Terep feletti bizt. mag."
-
-#~ msgid ""
-#~ "If true, certain InfoBoxes will have coloured text.  For example, the "
-#~ "active waypoint infobox will be blue when the glider is above final glide."
-#~ msgstr ""
-#~ "Ha igaz, bizonyos kijelzők felirata színes lesz. Például az aktív "
-#~ "fordulópont kijelzője kék lesz, ha a siklópálya felett vagyunk."
-
-#~ msgid "Terrain colors"
-#~ msgstr "Színek"
-
-#~ msgid "Load Preset"
-#~ msgstr "Készlet betöltése"
-
-#~ msgid "This is the time interval between logged points when circling."
-#~ msgstr "Körözés közben ilyen sűrűn történik meg a helyzet naplózása."
-
-#~ msgid "Page 4"
-#~ msgstr "4. oldal"
-
-#~ msgid ""
-#~ "This determines whether to blank the display after a long period of "
-#~ "inactivity when operating on internal battery power."
-#~ msgstr ""
-#~ "Egy hosszú inaktív időszak után kikapcsolja a képernyőt, ha a belső "
-#~ "telepről van táplálva a rendszer."
-
-#~ msgid "Dialog style"
-#~ msgstr "Párbeszédablak stílusa"
-
-#~ msgid "Altair Pro users should set this to Port 1."
-#~ msgstr "Altair Pro felhasználók állítsák ezt a Port1-re"
-
-#~ msgid "Show gross"
-#~ msgstr "Össz. emelés"
-
-#~ msgid ""
-#~ "[Off] Display fixed length for runways.\n"
-#~ "[On] Scale displayed runway length based on real length"
-#~ msgstr ""
-#~ "[KI] Azonos hosszúsággal ábrázolja a futópályákat.\n"
-#~ "[BE] A tényleges hosszal arányosan ábrázolja a futópályákat."
-
-#~ msgid "Whether to show the bugs percentage."
-#~ msgstr "Bogárpiszok kijelzése"
-
-#~ msgid "Task speed"
-#~ msgstr "Feladat sebesség"
-
-#~ msgid "Determines the information displayed on different screen pages."
-#~ msgstr "A különféle képernyőkön megjelenő információkat határozza meg."
-
-#~ msgid ""
-#~ "Optional the maximum manoeuvring speed can be entered on this page to "
-#~ "prevent the glide computer from commanding unrealistic cruise speeds."
-#~ msgstr ""
-#~ "A maximális manőverezési sebesség adható meg, hogy a siklókomputer ne "
-#~ "utasíthasson irreális siklási sebességekre. (megadható)"
-
-#~ msgid "Altair Pro or Vega users should set this to 38400."
-#~ msgstr "Altair Pro vagy Vega felhasználók állítsák ezt 38400-ra"
-
-#~ msgid "Default radius or length of the finish zone in new tasks."
-#~ msgstr "Új feladatokban a célzóna alap sugara vagy hossza."
-
-#~ msgid "Wind arrow"
-#~ msgstr "Szél nyíl"
-
-#~ msgid "Trail scaled"
-#~ msgstr "Nyomvonal méretezés"
-
-#~ msgid "If true, the InfoBoxes are white on black, otherwise black on white."
-#~ msgstr ""
-#~ "Ha igaz, a kijelzők fekete háttéren fehérek, egyébként fehér háttéren "
-#~ "feketék."
-
-#~ msgid ""
-#~ "Type of secondary device. The secondary device may be used as backup GPS "
-#~ "data or other data e.g. from an intelligent variometer. Generic can be "
-#~ "used for GPS sources including FLARM."
-#~ msgstr ""
-#~ "A másodlagos eszköz típusa. A másodlagos eszköz tartalék GPS jelként vagy "
-#~ "más forrásból, pl. intelligens variométerből származó jelként "
-#~ "használható. A Generic típus FLARM-ot tartalmazó GPS-hez is alkalmas."
-
-#~ msgid "Airspace transparency"
-#~ msgstr "Légtér átlátszóság"
-
-#~ msgid "Show MacReady"
-#~ msgstr "MacCready kijelzése"
-
-#~ msgid ""
-#~ "Controls filtering of airspace for display and warnings.  The airspace "
-#~ "filter button also allows filtering of display and warnings independently "
-#~ "for each airspace class.\n"
-#~ "[All on] All is displayed.\n"
-#~ "[Clip] Only airspace below the clip altitude.\n"
-#~ "[Auto] All within a margin of the glider.\n"
-#~ "[All below] All airspace below the glider."
-#~ msgstr ""
-#~ "A légterek megjelenítési és a figyelmeztetési szűrését szabályozza. A "
-#~ "légtér szűrő nyomógomb ugyancsak lehetővé teszi a megjelenítés és a "
-#~ "figyelmeztetés szűrését, osztályonként.\n"
-#~ "[MIND BE] Mind megjelenik.\n"
-#~ "[VÁGÁS] Csak a vágási szint alattiak.\n"
-#~ "[AUTOMATA] Mind, a gép magasságának egy tartományában.\n"
-#~ "[ALATTA MINDET] A gép alatt mind megjelenik."
-
-#~ msgid "Nav. by baro altitude"
-#~ msgstr "Nav. baro. mag. alapján"
-
-#~ msgid ""
-#~ "Select your PNA model to make full use of its hardware capabilities. If "
-#~ "it is not included, use Generic type."
-#~ msgstr ""
-#~ "Válassza ki a PNA modellt a hardverlehetőségek teljes kihasználása "
-#~ "érdekében. Ha nincs a listán, válassza a Generic típust."
-
-#~ msgid "Aircraft symbol"
-#~ msgstr "Repülőgép szimbólum"
-
-#~ msgid "Flap forces cruise"
-#~ msgstr "Ivelőlap siklást jelent"
-
-#~ msgid "Optimisation margin"
-#~ msgstr "Optimalizációs keret"
-
-#~ msgid ""
-#~ "The language options selects translations for English texts to other "
-#~ "languages. Select English for a native interface or Automatic to localise "
-#~ "XCSoar according to the system settings."
-#~ msgstr ""
-#~ "A nyelv kiválasztása az angol feliratokat fordítja le a választott "
-#~ "nyelvre. Válassza az angolt az eredeti feliratokhoz vagy az automatikust, "
-#~ "amely az eszköz területi beállításához igazítja a használt nyelvet."
-
-#~ msgid "Whether to show the gross climb rate."
-#~ msgstr "Össz. emelés kijelzése a variométerben."
-
-#~ msgid "Draw a digital elevation terrain on the map."
-#~ msgstr "Digitális domborzat kirajzolása a térképre."
-
-#~ msgid "Colours"
-#~ msgstr "Szinek"
-
-#~ msgid "Block speed to fly"
-#~ msgstr "Tartandó blokk sebesség"
-
-#~ msgid ""
-#~ "Setting this to \"On\" will automatically close the FLARM dialog if there "
-#~ "is no traffic. \"Off\" will keep the dialog open even without current "
-#~ "traffic."
-#~ msgstr ""
-#~ "Be állásban automatikusan bezáródik a FLARM ablak, ha nincs forgalom. Ki "
-#~ "esetén az ablak nyitva marad, még ha nincs is forgalom."
-
-#~ msgid ""
-#~ "Units used for horizontal distances e.g. range to waypoint, distance to "
-#~ "go."
-#~ msgstr "A vízszintes távolságokhoz használt mértékegység (fordulópont, táv)"
-
-#~ msgid "Start max. speed margin"
-#~ msgstr "Sebesség tűrése"
-
-#~ msgid "Max. ballast"
-#~ msgstr "Max. ballaszt"
-
-#~ msgid "Units used for altitude and heights."
-#~ msgstr "A magasságokhoz és szintekhez használt mértékegység."
-
-#~ msgid "More airspaces"
-#~ msgstr "Alkalmi légterek"
-
-#~ msgid "Show ballast"
-#~ msgstr "Ballaszt kijelzése"
-
-#~ msgid "Units used for latitude and longitude."
-#~ msgstr "A földrajzi szélességhez, hosszúsághoz használt mértékegység."
-
-#~ msgid "Page 3"
-#~ msgstr "3. oldal"
-
-#~ msgid ""
-#~ "The Input Events file defines the menu system and how XCSoar responds to "
-#~ "button presses and events from external devices."
-#~ msgstr ""
-#~ "Az beviteli események fájl határozza meg a menürendszert és hogy az "
-#~ "XCSoar hogyan válaszol a külső eszközöktől érkező gombnyomásokra és "
-#~ "eseményekre."
-
-#~ msgid "Menu timeout"
-#~ msgstr "Menü időkorlát"
-
-#~ msgid "Display orientation"
-#~ msgstr "Képernyő tájolás"
-
-#~ msgid "Short file name"
-#~ msgstr "Rövid fájl név"
-
-#~ msgid "Airspaces"
-#~ msgstr "Légterek"
-
-#~ msgid ""
-#~ "This option defines which auto MacCready algorithm is used.\n"
-#~ "[Final glide] adjusts MC for fastest arrival.  For OLC sprint tasks, the "
-#~ "MacCready is adjusted in order to cover the greatest distance in the "
-#~ "remaining time and reach the finish height.\n"
-#~ "[Trending Average] sets MC to the trending average climb rate based on "
-#~ "all climbs.\n"
-#~ "[Both] Uses trending average during task, then fastest arrival when in "
-#~ "final glide mode."
-#~ msgstr ""
-#~ "Ez határozza meg, hogy melyik MacCready algoritmus lesz alkalmazva.\n"
-#~ "[VÉGSIKLÁS] Az MC a leggyorsabb érkezéshez lesz beállítva. Az Online "
-#~ "Verseny sebességfeladataiban olyan MC lesz beállítva, hogy a legnagyobb "
-#~ "távolság legyen elérhető a maradék időben és az érkezési magasságot is "
-#~ "tartsuk.\n"
-#~ "[TERMIKÁTLAG KÖVETÉSE] az összes emelésen alapuló trendátlaghoz lesz "
-#~ "állítva a MC.\n"
-#~ "[MIND] a feladat alatt a trendátlag, a végsiklásban pedig a leggyorsabb "
-#~ "érkezés szerint lesz a MC állítva."
-
-#~ msgid "Reach polar"
-#~ msgstr "Elérhető táv polárisa"
-
-#~ msgid ""
-#~ "For auto airspace mode, this is the altitude above/below which airspace "
-#~ "is included."
-#~ msgstr ""
-#~ "A gép magassága felett és alatt ilyen vastag sávba eső légterek kerülnek "
-#~ "megjelenítésre a megfelelő üzemmódban."
-
-#~ msgid ""
-#~ "Defines the alignment of the status message box, either centered or in "
-#~ "the top left corner."
-#~ msgstr ""
-#~ "Az üzenetablakok megjelenésének helyét szabályozza, lehet a képernyő "
-#~ "közepén vagy a bal felső sarokban."
-
-#~ msgid "Whether to show the MacCready setting."
-#~ msgstr "MacCready érték kijelzése"
-
-#~ msgid "Msg. window"
-#~ msgstr "Üzenetablak"
-
-#~ msgid ""
-#~ "When enabled, route planning climbs are limited to ceiling defined by "
-#~ "greater of current aircraft altitude plus 500 m and the thermal ceiling.  "
-#~ "If disabled, climbs are unlimited."
-#~ msgstr ""
-#~ "Ha engedélyezzük, ez szabályozza, hogy milyen magas emelésekkel számol az "
-#~ "útvonaltervezésben. Ez vagy a gép pillanatnyi magassága felett 500m vagy "
-#~ "a termik magassága, amelyik magasabb. Ha kikapcsoljuk, az emelések "
-#~ "korlátlan magasak."
-
-#~ msgid "Previous"
-#~ msgstr "Előző"
-
-#~ msgid ""
-#~ "This determines the glide performance used in reach, landable arrival, "
-#~ "abort and alternate calculations:\n"
-#~ "[Task] Uses task glide polar\n"
-#~ "[Safety MC] Uses safety MacCready value"
-#~ msgstr ""
-#~ "Ez szabályozza, hogy a berepülhető terület, leszállóhelyi érkezés, "
-#~ "feladatmegszakítás és kitérő számításánál a gép milyen teljesítményével "
-#~ "számoljon.\n"
-#~ "[FELADAT] A feladat polárgörbéjével\n"
-#~ "[BIZTONSÁGOS MC] A biztonsági MC értékkel"
-
-#~ msgid "Clip altitude"
-#~ msgstr "Vágási magasság"
-
-#~ msgid "Altair Pro users should set this to Port 3"
-#~ msgstr "Altair Pro felhasználók állítsák ezt Port 3-ra."
-
-#~ msgid ""
-#~ "Draw a black outline around each airspace rather than the airspace color"
-#~ msgstr ""
-#~ "Minden légteret a saját színe helyett inkább fekete vonallal rajzoljon "
-#~ "meg."
-
-#~ msgid "Infobox geometry"
-#~ msgstr "Kijelzők elrendezése"
-
-#~ msgid "Page 6"
-#~ msgstr "6. oldal"
-
-#~ msgid ""
-#~ "Defines the amount of Phong shading in the terrain rendering.  Use large "
-#~ "values to emphasise terrain slope, smaller values if flying in steep "
-#~ "mountains."
-#~ msgstr ""
-#~ "A domborzat kidomborításának mértéke. Használjon nagy értékeket a lejtők "
-#~ "hangsúlyozására, kisebbeket ha meredek hegyek között repül."
-
-#~ msgid "Label format"
-#~ msgstr "Címkeformátum"
-
-#~ msgid "Trail length"
-#~ msgstr "Nyomvonal hossza"
-
-#~ msgid "Default turn point type for new tasks you create."
-#~ msgstr "Új feladatok alap fordulópont típusa."
-
-#~ msgid ""
-#~ "If true, the vario gauge will display a hollow averager needle.  During "
-#~ "cruise, this needle displays the average netto value.  During circling, "
-#~ "this needle displays the average gross value."
-#~ msgstr ""
-#~ "Ha bekapcsoljuk, akkor a varió műszer tartalmaz egy átlagoló mutatót. "
-#~ "Siklásban ez a mutató az átlagos nettó értéket mutatja. Körözésben az "
-#~ "átlagos összértéket mutatja."
-
-#~ msgid "Colored InfoBoxes"
-#~ msgstr "Színes kijelzők"
-
-#~ msgid "Use GPS time"
-#~ msgstr "GPS idő használata"
-
-#~ msgid ""
-#~ "When Vega variometer is connected and this option is true, the positive "
-#~ "flap setting switches the flight mode between circling and cruise."
-#~ msgstr ""
-#~ "Ha bekapcsoljuk és Vega variométer csatlakozik, a pozitív ívelőlap "
-#~ "állások átkapcsolnak a körözés és a siklás üzemmódok között."
-
-#~ msgid ""
-#~ "Units used for airspeed and ground speed.  A separate unit is available "
-#~ "for task speeds."
-#~ msgstr ""
-#~ "A repülési és a föld feletti sebességekhez használt mértékegység. A "
-#~ "feladat sebességek egysége külön állítható."
-
-#~ msgid "Auto MC mode"
-#~ msgstr "Automata MC"
-
-#~ msgid "Landable size"
-#~ msgstr "Leszálló mérete"
-
-#~ msgid "Terrain display"
-#~ msgstr "Domborzat"
-
-#~ msgid "FLARM radar"
-#~ msgstr "FLARM radar"
-
-#~ msgid "Slope shading"
-#~ msgstr "Lejtők árnyalása"
-
-#~ msgid ""
-#~ "Determines whether and how long a snail trail is drawn behind the glider"
-#~ msgstr ""
-#~ "Meghatározza, hogy kell-e és milyen hosszan nyomvonalat rajzolni a gép "
-#~ "mögött."
-
-#~ msgid "Default finish type for new tasks you create."
-#~ msgstr "Új feladatok célszektorának alap típusa."
-
-#~ msgid "This enables the display of FLARM traffic on the map window."
-#~ msgstr "A FLARM forgalom megjelenítése a térképablakban."
-
-#~ msgid ""
-#~ "The height above terrain that the glider should arrive at for a safe "
-#~ "landing."
-#~ msgstr ""
-#~ "A biztonságos leszálláshoz ezen a föld feletti magasságon kell a gépnek "
-#~ "érkeznie."
-
-#~ msgid "L/D average period"
-#~ msgstr "Átlagos siklószám mintavétel"
-
-#~ msgid "Aircraft/Wind speed"
-#~ msgstr "Repgép/szél sebesség"
-
-#~ msgid ""
-#~ "Primary waypoints file.  Supported file types are Cambridge/WinPilot "
-#~ "files (.dat), Zander files (.wpz) or SeeYou files (.cup)."
-#~ msgstr ""
-#~ "Elsődleges fordulópont fájl. A támogatott formátumok: Cambridge/WinPilot "
-#~ "(.dat), Zander (.wpz) vagy SeeYou (.cup)."
-
-#~ msgid ""
-#~ "This is the time period in which an acknowledged airspace warning will "
-#~ "not be repeated."
-#~ msgstr ""
-#~ "Egy tudomásul vett légtérsértési figyelmeztetést ennyi időn belül nem "
-#~ "ismétel meg."
-
-#~ msgid "V ach."
-#~ msgstr "V elért"
-
-#~ msgid ""
-#~ "Two styles for infobox borders are available:\n"
-#~ "[Box] Draws boxes around each infobox.\n"
-#~ "[Tab] Draws a tab at the top of the infobox across the title."
-#~ msgstr ""
-#~ "A kijelzőknek kétfajta kerete lehet:\n"
-#~ "[DOBOZ] Télalap alakú körbefutó keret.\n"
-#~ "[FÜL] A kijelző felső élére rajzolt fül."
-
-#~ msgid "If enabled, then airspaces are filled transparently."
-#~ msgstr "Ha bekapcsoljuk, a légtereket átlátszóan színezi ki."
-
-#~ msgid "Text input style"
-#~ msgstr "Szövegbevitel stílusa"
-
-#~ msgid "Lat./Lon."
-#~ msgstr "Szél/Hossz"
-
-#~ msgid ""
-#~ "Determines sorting of alternates in the alternates dialog and in abort "
-#~ "mode:\n"
-#~ "[Simple] The alternates will only be sorted by waypoint type (airport/"
-#~ "outlanding field) and arrival height.\n"
-#~ "[Task] The sorting will also take the current task direction into "
-#~ "account.\n"
-#~ "[Home] The sorting will try to find landing options in the current "
-#~ "direction to the configured home waypoint."
-#~ msgstr ""
-#~ "A kitérő repterek rendezésének elve a kitérők párbeszédablakban vagy "
-#~ "feladatmegszakítás során:\n"
-#~ "[EGYSZERŰ] A kitérők a típusuk (reptér/terep) és érkezési magasságuk "
-#~ "szerint rendezve.\n"
-#~ "[FELADAT] A rendezés figyelembe veszi a feladat szerinti irányt is.\n"
-#~ "[BÁZIS] A rendezés figyelembe veszi a beállított bázisreptér irányát."
-
-#~ msgid ""
-#~ "Secondary waypoints file.  This may be used to add waypoints for a "
-#~ "competition."
-#~ msgstr ""
-#~ "Másodlagos fordulópont fájl. Ezzel egy versenyen új fordulópontokat adhat "
-#~ "a többihez."
-
-#~ msgid "Detailed landables"
-#~ msgstr "Részletek"
-
-#~ msgid "Label style"
-#~ msgstr "Címkestílus"
-
-#~ msgid "Page 5"
-#~ msgstr "5. oldal"
-
-#~ msgid "Units used for vertical speeds (variometer)"
-#~ msgstr "Függőleges sebességek (variométer) esetében használt mértékegység."
-
-#~ msgid "Optional specification of the wing area."
-#~ msgstr "A szárny felülete (megadható)"
-
-#~ msgid "Pilot name"
-#~ msgstr "Pilóta neve"
-
-#~ msgid "Default task type for new tasks you create."
-#~ msgstr "Új feladatok alap feladattípusa."
-
-#~ msgid "Reach display"
-#~ msgstr "Elérhető terület"
-
-#~ msgid "Map database"
-#~ msgstr "Térképadatbázis"
-
-#~ msgid ""
-#~ "Determines how the user is prompted for text input (filename, teamcode "
-#~ "etc.)"
-#~ msgstr "A szövegbevitel (fájlnév, csapatkód, stb.) módját határozza meg."
-
-#~ msgid "Aircraft reg."
-#~ msgstr "Lajstrom jel"
-
-#~ msgid "Averager needle"
-#~ msgstr "Átlagoló mutató"
-
-#~ msgid "Thermal assistant"
-#~ msgstr "Termik segéd"
-
-#~ msgid "Margin"
-#~ msgstr "Vágási sáv"
-
-#~ msgid "Units used for temperature."
-#~ msgstr "A hőmérsékletekhez használt mértékegység."
-
-#~ msgid "Length/Radius"
-#~ msgstr "Hossz/Sugár"
-
-#~ msgid ""
-#~ "Select the rules used for calculating optimal points for the On-Line "
-#~ "Contest. The implementation  conforms to the official release 2010, "
-#~ "Sept.23.\n"
-#~ "[Classic] Up to seven points including start and finish, finish height "
-#~ "must not be lower than start height less 1000 meters.\n"
-#~ "[FAI] Conforms to FAI triangle rules. Three turns and common start and "
-#~ "finish. No leg less than 28% of total except for tasks longer than 500km: "
-#~ "No leg less than 25% or larger than 45%.\n"
-#~ "[League] The most recent contest with Sprint task rules.\n"
-#~ "[Plus] A combination of Classic and FAI rules. 30% of the FAI score are "
-#~ "added to the Classic score."
-#~ msgstr ""
-#~ "Az OnLine verseny optimális pontjainak számítása során alkalmazott "
-#~ "szabályok. Megfelel a 2010. szeptember 23-i hivatalos kiadványnak.\n"
-#~ "[Klasszikus] A startot és a célt beleértve maximum hét pont, az érkezés "
-#~ "nem lehet a startnál 1000 méternél alacsonyabban.\n"
-#~ "[FAI] A FAI háromszög szabálynak megfelelő. Három forduló, közös start és "
-#~ "cél. Egyik oldal sem lehet a táv 28%-nál rövidebb, kivéve a 500km-nél "
-#~ "hosszabb távokat: ott nem lehet 25%-nál rövidebb vagy 45%-nál hosszabb.\n"
-#~ "[Liga] A legutóbbi verseny Sprint szabályokkal.\n"
-#~ "[Plusz] A klasszikus és a FAI szabályok kombinációja. A FAI pontozás 30%-"
-#~ "a kerül a klasszikus pontozáshoz hozzáadásra."
-
-#~ msgid "Alternates mode"
-#~ msgstr "Kitérő üzemmód"
-
-#~ msgid ""
-#~ "MC\n"
-#~ "+"
-#~ msgstr ""
-#~ "MC\n"
-#~ "+"
-
-#~ msgid ""
-#~ "MC\n"
-#~ "-"
-#~ msgstr ""
-#~ "MC\n"
-#~ "-"
-
-#~ msgid ""
-#~ "Maintain effective\r\n"
-#~ "LOOKOUT at all times"
-#~ msgstr ""
-#~ "Mindig figyelje\r\n"
-#~ "KÖRNYEZETÉT!"
-
-#~ msgid ""
-#~ "Nearest\n"
-#~ "Waypoint"
-#~ msgstr ""
-#~ "Közeli\n"
-#~ "FP"
-
-#~ msgid ""
-#~ "Simulation\r\n"
-#~ "nothing is real!"
-#~ msgstr ""
-#~ "SZIMULÁCIÓ!\r\n"
-#~ "Nem valós repülés!"
-
-#~ msgid "Height barometric"
-#~ msgstr "Magasság barometrikus"
-
-#~ msgid "The vertical distance to the nearest airspace"
-#~ msgstr "Függőleges távolság a legközelebbi légtérig"
-
-#~ msgid ""
-#~ "The list of tracked stations is full. Please remove a station before "
-#~ "adding a new one."
-#~ msgstr ""
-#~ "A követett állomások listája tele van. Távolíts el egy állomást mielőtt "
-#~ "egy másikat hozzáadnál."
-
-#~ msgid "No fix"
-#~ msgstr "Nincs pozíció"
-
-#~ msgid "Flap"
-#~ msgstr "Ívelőlap"
-
-#~ msgid "SC"
-#~ msgstr "SC"
-
-#~ msgid "Locked"
-#~ msgstr "Zárva"
 
 #~ msgid "Previous turnpoint"
 #~ msgstr "Előző fordulópont"
@@ -8532,6 +7228,9 @@ msgstr ""
 #~ msgid "Wind Bearing"
 #~ msgstr "Szél irány"
 
+#~ msgid "Pressure Altitude"
+#~ msgstr "Nyomás magasság"
+
 #~ msgid "SnailTrail OFF"
 #~ msgstr "Nyomvonal KI"
 
@@ -8592,6 +7291,9 @@ msgstr ""
 #~ msgid "Map labels OFF"
 #~ msgstr "Térkép cimkék KI"
 
+#~ msgid "Task Start"
+#~ msgstr "Feladat Start"
+
 #~ msgid "Task Finish"
 #~ msgstr "Feladat vége"
 
@@ -8619,14 +7321,23 @@ msgstr ""
 #~ msgid "Temp trace"
 #~ msgstr "Hőmérséklet görbe"
 
+#~ msgid "Task speed"
+#~ msgstr "Feladat sebesség"
+
 #~ msgid "OnLine Contest"
 #~ msgstr "OnLine Verseny"
 
 #~ msgid "Site"
 #~ msgstr "Repülési terület"
 
+#~ msgid "Terrain Display"
+#~ msgstr "Terep megjelenítés"
+
 #~ msgid "Safety factors"
 #~ msgstr "Biztonsági tényezők"
+
+#~ msgid "Pilot name"
+#~ msgstr "Pilóta neve"
 
 #~ msgid "ON/Fixed"
 #~ msgstr "BE/Fixált"
@@ -8709,17 +7420,29 @@ msgstr ""
 #~ msgid "Info box titles"
 #~ msgstr "Info box címek"
 
+#~ msgid "V rough air"
+#~ msgstr "Megengedett seb."
+
 #~ msgid "Aircraft/wind speed"
 #~ msgstr "Repgép/szél sebesség"
 
 #~ msgid "Start max height"
 #~ msgstr "Start max magasság"
 
+#~ msgid "Filter"
+#~ msgstr "Szűrő"
+
 #~ msgid "Info box values"
 #~ msgstr "Info box érték"
 
+#~ msgid "Dump time"
+#~ msgstr "Kiengedési idő"
+
 #~ msgid "Start max speed"
 #~ msgstr "Start max sebesség"
+
+#~ msgid "Auto wind"
+#~ msgstr "Aut. szél számítás"
 
 #~ msgid "File browser"
 #~ msgstr "Fájl böngésző"
@@ -8739,14 +7462,26 @@ msgstr ""
 #~ msgid "Map waypoints"
 #~ msgstr "Térkép fordulópontok"
 
+#~ msgid "Locked"
+#~ msgstr "Zárva"
+
 #~ msgid "Lat/Lon"
 #~ msgstr "Szél/Hossz"
 
 #~ msgid "New Waypoint"
 #~ msgstr "Új Fordulópont"
 
+#~ msgid "Device A"
+#~ msgstr "Eszköz A"
+
 #~ msgid "Acknowledge time*"
 #~ msgstr "Nyugtázási idő*"
+
+#~ msgid "Lift"
+#~ msgstr "Emelkedés"
+
+#~ msgid "Device B"
+#~ msgstr "Eszköz B"
 
 #~ msgid "Finish alt min"
 #~ msgstr "Cél magasság min"
@@ -8759,6 +7494,15 @@ msgstr ""
 
 #~ msgid "Volume"
 #~ msgstr "Térfogat"
+
+#~ msgid "Declared"
+#~ msgstr "Deklarálva"
+
+#~ msgid "Device model"
+#~ msgstr "Eszköz tipus"
+
+#~ msgid "Airspace display"
+#~ msgstr "Légterek kijelzése"
 
 #~ msgid "Finish min height"
 #~ msgstr "Cél min magasság"
@@ -8781,6 +7525,9 @@ msgstr ""
 #~ msgid "Goto"
 #~ msgstr "Menj"
 
+#~ msgid "Terrain height"
+#~ msgstr "Terep feletti bizt. mag."
+
 #~ msgid "Free"
 #~ msgstr "Szabad"
 
@@ -8793,6 +7540,9 @@ msgstr ""
 #~ msgid "Dialog boxes"
 #~ msgstr "Dialógus ablakok"
 
+#~ msgid "Colours"
+#~ msgstr "Szinek"
+
 #~ msgid "Topology labels"
 #~ msgstr "Topológia cimkék"
 
@@ -8802,11 +7552,23 @@ msgstr ""
 #~ msgid "Warning time*"
 #~ msgstr "Figyelmeztetési idő*"
 
+#~ msgid "Short file name"
+#~ msgstr "Rövid fájl név"
+
 #~ msgid "Topology display"
 #~ msgstr "Topológia megjelenítés"
 
+#~ msgid "Clip altitude"
+#~ msgstr "Vágási magasság"
+
 #~ msgid "Start height ref"
 #~ msgstr "Start mag. bázisa"
+
+#~ msgid "Trail length"
+#~ msgstr "Nyomvonal hossza"
+
+#~ msgid "Use GPS time"
+#~ msgstr "GPS idő használata"
 
 #~ msgid "Glide terrain line"
 #~ msgstr "Elérhető táv vonala"
@@ -8828,6 +7590,9 @@ msgstr ""
 
 #~ msgid "Info box values small"
 #~ msgstr "Info box érték pici"
+
+#~ msgid "Glider position"
+#~ msgstr "Gép poziciója"
 
 #~ msgid "Below Final Glide"
 #~ msgstr "Végsikló pálya alatt"
@@ -8882,6 +7647,13 @@ msgstr ""
 #~ "MacCready- vagy az optimális sebességnél."
 
 #~ msgid ""
+#~ "This is the barometric altitude obtained from a GPS equipped with "
+#~ "pressure sensor, or a supported external intelligent vario."
+#~ msgstr ""
+#~ "Nyomásmérővel ellátott GPS vagy intelligens variométer által jelzett "
+#~ "barometrikus magasság."
+
+#~ msgid ""
 #~ "The required glide ratio to reach the next waypoint, given by the "
 #~ "distance to next waypoint divided by the height required to arrive at the "
 #~ "safety arrival altitude. Negative values indicate a climb is necessary to "
@@ -8899,11 +7671,35 @@ msgstr ""
 #~ "magasságból levonja a gép többletenergiáját, ha a levegőhöz viszonyított "
 #~ "sebesség a MacCready-nél vagy az optimális sebességnél nagyobb."
 
+#~ msgid "On-Line Contest"
+#~ msgstr "OnLine Verseny"
+
+#~ msgid "Aircraft/Wind speed"
+#~ msgstr "Repgép/szél sebesség"
+
+#~ msgid "V ach."
+#~ msgstr "V elért"
+
+#~ msgid "Lat./Lon."
+#~ msgstr "Szél/Hossz"
+
+#~ msgid "Airspaces at this location"
+#~ msgstr "Légterek ezen a helyen"
+
+#~ msgid "Map and InfoBoxes (Auto)"
+#~ msgstr "Térkép és kijelzők (auto)"
+
+#~ msgid "Map and InfoBoxes "
+#~ msgstr "Térkép és kijelzők "
+
 #~ msgid "Organiser Battery Low"
 #~ msgstr "A telep lemerült"
 
 #~ msgid "Symbols"
 #~ msgstr "Szimbólumok"
+
+#~ msgid "Waypoint Display"
+#~ msgstr "Fordulópont megjelenítés"
 
 #~ msgid "InfoBoxes"
 #~ msgstr "Kijelzők"
@@ -8911,11 +7707,20 @@ msgstr ""
 #~ msgid "Interface"
 #~ msgstr "Kezelőfelület"
 
+#~ msgid "Layout"
+#~ msgstr "Elrendezés"
+
+#~ msgid "FLARM And Other Gauges"
+#~ msgstr "FLARM és más műszerek"
+
 #~ msgid "Waypoint not editable"
 #~ msgstr "Nem szerkeszthető fordulópont"
 
 #~ msgid "Rel. Alt.:"
 #~ msgstr "Rel. mag.:"
+
+#~ msgid "Vario:"
+#~ msgstr "Varió:"
 
 #~ msgid "Distance:"
 #~ msgstr "Távolság:"
@@ -8929,8 +7734,23 @@ msgstr ""
 #~ msgid "Reading vario settings..."
 #~ msgstr "Varió beállítások beolvasása..."
 
+#~ msgid "No fix"
+#~ msgstr "Nincs pozíció"
+
 #~ msgid "Trending Average climb"
 #~ msgstr "Termikátlag követése"
+
+#~ msgid "Flap"
+#~ msgstr "Ívelőlap"
+
+#~ msgid "Aircraft reg."
+#~ msgstr "Lajstrom jel"
+
+#~ msgid "Logger ID"
+#~ msgstr "Logger azonosító"
+
+#~ msgid "Use black outline"
+#~ msgstr "Fekete keret"
 
 #~ msgid "Purple Circle"
 #~ msgstr "Lila kör"
@@ -8944,6 +7764,9 @@ msgstr ""
 #~ msgid "Keyhole"
 #~ msgstr "Kulcslyuk"
 
+#~ msgid "A straight line.  Cross line from inside area to start"
+#~ msgstr "Egy egyenes vonal. Startoláshoz keresztezze a terület belsejéből."
+
 #~ msgid "FAI"
 #~ msgstr "FAI"
 
@@ -8956,6 +7779,9 @@ msgstr ""
 #~ msgid "BGAEnhancedOption"
 #~ msgstr "BGA könnyített"
 
+#~ msgid "Cross line into area to finish"
+#~ msgstr "Keresztezze a vonalat a befutáshoz."
+
 #~ msgid "Unable to open port %s"
 #~ msgstr "A %s port megnyitása sikertelen."
 
@@ -8964,6 +7790,45 @@ msgstr ""
 
 #~ msgid "Unable to set serial port timers %s"
 #~ msgstr "A %s port időzítők beállítása sikertelen."
+
+#~ msgid "Next time to go (gnd spd)"
+#~ msgstr "FP idő úton ff"
+
+#~ msgid "Task time to go (gnd spd)"
+#~ msgstr "SF idő úton ff"
+
+#~ msgid "Interface Appearance"
+#~ msgstr "Kezelőfelület külleme"
+
+#~ msgid "User Interface"
+#~ msgstr "Kezelőfelület"
+
+#~ msgid "Map Elements"
+#~ msgstr "Térképelemek"
+
+#~ msgid "mph"
+#~ msgstr "mérföld/óra"
+
+#~ msgid "F"
+#~ msgstr "Fahrenheit"
+
+#~ msgid "C"
+#~ msgstr "Celsius"
+
+#~ msgid "ft/min"
+#~ msgstr "láb/perc"
+
+#~ msgid "sm"
+#~ msgstr "angol mérföld"
+
+#~ msgid "nm"
+#~ msgstr "tengeri mérföld"
+
+#~ msgid ""
+#~ "If set to ON the snail trail width is scaled according to the vario "
+#~ "signal."
+#~ msgstr ""
+#~ "Bekapcsolt állapotban a nyomvonal szélessége arányos lesz a varió jelével."
 
 #~ msgid ""
 #~ "This allows switching on or off the automatic wind algorithm.  When the "
@@ -8980,6 +7845,31 @@ msgstr ""
 #~ "[Cikkcakk] Intelligens variométerre van szükség, sebességjellel.\n"
 #~ "[Mindkettő] A cikkcakkot és a körözést használja."
 
+#~ msgid "Ignore checksum"
+#~ msgstr "Kontrollszám érdektelen"
+
+#~ msgid ""
+#~ "The STF risk factor reduces the MacCready setting used to calculate speed "
+#~ "to fly as the glider gets low, in order to compensate for risk.  Set to "
+#~ "0.0 for no compensation, 1.0 scales MC linearly with height."
+#~ msgstr ""
+#~ "A kockázati tényező csökkenti a tartandó sebesség számításához használt "
+#~ "MacCready értéket amikor a gép alacsonyra került, kompenzálva ezzel a "
+#~ "kockázatot. Állítsa 0.0-ra a kompenzálás elnyomásához, 1.0-ra a magasság "
+#~ "és a MC közötti lineáris összefüggéshez."
+
+#~ msgid "Page 1"
+#~ msgstr "1. oldal"
+
+#~ msgid "Defines the color ramp used in terrain rendering."
+#~ msgstr "A terep megjelenítése során használt színskála."
+
+#~ msgid "Start Anyway"
+#~ msgstr "Start bárhogyan"
+
+#~ msgid "Speed arrows"
+#~ msgstr "Sebesség nyilak"
+
 #~ msgid ""
 #~ "Minimum height above ground while finishing the task.  Set to 0 for no "
 #~ "limit."
@@ -8987,15 +7877,172 @@ msgstr ""
 #~ "A kívánt minimális magasság a feladat végére. Nullával kell jelezni, ha "
 #~ "nincs ilyen kikötés."
 
+#~ msgid "The file name of the primary airspace file."
+#~ msgstr "Az elsődleges légtér fájl neve."
+
+#~ msgid ""
+#~ "Defines the brightness (whiteness) of the terrain rendering.  This "
+#~ "controls the average illumination of the terrain."
+#~ msgstr ""
+#~ "A terep megjelenítésének fényességét (fehérségét) állítja. Ettől függ a "
+#~ "terep átlagos megvilágítottsága."
+
+#~ msgid "Page 8"
+#~ msgstr "8. oldal"
+
+#~ msgid "Specifies the mode for filling the airspace area."
+#~ msgstr "Légtér kiszínezésének módja."
+
+#~ msgid "Debounce time"
+#~ msgstr "Billentyűismétlés"
+
+#~ msgid ""
+#~ "The UTC offset field allows the UTC local time offset to be specified.  "
+#~ "The local time is displayed below in order to make it easier to verify "
+#~ "the correct offset has been entered."
+#~ msgstr ""
+#~ "A helyi időzóna, az UTC-hez képesti eltolás beállítása. Alul látszik a "
+#~ "számított helyi idő, ami segít a megfelelő eltolást beállítani."
+
+#~ msgid "Time step cruise"
+#~ msgstr "Mintavétel siklásban"
+
+#~ msgid "Language"
+#~ msgstr "Nyelv"
+
+#~ msgid ""
+#~ "This determines how long menus will appear on screen if the user does not "
+#~ "make any button presses or interacts with the computer."
+#~ msgstr ""
+#~ "Ez határozza meg, hogy a menük milyen hosszú ideig maradjanak a "
+#~ "képernyőn, ha a kezelő nem nyom meg egy gombot sem."
+
+#~ msgid ""
+#~ "If set to \"None\", neither airspace or terrain is used for route "
+#~ "planning.  If set to \"Terrain\", routes will avoid terrain; if set to "
+#~ "\"Airspace\", routes will avoid airspace.  If set to \"Both\", routes "
+#~ "will avoid airspace and terrain."
+#~ msgstr ""
+#~ "\"Semmi\" esetén sem a légterek, sem a domborzat nem lesz figyelembe véve "
+#~ "az útvonaltervezésnél. \"Terep\" esetén az útvonal elkerüli a "
+#~ "domborzatot, \"Légtér\" esetén a légtereket. \"Minden\" esetén kikerüli "
+#~ "mindezeket."
+
+#~ msgid ""
+#~ "This is the minimum interval between the system recognising key presses. "
+#~ "Set this to a low value for a more responsive user interface; if it is "
+#~ "too low, then accidental multiple key presses can occur."
+#~ msgstr ""
+#~ "Ez a minimális időtartam két billentyűleütés felismerése között. Alacsony "
+#~ "értékre állítva fürgébb kezelőfelületet kap, túl alacsony érték esetén "
+#~ "véletlen többszörözés fordulhat elő."
+
 #~ msgid "Maximum height while starting the task.  Set to 0 for no limit."
 #~ msgstr ""
 #~ "A start maximális magassága. Állítsa nullára, ha nincs ilyen kikötés."
+
+#~ msgid "Page 2"
+#~ msgstr "2. oldal"
 
 #~ msgid ""
 #~ "Geometry values range 0-7 but in landscape mode only some of them are "
 #~ "really available."
 #~ msgstr ""
 #~ "Elrendezési változatok, de fekvő helyzetben csak némelyikük használható."
+
+#~ msgid ""
+#~ "Three styles are available: Purple circles (WinPilot style), a high "
+#~ "contrast (monochrome) style, or orange. The rendering differs for "
+#~ "landable field and airport. All styles mark the waypoints within reach "
+#~ "green."
+#~ msgstr ""
+#~ "Három stílus létezik: lila pontok (WinPilot stílus), kontrasztos (fekete-"
+#~ "fehér) vagy narancs. A leszállóhelyek másképp jelennek meg mint a "
+#~ "repülőterek. Mindegyik stílusban az elérhető helyeket zöld színnel "
+#~ "keretezi."
+
+#~ msgid ""
+#~ "[Off] Display fixed icons for landables.\n"
+#~ "[On] Show landables with variable information like runway length and "
+#~ "heading."
+#~ msgstr ""
+#~ "[KI] Egy ikont jelenít meg a leszállóhelyeken.\n"
+#~ "[BE] A leszállóhelyeket különféle információkkal együtt jeleníti meg, "
+#~ "mint pálya hossza, iránya."
+
+#~ msgid ""
+#~ "This is the time before an airspace incursion is estimated at which the "
+#~ "system will warn the pilot."
+#~ msgstr "Egy légtér megsértése előtt ennyi idővel figyelmezteti a pilótát."
+
+#~ msgid "Label visibility"
+#~ msgstr "Címke láthatóság"
+
+#~ msgid "Default radius or length of the start zone for new tasks."
+#~ msgstr "Az startzóna új feladatokban felkínált sugara vagy hossza."
+
+#~ msgid ""
+#~ "This determines whether the logger uses the short IGC file name or the "
+#~ "long IGC file name. Example short name (81HXABC1.IGC), long name "
+#~ "(2008-01-18-XXX-ABC-01.IGC)."
+#~ msgstr ""
+#~ "Ez határozza meg, hogy a logger a rövid vagy a hosszú IGC fájlnevet "
+#~ "használja. Példa rövid fájlnév: (81HXABC1.IGC), hosszú fájlnév: "
+#~ "(2008-01-18-XXX-ABC-01.IGC)"
+
+#~ msgid "Route ceiling"
+#~ msgstr "Útvonal teteje"
+
+#~ msgid "Show average"
+#~ msgstr "Átlag kijelzése"
+
+#~ msgid "Page 7"
+#~ msgstr "7. oldal"
+
+#~ msgid ""
+#~ "Determines the way the wind arrow is drawn on the map.\n"
+#~ "[Arrow head] Draws an arrow head only\n"
+#~ "[Full arrow] Draws an arrow head with a dashed arrow line"
+#~ msgstr "Meghatározza a szél megjelenítésének módját a térképen."
+
+#~ msgid "This is the time interval between logged points when not circling."
+#~ msgstr "Ez a naplózás üteme, amikor nincs körözés."
+
+#~ msgid ""
+#~ "For clip airspace mode, this is the altitude below which airspace is "
+#~ "displayed."
+#~ msgstr ""
+#~ "Amikor a légterek megjelenítése vágásra van állítva, az itt megadott "
+#~ "szint alatti légterek lesznek megjelenítve."
+
+#~ msgid ""
+#~ "Enables the automatic starting and stopping of logger on takeoff and "
+#~ "landing respectively. Disable when flying paragliders."
+#~ msgstr ""
+#~ "A logger automatikus elindulását és leállását engedélyezi fel- és "
+#~ "leszálláskor. Függővitorlákon ki kell kapcsolni."
+
+#~ msgid "FLARM traffic"
+#~ msgstr "FLARM forgalom"
+
+#~ msgid ""
+#~ "The MacCready setting used, when safety MC is enabled for reach "
+#~ "calculations, in task abort mode and for determining arrival altitude at "
+#~ "airfields."
+#~ msgstr ""
+#~ "Ezzel a MacCready értékkel kerülnek meghatározásra feladat megszakítása "
+#~ "esetén az elérhető leszállóhelyek és érkezési magasságok."
+
+#~ msgid "Setup InfoBox"
+#~ msgstr "Kijelzők beállítása"
+
+#~ msgid "Airspace fill mode"
+#~ msgstr "Légtér kiszínezésének módja"
+
+#~ msgid "Determines whether tabbed dialogs use text or icons"
+#~ msgstr ""
+#~ "Meghatározza, hogy a többfüles dialógusablakok szöveget vagy ikonokat "
+#~ "használjanak."
 
 #~ msgid ""
 #~ "Draws digital elevation terrain on the map. This is shaded by the wind "
@@ -9005,12 +8052,240 @@ msgstr ""
 #~ "utal: a szél felőli emelkedők világosabbak, a szél alatti lejtők "
 #~ "sötétebbek."
 
+#~ msgid "Rotate the display on devices that support it."
+#~ msgstr ""
+#~ "Automatikusan elforgatja a kijelző tájolását az ezt támogató készülékeken."
+
+#~ msgid "Show bugs"
+#~ msgstr "Bogárpiszok kijelzése"
+
+#~ msgid ""
+#~ "The name of the file (.xcm) containing terrain, topography, and "
+#~ "optionally waypoints, their details and airspaces."
+#~ msgstr ""
+#~ "A domborzatot, térképjeleket, esetleg fordulópontokat és részleteit "
+#~ "tartalmazófájl (.xcm) neve."
+
 #~ msgid ""
 #~ "Maximum height above ground while starting the task.  Set to 0 for no "
 #~ "limit."
 #~ msgstr ""
 #~ "A startolás során engedélyezett maximális föld feletti magasság. Állítsa "
 #~ "nullára, ha nincs ilyen kikötés."
+
+#~ msgid "Wing area"
+#~ msgstr "Szárnyfelület"
+
+#~ msgid "Default radius of turnpoint cylinders and sectors in new tasks."
+#~ msgstr "Új feladatok henger alakú fordulópontjainál ekkora lesz a sugár."
+
+#~ msgid ""
+#~ "The terrain can be shaded among slopes to indicate either wind direction, "
+#~ "sun position or a fixed shading from north-east."
+#~ msgstr ""
+#~ "A domborzat lejtői árnyalhatók vagy észak-dél irányban vagy a szél vagy a "
+#~ "Nap irányától függően."
+
+#~ msgid ""
+#~ "Type of primary device. The primary device should be the most reliable "
+#~ "GPS data source."
+#~ msgstr ""
+#~ "Az elsődleges eszköz típusa. A legmegbízhatóbb GPS jelforrás legyen az "
+#~ "elsődleges eszköz."
+
+#~ msgid "The name of the file containing digital elevation terrain data."
+#~ msgstr "A terep digitális magasságadatait tartalmazó fájl neve."
+
+#~ msgid ""
+#~ "Maximum speed above maximum start speed to tolerate.  Set to 0 for no "
+#~ "tolerance."
+#~ msgstr ""
+#~ "A maximális startsebesség tűréshatára. Állítsa nullára ha nincs tűrés."
+
+#~ msgid "Length of the OZ line."
+#~ msgstr "A megfigyelési vonal hossza."
+
+#~ msgid "Trail type"
+#~ msgstr "Nyomvonal típusa"
+
+#~ msgid "Length"
+#~ msgstr "Hossz"
+
+#~ msgid "Inverse InfoBoxes"
+#~ msgstr "Inverz kijelzők"
+
+#~ msgid ""
+#~ "The MacCready setting used, when safety MC is enabled for reach "
+#~ "calculations, in task abort mode, for determining arrival altitude at "
+#~ "airfields."
+#~ msgstr ""
+#~ "A leszállóhelyek elérhetőségének, érkezési magasságának számításakor ez a "
+#~ "MacCready érték kerül felhasználásra, ha a feladatmegszakításhoz "
+#~ "engedélyezve van a biztonsági MC használata."
+
+#~ msgid "InfoBox border"
+#~ msgstr "Kijelző keret"
+
+#~ msgid ""
+#~ "Maximum height above maximum start height to tolerate.  Set to 0 for no "
+#~ "tolerance."
+#~ msgstr ""
+#~ "A maximális startmagasság tűréshatára. Állítsa nullára, ha nincs tűrés."
+
+#~ msgid "Sets the type of the snail trail display."
+#~ msgstr "A nyomvonal megjelenítésének típusát állítja be."
+
+#~ msgid "Units used for task speeds."
+#~ msgstr "Feladat sebességéhez használt mértékegységek."
+
+#~ msgid ""
+#~ "Whether to show the average climb rate.  In cruise mode, this switches to "
+#~ "showing the average netto airmass rate."
+#~ msgstr ""
+#~ "Az átlagos emelkedés arányának kijelzését szabályozza. Siklásban ez az "
+#~ "átlagos nettó légtömegre kapcsol."
+
+#~ msgid "Detour cost markers"
+#~ msgstr "Eltérés költsége"
+
+#~ msgid ""
+#~ "If the aircraft heading deviates from the current waypoint, markers are "
+#~ "displayed at points ahead of the aircraft. The value of each marker is "
+#~ "the extra distance required to reach that point as a percentage of "
+#~ "straight-line distance to the waypoint."
+#~ msgstr ""
+#~ "Ha az orrirány eltér az útiránytól, akkor jelzések jelennek meg a gép "
+#~ "előtti pontokon. Mindegyik jelzés azt mutatja, hogy mennyivel hosszabb út "
+#~ "kell annak a pontnak az eléréshez a fordulóponthoz vezető egyenes út "
+#~ "hosszához képest."
+
+#~ msgid "Auto. blank"
+#~ msgstr "Auto elsötétítés"
+
+#~ msgid "InfoBox Access"
+#~ msgstr "Hozzáférés a kijelzőkhöz"
+
+#~ msgid ""
+#~ "Whether to show speed command arrows on the vario gauge.  When shown, in "
+#~ "cruise mode, arrows point up to command slow down; arrows point down to "
+#~ "command speed up."
+#~ msgstr ""
+#~ "A sebességi utasítások variométerben történő megjelenítését szabályozza. "
+#~ "Megjelenítéskor, siklásban, a felfele mutató nyíl lassításra, a lefele "
+#~ "mutató nyíl gyorsításra utasít."
+
+#~ msgid "External wind"
+#~ msgstr "Külső széladat"
+
+#~ msgid "The time in seconds to dump full ballast."
+#~ msgstr "A vízballaszt kieresztésének időszükséglete másodpercben."
+
+#~ msgid "Tab dialog style"
+#~ msgstr "Füles ablakok stílusa"
+
+#~ msgid ""
+#~ "If enabled, then the wind vector received from external devices overrides "
+#~ "XCSoar's internal wind calculation."
+#~ msgstr ""
+#~ "Ha engedélyezve van, a külső eszközből származó széladat felülírja az "
+#~ "XCSoar saját számításait."
+
+#~ msgid ""
+#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
+#~ "data to be used anyway"
+#~ msgstr ""
+#~ "Ez engedélyezi az adatok felhasználását akkor is, ha a GPS eszköz "
+#~ "érvénytelen NMEA kontrollszámot ad."
+
+#~ msgid "This enables the display of the thermal assistant gauge."
+#~ msgstr "A termiksegéd megjelenését szabályozza."
+
+#~ msgid "Default start type for new tasks you create."
+#~ msgstr "Új feladatok alap starttípusa."
+
+#~ msgid ""
+#~ "When enabled and if connected to a barometric altimeter, barometric "
+#~ "altitude is used for all navigation functions. Otherwise GPS altitude is "
+#~ "used."
+#~ msgstr ""
+#~ "Ha engedélyezve van és egy barometrikus magasságmérő csatlakozik, a "
+#~ "barometrikus magasság lesz felhasználva minden navigációs számításhoz. "
+#~ "Ellenkező esetben a GPS magasságot használja."
+
+#~ msgid ""
+#~ "The height above terrain that the glider must clear during final glide."
+#~ msgstr "A végsiklás közben a terep felett megőrizendő magasság."
+
+#~ msgid ""
+#~ "This enables the display of the FLARM radar gauge. The track bearing of "
+#~ "the target relative to the track bearing of the aircraft is displayed as "
+#~ "an arrow head, and a triangle pointing up or down shows the relative "
+#~ "altitude of the target relative to you. In all modes, the color of the "
+#~ "target indicates the threat level."
+#~ msgstr ""
+#~ "Ez engedélyezi a FLARM radarkijelzőt. Nyílhegy formában kerül kijelzésre "
+#~ "az útirány eltérése a gép haladási irányától és egy fel vagy lefele "
+#~ "mutató háromszög utal a cél relatív magasságára a géphez képest. A cél "
+#~ "színe minden üzemmódban a fenyegetettség szintjére utal."
+
+#~ msgid ""
+#~ "If true, certain InfoBoxes will have coloured text.  For example, the "
+#~ "active waypoint infobox will be blue when the glider is above final glide."
+#~ msgstr ""
+#~ "Ha igaz, bizonyos kijelzők felirata színes lesz. Például az aktív "
+#~ "fordulópont kijelzője kék lesz, ha a siklópálya felett vagyunk."
+
+#~ msgid ""
+#~ "If enabled, the command speed in cruise is set to the MacCready speed to "
+#~ "fly in no vertical air-mass movement. If disabled, the command speed in "
+#~ "cruise is set to the dolphin speed to fly, equivalent to the MacCready "
+#~ "speed with vertical air-mass movement."
+#~ msgstr ""
+#~ "Ha engedélyezve van, a siklás közbeni sebesség utasítások a függőleges "
+#~ "légmozgás nélküli MacCready sebességre utasítanak. Ha nincs engedélyezve, "
+#~ "delfinezésre utasítanak, ami a függőleges légmozgás szerinti MacCready "
+#~ "sebesség."
+
+#~ msgid "Dialog style"
+#~ msgstr "Párbeszédablak stílusa"
+
+#~ msgid "Page 4"
+#~ msgstr "4. oldal"
+
+#~ msgid ""
+#~ "This determines whether to blank the display after a long period of "
+#~ "inactivity when operating on internal battery power."
+#~ msgstr ""
+#~ "Egy hosszú inaktív időszak után kikapcsolja a képernyőt, ha a belső "
+#~ "telepről van táplálva a rendszer."
+
+#~ msgid "This is the time interval between logged points when circling."
+#~ msgstr "Körözés közben ilyen sűrűn történik meg a helyzet naplózása."
+
+#~ msgid ""
+#~ "[Off] Display fixed length for runways.\n"
+#~ "[On] Scale displayed runway length based on real length"
+#~ msgstr ""
+#~ "[KI] Azonos hosszúsággal ábrázolja a futópályákat.\n"
+#~ "[BE] A tényleges hosszal arányosan ábrázolja a futópályákat."
+
+#~ msgid "Whether to show the bugs percentage."
+#~ msgstr "Bogárpiszok kijelzése"
+
+#~ msgid "Altair Pro users should set this to Port 1."
+#~ msgstr "Altair Pro felhasználók állítsák ezt a Port1-re"
+
+#~ msgid "Wind arrow"
+#~ msgstr "Szél nyíl"
+
+#~ msgid "Altair Pro or Vega users should set this to 38400."
+#~ msgstr "Altair Pro vagy Vega felhasználók állítsák ezt 38400-ra"
+
+#~ msgid "Determines the information displayed on different screen pages."
+#~ msgstr "A különféle képernyőkön megjelenő információkat határozza meg."
+
+#~ msgid "Default radius or length of the finish zone in new tasks."
+#~ msgstr "Új feladatokban a célzóna alap sugara vagy hossza."
 
 #~ msgid ""
 #~ "option, if enabled sets the clock of the computer to the GPS time once a "
@@ -9022,6 +8297,9 @@ msgstr ""
 #~ "akkor van szükség, ha a számítógépnek nincs saját telepről táplált órája "
 #~ "vagy az gyakran lemerül vagy más módon elfelejti az időt."
 
+#~ msgid "Airspace transparency"
+#~ msgstr "Légtér átlátszóság"
+
 #~ msgid ""
 #~ "The maximum manoeuvring speed can be entered on this page to prevent the "
 #~ "glide computer from commanding unrealistic cruise speeds."
@@ -9029,8 +8307,84 @@ msgstr ""
 #~ "A manőverezési sebességhatár rögzíthető ezen az oldalon, hogy a "
 #~ "siklókomputer ne utasítson irreális sebességekre."
 
+#~ msgid "If true, the InfoBoxes are white on black, otherwise black on white."
+#~ msgstr ""
+#~ "Ha igaz, a kijelzők fekete háttéren fehérek, egyébként fehér háttéren "
+#~ "feketék."
+
+#~ msgid ""
+#~ "Type of secondary device. The secondary device may be used as backup GPS "
+#~ "data or other data e.g. from an intelligent variometer. Generic can be "
+#~ "used for GPS sources including FLARM."
+#~ msgstr ""
+#~ "A másodlagos eszköz típusa. A másodlagos eszköz tartalék GPS jelként vagy "
+#~ "más forrásból, pl. intelligens variométerből származó jelként "
+#~ "használható. A Generic típus FLARM-ot tartalmazó GPS-hez is alkalmas."
+
+#~ msgid "Arrival height"
+#~ msgstr "Érkezési magasság"
+
+#~ msgid "Show MacReady"
+#~ msgstr "MacCready kijelzése"
+
+#~ msgid "Aircraft symbol"
+#~ msgstr "Repülőgép szimbólum"
+
+#~ msgid "Flap forces cruise"
+#~ msgstr "Ivelőlap siklást jelent"
+
+#~ msgid ""
+#~ "Select your PNA model to make full use of its hardware capabilities. If "
+#~ "it is not included, use Generic type."
+#~ msgstr ""
+#~ "Válassza ki a PNA modellt a hardverlehetőségek teljes kihasználása "
+#~ "érdekében. Ha nincs a listán, válassza a Generic típust."
+
+#~ msgid "Nav. by baro altitude"
+#~ msgstr "Nav. baro. mag. alapján"
+
 #~ msgid "Gestures"
 #~ msgstr "Gesztusok"
+
+#~ msgid "Optimisation margin"
+#~ msgstr "Optimalizációs keret"
+
+#~ msgid "Block speed to fly"
+#~ msgstr "Tartandó blokk sebesség"
+
+#~ msgid ""
+#~ "Units used for horizontal distances e.g. range to waypoint, distance to "
+#~ "go."
+#~ msgstr "A vízszintes távolságokhoz használt mértékegység (fordulópont, táv)"
+
+#~ msgid "Max. ballast"
+#~ msgstr "Max. ballaszt"
+
+#~ msgid "Units used for latitude and longitude."
+#~ msgstr "A földrajzi szélességhez, hosszúsághoz használt mértékegység."
+
+#~ msgid "Units used for altitude and heights."
+#~ msgstr "A magasságokhoz és szintekhez használt mértékegység."
+
+#~ msgid ""
+#~ "The Input Events file defines the menu system and how XCSoar responds to "
+#~ "button presses and events from external devices."
+#~ msgstr ""
+#~ "Az beviteli események fájl határozza meg a menürendszert és hogy az "
+#~ "XCSoar hogyan válaszol a külső eszközöktől érkező gombnyomásokra és "
+#~ "eseményekre."
+
+#~ msgid "Show ballast"
+#~ msgstr "Ballaszt kijelzése"
+
+#~ msgid "Page 3"
+#~ msgstr "3. oldal"
+
+#~ msgid "Airspaces"
+#~ msgstr "Légterek"
+
+#~ msgid "Display orientation"
+#~ msgstr "Képernyő tájolás"
 
 #~ msgid ""
 #~ "The language file defines translations for XCSoar text in English to "
@@ -9039,12 +8393,216 @@ msgstr ""
 #~ "A nyelvi fájlok az XCSoar angol nyelvű szövegét fordítják le más nyelvre. "
 #~ "Ha üresen hagyjuk ezt a mezőt, az XCSoar az angolt használja."
 
+#~ msgid "Menu timeout"
+#~ msgstr "Menü időkorlát"
+
+#~ msgid "Msg. window"
+#~ msgstr "Üzenetablak"
+
+#~ msgid ""
+#~ "When enabled, route planning climbs are limited to ceiling defined by "
+#~ "greater of current aircraft altitude plus 500 m and the thermal ceiling.  "
+#~ "If disabled, climbs are unlimited."
+#~ msgstr ""
+#~ "Ha engedélyezzük, ez szabályozza, hogy milyen magas emelésekkel számol az "
+#~ "útvonaltervezésben. Ez vagy a gép pillanatnyi magassága felett 500m vagy "
+#~ "a termik magassága, amelyik magasabb. Ha kikapcsoljuk, az emelések "
+#~ "korlátlan magasak."
+
+#~ msgid ""
+#~ "Defines the alignment of the status message box, either centered or in "
+#~ "the top left corner."
+#~ msgstr ""
+#~ "Az üzenetablakok megjelenésének helyét szabályozza, lehet a képernyő "
+#~ "közepén vagy a bal felső sarokban."
+
+#~ msgid ""
+#~ "For auto airspace mode, this is the altitude above/below which airspace "
+#~ "is included."
+#~ msgstr ""
+#~ "A gép magassága felett és alatt ilyen vastag sávba eső légterek kerülnek "
+#~ "megjelenítésre a megfelelő üzemmódban."
+
+#~ msgid "Whether to show the MacCready setting."
+#~ msgstr "MacCready érték kijelzése"
+
+#~ msgid "Previous"
+#~ msgstr "Előző"
+
+#~ msgid "Altair Pro users should set this to Port 3"
+#~ msgstr "Altair Pro felhasználók állítsák ezt Port 3-ra."
+
+#~ msgid ""
+#~ "Draw a black outline around each airspace rather than the airspace color"
+#~ msgstr ""
+#~ "Minden légteret a saját színe helyett inkább fekete vonallal rajzoljon "
+#~ "meg."
+
+#~ msgid "Page 6"
+#~ msgstr "6. oldal"
+
+#~ msgid "Default turn point type for new tasks you create."
+#~ msgstr "Új feladatok alap fordulópont típusa."
+
+#~ msgid "Label format"
+#~ msgstr "Címkeformátum"
+
+#~ msgid ""
+#~ "If true, the vario gauge will display a hollow averager needle.  During "
+#~ "cruise, this needle displays the average netto value.  During circling, "
+#~ "this needle displays the average gross value."
+#~ msgstr ""
+#~ "Ha bekapcsoljuk, akkor a varió műszer tartalmaz egy átlagoló mutatót. "
+#~ "Siklásban ez a mutató az átlagos nettó értéket mutatja. Körözésben az "
+#~ "átlagos összértéket mutatja."
+
+#~ msgid "Colored InfoBoxes"
+#~ msgstr "Színes kijelzők"
+
+#~ msgid "FLARM radar"
+#~ msgstr "FLARM radar"
+
+#~ msgid "Slope shading"
+#~ msgstr "Lejtők árnyalása"
+
+#~ msgid ""
+#~ "Units used for airspeed and ground speed.  A separate unit is available "
+#~ "for task speeds."
+#~ msgstr ""
+#~ "A repülési és a föld feletti sebességekhez használt mértékegység. A "
+#~ "feladat sebességek egysége külön állítható."
+
+#~ msgid ""
+#~ "When Vega variometer is connected and this option is true, the positive "
+#~ "flap setting switches the flight mode between circling and cruise."
+#~ msgstr ""
+#~ "Ha bekapcsoljuk és Vega variométer csatlakozik, a pozitív ívelőlap "
+#~ "állások átkapcsolnak a körözés és a siklás üzemmódok között."
+
+#~ msgid ""
+#~ "Determines whether and how long a snail trail is drawn behind the glider"
+#~ msgstr ""
+#~ "Meghatározza, hogy kell-e és milyen hosszan nyomvonalat rajzolni a gép "
+#~ "mögött."
+
+#~ msgid "Default finish type for new tasks you create."
+#~ msgstr "Új feladatok célszektorának alap típusa."
+
+#~ msgid ""
+#~ "The height above terrain that the glider should arrive at for a safe "
+#~ "landing."
+#~ msgstr ""
+#~ "A biztonságos leszálláshoz ezen a föld feletti magasságon kell a gépnek "
+#~ "érkeznie."
+
+#~ msgid ""
+#~ "Primary waypoints file.  Supported file types are Cambridge/WinPilot "
+#~ "files (.dat), Zander files (.wpz) or SeeYou files (.cup)."
+#~ msgstr ""
+#~ "Elsődleges fordulópont fájl. A támogatott formátumok: Cambridge/WinPilot "
+#~ "(.dat), Zander (.wpz) vagy SeeYou (.cup)."
+
+#~ msgid ""
+#~ "Two styles for infobox borders are available:\n"
+#~ "[Box] Draws boxes around each infobox.\n"
+#~ "[Tab] Draws a tab at the top of the infobox across the title."
+#~ msgstr ""
+#~ "A kijelzőknek kétfajta kerete lehet:\n"
+#~ "[DOBOZ] Télalap alakú körbefutó keret.\n"
+#~ "[FÜL] A kijelző felső élére rajzolt fül."
+
+#~ msgid "If enabled, then airspaces are filled transparently."
+#~ msgstr "Ha bekapcsoljuk, a légtereket átlátszóan színezi ki."
+
+#~ msgid ""
+#~ "This is the time period in which an acknowledged airspace warning will "
+#~ "not be repeated."
+#~ msgstr ""
+#~ "Egy tudomásul vett légtérsértési figyelmeztetést ennyi időn belül nem "
+#~ "ismétel meg."
+
+#~ msgid "Text input style"
+#~ msgstr "Szövegbevitel stílusa"
+
+#~ msgid ""
+#~ "Secondary waypoints file.  This may be used to add waypoints for a "
+#~ "competition."
+#~ msgstr ""
+#~ "Másodlagos fordulópont fájl. Ezzel egy versenyen új fordulópontokat adhat "
+#~ "a többihez."
+
+#~ msgid "Page 5"
+#~ msgstr "5. oldal"
+
+#~ msgid "Turn point"
+#~ msgstr "Fordulópont"
+
+#~ msgid "Label style"
+#~ msgstr "Címkestílus"
+
+#~ msgid "Units used for vertical speeds (variometer)"
+#~ msgstr "Függőleges sebességek (variométer) esetében használt mértékegység."
+
+#~ msgid "Map database"
+#~ msgstr "Térképadatbázis"
+
+#~ msgid "Default task type for new tasks you create."
+#~ msgstr "Új feladatok alap feladattípusa."
+
 #~ msgid ""
 #~ "Name of file to replay.  Can be an IGC file, a raw NMEA log file, or if "
 #~ "blank, runs the demo."
 #~ msgstr ""
 #~ "A visszajátszandó fájl neve. Lehet IGC fájl, NMEA naplófájl, ha üresen "
 #~ "hagyjuk, lejátsza a demót."
+
+#~ msgid "Length/Radius"
+#~ msgstr "Hossz/Sugár"
+
+#~ msgid "Units used for temperature."
+#~ msgstr "A hőmérsékletekhez használt mértékegység."
+
+#~ msgid ""
+#~ "Determines how the user is prompted for text input (filename, teamcode "
+#~ "etc.)"
+#~ msgstr "A szövegbevitel (fájlnév, csapatkód, stb.) módját határozza meg."
+
+#~ msgid "Averager needle"
+#~ msgstr "Átlagoló mutató"
+
+#~ msgid ""
+#~ "Maintain effective\r\n"
+#~ "LOOKOUT at all times"
+#~ msgstr ""
+#~ "Mindig figyelje\r\n"
+#~ "KÖRNYEZETÉT!"
+
+#~ msgid ""
+#~ "MC\n"
+#~ "+"
+#~ msgstr ""
+#~ "MC\n"
+#~ "+"
+
+#~ msgid "Alternates mode"
+#~ msgstr "Kitérő üzemmód"
+
+#~ msgid ""
+#~ "MC\n"
+#~ "-"
+#~ msgstr ""
+#~ "MC\n"
+#~ "-"
+
+#~ msgid ""
+#~ "Nearest\n"
+#~ "Waypoint"
+#~ msgstr ""
+#~ "Közeli\n"
+#~ "FP"
+
+#~ msgid "Thermal assistant"
+#~ msgstr "Termik segéd"
 
 #~ msgid ""
 #~ "Determines how the screen is rotated with the glider:\n"
@@ -9069,6 +8627,9 @@ msgstr ""
 #~ "Hiba történt, a feladat\n"
 #~ "NINCS deklarálva!"
 
+#~ msgid "Task declared"
+#~ msgstr "Feladat deklarálva"
+
 #~ msgid "Declare Task?"
 #~ msgstr "Deklarálod a feladatot?"
 
@@ -9078,20 +8639,129 @@ msgstr ""
 #~ msgid "Set speed remaining"
 #~ msgstr "Sebesség a maradék távon"
 
+#~ msgid "Pan mode on"
+#~ msgstr "Görgetés BE"
+
+#~ msgid "Pan mode off"
+#~ msgstr "Görgetés KI"
+
 #~ msgid "TODO"
 #~ msgstr "[Fejlesztés alatt...]"
+
+#~ msgid ""
+#~ "Simulation\r\n"
+#~ "nothing is real!"
+#~ msgstr ""
+#~ "SZIMULÁCIÓ!\r\n"
+#~ "Nem valós repülés!"
+
+#~ msgid "Status message"
+#~ msgstr "Üzenetek stílusa"
+
+#~ msgid "Watched waypoints"
+#~ msgstr "Kiszemelt FP"
+
+#~ msgid "More waypoints"
+#~ msgstr "Alkalmi FP"
+
+#~ msgid "More airspaces"
+#~ msgstr "Alkalmi légterek"
+
+#~ msgid ""
+#~ "Waypoint file containing special waypoints for which additional "
+#~ "computations like calculation of arrival height in map display always "
+#~ "takes place. Useful for waypoints like known reliable thermal sources (e."
+#~ "g. powerplants) or mountain passes."
+#~ msgstr ""
+#~ "Különleges fordulópontokat tartalmazó fájl, melyeket további számítások "
+#~ "használhatnak fel, mint például az érkezési magasság számítása. "
+#~ "Megbízható termiklelőhelyek (pl. erőművek), hágók, ilyesmik esetében "
+#~ "hasznos."
+
+#~ msgid "The file name of the secondary airspace file."
+#~ msgstr ""
+#~ "A másodlagos légtérfájl neve. Ezzel egy versenyen időleges légtereket "
+#~ "adhat a többihez."
+
+#~ msgid ""
+#~ "The file may contain extracts from enroute supplements or other "
+#~ "contributed information about individual waypoints and airfields."
+#~ msgstr ""
+#~ "A fájl kiegészítő információkat tartalmazhat fordulópontokról és "
+#~ "repülőterekről."
+
+#~ msgid "Track bearing"
+#~ msgstr "Repülési irány"
+
+#~ msgid "Landable symbols"
+#~ msgstr "Szimbólum"
+
+#~ msgid "Detailed landables"
+#~ msgstr "Részletek"
+
+#~ msgid "SC"
+#~ msgstr "SC"
 
 #~ msgid "Final glide bar"
 #~ msgstr "Végsiklás szintjelző"
 
+#~ msgid "Finish point"
+#~ msgstr "Célpont"
+
+#~ msgid "Start max. height margin"
+#~ msgstr "Magasság tűrése"
+
+#~ msgid "A percentage to select the size landables are displayed on the map."
+#~ msgstr ""
+#~ "A leszállóhelyek térképen történő kirajzolásának méretét szabályozza."
+
 #~ msgid "Speed Remaining Help"
 #~ msgstr "Sebesség a maradékon"
+
+#~ msgid "Load Preset"
+#~ msgstr "Készlet betöltése"
+
+#~ msgid "Reach polar"
+#~ msgstr "Elérhető táv polárisa"
 
 #~ msgid "Specifies the file defining the topological features."
 #~ msgstr "A térképjeleket tartalmazó fájl neve."
 
 #~ msgid "File type"
 #~ msgstr "Fájl típusa"
+
+#~ msgid "Waypoint details"
+#~ msgstr "FP részletek"
+
+#~ msgid "Terrain file"
+#~ msgstr "Domborzat"
+
+#~ msgid "Topography file"
+#~ msgstr "Térképjelek"
+
+#~ msgid ""
+#~ "Display the track bearing (ground track projection) on the map.\n"
+#~ "[Off] Disable display of track bearing.\n"
+#~ "[On] Always display track bearing.\n"
+#~ "[Auto] Display track bearing if there is a significant difference to "
+#~ "plane heading."
+#~ msgstr ""
+#~ "Megjeleníti a haladás irányát (annak felszíni vetületét) a térképen.\n"
+#~ "[KI] Nem jeleníti meg.\n"
+#~ "[BE] Mindig megjeleníti.\n"
+#~ "[AUTOMATA] Akkor jeleníti meg, ha lényegesen eltér az orriránytól."
+
+#~ msgid "Trail scaled"
+#~ msgstr "Nyomvonal méretezés"
+
+#~ msgid "Scale runway length"
+#~ msgstr "Futópálya méretében"
+
+#~ msgid "Terrain display"
+#~ msgstr "Domborzat"
+
+#~ msgid "Topography display"
+#~ msgstr "Topográfia"
 
 #~ msgid ""
 #~ "Defines the amount of phong shading in the terrain rendering.  Use large "
@@ -9100,3 +8770,376 @@ msgstr ""
 #~ msgstr ""
 #~ "A domborzat kidomborításának mértéke. Használjon nagy értékeket a lejtők "
 #~ "hangsúlyozására, kisebbeket ha meredek hegyek között repül."
+
+#~ msgid "Terrain contrast"
+#~ msgstr "Kontraszt"
+
+#~ msgid "Terrain brightness"
+#~ msgstr "Fényerő"
+
+#~ msgid "Terrain colors"
+#~ msgstr "Színek"
+
+#~ msgid "Whether to show the ballast percentage."
+#~ msgstr "A vízballaszt arányának megjelenítése"
+
+#~ msgid "Whether to show the gross climb rate."
+#~ msgstr "Össz. emelés kijelzése a variométerben."
+
+#~ msgid "Show gross"
+#~ msgstr "Össz. emelés"
+
+#~ msgid ""
+#~ "This option defines which auto MacCready algorithm is used.\n"
+#~ "[Final glide] adjusts MC for fastest arrival.  For OLC sprint tasks, the "
+#~ "MacCready is adjusted in order to cover the greatest distance in the "
+#~ "remaining time and reach the finish height.\n"
+#~ "[Trending Average] sets MC to the trending average climb rate based on "
+#~ "all climbs.\n"
+#~ "[Both] Uses trending average during task, then fastest arrival when in "
+#~ "final glide mode."
+#~ msgstr ""
+#~ "Ez határozza meg, hogy melyik MacCready algoritmus lesz alkalmazva.\n"
+#~ "[VÉGSIKLÁS] Az MC a leggyorsabb érkezéshez lesz beállítva. Az Online "
+#~ "Verseny sebességfeladataiban olyan MC lesz beállítva, hogy a legnagyobb "
+#~ "távolság legyen elérhető a maradék időben és az érkezési magasságot is "
+#~ "tartsuk.\n"
+#~ "[TERMIKÁTLAG KÖVETÉSE] az összes emelésen alapuló trendátlaghoz lesz "
+#~ "állítva a MC.\n"
+#~ "[MIND] a feladat alatt a trendátlag, a végsiklásban pedig a leggyorsabb "
+#~ "érkezés szerint lesz a MC állítva."
+
+#~ msgid "L/D average period"
+#~ msgstr "Átlagos siklószám mintavétel"
+
+#~ msgid "STF risk factor"
+#~ msgstr "Magasságvesztés kockázata"
+
+#~ msgid "Route mode"
+#~ msgstr "Útvonaltervezés módja"
+
+#~ msgid "Route climb"
+#~ msgstr "Emelések az útvonalon"
+
+#~ msgid ""
+#~ "This determines the glide performance used in reach, landable arrival, "
+#~ "abort and alternate calculations:\n"
+#~ "[Task] Uses task glide polar\n"
+#~ "[Safety MC] Uses safety MacCready value"
+#~ msgstr ""
+#~ "Ez szabályozza, hogy a berepülhető terület, leszállóhelyi érkezés, "
+#~ "feladatmegszakítás és kitérő számításánál a gép milyen teljesítményével "
+#~ "számoljon.\n"
+#~ "[FELADAT] A feladat polárgörbéjével\n"
+#~ "[BIZTONSÁGOS MC] A biztonsági MC értékkel"
+
+#~ msgid ""
+#~ "Controls filtering of airspace for display and warnings.  The airspace "
+#~ "filter button also allows filtering of display and warnings independently "
+#~ "for each airspace class.\n"
+#~ "[All on] All is displayed.\n"
+#~ "[Clip] Only airspace below the clip altitude.\n"
+#~ "[Auto] All within a margin of the glider.\n"
+#~ "[All below] All airspace below the glider."
+#~ msgstr ""
+#~ "A légterek megjelenítési és a figyelmeztetési szűrését szabályozza. A "
+#~ "légtér szűrő nyomógomb ugyancsak lehetővé teszi a megjelenítés és a "
+#~ "figyelmeztetés szűrését, osztályonként.\n"
+#~ "[MIND BE] Mind megjelenik.\n"
+#~ "[VÁGÁS] Csak a vágási szint alattiak.\n"
+#~ "[AUTOMATA] Mind, a gép magasságának egy tartományában.\n"
+#~ "[ALATTA MINDET] A gép alatt mind megjelenik."
+
+#~ msgid "Margin"
+#~ msgstr "Vágási sáv"
+
+#~ msgid "Enable/disable all airspace warnings."
+#~ msgstr "Engedélyezi vagy letiltja az összes légtér-riasztást."
+
+#~ msgid "Warning time"
+#~ msgstr "Riasztás időzítése"
+
+#~ msgid "Acknowledge time"
+#~ msgstr "Nyugtázás érvénye"
+
+#~ msgid "Start max. speed margin"
+#~ msgstr "Sebesség tűrése"
+
+#~ msgid "Default Task Rules"
+#~ msgstr "Feladatszabályok alapértékei"
+
+#~ msgid "Map Projection"
+#~ msgstr "Térkép megjelenítés"
+
+#~ msgid "Default Task Turnpoint Types"
+#~ msgstr "Fordulópont típusok alapértékei"
+
+#~ msgid "Time step circling"
+#~ msgstr "Mintavétel körözésben"
+
+#~ msgid "Auto. logger"
+#~ msgstr "Automatikus logger"
+
+#~ msgid ""
+#~ "The status file can be used to define sounds to be played when certain "
+#~ "events occur, and how long various status messages will appear on screen."
+#~ msgstr ""
+#~ "A státusz fájlban adható meg, hogy milyen hangok kerüljenek lejátszásra "
+#~ "bizonyos események esetén és hogy különféle állapotjelzések mennyi ideig "
+#~ "jelenjenek meg a képernyőn."
+
+#~ msgid "Events"
+#~ msgstr "Eseménykezelés"
+
+#~ msgid "Infobox geometry"
+#~ msgstr "Kijelzők elrendezése"
+
+#~ msgid "Determines display size of dialogs."
+#~ msgstr "A párbeszédablakok méretét, helyét határozza meg."
+
+#~ msgid ""
+#~ "This determines whether the glide reach is drawn as a line on the map "
+#~ "area:\n"
+#~ "[Off] Disables display\n"
+#~ "[Line] Draws a dashed line at the glide reach\n"
+#~ "[Shade] Shades terrain outside glide reach"
+#~ msgstr ""
+#~ "A siklásban elérhető terület kirajzolásának módja.\n"
+#~ "[KI] Kirajzolás letiltva\n"
+#~ "[VONAL] A terület peremét szaggatott vonal jelzi.\n"
+#~ "[ÁRNYÉK] A területen kívüli terep árnyékolva lesz."
+
+#~ msgid ""
+#~ "How calculations are performed of the reach of the glider with respect to "
+#~ "terrain.\n"
+#~ "[Off] Reach calculations disabled.\n"
+#~ "[Straight] The reach is from straight line paths from the glider.\n"
+#~ "[Turning] The reach is calculated allowing turns around terrain obstacles."
+#~ msgstr ""
+#~ "Az elérhető terület kiszámításának módja.\n"
+#~ "[KI] Számítások letiltva.\n"
+#~ "[EGYENESEN] Az egyenes vonalú repülésben elérhető terület.\n"
+#~ "[KERÜLŐKKEL] A terepakadályok megkerülésével elérhető terület."
+
+#~ msgid "Reach mode"
+#~ msgstr "Elérhető"
+
+#~ msgid ""
+#~ "When enabled and MC is positive, route planning allows climbs between the "
+#~ "aircraft location and destination."
+#~ msgstr ""
+#~ "Ha bekapcsoljuk és az MC érték pozitív, az útvonaltervező emelésekkel "
+#~ "számol a gép helyzete és az úticél között."
+
+#~ msgid "Reach display"
+#~ msgstr "Elérhető terület"
+
+#~ msgid ""
+#~ "Safety margin for AAT task optimisation.  Optimisation seeks to complete "
+#~ "the task at the minimum time plus this margin time."
+#~ msgstr ""
+#~ "Biztonsági időtartalék a hozzárendelt területes (HT) feladatok "
+#~ "optimizálásához. Az optimumszámítás a legrövidebb időnek ezzel a "
+#~ "tartalékkal megnövelt értékéhez igazítja a feladat végrehajtását."
+
+#~ msgid ""
+#~ "AA Speed - Assigned Area Task average speed achievable around target "
+#~ "points remaining in minimum AAT time."
+#~ msgstr ""
+#~ "HT seb - hozzárendelt területes feladatban a maradék minimum HT időben a "
+#~ "pontok körberepülésével elérhető átlagsebesség."
+
+#~ msgid "km"
+#~ msgstr "km"
+
+#~ msgid "km/h"
+#~ msgstr "km/óra"
+
+#~ msgid "m/s"
+#~ msgstr "méter/mp"
+
+#~ msgid "Specifies the file defining the topographical features."
+#~ msgstr "A topográfiai adatokat tartalmazó fájl."
+
+#~ msgid ""
+#~ "Determines sorting of alternates in the alternates dialog and in abort "
+#~ "mode:\n"
+#~ "[Simple] The alternates will only be sorted by waypoint type (airport/"
+#~ "outlanding field) and arrival height.\n"
+#~ "[Task] The sorting will also take the current task direction into "
+#~ "account.\n"
+#~ "[Home] The sorting will try to find landing options in the current "
+#~ "direction to the configured home waypoint."
+#~ msgstr ""
+#~ "A kitérő repterek rendezésének elve a kitérők párbeszédablakban vagy "
+#~ "feladatmegszakítás során:\n"
+#~ "[EGYSZERŰ] A kitérők a típusuk (reptér/terep) és érkezési magasságuk "
+#~ "szerint rendezve.\n"
+#~ "[FELADAT] A rendezés figyelembe veszi a feladat szerinti irányt is.\n"
+#~ "[BÁZIS] A rendezés figyelembe veszi a beállított bázisreptér irányát."
+
+#~ msgid "Landable size"
+#~ msgstr "Leszálló mérete"
+
+#~ msgid "Default AAT min. time for new AAT tasks."
+#~ msgstr "Alap HT minimum idő, új hozzárendelt területes (HT) feladatokhoz."
+
+#~ msgid "Info "
+#~ msgstr "Kijelzők "
+
+#~ msgid "Info Auto"
+#~ msgstr "Kijelzők automata"
+
+#~ msgid "Draw topographical features (roads, rivers, lakes etc.) on the map."
+#~ msgstr "Topográfia (utak, folyók, tavak, stb) megjelenítése a térképen."
+
+#~ msgid ""
+#~ "Setting this to \"On\" will automatically close the FLARM dialog if there "
+#~ "is no traffic. \"Off\" will keep the dialog open even without current "
+#~ "traffic."
+#~ msgstr ""
+#~ "Be állásban automatikusan bezáródik a FLARM ablak, ha nincs forgalom. Ki "
+#~ "esetén az ablak nyitva marad, még ha nincs is forgalom."
+
+#~ msgid ""
+#~ "Defines the amount of Phong shading in the terrain rendering.  Use large "
+#~ "values to emphasise terrain slope, smaller values if flying in steep "
+#~ "mountains."
+#~ msgstr ""
+#~ "A domborzat kidomborításának mértéke. Használjon nagy értékeket a lejtők "
+#~ "hangsúlyozására, kisebbeket ha meredek hegyek között repül."
+
+#~ msgid "The handicap factor used for the OnLine Contest scoring."
+#~ msgstr "Az OnLine verseny értékelése során alkalmazandó handicap faktor."
+
+#~ msgid "Reference weight at which the given polar is valid."
+#~ msgstr ""
+#~ "Az a referenciasúly, amely mellett a megadott sebességpoláris érvényes."
+
+#~ msgid ""
+#~ "Optional the amount of water ballast XCSoar refers to as 100% ballast. "
+#~ "Set to zero if it does not apply."
+#~ msgstr ""
+#~ "Az XCSoar által 100%-nak jelölt vízballaszt mennyisége. Állítsa nullára, "
+#~ "ha nincs ilyen."
+
+#~ msgid ""
+#~ "Here you can decide on how many seconds of flight this calculation must "
+#~ "be done. Normally for gliders a good value is 90-120 seconds, and for "
+#~ "paragliders 15 seconds."
+#~ msgstr ""
+#~ "Itt eldöntheti, hogy a repülés hanyadik másodpercében történjen meg ez a "
+#~ "számítás. Vitorlázógépek esetében a 90-120 mp., siklóernyők esetében a 15 "
+#~ "mp. általában a megfelelő érték."
+
+#~ msgid ""
+#~ "A list of possible InfoBox layouts. Do some trials to find the best for "
+#~ "your screen size."
+#~ msgstr ""
+#~ "A lehetséges kijelző-elrendezések listája. Végezzen néhány próbát a "
+#~ "képernyőmérethez legalkalmasabb elrendezés megtalálásához."
+
+#~ msgid ""
+#~ "Sets the symbol used for the aircraft.\n"
+#~ "[Simple] Simplified line graphics, black with white contours.\n"
+#~ "[Simple (large)] Enlarged simple graphics.\n"
+#~ "[Detailed] Rendered aircraft graphics."
+#~ msgstr ""
+#~ "A repülőgépet megjelenítő szimbólum beállítása.\n"
+#~ "[Egyszerű] Egyszerűsített vonalas grafika, fekete szín fehér "
+#~ "körvonallal.\n"
+#~ "[Egyszerű (nagy)] Felnagyított egyszerű grafika.\n"
+#~ "[Részletes] Finom rajzolatú, számított grafika."
+
+#~ msgid "Auto close FLARM"
+#~ msgstr "FLARM autmata bezárása"
+
+#~ msgid "This enables the display of FLARM traffic on the map window."
+#~ msgstr "A FLARM forgalom megjelenítése a térképablakban."
+
+#~ msgid "Optional specification of the wing area."
+#~ msgstr "A szárny felülete (megadható)"
+
+#~ msgid "Auto MC mode"
+#~ msgstr "Automata MC"
+
+#~ msgid ""
+#~ "If enabled sets the clock of the computer to the GPS time once a fix is "
+#~ "set. This is only necessary if your computer does not have a real-time "
+#~ "clock with battery backup or your computer frequently runs out of battery "
+#~ "power or otherwise loses time."
+#~ msgstr ""
+#~ "Az eszköz óráját a GPS-ből vett időhöz igazítja. Ez csak akkor szükséges, "
+#~ "ha az eszköznek nincs elemről táplált órája vagy az gyakran lemerül vagy "
+#~ "más ok miatt elfelejti a pontos időt."
+
+#~ msgid ""
+#~ "Optional the maximum manoeuvring speed can be entered on this page to "
+#~ "prevent the glide computer from commanding unrealistic cruise speeds."
+#~ msgstr ""
+#~ "A maximális manőverezési sebesség adható meg, hogy a siklókomputer ne "
+#~ "utasíthasson irreális siklási sebességekre. (megadható)"
+
+#~ msgid ""
+#~ "The language options selects translations for English texts to other "
+#~ "languages. Select English for a native interface or Automatic to localise "
+#~ "XCSoar according to the system settings."
+#~ msgstr ""
+#~ "A nyelv kiválasztása az angol feliratokat fordítja le a választott "
+#~ "nyelvre. Válassza az angolt az eredeti feliratokhoz vagy az automatikust, "
+#~ "amely az eszköz területi beállításához igazítja a használt nyelvet."
+
+#~ msgid "Draw a digital elevation terrain on the map."
+#~ msgstr "Digitális domborzat kirajzolása a térképre."
+
+#~ msgid ""
+#~ "Select the rules used for calculating optimal points for the On-Line "
+#~ "Contest. The implementation  conforms to the official release 2010, "
+#~ "Sept.23.\n"
+#~ "[Classic] Up to seven points including start and finish, finish height "
+#~ "must not be lower than start height less 1000 meters.\n"
+#~ "[FAI] Conforms to FAI triangle rules. Three turns and common start and "
+#~ "finish. No leg less than 28% of total except for tasks longer than 500km: "
+#~ "No leg less than 25% or larger than 45%.\n"
+#~ "[League] The most recent contest with Sprint task rules.\n"
+#~ "[Plus] A combination of Classic and FAI rules. 30% of the FAI score are "
+#~ "added to the Classic score."
+#~ msgstr ""
+#~ "Az OnLine verseny optimális pontjainak számítása során alkalmazott "
+#~ "szabályok. Megfelel a 2010. szeptember 23-i hivatalos kiadványnak.\n"
+#~ "[Klasszikus] A startot és a célt beleértve maximum hét pont, az érkezés "
+#~ "nem lehet a startnál 1000 méternél alacsonyabban.\n"
+#~ "[FAI] A FAI háromszög szabálynak megfelelő. Három forduló, közös start és "
+#~ "cél. Egyik oldal sem lehet a táv 28%-nál rövidebb, kivéve a 500km-nél "
+#~ "hosszabb távokat: ott nem lehet 25%-nál rövidebb vagy 45%-nál hosszabb.\n"
+#~ "[Liga] A legutóbbi verseny Sprint szabályokkal.\n"
+#~ "[Plusz] A klasszikus és a FAI szabályok kombinációja. A FAI pontozás 30%-"
+#~ "a kerül a klasszikus pontozáshoz hozzáadásra."
+
+#~ msgid "%s: %s"
+#~ msgstr "%s: %s"
+
+#~ msgid "Vario Gauge"
+#~ msgstr "Varió kijelző"
+
+#~ msgid "Dry mass"
+#~ msgstr "Száraz tömeg"
+
+#~ msgid "Reference mass"
+#~ msgstr "Referencia tömeg"
+
+#~ msgid "Determines how labels are displayed with each waypoint"
+#~ msgstr "Fordulópont címke megjelenítés megadása"
+
+#~ msgid "Height barometric"
+#~ msgstr "Magasság barometrikus"
+
+#~ msgid "The vertical distance to the nearest airspace"
+#~ msgstr "Függőleges távolság a legközelebbi légtérig"
+
+#~ msgid ""
+#~ "The list of tracked stations is full. Please remove a station before "
+#~ "adding a new one."
+#~ msgstr ""
+#~ "A követett állomások listája tele van. Távolíts el egy állomást mielőtt "
+#~ "egy másikat hozzáadnál."
