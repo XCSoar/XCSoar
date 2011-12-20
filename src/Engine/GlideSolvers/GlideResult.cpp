@@ -28,6 +28,9 @@
 GlideResult::GlideResult(const GlideState &task, const fixed V):
   head_wind(task.head_wind),
   v_opt(V),
+#ifndef NDEBUG
+  start_altitude(task.min_height + task.altitude_difference),
+#endif
   min_height(task.min_height),
   vector(task.vector),
   distance_to_final(task.vector.Distance),

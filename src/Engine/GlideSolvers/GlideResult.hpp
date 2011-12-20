@@ -62,6 +62,17 @@ struct GlideResult {
    */
   fixed v_opt;
 
+#ifndef NDEBUG
+  /**
+   * The altitude of the aircraft at the beginning of this leg [m
+   * MSL].  Immutable input value.
+   *
+   * This attribute shall aid debugging, and will be removed once we
+   * are certain the MacCready code is stable.
+   */
+  fixed start_altitude;
+#endif
+
   /**
    * Altitude [m above MSL] of target.  Immutable input value.
    */
