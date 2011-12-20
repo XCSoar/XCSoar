@@ -34,8 +34,30 @@ Copyright_License {
  * copies the other buffer to the screen.
  */
 class DoubleBufferWindow : public PaintWindow {
-#ifndef ENABLE_OPENGL
-private:
+#ifdef ENABLE_OPENGL
+  /* on OpenGL, there is no DrawThread, and we use only one buffer to
+     cache the painted window, to reduce CPU/GPU usage for new
+     frames */
+  BufferCanvas buffer;
+
+  /**
+   * Is the buffer dirty, i.e. does it need a full repaint with
+   * on_paint_buffer()?
+   */
+  bool dirty;
+
+public:
+  void invalidate() {
+    dirty = true;
+    PaintWindow::invalidate();
+  }
+
+protected:
+  virtual void on_create();
+  virtual void on_destroy();
+  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
+
+#else
   BufferCanvas buffers[2];
 
   /**

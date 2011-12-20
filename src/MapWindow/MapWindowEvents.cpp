@@ -91,7 +91,7 @@ void
 MapWindow::on_paint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
-  on_paint_buffer(canvas);
+  DoubleBufferWindow::on_paint(canvas);
 #else /* !ENABLE_OPENGL */
   if (buffer_generation == ui_generation)
     DoubleBufferWindow::on_paint(canvas);
