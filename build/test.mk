@@ -606,7 +606,8 @@ DEBUG_PROGRAM_NAMES = \
 	RunAirspaceWarningDialog \
 	TestNotify \
 	DebugDisplay \
-	RunFlarmUtils
+	RunFlarmUtils \
+	RunTCPListener
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += FeedNMEA \
@@ -1005,6 +1006,25 @@ RUN_PORT_HANDLER_SOURCES += \
 	$(SRC)/Device/Port/Widcomm.cpp
 endif
 $(eval $(call link-program,RunPortHandler,RUN_PORT_HANDLER))
+
+RUN_TCP_LISTENER_SOURCES = \
+	$(SRC)/Device/Port/Port.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Compatibility/string.c \
+	$(SRC)/Device/Port/TCPPort.cpp \
+	$(TEST_SRC_DIR)/RunTCPListener.cpp
+
+ifeq ($(HAVE_POSIX),n)
+ifeq ($(HAVE_CE),y)
+RUN_TCP_LISTENER_LDLIBS += -lwinsock
+else
+RUN_TCP_LISTENER_LDLIBS += -lws2_32
+endif
+endif
+
+$(eval $(call link-program,RunTCPListener,RUN_TCP_LISTENER))
 
 RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
