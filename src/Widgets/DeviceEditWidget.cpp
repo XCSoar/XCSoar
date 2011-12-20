@@ -432,7 +432,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
     return true;
 
   case DeviceConfig::PortType::SERIAL:
-    /* Bluetooth */
+    /* Serial Port */
     if (new_type == config.port_type &&
         _tcscmp(config.path, df.GetAsString()) == 0)
       return false;
