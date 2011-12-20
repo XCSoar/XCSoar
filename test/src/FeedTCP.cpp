@@ -94,7 +94,6 @@ int main(int argc, char **argv)
   while (fgets(line, sizeof(line), stdin) != NULL) {
     int l = strlen(line);
     c_count += l;
-    send(sock,line,l, 0);
     long tsleep = l*1e6/(baudrate/10);
     usleep(tsleep);
     sleep_acc += tsleep;
@@ -112,6 +111,8 @@ int main(int argc, char **argv)
       printf(".");
       fflush(stdout);
     }
+
+    send(sock,line,l, 0);
   }
   close(sock);
   printf(">>>> Av %ld\n", c_count/l_count);
