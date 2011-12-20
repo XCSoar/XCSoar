@@ -175,7 +175,7 @@ Bitmap::get_size() const
   assert(defined());
 
 #ifndef ENABLE_OPENGL
-  const PixelSize size = { surface->w, surface->h };
+  const PixelSize size = { Sint16(surface->w), Sint16(surface->h) };
 #endif
   return size;
 }

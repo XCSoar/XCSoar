@@ -387,8 +387,12 @@ Canvas::copy(int dest_x, int dest_y,
       !clip(dest_y, dest_height, height, src_y))
     return;
 
-  SDL_Rect src_rect = { src_x, src_y, dest_width, dest_height };
-  SDL_Rect dest_rect = { x_offset + dest_x, y_offset + dest_y };
+  SDL_Rect src_rect = {
+    Sint16(src_x), Sint16(src_y), Uint16(dest_width), Uint16(dest_height),
+  };
+  SDL_Rect dest_rect = {
+    Sint16(x_offset + dest_x), Sint16(y_offset + dest_y),
+  };
 
   ::SDL_BlitSurface(src_surface, &src_rect, surface, &dest_rect);
 }

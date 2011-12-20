@@ -72,8 +72,8 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
       { 0, -20 },
       { 6, -26 },
       { 0, -20 },
-      { 8 + kx, -24 },
-      { -8 - kx, -24 }
+      { PixelScalar(8 + kx), -24 },
+      { PixelScalar(-8 - kx), -24 }
   };
 
   for (int i = 1; i < 4; i++)
@@ -86,8 +86,8 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
 
   if (SettingsMap().WindArrowStyle == 1) {
     RasterPoint Tail[2] = {
-      { 0, Layout::FastScale(-20) },
-      { 0, Layout::FastScale(-26 - min(20, wmag) * 3) },
+      { 0, PixelScalar(Layout::FastScale(-20)) },
+      { 0, PixelScalar(Layout::FastScale(-26 - min(20, wmag) * 3)) },
     };
 
     Angle angle = (wind.bearing - render_projection.GetScreenAngle()).as_bearing();
