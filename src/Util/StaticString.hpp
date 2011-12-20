@@ -41,25 +41,76 @@
 /**
  * A string with a maximum size known at compile time.
  */
-template<unsigned max>
-class StaticString {
+template<typename T, unsigned max>
+class StaticStringBase
+{
 public:
   static const unsigned MAX_SIZE = max;
-  static const TCHAR SENTINEL = _T('\0');
+  static const T SENTINEL = '\0';
 
   typedef unsigned size_type;
 
 protected:
-  TCHAR data[max];
+  T data[max];
 
 public:
-  StaticString() = default;
-  explicit StaticString(const TCHAR *value) {
+  StaticStringBase() = default;
+  explicit StaticStringBase(const T *value) {
     set(value);
   }
 
-  size_type length() const {
+private:
+#ifdef _UNICODE
+  static unsigned length(const char *data) {
+    return strlen(data);
+  }
+
+  static bool equals(const char *a, const char *b) {
+    return strcmp(a, b) == 0;
+  }
+
+  static char *strtok(char *data, const char *delim) {
+    return strtok(data, delim);
+  }
+
+  template<typename... Args>
+  static void FormatInternal(char *data, unsigned max_size,
+                             const char *fmt, Args&&... args) {
+    ::snprintf(data, max_size, fmt, args...);
+  }
+
+  template<typename... Args>
+  static void UnsafeFormatInternal(char *data, const char *fmt, Args&&... args) {
+    ::sprintf(data, fmt, args...);
+  }
+#endif
+
+  static unsigned length(const TCHAR *data) {
     return _tcslen(data);
+  }
+
+  static bool equals(const TCHAR *a, const TCHAR *b) {
+    return _tcscmp(a, b) == 0;
+  }
+
+  static TCHAR *strtok(TCHAR *data, const TCHAR *delim) {
+    return _tcstok(data, delim);
+  }
+
+  template<typename... Args>
+  static void FormatInternal(TCHAR *data, unsigned max_size,
+                             const TCHAR *fmt, Args&&... args) {
+    ::_sntprintf(data, max_size, fmt, args...);
+  }
+
+  template<typename... Args>
+  static void UnsafeFormatInternal(TCHAR *data, const TCHAR *fmt, Args&&... args) {
+    ::_stprintf(data, fmt, args...);
+  }
+
+public:
+  size_type length() const {
+    return length(data);
   }
 
   bool empty() const {
@@ -86,23 +137,23 @@ public:
     data[new_length] = SENTINEL;
   }
 
-  bool equals(const TCHAR *other) const {
+  bool equals(const T *other) const {
     assert(other != NULL);
 
-    return _tcscmp(data, other) == 0;
+    return equals(data, other);
   }
 
   /**
    * Returns a writable buffer.
    */
-  TCHAR *buffer() {
+  T *buffer() {
     return data;
   }
 
   /**
    * Returns one character.  No bounds checking.
    */
-  TCHAR operator[](size_type i) const {
+  T operator[](size_type i) const {
     assert(i <= length());
 
     return data[i];
@@ -111,51 +162,51 @@ public:
   /**
    * Returns one writable character.  No bounds checking.
    */
-  TCHAR &operator[](size_type i) {
+  T &operator[](size_type i) {
     assert(i <= length());
 
     return data[i];
   }
 
-  const TCHAR *begin() const {
+  const T *begin() const {
     return data;
   }
 
-  const TCHAR *end() const {
+  const T *end() const {
     return data + length();
   }
 
-  TCHAR last() const {
+  T last() const {
     assert(length() > 0);
 
     return data[length() - 1];
   }
 
-  const TCHAR *get() const {
+  const T *get() const {
     return data;
   }
 
-  void set(const TCHAR *new_value) {
+  void set(const T *new_value) {
     assert(new_value != NULL);
 
     CopyString(data, new_value, MAX_SIZE);
   }
 
-  void set(const TCHAR *new_value, size_type length) {
+  void set(const T *new_value, size_type length) {
     assert(new_value != NULL);
 
     size_type max_length = (MAX_SIZE < length + 1) ? MAX_SIZE : length + 1;
     CopyString(data, new_value, max_length);
   }
 
-  void append(const TCHAR *new_value) {
+  void append(const T *new_value) {
     assert(new_value != NULL);
 
     size_type len = length();
     CopyString(data + len, new_value, MAX_SIZE - len);
   }
 
-  void append(const TCHAR *new_value, size_type _length) {
+  void append(const T *new_value, size_type _length) {
     assert(new_value != NULL);
 
     size_type len = length();
@@ -164,7 +215,7 @@ public:
     CopyString(data + len, new_value, max_length);
   }
 
-  bool Append(TCHAR ch) {
+  bool Append(T ch) {
     size_t l = length();
     if (l >= MAX_SIZE - 1)
       return false;
@@ -174,33 +225,33 @@ public:
     return true;
   }
 
-  const TCHAR *c_str() const {
+  const T *c_str() const {
     return get();
   }
 
-  operator const TCHAR *() const {
+  operator const T *() const {
     return get();
   }
 
-  bool operator ==(const TCHAR *value) const {
+  bool operator ==(const T *value) const {
     return equals(value);
   }
 
-  bool operator !=(const TCHAR *value) const {
+  bool operator !=(const T *value) const {
     return !equals(value);
   }
 
-  StaticString<max> &operator =(const TCHAR *new_value) {
+  StaticStringBase<T, max> &operator =(const T *new_value) {
     set(new_value);
     return *this;
   }
 
-  StaticString<max> &operator +=(const TCHAR *new_value) {
+  StaticStringBase<T, max> &operator +=(const T *new_value) {
     append(new_value);
     return *this;
   }
 
-  StaticString<max> &operator +=(TCHAR ch) {
+  StaticStringBase<T, max> &operator +=(T ch) {
     Append(ch);
     return *this;
   }
@@ -208,15 +259,15 @@ public:
   /**
    * Don't use - not thread safe.
    */
-  TCHAR *first_token(const TCHAR *delim) {
-    return _tcstok(data, delim);
+  T *first_token(const T *delim) {
+    return strtok(data, delim);
   }
 
   /**
    * Don't use - not thread safe.
    */
-  TCHAR *next_token(const TCHAR *delim) {
-    return _tcstok(NULL, delim);
+  T *next_token(const T *delim) {
+    return strtok(NULL, delim);
   }
 
   /**
@@ -224,8 +275,8 @@ public:
    * truncated if it is too long for the buffer.
    */
   template<typename... Args>
-  void Format(const TCHAR *fmt, Args&&... args) {
-    ::_sntprintf(data, MAX_SIZE, fmt, args...);
+  void Format(const T *fmt, Args&&... args) {
+    FormatInternal(data, MAX_SIZE, fmt, args...);
   }
 
   /**
@@ -233,9 +284,9 @@ public:
    * if it would become too long for the buffer.
    */
   template<typename... Args>
-  void AppendFormat(const TCHAR *fmt, Args&&... args) {
+  void AppendFormat(const T *fmt, Args&&... args) {
     size_t l = length();
-    ::_sntprintf(data + l, MAX_SIZE - l, fmt, args...);
+    FormatInternal(data + l, MAX_SIZE - l, fmt, args...);
   }
 
   /**
@@ -245,8 +296,56 @@ public:
    * enough!
    */
   template<typename... Args>
-  void UnsafeFormat(const TCHAR *fmt, Args&&... args) {
-    ::_stprintf(data, fmt, args...);
+  void UnsafeFormat(const T *fmt, Args&&... args) {
+    UnsafeFormatInternal(data, fmt, args...);
+  }
+};
+
+/**
+ * A string with a maximum size known at compile time.
+ * This is the TCHAR-based sister of the NarrowString class.
+ */
+template<unsigned max>
+class StaticString: public StaticStringBase<TCHAR, max>
+{
+public:
+  StaticString() = default;
+  explicit StaticString(const TCHAR *value):StaticStringBase<TCHAR, max>(value) {}
+
+  StaticString<max> &operator =(const TCHAR *new_value) {
+    return (StaticString<max> &)StaticStringBase<TCHAR, max>::operator =(new_value);
+  }
+
+  StaticString<max> &operator +=(const TCHAR *new_value) {
+    return (StaticString<max> &)StaticStringBase<TCHAR, max>::operator +=(new_value);
+  }
+
+  StaticString<max> &operator +=(TCHAR ch) {
+    return (StaticString<max> &)StaticStringBase<TCHAR, max>::operator +=(ch);
+  }
+};
+
+/**
+ * A string with a maximum size known at compile time.
+ * This is the char-based sister of the StaticString class.
+ */
+template<unsigned max>
+class NarrowString: public StaticStringBase<char, max>
+{
+public:
+  NarrowString() = default;
+  explicit NarrowString(const TCHAR *value):StaticStringBase<char, max>(value) {}
+
+  NarrowString<max> &operator =(const char *new_value) {
+    return (NarrowString<max> &)StaticStringBase<char, max>::operator =(new_value);
+  }
+
+  NarrowString<max> &operator +=(const char *new_value) {
+    return (NarrowString<max> &)StaticStringBase<char, max>::operator +=(new_value);
+  }
+
+  NarrowString<max> &operator +=(char ch) {
+    return (NarrowString<max> &)StaticStringBase<char, max>::operator +=(ch);
   }
 };
 
