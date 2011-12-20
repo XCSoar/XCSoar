@@ -621,11 +621,13 @@ DEBUG_PROGRAM_NAMES = \
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += FeedNMEA \
-	FeedTCP
+	FeedTCP \
+	FeedTCPServer
 endif
 
 ifeq ($(TARGET),PC)
-DEBUG_PROGRAM_NAMES += FeedTCP
+DEBUG_PROGRAM_NAMES += FeedTCP \
+  FeedTCPServer
 endif
 
 ifeq ($(HAVE_NET),y)
@@ -1947,6 +1949,25 @@ endif
 endif
 
 $(eval $(call link-program,FeedTCP,FEED_TCP))
+
+FEED_TCP_SERVER_SOURCES = \
+	$(SRC)/Device/Port/Port.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Compatibility/string.c \
+	$(SRC)/Device/Port/TCPPort.cpp \
+	$(TEST_SRC_DIR)/FeedTCPServer.cpp
+
+ifeq ($(HAVE_POSIX),n)
+ifeq ($(HAVE_CE),y)
+FEED_TCP_SERVER_LDLIBS += -lwinsock
+else
+FEED_TCP_SERVER_LDLIBS += -lws2_32
+endif
+endif
+
+$(eval $(call link-program,FeedTCPServer,FEED_TCP_SERVER))
 
 TODAY_INSTALL_SOURCES = \
 	$(TEST_SRC_DIR)/TodayInstall.cpp
