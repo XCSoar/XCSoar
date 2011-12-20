@@ -34,8 +34,6 @@ class TCPPort : public Port, protected StoppableThread
 {
   unsigned port;
 
-  unsigned rx_timeout;
-
   int listener_fd, connection_fd;
 
 public:

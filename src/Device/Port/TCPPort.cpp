@@ -39,7 +39,7 @@ Copyright_License {
 #endif
 
 TCPPort::TCPPort(unsigned _port, Handler &_handler)
-  :Port(_handler), port(_port), rx_timeout(0),
+  :Port(_handler), port(_port),
    listener_fd(-1), connection_fd(-1)
 {
 }
@@ -224,7 +224,6 @@ TCPPort::StartRxThread(void)
 bool
 TCPPort::SetRxTimeout(unsigned Timeout)
 {
-  rx_timeout = Timeout;
   return true;
 }
 
