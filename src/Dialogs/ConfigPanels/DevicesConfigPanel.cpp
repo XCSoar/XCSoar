@@ -493,7 +493,7 @@ SetupDeviceFields(const DeviceConfig &config,
  * @return true if the value has changed
  */
 static bool
-FinishPortField(DeviceConfig &config, WndProperty &port_field)
+FinishPortField(DeviceConfig &config, const WndProperty &port_field)
 {
   const DataFieldEnum &df = *(const DataFieldEnum *)port_field.GetDataField();
   unsigned value = df.GetAsInteger();
@@ -553,9 +553,9 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
 
 static bool
 FinishDeviceFields(DeviceConfig &config,
-                   WndProperty *port_field, WndProperty *speed_field,
+                   const WndProperty *port_field, const WndProperty *speed_field,
                    const WndProperty &bulk_baud_rate_field,
-                   WndProperty *driver_field)
+                   const WndProperty *driver_field)
 {
   bool changed = false;
 
