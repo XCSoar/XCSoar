@@ -63,8 +63,8 @@ Trace::get_recent_time(const unsigned t) const
     return 0;
 
   const TracePoint &last = back();
-  if (last.time > t)
-    return last.time - t;
+  if (last.GetTime() > t)
+    return last.GetTime() - t;
 
   return 0;
 }
@@ -138,7 +138,7 @@ Trace::erase_delta(const unsigned target_size, const unsigned recent)
   TraceDelta::iterator candidate = delta_list.begin();
   while (size() > target_size) {
     const TraceDelta &td = *candidate;
-    if (!td.IsEdge() && td.point.time < recent_time) {
+    if (!td.IsEdge() && td.point.GetTime() < recent_time) {
       erase_inside(candidate);
       candidate = delta_list.begin(); // find new top
       modified = true;
@@ -154,7 +154,7 @@ Trace::erase_delta(const unsigned target_size, const unsigned recent)
 bool
 Trace::erase_earlier_than(const unsigned p_time)
 {
-  if (p_time == 0 || empty() || GetFront().point.time >= p_time)
+  if (p_time == 0 || empty() || GetFront().point.GetTime() >= p_time)
     // there will be nothing to remove
     return false;
 
@@ -167,7 +167,7 @@ Trace::erase_earlier_than(const unsigned p_time)
     delta_list.erase(i);
 
     --cached_size;
-  } while (!empty() && GetFront().point.time < p_time);
+  } while (!empty() && GetFront().point.GetTime() < p_time);
 
   // need to set deltas for first point, only one of these
   // will occur (have to search for this point)
@@ -218,12 +218,12 @@ Trace::append(const AircraftState& state)
     // first point determines origin for flat projection
     task_projection.reset(state.location);
     task_projection.update_fast();
-  } else if (state.time < fixed(back().time)) {
+  } else if (state.time < fixed(back().GetTime())) {
     // gone back in time, must reset. (shouldn't get here!)
     assert(1);
     clear();
     return;
-  } else if ((unsigned)state.time - back().time < 2)
+  } else if ((unsigned)state.time - back().GetTime() < 2)
     // only add one item per two seconds
     return;
 
@@ -245,7 +245,7 @@ Trace::get_min_time() const
   if (empty() || m_max_time == null_time)
     return 0;
 
-  unsigned last_time = back().time;
+  unsigned last_time = back().GetTime();
   if (last_time == null_time || last_time <= m_max_time)
     return 0;
 
@@ -261,7 +261,7 @@ Trace::calc_average_delta_distance(const unsigned no_thin) const
 
   const ChronologicalConstIterator end = chronological_list.end();
   for (ChronologicalConstIterator it = chronological_list.begin();
-       it != end && it->point.time < r; ++it, ++counter)
+       it != end && it->point.GetTime() < r; ++it, ++counter)
     acc += it->delta_distance;
 
   if (counter)
@@ -279,7 +279,7 @@ Trace::calc_average_delta_time(const unsigned no_thin) const
   /* find the last item before the "r" timestamp */
   const ChronologicalConstIterator end = chronological_list.end();
   ChronologicalConstIterator it;
-  for (it = chronological_list.begin(); it != end && it->point.time < r; ++it)
+  for (it = chronological_list.begin(); it != end && it->point.GetTime() < r; ++it)
     ++counter;
 
   if (counter < 2)
@@ -288,8 +288,8 @@ Trace::calc_average_delta_time(const unsigned no_thin) const
   --it;
   --counter;
 
-  unsigned start_time = front().time;
-  unsigned end_time = it->point.time;
+  unsigned start_time = front().GetTime();
+  unsigned end_time = it->point.GetTime();
   return (end_time - start_time) / counter;
 }
 
@@ -344,7 +344,7 @@ Trace::GetTracePoints(TracePointVector &v, unsigned min_time,
       /* nothing left */
       return;
 
-    if (i->time >= min_time)
+    if (i->GetTime() >= min_time)
       /* found the first point that is within range */
       break;
 

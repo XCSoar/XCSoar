@@ -75,8 +75,8 @@ OLCLeague::Solve(bool exhaustive)
   unsigned index_fill = 1;
 
   for (unsigned index_classic = 1; index_classic+1 < solution_classic.size(); ++index_classic) {
-    if ((solution_classic[index_classic].time > solution[index_fill-1].time)
-        &&(solution_classic[index_classic].time < trace[1].time)) {
+    if (solution_classic[index_classic].IsNewerThan(solution[index_fill-1]) &&
+        solution_classic[index_classic].IsOlderThan(trace[1])) {
 
       solution[index_fill] = solution_classic[index_classic];
       index_fill++;
@@ -143,5 +143,5 @@ OLCLeague::CalcTime() const
   if (!solution[4].IsDefined())
     return fixed_zero;
   else 
-    return fixed(solution[4].time - solution[0].time);
+    return fixed(solution[4].DeltaTime(solution[0]));
 }

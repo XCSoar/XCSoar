@@ -5,6 +5,7 @@
 #include "SearchPoint.hpp"
 #include "Compiler.h"
 
+#include <assert.h>
 #include <vector>
 
 struct AircraftState;
@@ -15,7 +16,6 @@ struct AircraftState;
  */
 class TracePoint : public SearchPoint
 {
-public:
   /** Time of sample */
   unsigned time;
   /**
@@ -66,6 +66,29 @@ public:
 
   bool IsDefined() const {
     return time != (unsigned)(0 - 1);
+  }
+
+  unsigned GetTime() const {
+    return time;
+  }
+
+  bool IsOlderThan(const TracePoint &other) const {
+    return time < other.time;
+  }
+
+  bool IsNewerThan(const TracePoint &other) const {
+    return time > other.time;
+  }
+
+  unsigned DeltaTime(const TracePoint &previous) const {
+    assert(!IsOlderThan(previous));
+
+    return time - previous.time;
+  }
+
+  fixed CalculateDrift(fixed now) const {
+    const fixed dt = now - fixed(time);
+    return dt * drift_factor / 256;
   }
 
   fixed GetAltitude() const {

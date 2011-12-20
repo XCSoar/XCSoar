@@ -89,7 +89,7 @@ ContestDijkstra::master_is_updated() const
 
   // update trace if time and distance are greater than significance thresholds
 
-  return last_master.time > last_point.time + threshold_delta_t_trace &&
+  return last_master.GetTime() > last_point.GetTime() + threshold_delta_t_trace &&
     last_master.flat_distance(last_point) > threshold_distance_trace;
 }
 
@@ -202,7 +202,7 @@ ContestDijkstra::CalcTime() const
   if (!solution[num_stages-1].IsDefined())
     return fixed_zero;
   else 
-    return fixed(solution[num_stages - 1].time - solution[0].time);
+    return fixed(solution[num_stages - 1].DeltaTime(solution[0]));
 }
 
 fixed

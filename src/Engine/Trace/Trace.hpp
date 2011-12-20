@@ -73,10 +73,10 @@ class Trace : private NonCopyable
         return false;
 
       // all else fails, go by age
-      if (x.point.time < y.point.time)
+      if (x.point.IsOlderThan(y.point))
         return true;
 
-      if (x.point.time > y.point.time)
+      if (x.point.IsNewerThan(y.point))
         return false;
 
       return false;
@@ -178,8 +178,8 @@ class Trace : private NonCopyable
      */
     static unsigned time_metric(const TracePoint& last, const TracePoint& node,
                                 const TracePoint& next) {
-      return (next.time - last.time) -
-             std::min(next.time - node.time, node.time - last.time);
+      return next.DeltaTime(last)
+        - std::min(next.DeltaTime(node), node.DeltaTime(last));
     }
   };
 

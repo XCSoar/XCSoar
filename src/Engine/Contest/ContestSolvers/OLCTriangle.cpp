@@ -295,7 +295,7 @@ OLCTriangle::CalcTime() const
 
   const ScanTaskPoint start(0, 0);
   const ScanTaskPoint end(0, n_points-1);
-  return fixed(GetPointFast(end).time - GetPointFast(start).time);
+  return fixed(GetPointFast(end).DeltaTime(GetPointFast(start)));
 }
 
 

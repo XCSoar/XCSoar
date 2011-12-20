@@ -129,10 +129,10 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   RasterPoint last_point;
   bool last_valid = false;
   for (auto it = trace.begin(), end = trace.end(); it != end; ++it) {
-    const fixed dt = basic.time - fixed(it->time);
-    const GeoPoint gp = enable_traildrift ?
-      it->get_location().Parametric(traildrift, dt * it->drift_factor / 256) :
-      it->get_location();
+    const GeoPoint gp = enable_traildrift
+      ? it->get_location().Parametric(traildrift,
+                                      it->CalculateDrift(basic.time))
+      : it->get_location();
     if (!bounds.inside(gp)) {
       /* the point is outside of the MapWindow; don't paint it */
       last_valid = false;

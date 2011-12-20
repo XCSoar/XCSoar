@@ -67,12 +67,12 @@ OLCSprint::find_start() const
   assert(n_points > 0);
   ScanTaskPoint start(0, 1);
   const ScanTaskPoint end(0, n_points - 1);
-  const unsigned end_time = GetPointFast(end).time;
+  const auto end_time = GetPointFast(end).GetTime();
   if (end_time > 9000) {
     // fast forward to 2.5 hours before finish
     const unsigned start_time = end_time-9000;
     assert(start.point_index < n_points);
-    while (GetPointFast(start).time < start_time) {
+    while (GetPointFast(start).GetTime() < start_time) {
       ++start.point_index;
       assert(start.point_index < n_points);
     }
