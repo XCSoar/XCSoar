@@ -83,8 +83,6 @@ int main(int argc, char **argv)
     long tsleep = l*1e6/(baudrate/10);
     usleep(tsleep);
     sleep_acc += tsleep;
-//    printf(".");
-//    fflush(stdout);
 
     if (memcmp(line, "$GP", 3) == 0 &&
         (memcmp(line + 3, "GGA", 3) == 0 ||
