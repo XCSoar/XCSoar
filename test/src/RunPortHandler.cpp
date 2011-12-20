@@ -52,12 +52,11 @@ int main(int argc, char **argv)
 
   MyHandler handler;
 #ifdef HAVE_POSIX
-  TTYPort *port = new TTYPort(port_name, baud, handler);
+  TTYPort port(port_name, baud, handler);
 #else
-  SerialPort *port = new SerialPort(port_name, baud, handler);
+  SerialPort port(port_name, baud, handler);
 #endif
-  if (!port->Open()) {
-    delete port;
+  if (!port.Open()) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;
   }
