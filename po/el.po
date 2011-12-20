@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-20 19:50+0100\n"
-"PO-Revision-Date: 2011-12-20 19:34+0100\n"
+"PO-Revision-Date: 2011-12-20 19:53+0100\n"
 "Last-Translator: Kostas Hellas <Unknown>\n"
 "Language-Team: none\n"
 "Language: el\n"
@@ -6802,14 +6802,6 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
-
-#, fuzzy
-#~ msgid " - Altitude: "
-#~ msgstr "Υψόμετρο"
-
-#, fuzzy
-#~ msgid " - Vario: "
-#~ msgstr "Βαρόμετρο"
 
 #~ msgid "OK to invalidate declaration?"
 #~ msgstr "Ακύρωση της δήλωσης;"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-20 19:50+0100\n"
-"PO-Revision-Date: 2011-12-20 19:43+0100\n"
+"PO-Revision-Date: 2011-12-20 19:56+0100\n"
 "Last-Translator: Paulo Coimbra <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
@@ -6949,14 +6949,6 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
-
-#, fuzzy
-#~ msgid " - Altitude: "
-#~ msgstr "Altitude"
-
-#, fuzzy
-#~ msgid " - Vario: "
-#~ msgstr "D Vario"
 
 #~ msgid "mph"
 #~ msgstr "mph"

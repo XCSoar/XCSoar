@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-20 19:50+0100\n"
-"PO-Revision-Date: 2011-08-30 17:15+0000\n"
+"PO-Revision-Date: 2011-12-20 19:56+0100\n"
 "Last-Translator: samid <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
@@ -6895,14 +6895,6 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
-
-#, fuzzy
-#~ msgid " - Altitude: "
-#~ msgstr "Высота"
-
-#, fuzzy
-#~ msgid " - Vario: "
-#~ msgstr "Варио"
 
 #~ msgid "mph"
 #~ msgstr "миль/ч"

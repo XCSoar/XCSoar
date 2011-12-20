@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-20 19:50+0100\n"
-"PO-Revision-Date: 2011-12-20 19:42+0100\n"
+"PO-Revision-Date: 2011-12-20 19:57+0100\n"
 "Last-Translator: zeugma <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "Language: tr\n"
@@ -6705,13 +6705,3 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Auto wind"
-#~ msgstr "Otomatik"
-
-#~ msgid "OFF"
-#~ msgstr "KAPALI"
-
-#~ msgid "ON"
-#~ msgstr "AÇIK"

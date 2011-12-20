@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-20 19:50+0100\n"
-"PO-Revision-Date: 2011-12-20 19:51+0100\n"
+"PO-Revision-Date: 2011-12-20 19:54+0100\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -7013,14 +7013,6 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#, fuzzy
-#~ msgid " - Altitude: "
-#~ msgstr "Altitude"
-
-#, fuzzy
-#~ msgid " - Vario: "
-#~ msgstr "Vario:"
-
 #~ msgid "mph"
 #~ msgstr "milles/h"
 
@@ -7873,9 +7865,6 @@ msgstr ""
 #~ msgid "Task Type"
 #~ msgstr "Type de circuit"
 
-#~ msgid "Name: "
-#~ msgstr "Nom: "
-
 #~ msgid "Append to task"
 #~ msgstr "Ajouter au circuit"
 
@@ -7915,14 +7904,8 @@ msgstr ""
 #~ msgid "Language*"
 #~ msgstr "Langue*"
 
-#~ msgid "Aircraft type: "
-#~ msgstr "Type d'aéronef : "
-
 #~ msgid "V Manoeuvering"
 #~ msgstr "V manoeuvre"
-
-#~ msgid "Setup ..."
-#~ msgstr "Paramètres..."
 
 #~ msgid "Climb Rate"
 #~ msgstr "taux de montée"
@@ -7975,9 +7958,6 @@ msgstr ""
 #~ msgid "North arrow*"
 #~ msgstr "Flèche nord*"
 
-#~ msgid "Comment: "
-#~ msgstr "Commentaire : "
-
 #~ msgid "Lon"
 #~ msgstr "Lon"
 
@@ -7987,23 +7967,11 @@ msgstr ""
 #~ msgid "V rem"
 #~ msgstr "V rem"
 
-#~ msgid "Waypoints 2"
-#~ msgstr "Points de virage 2"
-
 #~ msgid "Set as new home"
 #~ msgstr "Définir comme nouvelle maison"
 
-#~ msgid "Pilot name: "
-#~ msgstr "Nom du pilote : "
-
-#~ msgid "Airspace 1"
-#~ msgstr "Espace aérien 1"
-
 #~ msgid "Volume"
 #~ msgstr "Volume"
-
-#~ msgid "Competition Id: "
-#~ msgstr "n° concours: "
 
 #~ msgid "Lat"
 #~ msgstr "Lat"

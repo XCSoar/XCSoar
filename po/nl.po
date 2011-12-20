@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-20 19:50+0100\n"
-"PO-Revision-Date: 2011-12-20 19:34+0100\n"
+"PO-Revision-Date: 2011-12-20 19:55+0100\n"
 "Last-Translator: Quint Segers <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "Language: nl\n"
@@ -6898,14 +6898,6 @@ msgid ""
 "TAF"
 msgstr ""
 
-#, fuzzy
-#~ msgid " - Altitude: "
-#~ msgstr "Hoogte"
-
-#, fuzzy
-#~ msgid " - Vario: "
-#~ msgstr "Vario:"
-
 #~ msgid "mph"
 #~ msgstr "mph"
 
@@ -8193,12 +8185,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Fout.\n"
 #~ "Opdracht NIET ingelezen!"
-
-#~ msgid "ON"
-#~ msgstr "AAN"
-
-#~ msgid "OFF"
-#~ msgstr "UIT"
 
 #~ msgid "Site"
 #~ msgstr "Bestanden"

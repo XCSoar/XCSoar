@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-20 19:50+0100\n"
-"PO-Revision-Date: 2011-12-20 19:50+0100\n"
+"PO-Revision-Date: 2011-12-20 19:53+0100\n"
 "Last-Translator: Turbo <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -8943,12 +8943,6 @@ msgstr ""
 #~ msgid "AAT Range"
 #~ msgstr "AAT Bereich"
 
-#~ msgid "MID"
-#~ msgstr "MID"
-
-#~ msgid "AC OFF"
-#~ msgstr "AC Aus"
-
 #~ msgid ""
 #~ "option, if enabled sets the clock of the computer to the GPS time once a "
 #~ "fix is set.  This is only necessary if your computer does not have a real-"
@@ -9661,30 +9655,6 @@ msgstr ""
 
 #~ msgid "Specifies the mode for filling the airspace area."
 #~ msgstr "Die Art wie das Areal eines Luftraums ausgefüllt wird."
-
-#~ msgid "OFF"
-#~ msgstr "Aus"
-
-#~ msgid "ON"
-#~ msgstr "Ein"
-
-#~ msgid "AutoZoom ON"
-#~ msgstr "Auto Zoom Ein"
-
-#~ msgid "Circling Zoom ON"
-#~ msgstr "Zoom im Kreisflug Ein"
-
-#~ msgid "Logger ON"
-#~ msgstr "Logger Ein"
-
-#~ msgid "ON/Fixed"
-#~ msgstr "Ein/Fixiert"
-
-#~ msgid "ON/Scaled"
-#~ msgstr "Ein/Skaliert"
-
-#~ msgid "NO"
-#~ msgstr "Nein"
 
 #~ msgid "Default Task Rules"
 #~ msgstr "Standard Wettbewerbsregeln"
