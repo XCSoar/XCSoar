@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-20 19:28+0100\n"
-"PO-Revision-Date: 2011-10-22 23:31+0000\n"
+"POT-Creation-Date: 2011-12-20 19:31+0100\n"
+"PO-Revision-Date: 2011-12-20 19:35+0100\n"
 "Last-Translator: Úr Balázs <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
@@ -2104,9 +2104,9 @@ msgstr ""
 msgid "Simulator"
 msgstr "Szimulátor"
 
-#: src/InfoBoxes/Content/Altitude.cpp:58 Data/Input/default.xci:724
-#: Data/Input/default.xci:773 Data/Input/default.xci:822
-#: Data/Input/default.xci:885
+#: src/InfoBoxes/Content/Altitude.cpp:58 src/PageSettings.cpp:45
+#: Data/Input/default.xci:724 Data/Input/default.xci:773
+#: Data/Input/default.xci:822 Data/Input/default.xci:885
 #, no-c-format
 msgid "Info"
 msgstr "Infó"
@@ -2422,19 +2422,15 @@ msgstr "Kijelzők rejtve"
 msgid "Map (Full screen)"
 msgstr "Térkép (Teljes képernyő)"
 
-#: src/PageSettings.cpp:45
-msgid "Info "
-msgstr "Kijelzők "
+#: src/PageSettings.cpp:49
+msgid "Map and InfoBoxes"
+msgstr "Térkép és kijelzők"
 
-#: src/PageSettings.cpp:48
-msgid "Map and InfoBoxes "
-msgstr "Térkép és kijelzők "
-
-#: src/PageSettings.cpp:54
+#: src/PageSettings.cpp:56
 msgid "Info Auto"
 msgstr "Kijelzők automata"
 
-#: src/PageSettings.cpp:56
+#: src/PageSettings.cpp:58
 msgid "Map and InfoBoxes (Auto)"
 msgstr "Térkép és kijelzők (auto)"
 

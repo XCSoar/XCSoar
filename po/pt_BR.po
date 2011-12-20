@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-20 19:28+0100\n"
-"PO-Revision-Date: 2011-06-11 15:16+0000\n"
+"POT-Creation-Date: 2011-12-20 19:31+0100\n"
+"PO-Revision-Date: 2011-12-20 19:35+0100\n"
 "Last-Translator: Paulo Coimbra <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
@@ -2082,9 +2082,9 @@ msgstr ""
 msgid "Simulator"
 msgstr "Simulador"
 
-#: src/InfoBoxes/Content/Altitude.cpp:58 Data/Input/default.xci:724
-#: Data/Input/default.xci:773 Data/Input/default.xci:822
-#: Data/Input/default.xci:885
+#: src/InfoBoxes/Content/Altitude.cpp:58 src/PageSettings.cpp:45
+#: Data/Input/default.xci:724 Data/Input/default.xci:773
+#: Data/Input/default.xci:822 Data/Input/default.xci:885
 #, no-c-format
 msgid "Info"
 msgstr "Info"
@@ -2400,19 +2400,15 @@ msgstr "Info oculto"
 msgid "Map (Full screen)"
 msgstr "Mapa (tela cheia)"
 
-#: src/PageSettings.cpp:45
-msgid "Info "
-msgstr "Info "
+#: src/PageSettings.cpp:49
+msgid "Map and InfoBoxes"
+msgstr "Mapa e InfoBoxes"
 
-#: src/PageSettings.cpp:48
-msgid "Map and InfoBoxes "
-msgstr "Mapa e InfoBoxes "
-
-#: src/PageSettings.cpp:54
+#: src/PageSettings.cpp:56
 msgid "Info Auto"
 msgstr ""
 
-#: src/PageSettings.cpp:56
+#: src/PageSettings.cpp:58
 msgid "Map and InfoBoxes (Auto)"
 msgstr "Mapa e InfoBoxes (Auto)"
 

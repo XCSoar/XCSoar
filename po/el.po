@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-20 19:28+0100\n"
-"PO-Revision-Date: 2011-12-09 12:43+0000\n"
+"POT-Creation-Date: 2011-12-20 19:31+0100\n"
+"PO-Revision-Date: 2011-12-20 19:34+0100\n"
 "Last-Translator: Kostas Hellas <Unknown>\n"
 "Language-Team: none\n"
 "Language: el\n"
@@ -2001,9 +2001,9 @@ msgstr ""
 msgid "Simulator"
 msgstr ""
 
-#: src/InfoBoxes/Content/Altitude.cpp:58 Data/Input/default.xci:724
-#: Data/Input/default.xci:773 Data/Input/default.xci:822
-#: Data/Input/default.xci:885
+#: src/InfoBoxes/Content/Altitude.cpp:58 src/PageSettings.cpp:45
+#: Data/Input/default.xci:724 Data/Input/default.xci:773
+#: Data/Input/default.xci:822 Data/Input/default.xci:885
 #, no-c-format
 msgid "Info"
 msgstr "Πληρ/ρίες"
@@ -2319,19 +2319,15 @@ msgstr ""
 msgid "Map (Full screen)"
 msgstr ""
 
-#: src/PageSettings.cpp:45
-msgid "Info "
-msgstr "Πληρ/ρίες "
-
-#: src/PageSettings.cpp:48
-msgid "Map and InfoBoxes "
-msgstr ""
-
-#: src/PageSettings.cpp:54
-msgid "Info Auto"
+#: src/PageSettings.cpp:49
+msgid "Map and InfoBoxes"
 msgstr ""
 
 #: src/PageSettings.cpp:56
+msgid "Info Auto"
+msgstr ""
+
+#: src/PageSettings.cpp:58
 msgid "Map and InfoBoxes (Auto)"
 msgstr ""
 

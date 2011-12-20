@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-20 19:28+0100\n"
-"PO-Revision-Date: 2011-03-31 22:53+0200\n"
+"POT-Creation-Date: 2011-12-20 19:31+0100\n"
+"PO-Revision-Date: 2011-12-20 19:35+0100\n"
 "Last-Translator: Max Kellermann <max@duempel.org>\n"
 "Language-Team: none\n"
 "Language: sr\n"
@@ -1924,9 +1924,9 @@ msgstr ""
 msgid "Simulator"
 msgstr ""
 
-#: src/InfoBoxes/Content/Altitude.cpp:58 Data/Input/default.xci:724
-#: Data/Input/default.xci:773 Data/Input/default.xci:822
-#: Data/Input/default.xci:885
+#: src/InfoBoxes/Content/Altitude.cpp:58 src/PageSettings.cpp:45
+#: Data/Input/default.xci:724 Data/Input/default.xci:773
+#: Data/Input/default.xci:822 Data/Input/default.xci:885
 #, no-c-format
 msgid "Info"
 msgstr "CIA brate"
@@ -2256,21 +2256,16 @@ msgstr "CIA brate"
 msgid "Map (Full screen)"
 msgstr ""
 
-#: src/PageSettings.cpp:45
-#, fuzzy
-msgid "Info "
-msgstr "CIA brate"
-
-#: src/PageSettings.cpp:48
-msgid "Map and InfoBoxes "
+#: src/PageSettings.cpp:49
+msgid "Map and InfoBoxes"
 msgstr ""
 
-#: src/PageSettings.cpp:54
+#: src/PageSettings.cpp:56
 #, fuzzy
 msgid "Info Auto"
 msgstr "InfoBox nalepiti"
 
-#: src/PageSettings.cpp:56
+#: src/PageSettings.cpp:58
 msgid "Map and InfoBoxes (Auto)"
 msgstr ""
 

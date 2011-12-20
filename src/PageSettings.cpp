@@ -42,10 +42,12 @@ PageSettings::PageLayout::MakeTitle(TCHAR* buffer, const bool concise) const
     if (!infoBoxConfig.autoSwitch &&
         infoBoxConfig.panel < InfoBoxSettings::MAX_PANELS) {
       if (concise) {
-        _tcscpy(buffer, _("Info "));
+        _tcscpy(buffer, _("Info"));
+        _tcscat(buffer, _T(" "));
         _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
       } else {
-        _tcscpy(buffer, _("Map and InfoBoxes "));
+        _tcscpy(buffer, _("Map and InfoBoxes"));
+        _tcscat(buffer, _T(" "));
         _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
       }
     }

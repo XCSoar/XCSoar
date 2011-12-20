@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-20 19:28+0100\n"
-"PO-Revision-Date: 2011-04-28 06:39+0000\n"
+"POT-Creation-Date: 2011-12-20 19:31+0100\n"
+"PO-Revision-Date: 2011-12-20 19:35+0100\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
@@ -2082,9 +2082,9 @@ msgstr ""
 msgid "Simulator"
 msgstr "Simulátor"
 
-#: src/InfoBoxes/Content/Altitude.cpp:58 Data/Input/default.xci:724
-#: Data/Input/default.xci:773 Data/Input/default.xci:822
-#: Data/Input/default.xci:885
+#: src/InfoBoxes/Content/Altitude.cpp:58 src/PageSettings.cpp:45
+#: Data/Input/default.xci:724 Data/Input/default.xci:773
+#: Data/Input/default.xci:822 Data/Input/default.xci:885
 #, no-c-format
 msgid "Info"
 msgstr "Info"
@@ -2403,19 +2403,15 @@ msgstr ""
 msgid "Map (Full screen)"
 msgstr "Mapa (Celá obrazovka)"
 
-#: src/PageSettings.cpp:45
-msgid "Info "
-msgstr "Info "
+#: src/PageSettings.cpp:49
+msgid "Map and InfoBoxes"
+msgstr "Mapa a Info-okná"
 
-#: src/PageSettings.cpp:48
-msgid "Map and InfoBoxes "
-msgstr "Mapa a Info-okná "
-
-#: src/PageSettings.cpp:54
+#: src/PageSettings.cpp:56
 msgid "Info Auto"
 msgstr ""
 
-#: src/PageSettings.cpp:56
+#: src/PageSettings.cpp:58
 msgid "Map and InfoBoxes (Auto)"
 msgstr "Mapa a Info-okná (Auto)"
 
