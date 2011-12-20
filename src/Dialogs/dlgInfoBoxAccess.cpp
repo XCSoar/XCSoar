@@ -139,8 +139,7 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(const int id)
   const InfoBoxFactory::t_InfoBox old_type = panel.contents[id];
 
   StaticString<32> buffer;
-  buffer.Format(_T("%s: %s"), _("InfoBox"),
-                gettext(InfoBoxFactory::GetName(old_type)));
+  buffer = gettext(InfoBoxFactory::GetName(old_type));
 
   wf->SetCaption(buffer);
   wf->ShowModeless();
