@@ -143,13 +143,9 @@ GLTexture::GLTexture(UPixelScalar _width, UPixelScalar _height)
   /* enable linear filtering for the terrain texture */
   Initialise(true);
 
-  GLenum type = have_gles()
-    ? GL_UNSIGNED_SHORT_5_6_5
-    : GL_UNSIGNED_BYTE;
-
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
                ValidateTextureSize(width), ValidateTextureSize(height),
-               0, GL_RGB, type, NULL);
+               0, GL_RGB, GetType(), NULL);
 }
 
 #ifndef ANDROID
