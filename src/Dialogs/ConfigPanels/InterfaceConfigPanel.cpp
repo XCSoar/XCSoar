@@ -78,7 +78,7 @@ OnFonts(gcc_unused WndButton &button)
 void
 InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent, N_("IDR_XML_INTERFACECONFIGPANEL"));
+  LoadWindow(NULL, parent, _T("IDR_XML_INTERFACECONFIGPANEL"));
 
   const UISettings &settings = CommonInterface::GetUISettings();
 
