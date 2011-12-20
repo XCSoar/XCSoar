@@ -52,8 +52,8 @@ Bitmap::load(SDL_Surface *_surface)
   assert(pthread_equal(pthread_self(), OpenGL::thread));
 
   texture = new GLTexture(_surface);
-  width = _surface->w;
-  height = _surface->h;
+  size.cx = _surface->w;
+  size.cy = _surface->h;
   SDL_FreeSurface(_surface);
 
   return true;
@@ -174,9 +174,7 @@ Bitmap::get_size() const
 {
   assert(defined());
 
-#ifdef ENABLE_OPENGL
-  const PixelSize size = { width, height };
-#else
+#ifndef ENABLE_OPENGL
   const PixelSize size = { surface->w, surface->h };
 #endif
   return size;
