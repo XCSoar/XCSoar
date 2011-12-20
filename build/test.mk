@@ -624,6 +624,10 @@ DEBUG_PROGRAM_NAMES += FeedNMEA \
 	FeedTCP
 endif
 
+ifeq ($(TARGET),PC)
+DEBUG_PROGRAM_NAMES += FeedTCP
+endif
+
 ifeq ($(HAVE_NET),y)
 DEBUG_PROGRAM_NAMES += DownloadFile RunNOAADownloader RunLiveTrack24
 endif
@@ -1933,6 +1937,15 @@ $(eval $(call link-program,FeedNMEA,FEED_NMEA))
 
 FEED_TCP_SOURCES = \
 	$(TEST_SRC_DIR)/FeedTCP.cpp
+
+ifeq ($(HAVE_POSIX),n)
+ifeq ($(HAVE_CE),y)
+FEED_TCP_LDLIBS += -lwinsock
+else
+FEED_TCP_LDLIBS += -lws2_32
+endif
+endif
+
 $(eval $(call link-program,FeedTCP,FEED_TCP))
 
 TODAY_INSTALL_SOURCES = \
