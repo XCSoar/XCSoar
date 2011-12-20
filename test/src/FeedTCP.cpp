@@ -22,10 +22,8 @@ Copyright_License {
 */
 
 /*
- * This program creates a pseudo-TTY symlinked to /tmp/nmea, and feeds
- * NMEA data read from stdin to it.  It is useful to feed WINE with
- * it: symlink ~/.wine/dosdevices/com1 to /tmp/nmea, and configure
- * "COM1" in XCSoar.
+ * This program tries to connect to a TCP server at the localhost at
+ * port 4353 and feeds NMEA data read from stdin to it.
  */
 
 #include <fcntl.h>
