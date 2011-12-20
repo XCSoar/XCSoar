@@ -10,8 +10,8 @@
   <Button Name="cmdLoadPolarFile" Caption="Import" X="5" Y="55" Width="70" Height="30" Visible="0"/>
   <Button Name="cmdSavePolarFile" Caption="Export" X="5" Y="85" Width="70" Height="30" Visible="0"/>
 
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="-72" Width="70" Height="35" OnClick="OnPrevClicked" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="5" Y="-107" Width="70" Height="35" OnClick="OnNextClicked" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="-72" Width="70" Height="35" OnClick="OnPrevClicked" />
   <Button Name="cmdClose" Caption="Close" X="5" Y="-37" Width="70" Height="35" OnClick="OnCloseClicked"/>
   <TabMenu Name="TabMenu" Caption="Configuration Menu" X="75" Y="0">
   </TabMenu>
