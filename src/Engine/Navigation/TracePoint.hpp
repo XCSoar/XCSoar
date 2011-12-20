@@ -4,6 +4,7 @@
 #include "Util/TypeTraits.hpp"
 #include "SearchPoint.hpp"
 #include "Rough/RoughAltitude.hpp"
+#include "Rough/RoughVSpeed.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -32,10 +33,9 @@ class TracePoint : public SearchPoint
   RoughAltitude altitude;
 
   /**
-   * The NettoVario value [m/256s].  This is a "short" fixed-point
-   * integer to save memory.
+   * The NettoVario value [m/s].
    */
-  signed short vario;
+  RoughVSpeed vario;
 
 public:
   /**
@@ -105,7 +105,7 @@ public:
   }
 
   fixed GetVario() const {
-    return fixed(vario) / 256;
+    return vario;
   }
 
   /** 
