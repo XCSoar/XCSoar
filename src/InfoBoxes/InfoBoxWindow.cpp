@@ -67,6 +67,11 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent,
   id = -1;
 }
 
+InfoBoxWindow::~InfoBoxWindow() {
+  delete content;
+  reset();
+}
+
 void
 InfoBoxWindow::SetID(const int _id)
 {

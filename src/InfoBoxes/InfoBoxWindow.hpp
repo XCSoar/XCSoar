@@ -138,7 +138,7 @@ public:
                 const InfoBoxSettings &settings, const InfoBoxLook &_look,
                 WindowStyle style=WindowStyle());
 
-  ~InfoBoxWindow() { delete content; }
+  ~InfoBoxWindow();
 
   const InfoBoxLook &GetLook() const {
     return look;
