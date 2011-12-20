@@ -362,12 +362,12 @@ FillBaudRates(DataFieldEnum &dfe)
 
 static void
 SetupDeviceFields(const DeviceConfig &config,
-                  WndProperty *port_field, WndProperty *speed_field,
+                  WndProperty &port_field, WndProperty &speed_field,
                   WndProperty &bulk_baud_rate_field,
-                  WndProperty *driver_field)
+                  WndProperty &driver_field)
 {
-  if (port_field != NULL) {
-    DataFieldEnum *dfe = (DataFieldEnum *)port_field->GetDataField();
+  {
+    DataFieldEnum *dfe = (DataFieldEnum *)port_field.GetDataField();
 #if defined(ANDROID) && defined (IOIOLIB)
     dfe->EnableItemHelp(true);
 #endif
@@ -454,14 +454,14 @@ SetupDeviceFields(const DeviceConfig &config,
       break;
     }
 
-    port_field->RefreshDisplay();
+    port_field.RefreshDisplay();
   }
 
-  if (speed_field != NULL) {
-    DataFieldEnum &dfe = *(DataFieldEnum *)speed_field->GetDataField();
+  {
+    DataFieldEnum &dfe = *(DataFieldEnum *)speed_field.GetDataField();
     FillBaudRates(dfe);
     dfe.Set(config.baud_rate);
-    speed_field->RefreshDisplay();
+    speed_field.RefreshDisplay();
   }
 
   DataFieldEnum &bulk_df = *(DataFieldEnum *)bulk_baud_rate_field.GetDataField();
@@ -470,8 +470,8 @@ SetupDeviceFields(const DeviceConfig &config,
   bulk_df.Set(config.bulk_baud_rate);
   bulk_baud_rate_field.RefreshDisplay();
 
-  if (driver_field) {
-    DataFieldEnum *dfe = (DataFieldEnum *)driver_field->GetDataField();
+  {
+    DataFieldEnum *dfe = (DataFieldEnum *)driver_field.GetDataField();
 
     const TCHAR *DeviceName;
     for (unsigned i = 0; (DeviceName = GetDriverNameByIndex(i)) != NULL; i++)
@@ -480,12 +480,11 @@ SetupDeviceFields(const DeviceConfig &config,
     dfe->Sort(1);
     dfe->SetAsString(config.driver_name);
 
-    driver_field->RefreshDisplay();
+    driver_field.RefreshDisplay();
   }
 
-  UpdateDeviceControlVisibility(*port_field, *speed_field,
-                                bulk_baud_rate_field,
-                                *driver_field);
+  UpdateDeviceControlVisibility(port_field, speed_field, bulk_baud_rate_field,
+                                driver_field);
 }
 
 
@@ -553,18 +552,18 @@ FinishPortField(DeviceConfig &config, const WndProperty &port_field)
 
 static bool
 FinishDeviceFields(DeviceConfig &config,
-                   const WndProperty *port_field, const WndProperty *speed_field,
+                   const WndProperty &port_field, const WndProperty &speed_field,
                    const WndProperty &bulk_baud_rate_field,
-                   const WndProperty *driver_field)
+                   const WndProperty &driver_field)
 {
   bool changed = false;
 
-  if (port_field != NULL && FinishPortField(config, *port_field))
+  if (FinishPortField(config, port_field))
     changed = true;
 
-  if (config.UsesSpeed() && speed_field != NULL &&
-      (int)config.baud_rate != speed_field->GetDataField()->GetAsInteger()) {
-    config.baud_rate = speed_field->GetDataField()->GetAsInteger();
+  if (config.UsesSpeed() &&
+      (int)config.baud_rate != speed_field.GetDataField()->GetAsInteger()) {
+    config.baud_rate = speed_field.GetDataField()->GetAsInteger();
     changed = true;
   }
 
@@ -574,9 +573,9 @@ FinishDeviceFields(DeviceConfig &config,
     changed = true;
   }
 
-  if (config.UsesDriver() && driver_field != NULL &&
-      !config.driver_name.equals(driver_field->GetDataField()->GetAsString())) {
-    config.driver_name = driver_field->GetDataField()->GetAsString();
+  if (config.UsesDriver() &&
+      !config.driver_name.equals(driver_field.GetDataField()->GetAsString())) {
+    config.driver_name = driver_field.GetDataField()->GetAsString();
     changed = true;
   }
 
@@ -603,16 +602,16 @@ DevicesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     Profile::GetDeviceConfig(i, device_config[i]);
 
   SetupDeviceFields(device_config[0],
-                    (WndProperty*)form.FindByName(_T("prpComPort1")),
-                    (WndProperty*)form.FindByName(_T("prpComSpeed1")),
+                    *(WndProperty *)form.FindByName(_T("prpComPort1")),
+                    *(WndProperty *)form.FindByName(_T("prpComSpeed1")),
                     *(WndProperty *)form.FindByName(_T("BulkBaudRate1")),
-                    (WndProperty*)form.FindByName(_T("prpComDevice1")));
+                    *(WndProperty *)form.FindByName(_T("prpComDevice1")));
 
   SetupDeviceFields(device_config[1],
-                    (WndProperty*)form.FindByName(_T("prpComPort2")),
-                    (WndProperty*)form.FindByName(_T("prpComSpeed2")),
+                    *(WndProperty *)form.FindByName(_T("prpComPort2")),
+                    *(WndProperty *)form.FindByName(_T("prpComSpeed2")),
                     *(WndProperty *)form.FindByName(_T("BulkBaudRate2")),
-                    (WndProperty*)form.FindByName(_T("prpComDevice2")));
+                    *(WndProperty *)form.FindByName(_T("prpComDevice2")));
 
   LoadFormProperty(form, _T("prpSetSystemTimeFromGPS"),
                    CommonInterface::SettingsComputer().set_system_time_from_gps);
@@ -629,17 +628,17 @@ DevicesConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   DevicePortChanged =
     FinishDeviceFields(device_config[0],
-                       (WndProperty*)form.FindByName(_T("prpComPort1")),
-                       (WndProperty*)form.FindByName(_T("prpComSpeed1")),
-                       *(const WndProperty *)form.FindByName(_T("BulkBaudRate1")),
-                       (WndProperty*)form.FindByName(_T("prpComDevice1")));
+                       *(WndProperty *)form.FindByName(_T("prpComPort1")),
+                       *(WndProperty *)form.FindByName(_T("prpComSpeed1")),
+                       *(WndProperty *)form.FindByName(_T("BulkBaudRate1")),
+                       *(WndProperty *)form.FindByName(_T("prpComDevice1")));
 
   DevicePortChanged =
     FinishDeviceFields(device_config[1],
-                       (WndProperty*)form.FindByName(_T("prpComPort2")),
-                       (WndProperty*)form.FindByName(_T("prpComSpeed2")),
-                       *(const WndProperty *)form.FindByName(_T("BulkBaudRate2")),
-                       (WndProperty*)form.FindByName(_T("prpComDevice2"))) ||
+                       *(WndProperty *)form.FindByName(_T("prpComPort2")),
+                       *(WndProperty *)form.FindByName(_T("prpComSpeed2")),
+                       *(WndProperty *)form.FindByName(_T("BulkBaudRate2")),
+                       *(WndProperty *)form.FindByName(_T("prpComDevice2"))) ||
     DevicePortChanged;
 
   changed |= SaveFormProperty(form, _T("prpSetSystemTimeFromGPS"),
