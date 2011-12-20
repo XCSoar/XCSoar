@@ -939,7 +939,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // e_Fin_ETE_VMG
   {
-    N_("Task time to go (gnd spd)"),
+    N_("Task time to go (ground speed)"),
     N_("Fin ETE VMG"),
     N_("Estimated time required to complete task, assuming current ground speed is maintained."),
     IBFHelper<InfoBoxContentFinalETEVMG>::Create,
@@ -949,7 +949,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // e_WP_ETE_VMG
   {
-    N_("Next time to go (gnd spd)"),
+    N_("Next time to go (ground speed)"),
     N_("WP ETE VMG"),
     N_("Estimated time required to reach next waypoint, assuming current ground speed is maintained."),
     IBFHelper<InfoBoxContentNextETEVMG>::Create,

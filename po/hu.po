@@ -1973,7 +1973,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:942
 #, no-c-format
-msgid "Task time to go (gnd spd)"
+msgid "Task time to go (ground speed)"
 msgstr "SF idő úton ff"
 
 #: src/InfoBoxes/Content/Factory.cpp:943
@@ -1992,7 +1992,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:952
 #, no-c-format
-msgid "Next time to go (gnd spd)"
+msgid "Next time to go (ground speed)"
 msgstr "FP idő úton ff"
 
 #: src/InfoBoxes/Content/Factory.cpp:953

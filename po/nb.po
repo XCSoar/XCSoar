@@ -1944,7 +1944,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:942
 #, no-c-format
-msgid "Task time to go (gnd spd)"
+msgid "Task time to go (ground speed)"
 msgstr "Oppgave gjenværende tid (bakkehast.)"
 
 #: src/InfoBoxes/Content/Factory.cpp:943
@@ -1963,7 +1963,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:952
 #, no-c-format
-msgid "Next time to go (gnd spd)"
+msgid "Next time to go (ground speed)"
 msgstr "Neste gjenværende tid (bakkehast.)"
 
 #: src/InfoBoxes/Content/Factory.cpp:953
