@@ -108,20 +108,6 @@ public:
     return fixed(vario) / 256;
   }
 
-  /**
-   * Structure for STL sorting by time
-   */
-  struct time_sort {
-    /** 
-     * Comparison operator
-     * 
-     * @return True if s1 is earlier than s2
-     */
-    bool operator()(const TracePoint& s1, const TracePoint& s2) {
-      return s1.time < s2.time;
-    }
-  };
-
   /** 
    * Test match based on time (since time of a sample must be unique)
    * 
