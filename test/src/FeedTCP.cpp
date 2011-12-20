@@ -50,7 +50,10 @@ int main(int argc, char **argv)
   int sock;
   struct sockaddr_in server_addr;
 
-  inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr);
+  if ((server_addr.sin_addr.s_addr = inet_addr("127.0.0.1")) == INADDR_NONE) {
+    perror("IP");
+    exit(1);
+  }
 
   if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
     perror("Socket");
