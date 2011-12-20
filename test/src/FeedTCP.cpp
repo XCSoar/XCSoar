@@ -43,6 +43,7 @@ Copyright_License {
 
 int main(int argc, char **argv)
 {
+  // Determine on which TCP port to connect to the server
   int tcp_port;
   if (argc < 2) {
     fprintf(stderr, "Usage: %s PORT\n", argv[0]);
@@ -52,6 +53,7 @@ int main(int argc, char **argv)
     tcp_port = atoi(argv[1]);
   }
 
+  // Convert IP address to binary form
   int sock;
   struct sockaddr_in server_addr;
 
@@ -60,11 +62,13 @@ int main(int argc, char **argv)
     exit(1);
   }
 
+  // Create socket for the outgoing connection
   if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
     perror("Socket");
     exit(1);
   }
 
+  // Connect to the specified server
   server_addr.sin_family = AF_INET;
   server_addr.sin_port = htons(tcp_port);
   memset(&(server_addr.sin_zero), 0, 8);
@@ -81,7 +85,10 @@ int main(int argc, char **argv)
   char line[1024];
   long baudrate = 9600;
   useconds_t sleep_acc = 0;
+
+  // Number of characters sent
   long c_count = 0;
+  // Number of sentence packages sent
   long l_count = 0;
 
   while (fgets(line, sizeof(line), stdin) != NULL) {
