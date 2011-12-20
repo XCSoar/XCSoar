@@ -214,7 +214,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   TCHAR lift_buffer[32], time_buffer[32];
   Units::FormatUserVSpeed(thermal.lift_rate, lift_buffer, 32);
   Units::TimeToTextHHMMSigned(time_buffer, TimeLocal((int)thermal.time));
-  buffer.Format(_("Avg. lift: %s - left at %s"), lift_buffer, time_buffer);
+  buffer.Format(_T("%s: %s"), _("Avg. lift"), lift_buffer);
+  buffer.append(_T(" - "));
+  buffer.AppendFormat(_("left at %s"), time_buffer);
   canvas.Select(small_font);
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
@@ -290,7 +292,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   StaticString<26> title_string(_("FLARM Traffic"));
   // Append name to the title, if it exists
   if (traffic.HasName()) {
-    title_string.append(_(" - "));
+    title_string.append(_T(" - "));
     title_string.append(traffic.name);
   }
   canvas.Select(name_font);
@@ -301,14 +303,12 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   if (traffic.altitude_available) {
     TCHAR tmp[15];
     Units::FormatUserAltitude(traffic.altitude, tmp, 15);
-    info_string += _(" - Altitude: ");
-    info_string += tmp;
+    info_string.AppendFormat(_T(" - %s: %s"), _("Altitude"), tmp);
   }
   if (traffic.climb_rate_avg30s_available) {
     TCHAR tmp[15];
     Units::FormatUserVSpeed(traffic.climb_rate_avg30s, tmp, 15);
-    info_string += _(" - Vario: ");
-    info_string += tmp;
+    info_string.AppendFormat(_T(" - %s: %s"), _("Vario"), tmp);
   }
   canvas.Select(small_font);
   canvas.text_clipped(left,
