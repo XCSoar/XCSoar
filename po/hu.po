@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-20 19:41+0100\n"
-"PO-Revision-Date: 2011-12-20 19:42+0100\n"
+"POT-Creation-Date: 2011-12-20 19:50+0100\n"
+"PO-Revision-Date: 2011-12-20 19:51+0100\n"
 "Last-Translator: Úr Balázs <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
@@ -3341,12 +3341,6 @@ msgstr "Törlés"
 #, c-format
 msgid "Do you want to load plane profile \"%s\"?"
 msgstr "Be akarod töltenia repülőgép profil \"%s\"-t?"
-
-#: src/Dialogs/dlgPlaneDetails.cpp:41 src/Dialogs/dlgPlanePolar.cpp:50
-#: src/Dialogs/dlgPlanePolar.cpp:58
-#, c-format
-msgid "%s: %s"
-msgstr "%s: %s"
 
 #: src/Dialogs/dlgPlaneDetails.cpp:41 Data/Dialogs/dlgPlaneDetails.xml:3
 #: Data/Dialogs/dlgPlaneDetails_L.xml:3

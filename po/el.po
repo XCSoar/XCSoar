@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-20 19:41+0100\n"
+"POT-Creation-Date: 2011-12-20 19:50+0100\n"
 "PO-Revision-Date: 2011-12-20 19:34+0100\n"
 "Last-Translator: Kostas Hellas <Unknown>\n"
 "Language-Team: none\n"
@@ -3182,12 +3182,6 @@ msgstr ""
 #: src/Dialogs/dlgPlanes.cpp:287
 #, c-format
 msgid "Do you want to load plane profile \"%s\"?"
-msgstr ""
-
-#: src/Dialogs/dlgPlaneDetails.cpp:41 src/Dialogs/dlgPlanePolar.cpp:50
-#: src/Dialogs/dlgPlanePolar.cpp:58
-#, c-format
-msgid "%s: %s"
 msgstr ""
 
 #: src/Dialogs/dlgPlaneDetails.cpp:41 Data/Dialogs/dlgPlaneDetails.xml:3

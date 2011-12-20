@@ -38,7 +38,7 @@ static void
 UpdateCaption()
 {
   StaticString<128> tmp;
-  tmp.Format(_("%s: %s"), _("Plane Details"), plane.registration.c_str());
+  tmp.Format(_T("%s: %s"), _("Plane Details"), plane.registration.c_str());
   dialog->SetCaption(tmp);
 }
 
