@@ -27,9 +27,42 @@ Copyright_License {
 #include "OS/PathName.hpp"
 
 bool
+FlarmDevice::GetStealthMode(bool &enabled)
+{
+  TCHAR buffer[2];
+  if (!GetConfig("PRIV", buffer, ARRAY_SIZE(buffer)))
+    return false;
+
+  if (buffer[0] == _T('1'))
+    enabled = true;
+  else if (buffer[0] == _T('0'))
+    enabled = false;
+  else
+    return false;
+
+  return true;
+}
+
+bool
 FlarmDevice::SetStealthMode(bool enabled)
 {
   return SetConfig("PRIV", enabled ? _T("1") : _T("0"));
+}
+
+bool
+FlarmDevice::GetRange(unsigned &range)
+{
+  TCHAR buffer[12];
+  if (!GetConfig("RANGE", buffer, ARRAY_SIZE(buffer)))
+    return false;
+
+  TCHAR *end_ptr;
+  unsigned value = _tcstoul(buffer, &end_ptr, 10);
+  if (end_ptr == buffer)
+    return false;
+
+  range = value;
+  return true;
 }
 
 bool
@@ -41,9 +74,21 @@ FlarmDevice::SetRange(unsigned range)
 }
 
 bool
+FlarmDevice::GetPilot(TCHAR *buffer, size_t length)
+{
+  return GetConfig("PILOT", buffer, length);
+}
+
+bool
 FlarmDevice::SetPilot(const TCHAR *pilot_name)
 {
   return SetConfig("PILOT", pilot_name);
+}
+
+bool
+FlarmDevice::GetCoPilot(TCHAR *buffer, size_t length)
+{
+  return GetConfig("COPIL", buffer, length);
 }
 
 bool
@@ -53,9 +98,21 @@ FlarmDevice::SetCoPilot(const TCHAR *copilot_name)
 }
 
 bool
+FlarmDevice::GetPlaneType(TCHAR *buffer, size_t length)
+{
+  return GetConfig("GLIDERTYPE", buffer, length);
+}
+
+bool
 FlarmDevice::SetPlaneType(const TCHAR *plane_type)
 {
   return SetConfig("GLIDERTYPE", plane_type);
+}
+
+bool
+FlarmDevice::GetPlaneRegistration(TCHAR *buffer, size_t length)
+{
+  return GetConfig("GLIDERID", buffer, length);
 }
 
 bool
@@ -65,9 +122,21 @@ FlarmDevice::SetPlaneRegistration(const TCHAR *registration)
 }
 
 bool
+FlarmDevice::GetCompetitionId(TCHAR *buffer, size_t length)
+{
+  return GetConfig("COMPID", buffer, length);
+}
+
+bool
 FlarmDevice::SetCompetitionId(const TCHAR *competition_id)
 {
   return SetConfig("COMPID", competition_id);
+}
+
+bool
+FlarmDevice::GetCompetitionClass(TCHAR *buffer, size_t length)
+{
+  return GetConfig("COMPCLASS", buffer, length);
 }
 
 bool

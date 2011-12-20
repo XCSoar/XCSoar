@@ -41,6 +41,10 @@ static void
 ChangePilot(FlarmDevice &flarm)
 {
   while (true) {
+    TCHAR old_pilot_name[64];
+    if (flarm.GetPilot(old_pilot_name, 64))
+      _tprintf(_T("Old pilot name: \"%s\"\n"), old_pilot_name);
+
     fprintf(stdout, "Please enter the new pilot name:\n");
     fprintf(stdout, "> ");
 
@@ -66,6 +70,10 @@ static void
 ChangeCoPilot(FlarmDevice &flarm)
 {
   while (true) {
+    TCHAR old_copilot_name[64];
+    if (flarm.GetCoPilot(old_copilot_name, 64))
+      _tprintf(_T("Old copilot name: \"%s\"\n"), old_copilot_name);
+
     fprintf(stdout, "Please enter the new copilot name:\n");
     fprintf(stdout, "> ");
 
@@ -91,6 +99,10 @@ static void
 ChangePlaneType(FlarmDevice &flarm)
 {
   while (true) {
+    TCHAR old_plane_type[64];
+    if (flarm.GetPlaneType(old_plane_type, 64))
+      _tprintf(_T("Old plane type: \"%s\"\n"), old_plane_type);
+
     fprintf(stdout, "Please enter the new plane type:\n");
     fprintf(stdout, "> ");
 
@@ -116,6 +128,10 @@ static void
 ChangeRegistration(FlarmDevice &flarm)
 {
   while (true) {
+    TCHAR old_registration[64];
+    if (flarm.GetPlaneRegistration(old_registration, 64))
+      _tprintf(_T("Old plane registratio: \"%s\"\n"), old_registration);
+
     fprintf(stdout, "Please enter the new plane registration:\n");
     fprintf(stdout, "> ");
 
@@ -141,6 +157,10 @@ static void
 ChangeCompetitionId(FlarmDevice &flarm)
 {
   while (true) {
+    TCHAR old_id[64];
+    if (flarm.GetCompetitionId(old_id, 64))
+      _tprintf(_T("Old competition id: \"%s\"\n"), old_id);
+
     fprintf(stdout, "Please enter the new competition id:\n");
     fprintf(stdout, "> ");
 
@@ -166,6 +186,10 @@ static void
 ChangeCompetitionClass(FlarmDevice &flarm)
 {
   while (true) {
+    TCHAR old_comp_class[64];
+    if (flarm.GetCompetitionClass(old_comp_class, 64))
+      _tprintf(_T("Old competition class: \"%s\"\n"), old_comp_class);
+
     fprintf(stdout, "Please enter the new competition class:\n");
     fprintf(stdout, "> ");
 
@@ -191,6 +215,11 @@ static void
 ChangeRange(FlarmDevice &flarm)
 {
   while (true) {
+    unsigned num_range;
+
+    if (flarm.GetRange(num_range))
+      printf("Old range setting: \"%d\"\n", num_range);
+
     fprintf(stdout, "Please enter the range setting (2000-25500):\n");
     fprintf(stdout, "> ");
 
@@ -203,7 +232,7 @@ ChangeRange(FlarmDevice &flarm)
     TrimRight(range);
 
     char *end_ptr;
-    unsigned num_range = strtoul(range, &end_ptr, 10);
+    num_range = strtoul(range, &end_ptr, 10);
     if (range == end_ptr) {
       fprintf(stdout, "Invalid input\n");
       continue;

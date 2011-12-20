@@ -58,14 +58,22 @@ public:
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env);
 
+  bool GetPilot(TCHAR *buffer, size_t length);
   bool SetPilot(const TCHAR *pilot_name);
+  bool GetCoPilot(TCHAR *buffer, size_t length);
   bool SetCoPilot(const TCHAR *copilot_name);
+  bool GetPlaneType(TCHAR *buffer, size_t length);
   bool SetPlaneType(const TCHAR *plane_type);
+  bool GetPlaneRegistration(TCHAR *buffer, size_t length);
   bool SetPlaneRegistration(const TCHAR *registration);
+  bool GetCompetitionId(TCHAR *buffer, size_t length);
   bool SetCompetitionId(const TCHAR *competition_id);
+  bool GetCompetitionClass(TCHAR *buffer, size_t length);
   bool SetCompetitionClass(const TCHAR *competition_class);
 
+  bool GetStealthMode(bool &enabled);
   bool SetStealthMode(bool enabled);
+  bool GetRange(unsigned &range);
   bool SetRange(unsigned range);
 
   void Restart();
