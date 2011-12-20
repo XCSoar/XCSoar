@@ -28,7 +28,7 @@ Copyright_License {
 #include "Port.hpp"
 
 /**
- * A serial port class for POSIX (/dev/ttyS*, /dev/ttyUSB*).
+ * A TCP listener port class.
  */
 class TCPPort : public Port, protected StoppableThread
 {
