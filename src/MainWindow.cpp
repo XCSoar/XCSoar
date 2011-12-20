@@ -56,6 +56,10 @@ Copyright_License {
 #include <unistd.h>
 #endif
 
+#if !defined(WIN32) && !defined(ANDROID)
+#include <unistd.h> /* for execl() */
+#endif
+
 MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(NULL),
    map(NULL), widget(NULL), vario(*this),

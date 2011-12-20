@@ -233,7 +233,7 @@ test_glide_cb(const fixed h, const fixed W, const fixed Wangle,
   GlideState gs (vect, fixed_zero, ac.altitude, ac.wind);
   GlideResult gr = MacCready::Solve(polar, gs);
 
-  gr.CalcDeferred(ac);
+  gr.CalcDeferred();
 
   hfile << (double)W << " "
         << (double)Wangle << " "

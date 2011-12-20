@@ -26,6 +26,14 @@
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Math/Angle.hpp"
 
+#ifndef ACCURACY
+/**
+ * Define this macro before including TestUtil.hpp to compare with a
+ * different accuracy.
+ */
+#define ACCURACY 10000
+#endif
+
 extern "C" {
 #include "tap.h"
 }
@@ -33,7 +41,7 @@ extern "C" {
 static inline bool
 is_zero(const fixed value)
 {
-  return (long)fabs(value * 10000) == 0;
+  return (long)(fabs(value) * ACCURACY) == 0;
 }
 
 static inline bool
@@ -74,10 +82,20 @@ between(double x, double a, double b)
 #endif
 
 static inline bool
+between(fixed x, fixed a, fixed b)
+{
+  return x >= a && x <= b;
+}
+
+#ifdef FIXED_MATH
+
+static inline bool
 between(fixed x, double a, double b)
 {
-  return x >= fixed(a) && x <= fixed(b);
+  return between(x, fixed(a), fixed(b));
 }
+
+#endif
 
 static inline bool
 equals(const Angle a, int b)

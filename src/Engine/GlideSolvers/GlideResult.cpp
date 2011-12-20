@@ -26,23 +26,24 @@
 #include "Navigation/Aircraft.hpp"
 
 GlideResult::GlideResult(const GlideState &task, const fixed V):
+  head_wind(task.head_wind),
+  v_opt(V),
+#ifndef NDEBUG
+  start_altitude(task.min_height + task.altitude_difference),
+#endif
+  min_height(task.min_height),
   vector(task.vector),
   distance_to_final(task.vector.distance),
-  v_opt(V),
   altitude_difference(task.altitude_difference),
-  altitude_required(task.altitude_difference),
   effective_wind_speed(task.wind.norm),
   effective_wind_angle(task.effective_wind_angle),
-  head_wind(task.head_wind),
-  validity(RESULT_NOSOLUTION),
-  min_height(task.min_height)
+  validity(RESULT_NOSOLUTION)
 {
 }
 
 void
-GlideResult::CalcDeferred(const AircraftState& state)
+GlideResult::CalcDeferred()
 {
-  altitude_required = state.altitude - altitude_difference;
   CalcCruiseBearing();
 }
 
@@ -78,17 +79,28 @@ GlideResult::Add(const GlideResult &s2)
        PARTIAL */
     return;
 
+  if (s2.GetRequiredAltitude() < min_height) {
+    /* must meet the safety height of the first leg */
+    assert(s2.min_height < s2.GetArrivalAltitude(min_height));
+
+    /* calculate a new minimum arrival height that considers the
+       "mountain top" in the middle */
+    min_height = s2.GetArrivalAltitude(min_height);
+  } else {
+    /* must meet the safety height of the second leg */
+
+    /* apply the increased altitude requirement */
+    altitude_difference -= s2.GetRequiredAltitude() - min_height;
+
+    /* adopt the minimum height of the second leg */
+    min_height = s2.min_height;
+  }
+
   time_elapsed += s2.time_elapsed;
   height_glide += s2.height_glide;
   height_climb += s2.height_climb;
   distance_to_final += s2.distance_to_final;
   time_virtual += s2.time_virtual;
-
-  if (negative(altitude_difference) || negative(s2.altitude_difference))
-    altitude_difference =
-        min(s2.altitude_difference + altitude_difference, altitude_difference);
-  else
-    altitude_difference = min(s2.altitude_difference, altitude_difference);
 }
 
 #define fixed_bignum fixed_int_constant(1000000) // error condition
@@ -135,21 +147,10 @@ GlideResult::DestinationAngleGround() const
   return fixed_int_constant(1000);
 }
 
-bool
-GlideResult::IsAchievable(const bool final_glide) const
-{
-  if (final_glide)
-    return (validity == RESULT_OK)
-            && positive(altitude_difference)
-            && !positive(height_climb);
-
-  return (validity == RESULT_OK);
-}
-
 bool 
 GlideResult::IsFinalGlide() const 
 {
-  return (validity == RESULT_OK) && !positive(distance_to_final);
+  return IsOk() && !negative(altitude_difference) && !positive(height_climb);
 }
 
 GeoPoint 

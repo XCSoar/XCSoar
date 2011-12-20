@@ -41,6 +41,8 @@
 class StartPoint:
   public OrderedTaskPoint
 {
+  fixed safety_height_terrain;
+
   TaskStartMargins margins;
 
    /**

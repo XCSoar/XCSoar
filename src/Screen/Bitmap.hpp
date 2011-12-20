@@ -61,7 +61,7 @@ protected:
   /** filename for external images (id=0) */
   tstring pathName;
   GLTexture *texture;
-  UPixelScalar width, height;
+  PixelSize size;
 #elif defined(ENABLE_SDL)
   SDL_Surface *surface;
 #else
@@ -103,11 +103,11 @@ public:
 
 #ifdef ENABLE_OPENGL
   UPixelScalar GetWidth() const {
-    return width;
+    return size.cx;
   }
 
   UPixelScalar GetHeight() const {
-    return height;
+    return size.cy;
   }
 #endif
 

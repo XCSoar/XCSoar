@@ -53,13 +53,13 @@ InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode)
   const Angle a5 = Angle::Degrees(fixed(5));
   switch (keycode) {
   case ibkUp:
-  case ibkLeft:
+  case ibkRight:
     device_blackboard->SetTrack(
         XCSoarInterface::Basic().track + a5);
     return true;
 
   case ibkDown:
-  case ibkRight:
+  case ibkLeft:
     device_blackboard->SetTrack(
         XCSoarInterface::Basic().track - a5);
     return true;

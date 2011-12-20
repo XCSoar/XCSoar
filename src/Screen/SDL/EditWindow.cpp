@@ -38,8 +38,10 @@ EditWindow::set(ContainerWindow &parent, PixelScalar left, PixelScalar top,
 void
 EditWindow::on_paint(Canvas &canvas)
 {
-  PixelRect rc = { 2, 2, PixelScalar(canvas.get_width() - 4),
-                   PixelScalar(canvas.get_height() - 4) };
+  PixelRect rc = {
+    2, 2, PixelScalar(canvas.get_width() - 4),
+    PixelScalar(canvas.get_height() - 4),
+  };
 
   if (is_enabled()) {
     if (is_read_only())

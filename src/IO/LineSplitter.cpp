@@ -28,7 +28,7 @@ Copyright_License {
 static std::pair<unsigned, unsigned>
 extract_line(const char *data, unsigned length)
 {
-  const char *eol = (char *)memchr(data, '\n', length);
+  const char *eol = (const char *)memchr(data, '\n', length);
   if (eol == NULL)
     return std::pair<unsigned, unsigned>(length, length);
 

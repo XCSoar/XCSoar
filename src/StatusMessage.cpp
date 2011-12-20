@@ -132,7 +132,7 @@ StatusMessageList::LoadFile(TLineReader &reader)
         // TODO code: this picks up memory lost from no entry, but not duplicates - fix.
         if (*location) {
           // JMW fix memory leak
-          free((void*)*location);
+          free((void*)const_cast<TCHAR *>(*location));
         }
         *location = StringMallocParse(value);
       }

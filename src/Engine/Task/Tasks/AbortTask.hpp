@@ -217,9 +217,6 @@ public:
   fixed GetTaskRadius(const GeoPoint &fallback_location) const;
 
 protected:
-  gcc_pure
-  bool IsReachable(const GlideResult &result, bool final_glide) const;
-
   /**
    * Test whether (and how) transitioning into/out of task points should occur, typically
    * according to task_advance mechanism.  This also may call the task_event callbacks.

@@ -57,7 +57,7 @@ MacCready::SolveVertical(const GlideState &task) const
   //     t_cl*mc*(V-W)= -dh*(V-W)+W*t_cl
   //     t_cl*(mc*(V-W)-W) = -dh*(V-W) .... (2)
 
-  if (positive(task.altitude_difference)) {
+  if (!negative(task.altitude_difference)) {
     // immediate solution
     result.height_climb = fixed_zero;
     result.height_glide = fixed_zero;
@@ -182,7 +182,7 @@ MacCready::SolveCruise(const GlideState &task) const
 
   result.time_elapsed = estimated_time;
   result.height_climb = time_climb * mc;
-  result.height_glide = sink_glide - result.height_climb;
+  result.height_glide = sink_glide;
   result.altitude_difference -= sink_glide;
   result.effective_wind_speed *= rho_plus_one;
 
@@ -250,7 +250,8 @@ MacCready::SolveSink(const GlideState &task, const fixed sink_rate) const
   const fixed height_offset = fixed_1mil;
   GlideState virtual_task = task;
   virtual_task.altitude_difference += height_offset;
-  GlideResult result = SolveGlide(task, glide_polar.GetVBestLD(), sink_rate);
+  GlideResult result = SolveGlide(virtual_task, glide_polar.GetVBestLD(),
+                                  sink_rate);
   result.altitude_difference -= height_offset;
   return result;
 }
@@ -258,6 +259,13 @@ MacCready::SolveSink(const GlideState &task, const fixed sink_rate) const
 GlideResult
 MacCready::Solve(const GlideState &task) const
 {
+  if (!glide_polar.IsValid()) {
+    /* can't solve without a valid GlidePolar() */
+    GlideResult result;
+    result.Reset();
+    return result;
+  }
+
   if (!positive(task.vector.distance))
     return SolveVertical(task);
 
@@ -265,7 +273,7 @@ MacCready::Solve(const GlideState &task) const
     // whole task must be glide
     return OptimiseGlide(task, false);
 
-  if (!positive(task.altitude_difference))
+  if (negative(task.altitude_difference))
     // whole task climb-cruise
     return SolveCruise(task);
 
@@ -282,13 +290,12 @@ MacCready::Solve(const GlideState &task) const
 
   GlideState sub_task = task;
   sub_task.vector.distance -= result_fg.vector.distance;
-  sub_task.min_height += result_fg.height_glide;
   sub_task.altitude_difference -= result_fg.height_glide;
 
   GlideResult result_cc = SolveCruise(sub_task);
-  result_cc.Add(result_fg);
+  result_fg.Add(result_cc);
 
-  return result_cc;
+  return result_fg;
 }
 
 /**

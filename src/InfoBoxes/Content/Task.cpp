@@ -168,11 +168,12 @@ InfoBoxContentNextETE::Update(InfoBoxData &data)
   // use proper non-terminal next task stats
 
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable() ||
-      !positive(task_stats.current_leg.time_remaining)) {
+  if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable()) {
     data.SetInvalid();
     return;
   }
+
+  assert(!negative(task_stats.current_leg.time_remaining));
 
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
@@ -213,8 +214,7 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxData &data)
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult &next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
-  if (!task_stats.task_valid || !next_solution.IsDefined() ||
-      !next_solution.IsAchievable(false)) {
+  if (!task_stats.task_valid || !next_solution.IsAchievable()) {
     data.SetInvalid();
     return;
   }
@@ -254,15 +254,14 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxData &data)
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult &next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
-  if (!task_stats.task_valid || !next_solution.IsDefined() ||
-      !next_solution.IsAchievable(false)) {
+  if (!task_stats.task_valid || !next_solution.IsAchievable()) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserAltitude(next_solution.altitude_required, tmp, 32, false);
+  Units::FormatUserAltitude(next_solution.GetRequiredAltitude(), tmp, 32, false);
   data.SetValue(tmp);
 
   // Set Unit
@@ -276,14 +275,14 @@ InfoBoxContentNextAltitudeArrival::Update(InfoBoxData &data)
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
-  if (!task_stats.task_valid || !next_solution.IsAchievable(true)) {
+  if (!task_stats.task_valid || !next_solution.IsFinalGlide()) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  fixed alt = XCSoarInterface::Basic().nav_altitude-next_solution.height_glide;
+  fixed alt = next_solution.GetArrivalAltitude(XCSoarInterface::Basic().nav_altitude);
   Units::FormatUserAltitude(alt, tmp, 32, false);
   data.SetValue(tmp);
 
@@ -341,11 +340,12 @@ InfoBoxContentFinalETE::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
-  if (!task_stats.task_valid || !task_stats.total.IsAchievable() ||
-      !positive(task_stats.total.time_remaining)) {
+  if (!task_stats.task_valid || !task_stats.total.IsAchievable()) {
     data.SetInvalid();
     return;
   }
+
+  assert(!negative(task_stats.total.time_remaining));
 
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
@@ -408,7 +408,7 @@ InfoBoxContentFinalAltitudeRequire::Update(InfoBoxData &data)
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserAltitude(task_stats.total.solution_remaining.altitude_required,
+  Units::FormatUserAltitude(task_stats.total.solution_remaining.GetRequiredAltitude(),
                             tmp, 32, false);
   data.SetValue(tmp);
 
@@ -607,11 +607,12 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxData &data)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid || !task_stats.total.IsAchievable() ||
-      !positive(task_stats.total.time_remaining)) {
+      !task_stats.task_valid || !task_stats.total.IsAchievable()) {
     data.SetInvalid();
     return;
   }
+
+  assert(!negative(task_stats.total.time_remaining));
 
   fixed diff = task_stats.total.time_remaining -
     common_stats.aat_time_remaining;

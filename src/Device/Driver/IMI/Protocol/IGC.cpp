@@ -345,7 +345,7 @@ IMI::WriteFix(const Fix &fix, bool fromB2, int no_enl, FILE *file)
   }
 
   if (fix.id == IMIFIX_ID_B_RECORD) {
-    const FixB *fix_b = (FixB*)&fix;
+    const FixB *fix_b = (const FixB *)&fix;
     AngleConverter angle;
 
     fputc('B', file);
@@ -380,13 +380,13 @@ IMI::WriteFix(const Fix &fix, bool fromB2, int no_enl, FILE *file)
     if (!fromB2)
       memcpy(&fixBLastFull, &fix, sizeof(fixBLastFull));
   } else if (fix.id == IMIFIX_ID_B2_RECORD) {
-    const FixB2 *fix_b2 = (FixB2*)&fix;
+    const FixB2 *fix_b2 = (const FixB2 *)&fix;
     if (SplitB2Fix(fix_b2, &fixBLastFull, &fixB1, &fixB2)) {
       WriteFix(*(Fix*)&fixB1, true, no_enl, file);
       WriteFix(*(Fix*)&fixB2, true, no_enl, file);
     }
   } else if (fix.id == IMIFIX_ID_K_RECORD) {
-    const FixK *fix_k = (FixK*)&fix;
+    const FixK *fix_k = (const FixK *)&fix;
 
     fputc('K', file);
     BrokenTime time = ConvertToDateTime(fix.time);
@@ -396,7 +396,7 @@ IMI::WriteFix(const Fix &fix, bool fromB2, int no_enl, FILE *file)
     fprintf(file, "%03d", fix_k->gsp);
     append_line_break = true;
   } else if (fix.id == IMIFIX_ID_E_RECORD) {
-    const FixE *fix_e = (FixE*)&fix;
+    const FixE *fix_e = (const FixE *)&fix;
     if (fix_e->type == IMIFIX_E_TYPE_SATELLITES) {
       siu = 0;
       fputc('F', file);

@@ -53,34 +53,71 @@ struct GlideResult {
     RESULT_NOSOLUTION
   };
 
-  /** Distance/bearing of task achievable */
+  /**
+   * Head wind component [m/s] in cruise.  Immutable input value.
+   */
+  fixed head_wind;
+
+  /**
+   * Optimal speed to fly in cruise [m/s].  Immutable input value.
+   */
+  fixed v_opt;
+
+#ifndef NDEBUG
+  /**
+   * The altitude of the aircraft at the beginning of this leg [m
+   * MSL].  Immutable input value.
+   *
+   * This attribute shall aid debugging, and will be removed once we
+   * are certain the MacCready code is stable.
+   */
+  fixed start_altitude;
+#endif
+
+  /**
+   * Altitude [m above MSL] of target.  Immutable input value.
+   */
+  fixed min_height;
+
+  /**
+   * Cruise vector of this result.  Usually, this equals the remaining
+   * vector (see ElementStat::vector_remaining), but if a solution is
+   * not achievable, this is the portion of the remaining vector that
+   * is achievable with straight cruise (may be an empty vector).
+   */
   GeoVector vector;
+
   /** Distance to go before final glide (m) */
   fixed distance_to_final;
   /** Track bearing in cruise for optimal drift compensation (deg true) */
   Angle cruise_track_bearing;
-  /** Optimal speed to fly in cruise (m/s) */
-  fixed v_opt;
-  /** Height to be climbed (m) */
+
+  /**
+   * Total height to be climbed [m relative].
+   */
   fixed height_climb;
-  /** Height that will be glided (m) */
+
+  /**
+   * Total height that will lost during straight glide along this
+   * solution.
+   */
   fixed height_glide;
+
   /** Time to complete task (s) */
   fixed time_elapsed;
   /** Equivalent time to recover glided height (s) at MC */
   fixed time_virtual;
-  /** Height above/below final glide for this task (m) */
+
+  /**
+   * Height above/below final glide for this task [m relative].
+   */
   fixed altitude_difference;
-  /** Height required to solve this task (m) */
-  fixed altitude_required;
+
   fixed effective_wind_speed;
   Angle effective_wind_angle;
-  /** Head wind component (m/s) in cruise */
-  fixed head_wind;
+
   /** Solution validity */
   GlideResultValidity validity;
-  /** Height (m above MSL) of end */
-  fixed min_height;
 
   /** Construct an uninitialised object. */
   GlideResult() = default;
@@ -105,9 +142,8 @@ struct GlideResult {
   /**
    * Calculate additional items (CruiseTrackBearing and AltitudeRequired) that were
    * deferred.
-   * @param state State from which this solution was obtained
    */
-  void CalcDeferred(const AircraftState &state);
+  void CalcDeferred();
 
   /**
    * Check whether aircraft can finish this task without
@@ -139,12 +175,53 @@ struct GlideResult {
   /**
    * Check whether task is achievable (optionally entirely on final glide)
    *
-   * @param final_glide Whether no further climb allowed
-   *
    * @return True if target is reachable
    */
   gcc_pure
-  bool IsAchievable(const bool final_glide=true) const;
+  bool IsAchievable() const {
+    return IsOk();
+  }
+
+  /**
+   * Absolute altitude required to solve this task [m MSL].  This is
+   * the current aircraft altitude plus #altitude_difference.
+   */
+  gcc_pure
+  fixed GetRequiredAltitude() const {
+    return min_height + height_glide;
+  }
+
+  /**
+   * Returns the altitude of the aircraft at the beginning of this leg
+   * [m MSL], as specified in the MacCready calculation input
+   * parameters.
+   */
+  gcc_pure
+  fixed GetStartAltitude() const {
+    return GetRequiredAltitude() + altitude_difference;
+  }
+
+  /**
+   * Returns the calculated altitude of the aircraft at the end of
+   * this leg, not assuming any climbs [m MSL].  It may be below the
+   * safety altitude or even below terrain.
+   *
+   * @param start_altitude the current aircraft altitude
+   */
+  gcc_pure
+  fixed GetArrivalAltitude(fixed start_altitude) const {
+    return start_altitude - height_glide;
+  }
+
+  /**
+   * Returns the calculated altitude of the aircraft at the end of
+   * this leg, not assuming any climbs [m MSL].  It may be below the
+   * safety altitude or even below terrain.
+   */
+  gcc_pure
+  fixed GetArrivalAltitude() const {
+    return GetArrivalAltitude(GetStartAltitude());
+  }
 
   /**
    * Adds another GlideResult to this.  This is used to

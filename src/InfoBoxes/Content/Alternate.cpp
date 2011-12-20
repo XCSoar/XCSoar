@@ -73,7 +73,7 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
   SetValueBearingDifference(data, Value);
 
   // Set Color (blue/black)
-  data.SetValueColor(alternate->solution.IsAchievable(true) ? 2 : 0);
+  data.SetValueColor(alternate->solution.IsFinalGlide() ? 2 : 0);
 }
 
 bool
@@ -147,7 +147,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data)
   }
 
   // Set Color (blue/black)
-  data.SetValueColor(alternate->solution.IsAchievable(true) ? 2 : 0);
+  data.SetValueColor(alternate->solution.IsFinalGlide() ? 2 : 0);
 }
 
 bool

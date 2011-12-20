@@ -75,8 +75,8 @@ Bitmap::Reload()
   if (texture == NULL)
     return false;
 
-  width = texture->GetWidth();
-  height = texture->GetHeight();
+  size.cx = texture->GetWidth();
+  size.cy = texture->GetHeight();
   return true;
 }
 
@@ -139,6 +139,5 @@ Bitmap::GetSize() const
 {
   assert(IsDefined());
 
-  const PixelSize size = { width, height };
   return size;
 }

@@ -64,8 +64,8 @@ ComboList::Append(ComboList::Item *item)
 static int
 CompareByValue(const void *elem1, const void *elem2)
 {
-  const ComboList::Item* entry1 = *((const ComboList::Item**)elem1);
-  const ComboList::Item* entry2 = *((const ComboList::Item**)elem2);
+  const ComboList::Item *entry1 = *((const ComboList::Item *const*)elem1);
+  const ComboList::Item *entry2 = *((const ComboList::Item *const*)elem2);
 
   return _tcscmp(entry1->StringValueFormatted, entry2->StringValueFormatted);
 }

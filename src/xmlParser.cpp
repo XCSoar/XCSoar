@@ -110,7 +110,7 @@ XMLNode::XMLNodeData::~XMLNodeData()
 {
   assert(ref_count == 0);
 
-  free((void*)lpszName);
+  free((void*)const_cast<TCHAR *>(lpszName));
 }
 
 void

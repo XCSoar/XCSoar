@@ -25,6 +25,9 @@ Version 6.3 - not yet released
   - support reverse screen modes for Galaxy Tab
 
 Version 6.2.4 - not yet released
+* calculations
+  - fix arrival altitude calculation when goal is above aircraft
+  - take terrain safety height into account for start point
 * devices
   - Borgelt: send MacCready to B800 with CAI302 protocol
   - Flytec: fixed the $FLYSEN parser (more data, including GPS)
@@ -38,6 +41,7 @@ Version 6.2.4 - not yet released
   - allow modification of some additional infobox values with up/down keys
     (or volume keys on android devices).
   - fix crash in the .xci file parser
+  - new translation: Korean
 * settings
   - load configured METAR/TAF stations on startup
   - remember UTC offsets > +12 hours.

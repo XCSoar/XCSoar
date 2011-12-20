@@ -34,7 +34,7 @@ ConditionMonitorGlideTerrain::CheckCondition(const GlideComputer& cmp)
     return false;
 
   const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
-  if (!res.IsFinalGlide() || !res.IsAchievable(true))
+  if (!res.IsFinalGlide())
     // only give message about terrain warnings if above final glide
     return false;
 

@@ -54,7 +54,6 @@ class TaskMacCready:
 protected:
   const std::vector<TaskPoint*> m_tps; /**< The TaskPoints in the task */
   std::vector<GlideResult> m_gs; /**< Glide solutions for each leg */
-  std::vector<fixed> m_minHs; /**< Minimum altitude for each taskpoint (m) */
   const unsigned m_activeTaskPoint; /**< Active task point (local copy for speed) */
   int m_start; /**< TaskPoint sequence index of first taskpoint included in scan */
   int m_end; /**< TaskPoint sequence index of last taskpoint included in scan */
@@ -135,7 +134,10 @@ public:
  * 
  * @return Glide solution of current leg
  */
-  const GlideResult& get_active_solution(const AircraftState &aircraft);
+  gcc_pure
+  const GlideResult& get_active_solution() const {
+    return m_gs[m_activeTaskPoint];
+  }
 
 protected:
 
@@ -194,15 +196,6 @@ private:
  */
   virtual const AircraftState &
   get_aircraft_start(const AircraftState &state) const = 0;
-
-/** 
- * Calculate clearance heights for all turnpoints, given the
- * glide polar.  This is the absolute minimum height the aircraft
- * can be at for solutions along the task.
- * 
- * @param state Aircraft state
- */
-  void clearance_heights(const AircraftState &state);
 };
 
 #endif

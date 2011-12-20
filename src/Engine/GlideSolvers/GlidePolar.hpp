@@ -116,6 +116,13 @@ public:
       const fixed _ballast = fixed_zero);
 
   /**
+   * Perform basic checks on the validity of the object.
+   */
+  bool IsValid() const {
+    return GetVMin() < GetVMax();
+  }
+
+  /**
    * Accesses minimum sink rate
    *
    * @return Sink rate (m/s, positive down)

@@ -108,7 +108,7 @@ struct ElementStat
    * @return True if can finish the task
    */
   bool IsAchievable() const {
-    return solution_remaining.IsOk();
+    return solution_remaining.IsAchievable();
   }
 
 #ifdef DO_PRINT

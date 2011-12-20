@@ -142,8 +142,11 @@ TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
   bool show_leg_info = leg.distance > fixed(0.01);
 
   // Draw icon
-  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
-                     PixelScalar(rc.top + line_height / 2) };
+  const RasterPoint pt = {
+    PixelScalar(rc.left + line_height / 2),
+    PixelScalar(rc.top + line_height / 2),
+  };
+
   WaypointIconRenderer wir(CommonInterface::SettingsMap().waypoint,
                            CommonInterface::main_window.GetLook().map.waypoint,
                            canvas);

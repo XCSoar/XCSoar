@@ -73,6 +73,7 @@ TEST_NAMES = \
 	TestColorRamp TestGeoPoint TestDiffFilter \
 	TestFileUtil TestPolars TestCSVLine TestGlidePolar \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
+	TestOrderedTask \
 	TestPlanes \
 	TestTaskPoint \
 	TestTaskWaypoint \
@@ -152,6 +153,15 @@ TEST_PROFILE_SOURCES = \
 	$(TEST_SRC_DIR)/TestProfile.cpp
 TEST_PROFILE_DEPENDS = MATH IO
 $(eval $(call link-program,TestProfile,TEST_PROFILE))
+
+TEST_ORDERED_TASK_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestOrderedTask.cpp
+TEST_ORDERED_TASK_OBJS = $(call SRC_TO_OBJ,$(TEST_ORDERED_TASK_SOURCES))
+TEST_ORDERED_TASK_LDADD = $(ENGINE_CORE_LIBS) $(MATH_LIBS) $(UTIL_LIBS)
+$(TARGET_BIN_DIR)/TestOrderedTask$(TARGET_EXEEXT): $(TEST_ORDERED_TASK_OBJS) $(TEST_ORDERED_TASK_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
 
 TEST_PLANES_SOURCES = \
 	$(SRC)/Plane/PlaneFileGlue.cpp \

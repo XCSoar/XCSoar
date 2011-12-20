@@ -267,7 +267,7 @@ GetRadius(const ObservationZonePoint &oz)
   case ObservationZonePoint::BGAENHANCEDOPTION:
   case ObservationZonePoint::BGA_START:
   case ObservationZonePoint::ANNULAR_SECTOR:
-    CylinderZone &cz = (CylinderZone &)oz;
+    const CylinderZone &cz = (const CylinderZone &)oz;
     return cz.getRadius();
   }
 

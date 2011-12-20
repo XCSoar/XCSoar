@@ -37,6 +37,7 @@
 
 #include <assert.h>
 #include <tchar.h>
+#include <stdlib.h>
 
 class TextWriter;
 
