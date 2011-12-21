@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-20 19:50+0100\n"
-"PO-Revision-Date: 2011-12-20 15:56+0000\n"
-"Last-Translator: 113Bom <Unknown>\n"
+"PO-Revision-Date: 2011-12-21 10:49+0000\n"
+"Last-Translator: Rolf Lindgren <Unknown>\n"
 "Language-Team: none\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-20 16:36+0000\n"
+"X-Launchpad-Export-Date: 2011-12-21 13:40+0000\n"
 "X-Generator: Launchpad (build 14538)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -36,11 +36,11 @@ msgstr "Laddar Luftrumsfil..."
 
 #: src/Airspace/AirspaceParser.cpp:240
 msgid "Parse Error at Line"
-msgstr ""
+msgstr "syntaxfel på rad"
 
 #: src/Airspace/AirspaceParser.cpp:240
 msgid "Line skipped."
-msgstr ""
+msgstr "Rad ignorerad."
 
 #: src/Airspace/AirspaceParser.cpp:241 src/Dialogs/dlgAnalysis.cpp:365
 #: src/Dialogs/dlgConfiguration.cpp:89
@@ -53,7 +53,7 @@ msgstr "Luftrum"
 
 #: src/Airspace/AirspaceParser.cpp:875
 msgid "Unknown airspace filetype"
-msgstr ""
+msgstr "Okänd filtyp för luftrum"
 
 #: src/ConditionMonitor/ConditionMonitorAATTime.cpp:50
 msgid "Expect early task arrival"
@@ -69,7 +69,7 @@ msgstr ""
 
 #: src/ConditionMonitor/ConditionMonitorStartRules.cpp:61
 msgid "Start rules violated"
-msgstr "Brott mot startreglerna"
+msgstr ""
 
 #: src/ConditionMonitor/ConditionMonitorSunset.cpp:58
 msgid "Expect arrival past sunset"
@@ -97,17 +97,19 @@ msgstr "Stoppa loggern"
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "Declare task?"
-msgstr ""
+msgstr "Deklarera banan?"
 
 #: src/Logger/ExternalLogger.cpp:86
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
+"Ett fel inträffade\n"
+"Banan EJ deklarerad!"
 
 #: src/Logger/ExternalLogger.cpp:91
 msgid "Task declared!"
-msgstr ""
+msgstr "Banan deklarerad!"
 
 #: src/Logger/ExternalLogger.cpp:109
 msgid "No logger connected"
@@ -116,28 +118,28 @@ msgstr "Ingen logger ansluten"
 #: src/Logger/ExternalLogger.cpp:110
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:393
 msgid "Declare task"
-msgstr "Deklarera bana"
+msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:268
 msgid "Failed to enable download mode."
-msgstr ""
+msgstr "Kan ej aktivera nedladdningsläge."
 
 #: src/Logger/ExternalLogger.cpp:269 src/Logger/ExternalLogger.cpp:278
 #: src/Logger/ExternalLogger.cpp:286 src/Logger/ExternalLogger.cpp:305
 msgid "Download flight"
-msgstr ""
+msgstr "Ladda ner flygningen"
 
 #: src/Logger/ExternalLogger.cpp:277
 msgid "Failed to download flight list."
-msgstr ""
+msgstr "Kan ej hämla lista med flygningar."
 
 #: src/Logger/ExternalLogger.cpp:285
 msgid "Logger is empty."
-msgstr ""
+msgstr "Loggern är tom."
 
 #: src/Logger/ExternalLogger.cpp:304
 msgid "Failed to download flight."
-msgstr ""
+msgstr "Nedladdning av flygning misslyckades."
 
 #: src/Replay/IgcReplayGlue.cpp:79
 msgid "Could not open IGC file!"
@@ -157,11 +159,11 @@ msgstr "Laddar brytpunkter..."
 
 #: src/Gauge/ThermalAssistantWindow.cpp:251
 msgid "Not Circling"
-msgstr ""
+msgstr "Kurvar inte"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:223
 msgid "No Traffic"
-msgstr ""
+msgstr "Ingen trafik"
 
 #: src/Waypoint/WaypointDetailsReader.cpp:142
 msgid "Loading Airfield Details File..."
@@ -175,7 +177,7 @@ msgstr "Nästa brytpunkt"
 #: src/ExpandMacros.cpp:127 src/ExpandMacros.cpp:137 src/ExpandMacros.cpp:210
 #: src/ExpandMacros.cpp:256
 msgid "Previous Turnpoint"
-msgstr "Förra brytpunkten"
+msgstr "Föregående brytpunkt"
 
 #: src/ExpandMacros.cpp:149 src/ExpandMacros.cpp:169
 msgid "Furthest Landpoint"
@@ -207,7 +209,7 @@ msgstr ""
 
 #: src/ExpandMacros.cpp:233
 msgid "Arm start"
-msgstr "Armera start"
+msgstr "Sätt i startläge."
 
 #: src/ExpandMacros.cpp:236
 msgid "Arm turn"
@@ -215,7 +217,7 @@ msgstr ""
 
 #: src/ExpandMacros.cpp:264
 msgid "Disarm start"
-msgstr ""
+msgstr "Lämna startläge"
 
 #: src/ExpandMacros.cpp:267
 msgid "Disarm turn"
@@ -226,18 +228,24 @@ msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
+"Nästa\n"
+"(manuell)"
 
 #: src/ExpandMacros.cpp:282
 msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
+"Nästa\n"
+"(Automatisk)"
 
 #: src/ExpandMacros.cpp:287
 msgid ""
 "Abort\n"
 "Start"
 msgstr ""
+"Avbryt\n"
+"Start"
 
 #: src/ExpandMacros.cpp:292
 msgid ""
@@ -250,16 +258,20 @@ msgid ""
 "Abort\n"
 "Turn"
 msgstr ""
+"Avbryt\n"
+"Brytpunktspassage"
 
 #: src/ExpandMacros.cpp:302
 msgid ""
 "Arm\n"
 "Turn"
 msgstr ""
+"Läge för\n"
+"Brytpunktspassage"
 
 #: src/ExpandMacros.cpp:321 src/ExpandMacros.cpp:325
 msgid "Resume"
-msgstr "Fortsätt"
+msgstr "Återuppta"
 
 #: src/ExpandMacros.cpp:321 src/ExpandMacros.cpp:325
 #: src/Dialogs/Message.cpp:169
@@ -273,7 +285,7 @@ msgstr "Stopp"
 
 #: src/ExpandMacros.cpp:439 Data/Dialogs/dlgLoggerReplay.xml:10
 msgid "Start"
-msgstr "Start"
+msgstr "Starta"
 
 #: src/ExpandMacros.cpp:445
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:110
@@ -288,7 +300,7 @@ msgstr "Kort"
 #: src/ExpandMacros.cpp:453
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:112
 msgid "Full"
-msgstr ""
+msgstr "Full"
 
 #: src/ExpandMacros.cpp:457 src/ExpandMacros.cpp:464 src/ExpandMacros.cpp:521
 #: src/ExpandMacros.cpp:527 src/ExpandMacros.cpp:530 src/ExpandMacros.cpp:533
@@ -343,7 +355,7 @@ msgstr "Manuell"
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:144
 #: Data/Dialogs/dlgBrightness.xml:6
 msgid "Auto"
-msgstr "auto"
+msgstr "Auto"
 
 #: src/ExpandMacros.cpp:536 src/Input/InputEventsSettings.cpp:313
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:143
@@ -354,7 +366,7 @@ msgstr "Allt"
 #: src/ExpandMacros.cpp:537 src/Input/InputEventsSettings.cpp:314
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Task & Landables"
 
 #: src/ExpandMacros.cpp:539 src/Input/InputEventsSettings.cpp:316
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:54
@@ -391,7 +403,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:88
 #, no-c-format
 msgid "Height AGL"
-msgstr ""
+msgstr "Höjd över terräng"
 
 #: src/InfoBoxes/Content/Factory.cpp:89
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:7
@@ -406,16 +418,18 @@ msgid ""
 "terrain file. The value is coloured red when the glider is below the terrain "
 "safety clearance height."
 msgstr ""
+"Detta är GPS-höjden minus terrängens höjd tagen från terrängfilen.  När "
+"värdet är mindre än säkerhetsmarginalen visas det i rött."
 
 #: src/InfoBoxes/Content/Factory.cpp:98
 #, no-c-format
 msgid "Thermal last 30 s"
-msgstr ""
+msgstr "Stig senaste 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:99
 #, no-c-format
 msgid "TC 30s"
-msgstr ""
+msgstr "TC 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:100
 #, no-c-format
@@ -423,6 +437,8 @@ msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
 "or vario if available."
 msgstr ""
+"Genomsnittligt stighastighet de senaste 30 sekunderna, baserat på GPS-höjd, "
+"eller på vario-data om sådan finns tillgänglig."
 
 #: src/InfoBoxes/Content/Factory.cpp:108 src/InfoBoxes/Content/Factory.cpp:109
 #: Data/Dialogs/dlgStatusAircraft.xml:10 Data/Dialogs/dlgTeamCode.xml:14
@@ -437,16 +453,18 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
+"Sann bäring till nästa brytpunkt. För AAT uppgifter är det bäringen till "
+"'target' inom AAT-sektorn."
 
 #: src/InfoBoxes/Content/Factory.cpp:118
 #, no-c-format
 msgid "L/D instantaneous"
-msgstr ""
+msgstr "momentant glidtal"
 
 #: src/InfoBoxes/Content/Factory.cpp:119
 #, no-c-format
 msgid "L/D Inst"
-msgstr ""
+msgstr "L/D mom"
 
 #: src/InfoBoxes/Content/Factory.cpp:120
 #, no-c-format
@@ -456,16 +474,19 @@ msgid ""
 "climbing cruise. If the vertical speed is close to zero, the displayed value "
 "is '---'."
 msgstr ""
+"Momentant glidtal, beräknat genom att dividera distans över marken med "
+"höjdförlust, över 20 sekunder. Negativa värden visar på höjdvinst, och om "
+"höjdförslusten är nära noll visas '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:128
 #, no-c-format
 msgid "L/D cruise"
-msgstr ""
+msgstr "L/D glid"
 
 #: src/InfoBoxes/Content/Factory.cpp:129
 #, no-c-format
 msgid "L/D Cru"
-msgstr ""
+msgstr "L/D Cru"
 
 #: src/InfoBoxes/Content/Factory.cpp:130
 #, no-c-format
@@ -475,16 +496,19 @@ msgid ""
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
 msgstr ""
+"Glidtal, beräknat genom att dividera flugen distans över marken med "
+"höjdförlust, sedan senaste kurvning. Negativa värden visar på höjdvinst, och "
+"om höjdförslusten är nära noll visas '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:138
 #, no-c-format
 msgid "Speed ground"
-msgstr ""
+msgstr "Hastighet över marken"
 
 #: src/InfoBoxes/Content/Factory.cpp:139
 #, no-c-format
 msgid "V Gnd"
-msgstr ""
+msgstr "V Gnd"
 
 #: src/InfoBoxes/Content/Factory.cpp:140
 #, no-c-format
@@ -493,16 +517,18 @@ msgid ""
 "mode, pressing the up and down arrows adjusts the speed, and left and right "
 "turn the glider."
 msgstr ""
+"Hastighet över marken, mätt med GPS. Om denna Informationsruta är aktiv i "
+"simulatorläge kan man ända höjd och riktning med piltangenterna."
 
 #: src/InfoBoxes/Content/Factory.cpp:148
 #, no-c-format
 msgid "Last thermal average"
-msgstr ""
+msgstr "Genomsnittligt stig i senaste blåsa."
 
 #: src/InfoBoxes/Content/Factory.cpp:149
 #, no-c-format
 msgid "TL Avg"
-msgstr ""
+msgstr "TL Avg"
 
 #: src/InfoBoxes/Content/Factory.cpp:150
 #, no-c-format
@@ -539,7 +565,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr ""
+msgstr "Tid i senaste blåsan"
 
 #: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
@@ -2257,9 +2283,8 @@ msgid "Thermal"
 msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:217
-#, fuzzy
 msgid "Avg. lift"
-msgstr "Snitt Stig"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:219
 #, c-format
@@ -7122,30 +7147,6 @@ msgstr ""
 #~ msgid "Final Glide Through Terrain"
 #~ msgstr "Finalglidning genom terräng!"
 
-#~ msgid "Pan mode on"
-#~ msgstr "Panorera På"
-
-#~ msgid "Pan mode off"
-#~ msgstr "Panorera Av"
-
-#~ msgid "Use black outline"
-#~ msgstr "Svart kontur"
-
-#~ msgid "Warning time"
-#~ msgstr "Varningstid"
-
-#~ msgid "Acknowledge time"
-#~ msgstr "Bekr. Tid"
-
-#~ msgid "Infobox geometry"
-#~ msgstr "Infobox Geometri"
-
-#~ msgid "V ach."
-#~ msgstr "Uppnådd Hast"
-
-#~ msgid "Lat./Lon."
-#~ msgstr "Lat/Long"
-
 #~ msgid ""
 #~ "Error occured,\n"
 #~ "Task NOT Declared!"
@@ -7155,42 +7156,3 @@ msgstr ""
 
 #~ msgid "OK to invalidate declaration?"
 #~ msgstr "OK att ogiltigförklara deklarationen?"
-
-#~ msgid "Time step circling"
-#~ msgstr "Tidsstegring kurvläge"
-
-#~ msgid "Terrain file"
-#~ msgstr "Terrängfil"
-
-#~ msgid "Time step cruise"
-#~ msgstr "Tidsstegring cruise"
-
-#~ msgid "Language"
-#~ msgstr "Språk"
-
-#~ msgid "Events"
-#~ msgstr "Händelser"
-
-#~ msgid "Status message"
-#~ msgstr "Status meddelande"
-
-#~ msgid "STF risk factor"
-#~ msgstr "STF risk faktor"
-
-#~ msgid "Wind arrow"
-#~ msgstr "Vindpil"
-
-#~ msgid "Block speed to fly"
-#~ msgstr "Blocka rek. Fart"
-
-#~ msgid "Menu timeout"
-#~ msgstr "Meny timeout"
-
-#~ msgid "L/D average period"
-#~ msgstr "L/D Genomsnitt"
-
-#~ msgid "Aircraft/Wind speed"
-#~ msgstr "Vindstyrka"
-
-#~ msgid "Text input style"
-#~ msgstr "Text Input utseende"
