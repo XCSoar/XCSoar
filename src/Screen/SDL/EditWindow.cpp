@@ -38,11 +38,6 @@ EditWindow::set(ContainerWindow &parent, PixelScalar left, PixelScalar top,
 void
 EditWindow::on_paint(Canvas &canvas)
 {
-  PixelRect rc = {
-    2, 2, PixelScalar(canvas.get_width() - 4),
-    PixelScalar(canvas.get_height() - 4),
-  };
-
   if (is_enabled()) {
     if (is_read_only())
       canvas.clear(Color(0xf0, 0xf0, 0xf0));
@@ -54,8 +49,12 @@ EditWindow::on_paint(Canvas &canvas)
     canvas.SetTextColor(COLOR_DARK_GRAY);
   }
 
-  canvas.DrawOutlineRectangle(0, 0, canvas.get_width() - 1,
-                           canvas.get_height() - 1, COLOR_BLACK);
+  PixelRect rc = {
+    0, 0, PixelScalar(canvas.get_width() - 1),
+    PixelScalar(canvas.get_height() - 1),
+  };
+
+  canvas.DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom, COLOR_BLACK);
 
   if (value.empty())
     return;
