@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/OpenGL/Scope.hpp"
+#include "Screen/OpenGL/Compatibility.hpp"
 #include "Texture.hpp"
 
 #include <assert.h>
@@ -108,6 +109,8 @@ BufferCanvas::CopyTo(Canvas &other)
 {
   assert(defined());
   assert(!active);
+
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
   GLEnable scope(GL_TEXTURE_2D);
   texture->Bind();
