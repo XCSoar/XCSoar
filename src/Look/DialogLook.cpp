@@ -31,7 +31,7 @@ DialogLook::Initialise(const Font &caption_font,
                        const Font &_button_font,
                        const Font &list_font)
 {
-  caption.background_color = Color(0, 77, 124);
+  caption.background_color = COLOR_XCSOAR_DARK;
   caption.text_color = COLOR_BLACK;
   caption.font = &caption_font;
 
