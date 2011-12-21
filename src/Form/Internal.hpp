@@ -35,10 +35,4 @@ class Canvas;
 bool
 KeyTimer(bool isdown, unsigned key_code);
 
-
-/** Paints the "Selector" */
-void
-PaintSelector(Canvas &canvas, const PixelRect rc,
-              const DialogLook &look);
-
 #endif

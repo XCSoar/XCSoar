@@ -327,7 +327,6 @@ WndProperty::on_paint(Canvas &canvas)
   /* background and selector */
   if (focused) {
     canvas.clear(look.focused.background_color);
-    PaintSelector(canvas, get_client_rect(), look);
   } else {
     /* don't need to erase the background when it has been done by the
        parent window already */

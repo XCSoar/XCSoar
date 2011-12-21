@@ -51,26 +51,3 @@ KeyTimer(bool isdown, unsigned thekey)
   }
   return false;
 }
-
-void
-PaintSelector(Canvas &canvas, const PixelRect rc,
-              const DialogLook &look)
-{
-  canvas.Select(look.focused.border_pen);
-
-  canvas.DrawTwoLines(rc.right - SELECTORWIDTH - 1, rc.top,
-                   rc.right - 1, rc.top,
-                   rc.right - 1, rc.top + SELECTORWIDTH + 1);
-
-  canvas.DrawTwoLines(rc.right - 1, rc.bottom - SELECTORWIDTH - 2,
-                   rc.right - 1, rc.bottom - 1,
-                   rc.right - SELECTORWIDTH - 1, rc.bottom - 1);
-
-  canvas.DrawTwoLines(rc.left + SELECTORWIDTH + 1, rc.bottom - 1,
-                   rc.left, rc.bottom - 1,
-                   rc.left, rc.bottom - SELECTORWIDTH - 2);
-
-  canvas.DrawTwoLines(rc.left, rc.top + SELECTORWIDTH + 1,
-                   rc.left, rc.top,
-                   rc.left + SELECTORWIDTH + 1, rc.top);
-}
