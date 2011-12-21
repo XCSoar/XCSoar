@@ -96,11 +96,6 @@ private:
    */
   void PaintComment(Canvas &canvas);
   /**
-   * Paints the InfoBox selector on the given canvas if the InfoBox is focused
-   * @param canvas The canvas to paint on
-   */
-  void PaintSelector(Canvas &canvas);
-  /**
    * Paints the InfoBox with borders, title, comment and value
    */
   void Paint(Canvas &canvas);

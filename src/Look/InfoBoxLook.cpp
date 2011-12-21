@@ -41,6 +41,7 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors)
   value.fg_color = title.fg_color = comment.fg_color =
     inverse ? COLOR_WHITE : COLOR_BLACK;
   background_color = inverse ? COLOR_BLACK : COLOR_WHITE;
+  focused_background_color = COLOR_XCSOAR_LIGHT;
 
   Color border_color = Color(128, 128, 128);
   border_pen.Set(BORDER_WIDTH, border_color);

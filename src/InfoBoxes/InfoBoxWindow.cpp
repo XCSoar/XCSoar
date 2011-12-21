@@ -250,33 +250,12 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
 }
 
 void
-InfoBoxWindow::PaintSelector(Canvas &canvas)
-{
-  canvas.Select(look.selector_pen);
-
-  const UPixelScalar width = canvas.get_width(), height = canvas.get_height();
-
-  canvas.DrawTwoLines(width - SELECTORWIDTH - 1, 0,
-                   width - 1, 0,
-                   width - 1, SELECTORWIDTH + 1);
-
-  canvas.DrawTwoLines(width - 1, height - SELECTORWIDTH - 2,
-                   width - 1, height - 1,
-                   width - SELECTORWIDTH - 1, height - 1);
-
-  canvas.DrawTwoLines(SELECTORWIDTH + 1, height - 1,
-                   0, height - 1,
-                   0, height - SELECTORWIDTH - 2);
-
-  canvas.DrawTwoLines(0, SELECTORWIDTH + 1,
-                   0, 0,
-                   SELECTORWIDTH + 1, 0);
-}
-
-void
 InfoBoxWindow::Paint(Canvas &canvas)
 {
-  canvas.clear(look.background_color);
+  if (has_focus() || force_draw_selector)
+    canvas.clear(look.focused_background_color);
+  else
+    canvas.clear(look.background_color);
 
   if (data.GetCustom() && content != NULL)
     content->on_custom_paint(*this, canvas);
@@ -526,12 +505,7 @@ InfoBoxWindow::on_mouse_double(PixelScalar x, PixelScalar y)
 void
 InfoBoxWindow::on_paint(Canvas &canvas)
 {
-  // Call the parent function
   Paint(canvas);
-
-  // Paint the selector
-  if (has_focus() || force_draw_selector)
-    PaintSelector(canvas);
 }
 
 bool
