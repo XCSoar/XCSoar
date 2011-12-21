@@ -126,19 +126,7 @@ public:
 #endif /* USE_GDI */
   }
 
-  void set_text(const TCHAR *text) {
-    assert_none_locked();
-
-#ifndef USE_GDI
-    if (text != NULL)
-      value = text;
-    else
-      value.clear();
-    invalidate();
-#else
-    ::SetWindowText(hWnd, text);
-#endif
-  }
+  void set_text(const TCHAR *text, bool convert_line_breaks = false);
 
   void get_text(TCHAR *text, size_t max_length) {
 #ifndef USE_GDI

@@ -33,3 +33,37 @@ EditWindow::set(ContainerWindow &parent,
   Window::set(&parent, WC_EDIT, NULL,
               left, top, width, height, style);
 }
+
+void
+EditWindow::set_text(const TCHAR *text, bool convert_line_breaks)
+{
+  assert_none_locked();
+
+  if (!convert_line_breaks) {
+    ::SetWindowText(hWnd, text);
+    return;
+  }
+
+  // Replace \n by \r\r\n to enable usage of line-breaks in edit control
+  unsigned size = _tcslen(text);
+  TCHAR buffer[size * sizeof(TCHAR) * 3];
+  const TCHAR* p2 = text;
+  TCHAR* p3 = buffer;
+  for (; *p2 != _T('\0'); p2++) {
+    if (*p2 == _T('\n')) {
+      *p3 = _T('\r');
+      p3++;
+      *p3 = _T('\r');
+      p3++;
+      *p3 = _T('\n');
+    } else if (*p2 == _T('\r')) {
+      continue;
+    } else {
+      *p3 = *p2;
+    }
+    p3++;
+  }
+  *p3 = _T('\0');
+
+  ::SetWindowText(hWnd, buffer);
+}

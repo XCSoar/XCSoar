@@ -72,3 +72,15 @@ EditWindow::on_paint(Canvas &canvas)
     canvas.TextAutoClipped(rc.left, top, value.c_str());
   }
 }
+
+void
+EditWindow::set_text(const TCHAR *text, gcc_unused bool convert_line_breaks)
+{
+  assert_none_locked();
+
+  if (text != NULL)
+    value = text;
+  else
+    value.clear();
+  invalidate();
+}
