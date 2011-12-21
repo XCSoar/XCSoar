@@ -45,7 +45,7 @@ EditWindow::on_paint(Canvas &canvas)
 
   if (is_enabled()) {
     if (is_read_only())
-      canvas.clear(Color(0xe0, 0xe0, 0xe0));
+      canvas.clear(Color(0xf0, 0xf0, 0xf0));
     else
       canvas.ClearWhite();
     canvas.SetTextColor(COLOR_BLACK);
