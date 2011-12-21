@@ -49,6 +49,7 @@ Copyright_License {
 #include "Form/CheckBox.hpp"
 #include "StringUtil.hpp"
 #include "ResourceLoader.hpp"
+#include "Look/DialogLook.hpp"
 
 #include <zlib/zlib.h>
 
@@ -720,6 +721,35 @@ LoadChild(SubForm &form, ContainerWindow &parent,
         // Tell the Property control about the DataField control
         property->SetDataField(data_field);
     }
+
+  } else if (_tcscmp(node.getName(), _T("TextEdit")) == 0) {
+    // Determine whether the control is multiline or readonly
+    bool multi_line = StringToIntDflt(node.getAttribute(_T("MultiLine")), 0);
+    bool read_only = StringToIntDflt(node.getAttribute(_T("ReadOnly")), 0);
+
+    EditWindowStyle edit_style(style);
+    if (read_only)
+      edit_style.read_only();
+    else
+      edit_style.tab_stop();
+
+    if (IsEmbedded() || Layout::scale_1024 < 2048)
+      /* sunken edge doesn't fit well on the tiny screen of an
+         embedded device */
+      edit_style.border();
+    else
+      edit_style.sunken_edge();
+
+    if (multi_line) {
+      edit_style.multiline();
+      edit_style.vscroll();
+    }
+
+    EditWindow *edit;
+    window = edit = new EditWindow();
+    edit->set(parent, pos.x, pos.y, size.cx, size.cy, edit_style);
+    edit->install_wndproc();
+    edit->set_font(*xml_dialog_look->text_font);
 
   // ButtonControl (WndButton)
   } else if (_tcscmp(node.getName(), _T("Button")) == 0) {
