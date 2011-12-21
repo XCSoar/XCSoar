@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 
 <Form Caption="XCSoar">
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="0" Y="-70" Width="60" Height="35" OnClick="OnNext" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" Y="-70" Width="70" Height="35" OnClick="OnNext" />
 
-  <Button Name="cmdClose" Caption="Close" X="0" Y="-35" Width="60" Height="35" OnClick="OnClose" />
+  <Button Name="cmdClose" Caption="Close" Y="-35" Width="70" Height="35" OnClick="OnClose" />
 
-  <Tabbed Name="tab" X="64" Y="2" Width="-2" Height="-2">
+  <Tabbed Name="tab" X="70" Y="0">
     <Panel Name="frmInfo">
       <Canvas OnPaint="OnLogoPaint" />
     </Panel>
@@ -19,5 +19,5 @@
     </Panel>
   </Tabbed>
 
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="-105" Width="60" Height="35" OnClick="OnPrev" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" Y="-105" Width="70" Height="35" OnClick="OnPrev" />
 </Form>
