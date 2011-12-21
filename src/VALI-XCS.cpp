@@ -25,6 +25,7 @@
  * to validate the GRecord of an XCSoar-generated IGC file
  */
 
+#include "OS/PathName.hpp"
 #include "Logger/LoggerGRecord.hpp"
 #include "Version.hpp"
 
@@ -103,16 +104,9 @@ int main(int argc, char* argv[])
          "%s\n",
 #endif
          XCSoar_Version);
-  if (argc > 1 && strcmp(argv[1], "-?") != 0) {
-#ifdef _UNICODE
-    TCHAR path[MAX_PATH];
-    int length = ::MultiByteToWideChar(CP_ACP, 0, argv[1], -1, path, MAX_PATH);
-    if (length == 0)
-      return 2;
-#else
-    const char *path = argv[1];
-#endif
 
+  if (argc > 1 && strcmp(argv[1], "-?") != 0) {
+    PathName path(argv[1]);
     return RunValidate(path);
   } else
     return 0;
