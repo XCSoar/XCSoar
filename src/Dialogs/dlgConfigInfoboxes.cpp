@@ -341,6 +341,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   style.control_parent();
 
   EditWindowStyle edit_style;
+  edit_style.vertical_center();
   edit_style.tab_stop();
 
   if (IsEmbedded() || Layout::scale_1024 < 2048)

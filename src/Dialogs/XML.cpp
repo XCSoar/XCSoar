@@ -673,6 +673,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     style.control_parent();
 
     EditWindowStyle edit_style;
+    edit_style.vertical_center();
     if (read_only)
       edit_style.read_only();
     else

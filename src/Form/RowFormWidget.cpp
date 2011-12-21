@@ -73,6 +73,8 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
     style.control_parent();
 
   EditWindowStyle edit_style;
+  edit_style.vertical_center();
+
   if (read_only)
     edit_style.read_only();
   else
