@@ -72,7 +72,7 @@ NextPage(int Step)
   }
   wf->SetCaption(buffer);
 
-  wDetails->SetText(ChecklistText[page], true);
+  wDetails->SetText(ChecklistText[page]);
 }
 
 static void

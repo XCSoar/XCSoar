@@ -57,10 +57,6 @@ void SetFormControlEnabled(SubForm &form, const TCHAR *control_name,
 void
 SetFormValue(SubForm &form, const TCHAR *control_name, const TCHAR *value);
 
-void
-SetFormMultiLineValue(SubForm &form, const TCHAR *control_name,
-                      const TCHAR *value);
-
 /**
  * Loads the specified value into the form.
  *

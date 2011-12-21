@@ -63,7 +63,7 @@ dlgHelpShowModal(SingleWindow &parent,
   full_caption.Format(_T("%s: %s"), _("Help"), Caption);
   wf->SetCaption(full_caption);
 
-  SetFormMultiLineValue(*wf, _T("prpHelpText"), HelpText);
+  SetFormValue(*wf, _T("prpHelpText"), HelpText);
 
   wf->ShowModal();
 

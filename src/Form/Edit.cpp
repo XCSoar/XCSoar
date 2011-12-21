@@ -185,9 +185,9 @@ WndProperty::~WndProperty(void)
 }
 
 void
-WndProperty::SetText(const TCHAR *Value, bool convert_line_breaks)
+WndProperty::SetText(const TCHAR *Value)
 {
-  edit.set_text(Value, convert_line_breaks);
+  edit.set_text(Value);
 }
 
 void

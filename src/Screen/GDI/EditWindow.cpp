@@ -35,11 +35,11 @@ EditWindow::set(ContainerWindow &parent,
 }
 
 void
-EditWindow::set_text(const TCHAR *text, bool convert_line_breaks)
+EditWindow::set_text(const TCHAR *text)
 {
   assert_none_locked();
 
-  if (!convert_line_breaks) {
+  if ((get_window_style()  & ES_MULTILINE) == 0) {
     ::SetWindowText(hWnd, text);
     return;
   }

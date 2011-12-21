@@ -74,7 +74,7 @@ EditWindow::on_paint(Canvas &canvas)
 }
 
 void
-EditWindow::set_text(const TCHAR *text, gcc_unused bool convert_line_breaks)
+EditWindow::set_text(const TCHAR *text)
 {
   assert_none_locked();
 

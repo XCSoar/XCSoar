@@ -192,7 +192,7 @@ public:
    * Sets the Editors text to the given Value
    * @param Value The new text of the Editor Control
    */
-  void SetText(const TCHAR *Value, bool convert_line_breaks = false);
+  void SetText(const TCHAR *Value);
 
 private:
   /**

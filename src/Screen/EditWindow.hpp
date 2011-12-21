@@ -126,7 +126,7 @@ public:
 #endif /* USE_GDI */
   }
 
-  void set_text(const TCHAR *text, bool convert_line_breaks = false);
+  void set_text(const TCHAR *text);
 
   void get_text(TCHAR *text, size_t max_length) {
 #ifndef USE_GDI

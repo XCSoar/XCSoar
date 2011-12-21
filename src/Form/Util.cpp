@@ -70,19 +70,6 @@ SetFormValue(SubForm &form, const TCHAR *control_name, const TCHAR *value)
 }
 
 void
-SetFormMultiLineValue(SubForm &form, const TCHAR *control_name,
-                      const TCHAR *value)
-{
-  assert(control_name != NULL);
-  assert(value != NULL);
-
-  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  assert(ctl != NULL);
-
-  ctl->SetText(value, true);
-}
-
-void
 LoadFormProperty(SubForm &form, const TCHAR *control_name, bool value)
 {
   assert(control_name != NULL);

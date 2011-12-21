@@ -578,7 +578,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   assert(wImage != NULL);
   assert(wDetails != NULL);
 
-  wDetails->SetText(selected_waypoint->details.c_str(), true);
+  wDetails->SetText(selected_waypoint->details.c_str());
   wCommand->hide();
 
   if (!allow_navigation) {
