@@ -32,12 +32,6 @@
  *
  */
 class ZeroFinder {
-  /** machine tolerance */
-  static const fixed epsilon;
-  /** sqrt of machine tolerance */
-  static const fixed sqrt_epsilon;
-  static const fixed r;
-
 protected:
   /** min value of search range */
   const fixed xmin;

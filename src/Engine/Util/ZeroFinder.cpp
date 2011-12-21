@@ -26,14 +26,15 @@
 #include <limits>
 
 #ifdef FIXED_MATH
-const fixed ZeroFinder::epsilon(fixed::internal(),2);
-const fixed ZeroFinder::sqrt_epsilon = sqrt(ZeroFinder::epsilon);
+static gcc_constexpr_data fixed epsilon(fixed::internal(), 2);
+static const fixed sqrt_epsilon = sqrt(epsilon);
 #else
-const fixed ZeroFinder::epsilon = std::numeric_limits<double>::epsilon();
-const fixed ZeroFinder::sqrt_epsilon =
-    sqrt(std::numeric_limits<double>::epsilon());
+/** machine tolerance */
+static gcc_constexpr_data fixed epsilon(std::numeric_limits<fixed>::epsilon());
+/** sqrt of machine tolerance */
+static const fixed sqrt_epsilon = sqrt(epsilon);
 #endif
-const fixed ZeroFinder::r((3. - sqrt(5.0)) / 2); /* Gold section ratio */
+static const fixed r((3. - sqrt(5.0)) / 2); /* Gold section ratio */
 
 #define fixed_threequaters fixed(0.75)
 
