@@ -142,7 +142,7 @@ LoadTextFromResource(const TCHAR* name, const TCHAR* control)
   const char *buffer2 = buffer;
 #endif
 
-  ((WndProperty *)wf->FindByName(control))->SetText(buffer2, true);
+  ((EditWindow *)wf->FindByName(control))->set_text(buffer2, true);
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {

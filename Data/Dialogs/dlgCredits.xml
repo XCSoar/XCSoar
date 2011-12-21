@@ -10,11 +10,11 @@
     </Panel>
   
     <Panel Name="frmAuthors">
-      <Edit Name="prpAuthors" ReadOnly="1" MultiLine="1" />
+      <TextEdit Name="prpAuthors" ReadOnly="1" MultiLine="1" />
     </Panel>
   
     <Panel Name="frmLicense">
-      <Edit Name="prpLicense" ReadOnly="1" MultiLine="1" />
+      <TextEdit Name="prpLicense" ReadOnly="1" MultiLine="1" />
     </Panel>
   </Tabbed>
 
