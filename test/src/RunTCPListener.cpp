@@ -39,6 +39,8 @@ int main(int argc, char **argv)
 {
   int tcp_port;
   if (argc < 2) {
+    fprintf(stderr, "This program opens up a TCP server and listens for data. ");
+    fprintf(stderr, "When data is received it is printed to stdout.\n\n");
     fprintf(stderr, "Usage: %s PORT\n", argv[0]);
     fprintf(stderr, "Defaulting to port 4353\n");
     tcp_port = 4353;

@@ -46,6 +46,8 @@ int main(int argc, char **argv)
   // Determine on which TCP port to connect to the server
   int tcp_port;
   if (argc < 2) {
+    fprintf(stderr, "This program opens a TCP connection to a server which is assumed ");
+    fprintf(stderr, "to be at 127.0.0.1, and sends NMEA data which is read from stdin.\n\n");
     fprintf(stderr, "Usage: %s PORT\n", argv[0]);
     fprintf(stderr, "Defaulting to port 4353\n");
     tcp_port = 4353;
