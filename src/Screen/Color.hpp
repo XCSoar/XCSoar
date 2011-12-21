@@ -32,6 +32,16 @@ Copyright_License {
 #include "Screen/GDI/Color.hpp"
 #endif
 
+#ifdef TESTING
+#define COLOR_XCSOAR_LIGHT Color(0xed, 0x90, 0x90)
+#define COLOR_XCSOAR Color(0xd0, 0x17, 0x17)
+#define COLOR_XCSOAR_DARK Color(0x5d, 0x0a, 0x0a)
+#else
+#define COLOR_XCSOAR_LIGHT Color(0xaa, 0xc9, 0xe4)
+#define COLOR_XCSOAR Color(0x3f, 0x76, 0xa8)
+#define COLOR_XCSOAR_DARK Color(0x00, 0x31, 0x5e)
+#endif
+
 #define COLOR_WHITE Color(0xff, 0xff, 0xff)
 #define COLOR_BLACK Color(0x00, 0x00, 0x00)
 #define COLOR_GRAY Color(0x80, 0x80, 0x80)
