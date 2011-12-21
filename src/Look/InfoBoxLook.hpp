@@ -36,7 +36,7 @@ struct InfoBoxLook {
   bool inverse;
 
   Pen border_pen, selector_pen;
-  Brush background_brush;
+  Color background_color;
 
   struct {
     Color fg_color;
