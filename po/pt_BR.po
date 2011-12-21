@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-20 19:50+0100\n"
-"PO-Revision-Date: 2011-12-21 00:36+0000\n"
+"PO-Revision-Date: 2011-12-21 02:11+0000\n"
 "Last-Translator: Wladimir Kummer de Paula <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-21 00:56+0000\n"
+"X-Launchpad-Export-Date: 2011-12-21 13:41+0000\n"
 "X-Generator: Launchpad (build 14538)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -278,7 +278,7 @@ msgstr "Retomar"
 #: src/ExpandMacros.cpp:321 src/ExpandMacros.cpp:325
 #: src/Dialogs/Message.cpp:169
 msgid "Abort"
-msgstr "Abortar"
+msgstr "&Cancelar"
 
 #: src/ExpandMacros.cpp:438 src/Dialogs/dlgBasicSettings.cpp:57
 #: Data/Dialogs/dlgLoggerReplay.xml:12
@@ -399,9 +399,8 @@ msgid ""
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
 "Altura acima do nível médio do mar reportada pelo GPS. Somente Touchscreen e "
-"PC: em modo de simulação, este valor é\r\n"
-"ajustável com as teclas para cima/para baixo. As teclas esquerda/direit "
-"também fazem o planador virar."
+"PC: em modo de simulação, este valor é ajustável com as teclas para cima/"
+"para baixo. As teclas esquerda/direit também fazem o planador virar."
 
 #: src/InfoBoxes/Content/Factory.cpp:88
 #, no-c-format
@@ -422,8 +421,8 @@ msgid ""
 "safety clearance height."
 msgstr ""
 "Altitude de navegação menos altura do terreno obtida do arquivo de terreno. "
-"O valor fica vermelho se o planador está abaixo\r\n"
-"da altura de segurança do terreno."
+"O valor fica vermelho se o planador está abaixo da altura de segurança para "
+"vencer o terreno."
 
 #: src/InfoBoxes/Content/Factory.cpp:98
 #, no-c-format
@@ -479,9 +478,8 @@ msgid ""
 "is '---'."
 msgstr ""
 "Razão de planeio instantânea, dada pela velocidade no solo dividida pela "
-"velocidade vertical (GPS) nos últimos 20 segundos.\r\n"
-"Valores negativos indicam subida. Se a velocidade vertical é próxima de zero "
-"o valor mostrado é '---'."
+"velocidade vertical (GPS) nos últimos 20 segundos. Valores negativos indicam "
+"subida. Se a velocidade vertical é próxima de zero o valor mostrado é '---'"
 
 #: src/InfoBoxes/Content/Factory.cpp:128
 #, no-c-format
@@ -502,9 +500,9 @@ msgid ""
 "to zero, the displayed value is '---'."
 msgstr ""
 "Distância do topo da última térmica dividida pela perda de altitude. Valores "
-"negativos indicam subida (ganho de altura desde que\r\n"
-"a última térmica foi deixada). Se a velocidade vertical é próxima de zero o "
-"valor mostrado é '---'."
+"negativos indicam subida (ganho de altura desde que a última térmica foi "
+"deixada). Se a velocidade vertical é próxima de zero o valor mostrado é "
+"'---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:138
 #, no-c-format
@@ -524,9 +522,8 @@ msgid ""
 "turn the glider."
 msgstr ""
 "Velocidade no solo medida pelo GPS. Se este InfoBox estiver ativo no modo de "
-"simulação, pressionar a tecla\r\n"
-"para baixo/para cima ajusta a velocidade. A tecla direita/esquerda gira o "
-"planador."
+"simulação, pressionar a tecla para baixo/para cima ajusta a velocidade. A "
+"tecla direita/esquerda gira o planador."
 
 #: src/InfoBoxes/Content/Factory.cpp:148
 #, no-c-format
@@ -563,7 +560,7 @@ msgstr "Ganho/perda total na última térmica"
 #: src/InfoBoxes/Content/Factory.cpp:168
 #, no-c-format
 msgid "Last thermal time"
-msgstr "Última tempo térmico"
+msgstr "Hora da última térmica"
 
 #: src/InfoBoxes/Content/Factory.cpp:169
 #, no-c-format
@@ -593,10 +590,9 @@ msgid ""
 "Setting if the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
 "Ajuste do anel de MacCready atual. Este InfoBox também mostra se o anel de "
-"MacCready está em modo manual\r\n"
-" ou automático. (Somente em Touchscreen ou PC) Se o InfoBox estiver ativo, a "
-"tecla para cima/para baixo ajusta\r\n"
-"o anel de MacCready."
+"MacCready está em modo manual ou automático. (Somente em Touchscreen ou PC). "
+"Se o InfoBox estiver ativo, a tecla para cima/para baixo ajusta o anel de "
+"MacCready."
 
 #: src/InfoBoxes/Content/Factory.cpp:188
 #, no-c-format
@@ -614,7 +610,7 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
-"Distância para o próximo ponto de virada selecionao. Em provas AAT é "
+"Distância para o próximo ponto de virada selecionado. Em provas AAT é "
 "distância até o ponto dentro da área."
 
 #: src/InfoBoxes/Content/Factory.cpp:198
@@ -632,7 +628,7 @@ msgstr "WP AltD"
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height."
 msgstr ""
-"Altitude de chegada no próximo waypoint relativo à altura de chegada segura."
+"Altitude de chegada no próximo ponto relativo à altura de chegada segura."
 
 #: src/InfoBoxes/Content/Factory.cpp:208
 #, no-c-format
@@ -647,7 +643,7 @@ msgstr "WP AltR"
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
 msgid "Additional altitude required to reach the next turn point."
-msgstr "Altitude adcional necessária para alcançar o próximo ponto de virada"
+msgstr "Altitude adicional para alcançar o próximo ponto de virada"
 
 #: src/InfoBoxes/Content/Factory.cpp:218
 #, no-c-format
@@ -668,9 +664,9 @@ msgid ""
 "waypoint details."
 msgstr ""
 "O nome do ponto de virada selecionado. Quando esta InfoBox esta ativa, "
-"utilizar teclas up/down para selecionar waypoint próximo/anterior para a "
+"utilizar teclas up/down para selecionar o ponto próximo/anterior para a "
 "tarefa. (Tela de toque/PC apenas) Pressionado a tecla enter trará para cima "
-"detalhes do waypoint."
+"detalhes do ponto."
 
 #: src/InfoBoxes/Content/Factory.cpp:228
 #, no-c-format
@@ -687,7 +683,7 @@ msgstr "Fin AltD"
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
-msgstr ""
+msgstr "Altitude de chegada no ponto final relativa à altitude de segurança"
 
 #: src/InfoBoxes/Content/Factory.cpp:238
 #, no-c-format
@@ -767,7 +763,7 @@ msgstr "Elevação do terreno"
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:8
 #, no-c-format
 msgid "H GND"
-msgstr "H GND"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:280
 #, no-c-format
@@ -814,7 +810,7 @@ msgstr "Ganho;perda de altitude na térmica atual."
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:55
 #, no-c-format
 msgid "Track"
-msgstr "Proa"
+msgstr "Curso"
 
 #: src/InfoBoxes/Content/Factory.cpp:310
 #, no-c-format
@@ -823,7 +819,7 @@ msgid ""
 "active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
-"Faixa magnética reportada pelo GPS. (Tela de toque/PC somente) Se este "
+"Curso magnético reportado pelo GPS. (Tela de toque/PC somente) Se este "
 "InfoBox estiver ativo no modo simulador, pressione teclas up ou down para "
 "ajustar a faixa."
 
@@ -870,11 +866,11 @@ msgid ""
 "enter cursor key saves the wind value as the initial value when XCSoar next "
 "starts."
 msgstr ""
-"Velocidade do vento estimado por AMADIS. (Tela de toque/PC apenas) Ajuste "
+"Velocidade do vento estimado pelo XCSoar. (Tela de toque/PC apenas) Ajuste "
 "manual é possível pressionando as teclas para cima / baixo para ajustar a "
 "magnitude e as teclas esquerda / direita para ajustar a direção quando a "
-"InfoBox estiver ativa. Pressionando a tecla enter o cursor salva o valor do "
-"vento como o valor inicial, o valor será iniciado quando começar o XCSoar "
+"InfoBox estiver ativa. Pressionando a tecla 'enter' o cursor salva o valor "
+"do vento como o valor inicial, o valor será iniciado quando começar o XCSoar "
 "novamente."
 
 #: src/InfoBoxes/Content/Factory.cpp:338
@@ -913,7 +909,7 @@ msgstr "Tempo AA"
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
 msgstr ""
-"Tempo restante de prova AAT. Fica vermenlho quando o tempo restante expirou."
+"Tempo restante de prova AAT. Fica vermelho quando o tempo restante expirou."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -985,7 +981,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:398
 #, no-c-format
 msgid "Airspeed IAS"
-msgstr "Velocidade do ar IAS"
+msgstr "Velocidade do ar indicada"
 
 #: src/InfoBoxes/Content/Factory.cpp:399
 #, no-c-format
@@ -1000,12 +996,12 @@ msgstr "Velocidade indicada reportada por um vario digital externo."
 #: src/InfoBoxes/Content/Factory.cpp:408
 #, no-c-format
 msgid "Barometric altitude"
-msgstr ""
+msgstr "Altitude barométrica"
 
 #: src/InfoBoxes/Content/Factory.cpp:409
 #, no-c-format
 msgid "Alt. Baro."
-msgstr ""
+msgstr "Alt. Baro"
 
 #: src/InfoBoxes/Content/Factory.cpp:410
 #, no-c-format
@@ -1013,6 +1009,8 @@ msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
 msgstr ""
+"Altitude barométrica obtida a partir de um dispositivo equipado com sensor "
+"de pressão."
 
 #: src/InfoBoxes/Content/Factory.cpp:418
 #, no-c-format
@@ -1138,7 +1136,7 @@ msgstr "Hora GPS expressa em UTC"
 #: src/InfoBoxes/Content/Factory.cpp:488
 #, no-c-format
 msgid "Task time to go"
-msgstr "Tempo para começar a tarefa"
+msgstr "Tempo restante da prova"
 
 #: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
@@ -1157,7 +1155,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:498
 #, no-c-format
 msgid "Next time to go"
-msgstr "Próximo tempo para começar"
+msgstr "Tempo até o próx. ponto"
 
 #: src/InfoBoxes/Content/Factory.cpp:499
 #, no-c-format
@@ -1194,13 +1192,14 @@ msgid ""
 "the current load factor (if an accelerometer is connected). When Block mode "
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
-"A velocidade instantânea MacCready para voar, fazendo uso de cálculos vario "
-"Netto para determinar a velocidade de cruzeiro e direção atual do planador. "
-"No modo vôo de cruzeiro, essa velocidade é calculada para a manutenção da "
-"altitude. No modo de planeio final, essa velocidade é calculada para "
-"descida. No modo subir, este passa para a velocidade mínima de imersão para "
-"o fator de carga atual (se um acelerômetro é ligado). Quando o bloco de "
-"velocidade de voo é selecionada, esta InfoBox exibe a velocidade MacCready."
+"A velocidade instantânea MacCready para voar, fazendo uso de cálculos Netto "
+"para determinar a velocidade de cruzeiro e utilizando a direção atual do "
+"planador. No modo vôo de cruzeiro, essa velocidade é calculada para a "
+"manutenção da altitude. No modo de planeio final, essa velocidade é "
+"calculada para descida. No modo subir, este passa para a velocidade mínima "
+"de afundamento para o fator de carga atual (se um acelerômetro é ligado). "
+"Quando o bloco de velocidade de voo é selecionada, esta InfoBox exibe a "
+"velocidade MacCready."
 
 #: src/InfoBoxes/Content/Factory.cpp:518
 #, no-c-format
@@ -1228,7 +1227,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:528
 #, no-c-format
 msgid "Task arrival time"
-msgstr "Iniciar tarefa para chegada"
+msgstr "Hora ao término da prova"
 
 #: src/InfoBoxes/Content/Factory.cpp:529
 #, no-c-format
@@ -1247,7 +1246,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:538
 #, no-c-format
 msgid "Next arrival time"
-msgstr "Hora Chegada Próximo Ponto"
+msgstr "Hora no próx. ponto"
 
 #: src/InfoBoxes/Content/Factory.cpp:539
 #, no-c-format
@@ -1300,7 +1299,7 @@ msgstr "Temperatura do ar externo"
 #: src/InfoBoxes/Content/Factory.cpp:559
 #, no-c-format
 msgid "OAT"
-msgstr "TAE"
+msgstr "OAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:560
 #, no-c-format
@@ -1348,7 +1347,7 @@ msgid ""
 "and relative humidity probe. (Touchscreen/PC only) Pressing the up/down "
 "cursor keys adjusts this forecast temperature."
 msgstr ""
-"Temperatura prevista no solo do aeródromo de casa, usada para estimar a "
+"Temperatura prevista no solo do aeródromo de partida, usada para estimar a "
 "altura de convecção e a altura da base em conjunto com o sensor de "
 "temperatura do ar externo e umidade relativa do ar. (Somente Touschscreen e "
 "PC) Pressionando as teclas para cima/para baixo ajusta a temperatura "
@@ -1357,7 +1356,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:588
 #, no-c-format
 msgid "AA distance around target"
-msgstr ""
+msgstr "Distância AA contornando o objetivo"
 
 #: src/InfoBoxes/Content/Factory.cpp:589
 #, no-c-format
@@ -1372,7 +1371,7 @@ msgstr "Distância em torno dos pontos restantes da prova de área."
 #: src/InfoBoxes/Content/Factory.cpp:598
 #, no-c-format
 msgid "AA speed around target"
-msgstr ""
+msgstr "Velocidade AA atingindo os pontos"
 
 #: src/InfoBoxes/Content/Factory.cpp:599
 #, no-c-format
@@ -1414,7 +1413,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:618
 #, no-c-format
 msgid "Airspeed TAS"
-msgstr "Velocidade TAS"
+msgstr "Velocidade verdadeira do ar"
 
 #: src/InfoBoxes/Content/Factory.cpp:619
 #, no-c-format
@@ -1424,12 +1423,12 @@ msgstr "V TAS"
 #: src/InfoBoxes/Content/Factory.cpp:620
 #, no-c-format
 msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr "Velocidade Verdadeira reportada por um vario inteligente suportado."
+msgstr "Velocidade verdadeira reportada por um vario inteligente suportado."
 
 #: src/InfoBoxes/Content/Factory.cpp:628
 #, no-c-format
 msgid "Team code"
-msgstr "Código equipe"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:629
 #, no-c-format
@@ -1448,12 +1447,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:638
 #, no-c-format
 msgid "Team bearing"
-msgstr "Proa Time"
+msgstr "Proa da equipe"
 
 #: src/InfoBoxes/Content/Factory.cpp:639
 #, no-c-format
 msgid "Tm Brng"
-msgstr "Time Proa"
+msgstr "ProaTim"
 
 #: src/InfoBoxes/Content/Factory.cpp:640
 #, no-c-format
@@ -1480,17 +1479,17 @@ msgstr "Proa referente à localização do planador do último código reportado
 #: src/InfoBoxes/Content/Factory.cpp:658
 #, no-c-format
 msgid "Team range"
-msgstr "Time Alcance"
+msgstr "Distância até o equipe"
 
 #: src/InfoBoxes/Content/Factory.cpp:659
 #, no-c-format
 msgid "Team Dis"
-msgstr "Time Dis"
+msgstr "Team Dis"
 
 #: src/InfoBoxes/Content/Factory.cpp:660
 #, no-c-format
 msgid "The range to the team aircraft location at the last reported team code."
-msgstr "Limite para a localização do planador reportado pelo último código."
+msgstr "Distância para a localização do planador reportado pelo último código."
 
 #: src/InfoBoxes/Content/Factory.cpp:668
 #, no-c-format
@@ -1514,7 +1513,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:678
 #, no-c-format
 msgid "Distance home"
-msgstr "Distância Casa"
+msgstr "Distância p/ casa"
 
 #: src/InfoBoxes/Content/Factory.cpp:679
 #, no-c-format
@@ -1529,7 +1528,7 @@ msgstr "Distância para casa (se definida)."
 #: src/InfoBoxes/Content/Factory.cpp:688
 #, no-c-format
 msgid "Speed task achieved"
-msgstr "Velocidade Atingida na Prova"
+msgstr "Velocidade na Prova"
 
 #: src/InfoBoxes/Content/Factory.cpp:689
 #, no-c-format
@@ -1563,8 +1562,8 @@ msgid ""
 "with estimated arrival time greater than AAT time plus 5 minutes."
 msgstr ""
 "Diferença entre o tempo esperado e o tempo mínimo de prova. Vermelho, se "
-"negativa (chegada esperada muito cedo), ou azul, se na diferença for maior "
-"que cinco minutos."
+"negativa (chegada muito cedo), ou azul, se na diferença for maior que cinco "
+"minutos."
 
 #: src/InfoBoxes/Content/Factory.cpp:708
 #, no-c-format
