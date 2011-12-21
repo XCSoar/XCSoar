@@ -84,6 +84,14 @@ public:
     style |= ES_CENTER;
 #endif
   }
+
+  void vertical_center() {
+#ifndef USE_GDI
+    text_style |= DT_VCENTER;
+#else
+    // TODO
+#endif
+  }
 };
 
 /**

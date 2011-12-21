@@ -63,6 +63,12 @@ EditWindow::on_paint(Canvas &canvas)
 
   if (have_clipping() || (get_text_style() & DT_WORDBREAK) != 0)
     canvas.formatted_text(&rc, value.c_str(), get_text_style());
-  else
+  else if ((get_text_style() & DT_VCENTER) == 0)
     canvas.TextAutoClipped(rc.left, rc.top, value.c_str());
+  else {
+    PixelScalar canvas_height = rc.bottom - rc.top;
+    UPixelScalar text_height = canvas.CalcTextHeight(value.c_str());
+    PixelScalar top = (canvas_height - text_height) / 2;
+    canvas.TextAutoClipped(rc.left, top, value.c_str());
+  }
 }
