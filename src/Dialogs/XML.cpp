@@ -648,13 +648,8 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
   // PropertyControl (WndProperty)
   if (_tcscmp(node.getName(), _T("Edit")) == 0) {
-    WndProperty *property;
-    int caption_width;
-    bool read_only;
-    bool multi_line;
-
     // Determine the width of the caption field
-    caption_width = StringToIntDflt(node.getAttribute(_T("CaptionWidth")), 0);
+    int caption_width = StringToIntDflt(node.getAttribute(_T("CaptionWidth")), 0);
 
     if (Layout::ScaleSupported())
       caption_width = Layout::Scale(caption_width);
@@ -662,8 +657,8 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     caption_width = ScaleWidth(caption_width, dialog_style);
 
     // Determine whether the control is multiline or readonly
-    multi_line = StringToIntDflt(node.getAttribute(_T("MultiLine")), 0);
-    read_only = StringToIntDflt(node.getAttribute(_T("ReadOnly")), 0);
+    bool multi_line = StringToIntDflt(node.getAttribute(_T("MultiLine")), 0);
+    bool read_only = StringToIntDflt(node.getAttribute(_T("ReadOnly")), 0);
 
     // Load the event callback properties
     WndProperty::DataChangeCallback_t data_notify_callback =
@@ -701,11 +696,10 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     rc.right = rc.left + size.cx;
     rc.bottom = rc.top + size.cy;
 
-    window = property = new WndProperty(parent, *xml_dialog_look, caption,
-                                        rc,
-                                 caption_width,
-                                 style, edit_style,
-                                 data_notify_callback);
+    WndProperty *property;
+    window = property = new WndProperty(parent, *xml_dialog_look, caption, rc,
+                                        caption_width, style, edit_style,
+                                        data_notify_callback);
 
     // Set the help function event callback
     property->SetOnHelpCallback(help_callback);
