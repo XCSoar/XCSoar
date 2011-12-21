@@ -63,14 +63,13 @@ class SubForm {
   std::forward_list<Window *> expert_windows;
 
 public:
-  ~SubForm();
-
-public:
   /**
    * Add a #Window to the "destruct" list: the object will be deleted
-   * by the destructor of this class.  This means that the caller
+   * by calling the class's Clear() method.  This means that the caller
    * doesn't have to keep track of the specified Window, because this
-   * WndForm is now responsible for freeing memory.
+   * SubForm is now responsible for freeing memory.
+   * Clear() must be called before deleting this form to delete windows
+   * in the list.
    */
   void AddDestruct(Window *window) {
     destruct_windows.push_front(window);
@@ -114,6 +113,13 @@ public:
   void RemoveExpert(Window *window) {
     expert_windows.remove(window);
   }
+
+  /**
+   * Deletes all windows added to the SubForm's
+   * destruct_windows list and clears the SubForm's
+   * lists of windows
+   */
+  void Clear();
 
   /**
    * Shows/Hides the ClientControls depending on the given value of advanced and

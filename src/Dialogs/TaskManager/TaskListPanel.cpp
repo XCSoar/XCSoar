@@ -500,6 +500,7 @@ void
 TaskListPanel::Unprepare()
 {
   delete task_store;
+  XMLWidget::Unprepare();
 }
 
 void

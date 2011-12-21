@@ -24,12 +24,6 @@ Copyright_License {
 #include "Form/SubForm.hpp"
 #include "Screen/Window.hpp"
 
-SubForm::~SubForm()
-{
-  for (auto i = destruct_windows.begin(), end = destruct_windows.end();
-       i != end; ++i)
-    delete *i;
-}
 
 Window *
 SubForm::FindByName(const TCHAR *name)
@@ -47,4 +41,16 @@ SubForm::FilterAdvanced(bool advanced)
   for (auto i = expert_windows.begin(), end = expert_windows.end();
        i != end; ++i)
     (*i)->set_visible(advanced);
+}
+
+void
+SubForm::Clear()
+{
+  for (auto i = destruct_windows.begin(), end = destruct_windows.end();
+       i != end; ++i)
+    delete *i;
+
+  destruct_windows.clear();
+  expert_windows.clear();
+  name_to_window.clear();
 }

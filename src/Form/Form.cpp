@@ -128,6 +128,7 @@ WndForm::~WndForm()
      our own on_destroy() method won't be called (during object
      destruction, this object loses its identity) */
   reset();
+  SubForm::Clear();
 }
 
 void
