@@ -25,52 +25,52 @@
 #include "Task/Tasks/BaseTask/TaskPoint.hpp"
 
 ObservationZoneClient::~ObservationZoneClient() {
-  delete m_oz;
+  delete oz_point;
 }
 
 bool
 ObservationZoneClient::IsInSector(const AircraftState &ref) const
 {
-  return m_oz->IsInSector(ref);
+  return oz_point->IsInSector(ref);
 }
 
 bool
 ObservationZoneClient::CanStartThroughTop() const
 {
-  return m_oz->CanStartThroughTop();
+  return oz_point->CanStartThroughTop();
 }
 
 GeoPoint
-ObservationZoneClient::randomPointInSector(const fixed mag) const
+ObservationZoneClient::GetRandomPointInSector(const fixed mag) const
 {
-  return m_oz->randomPointInSector(mag);
+  return oz_point->randomPointInSector(mag);
 }
 
 fixed
 ObservationZoneClient::ScoreAdjustment() const
 {
-  return m_oz->ScoreAdjustment();
+  return oz_point->ScoreAdjustment();
 }
 
 GeoPoint
 ObservationZoneClient::GetBoundaryParametric(fixed t) const
 {
-  return m_oz->GetBoundaryParametric(t);
+  return oz_point->GetBoundaryParametric(t);
 }
 
 bool
 ObservationZoneClient::TransitionConstraint(const AircraftState & ref_now,
-                                             const AircraftState & ref_last) const
+                                            const AircraftState & ref_last) const
 {
-  return m_oz->TransitionConstraint(ref_now, ref_last);
+  return oz_point->TransitionConstraint(ref_now, ref_last);
 }
 
 void 
-ObservationZoneClient::set_legs(const TaskPoint *previous,
-                                const TaskPoint *current,
-                                const TaskPoint *next)
+ObservationZoneClient::SetLegs(const TaskPoint *previous,
+                               const TaskPoint *current,
+                               const TaskPoint *next)
 {
-  m_oz->set_legs(previous != NULL ? &previous->GetLocation() : NULL,
-                 current != NULL ? &current->GetLocation() : NULL,
-                 next != NULL ? &next->GetLocation() : NULL);
+  oz_point->set_legs(previous != NULL ? &previous->GetLocation() : NULL,
+                     current != NULL ? &current->GetLocation() : NULL,
+                     next != NULL ? &next->GetLocation() : NULL);
 }

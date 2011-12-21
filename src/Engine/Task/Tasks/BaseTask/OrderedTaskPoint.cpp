@@ -60,7 +60,7 @@ OrderedTaskPoint::set_neighbours(OrderedTaskPoint* _prev,
 void
 OrderedTaskPoint::update_geometry()
 {
-  set_legs(tp_previous, this, tp_next);
+  SetLegs(tp_previous, this, tp_next);
 }
 
 void
@@ -121,8 +121,8 @@ OrderedTaskPoint::equals(const OrderedTaskPoint* other) const
 {
   return GetWaypoint() == other->GetWaypoint() &&
          GetType() == other->GetType() &&
-         get_oz()->equals(other->get_oz()) &&
-         other->get_oz()->equals(get_oz());
+         GetOZPoint()->equals(other->GetOZPoint()) &&
+         other->GetOZPoint()->equals(GetOZPoint());
 }
 
 OrderedTaskPoint* 
@@ -135,19 +135,19 @@ OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
 
   switch (GetType()) {
   case START:
-    return new StartPoint(get_oz()->clone(&waypoint->location),
+    return new StartPoint(GetOZPoint()->clone(&waypoint->location),
                           *waypoint, task_behaviour, ordered_task_behaviour);
 
   case AST:
-    return new ASTPoint(get_oz()->clone(&waypoint->location),
+    return new ASTPoint(GetOZPoint()->clone(&waypoint->location),
                         *waypoint, task_behaviour, ordered_task_behaviour);
 
   case AAT:
-    return new AATPoint(get_oz()->clone(&waypoint->location),
+    return new AATPoint(GetOZPoint()->clone(&waypoint->location),
                         *waypoint, task_behaviour, ordered_task_behaviour);
 
   case FINISH:
-    return new FinishPoint(get_oz()->clone(&waypoint->location),
+    return new FinishPoint(GetOZPoint()->clone(&waypoint->location),
                            *waypoint, task_behaviour, ordered_task_behaviour);
 
   case UNORDERED:

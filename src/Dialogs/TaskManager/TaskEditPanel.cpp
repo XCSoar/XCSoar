@@ -181,7 +181,7 @@ TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 
   // Draw details line
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
-  OrderedTaskPointRadiusLabel(*tp.get_oz(), buffer);
+  OrderedTaskPointRadiusLabel(*tp.GetOZPoint(), buffer);
   if (!string_is_empty(buffer))
     canvas.text_clipped(left, top2, rc.right - leg_info_width - left, buffer);
 

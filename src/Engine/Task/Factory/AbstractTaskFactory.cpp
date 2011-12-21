@@ -61,7 +61,7 @@ OrderedTaskPoint*
 AbstractTaskFactory::createMutatedPoint(const OrderedTaskPoint &tp,
                                         const LegalPointType_t newtype) const
 {
-  fixed ozsize = GetOZSize(tp.get_oz());
+  fixed ozsize = GetOZSize(tp.GetOZPoint());
   return createPoint(newtype, tp.GetWaypoint(), ozsize, ozsize, ozsize);
 }
 
@@ -172,7 +172,7 @@ AbstractTaskFactory::createFinish(const Waypoint &wp) const
 AbstractTaskFactory::LegalPointType_t 
 AbstractTaskFactory::getType(const OrderedTaskPoint &point) const
 {
-  const ObservationZonePoint* oz = point.get_oz();
+  const ObservationZonePoint* oz = point.GetOZPoint();
 
   switch (point.GetType()) {
   case TaskPoint::START:
@@ -754,7 +754,7 @@ AbstractTaskFactory::validateFAIOZs()
 
   for (unsigned i = 0; i < m_task.TaskSize() && valid; i++) {
     const OrderedTaskPoint *tp = m_task.get_tp(i);
-    const fixed ozsize = GetOZSize(tp->get_oz());
+    const fixed ozsize = GetOZSize(tp->GetOZPoint());
 
     switch (getType(*tp)) {
     case  START_BGA:

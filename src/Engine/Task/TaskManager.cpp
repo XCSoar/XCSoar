@@ -382,7 +382,7 @@ GeoPoint
 TaskManager::RandomPointInTask(const unsigned index, const fixed mag) const
 {
   if (active_task == &task_ordered && index < TaskSize())
-    return task_ordered.GetTaskPoint(index)->randomPointInSector(mag);
+    return task_ordered.GetTaskPoint(index)->GetRandomPointInSector(mag);
 
   if (index <= TaskSize())
     return active_task->GetActiveTaskPoint()->GetLocation();

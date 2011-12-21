@@ -200,7 +200,7 @@ MapItemListBuilder::AddTaskOZs(const ProtectedTaskManager &task)
     if (!task_point || !task_point->IsInSector(a))
       continue;
 
-    const ObservationZonePoint *oz = task_point->get_oz();
+    const ObservationZonePoint *oz = task_point->GetOZPoint();
     if (oz)
       list.checked_append(new TaskOZMapItem(i, *oz, task_point->GetType(),
                                             task_point->GetWaypoint()));

@@ -93,7 +93,7 @@ RefreshView()
   ShowFormControl(*wf, _T("frmOZSector"), false);
   ShowFormControl(*wf, _T("frmOZCylinder"), false);
 
-  const ObservationZonePoint &oz = *tp->get_oz();
+  const ObservationZonePoint &oz = *tp->GetOZPoint();
 
   switch (oz.shape) {
   case ObservationZonePoint::SECTOR:
@@ -204,7 +204,7 @@ static void
 ReadValues()
 {
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
-  ObservationZonePoint &oz = *tp->get_oz();
+  ObservationZonePoint &oz = *tp->GetOZPoint();
 
   switch (oz.shape) {
   case ObservationZonePoint::ANNULAR_SECTOR: {

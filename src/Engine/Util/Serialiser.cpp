@@ -76,7 +76,7 @@ Serialiser::serialise(const OrderedTaskPoint& data, const TCHAR* name)
 
   DataNode* ochild = child->add_child(_T("ObservationZone"));
   Serialiser oser(*ochild);
-  oser.serialise(*data.get_oz());
+  oser.serialise(*data.GetOZPoint());
   delete ochild;
 
   delete child;

@@ -30,7 +30,7 @@ gcc_pure
 static Declaration::TurnPoint::Shape
 get_shape(const OrderedTaskPoint &tp)
 {
-  const ObservationZonePoint *oz = tp.get_oz();
+  const ObservationZonePoint *oz = tp.GetOZPoint();
   if (oz == NULL)
     return Declaration::TurnPoint::SECTOR;
 
@@ -50,7 +50,7 @@ gcc_pure
 static unsigned
 get_radius(const OrderedTaskPoint &tp)
 {
-  const ObservationZonePoint *oz = tp.get_oz();
+  const ObservationZonePoint *oz = tp.GetOZPoint();
   if (oz == NULL)
     return Declaration::TurnPoint::SECTOR;
 

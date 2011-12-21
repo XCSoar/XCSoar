@@ -34,7 +34,7 @@ class TaskPoint;
 class ObservationZoneClient: 
   public virtual ObservationZone
 {
-  ObservationZonePoint *m_oz;
+  ObservationZonePoint *oz_point;
 
 public:
   /**
@@ -42,26 +42,26 @@ public:
    *
    * @param _oz The OZ to store
    */
-  ObservationZoneClient(ObservationZonePoint* _oz):m_oz(_oz) {};
+  ObservationZoneClient(ObservationZonePoint* _oz_point):oz_point(_oz_point) {}
 
   virtual ~ObservationZoneClient();
 
-/** 
- * Accessor for OZ (for modifying parameters etc)
- *
- * @return Observation zone
- */
-  ObservationZonePoint* get_oz() const {
-    return m_oz;
+  /**
+   * Accessor for OZ (for modifying parameters etc)
+   *
+   * @return Observation zone
+   */
+  ObservationZonePoint* GetOZPoint() const {
+    return oz_point;
   }
 
-/** 
- * Test whether aircraft is inside observation zone.
- * 
- * @param ref Aircraft state to test
- * 
- * @return True if aircraft is inside observation zone
- */
+  /**
+   * Test whether aircraft is inside observation zone.
+   *
+   * @param ref Aircraft state to test
+   *
+   * @return True if aircraft is inside observation zone
+   */
   virtual bool IsInSector(const AircraftState &ref) const;
 
   /**
@@ -72,54 +72,53 @@ public:
   virtual bool CanStartThroughTop() const;
 
   /**
- * Generate a random location inside the OZ (to be used for testing)
- * 
- * @param mag proportional magnitude of error from center (0-1)
- *
- * @return Location of point
- */
-  GeoPoint randomPointInSector(const fixed mag) const;
+   * Generate a random location inside the OZ (to be used for testing)
+   *
+   * @param mag proportional magnitude of error from center (0-1)
+   *
+   * @return Location of point
+   */
+  GeoPoint GetRandomPointInSector(const fixed mag) const;
 
-/** 
- * Calculate distance reduction for achieved task point,
- * to calcuate scored distance.
- * 
- * @return Distance reduction once achieved
- */
+  /**
+   * Calculate distance reduction for achieved task point,
+   * to calcuate scored distance.
+   *
+   * @return Distance reduction once achieved
+   */
   virtual fixed ScoreAdjustment() const;
 
-/** 
- * Calculate boundary point from parametric border
- * 
- * @param t t value (0,1) of parameter
- * 
- * @return Boundary point
- */
+  /**
+   * Calculate boundary point from parametric border
+   *
+   * @param t t value (0,1) of parameter
+   *
+   * @return Boundary point
+   */
   GeoPoint GetBoundaryParametric(fixed t) const;
 
 protected:
-
-/** 
- * Check transition constraints 
- * 
- * @param ref_now Current aircraft state
- * @param ref_last Previous aircraft state
- * 
- * @return True if constraints are satisfied
- */
+  /**
+   * Check transition constraints
+   *
+   * @param ref_now Current aircraft state
+   * @param ref_last Previous aircraft state
+   *
+   * @return True if constraints are satisfied
+   */
   virtual bool TransitionConstraint(const AircraftState & ref_now, 
-                                     const AircraftState & ref_last) const;
+                                    const AircraftState & ref_last) const;
 
-/**
- * Set previous/next taskpoints to allow OZ to update its geometry
- *
- * @param previous Origin tp of inbound leg
- * @param current Tp of this OZ
- * @param next Destination of outbound leg
- */
-  virtual void set_legs(const TaskPoint *previous,
-                        const TaskPoint *current,
-                        const TaskPoint *next);
+  /**
+   * Set previous/next taskpoints to allow OZ to update its geometry
+   *
+   * @param previous Origin tp of inbound leg
+   * @param current Tp of this OZ
+   * @param next Destination of outbound leg
+   */
+  virtual void SetLegs(const TaskPoint *previous,
+                       const TaskPoint *current,
+                       const TaskPoint *next);
 };
 
 
