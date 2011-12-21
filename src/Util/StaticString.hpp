@@ -334,7 +334,7 @@ class NarrowString: public StaticStringBase<char, max>
 {
 public:
   NarrowString() = default;
-  explicit NarrowString(const TCHAR *value):StaticStringBase<char, max>(value) {}
+  explicit NarrowString(const char *value):StaticStringBase<char, max>(value) {}
 
   NarrowString<max> &operator =(const char *new_value) {
     return (NarrowString<max> &)StaticStringBase<char, max>::operator =(new_value);
