@@ -52,35 +52,35 @@ class JobRunner;
  */
 namespace LiveTrack24
 {
-  enum VehicleType {
-    VT_PARAGLIDER = 1,
-    VT_FLEX_WING_FAI1 = 2,
-    VT_RIGID_WING_FAI5 = 4,
-    VT_GLIDER = 8,
-    VT_PARAMOTOR = 16,
-    VT_TRIKE = 32,
-    VT_POWERED_AIRCRAFT = 64,
-    VT_HOT_AIR_BALLOON = 128,
+  enum class VehicleType {
+    PARAGLIDER = 1,
+    FLEX_WING_FAI1 = 2,
+    RIGID_WING_FAI5 = 4,
+    GLIDER = 8,
+    PARAMOTOR = 16,
+    TRIKE = 32,
+    POWERED_AIRCRAFT = 64,
+    HOT_AIR_BALLOON = 128,
 
-    VT_WALK = 16385,
-    VT_RUN = 16386,
-    VT_BIKE = 16388,
+    WALK = 16385,
+    RUN = 16386,
+    BIKE = 16388,
 
-    VT_HIKE = 16400,
-    VT_CYCLE = 16401,
-    VT_MOUNTAIN_BIKE = 16402,
-    VT_MOTORCYCLE = 16403,
+    HIKE = 16400,
+    CYCLE = 16401,
+    MOUNTAIN_BIKE = 16402,
+    MOTORCYCLE = 16403,
 
-    VT_WINDSURF = 16500,
-    VT_KITESURF = 16501,
-    VT_SAILING = 16502,
+    WINDSURF = 16500,
+    KITESURF = 16501,
+    SAILING = 16502,
 
-    VT_SNOWBOARD = 16600,
-    VT_SKI = 16601,
-    VT_SNOWKITE = 16602,
+    SNOWBOARD = 16600,
+    SKI = 16601,
+    SNOWKITE = 16602,
 
-    VT_CAR = 17100,
-    VT_4X4_CAR = 17101,
+    CAR = 17100,
+    CAR_4X4 = 17101,
   };
 
   typedef uint32_t UserID;

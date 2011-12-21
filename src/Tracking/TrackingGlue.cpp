@@ -124,7 +124,7 @@ TrackingGlue::Tick()
 
     if (!LiveTrack24::StartTracking(state.session_id, copy.username,
                                     copy.password, tracking_interval,
-                                    LiveTrack24::VehicleType::VT_GLIDER,
+                                    LiveTrack24::VehicleType::GLIDER,
                                     _T("XCSoar"))) {
       state.ResetSession();
       mutex.Lock();
