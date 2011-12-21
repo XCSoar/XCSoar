@@ -54,15 +54,14 @@ int main(int argc, char **argv)
   }
 
   // Convert IP address to binary form
-  int sock;
   struct sockaddr_in server_addr;
-
   if ((server_addr.sin_addr.s_addr = inet_addr("127.0.0.1")) == INADDR_NONE) {
     perror("IP");
     exit(1);
   }
 
   // Create socket for the outgoing connection
+  int sock;
   if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
     perror("Socket");
     exit(1);
@@ -76,6 +75,7 @@ int main(int argc, char **argv)
   if (connect(sock, (struct sockaddr *)&server_addr,
               sizeof(struct sockaddr)) == -1)
   {
+    close(sock);
     perror("Connect");
     exit(1);
   }
