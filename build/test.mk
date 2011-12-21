@@ -247,7 +247,6 @@ TEST_ROUTE_DEPENDS = TEST1 JASPER
 $(eval $(call link-program,test_route,TEST_ROUTE))
 
 TEST_REPLAY_TASK_SOURCES = \
-	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(TEST_SRC_DIR)/test_replay_task.cpp
 TEST_REPLAY_TASK_DEPENDS = TEST1
@@ -771,7 +770,6 @@ RUN_LIVETRACK24_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Tracking/LiveTrack24.cpp \
 	$(SRC)/Version.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/Net/ToBuffer.cpp \
 	$(SRC)/Units/Units.cpp \
@@ -1233,7 +1231,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunIGCWriter.cpp
 RUN_IGC_WRITER_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_IGC_WRITER_DEPENDS = ENGINE MATH UTIL
+RUN_IGC_WRITER_DEPENDS = MATH UTIL
 $(eval $(call link-program,RunIGCWriter,RUN_IGC_WRITER))
 
 RUN_CIRCLING_WIND_SOURCES = \
@@ -1350,7 +1348,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Airspace/AirspaceVisibility.cpp \
-	$(ENGINE_SRC_DIR)/Airspace/AirspaceWarningConfig.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	$(SRC)/Renderer/BackgroundRenderer.cpp \
@@ -1611,7 +1608,6 @@ RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
-	$(SRC)/Screen/ProgressBar.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
@@ -1635,7 +1631,6 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/JobThread.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
-	$(SRC)/Screen/ProgressBar.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Util/StringUtil.cpp \
@@ -1706,7 +1701,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Screen/Chart.cpp \
 	$(SRC)/Screen/Graphics.cpp \
 	$(SRC)/Screen/Ramp.cpp \
-	$(SRC)/Screen/Util.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Look/Look.cpp \
 	$(SRC)/Look/MapLook.cpp \
@@ -1781,7 +1775,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Airspace/AirspaceGlue.cpp \
 	$(SRC)/Airspace/AirspaceVisibility.cpp \
-	$(ENGINE_SRC_DIR)/Airspace/AirspaceWarningConfig.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
@@ -1921,7 +1914,6 @@ RUN_TASK_EDITOR_DIALOG_DEPENDS = DATA_FIELD FORM SCREEN ENGINE IO ZZIP UTIL
 $(eval $(call link-program,RunTaskEditorDialog,RUN_TASK_EDITOR_DIALOG))
 
 TEST_NOTIFY_SOURCES = \
-	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Notify.cpp \
