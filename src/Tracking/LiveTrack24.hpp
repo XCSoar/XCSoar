@@ -32,6 +32,24 @@ struct BrokenDateTime;
 struct GeoPoint;
 class JobRunner;
 
+/**
+ * API for the LiveTrack24.com server.
+ *
+ * Procedure:
+ *
+ * - Generate a Session ID
+ *   (including User ID if available)
+ *
+ * - Send Start-of-Track packet
+ *   (on flight start or application start in midair)
+ *
+ * - Send GPS-Point packet(s)
+ *
+ * - Send End-of-Track packet
+ *   (on landing or application close)
+ *
+ * @see http://www.livetrack24.com/wiki/en/Leonardo%20Live%20Tracking%20API
+ */
 namespace LiveTrack24
 {
   enum VehicleType {
