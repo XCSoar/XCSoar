@@ -208,17 +208,16 @@ TextCache::get(const Font *font, const char *text)
 
   /* render the text into a OpenGL texture */
 
-  const Color background_color = COLOR_BLACK;
-  const Color text_color = COLOR_WHITE;
-
 #ifdef ANDROID
   PixelSize size;
-  int texture_id = font->TextTextureGL(text, size, text_color, background_color);
+  int texture_id = font->TextTextureGL(text, size);
   if (texture_id == 0)
     return NULL;
 
   RenderedText rt(texture_id, size.cx, size.cy);
 #else
+  const Color background_color = COLOR_BLACK;
+  const Color text_color = COLOR_WHITE;
   SDL_Surface *surface = ::TTF_RenderUTF8_Shaded(font->Native(), text,
                                                  text_color, background_color);
   if (surface == NULL)

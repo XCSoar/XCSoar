@@ -34,12 +34,12 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.opengl.GLES11;
 import static android.opengl.GLES11.*;
-import java.nio.ShortBuffer;
+import java.nio.ByteBuffer;
 
 public class TextUtil {
   private Paint paint;
   private Paint.FontMetricsInt metrics;
-  private ShortBuffer pixels;
+  private ByteBuffer pixels;
   private int[] extent = new int[2];
   private int[] id = new int[3];
 
@@ -92,20 +92,19 @@ public class TextUtil {
 
     /* check if the existing buffer is already large enough */
     if (pixels == null || pixels.capacity() < requiredCapacity)
-      pixels = ShortBuffer.allocate(requiredCapacity);
+      pixels = ByteBuffer.allocate(requiredCapacity);
     else if (pixels != null)
       pixels.clear();
   }
 
-  public int[] getTextTextureGL(String text,
-                                int fg_red, int fg_green, int fg_blue,
-                                int bg_red, int bg_green, int bg_blue) {
+  public int[] getTextTextureGL(String text) {
     getTextBounds(text);
 
     // draw text into a bitmap
-    Bitmap bmp = Bitmap.createBitmap(extent[0], extent[1], Bitmap.Config.RGB_565);
-    bmp.eraseColor(Color.rgb(bg_red, bg_green, bg_blue));
-    paint.setColor(Color.rgb(fg_red, fg_green, fg_blue));
+    Bitmap bmp = Bitmap.createBitmap(extent[0], extent[1],
+                                     Bitmap.Config.ALPHA_8);
+    bmp.eraseColor(Color.TRANSPARENT);
+    paint.setColor(Color.WHITE);
     Canvas canvas = new Canvas(bmp);
     canvas.drawText(text, 0, -paint.getFontMetricsInt().ascent, paint);
 
@@ -116,19 +115,19 @@ public class TextUtil {
     // create OpenGL texture
     int width2 = NativeView.validateTextureSize(extent[0]);
     int height2 = NativeView.validateTextureSize(extent[1]);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glGenTextures(1, id, 0);
     glBindTexture(GL_TEXTURE_2D, id[0]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     if (extent[0] == width2 && extent[1] == height2) {
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width2, height2,
-                   0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, pixels);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, width2, height2,
+                   0, GL_LUMINANCE, GL_UNSIGNED_BYTE, pixels);
     } else {
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width2, height2,
-                   0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, null);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, width2, height2,
+                   0, GL_LUMINANCE, GL_UNSIGNED_BYTE, null);
       glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, extent[0], extent[1],
-                      GL_RGB, GL_UNSIGNED_SHORT_5_6_5, pixels);
+                      GL_LUMINANCE, GL_UNSIGNED_BYTE, pixels);
     }
 
     id[1] = extent[0];

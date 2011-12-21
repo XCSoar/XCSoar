@@ -81,8 +81,7 @@ Font::TextSize(const TCHAR *text) const
 }
 
 int
-Font::TextTextureGL(const TCHAR *text, PixelSize &size,
-                      const Color &fg, const Color &bg) const
+Font::TextTextureGL(const TCHAR *text, PixelSize &size) const
 {
   if (!text_util_object)
     return 0;
@@ -91,9 +90,7 @@ Font::TextTextureGL(const TCHAR *text, PixelSize &size,
     return 0;
 
   const TextUtil::Texture texture =
-    text_util_object->getTextTextureGL(text,
-                                     fg.Red(), fg.Green(), fg.Blue(),
-                                     bg.Red(), bg.Green(), bg.Blue());
+    text_util_object->getTextTextureGL(text);
   size.cx = texture.width;
   size.cy = texture.height;
   return texture.id;

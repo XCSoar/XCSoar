@@ -102,8 +102,7 @@ public:
   PixelSize TextSize(const TCHAR *text) const;
 
   #ifdef ANDROID
-  int TextTextureGL(const TCHAR *text, PixelSize &size,
-                    const Color &fg, const Color &bg) const;
+  int TextTextureGL(const TCHAR *text, PixelSize &size) const;
   #else // !ANDROID
   #ifdef ENABLE_SDL
   TTF_Font*

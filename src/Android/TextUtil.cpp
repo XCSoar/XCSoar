@@ -73,7 +73,7 @@ TextUtil::create(const char *facename, int height, bool bold, bool italic)
     midGetTextBounds    = env->GetMethodID(textUtilClass, "getTextBounds",
                                            "(Ljava/lang/String;)[I");
     midGetTextTextureGL = env->GetMethodID(textUtilClass, "getTextTextureGL",
-                                           "(Ljava/lang/String;IIIIII)[I");
+                                           "(Ljava/lang/String;)[I");
   }
 
   Java::String paramFamilyName(env, facename);
@@ -123,14 +123,12 @@ TextUtil::getTextBounds(const char *text) const
 }
 
 TextUtil::Texture
-TextUtil::getTextTextureGL(const char *text, int fr, int fg, int fb,
-                           int br, int bg, int bb) const
+TextUtil::getTextTextureGL(const char *text) const
 {
   Java::String text2(env, text);
   jintArray jresult = (jintArray)
     env->CallObjectMethod(get(), midGetTextTextureGL,
-                          text2.get(),
-                          fr, fg, fb, br, bg, bb);
+                          text2.get());
   jint result[3];
   if (jresult != NULL) {
     env->GetIntArrayRegion(jresult, 0, 3, result);
