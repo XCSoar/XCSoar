@@ -120,8 +120,7 @@ OnLogoPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
   canvas.text(x, y, _T("more information at"));
   y += Layout::FastScale(22);
 
-  Color link(0x3E, 0x73, 0xA7);
-  canvas.SetTextColor(link);
+  canvas.SetTextColor(COLOR_XCSOAR);
   canvas.text(x, y, _T("http://www.xcsoar.org"));
 }
 
