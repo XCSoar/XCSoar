@@ -72,6 +72,7 @@ public:
    *
    * @return x value of best solution
    */
+  gcc_pure
   fixed find_zero(const fixed xstart);
 
   /**
@@ -83,20 +84,26 @@ public:
    *
    * @return x value of best solution
    */
+  gcc_pure
   fixed find_min(const fixed xstart);
 
 private:
+  gcc_pure
   fixed find_zero_actual(const fixed xstart);
+
+  gcc_pure
   fixed find_min_actual(const fixed xstart);
 
   /**
    * Tolerance in f of minimisation routine at x
    */
+  gcc_pure
   fixed tolerance_actual_min(const fixed x) const;
 
   /**
    * Tolerance in f of zero finding routine at x
    */
+  gcc_pure
   fixed tolerance_actual_zero(const fixed x) const;
 
   /**
@@ -107,6 +114,7 @@ private:
    *
    * @return true if no search required (xstart is good)
    */
+  gcc_pure
   bool solution_within_tolerance(const fixed xstart,
                                  const fixed tol_act);
 

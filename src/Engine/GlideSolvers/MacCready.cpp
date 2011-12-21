@@ -356,8 +356,8 @@ public:
   GlideResult
   Result(const fixed &v_init)
   {
-    find_min(v_init);
-    return res;
+    fixed v = find_min(v_init);
+    return mac.SolveGlide(task, v, allow_partial);
   }
 };
 
