@@ -62,7 +62,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
   if (is_enabled())
     canvas.SelectBlackBrush();
   else
-    canvas.Select(disabled_brush);
+    canvas.Select(look.button.disabled.brush);
 
   const char ch = (char)caption[0];
 

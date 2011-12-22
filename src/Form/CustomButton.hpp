@@ -40,8 +40,6 @@ class WndCustomButton : public WndButton
     return style;
   }
 
-  Color disabled_color;
-
 public:
   /**
    * Constructor of the WndCustomButton class
@@ -60,9 +58,7 @@ public:
                   const PixelRect &rc, const ButtonWindowStyle style,
                   ClickNotifyCallback Function = NULL)
     :WndButton(Parent, look, Caption, rc,
-               custom_painting(style), Function),
-               disabled_color(COLOR_GRAY)
-  {}
+               custom_painting(style), Function) {}
 
 protected:
   /**

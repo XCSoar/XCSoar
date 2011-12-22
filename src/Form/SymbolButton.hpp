@@ -38,8 +38,6 @@ class WndSymbolButton : public WndButton {
     return style;
   }
 
-  Brush disabled_brush;
-
 public:
   /**
    * Constructor of the WndSymbolButton class
@@ -58,9 +56,7 @@ public:
                   const PixelRect &rc, const ButtonWindowStyle style,
                   ClickNotifyCallback Function = NULL)
     :WndButton(Parent, look, Caption, rc,
-               custom_painting(style), Function),
-               disabled_brush(COLOR_GRAY)
-  {}
+               custom_painting(style), Function) {}
 
 protected:
   /**

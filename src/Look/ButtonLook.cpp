@@ -27,4 +27,7 @@ void
 ButtonLook::Initialise(const Font &_font)
 {
   font = &_font;
+
+  disabled.color = COLOR_GRAY;
+  disabled.brush.Set(disabled.color);
 }

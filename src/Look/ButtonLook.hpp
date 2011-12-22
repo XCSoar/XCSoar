@@ -24,10 +24,18 @@ Copyright_License {
 #ifndef XCSOAR_BUTTON_LOOK_HPP
 #define XCSOAR_BUTTON_LOOK_HPP
 
+#include "Screen/Color.hpp"
+#include "Screen/Brush.hpp"
+
 class Font;
 
 struct ButtonLook {
   const Font *font;
+
+  struct {
+    Color color;
+    Brush brush;
+  } disabled;
 
   void Initialise(const Font &_font);
 };

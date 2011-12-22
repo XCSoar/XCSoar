@@ -42,10 +42,10 @@ WndCustomButton::on_paint(Canvas &canvas)
   if (has_focus()) {
     canvas.DrawFilledRectangle(rc, look.focused.background_color);
     canvas.SetTextColor(is_enabled()
-                        ? look.focused.text_color : disabled_color);
+                        ? look.focused.text_color : look.button.disabled.color);
   } else {
     canvas.DrawFilledRectangle(rc, look.background_color);
-    canvas.SetTextColor(is_enabled() ? look.text_color : disabled_color);
+    canvas.SetTextColor(is_enabled() ? look.text_color : look.button.disabled.color);
   }
 
   // If button has text on it
