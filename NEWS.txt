@@ -5,7 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.3 - not yet released
 * devices
   - COM port monitor
-  - added separate FLARM driver for declaration
+  - added separate FLARM driver for declaration and IGC file download
 * map
   - airspace rendering fixed
   - show new map items list on click
