@@ -1478,6 +1478,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Dialogs/XML.cpp \
+	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Screen/Layout.cpp \
@@ -1736,6 +1737,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Terrain/TerrainSettings.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Dialogs/XML.cpp \
+	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
@@ -1818,6 +1820,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Dialogs/XML.cpp \
+	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
@@ -1861,6 +1864,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Dialogs/XML.cpp \
+	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/dlgTaskOverview.cpp \

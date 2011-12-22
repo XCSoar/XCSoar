@@ -128,6 +128,7 @@ LDLIBS = $(TARGET_LDLIBS) $(COVERAGE_LDLIBS)
 DIALOG_SOURCES = \
 	$(SRC)/Form/XMLWidget.cpp \
 	$(SRC)/Dialogs/XML.cpp \
+	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/Message.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
