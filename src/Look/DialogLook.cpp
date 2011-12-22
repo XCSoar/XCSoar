@@ -32,7 +32,7 @@ Copyright_License {
 void
 DialogLook::Initialise(const Font &caption_font,
                        const Font &_text_font,
-                       const Font &_button_font,
+                       const Font &button_font,
                        const Font &list_font)
 {
   caption.text_color = COLOR_BLACK;
@@ -48,7 +48,7 @@ DialogLook::Initialise(const Font &caption_font,
   text_color = COLOR_BLACK;
 
   text_font = &_text_font;
-  button_font = &_button_font;
+  button.Initialise(button_font);
 
   focused.background_color = COLOR_XCSOAR_DARK;
   focused.text_color = COLOR_WHITE;

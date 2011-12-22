@@ -38,7 +38,7 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
    right_callback(_right_callback)
 {
   set(parent, Caption, rc, style);
-  set_font(*look.button_font);
+  set_font(*look.button.font);
 }
 
 bool

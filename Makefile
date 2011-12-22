@@ -617,6 +617,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Look/Look.cpp \
 	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Look/TerminalLook.cpp \
 	$(SRC)/Look/VarioLook.cpp \
 	$(SRC)/Look/ChartLook.cpp \

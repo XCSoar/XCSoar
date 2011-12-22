@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DIALOG_LOOK_HPP
 #define XCSOAR_DIALOG_LOOK_HPP
 
+#include "ButtonLook.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
@@ -51,7 +52,7 @@ struct DialogLook {
 
   Brush background_brush;
 
-  const Font *text_font, *button_font;
+  const Font *text_font;
 
   struct {
     Color background_color, text_color;
@@ -68,6 +69,8 @@ struct DialogLook {
 
     const Font *font;
   } list;
+
+  ButtonLook button;
 
   void Initialise(const Font &caption_font,
                   const Font &text_font,

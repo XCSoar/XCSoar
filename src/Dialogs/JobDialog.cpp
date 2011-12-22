@@ -109,7 +109,7 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
     rc.bottom = rc.top + Layout::Scale(35);
     cancel_button.set(client_area, _("Cancel"), rc,
                       style);
-    cancel_button.set_font(*dialog_look.button_font);
+    cancel_button.set_font(*dialog_look.button.font);
     cancel_button.bring_to_top();
   }
 

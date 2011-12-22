@@ -677,7 +677,7 @@ void
 TabMenuDisplay::on_paint(Canvas &canvas)
 {
   canvas.clear(look.background_color);
-  canvas.Select(*look.button_font);
+  canvas.Select(*look.button.font);
 
   const unsigned CaptionStyle = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;

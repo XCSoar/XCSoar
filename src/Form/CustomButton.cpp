@@ -63,7 +63,7 @@ WndCustomButton::on_paint(Canvas &canvas)
   canvas.formatted_text(&rc, caption.c_str(), get_text_style());
 #else
   unsigned s = DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
-  canvas.Select(*(look.button_font));
+  canvas.Select(*(look.button.font));
   canvas.formatted_text(&rc, caption.c_str(), s);
 #endif
 }

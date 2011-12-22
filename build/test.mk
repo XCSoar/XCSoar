@@ -1476,6 +1476,7 @@ $(eval $(call link-program,RunMapWindow,RUN_MAP_WINDOW))
 
 RUN_DIALOG_SOURCES = \
 	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/Inflate.cpp \
@@ -1516,6 +1517,7 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/KineticManager.cpp \
 	$(SRC)/Form/SubForm.cpp \
 	$(SRC)/Form/Form.cpp \
@@ -1555,6 +1557,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/TaskLook.cpp \
@@ -1577,6 +1580,7 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
@@ -1634,6 +1638,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/ResourceLoader.cpp \
@@ -1743,6 +1748,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/Renderer/FlightStatisticsRenderer.cpp \
@@ -1819,6 +1825,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \

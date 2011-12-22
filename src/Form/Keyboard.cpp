@@ -221,5 +221,5 @@ KeyboardControl::add_button(const TCHAR* caption)
 
   ButtonWindow *button = &buttons[num_buttons++];
   button->set(*this, caption, (unsigned)caption[0], rc);
-  button->set_font(*look.button_font);
+  button->set_font(*look.button.font);
 }
