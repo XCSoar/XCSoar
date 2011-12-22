@@ -51,11 +51,11 @@ class WndForm : public ContainerWindow, public SubForm
 
   public:
     typedef bool (*CommandCallback_t)(unsigned cmd);
-    CommandCallback_t mCommandCallback;
+    CommandCallback_t command_callback;
 
   public:
     ClientAreaWindow(const DialogLook &_look)
-      :look(_look), mCommandCallback(NULL) {}
+      :look(_look), command_callback(NULL) {}
 
   protected:
     virtual bool on_command(unsigned id, unsigned code);
@@ -64,15 +64,15 @@ class WndForm : public ContainerWindow, public SubForm
   };
 
 public:
-  typedef void (*TimerNotifyCallback_t)(WndForm &Sender);
-  typedef bool (*KeyDownNotifyCallback_t)(WndForm &Sender, unsigned key_code);
+  typedef void (*TimerNotifyCallback)(WndForm &sender);
+  typedef bool (*KeyDownNotifyCallback)(WndForm &sender, unsigned key_code);
 
 protected:
   SingleWindow &main_window;
 
   const DialogLook &look;
 
-  int mModalResult;
+  int modal_result;
 
   /**
    * The dialog stays open as long as this flag is set, even if
@@ -89,17 +89,17 @@ protected:
   /** The ClientWindow */
   ClientAreaWindow client_area;
   /** Coordinates of the ClientWindow */
-  PixelRect mClientRect;
+  PixelRect client_rect;
   /** Coordinates of the titlebar */
-  PixelRect mTitleRect;
+  PixelRect title_rect;
 
-  TimerNotifyCallback_t mOnTimerNotify;
-  KeyDownNotifyCallback_t mOnKeyDownNotify;
+  TimerNotifyCallback timer_notify_callback;
+  KeyDownNotifyCallback key_down_notify_callback;
 
   /*
    * Control which should get the focus by default
    */
-  Window *defaultFocus;
+  Window *default_focus;
 
   /**
    * The on_paint event is called when the button needs to be drawn
@@ -109,7 +109,7 @@ protected:
 
   WindowTimer timer;
 
-  StaticString<256> mCaption;
+  StaticString<256> caption;
 
 public:
   /**
@@ -148,16 +148,16 @@ public:
   ContainerWindow &GetClientAreaWindow(void);
 
   unsigned GetTitleHeight() const {
-    return mTitleRect.bottom - mTitleRect.top;
+    return title_rect.bottom - title_rect.top;
   }
 
   void SetForceOpen(bool _force) {
     force = _force;
   }
 
-  int GetModalResult(void) { return mModalResult; }
+  int GetModalResult(void) { return modal_result; }
   int SetModalResult(int Value) {
-    mModalResult = Value;
+    modal_result = Value;
     return Value;
   }
 
@@ -174,11 +174,11 @@ public:
   int ShowModeless();
 
   const TCHAR *GetCaption() const {
-    return mCaption.c_str();
+    return caption.c_str();
   }
 
   /** Set the titlebar text */
-  void SetCaption(const TCHAR *Value);
+  void SetCaption(const TCHAR *_caption);
 
   /** from class Window */
   virtual bool on_resize(UPixelScalar width, UPixelScalar height);
@@ -189,22 +189,22 @@ public:
   virtual bool on_command(unsigned id, unsigned code);
 #endif
 
-  void SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify) {
-    mOnKeyDownNotify = KeyDownNotify;
+  void SetKeyDownNotify(KeyDownNotifyCallback KeyDownNotify) {
+    key_down_notify_callback = KeyDownNotify;
   }
 
-  void SetTimerNotify(TimerNotifyCallback_t OnTimerNotify, unsigned ms = 500);
+  void SetTimerNotify(TimerNotifyCallback OnTimerNotify, unsigned ms = 500);
 
   void SetCommandCallback(ClientAreaWindow::CommandCallback_t CommandCallback) {
-    client_area.mCommandCallback = CommandCallback;
+    client_area.command_callback = CommandCallback;
   }
 
   void SetDefaultFocus(Window *_defaultFocus) {
-    defaultFocus = _defaultFocus;
+    default_focus = _defaultFocus;
   }
 
   Window *GetDefaultFocus() {
-    return defaultFocus;
+    return default_focus;
   }
 
 #ifdef ANDROID
@@ -217,7 +217,7 @@ public:
 #endif
 
 private:
-  static PeriodClock timeAnyOpenClose; // when any dlg opens or child closes
+  static PeriodClock time_any_open_close; // when any dlg opens or child closes
 };
 
 #endif

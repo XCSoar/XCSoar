@@ -44,7 +44,7 @@ Copyright_License {
 bool
 WndForm::ClientAreaWindow::on_command(unsigned id, unsigned code)
 {
-  return (mCommandCallback != NULL && mCommandCallback(id))
+  return (command_callback != NULL && command_callback(id))
     || ContainerWindow::on_command(id, code);
 }
 
@@ -73,7 +73,7 @@ WndForm::ClientAreaWindow::on_paint(Canvas &canvas)
   ContainerWindow::on_paint(canvas);
 }
 
-PeriodClock WndForm::timeAnyOpenClose;
+PeriodClock WndForm::time_any_open_close;
 
 static WindowStyle
 add_border(WindowStyle style)
@@ -87,14 +87,14 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
                  const TCHAR *Caption,
                  const WindowStyle style)
   :main_window(_main_window), look(_look),
-   mModalResult(0), force(false),
+   modal_result(0), force(false),
    modeless(false),
    client_area(_look),
-   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL),
-   defaultFocus(NULL),
+   timer_notify_callback(NULL), key_down_notify_callback(NULL),
+   default_focus(NULL),
    timer(*this)
 {
-  mCaption = Caption;
+  caption = Caption;
 
   set(main_window, rc, add_border(style));
 
@@ -102,24 +102,24 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
 
   WindowStyle client_style;
   client_style.control_parent();
-  client_area.set(*this, mClientRect.left, mClientRect.top,
-                  mClientRect.right - mClientRect.left,
-                  mClientRect.bottom - mClientRect.top, client_style);
+  client_area.set(*this, client_rect.left, client_rect.top,
+                  client_rect.right - client_rect.left,
+                  client_rect.bottom - client_rect.top, client_style);
 
 #if defined(USE_GDI) && !defined(NDEBUG)
-  ::SetWindowText(hWnd, mCaption.c_str());
+  ::SetWindowText(hWnd, caption.c_str());
 #endif
 }
 
 void
-WndForm::SetTimerNotify(TimerNotifyCallback_t OnTimerNotify, unsigned ms)
+WndForm::SetTimerNotify(TimerNotifyCallback OnTimerNotify, unsigned ms)
 {
-  if (mOnTimerNotify != NULL && OnTimerNotify == NULL)
+  if (timer_notify_callback != NULL && OnTimerNotify == NULL)
     timer.Cancel();
-  else if (mOnTimerNotify == NULL && OnTimerNotify != NULL)
+  else if (timer_notify_callback == NULL && OnTimerNotify != NULL)
     timer.Schedule(ms);
 
-  mOnTimerNotify = OnTimerNotify;
+  timer_notify_callback = OnTimerNotify;
 }
 
 WndForm::~WndForm()
@@ -135,17 +135,17 @@ WndForm::UpdateLayout()
 {
   PixelRect rc = get_client_rect();
 
-  mTitleRect = rc;
-  mTitleRect.bottom = rc.top +
-    (mCaption.empty() ? 0 : look.caption.font->GetHeight());
+  title_rect = rc;
+  title_rect.bottom = rc.top +
+    (caption.empty() ? 0 : look.caption.font->GetHeight());
 
-  mClientRect = rc;
-  mClientRect.top = mTitleRect.bottom;
+  client_rect = rc;
+  client_rect.top = title_rect.bottom;
 
   if (client_area.defined())
-    client_area.move(mClientRect.left, mClientRect.top,
-                     mClientRect.right - mClientRect.left,
-                     mClientRect.bottom - mClientRect.top);
+    client_area.move(client_rect.left, client_rect.top,
+                     client_rect.right - client_rect.left,
+                     client_rect.bottom - client_rect.top);
 }
 
 ContainerWindow &
@@ -165,8 +165,8 @@ WndForm::on_resize(UPixelScalar width, UPixelScalar height)
 void
 WndForm::on_destroy()
 {
-  if (mModalResult == 0)
-    mModalResult = mrCancel;
+  if (modal_result == 0)
+    modal_result = mrCancel;
 
   timer.Cancel();
 
@@ -177,8 +177,8 @@ bool
 WndForm::on_timer(WindowTimer &_timer)
 {
   if (_timer == timer) {
-    if (mOnTimerNotify)
-      mOnTimerNotify(*this);
+    if (timer_notify_callback)
+      timer_notify_callback(*this);
     return true;
   } else
     return ContainerWindow::on_timer(_timer);
@@ -381,7 +381,7 @@ WndForm::ShowModal()
 
   show_on_top();
 
-  mModalResult = 0;
+  modal_result = 0;
 
 #ifdef USE_GDI
   oldFocusHwnd = ::GetFocus();
@@ -389,13 +389,13 @@ WndForm::ShowModal()
     ::SendMessage(oldFocusHwnd, WM_CANCELMODE, 0, 0);
 #endif /* USE_GDI */
   set_focus();
-  if (defaultFocus)
-    defaultFocus->set_focus();
+  if (default_focus)
+    default_focus->set_focus();
   else
     focus_first_control();
 
   bool hastimed = false;
-  WndForm::timeAnyOpenClose.update(); // when current dlg opens or child closes
+  WndForm::time_any_open_close.update(); // when current dlg opens or child closes
 
   main_window.add_dialog(this);
 
@@ -414,10 +414,10 @@ WndForm::ShowModal()
   MSG event;
 #endif
 
-  while ((mModalResult == 0 || force) && loop.Get(event)) {
+  while ((modal_result == 0 || force) && loop.Get(event)) {
 #if defined(ENABLE_SDL) && !defined(ANDROID)
     if (event.type == SDL_QUIT) {
-      mModalResult = mrCancel;
+      modal_result = mrCancel;
       continue;
     }
 #endif
@@ -440,17 +440,17 @@ WndForm::ShowModal()
     }
 
     if (IsEmbedded() && is_mouse_up(event) &&
-        !timeAnyOpenClose.check(OPENCLOSESUPPRESSTIME))
+        !time_any_open_close.check(OPENCLOSESUPPRESSTIME))
       /* prevents child click from being repeat-handled by parent if
          buttons overlap */
       continue;
 
-    if (mOnKeyDownNotify != NULL && is_key_down(event) &&
+    if (key_down_notify_callback != NULL && is_key_down(event) &&
 #ifdef USE_GDI
         identify_descendant(event.hwnd) &&
 #endif
         !check_special_key(this, event) &&
-        mOnKeyDownNotify(*this, get_key_code(event)))
+        key_down_notify_callback(*this, get_key_code(event)))
       continue;
 
 #if defined(ENABLE_SDL) && !defined(ANDROID)
@@ -483,7 +483,7 @@ WndForm::ShowModal()
 
 #ifndef USE_GDI
     if (is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
-      mModalResult = mrCancel;
+      modal_result = mrCancel;
       continue;
     }
 #endif
@@ -491,7 +491,7 @@ WndForm::ShowModal()
     /* map VK_ESCAPE to mrOK on Altair, because the Escape key is expected to 
        be the one that saves and closes a dialog */
     if (IsAltair() && is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
-      mModalResult = mrOK;
+      modal_result = mrOK;
       continue;
     }
 
@@ -501,7 +501,7 @@ WndForm::ShowModal()
   main_window.remove_dialog(this);
 
   // static.  this is current open/close or child open/close
-  WndForm::timeAnyOpenClose.update();
+  WndForm::time_any_open_close.update();
 
 #ifdef USE_GDI
   SetFocus(oldFocusHwnd);
@@ -513,7 +513,7 @@ WndForm::ShowModal()
   }
 #endif /* !USE_GDI */
 
-  return mModalResult;
+  return modal_result;
 }
 
 void
@@ -527,7 +527,7 @@ WndForm::on_paint(Canvas &canvas)
   // Draw the borders
   canvas.DrawRaisedEdge(rcClient);
 
-  if (!mCaption.empty()) {
+  if (!caption.empty()) {
     // Set the colors
     canvas.SetTextColor(COLOR_WHITE);
 
@@ -538,32 +538,32 @@ WndForm::on_paint(Canvas &canvas)
 
 #ifdef EYE_CANDY
     canvas.SetBackgroundTransparent();
-    canvas.stretch(mTitleRect.left, mTitleRect.top,
-                   mTitleRect.right - mTitleRect.left,
-                   mTitleRect.bottom - mTitleRect.top,
+    canvas.stretch(title_rect.left, title_rect.top,
+                   title_rect.right - title_rect.left,
+                   title_rect.bottom - title_rect.top,
                    look.caption.background_bitmap);
 
     // Draw titlebar text
-    canvas.text(mTitleRect.left + Layout::FastScale(2), mTitleRect.top,
-                mCaption.c_str());
+    canvas.text(title_rect.left + Layout::FastScale(2), title_rect.top,
+                caption.c_str());
 #else
     canvas.SetBackgroundColor(look.caption.background_color);
-    canvas.text_opaque(mTitleRect.left + Layout::FastScale(2),
-                       mTitleRect.top, mTitleRect, mCaption.c_str());
+    canvas.text_opaque(title_rect.left + Layout::FastScale(2),
+                       title_rect.top, title_rect, caption.c_str());
 #endif
   }
 }
 
 void
-WndForm::SetCaption(const TCHAR *Value)
+WndForm::SetCaption(const TCHAR *_caption)
 {
-  if (Value == NULL)
-    Value = _T("");
+  if (_caption == NULL)
+    _caption = _T("");
 
-  if (!mCaption.equals(Value)){
-    mCaption = Value;
+  if (!caption.equals(_caption)) {
+    caption = _caption;
     UpdateLayout();
-    invalidate(mTitleRect);
+    invalidate(title_rect);
   }
 }
 
@@ -574,7 +574,7 @@ WndForm::ReinitialiseLayout()
   if (main_window.get_width() < get_width() ||
       main_window.get_height() < get_height()) {
     // close dialog, it's creator may want to create a new layout
-    mModalResult = mrChangeLayout;
+    modal_result = mrChangeLayout;
   } else {
     // reposition dialog to fit into TopWindow
     PixelScalar left = get_left();
