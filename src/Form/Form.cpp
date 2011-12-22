@@ -41,11 +41,6 @@ Copyright_License {
 #include "Android/Main.hpp"
 #endif
 
-#ifdef EYE_CANDY
-#include "Screen/Bitmap.hpp"
-#include "resource.h"
-#endif
-
 bool
 WndForm::ClientAreaWindow::on_command(unsigned id, unsigned code)
 {
@@ -104,10 +99,6 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
   set(main_window, rc, add_border(style));
 
   // Create ClientWindow
-
-#ifdef EYE_CANDY
-  bitmap_title.Load(IDB_DIALOGTITLE);
-#endif
 
   WindowStyle client_style;
   client_style.control_parent();
@@ -550,7 +541,7 @@ WndForm::on_paint(Canvas &canvas)
     canvas.stretch(mTitleRect.left, mTitleRect.top,
                    mTitleRect.right - mTitleRect.left,
                    mTitleRect.bottom - mTitleRect.top,
-                   bitmap_title);
+                   look.caption.background_bitmap);
 
     // Draw titlebar text
     canvas.text(mTitleRect.left + Layout::FastScale(2), mTitleRect.top,

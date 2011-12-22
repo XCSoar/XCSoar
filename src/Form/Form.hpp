@@ -30,10 +30,6 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Util/tstring.hpp"
 
-#ifdef EYE_CANDY
-#include "Screen/Bitmap.hpp"
-#endif
-
 struct DialogLook;
 class SingleWindow;
 class PeriodClock;
@@ -90,10 +86,6 @@ protected:
    */
   bool modeless;
 
-  /** Font of the titlebar */
-#ifdef EYE_CANDY
-  Bitmap bitmap_title;
-#endif
   /** The ClientWindow */
   ClientAreaWindow client_area;
   /** Coordinates of the ClientWindow */

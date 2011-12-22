@@ -25,6 +25,10 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 
+#ifdef EYE_CANDY
+#include "resource.h"
+#endif
+
 void
 DialogLook::Initialise(const Font &caption_font,
                        const Font &_text_font,
@@ -34,6 +38,10 @@ DialogLook::Initialise(const Font &caption_font,
   caption.background_color = COLOR_XCSOAR_DARK;
   caption.text_color = COLOR_BLACK;
   caption.font = &caption_font;
+
+#ifdef EYE_CANDY
+  caption.background_bitmap.Load(IDB_DIALOGTITLE);
+#endif
 
   SetBackgroundColor(Color(0xe2, 0xdc, 0xbe));
   text_color = COLOR_BLACK;

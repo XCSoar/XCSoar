@@ -28,6 +28,10 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 
+#ifdef EYE_CANDY
+#include "Screen/Bitmap.hpp"
+#endif
+
 class Font;
 
 struct DialogLook {
@@ -35,6 +39,10 @@ struct DialogLook {
     Color background_color, text_color;
 
     const Font *font;
+
+#ifdef EYE_CANDY
+    Bitmap background_bitmap;
+#endif
   } caption;
 
   Color background_color, text_color;
