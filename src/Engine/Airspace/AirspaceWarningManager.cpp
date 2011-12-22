@@ -310,8 +310,15 @@ AirspaceWarningManager::update_task(const AircraftState& state)
     return false;
 
   AirspaceAircraftPerformanceTask perf_task(state, m_glide_polar, m_task);
-  const GeoPoint location_tp = m_task.getActiveTaskPoint()->GetLocationRemaining();
+  GeoPoint location_tp = m_task.getActiveTaskPoint()->GetLocationRemaining();
   const fixed time_remaining = m_task.get_stats().current_leg.solution_remaining.time_elapsed; 
+
+  const GeoVector vector(state.location, location_tp);
+  fixed max_distance = config.WarningTime * m_glide_polar.GetVMax();
+  if (vector.Distance > max_distance)
+    /* limit the distance to what our glider can actually fly within
+       the configured warning time */
+    location_tp = vector.intermediate_point(state.location, max_distance);
 
   return update_predicted(state, location_tp, perf_task,
                           AirspaceWarning::WARNING_TASK, time_remaining);
