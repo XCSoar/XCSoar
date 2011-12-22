@@ -204,8 +204,8 @@ $(DIALOG_COMPRESSED): $(DATA)/dialogs/%.xml: Data/Dialogs/%.xml \
 
 TEXT_FILES = AUTHORS COPYING
 
-TEXT_COMPRESSED = $(patsubst %,$(DATA)/%,$(TEXT_FILES))
-$(TEXT_COMPRESSED): $(DATA)/%: % | $(DATA)/dirstamp
+TEXT_COMPRESSED = $(patsubst %,$(DATA)/%.gz,$(TEXT_FILES))
+$(TEXT_COMPRESSED): $(DATA)/%.gz: % | $(DATA)/dirstamp
 	@$(NQ)echo "  GZIP    $@"
 	$(Q)gzip --best <$< >$@.tmp
 	$(Q)mv $@.tmp $@
