@@ -36,12 +36,14 @@ class Font;
 
 struct DialogLook {
   struct {
-    Color background_color, text_color;
+    Color text_color;
 
     const Font *font;
 
 #ifdef EYE_CANDY
     Bitmap background_bitmap;
+#else
+    Color background_color;
 #endif
   } caption;
 

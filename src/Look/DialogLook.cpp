@@ -35,12 +35,13 @@ DialogLook::Initialise(const Font &caption_font,
                        const Font &_button_font,
                        const Font &list_font)
 {
-  caption.background_color = COLOR_XCSOAR_DARK;
   caption.text_color = COLOR_BLACK;
   caption.font = &caption_font;
 
 #ifdef EYE_CANDY
   caption.background_bitmap.Load(IDB_DIALOGTITLE);
+#else
+  caption.background_color = COLOR_XCSOAR_DARK;
 #endif
 
   SetBackgroundColor(Color(0xe2, 0xdc, 0xbe));
