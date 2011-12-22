@@ -142,11 +142,11 @@ Canvas::DrawButton(PixelRect rc, bool down)
 {
   const Pen old_pen = pen;
 
-  Color gray = Color(192, 192, 192);
+  Color gray = COLOR_LIGHT_GRAY;
   DrawFilledRectangle(rc, gray);
 
-  Pen bright(1, Color(240, 240, 240));
-  Pen dark(1, Color(128, 128, 128));
+  Pen bright(1, LightColor(gray));
+  Pen dark(1, DarkColor(gray));
 
   Select(down ? dark : bright);
   DrawTwoLines(rc.left, rc.bottom - 2, rc.left, rc.top,
