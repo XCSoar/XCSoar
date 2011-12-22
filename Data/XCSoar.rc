@@ -387,8 +387,8 @@ tr.mo MO DISCARDABLE "../output/po/tr.mo"
 uk.mo MO DISCARDABLE "../output/po/uk.mo"
 #endif
 
-LICENSE TEXT DISCARDABLE "../COPYING"
-AUTHORS TEXT DISCARDABLE "../AUTHORS"
+LICENSE TEXT DISCARDABLE "../output/data/COPYING"
+AUTHORS TEXT DISCARDABLE "../output/data/AUTHORS"
 
 // --- EGM96 Raster Data --- 
 

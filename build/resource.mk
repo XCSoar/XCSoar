@@ -202,7 +202,15 @@ $(DIALOG_COMPRESSED): $(DATA)/dialogs/%.xml: Data/Dialogs/%.xml \
 	$(Q)gzip --best <$< >$@.tmp
 	$(Q)mv $@.tmp $@
 
-RESOURCE_FILES = $(DIALOG_COMPRESSED)
+TEXT_FILES = AUTHORS COPYING
+
+TEXT_COMPRESSED = $(patsubst %,$(DATA)/%,$(TEXT_FILES))
+$(TEXT_COMPRESSED): $(DATA)/%: % | $(DATA)/dirstamp
+	@$(NQ)echo "  GZIP    $@"
+	$(Q)gzip --best <$< >$@.tmp
+	$(Q)mv $@.tmp $@
+
+RESOURCE_FILES = $(DIALOG_COMPRESSED) $(TEXT_COMPRESSED)
 
 ifeq ($(TARGET),ANDROID)
 RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))

@@ -32,6 +32,7 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "ResourceLoader.hpp"
 #include "Version.hpp"
+#include "Inflate.hpp"
 #include "resource.h"
 
 #include <assert.h>
@@ -129,19 +130,27 @@ LoadTextFromResource(const TCHAR* name, const TCHAR* control)
 {
   ResourceLoader::Data data = ResourceLoader::Load(name, _T("TEXT"));
   assert(data.first != NULL);
-  const char *buffer = (const char *)data.first;
+
+  char *buffer = InflateToString(data.first, data.second);
 
 #ifdef _UNICODE
-  int length = data.second;
-  TCHAR buffer2[length + 1];
-  length = MultiByteToWideChar(CP_UTF8, MB_PRECOMPOSED, buffer, length,
+  int length = strlen(buffer);
+  TCHAR *buffer2 = new TCHAR[length + 1];
+  length = MultiByteToWideChar(CP_UTF8, 0, buffer, length,
                                buffer2, length);
   buffer2[length] = _T('\0');
+  delete[] buffer;
 #else
   const char *buffer2 = buffer;
 #endif
 
   ((EditWindow *)wf->FindByName(control))->set_text(buffer2);
+
+#ifdef _UNICODE
+  delete[] buffer2;
+#else
+  delete[] buffer;
+#endif
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
