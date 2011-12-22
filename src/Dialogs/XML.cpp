@@ -717,8 +717,8 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   // ButtonControl (WndButton)
   } else if (_tcscmp(node.getName(), _T("Button")) == 0) {
     // Determine ClickCallback function
-    WndButton::ClickNotifyCallback_t click_callback =
-      (WndButton::ClickNotifyCallback_t)
+    WndButton::ClickNotifyCallback click_callback =
+      (WndButton::ClickNotifyCallback)
       GetCallBack(lookup_table, node, _T("OnClick"));
 
     // Create the ButtonControl
@@ -760,8 +760,8 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   // SymbolButtonControl (WndSymbolButton) not used yet
   } else if (_tcscmp(node.getName(), _T("SymbolButton")) == 0) {
     // Determine ClickCallback function
-    WndButton::ClickNotifyCallback_t click_callback =
-      (WndButton::ClickNotifyCallback_t)
+    WndButton::ClickNotifyCallback click_callback =
+      (WndButton::ClickNotifyCallback)
       GetCallBack(lookup_table, node, _T("OnClick"));
 
     // Create the SymbolButtonControl

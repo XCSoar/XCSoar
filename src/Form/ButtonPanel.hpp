@@ -50,7 +50,7 @@ public:
   }
 
   WndButton *Add(const TCHAR *caption,
-                 WndButton::ClickNotifyCallback_t callback);
+                 WndButton::ClickNotifyCallback callback);
 
 protected:
   PixelRect GetButtonRect(unsigned i) const;

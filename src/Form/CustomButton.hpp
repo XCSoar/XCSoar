@@ -58,7 +58,7 @@ public:
   WndCustomButton(ContainerWindow &Parent, const DialogLook &look,
                   const TCHAR *Caption,
                   const PixelRect &rc, const ButtonWindowStyle style,
-                  ClickNotifyCallback_t Function = NULL)
+                  ClickNotifyCallback Function = NULL)
     :WndButton(Parent, look, Caption, rc,
                custom_painting(style), Function),
                disabled_color(COLOR_GRAY)

@@ -35,8 +35,8 @@ class ContainerWindow;
  */
 class WndButton : public ButtonWindow {
 public:
-  typedef void (*ClickNotifyCallback_t)(WndButton &button);
-  typedef void (*LeftRightNotifyCallback_t)(WndButton &button);
+  typedef void (*ClickNotifyCallback)(WndButton &button);
+  typedef void (*LeftRightNotifyCallback)(WndButton &button);
 
 protected:
   const DialogLook &look;
@@ -46,15 +46,15 @@ private:
    * The callback-function that should be called when the button is pressed
    * @see SetOnClickNotify()
    */
-  ClickNotifyCallback_t mOnClickNotify;
+  ClickNotifyCallback click_callback;
 
   /**
    * The callback-functions that should be called when the Left and Right
    * keys are pressed
    * @see SetOnLeftNotify() and SetOnRightNotify()
    */
-  LeftRightNotifyCallback_t mOnLeftNotify;
-  LeftRightNotifyCallback_t mOnRightNotify;
+  LeftRightNotifyCallback left_callback;
+  LeftRightNotifyCallback right_callback;
 
 public:
   /**
@@ -69,21 +69,20 @@ public:
    * when the button is clicked
    */
   WndButton(ContainerWindow &parent, const DialogLook &look,
-            const TCHAR *Caption,
-            const PixelRect &rc,
+            const TCHAR *caption, const PixelRect &rc,
             const ButtonWindowStyle style,
-      ClickNotifyCallback_t Function = NULL,
-      LeftRightNotifyCallback_t LeftFunction = NULL,
-      LeftRightNotifyCallback_t RightFunction = NULL);
+            ClickNotifyCallback click_callback = NULL,
+            LeftRightNotifyCallback left_callback = NULL,
+            LeftRightNotifyCallback right_callback = NULL);
 
   /**
    * Sets the function that should be called when the button is pressed
    * @param Function Pointer to the function to be called
    */
   void
-  SetOnClickNotify(ClickNotifyCallback_t Function)
+  SetOnClickNotify(ClickNotifyCallback _click_callback)
   {
-    mOnClickNotify = Function;
+    click_callback = _click_callback;
   }
 
   /**
@@ -91,9 +90,9 @@ public:
    * @param Function Pointer to the function to be called
    */
   void
-  SetOnLeftNotify(LeftRightNotifyCallback_t Function)
+  SetOnLeftNotify(LeftRightNotifyCallback _left_callback)
   {
-    mOnLeftNotify = Function;
+    left_callback = _left_callback;
   }
 
   /**
@@ -101,17 +100,17 @@ public:
    * @param Function Pointer to the function to be called
    */
   void
-  SetOnRightNotify(LeftRightNotifyCallback_t Function)
+  SetOnRightNotify(LeftRightNotifyCallback _right_callback)
   {
-    mOnRightNotify = Function;
+    right_callback = _right_callback;
   }
   /**
    * Sets the Caption/Text of the Control and resets the cached text height
    * (derived from WindowControl)
    * @param Value The new Caption/Text of the Control
    */
-  void SetCaption(const TCHAR *Value) {
-    set_text(Value);
+  void SetCaption(const TCHAR *caption) {
+    set_text(caption);
   }
 
   /**

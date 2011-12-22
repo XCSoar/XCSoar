@@ -27,16 +27,15 @@ Copyright_License {
 #include "Asset.hpp"
 
 WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
-                     const TCHAR *Caption,
-                     const PixelRect &rc,
+                     const TCHAR *Caption, const PixelRect &rc,
                      const ButtonWindowStyle style,
-    ClickNotifyCallback_t Function,
-    LeftRightNotifyCallback_t LeftFunction,
-    LeftRightNotifyCallback_t RightFunction)
+                     ClickNotifyCallback _click_callback,
+                     LeftRightNotifyCallback _left_callback,
+                     LeftRightNotifyCallback _right_callback)
   :look(_look),
-    mOnClickNotify(Function),
-    mOnLeftNotify(LeftFunction),
-    mOnRightNotify(RightFunction)
+   click_callback(_click_callback),
+   left_callback(_left_callback),
+   right_callback(_right_callback)
 {
   set(parent, Caption, rc, style);
   set_font(*look.button_font);
@@ -46,8 +45,8 @@ bool
 WndButton::on_clicked()
 {
   // Call the OnClick function
-  if (mOnClickNotify != NULL) {
-    mOnClickNotify(*this);
+  if (click_callback != NULL) {
+    click_callback(*this);
     return true;
   }
 
@@ -58,8 +57,8 @@ bool
 WndButton::on_left()
 {
   // call on Left key function
-  if (mOnLeftNotify != NULL) {
-    mOnLeftNotify(*this);
+  if (left_callback != NULL) {
+    left_callback(*this);
     return true;
   }
   return false;
@@ -69,8 +68,8 @@ bool
 WndButton::on_right()
 {
   // call on Left key function
-  if (mOnRightNotify != NULL) {
-    mOnRightNotify(*this);
+  if (right_callback != NULL) {
+    right_callback(*this);
     return true;
   }
   return false;
@@ -81,10 +80,10 @@ WndButton::on_key_check(unsigned key_code) const
 {
   switch (key_code) {
   case VK_LEFT:
-    return mOnLeftNotify != NULL;
+    return left_callback != NULL;
 
   case VK_RIGHT:
-    return mOnRightNotify != NULL;
+    return right_callback != NULL;
 
   default:
     return ButtonWindow::on_key_check(key_code);
@@ -104,5 +103,3 @@ WndButton::on_key_down(unsigned key_code)
 
   return ButtonWindow::on_key_down(key_code);
 }
-
-

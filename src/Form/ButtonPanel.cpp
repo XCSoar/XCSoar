@@ -112,7 +112,7 @@ ButtonPanel::Resized(const PixelRect &area, unsigned count)
 
 WndButton *
 ButtonPanel::Add(const TCHAR *caption,
-                 WndButton::ClickNotifyCallback_t callback)
+                 WndButton::ClickNotifyCallback callback)
 {
   if (row_count == 0 || buttons.size() % row_capacity == 0)
     Resized(parent.get_client_rect(), buttons.size() + 1);
