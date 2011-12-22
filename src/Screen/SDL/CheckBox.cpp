@@ -152,15 +152,17 @@ CheckBox::on_cancel_mode()
 void
 CheckBox::on_paint(Canvas &canvas)
 {
-  Brush brush(pressed ? COLOR_GRAY : COLOR_WHITE);
+  if (has_focus())
+    canvas.clear(COLOR_XCSOAR_DARK);
+
+  Brush brush(pressed ? COLOR_XCSOAR_LIGHT : COLOR_WHITE);
   canvas.Select(brush);
 
-  if (has_focus())
-    canvas.Select(Pen(Layout::Scale(1) + 1, COLOR_BLACK));
-  else if (is_enabled())
+  if (is_enabled())
     canvas.SelectBlackPen();
   else
     canvas.Select(Pen(1, COLOR_GRAY));
+
   canvas.Rectangle(2, 2, canvas.get_height() - 4, canvas.get_height() - 4);
 
   if (checked) {
@@ -168,18 +170,10 @@ CheckBox::on_paint(Canvas &canvas)
     canvas.line(canvas.get_height() - 8, 4, 4, canvas.get_height() - 8);
   }
 
-  canvas.SetTextColor(is_enabled() ? COLOR_BLACK : COLOR_GRAY);
+  canvas.SetTextColor(
+      is_enabled() ? (has_focus() ? COLOR_WHITE : COLOR_BLACK) : COLOR_GRAY);
   canvas.SetBackgroundTransparent();
   canvas.text(canvas.get_height() + 2, 2, text.c_str());
-
-  if (has_focus()) {
-    const PixelRect rc = {
-      0, 0, PixelScalar(canvas.get_width() - 1),
-      PixelScalar(canvas.get_height() - 1),
-    };
-
-    canvas.DrawFocusRectangle(rc);
-  }
 }
 
 bool
