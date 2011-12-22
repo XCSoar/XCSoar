@@ -31,11 +31,6 @@ Copyright_License {
 void
 WndSymbolButton::on_paint(Canvas &canvas)
 {
-#ifdef HAVE_CLIPPING
-  /* background and selector */
-  canvas.clear(look.background_brush);
-#endif
-
   // Get button PixelRect and shrink it to make room for the selector/focus
   PixelRect rc = get_client_rect();
 
