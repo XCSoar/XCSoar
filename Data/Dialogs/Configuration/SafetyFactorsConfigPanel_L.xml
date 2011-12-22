@@ -17,7 +17,7 @@
   </Edit>
 
   <Edit Name="prpSafetyMacCready" Caption="Safety MC" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
-    Help="The MacCready setting used, when safety MC is enabled for reach calculations, in task abort mode, for determining arrival altitude at airfields.">
+    Help="The MacCready setting used, when safety MC is enabled for reach calculations, in task abort mode and for determining arrival altitude at airfields.">
     <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="10" Step="0.1" />
   </Edit>
 
