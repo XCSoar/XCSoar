@@ -26,13 +26,13 @@ Copyright_License {
 
 CheckBoxControl::CheckBoxControl(ContainerWindow &parent,
                                  const DialogLook &look,
-                                 const TCHAR *Caption,
+                                 const TCHAR *caption,
                                  const PixelRect &rc,
                                  const CheckBoxStyle style,
-                                 ClickNotifyCallback_t Function) :
-  mOnClickNotify(Function)
+                                 ClickNotifyCallback _click_notify_callback)
+  :click_notify_callback(_click_notify_callback)
 {
-  set(parent, Caption, rc, style);
+  set(parent, caption, rc, style);
   set_font(*look.text_font);
 }
 
@@ -40,8 +40,8 @@ bool
 CheckBoxControl::on_clicked()
 {
   // Call the OnClick function
-  if (mOnClickNotify != NULL) {
-    mOnClickNotify(*this);
+  if (click_notify_callback != NULL) {
+    click_notify_callback(*this);
     return true;
   }
 

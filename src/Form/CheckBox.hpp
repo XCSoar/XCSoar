@@ -35,7 +35,7 @@ class ContainerWindow;
  */
 class CheckBoxControl : public CheckBox {
 public:
-  typedef void (*ClickNotifyCallback_t)(CheckBoxControl &button);
+  typedef void (*ClickNotifyCallback)(CheckBoxControl &button);
 
 public:
   /**
@@ -46,19 +46,19 @@ public:
    * when the button is clicked
    */
   CheckBoxControl(ContainerWindow &parent, const DialogLook &look,
-                  const TCHAR *Caption,
+                  const TCHAR *caption,
                   const PixelRect &rc,
                   const CheckBoxStyle style,
-                  ClickNotifyCallback_t Function = NULL);
+                  ClickNotifyCallback click_notify_callback = NULL);
 
   /**
    * Sets the function that should be called when the button is pressed
    * @param Function Pointer to the function to be called
    */
   void
-  SetOnClickNotify(ClickNotifyCallback_t Function)
+  SetOnClickNotify(ClickNotifyCallback _click_notify_callback)
   {
-    mOnClickNotify = Function;
+    click_notify_callback = _click_notify_callback;
   }
 
   /**
@@ -79,7 +79,7 @@ private:
    * The callback-function that should be called when the button is pressed
    * @see SetOnClickNotify()
    */
-  ClickNotifyCallback_t mOnClickNotify;
+  ClickNotifyCallback click_notify_callback;
 };
 
 #endif

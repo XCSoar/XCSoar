@@ -739,8 +739,8 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
   } else if (_tcscmp(node.getName(), _T("CheckBox")) == 0) {
     // Determine click_callback function
-    CheckBoxControl::ClickNotifyCallback_t click_callback =
-      (CheckBoxControl::ClickNotifyCallback_t)
+    CheckBoxControl::ClickNotifyCallback click_callback =
+      (CheckBoxControl::ClickNotifyCallback)
       GetCallBack(lookup_table, node, _T("OnClick"));
 
     // Create the CheckBoxControl
