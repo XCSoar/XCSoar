@@ -35,19 +35,11 @@ Copyright_License {
 #ifdef _WIN32_WCE /* embedded Windows? */
 
 /* AlphaBlend() is implemented since WM5, but we need to load it
-   dynamically from coredll.dll */
+   dynamically from coredll.dll; importing the DLL symbol directly
+   fails on some hx4700 with WM5 */
 #if _WIN32_WCE >= 0x500
 #define HAVE_ALPHA_BLEND
-
-/* the AlphaBlend() prototype was missing in mingw32ce 3.15 */
-#include "_mingw.h"
-#if __MINGW32_MAJOR_VERSION > 3 || \
-  (__MINGW32_MAJOR_VERSION == 3 && __MINGW32_MINOR_VERSION >= 16)
-#define HAVE_BUILTIN_ALPHA_BLEND
-#else
 #define HAVE_DYNAMIC_ALPHA_BLEND
-#endif
-
 #endif
 
 #else /* !_WIN32_WCE */
