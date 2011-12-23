@@ -27,12 +27,17 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Features.hpp"
+#include "Look/DialogLook.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 
 /**
  * This class is used for creating buttons with symbols instead of text.
  * It is based on the WndButton class.
  */
-class WndSymbolButton : public WndButton {
+class WndSymbolButton : public WndButton
+{
+  ButtonRenderer renderer;
+
   static inline ButtonWindowStyle custom_painting(ButtonWindowStyle style) {
     style.enable_custom_painting();
     return style;
@@ -56,7 +61,7 @@ public:
                   const PixelRect &rc, const ButtonWindowStyle style,
                   ClickNotifyCallback Function = NULL)
     :WndButton(Parent, look, Caption, rc,
-               custom_painting(style), Function) {}
+               custom_painting(style), Function), renderer(look.button) {}
 
 protected:
   /**

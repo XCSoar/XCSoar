@@ -31,33 +31,28 @@ Copyright_License {
 void
 WndSymbolButton::on_paint(Canvas &canvas)
 {
-  // Get button PixelRect and shrink it to make room for the selector/focus
-  PixelRect rc = get_client_rect();
+  PixelRect rc = {
+    PixelScalar(0), PixelScalar(0), PixelScalar(canvas.get_width()),
+    PixelScalar(canvas.get_height())
+  };
 
-  // Draw button to the background
-  canvas.DrawButton(rc, is_down());
+  bool pressed = is_down();
 
-  // Draw focus rectangle
-  if (has_focus()) {
-    PixelRect focus_rc = rc;
-    InflateRect(&focus_rc, -3, -3);
-    canvas.DrawFocusRectangle(focus_rc);
-  }
-
+  renderer.DrawButton(canvas, rc, has_focus(), pressed);
   // If button has text on it
   tstring caption = get_text();
   if (caption.empty())
     return;
 
-  // If button is pressed, offset the text for 3D effect
-  if (is_down())
-    OffsetRect(&rc, 1, 1);
+  rc = renderer.GetDrawingRect(rc, pressed);
 
   canvas.SelectNullPen();
-  if (is_enabled())
-    canvas.SelectBlackBrush();
-  else
+  if (!is_enabled())
     canvas.Select(look.button.disabled.brush);
+  else if (has_focus())
+    canvas.Select(look.button.focused.foreground_brush);
+  else
+    canvas.Select(look.button.standard.foreground_brush);
 
   const char ch = (char)caption[0];
 
