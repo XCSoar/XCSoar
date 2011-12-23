@@ -25,6 +25,8 @@ Version 6.2.4 - not yet released
     (or volume keys on android devices).
   - fix crash in the .xci file parser
   - new translation: Korean
+* map
+  - performance improvements for large maps
 * settings
   - load configured METAR/TAF stations on startup
   - remember UTC offsets > +12 hours.

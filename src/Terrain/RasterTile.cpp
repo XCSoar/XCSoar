@@ -337,6 +337,12 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
     /* use all segments when loading the overview */
     return 0;
 
+  if (remaining_segments > 0) {
+    /* enable the follow-up segment */
+    --remaining_segments;
+    return 0;
+  }
+
   const MarkerSegmentInfo *segment = FindMarkerSegment(file_offset);
   if (segment == NULL)
     /* past the end of the recorded segment list; shouldn't happen */
@@ -354,6 +360,7 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
     skip_to = segment->file_offset;
   }
 
+  remaining_segments = segment->count;
   return skip_to - file_offset;
 }
 
@@ -385,13 +392,26 @@ RasterTileCache::MarkerSegment(long file_offset, unsigned id)
   if (operation != NULL)
     operation->SetProgressPosition(file_offset / 65536);
 
-  uint16_t tile = MarkerSegmentInfo::NO_TILE;
-  if (is_tile_segment(id) && !segments.empty())
+  if (is_tile_segment(id) && !segments.empty() &&
+      segments.last().IsTileSegment()) {
     /* this segment belongs to the same tile as the preceding SOT
        segment */
-    tile = segments.last().tile;
+    ++segments.last().count;
+    return;
+  }
 
-  segments.append(MarkerSegmentInfo(file_offset, tile));
+  if (segments.size() >= 2 && !segments.last().IsTileSegment() &&
+      !segments[segments.size() - 2].IsTileSegment()) {
+    /* the last two segments are both "generic" segments and can be merged*/
+    assert(segments.last().count == 0);
+
+    ++segments[segments.size() - 2].count;
+
+    /* reuse the second segment */
+    segments.last().file_offset = file_offset;
+  } else
+    segments.append(MarkerSegmentInfo(file_offset,
+                                      MarkerSegmentInfo::NO_TILE));
 }
 
 extern RasterTileCache *raster_tile_current;
@@ -506,6 +526,8 @@ RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
 {
   if (!PollTiles(x, y, radius))
     return;
+
+  remaining_segments = 0;
 
   LoadJPG2000(path);
 

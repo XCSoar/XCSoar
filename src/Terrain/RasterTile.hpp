@@ -212,9 +212,14 @@ protected:
      */
     uint16_t tile;
 
+    /**
+     * The number of follow-up segments.
+     */
+    uint16_t count;
+
     MarkerSegmentInfo() {}
     MarkerSegmentInfo(uint32_t _file_offset, int _tile=NO_TILE)
-      :file_offset(_file_offset), tile(_tile) {}
+      :file_offset(_file_offset), tile(_tile), count(0) {}
 
     bool IsTileSegment() const {
       return tile != NO_TILE;
@@ -256,6 +261,11 @@ protected:
   GeoBounds bounds;
 
   StaticArray<MarkerSegmentInfo, 8192> segments;
+
+  /**
+   * The number of remaining segments after the current one.
+   */
+  mutable unsigned remaining_segments;
 
   /**
    * An array that is used to sort the requested tiles by distance.
