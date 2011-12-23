@@ -218,8 +218,8 @@ protected:
    * @param key_code
    * @return
    */
-  virtual bool on_killfocus();
-  virtual bool on_setfocus();
+  virtual void on_killfocus();
+  virtual void on_setfocus();
   virtual bool on_key_check(unsigned key_code) const;
   virtual bool on_key_down(unsigned key_code);
 

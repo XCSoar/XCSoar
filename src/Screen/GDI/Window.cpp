@@ -127,8 +127,8 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_SIZE:
-    if (on_resize(LOWORD(lParam), HIWORD(lParam))) return 0;
-    break;
+    on_resize(LOWORD(lParam), HIWORD(lParam));
+    return 0;
 
   case WM_MOUSEMOVE:
     if (on_mouse_move(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), wParam))
@@ -208,14 +208,12 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_SETFOCUS:
-    if (on_setfocus())
-      return 0;
-    break;
+    on_setfocus();
+    return 0;
 
   case WM_KILLFOCUS:
-    if (on_killfocus())
-      return 0;
-    break;
+    on_killfocus();
+    return 0;
 
   case WM_TIMER:
     if (on_timer(*(WindowTimer *)wParam))

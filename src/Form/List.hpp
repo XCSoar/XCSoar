@@ -226,10 +226,10 @@ protected:
    * The on_resize event is called when the Control is resized
    * (derived from Window)
    */
-  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void on_resize(UPixelScalar width, UPixelScalar height);
 
-  virtual bool on_setfocus();
-  virtual bool on_killfocus();
+  virtual void on_setfocus();
+  virtual void on_killfocus();
 
   /**
    * The on_mouse_down event is called when the mouse is pressed over the button

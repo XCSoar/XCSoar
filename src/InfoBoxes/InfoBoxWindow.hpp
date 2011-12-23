@@ -193,7 +193,7 @@ protected:
    */
   virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
 
-  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void on_resize(UPixelScalar width, UPixelScalar height);
 
   /**
    * This event handler is called when the InfoBox needs to be repainted
@@ -202,15 +202,9 @@ protected:
   virtual void on_paint(Canvas &canvas);
 
   virtual bool on_cancel_mode();
+  virtual void on_setfocus();
+  virtual void on_killfocus();
 
-  /**
-   * This event handler is called when the InfoBox is getting focused
-   */
-  virtual bool on_setfocus();
-  /**
-   * This event handler is called when the InfoBox lost focus
-   */
-  virtual bool on_killfocus();
   /**
    * This event handler is called when a timer is triggered
    * @param id Id of the timer that triggered the handler

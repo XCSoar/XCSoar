@@ -31,7 +31,7 @@ Copyright_License {
 #include "Screen/WindowCanvas.hpp"
 #endif
 
-bool
+void
 MapWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   DoubleBufferWindow::on_resize(width, height);
@@ -49,8 +49,6 @@ MapWindow::on_resize(UPixelScalar width, UPixelScalar height)
 
   visible_projection.SetScreenSize(width, height);
   visible_projection.UpdateScreenBounds();
-
-  return true;
 }
 
 void

@@ -208,7 +208,7 @@ protected:
 #endif /* !ENABLE_SDL */
 
 #ifdef ANDROID
-  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void on_resize(UPixelScalar width, UPixelScalar height);
 
   /**
    * @see Event::PAUSE

@@ -46,13 +46,12 @@ BufferWindow::on_destroy()
   buffer.reset();
 }
 
-bool
+void
 BufferWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   buffer.resize(width, height);
   PaintWindow::on_resize(width, height);
   invalidate();
-  return true;
 }
 
 #endif

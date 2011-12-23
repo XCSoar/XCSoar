@@ -725,7 +725,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
   }
 }
 
-bool
+void
 GaugeVario::on_resize(UPixelScalar width, UPixelScalar height)
 {
   BufferWindow::on_resize(width, height);
@@ -737,6 +737,4 @@ GaugeVario::on_resize(UPixelScalar width, UPixelScalar height)
   needle_initialised = false;
   ballast_initialised = false;
   bugs_initialised = false;
-
-  return true;
 }

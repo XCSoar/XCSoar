@@ -146,7 +146,7 @@ TabbedControl::Save(bool &changed, bool &require_restart)
   return true;
 }
 
-bool
+void
 TabbedControl::on_resize(UPixelScalar width, UPixelScalar height)
 {
   ContainerWindow::on_resize(width, height);
@@ -158,8 +158,6 @@ TabbedControl::on_resize(UPixelScalar width, UPixelScalar height)
     assert(tab.prepared);
     tab.widget->Move(get_client_rect());
   }
-
-  return true;
 }
 
 void

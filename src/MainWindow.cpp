@@ -444,7 +444,7 @@ MainWindow::full_redraw()
 
 // Windows event handlers
 
-bool
+void
 MainWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   SingleWindow::on_resize(width, height);
@@ -466,8 +466,6 @@ MainWindow::on_resize(UPixelScalar width, UPixelScalar height)
   }
 
   ProgressGlue::Resize(width, height);
-
-  return true;
 }
 
 bool
@@ -480,9 +478,11 @@ MainWindow::on_activate()
   return true;
 }
 
-bool
+void
 MainWindow::on_setfocus()
 {
+  SingleWindow::on_setfocus();
+
   if (!has_dialog()) {
     /* the main window should never have the keyboard focus; if we
        happen to get the focus despite of that, forward it to the map
@@ -491,10 +491,7 @@ MainWindow::on_setfocus()
       map->set_focus();
     else if (widget != NULL)
       widget->SetFocus();
-    return true;
   }
-
-  return SingleWindow::on_setfocus();
 }
 
 bool

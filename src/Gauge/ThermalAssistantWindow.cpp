@@ -87,7 +87,7 @@ ThermalAssistantWindow::on_destroy()
   BufferWindow::on_destroy();
 }
 
-bool
+void
 ThermalAssistantWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   BufferWindow::on_resize(width, height);
@@ -96,8 +96,6 @@ ThermalAssistantWindow::on_resize(UPixelScalar width, UPixelScalar height)
   radius = min(height, width) / 2 - padding;
   mid.x = width / 2;
   mid.y = height / 2;
-
-  return true;
 }
 
 bool

@@ -79,29 +79,26 @@ WndListFrame::show_or_hide_scroll_bar()
     scroll_bar.reset();
 }
 
-bool
+void
 WndListFrame::on_resize(UPixelScalar width, UPixelScalar height)
 {
   PaintWindow::on_resize(width, height);
   items_visible = height / item_height;
   show_or_hide_scroll_bar();
-  return true;
 }
 
-bool
+void
 WndListFrame::on_setfocus()
 {
   PaintWindow::on_setfocus();
   invalidate_item(cursor);
-  return true;
 }
 
-bool
+void
 WndListFrame::on_killfocus()
 {
   PaintWindow::on_killfocus();
   invalidate_item(cursor);
-  return true;
 }
 
 void

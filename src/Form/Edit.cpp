@@ -126,23 +126,21 @@ WndProperty::Editor::on_key_up(unsigned key_code)
   return EditWindow::on_key_up(key_code);
 }
 
-bool
+void
 WndProperty::Editor::on_setfocus()
 {
   KeyTimer(true, 0);
   EditWindow::on_setfocus();
   parent->on_editor_setfocus();
   set_selection();
-  return true;
 }
 
-bool
+void
 WndProperty::Editor::on_killfocus()
 {
   KeyTimer(true, 0);
   parent->on_editor_killfocus();
   EditWindow::on_killfocus();
-  return true;
 }
 
 WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
@@ -268,12 +266,11 @@ WndProperty::on_editor_killfocus()
   invalidate();
 }
 
-bool
+void
 WndProperty::on_resize(UPixelScalar width, UPixelScalar height)
 {
   WindowControl::on_resize(width, height);
   UpdateLayout();
-  return true;
 }
 
 bool

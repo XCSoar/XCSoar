@@ -121,7 +121,7 @@ protected:
   void PaintNorth(Canvas &canvas) const;
 
 protected:
-  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void on_resize(UPixelScalar width, UPixelScalar height);
   virtual void on_paint(Canvas &canvas);
 };
 

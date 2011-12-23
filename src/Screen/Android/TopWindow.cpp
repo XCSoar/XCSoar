@@ -56,7 +56,7 @@ TopWindow::RefreshSize()
   resize(width, height);
 }
 
-bool
+void
 TopWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   if (native_view != NULL) {
@@ -65,7 +65,6 @@ TopWindow::on_resize(UPixelScalar width, UPixelScalar height)
   }
 
   ContainerWindow::on_resize(width, height);
-  return true;
 }
 
 void

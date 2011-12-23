@@ -213,8 +213,6 @@ protected:
   bool on_mouse_gesture(const TCHAR* gesture);
 
   virtual bool on_key_down(unsigned key_code);
-
-  virtual bool on_setfocus();
   virtual bool on_cancel_mode();
   virtual void on_paint(Canvas &canvas);
   virtual void on_paint_buffer(Canvas& canvas);

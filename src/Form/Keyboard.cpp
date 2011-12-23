@@ -192,13 +192,12 @@ KeyboardControl::on_command(unsigned id, unsigned code)
     return ContainerWindow::on_command(id, code);
 }
 
-bool
+void
 KeyboardControl::on_resize(UPixelScalar width, UPixelScalar height)
 {
   set_buttons_size();
   resize_buttons();
   move_buttons();
-  return true;
 }
 
 bool

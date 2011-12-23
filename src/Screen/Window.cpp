@@ -165,10 +165,9 @@ Window::on_close()
   return false;
 }
 
-bool
+void
 Window::on_resize(UPixelScalar width, UPixelScalar height)
 {
-  return false;
 }
 
 bool
@@ -257,20 +256,17 @@ Window::on_cancel_mode()
   return false;
 }
 
-bool
+void
 Window::on_setfocus()
 {
 #ifndef USE_GDI
   assert(!focused);
 
   focused = true;
-  return true;
-#else /* USE_GDI */
-  return false;
 #endif /* USE_GDI */
 }
 
-bool
+void
 Window::on_killfocus()
 {
 #ifndef USE_GDI
@@ -279,9 +275,6 @@ Window::on_killfocus()
   release_capture();
 
   focused = false;
-  return true;
-#else /* USE_GDI */
-  return false;
 #endif /* USE_GDI */
 }
 

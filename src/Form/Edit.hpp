@@ -69,18 +69,9 @@ class WndProperty : public WindowControl {
      * (derived from Window)
      */
     virtual bool on_key_up(unsigned key_code);
-    /**
-     * The on_setfocus event is called when the Control gets focused
-     * button is focused
-     * (derived from Window)
-     */
-    virtual bool on_setfocus();
-    /**
-     * The on_killfocus event is called when the Control loses focus
-     * button is focused
-     * (derived from Window)
-     */
-    virtual bool on_killfocus();
+
+    virtual void on_setfocus();
+    virtual void on_killfocus();
   };
 
   friend class Editor;
@@ -160,7 +151,7 @@ public:
   void BeginEditing();
 
 protected:
-  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void on_resize(UPixelScalar width, UPixelScalar height);
 
   /**
    * The on_mouse_down event is called when the mouse is pressed over the button

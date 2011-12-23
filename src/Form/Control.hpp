@@ -65,12 +65,13 @@ public:
    * The on_setfocus event is called when the control gets focused
    * (derived from Window)
    */
-  virtual bool on_setfocus();
+  virtual void on_setfocus();
+
   /**
    * The on_killfocus event is called when the control loses the focus
    * (derived from Window)
    */
-  virtual bool on_killfocus();
+  virtual void on_killfocus();
 
   /**
    * The on_key_down event is called when a key is pressed while the

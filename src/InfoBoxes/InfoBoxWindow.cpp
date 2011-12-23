@@ -381,7 +381,7 @@ InfoBoxWindow::on_destroy()
   PaintWindow::on_destroy();
 }
 
-bool
+void
 InfoBoxWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   PaintWindow::on_resize(width, height);
@@ -413,8 +413,6 @@ InfoBoxWindow::on_resize(UPixelScalar width, UPixelScalar height)
 
   value_and_comment_rect = value_rect;
   value_and_comment_rect.bottom = comment_rect.bottom;
-
-  return true;
 }
 
 bool
@@ -517,7 +515,7 @@ InfoBoxWindow::on_cancel_mode()
   return false;
 }
 
-bool
+void
 InfoBoxWindow::on_setfocus()
 {
   // Call the parent function
@@ -529,11 +527,9 @@ InfoBoxWindow::on_setfocus()
 
   // Redraw fast to paint the selector
   invalidate();
-
-  return true;
 }
 
-bool
+void
 InfoBoxWindow::on_killfocus()
 {
   // Call the parent function
@@ -544,8 +540,6 @@ InfoBoxWindow::on_killfocus()
 
   // Redraw fast to remove the selector
   invalidate();
-
-  return true;
 }
 
 bool

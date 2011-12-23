@@ -121,20 +121,18 @@ ButtonWindow::on_mouse_up(PixelScalar x, PixelScalar y)
   return true;
 }
 
-bool
+void
 ButtonWindow::on_setfocus()
 {
   PaintWindow::on_setfocus();
   invalidate();
-  return true;
 }
 
-bool
+void
 ButtonWindow::on_killfocus()
 {
   PaintWindow::on_killfocus();
   invalidate();
-  return true;
 }
 
 bool

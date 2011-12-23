@@ -307,7 +307,7 @@ TargetMapWindow::SetTarget(unsigned index)
   invalidate();
 }
 
-bool
+void
 TargetMapWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   BufferWindow::on_resize(width, height);
@@ -322,8 +322,6 @@ TargetMapWindow::on_resize(UPixelScalar width, UPixelScalar height)
   projection.SetScreenSize(width, height);
   projection.SetScreenOrigin(width / 2, height / 2);
   projection.UpdateScreenBounds();
-
-  return true;
 }
 
 void

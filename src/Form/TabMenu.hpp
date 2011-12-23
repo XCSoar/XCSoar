@@ -413,8 +413,8 @@ protected:
    */
   virtual void on_paint(Canvas &canvas);
 
-  virtual bool on_killfocus();
-  virtual bool on_setfocus();
+  virtual void on_killfocus();
+  virtual void on_setfocus();
 
   /**
    * draw border around main menu

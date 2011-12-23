@@ -101,18 +101,16 @@ WindowControl::on_key_up(unsigned key_code)
   return ContainerWindow::on_key_up(key_code);
 }
 
-bool
+void
 WindowControl::on_setfocus()
 {
   ContainerWindow::on_setfocus();
   invalidate();
-  return true;
 }
 
-bool
+void
 WindowControl::on_killfocus()
 {
   ContainerWindow::on_killfocus();
   invalidate();
-  return true;
 }

@@ -154,12 +154,11 @@ WndForm::GetClientAreaWindow(void)
   return client_area;
 }
 
-bool
+void
 WndForm::on_resize(UPixelScalar width, UPixelScalar height)
 {
   ContainerWindow::on_resize(width, height);
   UpdateLayout();
-  return true;
 }
 
 void

@@ -77,16 +77,14 @@ protected:
     return true;
   }
 
-  virtual bool on_setfocus() {
+  virtual void on_setfocus() {
     PaintWindow::on_setfocus();
     invalidate();
-    return true;
   }
 
-  virtual bool on_killfocus() {
+  virtual void on_killfocus() {
     PaintWindow::on_killfocus();
     invalidate();
-    return true;
   }
 
   virtual void on_paint(Canvas &canvas) {
@@ -156,11 +154,10 @@ public:
   }
 
 protected:
-  virtual bool on_resize(UPixelScalar width, UPixelScalar height) {
+  virtual void on_resize(UPixelScalar width, UPixelScalar height) {
     SingleWindow::on_resize(width, height);
     key_code_dumper.move(0, 0, width, (height + 1) / 2);
     close_button.move(0, (height + 1) / 2, width, height / 2);
-    return true;
   }
 
   virtual bool on_command(unsigned id, unsigned code) {

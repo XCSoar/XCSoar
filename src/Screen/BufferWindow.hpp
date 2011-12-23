@@ -71,7 +71,7 @@ protected:
   virtual void on_create();
   virtual void on_destroy();
 
-  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void on_resize(UPixelScalar width, UPixelScalar height);
 #endif
 
   virtual void on_paint(Canvas &canvas);

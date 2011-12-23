@@ -60,7 +60,7 @@ FlarmTrafficWindow::WarningMode() const
   return warning >= 0;
 }
 
-bool
+void
 FlarmTrafficWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   PaintWindow::on_resize(width, height);
@@ -69,8 +69,6 @@ FlarmTrafficWindow::on_resize(UPixelScalar width, UPixelScalar height)
   radius = min(height, width) / 2 - padding;
   radar_mid.x = width / 2;
   radar_mid.y = height / 2;
-
-  return true;
 }
 
 void

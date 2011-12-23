@@ -154,11 +154,10 @@ public:
 protected:
   virtual void on_paint(Canvas &canvas);
 
-  virtual bool on_resize(UPixelScalar width, UPixelScalar height) {
+  virtual void on_resize(UPixelScalar width, UPixelScalar height) {
     PaintWindow::on_resize(width, height);
     projection.SetScale(fixed(width) / 21000);
     projection.SetScreenOrigin(width / 2, height / 2);
-    return true;
   }
 };
 

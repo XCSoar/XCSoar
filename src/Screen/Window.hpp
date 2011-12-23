@@ -863,7 +863,7 @@ public:
   virtual void on_create();
   virtual void on_destroy();
   virtual bool on_close();
-  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void on_resize(UPixelScalar width, UPixelScalar height);
   virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
   virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
   virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
@@ -896,8 +896,8 @@ public:
   virtual bool on_key_up(unsigned key_code);
   virtual bool on_command(unsigned id, unsigned code);
   virtual bool on_cancel_mode();
-  virtual bool on_setfocus();
-  virtual bool on_killfocus();
+  virtual void on_setfocus();
+  virtual void on_killfocus();
   virtual bool on_timer(WindowTimer &timer);
   virtual bool on_user(unsigned id);
 

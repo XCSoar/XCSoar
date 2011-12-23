@@ -44,14 +44,6 @@ using std::min;
 using std::max;
 
 bool
-GlueMapWindow::on_setfocus()
-{
-  MapWindow::on_setfocus();
-
-  return true;
-}
-
-bool
 GlueMapWindow::on_mouse_double(PixelScalar x, PixelScalar y)
 {
   map_item_timer.Cancel();

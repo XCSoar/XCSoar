@@ -101,7 +101,7 @@ TerminalWindow::on_create()
   data.Reset();
 }
 
-bool
+void
 TerminalWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   PaintWindow::on_resize(width, height);
@@ -115,8 +115,6 @@ TerminalWindow::on_resize(UPixelScalar width, UPixelScalar height)
     cursor_y = data.GetHeight() - 1;
 
   invalidate();
-
-  return true;
 }
 
 void

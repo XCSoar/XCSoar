@@ -40,13 +40,12 @@ DoubleBufferWindow::on_destroy()
   PaintWindow::on_destroy();
 }
 
-bool
+void
 DoubleBufferWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   PaintWindow::on_resize(width, height);
   buffer.reset();
   invalidate();
-  return true;
 }
 
 #else /* !OpenGL */

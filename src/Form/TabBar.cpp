@@ -387,21 +387,18 @@ TabDisplay::on_paint(Canvas &canvas)
   }
 }
 
-bool
+void
 TabDisplay::on_killfocus()
 {
   invalidate();
   PaintWindow::on_killfocus();
-
-  return true;
 }
 
-bool
+void
 TabDisplay::on_setfocus()
 {
   invalidate();
   PaintWindow::on_setfocus();
-  return true;
 }
 
 bool

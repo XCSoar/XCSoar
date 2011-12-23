@@ -84,8 +84,8 @@ protected:
   virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
   virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
   virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
-  virtual bool on_setfocus();
-  virtual bool on_killfocus();
+  virtual void on_setfocus();
+  virtual void on_killfocus();
   virtual bool on_cancel_mode();
   virtual void on_paint(Canvas &canvas);
 

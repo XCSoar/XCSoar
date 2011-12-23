@@ -76,7 +76,7 @@ public:
 protected:
   virtual void on_paint(Canvas &canvas);
   virtual bool on_command(unsigned id, unsigned code);
-  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void on_resize(UPixelScalar width, UPixelScalar height);
 
 private:
   UPixelScalar button_width;

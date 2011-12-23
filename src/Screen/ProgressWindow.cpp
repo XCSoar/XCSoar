@@ -126,7 +126,7 @@ ProgressWindow::step()
   progress_bar.step();
 }
 
-bool
+void
 ProgressWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   ContainerWindow::on_resize(width, height);
@@ -147,8 +147,6 @@ ProgressWindow::on_resize(UPixelScalar width, UPixelScalar height)
                       progress_height);
 
   invalidate();
-
-  return true;
 }
 
 void
