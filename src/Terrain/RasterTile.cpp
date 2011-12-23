@@ -186,7 +186,7 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius)
      loaded are added to RequestTiles */
 
   RequestTiles.clear();
-  for (int i = tiles.GetSize() - 1; i >= 0; --i)
+  for (int i = tiles.GetSize() - 1; i >= 0 && !RequestTiles.full(); --i)
     if (tiles.GetLinear(i).VisibilityChanged(x, y, radius))
       RequestTiles.append(i);
 
