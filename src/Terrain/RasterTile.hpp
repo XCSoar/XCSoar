@@ -199,7 +199,7 @@ protected:
   friend struct RTDistanceSort;
 
   struct MarkerSegmentInfo {
-    static const int NO_TILE = -1;
+    static const uint16_t NO_TILE = (uint16_t)-1;
 
     /**
      * The position of this marker segment within the file.
@@ -210,23 +210,23 @@ protected:
      * The associated tile number.  -1 if this segment does not belong
      * to a tile.
      */
-    int tile;
+    uint16_t tile;
 
     MarkerSegmentInfo() {}
     MarkerSegmentInfo(uint32_t _file_offset, int _tile=NO_TILE)
       :file_offset(_file_offset), tile(_tile) {}
 
     bool IsTileSegment() const {
-      return tile >= 0;
+      return tile != NO_TILE;
     }
   };
 
   struct CacheHeader {
     enum {
 #ifdef FIXED_MATH
-      VERSION = 0x6,
+      VERSION = 0x8,
 #else
-      VERSION = 0x7,
+      VERSION = 0x9,
 #endif
     };
 
@@ -262,7 +262,7 @@ protected:
    * This is only used by PollTiles() internally, but is stored in the
    * class because it would be too large for the stack.
    */
-  StaticArray<unsigned short, MAX_RTC_TILES> RequestTiles;
+  StaticArray<uint16_t, MAX_RTC_TILES> RequestTiles;
 
   /**
    * Progress callbacks for loading the file during startup.

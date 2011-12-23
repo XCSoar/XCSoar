@@ -385,7 +385,7 @@ RasterTileCache::MarkerSegment(long file_offset, unsigned id)
   if (operation != NULL)
     operation->SetProgressPosition(file_offset / 65536);
 
-  int tile = MarkerSegmentInfo::NO_TILE;
+  uint16_t tile = MarkerSegmentInfo::NO_TILE;
   if (is_tile_segment(id) && !segments.empty())
     /* this segment belongs to the same tile as the preceding SOT
        segment */
