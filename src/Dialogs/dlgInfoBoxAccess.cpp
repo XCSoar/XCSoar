@@ -41,7 +41,15 @@ Copyright_License {
 #include <stdio.h>
 
 class CloseInfoBoxAccess : public XMLWidget {
+protected:
+  /**
+   * The parent form that needs to be closed
+   */
+  WndForm &wf;
 public:
+  CloseInfoBoxAccess(WndForm &_wf) :
+    wf(_wf) {
+  }
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Click();
   virtual void ReClick();
@@ -124,7 +132,7 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(const int id)
     wTabBar->AddTab(wSwitch, _("Switch InfoBox"));
   }
 
-  Widget *wClose = new CloseInfoBoxAccess();
+  Widget *wClose = new CloseInfoBoxAccess(*wf);
   wTabBar->AddTab(wClose, _("Close"));
 
   StaticString<32> buffer;
@@ -158,14 +166,14 @@ CloseInfoBoxAccess::Prepare(ContainerWindow &parent, const PixelRect &rc)
 bool
 CloseInfoBoxAccess::Click()
 {
-  dlgInfoBoxAccess::OnClose();
+  ReClick();
   return false;
 }
 
 void
 CloseInfoBoxAccess::ReClick()
 {
-  dlgInfoBoxAccess::OnClose();
+  wf.SetModalResult(mrOK);
 }
 
 bool
