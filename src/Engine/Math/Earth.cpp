@@ -109,6 +109,13 @@ IntermediatePoint(const GeoPoint loc1, const GeoPoint loc2, const fixed dthis)
   }
 }
 
+GeoPoint
+Middle(GeoPoint a, GeoPoint b)
+{
+  // TODO: optimize this naive approach
+  const fixed distance = Distance(a, b);
+  return IntermediatePoint(a, b, half(distance));
+}
 
 /**
  * Calculates the distance and bearing of two locations

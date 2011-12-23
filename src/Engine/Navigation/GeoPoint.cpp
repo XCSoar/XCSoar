@@ -63,6 +63,12 @@ GeoPoint::projected_distance(const GeoPoint &from,
   return ::ProjectedDistance(from, to, *this);
 }
 
+GeoPoint
+GeoPoint::Middle(const GeoPoint &other) const
+{
+  return ::Middle(*this, other);
+}
+
 bool 
 GeoPoint::equals(const GeoPoint &other) const
 {
