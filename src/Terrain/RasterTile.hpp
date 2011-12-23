@@ -32,6 +32,7 @@ Copyright_License {
 #include <tchar.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #define RASTER_SLOPE_FACT 12
 
@@ -199,13 +200,13 @@ protected:
 
   struct MarkerSegmentInfo {
     MarkerSegmentInfo() {}
-    MarkerSegmentInfo(long _file_offset, int _tile=-1)
+    MarkerSegmentInfo(uint32_t _file_offset, int _tile=-1)
       :file_offset(_file_offset), tile(_tile) {}
 
     /**
      * The position of this marker segment within the file.
      */
-    long file_offset;
+    uint32_t file_offset;
 
     /**
      * The associated tile number.  -1 if this segment does not belong
@@ -366,7 +367,7 @@ public:
 private:
   gcc_pure
   const MarkerSegmentInfo *
-  FindMarkerSegment(long file_offset) const;
+  FindMarkerSegment(uint32_t file_offset) const;
 
 public:
   /* callback methods for libjasper (via jas_rtc.cpp) */
