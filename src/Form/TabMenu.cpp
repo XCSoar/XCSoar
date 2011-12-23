@@ -166,7 +166,7 @@ TabMenuControl::SetCurrentPage(unsigned page)
     assert(butMain);
     StaticString<128> caption;
     caption.Format(_T("%s > %s"),
-                   gettext(butMain->caption), theitem.menu_caption);
+                   gettext(butMain->caption), gettext(theitem.menu_caption));
     form.SetCaption(caption);
   }
 }
