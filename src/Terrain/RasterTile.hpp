@@ -199,10 +199,6 @@ protected:
   friend struct RTDistanceSort;
 
   struct MarkerSegmentInfo {
-    MarkerSegmentInfo() {}
-    MarkerSegmentInfo(uint32_t _file_offset, int _tile=-1)
-      :file_offset(_file_offset), tile(_tile) {}
-
     /**
      * The position of this marker segment within the file.
      */
@@ -213,6 +209,10 @@ protected:
      * to a tile.
      */
     int tile;
+
+    MarkerSegmentInfo() {}
+    MarkerSegmentInfo(uint32_t _file_offset, int _tile=-1)
+      :file_offset(_file_offset), tile(_tile) {}
   };
 
   struct CacheHeader {
