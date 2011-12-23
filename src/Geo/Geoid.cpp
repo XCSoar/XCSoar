@@ -49,6 +49,7 @@ OpenGeoid(void)
     return;
   }
 
+  assert(data.second == EGM96SIZE);
   egm96data = (unsigned char *)malloc(data.second);
   memcpy(egm96data, data.first, data.second);
 }
