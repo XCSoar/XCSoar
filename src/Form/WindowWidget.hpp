@@ -53,6 +53,11 @@ protected:
     window = _window;
   }
 
+  /**
+   * Deletes the window object
+   */
+  void DeleteWindow();
+
   Window *GetWindow() {
     assert(window != NULL);
     return window;

@@ -31,6 +31,13 @@ WindowWidget::WindowWidget(Window *_window)
 }
 
 void
+WindowWidget::DeleteWindow()
+{
+  assert(window != NULL);
+  delete window;
+}
+
+void
 WindowWidget::Show(const PixelRect &rc)
 {
   assert(window != NULL);
