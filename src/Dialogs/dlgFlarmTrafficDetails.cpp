@@ -132,7 +132,7 @@ Update()
 
     // Fill the frequency field
     _tcscpy(tmp, record->frequency);
-    _tcscat(tmp, _T("MHz"));
+    _tcscat(tmp, _T(" MHz"));
     ((WndProperty *)wf->FindByName(_T("prpFrequency")))->SetText(tmp);
 
     // Fill the home airfield field
