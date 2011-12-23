@@ -539,6 +539,8 @@ RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
     if (tile.is_requested() && !tile.IsEnabled())
       tile.Clear();
   }
+
+  ++serial;
 }
 
 bool

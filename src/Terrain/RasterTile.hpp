@@ -27,6 +27,7 @@ Copyright_License {
 #include "Geo/GeoBounds.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
+#include "Util/Serial.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -252,6 +253,12 @@ protected:
 
   bool dirty;
 
+  /**
+   * This serial gets updated each time the tiles get loaded or
+   * discarded.
+   */
+  Serial serial;
+
   AllocatedGrid<RasterTile> tiles;
   unsigned short tile_width, tile_height;
 
@@ -372,6 +379,10 @@ public:
 
   bool GetInitialised() const {
     return initialised;
+  }
+
+  const Serial &GetSerial() const {
+    return serial;
   }
 
   void Reset();
