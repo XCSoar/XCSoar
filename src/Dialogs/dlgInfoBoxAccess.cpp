@@ -34,13 +34,12 @@ Copyright_License {
 #include "Form/TabBar.hpp"
 #include "Form/Form.hpp"
 #include "Form/Panel.hpp"
-#include "Form/XMLWidget.hpp"
 #include "Form/PanelWidget.hpp"
 
 #include <assert.h>
 #include <stdio.h>
 
-class CloseInfoBoxAccess : public XMLWidget {
+class CloseInfoBoxAccess : public PanelWidget {
 protected:
   /**
    * The parent form that needs to be closed
@@ -50,7 +49,6 @@ public:
   CloseInfoBoxAccess(WndForm &_wf) :
     wf(_wf) {
   }
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Click();
   virtual void ReClick();
 };
@@ -152,15 +150,6 @@ dlgInfoBoxAccess::OnClose()
 {
   wf->SetModalResult(mrOK);
   return true;
-}
-
-
-// panel close
-
-void
-CloseInfoBoxAccess::Prepare(ContainerWindow &parent, const PixelRect &rc)
-{
-  LoadWindow(NULL, parent, _T("IDR_XML_INFOBOXACCESSCLOSE"));
 }
 
 bool
