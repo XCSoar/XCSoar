@@ -73,6 +73,15 @@ AbstractTask::update_auto_mc(GlidePolar &glide_polar,
     trigger_auto = false;
   }
 
+  if (!trigger_auto &&
+      task_behaviour.auto_mc_mode == TaskBehaviour::AUTOMC_FINALGLIDE &&
+      stats.mc_best >= fixed(0.05)) {
+    /* no solution, but forced final glide AutoMacCready - converge to
+       zero */
+    mc_found = fixed_zero;
+    trigger_auto = true;
+  }
+
   if (trigger_auto) {
     // smooth out updates
     stats.mc_best = std::max(mc_lpf.update(mc_found), fixed_zero);

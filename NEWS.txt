@@ -8,6 +8,7 @@ Version 6.2.4 - not yet released
   - take terrain safety height into account for start point
   - calculate final glide MacCready even when no thermal was measured yet
   - fix rare crash in AutoMacCready calculation
+  - converge to AutoMacCready to zero when goal is unreachable
 * devices
   - Borgelt: send MacCready to B800 with CAI302 protocol
   - Flytec: fixed the $FLYSEN parser (more data, including GPS)
