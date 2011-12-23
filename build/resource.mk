@@ -195,8 +195,8 @@ DIALOG_FILES = $(wildcard Data/Dialogs/*.xml)
 DIALOG_FILES += $(wildcard Data/Dialogs/Infobox/*.xml)
 DIALOG_FILES += $(wildcard Data/Dialogs/Configuration/*.xml)
 
-DIALOG_COMPRESSED = $(patsubst Data/Dialogs/%.xml,$(DATA)/dialogs/%.xml,$(DIALOG_FILES))
-$(DIALOG_COMPRESSED): $(DATA)/dialogs/%.xml: Data/Dialogs/%.xml \
+DIALOG_COMPRESSED = $(patsubst Data/Dialogs/%.xml,$(DATA)/dialogs/%.xml.gz,$(DIALOG_FILES))
+$(DIALOG_COMPRESSED): $(DATA)/dialogs/%.xml.gz: Data/Dialogs/%.xml \
 	| $(DATA)/dialogs/Configuration/dirstamp $(DATA)/dialogs/Infobox/dirstamp
 	@$(NQ)echo "  GZIP    $@"
 	$(Q)gzip --best <$< >$@.tmp
