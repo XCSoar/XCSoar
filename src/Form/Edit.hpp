@@ -141,6 +141,10 @@ protected:
   void on_editor_killfocus();
 
 public:
+  void SetDataChangeCallback(DataChangeCallback_t data_change_callback) {
+    mOnDataChangeNotify = data_change_callback;
+  }
+
   void RefreshDisplay(void);
 
   void set_enabled(bool enabled) {
