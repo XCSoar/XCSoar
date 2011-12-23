@@ -69,6 +69,10 @@ public:
             DataAccessCallback_t OnDataAccess = NULL);
   virtual ~DataField(void) {}
 
+  void SetDataAccessCallback(DataAccessCallback_t _data_access_callback) {
+    mOnDataAccess = _data_access_callback;
+  }
+
   Type GetType() const {
     return type;
   }
