@@ -80,7 +80,11 @@ public:
   gcc_constexpr_ctor
   WindowStyle()
     :style(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
-     ex_style(0), double_clicks(false), custom_painting(false) {}
+     ex_style(0), double_clicks(false), custom_painting(false)
+#ifdef _WIN32_WCE
+    , dummy0(0), dummy1(0)
+#endif
+  {}
 #endif /* USE_GDI */
 
   /** The window is initially not visible. */
