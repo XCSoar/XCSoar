@@ -245,7 +245,8 @@ fixed ZeroFinder::find_zero_actual(const fixed xstart) {
       fc = fa;
     }
 
-    assert((b <= xmax) && (b >= xmin));
+    assert(b >= xmin);
+    assert(b <= xmax);
   }
 }
 
