@@ -24,7 +24,8 @@ Copyright_License {
 #ifndef GEOID_H
 #define GEOID_H
 
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Math/fixed.hpp"
+struct GeoPoint;
 
 /**
  * Load the EGM96 geoid resource into egm96data.

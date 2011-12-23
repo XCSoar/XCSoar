@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Geo/Geoid.hpp"
+#include "Engine/Navigation/GeoPoint.hpp"
 
 fixed
 LookupGeoidSeparation(const GeoPoint pt)

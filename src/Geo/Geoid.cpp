@@ -29,6 +29,7 @@ Copyright_License {
 
 #include "Geoid.hpp"
 #include "ResourceLoader.hpp"
+#include "Engine/Navigation/GeoPoint.hpp"
 
 #include <stdlib.h>
 #include <string.h>
