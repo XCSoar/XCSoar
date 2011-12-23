@@ -59,19 +59,18 @@ dlgWindSettingsShowModal(void)
 {
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
 		                  _T("IDR_XML_WINDSETTINGS"));
-  if (wf == NULL)
-    return;
+  assert(wf != NULL);
 
   const bool external_wind = XCSoarInterface::Basic().external_wind_available &&
     XCSoarInterface::SettingsComputer().use_external_wind;
 
-  WndProperty* wp;
-
   const SpeedVector wind = CommonInterface::Calculated().GetWindOrZero();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
-  if (wp) {
-    wp->set_enabled(!external_wind);
+  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
+  assert(wp != NULL);
+  wp->set_enabled(!external_wind);
+
+  {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
     df.SetUnits(Units::GetSpeedName());
@@ -80,8 +79,10 @@ dlgWindSettingsShowModal(void)
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
-  if (wp) {
-    wp->set_enabled(!external_wind);
+  assert(wp != NULL);
+  wp->set_enabled(!external_wind);
+
+  {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.Set(wind.bearing.Degrees());
     wp->RefreshDisplay();
@@ -107,7 +108,9 @@ dlgWindSettingsShowModal(void)
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpTrailDrift"));
-  if (wp) {
+  assert(wp != NULL);
+
+  {
     DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
     df.Set(XCSoarInterface::SettingsMap().trail_drift_enabled);
     wp->RefreshDisplay();
@@ -120,7 +123,8 @@ dlgWindSettingsShowModal(void)
 
   if (!external_wind) {
     wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
-    if (wp != NULL) {
+    assert(wp != NULL);
+    {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
       XCSoarInterface::SetSettingsComputer().manual_wind.norm =
         Units::ToSysWindSpeed(df.GetAsFixed());
@@ -128,7 +132,8 @@ dlgWindSettingsShowModal(void)
     }
 
     wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
-    if (wp != NULL) {
+    assert(wp != NULL);
+    {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
       XCSoarInterface::SetSettingsComputer().manual_wind.bearing =
         Angle::Degrees(df.GetAsFixed());
