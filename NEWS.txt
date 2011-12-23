@@ -22,6 +22,7 @@ Version 6.2.4 - not yet released
 * Altair
   - fix crash in InfoBox cursor movement
 * user interface
+  - restore the current menu after rotating the display
   - fix sorting by filename in file selector of task manager
   - allow modification of some additional infobox values with up/down keys
     (or volume keys on android devices).

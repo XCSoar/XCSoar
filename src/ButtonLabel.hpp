@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef BUTTON_LABEL_HPP
 #define BUTTON_LABEL_HPP
 
+#include "Screen/Point.hpp"
+
 #include <tchar.h>
 
 class Font;
@@ -41,6 +43,7 @@ public:
   static void Destroy();
   static void SetLabelText(unsigned i, const TCHAR *text);
   static bool IsEnabled(unsigned i);
+  static void OnResize(const PixelRect &rc);
 
   static bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
 };
