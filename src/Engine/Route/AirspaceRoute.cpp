@@ -21,7 +21,6 @@
  */
 #include "AirspaceRoute.hpp"
 #include "Navigation/SearchPointVector.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspacePolygon.hpp"
@@ -249,12 +248,13 @@ AirspaceRoute::synchronise(const Airspaces& master,
 {
   // @todo: also synchronise with AirspaceWarningManager to filter out items that are
   // acknowledged.
-  GeoVector vector(origin, destination);
   h_min = std::min(origin.altitude, std::min(destination.altitude, h_min));
   h_max = std::max(origin.altitude, std::max(destination.altitude, h_max));
   // @todo: have margin for h_max to allow for climb
   AirspacePredicateHeightRangeExcludeTwo condition(h_min, h_max, origin, destination);
-  if (m_airspaces.synchronise_in_range(master, vector.mid_point(origin), vector.Distance/2, condition))
+  if (m_airspaces.synchronise_in_range(master, origin.Middle(destination),
+                                       half(origin.distance(destination)),
+                                            condition))
   {
     if (m_airspaces.size())
       dirty = true;
