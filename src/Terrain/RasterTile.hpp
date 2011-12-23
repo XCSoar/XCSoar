@@ -199,6 +199,8 @@ protected:
   friend struct RTDistanceSort;
 
   struct MarkerSegmentInfo {
+    static const int NO_TILE = -1;
+
     /**
      * The position of this marker segment within the file.
      */
@@ -211,8 +213,12 @@ protected:
     int tile;
 
     MarkerSegmentInfo() {}
-    MarkerSegmentInfo(uint32_t _file_offset, int _tile=-1)
+    MarkerSegmentInfo(uint32_t _file_offset, int _tile=NO_TILE)
       :file_offset(_file_offset), tile(_tile) {}
+
+    bool IsTileSegment() const {
+      return tile >= 0;
+    }
   };
 
   struct CacheHeader {

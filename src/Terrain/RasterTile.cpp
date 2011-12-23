@@ -142,7 +142,7 @@ void
 RasterTileCache::SetTile(unsigned index,
                          int xstart, int ystart, int xend, int yend)
 {
-  if (!segments.empty() && segments.last().tile < 0)
+  if (!segments.empty() && !segments.last().IsTileSegment())
     /* link current marker segment with this tile */
     segments.last().tile = index;
 
@@ -343,7 +343,7 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
     return 0;
 
   long skip_to = segment->file_offset;
-  while (segment->tile >= 0 &&
+  while (segment->IsTileSegment() &&
          !tiles.GetLinear(segment->tile).is_requested()) {
     ++segment;
     if (segment >= segments.end())
@@ -385,7 +385,7 @@ RasterTileCache::MarkerSegment(long file_offset, unsigned id)
   if (operation != NULL)
     operation->SetProgressPosition(file_offset / 65536);
 
-  int tile = -1;
+  int tile = MarkerSegmentInfo::NO_TILE;
   if (is_tile_segment(id) && !segments.empty())
     /* this segment belongs to the same tile as the preceding SOT
        segment */
