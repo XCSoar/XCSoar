@@ -140,7 +140,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.location_available.Update(basic.clock);
 
   if (hasAltitude) {
-    fixed GeoidSeparation = LookupGeoidSeparation(basic.location);
+    fixed GeoidSeparation = EGM96::LookupSeparation(basic.location);
     basic.gps_altitude = fixed(altitude) - GeoidSeparation;
     basic.gps_altitude_available.Update(basic.clock);
   } else

@@ -40,7 +40,7 @@ Copyright_License {
 unsigned char* egm96data= NULL;
 
 void
-OpenGeoid(void)
+EGM96::Load()
 {
   ResourceLoader::Data data = ResourceLoader::Load(_T("IDR_RASTER_EGM96S"),
                                                    _T("RASTERDATA"));
@@ -56,7 +56,7 @@ OpenGeoid(void)
 }
 
 void
-CloseGeoid(void)
+EGM96::Close()
 {
   if (!egm96data)
     return;
@@ -66,7 +66,7 @@ CloseGeoid(void)
 }
 
 fixed
-LookupGeoidSeparation(const GeoPoint pt)
+EGM96::LookupSeparation(const GeoPoint pt)
 {
   if (!egm96data)
     return fixed_zero;

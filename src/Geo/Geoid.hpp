@@ -27,23 +27,26 @@ Copyright_License {
 #include "Math/fixed.hpp"
 struct GeoPoint;
 
-/**
- * Load the EGM96 geoid resource into egm96data.
- */
-void OpenGeoid(void);
+namespace EGM96
+{
+  /**
+   * Load the EGM96 geoid resource into egm96data.
+   */
+  void Load();
 
-/**
- * Clear the EGM96 from the memory
- */
-void CloseGeoid(void);
+  /**
+   * Clear the EGM96 from the memory
+   */
+  void Close();
 
-/**
- * Returns the geoid separation between the EGS96
- * and the WGS84 at the given latitude and longitude
- * @param lat Latitude
- * @param lon Longitude
- * @return The geoid separation
- */
-fixed LookupGeoidSeparation(const GeoPoint pt);
+  /**
+   * Returns the geoid separation between the EGS96
+   * and the WGS84 at the given latitude and longitude
+   * @param lat Latitude
+   * @param lon Longitude
+   * @return The geoid separation
+   */
+  fixed LookupSeparation(const GeoPoint pt);
+}
 
 #endif

@@ -593,7 +593,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
     //
     if (use_geoid) {
       // JMW TODO really need to know the actual device..
-      geoid_separation = LookupGeoidSeparation(info.location);
+      geoid_separation = EGM96::LookupSeparation(info.location);
       info.gps_altitude -= geoid_separation;
     }
   }

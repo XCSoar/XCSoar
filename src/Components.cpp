@@ -360,7 +360,7 @@ XCSoarInterface::Startup()
   replay = new Replay(&logger, *protected_task_manager);
 
   // Load the EGM96 geoid data
-  OpenGeoid();
+  EGM96::Load();
 
   GlidePolar &gp = SetSettingsComputer().glide_polar_task;
   gp = GlidePolar(fixed_zero);
@@ -626,7 +626,7 @@ XCSoarInterface::Shutdown(void)
   operation.Hide();
 
   // Clear the EGM96 database
-  CloseGeoid();
+  EGM96::Close();
 
   delete glide_computer;
 

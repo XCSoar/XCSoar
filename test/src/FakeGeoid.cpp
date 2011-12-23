@@ -25,7 +25,7 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 
 fixed
-LookupGeoidSeparation(const GeoPoint pt)
+EGM96::LookupSeparation(gcc_unused const GeoPoint pt)
 {
   return fixed_zero;
 }
