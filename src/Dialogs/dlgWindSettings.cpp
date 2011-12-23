@@ -34,7 +34,17 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
 
+struct WindDialogSettings
+{
+  SpeedVector wind;
+
+  uint8_t auto_wind_mode;
+  bool trail_drift_enabled;
+};
+
 static WndForm *wf = NULL;
+static bool external_wind;
+static WindDialogSettings settings;
 
 static void
 OnCancel(gcc_unused WndButton &Sender)
@@ -46,6 +56,152 @@ static void
 OnOK(gcc_unused WndButton &Sender)
 {
   wf->SetModalResult(mrOK);
+}
+
+static void
+SetFieldValues(const WindDialogSettings &settings)
+{
+  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
+  assert(wp != NULL);
+  {
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.Set(Units::ToUserWindSpeed(settings.wind.norm));
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
+  assert(wp != NULL);
+  {
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.Set(settings.wind.bearing.Degrees());
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpAutoWind"));
+  assert(wp != NULL);
+  if (!external_wind) {
+    DataFieldEnum *dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->Set(settings.auto_wind_mode);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpTrailDrift"));
+  assert(wp != NULL);
+  {
+    DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
+    df.Set(settings.trail_drift_enabled);
+    wp->RefreshDisplay();
+  }
+}
+
+static void
+GetFieldValues(WindDialogSettings &settings)
+{
+  if (!external_wind) {
+    WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
+    assert(wp != NULL);
+    {
+      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+      settings.wind.norm = Units::ToSysWindSpeed(df.GetAsFixed());
+    }
+
+    wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
+    assert(wp != NULL);
+    {
+      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+      settings.wind.bearing = Angle::Degrees(df.GetAsFixed());
+    }
+
+    SaveFormProperty(*wf, _T("prpAutoWind"), settings.auto_wind_mode);
+  }
+
+  SaveFormProperty(*wf, _T("prpTrailDrift"), settings.trail_drift_enabled);
+}
+
+static void
+ApplySettings(const WindDialogSettings &settings)
+{
+  if (!external_wind) {
+    XCSoarInterface::SetSettingsComputer().manual_wind = settings.wind;
+    XCSoarInterface::SetSettingsComputer().manual_wind_available.Update(
+        XCSoarInterface::Basic().clock);
+
+    XCSoarInterface::SetSettingsComputer().auto_wind_mode =
+        settings.auto_wind_mode;
+  }
+
+  XCSoarInterface::SetSettingsMap().trail_drift_enabled =
+      settings.trail_drift_enabled;
+
+  ActionInterface::SendSettingsMap();
+}
+
+static void
+SaveSettings(const WindDialogSettings &settings)
+{
+  if (!external_wind)
+    Profile::Set(szProfileAutoWind, settings.auto_wind_mode);
+
+  Profile::Set(szProfileTrailDrift, settings.trail_drift_enabled);
+}
+
+static void
+OnDataAccess(gcc_unused DataField *sender, DataField::DataAccessKind_t mode)
+{
+  if (mode != DataField::daChange)
+    return;
+
+  // Read field values
+  WindDialogSettings settings;
+  GetFieldValues(settings);
+
+  // Use field values
+  ApplySettings(settings);
+}
+
+static void
+InitFields()
+{
+  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
+  assert(wp != NULL);
+  wp->set_enabled(!external_wind);
+  {
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetDataAccessCallback(OnDataAccess);
+    df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
+    df.SetUnits(Units::GetSpeedName());
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
+  assert(wp != NULL);
+  wp->set_enabled(!external_wind);
+  {
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetDataAccessCallback(OnDataAccess);
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpAutoWind"));
+  assert(wp != NULL);
+  if (external_wind) {
+    wp->set_enabled(false);
+    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
+    df.addEnumText(_("External"));
+    df.Set(0);
+  } else {
+    DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->SetDataAccessCallback(OnDataAccess);
+    dfe->addEnumText(_("Manual"));
+    dfe->addEnumText(_("Circling"));
+    dfe->addEnumText(_("ZigZag"));
+    dfe->addEnumText(_("Both"));
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpTrailDrift"));
+  assert(wp != NULL);
+  {
+    DataField &df = *(DataField *)wp->GetDataField();
+    df.SetDataAccessCallback(OnDataAccess);
+  }
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
@@ -61,93 +217,30 @@ dlgWindSettingsShowModal(void)
 		                  _T("IDR_XML_WINDSETTINGS"));
   assert(wf != NULL);
 
-  const bool external_wind = XCSoarInterface::Basic().external_wind_available &&
-    XCSoarInterface::SettingsComputer().use_external_wind;
+  external_wind = XCSoarInterface::Basic().external_wind_available &&
+                  XCSoarInterface::SettingsComputer().use_external_wind,
 
-  const SpeedVector wind = CommonInterface::Calculated().GetWindOrZero();
+  // Save current settings
+  settings.wind = CommonInterface::Calculated().GetWindOrZero();
+  settings.auto_wind_mode = XCSoarInterface::SettingsComputer().auto_wind_mode;
+  settings.trail_drift_enabled = XCSoarInterface::SettingsMap().trail_drift_enabled;
 
-  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
-  assert(wp != NULL);
-  wp->set_enabled(!external_wind);
+  // Initialize field values
+  InitFields();
+  // Set fields according to settings
+  SetFieldValues(settings);
 
-  {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
-    df.SetUnits(Units::GetSpeedName());
-    df.Set(Units::ToUserWindSpeed(wind.norm));
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
-  assert(wp != NULL);
-  wp->set_enabled(!external_wind);
-
-  {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.Set(wind.bearing.Degrees());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoWind"));
-  assert(wp != NULL);
-  if (external_wind) {
-    wp->set_enabled(false);
-    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
-    df.addEnumText(_("External"));
-    df.Set(0);
-    wp->RefreshDisplay();
+  if (wf->ShowModal() == mrOK) {
+    // Read current settings
+    GetFieldValues(settings);
+    // Apply current settings
+    ApplySettings(settings);
+    // Save current settings to the profile
+    SaveSettings(settings);
   } else {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Manual"));
-    dfe->addEnumText(_("Circling"));
-    dfe->addEnumText(_("ZigZag"));
-    dfe->addEnumText(_("Both"));
-    dfe->Set(XCSoarInterface::SettingsComputer().auto_wind_mode);
-    wp->RefreshDisplay();
+    // Re-apply original setting
+    ApplySettings(settings);
   }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTrailDrift"));
-  assert(wp != NULL);
-
-  {
-    DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
-    df.Set(XCSoarInterface::SettingsMap().trail_drift_enabled);
-    wp->RefreshDisplay();
-  }
-
-  if (wf->ShowModal() != mrOK) {
-    delete wf;
-    return;
-  }
-
-  if (!external_wind) {
-    wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
-    assert(wp != NULL);
-    {
-      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-      XCSoarInterface::SetSettingsComputer().manual_wind.norm =
-        Units::ToSysWindSpeed(df.GetAsFixed());
-      XCSoarInterface::SetSettingsComputer().manual_wind_available.Update(XCSoarInterface::Basic().clock);
-    }
-
-    wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
-    assert(wp != NULL);
-    {
-      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-      XCSoarInterface::SetSettingsComputer().manual_wind.bearing =
-        Angle::Degrees(df.GetAsFixed());
-      XCSoarInterface::SetSettingsComputer().manual_wind_available.Update(XCSoarInterface::Basic().clock);
-    }
-
-    SaveFormProperty(*wf, _T("prpAutoWind"), szProfileAutoWind,
-                     XCSoarInterface::SetSettingsComputer().auto_wind_mode);
-  }
-
-  SaveFormProperty(*wf, _T("prpTrailDrift"),
-                   XCSoarInterface::SetSettingsMap().trail_drift_enabled);
-
-  ActionInterface::SendSettingsMap();
 
   delete wf;
 }
