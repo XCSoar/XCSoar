@@ -179,11 +179,10 @@ public:
    * Note that the visitor is not instantiated separately for each match
    * 
    * @param loc location of origin of search
-   * @param vec vector of line along with to search for intersections
+   * @param end end of line along with to search for intersections
    * @param visitor visitor class to call on airspaces intersected by line
    */
-  void visit_intersecting(const GeoPoint &loc, 
-                          const GeoVector &vec,
+  void VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
                           AirspaceIntersectionVisitor& visitor) const;
 
   /**

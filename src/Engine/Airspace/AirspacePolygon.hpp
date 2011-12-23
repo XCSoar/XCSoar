@@ -69,12 +69,11 @@ public:
    * Can be approximate by using flat-earth representation internally.
    * 
    * @param g1 Location of origin of search vector
-   * @param vec Line from origin
    * 
    * @return Vector of intersection pairs if the line intersects the airspace
    */
   AirspaceIntersectionVector Intersects(const GeoPoint &g1,
-                                        const GeoVector &vec) const;
+                                        const GeoPoint &end) const;
 
   GeoPoint ClosestPoint(const GeoPoint &loc) const;
 

@@ -9,6 +9,7 @@ Version 6.2.4 - not yet released
   - calculate final glide MacCready even when no thermal was measured yet
   - fix rare crash in AutoMacCready calculation
   - converge AutoMacCready to zero when goal is unreachable
+  - fix crash with far away task
 * devices
   - Borgelt: send MacCready to B800 with CAI302 protocol
   - Flytec: fixed the $FLYSEN parser (more data, including GPS)

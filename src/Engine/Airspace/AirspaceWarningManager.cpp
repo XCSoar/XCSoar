@@ -287,8 +287,7 @@ AirspaceWarningManager::update_predicted(const AircraftState& state,
                                              warning_state, max_time_limit,
                                              ceiling);
 
-  GeoVector vector_predicted(state.location, location_predicted);
-  m_airspaces.visit_intersecting(state.location, vector_predicted, visitor);
+  m_airspaces.VisitIntersecting(state.location, location_predicted, visitor);
 
   visitor.set_mode(true);
   m_airspaces.visit_inside(state.location, visitor);
@@ -382,9 +381,8 @@ AirspaceWarningManager::update_inside(const AircraftState& state)
 
     if (warning.state_accepted(AirspaceWarning::WARNING_INSIDE)) {
       GeoPoint c = airspace.ClosestPoint(state.location);
-      GeoVector vector_exit(state.location, c);
       AirspaceInterceptSolution solution;
-      airspace.Intercept(state, vector_exit, m_perf_glide, solution); 
+      airspace.Intercept(state, c, m_perf_glide, solution); 
 
       warning.update_solution(AirspaceWarning::WARNING_INSIDE, solution);
       found = true;

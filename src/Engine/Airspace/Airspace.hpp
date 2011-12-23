@@ -138,12 +138,12 @@ public:
    * the query to the enclosed concrete airspace.
    * 
    * @param g1 Location of origin of search vector
-   * @param vec Line from origin
+   * @param end the end of the search vector
    * 
    * @return true if the line intersects the airspace
    */
   gcc_pure
-  AirspaceIntersectionVector intersects(const GeoPoint& g1, const GeoVector &vec) const;
+  AirspaceIntersectionVector Intersects(const GeoPoint& g1, const GeoPoint &end) const;
 
   /** 
    * Destroys concrete airspace enclosed by this instance if present.

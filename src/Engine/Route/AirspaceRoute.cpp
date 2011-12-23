@@ -118,9 +118,8 @@ AirspaceRoute::first_intersecting(const RouteLink& e) const
 {
   const GeoPoint origin(task_projection.unproject(e.first));
   const GeoPoint dest(task_projection.unproject(e.second));
-  const GeoVector v(origin, dest);
   AIV visitor(e, task_projection, rpolars_route);
-  m_airspaces.visit_intersecting(origin, v, visitor);
+  m_airspaces.VisitIntersecting(origin, dest, visitor);
   const AIV::AIVResult res (visitor.get_nearest());
   count_airspace++;
   return std::make_pair(res.first, res.second);
