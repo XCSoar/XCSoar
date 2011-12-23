@@ -21,6 +21,6 @@
   <Edit Name="prpVSpeed" Caption="Vario" X="10" Y="90" Height="22" CaptionWidth="70" ReadOnly="1" />
   <Edit Name="prpPilot" Caption="Pilot" X="10" Y="120" Height="22" CaptionWidth="70" ReadOnly="1" />
   <Edit Name="prpAirport" Caption="Airport" X="10" Y="140" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpFrequency" Caption="Freq." X="10" Y="160" Height="22" CaptionWidth="70" ReadOnly="1" />
+  <Edit Name="prpFrequency" Caption="Radio frequency" X="10" Y="160" Height="22" CaptionWidth="70" ReadOnly="1" />
   <Edit Name="prpPlaneType" Caption="Plane" X="10" Y="180" Height="22" CaptionWidth="70" ReadOnly="1" />
 </Form>
