@@ -299,9 +299,7 @@ dlgFlarmTrafficDetailsShowModal(FlarmId id)
   wf = LoadDialog(CallBackTable,
       XCSoarInterface::main_window, Layout::landscape ?
       _T("IDR_XML_FLARMTRAFFICDETAILS_L") : _T("IDR_XML_FLARMTRAFFICDETAILS"));
-
-  if (!wf)
-    return;
+  assert(wf != NULL);
 
   // Set dialog events
   wf->SetTimerNotify(OnTimerNotify);
