@@ -66,34 +66,41 @@ UpdateChanging()
   const FlarmTraffic* target =
       XCSoarInterface::Basic().flarm.FindTraffic(target_id);
 
-  // If target moved out of range -> return
-  if (!target || !target->IsDefined())
-    return;
+  bool target_ok = target && target->IsDefined();
 
   // Fill distance field
-  Units::FormatUserDistance(target->distance, tmp, 20);
+  if (target_ok)
+    Units::FormatUserDistance(target->distance, tmp, 20);
+  else
+    _tcscpy(tmp, _T("--"));
   ((WndProperty *)wf->FindByName(_T("prpDistance")))->SetText(tmp);
 
   // Fill horizontal direction field
-  FormatAngleDelta(tmp, ARRAY_SIZE(tmp),
-                   target->Bearing() - CommonInterface::Basic().track);
+  if (target_ok)
+    FormatAngleDelta(tmp, ARRAY_SIZE(tmp),
+                     target->Bearing() - CommonInterface::Basic().track);
+  else
+    _tcscpy(tmp, _T("--"));
   ((WndProperty *)wf->FindByName(_T("prpDirectionH")))->SetText(tmp);
 
   // Fill altitude field
-  if (target->altitude_available)
+  if (target_ok && target->altitude_available)
     Units::FormatUserAltitude(target->altitude, tmp, 20);
   else
     _tcscpy(tmp, _T("--"));
   ((WndProperty *)wf->FindByName(_T("prpAltitude")))->SetText(tmp);
 
   // Fill vertical direction field
-  Angle dir = Angle::Radians((fixed)atan2(target->relative_altitude,
-                                          target->distance)).AsDelta();
-  FormatVerticalAngleDelta(tmp, ARRAY_SIZE(tmp), dir);
+  if (target_ok) {
+    Angle dir = Angle::Radians((fixed)atan2(target->relative_altitude,
+                                            target->distance)).AsDelta();
+    FormatVerticalAngleDelta(tmp, ARRAY_SIZE(tmp), dir);
+  } else
+    _tcscpy(tmp, _T("--"));
   ((WndProperty *)wf->FindByName(_T("prpDirectionV")))->SetText(tmp);
 
   // Fill climb speed field
-  if (target->climb_rate_avg30s_available)
+  if (target_ok && target->climb_rate_avg30s_available)
     Units::FormatUserVSpeed(target->climb_rate_avg30s, tmp, 20);
   else
     _tcscpy(tmp, _T("--"));
