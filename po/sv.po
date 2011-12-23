@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-23 01:31+0100\n"
-"PO-Revision-Date: 2011-12-21 10:49+0000\n"
-"Last-Translator: Rolf Lindgren <Unknown>\n"
+"PO-Revision-Date: 2011-12-22 16:11+0000\n"
+"Last-Translator: 113Bom <Unknown>\n"
 "Language-Team: none\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-21 13:40+0000\n"
-"X-Generator: Launchpad (build 14538)\n"
+"X-Launchpad-Export-Date: 2011-12-22 23:48+0000\n"
+"X-Generator: Launchpad (build 14560)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -120,7 +120,7 @@ msgstr "Ingen logger ansluten"
 #: src/Logger/ExternalLogger.cpp:110
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:393
 msgid "Declare task"
-msgstr ""
+msgstr "Deklarera bana"
 
 #: src/Logger/ExternalLogger.cpp:268
 msgid "Failed to enable download mode."
@@ -254,6 +254,8 @@ msgid ""
 "Arm\n"
 "Start"
 msgstr ""
+"Sätt i \n"
+"startläge"
 
 #: src/ExpandMacros.cpp:297
 msgid ""
@@ -537,32 +539,32 @@ msgstr "TL Avg"
 msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
-msgstr ""
+msgstr "Hela höjdvinsten i senaste blåsan delat med tiden i blåsan."
 
 #: src/InfoBoxes/Content/Factory.cpp:158
 #, no-c-format
 msgid "Last thermal gain"
-msgstr ""
+msgstr "Höjdvinst i senaste blåsan"
 
 #: src/InfoBoxes/Content/Factory.cpp:159
 #, no-c-format
 msgid "TL Gain"
-msgstr ""
+msgstr "TL Gain"
 
 #: src/InfoBoxes/Content/Factory.cpp:160
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr ""
+msgstr "Total höjd vinst/förlust i sensate blåsan."
 
 #: src/InfoBoxes/Content/Factory.cpp:168
 #, no-c-format
 msgid "Last thermal time"
-msgstr ""
+msgstr "tid kurvning i senaste blåsan"
 
 #: src/InfoBoxes/Content/Factory.cpp:169
 #, no-c-format
 msgid "TL Time"
-msgstr ""
+msgstr "TL tid"
 
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
@@ -586,16 +588,18 @@ msgid ""
 "manual or auto. (Touchscreen/PC only) Also used to adjust the MacCready "
 "Setting if the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
+"Nuvarande MacCready värde. Denna infobox visar också om värdet är manuellt "
+"satt eller automatiskt."
 
 #: src/InfoBoxes/Content/Factory.cpp:188
 #, no-c-format
 msgid "Next distance"
-msgstr ""
+msgstr "Nästa ben"
 
 #: src/InfoBoxes/Content/Factory.cpp:189
 #, no-c-format
 msgid "WP Dist"
-msgstr ""
+msgstr "Brytpunkt avstånd"
 
 #: src/InfoBoxes/Content/Factory.cpp:190
 #, no-c-format
@@ -603,11 +607,13 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
+"Avståndet till vald brytpunkt. För AAT-banor visas avståndet till \"target"
+"\"inom AAT-sektorn."
 
 #: src/InfoBoxes/Content/Factory.cpp:198
 #, no-c-format
 msgid "Next altitude difference"
-msgstr ""
+msgstr "Höjdskillnad nästa BP."
 
 #: src/InfoBoxes/Content/Factory.cpp:199
 #, no-c-format
@@ -618,12 +624,12 @@ msgstr ""
 #, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height."
-msgstr ""
+msgstr "Ankomsthöjd över säkerhetsmarginalen vid nästa brytpunkt."
 
 #: src/InfoBoxes/Content/Factory.cpp:208
 #, no-c-format
 msgid "Next altitude required"
-msgstr ""
+msgstr "Höjd för nästa BP"
 
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, no-c-format
@@ -638,7 +644,7 @@ msgstr "Extra höjd som behövs för att nå nästa brytpunkt"
 #: src/InfoBoxes/Content/Factory.cpp:218
 #, no-c-format
 msgid "Next waypoint"
-msgstr ""
+msgstr "Nästa brytpunkt"
 
 #: src/InfoBoxes/Content/Factory.cpp:219 src/InfoBoxes/Content/Task.cpp:80
 #, no-c-format
@@ -657,12 +663,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:228
 #, no-c-format
 msgid "Final altitude difference"
-msgstr ""
+msgstr "Höjdskillnad för final"
 
 #: src/InfoBoxes/Content/Factory.cpp:229
 #, no-c-format
 msgid "Fin AltD"
-msgstr ""
+msgstr "Fin Hjd"
 
 #: src/InfoBoxes/Content/Factory.cpp:230
 #, no-c-format
@@ -5633,7 +5639,9 @@ msgstr ""
 #: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:9
 #, fuzzy
 msgid "FLARM traffic"
-msgstr "Ingen trafik"
+msgstr ""
+"FLARM\n"
+"Detaljer"
 
 #: Data/Dialogs/dlgVario.xml:402 Data/Dialogs/dlgVario_L.xml:401
 msgid "V terrain"
@@ -8219,21 +8227,23 @@ msgstr ""
 
 #: Data/Input/default.xci:684
 msgid "Vario ASI zeroed"
-msgstr ""
+msgstr "Vario nollad"
 
 #: Data/Input/default.xci:691
 msgid "Accelerometer leveled"
-msgstr ""
+msgstr "Acelerometer nollad"
 
 #: Data/Input/default.xci:440 Data/Input/default.xci:1045
 msgid ""
 "Pan\n"
 "On"
 msgstr ""
+"Panorering\n"
+"På"
 
 #: Data/Input/default.xci:43
 msgid "Waiting for GPS fix"
-msgstr "Väntar på GPS-låsning"
+msgstr "Väntar på GPS fix"
 
 #: Data/Input/default.xci:59
 msgid "Takeoff"
@@ -8248,12 +8258,16 @@ msgid ""
 "ASI\n"
 "Zero"
 msgstr ""
+"Hastighetsmätare\n"
+"nollad"
 
 #: Data/Input/default.xci:433 Data/Input/default.xci:1038
 msgid ""
 "Mark\n"
 "Drop"
 msgstr ""
+"Sätt\n"
+"Markering"
 
 #: Data/Input/default.xci:38
 msgid "Restarting comm. ports"
@@ -8261,7 +8275,7 @@ msgstr "Startar om Com-portar"
 
 #: Data/Input/default.xci:699
 msgid "Stored to EEPROM"
-msgstr ""
+msgstr "Sparad i EEPROM"
 
 #: Data/Input/default.xci:666
 msgid "Accel"
@@ -8269,7 +8283,7 @@ msgstr ""
 
 #: Data/Input/default.xci:831
 msgid "Credits"
-msgstr ""
+msgstr "Kudos!"
 
 #: Data/Input/default.xci:141 Data/Input/default.xci:415
 #: Data/Input/default.xci:931
@@ -8277,24 +8291,32 @@ msgid ""
 "Zoom\n"
 "Out"
 msgstr ""
+"Zooma\n"
+"ut"
 
 #: Data/Input/default.xci:714
 msgid ""
 "Climb\n"
 "Demo"
 msgstr ""
+"Höjdvinst\n"
+"Demo"
 
 #: Data/Input/default.xci:853
 msgid ""
 "Message\n"
 "Repeat"
 msgstr ""
+"Meddelande\n"
+"Repetera"
 
 #: Data/Input/default.xci:804
 msgid ""
 "FLARM\n"
 "Details"
 msgstr ""
+"FLARM\n"
+"Detaljer"
 
 #: Data/Input/default.xci:134 Data/Input/default.xci:408
 #: Data/Input/default.xci:924
@@ -8302,6 +8324,8 @@ msgid ""
 "Zoom\n"
 "In"
 msgstr ""
+"Zooma\n"
+"in"
 
 #: Data/Input/default.xci:913
 msgid "Return"
@@ -8310,29 +8334,33 @@ msgstr ""
 #: Data/Input/default.xci:303 Data/Input/default.xci:352
 #: Data/Input/default.xci:864
 msgid "Nav"
-msgstr ""
+msgstr "Nav"
 
 #: Data/Input/default.xci:570 Data/Input/default.xci:1116
 msgid ""
 "Settings\n"
 "Airspace"
 msgstr ""
+"Inställningar\n"
+"Luftrum"
 
 #: Data/Input/default.xci:700
 msgid "Store"
-msgstr ""
+msgstr "Lagra"
 
 #: Data/Input/default.xci:797
 msgid ""
 "Team\n"
 "Code"
 msgstr ""
+"Team\n"
+"Kod"
 
 #: Data/Input/default.xci:506
 msgid ""
 "MacCready\n"
 "+"
-msgstr ""
+msgstr "MacCready"
 
 #: Data/Input/default.xci:64
 msgid "Landing"
@@ -8343,6 +8371,8 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+"METAR\n"
+"TAF"
 
 #~ msgid "Declare Task?"
 #~ msgstr "Deklarera Bana?"
