@@ -40,7 +40,7 @@ typedef BOOL (*AlphaBlend_t)(HDC hdcDest,
                              int wSrc, int hSrc,
                              BLENDFUNCTION ftn);
 
-extern AlphaBlend_t AlphaBlend;
+extern AlphaBlend_t alpha_blend_pointer;
 
 void
 AlphaBlendInit();
@@ -51,8 +51,10 @@ AlphaBlendDeinit();
 static inline bool
 AlphaBlendAvailable()
 {
-  return AlphaBlend != NULL;
+  return alpha_blend_pointer != NULL;
 }
+
+#define AlphaBlendInvoke alpha_blend_pointer
 
 #elif defined(HAVE_BUILTIN_ALPHA_BLEND)
 
@@ -61,6 +63,8 @@ AlphaBlendAvailable()
 {
   return true;
 }
+
+#define AlphaBlendInvoke AlphaBlend
 
 #else
 #error No alpha blending

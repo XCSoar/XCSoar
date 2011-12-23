@@ -31,7 +31,7 @@ Copyright_License {
 
 static DynamicLibrary *coredll;
 
-AlphaBlend_t AlphaBlend;
+AlphaBlend_t alpha_blend_pointer;
 
 void
 AlphaBlendInit()
@@ -45,8 +45,8 @@ AlphaBlendInit()
     return;
   }
 
-  AlphaBlend = (AlphaBlend_t)coredll->lookup(_T("AlphaBlend"));
-  if (AlphaBlend == NULL) {
+  alpha_blend_pointer = (AlphaBlend_t)coredll->lookup(_T("AlphaBlend"));
+  if (alpha_blend_pointer == NULL) {
     delete coredll;
     coredll = NULL;
   }

@@ -482,9 +482,7 @@ public:
                    int src_x, int src_y,
                    unsigned src_width, unsigned src_height,
                    uint8_t alpha) {
-#ifdef HAVE_DYNAMIC_ALPHA_BLEND
-    assert(AlphaBlend != NULL);
-#endif
+    assert(AlphaBlendAvailable());
 
     BLENDFUNCTION fn;
     fn.BlendOp = AC_SRC_OVER;
@@ -492,9 +490,9 @@ public:
     fn.SourceConstantAlpha = alpha;
     fn.AlphaFormat = 0;
 
-    ::AlphaBlend(dc, dest_x, dest_y, dest_width, dest_height,
-                 src, src_x, src_y, src_width, src_height,
-                 fn);
+    ::AlphaBlendInvoke(dc, dest_x, dest_y, dest_width, dest_height,
+                       src, src_x, src_y, src_width, src_height,
+                       fn);
   }
 
   void alpha_blend(int dest_x, int dest_y,
