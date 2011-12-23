@@ -25,7 +25,6 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Profile/DisplayConfig.hpp"
 #include "Asset.hpp"
 #include "Simulator.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
@@ -75,7 +74,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "IO/FileCache.hpp"
 #include "Hardware/AltairControl.hpp"
-#include "Hardware/Display.hpp"
+#include "Hardware/DisplayGlue.hpp"
 #include "Compiler.h"
 #include "NMEA/Aircraft.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -152,44 +151,6 @@ XCSoarInterface::LoadProfile()
   Units::SetConfig(GetUISettings().units);
 
   return true;
-}
-
-static void
-LoadDisplayOrientation(VerboseOperationEnvironment &env)
-{
-  if (!Display::RotateSupported())
-    return;
-
-  Display::RotateInitialize();
-
-  Display::orientation orientation = Profile::GetDisplayOrientation();
-  if (orientation == Display::ORIENTATION_DEFAULT)
-    return;
-
-  if (!Display::Rotate(orientation)) {
-    LogStartUp(_T("Display rotation failed"));
-    return;
-  }
-
-  LogStartUp(_T("Display rotated"));
-
-  XCSoarInterface::main_window.Initialise();
-
-  /* force the progress dialog to update its layout */
-  env.UpdateLayout();
-}
-
-static void
-RestoreDisplayOrientation()
-{
-  if (!Display::RotateSupported())
-    return;
-
-  Display::orientation orientation = Profile::GetDisplayOrientation();
-  if (orientation == Display::ORIENTATION_DEFAULT)
-    return;
-
-  Display::RotateRestore();
 }
 
 void
@@ -300,7 +261,7 @@ XCSoarInterface::Startup()
 
   InitAsset();
 
-  LoadDisplayOrientation(operation);
+  Display::LoadOrientation(operation);
 
   main_window.InitialiseConfigured();
 
@@ -644,7 +605,7 @@ XCSoarInterface::Shutdown(void)
 
   CloseLanguageFile();
 
-  RestoreDisplayOrientation();
+  Display::RestoreOrientation();
 
   StartupLogFreeRamAndStorage();
 
