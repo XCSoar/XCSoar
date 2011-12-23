@@ -1,26 +1,27 @@
 <?xml version="1.0"?>
 
 <Form Caption="FLARM Traffic Details">
-  <Button Name="cmdCallsign" Caption="..." X="-38" Y="20" Width="36" Height="22" OnClick="OnCallsignClicked" />
+  <Button Name="cmdSetAsTeamMate" Caption="Team" Y="-35" Width="120" Height="35" OnClick="OnTeamClicked" />
+  <Button Name="cmdClose" Caption="Close" X="120" Y="-35" Height="35" OnClick="OnCloseClicked" />
 
-  <Label X="3" Y="-97" Width="58" Height="16" Caption="Friends" />
-  <SymbolButton Name="cmdFriendGreen" Caption="Green" X="3" Y="-80" Width="28" Height="28" OnClick="OnFriendGreenClicked" />
-  <SymbolButton Name="cmdFriendBlue" Caption="Blue" X="33" Y="-80" Width="28" Height="28" OnClick="OnFriendBlueClicked" />
-  <SymbolButton Name="cmdFriendYellow" Caption="Yellow" X="63" Y="-80" Width="28" Height="28" OnClick="OnFriendYellowClicked" />
-  <SymbolButton Name="cmdFriendMagenta" Caption="Magenta" X="93" Y="-80" Width="28" Height="28" OnClick="OnFriendMagentaClicked" />
-  <Button Name="cmdFriendClear" Caption="Clear" X="123" Y="-80" Width="58" Height="28" OnClick="OnFriendClearClicked" />
+  <Edit Name="prpCallsign" Caption="Callsign" Y="0" Height="22" CaptionWidth="80" ReadOnly="1" />
+  <Button Name="cmdCallsign" Caption="Change callsign" X="80" Height="22" OnClick="OnCallsignClicked" />
 
-  <Button Name="cmdClose" Caption="Close" X="3" Y="-30" Width="58" Height="28" OnClick="OnCloseClicked" />
-  <Button Name="cmdSetAsTeamMate" Caption="Team" X="-61" Y="-30" Width="58" Height="28" OnClick="OnTeamClicked" />
+  <Edit Name="prpDistance" Caption="Distance" Y="55" Width="-60" Height="22" CaptionWidth="80" ReadOnly="1" />
+  <Edit Name="prpDirectionH" X="-60" Y="55" Height="22" ReadOnly="1" />
+  <Edit Name="prpAltitude" Caption="Altitude" Y="77" Width="-60" Height="22" CaptionWidth="80" ReadOnly="1" />
+  <Edit Name="prpDirectionV" X="-60" Y="77" Height="22" ReadOnly="1" />
+  <Edit Name="prpVSpeed" Caption="Vario" Height="22" CaptionWidth="80" ReadOnly="1" />
 
-  <Edit Name="prpCallsign" Caption="Comp. ID" X="10" Y="20" Width="-38" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpDirectionH" Caption=" " X="-83" Y="50" Height="22" ReadOnly="1" />
-  <Edit Name="prpDirectionV" Caption=" " X="-83" Y="70" Height="22" ReadOnly="1" />
-  <Edit Name="prpDistance" Caption="Distance" X="10" Y="50" Width="-83" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpAltitude" Caption="Altitude" X="10" Y="70" Width="-83" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpVSpeed" Caption="Vario" X="10" Y="90" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpPilot" Caption="Pilot" X="10" Y="120" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpAirport" Caption="Airport" X="10" Y="140" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpFrequency" Caption="Radio frequency" X="10" Y="160" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpPlaneType" Caption="Plane" X="10" Y="180" Height="22" CaptionWidth="70" ReadOnly="1" />
+  <Edit Name="prpPilot" Caption="Pilot" Y="130" Height="22" CaptionWidth="80" ReadOnly="1" />
+  <Edit Name="prpAirport" Caption="Airport" Height="22" CaptionWidth="80" ReadOnly="1" />
+  <Edit Name="prpFrequency" Caption="Radio frequency" Height="22" CaptionWidth="80" ReadOnly="1" />
+  <Edit Name="prpPlaneType" Caption="Plane" Height="22" CaptionWidth="80" ReadOnly="1" />
+
+  <Label X="2" Y="-82" Height="16" Caption="Friends" />
+  <SymbolButton Name="cmdFriendGreen" Caption="Green" Y="-65" Width="30" Height="30" OnClick="OnFriendGreenClicked" />
+  <SymbolButton Name="cmdFriendBlue" Caption="Blue" X="30" Y="-65" Width="30" Height="30" OnClick="OnFriendBlueClicked" />
+  <SymbolButton Name="cmdFriendYellow" Caption="Yellow" X="60" Y="-65" Width="30" Height="30" OnClick="OnFriendYellowClicked" />
+  <SymbolButton Name="cmdFriendMagenta" Caption="Magenta" X="90" Y="-65" Width="30" Height="30" OnClick="OnFriendMagentaClicked" />
+  <Button Name="cmdFriendClear" Caption="Clear" X="120" Y="-65" Height="30" OnClick="OnFriendClearClicked" />
 </Form>
