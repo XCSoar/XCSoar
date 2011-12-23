@@ -26,8 +26,23 @@ Copyright_License {
 
 #include "Engine/Navigation/GeoPoint.hpp"
 
+/**
+ * Load the EGM96 geoid resource into egm96data.
+ */
 void OpenGeoid(void);
+
+/**
+ * Clear the EGM96 from the memory
+ */
 void CloseGeoid(void);
+
+/**
+ * Returns the geoid separation between the EGS96
+ * and the WGS84 at the given latitude and longitude
+ * @param lat Latitude
+ * @param lon Longitude
+ * @return The geoid separation
+ */
 fixed LookupGeoidSeparation(const GeoPoint pt);
 
 #endif

@@ -38,9 +38,6 @@ Copyright_License {
 
 unsigned char* egm96data= NULL;
 
-/**
- * Load the EGM96 geoid resource into egm96data.
- */
 void
 OpenGeoid(void)
 {
@@ -56,9 +53,6 @@ OpenGeoid(void)
   memcpy(egm96data, data.first, data.second);
 }
 
-/**
- * Clear the EGM96 from the memory
- */
 void
 CloseGeoid(void)
 {
@@ -69,13 +63,6 @@ CloseGeoid(void)
   egm96data = NULL;
 }
 
-/**
- * Returns the geoid separation between the EGS96
- * and the WGS84 at the given latitude and longitude
- * @param lat Latitude
- * @param lon Longitude
- * @return The geoid separation
- */
 fixed
 LookupGeoidSeparation(const GeoPoint pt)
 {
