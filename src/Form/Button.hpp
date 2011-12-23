@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_FORM_BUTTON_HPP
 
 #include "Screen/ButtonWindow.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 
 struct DialogLook;
 class ContainerWindow;
@@ -40,6 +41,7 @@ public:
 
 protected:
   const DialogLook &look;
+  ButtonRenderer renderer;
 
 private:
   /**
@@ -70,7 +72,7 @@ public:
    */
   WndButton(ContainerWindow &parent, const DialogLook &look,
             const TCHAR *caption, const PixelRect &rc,
-            const ButtonWindowStyle style,
+            ButtonWindowStyle style,
             ClickNotifyCallback click_callback = NULL,
             LeftRightNotifyCallback left_callback = NULL,
             LeftRightNotifyCallback right_callback = NULL);
@@ -131,6 +133,7 @@ private:
 protected:
   virtual bool on_key_check(unsigned key_code) const;
   virtual bool on_key_down(unsigned key_code);
+  virtual void on_paint(Canvas &canvas);
 };
 
 #endif
