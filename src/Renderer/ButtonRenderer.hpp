@@ -21,32 +21,23 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_BUTTON_LOOK_HPP
-#define XCSOAR_BUTTON_LOOK_HPP
+#ifndef XCSOAR_BUTTON_RENDERER_HPP
+#define XCSOAR_BUTTON_RENDERER_HPP
 
-#include "Screen/Color.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Pen.hpp"
+#include "Screen/Point.hpp"
 
-class Font;
+struct ButtonLook;
+class Canvas;
 
-struct ButtonLook {
-  const Font *font;
+class ButtonRenderer
+{
+  const ButtonLook &look;
 
-  struct StateLook {
-    Color foreground_color;
-    Brush foreground_brush;
+public:
+  ButtonRenderer(const ButtonLook &_look):look(_look) {}
 
-    Color background_color;
-    Pen light_border_pen, dark_border_pen;
-  } standard, focused;
-
-  struct {
-    Color color;
-    Brush brush;
-  } disabled;
-
-  void Initialise(const Font &_font);
+  void DrawButton(Canvas &canvas, PixelRect rc, bool focused, bool pressed);
+  PixelRect GetDrawingRect(PixelRect rc, bool pressed);
 };
 
 #endif

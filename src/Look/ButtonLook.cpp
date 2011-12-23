@@ -28,6 +28,18 @@ ButtonLook::Initialise(const Font &_font)
 {
   font = &_font;
 
+  standard.foreground_color = COLOR_BLACK;
+  standard.foreground_brush.Set(standard.foreground_color);
+  standard.background_color = COLOR_LIGHT_GRAY;
+  standard.light_border_pen.Set(1, LightColor(standard.background_color));
+  standard.dark_border_pen.Set(1, DarkColor(standard.background_color));
+
+  focused.foreground_color = COLOR_WHITE;
+  focused.foreground_brush.Set(focused.foreground_color);
+  focused.background_color = COLOR_XCSOAR_DARK;
+  focused.light_border_pen.Set(1, LightColor(focused.background_color));
+  focused.dark_border_pen.Set(1, DarkColor(focused.background_color));
+
   disabled.color = COLOR_GRAY;
   disabled.brush.Set(disabled.color);
 }
