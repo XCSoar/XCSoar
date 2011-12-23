@@ -372,7 +372,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
         canvas.Select(look.team_brush_blue);
         break;
       case FlarmFriends::YELLOW:
-        canvas.Select(look.team_brush_green);
+        canvas.Select(look.team_brush_yellow);
         break;
       case FlarmFriends::MAGENTA:
         canvas.Select(look.team_brush_magenta);
