@@ -163,9 +163,11 @@ class RasterTileCache : private NonCopyable {
    * The maximum number of tiles which are loaded at a time.  This
    * must be limited because the amount of memory is finite.
    */
-#if !defined(_WIN32_WCE) && !defined(ANDROID)
+#if defined(ANDROID)
+  static const unsigned MAX_ACTIVE_TILES = 128;
+#elif !defined(_WIN32_WCE)
   // desktop: use a lot of memory
-  static const unsigned MAX_ACTIVE_TILES = 64;
+  static const unsigned MAX_ACTIVE_TILES = 512;
 #elif !defined(_WIN32_WCE) || (_WIN32_WCE >= 0x0400 && !defined(GNAV))
   // embedded: use less memory
   static const unsigned MAX_ACTIVE_TILES = 32;
