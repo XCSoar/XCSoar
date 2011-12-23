@@ -120,7 +120,7 @@ XShape::XShape(shapefileObj *shpfile, int i, int label_field)
   bounds.east = Angle::Degrees(fixed(shape.bounds.maxx));
   bounds.north = Angle::Degrees(fixed(shape.bounds.maxy));
 #ifdef ENABLE_OPENGL
-  center = bounds.center();
+  center = bounds.GetCenter();
 #endif
 
   type = shape.type;

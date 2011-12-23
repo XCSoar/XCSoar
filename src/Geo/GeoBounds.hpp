@@ -44,11 +44,11 @@ struct GeoBounds {
     :west(_north_west.longitude), north(_north_west.latitude),
      east(_south_east.longitude), south(_south_east.latitude) {}
 
-  bool empty() const {
+  bool IsEmpty() const {
     return west == east && north == south;
   }
 
-  void extend(const GeoPoint pt) {
+  void Extend(const GeoPoint pt) {
     if (pt.longitude < west)
       west = pt.longitude;
     if (pt.latitude > north)
@@ -59,17 +59,17 @@ struct GeoBounds {
       south = pt.latitude;
   }
 
-  bool inside(Angle longitude, Angle latitude) const {
+  bool IsInside(Angle longitude, Angle latitude) const {
     return longitude.Between(west, east) && latitude.Between(south, north);
   }
 
-  bool inside(const GeoPoint pt) const {
-    return inside(pt.longitude, pt.latitude);
+  bool IsInside(const GeoPoint pt) const {
+    return IsInside(pt.longitude, pt.latitude);
   }
 
-  bool inside(const GeoBounds &interior) const {
-    return inside(interior.west, interior.north) &&
-      inside(interior.east, interior.south);
+  bool IsInside(const GeoBounds &interior) const {
+    return IsInside(interior.west, interior.north) &&
+      IsInside(interior.east, interior.south);
   }
 
 protected:
@@ -77,7 +77,7 @@ protected:
    * Does the range a1..a2 overlap with b1..b2?
    */
   gcc_const
-  static bool overlaps(Angle a1, Angle a2, Angle b1, Angle b2) {
+  static bool Overlaps(Angle a1, Angle a2, Angle b1, Angle b2) {
     return a1.Between(b1, b2) || b1.Between(a1, a2);
   }
 
@@ -86,12 +86,13 @@ public:
    * Does this GeoBounds instance overlap with the specified one?
    */
   gcc_pure
-  bool overlaps(const GeoBounds &other) const {
-    return overlaps(west, east, other.west, other.east) &&
-      overlaps(south, north, other.south, other.north);
+  bool Overlaps(const GeoBounds &other) const {
+    return Overlaps(west, east, other.west, other.east) &&
+      Overlaps(south, north, other.south, other.north);
   }
 
-  GeoPoint center() const {
+  gcc_pure
+  GeoPoint GetCenter() const {
     return GeoPoint(west.Fraction(east, fixed_half),
                     south.Fraction(north, fixed_half));
   }
@@ -102,7 +103,8 @@ public:
    * @param factor The scaling factor
    * @return A scaled version of the GeoBounds
    */
-  GeoBounds scale(fixed factor) const {
+  gcc_pure
+  GeoBounds Scale(fixed factor) const {
     Angle diff_lat_half =
         (north - south).AsBearing() / fixed_two * (factor - fixed_one);
     Angle diff_lon_half =

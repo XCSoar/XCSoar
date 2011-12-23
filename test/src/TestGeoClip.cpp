@@ -33,10 +33,10 @@ make_geo_point(int longitude, int latitude)
 }
 
 static void
-test_clip_line(const GeoClip &clip, GeoPoint a, GeoPoint b,
+test_ClipLine(const GeoClip &clip, GeoPoint a, GeoPoint b,
                const GeoPoint a2, const GeoPoint b2)
 {
-  clip.clip_line(a, b);
+  clip.ClipLine(a, b);
   ok1(equals(a, a2));
   ok1(equals(b, b2));
 }
@@ -47,32 +47,32 @@ test_clip_line()
   GeoClip clip(GeoBounds(make_geo_point(2, 5), make_geo_point(6, 1)));
 
   /* no clipping */
-  test_clip_line(clip, make_geo_point(2, 5), make_geo_point(6, 1),
-                 make_geo_point(2, 5), make_geo_point(6, 1));
+  test_ClipLine(clip, make_geo_point(2, 5), make_geo_point(6, 1),
+                make_geo_point(2, 5), make_geo_point(6, 1));
 
   /* clipping at east border */
-  test_clip_line(clip, make_geo_point(2, 4), make_geo_point(7, 4),
-                 make_geo_point(2, 4), make_geo_point(6, 4));
+  test_ClipLine(clip, make_geo_point(2, 4), make_geo_point(7, 4),
+                make_geo_point(2, 4), make_geo_point(6, 4));
 
   /* clipping east & west */
-  test_clip_line(clip, make_geo_point(1, 4), make_geo_point(7, 4),
-                 make_geo_point(2, 4), make_geo_point(6, 4));
+  test_ClipLine(clip, make_geo_point(1, 4), make_geo_point(7, 4),
+                make_geo_point(2, 4), make_geo_point(6, 4));
 
   /* clipping north */
-  test_clip_line(clip, make_geo_point(3, 7), make_geo_point(3, 2),
-                 make_geo_point(3, 5), make_geo_point(3, 2));
+  test_ClipLine(clip, make_geo_point(3, 7), make_geo_point(3, 2),
+                make_geo_point(3, 5), make_geo_point(3, 2));
 
   /* clipping north & south */
-  test_clip_line(clip, make_geo_point(3, 7), make_geo_point(3, -1000),
-                 make_geo_point(3, 5), make_geo_point(3, 1));
+  test_ClipLine(clip, make_geo_point(3, 7), make_geo_point(3, -1000),
+                make_geo_point(3, 5), make_geo_point(3, 1));
 
   /* clipping southwest */
-  test_clip_line(clip, make_geo_point(5, 2), make_geo_point(7, 0),
-                 make_geo_point(5, 2), make_geo_point(6, 1));
+  test_ClipLine(clip, make_geo_point(5, 2), make_geo_point(7, 0),
+                make_geo_point(5, 2), make_geo_point(6, 1));
 
   /* clipping northwest & southeast */
-  test_clip_line(clip, make_geo_point(0, 9), make_geo_point(9, -3),
-                 make_geo_point(3, 5), make_geo_point(6, 1));
+  test_ClipLine(clip, make_geo_point(0, 9), make_geo_point(9, -3),
+                make_geo_point(3, 5), make_geo_point(6, 1));
 }
 
 static int
@@ -111,7 +111,7 @@ test_clip_polygon(const GeoClip &clip, const GeoPoint *src, unsigned src_size,
                   const GeoPoint *result, unsigned result_size)
 {
   GeoPoint dest[64];
-  unsigned dest_size = clip.clip_polygon(dest, src, src_size);
+  unsigned dest_size = clip.ClipPolygon(dest, src, src_size);
   ok1(equals(result, result_size, dest, dest_size));
 }
 

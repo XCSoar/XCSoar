@@ -26,7 +26,7 @@ Copyright_License {
 bool
 WindowProjection::GeoVisible(const GeoPoint &loc) const
 {
-  return screenbounds_latlon.inside(loc);
+  return screenbounds_latlon.IsInside(loc);
 }
 
 bool
@@ -73,9 +73,9 @@ WindowProjection::UpdateScreenBounds()
   assert(screen_size_initialised);
 
   GeoBounds sb(ScreenToGeo(0, 0));
-  sb.extend(ScreenToGeo(screen_width, 0));
-  sb.extend(ScreenToGeo(screen_width, screen_height));
-  sb.extend(ScreenToGeo(0, screen_height));
+  sb.Extend(ScreenToGeo(screen_width, 0));
+  sb.Extend(ScreenToGeo(screen_width, screen_height));
+  sb.Extend(ScreenToGeo(0, screen_height));
 
   screenbounds_latlon = sb;
 }

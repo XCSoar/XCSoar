@@ -44,7 +44,7 @@ DrawPolygon(Canvas &canvas, const AirspacePolygon &airspace,
   }
 
   GeoBounds bounds = airspace.GetGeoBounds();
-  GeoPoint center = bounds.center();
+  GeoPoint center = bounds.GetCenter();
 
   fixed geo_heigth = GeoPoint(center.longitude, bounds.north).Distance(
                      GeoPoint(center.longitude, bounds.south));

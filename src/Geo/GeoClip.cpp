@@ -53,7 +53,7 @@ clip_latitude(const GeoPoint origin, const GeoPoint pt, Angle at)
 }
 
 bool
-GeoClip::clip_point(const GeoPoint &origin, GeoPoint &pt) const
+GeoClip::ClipPoint(const GeoPoint &origin, GeoPoint &pt) const
 {
   const Angle zero = Angle::Zero();
 
@@ -85,23 +85,23 @@ GeoClip::clip_point(const GeoPoint &origin, GeoPoint &pt) const
 }
 
 bool
-GeoClip::clip_line(GeoPoint &a, GeoPoint &b) const
+GeoClip::ClipLine(GeoPoint &a, GeoPoint &b) const
 {
-  GeoPoint a2 = import_point(a);
-  GeoPoint b2 = import_point(b);
+  GeoPoint a2 = ImportPoint(a);
+  GeoPoint b2 = ImportPoint(b);
 
-  if (!clip_point(a2, b2) || !clip_point(b2, a2))
+  if (!ClipPoint(a2, b2) || !ClipPoint(b2, a2))
     return false;
 
-  a = export_point(a2);
-  b = export_point(b2);
+  a = ExportPoint(a2);
+  b = ExportPoint(b2);
   return true;
 }
 
 static unsigned
-clip_vertex_longitude(const Angle west, const Angle east,
-                      const GeoPoint &prev, GeoPoint &pt, GeoPoint &insert,
-                      const GeoPoint &next)
+ClipVertexLongitude(const Angle west, const Angle east,
+                    const GeoPoint &prev, GeoPoint &pt, GeoPoint &insert,
+                    const GeoPoint &next)
 {
   unsigned num_insert = 0;
 
@@ -145,9 +145,9 @@ clip_vertex_longitude(const Angle west, const Angle east,
 }
 
 static unsigned
-clip_vertex_latitude(const Angle south, const Angle north,
-                     const GeoPoint &prev, GeoPoint &pt, GeoPoint &insert,
-                     const GeoPoint &next)
+ClipVertex_latitude(const Angle south, const Angle north,
+                    const GeoPoint &prev, GeoPoint &pt, GeoPoint &insert,
+                    const GeoPoint &next)
 {
   unsigned num_insert = 0;
 
@@ -191,8 +191,8 @@ clip_vertex_latitude(const Angle south, const Angle north,
 }
 
 static unsigned
-clip_polygon_longitude(const Angle west, const Angle east, GeoPoint *dest,
-                       const GeoPoint *src, unsigned src_length)
+ClipPolygonLongitude(const Angle west, const Angle east, GeoPoint *dest,
+                     const GeoPoint *src, unsigned src_length)
 {
   /* this array always holds the current vertex and its two neighbors;
      it is filled in advance with the last two points, because that
@@ -216,8 +216,8 @@ clip_polygon_longitude(const Angle west, const Angle east, GeoPoint *dest,
     }
 
     GeoPoint insert;
-    unsigned n = clip_vertex_longitude(west, east,
-                                       three[0], three[1], insert, three[2]);
+    unsigned n = ClipVertexLongitude(west, east,
+                                     three[0], three[1], insert, three[2]);
     assert(n <= 2);
 
     if (n == 0) {
@@ -244,8 +244,8 @@ clip_polygon_longitude(const Angle west, const Angle east, GeoPoint *dest,
 }
 
 static unsigned
-clip_polygon_latitude(const Angle south, const Angle north, GeoPoint *dest,
-                      const GeoPoint *src, unsigned src_length)
+ClipPolygonLatitude(const Angle south, const Angle north, GeoPoint *dest,
+                    const GeoPoint *src, unsigned src_length)
 {
   /* this array always holds the current vertex and its two neighbors;
      it is filled in advance with the last two points, because that
@@ -269,8 +269,8 @@ clip_polygon_latitude(const Angle south, const Angle north, GeoPoint *dest,
     }
 
     GeoPoint insert;
-    unsigned n = clip_vertex_latitude(south, north,
-                                      three[0], three[1], insert, three[2]);
+    unsigned n = ClipVertex_latitude(south, north,
+                                     three[0], three[1], insert, three[2]);
     assert(n <= 2);
 
     if (n == 0) {
@@ -297,27 +297,27 @@ clip_polygon_latitude(const Angle south, const Angle north, GeoPoint *dest,
 }
 
 unsigned
-GeoClip::clip_polygon(GeoPoint *dest,
-                      const GeoPoint *src, unsigned src_length) const
+GeoClip::ClipPolygon(GeoPoint *dest,
+                     const GeoPoint *src, unsigned src_length) const
 {
   if (src_length < 3)
     return 0;
 
   GeoPoint *imported = dest + src_length * 2;
   for (unsigned i = 0; i < src_length; ++i)
-    imported[i] = import_point(src[i]);
+    imported[i] = ImportPoint(src[i]);
 
   GeoPoint *first_stage = dest + src_length;
-  unsigned n = clip_polygon_longitude(Angle::Zero(), width,
-                                      first_stage, imported, src_length);
+  unsigned n = ClipPolygonLongitude(Angle::Zero(), width,
+                                    first_stage, imported, src_length);
   if (n < 3)
     return 0;
 
-  n = clip_polygon_latitude(south, north, dest, first_stage, n);
+  n = ClipPolygonLatitude(south, north, dest, first_stage, n);
   if (n < 3)
     return 0;
 
   for (unsigned i = 0; i < n; ++i)
-    dest[i] = export_point(dest[i]);
+    dest[i] = ExportPoint(dest[i]);
   return n;
 }

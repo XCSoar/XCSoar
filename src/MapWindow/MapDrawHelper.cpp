@@ -33,7 +33,7 @@ Copyright_License {
 MapDrawHelper::MapDrawHelper(Canvas &_canvas, Canvas &_buffer, Canvas &_stencil,
                              const WindowProjection &_proj,
                              const AirspaceRendererSettings &_settings)
-  :clip(_proj.GetScreenBounds().scale(fixed(1.1))),
+  :clip(_proj.GetScreenBounds().Scale(fixed(1.1))),
    m_canvas(_canvas),
    m_buffer(_buffer),
    m_stencil(_stencil),
@@ -69,7 +69,7 @@ MapDrawHelper::draw_search_point_vector(const SearchPointVector& points)
     geo_points[i] = points[i].get_location();
 
   /* clip them */
-  size = clip.clip_polygon(geo_points.begin(), geo_points.begin(), size);
+  size = clip.ClipPolygon(geo_points.begin(), geo_points.begin(), size);
   if (size < 3)
     /* it's completely outside the screen */
     return;

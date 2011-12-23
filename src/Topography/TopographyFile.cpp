@@ -114,11 +114,11 @@ TopographyFile::Update(const WindowProjection &map_projection)
 
   const GeoBounds screenRect =
     map_projection.GetScreenBounds();
-  if (cache_bounds.inside(screenRect))
+  if (cache_bounds.IsInside(screenRect))
     /* the cache is still fresh */
     return false;
 
-  cache_bounds = map_projection.GetScreenBounds().scale(fixed_two);
+  cache_bounds = map_projection.GetScreenBounds().Scale(fixed_two);
 
   rectObj deg_bounds = ConvertRect(cache_bounds);
 

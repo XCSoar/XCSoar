@@ -141,7 +141,7 @@ public:
                           const AirspaceWarningCopy& warnings,
                           const AirspaceRendererSettings &_settings)
     :MapCanvas(_canvas, _projection,
-               _projection.GetScreenBounds().scale(fixed(1.1))),
+               _projection.GetScreenBounds().Scale(fixed(1.1))),
      airspace_look(_airspace_look),
      m_warnings(warnings),
      settings(_settings),
@@ -283,7 +283,7 @@ public:
                        const AirspaceWarningCopy& warnings,
                        const AirspaceRendererSettings &_settings)
     :MapCanvas(_canvas, _projection,
-               _projection.GetScreenBounds().scale(fixed(1.1))),
+               _projection.GetScreenBounds().Scale(fixed(1.1))),
      airspace_look(_airspace_look),
      m_warnings(warnings),
      settings(_settings)
@@ -462,7 +462,7 @@ public:
                           const AirspaceLook &_airspace_look,
                           bool _black)
     :MapCanvas(_canvas, _projection,
-               _projection.GetScreenBounds().scale(fixed(1.1))),
+               _projection.GetScreenBounds().Scale(fixed(1.1))),
      airspace_look(_airspace_look),
      black(_black) {
     if (black)

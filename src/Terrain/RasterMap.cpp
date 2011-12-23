@@ -127,7 +127,7 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
 
   GeoPoint clipped_start = start, clipped_end = end;
   const GeoClip clip(raster_tile_cache.GetBounds());
-  if (!clip.clip_line(clipped_start, clipped_end)) {
+  if (!clip.ClipLine(clipped_start, clipped_end)) {
     std::fill(buffer, buffer + size, invalid);
     return;
   }

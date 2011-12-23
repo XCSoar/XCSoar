@@ -49,9 +49,9 @@ OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
   } else {
     GeoBounds bounds(oz.GetBoundaryParametric(fixed_one));
     for (fixed i = fixed_zero; i < fixed_one; i += fixed_one / 10)
-      bounds.extend(oz.GetBoundaryParametric(i));
+      bounds.Extend(oz.GetBoundaryParametric(i));
 
-    center = bounds.center();
+    center = bounds.GetCenter();
 
     fixed geo_heigth = GeoPoint(center.longitude, bounds.north).Distance(
                        GeoPoint(center.longitude, bounds.south));

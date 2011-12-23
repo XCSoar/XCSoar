@@ -49,20 +49,20 @@ void
 TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection)
 {
   if (file.GetSerial() == visible_serial &&
-      visible_bounds.inside(projection.GetScreenBounds()) &&
-      projection.GetScreenBounds().scale(fixed_two).inside(visible_bounds))
+      visible_bounds.IsInside(projection.GetScreenBounds()) &&
+      projection.GetScreenBounds().Scale(fixed_two).IsInside(visible_bounds))
     /* cache is clean */
     return;
 
   visible_serial = file.GetSerial();
-  visible_bounds = projection.GetScreenBounds().scale(fixed(1.2));
+  visible_bounds = projection.GetScreenBounds().Scale(fixed(1.2));
   visible_shapes.clear();
   visible_labels.clear();
 
   for (auto it = file.begin(), end = file.end(); it != end; ++it) {
     const XShape &shape = *it;
 
-    if (!visible_bounds.overlaps(shape.get_bounds()))
+    if (!visible_bounds.Overlaps(shape.get_bounds()))
       continue;
 
     if (shape.get_type() != MS_SHAPE_NULL)
@@ -182,7 +182,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   glScalef((GLfloat)projection.GetScale(), (GLfloat)projection.GetScale(), 1.);
 #endif
 #else // !ENABLE_OPENGL
-  const GeoClip clip(projection.GetScreenBounds().scale(fixed(1.1)));
+  const GeoClip clip(projection.GetScreenBounds().Scale(fixed(1.1)));
   AllocatedArray<GeoPoint> geo_points;
 
   int iskip = file.GetSkipSteps(map_scale);
@@ -192,7 +192,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
        it != end; ++it) {
     const XShape &shape = **it;
 
-    if (!projection.GetScreenBounds().overlaps(shape.get_bounds()))
+    if (!projection.GetScreenBounds().Overlaps(shape.get_bounds()))
       continue;
 
 #ifdef ENABLE_OPENGL
@@ -295,8 +295,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
         for (unsigned i = 0; i < msize; ++i)
           geo_points[i] = points[i * iskip];
 
-        msize = clip.clip_polygon(geo_points.begin(),
-                                  geo_points.begin(), msize);
+        msize = clip.ClipPolygon(geo_points.begin(),
+                                 geo_points.begin(), msize);
         if (msize < 3)
           continue;
 
@@ -366,7 +366,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
        it != end; ++it) {
     const XShape &shape = **it;
 
-    if (!projection.GetScreenBounds().overlaps(shape.get_bounds()))
+    if (!projection.GetScreenBounds().Overlaps(shape.get_bounds()))
       continue;
 
     // Skip shapes without a label

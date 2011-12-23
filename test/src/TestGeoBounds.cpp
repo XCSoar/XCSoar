@@ -38,36 +38,36 @@ int main(int argc, char **argv)
   ok1(equals(b.north, 4));
   ok1(equals(b.south, 4));
 
-  ok1(b.empty());
+  ok1(b.IsEmpty());
 
   g.latitude = Angle::Degrees(fixed(6));
   g.longitude = Angle::Degrees(fixed(8));
-  b.extend(g);
+  b.Extend(g);
 
   ok1(equals(b.east, 8));
   ok1(equals(b.west, 2));
   ok1(equals(b.north, 6));
   ok1(equals(b.south, 4));
 
-  ok1(!b.empty());
+  ok1(!b.IsEmpty());
 
-  g = b.center();
+  g = b.GetCenter();
   ok1(equals(g.latitude, 5));
   ok1(equals(g.longitude, 5));
 
-  ok1(b.inside(Angle::Degrees(fixed(7)), Angle::Degrees(fixed(4.5))));
-  ok1(!b.inside(Angle::Degrees(fixed(9)), Angle::Degrees(fixed(4.5))));
-  ok1(!b.inside(Angle::Degrees(fixed(7)), Angle::Degrees(fixed(1))));
-  ok1(!b.inside(Angle::Degrees(fixed(9)), Angle::Degrees(fixed(1))));
+  ok1(b.IsInside(Angle::Degrees(fixed(7)), Angle::Degrees(fixed(4.5))));
+  ok1(!b.IsInside(Angle::Degrees(fixed(9)), Angle::Degrees(fixed(4.5))));
+  ok1(!b.IsInside(Angle::Degrees(fixed(7)), Angle::Degrees(fixed(1))));
+  ok1(!b.IsInside(Angle::Degrees(fixed(9)), Angle::Degrees(fixed(1))));
 
-  b = b.scale(fixed(2));
+  b = b.Scale(fixed(2));
 
   ok1(equals(b.east, 11));
   ok1(equals(b.west, -1));
   ok1(equals(b.north, 7));
   ok1(equals(b.south, 3));
 
-  b = b.scale(fixed(0.5));
+  b = b.Scale(fixed(0.5));
 
   ok1(equals(b.east, 8));
   ok1(equals(b.west, 2));

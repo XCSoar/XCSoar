@@ -580,7 +580,7 @@ RasterTileCache::LoadCache(FILE *file)
       header.height < 1024 || header.height > 1024 * 1024 ||
       header.num_marker_segments < 4 ||
       header.num_marker_segments > segments.capacity() ||
-      header.bounds.empty())
+      header.bounds.IsEmpty())
     return false;
 
   SetSize(header.width, header.height,

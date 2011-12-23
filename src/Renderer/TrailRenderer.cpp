@@ -124,7 +124,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   bool scaled_trail = settings.snail_scaling_enabled &&
                       projection.GetMapScale() <= fixed_int_constant(6000);
 
-  const GeoBounds bounds = projection.GetScreenBounds().scale(fixed_four);
+  const GeoBounds bounds = projection.GetScreenBounds().Scale(fixed_four);
 
   RasterPoint last_point;
   bool last_valid = false;
@@ -133,7 +133,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
       ? it->get_location().Parametric(traildrift,
                                       it->CalculateDrift(basic.time))
       : it->get_location();
-    if (!bounds.inside(gp)) {
+    if (!bounds.IsInside(gp)) {
       /* the point is outside of the MapWindow; don't paint it */
       last_valid = false;
       continue;

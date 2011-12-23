@@ -48,17 +48,17 @@ protected:
    * "west" bound.
    */
   gcc_pure
-  Angle import_longitude(Angle l) const {
+  Angle ImportLongitude(Angle l) const {
     return (l - west).AsDelta();
   }
 
   gcc_pure
-  GeoPoint import_point(GeoPoint pt) const {
-    return GeoPoint(import_longitude(pt.longitude), pt.latitude);
+  GeoPoint ImportPoint(GeoPoint pt) const {
+    return GeoPoint(ImportLongitude(pt.longitude), pt.latitude);
   }
 
   gcc_pure
-  GeoPoint export_point(GeoPoint pt) const {
+  GeoPoint ExportPoint(GeoPoint pt) const {
     return GeoPoint(pt.longitude + west, pt.latitude);
   }
 
@@ -68,7 +68,7 @@ protected:
    * @param pt the point to be clipped (in and out)
    * @return false if neither origin nor pt are visible
    */
-  bool clip_point(const GeoPoint &origin, GeoPoint &pt) const;
+  bool ClipPoint(const GeoPoint &origin, GeoPoint &pt) const;
 
   /**
    * Clips a vertex.
@@ -80,8 +80,8 @@ protected:
    * @return the new number of vertices between prev and next (e.g. 0
    * deletes, 1 preserves, 2 or 3 insert new ones)
    */
-  unsigned clip_vertex(const GeoPoint &prev, GeoPoint &pt, GeoPoint *insert,
-                       const GeoPoint &next) const;
+  unsigned ClipVertex(const GeoPoint &prev, GeoPoint &pt, GeoPoint *insert,
+                      const GeoPoint &next) const;
 
 public:
   /**
@@ -92,7 +92,7 @@ public:
    * @return false if the line is definitely outside the bounds
    * rectangle
    */
-  bool clip_line(GeoPoint &a, GeoPoint &b) const;
+  bool ClipLine(GeoPoint &a, GeoPoint &b) const;
 
   /**
    * Makes sure that the polygon does not exceed the bounds.  This
@@ -107,8 +107,8 @@ public:
    * @return the number of vertices written to dest; if less than 3,
    * then the polygon can not be drawn
    */
-  unsigned clip_polygon(GeoPoint *dest,
-                        const GeoPoint *src, unsigned src_length) const;
+  unsigned ClipPolygon(GeoPoint *dest,
+                       const GeoPoint *src, unsigned src_length) const;
 };
 
 #endif

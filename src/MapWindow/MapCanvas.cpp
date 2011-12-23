@@ -32,7 +32,7 @@ Copyright_License {
 void
 MapCanvas::line(GeoPoint a, GeoPoint b)
 {
-  if (!clip.clip_line(a, b))
+  if (!clip.ClipLine(a, b))
     return;
 
   RasterPoint pts[2];
@@ -45,7 +45,7 @@ MapCanvas::line(GeoPoint a, GeoPoint b)
 void
 MapCanvas::offset_line(GeoPoint a, GeoPoint b)
 {
-  if (!clip.clip_line(a, b))
+  if (!clip.ClipLine(a, b))
     return;
 
   RasterPoint pts[3];
@@ -115,8 +115,8 @@ MapCanvas::prepare_polygon(const SearchPointVector &points)
     geo_points[i] = points[i].get_location();
 
   /* clip them */
-  num_raster_points = clip.clip_polygon(geo_points.begin(),
-                                 geo_points.begin(), num_points);
+  num_raster_points = clip.ClipPolygon(geo_points.begin(),
+                                       geo_points.begin(), num_points);
   if (num_raster_points < 3)
     /* it's completely outside the screen */
     return false;

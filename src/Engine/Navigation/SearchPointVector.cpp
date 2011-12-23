@@ -183,7 +183,7 @@ SearchPointVector::CalculateGeoBounds() const
 
   GeoBounds bb((*this)[0].get_location());
   for (auto v = begin(); v != end(); ++v)
-    bb.extend(v->get_location());
+    bb.Extend(v->get_location());
 
   return bb;
 }

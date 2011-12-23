@@ -51,12 +51,12 @@ public:
 
   gcc_pure
   bool inside(const GeoPoint &pt) const {
-    return raster_tile_cache.GetBounds().inside(pt);
+    return raster_tile_cache.GetBounds().IsInside(pt);
   }
 
   gcc_pure
   GeoPoint GetMapCenter() const {
-    return raster_tile_cache.GetBounds().center();
+    return raster_tile_cache.GetBounds().GetCenter();
   }
 
   void SetViewCenter(const GeoPoint &location, fixed radius);

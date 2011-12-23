@@ -45,7 +45,7 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
                                  const GeoPoint &_location)
   :canvas(_canvas), m_proj(_projection),
    map_canvas(_canvas, _projection,
-              _projection.GetScreenBounds().scale(fixed(1.1))),
+              _projection.GetScreenBounds().Scale(fixed(1.1))),
    task_look(_task_look),
    task_projection(_task_projection),
    draw_bearing(_draw_bearing),
