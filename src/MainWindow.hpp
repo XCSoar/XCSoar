@@ -276,6 +276,9 @@ public:
   void ToggleSuppressFLARMRadar();
   void ToggleForceFLARMRadar();
 
+private:
+  void UpdateTrafficGaugeVisibility();
+
 protected:
   virtual void on_resize(UPixelScalar width, UPixelScalar height);
   bool on_activate();

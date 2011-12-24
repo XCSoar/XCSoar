@@ -731,6 +731,12 @@ MainWindow::UpdateGaugeVisibility()
   vario.SetVisible(!full_screen &&
                    !CommonInterface::GetUIState().screen_blanked);
 
+  UpdateTrafficGaugeVisibility();
+}
+
+void
+MainWindow::UpdateTrafficGaugeVisibility()
+{
   const FlarmState &flarm = CommonInterface::Basic().flarm;
   bool traffic_visible =
     (force_traffic_gauge ||
