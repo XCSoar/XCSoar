@@ -35,26 +35,24 @@ Copyright_License {
 #include <mmsystem.h>
 #endif
 
-bool PlayResource (const TCHAR* lpName)
+bool
+PlayResource(const TCHAR *resource_name)
 {
 #ifdef ANDROID
+
   return sound_util != NULL &&
-    sound_util->play(Java::GetEnv(), context->get(), lpName);
+         sound_util->play(Java::GetEnv(), context->get(), resource_name);
+
 #elif defined(WIN32) && !defined(GNAV)
-  BOOL bRtn;
 
-  // TODO code: Modify to allow use of WAV Files and/or Embedded files
+  if (_tcsstr(resource_name, TEXT(".wav")))
+    return sndPlaySound (resource_name, SND_ASYNC | SND_NODEFAULT );
 
-  if (_tcsstr(lpName, TEXT(".wav"))) {
-    bRtn = sndPlaySound (lpName, SND_ASYNC | SND_NODEFAULT );
+  ResourceLoader::Data data = ResourceLoader::Load(resource_name, _T("WAVE"));
+  return data.first != NULL &&
+         sndPlaySound((LPCTSTR)data.first,
+                      SND_MEMORY | SND_ASYNC | SND_NODEFAULT);
 
-  } else {
-    ResourceLoader::Data data = ResourceLoader::Load(lpName, _T("WAVE"));
-    return data.first != NULL &&
-      sndPlaySound((LPCTSTR)data.first,
-                   SND_MEMORY | SND_ASYNC | SND_NODEFAULT);
-  }
-  return bRtn;
 #else
   return false;
 #endif
