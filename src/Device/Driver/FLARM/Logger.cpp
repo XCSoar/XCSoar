@@ -103,15 +103,18 @@ operator+(BrokenTime &a, BrokenTime &b)
   c.minute = a.minute + b.minute;
   c.second = a.second + b.second;
 
-  while (c.second > 60) {
+  while (c.second >= 60) {
     c.second -= 60;
     c.minute++;
   }
 
-  while (c.minute > 60) {
+  while (c.minute >= 60) {
     c.minute -= 60;
     c.hour++;
   }
+
+  while (c.hour >= 23)
+    c.hour -= 24;
 
   return c;
 }
