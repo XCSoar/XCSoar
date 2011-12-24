@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Audio/Sound.hpp"
-#include "ResourceLoader.hpp"
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
@@ -31,6 +30,7 @@ Copyright_License {
 #endif
 
 #if defined(WIN32) && !defined(GNAV)
+#include "ResourceLoader.hpp"
 #include <windows.h>
 #include <mmsystem.h>
 #endif
