@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_INPUT_CONFIG_HPP
 
 #include "InputQueue.hpp"
-#include "MenuData.hpp"
+#include "Menu/MenuData.hpp"
 #include "Util/RadixTree.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/TrivialArray.hpp"

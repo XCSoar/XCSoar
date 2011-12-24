@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "ButtonLabel.hpp"
+#include "Menu/ButtonLabel.hpp"
 #include "Language/Language.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Logger/Logger.hpp"

@@ -43,7 +43,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Logger/LoggerImpl.hpp"
 #include "Audio/Sound.hpp"
-#include "ButtonLabel.hpp"
+#include "Menu/ButtonLabel.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Airspace/AirspaceParser.hpp"
 #include "Profile/Profile.hpp"

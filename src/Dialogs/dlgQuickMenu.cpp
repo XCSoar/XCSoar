@@ -30,7 +30,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Util/TrivialArray.hpp"
 #include "Util/Macros.hpp"
-#include "ButtonLabel.hpp"
+#include "Menu/ButtonLabel.hpp"
 #include "UIGlobals.hpp"
 
 #include <stdio.h>

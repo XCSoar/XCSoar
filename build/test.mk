@@ -934,7 +934,7 @@ RUN_INPUT_PARSER_SOURCES = \
 	$(SRC)/Input/InputKeys.cpp \
 	$(SRC)/Input/InputConfig.cpp \
 	$(SRC)/Input/InputParser.cpp \
-	$(SRC)/MenuData.cpp \
+	$(SRC)/Menu/MenuData.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \

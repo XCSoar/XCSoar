@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Compiler.h"
-#include "MenuData.hpp"
+#include "Menu/MenuData.hpp"
 
 #include <tchar.h>
 

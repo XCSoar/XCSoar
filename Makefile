@@ -371,11 +371,11 @@ XCSOAR_SOURCES := \
 	$(SRC)/Gauge/LogoView.cpp \
 	\
 	$(SRC)/Waypoint/WaypointDetailsReader.cpp \
-	$(SRC)/MenuData.cpp \
-	$(SRC)/MenuBar.cpp \
-	$(SRC)/ButtonLabel.cpp \
+	$(SRC)/Menu/MenuData.cpp \
+	$(SRC)/Menu/MenuBar.cpp \
+	$(SRC)/Menu/ButtonLabel.cpp \
 	$(SRC)/Dialogs/Dialogs.cpp \
-	$(SRC)/ExpandMacros.cpp \
+	$(SRC)/Menu/ExpandMacros.cpp \
 	$(SRC)/InfoBoxes/Content/Factory.cpp \
 	$(SRC)/InfoBoxes/Content/Alternate.cpp \
 	$(SRC)/InfoBoxes/Content/Base.cpp \

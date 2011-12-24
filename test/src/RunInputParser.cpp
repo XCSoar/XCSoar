@@ -24,7 +24,7 @@ Copyright_License {
 #include "Input/InputParser.hpp"
 #include "Input/InputConfig.hpp"
 #include "Input/InputLookup.hpp"
-#include "MenuData.hpp"
+#include "Menu/MenuData.hpp"
 #include "IO/FileLineReader.hpp"
 
 #include <stdio.h>
