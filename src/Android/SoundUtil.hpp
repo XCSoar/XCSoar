@@ -34,7 +34,7 @@ class SoundUtil {
 public:
   SoundUtil(JNIEnv *env);
 
-  bool play(JNIEnv *env, jobject context, const char *name);
+  bool Play(JNIEnv *env, jobject context, const char *name);
 };
 
 #endif

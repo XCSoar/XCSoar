@@ -32,7 +32,7 @@ SoundUtil::SoundUtil(JNIEnv *env)
 }
 
 bool
-SoundUtil::play(JNIEnv *env, jobject context, const char *name)
+SoundUtil::Play(JNIEnv *env, jobject context, const char *name)
 {
   Java::String paramName(env, name);
   return env->CallStaticBooleanMethod(cls, mid_play, context, paramName.get());
