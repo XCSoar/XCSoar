@@ -755,6 +755,9 @@ MainWindow::UpdateTrafficGaugeVisibility()
   }
 
   if (traffic_visible) {
+    if (has_dialog())
+      return;
+
     if (!traffic_gauge.IsDefined())
       traffic_gauge.Set(new GaugeFLARM(CommonInterface::GetLiveBlackboard(),
                                        GetLook().flarm_gauge));
