@@ -130,14 +130,22 @@ TabBarControl::AddTab(Widget *widget, const TCHAR *caption,
 }
 
 void
-TabBarControl::SetCurrentPage(unsigned i, EventType _EventType)
+TabBarControl::ClickPage(unsigned i)
 {
   assert(i < buttons.size());
 
-  if (_EventType == MouseOrButton)
-    pager.ClickPage(i);
-  else
-    pager.SetCurrentPage(i);
+  pager.ClickPage(i);
+
+  if (tab_display != NULL)
+    tab_display->invalidate();
+}
+
+void
+TabBarControl::SetCurrentPage(unsigned i)
+{
+  assert(i < buttons.size());
+
+  pager.SetCurrentPage(i);
 
   if (tab_display != NULL)
     tab_display->invalidate();
@@ -155,8 +163,7 @@ TabBarControl::NextPage()
     // prevent wraparound
     return;
 
-  SetCurrentPage((GetCurrentPage() + 1) % buttons.size(),
-                 NextPreviousKey);
+  SetCurrentPage((GetCurrentPage() + 1) % buttons.size());
 }
 
 void
@@ -171,8 +178,7 @@ TabBarControl::PreviousPage()
     // prevent wraparound
     return;
 
-  SetCurrentPage((GetCurrentPage() + buttons.size() - 1) % buttons.size(),
-                 NextPreviousKey);
+  SetCurrentPage((GetCurrentPage() + buttons.size() - 1) % buttons.size());
 }
 
 const PixelRect &
@@ -435,27 +441,26 @@ TabDisplay::on_key_down(unsigned key_code)
 
   case VK_APP1:
     if (tab_bar.GetTabCount() > 0)
-      tab_bar.SetCurrentPage(0, TabBarControl::MouseOrButton);
+      tab_bar.ClickPage(0);
     return true;
 
   case VK_APP2:
     if (tab_bar.GetTabCount() > 1)
-      tab_bar.SetCurrentPage(1, TabBarControl::MouseOrButton);
+      tab_bar.ClickPage(1);
     return true;
 
   case VK_APP3:
     if (tab_bar.GetTabCount() > 2)
-      tab_bar.SetCurrentPage(2, TabBarControl::MouseOrButton);
+      tab_bar.ClickPage(2);
     return true;
 
   case VK_APP4:
     if (tab_bar.GetTabCount() > 3)
-      tab_bar.SetCurrentPage(3, TabBarControl::MouseOrButton);
+      tab_bar.ClickPage(3);
     return true;
 
   case VK_RETURN:
-    tab_bar.SetCurrentPage(tab_bar.GetCurrentPage(),
-        TabBarControl::MouseOrButton);
+    tab_bar.ClickPage(tab_bar.GetCurrentPage());
     return true;
 
   case VK_DOWN:
@@ -511,7 +516,7 @@ TabDisplay::on_mouse_up(PixelScalar x, PixelScalar y)
 
     int i = GetButtonIndexAt(Pos);
     if (i == down_index)
-      tab_bar.SetCurrentPage(i, TabBarControl::MouseOrButton);
+      tab_bar.ClickPage(i);
 
     if (down_index > -1)
       invalidate();
