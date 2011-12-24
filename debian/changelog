@@ -1,6 +1,6 @@
 xcsoar (6.2.5) unstable; urgency=low
 
-  * 
+  * move vali-xcs to a separate package
 
  --
 
