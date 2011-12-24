@@ -32,14 +32,14 @@ Copyright_License {
  */
 class MapSettingsBlackboard
 {
+protected:
+  MapSettings settings_map;
+
 public:
   gcc_const
   const MapSettings& GetMapSettings() const {
     return settings_map;
   }
-
-protected:
-  MapSettings settings_map;
 };
 
 #endif

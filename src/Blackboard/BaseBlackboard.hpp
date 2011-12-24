@@ -33,6 +33,10 @@ Copyright_License {
  */
 class BaseBlackboard
 {
+protected:
+  MoreData gps_info;
+  DerivedInfo calculated_info;
+
 public:
   // all blackboards can be read as const
   gcc_pure
@@ -44,10 +48,6 @@ public:
   const DerivedInfo& Calculated() const {
     return calculated_info;
   }
-
-protected:
-  MoreData gps_info;
-  DerivedInfo calculated_info;
 };
 
 #endif
