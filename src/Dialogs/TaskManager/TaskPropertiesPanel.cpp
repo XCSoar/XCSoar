@@ -254,21 +254,13 @@ TaskPropertiesPanel::Show(const PixelRect &rc)
 }
 
 bool
-TaskPropertiesPanel::Save(bool &changed, bool &require_restart)
+TaskPropertiesPanel::Leave()
 {
   ReadValues();
   if (orig_taskType != ordered_task->get_factory_type())
     ordered_task->GetFactory().mutate_tps_to_task_type();
 
   return true;
-}
-
-bool
-TaskPropertiesPanel::Leave()
-{
-  bool changed = false;
-  bool requirerestart = false;
-  return Save(changed, requirerestart);
 }
 
 void

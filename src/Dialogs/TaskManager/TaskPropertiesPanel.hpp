@@ -58,12 +58,6 @@ public:
    * so they can be used by other panels editing the task.
    * @return true
    */
-  virtual bool Save(bool &changed, bool &require_restart);
-
-  /**
-   * Calls Save()
-   * @return true
-   */
   virtual bool Leave();
 
 protected:
