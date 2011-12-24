@@ -437,6 +437,7 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
   if (!ExpectXOff(port, 1000))
     return false;
 
+  unsigned tracks = 0;
   while (true) {
     // Check if the user cancelled the operation
     if (env.IsCancelled())
@@ -461,11 +462,24 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
     RecordedFlightInfo flight;
     NMEAInputLine line(buffer);
 
-    // Skip $PBRTL and number of stored tracks
-    line.skip(2);
+    // Skip $PBRTL
+    line.skip();
+
+    if (tracks == 0) {
+      // If number of tracks not read yet
+      // .. read and save it
+      if (!line.read_checked(tracks))
+        continue;
+
+      env.SetProgressRange(tracks);
+    } else
+      line.skip();
 
     if (!line.read_checked(flight.internal.flytec))
       continue;
+
+    if (tracks != 0 && flight.internal.flytec < tracks)
+      env.SetProgressPosition(flight.internal.flytec);
 
     char field_buffer[16];
     line.read(field_buffer, ARRAY_SIZE(field_buffer));
