@@ -1157,6 +1157,9 @@ RasterTileCache::FirstIntersection(int x0, int y0,
 short
 RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_index) const
 {
+  assert(px < width);
+  assert(py < height);
+
 #ifdef ACCURATE_TERRAIN_INTERSECTION
 
   const RasterTile &tile = tiles.Get(px / tile_width, py / tile_height);
@@ -1168,14 +1171,13 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_
   // still not found, so go to overview
   tile_index = -1;
 
-  if ((px >= width) || (py >= height))
-    // outside overall bounds
-    return RasterBuffer::TERRAIN_INVALID;
-
   // The overview might not cover the whole tile, if width or height are not
   // a multiple of 2^OVERVIEW_BITS.
   unsigned x_overview = px >> OVERVIEW_BITS;
   unsigned y_overview = py >> OVERVIEW_BITS;
+  assert(x_overview <= Overview.get_width());
+  assert(y_overview <= Overview.get_height());
+
   if (x_overview == Overview.get_width())
     x_overview--;
   if (y_overview == Overview.get_height())
