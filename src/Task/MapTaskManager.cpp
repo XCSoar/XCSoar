@@ -30,7 +30,7 @@
 static const TaskBehaviour&
 GetTaskBehaviour()
 {
-  return XCSoarInterface::SettingsComputer().task;
+  return XCSoarInterface::GetSettingsComputer().task;
 }
 
 static MapTaskManager::task_edit_result

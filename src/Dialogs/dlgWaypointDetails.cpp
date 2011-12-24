@@ -318,7 +318,7 @@ goto_and_clear_task(const Waypoint &wp)
   protected_task_manager->DoGoto(wp);
   TaskEvents task_events;
   const OrderedTask blank(task_events,
-                          XCSoarInterface::SettingsComputer(),
+                          XCSoarInterface::GetSettingsComputer(),
                           XCSoarInterface::Calculated().glide_polar_task);
   protected_task_manager->task_commit(blank);
 
@@ -449,7 +449,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   const MoreData &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SettingsComputer();
+    CommonInterface::GetSettingsComputer();
 
   selected_waypoint = &way_point;
 

@@ -62,7 +62,7 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                                _T("IDR_XML_GLIDECOMPUTERCONFIGPANEL_L"));
 
 
-  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
+  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::GetSettingsComputer();
 
   static gcc_constexpr_data StaticEnumChoice auto_wind_list[] = {
     { AUTOWIND_NONE, N_("Manual") },

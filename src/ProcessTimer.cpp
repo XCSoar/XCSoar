@@ -102,7 +102,7 @@ SystemClockTimer()
   static bool sysTimeInitialised = false;
 
   if (basic.connected &&
-      CommonInterface::SettingsComputer().set_system_time_from_gps
+      CommonInterface::GetSettingsComputer().set_system_time_from_gps
       && basic.gps.real
       /* assume that we only have a valid date and time when we have a
          full GPS fix */
@@ -122,7 +122,7 @@ SystemClockTimer()
 
 #if defined(_WIN32_WCE) && defined(GNAV)
     TIME_ZONE_INFORMATION tzi;
-    tzi.Bias = - CommonInterface::SettingsComputer().utc_offset / 60;
+    tzi.Bias = - CommonInterface::GetSettingsComputer().utc_offset / 60;
     _tcscpy(tzi.StandardName,TEXT("Altair"));
     tzi.StandardDate.wMonth= 0; // disable daylight savings
     tzi.StandardBias = 0;
@@ -367,7 +367,7 @@ ProcessTimer::Process(void)
 
 #ifdef HAVE_TRACKING
   if (tracking != NULL && CommonInterface::Basic().gps.real) {
-    tracking->SetSettings(CommonInterface::SettingsComputer().tracking);
+    tracking->SetSettings(CommonInterface::GetSettingsComputer().tracking);
     tracking->OnTimer(CommonInterface::Basic(), CommonInterface::Calculated());
   }
 #endif

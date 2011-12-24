@@ -50,7 +50,7 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   assert(i < AIRSPACECLASSCOUNT);
 
   const AirspaceComputerSettings &computer =
-    CommonInterface::SettingsComputer().airspace;
+    CommonInterface::GetSettingsComputer().airspace;
   const AirspaceRendererSettings &renderer =
     CommonInterface::GetSettingsMap().airspace;
   const AirspaceLook &look = CommonInterface::main_window.GetLook().map.airspace;

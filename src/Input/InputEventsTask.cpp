@@ -127,7 +127,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
     return;
 
   const GlidePolar &polar =
-    CommonInterface::SettingsComputer().glide_polar_task;
+    CommonInterface::GetSettingsComputer().glide_polar_task;
   fixed mc = polar.GetMC();
 
   TaskBehaviour &task_behaviour = CommonInterface::SetSettingsComputer().task;

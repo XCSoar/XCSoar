@@ -61,7 +61,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              Layout::landscape ? _T("IDR_XML_TASKRULESCONFIGPANEL_L") :
                                _T("IDR_XML_TASKRULESCONFIGPANEL"));
 
-  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
+  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::GetSettingsComputer();
   const TaskBehaviour &task_behaviour = settings_computer.task;
 
   LoadFormProperty(form, _T("prpStartMaxSpeed"), ugHorizontalSpeed,

@@ -178,7 +178,7 @@ CloseClicked(gcc_unused WndButton &button)
 static void
 NewClicked(gcc_unused WndButton &button)
 {
-  Plane plane = CommonInterface::SettingsComputer().plane;
+  Plane plane = CommonInterface::GetSettingsComputer().plane;
 
   while (dlgPlaneDetailsShowModal(*(SingleWindow*)dialog->get_root_owner(), plane)) {
     if (plane.registration.empty()) {

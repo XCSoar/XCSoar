@@ -49,7 +49,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location) const
   if (airspace_database)
     builder.AddVisibleAirspace(*airspace_database,
                                airspace_renderer.GetAirspaceWarnings(),
-                               SettingsComputer().airspace,
+                               GetSettingsComputer().airspace,
                                GetSettingsMap().airspace, Basic(),
                                Calculated());
 

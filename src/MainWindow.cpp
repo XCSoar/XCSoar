@@ -201,7 +201,7 @@ MainWindow::InitialiseConfigured()
   ReinitialiseLayout_flarm(rc, ib_layout);
 
   map = new GlueMapWindow(*look);
-  map->SetSettingsComputer(CommonInterface::SettingsComputer());
+  map->SetSettingsComputer(CommonInterface::GetSettingsComputer());
   map->SetSettingsMap(CommonInterface::GetSettingsMap());
   map->set(*this, map_rect);
   map->set_font(Fonts::map);

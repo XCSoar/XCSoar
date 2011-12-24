@@ -201,7 +201,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   AirspaceWarningManager airspace_warning(airspace_database);
 
   ProtectedTaskManager protected_task_manager(task_manager,
-                                              blackboard.SettingsComputer().task,
+                                              blackboard.GetSettingsComputer().task,
                                               task_events);
 
   LoadFiles(airspace_database);
@@ -211,7 +211,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                                task_events);
   glide_computer.SetTerrain(terrain);
   glide_computer.Initialise();
-  glide_computer.ReadSettingsComputer(blackboard.SettingsComputer());
+  glide_computer.ReadSettingsComputer(blackboard.GetSettingsComputer());
   glide_computer.SetScreenDistanceMeters(fixed(50000));
 
   ScreenGlobalInit screen_init;

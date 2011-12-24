@@ -31,8 +31,9 @@ class SettingsComputerBlackboard
 {
 public:
   gcc_const
-  const SETTINGS_COMPUTER& SettingsComputer() const
-  { return settings_computer; }
+  const SETTINGS_COMPUTER& GetSettingsComputer() const {
+    return settings_computer;
+  }
 protected:
   SETTINGS_COMPUTER settings_computer;
 };

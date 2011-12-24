@@ -84,7 +84,7 @@ XCSoarInterface::ReceiveCalculated()
     ScopeLock protect(device_blackboard->mutex);
 
     ReadBlackboardCalculated(device_blackboard->Calculated());
-    device_blackboard->ReadSettingsComputer(SettingsComputer());
+    device_blackboard->ReadSettingsComputer(GetSettingsComputer());
   }
 
   BroadcastCalculatedUpdate();
@@ -94,7 +94,7 @@ void
 XCSoarInterface::ExchangeBlackboard()
 {
   ExchangeDeviceBlackboard();
-  SendSettingsComputer();
+  SendGetSettingsComputer();
   SendSettingsMap();
 }
 
@@ -103,17 +103,17 @@ XCSoarInterface::ExchangeDeviceBlackboard()
 {
   ScopeLock protect(device_blackboard->mutex);
 
-  device_blackboard->ReadSettingsComputer(SettingsComputer());
+  device_blackboard->ReadSettingsComputer(GetSettingsComputer());
 }
 
 void
-ActionInterface::SendSettingsComputer()
+ActionInterface::SendGetSettingsComputer()
 {
   assert(calculation_thread != NULL);
 
-  main_window.SetSettingsComputer(SettingsComputer());
+  main_window.SetSettingsComputer(GetSettingsComputer());
 
-  calculation_thread->SetSettingsComputer(SettingsComputer());
+  calculation_thread->SetSettingsComputer(GetSettingsComputer());
   calculation_thread->SetScreenDistanceMeters(main_window.GetProjection().GetScreenDistanceMeters());
 }
 
@@ -135,7 +135,7 @@ ActionInterface::SetMacCready(fixed mc, bool to_devices)
     protected_task_manager->SetGlidePolar(polar);
 
   if (calculation_thread != NULL) {
-    calculation_thread->SetSettingsComputer(SettingsComputer());
+    calculation_thread->SetSettingsComputer(GetSettingsComputer());
     calculation_thread->Trigger();
   }
 

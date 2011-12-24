@@ -160,7 +160,7 @@ ChartControl::on_paint(Canvas &canvas)
 {
   assert(glide_computer != NULL);
 
-  const SETTINGS_COMPUTER &settings_computer = blackboard->SettingsComputer();
+  const SETTINGS_COMPUTER &settings_computer = blackboard->GetSettingsComputer();
   const SETTINGS_MAP &settings_map = blackboard->GetSettingsMap();
   const MoreData &basic = blackboard->Basic();
   const DerivedInfo &calculated = blackboard->Calculated();
@@ -273,7 +273,7 @@ Update(void)
   assert(csw != NULL);
   assert(glide_computer != NULL);
 
-  const SETTINGS_COMPUTER &settings_computer = blackboard->SettingsComputer();
+  const SETTINGS_COMPUTER &settings_computer = blackboard->GetSettingsComputer();
   const DerivedInfo &calculated = blackboard->Calculated();
 
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),

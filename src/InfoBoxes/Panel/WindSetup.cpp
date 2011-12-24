@@ -81,7 +81,7 @@ WindSetupPanel::Show(const PixelRect &rc)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
   const SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::SettingsComputer();
+    XCSoarInterface::GetSettingsComputer();
   const bool external_wind = basic.external_wind_available &&
     settings_computer.use_external_wind;
 

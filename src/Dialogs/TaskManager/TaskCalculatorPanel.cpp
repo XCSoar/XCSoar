@@ -78,7 +78,7 @@ TaskCalculatorPanel::Refresh()
     LoadFormProperty(form, _T("prpDistance"), ugDistance, rPlanned);
 
   LoadFormProperty(form, _T("prpMacCready"), ugVerticalSpeed,
-                   CommonInterface::SettingsComputer().glide_polar_task.GetMC());
+                   CommonInterface::GetSettingsComputer().glide_polar_task.GetMC());
   LoadFormProperty(form, _T("prpEffectiveMacCready"), emc);
 
   if (positive(rPlanned)) {
@@ -150,7 +150,7 @@ static void
 OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
-  fixed clast = CommonInterface::SettingsComputer().glide_polar_task.GetCruiseEfficiency();
+  fixed clast = CommonInterface::GetSettingsComputer().glide_polar_task.GetCruiseEfficiency();
   (void)clast; // unused for now
 
   switch (Mode) {
@@ -213,7 +213,7 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 TaskCalculatorPanel::Show(const PixelRect &rc)
 {
-  const GlidePolar& polar = CommonInterface::SettingsComputer().glide_polar_task;
+  const GlidePolar& polar = CommonInterface::GetSettingsComputer().glide_polar_task;
 
   cruise_efficiency = polar.GetCruiseEfficiency();
   emc = XCSoarInterface::Calculated().task_stats.effective_mc;

@@ -97,7 +97,7 @@ void dlgVoiceShowModal(void){
   
   if (!wf) return;
 
-  LoadIntoForm(*wf, XCSoarInterface::SettingsComputer());
+  LoadIntoForm(*wf, XCSoarInterface::GetSettingsComputer());
 
   wf->ShowModal();
 

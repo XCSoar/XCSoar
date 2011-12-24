@@ -124,7 +124,7 @@ void
 AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const AirspaceComputerSettings &computer =
-    CommonInterface::SettingsComputer().airspace;
+    CommonInterface::GetSettingsComputer().airspace;
   const AirspaceRendererSettings &renderer =
     CommonInterface::GetSettingsMap().airspace;
 

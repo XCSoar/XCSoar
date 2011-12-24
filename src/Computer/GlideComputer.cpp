@@ -100,9 +100,9 @@ GlideComputer::ProcessGPS()
   // Process basic task information
   ProcessBasicTask(basic, LastBasic(),
                    calculated, LastCalculated(),
-                   SettingsComputer());
+                   GetSettingsComputer());
   ProcessMoreTask(basic, calculated, LastCalculated(),
-                  SettingsComputer());
+                  GetSettingsComputer());
 
   // Check if everything is okay with the gps time and process it
   if (!FlightTimes())
@@ -127,7 +127,7 @@ GlideComputer::ProcessGPS()
   // (if teammate is a FLARM target)
   CheckTraffic();
 
-  vegavoice.Update(basic, Calculated(), SettingsComputer());
+  vegavoice.Update(basic, Calculated(), GetSettingsComputer());
 
   // update basic trace history
   if (time_advanced())
@@ -147,20 +147,20 @@ GlideComputer::ProcessIdle(bool exhaustive)
 {
   // Log GPS fixes for internal usage
   // (snail trail, stats, olc, ...)
-  DoLogging(Basic(), LastBasic(), Calculated(), SettingsComputer());
+  DoLogging(Basic(), LastBasic(), Calculated(), GetSettingsComputer());
 
-  GlideComputerTask::ProcessIdle(Basic(), SetCalculated(), SettingsComputer(),
+  GlideComputerTask::ProcessIdle(Basic(), SetCalculated(), GetSettingsComputer(),
                                  exhaustive);
 
   if (time_advanced())
-    warning_computer.Update(SettingsComputer(), Basic(), LastBasic(),
+    warning_computer.Update(GetSettingsComputer(), Basic(), LastBasic(),
                             Calculated(), SetCalculated().airspace_warnings);
 }
 
 bool
 GlideComputer::DetermineTeamCodeRefLocation()
 {
-  const SETTINGS_COMPUTER &settings_computer = SettingsComputer();
+  const SETTINGS_COMPUTER &settings_computer = GetSettingsComputer();
 
   if (settings_computer.team_code_reference_waypoint < 0)
     return false;
@@ -244,7 +244,7 @@ ComputeTeamCode(const GeoPoint &location, const GeoPoint &reference_location,
 void
 GlideComputer::CalculateTeammateBearingRange()
 {
-  const SETTINGS_COMPUTER &settings_computer = SettingsComputer();
+  const SETTINGS_COMPUTER &settings_computer = GetSettingsComputer();
   const NMEAInfo &basic = Basic();
   TeamInfo &teamcode_info = SetCalculated();
 

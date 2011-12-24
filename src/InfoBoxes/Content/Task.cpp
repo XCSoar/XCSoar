@@ -536,7 +536,7 @@ InfoBoxContentHomeDistance::Update(InfoBoxData &data)
 void
 InfoBoxContentOLC::Update(InfoBoxData &data)
 {
-  if (!XCSoarInterface::SettingsComputer().task.enable_olc ||
+  if (!XCSoarInterface::GetSettingsComputer().task.enable_olc ||
       !protected_task_manager) {
     data.SetInvalid();
     return;

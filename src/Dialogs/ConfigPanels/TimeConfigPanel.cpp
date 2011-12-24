@@ -118,7 +118,7 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   loading = true;
 
-  int utc_offset = XCSoarInterface::SettingsComputer().utc_offset;
+  int utc_offset = XCSoarInterface::GetSettingsComputer().utc_offset;
   LoadFormProperty(form, _T("prpUTCOffset"),
                    fixed(iround(fixed(utc_offset) / 1800)) / 2);
 #ifdef WIN32

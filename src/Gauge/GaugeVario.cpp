@@ -110,7 +110,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
     fixed mc = Units::ToUserVSpeed(Calculated().common_stats.current_mc);
     RenderValue(canvas, orgBottom.x, orgBottom.y, &diValueBottom, &diLabelBottom,
                 mc,
-                SettingsComputer().task.auto_mc ? _T("Auto MC") : _T("MC"));
+                GetSettingsComputer().task.auto_mc ? _T("Auto MC") : _T("MC"));
   }
 
   if (Settings().ShowSpeedToFly)

@@ -61,7 +61,7 @@ public:
 
   virtual bool Next() = 0;
 
-  const SETTINGS_COMPUTER &SettingsComputer() const {
+  const SETTINGS_COMPUTER &GetSettingsComputer() const {
     return settings_computer;
   }
 

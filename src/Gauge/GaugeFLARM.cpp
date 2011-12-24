@@ -129,5 +129,5 @@ GaugeFLARM::Update(const NMEAInfo &basic)
   SmallTrafficWindow *window =
     (SmallTrafficWindow *)GetWindow();
 
-  window->Update(basic, blackboard.SettingsComputer());
+  window->Update(basic, blackboard.GetSettingsComputer());
 }

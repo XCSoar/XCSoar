@@ -60,7 +60,7 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                                _T("IDR_XML_LOGGERCONFIGPANEL_L"));
 
   const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SettingsComputer();
+    CommonInterface::GetSettingsComputer();
   const Plane &plane = settings_computer.plane;
 
   LoadFormProperty(form, _T("prpLoggerTimeStepCruise"),

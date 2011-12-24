@@ -122,7 +122,7 @@ class GlueMapWindow : public MapWindow {
 
   /**
    * The new glide computer settings.  It is passed to
-   * MapWindowBlackboard::ReadSettingsComputer() before the next
+   * MapWindowBlackboard::ReadGetSettingsComputer() before the next
    * frame.
    */
   SETTINGS_COMPUTER next_settings_computer;

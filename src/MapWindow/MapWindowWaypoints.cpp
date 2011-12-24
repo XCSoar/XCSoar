@@ -29,6 +29,6 @@ MapWindow::DrawWaypoints(Canvas &canvas)
 {
   waypoint_renderer.render(canvas, label_block,
                             render_projection, GetSettingsMap().waypoint,
-                            SettingsComputer().task,
+                            GetSettingsComputer().task,
                             task, route_planner);
 }

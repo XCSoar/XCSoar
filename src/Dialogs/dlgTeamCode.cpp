@@ -69,9 +69,9 @@ Update()
   SetFormValue(*wf, _T("prpOwnCode"),
                teamcode_info.own_teammate_code.GetCode());
   SetFormValue(*wf, _T("prpMateCode"),
-               CommonInterface::SettingsComputer().team_code.GetCode());
+               CommonInterface::GetSettingsComputer().team_code.GetCode());
 
-  const TeamCodeSettings &settings = CommonInterface::SettingsComputer();
+  const TeamCodeSettings &settings = CommonInterface::GetSettingsComputer();
   SetFormValue(*wf, _T("prpFlarmLock"),
                settings.team_flarm_tracking
                ? settings.team_flarm_callsign.c_str()
@@ -95,7 +95,7 @@ OnCodeClicked(gcc_unused WndButton &button)
   TCHAR newTeammateCode[10];
 
   CopyString(newTeammateCode,
-             XCSoarInterface::SettingsComputer().team_code.GetCode(), 10);
+             XCSoarInterface::GetSettingsComputer().team_code.GetCode(), 10);
 
   if (!dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
                              newTeammateCode, 7))
@@ -104,7 +104,7 @@ OnCodeClicked(gcc_unused WndButton &button)
   TrimRight(newTeammateCode);
 
   XCSoarInterface::SetSettingsComputer().team_code.Update(newTeammateCode);
-  if (!string_is_empty(XCSoarInterface::SettingsComputer().team_code.GetCode())) {
+  if (!string_is_empty(XCSoarInterface::GetSettingsComputer().team_code.GetCode())) {
     XCSoarInterface::SetSettingsComputer().team_code_valid = true;
     XCSoarInterface::SetSettingsComputer().team_flarm_tracking = false;
   }
@@ -126,7 +126,7 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
   settings.team_flarm_callsign = newTeamFlarmCNTarget;
   settings.team_code_valid = false;
 
-  if (string_is_empty(XCSoarInterface::SettingsComputer().team_flarm_callsign)) {
+  if (string_is_empty(XCSoarInterface::GetSettingsComputer().team_flarm_callsign)) {
     settings.team_flarm_tracking = false;
     settings.team_flarm_id.Clear();
     return;
@@ -134,7 +134,7 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
 
   const FlarmId *ids[30];
   unsigned count = FlarmDetails::FindIdsByCallSign(
-      XCSoarInterface::SettingsComputer().team_flarm_callsign, ids, 30);
+      XCSoarInterface::GetSettingsComputer().team_flarm_callsign, ids, 30);
 
   if (count > 0) {
     const FlarmId *id =

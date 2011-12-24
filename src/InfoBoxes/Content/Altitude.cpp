@@ -171,7 +171,7 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxData &data)
 
   // Set Color (red/black)
   data.SetValueColor(calculated.altitude_agl <
-      XCSoarInterface::SettingsComputer().task.route_planner.safety_height_terrain ? 1 : 0);
+      XCSoarInterface::GetSettingsComputer().task.route_planner.safety_height_terrain ? 1 : 0);
 }
 
 void
@@ -239,7 +239,7 @@ InfoBoxContentFlightLevel::Update(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SettingsComputer();
+    CommonInterface::GetSettingsComputer();
 
   if (basic.pressure_altitude_available) {
     fixed Altitude = Units::ToUserUnit(basic.pressure_altitude, unFeet);

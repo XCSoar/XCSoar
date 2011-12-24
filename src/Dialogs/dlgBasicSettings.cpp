@@ -53,7 +53,7 @@ SetButtons()
 
   if ((wb = (WndButton *)wf->FindByName(_T("cmdDump"))) != NULL) {
     wb->set_visible(glide_polar.HasBallast());
-    wb->SetCaption(XCSoarInterface::SettingsComputer().ballast_timer_active ?
+    wb->SetCaption(XCSoarInterface::GetSettingsComputer().ballast_timer_active ?
         _("Stop") : _("Dump"));
   }
 }
@@ -70,7 +70,7 @@ SetBallastTimer(bool active)
   if (protected_task_manager == NULL)
     return;
 
-  if (active == XCSoarInterface::SettingsComputer().ballast_timer_active)
+  if (active == XCSoarInterface::GetSettingsComputer().ballast_timer_active)
     return;
 
   if (active && changed) {
@@ -88,7 +88,7 @@ SetBallastTimer(bool active)
 static void
 OnBallastDump(gcc_unused WndButton &Sender)
 {
-  SetBallastTimer(!XCSoarInterface::SettingsComputer().ballast_timer_active);
+  SetBallastTimer(!XCSoarInterface::GetSettingsComputer().ballast_timer_active);
 }
 
 static void
@@ -186,9 +186,9 @@ static void
 OnTimerNotify(gcc_unused WndForm &Sender)
 {
   if (protected_task_manager != NULL &&
-      XCSoarInterface::SettingsComputer().ballast_timer_active && !changed) {
+      XCSoarInterface::GetSettingsComputer().ballast_timer_active && !changed) {
     /* get new GlidePolar values */
-    glide_polar = CommonInterface::SettingsComputer().glide_polar_task;
+    glide_polar = CommonInterface::GetSettingsComputer().glide_polar_task;
 
     /* display the new values on the screen */
     SetBallast();
@@ -208,7 +208,7 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
   switch (Mode) {
   case DataField::daSpecial:
     SetBallastTimer(glide_polar.HasBallast() &&
-                    !XCSoarInterface::SettingsComputer().ballast_timer_active);
+                    !XCSoarInterface::GetSettingsComputer().ballast_timer_active);
     break;
   case DataField::daChange:
     glide_polar.SetBallastLitres(df.GetAsFixed());
@@ -248,7 +248,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 void
 dlgBasicSettingsShowModal()
 {
-  const SETTINGS_COMPUTER &settings = CommonInterface::SettingsComputer();
+  const SETTINGS_COMPUTER &settings = CommonInterface::GetSettingsComputer();
 
   glide_polar = settings.glide_polar_task;
 

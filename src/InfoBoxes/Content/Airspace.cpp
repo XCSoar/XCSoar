@@ -66,7 +66,7 @@ static bool
 CheckAirspace(const AbstractAirspace &airspace)
 {
   const AirspaceWarningConfig &config =
-    CommonInterface::SettingsComputer().airspace.warnings;
+    CommonInterface::GetSettingsComputer().airspace.warnings;
 
   return config.class_enabled(airspace.GetType()) && !IsAcked(airspace);
 }

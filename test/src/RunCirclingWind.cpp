@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     circling_computer.Turning(replay->SetCalculated(),
                               replay->Basic(), replay->LastBasic(),
                               replay->Calculated(), replay->LastCalculated(),
-                              replay->SettingsComputer());
+                              replay->GetSettingsComputer());
 
     if ((replay->LastCalculated().turn_mode == WAITCLIMB &&
          replay->Calculated().turn_mode == CLIMB) ||

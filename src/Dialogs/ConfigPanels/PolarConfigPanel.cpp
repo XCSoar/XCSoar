@@ -127,7 +127,7 @@ PolarConfigPanel::UpdatePolarTitle()
 {
   StaticString<100> caption(_("Polar"));
   caption += _T(": ");
-  caption += CommonInterface::SettingsComputer().plane.polar_name;
+  caption += CommonInterface::GetSettingsComputer().plane.polar_name;
 
   ((WndFrame *)form.FindByName(_T("lblPolar")))->SetCaption(caption);
 }
@@ -378,7 +378,7 @@ PolarConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetLiftFieldStepAndMax(_T("prpPolarW2"));
   SetLiftFieldStepAndMax(_T("prpPolarW3"));
 
-  const SETTINGS_COMPUTER &settings = XCSoarInterface::SettingsComputer();
+  const SETTINGS_COMPUTER &settings = XCSoarInterface::GetSettingsComputer();
   UpdatePolarPoints(settings.plane.v1, settings.plane.v2, settings.plane.v3,
                     settings.plane.w1, settings.plane.w2, settings.plane.w3);
 
@@ -394,7 +394,7 @@ PolarConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   UpdatePolarTitle();
   UpdatePolarInvalidLabel();
 
-  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
+  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::GetSettingsComputer();
 
   LoadFormProperty(form, _T("prpHandicap"),
                    settings_computer.plane.handicap);

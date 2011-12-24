@@ -103,8 +103,8 @@ protected:
     return blackboard.Calculated();
   }
 
-  const SETTINGS_COMPUTER &SettingsComputer() const {
-    return blackboard.SettingsComputer();
+  const SETTINGS_COMPUTER &GetSettingsComputer() const {
+    return blackboard.GetSettingsComputer();
   }
 
   const VarioSettings &Settings() const {

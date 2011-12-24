@@ -87,7 +87,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   instance = this;
 
   const TrackingSettings &settings =
-    CommonInterface::SettingsComputer().tracking;
+    CommonInterface::GetSettingsComputer().tracking;
 
   LoadWindow(CallBackTable, parent,
              Layout::landscape ? _T("IDR_XML_TRACKINGCONFIGPANEL") :

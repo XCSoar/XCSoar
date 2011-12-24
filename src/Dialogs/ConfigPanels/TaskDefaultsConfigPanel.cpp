@@ -121,7 +121,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                                _T("IDR_XML_TASKDEFAULTSCONFIGPANEL"));
 
   WndProperty *wp;
-  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
+  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::GetSettingsComputer();
   const TaskBehaviour &task_behaviour = settings_computer.task;
   OrderedTask* temptask = protected_task_manager->TaskBlank();
   temptask->SetFactory(TaskBehaviour::FACTORY_RT);

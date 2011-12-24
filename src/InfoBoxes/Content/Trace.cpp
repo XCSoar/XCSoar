@@ -63,7 +63,7 @@ InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
   const Look &look = CommonInterface::main_window.GetLook();
   TraceHistoryRenderer renderer(look.trace_history, look.vario, look.chart);
   renderer.RenderVario(canvas, get_spark_rect(infobox), var, center,
-                       CommonInterface::SettingsComputer().glide_polar_task.GetMC());
+                       CommonInterface::GetSettingsComputer().glide_polar_task.GetMC());
 }
 
 void
@@ -174,10 +174,10 @@ InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canva
   ThermalBandRenderer renderer(look.thermal_band, look.chart);
   renderer.DrawThermalBandSpark(CommonInterface::Basic(),
                                 CommonInterface::Calculated(),
-                                CommonInterface::SettingsComputer(),
+                                CommonInterface::GetSettingsComputer(),
                                 canvas,
                                 infobox.GetValueAndCommentRect(),
-                                XCSoarInterface::SettingsComputer().task);
+                                XCSoarInterface::GetSettingsComputer().task);
 }
 
 void

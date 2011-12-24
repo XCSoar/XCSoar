@@ -120,7 +120,7 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
   } else {
     protected_marks->MarkLocation(basic.location, basic.date_time_utc);
 
-    if (XCSoarInterface::SettingsComputer().sound_modes_enabled)
+    if (XCSoarInterface::GetSettingsComputer().sound_modes_enabled)
       PlayResource(_T("IDR_WAV_CLEAR"));
   }
 
@@ -349,7 +349,7 @@ InputEvents::eventPlaySound(const TCHAR *misc)
 void
 InputEvents::eventAutoLogger(const TCHAR *misc)
 {
-  if (!XCSoarInterface::SettingsComputer().auto_logger_disabled)
+  if (!XCSoarInterface::GetSettingsComputer().auto_logger_disabled)
     eventLogger(misc);
 }
 
@@ -375,7 +375,7 @@ InputEvents::eventLogger(const TCHAR *misc)
 
   const NMEAInfo &basic = CommonInterface::Basic();
   const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SettingsComputer();
+    CommonInterface::GetSettingsComputer();
 
   if (_tcscmp(misc, _T("start ask")) == 0)
     logger.GUIStartLogger(basic, settings_computer,

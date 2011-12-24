@@ -76,8 +76,8 @@ public:
    * @return The InterfaceBlackboard.SettingsComputer
    */
   gcc_const
-  static const SETTINGS_COMPUTER& SettingsComputer()
-  { return blackboard.SettingsComputer(); }
+  static const SETTINGS_COMPUTER& GetSettingsComputer()
+  { return blackboard.GetSettingsComputer(); }
 
   /**
    * Returns the InterfaceBlackboard.SettingsComputer (read-write)
@@ -177,7 +177,7 @@ protected:
    * Determine whether vario gauge, FLARM radar and infoboxes should be drawn
    */
   static void DisplayModes();
-  static void SendSettingsComputer();
+  static void SendGetSettingsComputer();
 
   static bool force_shutdown;
 

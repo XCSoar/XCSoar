@@ -64,7 +64,7 @@ InfoBoxContentTemperature::Update(InfoBoxData &data)
 void
 InfoBoxContentTemperatureForecast::Update(InfoBoxData &data)
 {
-  fixed temperature = CommonInterface::SettingsComputer().forecast_temperature;
+  fixed temperature = CommonInterface::GetSettingsComputer().forecast_temperature;
   SetValueFromFixed(data, _T("%2.1f"),
                     Units::ToUserTemperature(temperature));
 

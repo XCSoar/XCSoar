@@ -45,7 +45,7 @@ void
 Profile::SetSoundSettings()
 {
   const SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::SettingsComputer();
+    XCSoarInterface::GetSettingsComputer();
 
   Set(szProfileSoundVolume,
       settings_computer.sound_volume);

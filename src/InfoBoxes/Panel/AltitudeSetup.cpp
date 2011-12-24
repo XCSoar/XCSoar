@@ -104,7 +104,7 @@ void
 AltitudeSetupPanel::Show(const PixelRect &rc)
 {
   LoadFormProperty(form, _T("prpQNH"),
-                   Units::ToUserPressure(CommonInterface::SettingsComputer().pressure.GetHectoPascal()));
+                   Units::ToUserPressure(CommonInterface::GetSettingsComputer().pressure.GetHectoPascal()));
 
   WndProperty* wp;
   wp = (WndProperty*)form.FindByName(_T("prpQNH"));

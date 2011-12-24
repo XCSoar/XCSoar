@@ -335,7 +335,7 @@ TaskListPanel::OnNewTaskClicked()
       (MessageBoxX(_("Create new task?"), _("Task New"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
     (*active_task)->Clear();
-    (*active_task)->SetFactory(XCSoarInterface::SettingsComputer().task.task_type_default);
+    (*active_task)->SetFactory(XCSoarInterface::GetSettingsComputer().task.task_type_default);
     *task_modified = true;
     tab_bar.SetCurrentPage(dlgTaskManager::GetPropertiesTab());
     tab_bar.set_focus();
@@ -396,7 +396,7 @@ TaskListPanel::OnDeclareClicked()
   }
 
   Declaration decl(*active_task);
-  Profile::GetDeclarationConfig(decl, CommonInterface::SettingsComputer().plane);
+  Profile::GetDeclarationConfig(decl, CommonInterface::GetSettingsComputer().plane);
   ExternalLogger::Declare(decl, way_points.GetHome());
 }
 

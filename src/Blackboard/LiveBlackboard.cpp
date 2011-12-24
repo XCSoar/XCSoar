@@ -76,7 +76,7 @@ LiveBlackboard::BroadcastComputerSettingsUpdate()
   calling_listeners = true;
 
   for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-    (*i)->OnComputerSettingsUpdate(SettingsComputer());
+    (*i)->OnComputerSettingsUpdate(GetSettingsComputer());
 
   calling_listeners = false;
 }

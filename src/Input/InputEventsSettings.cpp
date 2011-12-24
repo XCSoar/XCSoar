@@ -299,7 +299,7 @@ InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
     CommonInterface::SetSettingsComputer().forecast_temperature -= fixed_one;
   else if (_tcscmp(misc, _T("show")) == 0) {
     fixed temperature =
-      CommonInterface::SettingsComputer().forecast_temperature;
+      CommonInterface::GetSettingsComputer().forecast_temperature;
     TCHAR Temp[100];
     _stprintf(Temp, _T("%f"),
               (double)Units::ToUserTemperature(temperature));

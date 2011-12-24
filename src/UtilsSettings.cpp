@@ -143,7 +143,7 @@ SettingsLeave(const UISettings &old_ui_settings)
     TaskEvents task_events;
     GlidePolar glide_polar(lease->GetGlidePolar());
     OrderedTask *task = lease->Clone(task_events,
-                                     XCSoarInterface::SettingsComputer().task,
+                                     XCSoarInterface::GetSettingsComputer().task,
                                      glide_polar);
     if (task) {
       // this must be done in thread lock because it potentially changes the
@@ -176,7 +176,7 @@ SettingsLeave(const UISettings &old_ui_settings)
 
     airspace_database.clear();
     ReadAirspace(airspace_database, terrain,
-                 CommonInterface::SettingsComputer().pressure,
+                 CommonInterface::GetSettingsComputer().pressure,
                  operation);
   }
 

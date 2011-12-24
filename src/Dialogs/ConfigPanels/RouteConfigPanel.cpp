@@ -110,7 +110,7 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              Layout::landscape ? _T("IDR_XML_ROUTECONFIGPANEL") :
                                _T("IDR_XML_ROUTECONFIGPANEL_L"));
 
-  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
+  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::GetSettingsComputer();
   const RoutePlannerConfig &route_planner =
     settings_computer.task.route_planner;
 

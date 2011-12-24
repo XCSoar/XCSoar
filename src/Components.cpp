@@ -170,7 +170,7 @@ XCSoarInterface::AfterStartup()
   }
 
   OrderedTask *defaultTask = protected_task_manager->TaskCreateDefault(
-      &way_points, SettingsComputer().task.task_type_default);
+      &way_points, GetSettingsComputer().task.task_type_default);
   if (defaultTask) {
     {
       ScopeSuspendAllThreads suspend;
@@ -302,7 +302,7 @@ XCSoarInterface::Startup()
 
   protected_task_manager =
     new ProtectedTaskManager(*task_manager,
-                             XCSoarInterface::SettingsComputer().task,
+                             XCSoarInterface::GetSettingsComputer().task,
                              task_events);
 
   // Read the terrain file
@@ -313,7 +313,7 @@ XCSoarInterface::Startup()
   glide_computer = new GlideComputer(way_points, airspace_database,
                                      *protected_task_manager,
                                      task_events);
-  glide_computer->ReadSettingsComputer(SettingsComputer());
+  glide_computer->ReadSettingsComputer(GetSettingsComputer());
   glide_computer->SetTerrain(terrain);
   glide_computer->SetLogger(&logger);
   glide_computer->Initialise();
@@ -325,9 +325,9 @@ XCSoarInterface::Startup()
 
   GlidePolar &gp = SetSettingsComputer().glide_polar_task;
   gp = GlidePolar(fixed_zero);
-  gp.SetMC(SettingsComputer().task.safety_mc);
+  gp.SetMC(GetSettingsComputer().task.safety_mc);
   PlaneGlue::FromProfile(SetSettingsComputer().plane);
-  PlaneGlue::Synchronize(SettingsComputer().plane, SetSettingsComputer(), gp);
+  PlaneGlue::Synchronize(GetSettingsComputer().plane, SetSettingsComputer(), gp);
   task_manager->SetGlidePolar(gp);
 
   // Read the topography file(s)
@@ -353,7 +353,7 @@ XCSoarInterface::Startup()
   RASP.ScanAll(Basic().location, operation);
 
   // Reads the airspace files
-  ReadAirspace(airspace_database, terrain, SettingsComputer().pressure,
+  ReadAirspace(airspace_database, terrain, GetSettingsComputer().pressure,
                operation);
 
   {
@@ -362,7 +362,7 @@ XCSoarInterface::Startup()
                       device_blackboard->Calculated());
     ProtectedAirspaceWarningManager::ExclusiveLease lease(glide_computer->GetAirspaceWarnings());
     lease->Reset(aircraft_state);
-    lease->SetConfig(CommonInterface::SettingsComputer().airspace.warnings);
+    lease->SetConfig(CommonInterface::GetSettingsComputer().airspace.warnings);
   }
 
   // Read the FLARM details file
@@ -390,7 +390,7 @@ XCSoarInterface::Startup()
 /*
   -- Reset polar in case devices need the data
   LogStartUp(_T("GlidePolar::UpdatePolar"));
-  GlidePolar::UpdatePolar(true, SettingsComputer());
+  GlidePolar::UpdatePolar(true, GetSettingsComputer());
 
   This should be done inside devStartup if it is really required
 */
@@ -445,7 +445,7 @@ XCSoarInterface::Startup()
 
 #ifdef HAVE_TRACKING
   tracking = new TrackingGlue();
-  tracking->SetSettings(SettingsComputer().tracking);
+  tracking->SetSettings(GetSettingsComputer().tracking);
 #endif
 
   globalRunningEvent.Signal();

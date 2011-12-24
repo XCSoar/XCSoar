@@ -62,7 +62,7 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              Layout::landscape ? _T("IDR_XML_SAFETYFACTORSCONFIGPANEL") :
                                _T("IDR_XML_SAFETYFACTORSCONFIGPANEL_L"));
 
-  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
+  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::GetSettingsComputer();
   const TaskBehaviour &task_behaviour = settings_computer.task;
 
   LoadFormProperty(form, _T("prpSafetyAltitudeArrival"), ugAltitude,

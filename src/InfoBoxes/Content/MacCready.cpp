@@ -80,12 +80,12 @@ void
 InfoBoxContentMacCready::Update(InfoBoxData &data)
 {
   const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SettingsComputer();
+    CommonInterface::GetSettingsComputer();
 
   SetVSpeed(data, settings_computer.glide_polar_task.GetMC());
 
   // Set Comment
-  if (XCSoarInterface::SettingsComputer().task.auto_mc)
+  if (XCSoarInterface::GetSettingsComputer().task.auto_mc)
     data.SetComment(_("AUTO"));
   else
     data.SetComment(_("MANUAL"));
@@ -98,7 +98,7 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
     return false;
 
   const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SettingsComputer();
+    CommonInterface::GetSettingsComputer();
   const GlidePolar &polar = settings_computer.glide_polar_task;
   TaskBehaviour &task_behaviour = CommonInterface::SetSettingsComputer().task;
   fixed mc = polar.GetMC();
@@ -143,7 +143,7 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
     return false;
 
   const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SettingsComputer();
+    CommonInterface::GetSettingsComputer();
   const GlidePolar &polar = settings_computer.glide_polar_task;
   fixed mc = polar.GetMC();
 

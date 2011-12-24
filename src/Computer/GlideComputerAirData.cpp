@@ -60,7 +60,7 @@ GlideComputerAirData::ResetFlight(const bool full)
 
   thermallocator.Reset();
 
-  gr_calculator.Initialize(SettingsComputer());
+  gr_calculator.Initialize(GetSettingsComputer());
 
   flying_computer.Reset();
   wind_computer.Reset();
@@ -81,7 +81,7 @@ GlideComputerAirData::ProcessVertical()
   const NMEAInfo &basic = Basic();
   DerivedInfo &calculated = SetCalculated();
 
-  auto_qnh.Process(basic, calculated, SettingsComputer(), waypoints);
+  auto_qnh.Process(basic, calculated, GetSettingsComputer(), waypoints);
 
   Heading();
   TurnRate();
@@ -113,7 +113,7 @@ GlideComputerAirData::ProcessVertical()
 void
 GlideComputerAirData::Wind()
 {
-  wind_computer.Compute(SettingsComputer(),
+  wind_computer.Compute(GetSettingsComputer(),
                         Basic(), LastBasic(),
                         SetCalculated());
 }
@@ -121,7 +121,7 @@ GlideComputerAirData::Wind()
 void
 GlideComputerAirData::SelectWind()
 {
-  wind_computer.Select(SettingsComputer(), Basic(), SetCalculated());
+  wind_computer.Select(GetSettingsComputer(), Basic(), SetCalculated());
 }
 
 void
@@ -150,7 +150,7 @@ GlideComputerAirData::NettoVario()
 {
   const MoreData &basic = Basic();
   const DerivedInfo &calculated = Calculated();
-  const SETTINGS_COMPUTER &settings_computer = SettingsComputer();
+  const SETTINGS_COMPUTER &settings_computer = GetSettingsComputer();
   VarioInfo &vario = SetCalculated();
 
   vario.sink_rate =
@@ -450,7 +450,7 @@ GlideComputerAirData::FlightTimes()
     return false;
   }
 
-  FlightState(SettingsComputer().glide_polar_task);
+  FlightState(GetSettingsComputer().glide_polar_task);
   TakeoffLanding();
 
   return true;
@@ -495,7 +495,7 @@ GlideComputerAirData::OnTakeoff()
 void
 GlideComputerAirData::OnSwitchClimbMode(bool isclimb, bool left)
 {
-  gr_calculator.Initialize(SettingsComputer());
+  gr_calculator.Initialize(GetSettingsComputer());
 }
 
 void
@@ -550,7 +550,7 @@ GlideComputerAirData::Turning()
   circling_computer.Turning(SetCalculated(),
                             Basic(), LastBasic(),
                             Calculated(), LastCalculated(),
-                            SettingsComputer());
+                            GetSettingsComputer());
 
   if (LastCalculated().turn_mode == WAITCLIMB &&
       Calculated().turn_mode == CLIMB)
@@ -654,7 +654,7 @@ GlideComputerAirData::WorkingBand()
   ThermalBandInfo &tbi = SetCalculated().thermal_band;
 
   const fixed h_safety =
-    SettingsComputer().task.route_planner.safety_height_terrain +
+    GetSettingsComputer().task.route_planner.safety_height_terrain +
     Calculated().GetTerrainBaseFallback();
 
   tbi.working_band_height = Basic().TE_altitude - h_safety;

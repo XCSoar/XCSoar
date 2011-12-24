@@ -341,9 +341,9 @@ Calculated()
 }
 
 static const SETTINGS_COMPUTER &
-SettingsComputer()
+GetSettingsComputer()
 {
-  return CommonInterface::SettingsComputer();
+  return CommonInterface::GetSettingsComputer();
 }
 
 static const SETTINGS_MAP &
@@ -376,7 +376,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   }
 
   invalid |= ExpandTaskMacros(OutBuffer, Size,
-                              Calculated(), SettingsComputer());
+                              Calculated(), GetSettingsComputer());
 
 
   if (_tcsstr(OutBuffer, _T("$(CheckFLARM)"))) {
@@ -543,7 +543,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                     gettext(labels[(i + 1) % n]), Size);
   }
 
-  CondReplaceInString(SettingsComputer().task.auto_mc,
+  CondReplaceInString(GetSettingsComputer().task.auto_mc,
                       OutBuffer, _T("$(MacCreadyToggleActionName)"),
                       _("Manual"), _("Auto"), Size);
   CondReplaceInString(GetUIState().auxiliary_enabled,

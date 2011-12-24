@@ -258,10 +258,10 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     buffer += _T(" ");
   }
 
-  if (SettingsComputer().ballast_timer_active)
+  if (GetSettingsComputer().ballast_timer_active)
     buffer.AppendFormat(
         _T("BALLAST %d LITERS "),
-        (int)SettingsComputer().glide_polar_task.GetBallastLitres());
+        (int)GetSettingsComputer().glide_polar_task.GetBallastLitres());
 
   if (weather != NULL && weather->GetParameter() > 0) {
     const TCHAR *label = weather->ItemLabel(weather->GetParameter());
@@ -339,19 +339,19 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
     ProtectedTaskManager::Lease task_manager(*task);
     renderer.DrawThermalBand(Basic(),
                              Calculated(),
-                             SettingsComputer(),
+                             GetSettingsComputer(),
                              canvas,
                              tb_rect,
-                             SettingsComputer().task,
+                             GetSettingsComputer().task,
                              true,
                              &task_manager->GetOrderedTaskBehaviour());
   } else {
     renderer.DrawThermalBand(Basic(),
                              Calculated(),
-                             SettingsComputer(),
+                             GetSettingsComputer(),
                              canvas,
                              tb_rect,
-                             SettingsComputer().task,
+                             GetSettingsComputer().task,
                              true);
   }
 }
