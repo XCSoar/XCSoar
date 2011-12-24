@@ -69,16 +69,27 @@ TabbedControl::AddClient(Window *w)
   AddPage(new WindowWidget(w));
 }
 
-void
-TabbedControl::SetCurrentPage(unsigned i)
+bool
+TabbedControl::SetCurrentPage(unsigned i, bool click)
 {
   assert(i < tabs.size());
 
-  if (i == current)
-    return;
+  if (i == current) {
+    if (!click) {
+      return true;
+    } else {
+      tabs[i].widget->ReClick();
+      return true;
+    }
+  }
 
   assert(tabs[current].prepared);
-  tabs[current].widget->Leave();
+  if (!tabs[current].widget->Leave())
+    return false;
+
+  if (click && !tabs[i].widget->Click())
+    return false;
+
   tabs[current].widget->Hide();
 
   current = i;
@@ -92,6 +103,8 @@ TabbedControl::SetCurrentPage(unsigned i)
 
   if (page_flipped_callback != NULL)
     page_flipped_callback();
+
+  return true;
 }
 
 void
@@ -121,19 +134,7 @@ TabbedControl::ClickPage(unsigned i)
 {
   assert(i < tabs.size());
 
-  if (i == current) {
-    /* already visible: invoke ReClick() */
-    assert(tabs[i].prepared);
-
-    tabs[i].widget->ReClick();
-    return true;
-  } else if (tabs[i].widget->Click()) {
-    /* switch to that page after confirmation by Widget */
-    SetCurrentPage(i);
-    return true;
-  } else
-    /* cancelled by Widget */
-    return false;
+  return SetCurrentPage(i, true);
 }
 
 bool

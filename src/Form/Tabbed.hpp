@@ -92,16 +92,23 @@ public:
     return tabs[current].widget;
   }
 
-  void SetCurrentPage(unsigned i);
+  /**
+   * Attempts to display page.  Follows Widget API rules
+   * @param i Tab that is requested to be shown.
+   * @param click true if Widget's Click() or ReClick() is to be called.
+   * @return true if specified page is now visible
+   */
+  bool SetCurrentPage(unsigned i, bool click = false);
 
   void NextPage();
   void PreviousPage();
 
   /**
+   * Calls SetCurrentPage() with click=true parameter.
    * Call this to indicate that the user has clicked on the "handle
    * area" of a page (e.g. a tab).  It will invoke Widget::ReClick()
-   * if the page was already visible, or Widget::Click() and switch to
-   * that page.
+   * if the page was already visible, or Widget::Leave() then Widget::Click()
+   * and switch to that page.
    *
    * @return true if the specified page is now visible
    */
