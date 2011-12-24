@@ -68,6 +68,11 @@ struct RecordedFlightInfo {
      * Flight number, used by the FLARM driver.
      */
     uint8_t flarm;
+
+    /**
+     * Flight number, used by the Flytec driver.
+     */
+    unsigned flytec;
   } internal;
 };
 

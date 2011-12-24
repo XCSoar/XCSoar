@@ -26,14 +26,27 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "NMEA/Checksum.hpp"
 #include "Units/System.hpp"
+#include "Device/Port/Port.hpp"
+#include "PeriodClock.hpp"
+#include "Util/Macros.hpp"
+#include "IO/TextWriter.hpp"
 
 #include <stdlib.h>
 #include <math.h>
 
 class FlytecDevice : public AbstractDevice {
+  Port &port;
+
 public:
+  FlytecDevice(Port &_port):port(_port) {}
+
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
+
+  bool ReadFlightList(RecordedFlightList &flight_list, OperationEnvironment &env);
+  bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
+                      OperationEnvironment &env);
 };
 
 /**
@@ -264,15 +277,253 @@ FlytecDevice::ParseNMEA(const char *_line, NMEAInfo &info)
     return false;
 }
 
+static bool
+ExpectCharacter(Port &port, char c, unsigned timeout_ms)
+{
+  PeriodClock timeout;
+  timeout.update();
+
+  while (!timeout.check(timeout_ms))
+    if (port.GetChar() == c)
+      return true;
+
+  return false;
+}
+
+static bool
+ExpectXOff(Port &port, unsigned timeout_ms)
+{
+  return ExpectCharacter(port, 0x13, timeout_ms);
+}
+
+static bool
+ReceiveLine(Port &port, char *buffer, size_t length, unsigned timeout_ms)
+{
+  PeriodClock timeout;
+  timeout.update();
+
+  char *p = (char *)buffer, *end = p + length;
+  while (p < end) {
+    if (timeout.check(timeout_ms))
+      return false;
+
+    // Read single character from port
+    int c = port.GetChar();
+
+    // On failure try again until timed out
+    if (c == -1)
+      continue;
+
+    // Break on XOn
+    if (c == 0x11) {
+      *p = '\0';
+      break;
+    }
+
+    // Write received character to buffer
+    *p = c;
+    p++;
+
+    // Break on line break
+    if (c == '\n') {
+      *p = '\0';
+      break;
+    }
+  }
+
+  return true;
+}
+
+static bool
+ParseDate(const char *str, BrokenDate &date)
+{
+  char *endptr;
+
+  // Parse day
+  date.day = strtoul(str, &endptr, 10);
+
+  // Check if parsed correctly and following character is a separator
+  if (str == endptr || *endptr != '.')
+    return false;
+
+  // Set str pointer to first character after the separator
+  str = endptr + 1;
+
+  // Parse month
+  date.month = strtoul(str, &endptr, 10);
+
+  // Check if parsed correctly and following character is a separator
+  if (str == endptr || *endptr != '.')
+    return false;
+
+  // Set str pointer to first character after the separator
+  str = endptr + 1;
+
+  // Parse year
+  date.year = strtoul(str, &endptr, 10) + 2000;
+
+  // Check if parsed correctly and following character is a separator
+  return str != endptr;
+}
+
+static bool
+ParseTime(const char *str, BrokenTime &time)
+{
+  char *endptr;
+
+  // Parse year
+  time.hour = strtoul(str, &endptr, 10);
+
+  // Check if parsed correctly and following character is a separator
+  if (str == endptr || *endptr != ':')
+    return false;
+
+  // Set str pointer to first character after the separator
+  str = endptr + 1;
+
+  // Parse month
+  time.minute = strtoul(str, &endptr, 10);
+
+  // Check if parsed correctly and following character is a separator
+  if (str == endptr || *endptr != ':')
+    return false;
+
+  // Set str pointer to first character after the separator
+  str = endptr + 1;
+
+  // Parse day
+  time.second = strtoul(str, &endptr, 10);
+
+  // Check if parsed correctly and following character is a separator
+  return str != endptr;
+}
+
+static BrokenTime
+operator+(BrokenTime &a, BrokenTime &b)
+{
+  BrokenTime c;
+
+  c.hour = a.hour + b.hour;
+  c.minute = a.minute + b.minute;
+  c.second = a.second + b.second;
+
+  while (c.second > 60) {
+    c.second -= 60;
+    c.minute++;
+  }
+
+  while (c.minute > 60) {
+    c.minute -= 60;
+    c.hour++;
+  }
+
+  return c;
+}
+
+bool
+FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
+                             OperationEnvironment &env)
+{
+  char buffer[256];
+  strcpy(buffer, "$PBRTL,");
+  AppendNMEAChecksum(buffer);
+  strcat(buffer, "\r\n");
+
+  port.Write(buffer);
+  if (!ExpectXOff(port, 1000))
+    return false;
+
+  while (true) {
+    // Receive the next line
+    if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer), 1000))
+      return false;
+
+    // XON was received, last record was read already
+    if (string_is_empty(buffer))
+      break;
+
+    // $PBRTL    Identifier
+    // AA        total number of stored tracks
+    // BB        actual number of track (0 indicates the most actual track)
+    // DD.MM.YY  date of recorded track (UTC)(e.g. 24.03.04)
+    // hh:mm:ss  starttime (UTC)(e.g. 08:23:15)
+    // HH:MM:SS  duration (e.g. 03:23:15)
+    // *ZZ       Checksum as defined by NMEA
+
+    RecordedFlightInfo flight;
+    NMEAInputLine line(buffer);
+
+    // Skip $PBRTL and number of stored tracks
+    line.skip(2);
+
+    if (!line.read_checked(flight.internal.flytec))
+      continue;
+
+    char field_buffer[16];
+    line.read(field_buffer, ARRAY_SIZE(field_buffer));
+    if (!ParseDate(field_buffer, flight.date))
+      continue;
+
+    line.read(field_buffer, ARRAY_SIZE(field_buffer));
+    if (!ParseTime(field_buffer, flight.start_time))
+      continue;
+
+    BrokenTime duration;
+    line.read(field_buffer, ARRAY_SIZE(field_buffer));
+    if (!ParseTime(field_buffer, duration))
+      continue;
+
+    flight.end_time = flight.start_time + duration;
+    flight_list.append(flight);
+  }
+
+  return true;
+}
+
+bool
+FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
+                             const TCHAR *path, OperationEnvironment &env)
+{
+  // Request flight record
+  char buffer[256];
+  sprintf(buffer, "$PBRTR,%02d", flight.internal.flytec);
+  AppendNMEAChecksum(buffer);
+  strcat(buffer, "\r\n");
+
+  port.Write(buffer);
+  if (!ExpectXOff(port, 1000))
+    return false;
+
+  // Open file writer
+  FileHandle writer(path, _T("wb"));
+  if (!writer.IsOpen())
+    return false;
+
+  while (true) {
+    // Receive the next line
+    if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer), 1000))
+      return false;
+
+    // XON was received
+    if (string_is_empty(buffer))
+      break;
+
+    // Write line to the file
+    writer.Write(buffer);
+  }
+
+  return true;
+}
+
 static Device *
 FlytecCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
-  return new FlytecDevice();
+  return new FlytecDevice(com_port);
 }
 
 const struct DeviceRegister flytec_device_driver = {
   _T("Flytec"),
   _T("Flytec 5030 / Brauniger"),
-  0,
+  0 /* DeviceRegister::LOGGER deactivated until current firmware supports this */,
   FlytecCreateOnPort,
 };
