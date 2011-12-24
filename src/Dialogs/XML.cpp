@@ -47,6 +47,7 @@ Copyright_License {
 #include "Form/Panel.hpp"
 #include "Form/Keyboard.hpp"
 #include "Form/CheckBox.hpp"
+#include "Form/DockWindow.hpp"
 #include "StringUtil.hpp"
 #include "ResourceLoader.hpp"
 #include "Look/DialogLook.hpp"
@@ -899,6 +900,10 @@ LoadChild(SubForm &form, ContainerWindow &parent,
       return NULL;
 
     window = create_callback(parent, pos.x, pos.y, size.cx, size.cy, style);
+  } else if (_tcscmp(node.getName(), _T("Widget")) == 0) {
+    DockWindow *dock = new DockWindow();
+    dock->set(parent, rc, style);
+    window = dock;
   }
 
   if (window != NULL) {
