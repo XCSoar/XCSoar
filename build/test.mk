@@ -501,6 +501,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Util/StringUtil.cpp \
@@ -1058,6 +1059,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/Compatibility/string.c \
@@ -1084,6 +1086,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
@@ -1147,6 +1150,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
@@ -1184,6 +1188,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \

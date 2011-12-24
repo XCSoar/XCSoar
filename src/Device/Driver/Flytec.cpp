@@ -33,6 +33,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "IO/TextWriter.hpp"
 #include "Operation/Operation.hpp"
+#include "Replay/IGCParser.hpp"
 
 #include <stdlib.h>
 #include <math.h>
@@ -506,6 +507,9 @@ bool
 FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
                              const TCHAR *path, OperationEnvironment &env)
 {
+  PeriodClock status_clock;
+  status_clock.update();
+
   // Request flight record
   char buffer[256];
   sprintf(buffer, "$PBRTR,%02d", flight.internal.flytec);
@@ -521,6 +525,14 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
   if (!writer.IsOpen())
     return false;
 
+  unsigned start_sec = flight.start_time.GetSecondOfDay();
+  unsigned end_sec = flight.end_time.GetSecondOfDay();
+  if (end_sec < start_sec)
+    end_sec += 24 * 60 * 60;
+
+  unsigned range = end_sec - start_sec;
+  env.SetProgressRange(range);
+
   while (true) {
     // Check if the user cancelled the operation
     if (env.IsCancelled())
@@ -533,6 +545,26 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
     // XON was received
     if (string_is_empty(buffer))
       break;
+
+    if (status_clock.check_update(250)) {
+      // Parse the fix time
+      BrokenTime time;
+      if (IGCParseFixTime(buffer, time)) {
+
+        unsigned time_sec = time.GetSecondOfDay();
+        if (time_sec < start_sec)
+          time_sec += 24 * 60 * 60;
+
+        if (time_sec > end_sec + 5 * 60)
+          time_sec = start_sec;
+
+        unsigned position = time_sec - start_sec;
+        if (position > range)
+          position = range;
+
+        env.SetProgressPosition(position);
+      }
+    }
 
     // Write line to the file
     writer.Write(buffer);
