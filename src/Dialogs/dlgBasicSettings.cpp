@@ -226,7 +226,7 @@ OnBugsData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daChange:
-    glide_polar.SetBugs(Sender->GetAsFixed() / 100);
+    glide_polar.SetBugs(fixed_one - (Sender->GetAsFixed() / 100));
     changed = true;
     break;
 
@@ -265,7 +265,7 @@ dlgBasicSettingsShowModal()
   SetButtons();
 
   SetBallast();
-  LoadFormProperty(*wf, _T("prpBugs"), glide_polar.GetBugs() * 100);
+  LoadFormProperty(*wf, _T("prpBugs"), (fixed_one - glide_polar.GetBugs()) * 100);
   LoadFormProperty(*wf, _T("prpQNH"), Units::ToUserPressure(settings.pressure.GetHectoPascal()));
 
   WndProperty* wp;
