@@ -52,13 +52,6 @@ public:
    */
   static bool OnClose();
 
-  /**
-   * Calls TabBar's Save() function to save
-   * all panels (to the temporary task).
-   * The TaskProperties is currently the
-   * only task panel that implements Save().
-   */
-  static void SaveToTempTask();
   static void dlgTaskManagerShowModal(SingleWindow &parent);
   static void RevertTask();
   static const CallBackTableEntry CallBackTable[];

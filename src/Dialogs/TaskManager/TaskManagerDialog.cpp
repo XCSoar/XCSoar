@@ -185,14 +185,6 @@ dlgTaskManager::CommitTaskChanges()
                       _("Task Manager"), MB_YESNO | MB_ICONQUESTION) == IDYES);
 }
 
-void
-dlgTaskManager::SaveToTempTask()
-{
-  bool changed = false;
-  bool requirerestart = false;
-  wTabBar->Save(changed, requirerestart);
-}
-
 bool
 dlgTaskManager::OnClose()
 {

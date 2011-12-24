@@ -100,9 +100,6 @@ TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 bool
 TaskClosePanel::Click()
 {
-  // first save tabs to temporary task
-  dlgTaskManager::SaveToTempTask();
-
   if (!(*task_modified)) {
     dlgTaskManager::OnClose();
     return false;
