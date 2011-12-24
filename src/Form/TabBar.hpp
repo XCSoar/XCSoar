@@ -108,7 +108,7 @@ public:
   }
 
   void SetCurrentPage(unsigned i,
-      EventType EventType = TabBarControl::MouseOrButton, bool ReClick = false);
+      EventType EventType = TabBarControl::MouseOrButton);
   void NextPage();
   void PreviousPage();
 
