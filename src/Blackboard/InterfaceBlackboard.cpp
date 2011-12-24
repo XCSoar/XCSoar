@@ -35,9 +35,9 @@ InterfaceBlackboard::ReadBlackboardBasic(const MoreData &nmea_info)
 }
 
 void
-InterfaceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
+InterfaceBlackboard::ReadComputerSettings(const ComputerSettings
 					  &settings)
 {
-  settings_computer = settings;
+  computer_settings = settings;
 }
 

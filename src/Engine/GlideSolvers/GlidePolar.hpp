@@ -149,7 +149,7 @@ public:
   /**
    * Accesses maximum airspeed
    *
-   * @todo this should be set by SETTINGS_COMPUTER SafetySpeed
+   * @todo this should be set by ComputerSettings SafetySpeed
    *
    * @return Speed (m/s)
    */

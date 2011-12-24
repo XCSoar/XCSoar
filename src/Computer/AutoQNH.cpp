@@ -24,12 +24,12 @@ Copyright_License {
 #include "AutoQNH.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
 void
 AutoQNH::Process(const NMEAInfo &basic, DerivedInfo &calculated,
-        const SETTINGS_COMPUTER &settings_computer, const Waypoints &way_points)
+        const ComputerSettings &settings_computer, const Waypoints &way_points)
 {
   if (!calculated.flight.on_ground // must be on ground
       || IsFinished()    // only do it once

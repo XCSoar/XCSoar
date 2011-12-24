@@ -26,7 +26,7 @@ Copyright_License {
 
 struct MoreData;
 struct DerivedInfo;
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 
 /**
  * A computer which adds missing values to #NMEA_INFO.  It performs
@@ -38,7 +38,7 @@ public:
   /**
    * Fill the missing attributes with a fallback.
    */
-  void Fill(MoreData &data, const SETTINGS_COMPUTER &settings_computer);
+  void Fill(MoreData &data, const ComputerSettings &settings_computer);
 
   /**
    * Runs all calculations.
@@ -50,7 +50,7 @@ public:
    */
   void Compute(MoreData &data, const MoreData &last,
                const DerivedInfo &calculated,
-               const SETTINGS_COMPUTER &settings_computer);
+               const ComputerSettings &settings_computer);
 };
 
 #endif

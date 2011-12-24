@@ -25,7 +25,7 @@ Copyright_License {
 #define DEVICE_BLACKBOARD_H
 
 #include "Blackboard/BaseBlackboard.hpp"
-#include "Blackboard/SettingsComputerBlackboard.hpp"
+#include "Blackboard/ComputerSettingsBlackboard.hpp"
 #include "Device/Simulator.hpp"
 #include "Device/List.hpp"
 #include "Thread/Mutex.hpp"
@@ -43,7 +43,7 @@ class GlidePolar;
  */
 class DeviceBlackboard:
   public BaseBlackboard,
-  public SettingsComputerBlackboard
+  public ComputerSettingsBlackboard
 {
   friend class MergeThread;
 
@@ -75,7 +75,7 @@ public:
 public:
   DeviceBlackboard();
   void ReadBlackboard(const DerivedInfo &derived_info);
-  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
+  void ReadComputerSettings(const ComputerSettings &settings);
 
 protected:
   NMEAInfo &SetBasic() { return gps_info; }

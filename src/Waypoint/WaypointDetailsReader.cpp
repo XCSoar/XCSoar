@@ -58,7 +58,7 @@ find_waypoint(Waypoints &way_points, const TCHAR *name)
     buffer[name_length - 5] = _T('\0');
     wp = way_points.LookupName(buffer);
     if (wp != NULL) {
-      XCSoarInterface::SetSettingsComputer().SetHome(*wp);
+      XCSoarInterface::SetComputerSettings().SetHome(*wp);
       return wp;
     }
   }

@@ -24,10 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_COMPUTER_PROFILE_HPP
 #define XCSOAR_COMPUTER_PROFILE_HPP
 
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 
 namespace Profile {
-  void Load(SETTINGS_COMPUTER &settings);
+  void Load(ComputerSettings &settings);
 };
 
 #endif

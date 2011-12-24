@@ -21,21 +21,22 @@ Copyright_License {
 }
 */
 
-#ifndef SETTINGS_COMPUTER_BLACKBOARD_HPP
-#define SETTINGS_COMPUTER_BLACKBOARD_HPP
+#ifndef COMPUTER_SETTINGS_BLACKBOARD_HPP
+#define COMPUTER_SETTINGS_BLACKBOARD_HPP
 
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Compiler.h"
 
-class SettingsComputerBlackboard
+class ComputerSettingsBlackboard
 {
+protected:
+  ComputerSettings computer_settings;
+
 public:
   gcc_const
-  const SETTINGS_COMPUTER& GetSettingsComputer() const {
-    return settings_computer;
+  const ComputerSettings& GetComputerSettings() const {
+    return computer_settings;
   }
-protected:
-  SETTINGS_COMPUTER settings_computer;
 };
 
 #endif

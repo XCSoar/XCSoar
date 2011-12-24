@@ -40,7 +40,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Wind/WindStore.hpp"
 #include "Language/Language.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "SettingsMap.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
@@ -270,7 +270,7 @@ FlightStatisticsRenderer::RenderClimb(Canvas &canvas, const PixelRect rc,
 void
 FlightStatisticsRenderer::RenderGlidePolar(Canvas &canvas, const PixelRect rc,
                                            const ClimbHistory &climb_history,
-                                   const SETTINGS_COMPUTER &settings_computer,
+                                   const ComputerSettings &settings_computer,
                                    const GlidePolar& glide_polar) const
 {
   Chart chart(chart_look, canvas, rc);
@@ -342,7 +342,7 @@ void
 FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
                             const NMEAInfo &nmea_info, 
                             const DerivedInfo &calculated,
-                            const SETTINGS_COMPUTER &settings_computer,
+                            const ComputerSettings &settings_computer,
                             const SETTINGS_MAP &settings_map,
                             const ContestStatistics &contest,
                                     const TraceComputer &trace_computer) const
@@ -459,7 +459,7 @@ void
 FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
                              const NMEAInfo &nmea_info, 
                              const DerivedInfo &calculated,
-                             const SETTINGS_COMPUTER &settings_computer,
+                             const ComputerSettings &settings_computer,
                              const SETTINGS_MAP &settings_map,
                                      const ProtectedTaskManager &_task_manager,
                                      const TraceComputer *trace_computer) const

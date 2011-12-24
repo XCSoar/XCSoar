@@ -102,7 +102,7 @@ SystemClockTimer()
   static bool sysTimeInitialised = false;
 
   if (basic.connected &&
-      CommonInterface::GetSettingsComputer().set_system_time_from_gps
+      CommonInterface::GetComputerSettings().set_system_time_from_gps
       && basic.gps.real
       /* assume that we only have a valid date and time when we have a
          full GPS fix */
@@ -122,7 +122,7 @@ SystemClockTimer()
 
 #if defined(_WIN32_WCE) && defined(GNAV)
     TIME_ZONE_INFORMATION tzi;
-    tzi.Bias = - CommonInterface::GetSettingsComputer().utc_offset / 60;
+    tzi.Bias = - CommonInterface::GetComputerSettings().utc_offset / 60;
     _tcscpy(tzi.StandardName,TEXT("Altair"));
     tzi.StandardDate.wMonth= 0; // disable daylight savings
     tzi.StandardBias = 0;
@@ -167,8 +167,8 @@ BlackboardProcessTimer()
 static void
 QNHProcessTimer()
 {
-  SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer =
+    CommonInterface::SetComputerSettings();
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
@@ -211,8 +211,8 @@ MacCreadyProcessTimer()
 static void
 BallastDumpProcessTimer()
 {
-  SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer =
+    CommonInterface::SetComputerSettings();
 
   if (!settings_computer.ballast_timer_active)
     return;
@@ -252,8 +252,8 @@ BallastDumpProcessTimer()
 static void
 ManualWindProcessTimer()
 {
-  SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer =
+    CommonInterface::SetComputerSettings();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
   /* as soon as another wind setting is used, clear the manual wind */
@@ -367,7 +367,7 @@ ProcessTimer::Process(void)
 
 #ifdef HAVE_TRACKING
   if (tracking != NULL && CommonInterface::Basic().gps.real) {
-    tracking->SetSettings(CommonInterface::GetSettingsComputer().tracking);
+    tracking->SetSettings(CommonInterface::GetComputerSettings().tracking);
     tracking->OnTimer(CommonInterface::Basic(), CommonInterface::Calculated());
   }
 #endif

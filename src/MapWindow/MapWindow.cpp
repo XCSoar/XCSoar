@@ -111,11 +111,11 @@ MapWindow::ReadBlackboard(const MoreData &nmea_info,
 void
 MapWindow::ReadBlackboard(const MoreData &nmea_info,
                           const DerivedInfo &derived_info,
-                          const SETTINGS_COMPUTER &settings_computer,
+                          const ComputerSettings &settings_computer,
                           const SETTINGS_MAP &settings_map)
 {
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
-  ReadSettingsComputer(settings_computer);
+  ReadComputerSettings(settings_computer);
   ReadSettingsMap(settings_map);
 }
 

@@ -42,8 +42,8 @@ MergeThread::Process()
   device_blackboard.Merge();
 
   const MoreData &basic = device_blackboard.Basic();
-  const SETTINGS_COMPUTER &settings_computer =
-    device_blackboard.GetSettingsComputer();
+  const ComputerSettings &settings_computer =
+    device_blackboard.GetComputerSettings();
 
   computer.Fill(device_blackboard.SetMoreData(), settings_computer);
   computer.Compute(device_blackboard.SetMoreData(), last_fix,

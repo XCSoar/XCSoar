@@ -35,7 +35,7 @@ Profile::Use()
 {
   LogStartUp(_T("Read registry settings"));
 
-  Load(CommonInterface::SetSettingsComputer());
+  Load(CommonInterface::SetComputerSettings());
   Load(CommonInterface::SetUISettings());
 
   GetEnum(szProfileAppDialogStyle, dialog_style_setting);
@@ -44,8 +44,8 @@ Profile::Use()
 void
 Profile::SetSoundSettings()
 {
-  const SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::GetSettingsComputer();
+  const ComputerSettings &settings_computer =
+    XCSoarInterface::GetComputerSettings();
 
   Set(szProfileSoundVolume,
       settings_computer.sound_volume);

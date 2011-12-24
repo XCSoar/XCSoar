@@ -495,7 +495,7 @@ TrafficWidget::Update()
 
   view->Update(basic.track,
                basic.flarm,
-               XCSoarInterface::GetSettingsComputer());
+               XCSoarInterface::GetComputerSettings());
 
   view->UpdateTaskDirection(calculated.task_stats.task_valid &&
                             calculated.task_stats.current_leg.solution_remaining.IsOk(),

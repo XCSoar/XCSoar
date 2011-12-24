@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "WindComputer.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
@@ -37,7 +37,7 @@ WindComputer::Reset()
 }
 
 void
-WindComputer::Compute(const SETTINGS_COMPUTER &settings,
+WindComputer::Compute(const ComputerSettings &settings,
                       const MoreData &basic, const NMEAInfo &last_basic,
                       DerivedInfo &calculated)
 {
@@ -88,7 +88,7 @@ WindComputer::ComputeHeadWind(const NMEAInfo &basic, DerivedInfo &info)
 }
 
 void
-WindComputer::Select(const SETTINGS_COMPUTER &settings,
+WindComputer::Select(const ComputerSettings &settings,
                      const NMEAInfo &basic, DerivedInfo &calculated)
 {
   if (basic.external_wind_available && settings.use_external_wind) {

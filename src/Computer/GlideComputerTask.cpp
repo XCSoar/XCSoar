@@ -28,7 +28,7 @@ Copyright_License {
 #include "NMEA/Aircraft.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 
 #include <algorithm>
 
@@ -60,7 +60,7 @@ GlideComputerTask::ProcessBasicTask(const MoreData &basic,
                                     const MoreData &last_basic,
                                     DerivedInfo &calculated,
                                     const DerivedInfo &last_calculated,
-                                    const SETTINGS_COMPUTER &settings_computer)
+                                    const ComputerSettings &settings_computer)
 {
   if (basic.HasTimeAdvancedSince(last_basic) && basic.location_available)
     trace.Update(settings_computer, ToAircraftState(basic, calculated));
@@ -94,7 +94,7 @@ void
 GlideComputerTask::ProcessMoreTask(const MoreData &basic,
                                    DerivedInfo &calculated,
                                    const DerivedInfo &last_calculated,
-                                   const SETTINGS_COMPUTER &settings_computer)
+                                   const ComputerSettings &settings_computer)
 {
   GlidePolar glide_polar, safety_polar;
 
@@ -121,7 +121,7 @@ GlideComputerTask::ProcessMoreTask(const MoreData &basic,
 
 void
 GlideComputerTask::ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
-                               const SETTINGS_COMPUTER &settings_computer,
+                               const ComputerSettings &settings_computer,
                                bool exhaustive)
 {
   if (exhaustive)

@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SETTINGS_COMPUTER_HPP
-#define XCSOAR_SETTINGS_COMPUTER_HPP
+#ifndef XCSOAR_COMPUTER_SETTINGS_HPP
+#define XCSOAR_COMPUTER_SETTINGS_HPP
 
 #include "FLARM/FlarmId.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
@@ -222,7 +222,7 @@ enum AverageEffTime {
   ae3minutes,
 };
 
-struct SETTINGS_COMPUTER: 
+struct ComputerSettings: 
   public WindSettings,
   public LoggerSettings,
   public PolarSettings,
@@ -268,7 +268,7 @@ struct SETTINGS_COMPUTER:
   void SetDefaults();
 };
 
-static_assert(is_trivial<SETTINGS_COMPUTER>::value,
+static_assert(is_trivial<ComputerSettings>::value,
               "type is not trivial");
 
 #endif

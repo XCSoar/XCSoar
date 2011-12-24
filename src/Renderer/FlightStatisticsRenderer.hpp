@@ -34,7 +34,7 @@ struct DerivedInfo;
 class ClimbHistory;
 class TracePointVector;
 struct TaskBehaviour;
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 struct SETTINGS_MAP;
 class Canvas;
 class WindStore;
@@ -79,7 +79,7 @@ public:
 
   void RenderGlidePolar(Canvas &canvas, const PixelRect rc,
                         const ClimbHistory &climb_history,
-                        const SETTINGS_COMPUTER &settings_computer,
+                        const ComputerSettings &settings_computer,
                         const GlidePolar& glide_polar) const;
 
   void RenderWind(Canvas &canvas, const PixelRect rc,
@@ -92,7 +92,7 @@ public:
   void RenderOLC(Canvas &canvas, const PixelRect rc,
                  const NMEAInfo &nmea_info,
                  const DerivedInfo &calculated,
-                 const SETTINGS_COMPUTER &settings_computer,
+                 const ComputerSettings &settings_computer,
                  const SETTINGS_MAP &settings_map,
                  const ContestStatistics &contest,
                  const TraceComputer &trace_computer) const;
@@ -100,7 +100,7 @@ public:
   void RenderTask(Canvas &canvas, const PixelRect rc,
                   const NMEAInfo &nmea_info,
                   const DerivedInfo &derived_info,
-                  const SETTINGS_COMPUTER &settings_computer,
+                  const ComputerSettings &settings_computer,
                   const SETTINGS_MAP &settings_map,
                   const ProtectedTaskManager &task,
                   const TraceComputer *trace_computer) const;

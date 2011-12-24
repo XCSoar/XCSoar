@@ -28,7 +28,7 @@ Copyright_License {
 
 struct NMEAInfo;
 struct DerivedInfo;
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 
 /**
  * Wrapper for CuSonde.
@@ -44,7 +44,7 @@ public:
   void Reset();
 
   void Compute(const NMEAInfo &basic, const DerivedInfo &calculated,
-               const SETTINGS_COMPUTER &settings);
+               const ComputerSettings &settings);
 };
 
 #endif

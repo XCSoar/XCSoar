@@ -26,7 +26,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Atmosphere/CuSonde.hpp"
@@ -53,7 +53,7 @@ SetButtons()
 
   if ((wb = (WndButton *)wf->FindByName(_T("cmdDump"))) != NULL) {
     wb->set_visible(glide_polar.HasBallast());
-    wb->SetCaption(XCSoarInterface::GetSettingsComputer().ballast_timer_active ?
+    wb->SetCaption(XCSoarInterface::GetComputerSettings().ballast_timer_active ?
         _("Stop") : _("Dump"));
   }
 }
@@ -70,17 +70,17 @@ SetBallastTimer(bool active)
   if (protected_task_manager == NULL)
     return;
 
-  if (active == XCSoarInterface::GetSettingsComputer().ballast_timer_active)
+  if (active == XCSoarInterface::GetComputerSettings().ballast_timer_active)
     return;
 
   if (active && changed) {
     /* apply the new ballast settings before starting the timer */
-    CommonInterface::SetSettingsComputer().glide_polar_task = glide_polar;
+    CommonInterface::SetComputerSettings().glide_polar_task = glide_polar;
     protected_task_manager->SetGlidePolar(glide_polar);
     changed = false;
   }
 
-  XCSoarInterface::SetSettingsComputer().ballast_timer_active = active;
+  XCSoarInterface::SetComputerSettings().ballast_timer_active = active;
 
   SetButtons();
 }
@@ -88,7 +88,7 @@ SetBallastTimer(bool active)
 static void
 OnBallastDump(gcc_unused WndButton &Sender)
 {
-  SetBallastTimer(!XCSoarInterface::GetSettingsComputer().ballast_timer_active);
+  SetBallastTimer(!XCSoarInterface::GetComputerSettings().ballast_timer_active);
 }
 
 static void
@@ -115,8 +115,8 @@ static void
 RefreshAltitudeControl()
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer =
+    CommonInterface::SetComputerSettings();
 
   if (basic.pressure_altitude_available && settings_computer.pressure_available)
     ShowAltitude(settings_computer.pressure.PressureAltitudeToQNHAltitude(basic.pressure_altitude));
@@ -131,8 +131,8 @@ OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
   const NMEAInfo &basic = CommonInterface::Basic();
-  SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer =
+    CommonInterface::SetComputerSettings();
 
   switch (Mode) {
   case DataField::daChange:
@@ -186,9 +186,9 @@ static void
 OnTimerNotify(gcc_unused WndForm &Sender)
 {
   if (protected_task_manager != NULL &&
-      XCSoarInterface::GetSettingsComputer().ballast_timer_active && !changed) {
+      XCSoarInterface::GetComputerSettings().ballast_timer_active && !changed) {
     /* get new GlidePolar values */
-    glide_polar = CommonInterface::GetSettingsComputer().glide_polar_task;
+    glide_polar = CommonInterface::GetComputerSettings().glide_polar_task;
 
     /* display the new values on the screen */
     SetBallast();
@@ -208,7 +208,7 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
   switch (Mode) {
   case DataField::daSpecial:
     SetBallastTimer(glide_polar.HasBallast() &&
-                    !XCSoarInterface::GetSettingsComputer().ballast_timer_active);
+                    !XCSoarInterface::GetComputerSettings().ballast_timer_active);
     break;
   case DataField::daChange:
     glide_polar.SetBallastLitres(df.GetAsFixed());
@@ -248,7 +248,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 void
 dlgBasicSettingsShowModal()
 {
-  const SETTINGS_COMPUTER &settings = CommonInterface::GetSettingsComputer();
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
   glide_polar = settings.glide_polar_task;
 
@@ -292,7 +292,7 @@ dlgBasicSettingsShowModal()
   }
 
   if (wf->ShowModal() == mrOK) {
-    SETTINGS_COMPUTER &settings = CommonInterface::SetSettingsComputer();
+    ComputerSettings &settings = CommonInterface::SetComputerSettings();
 
     if (changed) {
       settings.glide_polar_task = glide_polar;

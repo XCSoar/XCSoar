@@ -202,7 +202,7 @@ GenerateBlackboard(MapWindow &map, const SETTINGS_MAP &settings_map)
 {
   MoreData nmea_info;
   DerivedInfo derived_info;
-  SETTINGS_COMPUTER settings_computer;
+  ComputerSettings settings_computer;
 
   nmea_info.Reset();
   nmea_info.clock = fixed_one;

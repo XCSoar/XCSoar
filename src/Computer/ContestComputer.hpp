@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Engine/Contest/ContestManager.hpp"
 
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 struct DerivedInfo;
 class Trace;
 
@@ -41,10 +41,10 @@ public:
     contest_manager.Reset();
   }
 
-  void Solve(const SETTINGS_COMPUTER &settings_computer,
+  void Solve(const ComputerSettings &settings_computer,
              DerivedInfo &calculated);
 
-  bool SolveExhaustive(const SETTINGS_COMPUTER &settings_computer,
+  bool SolveExhaustive(const ComputerSettings &settings_computer,
                        DerivedInfo &calculated);
 };
 

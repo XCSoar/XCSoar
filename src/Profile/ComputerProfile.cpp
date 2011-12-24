@@ -25,7 +25,7 @@ Copyright_License {
 #include "Profile/TaskProfile.hpp"
 #include "Profile/TrackingProfile.hpp"
 #include "Profile/Profile.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 
 namespace Profile {
   static void Load(WindSettings &settings);
@@ -100,7 +100,7 @@ Profile::Load(FeaturesSettings &settings)
 }
 
 void
-Profile::Load(SETTINGS_COMPUTER &settings)
+Profile::Load(ComputerSettings &settings)
 {
   Load((WindSettings &)settings);
   Load((LoggerSettings &)settings);

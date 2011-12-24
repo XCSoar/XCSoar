@@ -650,7 +650,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/SettingsComputer.cpp \
+	$(SRC)/ComputerSettings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceWarningConfig.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
@@ -1425,7 +1425,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Look/MarkerLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMap.cpp \
-	$(SRC)/SettingsComputer.cpp \
+	$(SRC)/ComputerSettings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/Task/TaskFile.cpp \
@@ -1776,7 +1776,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/GlideComputerStats.cpp \
 	$(SRC)/Computer/GlideComputerInterface.cpp \
 	$(SRC)/Computer/CuComputer.cpp \
-	$(SRC)/SettingsComputer.cpp \
+	$(SRC)/ComputerSettings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/SettingsMap.cpp \

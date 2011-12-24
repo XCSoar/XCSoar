@@ -50,7 +50,7 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   assert(i < AIRSPACECLASSCOUNT);
 
   const AirspaceComputerSettings &computer =
-    CommonInterface::GetSettingsComputer().airspace;
+    CommonInterface::GetComputerSettings().airspace;
   const AirspaceRendererSettings &renderer =
     CommonInterface::GetSettingsMap().airspace;
   const AirspaceLook &look = CommonInterface::main_window.GetLook().map.airspace;
@@ -103,7 +103,7 @@ OnAirspaceListEnter(unsigned ItemIndex)
   assert(ItemIndex < AIRSPACECLASSCOUNT);
 
   AirspaceComputerSettings &computer =
-    CommonInterface::SetSettingsComputer().airspace;
+    CommonInterface::SetComputerSettings().airspace;
   AirspaceRendererSettings &renderer =
     CommonInterface::SetSettingsMap().airspace;
 
@@ -192,7 +192,7 @@ dlgAirspaceShowModal(bool coloredit)
   if (changed) {
     if (!colormode && glide_computer != NULL) {
       ProtectedAirspaceWarningManager::ExclusiveLease awm(glide_computer->GetAirspaceWarnings());
-      awm->SetConfig(CommonInterface::SetSettingsComputer().airspace.warnings);
+      awm->SetConfig(CommonInterface::SetComputerSettings().airspace.warnings);
     }
 
     Profile::Save();

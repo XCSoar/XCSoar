@@ -87,7 +87,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   instance = this;
 
   const TrackingSettings &settings =
-    CommonInterface::GetSettingsComputer().tracking;
+    CommonInterface::GetComputerSettings().tracking;
 
   LoadWindow(CallBackTable, parent,
              Layout::landscape ? _T("IDR_XML_TRACKINGCONFIGPANEL") :
@@ -109,7 +109,7 @@ TrackingConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool changed = false, require_restart = false;
 
   TrackingSettings &settings =
-    CommonInterface::SetSettingsComputer().tracking;
+    CommonInterface::SetComputerSettings().tracking;
 
   CheckBox *cb = (CheckBox *)form.FindByName(_T("LT24Enabled"));
 

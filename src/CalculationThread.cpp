@@ -38,7 +38,7 @@ CalculationThread::CalculationThread(GlideComputer &_glide_computer)
 }
 
 void
-CalculationThread::SetSettingsComputer(const SETTINGS_COMPUTER &new_value)
+CalculationThread::SetComputerSettings(const ComputerSettings &new_value)
 {
   ScopeLock protect(mutex);
   settings_computer = new_value;
@@ -71,8 +71,8 @@ CalculationThread::Tick()
 
   {
     ScopeLock protect(mutex);
-    // Copy settings form SettingsComputerBlackboard to GlideComputerBlackboard
-    glide_computer.ReadSettingsComputer(settings_computer);
+    // Copy settings form ComputerSettingsBlackboard to GlideComputerBlackboard
+    glide_computer.ReadComputerSettings(settings_computer);
     glide_computer.SetScreenDistanceMeters(screen_distance_meters);
   }
 

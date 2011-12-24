@@ -24,7 +24,7 @@ Copyright_License {
 #include "BasicComputer.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 
 #define fixed_inv_g fixed(1.0/9.81)
 #define fixed_inv_2g fixed(1.0/(2.0*9.81))
@@ -50,7 +50,7 @@ FillVario(MoreData &data)
 }
 
 static void
-ComputePressure(NMEAInfo &basic, const SETTINGS_COMPUTER &settings_computer)
+ComputePressure(NMEAInfo &basic, const ComputerSettings &settings_computer)
 {
   const AtmosphericPressure &qnh = settings_computer.pressure;
   const bool qnh_available = settings_computer.pressure_available;
@@ -103,7 +103,7 @@ ComputePressure(NMEAInfo &basic, const SETTINGS_COMPUTER &settings_computer)
 
 static void
 ComputeNavAltitude(MoreData &basic,
-                   const SETTINGS_COMPUTER &settings_computer)
+                   const ComputerSettings &settings_computer)
 {
   basic.nav_altitude = settings_computer.nav_baro_altitude_enabled &&
     basic.baro_altitude_available
@@ -288,7 +288,7 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 }
 
 void
-BasicComputer::Fill(MoreData &data, const SETTINGS_COMPUTER &settings_computer)
+BasicComputer::Fill(MoreData &data, const ComputerSettings &settings_computer)
 {
   FillVario(data);
   ComputePressure(data, settings_computer);
@@ -298,7 +298,7 @@ BasicComputer::Fill(MoreData &data, const SETTINGS_COMPUTER &settings_computer)
 void
 BasicComputer::Compute(MoreData &data, const MoreData &last,
                        const DerivedInfo &calculated,
-                       const SETTINGS_COMPUTER &settings_computer)
+                       const ComputerSettings &settings_computer)
 {
   if (!data.HasTimeAdvancedSince(last))
     return;

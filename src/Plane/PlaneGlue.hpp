@@ -25,7 +25,7 @@ Copyright_License {
 #define PLANE_GLUE_HPP
 
 struct Plane;
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 class GlidePolar;
 
 namespace PlaneGlue
@@ -33,7 +33,7 @@ namespace PlaneGlue
   void FromProfile(Plane &plane);
   void ToProfile(const Plane &plane);
 
-  void Synchronize(const Plane &plane, SETTINGS_COMPUTER &settings,
+  void Synchronize(const Plane &plane, ComputerSettings &settings,
                    GlidePolar &gp);
 }
 

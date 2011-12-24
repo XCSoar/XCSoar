@@ -201,7 +201,7 @@ MainWindow::InitialiseConfigured()
   ReinitialiseLayout_flarm(rc, ib_layout);
 
   map = new GlueMapWindow(*look);
-  map->SetSettingsComputer(CommonInterface::GetSettingsComputer());
+  map->SetComputerSettings(CommonInterface::GetComputerSettings());
   map->SetSettingsMap(CommonInterface::GetSettingsMap());
   map->set(*this, map_rect);
   map->set_font(Fonts::map);
@@ -651,10 +651,10 @@ MainWindow::GetDisplayMode() const
 }
 
 void
-MainWindow::SetSettingsComputer(const SETTINGS_COMPUTER &settings_computer)
+MainWindow::SetComputerSettings(const ComputerSettings &settings_computer)
 {
   if (map != NULL)
-    map->SetSettingsComputer(settings_computer);
+    map->SetComputerSettings(settings_computer);
 }
 
 void

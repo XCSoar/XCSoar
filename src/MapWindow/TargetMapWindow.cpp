@@ -49,10 +49,10 @@ Copyright_License {
 
 #include <tchar.h>
 
-static const SETTINGS_COMPUTER &
-GetSettingsComputer()
+static const ComputerSettings &
+GetComputerSettings()
 {
-  return CommonInterface::GetSettingsComputer();
+  return CommonInterface::GetComputerSettings();
 }
 
 static const SETTINGS_MAP &
@@ -139,7 +139,7 @@ TargetMapWindow::RenderAirspace(Canvas &canvas)
 #endif
                            projection,
                            Basic(), Calculated(),
-                           GetSettingsComputer(), GetSettingsMap());
+                           GetComputerSettings(), GetSettingsMap());
 }
 
 void
@@ -177,7 +177,7 @@ TargetMapWindow::DrawWaypoints(Canvas &canvas)
 
   way_point_renderer.render(canvas, label_block,
                             projection, settings,
-                            GetSettingsComputer().task,
+                            GetComputerSettings().task,
                             task, NULL);
 }
 

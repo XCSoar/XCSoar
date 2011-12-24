@@ -91,8 +91,8 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
 {
   const MoreData &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
-  const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::GetSettingsComputer();
+  const ComputerSettings &settings_computer =
+    CommonInterface::GetComputerSettings();
 
   ProtectedAirspaceWarningManager *airspace_warnings = GetAirspaceWarnings();
   if (airspace_warnings != NULL && !airspace_warnings->warning_empty()) {

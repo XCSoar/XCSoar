@@ -229,14 +229,14 @@ DeviceBlackboard::ReadBlackboard(const DerivedInfo &derived_info)
 /**
  * Reads the given settings usually provided by the InterfaceBlackboard
  * and saves it to the own Blackboard
- * @param settings SettingsComputer usually provided by the
+ * @param settings ComputerSettings usually provided by the
  * InterfaceBlackboard
  */
 void
-DeviceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
+DeviceBlackboard::ReadComputerSettings(const ComputerSettings
 					      &settings)
 {
-  settings_computer = settings;
+  computer_settings = settings;
 }
 
 void

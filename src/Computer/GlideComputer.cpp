@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "GlideComputer.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "ConditionMonitor/ConditionMonitors.hpp"
@@ -30,7 +30,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "GlideComputerInterface.hpp"
 #include "Input/InputQueue.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Math/Earth.hpp"
 #include "Logger/Logger.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
@@ -100,9 +100,9 @@ GlideComputer::ProcessGPS()
   // Process basic task information
   ProcessBasicTask(basic, LastBasic(),
                    calculated, LastCalculated(),
-                   GetSettingsComputer());
+                   GetComputerSettings());
   ProcessMoreTask(basic, calculated, LastCalculated(),
-                  GetSettingsComputer());
+                  GetComputerSettings());
 
   // Check if everything is okay with the gps time and process it
   if (!FlightTimes())
@@ -127,7 +127,7 @@ GlideComputer::ProcessGPS()
   // (if teammate is a FLARM target)
   CheckTraffic();
 
-  vegavoice.Update(basic, Calculated(), GetSettingsComputer());
+  vegavoice.Update(basic, Calculated(), GetComputerSettings());
 
   // update basic trace history
   if (time_advanced())
@@ -147,20 +147,20 @@ GlideComputer::ProcessIdle(bool exhaustive)
 {
   // Log GPS fixes for internal usage
   // (snail trail, stats, olc, ...)
-  DoLogging(Basic(), LastBasic(), Calculated(), GetSettingsComputer());
+  DoLogging(Basic(), LastBasic(), Calculated(), GetComputerSettings());
 
-  GlideComputerTask::ProcessIdle(Basic(), SetCalculated(), GetSettingsComputer(),
+  GlideComputerTask::ProcessIdle(Basic(), SetCalculated(), GetComputerSettings(),
                                  exhaustive);
 
   if (time_advanced())
-    warning_computer.Update(GetSettingsComputer(), Basic(), LastBasic(),
+    warning_computer.Update(GetComputerSettings(), Basic(), LastBasic(),
                             Calculated(), SetCalculated().airspace_warnings);
 }
 
 bool
 GlideComputer::DetermineTeamCodeRefLocation()
 {
-  const SETTINGS_COMPUTER &settings_computer = GetSettingsComputer();
+  const ComputerSettings &settings_computer = GetComputerSettings();
 
   if (settings_computer.team_code_reference_waypoint < 0)
     return false;
@@ -244,7 +244,7 @@ ComputeTeamCode(const GeoPoint &location, const GeoPoint &reference_location,
 void
 GlideComputer::CalculateTeammateBearingRange()
 {
-  const SETTINGS_COMPUTER &settings_computer = GetSettingsComputer();
+  const ComputerSettings &settings_computer = GetComputerSettings();
   const NMEAInfo &basic = Basic();
   TeamInfo &teamcode_info = SetCalculated();
 

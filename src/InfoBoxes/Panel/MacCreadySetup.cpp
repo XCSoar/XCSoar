@@ -67,7 +67,7 @@ PnlSetupOnSetup(gcc_unused WndButton &Sender) {
 static void
 PnlSetupOnMode(gcc_unused WndButton &Sender)
 {
-  if (XCSoarInterface::GetSettingsComputer().task.auto_mc)
+  if (XCSoarInterface::GetComputerSettings().task.auto_mc)
     Sender.SetCaption(_("AUTO"));
   else
     Sender.SetCaption(_("MANUAL"));
@@ -90,7 +90,7 @@ MacCreadySetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 MacCreadySetupPanel::Show(const PixelRect &rc)
 {
-  if (XCSoarInterface::GetSettingsComputer().task.auto_mc)
+  if (XCSoarInterface::GetComputerSettings().task.auto_mc)
     ((WndButton *)form.FindByName(_T("cmdMode")))->SetCaption(_("MANUAL"));
   else
     ((WndButton *)form.FindByName(_T("cmdMode")))->SetCaption(_("AUTO"));

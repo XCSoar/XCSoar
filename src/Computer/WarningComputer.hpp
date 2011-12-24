@@ -29,7 +29,7 @@ Copyright_License {
 #include "GPSClock.hpp"
 
 class Airspaces;
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 struct MoreData;
 struct DerivedInfo;
 struct AirspaceWarningsInfo;
@@ -60,7 +60,7 @@ public:
 
   void Reset(const MoreData &basic, const DerivedInfo &calculated);
 
-  void Update(const SETTINGS_COMPUTER &settings_computer,
+  void Update(const ComputerSettings &settings_computer,
               const MoreData &basic, const MoreData &last_basic,
               const DerivedInfo &calculated,
               AirspaceWarningsInfo &result);

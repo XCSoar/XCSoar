@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "ContestComputer.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "NMEA/Derived.hpp"
 
 void
-ContestComputer::Solve(const SETTINGS_COMPUTER &settings_computer,
+ContestComputer::Solve(const ComputerSettings &settings_computer,
                        DerivedInfo &calculated)
 {
   if (!settings_computer.task.enable_olc)
@@ -41,7 +41,7 @@ ContestComputer::Solve(const SETTINGS_COMPUTER &settings_computer,
 }
 
 bool
-ContestComputer::SolveExhaustive(const SETTINGS_COMPUTER &settings_computer,
+ContestComputer::SolveExhaustive(const ComputerSettings &settings_computer,
                                  DerivedInfo &calculated)
 {
   if (!settings_computer.task.enable_olc)

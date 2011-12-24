@@ -44,7 +44,7 @@ private:
   virtual void OnCalculatedUpdate(const MoreData &basic,
                                   const DerivedInfo &calculated);
 
-  virtual void OnComputerSettingsUpdate(const SETTINGS_COMPUTER &settings);
+  virtual void OnComputerSettingsUpdate(const ComputerSettings &settings);
 
   virtual void OnUISettingsUpdate(const UISettings &settings);
 };

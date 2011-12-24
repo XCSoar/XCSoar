@@ -31,7 +31,7 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Asset.hpp"
 #include "Profile/DeclarationConfig.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 
 void
 Logger::LogPoint(const NMEAInfo &gps_info)
@@ -82,7 +82,7 @@ Logger::LoggerClearFreeSpace(const NMEAInfo &gps_info)
 
 void
 Logger::GUIStartLogger(const NMEAInfo& gps_info,
-                    const SETTINGS_COMPUTER& settings,
+                    const ComputerSettings& settings,
                        const ProtectedTaskManager &protected_task_manager,
                     bool noAsk)
 {
@@ -128,7 +128,7 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
 
 void
 Logger::GUIToggleLogger(const NMEAInfo& gps_info,
-                     const SETTINGS_COMPUTER& settings,
+                     const ComputerSettings& settings,
                       const ProtectedTaskManager &protected_task_manager,
                      bool noAsk)
 {

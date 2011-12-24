@@ -27,7 +27,7 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Components.hpp"
 #include "Compatibility/string.h"
 #include "SettingsMap.hpp"
@@ -89,7 +89,7 @@ CondReplaceInString(bool Condition, TCHAR *Buffer, const TCHAR *Macro,
 static bool
 ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                  const DerivedInfo &calculated,
-                 const SETTINGS_COMPUTER &settings_computer)
+                 const ComputerSettings &settings_computer)
 {
   if (protected_task_manager == NULL)
     return true;
@@ -340,10 +340,10 @@ Calculated()
   return CommonInterface::Calculated();
 }
 
-static const SETTINGS_COMPUTER &
-GetSettingsComputer()
+static const ComputerSettings &
+GetComputerSettings()
 {
-  return CommonInterface::GetSettingsComputer();
+  return CommonInterface::GetComputerSettings();
 }
 
 static const SETTINGS_MAP &
@@ -376,7 +376,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   }
 
   invalid |= ExpandTaskMacros(OutBuffer, Size,
-                              Calculated(), GetSettingsComputer());
+                              Calculated(), GetComputerSettings());
 
 
   if (_tcsstr(OutBuffer, _T("$(CheckFLARM)"))) {
@@ -543,7 +543,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                     gettext(labels[(i + 1) % n]), Size);
   }
 
-  CondReplaceInString(GetSettingsComputer().task.auto_mc,
+  CondReplaceInString(GetComputerSettings().task.auto_mc,
                       OutBuffer, _T("$(MacCreadyToggleActionName)"),
                       _("Manual"), _("Auto"), Size);
   CondReplaceInString(GetUIState().auxiliary_enabled,

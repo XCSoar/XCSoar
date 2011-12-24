@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Thread/WorkerThread.hpp"
 #include "Thread/Mutex.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 
 class GlideComputer;
 
@@ -42,7 +42,7 @@ class CalculationThread : public WorkerThread {
    */
   Mutex mutex;
 
-  SETTINGS_COMPUTER settings_computer;
+  ComputerSettings settings_computer;
 
   fixed screen_distance_meters;
 
@@ -52,7 +52,7 @@ class CalculationThread : public WorkerThread {
 public:
   CalculationThread(GlideComputer &_glide_computer);
 
-  void SetSettingsComputer(const SETTINGS_COMPUTER &new_value);
+  void SetComputerSettings(const ComputerSettings &new_value);
   void SetScreenDistanceMeters(fixed new_value);
 
   bool Start(bool suspended=false) {

@@ -127,7 +127,7 @@ PolarConfigPanel::UpdatePolarTitle()
 {
   StaticString<100> caption(_("Polar"));
   caption += _T(": ");
-  caption += CommonInterface::GetSettingsComputer().plane.polar_name;
+  caption += CommonInterface::GetComputerSettings().plane.polar_name;
 
   ((WndFrame *)form.FindByName(_T("lblPolar")))->SetCaption(caption);
 }
@@ -202,7 +202,7 @@ PolarConfigPanel::LoadInternal()
     if (item.contest_handicap > 0)
       LoadFormProperty(form, _T("prpHandicap"), item.contest_handicap);
 
-    CommonInterface::SetSettingsComputer().plane.polar_name = item.name;
+    CommonInterface::SetComputerSettings().plane.polar_name = item.name;
     UpdatePolarTitle();
     UpdatePolarInvalidLabel();
   }
@@ -260,7 +260,7 @@ PolarConfigPanel::LoadFromFile()
       LoadFormProperty(form, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
                        polar.v_no);
 
-    CommonInterface::SetSettingsComputer().plane.polar_name =
+    CommonInterface::SetComputerSettings().plane.polar_name =
         list[result].StringValueFormatted;
     UpdatePolarTitle();
     UpdatePolarInvalidLabel();
@@ -288,7 +288,7 @@ PolarConfigPanel::Export()
   PolarInfo polar;
   SaveFormToPolar(form, polar);
   if (PolarGlue::SaveToFile(polar, path)) {
-    CommonInterface::SetSettingsComputer().plane.polar_name = filename;
+    CommonInterface::SetComputerSettings().plane.polar_name = filename;
     UpdatePolarTitle();
   }
 }
@@ -303,7 +303,7 @@ void
 PolarConfigPanel::DataChanged()
 {
   if (!loading)
-    CommonInterface::SetSettingsComputer().plane.polar_name = _T("Custom");
+    CommonInterface::SetComputerSettings().plane.polar_name = _T("Custom");
 
   UpdatePolarTitle();
   UpdatePolarInvalidLabel();
@@ -378,7 +378,7 @@ PolarConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetLiftFieldStepAndMax(_T("prpPolarW2"));
   SetLiftFieldStepAndMax(_T("prpPolarW3"));
 
-  const SETTINGS_COMPUTER &settings = XCSoarInterface::GetSettingsComputer();
+  const ComputerSettings &settings = XCSoarInterface::GetComputerSettings();
   UpdatePolarPoints(settings.plane.v1, settings.plane.v2, settings.plane.v3,
                     settings.plane.w1, settings.plane.w2, settings.plane.w3);
 
@@ -394,7 +394,7 @@ PolarConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   UpdatePolarTitle();
   UpdatePolarInvalidLabel();
 
-  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::GetSettingsComputer();
+  const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
 
   LoadFormProperty(form, _T("prpHandicap"),
                    settings_computer.plane.handicap);
@@ -410,7 +410,7 @@ PolarConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false;
 
-  SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
 
   changed |= SaveFormProperty(form, _T("prpPolarV1"), ugHorizontalSpeed,
                               settings_computer.plane.v1);

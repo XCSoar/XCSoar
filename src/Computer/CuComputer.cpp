@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "CuComputer.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Units/Units.hpp"
 
 struct NMEAInfo;
@@ -36,7 +36,7 @@ CuComputer::Reset()
 
 void
 CuComputer::Compute(const NMEAInfo &basic, const DerivedInfo &calculated,
-                    const SETTINGS_COMPUTER &settings)
+                    const ComputerSettings &settings)
 {
   cu_sonde.setForecastTemperature(Units::ToUserUnit(settings.forecast_temperature,
                                                     unGradCelcius));

@@ -62,7 +62,7 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                                _T("IDR_XML_GLIDECOMPUTERCONFIGPANEL_L"));
 
 
-  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::GetSettingsComputer();
+  const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
 
   static gcc_constexpr_data StaticEnumChoice auto_wind_list[] = {
     { AUTOWIND_NONE, N_("Manual") },
@@ -115,7 +115,7 @@ GlideComputerConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
 
-  SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
 
   changed |= SaveFormProperty(form, _T("prpAutoWind"), szProfileAutoWind,
                               settings_computer.auto_wind_mode);

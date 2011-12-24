@@ -24,7 +24,7 @@ Copyright_License {
 #include "CirclingComputer.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Math/LowPassFilter.hpp"
 
 static const fixed MinTurnRate(4);
@@ -67,7 +67,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
                           const MoreData &basic, const MoreData &last_basic,
                           const DerivedInfo &calculated,
                           const DerivedInfo &last_calculated,
-                          const SETTINGS_COMPUTER &settings_computer)
+                          const ComputerSettings &settings_computer)
 {
   // You can't be circling unless you're flying
   if (!calculated.flight.flying || !basic.HasTimeAdvancedSince(last_basic))

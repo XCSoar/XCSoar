@@ -33,7 +33,7 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "OS/PathName.hpp"
 #include "Math/SunEphemeris.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
@@ -225,8 +225,8 @@ OnNewHomeClicked(gcc_unused WndButton &button)
 {
   assert(selected_waypoint != NULL);
 
-  SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer =
+    CommonInterface::SetComputerSettings();
 
   settings_computer.SetHome(*selected_waypoint);
 
@@ -318,7 +318,7 @@ goto_and_clear_task(const Waypoint &wp)
   protected_task_manager->DoGoto(wp);
   TaskEvents task_events;
   const OrderedTask blank(task_events,
-                          XCSoarInterface::GetSettingsComputer(),
+                          XCSoarInterface::GetComputerSettings(),
                           XCSoarInterface::Calculated().glide_polar_task);
   protected_task_manager->task_commit(blank);
 
@@ -448,8 +448,8 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
 {
   const MoreData &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
-  const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::GetSettingsComputer();
+  const ComputerSettings &settings_computer =
+    CommonInterface::GetComputerSettings();
 
   selected_waypoint = &way_point;
 

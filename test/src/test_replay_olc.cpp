@@ -5,7 +5,7 @@
 #include "UtilsText.hpp"
 #include "Computer/FlyingComputer.hpp"
 #include "Engine/Contest/ContestManager.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 
 #include <fstream>
 
@@ -137,7 +137,7 @@ test_replay(const Contests olc_type,
   ConvertCToT(szFilename, replay_file.c_str());
   sim.SetFilename(szFilename);
 
-  SETTINGS_COMPUTER settings_computer;
+  ComputerSettings settings_computer;
   settings_computer.SetDefaults();
   settings_computer.task.enable_olc = true;
   load_scores(settings_computer.task.contest_handicap);

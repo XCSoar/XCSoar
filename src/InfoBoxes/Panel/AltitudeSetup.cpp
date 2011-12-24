@@ -59,8 +59,8 @@ static void
 PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
-  SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer =
+    CommonInterface::SetComputerSettings();
 
   switch (Mode) {
   case DataField::daChange:
@@ -104,7 +104,7 @@ void
 AltitudeSetupPanel::Show(const PixelRect &rc)
 {
   LoadFormProperty(form, _T("prpQNH"),
-                   Units::ToUserPressure(CommonInterface::GetSettingsComputer().pressure.GetHectoPascal()));
+                   Units::ToUserPressure(CommonInterface::GetComputerSettings().pressure.GetHectoPascal()));
 
   WndProperty* wp;
   wp = (WndProperty*)form.FindByName(_T("prpQNH"));

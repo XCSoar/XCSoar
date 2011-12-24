@@ -72,20 +72,20 @@ public:
   static const DerivedInfo& Calculated() { return blackboard.Calculated(); }
 
   /**
-   * Returns the InterfaceBlackboard.SettingsComputer (read-only)
-   * @return The InterfaceBlackboard.SettingsComputer
+   * Returns the InterfaceBlackboard.ComputerSettings (read-only)
+   * @return The InterfaceBlackboard.ComputerSettings
    */
   gcc_const
-  static const SETTINGS_COMPUTER& GetSettingsComputer()
-  { return blackboard.GetSettingsComputer(); }
+  static const ComputerSettings& GetComputerSettings()
+  { return blackboard.GetComputerSettings(); }
 
   /**
-   * Returns the InterfaceBlackboard.SettingsComputer (read-write)
-   * @return The InterfaceBlackboard.SettingsComputer
+   * Returns the InterfaceBlackboard.ComputerSettings (read-write)
+   * @return The InterfaceBlackboard.ComputerSettings
    */
   gcc_const
-  static SETTINGS_COMPUTER& SetSettingsComputer()
-  { return blackboard.SetSettingsComputer(); }
+  static ComputerSettings& SetComputerSettings()
+  { return blackboard.SetComputerSettings(); }
 
   gcc_const
   static const UISettings &GetUISettings() {
@@ -177,13 +177,13 @@ protected:
    * Determine whether vario gauge, FLARM radar and infoboxes should be drawn
    */
   static void DisplayModes();
-  static void SendGetSettingsComputer();
+  static void SendGetComputerSettings();
 
   static bool force_shutdown;
 
 public:
   /**
-   * Configure a new MacCready setting in #SETTINGS_COMPUTER, and
+   * Configure a new MacCready setting in #ComputerSettings, and
    * forward it to all XCSoar modules that want it.
    *
    * @param to_devices send the new settings to all devices?

@@ -25,7 +25,7 @@ Copyright_License {
 #define MAP_WINDOW_BLACKBOARD_H
 
 #include "Blackboard/BaseBlackboard.hpp"
-#include "Blackboard/SettingsComputerBlackboard.hpp"
+#include "Blackboard/ComputerSettingsBlackboard.hpp"
 #include "Blackboard/SettingsMapBlackboard.hpp"
 
 /**
@@ -35,13 +35,13 @@ Copyright_License {
  */
 class MapWindowBlackboard:
   public BaseBlackboard,
-  public SettingsComputerBlackboard,
+  public ComputerSettingsBlackboard,
   public SettingsMapBlackboard
 {
 protected:
   void ReadBlackboard(const MoreData &nmea_info,
                       const DerivedInfo &derived_info);
-  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
+  void ReadComputerSettings(const ComputerSettings &settings);
   void ReadSettingsMap(const SETTINGS_MAP &settings);
 };
 

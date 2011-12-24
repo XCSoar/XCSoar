@@ -46,7 +46,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[]={
 };
 
 
-static void LoadIntoForm(WndForm &form, const SETTINGS_COMPUTER &settings){
+static void LoadIntoForm(WndForm &form, const ComputerSettings &settings){
   LoadFormProperty(form, _T("prpVoiceClimbRate"),
                    settings.voice_climb_rate_enabled);
   LoadFormProperty(form, _T("prpVoiceTerrain"), settings.voice_terrain_enabled);
@@ -63,7 +63,7 @@ static void LoadIntoForm(WndForm &form, const SETTINGS_COMPUTER &settings){
 }
 
 static bool
-SaveFromForm(const WndForm &form, SETTINGS_COMPUTER &settings)
+SaveFromForm(const WndForm &form, ComputerSettings &settings)
 {
   return
     SaveFormProperty(form, _T("prpVoiceClimbRate"),
@@ -97,13 +97,13 @@ void dlgVoiceShowModal(void){
   
   if (!wf) return;
 
-  LoadIntoForm(*wf, XCSoarInterface::GetSettingsComputer());
+  LoadIntoForm(*wf, XCSoarInterface::GetComputerSettings());
 
   wf->ShowModal();
 
   bool changed = false;
 
-  changed = SaveFromForm(*wf, XCSoarInterface::SetSettingsComputer());
+  changed = SaveFromForm(*wf, XCSoarInterface::SetComputerSettings());
 
   if (changed) {
     Profile::Save();

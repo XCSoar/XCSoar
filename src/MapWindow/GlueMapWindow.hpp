@@ -122,10 +122,10 @@ class GlueMapWindow : public MapWindow {
 
   /**
    * The new glide computer settings.  It is passed to
-   * MapWindowBlackboard::ReadGetSettingsComputer() before the next
+   * MapWindowBlackboard::ReadGetComputerSettings() before the next
    * frame.
    */
-  SETTINGS_COMPUTER next_settings_computer;
+  ComputerSettings next_settings_computer;
 #endif
 
   ThermalBandRenderer thermal_band_renderer;
@@ -141,7 +141,7 @@ public:
   }
 
   void SetSettingsMap(const SETTINGS_MAP &new_value);
-  void SetSettingsComputer(const SETTINGS_COMPUTER &new_value);
+  void SetComputerSettings(const ComputerSettings &new_value);
 
   /**
    * Update the blackboard from DeviceBlackboard and

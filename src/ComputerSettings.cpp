@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "OS/Clock.hpp"
 #include "Asset.hpp"
@@ -106,7 +106,7 @@ FeaturesSettings::SetDefaults()
 }
 
 void
-SETTINGS_COMPUTER::SetDefaults()
+ComputerSettings::SetDefaults()
 {
   WindSettings::SetDefaults();
   LoggerSettings::SetDefaults();

@@ -34,7 +34,7 @@ Copyright_License {
 
 #include <assert.h>
 
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 struct SETTINGS_MAP;
 struct Look;
 class GlueMapWindow;
@@ -229,7 +229,7 @@ public:
     return *look;
   }
 
-  void SetSettingsComputer(const SETTINGS_COMPUTER &settings_computer);
+  void SetComputerSettings(const ComputerSettings &settings_computer);
   void SetSettingsMap(const SETTINGS_MAP &settings_map);
 
   /**

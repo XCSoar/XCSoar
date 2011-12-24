@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "GlideRatio.hpp"
 #include "Math/LowPassFilter.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Util/Macros.hpp"
 
 #include <assert.h>
@@ -32,7 +32,7 @@ Copyright_License {
 static const int MAXEFFICIENCYSHOW = 200;
 
 void
-GlideRatioCalculator::Initialize(const SETTINGS_COMPUTER &settings)
+GlideRatioCalculator::Initialize(const ComputerSettings &settings)
 {
   unsigned bsize;
 

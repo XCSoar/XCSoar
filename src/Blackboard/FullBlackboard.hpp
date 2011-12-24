@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FULL_BLACKBOARD_HPP
 
 #include "BaseBlackboard.hpp"
-#include "SettingsComputerBlackboard.hpp"
+#include "ComputerSettingsBlackboard.hpp"
 #include "UISettings.hpp"
 
 /**
@@ -35,7 +35,7 @@ Copyright_License {
  */
 class FullBlackboard
   : public BaseBlackboard,
-    public SettingsComputerBlackboard
+    public ComputerSettingsBlackboard
 {
 protected:
   UISettings ui_settings;

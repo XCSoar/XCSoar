@@ -35,7 +35,7 @@ Copyright_License {
 #include <windef.h>
 
 struct NMEAInfo;
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 struct Declaration;
 class OrderedTask;
 class DeviceDescriptor;
@@ -118,7 +118,7 @@ public:
    * @return True if enough space could be cleared, False otherwise
    */
   static bool LoggerClearFreeSpace(const NMEAInfo &gps_info);
-  void StartLogger(const NMEAInfo &gps_info, const SETTINGS_COMPUTER &settings,
+  void StartLogger(const NMEAInfo &gps_info, const ComputerSettings &settings,
                    const TCHAR *asset_number, const Declaration &decl);
 
   /**
@@ -130,7 +130,7 @@ public:
   void ClearBuffer();
 
 private:
-  void StartLogger(const NMEAInfo &gps_info, const SETTINGS_COMPUTER &settings,
+  void StartLogger(const NMEAInfo &gps_info, const ComputerSettings &settings,
                    const TCHAR *asset_number);
   
 private:

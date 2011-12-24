@@ -32,7 +32,7 @@ Copyright_License {
 
 struct NMEAInfo;
 struct DerivedInfo;
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 
 // These messages are listed in order of priotity,
 // first message to be active is spoken.
@@ -113,7 +113,7 @@ public:
 public:
 
   bool Update(const NMEAInfo &basic, const DerivedInfo &calculated,
-	      const SETTINGS_COMPUTER &settings);
+	      const ComputerSettings &settings);
 
 };
 
@@ -130,7 +130,7 @@ public:
   ~VegaVoice();
 
   void Update(const NMEAInfo &basic, const DerivedInfo &calculated,
-	      const SETTINGS_COMPUTER &settings);
+	      const ComputerSettings &settings);
 
   // called when notified by Altair that the message has been spoken
   void MessageSpoken(int id_this, fixed time);

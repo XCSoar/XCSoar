@@ -64,7 +64,7 @@ InfoBoxContentTemperature::Update(InfoBoxData &data)
 void
 InfoBoxContentTemperatureForecast::Update(InfoBoxData &data)
 {
-  fixed temperature = CommonInterface::GetSettingsComputer().forecast_temperature;
+  fixed temperature = CommonInterface::GetComputerSettings().forecast_temperature;
   SetValueFromFixed(data, _T("%2.1f"),
                     Units::ToUserTemperature(temperature));
 
@@ -76,11 +76,11 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch(keycode) {
   case ibkUp:
-    CommonInterface::SetSettingsComputer().forecast_temperature += fixed_half;
+    CommonInterface::SetComputerSettings().forecast_temperature += fixed_half;
     return true;
 
   case ibkDown:
-    CommonInterface::SetSettingsComputer().forecast_temperature -= fixed_half;
+    CommonInterface::SetComputerSettings().forecast_temperature -= fixed_half;
     return true;
 
   default:

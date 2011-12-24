@@ -110,7 +110,7 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              Layout::landscape ? _T("IDR_XML_ROUTECONFIGPANEL") :
                                _T("IDR_XML_ROUTECONFIGPANEL_L"));
 
-  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::GetSettingsComputer();
+  const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
   const RoutePlannerConfig &route_planner =
     settings_computer.task.route_planner;
 
@@ -168,7 +168,7 @@ bool
 RouteConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
-  SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   RoutePlannerConfig &route_planner = settings_computer.task.route_planner;
 
   changed |= SaveFormPropertyEnum(form, _T("prpRoutePlannerMode"),

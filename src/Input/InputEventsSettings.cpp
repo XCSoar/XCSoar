@@ -44,8 +44,8 @@ trigger_redraw()
 void
 InputEvents::eventSounds(const TCHAR *misc)
 {
-  SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer =
+    CommonInterface::SetComputerSettings();
  // bool OldEnableSoundVario = EnableSoundVario;
 
   if (_tcscmp(misc, _T("toggle")) == 0)
@@ -149,8 +149,8 @@ InputEvents::eventTerrainTopography(const TCHAR *misc)
 void
 InputEvents::eventAudioDeadband(const TCHAR *misc)
 {
-  SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer =
+    CommonInterface::SetComputerSettings();
 
   if (_tcscmp(misc, _T("+"))) {
     if (settings_computer.sound_deadband >= 40)
@@ -187,7 +187,7 @@ InputEvents::eventBugs(const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  GlidePolar &polar = CommonInterface::SetSettingsComputer().glide_polar_task;
+  GlidePolar &polar = CommonInterface::SetComputerSettings().glide_polar_task;
   fixed BUGS = polar.GetBugs();
   fixed oldBugs = BUGS;
 
@@ -228,7 +228,7 @@ InputEvents::eventBallast(const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  GlidePolar &polar = CommonInterface::SetSettingsComputer().glide_polar_task;
+  GlidePolar &polar = CommonInterface::SetComputerSettings().glide_polar_task;
   fixed BALLAST = polar.GetBallast();
   fixed oldBallast = BALLAST;
 
@@ -294,12 +294,12 @@ void
 InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
 {
   if (_tcscmp(misc, _T("+")) == 0)
-    CommonInterface::SetSettingsComputer().forecast_temperature += fixed_one;
+    CommonInterface::SetComputerSettings().forecast_temperature += fixed_one;
   else if (_tcscmp(misc, _T("-")) == 0)
-    CommonInterface::SetSettingsComputer().forecast_temperature -= fixed_one;
+    CommonInterface::SetComputerSettings().forecast_temperature -= fixed_one;
   else if (_tcscmp(misc, _T("show")) == 0) {
     fixed temperature =
-      CommonInterface::GetSettingsComputer().forecast_temperature;
+      CommonInterface::GetComputerSettings().forecast_temperature;
     TCHAR Temp[100];
     _stprintf(Temp, _T("%f"),
               (double)Units::ToUserTemperature(temperature));

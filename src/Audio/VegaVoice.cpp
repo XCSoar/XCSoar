@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Audio/VegaVoice.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Units/Units.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
@@ -309,7 +309,7 @@ VegaVoiceMessage::DoSend(gcc_unused fixed time, TCHAR *text)
 bool
 VegaVoiceMessage::Update(const NMEAInfo &basic,
                          const DerivedInfo &calculated,
-			 const SETTINGS_COMPUTER &settings)
+			 const ComputerSettings &settings)
 {
   const fixed Time = basic.clock;
   TCHAR text[80];
@@ -524,7 +524,7 @@ VegaVoice::~VegaVoice() {
 
 void
 VegaVoice::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
-		  const SETTINGS_COMPUTER &settings)
+		  const ComputerSettings &settings)
 {
 
   if (!AirspaceNotifierInstalled){

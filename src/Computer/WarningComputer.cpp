@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "WarningComputer.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
@@ -44,7 +44,7 @@ WarningComputer::Reset(const MoreData &basic, const DerivedInfo &calculated)
 }
 
 void
-WarningComputer::Update(const SETTINGS_COMPUTER &settings_computer,
+WarningComputer::Update(const ComputerSettings &settings_computer,
                         const MoreData &basic, const MoreData &last_basic,
                         const DerivedInfo &calculated,
                         AirspaceWarningsInfo &result)

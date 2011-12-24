@@ -23,7 +23,7 @@ Copyright_License {
 */
 
 #include "GlideComputerStats.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"

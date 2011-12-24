@@ -62,7 +62,7 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              Layout::landscape ? _T("IDR_XML_SAFETYFACTORSCONFIGPANEL") :
                                _T("IDR_XML_SAFETYFACTORSCONFIGPANEL_L"));
 
-  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::GetSettingsComputer();
+  const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
 
   LoadFormProperty(form, _T("prpSafetyAltitudeArrival"), ugAltitude,
@@ -93,7 +93,7 @@ SafetyFactorsConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool changed = false, require_restart = false;
 
   WndProperty *wp;
-  SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
 
   changed |= SaveFormProperty(form, _T("prpSafetyAltitudeArrival"), ugAltitude,

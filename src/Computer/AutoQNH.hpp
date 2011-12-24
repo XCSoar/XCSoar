@@ -28,7 +28,7 @@ Copyright_License {
 
 struct NMEAInfo;
 struct DerivedInfo;
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 class Waypoints;
 
 class AutoQNH {
@@ -38,7 +38,7 @@ class AutoQNH {
 
 public:
   void Process(const NMEAInfo &basic, DerivedInfo &calculated,
-               const SETTINGS_COMPUTER &settings_computer,
+               const ComputerSettings &settings_computer,
                const Waypoints &way_points);
 
   void Reset();

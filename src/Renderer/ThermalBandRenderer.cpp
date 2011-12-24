@@ -24,7 +24,7 @@ Copyright_License {
 #include "ThermalBandRenderer.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Screen/Chart.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/ThermalBandLook.hpp"
@@ -35,7 +35,7 @@ Copyright_License {
 
 void
 ThermalBandRenderer::scale_chart(const DerivedInfo &calculated,
-                                 const SETTINGS_COMPUTER &settings_computer,
+                                 const ComputerSettings &settings_computer,
                                  Chart &chart) const
 {
   chart.ScaleYFromValue(fixed_zero);
@@ -50,7 +50,7 @@ ThermalBandRenderer::scale_chart(const DerivedInfo &calculated,
 void
 ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
                                       const DerivedInfo& calculated,
-                                      const SETTINGS_COMPUTER &settings_computer,
+                                      const ComputerSettings &settings_computer,
                                       Chart &chart,
                                       const TaskBehaviour& task_props,
                                       const bool is_infobox,
@@ -173,7 +173,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
 void 
 ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
                                      const DerivedInfo& calculated,
-                                     const SETTINGS_COMPUTER &settings_computer,
+                                     const ComputerSettings &settings_computer,
                                      Canvas &canvas, 
                                      const PixelRect &rc,
                                      const TaskBehaviour& task_props,
@@ -204,7 +204,7 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
 void 
 ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
                                           const DerivedInfo& calculated,
-                                          const SETTINGS_COMPUTER &settings_computer,
+                                          const ComputerSettings &settings_computer,
                                           Canvas &canvas, 
                                           const PixelRect &rc,
                                           const TaskBehaviour &task_props) const

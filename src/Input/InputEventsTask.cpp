@@ -127,10 +127,10 @@ InputEvents::eventMacCready(const TCHAR *misc)
     return;
 
   const GlidePolar &polar =
-    CommonInterface::GetSettingsComputer().glide_polar_task;
+    CommonInterface::GetComputerSettings().glide_polar_task;
   fixed mc = polar.GetMC();
 
-  TaskBehaviour &task_behaviour = CommonInterface::SetSettingsComputer().task;
+  TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
 
   if (_tcscmp(misc, _T("up")) == 0) {
     mc = std::min(mc + Units::ToSysVSpeed(fixed_one / fixed(10)), fixed(5));

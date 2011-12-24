@@ -33,7 +33,7 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "Audio/Sound.hpp"
 #include "LogFile.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Language/Language.hpp"
 #include "StatusMessage.hpp"
 #include "UISettings.hpp"

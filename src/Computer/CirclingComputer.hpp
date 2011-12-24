@@ -28,7 +28,7 @@ struct CirclingInfo;
 struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 
 /**
  * Detect when the aircraft begins or ends circling.
@@ -53,7 +53,7 @@ public:
                const MoreData &basic, const MoreData &last_basic,
                const DerivedInfo &calculated,
                const DerivedInfo &last_calculated,
-               const SETTINGS_COMPUTER &settings_computer);
+               const ComputerSettings &settings_computer);
 };
 
 #endif

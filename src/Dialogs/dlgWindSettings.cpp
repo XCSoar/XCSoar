@@ -25,7 +25,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "SettingsMap.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Units/Units.hpp"
 #include "Profile/Profile.hpp"
 #include "DataField/Enum.hpp"
@@ -122,11 +122,11 @@ static void
 ApplySettings(const WindDialogSettings &settings)
 {
   if (!external_wind) {
-    XCSoarInterface::SetSettingsComputer().manual_wind = settings.wind;
-    XCSoarInterface::SetSettingsComputer().manual_wind_available.Update(
+    XCSoarInterface::SetComputerSettings().manual_wind = settings.wind;
+    XCSoarInterface::SetComputerSettings().manual_wind_available.Update(
         XCSoarInterface::Basic().clock);
 
-    XCSoarInterface::SetSettingsComputer().auto_wind_mode =
+    XCSoarInterface::SetComputerSettings().auto_wind_mode =
         settings.auto_wind_mode;
   }
 
@@ -218,11 +218,11 @@ dlgWindSettingsShowModal(void)
   assert(wf != NULL);
 
   external_wind = XCSoarInterface::Basic().external_wind_available &&
-                  XCSoarInterface::GetSettingsComputer().use_external_wind,
+                  XCSoarInterface::GetComputerSettings().use_external_wind,
 
   // Save current settings
   settings.wind = CommonInterface::Calculated().GetWindOrZero();
-  settings.auto_wind_mode = XCSoarInterface::GetSettingsComputer().auto_wind_mode;
+  settings.auto_wind_mode = XCSoarInterface::GetComputerSettings().auto_wind_mode;
   settings.trail_drift_enabled = XCSoarInterface::GetSettingsMap().trail_drift_enabled;
 
   // Initialize field values

@@ -84,7 +84,7 @@ XCSoarInterface::ReceiveCalculated()
     ScopeLock protect(device_blackboard->mutex);
 
     ReadBlackboardCalculated(device_blackboard->Calculated());
-    device_blackboard->ReadSettingsComputer(GetSettingsComputer());
+    device_blackboard->ReadComputerSettings(GetComputerSettings());
   }
 
   BroadcastCalculatedUpdate();
@@ -94,7 +94,7 @@ void
 XCSoarInterface::ExchangeBlackboard()
 {
   ExchangeDeviceBlackboard();
-  SendGetSettingsComputer();
+  SendGetComputerSettings();
   SendSettingsMap();
 }
 
@@ -103,17 +103,17 @@ XCSoarInterface::ExchangeDeviceBlackboard()
 {
   ScopeLock protect(device_blackboard->mutex);
 
-  device_blackboard->ReadSettingsComputer(GetSettingsComputer());
+  device_blackboard->ReadComputerSettings(GetComputerSettings());
 }
 
 void
-ActionInterface::SendGetSettingsComputer()
+ActionInterface::SendGetComputerSettings()
 {
   assert(calculation_thread != NULL);
 
-  main_window.SetSettingsComputer(GetSettingsComputer());
+  main_window.SetComputerSettings(GetComputerSettings());
 
-  calculation_thread->SetSettingsComputer(GetSettingsComputer());
+  calculation_thread->SetComputerSettings(GetComputerSettings());
   calculation_thread->SetScreenDistanceMeters(main_window.GetProjection().GetScreenDistanceMeters());
 }
 
@@ -122,7 +122,7 @@ ActionInterface::SetMacCready(fixed mc, bool to_devices)
 {
   /* update interface settings */
 
-  GlidePolar &polar = SetSettingsComputer().glide_polar_task;
+  GlidePolar &polar = SetComputerSettings().glide_polar_task;
   polar.SetMC(mc);
 
   /* update InfoBoxes (that might show the MacCready setting) */
@@ -135,7 +135,7 @@ ActionInterface::SetMacCready(fixed mc, bool to_devices)
     protected_task_manager->SetGlidePolar(polar);
 
   if (calculation_thread != NULL) {
-    calculation_thread->SetSettingsComputer(GetSettingsComputer());
+    calculation_thread->SetComputerSettings(GetComputerSettings());
     calculation_thread->Trigger();
   }
 

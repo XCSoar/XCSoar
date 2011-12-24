@@ -26,7 +26,7 @@ Copyright_License {
 #include "FlarmTrafficWindow.hpp"
 #include "Blackboard/LiveBlackboard.hpp"
 #include "NMEA/MoreData.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Dialogs/Traffic.hpp"
 
 /**
@@ -129,5 +129,5 @@ GaugeFLARM::Update(const NMEAInfo &basic)
   SmallTrafficWindow *window =
     (SmallTrafficWindow *)GetWindow();
 
-  window->Update(basic, blackboard.GetSettingsComputer());
+  window->Update(basic, blackboard.GetComputerSettings());
 }

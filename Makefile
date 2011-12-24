@@ -502,7 +502,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/UIState.cpp \
 	$(SRC)/UISettings.cpp \
 	$(SRC)/SettingsMap.cpp \
-	$(SRC)/SettingsComputer.cpp \
+	$(SRC)/ComputerSettings.cpp \
 	$(SRC)/MergeThread.cpp \
 	$(SRC)/CalculationThread.cpp \
 	$(SRC)/DisplayMode.cpp \

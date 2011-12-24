@@ -34,14 +34,14 @@ public:
   void ReadBlackboardCalculated(const DerivedInfo &derived_info);
 
   gcc_const
-  SETTINGS_COMPUTER& SetSettingsComputer() { return settings_computer; }
+  ComputerSettings& SetComputerSettings() { return computer_settings; }
 
   gcc_const
   UISettings &SetUISettings() {
     return ui_settings;
   }
 
-  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
+  void ReadComputerSettings(const ComputerSettings &settings);
 };
 
 #endif

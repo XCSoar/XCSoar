@@ -215,7 +215,7 @@ public:
 
   void ReadBlackboard(const MoreData &nmea_info,
                       const DerivedInfo &derived_info,
-                      const SETTINGS_COMPUTER &settings_computer,
+                      const ComputerSettings &settings_computer,
                       const SETTINGS_MAP &settings_map);
 
   const MapWindowProjection &VisibleProjection() const {

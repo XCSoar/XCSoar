@@ -127,7 +127,7 @@ Load(unsigned i)
 {
   assert(i < list.size());
 
-  SETTINGS_COMPUTER &settings = CommonInterface::SetSettingsComputer();
+  ComputerSettings &settings = CommonInterface::SetComputerSettings();
 
   if (!PlaneGlue::ReadFile(settings.plane, list[i].path))
     return false;
@@ -178,7 +178,7 @@ CloseClicked(gcc_unused WndButton &button)
 static void
 NewClicked(gcc_unused WndButton &button)
 {
-  Plane plane = CommonInterface::GetSettingsComputer().plane;
+  Plane plane = CommonInterface::GetComputerSettings().plane;
 
   while (dlgPlaneDetailsShowModal(*(SingleWindow*)dialog->get_root_owner(), plane)) {
     if (plane.registration.empty()) {

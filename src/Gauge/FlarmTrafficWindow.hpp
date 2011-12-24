@@ -26,7 +26,7 @@
 
 #include "Screen/PaintWindow.hpp"
 #include "FLARM/State.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Math/FastRotation.hpp"
 #include "FlarmTrafficLook.hpp"
 

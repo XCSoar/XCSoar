@@ -23,7 +23,7 @@ Copyright_License {
 */
 
 #include "GlideComputerBlackboard.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "GlideRatio.hpp"
@@ -110,7 +110,7 @@ GlideComputerBlackboard::ReadBlackboard(const MoreData &nmea_info)
  * @param settings New settings
  */
 void
-GlideComputerBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER &settings)
+GlideComputerBlackboard::ReadComputerSettings(const ComputerSettings &settings)
 {
-  settings_computer = settings;
+  computer_settings = settings;
 }

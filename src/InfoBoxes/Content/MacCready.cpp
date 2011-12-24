@@ -79,13 +79,13 @@ InfoBoxContentMacCready::GetDialogContent() {
 void
 InfoBoxContentMacCready::Update(InfoBoxData &data)
 {
-  const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::GetSettingsComputer();
+  const ComputerSettings &settings_computer =
+    CommonInterface::GetComputerSettings();
 
   SetVSpeed(data, settings_computer.glide_polar_task.GetMC());
 
   // Set Comment
-  if (XCSoarInterface::GetSettingsComputer().task.auto_mc)
+  if (XCSoarInterface::GetComputerSettings().task.auto_mc)
     data.SetComment(_("AUTO"));
   else
     data.SetComment(_("MANUAL"));
@@ -97,10 +97,10 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
   if (protected_task_manager == NULL)
     return false;
 
-  const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::GetSettingsComputer();
+  const ComputerSettings &settings_computer =
+    CommonInterface::GetComputerSettings();
   const GlidePolar &polar = settings_computer.glide_polar_task;
-  TaskBehaviour &task_behaviour = CommonInterface::SetSettingsComputer().task;
+  TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
   fixed mc = polar.GetMC();
 
   switch (keycode) {
@@ -142,8 +142,8 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
   if (protected_task_manager == NULL)
     return false;
 
-  const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::GetSettingsComputer();
+  const ComputerSettings &settings_computer =
+    CommonInterface::GetComputerSettings();
   const GlidePolar &polar = settings_computer.glide_polar_task;
   fixed mc = polar.GetMC();
 

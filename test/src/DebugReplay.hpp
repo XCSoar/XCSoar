@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEBUG_REPLAY_HPP
 #define XCSOAR_DEBUG_REPLAY_HPP
 
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Computer/BasicComputer.hpp"
@@ -45,7 +45,7 @@ protected:
   BasicComputer computer;
   FlyingComputer flying_computer;
 
-  SETTINGS_COMPUTER settings_computer;
+  ComputerSettings settings_computer;
   MoreData basic, last_basic;
   DerivedInfo calculated, last_calculated;
 
@@ -61,7 +61,7 @@ public:
 
   virtual bool Next() = 0;
 
-  const SETTINGS_COMPUTER &GetSettingsComputer() const {
+  const ComputerSettings &GetComputerSettings() const {
     return settings_computer;
   }
 

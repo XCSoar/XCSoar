@@ -25,7 +25,7 @@ Copyright_License {
 #define GLIDECOMPUTER_BLACKBOARD_HPP
 
 #include "Blackboard/BaseBlackboard.hpp"
-#include "Blackboard/SettingsComputerBlackboard.hpp"
+#include "Blackboard/ComputerSettingsBlackboard.hpp"
 
 class ProtectedTaskManager;
 
@@ -35,7 +35,7 @@ class ProtectedTaskManager;
  */
 class GlideComputerBlackboard:
   public BaseBlackboard,
-  public SettingsComputerBlackboard
+  public ComputerSettingsBlackboard
 {
   fixed ScreenDistanceMeters;
 
@@ -48,7 +48,7 @@ public:
   GlideComputerBlackboard();
 
   void ReadBlackboard(const MoreData &nmea_info);
-  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
+  void ReadComputerSettings(const ComputerSettings &settings);
   const MoreData &LastBasic() const { return last_gps_info; }
   const DerivedInfo& LastCalculated() const { return last_calculated_info; }
 

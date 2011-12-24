@@ -59,8 +59,8 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              Layout::landscape ? _T("IDR_XML_LOGGERCONFIGPANEL") :
                                _T("IDR_XML_LOGGERCONFIGPANEL_L"));
 
-  const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::GetSettingsComputer();
+  const ComputerSettings &settings_computer =
+    CommonInterface::GetComputerSettings();
   const Plane &plane = settings_computer.plane;
 
   LoadFormProperty(form, _T("prpLoggerTimeStepCruise"),
@@ -87,8 +87,8 @@ LoggerConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
 
-  SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer =
+    XCSoarInterface::SetComputerSettings();
   Plane &plane = settings_computer.plane;
 
   changed |= SaveFormProperty(form, _T("prpLoggerTimeStepCruise"),

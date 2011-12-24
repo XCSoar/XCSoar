@@ -27,7 +27,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Engine/Trace/Trace.hpp"
 
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 struct AircraftState;
 
 /**
@@ -87,9 +87,9 @@ public:
   void LockedCopyTo(TracePointVector &v, unsigned min_time,
                             const GeoPoint &location, fixed resolution) const;
 
-  void Update(const SETTINGS_COMPUTER &settings_computer,
+  void Update(const ComputerSettings &settings_computer,
               const AircraftState &state);
-  void Idle(const SETTINGS_COMPUTER &settings_computer,
+  void Idle(const ComputerSettings &settings_computer,
             const AircraftState &state);
 };
 

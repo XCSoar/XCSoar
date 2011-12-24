@@ -29,7 +29,7 @@ Copyright_License {
 class Waypoints;
 class RasterTerrain;
 class OperationEnvironment;
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 
 class WaypointReaderBase;
 
@@ -38,7 +38,7 @@ class WaypointReaderBase;
  */
 namespace WaypointGlue {
   void SetHome(Waypoints &way_points, const RasterTerrain *terrain,
-               SETTINGS_COMPUTER &settings, const bool reset);
+               ComputerSettings &settings, const bool reset);
 
   /**
    * Reads the waypoints out of the two waypoint files and appends them to the

@@ -30,7 +30,7 @@ Copyright_License {
 struct AirspaceLook;
 struct MoreData;
 struct DerivedInfo;
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 struct SETTINGS_MAP;
 class Airspaces;
 class ProtectedAirspaceWarningManager;
@@ -83,7 +83,7 @@ public:
 #endif
             const WindowProjection &projection,
             const MoreData &basic, const DerivedInfo &calculated,
-            const SETTINGS_COMPUTER &settings_computer,
+            const ComputerSettings &settings_computer,
             const SETTINGS_MAP &settings_map);
 
   void DrawIntersections(Canvas &canvas,

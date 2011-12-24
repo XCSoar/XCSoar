@@ -30,7 +30,7 @@ Copyright_License {
 #include "Poco/RWLock.h"
 
 struct NMEAInfo;
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 
 class LoggerImpl;
 class OrderedTask;
@@ -52,11 +52,11 @@ public:
 
   bool LoggerClearFreeSpace(const NMEAInfo &gps_info);
   void GUIStartLogger(const NMEAInfo& gps_info,
-                      const SETTINGS_COMPUTER& settings,
+                      const ComputerSettings& settings,
                       const ProtectedTaskManager &protected_task_manager,
                       bool noAsk = false);
   void GUIToggleLogger(const NMEAInfo& gps_info,
-                       const SETTINGS_COMPUTER& settings,
+                       const ComputerSettings& settings,
                        const ProtectedTaskManager &protected_task_manager,
                        bool noAsk = false);
   void GUIStopLogger(const NMEAInfo &gps_info,

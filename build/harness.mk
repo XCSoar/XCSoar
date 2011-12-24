@@ -5,7 +5,7 @@ HARNESS_SOURCES = \
 	$(SRC)/Replay/TaskAutoPilot.cpp \
 	$(SRC)/Replay/AircraftSim.cpp \
 	$(SRC)/UtilsText.cpp \
-	$(SRC)/SettingsComputer.cpp \
+	$(SRC)/ComputerSettings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/OS/Clock.cpp \

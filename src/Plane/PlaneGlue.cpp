@@ -27,7 +27,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/PolarGlue.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -114,7 +114,7 @@ PlaneGlue::ToProfile(const Plane &plane)
 }
 
 void
-PlaneGlue::Synchronize(const Plane &plane, SETTINGS_COMPUTER &settings,
+PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
                        GlidePolar &gp)
 {
   settings.task.contest_handicap = plane.handicap;

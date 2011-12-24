@@ -30,7 +30,7 @@ Copyright_License {
 
 static const unsigned INVALID_GR = 999;
 
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 
 class GlideRatioCalculator : private NonCopyable {
   struct Record {
@@ -58,7 +58,7 @@ class GlideRatioCalculator : private NonCopyable {
   bool valid;
 
 public:
-  void Initialize(const SETTINGS_COMPUTER &settings);
+  void Initialize(const ComputerSettings &settings);
   void Add(unsigned distance, int altitude);
   int Calculate() const;
 };

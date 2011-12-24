@@ -41,8 +41,8 @@ static void
 PnlEditOnWindSpeed(gcc_unused DataFieldFloat &Sender)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
-  SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer =
+    XCSoarInterface::SetComputerSettings();
   const bool external_wind = basic.external_wind_available &&
     settings_computer.use_external_wind;
 
@@ -57,8 +57,8 @@ static void
 PnlEditOnWindDirection(gcc_unused DataFieldFloat &Sender)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
-  SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer =
+    XCSoarInterface::SetComputerSettings();
   const bool external_wind = basic.external_wind_available &&
     settings_computer.use_external_wind;
 
@@ -85,8 +85,8 @@ void
 WindEditPanel::Show(const PixelRect &rc)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
-  const SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::GetSettingsComputer();
+  const ComputerSettings &settings_computer =
+    XCSoarInterface::GetComputerSettings();
   const bool external_wind = basic.external_wind_available &&
     settings_computer.use_external_wind;
 

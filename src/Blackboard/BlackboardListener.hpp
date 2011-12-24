@@ -26,7 +26,7 @@ Copyright_License {
 
 struct MoreData;
 struct DerivedInfo;
-struct SETTINGS_COMPUTER;
+struct ComputerSettings;
 struct UISettings;
 
 /**
@@ -51,7 +51,7 @@ public:
   /**
    * The user has modified the computer settings.
    */
-  virtual void OnComputerSettingsUpdate(const SETTINGS_COMPUTER &settings) = 0;
+  virtual void OnComputerSettingsUpdate(const ComputerSettings &settings) = 0;
 
   /**
    * The user has modified the UI settings.
@@ -71,7 +71,7 @@ public:
   virtual void OnCalculatedUpdate(const MoreData &basic,
                                   const DerivedInfo &calculated);
 
-  virtual void OnComputerSettingsUpdate(const SETTINGS_COMPUTER &settings);
+  virtual void OnComputerSettingsUpdate(const ComputerSettings &settings);
 
   virtual void OnUISettingsUpdate(const UISettings &settings);
 };

@@ -33,7 +33,7 @@ Profile::LoadAirspaceConfig()
   unsigned Temp = 0;
 
   AirspaceComputerSettings &computer =
-    CommonInterface::SetSettingsComputer().airspace;
+    CommonInterface::SetComputerSettings().airspace;
   AirspaceRendererSettings &renderer =
     CommonInterface::SetSettingsMap().airspace;
 
@@ -70,7 +70,7 @@ void
 Profile::SetAirspaceMode(int i)
 {
   const AirspaceComputerSettings &computer =
-    CommonInterface::GetSettingsComputer().airspace;
+    CommonInterface::GetComputerSettings().airspace;
   const AirspaceRendererSettings &renderer =
     CommonInterface::GetSettingsMap().airspace;
 

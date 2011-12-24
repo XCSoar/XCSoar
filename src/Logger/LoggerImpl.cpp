@@ -32,7 +32,7 @@
 #include "Device/Declaration.hpp"
 #include "Compatibility/path.h"
 #include "Compatibility/dirent.h"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "NMEA/Info.hpp"
 #include "Simulator.hpp"
 #include "Interface.hpp"
@@ -215,7 +215,7 @@ IsAlphaNum (TCHAR c)
 
 void
 LoggerImpl::StartLogger(const NMEAInfo &gps_info,
-    const SETTINGS_COMPUTER &settings, const TCHAR *_asset_number)
+    const ComputerSettings &settings, const TCHAR *_asset_number)
 {
   int i;
 
@@ -412,7 +412,7 @@ LoggerImpl::LoggerClearFreeSpace(const NMEAInfo &gps_info)
 // TODO: fix scope so only gui things can start it
 void
 LoggerImpl::StartLogger(const NMEAInfo &gps_info,
-                        const SETTINGS_COMPUTER &settings,
+                        const ComputerSettings &settings,
                         const TCHAR *asset_number, const Declaration &decl)
 {
   StartLogger(gps_info, settings, asset_number);

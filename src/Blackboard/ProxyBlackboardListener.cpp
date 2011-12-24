@@ -37,7 +37,7 @@ ProxyBlackboardListener::OnCalculatedUpdate(const MoreData &basic,
 }
 
 void
-ProxyBlackboardListener::OnComputerSettingsUpdate(const SETTINGS_COMPUTER &settings)
+ProxyBlackboardListener::OnComputerSettingsUpdate(const ComputerSettings &settings)
 {
   next.OnComputerSettingsUpdate(settings);
 }

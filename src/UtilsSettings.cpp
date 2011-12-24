@@ -26,7 +26,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "SettingsMap.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/WaypointDetailsReader.hpp"
@@ -143,7 +143,7 @@ SettingsLeave(const UISettings &old_ui_settings)
     TaskEvents task_events;
     GlidePolar glide_polar(lease->GetGlidePolar());
     OrderedTask *task = lease->Clone(task_events,
-                                     XCSoarInterface::GetSettingsComputer().task,
+                                     XCSoarInterface::GetComputerSettings().task,
                                      glide_polar);
     if (task) {
       // this must be done in thread lock because it potentially changes the
@@ -156,7 +156,7 @@ SettingsLeave(const UISettings &old_ui_settings)
   if (WaypointFileChanged || TerrainFileChanged) {
     // re-set home
     WaypointGlue::SetHome(way_points, terrain,
-                          XCSoarInterface::SetSettingsComputer(),
+                          XCSoarInterface::SetComputerSettings(),
                           WaypointFileChanged);
   }
 
@@ -176,7 +176,7 @@ SettingsLeave(const UISettings &old_ui_settings)
 
     airspace_database.clear();
     ReadAirspace(airspace_database, terrain,
-                 CommonInterface::GetSettingsComputer().pressure,
+                 CommonInterface::GetComputerSettings().pressure,
                  operation);
   }
 

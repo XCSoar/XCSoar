@@ -35,7 +35,7 @@ NullBlackboardListener::OnCalculatedUpdate(const MoreData &basic,
 }
 
 void
-NullBlackboardListener::OnComputerSettingsUpdate(const SETTINGS_COMPUTER &settings)
+NullBlackboardListener::OnComputerSettingsUpdate(const ComputerSettings &settings)
 {
 }
 

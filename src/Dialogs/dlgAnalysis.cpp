@@ -29,7 +29,7 @@ Copyright_License {
 #include "Dialogs/Task.hpp"
 #include "CrossSection/CrossSectionWindow.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Screen/Fonts.hpp"
@@ -160,7 +160,7 @@ ChartControl::on_paint(Canvas &canvas)
 {
   assert(glide_computer != NULL);
 
-  const SETTINGS_COMPUTER &settings_computer = blackboard->GetSettingsComputer();
+  const ComputerSettings &settings_computer = blackboard->GetComputerSettings();
   const SETTINGS_MAP &settings_map = blackboard->GetSettingsMap();
   const MoreData &basic = blackboard->Basic();
   const DerivedInfo &calculated = blackboard->Calculated();
@@ -273,7 +273,7 @@ Update(void)
   assert(csw != NULL);
   assert(glide_computer != NULL);
 
-  const SETTINGS_COMPUTER &settings_computer = blackboard->GetSettingsComputer();
+  const ComputerSettings &settings_computer = blackboard->GetComputerSettings();
   const DerivedInfo &calculated = blackboard->Calculated();
 
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "TraceComputer.hpp"
-#include "SettingsComputer.hpp"
+#include "ComputerSettings.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 
 TraceComputer::TraceComputer()
@@ -61,7 +61,7 @@ TraceComputer::LockedCopyTo(TracePointVector &v, unsigned min_time,
 }
 
 void
-TraceComputer::Update(const SETTINGS_COMPUTER &settings_computer,
+TraceComputer::Update(const ComputerSettings &settings_computer,
                       const AircraftState &state)
 {
   if (state.time < last_time) {
@@ -88,7 +88,7 @@ TraceComputer::Update(const SETTINGS_COMPUTER &settings_computer,
 }
 
 void
-TraceComputer::Idle(const SETTINGS_COMPUTER &settings_computer,
+TraceComputer::Idle(const ComputerSettings &settings_computer,
                     const AircraftState &state)
 {
   if (!state.flying)

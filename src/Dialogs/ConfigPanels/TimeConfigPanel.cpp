@@ -118,7 +118,7 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   loading = true;
 
-  int utc_offset = XCSoarInterface::GetSettingsComputer().utc_offset;
+  int utc_offset = XCSoarInterface::GetComputerSettings().utc_offset;
   LoadFormProperty(form, _T("prpUTCOffset"),
                    fixed(iround(fixed(utc_offset) / 1800)) / 2);
 #ifdef WIN32
@@ -135,7 +135,7 @@ TimeConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
 
-  SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
+  ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   int ival = iround(GetFormValueFixed(form, _T("prpUTCOffset")) * 3600);
   if (settings_computer.utc_offset != ival) {
     settings_computer.utc_offset = ival;

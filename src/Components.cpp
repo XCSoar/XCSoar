@@ -170,7 +170,7 @@ XCSoarInterface::AfterStartup()
   }
 
   OrderedTask *defaultTask = protected_task_manager->TaskCreateDefault(
-      &way_points, GetSettingsComputer().task.task_type_default);
+      &way_points, GetComputerSettings().task.task_type_default);
   if (defaultTask) {
     {
       ScopeSuspendAllThreads suspend;
@@ -247,7 +247,7 @@ XCSoarInterface::Startup()
 
   SetXMLDialogLook(main_window.GetLook().dialog);
 
-  SetSettingsComputer().SetDefaults();
+  SetComputerSettings().SetDefaults();
   SetUISettings().SetDefaults();
   SetUIState().Clear();
 
@@ -302,7 +302,7 @@ XCSoarInterface::Startup()
 
   protected_task_manager =
     new ProtectedTaskManager(*task_manager,
-                             XCSoarInterface::GetSettingsComputer().task,
+                             XCSoarInterface::GetComputerSettings().task,
                              task_events);
 
   // Read the terrain file
@@ -313,7 +313,7 @@ XCSoarInterface::Startup()
   glide_computer = new GlideComputer(way_points, airspace_database,
                                      *protected_task_manager,
                                      task_events);
-  glide_computer->ReadSettingsComputer(GetSettingsComputer());
+  glide_computer->ReadComputerSettings(GetComputerSettings());
   glide_computer->SetTerrain(terrain);
   glide_computer->SetLogger(&logger);
   glide_computer->Initialise();
@@ -323,11 +323,11 @@ XCSoarInterface::Startup()
   // Load the EGM96 geoid data
   EGM96::Load();
 
-  GlidePolar &gp = SetSettingsComputer().glide_polar_task;
+  GlidePolar &gp = SetComputerSettings().glide_polar_task;
   gp = GlidePolar(fixed_zero);
-  gp.SetMC(GetSettingsComputer().task.safety_mc);
-  PlaneGlue::FromProfile(SetSettingsComputer().plane);
-  PlaneGlue::Synchronize(GetSettingsComputer().plane, SetSettingsComputer(), gp);
+  gp.SetMC(GetComputerSettings().task.safety_mc);
+  PlaneGlue::FromProfile(SetComputerSettings().plane);
+  PlaneGlue::Synchronize(GetComputerSettings().plane, SetComputerSettings(), gp);
   task_manager->SetGlidePolar(gp);
 
   // Read the topography file(s)
@@ -341,7 +341,7 @@ XCSoarInterface::Startup()
   WaypointDetails::ReadFileFromProfile(way_points, operation);
 
   // Set the home waypoint
-  WaypointGlue::SetHome(way_points, terrain, SetSettingsComputer(),
+  WaypointGlue::SetHome(way_points, terrain, SetComputerSettings(),
                         false);
 
   // ReSynchronise the blackboards here since SetHome touches them
@@ -353,7 +353,7 @@ XCSoarInterface::Startup()
   RASP.ScanAll(Basic().location, operation);
 
   // Reads the airspace files
-  ReadAirspace(airspace_database, terrain, GetSettingsComputer().pressure,
+  ReadAirspace(airspace_database, terrain, GetComputerSettings().pressure,
                operation);
 
   {
@@ -362,7 +362,7 @@ XCSoarInterface::Startup()
                       device_blackboard->Calculated());
     ProtectedAirspaceWarningManager::ExclusiveLease lease(glide_computer->GetAirspaceWarnings());
     lease->Reset(aircraft_state);
-    lease->SetConfig(CommonInterface::GetSettingsComputer().airspace.warnings);
+    lease->SetConfig(CommonInterface::GetComputerSettings().airspace.warnings);
   }
 
   // Read the FLARM details file
@@ -390,7 +390,7 @@ XCSoarInterface::Startup()
 /*
   -- Reset polar in case devices need the data
   LogStartUp(_T("GlidePolar::UpdatePolar"));
-  GlidePolar::UpdatePolar(true, GetSettingsComputer());
+  GlidePolar::UpdatePolar(true, GetComputerSettings());
 
   This should be done inside devStartup if it is really required
 */
@@ -445,7 +445,7 @@ XCSoarInterface::Startup()
 
 #ifdef HAVE_TRACKING
   tracking = new TrackingGlue();
-  tracking->SetSettings(GetSettingsComputer().tracking);
+  tracking->SetSettings(GetComputerSettings().tracking);
 #endif
 
   globalRunningEvent.Signal();
