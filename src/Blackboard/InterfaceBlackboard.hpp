@@ -34,7 +34,9 @@ public:
   void ReadBlackboardCalculated(const DerivedInfo &derived_info);
 
   gcc_const
-  ComputerSettings& SetComputerSettings() { return computer_settings; }
+  ComputerSettings& SetComputerSettings() {
+    return computer_settings;
+  }
 
   gcc_const
   UISettings &SetUISettings() {

@@ -41,7 +41,9 @@ public:
   }
 
   gcc_pure
-  const DerivedInfo& Calculated() const { return calculated_info; }
+  const DerivedInfo& Calculated() const {
+    return calculated_info;
+  }
 
 protected:
   MoreData gps_info;
