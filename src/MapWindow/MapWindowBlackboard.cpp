@@ -31,7 +31,7 @@ MapWindowBlackboard::ReadComputerSettings(const ComputerSettings
 }
 
 void
-MapWindowBlackboard::ReadSettingsMap(const SETTINGS_MAP
+MapWindowBlackboard::ReadMapSettings(const MapSettings
 				     &settings)
 {
   settings_map = settings;

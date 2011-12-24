@@ -202,7 +202,7 @@ MainWindow::InitialiseConfigured()
 
   map = new GlueMapWindow(*look);
   map->SetComputerSettings(CommonInterface::GetComputerSettings());
-  map->SetSettingsMap(CommonInterface::GetSettingsMap());
+  map->SetMapSettings(CommonInterface::GetMapSettings());
   map->set(*this, map_rect);
   map->set_font(Fonts::map);
 
@@ -658,10 +658,10 @@ MainWindow::SetComputerSettings(const ComputerSettings &settings_computer)
 }
 
 void
-MainWindow::SetSettingsMap(const SETTINGS_MAP &settings_map)
+MainWindow::SetMapSettings(const MapSettings &settings_map)
 {
   if (map != NULL)
-    map->SetSettingsMap(settings_map);
+    map->SetMapSettings(settings_map);
 }
 
 GlueMapWindow *

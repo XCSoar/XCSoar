@@ -137,7 +137,7 @@ Pages::OpenLayout(const PageSettings::PageLayout &layout)
   }
 
   InfoBoxManager::SetDirty();
-  XCSoarInterface::SendSettingsMap(true);
+  XCSoarInterface::SendMapSettings(true);
 }
 
 

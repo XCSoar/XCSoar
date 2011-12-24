@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "MapLook.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Screen/Layout.hpp"
 #include "resource.h"
 
 void
-MapLook::Initialise(const struct SETTINGS_MAP &settings)
+MapLook::Initialise(const struct MapSettings &settings)
 {
   waypoint.Initialise(settings.waypoint);
   airspace.Initialise(settings.airspace);

@@ -25,7 +25,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Terrain/WeatherTerrainRenderer.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Navigation/SpeedVector.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"

@@ -95,7 +95,7 @@ XCSoarInterface::ExchangeBlackboard()
 {
   ExchangeDeviceBlackboard();
   SendGetComputerSettings();
-  SendSettingsMap();
+  SendMapSettings();
 }
 
 void
@@ -146,7 +146,7 @@ ActionInterface::SetMacCready(fixed mc, bool to_devices)
 }
 
 void
-ActionInterface::SendSettingsMap(const bool trigger_draw)
+ActionInterface::SendMapSettings(const bool trigger_draw)
 {
   // trigger_draw: asks for an immediate exchange of blackboard data
   // (via ProcessTimer()) rather than waiting for the idle timer every 500ms
@@ -156,7 +156,7 @@ ActionInterface::SendSettingsMap(const bool trigger_draw)
     InfoBoxManager::ProcessTimer();
   }
 
-  main_window.SetSettingsMap(GetSettingsMap());
+  main_window.SetMapSettings(GetMapSettings());
 
   if (trigger_draw) {
     main_window.full_redraw();

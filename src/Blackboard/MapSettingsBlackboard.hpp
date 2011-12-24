@@ -21,23 +21,23 @@ Copyright_License {
 }
 */
 
-#ifndef SETTINGS_MAP_BLACKBOARD_H
-#define SETTINGS_MAP_BLACKBOARD_H
+#ifndef MAP_SETTINGS_BLACKBOARD_HPP
+#define MAP_SETTINGS_BLACKBOARD_HPP
 
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Compiler.h"
 
 /**
  * Blackboard for clients requiring read access to map settings
  */
-class SettingsMapBlackboard
+class MapSettingsBlackboard
 {
 public:
   gcc_const
-  const SETTINGS_MAP& GetSettingsMap() const
+  const MapSettings& GetMapSettings() const
   { return settings_map; };
 protected:
-  SETTINGS_MAP settings_map;
+  MapSettings settings_map;
 };
 
 #endif

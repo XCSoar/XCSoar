@@ -54,7 +54,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
   WaypointListRenderer::Draw(canvas, rc, waypoint, solution.vector.distance,
                              solution.altitude_difference,
                              CommonInterface::main_window.GetLook().map.waypoint,
-                             CommonInterface::GetSettingsMap().waypoint);
+                             CommonInterface::GetMapSettings().waypoint);
 }
 
 void

@@ -50,12 +50,12 @@ GlueMapWindow::set(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-GlueMapWindow::SetSettingsMap(const SETTINGS_MAP &new_value)
+GlueMapWindow::SetMapSettings(const MapSettings &new_value)
 {
   AssertThreadOrUndefined();
 
 #ifdef ENABLE_OPENGL
-  ReadSettingsMap(new_value);
+  ReadMapSettings(new_value);
 #else
   ScopeLock protect(next_mutex);
   next_settings_map = new_value;
@@ -86,7 +86,7 @@ GlueMapWindow::ExchangeBlackboard()
 
 #ifndef ENABLE_OPENGL
   next_mutex.Lock();
-  ReadSettingsMap(next_settings_map);
+  ReadMapSettings(next_settings_map);
   ReadComputerSettings(next_settings_computer);
   next_mutex.Unlock();
 #endif

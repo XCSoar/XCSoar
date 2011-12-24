@@ -36,7 +36,7 @@ class ContestTraceVector;
 struct TrailLook;
 struct NMEAInfo;
 struct DerivedInfo;
-struct SETTINGS_MAP;
+struct MapSettings;
 
 class TrailRenderer {
   const TrailLook &look;
@@ -64,7 +64,7 @@ public:
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
             const WindowProjection &projection, unsigned min_time,
             bool enable_traildrift, const RasterPoint pos, const NMEAInfo &basic,
-            const DerivedInfo &calculated, const SETTINGS_MAP &settings);
+            const DerivedInfo &calculated, const MapSettings &settings);
 
   /**
    * Draw the trace that was obtained by LoadTrace() with the trace pen.

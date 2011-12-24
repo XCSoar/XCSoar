@@ -102,7 +102,7 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-  const SETTINGS_MAP &settings_map = CommonInterface::GetSettingsMap();
+  const MapSettings &settings_map = CommonInterface::GetMapSettings();
 
   AddEnum(_("Cruise orientation"),
           _("Determines how the screen is rotated with the glider"),
@@ -144,7 +144,7 @@ MapDisplayConfigPanel::Save(bool &_changed, bool &require_restart)
 {
   bool changed = false;
 
-  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+  MapSettings &settings_map = CommonInterface::SetMapSettings();
 
   changed |= SaveValueEnum(OrientationCruise, szProfileOrientationCruise,
                            settings_map.cruise_orientation);

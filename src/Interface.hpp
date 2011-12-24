@@ -93,11 +93,11 @@ public:
   }
 
   /**
-   * Returns the InterfaceBlackboard.SettingsMap (read-only)
-   * @return The InterfaceBlackboard.SettingsMap
+   * Returns the InterfaceBlackboard.MapSettings (read-only)
+   * @return The InterfaceBlackboard.MapSettings
    */
   gcc_const
-  static const SETTINGS_MAP& GetSettingsMap() {
+  static const MapSettings& GetMapSettings() {
     return GetUISettings().map;
   }
 
@@ -117,11 +117,11 @@ public:
   }
 
   /**
-   * Returns the InterfaceBlackboard.SettingsMap (read-write)
-   * @return The InterfaceBlackboard.SettingsMap
+   * Returns the InterfaceBlackboard.MapSettings (read-write)
+   * @return The InterfaceBlackboard.MapSettings
    */
   gcc_const
-  static SETTINGS_MAP& SetSettingsMap() {
+  static MapSettings& SetMapSettings() {
     return SetUISettings().map;
   }
 
@@ -191,12 +191,12 @@ public:
   static void SetMacCready(fixed mc, bool to_devices=true);
 
   /**
-   * Call this after SETTINGS_MAP has been modified with
-   * SetSettingsMap().  It sends the new values to all sub systems,
+   * Call this after MapSettings has been modified with
+   * SetMapSettings().  It sends the new values to all sub systems,
    * and optionally forces a redraw.
    * @param trigger_draw Triggers the draw event after sending if true
    */
-  static void SendSettingsMap(const bool trigger_draw = false);
+  static void SendMapSettings(const bool trigger_draw = false);
 
 public:
   // ideally these should be protected

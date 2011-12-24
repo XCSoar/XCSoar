@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 
 void
-SETTINGS_MAP::SetDefaults()
+MapSettings::SetDefaults()
 {
   circle_zoom_enabled = true;
   max_auto_zoom_distance = fixed(100000); /* 100 km */

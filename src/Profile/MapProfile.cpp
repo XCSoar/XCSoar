@@ -25,10 +25,10 @@ Copyright_License {
 #include "Profile/TerrainConfig.hpp"
 #include "Profile/AirspaceConfig.hpp"
 #include "Profile/Profile.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 
 void
-Profile::Load(SETTINGS_MAP &settings)
+Profile::Load(MapSettings &settings)
 {
   Get(szProfileCircleZoom, settings.circle_zoom_enabled);
   Get(szProfileMaxAutoZoomDistance, settings.max_auto_zoom_distance);

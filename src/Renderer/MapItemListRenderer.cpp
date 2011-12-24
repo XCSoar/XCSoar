@@ -38,7 +38,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/StaticString.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "LocalTime.hpp"
 #include "Math/Screen.hpp"
 #include "Look/TrafficLook.hpp"
@@ -49,7 +49,7 @@ Copyright_License {
 namespace MapItemListRenderer
 {
   void Draw(Canvas &canvas, const PixelRect rc, const SelfMapItem &item,
-            const AircraftLook &look, const SETTINGS_MAP &settings);
+            const AircraftLook &look, const MapSettings &settings);
 
   void Draw(Canvas &canvas, const PixelRect rc, const AirspaceMapItem &item,
             const AirspaceLook &look,
@@ -76,7 +76,7 @@ namespace MapItemListRenderer
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const SelfMapItem &item, const AircraftLook &look,
-                          const SETTINGS_MAP &settings)
+                          const MapSettings &settings)
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
@@ -321,7 +321,7 @@ MapItemListRenderer::Draw(
     Canvas &canvas, const PixelRect rc, const MapItem &item,
     const MapLook &look,
     const TrafficLook &traffic_look,
-    const SETTINGS_MAP &settings)
+    const MapSettings &settings)
 {
   switch (item.type) {
   case MapItem::SELF:

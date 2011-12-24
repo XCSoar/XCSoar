@@ -52,7 +52,7 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   const AirspaceComputerSettings &computer =
     CommonInterface::GetComputerSettings().airspace;
   const AirspaceRendererSettings &renderer =
-    CommonInterface::GetSettingsMap().airspace;
+    CommonInterface::GetMapSettings().airspace;
   const AirspaceLook &look = CommonInterface::main_window.GetLook().map.airspace;
 
   PixelScalar w0 = rc.right - rc.left - Layout::FastScale(4);
@@ -105,13 +105,13 @@ OnAirspaceListEnter(unsigned ItemIndex)
   AirspaceComputerSettings &computer =
     CommonInterface::SetComputerSettings().airspace;
   AirspaceRendererSettings &renderer =
-    CommonInterface::SetSettingsMap().airspace;
+    CommonInterface::SetMapSettings().airspace;
 
   if (colormode) {
     int c = dlgAirspaceColoursShowModal();
     if (c >= 0) {
       renderer.colours[ItemIndex] = c;
-      ActionInterface::SendSettingsMap();
+      ActionInterface::SendMapSettings();
       Profile::SetAirspaceColor(ItemIndex, renderer.colours[ItemIndex]);
       changed = true;
 
@@ -127,7 +127,7 @@ OnAirspaceListEnter(unsigned ItemIndex)
       int p = dlgAirspacePatternsShowModal();
       if (p >= 0) {
         renderer.brushes[ItemIndex] = p;
-        ActionInterface::SendSettingsMap();
+        ActionInterface::SendMapSettings();
         Profile::SetAirspaceBrush(ItemIndex, renderer.brushes[ItemIndex]);
         changed = true;
       }
@@ -147,7 +147,7 @@ OnAirspaceListEnter(unsigned ItemIndex)
 
   wAirspaceList->invalidate();
 
-  ActionInterface::SendSettingsMap();
+  ActionInterface::SendMapSettings();
 }
 
 static void

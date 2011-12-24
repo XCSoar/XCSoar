@@ -30,7 +30,7 @@ Copyright_License {
 #include "Form/Draw.hpp"
 #include "Form/Button.hpp"
 #include "Compatibility/string.h"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Asset.hpp"
 #include "StringUtil.hpp"
 #include "Interface.hpp"

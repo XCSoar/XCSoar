@@ -30,14 +30,14 @@ class Canvas;
 struct MapItem;
 struct MapLook;
 struct TrafficLook;
-struct SETTINGS_MAP;
+struct MapSettings;
 
 namespace MapItemListRenderer
 {
   void Draw(Canvas &canvas, const PixelRect rc, const MapItem &item,
             const MapLook &look,
             const TrafficLook &traffic_look,
-            const SETTINGS_MAP &settings);
+            const MapSettings &settings);
 }
 
 #endif

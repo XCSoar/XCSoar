@@ -35,7 +35,7 @@ class ClimbHistory;
 class TracePointVector;
 struct TaskBehaviour;
 struct ComputerSettings;
-struct SETTINGS_MAP;
+struct MapSettings;
 class Canvas;
 class WindStore;
 class Airspaces;
@@ -93,7 +93,7 @@ public:
                  const NMEAInfo &nmea_info,
                  const DerivedInfo &calculated,
                  const ComputerSettings &settings_computer,
-                 const SETTINGS_MAP &settings_map,
+                 const MapSettings &settings_map,
                  const ContestStatistics &contest,
                  const TraceComputer &trace_computer) const;
 
@@ -101,7 +101,7 @@ public:
                   const NMEAInfo &nmea_info,
                   const DerivedInfo &derived_info,
                   const ComputerSettings &settings_computer,
-                  const SETTINGS_MAP &settings_map,
+                  const MapSettings &settings_map,
                   const ProtectedTaskManager &task,
                   const TraceComputer *trace_computer) const;
 

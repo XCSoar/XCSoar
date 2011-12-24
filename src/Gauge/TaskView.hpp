@@ -31,13 +31,13 @@ class OrderedTask;
 class OrderedTaskPoint;
 class RasterTerrain;
 struct GeoPoint;
-struct SETTINGS_MAP;
+struct MapSettings;
 struct TaskLook;
 struct AirspaceLook;
 
 void
 PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
-          const GeoPoint &location, const SETTINGS_MAP &settings_map,
+          const GeoPoint &location, const MapSettings &settings_map,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
           const RasterTerrain *terrain);
@@ -45,7 +45,7 @@ PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
 void
 PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const OrderedTask &task, const OrderedTaskPoint &point,
-               const GeoPoint &location, const SETTINGS_MAP &settings_map,
+               const GeoPoint &location, const MapSettings &settings_map,
                const TaskLook &task_look,
                const AirspaceLook &airspace_look,
                const RasterTerrain *terrain);

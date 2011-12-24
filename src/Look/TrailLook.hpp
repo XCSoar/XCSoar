@@ -27,7 +27,7 @@
 #include "Screen/Pen.hpp"
 #include "Compiler.h"
 
-struct SETTINGS_MAP;
+struct MapSettings;
 
 struct TrailLook {
   static gcc_constexpr_data unsigned NUMSNAILCOLORS = 15;
@@ -37,7 +37,7 @@ struct TrailLook {
 
   Pen trace_pen;
 
-  void Initialise(const SETTINGS_MAP &settings_map);
+  void Initialise(const MapSettings &settings_map);
 };
 
 #endif

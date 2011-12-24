@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Computer/TraceComputer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Engine/Math/Earth.hpp"
@@ -82,7 +82,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const WindowProjection &projection, unsigned min_time,
                     bool enable_traildrift, const RasterPoint pos,
                     const NMEAInfo &basic, const DerivedInfo &calculated,
-                    const SETTINGS_MAP &settings)
+                    const MapSettings &settings)
 {
   if (settings.trail_length == TRAIL_OFF)
     return;

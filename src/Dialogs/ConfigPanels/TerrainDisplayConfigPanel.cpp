@@ -30,7 +30,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
 #include "Language/Language.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Terrain/TerrainRenderer.hpp"
 #include "Projection/MapWindowProjection.hpp"
 #include "Components.hpp"
@@ -179,7 +179,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   instance = this;
 
-  const SETTINGS_MAP &settings_map = CommonInterface::GetSettingsMap();
+  const MapSettings &settings_map = CommonInterface::GetMapSettings();
 
   LoadWindow(CallBackTable, parent,
              Layout::landscape ? _T("IDR_XML_TERRAINDISPLAYCONFIGPANEL_L") :
@@ -234,7 +234,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 bool
 TerrainDisplayConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
-  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+  MapSettings &settings_map = CommonInterface::SetMapSettings();
 
   bool changed = false, require_restart = false;
   changed = (settings_map.terrain != terrain_settings);

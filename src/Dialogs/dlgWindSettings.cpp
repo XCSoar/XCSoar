@@ -24,7 +24,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "ComputerSettings.hpp"
 #include "Units/Units.hpp"
 #include "Profile/Profile.hpp"
@@ -130,10 +130,10 @@ ApplySettings(const WindDialogSettings &settings)
         settings.auto_wind_mode;
   }
 
-  XCSoarInterface::SetSettingsMap().trail_drift_enabled =
+  XCSoarInterface::SetMapSettings().trail_drift_enabled =
       settings.trail_drift_enabled;
 
-  ActionInterface::SendSettingsMap();
+  ActionInterface::SendMapSettings();
 }
 
 static void
@@ -223,7 +223,7 @@ dlgWindSettingsShowModal(void)
   // Save current settings
   settings.wind = CommonInterface::Calculated().GetWindOrZero();
   settings.auto_wind_mode = XCSoarInterface::GetComputerSettings().auto_wind_mode;
-  settings.trail_drift_enabled = XCSoarInterface::GetSettingsMap().trail_drift_enabled;
+  settings.trail_drift_enabled = XCSoarInterface::GetMapSettings().trail_drift_enabled;
 
   // Initialize field values
   InitFields();

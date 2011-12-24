@@ -91,7 +91,7 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              Layout::landscape ? _T("IDR_XML_SYMBOLSCONFIGPANEL") :
                                _T("IDR_XML_SYMBOLSCONFIGPANEL_L"));
 
-  const SETTINGS_MAP &settings_map = CommonInterface::GetSettingsMap();
+  const MapSettings &settings_map = CommonInterface::GetMapSettings();
 
   WndProperty *wp;
 
@@ -165,7 +165,7 @@ SymbolsConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
 
-  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+  MapSettings &settings_map = CommonInterface::SetMapSettings();
 
   changed |= SaveFormProperty(form, _T("prpWindArrowStyle"),
                               szProfileWindArrowStyle,

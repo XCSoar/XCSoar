@@ -49,7 +49,7 @@ Copyright_License {
 
 static const MapLook *look;
 static const TrafficLook *traffic_look;
-static const SETTINGS_MAP *settings;
+static const MapSettings *settings;
 static ProtectedAirspaceWarningManager *airspace_warnings;
 static GeoVector vector;
 static const MapItemList *list;
@@ -222,7 +222,7 @@ ShowMapItemListDialog(SingleWindow &parent,
                       const MapItemList &_list, short _elevation,
                       const MapLook &_look,
                       const TrafficLook &_traffic_look,
-                      const SETTINGS_MAP &_settings,
+                      const MapSettings &_settings,
                       ProtectedAirspaceWarningManager *_airspace_warnings)
 {
   switch (_list.size()) {

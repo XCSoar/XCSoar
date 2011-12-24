@@ -35,7 +35,7 @@ Copyright_License {
 #include <assert.h>
 
 struct ComputerSettings;
-struct SETTINGS_MAP;
+struct MapSettings;
 struct Look;
 class GlueMapWindow;
 class Widget;
@@ -230,7 +230,7 @@ public:
   }
 
   void SetComputerSettings(const ComputerSettings &settings_computer);
-  void SetSettingsMap(const SETTINGS_MAP &settings_map);
+  void SetMapSettings(const MapSettings &settings_map);
 
   /**
    * Returns the map even if it is not active.  May return NULL if

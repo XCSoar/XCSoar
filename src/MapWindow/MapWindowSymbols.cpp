@@ -37,7 +37,7 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
 
   WindArrowRenderer wind_arrow_renderer(look.wind);
   wind_arrow_renderer.Draw(canvas, render_projection.GetScreenAngle(),
-                           Start, rc, Calculated(), GetSettingsMap());
+                           Start, rc, Calculated(), GetMapSettings());
 }
 
 void
@@ -67,5 +67,5 @@ MapWindow::DrawTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos) cons
 
   TrackLineRenderer track_line_renderer(look);
   track_line_renderer.Draw(canvas, render_projection.GetScreenAngle(),
-                           aircraft_pos, Basic(), Calculated(), GetSettingsMap());
+                           aircraft_pos, Basic(), Calculated(), GetMapSettings());
 }

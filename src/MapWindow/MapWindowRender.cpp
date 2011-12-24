@@ -32,22 +32,22 @@ Copyright_License {
 void
 MapWindow::RenderTerrain(Canvas &canvas)
 {
-  background.SetSunAngle(render_projection, GetSettingsMap().terrain,
+  background.SetSunAngle(render_projection, GetMapSettings().terrain,
                            Basic(), Calculated());
-  background.Draw(canvas, render_projection, GetSettingsMap().terrain);
+  background.Draw(canvas, render_projection, GetMapSettings().terrain);
 }
 
 void
 MapWindow::RenderTopography(Canvas &canvas)
 {
-  if (topography_renderer != NULL && GetSettingsMap().topography_enabled)
+  if (topography_renderer != NULL && GetMapSettings().topography_enabled)
     topography_renderer->Draw(canvas, render_projection);
 }
 
 void
 MapWindow::RenderTopographyLabels(Canvas &canvas)
 {
-  if (topography_renderer != NULL && GetSettingsMap().topography_enabled)
+  if (topography_renderer != NULL && GetMapSettings().topography_enabled)
     topography_renderer->DrawLabels(canvas, render_projection, label_block);
 }
 
@@ -62,14 +62,14 @@ MapWindow::RenderFinalGlideShading(Canvas &canvas)
 void
 MapWindow::RenderAirspace(Canvas &canvas)
 {
-  if (GetSettingsMap().airspace.enable)
+  if (GetMapSettings().airspace.enable)
     airspace_renderer.Draw(canvas,
 #ifndef ENABLE_OPENGL
                            buffer_canvas, stencil_canvas,
 #endif
                            render_projection,
                            Basic(), Calculated(),
-                           GetComputerSettings(), GetSettingsMap());
+                           GetComputerSettings(), GetMapSettings());
 }
 
 void
@@ -161,7 +161,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   // Finally, draw you!
   if (Basic().connected)
-    AircraftRenderer::Draw(canvas, GetSettingsMap(), look.aircraft,
+    AircraftRenderer::Draw(canvas, GetMapSettings(), look.aircraft,
                            Calculated().heading - render_projection.GetScreenAngle(),
                            aircraft_pos);
 

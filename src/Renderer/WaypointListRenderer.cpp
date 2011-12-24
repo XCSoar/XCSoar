@@ -32,7 +32,7 @@ Copyright_License {
 #include "Units/UnitsFormatter.hpp"
 #include "Units/AngleFormatter.hpp"
 #include "Language/Language.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/Macros.hpp"
 

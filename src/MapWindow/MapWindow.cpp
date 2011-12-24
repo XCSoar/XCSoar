@@ -112,17 +112,17 @@ void
 MapWindow::ReadBlackboard(const MoreData &nmea_info,
                           const DerivedInfo &derived_info,
                           const ComputerSettings &settings_computer,
-                          const SETTINGS_MAP &settings_map)
+                          const MapSettings &settings_map)
 {
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
   ReadComputerSettings(settings_computer);
-  ReadSettingsMap(settings_map);
+  ReadMapSettings(settings_map);
 }
 
 unsigned
 MapWindow::UpdateTopography(unsigned max_update)
 {
-  if (topography != NULL && GetSettingsMap().topography_enabled)
+  if (topography != NULL && GetMapSettings().topography_enabled)
     return topography->ScanVisibility(visible_projection, max_update);
   else
     return 0;

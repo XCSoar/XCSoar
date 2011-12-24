@@ -233,7 +233,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                                    rc.bottom - Height);
 
   buffer.clear();
-  if (GetSettingsMap().auto_zoom_enabled)
+  if (GetMapSettings().auto_zoom_enabled)
     buffer = _T("AUTO ");
 
   switch (follow_mode) {
@@ -302,7 +302,7 @@ void
 GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos)
 {
   unsigned min_time;
-  switch(GetSettingsMap().trail_length) {
+  switch(GetMapSettings().trail_length) {
   case TRAIL_OFF:
     return;
   case TRAIL_LONG:
@@ -317,7 +317,7 @@ GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos)
   }
 
   DrawTrail(canvas, aircraft_pos, min_time,
-            GetSettingsMap().trail_drift_enabled && GetDisplayMode() == DM_CIRCLING);
+            GetMapSettings().trail_drift_enabled && GetDisplayMode() == DM_CIRCLING);
 }
 
 void

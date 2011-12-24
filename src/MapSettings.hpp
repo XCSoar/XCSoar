@@ -20,8 +20,9 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef XCSOAR_SETTINGS_USER_HPP
-#define XCSOAR_SETTINGS_USER_HPP
+
+#ifndef XCSOAR_MAP_SETTINGS_HPP
+#define XCSOAR_MAP_SETTINGS_HPP
 
 // changed only in config or by user interface
 // not expected to be used by other threads
@@ -74,7 +75,7 @@ enum DisplayTrackBearing {
 // where using these from Calculations or MapWindow thread, should
 // protect
 
-struct SETTINGS_MAP {
+struct MapSettings {
   /** Map zooms in on circling */
   bool circle_zoom_enabled;
   /** Maximum distance limit for AutoZoom */

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_UI_SETTINGS_HPP
 
 #include "Units/Settings.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Gauge/VarioSettings.hpp"
 #include "PageSettings.hpp"
@@ -69,7 +69,7 @@ struct UISettings {
   } flarm_location;
 
   UnitSetting units;
-  SETTINGS_MAP map;
+  MapSettings map;
   InfoBoxSettings info_boxes;
   VarioSettings vario;
   PageSettings pages;

@@ -37,7 +37,7 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Features.hpp"
 
-struct SETTINGS_MAP;
+struct MapSettings;
 
 struct MapLook {
   WaypointLook waypoint;
@@ -74,7 +74,7 @@ struct MapLook {
   MaskedIcon map_scale_left_icon;
   MaskedIcon map_scale_right_icon;
 
-  void Initialise(const struct SETTINGS_MAP &settings);
+  void Initialise(const struct MapSettings &settings);
 };
 
 #endif

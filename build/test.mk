@@ -1424,7 +1424,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Look/TrafficLook.cpp \
 	$(SRC)/Look/MarkerLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
-	$(SRC)/SettingsMap.cpp \
+	$(SRC)/MapSettings.cpp \
 	$(SRC)/ComputerSettings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
@@ -1779,7 +1779,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/ComputerSettings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
-	$(SRC)/SettingsMap.cpp \
+	$(SRC)/MapSettings.cpp \
 	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \
 	$(SRC)/TeamCodeCalculation.cpp \

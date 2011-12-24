@@ -31,7 +31,7 @@ class Angle;
 struct MapLook;
 struct NMEAInfo;
 struct DerivedInfo;
-struct SETTINGS_MAP;
+struct MapSettings;
 
 class TrackLineRenderer {
   const MapLook &look;
@@ -44,7 +44,7 @@ public:
 
   void Draw(Canvas &canvas, const Angle screen_angle,
             const RasterPoint pos, const NMEAInfo &basic,
-            const DerivedInfo &calculated, const SETTINGS_MAP &settings);
+            const DerivedInfo &calculated, const MapSettings &settings);
 };
 
 #endif

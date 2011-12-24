@@ -35,7 +35,7 @@ Profile::LoadAirspaceConfig()
   AirspaceComputerSettings &computer =
     CommonInterface::SetComputerSettings().airspace;
   AirspaceRendererSettings &renderer =
-    CommonInterface::SetSettingsMap().airspace;
+    CommonInterface::SetMapSettings().airspace;
 
   Get(szProfileAirspaceWarning, computer.enable_warnings);
   Get(szProfileAltMargin, computer.warnings.AltWarningMargin);
@@ -72,7 +72,7 @@ Profile::SetAirspaceMode(int i)
   const AirspaceComputerSettings &computer =
     CommonInterface::GetComputerSettings().airspace;
   const AirspaceRendererSettings &renderer =
-    CommonInterface::GetSettingsMap().airspace;
+    CommonInterface::GetMapSettings().airspace;
 
   int val = 0;
   if (renderer.display[i])

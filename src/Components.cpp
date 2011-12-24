@@ -45,7 +45,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/FlarmNet.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "Waypoint/WaypointDetailsReader.hpp"

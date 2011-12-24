@@ -45,7 +45,7 @@ public:
     return ui_settings;
   }
 
-  const SETTINGS_MAP &GetSettingsMap() const {
+  const MapSettings &GetMapSettings() const {
     return ui_settings.map;
   }
 };

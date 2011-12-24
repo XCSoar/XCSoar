@@ -40,7 +40,7 @@ class Canvas;
 class WindowProjection;
 struct GeoBounds;
 class LabelBlock;
-struct SETTINGS_MAP;
+struct MapSettings;
 class XShape;
 struct zzip_dir;
 

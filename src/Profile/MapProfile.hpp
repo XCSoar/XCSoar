@@ -24,10 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_MAP_PROFILE_HPP
 #define XCSOAR_MAP_PROFILE_HPP
 
-struct SETTINGS_MAP;
+struct MapSettings;
 
 namespace Profile {
-  void Load(SETTINGS_MAP &settings);
+  void Load(MapSettings &settings);
 };
 
 #endif

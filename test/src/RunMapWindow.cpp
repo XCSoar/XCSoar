@@ -164,7 +164,7 @@ protected:
 };
 
 static void
-SetDefaults(SETTINGS_MAP &settings_map)
+SetDefaults(MapSettings &settings_map)
 {
   settings_map.cruise_orientation = NORTHUP;
   settings_map.circling_orientation = NORTHUP;
@@ -198,7 +198,7 @@ LoadFiles()
 }
 
 static void
-GenerateBlackboard(MapWindow &map, const SETTINGS_MAP &settings_map)
+GenerateBlackboard(MapWindow &map, const MapSettings &settings_map)
 {
   MoreData nmea_info;
   DerivedInfo derived_info;
@@ -278,7 +278,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow::register_class(hInstance);
 #endif
 
-  SETTINGS_MAP settings_map;
+  MapSettings settings_map;
   settings_map.SetDefaults();
   SetDefaults(settings_map);
 

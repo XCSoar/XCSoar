@@ -31,7 +31,7 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/Units.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Util/Macros.hpp"
 
 #include <tchar.h>
@@ -110,7 +110,7 @@ void
 WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const RasterPoint pos, const PixelRect rc,
                         const DerivedInfo &calculated,
-                        const SETTINGS_MAP &settings)
+                        const MapSettings &settings)
 {
   if (!calculated.wind_available)
     return;

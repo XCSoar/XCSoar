@@ -62,7 +62,7 @@ MapWindow::DrawTask(Canvas &canvas)
         IsNearSelf() ? RenderTaskPoint::ACTIVE : RenderTaskPoint::ALL;
 
     OZRenderer ozv(look.task, airspace_renderer.GetLook(),
-                              GetSettingsMap().airspace);
+                              GetMapSettings().airspace);
     RenderTaskPoint tpv(canvas,
                         render_projection,
                         look.task,
@@ -103,7 +103,7 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
   if (Calculated().circling 
       || !Basic().location_available
       || !Basic().track_available
-      || !GetSettingsMap().detour_cost_markers_enabled)
+      || !GetMapSettings().detour_cost_markers_enabled)
     return;
 
   const TaskStats &task_stats = Calculated().task_stats;

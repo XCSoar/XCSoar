@@ -24,7 +24,7 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "Language/Language.hpp"
 #include "Message.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
@@ -51,7 +51,7 @@ void
 InputEvents::eventAirSpace(const TCHAR *misc)
 {
   AirspaceRendererSettings &settings =
-    CommonInterface::SetSettingsMap().airspace;
+    CommonInterface::SetMapSettings().airspace;
 
   if (_tcscmp(misc, _T("toggle")) == 0)
     settings.enable = !settings.enable;
@@ -66,7 +66,7 @@ InputEvents::eventAirSpace(const TCHAR *misc)
       Message::AddMessage(_("Show airspace on"));
   }
 
-  ActionInterface::SendSettingsMap(true);
+  ActionInterface::SendMapSettings(true);
 }
 
 // ClearAirspaceWarnings
@@ -107,7 +107,7 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
   const AircraftState aircraft_state =
     ToAircraftState(basic, calculated);
   AirspaceVisiblePredicate visible(settings_computer.airspace,
-                          CommonInterface::GetSettingsMap().airspace,
+                          CommonInterface::GetMapSettings().airspace,
                           aircraft_state);
   GlidePolar polar = settings_computer.glide_polar_task;
   polar.SetMC(max(polar.GetMC(),fixed_one));

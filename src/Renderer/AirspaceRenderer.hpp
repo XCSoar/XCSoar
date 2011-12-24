@@ -31,7 +31,7 @@ struct AirspaceLook;
 struct MoreData;
 struct DerivedInfo;
 struct ComputerSettings;
-struct SETTINGS_MAP;
+struct MapSettings;
 class Airspaces;
 class ProtectedAirspaceWarningManager;
 class Canvas;
@@ -84,7 +84,7 @@ public:
             const WindowProjection &projection,
             const MoreData &basic, const DerivedInfo &calculated,
             const ComputerSettings &settings_computer,
-            const SETTINGS_MAP &settings_map);
+            const MapSettings &settings_map);
 
   void DrawIntersections(Canvas &canvas,
                          const WindowProjection &projection) const;

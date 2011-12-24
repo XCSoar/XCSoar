@@ -30,7 +30,7 @@ Copyright_License {
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/TaskLook.hpp"

@@ -22,12 +22,12 @@
 */
 
 #include "TrailLook.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Screen/Ramp.hpp"
 #include "Screen/Layout.hpp"
 
 void
-TrailLook::Initialise(const SETTINGS_MAP &settings_map)
+TrailLook::Initialise(const MapSettings &settings_map)
 {
   static gcc_constexpr_data ColorRamp snail_colors_vario[] = {
     {0,   0xc4, 0x80, 0x1e}, // sinkColor

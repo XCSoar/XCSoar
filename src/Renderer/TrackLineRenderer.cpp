@@ -27,7 +27,7 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 
 void
 TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
@@ -48,7 +48,7 @@ void
 TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const RasterPoint pos, const NMEAInfo &basic,
                         const DerivedInfo &calculated,
-                        const SETTINGS_MAP &settings)
+                        const MapSettings &settings)
 {
   if (settings.display_track_bearing == dtbOff ||
       calculated.circling)

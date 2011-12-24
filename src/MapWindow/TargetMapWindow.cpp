@@ -55,10 +55,10 @@ GetComputerSettings()
   return CommonInterface::GetComputerSettings();
 }
 
-static const SETTINGS_MAP &
-GetSettingsMap()
+static const MapSettings &
+GetMapSettings()
 {
-  return CommonInterface::GetSettingsMap();
+  return CommonInterface::GetMapSettings();
 }
 
 static const MoreData &
@@ -110,36 +110,36 @@ TargetMapWindow::set(ContainerWindow &parent,
 void
 TargetMapWindow::RenderTerrain(Canvas &canvas)
 {
-  background.SetSunAngle(projection, GetSettingsMap().terrain,
+  background.SetSunAngle(projection, GetMapSettings().terrain,
                          Basic(), Calculated());
-  background.Draw(canvas, projection, GetSettingsMap().terrain);
+  background.Draw(canvas, projection, GetMapSettings().terrain);
 }
 
 void
 TargetMapWindow::RenderTopography(Canvas &canvas)
 {
-  if (topography_renderer != NULL && GetSettingsMap().topography_enabled)
+  if (topography_renderer != NULL && GetMapSettings().topography_enabled)
     topography_renderer->Draw(canvas, projection);
 }
 
 void
 TargetMapWindow::RenderTopographyLabels(Canvas &canvas)
 {
-  if (topography_renderer != NULL && GetSettingsMap().topography_enabled)
+  if (topography_renderer != NULL && GetMapSettings().topography_enabled)
     topography_renderer->DrawLabels(canvas, projection, label_block);
 }
 
 void
 TargetMapWindow::RenderAirspace(Canvas &canvas)
 {
-  if (GetSettingsMap().airspace.enable)
+  if (GetMapSettings().airspace.enable)
     airspace_renderer.Draw(canvas,
 #ifndef ENABLE_OPENGL
                            buffer_canvas, stencil_canvas,
 #endif
                            projection,
                            Basic(), Calculated(),
-                           GetComputerSettings(), GetSettingsMap());
+                           GetComputerSettings(), GetMapSettings());
 }
 
 void
@@ -153,7 +153,7 @@ TargetMapWindow::DrawTask(Canvas &canvas)
   if (task && task->CheckTask()) {
 
     OZRenderer ozv(task_look, airspace_renderer.GetLook(),
-                              GetSettingsMap().airspace);
+                              GetMapSettings().airspace);
     RenderTaskPoint tpv(canvas,
                         projection,
                         task_look,
@@ -171,7 +171,7 @@ TargetMapWindow::DrawTask(Canvas &canvas)
 void
 TargetMapWindow::DrawWaypoints(Canvas &canvas)
 {
-  const SETTINGS_MAP &settings_map = GetSettingsMap();
+  const MapSettings &settings_map = GetMapSettings();
   WaypointRendererSettings settings = settings_map.waypoint;
   settings.display_text_type = DISPLAYNAME;
 
@@ -225,7 +225,7 @@ TargetMapWindow::on_paint_buffer(Canvas &canvas)
 
   // Finally, draw you!
   if (Basic().connected)
-    AircraftRenderer::Draw(canvas, GetSettingsMap(), aircraft_look,
+    AircraftRenderer::Draw(canvas, GetMapSettings(), aircraft_look,
                            Calculated().heading - projection.GetScreenAngle(),
                            aircraft_pos);
 }

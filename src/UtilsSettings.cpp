@@ -27,7 +27,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "ComputerSettings.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/WaypointDetailsReader.hpp"
 #include "Topography/TopographyStore.hpp"
@@ -187,8 +187,8 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   Units::SetConfig(ui_settings.units);
 
-  const SETTINGS_MAP &old_settings_map = old_ui_settings.map;
-  const SETTINGS_MAP &settings_map = ui_settings.map;
+  const MapSettings &old_settings_map = old_ui_settings.map;
+  const MapSettings &settings_map = ui_settings.map;
 
   if (settings_map.snail_type != old_settings_map.snail_type ||
       settings_map.snail_scaling_enabled != old_settings_map.snail_scaling_enabled)
@@ -201,7 +201,7 @@ SettingsLeave(const UISettings &old_ui_settings)
   CommonInterface::main_window.ResumeThreads();
   // allow map and calculations threads to continue
 
-  ActionInterface::SendSettingsMap(true);
+  ActionInterface::SendMapSettings(true);
 
   operation.Hide();
   main_window.full_redraw();

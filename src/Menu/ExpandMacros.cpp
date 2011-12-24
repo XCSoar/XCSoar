@@ -30,7 +30,7 @@ Copyright_License {
 #include "ComputerSettings.hpp"
 #include "Components.hpp"
 #include "Compatibility/string.h"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Simulator.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
@@ -346,10 +346,10 @@ GetComputerSettings()
   return CommonInterface::GetComputerSettings();
 }
 
-static const SETTINGS_MAP &
-GetSettingsMap()
+static const MapSettings &
+GetMapSettings()
 {
-  return CommonInterface::GetSettingsMap();
+  return CommonInterface::GetMapSettings();
 }
 
 static const UIState &
@@ -439,7 +439,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       _("Start"), Size);
 
   if (_tcsstr(OutBuffer, _T("$(SnailTrailToggleName)"))) {
-    switch (GetSettingsMap().trail_length) {
+    switch (GetMapSettings().trail_length) {
     case TRAIL_OFF:
       ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
                       _("Long"), Size);
@@ -461,14 +461,14 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
   if (_tcsstr(OutBuffer, _T("$(AirSpaceToggleName)"))) {
     ReplaceInString(OutBuffer, _T("$(AirSpaceToggleName)"),
-                    GetSettingsMap().airspace.enable ? _("Off") : _("On"), Size);
+                    GetMapSettings().airspace.enable ? _("Off") : _("On"), Size);
   }
 
   if (_tcsstr(OutBuffer, _T("$(TerrainTopologyToggleName)"))) {
     char val = 0;
-    if (GetSettingsMap().topography_enabled)
+    if (GetMapSettings().topography_enabled)
       val++;
-    if (GetSettingsMap().terrain.enable)
+    if (GetMapSettings().terrain.enable)
       val += (char)2;
     switch (val) {
     case 0:
@@ -492,9 +492,9 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
   if (_tcsstr(OutBuffer, _T("$(TerrainTopographyToggleName)"))) {
     char val = 0;
-    if (GetSettingsMap().topography_enabled)
+    if (GetMapSettings().topography_enabled)
       val++;
-    if (GetSettingsMap().terrain.enable)
+    if (GetMapSettings().terrain.enable)
       val += (char)2;
     switch (val) {
     case 0:
@@ -519,16 +519,16 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   CondReplaceInString(CommonInterface::main_window.GetFullScreen(), OutBuffer,
                       _T("$(FullScreenToggleActionName)"),
                       _("Off"), _("On"), Size);
-  CondReplaceInString(GetSettingsMap().auto_zoom_enabled, OutBuffer,
+  CondReplaceInString(GetMapSettings().auto_zoom_enabled, OutBuffer,
 		                  _T("$(ZoomAutoToggleActionName)"),
 		                  _("Manual"), _("Auto"), Size);
-  CondReplaceInString(GetSettingsMap().topography_enabled, OutBuffer,
+  CondReplaceInString(GetMapSettings().topography_enabled, OutBuffer,
                       _T("$(TopologyToggleActionName)"),
                       _("Off"), _("On"), Size);
-  CondReplaceInString(GetSettingsMap().topography_enabled, OutBuffer,
+  CondReplaceInString(GetMapSettings().topography_enabled, OutBuffer,
                       _T("$(TopographyToggleActionName)"),
                       _("Off"), _("On"), Size);
-  CondReplaceInString(GetSettingsMap().terrain.enable, OutBuffer,
+  CondReplaceInString(GetMapSettings().terrain.enable, OutBuffer,
                       _T("$(TerrainToggleActionName)"),
                       _("Off"), _("On"), Size);
 
@@ -538,7 +538,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                                            N_("Task"),
                                            N_("None") };
     static gcc_constexpr_data unsigned int n = ARRAY_SIZE(labels);
-    unsigned int i = GetSettingsMap().waypoint.label_selection;
+    unsigned int i = GetMapSettings().waypoint.label_selection;
     ReplaceInString(OutBuffer, _T("$(MapLabelsToggleActionName)"),
                     gettext(labels[(i + 1) % n]), Size);
   }
@@ -563,39 +563,39 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       OutBuffer, _T("$(DispModeFinalShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 
-  CondReplaceInString(GetSettingsMap().airspace.altitude_mode == ALLON,
+  CondReplaceInString(GetMapSettings().airspace.altitude_mode == ALLON,
                       OutBuffer, _T("$(AirspaceModeAllShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetSettingsMap().airspace.altitude_mode == CLIP,
+  CondReplaceInString(GetMapSettings().airspace.altitude_mode == CLIP,
                       OutBuffer, _T("$(AirspaceModeClipShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetSettingsMap().airspace.altitude_mode == AUTO,
+  CondReplaceInString(GetMapSettings().airspace.altitude_mode == AUTO,
                       OutBuffer, _T("$(AirspaceModeAutoShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetSettingsMap().airspace.altitude_mode == ALLBELOW,
+  CondReplaceInString(GetMapSettings().airspace.altitude_mode == ALLBELOW,
                       OutBuffer, _T("$(AirspaceModeBelowShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetSettingsMap().airspace.altitude_mode == ALLOFF,
+  CondReplaceInString(GetMapSettings().airspace.altitude_mode == ALLOFF,
                       OutBuffer, _T("$(AirspaceModeAllOffIndicator)"),
                       _T("(*)"), _T(""), Size);
 
-  CondReplaceInString(GetSettingsMap().trail_length == TRAIL_OFF,
+  CondReplaceInString(GetMapSettings().trail_length == TRAIL_OFF,
                       OutBuffer, _T("$(SnailTrailOffShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetSettingsMap().trail_length == TRAIL_SHORT,
+  CondReplaceInString(GetMapSettings().trail_length == TRAIL_SHORT,
                       OutBuffer, _T("$(SnailTrailShortShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetSettingsMap().trail_length == TRAIL_LONG,
+  CondReplaceInString(GetMapSettings().trail_length == TRAIL_LONG,
                       OutBuffer, _T("$(SnailTrailLongShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetSettingsMap().trail_length == TRAIL_FULL,
+  CondReplaceInString(GetMapSettings().trail_length == TRAIL_FULL,
                       OutBuffer, _T("$(SnailTrailFullShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 
-  CondReplaceInString(!GetSettingsMap().airspace.enable,
+  CondReplaceInString(!GetMapSettings().airspace.enable,
                       OutBuffer, _T("$(AirSpaceOffShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetSettingsMap().airspace.enable,
+  CondReplaceInString(GetMapSettings().airspace.enable,
                       OutBuffer, _T("$(AirSpaceOnShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 

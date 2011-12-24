@@ -161,7 +161,7 @@ ChartControl::on_paint(Canvas &canvas)
   assert(glide_computer != NULL);
 
   const ComputerSettings &settings_computer = blackboard->GetComputerSettings();
-  const SETTINGS_MAP &settings_map = blackboard->GetSettingsMap();
+  const MapSettings &settings_map = blackboard->GetMapSettings();
   const MoreData &basic = blackboard->Basic();
   const DerivedInfo &calculated = blackboard->Calculated();
 
@@ -257,7 +257,7 @@ UpdateCrossSection()
   const DerivedInfo &calculated = blackboard->Calculated();
 
   assert(csw != NULL);
-  csw->ReadBlackboard(basic, calculated, blackboard->GetSettingsMap().airspace);
+  csw->ReadBlackboard(basic, calculated, blackboard->GetMapSettings().airspace);
   csw->set_direction(basic.track);
   csw->set_start(basic.location);
 }

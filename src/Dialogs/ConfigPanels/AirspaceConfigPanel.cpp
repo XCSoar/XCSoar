@@ -126,7 +126,7 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const AirspaceComputerSettings &computer =
     CommonInterface::GetComputerSettings().airspace;
   const AirspaceRendererSettings &renderer =
-    CommonInterface::GetSettingsMap().airspace;
+    CommonInterface::GetMapSettings().airspace;
 
   instance = this;
 
@@ -197,7 +197,7 @@ AirspaceConfigPanel::Save(bool &_changed, bool &_require_restart)
   AirspaceComputerSettings &computer =
     CommonInterface::SetComputerSettings().airspace;
   AirspaceRendererSettings &renderer =
-    CommonInterface::SetSettingsMap().airspace;
+    CommonInterface::SetMapSettings().airspace;
 
   changed |= SaveFormPropertyEnum(form, _T("prpAirspaceDisplay"),
                                   szProfileAltMode, renderer.altitude_mode);

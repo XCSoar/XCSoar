@@ -97,7 +97,7 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
                                _T("IDR_XML_WAYPOINTDISPLAYCONFIGPANEL_L"));
 
   const WaypointRendererSettings &settings =
-    CommonInterface::GetSettingsMap().waypoint;
+    CommonInterface::GetMapSettings().waypoint;
 
   static gcc_constexpr_data StaticEnumChoice wp_labels_list[] = {
     { DISPLAYNAME, N_("Full name"),
@@ -183,7 +183,7 @@ WaypointDisplayConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool changed = false, require_restart = false;
 
   WaypointRendererSettings &settings =
-    CommonInterface::SetSettingsMap().waypoint;
+    CommonInterface::SetMapSettings().waypoint;
 
   changed |= SaveFormPropertyEnum(form, _T("prpWaypointLabels"),
                                   szProfileDisplayText,

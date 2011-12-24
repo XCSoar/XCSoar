@@ -54,7 +54,7 @@ InputEvents::eventZoom(const TCHAR* misc)
   // 0 means off
   // 1 means on
 
-  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+  MapSettings &settings_map = CommonInterface::SetMapSettings();
 
   if (_tcscmp(misc, _T("auto toggle")) == 0)
     sub_AutoZoom(-1);
@@ -103,7 +103,7 @@ InputEvents::eventZoom(const TCHAR* misc)
     sub_SetZoom(Units::ToSysDistance(fixed(zoom)));
   }
 
-  XCSoarInterface::SendSettingsMap(true);
+  XCSoarInterface::SendMapSettings(true);
 }
 
 /**
@@ -154,7 +154,7 @@ InputEvents::eventPan(const TCHAR *misc)
   else if (_tcscmp(misc, _T("right")) == 0)
     sub_PanCursor(-1, 0);
 
-  XCSoarInterface::SendSettingsMap(true);
+  XCSoarInterface::SendMapSettings(true);
 }
 
 void
@@ -220,7 +220,7 @@ InputEvents::sub_PanCursor(int dx, int dy)
 void
 InputEvents::sub_AutoZoom(int vswitch)
 {
-  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+  MapSettings &settings_map = CommonInterface::SetMapSettings();
 
   if (vswitch == -1)
     settings_map.auto_zoom_enabled = !settings_map.auto_zoom_enabled;
@@ -233,13 +233,13 @@ InputEvents::sub_AutoZoom(int vswitch)
       CommonInterface::main_window.GetMap() != NULL)
     CommonInterface::main_window.GetMap()->SetPan(false);
 
-  ActionInterface::SendSettingsMap(true);
+  ActionInterface::SendMapSettings(true);
 }
 
 void
 InputEvents::sub_SetZoom(fixed value)
 {
-  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+  MapSettings &settings_map = CommonInterface::SetMapSettings();
   GlueMapWindow *map_window = CommonInterface::main_window.ActivateMap();
   if (map_window == NULL)
     return;

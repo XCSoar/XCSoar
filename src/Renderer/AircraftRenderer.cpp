@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Look/AircraftLook.hpp"
 #include "Math/Screen.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Util/Macros.hpp"
 #include "Math/Angle.hpp"
 
@@ -163,7 +163,7 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
 }
 
 void
-AircraftRenderer::Draw(Canvas &canvas, const SETTINGS_MAP &settings_map,
+AircraftRenderer::Draw(Canvas &canvas, const MapSettings &settings_map,
                        const AircraftLook &look,
                        const Angle angle, const RasterPoint aircraft_pos)
 {

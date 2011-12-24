@@ -31,7 +31,7 @@ class Angle;
 struct WindArrowLook;
 struct SpeedVector;
 struct DerivedInfo;
-struct SETTINGS_MAP;
+struct MapSettings;
 
 class WindArrowRenderer {
   const WindArrowLook &look;
@@ -44,7 +44,7 @@ public:
 
   void Draw(Canvas &canvas, const Angle screen_angle, const RasterPoint pos,
             const PixelRect rc, const DerivedInfo &calculated,
-            const SETTINGS_MAP &settings);
+            const MapSettings &settings);
 
 private:
   void DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,

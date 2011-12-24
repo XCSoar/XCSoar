@@ -26,14 +26,14 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
-struct SETTINGS_MAP;
+struct MapSettings;
 struct AircraftLook;
 class Canvas;
 class Angle;
 
 namespace AircraftRenderer
 {
-  void Draw(Canvas &canvas, const SETTINGS_MAP &settings_map,
+  void Draw(Canvas &canvas, const MapSettings &settings_map,
             const AircraftLook &look,
             const Angle angle, const RasterPoint aircraft_pos);
 }

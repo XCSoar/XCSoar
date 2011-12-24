@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "AirspaceRenderer.hpp"
 #include "ComputerSettings.hpp"
-#include "SettingsMap.hpp"
+#include "MapSettings.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
 #include "MapWindow/MapCanvas.hpp"
@@ -515,7 +515,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
                        const MoreData &basic,
                        const DerivedInfo &calculated,
                        const ComputerSettings &settings_computer,
-                       const SETTINGS_MAP &settings_map)
+                       const MapSettings &settings_map)
 {
   if (airspace_database == NULL)
     return;

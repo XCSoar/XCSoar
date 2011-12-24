@@ -116,9 +116,9 @@ class GlueMapWindow : public MapWindow {
 
   /**
    * The new map settings.  It is passed to
-   * MapWindowBlackboard::ReadSettingsMap() before the next frame.
+   * MapWindowBlackboard::ReadMapSettings() before the next frame.
    */
-  SETTINGS_MAP next_settings_map;
+  MapSettings next_settings_map;
 
   /**
    * The new glide computer settings.  It is passed to
@@ -140,7 +140,7 @@ public:
     logger = _logger;
   }
 
-  void SetSettingsMap(const SETTINGS_MAP &new_value);
+  void SetMapSettings(const MapSettings &new_value);
   void SetComputerSettings(const ComputerSettings &new_value);
 
   /**
