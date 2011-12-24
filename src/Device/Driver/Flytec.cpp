@@ -32,6 +32,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "Util/Macros.hpp"
 #include "IO/TextWriter.hpp"
+#include "Operation/Operation.hpp"
 
 #include <stdlib.h>
 #include <math.h>
@@ -437,6 +438,10 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
     return false;
 
   while (true) {
+    // Check if the user cancelled the operation
+    if (env.IsCancelled())
+      return false;
+
     // Receive the next line
     if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer), 1000))
       return false;
@@ -503,6 +508,10 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
     return false;
 
   while (true) {
+    // Check if the user cancelled the operation
+    if (env.IsCancelled())
+      return false;
+
     // Receive the next line
     if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer), 1000))
       return false;
