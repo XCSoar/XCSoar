@@ -63,7 +63,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/Message.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Message.hpp"
-#include "ProtectedMarkers.hpp"
+#include "Markers/ProtectedMarkers.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "MainWindow.hpp"
 #include "Projection/MapWindowProjection.hpp"
