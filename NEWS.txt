@@ -25,24 +25,36 @@ Version 6.3 - not yet released
 * Android
   - support reverse screen modes for Galaxy Tab
 
-Version 6.2.4 - not yet released
+Version 6.2.4 - 2011/12/24
 * calculations
   - fix arrival altitude calculation when goal is above aircraft
   - take terrain safety height into account for start point
+  - calculate final glide MacCready even when no thermal was measured yet
+  - fix rare crash in AutoMacCready calculation
+  - converge AutoMacCready to zero when goal is unreachable
+  - fix crash with far away task
+  - fix crash in terrain reach calculator
 * devices
   - Borgelt: send MacCready to B800 with CAI302 protocol
   - Flytec: fixed the $FLYSEN parser (more data, including GPS)
 * Android
   - fix bogus long InfoBox clicks
   - fix crash after resuming
+  - don't reveal InfoBoxes after rotating the display during pan
+* Windows
+  - work around startup problem on hx4700 with Windows Mobile 5
 * Altair
   - fix crash in InfoBox cursor movement
 * user interface
+  - restore the current menu after rotating the display
   - fix sorting by filename in file selector of task manager
   - allow modification of some additional infobox values with up/down keys
     (or volume keys on android devices).
   - fix crash in the .xci file parser
   - new translation: Korean
+* map
+  - performance improvements for large maps
+  - redraw map after terrain cache update
 * settings
   - load configured METAR/TAF stations on startup
   - remember UTC offsets > +12 hours.

@@ -22,7 +22,6 @@
 
 #include "AirspaceRoute.hpp"
 #include "Navigation/SearchPointVector.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspacePolygon.hpp"
@@ -120,9 +119,8 @@ AirspaceRoute::FirstIntersecting(const RouteLink& e) const
 {
   const GeoPoint origin(task_projection.unproject(e.first));
   const GeoPoint dest(task_projection.unproject(e.second));
-  const GeoVector v(origin, dest);
   AIV visitor(e, task_projection, rpolars_route);
-  m_airspaces.visit_intersecting(origin, v, visitor);
+  m_airspaces.VisitIntersecting(origin, dest, visitor);
   const AIV::AIVResult res (visitor.get_nearest());
   count_airspace++;
   return RouteAirspaceIntersection(res.first, res.second);
@@ -249,12 +247,13 @@ AirspaceRoute::Synchronise(const Airspaces& master,
 {
   // @todo: also synchronise with AirspaceWarningManager to filter out items that are
   // acknowledged.
-  GeoVector vector(origin, destination);
   h_min = std::min(origin.altitude, std::min(destination.altitude, h_min));
   h_max = std::max(origin.altitude, std::max(destination.altitude, h_max));
   // @todo: have margin for h_max to allow for climb
   AirspacePredicateHeightRangeExcludeTwo condition(h_min, h_max, origin, destination);
-  if (m_airspaces.synchronise_in_range(master, vector.MidPoint(origin), vector.distance/2, condition))
+  if (m_airspaces.synchronise_in_range(master, origin.Middle(destination),
+                                       half(origin.Distance(destination)),
+                                       condition))
   {
     if (m_airspaces.size())
       dirty = true;

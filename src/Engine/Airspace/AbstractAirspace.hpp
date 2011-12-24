@@ -148,13 +148,13 @@ public:
    * Can be approximate by using flat-earth representation internally.
    * 
    * @param g1 Location of origin of search vector
-   * @param vec Line from origin
+   * @param end the end of the search vector
    * 
    * @return Vector of intersection pairs if the line intersects the airspace
    */
   gcc_pure
   virtual AirspaceIntersectionVector Intersects(const GeoPoint &g1,
-                                                const GeoVector &vec) const = 0;
+                                                const GeoPoint &end) const = 0;
 
   /**
    * Find location of closest point on boundary to a reference
@@ -290,13 +290,13 @@ public:
    * specified location)
    *
    * @param state Aircraft state
-   * @param vec Path vector of aircraft
+   * @param end end point of aircraft path vector
    * @param perf Aircraft performance model
    * @param solution Solution of intercept (set if intercept possible, else untouched)
    * @return True if intercept found
    */
   bool Intercept(const AircraftState &state,
-                 const GeoVector &vec,
+                 const GeoPoint &end,
                  const AirspaceAircraftPerformance &perf,
                  AirspaceInterceptSolution &solution) const;
 

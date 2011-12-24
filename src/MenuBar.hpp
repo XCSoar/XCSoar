@@ -72,6 +72,12 @@ public:
   bool IsButtonEnabled(unsigned i) const {
     return buttons[i].is_enabled();
   }
+
+  /**
+   * To be called when the parent's size changes.  Moves all buttons
+   * to a new position.
+   */
+  void OnResize(const PixelRect &rc);
 };
 
 #endif

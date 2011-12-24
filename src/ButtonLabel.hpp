@@ -25,6 +25,7 @@ Copyright_License {
 #define BUTTON_LABEL_HPP
 
 #include "Compiler.h"
+#include "Screen/Point.hpp"
 
 #include <tchar.h>
 #include <stddef.h>
@@ -50,6 +51,8 @@ namespace ButtonLabel {
   bool IsEnabled(unsigned i);
 
   bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
+
+  void OnResize(const PixelRect &rc);
 
   /**
    * Show the specified menu.

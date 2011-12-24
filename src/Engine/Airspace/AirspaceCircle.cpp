@@ -50,9 +50,8 @@ AirspaceCircle::Inside(const GeoPoint &loc) const
 }
 
 AirspaceIntersectionVector
-AirspaceCircle::Intersects(const GeoPoint &start, const GeoVector &vec) const
+AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end) const
 {
-  const GeoPoint end = vec.EndPoint(start);
   AirspaceIntersectSort sorter(start, end, *this);
 
   const fixed f_radius = m_task_projection->fproject_range(m_center, m_radius);

@@ -220,6 +220,13 @@ struct GeoPoint {
                              const fixed distance) const;
 
   /**
+   * Find the nearest great-circle middle point between this point and
+   * the specified one.
+   */
+  gcc_pure
+  GeoPoint Middle(const GeoPoint &other) const;
+
+  /**
    * Test whether two points are co-located
    *
    * @param other Point to compare

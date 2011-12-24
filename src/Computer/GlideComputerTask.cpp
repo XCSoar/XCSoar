@@ -75,12 +75,13 @@ GlideComputerTask::ProcessBasicTask(const MoreData &basic,
 
     _task->Update(current_as, last_as);
 
-    if (calculated.last_thermal.IsDefined()) {
-      if (_task->UpdateAutoMC(current_as, std::max(fixed_zero,
-                                                  calculated.last_thermal_average_smooth))) {
-        calculated.auto_mac_cready = _task->GetGlidePolar().GetMC();
-        calculated.auto_mac_cready_available.Update(basic.clock);
-      }
+    const fixed fallback_mc = calculated.last_thermal.IsDefined() &&
+      positive(calculated.last_thermal_average_smooth)
+      ? calculated.last_thermal_average_smooth
+      : fixed_zero;
+    if (_task->UpdateAutoMC(current_as, fallback_mc)) {
+      calculated.auto_mac_cready = _task->GetGlidePolar().GetMC();
+      calculated.auto_mac_cready_available.Update(basic.clock);
     }
   }
 

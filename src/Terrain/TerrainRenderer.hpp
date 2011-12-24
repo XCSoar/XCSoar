@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "RasterRenderer.hpp"
 #include "Util/NonCopyable.hpp"
+#include "Util/Serial.hpp"
 #include "Terrain/TerrainSettings.hpp"
 #include "Projection/CompareProjection.hpp"
 
@@ -36,6 +37,8 @@ struct ColorRamp;
 
 class TerrainRenderer : private NonCopyable {
   const RasterTerrain *terrain;
+
+  Serial terrain_serial;
 
 protected:
   struct TerrainRendererSettings settings;

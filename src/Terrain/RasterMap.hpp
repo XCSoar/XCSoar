@@ -70,6 +70,10 @@ public:
     return raster_tile_cache.IsDirty();
   }
 
+  const Serial &GetSerial() const {
+    return raster_tile_cache.GetSerial();
+  }
+
   /**
    * @see RasterProjection::pixel_distance()
    */

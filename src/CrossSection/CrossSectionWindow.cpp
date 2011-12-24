@@ -277,7 +277,7 @@ CrossSectionWindow::PaintAirspaces(Canvas &canvas, Chart &chart)
                                                             Calculated()));
 
   // Call visitor with intersecting airspaces
-  airspace_database->visit_intersecting(start, vec, ivisitor);
+  airspace_database->VisitIntersecting(start, vec.EndPoint(start), ivisitor);
 }
 
 void

@@ -232,9 +232,12 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
                           const Angle sunazimuth)
 {
   if (compare_projection.CompareAndUpdate(map_projection) &&
+      terrain_serial == terrain->GetSerial() &&
       last_sun_azimuth == sunazimuth)
     /* no change since previous frame */
     return;
+
+  terrain_serial = terrain->GetSerial();
 
   last_sun_azimuth = sunazimuth;
 

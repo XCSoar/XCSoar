@@ -493,9 +493,7 @@ public:
                    PixelScalar src_x, PixelScalar src_y,
                    UPixelScalar src_width, UPixelScalar src_height,
                    uint8_t alpha) {
-#ifdef HAVE_DYNAMIC_ALPHA_BLEND
-    assert(AlphaBlend != NULL);
-#endif
+    assert(AlphaBlendAvailable());
 
     BLENDFUNCTION fn;
     fn.BlendOp = AC_SRC_OVER;
@@ -503,9 +501,9 @@ public:
     fn.SourceConstantAlpha = alpha;
     fn.AlphaFormat = 0;
 
-    ::AlphaBlend(dc, dest_x, dest_y, dest_width, dest_height,
-                 src, src_x, src_y, src_width, src_height,
-                 fn);
+    ::AlphaBlendInvoke(dc, dest_x, dest_y, dest_width, dest_height,
+                       src, src_x, src_y, src_width, src_height,
+                       fn);
   }
 
   void alpha_blend(PixelScalar dest_x, PixelScalar dest_y,

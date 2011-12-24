@@ -158,3 +158,10 @@ MenuBar::HideButton(unsigned i)
 
   buttons[i].hide();
 }
+
+void
+MenuBar::OnResize(const PixelRect &rc)
+{
+  for (unsigned i = 0; i < MAX_BUTTONS; ++i)
+    buttons[i].move(GetButtonPosition(i, rc));
+}

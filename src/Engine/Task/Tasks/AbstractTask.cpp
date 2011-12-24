@@ -72,9 +72,18 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
     trigger_auto = false;
   }
 
+  if (!trigger_auto &&
+      task_behaviour.auto_mc_mode == TaskBehaviour::AUTOMC_FINALGLIDE &&
+      stats.mc_best >= fixed(0.05)) {
+    /* no solution, but forced final glide AutoMacCready - converge to
+       zero */
+    mc_found = fixed_zero;
+    trigger_auto = true;
+  }
+
   if (trigger_auto) {
     // smooth out updates
-    stats.mc_best = mc_lpf.update(mc_found);
+    stats.mc_best = std::max(mc_lpf.update(mc_found), fixed_zero);
     glide_polar.SetMC(stats.mc_best);
   } else {
     // reset lpf so will be smooth next time it becomes active
@@ -90,7 +99,7 @@ AbstractTask::UpdateIdle(const AircraftState &state)
   if (TaskStarted() && task_behaviour.calc_cruise_efficiency) {
     fixed val = fixed_one;
     if (CalcCruiseEfficiency(state, val))
-      stats.cruise_efficiency = ce_lpf.update(val);
+      stats.cruise_efficiency = std::max(ce_lpf.update(val), fixed_zero);
   } else {
     stats.cruise_efficiency = ce_lpf.reset(fixed_one);
   }
@@ -98,7 +107,7 @@ AbstractTask::UpdateIdle(const AircraftState &state)
   if (TaskStarted() && task_behaviour.calc_effective_mc) {
     fixed val = glide_polar.GetMC();
     if (CalcEffectiveMC(state, val))
-      stats.effective_mc = em_lpf.update(val);
+      stats.effective_mc = std::max(em_lpf.update(val), fixed_zero);
   } else {
     stats.effective_mc = em_lpf.reset(glide_polar.GetMC());
   }

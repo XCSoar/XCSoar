@@ -130,3 +130,10 @@ ButtonLabel::IsEnabled(unsigned i)
 {
   return bar->IsButtonEnabled(i);
 }
+
+void
+ButtonLabel::OnResize(const PixelRect &rc)
+{
+  if (bar != NULL)
+    bar->OnResize(rc);
+}

@@ -142,7 +142,7 @@ void
 RasterTileCache::SetTile(unsigned index,
                          int xstart, int ystart, int xend, int yend)
 {
-  if (!segments.empty() && segments.last().tile < 0)
+  if (!segments.empty() && !segments.last().IsTileSegment())
     /* link current marker segment with this tile */
     segments.last().tile = index;
 
@@ -186,7 +186,7 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius)
      loaded are added to RequestTiles */
 
   RequestTiles.clear();
-  for (int i = tiles.GetSize() - 1; i >= 0; --i)
+  for (int i = tiles.GetSize() - 1; i >= 0 && !RequestTiles.full(); --i)
     if (tiles.GetLinear(i).VisibilityChanged(x, y, radius))
       RequestTiles.append(i);
 
@@ -321,7 +321,7 @@ RasterTileCache::Reset()
 
 gcc_pure
 const RasterTileCache::MarkerSegmentInfo *
-RasterTileCache::FindMarkerSegment(long file_offset) const
+RasterTileCache::FindMarkerSegment(uint32_t file_offset) const
 {
   for (const MarkerSegmentInfo *p = segments.begin(); p < segments.end(); ++p)
     if (p->file_offset >= file_offset)
@@ -337,13 +337,19 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
     /* use all segments when loading the overview */
     return 0;
 
+  if (remaining_segments > 0) {
+    /* enable the follow-up segment */
+    --remaining_segments;
+    return 0;
+  }
+
   const MarkerSegmentInfo *segment = FindMarkerSegment(file_offset);
   if (segment == NULL)
     /* past the end of the recorded segment list; shouldn't happen */
     return 0;
 
   long skip_to = segment->file_offset;
-  while (segment->tile >= 0 &&
+  while (segment->IsTileSegment() &&
          !tiles.GetLinear(segment->tile).is_requested()) {
     ++segment;
     if (segment >= segments.end())
@@ -354,6 +360,7 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
     skip_to = segment->file_offset;
   }
 
+  remaining_segments = segment->count;
   return skip_to - file_offset;
 }
 
@@ -362,7 +369,7 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
  * inherits the tile number.
  */
 static bool
-is_tile_DrawSegment(unsigned id)
+is_tile_segment(unsigned id)
 {
   return id == 0xff93 /* SOD */ ||
     id == 0xff52 /* COD */ ||
@@ -385,13 +392,26 @@ RasterTileCache::MarkerSegment(long file_offset, unsigned id)
   if (operation != NULL)
     operation->SetProgressPosition(file_offset / 65536);
 
-  int tile = -1;
-  if (is_tile_DrawSegment(id) && !segments.empty())
+  if (is_tile_segment(id) && !segments.empty() &&
+      segments.last().IsTileSegment()) {
     /* this segment belongs to the same tile as the preceding SOT
        segment */
-    tile = segments.last().tile;
+    ++segments.last().count;
+    return;
+  }
 
-  segments.append(MarkerSegmentInfo(file_offset, tile));
+  if (segments.size() >= 2 && !segments.last().IsTileSegment() &&
+      !segments[segments.size() - 2].IsTileSegment()) {
+    /* the last two segments are both "generic" segments and can be merged*/
+    assert(segments.last().count == 0);
+
+    ++segments[segments.size() - 2].count;
+
+    /* reuse the second segment */
+    segments.last().file_offset = file_offset;
+  } else
+    segments.append(MarkerSegmentInfo(file_offset,
+                                      MarkerSegmentInfo::NO_TILE));
 }
 
 extern RasterTileCache *raster_tile_current;
@@ -507,6 +527,8 @@ RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
   if (!PollTiles(x, y, radius))
     return;
 
+  remaining_segments = 0;
+
   LoadJPG2000(path);
 
   /* permanently disable the requested tiles which are still not
@@ -518,6 +540,8 @@ RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
     if (tile.is_requested() && !tile.IsEnabled())
       tile.Clear();
   }
+
+  ++serial;
 }
 
 bool
@@ -1134,6 +1158,9 @@ RasterTileCache::FirstIntersection(int x0, int y0,
 short
 RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_index) const
 {
+  assert(px < width);
+  assert(py < height);
+
 #ifdef ACCURATE_TERRAIN_INTERSECTION
 
   const RasterTile &tile = tiles.Get(px / tile_width, py / tile_height);
@@ -1145,11 +1172,19 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_
   // still not found, so go to overview
   tile_index = -1;
 
-  if ((px >= width) || (py >= height))
-    // outside overall bounds
-    return RasterBuffer::TERRAIN_INVALID;
+  // The overview might not cover the whole tile, if width or height are not
+  // a multiple of 2^OVERVIEW_BITS.
+  unsigned x_overview = px >> OVERVIEW_BITS;
+  unsigned y_overview = py >> OVERVIEW_BITS;
+  assert(x_overview <= Overview.get_width());
+  assert(y_overview <= Overview.get_height());
 
-  return Overview.get(px >> OVERVIEW_BITS, py >> OVERVIEW_BITS);
+  if (x_overview == Overview.get_width())
+    x_overview--;
+  if (y_overview == Overview.get_height())
+    y_overview--;
+
+  return Overview.get(x_overview, y_overview);
 }
 
 RasterLocation

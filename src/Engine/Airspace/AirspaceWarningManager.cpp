@@ -282,8 +282,7 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
                                              warning_state, max_time_limit,
                                              ceiling);
 
-  GeoVector vector_predicted(state.location, location_predicted);
-  airspaces.visit_intersecting(state.location, vector_predicted, visitor);
+  airspaces.VisitIntersecting(state.location, location_predicted, visitor);
 
   visitor.SetMode(true);
   airspaces.visit_inside(state.location, visitor);
@@ -309,8 +308,15 @@ AirspaceWarningManager::UpdateTask(const AircraftState &state,
 
   AirspaceAircraftPerformanceTask perf_task(state, glide_polar,
                                             current_leg.solution_remaining);
-  const GeoPoint location_tp = current_leg.location_remaining;
+  GeoPoint location_tp = current_leg.location_remaining;
   const fixed time_remaining = solution.time_elapsed;
+
+  const GeoVector vector(state.location, location_tp);
+  fixed max_distance = config.WarningTime * glide_polar.GetVMax();
+  if (vector.distance > max_distance)
+    /* limit the distance to what our glider can actually fly within
+       the configured warning time */
+    location_tp = vector.IntermediatePoint(state.location, max_distance);
 
   return UpdatePredicted(state, location_tp, perf_task,
                           AirspaceWarning::WARNING_TASK, time_remaining);
@@ -375,10 +381,9 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
 
     if (warning.IsStateAccepted(AirspaceWarning::WARNING_INSIDE)) {
       GeoPoint c = airspace.ClosestPoint(state.location);
-      GeoVector vector_exit(state.location, c);
       const AirspaceAircraftPerformanceGlide perf_glide(glide_polar);
       AirspaceInterceptSolution solution;
-      airspace.Intercept(state, vector_exit, perf_glide, solution); 
+      airspace.Intercept(state, c, perf_glide, solution);
 
       warning.UpdateSolution(AirspaceWarning::WARNING_INSIDE, solution);
       found = true;

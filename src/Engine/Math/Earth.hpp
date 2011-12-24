@@ -83,6 +83,13 @@ gcc_const
 GeoPoint IntermediatePoint(const GeoPoint loc1, const GeoPoint loc2,
                            const fixed dthis);
 
+/**
+ * Find the nearest great-circle middle point between the two.
+ */
+gcc_const
+GeoPoint
+Middle(GeoPoint a, GeoPoint b);
+
 /** 
  * Calculate and add distances between point 1 and 2, and point 2 and 3.
  * 

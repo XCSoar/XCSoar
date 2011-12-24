@@ -235,7 +235,7 @@ public:
     AirspaceInterceptSolution solution;
     GeoVector vec(state.location, c);
     vec.distance = fixed(20000); // set big distance (for testing)
-    if (as.Intercept(state, vec, m_perf, solution)) {
+    if (as.Intercept(state, vec.EndPoint(state.location), m_perf, solution)) {
       if (fout) {
         *fout << "# intercept in " << solution.elapsed_time << " h " << solution.altitude << "\n";
       }
@@ -306,8 +306,7 @@ void scan_airspaces(const AircraftState state,
                                               "results/res-bb-intercepts.txt",
                                               do_report,
                                               state, perf);
-    GeoVector vec(state.location, target);
-    airspaces.visit_intersecting(state.location, vec, ivisitor);
+    airspaces.VisitIntersecting(state.location, target, ivisitor);
   }
 
   {

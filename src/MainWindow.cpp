@@ -457,13 +457,10 @@ MainWindow::on_resize(UPixelScalar width, UPixelScalar height)
     /* the map being created already is an indicator that XCSoar is
        running already, and so we assume the menu buttons have been
        created, too */
-
-    ButtonLabel::Destroy();
-    ButtonLabel::CreateButtonLabels(*this);
-    ButtonLabel::SetFont(Fonts::map_bold);
-
     map->BringToBottom();
   }
+
+  ButtonLabel::OnResize(get_client_rect());
 
   ProgressGlue::Resize(width, height);
 }

@@ -74,9 +74,8 @@ AirspacePolygon::Inside(const GeoPoint &loc) const
 }
 
 AirspaceIntersectionVector
-AirspacePolygon::Intersects(const GeoPoint &start, const GeoVector &vec) const
+AirspacePolygon::Intersects(const GeoPoint &start, const GeoPoint &end) const
 {
-  const GeoPoint end = vec.EndPoint(start);
   const FlatRay ray(m_task_projection->project(start),
                     m_task_projection->project(end));
 

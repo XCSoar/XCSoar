@@ -27,11 +27,13 @@ Copyright_License {
 #include "Geo/GeoBounds.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
+#include "Util/Serial.hpp"
 
 #include <assert.h>
 #include <tchar.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #define RASTER_SLOPE_FACT 12
 
@@ -162,9 +164,11 @@ class RasterTileCache : private NonCopyable {
    * The maximum number of tiles which are loaded at a time.  This
    * must be limited because the amount of memory is finite.
    */
-#if !defined(_WIN32_WCE) && !defined(ANDROID)
+#if defined(ANDROID)
+  static const unsigned MAX_ACTIVE_TILES = 128;
+#elif !defined(_WIN32_WCE)
   // desktop: use a lot of memory
-  static const unsigned MAX_ACTIVE_TILES = 64;
+  static const unsigned MAX_ACTIVE_TILES = 512;
 #elif !defined(_WIN32_WCE) || (_WIN32_WCE >= 0x0400 && !defined(GNAV))
   // embedded: use less memory
   static const unsigned MAX_ACTIVE_TILES = 32;
@@ -198,28 +202,39 @@ protected:
   friend struct RTDistanceSort;
 
   struct MarkerSegmentInfo {
-    MarkerSegmentInfo() {}
-    MarkerSegmentInfo(long _file_offset, int _tile=-1)
-      :file_offset(_file_offset), tile(_tile) {}
+    static const uint16_t NO_TILE = (uint16_t)-1;
 
     /**
      * The position of this marker segment within the file.
      */
-    long file_offset;
+    uint32_t file_offset;
 
     /**
      * The associated tile number.  -1 if this segment does not belong
      * to a tile.
      */
-    int tile;
+    uint16_t tile;
+
+    /**
+     * The number of follow-up segments.
+     */
+    uint16_t count;
+
+    MarkerSegmentInfo() {}
+    MarkerSegmentInfo(uint32_t _file_offset, int _tile=NO_TILE)
+      :file_offset(_file_offset), tile(_tile), count(0) {}
+
+    bool IsTileSegment() const {
+      return tile != NO_TILE;
+    }
   };
 
   struct CacheHeader {
     enum {
 #ifdef FIXED_MATH
-      VERSION = 0x6,
+      VERSION = 0x8,
 #else
-      VERSION = 0x7,
+      VERSION = 0x9,
 #endif
     };
 
@@ -238,6 +253,12 @@ protected:
 
   bool dirty;
 
+  /**
+   * This serial gets updated each time the tiles get loaded or
+   * discarded.
+   */
+  Serial serial;
+
   AllocatedGrid<RasterTile> tiles;
   unsigned short tile_width, tile_height;
 
@@ -251,11 +272,16 @@ protected:
   StaticArray<MarkerSegmentInfo, 8192> segments;
 
   /**
+   * The number of remaining segments after the current one.
+   */
+  mutable unsigned remaining_segments;
+
+  /**
    * An array that is used to sort the requested tiles by distance.
    * This is only used by PollTiles() internally, but is stored in the
    * class because it would be too large for the stack.
    */
-  StaticArray<unsigned short, MAX_RTC_TILES> RequestTiles;
+  StaticArray<uint16_t, MAX_RTC_TILES> RequestTiles;
 
   /**
    * Progress callbacks for loading the file during startup.
@@ -355,6 +381,10 @@ public:
     return initialised;
   }
 
+  const Serial &GetSerial() const {
+    return serial;
+  }
+
   void Reset();
 
   const GeoBounds &GetBounds() const {
@@ -366,7 +396,7 @@ public:
 private:
   gcc_pure
   const MarkerSegmentInfo *
-  FindMarkerSegment(long file_offset) const;
+  FindMarkerSegment(uint32_t file_offset) const;
 
 public:
   /* callback methods for libjasper (via jas_rtc.cpp) */

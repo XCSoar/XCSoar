@@ -61,6 +61,10 @@ public:
                 OperationEnvironment &operation)
     :Guard<RasterMap>(map), map(path, world_file, cache, operation) {}
 
+  const Serial &GetSerial() const {
+    return map.GetSerial();
+  }
+
 /** 
  * Load the terrain.  Determines the file to load from profile settings.
  * 

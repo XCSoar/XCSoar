@@ -180,11 +180,11 @@ AbstractAirspace::Intercept(const AircraftState &state,
 
 bool 
 AbstractAirspace::Intercept(const AircraftState &state,
-                            const GeoVector &vec,
+                            const GeoPoint &end,
                             const AirspaceAircraftPerformance &perf,
                             AirspaceInterceptSolution &solution) const
 {
-  AirspaceIntersectionVector vis = Intersects(state.location, vec);
+  AirspaceIntersectionVector vis = Intersects(state.location, end);
   if (vis.empty())
     return false;
 
