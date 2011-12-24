@@ -608,6 +608,11 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   if (StringToIntDflt(node.getAttribute(_T("Border")), 0))
     style.border();
 
+  rc.left = pos.x;
+  rc.top = pos.y;
+  rc.right = rc.left + size.cx;
+  rc.bottom = rc.top + size.cy;
+
   bool expert = (StringToIntDflt(node.getAttribute(_T("Expert")), 0) == 1);
 
   // PropertyControl (WndProperty)
@@ -654,12 +659,6 @@ LoadChild(SubForm &form, ContainerWindow &parent,
       edit_style.multiline();
       edit_style.vscroll();
     }
-
-    PixelRect rc;
-    rc.left = pos.x;
-    rc.top = pos.y;
-    rc.right = rc.left + size.cx;
-    rc.bottom = rc.top + size.cy;
 
     WndProperty *property;
     window = property = new WndProperty(parent, *xml_dialog_look, caption, rc,
@@ -727,12 +726,6 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     button_style.tab_stop();
     button_style.multiline();
 
-    PixelRect rc;
-    rc.left = pos.x;
-    rc.top = pos.y;
-    rc.right = rc.left + size.cx;
-    rc.bottom = rc.top + size.cy;
-
     window = new WndButton(parent, *xml_dialog_look, caption,
                            rc,
                            button_style, click_callback);
@@ -746,12 +739,6 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     // Create the CheckBoxControl
 
     style.tab_stop();
-
-    PixelRect rc;
-    rc.left = pos.x;
-    rc.top = pos.y;
-    rc.right = rc.left + size.cx;
-    rc.bottom = rc.top + size.cy;
 
     window = new CheckBoxControl(parent, *xml_dialog_look, caption,
                                  rc,
@@ -768,12 +755,6 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     style.tab_stop();
 
-    PixelRect rc;
-    rc.left = pos.x;
-    rc.top = pos.y;
-    rc.right = rc.left + size.cx;
-    rc.bottom = rc.top + size.cy;
-
     window = new WndSymbolButton(parent, *xml_dialog_look, caption,
                                  rc,
                                  style, click_callback);
@@ -783,12 +764,6 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     // Create the PanelControl
 
     style.control_parent();
-
-    PixelRect rc;
-    rc.left = pos.x;
-    rc.top = pos.y;
-    rc.right = rc.left + size.cx;
-    rc.bottom = rc.top + size.cy;
 
     PanelControl *frame = new PanelControl(parent, *xml_dialog_look,
                                            rc,
