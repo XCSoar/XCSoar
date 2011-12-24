@@ -32,22 +32,6 @@ Copyright_License {
 #include "Dialogs/DialogSettings.hpp"
 #include "Util/TypeTraits.hpp"
 
-enum StateMessageAlign_t {
-  smAlignCenter = 0,
-  smAlignTopLeft,
-};
-
-/** Location of Flarm radar */
-enum FlarmLocation {
-  flAuto,
-  flTopLeft,
-  flTopRight,
-  flBottomLeft,
-  flBottomRight,
-  flCentreTop,
-  flCentreBottom,
-};
-
 /**
  * User interface settings.
  */
@@ -68,9 +52,21 @@ struct UISettings {
   /** Show ThermalAssistant if circling */
   bool enable_thermal_assistant_gauge;
 
-  StateMessageAlign_t popup_message_position;
+  enum StateMessageAlign_t {
+    smAlignCenter = 0,
+    smAlignTopLeft,
+  } popup_message_position;
 
-  FlarmLocation flarm_location;
+  /** Location of Flarm radar */
+  enum FlarmLocation {
+    flAuto,
+    flTopLeft,
+    flTopRight,
+    flBottomLeft,
+    flBottomRight,
+    flCentreTop,
+    flCentreBottom,
+  } flarm_location;
 
   UnitSetting units;
   SETTINGS_MAP map;

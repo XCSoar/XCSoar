@@ -335,54 +335,54 @@ MainWindow::ReinitialiseLayout()
 void 
 MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout ib_layout)
 {
-  FlarmLocation val = CommonInterface::GetUISettings().flarm_location;
+  UISettings::FlarmLocation val = CommonInterface::GetUISettings().flarm_location;
 
   // Automatic mode - follow info boxes
-  if (val == flAuto) {
+  if (val == UISettings::flAuto) {
     switch (InfoBoxLayout::InfoBoxGeometry) {
     case InfoBoxLayout::ibTop8:
-      val = flTopRight;
+      val = UISettings::flTopRight;
       break;
     case InfoBoxLayout::ibLeft8:
-      val = flBottomLeft;
+      val = UISettings::flBottomLeft;
       break;
     case InfoBoxLayout::ibTop12:
-      val = flTopLeft;
+      val = UISettings::flTopLeft;
       break;
     default:
-      val = flBottomRight;    // Assume bottom right unles...
+      val = UISettings::flBottomRight;    // Assume bottom right unles...
       break;
     }
   }
 
   switch (val) {
-  case flTopLeft:
+  case UISettings::flTopLeft:
     rc.right = rc.left + ib_layout.control_width * 2;
     ++rc.left;
     rc.bottom = rc.top + ib_layout.control_height * 2;
     ++rc.top;
     break;
 
-  case flTopRight:
+  case UISettings::flTopRight:
     rc.left = rc.right - ib_layout.control_width * 2 + 1;
     rc.bottom = rc.top + ib_layout.control_height * 2;
     ++rc.top;
     break;
 
-  case flBottomLeft:
+  case UISettings::flBottomLeft:
     rc.right = rc.left + ib_layout.control_width * 2;
     ++rc.left;
     rc.top = rc.bottom - ib_layout.control_height * 2 + 1;
     break;
 
-  case flCentreTop:
+  case UISettings::flCentreTop:
     rc.left = (rc.left + rc.right) / 2 - ib_layout.control_width;
     rc.right = rc.left + ib_layout.control_width * 2 - 1;
     rc.bottom = rc.top + ib_layout.control_height * 2;
     ++rc.top;
     break;
 
-  case flCentreBottom:
+  case UISettings::flCentreBottom:
     rc.left = (rc.left + rc.right) / 2 - ib_layout.control_width;
     rc.right = rc.left + ib_layout.control_width * 2 - 1;
     rc.top = rc.bottom - ib_layout.control_height * 2 + 1;

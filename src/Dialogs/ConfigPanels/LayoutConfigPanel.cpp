@@ -114,13 +114,13 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Auto (follow infoboxes)"), flAuto);
-    dfe->addEnumText(_("Top Left"), flTopLeft);
-    dfe->addEnumText(_("Top Right"), flTopRight);
-    dfe->addEnumText(_("Bottom Left"), flBottomLeft);
-    dfe->addEnumText(_("Bottom Right"), flBottomRight);
-    dfe->addEnumText(_("Centre Top"), flCentreTop);
-    dfe->addEnumText(_("Centre Bottom"), flCentreBottom);
+    dfe->addEnumText(_("Auto (follow infoboxes)"), UISettings::flAuto);
+    dfe->addEnumText(_("Top Left"), UISettings::flTopLeft);
+    dfe->addEnumText(_("Top Right"), UISettings::flTopRight);
+    dfe->addEnumText(_("Bottom Left"), UISettings::flBottomLeft);
+    dfe->addEnumText(_("Bottom Right"), UISettings::flBottomRight);
+    dfe->addEnumText(_("Centre Top"), UISettings::flCentreTop);
+    dfe->addEnumText(_("Centre Bottom"), UISettings::flCentreBottom);
     dfe->Set(ui_settings.flarm_location);
     wp->RefreshDisplay();
   }
