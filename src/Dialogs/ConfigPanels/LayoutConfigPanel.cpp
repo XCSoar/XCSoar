@@ -97,55 +97,49 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
-  WndProperty *wp;
-
-  if (Display::RotateSupported()) {
+  if (Display::RotateSupported())
     LoadFormProperty(form, _T("prpDisplayOrientation"),
                      display_orientation_list,
                      Profile::GetDisplayOrientation());
-  } else {
+  else
     ShowFormControl(form, _T("prpDisplayOrientation"), false);
-  }
 
   LoadFormProperty(form, _T("prpAppInfoBoxGeom"),
                    info_box_geometry_list, InfoBoxLayout::InfoBoxGeometry);
 
-  wp = (WndProperty*)form.FindByName(_T("prpAppFlarmLocation"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Auto (follow infoboxes)"), UISettings::flAuto);
-    dfe->addEnumText(_("Top Left"), UISettings::flTopLeft);
-    dfe->addEnumText(_("Top Right"), UISettings::flTopRight);
-    dfe->addEnumText(_("Bottom Left"), UISettings::flBottomLeft);
-    dfe->addEnumText(_("Bottom Right"), UISettings::flBottomRight);
-    dfe->addEnumText(_("Centre Top"), UISettings::flCentreTop);
-    dfe->addEnumText(_("Centre Bottom"), UISettings::flCentreBottom);
-    dfe->Set(ui_settings.flarm_location);
-    wp->RefreshDisplay();
-  }
+  WndProperty *wp = (WndProperty*)form.FindByName(_T("prpAppFlarmLocation"));
+  assert(wp != NULL);
+  DataFieldEnum *dfe = (DataFieldEnum*)wp->GetDataField();
+  assert(dfe != NULL);
+  dfe->addEnumText(_("Auto (follow infoboxes)"), UISettings::flAuto);
+  dfe->addEnumText(_("Top Left"), UISettings::flTopLeft);
+  dfe->addEnumText(_("Top Right"), UISettings::flTopRight);
+  dfe->addEnumText(_("Bottom Left"), UISettings::flBottomLeft);
+  dfe->addEnumText(_("Bottom Right"), UISettings::flBottomRight);
+  dfe->addEnumText(_("Centre Top"), UISettings::flCentreTop);
+  dfe->addEnumText(_("Centre Bottom"), UISettings::flCentreBottom);
+  dfe->Set(ui_settings.flarm_location);
+  wp->RefreshDisplay();
 
   wp = (WndProperty*)form.FindByName(_T("prpAppStatusMessageAlignment"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Center"));
-    dfe->addEnumText(_("Topleft"));
-    dfe->Set(ui_settings.popup_message_position);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  assert(dfe != NULL);
+  dfe->addEnumText(_("Center"));
+  dfe->addEnumText(_("Topleft"));
+  dfe->Set(ui_settings.popup_message_position);
+  wp->RefreshDisplay();
 
   wp = (WndProperty*)form.FindByName(_T("prpDialogStyle"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Full width"));
-    dfe->addEnumText(_("Scaled"));
-    dfe->addEnumText(_("Scaled centered"));
-    dfe->addEnumText(_("Fixed"));
-    dfe->Set(dialog_style_setting);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  assert(dfe != NULL);
+  dfe->addEnumText(_("Full width"));
+  dfe->addEnumText(_("Scaled"));
+  dfe->addEnumText(_("Scaled centered"));
+  dfe->addEnumText(_("Fixed"));
+  dfe->Set(dialog_style_setting);
+  wp->RefreshDisplay();
 
   LoadFormProperty(form, _T("prpAppInverseInfoBox"),
                    ui_settings.info_boxes.inverse);
@@ -154,25 +148,22 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                    ui_settings.info_boxes.use_colors);
 
   wp = (WndProperty*)form.FindByName(_T("prpAppInfoBoxBorder"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Box"));
-    dfe->addEnumText(_("Tab"));
-    dfe->Set(ui_settings.info_boxes.border_style);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  assert(dfe != NULL);
+  dfe->addEnumText(_("Box"));
+  dfe->addEnumText(_("Tab"));
+  dfe->Set(ui_settings.info_boxes.border_style);
+  wp->RefreshDisplay();
 
   wp = (WndProperty*)form.FindByName(_T("prpTabDialogStyle"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Text"));
-    dfe->addEnumText(_("Icons"));
-    dfe->Set(CommonInterface::GetUISettings().dialog.tab_style);
-    wp->RefreshDisplay();
-  }
-
+  assert(wp != NULL);
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  assert(dfe != NULL);
+  dfe->addEnumText(_("Text"));
+  dfe->addEnumText(_("Icons"));
+  dfe->Set(CommonInterface::GetUISettings().dialog.tab_style);
+  wp->RefreshDisplay();
 }
 
 bool
@@ -191,6 +182,7 @@ LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
     assert(wp != NULL);
 
     const DataFieldEnum *dfe = (const DataFieldEnum *)wp->GetDataField();
+    assert(dfe != NULL);
     Display::orientation orientation =
       (Display::orientation)dfe->GetAsInteger();
     if (orientation != Profile::GetDisplayOrientation()) {
