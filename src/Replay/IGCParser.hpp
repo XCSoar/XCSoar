@@ -80,4 +80,12 @@ IGCParseDate(const char *line, BrokenDate &date);
 bool
 IGCParseFix(const char *buffer, IGCFix &fix);
 
+/**
+ * Parse the time from an IGC "B" record.
+ *
+ * @return true on success, false if the line was not recognized
+ */
+bool
+IGCParseFixTime(const char *buffer, BrokenTime &time);
+
 #endif
