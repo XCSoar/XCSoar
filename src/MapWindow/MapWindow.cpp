@@ -122,7 +122,7 @@ MapWindow::ReadBlackboard(const MoreData &nmea_info,
 unsigned
 MapWindow::UpdateTopography(unsigned max_update)
 {
-  if (topography != NULL && SettingsMap().topography_enabled)
+  if (topography != NULL && GetSettingsMap().topography_enabled)
     return topography->ScanVisibility(visible_projection, max_update);
   else
     return 0;

@@ -744,7 +744,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   WaypointListRenderer::Draw(canvas, rc, *info.waypoint,
                              GeoVector(info.distance, info.direction),
                              CommonInterface::main_window.GetLook().map.waypoint,
-                             CommonInterface::SettingsMap().waypoint);
+                             CommonInterface::GetSettingsMap().waypoint);
 }
 
 static void

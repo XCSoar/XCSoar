@@ -97,7 +97,7 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
                                _T("IDR_XML_WAYPOINTDISPLAYCONFIGPANEL_L"));
 
   const WaypointRendererSettings &settings =
-    CommonInterface::SettingsMap().waypoint;
+    CommonInterface::GetSettingsMap().waypoint;
 
   static gcc_constexpr_data StaticEnumChoice wp_labels_list[] = {
     { DISPLAYNAME, N_("Full name"),

@@ -286,7 +286,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   const Look &look = CommonInterface::main_window.GetLook();
   PaintTaskPoint(canvas, rc, *ordered_task, *tp,
                  XCSoarInterface::Basic().location,
-                 XCSoarInterface::SettingsMap(),
+                 XCSoarInterface::GetSettingsMap(),
                  look.map.task, look.map.airspace,
                  terrain);
 }

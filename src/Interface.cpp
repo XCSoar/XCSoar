@@ -156,7 +156,7 @@ ActionInterface::SendSettingsMap(const bool trigger_draw)
     InfoBoxManager::ProcessTimer();
   }
 
-  main_window.SetSettingsMap(SettingsMap());
+  main_window.SetSettingsMap(GetSettingsMap());
 
   if (trigger_draw) {
     main_window.full_redraw();

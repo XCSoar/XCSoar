@@ -347,9 +347,9 @@ SettingsComputer()
 }
 
 static const SETTINGS_MAP &
-SettingsMap()
+GetSettingsMap()
 {
-  return CommonInterface::SettingsMap();
+  return CommonInterface::GetSettingsMap();
 }
 
 static const UIState &
@@ -439,7 +439,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       _("Start"), Size);
 
   if (_tcsstr(OutBuffer, _T("$(SnailTrailToggleName)"))) {
-    switch (SettingsMap().trail_length) {
+    switch (GetSettingsMap().trail_length) {
     case TRAIL_OFF:
       ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
                       _("Long"), Size);
@@ -461,14 +461,14 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
   if (_tcsstr(OutBuffer, _T("$(AirSpaceToggleName)"))) {
     ReplaceInString(OutBuffer, _T("$(AirSpaceToggleName)"),
-                    SettingsMap().airspace.enable ? _("Off") : _("On"), Size);
+                    GetSettingsMap().airspace.enable ? _("Off") : _("On"), Size);
   }
 
   if (_tcsstr(OutBuffer, _T("$(TerrainTopologyToggleName)"))) {
     char val = 0;
-    if (SettingsMap().topography_enabled)
+    if (GetSettingsMap().topography_enabled)
       val++;
-    if (SettingsMap().terrain.enable)
+    if (GetSettingsMap().terrain.enable)
       val += (char)2;
     switch (val) {
     case 0:
@@ -492,9 +492,9 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
   if (_tcsstr(OutBuffer, _T("$(TerrainTopographyToggleName)"))) {
     char val = 0;
-    if (SettingsMap().topography_enabled)
+    if (GetSettingsMap().topography_enabled)
       val++;
-    if (SettingsMap().terrain.enable)
+    if (GetSettingsMap().terrain.enable)
       val += (char)2;
     switch (val) {
     case 0:
@@ -519,16 +519,16 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   CondReplaceInString(CommonInterface::main_window.GetFullScreen(), OutBuffer,
                       _T("$(FullScreenToggleActionName)"),
                       _("Off"), _("On"), Size);
-  CondReplaceInString(SettingsMap().auto_zoom_enabled, OutBuffer,
+  CondReplaceInString(GetSettingsMap().auto_zoom_enabled, OutBuffer,
 		                  _T("$(ZoomAutoToggleActionName)"),
 		                  _("Manual"), _("Auto"), Size);
-  CondReplaceInString(SettingsMap().topography_enabled, OutBuffer,
+  CondReplaceInString(GetSettingsMap().topography_enabled, OutBuffer,
                       _T("$(TopologyToggleActionName)"),
                       _("Off"), _("On"), Size);
-  CondReplaceInString(SettingsMap().topography_enabled, OutBuffer,
+  CondReplaceInString(GetSettingsMap().topography_enabled, OutBuffer,
                       _T("$(TopographyToggleActionName)"),
                       _("Off"), _("On"), Size);
-  CondReplaceInString(SettingsMap().terrain.enable, OutBuffer,
+  CondReplaceInString(GetSettingsMap().terrain.enable, OutBuffer,
                       _T("$(TerrainToggleActionName)"),
                       _("Off"), _("On"), Size);
 
@@ -538,7 +538,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                                            N_("Task"),
                                            N_("None") };
     static gcc_constexpr_data unsigned int n = ARRAY_SIZE(labels);
-    unsigned int i = SettingsMap().waypoint.label_selection;
+    unsigned int i = GetSettingsMap().waypoint.label_selection;
     ReplaceInString(OutBuffer, _T("$(MapLabelsToggleActionName)"),
                     gettext(labels[(i + 1) % n]), Size);
   }
@@ -563,39 +563,39 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       OutBuffer, _T("$(DispModeFinalShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 
-  CondReplaceInString(SettingsMap().airspace.altitude_mode == ALLON,
+  CondReplaceInString(GetSettingsMap().airspace.altitude_mode == ALLON,
                       OutBuffer, _T("$(AirspaceModeAllShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().airspace.altitude_mode == CLIP,
+  CondReplaceInString(GetSettingsMap().airspace.altitude_mode == CLIP,
                       OutBuffer, _T("$(AirspaceModeClipShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().airspace.altitude_mode == AUTO,
+  CondReplaceInString(GetSettingsMap().airspace.altitude_mode == AUTO,
                       OutBuffer, _T("$(AirspaceModeAutoShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().airspace.altitude_mode == ALLBELOW,
+  CondReplaceInString(GetSettingsMap().airspace.altitude_mode == ALLBELOW,
                       OutBuffer, _T("$(AirspaceModeBelowShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().airspace.altitude_mode == ALLOFF,
+  CondReplaceInString(GetSettingsMap().airspace.altitude_mode == ALLOFF,
                       OutBuffer, _T("$(AirspaceModeAllOffIndicator)"),
                       _T("(*)"), _T(""), Size);
 
-  CondReplaceInString(SettingsMap().trail_length == TRAIL_OFF,
+  CondReplaceInString(GetSettingsMap().trail_length == TRAIL_OFF,
                       OutBuffer, _T("$(SnailTrailOffShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().trail_length == TRAIL_SHORT,
+  CondReplaceInString(GetSettingsMap().trail_length == TRAIL_SHORT,
                       OutBuffer, _T("$(SnailTrailShortShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().trail_length == TRAIL_LONG,
+  CondReplaceInString(GetSettingsMap().trail_length == TRAIL_LONG,
                       OutBuffer, _T("$(SnailTrailLongShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().trail_length == TRAIL_FULL,
+  CondReplaceInString(GetSettingsMap().trail_length == TRAIL_FULL,
                       OutBuffer, _T("$(SnailTrailFullShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 
-  CondReplaceInString(!SettingsMap().airspace.enable,
+  CondReplaceInString(!GetSettingsMap().airspace.enable,
                       OutBuffer, _T("$(AirSpaceOffShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().airspace.enable,
+  CondReplaceInString(GetSettingsMap().airspace.enable,
                       OutBuffer, _T("$(AirSpaceOnShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 

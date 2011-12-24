@@ -124,7 +124,7 @@ GlueMapWindow::SetMapScale(const fixed x)
 {
   MapWindow::SetMapScale(x);
 
-  if (GetDisplayMode() == DM_CIRCLING && SettingsMap().circle_zoom_enabled)
+  if (GetDisplayMode() == DM_CIRCLING && GetSettingsMap().circle_zoom_enabled)
     // save cruise scale
     zoomclimb.ClimbScale = visible_projection.GetScale();
   else
@@ -160,7 +160,7 @@ GlueMapWindow::SwitchZoomClimb()
 {
   bool isclimb = (GetDisplayMode() == DM_CIRCLING);
 
-  if (SettingsMap().circle_zoom_enabled) {
+  if (GetSettingsMap().circle_zoom_enabled) {
     if (isclimb != zoomclimb.last_isclimb) {
       if (isclimb) {
         // save cruise scale
@@ -204,7 +204,7 @@ GlueMapWindow::UpdateScreenAngle()
      called by the main thread */
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
-  const SETTINGS_MAP &settings = CommonInterface::SettingsMap();
+  const SETTINGS_MAP &settings = CommonInterface::GetSettingsMap();
 
   DisplayOrientation orientation =
       (GetDisplayMode() == DM_CIRCLING) ?
@@ -229,9 +229,9 @@ GlueMapWindow::UpdateMapScale()
   /* not using MapWindowBlackboard here because these methods are
      called by the main thread */
   const DerivedInfo &calculated = CommonInterface::Calculated();
-  const SETTINGS_MAP &settings = CommonInterface::SettingsMap();
+  const SETTINGS_MAP &settings = CommonInterface::GetSettingsMap();
 
-  if (GetDisplayMode() == DM_CIRCLING && SettingsMap().circle_zoom_enabled)
+  if (GetDisplayMode() == DM_CIRCLING && GetSettingsMap().circle_zoom_enabled)
     return;
 
   if (!IsNearSelf())
@@ -242,7 +242,7 @@ GlueMapWindow::UpdateMapScale()
     // Calculate distance percentage between plane symbol and map edge
     // 50: centered  100: at edge of map
     int AutoZoomFactor = (GetDisplayMode() == DM_CIRCLING) ?
-                                 50 : 100 - SettingsMap().glider_screen_position;
+                                 50 : 100 - GetSettingsMap().glider_screen_position;
     // Leave 5% of full distance for target display
     AutoZoomFactor -= 5;
     // Adjust to account for map scale units
@@ -250,7 +250,7 @@ GlueMapWindow::UpdateMapScale()
     wpd = wpd / ((fixed) AutoZoomFactor / fixed_int_constant(100));
     // Clip map auto zoom range to reasonable values
     wpd = max(fixed_int_constant(525),
-              min(SettingsMap().max_auto_zoom_distance / fixed_int_constant(10), wpd));
+              min(GetSettingsMap().max_auto_zoom_distance / fixed_int_constant(10), wpd));
     visible_projection.SetFreeMapScale(wpd);
   }
 }
@@ -275,7 +275,7 @@ GlueMapWindow::UpdateProjection()
      called by the main thread */
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
-  const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
+  const SETTINGS_MAP &settings_map = CommonInterface::GetSettingsMap();
 
   RasterPoint center;
   center.x = (rc.left + rc.right) / 2;

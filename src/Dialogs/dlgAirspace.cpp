@@ -52,7 +52,7 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   const AirspaceComputerSettings &computer =
     CommonInterface::SettingsComputer().airspace;
   const AirspaceRendererSettings &renderer =
-    CommonInterface::SettingsMap().airspace;
+    CommonInterface::GetSettingsMap().airspace;
   const AirspaceLook &look = CommonInterface::main_window.GetLook().map.airspace;
 
   PixelScalar w0 = rc.right - rc.left - Layout::FastScale(4);

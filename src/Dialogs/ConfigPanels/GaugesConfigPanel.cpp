@@ -68,7 +68,7 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                    ui_settings.enable_thermal_assistant_gauge);
 
   LoadFormProperty(form, _T("prpEnableThermalProfile"),
-                   XCSoarInterface::SettingsMap().show_thermal_profile);
+                   XCSoarInterface::GetSettingsMap().show_thermal_profile);
 }
 
 bool

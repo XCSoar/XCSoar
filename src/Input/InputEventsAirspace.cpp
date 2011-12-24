@@ -107,7 +107,7 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
   const AircraftState aircraft_state =
     ToAircraftState(basic, calculated);
   AirspaceVisiblePredicate visible(settings_computer.airspace,
-                          CommonInterface::SettingsMap().airspace,
+                          CommonInterface::GetSettingsMap().airspace,
                           aircraft_state);
   GlidePolar polar = settings_computer.glide_polar_task;
   polar.SetMC(max(polar.GetMC(),fixed_one));

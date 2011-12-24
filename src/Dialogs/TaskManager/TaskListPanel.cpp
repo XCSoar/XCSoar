@@ -119,7 +119,7 @@ TaskListPanel::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   const Look &look = CommonInterface::main_window.GetLook();
   PaintTask(canvas, Sender->get_client_rect(), *ordered_task,
             XCSoarInterface::Basic().location,
-            XCSoarInterface::SettingsMap(),
+            XCSoarInterface::GetSettingsMap(),
             look.map.task, look.map.airspace,
             terrain);
 }

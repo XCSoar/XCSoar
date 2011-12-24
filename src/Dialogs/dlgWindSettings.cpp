@@ -223,7 +223,7 @@ dlgWindSettingsShowModal(void)
   // Save current settings
   settings.wind = CommonInterface::Calculated().GetWindOrZero();
   settings.auto_wind_mode = XCSoarInterface::SettingsComputer().auto_wind_mode;
-  settings.trail_drift_enabled = XCSoarInterface::SettingsMap().trail_drift_enabled;
+  settings.trail_drift_enabled = XCSoarInterface::GetSettingsMap().trail_drift_enabled;
 
   // Initialize field values
   InitFields();

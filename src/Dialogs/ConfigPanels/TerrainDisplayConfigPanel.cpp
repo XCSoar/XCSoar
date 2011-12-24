@@ -179,7 +179,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   instance = this;
 
-  const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
+  const SETTINGS_MAP &settings_map = CommonInterface::GetSettingsMap();
 
   LoadWindow(CallBackTable, parent,
              Layout::landscape ? _T("IDR_XML_TERRAINDISPLAYCONFIGPANEL_L") :

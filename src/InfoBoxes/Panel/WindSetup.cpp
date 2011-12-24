@@ -107,7 +107,7 @@ WindSetupPanel::Show(const PixelRect &rc)
   }
 
   LoadFormProperty(form, _T("prpTrailDrift"),
-                   XCSoarInterface::SettingsMap().trail_drift_enabled);
+                   XCSoarInterface::GetSettingsMap().trail_drift_enabled);
 
   XMLWidget::Show(rc);
 }

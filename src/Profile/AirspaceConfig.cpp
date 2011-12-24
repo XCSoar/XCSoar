@@ -72,7 +72,7 @@ Profile::SetAirspaceMode(int i)
   const AirspaceComputerSettings &computer =
     CommonInterface::SettingsComputer().airspace;
   const AirspaceRendererSettings &renderer =
-    CommonInterface::SettingsMap().airspace;
+    CommonInterface::GetSettingsMap().airspace;
 
   int val = 0;
   if (renderer.display[i])

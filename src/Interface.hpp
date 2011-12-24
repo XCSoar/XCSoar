@@ -97,7 +97,7 @@ public:
    * @return The InterfaceBlackboard.SettingsMap
    */
   gcc_const
-  static const SETTINGS_MAP& SettingsMap() {
+  static const SETTINGS_MAP& GetSettingsMap() {
     return GetUISettings().map;
   }
 

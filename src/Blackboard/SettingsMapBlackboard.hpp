@@ -34,7 +34,7 @@ class SettingsMapBlackboard
 {
 public:
   gcc_const
-  const SETTINGS_MAP& SettingsMap() const
+  const SETTINGS_MAP& GetSettingsMap() const
   { return settings_map; };
 protected:
   SETTINGS_MAP settings_map;

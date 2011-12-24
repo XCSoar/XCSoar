@@ -50,7 +50,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location) const
     builder.AddVisibleAirspace(*airspace_database,
                                airspace_renderer.GetAirspaceWarnings(),
                                SettingsComputer().airspace,
-                               SettingsMap().airspace, Basic(),
+                               GetSettingsMap().airspace, Basic(),
                                Calculated());
 
   if (marks && render_projection.GetMapScale() <= fixed_int_constant(30000))
@@ -85,7 +85,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location) const
     return false;
 
   ShowMapItemListDialog(UIGlobals::GetMainWindow(), vector, list,
-                        elevation, look, traffic_look, SettingsMap(),
+                        elevation, look, traffic_look, GetSettingsMap(),
                         glide_computer != NULL
                         ? &glide_computer->GetAirspaceWarnings() : NULL);
   return true;

@@ -91,7 +91,7 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              Layout::landscape ? _T("IDR_XML_SYMBOLSCONFIGPANEL") :
                                _T("IDR_XML_SYMBOLSCONFIGPANEL_L"));
 
-  const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
+  const SETTINGS_MAP &settings_map = CommonInterface::GetSettingsMap();
 
   WndProperty *wp;
 
