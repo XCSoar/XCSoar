@@ -309,9 +309,81 @@ FillTCPPorts(DataFieldEnum &dfe)
   dfe.addEnumText(_T("10110"), 10110);
 }
 
+static void
+SetPort(DataFieldEnum &df, const DeviceConfig &config)
+{
+  switch (config.port_type) {
+  case DeviceConfig::PortType::DISABLED:
+  case DeviceConfig::PortType::AUTO:
+  case DeviceConfig::PortType::INTERNAL:
+  case DeviceConfig::PortType::TCP_LISTENER:
+    break;
+
+  case DeviceConfig::PortType::SERIAL:
+    if (!df.Exists(config.path))
+      AddPort(df, config.port_type, config.path);
+    df.SetAsString(config.path);
+    return;
+
+  case DeviceConfig::PortType::RFCOMM:
+    if (!df.Exists(config.bluetooth_mac))
+      AddPort(df, DeviceConfig::PortType::RFCOMM, config.bluetooth_mac);
+
+    df.SetAsString(config.bluetooth_mac);
+    return;
+
+  case DeviceConfig::PortType::IOIOUART:
+    StaticString<16> buffer;
+    buffer.UnsafeFormat(_T("%d"), config.ioio_uart_id);
+    df.SetAsString(buffer);
+    return;
+  }
+
+  for (unsigned i = 0; port_types[i].label != NULL; i++) {
+    if (port_types[i].type == config.port_type) {
+      df.SetAsString(gettext(port_types[i].label));
+      break;
+    }
+  }
+}
+
 DeviceEditWidget::DeviceEditWidget(const DeviceConfig &_config)
   :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(80)),
    config(_config) {}
+
+
+void
+DeviceEditWidget::SetConfig(const DeviceConfig &_config)
+{
+  config = _config;
+
+  WndProperty &port_control = GetControl(Port);
+  DataFieldEnum &port_df = *(DataFieldEnum *)port_control.GetDataField();
+  SetPort(port_df, config);
+  port_control.RefreshDisplay();
+
+  WndProperty &baud_control = GetControl(BaudRate);
+  DataFieldEnum &baud_df = *(DataFieldEnum *)baud_control.GetDataField();
+  baud_df.Set(config.baud_rate);
+  baud_control.RefreshDisplay();
+
+  WndProperty &bulk_baud_control = GetControl(BulkBaudRate);
+  DataFieldEnum &bulk_baud_df = *(DataFieldEnum *)
+    bulk_baud_control.GetDataField();
+  bulk_baud_df.Set(config.bulk_baud_rate);
+  bulk_baud_control.RefreshDisplay();
+
+  WndProperty &tcp_port_control = GetControl(TCPPort);
+  DataFieldEnum &tcp_port_df = *(DataFieldEnum *)
+    tcp_port_control.GetDataField();
+  tcp_port_df.Set(config.tcp_port);
+  tcp_port_control.RefreshDisplay();
+
+  WndProperty &driver_control = GetControl(Driver);
+  DataFieldEnum &driver_df = *(DataFieldEnum *)driver_control.GetDataField();
+  driver_df.SetAsString(config.driver_name);
+  driver_control.RefreshDisplay();
+}
 
 gcc_pure
 static bool

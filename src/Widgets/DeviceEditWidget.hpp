@@ -37,9 +37,13 @@ public:
     return config;
   }
 
+  /**
+   * Fill new values into the form.
+   */
+  void SetConfig(const DeviceConfig &config);
+
   void UpdateVisibilities();
 
-private:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
 };
