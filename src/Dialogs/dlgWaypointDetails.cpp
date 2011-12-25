@@ -524,6 +524,57 @@ UpdateSunsetTime(const GeoPoint &location, const BrokenDateTime &date_time)
   wp->SetText(buffer);
 }
 
+static void
+UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
+                       const MoreData &basic, const DerivedInfo &calculated,
+                       const Waypoint &waypoint)
+{
+  GlidePolar glide_polar = settings_computer.glide_polar_task;
+  const GlidePolar &safety_polar = calculated.glide_polar_safety;
+
+  UnorderedTaskPoint task_point(waypoint, settings_computer.task);
+
+  const AircraftState aircraft_state = ToAircraftState(basic, calculated);
+
+  // alt reqd at current mc
+  WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
+  assert(wp != NULL);
+
+  GlideResult r = TaskSolution::glide_solution_remaining(
+      task_point, aircraft_state, glide_polar);
+
+  StaticString<64> buffer;
+  buffer.Format(_T("%.0f %s"),
+                (double)Units::ToUserAltitude(r.altitude_difference),
+                Units::GetAltitudeName());
+  wp->SetText(buffer);
+
+  // alt reqd at mc 0
+  wp = (WndProperty *)wf->FindByName(_T("prpMc0"));
+  assert(wp != NULL);
+
+  glide_polar.SetMC(fixed_zero);
+  r = TaskSolution::glide_solution_remaining(
+      task_point, aircraft_state, glide_polar);
+
+  buffer.Format(_T("%.0f %s"),
+                (double)Units::ToUserAltitude(r.altitude_difference),
+                Units::GetAltitudeName());
+  wp->SetText(buffer);
+
+  // alt reqd at safety mc
+  wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
+  assert(wp != NULL);
+
+  r = TaskSolution::glide_solution_remaining(
+      task_point, aircraft_state, safety_polar);
+
+  buffer.Format(_T("%.0f %s"),
+                (double)Units::ToUserAltitude(r.altitude_difference),
+                Units::GetAltitudeName());
+  wp->SetText(buffer);
+}
+
 void 
 dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
                             bool allow_navigation)
@@ -540,8 +591,6 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
                                       _T("IDR_XML_WAYPOINTDETAILS"));
   assert(wf != NULL);
 
-  TCHAR sTmp[128];
-
   UpdateCaption(waypoint->name.c_str());
   UpdateComment(waypoint->comment.c_str());
 
@@ -557,42 +606,8 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   if (basic.connected)
     UpdateSunsetTime(waypoint->location, basic.date_time_utc);
 
-  if (protected_task_manager != NULL) {
-    GlidePolar glide_polar = settings_computer.glide_polar_task;
-    const GlidePolar &safety_polar = calculated.glide_polar_safety;
-
-    UnorderedTaskPoint t(_waypoint, settings_computer.task);
-
-    const AircraftState aircraft_state = ToAircraftState(basic, calculated);
-    GlideResult r = TaskSolution::glide_solution_remaining(t, aircraft_state,
-                                                           glide_polar);
-    // alt reqd at current mc
-    WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
-    assert(wp != NULL);
-    _stprintf(sTmp, _T("%.0f %s"),
-              (double)Units::ToUserAltitude(r.altitude_difference),
-              Units::GetAltitudeName());
-    wp->SetText(sTmp);
-
-    // alt reqd at mc 0
-    glide_polar.SetMC(fixed_zero);
-    r = TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
-    wp = (WndProperty *)wf->FindByName(_T("prpMc0"));
-    assert(wp != NULL);
-    _stprintf(sTmp, _T("%.0f %s"),
-              (double)Units::ToUserAltitude(r.altitude_difference),
-              Units::GetAltitudeName());
-    wp->SetText(sTmp);
-
-    // alt reqd at safety mc
-    r = TaskSolution::glide_solution_remaining(t, aircraft_state, safety_polar);
-    wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
-    assert(wp != NULL);
-    _stprintf(sTmp, _T("%.0f %s"),
-              (double)Units::ToUserAltitude(r.altitude_difference),
-              Units::GetAltitudeName());
-    wp->SetText(sTmp);
-  }
+  if (protected_task_manager != NULL)
+    UpdateArrivalAltitudes(settings_computer, basic, calculated, *waypoint);
 
   wf->SetKeyDownNotify(FormKeyDown);
 
