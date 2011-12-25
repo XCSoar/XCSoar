@@ -408,6 +408,20 @@ ShowTaskCommands()
   wb->set_visible(MapTaskManager::GetIndexInTask(*waypoint) >= 0);
 }
 
+static void
+UpdateRadioFrequency(const RadioFrequency &radio_frequency)
+{
+  if (!radio_frequency.IsDefined())
+    return;
+
+  WndProperty *wp = (WndProperty *)wf->FindByName(_T("Radio"));
+  assert(wp != NULL);
+
+  TCHAR buffer[64];
+  if (radio_frequency.Format(buffer, ARRAY_SIZE(buffer)) != NULL)
+    wp->SetText(buffer);
+}
+
 void 
 dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
                             bool allow_navigation)
@@ -431,11 +445,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   WndProperty *wp = ((WndProperty *)wf->FindByName(_T("prpWpComment")));
   wp->SetText(waypoint->comment.c_str());
 
-  TCHAR *radio_frequency;
-  if (waypoint->radio_frequency.IsDefined() &&
-      (radio_frequency =
-       waypoint->radio_frequency.Format(sTmp, 128)) != NULL)
-    ((WndProperty *)wf->FindByName(_T("Radio")))->SetText(radio_frequency);
+  UpdateRadioFrequency(waypoint->radio_frequency);
 
   const Runway &runway = waypoint->runway;
   if (runway.IsDirectionDefined()) {
