@@ -404,8 +404,8 @@ ShowTaskCommands()
     return;
 
   WndButton *wb = ((WndButton *)wf->FindByName(_T("cmdRemoveFromTask")));
-  if (wb)
-    wb->set_visible(MapTaskManager::GetIndexInTask(*selected_waypoint) >= 0);
+  assert(wb != NULL);
+  wb->set_visible(MapTaskManager::GetIndexInTask(*selected_waypoint) >= 0);
 }
 
 void 
@@ -428,8 +428,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   _stprintf(sTmp, _T("%s: '%s'"), wf->GetCaption(), selected_waypoint->name.c_str());
   wf->SetCaption(sTmp);
 
-  WndProperty *wp;
-  wp = ((WndProperty *)wf->FindByName(_T("prpWpComment")));
+  WndProperty *wp = ((WndProperty *)wf->FindByName(_T("prpWpComment")));
   wp->SetText(selected_waypoint->comment.c_str());
 
   TCHAR *radio_frequency;
@@ -488,66 +487,61 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
 
     UnorderedTaskPoint t(way_point, settings_computer.task);
 
-    // alt reqd at current mc
-
     const AircraftState aircraft_state = ToAircraftState(basic, calculated);
     GlideResult r = TaskSolution::glide_solution_remaining(t, aircraft_state,
                                                            glide_polar);
+    // alt reqd at current mc
     wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
-    if (wp) {
-      _stprintf(sTmp, _T("%.0f %s"),
-                (double)Units::ToUserAltitude(r.altitude_difference),
-                Units::GetAltitudeName());
-      wp->SetText(sTmp);
-    }
+    assert(wp != NULL);
+    _stprintf(sTmp, _T("%.0f %s"),
+              (double)Units::ToUserAltitude(r.altitude_difference),
+              Units::GetAltitudeName());
+    wp->SetText(sTmp);
 
     // alt reqd at mc 0
-
     glide_polar.SetMC(fixed_zero);
     r = TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
     wp = (WndProperty *)wf->FindByName(_T("prpMc0"));
-    if (wp) {
-      _stprintf(sTmp, _T("%.0f %s"),
-                (double)Units::ToUserAltitude(r.altitude_difference),
-                Units::GetAltitudeName());
-      wp->SetText(sTmp);
-    }
+    assert(wp != NULL);
+    _stprintf(sTmp, _T("%.0f %s"),
+              (double)Units::ToUserAltitude(r.altitude_difference),
+              Units::GetAltitudeName());
+    wp->SetText(sTmp);
 
     // alt reqd at safety mc
-
     r = TaskSolution::glide_solution_remaining(t, aircraft_state, safety_polar);
     wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
-    if (wp) {
-      _stprintf(sTmp, _T("%.0f %s"),
-                (double)Units::ToUserAltitude(r.altitude_difference),
-                Units::GetAltitudeName());
-      wp->SetText(sTmp);
-    }
+    assert(wp != NULL);
+    _stprintf(sTmp, _T("%.0f %s"),
+              (double)Units::ToUserAltitude(r.altitude_difference),
+              Units::GetAltitudeName());
+    wp->SetText(sTmp);
   }
 
   wf->SetKeyDownNotify(FormKeyDown);
 
   wInfo = ((WndFrame *)wf->FindByName(_T("frmInfos")));
-  wCommand = ((WndFrame *)wf->FindByName(_T("frmCommands")));
-  wDetails = (EditWindow*)wf->FindByName(_T("frmDetails"));
-
   assert(wInfo != NULL);
-  assert(wCommand != NULL);
-  assert(wDetails != NULL);
 
-  wDetails->set_text(selected_waypoint->details.c_str());
+  wCommand = ((WndFrame *)wf->FindByName(_T("frmCommands")));
+  assert(wCommand != NULL);
   wCommand->hide();
 
+  wDetails = (EditWindow*)wf->FindByName(_T("frmDetails"));
+  assert(wDetails != NULL);
+  wDetails->set_text(selected_waypoint->details.c_str());
+
   if (!allow_navigation) {
-    WndButton* butnav = NULL;
-    butnav = (WndButton *)wf->FindByName(_T("cmdPrev"));
-    assert(butnav);
+    WndButton* butnav = (WndButton *)wf->FindByName(_T("cmdPrev"));
+    assert(butnav != NULL);
     butnav->hide();
+
     butnav = (WndButton *)wf->FindByName(_T("cmdNext"));
-    assert(butnav);
+    assert(butnav != NULL);
     butnav->hide();
+
     butnav = (WndButton *)wf->FindByName(_T("cmdGoto"));
-    assert(butnav);
+    assert(butnav != NULL);
     butnav->hide();
   }
 
