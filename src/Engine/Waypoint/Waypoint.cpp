@@ -35,7 +35,7 @@ Waypoint::Flags::SetDefaultFlags(bool turnpoint)
 
 Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):
   location(_location),
-  type(TYPE_NORMAL)
+  type(Type::NORMAL)
 {
   flags.SetDefaultFlags(is_turnpoint);
   runway.Clear();

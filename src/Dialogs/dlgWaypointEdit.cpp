@@ -320,13 +320,13 @@ GetValues()
   switch(wp->GetDataField()->GetAsInteger()) {
   case 1:
     global_wpt->flags.turn_point = true;
-    global_wpt->type = Waypoint::TYPE_AIRFIELD;
+    global_wpt->type = Waypoint::Type::AIRFIELD;
     break;
   case 2:
-    global_wpt->type = Waypoint::TYPE_OUTLANDING;
+    global_wpt->type = Waypoint::Type::OUTLANDING;
     break;
   default:
-    global_wpt->type = Waypoint::TYPE_NORMAL;
+    global_wpt->type = Waypoint::Type::NORMAL;
     global_wpt->flags.turn_point = true;
   };
 }

@@ -157,7 +157,7 @@ ParseFlags(const TCHAR* src, Waypoint &dest)
     switch (src[i]) {
     case 'A':
     case 'a':
-      dest.type = Waypoint::TYPE_AIRFIELD;
+      dest.type = Waypoint::Type::AIRFIELD;
       break;
     case 'T':
     case 't':
@@ -166,8 +166,8 @@ ParseFlags(const TCHAR* src, Waypoint &dest)
     case 'L':
     case 'l':
       // Don't downgrade!
-      if (dest.type != Waypoint::TYPE_AIRFIELD)
-        dest.type = Waypoint::TYPE_OUTLANDING;
+      if (dest.type != Waypoint::Type::AIRFIELD)
+        dest.type = Waypoint::Type::OUTLANDING;
       break;
     case 'H':
     case 'h':

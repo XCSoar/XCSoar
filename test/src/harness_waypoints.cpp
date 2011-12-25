@@ -38,39 +38,39 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
 
   Waypoint wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed_zero),
                                           Angle::Degrees(fixed_zero)));
-  wp.type = Waypoint::TYPE_AIRFIELD;
+  wp.type = Waypoint::Type::AIRFIELD;
   wp.altitude = fixed(0.25);
   waypoints.Append(wp);
 
   wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed_zero), 
                                  Angle::Degrees(fixed_one)));
-  wp.type = Waypoint::TYPE_AIRFIELD;
+  wp.type = Waypoint::Type::AIRFIELD;
   wp.altitude = fixed(0.25);
   waypoints.Append(wp);
 
   wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed_one), 
                                  Angle::Degrees(fixed_one)));
   wp.name = _T("Hello");
-  wp.type = Waypoint::TYPE_AIRFIELD;
+  wp.type = Waypoint::Type::AIRFIELD;
   wp.altitude = fixed_half;
   waypoints.Append(wp);
 
   wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed(0.8)), 
                                  Angle::Degrees(fixed(0.5))));
   wp.name = _T("Unk");
-  wp.type = Waypoint::TYPE_AIRFIELD;
+  wp.type = Waypoint::Type::AIRFIELD;
   wp.altitude = fixed(0.25);
   waypoints.Append(wp);
 
   wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed_one), 
                                  Angle::Degrees(fixed_zero)));
-  wp.type = Waypoint::TYPE_AIRFIELD;
+  wp.type = Waypoint::Type::AIRFIELD;
   wp.altitude = fixed(0.25);
   waypoints.Append(wp);
 
   wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed_zero), 
                                  Angle::Degrees(fixed(0.23))));
-  wp.type = Waypoint::TYPE_AIRFIELD;
+  wp.type = Waypoint::Type::AIRFIELD;
   wp.altitude = fixed(0.25);
   waypoints.Append(wp);
 
@@ -80,7 +80,7 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
     double z = rand()% std::max(terrain_height,1);
     wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed(x/1000.0)), 
                                    Angle::Degrees(fixed(y/1000.0))));
-    wp.type = Waypoint::TYPE_NORMAL;
+    wp.type = Waypoint::Type::NORMAL;
     wp.altitude = fixed(z);
     waypoints.Append(wp);
   }

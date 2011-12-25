@@ -24,7 +24,6 @@
 #define WAYPOINT_HPP
 
 #include "Util/tstring.hpp"
-#include "Util/TinyEnum.hpp"
 #include "Util/DebugFlag.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/Flat/FlatGeoPoint.hpp"
@@ -47,17 +46,17 @@ class TaskProjection;
  *   so we know they will be unique.
  */
 struct Waypoint {
-  enum Type {
-    TYPE_NORMAL,
-    TYPE_AIRFIELD,
-    TYPE_OUTLANDING,
-    TYPE_MOUNTAIN_TOP,
-    TYPE_MOUNTAIN_PASS,
-    TYPE_BRIDGE,
-    TYPE_TUNNEL,
-    TYPE_TOWER,
-    TYPE_POWERPLANT,
-    TYPE_OBSTACLE,
+  enum class Type: uint8_t {
+    NORMAL,
+    AIRFIELD,
+    OUTLANDING,
+    MOUNTAIN_TOP,
+    MOUNTAIN_PASS,
+    BRIDGE,
+    TUNNEL,
+    TOWER,
+    POWERPLANT,
+    OBSTACLE,
   };
 
   /**
@@ -110,7 +109,7 @@ struct Waypoint {
   RadioFrequency radio_frequency;
 
   /** Type of the waypoint */
-  TinyEnum<Type> type;
+  Type type;
   /** Flag types of this waypoint */
   Flags flags;
   /** File number to store waypoint in (0,1), -1 to delete/ignore */
@@ -139,7 +138,7 @@ struct Waypoint {
   bool
   IsLandable() const
   {
-    return (type == TYPE_AIRFIELD || type == TYPE_OUTLANDING);
+    return (type == Type::AIRFIELD || type == Type::OUTLANDING);
   }
 
   /**
@@ -150,7 +149,7 @@ struct Waypoint {
   bool
   IsAirport() const
   {
-    return type == TYPE_AIRFIELD;
+    return type == Type::AIRFIELD;
   }
 
   /**

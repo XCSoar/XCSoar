@@ -122,34 +122,34 @@ ParseStyle(const TCHAR* src, Waypoint &dest)
   // Update flags
   switch (style) {
   case 3:
-    dest.type = Waypoint::TYPE_OUTLANDING;
+    dest.type = Waypoint::Type::OUTLANDING;
     break;
   case 2:
   case 4:
   case 5:
-    dest.type = Waypoint::TYPE_AIRFIELD;
+    dest.type = Waypoint::Type::AIRFIELD;
     break;
   case 6:
-    dest.type = Waypoint::TYPE_MOUNTAIN_PASS;
+    dest.type = Waypoint::Type::MOUNTAIN_PASS;
     break;
   case 7:
-    dest.type = Waypoint::TYPE_MOUNTAIN_TOP;
+    dest.type = Waypoint::Type::MOUNTAIN_TOP;
     break;
   case 8:
-    dest.type = Waypoint::TYPE_OBSTACLE;
+    dest.type = Waypoint::Type::OBSTACLE;
     break;
   case 11:
   case 16:
-    dest.type = Waypoint::TYPE_TOWER;
+    dest.type = Waypoint::Type::TOWER;
     break;
   case 13:
-    dest.type = Waypoint::TYPE_TUNNEL;
+    dest.type = Waypoint::Type::TUNNEL;
     break;
   case 14:
-    dest.type = Waypoint::TYPE_BRIDGE;
+    dest.type = Waypoint::Type::BRIDGE;
     break;
   case 15:
-    dest.type = Waypoint::TYPE_POWERPLANT;
+    dest.type = Waypoint::Type::POWERPLANT;
     break;
   }
 
