@@ -45,13 +45,11 @@ Copyright_License {
 #include "Task/TaskManager.hpp"
 #include "Task/MapTaskManager.hpp"
 #include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
-#include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Compiler.h"
 #include "Compatibility/path.h"
 #include "Input/InputEvents.hpp"
-#include "NMEA/Aircraft.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Units/Units.hpp"
 #include "Units/AngleFormatter.hpp"
@@ -532,16 +530,14 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
   GlidePolar glide_polar = settings_computer.glide_polar_task;
   const GlidePolar &safety_polar = calculated.glide_polar_safety;
 
-  UnorderedTaskPoint task_point(waypoint, settings_computer.task);
-
-  const AircraftState aircraft_state = ToAircraftState(basic, calculated);
-
   // alt reqd at current mc
   WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
   assert(wp != NULL);
 
   GlideResult r = TaskSolution::GlideSolutionRemaining(
-      task_point, aircraft_state, glide_polar);
+      basic.location, waypoint.location,
+      waypoint.altitude + settings_computer.task.safety_height_arrival,
+      basic.nav_altitude, calculated.wind, glide_polar);
 
   StaticString<64> buffer;
   buffer.Format(_T("%.0f %s"),
@@ -555,7 +551,9 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
 
   glide_polar.SetMC(fixed_zero);
   r = TaskSolution::GlideSolutionRemaining(
-      task_point, aircraft_state, glide_polar);
+      basic.location, waypoint.location,
+      waypoint.altitude + settings_computer.task.safety_height_arrival,
+      basic.nav_altitude, calculated.wind, glide_polar);
 
   buffer.Format(_T("%.0f %s"),
                 (double)Units::ToUserAltitude(r.altitude_difference),
@@ -567,7 +565,9 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
   assert(wp != NULL);
 
   r = TaskSolution::GlideSolutionRemaining(
-      task_point, aircraft_state, safety_polar);
+      basic.location, waypoint.location,
+      waypoint.altitude + settings_computer.task.safety_height_arrival,
+      basic.nav_altitude, calculated.wind, safety_polar);
 
   buffer.Format(_T("%.0f %s"),
                 (double)Units::ToUserAltitude(r.altitude_difference),
