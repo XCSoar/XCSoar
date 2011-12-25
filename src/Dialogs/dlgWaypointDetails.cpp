@@ -418,8 +418,10 @@ UpdateRadioFrequency(const RadioFrequency &radio_frequency)
   assert(wp != NULL);
 
   TCHAR buffer[64];
-  if (radio_frequency.Format(buffer, ARRAY_SIZE(buffer)) != NULL)
+  if (radio_frequency.Format(buffer, ARRAY_SIZE(buffer)) != NULL) {
+    _tcscat(buffer, _T(" MHz"));
     wp->SetText(buffer);
+  }
 }
 
 static void
