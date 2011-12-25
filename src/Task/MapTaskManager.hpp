@@ -23,9 +23,7 @@
 #ifndef MAPTASKMANAGER_H
 #define MAPTASKMANAGER_H
 
-#include "Waypoint/Waypoint.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
-#include "Task/TaskEvents.hpp"
+struct Waypoint;
 
 /**
  * Appends wp to current Ordered task and activates the ordered task if
