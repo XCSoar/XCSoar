@@ -420,6 +420,17 @@ UpdateLocation(const GeoPoint &location)
 }
 
 static void
+UpdateElevation(fixed elevation)
+{
+  WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpAltitude"));
+  assert(wp != NULL);
+
+  TCHAR buffer[64];
+  Units::FormatUserAltitude(elevation, buffer, ARRAY_SIZE(buffer));
+  wp->SetText(buffer);
+}
+
+static void
 UpdateRadioFrequency(const RadioFrequency &radio_frequency)
 {
   if (!radio_frequency.IsDefined())
@@ -484,12 +495,9 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   wp->SetText(waypoint->comment.c_str());
 
   UpdateLocation(waypoint->location);
+  UpdateElevation(waypoint->altitude);
   UpdateRadioFrequency(waypoint->radio_frequency);
   UpdateRunwayInformation(waypoint->runway);
-
-  Units::FormatUserAltitude(waypoint->altitude, sTmp, sizeof(sTmp)-1);
-  ((WndProperty *)wf->FindByName(_T("prpAltitude")))
-    ->SetText(sTmp);
 
   if (basic.connected) {
     SunEphemeris::Result sun = SunEphemeris::CalcSunTimes(
