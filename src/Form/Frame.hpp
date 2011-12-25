@@ -36,7 +36,7 @@ class WndFrame : public PaintWindow {
   Color caption_color;
 
   const Font *font;
-  StaticString<256> text;
+  StaticString<300> text;
 
 public:
   WndFrame(ContainerWindow &parent, const DialogLook &look,
