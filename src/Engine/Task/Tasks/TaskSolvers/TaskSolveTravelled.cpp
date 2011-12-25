@@ -52,9 +52,9 @@ TaskSolveTravelled::time_error()
 #else
   fixed d = fabs(res.time_elapsed-dt);
 #endif
-  if (res.validity!=GlideResult::RESULT_OK) {
+  if (res.validity != GlideResult::Validity::RESULT_OK)
     d += res.time_virtual;
-  }
+
   return d*inv_dt;
 }
 

@@ -37,7 +37,7 @@ GlideResult::GlideResult(const GlideState &task, const fixed V):
   altitude_difference(task.altitude_difference),
   effective_wind_speed(task.wind.norm),
   effective_wind_angle(task.effective_wind_angle),
-  validity(RESULT_NOSOLUTION)
+  validity(Validity::RESULT_NOSOLUTION)
 {
 }
 
@@ -65,7 +65,7 @@ GlideResult::CalcCruiseBearing()
 void
 GlideResult::Add(const GlideResult &s2) 
 {
-  if (s2.validity > validity)
+  if ((unsigned)s2.validity > (unsigned)validity)
     /* downgrade the validity */
     validity = s2.validity;
 
@@ -162,5 +162,5 @@ GlideResult::FinalGlideStartLocation(const GeoPoint &location) const
 void
 GlideResult::Reset()
 {
-  validity = RESULT_NOSOLUTION;
+  validity = Validity::RESULT_NOSOLUTION;
 }

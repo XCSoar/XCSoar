@@ -42,7 +42,7 @@ struct GlideResult {
    * Results of glide calculations.  Used to provide feedback if
    * fails due to insufficient MC value etc.
    */
-  enum GlideResultValidity {
+  enum class Validity : uint8_t {
     /** Solution is achievable */
     RESULT_OK = 0,
     /** Wind is too strong to allow progress */
@@ -117,7 +117,7 @@ struct GlideResult {
   Angle effective_wind_angle;
 
   /** Solution validity */
-  GlideResultValidity validity;
+  Validity validity;
 
   /** Construct an uninitialised object. */
   GlideResult() = default;
@@ -136,7 +136,7 @@ struct GlideResult {
   GlideResult(const GlideState &task, const fixed V);
 
   bool IsDefined() const {
-    return validity != RESULT_NOSOLUTION;
+    return validity != Validity::RESULT_NOSOLUTION;
   }
 
   /**
@@ -169,7 +169,7 @@ struct GlideResult {
   bool
   IsOk() const
   {
-    return (validity == RESULT_OK);
+    return validity == Validity::RESULT_OK;
   }
 
   /**

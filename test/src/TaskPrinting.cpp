@@ -339,7 +339,7 @@ std::ostream& operator<< (std::ostream& o,
 std::ostream& operator<< (std::ostream& f, 
                           const GlideResult& gl)
 {
-  if (gl.validity != GlideResult::RESULT_OK) {
+  if (gl.validity != GlideResult::Validity::RESULT_OK) {
     f << "#     Solution NOT OK\n";
   }
   f << "#    Altitude Difference " << gl.altitude_difference << " (m)\n";
