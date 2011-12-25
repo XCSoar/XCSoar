@@ -95,9 +95,9 @@ struct TaskBehaviour : public TaskStartMargins {
   bool optimise_targets_range;
   /** Option to enable positioning of AAT targets at optimal point on isoline */
   bool optimise_targets_bearing;
-  /** Option to enable calculation and setting of auto MacCready */
-  unsigned optimise_targets_margin;
   /** Seconds additional to min time to optimise for */
+  unsigned optimise_targets_margin;
+  /** Option to enable calculation and setting of auto MacCready */
   bool auto_mc;
 
   /** Enumeration of auto MC modes */
