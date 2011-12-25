@@ -34,15 +34,41 @@ struct BrokenDateTime;
  * Sun ephemeris model, used largely for calculations of sunset times
  */
 class SunEphemeris {
+  /**
+   * Get the days to J2000
+   * FNday only works between 1901 to 2099 - see Meeus chapter 7
+   * @param y Year
+   * @param m Month
+   * @param d Day
+   * @param h UT in decimal hours
+   * @return days to J2000
+   * @see http://www.sci.fi/~benefon/azimalt.cpp
+   */
   gcc_const
   static fixed FNday(const BrokenDateTime &date_time);
 
+  /**
+   * Calculating the hourangle
+   * @param lat Latitude
+   * @param declin Declination
+   * @return The hourangle
+   */
   gcc_const
   static Angle GetHourAngle(Angle lat, Angle declin);
 
+  /**
+   * Calculating the hourangle for twilight times
+   * @param lat Latitude
+   * @param declin Declination
+   * @return The hourangle for twilight times
+   */
   gcc_const
   static Angle GetHourAngleTwilight(Angle lat, Angle declin);
 
+  /**
+   * Find the ecliptic longitude of the Sun
+   * @return The ecliptic longitude of the Sun
+   */
   gcc_pure
   Angle GetEclipticLongitude(fixed d, Angle L);
 
@@ -54,6 +80,15 @@ class SunEphemeris {
   fixed TimeOfNoon, TimeOfSunSet, TimeOfSunRise;
   Angle Azimuth;
 
+  /**
+   * Calculates all sun-related important times
+   * depending on time of year and location
+   * @param Location Location to be used in calculation
+   * @param Basic NMEA_INFO for current date
+   * @param Calculated DERIVED_INFO (not yet used)
+   * @param TimeZone The timezone
+   * @return Sunset time
+   */
   void CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
                     fixed TimeZone);
 };

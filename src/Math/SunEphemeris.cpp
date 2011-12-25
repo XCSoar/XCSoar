@@ -35,16 +35,6 @@ Copyright_License {
 // Atmospheric refraction degrees
 #define AIR_REFRACTION fixed(34.0/60.0)
 
-/**
- * Get the days to J2000
- * FNday only works between 1901 to 2099 - see Meeus chapter 7
- * @param y Year
- * @param m Month
- * @param d Day
- * @param h UT in decimal hours
- * @return days to J2000
- * @see http://www.sci.fi/~benefon/azimalt.cpp
- */
 fixed
 SunEphemeris::FNday(const BrokenDateTime &date_time)
 {
@@ -57,13 +47,6 @@ SunEphemeris::FNday(const BrokenDateTime &date_time)
   return fixed(luku) - fixed(730531.5) + fixed(date_time.hour % 24) / 24;
 }
 
-/**
- * Calculating the hourangle
- * @param lat Latitude
- * @param declin Declination
- * @return The hourangle
- */
-// TODO TB: find explanations/links for this and following
 Angle
 SunEphemeris::GetHourAngle(Angle lat, Angle declin)
 {
@@ -79,12 +62,6 @@ SunEphemeris::GetHourAngle(Angle lat, Angle declin)
   return Angle::Radians(fo);
 }
 
-/**
- * Calculating the hourangle for twilight times
- * @param lat Latitude
- * @param declin Declination
- * @return The hourangle for twilight times
- */
 Angle
 SunEphemeris::GetHourAngleTwilight(Angle lat, Angle declin)
 {
@@ -100,10 +77,6 @@ SunEphemeris::GetHourAngleTwilight(Angle lat, Angle declin)
   return Angle::Radians(fi);
 }
 
-/**
- * Find the ecliptic longitude of the Sun
- * @return The ecliptic longitude of the Sun
- */
 Angle
 SunEphemeris::GetEclipticLongitude(fixed d, Angle L)
 {
@@ -144,15 +117,6 @@ CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
                                Location.latitude.sin() * dec.cos() * t.cos()));
 }
 
-/**
- * Calculates all sun-related important times
- * depending on time of year and location
- * @param Location Location to be used in calculation
- * @param Basic NMEA_INFO for current date
- * @param Calculated DERIVED_INFO (not yet used)
- * @param TimeZone The timezone
- * @return Sunset time
- */
 void
 SunEphemeris::CalcSunTimes(const GeoPoint &Location,
                            const BrokenDateTime &date_time,
