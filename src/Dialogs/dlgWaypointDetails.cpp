@@ -409,6 +409,22 @@ ShowTaskCommands()
 }
 
 static void
+UpdateCaption(const TCHAR *waypoint_name)
+{
+  StaticString<256> buffer;
+  buffer.Format(_T("%s: '%s'"), _("Waypoint Info"), waypoint_name);
+  wf->SetCaption(buffer);
+}
+
+static void
+UpdateComment(const TCHAR *comment)
+{
+  WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpWpComment"));
+  assert(wp != NULL);
+  wp->SetText(comment);
+}
+
+static void
 UpdateLocation(const GeoPoint &location)
 {
   WndProperty *wp = (WndProperty *)wf->FindByName(_T("Location"));
@@ -525,11 +541,9 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   assert(wf != NULL);
 
   TCHAR sTmp[128];
-  _stprintf(sTmp, _T("%s: '%s'"), wf->GetCaption(), waypoint->name.c_str());
-  wf->SetCaption(sTmp);
 
-  WndProperty *wp = ((WndProperty *)wf->FindByName(_T("prpWpComment")));
-  wp->SetText(waypoint->comment.c_str());
+  UpdateCaption(waypoint->name.c_str());
+  UpdateComment(waypoint->comment.c_str());
 
   UpdateLocation(waypoint->location);
 
@@ -553,7 +567,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
     GlideResult r = TaskSolution::glide_solution_remaining(t, aircraft_state,
                                                            glide_polar);
     // alt reqd at current mc
-    wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
+    WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
     assert(wp != NULL);
     _stprintf(sTmp, _T("%.0f %s"),
               (double)Units::ToUserAltitude(r.altitude_difference),
