@@ -471,6 +471,24 @@ UpdateRunwayInformation(const Runway &runway)
   wp->SetText(buffer);
 }
 
+static void
+UpdateSunsetTime(const GeoPoint &location, const BrokenDateTime &date_time)
+{
+  WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpSunset"));
+  assert(wp != NULL);
+
+  SunEphemeris::Result sun = SunEphemeris::CalcSunTimes(
+      location, date_time, fixed(GetUTCOffset()) / 3600);
+
+  int sunset_hour = (int)sun.time_of_sunset;
+  int sunset_minute = (int)((sun.time_of_sunset - fixed(sunset_hour)) * 60);
+
+  StaticString<64> buffer;
+  buffer.Format(_T("%02d:%02d"), sunset_hour, sunset_minute);
+
+  wp->SetText(buffer);
+}
+
 void 
 dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
                             bool allow_navigation)
@@ -499,17 +517,8 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   UpdateRadioFrequency(waypoint->radio_frequency);
   UpdateRunwayInformation(waypoint->runway);
 
-  if (basic.connected) {
-    SunEphemeris::Result sun = SunEphemeris::CalcSunTimes(
-        waypoint->location, basic.date_time_utc,
-        fixed(GetUTCOffset()) / 3600);
-
-    int sunsethours = (int)sun.time_of_sunset;
-    int sunsetmins = (int)((sun.time_of_sunset - fixed(sunsethours)) * 60);
-
-    _stprintf(sTmp, _T("%02d:%02d"), sunsethours, sunsetmins);
-    ((WndProperty *)wf->FindByName(_T("prpSunset")))->SetText(sTmp);
-  }
+  if (basic.connected)
+    UpdateSunsetTime(waypoint->location, basic.date_time_utc);
 
   if (basic.location_available) {
     GeoVector gv = basic.location.DistanceBearing(waypoint->location);
