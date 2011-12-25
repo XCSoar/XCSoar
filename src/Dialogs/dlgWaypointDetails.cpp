@@ -420,6 +420,25 @@ UpdateLocation(const GeoPoint &location)
 }
 
 static void
+UpdateDistanceBearing(const GeoPoint &own_location,
+                      const GeoPoint &waypoint_location)
+{
+  WndProperty *wp = (WndProperty *)wf->FindByName(_T("BearingDistance"));
+  assert(wp != NULL);
+
+  GeoVector vector = own_location.DistanceBearing(waypoint_location);
+
+  TCHAR distance_buffer[32];
+  Units::FormatUserDistance(vector.distance, distance_buffer,
+                            ARRAY_SIZE(distance_buffer));
+
+  TCHAR buffer[64];
+  FormatBearing(buffer, ARRAY_SIZE(buffer), vector.bearing, distance_buffer);
+
+  wp->SetText(buffer);
+}
+
+static void
 UpdateElevation(fixed elevation)
 {
   WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpAltitude"));
@@ -513,22 +532,16 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   wp->SetText(waypoint->comment.c_str());
 
   UpdateLocation(waypoint->location);
+
+  if (basic.location_available)
+    UpdateDistanceBearing(basic.location, waypoint->location);
+
   UpdateElevation(waypoint->altitude);
   UpdateRadioFrequency(waypoint->radio_frequency);
   UpdateRunwayInformation(waypoint->runway);
 
   if (basic.connected)
     UpdateSunsetTime(waypoint->location, basic.date_time_utc);
-
-  if (basic.location_available) {
-    GeoVector gv = basic.location.DistanceBearing(waypoint->location);
-
-    TCHAR DistanceText[MAX_PATH];
-    Units::FormatUserDistance(gv.distance, DistanceText, 10);
-
-    FormatBearing(sTmp, ARRAY_SIZE(sTmp), gv.bearing, DistanceText);
-    ((WndProperty *)wf->FindByName(_T("BearingDistance")))->SetText(sTmp);
-  }
 
   if (protected_task_manager != NULL) {
     GlidePolar glide_polar = settings_computer.glide_polar_task;
