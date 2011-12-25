@@ -71,10 +71,10 @@ class SunEphemeris
    * @return The ecliptic longitude of the Sun
    */
   gcc_pure
-  Angle GetEclipticLongitude(fixed d, Angle l);
+  static Angle GetEclipticLongitude(fixed d, Angle l);
 
   gcc_pure
-  Angle GetMeanSunLongitude(fixed d);
+  static Angle GetMeanSunLongitude(fixed d);
 
 public:
   fixed day_length, morning_twilight, evening_twilight;
