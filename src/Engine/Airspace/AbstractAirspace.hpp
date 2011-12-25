@@ -50,12 +50,12 @@ typedef std::vector< std::pair<GeoPoint,GeoPoint> > AirspaceIntersectionVector;
 /** Abstract base class for airspace regions */
 class AbstractAirspace {
 public:
-  enum Shape {
+  enum class Shape: uint8_t {
     CIRCLE,
     POLYGON,
   };
 
-  const TinyEnum<Shape> shape;
+  const Shape shape;
 
 protected:
   /** Airspace class */

@@ -27,11 +27,11 @@ void
 AirspaceVisitor::Visit(const AbstractAirspace &aa)
 {
   switch (aa.shape) {
-  case AbstractAirspace::CIRCLE:
+  case AbstractAirspace::Shape::CIRCLE:
     Visit((const AirspaceCircle &)aa);
     break;
 
-  case AbstractAirspace::POLYGON:
+  case AbstractAirspace::Shape::POLYGON:
     Visit((const AirspacePolygon &)aa);
     break;
   }

@@ -74,11 +74,11 @@ std::ostream& operator<< (std::ostream& f,
                           const AbstractAirspace& as)
 {
   switch (as.shape) {
-  case AbstractAirspace::CIRCLE:
+  case AbstractAirspace::Shape::CIRCLE:
     f << (const AirspaceCircle &)as;
     break;
 
-  case AbstractAirspace::POLYGON:
+  case AbstractAirspace::Shape::POLYGON:
     f << (const AirspacePolygon &)as;
     break;
   }

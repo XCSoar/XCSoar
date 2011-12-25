@@ -29,7 +29,7 @@
 #include "AirspaceIntersectSort.hpp"
 
 AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const fixed _radius)
-  :AbstractAirspace(CIRCLE), m_center(loc), m_radius(_radius)
+  :AbstractAirspace(Shape::CIRCLE), m_center(loc), m_radius(_radius)
 {
   m_is_convex = true;
 
