@@ -22,31 +22,61 @@ Copyright_License {
 */
 
 #include "AirspaceConfigPanel.hpp"
-#include "DataField/Base.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
-#include "DataField/ComboList.hpp"
 #include "Form/Button.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
-#include "Form/Frame.hpp"
-#include "Form/Form.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Dialogs/Airspace.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Language/Language.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
-#include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Interface.hpp"
+#include "UIGlobals.hpp"
 
-class AirspaceConfigPanel : public XMLWidget {
+enum ControlIndex {
+  AirspaceDisplay,
+  ClipAltitude,
+  AltWarningMargin,
+  AirspaceWarnings,
+  WarningTime,
+  AcknowledgeTime,
+  UseBlackOutline,
+  AirspaceFillMode,
+  AirspaceTransparency
+};
+
+static const StaticEnumChoice  as_display_list[] = {
+  { ALLON, N_("All on"),
+    N_("All airspaces are displayed.") },
+  { CLIP, N_("Clip"),
+    N_("Display airspaces below the clip altitude.") },
+  { AUTO, N_("Auto"),
+    N_("Display airspaces within a margin of the glider.") },
+  { ALLBELOW, N_("All below"),
+    N_("Display airspaces below the glider or within a margin.") },
+  { 0 }
+};
+
+static const StaticEnumChoice  as_fill_mode_list[] = {
+  { AirspaceRendererSettings::AS_FILL_DEFAULT, N_("Default"),
+    N_("") },
+  { AirspaceRendererSettings::AS_FILL_ALL, N_("Fill all"),
+    N_("") },
+  { AirspaceRendererSettings::AS_FILL_PADDING, N_("Fill padding"),
+    N_("") },
+  { 0 }
+};
+
+class AirspaceConfigPanel : public RowFormWidget {
 public:
+  AirspaceConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
   void ShowDisplayControls(AirspaceDisplayMode_t mode);
   void ShowWarningControls(bool visible);
 };
@@ -55,18 +85,6 @@ public:
 /** XXX this hack is needed because the form callbacks don't get a
     context pointer - please refactor! */
 static AirspaceConfigPanel *instance;
-
-void
-AirspaceConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
-
-void
-AirspaceConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
 
 static void
 OnAirspaceColoursClicked(gcc_unused WndButton &button)
@@ -83,16 +101,15 @@ OnAirspaceModeClicked(gcc_unused WndButton &button)
 void
 AirspaceConfigPanel::ShowDisplayControls(AirspaceDisplayMode_t mode)
 {
-  ShowFormControl(form, _T("prpClipAltitude"), mode == CLIP);
-  ShowFormControl(form, _T("prpAltWarningMargin"),
-                            mode == AUTO || mode == ALLBELOW);
+  GetControl(ClipAltitude).set_visible(mode == CLIP);
+  GetControl(AltWarningMargin).set_visible(mode == AUTO || mode == ALLBELOW);
 }
 
 void
 AirspaceConfigPanel::ShowWarningControls(bool visible)
 {
-  ShowFormControl(form, _T("prpWarningTime"), visible);
-  ShowFormControl(form, _T("prpAcknowledgementTime"), visible);
+  GetControl(WarningTime).set_visible(visible);
+  GetControl(AcknowledgeTime).set_visible(visible);
 }
 
 static void
@@ -112,7 +129,7 @@ OnAirspaceWarning(DataField *Sender,
   instance->ShowWarningControls(df.GetAsBoolean());
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = { // TODO remove it
   DeclareCallBackEntry(OnAirspaceColoursClicked),
   DeclareCallBackEntry(OnAirspaceModeClicked),
   DeclareCallBackEntry(OnAirspaceDisplay),
@@ -130,123 +147,93 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   instance = this;
 
-  LoadWindow(CallBackTable, parent,
-             Layout::landscape ? _T("IDR_XML_AIRSPACECONFIGPANEL") :
-                               _T("IDR_XML_AIRSPACECONFIGPANEL_L"));
+  RowFormWidget::Prepare(parent, rc);
 
-  WndProperty *wp;
+  AddEnum(_("Airspace display"),
+          _("Controls filtering of airspace for display and warnings.  The airspace filter button also allows filtering of display and warnings independently for each airspace class."),
+          as_display_list ,renderer.altitude_mode, OnAirspaceDisplay);
 
-  wp = (WndProperty*)form.FindByName(_T("prpAirspaceDisplay"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("All on"));
-    dfe->addEnumText(_("Clip"));
-    dfe->addEnumText(_("Auto"));
-    dfe->addEnumText(_("All below"));
-    dfe->Set(renderer.altitude_mode);
-    wp->RefreshDisplay();
-  }
+  AddFloat(_("Clip altitude"),
+           _("For clip airspace mode, this is the altitude below which airspace is displayed."),
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(20000), fixed(100), false, ugAltitude, fixed(renderer.clip_altitude));
 
-  LoadFormProperty(form, _T("prpClipAltitude"), ugAltitude,
-                   renderer.clip_altitude);
+  AddFloat(_("Margin"),
+           _("For auto and all below airspace mode, this is the altitude above/below which airspace is included."),
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(100), false, ugAltitude, fixed(computer.warnings.AltWarningMargin));
 
-  LoadFormProperty(form, _T("prpAltWarningMargin"), ugAltitude,
-                   computer.warnings.AltWarningMargin);
+  AddBoolean(_("Warnings"), _("Enable/disable all airspace warnings."), computer.enable_warnings, OnAirspaceWarning);
 
-  LoadFormProperty(form, _T("prpAirspaceWarnings"), computer.enable_warnings);
-  LoadFormProperty(form, _T("prpWarningTime"), computer.warnings.WarningTime);
-  LoadFormProperty(form, _T("prpAcknowledgementTime"),
-                   computer.warnings.AcknowledgementTime);
+  // TODO All below is for the Expert
+  AddInteger(_("Warning time"),
+             _("This is the time before an airspace incursion is estimated at which the system will warn the pilot."),
+             _T("%u s"), _T("%u"), 10, 1000, 5, computer.warnings.WarningTime);
 
-  LoadFormProperty(form, _T("prpAirspaceOutline"), renderer.black_outline);
+  AddInteger(_("Acknowledge time"),
+             _("This is the time period in which an acknowledged airspace warning will not be repeated."),
+             _T("%u s"), _T("%u"), 10, 1000, 5, computer.warnings.AcknowledgementTime);
 
-  wp = (WndProperty *)form.FindByName(_T("prpAirspaceFillMode"));
-  {
-    DataFieldEnum &dfe = *(DataFieldEnum *)wp->GetDataField();
-    dfe.addEnumText(_("Default"), AirspaceRendererSettings::AS_FILL_DEFAULT);
-    dfe.addEnumText(_("Fill all"), AirspaceRendererSettings::AS_FILL_ALL);
-    dfe.addEnumText(_("Fill padding"),
-                    AirspaceRendererSettings::AS_FILL_PADDING);
-    dfe.Set(renderer.fill_mode);
-    wp->RefreshDisplay();
-  }
+  AddBoolean(_("Use black outline"),
+             _("Draw a black outline around each airspace rather than the airspace color."),
+             renderer.black_outline);
+
+  AddEnum(_("Airspace fill mode"),
+          _("Specifies the mode for filling the airspace area."),
+          as_fill_mode_list, renderer.fill_mode);
 
 #if !defined(ENABLE_OPENGL) && defined(HAVE_ALPHA_BLEND)
   if (AlphaBlendAvailable())
-    LoadFormProperty(form, _T("prpAirspaceTransparency"),
-                     renderer.transparency);
+    AddBoolean(_("Airspace transparency"), _("If enabled, then airspaces are filled transparently."),
+               renderer.transparency);
   else
 #endif
-  {
-    wp = (WndProperty *)form.FindByName(_T("prpAirspaceTransparency"));
-    wp->hide();
-    form.RemoveExpert(wp);  // prevent unhiding with expert-switch
-  }
 
-  ShowDisplayControls(renderer.altitude_mode);
+  ShowDisplayControls(renderer.altitude_mode); // TODO make this work the first time
   ShowWarningControls(computer.enable_warnings);
 }
 
 
 bool
-AirspaceConfigPanel::Save(bool &_changed, bool &_require_restart)
+AirspaceConfigPanel::Save(bool &_changed, bool &require_restart)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
   AirspaceComputerSettings &computer =
     CommonInterface::SetComputerSettings().airspace;
   AirspaceRendererSettings &renderer =
     CommonInterface::SetMapSettings().airspace;
 
-  changed |= SaveFormPropertyEnum(form, _T("prpAirspaceDisplay"),
-                                  szProfileAltMode, renderer.altitude_mode);
+  changed |= SaveValueEnum(AirspaceDisplay, szProfileAltMode, renderer.altitude_mode);
 
-  changed |= SaveFormProperty(form, _T("prpClipAltitude"), ugAltitude,
-                              renderer.clip_altitude,
-                              szProfileClipAlt);
+  changed |= SaveValue(ClipAltitude, ugAltitude, szProfileClipAlt, renderer.clip_altitude);
 
-  changed |= SaveFormProperty(form, _T("prpAltWarningMargin"),
-                              ugAltitude, computer.warnings.AltWarningMargin,
-                              szProfileAltMargin);
+  changed |= SaveValue(AltWarningMargin, ugAltitude, szProfileAltMargin, computer.warnings.AltWarningMargin);
 
-  changed |= SaveFormProperty(form, _T("prpAirspaceWarnings"),
-                              szProfileAirspaceWarning,
-                              computer.enable_warnings);
+  changed |= SaveValue(AirspaceWarnings, szProfileAirspaceWarning, computer.enable_warnings);
 
-  if (SaveFormProperty(form, _T("prpWarningTime"),
-                       szProfileWarningTime,
-                       computer.warnings.WarningTime)) {
+  if (SaveValue(WarningTime, szProfileWarningTime, computer.warnings.WarningTime)) {
     changed = true;
     require_restart = true;
   }
 
-  if (SaveFormProperty(form, _T("prpAcknowledgementTime"),
-                       szProfileAcknowledgementTime,
-                       computer.warnings.AcknowledgementTime)) {
+  if (SaveValue(AcknowledgeTime, szProfileAcknowledgementTime,
+                computer.warnings.AcknowledgementTime)) {
     changed = true;
     require_restart = true;
   }
 
-  changed |= SaveFormProperty(form, _T("prpAirspaceOutline"),
-                              szProfileAirspaceBlackOutline,
-                              renderer.black_outline);
+  changed |= SaveValue(UseBlackOutline, szProfileAirspaceBlackOutline, renderer.black_outline);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpAirspaceFillMode"),
-                                  szProfileAirspaceFillMode,
-                                  renderer.fill_mode);
+  changed |= SaveValueEnum(AirspaceFillMode, szProfileAirspaceFillMode, renderer.fill_mode);
 
 #ifndef ENABLE_OPENGL
 #ifdef HAVE_ALPHA_BLEND
   if (AlphaBlendAvailable())
-    changed |= SaveFormProperty(form, _T("prpAirspaceTransparency"),
-                                szProfileAirspaceTransparency,
-                                renderer.transparency);
+    changed |= SaveValue(AirspaceTransparency, szProfileAirspaceTransparency,
+                         renderer.transparency);
 #endif
 #endif /* !OpenGL */
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }
@@ -256,4 +243,30 @@ Widget *
 CreateAirspaceConfigPanel()
 {
   return new AirspaceConfigPanel();
+}
+
+
+// TODO Find a solution for the two buttons on the AirspaceConfig Panel
+// and remove the code below
+
+#include "Form/XMLWidget.hpp"
+
+class AirspaceTmpButtonPanel : public XMLWidget {
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+};
+
+
+void
+AirspaceTmpButtonPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  LoadWindow(CallBackTable, parent,
+             Layout::landscape ? _T("IDR_XML_AIRSPACECONFIGPANEL") :
+                               _T("IDR_XML_AIRSPACECONFIGPANEL_L"));
+}
+
+Widget *
+CreateAirspaceTmpButtonPanel()
+{
+  return new AirspaceTmpButtonPanel();
 }
