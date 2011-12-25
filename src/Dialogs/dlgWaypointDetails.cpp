@@ -422,6 +422,31 @@ UpdateRadioFrequency(const RadioFrequency &radio_frequency)
     wp->SetText(buffer);
 }
 
+static void
+UpdateRunwayInformation(const Runway &runway)
+{
+  WndProperty *wp = (WndProperty *)wf->FindByName(_T("Runway"));
+  assert(wp != NULL);
+
+  StaticString<64> buffer;
+  if (runway.IsDirectionDefined())
+    buffer.Format(_T("%02u"), runway.GetDirectionName());
+  else
+    buffer.clear();
+
+  if (runway.IsLengthDefined()) {
+    if (!buffer.empty())
+      buffer += _T("; ");
+
+    TCHAR length_buffer[16];
+    Units::FormatUserDistance(fixed(runway.GetLength()),
+                              length_buffer, ARRAY_SIZE(length_buffer));
+    buffer += length_buffer;
+  }
+
+  wp->SetText(buffer);
+}
+
 void 
 dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
                             bool allow_navigation)
@@ -446,18 +471,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   wp->SetText(waypoint->comment.c_str());
 
   UpdateRadioFrequency(waypoint->radio_frequency);
-
-  const Runway &runway = waypoint->runway;
-  if (runway.IsDirectionDefined()) {
-    _stprintf(sTmp, _T("%02u"), runway.GetDirectionName());
-    if (runway.IsLengthDefined()) {
-      _tcscat(sTmp, _T("; "));
-      Units::FormatUserDistance(fixed(runway.GetLength()),
-                                sTmp + _tcslen(sTmp), 128 - _tcslen(sTmp));
-    }
-
-    ((WndProperty *)wf->FindByName(_T("Runway")))->SetText(sTmp);
-  }
+  UpdateRunwayInformation(waypoint->runway);
 
   TCHAR *location = Units::FormatGeoPoint(waypoint->location,
                                           sTmp, 128);
