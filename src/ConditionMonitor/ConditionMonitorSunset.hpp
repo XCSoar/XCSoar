@@ -25,12 +25,9 @@ Copyright_License {
 #define XCSOAR_CONDITION_MONITOR_SUNSET_HPP
 
 #include "ConditionMonitor.hpp"
-#include "Math/SunEphemeris.hpp"
 
 class ConditionMonitorSunset: public ConditionMonitor
 {
-  SunEphemeris sun;
-
 public:
   ConditionMonitorSunset():ConditionMonitor(60 * 30, 60) {}
 

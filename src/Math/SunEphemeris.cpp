@@ -117,11 +117,13 @@ CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
                                Location.latitude.sin() * dec.cos() * t.cos()));
 }
 
-void
+SunEphemeris::Result
 SunEphemeris::CalcSunTimes(const GeoPoint &location,
                            const BrokenDateTime &date_time,
                            const fixed time_zone)
 {
+  Result result;
+
   assert(date_time.Plausible());
 
   fixed days_to_j2000 = FNday(date_time);
@@ -149,29 +151,31 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
   Angle hour_angle = GetHourAngle(location.latitude, delta);
   Angle hour_angle_twilight = GetHourAngleTwilight(location.latitude, delta);
 
-  azimuth = CalculateAzimuth(location, date_time, time_zone, delta);
+  result.azimuth = CalculateAzimuth(location, date_time, time_zone, delta);
 
   // length of twilight in hours
   fixed twilight_hours = (hour_angle_twilight - hour_angle).Hours();
 
   // Conversion of angle to hours and minutes
-  day_length = hour_angle.Hours() * fixed_two;
+  result.day_length = hour_angle.Hours() * fixed_two;
 
-  if (day_length < fixed(0.0001))
+  if (result.day_length < fixed(0.0001))
     // arctic winter
-    day_length = fixed_zero;
+    result.day_length = fixed_zero;
 
-  time_of_sunrise = fixed(12) - hour_angle.Hours() + time_zone
+  result.time_of_sunrise = fixed(12) - hour_angle.Hours() + time_zone
     - location.longitude.Degrees() / 15 + equation / 60;
 
-  if (time_of_sunrise > fixed(24))
-    time_of_sunrise -= fixed(24);
+  if (result.time_of_sunrise > fixed(24))
+    result.time_of_sunrise -= fixed(24);
 
-  time_of_sunset = time_of_sunrise + day_length;
-  time_of_noon = time_of_sunrise + hour_angle.Hours();
+  result.time_of_sunset = result.time_of_sunrise + result.day_length;
+  result.time_of_noon = result.time_of_sunrise + hour_angle.Hours();
 
   // morning twilight begin
-  morning_twilight = time_of_sunrise - twilight_hours;
+  result.morning_twilight = result.time_of_sunrise - twilight_hours;
   // evening twilight end
-  evening_twilight = time_of_sunset + twilight_hours;
+  result.evening_twilight = result.time_of_sunset + twilight_hours;
+
+  return result;
 }

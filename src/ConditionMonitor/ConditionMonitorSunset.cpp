@@ -28,6 +28,7 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "Language/Language.hpp"
 #include "Message.hpp"
+#include "Math/SunEphemeris.hpp"
 
 bool
 ConditionMonitorSunset::CheckCondition(const GlideComputer& cmp)
@@ -43,8 +44,10 @@ ConditionMonitorSunset::CheckCondition(const GlideComputer& cmp)
 
   /// @todo should be destination location
 
-  sun.CalcSunTimes(cmp.Basic().location, cmp.Basic().date_time_utc,
-                   fixed(GetUTCOffset()) / 3600);
+  SunEphemeris::Result sun = SunEphemeris::CalcSunTimes(
+      cmp.Basic().location, cmp.Basic().date_time_utc,
+      fixed(GetUTCOffset()) / 3600);
+
   fixed d1((res.time_elapsed + fixed(DetectCurrentTime(cmp.Basic()))) / 3600);
   fixed d0(DetectCurrentTime(cmp.Basic()) / 3600);
 

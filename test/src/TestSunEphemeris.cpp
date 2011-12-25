@@ -38,8 +38,8 @@ test_times()
   dt.minute = 21;
   dt.second = 12;
 
-  SunEphemeris sun;
-  sun.CalcSunTimes(location, dt, fixed_two);
+  SunEphemeris::Result sun =
+      SunEphemeris::CalcSunTimes(location, dt, fixed_two);
 
   ok1(between(sun.morning_twilight, 6.88, 6.9));
   ok1(between(sun.time_of_noon, 13.3, 13.4));
@@ -114,18 +114,23 @@ test_azimuth()
   dt.minute = 30;
   dt.second = 0;
 
-  SunEphemeris sun;
-  for(int hour = 0; hour < 24; hour++) {
+  for (unsigned hour = 0; hour < 24; hour++) {
     dt.hour = hour;
-    sun.CalcSunTimes(location, dt, fixed_zero);
+
+    SunEphemeris::Result sun =
+        SunEphemeris::CalcSunTimes(location, dt, fixed_zero);
+
     ok1(equals(sun.azimuth, test_data1[hour]));
   }
 
   location.latitude.Flip();
 
-  for(int hour = 0; hour < 24; hour++) {
+  for (unsigned hour = 0; hour < 24; hour++) {
     dt.hour = hour;
-    sun.CalcSunTimes(location, dt, fixed_two);
+
+    SunEphemeris::Result sun =
+        SunEphemeris::CalcSunTimes(location, dt, fixed_two);
+
     ok1(equals(sun.azimuth, test_data2[hour]));
   }
 }

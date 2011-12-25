@@ -707,9 +707,9 @@ GlideComputerAirData::ProcessSun()
 
   DerivedInfo &calculated = SetCalculated();
 
-  SunEphemeris sun;
-  sun.CalcSunTimes(Basic().location, Basic().date_time_utc,
-                   fixed(GetUTCOffset()) / 3600);
+  SunEphemeris::Result sun = SunEphemeris::CalcSunTimes(
+      Basic().location, Basic().date_time_utc, fixed(GetUTCOffset()) / 3600);
+
   calculated.sunset_time = fixed(sun.time_of_sunset);
   calculated.sun_azimuth = sun.azimuth;
 }

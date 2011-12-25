@@ -77,9 +77,11 @@ class SunEphemeris
   static Angle GetMeanSunLongitude(fixed d);
 
 public:
-  fixed day_length, morning_twilight, evening_twilight;
-  fixed time_of_noon, time_of_sunset, time_of_sunrise;
-  Angle azimuth;
+  struct Result {
+    fixed day_length, morning_twilight, evening_twilight;
+    fixed time_of_noon, time_of_sunset, time_of_sunrise;
+    Angle azimuth;
+  };
 
   /**
    * Calculates all sun-related important times
@@ -90,8 +92,8 @@ public:
    * @param TimeZone The timezone
    * @return Sunset time
    */
-  void CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
-                    fixed time_zone);
+  static Result CalcSunTimes(const GeoPoint &location,
+                             const BrokenDateTime &date_time, fixed time_zone);
 };
 
 #endif

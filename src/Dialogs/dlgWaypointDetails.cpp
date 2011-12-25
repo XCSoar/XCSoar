@@ -459,10 +459,9 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
     ->SetText(sTmp);
 
   if (basic.connected) {
-    SunEphemeris sun;
-    sun.CalcSunTimes(selected_waypoint->location,
-                     basic.date_time_utc,
-                     fixed(GetUTCOffset()) / 3600);
+    SunEphemeris::Result sun = SunEphemeris::CalcSunTimes(
+        selected_waypoint->location, basic.date_time_utc,
+        fixed(GetUTCOffset()) / 3600);
 
     int sunsethours = (int)sun.time_of_sunset;
     int sunsetmins = (int)((sun.time_of_sunset - fixed(sunsethours)) * 60);
