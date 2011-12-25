@@ -288,8 +288,6 @@ IDR_XML_AIRSPACECONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Config
 IDR_XML_AIRSPACECONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/AirspaceConfigPanel_L.xml.gz"
 IDR_XML_DEVICESCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/DevicesConfigPanel.xml.gz"
 IDR_XML_DEVICESCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/DevicesConfigPanel_L.xml.gz"
-IDR_XML_EXPERIMENTALCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/ExperimentalConfigPanel.xml.gz"
-IDR_XML_EXPERIMENTALCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/ExperimentalConfigPanel_L.xml.gz"
 IDR_XML_GAUGESCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/GaugesConfigPanel.xml.gz"
 IDR_XML_GAUGESCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/GaugesConfigPanel_L.xml.gz"
 IDR_XML_GLIDECOMPUTERCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/GlideComputerConfigPanel.xml.gz"

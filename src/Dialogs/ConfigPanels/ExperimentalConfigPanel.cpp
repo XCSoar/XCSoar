@@ -23,17 +23,41 @@ Copyright_License {
 
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
-#include "Form/XMLWidget.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "DataField/Enum.hpp"
 #include "Asset.hpp"
 #include "ExperimentalConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
 
-class ExperimentalConfigPanel : public XMLWidget {
+enum ControlIndex {
+  DeviceModelType
+};
+
+
+static const StaticEnumChoice  model_type_list[] = {
+  { MODELTYPE_PNA_PNA, N_("Generic"),
+    N_("") },
+  { MODELTYPE_PNA_HP31X, _T("HP31x"),
+    N_("") },
+  { MODELTYPE_PNA_MEDION_P5, _T("MedionP5"),
+    N_("") },
+  { MODELTYPE_PNA_MIO, _T("MIO"),
+    N_("") },
+  { MODELTYPE_PNA_NOKIA_500, _T("Nokia500"),
+    N_("") },
+  { MODELTYPE_PNA_PN6000, _T("PN6000"),
+  N_("") },
+  { 0 }
+};
+
+
+class ExperimentalConfigPanel : public RowFormWidget {
 public:
+  ExperimentalConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
 };
@@ -41,27 +65,12 @@ public:
 void
 ExperimentalConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent,
-             Layout::landscape ? _T("IDR_XML_EXPERIMENTALCONFIGPANEL_L") :
-                               _T("IDR_XML_EXPERIMENTALCONFIGPANEL"));
+  RowFormWidget::Prepare(parent, rc);
 
-  WndProperty *wp = (WndProperty*)form.FindByName(_T("prpAppInfoBoxModel"));
-  assert(wp != NULL);
-
-  if (!HasModelType()) {
-    wp->hide();
-  } else {
-    // VENTA-ADDON Model change config menu 11
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Generic"));
-    dfe->addEnumText(_T("HP31x"));
-    dfe->addEnumText(_T("MedionP5"));
-    dfe->addEnumText(_T("MIO"));
-    dfe->addEnumText(_T("Nokia500")); // VENTA3
-    dfe->addEnumText(_T("PN6000"));
-    dfe->Set((int)global_model_type);
-    wp->RefreshDisplay();
+  if (HasModelType()) {
+    AddEnum(_("Device model"),
+            _("Select your PNA model to make full use of its hardware capabilities. If it is not included, use Generic type."),
+            model_type_list, (unsigned int)global_model_type);
   }
 }
 
@@ -72,16 +81,9 @@ ExperimentalConfigPanel::Save(bool &_changed, bool &_require_restart)
 
 #ifdef HAVE_MODEL_TYPE
   // VENTA-ADDON MODEL CHANGE
-  WndProperty *wp;
-  wp = (WndProperty*)form.FindByName(_T("prpAppInfoBoxModel"));
-  if (wp) {
-    if (global_model_type != (ModelType)wp->GetDataField()->GetAsInteger()) {
-      global_model_type = (ModelType)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileAppInfoBoxModel,
-                    global_model_type);
-      changed = true;
-      require_restart = true;
-    }
+  changed |= SaveValueEnum(DeviceModelType, szProfileAppInfoBoxModel, global_model_type);
+  if (changed) {
+    require_restart = true;
   }
 #endif
 
