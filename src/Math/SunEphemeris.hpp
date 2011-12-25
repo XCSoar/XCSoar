@@ -33,6 +33,7 @@ struct BrokenDateTime;
 
 /**
  * Sun ephemeris model, used largely for calculations of sunset times
+ * @see http://www.sci.fi/~benefon/azimalt.cpp
  */
 namespace SunEphemeris
 {

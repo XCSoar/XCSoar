@@ -45,7 +45,6 @@ namespace SunEphemeris
    * @param d Day
    * @param h UT in decimal hours
    * @return days to J2000
-   * @see http://www.sci.fi/~benefon/azimalt.cpp
    */
   gcc_const
   fixed FNday(const BrokenDateTime &date_time);
