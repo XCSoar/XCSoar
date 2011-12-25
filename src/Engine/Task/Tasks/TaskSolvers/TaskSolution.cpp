@@ -28,6 +28,20 @@
 #include "Task/Tasks/BaseTask/TaskPoint.hpp"
 
 GlideResult 
+TaskSolution::GlideSolutionRemaining(const GeoPoint &location,
+                                     const GeoPoint &target,
+                                     const fixed target_elevation,
+                                     const fixed altitude,
+                                     const SpeedVector &wind,
+                                     const GlidePolar &polar)
+{
+  GlideState gs(location.DistanceBearing(target),
+                target_elevation, altitude, wind);
+
+  return MacCready::Solve(polar, gs);
+}
+
+GlideResult
 TaskSolution::GlideSolutionRemaining(const TaskPoint &taskpoint,
                                      const AircraftState &ac,
                                      const GlidePolar &polar,

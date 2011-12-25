@@ -29,6 +29,8 @@ struct GlideResult;
 struct AircraftState;
 class GlidePolar;
 class TaskPoint;
+struct GeoPoint;
+struct SpeedVector;
 
 /**
  * Utility class for calculating glide solutions for individual points and whole tasks
@@ -49,6 +51,13 @@ namespace TaskSolution
                                      const AircraftState &state,
                                      const GlidePolar &polar,
                                      const fixed min_h = fixed_zero);
+
+  GlideResult GlideSolutionRemaining(const GeoPoint &location,
+                                     const GeoPoint &target,
+                                     const fixed target_elevation,
+                                     const fixed altitude,
+                                     const SpeedVector &wind,
+                                     const GlidePolar &polar);
 
   /**
    * Compute optimal glide solution from aircraft to destination, with
