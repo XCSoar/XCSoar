@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_TRAFFIC_HPP
 #define XCSOAR_FLARM_TRAFFIC_HPP
 
-#include "Util/TinyEnum.hpp"
 #include "FlarmId.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "NMEA/Validity.hpp"
@@ -50,22 +49,22 @@ struct FlarmTraffic {
    * @see http://www.flarm.com/support/manual/FLARM_DataportManual_v4.06E.pdf
    * Page 8
    */
-  enum AircraftType {
-    acUnknown = 0,         //!< unknown
-    acGlider = 1,          //!< glider / motor-glider
-    acTowPlane = 2,        //!< tow / tug plane
-    acHelicopter = 3,      //!< helicopter / rotorcraft
-    acParachute = 4,       //!< parachute
-    acDropPlane = 5,       //!< drop plane for parachutes
-    acHangGlider = 6,      //!< hang-glider (hard)
-    acParaGlider = 7,      //!< para-glider (soft)
-    acPoweredAircraft = 8, //!< powered aircraft
-    acJetAircraft = 9,     //!< jet aircraft
-    acFlyingSaucer = 10,   //!< flying saucer (UFO)
-    acBalloon = 11,        //!< balloon
-    acAirship = 12,        //!< airship
-    acUAV = 13,            //!< unmanned aerial vehicle
-    acStaticObject = 15    //!< static object
+  enum class AircraftType: uint8_t {
+    UNKNOWN = 0,          //!< unknown
+    GLIDER = 1,           //!< glider / motor-glider
+    TOW_PLANE = 2,        //!< tow / tug plane
+    HELICOPTER = 3,       //!< helicopter / rotorcraft
+    PARACHUTE = 4,        //!< parachute
+    DROP_PLANE = 5,       //!< drop plane for parachutes
+    HANG_GLIDER = 6,      //!< hang-glider (hard)
+    PARA_GLIDER = 7,      //!< para-glider (soft)
+    POWERED_AIRCRAFT = 8, //!< powered aircraft
+    JET_AIRCRAFT = 9,     //!< jet aircraft
+    FLYING_SAUCER = 10,   //!< flying saucer (UFO)
+    BALLOON = 11,         //!< balloon
+    AIRSHIP = 12,         //!< airship
+    UAV = 13,             //!< unmanned aerial vehicle
+    STATIC_OBJECT = 15    //!< static object
   };
 
   /** Is the target in stealth mode */
@@ -134,7 +133,7 @@ struct FlarmTraffic {
   AlarmType alarm_level;
 
   /** Type of the aircraft */
-  TinyEnum<AircraftType> type;
+  AircraftType type;
 
   /** Average climb rate over 30s */
   fixed climb_rate_avg30s;
@@ -165,7 +164,9 @@ struct FlarmTraffic {
   }
 
   bool IsPowered() const {
-    return type != acGlider && type != acHangGlider && type != acParaGlider;
+    return type != AircraftType::GLIDER &&
+           type != AircraftType::HANG_GLIDER &&
+           type != AircraftType::PARA_GLIDER;
   }
 
   bool IsPassive() const {

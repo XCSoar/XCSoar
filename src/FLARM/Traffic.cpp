@@ -30,10 +30,11 @@ const TCHAR* acTypes[16] = { _T("Unknown"), _T("Glider"), _T("TowPlane"),
     _T("Unknown"), _T("StaticObject") };
 
 const TCHAR *
-FlarmTraffic::GetTypeString(AircraftType Type)
+FlarmTraffic::GetTypeString(AircraftType type)
 {
-  if (Type < 16)
-    return acTypes[Type];
+  unsigned index = (unsigned)type;
+  if (index < 16)
+    return acTypes[index];
 
   return NULL;
 }

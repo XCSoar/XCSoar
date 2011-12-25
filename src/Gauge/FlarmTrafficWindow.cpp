@@ -467,9 +467,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   if (side_display_type == 1 &&
       (!traffic.climb_rate_avg30s_available ||
        traffic.climb_rate_avg30s < fixed(0.5) ||
-       (traffic.type != FlarmTraffic::acGlider &&
-        traffic.type != FlarmTraffic::acHangGlider &&
-        traffic.type != FlarmTraffic::acParaGlider)))
+       traffic.IsPowered()))
       return;
 
   // Select font

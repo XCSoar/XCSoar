@@ -167,7 +167,7 @@ TestFLARM()
     ok1(traffic->speed_received);
     ok1(equals(traffic->climb_rate, 1.4));
     ok1(traffic->climb_rate_received);
-    ok1(traffic->type == FlarmTraffic::acTowPlane);
+    ok1(traffic->type == FlarmTraffic::AircraftType::TOW_PLANE);
     ok1(!traffic->stealth);
   } else {
     skip(16, 0, "traffic == NULL");
@@ -189,7 +189,7 @@ TestFLARM()
     ok1(!traffic->turn_rate_received);
     ok1(!traffic->speed_received);
     ok1(!traffic->climb_rate_received);
-    ok1(traffic->type == FlarmTraffic::acGlider);
+    ok1(traffic->type == FlarmTraffic::AircraftType::GLIDER);
     ok1(traffic->stealth);
   } else {
     skip(12, 0, "traffic == NULL");
