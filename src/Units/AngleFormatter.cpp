@@ -40,8 +40,7 @@ FormatBearing(TCHAR *buffer, size_t size, unsigned value_degrees,
 void
 FormatBearing(TCHAR *buffer, size_t size, Angle value, const TCHAR *suffix)
 {
-  return FormatBearing(buffer, size, uround(value.AsBearing().Degrees()),
-                       suffix);
+  FormatBearing(buffer, size, uround(value.AsBearing().Degrees()), suffix);
 }
 
 void
