@@ -38,11 +38,11 @@ Copyright_License {
 #include <tchar.h>
 
 struct FlarmTraffic {
-  enum AlarmType {
-    ALARM_NONE = 0,
-    ALARM_LOW = 1,
-    ALARM_IMPORTANT = 2,
-    ALARM_URGENT = 3,
+  enum class AlarmType: uint8_t {
+    NONE = 0,
+    LOW = 1,
+    IMPORTANT = 2,
+    URGENT = 3,
   };
 
   /**
@@ -131,7 +131,7 @@ struct FlarmTraffic {
   /** (if exists) Name of the FLARM target */
   StaticString<10> name;
 
-  TinyEnum<AlarmType> alarm_level;
+  AlarmType alarm_level;
 
   /** Type of the aircraft */
   TinyEnum<AircraftType> type;
@@ -144,7 +144,7 @@ struct FlarmTraffic {
   }
 
   bool HasAlarm() const {
-    return alarm_level != ALARM_NONE;
+    return alarm_level != AlarmType::NONE;
   }
 
   /**

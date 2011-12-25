@@ -41,7 +41,7 @@ FlarmState::FindMaximumAlert() const
 
     if (traffic.HasAlarm() &&
         (alert == NULL ||
-         (traffic.alarm_level > alert->alarm_level ||
+         ((unsigned)traffic.alarm_level > (unsigned)alert->alarm_level ||
           (traffic.alarm_level == alert->alarm_level &&
            /* if the levels match -> let the distance decide (smaller
               distance wins) */

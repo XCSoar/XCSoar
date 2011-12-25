@@ -178,14 +178,14 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
     return;
 
   switch (flarm.alarm_level) {
-  case 0:
+  case FlarmTraffic::AlarmType::NONE:
     bmp = &look.traffic_safe_icon;
     break;
-  case 1:
+  case FlarmTraffic::AlarmType::LOW:
     bmp = &look.traffic_warning_icon;
     break;
-  case 2:
-  case 3:
+  case FlarmTraffic::AlarmType::IMPORTANT:
+  case FlarmTraffic::AlarmType::URGENT:
     bmp = &look.traffic_alarm_icon;
     break;
   };

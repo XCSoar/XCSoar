@@ -140,7 +140,7 @@ TestFLARM()
   ok1(nmea_info.flarm.rx == 3);
   ok1(nmea_info.flarm.tx);
   ok1(nmea_info.flarm.gps == 1);
-  ok1(nmea_info.flarm.alarm_level == 0);
+  ok1(nmea_info.flarm.alarm_level == FlarmTraffic::AlarmType::NONE);
   ok1(nmea_info.flarm.GetActiveTrafficCount() == 0);
   ok1(!nmea_info.flarm.new_traffic);
 
@@ -155,7 +155,7 @@ TestFLARM()
   FlarmTraffic *traffic = nmea_info.flarm.FindTraffic(id);
   if (ok1(traffic != NULL)) {
     ok1(traffic->valid);
-    ok1(traffic->alarm_level == 0);
+    ok1(traffic->alarm_level == FlarmTraffic::AlarmType::NONE);
     ok1(equals(traffic->relative_north, 100));
     ok1(equals(traffic->relative_east, -150));
     ok1(equals(traffic->relative_altitude, 10));
@@ -181,7 +181,7 @@ TestFLARM()
   traffic = nmea_info.flarm.FindTraffic(id);
   if (ok1(traffic != NULL)) {
     ok1(traffic->valid);
-    ok1(traffic->alarm_level == 2);
+    ok1(traffic->alarm_level == FlarmTraffic::AlarmType::IMPORTANT);
     ok1(equals(traffic->relative_north, 20));
     ok1(equals(traffic->relative_east, 10));
     ok1(equals(traffic->relative_altitude, 24));

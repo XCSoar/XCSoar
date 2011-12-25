@@ -694,7 +694,7 @@ NMEAParser::PFLAU(NMEAInputLine &line, FlarmState &flarm, fixed time)
   flarm.gps = (FlarmState::GPSStatus)line.read(FlarmState::GPS_NONE);
   line.skip();
   flarm.alarm_level = (FlarmTraffic::AlarmType)
-    line.read(FlarmTraffic::ALARM_NONE);
+    line.read((int)FlarmTraffic::AlarmType::NONE);
 
   return true;
 }
@@ -708,7 +708,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEAInfo &info)
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   FlarmTraffic traffic;
   traffic.alarm_level = (FlarmTraffic::AlarmType)
-    line.read(FlarmTraffic::ALARM_NONE);
+    line.read((int)FlarmTraffic::AlarmType::NONE);
 
   fixed value;
   bool stealth = false;

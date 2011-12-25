@@ -49,14 +49,14 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
 
   // Select brush depending on AlarmLevel
   switch (traffic.alarm_level) {
-  case FlarmTraffic::ALARM_LOW:
+  case FlarmTraffic::AlarmType::LOW:
     canvas.Select(traffic_look.warning_brush);
     break;
-  case FlarmTraffic::ALARM_IMPORTANT:
-  case FlarmTraffic::ALARM_URGENT:
+  case FlarmTraffic::AlarmType::IMPORTANT:
+  case FlarmTraffic::AlarmType::URGENT:
     canvas.Select(traffic_look.alarm_brush);
     break;
-  case FlarmTraffic::ALARM_NONE:
+  case FlarmTraffic::AlarmType::NONE:
     canvas.Select(traffic_look.safe_brush);
     break;
   }

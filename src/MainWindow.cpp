@@ -748,7 +748,8 @@ MainWindow::UpdateTrafficGaugeVisibility()
     !InputEvents::IsFlavour(_T("Traffic"));
 
   if (traffic_visible && suppress_traffic_gauge) {
-    if (flarm.available && flarm.alarm_level > 0)
+    if (flarm.available &&
+        flarm.alarm_level != FlarmTraffic::AlarmType::NONE)
       suppress_traffic_gauge = false;
     else
       traffic_visible = false;

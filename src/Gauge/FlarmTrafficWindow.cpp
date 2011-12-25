@@ -273,22 +273,22 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Set the arrow color depending on alarm level
   switch (traffic.alarm_level) {
-  case FlarmTraffic::ALARM_LOW:
+  case FlarmTraffic::AlarmType::LOW:
     text_color = &look.default_color;
     target_pen = circle_pen = &look.warning_pen;
     target_brush = &look.warning_brush;
     arrow_brush = &look.default_brush;
     circles = 1;
     break;
-  case FlarmTraffic::ALARM_IMPORTANT:
-  case FlarmTraffic::ALARM_URGENT:
+  case FlarmTraffic::AlarmType::IMPORTANT:
+  case FlarmTraffic::AlarmType::URGENT:
     text_color = &look.default_color;
     target_pen = circle_pen = &look.alarm_pen;
     target_brush = &look.alarm_brush;
     arrow_brush = &look.default_brush;
     circles = 2;
     break;
-  case FlarmTraffic::ALARM_NONE:
+  case FlarmTraffic::AlarmType::NONE:
     if (WarningMode()) {
       text_color = &look.passive_color;
       target_pen = &look.passive_pen;

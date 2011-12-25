@@ -60,7 +60,7 @@ struct FlarmState
   TinyEnum<GPSStatus> gps;
 
   /** Alarm level of FLARM (0-3) */
-  TinyEnum<FlarmTraffic::AlarmType> alarm_level;
+  FlarmTraffic::AlarmType alarm_level;
 
   /** Is FLARM information available? */
   Validity available;
