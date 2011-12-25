@@ -66,12 +66,7 @@ static WndForm *wf = NULL;
 static EditWindow *wDetails = NULL;
 static WndFrame *wInfo = NULL;
 static WndFrame *wCommand = NULL;
-static WndOwnerDrawFrame *wImage = NULL;
-static bool hasimage1 = false;
-static bool hasimage2 = false;
 static const Waypoint *selected_waypoint = NULL;
-
-static Bitmap jpgimage1, jpgimage2;
 
 static void
 NextPage(int Step)
@@ -103,22 +98,6 @@ NextPage(int Step)
       page_ok = true;
       break;
 
-    case 3:
-      if (!hasimage1)
-        page += Step;
-      else
-        page_ok = true;
-
-      break;
-
-    case 4:
-      if (!hasimage2)
-        page += Step;
-      else
-        page_ok = true;
-
-      break;
-
     default:
       page_ok = true;
       page = 0;
@@ -130,7 +109,6 @@ NextPage(int Step)
   wInfo->set_visible(page == 0);
   wDetails->set_visible(page == 1);
   wCommand->set_visible(page == 2);
-  wImage->set_visible(page >= 3);
 }
 
 static void
@@ -405,17 +383,6 @@ OnActivatePanClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
-static void
-OnImagePaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
-{
-  canvas.ClearWhite();
-  if (page == 3) {
-    canvas.copy(jpgimage1);
-  } else if (page == 4) {
-    canvas.copy(jpgimage2);
-  }
-}
-
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
     DeclareCallBackEntry(OnNextClicked),
     DeclareCallBackEntry(OnPrevClicked),
@@ -427,7 +394,6 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
     DeclareCallBackEntry(OnRemoveFromTaskClicked),
     DeclareCallBackEntry(OnNewHomeClicked),
     DeclareCallBackEntry(OnActivatePanClicked),
-    DeclareCallBackEntry(OnImagePaint),
     DeclareCallBackEntry(NULL)
 };
 
@@ -457,13 +423,6 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
                   Layout::landscape ? _T("IDR_XML_WAYPOINTDETAILS_L") :
                                       _T("IDR_XML_WAYPOINTDETAILS"));
   assert(wf != NULL);
-
-  TCHAR path[MAX_PATH], buffer[MAX_PATH];
-  const TCHAR *Directory = NULL;
-  if (Profile::GetPath(szProfileWaypointFile, path))
-    Directory = DirName(path, buffer);
-  if (Directory == NULL)
-    Directory = _T("");
 
   TCHAR sTmp[128];
   _stprintf(sTmp, _T("%s: '%s'"), wf->GetCaption(), selected_waypoint->name.c_str());
@@ -570,12 +529,10 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
 
   wInfo = ((WndFrame *)wf->FindByName(_T("frmInfos")));
   wCommand = ((WndFrame *)wf->FindByName(_T("frmCommands")));
-  wImage = ((WndOwnerDrawFrame *)wf->FindByName(_T("frmImage")));
   wDetails = (EditWindow*)wf->FindByName(_T("frmDetails"));
 
   assert(wInfo != NULL);
   assert(wCommand != NULL);
-  assert(wImage != NULL);
   assert(wDetails != NULL);
 
   wDetails->set_text(selected_waypoint->details.c_str());
@@ -596,14 +553,6 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
 
   ShowTaskCommands();
 
-  _stprintf(path, _T("%s" DIR_SEPARATOR_S "modis-%03d.jpg"),
-            Directory, selected_waypoint->original_id);
-  hasimage1 = jpgimage1.LoadFile(path);
-
-  _stprintf(path, _T("%s" DIR_SEPARATOR_S "google-%03d.jpg"),
-            Directory, selected_waypoint->original_id);
-  hasimage2 = jpgimage2.LoadFile(path);
-
   page = 0;
 
   NextPage(0); // JMW just to turn proper pages on/off
@@ -611,7 +560,4 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   wf->ShowModal();
 
   delete wf;
-
-  jpgimage1.Reset();
-  jpgimage2.Reset();
 }

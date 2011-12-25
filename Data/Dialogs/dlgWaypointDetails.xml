@@ -31,6 +31,4 @@
     <Button Name="cmdNewHome" Caption="Set As New Home" X="40" Width="-40" Height="30" OnClick="OnNewHomeClicked" />
     <Button Name="cmdActivatePan" Caption="Pan To Waypoint" X="40" Width="-40" Height="30" OnClick="OnActivatePanClicked" />
   </Panel>
-
-  <Canvas Name="frmImage" X="0" Y="0" Height="-32" Visible="0" Border="1" OnPaint="OnImagePaint"/>
 </Form>
