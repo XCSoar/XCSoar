@@ -48,7 +48,7 @@ ConditionMonitorSunset::CheckCondition(const GlideComputer& cmp)
   fixed d1((res.time_elapsed + fixed(DetectCurrentTime(cmp.Basic()))) / 3600);
   fixed d0(DetectCurrentTime(cmp.Basic()) / 3600);
 
-  bool past_sunset = (d1 > sun.TimeOfSunSet) && (d0 < sun.TimeOfSunSet);
+  bool past_sunset = (d1 > sun.time_of_sunset) && (d0 < sun.time_of_sunset);
   return past_sunset;
 }
 

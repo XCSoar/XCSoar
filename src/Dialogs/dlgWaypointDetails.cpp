@@ -464,8 +464,8 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
                      basic.date_time_utc,
                      fixed(GetUTCOffset()) / 3600);
 
-    int sunsethours = (int)sun.TimeOfSunSet;
-    int sunsetmins = (int)((sun.TimeOfSunSet - fixed(sunsethours)) * 60);
+    int sunsethours = (int)sun.time_of_sunset;
+    int sunsetmins = (int)((sun.time_of_sunset - fixed(sunsethours)) * 60);
 
     _stprintf(sTmp, _T("%02d:%02d"), sunsethours, sunsetmins);
     ((WndProperty *)wf->FindByName(_T("prpSunset")))->SetText(sTmp);

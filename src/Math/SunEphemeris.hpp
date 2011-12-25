@@ -33,7 +33,8 @@ struct BrokenDateTime;
 /**
  * Sun ephemeris model, used largely for calculations of sunset times
  */
-class SunEphemeris {
+class SunEphemeris
+{
   /**
    * Get the days to J2000
    * FNday only works between 1901 to 2099 - see Meeus chapter 7
@@ -70,15 +71,15 @@ class SunEphemeris {
    * @return The ecliptic longitude of the Sun
    */
   gcc_pure
-  Angle GetEclipticLongitude(fixed d, Angle L);
+  Angle GetEclipticLongitude(fixed d, Angle l);
 
   gcc_pure
   Angle GetMeanSunLongitude(fixed d);
 
- public:
-  fixed DayLength, MorningTwilight, EveningTwilight;
-  fixed TimeOfNoon, TimeOfSunSet, TimeOfSunRise;
-  Angle Azimuth;
+public:
+  fixed day_length, morning_twilight, evening_twilight;
+  fixed time_of_noon, time_of_sunset, time_of_sunrise;
+  Angle azimuth;
 
   /**
    * Calculates all sun-related important times
@@ -90,7 +91,7 @@ class SunEphemeris {
    * @return Sunset time
    */
   void CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
-                    fixed TimeZone);
+                    fixed time_zone);
 };
 
 #endif

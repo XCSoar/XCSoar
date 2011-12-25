@@ -710,6 +710,6 @@ GlideComputerAirData::ProcessSun()
   SunEphemeris sun;
   sun.CalcSunTimes(Basic().location, Basic().date_time_utc,
                    fixed(GetUTCOffset()) / 3600);
-  calculated.sunset_time = fixed(sun.TimeOfSunSet);
-  calculated.sun_azimuth = sun.Azimuth;
+  calculated.sunset_time = fixed(sun.time_of_sunset);
+  calculated.sun_azimuth = sun.azimuth;
 }

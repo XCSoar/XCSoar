@@ -41,11 +41,11 @@ test_times()
   SunEphemeris sun;
   sun.CalcSunTimes(location, dt, fixed_two);
 
-  ok1(between(sun.MorningTwilight, 6.88, 6.9));
-  ok1(between(sun.TimeOfNoon, 13.3, 13.4));
-  ok1(between(sun.TimeOfSunSet, 19.36, 19.40));
-  ok1(between(sun.TimeOfSunRise, 7.32, 7.41));
-  ok1(between(sun.EveningTwilight, 19.81, 19.82));
+  ok1(between(sun.morning_twilight, 6.88, 6.9));
+  ok1(between(sun.time_of_noon, 13.3, 13.4));
+  ok1(between(sun.time_of_sunset, 19.36, 19.40));
+  ok1(between(sun.time_of_sunrise, 7.32, 7.41));
+  ok1(between(sun.evening_twilight, 19.81, 19.82));
 }
 
 static void
@@ -118,7 +118,7 @@ test_azimuth()
   for(int hour = 0; hour < 24; hour++) {
     dt.hour = hour;
     sun.CalcSunTimes(location, dt, fixed_zero);
-    ok1(equals(sun.Azimuth, test_data1[hour]));
+    ok1(equals(sun.azimuth, test_data1[hour]));
   }
 
   location.latitude.Flip();
@@ -126,7 +126,7 @@ test_azimuth()
   for(int hour = 0; hour < 24; hour++) {
     dt.hour = hour;
     sun.CalcSunTimes(location, dt, fixed_two);
-    ok1(equals(sun.Azimuth, test_data2[hour]));
+    ok1(equals(sun.azimuth, test_data2[hour]));
   }
 }
 
