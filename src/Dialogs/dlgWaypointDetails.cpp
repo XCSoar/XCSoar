@@ -409,6 +409,17 @@ ShowTaskCommands()
 }
 
 static void
+UpdateLocation(const GeoPoint &location)
+{
+  WndProperty *wp = (WndProperty *)wf->FindByName(_T("Location"));
+  assert(wp != NULL);
+
+  TCHAR buffer[64];
+  if (Units::FormatGeoPoint(location, buffer, ARRAY_SIZE(buffer)) != NULL)
+    wp->SetText(buffer);
+}
+
+static void
 UpdateRadioFrequency(const RadioFrequency &radio_frequency)
 {
   if (!radio_frequency.IsDefined())
@@ -472,13 +483,9 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   WndProperty *wp = ((WndProperty *)wf->FindByName(_T("prpWpComment")));
   wp->SetText(waypoint->comment.c_str());
 
+  UpdateLocation(waypoint->location);
   UpdateRadioFrequency(waypoint->radio_frequency);
   UpdateRunwayInformation(waypoint->runway);
-
-  TCHAR *location = Units::FormatGeoPoint(waypoint->location,
-                                          sTmp, 128);
-  if (location != NULL)
-    ((WndProperty *)wf->FindByName(_T("Location")))->SetText(location);
 
   Units::FormatUserAltitude(waypoint->altitude, sTmp, sizeof(sTmp)-1);
   ((WndProperty *)wf->FindByName(_T("prpAltitude")))
