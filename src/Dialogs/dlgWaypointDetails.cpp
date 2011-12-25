@@ -63,7 +63,7 @@ Copyright_License {
 
 static int page = 0;
 static WndForm *wf = NULL;
-static WndProperty *wDetails = NULL;
+static EditWindow *wDetails = NULL;
 static WndFrame *wInfo = NULL;
 static WndFrame *wCommand = NULL;
 static WndOwnerDrawFrame *wImage = NULL;
@@ -571,14 +571,14 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   wInfo = ((WndFrame *)wf->FindByName(_T("frmInfos")));
   wCommand = ((WndFrame *)wf->FindByName(_T("frmCommands")));
   wImage = ((WndOwnerDrawFrame *)wf->FindByName(_T("frmImage")));
-  wDetails = (WndProperty*)wf->FindByName(_T("frmDetails"));
+  wDetails = (EditWindow*)wf->FindByName(_T("frmDetails"));
 
   assert(wInfo != NULL);
   assert(wCommand != NULL);
   assert(wImage != NULL);
   assert(wDetails != NULL);
 
-  wDetails->SetText(selected_waypoint->details.c_str());
+  wDetails->set_text(selected_waypoint->details.c_str());
   wCommand->hide();
 
   if (!allow_navigation) {
