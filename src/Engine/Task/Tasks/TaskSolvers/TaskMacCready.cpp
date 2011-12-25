@@ -115,5 +115,5 @@ TaskMacCready::tp_sink(const unsigned i,
                        const AircraftState &aircraft, 
                        const fixed S) const
 {
-  return TaskSolution::glide_solution_sink(*m_tps[i], aircraft, m_glide_polar, S);
+  return TaskSolution::GlideSolutionSink(*m_tps[i], aircraft, m_glide_polar, S);
 }

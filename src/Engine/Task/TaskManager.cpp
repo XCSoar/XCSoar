@@ -194,7 +194,7 @@ TaskManager::UpdateCommonStatsWaypoints(const AircraftState &state)
     const UnorderedTaskPoint fp(tp->GetWaypoint(), task_behaviour);
     // @todo: consider change to task_abort.get_safety_polar();
     common_stats.next_solution =
-      TaskSolution::glide_solution_remaining(fp, state, GetGlidePolar());
+      TaskSolution::GlideSolutionRemaining(fp, state, GetGlidePolar());
   } else
     common_stats.next_solution.Reset();
 }

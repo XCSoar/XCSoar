@@ -540,7 +540,7 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
   WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
   assert(wp != NULL);
 
-  GlideResult r = TaskSolution::glide_solution_remaining(
+  GlideResult r = TaskSolution::GlideSolutionRemaining(
       task_point, aircraft_state, glide_polar);
 
   StaticString<64> buffer;
@@ -554,7 +554,7 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
   assert(wp != NULL);
 
   glide_polar.SetMC(fixed_zero);
-  r = TaskSolution::glide_solution_remaining(
+  r = TaskSolution::GlideSolutionRemaining(
       task_point, aircraft_state, glide_polar);
 
   buffer.Format(_T("%.0f %s"),
@@ -566,7 +566,7 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
   wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
   assert(wp != NULL);
 
-  r = TaskSolution::glide_solution_remaining(
+  r = TaskSolution::GlideSolutionRemaining(
       task_point, aircraft_state, safety_polar);
 
   buffer.Format(_T("%.0f %s"),

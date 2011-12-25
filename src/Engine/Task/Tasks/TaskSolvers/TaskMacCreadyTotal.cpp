@@ -35,7 +35,7 @@ TaskMacCreadyTotal::tp_solution(const unsigned i,
                                 const AircraftState &aircraft, 
                                 fixed minH) const
 {
-  return TaskSolution::glide_solution_planned(*m_tps[i],aircraft, m_glide_polar, minH);
+  return TaskSolution::GlideSolutionPlanned(*m_tps[i],aircraft, m_glide_polar, minH);
 }
 
 const AircraftState &
