@@ -35,6 +35,50 @@ Copyright_License {
 // Atmospheric refraction degrees
 #define AIR_REFRACTION fixed(34.0/60.0)
 
+namespace SunEphemeris
+{
+  /**
+   * Get the days to J2000
+   * FNday only works between 1901 to 2099 - see Meeus chapter 7
+   * @param y Year
+   * @param m Month
+   * @param d Day
+   * @param h UT in decimal hours
+   * @return days to J2000
+   * @see http://www.sci.fi/~benefon/azimalt.cpp
+   */
+  gcc_const
+  fixed FNday(const BrokenDateTime &date_time);
+
+  /**
+   * Calculating the hourangle
+   * @param lat Latitude
+   * @param declin Declination
+   * @return The hourangle
+   */
+  gcc_const
+  Angle GetHourAngle(Angle lat, Angle declin);
+
+  /**
+   * Calculating the hourangle for twilight times
+   * @param lat Latitude
+   * @param declin Declination
+   * @return The hourangle for twilight times
+   */
+  gcc_const
+  Angle GetHourAngleTwilight(Angle lat, Angle declin);
+
+  /**
+   * Find the ecliptic longitude of the Sun
+   * @return The ecliptic longitude of the Sun
+   */
+  gcc_pure
+  Angle GetEclipticLongitude(fixed d, Angle l);
+
+  gcc_pure
+  Angle GetMeanSunLongitude(fixed d);
+}
+
 fixed
 SunEphemeris::FNday(const BrokenDateTime &date_time)
 {

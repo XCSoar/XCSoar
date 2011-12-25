@@ -20,6 +20,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #ifndef SUN_EPHEMERIS_HPP
 #define SUN_EPHEMERIS_HPP
 
@@ -33,50 +34,8 @@ struct BrokenDateTime;
 /**
  * Sun ephemeris model, used largely for calculations of sunset times
  */
-class SunEphemeris
+namespace SunEphemeris
 {
-  /**
-   * Get the days to J2000
-   * FNday only works between 1901 to 2099 - see Meeus chapter 7
-   * @param y Year
-   * @param m Month
-   * @param d Day
-   * @param h UT in decimal hours
-   * @return days to J2000
-   * @see http://www.sci.fi/~benefon/azimalt.cpp
-   */
-  gcc_const
-  static fixed FNday(const BrokenDateTime &date_time);
-
-  /**
-   * Calculating the hourangle
-   * @param lat Latitude
-   * @param declin Declination
-   * @return The hourangle
-   */
-  gcc_const
-  static Angle GetHourAngle(Angle lat, Angle declin);
-
-  /**
-   * Calculating the hourangle for twilight times
-   * @param lat Latitude
-   * @param declin Declination
-   * @return The hourangle for twilight times
-   */
-  gcc_const
-  static Angle GetHourAngleTwilight(Angle lat, Angle declin);
-
-  /**
-   * Find the ecliptic longitude of the Sun
-   * @return The ecliptic longitude of the Sun
-   */
-  gcc_pure
-  static Angle GetEclipticLongitude(fixed d, Angle l);
-
-  gcc_pure
-  static Angle GetMeanSunLongitude(fixed d);
-
-public:
   struct Result {
     fixed day_length, morning_twilight, evening_twilight;
     fixed time_of_noon, time_of_sunset, time_of_sunrise;
@@ -92,8 +51,8 @@ public:
    * @param TimeZone The timezone
    * @return Sunset time
    */
-  static Result CalcSunTimes(const GeoPoint &location,
-                             const BrokenDateTime &date_time, fixed time_zone);
-};
+  Result CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
+                      fixed time_zone);
+}
 
 #endif
