@@ -113,7 +113,6 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
   assert(list_control != NULL);
   list_control->SetItemHeight(item_height);
   list_control->SetLength(num_items);
-  list_control->SetCursorIndex(initial_value);
   list_control->SetActivateCallback(OnComboPopupListEnter);
   list_control->SetPaintItemCallback(paint_callback);
 
@@ -133,6 +132,8 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
   }
   else
     wItemHelp = NULL;
+
+  list_control->SetCursorIndex(initial_value);
 
   WndButton *help_button = (WndButton *)wf->FindByName(_T("cmdHelp"));
   assert(help_button != NULL);
