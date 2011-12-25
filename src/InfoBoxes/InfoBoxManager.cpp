@@ -508,7 +508,9 @@ InfoBoxManager::ShowInfoBoxPicker(const int id)
 
   ComboList list;
   for (unsigned j = InfoBoxFactory::MIN_TYPE_VAL; j < InfoBoxFactory::NUM_TYPES; j++)
-    list.Append(j, gettext(InfoBoxFactory::GetName((t_InfoBox) j)));
+    list.Append(j, gettext(InfoBoxFactory::GetName((t_InfoBox) j)),
+                gettext(InfoBoxFactory::GetName((t_InfoBox) j)),
+                InfoBoxFactory::GetDescription((t_InfoBox) j));
 
   list.Sort();
   list.ComboPopupItemSavedIndex = list.LookUp(old_type);
@@ -519,7 +521,7 @@ InfoBoxManager::ShowInfoBoxPicker(const int id)
   caption.Format(_T("%s: %d"), _("InfoBox"), i + 1);
   info_box_combo_list = &list;
   int result = ComboPicker(XCSoarInterface::main_window, caption, list,
-                           OnInfoBoxHelp);
+                           OnInfoBoxHelp, true);
   if (result < 0)
     return;
 
