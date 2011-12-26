@@ -44,7 +44,7 @@ public:
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+  virtual bool Save(bool &changed, bool &require_restart);
 };
 
 /** XXX this hack is needed because the form callbacks don't get a
@@ -112,9 +112,11 @@ WindSetupPanel::Show(const PixelRect &rc)
   XMLWidget::Show(rc);
 }
 
-void
-WindSetupPanel::Hide()
+bool
+WindSetupPanel::Save(bool &_changed, bool &_require_restart)
 {
+  bool changed = false, require_restart = false;
+
   const NMEAInfo &basic = XCSoarInterface::Basic();
   ComputerSettings &settings_computer =
     XCSoarInterface::SetComputerSettings();
@@ -122,15 +124,18 @@ WindSetupPanel::Hide()
     settings_computer.use_external_wind;
 
   if (!external_wind) {
-    SaveFormProperty(form, _T("prpAutoWind"), szProfileAutoWind,
+    changed = SaveFormProperty(form, _T("prpAutoWind"), szProfileAutoWind,
                      settings_computer.auto_wind_mode);
   }
 
-  SaveFormProperty(form, _T("prpTrailDrift"),
-                   XCSoarInterface::SetMapSettings().trail_drift_enabled);
+  changed |= SaveFormProperty(form, _T("prpTrailDrift"),
+                              XCSoarInterface::
+                              SetMapSettings().trail_drift_enabled);
   ActionInterface::SendMapSettings();
 
-  XMLWidget::Hide();
+  _changed |= changed;
+  _require_restart |= require_restart;
+  return true;
 }
 
 Widget *
