@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/Color.hpp"
 #include "Util/ListHead.hpp"
 #include "Util/Cache.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <unordered_map>
 #include <string>
@@ -100,7 +101,7 @@ struct TextCacheKey {
   gcc_pure
   bool operator==(const TextCacheKey &other) const {
     return font == other.font && height == other.height &&
-      strcmp(text, other.text) == 0;
+      StringIsEqual(text, other.text);
   }
 
   struct StringHash {
