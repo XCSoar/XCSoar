@@ -111,33 +111,33 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
 
   KeyValuePair pair;
   while (reader.Read(pair)) {
-    if (!has_registration && _tcscmp(pair.key, _T("Registration")) == 0) {
+    if (!has_registration && StringIsEqual(pair.key, _T("Registration"))) {
       plane.registration = pair.value;
       has_registration = true;
-    } else if (!has_competition_id && _tcscmp(pair.key, _T("CompetitionID")) == 0) {
+    } else if (!has_competition_id && StringIsEqual(pair.key, _T("CompetitionID"))) {
       plane.competition_id = pair.value;
       has_competition_id = true;
-    } else if (!has_type && _tcscmp(pair.key, _T("Type")) == 0) {
+    } else if (!has_type && StringIsEqual(pair.key, _T("Type"))) {
       plane.type = pair.value;
       has_type = true;
-    } else if (!has_handicap && _tcscmp(pair.key, _T("Handicap")) == 0) {
+    } else if (!has_handicap && StringIsEqual(pair.key, _T("Handicap"))) {
       has_handicap = ReadUnsigned(pair.value, plane.handicap);
-    } else if (!has_polar_name && _tcscmp(pair.key, _T("PolarName")) == 0) {
+    } else if (!has_polar_name && StringIsEqual(pair.key, _T("PolarName"))) {
       plane.polar_name = pair.value;
       has_polar_name = true;
-    } else if (!has_polar && _tcscmp(pair.key, _T("PolarInformation")) == 0) {
+    } else if (!has_polar && StringIsEqual(pair.key, _T("PolarInformation"))) {
       has_polar = ReadPolar(pair.value, plane);
-    } else if (!has_reference_mass && _tcscmp(pair.key, _T("PolarReferenceMass")) == 0) {
+    } else if (!has_reference_mass && StringIsEqual(pair.key, _T("PolarReferenceMass"))) {
       has_reference_mass = ReadFixed(pair.value, plane.reference_mass);
-    } else if (!has_dry_mass && _tcscmp(pair.key, _T("PolarDryMass")) == 0) {
+    } else if (!has_dry_mass && StringIsEqual(pair.key, _T("PolarDryMass"))) {
       has_dry_mass = ReadFixed(pair.value, plane.dry_mass);
-    } else if (!has_max_ballast && _tcscmp(pair.key, _T("MaxBallast")) == 0) {
+    } else if (!has_max_ballast && StringIsEqual(pair.key, _T("MaxBallast"))) {
       has_max_ballast = ReadFixed(pair.value, plane.max_ballast);
-    } else if (!has_dump_time && _tcscmp(pair.key, _T("DumpTime")) == 0) {
+    } else if (!has_dump_time && StringIsEqual(pair.key, _T("DumpTime"))) {
       has_dump_time = ReadUnsigned(pair.value, plane.dump_time);
-    } else if (!has_max_speed && _tcscmp(pair.key, _T("MaxSpeed")) == 0) {
+    } else if (!has_max_speed && StringIsEqual(pair.key, _T("MaxSpeed"))) {
       has_max_speed = ReadFixed(pair.value, plane.max_speed);
-    } else if (!has_wing_area && _tcscmp(pair.key, _T("WingArea")) == 0) {
+    } else if (!has_wing_area && StringIsEqual(pair.key, _T("WingArea"))) {
       has_wing_area = ReadFixed(pair.value, plane.wing_area);
     }
   }
