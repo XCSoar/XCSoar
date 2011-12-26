@@ -25,7 +25,7 @@ Copyright_License {
 #include "Look/VarioLook.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
-#include "Math/FastRotation.hpp"
+#include "Screen/FastPixelRotation.hpp"
 #include "LogFile.hpp"
 #include "Units/Units.hpp"
 
@@ -178,30 +178,31 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
   RenderZero(canvas);
 }
 
+gcc_const
+static RasterPoint
+TransformRotatedPoint(RasterPoint pt, PixelScalar xoffset, PixelScalar yoffset)
+{
+  return RasterPoint{ PixelScalar(pt.x + xoffset),
+      PixelScalar((pt.y * 112 / 100) + yoffset + 1) };
+}
+
 void
 GaugeVario::MakePolygon(const int i)
 {
   RasterPoint *bit = getPolygon(i);
   RasterPoint *bline = &lines[i + gmax];
 
-  const FastRotation r = FastRotation(Angle::Degrees(fixed(i)));
-  FastRotation::Pair p;
+  const FastPixelRotation r(Angle::Degrees(fixed(i)));
 
-  p = r.Rotate(fixed(-xoffset + nlength0), fixed(nwidth));
-  bit[0].x = (int)p.first + xoffset;
-  bit[0].y = (int)(p.second * 112 / 100) + yoffset + 1;
+  bit[0] = TransformRotatedPoint(r.Rotate(-xoffset + nlength0, nwidth),
+                                 xoffset, yoffset);
+  bit[1] = TransformRotatedPoint(r.Rotate(-xoffset + nlength1, 0),
+                                 xoffset, yoffset);
+  bit[2] = TransformRotatedPoint(r.Rotate(-xoffset + nlength0, -nwidth),
+                                 xoffset, yoffset);
 
-  p = r.Rotate(fixed(-xoffset + nlength0), fixed(-nwidth));
-  bit[2].x = (int)p.first + xoffset;
-  bit[2].y = (int)(p.second * 112 / 100) + yoffset + 1;
-
-  p = r.Rotate(fixed(-xoffset + nlength1), fixed_zero);
-  bit[1].x = (int)p.first + xoffset;
-  bit[1].y = (int)(p.second * 112 / 100) + yoffset + 1;
-
-  p = r.Rotate(fixed(-xoffset + nline), fixed_zero);
-  bline->x = (int)p.first + xoffset;
-  bline->y = (int)(p.second * 112 / 100) + yoffset + 1;
+  *bline = TransformRotatedPoint(r.Rotate(-xoffset + nline, 0),
+                                 xoffset, yoffset);
 }
 
 RasterPoint *
