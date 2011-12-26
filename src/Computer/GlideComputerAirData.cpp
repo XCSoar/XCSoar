@@ -552,11 +552,11 @@ GlideComputerAirData::Turning()
                             Calculated(), LastCalculated(),
                             GetComputerSettings());
 
-  if (LastCalculated().turn_mode == WAITCLIMB &&
-      Calculated().turn_mode == CLIMB)
+  if (LastCalculated().turn_mode == CirclingMode::POSSIBLE_CLIMB &&
+      Calculated().turn_mode == CirclingMode::CLIMB)
     OnSwitchClimbMode(true, Calculated().TurningLeft());
-  else if (LastCalculated().turn_mode == WAITCRUISE &&
-           Calculated().turn_mode == CRUISE)
+  else if (LastCalculated().turn_mode == CirclingMode::POSSIBLE_CRUISE &&
+           Calculated().turn_mode == CirclingMode::CRUISE)
     OnSwitchClimbMode(false, Calculated().TurningLeft());
 
   // Calculate circling time percentage and call thermal band calculation

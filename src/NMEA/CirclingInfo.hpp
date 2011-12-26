@@ -24,21 +24,20 @@ Copyright_License {
 #ifndef XCSOAR_CIRCLING_INFO_HPP
 #define XCSOAR_CIRCLING_INFO_HPP
 
-#include "Util/TinyEnum.hpp"
 #include "Util/TypeTraits.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Math/fixed.hpp"
 
 /** Enumeration for cruise/circling mode detection */
-enum CirclingMode {
+enum class CirclingMode: uint8_t {
   /** Established cruise mode */
   CRUISE = 0,
   /** In cruise, pending transition to climb */
-  WAITCLIMB,
+  POSSIBLE_CLIMB,
   /** Established climb mode */
   CLIMB,
   /** In climb, pending transition to cruise */
-  WAITCRUISE,
+  POSSIBLE_CRUISE,
 };
 
 /** Data for tracking of climb/cruise mode and transition points */
@@ -77,7 +76,7 @@ struct CirclingInfo
   fixed turn_start_energy_height;
 
   /** Current TurnMode (Cruise, Climb or somewhere between) */
-  TinyEnum<CirclingMode> turn_mode;
+  CirclingMode turn_mode;
 
   /**
    * True if the turn rate is above the threshold for circling.

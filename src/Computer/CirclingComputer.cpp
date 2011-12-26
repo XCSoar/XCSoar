@@ -105,7 +105,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   }
 
   switch (calculated.turn_mode) {
-  case CRUISE:
+  case CirclingMode::CRUISE:
     // If (in cruise mode and beginning of circling detected)
     if (circling_info.turning || forcecircling) {
       // Remember the start values of the turn
@@ -113,14 +113,14 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
       circling_info.turn_start_location = basic.location;
       circling_info.turn_start_altitude = basic.nav_altitude;
       circling_info.turn_start_energy_height = basic.energy_height;
-      circling_info.turn_mode = WAITCLIMB;
+      circling_info.turn_mode = CirclingMode::POSSIBLE_CLIMB;
     }
     if (!forcecircling)
       break;
 
-  case WAITCLIMB:
+  case CirclingMode::POSSIBLE_CLIMB:
     if (forcecruise) {
-      circling_info.turn_mode = CRUISE;
+      circling_info.turn_mode = CirclingMode::CRUISE;
       break;
     }
     if (circling_info.turning || forcecircling) {
@@ -130,7 +130,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
         circling_info.circling = true;
 
         // JMW Transition to climb
-        circling_info.turn_mode = CLIMB;
+        circling_info.turn_mode = CirclingMode::CLIMB;
 
         // Remember the start values of the climbing period
         circling_info.climb_start_location = circling_info.turn_start_location;
@@ -140,11 +140,11 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
       }
     } else {
       // nope, not turning, so go back to cruise
-      circling_info.turn_mode = CRUISE;
+      circling_info.turn_mode = CirclingMode::CRUISE;
     }
     break;
 
-  case CLIMB:
+  case CirclingMode::CLIMB:
     if (!circling_info.turning || forcecruise) {
       // Remember the end values of the turn
       circling_info.turn_start_time = basic.time;
@@ -153,14 +153,14 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
       circling_info.turn_start_energy_height = basic.energy_height;
 
       // JMW Transition to cruise, due to not properly turning
-      circling_info.turn_mode = WAITCRUISE;
+      circling_info.turn_mode = CirclingMode::POSSIBLE_CRUISE;
     }
     if (!forcecruise)
       break;
 
-  case WAITCRUISE:
+  case CirclingMode::POSSIBLE_CRUISE:
     if (forcecircling) {
-      circling_info.turn_mode = CLIMB;
+      circling_info.turn_mode = CirclingMode::CLIMB;
       break;
     }
 
@@ -171,7 +171,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
         circling_info.circling = false;
 
         // Transition to cruise
-        circling_info.turn_mode = CRUISE;
+        circling_info.turn_mode = CirclingMode::CRUISE;
         circling_info.cruise_start_location = circling_info.turn_start_location;
         circling_info.cruise_start_altitude = circling_info.turn_start_altitude;
         circling_info.cruise_start_time = circling_info.turn_start_time;
@@ -179,12 +179,12 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     } else {
       // nope, we are circling again
       // JMW Transition back to climb, because we are turning again
-      circling_info.turn_mode = CLIMB;
+      circling_info.turn_mode = CirclingMode::CLIMB;
     }
     break;
 
   default:
     // error, go to cruise
-    circling_info.turn_mode = CRUISE;
+    circling_info.turn_mode = CirclingMode::CRUISE;
   }
 }

@@ -51,7 +51,7 @@ last_circling = calculated.circling;
     return;
 
   if (settings.CirclingWindEnabled() &&
-      calculated.turn_mode == CLIMB) {
+      calculated.turn_mode == CirclingMode::CLIMB) {
     CirclingWind::Result result = circling_wind.NewSample(basic);
     if (result.IsValid())
       wind_store.SlotMeasurement(basic, result.wind, result.quality);

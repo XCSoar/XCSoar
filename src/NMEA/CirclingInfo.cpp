@@ -42,5 +42,5 @@ CirclingInfo::Clear()
   max_height_gain = fixed_zero;
 
   turn_rate_smoothed = fixed_zero;
-  turn_mode = CRUISE;
+  turn_mode = CirclingMode::CRUISE;
 }
