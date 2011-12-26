@@ -27,6 +27,8 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <tchar.h>
+#include <string.h>
+#include <assert.h>
 
 static inline bool
 string_is_empty(const TCHAR *string)
@@ -121,5 +123,37 @@ TrimRight(char *p);
  */
 TCHAR *
 normalize_search_string(TCHAR *dest, const TCHAR *src);
+
+/**
+ * Checks whether str1 and str2 are equal.
+ * @param str1 String 1
+ * @param str2 String 2
+ * @return True if equal, False otherwise
+ */
+static inline bool
+StringIsEqual(const TCHAR *str1, const TCHAR *str2)
+{
+  assert(str1 != NULL);
+  assert(str2 != NULL);
+
+  return _tcscmp(str1, str2) == 0;
+}
+
+#ifdef _UNICODE
+/**
+ * Checks whether str1 and str2 are equal.
+ * @param str1 String 1
+ * @param str2 String 2
+ * @return True if equal, False otherwise
+ */
+static inline bool
+StringIsEqual(const char *str1, const char *str2)
+{
+  assert(str1 != NULL);
+  assert(str2 != NULL);
+
+  return strcmp(str1, str2) == 0;
+}
+#endif
 
 #endif

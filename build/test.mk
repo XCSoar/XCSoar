@@ -82,7 +82,8 @@ TEST_NAMES = \
 	TestMETARParser \
 	TestIGCParser \
 	TestByteOrder \
-	TestByteOrder2
+	TestByteOrder2 \
+	TestStrings
 
 TESTS = $(call name-to-bin,$(TEST_NAMES))
 
@@ -325,6 +326,12 @@ TEST_UNITS_SOURCES = \
 	$(TEST_SRC_DIR)/TestUnits.cpp
 TEST_UNITS_DEPENDS = MATH
 $(eval $(call link-program,TestUnits,TEST_UNITS))
+
+TEST_STRINGS_SOURCES = \
+	$(SRC)/Util/StringUtil.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestStrings.cpp
+$(eval $(call link-program,TestStrings,TEST_STRINGS))
 
 TEST_POLARS_SOURCES = \
 	$(SRC)/Util/UTF8.cpp \

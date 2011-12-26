@@ -25,7 +25,6 @@ Copyright_License {
 #include "CharUtil.hpp"
 #include "Compatibility/string.h"
 
-#include <assert.h>
 #include <string.h>
 #include <ctype.h>
 #include <algorithm>
