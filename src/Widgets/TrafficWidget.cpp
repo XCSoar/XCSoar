@@ -543,31 +543,31 @@ FlarmTrafficControl2::on_mouse_double(PixelScalar x, PixelScalar y)
 bool
 FlarmTrafficControl2::on_mouse_gesture(const TCHAR* gesture)
 {
-  if (_tcscmp(gesture, _T("U")) == 0) {
+  if (StringIsEqual(gesture, _T("U"))) {
     ZoomIn();
     return true;
   }
-  if (_tcscmp(gesture, _T("D")) == 0) {
+  if (StringIsEqual(gesture, _T("D"))) {
     ZoomOut();
     return true;
   }
-  if (_tcscmp(gesture, _T("L")) == 0) {
+  if (StringIsEqual(gesture, _T("L"))) {
     PrevTarget();
     return true;
   }
-  if (_tcscmp(gesture, _T("R")) == 0) {
+  if (StringIsEqual(gesture, _T("R"))) {
     NextTarget();
     return true;
   }
-  if (_tcscmp(gesture, _T("UD")) == 0) {
+  if (StringIsEqual(gesture, _T("UD"))) {
     SetAutoZoom(true);
     return true;
   }
-  if (_tcscmp(gesture, _T("DR")) == 0) {
+  if (StringIsEqual(gesture, _T("DR"))) {
     instance->OpenDetails();
     return true;
   }
-  if (_tcscmp(gesture, _T("RL")) == 0) {
+  if (StringIsEqual(gesture, _T("RL"))) {
     instance->SwitchData();
     return true;
   }
