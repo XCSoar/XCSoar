@@ -133,7 +133,7 @@ Profile::GetPathIsEqual(const TCHAR *key, const TCHAR *value)
     return false;
 
   ExpandLocalPath(saved);
-  return _tcscmp(saved, value) == 0;
+  return StringIsEqual(saved, value);
 }
 
 void

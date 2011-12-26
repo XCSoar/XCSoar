@@ -112,25 +112,25 @@ MakeDeviceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n,
 static DeviceConfig::PortType
 StringToPortType(const TCHAR *value)
 {
-  if (_tcscmp(value, _T("disabled")) == 0)
+  if (StringIsEqual(value, _T("disabled")))
     return DeviceConfig::PortType::DISABLED;
 
-  if (_tcscmp(value, _T("serial")) == 0)
+  if (StringIsEqual(value, _T("serial")))
     return DeviceConfig::PortType::SERIAL;
 
-  if (_tcscmp(value, _T("rfcomm")) == 0)
+  if (StringIsEqual(value, _T("rfcomm")))
     return DeviceConfig::PortType::RFCOMM;
 
-  if (_tcscmp(value, _T("ioio_uart")) == 0)
+  if (StringIsEqual(value, _T("ioio_uart")))
     return DeviceConfig::PortType::IOIOUART;
 
-  if (_tcscmp(value, _T("auto")) == 0)
+  if (StringIsEqual(value, _T("auto")))
     return DeviceConfig::PortType::AUTO;
 
-  if (_tcscmp(value, _T("internal")) == 0)
+  if (StringIsEqual(value, _T("internal")))
     return DeviceConfig::PortType::INTERNAL;
 
-  if (_tcscmp(value, _T("tcp_listener")) == 0)
+  if (StringIsEqual(value, _T("tcp_listener")))
     return DeviceConfig::PortType::TCP_LISTENER;
 
   if (IsAndroid())
