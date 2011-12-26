@@ -72,23 +72,23 @@ Deserialiser::deserialise_point(OrderedTask& data)
   ObservationZonePoint* oz = NULL;
   OrderedTaskPoint *pt = NULL;
 
-  if (_tcscmp(type.c_str(), _T("Start")) == 0) {
+  if (StringIsEqual(type.c_str(), _T("Start"))) {
     if ((oz = oser.deserialise_oz(*wp, false)) != NULL)
       pt = fact.createStart(oz, *wp);
-  } else if (_tcscmp(type.c_str(), _T("OptionalStart")) == 0) {
+  } else if (StringIsEqual(type.c_str(), _T("OptionalStart"))) {
     if ((oz = oser.deserialise_oz(*wp, false)) != NULL) {
       pt = fact.createStart(oz, *wp);
       fact.append_optional_start(*pt);
       delete pt; // don't let generic code below add it
       pt = NULL;
     }
-  } else if (_tcscmp(type.c_str(), _T("Turn")) == 0) {
+  } else if (StringIsEqual(type.c_str(), _T("Turn"))) {
     if ((oz = oser.deserialise_oz(*wp, true)) != NULL)
       pt = fact.createAST(oz, *wp);
-  } else if (_tcscmp(type.c_str(), _T("Area")) == 0) {
+  } else if (StringIsEqual(type.c_str(), _T("Area"))) {
     if ((oz = oser.deserialise_oz(*wp, true)) != NULL)
       pt = fact.createAAT(oz, *wp);
-  } else if (_tcscmp(type.c_str(), _T("Finish")) == 0) {
+  } else if (StringIsEqual(type.c_str(), _T("Finish"))) {
     if ((oz = oser.deserialise_oz(*wp, false)) != NULL)
       pt = fact.createFinish(oz, *wp);
   } 
@@ -112,7 +112,7 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
     return NULL;
   }
 
-  if (_tcscmp(type.c_str(), _T("Line")) == 0) {
+  if (StringIsEqual(type.c_str(), _T("Line"))) {
     LineSectorZone *ls = new LineSectorZone(wp.location);
 
     fixed length;
@@ -120,7 +120,7 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
       ls->setLength(length);
 
     return ls;
-  } else if (_tcscmp(type.c_str(), _T("Cylinder")) == 0) {
+  } else if (StringIsEqual(type.c_str(), _T("Cylinder"))) {
     CylinderZone *ls = new CylinderZone(wp.location);
 
     fixed radius;
@@ -128,7 +128,7 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
       ls->setRadius(radius);
 
     return ls;
-  } else if (_tcscmp(type.c_str(), _T("Sector")) == 0) {
+  } else if (StringIsEqual(type.c_str(), _T("Sector"))) {
 
     fixed radius, inner_radius;
     Angle start, end;
@@ -149,15 +149,15 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
       ls->setEndRadial(end);
 
     return ls;
-  } else if (_tcscmp(type.c_str(), _T("FAISector")) == 0)
+  } else if (StringIsEqual(type.c_str(), _T("FAISector")))
     return new FAISectorZone(wp.location, is_turnpoint);
-  else if (_tcscmp(type.c_str(), _T("Keyhole")) == 0)
+  else if (StringIsEqual(type.c_str(), _T("Keyhole")))
     return new KeyholeZone(wp.location);
-  else if (_tcscmp(type.c_str(), _T("BGAStartSector")) == 0)
+  else if (StringIsEqual(type.c_str(), _T("BGAStartSector")))
     return new BGAStartSectorZone(wp.location);
-  else if (_tcscmp(type.c_str(), _T("BGAFixedCourse")) == 0)
+  else if (StringIsEqual(type.c_str(), _T("BGAFixedCourse")))
     return new BGAFixedCourseZone(wp.location);
-  else if (_tcscmp(type.c_str(), _T("BGAEnhancedOption")) == 0)
+  else if (StringIsEqual(type.c_str(), _T("BGAEnhancedOption")))
     return new BGAEnhancedOptionZone(wp.location);
 
   assert(1);
@@ -263,7 +263,7 @@ Deserialiser::height_ref(const TCHAR *nodename) const
     return hrAGL;
   }
 
-  if (_tcscmp(type.c_str(), _T("AGL")) == 0)
+  if (StringIsEqual(type.c_str(), _T("AGL")))
     return hrAGL;
 
   return hrMSL;
@@ -278,21 +278,21 @@ Deserialiser::task_factory_type() const
     return TaskBehaviour::FACTORY_FAI_GENERAL;
   }
 
-  if (_tcscmp(type.c_str(), _T("FAIGeneral")) == 0)
+  if (StringIsEqual(type.c_str(), _T("FAIGeneral")))
     return TaskBehaviour::FACTORY_FAI_GENERAL;
-  else if (_tcscmp(type.c_str(), _T("FAITriangle")) == 0)
+  else if (StringIsEqual(type.c_str(), _T("FAITriangle")))
     return TaskBehaviour::FACTORY_FAI_TRIANGLE;
-  else if (_tcscmp(type.c_str(), _T("FAIOR")) == 0)
+  else if (StringIsEqual(type.c_str(), _T("FAIOR")))
     return TaskBehaviour::FACTORY_FAI_OR;
-  else if (_tcscmp(type.c_str(), _T("FAIGoal")) == 0)
+  else if (StringIsEqual(type.c_str(), _T("FAIGoal")))
     return TaskBehaviour::FACTORY_FAI_GOAL;
-  else if (_tcscmp(type.c_str(), _T("RT")) == 0)
+  else if (StringIsEqual(type.c_str(), _T("RT")))
     return TaskBehaviour::FACTORY_RT;
-  else if (_tcscmp(type.c_str(), _T("AAT")) == 0)
+  else if (StringIsEqual(type.c_str(), _T("AAT")))
     return TaskBehaviour::FACTORY_AAT;
-  else if (_tcscmp(type.c_str(), _T("Mixed")) == 0)
+  else if (StringIsEqual(type.c_str(), _T("Mixed")))
     return TaskBehaviour::FACTORY_MIXED;
-  else if (_tcscmp(type.c_str(), _T("Touring")) == 0)
+  else if (StringIsEqual(type.c_str(), _T("Touring")))
     return TaskBehaviour::FACTORY_TOURING;
 
   assert(1);
