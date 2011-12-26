@@ -58,7 +58,7 @@ UpdateValues()
   Update(_T("prpUserSwitchMiddle"), switches.user_switch_middle);
   Update(_T("prpUserSwitchDown"), switches.user_switch_down);
   Update(_T("prpVarioCircling"),
-         switches.flight_mode == SwitchInfo::MODE_CIRCLING);
+         switches.flight_mode == SwitchInfo::FlightMode::CIRCLING);
 }
 
 static void

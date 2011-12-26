@@ -229,7 +229,7 @@ GaugeVario::RenderClimb(Canvas &canvas)
   if (!dirty)
     return;
 
-  if (Basic().switch_state.flight_mode == SwitchInfo::MODE_CIRCLING)
+  if (Basic().switch_state.flight_mode == SwitchInfo::FlightMode::CIRCLING)
     canvas.scale_copy(x, y, look.climb_bitmap, 12, 0, 12, 12);
   else if (is_persistent())
     canvas.DrawFilledRectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12),

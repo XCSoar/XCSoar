@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_INFO_H
 #define XCSOAR_NMEA_INFO_H
 
-#include "Util/TinyEnum.hpp"
 #include "Util/TypeTraits.hpp"
 #include "NMEA/Validity.hpp"
 #include "NMEA/ExternalSettings.hpp"
@@ -40,13 +39,13 @@ Copyright_License {
  */
 struct SwitchInfo
 {
-  enum FlightMode {
-    MODE_UNKNOWN,
-    MODE_CIRCLING,
-    MODE_CRUISE,
+  enum class FlightMode: uint8_t {
+    UNKNOWN,
+    CIRCLING,
+    CRUISE,
   };
 
-  TinyEnum<FlightMode> flight_mode;
+  FlightMode flight_mode;
 
   bool airbrake_locked;
   bool flap_positive;

@@ -137,8 +137,8 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info)
   */
   info.switch_state.flight_mode =
     (switchoutputs & (1 << OUTPUT_BIT_CIRCLING)) > 0
-    ? SwitchInfo::MODE_CIRCLING
-    : SwitchInfo::MODE_CRUISE;
+    ? SwitchInfo::FlightMode::CIRCLING
+    : SwitchInfo::FlightMode::CRUISE;
   info.switch_state.flap_landing =
     (switchoutputs & (1<<OUTPUT_BIT_FLAP_LANDING))>0;
 

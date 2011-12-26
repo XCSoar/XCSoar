@@ -38,7 +38,7 @@ SwitchInfo::Reset()
   user_switch_up = false;
   user_switch_middle = false;
   user_switch_down = false;
-  flight_mode = SwitchInfo::MODE_UNKNOWN;
+  flight_mode = SwitchInfo::FlightMode::UNKNOWN;
 }
 
 void
