@@ -67,7 +67,7 @@ VolksloggerDevice::ParseNMEA(const char *String, NMEAInfo &info)
   char type[16];
   line.read(type, 16);
 
-  if (strcmp(type, "$PGCS") == 0)
+  if (StringIsEqual(type, "$PGCS"))
     return vl_PGCS1(line, info);
   else
     return false;

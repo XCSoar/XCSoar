@@ -269,11 +269,11 @@ FlytecDevice::ParseNMEA(const char *_line, NMEAInfo &info)
   char type[16];
   line.read(type, 16);
 
-  if (strcmp(type, "$BRSF") == 0)
+  if (StringIsEqual(type, "$BRSF"))
     return FlytecParseBRSF(line, info);
-  else if (strcmp(type, "$VMVABD") == 0)
+  else if (StringIsEqual(type, "$VMVABD"))
     return FlytecParseVMVABD(line, info);
-  else if (strcmp(type, "$FLYSEN") == 0)
+  else if (StringIsEqual(type, "$FLYSEN"))
     return FlytecParseFLYSEN(line, info);
   else
     return false;

@@ -120,13 +120,13 @@ CondorDevice::ParseNMEA(const char *String, NMEAInfo &info)
   char type[16];
   line.read(type, 16);
 
-  if (strcmp(type, "$LXWP0") == 0)
+  if (StringIsEqual(type, "$LXWP0"))
     return cLXWP0(line, info);
 
-  if (strcmp(type, "$LXWP1") == 0)
+  if (StringIsEqual(type, "$LXWP1"))
     return cLXWP1(line, info);
 
-  if (strcmp(type, "$LXWP2") == 0)
+  if (StringIsEqual(type, "$LXWP2"))
     return cLXWP2(line, info);
 
   return false;

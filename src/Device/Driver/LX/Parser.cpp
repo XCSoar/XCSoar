@@ -139,13 +139,13 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
   char type[16];
   line.read(type, 16);
 
-  if (strcmp(type, "$LXWP0") == 0)
+  if (StringIsEqual(type, "$LXWP0"))
     return LXWP0(line, info);
 
-  if (strcmp(type, "$LXWP1") == 0)
+  if (StringIsEqual(type, "$LXWP1"))
     return LXWP1(line, info);
 
-  if (strcmp(type, "$LXWP2") == 0)
+  if (StringIsEqual(type, "$LXWP2"))
     return LXWP2(line, info);
 
   return false;

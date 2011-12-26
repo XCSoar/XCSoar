@@ -89,7 +89,7 @@ AltairProDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   // no propriatary sentence
 
-  if (strcmp(type, "$PGRMZ") == 0) {
+  if (StringIsEqual(type, "$PGRMZ")) {
     fixed value;
     if (ReadAltitude(line, value))
       info.ProvidePressureAltitude(value);

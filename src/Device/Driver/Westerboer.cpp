@@ -135,10 +135,10 @@ WesterboerDevice::ParseNMEA(const char *String, NMEAInfo &info)
   char type[16];
   line.read(type, 16);
 
-  if (strcmp(type, "$PWES0") == 0)
+  if (StringIsEqual(type, "$PWES0"))
     return PWES0(line, info);
 
-  if (strcmp(type, "$PWES1") == 0)
+  if (StringIsEqual(type, "$PWES1"))
     return PWES1(line, info);
 
   return false;

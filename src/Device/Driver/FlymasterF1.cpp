@@ -81,7 +81,7 @@ FlymasterF1Device::ParseNMEA(const char *String, NMEAInfo &info)
   char type[16];
   line.read(type, 16);
 
-  if (strcmp(type, "$VARIO") == 0)
+  if (StringIsEqual(type, "$VARIO"))
     return VARIO(line, info);
   else
     return false;

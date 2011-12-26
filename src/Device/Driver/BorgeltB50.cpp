@@ -140,7 +140,7 @@ B50Device::ParseNMEA(const char *String, NMEAInfo &info)
   char type[16];
   line.read(type, 16);
 
-  if (strcmp(type, "$PBB50") == 0)
+  if (StringIsEqual(type, "$PBB50"))
     return PBB50(line, info);
   else
     return false;

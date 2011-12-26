@@ -203,14 +203,19 @@ LeonardoDevice::ParseNMEA(const char *_line, NMEAInfo &info)
   char type[16];
   line.read(type, 16);
 
-  if (strcmp(type, "$C") == 0 || strcmp(type, "$c") == 0)
+  if (StringIsEqual(type, "$C") ||
+      StringIsEqual(type, "$c"))
     return LeonardoParseC(line, info);
-  else if (strcmp(type, "$D") == 0 || strcmp(type, "$d") == 0)
+
+  else if (StringIsEqual(type, "$D") ||
+           StringIsEqual(type, "$d"))
     return LeonardoParseD(line, info);
-  else if (strcmp(type, "$PDGFTL1") == 0 || strcmp(type, "$PDGFTTL") == 0)
+
+  else if (StringIsEqual(type, "$PDGFTL1") ||
+           StringIsEqual(type, "$PDGFTTL"))
     return PDGFTL1(line, info);
-  else
-    return false;
+
+  return false;
 }
 
 static Device *

@@ -89,9 +89,9 @@ ILECDevice::ParseNMEA(const char *_line, NMEAInfo &info)
   char type[16];
   line.read(type, sizeof(type));
 
-  if (strcmp(type, "$PILC") == 0) {
+  if (StringIsEqual(type, "$PILC")) {
     line.read(type, sizeof(type));
-    if (strcmp(type, "PDA1") == 0)
+    if (StringIsEqual(type, "PDA1"))
       return ParsePDA1(line, info);
     else
       return false;

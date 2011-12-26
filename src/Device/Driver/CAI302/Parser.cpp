@@ -149,13 +149,13 @@ CAI302Device::ParseNMEA(const char *String, NMEAInfo &info)
   char type[16];
   line.read(type, 16);
 
-  if (strcmp(type, "$PCAIB") == 0)
+  if (StringIsEqual(type, "$PCAIB"))
     return cai_PCAIB(line, info);
 
-  if (strcmp(type, "$PCAID") == 0)
+  if (StringIsEqual(type, "$PCAID"))
     return cai_PCAID(line, info);
 
-  if (strcmp(type, "!w") == 0)
+  if (StringIsEqual(type, "!w"))
     return cai_w(line, info);
 
   return false;

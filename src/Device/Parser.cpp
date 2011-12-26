@@ -81,33 +81,33 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
   // if (proprietary sentence) ...
   if (type[1] == 'P') {
     // Airspeed and vario sentence
-    if (strcmp(type + 1, "PTAS1") == 0)
+    if (StringIsEqual(type + 1, "PTAS1"))
       return PTAS1(line, info);
 
     // FLARM sentences
-    if (strcmp(type + 1, "PFLAA") == 0)
+    if (StringIsEqual(type + 1, "PFLAA"))
       return PFLAA(line, info);
 
-    if (strcmp(type + 1, "PFLAU") == 0)
+    if (StringIsEqual(type + 1, "PFLAU"))
       return PFLAU(line, info.flarm, info.clock);
 
     // Garmin altitude sentence
-    if (strcmp(type + 1, "PGRMZ") == 0)
+    if (StringIsEqual(type + 1, "PGRMZ"))
       return RMZ(line, info);
 
     return false;
   }
 
-  if (strcmp(type + 3, "GSA") == 0)
+  if (StringIsEqual(type + 3, "GSA"))
     return GSA(line, info);
 
-  if (strcmp(type + 3, "GLL") == 0)
+  if (StringIsEqual(type + 3, "GLL"))
     return GLL(line, info);
 
-  if (strcmp(type + 3, "RMC") == 0)
+  if (StringIsEqual(type + 3, "RMC"))
     return RMC(line, info);
 
-  if (strcmp(type + 3, "GGA") == 0)
+  if (StringIsEqual(type + 3, "GGA"))
     return GGA(line, info);
 
   return false;

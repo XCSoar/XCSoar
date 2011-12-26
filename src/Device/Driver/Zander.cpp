@@ -138,19 +138,19 @@ ZanderDevice::ParseNMEA(const char *String, NMEAInfo &info)
   char type[16];
   line.read(type, 16);
 
-  if (strcmp(type, "$PZAN1") == 0)
+  if (StringIsEqual(type, "$PZAN1"))
     return PZAN1(line, info);
 
-  if (strcmp(type, "$PZAN2") == 0)
+  if (StringIsEqual(type, "$PZAN2"))
     return PZAN2(line, info);
 
-  if (strcmp(type, "$PZAN3") == 0)
+  if (StringIsEqual(type, "$PZAN3"))
     return PZAN3(line, info);
 
-  if (strcmp(type, "$PZAN4") == 0)
+  if (StringIsEqual(type, "$PZAN4"))
     return PZAN4(line, info);
 
-  if (strcmp(type, "$PZAN5") == 0)
+  if (StringIsEqual(type, "$PZAN5"))
     return PZAN5(line, info);
 
   return false;

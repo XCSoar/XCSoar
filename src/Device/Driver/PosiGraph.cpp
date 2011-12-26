@@ -71,7 +71,7 @@ PGDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   // $GPWIN ... Winpilot proprietary sentance includinh baro altitude
   // $GPWIN ,01900 , 0 , 5159 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 * 6 B , 0 7 * 6 0 E
-  if (strcmp(type, "$GPWIN") == 0)
+  if (StringIsEqual(type, "$GPWIN"))
     return GPWIN(line, info);
   else
     return LXDevice::ParseNMEA(String, info);

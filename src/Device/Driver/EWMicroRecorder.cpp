@@ -90,7 +90,7 @@ EWMicroRecorderDevice::ParseNMEA(const char *String, NMEAInfo &info)
   char type[16];
   line.read(type, 16);
 
-  if (strcmp(type, "$PGRMZ") == 0) {
+  if (StringIsEqual(type, "$PGRMZ")) {
     fixed value;
 
     /* The normal Garmin $PGRMZ line contains the "true" barometric
