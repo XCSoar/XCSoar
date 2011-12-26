@@ -152,15 +152,6 @@ private:
   bool RMC(NMEAInputLine &line, NMEAInfo &info);
 
   /**
-   * Parses a RMB sentence (not used anymore)
-   *
-   * @param line A NMEAInputLine instance that can be used for parsing
-   * @param info NMEA_INFO struct to parse into
-   * @return Parsing success
-   */
-  static bool RMB(NMEAInputLine &line, NMEAInfo &info);
-
-  /**
    * Parses a PGRMZ sentence (Garmin proprietary).
    *
    * @param line A NMEAInputLine instance that can be used for parsing

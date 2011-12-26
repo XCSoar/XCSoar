@@ -104,9 +104,6 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
   if (strcmp(type + 3, "GLL") == 0)
     return GLL(line, info);
 
-  if (strcmp(type + 3, "RMB") == 0)
-    return RMB(line, info);
-
   if (strcmp(type + 3, "RMC") == 0)
     return RMC(line, info);
 
@@ -367,32 +364,6 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
   info.gps.android_internal_gps = false;
 #endif
 
-  return true;
-}
-
-bool
-NMEAParser::RMB(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
-{
-  /*
-   * $--RMB,A,x.x,a,c--c,c--c,llll.ll,a,yyyyy.yy,a,x.x,x.x,x.x,A,m,*hh
-   *
-   * Field Number:
-   *  1) Status, A= Active, V = Void
-   *  2) Cross Track error - nautical miles
-   *  3) Direction to Steer, Left or Right
-   *  4) TO Waypoint ID
-   *  5) FROM Waypoint ID
-   *  6) Destination Waypoint Latitude
-   *  7) N or S
-   *  8) Destination Waypoint Longitude
-   *  9) E or W
-   * 10) Range to destination in nautical miles
-   * 11) Bearing to destination in degrees True
-   * 12) Destination closing velocity in knots
-   * 13) Arrival Status, A = Arrival Circle Entered
-   * 14) FAA mode indicator (NMEA 2.3 and later)
-   * 15) Checksum
-   */
   return true;
 }
 
