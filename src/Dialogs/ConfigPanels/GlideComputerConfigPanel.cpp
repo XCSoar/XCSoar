@@ -23,91 +23,109 @@ Copyright_License {
 
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "GlideComputerConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
 
-class GlideComputerConfigPanel : public XMLWidget {
-
-public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+enum ControlIndex {
+  AutoWind,
+  ExternalWind,
+  AutoMcMode,
+  BlockSTF,
+  EnableNavBaroAltitude,
+  EnableExternalTriggerCruise,
+  AverEffTime
 };
 
-void
-GlideComputerConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
+class GlideComputerConfigPanel : public RowFormWidget {
+public:
+  GlideComputerConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
 
-void
-GlideComputerConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+};
 
 void
 GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent,
-             Layout::landscape ? _T("IDR_XML_GLIDECOMPUTERCONFIGPANEL") :
-                               _T("IDR_XML_GLIDECOMPUTERCONFIGPANEL_L"));
-
-
   const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
 
+  RowFormWidget::Prepare(parent, rc);
+
   static gcc_constexpr_data StaticEnumChoice auto_wind_list[] = {
-    { AUTOWIND_NONE, N_("Manual") },
-    { AUTOWIND_CIRCLING, N_("Circling") },
-    { AUTOWIND_ZIGZAG, N_("ZigZag") },
-    { AUTOWIND_CIRCLING | AUTOWIND_ZIGZAG, N_("Both") },
+    { AUTOWIND_NONE, N_("Manual"),
+      N_("When the algorithm is switched off, the pilot is responsible for setting the wind estimate.") },
+    { AUTOWIND_CIRCLING, N_("Circling"),
+      N_("Requires only a GPS source.") },
+    { AUTOWIND_ZIGZAG, N_("ZigZag"),
+      N_("Requires GPS and an intelligent vario with airspeed output.") },
+    { AUTOWIND_CIRCLING | AUTOWIND_ZIGZAG, N_("Both"),
+      N_("Use ZigZag and circling.") },
     { 0 }
   };
 
-  LoadFormProperty(form, _T("prpAutoWind"), auto_wind_list,
-                   settings_computer.auto_wind_mode);
+  AddEnum(_("Auto wind"),
+          _("This allows switching on or off the automatic wind algorithm."),
+          auto_wind_list, settings_computer.auto_wind_mode);
 
-  LoadFormProperty(form, _T("prpExternalWind"), settings_computer.use_external_wind);
+  AddBoolean(_("External wind"),
+             _("If enabled, then the wind vector received from external devices overrides "
+                 "XCSoar's internal wind calculation."),
+             settings_computer.use_external_wind);
 
   static gcc_constexpr_data StaticEnumChoice auto_mc_list[] = {
-    { TaskBehaviour::AUTOMC_FINALGLIDE, N_("Final glide") },
-    { TaskBehaviour::AUTOMC_CLIMBAVERAGE, N_("Trending average climb") },
-    { TaskBehaviour::AUTOMC_BOTH, N_("Both") },
+    { TaskBehaviour::AUTOMC_FINALGLIDE, N_("Final glide"),
+      N_("Adjusts MC for fastest arrival.  For OLC sprint tasks, the MacCready is adjusted in "
+          "order to cover the greatest distance in the remaining time and reach the finish height.") },
+    { TaskBehaviour::AUTOMC_CLIMBAVERAGE, N_("Trending average climb"),
+      N_("Sets MC to the trending average climb rate based on all climbs.") },
+    { TaskBehaviour::AUTOMC_BOTH, N_("Both"),
+      N_("Uses trending average during task, then fastest arrival when in final glide mode.") },
     { 0 }
   };
 
-  LoadFormProperty(form, _T("prpAutoMcMode"), auto_mc_list,
-                   settings_computer.task.auto_mc_mode);
+  AddEnum(_("Auto MC mode"),
+          _("This option defines which auto MacCready algorithm is used."),
+          auto_mc_list, settings_computer.task.auto_mc_mode);
 
-  LoadFormProperty(form, _T("prpBlockSTF"),
-                   settings_computer.block_stf_enabled);
+  // TODO All below is for the Expert
+  AddBoolean(_("Block speed to fly"),
+             _("If enabled, the command speed in cruise is set to the MacCready speed to fly in "
+                 "no vertical air-mass movement. If disabled, the command speed in cruise is set "
+                 "to the dolphin speed to fly, equivalent to the MacCready speed with vertical "
+                 "air-mass movement."),
+             settings_computer.block_stf_enabled);
 
-  LoadFormProperty(form, _T("prpEnableNavBaroAltitude"),
-                   settings_computer.nav_baro_altitude_enabled);
+  AddBoolean(_("Nav. by baro altitude"),
+             _("When enabled and if connected to a barometric altimeter, barometric altitude is "
+                 "used for all navigation functions. Otherwise GPS altitude is used."),
+             settings_computer.nav_baro_altitude_enabled);
 
-  LoadFormProperty(form, _T("prpEnableExternalTriggerCruise"),
-                   settings_computer.external_trigger_cruise_enabled);
+  AddBoolean(_("Flap forces cruise"),
+             _("When Vega variometer is connected and this option is true, the positive flap "
+                 "setting switches the flight mode between circling and cruise."),
+             settings_computer.external_trigger_cruise_enabled);
 
   static gcc_constexpr_data StaticEnumChoice aver_eff_list[] = {
-    { ae15seconds, _T("15 s") },
+    { ae15seconds, _T("15 s"), N_("Preferred period for paragliders.") },
     { ae30seconds, _T("30 s") },
     { ae60seconds, _T("60 s") },
-    { ae90seconds, _T("90 s") },
+    { ae90seconds, _T("90 s"), N_("Preferred period for gliders.") },
     { ae2minutes, _T("2 min") },
     { ae3minutes, _T("3 min") },
     { 0 }
   };
 
-  LoadFormProperty(form, _T("prpAverEffTime"), aver_eff_list,
-                   settings_computer.average_eff_time);
+  AddEnum(_("L/D average period"),
+          _("Here you can decide on how many seconds of flight this calculation must be done. "
+              "Normally for gliders a good value is 90-120 seconds, and for paragliders 15 seconds."),
+          aver_eff_list, settings_computer.average_eff_time);
 }
 
 bool
@@ -117,32 +135,22 @@ GlideComputerConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
 
-  changed |= SaveFormProperty(form, _T("prpAutoWind"), szProfileAutoWind,
-                              settings_computer.auto_wind_mode);
+  changed |= SaveValueEnum(AutoWind, szProfileAutoWind, settings_computer.auto_wind_mode);
 
-  changed |= SaveFormProperty(form, _T("prpExternalWind"),
-                              szProfileExternalWind,
-                              settings_computer.use_external_wind);
+  changed |= SaveValue(ExternalWind, szProfileExternalWind, settings_computer.use_external_wind);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpAutoMcMode"),
-                                  szProfileAutoMcMode,
-                                  settings_computer.task.auto_mc_mode);
+  changed |= SaveValueEnum(AutoMcMode, szProfileAutoMcMode, settings_computer.task.auto_mc_mode);
 
-  changed |= SaveFormProperty(form, _T("prpBlockSTF"),
-                              szProfileBlockSTF,
-                              settings_computer.block_stf_enabled);
+  changed |= SaveValue(BlockSTF, szProfileBlockSTF, settings_computer.block_stf_enabled);
 
-  changed |= SaveFormProperty(form, _T("prpEnableNavBaroAltitude"),
-                              szProfileEnableNavBaroAltitude,
-                              settings_computer.nav_baro_altitude_enabled);
+  changed |= SaveValue(EnableNavBaroAltitude, szProfileEnableNavBaroAltitude,
+                       settings_computer.nav_baro_altitude_enabled);
 
-  changed |= SaveFormProperty(form, _T("prpEnableExternalTriggerCruise"),
-                              szProfileEnableExternalTriggerCruise,
-                              settings_computer.external_trigger_cruise_enabled);
+  changed |= SaveValue(EnableExternalTriggerCruise, szProfileEnableExternalTriggerCruise,
+                       settings_computer.external_trigger_cruise_enabled);
 
   changed |= require_restart |=
-    SaveFormPropertyEnum(form, _T("prpAverEffTime"),
-                         szProfileAverEffTime, settings_computer.average_eff_time);
+      SaveValueEnum(AverEffTime, szProfileAverEffTime, settings_computer.average_eff_time);
 
   _changed |= changed;
   _require_restart |= require_restart;
