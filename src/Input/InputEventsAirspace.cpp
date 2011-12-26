@@ -53,13 +53,13 @@ InputEvents::eventAirSpace(const TCHAR *misc)
   AirspaceRendererSettings &settings =
     CommonInterface::SetMapSettings().airspace;
 
-  if (_tcscmp(misc, _T("toggle")) == 0)
+  if (StringIsEqual(misc, _T("toggle")))
     settings.enable = !settings.enable;
-  else if (_tcscmp(misc, _T("off")) == 0)
+  else if (StringIsEqual(misc, _T("off")))
     settings.enable = false;
-  else if (_tcscmp(misc, _T("on")) == 0)
+  else if (StringIsEqual(misc, _T("on")))
     settings.enable = true;
-  else if (_tcscmp(misc, _T("show")) == 0) {
+  else if (StringIsEqual(misc, _T("show"))) {
     if (!settings.enable)
       Message::AddMessage(_("Show airspace off"));
     if (settings.enable)

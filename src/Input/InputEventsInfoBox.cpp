@@ -29,9 +29,9 @@ Copyright_License {
 void
 InputEvents::eventSelectInfoBox(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("next")) == 0)
+  if (StringIsEqual(misc, _T("next")))
     InfoBoxManager::Event_Select(1);
-  else if (_tcscmp(misc, _T("previous")) == 0)
+  else if (StringIsEqual(misc, _T("previous")))
     InfoBoxManager::Event_Select(-1);
 }
 
@@ -40,8 +40,8 @@ InputEvents::eventSelectInfoBox(const TCHAR *misc)
 void
 InputEvents::eventChangeInfoBoxType(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("next")) == 0)
+  if (StringIsEqual(misc, _T("next")))
     InfoBoxManager::Event_Change(1);
-  else if (_tcscmp(misc, _T("previous")) == 0)
+  else if (StringIsEqual(misc, _T("previous")))
     InfoBoxManager::Event_Change(-1);
 }

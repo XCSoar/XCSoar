@@ -86,27 +86,27 @@ void
 InputEvents::eventAdjustVarioFilter(const TCHAR *misc)
 {
   static int naccel = 0;
-  if (_tcscmp(misc, _T("slow")) == 0)
+  if (StringIsEqual(misc, _T("slow")))
     VarioWriteNMEA(_T("PDVSC,S,VarioTimeConstant,3"));
-  else if (_tcscmp(misc, _T("medium")) == 0)
+  else if (StringIsEqual(misc, _T("medium")))
     VarioWriteNMEA(_T("PDVSC,S,VarioTimeConstant,2"));
-  else if (_tcscmp(misc, _T("fast")) == 0)
+  else if (StringIsEqual(misc, _T("fast")))
     VarioWriteNMEA(_T("PDVSC,S,VarioTimeConstant,1"));
-  else if (_tcscmp(misc, _T("statistics")) == 0) {
+  else if (StringIsEqual(misc, _T("statistics"))) {
     VarioWriteNMEA(_T("PDVSC,S,Diagnostics,1"));
-  } else if (_tcscmp(misc, _T("diagnostics")) == 0) {
+  } else if (StringIsEqual(misc, _T("diagnostics"))) {
     VarioWriteNMEA(_T("PDVSC,S,Diagnostics,2"));
-  } else if (_tcscmp(misc, _T("psraw")) == 0)
+  } else if (StringIsEqual(misc, _T("psraw")))
     VarioWriteNMEA(_T("PDVSC,S,Diagnostics,3"));
-  else if (_tcscmp(misc, _T("switch")) == 0)
+  else if (StringIsEqual(misc, _T("switch")))
     VarioWriteNMEA(_T("PDVSC,S,Diagnostics,4"));
-  else if (_tcscmp(misc, _T("democlimb")) == 0) {
+  else if (StringIsEqual(misc, _T("democlimb"))) {
     VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"));
     VarioWriteNMEA(_T("PDVSC,S,DemoMode,2"));
-  } else if (_tcscmp(misc, _T("demostf"))==0) {
+  } else if (StringIsEqual(misc, _T("demostf"))) {
     VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"));
     VarioWriteNMEA(_T("PDVSC,S,DemoMode,1"));
-  } else if (_tcscmp(misc, _T("accel")) == 0) {
+  } else if (StringIsEqual(misc, _T("accel"))) {
     switch (naccel) {
     case 0:
       VarioWriteNMEA(_T("PDVSC,R,AccelerometerSlopeX"));
@@ -128,27 +128,27 @@ InputEvents::eventAdjustVarioFilter(const TCHAR *misc)
     if (naccel > 3)
       naccel = 0;
 
-  } else if (_tcscmp(misc, _T("xdemo")) == 0) {
+  } else if (StringIsEqual(misc, _T("xdemo"))) {
     dlgVegaDemoShowModal();
-  } else if (_tcscmp(misc, _T("zero"))==0) {
+  } else if (StringIsEqual(misc, _T("zero"))) {
     // zero, no mixing
     if (!CommonInterface::Calculated().flight.flying) {
       VarioWriteNMEA(_T("PDVSC,S,ZeroASI,1"));
     }
-  } else if (_tcscmp(misc, _T("save")) == 0) {
+  } else if (StringIsEqual(misc, _T("save"))) {
     VarioWriteNMEA(_T("PDVSC,S,StoreToEeprom,2"));
 
   // accel calibration
   } else if (!CommonInterface::Calculated().flight.flying) {
-    if (_tcscmp(misc, _T("X1"))==0)
+    if (StringIsEqual(misc, _T("X1")))
       VarioWriteNMEA(_T("PDVSC,S,CalibrateAccel,1"));
-    else if (_tcscmp(misc, _T("X2"))==0)
+    else if (StringIsEqual(misc, _T("X2")))
       VarioWriteNMEA(_T("PDVSC,S,CalibrateAccel,2"));
-    else if (_tcscmp(misc, _T("X3"))==0)
+    else if (StringIsEqual(misc, _T("X3")))
       VarioWriteNMEA(_T("PDVSC,S,CalibrateAccel,3"));
-    else if (_tcscmp(misc, _T("X4"))==0)
+    else if (StringIsEqual(misc, _T("X4")))
       VarioWriteNMEA(_T("PDVSC,S,CalibrateAccel,4"));
-    else if (_tcscmp(misc, _T("X5"))==0)
+    else if (StringIsEqual(misc, _T("X5")))
       VarioWriteNMEA(_T("PDVSC,S,CalibrateAccel,5"));
   }
 }
@@ -158,7 +158,7 @@ InputEvents::eventDevice(const TCHAR *misc)
 {
   assert(misc != NULL);
 
-  if (_tcscmp(misc, _T("list")) == 0)
+  if (StringIsEqual(misc, _T("list")))
     ShowDeviceList(CommonInterface::main_window,
                    CommonInterface::main_window.GetLook().dialog,
                    CommonInterface::main_window.GetLook().terminal);

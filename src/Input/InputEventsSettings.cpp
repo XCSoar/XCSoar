@@ -48,13 +48,13 @@ InputEvents::eventSounds(const TCHAR *misc)
     CommonInterface::SetComputerSettings();
  // bool OldEnableSoundVario = EnableSoundVario;
 
-  if (_tcscmp(misc, _T("toggle")) == 0)
+  if (StringIsEqual(misc, _T("toggle")))
     settings_computer.sound_vario_enabled = !settings_computer.sound_vario_enabled;
-  else if (_tcscmp(misc, _T("on")) == 0)
+  else if (StringIsEqual(misc, _T("on")))
     settings_computer.sound_vario_enabled = true;
-  else if (_tcscmp(misc, _T("off")) == 0)
+  else if (StringIsEqual(misc, _T("off")))
     settings_computer.sound_vario_enabled = false;
-  else if (_tcscmp(misc, _T("show")) == 0) {
+  else if (StringIsEqual(misc, _T("show"))) {
     if (settings_computer.sound_vario_enabled)
       Message::AddMessage(_("Vario sounds on"));
     else
@@ -72,19 +72,19 @@ InputEvents::eventSnailTrail(const TCHAR *misc)
 {
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 
-  if (_tcscmp(misc, _T("toggle")) == 0) {
+  if (StringIsEqual(misc, _T("toggle"))) {
     unsigned trail_length = (int)settings_map.trail_length;
     trail_length = (trail_length + 1u) % 4u;
     settings_map.trail_length = (TrailLength)trail_length;
-  } else if (_tcscmp(misc, _T("off")) == 0)
+  } else if (StringIsEqual(misc, _T("off")))
     settings_map.trail_length = TRAIL_OFF;
-  else if (_tcscmp(misc, _T("long")) == 0)
+  else if (StringIsEqual(misc, _T("long")))
     settings_map.trail_length = TRAIL_LONG;
-  else if (_tcscmp(misc, _T("short")) == 0)
+  else if (StringIsEqual(misc, _T("short")))
     settings_map.trail_length = TRAIL_SHORT;
-  else if (_tcscmp(misc, _T("full")) == 0)
+  else if (StringIsEqual(misc, _T("full")))
     settings_map.trail_length = TRAIL_FULL;
-  else if (_tcscmp(misc, _T("show")) == 0) {
+  else if (StringIsEqual(misc, _T("show"))) {
     switch (settings_map.trail_length) {
     case TRAIL_OFF:
       Message::AddMessage(_("Snail trail off"));
@@ -117,27 +117,27 @@ InputEvents::eventTerrainTopology(const TCHAR *misc)
 void
 InputEvents::eventTerrainTopography(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("terrain toggle")) == 0)
+  if (StringIsEqual(misc, _T("terrain toggle")))
     sub_TerrainTopography(-2);
-  else if (_tcscmp(misc, _T("topography toggle")) == 0)
+  else if (StringIsEqual(misc, _T("topography toggle")))
     sub_TerrainTopography(-3);
-  else if (_tcscmp(misc, _T("topology toggle")) == 0)
+  else if (StringIsEqual(misc, _T("topology toggle")))
     sub_TerrainTopography(-3);
-  else if (_tcscmp(misc, _T("terrain on")) == 0)
+  else if (StringIsEqual(misc, _T("terrain on")))
     sub_TerrainTopography(3);
-  else if (_tcscmp(misc, _T("terrain off")) == 0)
+  else if (StringIsEqual(misc, _T("terrain off")))
     sub_TerrainTopography(4);
-  else if (_tcscmp(misc, _T("topography on")) == 0)
+  else if (StringIsEqual(misc, _T("topography on")))
     sub_TerrainTopography(1);
-  else if (_tcscmp(misc, _T("topography off")) == 0)
+  else if (StringIsEqual(misc, _T("topography off")))
     sub_TerrainTopography(2);
-  else if (_tcscmp(misc, _T("topology on")) == 0)
+  else if (StringIsEqual(misc, _T("topology on")))
     sub_TerrainTopography(1);
-  else if (_tcscmp(misc, _T("topology off")) == 0)
+  else if (StringIsEqual(misc, _T("topology off")))
     sub_TerrainTopography(2);
-  else if (_tcscmp(misc, _T("show")) == 0)
+  else if (StringIsEqual(misc, _T("show")))
     sub_TerrainTopography(0);
-  else if (_tcscmp(misc, _T("toggle")) == 0)
+  else if (StringIsEqual(misc, _T("toggle")))
     sub_TerrainTopography(-1);
 
   XCSoarInterface::SendMapSettings(true);
@@ -152,13 +152,13 @@ InputEvents::eventAudioDeadband(const TCHAR *misc)
   ComputerSettings &settings_computer =
     CommonInterface::SetComputerSettings();
 
-  if (_tcscmp(misc, _T("+"))) {
+  if (StringIsEqual(misc, _T("+"))) {
     if (settings_computer.sound_deadband >= 40)
       return;
 
     settings_computer.sound_deadband++;
   }
-  if (_tcscmp(misc, _T("-"))) {
+  if (StringIsEqual(misc, _T("-"))) {
     if (settings_computer.sound_deadband <= 0)
       return;
 
@@ -191,19 +191,19 @@ InputEvents::eventBugs(const TCHAR *misc)
   fixed BUGS = polar.GetBugs();
   fixed oldBugs = BUGS;
 
-  if (_tcscmp(misc, _T("up")) == 0) {
+  if (StringIsEqual(misc, _T("up"))) {
     BUGS += fixed_one / 10;
     if (BUGS > fixed_one)
       BUGS = fixed_one;
-  } else if (_tcscmp(misc, _T("down")) == 0) {
+  } else if (StringIsEqual(misc, _T("down"))) {
     BUGS -= fixed_one / 10;
     if (BUGS < fixed_half)
       BUGS = fixed_half;
-  } else if (_tcscmp(misc, _T("max")) == 0)
+  } else if (StringIsEqual(misc, _T("max")))
     BUGS = fixed_one;
-  else if (_tcscmp(misc, _T("min")) == 0)
+  else if (StringIsEqual(misc, _T("min")))
     BUGS = fixed_half;
-  else if (_tcscmp(misc, _T("show")) == 0) {
+  else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
     _stprintf(Temp, _T("%d"), (int)(BUGS * 100));
     Message::AddMessage(_("Bugs performance"), Temp);
@@ -232,19 +232,19 @@ InputEvents::eventBallast(const TCHAR *misc)
   fixed BALLAST = polar.GetBallast();
   fixed oldBallast = BALLAST;
 
-  if (_tcscmp(misc, _T("up")) == 0) {
+  if (StringIsEqual(misc, _T("up"))) {
     BALLAST += fixed_one / 10;
     if (BALLAST >= fixed_one)
       BALLAST = fixed_one;
-  } else if (_tcscmp(misc, _T("down")) == 0) {
+  } else if (StringIsEqual(misc, _T("down"))) {
     BALLAST -= fixed_one / 10;
     if (BALLAST < fixed_zero)
       BALLAST = fixed_zero;
-  } else if (_tcscmp(misc, _T("max")) == 0)
+  } else if (StringIsEqual(misc, _T("max")))
     BALLAST = fixed_one;
-  else if (_tcscmp(misc, _T("min")) == 0)
+  else if (StringIsEqual(misc, _T("min")))
     BALLAST = fixed_zero;
-  else if (_tcscmp(misc, _T("show")) == 0) {
+  else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
     _stprintf(Temp, _T("%d"), (int)(BALLAST * 100));
     Message::AddMessage(_("Ballast %"), Temp);
@@ -293,11 +293,11 @@ InputEvents::eventProfileSave(const TCHAR *misc)
 void
 InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("+")) == 0)
+  if (StringIsEqual(misc, _T("+")))
     CommonInterface::SetComputerSettings().forecast_temperature += fixed_one;
-  else if (_tcscmp(misc, _T("-")) == 0)
+  else if (StringIsEqual(misc, _T("-")))
     CommonInterface::SetComputerSettings().forecast_temperature -= fixed_one;
-  else if (_tcscmp(misc, _T("show")) == 0) {
+  else if (StringIsEqual(misc, _T("show"))) {
     fixed temperature =
       CommonInterface::GetComputerSettings().forecast_temperature;
     TCHAR Temp[100];
@@ -322,16 +322,16 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
 
   WaypointLabelSelection_t &wls =
     XCSoarInterface::SetMapSettings().waypoint.label_selection;
-  if (_tcscmp(misc, _T("toggle")) == 0)
+  if (StringIsEqual(misc, _T("toggle")))
     wls = (WaypointLabelSelection_t) ((wls + 1) %  n);
-  else if (_tcscmp(misc, _T("show")) == 0 && (unsigned int) wls < n) {
+  else if (StringIsEqual(misc, _T("show")) && (unsigned int) wls < n) {
     TCHAR tbuf[64];
     _stprintf(tbuf, _T("%s: %s"), _("Waypoint labels"), gettext(msg[wls]));
     Message::AddMessage(tbuf);
   }
   else {
     for (unsigned int i=0; i<n; i++)
-      if (_tcscmp(misc, actions[i]) == 0)
+      if (StringIsEqual(misc, actions[i]))
         wls = (WaypointLabelSelection_t) i;
   }
 
@@ -344,15 +344,15 @@ InputEvents::eventAirspaceDisplayMode(const TCHAR *misc)
   AirspaceRendererSettings &settings =
     CommonInterface::SetMapSettings().airspace;
 
-  if (_tcscmp(misc, _T("all")) == 0)
+  if (StringIsEqual(misc, _T("all")))
     settings.altitude_mode = ALLON;
-  else if (_tcscmp(misc, _T("clip")) == 0)
+  else if (StringIsEqual(misc, _T("clip")))
     settings.altitude_mode = CLIP;
-  else if (_tcscmp(misc, _T("auto")) == 0)
+  else if (StringIsEqual(misc, _T("auto")))
     settings.altitude_mode = AUTO;
-  else if (_tcscmp(misc, _T("below")) == 0)
+  else if (StringIsEqual(misc, _T("below")))
     settings.altitude_mode = ALLBELOW;
-  else if (_tcscmp(misc, _T("off")) == 0)
+  else if (StringIsEqual(misc, _T("off")))
     settings.altitude_mode = ALLOFF;
 
   trigger_redraw();
@@ -363,19 +363,19 @@ InputEvents::eventOrientation(const TCHAR *misc)
 {
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 
-  if (_tcscmp(misc, _T("northup")) == 0) {
+  if (StringIsEqual(misc, _T("northup"))) {
     settings_map.cruise_orientation = NORTHUP;
     settings_map.circling_orientation = NORTHUP;
-  } else if (_tcscmp(misc, _T("northcircle")) == 0) {
+  } else if (StringIsEqual(misc, _T("northcircle"))) {
     settings_map.cruise_orientation = TRACKUP;
     settings_map.circling_orientation = NORTHUP;
-  } else if (_tcscmp(misc, _T("trackcircle")) == 0) {
+  } else if (StringIsEqual(misc, _T("trackcircle"))) {
     settings_map.cruise_orientation = NORTHUP;
     settings_map.circling_orientation = TRACKUP;
-  } else if (_tcscmp(misc, _T("trackup")) == 0) {
+  } else if (StringIsEqual(misc, _T("trackup"))) {
     settings_map.cruise_orientation = TRACKUP;
     settings_map.circling_orientation = TRACKUP;
-  } else if (_tcscmp(misc, _T("northtrack")) == 0) {
+  } else if (StringIsEqual(misc, _T("northtrack"))) {
     settings_map.cruise_orientation = TRACKUP;
     settings_map.circling_orientation = TARGETUP;
   }

@@ -180,7 +180,7 @@ InputEvents::IsFlavour(const TCHAR *_flavour)
   if (_flavour == NULL)
     return false;
 
-  return _tcscmp(flavour, _flavour) == 0;
+  return StringIsEqual(flavour, _flavour);
 }
 
 void

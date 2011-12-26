@@ -34,7 +34,7 @@ static TrafficWidget *traffic_widget;
 void
 InputEvents::eventTraffic(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("show")) == 0) {
+  if (StringIsEqual(misc, _T("show"))) {
     if (!CommonInterface::Basic().flarm.available ||
         IsFlavour(_T("Traffic")))
       return;
@@ -50,13 +50,13 @@ InputEvents::eventTraffic(const TCHAR *misc)
 
   assert(traffic_widget != NULL);
 
-  if (_tcscmp(misc, _T("zoom auto toggle")) == 0) {
+  if (StringIsEqual(misc, _T("zoom auto toggle"))) {
     traffic_widget->ToggleAutoZoom();
-  } else if (_tcscmp(misc, _T("zoom in")) == 0) {
+  } else if (StringIsEqual(misc, _T("zoom in"))) {
     traffic_widget->ZoomIn();
-  } else if (_tcscmp(misc, _T("zoom out")) == 0) {
+  } else if (StringIsEqual(misc, _T("zoom out"))) {
     traffic_widget->ZoomOut();
-  } else if (_tcscmp(misc, _T("northup toggle")) == 0) {
+  } else if (StringIsEqual(misc, _T("northup toggle"))) {
     traffic_widget->ToggleNorthUp();
   }
 }

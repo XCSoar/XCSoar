@@ -56,40 +56,40 @@ InputEvents::eventZoom(const TCHAR* misc)
 
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 
-  if (_tcscmp(misc, _T("auto toggle")) == 0)
+  if (StringIsEqual(misc, _T("auto toggle")))
     sub_AutoZoom(-1);
-  else if (_tcscmp(misc, _T("auto on")) == 0)
+  else if (StringIsEqual(misc, _T("auto on")))
     sub_AutoZoom(1);
-  else if (_tcscmp(misc, _T("auto off")) == 0)
+  else if (StringIsEqual(misc, _T("auto off")))
     sub_AutoZoom(0);
-  else if (_tcscmp(misc, _T("auto show")) == 0) {
+  else if (StringIsEqual(misc, _T("auto show"))) {
     if (settings_map.auto_zoom_enabled)
       Message::AddMessage(_("Auto. zoom on"));
     else
       Message::AddMessage(_("Auto. zoom off"));
-  } else if (_tcscmp(misc, _T("slowout")) == 0)
+  } else if (StringIsEqual(misc, _T("slowout")))
     sub_ScaleZoom(-1);
-  else if (_tcscmp(misc, _T("slowin")) == 0)
+  else if (StringIsEqual(misc, _T("slowin")))
     sub_ScaleZoom(1);
-  else if (_tcscmp(misc, _T("out")) == 0)
+  else if (StringIsEqual(misc, _T("out")))
     sub_ScaleZoom(-1);
-  else if (_tcscmp(misc, _T("in")) == 0)
+  else if (StringIsEqual(misc, _T("in")))
     sub_ScaleZoom(1);
-  else if (_tcscmp(misc, _T("-")) == 0)
+  else if (StringIsEqual(misc, _T("-")))
     sub_ScaleZoom(-1);
-  else if (_tcscmp(misc, _T("+")) == 0)
+  else if (StringIsEqual(misc, _T("+")))
     sub_ScaleZoom(1);
-  else if (_tcscmp(misc, _T("--")) == 0)
+  else if (StringIsEqual(misc, _T("--")))
     sub_ScaleZoom(-2);
-  else if (_tcscmp(misc, _T("++")) == 0)
+  else if (StringIsEqual(misc, _T("++")))
     sub_ScaleZoom(2);
-  else if (_tcscmp(misc, _T("circlezoom toggle")) == 0) {
+  else if (StringIsEqual(misc, _T("circlezoom toggle"))) {
     settings_map.circle_zoom_enabled = !settings_map.circle_zoom_enabled;
-  } else if (_tcscmp(misc, _T("circlezoom on")) == 0) {
+  } else if (StringIsEqual(misc, _T("circlezoom on"))) {
     settings_map.circle_zoom_enabled = true;
-  } else if (_tcscmp(misc, _T("circlezoom off")) == 0) {
+  } else if (StringIsEqual(misc, _T("circlezoom off"))) {
     settings_map.circle_zoom_enabled = false;
-  } else if (_tcscmp(misc, _T("circlezoom show")) == 0) {
+  } else if (StringIsEqual(misc, _T("circlezoom show"))) {
     if (settings_map.circle_zoom_enabled)
       Message::AddMessage(_("Circling zoom on"));
     else
@@ -124,34 +124,34 @@ InputEvents::eventZoom(const TCHAR* misc)
 void
 InputEvents::eventPan(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("toggle")) == 0 ||
-      /* deprecated: */ _tcscmp(misc, _T("supertoggle")) == 0)
+  if (StringIsEqual(misc, _T("toggle")) ||
+      /* deprecated: */ StringIsEqual(misc, _T("supertoggle")))
     TogglePan();
 
-  else if (_tcscmp(misc, _T("on")) == 0)
+  else if (StringIsEqual(misc, _T("on")))
     SetPan(true);
 
-  else if (_tcscmp(misc, _T("off")) == 0)
+  else if (StringIsEqual(misc, _T("off")))
     SetPan(false);
 
-  else if (_tcscmp(misc, _T("up")) == 0)
+  else if (StringIsEqual(misc, _T("up")))
     if (IsHP31X())
       // Scroll wheel on the HP31x series should zoom in pan mode
       sub_ScaleZoom(1);
     else
       sub_PanCursor(0, 1);
 
-  else if (_tcscmp(misc, _T("down")) == 0)
+  else if (StringIsEqual(misc, _T("down")))
     if (IsHP31X())
       // Scroll wheel on the HP31x series should zoom in pan mode
       sub_ScaleZoom(-1);
     else
       sub_PanCursor(0, -1);
 
-  else if (_tcscmp(misc, _T("left")) == 0)
+  else if (StringIsEqual(misc, _T("left")))
     sub_PanCursor(1, 0);
 
-  else if (_tcscmp(misc, _T("right")) == 0)
+  else if (StringIsEqual(misc, _T("right")))
     sub_PanCursor(-1, 0);
 
   XCSoarInterface::SendMapSettings(true);
@@ -300,6 +300,6 @@ InputEvents::sub_ScaleZoom(int vswitch)
 void
 InputEvents::eventMap(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("show")) == 0)
+  if (StringIsEqual(misc, _T("show")))
     CommonInterface::main_window.ActivateMap();
 }

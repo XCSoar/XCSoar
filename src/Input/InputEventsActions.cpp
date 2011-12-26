@@ -115,7 +115,7 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
-  if (_tcscmp(misc, _T("reset")) == 0) {
+  if (StringIsEqual(misc, _T("reset"))) {
     protected_marks->Reset();
   } else {
     protected_marks->MarkLocation(basic.location, basic.date_time_utc);
@@ -142,36 +142,36 @@ InputEvents::eventScreenModes(const TCHAR *misc)
 
   const UIState &ui_state = CommonInterface::GetUIState();
 
-  if (_tcscmp(misc, _T("normal")) == 0) {
+  if (StringIsEqual(misc, _T("normal"))) {
     const PageSettings::PageLayout pl(PageLayout::tlMapAndInfoBoxes,
                                       InfoBoxConfig(true, 0));
     OpenLayout(pl);
-  } else if (_tcscmp(misc, _T("auxilary")) == 0) {
+  } else if (StringIsEqual(misc, _T("auxilary"))) {
     const PageSettings::PageLayout pl(PageLayout::tlMapAndInfoBoxes,
                                       InfoBoxConfig(false, 3));
     OpenLayout(pl);
-  } else if (_tcscmp(misc, _T("toggleauxiliary")) == 0) {
+  } else if (StringIsEqual(misc, _T("toggleauxiliary"))) {
     const PageLayout pl(!ui_state.auxiliary_enabled ?
                         PageLayout(PageLayout::tlMapAndInfoBoxes,
                                    PageSettings::InfoBoxConfig(false, 3)) :
                         PageLayout(PageLayout::tlMapAndInfoBoxes,
                                    PageSettings::InfoBoxConfig(true, 0)));
     OpenLayout(pl);
-  } else if (_tcscmp(misc, _T("full")) == 0) {
+  } else if (StringIsEqual(misc, _T("full"))) {
     const PageLayout pl(PageLayout::tlMap,
                         PageSettings::InfoBoxConfig(true, 0));
     OpenLayout(pl);
-  } else if (_tcscmp(misc, _T("togglefull")) == 0) {
+  } else if (StringIsEqual(misc, _T("togglefull"))) {
     XCSoarInterface::main_window.SetFullScreen(
         !XCSoarInterface::main_window.GetFullScreen());
-  } else if (_tcscmp(misc, _T("show")) == 0) {
+  } else if (StringIsEqual(misc, _T("show"))) {
     if (XCSoarInterface::main_window.GetFullScreen())
       Message::AddMessage(_("Screen Mode Full"));
     else if (ui_state.auxiliary_enabled)
         Message::AddMessage(_("Auxiliary InfoBoxes"));
     else
         Message::AddMessage(_("Default InfoBoxes"));
-  } else if (_tcscmp(misc, _T("previous")) == 0)
+  } else if (StringIsEqual(misc, _T("previous")))
     Pages::Prev();
   else
     Pages::Next();
@@ -192,7 +192,7 @@ InputEvents::eventClearStatusMessages(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventFLARMRadar(gcc_unused const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("ForceToggle")) == 0) {
+  if (StringIsEqual(misc, _T("ForceToggle"))) {
     CommonInterface::main_window.ToggleForceFLARMRadar();
   } else
     CommonInterface::main_window.ToggleSuppressFLARMRadar();
@@ -272,11 +272,11 @@ InputEvents::eventFlarmDetails(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventStatus(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("system")) == 0) {
+  if (StringIsEqual(misc, _T("system"))) {
     dlgStatusShowModal(1);
-  } else if (_tcscmp(misc, _T("task")) == 0) {
+  } else if (StringIsEqual(misc, _T("task"))) {
     dlgStatusShowModal(2);
-  } else if (_tcscmp(misc, _T("aircraft")) == 0) {
+  } else if (StringIsEqual(misc, _T("aircraft"))) {
     dlgStatusShowModal(0);
   } else {
     dlgStatusShowModal(-1);
@@ -312,7 +312,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
   const NMEAInfo &basic = CommonInterface::Basic();
   const Waypoint* wp = NULL;
 
-  if (_tcscmp(misc, _T("current")) == 0) {
+  if (StringIsEqual(misc, _T("current"))) {
     if (protected_task_manager == NULL)
       return;
 
@@ -321,7 +321,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
       Message::AddMessage(_("No active waypoint!"));
       return;
     }
-  } else if (_tcscmp(misc, _T("select")) == 0) {
+  } else if (StringIsEqual(misc, _T("select"))) {
     wp = dlgWaypointSelect(XCSoarInterface::main_window, basic.location);
   }
   if (wp)
@@ -377,36 +377,36 @@ InputEvents::eventLogger(const TCHAR *misc)
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
 
-  if (_tcscmp(misc, _T("start ask")) == 0)
+  if (StringIsEqual(misc, _T("start ask")))
     logger.GUIStartLogger(basic, settings_computer,
                           *protected_task_manager);
-  else if (_tcscmp(misc, _T("start")) == 0)
+  else if (StringIsEqual(misc, _T("start")))
     logger.GUIStartLogger(basic, settings_computer,
                           *protected_task_manager, true);
-  else if (_tcscmp(misc, _T("stop ask")) == 0)
+  else if (StringIsEqual(misc, _T("stop ask")))
     logger.GUIStopLogger(basic);
-  else if (_tcscmp(misc, _T("stop")) == 0)
+  else if (StringIsEqual(misc, _T("stop")))
     logger.GUIStopLogger(basic, true);
-  else if (_tcscmp(misc, _T("toggle ask")) == 0)
+  else if (StringIsEqual(misc, _T("toggle ask")))
     logger.GUIToggleLogger(basic, settings_computer,
                            *protected_task_manager);
-  else if (_tcscmp(misc, _T("toggle")) == 0)
+  else if (StringIsEqual(misc, _T("toggle")))
     logger.GUIToggleLogger(basic, settings_computer,
                            *protected_task_manager, true);
-  else if (_tcscmp(misc, _T("nmea")) == 0) {
+  else if (StringIsEqual(misc, _T("nmea"))) {
     NMEALogger::enabled = !NMEALogger::enabled;
     if (NMEALogger::enabled) {
       Message::AddMessage(_("NMEA log on"));
     } else {
       Message::AddMessage(_("NMEA log off"));
     }
-  } else if (_tcscmp(misc, _T("show")) == 0)
+  } else if (StringIsEqual(misc, _T("show")))
     if (logger.IsLoggerActive()) {
       Message::AddMessage(_("Logger on"));
     } else {
       Message::AddMessage(_("Logger off"));
     }
-  else if (_tcsncmp(misc, _T("note"), 4) == 0)
+  else if (_tcsncmp(misc, _T("note"), 4))
     // add note to logger file if available..
     logger.LoggerNote(misc + 4);
 }
@@ -429,11 +429,11 @@ InputEvents::eventRepeatStatusMessage(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("aircraft")) == 0)
+  if (StringIsEqual(misc, _T("aircraft")))
     // big range..
     PopupNearestWaypointDetails(way_points, CommonInterface::Basic().location,
                                 1.0e5);
-  else if (_tcscmp(misc, _T("pan")) == 0)
+  else if (StringIsEqual(misc, _T("pan")))
     // big range..
     PopupNearestWaypointDetails(way_points,
                                 CommonInterface::main_window.GetProjection().GetGeoLocation(),
@@ -447,11 +447,11 @@ InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
 void
 InputEvents::eventNearestMapItems(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("aircraft")) == 0)
+  if (StringIsEqual(misc, _T("aircraft")))
     CommonInterface::main_window.GetMap()->ShowMapItems(
         CommonInterface::Basic().location);
 
-  else if (_tcscmp(misc, _T("pan")) == 0)
+  else if (StringIsEqual(misc, _T("pan")))
     CommonInterface::main_window.GetMap()->ShowMapItems(
         CommonInterface::main_window.GetProjection().GetGeoLocation());
 }
@@ -487,32 +487,32 @@ InputEvents::eventBeep(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventSetup(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("Basic")) == 0)
+  if (StringIsEqual(misc, _T("Basic")))
     dlgBasicSettingsShowModal();
-  else if (_tcscmp(misc, _T("Wind")) == 0)
+  else if (StringIsEqual(misc, _T("Wind")))
     dlgWindSettingsShowModal();
-  else if (_tcscmp(misc, _T("System")) == 0)
+  else if (StringIsEqual(misc, _T("System")))
     SystemConfiguration();
-  else if (_tcscmp(misc, _T("Task")) == 0)
+  else if (StringIsEqual(misc, _T("Task")))
     dlgTaskManagerShowModal(XCSoarInterface::main_window);
-  else if (_tcscmp(misc, _T("Airspace")) == 0)
+  else if (StringIsEqual(misc, _T("Airspace")))
     dlgAirspaceShowModal(false);
-  else if (_tcscmp(misc, _T("Weather")) == 0)
+  else if (StringIsEqual(misc, _T("Weather")))
     dlgWeatherShowModal();
-  else if (_tcscmp(misc, _T("Replay")) == 0) {
+  else if (StringIsEqual(misc, _T("Replay"))) {
     if (!CommonInterface::MovementDetected())
       dlgLoggerReplayShowModal();
-  } else if (_tcscmp(misc, _T("Switches")) == 0)
+  } else if (StringIsEqual(misc, _T("Switches")))
     dlgSwitchesShowModal();
-  else if (_tcscmp(misc, _T("Voice")) == 0)
+  else if (StringIsEqual(misc, _T("Voice")))
     dlgVoiceShowModal();
-  else if (_tcscmp(misc, _T("Teamcode")) == 0)
+  else if (StringIsEqual(misc, _T("Teamcode")))
     dlgTeamCodeShowModal();
-  else if (_tcscmp(misc, _T("Target")) == 0)
+  else if (StringIsEqual(misc, _T("Target")))
     dlgTargetShowModal();
-  else if (_tcscmp(misc, _T("Plane")) == 0)
+  else if (StringIsEqual(misc, _T("Plane")))
     dlgPlanesShowModal(XCSoarInterface::main_window);
-  else if (_tcscmp(misc, _T("Alternates")) == 0)
+  else if (StringIsEqual(misc, _T("Alternates")))
     dlgAlternatesListShowModal(XCSoarInterface::main_window);
 
   trigger_redraw();
@@ -562,15 +562,15 @@ InputEvents::eventUserDisplayModeForce(const TCHAR *misc)
 {
   UIState &ui_state = CommonInterface::SetUIState();
 
-  if (_tcscmp(misc, _T("unforce")) == 0)
+  if (StringIsEqual(misc, _T("unforce")))
     ui_state.force_display_mode = DM_NONE;
-  else if (_tcscmp(misc, _T("forceclimb")) == 0)
+  else if (StringIsEqual(misc, _T("forceclimb")))
     ui_state.force_display_mode = DM_CIRCLING;
-  else if (_tcscmp(misc, _T("forcecruise")) == 0)
+  else if (StringIsEqual(misc, _T("forcecruise")))
     ui_state.force_display_mode = DM_CRUISE;
-  else if (_tcscmp(misc, _T("forcefinal")) == 0)
+  else if (StringIsEqual(misc, _T("forcefinal")))
     ui_state.force_display_mode = DM_FINAL_GLIDE;
-  else if (_tcscmp(misc, _T("show")) == 0)
+  else if (StringIsEqual(misc, _T("show")))
     Message::AddMessage(_("Map labels on"));
 
   /* trigger mode update by GlueMapWindow */
@@ -583,7 +583,7 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
-  if (_tcscmp(misc, _T("takeoff")) == 0) {
+  if (StringIsEqual(misc, _T("takeoff"))) {
     if (basic.location_available && calculated.terrain_valid) {
       ScopeSuspendAllThreads suspend;
       way_points.AddTakeoffPoint(basic.location, calculated.terrain_altitude);
@@ -651,7 +651,7 @@ void
 InputEvents::eventWeather(const TCHAR *misc)
 {
 #ifdef HAVE_NET
-  if (_tcscmp(misc, _T("list")) == 0)
+  if (StringIsEqual(misc, _T("list")))
     dlgNOAAListShowModal(XCSoarInterface::main_window);
 #endif
 }

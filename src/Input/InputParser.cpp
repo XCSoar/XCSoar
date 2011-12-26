@@ -182,7 +182,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
 
     // experimental: if the first line is "#CLEAR" then the whole default config is cleared
     //               and can be overwritten by file
-    if (line == 1 && _tcscmp(buffer, _T("#CLEAR")) == 0) {
+    if (line == 1 && StringIsEqual(buffer, _T("#CLEAR"))) {
       config.SetDefaults();
     } else if (buffer[0] == _T('\0')) {
       // Check valid line? If not valid, assume next record (primative, but works ok!)
@@ -197,13 +197,13 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
       // NOTE: Do NOT display buffer to user as it may contain an invalid stirng !
 
     } else if (parse_assignment(buffer, key, value)) {
-      if (_tcscmp(key, _T("mode")) == 0) {
+      if (StringIsEqual(key, _T("mode"))) {
         current.mode = value;
-      } else if (_tcscmp(key, _T("type")) == 0) {
+      } else if (StringIsEqual(key, _T("type"))) {
         current.type = value;
-      } else if (_tcscmp(key, _T("data")) == 0) {
+      } else if (StringIsEqual(key, _T("data"))) {
         current.data = value;
-      } else if (_tcscmp(key, _T("event")) == 0) {
+      } else if (StringIsEqual(key, _T("event"))) {
         if (_tcslen(value) < 256) {
           TCHAR d_event[256] = _T("");
           TCHAR d_misc[256] = _T("");
@@ -250,9 +250,9 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
             LogStartUp(_T("Invalid event type at %i"), line);
           }
         }
-      } else if (_tcscmp(key, _T("label")) == 0) {
+      } else if (StringIsEqual(key, _T("label"))) {
         current.label = value;
-      } else if (_tcscmp(key, _T("location")) == 0) {
+      } else if (StringIsEqual(key, _T("location"))) {
         current.location = _ttoi(value);
 
       } else {

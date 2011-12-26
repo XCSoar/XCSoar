@@ -65,13 +65,13 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
   const TaskAdvance::TaskAdvanceState_t mode =
     task_manager->GetTaskAdvance().get_advance_state();
   
-  if (_tcscmp(misc, _T("on")) == 0) {
+  if (StringIsEqual(misc, _T("on"))) {
     task_manager->GetTaskAdvance().set_armed(true);
-  } else if (_tcscmp(misc, _T("off")) == 0) {
+  } else if (StringIsEqual(misc, _T("off"))) {
     task_manager->GetTaskAdvance().set_armed(false);
-  } else if (_tcscmp(misc, _T("toggle")) == 0) {
+  } else if (StringIsEqual(misc, _T("toggle"))) {
     task_manager->GetTaskAdvance().toggle_armed();
-  } else if (_tcscmp(misc, _T("show")) == 0) {
+  } else if (StringIsEqual(misc, _T("show"))) {
     switch (mode) {
     case TaskAdvance::MANUAL:
       Message::AddMessage(_("Advance manually"));
@@ -132,28 +132,28 @@ InputEvents::eventMacCready(const TCHAR *misc)
 
   TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
 
-  if (_tcscmp(misc, _T("up")) == 0) {
+  if (StringIsEqual(misc, _T("up"))) {
     mc = std::min(mc + Units::ToSysVSpeed(fixed_one / fixed(10)), fixed(5));
     ActionInterface::SetMacCready(mc);
-  } else if (_tcscmp(misc, _T("down")) == 0) {
+  } else if (StringIsEqual(misc, _T("down"))) {
     mc = std::max(mc - Units::ToSysVSpeed(fixed_one / fixed(10)), fixed_zero);
     ActionInterface::SetMacCready(mc);
-  } else if (_tcscmp(misc, _T("auto toggle")) == 0) {
+  } else if (StringIsEqual(misc, _T("auto toggle"))) {
     task_behaviour.auto_mc = !task_behaviour.auto_mc;
     Profile::Set(szProfileAutoMc, task_behaviour.auto_mc);
-  } else if (_tcscmp(misc, _T("auto on")) == 0) {
+  } else if (StringIsEqual(misc, _T("auto on"))) {
     task_behaviour.auto_mc = true;
     Profile::Set(szProfileAutoMc, true);
-  } else if (_tcscmp(misc, _T("auto off")) == 0) {
+  } else if (StringIsEqual(misc, _T("auto off"))) {
     task_behaviour.auto_mc = false;
     Profile::Set(szProfileAutoMc, false);
-  } else if (_tcscmp(misc, _T("auto show")) == 0) {
+  } else if (StringIsEqual(misc, _T("auto show"))) {
     if (task_behaviour.auto_mc) {
       Message::AddMessage(_("Auto. MacCready on"));
     } else {
       Message::AddMessage(_("Auto. MacCready off"));
     }
-  } else if (_tcscmp(misc, _T("show")) == 0) {
+  } else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
     Units::FormatUserVSpeed(mc,
                             Temp, ARRAY_SIZE(Temp),
@@ -174,17 +174,17 @@ InputEvents::eventAdjustWaypoint(const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  if (_tcscmp(misc, _T("next")) == 0)
+  if (StringIsEqual(misc, _T("next")))
     protected_task_manager->IncrementActiveTaskPoint(1); // next
-  else if (_tcscmp(misc, _T("nextwrap")) == 0)
+  else if (StringIsEqual(misc, _T("nextwrap")))
     protected_task_manager->IncrementActiveTaskPoint(1); // next - with wrap
-  else if (_tcscmp(misc, _T("previous")) == 0)
+  else if (StringIsEqual(misc, _T("previous")))
     protected_task_manager->IncrementActiveTaskPoint(-1); // previous
-  else if (_tcscmp(misc, _T("previouswrap")) == 0)
+  else if (StringIsEqual(misc, _T("previouswrap")))
     protected_task_manager->IncrementActiveTaskPoint(-1); // previous with wrap
-  else if (_tcscmp(misc, _T("nextarm")) == 0)
+  else if (StringIsEqual(misc, _T("nextarm")))
     protected_task_manager->IncrementActiveTaskPointArm(1); // arm sensitive next
-  else if (_tcscmp(misc, _T("previousarm")) == 0)
+  else if (StringIsEqual(misc, _T("previousarm")))
     protected_task_manager->IncrementActiveTaskPointArm(-1); // arm sensitive previous
 
   trigger_redraw();
@@ -204,11 +204,11 @@ InputEvents::eventAbortTask(const TCHAR *misc)
 
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
 
-  if (_tcscmp(misc, _T("abort")) == 0)
+  if (StringIsEqual(misc, _T("abort")))
     task_manager->Abort();
-  else if (_tcscmp(misc, _T("resume")) == 0)
+  else if (StringIsEqual(misc, _T("resume")))
     task_manager->Resume();
-  else if (_tcscmp(misc, _T("show")) == 0) {
+  else if (StringIsEqual(misc, _T("show"))) {
     switch (task_manager->GetMode()) {
     case TaskManager::MODE_ABORT:
       Message::AddMessage(_("Task aborted"));
@@ -295,7 +295,7 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  if (_tcscmp(misc, _T("start")) == 0) {
+  if (StringIsEqual(misc, _T("start"))) {
     AircraftState start_state = protected_task_manager->GetStartState();
 
     TCHAR TempTime[40];
@@ -312,11 +312,11 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     _stprintf(TempAll, _T("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"),
               TempAlt, TempSpeed, TempTime);
     Message::AddMessage(_("Task start"), TempAll);
-  } else if (_tcscmp(misc, _T("tp")) == 0) {
+  } else if (StringIsEqual(misc, _T("tp"))) {
     Message::AddMessage(_("Next turnpoint"));
-  } else if (_tcscmp(misc, _T("finish")) == 0) {
+  } else if (StringIsEqual(misc, _T("finish"))) {
     Message::AddMessage(_("Task finished"));
-  } else if (_tcscmp(misc, _T("ready")) == 0) {
+  } else if (StringIsEqual(misc, _T("ready"))) {
     Message::AddMessage(_("In sector, arm advance when ready"));
   }
 }
