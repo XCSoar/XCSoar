@@ -74,11 +74,7 @@ void
 WindSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   LoadWindow(CallBackTable, parent, _T("IDR_XML_INFOBOXWINDSETUP"));
-}
 
-void
-WindSetupPanel::Show(const PixelRect &rc)
-{
   const NMEAInfo &basic = XCSoarInterface::Basic();
   const ComputerSettings &settings_computer =
     XCSoarInterface::GetComputerSettings();
@@ -105,7 +101,11 @@ WindSetupPanel::Show(const PixelRect &rc)
     LoadFormProperty(form, _T("prpAutoWind"), auto_wind_list,
                      settings_computer.auto_wind_mode);
   }
+}
 
+void
+WindSetupPanel::Show(const PixelRect &rc)
+{
   LoadFormProperty(form, _T("prpTrailDrift"),
                    XCSoarInterface::GetMapSettings().trail_drift_enabled);
 
