@@ -167,8 +167,6 @@ public:
 
   template<typename T>
   bool SaveValueEnum(unsigned i, const TCHAR *registry_key, T &value) const {
-    if (sizeof(T) == sizeof(int))
-      return SaveValue(i, registry_key, (int &)value);
 
     int value2 = (int)value;
     if (!SaveValue(i, registry_key, value2))
