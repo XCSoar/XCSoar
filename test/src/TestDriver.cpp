@@ -139,7 +139,7 @@ TestFLARM()
                                       nmea_info));
   ok1(nmea_info.flarm.rx == 3);
   ok1(nmea_info.flarm.tx);
-  ok1(nmea_info.flarm.gps == 1);
+  ok1(nmea_info.flarm.gps == FlarmState::GPSStatus::GPS_2D);
   ok1(nmea_info.flarm.alarm_level == FlarmTraffic::AlarmType::NONE);
   ok1(nmea_info.flarm.GetActiveTrafficCount() == 0);
   ok1(!nmea_info.flarm.new_traffic);

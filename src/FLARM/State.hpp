@@ -27,7 +27,6 @@ Copyright_License {
 #include "FLARM/Traffic.hpp"
 #include "NMEA/Validity.hpp"
 #include "Util/TrivialArray.hpp"
-#include "Util/TinyEnum.hpp"
 #include "Util/TypeTraits.hpp"
 
 /**
@@ -39,8 +38,8 @@ struct FlarmState
     FLARM_MAX_TRAFFIC = 25,
   };
 
-  enum GPSStatus {
-    GPS_NONE = 0,
+  enum class GPSStatus: uint8_t {
+    NONE = 0,
     GPS_2D = 1,
     GPS_3D = 2,
   };
@@ -57,7 +56,7 @@ struct FlarmState
   bool new_traffic;
 
   /** GPS status */
-  TinyEnum<GPSStatus> gps;
+  GPSStatus gps;
 
   /** Alarm level of FLARM (0-3) */
   FlarmTraffic::AlarmType alarm_level;
