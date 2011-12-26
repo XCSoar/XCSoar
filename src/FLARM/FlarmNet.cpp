@@ -153,7 +153,7 @@ FlarmNet::FindFirstRecordByCallSign(const TCHAR *cn)
   RecordMap::const_iterator i = record_map.begin();
   while (i != record_map.end()) {
     const Record *record = (const Record *)(i->second);
-    if (_tcscmp(record->callsign, cn) == 0)
+    if (StringIsEqual(record->callsign, cn))
       return record;
 
     i++;
@@ -170,7 +170,7 @@ FlarmNet::FindRecordsByCallSign(const TCHAR *cn, const Record *array[], unsigned
   RecordMap::const_iterator i = record_map.begin();
   while (i != record_map.end() && count < size) {
     const Record *record = (const Record *)(i->second);
-    if (_tcscmp(record->callsign, cn) == 0) {
+    if (StringIsEqual(record->callsign, cn)) {
       array[count] = record;
       count++;
     }
@@ -189,7 +189,7 @@ FlarmNet::FindIdsByCallSign(const TCHAR *cn, const FlarmId *array[], unsigned si
   RecordMap::const_iterator i = record_map.begin();
   while (i != record_map.end() && count < size) {
     const Record *record = (const Record *)(i->second);
-    if (_tcscmp(record->callsign, cn) == 0) {
+    if (StringIsEqual(record->callsign, cn)) {
       array[count] = (const FlarmId *)(&(i->first));
       count++;
     }
