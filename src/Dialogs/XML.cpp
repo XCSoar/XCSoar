@@ -316,7 +316,7 @@ CallBackLookup(const CallBackTableEntry *lookup_table, const TCHAR *name)
     assert(p->name != NULL);
     assert(p->callback != NULL);
 
-    if (_tcscmp(p->name, name) == 0)
+    if (StringIsEqual(p->name, name))
       return p->callback;
   }
 }
@@ -464,7 +464,7 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   assert(node != NULL);
 
   // If the main XMLNode is of type "Form"
-  assert(_tcscmp(node->getName(), _T("Form")) == 0);
+  assert(StringIsEqual(node->getName(), _T("Form")));
 
   // Determine the dialog style of the dialog
   DialogStyle dialog_style = GetDialogStyle(*node);
@@ -617,7 +617,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   bool expert = (StringToIntDflt(node.getAttribute(_T("Expert")), 0) == 1);
 
   // PropertyControl (WndProperty)
-  if (_tcscmp(node.getName(), _T("Edit")) == 0) {
+  if (StringIsEqual(node.getName(), _T("Edit"))) {
     // Determine the width of the caption field
     int caption_width = StringToIntDflt(node.getAttribute(_T("CaptionWidth")), 0);
 
@@ -685,7 +685,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
         property->SetDataField(data_field);
     }
 
-  } else if (_tcscmp(node.getName(), _T("TextEdit")) == 0) {
+  } else if (StringIsEqual(node.getName(), _T("TextEdit"))) {
     // Determine whether the control is multiline or readonly
     bool multi_line = StringToIntDflt(node.getAttribute(_T("MultiLine")), 0);
     bool read_only = StringToIntDflt(node.getAttribute(_T("ReadOnly")), 0);
@@ -715,7 +715,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     edit->set_font(*xml_dialog_look->text_font);
 
   // ButtonControl (WndButton)
-  } else if (_tcscmp(node.getName(), _T("Button")) == 0) {
+  } else if (StringIsEqual(node.getName(), _T("Button"))) {
     // Determine ClickCallback function
     WndButton::ClickNotifyCallback click_callback =
       (WndButton::ClickNotifyCallback)
@@ -731,7 +731,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
                            rc,
                            button_style, click_callback);
 
-  } else if (_tcscmp(node.getName(), _T("CheckBox")) == 0) {
+  } else if (StringIsEqual(node.getName(), _T("CheckBox"))) {
     // Determine click_callback function
     CheckBoxControl::ClickNotifyCallback click_callback =
       (CheckBoxControl::ClickNotifyCallback)
@@ -746,7 +746,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
                                  style, click_callback);
 
   // SymbolButtonControl (WndSymbolButton) not used yet
-  } else if (_tcscmp(node.getName(), _T("SymbolButton")) == 0) {
+  } else if (StringIsEqual(node.getName(), _T("SymbolButton"))) {
     // Determine ClickCallback function
     WndButton::ClickNotifyCallback click_callback =
       (WndButton::ClickNotifyCallback)
@@ -761,7 +761,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
                                  style, click_callback);
 
   // PanelControl (WndPanel)
-  } else if (_tcscmp(node.getName(), _T("Panel")) == 0) {
+  } else if (StringIsEqual(node.getName(), _T("Panel"))) {
     // Create the PanelControl
 
     style.control_parent();
@@ -777,7 +777,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
                         lookup_table, &node, dialog_style);
 
   // KeyboardControl
-  } else if (_tcscmp(node.getName(), _T("Keyboard")) == 0) {
+  } else if (StringIsEqual(node.getName(), _T("Keyboard"))) {
     KeyboardControl::OnCharacterCallback_t character_callback =
       (KeyboardControl::OnCharacterCallback_t)
       GetCallBack(lookup_table, node, _T("OnCharacter"));
@@ -790,7 +790,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     window = kb;
   // DrawControl (WndOwnerDrawFrame)
-  } else if (_tcscmp(node.getName(), _T("Canvas")) == 0) {
+  } else if (StringIsEqual(node.getName(), _T("Canvas"))) {
     // Determine DrawCallback function
     WndOwnerDrawFrame::OnPaintCallback_t paint_callback =
       (WndOwnerDrawFrame::OnPaintCallback_t)
@@ -804,7 +804,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     window = canvas;
 
   // FrameControl (WndFrame)
-  } else if (_tcscmp(node.getName(), _T("Label")) == 0){
+  } else if (StringIsEqual(node.getName(), _T("Label"))){
     // Create the FrameControl
     WndFrame* frame = new WndFrame(parent, *xml_dialog_look,
                                    pos.x, pos.y, size.cx, size.cy,
@@ -820,7 +820,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     window = frame;
 
   // ListBoxControl (WndListFrame)
-  } else if (_tcscmp(node.getName(), _T("List")) == 0){
+  } else if (StringIsEqual(node.getName(), _T("List"))){
     // Determine ItemHeight of the list items
     UPixelScalar item_height =
       Layout::Scale(StringToIntDflt(node.getAttribute(_T("ItemHeight")), 18));
@@ -842,7 +842,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
                               item_height);
 
   // TabControl (Tabbed)
-  } else if (_tcscmp(node.getName(), _T("Tabbed")) == 0) {
+  } else if (StringIsEqual(node.getName(), _T("Tabbed"))) {
     // Create the TabControl
 
     style.control_parent();
@@ -862,7 +862,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
         tabbed->AddClient(child);
     }
   // TabBarControl (TabBar)
-  } else if (_tcscmp(node.getName(), _T("TabBar")) == 0) {
+  } else if (StringIsEqual(node.getName(), _T("TabBar"))) {
     // Create the TabBarControl
 
     bool flip_orientation = false;
@@ -877,7 +877,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     window = tabbar;
 
     // TabMenuControl (TabMenu)
-  } else if (_tcscmp(node.getName(), _T("TabMenu")) == 0) {
+  } else if (StringIsEqual(node.getName(), _T("TabMenu"))) {
     // Create the TabMenuControl
 
     style.control_parent();
@@ -892,7 +892,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
                                                  style);
     window = tabmenu;
 
-  } else if (_tcscmp(node.getName(), _T("Custom")) == 0) {
+  } else if (StringIsEqual(node.getName(), _T("Custom"))) {
     // Create a custom Window object with a callback
     CreateWindowCallback_t create_callback =
         (CreateWindowCallback_t)GetCallBack(lookup_table, node, _T("OnCreate"));
@@ -900,7 +900,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
       return NULL;
 
     window = create_callback(parent, pos.x, pos.y, size.cx, size.cy, style);
-  } else if (_tcscmp(node.getName(), _T("Widget")) == 0) {
+  } else if (StringIsEqual(node.getName(), _T("Widget"))) {
     DockWindow *dock = new DockWindow();
     dock->set(parent, rc, style);
     window = dock;
