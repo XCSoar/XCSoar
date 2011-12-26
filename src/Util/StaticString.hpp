@@ -65,10 +65,6 @@ private:
     return strlen(data);
   }
 
-  static bool equals(const char *a, const char *b) {
-    return strcmp(a, b) == 0;
-  }
-
   static char *strtok(char *data, const char *delim) {
     return strtok(data, delim);
   }
@@ -87,10 +83,6 @@ private:
 
   static unsigned length(const TCHAR *data) {
     return _tcslen(data);
-  }
-
-  static bool equals(const TCHAR *a, const TCHAR *b) {
-    return _tcscmp(a, b) == 0;
   }
 
   static TCHAR *strtok(TCHAR *data, const TCHAR *delim) {
@@ -140,7 +132,7 @@ public:
   bool equals(const T *other) const {
     assert(other != NULL);
 
-    return equals(data, other);
+    return StringIsEqual(data, other);
   }
 
   /**
