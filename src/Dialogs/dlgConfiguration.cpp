@@ -87,6 +87,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Waypoints"), 1, CreateWaypointDisplayConfigPanel },
   {N_("Terrain"), 1, CreateTerrainDisplayConfigPanel },
   {N_("Airspace"), 1, CreateAirspaceConfigPanel },
+  {_T("AirspaceTmp"), 1, CreateAirspaceTmpButtonPanel },
   {N_("Safety Factors"), 2, CreateSafetyFactorsConfigPanel },
   {N_("Glide Computer"), 2, CreateGlideComputerConfigPanel },
   {N_("Route"), 2, CreateRouteConfigPanel },

@@ -315,6 +315,26 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
   return true;
 }
 
+bool
+RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
+                         const TCHAR *registry_key, unsigned int &value) const
+{
+  const DataFieldFloat &df =
+    (const DataFieldFloat &)GetDataField(i);
+  assert(df.GetType() == DataField::TYPE_INTEGER || df.GetType() == DataField::TYPE_REAL);
+
+  fixed new_value = df.GetAsFixed();
+  const Unit unit = Units::GetUserUnitByGroup(unit_group);
+  new_value = Units::ToSysUnit(new_value, unit);
+  if ((unsigned int)(new_value) > value - iround(df.GetStep()) / 2 &&
+      (unsigned int)(new_value) < value + iround(df.GetStep()) / 2)
+    return false;
+
+  value = iround(new_value);
+  Profile::Set(registry_key, new_value);
+  return true;
+}
+
 void
 RowFormWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {

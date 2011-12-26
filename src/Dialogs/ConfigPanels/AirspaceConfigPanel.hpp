@@ -29,4 +29,7 @@ class Widget;
 Widget *
 CreateAirspaceConfigPanel();
 
+Widget *
+CreateAirspaceTmpButtonPanel();
+
 #endif /* AIRSPACECONFIGPANEL_HPP */

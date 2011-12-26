@@ -149,6 +149,9 @@ public:
   bool SaveValue(unsigned i, UnitGroup unit_group,
                  const TCHAR *registry_key, fixed &value) const;
 
+  bool SaveValue(unsigned i, UnitGroup unit_group,
+                 const TCHAR *registry_key, unsigned int &value) const;
+
   template<typename T>
   bool SaveValueEnum(unsigned i, T &value) const {
     if (sizeof(T) == sizeof(int))

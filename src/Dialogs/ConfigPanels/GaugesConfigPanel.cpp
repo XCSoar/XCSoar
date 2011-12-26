@@ -23,52 +23,51 @@ Copyright_License {
 
 #include "GaugesConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Form/Util.hpp"
 #include "Interface.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
+#include "Language/Language.hpp"
+#include "UIGlobals.hpp"
 
-class GaugesConfigPanel : public XMLWidget {
-
-public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+enum ControlIndex {
+  EnableFLARMGauge,
+  AutoCloseFlarmDialog,
+  EnableTAGauge,
+  EnableThermalProfile
 };
 
-void
-GaugesConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
+class GaugesConfigPanel : public RowFormWidget {
 
-void
-GaugesConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
+public:
+  GaugesConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+};
 
 void
 GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent,
-             Layout::landscape ? _T("IDR_XML_GAUGESCONFIGPANEL") :
-                               _T("IDR_XML_GAUGESCONFIGPANEL_L"));
-
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
-  LoadFormProperty(form, _T("prpEnableFLARMGauge"),
-                   ui_settings.enable_flarm_gauge);
+  RowFormWidget::Prepare(parent, rc);
 
-  LoadFormProperty(form, _T("prpAutoCloseFlarmDialog"),
-                   ui_settings.auto_close_flarm_dialog);
+  AddBoolean(_("FLARM radar"),
+             _("This enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."),
+             ui_settings.enable_flarm_gauge);
 
-  LoadFormProperty(form, _T("prpEnableTAGauge"),
-                   ui_settings.enable_thermal_assistant_gauge);
+  AddBoolean(_("Auto close FLARM"),
+             _("Setting this to \"On\" will automatically close the FLARM dialog if there is no traffic. \"Off\" will keep the dialog open even without current traffic."),
+             ui_settings.auto_close_flarm_dialog);
 
-  LoadFormProperty(form, _T("prpEnableThermalProfile"),
-                   XCSoarInterface::GetMapSettings().show_thermal_profile);
+  AddBoolean(_("Thermal assistant"),
+             _("This enables the display of the thermal assistant gauge."),
+             ui_settings.enable_thermal_assistant_gauge);
+
+  AddBoolean(_("Thermal band"),
+             _("This enables the display of the thermal profile (climb band) display on the map."),
+             XCSoarInterface::GetMapSettings().show_thermal_profile);
 }
 
 bool
@@ -78,21 +77,17 @@ GaugesConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   UISettings &ui_settings = CommonInterface::SetUISettings();
 
-  changed |= SaveFormProperty(form, _T("prpEnableFLARMGauge"),
-                              szProfileEnableFLARMGauge,
-                              ui_settings.enable_flarm_gauge);
+  changed |= SaveValue(EnableFLARMGauge, szProfileEnableFLARMGauge,
+                       ui_settings.enable_flarm_gauge);
 
-  changed |= SaveFormProperty(form, _T("prpAutoCloseFlarmDialog"),
-                              szProfileAutoCloseFlarmDialog,
-                              ui_settings.auto_close_flarm_dialog);
+  changed |= SaveValue(AutoCloseFlarmDialog, szProfileAutoCloseFlarmDialog,
+                       ui_settings.auto_close_flarm_dialog);
 
-  changed |= SaveFormProperty(form, _T("prpEnableTAGauge"),
-                              szProfileEnableTAGauge,
-                              ui_settings.enable_thermal_assistant_gauge);
+  changed |= SaveValue(EnableTAGauge, szProfileEnableTAGauge,
+                       ui_settings.enable_thermal_assistant_gauge);
 
-  changed |= SaveFormProperty(form, _T("prpEnableThermalProfile"),
-                              szProfileEnableThermalProfile,
-                              XCSoarInterface::SetMapSettings().show_thermal_profile);
+  changed |= SaveValue(EnableThermalProfile, szProfileEnableThermalProfile,
+                       XCSoarInterface::SetMapSettings().show_thermal_profile);
 
   _changed |= changed;
   _require_restart |= require_restart;
