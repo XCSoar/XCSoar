@@ -23,39 +23,28 @@ Copyright_License {
 
 #include "PagesConfigPanel.hpp"
 #include "DataField/Enum.hpp"
-#include "Form/Edit.hpp"
 #include "Pages.hpp"
+#include "Language/Language.hpp"
 #include "Profile/PageProfile.hpp"
 #include "Interface.hpp"
-#include "Form/Form.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
 
 #include <stdio.h>
 
 using namespace Pages;
 
 
-class PagesConfigPanel : public XMLWidget {
+class PagesConfigPanel : public RowFormWidget {
+public:
+  PagesConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(50)) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
 };
-
-void
-PagesConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
-
-void
-PagesConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
 
 static void
 UpdateComboBox(DataFieldEnum* dfe, unsigned page)
@@ -77,20 +66,27 @@ UpdateComboBox(DataFieldEnum* dfe, unsigned page)
   }
 }
 
+
+
 void
 PagesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent,
-             Layout::landscape ? _T("IDR_XML_PAGESCONFIGPANEL") :
-                               _T("IDR_XML_PAGESCONFIGPANEL_L"));
+  static const StaticEnumChoice  empty_list[] = { { 0 }  };
 
-  StaticString<64> prpName;
-  for (unsigned i = 0; i < PageSettings::MAX_PAGES; i++) {
-    prpName.Format(_T("prpPageLayout%u"), i);
-    WndProperty* wp = (WndProperty*)form.FindByName(prpName);
+  RowFormWidget::Prepare(parent, rc);
+
+  for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; i++) {
+    StaticString<32> caption;
+    caption.Format(_T("%s %u"), _("Page"), i+1);
+    WndProperty* wp = AddEnum(caption,
+                             _("Determines the information displayed on different screen pages."),
+                             empty_list, 0);
     if (wp) {
       DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
       UpdateComboBox(dfe, i);
+// TODO     if (i>2 && !Expert) {
+//        wp->set_visible(false);
+//      }
       wp->RefreshDisplay();
     }
   }
@@ -100,16 +96,14 @@ bool
 PagesConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
-  StaticString<64> prpName;
 
   PageSettings &settings = CommonInterface::SetUISettings().pages;
   for (unsigned int i = 0; i < PageSettings::MAX_PAGES; i++) {
-    prpName.Format(_T("prpPageLayout%u"), i);
-    WndProperty* wp = (WndProperty*)form.FindByName(prpName);
-    if (wp) {
+    unsigned int tmp_page_selection;
+    if (SaveValueEnum(i, tmp_page_selection)) {
       PageSettings::PageLayout *currentPL = &settings.pages[i];
       const PageSettings::PageLayout *setPL =
-        PossiblePageLayout(wp->GetDataField()->GetAsInteger());
+        PossiblePageLayout(tmp_page_selection);
       if (! (*currentPL == *setPL)) {
         SetLayout(i, *setPL);
 
