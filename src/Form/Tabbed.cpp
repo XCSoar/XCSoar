@@ -35,6 +35,11 @@ TabbedControl::TabbedControl(ContainerWindow &parent,
   set(parent, x, y, width, height, style);
 }
 
+TabbedControl::~TabbedControl()
+{
+  reset();
+}
+
 void
 TabbedControl::AddPage(Widget *w)
 {

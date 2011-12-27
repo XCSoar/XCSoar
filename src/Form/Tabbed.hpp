@@ -65,6 +65,8 @@ public:
                 UPixelScalar width, UPixelScalar height,
                 const WindowStyle style=WindowStyle());
 
+  virtual ~TabbedControl();
+
   void SetPageFlippedCallback(PageFlippedCallback _page_flipped_callback) {
     assert(page_flipped_callback == NULL);
     assert(_page_flipped_callback != NULL);
