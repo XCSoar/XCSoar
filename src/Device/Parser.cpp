@@ -770,7 +770,11 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEAInfo &info)
 
   traffic.stealth = stealth;
 
-  traffic.type = (FlarmTraffic::AircraftType)line.read(0);
+  unsigned type = line.read(0);
+  if (type > 15 || type == 14)
+    traffic.type = FlarmTraffic::AircraftType::UNKNOWN;
+  else
+    traffic.type = (FlarmTraffic::AircraftType)type;
 
   FlarmTraffic *flarm_slot = flarm.FindTraffic(traffic.id);
   if (flarm_slot == NULL) {
