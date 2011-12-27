@@ -71,7 +71,15 @@ protected:
   /** The index of the selected item on the screen. */
   unsigned cursor;
 
+  /**
+   * true if the mouse_down event occurred over a list item
+   */
   bool dragging;
+
+  /**
+   * the vertical distance from the start of the drag relative to the
+   * top of the list (not the top of the screen)
+   */
   int drag_y;
 
   ActivateCallback_t ActivateCallback;
