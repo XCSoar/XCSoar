@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-23 01:31+0100\n"
-"PO-Revision-Date: 2011-12-21 14:45+0000\n"
+"PO-Revision-Date: 2011-12-24 15:12+0000\n"
 "Last-Translator: Mike Myungha Kuh <Unknown>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-21 16:44+0000\n"
-"X-Generator: Launchpad (build 14538)\n"
+"X-Launchpad-Export-Date: 2011-12-27 08:16+0000\n"
+"X-Generator: Launchpad (build 14560)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -1758,7 +1758,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:912 src/InfoBoxes/Content/Factory.cpp:913
 #, no-c-format
 msgid "Climb band"
-msgstr ""
+msgstr "상승 구간"
 
 #: src/InfoBoxes/Content/Factory.cpp:914
 #, no-c-format
@@ -1903,12 +1903,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:999
 #, no-c-format
 msgid "Head wind component"
-msgstr ""
+msgstr "정풍 성분"
 
 #: src/InfoBoxes/Content/Factory.cpp:1000
 #, no-c-format
 msgid "Head wind"
-msgstr ""
+msgstr "정풍"
 
 #: src/InfoBoxes/Content/Factory.cpp:1001
 #, no-c-format
@@ -2004,7 +2004,7 @@ msgstr ""
 #: src/InfoBoxes/InfoBoxSettings.cpp:76
 #, no-c-format
 msgid "Cruise"
-msgstr ""
+msgstr "순항"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:77
 #, no-c-format
@@ -2015,7 +2015,7 @@ msgstr ""
 #: src/Dialogs/dlgConfigInfoboxes.cpp:210
 #: src/Dialogs/dlgConfigInfoboxes.cpp:373
 msgid "InfoBox"
-msgstr ""
+msgstr "인포 박스"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:483 src/Dialogs/dlgConfigInfoboxes.cpp:214
 #: src/Dialogs/dlgWeather.cpp:67
@@ -2032,7 +2032,7 @@ msgstr "사용할 수 없음"
 #: src/InfoBoxes/Panel/WindSetup.cpp:90 src/Dialogs/dlgWindSettings.cpp:95
 #, no-c-format
 msgid "External"
-msgstr ""
+msgstr "외부"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:100
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:70
@@ -2048,7 +2048,7 @@ msgstr ""
 #: src/Dialogs/dlgWindSettings.cpp:104
 #, no-c-format
 msgid "Both"
-msgstr ""
+msgstr "양쪽"
 
 #: src/Input/InputEventsActions.cpp:169
 msgid "Screen Mode Full"
@@ -2075,7 +2075,7 @@ msgstr "상세히 보이기"
 
 #: src/Input/InputEventsActions.cpp:260
 msgid "Unknown competition number"
-msgstr ""
+msgstr "알 수없는 선수 번호"
 
 #: src/Input/InputEventsActions.cpp:261
 msgid "Not found"
@@ -2139,7 +2139,7 @@ msgstr ""
 
 #: src/Input/InputEventsTask.cpp:83
 msgid "Ready to start"
-msgstr ""
+msgstr "시작 준비"
 
 #: src/Input/InputEventsTask.cpp:86
 msgid "Hold start"
@@ -2147,11 +2147,11 @@ msgstr "시작 보류"
 
 #: src/Input/InputEventsTask.cpp:89
 msgid "Ready to turn"
-msgstr ""
+msgstr "턴 준비"
 
 #: src/Input/InputEventsTask.cpp:92
 msgid "Hold turn"
-msgstr ""
+msgstr "턴 보류"
 
 #: src/Input/InputEventsTask.cpp:152
 msgid "Auto. MacCready on"
@@ -2257,7 +2257,7 @@ msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:178
 msgid "Marker"
-msgstr ""
+msgstr "마커"
 
 #: src/Renderer/MapItemListRenderer.cpp:184
 #, c-format
@@ -2266,11 +2266,11 @@ msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:211
 msgid "Thermal"
-msgstr ""
+msgstr "써멀"
 
 #: src/Renderer/MapItemListRenderer.cpp:217
 msgid "Avg. lift"
-msgstr ""
+msgstr "평균 상승"
 
 #: src/Renderer/MapItemListRenderer.cpp:219
 #, c-format
@@ -2293,7 +2293,7 @@ msgstr ""
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:22
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:22
 msgid "Altitude"
-msgstr ""
+msgstr "고도"
 
 #: src/Renderer/WaypointListRenderer.cpp:119
 #: src/Renderer/FlightStatisticsRenderer.cpp:399
@@ -2314,11 +2314,11 @@ msgstr "거리"
 
 #: src/Renderer/WaypointListRenderer.cpp:120
 msgid "Arrival Alt"
-msgstr ""
+msgstr "도착 고도"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:101
 msgid "Elevation: "
-msgstr ""
+msgstr "상승 "
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:119
 msgid "GPS not connected"
@@ -2523,7 +2523,7 @@ msgstr "시간"
 #: Data/Dialogs/dlgWindSettings.xml:4
 #: Data/Dialogs/Infobox/pnlInfoBoxWindEdit.xml:4
 msgid "Speed"
-msgstr ""
+msgstr "속도"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:580
 #: src/Renderer/FlightStatisticsRenderer.cpp:586
@@ -2541,7 +2541,7 @@ msgstr "평균 상승"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:612
 msgid "Climb trend"
-msgstr ""
+msgstr "상승 추이"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:624
 msgid "Best L/D"
@@ -2608,7 +2608,7 @@ msgstr "호주인"
 #. Read the terrain file
 #: src/UtilsSettings.cpp:122 src/Components.cpp:348
 msgid "Loading Terrain File..."
-msgstr ""
+msgstr "지형 파일 불러오는 중..."
 
 #: src/Profile/DeviceConfig.cpp:67 src/Widgets/DeviceEditWidget.cpp:54
 #: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:66
@@ -2692,7 +2692,7 @@ msgstr "종료중, 타스크 저장중..."
 #: src/Widgets/TrafficWidget.cpp:338 src/Widgets/TrafficWidget.cpp:341
 #: src/Dialogs/dlgFlarmTraffic.cpp:334 src/Dialogs/dlgFlarmTraffic.cpp:337
 msgid "Rel. Alt."
-msgstr ""
+msgstr "실고도"
 
 #: src/Widgets/DeviceEditWidget.cpp:373
 #: Data/Dialogs/Configuration/DevicesConfigPanel.xml:7
@@ -2700,7 +2700,7 @@ msgstr ""
 #: Data/Dialogs/Configuration/DevicesConfigPanel_L.xml:7
 #: Data/Dialogs/Configuration/DevicesConfigPanel_L.xml:31
 msgid "Port"
-msgstr ""
+msgstr "포트"
 
 #: src/Widgets/DeviceEditWidget.cpp:378
 #: Data/Dialogs/Configuration/DevicesConfigPanel.xml:11
@@ -2734,7 +2734,7 @@ msgstr ""
 #: Data/Dialogs/Configuration/DevicesConfigPanel_L.xml:15
 #: Data/Dialogs/Configuration/DevicesConfigPanel_L.xml:40
 msgid "TCP Port"
-msgstr ""
+msgstr "TCP 포트"
 
 #: src/Widgets/DeviceEditWidget.cpp:402
 #: Data/Dialogs/Configuration/DevicesConfigPanel.xml:23
@@ -2742,7 +2742,7 @@ msgstr ""
 #: Data/Dialogs/Configuration/DevicesConfigPanel_L.xml:23
 #: Data/Dialogs/Configuration/DevicesConfigPanel_L.xml:48
 msgid "Driver"
-msgstr ""
+msgstr "드라이버"
 
 #: src/Device/Descriptor.cpp:133
 msgid "No such driver"
@@ -2818,7 +2818,7 @@ msgstr "연결됨"
 
 #: src/Dialogs/DeviceListDialog.cpp:125
 msgid "GPS fix"
-msgstr ""
+msgstr "GPS 수신"
 
 #: src/Dialogs/DeviceListDialog.cpp:130
 msgid "Baro"
@@ -2834,7 +2834,7 @@ msgstr "연결되지 않음"
 
 #: src/Dialogs/DeviceListDialog.cpp:204
 msgid "Edit device"
-msgstr ""
+msgstr "장치 편집"
 
 #: src/Dialogs/DeviceListDialog.cpp:273 src/Dialogs/dlgConfiguration.cpp:101
 #: Data/Input/default.xci:611 Data/Input/default.xci:1139
@@ -2906,7 +2906,7 @@ msgstr "관리"
 
 #: src/Dialogs/DeviceListDialog.cpp:284
 msgid "Monitor"
-msgstr ""
+msgstr "모니터"
 
 #: src/Dialogs/PortMonitor.cpp:121
 msgid "Port monitor"
@@ -2917,7 +2917,7 @@ msgstr ""
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:9
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:9
 msgid "Clear"
-msgstr ""
+msgstr "지우기"
 
 #: src/Dialogs/ManageCAI302Dialog.cpp:60
 msgid "Do you really want to delete all flights from the device?"
@@ -2938,13 +2938,13 @@ msgstr "다시 시작"
 #: Data/Dialogs/dlgWaypointSelect_L.xml:9 Data/Dialogs/dlgWindSettings.xml:8
 #: Data/Dialogs/Infobox/pnlInfoBoxWindEdit.xml:8
 msgid "Direction"
-msgstr ""
+msgstr "방향"
 
 #: src/Dialogs/MapItemListDialog.cpp:167
 #: Data/Dialogs/dlgWaypointDetails.xml:16
 #: Data/Dialogs/dlgWaypointDetails_L.xml:16
 msgid "Elevation"
-msgstr ""
+msgstr "양각"
 
 #: src/Dialogs/dlgAirspace.cpp:60 src/Dialogs/dlgAirspace.cpp:86
 msgid "Warn"
@@ -3023,11 +3023,11 @@ msgstr "타스크 계산"
 
 #: src/Dialogs/dlgAnalysis.cpp:303
 msgid "Thermal Band"
-msgstr ""
+msgstr "써멀 구간"
 
 #: src/Dialogs/dlgAnalysis.cpp:312
 msgid "Wind At Altitude"
-msgstr ""
+msgstr "고도에서의 풍속"
 
 #: src/Dialogs/dlgAnalysis.cpp:315
 msgid "Set Wind"
@@ -3179,7 +3179,7 @@ msgstr "사이트 파일들"
 #: src/Dialogs/dlgConfiguration.cpp:75
 #, no-c-format
 msgid "Map Display"
-msgstr ""
+msgstr "지도 표시"
 
 #: src/Dialogs/dlgConfiguration.cpp:76 src/Dialogs/dlgConfiguration.cpp:91
 #, no-c-format
@@ -3190,7 +3190,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfigFonts_L.xml:31
 #, no-c-format
 msgid "Gauges"
-msgstr ""
+msgstr "게이지"
 
 #: src/Dialogs/dlgConfiguration.cpp:78
 #, no-c-format
@@ -3205,12 +3205,12 @@ msgstr ""
 #: src/Dialogs/dlgConfiguration.cpp:85
 #, no-c-format
 msgid "Orientation"
-msgstr ""
+msgstr "화면 방향"
 
 #: src/Dialogs/dlgConfiguration.cpp:86
 #, no-c-format
 msgid "Elements"
-msgstr ""
+msgstr "구성 요소"
 
 #: src/Dialogs/dlgConfiguration.cpp:87
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:11
@@ -3237,22 +3237,22 @@ msgstr ""
 #: src/Dialogs/dlgConfiguration.cpp:95
 #, no-c-format
 msgid "Task Rules"
-msgstr ""
+msgstr "타스크 규정"
 
 #: src/Dialogs/dlgConfiguration.cpp:96
 #, no-c-format
 msgid "Turnpoint Types"
-msgstr ""
+msgstr "턴포인트 종류"
 
 #: src/Dialogs/dlgConfiguration.cpp:97
 #, no-c-format
 msgid "Language, Input"
-msgstr ""
+msgstr "언어, 입력"
 
 #: src/Dialogs/dlgConfiguration.cpp:98
 #, no-c-format
 msgid "Screen Layout"
-msgstr ""
+msgstr "스크린 레이아웃"
 
 #: src/Dialogs/dlgConfiguration.cpp:99
 #, no-c-format
@@ -3282,12 +3282,12 @@ msgstr "단위"
 #: src/Dialogs/dlgConfiguration.cpp:110
 #, no-c-format
 msgid "Tracking"
-msgstr ""
+msgstr "트래킹"
 
 #: src/Dialogs/dlgConfiguration.cpp:113
 #, no-c-format
 msgid "Experimental Features"
-msgstr ""
+msgstr "실험적인 기능들"
 
 #: src/Dialogs/dlgConfiguration.cpp:260 src/Dialogs/dlgConfigFonts.cpp:295
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
@@ -3704,7 +3704,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:107
 msgid "Cruise orientation"
-msgstr ""
+msgstr "순항 방향"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:108
 msgid "Determines how the screen is rotated with the glider"
@@ -3916,7 +3916,7 @@ msgstr "미터"
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:103
 #, no-c-format
 msgid "Full name"
-msgstr ""
+msgstr "전체 이름"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:104
 #, no-c-format
@@ -3926,7 +3926,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:105
 #, no-c-format
 msgid "First word of name"
-msgstr ""
+msgstr "이름의 첫단어"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:106
 #, no-c-format
@@ -3936,7 +3936,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:107
 #, no-c-format
 msgid "First 3 letters"
-msgstr ""
+msgstr "첫3문자"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:108
 #, no-c-format
@@ -3946,7 +3946,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:109
 #, no-c-format
 msgid "First 5 letters"
-msgstr ""
+msgstr "첫5문자"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:110
 #, no-c-format
@@ -4077,11 +4077,11 @@ msgstr ""
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:185
 #: Data/Dialogs/dlgTaskManager.xml:3 Data/Dialogs/dlgTaskManager_L.xml:3
 msgid "Task Manager"
-msgstr ""
+msgstr "작업 관리자"
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:182
 msgid "Validation Errors"
-msgstr ""
+msgstr "인증 오류"
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:184
 msgid ""
@@ -4113,7 +4113,7 @@ msgstr ""
 
 #: src/Dialogs/TaskManager/TaskEditPanel.cpp:102
 msgid "Clear all points?"
-msgstr ""
+msgstr "모든 포인트를 삭제할까요?"
 
 #: src/Dialogs/TaskManager/TaskEditPanel.cpp:102
 msgid "Task edit"
@@ -4146,7 +4146,7 @@ msgstr "삭제 에러"
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:232
 msgid "Delete the selected task?"
-msgstr ""
+msgstr "선택된 타스크를 삭제합니다."
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:272
 msgid "Can't rename .CUP files"
@@ -4190,7 +4190,7 @@ msgstr "타스크 포인트"
 
 #: src/Dialogs/dlgTaskPointType.cpp:109
 msgid "Change point type?"
-msgstr ""
+msgstr "포은트 타입을 바꿉니다"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:48
 msgid "Racing"
@@ -4268,7 +4268,7 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:115
 msgid "Goal"
-msgstr ""
+msgstr "골"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:122
 msgid "Out and return"
@@ -4298,7 +4298,7 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:182
 msgid "max."
-msgstr ""
+msgstr "최대."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:186
 msgid "min."
@@ -4306,7 +4306,7 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:194
 msgid "dist."
-msgstr ""
+msgstr "거리."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:232 src/Dialogs/dlgTaskHelpers.cpp:325
 msgid "FAI quadrant"
@@ -4314,7 +4314,7 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:237
 msgid "Sector"
-msgstr ""
+msgstr "지역"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:237 src/Dialogs/dlgTaskHelpers.cpp:249
 #: Data/Dialogs/dlgTaskPoint.xml:25 Data/Dialogs/dlgTaskPoint.xml:31
@@ -4322,16 +4322,16 @@ msgstr ""
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:31
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:31
 msgid "Radius"
-msgstr ""
+msgstr "반경"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:243 Data/Dialogs/dlgTaskPoint.xml:19
 #: Data/Dialogs/dlgTaskPoint_L.xml:23
 msgid "Gate Width"
-msgstr ""
+msgstr "게이트 너비"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:249
 msgid "Cylinder"
-msgstr ""
+msgstr "실린더"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:255
 msgid "DAeC Keyhole"
@@ -4430,11 +4430,11 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:319
 msgid "Start line"
-msgstr ""
+msgstr "스타트 라인"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:321
 msgid "Start cylinder"
-msgstr ""
+msgstr "스타트 실린더"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:323
 msgid "BGA start sector"
@@ -4490,15 +4490,15 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:394
 msgid "No valid start.\n"
-msgstr ""
+msgstr "유효한 출발이 없슴.\n"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:397
 msgid "No valid finish.\n"
-msgstr ""
+msgstr "유효한 시합 종료가 없슴.\n"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:400
 msgid "Task not closed.\n"
-msgstr ""
+msgstr "타스크가 종료되지 않음.\n"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:403
 msgid "All turnpoints not the same type.\n"
@@ -4514,11 +4514,11 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:412
 msgid "Not enough turnpoints.\n"
-msgstr ""
+msgstr "충분하지 않은 턴포인트\n"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:415
 msgid "Turnpoints not unique.\n"
-msgstr ""
+msgstr "턴포인트가 중복됨.\n"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:418
 msgid "Invalid FAI triangle shape.\n"
@@ -4534,30 +4534,30 @@ msgstr ""
 
 #: src/Dialogs/dlgTeamCode.cpp:142
 msgid "Set new teammate:"
-msgstr ""
+msgstr "새로운 팀메이트 설정"
 
 #: src/Dialogs/dlgTeamCode.cpp:150
 msgid "Unknown Competition Number"
-msgstr ""
+msgstr "알 수 없는 선수 번호"
 
 #: src/Dialogs/dlgTeamCode.cpp:151
 msgid "Not Found"
-msgstr ""
+msgstr "찾을 수 없음"
 
 #: src/Dialogs/dlgWeather.cpp:58
 msgid "Weather parameters"
-msgstr ""
+msgstr "기상 파라메터"
 
 #: src/Dialogs/dlgWaypointDetails.cpp:205
 #: src/Dialogs/dlgWaypointDetails.cpp:256
 #: src/Dialogs/dlgWaypointDetails.cpp:289
 #: src/Dialogs/dlgWaypointDetails.cpp:377
 msgid "No task defined."
-msgstr ""
+msgstr "정의된 타스크가 없슴"
 
 #: src/Dialogs/dlgWaypointDetails.cpp:209
 msgid "No active task point."
-msgstr ""
+msgstr "활성화된 타스크 포인트가 없슴."
 
 #: src/Dialogs/dlgWaypointDetails.cpp:209
 msgid "Replace in task"
@@ -4580,7 +4580,7 @@ msgstr ""
 #: src/Dialogs/dlgWaypointDetails.cpp:298
 #: src/Dialogs/dlgWaypointDetails.cpp:303
 msgid "Success"
-msgstr ""
+msgstr "성공"
 
 #: src/Dialogs/dlgWaypointDetails.cpp:270
 #: src/Dialogs/dlgWaypointDetails.cpp:303
@@ -4589,7 +4589,7 @@ msgstr ""
 
 #: src/Dialogs/dlgWaypointDetails.cpp:346
 msgid "Clear current task?"
-msgstr ""
+msgstr "현재 타스크를 삭제하겠습니까?"
 
 #: src/Dialogs/dlgWaypointDetails.cpp:347
 msgid "Goto and clear task"
@@ -4605,21 +4605,21 @@ msgstr ""
 
 #: src/Dialogs/dlgWaypointDetails.cpp:381
 msgid "Remove from task"
-msgstr ""
+msgstr "타스크에서 제거"
 
 #: src/Dialogs/dlgWaypointEdit.cpp:55 src/Dialogs/dlgWaypointEdit.cpp:60
 msgid "(blank)"
-msgstr ""
+msgstr "(공란)"
 
 #: src/Dialogs/dlgWaypointEdit.cpp:58 Data/Dialogs/dlgWaypointDetails.xml:12
 #: Data/Dialogs/dlgWaypointDetails_L.xml:12 Data/Dialogs/dlgWaypointEdit.xml:8
 #: Data/Dialogs/dlgWaypointEdit_L.xml:8
 msgid "Comment"
-msgstr ""
+msgstr "주석"
 
 #: src/Dialogs/dlgWaypointSelect.cpp:658
 msgid "Waypoint name"
-msgstr ""
+msgstr "웨이포인트 이름"
 
 #: src/Dialogs/dlgWaypointSelect.cpp:736
 msgid "Choose a filter or click here"
@@ -4633,11 +4633,11 @@ msgstr ""
 
 #: src/Dialogs/dlgFontEdit.cpp:91
 msgid "Font not found."
-msgstr ""
+msgstr "서체를 찾을 수 없습니다."
 
 #: src/Dialogs/dlgFontEdit.cpp:115 Data/Dialogs/dlgFontEdit.xml:3
 msgid "Edit Font"
-msgstr ""
+msgstr "서체 편집"
 
 #: src/Dialogs/dlgNOAAList.cpp:106
 msgid "No METAR available"
@@ -4660,7 +4660,7 @@ msgstr ""
 #: src/Dialogs/dlgNOAAList.cpp:141 src/Dialogs/dlgNOAAList.cpp:151
 #: src/Dialogs/dlgNOAADetails.cpp:74
 msgid "Download"
-msgstr ""
+msgstr "내려받기"
 
 #: src/Dialogs/dlgNOAAList.cpp:163 src/Dialogs/dlgNOAADetails.cpp:83
 #, c-format
@@ -4674,7 +4674,7 @@ msgstr ""
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:5 Data/Dialogs/dlgTaskPoint.xml:9
 #: Data/Dialogs/dlgTaskPoint_L.xml:13
 msgid "Remove"
-msgstr ""
+msgstr "제거"
 
 #: src/Dialogs/dlgNOAAList.cpp:241 src/Dialogs/dlgNOAADetails.cpp:131
 msgid "This function is not available on your platform yet."
@@ -4691,21 +4691,21 @@ msgstr ""
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:27
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:27
 msgid "Temperature"
-msgstr ""
+msgstr "온도"
 
 #: src/Weather/NOAAFormatter.cpp:132 src/Weather/NOAAFormatter.cpp:139
 msgid "Dew Point"
-msgstr ""
+msgstr "이슬점"
 
 #: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:36
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:36
 msgid "Pressure"
-msgstr ""
+msgstr "기압"
 
 #: src/Weather/NOAAFormatter.cpp:166
 msgid "Visibility"
-msgstr ""
+msgstr "시계"
 
 #: src/Weather/NOAAFormatter.cpp:175
 #, c-format
@@ -4714,11 +4714,11 @@ msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:189
 msgid "Sky Conditions"
-msgstr ""
+msgstr "기상 상태"
 
 #: src/Weather/NOAAFormatter.cpp:203 Data/Input/default.xci:789
 msgid "Weather"
-msgstr ""
+msgstr "날씨"
 
 #: src/Weather/NOAAFormatter.cpp:251
 #, c-format
@@ -4736,7 +4736,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:14
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:5
 msgid "Team"
-msgstr ""
+msgstr "팀"
 
 #: Data/Dialogs/dlgVario.xml:321
 msgid "Max. reported circling"
@@ -4812,9 +4812,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/LoggerConfigPanel.xml:9
 #: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:9
-#, fuzzy
 msgid "Time step circling"
-msgstr "써멀 써클링 괘적"
+msgstr ""
 
 #: Data/Dialogs/dlgStatusTask.xml:3
 msgid "Task Status"
@@ -4822,9 +4821,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/LoggerConfigPanel.xml:30
 #: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:30
-#, fuzzy
 msgid "Logger ID"
-msgstr "로그"
+msgstr ""
 
 #: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:24
 #: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:24
@@ -4889,9 +4887,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:59
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:59
-#, fuzzy
 msgid "Dump time"
-msgstr "파일 받기"
+msgstr ""
 
 #: Data/Dialogs/dlgWeather.xml:3
 msgid "Weather Forecast"
@@ -4926,9 +4923,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:5
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:5
-#, fuzzy
 msgid "Speed arrows"
-msgstr "그라운드 스피드"
+msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:17
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:17
@@ -4959,9 +4955,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:34
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:34
-#, fuzzy
 msgid "Terrain file"
-msgstr "지형 표시 끔"
+msgstr ""
 
 #: Data/Dialogs/Configuration/PagesConfigPanel.xml:32
 #: Data/Dialogs/Configuration/PagesConfigPanel_L.xml:32
@@ -4970,9 +4965,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/GlideComputerConfigPanel.xml:4
 #: Data/Dialogs/Configuration/GlideComputerConfigPanel_L.xml:5
-#, fuzzy
 msgid "Auto wind"
-msgstr "자동"
+msgstr ""
 
 #: Data/Dialogs/Configuration/AirspaceConfigPanel.xml:36
 #: Data/Dialogs/Configuration/AirspaceConfigPanel_L.xml:36
@@ -5133,9 +5127,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:12
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:12
-#, fuzzy
 msgid "Terrain contrast"
-msgstr "지형 표시"
+msgstr ""
 
 #: Data/Dialogs/Configuration/RouteConfigPanel.xml:24
 #: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:24
@@ -5184,9 +5177,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:39
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:39
-#, fuzzy
 msgid "Topography file"
-msgstr "지형 파일 불러오는 중..."
+msgstr ""
 
 #: Data/Dialogs/Configuration/PagesConfigPanel.xml:8
 #: Data/Dialogs/Configuration/PagesConfigPanel_L.xml:8
@@ -5425,9 +5417,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/RouteConfigPanel.xml:16
 #: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:16
-#, fuzzy
 msgid "Route ceiling"
-msgstr "써클링 없슴"
+msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:8
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:8
@@ -5436,9 +5427,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TrackingConfigPanel.xml:12
 #: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:12
-#, fuzzy
 msgid "Enabled"
-msgstr "사용함"
+msgstr ""
 
 #: Data/Dialogs/dlgFontEdit.xml:8
 msgid "Height"
@@ -5459,9 +5449,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:10
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:10
-#, fuzzy
 msgid "Show average"
-msgstr "L/D 평균"
+msgstr ""
 
 #: Data/Dialogs/Configuration/PagesConfigPanel.xml:28
 #: Data/Dialogs/Configuration/PagesConfigPanel_L.xml:28
@@ -5561,15 +5550,13 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:43
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:43
-#, fuzzy
 msgid "Waypoint details"
-msgstr "WPT 표시"
+msgstr ""
 
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel.xml:22
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel_L.xml:25
-#, fuzzy
 msgid "Start max. height margin"
-msgstr "시작 고도"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:115 Data/Dialogs/dlgVario_L.xml:114
 msgid "Circling deadband type"
@@ -5613,9 +5600,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:9
 #: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:9
-#, fuzzy
 msgid "FLARM traffic"
-msgstr "트래픽 없슴"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:402 Data/Dialogs/dlgVario_L.xml:401
 msgid "V terrain"
@@ -5667,9 +5653,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/AirspaceConfigPanel.xml:36
 #: Data/Dialogs/Configuration/AirspaceConfigPanel_L.xml:36
-#, fuzzy
 msgid "Airspace fill mode"
-msgstr "공역"
+msgstr ""
 
 #: Data/Dialogs/Configuration/LayoutConfigPanel.xml:19
 #: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:19
@@ -5743,9 +5728,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:14
 #: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:14
-#, fuzzy
 msgid "Status message"
-msgstr "상태"
+msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:3 Data/Dialogs/dlgTeamCode_L.xml:3
 msgid "Team Code"
@@ -5766,9 +5750,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/DevicesConfigPanel.xml:5
 #: Data/Dialogs/Configuration/DevicesConfigPanel_L.xml:5
-#, fuzzy
 msgid "Device A"
-msgstr "장치들"
+msgstr ""
 
 #: Data/Dialogs/dlgTaskPoint.xml:31 Data/Dialogs/dlgTaskPoint_L.xml:35
 msgid "Radius of the OZ sector."
@@ -5776,9 +5759,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/AirspaceConfigPanel.xml:24
 #: Data/Dialogs/Configuration/AirspaceConfigPanel_L.xml:24
-#, fuzzy
 msgid "Warning time"
-msgstr "경고"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:131 Data/Dialogs/dlgVario_L.xml:130
 msgid "High limit of cruise dead band"
@@ -5820,9 +5802,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:21
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:21
-#, fuzzy
 msgid "Watched waypoints"
-msgstr "타스크 웨이포인트"
+msgstr ""
 
 #: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:14
 #: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:14
@@ -5833,9 +5814,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/DevicesConfigPanel.xml:29
 #: Data/Dialogs/Configuration/DevicesConfigPanel_L.xml:29
-#, fuzzy
 msgid "Device B"
-msgstr "장치들"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:16 Data/Dialogs/dlgConfiguration_L.xml:16
 msgid "Configuration Menu"
@@ -5847,9 +5827,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/LoggerConfigPanel.xml:39
 #: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:39
-#, fuzzy
 msgid "Auto. logger"
-msgstr "로그 중지"
+msgstr ""
 
 #: Data/Dialogs/pnlStatusTask.xml:10
 msgid "Speed average"
@@ -5890,9 +5869,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:16
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:16
-#, fuzzy
 msgid "More waypoints"
-msgstr "다음 웨이포인트"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:3 Data/Dialogs/dlgVario_L.xml:3
 msgid "Vario Configuration"
@@ -5962,9 +5940,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:4
 #: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:4
-#, fuzzy
 msgid "Track bearing"
-msgstr "바람 방향"
+msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:22
 msgid "MacCready"
@@ -5995,9 +5972,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/LayoutConfigPanel.xml:34
 #: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:34
-#, fuzzy
 msgid "Inverse InfoBoxes"
-msgstr "인포 박스 초기 상태"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:440 Data/Dialogs/dlgVario_L.xml:439
 msgid "LED bright"
@@ -6053,15 +6029,13 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/LayoutConfigPanel.xml:44
 #: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:44
-#, fuzzy
 msgid "InfoBox border"
-msgstr "인포박스 모드"
+msgstr ""
 
 #: Data/Dialogs/Configuration/RouteConfigPanel.xml:11
 #: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:11
-#, fuzzy
 msgid "Route climb"
-msgstr "루트"
+msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:30
 msgid ""
@@ -6168,9 +6142,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:17
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:17
-#, fuzzy
 msgid "Terrain brightness"
-msgstr "지형 표시"
+msgstr ""
 
 #: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:34
 #: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:34
@@ -6269,9 +6242,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/ExperimentalConfigPanel.xml:4
 #: Data/Dialogs/Configuration/ExperimentalConfigPanel_L.xml:4
-#, fuzzy
 msgid "Device model"
-msgstr "장치들"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:325 Data/Dialogs/dlgVario_L.xml:324
 msgid "Flarm interface"
@@ -6290,9 +6262,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/AirspaceConfigPanel.xml:7
 #: Data/Dialogs/Configuration/AirspaceConfigPanel_L.xml:7
-#, fuzzy
 msgid "Airspace display"
-msgstr "공역"
+msgstr ""
 
 #: Data/Dialogs/dlgLoggerReplay.xml:3 Data/Input/default.xci:586
 msgid "Replay"
@@ -6410,9 +6381,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/GaugesConfigPanel.xml:20
 #: Data/Dialogs/Configuration/GaugesConfigPanel_L.xml:20
-#, fuzzy
 msgid "Thermal band"
-msgstr "써멀 획득"
+msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:23
 msgid "Gear down"
@@ -6508,9 +6478,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/RouteConfigPanel.xml:6
 #: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:6
-#, fuzzy
 msgid "Route mode"
-msgstr "루트"
+msgstr ""
 
 #: Data/Dialogs/Infobox/pnlInfoBoxMacCreadySetup.xml:4
 msgid "Setup Mode"
@@ -6578,9 +6547,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:9
 #: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:9
-#, fuzzy
 msgid "Terrain height"
-msgstr "써멀 고도"
+msgstr ""
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:8
 msgid "ACK Day"
@@ -6616,9 +6584,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:22
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:22
-#, fuzzy
 msgid "Terrain colors"
-msgstr "지형 표시"
+msgstr ""
 
 #: Data/Dialogs/dlgTarget_L.xml:23
 msgid "ETE"
@@ -6649,9 +6616,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:6
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:6
-#, fuzzy
 msgid "Load Preset"
-msgstr "폴라 불러오기"
+msgstr ""
 
 #: Data/Dialogs/dlgWaypointSelect.xml:1 Data/Dialogs/dlgWaypointSelect_L.xml:1
 msgid "Select Waypoint"
@@ -6784,9 +6750,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:32
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:32
-#, fuzzy
 msgid "Task speed"
-msgstr "타스크 속도"
+msgstr ""
 
 #: Data/Dialogs/Configuration/PagesConfigPanel.xml:4
 #: Data/Dialogs/Configuration/PagesConfigPanel.xml:8
@@ -6845,9 +6810,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:44
 #: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:44
-#, fuzzy
 msgid "Wind arrow"
-msgstr "바람 방향"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:135 Data/Dialogs/dlgVario_L.xml:134
 msgid "Cruise low cutoff"
@@ -6864,9 +6828,8 @@ msgstr ""
 #: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:4
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:9
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:9
-#, fuzzy
 msgid "Arrival height"
-msgstr "써멀 고도"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskProperties.xml:25
 #: Data/Dialogs/pnlTaskProperties_L.xml:26
@@ -6931,9 +6894,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:15
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:15
-#, fuzzy
 msgid "Show MacReady"
-msgstr "맥크레디 속도"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:29 Data/Dialogs/dlgVario_L.xml:28
 msgid ""
@@ -6967,9 +6929,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/GlideComputerConfigPanel.xml:24
 #: Data/Dialogs/Configuration/GlideComputerConfigPanel_L.xml:25
-#, fuzzy
 msgid "Nav. by baro altitude"
-msgstr "기압 고도"
+msgstr ""
 
 #: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:39
 #: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:39
@@ -7145,9 +7106,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:30
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:30
-#, fuzzy
 msgid "More airspaces"
-msgstr "공역 끄기"
+msgstr ""
 
 #: Data/Dialogs/dlgStatusTask.xml:6 Data/Dialogs/pnlStatusTask.xml:6
 msgid "Remaining time"
@@ -7168,9 +7128,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:25
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:25
-#, fuzzy
 msgid "Show ballast"
-msgstr "상세히 보이기"
+msgstr ""
 
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:42
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:42
@@ -7212,9 +7171,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/LayoutConfigPanel.xml:4
 #: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:4
-#, fuzzy
 msgid "Display orientation"
-msgstr "써클링 방향"
+msgstr ""
 
 #: Data/Dialogs/dlgTaskPoint.xml:43 Data/Dialogs/dlgTaskPoint_L.xml:47
 msgid "Inner radius"
@@ -7232,9 +7190,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/LoggerConfigPanel.xml:34
 #: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:34
-#, fuzzy
 msgid "Short file name"
-msgstr "짧은 비행 괘적"
+msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:57
 msgid "Flap landing"
@@ -7259,15 +7216,13 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TrackingConfigPanel.xml:10
 #: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:10
-#, fuzzy
 msgid "LiveTrack24"
-msgstr "트랙"
+msgstr ""
 
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:26
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:26
-#, fuzzy
 msgid "Airspaces"
-msgstr "공역"
+msgstr ""
 
 #: Data/Dialogs/Configuration/GlideComputerConfigPanel.xml:14
 #: Data/Dialogs/Configuration/GlideComputerConfigPanel_L.xml:15
@@ -7317,9 +7272,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:15
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:15
-#, fuzzy
 msgid "Whether to show the MacCready setting."
-msgstr "맥크레디 세팅"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:127 Data/Dialogs/dlgVario_L.xml:126
 msgid "Cruise deadband type"
@@ -7373,9 +7327,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/AirspaceConfigPanel.xml:11
 #: Data/Dialogs/Configuration/AirspaceConfigPanel_L.xml:11
-#, fuzzy
 msgid "Clip altitude"
-msgstr "기압 고도"
+msgstr ""
 
 #: Data/Dialogs/Configuration/DevicesConfigPanel.xml:7
 #: Data/Dialogs/Configuration/DevicesConfigPanel_L.xml:7
@@ -7397,9 +7350,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/LayoutConfigPanel.xml:9
 #: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:9
-#, fuzzy
 msgid "Infobox geometry"
-msgstr "인포박스 페이지"
+msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:30
 msgid "In sector"
@@ -7526,9 +7478,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/LayoutConfigPanel.xml:39
 #: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:39
-#, fuzzy
 msgid "Colored InfoBoxes"
-msgstr "보조 인포 박스"
+msgstr ""
 
 #: Data/Dialogs/dlgConfigWaypoints.xml:8
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:8 Data/Dialogs/dlgVario.xml:9
@@ -7614,9 +7565,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/GlideComputerConfigPanel.xml:14
 #: Data/Dialogs/Configuration/GlideComputerConfigPanel_L.xml:15
-#, fuzzy
 msgid "Auto MC mode"
-msgstr "자동 맥크레디 켜기"
+msgstr ""
 
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:4
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:4 Data/Dialogs/dlgTaskPoint.xml:10
@@ -7626,9 +7576,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:4
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:4
-#, fuzzy
 msgid "Terrain display"
-msgstr "지형 표시"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskEdit.xml:9 Data/Dialogs/pnlTaskEdit_L.xml:8
 msgid "Edit Point"
@@ -7636,9 +7585,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:27
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:27
-#, fuzzy
 msgid "Slope shading"
-msgstr "방향"
+msgstr ""
 
 #: Data/Dialogs/Configuration/GaugesConfigPanel.xml:5
 #: Data/Dialogs/Configuration/GaugesConfigPanel_L.xml:5
@@ -7724,9 +7672,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/GlideComputerConfigPanel.xml:34
 #: Data/Dialogs/Configuration/GlideComputerConfigPanel_L.xml:35
-#, fuzzy
 msgid "L/D average period"
-msgstr "L/D 평균"
+msgstr ""
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:9
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:10
@@ -7735,9 +7682,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:8
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:8
-#, fuzzy
 msgid "Aircraft/Wind speed"
-msgstr "윈드 스피드"
+msgstr ""
 
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:11
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:11
@@ -7845,15 +7791,13 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:28
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:28
-#, fuzzy
 msgid "Detailed landables"
-msgstr "상세한"
+msgstr ""
 
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:27
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:27
-#, fuzzy
 msgid "Turn point"
-msgstr "턴 포인트"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskProperties.xml:30
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
@@ -7900,9 +7844,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/LoggerConfigPanel.xml:14
 #: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:14
-#, fuzzy
 msgid "Pilot name"
-msgstr "패널 이름"
+msgstr ""
 
 #: Data/Dialogs/dlgWaypointDetails.xml:20
 #: Data/Dialogs/dlgWaypointDetails_L.xml:20
@@ -7924,9 +7867,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/RouteConfigPanel.xml:29
 #: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:29
-#, fuzzy
 msgid "Reach display"
-msgstr "화면"
+msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
@@ -7994,9 +7936,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/GaugesConfigPanel.xml:15
 #: Data/Dialogs/Configuration/GaugesConfigPanel_L.xml:15
-#, fuzzy
 msgid "Thermal assistant"
-msgstr "써멀 획득"
+msgstr ""
 
 #: Data/Dialogs/Configuration/AirspaceConfigPanel.xml:16
 #: Data/Dialogs/Configuration/AirspaceConfigPanel_L.xml:16
@@ -8005,9 +7946,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:27
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:27
-#, fuzzy
 msgid "Units used for temperature."
-msgstr "외기 온도"
+msgstr ""
 
 #: Data/Dialogs/dlgWaypointEdit.xml:34
 msgid "Lat."
