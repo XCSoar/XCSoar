@@ -8,18 +8,17 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-23 01:31+0100\n"
-"PO-Revision-Date: 2011-12-21 18:34+0000\n"
-"Last-Translator: Peter Hanhart <Unknown>\n"
+"PO-Revision-Date: 2011-12-26 11:21+0000\n"
+"Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-22 10:52+0000\n"
+"X-Launchpad-Export-Date: 2011-12-27 08:16+0000\n"
 "X-Generator: Launchpad (build 14560)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -2106,6 +2105,10 @@ msgid ""
 "ground speed if airspeed is available from external device. Otherwise the "
 "estimated wind is used for the calculation."
 msgstr ""
+"Aktuelle Gegenwindkomponente. Die Gegenwindkomponente wird aus TAS und GPS "
+"Geschwindigkeit über Grund errechnet.  Wenn die Geschwindigkeit nicht von "
+"einem externen Gerät verfügbar ist, wird der von XCSoar geschätzte Wert "
+"verwendet."
 
 #: src/InfoBoxes/Content/Altitude.cpp:54
 #: src/MapWindow/GlueMapWindowOverlays.cpp:257
@@ -3265,7 +3268,7 @@ msgstr "Aufgaben Berechnung"
 
 #: src/Dialogs/dlgAnalysis.cpp:303
 msgid "Thermal Band"
-msgstr "Konvektionshöhe"
+msgstr "Thermikprofil"
 
 #: src/Dialogs/dlgAnalysis.cpp:312
 msgid "Wind At Altitude"
@@ -5016,7 +5019,7 @@ msgstr "mehr als %s"
 
 #: src/Weather/NOAAFormatter.cpp:189
 msgid "Sky Conditions"
-msgstr ""
+msgstr "Wolken und Niederschlag"
 
 #: src/Weather/NOAAFormatter.cpp:203 Data/Input/default.xci:789
 msgid "Weather"
@@ -5761,7 +5764,7 @@ msgid ""
 "done. Normally for gliders a good value is 90-120 seconds, and for "
 "paragliders 15 seconds."
 msgstr ""
-"Hier kannst Du einstellen auf wie viele Flugsekunden diese Berechnung "
+"Hier kannst Du einstellen über wie viele Flugsekunden diese Berechnung "
 "gemacht wird. Normalerweise wird für Segelflugzeuge ein Wert von 90-120 "
 "Sekunden empfohlen, für Gleitschirme 15 Sekunden."
 
@@ -5861,7 +5864,7 @@ msgstr ""
 msgid "This is the time interval between logged points when not circling."
 msgstr ""
 "Das Zeitintervall zwischen zwei Punkten im Logschrieb, wenn nicht im "
-"Steigmodus. "
+"Steigmodus."
 
 #: Data/Dialogs/dlgSwitches.xml:35
 msgid "Speed command"
@@ -6022,7 +6025,7 @@ msgstr "Freq."
 #: Data/Dialogs/Infobox/pnlInfoBoxMacCreadySetup.xml:5
 #: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:12
 msgid "Switch InfoBox"
-msgstr ""
+msgstr "InfoBox wechseln"
 
 #: Data/Dialogs/dlgPlanePolar.xml:10 Data/Dialogs/dlgPlanePolar_L.xml:10
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:8
@@ -6710,7 +6713,7 @@ msgid ""
 "If enabled, then the wind vector received from external devices overrides "
 "XCSoar's internal wind calculation."
 msgstr ""
-"Wenn diese Einstellung aktiv ist, wird der Empfangene Wind von anderen "
+"Wenn diese Einstellung aktiv ist, wird die Windberechnung von externen "
 "Geräten der Berechnung von XCSoar vorgezogen."
 
 #: Data/Dialogs/Configuration/AirspaceConfigPanel.xml:7
@@ -6842,7 +6845,7 @@ msgstr "Schließe FLARM automatisch."
 #: Data/Dialogs/Configuration/GaugesConfigPanel.xml:20
 #: Data/Dialogs/Configuration/GaugesConfigPanel_L.xml:20
 msgid "Thermal band"
-msgstr "Konvektionshöhe"
+msgstr "Thermikprofil"
 
 #: Data/Dialogs/dlgSwitches.xml:23
 msgid "Gear down"
@@ -7120,7 +7123,7 @@ msgstr "Wegpunktauswahl"
 msgid "This is the time interval between logged points when circling."
 msgstr ""
 "Mit diesem Zeitintervall werden im Steigmodus GPS Positionen ins Logg "
-"geschrieben. "
+"geschrieben."
 
 #: Data/Dialogs/Configuration/PagesConfigPanel.xml:16
 #: Data/Dialogs/Configuration/PagesConfigPanel_L.xml:16
@@ -7529,6 +7532,9 @@ msgid ""
 "languages. Select English for a native interface or Automatic to localise "
 "XCSoar according to the system settings."
 msgstr ""
+"Die Sprachoption bestimmt die Übersetzung der Englischen XCSoar Texte in "
+"andere Sprachen. Wähle Englisch für die native Oberfläche, oder Automatic um "
+"XCSoar nach der Systemeinstellung zu übersetzten."
 
 #: Data/Dialogs/pnlStatusRules.xml:8
 msgid "Start speed"
@@ -8139,8 +8145,8 @@ msgid ""
 "When Vega variometer is connected and this option is true, the positive flap "
 "setting switches the flight mode between circling and cruise."
 msgstr ""
-"Wenn ein Vega Variometer angeschlossen und [Wölbklappe] gewählt ist, wird "
-"mit der Wölbklappe zwischen Kreis- und Vorflug umgeschaltet."
+"Wenn ein Vega Variometer angeschlossen ist und diese Option aktiviert ist, "
+"wird mit der Wölbklappe zwischen Kreis- und Vorflug umgeschaltet."
 
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:8
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:8
@@ -8973,6 +8979,9 @@ msgstr ""
 "METAR\n"
 "TAF"
 
+#~ msgid "Ignore checksum*"
+#~ msgstr "Prüfsumme ignorieren*"
+
 #~ msgid ""
 #~ "When External Polar File is the polar type, this is the name of the file "
 #~ "containing the glide polar data (in WinPilot format)."
@@ -9063,6 +9072,9 @@ msgstr ""
 
 #~ msgid "Set wind"
 #~ msgstr "Wind einstellen"
+
+#~ msgid "OnLine Contest"
+#~ msgstr "Online Contest"
 
 #~ msgid "Terrain Display"
 #~ msgstr "Gelände Anzeige"
@@ -9160,6 +9172,9 @@ msgstr ""
 #~ msgid "Task saved"
 #~ msgstr "Aufgabe gespeichert"
 
+#~ msgid "add waypoint"
+#~ msgstr "Wegpunkt hinzufügen"
+
 #~ msgid "Task Type"
 #~ msgstr "Aufgabentyp"
 
@@ -9169,11 +9184,20 @@ msgstr ""
 #~ msgid "Append to task"
 #~ msgstr "An Aufgabe hinzufügen"
 
+#~ msgid "Show bugs*"
+#~ msgstr "Zeige Mücken*"
+
 #~ msgid "Info box titles"
 #~ msgstr "InfoBox Titel"
 
+#~ msgid "Landable fields"
+#~ msgstr "Landbare Felder"
+
 #~ msgid "FAI finish height"
 #~ msgstr "FAI Zielhöhe"
+
+#~ msgid "Show ballast*"
+#~ msgstr "Zeige Ballast*"
 
 #~ msgid "Info box values"
 #~ msgstr "InfoBox Werte"
@@ -9190,17 +9214,32 @@ msgstr ""
 #~ msgid "Period Scheme"
 #~ msgstr "Periodenschema"
 
+#~ msgid "Language*"
+#~ msgstr "Sprache*"
+
 #~ msgid "Free"
 #~ msgstr "Frei"
 
 #~ msgid "Aircraft type: "
 #~ msgstr "Flugzeugtyp "
 
+#~ msgid "Infobox Geometry"
+#~ msgstr "InfoBox Geometrie"
+
 #~ msgid "Setup ..."
 #~ msgstr "Setup ..."
 
 #~ msgid "Logger ID: "
 #~ msgstr "Logger ID: "
+
+#~ msgid "Msg window*"
+#~ msgstr "Nachrichten Fenster*"
+
+#~ msgid "Text Input Style*"
+#~ msgstr "Texteingabestil"
+
+#~ msgid "Dialog Style*"
+#~ msgstr "Dialogstil*"
 
 #~ msgid "Gestures"
 #~ msgstr "Gesten"
@@ -9247,6 +9286,9 @@ msgstr ""
 #~ msgid "Save as"
 #~ msgstr "Speichern unter"
 
+#~ msgid "Events*"
+#~ msgstr "Ereignisse"
+
 #~ msgid "Finish alt min"
 #~ msgstr "Minimal Zielhöhe"
 
@@ -9268,6 +9310,9 @@ msgstr ""
 #~ msgid "Waypoints 2"
 #~ msgstr "Wegpunkte 2"
 
+#~ msgid "Auto logger*"
+#~ msgstr "Auto Logger*"
+
 #~ msgid "Pilot name: "
 #~ msgstr "Pilotenname: "
 
@@ -9286,8 +9331,14 @@ msgstr ""
 #~ msgid "Info box values small"
 #~ msgstr "infoBox Werte klein"
 
+#~ msgid "Auto Blank"
+#~ msgstr "Auto Blank"
+
 #~ msgid "Glider position"
 #~ msgstr "Flugzeug Position"
+
+#~ msgid "Wind arrow*"
+#~ msgstr "Windpfeil"
 
 #~ msgid "Last Thermal Time"
 #~ msgstr "Letzte Thermik - Dauer"
@@ -9409,6 +9460,9 @@ msgstr ""
 #~ msgid "Urgent min volume"
 #~ msgstr "Minimale Dringendlautstärke"
 
+#~ msgid "Infobox border*"
+#~ msgstr "Infobox Rahmen*"
+
 #~ msgid "TE dynamic cal"
 #~ msgstr "TE dynamische Kalibrierung"
 
@@ -9423,6 +9477,12 @@ msgstr ""
 
 #~ msgid "Interval, Caution"
 #~ msgstr "Intervall, Vorsicht"
+
+#~ msgid "Lat/Lon"
+#~ msgstr "Breite/Länge"
+
+#~ msgid "Averager needle*"
+#~ msgstr "Mittelwert Zeiger"
 
 #~ msgid "Topology / Terrain"
 #~ msgstr "Topologie / Gelände"
@@ -9600,6 +9660,12 @@ msgstr ""
 #~ msgid "Pitch Scale"
 #~ msgstr "Änderung"
 
+#~ msgid "Av climb"
+#~ msgstr "Mitl. Steigen"
+
+#~ msgid "Use black outline*"
+#~ msgstr "Benutze schwarze Kontur"
+
 #~ msgid "V Task Av"
 #~ msgstr "mitl. V Aufgabe"
 
@@ -9614,6 +9680,12 @@ msgstr ""
 
 #~ msgid "Task Altitude Difference"
 #~ msgstr "Aufgabe Höhenunterschied"
+
+#~ msgid "Show gross*"
+#~ msgstr "Zeige Brutto*"
+
+#~ msgid "STF risk factor*"
+#~ msgstr "STF Risiko Faktor*"
 
 #~ msgid "MaxTemp"
 #~ msgstr "MaxTemp"
@@ -9688,17 +9760,35 @@ msgstr ""
 #~ msgid "Polar file"
 #~ msgstr "Polare"
 
+#~ msgid "Auto Mc mode"
+#~ msgstr "MC Optimierung"
+
 #~ msgid "Goto"
 #~ msgstr "Ziele auf"
 
 #~ msgid "Online contest"
 #~ msgstr "Online Contest"
 
+#~ msgid "Map waypoints"
+#~ msgstr "Wegpunkte der Karte"
+
+#~ msgid "Warning time*"
+#~ msgstr "Vorwarnzeit*"
+
+#~ msgid "Nav by baro altitude*"
+#~ msgstr "Nav. mit barometrischer Höhe*"
+
+#~ msgid "Block speed to fly*"
+#~ msgstr "Blockgeschwindigkeit*"
+
 #~ msgid "Task scoring"
 #~ msgstr "Aufgaben Bewertung"
 
 #~ msgid "Glide terrain line"
 #~ msgstr "Gleitflugbereich als"
+
+#~ msgid "Terrain file*"
+#~ msgstr "Gelände*"
 
 #~ msgid "Labels\n"
 #~ msgstr "Beschriftung\n"
@@ -9721,6 +9811,12 @@ msgstr ""
 
 #~ msgid "V Flap"
 #~ msgstr "V Wölbklappe"
+
+#~ msgid "Inverse infoboxes*"
+#~ msgstr "Invertierte Infobox*"
+
+#~ msgid "Color infoboxes*"
+#~ msgstr "Infobox Farbe*"
 
 #~ msgid "FLARM and other gauges"
 #~ msgstr "FLARM und andere Anzeigen"
@@ -9762,6 +9858,9 @@ msgstr ""
 #~ msgid "Avg/Alt"
 #~ msgstr "Vario/Höhe"
 
+#~ msgid "Start max height margin"
+#~ msgstr "Max. tolerierte Abflugüberhöhung"
+
 #~ msgid "Advance: Hold start"
 #~ msgstr "Fortschritt: Nicht abfliegen"
 
@@ -9773,6 +9872,13 @@ msgstr ""
 
 #~ msgid "Advance: Ready to start"
 #~ msgstr "Fortschritt: Abflugbereit"
+
+#~ msgid ""
+#~ "The MacCready setting used in task abort mode and for determining arrival "
+#~ "altitude at airfields. "
+#~ msgstr ""
+#~ "MacCready Wert, der nach einem Abbruch der Aufgabe, als auch für den "
+#~ "Endanflug auf einen Flugplatz verwendet wird. "
 
 #~ msgid ""
 #~ "When enabled, the current MacCready setting is used for determining "
@@ -9840,6 +9946,9 @@ msgstr ""
 #~ "reaktiv, dabei kann es aber zu einem ungewollten Mehrfach-Tastendruck "
 #~ "kommen."
 
+#~ msgid "The handicap factor used for OnLine Contest scoring."
+#~ msgstr "Der Handicap-Faktor für die OnLine Contest Wertung."
+
 #~ msgid "Maximum height while starting the task.  Set to 0 for no limit."
 #~ msgstr ""
 #~ "Maximale Höhe beim Abflug zur Aufgabe. Auf 0 gesetzt  gibt es keine "
@@ -9877,8 +9986,21 @@ msgstr ""
 #~ msgid "Pan mode OFF"
 #~ msgstr "Verschiebemodus AUS"
 
+#~ msgid ""
+#~ "For auto airspace mode, this is the altitude above/below which airspace "
+#~ "is included."
+#~ msgstr ""
+#~ "Für die \"Auto\" Luftraumanzeige ist das die Höhe über/unter der "
+#~ "Lufträume in die Darstellung einbezogen werden."
+
+#~ msgid "Flap forces cruise*"
+#~ msgstr "Wechsel Steig-/Vorflugmodus"
+
 #~ msgid "Start max speed"
 #~ msgstr "Maximale Abfluggeschwindigkeit"
+
+#~ msgid "Start max speed margin"
+#~ msgstr "Max. Abflug-Geschwindigkeitstoleranz"
 
 #~ msgid "Interface"
 #~ msgstr "Benutzeroberfläche"
@@ -9891,6 +10013,13 @@ msgstr ""
 
 #~ msgid "Sets the width of the snail trail display."
 #~ msgstr "Stellt die Breite der angezeigten Flugspur ein."
+
+#~ msgid ""
+#~ "The airfields file may contain extracts from Enroute Supplements or other "
+#~ "contributed information about individual airfields."
+#~ msgstr ""
+#~ "Die Flugplatzdatei kann auszugsweise unterwegs Unterstützung, oder andere "
+#~ "hinzugefügte Informationen über einzelne Flugplätze enthalten."
 
 #~ msgid ""
 #~ "Maximum height above ground while starting the task.  Set to 0 for no "
@@ -9915,8 +10044,18 @@ msgstr ""
 #~ msgid "Length of the OZ line."
 #~ msgstr "Länge der OZ Linie."
 
+#~ msgid ""
+#~ "The name of the file containing terrain, topology, and optionally "
+#~ "waypoints, airfield details and airspace."
+#~ msgstr ""
+#~ "Der Name der Datei die Gelände, Topologie, optional Wegpunkte, "
+#~ "Flugplatzdetails und Lufträume enthält."
+
 #~ msgid "V rem"
 #~ msgstr "V verb."
+
+#~ msgid "Specifies the file defining the topological features."
+#~ msgstr "Die Datei mit den topologischen Angaben."
 
 #~ msgid "Select pattern"
 #~ msgstr "Wähle ein Muster"
@@ -9966,6 +10105,15 @@ msgstr ""
 #~ "Querformat  nicht alle wirklich verfügbar."
 
 #~ msgid ""
+#~ "Whether to show speed command arrows on the Vario gauge.  When shown, in "
+#~ "cruise mode, arrows point up to command slow down; arrows point down to "
+#~ "command speed up."
+#~ msgstr ""
+#~ "Ob Pfeile für die Geschwindigkeitsanweisung in der Varioanzeige "
+#~ "dargestellt werden sollen. Wenn aktiviert weisen im Vorflugmodus "
+#~ "Aufwärtspfeile zum Verlangsamen, und Abwärtspfeile zum Beschleunigen an."
+
+#~ msgid ""
 #~ "Draws digital elevation terrain on the map. This is shaded by the wind "
 #~ "direction: upwind is brighter, downwind darker."
 #~ msgstr ""
@@ -9979,11 +10127,52 @@ msgstr ""
 #~ msgid "Alternate"
 #~ msgstr "Alternative"
 
+#~ msgid ""
+#~ "Draw topological features (roads, rivers, lakes etc) on the map.  "
+#~ "Requires the topology file to be specified."
+#~ msgstr ""
+#~ "Zeige topologische Strukturen (Straßen, Flüsse, Seen usw.) auf der Karte. "
+#~ "Es muss eine Topologiedatei angegeben werden."
+
+#~ msgid ""
+#~ "The STF risk factor reduces the MacCready setting used to calculate speed "
+#~ "to fly as the glider gets low, in order to compensate for risk.  Set to "
+#~ "0.0 for no compensation, 1.0 scales Mc linearly with height."
+#~ msgstr ""
+#~ "Der STF Risikofaktor reduziert die MacCready Einstellung für die "
+#~ "empfohlene Vorfluggeschwindigkeit wenn man tiefer fliegt um das Risiko "
+#~ "auszugleichen. Auf 0,0 gesetzt gibt es kein Ausgleich, 1,0 berechnet "
+#~ "einen Ausgleich linear zur Höhe."
+
 #~ msgid "Climb Rate"
 #~ msgstr "Steigwert"
 
 #~ msgid "Set as new home"
 #~ msgstr "Setze als neuer Heimatplatz"
+
+#~ msgid "This is the time interval between logged points when circling. "
+#~ msgstr ""
+#~ "Mit diesem Zeitintervall werden im Steigmodus GPS Positionen ins Logg "
+#~ "geschrieben. "
+
+#~ msgid "Time step cruise*"
+#~ msgstr "Zeitintervall beim Vorflug*"
+
+#~ msgid "Time step circling*"
+#~ msgstr "Zeitintervall im Steigen"
+
+#~ msgid "This is the time interval between logged points when not circling. "
+#~ msgstr ""
+#~ "Das Zeitintervall zwischen zwei Punkten im Logschrieb, wenn nicht im "
+#~ "Steigmodus. "
+
+#~ msgid ""
+#~ "Defines the amount of phong shading in the terrain rendering.  Use large "
+#~ "values to emphasise terrain slope, smaller values if flying in steep "
+#~ "mountains."
+#~ msgstr ""
+#~ "Anpassung der Phong-Tönung der Geländedarstellung. Nimm größere Werte um "
+#~ "das Relief zu betonen, kleinere Werte für steile Berglandschaft."
 
 #~ msgid "Set teamcode"
 #~ msgstr "Teamkode setzen"
@@ -10031,6 +10220,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Kalibrierfaktor des statischen Druck für die Totalenergieberechnung. "
 
+#~ msgid "This enables the display of the ThermalAssistant gauge."
+#~ msgstr "Aktiviert die Anzeige des Thermikassistenten."
+
 #~ msgid ""
 #~ "MC\n"
 #~ "+"
@@ -10048,6 +10240,14 @@ msgstr ""
 #~ msgid "Task Calculator"
 #~ msgstr "Aufgaben-Rechner"
 
+#~ msgid ""
+#~ "The maximum manoeuvring speed can be entered on this page to prevent the "
+#~ "glide computer from commanding unrealistic cruise speeds."
+#~ msgstr ""
+#~ "Die Manövergeschwindigkeit, d.h. Geschw. bei der die Ruder noch voll "
+#~ "ausgeschlagen werden dürfen (Handbuch des Seglers). Das hindert den "
+#~ "Rechner daran unsinnige Vorfluggeschwindigkeiten vorzuschlagen."
+
 #~ msgid "Airfields file*"
 #~ msgstr "Flugplatzdetails*"
 
@@ -10059,6 +10259,9 @@ msgstr ""
 
 #~ msgid "UTC Offset"
 #~ msgstr "Zeitzonenverschiebung"
+
+#~ msgid "Aircraft/wind speed"
+#~ msgstr "Flug- u. Windgeschwindigkeit"
 
 #~ msgid "Unknown Filetype."
 #~ msgstr "Unbekannter Dateityp."
@@ -10090,6 +10293,9 @@ msgstr ""
 #~ msgid "Point"
 #~ msgstr "Punkt"
 
+#~ msgid "Display Orientation"
+#~ msgstr "Ausrichtung der Anzeige"
+
 #~ msgid "Configuration - InfoBoxes - "
 #~ msgstr "Einstellung - InfoBoxen - "
 
@@ -10099,6 +10305,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Aufgabe\n"
 #~ "bearbeiten"
+
+#~ msgid "Detour cost markers*"
+#~ msgstr "Angabe zu den Umwegkosten*"
 
 #~ msgid "OLC Classic"
 #~ msgstr "OLC Classic"
@@ -10112,6 +10321,9 @@ msgstr ""
 #~ msgid "Trending Average climb"
 #~ msgstr "Erwartetes mittleres Steigen"
 
+#~ msgid "L/D Average period*"
+#~ msgstr "Gleitzahl Mittelwertzeitintervall"
+
 #~ msgid "AAT Range"
 #~ msgstr "AAT Bereich"
 
@@ -10120,6 +10332,17 @@ msgstr ""
 
 #~ msgid "AC OFF"
 #~ msgstr "AC Aus"
+
+#~ msgid ""
+#~ "option, if enabled sets the clock of the computer to the GPS time once a "
+#~ "fix is set.  This is only necessary if your computer does not have a real-"
+#~ "time clock with battery backup or your computer frequently runs out of "
+#~ "battery power or otherwise loses time."
+#~ msgstr ""
+#~ "Wenn aktiviert wird die Uhr des Rechners nach der GPS Zeit gestellt, "
+#~ "sobald Empfang vorhanden ist. Diese Einstellung mach nur Sinn wenn der "
+#~ "Rechner über keine Batterie gepufferte Echtzeituhr verfügt, öfters ganz "
+#~ "ohne Spannungsversorgung ist, oder aus anderen Gründen die Zeit verliert."
 
 #~ msgid "V ach"
 #~ msgstr "V ach"
@@ -10133,17 +10356,26 @@ msgstr ""
 #~ msgid "OLC League"
 #~ msgstr "OLC Wettbewerb"
 
+#~ msgid "Acknowledge time*"
+#~ msgstr "Bestätigungszeit*"
+
 #~ msgid "OLC Plus"
 #~ msgstr "OLC Plus"
 
 #~ msgid "North arrow*"
 #~ msgstr "Nordpfeil*"
 
+#~ msgid "Topology display"
+#~ msgstr "Topologie"
+
 #~ msgid "Symbols"
 #~ msgstr "Kartensymbole"
 
 #~ msgid "Aux Info\n"
 #~ msgstr "Zus. Info\n"
+
+#~ msgid "Menu timeout*"
+#~ msgstr "Menü Zeitabschaltung*"
 
 #~ msgid "Auxiliary"
 #~ msgstr "Zusätzlich"
@@ -10183,6 +10415,15 @@ msgstr ""
 
 #~ msgid "Terrain "
 #~ msgstr "Gelände "
+
+#~ msgid ""
+#~ "Setting this to \"ON\" will automatically close the FLARM dialog if there "
+#~ "is no traffic. \"OFF\" will keep the dialog open even without current "
+#~ "traffic."
+#~ msgstr ""
+#~ "Eingeschaltet (\"EIN\") wird der FLARM Dialog automatisch geschlossen, "
+#~ "sobald kein Verkehr da ist. \"AUS\" belässt den Dialog offen, auch wenn "
+#~ "kein Verkehr mehr da ist."
 
 #~ msgid "Draw shades among slopes, indicating the wind direction."
 #~ msgstr ""
@@ -10293,6 +10534,9 @@ msgstr ""
 
 #~ msgid "CPU Load"
 #~ msgstr "Prozessorlast"
+
+#~ msgid "Trail type*"
+#~ msgstr "Spurtyp*"
 
 #~ msgid "Cruise Orientation"
 #~ msgstr "Vorflug Ausrichtung"
@@ -10494,6 +10738,17 @@ msgstr ""
 #~ "Die Liste enthält eine Auswahl von Segelflugzeugen mit unterschiedlicher "
 #~ "Leistung, sowohl einen speziellen Eintrag für eine externe Polarendatei."
 
+#~ msgid ""
+#~ "Three styles are available: Purple circles (WinPilot style), a high "
+#~ "contrast (monochrome) style with icons, or orange icons. The icons differ "
+#~ "for landable field and airport. All styles mark the waypoints within "
+#~ "reach green."
+#~ msgstr ""
+#~ "Es sind drei Darstellungen verfügbar: Lila Punkte (WinPilot-Stil), ein "
+#~ "kontrastreicher (einfarbiger) Stil mit Symbolen, oder einer mit orange "
+#~ "Symbolen. Es gibt unterschiedliche Symbole für Landewiese und Flugplatz. "
+#~ "Alle Darstellungen markieren die erreichbaren Wegpunkte grün."
+
 #~ msgid "DAe"
 #~ msgstr "DAeC"
 
@@ -10560,6 +10815,18 @@ msgstr ""
 #~ "gerichtet ist."
 
 #~ msgid ""
+#~ "This determines whether the the glide terrain range is calculated and "
+#~ "drawn as a line on the map area:\n"
+#~ "[OFF] Disables display\n"
+#~ "[Line] Draws a dashed line at the glide range\n"
+#~ "[Shade] Shades terrain outside glide range"
+#~ msgstr ""
+#~ "Bestimmt ob der Gleitflugbereich berechnet und dargetellt wird.\n"
+#~ "[AUS] schaltet die Darstellung aus,\n"
+#~ "[Grenzlinie] zeichnet eine gestrichelte Linie um den Bereich,\n"
+#~ "[Schattiert] verdunkelt das Gelände außerhalb des Gleitflugbereichs."
+
+#~ msgid ""
 #~ "Rules used for calculating optimal points for OnLine Contest.\n"
 #~ "[Sprint]: Conforms to FAI IGC League rules.  Up to 5 points including "
 #~ "start and finish, maximum duration 2.5 hours, finish height must not be "
@@ -10585,6 +10852,43 @@ msgstr ""
 #~ "Abflug und Ziel eingeschlossen. Die Zielhöhe darf max. 1000 Meter unter "
 #~ "dem Abflug liegen. Es werden 80% des zweitletzten Schenkels und nur 60% "
 #~ "des letzten Schenkels zuerkannt."
+
+#~ msgid ""
+#~ "Controls filtering of airspace for display and warnings.  The airspace "
+#~ "filter button also allows filtering of display and warnings independently "
+#~ "for each airspace class.\n"
+#~ "[All on] All is displayed.\n"
+#~ "[Clip] Only airspace below the clip altitude.\n"
+#~ "[Auto] All within a margin of the glider.\n"
+#~ "[All below] All airspace below the glider."
+#~ msgstr ""
+#~ "Setzt den Filter für Lufträume die angezeigt, bzw. vor denen gewarnt "
+#~ "wird. Zusätzlich kann mit der Filtertabelle jede Luftraumklasse "
+#~ "unabhängig für Anzeige und Warnung ausgewählt werden.\n"
+#~ "[Alles an] Alles wird gezeigt.\n"
+#~ "[bis max. Höhe] Es werden nur Lufträume unter dieser Höhe gezeigt.\n"
+#~ "[Auto] Alles in einem Höhenband um den Segler.\n"
+#~ "[Alles unter mir] Alle Lufträume unter dem Segler."
+
+#~ msgid ""
+#~ "This option defines which auto MacCready algorithm is used.\n"
+#~ "[Final glide] adjusts Mc for fastest arrival.  For OLC sprint tasks, the "
+#~ "MacCready is adjusted in order to cover the greatest distance in the "
+#~ "remaining time and reach the finish height.\n"
+#~ "[Trending Average] sets Mc to the trending average climb rate based on "
+#~ "all climbs.\n"
+#~ "[Both] Uses trending average during task, then fastest arrival when in "
+#~ "final glide mode."
+#~ msgstr ""
+#~ "Diese Option legt fest, welcher MacCready Algorythmus benutzt wird.\n"
+#~ "[Endanflug] stellt MacCready auf die schnellstmögliche Ankunft ein. Bei "
+#~ "den OLC Sprint-Aufgaben sind die Einstellungen so, dass eine möglichst "
+#~ "große Strecke innerhalb der verbleibenden Zeit beim erreichen der "
+#~ "Ankunftshöhe im Ziel erreicht wird.\n"
+#~ "[Erwartetes mittleres Steigen] stellt MacCready auf den Wert aller\n"
+#~ "bisherigen Steigwerte.\n"
+#~ "[Beide] nutzt [Erwartetes mittleres Steigen] während der Aufgabe und "
+#~ "wechselt beim Endanflug automatisch auf [Endanflug]."
 
 #~ msgid ""
 #~ "Determines how labels are displayed with each waypoint:\n"
@@ -10652,6 +10956,9 @@ msgstr ""
 
 #~ msgid "Speed Remaining Help"
 #~ msgstr "Hilfe Verbleibende Geschwindigkeit"
+
+#~ msgid "Status message*"
+#~ msgstr "Status Meldung*"
 
 #~ msgid "Set speed remaining"
 #~ msgstr "Benötigte Geschwindigkeit"
