@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 #include "Util/StaticArray.hpp"
+#include "PagerWidget.hpp"
 
 class Widget;
 
@@ -34,22 +35,7 @@ public:
   typedef void (*PageFlippedCallback)();
 
 protected:
-  struct Page {
-    Widget *widget;
-
-    /**
-     * Has Widget::Prepare() been called?
-     */
-    bool prepared;
-
-    Page() = default;
-
-    gcc_constexpr_ctor
-    Page(Widget *_widget):widget(_widget), prepared(false) {}
-  };
-
-  unsigned current;
-  StaticArray<Page, 32> tabs;
+  PagerWidget pager;
 
   PageFlippedCallback page_flipped_callback;
 
@@ -83,15 +69,15 @@ public:
   void AddClient(Window *w);
 
   unsigned GetTabCount() const {
-    return tabs.size();
+    return pager.GetSize();
   }
 
   unsigned GetCurrentPage() const {
-    return current;
+    return pager.GetCurrentIndex();
   }
 
   const Widget *GetCurrentWidget() const {
-    return tabs[current].widget;
+    return pager.GetCurrentWidget();
   }
 
   /**
@@ -126,6 +112,7 @@ public:
 
 protected:
   virtual void on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void on_create();
   virtual void on_destroy();
 };
 

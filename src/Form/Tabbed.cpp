@@ -45,24 +45,7 @@ TabbedControl::AddPage(Widget *w)
 {
   assert(defined());
 
-  if (tabs.empty()) {
-    current = 0;
-  } else {
-    assert(current < tabs.size());
-  }
-
-  const bool show = tabs.empty();
-  tabs.append(w);
-  Page &tab = tabs.back();
-
-  const PixelRect rc = get_client_rect();
-  w->Initialise(*this, rc);
-
-  if (show) {
-    tab.prepared = true;
-    w->Prepare(*this, rc);
-    w->Show(rc);
-  }
+  pager.Add(w);
 }
 
 void
@@ -77,79 +60,41 @@ TabbedControl::AddClient(Window *w)
 bool
 TabbedControl::SetCurrentPage(unsigned i, bool click)
 {
-  assert(i < tabs.size());
+  const unsigned old_current = pager.GetCurrentIndex();
 
-  if (i == current) {
-    if (!click) {
-      return true;
-    } else {
-      tabs[i].widget->ReClick();
-      return true;
-    }
-  }
+  bool success = pager.SetCurrent(i, click);
 
-  assert(tabs[current].prepared);
-  if (!tabs[current].widget->Leave())
-    return false;
-
-  if (click && !tabs[i].widget->Click())
-    return false;
-
-  tabs[current].widget->Hide();
-
-  current = i;
-
-  if (!tabs[current].prepared) {
-    tabs[current].prepared = true;
-    tabs[current].widget->Prepare(*this, get_client_rect());
-  }
-
-  tabs[current].widget->Show(get_client_rect());
-
-  if (page_flipped_callback != NULL)
+  if (success && old_current != pager.GetCurrentIndex() &&
+      page_flipped_callback != NULL)
     page_flipped_callback();
 
-  return true;
+  return success;
 }
 
 void
 TabbedControl::NextPage()
 {
-  if (tabs.size() < 2)
-    return;
-
-  assert(current < tabs.size());
-
-  SetCurrentPage((current + 1) % tabs.size());
+  if (pager.Next() && page_flipped_callback != NULL)
+    page_flipped_callback();
 }
 
 void
 TabbedControl::PreviousPage()
 {
-  if (tabs.size() < 2)
-    return;
-
-  assert(current < tabs.size());
-
-  SetCurrentPage((current + tabs.size() - 1) % tabs.size());
+  if (pager.Previous() && page_flipped_callback != NULL)
+    page_flipped_callback();
 }
 
 bool
 TabbedControl::ClickPage(unsigned i)
 {
-  assert(i < tabs.size());
-
-  return SetCurrentPage(i, true);
+  return pager.SetCurrent(i, true);
 }
 
 bool
 TabbedControl::Save(bool &changed, bool &require_restart)
 {
-  for (auto i = tabs.begin(), end = tabs.end(); i != end; ++i)
-    if (i->prepared && !i->widget->Save(changed, require_restart))
-      return false;
-
-  return true;
+  return pager.Save(changed, require_restart);
 }
 
 void
@@ -157,32 +102,25 @@ TabbedControl::on_resize(UPixelScalar width, UPixelScalar height)
 {
   ContainerWindow::on_resize(width, height);
 
-  if (!tabs.empty()) {
-    /* adjust the current page: hide and show it again with the new
-       dimensions */
-    Page &tab = tabs[current];
-    assert(tab.prepared);
-    tab.widget->Move(get_client_rect());
-  }
+  pager.Move(get_client_rect());
+}
+
+void
+TabbedControl::on_create()
+{
+  ContainerWindow::on_create();
+
+  const PixelRect rc = get_client_rect();
+  pager.Initialise(*this, rc);
+  pager.Prepare(*this, rc);
+  pager.Show(rc);
 }
 
 void
 TabbedControl::on_destroy()
 {
-  if (!tabs.empty()) {
-    assert(tabs[current].prepared);
-    tabs[current].widget->Leave();
-    tabs[current].widget->Hide();
-  }
-
-  for (auto i = tabs.begin(), end = tabs.end(); i != end; ++i) {
-    if (i->prepared)
-      i->widget->Unprepare();
-
-    delete i->widget;
-  }
-
-  tabs.clear();
+  pager.Hide();
+  pager.Unprepare();
 
   ContainerWindow::on_destroy();
 }
