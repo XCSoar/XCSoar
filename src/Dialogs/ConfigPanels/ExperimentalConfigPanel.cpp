@@ -37,18 +37,12 @@ enum ControlIndex {
 
 
 static const StaticEnumChoice  model_type_list[] = {
-  { MODELTYPE_PNA_PNA, N_("Generic"),
-    N_("") },
-  { MODELTYPE_PNA_HP31X, _T("HP31x"),
-    N_("") },
-  { MODELTYPE_PNA_MEDION_P5, _T("MedionP5"),
-    N_("") },
-  { MODELTYPE_PNA_MIO, _T("MIO"),
-    N_("") },
-  { MODELTYPE_PNA_NOKIA_500, _T("Nokia500"),
-    N_("") },
-  { MODELTYPE_PNA_PN6000, _T("PN6000"),
-  N_("") },
+  { MODELTYPE_PNA_PNA, N_("Generic") },
+  { MODELTYPE_PNA_HP31X, _T("HP31x") },
+  { MODELTYPE_PNA_MEDION_P5, _T("MedionP5") },
+  { MODELTYPE_PNA_MIO, _T("MIO") },
+  { MODELTYPE_PNA_NOKIA_500, _T("Nokia500") },
+  { MODELTYPE_PNA_PN6000, _T("PN6000") },
   { 0 }
 };
 

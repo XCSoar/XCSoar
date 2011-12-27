@@ -62,11 +62,11 @@ static const StaticEnumChoice  as_display_list[] = {
 
 static const StaticEnumChoice  as_fill_mode_list[] = {
   { AirspaceRendererSettings::AS_FILL_DEFAULT, N_("Default"),
-    N_("") },
+    _T("") },
   { AirspaceRendererSettings::AS_FILL_ALL, N_("Fill all"),
-    N_("") },
+    _T("") },
   { AirspaceRendererSettings::AS_FILL_PADDING, N_("Fill padding"),
-    N_("") },
+    _T("") },
   { 0 }
 };
 
