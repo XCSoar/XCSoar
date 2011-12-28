@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FORM_TABBAR_HPP
 #define XCSOAR_FORM_TABBAR_HPP
 
-#include "Util/StaticArray.hpp"
-#include "Util/StaticString.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "PagerWidget.hpp"
 
@@ -48,7 +46,6 @@ class TabBarControl : public ContainerWindow {
   PagerWidget pager;
 
   TabDisplay * tab_display;
-  StaticArray<OneTabButton *, 32> buttons;
   const UPixelScalar tab_line_height;
   bool flip_orientation;
   /** if false (default) Client rectangle is adjacent to tabs
@@ -123,20 +120,8 @@ public:
   gcc_pure
   UPixelScalar GetTabWidth() const;
 
-  /**
-   * calculates the size and position of ith button
-   * works in landscape or portrait mode
-   * @param i index of button
-   * @return Rectangle of button coordinates
-   */
-  gcc_pure
-  const PixelRect &GetButtonSize(unsigned i) const;
-
   gcc_pure
   const TCHAR *GetButtonCaption(unsigned i) const;
-
-  const StaticArray<OneTabButton *, 32>
-      &GetTabButtons() { return buttons; }
 
   UPixelScalar GetTabLineHeight() const {
     return tab_line_height;
@@ -147,31 +132,6 @@ public:
 protected:
   virtual void on_create();
   virtual void on_destroy();
-};
-
-/**
- * OneTabButton class holds display and callbacks data for a single tab
- */
-class OneTabButton {
-public:
-  StaticString<32> caption;
-  bool is_button_only;
-  const Bitmap *bmp;
-  PixelRect but_size;
-
-public:
-  OneTabButton(const TCHAR* _Caption,
-               bool _IsButtonOnly,
-               const Bitmap *_bmp)
-    :is_button_only(_IsButtonOnly),
-     bmp(_bmp)
-  {
-    caption = _Caption;
-    but_size.left = 0;
-    but_size.top = 0;
-    but_size.right = 0;
-    but_size.bottom = 0;
-  };
 };
 
 #endif

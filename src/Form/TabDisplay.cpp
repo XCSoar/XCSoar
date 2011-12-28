@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Screen/Icon.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Layout.hpp"
 #include "Asset.hpp"
 
 #include <assert.h>
@@ -47,6 +48,73 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
   WindowStyle mystyle;
   mystyle.tab_stop();
   set(parent, left, top, width, height, mystyle);
+}
+
+TabDisplay::~TabDisplay()
+{
+  for (auto i = buttons.begin(), end = buttons.end(); i != end; ++i)
+    delete *i;
+}
+
+const PixelRect &
+TabDisplay::GetButtonSize(unsigned i) const
+{
+  assert(i < GetSize());
+
+  if (buttons[i]->but_size.left < buttons[i]->but_size.right)
+    return buttons[i]->but_size;
+
+  const UPixelScalar margin = 1;
+
+  /*
+  bool partialTab = false;
+  if ( ((Layout::landscape ^ flip_orientation) && tab_display->GetTabHeight() < get_height()) ||
+      ((!Layout::landscape ^ flip_orientation) && tab_display->GetTabWidth() < get_width()) )
+    partialTab = true;
+  */
+
+  const UPixelScalar finalmargin = 1; //partialTab ? tab_line_height - 1 * margin : margin;
+  // Todo make the final margin display on either beginning or end of tab bar
+  // depending on position of tab bar
+
+  PixelRect rc;
+
+  if (Layout::landscape ^ flip_orientation) {
+    const UPixelScalar but_height =
+       (GetTabHeight() - finalmargin) / GetSize() - margin;
+
+    rc.left = 0;
+    rc.right = GetTabWidth() - tab_bar.GetTabLineHeight();
+
+    rc.top = finalmargin + (margin + but_height) * i;
+    rc.bottom = rc.top + but_height;
+
+  } else {
+    const unsigned portraitRows = (GetSize() > 4) ? 2 : 1;
+
+    const unsigned portraitColumnsRow0 = ((portraitRows == 1)
+       ? GetSize() : GetSize() / 2);
+    const unsigned portraitColumnsRow1 = ((portraitRows == 1)
+       ? 0 : GetSize() - GetSize() / 2);
+
+    const unsigned row = (i > (portraitColumnsRow0 - 1)) ? 1 : 0;
+
+    const UPixelScalar rowheight = (GetTabHeight() - tab_bar.GetTabLineHeight())
+        / portraitRows - margin;
+
+    const UPixelScalar but_width =
+          (GetTabWidth() - finalmargin) /
+          ((row == 0) ? portraitColumnsRow0 : portraitColumnsRow1) - margin;
+
+    rc.top = row * (rowheight + margin);
+    rc.bottom = rc.top + rowheight;
+
+    rc.left = finalmargin + (margin + but_width) * (row ? (i - portraitColumnsRow0) : i);
+    rc.right = rc.left + but_width;
+  }
+
+  buttons[i]->but_size = rc;
+  return buttons[i]->but_size;
 }
 
 void
@@ -105,11 +173,18 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
   }
 }
 
+void
+TabDisplay::Add(const TCHAR *caption, bool button_only, const Bitmap *bmp)
+{
+  OneTabButton *b = new OneTabButton(caption, button_only, bmp);
+  buttons.append(b);
+}
+
 int
 TabDisplay::GetButtonIndexAt(RasterPoint p) const
 {
-  for (unsigned i = 0; i < tab_bar.GetTabCount(); i++) {
-    const PixelRect &rc = tab_bar.GetButtonSize(i);
+  for (unsigned i = 0; i < GetSize(); i++) {
+    const PixelRect &rc = GetButtonSize(i);
     if (PtInRect(&rc, p))
       return i;
   }
@@ -126,7 +201,6 @@ TabDisplay::on_paint(Canvas &canvas)
   const unsigned CaptionStyle = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;
 
-  auto buttons = tab_bar.GetTabButtons();
   for (unsigned i = 0; i < buttons.size(); i++) {
     const OneTabButton &button = *buttons[i];
     bool inverse = false;
@@ -147,7 +221,7 @@ TabDisplay::on_paint(Canvas &canvas)
       canvas.SetTextColor(COLOR_BLACK);
       canvas.SetBackgroundColor(COLOR_WHITE);
     }
-    const PixelRect &rc = tab_bar.GetButtonSize(i);
+    const PixelRect &rc = GetButtonSize(i);
     PaintButton(canvas, CaptionStyle,
                 button.caption,
                 rc,
@@ -196,7 +270,7 @@ TabDisplay::on_key_check(unsigned key_code) const
     return (tab_bar.GetCurrentPage() > 0);
 
   case VK_RIGHT:
-    return tab_bar.GetCurrentPage() < tab_bar.GetTabCount() - 1;
+    return tab_bar.GetCurrentPage() < GetSize() - 1;
 
   case VK_DOWN:
     return false;
@@ -216,22 +290,22 @@ TabDisplay::on_key_down(unsigned key_code)
   switch (key_code) {
 
   case VK_APP1:
-    if (tab_bar.GetTabCount() > 0)
+    if (GetSize() > 0)
       tab_bar.ClickPage(0);
     return true;
 
   case VK_APP2:
-    if (tab_bar.GetTabCount() > 1)
+    if (GetSize() > 1)
       tab_bar.ClickPage(1);
     return true;
 
   case VK_APP3:
-    if (tab_bar.GetTabCount() > 2)
+    if (GetSize() > 2)
       tab_bar.ClickPage(2);
     return true;
 
   case VK_APP4:
-    if (tab_bar.GetTabCount() > 3)
+    if (GetSize() > 3)
       tab_bar.ClickPage(3);
     return true;
 
@@ -309,7 +383,7 @@ TabDisplay::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
   if (down_index == -1)
     return false;
 
-  const PixelRect rc = tab_bar.GetButtonSize(down_index);
+  const PixelRect rc = GetButtonSize(down_index);
   RasterPoint Pos;
   Pos.x = x;
   Pos.y = y;

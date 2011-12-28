@@ -25,11 +25,38 @@ Copyright_License {
 #define XCSOAR_FORM_TAB_DISPLAY_HPP
 
 #include "Screen/PaintWindow.hpp"
+#include "Util/StaticArray.hpp"
+#include "Util/StaticString.hpp"
 
 struct DialogLook;
 class Bitmap;
 class ContainerWindow;
 class TabBarControl;
+
+/**
+ * OneTabButton class holds display and callbacks data for a single tab
+ */
+class OneTabButton {
+public:
+  StaticString<32> caption;
+  bool is_button_only;
+  const Bitmap *bmp;
+  PixelRect but_size;
+
+public:
+  OneTabButton(const TCHAR* _Caption,
+               bool _IsButtonOnly,
+               const Bitmap *_bmp)
+    :is_button_only(_IsButtonOnly),
+     bmp(_bmp)
+  {
+    caption = _Caption;
+    but_size.left = 0;
+    but_size.top = 0;
+    but_size.right = 0;
+    but_size.bottom = 0;
+  };
+};
 
 /**
  * TabDisplay class handles onPaint callback for TabBar UI
@@ -42,6 +69,9 @@ class TabDisplay: public PaintWindow
 protected:
   TabBarControl& tab_bar;
   const DialogLook &look;
+
+  StaticArray<OneTabButton *, 32> buttons;
+
   bool dragging; // tracks that mouse is down and captured
   int down_index; // index of tab where mouse down occurred
   bool drag_off_button; // set by mouse_move
@@ -63,6 +93,8 @@ public:
              UPixelScalar width, UPixelScalar height,
              bool _flipOrientation = false);
 
+  virtual ~TabDisplay();
+
   /**
    * Paints one button
    */
@@ -70,6 +102,18 @@ public:
                           const TCHAR *caption, const PixelRect &rc,
                           bool isButtonOnly, const Bitmap *bmp,
                           const bool isDown, bool inverse);
+
+  unsigned GetSize() const {
+    return buttons.size();
+  }
+
+  void Add(const TCHAR *caption, bool button_only=false,
+           const Bitmap *bmp=NULL);
+
+  gcc_pure
+  const TCHAR *GetCaption(unsigned i) const {
+    return buttons[i]->caption.c_str();
+  }
 
   /**
    * @return -1 if there is no button at the specified position
@@ -85,6 +129,16 @@ public:
   UPixelScalar GetTabWidth() const {
     return this->get_width();
   }
+
+private:
+  /**
+   * calculates the size and position of ith button
+   * works in landscape or portrait mode
+   * @param i index of button
+   * @return Rectangle of button coordinates
+   */
+  gcc_pure
+  const PixelRect &GetButtonSize(unsigned i) const;
 
 protected:
   /**

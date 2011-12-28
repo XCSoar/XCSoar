@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/StaticArray.hpp"
 #include "Form/Tabbed.hpp"
-#include "Form/TabBar.hpp"
+#include "Form/TabDisplay.hpp"
 #include "Dialogs/XML.hpp"
 
 struct DialogLook;

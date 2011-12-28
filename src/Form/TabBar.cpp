@@ -66,9 +66,6 @@ TabBarControl::~TabBarControl()
 {
   delete tab_display;
 
-  for (auto i = buttons.begin(), end = buttons.end(); i != end; ++i)
-    delete *i;
-
   reset();
 }
 
@@ -94,9 +91,7 @@ TabBarControl::SetClientOverlapTabs(bool value)
 const TCHAR*
 TabBarControl::GetButtonCaption(unsigned i) const
 {
-  assert(i < GetTabCount());
-
-  return buttons[i]->caption.c_str();
+  return tab_display->GetCaption(i);
 }
 
 unsigned
@@ -104,18 +99,13 @@ TabBarControl::AddTab(Widget *widget, const TCHAR *caption,
                       bool button_only, const Bitmap *bmp)
 {
   pager.Add(widget);
-
-  OneTabButton *b = new OneTabButton(caption, button_only, bmp);
-  buttons.append(b);
-
+  tab_display->Add(caption, button_only, bmp);
   return GetTabCount() - 1;
 }
 
 void
 TabBarControl::ClickPage(unsigned i)
 {
-  assert(i < GetTabCount());
-
   pager.ClickPage(i);
 
   if (tab_display != NULL)
@@ -125,8 +115,6 @@ TabBarControl::ClickPage(unsigned i)
 void
 TabBarControl::SetCurrentPage(unsigned i)
 {
-  assert(i < GetTabCount());
-
   const unsigned old_current = pager.GetCurrentIndex();
 
   bool success = pager.SetCurrent(i);
@@ -151,67 +139,6 @@ TabBarControl::PreviousPage()
 {
   if (pager.Previous(HasPointer()) && page_flipped_callback != NULL)
     page_flipped_callback();
-}
-
-const PixelRect &
-TabBarControl::GetButtonSize(unsigned i) const
-{
-  assert(i < GetTabCount());
-
-  if (buttons[i]->but_size.left < buttons[i]->but_size.right)
-    return buttons[i]->but_size;
-
-  const UPixelScalar margin = 1;
-
-  /*
-  bool partialTab = false;
-  if ( ((Layout::landscape ^ flip_orientation) && tab_display->GetTabHeight() < get_height()) ||
-      ((!Layout::landscape ^ flip_orientation) && tab_display->GetTabWidth() < get_width()) )
-    partialTab = true;
-  */
-
-  const UPixelScalar finalmargin = 1; //partialTab ? tab_line_height - 1 * margin : margin;
-  // Todo make the final margin display on either beginning or end of tab bar
-  // depending on position of tab bar
-
-  PixelRect rc;
-
-  if (Layout::landscape ^ flip_orientation) {
-    const UPixelScalar but_height =
-       (tab_display->GetTabHeight() - finalmargin) / GetTabCount() - margin;
-
-    rc.left = 0;
-    rc.right = tab_display->GetTabWidth() - tab_line_height;
-
-    rc.top = finalmargin + (margin + but_height) * i;
-    rc.bottom = rc.top + but_height;
-
-  } else {
-    const unsigned portraitRows = (GetTabCount() > 4) ? 2 : 1;
-
-    const unsigned portraitColumnsRow0 = ((portraitRows == 1)
-       ? GetTabCount() : GetTabCount() / 2);
-    const unsigned portraitColumnsRow1 = ((portraitRows == 1)
-       ? 0 : GetTabCount() - GetTabCount() / 2);
-
-    const unsigned row = (i > (portraitColumnsRow0 - 1)) ? 1 : 0;
-
-    const UPixelScalar rowheight = (tab_display->GetTabHeight() - tab_line_height)
-        / portraitRows - margin;
-
-    const UPixelScalar but_width =
-          (tab_display->GetTabWidth() - finalmargin) /
-          ((row == 0) ? portraitColumnsRow0 : portraitColumnsRow1) - margin;
-
-    rc.top = row * (rowheight + margin);
-    rc.bottom = rc.top + rowheight;
-
-    rc.left = finalmargin + (margin + but_width) * (row ? (i - portraitColumnsRow0) : i);
-    rc.right = rc.left + but_width;
-  }
-
-  buttons[i]->but_size = rc;
-  return buttons[i]->but_size;
 }
 
 UPixelScalar
