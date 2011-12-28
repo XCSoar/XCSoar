@@ -113,7 +113,7 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Circling orientation"),
           _("Determines how the screen is rotated with the glider while circling"),
           orientation_list,
-          settings_map.cruise_orientation,
+          settings_map.circling_orientation,
           OnShiftTypeData);
 
   AddBoolean(_("Circling zoom"),
