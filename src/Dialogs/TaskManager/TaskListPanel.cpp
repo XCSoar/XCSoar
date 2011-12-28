@@ -30,6 +30,7 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Form/List.hpp"
 #include "Form/Draw.hpp"
+#include "Form/Tabbed.hpp"
 #include "Form/TabBar.hpp"
 #include "Task/TaskStore.hpp"
 #include "Task/ProtectedTaskManager.hpp"
