@@ -287,13 +287,13 @@ PagerWidget::Move(const PixelRect &rc)
   assert(prepared);
   assert(visible);
 
+  position = rc;
+
   if (children.empty())
     /* allowed transitional state, see Show() for explanation */
     return;
 
   assert(children[current].prepared);
-
-  position = rc;
 
   children[current].widget->Move(rc);
 }
