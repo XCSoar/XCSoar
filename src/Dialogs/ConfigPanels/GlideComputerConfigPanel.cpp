@@ -33,8 +33,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 
 enum ControlIndex {
-  AutoWind,
-  ExternalWind,
   AutoMcMode,
   BlockSTF,
   EnableNavBaroAltitude,
@@ -57,27 +55,6 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
 
   RowFormWidget::Prepare(parent, rc);
-
-  static gcc_constexpr_data StaticEnumChoice auto_wind_list[] = {
-    { AUTOWIND_NONE, N_("Manual"),
-      N_("When the algorithm is switched off, the pilot is responsible for setting the wind estimate.") },
-    { AUTOWIND_CIRCLING, N_("Circling"),
-      N_("Requires only a GPS source.") },
-    { AUTOWIND_ZIGZAG, N_("ZigZag"),
-      N_("Requires GPS and an intelligent vario with airspeed output.") },
-    { AUTOWIND_CIRCLING | AUTOWIND_ZIGZAG, N_("Both"),
-      N_("Use ZigZag and circling.") },
-    { 0 }
-  };
-
-  AddEnum(_("Auto wind"),
-          _("This allows switching on or off the automatic wind algorithm."),
-          auto_wind_list, settings_computer.auto_wind_mode);
-
-  AddBoolean(_("External wind"),
-             _("If enabled, then the wind vector received from external devices overrides "
-                 "XCSoar's internal wind calculation."),
-             settings_computer.use_external_wind);
 
   static gcc_constexpr_data StaticEnumChoice auto_mc_list[] = {
     { TaskBehaviour::AUTOMC_FINALGLIDE, N_("Final glide"),
@@ -134,10 +111,6 @@ GlideComputerConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool changed = false, require_restart = false;
 
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
-
-  changed |= SaveValueEnum(AutoWind, szProfileAutoWind, settings_computer.auto_wind_mode);
-
-  changed |= SaveValue(ExternalWind, szProfileExternalWind, settings_computer.use_external_wind);
 
   changed |= SaveValueEnum(AutoMcMode, szProfileAutoMcMode, settings_computer.task.auto_mc_mode);
 

@@ -48,6 +48,7 @@ Copyright_License {
 #include "ConfigPanels/SymbolsConfigPanel.hpp"
 #include "ConfigPanels/TerrainDisplayConfigPanel.hpp"
 #include "ConfigPanels/GlideComputerConfigPanel.hpp"
+#include "ConfigPanels/WindConfigPanel.hpp"
 #include "ConfigPanels/SafetyFactorsConfigPanel.hpp"
 #include "ConfigPanels/RouteConfigPanel.hpp"
 #include "ConfigPanels/InterfaceConfigPanel.hpp"
@@ -90,6 +91,7 @@ static const TabMenuControl::PageItem pages[] = {
   {_T("AirspaceTmp"), 1, CreateAirspaceTmpButtonPanel },
   {N_("Safety Factors"), 2, CreateSafetyFactorsConfigPanel },
   {N_("Glide Computer"), 2, CreateGlideComputerConfigPanel },
+  {N_("Wind"), 2, CreateWindConfigPanel },
   {N_("Route"), 2, CreateRouteConfigPanel },
   {N_("FLARM, Other"), 3, CreateGaugesConfigPanel },
   {N_("Vario"), 3, CreateVarioConfigPanel },
