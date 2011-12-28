@@ -108,7 +108,9 @@ public:
    *
    * @return true if the specified page is now visible
    */
-  bool ClickPage(unsigned i);
+  bool ClickPage(unsigned i) {
+    return SetCurrent(i, true);
+  }
 
   /* methods from Widget */
   virtual void Initialise(ContainerWindow &parent, const PixelRect &rc);
