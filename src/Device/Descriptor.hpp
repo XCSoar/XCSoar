@@ -45,6 +45,7 @@ class Device;
 class AtmosphericPressure;
 struct DeviceRegister;
 class InternalGPS;
+class NonGPSSensors;
 class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
@@ -66,6 +67,7 @@ class DeviceDescriptor : public PortLineHandler
 
 #ifdef ANDROID
   InternalGPS *internal_gps;
+  NonGPSSensors *non_gps_sensors;
 #endif
 
   /**
@@ -162,6 +164,8 @@ public:
             OperationEnvironment &env);
 
   bool OpenInternalGPS();
+
+  bool OpenNonGPSSensors();
 
   bool Open(OperationEnvironment &env);
 

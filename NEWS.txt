@@ -24,6 +24,7 @@ Version 6.3 - not yet released
   - use XCSoarData folder on removable drives/cards if available
 * Android
   - support reverse screen modes for Galaxy Tab
+  - support baro sensor
 
 Version 6.2.4 - 2011/12/24
 * calculations

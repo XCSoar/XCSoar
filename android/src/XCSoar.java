@@ -86,6 +86,7 @@ public class XCSoar extends Activity {
 
     Timer.Initialize();
     InternalGPS.Initialize();
+    NonGPSSensors.Initialize();
 
     try {
       BluetoothHelper.Initialize();
