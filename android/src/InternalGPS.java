@@ -39,13 +39,19 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.view.WindowManager;
 import android.view.Surface;
+import android.util.Log;
 import java.lang.Math;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Code to support the internal GPS receiver via #LocationManager.
  */
 public class InternalGPS
   implements LocationListener, SensorEventListener, Runnable {
+  private static final String TAG = "XCSoar";
+
   private static Handler handler;
 
   /**
@@ -71,6 +77,11 @@ public class InternalGPS
   private double acceleration;
   private static boolean queriedLocationSettings = false;
 
+  // For waiting for updates to GPS/sensor subscriptions.
+  private boolean awaitingUpdate;
+  private final Lock updateLock;
+  private final Condition updateCondition;
+
   InternalGPS(Context context, int _index) {
     index = _index;
 
@@ -88,6 +99,11 @@ public class InternalGPS
     accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     acceleration = 1.0;
 
+    // Prepare locking/condition mechanism for GPS/sensor subscription updates.
+    awaitingUpdate = false;
+    updateLock = new ReentrantLock();
+    updateCondition = updateLock.newCondition();
+
     update();
   }
 
@@ -96,26 +112,38 @@ public class InternalGPS
    * LocationManager subscription inside the main thread.
    */
   @Override public void run() {
-    locationManager.removeUpdates(this);
-    sensorManager.unregisterListener(this);
+    updateLock.lock();
+    try {
+      Log.d(TAG, "Updating GPS subscription...");
+      locationManager.removeUpdates(this);
+      sensorManager.unregisterListener(this);
 
-    if (locationProvider != null) {
-      try {
-        locationManager.requestLocationUpdates(locationProvider,
-                                               1000, 0, this);
-      } catch (IllegalArgumentException e) {
-        /* this exception was recorded on the Android Market, message
-           was: "provider=gps" - no idea what that means */
-        setConnected(0);
-        return;
+      if (locationProvider != null) {
+        Log.d(TAG, "Subscribing to GPS updates.");
+        try {
+          locationManager.requestLocationUpdates(locationProvider,
+                                                 1000, 0, this);
+        } catch (IllegalArgumentException e) {
+          /* this exception was recorded on the Android Market, message
+             was: "provider=gps" - no idea what that means */
+          setConnected(0);
+          return;
+        }
+
+        sensorManager.registerListener(this, accelerometer,
+                                       sensorManager.SENSOR_DELAY_NORMAL);
+
+        setConnected(1); // waiting for fix
+      } else {
+        Log.d(TAG, "Unsubscribing from GPS updates.");
+        setConnected(0); // not connected
       }
-
-      sensorManager.registerListener(this, accelerometer,
-                                     sensorManager.SENSOR_DELAY_NORMAL);
-
-      setConnected(1); // waiting for fix
-    } else
-      setConnected(0); // not connected
+      Log.d(TAG, "Done updating GPS subscription...");
+      awaitingUpdate = false;
+      updateCondition.signal();
+    } finally {
+      updateLock.unlock();
+    }
   }
 
   /**
@@ -123,7 +151,17 @@ public class InternalGPS
    * thread.
    */
   private void update() {
-    handler.post(this);
+    updateLock.lock();
+    try {
+      Log.d(TAG, "Triggering GPS subscription update...");
+      handler.post(this);
+      for (awaitingUpdate = true; awaitingUpdate;) {
+        updateCondition.awaitUninterruptibly();
+      }
+      Log.d(TAG, "GPS subscription update complete.");
+    } finally {
+      updateLock.unlock();
+    }
   }
 
   public void setLocationProvider(String _locationProvider) {
