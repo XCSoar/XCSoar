@@ -43,7 +43,8 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                  ? (Layout::Scale(TabLineHeightInitUnscaled) * 0.75)
                  : Layout::Scale(TabLineHeightInitUnscaled)),
    flip_orientation(_flipOrientation),
-   client_overlap_tabs(_clientOverlapTabs)
+   client_overlap_tabs(_clientOverlapTabs),
+   page_flipped_callback(NULL)
 {
   set(_parent, 0, 0, _parent.get_width(), _parent.get_height(), style),
 
@@ -59,10 +60,7 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
       rc.top += tab_display->GetTabHeight();
   }
 
-  WindowStyle pager_style;
-  pager_style.control_parent();
-  pager.set(*this, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
-            pager_style);
+  pager.Move(rc);
 }
 
 TabBarControl::~TabBarControl()
@@ -89,7 +87,7 @@ TabBarControl::SetClientOverlapTabs(bool value)
       rc.top += tab_display->GetTabHeight();
   }
 
-  pager.move(rc);
+  pager.Move(rc);
 }
 
 bool
@@ -121,7 +119,7 @@ unsigned
 TabBarControl::AddTab(Widget *widget, const TCHAR *caption,
                       bool button_only, const Bitmap *bmp)
 {
-  pager.AddPage(widget);
+  pager.Add(widget);
 
   OneTabButton *b = new OneTabButton(caption, button_only, bmp);
   buttons.append(b);
@@ -145,7 +143,13 @@ TabBarControl::SetCurrentPage(unsigned i)
 {
   assert(i < buttons.size());
 
-  pager.SetCurrentPage(i);
+  const unsigned old_current = pager.GetCurrentIndex();
+
+  bool success = pager.SetCurrent(i);
+
+  if (success && old_current != pager.GetCurrentIndex() &&
+      page_flipped_callback != NULL)
+    page_flipped_callback();
 
   if (tab_display != NULL)
     tab_display->invalidate();
@@ -255,6 +259,26 @@ UPixelScalar
 TabBarControl::GetTabWidth() const
 {
   return tab_display->GetTabWidth();
+}
+
+void
+TabBarControl::on_create()
+{
+  ContainerWindow::on_create();
+
+  const PixelRect rc = get_client_rect();
+  pager.Initialise(*this, rc);
+  pager.Prepare(*this, rc);
+  pager.Show(rc);
+}
+
+void
+TabBarControl::on_destroy()
+{
+  pager.Hide();
+  pager.Unprepare();
+
+  ContainerWindow::on_destroy();
 }
 
 // TabDisplay Functions

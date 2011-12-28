@@ -25,8 +25,9 @@ Copyright_License {
 #define XCSOAR_FORM_TABBAR_HPP
 
 #include "Util/StaticArray.hpp"
-#include "Form/Tabbed.hpp"
 #include "Util/StaticString.hpp"
+#include "Screen/ContainerWindow.hpp"
+#include "PagerWidget.hpp"
 
 struct DialogLook;
 class Bitmap;
@@ -43,9 +44,9 @@ class OneTabButton;
  * ToDo: support lazy loading
  */
 class TabBarControl : public ContainerWindow {
+  typedef void (*PageFlippedCallback)();
 
-protected:
-  TabbedControl pager;
+  PagerWidget pager;
 
   TabDisplay * tab_display;
   StaticArray<OneTabButton *, 32> buttons;
@@ -55,6 +56,8 @@ protected:
    *  if true, Client rectangle overlaps tabs (for advanced drawing)
    */
   bool client_overlap_tabs;
+
+  PageFlippedCallback page_flipped_callback;
 
 public:
   /**
@@ -74,8 +77,11 @@ public:
 
   ~TabBarControl();
 
-  void SetPageFlippedCallback(TabbedControl::PageFlippedCallback cb) {
-    pager.SetPageFlippedCallback(cb);
+  void SetPageFlippedCallback(PageFlippedCallback _page_flipped_callback) {
+    assert(page_flipped_callback == NULL);
+    assert(_page_flipped_callback != NULL);
+
+    page_flipped_callback = _page_flipped_callback;
   }
 
 private:
@@ -89,12 +95,12 @@ public:
 public:
   gcc_pure
   unsigned GetTabCount() const {
-    return pager.GetTabCount();
+    return pager.GetSize();
   }
 
   gcc_pure
   unsigned GetCurrentPage() const {
-    return pager.GetCurrentPage();
+    return pager.GetCurrentIndex();
   }
 
   gcc_pure
@@ -144,6 +150,10 @@ public:
   }
 
   void SetClientOverlapTabs(bool value);
+
+protected:
+  virtual void on_create();
+  virtual void on_destroy();
 };
 
 /**
