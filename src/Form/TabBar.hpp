@@ -135,12 +135,6 @@ public:
   gcc_pure
   const TCHAR *GetButtonCaption(unsigned i) const;
 
-  gcc_pure
-  const Bitmap *GetButtonIcon(unsigned i) const;
-
-  gcc_pure
-  bool GetButtonIsButtonOnly(unsigned i) const;
-
   const StaticArray<OneTabButton *, 32>
       &GetTabButtons() { return buttons; }
 

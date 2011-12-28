@@ -126,7 +126,9 @@ TabDisplay::on_paint(Canvas &canvas)
   const unsigned CaptionStyle = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;
 
-  for (unsigned i = 0; i < tab_bar.GetTabCount(); i++) {
+  auto buttons = tab_bar.GetTabButtons();
+  for (unsigned i = 0; i < buttons.size(); i++) {
+    const OneTabButton &button = *buttons[i];
     bool inverse = false;
     if (((int)i == down_index) && (drag_off_button == false)) {
       canvas.SetTextColor(COLOR_BLACK);
@@ -147,10 +149,10 @@ TabDisplay::on_paint(Canvas &canvas)
     }
     const PixelRect &rc = tab_bar.GetButtonSize(i);
     PaintButton(canvas, CaptionStyle,
-                tab_bar.GetButtonCaption(i),
+                button.caption,
                 rc,
-                tab_bar.GetButtonIsButtonOnly(i),
-                tab_bar.GetButtonIcon(i),
+                button.is_button_only,
+                button.bmp,
                 (int)i == down_index, inverse);
   }
   if (has_focus()) {

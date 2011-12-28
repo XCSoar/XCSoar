@@ -89,29 +89,12 @@ TabBarControl::SetClientOverlapTabs(bool value)
   pager.Move(rc);
 }
 
-bool
-TabBarControl::GetButtonIsButtonOnly(unsigned i) const
-{
-
-  assert(i < buttons.size());
-
-  return buttons[i]->is_button_only;
-}
-
 const TCHAR*
 TabBarControl::GetButtonCaption(unsigned i) const
 {
   assert(i < buttons.size());
 
   return buttons[i]->caption.c_str();
-}
-
-const Bitmap *
-TabBarControl::GetButtonIcon(unsigned i) const
-{
-  assert(i < buttons.size());
-
-  return buttons[i]->bmp;
 }
 
 unsigned
