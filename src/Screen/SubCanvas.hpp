@@ -55,8 +55,6 @@ public:
 #ifdef ENABLE_OPENGL
     assert(canvas.x_offset == OpenGL::translate_x);
     assert(canvas.y_offset == OpenGL::translate_y);
-    OpenGL::translate_x += _x;
-    OpenGL::translate_y += _y;
 #else
     surface = canvas.surface;
 #endif
@@ -66,12 +64,17 @@ public:
     height = _height;
 
 #ifdef ENABLE_OPENGL
-    glPushMatrix();
+    if (relative_x != 0 || relative_y != 0) {
+      OpenGL::translate_x += _x;
+      OpenGL::translate_y += _y;
+
+      glPushMatrix();
 #ifdef ANDROID
-    glTranslatex((GLfixed)relative_x << 16, (GLfixed)relative_y << 16, 0);
+      glTranslatex((GLfixed)relative_x << 16, (GLfixed)relative_y << 16, 0);
 #else
-    glTranslatef(relative_x, relative_y, 0);
+      glTranslatef(relative_x, relative_y, 0);
 #endif
+    }
 #endif
   }
 
@@ -80,10 +83,12 @@ public:
     assert(x_offset == OpenGL::translate_x);
     assert(y_offset == OpenGL::translate_y);
 
-    OpenGL::translate_x -= relative_x;
-    OpenGL::translate_y -= relative_y;
+    if (relative_x != 0 || relative_y != 0) {
+      OpenGL::translate_x -= relative_x;
+      OpenGL::translate_y -= relative_y;
 
-    glPopMatrix();
+      glPopMatrix();
+    }
 #endif
   }
 };
