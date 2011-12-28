@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Form/TabMenu.hpp"
+#include "Form/TabDisplay.hpp"
 #include "Form/Form.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/PaintWindow.hpp"
