@@ -371,7 +371,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   control_rc.bottom = control_rc.top + height;
 
   edit_select = new WndProperty(client_area, dialog_look, _("InfoBox"),
-                                rc, caption_width,
+                                control_rc, caption_width,
                                 style, edit_style,
                                 NULL);
 
@@ -388,7 +388,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   control_rc.bottom += height;
 
   edit_content = new WndProperty(client_area, dialog_look, _("Content"),
-                                 rc, caption_width,
+                                 control_rc, caption_width,
                                  style, edit_style,
                                  NULL);
 
