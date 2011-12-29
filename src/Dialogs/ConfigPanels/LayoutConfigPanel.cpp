@@ -25,10 +25,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/DisplayConfig.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
-#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Hardware/Display.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
@@ -36,16 +33,29 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Language/Language.hpp"
 #include "Dialogs/XML.hpp"
-#include "Form/Form.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
 
+enum ControlIndex {
+  DisplayOrientation,
+  AppInfoBoxGeom,
+  AppFlarmLocation,
+  TabDialogStyle,
+  AppStatusMessageAlignment,
+  DialogStyle,
+  AppInverseInfoBox,
+  AppInfoBoxColors,
+  AppInfoBoxBorder
+};
+
+const TCHAR *display_orientation_help = N_("Rotate the display on devices that support it.");
 static const StaticEnumChoice display_orientation_list[] = {
-  { Display::ORIENTATION_DEFAULT, N_("Default") },
-  { Display::ORIENTATION_PORTRAIT, N_("Portrait") },
-  { Display::ORIENTATION_LANDSCAPE, N_("Landscape") },
-  { Display::ORIENTATION_REVERSE_PORTRAIT, N_("Reverse Portrait") },
-  { Display::ORIENTATION_REVERSE_LANDSCAPE, N_("Reverse Landscape") },
+  { Display::ORIENTATION_DEFAULT, N_("Default"), display_orientation_help },
+  { Display::ORIENTATION_PORTRAIT, N_("Portrait"), display_orientation_help },
+  { Display::ORIENTATION_LANDSCAPE, N_("Landscape"), display_orientation_help },
+  { Display::ORIENTATION_REVERSE_PORTRAIT, N_("Reverse Portrait"), display_orientation_help },
+  { Display::ORIENTATION_REVERSE_LANDSCAPE, N_("Reverse Landscape"), display_orientation_help },
   { 0 }
 };
 
@@ -67,103 +77,96 @@ static const StaticEnumChoice info_box_geometry_list[] = {
   { 0 }
 };
 
-class LayoutConfigPanel : public XMLWidget {
+const TCHAR *flarm_display_help = N_("Choose a location for the FLARM display.");
+static const StaticEnumChoice flarm_display_location_list[] = {
+  { UISettings::flAuto, N_("Auto (follow infoboxes)"), flarm_display_help },
+  { UISettings::flTopLeft, N_("Top Left"), flarm_display_help },
+  { UISettings::flTopRight, N_("Top Right"), flarm_display_help },
+  { UISettings::flBottomLeft, N_("Bottom Left"), flarm_display_help },
+  { UISettings::flBottomRight, N_("Bottom Right"), flarm_display_help },
+  { UISettings::flCentreTop, N_("Centre Top"), flarm_display_help },
+  { UISettings::flCentreBottom, N_("Centre Bottom"), flarm_display_help },
+  { 0 }
+};
+
+static const StaticEnumChoice tabdialog_style_list[] = {
+  { 0, N_("Text"), N_("Show text on tabbed dialogs.") },
+  { 1, N_("Icons"), N_("Show icons on tabbed dialogs.")},
+  { 0 }
+};
+
+static const StaticEnumChoice popup_msg_position_list[] = {
+  { 0, N_("Center"), N_("Center the status message boxes.") },
+  { 1, N_("Topleft"), N_("Show status message boxes in the top left corner.") },
+  { 0 }
+};
+
+const TCHAR *dialog_style_help = N_("Choose the display size of dialogs.");
+static const StaticEnumChoice dialog_style_list[] = {
+  { 0, N_("Full width"), dialog_style_help },
+  { 1, N_("Scaled"), dialog_style_help },
+  { 2, N_("Scaled centered"), dialog_style_help },
+  { 3, N_("Fixed"), dialog_style_help },
+  { 0 }
+};
+
+static const StaticEnumChoice infobox_border_list[] = {
+  { 0, N_("Box"), N_("Draws boxes around each InfoBox.") },
+  { 1, N_("Tab"), N_("Draws a tab at the top of the InfoBox across the title.") },
+  { 0 }
+};
+
+class LayoutConfigPanel : public RowFormWidget {
+public:
+  LayoutConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(110)) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
 };
-
-void
-LayoutConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
-
-void
-LayoutConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
 
 void
 LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent,
-             Layout::landscape ? _T("IDR_XML_LAYOUTCONFIGPANEL") :
-                               _T("IDR_XML_LAYOUTCONFIGPANEL_L"));
-
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
-  if (Display::RotateSupported())
-    LoadFormProperty(form, _T("prpDisplayOrientation"),
-                     display_orientation_list,
-                     Profile::GetDisplayOrientation());
-  else
-    ShowFormControl(form, _T("prpDisplayOrientation"), false);
+  RowFormWidget::Prepare(parent, rc);
 
-  LoadFormProperty(form, _T("prpAppInfoBoxGeom"),
-                   info_box_geometry_list, InfoBoxLayout::InfoBoxGeometry);
+  WndProperty *wp = AddEnum(_("Display orientation"), _T(""),
+                            display_orientation_list, Profile::GetDisplayOrientation());
+  wp->set_visible(Display::RotateSupported());
 
-  WndProperty *wp = (WndProperty*)form.FindByName(_T("prpAppFlarmLocation"));
-  assert(wp != NULL);
-  DataFieldEnum *dfe = (DataFieldEnum*)wp->GetDataField();
-  assert(dfe != NULL);
-  dfe->addEnumText(_("Auto (follow infoboxes)"), UISettings::flAuto);
-  dfe->addEnumText(_("Top Left"), UISettings::flTopLeft);
-  dfe->addEnumText(_("Top Right"), UISettings::flTopRight);
-  dfe->addEnumText(_("Bottom Left"), UISettings::flBottomLeft);
-  dfe->addEnumText(_("Bottom Right"), UISettings::flBottomRight);
-  dfe->addEnumText(_("Centre Top"), UISettings::flCentreTop);
-  dfe->addEnumText(_("Centre Bottom"), UISettings::flCentreBottom);
-  dfe->Set(ui_settings.flarm_location);
-  wp->RefreshDisplay();
+  AddEnum(_("InfoBox geometry"),
+          _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
+          info_box_geometry_list, InfoBoxLayout::InfoBoxGeometry);
 
-  wp = (WndProperty*)form.FindByName(_T("prpAppStatusMessageAlignment"));
-  assert(wp != NULL);
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  assert(dfe != NULL);
-  dfe->addEnumText(_("Center"));
-  dfe->addEnumText(_("Topleft"));
-  dfe->Set(ui_settings.popup_message_position);
-  wp->RefreshDisplay();
+  // Expert item (TODO)
+  AddEnum(_("FLARM location"), _T(""),
+          flarm_display_location_list, ui_settings.flarm_location);
 
-  wp = (WndProperty*)form.FindByName(_T("prpDialogStyle"));
-  assert(wp != NULL);
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  assert(dfe != NULL);
-  dfe->addEnumText(_("Full width"));
-  dfe->addEnumText(_("Scaled"));
-  dfe->addEnumText(_("Scaled centered"));
-  dfe->addEnumText(_("Fixed"));
-  dfe->Set(dialog_style_setting);
-  wp->RefreshDisplay();
+  AddEnum(_("Tab dialog style"), _T(""),
+          tabdialog_style_list, CommonInterface::GetUISettings().dialog.tab_style);
 
-  LoadFormProperty(form, _T("prpAppInverseInfoBox"),
-                   ui_settings.info_boxes.inverse);
+  // Expert item
+  AddEnum(_("Message location"), _T(""),
+          popup_msg_position_list, ui_settings.popup_message_position);
+          // Expert item
+  AddEnum(_("Dialog size"), _T(""),
+          dialog_style_list, dialog_style_setting);
 
-  LoadFormProperty(form, _T("prpAppInfoBoxColors"),
-                   ui_settings.info_boxes.use_colors);
+  // Expert item
+  AddBoolean(_("Inverse InfoBoxes"), _("If true, the InfoBoxes are white on black, otherwise black on white."),
+             ui_settings.info_boxes.inverse);
 
-  wp = (WndProperty*)form.FindByName(_T("prpAppInfoBoxBorder"));
-  assert(wp != NULL);
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  assert(dfe != NULL);
-  dfe->addEnumText(_("Box"));
-  dfe->addEnumText(_("Tab"));
-  dfe->Set(ui_settings.info_boxes.border_style);
-  wp->RefreshDisplay();
+  // Expert item
+  AddBoolean(_("Colored InfoBoxes"),
+             _("If true, certain InfoBoxes will have coloured text.  For example, the active waypoint "
+                 "InfoBox will be blue when the glider is above final glide."),
+             ui_settings.info_boxes.use_colors);
 
-  wp = (WndProperty*)form.FindByName(_T("prpTabDialogStyle"));
-  assert(wp != NULL);
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  assert(dfe != NULL);
-  dfe->addEnumText(_("Text"));
-  dfe->addEnumText(_("Icons"));
-  dfe->Set(CommonInterface::GetUISettings().dialog.tab_style);
-  wp->RefreshDisplay();
+  // Expert item
+  AddEnum(_("InfoBox border"), _T(""), infobox_border_list, ui_settings.info_boxes.border_style);
 }
 
 bool
@@ -173,19 +176,11 @@ LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   UISettings &ui_settings = CommonInterface::SetUISettings();
 
-  WndProperty *wp;
-
   bool orientation_changed = false;
 
   if (Display::RotateSupported()) {
-    wp = (WndProperty*)form.FindByName(_T("prpDisplayOrientation"));
-    assert(wp != NULL);
-
-    const DataFieldEnum *dfe = (const DataFieldEnum *)wp->GetDataField();
-    assert(dfe != NULL);
-    Display::orientation orientation =
-      (Display::orientation)dfe->GetAsInteger();
-    if (orientation != Profile::GetDisplayOrientation()) {
+    Display::orientation orientation = Profile::GetDisplayOrientation();
+    if (SaveValueEnum(DisplayOrientation, orientation)) {
       Profile::SetDisplayOrientation(orientation);
       changed = true;
       orientation_changed = true;
@@ -195,43 +190,29 @@ LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool info_box_geometry_changed = false;
 
   info_box_geometry_changed |=
-    SaveFormPropertyEnum(form, _T("prpAppInfoBoxGeom"),
-                         szProfileInfoBoxGeometry,
-                         InfoBoxLayout::InfoBoxGeometry);
+    SaveValueEnum(AppInfoBoxGeom, szProfileInfoBoxGeometry, InfoBoxLayout::InfoBoxGeometry);
 
   info_box_geometry_changed |=
-    SaveFormPropertyEnum(form, _T("prpAppFlarmLocation"),
-                         szProfileFlarmLocation, ui_settings.flarm_location);
+    SaveValueEnum(AppFlarmLocation, szProfileFlarmLocation, ui_settings.flarm_location);
 
   changed |= info_box_geometry_changed;
 
-  changed |= SaveFormPropertyEnum(form, _T("prpAppStatusMessageAlignment"),
-                                  szProfileAppStatusMessageAlignment,
-                                  ui_settings.popup_message_position);
+  changed |= SaveValueEnum(AppStatusMessageAlignment, szProfileAppStatusMessageAlignment,
+                           ui_settings.popup_message_position);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpDialogStyle"),
-                                  szProfileAppDialogStyle,
-                                  dialog_style_setting);
+  changed |= SaveValueEnum(DialogStyle, szProfileAppDialogStyle, dialog_style_setting);
 
   changed |= require_restart |=
-    SaveFormPropertyEnum(form, _T("prpAppInfoBoxBorder"),
-                         szProfileAppInfoBoxBorder,
-                         ui_settings.info_boxes.border_style);
+    SaveValueEnum(AppInfoBoxBorder, szProfileAppInfoBoxBorder, ui_settings.info_boxes.border_style);
 
   changed |= require_restart |=
-    SaveFormProperty(form, _T("prpAppInverseInfoBox"),
-                     szProfileAppInverseInfoBox,
-                     ui_settings.info_boxes.inverse);
+    SaveValue(AppInverseInfoBox, szProfileAppInverseInfoBox, ui_settings.info_boxes.inverse);
 
   changed |= require_restart |=
-    SaveFormProperty(form, _T("prpAppInfoBoxColors"),
-                     szProfileAppInfoBoxColors,
-                     ui_settings.info_boxes.use_colors);
+    SaveValue(AppInfoBoxColors, szProfileAppInfoBoxColors, ui_settings.info_boxes.use_colors);
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
-  changed |= SaveFormPropertyEnum(form, _T("prpTabDialogStyle"),
-                                  szProfileAppDialogTabStyle,
-                                  dialog_settings.tab_style);
+  changed |= SaveValueEnum(TabDialogStyle, szProfileAppDialogTabStyle, dialog_settings.tab_style);
 
   if (orientation_changed) {
     assert(Display::RotateSupported());
