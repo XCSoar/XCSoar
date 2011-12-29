@@ -99,7 +99,7 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
    * Index of this device in the global list. This value is extracted directly
    * from this object by the C++ wrapper code.
    */
-  private final int index_;
+  private final int index;
 
   /**
    * Global initialization of the class.  Must be called from the main
@@ -110,8 +110,8 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
     handler_ = new Handler();
   }
 
-  NonGPSSensors(Context context, int index) {
-    index_ = index;
+  NonGPSSensors(Context context, int _index) {
+    index = _index;
     default_sensors_ = new Sensor[SENSOR_TYPE_ID_UPPER_BOUND];
     enabled_sensors_ = new boolean[SENSOR_TYPE_ID_UPPER_BOUND];
 

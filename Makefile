@@ -705,8 +705,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Java/String.cpp \
 	$(SRC)/Device/Port/AndroidBluetoothPort.cpp \
 	$(SRC)/Android/Environment.cpp \
-	$(SRC)/Android/InternalGPS.cpp \
-	$(SRC)/Android/NonGPSSensors.cpp \
+	$(SRC)/Android/InternalSensors.cpp \
 	$(SRC)/Android/SoundUtil.cpp \
 	$(SRC)/Android/TextUtil.cpp \
 	$(SRC)/Android/Timer.cpp \

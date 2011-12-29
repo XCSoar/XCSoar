@@ -45,8 +45,7 @@ Copyright_License {
 #ifdef ANDROID
 #include "Java/Object.hpp"
 #include "Java/Global.hpp"
-#include "Android/InternalGPS.hpp"
-#include "Android/NonGPSSensors.hpp"
+#include "Android/InternalSensors.hpp"
 #include "Android/Main.hpp"
 #endif
 
@@ -57,7 +56,7 @@ DeviceDescriptor::DeviceDescriptor()
    pipe_to_device(NULL),
    driver(NULL), device(NULL),
 #ifdef ANDROID
-   internal_gps(NULL),
+   internal_sensors(NULL),
 #endif
    ticker(false), busy(false)
 {
@@ -106,35 +105,21 @@ DeviceDescriptor::Open(Port &_port, const DeviceRegister &_driver,
 }
 
 bool
-DeviceDescriptor::OpenInternalGPS()
+DeviceDescriptor::OpenInternalSensors()
 {
 #ifdef ANDROID
   if (is_simulator())
     return true;
 
-  internal_gps = InternalGPS::create(Java::GetEnv(), context, GetIndex());
-  return internal_gps != NULL;
-#else
-  return false;
-#endif
-}
-
-bool
-DeviceDescriptor::OpenNonGPSSensors()
-{
-#ifdef ANDROID
-  if (is_simulator())
+  internal_sensors =
+      InternalSensors::create(Java::GetEnv(), context, GetIndex());
+  if (internal_sensors) {
+    // TODO: Allow user to specify whether they want certain sensors.
+    internal_sensors->subscribeToSensor(InternalSensors::TYPE_PRESSURE);
     return true;
-
-  non_gps_sensors = NonGPSSensors::create(Java::GetEnv(), context, GetIndex());
-  // TODO: Don't just attempt to turn on the pressure sensor automatically.
-  // Give the user the ability to choose which sensors they want.
-  // For now, this call won't cause problems if there's no pressure sensor.
-  non_gps_sensors->subscribeToSensor(NonGPSSensors::TYPE_PRESSURE);
-  return non_gps_sensors != NULL;
-#else
-  return false;
+  }
 #endif
+  return false;
 }
 
 bool
@@ -143,9 +128,8 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   TCHAR buffer[64];
   LogStartUp(_T("Opening device %s"), config.GetPortName(buffer, 64));
 
-  // TODO: Remove association between internal GPS and other internal sensors.
   if (config.port_type == DeviceConfig::PortType::INTERNAL)
-    return OpenInternalGPS() && OpenNonGPSSensors();
+    return OpenInternalSensors();
 
   const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
   if (driver == NULL) {
@@ -178,10 +162,8 @@ void
 DeviceDescriptor::Close()
 {
 #ifdef ANDROID
-  delete internal_gps;
-  internal_gps = NULL;
-  delete non_gps_sensors;
-  non_gps_sensors = NULL;
+  delete internal_sensors;
+  internal_sensors = NULL;
 #endif
 
   delete device;

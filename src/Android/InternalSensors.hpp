@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_NON_GPS_SENSORS_HPP
-#define XCSOAR_ANDROID_NON_GPS_SENSORS_HPP
+#ifndef XCSOAR_ANDROID_INTERNAL_SENSORS_HPP
+#define XCSOAR_ANDROID_INTERNAL_SENSORS_HPP
 
 #include "Java/Object.hpp"
 #include "Compiler.h"
@@ -32,24 +32,35 @@ Copyright_License {
 
 class Context;
 
-class NonGPSSensors : public Java::Object {
+// Consolidated class for handling Java objects that work with Android GPS
+// and sensor facilities. Public methods handle activation and deactivation of
+// specific sensors.
+class InternalSensors {
  private:
-  jmethodID mid_subscribeToSensor_;
-  jmethodID mid_cancelSensorSubscription_;
-  jmethodID mid_subscribedToSensor_;
-  jmethodID mid_cancelAllSensorSubscriptions_;
+  // Java objects working with the GPS and the other sensors respectively.
+  Java::Object obj_InternalGPS_;
+  Java::Object obj_NonGPSSensors_;
+
+  // IDs for methods in InternalGPS.java.
+  jmethodID mid_gps_setLocationProvider_;
+
+  // IDs for methods in NonGPSSensors.java.
+  jmethodID mid_sensors_subscribeToSensor_;
+  jmethodID mid_sensors_cancelSensorSubscription_;
+  jmethodID mid_sensors_subscribedToSensor_;
+  jmethodID mid_sensors_cancelAllSensorSubscriptions_;
   std::vector<int> subscribable_sensors_;
 
-  NonGPSSensors(JNIEnv* env, jobject obj);
-  void getSubscribableSensors(JNIEnv* env, jobject obj);
+  InternalSensors(JNIEnv* env, jobject gps_obj, jobject sensors_obj);
+  void getSubscribableSensors(JNIEnv* env, jobject sensors_obj);
  public:
+  ~InternalSensors();
+
   // Sensor type identifier constants for use with subscription methods below.
   static const int TYPE_ACCELEROMETER;
   static const int TYPE_GYROSCOPE;
   static const int TYPE_MAGNETIC_FIELD;
   static const int TYPE_PRESSURE;
-
-  ~NonGPSSensors();
 
   // For information on these methods, see comments around analogous methods
   // in NonGPSSensors.java.
@@ -62,7 +73,7 @@ class NonGPSSensors : public Java::Object {
   void cancelAllSensorSubscriptions();
 
   gcc_malloc
-  static NonGPSSensors *create(JNIEnv* env, Context* native_view,
+  static InternalSensors *create(JNIEnv* env, Context* native_view,
                                unsigned int index);
 };
 

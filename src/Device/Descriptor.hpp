@@ -44,8 +44,7 @@ class Port;
 class Device;
 class AtmosphericPressure;
 struct DeviceRegister;
-class InternalGPS;
-class NonGPSSensors;
+class InternalSensors;
 class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
@@ -66,8 +65,7 @@ class DeviceDescriptor : public PortLineHandler
   Device *device;
 
 #ifdef ANDROID
-  InternalGPS *internal_gps;
-  NonGPSSensors *non_gps_sensors;
+  InternalSensors *internal_sensors;
 #endif
 
   /**
@@ -140,7 +138,7 @@ public:
   bool IsOpen() const {
     return port != NULL
 #ifdef ANDROID
-      || internal_gps != NULL;
+      || internal_sensors != NULL;
 #endif
     ;
   }
@@ -163,9 +161,7 @@ public:
   bool Open(Port &port, const DeviceRegister &driver,
             OperationEnvironment &env);
 
-  bool OpenInternalGPS();
-
-  bool OpenNonGPSSensors();
+  bool OpenInternalSensors();
 
   bool Open(OperationEnvironment &env);
 
