@@ -40,7 +40,10 @@ namespace Profile {
 void
 Profile::Load(WindSettings &settings)
 {
-  Get(szProfileAutoWind, settings.auto_wind_mode);
+  unsigned auto_wind_mode = settings.GetLegacyAutoWindMode();
+  if (Get(szProfileAutoWind, auto_wind_mode))
+    settings.SetLegacyAutoWindMode(auto_wind_mode);
+
   Get(szProfileExternalWind, settings.use_external_wind);
 }
 

@@ -64,13 +64,15 @@ enum AutoWindModeBits
  */
 struct WindSettings {
   /**
-   * AutoWind calculation mode
-   * 0: Manual
-   * 1: Circling
-   * 2: ZigZag
-   * 3: Both
+   * Use the circling algorithm to calculate the wind?
    */
-  uint8_t auto_wind_mode;
+  bool circling_wind;
+
+  /**
+   * Use the EKF algorithm to calculate the wind? (formerly known as
+   * "zig zag")
+   */
+  bool zig_zag_wind;
 
   /**
    * If enabled, then the wind vector received from external devices
@@ -87,12 +89,25 @@ struct WindSettings {
 
   void SetDefaults();
 
+  bool IsAutoWindEnabled() const {
+    return circling_wind || zig_zag_wind;
+  }
+
   bool CirclingWindEnabled() const {
-    return (auto_wind_mode & AUTOWIND_CIRCLING) != 0;
+    return circling_wind;
   }
 
   bool ZigZagWindEnabled() const {
-    return (auto_wind_mode & AUTOWIND_ZIGZAG) != 0;
+    return zig_zag_wind;
+  }
+
+  unsigned GetLegacyAutoWindMode() const {
+    return (circling_wind ? 0x1 : 0x0) | (zig_zag_wind ? 0x2 : 0x0);
+  }
+
+  void SetLegacyAutoWindMode(unsigned mode) {
+    circling_wind = (mode & 0x1) != 0;
+    zig_zag_wind = (mode & 0x2) != 0;
   }
 };
 

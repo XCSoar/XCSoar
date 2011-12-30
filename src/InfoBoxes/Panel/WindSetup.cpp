@@ -99,7 +99,7 @@ WindSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     };
 
     LoadFormProperty(form, _T("prpAutoWind"), auto_wind_list,
-                     settings_computer.auto_wind_mode);
+                     settings_computer.GetLegacyAutoWindMode());
   }
 }
 
@@ -124,8 +124,12 @@ WindSetupPanel::Save(bool &_changed, bool &_require_restart)
     settings_computer.use_external_wind;
 
   if (!external_wind) {
-    changed = SaveFormProperty(form, _T("prpAutoWind"), szProfileAutoWind,
-                     settings_computer.auto_wind_mode);
+    unsigned auto_wind_mode = settings_computer.GetLegacyAutoWindMode();
+    if (SaveFormProperty(form, _T("prpAutoWind"), szProfileAutoWind,
+                         auto_wind_mode)) {
+      settings_computer.SetLegacyAutoWindMode(auto_wind_mode);
+      changed = true;
+    }
   }
 
   changed |= SaveFormProperty(form, _T("prpTrailDrift"),

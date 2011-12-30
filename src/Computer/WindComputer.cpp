@@ -67,7 +67,7 @@ last_circling = calculated.circling;
     }
   }
 
-  if (settings.auto_wind_mode != 0)
+  if (settings.IsAutoWindEnabled())
     wind_store.SlotAltitude(basic, calculated);
 }
 
@@ -96,19 +96,19 @@ WindComputer::Select(const ComputerSettings &settings,
     calculated.wind = basic.external_wind;
     calculated.wind_available = basic.external_wind_available;
 
-  } else if (settings.manual_wind_available && settings.auto_wind_mode == 0) {
+  } else if (settings.manual_wind_available && !settings.IsAutoWindEnabled()) {
     // manual wind only if available and desired
     calculated.wind = settings.manual_wind;
     calculated.wind_available = settings.manual_wind_available;
 
   } else if (calculated.estimated_wind_available.Modified(settings.manual_wind_available)
-             && settings.auto_wind_mode) {
+             && settings.IsAutoWindEnabled()) {
     // auto wind when available and newer than manual wind
     calculated.wind = calculated.estimated_wind;
     calculated.wind_available = calculated.estimated_wind_available;
 
   } else if (settings.manual_wind_available
-             && settings.auto_wind_mode) {
+             && settings.IsAutoWindEnabled()) {
     // manual wind overrides auto wind if available
     calculated.wind = settings.manual_wind;
     calculated.wind_available = settings.manual_wind_available;

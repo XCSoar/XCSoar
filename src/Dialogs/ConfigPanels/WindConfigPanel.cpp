@@ -67,7 +67,7 @@ WindConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddEnum(_("Auto wind"),
           _("This allows switching on or off the automatic wind algorithm."),
-          auto_wind_list, settings_computer.auto_wind_mode);
+          auto_wind_list, settings_computer.GetLegacyAutoWindMode());
 
   AddBoolean(_("External wind"),
              _("If enabled, then the wind vector received from external devices overrides "
@@ -82,7 +82,11 @@ WindConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
 
-  changed |= SaveValueEnum(AutoWind, szProfileAutoWind, settings_computer.auto_wind_mode);
+  unsigned auto_wind_mode = settings_computer.GetLegacyAutoWindMode();
+  if (SaveValueEnum(AutoWind, szProfileAutoWind, auto_wind_mode)) {
+    settings_computer.SetLegacyAutoWindMode(auto_wind_mode);
+    changed = true;
+  }
 
   changed |= SaveValue(ExternalWind, szProfileExternalWind, settings_computer.use_external_wind);
 
