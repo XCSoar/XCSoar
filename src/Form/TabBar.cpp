@@ -94,7 +94,7 @@ TabBarControl::SetClientOverlapTabs(bool value)
 const TCHAR*
 TabBarControl::GetButtonCaption(unsigned i) const
 {
-  assert(i < buttons.size());
+  assert(i < GetTabCount());
 
   return buttons[i]->caption.c_str();
 }
@@ -108,13 +108,13 @@ TabBarControl::AddTab(Widget *widget, const TCHAR *caption,
   OneTabButton *b = new OneTabButton(caption, button_only, bmp);
   buttons.append(b);
 
-  return buttons.size() - 1;
+  return GetTabCount() - 1;
 }
 
 void
 TabBarControl::ClickPage(unsigned i)
 {
-  assert(i < buttons.size());
+  assert(i < GetTabCount());
 
   pager.ClickPage(i);
 
@@ -125,7 +125,7 @@ TabBarControl::ClickPage(unsigned i)
 void
 TabBarControl::SetCurrentPage(unsigned i)
 {
-  assert(i < buttons.size());
+  assert(i < GetTabCount());
 
   const unsigned old_current = pager.GetCurrentIndex();
 
@@ -178,7 +178,7 @@ TabBarControl::GetButtonSize(unsigned i) const
 
   if (Layout::landscape ^ flip_orientation) {
     const UPixelScalar but_height =
-       (tab_display->GetTabHeight() - finalmargin) / buttons.size() - margin;
+       (tab_display->GetTabHeight() - finalmargin) / GetTabCount() - margin;
 
     rc.left = 0;
     rc.right = tab_display->GetTabWidth() - tab_line_height;
@@ -187,12 +187,12 @@ TabBarControl::GetButtonSize(unsigned i) const
     rc.bottom = rc.top + but_height;
 
   } else {
-    const unsigned portraitRows = (buttons.size() > 4) ? 2 : 1;
+    const unsigned portraitRows = (GetTabCount() > 4) ? 2 : 1;
 
     const unsigned portraitColumnsRow0 = ((portraitRows == 1)
-       ? buttons.size() : buttons.size() / 2);
+       ? GetTabCount() : GetTabCount() / 2);
     const unsigned portraitColumnsRow1 = ((portraitRows == 1)
-       ? 0 : buttons.size() - buttons.size() / 2);
+       ? 0 : GetTabCount() - GetTabCount() / 2);
 
     const unsigned row = (i > (portraitColumnsRow0 - 1)) ? 1 : 0;
 
