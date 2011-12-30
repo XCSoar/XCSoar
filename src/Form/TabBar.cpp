@@ -156,10 +156,7 @@ TabBarControl::PreviousPage()
 const PixelRect &
 TabBarControl::GetButtonSize(unsigned i) const
 {
-  const static PixelRect rcFallback = {0, 0, 0, 0};
-
-  if (i >= buttons.size())
-    return rcFallback; // should never be used
+  assert(i < GetTabCount());
 
   if (buttons[i]->but_size.left < buttons[i]->but_size.right)
     return buttons[i]->but_size;
