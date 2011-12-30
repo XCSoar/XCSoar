@@ -68,6 +68,8 @@ TabBarControl::~TabBarControl()
 
   for (auto i = buttons.begin(), end = buttons.end(); i != end; ++i)
     delete *i;
+
+  reset();
 }
 
 void
