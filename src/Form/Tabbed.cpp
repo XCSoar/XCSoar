@@ -74,14 +74,14 @@ TabbedControl::SetCurrentPage(unsigned i, bool click)
 void
 TabbedControl::NextPage()
 {
-  if (pager.Next() && page_flipped_callback != NULL)
+  if (pager.Next(true) && page_flipped_callback != NULL)
     page_flipped_callback();
 }
 
 void
 TabbedControl::PreviousPage()
 {
-  if (pager.Previous() && page_flipped_callback != NULL)
+  if (pager.Previous(true) && page_flipped_callback != NULL)
     page_flipped_callback();
 }
 

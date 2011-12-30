@@ -123,25 +123,41 @@ PagerWidget::SetCurrent(unsigned i, bool click)
 }
 
 bool
-PagerWidget::Next()
+PagerWidget::Next(bool wrap)
 {
   if (children.size() < 2)
     return false;
 
   assert(current < children.size());
 
-  return SetCurrent((current + 1) % children.size());
+  unsigned i = current + 1;
+  if (i >= children.size()) {
+    if (!wrap)
+      return false;
+
+    i = 0;
+  }
+
+  return SetCurrent(i);
 }
 
 bool
-PagerWidget::Previous()
+PagerWidget::Previous(bool wrap)
 {
   if (children.size() < 2)
     return false;
 
   assert(current < children.size());
 
-  return SetCurrent((current + children.size() - 1) % children.size());
+  unsigned i = current;
+  if (i == 0) {
+    if (!wrap)
+      return false;
+
+    i = children.size();
+  }
+
+  return SetCurrent(i - 1);
 }
 
 void

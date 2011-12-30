@@ -96,8 +96,23 @@ public:
    */
   bool SetCurrent(unsigned i, bool click=false);
 
-  bool Next();
-  bool Previous();
+  /**
+   * Display the next page.
+   *
+   * @param wrap wrap around if on the last page
+   * @return true if the page was switched, false if the current page
+   * hasn't changed.
+   */
+  bool Next(bool wrap);
+
+  /**
+   * Display the previous page.
+   *
+   * @param wrap wrap around if on the last page
+   * @return true if the page was switched, false if the current page
+   * hasn't changed.
+   */
+  bool Previous(bool wrap);
 
   /**
    * Calls SetCurrentPage() with click=true parameter.
