@@ -21,14 +21,16 @@
  */
 
 #include "MacCready.hpp"
-#include <assert.h>
-#include <algorithm>
+#include "GlideSettings.hpp"
 #include "GlideState.hpp"
 #include "GlidePolar.hpp"
 #include "GlideResult.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Util/ZeroFinder.hpp"
 #include "Util/Tolerances.hpp"
+
+#include <algorithm>
+#include <assert.h>
 
 #define fixed_1mil fixed_int_constant(1000000)
 
@@ -273,7 +275,8 @@ MacCready::Solve(const GlideState &task) const
   if (!positive(task.vector.distance))
     return SolveVertical(task);
 
-  if (!positive(glide_polar.GetMC()))
+  if (!positive(glide_polar.GetMC()) ||
+      !settings.predict_wind_drift)
     // whole task must be glide
     return OptimiseGlide(task, false);
 

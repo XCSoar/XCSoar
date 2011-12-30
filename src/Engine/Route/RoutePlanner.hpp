@@ -35,7 +35,7 @@
 #include "Navigation/SearchPointVector.hpp"
 #include "ReachFan.hpp"
 
-struct GlidePolar;
+class GlidePolar;
 
 // define PLANNER_SET if STL tr1 extensions are not to be used
 // (with performance penalty)

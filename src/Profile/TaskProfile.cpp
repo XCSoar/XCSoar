@@ -36,6 +36,7 @@ namespace Profile {
 void
 Profile::Load(GlideSettings &settings)
 {
+  Get(szProfilePredictWindDrift, settings.predict_wind_drift);
 }
 
 void

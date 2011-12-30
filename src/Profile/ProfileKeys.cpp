@@ -241,6 +241,7 @@ const TCHAR szProfileSnailWidthScale[] = _T("SnailWidthScale");
 const TCHAR szProfileSnailType[] = _T("SnailType");
 const TCHAR szProfileUserLevel[] = _T("UserLevel");
 const TCHAR szProfileRiskGamma[] = _T("RiskGamma");
+const TCHAR szProfilePredictWindDrift[] = _T("PredictWindDrift");
 const TCHAR szProfileWindArrowStyle[] = _T("WindArrowStyle");
 const TCHAR szProfileDisableAutoLogger[] = _T("DisableAutoLogger");
 const TCHAR szProfileMapFile[] = _T("MapFile"); // pL

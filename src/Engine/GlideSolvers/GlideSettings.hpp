@@ -27,6 +27,11 @@
  * Settings for calculating a glide path.
  */
 struct GlideSettings {
+  /**
+   * Account for wind drift for the predicted circling duration.
+   */
+  bool predict_wind_drift;
+
   void SetDefaults();
 };
 

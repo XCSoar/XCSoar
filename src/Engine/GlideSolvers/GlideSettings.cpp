@@ -25,4 +25,5 @@
 void
 GlideSettings::SetDefaults()
 {
+  predict_wind_drift = true;
 }

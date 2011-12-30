@@ -184,6 +184,7 @@ extern const TCHAR szProfileSnailType[];
 extern const TCHAR szProfileLatLonUnits[];
 extern const TCHAR szProfileUserLevel[];
 extern const TCHAR szProfileRiskGamma[];
+extern const TCHAR szProfilePredictWindDrift[];
 extern const TCHAR szProfileWindArrowStyle[];
 extern const TCHAR szProfileDisableAutoLogger[];
 extern const TCHAR szProfileMapFile[];
