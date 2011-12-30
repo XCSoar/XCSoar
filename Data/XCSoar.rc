@@ -298,8 +298,6 @@ IDR_XML_POLARCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configura
 IDR_XML_POLARCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/PolarConfigPanel_L.xml.gz"
 IDR_XML_ROUTECONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/RouteConfigPanel.xml.gz"
 IDR_XML_ROUTECONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/RouteConfigPanel_L.xml.gz"
-IDR_XML_SAFETYFACTORSCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/SafetyFactorsConfigPanel.xml.gz"
-IDR_XML_SAFETYFACTORSCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/SafetyFactorsConfigPanel_L.xml.gz"
 IDR_XML_SITECONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/SiteConfigPanel.xml.gz"
 IDR_XML_SITECONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/SiteConfigPanel_L.xml.gz"
 IDR_XML_SYMBOLSCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/SymbolsConfigPanel.xml.gz"

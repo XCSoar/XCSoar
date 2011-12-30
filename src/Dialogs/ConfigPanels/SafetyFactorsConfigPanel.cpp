@@ -24,52 +24,51 @@ Copyright_License {
 #include "SafetyFactorsConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "DataField/Enum.hpp"
-#include "DataField/Float.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
 
-class SafetyFactorsConfigPanel : public XMLWidget {
-
-public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+enum ControlIndex {
+  ArrivalHeight,
+  TerrainHeight,
+  AlternateMode,
+  SafetyMC,
+  RiskFactor,
 };
 
-void
-SafetyFactorsConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
+class SafetyFactorsConfigPanel : public RowFormWidget {
+public:
+  SafetyFactorsConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
 
-void
-SafetyFactorsConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+};
 
 void
 SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent,
-             Layout::landscape ? _T("IDR_XML_SAFETYFACTORSCONFIGPANEL") :
-                               _T("IDR_XML_SAFETYFACTORSCONFIGPANEL_L"));
+  RowFormWidget::Prepare(parent, rc);
 
   const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
 
-  LoadFormProperty(form, _T("prpSafetyAltitudeArrival"), ugAltitude,
-                   task_behaviour.safety_height_arrival);
+  AddFloat(_("Arrival height"),
+           _("The height above terrain that the glider should arrive at for a safe landing."),
+           _T("%.0f %s"), _T("%.0f"),
+           fixed_zero, fixed(10000), fixed(100), false,
+           ugAltitude, task_behaviour.safety_height_arrival);
 
-  LoadFormProperty(form, _T("prpSafetyAltitudeTerrain"), ugAltitude,
-                   task_behaviour.route_planner.safety_height_terrain);
+  AddFloat(_("Terrain height"),
+           _("The height above terrain that the glider must clear during final glide."),
+           _T("%.0f %s"), _T("%.0f"),
+           fixed_zero, fixed(10000), fixed(100), false,
+           ugAltitude, task_behaviour.route_planner.safety_height_terrain);
 
   static gcc_constexpr_data StaticEnumChoice abort_task_mode_list[] = {
     { atmSimple, N_("Simple") },
@@ -78,13 +77,21 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
 
-  LoadFormProperty(form, _T("prpAbortTaskMode"), abort_task_mode_list,
-                   task_behaviour.abort_task_mode);
+  AddEnum(_("Alternates mode"),
+          _("Determines sorting of alternates in the alternates dialog and in abort mode:\n[Simple] The alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height.\n[Task] The sorting will also take the current task direction into account.\n[Home] The sorting will try to find landing options in the current direction to the configured home waypoint."),
+          abort_task_mode_list, task_behaviour.abort_task_mode);
 
-  LoadFormProperty(form, _T("prpSafetyMacCready"), ugVerticalSpeed,
-                   task_behaviour.safety_mc);
+  AddFloat(_("Safety MC"),
+           _("The MacCready setting used, when safety MC is enabled for reach calculations, in task abort mode and for determining arrival altitude at airfields."),
+           _T("%.1f %s"), _T("%.1f"),
+           fixed_zero, fixed_ten, fixed(0.1), false,
+           ugVerticalSpeed, task_behaviour.safety_mc);
 
-  LoadFormProperty(form, _T("prpRiskGamma"), task_behaviour.risk_gamma);
+  AddFloat(_("STF risk factor"),
+           _("The STF risk factor reduces the MacCready setting used to calculate speed to fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for no compensation, 1.0 scales MC linearly with height."),
+           _T("%.1f %s"), _T("%.1f"),
+           fixed_zero, fixed_one, fixed(0.1), false,
+           task_behaviour.risk_gamma);
 }
 
 bool
@@ -92,43 +99,30 @@ SafetyFactorsConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
 
-  WndProperty *wp;
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
 
-  changed |= SaveFormProperty(form, _T("prpSafetyAltitudeArrival"), ugAltitude,
-                              task_behaviour.safety_height_arrival,
-                              szProfileSafetyAltitudeArrival);
+  changed |= SaveValue(ArrivalHeight, ugAltitude,
+                       szProfileSafetyAltitudeArrival,
+                       task_behaviour.safety_height_arrival);
 
-  changed |= SaveFormProperty(form, _T("prpSafetyAltitudeTerrain"), ugAltitude,
-                              task_behaviour.route_planner.safety_height_terrain,
-                              szProfileSafetyAltitudeTerrain);
+  changed |= SaveValue(TerrainHeight, ugAltitude,
+                       szProfileSafetyAltitudeTerrain,
+                       task_behaviour.route_planner.safety_height_terrain);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpAbortTaskMode"),
-                                  szProfileAbortTaskMode,
-                                  task_behaviour.abort_task_mode);
+  changed |= SaveValueEnum(AlternateMode, szProfileAbortTaskMode,
+                           task_behaviour.abort_task_mode);
 
-  wp = (WndProperty*)form.FindByName(_T("prpSafetyMacCready"));
-  if (wp) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    fixed val = Units::ToSysVSpeed(df.GetAsFixed());
-    if (task_behaviour.safety_mc != val) {
-      task_behaviour.safety_mc = val;
-      Profile::Set(szProfileSafetyMacCready,
-                    iround(task_behaviour.safety_mc*10));
-      changed = true;
-    }
+  if (SaveValue(SafetyMC, ugVerticalSpeed, task_behaviour.safety_mc)) {
+    Profile::Set(szProfileSafetyMacCready,
+                 iround(task_behaviour.safety_mc * 10));
+    changed = true;
   }
 
-  wp = (WndProperty*)form.FindByName(_T("prpRiskGamma"));
-  if (wp) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    fixed val = df.GetAsFixed();
-    if (task_behaviour.risk_gamma != val) {
-      task_behaviour.risk_gamma = val;
-      Profile::Set(szProfileRiskGamma, iround(task_behaviour.risk_gamma * 10));
-      changed = true;
-    }
+  if (SaveValue(RiskFactor, task_behaviour.risk_gamma)) {
+    Profile::Set(szProfileRiskGamma,
+                 iround(task_behaviour.risk_gamma * 10));
+    changed = true;
   }
 
   _changed |= changed;
