@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-27 13:21+0100\n"
+"POT-Creation-Date: 2011-12-30 12:43+0100\n"
 "PO-Revision-Date: 2011-12-20 19:55+0100\n"
 "Last-Translator: Perapendio <Unknown>\n"
 "Language-Team: none\n"
@@ -118,7 +118,7 @@ msgid "No logger connected"
 msgstr "Nessun logger collegato"
 
 #: src/Logger/ExternalLogger.cpp:110
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:393
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:394
 msgid "Declare task"
 msgstr "Dichiara Task"
 
@@ -2750,23 +2750,23 @@ msgstr "Porta"
 msgid "Driver"
 msgstr ""
 
-#: src/Device/Descriptor.cpp:133
+#: src/Device/Descriptor.cpp:153
 msgid "No such driver"
 msgstr ""
 
-#: src/Device/Descriptor.cpp:144
+#: src/Device/Descriptor.cpp:164
 msgid "Unable to open port"
 msgstr ""
 
-#: src/Device/Descriptor.cpp:413 src/Device/Descriptor.cpp:421
+#: src/Device/Descriptor.cpp:435 src/Device/Descriptor.cpp:443
 msgid "Sending declaration"
 msgstr ""
 
-#: src/Device/Descriptor.cpp:465
+#: src/Device/Descriptor.cpp:487
 msgid "Reading flight list"
 msgstr ""
 
-#: src/Device/Descriptor.cpp:483
+#: src/Device/Descriptor.cpp:505
 msgid "Downloading flight log"
 msgstr ""
 
@@ -3476,7 +3476,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:64
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:151
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:44
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:54
 #, no-c-format
 msgid "Default"
 msgstr ""
@@ -3784,164 +3784,289 @@ msgstr "Tastiera"
 msgid "HighScore Style"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:45
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:52
 #, no-c-format
-msgid "Portrait"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:46
-#, no-c-format
-msgid "Landscape"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:47
-#, no-c-format
-msgid "Reverse Portrait"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:48
-#, no-c-format
-msgid "Reverse Landscape"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:53
-#, no-c-format
-msgid "8 Top + Bottom (Portrait)"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:54
-#, no-c-format
-msgid "8 Bottom (Portrait)"
+msgid "Rotate the display on devices that support it."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:55
 #, no-c-format
-msgid "8 Bottom + Vario (Portrait)"
+msgid "Portrait"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:56
 #, no-c-format
-msgid "8 Top (Portrait)"
+msgid "Landscape"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:57
 #, no-c-format
-msgid "8 Left + Right (Landscape)"
+msgid "Reverse Portrait"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:58
 #, no-c-format
-msgid "8 Left (Landscape)"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:59
-#, no-c-format
-msgid "8 Right (Landscape)"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:60
-#, no-c-format
-msgid "9 Right + Vario (Landscape)"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:61
-#, no-c-format
-msgid "9 Left + Right (Landscape)"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:62
-#, no-c-format
-msgid "5 Right (Square)"
+msgid "Reverse Landscape"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:63
 #, no-c-format
-msgid "12 Right (Landscape)"
+msgid "8 Top + Bottom (Portrait)"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:64
 #, no-c-format
-msgid "12 Bottom (Portrait)"
+msgid "8 Bottom (Portrait)"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:65
 #, no-c-format
-msgid "12 Top (Portrait)"
+msgid "8 Bottom + Vario (Portrait)"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:66
 #, no-c-format
+msgid "8 Top (Portrait)"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:67
+#, no-c-format
+msgid "8 Left + Right (Landscape)"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:68
+#, no-c-format
+msgid "8 Left (Landscape)"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:69
+#, no-c-format
+msgid "8 Right (Landscape)"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:70
+#, no-c-format
+msgid "9 Right + Vario (Landscape)"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:71
+#, no-c-format
+msgid "9 Left + Right (Landscape)"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:72
+#, no-c-format
+msgid "5 Right (Square)"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:73
+#, no-c-format
+msgid "12 Right (Landscape)"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:74
+#, no-c-format
+msgid "12 Bottom (Portrait)"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:75
+#, no-c-format
+msgid "12 Top (Portrait)"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:76
+#, no-c-format
 msgid "24 Right (Landscape)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:114
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:80
+#, no-c-format
+msgid "Choose a location for the FLARM display."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:82
+#, no-c-format
 msgid "Auto (follow infoboxes)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:115
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:83
+#, no-c-format
 msgid "Top Left"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:116
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
+#, no-c-format
 msgid "Top Right"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:117
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:85
+#, no-c-format
 msgid "Bottom Left"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:118
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:86
+#, no-c-format
 msgid "Bottom Right"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:119
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:87
+#, no-c-format
 msgid "Centre Top"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:120
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:88
+#, no-c-format
 msgid "Centre Bottom"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:128
-msgid "Center"
-msgstr "Centro"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:129
-msgid "Topleft"
-msgstr "Alto-Sinistra"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:137
-msgid "Full width"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:138
-msgid "Scaled"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:139
-msgid "Scaled centered"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:140
-#: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:201
-msgid "Fixed"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:154
-msgid "Box"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:155
-msgid "Tab"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:163
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:93
+#, no-c-format
 msgid "Text"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:164
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:93
+#, no-c-format
+msgid "Show text on tabbed dialogs."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:94
+#, no-c-format
 msgid "Icons"
 msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:94
+#, no-c-format
+msgid "Show icons on tabbed dialogs."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:99
+#, no-c-format
+msgid "Center"
+msgstr "Centro"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:99
+#, no-c-format
+msgid "Center the status message boxes."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:100
+#, no-c-format
+msgid "Topleft"
+msgstr "Alto-Sinistra"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:100
+#, no-c-format
+msgid "Show status message boxes in the top left corner."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:104
+#, no-c-format
+msgid "Choose the display size of dialogs."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:106
+#, no-c-format
+msgid "Full width"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:107
+#, no-c-format
+msgid "Scaled"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:108
+#, no-c-format
+msgid "Scaled centered"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:109
+#: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:201
+#, no-c-format
+msgid "Fixed"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:114
+#, no-c-format
+msgid "Box"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:114
+#, no-c-format
+msgid "Draws boxes around each InfoBox."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:115
+#, no-c-format
+msgid "Tab"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:115
+#, no-c-format
+msgid "Draws a tab at the top of the InfoBox across the title."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:136
+#, fuzzy
+msgid "Display orientation"
+msgstr "Elevazione"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:140
+msgid "InfoBox geometry"
+msgstr "Geometria InfoBox"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:141
+msgid ""
+"A list of possible InfoBox layouts. Do some trials to find the best for your "
+"screen size."
+msgstr ""
+
+#. Expert item (TODO)
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:145
+#, fuzzy
+msgid "FLARM display"
+msgstr "Terreno"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:148
+msgid "Tab dialog style"
+msgstr ""
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:152
+#, fuzzy
+msgid "Message display"
+msgstr "Terreno"
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:155
+#, fuzzy
+msgid "Dialog size"
+msgstr "Finestre dialogo"
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:159
+msgid "Inverse InfoBoxes"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:159
+msgid "If true, the InfoBoxes are white on black, otherwise black on white."
+msgstr ""
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:163
+msgid "Colored InfoBoxes"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:164
+msgid ""
+"If true, certain InfoBoxes will have coloured text.  For example, the active "
+"waypoint InfoBox will be blue when the glider is above final glide."
+msgstr ""
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:169
+#, fuzzy
+msgid "InfoBox border"
+msgstr "Incolla InfoBox"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:44
 #, no-c-format
@@ -4430,44 +4555,44 @@ msgstr ""
 msgid "Add Turnpoint"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:185
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:186
 msgid "Task not saved"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:197
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:198
 msgid "Load the selected task?"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:202
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:237
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:203
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:238
 msgid "Task Browser"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:226
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:227
 msgid "Can't delete .CUP files"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:226
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:227
 msgid "Delete Error"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:232
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:233
 msgid "Delete the selected task?"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:272
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:273
 msgid "Can't rename .CUP files"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:272
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:273
 msgid "Rename Error"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:335
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:336
 msgid "Create new task?"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:335
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:336
 msgid "Task New"
 msgstr ""
 
@@ -5390,11 +5515,6 @@ msgstr ""
 msgid "On-Line Contest"
 msgstr "Online Contest"
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:14
-msgid "Flarm display location"
-msgstr ""
-
 #: Data/Dialogs/dlgVario_L.xml:342 Data/Dialogs/dlgVario.xml:343
 msgid "Privacy"
 msgstr ""
@@ -5825,11 +5945,6 @@ msgstr ""
 msgid "Insert In Task"
 msgstr "Inserisci nel tema"
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:29
-msgid "Determines display size of dialogs."
-msgstr ""
-
 #: Data/Dialogs/dlgAirspaceWarnings.xml:6
 msgid "ACK Warn"
 msgstr "Ok alarm"
@@ -5881,11 +5996,6 @@ msgstr "Efficienza Planata"
 msgid "Polar V"
 msgstr ""
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:4
-msgid "Rotate the display on devices that support it."
-msgstr ""
-
 #: Data/Dialogs/dlgVario_L.xml:100 Data/Dialogs/dlgVario.xml:101
 msgid "Variometer low pass filter time constant in circling mode."
 msgstr ""
@@ -5897,11 +6007,6 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:10 Data/Dialogs/dlgConfiguration.xml:13
 #: Data/Dialogs/dlgPlanePolar_L.xml:53 Data/Dialogs/dlgPlanePolar.xml:65
 msgid "Import"
-msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:19
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:19
-msgid "Determines whether tabbed dialogs use text or icons"
 msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:92 Data/Dialogs/dlgVario.xml:93
@@ -6198,11 +6303,6 @@ msgid ""
 "vario value."
 msgstr ""
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:34
-msgid "Inverse InfoBoxes"
-msgstr ""
-
 #: Data/Dialogs/dlgVario_L.xml:439 Data/Dialogs/dlgVario.xml:440
 msgid "LED bright"
 msgstr ""
@@ -6254,12 +6354,6 @@ msgstr "Ricerca"
 #: Data/Dialogs/dlgTaskPoint_L.xml:19 Data/Dialogs/dlgTaskPoint.xml:15
 msgid "Change Type"
 msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:44
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:44
-#, fuzzy
-msgid "InfoBox border"
-msgstr "Incolla InfoBox"
 
 #: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:11
 #: Data/Dialogs/Configuration/RouteConfigPanel.xml:11
@@ -6404,13 +6498,6 @@ msgstr ""
 msgid "FLARM"
 msgstr ""
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:9
-msgid ""
-"A list of possible InfoBox layouts. Do some trials to find the best for your "
-"screen size."
-msgstr ""
-
 #: Data/Dialogs/dlgTaskPointType_L.xml:3 Data/Dialogs/dlgTaskPointType.xml:3
 msgid "Task Point Type"
 msgstr ""
@@ -6492,11 +6579,6 @@ msgstr "Traguard.valido"
 
 #: Data/Dialogs/dlgVario_L.xml:16 Data/Dialogs/dlgVario.xml:17
 msgid "Pitot port"
-msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:19
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:19
-msgid "Tab dialog style"
 msgstr ""
 
 #: Data/Dialogs/pnlTaskProperties_L.xml:11
@@ -6715,18 +6797,6 @@ msgstr "Altezza Terreno"
 msgid "Headset threshold"
 msgstr ""
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:14
-msgid "Choose a location for the flarm display"
-msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:39
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:39
-msgid ""
-"If true, certain InfoBoxes will have coloured text.  For example, the active "
-"waypoint infobox will be blue when the glider is above final glide."
-msgstr ""
-
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:22
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:22
 msgid "Terrain colors"
@@ -6795,12 +6865,6 @@ msgstr "Esperto"
 #: Data/Dialogs/dlgTarget_L.xml:38 Data/Dialogs/dlgTarget.xml:32
 msgid "Optimized"
 msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:29
-#, fuzzy
-msgid "Dialog style"
-msgstr "Finestre dialogo"
 
 #: Data/Dialogs/dlgStatusAircraft.xml:4 Data/Dialogs/dlgWaypointEdit_L.xml:10
 #: Data/Dialogs/pnlStatusFlight.xml:5
@@ -6988,11 +7052,6 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:15
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:7
 msgid "Callsign"
-msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:34
-msgid "If true, the InfoBoxes are white on black, otherwise black on white."
 msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:26
@@ -7188,15 +7247,15 @@ msgstr ""
 msgid "Units used for altitude and heights."
 msgstr ""
 
+#: Data/Dialogs/dlgStatusTask.xml:6 Data/Dialogs/pnlStatusTask.xml:6
+msgid "Remaining time"
+msgstr "Tempo restante"
+
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:30
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:30
 #, fuzzy
 msgid "More airspaces"
 msgstr "Vis SpazioAer ON"
-
-#: Data/Dialogs/dlgStatusTask.xml:6 Data/Dialogs/pnlStatusTask.xml:6
-msgid "Remaining time"
-msgstr "Tempo restante"
 
 #: Data/Dialogs/dlgAirspaceColours_L.xml:3
 #: Data/Dialogs/dlgAirspaceColours.xml:3
@@ -7248,12 +7307,6 @@ msgstr ""
 #: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:19
 msgid "Menu timeout"
 msgstr "Timeout Menu"
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:4
-#, fuzzy
-msgid "Display orientation"
-msgstr "Elevazione"
 
 #: Data/Dialogs/dlgTaskPoint_L.xml:47 Data/Dialogs/dlgTaskPoint.xml:43
 msgid "Inner radius"
@@ -7326,13 +7379,6 @@ msgstr ""
 msgid "Reach polar"
 msgstr ""
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:24
-msgid ""
-"Defines the alignment of the status message box, either centered or in the "
-"top left corner."
-msgstr ""
-
 #: Data/Dialogs/dlgTextEntry.xml:3
 msgid "Edit text"
 msgstr "Edita testo"
@@ -7345,11 +7391,6 @@ msgstr "Settaggio MacCready"
 
 #: Data/Dialogs/dlgVario_L.xml:126 Data/Dialogs/dlgVario.xml:127
 msgid "Cruise deadband type"
-msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:24
-msgid "Msg. window"
 msgstr ""
 
 #: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:16
@@ -7399,11 +7440,6 @@ msgid ""
 "disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
 "specified."
 msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:9
-msgid "Infobox geometry"
-msgstr "Geometria InfoBox"
 
 #: Data/Dialogs/dlgVoice.xml:30
 msgid "In sector"
@@ -7522,11 +7558,6 @@ msgstr ""
 #: Data/Dialogs/pnlTaskList.xml:9
 msgid "Save"
 msgstr "Salva"
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:39
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:39
-msgid "Colored InfoBoxes"
-msgstr ""
 
 #: Data/Dialogs/dlgTextEntry.xml:7
 msgid "A+"
@@ -7721,14 +7752,6 @@ msgstr ""
 msgid "Max. reported Circling"
 msgstr ""
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:44
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:44
-msgid ""
-"Two styles for infobox borders are available:\n"
-"[Box] Draws boxes around each infobox.\n"
-"[Tab] Draws a tab at the top of the infobox across the title."
-msgstr ""
-
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:7
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:22
 msgid "Green"
@@ -7780,15 +7803,15 @@ msgstr ""
 msgid "Flarm Lock"
 msgstr ""
 
+#: Data/Dialogs/dlgVario_L.xml:96 Data/Dialogs/dlgVario.xml:97
+msgid "Base frequency"
+msgstr ""
+
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:16
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:16
 msgid ""
 "Secondary waypoints file.  This may be used to add waypoints for a "
 "competition."
-msgstr ""
-
-#: Data/Dialogs/dlgVario_L.xml:96 Data/Dialogs/dlgVario.xml:97
-msgid "Base frequency"
 msgstr ""
 
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:28

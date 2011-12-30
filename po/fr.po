@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-27 13:21+0100\n"
+"POT-Creation-Date: 2011-12-30 12:43+0100\n"
 "PO-Revision-Date: 2011-12-20 19:54+0100\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -121,7 +121,7 @@ msgid "No logger connected"
 msgstr "Pas d'enregistreur connecté"
 
 #: src/Logger/ExternalLogger.cpp:110
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:393
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:394
 msgid "Declare task"
 msgstr "Déclarer circuit"
 
@@ -891,14 +891,14 @@ msgstr "V Vent"
 #, no-c-format
 msgid ""
 "Wind speed estimated by XCSoar. (Touchscreen/PC only) Manual adjustment is "
-"possible by pressing the up/down cursor keys to adjust magnitude and "
-"left/right cursor keys to adjust bearing when the InfoBox is active. "
-"Pressing the enter cursor key saves the wind value as the initial value when "
-"XCSoar next starts."
+"possible by pressing the up/down cursor keys to adjust magnitude and left/"
+"right cursor keys to adjust bearing when the InfoBox is active. Pressing the "
+"enter cursor key saves the wind value as the initial value when XCSoar next "
+"starts."
 msgstr ""
 "Vitesse du vent estimée par XCSoar. Écrans tactiles/PC : si l'InfoBox est "
-"active, alors le réglage manuel est possible en utilisant les flèches "
-"haut/bas pour la vitesse, et gauche/droite pour la direction. L'appui sur la "
+"active, alors le réglage manuel est possible en utilisant les flèches haut/"
+"bas pour la vitesse, et gauche/droite pour la direction. L'appui sur la "
 "touche entrée enregistre les paramètres du vent comme paramètres initiaux "
 "pour le prochain démarrage d'XCSoar."
 
@@ -920,8 +920,8 @@ msgid ""
 "InfoBox is active."
 msgstr ""
 "Direction du vent estimée par XCSoar. Écrans tactiles/PC : si l'InfoBox est "
-"active, alors le réglage manuel est possible en utilisant les flèches "
-"haut/bas."
+"active, alors le réglage manuel est possible en utilisant les flèches haut/"
+"bas."
 
 #: src/InfoBoxes/Content/Factory.cpp:348
 #, no-c-format
@@ -1656,8 +1656,8 @@ msgid ""
 "Displays percentage of device battery remaining (where applicable) and "
 "status/voltage of external power supply."
 msgstr ""
-"Affiche le pourcentage restant de batterie (si possible) et le "
-"statut/tension de l'alimentation externe."
+"Affiche le pourcentage restant de batterie (si possible) et le statut/"
+"tension de l'alimentation externe."
 
 #: src/InfoBoxes/Content/Factory.cpp:742
 #, no-c-format
@@ -2112,7 +2112,8 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Altitude.cpp:54
 #: src/MapWindow/GlueMapWindowOverlays.cpp:257
-#: Data/Dialogs/dlgSimulatorPrompt_L.xml:6 Data/Dialogs/dlgSimulatorPrompt.xml:6
+#: Data/Dialogs/dlgSimulatorPrompt_L.xml:6
+#: Data/Dialogs/dlgSimulatorPrompt.xml:6
 #, no-c-format
 msgid "Simulator"
 msgstr "Simulateur"
@@ -2125,13 +2126,15 @@ msgstr "Simulateur"
 msgid "Info"
 msgstr "Info"
 
-#: src/InfoBoxes/Content/Altitude.cpp:62 src/InfoBoxes/Content/MacCready.cpp:62
+#: src/InfoBoxes/Content/Altitude.cpp:62
+#: src/InfoBoxes/Content/MacCready.cpp:62
 #: src/InfoBoxes/Content/Weather.cpp:103 src/Dialogs/dlgConfiguration.cpp:80
 #, no-c-format
 msgid "Setup"
 msgstr "Configuration"
 
-#: src/InfoBoxes/Content/Altitude.cpp:187 src/InfoBoxes/Content/Altitude.cpp:274
+#: src/InfoBoxes/Content/Altitude.cpp:187
+#: src/InfoBoxes/Content/Altitude.cpp:274
 msgid "no QNH"
 msgstr "Aucun QNH"
 
@@ -2201,7 +2204,8 @@ msgid "FinalGlide"
 msgstr "Plané final"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:475 src/InfoBoxes/InfoBoxManager.cpp:521
-#: src/Dialogs/dlgConfigInfoboxes.cpp:210 src/Dialogs/dlgConfigInfoboxes.cpp:373
+#: src/Dialogs/dlgConfigInfoboxes.cpp:210
+#: src/Dialogs/dlgConfigInfoboxes.cpp:373
 msgid "InfoBox"
 msgstr "InfoBox"
 
@@ -2497,8 +2501,9 @@ msgstr "Altitude"
 #: Data/Dialogs/dlgAirspaceSelect.xml:16
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:18
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:10
-#: Data/Dialogs/dlgStatusAircraft.xml:11 Data/Dialogs/dlgWaypointSelect_L.xml:5
-#: Data/Dialogs/dlgWaypointSelect.xml:9 Data/Dialogs/pnlStatusFlight.xml:10
+#: Data/Dialogs/dlgStatusAircraft.xml:11
+#: Data/Dialogs/dlgWaypointSelect_L.xml:5 Data/Dialogs/dlgWaypointSelect.xml:9
+#: Data/Dialogs/pnlStatusFlight.xml:10
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:13
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:13
 msgid "Distance"
@@ -2681,7 +2686,8 @@ msgstr ""
 msgid "Scanning weather forecast"
 msgstr "Scan des prévisions météo"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:328 src/Dialogs/dlgAnalysis.cpp:320
+#: src/Renderer/FlightStatisticsRenderer.cpp:328
+#: src/Dialogs/dlgAnalysis.cpp:320
 msgid "Mass"
 msgstr "Masse"
 
@@ -2918,23 +2924,23 @@ msgstr "Port"
 msgid "Driver"
 msgstr "Pilote"
 
-#: src/Device/Descriptor.cpp:133
+#: src/Device/Descriptor.cpp:153
 msgid "No such driver"
 msgstr "Pas de pilote"
 
-#: src/Device/Descriptor.cpp:144
+#: src/Device/Descriptor.cpp:164
 msgid "Unable to open port"
 msgstr "Impossible d'ouvrir le port"
 
-#: src/Device/Descriptor.cpp:413 src/Device/Descriptor.cpp:421
+#: src/Device/Descriptor.cpp:435 src/Device/Descriptor.cpp:443
 msgid "Sending declaration"
 msgstr "Envoi de la déclaration"
 
-#: src/Device/Descriptor.cpp:465
+#: src/Device/Descriptor.cpp:487
 msgid "Reading flight list"
 msgstr "Lecture de la liste de vol"
 
-#: src/Device/Descriptor.cpp:483
+#: src/Device/Descriptor.cpp:505
 msgid "Downloading flight log"
 msgstr "téléchargement du log du vol"
 
@@ -2945,7 +2951,8 @@ msgstr "téléchargement du log du vol"
 msgid "OK"
 msgstr "Valider"
 
-#: src/Dialogs/Message.cpp:139 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:49
+#: src/Dialogs/Message.cpp:139
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:49
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:53
 msgid "Yes"
 msgstr "Oui"
@@ -3026,7 +3033,8 @@ msgstr "Périph."
 #: Data/Dialogs/dlgAirspaceColours.xml:4 Data/Dialogs/dlgAirspaceDetails.xml:4
 #: Data/Dialogs/dlgAirspace_L.xml:4 Data/Dialogs/dlgAirspacePatterns_L.xml:4
 #: Data/Dialogs/dlgAirspacePatterns.xml:4
-#: Data/Dialogs/dlgAirspaceSelect_L.xml:22 Data/Dialogs/dlgAirspaceSelect.xml:6
+#: Data/Dialogs/dlgAirspaceSelect_L.xml:22
+#: Data/Dialogs/dlgAirspaceSelect.xml:6
 #: Data/Dialogs/dlgAirspaceWarnings.xml:10 Data/Dialogs/dlgAirspace.xml:4
 #: Data/Dialogs/dlgAnalysis_L.xml:14 Data/Dialogs/dlgAnalysis.xml:14
 #: Data/Dialogs/dlgBasicSettings.xml:5 Data/Dialogs/dlgBrightness.xml:4
@@ -3085,7 +3093,8 @@ msgstr ""
 msgid "Port monitor"
 msgstr "Portrait"
 
-#: src/Dialogs/PortMonitor.cpp:131 Data/Dialogs/dlgFlarmTrafficDetails_L.xml:11
+#: src/Dialogs/PortMonitor.cpp:131
+#: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:11
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:26
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:9
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:9
@@ -3106,7 +3115,8 @@ msgstr "Redémarrer"
 
 #: src/Dialogs/MapItemListDialog.cpp:157 src/Dialogs/MapItemListDialog.cpp:160
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:14
-#: Data/Dialogs/dlgAirspaceSelect.xml:20 Data/Dialogs/dlgWaypointSelect_L.xml:9
+#: Data/Dialogs/dlgAirspaceSelect.xml:20
+#: Data/Dialogs/dlgWaypointSelect_L.xml:9
 #: Data/Dialogs/dlgWaypointSelect.xml:13 Data/Dialogs/dlgWindSettings.xml:8
 #: Data/Dialogs/Infobox/pnlInfoBoxWindEdit.xml:8
 msgid "Direction"
@@ -3136,7 +3146,8 @@ msgstr "Réautoriser l'espace aérien?"
 msgid "Acknowledge for day?"
 msgstr "OK pour la journée?"
 
-#: src/Dialogs/dlgAirspaceDetails.cpp:88 Data/Dialogs/dlgAirspaceWarnings.xml:9
+#: src/Dialogs/dlgAirspaceDetails.cpp:88
+#: Data/Dialogs/dlgAirspaceWarnings.xml:9
 msgid "Enable"
 msgstr "Activer"
 
@@ -3479,10 +3490,10 @@ msgid "Invalid"
 msgstr "Invalide"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:228 src/Dialogs/dlgWaypointEdit.cpp:53
-#: Data/Dialogs/dlgAirspaceDetails.xml:8 Data/Dialogs/dlgAirspaceSelect_L.xml:6
-#: Data/Dialogs/dlgAirspaceSelect.xml:8 Data/Dialogs/dlgWaypointEdit_L.xml:6
-#: Data/Dialogs/dlgWaypointEdit.xml:6 Data/Dialogs/dlgWaypointSelect_L.xml:2
-#: Data/Dialogs/dlgWaypointSelect.xml:2
+#: Data/Dialogs/dlgAirspaceDetails.xml:8
+#: Data/Dialogs/dlgAirspaceSelect_L.xml:6 Data/Dialogs/dlgAirspaceSelect.xml:8
+#: Data/Dialogs/dlgWaypointEdit_L.xml:6 Data/Dialogs/dlgWaypointEdit.xml:6
+#: Data/Dialogs/dlgWaypointSelect_L.xml:2 Data/Dialogs/dlgWaypointSelect.xml:2
 msgid "Name"
 msgstr "Nom"
 
@@ -3503,7 +3514,8 @@ msgid "Paste"
 msgstr "Coller"
 
 #: src/Dialogs/dlgConfigWaypoints.cpp:53 src/Dialogs/dlgConfigWaypoints.cpp:76
-#: src/Dialogs/dlgConfigWaypoints.cpp:98 src/Dialogs/dlgConfigWaypoints.cpp:115
+#: src/Dialogs/dlgConfigWaypoints.cpp:98
+#: src/Dialogs/dlgConfigWaypoints.cpp:115
 msgid "Waypoints not editable"
 msgstr "Waypoints non editables"
 
@@ -3640,7 +3652,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:64
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:151
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:44
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:54
 #, no-c-format
 msgid "Default"
 msgstr "Par défaut"
@@ -3957,164 +3969,294 @@ msgstr "Clavier"
 msgid "HighScore Style"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:45
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:52
+#, no-c-format
+msgid "Rotate the display on devices that support it."
+msgstr "Rotation de l'écran sur les appareils qui le supportent."
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:55
 #, no-c-format
 msgid "Portrait"
 msgstr "Portrait"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:46
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:56
 #, no-c-format
 msgid "Landscape"
 msgstr "Paysage"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:47
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:57
 #, no-c-format
 msgid "Reverse Portrait"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:48
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:58
 #, no-c-format
 msgid "Reverse Landscape"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:53
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:63
 #, no-c-format
 msgid "8 Top + Bottom (Portrait)"
 msgstr "8 Haut + Bas (Portrait)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:54
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:64
 #, no-c-format
 msgid "8 Bottom (Portrait)"
 msgstr "8 Bas (Portrait)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:55
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:65
 #, no-c-format
 msgid "8 Bottom + Vario (Portrait)"
 msgstr "8 Bas + Vario (Portrait)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:56
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:66
 #, no-c-format
 msgid "8 Top (Portrait)"
 msgstr "8 Haut (Portrait)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:57
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:67
 #, no-c-format
 msgid "8 Left + Right (Landscape)"
 msgstr "8 Gauche + Droite (Paysage)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:58
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:68
 #, no-c-format
 msgid "8 Left (Landscape)"
 msgstr "8 Gauche (Paysage)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:59
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:69
 #, no-c-format
 msgid "8 Right (Landscape)"
 msgstr "8 Droite (Paysage)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:60
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:70
 #, no-c-format
 msgid "9 Right + Vario (Landscape)"
 msgstr "9 Droite + Vario (Paysage)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:61
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:71
 #, no-c-format
 msgid "9 Left + Right (Landscape)"
 msgstr "9 Gauche + Droite (Paysage)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:62
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:72
 #, no-c-format
 msgid "5 Right (Square)"
 msgstr "5 Droite (Carré)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:63
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:73
 #, no-c-format
 msgid "12 Right (Landscape)"
 msgstr "12 Droite (Paysage)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:64
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:74
 #, no-c-format
 msgid "12 Bottom (Portrait)"
 msgstr "12 Bas (Portrait)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:65
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:75
 #, no-c-format
 msgid "12 Top (Portrait)"
 msgstr "12 Haut (Portrait)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:66
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:76
 #, no-c-format
 msgid "24 Right (Landscape)"
 msgstr "24 Droite (Paysage)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:114
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:80
+#, no-c-format
+msgid "Choose a location for the FLARM display."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:82
+#, no-c-format
 msgid "Auto (follow infoboxes)"
 msgstr "Auto (suit les InfoBoxes)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:115
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:83
+#, no-c-format
 msgid "Top Left"
 msgstr "En haut à gauche"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:116
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
+#, no-c-format
 msgid "Top Right"
 msgstr "En haut à droite"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:117
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:85
+#, no-c-format
 msgid "Bottom Left"
 msgstr "En bas à gauche"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:118
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:86
+#, no-c-format
 msgid "Bottom Right"
 msgstr "En bas à droite"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:119
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:87
+#, no-c-format
 msgid "Centre Top"
 msgstr "Centrer en haut"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:120
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:88
+#, no-c-format
 msgid "Centre Bottom"
 msgstr "Centrer en bas"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:128
-msgid "Center"
-msgstr "Centré"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:129
-msgid "Topleft"
-msgstr "HautGauche"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:137
-msgid "Full width"
-msgstr "Toute la largeur"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:138
-msgid "Scaled"
-msgstr "A l'échèle"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:139
-msgid "Scaled centered"
-msgstr "A l'échèle centré"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:140
-#: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:201
-msgid "Fixed"
-msgstr "Fixe"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:154
-msgid "Box"
-msgstr "Boite"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:155
-msgid "Tab"
-msgstr "Tab"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:163
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:93
+#, no-c-format
 msgid "Text"
 msgstr "Texte"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:164
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:93
+#, fuzzy, no-c-format
+msgid "Show text on tabbed dialogs."
+msgstr "Détermine si les onglets utilisent du texte ou des icônes."
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:94
+#, no-c-format
 msgid "Icons"
 msgstr "Icônes"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:94
+#, fuzzy, no-c-format
+msgid "Show icons on tabbed dialogs."
+msgstr "Détermine si les onglets utilisent du texte ou des icônes."
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:99
+#, no-c-format
+msgid "Center"
+msgstr "Centré"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:99
+#, no-c-format
+msgid "Center the status message boxes."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:100
+#, no-c-format
+msgid "Topleft"
+msgstr "HautGauche"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:100
+#, no-c-format
+msgid "Show status message boxes in the top left corner."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:104
+#, no-c-format
+msgid "Choose the display size of dialogs."
+msgstr "Détermine la taille de l'affichage des dialogues."
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:106
+#, no-c-format
+msgid "Full width"
+msgstr "Toute la largeur"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:107
+#, no-c-format
+msgid "Scaled"
+msgstr "A l'échèle"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:108
+#, no-c-format
+msgid "Scaled centered"
+msgstr "A l'échèle centré"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:109
+#: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:201
+#, no-c-format
+msgid "Fixed"
+msgstr "Fixe"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:114
+#, no-c-format
+msgid "Box"
+msgstr "Boite"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:114
+#, no-c-format
+msgid "Draws boxes around each InfoBox."
+msgstr "Dessine une boîte autour de chaque InfoBox."
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:115
+#, no-c-format
+msgid "Tab"
+msgstr "Tab"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:115
+#, no-c-format
+msgid "Draws a tab at the top of the InfoBox across the title."
+msgstr "Dessine un onglet au-dessus de l'InfoBox."
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:136
+#, fuzzy
+msgid "Display orientation"
+msgstr "Afficher orientation"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:140
+msgid "InfoBox geometry"
+msgstr "Mise en page des InfoBoxes"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:141
+msgid ""
+"A list of possible InfoBox layouts. Do some trials to find the best for your "
+"screen size."
+msgstr ""
+"Une liste de mises en page possibles pour les InfoBoxes. Faites des essais "
+"pour trouver la meilleure pour votre taille d'écran."
+
+#. Expert item (TODO)
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:145
+#, fuzzy
+msgid "FLARM display"
+msgstr "Affichage relief"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:148
+msgid "Tab dialog style"
+msgstr ""
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:152
+#, fuzzy
+msgid "Message display"
+msgstr "Affichage relief"
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:155
+#, fuzzy
+msgid "Dialog size"
+msgstr "Boîtes de dialogue"
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:159
+msgid "Inverse InfoBoxes"
+msgstr "Inverser les InfoBoxes"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:159
+msgid "If true, the InfoBoxes are white on black, otherwise black on white."
+msgstr ""
+"Si activé, alors les InfoBoxes seront affichées en blanc sur noir, sinon en "
+"noir sur blanc."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:163
+msgid "Colored InfoBoxes"
+msgstr "InfoBoxes en couleur"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:164
+msgid ""
+"If true, certain InfoBoxes will have coloured text.  For example, the active "
+"waypoint InfoBox will be blue when the glider is above final glide."
+msgstr ""
+"Si activé, alors certaines InfoBoxes auront leur texte coloré. Par exemple "
+"le nom du waypoint actif sera bleu lorsque le planeur est au-dessus du plan."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:169
+msgid "InfoBox border"
+msgstr "Bordure InfoBox"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:44
 #, no-c-format
@@ -4628,44 +4770,44 @@ msgstr "Editer le circuit"
 msgid "Add Turnpoint"
 msgstr "Ajouter point de virage"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:185
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:186
 msgid "Task not saved"
 msgstr "Circuit non sauvegardé"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:197
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:198
 msgid "Load the selected task?"
 msgstr "Charger le circuit sélectionné ?"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:202
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:237
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:203
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:238
 msgid "Task Browser"
 msgstr "Explorateur de circuits"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:226
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:227
 msgid "Can't delete .CUP files"
 msgstr "Suppression des fichiers .CUP impossible"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:226
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:227
 msgid "Delete Error"
 msgstr "Erreur de suppression"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:232
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:233
 msgid "Delete the selected task?"
 msgstr "Effacer le circuit sélectionné ?"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:272
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:273
 msgid "Can't rename .CUP files"
 msgstr "Impossible de renommer les fichiers .CUP"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:272
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:273
 msgid "Rename Error"
 msgstr "Erreur de renommage"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:335
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:336
 msgid "Create new task?"
 msgstr "Créer nouveau circuit?"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:335
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:336
 msgid "Task New"
 msgstr "Nouveau circuit"
 
@@ -5063,7 +5205,8 @@ msgstr "Paramètres météo"
 
 #: src/Dialogs/dlgWaypointDetails.cpp:181
 #: src/Dialogs/dlgWaypointDetails.cpp:232
-#: src/Dialogs/dlgWaypointDetails.cpp:265 src/Dialogs/dlgWaypointDetails.cpp:353
+#: src/Dialogs/dlgWaypointDetails.cpp:265
+#: src/Dialogs/dlgWaypointDetails.cpp:353
 msgid "No task defined."
 msgstr "Pas de circuit défini."
 
@@ -5077,21 +5220,25 @@ msgstr "Remplacer dans circuit"
 
 #: src/Dialogs/dlgWaypointDetails.cpp:190
 #: src/Dialogs/dlgWaypointDetails.cpp:237
-#: src/Dialogs/dlgWaypointDetails.cpp:270 src/Dialogs/dlgWaypointDetails.cpp:362
+#: src/Dialogs/dlgWaypointDetails.cpp:270
+#: src/Dialogs/dlgWaypointDetails.cpp:362
 msgid "Task would not be valid after the change."
 msgstr "Le circuit ne serait pas valide après modification."
 
-#: src/Dialogs/dlgWaypointDetails.cpp:241 src/Dialogs/dlgWaypointDetails.cpp:274
+#: src/Dialogs/dlgWaypointDetails.cpp:241
+#: src/Dialogs/dlgWaypointDetails.cpp:274
 msgid "Created Goto Task."
 msgstr ""
 
 #: src/Dialogs/dlgWaypointDetails.cpp:241
 #: src/Dialogs/dlgWaypointDetails.cpp:246
-#: src/Dialogs/dlgWaypointDetails.cpp:274 src/Dialogs/dlgWaypointDetails.cpp:279
+#: src/Dialogs/dlgWaypointDetails.cpp:274
+#: src/Dialogs/dlgWaypointDetails.cpp:279
 msgid "Success"
 msgstr ""
 
-#: src/Dialogs/dlgWaypointDetails.cpp:246 src/Dialogs/dlgWaypointDetails.cpp:279
+#: src/Dialogs/dlgWaypointDetails.cpp:246
+#: src/Dialogs/dlgWaypointDetails.cpp:279
 msgid "Created 2-point task from Goto Task."
 msgstr ""
 
@@ -5116,7 +5263,8 @@ msgid "Remove from task"
 msgstr "Enlever du circuit"
 
 #: src/Dialogs/dlgWaypointDetails.cpp:413
-#: Data/Dialogs/dlgWaypointDetails_L.xml:3 Data/Dialogs/dlgWaypointDetails.xml:3
+#: Data/Dialogs/dlgWaypointDetails_L.xml:3
+#: Data/Dialogs/dlgWaypointDetails.xml:3
 msgid "Waypoint Info"
 msgstr "Information du waypoint"
 
@@ -5292,7 +5440,8 @@ msgstr ""
 msgid "Rate"
 msgstr "Taux"
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:37 Data/Dialogs/pnlTaskCalculator.xml:37
+#: Data/Dialogs/pnlTaskCalculator_L.xml:37
+#: Data/Dialogs/pnlTaskCalculator.xml:37
 msgid "Achieved MacCready"
 msgstr "MacCready réalisé"
 
@@ -5570,7 +5719,8 @@ msgstr ""
 msgid "Set As New Home"
 msgstr "=> Nvlle Base"
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:28 Data/Dialogs/pnlTaskCalculator.xml:28
+#: Data/Dialogs/pnlTaskCalculator_L.xml:28
+#: Data/Dialogs/pnlTaskCalculator.xml:28
 msgid ""
 "For AAT tasks, this value tells you how far based on the targets of your "
 "task you will fly relative to the minimum and maximum possible tasks. -100% "
@@ -5607,11 +5757,6 @@ msgstr "Délai batterie faible"
 msgid "On-Line Contest"
 msgstr "On-Line Contest"
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:14
-msgid "Flarm display location"
-msgstr "Emplacement affichage FLARM"
-
 #: Data/Dialogs/dlgVario_L.xml:342 Data/Dialogs/dlgVario.xml:343
 msgid "Privacy"
 msgstr "Confidentialité"
@@ -5635,7 +5780,8 @@ msgstr "Vitesse restante"
 msgid "Circling hi cutoff"
 msgstr ""
 
-#: Data/Dialogs/pnlTaskProperties_L.xml:40 Data/Dialogs/pnlTaskProperties.xml:39
+#: Data/Dialogs/pnlTaskProperties_L.xml:40
+#: Data/Dialogs/pnlTaskProperties.xml:39
 msgid "Sets the behaviour for the current task."
 msgstr "Configure le comportement pour le circuit actuel."
 
@@ -5705,14 +5851,15 @@ msgstr "Démo"
 msgid "Dialog text"
 msgstr ""
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:45 Data/Dialogs/pnlTaskCalculator.xml:45
+#: Data/Dialogs/pnlTaskCalculator_L.xml:45
+#: Data/Dialogs/pnlTaskCalculator.xml:45
 msgid ""
 "Efficiency of cruise.  100 indicates perfect MacCready performance, greater "
 "than 100 indicates better than MacCready performance is achieved through "
-"flying in streets.  Less than 100 is appropriate if you fly considerably "
-"off-track.  This value estimates your cruise efficiency according to the "
-"current flight history with the set MC value.  Calculation begins after task "
-"is started."
+"flying in streets.  Less than 100 is appropriate if you fly considerably off-"
+"track.  This value estimates your cruise efficiency according to the current "
+"flight history with the set MC value.  Calculation begins after task is "
+"started."
 msgstr ""
 "Efficacité en transition. 100 indique la performance MacCready parfaite, "
 "plus que 100 indique que la transition est meilleure que le MacCready, lors "
@@ -5762,7 +5909,8 @@ msgstr ""
 msgid "The file name of the secondary airspace file."
 msgstr "Le nom du second fichier d'espace aérien."
 
-#: Data/Dialogs/pnlTaskProperties_L.xml:40 Data/Dialogs/pnlTaskProperties.xml:39
+#: Data/Dialogs/pnlTaskProperties_L.xml:40
+#: Data/Dialogs/pnlTaskProperties.xml:39
 msgid "Task type"
 msgstr "Type de circuit"
 
@@ -5876,7 +6024,8 @@ msgstr ""
 msgid "Local time"
 msgstr "Heure locale"
 
-#: Data/Dialogs/pnlTaskProperties_L.xml:36 Data/Dialogs/pnlTaskProperties.xml:35
+#: Data/Dialogs/pnlTaskProperties_L.xml:36
+#: Data/Dialogs/pnlTaskProperties.xml:35
 msgid "FAI start / finish rules"
 msgstr "Règles de départ/arrivée FAI"
 
@@ -5897,8 +6046,8 @@ msgstr "Afficher le relief"
 #: Data/Dialogs/Configuration/LoggerConfigPanel.xml:34
 msgid ""
 "This determines whether the logger uses the short IGC file name or the long "
-"IGC file name. Example short name (81HXABC1.IGC), long name "
-"(2008-01-18-XXX-ABC-01.IGC)."
+"IGC file name. Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-"
+"ABC-01.IGC)."
 msgstr ""
 "Ceci détermine si l'enregistreur utilise les noms de fichiers IGC courts ou "
 "longs. Par exemple, un nom de fichier court (81HXABC1.IGC) et un nom de "
@@ -6073,11 +6222,6 @@ msgstr ""
 msgid "Insert In Task"
 msgstr "Inséré dans Circuit"
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:29
-msgid "Determines display size of dialogs."
-msgstr "Détermine la taille de l'affichage des dialogues."
-
 #: Data/Dialogs/dlgAirspaceWarnings.xml:6
 msgid "ACK Warn"
 msgstr "OK Alert."
@@ -6120,7 +6264,8 @@ msgstr "V relief"
 msgid "Borgelt"
 msgstr "Borgelt"
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:45 Data/Dialogs/pnlTaskCalculator.xml:45
+#: Data/Dialogs/pnlTaskCalculator_L.xml:45
+#: Data/Dialogs/pnlTaskCalculator.xml:45
 msgid "Cruise efficiency"
 msgstr "Finesse Transition"
 
@@ -6129,11 +6274,6 @@ msgstr "Finesse Transition"
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:8
 msgid "Polar V"
 msgstr "V polaire"
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:4
-msgid "Rotate the display on devices that support it."
-msgstr "Rotation de l'écran sur les appareils qui le supportent."
 
 #: Data/Dialogs/dlgVario_L.xml:100 Data/Dialogs/dlgVario.xml:101
 msgid "Variometer low pass filter time constant in circling mode."
@@ -6147,11 +6287,6 @@ msgstr "Volume min. urgent"
 #: Data/Dialogs/dlgPlanePolar_L.xml:53 Data/Dialogs/dlgPlanePolar.xml:65
 msgid "Import"
 msgstr "importer"
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:19
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:19
-msgid "Determines whether tabbed dialogs use text or icons"
-msgstr "Détermine si les onglets utilisent du texte ou des icônes."
 
 #: Data/Dialogs/dlgVario_L.xml:92 Data/Dialogs/dlgVario.xml:93
 msgid "Cruise volume"
@@ -6203,7 +6338,8 @@ msgstr "V volets"
 msgid "Topography labels, normal"
 msgstr "Étiquettes de topographie, normal"
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:22 Data/Dialogs/pnlTaskCalculator.xml:22
+#: Data/Dialogs/pnlTaskCalculator_L.xml:22
+#: Data/Dialogs/pnlTaskCalculator.xml:22
 msgid "Set MacCready"
 msgstr "Entrer MacCready"
 
@@ -6463,11 +6599,6 @@ msgid ""
 "vario value."
 msgstr ""
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:34
-msgid "Inverse InfoBoxes"
-msgstr "Inverser les InfoBoxes"
-
 #: Data/Dialogs/dlgVario_L.xml:439 Data/Dialogs/dlgVario.xml:440
 msgid "LED bright"
 msgstr ""
@@ -6521,11 +6652,6 @@ msgstr "Parcourir"
 #: Data/Dialogs/dlgTaskPoint_L.xml:19 Data/Dialogs/dlgTaskPoint.xml:15
 msgid "Change Type"
 msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:44
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:44
-msgid "InfoBox border"
-msgstr "Bordure InfoBox"
 
 #: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:11
 #: Data/Dialogs/Configuration/RouteConfigPanel.xml:11
@@ -6624,7 +6750,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgComboPicker_L.xml:8 Data/Dialogs/dlgComboPicker.xml:7
 #: Data/Dialogs/dlgTaskPointType_L.xml:4 Data/Dialogs/dlgTaskPointType.xml:4
-#: Data/Dialogs/dlgWaypointSelect_L.xml:17 Data/Dialogs/dlgWaypointSelect.xml:19
+#: Data/Dialogs/dlgWaypointSelect_L.xml:17
+#: Data/Dialogs/dlgWaypointSelect.xml:19
 msgid "Select"
 msgstr "Sélectionner"
 
@@ -6677,15 +6804,6 @@ msgstr ""
 #: Data/Dialogs/dlgStatusSystem.xml:7 Data/Dialogs/pnlStatusSystem.xml:7
 msgid "FLARM"
 msgstr "FLARM"
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:9
-msgid ""
-"A list of possible InfoBox layouts. Do some trials to find the best for your "
-"screen size."
-msgstr ""
-"Une liste de mises en page possibles pour les InfoBoxes. Faites des essais "
-"pour trouver la meilleure pour votre taille d'écran."
 
 #: Data/Dialogs/dlgTaskPointType_L.xml:3 Data/Dialogs/dlgTaskPointType.xml:3
 msgid "Task Point Type"
@@ -6768,11 +6886,6 @@ msgstr "Arrivée Valide"
 
 #: Data/Dialogs/dlgVario_L.xml:16 Data/Dialogs/dlgVario.xml:17
 msgid "Pitot port"
-msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:19
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:19
-msgid "Tab dialog style"
 msgstr ""
 
 #: Data/Dialogs/pnlTaskProperties_L.xml:11
@@ -6870,7 +6983,8 @@ msgstr "Champ"
 msgid "Climb fast trigger"
 msgstr ""
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:22 Data/Dialogs/pnlTaskCalculator.xml:22
+#: Data/Dialogs/pnlTaskCalculator_L.xml:22
+#: Data/Dialogs/pnlTaskCalculator.xml:22
 msgid ""
 "Adjusts MC value used in the calculator.  Use this to determine the effect "
 "on estimated task time due to changes in conditions.  This value will not "
@@ -6993,20 +7107,6 @@ msgstr "Hauteur Sol"
 msgid "Headset threshold"
 msgstr ""
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:14
-msgid "Choose a location for the flarm display"
-msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:39
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:39
-msgid ""
-"If true, certain InfoBoxes will have coloured text.  For example, the active "
-"waypoint infobox will be blue when the glider is above final glide."
-msgstr ""
-"Si activé, alors certaines InfoBoxes auront leur texte coloré. Par exemple "
-"le nom du waypoint actif sera bleu lorsque le planeur est au-dessus du plan."
-
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:22
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:22
 msgid "Terrain colors"
@@ -7079,12 +7179,6 @@ msgstr "Expert"
 #: Data/Dialogs/dlgTarget_L.xml:38 Data/Dialogs/dlgTarget.xml:32
 msgid "Optimized"
 msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:29
-#, fuzzy
-msgid "Dialog style"
-msgstr "Boîtes de dialogue"
 
 #: Data/Dialogs/dlgStatusAircraft.xml:4 Data/Dialogs/dlgWaypointEdit_L.xml:10
 #: Data/Dialogs/pnlStatusFlight.xml:5
@@ -7257,8 +7351,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid ""
-"Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file "
-"(.nmea), or if blank, runs the demo."
+"Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
+"nmea), or if blank, runs the demo."
 msgstr ""
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7
@@ -7279,13 +7373,6 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:7
 msgid "Callsign"
 msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:34
-msgid "If true, the InfoBoxes are white on black, otherwise black on white."
-msgstr ""
-"Si activé, alors les InfoBoxes seront affichées en blanc sur noir, sinon en "
-"noir sur blanc."
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "New waypoint"
@@ -7483,16 +7570,17 @@ msgstr ""
 msgid "Units used for altitude and heights."
 msgstr "Unités utilisées pour les vitesses du circuit."
 
+#: Data/Dialogs/dlgStatusTask.xml:6 Data/Dialogs/pnlStatusTask.xml:6
+msgid "Remaining time"
+msgstr "Temps restant"
+
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:30
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:30
 msgid "More airspaces"
 msgstr "Plus d'esp. aér."
 
-#: Data/Dialogs/dlgStatusTask.xml:6 Data/Dialogs/pnlStatusTask.xml:6
-msgid "Remaining time"
-msgstr "Temps restant"
-
-#: Data/Dialogs/dlgAirspaceColours_L.xml:3 Data/Dialogs/dlgAirspaceColours.xml:3
+#: Data/Dialogs/dlgAirspaceColours_L.xml:3
+#: Data/Dialogs/dlgAirspaceColours.xml:3
 msgid "Select Colour"
 msgstr "Select. Couleur"
 
@@ -7543,12 +7631,6 @@ msgstr ""
 #: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:19
 msgid "Menu timeout"
 msgstr "Tps Sortie Menu"
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:4
-#, fuzzy
-msgid "Display orientation"
-msgstr "Afficher orientation"
 
 #: Data/Dialogs/dlgTaskPoint_L.xml:47 Data/Dialogs/dlgTaskPoint.xml:43
 msgid "Inner radius"
@@ -7621,13 +7703,6 @@ msgstr "Vega"
 msgid "Reach polar"
 msgstr ""
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:24
-msgid ""
-"Defines the alignment of the status message box, either centered or in the "
-"top left corner."
-msgstr ""
-
 #: Data/Dialogs/dlgTextEntry.xml:3
 msgid "Edit text"
 msgstr "Saisie texte"
@@ -7640,11 +7715,6 @@ msgstr "Affiche ou non le pourcentage des ballasts."
 
 #: Data/Dialogs/dlgVario_L.xml:126 Data/Dialogs/dlgVario.xml:127
 msgid "Cruise deadband type"
-msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:24
-msgid "Msg. window"
 msgstr ""
 
 #: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:16
@@ -7695,11 +7765,6 @@ msgid ""
 "specified."
 msgstr ""
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:9
-msgid "Infobox geometry"
-msgstr "Mise en page des InfoBoxes"
-
 #: Data/Dialogs/dlgVoice.xml:30
 msgid "In sector"
 msgstr ""
@@ -7739,7 +7804,8 @@ msgstr "Dérive Compensée"
 msgid "Dry Mass"
 msgstr ""
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:41 Data/Dialogs/pnlTaskCalculator.xml:41
+#: Data/Dialogs/pnlTaskCalculator_L.xml:41
+#: Data/Dialogs/pnlTaskCalculator.xml:41
 msgid "Achieved speed"
 msgstr "Vitesse réalisée"
 
@@ -7774,7 +7840,8 @@ msgstr ""
 msgid "Start radial"
 msgstr "Radiale N°1"
 
-#: Data/Dialogs/pnlTaskProperties_L.xml:36 Data/Dialogs/pnlTaskProperties.xml:35
+#: Data/Dialogs/pnlTaskProperties_L.xml:36
+#: Data/Dialogs/pnlTaskProperties.xml:35
 msgid ""
 "If enabled, has no max start height or max start speed and requires the "
 "minimum height above ground for finish to be greater than 1000m below the "
@@ -7816,11 +7883,6 @@ msgstr ""
 msgid "Save"
 msgstr "Enregistrer"
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:39
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:39
-msgid "Colored InfoBoxes"
-msgstr "InfoBoxes en couleur"
-
 #: Data/Dialogs/dlgTextEntry.xml:7
 msgid "A+"
 msgstr "A+"
@@ -7839,7 +7901,8 @@ msgstr ""
 msgid "QNH"
 msgstr "QNH"
 
-#: Data/Dialogs/dlgSimulatorPrompt_L.xml:4 Data/Dialogs/dlgSimulatorPrompt.xml:4
+#: Data/Dialogs/dlgSimulatorPrompt_L.xml:4
+#: Data/Dialogs/dlgSimulatorPrompt.xml:4
 msgid "What do you want to do?"
 msgstr "Que voulez-vous faire ?"
 
@@ -7912,7 +7975,8 @@ msgstr ""
 msgid "Slope shading"
 msgstr "Volets landing"
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:28 Data/Dialogs/pnlTaskCalculator.xml:28
+#: Data/Dialogs/pnlTaskCalculator_L.xml:28
+#: Data/Dialogs/pnlTaskCalculator.xml:28
 msgid "AAT range"
 msgstr ""
 
@@ -7956,7 +8020,8 @@ msgid "Append To Task"
 msgstr "Ajouter Au Circuit"
 
 #: Data/Dialogs/dlgStatusTask.xml:8 Data/Dialogs/pnlStatusTask.xml:7
-#: Data/Dialogs/pnlTaskCalculator_L.xml:18 Data/Dialogs/pnlTaskCalculator.xml:18
+#: Data/Dialogs/pnlTaskCalculator_L.xml:18
+#: Data/Dialogs/pnlTaskCalculator.xml:18
 msgid "Task distance"
 msgstr "Distance circuit"
 
@@ -7996,8 +8061,8 @@ msgstr "Vitesse Aéronef/Vent"
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:11
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:11
 msgid ""
-"Primary waypoints file.  Supported file types are Cambridge/WinPilot files "
-"(.dat), Zander files (.wpz) or SeeYou files (.cup)."
+"Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
+"dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:66 Data/Dialogs/dlgVario.xml:67
@@ -8006,7 +8071,8 @@ msgid ""
 "calculation."
 msgstr ""
 
-#: Data/Dialogs/dlgConfigWaypoints_L.xml:3 Data/Dialogs/dlgConfigWaypoints.xml:3
+#: Data/Dialogs/dlgConfigWaypoints_L.xml:3
+#: Data/Dialogs/dlgConfigWaypoints.xml:3
 msgid "Waypoints Editor"
 msgstr ""
 
@@ -8017,17 +8083,6 @@ msgstr ""
 #: Data/Dialogs/dlgVario_L.xml:320
 msgid "Max. reported Circling"
 msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:44
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:44
-msgid ""
-"Two styles for infobox borders are available:\n"
-"[Box] Draws boxes around each infobox.\n"
-"[Tab] Draws a tab at the top of the infobox across the title."
-msgstr ""
-"Deux types de contour des InfoBoxes sont disponibles :\n"
-"[Box] Dessine une boîte autour de chaque InfoBox.\n"
-"[Tab] Dessine un onglet au-dessus de l'InfoBox"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:7
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:22
@@ -8070,8 +8125,8 @@ msgstr "Satellites en vue"
 msgid ""
 "Determines sorting of alternates in the alternates dialog and in abort "
 "mode:\n"
-"[Simple] The alternates will only be sorted by waypoint type "
-"(airport/outlanding field) and arrival height.\n"
+"[Simple] The alternates will only be sorted by waypoint type (airport/"
+"outlanding field) and arrival height.\n"
 "[Task] The sorting will also take the current task direction into account.\n"
 "[Home] The sorting will try to find landing options in the current direction "
 "to the configured home waypoint."
@@ -8081,15 +8136,15 @@ msgstr ""
 msgid "Flarm Lock"
 msgstr ""
 
+#: Data/Dialogs/dlgVario_L.xml:96 Data/Dialogs/dlgVario.xml:97
+msgid "Base frequency"
+msgstr ""
+
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:16
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:16
 msgid ""
 "Secondary waypoints file.  This may be used to add waypoints for a "
 "competition."
-msgstr ""
-
-#: Data/Dialogs/dlgVario_L.xml:96 Data/Dialogs/dlgVario.xml:97
-msgid "Base frequency"
 msgstr ""
 
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:28
@@ -8185,8 +8240,8 @@ msgstr ""
 #: Data/Dialogs/dlgBasicSettings.xml:7
 msgid ""
 "Ballast of the glider.  Increase this value if the pilot/cockpit load is "
-"greater than the reference pilot weight of the glide polar (typically 75kg). "
-" Press ENTER on this field to toggle count-down of the ballast volume "
+"greater than the reference pilot weight of the glide polar (typically "
+"75kg).  Press ENTER on this field to toggle count-down of the ballast volume "
 "according to the dump rate specified in the configuration settings."
 msgstr ""
 
@@ -8612,6 +8667,31 @@ msgid ""
 msgstr ""
 "METAR\n"
 "TAF"
+
+#, fuzzy
+#~ msgid "FLARM location"
+#~ msgstr "FLARM connecté"
+
+#, fuzzy
+#~ msgid "Message location"
+#~ msgstr ""
+#~ "Répéter\n"
+#~ "Message"
+
+#~ msgid "Flarm display location"
+#~ msgstr "Emplacement affichage FLARM"
+
+#~ msgid "Determines whether tabbed dialogs use text or icons"
+#~ msgstr "Détermine si les onglets utilisent du texte ou des icônes."
+
+#~ msgid ""
+#~ "Two styles for infobox borders are available:\n"
+#~ "[Box] Draws boxes around each infobox.\n"
+#~ "[Tab] Draws a tab at the top of the infobox across the title."
+#~ msgstr ""
+#~ "Deux types de contour des InfoBoxes sont disponibles :\n"
+#~ "[Box] Dessine une boîte autour de chaque InfoBox.\n"
+#~ "[Tab] Dessine un onglet au-dessus de l'InfoBox"
 
 #~ msgid "Page 8"
 #~ msgstr "Page 8"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-27 13:21+0100\n"
+"POT-Creation-Date: 2011-12-30 12:43+0100\n"
 "PO-Revision-Date: 2011-12-20 20:02+0000\n"
 "Last-Translator: Úr Balázs <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -121,7 +121,7 @@ msgid "No logger connected"
 msgstr "Nincs logger csatlakoztatva"
 
 #: src/Logger/ExternalLogger.cpp:110
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:393
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:394
 msgid "Declare task"
 msgstr "Feladat deklarálása"
 
@@ -880,10 +880,10 @@ msgstr "Szél seb"
 #, no-c-format
 msgid ""
 "Wind speed estimated by XCSoar. (Touchscreen/PC only) Manual adjustment is "
-"possible by pressing the up/down cursor keys to adjust magnitude and "
-"left/right cursor keys to adjust bearing when the InfoBox is active. "
-"Pressing the enter cursor key saves the wind value as the initial value when "
-"XCSoar next starts."
+"possible by pressing the up/down cursor keys to adjust magnitude and left/"
+"right cursor keys to adjust bearing when the InfoBox is active. Pressing the "
+"enter cursor key saves the wind value as the initial value when XCSoar next "
+"starts."
 msgstr ""
 "Az XCSoar által becsült szélsebesség. Érintőképernyő/PC: ha ez a kijelző az "
 "aktív, a fel-le nyilak a szélerősséget, a jobbra-balra nyilak a szélirányt "
@@ -1194,8 +1194,8 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
-"A következő fordulópont eléréséhez szükséges idő, ideális MacCready "
-"siklás/emelkedés ciklusokat feltételezve."
+"A következő fordulópont eléréséhez szükséges idő, ideális MacCready siklás/"
+"emelkedés ciklusokat feltételezve."
 
 #: src/InfoBoxes/Content/Factory.cpp:508
 #, no-c-format
@@ -2102,7 +2102,8 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Altitude.cpp:54
 #: src/MapWindow/GlueMapWindowOverlays.cpp:257
-#: Data/Dialogs/dlgSimulatorPrompt_L.xml:6 Data/Dialogs/dlgSimulatorPrompt.xml:6
+#: Data/Dialogs/dlgSimulatorPrompt_L.xml:6
+#: Data/Dialogs/dlgSimulatorPrompt.xml:6
 #, no-c-format
 msgid "Simulator"
 msgstr "Szimulátor"
@@ -2115,13 +2116,15 @@ msgstr "Szimulátor"
 msgid "Info"
 msgstr "Infó"
 
-#: src/InfoBoxes/Content/Altitude.cpp:62 src/InfoBoxes/Content/MacCready.cpp:62
+#: src/InfoBoxes/Content/Altitude.cpp:62
+#: src/InfoBoxes/Content/MacCready.cpp:62
 #: src/InfoBoxes/Content/Weather.cpp:103 src/Dialogs/dlgConfiguration.cpp:80
 #, no-c-format
 msgid "Setup"
 msgstr "Beállítás"
 
-#: src/InfoBoxes/Content/Altitude.cpp:187 src/InfoBoxes/Content/Altitude.cpp:274
+#: src/InfoBoxes/Content/Altitude.cpp:187
+#: src/InfoBoxes/Content/Altitude.cpp:274
 msgid "no QNH"
 msgstr "nincs QNH"
 
@@ -2191,7 +2194,8 @@ msgid "FinalGlide"
 msgstr "Végsiklás"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:475 src/InfoBoxes/InfoBoxManager.cpp:521
-#: src/Dialogs/dlgConfigInfoboxes.cpp:210 src/Dialogs/dlgConfigInfoboxes.cpp:373
+#: src/Dialogs/dlgConfigInfoboxes.cpp:210
+#: src/Dialogs/dlgConfigInfoboxes.cpp:373
 msgid "InfoBox"
 msgstr "Kijelző"
 
@@ -2483,8 +2487,9 @@ msgstr "Magasság"
 #: Data/Dialogs/dlgAirspaceSelect.xml:16
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:18
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:10
-#: Data/Dialogs/dlgStatusAircraft.xml:11 Data/Dialogs/dlgWaypointSelect_L.xml:5
-#: Data/Dialogs/dlgWaypointSelect.xml:9 Data/Dialogs/pnlStatusFlight.xml:10
+#: Data/Dialogs/dlgStatusAircraft.xml:11
+#: Data/Dialogs/dlgWaypointSelect_L.xml:5 Data/Dialogs/dlgWaypointSelect.xml:9
+#: Data/Dialogs/pnlStatusFlight.xml:10
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:13
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:13
 msgid "Distance"
@@ -2705,7 +2710,8 @@ msgstr "Hr cw alap"
 msgid "Scanning weather forecast"
 msgstr "Időjárás előrejelzés elemzése"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:328 src/Dialogs/dlgAnalysis.cpp:320
+#: src/Renderer/FlightStatisticsRenderer.cpp:328
+#: src/Dialogs/dlgAnalysis.cpp:320
 msgid "Mass"
 msgstr "Tömeg"
 
@@ -2941,23 +2947,23 @@ msgstr ""
 msgid "Driver"
 msgstr "Illesztőprogram"
 
-#: src/Device/Descriptor.cpp:133
+#: src/Device/Descriptor.cpp:153
 msgid "No such driver"
 msgstr "Nincs ilyen illesztőprogram."
 
-#: src/Device/Descriptor.cpp:144
+#: src/Device/Descriptor.cpp:164
 msgid "Unable to open port"
 msgstr "A port nem nyitható meg."
 
-#: src/Device/Descriptor.cpp:413 src/Device/Descriptor.cpp:421
+#: src/Device/Descriptor.cpp:435 src/Device/Descriptor.cpp:443
 msgid "Sending declaration"
 msgstr "Deklarálás küldése"
 
-#: src/Device/Descriptor.cpp:465
+#: src/Device/Descriptor.cpp:487
 msgid "Reading flight list"
 msgstr ""
 
-#: src/Device/Descriptor.cpp:483
+#: src/Device/Descriptor.cpp:505
 msgid "Downloading flight log"
 msgstr "Napló letöltése"
 
@@ -2968,7 +2974,8 @@ msgstr "Napló letöltése"
 msgid "OK"
 msgstr "Rendben"
 
-#: src/Dialogs/Message.cpp:139 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:49
+#: src/Dialogs/Message.cpp:139
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:49
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:53
 msgid "Yes"
 msgstr "Igen"
@@ -3048,7 +3055,8 @@ msgstr "Eszközök"
 #: Data/Dialogs/dlgAirspaceColours.xml:4 Data/Dialogs/dlgAirspaceDetails.xml:4
 #: Data/Dialogs/dlgAirspace_L.xml:4 Data/Dialogs/dlgAirspacePatterns_L.xml:4
 #: Data/Dialogs/dlgAirspacePatterns.xml:4
-#: Data/Dialogs/dlgAirspaceSelect_L.xml:22 Data/Dialogs/dlgAirspaceSelect.xml:6
+#: Data/Dialogs/dlgAirspaceSelect_L.xml:22
+#: Data/Dialogs/dlgAirspaceSelect.xml:6
 #: Data/Dialogs/dlgAirspaceWarnings.xml:10 Data/Dialogs/dlgAirspace.xml:4
 #: Data/Dialogs/dlgAnalysis_L.xml:14 Data/Dialogs/dlgAnalysis.xml:14
 #: Data/Dialogs/dlgBasicSettings.xml:5 Data/Dialogs/dlgBrightness.xml:4
@@ -3106,7 +3114,8 @@ msgstr ""
 msgid "Port monitor"
 msgstr ""
 
-#: src/Dialogs/PortMonitor.cpp:131 Data/Dialogs/dlgFlarmTrafficDetails_L.xml:11
+#: src/Dialogs/PortMonitor.cpp:131
+#: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:11
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:26
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:9
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:9
@@ -3127,7 +3136,8 @@ msgstr "Újraindítás"
 
 #: src/Dialogs/MapItemListDialog.cpp:157 src/Dialogs/MapItemListDialog.cpp:160
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:14
-#: Data/Dialogs/dlgAirspaceSelect.xml:20 Data/Dialogs/dlgWaypointSelect_L.xml:9
+#: Data/Dialogs/dlgAirspaceSelect.xml:20
+#: Data/Dialogs/dlgWaypointSelect_L.xml:9
 #: Data/Dialogs/dlgWaypointSelect.xml:13 Data/Dialogs/dlgWindSettings.xml:8
 #: Data/Dialogs/Infobox/pnlInfoBoxWindEdit.xml:8
 msgid "Direction"
@@ -3157,7 +3167,8 @@ msgstr "Újra engedélyezi a légteret?"
 msgid "Acknowledge for day?"
 msgstr "Nyugtázzam egész napra?"
 
-#: src/Dialogs/dlgAirspaceDetails.cpp:88 Data/Dialogs/dlgAirspaceWarnings.xml:9
+#: src/Dialogs/dlgAirspaceDetails.cpp:88
+#: Data/Dialogs/dlgAirspaceWarnings.xml:9
 msgid "Enable"
 msgstr "Újra riaszt"
 
@@ -3500,10 +3511,10 @@ msgid "Invalid"
 msgstr "Érvénytelen"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:228 src/Dialogs/dlgWaypointEdit.cpp:53
-#: Data/Dialogs/dlgAirspaceDetails.xml:8 Data/Dialogs/dlgAirspaceSelect_L.xml:6
-#: Data/Dialogs/dlgAirspaceSelect.xml:8 Data/Dialogs/dlgWaypointEdit_L.xml:6
-#: Data/Dialogs/dlgWaypointEdit.xml:6 Data/Dialogs/dlgWaypointSelect_L.xml:2
-#: Data/Dialogs/dlgWaypointSelect.xml:2
+#: Data/Dialogs/dlgAirspaceDetails.xml:8
+#: Data/Dialogs/dlgAirspaceSelect_L.xml:6 Data/Dialogs/dlgAirspaceSelect.xml:8
+#: Data/Dialogs/dlgWaypointEdit_L.xml:6 Data/Dialogs/dlgWaypointEdit.xml:6
+#: Data/Dialogs/dlgWaypointSelect_L.xml:2 Data/Dialogs/dlgWaypointSelect.xml:2
 msgid "Name"
 msgstr "Név"
 
@@ -3524,7 +3535,8 @@ msgid "Paste"
 msgstr "Beill."
 
 #: src/Dialogs/dlgConfigWaypoints.cpp:53 src/Dialogs/dlgConfigWaypoints.cpp:76
-#: src/Dialogs/dlgConfigWaypoints.cpp:98 src/Dialogs/dlgConfigWaypoints.cpp:115
+#: src/Dialogs/dlgConfigWaypoints.cpp:98
+#: src/Dialogs/dlgConfigWaypoints.cpp:115
 msgid "Waypoints not editable"
 msgstr "Nem szerkeszthető fordulópontok"
 
@@ -3660,7 +3672,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:64
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:151
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:44
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:54
 #, no-c-format
 msgid "Default"
 msgstr "Alapértelmezett"
@@ -3998,164 +4010,296 @@ msgstr "Billentyűzet"
 msgid "HighScore Style"
 msgstr "Betűgörgetés"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:45
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:52
+#, no-c-format
+msgid "Rotate the display on devices that support it."
+msgstr ""
+"Automatikusan elforgatja a kijelző tájolását az ezt támogató készülékeken."
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:55
 #, no-c-format
 msgid "Portrait"
 msgstr "Álló"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:46
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:56
 #, no-c-format
 msgid "Landscape"
 msgstr "Fekvő"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:47
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:57
 #, no-c-format
 msgid "Reverse Portrait"
 msgstr "Fordított portré"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:48
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:58
 #, no-c-format
 msgid "Reverse Landscape"
 msgstr "Fordított tájkép"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:53
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:63
 #, no-c-format
 msgid "8 Top + Bottom (Portrait)"
 msgstr "8 fent + lent (Álló)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:54
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:64
 #, no-c-format
 msgid "8 Bottom (Portrait)"
 msgstr "8 lent (Álló)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:55
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:65
 #, no-c-format
 msgid "8 Bottom + Vario (Portrait)"
 msgstr "8 lent + varió (portré)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:56
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:66
 #, no-c-format
 msgid "8 Top (Portrait)"
 msgstr "8 fent (Álló)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:57
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:67
 #, no-c-format
 msgid "8 Left + Right (Landscape)"
 msgstr "8 balra + jobbra (Fekvő)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:58
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:68
 #, no-c-format
 msgid "8 Left (Landscape)"
 msgstr "8 balra (Fekvő)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:59
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:69
 #, no-c-format
 msgid "8 Right (Landscape)"
 msgstr "8 jobbra (Fekvő)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:60
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:70
 #, no-c-format
 msgid "9 Right + Vario (Landscape)"
 msgstr "9 jobbra + varió (Fekvő)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:61
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:71
 #, no-c-format
 msgid "9 Left + Right (Landscape)"
 msgstr "9 balra + jobbra (tájkép)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:62
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:72
 #, no-c-format
 msgid "5 Right (Square)"
 msgstr "5 jobbra (Négyzetes)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:63
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:73
 #, no-c-format
 msgid "12 Right (Landscape)"
 msgstr "12 jobbra (Fekvő)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:64
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:74
 #, no-c-format
 msgid "12 Bottom (Portrait)"
 msgstr "12 alul (Álló)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:65
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:75
 #, no-c-format
 msgid "12 Top (Portrait)"
 msgstr "12 felül"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:66
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:76
 #, no-c-format
 msgid "24 Right (Landscape)"
 msgstr "24 jobbra (Fekvő)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:114
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:80
+#, no-c-format
+msgid "Choose a location for the FLARM display."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:82
+#, no-c-format
 msgid "Auto (follow infoboxes)"
 msgstr "Automata (kijelzőket követő)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:115
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:83
+#, no-c-format
 msgid "Top Left"
 msgstr "Bal felső"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:116
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
+#, no-c-format
 msgid "Top Right"
 msgstr "Jobb felső"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:117
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:85
+#, no-c-format
 msgid "Bottom Left"
 msgstr "Bal alsó"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:118
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:86
+#, no-c-format
 msgid "Bottom Right"
 msgstr "Jobb alsó"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:119
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:87
+#, no-c-format
 msgid "Centre Top"
 msgstr "Felül, középen"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:120
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:88
+#, no-c-format
 msgid "Centre Bottom"
 msgstr "Alul, középen"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:128
-msgid "Center"
-msgstr "Középen"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:129
-msgid "Topleft"
-msgstr "Balrafent"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:137
-msgid "Full width"
-msgstr "Teljes szélességben"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:138
-msgid "Scaled"
-msgstr "Méretezve"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:139
-msgid "Scaled centered"
-msgstr "Méretezve középen"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:140
-#: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:201
-msgid "Fixed"
-msgstr "Rögzített helyen"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:154
-msgid "Box"
-msgstr "Keret"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:155
-msgid "Tab"
-msgstr "Fül"
-
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:163
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:93
+#, no-c-format
 msgid "Text"
 msgstr "Szöveg"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:164
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:93
+#, no-c-format
+msgid "Show text on tabbed dialogs."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:94
+#, no-c-format
 msgid "Icons"
 msgstr "Ikonok"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:94
+#, no-c-format
+msgid "Show icons on tabbed dialogs."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:99
+#, no-c-format
+msgid "Center"
+msgstr "Középen"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:99
+#, no-c-format
+msgid "Center the status message boxes."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:100
+#, no-c-format
+msgid "Topleft"
+msgstr "Balrafent"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:100
+#, fuzzy, no-c-format
+msgid "Show status message boxes in the top left corner."
+msgstr ""
+"Az üzenetablakok megjelenésének helyét szabályozza, lehet a képernyő közepén "
+"vagy a bal felső sarokban."
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:104
+#, no-c-format
+msgid "Choose the display size of dialogs."
+msgstr "A párbeszédablakok méretét, helyét határozza meg."
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:106
+#, no-c-format
+msgid "Full width"
+msgstr "Teljes szélességben"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:107
+#, no-c-format
+msgid "Scaled"
+msgstr "Méretezve"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:108
+#, no-c-format
+msgid "Scaled centered"
+msgstr "Méretezve középen"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:109
+#: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:201
+#, no-c-format
+msgid "Fixed"
+msgstr "Rögzített helyen"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:114
+#, no-c-format
+msgid "Box"
+msgstr "Keret"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:114
+#, no-c-format
+msgid "Draws boxes around each InfoBox."
+msgstr "Télalap alakú körbefutó keret."
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:115
+#, no-c-format
+msgid "Tab"
+msgstr "Fül"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:115
+#, no-c-format
+msgid "Draws a tab at the top of the InfoBox across the title."
+msgstr "A kijelző felső élére rajzolt fül."
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:136
+msgid "Display orientation"
+msgstr "Képernyő tájolás"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:140
+msgid "InfoBox geometry"
+msgstr "Kijelzők elrendezése"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:141
+msgid ""
+"A list of possible InfoBox layouts. Do some trials to find the best for your "
+"screen size."
+msgstr ""
+"A lehetséges kijelző-elrendezések listája. Végezzen néhány próbát a "
+"képernyőmérethez legalkalmasabb elrendezés megtalálásához."
+
+#. Expert item (TODO)
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:145
+#, fuzzy
+msgid "FLARM display"
+msgstr "Elérhető terület"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:148
+msgid "Tab dialog style"
+msgstr "Füles ablakok stílusa"
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:152
+#, fuzzy
+msgid "Message display"
+msgstr "Elérhető terület"
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:155
+#, fuzzy
+msgid "Dialog size"
+msgstr "Párbeszédablak stílusa"
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:159
+msgid "Inverse InfoBoxes"
+msgstr "Inverz kijelzők"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:159
+msgid "If true, the InfoBoxes are white on black, otherwise black on white."
+msgstr ""
+"Ha igaz, a kijelzők fekete háttéren fehérek, egyébként fehér háttéren "
+"feketék."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:163
+msgid "Colored InfoBoxes"
+msgstr "Színes kijelzők"
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:164
+msgid ""
+"If true, certain InfoBoxes will have coloured text.  For example, the active "
+"waypoint InfoBox will be blue when the glider is above final glide."
+msgstr ""
+"Ha igaz, bizonyos kijelzők felirata színes lesz. Például az aktív "
+"fordulópont kijelzője kék lesz, ha a siklópálya felett vagyunk."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:169
+msgid "InfoBox border"
+msgstr "Kijelző keret"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:44
 #, no-c-format
@@ -4662,44 +4806,44 @@ msgstr "Feladat szerkesztés"
 msgid "Add Turnpoint"
 msgstr "Fordulópont hozzáadása"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:185
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:186
 msgid "Task not saved"
 msgstr "Feladat nincs mentve."
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:197
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:198
 msgid "Load the selected task?"
 msgstr "Betöltsem a kiválasztott feladatot?"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:202
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:237
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:203
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:238
 msgid "Task Browser"
 msgstr "Feladatböngésző"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:226
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:227
 msgid "Can't delete .CUP files"
 msgstr "A .CUP fájl nem törölhető."
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:226
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:227
 msgid "Delete Error"
 msgstr "Törlési hiba"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:232
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:233
 msgid "Delete the selected task?"
 msgstr "Töröljem a kiválasztott feladatot?"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:272
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:273
 msgid "Can't rename .CUP files"
 msgstr "A .CUP fájl nem nevezhető át."
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:272
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:273
 msgid "Rename Error"
 msgstr "Átnevezési hiba"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:335
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:336
 msgid "Create new task?"
 msgstr "Új feladatot hoz létre?"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:335
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:336
 msgid "Task New"
 msgstr "Új feladat"
 
@@ -5123,7 +5267,8 @@ msgstr "Időjárási paraméterek"
 
 #: src/Dialogs/dlgWaypointDetails.cpp:181
 #: src/Dialogs/dlgWaypointDetails.cpp:232
-#: src/Dialogs/dlgWaypointDetails.cpp:265 src/Dialogs/dlgWaypointDetails.cpp:353
+#: src/Dialogs/dlgWaypointDetails.cpp:265
+#: src/Dialogs/dlgWaypointDetails.cpp:353
 msgid "No task defined."
 msgstr "Nincs feladat létrehozva."
 
@@ -5137,21 +5282,25 @@ msgstr "Feladatban kicserél"
 
 #: src/Dialogs/dlgWaypointDetails.cpp:190
 #: src/Dialogs/dlgWaypointDetails.cpp:237
-#: src/Dialogs/dlgWaypointDetails.cpp:270 src/Dialogs/dlgWaypointDetails.cpp:362
+#: src/Dialogs/dlgWaypointDetails.cpp:270
+#: src/Dialogs/dlgWaypointDetails.cpp:362
 msgid "Task would not be valid after the change."
 msgstr "A feladat így érvénytelen lesz."
 
-#: src/Dialogs/dlgWaypointDetails.cpp:241 src/Dialogs/dlgWaypointDetails.cpp:274
+#: src/Dialogs/dlgWaypointDetails.cpp:241
+#: src/Dialogs/dlgWaypointDetails.cpp:274
 msgid "Created Goto Task."
 msgstr ""
 
 #: src/Dialogs/dlgWaypointDetails.cpp:241
 #: src/Dialogs/dlgWaypointDetails.cpp:246
-#: src/Dialogs/dlgWaypointDetails.cpp:274 src/Dialogs/dlgWaypointDetails.cpp:279
+#: src/Dialogs/dlgWaypointDetails.cpp:274
+#: src/Dialogs/dlgWaypointDetails.cpp:279
 msgid "Success"
 msgstr ""
 
-#: src/Dialogs/dlgWaypointDetails.cpp:246 src/Dialogs/dlgWaypointDetails.cpp:279
+#: src/Dialogs/dlgWaypointDetails.cpp:246
+#: src/Dialogs/dlgWaypointDetails.cpp:279
 msgid "Created 2-point task from Goto Task."
 msgstr ""
 
@@ -5176,7 +5325,8 @@ msgid "Remove from task"
 msgstr "Feladatból töröld"
 
 #: src/Dialogs/dlgWaypointDetails.cpp:413
-#: Data/Dialogs/dlgWaypointDetails_L.xml:3 Data/Dialogs/dlgWaypointDetails.xml:3
+#: Data/Dialogs/dlgWaypointDetails_L.xml:3
+#: Data/Dialogs/dlgWaypointDetails.xml:3
 msgid "Waypoint Info"
 msgstr "Fordulópont részletek"
 
@@ -5348,7 +5498,8 @@ msgstr "Poláris W"
 msgid "Rate"
 msgstr "Ráta"
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:37 Data/Dialogs/pnlTaskCalculator.xml:37
+#: Data/Dialogs/pnlTaskCalculator_L.xml:37
+#: Data/Dialogs/pnlTaskCalculator.xml:37
 msgid "Achieved MacCready"
 msgstr "Elért MacCready érték"
 
@@ -5638,7 +5789,8 @@ msgstr "Mintavétel siklásban"
 msgid "Set As New Home"
 msgstr "Legyen ez a bázis"
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:28 Data/Dialogs/pnlTaskCalculator.xml:28
+#: Data/Dialogs/pnlTaskCalculator_L.xml:28
+#: Data/Dialogs/pnlTaskCalculator.xml:28
 msgid ""
 "For AAT tasks, this value tells you how far based on the targets of your "
 "task you will fly relative to the minimum and maximum possible tasks. -100% "
@@ -5676,12 +5828,6 @@ msgstr "Telep kimerült késl."
 msgid "On-Line Contest"
 msgstr "OnLine Verseny"
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:14
-#, fuzzy
-msgid "Flarm display location"
-msgstr "Képernyő tájolás"
-
 #: Data/Dialogs/dlgVario_L.xml:342 Data/Dialogs/dlgVario.xml:343
 msgid "Privacy"
 msgstr "Adatvédelem"
@@ -5705,7 +5851,8 @@ msgstr "Seb. maradék"
 msgid "Circling hi cutoff"
 msgstr "Körözés felső vágás"
 
-#: Data/Dialogs/pnlTaskProperties_L.xml:40 Data/Dialogs/pnlTaskProperties.xml:39
+#: Data/Dialogs/pnlTaskProperties_L.xml:40
+#: Data/Dialogs/pnlTaskProperties.xml:39
 msgid "Sets the behaviour for the current task."
 msgstr "Az aktuális feladatban követendő szabályok."
 
@@ -5774,14 +5921,15 @@ msgstr "Demó"
 msgid "Dialog text"
 msgstr "Párbeszédablakok"
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:45 Data/Dialogs/pnlTaskCalculator.xml:45
+#: Data/Dialogs/pnlTaskCalculator_L.xml:45
+#: Data/Dialogs/pnlTaskCalculator.xml:45
 msgid ""
 "Efficiency of cruise.  100 indicates perfect MacCready performance, greater "
 "than 100 indicates better than MacCready performance is achieved through "
-"flying in streets.  Less than 100 is appropriate if you fly considerably "
-"off-track.  This value estimates your cruise efficiency according to the "
-"current flight history with the set MC value.  Calculation begins after task "
-"is started."
+"flying in streets.  Less than 100 is appropriate if you fly considerably off-"
+"track.  This value estimates your cruise efficiency according to the current "
+"flight history with the set MC value.  Calculation begins after task is "
+"started."
 msgstr ""
 "A siklás hatékonysága. A 100 tökéletes MacCready teljesítmény. A 100-nál "
 "nagyobb a MacCready-nél jobb teljesítményt jelent és felhőutakon lehet "
@@ -5820,8 +5968,8 @@ msgid ""
 "(monochrome) style, or orange. The rendering differs for landable field and "
 "airport. All styles mark the waypoints within reach green."
 msgstr ""
-"Három stílus létezik: lila pontok (WinPilot stílus), kontrasztos "
-"(fekete-fehér) vagy narancs. A leszállóhelyek másképp jelennek meg mint a "
+"Három stílus létezik: lila pontok (WinPilot stílus), kontrasztos (fekete-"
+"fehér) vagy narancs. A leszállóhelyek másképp jelennek meg mint a "
 "repülőterek. Mindegyik stílusban az elérhető helyeket zöld színnel keretezi."
 
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:30
@@ -5831,7 +5979,8 @@ msgstr ""
 "A másodlagos légtérfájl neve. Ezzel egy versenyen időleges légtereket adhat "
 "a többihez."
 
-#: Data/Dialogs/pnlTaskProperties_L.xml:40 Data/Dialogs/pnlTaskProperties.xml:39
+#: Data/Dialogs/pnlTaskProperties_L.xml:40
+#: Data/Dialogs/pnlTaskProperties.xml:39
 msgid "Task type"
 msgstr "Feladat típus"
 
@@ -5949,7 +6098,8 @@ msgstr ""
 msgid "Local time"
 msgstr "Helyi idő"
 
-#: Data/Dialogs/pnlTaskProperties_L.xml:36 Data/Dialogs/pnlTaskProperties.xml:35
+#: Data/Dialogs/pnlTaskProperties_L.xml:36
+#: Data/Dialogs/pnlTaskProperties.xml:35
 msgid "FAI start / finish rules"
 msgstr "FAI start/cél szabályok"
 
@@ -5970,12 +6120,12 @@ msgstr "Topográfia"
 #: Data/Dialogs/Configuration/LoggerConfigPanel.xml:34
 msgid ""
 "This determines whether the logger uses the short IGC file name or the long "
-"IGC file name. Example short name (81HXABC1.IGC), long name "
-"(2008-01-18-XXX-ABC-01.IGC)."
+"IGC file name. Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-"
+"ABC-01.IGC)."
 msgstr ""
 "Ez határozza meg, hogy a logger a rövid vagy a hosszú IGC fájlnevet "
-"használja. Példa rövid fájlnév: (81HXABC1.IGC), hosszú fájlnév: "
-"(2008-01-18-XXX-ABC-01.IGC)"
+"használja. Példa rövid fájlnév: (81HXABC1.IGC), hosszú fájlnév: (2008-01-18-"
+"XXX-ABC-01.IGC)"
 
 #: Data/Dialogs/dlgSwitches.xml:3
 msgid "Switches"
@@ -6141,11 +6291,6 @@ msgstr "Körözési holtsáv típusa"
 msgid "Insert In Task"
 msgstr "Feladatba beszúr"
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:29
-msgid "Determines display size of dialogs."
-msgstr "A párbeszédablakok méretét, helyét határozza meg."
-
 #: Data/Dialogs/dlgAirspaceWarnings.xml:6
 msgid "ACK Warn"
 msgstr "1x nyugta"
@@ -6187,7 +6332,8 @@ msgstr "Seb ff"
 msgid "Borgelt"
 msgstr "Borgelt"
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:45 Data/Dialogs/pnlTaskCalculator.xml:45
+#: Data/Dialogs/pnlTaskCalculator_L.xml:45
+#: Data/Dialogs/pnlTaskCalculator.xml:45
 msgid "Cruise efficiency"
 msgstr "Siklás hatásfoka"
 
@@ -6196,12 +6342,6 @@ msgstr "Siklás hatásfoka"
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:8
 msgid "Polar V"
 msgstr "Poláris V"
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:4
-msgid "Rotate the display on devices that support it."
-msgstr ""
-"Automatikusan elforgatja a kijelző tájolását az ezt támogató készülékeken."
 
 #: Data/Dialogs/dlgVario_L.xml:100 Data/Dialogs/dlgVario.xml:101
 msgid "Variometer low pass filter time constant in circling mode."
@@ -6215,13 +6355,6 @@ msgstr "Sürgős min. hangerő"
 #: Data/Dialogs/dlgPlanePolar_L.xml:53 Data/Dialogs/dlgPlanePolar.xml:65
 msgid "Import"
 msgstr "Import"
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:19
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:19
-msgid "Determines whether tabbed dialogs use text or icons"
-msgstr ""
-"Meghatározza, hogy a többfüles dialógusablakok szöveget vagy ikonokat "
-"használjanak."
 
 #: Data/Dialogs/dlgVario_L.xml:92 Data/Dialogs/dlgVario.xml:93
 msgid "Cruise volume"
@@ -6272,7 +6405,8 @@ msgstr "V ív"
 msgid "Topography labels, normal"
 msgstr "Topográfiai címkék"
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:22 Data/Dialogs/pnlTaskCalculator.xml:22
+#: Data/Dialogs/pnlTaskCalculator_L.xml:22
+#: Data/Dialogs/pnlTaskCalculator.xml:22
 msgid "Set MacCready"
 msgstr "MacCready érték"
 
@@ -6530,16 +6664,11 @@ msgid ""
 "[AVERAGE]: State HIGH if gross vario value is greater than average gross "
 "vario value."
 msgstr ""
-"Az összehasonlítás módszere az emelkedés fázisának megállapítására "
-"(MAGAS/ALACSONY).\n"
+"Az összehasonlítás módszere az emelkedés fázisának megállapítására (MAGAS/"
+"ALACSONY).\n"
 "[NINCS]: ALACSONY állapot letiltva\n"
 "[MACCREADY]: MAGAS fázis, ha az összvarió nagyobb mint a MC érték.\n"
 "[ÁTLAG]: MAGAS fázis, ha az összvarió nagyobb mint az átlagos varió érték."
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:34
-msgid "Inverse InfoBoxes"
-msgstr "Inverz kijelzők"
 
 #: Data/Dialogs/dlgVario_L.xml:439 Data/Dialogs/dlgVario.xml:440
 msgid "LED bright"
@@ -6596,11 +6725,6 @@ msgstr "Keresés"
 #: Data/Dialogs/dlgTaskPoint_L.xml:19 Data/Dialogs/dlgTaskPoint.xml:15
 msgid "Change Type"
 msgstr "Típusváltás"
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:44
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:44
-msgid "InfoBox border"
-msgstr "Kijelző keret"
 
 #: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:11
 #: Data/Dialogs/Configuration/RouteConfigPanel.xml:11
@@ -6698,7 +6822,8 @@ msgstr "Átesésjelző nyomásszonda csatlakozása"
 
 #: Data/Dialogs/dlgComboPicker_L.xml:8 Data/Dialogs/dlgComboPicker.xml:7
 #: Data/Dialogs/dlgTaskPointType_L.xml:4 Data/Dialogs/dlgTaskPointType.xml:4
-#: Data/Dialogs/dlgWaypointSelect_L.xml:17 Data/Dialogs/dlgWaypointSelect.xml:19
+#: Data/Dialogs/dlgWaypointSelect_L.xml:17
+#: Data/Dialogs/dlgWaypointSelect.xml:19
 msgid "Select"
 msgstr "Kiválaszt"
 
@@ -6754,15 +6879,6 @@ msgstr ""
 #: Data/Dialogs/dlgStatusSystem.xml:7 Data/Dialogs/pnlStatusSystem.xml:7
 msgid "FLARM"
 msgstr "FLARM"
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:9
-msgid ""
-"A list of possible InfoBox layouts. Do some trials to find the best for your "
-"screen size."
-msgstr ""
-"A lehetséges kijelző-elrendezések listája. Végezzen néhány próbát a "
-"képernyőmérethez legalkalmasabb elrendezés megtalálásához."
 
 #: Data/Dialogs/dlgTaskPointType_L.xml:3 Data/Dialogs/dlgTaskPointType.xml:3
 msgid "Task Point Type"
@@ -6850,11 +6966,6 @@ msgstr "Érvényes cél"
 #: Data/Dialogs/dlgVario_L.xml:16 Data/Dialogs/dlgVario.xml:17
 msgid "Pitot port"
 msgstr "Pitotcső port"
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:19
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:19
-msgid "Tab dialog style"
-msgstr "Füles ablakok stílusa"
 
 #: Data/Dialogs/pnlTaskProperties_L.xml:11
 #: Data/Dialogs/pnlTaskProperties.xml:10
@@ -6955,7 +7066,8 @@ msgstr "Reptér"
 msgid "Climb fast trigger"
 msgstr "Emelkedés gyors érzékelő"
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:22 Data/Dialogs/pnlTaskCalculator.xml:22
+#: Data/Dialogs/pnlTaskCalculator_L.xml:22
+#: Data/Dialogs/pnlTaskCalculator.xml:22
 msgid ""
 "Adjusts MC value used in the calculator.  Use this to determine the effect "
 "on estimated task time due to changes in conditions.  This value will not "
@@ -7083,20 +7195,6 @@ msgstr "Terep feletti bizt. mag."
 msgid "Headset threshold"
 msgstr "Fülhallgató hiszterézis"
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:14
-msgid "Choose a location for the flarm display"
-msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:39
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:39
-msgid ""
-"If true, certain InfoBoxes will have coloured text.  For example, the active "
-"waypoint infobox will be blue when the glider is above final glide."
-msgstr ""
-"Ha igaz, bizonyos kijelzők felirata színes lesz. Például az aktív "
-"fordulópont kijelzője kék lesz, ha a siklópálya felett vagyunk."
-
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:22
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:22
 msgid "Terrain colors"
@@ -7169,11 +7267,6 @@ msgstr "Szakértő"
 #: Data/Dialogs/dlgTarget_L.xml:38 Data/Dialogs/dlgTarget.xml:32
 msgid "Optimized"
 msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:29
-msgid "Dialog style"
-msgstr "Párbeszédablak stílusa"
 
 #: Data/Dialogs/dlgStatusAircraft.xml:4 Data/Dialogs/dlgWaypointEdit_L.xml:10
 #: Data/Dialogs/pnlStatusFlight.xml:5
@@ -7352,8 +7445,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid ""
-"Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file "
-"(.nmea), or if blank, runs the demo."
+"Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
+"nmea), or if blank, runs the demo."
 msgstr ""
 "A lejátszandó fájl neve. Lehet IGC fájl (.igc), nyers NMEA naplófájl (.nmea) "
 "vagy üresen hagyható, ami a bemutató futását eredményezi."
@@ -7375,13 +7468,6 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:7
 msgid "Callsign"
 msgstr ""
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:34
-msgid "If true, the InfoBoxes are white on black, otherwise black on white."
-msgstr ""
-"Ha igaz, a kijelzők fekete háttéren fehérek, egyébként fehér háttéren "
-"feketék."
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "New waypoint"
@@ -7596,16 +7682,17 @@ msgstr "XCSoar"
 msgid "Units used for altitude and heights."
 msgstr "A magasságokhoz és szintekhez használt mértékegység."
 
+#: Data/Dialogs/dlgStatusTask.xml:6 Data/Dialogs/pnlStatusTask.xml:6
+msgid "Remaining time"
+msgstr "Hátralévő idő"
+
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:30
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:30
 msgid "More airspaces"
 msgstr "Alkalmi légterek"
 
-#: Data/Dialogs/dlgStatusTask.xml:6 Data/Dialogs/pnlStatusTask.xml:6
-msgid "Remaining time"
-msgstr "Hátralévő idő"
-
-#: Data/Dialogs/dlgAirspaceColours_L.xml:3 Data/Dialogs/dlgAirspaceColours.xml:3
+#: Data/Dialogs/dlgAirspaceColours_L.xml:3
+#: Data/Dialogs/dlgAirspaceColours.xml:3
 msgid "Select Colour"
 msgstr "Válassz színt"
 
@@ -7656,11 +7743,6 @@ msgstr "A siklás közbeni sebesség utasításokhoz használt átlagoló üteme
 #: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:19
 msgid "Menu timeout"
 msgstr "Menü időkorlát"
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:4
-msgid "Display orientation"
-msgstr "Képernyő tájolás"
 
 #: Data/Dialogs/dlgTaskPoint_L.xml:47 Data/Dialogs/dlgTaskPoint.xml:43
 msgid "Inner radius"
@@ -7740,15 +7822,6 @@ msgstr "Vega"
 msgid "Reach polar"
 msgstr "Elérhető táv polárisa"
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:24
-msgid ""
-"Defines the alignment of the status message box, either centered or in the "
-"top left corner."
-msgstr ""
-"Az üzenetablakok megjelenésének helyét szabályozza, lehet a képernyő közepén "
-"vagy a bal felső sarokban."
-
 #: Data/Dialogs/dlgTextEntry.xml:3
 msgid "Edit text"
 msgstr "Szöveg szerkesztése"
@@ -7761,11 +7834,6 @@ msgstr "MacCready érték kijelzése"
 #: Data/Dialogs/dlgVario_L.xml:126 Data/Dialogs/dlgVario.xml:127
 msgid "Cruise deadband type"
 msgstr "Siklás holtsáv típusa"
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:24
-msgid "Msg. window"
-msgstr "Üzenetablak"
 
 #: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:16
 #: Data/Dialogs/Configuration/RouteConfigPanel.xml:16
@@ -7827,11 +7895,6 @@ msgstr ""
 "255-re az automatikus felismeréshez; egyébként a 1Wire eszköz azonosító "
 "használható."
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:9
-msgid "Infobox geometry"
-msgstr "Kijelzők elrendezése"
-
 #: Data/Dialogs/dlgVoice.xml:30
 msgid "In sector"
 msgstr "Szektorban"
@@ -7871,7 +7934,8 @@ msgstr "Sodrás"
 msgid "Dry Mass"
 msgstr "Száraz tömeg"
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:41 Data/Dialogs/pnlTaskCalculator.xml:41
+#: Data/Dialogs/pnlTaskCalculator_L.xml:41
+#: Data/Dialogs/pnlTaskCalculator.xml:41
 msgid "Achieved speed"
 msgstr "Elért sebesség"
 
@@ -7910,7 +7974,8 @@ msgstr ""
 msgid "Start radial"
 msgstr "Start radiál"
 
-#: Data/Dialogs/pnlTaskProperties_L.xml:36 Data/Dialogs/pnlTaskProperties.xml:35
+#: Data/Dialogs/pnlTaskProperties_L.xml:36
+#: Data/Dialogs/pnlTaskProperties.xml:35
 msgid ""
 "If enabled, has no max start height or max start speed and requires the "
 "minimum height above ground for finish to be greater than 1000m below the "
@@ -7957,11 +8022,6 @@ msgstr ""
 msgid "Save"
 msgstr "Mentés"
 
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:39
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:39
-msgid "Colored InfoBoxes"
-msgstr "Színes kijelzők"
-
 #: Data/Dialogs/dlgTextEntry.xml:7
 msgid "A+"
 msgstr "A+"
@@ -7980,7 +8040,8 @@ msgstr "Emelésérzékelő siklásban"
 msgid "QNH"
 msgstr "QNH"
 
-#: Data/Dialogs/dlgSimulatorPrompt_L.xml:4 Data/Dialogs/dlgSimulatorPrompt.xml:4
+#: Data/Dialogs/dlgSimulatorPrompt_L.xml:4
+#: Data/Dialogs/dlgSimulatorPrompt.xml:4
 msgid "What do you want to do?"
 msgstr "Mit szeretne tenni?"
 
@@ -8051,7 +8112,8 @@ msgstr "Szerkeszt"
 msgid "Slope shading"
 msgstr "Lejtők árnyalása"
 
-#: Data/Dialogs/pnlTaskCalculator_L.xml:28 Data/Dialogs/pnlTaskCalculator.xml:28
+#: Data/Dialogs/pnlTaskCalculator_L.xml:28
+#: Data/Dialogs/pnlTaskCalculator.xml:28
 msgid "AAT range"
 msgstr "HT táv"
 
@@ -8093,7 +8155,8 @@ msgid "Append To Task"
 msgstr "Feladathoz illeszt"
 
 #: Data/Dialogs/dlgStatusTask.xml:8 Data/Dialogs/pnlStatusTask.xml:7
-#: Data/Dialogs/pnlTaskCalculator_L.xml:18 Data/Dialogs/pnlTaskCalculator.xml:18
+#: Data/Dialogs/pnlTaskCalculator_L.xml:18
+#: Data/Dialogs/pnlTaskCalculator.xml:18
 msgid "Task distance"
 msgstr "Feladat távolság"
 
@@ -8135,11 +8198,11 @@ msgstr "Repgép/szél sebesség"
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:11
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:11
 msgid ""
-"Primary waypoints file.  Supported file types are Cambridge/WinPilot files "
-"(.dat), Zander files (.wpz) or SeeYou files (.cup)."
+"Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
+"dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
-"Elsődleges fordulópont fájl. A támogatott formátumok: Cambridge/WinPilot "
-"(.dat), Zander (.wpz) vagy SeeYou (.cup)."
+"Elsődleges fordulópont fájl. A támogatott formátumok: Cambridge/WinPilot (."
+"dat), Zander (.wpz) vagy SeeYou (.cup)."
 
 #: Data/Dialogs/dlgVario_L.xml:66 Data/Dialogs/dlgVario.xml:67
 msgid ""
@@ -8149,7 +8212,8 @@ msgstr ""
 "Az összenergia számításokban felhasznált dinamikus nyomásra alkalmazott "
 "kalibrációs tényező."
 
-#: Data/Dialogs/dlgConfigWaypoints_L.xml:3 Data/Dialogs/dlgConfigWaypoints.xml:3
+#: Data/Dialogs/dlgConfigWaypoints_L.xml:3
+#: Data/Dialogs/dlgConfigWaypoints.xml:3
 msgid "Waypoints Editor"
 msgstr "Fordulópontok kezelése"
 
@@ -8160,17 +8224,6 @@ msgstr "Futó ki késleltetés"
 #: Data/Dialogs/dlgVario_L.xml:320
 msgid "Max. reported Circling"
 msgstr "Max jelentett Körözés"
-
-#: Data/Dialogs/Configuration/LayoutConfigPanel_L.xml:44
-#: Data/Dialogs/Configuration/LayoutConfigPanel.xml:44
-msgid ""
-"Two styles for infobox borders are available:\n"
-"[Box] Draws boxes around each infobox.\n"
-"[Tab] Draws a tab at the top of the infobox across the title."
-msgstr ""
-"A kijelzőknek kétfajta kerete lehet:\n"
-"[DOBOZ] Télalap alakú körbefutó keret.\n"
-"[FÜL] A kijelző felső élére rajzolt fül."
 
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:7
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:22
@@ -8212,8 +8265,8 @@ msgstr "Műholdak"
 msgid ""
 "Determines sorting of alternates in the alternates dialog and in abort "
 "mode:\n"
-"[Simple] The alternates will only be sorted by waypoint type "
-"(airport/outlanding field) and arrival height.\n"
+"[Simple] The alternates will only be sorted by waypoint type (airport/"
+"outlanding field) and arrival height.\n"
 "[Task] The sorting will also take the current task direction into account.\n"
 "[Home] The sorting will try to find landing options in the current direction "
 "to the configured home waypoint."
@@ -8229,6 +8282,10 @@ msgstr ""
 msgid "Flarm Lock"
 msgstr "Flarm kapocs"
 
+#: Data/Dialogs/dlgVario_L.xml:96 Data/Dialogs/dlgVario.xml:97
+msgid "Base frequency"
+msgstr "Alapfrekvencia"
+
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:16
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:16
 msgid ""
@@ -8237,10 +8294,6 @@ msgid ""
 msgstr ""
 "Másodlagos fordulópont fájl. Ezzel egy versenyen új fordulópontokat adhat a "
 "többihez."
-
-#: Data/Dialogs/dlgVario_L.xml:96 Data/Dialogs/dlgVario.xml:97
-msgid "Base frequency"
-msgstr "Alapfrekvencia"
 
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:28
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:28
@@ -8329,8 +8382,8 @@ msgstr "H."
 #: Data/Dialogs/dlgBasicSettings.xml:7
 msgid ""
 "Ballast of the glider.  Increase this value if the pilot/cockpit load is "
-"greater than the reference pilot weight of the glide polar (typically 75kg). "
-" Press ENTER on this field to toggle count-down of the ballast volume "
+"greater than the reference pilot weight of the glide polar (typically "
+"75kg).  Press ENTER on this field to toggle count-down of the ballast volume "
 "according to the dump rate specified in the configuration settings."
 msgstr ""
 "A gép vízballasztja. Növelje ezt az értéket, ha a pilóta/csomag terhelés "
@@ -8775,6 +8828,37 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+
+#, fuzzy
+#~ msgid "FLARM location"
+#~ msgstr "Hely"
+
+#, fuzzy
+#~ msgid "Message location"
+#~ msgstr ""
+#~ "Üzenet\n"
+#~ "ismét"
+
+#, fuzzy
+#~ msgid "Flarm display location"
+#~ msgstr "Képernyő tájolás"
+
+#~ msgid "Determines whether tabbed dialogs use text or icons"
+#~ msgstr ""
+#~ "Meghatározza, hogy a többfüles dialógusablakok szöveget vagy ikonokat "
+#~ "használjanak."
+
+#~ msgid "Msg. window"
+#~ msgstr "Üzenetablak"
+
+#~ msgid ""
+#~ "Two styles for infobox borders are available:\n"
+#~ "[Box] Draws boxes around each infobox.\n"
+#~ "[Tab] Draws a tab at the top of the infobox across the title."
+#~ msgstr ""
+#~ "A kijelzőknek kétfajta kerete lehet:\n"
+#~ "[DOBOZ] Télalap alakú körbefutó keret.\n"
+#~ "[FÜL] A kijelző felső élére rajzolt fül."
 
 #~ msgid "Page 8"
 #~ msgstr "8. oldal"
@@ -9556,9 +9640,9 @@ msgstr ""
 
 #~ msgid ""
 #~ "option, if enabled sets the clock of the computer to the GPS time once a "
-#~ "fix is set.  This is only necessary if your computer does not have a "
-#~ "real-time clock with battery backup or your computer frequently runs out "
-#~ "of battery power or otherwise loses time."
+#~ "fix is set.  This is only necessary if your computer does not have a real-"
+#~ "time clock with battery backup or your computer frequently runs out of "
+#~ "battery power or otherwise loses time."
 #~ msgstr ""
 #~ "A számítógép óráját a GPS által vett pontos időhöz igazítja. Erre csak "
 #~ "akkor van szükség, ha a számítógépnek nincs saját telepről táplált órája "

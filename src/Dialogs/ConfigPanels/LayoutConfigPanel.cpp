@@ -142,14 +142,14 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           info_box_geometry_list, InfoBoxLayout::InfoBoxGeometry);
 
   // Expert item (TODO)
-  AddEnum(_("FLARM location"), _T(""),
+  AddEnum(_("FLARM display"), _T(""),
           flarm_display_location_list, ui_settings.flarm_location);
 
   AddEnum(_("Tab dialog style"), _T(""),
           tabdialog_style_list, CommonInterface::GetUISettings().dialog.tab_style);
 
   // Expert item
-  AddEnum(_("Message location"), _T(""),
+  AddEnum(_("Message display"), _T(""),
           popup_msg_position_list, ui_settings.popup_message_position);
           // Expert item
   AddEnum(_("Dialog size"), _T(""),
