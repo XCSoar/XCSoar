@@ -142,31 +142,15 @@ TabBarControl::SetCurrentPage(unsigned i)
 void
 TabBarControl::NextPage()
 {
-  if (buttons.size() < 2)
-    return;
-
-  assert(GetCurrentPage() < buttons.size());
-
-  if (!HasPointer() && (GetCurrentPage()+1 >= buttons.size()))
-    // prevent wraparound
-    return;
-
-  SetCurrentPage((GetCurrentPage() + 1) % buttons.size());
+  if (pager.Next(HasPointer()) && page_flipped_callback != NULL)
+    page_flipped_callback();
 }
 
 void
 TabBarControl::PreviousPage()
 {
-  if (buttons.size() < 2)
-    return;
-
-  assert(GetCurrentPage() < buttons.size());
-
-  if (!HasPointer() && (GetCurrentPage() == 0))
-    // prevent wraparound
-    return;
-
-  SetCurrentPage((GetCurrentPage() + buttons.size() - 1) % buttons.size());
+  if (pager.Previous(HasPointer()) && page_flipped_callback != NULL)
+    page_flipped_callback();
 }
 
 const PixelRect &
