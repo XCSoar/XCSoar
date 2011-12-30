@@ -195,6 +195,11 @@ MacCready::solve_glide(const GlideState &task, const fixed Vset, const fixed S,
   result.altitude_difference -= result.height_glide;
   result.distance_to_final = fixed_zero;
 
+  const fixed inv_mc = glide_polar.GetInvMC();
+  if(positive(inv_mc))
+    // equivalent time to gain the height that was used
+    result.time_virtual = result.height_glide * inv_mc;
+
   return result;
 }
 
@@ -260,7 +265,7 @@ MacCready::solve(const GlideState &task) const
 }
 
 /**
- * Class used to find VOpt for a MacCready setting, for final glide
+ * Class used to find VOpt to optimize glide distance, for final glide
  * calculations.  Intended to be used temporarily only.
  */
 class MacCreadyVopt: public ZeroFinder
@@ -301,13 +306,13 @@ public:
    *   fail with too small df/dx
    *
    * @param V cruise true air speed (m/s)
-   * @return Virtual speed (m/s) of flight
+   * @return Inverse LD
    */
   fixed
   f(const fixed V)
   {
     res = mac.solve_glide(task, V, allow_partial);
-    return res.CalcVInvSpeed(inv_mc) * fixed_360;
+    return res.height_glide / res.vector.Distance * fixed_360;
   }
   
   /**
@@ -325,6 +330,9 @@ public:
 GlideResult
 MacCready::optimise_glide(const GlideState &task, const bool allow_partial) const
 {
+  if (positive(glide_polar.GetMC()))
+    return solve_glide(task, glide_polar.GetVBestLD(), allow_partial);
+
   MacCreadyVopt mcvopt(task, *this, glide_polar.GetInvMC(),
                        glide_polar.GetVMin(), glide_polar.GetVMax(),
                        allow_partial);

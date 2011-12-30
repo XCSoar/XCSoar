@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.2.5 - not yet released
 * calculations
   - fix time calculation when goal is above aircraft
+  - fix speed to fly when goal is below aircraft
   - fix minor OLC miscalculation
   - enable the logger ID on all platforms
   - prevent spikes and jumps during IGC replay
