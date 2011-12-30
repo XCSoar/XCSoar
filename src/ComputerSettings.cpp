@@ -30,7 +30,7 @@ void
 WindSettings::SetDefaults()
 {
   circling_wind = true;
-  zig_zag_wind = false;
+  zig_zag_wind = true;
   use_external_wind = true;
   manual_wind_available.Clear();
 }
