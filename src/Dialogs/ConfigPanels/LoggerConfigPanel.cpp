@@ -23,63 +23,81 @@ Copyright_License {
 
 #include "LoggerConfigPanel.hpp"
 #include "Form/Util.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Profile.hpp"
+#include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "Plane/PlaneGlue.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
 
-class LoggerConfigPanel : public XMLWidget {
+enum ControlIndex {
+  LoggerTimeStepCruise,
+  LoggerTimeStepCircling,
+  PilotName,
+  AircraftType,
+  AircraftReg,
+  CompetitionID,
+  LoggerID,
+  LoggerShortName,
+  DisableAutoLogger
+};
+
+class LoggerConfigPanel : public RowFormWidget {
+public:
+  LoggerConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
 };
-
-void
-LoggerConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
-
-void
-LoggerConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
 
 void
 LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent,
-             Layout::landscape ? _T("IDR_XML_LOGGERCONFIGPANEL") :
-                               _T("IDR_XML_LOGGERCONFIGPANEL_L"));
-
-  const ComputerSettings &settings_computer =
-    CommonInterface::GetComputerSettings();
+  const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
   const Plane &plane = settings_computer.plane;
 
-  LoadFormProperty(form, _T("prpLoggerTimeStepCruise"),
-                   settings_computer.logger_time_step_cruise);
+  RowFormWidget::Prepare(parent, rc);
 
-  LoadFormProperty(form, _T("prpLoggerTimeStepCircling"),
-                   settings_computer.logger_time_step_circling);
+  // Expert item (TODO)
+  AddInteger(_("Time step cruise"),
+           _("This is the time interval between logged points when not circling."),
+           _T("%u s"), _T("%u"), 1, 30, 1,
+           settings_computer.logger_time_step_cruise);
 
-  LoadFormPropertyFromProfile(form, _T("PilotName"), szProfilePilotName);
-  LoadFormProperty(form, _T("AircraftType"), plane.type);
-  LoadFormProperty(form, _T("AircraftReg"), plane.registration);
-  LoadFormProperty(form, _T("CompetitionID"), plane.competition_id);
-  LoadFormPropertyFromProfile(form, _T("LoggerID"), szProfileLoggerID);
+  // Expert item
+  AddInteger(_("Time step circling"),
+          _("This is the time interval between logged points when circling."),
+          _T("%u s"), _T("%u"),  1, 30, 1,
+          settings_computer.logger_time_step_circling);
 
-  LoadFormProperty(form, _T("prpLoggerShortName"),
-                   settings_computer.logger_short_name);
+  TCHAR tmp_text[100];
+  Profile::Get(szProfilePilotName, tmp_text, 100);
+  AddText(_("Pilot name"), _T(""), tmp_text);
 
-  LoadFormProperty(form, _T("prpDisableAutoLogger"),
-                   !settings_computer.auto_logger_disabled);
+  AddText(_("Aircraft type"), _T(""), plane.type);
+  AddText(_("Aircraft reg."), _T(""), plane.registration);
+  AddText(_("Competition ID"), _T(""), plane.competition_id);
+
+  Profile::Get(szProfileLoggerID, tmp_text, 100);
+  AddText(_("Logger ID"), _T(""), tmp_text);
+
+  // Expert item
+  AddBoolean(_("Short file name"),
+             _("This determines whether the logger uses the short IGC file name or the "
+                 "long IGC file name. Example short name (81HXABC1.IGC), long name "
+                 "(2008-01-18-XXX-ABC-01.IGC)."),
+             settings_computer.logger_short_name);
+
+  // Expert item
+  AddBoolean(_("Auto. logger"),
+             _("Enables the automatic starting and stopping of logger on takeoff and landing "
+                 "respectively. Disable when flying paragliders."),
+             !settings_computer.auto_logger_disabled);
 }
 
 bool
@@ -87,33 +105,34 @@ LoggerConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
 
-  ComputerSettings &settings_computer =
-    XCSoarInterface::SetComputerSettings();
+  ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   Plane &plane = settings_computer.plane;
 
-  changed |= SaveFormProperty(form, _T("prpLoggerTimeStepCruise"),
-                              szProfileLoggerTimeStepCruise,
-                              settings_computer.logger_time_step_cruise);
+  unsigned int tmp_value = settings_computer.logger_time_step_cruise;
+  changed |= SaveValue(LoggerTimeStepCruise, szProfileLoggerTimeStepCruise, tmp_value);
+  settings_computer.logger_time_step_cruise = tmp_value;
 
-  changed |= SaveFormProperty(form, _T("prpLoggerTimeStepCircling"),
-                              szProfileLoggerTimeStepCircling,
-                              settings_computer.logger_time_step_circling);
+  tmp_value = settings_computer.logger_time_step_circling;
+  changed |= SaveValue(LoggerTimeStepCircling, szProfileLoggerTimeStepCircling, tmp_value);
+  settings_computer.logger_time_step_circling = tmp_value;
 
-  changed |= SaveFormPropertyToProfile(form, _T("PilotName"),
-                                       szProfilePilotName);
-  changed |= SaveFormProperty(form, _T("AircraftType"), plane.type);
-  changed |= SaveFormProperty(form, _T("AircraftReg"), plane.registration);
-  changed |= SaveFormProperty(form, _T("CompetitionID"), plane.competition_id);
-  changed |= SaveFormPropertyToProfile(form, _T("LoggerID"), szProfileLoggerID);
+  TCHAR tmp_text[100];
+  Profile::Get(szProfilePilotName, tmp_text, 100);
+  changed |= SaveValue(PilotName, szProfilePilotName, tmp_text, 100);
 
-  changed |= SaveFormProperty(form, _T("prpLoggerShortName"),
-                              szProfileLoggerShort,
-                              settings_computer.logger_short_name);
+  changed |= SaveValue(AircraftType, plane.type.buffer(), plane.type.MAX_SIZE);
+  changed |= SaveValue(AircraftReg, plane.registration.buffer(), plane.registration.MAX_SIZE);
+  changed |= SaveValue(CompetitionID, plane.competition_id.buffer(), plane.competition_id.MAX_SIZE);
+
+  Profile::Get(szProfileLoggerID, tmp_text, 100);
+  changed |= SaveValue(LoggerID, szProfileLoggerID, tmp_text, 100);
+
+  changed |= SaveValue(LoggerShortName, szProfileLoggerShort,
+                       settings_computer.logger_short_name);
 
   /* GUI label is "Enable Auto Logger" */
-  changed |= SaveFormPropertyNegated(form, _T("prpDisableAutoLogger"),
-                                     szProfileDisableAutoLogger,
-                                     settings_computer.auto_logger_disabled);
+  changed |= SaveValue(DisableAutoLogger, szProfileDisableAutoLogger,
+                       settings_computer.auto_logger_disabled, true);
 
   if (changed)
     PlaneGlue::ToProfile(settings_computer.plane);

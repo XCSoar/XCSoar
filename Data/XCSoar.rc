@@ -292,8 +292,6 @@ IDR_XML_INFOBOXESCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Confi
 IDR_XML_INFOBOXESCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/InfoBoxesConfigPanel_L.xml.gz"
 IDR_XML_INTERFACECONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/InterfaceConfigPanel.xml.gz"
 IDR_XML_INTERFACECONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/InterfaceConfigPanel_L.xml.gz"
-IDR_XML_LOGGERCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/LoggerConfigPanel.xml.gz"
-IDR_XML_LOGGERCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/LoggerConfigPanel_L.xml.gz"
 IDR_XML_POLARCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/PolarConfigPanel.xml.gz"
 IDR_XML_POLARCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/PolarConfigPanel_L.xml.gz"
 IDR_XML_ROUTECONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/RouteConfigPanel.xml.gz"
