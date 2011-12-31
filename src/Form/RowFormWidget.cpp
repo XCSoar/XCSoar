@@ -29,6 +29,7 @@ Copyright_License {
 #include "DataField/Integer.hpp"
 #include "DataField/Float.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/String.hpp"
 #include "Language/Language.hpp"
 #include "Profile/Profile.hpp"
 #include "Units/Units.hpp"
@@ -192,6 +193,18 @@ RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
   return edit;
 }
 
+WndProperty *
+RowFormWidget::AddText(const TCHAR *label, const TCHAR *help,
+                       const TCHAR *content, bool editable,
+                       DataField::DataAccessCallback_t callback)
+{
+  WndProperty *edit = Add(label, help);
+  DataFieldString *df = new DataFieldString(content, callback);
+
+  edit->SetDataField(df);
+  return edit;
+}
+
 bool
 RowFormWidget::GetValueBoolean(unsigned i) const
 {
@@ -217,9 +230,11 @@ RowFormWidget::GetValueFloat(unsigned i) const
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, bool &value) const
+RowFormWidget::SaveValue(unsigned i, bool &value, bool negated) const
 {
   bool new_value = GetValueBoolean(i);
+  if (negated)
+    new_value = !new_value;
   if (new_value == value)
     return false;
 
@@ -264,9 +279,20 @@ RowFormWidget::SaveValue(unsigned i, TCHAR *string, size_t max_size) const
 
 bool
 RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
-                         bool &value) const
+                         TCHAR *string, size_t max_size) const
 {
-  if (!SaveValue(i, value))
+  if (!SaveValue(i, string, max_size))
+    return false;
+
+  Profile::Set(registry_key, string);
+  return true;
+}
+
+bool
+RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
+                         bool &value, bool negated) const
+{
+  if (!SaveValue(i, value, negated))
     return false;
 
   Profile::Set(registry_key, value);

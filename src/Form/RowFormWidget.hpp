@@ -89,6 +89,11 @@ public:
                        const StaticEnumChoice *list, unsigned value=0,
                        DataField::DataAccessCallback_t callback=NULL);
 
+  WndProperty *AddText(const TCHAR *label, const TCHAR *help,
+                       const TCHAR *content, bool editable=true,
+                       DataField::DataAccessCallback_t callback=NULL);
+
+
   gcc_pure
   WndProperty &GetControl(unsigned i) {
     assert(i < (unsigned)controls.size());
@@ -128,16 +133,17 @@ public:
   gcc_pure
   fixed GetValueFloat(unsigned i) const;
 
-  bool SaveValue(unsigned i, bool &value) const;
+  bool SaveValue(unsigned i, bool &value, bool negated = false) const;
   bool SaveValue(unsigned i, int &value) const;
   bool SaveValue(unsigned i, fixed &value) const;
   bool SaveValue(unsigned i, TCHAR *string, size_t max_size) const;
+  bool SaveValue(unsigned i, const TCHAR *registry_key, TCHAR *string, size_t max_size) const;
 
   bool SaveValue(unsigned i, unsigned &value) const {
     return SaveValue(i, (int &)value);
   }
 
-  bool SaveValue(unsigned i, const TCHAR *registry_key, bool &value) const;
+  bool SaveValue(unsigned i, const TCHAR *registry_key, bool &value, bool negated = false) const;
   bool SaveValue(unsigned i, const TCHAR *registry_key, int &value) const;
   bool SaveValue(unsigned i, const TCHAR *registry_key, fixed &value) const;
 
