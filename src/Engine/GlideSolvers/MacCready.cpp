@@ -37,9 +37,11 @@
 long count_mc = 0;
 #endif
 
-MacCready::MacCready(const GlidePolar &_glide_polar,
+MacCready::MacCready(const GlideSettings &_settings,
+                     const GlidePolar &_glide_polar,
                      const fixed _cruise_efficiency)
-  :glide_polar(_glide_polar), cruise_efficiency(_cruise_efficiency) {}
+  :settings(_settings), glide_polar(_glide_polar),
+   cruise_efficiency(_cruise_efficiency) {}
 
 GlideResult 
 MacCready::SolveVertical(const GlideState &task) const
@@ -93,23 +95,25 @@ MacCready::SolveVertical(const GlideState &task) const
 }
 
 GlideResult
-MacCready::Solve(const GlidePolar &glide_polar, const GlideState &task)
+MacCready::Solve(const GlideSettings &settings, const GlidePolar &glide_polar,
+                 const GlideState &task)
 {
 #ifdef INSTRUMENT_TASK
   count_mc++;
 #endif
-  MacCready mac(glide_polar, glide_polar.GetCruiseEfficiency());
+  MacCready mac(settings, glide_polar, glide_polar.GetCruiseEfficiency());
   return mac.Solve(task);
 }
 
 GlideResult
-MacCready::SolveSink(const GlidePolar &glide_polar, const GlideState &task,
+MacCready::SolveSink(const GlideSettings &settings,
+                     const GlidePolar &glide_polar, const GlideState &task,
                       const fixed sink_rate)
 {
 #ifdef INSTRUMENT_TASK
   count_mc++;
 #endif
-  MacCready mac(glide_polar, glide_polar.GetCruiseEfficiency());
+  MacCready mac(settings, glide_polar, glide_polar.GetCruiseEfficiency());
   return mac.SolveSink(task, sink_rate);
 }
 

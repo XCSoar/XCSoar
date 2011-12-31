@@ -53,6 +53,7 @@ void
 GlideComputerRoute::ProcessRoute(const MoreData &basic,
                                  DerivedInfo &calculated,
                                  const DerivedInfo &last_calculated,
+                                 const GlideSettings &settings,
                                  const RoutePlannerConfig &config,
                                  const GlidePolar &glide_polar,
                                  const GlidePolar &safety_polar)
@@ -60,7 +61,7 @@ GlideComputerRoute::ProcessRoute(const MoreData &basic,
   if (!basic.location_available || !basic.NavAltitudeAvailable())
     return;
 
-  protected_route_planner.SetPolars(glide_polar, safety_polar,
+  protected_route_planner.SetPolars(settings, glide_polar, safety_polar,
                                     calculated.GetWindOrZero());
 
   Reach(basic, calculated, config);

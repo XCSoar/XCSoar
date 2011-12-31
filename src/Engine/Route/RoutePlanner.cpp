@@ -360,11 +360,12 @@ RoutePlanner::AddEdges(const RouteLink &e)
 }
 
 void
-RoutePlanner::UpdatePolar(const GlidePolar &task_polar,
+RoutePlanner::UpdatePolar(const GlideSettings &settings,
+                          const GlidePolar &task_polar,
                            const GlidePolar &safety_polar,
                            const SpeedVector &wind)
 {
-  rpolars_route.Initialise(task_polar, wind);
+  rpolars_route.Initialise(settings, task_polar, wind);
   switch (reach_polar_mode) {
   case RoutePlannerConfig::rpmTask:
     rpolars_reach = rpolars_route;
@@ -372,7 +373,7 @@ RoutePlanner::UpdatePolar(const GlidePolar &task_polar,
     // make copy to avoid waste
     break;
   case RoutePlannerConfig::rpmSafety:
-    rpolars_reach.Initialise(safety_polar, wind);
+    rpolars_reach.Initialise(settings, safety_polar, wind);
     glide_polar_reach = safety_polar;
     break;
   }

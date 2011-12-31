@@ -60,7 +60,7 @@ public:
   TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                 const unsigned activeTaskPoint,
                 const AircraftState &_aircraft,
-                const GlidePolar &_gp,
+                const GlideSettings &settings, const GlidePolar &_gp,
                 AATPoint& _tp_current,
                 const TaskProjection &projection,
                 StartPoint *_ts);

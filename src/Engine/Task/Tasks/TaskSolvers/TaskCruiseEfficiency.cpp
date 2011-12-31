@@ -24,13 +24,15 @@
 TaskCruiseEfficiency::TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>& tps,
                                            const unsigned activeTaskPoint,
                                            const AircraftState &_aircraft,
+                                           const GlideSettings &settings,
                                            const GlidePolar &gp):
-  TaskSolveTravelled(tps, activeTaskPoint, _aircraft, gp, fixed(0.1), fixed(2.0))
+  TaskSolveTravelled(tps, activeTaskPoint, _aircraft,
+                     settings, gp, fixed(0.1), fixed(2.0))
 {
 }
 
 fixed 
-TaskCruiseEfficiency::f(const fixed ce) 
+TaskCruiseEfficiency::f(const fixed ce)
 {
   tm.set_cruise_efficiency(ce);
   return time_error();

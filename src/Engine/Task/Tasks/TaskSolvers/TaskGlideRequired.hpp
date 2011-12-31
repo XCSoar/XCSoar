@@ -53,7 +53,8 @@ public:
   TaskGlideRequired(const std::vector<OrderedTaskPoint*>& tps,
                     const unsigned activeTaskPoint,
                     const AircraftState &_aircraft,
-                    const GlidePolar &gp);
+                    const GlideSettings &settings, const GlidePolar &gp);
+
 /** 
  * Constructor for single task points (non-ordered ones)
  * 
@@ -63,7 +64,8 @@ public:
  */
   TaskGlideRequired(TaskPoint* tp,
                     const AircraftState &_aircraft,
-                    const GlidePolar &gp);
+                    const GlideSettings &settings, const GlidePolar &gp);
+
   virtual ~TaskGlideRequired() {};
 
   virtual fixed f(const fixed mc);

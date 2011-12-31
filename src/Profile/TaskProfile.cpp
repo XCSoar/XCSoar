@@ -27,10 +27,16 @@ Copyright_License {
 #include "Task/TaskBehaviour.hpp"
 
 namespace Profile {
+  static void Load(GlideSettings &settings);
   static void Load(TaskStartMargins &settings);
   static void Load(SectorDefaults &settings);
   static void Load(OrderedTaskBehaviour &settings);
 };
+
+void
+Profile::Load(GlideSettings &settings)
+{
+}
 
 void
 Profile::Load(TaskStartMargins &settings)
@@ -65,6 +71,7 @@ void
 Profile::Load(TaskBehaviour &settings)
 {
   Load((TaskStartMargins &)settings);
+  Load(settings.glide);
 
   Get(szProfileAATTimeMargin, settings.optimise_targets_margin);
   Get(szProfileAutoMc, settings.auto_mc);

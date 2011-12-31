@@ -27,6 +27,7 @@
 #include "OrderedTaskBehaviour.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Route/Config.hpp"
+#include "GlideSolvers/GlideSettings.hpp"
 #include "Util/TypeTraits.hpp"
 
 struct AircraftState;
@@ -87,6 +88,8 @@ struct TaskBehaviour : public TaskStartMargins {
     FACTORY_MIXED,
     FACTORY_TOURING
   };
+
+  GlideSettings glide;
 
   /**
    * Option to enable positionining of AAT targets to achieve

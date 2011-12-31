@@ -19,21 +19,10 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#include "TaskEffectiveMacCready.hpp"
 
-TaskEffectiveMacCready::TaskEffectiveMacCready(const std::vector<OrderedTaskPoint*>& tps,
-                                           const unsigned activeTaskPoint,
-                                           const AircraftState &_aircraft,
-                                               const GlideSettings &settings,
-                                               const GlidePolar &gp):
-  TaskSolveTravelled(tps, activeTaskPoint, _aircraft,
-                     settings, gp, fixed(0.001), fixed(10.0))
-{
-}
+#include "GlideSettings.hpp"
 
-fixed 
-TaskEffectiveMacCready::f(const fixed mc) 
+void
+GlideSettings::SetDefaults()
 {
-  tm.set_mc(mc);
-  return time_error();
 }

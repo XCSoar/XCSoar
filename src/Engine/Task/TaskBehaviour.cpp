@@ -45,6 +45,8 @@ TaskBehaviour::SetDefaults()
 {
   TaskStartMargins::SetDefaults();
 
+  glide.SetDefaults();
+
   optimise_targets_range = true;
   optimise_targets_bearing = true;
   optimise_targets_margin = 300;

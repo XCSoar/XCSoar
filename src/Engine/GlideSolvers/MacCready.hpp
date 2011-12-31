@@ -25,6 +25,7 @@
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
+struct GlideSettings;
 struct GlideState;
 struct GlideResult;
 class GlidePolar;
@@ -43,6 +44,7 @@ class GlidePolar;
  */
 class MacCready 
 {
+  const GlideSettings &settings;
   const GlidePolar &glide_polar;
   const fixed cruise_efficiency;
 
@@ -54,7 +56,8 @@ public:
    * @param _glide_polar The glide polar used for calculations.
    * @param _cruise_efficiency The efficiency ratio for calculations 
    */
-  MacCready(const GlidePolar &_glide_polar, const fixed _cruise_efficiency);
+  MacCready(const GlideSettings &settings, const GlidePolar &_glide_polar,
+            const fixed _cruise_efficiency);
 
   /** 
    * Calculates the glide solution with a specified sink rate (or lift rate)
@@ -71,7 +74,8 @@ public:
   GlideResult SolveSink(const GlideState &task, const fixed sink_rate) const;
 
   gcc_pure
-  static GlideResult SolveSink(const GlidePolar &glide_polar,
+  static GlideResult SolveSink(const GlideSettings &settings,
+                               const GlidePolar &glide_polar,
                                const GlideState &task, const fixed sink_rate);
 
   /** 
@@ -87,7 +91,8 @@ public:
   GlideResult Solve(const GlideState &task) const;
 
   gcc_pure
-  static GlideResult Solve(const GlidePolar &glide_polar,
+  static GlideResult Solve(const GlideSettings &settings,
+                           const GlidePolar &glide_polar,
                            const GlideState &task);
 
   /**

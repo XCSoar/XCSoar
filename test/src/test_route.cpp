@@ -27,6 +27,7 @@
 #include "harness_airspace.hpp"
 #include "Route/AirspaceRoute.hpp"
 #include "Navigation/SpeedVector.hpp"
+#include "GlideSolvers/GlideSettings.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "OS/PathName.hpp"
@@ -126,8 +127,10 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     SpeedVector wind(Angle::Degrees(fixed(0)), fixed(0.0));
     GlidePolar polar(fixed_one);
 
+    GlideSettings settings;
+    settings.SetDefaults();
     AirspaceRoute route(airspaces);
-    route.UpdatePolar(polar, polar, wind);
+    route.UpdatePolar(settings, polar, polar, wind);
     route.SetTerrain(&map);
     RoutePlannerConfig config;
     config.mode = RoutePlannerConfig::rpBoth;

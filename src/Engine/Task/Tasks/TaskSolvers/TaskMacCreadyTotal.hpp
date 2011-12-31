@@ -40,7 +40,7 @@ public:
  */
   TaskMacCreadyTotal(const std::vector<OrderedTaskPoint*> &_tps,
                      const unsigned _activeTaskPoint,
-                     const GlidePolar &_gp);
+                     const GlideSettings &settings, const GlidePolar &_gp);
 
 /** 
  * Calculate effective distance remaining such that at the virtual

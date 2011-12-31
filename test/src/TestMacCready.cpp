@@ -21,6 +21,7 @@
 */
 
 #include "Engine/Navigation/SpeedVector.hpp"
+#include "Engine/GlideSolvers/GlideSettings.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Engine/GlideSolvers/GlideState.hpp"
 #include "Engine/GlideSolvers/GlideResult.hpp"
@@ -32,6 +33,7 @@
 
 #include "TestUtil.hpp"
 
+static GlideSettings glide_settings;
 static GlidePolar glide_polar(fixed_zero);
 
 static void
@@ -41,7 +43,8 @@ Test(const fixed distance, const fixed altitude, const SpeedVector wind)
   const GlideState state(vector,
                          fixed(2000), fixed(2000) + altitude,
                          wind);
-  const GlideResult result = MacCready::Solve(glide_polar, state);
+  const GlideResult result =
+    MacCready::Solve(glide_settings, glide_polar, state);
 
   const fixed ld_ground = glide_polar.GetLDOverGround(vector.bearing, wind);
 
@@ -132,6 +135,8 @@ TestAll()
 int main(int argc, char **argv)
 {
   plan_tests(760);
+
+  glide_settings.SetDefaults();
 
   TestAll();
 

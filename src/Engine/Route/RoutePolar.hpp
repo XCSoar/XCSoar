@@ -32,6 +32,7 @@
 #include <utility>
 
 class GlidePolar;
+struct GlideSettings;
 struct GlideResult;
 class TaskProjection;
 class RasterMap;
@@ -90,7 +91,8 @@ public:
    * @param wind Wind condition
    * @param glide Whether pure glide or cruise-climb is enforced
    */
-  void Initialise(const GlidePolar& polar, const SpeedVector& wind,
+  void Initialise(const GlideSettings &settings, const GlidePolar& polar,
+                  const SpeedVector& wind,
                   const bool glide);
 
   /**
@@ -114,7 +116,8 @@ public:
   static void IndexToDXDY(const int index, int& dx, int& dy);
 
 private:
-  GlideResult SolveTask(const GlidePolar& polar, const SpeedVector& wind,
+  GlideResult SolveTask(const GlideSettings &settings, const GlidePolar& polar,
+                        const SpeedVector &wind,
                         const Angle theta, const bool glide) const;
 };
 

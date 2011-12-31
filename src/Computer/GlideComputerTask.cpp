@@ -105,6 +105,7 @@ GlideComputerTask::ProcessMoreTask(const MoreData &basic,
   }
 
   route.ProcessRoute(basic, calculated, last_calculated,
+                     settings_computer.task.glide,
                      settings_computer.task.route_planner,
                      glide_polar, safety_polar);
 

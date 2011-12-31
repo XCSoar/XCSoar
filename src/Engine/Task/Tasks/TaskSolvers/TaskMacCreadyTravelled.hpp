@@ -40,7 +40,7 @@ public:
  */
   TaskMacCreadyTravelled(const std::vector<OrderedTaskPoint*> &_tps,
                          const unsigned _activeTaskPoint,
-                         const GlidePolar &_gp);
+                         const GlideSettings &settings, const GlidePolar &_gp);
 
 private:
   virtual GlideResult tp_solution(const unsigned i,

@@ -537,7 +537,8 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
   GlideResult r = TaskSolution::GlideSolutionRemaining(
       basic.location, waypoint.location,
       waypoint.altitude + settings_computer.task.safety_height_arrival,
-      basic.nav_altitude, calculated.wind, glide_polar);
+      basic.nav_altitude, calculated.wind,
+      settings_computer.task.glide, glide_polar);
 
   StaticString<64> buffer;
   buffer.Format(_T("%.0f %s"),
@@ -553,7 +554,8 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
   r = TaskSolution::GlideSolutionRemaining(
       basic.location, waypoint.location,
       waypoint.altitude + settings_computer.task.safety_height_arrival,
-      basic.nav_altitude, calculated.wind, glide_polar);
+      basic.nav_altitude, calculated.wind,
+      settings_computer.task.glide, glide_polar);
 
   buffer.Format(_T("%.0f %s"),
                 (double)Units::ToUserAltitude(r.altitude_difference),
@@ -567,7 +569,8 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
   r = TaskSolution::GlideSolutionRemaining(
       basic.location, waypoint.location,
       waypoint.altitude + settings_computer.task.safety_height_arrival,
-      basic.nav_altitude, calculated.wind, safety_polar);
+      basic.nav_altitude, calculated.wind,
+      settings_computer.task.glide, safety_polar);
 
   buffer.Format(_T("%.0f %s"),
                 (double)Units::ToUserAltitude(r.altitude_difference),

@@ -53,7 +53,7 @@ public:
   TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
              const unsigned activeTaskPoint,
              const AircraftState &_aircraft,
-             const GlidePolar &_gp,
+             const GlideSettings &settings, const GlidePolar &_gp,
              const fixed _mc_min=fixed_zero);
 /** 
  * Constructor for single task points (non-ordered ones)
@@ -64,7 +64,8 @@ public:
  */
   TaskBestMc(TaskPoint* tp,
              const AircraftState &_aircraft,
-             const GlidePolar &_gp);
+             const GlideSettings &settings, const GlidePolar &_gp);
+
   virtual ~TaskBestMc() {};
 
   virtual fixed f(const fixed mc);

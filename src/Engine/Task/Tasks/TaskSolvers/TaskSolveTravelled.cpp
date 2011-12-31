@@ -26,12 +26,13 @@
 TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps,
                                        const unsigned activeTaskPoint,
                                        const AircraftState &_aircraft,
+                                       const GlideSettings &settings,
                                        const GlidePolar &gp,
                                        const fixed _xmin, 
                                        const fixed _xmax):
   ZeroFinder(_xmin, _xmax, fixed(TOLERANCE_CRUISE_EFFICIENCY)),
   aircraft(_aircraft),
-  tm(tps, activeTaskPoint, gp)
+  tm(tps, activeTaskPoint, settings, gp)
 {
   dt = aircraft.time-tps[0]->GetEnteredState().time;
   if (positive(dt)) {

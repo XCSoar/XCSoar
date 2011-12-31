@@ -46,7 +46,7 @@ public:
   TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>& tps,
                        const unsigned activeTaskPoint,
                        const AircraftState &_aircraft,
-                       const GlidePolar &gp);
+                       const GlideSettings &settings, const GlidePolar &gp);
   virtual ~TaskCruiseEfficiency() {};
 
   fixed f(const fixed ce);

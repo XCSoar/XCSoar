@@ -25,6 +25,7 @@
 
 #include "Math/fixed.hpp"
 
+struct GlideSettings;
 struct GlideResult;
 struct AircraftState;
 class GlidePolar;
@@ -49,6 +50,7 @@ namespace TaskSolution
    */
   GlideResult GlideSolutionRemaining(const TaskPoint& taskpoint,
                                      const AircraftState &state,
+                                     const GlideSettings &settings,
                                      const GlidePolar &polar,
                                      const fixed min_h = fixed_zero);
 
@@ -57,6 +59,7 @@ namespace TaskSolution
                                      const fixed target_elevation,
                                      const fixed altitude,
                                      const SpeedVector &wind,
+                                     const GlideSettings &settings,
                                      const GlidePolar &polar);
 
   /**
@@ -72,6 +75,7 @@ namespace TaskSolution
    */
   GlideResult GlideSolutionSink(const TaskPoint &taskpoint,
                                 const AircraftState &state,
+                                const GlideSettings &settings,
                                 const GlidePolar &polar,
                                 const fixed s);
 
@@ -87,6 +91,7 @@ namespace TaskSolution
    */
   GlideResult GlideSolutionTravelled(const TaskPoint &taskpoint,
                                      const AircraftState &state,
+                                     const GlideSettings &settings,
                                      const GlidePolar &polar,
                                      const fixed min_h = fixed_zero);
 
@@ -102,6 +107,7 @@ namespace TaskSolution
    */
   GlideResult GlideSolutionPlanned(const TaskPoint &taskpoint,
                                    const AircraftState &state,
+                                   const GlideSettings &settings,
                                    const GlidePolar &polar,
                                    const fixed min_h = fixed_zero);
 };

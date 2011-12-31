@@ -25,29 +25,35 @@
 
 TaskMacCready::TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
                              const unsigned _activeTaskPoint,
+                             const GlideSettings &_settings,
                              const GlidePolar &gp):
   m_tps(_tps.begin(), _tps.end()),
   m_gs(_tps.size()),
   m_activeTaskPoint(_activeTaskPoint),
   m_start(0),
   m_end(max((int)_tps.size(), 1) - 1),
+  settings(_settings),
   m_glide_polar(gp) {}
 
-TaskMacCready::TaskMacCready(TaskPoint* tp, const GlidePolar &gp):
+TaskMacCready::TaskMacCready(TaskPoint* tp, const GlideSettings &_settings,
+                             const GlidePolar &gp):
   m_tps(1, tp),
   m_gs(1),
   m_activeTaskPoint(0),
   m_start(0),
   m_end(0),
+  settings(_settings),
   m_glide_polar(gp) {}
 
 TaskMacCready::TaskMacCready(const std::vector<TaskPoint*> &_tps,
+                             const GlideSettings &_settings,
                              const GlidePolar &gp):
   m_tps(_tps.begin(), _tps.end()),
   m_gs(_tps.size()),
   m_activeTaskPoint(0),
   m_start(0),
   m_end(max((int)_tps.size(), 1) - 1),
+  settings(_settings),
   m_glide_polar(gp) {}
 
 GlideResult 
@@ -115,5 +121,6 @@ TaskMacCready::tp_sink(const unsigned i,
                        const AircraftState &aircraft, 
                        const fixed S) const
 {
-  return TaskSolution::GlideSolutionSink(*m_tps[i], aircraft, m_glide_polar, S);
+  return TaskSolution::GlideSolutionSink(*m_tps[i], aircraft,
+                                         settings, m_glide_polar, S);
 }

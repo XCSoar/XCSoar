@@ -27,6 +27,7 @@
 #include "Task/RoutePlannerGlue.hpp"
 #include "Compiler.h"
 
+struct GlideSettings;
 struct RoutePlannerConfig;
 class GlidePolar;
 class RasterTerrain;
@@ -54,7 +55,8 @@ public:
 
   void SetTerrain(const RasterTerrain *terrain);
 
-  void SetPolars(const GlidePolar &glide_polar, const GlidePolar &safety_polar,
+  void SetPolars(const GlideSettings &settings,
+                 const GlidePolar &glide_polar, const GlidePolar &safety_polar,
                  const SpeedVector &wind);
 
   void SolveRoute(const AGeoPoint &dest, const AGeoPoint &start,

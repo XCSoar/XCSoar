@@ -45,10 +45,11 @@ RoutePolars::MSLIntercept(const int index, const AGeoPoint& p,
 }
 
 void
-RoutePolars::Initialise(const GlidePolar& polar, const SpeedVector& wind)
+RoutePolars::Initialise(const GlideSettings &settings, const GlidePolar &polar,
+                        const SpeedVector &wind)
 {
-  polar_glide.Initialise(polar, wind, true);
-  polar_cruise.Initialise(polar, wind, false);
+  polar_glide.Initialise(settings, polar, wind, true);
+  polar_cruise.Initialise(settings, polar, wind, false);
   const fixed imc = polar.GetInvMC();
   if (positive(imc))
     inv_mc = fixed(MC_CEILING_PENALTY_FACTOR) * imc;

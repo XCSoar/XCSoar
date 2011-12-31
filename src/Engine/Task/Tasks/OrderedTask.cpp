@@ -413,7 +413,8 @@ OrderedTask::UpdateIdle(const AircraftState& state)
       if (task_points[active_task_point]->GetType() == TaskPoint::AAT) {
         AATPoint *ap = (AATPoint *)task_points[active_task_point];
         // very nasty hack
-        TaskOptTarget tot(task_points, active_task_point, state, glide_polar,
+        TaskOptTarget tot(task_points, active_task_point, state,
+                          task_behaviour.glide, glide_polar,
                           *ap, task_projection, taskpoint_start);
         tot.search(fixed(0.5));
       }
@@ -702,7 +703,8 @@ OrderedTask::GlideSolutionRemaining(const AircraftState &aircraft,
                                       GlideResult &total,
                                       GlideResult &leg)
 {
-  TaskMacCreadyRemaining tm(task_points, active_task_point, polar);
+  TaskMacCreadyRemaining tm(task_points, active_task_point,
+                            task_behaviour.glide, polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
 }
@@ -712,7 +714,8 @@ OrderedTask::GlideSolutionTravelled(const AircraftState &aircraft,
                                       GlideResult &total,
                                       GlideResult &leg)
 {
-  TaskMacCreadyTravelled tm(task_points, active_task_point, glide_polar);
+  TaskMacCreadyTravelled tm(task_points, active_task_point,
+                            task_behaviour.glide, glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
 }
@@ -726,7 +729,8 @@ OrderedTask::GlideSolutionPlanned(const AircraftState &aircraft,
                                     const GlideResult &solution_remaining_total,
                                     const GlideResult &solution_remaining_leg)
 {
-  TaskMacCreadyTotal tm(task_points, active_task_point, glide_polar);
+  TaskMacCreadyTotal tm(task_points, active_task_point,
+                        task_behaviour.glide, glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
 
@@ -746,7 +750,8 @@ OrderedTask::GlideSolutionPlanned(const AircraftState &aircraft,
 fixed
 OrderedTask::CalcRequiredGlide(const AircraftState &aircraft) const
 {
-  TaskGlideRequired bgr(task_points, active_task_point, aircraft, glide_polar);
+  TaskGlideRequired bgr(task_points, active_task_point, aircraft,
+                        task_behaviour.glide, glide_polar);
   return bgr.search(fixed_zero);
 }
 
@@ -754,7 +759,8 @@ bool
 OrderedTask::CalcBestMC(const AircraftState &aircraft, fixed& best) const
 {
   // note setting of lower limit on mc
-  TaskBestMc bmc(task_points,active_task_point, aircraft, glide_polar);
+  TaskBestMc bmc(task_points, active_task_point, aircraft,
+                 task_behaviour.glide, glide_polar);
   return bmc.search(glide_polar.GetMC(), best);
 }
 
@@ -776,7 +782,8 @@ bool
 OrderedTask::CalcCruiseEfficiency(const AircraftState &aircraft, fixed& val) const
 {
   if (allow_incremental_boundary_stats(aircraft)) {
-    TaskCruiseEfficiency bce(task_points, active_task_point, aircraft, glide_polar);
+    TaskCruiseEfficiency bce(task_points, active_task_point, aircraft,
+                             task_behaviour.glide, glide_polar);
     val = bce.search(fixed_one);
     return true;
   } else {
@@ -789,7 +796,8 @@ bool
 OrderedTask::CalcEffectiveMC(const AircraftState &aircraft, fixed& val) const
 {
   if (allow_incremental_boundary_stats(aircraft)) {
-    TaskEffectiveMacCready bce(task_points,active_task_point, aircraft, glide_polar);
+    TaskEffectiveMacCready bce(task_points, active_task_point, aircraft,
+                               task_behaviour.glide, glide_polar);
     val = bce.search(glide_polar.GetMC());
     return true;
   } else {
@@ -806,7 +814,9 @@ OrderedTask::CalcMinTarget(const AircraftState &aircraft, const fixed t_target)
     // only perform scan if modification is possible
     const fixed t_rem = max(fixed_zero, t_target - stats.total.time_elapsed);
 
-    TaskMinTarget bmt(task_points, active_task_point, aircraft, glide_polar, t_rem, taskpoint_start);
+    TaskMinTarget bmt(task_points, active_task_point, aircraft,
+                      task_behaviour.glide, glide_polar,
+                      t_rem, taskpoint_start);
     fixed p = bmt.search(fixed_zero);
     return p;
   }

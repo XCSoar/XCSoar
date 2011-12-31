@@ -31,12 +31,13 @@ ProtectedRoutePlanner::SetTerrain(const RasterTerrain *terrain)
 }
 
 void
-ProtectedRoutePlanner::SetPolars(const GlidePolar &glide_polar,
+ProtectedRoutePlanner::SetPolars(const GlideSettings &settings,
+                                 const GlidePolar &glide_polar,
                                  const GlidePolar &safety_polar,
                                  const SpeedVector &wind)
 {
   ExclusiveLease lease(*this);
-  lease->update_polar(glide_polar, safety_polar, wind);
+  lease->update_polar(settings, glide_polar, safety_polar, wind);
 }
 
 void

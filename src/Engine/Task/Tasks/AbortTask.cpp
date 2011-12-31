@@ -171,7 +171,8 @@ AbortTask::FillReachable(const AircraftState &state,
 
     UnorderedTaskPoint t(v->waypoint, task_behaviour);
     GlideResult result =
-        TaskSolution::GlideSolutionRemaining(t, state, polar);
+        TaskSolution::GlideSolutionRemaining(t, state,
+                                             task_behaviour.glide, polar);
     /* calculate time_virtual, which is needed by AbortRank */
     result.CalcVInvSpeed(polar.GetInvMC());
 

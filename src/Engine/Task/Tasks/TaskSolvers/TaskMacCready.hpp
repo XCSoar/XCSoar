@@ -29,6 +29,8 @@
 #include "Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 #include <vector>
 
+struct GlideSettings;
+
 /**
  * Abstract class for calculation of glide solutions with respect
  * to ordered tasks.  This class handles high intermediate turnpoints
@@ -57,6 +59,7 @@ protected:
   const unsigned m_activeTaskPoint; /**< Active task point (local copy for speed) */
   int m_start; /**< TaskPoint sequence index of first taskpoint included in scan */
   int m_end; /**< TaskPoint sequence index of last taskpoint included in scan */
+  const GlideSettings &settings;
   GlidePolar m_glide_polar; /**< Glide polar used for computations */
 
 public:
@@ -69,7 +72,7 @@ public:
  */
   TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
                 const unsigned _activeTaskPoint,
-                const GlidePolar &gp);
+                const GlideSettings &settings, const GlidePolar &gp);
 
 /** 
  * Constructor for single task points (non-ordered ones)
@@ -78,7 +81,7 @@ public:
  * @param gp Glide polar to copy for calculations
  */
   TaskMacCready(TaskPoint* tp,
-                const GlidePolar &gp);
+                const GlideSettings &settings, const GlidePolar &gp);
 
 /**
  * Constructor for sequence of task points, starting from first point
@@ -87,7 +90,7 @@ public:
  * @param gp Glide polar to copy for calculations
  */
   TaskMacCready(const std::vector<TaskPoint*> &_tps,
-                const GlidePolar &gp);
+                const GlideSettings &settings, const GlidePolar &gp);
 
 /** 
  * Calculate glide solution

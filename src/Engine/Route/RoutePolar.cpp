@@ -41,22 +41,24 @@ IndexToAngle(unsigned i)
 }
 
 GlideResult
-RoutePolar::SolveTask(const GlidePolar& glide_polar,
+RoutePolar::SolveTask(const GlideSettings &settings,
+                      const GlidePolar& glide_polar,
                        const SpeedVector& wind,
                        const Angle theta, const bool glide) const
 {
   fixed altitude = glide? fixed(1.0e5): fixed_zero;
   GlideState task(GeoVector(fixed(1.0), theta), fixed_zero, altitude, wind);
-  return MacCready::Solve(glide_polar, task);
+  return MacCready::Solve(settings, glide_polar, task);
 }
 
 void
-RoutePolar::Initialise(const GlidePolar& polar, const SpeedVector& wind,
+RoutePolar::Initialise(const GlideSettings &settings, const GlidePolar& polar,
+                       const SpeedVector& wind,
                        const bool is_glide)
 {
   for (unsigned i = 0; i < ROUTEPOLAR_POINTS; ++i) {
     const Angle ang = IndexToAngle(i);
-    GlideResult res = SolveTask(polar, wind, ang, is_glide);
+    GlideResult res = SolveTask(settings, polar, wind, ang, is_glide);
     if (res.IsOk()) {
       RoutePolarPoint point(res.time_elapsed, res.height_glide);
       points[i] = point;

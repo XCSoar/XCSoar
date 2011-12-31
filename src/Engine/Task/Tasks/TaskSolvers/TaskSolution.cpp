@@ -33,58 +33,63 @@ TaskSolution::GlideSolutionRemaining(const GeoPoint &location,
                                      const fixed target_elevation,
                                      const fixed altitude,
                                      const SpeedVector &wind,
+                                     const GlideSettings &settings,
                                      const GlidePolar &polar)
 {
   GlideState gs(location.DistanceBearing(target),
                 target_elevation, altitude, wind);
 
-  return MacCready::Solve(polar, gs);
+  return MacCready::Solve(settings, polar, gs);
 }
 
 GlideResult
 TaskSolution::GlideSolutionRemaining(const TaskPoint &taskpoint,
                                      const AircraftState &ac,
+                                     const GlideSettings &settings,
                                      const GlidePolar &polar,
                                      const fixed min_h)
 {
   GlideState gs(taskpoint.GetVectorRemaining(ac.location),
                 max(min_h, taskpoint.GetElevation()),
                 ac.altitude, ac.wind);
-  return MacCready::Solve(polar, gs);
+  return MacCready::Solve(settings, polar, gs);
 }
 
 GlideResult 
 TaskSolution::GlideSolutionPlanned(const TaskPoint &taskpoint,
                                    const AircraftState &ac,
+                                   const GlideSettings &settings,
                                    const GlidePolar &polar,
                                    const fixed min_h)
 {
   GlideState gs(taskpoint.GetVectorPlanned(),
                 max(min_h,taskpoint.GetElevation()),
                 ac.altitude, ac.wind);
-  return MacCready::Solve(polar, gs);
+  return MacCready::Solve(settings, polar, gs);
 }
 
 GlideResult 
 TaskSolution::GlideSolutionTravelled(const TaskPoint &taskpoint,
                                      const AircraftState &ac,
+                                     const GlideSettings &settings,
                                      const GlidePolar &polar,
                                      const fixed min_h)
 {
   GlideState gs(taskpoint.GetVectorTravelled(),
                 max(min_h,taskpoint.GetElevation()),
                 ac.altitude, ac.wind);
-  return MacCready::Solve(polar, gs);
+  return MacCready::Solve(settings, polar, gs);
 }
 
 GlideResult 
 TaskSolution::GlideSolutionSink(const TaskPoint &taskpoint,
                                 const AircraftState &ac,
+                                const GlideSettings &settings,
                                 const GlidePolar &polar,
                                 const fixed s)
 {
   GlideState gs(taskpoint.GetVectorRemaining(ac.location),
                 taskpoint.GetElevation(),
                 ac.altitude, ac.wind);
-  return MacCready::SolveSink(polar, gs, s);
+  return MacCready::SolveSink(settings, polar, gs, s);
 }

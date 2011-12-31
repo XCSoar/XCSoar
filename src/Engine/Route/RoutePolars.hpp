@@ -29,6 +29,7 @@
 #include "Rough/RoughAltitude.hpp"
 
 class GlidePolar;
+struct GlideSettings;
 struct GlideResult;
 class TaskProjection;
 class RasterMap;
@@ -65,7 +66,8 @@ public:
    * @param polar Polar used for performance
    * @param wind Wind condition
    */
-  void Initialise(const GlidePolar& polar, const SpeedVector& wind);
+  void Initialise(const GlideSettings &settings, const GlidePolar& polar,
+                  const SpeedVector& wind);
 
   /**
    * Calculate the time required to fly the link.  Returns UINT_MAX

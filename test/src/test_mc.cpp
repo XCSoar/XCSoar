@@ -21,7 +21,7 @@
 */
 
 #include "test_debug.hpp"
-
+#include "GlideSolvers/GlideSettings.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideState.hpp"
 #include "GlideSolvers/GlideResult.hpp"
@@ -83,6 +83,9 @@ static void
 test_glide_alt(const fixed h, const fixed W, const fixed Wangle,
                std::ostream &hfile)
 {
+  GlideSettings settings;
+  settings.SetDefaults();
+
   GlidePolar polar(fixed_zero);
   polar.SetMC(fixed_one);
 
@@ -97,7 +100,7 @@ test_glide_alt(const fixed h, const fixed W, const fixed Wangle,
 
   GeoVector vect(fixed(400.0));
   GlideState gs(vect, fixed_zero, ac.altitude, ac.wind);
-  GlideResult gr = MacCready::Solve(polar, gs);
+  GlideResult gr = MacCready::Solve(settings, polar, gs);
   hfile << (double)h << " " 
         << (double)gr.altitude_difference << " "
         << (double)gr.time_elapsed << " " 
@@ -111,6 +114,9 @@ static void
 test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
                std::ostream &hfile)
 {
+  GlideSettings settings;
+  settings.SetDefaults();
+
   GlidePolar polar(fixed_zero);
   polar.SetMC(fixed_one);
 
@@ -126,7 +132,7 @@ test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
 
   GeoVector vect(fixed(400.0));
   GlideState gs(vect, fixed_zero, ac.altitude, ac.wind);
-  GlideResult gr = MacCready::Solve(polar, gs);
+  GlideResult gr = MacCready::Solve(settings, polar, gs);
 
   fixed Vstf = polar.SpeedToFly(ac, gr, false);
 
@@ -218,6 +224,9 @@ static void
 test_glide_cb(const fixed h, const fixed W, const fixed Wangle,
               std::ostream &hfile)
 {
+  GlideSettings settings;
+  settings.SetDefaults();
+
   GlidePolar polar(fixed_one);
 
   AircraftState ac;
@@ -231,7 +240,7 @@ test_glide_cb(const fixed h, const fixed W, const fixed Wangle,
 
   GeoVector vect(fixed(400.0));
   GlideState gs (vect, fixed_zero, ac.altitude, ac.wind);
-  GlideResult gr = MacCready::Solve(polar, gs);
+  GlideResult gr = MacCready::Solve(settings, polar, gs);
 
   gr.CalcDeferred();
 

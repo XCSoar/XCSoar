@@ -19,21 +19,15 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#include "TaskEffectiveMacCready.hpp"
 
-TaskEffectiveMacCready::TaskEffectiveMacCready(const std::vector<OrderedTaskPoint*>& tps,
-                                           const unsigned activeTaskPoint,
-                                           const AircraftState &_aircraft,
-                                               const GlideSettings &settings,
-                                               const GlidePolar &gp):
-  TaskSolveTravelled(tps, activeTaskPoint, _aircraft,
-                     settings, gp, fixed(0.001), fixed(10.0))
-{
-}
+#ifndef XCSOAR_GLIDE_SETTINGS_HPP
+#define XCSOAR_GLIDE_SETTINGS_HPP
 
-fixed 
-TaskEffectiveMacCready::f(const fixed mc) 
-{
-  tm.set_mc(mc);
-  return time_error();
-}
+/**
+ * Settings for calculating a glide path.
+ */
+struct GlideSettings {
+  void SetDefaults();
+};
+
+#endif

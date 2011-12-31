@@ -668,6 +668,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/ComputerSettings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceWarningConfig.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
@@ -1289,6 +1290,7 @@ RUN_TRACE_SOURCES = \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/UtilsFile.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \

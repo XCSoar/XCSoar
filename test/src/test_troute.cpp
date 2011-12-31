@@ -28,6 +28,7 @@
 #include "Terrain/RasterMap.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
+#include "GlideSolvers/GlideSettings.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Navigation/SpeedVector.hpp"
@@ -37,10 +38,12 @@
 static void
 test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
 {
+  GlideSettings settings;
+  settings.SetDefaults();
   GlidePolar polar(mc);
   SpeedVector wind(Angle::Degrees(fixed(0)), mwind);
   TerrainRoute route;
-  route.UpdatePolar(polar, polar, wind);
+  route.UpdatePolar(settings, polar, polar, wind);
   route.SetTerrain(&map);
 
   GeoPoint origin(map.GetMapCenter());

@@ -24,6 +24,7 @@
 
 #include "Route/AirspaceRoute.hpp"
 
+struct GlideSettings;
 class RoughAltitude;
 class RasterTerrain;
 
@@ -36,10 +37,11 @@ public:
 
   void set_terrain(const RasterTerrain *_terrain);
 
-  void update_polar(const GlidePolar& polar,
+  void update_polar(const GlideSettings &settings,
+                    const GlidePolar& polar,
                     const GlidePolar& safety_polar,
                     const SpeedVector& wind) {
-    m_planner.UpdatePolar(polar, safety_polar, wind);
+    m_planner.UpdatePolar(settings, polar, safety_polar, wind);
   }
 
   void synchronise(const Airspaces& master,

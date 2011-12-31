@@ -35,6 +35,8 @@
 #include "Navigation/SearchPointVector.hpp"
 #include "ReachFan.hpp"
 
+struct GlidePolar;
+
 // define PLANNER_SET if STL tr1 extensions are not to be used
 // (with performance penalty)
 #define PLANNER_SET
@@ -232,7 +234,8 @@ public:
    * @param polar Glide performance model used for reach planning
    * @param wind Wind estimate
    */
-  void UpdatePolar(const GlidePolar &polar, const GlidePolar &safety_polar,
+  void UpdatePolar(const GlideSettings &settings,
+                   const GlidePolar &polar, const GlidePolar &safety_polar,
                    const SpeedVector &wind);
 
   /** Reset the optimiser as if never flown and clear temporary buffers. */
