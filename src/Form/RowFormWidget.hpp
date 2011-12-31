@@ -146,6 +146,8 @@ public:
     return SaveValue(i, registry_key, (int &)value);
   }
 
+  bool SaveValue(unsigned i, UnitGroup unit_group, fixed &value) const;
+
   bool SaveValue(unsigned i, UnitGroup unit_group,
                  const TCHAR *registry_key, fixed &value) const;
 

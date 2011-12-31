@@ -296,6 +296,24 @@ RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
 }
 
 bool
+RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group, fixed &value) const
+{
+  const DataFieldFloat &df =
+    (const DataFieldFloat &)GetDataField(i);
+  assert(df.GetType() == DataField::TYPE_REAL);
+
+  fixed new_value = df.GetAsFixed();
+  const Unit unit = Units::GetUserUnitByGroup(unit_group);
+  new_value = Units::ToSysUnit(new_value, unit);
+  if (new_value > value - df.GetStep() / 2 &&
+      new_value < value + df.GetStep() / 2)
+    return false;
+
+  value = new_value;
+  return true;
+}
+
+bool
 RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
                          const TCHAR *registry_key, fixed &value) const
 {
