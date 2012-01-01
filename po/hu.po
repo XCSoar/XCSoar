@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-30 12:43+0100\n"
+"POT-Creation-Date: 2012-01-01 22:47+0100\n"
 "PO-Revision-Date: 2011-12-20 20:02+0000\n"
 "Last-Translator: Úr Balázs <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -25,8 +25,8 @@ msgstr ""
 #. .. append " - Task #[n]" suffix to the task name
 #: src/Task/TaskStore.cpp:74 src/Menu/ExpandMacros.cpp:538
 #: src/Input/InputEventsSettings.cpp:315 src/Dialogs/dlgAnalysis.cpp:347
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:155
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:76
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:158
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:75
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:38
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:38
 #: Data/Input/default.xci:311 Data/Input/default.xci:360
@@ -48,8 +48,8 @@ msgid "Line skipped."
 msgstr "sor kihagyva"
 
 #: src/Airspace/AirspaceParser.cpp:241 src/Dialogs/dlgAnalysis.cpp:365
-#: src/Dialogs/dlgConfiguration.cpp:89
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:130
+#: src/Dialogs/dlgConfiguration.cpp:90
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:108
 #: Data/Dialogs/dlgAirspace_L.xml:3 Data/Dialogs/dlgAirspace.xml:3
 #: Data/Dialogs/dlgVoice.xml:34
 #, no-c-format
@@ -315,8 +315,8 @@ msgstr "Teljes"
 #: src/Menu/ExpandMacros.cpp:551 src/Menu/ExpandMacros.cpp:604
 #: src/Input/InputEventsSettings.cpp:443 src/Input/InputEventsSettings.cpp:446
 #: src/Dialogs/XML.cpp:560 src/Dialogs/StatusPanels/SystemStatusPanel.cpp:78
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:118
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:145
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:131
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:148
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:109
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:142
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:200
@@ -352,8 +352,8 @@ msgstr "Domborzat ki"
 
 #: src/Menu/ExpandMacros.cpp:524 src/Menu/ExpandMacros.cpp:548
 #: src/InfoBoxes/Panel/WindSetup.cpp:94
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:62
-#: src/Dialogs/dlgWindSettings.cpp:193
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:57
+#: src/Dialogs/dlgWindSettings.cpp:192
 #, no-c-format
 msgid "Manual"
 msgstr "Kézi"
@@ -380,7 +380,7 @@ msgstr "feladat + leszállók"
 
 #: src/Menu/ExpandMacros.cpp:539 src/Input/InputEventsSettings.cpp:316
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:54
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:128
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:104
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:111
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:119
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:148
@@ -846,7 +846,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:883
 #: src/Renderer/MapItemListRenderer.cpp:311 src/Widgets/TrafficWidget.cpp:316
 #: src/Widgets/TrafficWidget.cpp:317 src/Dialogs/DeviceListDialog.cpp:140
-#: src/Dialogs/dlgConfiguration.cpp:95 src/Dialogs/dlgFlarmTraffic.cpp:312
+#: src/Dialogs/dlgConfiguration.cpp:97 src/Dialogs/dlgFlarmTraffic.cpp:312
 #: src/Dialogs/dlgFlarmTraffic.cpp:313
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:123
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:126
@@ -2118,7 +2118,7 @@ msgstr "Infó"
 
 #: src/InfoBoxes/Content/Altitude.cpp:62
 #: src/InfoBoxes/Content/MacCready.cpp:62
-#: src/InfoBoxes/Content/Weather.cpp:103 src/Dialogs/dlgConfiguration.cpp:80
+#: src/InfoBoxes/Content/Weather.cpp:103 src/Dialogs/dlgConfiguration.cpp:81
 #, no-c-format
 msgid "Setup"
 msgstr "Beállítás"
@@ -2177,8 +2177,8 @@ msgid "Time Below"
 msgstr "Idő alacsonyabban"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:75 src/InfoBoxes/Panel/WindSetup.cpp:95
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:64
-#: src/Dialogs/dlgWindSettings.cpp:194 Data/Dialogs/dlgVegaDemo.xml:14
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:59
+#: src/Dialogs/dlgWindSettings.cpp:193 Data/Dialogs/dlgVegaDemo.xml:14
 #, no-c-format
 msgid "Circling"
 msgstr "Körözés"
@@ -2211,23 +2211,23 @@ msgstr "Ehhez nincs súgó."
 msgid "N/A"
 msgstr "na."
 
-#: src/InfoBoxes/Panel/WindSetup.cpp:86 src/Dialogs/dlgWindSettings.cpp:188
+#: src/InfoBoxes/Panel/WindSetup.cpp:86 src/Dialogs/dlgWindSettings.cpp:187
 #, no-c-format
 msgid "External"
 msgstr "Külső"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:96
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:66
-#: src/Dialogs/dlgWindSettings.cpp:195
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:61
+#: src/Dialogs/dlgWindSettings.cpp:194
 #, no-c-format
 msgid "ZigZag"
 msgstr "Cikkcakk"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:97
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:68
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:88
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:131
-#: src/Dialogs/dlgWindSettings.cpp:196
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:65
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:63
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:110
+#: src/Dialogs/dlgWindSettings.cpp:195
 #, no-c-format
 msgid "Both"
 msgstr "Mindkettő"
@@ -2246,8 +2246,7 @@ msgstr "Alap kijelzők"
 
 #: src/Input/InputEventsActions.cpp:247
 #: src/Dialogs/dlgFlarmTrafficDetails.cpp:245
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:26
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:26
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:84
 msgid "Competition ID"
 msgstr "Farokjel"
 
@@ -2515,8 +2514,8 @@ msgstr "GPS pozíciót mér"
 msgid "Loading Topography File..."
 msgstr "Térképjelek betöltése..."
 
-#: src/Terrain/RasterWeather.cpp:49 src/Dialogs/dlgConfiguration.cpp:88
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:129
+#: src/Terrain/RasterWeather.cpp:49 src/Dialogs/dlgConfiguration.cpp:89
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:106
 #: src/Dialogs/dlgWeather.cpp:111 Data/Dialogs/dlgVoice.xml:10
 #: Data/Input/default.xci:474 Data/Input/default.xci:1068
 #, no-c-format
@@ -2739,7 +2738,7 @@ msgstr "pont"
 #: src/Renderer/FlightStatisticsRenderer.cpp:401
 #: src/Renderer/FlightStatisticsRenderer.cpp:425
 #: src/Renderer/FlightStatisticsRenderer.cpp:453
-#: src/Dialogs/dlgConfiguration.cpp:109 Data/Dialogs/dlgWeather.xml:8
+#: src/Dialogs/dlgConfiguration.cpp:111 Data/Dialogs/dlgWeather.xml:8
 #, no-c-format
 msgid "Time"
 msgstr "Idő"
@@ -2947,23 +2946,23 @@ msgstr ""
 msgid "Driver"
 msgstr "Illesztőprogram"
 
-#: src/Device/Descriptor.cpp:153
+#: src/Device/Descriptor.cpp:137
 msgid "No such driver"
 msgstr "Nincs ilyen illesztőprogram."
 
-#: src/Device/Descriptor.cpp:164
+#: src/Device/Descriptor.cpp:148
 msgid "Unable to open port"
 msgstr "A port nem nyitható meg."
 
-#: src/Device/Descriptor.cpp:435 src/Device/Descriptor.cpp:443
+#: src/Device/Descriptor.cpp:417 src/Device/Descriptor.cpp:425
 msgid "Sending declaration"
 msgstr "Deklarálás küldése"
 
-#: src/Device/Descriptor.cpp:487
+#: src/Device/Descriptor.cpp:469
 msgid "Reading flight list"
 msgstr ""
 
-#: src/Device/Descriptor.cpp:505
+#: src/Device/Descriptor.cpp:487
 msgid "Downloading flight log"
 msgstr "Napló letöltése"
 
@@ -3040,7 +3039,7 @@ msgstr "Nincs kapcsolat"
 msgid "Edit device"
 msgstr ""
 
-#: src/Dialogs/DeviceListDialog.cpp:273 src/Dialogs/dlgConfiguration.cpp:102
+#: src/Dialogs/DeviceListDialog.cpp:273 src/Dialogs/dlgConfiguration.cpp:104
 #: Data/Input/default.xci:611 Data/Input/default.xci:1139
 #, no-c-format
 msgid "Devices"
@@ -3352,7 +3351,7 @@ msgstr "Repülő részletek"
 msgid "Plane Polar"
 msgstr "Repülő poláris"
 
-#: src/Dialogs/dlgPlanePolar.cpp:58 src/Dialogs/dlgConfiguration.cpp:103
+#: src/Dialogs/dlgPlanePolar.cpp:58 src/Dialogs/dlgConfiguration.cpp:105
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:128
 #: Data/Dialogs/dlgPlaneDetails_L.xml:23 Data/Dialogs/dlgPlaneDetails.xml:27
 #: Data/Dialogs/dlgPlanePolar_L.xml:5 Data/Dialogs/dlgPlanePolar.xml:5
@@ -3373,107 +3372,114 @@ msgstr "Polárgörbe betöltése"
 msgid "Load Polar From File"
 msgstr "Polárgörbe betöltése fájlból"
 
-#: src/Dialogs/dlgConfiguration.cpp:74 src/Dialogs/dlgConfiguration.cpp:84
+#: src/Dialogs/dlgConfiguration.cpp:75 src/Dialogs/dlgConfiguration.cpp:85
 #, no-c-format
 msgid "Site Files"
 msgstr "Térképfájlok"
 
-#: src/Dialogs/dlgConfiguration.cpp:75
+#: src/Dialogs/dlgConfiguration.cpp:76
 #, no-c-format
 msgid "Map Display"
 msgstr "Térkép megjelenítés"
 
-#: src/Dialogs/dlgConfiguration.cpp:76 src/Dialogs/dlgConfiguration.cpp:92
+#: src/Dialogs/dlgConfiguration.cpp:77 src/Dialogs/dlgConfiguration.cpp:93
 #, no-c-format
 msgid "Glide Computer"
 msgstr "Siklókomputer"
 
-#: src/Dialogs/dlgConfiguration.cpp:77 Data/Dialogs/dlgConfigFonts_L.xml:31
+#: src/Dialogs/dlgConfiguration.cpp:78 Data/Dialogs/dlgConfigFonts_L.xml:31
 #: Data/Dialogs/dlgConfigFonts.xml:31
 #, no-c-format
 msgid "Gauges"
 msgstr "Műszerek"
 
-#: src/Dialogs/dlgConfiguration.cpp:78
+#: src/Dialogs/dlgConfiguration.cpp:79
 #, no-c-format
 msgid "Task Defaults"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:79
+#: src/Dialogs/dlgConfiguration.cpp:80
 #, no-c-format
 msgid "Look"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:85
+#: src/Dialogs/dlgConfiguration.cpp:86
 #, no-c-format
 msgid "Orientation"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:86
+#: src/Dialogs/dlgConfiguration.cpp:87
 #, no-c-format
 msgid "Elements"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:87
+#: src/Dialogs/dlgConfiguration.cpp:88
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:11
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:11
 #, no-c-format
 msgid "Waypoints"
 msgstr "Fordulópontok"
 
-#: src/Dialogs/dlgConfiguration.cpp:91
+#: src/Dialogs/dlgConfiguration.cpp:92
 #, no-c-format
 msgid "Safety Factors"
 msgstr "Biztonsági tényezők"
 
-#: src/Dialogs/dlgConfiguration.cpp:93
+#: src/Dialogs/dlgConfiguration.cpp:94
+#: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:203
+#: src/Weather/NOAAFormatter.cpp:95 src/Weather/NOAAFormatter.cpp:102
+#, no-c-format
+msgid "Wind"
+msgstr "Szél"
+
+#: src/Dialogs/dlgConfiguration.cpp:95
 #, no-c-format
 msgid "Route"
 msgstr "Útvonal"
 
-#: src/Dialogs/dlgConfiguration.cpp:94
+#: src/Dialogs/dlgConfiguration.cpp:96
 #, no-c-format
 msgid "FLARM, Other"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:96
+#: src/Dialogs/dlgConfiguration.cpp:98
 #, no-c-format
 msgid "Task Rules"
 msgstr "Feladat szabályok"
 
-#: src/Dialogs/dlgConfiguration.cpp:97
+#: src/Dialogs/dlgConfiguration.cpp:99
 #, no-c-format
 msgid "Turnpoint Types"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:98
+#: src/Dialogs/dlgConfiguration.cpp:100
 #, no-c-format
 msgid "Language, Input"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:99
+#: src/Dialogs/dlgConfiguration.cpp:101
 #, no-c-format
 msgid "Screen Layout"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:100
+#: src/Dialogs/dlgConfiguration.cpp:102
 #, no-c-format
 msgid "InfoBox Pages"
 msgstr "Kijelző oldalak"
 
-#: src/Dialogs/dlgConfiguration.cpp:101
+#: src/Dialogs/dlgConfiguration.cpp:103
 #, no-c-format
 msgid "InfoBox Modes"
 msgstr "Kijelző oldalak tartalma"
 
-#: src/Dialogs/dlgConfiguration.cpp:104 Data/Dialogs/dlgStatusSystem.xml:8
+#: src/Dialogs/dlgConfiguration.cpp:106 Data/Dialogs/dlgStatusSystem.xml:8
 #: Data/Dialogs/pnlStatusSystem.xml:8 Data/Input/default.xci:578
 #: Data/Input/default.xci:1124
 #, no-c-format
 msgid "Logger"
 msgstr "Logger"
 
-#: src/Dialogs/dlgConfiguration.cpp:105
+#: src/Dialogs/dlgConfiguration.cpp:107
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:135
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:5
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:5
@@ -3481,17 +3487,17 @@ msgstr "Logger"
 msgid "Units"
 msgstr "Mértékegységek"
 
-#: src/Dialogs/dlgConfiguration.cpp:111
+#: src/Dialogs/dlgConfiguration.cpp:113
 #, no-c-format
 msgid "Tracking"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:114
+#: src/Dialogs/dlgConfiguration.cpp:116
 #, no-c-format
 msgid "Experimental Features"
 msgstr "Kísérleti funkciók"
 
-#: src/Dialogs/dlgConfiguration.cpp:261 src/Dialogs/dlgConfigFonts.cpp:295
+#: src/Dialogs/dlgConfiguration.cpp:263 src/Dialogs/dlgConfigFonts.cpp:295
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr "Változások elmentve. Újra kell indítani az XCSoar programot."
 
@@ -3846,54 +3852,12 @@ msgid ""
 "map."
 msgstr "A termiksegéd megjelenését szabályozza."
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:63
-#, no-c-format
-msgid ""
-"When the algorithm is switched off, the pilot is responsible for setting the "
-"wind estimate."
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:65
-#, no-c-format
-msgid "Requires only a GPS source."
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:67
-#, no-c-format
-msgid "Requires GPS and an intelligent vario with airspeed output."
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:69
-#, no-c-format
-msgid "Use ZigZag and circling."
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:73
-msgid "Auto wind"
-msgstr "Aut. szél számítás"
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:74
-msgid "This allows switching on or off the automatic wind algorithm."
-msgstr "Az automatikus szélalgoritmust lehet ki/be kapcsolni."
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:77
-msgid "External wind"
-msgstr "Külső széladat"
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:78
-msgid ""
-"If enabled, then the wind vector received from external devices overrides "
-"XCSoar's internal wind calculation."
-msgstr ""
-"Ha engedélyezve van, a külső eszközből származó széladat felülírja az XCSoar "
-"saját számításait."
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:83
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:60
 #, no-c-format
 msgid "Final glide"
 msgstr "Végsiklás"
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:84
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:61
 #, no-c-format
 msgid ""
 "Adjusts MC for fastest arrival.  For OLC sprint tasks, the MacCready is "
@@ -3901,37 +3865,37 @@ msgid ""
 "reach the finish height."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:86
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:63
 #, no-c-format
 msgid "Trending average climb"
 msgstr "Emelések görgetett átlaga"
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:87
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:64
 #, no-c-format
 msgid "Sets MC to the trending average climb rate based on all climbs."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:89
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:66
 #, no-c-format
 msgid ""
 "Uses trending average during task, then fastest arrival when in final glide "
 "mode."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:93
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:70
 msgid "Auto MC mode"
 msgstr "Automata MC"
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:94
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:71
 msgid "This option defines which auto MacCready algorithm is used."
 msgstr ""
 
 #. TODO All below is for the Expert
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:98
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:75
 msgid "Block speed to fly"
 msgstr "Tartandó blokk sebesség"
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:99
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:76
 msgid ""
 "If enabled, the command speed in cruise is set to the MacCready speed to fly "
 "in no vertical air-mass movement. If disabled, the command speed in cruise "
@@ -3943,11 +3907,11 @@ msgstr ""
 "delfinezésre utasítanak, ami a függőleges légmozgás szerinti MacCready "
 "sebesség."
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:105
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:82
 msgid "Nav. by baro altitude"
 msgstr "Nav. baro. mag. alapján"
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:106
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:83
 msgid ""
 "When enabled and if connected to a barometric altimeter, barometric altitude "
 "is used for all navigation functions. Otherwise GPS altitude is used."
@@ -3956,11 +3920,11 @@ msgstr ""
 "barometrikus magasság lesz felhasználva minden navigációs számításhoz. "
 "Ellenkező esetben a GPS magasságot használja."
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:110
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:87
 msgid "Flap forces cruise"
 msgstr "Ivelőlap siklást jelent"
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:111
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:88
 msgid ""
 "When Vega variometer is connected and this option is true, the positive flap "
 "setting switches the flight mode between circling and cruise."
@@ -3968,21 +3932,21 @@ msgstr ""
 "Ha bekapcsoljuk és Vega variométer csatlakozik, a pozitív ívelőlap állások "
 "átkapcsolnak a körözés és a siklás üzemmódok között."
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:116
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:93
 #, no-c-format
 msgid "Preferred period for paragliders."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:119
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:96
 #, no-c-format
 msgid "Preferred period for gliders."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:125
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:102
 msgid "L/D average period"
 msgstr "Átlagos siklószám mintavétel"
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:126
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:103
 msgid ""
 "Here you can decide on how many seconds of flight this calculation must be "
 "done. Normally for gliders a good value is 90-120 seconds, and for "
@@ -3991,6 +3955,48 @@ msgstr ""
 "Itt eldöntheti, hogy a repülés hanyadik másodpercében történjen meg ez a "
 "számítás. Vitorlázógépek esetében a 90-120 mp., siklóernyők esetében a 15 "
 "mp. általában a megfelelő érték."
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:58
+#, no-c-format
+msgid ""
+"When the algorithm is switched off, the pilot is responsible for setting the "
+"wind estimate."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:60
+#, no-c-format
+msgid "Requires only a GPS source."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:62
+#, no-c-format
+msgid "Requires GPS and an intelligent vario with airspeed output."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:64
+#, no-c-format
+msgid "Use ZigZag and circling."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:68
+msgid "Auto wind"
+msgstr "Aut. szél számítás"
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:69
+msgid "This allows switching on or off the automatic wind algorithm."
+msgstr "Az automatikus szélalgoritmust lehet ki/be kapcsolni."
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:72
+msgid "External wind"
+msgstr "Külső széladat"
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:73
+msgid ""
+"If enabled, then the wind vector received from external devices overrides "
+"XCSoar's internal wind calculation."
+msgstr ""
+"Ha engedélyezve van, a külső eszközből származó széladat felülírja az XCSoar "
+"saját számításait."
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:106
 msgid "Automatic"
@@ -4301,6 +4307,69 @@ msgstr ""
 msgid "InfoBox border"
 msgstr "Kijelző keret"
 
+#. Expert item (TODO)
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:67
+msgid "Time step cruise"
+msgstr "Mintavétel siklásban"
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:68
+msgid "This is the time interval between logged points when not circling."
+msgstr "Ez a naplózás üteme, amikor nincs körözés."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:73
+msgid "Time step circling"
+msgstr "Mintavétel körözésben"
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:74
+msgid "This is the time interval between logged points when circling."
+msgstr "Körözés közben ilyen sűrűn történik meg a helyzet naplózása."
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:80
+msgid "Pilot name"
+msgstr "Pilóta neve"
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:82
+#: Data/Dialogs/dlgVario_L.xml:346 Data/Dialogs/dlgVario.xml:347
+msgid "Aircraft type"
+msgstr "Repülőgép típus"
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:83
+msgid "Aircraft reg."
+msgstr "Lajstrom jel"
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:87
+msgid "Logger ID"
+msgstr "Logger azonosító"
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:90
+msgid "Short file name"
+msgstr "Rövid fájl név"
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:91
+msgid ""
+"This determines whether the logger uses the short IGC file name or the long "
+"IGC file name. Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-"
+"ABC-01.IGC)."
+msgstr ""
+"Ez határozza meg, hogy a logger a rövid vagy a hosszú IGC fájlnevet "
+"használja. Példa rövid fájlnév: (81HXABC1.IGC), hosszú fájlnév: (2008-01-18-"
+"XXX-ABC-01.IGC)"
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:97
+msgid "Auto. logger"
+msgstr "Automatikus logger"
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:98
+msgid ""
+"Enables the automatic starting and stopping of logger on takeoff and landing "
+"respectively. Disable when flying paragliders."
+msgstr ""
+"A logger automatikus elindulását és leállását engedélyezi fel- és "
+"leszálláskor. Függővitorlákon ki kell kapcsolni."
+
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:44
 #, no-c-format
 msgid "Track up"
@@ -4430,44 +4499,231 @@ msgstr "A különféle képernyőkön megjelenő információkat határozza meg.
 msgid "Polar name"
 msgstr "Poláris neve"
 
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:105
+#, no-c-format
+msgid "Neither airspace nor terrain is used for route planning."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:107
+#, no-c-format
+msgid "Routes will avoid terrain."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:109
+#, no-c-format
+msgid "Routes will avoid airspace."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:111
+#, no-c-format
+msgid "Routes will avoid airspace and terrain."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:115
+msgid "Route mode"
+msgstr "Útvonaltervezés módja"
+
+#. Expert item (TODO)
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:118
+msgid "Route climb"
+msgstr "Emelések az útvonalon"
+
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:119
+msgid ""
+"When enabled and MC is positive, route planning allows climbs between the "
+"aircraft location and destination."
+msgstr ""
+"Ha bekapcsoljuk és az MC érték pozitív, az útvonaltervező emelésekkel számol "
+"a gép helyzete és az úticél között."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:124
+msgid "Route ceiling"
+msgstr "Útvonal teteje"
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:125
+msgid ""
+"When enabled, route planning climbs are limited to ceiling defined by "
+"greater of current aircraft altitude plus 500 m and the thermal ceiling.  If "
+"disabled, climbs are unlimited."
+msgstr ""
+"Ha engedélyezzük, ez szabályozza, hogy milyen magas emelésekkel számol az "
+"útvonaltervezésben. Ez vagy a gép pillanatnyi magassága felett 500m vagy a "
+"termik magassága, amelyik magasabb. Ha kikapcsoljuk, az emelések korlátlan "
+"magasak."
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:132
+#, no-c-format
+msgid "Reach calculations disabled."
+msgstr "Számítások letiltva."
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:133
+#, no-c-format
+msgid "Straight"
+msgstr "Egyenesen"
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:134
+#, no-c-format
+msgid "The reach is from straight line paths from the glider."
+msgstr "Az egyenes vonalú repülésben elérhető terület."
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:135
+#, no-c-format
+msgid "Turning"
+msgstr "Kerülőkkel"
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:136
+#, no-c-format
+msgid "The reach is calculated allowing turns around terrain obstacles."
+msgstr "A terepakadályok megkerülésével elérhető terület."
+
+#. Spacer
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:142
+msgid "Reach mode"
+msgstr "Elérhető"
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:143
+msgid ""
+"How calculations are performed of the reach of the glider with respect to "
+"terrain."
+msgstr "Az elérhető terület kiszámításának módja."
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:148
+#, fuzzy, no-c-format
+msgid "Disables the reach display."
+msgstr "Kirajzolás letiltva."
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:149
 #: src/Dialogs/dlgTaskHelpers.cpp:243
 #, no-c-format
 msgid "Line"
 msgstr "Vonal"
 
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:120
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:149
+#, no-c-format
+msgid "Draws a dashed line at the glide reach."
+msgstr "A terület peremét szaggatott vonal jelzi."
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:150
 #, no-c-format
 msgid "Shade"
 msgstr "Árnyék"
 
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:146
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:150
 #, no-c-format
-msgid "Straight"
-msgstr "Egyenesen"
+msgid "Shades terrain outside glide reach."
+msgstr "A területen kívüli terep árnyékolva lesz."
 
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:147
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:154
+msgid "Reach display"
+msgstr "Elérhető terület"
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:158
 #, no-c-format
-msgid "Turning"
-msgstr "Kerülőkkel"
+msgid "Uses task glide polar."
+msgstr "A feladat polárgörbéjével."
 
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:156
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:19
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:19
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:159
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:84
 #, no-c-format
 msgid "Safety MC"
 msgstr "Biztonságos MC"
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:75
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:159
+#, no-c-format
+msgid "Uses safety MacCready value"
+msgstr "A biztonsági MC értékkel."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:164
+msgid "Reach polar"
+msgstr "Elérhető táv polárisa"
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:165
+msgid ""
+"This determines the glide performance used in reach, landable arrival, abort "
+"and alternate calculations."
+msgstr ""
+"Ez szabályozza, hogy a berepülhető terület, leszállóhelyi érkezés, "
+"feladatmegszakítás és kitérő számításánál a gép milyen teljesítményével "
+"számoljon."
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:61
+#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:9
+#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:9
+msgid "Arrival height"
+msgstr "Érkezési magasság"
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:62
+msgid ""
+"The height above terrain that the glider should arrive at for a safe landing."
+msgstr ""
+"A biztonságos leszálláshoz ezen a föld feletti magasságon kell a gépnek "
+"érkeznie."
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:67
+msgid "Terrain height"
+msgstr "Terep feletti bizt. mag."
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:68
+msgid "The height above terrain that the glider must clear during final glide."
+msgstr "A végsiklás közben a terep felett megőrizendő magasság."
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:74
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:154
 #, no-c-format
 msgid "Simple"
 msgstr "Egyszerű"
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:77
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:76
 #, no-c-format
 msgid "Home"
 msgstr "Bázisra"
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:80
+msgid "Alternates mode"
+msgstr "Kitérő üzemmód"
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:81
+msgid ""
+"Determines sorting of alternates in the alternates dialog and in abort "
+"mode:\n"
+"[Simple] The alternates will only be sorted by waypoint type (airport/"
+"outlanding field) and arrival height.\n"
+"[Task] The sorting will also take the current task direction into account.\n"
+"[Home] The sorting will try to find landing options in the current direction "
+"to the configured home waypoint."
+msgstr ""
+"A kitérő repterek rendezésének elve a kitérők párbeszédablakban vagy "
+"feladatmegszakítás során:\n"
+"[EGYSZERŰ] A kitérők a típusuk (reptér/terep) és érkezési magasságuk szerint "
+"rendezve.\n"
+"[FELADAT] A rendezés figyelembe veszi a feladat szerinti irányt is.\n"
+"[BÁZIS] A rendezés figyelembe veszi a beállított bázisreptér irányát."
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:85
+msgid ""
+"The MacCready setting used, when safety MC is enabled for reach "
+"calculations, in task abort mode and for determining arrival altitude at "
+"airfields."
+msgstr ""
+"Ezzel a MacCready értékkel kerülnek meghatározásra feladat megszakítása "
+"esetén az elérhető leszállóhelyek és érkezési magasságok."
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:90
+msgid "STF risk factor"
+msgstr "Magasságvesztés kockázata"
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:91
+msgid ""
+"The STF risk factor reduces the MacCready setting used to calculate speed to "
+"fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for "
+"no compensation, 1.0 scales MC linearly with height."
+msgstr ""
+"A kockázati tényező csökkenti a tartandó sebesség számításához használt "
+"MacCready értéket amikor a gép alacsonyra került, kompenzálva ezzel a "
+"kockázatot. Állítsa 0.0-ra a kompenzálás elnyomásához, 1.0-ra a magasság és "
+"a MC közötti lineáris összefüggéshez."
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:101
 msgid "Arrow head"
@@ -4528,11 +4784,6 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:202
 msgid "Sun"
 msgstr "Nap"
-
-#: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:203
-#: src/Weather/NOAAFormatter.cpp:95 src/Weather/NOAAFormatter.cpp:102
-msgid "Wind"
-msgstr "Szél"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:218
 msgid "Low lands"
@@ -5539,31 +5790,9 @@ msgstr ""
 msgid "TE port"
 msgstr "ÖsszE port"
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:9
-msgid "Time step circling"
-msgstr "Mintavétel körözésben"
-
 #: Data/Dialogs/dlgStatusTask.xml:3
 msgid "Task Status"
 msgstr "Feladat Státusz"
-
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:30
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:30
-msgid "Logger ID"
-msgstr "Logger azonosító"
-
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:24
-msgid ""
-"The STF risk factor reduces the MacCready setting used to calculate speed to "
-"fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for "
-"no compensation, 1.0 scales MC linearly with height."
-msgstr ""
-"A kockázati tényező csökkenti a tartandó sebesség számításához használt "
-"MacCready értéket amikor a gép alacsonyra került, kompenzálva ezzel a "
-"kockázatot. Állítsa 0.0-ra a kompenzálás elnyomásához, 1.0-ra a magasság és "
-"a MC közötti lineáris összefüggéshez."
 
 #: Data/Dialogs/dlgWindSettings.xml:3
 msgid "Wind Settings"
@@ -5779,11 +6008,6 @@ msgstr ""
 msgid "Mute vario on voice"
 msgstr "Variométer némítás"
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:4
-msgid "Time step cruise"
-msgstr "Mintavétel siklásban"
-
 #: Data/Dialogs/dlgWaypointDetails_L.xml:31
 #: Data/Dialogs/dlgWaypointDetails.xml:31
 msgid "Set As New Home"
@@ -5801,18 +6025,6 @@ msgstr ""
 "lehetséges minimum és maximum távhoz képest milyen távot jelölt ki a "
 "célpontokkal. -100% a minimum, 0% a névleges, +100% a maximum HT távot "
 "jelenti."
-
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:6
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:6
-msgid ""
-"If set to \"None\", neither airspace or terrain is used for route planning.  "
-"If set to \"Terrain\", routes will avoid terrain; if set to \"Airspace\", "
-"routes will avoid airspace.  If set to \"Both\", routes will avoid airspace "
-"and terrain."
-msgstr ""
-"\"Semmi\" esetén sem a légterek, sem a domborzat nem lesz figyelembe véve az "
-"útvonaltervezésnél. \"Terep\" esetén az útvonal elkerüli a domborzatot, "
-"\"Légtér\" esetén a légtereket. \"Minden\" esetén kikerüli mindezeket."
 
 #: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:9
 #: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:9
@@ -5860,11 +6072,6 @@ msgstr "Az aktuális feladatban követendő szabályok."
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:12
 msgid "Terrain contrast"
 msgstr "Kontraszt"
-
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:24
-msgid "Reach mode"
-msgstr "Elérhető"
 
 #: Data/Dialogs/dlgTeamCode_L.xml:10 Data/Dialogs/dlgTeamCode.xml:9
 msgid "Own code"
@@ -6026,39 +6233,12 @@ msgstr "Ez körözés vagy siklás üzemmódba kényszeríti a variométert."
 msgid "Label visibility"
 msgstr "Címke láthatóság"
 
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:24
-msgid ""
-"How calculations are performed of the reach of the glider with respect to "
-"terrain.\n"
-"[Off] Reach calculations disabled.\n"
-"[Straight] The reach is from straight line paths from the glider.\n"
-"[Turning] The reach is calculated allowing turns around terrain obstacles."
-msgstr ""
-"Az elérhető terület kiszámításának módja.\n"
-"[KI] Számítások letiltva.\n"
-"[EGYENESEN] Az egyenes vonalú repülésben elérhető terület.\n"
-"[KERÜLŐKKEL] A terepakadályok megkerülésével elérhető terület."
-
 #: Data/Dialogs/pnlTaskProperties_L.xml:26
 #: Data/Dialogs/pnlTaskProperties.xml:25
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel_L.xml:37
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel.xml:34
 msgid "Finish min. height"
 msgstr "Cél min magasság"
-
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:29
-msgid ""
-"This determines whether the glide reach is drawn as a line on the map area:\n"
-"[Off] Disables display\n"
-"[Line] Draws a dashed line at the glide reach\n"
-"[Shade] Shades terrain outside glide reach"
-msgstr ""
-"A siklásban elérhető terület kirajzolásának módja.\n"
-"[KI] Kirajzolás letiltva\n"
-"[VONAL] A terület peremét szaggatott vonal jelzi.\n"
-"[ÁRNYÉK] A területen kívüli terep árnyékolva lesz."
 
 #: Data/Dialogs/pnlStatusRules.xml:7
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:5
@@ -6116,17 +6296,6 @@ msgstr ""
 msgid "Topography display"
 msgstr "Topográfia"
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:34
-msgid ""
-"This determines whether the logger uses the short IGC file name or the long "
-"IGC file name. Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-"
-"ABC-01.IGC)."
-msgstr ""
-"Ez határozza meg, hogy a logger a rövid vagy a hosszú IGC fájlnevet "
-"használja. Példa rövid fájlnév: (81HXABC1.IGC), hosszú fájlnév: (2008-01-18-"
-"XXX-ABC-01.IGC)"
-
 #: Data/Dialogs/dlgSwitches.xml:3
 msgid "Switches"
 msgstr "Kapcsolók"
@@ -6137,11 +6306,6 @@ msgstr "Kapcsolók"
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel.xml:17
 msgid "Start max. height"
 msgstr "Start max magasság"
-
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:16
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:16
-msgid "Route ceiling"
-msgstr "Útvonal teteje"
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:8
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:8
@@ -6197,11 +6361,6 @@ msgid ""
 "[Full arrow] Draws an arrow head with a dashed arrow line"
 msgstr "Meghatározza a szél megjelenítésének módját a térképen."
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:4
-msgid "This is the time interval between logged points when not circling."
-msgstr "Ez a naplózás üteme, amikor nincs körözés."
-
 #: Data/Dialogs/dlgSwitches.xml:35
 msgid "Speed command"
 msgstr "Sebesség parancs"
@@ -6255,15 +6414,6 @@ msgstr "ÁTL/MAG"
 msgid "This sets the task point for review."
 msgstr "Ezzel kiválasztható a megtekintendő feladatpont."
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:39
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:39
-msgid ""
-"Enables the automatic starting and stopping of logger on takeoff and landing "
-"respectively. Disable when flying paragliders."
-msgstr ""
-"A logger automatikus elindulását és leállását engedélyezi fel- és "
-"leszálláskor. Függővitorlákon ki kell kapcsolni."
-
 #: Data/Dialogs/dlgVoice.xml:34
 msgid "Enable voice warnings for airspace incursions."
 msgstr "A légtérsértésre figyelmeztető hangjelzés engedélyezése."
@@ -6308,16 +6458,6 @@ msgstr "Szimbólum"
 #: Data/Dialogs/dlgWaypointDetails.xml:32
 msgid "Pan To Waypoint"
 msgstr "Gördülj a ponthoz"
-
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:19
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:19
-msgid ""
-"The MacCready setting used, when safety MC is enabled for reach "
-"calculations, in task abort mode and for determining arrival altitude at "
-"airfields."
-msgstr ""
-"Ezzel a MacCready értékkel kerülnek meghatározásra feladat megszakítása "
-"esetén az elérhető leszállóhelyek és érkezési magasságok."
 
 #: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:9
 #: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:9
@@ -6508,11 +6648,6 @@ msgstr ""
 #: Data/Dialogs/dlgVario_L.xml:352 Data/Dialogs/dlgVario.xml:353
 msgid "Interval; info"
 msgstr "Intervallum; infó"
-
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:39
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:39
-msgid "Auto. logger"
-msgstr "Automatikus logger"
 
 #: Data/Dialogs/pnlStatusTask.xml:10
 msgid "Speed average"
@@ -6726,11 +6861,6 @@ msgstr "Keresés"
 msgid "Change Type"
 msgstr "Típusváltás"
 
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:11
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:11
-msgid "Route climb"
-msgstr "Emelések az útvonalon"
-
 #: Data/Dialogs/dlgVoice.xml:30
 msgid ""
 "Enable voice announcement that the glider is within the task observation "
@@ -6770,15 +6900,6 @@ msgstr "A nyomvonal megjelenítésének típusát állítja be."
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:32
 msgid "Units used for task speeds."
 msgstr "Feladat sebességéhez használt mértékegységek."
-
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:11
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:11
-msgid ""
-"When enabled and MC is positive, route planning allows climbs between the "
-"aircraft location and destination."
-msgstr ""
-"Ha bekapcsoljuk és az MC érték pozitív, az útvonaltervező emelésekkel számol "
-"a gép helyzete és az úticél között."
 
 #: Data/Dialogs/dlgPlaneDetails_L.xml:5 Data/Dialogs/dlgPlaneDetails.xml:5
 msgid "Registration"
@@ -7079,15 +7200,15 @@ msgstr ""
 "befolyásolja a fő siklókomputer beállításait, ha az ablakot a Mégsem gombbal "
 "zárjuk be."
 
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:5
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:5
-msgid "Default start type for new tasks you create."
-msgstr "Új feladatok alap starttípusa."
-
 #: Data/Dialogs/dlgWindSettings.xml:4
 #: Data/Dialogs/Infobox/pnlInfoBoxWindEdit.xml:4
 msgid "Manual adjustment of wind speed."
 msgstr "A szélsebesség kézi beállítása."
+
+#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:5
+#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:5
+msgid "Default start type for new tasks you create."
+msgstr "Új feladatok alap starttípusa."
 
 #: Data/Dialogs/dlgLoggerReplay.xml:14
 msgid ""
@@ -7137,11 +7258,6 @@ msgid ""
 msgstr ""
 "Az összenergia szonda és a pitot/statikus összenergia keverésének aránya."
 
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:6
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:6
-msgid "Route mode"
-msgstr "Útvonaltervezés módja"
-
 #: Data/Dialogs/Infobox/pnlInfoBoxMacCreadySetup.xml:4
 msgid "Setup Mode"
 msgstr "Beállítás mód"
@@ -7155,11 +7271,6 @@ msgstr "Le"
 msgid "Configuration"
 msgstr "Beállítások"
 
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:24
-msgid "STF risk factor"
-msgstr "Magasságvesztés kockázata"
-
 #: Data/Dialogs/dlgVoice.xml:22
 msgid "Enable voice read-back of MacReady setting after it is adjusted."
 msgstr "A MacCready érték változtatását követő hangjelzést engedélyezi."
@@ -7167,11 +7278,6 @@ msgstr "A MacCready érték változtatását követő hangjelzést engedélyezi.
 #: Data/Dialogs/dlgVario_L.xml:100 Data/Dialogs/dlgVario.xml:101
 msgid "Filter circling"
 msgstr "Körözés szűrése"
-
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:9
-msgid "The height above terrain that the glider must clear during final glide."
-msgstr "A végsiklás közben a terep felett megőrizendő magasság."
 
 #: Data/Dialogs/dlgVario_L.xml:130 Data/Dialogs/dlgVario.xml:131
 msgid "Cruise hi cutoff"
@@ -7185,11 +7291,6 @@ msgstr "Referencia tömeg"
 #: Data/Dialogs/dlgAirspaceWarnings.xml:8
 msgid "ACK Day"
 msgstr "Napi nyugta"
-
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:9
-msgid "Terrain height"
-msgstr "Terep feletti bizt. mag."
 
 #: Data/Dialogs/dlgVario_L.xml:306 Data/Dialogs/dlgVario.xml:307
 msgid "Headset threshold"
@@ -7237,11 +7338,6 @@ msgstr "Készlet betöltése"
 #: Data/Dialogs/dlgWaypointSelect_L.xml:1 Data/Dialogs/dlgWaypointSelect.xml:1
 msgid "Select Waypoint"
 msgstr "Válasszon fordulópontot!"
-
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:9
-msgid "This is the time interval between logged points when circling."
-msgstr "Körözés közben ilyen sűrűn történik meg a helyzet naplózása."
 
 #: Data/Dialogs/dlgVario_L.xml:336 Data/Dialogs/dlgVario.xml:337
 msgid "No aircraft type"
@@ -7400,14 +7496,14 @@ msgstr ""
 msgid "Circling low cutoff"
 msgstr "Körözés alsó vág"
 
+#: Data/Dialogs/dlgVario_L.xml:134 Data/Dialogs/dlgVario.xml:135
+msgid "Cruise low cutoff"
+msgstr "Siklás alsó vág"
+
 #: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:44
 #: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:44
 msgid "Wind arrow"
 msgstr "Szél nyíl"
-
-#: Data/Dialogs/dlgVario_L.xml:134 Data/Dialogs/dlgVario.xml:135
-msgid "Cruise low cutoff"
-msgstr "Siklás alsó vág"
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid ""
@@ -7429,13 +7525,6 @@ msgid ""
 "the task.  Set to 0 for no limit."
 msgstr ""
 
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:4
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:9
-msgid "Arrival height"
-msgstr "Érkezési magasság"
-
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
 #: Data/Dialogs/pnlTaskProperties.xml:30
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel_L.xml:42
@@ -7455,14 +7544,14 @@ msgstr ""
 msgid "ACK Space"
 msgstr "Légtér nyugta"
 
+#: Data/Dialogs/dlgPlaneDetails_L.xml:33 Data/Dialogs/dlgPlaneDetails.xml:39
+msgid "Max. Ballast"
+msgstr ""
+
 #: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:29
 #: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:29
 msgid "Trail scaled"
 msgstr "Nyomvonal méretezés"
-
-#: Data/Dialogs/dlgPlaneDetails_L.xml:33 Data/Dialogs/dlgPlaneDetails.xml:39
-msgid "Max. Ballast"
-msgstr ""
 
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:15
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:7
@@ -7764,11 +7853,6 @@ msgstr ""
 msgid "Flap landing"
 msgstr "Leszálló ívelőlap"
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:34
-msgid "Short file name"
-msgstr "Rövid fájl név"
-
 #: Data/Dialogs/dlgVario_L.xml:148 Data/Dialogs/dlgVario_L.xml:170
 #: Data/Dialogs/dlgVario_L.xml:192 Data/Dialogs/dlgVario_L.xml:214
 #: Data/Dialogs/dlgVario_L.xml:236 Data/Dialogs/dlgVario_L.xml:258
@@ -7817,11 +7901,6 @@ msgstr ""
 msgid "Vega"
 msgstr "Vega"
 
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:34
-msgid "Reach polar"
-msgstr "Elérhető táv polárisa"
-
 #: Data/Dialogs/dlgTextEntry.xml:3
 msgid "Edit text"
 msgstr "Szöveg szerkesztése"
@@ -7835,45 +7914,13 @@ msgstr "MacCready érték kijelzése"
 msgid "Cruise deadband type"
 msgstr "Siklás holtsáv típusa"
 
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:16
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:16
-msgid ""
-"When enabled, route planning climbs are limited to ceiling defined by "
-"greater of current aircraft altitude plus 500 m and the thermal ceiling.  If "
-"disabled, climbs are unlimited."
-msgstr ""
-"Ha engedélyezzük, ez szabályozza, hogy milyen magas emelésekkel számol az "
-"útvonaltervezésben. Ez vagy a gép pillanatnyi magassága felett 500m vagy a "
-"termik magassága, amelyik magasabb. Ha kikapcsoljuk, az emelések korlátlan "
-"magasak."
-
 #: Data/Dialogs/dlgVario_L.xml:16 Data/Dialogs/dlgVario.xml:17
 msgid "Whether the Pitot port is connected."
 msgstr "Pitot port csatlakozása"
 
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:34
-msgid ""
-"This determines the glide performance used in reach, landable arrival, abort "
-"and alternate calculations:\n"
-"[Task] Uses task glide polar\n"
-"[Safety MC] Uses safety MacCready value"
-msgstr ""
-"Ez szabályozza, hogy a berepülhető terület, leszállóhelyi érkezés, "
-"feladatmegszakítás és kitérő számításánál a gép milyen teljesítményével "
-"számoljon.\n"
-"[FELADAT] A feladat polárgörbéjével\n"
-"[BIZTONSÁGOS MC] A biztonsági MC értékkel"
-
 #: Data/Dialogs/dlgVario_L.xml:386 Data/Dialogs/dlgVario.xml:387
 msgid "Battery empty delay"
 msgstr "Telep lemerült késleltetés"
-
-#: Data/Dialogs/dlgVario_L.xml:346 Data/Dialogs/dlgVario.xml:347
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:18
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:18
-msgid "Aircraft type"
-msgstr "Repülőgép típus"
 
 #: Data/Dialogs/dlgFlarmTraffic_L.xml:14 Data/Dialogs/dlgFlarmTraffic.xml:7
 msgid "Auto. zoom"
@@ -7994,15 +8041,15 @@ msgstr "Címkeformátum"
 msgid "Friends"
 msgstr ""
 
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:27
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:27
-msgid "Default turn point type for new tasks you create."
-msgstr "Új feladatok alap fordulópont típusa."
-
 #: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:14
 #: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:14
 msgid "Trail length"
 msgstr "Nyomvonal hossza"
+
+#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:27
+#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:27
+msgid "Default turn point type for new tasks you create."
+msgstr "Új feladatok alap fordulópont típusa."
 
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:35
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:35
@@ -8177,14 +8224,6 @@ msgstr "ÖsszE szonda kal"
 msgid "Base"
 msgstr "Alja"
 
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:4
-msgid ""
-"The height above terrain that the glider should arrive at for a safe landing."
-msgstr ""
-"A biztonságos leszálláshoz ezen a föld feletti magasságon kell a gépnek "
-"érkeznie."
-
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:9
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:24
 msgid "Yellow"
@@ -8260,24 +8299,6 @@ msgstr "Szél/Hossz"
 msgid "Satellites in view"
 msgstr "Műholdak"
 
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:14
-msgid ""
-"Determines sorting of alternates in the alternates dialog and in abort "
-"mode:\n"
-"[Simple] The alternates will only be sorted by waypoint type (airport/"
-"outlanding field) and arrival height.\n"
-"[Task] The sorting will also take the current task direction into account.\n"
-"[Home] The sorting will try to find landing options in the current direction "
-"to the configured home waypoint."
-msgstr ""
-"A kitérő repterek rendezésének elve a kitérők párbeszédablakban vagy "
-"feladatmegszakítás során:\n"
-"[EGYSZERŰ] A kitérők a típusuk (reptér/terep) és érkezési magasságuk szerint "
-"rendezve.\n"
-"[FELADAT] A rendezés figyelembe veszi a feladat szerinti irányt is.\n"
-"[BÁZIS] A rendezés figyelembe veszi a beállított bázisreptér irányát."
-
 #: Data/Dialogs/dlgTeamCode_L.xml:7 Data/Dialogs/dlgTeamCode.xml:5
 msgid "Flarm Lock"
 msgstr "Flarm kapocs"
@@ -8343,20 +8364,10 @@ msgstr "A szárny felülete (megadható)"
 msgid "Bold font"
 msgstr "Félkövér"
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:14
-msgid "Pilot name"
-msgstr "Pilóta neve"
-
 #: Data/Dialogs/dlgWaypointDetails_L.xml:20
 #: Data/Dialogs/dlgWaypointDetails.xml:20
 msgid "Alt. diff. MC safety"
 msgstr "Mag.tbl.MC.bizt"
-
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:38
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:38
-msgid "Default task type for new tasks you create."
-msgstr "Új feladatok alap feladattípusa."
 
 #: Data/Dialogs/dlgStatusSystem.xml:6 Data/Dialogs/pnlStatusSystem.xml:6
 msgid "Variometer"
@@ -8366,14 +8377,14 @@ msgstr "Varió"
 msgid "Add"
 msgstr ""
 
+#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:38
+#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:38
+msgid "Default task type for new tasks you create."
+msgstr "Új feladatok alap feladattípusa."
+
 #: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
 msgstr "Légtér adatok"
-
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:29
-msgid "Reach display"
-msgstr "Elérhető terület"
 
 #: Data/Dialogs/dlgWaypointEdit.xml:10
 msgid "Lon."
@@ -8426,11 +8437,6 @@ msgstr "A szövegbevitel (fájlnév, csapatkód, stb.) módját határozza meg."
 msgid "Needle gauge type"
 msgstr "Mutatós műszer"
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:22
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:22
-msgid "Aircraft reg."
-msgstr "Lajstrom jel"
-
 #: Data/Dialogs/dlgVario_L.xml:406 Data/Dialogs/dlgVario.xml:407
 msgid "Height terrain"
 msgstr "Terep szintje"
@@ -8453,16 +8459,16 @@ msgstr "SZ."
 msgid "Valid start"
 msgstr "Érvényes start"
 
+#: Data/Dialogs/dlgVario_L.xml:374 Data/Dialogs/dlgVario.xml:375
+msgid "Interval; gear"
+msgstr "Intervallum; futó"
+
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:9
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:20
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:9
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:20
 msgid "Length/Radius"
 msgstr "Hossz/Sugár"
-
-#: Data/Dialogs/dlgVario_L.xml:374 Data/Dialogs/dlgVario.xml:375
-msgid "Interval; gear"
-msgstr "Intervallum; futó"
 
 #: Data/Dialogs/dlgSwitches.xml:7
 msgid "Airbrake locked"
@@ -8506,11 +8512,6 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:8
 msgid "Change callsign"
 msgstr ""
-
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:14
-msgid "Alternates mode"
-msgstr "Kitérő üzemmód"
 
 #: Data/Input/default.xci:619 Data/Input/default.xci:1147
 msgid "Setup Plane"
@@ -8828,6 +8829,53 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+
+#~ msgid ""
+#~ "If set to \"None\", neither airspace or terrain is used for route "
+#~ "planning.  If set to \"Terrain\", routes will avoid terrain; if set to "
+#~ "\"Airspace\", routes will avoid airspace.  If set to \"Both\", routes "
+#~ "will avoid airspace and terrain."
+#~ msgstr ""
+#~ "\"Semmi\" esetén sem a légterek, sem a domborzat nem lesz figyelembe véve "
+#~ "az útvonaltervezésnél. \"Terep\" esetén az útvonal elkerüli a "
+#~ "domborzatot, \"Légtér\" esetén a légtereket. \"Minden\" esetén kikerüli "
+#~ "mindezeket."
+
+#~ msgid ""
+#~ "How calculations are performed of the reach of the glider with respect to "
+#~ "terrain.\n"
+#~ "[Off] Reach calculations disabled.\n"
+#~ "[Straight] The reach is from straight line paths from the glider.\n"
+#~ "[Turning] The reach is calculated allowing turns around terrain obstacles."
+#~ msgstr ""
+#~ "Az elérhető terület kiszámításának módja.\n"
+#~ "[KI] Számítások letiltva.\n"
+#~ "[EGYENESEN] Az egyenes vonalú repülésben elérhető terület.\n"
+#~ "[KERÜLŐKKEL] A terepakadályok megkerülésével elérhető terület."
+
+#~ msgid ""
+#~ "This determines whether the glide reach is drawn as a line on the map "
+#~ "area:\n"
+#~ "[Off] Disables display\n"
+#~ "[Line] Draws a dashed line at the glide reach\n"
+#~ "[Shade] Shades terrain outside glide reach"
+#~ msgstr ""
+#~ "A siklásban elérhető terület kirajzolásának módja.\n"
+#~ "[KI] Kirajzolás letiltva\n"
+#~ "[VONAL] A terület peremét szaggatott vonal jelzi.\n"
+#~ "[ÁRNYÉK] A területen kívüli terep árnyékolva lesz."
+
+#~ msgid ""
+#~ "This determines the glide performance used in reach, landable arrival, "
+#~ "abort and alternate calculations:\n"
+#~ "[Task] Uses task glide polar\n"
+#~ "[Safety MC] Uses safety MacCready value"
+#~ msgstr ""
+#~ "Ez szabályozza, hogy a berepülhető terület, leszállóhelyi érkezés, "
+#~ "feladatmegszakítás és kitérő számításánál a gép milyen teljesítményével "
+#~ "számoljon.\n"
+#~ "[FELADAT] A feladat polárgörbéjével\n"
+#~ "[BIZTONSÁGOS MC] A biztonsági MC értékkel"
 
 #, fuzzy
 #~ msgid "FLARM location"

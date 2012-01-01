@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-30 12:43+0100\n"
+"POT-Creation-Date: 2012-01-01 22:47+0100\n"
 "PO-Revision-Date: 2011-12-20 19:55+0100\n"
 "Last-Translator: Geir Gronlien <Unknown>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
@@ -25,8 +25,8 @@ msgstr ""
 #. .. append " - Task #[n]" suffix to the task name
 #: src/Task/TaskStore.cpp:74 src/Menu/ExpandMacros.cpp:538
 #: src/Input/InputEventsSettings.cpp:315 src/Dialogs/dlgAnalysis.cpp:347
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:155
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:76
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:158
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:75
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:38
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:38
 #: Data/Input/default.xci:311 Data/Input/default.xci:360
@@ -48,8 +48,8 @@ msgid "Line skipped."
 msgstr "Hoppet over linjen."
 
 #: src/Airspace/AirspaceParser.cpp:241 src/Dialogs/dlgAnalysis.cpp:365
-#: src/Dialogs/dlgConfiguration.cpp:89
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:130
+#: src/Dialogs/dlgConfiguration.cpp:90
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:108
 #: Data/Dialogs/dlgAirspace_L.xml:3 Data/Dialogs/dlgAirspace.xml:3
 #: Data/Dialogs/dlgVoice.xml:34
 #, no-c-format
@@ -314,8 +314,8 @@ msgstr "Alt"
 #: src/Menu/ExpandMacros.cpp:551 src/Menu/ExpandMacros.cpp:604
 #: src/Input/InputEventsSettings.cpp:443 src/Input/InputEventsSettings.cpp:446
 #: src/Dialogs/XML.cpp:560 src/Dialogs/StatusPanels/SystemStatusPanel.cpp:78
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:118
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:145
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:131
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:148
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:109
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:142
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:200
@@ -351,8 +351,8 @@ msgstr "Terreng Av"
 
 #: src/Menu/ExpandMacros.cpp:524 src/Menu/ExpandMacros.cpp:548
 #: src/InfoBoxes/Panel/WindSetup.cpp:94
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:62
-#: src/Dialogs/dlgWindSettings.cpp:193
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:57
+#: src/Dialogs/dlgWindSettings.cpp:192
 #, no-c-format
 msgid "Manual"
 msgstr "Man"
@@ -379,7 +379,7 @@ msgstr "Oppg./Land."
 
 #: src/Menu/ExpandMacros.cpp:539 src/Input/InputEventsSettings.cpp:316
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:54
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:128
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:104
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:111
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:119
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:148
@@ -838,7 +838,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:883
 #: src/Renderer/MapItemListRenderer.cpp:311 src/Widgets/TrafficWidget.cpp:316
 #: src/Widgets/TrafficWidget.cpp:317 src/Dialogs/DeviceListDialog.cpp:140
-#: src/Dialogs/dlgConfiguration.cpp:95 src/Dialogs/dlgFlarmTraffic.cpp:312
+#: src/Dialogs/dlgConfiguration.cpp:97 src/Dialogs/dlgFlarmTraffic.cpp:312
 #: src/Dialogs/dlgFlarmTraffic.cpp:313
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:123
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:126
@@ -2096,7 +2096,7 @@ msgstr "Info"
 
 #: src/InfoBoxes/Content/Altitude.cpp:62
 #: src/InfoBoxes/Content/MacCready.cpp:62
-#: src/InfoBoxes/Content/Weather.cpp:103 src/Dialogs/dlgConfiguration.cpp:80
+#: src/InfoBoxes/Content/Weather.cpp:103 src/Dialogs/dlgConfiguration.cpp:81
 #, no-c-format
 msgid "Setup"
 msgstr "Konfig."
@@ -2155,8 +2155,8 @@ msgid "Time Below"
 msgstr "Tid Under"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:75 src/InfoBoxes/Panel/WindSetup.cpp:95
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:64
-#: src/Dialogs/dlgWindSettings.cpp:194 Data/Dialogs/dlgVegaDemo.xml:14
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:59
+#: src/Dialogs/dlgWindSettings.cpp:193 Data/Dialogs/dlgVegaDemo.xml:14
 #, no-c-format
 msgid "Circling"
 msgstr "Sirkler"
@@ -2189,23 +2189,23 @@ msgstr "Ingen hjelp for dette elementet"
 msgid "N/A"
 msgstr "–"
 
-#: src/InfoBoxes/Panel/WindSetup.cpp:86 src/Dialogs/dlgWindSettings.cpp:188
+#: src/InfoBoxes/Panel/WindSetup.cpp:86 src/Dialogs/dlgWindSettings.cpp:187
 #, no-c-format
 msgid "External"
 msgstr "Ekstern"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:96
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:66
-#: src/Dialogs/dlgWindSettings.cpp:195
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:61
+#: src/Dialogs/dlgWindSettings.cpp:194
 #, no-c-format
 msgid "ZigZag"
 msgstr "SikkSakk"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:97
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:68
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:88
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:131
-#: src/Dialogs/dlgWindSettings.cpp:196
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:65
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:63
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:110
+#: src/Dialogs/dlgWindSettings.cpp:195
 #, no-c-format
 msgid "Both"
 msgstr "Begge"
@@ -2224,8 +2224,7 @@ msgstr "Standard InfoBokser"
 
 #: src/Input/InputEventsActions.cpp:247
 #: src/Dialogs/dlgFlarmTrafficDetails.cpp:245
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:26
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:26
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:84
 msgid "Competition ID"
 msgstr "KonkurranseID"
 
@@ -2500,8 +2499,8 @@ msgstr "GPS venter på satellitter"
 msgid "Loading Topography File..."
 msgstr "Laster Topografi-fil"
 
-#: src/Terrain/RasterWeather.cpp:49 src/Dialogs/dlgConfiguration.cpp:88
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:129
+#: src/Terrain/RasterWeather.cpp:49 src/Dialogs/dlgConfiguration.cpp:89
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:106
 #: src/Dialogs/dlgWeather.cpp:111 Data/Dialogs/dlgVoice.xml:10
 #: Data/Input/default.xci:474 Data/Input/default.xci:1068
 #, no-c-format
@@ -2722,7 +2721,7 @@ msgstr "poeng"
 #: src/Renderer/FlightStatisticsRenderer.cpp:401
 #: src/Renderer/FlightStatisticsRenderer.cpp:425
 #: src/Renderer/FlightStatisticsRenderer.cpp:453
-#: src/Dialogs/dlgConfiguration.cpp:109 Data/Dialogs/dlgWeather.xml:8
+#: src/Dialogs/dlgConfiguration.cpp:111 Data/Dialogs/dlgWeather.xml:8
 #, no-c-format
 msgid "Time"
 msgstr "Klokkeslett"
@@ -2932,25 +2931,25 @@ msgstr "Port"
 msgid "Driver"
 msgstr "Driver"
 
-#: src/Device/Descriptor.cpp:153
+#: src/Device/Descriptor.cpp:137
 msgid "No such driver"
 msgstr ""
 
-#: src/Device/Descriptor.cpp:164
+#: src/Device/Descriptor.cpp:148
 #, fuzzy
 msgid "Unable to open port"
 msgstr "Kunne ikke åpne port %s"
 
-#: src/Device/Descriptor.cpp:435 src/Device/Descriptor.cpp:443
+#: src/Device/Descriptor.cpp:417 src/Device/Descriptor.cpp:425
 #, fuzzy
 msgid "Sending declaration"
 msgstr "Terrenghøyde"
 
-#: src/Device/Descriptor.cpp:487
+#: src/Device/Descriptor.cpp:469
 msgid "Reading flight list"
 msgstr ""
 
-#: src/Device/Descriptor.cpp:505
+#: src/Device/Descriptor.cpp:487
 msgid "Downloading flight log"
 msgstr ""
 
@@ -3031,7 +3030,7 @@ msgstr "GPS ikke tilkoblet"
 msgid "Edit device"
 msgstr "Rediger tekst"
 
-#: src/Dialogs/DeviceListDialog.cpp:273 src/Dialogs/dlgConfiguration.cpp:102
+#: src/Dialogs/DeviceListDialog.cpp:273 src/Dialogs/dlgConfiguration.cpp:104
 #: Data/Input/default.xci:611 Data/Input/default.xci:1139
 #, no-c-format
 msgid "Devices"
@@ -3350,7 +3349,7 @@ msgstr "Detaljer"
 msgid "Plane Polar"
 msgstr "Polar"
 
-#: src/Dialogs/dlgPlanePolar.cpp:58 src/Dialogs/dlgConfiguration.cpp:103
+#: src/Dialogs/dlgPlanePolar.cpp:58 src/Dialogs/dlgConfiguration.cpp:105
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:128
 #: Data/Dialogs/dlgPlaneDetails_L.xml:23 Data/Dialogs/dlgPlaneDetails.xml:27
 #: Data/Dialogs/dlgPlanePolar_L.xml:5 Data/Dialogs/dlgPlanePolar.xml:5
@@ -3371,107 +3370,114 @@ msgstr "Last Polar"
 msgid "Load Polar From File"
 msgstr "Last Polar Fra Fil"
 
-#: src/Dialogs/dlgConfiguration.cpp:74 src/Dialogs/dlgConfiguration.cpp:84
+#: src/Dialogs/dlgConfiguration.cpp:75 src/Dialogs/dlgConfiguration.cpp:85
 #, no-c-format
 msgid "Site Files"
 msgstr "Flystederfil"
 
-#: src/Dialogs/dlgConfiguration.cpp:75
+#: src/Dialogs/dlgConfiguration.cpp:76
 #, fuzzy, no-c-format
 msgid "Map Display"
 msgstr "Vis"
 
-#: src/Dialogs/dlgConfiguration.cpp:76 src/Dialogs/dlgConfiguration.cpp:92
+#: src/Dialogs/dlgConfiguration.cpp:77 src/Dialogs/dlgConfiguration.cpp:93
 #, no-c-format
 msgid "Glide Computer"
 msgstr "Glidningskalkulator"
 
-#: src/Dialogs/dlgConfiguration.cpp:77 Data/Dialogs/dlgConfigFonts_L.xml:31
+#: src/Dialogs/dlgConfiguration.cpp:78 Data/Dialogs/dlgConfigFonts_L.xml:31
 #: Data/Dialogs/dlgConfigFonts.xml:31
 #, no-c-format
 msgid "Gauges"
 msgstr "Instrumenter"
 
-#: src/Dialogs/dlgConfiguration.cpp:78
+#: src/Dialogs/dlgConfiguration.cpp:79
 #, fuzzy, no-c-format
 msgid "Task Defaults"
 msgstr "Standard"
 
-#: src/Dialogs/dlgConfiguration.cpp:79
+#: src/Dialogs/dlgConfiguration.cpp:80
 #, fuzzy, no-c-format
 msgid "Look"
 msgstr "Oppslag"
 
-#: src/Dialogs/dlgConfiguration.cpp:85
+#: src/Dialogs/dlgConfiguration.cpp:86
 #, fuzzy, no-c-format
 msgid "Orientation"
 msgstr "Strekkflygingsorientering"
 
-#: src/Dialogs/dlgConfiguration.cpp:86
+#: src/Dialogs/dlgConfiguration.cpp:87
 #, fuzzy, no-c-format
 msgid "Elements"
 msgstr "Kartelementer"
 
-#: src/Dialogs/dlgConfiguration.cpp:87
+#: src/Dialogs/dlgConfiguration.cpp:88
 #: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:11
 #: Data/Dialogs/Configuration/SiteConfigPanel.xml:11
 #, no-c-format
 msgid "Waypoints"
 msgstr "Vendepunkt"
 
-#: src/Dialogs/dlgConfiguration.cpp:91
+#: src/Dialogs/dlgConfiguration.cpp:92
 #, no-c-format
 msgid "Safety Factors"
 msgstr "Sikkerhetsfaktorer"
 
-#: src/Dialogs/dlgConfiguration.cpp:93
+#: src/Dialogs/dlgConfiguration.cpp:94
+#: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:203
+#: src/Weather/NOAAFormatter.cpp:95 src/Weather/NOAAFormatter.cpp:102
+#, no-c-format
+msgid "Wind"
+msgstr "Vind"
+
+#: src/Dialogs/dlgConfiguration.cpp:95
 #, no-c-format
 msgid "Route"
 msgstr "Rute"
 
-#: src/Dialogs/dlgConfiguration.cpp:94
+#: src/Dialogs/dlgConfiguration.cpp:96
 #, fuzzy, no-c-format
 msgid "FLARM, Other"
 msgstr "FLARM Og Andre Indikatorer"
 
-#: src/Dialogs/dlgConfiguration.cpp:96
+#: src/Dialogs/dlgConfiguration.cpp:98
 #, no-c-format
 msgid "Task Rules"
 msgstr "Oppgaveregler"
 
-#: src/Dialogs/dlgConfiguration.cpp:97
+#: src/Dialogs/dlgConfiguration.cpp:99
 #, fuzzy, no-c-format
 msgid "Turnpoint Types"
 msgstr "Vendepunkt"
 
-#: src/Dialogs/dlgConfiguration.cpp:98
+#: src/Dialogs/dlgConfiguration.cpp:100
 #, fuzzy, no-c-format
 msgid "Language, Input"
 msgstr "Språk"
 
-#: src/Dialogs/dlgConfiguration.cpp:99
+#: src/Dialogs/dlgConfiguration.cpp:101
 #, fuzzy, no-c-format
 msgid "Screen Layout"
 msgstr "Helskjerm-modus"
 
-#: src/Dialogs/dlgConfiguration.cpp:100
+#: src/Dialogs/dlgConfiguration.cpp:102
 #, no-c-format
 msgid "InfoBox Pages"
 msgstr "InfoBoks Sider"
 
-#: src/Dialogs/dlgConfiguration.cpp:101
+#: src/Dialogs/dlgConfiguration.cpp:103
 #, no-c-format
 msgid "InfoBox Modes"
 msgstr "InfoBoks Modus"
 
-#: src/Dialogs/dlgConfiguration.cpp:104 Data/Dialogs/dlgStatusSystem.xml:8
+#: src/Dialogs/dlgConfiguration.cpp:106 Data/Dialogs/dlgStatusSystem.xml:8
 #: Data/Dialogs/pnlStatusSystem.xml:8 Data/Input/default.xci:578
 #: Data/Input/default.xci:1124
 #, no-c-format
 msgid "Logger"
 msgstr "Logger"
 
-#: src/Dialogs/dlgConfiguration.cpp:105
+#: src/Dialogs/dlgConfiguration.cpp:107
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:135
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:5
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:5
@@ -3479,17 +3485,17 @@ msgstr "Logger"
 msgid "Units"
 msgstr "Enheter"
 
-#: src/Dialogs/dlgConfiguration.cpp:111
+#: src/Dialogs/dlgConfiguration.cpp:113
 #, fuzzy, no-c-format
 msgid "Tracking"
 msgstr "Spor"
 
-#: src/Dialogs/dlgConfiguration.cpp:114
+#: src/Dialogs/dlgConfiguration.cpp:116
 #, no-c-format
 msgid "Experimental Features"
 msgstr "Eksperimentelle funksjoner"
 
-#: src/Dialogs/dlgConfiguration.cpp:261 src/Dialogs/dlgConfigFonts.cpp:295
+#: src/Dialogs/dlgConfiguration.cpp:263 src/Dialogs/dlgConfigFonts.cpp:295
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
 "Endring av instillingene lagret. Start XCSoar på nytt for å ta i bruk "
@@ -3845,55 +3851,12 @@ msgid ""
 "map."
 msgstr "Termikkhjelp av/på."
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:63
-#, no-c-format
-msgid ""
-"When the algorithm is switched off, the pilot is responsible for setting the "
-"wind estimate."
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:65
-#, no-c-format
-msgid "Requires only a GPS source."
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:67
-#, no-c-format
-msgid "Requires GPS and an intelligent vario with airspeed output."
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:69
-#, no-c-format
-msgid "Use ZigZag and circling."
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:73
-msgid "Auto wind"
-msgstr "Autovind"
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:74
-msgid "This allows switching on or off the automatic wind algorithm."
-msgstr "Beregning av vindforholdene."
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:77
-msgid "External wind"
-msgstr "Ekstern vind"
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:78
-msgid ""
-"If enabled, then the wind vector received from external devices overrides "
-"XCSoar's internal wind calculation."
-msgstr ""
-"Ekstern vindmåling.\r\n"
-"[På] Ekstern vindmåling overstyrer XCSoars beregnede verdi.\r\n"
-"[Av] Beregnede vindforhold brukes."
-
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:83
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:60
 #, no-c-format
 msgid "Final glide"
 msgstr "Målglidning"
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:84
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:61
 #, no-c-format
 msgid ""
 "Adjusts MC for fastest arrival.  For OLC sprint tasks, the MacCready is "
@@ -3901,37 +3864,37 @@ msgid ""
 "reach the finish height."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:86
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:63
 #, no-c-format
 msgid "Trending average climb"
 msgstr "Trend for snittstig"
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:87
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:64
 #, no-c-format
 msgid "Sets MC to the trending average climb rate based on all climbs."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:89
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:66
 #, no-c-format
 msgid ""
 "Uses trending average during task, then fastest arrival when in final glide "
 "mode."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:93
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:70
 msgid "Auto MC mode"
 msgstr "Automatisk MC-modus"
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:94
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:71
 msgid "This option defines which auto MacCready algorithm is used."
 msgstr "McCready algorytmevalg."
 
 #. TODO All below is for the Expert
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:98
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:75
 msgid "Block speed to fly"
 msgstr "Blokker speed-to-fly"
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:99
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:76
 msgid ""
 "If enabled, the command speed in cruise is set to the MacCready speed to fly "
 "in no vertical air-mass movement. If disabled, the command speed in cruise "
@@ -3944,11 +3907,11 @@ msgstr ""
 "[Av] Anbefalt hastighet settes til delfin speed-to-fly, som er lik McCready "
 "hastighet i luft med vertikalbevegelse."
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:105
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:82
 msgid "Nav. by baro altitude"
 msgstr "Nav. med barohøyde"
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:106
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:83
 msgid ""
 "When enabled and if connected to a barometric altimeter, barometric altitude "
 "is used for all navigation functions. Otherwise GPS altitude is used."
@@ -3957,11 +3920,11 @@ msgstr ""
 "[På] Høyde fra ekstern barometrisk høydemåler brukes i alle funksjoner.\r\n"
 "[Av] GPS høyde brukes i alle funksjoner."
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:110
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:87
 msgid "Flap forces cruise"
 msgstr "Flapp tvinger strekkfl."
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:111
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:88
 msgid ""
 "When Vega variometer is connected and this option is true, the positive flap "
 "setting switches the flight mode between circling and cruise."
@@ -3969,26 +3932,69 @@ msgstr ""
 "Slått på og med Vega vario koblet til, vil flymodus bytte automatisk mellom "
 "strekkflyging og sirkling når flapp-bryterne indikerer positive utslag."
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:116
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:93
 #, no-c-format
 msgid "Preferred period for paragliders."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:119
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:96
 #, no-c-format
 msgid "Preferred period for gliders."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:125
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:102
 msgid "L/D average period"
 msgstr "L/D snitt periode"
 
-#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:126
+#: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:103
 msgid ""
 "Here you can decide on how many seconds of flight this calculation must be "
 "done. Normally for gliders a good value is 90-120 seconds, and for "
 "paragliders 15 seconds."
 msgstr ""
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:58
+#, no-c-format
+msgid ""
+"When the algorithm is switched off, the pilot is responsible for setting the "
+"wind estimate."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:60
+#, no-c-format
+msgid "Requires only a GPS source."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:62
+#, no-c-format
+msgid "Requires GPS and an intelligent vario with airspeed output."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:64
+#, no-c-format
+msgid "Use ZigZag and circling."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:68
+msgid "Auto wind"
+msgstr "Autovind"
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:69
+msgid "This allows switching on or off the automatic wind algorithm."
+msgstr "Beregning av vindforholdene."
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:72
+msgid "External wind"
+msgstr "Ekstern vind"
+
+#: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:73
+msgid ""
+"If enabled, then the wind vector received from external devices overrides "
+"XCSoar's internal wind calculation."
+msgstr ""
+"Ekstern vindmåling.\r\n"
+"[På] Ekstern vindmåling overstyrer XCSoars beregnede verdi.\r\n"
+"[Av] Beregnede vindforhold brukes."
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:106
 msgid "Automatic"
@@ -4292,6 +4298,68 @@ msgstr ""
 msgid "InfoBox border"
 msgstr "InfoBoksramme"
 
+#. Expert item (TODO)
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:67
+msgid "Time step cruise"
+msgstr "Loggintervall glidning"
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:68
+msgid "This is the time interval between logged points when not circling."
+msgstr "Tidsintervallet mellom loggpunkter når man ikke sirkler."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:73
+msgid "Time step circling"
+msgstr "Logintervall ved sirkling"
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:74
+msgid "This is the time interval between logged points when circling."
+msgstr "Tidsintervallet mellom loggpunktene ved sirkling."
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:80
+msgid "Pilot name"
+msgstr "Pilotnavn"
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:82
+#: Data/Dialogs/dlgVario_L.xml:346 Data/Dialogs/dlgVario.xml:347
+msgid "Aircraft type"
+msgstr "Farkosttype"
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:83
+msgid "Aircraft reg."
+msgstr "Farkostreg."
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:87
+msgid "Logger ID"
+msgstr "LoggerID"
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:90
+msgid "Short file name"
+msgstr "Kort filnavn"
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:91
+msgid ""
+"This determines whether the logger uses the short IGC file name or the long "
+"IGC file name. Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-"
+"ABC-01.IGC)."
+msgstr ""
+"IGC filnavnlengde, kort eller langt. Eksempel på kort navn (81HXABC1.IGC), "
+"langt navn (2008-01-18-XXX-ABC-01.IGC)."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:97
+msgid "Auto. logger"
+msgstr "Logger Auto."
+
+#: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:98
+msgid ""
+"Enables the automatic starting and stopping of logger on takeoff and landing "
+"respectively. Disable when flying paragliders."
+msgstr ""
+"Automatisk start / stopp av logger ved start og landing. Bør slås av ved "
+"flyging med hang- eller paraglider."
+
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:44
 #, no-c-format
 msgid "Track up"
@@ -4426,44 +4494,232 @@ msgstr "Informasjonen som vises på de forskjellige sidene."
 msgid "Polar name"
 msgstr "Polar W"
 
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:105
+#, no-c-format
+msgid "Neither airspace nor terrain is used for route planning."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:107
+#, no-c-format
+msgid "Routes will avoid terrain."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:109
+#, no-c-format
+msgid "Routes will avoid airspace."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:111
+#, no-c-format
+msgid "Routes will avoid airspace and terrain."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:115
+msgid "Route mode"
+msgstr "Rutemodus"
+
+#. Expert item (TODO)
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:118
+msgid "Route climb"
+msgstr "Rute stig"
+
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:119
+msgid ""
+"When enabled and MC is positive, route planning allows climbs between the "
+"aircraft location and destination."
+msgstr ""
+"Hvis slått på og MC er positiv, ruteplanlegger tillater løft mellom "
+"nåværende posisjon og målet."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:124
+msgid "Route ceiling"
+msgstr "Rute tak"
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:125
+msgid ""
+"When enabled, route planning climbs are limited to ceiling defined by "
+"greater of current aircraft altitude plus 500 m and the thermal ceiling.  If "
+"disabled, climbs are unlimited."
+msgstr ""
+"Ruteplanlegger, høydebegrensning.\r\n"
+"[På] Maksimalhøyde begrenset til den største verdien av nåværende høyde "
+"pluss 500 m eller maksimal termikkhøyde. \r\n"
+"[Av] Maksimalhøyde som brukes i ruteplanleggeren er ubegrenset."
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:132
+#, no-c-format
+msgid "Reach calculations disabled."
+msgstr "Slått av."
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:133
+#, no-c-format
+msgid "Straight"
+msgstr "Rett"
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:134
+#, no-c-format
+msgid "The reach is from straight line paths from the glider."
+msgstr "Rett linje."
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:135
+#, no-c-format
+msgid "Turning"
+msgstr "Svinger"
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:136
+#, no-c-format
+msgid "The reach is calculated allowing turns around terrain obstacles."
+msgstr "Beregnet i forhold til terrenget."
+
+#. Spacer
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:142
+msgid "Reach mode"
+msgstr "Rekkeviddemodus"
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:143
+msgid ""
+"How calculations are performed of the reach of the glider with respect to "
+"terrain."
+msgstr "Rekkeviddeberegning."
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:148
+#, fuzzy, no-c-format
+msgid "Disables the reach display."
+msgstr "Slått av."
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:149
 #: src/Dialogs/dlgTaskHelpers.cpp:243
 #, no-c-format
 msgid "Line"
 msgstr "Linje"
 
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:120
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:149
+#, no-c-format
+msgid "Draws a dashed line at the glide reach."
+msgstr "Markerer rekkevidden med en linje."
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:150
 #, no-c-format
 msgid "Shade"
 msgstr "Skygge"
 
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:146
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:150
 #, no-c-format
-msgid "Straight"
-msgstr "Rett"
+msgid "Shades terrain outside glide reach."
+msgstr "Skyggelegger området utenfor rekkevidde."
 
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:147
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:154
+msgid "Reach display"
+msgstr "Rekkeviddevisning"
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:158
 #, no-c-format
-msgid "Turning"
-msgstr "Svinger"
+msgid "Uses task glide polar."
+msgstr "Bruker oppgavens glidepolar."
 
-#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:156
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:19
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:19
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:159
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:84
 #, no-c-format
 msgid "Safety MC"
 msgstr "Sikkerhets MC"
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:75
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:159
+#, no-c-format
+msgid "Uses safety MacCready value"
+msgstr "Bruker sikkerrhets McCready verdi."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:164
+msgid "Reach polar"
+msgstr "Rekkevidde polar"
+
+#: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:165
+msgid ""
+"This determines the glide performance used in reach, landable arrival, abort "
+"and alternate calculations."
+msgstr ""
+"Valg av glideytelsen."
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:61
+#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:9
+#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:9
+#, fuzzy
+msgid "Arrival height"
+msgstr "Ankomsthøyde"
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:62
+msgid ""
+"The height above terrain that the glider should arrive at for a safe landing."
+msgstr ""
+"Bakkehøyden som farkosten bør ankomme med for å kunne gjennomføre en trygg "
+"landing."
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:67
+msgid "Terrain height"
+msgstr "Terrenghøyde"
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:68
+msgid "The height above terrain that the glider must clear during final glide."
+msgstr "Minstehøyde over bakken ved målglidestrekket"
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:74
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:154
 #, no-c-format
 msgid "Simple"
 msgstr "Enkel"
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:77
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:76
 #, no-c-format
 msgid "Home"
 msgstr "Hjem"
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:80
+msgid "Alternates mode"
+msgstr "Alt.landinger modus"
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:81
+#, fuzzy
+msgid ""
+"Determines sorting of alternates in the alternates dialog and in abort "
+"mode:\n"
+"[Simple] The alternates will only be sorted by waypoint type (airport/"
+"outlanding field) and arrival height.\n"
+"[Task] The sorting will also take the current task direction into account.\n"
+"[Home] The sorting will try to find landing options in the current direction "
+"to the configured home waypoint."
+msgstr ""
+"[Enkel] Alternative landinger sorteres etter vendepunktstype (flyplass/"
+"utelandning) og ankomsthøyde.\r\n"
+"[Oppgave] Sorteringen av alternative landinger tar også hensyn til gjeldende "
+"oppgave.\r\n"
+"[Hjem] Sorteringen av alternative landinger er i forhold til strekket fra "
+"nåværende posisjon til Hjemmeposisjon."
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:85
+msgid ""
+"The MacCready setting used, when safety MC is enabled for reach "
+"calculations, in task abort mode and for determining arrival altitude at "
+"airfields."
+msgstr ""
+"Den brukte MacCreadyverdien når sikkerhets MC er slått på, i "
+"rekkeviddeberegninger, ved avbrutt oppgave, og ved beregning av ankomsthøyde "
+"ved landingsplasser."
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:90
+msgid "STF risk factor"
+msgstr "STF risikofaktor"
+
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:91
+msgid ""
+"The STF risk factor reduces the MacCready setting used to calculate speed to "
+"fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for "
+"no compensation, 1.0 scales MC linearly with height."
+msgstr ""
+"STF risikofaktor reduserer MacCreadyverdien som brukes for å beregne speed-"
+"to-fly når høyden blir lav. Dette for å kompensere for risiko. Sett verdien "
+"til 0.0 for å slå av kompensering, verdi 1.0 skalerer MC lineær i forhold "
+"til høyden."
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:101
 msgid "Arrow head"
@@ -4524,11 +4780,6 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:202
 msgid "Sun"
 msgstr "Sol"
-
-#: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:203
-#: src/Weather/NOAAFormatter.cpp:95 src/Weather/NOAAFormatter.cpp:102
-msgid "Wind"
-msgstr "Vind"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:218
 msgid "Low lands"
@@ -5547,31 +5798,9 @@ msgstr "Slått på vil sporbredden skaleres i forhold til varioverdiene"
 msgid "TE port"
 msgstr "TE port"
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:9
-msgid "Time step circling"
-msgstr "Logintervall ved sirkling"
-
 #: Data/Dialogs/dlgStatusTask.xml:3
 msgid "Task Status"
 msgstr "Oppgavestatus"
-
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:30
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:30
-msgid "Logger ID"
-msgstr "LoggerID"
-
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:24
-msgid ""
-"The STF risk factor reduces the MacCready setting used to calculate speed to "
-"fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for "
-"no compensation, 1.0 scales MC linearly with height."
-msgstr ""
-"STF risikofaktor reduserer MacCreadyverdien som brukes for å beregne speed-"
-"to-fly når høyden blir lav. Dette for å kompensere for risiko. Sett verdien "
-"til 0.0 for å slå av kompensering, verdi 1.0 skalerer MC lineær i forhold "
-"til høyden."
 
 #: Data/Dialogs/dlgWindSettings.xml:3
 msgid "Wind Settings"
@@ -5783,11 +6012,6 @@ msgstr "Kalibreringsfaktor for flyhastighetssensor."
 msgid "Mute vario on voice"
 msgstr "Demp vario ved talebeskjeder"
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:4
-msgid "Time step cruise"
-msgstr "Loggintervall glidning"
-
 #: Data/Dialogs/dlgWaypointDetails_L.xml:31
 #: Data/Dialogs/dlgWaypointDetails.xml:31
 msgid "Set As New Home"
@@ -5805,21 +6029,6 @@ msgstr ""
 "oppgavens vendepunkter og de minimale og maksimale mulighetene. -100 % "
 "indikerer minimum AAT distanse. 0 % indikerer standard AAT distanse. +100 % "
 "indikerer maksimal AAT distanse."
-
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:6
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:6
-msgid ""
-"If set to \"None\", neither airspace or terrain is used for route planning.  "
-"If set to \"Terrain\", routes will avoid terrain; if set to \"Airspace\", "
-"routes will avoid airspace.  If set to \"Both\", routes will avoid airspace "
-"and terrain."
-msgstr ""
-"[Ingen] Verken luftrom eller terreng blir tatt hensyn til ved planlegging av "
-"ruten. \r\n"
-"[Terreng]  Terrenget blir tatt hensyn til ved planlegging av ruten. \r\n"
-"[Luftrom]  Luftrom blir tatt hensyn til ved planlegging av ruten. \r\n"
-"[Begge] Det tas hensyn til både terrenget og luftrom ved planlegging av "
-"ruten."
 
 #: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:9
 #: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:9
@@ -5866,11 +6075,6 @@ msgstr "Velg hvordan gjeldende oppgave planlegges."
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:12
 msgid "Terrain contrast"
 msgstr "Terrengkontrast"
-
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:24
-msgid "Reach mode"
-msgstr "Rekkeviddemodus"
 
 #: Data/Dialogs/dlgTeamCode_L.xml:10 Data/Dialogs/dlgTeamCode.xml:9
 msgid "Own code"
@@ -6032,39 +6236,12 @@ msgstr "Tvinger varioen i sirkle- eller glidestrekkmodus"
 msgid "Label visibility"
 msgstr "Etikettens synlighet"
 
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:24
-msgid ""
-"How calculations are performed of the reach of the glider with respect to "
-"terrain.\n"
-"[Off] Reach calculations disabled.\n"
-"[Straight] The reach is from straight line paths from the glider.\n"
-"[Turning] The reach is calculated allowing turns around terrain obstacles."
-msgstr ""
-"Rekkeviddeberegning.\n"
-"[Av] Slått av.\n"
-"[Rett] Rett linje.\n"
-"[Svinger] Beregnet i forhold til terrenget."
-
 #: Data/Dialogs/pnlTaskProperties_L.xml:26
 #: Data/Dialogs/pnlTaskProperties.xml:25
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel_L.xml:37
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel.xml:34
 msgid "Finish min. height"
 msgstr "Mål min. høyde"
-
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:29
-msgid ""
-"This determines whether the glide reach is drawn as a line on the map area:\n"
-"[Off] Disables display\n"
-"[Line] Draws a dashed line at the glide reach\n"
-"[Shade] Shades terrain outside glide reach"
-msgstr ""
-"Rekkeviddevisning.\n"
-"[Av] Slått av.\n"
-"[Linje] Markerer rekkevidden med en linje.\n"
-"[Skygge] Skyggelegger området utenfor rekkevidde."
 
 #: Data/Dialogs/pnlStatusRules.xml:7
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:5
@@ -6123,16 +6300,6 @@ msgstr "Fly"
 msgid "Topography display"
 msgstr "Topografisk visning"
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:34
-msgid ""
-"This determines whether the logger uses the short IGC file name or the long "
-"IGC file name. Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-"
-"ABC-01.IGC)."
-msgstr ""
-"IGC filnavnlengde, kort eller langt. Eksempel på kort navn (81HXABC1.IGC), "
-"langt navn (2008-01-18-XXX-ABC-01.IGC)."
-
 #: Data/Dialogs/dlgSwitches.xml:3
 msgid "Switches"
 msgstr "Brytere"
@@ -6143,11 +6310,6 @@ msgstr "Brytere"
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel.xml:17
 msgid "Start max. height"
 msgstr "Start maks. høyde"
-
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:16
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:16
-msgid "Route ceiling"
-msgstr "Rute tak"
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:8
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:8
@@ -6206,11 +6368,6 @@ msgstr ""
 "[Pilspiss] Vis kun pilspiss.\n"
 "[Pil] Vis hel pil."
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:4
-msgid "This is the time interval between logged points when not circling."
-msgstr "Tidsintervallet mellom loggpunkter når man ikke sirkler."
-
 #: Data/Dialogs/dlgSwitches.xml:35
 msgid "Speed command"
 msgstr "Hastighetskommando"
@@ -6263,15 +6420,6 @@ msgstr "AVG/ALT"
 msgid "This sets the task point for review."
 msgstr "Dette setter oppgavepunktet til vurdering."
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:39
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:39
-msgid ""
-"Enables the automatic starting and stopping of logger on takeoff and landing "
-"respectively. Disable when flying paragliders."
-msgstr ""
-"Automatisk start / stopp av logger ved start og landing. Bør slås av ved "
-"flyging med hang- eller paraglider."
-
 #: Data/Dialogs/dlgVoice.xml:34
 msgid "Enable voice warnings for airspace incursions."
 msgstr "Talemelding ved varsler om kontakt med luftrom."
@@ -6316,17 +6464,6 @@ msgstr "Landinger symboler"
 #: Data/Dialogs/dlgWaypointDetails.xml:32
 msgid "Pan To Waypoint"
 msgstr "Flytt Kart Til Vendepunkt"
-
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:19
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:19
-msgid ""
-"The MacCready setting used, when safety MC is enabled for reach "
-"calculations, in task abort mode and for determining arrival altitude at "
-"airfields."
-msgstr ""
-"Den brukte MacCreadyverdien når sikkerhets MC er slått på, i "
-"rekkeviddeberegninger, ved avbrutt oppgave, og ved beregning av ankomsthøyde "
-"ved landingsplasser."
 
 #: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:9
 #: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:9
@@ -6521,11 +6658,6 @@ msgstr "Konfigurasjon"
 #: Data/Dialogs/dlgVario_L.xml:352 Data/Dialogs/dlgVario.xml:353
 msgid "Interval; info"
 msgstr "Intervall; info"
-
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:39
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:39
-msgid "Auto. logger"
-msgstr "Logger Auto."
 
 #: Data/Dialogs/pnlStatusTask.xml:10
 msgid "Speed average"
@@ -6745,11 +6877,6 @@ msgstr "Oppslag"
 msgid "Change Type"
 msgstr "Endre Type"
 
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:11
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:11
-msgid "Route climb"
-msgstr "Rute stig"
-
 #: Data/Dialogs/dlgVoice.xml:30
 msgid ""
 "Enable voice announcement that the glider is within the task observation "
@@ -6790,15 +6917,6 @@ msgstr "Sportype som vises."
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:32
 msgid "Units used for task speeds."
 msgstr "Enhet for hastighet som brukes i oppgaver."
-
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:11
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:11
-msgid ""
-"When enabled and MC is positive, route planning allows climbs between the "
-"aircraft location and destination."
-msgstr ""
-"Hvis slått på og MC er positiv, ruteplanlegger tillater løft mellom "
-"nåværende posisjon og målet."
 
 #: Data/Dialogs/dlgPlaneDetails_L.xml:5 Data/Dialogs/dlgPlaneDetails.xml:5
 msgid "Registration"
@@ -7096,15 +7214,15 @@ msgstr ""
 "værendringer på oppgaven. Denne endringen vil ikke ha innvirkning på det som "
 "beregnes under selve oppgaven dersom vinduet lukkes ved hjelp av Avbryt."
 
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:5
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:5
-msgid "Default start type for new tasks you create."
-msgstr "Standard starttype ved nye oppgaver."
-
 #: Data/Dialogs/dlgWindSettings.xml:4
 #: Data/Dialogs/Infobox/pnlInfoBoxWindEdit.xml:4
 msgid "Manual adjustment of wind speed."
 msgstr "Manuell endring av vindhastighet."
+
+#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:5
+#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:5
+msgid "Default start type for new tasks you create."
+msgstr "Standard starttype ved nye oppgaver."
 
 #: Data/Dialogs/dlgLoggerReplay.xml:14
 msgid ""
@@ -7155,11 +7273,6 @@ msgstr ""
 "Andel av TE sensor som brukes til totalenergiberegning, sammen med verdier "
 "fra pitotrør."
 
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:6
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:6
-msgid "Route mode"
-msgstr "Rutemodus"
-
 #: Data/Dialogs/Infobox/pnlInfoBoxMacCreadySetup.xml:4
 msgid "Setup Mode"
 msgstr "Modus Konfig."
@@ -7173,11 +7286,6 @@ msgstr "Bruker ned"
 msgid "Configuration"
 msgstr "Konfigurasjon"
 
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:24
-msgid "STF risk factor"
-msgstr "STF risikofaktor"
-
 #: Data/Dialogs/dlgVoice.xml:22
 msgid "Enable voice read-back of MacReady setting after it is adjusted."
 msgstr "Talemelding når McCreadyverdien endres av/på."
@@ -7185,11 +7293,6 @@ msgstr "Talemelding når McCreadyverdien endres av/på."
 #: Data/Dialogs/dlgVario_L.xml:100 Data/Dialogs/dlgVario.xml:101
 msgid "Filter circling"
 msgstr "Filtrer sirkling"
-
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:9
-msgid "The height above terrain that the glider must clear during final glide."
-msgstr "Minstehøyde over bakken ved målglidestrekket"
 
 #: Data/Dialogs/dlgVario_L.xml:130 Data/Dialogs/dlgVario.xml:131
 msgid "Cruise hi cutoff"
@@ -7203,11 +7306,6 @@ msgstr ""
 #: Data/Dialogs/dlgAirspaceWarnings.xml:8
 msgid "ACK Day"
 msgstr "Kvitt Idag"
-
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:9
-msgid "Terrain height"
-msgstr "Terrenghøyde"
 
 #: Data/Dialogs/dlgVario_L.xml:306 Data/Dialogs/dlgVario.xml:307
 msgid "Headset threshold"
@@ -7254,11 +7352,6 @@ msgstr "Last inn Forhåndsvalgene"
 #: Data/Dialogs/dlgWaypointSelect_L.xml:1 Data/Dialogs/dlgWaypointSelect.xml:1
 msgid "Select Waypoint"
 msgstr "Velg Vendepunkt"
-
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:9
-msgid "This is the time interval between logged points when circling."
-msgstr "Tidsintervallet mellom loggpunktene ved sirkling."
 
 #: Data/Dialogs/dlgVario_L.xml:336 Data/Dialogs/dlgVario.xml:337
 msgid "No aircraft type"
@@ -7417,14 +7510,14 @@ msgstr ""
 msgid "Circling low cutoff"
 msgstr "Sirkling nedre kutt"
 
+#: Data/Dialogs/dlgVario_L.xml:134 Data/Dialogs/dlgVario.xml:135
+msgid "Cruise low cutoff"
+msgstr "Strekkfl. nedre kutt"
+
 #: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:44
 #: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:44
 msgid "Wind arrow"
 msgstr "Vindpil"
-
-#: Data/Dialogs/dlgVario_L.xml:134 Data/Dialogs/dlgVario.xml:135
-msgid "Cruise low cutoff"
-msgstr "Strekkfl. nedre kutt"
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid ""
@@ -7447,14 +7540,6 @@ msgid ""
 msgstr ""
 "Minimumshøyde over bakken ved målgang. Sett til 0 for ingen begrensning."
 
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:4
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:9
-#, fuzzy
-msgid "Arrival height"
-msgstr "Ankomsthøyde"
-
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
 #: Data/Dialogs/pnlTaskProperties.xml:30
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel_L.xml:42
@@ -7473,15 +7558,15 @@ msgstr "Navn på fil for reprise. Eks. .IGC eller .nmea-filer."
 msgid "ACK Space"
 msgstr "Kvitt. Luftrom"
 
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:29
-msgid "Trail scaled"
-msgstr "Spor skalert"
-
 #: Data/Dialogs/dlgPlaneDetails_L.xml:33 Data/Dialogs/dlgPlaneDetails.xml:39
 #, fuzzy
 msgid "Max. Ballast"
 msgstr "Maks. ballast"
+
+#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:29
+#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:29
+msgid "Trail scaled"
+msgstr "Spor skalert"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:15
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:7
@@ -7782,11 +7867,6 @@ msgstr ""
 msgid "Flap landing"
 msgstr "Flapp lander"
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:34
-msgid "Short file name"
-msgstr "Kort filnavn"
-
 #: Data/Dialogs/dlgVario_L.xml:148 Data/Dialogs/dlgVario_L.xml:170
 #: Data/Dialogs/dlgVario_L.xml:192 Data/Dialogs/dlgVario_L.xml:214
 #: Data/Dialogs/dlgVario_L.xml:236 Data/Dialogs/dlgVario_L.xml:258
@@ -7836,11 +7916,6 @@ msgstr ""
 msgid "Vega"
 msgstr "Vega"
 
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:34
-msgid "Reach polar"
-msgstr "Rekkevidde polar"
-
 #: Data/Dialogs/dlgTextEntry.xml:3
 msgid "Edit text"
 msgstr "Rediger tekst"
@@ -7854,43 +7929,13 @@ msgstr "Vis McCready innstilling av/på"
 msgid "Cruise deadband type"
 msgstr "Strekkfl. dødbåndstype"
 
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:16
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:16
-msgid ""
-"When enabled, route planning climbs are limited to ceiling defined by "
-"greater of current aircraft altitude plus 500 m and the thermal ceiling.  If "
-"disabled, climbs are unlimited."
-msgstr ""
-"Ruteplanlegger, høydebegrensning.\r\n"
-"[På] Maksimalhøyde begrenset til den største verdien av nåværende høyde "
-"pluss 500 m eller maksimal termikkhøyde. \r\n"
-"[Av] Maksimalhøyde som brukes i ruteplanleggeren er ubegrenset."
-
 #: Data/Dialogs/dlgVario_L.xml:16 Data/Dialogs/dlgVario.xml:17
 msgid "Whether the Pitot port is connected."
 msgstr "Informasjon om Pitotport er koblet til eller ikke."
 
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:34
-msgid ""
-"This determines the glide performance used in reach, landable arrival, abort "
-"and alternate calculations:\n"
-"[Task] Uses task glide polar\n"
-"[Safety MC] Uses safety MacCready value"
-msgstr ""
-"Valg av glideytelse:\n"
-"[Oppgave] Bruker oppgavens glidepolar.\n"
-"[Sikkerhets MC] Bruker sikkerrhets McCready verdi."
-
 #: Data/Dialogs/dlgVario_L.xml:386 Data/Dialogs/dlgVario.xml:387
 msgid "Battery empty delay"
 msgstr "Batteri tomt forsinkelse"
-
-#: Data/Dialogs/dlgVario_L.xml:346 Data/Dialogs/dlgVario.xml:347
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:18
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:18
-msgid "Aircraft type"
-msgstr "Farkosttype"
 
 #: Data/Dialogs/dlgFlarmTraffic_L.xml:14 Data/Dialogs/dlgFlarmTraffic.xml:7
 msgid "Auto. zoom"
@@ -8012,15 +8057,15 @@ msgstr "Etikettformat"
 msgid "Friends"
 msgstr ""
 
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:27
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:27
-msgid "Default turn point type for new tasks you create."
-msgstr "Standard vendepunktstype for nye oppgaver."
-
 #: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:14
 #: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:14
 msgid "Trail length"
 msgstr "Sporlengde"
+
+#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:27
+#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:27
+msgid "Default turn point type for new tasks you create."
+msgstr "Standard vendepunktstype for nye oppgaver."
 
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:35
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:35
@@ -8194,14 +8239,6 @@ msgstr "TE sensor kal."
 msgid "Base"
 msgstr "Basis"
 
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:4
-msgid ""
-"The height above terrain that the glider should arrive at for a safe landing."
-msgstr ""
-"Bakkehøyden som farkosten bør ankomme med for å kunne gjennomføre en trygg "
-"landing."
-
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:9
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:24
 msgid "Yellow"
@@ -8277,25 +8314,6 @@ msgstr "Lengdegr./Breddegr."
 msgid "Satellites in view"
 msgstr "Synlige satelitter"
 
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:14
-#, fuzzy
-msgid ""
-"Determines sorting of alternates in the alternates dialog and in abort "
-"mode:\n"
-"[Simple] The alternates will only be sorted by waypoint type (airport/"
-"outlanding field) and arrival height.\n"
-"[Task] The sorting will also take the current task direction into account.\n"
-"[Home] The sorting will try to find landing options in the current direction "
-"to the configured home waypoint."
-msgstr ""
-"[Enkel] Alternative landinger sorteres etter vendepunktstype (flyplass/"
-"utelandning) og ankomsthøyde.\r\n"
-"[Oppgave] Sorteringen av alternative landinger tar også hensyn til gjeldende "
-"oppgave.\r\n"
-"[Hjem] Sorteringen av alternative landinger er i forhold til strekket fra "
-"nåværende posisjon til Hjemmeposisjon."
-
 #: Data/Dialogs/dlgTeamCode_L.xml:7 Data/Dialogs/dlgTeamCode.xml:5
 msgid "Flarm Lock"
 msgstr "FLARM kontakt"
@@ -8366,20 +8384,10 @@ msgstr ""
 msgid "Bold font"
 msgstr "Fet skrift"
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:14
-msgid "Pilot name"
-msgstr "Pilotnavn"
-
 #: Data/Dialogs/dlgWaypointDetails_L.xml:20
 #: Data/Dialogs/dlgWaypointDetails.xml:20
 msgid "Alt. diff. MC safety"
 msgstr "Høydediff MC sikkerhet"
-
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:38
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:38
-msgid "Default task type for new tasks you create."
-msgstr "Standard oppgavetype for  nye oppgaver."
 
 #: Data/Dialogs/dlgStatusSystem.xml:6 Data/Dialogs/pnlStatusSystem.xml:6
 msgid "Variometer"
@@ -8389,14 +8397,14 @@ msgstr "Variometer"
 msgid "Add"
 msgstr ""
 
+#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:38
+#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:38
+msgid "Default task type for new tasks you create."
+msgstr "Standard oppgavetype for  nye oppgaver."
+
 #: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
 msgstr "Luftromsdetaljer"
-
-#: Data/Dialogs/Configuration/RouteConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/RouteConfigPanel.xml:29
-msgid "Reach display"
-msgstr "Rekkeviddevisning"
 
 #: Data/Dialogs/dlgWaypointEdit.xml:10
 msgid "Lon."
@@ -8450,11 +8458,6 @@ msgstr ""
 msgid "Needle gauge type"
 msgstr "Instrumentvisertype"
 
-#: Data/Dialogs/Configuration/LoggerConfigPanel_L.xml:22
-#: Data/Dialogs/Configuration/LoggerConfigPanel.xml:22
-msgid "Aircraft reg."
-msgstr "Farkostreg."
-
 #: Data/Dialogs/dlgVario_L.xml:406 Data/Dialogs/dlgVario.xml:407
 msgid "Height terrain"
 msgstr "Høyde terreng"
@@ -8477,16 +8480,16 @@ msgstr "Len."
 msgid "Valid start"
 msgstr "Gyldig start"
 
+#: Data/Dialogs/dlgVario_L.xml:374 Data/Dialogs/dlgVario.xml:375
+msgid "Interval; gear"
+msgstr "Interval; utstyr"
+
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:9
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:20
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:9
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:20
 msgid "Length/Radius"
 msgstr "Lengde/Radius"
-
-#: Data/Dialogs/dlgVario_L.xml:374 Data/Dialogs/dlgVario.xml:375
-msgid "Interval; gear"
-msgstr "Interval; utstyr"
 
 #: Data/Dialogs/dlgSwitches.xml:7
 msgid "Airbrake locked"
@@ -8530,11 +8533,6 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:8
 msgid "Change callsign"
 msgstr ""
-
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/SafetyFactorsConfigPanel.xml:14
-msgid "Alternates mode"
-msgstr "Alt.landinger modus"
 
 #: Data/Input/default.xci:619 Data/Input/default.xci:1147
 #, fuzzy
@@ -8856,6 +8854,53 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+
+#~ msgid ""
+#~ "If set to \"None\", neither airspace or terrain is used for route "
+#~ "planning.  If set to \"Terrain\", routes will avoid terrain; if set to "
+#~ "\"Airspace\", routes will avoid airspace.  If set to \"Both\", routes "
+#~ "will avoid airspace and terrain."
+#~ msgstr ""
+#~ "[Ingen] Verken luftrom eller terreng blir tatt hensyn til ved planlegging "
+#~ "av ruten. \r\n"
+#~ "[Terreng]  Terrenget blir tatt hensyn til ved planlegging av ruten. \r\n"
+#~ "[Luftrom]  Luftrom blir tatt hensyn til ved planlegging av ruten. \r\n"
+#~ "[Begge] Det tas hensyn til både terrenget og luftrom ved planlegging av "
+#~ "ruten."
+
+#~ msgid ""
+#~ "How calculations are performed of the reach of the glider with respect to "
+#~ "terrain.\n"
+#~ "[Off] Reach calculations disabled.\n"
+#~ "[Straight] The reach is from straight line paths from the glider.\n"
+#~ "[Turning] The reach is calculated allowing turns around terrain obstacles."
+#~ msgstr ""
+#~ "Rekkeviddeberegning.\n"
+#~ "[Av] Slått av.\n"
+#~ "[Rett] Rett linje.\n"
+#~ "[Svinger] Beregnet i forhold til terrenget."
+
+#~ msgid ""
+#~ "This determines whether the glide reach is drawn as a line on the map "
+#~ "area:\n"
+#~ "[Off] Disables display\n"
+#~ "[Line] Draws a dashed line at the glide reach\n"
+#~ "[Shade] Shades terrain outside glide reach"
+#~ msgstr ""
+#~ "Rekkeviddevisning.\n"
+#~ "[Av] Slått av.\n"
+#~ "[Linje] Markerer rekkevidden med en linje.\n"
+#~ "[Skygge] Skyggelegger området utenfor rekkevidde."
+
+#~ msgid ""
+#~ "This determines the glide performance used in reach, landable arrival, "
+#~ "abort and alternate calculations:\n"
+#~ "[Task] Uses task glide polar\n"
+#~ "[Safety MC] Uses safety MacCready value"
+#~ msgstr ""
+#~ "Valg av glideytelse:\n"
+#~ "[Oppgave] Bruker oppgavens glidepolar.\n"
+#~ "[Sikkerhets MC] Bruker sikkerrhets McCready verdi."
 
 #, fuzzy
 #~ msgid "FLARM location"
