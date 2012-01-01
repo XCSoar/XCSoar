@@ -93,6 +93,7 @@ public:
                        const TCHAR *content, bool editable=true,
                        DataField::DataAccessCallback_t callback=NULL);
 
+  WndProperty *AddSpacer(void);
 
   gcc_pure
   WndProperty &GetControl(unsigned i) {

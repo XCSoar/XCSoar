@@ -205,6 +205,15 @@ RowFormWidget::AddText(const TCHAR *label, const TCHAR *help,
   return edit;
 }
 
+WndProperty *
+RowFormWidget::AddSpacer(void)
+{
+  // TODO, there might be better ideas to group a row form widget
+  WndProperty *edit = Add(_T(""), 0, true);
+  edit->set_visible(false);
+  return edit;
+}
+
 bool
 RowFormWidget::GetValueBoolean(unsigned i) const
 {
