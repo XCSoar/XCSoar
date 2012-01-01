@@ -65,7 +65,7 @@ TEST_NAMES = \
 	TestColorRamp TestGeoPoint TestDiffFilter \
 	TestFileUtil TestPolars TestCSVLine TestGlidePolar \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
-	TestOrderedTask \
+	TestMacCready TestOrderedTask \
 	TestPlanes \
 	TestTaskPoint \
 	TestTaskWaypoint \
@@ -172,6 +172,15 @@ TEST_PROFILE_SOURCES = \
 TEST_PROFILE_OBJS = $(call SRC_TO_OBJ,$(TEST_PROFILE_SOURCES))
 TEST_PROFILE_LDADD = $(MATH_LIBS) $(IO_LIBS)
 $(TARGET_BIN_DIR)/TestProfile$(TARGET_EXEEXT): $(TEST_PROFILE_OBJS) $(TEST_PROFILE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
+
+TEST_MAC_CREADY_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestMacCready.cpp
+TEST_MAC_CREADY_OBJS = $(call SRC_TO_OBJ,$(TEST_MAC_CREADY_SOURCES))
+TEST_MAC_CREADY_LDADD = $(ENGINE_CORE_LIBS) $(MATH_LIBS) $(UTIL_LIBS)
+$(TARGET_BIN_DIR)/TestMacCready$(TARGET_EXEEXT): $(TEST_MAC_CREADY_OBJS) $(TEST_MAC_CREADY_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
 
