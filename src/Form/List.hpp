@@ -72,9 +72,22 @@ protected:
   unsigned cursor;
 
   /**
-   * true if the mouse_down event occurred over a list item
+   * Tracks the state of the mouse dragging over the list items
    */
-  bool dragging;
+  enum class DragMode {
+
+    /**
+     * No dragging in progress
+     */
+    NONE,
+
+    /**
+     * The user is currently scrolling the map.
+     */
+    SCROLL,
+  };
+
+  DragMode drag_mode;
 
   /**
    * the vertical distance from the start of the drag relative to the

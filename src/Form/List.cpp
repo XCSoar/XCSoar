@@ -54,7 +54,7 @@ WndListFrame::WndListFrame(ContainerWindow &parent, const DialogLook &_look,
    origin(0), pixel_pan(0),
    items_visible(Height / item_height),
   cursor(0),
-  dragging(false),
+  drag_mode(DragMode::NONE),
   ActivateCallback(NULL),
   CursorCallback(NULL),
   PaintItemCallback(NULL)
@@ -411,7 +411,7 @@ WndListFrame::on_mouse_up(PixelScalar x, PixelScalar y)
   if (scroll_bar.is_dragging()) {
     scroll_bar.drag_end(this);
     return true;
-  } else if (dragging) {
+  } else if (drag_mode != DragMode::NONE) {
     drag_end();
 
 #ifndef _WIN32_WCE
@@ -427,8 +427,8 @@ WndListFrame::on_mouse_up(PixelScalar x, PixelScalar y)
 void
 WndListFrame::drag_end()
 {
-  if (dragging) {
-    dragging = false;
+  if (drag_mode != DragMode::NONE) {
+    drag_mode = DragMode::NONE;
     release_capture();
   }
 }
@@ -443,7 +443,7 @@ WndListFrame::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
       scroll_bar.drag_move(length * item_height, get_height(), y);
     SetPixelOrigin(value);
     return true;
-  } else if (dragging) {
+  } else if (drag_mode == DragMode::SCROLL) {
     int new_origin = drag_y - y;
     SetPixelOrigin(new_origin);
 #ifndef _WIN32_WCE
@@ -516,7 +516,7 @@ WndListFrame::on_mouse_down(PixelScalar x, PixelScalar y)
 #ifndef _WIN32_WCE
       kinetic.MouseDown(GetPixelOrigin());
 #endif
-      dragging = true;
+      drag_mode = DragMode::SCROLL;
       set_capture();
     }
   }
