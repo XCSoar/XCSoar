@@ -115,7 +115,7 @@ normalize_search_string(TCHAR *dest, const TCHAR *src)
   TCHAR *retval = dest;
 
   for (; !string_is_empty(src); ++src)
-    if (_istalnum(*src))
+    if (static_cast<unsigned>(*src) < 128 && _istalnum(*src))
       *dest++ = _totupper(*src);
 
   *dest = _T('\0');
