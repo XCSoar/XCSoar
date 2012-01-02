@@ -95,6 +95,9 @@ public:
 
   WndProperty *AddSpacer(void);
 
+  WndProperty *AddFileReader(const TCHAR *label, const TCHAR *help,
+                             const TCHAR *registry_key, const TCHAR *filters);
+
   gcc_pure
   WndProperty &GetControl(unsigned i) {
     assert(i < (unsigned)controls.size());
@@ -184,6 +187,8 @@ public:
     value = (T)value2;
     return true;
   }
+
+  bool SaveValueFileReader(unsigned i, const TCHAR *registry_key);
 
 protected:
   void NextControlRect(PixelRect &rc, UPixelScalar height) {

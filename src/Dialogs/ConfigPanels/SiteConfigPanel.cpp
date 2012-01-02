@@ -22,21 +22,37 @@ Copyright_License {
 */
 
 #include "Profile/ProfileKeys.hpp"
-#include "Profile/Profile.hpp"
+#include "Language/Language.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Waypoint.hpp"
-#include "Form/Edit.hpp"
+#include "DataField/Enum.hpp"
 #include "Form/Button.hpp"
 #include "LocalPath.hpp"
 #include "Protection.hpp"
 #include "ConfigPanel.hpp"
 #include "SiteConfigPanel.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
 
-using namespace ConfigPanel;
+enum ControlIndex {
+  DataPath,
+  MapFile,
+  WaypointFile,
+  AdditionalWaypointFile,
+  WatchedWaypointFile,
+  AirspaceFile,
+  AdditionalAirspaceFile,
+  TerrainFile,
+  TopographyFile,
+  AirfieldFile
+};
 
-class SiteConfigPanel : public XMLWidget {
+class SiteConfigPanel : public RowFormWidget {
+public:
+  SiteConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(100)), buttonWaypoints(0) {}
+
 private:
   WndButton *buttonWaypoints;
 
@@ -51,14 +67,14 @@ void
 SiteConfigPanel::Show(const PixelRect &rc)
 {
   buttonWaypoints->set_visible(true);
-  XMLWidget::Show(rc);
+  RowFormWidget::Show(rc);
 }
 
 void
 SiteConfigPanel::Hide()
 {
   buttonWaypoints->set_visible(false);
-  XMLWidget::Hide();
+  RowFormWidget::Hide();
 }
 
 static void
@@ -70,39 +86,56 @@ OnWaypoints(gcc_unused WndButton &button)
 void
 SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent,
-             Layout::landscape ? _T("IDR_XML_SITECONFIGPANEL") :
-                               _T("IDR_XML_SITECONFIGPANEL_L"));
-
-  buttonWaypoints = ((WndButton *)ConfigPanel::GetForm().
-    FindByName(_T("cmdWaypoints")));
+  buttonWaypoints = ((WndButton *)ConfigPanel::GetForm().FindByName(_T("cmdWaypoints")));
   assert (buttonWaypoints);
   buttonWaypoints->SetOnClickNotify(OnWaypoints);
+  buttonWaypoints->set_visible(true);
 
-  InitFileField(form, _T("prpAirspaceFile"),
-                szProfileAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
-  InitFileField(form, _T("prpAdditionalAirspaceFile"),
-                szProfileAdditionalAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
-  InitFileField(form, _T("prpWaypointFile"),
-                szProfileWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
-  InitFileField(form, _T("prpAdditionalWaypointFile"),
-                szProfileAdditionalWaypointFile,
-                _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
-  InitFileField(form, _T("prpWatchedWaypointFile"),
-                szProfileWatchedWaypointFile,
-                _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
-
-  WndProperty *wp = (WndProperty *)form.FindByName(_T("prpDataPath"));
-  wp->set_enabled(false);
+  WndProperty *wp = Add(_T(""), 0, true);
   wp->SetText(GetPrimaryDataPath());
+  wp->set_enabled(false);
 
-  InitFileField(form, _T("prpMapFile"),
+  AddFileReader(_("Map database"),
+                _("The name of the file (.xcm) containing terrain, topography, and optionally "
+                    "waypoints, their details and airspaces."),
                 szProfileMapFile, _T("*.xcm\0*.lkm\0"));
-  InitFileField(form, _T("prpTerrainFile"),
+
+  AddFileReader(_("Waypoints"),
+                _("Primary waypoints file.  Supported file types are Cambridge/WinPilot files (.dat), "
+                    "Zander files (.wpz) or SeeYou files (.cup)."),
+                szProfileWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
+
+  // Expert item (TODO)
+  AddFileReader(_("More waypoints"),
+                _("Secondary waypoints file.  This may be used to add waypoints for a competition."),
+                szProfileAdditionalWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
+
+  // Expert item
+  AddFileReader(_("Watched waypoints"),
+                _("Waypoint file containing special waypoints for which additional computations like "
+                    "calculation of arrival height in map display always takes place. Useful for "
+                    "waypoints like known reliable thermal sources (e.g. powerplants) or mountain passes."),
+                szProfileWatchedWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
+
+  AddFileReader(_("Airspaces"), _("The file name of the primary airspace file."),
+                szProfileAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
+
+  // Expert item
+  AddFileReader(_("More airspaces"), _("The file name of the secondary airspace file."),
+                szProfileAdditionalAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
+
+  // Expert item
+  AddFileReader(_("Terrain file"), _("The name of the file containing digital elevation terrain data."),
                 szProfileTerrainFile, _T("*.jp2\0"));
-  InitFileField(form, _T("prpTopographyFile"),
+
+  // Expert item
+  AddFileReader(_("Topography file"), _("Specifies the file defining the topographical features."),
                 szProfileTopographyFile, _T("*.tpl\0"));
-  InitFileField(form, _T("prpAirfieldFile"),
+
+  // Expert item
+  AddFileReader(_("Waypoint details"),
+                _("The file may contain extracts from enroute supplements or other contributed "
+                    "information about individual waypoints and airfields."),
                 szProfileAirfieldFile, _T("*.txt\0"));
 }
 
@@ -111,28 +144,21 @@ SiteConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
 
-  WaypointFileChanged = WaypointFileChanged |
-    FinishFileField(form, _T("prpWaypointFile"), szProfileWaypointFile) |
-    FinishFileField(form, _T("prpAdditionalWaypointFile"),
-                    szProfileAdditionalWaypointFile) |
-    FinishFileField(form, _T("prpWatchedWaypointFile"),
-                    szProfileWatchedWaypointFile);
+  MapFileChanged = SaveValueFileReader(MapFile, szProfileMapFile);
 
-  AirspaceFileChanged =
-    FinishFileField(form, _T("prpAirspaceFile"), szProfileAirspaceFile) |
-    FinishFileField(form, _T("prpAdditionalAirspaceFile"),
-                    szProfileAdditionalAirspaceFile);
+  // WaypointFileChanged has already a meaningful value
+  WaypointFileChanged |= SaveValueFileReader(WaypointFile, szProfileWaypointFile);
+  WaypointFileChanged |= SaveValueFileReader(AdditionalWaypointFile, szProfileAdditionalWaypointFile);
+  WaypointFileChanged |= SaveValueFileReader(WatchedWaypointFile, szProfileWatchedWaypointFile);
 
-  MapFileChanged = FinishFileField(form, _T("prpMapFile"), szProfileMapFile);
+  AirspaceFileChanged = SaveValueFileReader(AirspaceFile, szProfileAirspaceFile);
+  AirspaceFileChanged |= SaveValueFileReader(AdditionalAirspaceFile, szProfileAdditionalAirspaceFile);
 
-  TerrainFileChanged = FinishFileField(form, _T("prpTerrainFile"),
-                                       szProfileTerrainFile);
+  TerrainFileChanged = SaveValueFileReader(TerrainFile, szProfileTerrainFile);
 
-  TopographyFileChanged = FinishFileField(form, _T("prpTopographyFile"),
-                                        szProfileTopographyFile);
+  TopographyFileChanged = SaveValueFileReader(TopographyFile, szProfileTopographyFile);
 
-  AirfieldFileChanged = FinishFileField(form, _T("prpAirfieldFile"),
-                                        szProfileAirfieldFile);
+  AirfieldFileChanged = SaveValueFileReader(AirfieldFile, szProfileAirfieldFile);
 
 
   changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged ||

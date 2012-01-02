@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/ConfigPanels/ConfigPanel.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Panel.hpp"
@@ -30,6 +31,7 @@ Copyright_License {
 #include "DataField/Float.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/String.hpp"
+#include "DataField/FileReader.hpp"
 #include "Language/Language.hpp"
 #include "Profile/Profile.hpp"
 #include "Units/Units.hpp"
@@ -91,7 +93,7 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
   PanelControl &panel = *(PanelControl *)GetWindow();
   WndProperty *edit =
     new WndProperty(panel, look, label,
-                    edit_rc, caption_width,
+                    edit_rc, (*label == '\0') ? 0 : caption_width,
                     style, edit_style, NULL);
   if (help != NULL)
     edit->SetHelpText(help);
@@ -213,6 +215,19 @@ RowFormWidget::AddSpacer(void)
   edit->set_visible(false);
   return edit;
 }
+
+WndProperty *
+RowFormWidget::AddFileReader(const TCHAR *label, const TCHAR *help,
+                             const TCHAR *registry_key, const TCHAR *filters)
+{
+  WndProperty *edit = Add(label, help);
+  DataFieldFileReader *df = new DataFieldFileReader(NULL);
+  edit->SetDataField(df);
+
+  ConfigPanel::InitFileField(*edit, registry_key, filters);
+  return edit;
+}
+
 
 bool
 RowFormWidget::GetValueBoolean(unsigned i) const
@@ -386,6 +401,12 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
   value = iround(new_value);
   Profile::Set(registry_key, new_value);
   return true;
+}
+
+bool
+RowFormWidget::SaveValueFileReader(unsigned i, const TCHAR *registry_key)
+{
+  return ConfigPanel::FinishFileField(GetControl(i), registry_key);
 }
 
 void
