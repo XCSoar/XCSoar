@@ -387,18 +387,24 @@ GlidePolar::GetVTakeoff() const
 }
 
 fixed
-GlidePolar::GetLDOverGround(const AircraftState &state) const
+GlidePolar::GetLDOverGround(Angle track, SpeedVector wind) const
 {
-  if (state.wind.is_zero())
+  if (wind.is_zero())
     return bestLD;
 
-  const fixed c_theta = (state.wind.bearing.Reciprocal() - state.track).cos();
+  const fixed c_theta = (wind.bearing.Reciprocal() - track).cos();
 
-  Quadratic q(-fixed_two * state.wind.norm * c_theta,
-              state.wind.norm * state.wind.norm - bestLD * bestLD);
+  Quadratic q(-fixed_two * wind.norm * c_theta,
+              wind.norm * wind.norm - bestLD * bestLD);
 
   if (q.Check())
     return max(fixed_zero, q.SolutionMax());
 
   return fixed_zero;
+}
+
+fixed
+GlidePolar::GetLDOverGround(const AircraftState &state) const
+{
+  return GetLDOverGround(state.track, state.wind);
 }
