@@ -22,11 +22,10 @@ Copyright_License {
 */
 
 #include "InterfaceConfigPanel.hpp"
-#include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
 #include "Form/Button.hpp"
+#include "Screen/Layout.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Form/XMLWidget.hpp"
 #include "DataField/FileReader.hpp"
 #include "DataField/Enum.hpp"
@@ -40,12 +39,26 @@ Copyright_License {
 #include "Protection.hpp"
 #include "ConfigPanel.hpp"
 #include "Language/Language.hpp"
+#include "UIGlobals.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
-using namespace ConfigPanel;
+enum ControlIndex {
+#ifdef HAVE_BLANK
+  AutoBlank,
+#endif
+  InputFile,
+  LanguageFile,
+  StatusFile,
+  MenuTimeout,
+  TextInput
+};
 
-class InterfaceConfigPanel : public XMLWidget {
+class InterfaceConfigPanel : public RowFormWidget {
+public:
+  InterfaceConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)), buttonFonts(0) {}
+
   WndButton *buttonFonts;
 
 public:
@@ -58,15 +71,15 @@ public:
 void
 InterfaceConfigPanel::Show(const PixelRect &rc)
 {
-  XMLWidget::Show(rc);
   buttonFonts->show();
+  RowFormWidget::Show(rc);
 }
 
 void
 InterfaceConfigPanel::Hide()
 {
-  XMLWidget::Hide();
   buttonFonts->hide();
+  RowFormWidget::Hide();
 }
 
 static void
@@ -78,26 +91,34 @@ OnFonts(gcc_unused WndButton &button)
 void
 InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent, _T("IDR_XML_INTERFACECONFIGPANEL"));
-
+  static const StaticEnumChoice  empty_list[] = { { 0 } };
   const UISettings &settings = CommonInterface::GetUISettings();
-
   WndProperty *wp;
+
+  RowFormWidget::Prepare(parent, rc);
 
   buttonFonts = ((WndButton *)ConfigPanel::GetForm().FindByName(_T("cmdFonts")));
   assert(buttonFonts);
   buttonFonts->SetOnClickNotify(OnFonts);
 
 #ifdef HAVE_BLANK
-  LoadFormProperty(form, _T("prpAutoBlank"),
-                   settings.map.EnableAutoBlank);
-#else
-  ShowFormControl(form, _T("prpAutoBlank"), false);
+  AddBoolean(_("Auto. blank"),
+             _("This determines whether to blank the display after a long period of inactivity "
+                 "when operating on internal battery power."),
+             settings.enable_auto_blank);
 #endif
 
-  InitFileField(form, _T("prpInputFile"), szProfileInputFile, _T("*.xci\0"));
+  // Expert item (TODO)
+  AddFileReader(_("Events"),
+                _("The Input Events file defines the menu system and how XCSoar responds to "
+                    "button presses and events from external devices."),
+                szProfileInputFile, _T("*.xci\0"));
 
-  wp = (WndProperty *)form.FindByName(_T("prpLanguageFile"));
+  wp = AddEnum(_("Language"),
+               _("The language options selects translations for English texts to other "
+                   "languages. Select English for a native interface or Automatic to localise "
+                   "XCSoar according to the system settings."),
+               empty_list, 0);
   if (wp != NULL) {
 #ifdef HAVE_NATIVE_GETTEXT
     wp->hide();
@@ -138,29 +159,37 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
         df.SetAsString(base);
     }
 
-    wp->RefreshDisplay();
 #endif /* !HAVE_NATIVE_GETTEXT */
   }
 
-  InitFileField(form, _T("prpStatusFile"), szProfileStatusFile, _T("*.xcs\0"));
+  // Expert item
+  AddFileReader(_("Status message"),
+                _("The status file can be used to define sounds to be played when certain "
+                    "events occur, and how long various status messages will appear on screen."),
+                szProfileStatusFile, _T("*.xcs\0"));
 
-  LoadFormProperty(form, _T("prpMenuTimeout"), settings.menu_timeout / 2);
+  // Expert item
+  AddInteger(_("Menu timeout"),
+             _("This determines how long menus will appear on screen if the user does not make any button "
+                 "presses or interacts with the computer."),
+             _T("%u s"), _T("%u"), 1, 60, 1, settings.menu_timeout / 2);
 
-  if (HasPointer()) {
-    static gcc_constexpr_data StaticEnumChoice text_input_list[] = {
-      { tiDefault, N_("Default") },
-      { tiKeyboard, N_("Keyboard") },
-      { tiHighScore, N_("HighScore Style") },
-      { 0 }
-    };
 
-    LoadFormProperty(form, _T("prpTextInput"), text_input_list,
-                     settings.dialog.text_input_style);
-  } else {
-    /* on-screen keyboard doesn't work without a pointing device
+  static gcc_constexpr_data StaticEnumChoice text_input_list[] = {
+    { tiDefault, N_("Default") },
+    { tiKeyboard, N_("Keyboard") },
+    { tiHighScore, N_("HighScore Style") },
+    { 0 }
+  };
+
+  // Expert item
+  wp = AddEnum(_("Text input style"),
+               _("Determines how the user is prompted for text input (filename, teamcode etc.)"),
+               text_input_list, settings.dialog.text_input_style);
+
+  /* on-screen keyboard doesn't work without a pointing device
        (mouse or touch screen), hide the option on Altair */
-    ShowFormControl(form, _T("prpTextInput"), false);
-  }
+  wp->set_visible(HasPointer());
 }
 
 bool
@@ -170,18 +199,13 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool changed = false, require_restart = false;;
 
 #ifdef HAVE_BLANK
-  changed |= SaveFormProperty(form, _T("prpAutoBlank"),
-                              szProfileAutoBlank,
-                              settings.map.EnableAutoBlank);
+  changed |= SaveValue(AutoBlank, szProfileAutoBlank, settings.enable_auto_blank);
 #endif
 
-  if (FinishFileField(form, _T("prpInputFile"), szProfileInputFile)) {
-    changed = true;
-    require_restart = true;
-  }
+  require_restart |= changed |= SaveValueFileReader(InputFile, szProfileInputFile);
 
 #ifndef HAVE_NATIVE_GETTEXT
-  WndProperty *wp = (WndProperty *)form.FindByName(_T("prpLanguageFile"));
+  WndProperty *wp = (WndProperty *)&GetControl(LanguageFile);
   if (wp != NULL) {
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
 
@@ -223,12 +247,11 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
   }
 #endif
 
-  if (FinishFileField(form, _T("prpStatusFile"), szProfileStatusFile)) {
-    changed = true;
-    require_restart = true;
-  }
+  require_restart |= changed |= SaveValueFileReader(StatusFile, szProfileStatusFile);
 
-  unsigned menu_timeout = GetFormValueInteger(form, _T("prpMenuTimeout")) * 2;
+  unsigned menu_timeout;
+  SaveValue(MenuTimeout, menu_timeout);
+  menu_timeout *= 2;
   if (settings.menu_timeout != menu_timeout) {
     settings.menu_timeout = menu_timeout;
     Profile::Set(szProfileMenuTimeout, menu_timeout);
@@ -236,9 +259,7 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
   }
 
   if (HasPointer())
-    changed |= SaveFormPropertyEnum(form, _T("prpTextInput"),
-                                    szProfileAppTextInputStyle,
-                                    settings.dialog.text_input_style);
+    changed |= SaveValueEnum(TextInput, szProfileAppTextInputStyle, settings.dialog.text_input_style);
 
   _changed |= changed;
   _require_restart |= require_restart;
