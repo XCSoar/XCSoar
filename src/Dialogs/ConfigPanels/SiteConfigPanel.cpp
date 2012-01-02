@@ -89,7 +89,6 @@ SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   buttonWaypoints = ((WndButton *)ConfigPanel::GetForm().FindByName(_T("cmdWaypoints")));
   assert (buttonWaypoints);
   buttonWaypoints->SetOnClickNotify(OnWaypoints);
-  buttonWaypoints->set_visible(true);
 
   WndProperty *wp = Add(_T(""), 0, true);
   wp->SetText(GetPrimaryDataPath());
