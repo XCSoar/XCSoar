@@ -41,24 +41,24 @@ extern "C" {
 int verbose;
 
 static inline bool
-is_zero(const fixed value)
+is_zero(const fixed value, const int accuracy=ACCURACY)
 {
-  return (long)(fabs(value) * ACCURACY) == 0;
+  return (long)(fabs(value) * accuracy) == 0;
 }
 
 static inline bool
-is_one(const fixed value)
+is_one(const fixed value, const int accuracy=ACCURACY)
 {
-  return is_zero(value - fixed_one);
+  return is_zero(value - fixed_one, accuracy);
 }
 
 static inline bool
-equals(const fixed a, const fixed b)
+equals(const fixed a, const fixed b, const int accuracy=ACCURACY)
 {
-  if (is_zero(a) || is_zero(b))
-    return is_zero(a) && is_zero(b);
+  if (is_zero(a, accuracy) || is_zero(b, accuracy))
+    return is_zero(a, accuracy) && is_zero(b, accuracy);
 
-  return is_one(a / b);
+  return is_one(a / b, accuracy);
 }
 
 #ifdef FIXED_MATH
