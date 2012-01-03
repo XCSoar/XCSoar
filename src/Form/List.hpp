@@ -85,6 +85,11 @@ protected:
      * The user is currently scrolling the map.
      */
     SCROLL,
+
+    /**
+     * The user is dragging the selected item.
+     */
+    CURSOR,
   };
 
   DragMode drag_mode;
@@ -94,6 +99,13 @@ protected:
    * top of the list (not the top of the screen)
    */
   int drag_y;
+
+  /**
+   * The vertical distance from the start of the drag relative to the
+   * top of the window
+   */
+  int drag_y_window;
+
 
   ActivateCallback_t ActivateCallback;
   CursorCallback_t CursorCallback;

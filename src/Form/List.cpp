@@ -411,7 +411,17 @@ WndListFrame::OnMouseUp(PixelScalar x, PixelScalar y)
   if (scroll_bar.IsDragging()) {
     scroll_bar.DragEnd(this);
     return true;
-  } else if (drag_mode != DragMode::NONE) {
+  }
+
+  if (drag_mode == DragMode::CURSOR &&
+      ActivateCallback != NULL && x >= 0 &&
+      x <= ((PixelScalar)get_width() - scroll_bar.GetWidth())) {
+      drag_end();
+      ActivateCallback(GetCursorIndex());
+      return true;
+  }
+
+  if (drag_mode == DragMode::SCROLL || drag_mode == DragMode::CURSOR) {
     drag_end();
 
 #ifndef _WIN32_WCE
@@ -443,7 +453,14 @@ WndListFrame::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
       scroll_bar.DragMove(length * item_height, get_height(), y);
     SetPixelOrigin(value);
     return true;
-  } else if (drag_mode == DragMode::SCROLL) {
+  } else if (drag_mode == DragMode::CURSOR) {
+    if (abs(y - drag_y_window) > ((int)item_height / 5))
+      drag_mode = DragMode::SCROLL;
+    else
+      return true;
+  }
+
+  if (drag_mode == DragMode::SCROLL || drag_mode == DragMode::CURSOR) {
     int new_origin = drag_y - y;
     SetPixelOrigin(new_origin);
 #ifndef _WIN32_WCE
@@ -502,23 +519,22 @@ WndListFrame::OnMouseDown(PixelScalar x, PixelScalar y)
     if (index < 0)
       return false;
 
+    drag_y = GetPixelOrigin() + y;
+    drag_y_window = y;
+
     if (had_focus && ActivateCallback != NULL &&
         (unsigned)index == GetCursorIndex()) {
-      // If item was already selected
-      // -> call event handler
-      ActivateCallback(index);
+      drag_mode = DragMode::CURSOR;
     } else {
       // If item was not selected before
       // -> select it
       SetCursorIndex(index);
-
-      drag_y = GetPixelOrigin() + y;
-#ifndef _WIN32_WCE
-      kinetic.MouseDown(GetPixelOrigin());
-#endif
       drag_mode = DragMode::SCROLL;
-      set_capture();
     }
+#ifndef _WIN32_WCE
+    kinetic.MouseDown(GetPixelOrigin());
+#endif
+    set_capture();
   }
 
   return true;
