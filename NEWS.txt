@@ -26,6 +26,10 @@ Version 6.3 - not yet released
   - support reverse screen modes for Galaxy Tab
   - support baro sensor
 
+Version 6.2.5 - not yet released
+* calculations
+  - fix time calculation when goal is above aircraft
+
 Version 6.2.4 - 2011/12/24
 * calculations
   - fix arrival altitude calculation when goal is above aircraft

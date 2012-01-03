@@ -205,7 +205,7 @@ CrossTrackError(const GeoPoint loc1, const GeoPoint loc2,
     const fixed sinXTD = sc.first, cosXTD = sc.second;
 
     const fixed along_track_distance =
-      earth_asin(sqrt(sindist_AD * sindist_AD - sinXTD * sinXTD) / cosXTD);
+      earth_asin(sqrt(sqr(sindist_AD) - sqr(sinXTD)) / cosXTD);
 
     *loc4 = IntermediatePoint(loc1, loc2, along_track_distance, dist_AB.Radians());
   }
@@ -246,7 +246,7 @@ ProjectedDistance(const GeoPoint loc1, const GeoPoint loc2, const GeoPoint loc3)
 
   // along track distance
   const fixed along_track_distance =
-    earth_asin(sqrt(sindist_AD * sindist_AD - sinXTD * sinXTD) / cosXTD);
+    earth_asin(sqrt(sqr(sindist_AD) - sqr(sinXTD)) / cosXTD);
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;

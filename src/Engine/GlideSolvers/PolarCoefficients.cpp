@@ -29,15 +29,15 @@ PolarCoefficients::From3VW(fixed v1, fixed v2, fixed v3,
 {
   PolarCoefficients pc;
 
-  fixed d = v1 * v1 * (v2 - v3) + v2 * v2 * (v3 - v1) + v3 * v3 * (v1 - v2);
+  fixed d = sqr(v1) * (v2 - v3) + sqr(v2) * (v3 - v1) + sqr(v3) * (v1 - v2);
   pc.a = (d == fixed_zero) ? fixed_zero :
          -((v2 - v3) * (w1 - w3) + (v3 - v1) * (w2 - w3)) / d;
 
   d = v2 - v3;
   pc.b = (d == fixed_zero) ? fixed_zero:
-         -(w2 - w3 + pc.a * (v2 * v2 - v3 * v3)) / d;
+    -(w2 - w3 + pc.a * (sqr(v2) - sqr(v3))) / d;
 
-  pc.c = -(w3 + pc.a * v3 * v3 + pc.b * v3);
+  pc.c = -(w3 + pc.a * sqr(v3) + pc.b * v3);
 
   return pc;
 }
@@ -47,10 +47,10 @@ PolarCoefficients::From2VW(fixed v1, fixed v2, fixed w1, fixed w2)
 {
   PolarCoefficients pc;
 
-  fixed d = (v2 - v1) * (v2 - v1);
+  fixed d = sqr(v2 - v1);
   pc.a = (d == fixed_zero) ? fixed_zero : (w2 - w1) / d;
   pc.b = - Double(pc.a * v1);
-  pc.c = pc.a * v1 * v1 + w1;
+  pc.c = pc.a * sqr(v1) + w1;
 
   return pc;
 }

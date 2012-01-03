@@ -31,7 +31,9 @@ struct AircraftState;
 #include "Util/TypeTraits.hpp"
 #include "Compiler.h"
 
+class Angle;
 struct PolarInfo;
+struct SpeedVector;
 
 /**
  * Class implementing basic glide polar performance model
@@ -429,10 +431,21 @@ public:
   /**
    * Find LD relative to ground for specified track bearing
    *
+   * @param track the true aircraft ground direction
+   * @param wind the wind vector
+   * @return LD ratio (distance travelled per unit height loss)
+   */
+  gcc_pure
+  fixed GetLDOverGround(Angle track, SpeedVector wind) const;
+
+  /**
+   * Find LD relative to ground for specified track bearing
+   *
    * @param state Aircraft state (for wind)
    *
    * @return LD ratio (distance travelled per unit height loss)
    */
+  gcc_pure
   fixed GetLDOverGround(const AircraftState &state) const;
 
   /** Returns the wing area in m^2 */

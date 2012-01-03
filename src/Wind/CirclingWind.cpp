@@ -259,7 +259,7 @@ CirclingWind::CalcWind()
     wx = wx * av + mag;
     wy *= av;
     fixed cmag = hypot(wx, wy) - samples[i].mag;
-    rthis += cmag * cmag;
+    rthis += sqr(cmag);
   }
 
   rthis /= samples.size();

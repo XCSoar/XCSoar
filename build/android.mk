@@ -19,7 +19,11 @@ ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/build
 ANDROID_BIN = $(TARGET_BIN_DIR)
 ANDROID_JNI = $(TARGET_OUTPUT_DIR)/jni
 
-ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux_x86
+ifeq ($(HOST_IS_DARWIN),y)
+  ANDROID_SDK ?= $(HOME)/opt/android-sdk-macosx
+else
+  ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux_x86
+endif
 ANDROID_ABI = $(ANDROID_ABI3)
 ANDROID_ALL_ABIS = armeabi armeabi-v7a
 ANDROID_LIB_DIR = /opt/android/libs/$(ANDROID_ABI)
@@ -111,7 +115,7 @@ endif
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/
 	$(Q)$(ANDROID_SDK)/tools/android update project --path $(@D) --target $(ANDROID_PLATFORM)
 ifeq ($(TESTING),y)
-	$(Q)sed -i -f build/r.sed $@
+	$(Q)sed -i "" -f build/r.sed $@
 endif
 	@touch $@
 

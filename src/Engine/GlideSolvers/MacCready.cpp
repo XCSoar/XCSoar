@@ -180,7 +180,7 @@ MacCready::SolveCruise(const GlideState &task) const
 
   const fixed sink_glide = time_cruise * mc_sink_rate;
 
-  result.time_elapsed = estimated_time;
+  result.time_elapsed = estimated_time + time_climb_drift;
   result.height_climb = time_climb * mc;
   result.height_glide = sink_glide;
   result.altitude_difference -= sink_glide;

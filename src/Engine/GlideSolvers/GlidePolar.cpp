@@ -377,7 +377,7 @@ GlidePolar::GetRiskMC(fixed height_fraction, const fixed riskGamma) const
   else if (riskGamma > fixed_up_limit)
     return height_fraction * mc;
 
-  const fixed k = fixed_one / (riskGamma * riskGamma) - fixed_one;
+  const fixed k = fixed_one / sqr(riskGamma) - fixed_one;
   return mc * FRiskFunction(height_fraction, k) / FRiskFunction(fixed_one, k);
 }
 
@@ -388,18 +388,28 @@ GlidePolar::GetVTakeoff() const
 }
 
 fixed
-GlidePolar::GetLDOverGround(const AircraftState &state) const
+GlidePolar::GetLDOverGround(Angle track, SpeedVector wind) const
 {
-  if (state.wind.IsZero())
+  if (wind.IsZero())
     return bestLD;
 
-  const fixed c_theta = (state.wind.bearing.Reciprocal() - state.track).cos();
+  const fixed c_theta = (wind.bearing.Reciprocal() - track).cos();
 
-  Quadratic q(- Double(state.wind.norm * c_theta),
-              state.wind.norm * state.wind.norm - bestLD * bestLD);
+  /* convert the wind speed into some sort of "virtual L/D" to put it
+     in relation to the polar's best L/D */
+  const fixed wind_ld = wind.norm / GetSBestLD();
+
+  Quadratic q(- Double(wind_ld * c_theta),
+              sqr(wind_ld) - sqr(bestLD));
 
   if (q.Check())
     return max(fixed_zero, q.SolutionMax());
 
   return fixed_zero;
+}
+
+fixed
+GlidePolar::GetLDOverGround(const AircraftState &state) const
+{
+  return GetLDOverGround(state.track, state.wind);
 }
