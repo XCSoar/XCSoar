@@ -86,13 +86,13 @@ public:
     return as.IsActive() && find(as, ids_inside);
   }
 
-  void visit_warned(AirspaceVisitor &visitor) {
+  void visit_warned(AirspaceVisitor &visitor) const {
     for (auto it = ids_warning.begin(), end = ids_warning.end(); it != end; ++it)
       if (!is_acked(**it))
         visitor.Visit(**it);
   }
 
-  void visit_inside(AirspaceVisitor &visitor) {
+  void visit_inside(AirspaceVisitor &visitor) const {
     for (auto it = ids_inside.begin(), end = ids_inside.end(); it != end; ++it)
       if (!is_acked(**it))
         visitor.Visit(**it);
