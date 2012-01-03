@@ -514,8 +514,8 @@ AirspaceRenderer::Draw(Canvas &canvas,
                        const WindowProjection &projection,
                        const MoreData &basic,
                        const DerivedInfo &calculated,
-                       const ComputerSettings &settings_computer,
-                       const MapSettings &settings_map)
+                       const AirspaceComputerSettings &computer_settings,
+                       const AirspaceRendererSettings &settings)
 {
   if (airspace_database == NULL)
     return;
@@ -524,28 +524,28 @@ AirspaceRenderer::Draw(Canvas &canvas,
   if (airspace_warnings != NULL)
     awc.Visit(*airspace_warnings);
 
-  const AirspaceMapVisible visible(settings_computer.airspace,
-                                   settings_map.airspace,
+  const AirspaceMapVisible visible(computer_settings,
+                                   settings,
                                    ToAircraftState(basic, calculated), awc);
 
 #ifdef ENABLE_OPENGL
-  if (settings_map.airspace.fill_mode == AirspaceRendererSettings::AS_FILL_ALL) {
+  if (settings.fill_mode == AirspaceRendererSettings::AS_FILL_ALL) {
     AirspaceFillRenderer renderer(canvas, projection, airspace_look, awc,
-                                  settings_map.airspace);
+                                  settings);
     airspace_database->visit_within_range(projection.GetGeoScreenCenter(),
                                           projection.GetScreenDistanceMeters(),
                                           renderer, visible);
   } else {
     AirspaceVisitorRenderer renderer(canvas, projection, airspace_look, awc,
-                                     settings_map.airspace);
+                                     settings);
     airspace_database->visit_within_range(projection.GetGeoScreenCenter(),
                                           projection.GetScreenDistanceMeters(),
                                           renderer, visible);
   }
 #else
   MapDrawHelper helper(canvas, buffer_canvas, stencil_canvas, projection,
-                       settings_map.airspace);
-  AirspaceVisitorMap v(helper, awc, settings_map.airspace,
+                       settings);
+  AirspaceVisitorMap v(helper, awc, settings,
                        airspace_look);
 
   // JMW TODO wasteful to draw twice, can't it be drawn once?
@@ -562,7 +562,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
 
   AirspaceOutlineRenderer outline_renderer(canvas, projection,
                                            airspace_look,
-                                           settings_map.airspace.black_outline);
+                                           settings.black_outline);
   airspace_database->visit_within_range(projection.GetGeoScreenCenter(),
                                         projection.GetScreenDistanceMeters(),
                                         outline_renderer, visible);

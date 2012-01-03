@@ -69,7 +69,8 @@ MapWindow::RenderAirspace(Canvas &canvas)
 #endif
                            render_projection,
                            Basic(), Calculated(),
-                           GetComputerSettings(), GetMapSettings());
+                           GetComputerSettings().airspace,
+                           GetMapSettings().airspace);
 }
 
 void

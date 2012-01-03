@@ -139,7 +139,8 @@ TargetMapWindow::RenderAirspace(Canvas &canvas)
 #endif
                            projection,
                            Basic(), Calculated(),
-                           GetComputerSettings(), GetMapSettings());
+                           GetComputerSettings().airspace,
+                           GetMapSettings().airspace);
 }
 
 void
