@@ -44,7 +44,7 @@ public:
    * @param _c Value of c
    */
   Quadratic(const fixed _b, const fixed _c) :
-    da(fixed_two), b(_b), denom(b * b - fixed_four * _c)
+    da(fixed_two), b(_b), denom(sqr(b) - fixed_four * _c)
   {
   }
 
@@ -56,7 +56,7 @@ public:
    * @param _c Value of c
    */
   Quadratic(const fixed _a, const fixed _b, const fixed _c) :
-    da(fixed_two * _a), b(_b), denom(b * b - fixed_two * da * _c)
+    da(fixed_two * _a), b(_b), denom(sqr(b) - fixed_two * da * _c)
   {
   }
 

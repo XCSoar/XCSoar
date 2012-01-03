@@ -42,7 +42,7 @@ public:
    */
   AverageSpeedSolver(const fixed dwcostheta, const fixed wind_speed_squared,
                      const fixed V) :
-    Quadratic(dwcostheta, wind_speed_squared - V * V)
+    Quadratic(dwcostheta, wind_speed_squared - sqr(V))
   {
   }
 
@@ -90,7 +90,7 @@ GlideState::CalcSpeedups(const SpeedVector _wind)
   if (_wind.is_non_zero()) {
     wind = _wind;
     effective_wind_angle = wind.bearing.Reciprocal() - vector.Bearing;
-    wind_speed_squared = wind.norm * wind.norm;
+    wind_speed_squared = sqr(wind.norm);
     head_wind = -wind.norm * effective_wind_angle.cos();
     head_wind_doubled = fixed_two * head_wind;
   } else {

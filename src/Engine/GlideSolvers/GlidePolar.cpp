@@ -128,7 +128,7 @@ GlidePolar::SinkRate(const fixed V, const fixed n) const
   const fixed w0 = SinkRate(V);
   const fixed vl = VbestLD / max(half(VbestLD), V);
   return max(fixed_zero,
-             w0 + (V / (fixed_two * bestLD)) * (n * n - fixed_one) * vl * vl);
+             w0 + (V / (fixed_two * bestLD)) * (sqr(n) - fixed_one) * sqr(vl));
 }
 
 #if 0
@@ -376,7 +376,7 @@ GlidePolar::GetRiskMC(const fixed height_fraction, const fixed riskGamma) const
   else if (riskGamma > fixed_up_limit)
     return x * mc;
 
-  const fixed k = fixed_one / (riskGamma * riskGamma) - fixed_one;
+  const fixed k = fixed_one / sqr(riskGamma) - fixed_one;
   return mc * FRiskFunction(x, k) / FRiskFunction(fixed_one, k);
 }
 
@@ -395,7 +395,7 @@ GlidePolar::GetLDOverGround(Angle track, SpeedVector wind) const
   const fixed c_theta = (wind.bearing.Reciprocal() - track).cos();
 
   Quadratic q(-fixed_two * wind.norm * c_theta,
-              wind.norm * wind.norm - bestLD * bestLD);
+              sqr(wind.norm) - sqr(bestLD));
 
   if (q.Check())
     return max(fixed_zero, q.SolutionMax());

@@ -38,7 +38,7 @@ FlatEllipse::FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2,
   theta = f12.angle();
   const fixed csq = f12.dsq();
   a = (f1.d(ap) + f2.d(ap));
-  b = half(sqrt(a * a - csq));
+  b = half(sqrt(sqr(a) - csq));
   a = half(a);
 
   // a.sin(t) = ap.x

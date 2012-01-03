@@ -199,7 +199,7 @@ CrossTrackError(const GeoPoint loc1, const GeoPoint loc2,
     sin_cos(XTD, &sinXTD, &cosXTD);
 
     // along track distance
-    const fixed ATD(earth_asin(sqrt(sindist_AD * sindist_AD - sinXTD * sinXTD)
+    const fixed ATD(earth_asin(sqrt(sqr(sindist_AD) - sqr(sinXTD))
                          / cosXTD));
 
     *loc4 = IntermediatePoint(loc1, loc2, ATD, dist_AB.value_radians());
@@ -240,7 +240,7 @@ ProjectedDistance(const GeoPoint loc1, const GeoPoint loc2, const GeoPoint loc3)
   sin_cos(XTD, &sinXTD, &cosXTD);
 
   // along track distance
-  const fixed ATD(earth_asin(sqrt(sindist_AD * sindist_AD - sinXTD * sinXTD) / cosXTD));
+  const fixed ATD(earth_asin(sqrt(sqr(sindist_AD) - sqr(sinXTD)) / cosXTD));
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;

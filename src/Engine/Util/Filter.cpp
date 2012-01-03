@@ -58,7 +58,7 @@ Filter::design(const fixed cutoff_wavelength, const bool bessel)
 
   fixed omega0 = tan(fixed_pi * f_star);
   fixed K1 = p * omega0;
-  fixed K2 = g * omega0 * omega0;
+  fixed K2 = g * sqr(omega0);
 
   a[0] = K2 / (fixed_one + K1 + K2);
   a[1] = a[0] + a[0];

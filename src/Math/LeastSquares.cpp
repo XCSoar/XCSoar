@@ -150,7 +150,7 @@ LeastSquares::LeastSquaresUpdate(fixed x, fixed y, fixed weight)
 
   // Calculate error
   fixed error = fabs(y - (m * x + b));
-  sum_error += error * error * weight;
+  sum_error += sqr(error) * weight;
   if (error > max_error)
     max_error = error;
 }
@@ -208,6 +208,6 @@ LeastSquares::LeastSquaresAdd(fixed x, fixed y, fixed weight)
 
   sum_xi += xw;
   sum_yi += yw;
-  sum_xi_2 += xw * xw;
+  sum_xi_2 += sqr(xw);
   sum_xi_yi += xw * yw;
 }
