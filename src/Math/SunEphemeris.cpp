@@ -200,7 +200,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
   fixed twilight_hours = (hour_angle_twilight - hour_angle).Hours();
 
   // Conversion of angle to hours and minutes
-  result.day_length = hour_angle.Hours() * fixed_two;
+  result.day_length = Double(hour_angle.Hours());
 
   if (result.day_length < fixed(0.0001))
     // arctic winter

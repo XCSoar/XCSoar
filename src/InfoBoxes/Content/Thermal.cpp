@@ -58,7 +58,7 @@ InfoBoxContentThermal30s::Update(InfoBoxData &data)
   SetVSpeed(data, XCSoarInterface::Calculated().average);
 
   // Set Color (red/black)
-  data.SetValueColor(XCSoarInterface::Calculated().average * fixed_two <
+  data.SetValueColor(Double(CommonInterface::Calculated().average) <
       XCSoarInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
 }
 

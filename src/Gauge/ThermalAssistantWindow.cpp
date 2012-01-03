@@ -162,7 +162,7 @@ ThermalAssistantWindow::UpdateLiftPoints()
 fixed
 ThermalAssistantWindow::RangeScale(fixed lift) const
 {
-  lift = (lift + max_lift) / (max_lift * fixed_two);
+  lift = (lift + max_lift) / Double(max_lift);
   return std::min(fixed_one, std::max(fixed_zero, lift)) * fixed(radius);
 }
 

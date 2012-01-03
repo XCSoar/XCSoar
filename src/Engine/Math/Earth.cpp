@@ -48,9 +48,9 @@ earth_distance_function(const fixed a)
   // acos(1-x) = 2*asin(sqrt(x/2))
   // acos(1-2*x) = 2*asin(sqrt(x))
   //    = 2*atan2(sqrt(x), sqrt(fixed_one-x));
-  return fixed_two*earth_asin(sqrt(a)/(1<<fixed::accurate_cordic_shift));
+  return Double(earth_asin(sqrt(a) / (1 << fixed::accurate_cordic_shift)));
 #else
-  return acos(fixed_one - fixed_two * a);
+  return acos(fixed_one - Double(a));
 #endif
 }
 

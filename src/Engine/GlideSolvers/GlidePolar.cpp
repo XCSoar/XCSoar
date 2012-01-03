@@ -128,7 +128,7 @@ GlidePolar::SinkRate(const fixed V, const fixed n) const
   const fixed w0 = SinkRate(V);
   const fixed vl = VbestLD / max(half(VbestLD), V);
   return max(fixed_zero,
-             w0 + (V / (fixed_two * bestLD)) * (n * n - fixed_one) * vl * vl);
+             w0 + (V / Double(bestLD)) * (sqr(n) - fixed_one) * sqr(vl));
 }
 
 #if 0
@@ -226,7 +226,7 @@ GlidePolar::UpdateSMin()
   GlidePolarMinSink gpminsink(*this, Vmax);
   Vmin = gpminsink.find_min(Vmin);
 #else
-  Vmin = min(Vmax, -polar.b/(fixed_two*polar.a));
+  Vmin = min(Vmax, -polar.b / Double(polar.a));
   Smin = SinkRate(Vmin);
 #endif
 
@@ -395,7 +395,7 @@ GlidePolar::GetLDOverGround(const AircraftState &state) const
 
   const fixed c_theta = (state.wind.bearing.Reciprocal() - state.track).cos();
 
-  Quadratic q(-fixed_two * state.wind.norm * c_theta,
+  Quadratic q(- Double(state.wind.norm * c_theta),
               state.wind.norm * state.wind.norm - bestLD * bestLD);
 
   if (q.Check())

@@ -79,6 +79,13 @@ half(fixed a)
   return a * 0.5;
 }
 
+gcc_constexpr_function
+static inline fixed
+Double(fixed a)
+{
+  return a * 2;
+}
+
 gcc_const
 inline fixed rsqrt(fixed a) {
   // not fast
@@ -347,6 +354,11 @@ public:
   gcc_constexpr_method
   fixed Half() const {
     return fixed(internal(), m_nVal >> 1);
+  }
+
+  gcc_constexpr_method
+  fixed Double() const {
+    return fixed(internal(), m_nVal << 1);
   }
 
   gcc_pure
@@ -969,6 +981,13 @@ static inline fixed
 half(fixed a)
 {
   return a.Half();
+}
+
+gcc_constexpr_function
+static inline fixed
+Double(fixed a)
+{
+  return a.Double();
 }
 
 #endif

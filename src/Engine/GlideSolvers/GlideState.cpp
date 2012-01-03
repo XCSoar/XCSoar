@@ -68,7 +68,7 @@ GlideState::CalcAverageSpeed(const fixed Veff) const
 {
   if (wind.IsNonZero()) {
     // only need to solve if positive wind speed
-    return AverageSpeedSolver(head_wind_doubled, wind_speed_squared, Veff).Solve();
+    return AverageSpeedSolver(Double(head_wind), wind_speed_squared, Veff).Solve();
   }
 
   return Veff;
@@ -92,13 +92,11 @@ GlideState::CalcSpeedups(const SpeedVector _wind)
     effective_wind_angle = wind.bearing.Reciprocal() - vector.bearing;
     wind_speed_squared = wind.norm * wind.norm;
     head_wind = -wind.norm * effective_wind_angle.cos();
-    head_wind_doubled = fixed_two * head_wind;
   } else {
     wind = SpeedVector::Zero();
     effective_wind_angle = Angle::Zero();
     head_wind = fixed_zero;
     wind_speed_squared = fixed_zero;
-    head_wind_doubled = fixed_zero;
   }
 }
 

@@ -43,7 +43,7 @@ fixed ZeroFinder::tolerance_actual_min(const fixed x) const {
 }
 
 fixed ZeroFinder::tolerance_actual_zero(const fixed x) const {
-  return 2 * epsilon * fabs(x) + half(tolerance);
+  return Double(epsilon * fabs(x)) + half(tolerance);
 }
 
 //#define INSTRUMENT_ZERO
@@ -339,7 +339,7 @@ fixed ZeroFinder::find_min_actual(const fixed xstart)
 
     // Actual tolerance
     const fixed tol_act = tolerance_actual_min(x);
-    const fixed double_tol_act = fixed_two * tol_act;
+    const fixed double_tol_act = Double(tol_act);
 
     if (fabs(x-middle_range) + half(range) <= double_tol_act) {
       if (!x_best)
@@ -367,7 +367,7 @@ fixed ZeroFinder::find_min_actual(const fixed xstart)
       const fixed t = (x - w) * (fx - fv);
       q = (x - v) * (fx - fw);
       p = (x - v) * q - (x - w) * t;
-      q = fixed_two * (q - t);
+      q = Double(q - t);
 
       // q was calculated with the opposite sign;
       // make q positive and assign possible minus to p

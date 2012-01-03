@@ -93,8 +93,8 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
 
   const auto sc = angle.SinCos();
   const fixed x = sc.first, y = sc.second;
-  int lx = iround(x * radius * fixed_two) & ~0x1;  // make it a even number
-  int ly = iround(y * radius * fixed_two) & ~0x1;
+  int lx = iround(Double(x * radius)) & ~0x1;  // make it a even number
+  int ly = iround(Double(y * radius)) & ~0x1;
   int wx = iround(-y * width);
   int wy = iround(x * width);
 
@@ -150,7 +150,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
                     ? look.reachable_brush
                     : look.terrain_unreachable_brush);
       DrawLandableBase(canvas, point, waypoint.IsAirport(),
-                       radius + radius / fixed_two);
+                       radius + half(radius));
     }
     canvas.Select(look.magenta_brush);
   } else if (settings.landable_style == wpLandableAltB) {
@@ -177,11 +177,11 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
   if (runway.IsDirectionDefined()) {
     fixed len;
     if (settings.scale_runway_length && runway.IsLengthDefined())
-      len = (radius / fixed_two) +
+      len = half(radius) +
         (((int) runway.GetLength() - 500) / 500) * (radius / fixed_four);
     else
       len = radius;
-    len += fixed_two * scale;
+    len += Double(scale);
     Angle runwayDrawingAngle = runway.GetDirection() - screen_rotation;
     canvas.Select(look.white_brush);
     DrawLandableRunway(canvas, point, runwayDrawingAngle, len,

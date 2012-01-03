@@ -49,7 +49,7 @@ PolarCoefficients::From2VW(fixed v1, fixed v2, fixed w1, fixed w2)
 
   fixed d = (v2 - v1) * (v2 - v1);
   pc.a = (d == fixed_zero) ? fixed_zero : (w2 - w1) / d;
-  pc.b = -fixed_two * pc.a * v1;
+  pc.b = - Double(pc.a * v1);
   pc.c = pc.a * v1 * v1 + w1;
 
   return pc;

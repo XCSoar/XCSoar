@@ -84,7 +84,7 @@ TaskCalculatorPanel::Refresh()
   if (positive(rPlanned)) {
     fixed rMax = task_stats.distance_max;
     fixed rMin = task_stats.distance_min;
-    fixed range = (fixed_two * (rPlanned - rMin) / (rMax - rMin)) - fixed_one;
+    fixed range = Double((rPlanned - rMin) / (rMax - rMin)) - fixed_one;
     LoadFormProperty(form, _T("prpRange"), range * 100);
   }
 

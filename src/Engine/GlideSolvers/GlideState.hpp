@@ -48,8 +48,6 @@ struct GlideState
 private:
   /** (internal use) */
   fixed wind_speed_squared;
-  /** (internal use) */
-  fixed head_wind_doubled;
 
 public:
   /**
