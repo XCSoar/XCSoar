@@ -394,8 +394,12 @@ GlidePolar::GetLDOverGround(Angle track, SpeedVector wind) const
 
   const fixed c_theta = (wind.bearing.Reciprocal() - track).cos();
 
-  Quadratic q(-fixed_two * wind.norm * c_theta,
-              sqr(wind.norm) - sqr(bestLD));
+  /* convert the wind speed into some sort of "virtual L/D" to put it
+     in relation to the polar's best L/D */
+  const fixed wind_ld = wind.norm / GetSBestLD();
+
+  Quadratic q(-fixed_two * wind_ld * c_theta,
+              sqr(wind_ld) - sqr(bestLD));
 
   if (q.Check())
     return max(fixed_zero, q.SolutionMax());
