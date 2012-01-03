@@ -48,7 +48,9 @@ enum ControlIndex {
   AutoBlank,
 #endif
   InputFile,
+#ifndef HAVE_NATIVE_GETTEXT
   LanguageFile,
+#endif
   StatusFile,
   MenuTimeout,
   TextInput
@@ -91,7 +93,6 @@ OnFonts(gcc_unused WndButton &button)
 void
 InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  static const StaticEnumChoice  empty_list[] = { { 0 } };
   const UISettings &settings = CommonInterface::GetUISettings();
   WndProperty *wp;
 
@@ -114,15 +115,12 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                     "button presses and events from external devices."),
                 szProfileInputFile, _T("*.xci\0"));
 
+#ifndef HAVE_NATIVE_GETTEXT
   wp = AddEnum(_("Language"),
                _("The language options selects translations for English texts to other "
                    "languages. Select English for a native interface or Automatic to localise "
-                   "XCSoar according to the system settings."),
-               empty_list, 0);
+                   "XCSoar according to the system settings."));
   if (wp != NULL) {
-#ifdef HAVE_NATIVE_GETTEXT
-    wp->hide();
-#else /* !HAVE_NATIVE_GETTEXT */
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
     df.addEnumText(_("Automatic"));
     df.addEnumText(_("English"));
@@ -158,9 +156,9 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
       if (base != NULL)
         df.SetAsString(base);
     }
-
-#endif /* !HAVE_NATIVE_GETTEXT */
+    wp->RefreshDisplay();
   }
+#endif /* !HAVE_NATIVE_GETTEXT */
 
   // Expert item
   AddFileReader(_("Status message"),

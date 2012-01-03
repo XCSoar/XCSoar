@@ -196,6 +196,17 @@ RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
 }
 
 WndProperty *
+RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
+                       DataField::DataAccessCallback_t callback)
+{
+  WndProperty *edit = Add(label, help);
+  DataFieldEnum *df = new DataFieldEnum(callback);
+
+  edit->SetDataField(df);
+  return edit;
+}
+
+WndProperty *
 RowFormWidget::AddText(const TCHAR *label, const TCHAR *help,
                        const TCHAR *content, bool editable,
                        DataField::DataAccessCallback_t callback)

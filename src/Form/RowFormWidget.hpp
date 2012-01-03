@@ -89,6 +89,9 @@ public:
                        const StaticEnumChoice *list, unsigned value=0,
                        DataField::DataAccessCallback_t callback=NULL);
 
+  WndProperty *AddEnum(const TCHAR *label, const TCHAR *help,
+                       DataField::DataAccessCallback_t callback=NULL);
+
   WndProperty *AddText(const TCHAR *label, const TCHAR *help,
                        const TCHAR *content, bool editable=true,
                        DataField::DataAccessCallback_t callback=NULL);
