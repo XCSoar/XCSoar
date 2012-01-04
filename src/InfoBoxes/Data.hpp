@@ -91,6 +91,8 @@ struct InfoBoxData {
    */
   void SetValue(const TCHAR *value);
 
+  void SetValue(const TCHAR *format, fixed value);
+
   /**
    * Sets the InfoBox value to the given angle.
    */

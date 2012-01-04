@@ -26,6 +26,12 @@ Copyright_License {
 #include "Math/Angle.hpp"
 
 void
+InfoBoxData::SetValue(const TCHAR *format, fixed value)
+{
+  UnsafeFormatValue(format, (double)value);
+}
+
+void
 InfoBoxData::SetValue(Angle _value, const TCHAR *suffix)
 {
   assert(suffix != NULL);

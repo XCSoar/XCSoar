@@ -389,7 +389,7 @@ InfoBoxContentTaskSpeed::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromFixed(data, _T("%2.0f"),
+  data.SetValue(_T("%2.0f"),
                     Units::ToUserTaskSpeed(task_stats.total.travelled.get_speed()));
 
   // Set Unit
@@ -407,7 +407,7 @@ InfoBoxContentTaskSpeedAchieved::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromFixed(data, _T("%2.0f"),
+  data.SetValue(_T("%2.0f"),
                     Units::ToUserTaskSpeed(task_stats.total.remaining_effective.get_speed()));
 
   // Set Unit
@@ -424,7 +424,7 @@ InfoBoxContentTaskSpeedInstant::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromFixed(data, _T("%2.0f"),
+  data.SetValue(_T("%2.0f"),
                     Units::ToUserTaskSpeed(task_stats.get_pirker_speed()));
 
   // Set Unit
@@ -657,7 +657,7 @@ InfoBoxContentTaskAASpeed::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromFixed(data, _T("%2.0f"),
+  data.SetValue(_T("%2.0f"),
                     Units::ToUserTaskSpeed(common_stats.aat_speed_remaining));
 
   // Set Unit
@@ -677,7 +677,7 @@ InfoBoxContentTaskAASpeedMax::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromFixed(data, _T("%2.0f"),
+  data.SetValue(_T("%2.0f"),
                     Units::ToUserTaskSpeed(common_stats.aat_speed_max));
 
   // Set Unit
@@ -697,7 +697,7 @@ InfoBoxContentTaskAASpeedMin::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromFixed(data, _T("%2.0f"),
+  data.SetValue(_T("%2.0f"),
                     Units::ToUserTaskSpeed(common_stats.aat_speed_min));
 
   // Set Unit

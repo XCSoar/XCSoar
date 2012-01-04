@@ -42,7 +42,7 @@ InfoBoxContentGLoad::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromFixed(data, _T("%2.2f"),
+  data.SetValue(_T("%2.2f"),
                     XCSoarInterface::Basic().acceleration.g_load);
 }
 
@@ -60,7 +60,7 @@ InfoBoxContentBattery::Update(InfoBoxData &data)
         data.SetComment(_("AC ON"));
       else{
         DisplaySupplyVoltageAsValue = true;
-        SetValueFromFixed(data, _T("%2.1fV"),
+        data.SetValue(_T("%2.1fV"),
                           XCSoarInterface::Basic().voltage);
       }
       break;
@@ -101,10 +101,10 @@ InfoBoxContentBattery::Update(InfoBoxData &data)
 #endif
 
   if (XCSoarInterface::Basic().voltage_available) {
-    SetValueFromFixed(data, _T("%2.1fV"), XCSoarInterface::Basic().voltage);
+    data.SetValue(_T("%2.1fV"), XCSoarInterface::Basic().voltage);
     return;
   } else if (XCSoarInterface::Basic().battery_level_available) {
-    SetValueFromFixed(data, _T("%.0f%%"), XCSoarInterface::Basic().battery_level);
+    data.SetValue(_T("%.0f%%"), XCSoarInterface::Basic().battery_level);
     return;
   }
 

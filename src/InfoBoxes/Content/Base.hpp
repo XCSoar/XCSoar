@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_INFOBOX_CONTENT_HPP
 
 #include "Language/Language.hpp"
-#include "Math/fixed.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 
@@ -91,9 +91,6 @@ public:
 
   static void SetCommentFromWaypointName(InfoBoxData &data,
                                          const Waypoint* waypoint);
-
-  static void SetValueFromFixed(InfoBoxData &data,
-                                const TCHAR* format, fixed value);
 
   static void SetValueBearingDifference(InfoBoxData &data, Angle delta);
   static void SetCommentBearingDifference(InfoBoxData &data, Angle delta);

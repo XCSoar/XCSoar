@@ -56,7 +56,7 @@ InfoBoxContentTemperature::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromFixed(data, _T("%2.1f"),
+  data.SetValue(_T("%2.1f"),
                     Units::ToUserTemperature(basic.temperature));
 
   data.SetValueUnit(Units::current.temperature_unit);
@@ -66,7 +66,7 @@ void
 InfoBoxContentTemperatureForecast::Update(InfoBoxData &data)
 {
   fixed temperature = CommonInterface::GetComputerSettings().forecast_temperature;
-  SetValueFromFixed(data, _T("%2.1f"),
+  data.SetValue(_T("%2.1f"),
                     Units::ToUserTemperature(temperature));
 
   data.SetValueUnit(Units::current.temperature_unit);
@@ -125,7 +125,7 @@ InfoBoxContentWindSpeed::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromFixed(data, _T("%2.0f"),
+  data.SetValue(_T("%2.0f"),
                     Units::ToUserWindSpeed(info.wind.norm));
 
   // Set Unit
@@ -157,7 +157,7 @@ InfoBoxContentHeadWind::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromFixed(data, _T("%2.0f"),
+  data.SetValue(_T("%2.0f"),
                     Units::ToUserWindSpeed(info.head_wind));
 
   // Set Unit

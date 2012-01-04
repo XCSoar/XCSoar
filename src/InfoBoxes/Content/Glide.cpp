@@ -37,7 +37,7 @@ InfoBoxContentLDInstant::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromFixed(data, _T("%2.0f"), XCSoarInterface::Calculated().ld);
+  data.SetValue(_T("%2.0f"), XCSoarInterface::Calculated().ld);
 }
 
 void
@@ -49,7 +49,7 @@ InfoBoxContentLDCruise::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromFixed(data, _T("%2.0f"), XCSoarInterface::Calculated().cruise_ld);
+  data.SetValue(_T("%2.0f"), XCSoarInterface::Calculated().cruise_ld);
 }
 
 void
@@ -66,7 +66,7 @@ InfoBoxContentLDAvg::Update(InfoBoxData &data)
   else if (XCSoarInterface::Calculated().average_ld >= 999)
     data.SetValue(_T("+++"));
   else
-    SetValueFromFixed(data, _T("%2.0f"),
+    data.SetValue(_T("%2.0f"),
                       fixed(XCSoarInterface::Calculated().average_ld));
 }
 
@@ -81,5 +81,5 @@ InfoBoxContentLDVario::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromFixed(data, _T("%2.0f"), XCSoarInterface::Calculated().ld_vario);
+  data.SetValue(_T("%2.0f"), XCSoarInterface::Calculated().ld_vario);
 }

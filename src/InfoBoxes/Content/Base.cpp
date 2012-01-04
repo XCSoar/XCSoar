@@ -97,10 +97,3 @@ InfoBoxContent::SetCommentFromWaypointName(InfoBoxData &data,
 {
   FillInfoBoxWaypointName(data, waypoint, false);
 }
-
-void
-InfoBoxContent::SetValueFromFixed(InfoBoxData &data,
-                                  const TCHAR* format, fixed value)
-{
-  data.UnsafeFormatValue(format, (double)value);
-}
