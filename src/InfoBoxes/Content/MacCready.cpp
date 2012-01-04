@@ -27,7 +27,8 @@ Copyright_License {
 #include "InfoBoxes/Panel/MacCreadySetup.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Interface.hpp"
-
+#include "Units/Units.hpp"
+#include "Units/UnitsFormatter.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "DeviceBlackboard.hpp"

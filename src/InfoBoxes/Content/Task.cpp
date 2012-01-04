@@ -31,6 +31,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "LocalTime.hpp"
 #include "Engine/Util/Gradient.hpp"
+#include "Units/Units.hpp"
 #include "Units/UnitsFormatter.hpp"
 
 #include <tchar.h>
