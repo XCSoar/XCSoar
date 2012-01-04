@@ -31,14 +31,10 @@ ZoomClimb_t::ZoomClimb_t():
   ClimbScale(fixed_one / 2),
   last_isclimb(false) {}
 
-
-const RasterPoint OffsetHistory::zeroPoint = {0, 0};
-
 void
 OffsetHistory::reset()
 {
-  for (unsigned int i = 0; i < historySize; i++)
-    offsets[i] = zeroPoint;
+  offsets.fill(RasterPoint{0, 0});
 }
 
 void
@@ -48,7 +44,7 @@ OffsetHistory::add(PixelScalar x, PixelScalar y)
   point.x = x;
   point.y = y;
   offsets[pos] = point;
-  pos = (pos + 1) % historySize;
+  pos = (pos + 1) % offsets.size();
 }
 
 RasterPoint
@@ -57,14 +53,14 @@ OffsetHistory::average() const
   int x = 0;
   int y = 0;
 
-  for (unsigned int i = 0; i < historySize; i++) {
-    x += offsets[i].x;
-    y += offsets[i].y;
+  for (auto i = offsets.begin(), end = offsets.end(); i != end; ++i) {
+    x += i->x;
+    y += i->y;
   }
 
   RasterPoint avg;
-  avg.x = x / (int) historySize;
-  avg.y = y / (int) historySize;
+  avg.x = x / offsets.size();
+  avg.y = y / offsets.size();
 
   return avg;
 }
@@ -284,7 +280,7 @@ GlueMapWindow::UpdateProjection()
   if (GetDisplayMode() == DM_CIRCLING || !IsNearSelf())
     visible_projection.SetScreenOrigin(center.x, center.y);
   else if (settings_map.cruise_orientation == NORTHUP) {
-    RasterPoint offset = OffsetHistory::zeroPoint;
+    RasterPoint offset{0, 0};
     if (settings_map.glider_screen_position != 50 &&
         settings_map.map_shift_bias != MAP_SHIFT_BIAS_NONE) {
       fixed x = fixed_zero;

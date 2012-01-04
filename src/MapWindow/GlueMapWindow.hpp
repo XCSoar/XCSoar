@@ -33,6 +33,8 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "DisplayMode.hpp"
 
+#include <array>
+
 struct Look;
 class Logger;
 class SingleWindow;
@@ -48,9 +50,8 @@ struct ZoomClimb_t
 
 
 class OffsetHistory {
-  static const unsigned int historySize = 30;
   unsigned int pos;
-  RasterPoint offsets[historySize];
+  std::array<RasterPoint, 30> offsets;
 
   friend class GlueMapWindow;
 
@@ -60,8 +61,6 @@ protected:
   void add(PixelScalar x, PixelScalar y);
   void add(const RasterPoint &p) { add(p.x, p.y); }
   RasterPoint average() const;
-
-  static const RasterPoint zeroPoint;
 };
 
 
