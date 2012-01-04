@@ -29,6 +29,7 @@ Copyright_License {
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Util/Macros.hpp"
 #include "Units/Units.hpp"
+#include "Language/Language.hpp"
 
 #include <tchar.h>
 #include <stdio.h>

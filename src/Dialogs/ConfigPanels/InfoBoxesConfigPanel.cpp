@@ -37,6 +37,7 @@ Copyright_License {
 #include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "ConfigPanel.hpp"
+#include "Language/Language.hpp"
 
 class InfoBoxesConfigPanel : public XMLWidget {
 

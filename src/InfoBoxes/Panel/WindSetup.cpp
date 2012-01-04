@@ -31,6 +31,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Interface.hpp"
+#include "Language/Language.hpp"
 
 class WndButton;
 

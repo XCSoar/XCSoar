@@ -29,6 +29,7 @@ Copyright_License {
 #include "OS/SystemLoad.hpp"
 #include "OS/MemInfo.hpp"
 #include "Asset.hpp"
+#include "Language/Language.hpp"
 
 #include <tchar.h>
 #include <stdio.h>

@@ -26,7 +26,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Math/Angle.hpp"
-#include "Units/UnitsFormatter.hpp"
 #include "Util/StringUtil.hpp"
 
 #include <stdio.h>

@@ -29,6 +29,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Interface.hpp"
+#include "Language/Language.hpp"
 
 class WndButton;
 
