@@ -27,9 +27,7 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Util/TinyEnum.hpp"
 #include "Units/Settings.hpp"
-#include "InfoBoxes/Content/Base.hpp"
-#include "Screen/PaintWindow.hpp"
-#include "PeriodClock.hpp"
+#include "Math/fixed.hpp"
 
 class Angle;
 

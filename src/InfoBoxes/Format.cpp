@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Data.hpp"
 #include "Units/AngleFormatter.hpp"
+#include "Math/Angle.hpp"
 
 void
 InfoBoxData::SetValue(Angle _value, const TCHAR *suffix)
