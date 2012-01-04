@@ -33,7 +33,9 @@ struct DerivedInfo;
 struct AirspaceComputerSettings;
 struct AirspaceRendererSettings;
 class Airspaces;
+class AirspacePredicate;
 class ProtectedAirspaceWarningManager;
+class AirspaceWarningCopy;
 class Canvas;
 class WindowProjection;
 
@@ -77,6 +79,31 @@ public:
     airspace_warnings = NULL;
   }
 
+  /**
+   * Draw airspaces selected by the given #AirspacePredicate.
+   */
+  void Draw(Canvas &canvas,
+#ifndef ENABLE_OPENGL
+            Canvas &buffer_canvas, Canvas &stencil_canvas,
+#endif
+            const WindowProjection &projection,
+            const AirspaceRendererSettings &settings,
+            const AirspaceWarningCopy &awc,
+            const AirspacePredicate &visible);
+
+  /**
+   * Draw all airspaces.
+   */
+  void Draw(Canvas &canvas,
+#ifndef ENABLE_OPENGL
+            Canvas &buffer_canvas, Canvas &stencil_canvas,
+#endif
+            const WindowProjection &projection,
+            const AirspaceRendererSettings &settings);
+
+  /**
+   * Draw airspaces that are visible according to standard rules.
+   */
   void Draw(Canvas &canvas,
 #ifndef ENABLE_OPENGL
             Canvas &buffer_canvas, Canvas &stencil_canvas,

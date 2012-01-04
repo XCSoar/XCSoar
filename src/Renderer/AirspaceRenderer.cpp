@@ -501,32 +501,18 @@ AirspaceRenderer::DrawIntersections(Canvas &canvas,
   }
 }
 
-/**
- * Draws the airspace to the given canvas
- * @param canvas The drawing canvas
- * @param buffer The drawing buffer
- */
 void
 AirspaceRenderer::Draw(Canvas &canvas,
 #ifndef ENABLE_OPENGL
                        Canvas &buffer_canvas, Canvas &stencil_canvas,
 #endif
                        const WindowProjection &projection,
-                       const MoreData &basic,
-                       const DerivedInfo &calculated,
-                       const AirspaceComputerSettings &computer_settings,
-                       const AirspaceRendererSettings &settings)
+                       const AirspaceRendererSettings &settings,
+                       const AirspaceWarningCopy &awc,
+                       const AirspacePredicate &visible)
 {
   if (airspace_database == NULL)
     return;
-
-  AirspaceWarningCopy awc;
-  if (airspace_warnings != NULL)
-    awc.Visit(*airspace_warnings);
-
-  const AirspaceMapVisible visible(computer_settings,
-                                   settings,
-                                   ToAircraftState(basic, calculated), awc);
 
 #ifdef ENABLE_OPENGL
   if (settings.fill_mode == AirspaceRendererSettings::AS_FILL_ALL) {
@@ -571,4 +557,53 @@ AirspaceRenderer::Draw(Canvas &canvas,
 #endif
 
   m_airspace_intersections = awc.get_locations();
+}
+
+void
+AirspaceRenderer::Draw(Canvas &canvas,
+#ifndef ENABLE_OPENGL
+                       Canvas &buffer_canvas, Canvas &stencil_canvas,
+#endif
+                       const WindowProjection &projection,
+                       const AirspaceRendererSettings &settings)
+{
+  if (airspace_database == NULL)
+    return;
+
+  AirspaceWarningCopy awc;
+  if (airspace_warnings != NULL)
+    awc.Visit(*airspace_warnings);
+
+  Draw(canvas,
+#ifndef ENABLE_OPENGL
+       buffer_canvas, stencil_canvas,
+#endif
+       projection, settings, awc, AirspacePredicateTrue());
+}
+
+void
+AirspaceRenderer::Draw(Canvas &canvas,
+#ifndef ENABLE_OPENGL
+                       Canvas &buffer_canvas, Canvas &stencil_canvas,
+#endif
+                       const WindowProjection &projection,
+                       const MoreData &basic,
+                       const DerivedInfo &calculated,
+                       const AirspaceComputerSettings &computer_settings,
+                       const AirspaceRendererSettings &settings)
+{
+  if (airspace_database == NULL)
+    return;
+
+  AirspaceWarningCopy awc;
+  if (airspace_warnings != NULL)
+    awc.Visit(*airspace_warnings);
+
+  const AirspaceMapVisible visible(computer_settings, settings,
+                                   ToAircraftState(basic, calculated), awc);
+  Draw(canvas,
+#ifndef ENABLE_OPENGL
+       buffer_canvas, stencil_canvas,
+#endif
+       projection, settings, awc, visible);
 }
