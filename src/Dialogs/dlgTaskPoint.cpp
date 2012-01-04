@@ -288,7 +288,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
                  XCSoarInterface::Basic().location,
                  XCSoarInterface::GetMapSettings(),
                  look.map.task, look.map.airspace,
-                 terrain);
+                 terrain, &airspace_database);
 }
 
 static void 

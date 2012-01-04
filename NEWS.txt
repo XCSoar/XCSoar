@@ -16,6 +16,7 @@ Version 6.3 - not yet released
   - sort METAR stations by name
   - added kinetic scrolling for non-WinCE platforms
   - enable font anti-aliasing on Linux and Mac OS X
+  - show airspaces in the task manager
 * data files
   - added support for CompeGPS waypoint files
 * internet

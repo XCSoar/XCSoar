@@ -25,6 +25,7 @@
 #include "Screen/Canvas.hpp"
 #include "Projection/ChartProjection.hpp"
 #include "Renderer/BackgroundRenderer.hpp"
+#include "Renderer/AirspaceRenderer.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/RenderTaskPoint.hpp"
 #include "Renderer/TaskRenderer.hpp"
@@ -32,17 +33,39 @@
 #include "Engine/Task/Tasks/OrderedTask.hpp"
 #include "MapSettings.hpp"
 
+#ifndef ENABLE_OPENGL
+#include "Screen/BufferCanvas.hpp"
+#endif
+
 static void
 PaintTask(Canvas &canvas, const WindowProjection &projection,
           const OrderedTask &task,
           const GeoPoint &location, const MapSettings &settings_map,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
-          const RasterTerrain *terrain)
+          const RasterTerrain *terrain, const Airspaces *airspaces)
 {
   BackgroundRenderer background;
   background.SetTerrain(terrain);
   background.Draw(canvas, projection, settings_map.terrain);
+
+  if (airspaces != NULL) {
+    AirspaceRenderer airspace_renderer(airspace_look);
+    airspace_renderer.SetAirspaces(airspaces);
+
+#ifndef ENABLE_OPENGL
+    BufferCanvas buffer_canvas, stencil_canvas;
+    buffer_canvas.set(canvas);
+    stencil_canvas.set(canvas);
+#endif
+
+    airspace_renderer.Draw(canvas,
+#ifndef ENABLE_OPENGL
+                           buffer_canvas, stencil_canvas,
+#endif
+                           projection,
+                           settings_map.airspace);
+  }
 
   OZRenderer ozv(task_look, airspace_look, settings_map.airspace);
   RenderTaskPoint tpv(canvas, projection, task_look,
@@ -57,11 +80,11 @@ PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
           const GeoPoint &location, const MapSettings &settings_map,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
-          const RasterTerrain *terrain)
+          const RasterTerrain *terrain, const Airspaces *airspaces)
 {
   ChartProjection projection(rc, task, location);
   PaintTask(canvas, projection, task, location, settings_map,
-            task_look, airspace_look, terrain);
+            task_look, airspace_look, terrain, airspaces);
 }
 
 void
@@ -70,9 +93,9 @@ PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const GeoPoint &location, const MapSettings &settings_map,
                const TaskLook &task_look,
                const AirspaceLook &airspace_look,
-               const RasterTerrain *terrain)
+               const RasterTerrain *terrain, const Airspaces *airspaces)
 {
   ChartProjection projection(rc, point, point.GetLocation());
   PaintTask(canvas, projection, task, location, settings_map,
-            task_look, airspace_look, terrain);
+            task_look, airspace_look, terrain, airspaces);
 }
