@@ -38,12 +38,9 @@ OffsetHistory::reset()
 }
 
 void
-OffsetHistory::add(PixelScalar x, PixelScalar y)
+OffsetHistory::add(RasterPoint p)
 {
-  RasterPoint point;
-  point.x = x;
-  point.y = y;
-  offsets[pos] = point;
+  offsets[pos] = p;
   pos = (pos + 1) % offsets.size();
 }
 

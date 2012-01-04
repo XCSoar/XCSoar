@@ -58,8 +58,7 @@ class OffsetHistory {
 protected:
   OffsetHistory() : pos(0) { reset(); }
   void reset();
-  void add(PixelScalar x, PixelScalar y);
-  void add(const RasterPoint &p) { add(p.x, p.y); }
+  void add(RasterPoint p);
   RasterPoint average() const;
 };
 
