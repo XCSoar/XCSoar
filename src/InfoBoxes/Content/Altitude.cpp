@@ -27,7 +27,6 @@ Copyright_License {
 #include "InfoBoxes/Panel/AltitudeSetup.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-#include "Units/UnitsFormatter.hpp"
 #include "Units/Units.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
@@ -77,25 +76,14 @@ void
 InfoBoxContentAltitudeGPS::Update(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  TCHAR sTmp[32];
 
   if (!basic.gps_altitude_available) {
     data.SetInvalid();
     return;
   }
 
-  // Set Value
-  Units::FormatUserAltitude(basic.gps_altitude, sTmp,
-                            ARRAY_SIZE(sTmp), false);
-  data.SetValue(sTmp);
-
-  // Set Comment
-  Units::FormatAlternateUserAltitude(basic.gps_altitude, sTmp,
-                                     ARRAY_SIZE(sTmp));
-  data.SetComment(sTmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueFromAltitude(basic.gps_altitude);
+  data.SetCommentFromAlternateAltitude(basic.gps_altitude);
 }
 
 static void
@@ -149,25 +137,14 @@ void
 InfoBoxContentAltitudeAGL::Update(InfoBoxData &data)
 {
   const DerivedInfo &calculated = CommonInterface::Calculated();
-  TCHAR sTmp[32];
 
   if (!calculated.altitude_agl_valid) {
     data.SetInvalid();
     return;
   }
 
-  // Set Value
-  Units::FormatUserAltitude(calculated.altitude_agl, sTmp,
-                            ARRAY_SIZE(sTmp), false);
-  data.SetValue(sTmp);
-
-  // Set Comment
-  Units::FormatAlternateUserAltitude(calculated.altitude_agl, sTmp,
-                                     ARRAY_SIZE(sTmp));
-  data.SetComment(sTmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueFromAltitude(calculated.altitude_agl);
+  data.SetCommentFromAlternateAltitude(calculated.altitude_agl);
 
   // Set Color (red/black)
   data.SetValueColor(calculated.altitude_agl <
@@ -178,7 +155,6 @@ void
 InfoBoxContentAltitudeBaro::Update(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  TCHAR sTmp[32];
 
   if (!basic.baro_altitude_available) {
     data.SetInvalid();
@@ -189,25 +165,14 @@ InfoBoxContentAltitudeBaro::Update(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-  Units::FormatUserAltitude(basic.baro_altitude, sTmp,
-                            ARRAY_SIZE(sTmp), false);
-  data.SetValue(sTmp);
-
-  // Set Comment
-  Units::FormatAlternateUserAltitude(basic.baro_altitude, sTmp,
-                                     ARRAY_SIZE(sTmp));
-  data.SetComment(sTmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueFromAltitude(basic.baro_altitude);
+  data.SetCommentFromAlternateAltitude(basic.baro_altitude);
 }
 
 void
 InfoBoxContentAltitudeQFE::Update(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  TCHAR sTmp[32];
 
   if (!basic.gps_altitude_available) {
     data.SetInvalid();
@@ -220,18 +185,8 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxData &data)
   if (home_waypoint)
     Value -= home_waypoint->altitude;
 
-  // Set Value
-  Units::FormatUserAltitude(Value, sTmp,
-                            ARRAY_SIZE(sTmp), false);
-  data.SetValue(sTmp);
-
-  // Set Comment
-  Units::FormatAlternateUserAltitude(Value, sTmp,
-                                     ARRAY_SIZE(sTmp));
-  data.SetComment(sTmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueFromAltitude(Value);
+  data.SetCommentFromAlternateAltitude(Value);
 }
 
 void
@@ -281,24 +236,13 @@ void
 InfoBoxContentTerrainHeight::Update(InfoBoxData &data)
 {
   const DerivedInfo &calculated = CommonInterface::Calculated();
-  TCHAR sTmp[32];
 
   if (!calculated.terrain_valid){
     data.SetInvalid();
     return;
   }
 
-  // Set Value
-  Units::FormatUserAltitude(calculated.terrain_altitude, sTmp,
-                            ARRAY_SIZE(sTmp), false);
-  data.SetValue(sTmp);
-
-  // Set Comment
-  Units::FormatAlternateUserAltitude(calculated.terrain_altitude, sTmp,
-                                     ARRAY_SIZE(sTmp));
-  data.SetComment(sTmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueFromAltitude(calculated.terrain_altitude);
+  data.SetCommentFromAlternateAltitude(calculated.terrain_altitude);
 }
 

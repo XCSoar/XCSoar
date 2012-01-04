@@ -153,7 +153,7 @@ InfoBoxContentNextDistance::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromDistance(data, vector_remaining.distance);
+  data.SetValueFromDistance(vector_remaining.distance);
 
   if (basic.track_available) {
     Angle bd = vector_remaining.bearing - basic.track;
@@ -219,13 +219,7 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserAltitude(next_solution.altitude_difference, tmp, 32, false);
-  data.SetValue(tmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueFromArrival(next_solution.altitude_difference);
 }
 
 void
@@ -238,13 +232,7 @@ InfoBoxContentNextMC0AltitudeDiff::Update(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserAltitude(next_solution.altitude_difference, tmp, 32, false);
-  data.SetValue(tmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueFromArrival(next_solution.altitude_difference);
 }
 
 void
@@ -259,13 +247,7 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserAltitude(next_solution.GetRequiredAltitude(), tmp, 32, false);
-  data.SetValue(tmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueFromAltitude(next_solution.GetRequiredAltitude());
 }
 
 void
@@ -273,6 +255,7 @@ InfoBoxContentNextAltitudeArrival::Update(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
+  const MoreData &basic = CommonInterface::Basic();
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
   if (!task_stats.task_valid || !next_solution.IsFinalGlide()) {
@@ -280,14 +263,7 @@ InfoBoxContentNextAltitudeArrival::Update(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-  TCHAR tmp[32];
-  fixed alt = next_solution.GetArrivalAltitude(XCSoarInterface::Basic().nav_altitude);
-  Units::FormatUserAltitude(alt, tmp, 32, false);
-  data.SetValue(tmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueFromAltitude(next_solution.GetArrivalAltitude(basic.nav_altitude));
 }
 
 
@@ -330,9 +306,9 @@ InfoBoxContentFinalDistance::Update(InfoBoxData &data)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   // Set Value
-  SetValueFromDistance(data, common_stats.task_finished
-                       ? task_stats.current_leg.vector_remaining.distance
-                       : task_stats.total.remaining.get_distance());
+  data.SetValueFromDistance(common_stats.task_finished
+                            ? task_stats.current_leg.vector_remaining.distance
+                            : task_stats.total.remaining.get_distance());
 }
 
 void
@@ -386,14 +362,7 @@ InfoBoxContentFinalAltitudeDiff::Update(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserAltitude(task_stats.total.solution_remaining.altitude_difference,
-                            tmp, 32, false);
-  data.SetValue(tmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueFromArrival(task_stats.total.solution_remaining.altitude_difference);
 }
 
 void
@@ -406,14 +375,7 @@ InfoBoxContentFinalAltitudeRequire::Update(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserAltitude(task_stats.total.solution_remaining.GetRequiredAltitude(),
-                            tmp, 32, false);
-  data.SetValue(tmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueFromAltitude(task_stats.total.solution_remaining.GetRequiredAltitude());
 }
 
 void
@@ -524,7 +486,7 @@ InfoBoxContentHomeDistance::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromDistance(data, common_stats.vector_home.distance);
+  data.SetValueFromDistance(common_stats.vector_home.distance);
 
   if (basic.track_available) {
     Angle bd = common_stats.vector_home.bearing - basic.track;
@@ -551,7 +513,7 @@ InfoBoxContentOLC::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromDistance(data, result_olc.distance);
+  data.SetValueFromDistance(result_olc.distance);
 
   data.UnsafeFormatComment(_T("%.1f pts"), (double)result_olc.score);
 }
@@ -646,7 +608,7 @@ InfoBoxContentTaskAADistance::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromDistance(data, task_stats.total.planned.get_distance());
+  data.SetValueFromDistance(task_stats.total.planned.get_distance());
 }
 
 void
@@ -662,7 +624,7 @@ InfoBoxContentTaskAADistanceMax::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromDistance(data, task_stats.distance_max);
+  data.SetValueFromDistance(task_stats.distance_max);
 }
 
 void
@@ -678,7 +640,7 @@ InfoBoxContentTaskAADistanceMin::Update(InfoBoxData &data)
   }
 
   // Set Value
-  SetValueFromDistance(data, task_stats.distance_min);
+  data.SetValueFromDistance(task_stats.distance_min);
 }
 
 void

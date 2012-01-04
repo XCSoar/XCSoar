@@ -99,6 +99,26 @@ struct InfoBoxData {
   void SetValue(Angle value, const TCHAR *suffix=_T(""));
 
   /**
+   * Set the InfoBox value to the specified distance.
+   */
+  void SetValueFromDistance(fixed value);
+
+  /**
+   * Set the InfoBox value to the specified altitude.
+   */
+  void SetValueFromAltitude(fixed value);
+
+  /**
+   * Set the InfoBox value to the specified arrival altitude.
+   */
+  void SetValueFromArrival(fixed value);
+
+  /**
+   * Set the InfoBox value to the specified horizontal speed.
+   */
+  void SetValueFromSpeed(fixed value, bool precision=true);
+
+  /**
    * Sets the InfoBox comment to the given Value
    * @param Value New value of the InfoBox comment
    */
@@ -108,6 +128,12 @@ struct InfoBoxData {
    * Sets the InfoBox comment to the given angle.
    */
   void SetComment(Angle comment, const TCHAR *suffix=_T(""));
+
+  /**
+   * Set the InfoBox value to the specified altitude in the alternate
+   * altitude unit.
+   */
+  void SetCommentFromAlternateAltitude(fixed value);
 
   template<typename... Args>
   void FormatTitle(const TCHAR *fmt, Args&&... args) {

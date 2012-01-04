@@ -83,13 +83,7 @@ InfoBoxContentThermalLastGain::Update(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-  TCHAR sTmp[32];
-  Units::FormatUserAltitude(thermal.gain, sTmp, 32, false);
-  data.SetValue(sTmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueFromAltitude(thermal.gain);
 }
 
 void
@@ -147,13 +141,7 @@ InfoBoxContentThermalGain::Update(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-  TCHAR sTmp[32];
-  Units::FormatUserAltitude(thermal.gain, sTmp, 32, false);
-  data.SetValue(sTmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueFromAltitude(thermal.gain);
 }
 
 void

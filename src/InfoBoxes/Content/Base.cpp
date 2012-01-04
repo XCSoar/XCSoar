@@ -104,13 +104,3 @@ InfoBoxContent::SetValueFromFixed(InfoBoxData &data,
 {
   data.UnsafeFormatValue(format, (double)value);
 }
-
-void
-InfoBoxContent::SetValueFromDistance(InfoBoxData &data, fixed distance)
-{
-  TCHAR tmp[32];
-  Units::FormatUserDistance(distance, tmp, 32, false);
-  data.SetValue(tmp);
-
-  data.SetValueUnit(Units::current.distance_unit);
-}

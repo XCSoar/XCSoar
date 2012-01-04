@@ -155,15 +155,9 @@ InfoBoxContentTeamDistance::Update(InfoBoxData &data)
   const TeamInfo &teamcode_info = CommonInterface::Calculated();
 
   // Set Value
-  if (teamcode_info.teammate_available) {
-    TCHAR tmp[32];
-    Units::FormatUserDistance(teamcode_info.teammate_vector.distance,
-                              tmp, 32, false);
-    data.SetValue(tmp);
-
-    // Set Unit
-    data.SetValueUnit(Units::current.distance_unit);
-  } else
+  if (teamcode_info.teammate_available)
+    data.SetValueFromDistance(teamcode_info.teammate_vector.distance);
+  else
     data.SetValueInvalid();
 
   // Set Comment

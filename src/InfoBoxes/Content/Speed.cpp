@@ -29,7 +29,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Language/Language.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/Units.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -37,20 +37,13 @@ Copyright_License {
 void
 InfoBoxContentSpeedGround::Update(InfoBoxData &data)
 {
-
-  if (!XCSoarInterface::Basic().ground_speed_available) {
+  const NMEAInfo &basic = CommonInterface::Basic();
+  if (!basic.ground_speed_available) {
     data.SetInvalid();
     return;
   }
 
-  // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserSpeed(XCSoarInterface::Basic().ground_speed,
-                         tmp, 32, false);
-  data.SetValue(tmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.speed_unit);
+  data.SetValueFromSpeed(basic.ground_speed);
 }
 
 bool
@@ -93,63 +86,40 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentSpeedIndicated::Update(InfoBoxData &data)
 {
-  if (!XCSoarInterface::Basic().airspeed_available) {
+  const NMEAInfo &basic = CommonInterface::Basic();
+  if (!basic.airspeed_available) {
     data.SetInvalid();
     return;
   }
 
-  // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserSpeed(XCSoarInterface::Basic().indicated_airspeed,
-                         tmp, 32, false, false);
-  data.SetValue(tmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.speed_unit);
+  data.SetValueFromSpeed(basic.indicated_airspeed, false);
 }
 
 void
 InfoBoxContentSpeed::Update(InfoBoxData &data)
 {
-  if (!XCSoarInterface::Basic().airspeed_available) {
+  const NMEAInfo &basic = CommonInterface::Basic();
+  if (!basic.airspeed_available) {
     data.SetInvalid();
     return;
   }
 
-  // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserSpeed(XCSoarInterface::Basic().true_airspeed,
-                         tmp, 32, false, false);
-  data.SetValue(tmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.speed_unit);
+  data.SetValueFromSpeed(basic.true_airspeed, false);
 }
 
 void
 InfoBoxContentSpeedMacCready::Update(InfoBoxData &data)
 {
-  // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserSpeed(XCSoarInterface::Calculated().common_stats.V_block,
-                         tmp, 32, false, false);
-  data.SetValue(tmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.speed_unit);
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  data.SetValueFromSpeed(common_stats.V_block, false);
 }
 
 void
 InfoBoxContentSpeedDolphin::Update(InfoBoxData &data)
 {
   // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserSpeed(XCSoarInterface::Calculated().V_stf,
-                         tmp, 32, false, false);
-  data.SetValue(tmp);
-
-  // Set Unit
-  data.SetValueUnit(Units::current.speed_unit);
+  const DerivedInfo &calculated = CommonInterface::Calculated();
+  data.SetValueFromSpeed(calculated.V_stf, false);
 
   // Set Comment
   if (XCSoarInterface::GetComputerSettings().block_stf_enabled)

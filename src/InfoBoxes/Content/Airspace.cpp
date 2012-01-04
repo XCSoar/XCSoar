@@ -32,7 +32,6 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceCircle.hpp"
 #include "Engine/Airspace/AirspacePolygon.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "Units/UnitsFormatter.hpp"
 #include "Util/Macros.hpp"
 
 struct NearestAirspace {
@@ -130,7 +129,7 @@ InfoBoxContentNearestAirspaceHorizontal::Update(InfoBoxData &data)
     return;
   }
 
-  SetValueFromDistance(data, nearest.distance);
+  data.SetValueFromDistance(nearest.distance);
   data.SetComment(nearest.airspace->GetName());
 }
 
@@ -220,10 +219,6 @@ InfoBoxContentNearestAirspaceVertical::Update(InfoBoxData &data)
     return;
   }
 
-  TCHAR buffer[32];
-  Units::FormatUserArrival(nearest.distance, buffer,
-                           ARRAY_SIZE(buffer), false);
-  data.SetValue(buffer);
-  data.SetValueUnit(Units::current.altitude_unit);
+  data.SetValueFromArrival(nearest.distance);
   data.SetComment(nearest.airspace->GetName());
 }

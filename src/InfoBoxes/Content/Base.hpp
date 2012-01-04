@@ -97,7 +97,6 @@ public:
 
   static void SetValueBearingDifference(InfoBoxData &data, Angle delta);
   static void SetCommentBearingDifference(InfoBoxData &data, Angle delta);
-  static void SetValueFromDistance(InfoBoxData &data, fixed distance);
 };
 
 #endif
