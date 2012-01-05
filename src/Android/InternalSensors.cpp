@@ -140,8 +140,7 @@ void InternalSensors::getSubscribableSensors(JNIEnv* env, jobject sensors_obj) {
       obj_NonGPSSensors_.get(), mid_sensors_getSubscribableSensors);
   jsize ss_arr_size = env->GetArrayLength(ss_arr);
   jint* ss_arr_elems = env->GetIntArrayElements(ss_arr, NULL);
-  subscribable_sensors_.swap(
-      std::vector<int>(ss_arr_elems, ss_arr_elems + ss_arr_size));
+  subscribable_sensors_.assign(ss_arr_elems, ss_arr_elems + ss_arr_size);
   env->ReleaseIntArrayElements(ss_arr, ss_arr_elems, 0);
 }
 
