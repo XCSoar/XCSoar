@@ -64,7 +64,7 @@ public:
 #endif
   }
 
-  void Scalex(long factor) {
+  void Scalex(int32_t factor) {
     m[0][0] = mul(factor, m[0][0]);
     m[0][1] = mul(factor, m[0][1]);
     m[1][0] = mul(factor, m[1][0]);
@@ -72,14 +72,14 @@ public:
   }
 
   void Translate(RasterPoint pt) {
-    Translatex((int)pt.x << 16, (int)pt.y << 16);
+    Translatex((int32_t)pt.x << 16, (int32_t)pt.y << 16);
   }
 
   void Translatex(ShapePoint pt) {
     Translatex(pt.x, pt.y);
   }
 
-  void Translatex(long x, long y) {
+  void Translatex(int32_t x, int32_t y) {
     m[2][0] += mul(x, m[0][0]) + mul(y, m[1][0]);
     m[2][1] += mul(x, m[0][1]) + mul(y, m[1][1]);
   }
@@ -88,17 +88,17 @@ public:
     const auto sc = alpha.SinCos();
     const fixed sin = sc.first, cos = sc.second;
 #ifdef FIXED_MATH
-    long s = sin.as_glfixed();
-    long c = cos.as_glfixed();
+    int32_t s = sin.as_glfixed();
+    int32_t c = cos.as_glfixed();
 #else
-    long s = sin * (1<<16);
-    long c = cos * (1<<16);
+    int32_t s = sin * (1<<16);
+    int32_t c = cos * (1<<16);
 #endif
     Rotatex(s, c);
   }
 
-  void Rotatex(long s, long c) {
-    long tmp;
+  void Rotatex(int32_t s, int32_t c) {
+    int32_t tmp;
     tmp = mul(s, m[0][0]) + mul(c, m[1][0]);
     m[0][0] = mul(c, m[0][0]) - mul(s, m[1][0]);
     m[1][0] = tmp;
@@ -115,7 +115,7 @@ public:
   }
 
 protected:
-  long mul(long a, long b) const {
+  long mul(int32_t a, int32_t b) const {
     return ((int64_t)a * b) >> 16;
   }
 };
