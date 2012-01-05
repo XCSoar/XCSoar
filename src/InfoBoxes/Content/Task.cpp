@@ -766,7 +766,7 @@ InfoBoxContentNextETEVMG::Update(InfoBoxWindow &infobox)
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
-  if (!basic.ground_speed_available || task_stats.task_valid ||
+  if (!basic.ground_speed_available || !task_stats.task_valid ||
       !task_stats.current_leg.remaining.IsDefined()) {
     infobox.SetInvalid();
     return;
@@ -797,8 +797,8 @@ InfoBoxContentFinalETEVMG::Update(InfoBoxWindow &infobox)
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
-  if (!basic.ground_speed_available || task_stats.task_valid ||
-      task_stats.total.remaining.IsDefined()) {
+  if (!basic.ground_speed_available || !task_stats.task_valid ||
+      !task_stats.total.remaining.IsDefined()) {
     infobox.SetInvalid();
     return;
   }
