@@ -70,39 +70,16 @@ static void
 NextPage(int Step)
 {
   assert(waypoint);
-  bool page_ok = false;
-  page += Step;
 
+  int last_page = 2;
   do {
+    page += Step;
     if (page < 0)
-      page = 4;
-    if (page > 4)
+      page = last_page;
+    else if (page > last_page)
       page = 0;
-
-    switch (page) {
-    case 0:
-      page_ok = true;
-      break;
-
-    case 1:
-      if (waypoint->details.empty())
-        page += Step;
-      else
-        page_ok = true;
-
-      break;
-
-    case 2:
-      page_ok = true;
-      break;
-
-    default:
-      page_ok = true;
-      page = 0;
-      break;
-      // error!
-    }
-  } while (!page_ok);
+  } while (page == 1 &&
+           waypoint->details.empty());
 
   wInfo->set_visible(page == 0);
   wDetails->set_visible(page == 1);
