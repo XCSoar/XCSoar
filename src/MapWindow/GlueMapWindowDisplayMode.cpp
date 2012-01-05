@@ -56,8 +56,8 @@ OffsetHistory::average() const
   }
 
   RasterPoint avg;
-  avg.x = x / offsets.size();
-  avg.y = y / offsets.size();
+  avg.x = x / (int) offsets.size();
+  avg.y = y / (int) offsets.size();
 
   return avg;
 }
