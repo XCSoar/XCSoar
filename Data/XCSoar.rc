@@ -292,8 +292,6 @@ IDR_XML_INFOBOXESCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Confi
 IDR_XML_INFOBOXESCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/InfoBoxesConfigPanel_L.xml.gz"
 IDR_XML_POLARCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/PolarConfigPanel.xml.gz"
 IDR_XML_POLARCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/PolarConfigPanel_L.xml.gz"
-IDR_XML_SYMBOLSCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/SymbolsConfigPanel.xml.gz"
-IDR_XML_SYMBOLSCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/SymbolsConfigPanel_L.xml.gz"
 IDR_XML_TASKDEFAULTSCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TaskDefaultsConfigPanel.xml.gz"
 IDR_XML_TASKDEFAULTSCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TaskDefaultsConfigPanel_L.xml.gz"
 IDR_XML_TASKRULESCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TaskRulesConfigPanel.xml.gz"

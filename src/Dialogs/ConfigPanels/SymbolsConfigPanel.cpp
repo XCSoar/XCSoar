@@ -23,25 +23,72 @@ Copyright_License {
 
 #include "SymbolsConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Profile/Profile.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/Base.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
-#include "DataField/Base.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Dialogs/CallBackTable.hpp"
+#include "UIGlobals.hpp"
 
-class SymbolsConfigPanel : public XMLWidget {
+enum ControlIndex {
+  DisplayTrackBearing,
+  EnableFLARMMap,
+  Trail,
+  TrailDrift,
+  SnailType,
+  SnailWidthScale,
+  DetourCostMarker,
+  AircraftSymbol,
+  WindArrowStyle
+};
+/*
+<Edit Name="prpDisplayTrackBearing" Caption="Track bearing" X="2" Width="-2" Height="22" CaptionWidth="150"
+  Help="Display the track bearing (ground track projection) on the map.&#10;[Off] Disable display of track bearing.&#10;[On] Always display track bearing.&#10;[Auto] Display track bearing if there is a significant difference to plane heading.">
+  <DataField DataType="enum"/>
+
+<Edit Name="prpEnableFLARMMap" Caption="FLARM traffic" X="2" Width="-2" Height="22" CaptionWidth="150"
+  Help="This enables the display of FLARM traffic on the map window.">
+  <DataField DataType="boolean"/>
+
+<Edit Name="prpTrail" Caption="Trail length" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+  Help="Determines whether and how long a snail trail is drawn behind the glider">
+  <DataField DataType="enum" OnDataAccess="OnTrailLength"/>
+
+<Edit Name="prpTrailDrift" Caption="Trail drift" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+  Help="Determines whether the snail trail is drifted with the wind when displayed in circling mode.">
+  <DataField DataType="boolean"/>
+
+<Edit Name="prpSnailType" Caption="Trail type" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+  Help="Sets the type of the snail trail display.">
+  <DataField DataType="enum" />
+
+<Edit Name="prpSnailWidthScale" Caption="Trail scaled" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+  Help="If set to ON the snail trail width is scaled according to the vario signal.">
+  <DataField DataType="boolean"/>
+
+<Edit Name="prpDetourCostMarker" Caption="Detour cost markers" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+   Help="If the aircraft heading deviates from the current waypoint, markers are displayed at points ahead of the aircraft. The value of each marker is the extra distance required to reach that point as a percentage of straight-line distance to the waypoint.">
+  <DataField DataType="boolean"/>
+
+<Edit Name="prpAircraftSymbol" Caption="Aircraft symbol" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+  Help="Sets the symbol used for the aircraft.&#10;[Simple] Simplified line graphics, black with white contours.&#10;[Simple (large)] Enlarged simple graphics.&#10;[Detailed] Rendered aircraft graphics.">
+  <DataField DataType="enum" />
+
+<Edit Name="prpWindArrowStyle" Caption="Wind arrow" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+  Help="Determines the way the wind arrow is drawn on the map.&#10;[Arrow head] Draws an arrow head only&#10;[Full arrow] Draws an arrow head with a dashed arrow line">
+  <DataField DataType="enum"/>
+*/
+class SymbolsConfigPanel : public RowFormWidget {
+public:
+  SymbolsConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
   void ShowTrailControls(bool show);
 };
 
@@ -50,23 +97,11 @@ public:
 static SymbolsConfigPanel *instance;
 
 void
-SymbolsConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
-
-void
-SymbolsConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
-
-void
 SymbolsConfigPanel::ShowTrailControls(bool show)
 {
-  ShowFormControl(form, _T("prpTrailDrift"), show);
-  ShowFormControl(form, _T("prpSnailType"), show);
-  ShowFormControl(form, _T("prpSnailWidthScale"), show);
+  GetControl(TrailDrift).set_visible(show);
+  GetControl(SnailType).set_visible(show);
+  GetControl(SnailWidthScale).set_visible(show);
 }
 
 static void
@@ -78,84 +113,90 @@ OnTrailLength(DataField *Sender,
   instance->ShowTrailControls(trail_length != TRAIL_OFF);
 }
 
-gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnTrailLength),
-  DeclareCallBackEntry(NULL)
+static const StaticEnumChoice  track_bearing_mode_list[] = {
+  { 0, N_("Off"), N_("Disable display of track bearing.") },
+  { 1, N_("On"), N_("Always display track bearing.") },
+  { 2, N_("Auto"), N_("Display track bearing if there is a significant difference to plane heading.") },
+  { 0 }
+};
+
+const TCHAR *trail_length_help = N_("Determines whether and how long a snail trail is drawn behind the glider.");
+static const StaticEnumChoice  trail_length_list[] = {
+  { TRAIL_OFF, N_("Off"), trail_length_help },
+  { TRAIL_LONG, N_("Long"), trail_length_help },
+  { TRAIL_SHORT, N_("Short"), trail_length_help },
+  { TRAIL_FULL, N_("Full"), trail_length_help },
+  { 0 }
+};
+
+const TCHAR *trail_type_help = N_("Sets the type of the snail trail display.");
+static const StaticEnumChoice  trail_type_list[] = {
+  { 0, N_("Vario #1"), trail_type_help },
+  { 1, N_("Vario #2"), trail_type_help },
+  { 2, N_("Altitude"), trail_type_help },
+  { 0 }
+};
+
+static const StaticEnumChoice  aircraft_symbol_list[] = {
+  { acSimple, N_("Simple"),
+    N_("Simplified line graphics, black with white contours.") },
+  { acSimpleLarge, N_("Simple (large)"),
+    N_("Enlarged simple graphics.") },
+  { acDetailed, N_("Detailed"),
+    N_("Detailed rendered aircraft graphics.") },
+  { 0 }
+};
+
+static const StaticEnumChoice  wind_arrow_list[] = {
+  { 0, N_("Arrow head"), N_("Draws an arrow head only.") },
+  { 1, N_("Full arrow"), N_("Draws an arrow head with a dashed arrow line.") },
+  { 0 }
 };
 
 void
 SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  instance = this;
-  LoadWindow(CallBackTable, parent,
-             Layout::landscape ? _T("IDR_XML_SYMBOLSCONFIGPANEL") :
-                               _T("IDR_XML_SYMBOLSCONFIGPANEL_L"));
-
   const MapSettings &settings_map = CommonInterface::GetMapSettings();
 
-  WndProperty *wp;
+  instance = this;
 
-  wp = (WndProperty*)form.FindByName(_T("prpWindArrowStyle"));
-  assert(wp != NULL);
-  DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->addEnumText(_("Arrow head"));
-  dfe->addEnumText(_("Full arrow"));
-  dfe->Set(settings_map.wind_arrow_style);
-  wp->RefreshDisplay();
+  AddEnum(_("Track bearing"),
+          _("Display the track bearing (ground track projection) on the map."),
+          track_bearing_mode_list, settings_map.display_track_bearing);
 
-  wp = (WndProperty*)form.FindByName(_T("prpTrail"));
-  assert(wp != NULL);
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->addEnumText(_("Off"), TRAIL_OFF);
-  dfe->addEnumText(_("Long"), TRAIL_LONG);
-  dfe->addEnumText(_("Short"), TRAIL_SHORT);
-  dfe->addEnumText(_("Full"), TRAIL_FULL);
-  dfe->Set(settings_map.trail_length);
-  wp->RefreshDisplay();
+  AddBoolean(_("FLARM traffic"), _("This enables the display of FLARM traffic on the map window."),
+             settings_map.show_flarm_on_map);
 
-  LoadFormProperty(form, _T("prpTrailDrift"),
-                   settings_map.trail_drift_enabled);
+  // Expert item (TODO)
+  AddEnum(_("Trail length"), _T(""), trail_length_list, settings_map.trail_length, OnTrailLength);
 
-  wp = (WndProperty*)form.FindByName(_T("prpSnailType"));
-  assert(wp != NULL);
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  TCHAR tmp_text[30];
-  _tcscpy(tmp_text, _("Vario"));
-  _tcscat(tmp_text, _T(" #1"));
-  dfe->addEnumText(tmp_text);
-  _tcscpy(tmp_text, _("Vario"));
-  _tcscat(tmp_text, _T(" #2"));
-  dfe->addEnumText(tmp_text);
-  dfe->addEnumText(_("Altitude"));
-  dfe->Set((int)settings_map.snail_type);
-  wp->RefreshDisplay();
+  // Expert item
+  AddBoolean(_("Trail drift"),
+             _("Determines whether the snail trail is drifted with the wind when displayed in "
+                 "circling mode."),
+             settings_map.trail_drift_enabled);
 
-  LoadFormProperty(form, _T("prpSnailWidthScale"),
-                   settings_map.snail_scaling_enabled);
+  // Expert item
+  AddEnum(_("Trail type"), _T(""), trail_type_list, (int)settings_map.snail_type);
 
-  LoadFormProperty(form, _T("prpDetourCostMarker"),
-                   settings_map.detour_cost_markers_enabled);
+  // Expert item
+  AddBoolean(_("Trail scaled"),
+             _("If set to ON the snail trail width is scaled according to the vario signal."),
+             settings_map.snail_scaling_enabled);
 
-  wp = (WndProperty*)form.FindByName(_T("prpDisplayTrackBearing"));
-  assert(wp != NULL);
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->addEnumText(_("Off"));
-  dfe->addEnumText(_("On"));
-  dfe->addEnumText(_("Auto"));
-  dfe->Set(settings_map.display_track_bearing);
-  wp->RefreshDisplay();
+  // Expert item
+  AddBoolean(_("Detour cost markers"),
+             _("If the aircraft heading deviates from the current waypoint, markers are displayed "
+                 "at points ahead of the aircraft. The value of each marker is the extra distance "
+                 "required to reach that point as a percentage of straight-line distance to the waypoint."),
+             settings_map.detour_cost_markers_enabled);
 
-  LoadFormProperty(form, _T("prpEnableFLARMMap"),
-                   settings_map.show_flarm_on_map);
+  // Expert item
+  AddEnum(_("Aircraft symbol"), _T(""), aircraft_symbol_list, settings_map.aircraft_symbol);
 
-  wp = (WndProperty*)form.FindByName(_T("prpAircraftSymbol"));
-  assert(wp != NULL);
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->addEnumText(_("Simple"), acSimple);
-  dfe->addEnumText(_("Simple (large)"), acSimpleLarge);
-  dfe->addEnumText(_("Detailed"), acDetailed);
-  dfe->Set(settings_map.aircraft_symbol);
-  wp->RefreshDisplay();
+  // Expert item
+  AddEnum(_("Wind arrow"), _("Determines the way the wind arrow is drawn on the map."),
+          wind_arrow_list, settings_map.wind_arrow_style);
 
   ShowTrailControls(settings_map.trail_length != TRAIL_OFF);
 }
@@ -167,41 +208,27 @@ SymbolsConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 
-  changed |= SaveFormProperty(form, _T("prpWindArrowStyle"),
-                              szProfileWindArrowStyle,
-                              settings_map.wind_arrow_style);
+  changed |= SaveValueEnum(DisplayTrackBearing, szProfileDisplayTrackBearing,
+                           settings_map.display_track_bearing);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpTrail"),
-                                  szProfileSnailTrail,
-                                  settings_map.trail_length);
+  changed |= SaveValue(EnableFLARMMap, szProfileEnableFLARMMap,
+                       settings_map.show_flarm_on_map);
 
-  changed |= SaveFormProperty(form, _T("prpTrailDrift"),
-                              szProfileTrailDrift,
-                              settings_map.trail_drift_enabled);
+  changed |= SaveValueEnum(Trail, szProfileSnailTrail, settings_map.trail_length);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpSnailType"),
-                                  szProfileSnailType,
-                                  settings_map.snail_type);
+  changed |= SaveValue(TrailDrift, szProfileTrailDrift, settings_map.trail_drift_enabled);
 
-  changed |= SaveFormProperty(form, _T("prpSnailWidthScale"),
-                              szProfileSnailWidthScale,
-                              settings_map.snail_scaling_enabled);
+  changed |= SaveValueEnum(SnailType, szProfileSnailType, settings_map.snail_type);
 
-  changed |= SaveFormProperty(form, _T("prpDetourCostMarker"),
-                              szProfileDetourCostMarker,
-                              settings_map.detour_cost_markers_enabled);
+  changed |= SaveValue(SnailWidthScale, szProfileSnailWidthScale,
+                       settings_map.snail_scaling_enabled);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpDisplayTrackBearing"),
-                              szProfileDisplayTrackBearing,
-                              settings_map.display_track_bearing);
+  changed |= SaveValue(DetourCostMarker, szProfileDetourCostMarker,
+                       settings_map.detour_cost_markers_enabled);
 
-  changed |= SaveFormProperty(form, _T("prpEnableFLARMMap"),
-                              szProfileEnableFLARMMap,
-                              settings_map.show_flarm_on_map);
+  changed |= SaveValueEnum(AircraftSymbol, szProfileAircraftSymbol, settings_map.aircraft_symbol);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpAircraftSymbol"),
-                                  szProfileAircraftSymbol,
-                                  settings_map.aircraft_symbol);
+  changed |= SaveValueEnum(WindArrowStyle, szProfileWindArrowStyle, settings_map.wind_arrow_style);
 
   _changed |= changed;
   _require_restart |= require_restart;
