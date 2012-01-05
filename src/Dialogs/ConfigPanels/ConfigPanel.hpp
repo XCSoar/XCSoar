@@ -35,16 +35,6 @@ namespace ConfigPanel {
   gcc_pure
   WndForm &GetForm();
 
-  void InitFileField(WndProperty &wp, const TCHAR *profile_key,
-                     const TCHAR *filters);
-
-  void InitFileField(SubForm &form, const TCHAR *control_name,
-                     const TCHAR *profile_key, const TCHAR *filters);
-
-  bool FinishFileField(const WndProperty &wp, const TCHAR *profile_key);
-
-  bool FinishFileField(SubForm &form, const TCHAR *control_name,
-                       const TCHAR *profile_key);
 };
 
 #endif

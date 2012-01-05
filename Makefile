@@ -177,7 +177,6 @@ DIALOG_SOURCES = \
 	\
 	$(SRC)/Dialogs/dlgSwitches.cpp \
 	\
-	$(SRC)/Dialogs/ConfigPanels/ConfigPanel.cpp \
 	$(SRC)/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp \
 	$(SRC)/Dialogs/ConfigPanels/DevicesConfigPanel.cpp \
 	$(SRC)/Dialogs/ConfigPanels/ExperimentalConfigPanel.cpp \

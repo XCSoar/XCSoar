@@ -24,6 +24,8 @@ Copyright_License {
 #include "InterfaceConfigPanel.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/Button.hpp"
+#include "Form/Util.hpp"
+#include "Form/Form.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Form/XMLWidget.hpp"
