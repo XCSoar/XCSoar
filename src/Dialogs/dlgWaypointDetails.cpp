@@ -82,6 +82,7 @@ NextPage(int Step)
       page = last_page;
     else if (page > last_page)
       page = 0;
+    // skip wDetails frame, if there are no details
   } while (page == 1 &&
            waypoint->details.empty());
 
@@ -603,10 +604,10 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  wInfo = ((WndFrame *)wf->FindByName(_T("frmInfos")));
+  wInfo = (WndFrame *)wf->FindByName(_T("frmInfos"));
   assert(wInfo != NULL);
 
-  wCommand = ((WndFrame *)wf->FindByName(_T("frmCommands")));
+  wCommand = (WndFrame *)wf->FindByName(_T("frmCommands"));
   assert(wCommand != NULL);
   wCommand->hide();
 
