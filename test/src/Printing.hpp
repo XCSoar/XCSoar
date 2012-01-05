@@ -23,6 +23,8 @@
 #ifndef PRINTING_HPP
 #define PRINTING_HPP
 
+#define DO_PRINT
+
 #include <iostream>
 
 class TaskManager;

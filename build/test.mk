@@ -577,7 +577,6 @@ TEST_TRACE_SOURCES = \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TestTrace.cpp 
 TEST_TRACE_DEPENDS = IO ENGINE MATH UTIL
-TEST_TRACE_CPPFLAGS = -DDO_PRINT
 $(eval $(call link-program,TestTrace,TEST_TRACE))
 
 FLIGHT_TABLE_SOURCES = \
@@ -1334,7 +1333,6 @@ RUN_OLC_SOURCES = \
 	$(TEST_SRC_DIR)/ContestPrinting.cpp \
 	$(TEST_SRC_DIR)/RunOLCAnalysis.cpp
 RUN_OLC_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_OLC_CPPFLAGS = -DDO_PRINT
 RUN_OLC_DEPENDS = UTIL MATH
 $(eval $(call link-program,RunOLCAnalysis,RUN_OLC))
 

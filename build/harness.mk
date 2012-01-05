@@ -25,6 +25,4 @@ HARNESS_SOURCES = \
 	$(TEST_SRC_DIR)/TaskEventsPrint.cpp \
 	$(TEST_SRC_DIR)/tap.c
 
-HARNESS_CPPFLAGS_INTERNAL = -DDO_PRINT
-
 $(eval $(call link-library,harness,HARNESS))
