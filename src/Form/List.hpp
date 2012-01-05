@@ -135,6 +135,14 @@ public:
     PaintItemCallback = cb;
   }
 
+  /**
+   * Returns the height of list items
+   * @return height of list items in pixel
+   */
+  unsigned GetItemHeight() const {
+    return item_height;
+  }
+
   void SetItemHeight(UPixelScalar _item_height);
 
   /**
