@@ -33,6 +33,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "ComputerSettings.hpp"
+#include "LocalPath.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
@@ -63,14 +64,17 @@ static WndForm *wf = NULL;
 static EditWindow *wDetails = NULL;
 static WndFrame *wInfo = NULL;
 static WndFrame *wCommand = NULL;
+static WndOwnerDrawFrame *wImage = NULL;
 static const Waypoint *waypoint = NULL;
+
+static StaticArray<Bitmap, 5> images;
 
 static void
 NextPage(int Step)
 {
   assert(waypoint);
 
-  int last_page = 2;
+  int last_page = 2 + images.size();
   do {
     page += Step;
     if (page < 0)
@@ -83,6 +87,7 @@ NextPage(int Step)
   wInfo->set_visible(page == 0);
   wDetails->set_visible(page == 1);
   wCommand->set_visible(page == 2);
+  wImage->set_visible(page >= 3);
 }
 
 static void
@@ -357,6 +362,14 @@ OnActivatePanClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
+static void
+OnImagePaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
+{
+  canvas.ClearWhite();
+  if (page >= 3 && page < 3 + (int)images.size())
+    canvas.copy(images[page-3]);
+}
+
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
     DeclareCallBackEntry(OnNextClicked),
     DeclareCallBackEntry(OnPrevClicked),
@@ -368,6 +381,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
     DeclareCallBackEntry(OnRemoveFromTaskClicked),
     DeclareCallBackEntry(OnNewHomeClicked),
     DeclareCallBackEntry(OnActivatePanClicked),
+    DeclareCallBackEntry(OnImagePaint),
     DeclareCallBackEntry(NULL)
 };
 
@@ -601,6 +615,9 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   assert(wDetails != NULL);
   wDetails->set_text(waypoint->details.c_str());
 
+  wImage = (WndOwnerDrawFrame *)wf->FindByName(_T("frmImage"));
+  assert(wImage != NULL);
+
   if (!allow_navigation) {
     WndButton* butnav = (WndButton *)wf->FindByName(_T("cmdPrev"));
     assert(butnav != NULL);
@@ -617,6 +634,15 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
 
   ShowTaskCommands();
 
+  for (auto it = waypoint->files_embed.begin(),
+       it_end = waypoint->files_embed.end();
+       it < it_end && !images.full(); it++) {
+    TCHAR path[MAX_PATH];
+    LocalPath(path, it->c_str());
+    if (!images.append().LoadFile(path))
+      images.shrink(images.size() - 1);
+  }
+
   page = 0;
 
   NextPage(0); // JMW just to turn proper pages on/off
@@ -624,4 +650,9 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   wf->ShowModal();
 
   delete wf;
+
+  for (auto image = images.begin(); image < images.end(); image++)
+    image->Reset();
+
+  images.clear();
 }
