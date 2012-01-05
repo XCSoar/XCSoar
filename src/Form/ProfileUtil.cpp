@@ -73,9 +73,8 @@ SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
   if (SaveFormProperty(form, field, value)) {
     Profile::Set(reg, value);
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 bool
@@ -85,9 +84,8 @@ SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
   if (SaveFormProperty(form, field, value)) {
     Profile::Set(reg, value);
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 bool
@@ -97,9 +95,8 @@ SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
   if (SaveFormProperty(form, field, value)) {
     Profile::Set(reg, value);
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 bool
@@ -109,9 +106,8 @@ SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
   if (SaveFormProperty(form, field, value)) {
     Profile::Set(reg, value);
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 bool
@@ -121,9 +117,8 @@ SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
   if (SaveFormProperty(form, field, value)) {
     Profile::Set(reg, value);
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 bool
@@ -133,9 +128,8 @@ SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
   if (SaveFormProperty(form, field, value)) {
     Profile::Set(reg, value);
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 bool
