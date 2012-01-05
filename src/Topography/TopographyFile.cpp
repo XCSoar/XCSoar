@@ -134,40 +134,26 @@ TopographyFile::Update(const WindowProjection &map_projection)
   }
 
   // Iterate through the shapefile entries
-  for (int i = 0; i < file.numshapes; i++) {
+  const ShapeList **current = &first;
+  auto it = shapes.begin();
+  for (int i = 0; i < file.numshapes; ++i, ++it) {
     if (!msGetBit(file.status, i)) {
       // If the shape is outside the bounds
       // delete the shape from the cache
-      delete shapes[i].shape;
-      shapes[i].shape = NULL;
-    } else if (shapes[i].shape == NULL) {
-      // If the shape is inside the bounds and if the
-      // shape isn't cached yet -> cache the shape
-      shapes[i].shape = new XShape(&file, i, label_field);
+      delete it->shape;
+      it->shape = NULL;
+    } else {
+      // is inside the bounds
+      if (it->shape == NULL)
+        // shape isn't cached yet -> cache the shape
+        it->shape = new XShape(&file, i, label_field);
+      // update list pointer
+      *current = it;
+      current = &it->next;
     }
   }
-
-  ShapeList::NotNull not_null;
-  auto end = shapes.end(), it = shapes.begin();
-  it = std::find_if(it, end, not_null);
-  if (it != shapes.end()) {
-    ShapeList *current = &*it;
-    first = current;
-
-    while (true) {
-      ++it;
-      it = std::find_if(it, end, not_null);
-      if (it == end) {
-        current->next = NULL;
-        break;
-      }
-
-      ShapeList *next = &*it;
-      current->next = next;
-      current = next;
-    }
-  } else
-    first = NULL;
+  // end of list marker
+  *current = NULL;
 
   ++serial;
   return true;

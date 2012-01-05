@@ -46,12 +46,6 @@ struct zzip_dir;
 
 class TopographyFile : private NonCopyable {
   struct ShapeList {
-    struct NotNull {
-      bool operator()(const ShapeList &x) const {
-        return x.shape != NULL;
-      }
-    };
-
     const ShapeList *next;
 
     const XShape *shape;
