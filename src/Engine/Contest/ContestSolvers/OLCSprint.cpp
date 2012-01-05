@@ -64,7 +64,7 @@ unsigned
 OLCSprint::find_start() const
 {
   assert(num_stages <= MAX_STAGES);
-  assert(n_points > 0);
+  assert(n_points >= 2);
   ScanTaskPoint start(0, 1);
   const ScanTaskPoint end(0, n_points - 1);
   const unsigned end_time = GetPointFast(end).time;
