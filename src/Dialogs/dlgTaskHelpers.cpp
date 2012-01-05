@@ -229,7 +229,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
 {
   switch (ozp.shape) {
   case ObservationZonePoint::FAI_SECTOR:
-    _stprintf(buffer,_("FAI quadrant"));
+    _tcscpy(buffer, _("FAI quadrant"));
     break;
 
   case ObservationZonePoint::SECTOR:
@@ -252,19 +252,19 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
     break;
 
   case ObservationZonePoint::KEYHOLE:
-    _stprintf(buffer,_("DAeC Keyhole"));
+    _tcscpy(buffer, _("DAeC Keyhole"));
     break;
 
   case ObservationZonePoint::BGAFIXEDCOURSE:
-    _stprintf(buffer,_("BGA Fixed Course"));
+    _tcscpy(buffer, _("BGA Fixed Course"));
     break;
 
   case ObservationZonePoint::BGAENHANCEDOPTION:
-    _stprintf(buffer,_("BGA Enhanced Option"));
+    _tcscpy(buffer, _("BGA Enhanced Option"));
     break;
 
   case ObservationZonePoint::BGA_START:
-    _stprintf(buffer,_("BGA Start Sector"));
+    _tcscpy(buffer, _("BGA Start Sector"));
     break;
   }
 }
