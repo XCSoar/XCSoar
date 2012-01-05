@@ -28,7 +28,6 @@ Copyright_License {
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
-#include "Profile/Profile.hpp"
 #include "LocalTime.hpp"
 #include "UtilsText.hpp"
 #include "OS/PathName.hpp"
