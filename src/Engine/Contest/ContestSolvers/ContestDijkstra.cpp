@@ -184,6 +184,9 @@ ContestDijkstra::CalcTime() const
 {
   assert(num_stages <= MAX_STAGES);
 
+  assert(!solution[num_stages-1].IsDefined() ||
+         solution[num_stages - 1].time >= solution[0].time);
+
   if (!solution[num_stages-1].IsDefined())
     return fixed_zero;
   else 
