@@ -164,22 +164,24 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #endif
 
   glPushMatrix();
+  fixed angle = projection.GetScreenAngle().Degrees();
+  fixed scale = projection.GetScale();
+  const RasterPoint &screen_origin = projection.GetScreenOrigin();
 #ifdef HAVE_GLES
 #ifdef FIXED_MATH
-  GLfixed angle = projection.GetScreenAngle().Degrees().as_glfixed();
-  GLfixed scale = projection.GetScale().as_glfixed_scale();
+  GLfixed fixed_angle = angle.as_glfixed();
+  GLfixed fixed_scale = scale.as_glfixed_scale();
 #else
-  GLfixed angle = projection.GetScreenAngle().Degrees() * (1<<16);
-  GLfixed scale = projection.GetScale() * (1LL<<32);
+  GLfixed fixed_angle = angle * (1<<16);
+  GLfixed fixed_scale = scale * (1LL<<32);
 #endif
-  glTranslatex((int)projection.GetScreenOrigin().x << 16,
-               (int)projection.GetScreenOrigin().y << 16, 0);
-  glRotatex(angle, 0, 0, -(1<<16));
-  glScalex(scale, scale, 1<<16);
+  glTranslatex((int)screen_origin.x << 16, (int)screen_origin.y << 16, 0);
+  glRotatex(fixed_angle, 0, 0, -(1<<16));
+  glScalex(fixed_scale, fixed_scale, 1<<16);
 #else
-  glTranslatef(projection.GetScreenOrigin().x, projection.GetScreenOrigin().y, 0.);
-  glRotatef((GLfloat)projection.GetScreenAngle().Degrees(), 0., 0., -1.);
-  glScalef((GLfloat)projection.GetScale(), (GLfloat)projection.GetScale(), 1.);
+  glTranslatef(screen_origin.x, screen_origin.y, 0.);
+  glRotatef((GLfloat)angle, 0., 0., -1.);
+  glScalef((GLfloat)scale, (GLfloat)scale, 1.);
 #endif
 #else // !ENABLE_OPENGL
   const GeoClip clip(projection.GetScreenBounds().Scale(fixed(1.1)));
