@@ -167,6 +167,7 @@ ContestDijkstra::Reset()
 {
   best_solution.clear();
   dijkstra.clear();
+  solution_valid = false;
   clear_trace();
   solution[num_stages - 1].Clear();
 
@@ -287,7 +288,7 @@ ContestDijkstra::SaveSolution()
 {
   assert(num_stages <= MAX_STAGES);
 
-  if (AbstractContest::SaveSolution()) {
+  if (solution_valid && AbstractContest::SaveSolution()) {
     best_solution.clear();
     for (unsigned i=0; i<num_stages; ++i) {
       best_solution.append(solution[i]);
