@@ -27,6 +27,8 @@ Copyright_License {
 #include "Dialogs/Waypoint.hpp"
 #include "DataField/Enum.hpp"
 #include "Form/Button.hpp"
+#include "Form/Util.hpp"
+#include "Form/Form.hpp"
 #include "LocalPath.hpp"
 #include "Protection.hpp"
 #include "ConfigPanel.hpp"

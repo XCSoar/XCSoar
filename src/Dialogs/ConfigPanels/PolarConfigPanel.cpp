@@ -33,6 +33,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
+#include "Form/Form.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/CallBackTable.hpp"

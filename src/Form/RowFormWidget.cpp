@@ -21,7 +21,6 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/ConfigPanels/ConfigPanel.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Panel.hpp"
@@ -36,7 +35,9 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Units/Units.hpp"
 #include "Units/Descriptor.hpp"
+#include "LocalPath.hpp"
 
+#include <windef.h>
 #include <assert.h>
 
 RowFormWidget::RowFormWidget(const DialogLook &_look,
@@ -235,7 +236,18 @@ RowFormWidget::AddFileReader(const TCHAR *label, const TCHAR *help,
   DataFieldFileReader *df = new DataFieldFileReader(NULL);
   edit->SetDataField(df);
 
-  ConfigPanel::InitFileField(*edit, registry_key, filters);
+  size_t length;
+  while ((length = _tcslen(filters)) > 0) {
+    df->ScanDirectoryTop(filters);
+    filters += length + 1;
+  }
+
+  TCHAR path[MAX_PATH];
+  if (Profile::GetPath(registry_key, path))
+    df->Lookup(path);
+
+  edit->RefreshDisplay();
+
   return edit;
 }
 
@@ -417,7 +429,19 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
 bool
 RowFormWidget::SaveValueFileReader(unsigned i, const TCHAR *registry_key)
 {
-  return ConfigPanel::FinishFileField(GetControl(i), registry_key);
+  const DataFieldFileReader *dfe =
+    (const DataFieldFileReader *)GetControl(i).GetDataField();
+  TCHAR new_value[MAX_PATH];
+  _tcscpy(new_value, dfe->GetPathFile());
+  ContractLocalPath(new_value);
+
+  TCHAR old_value[MAX_PATH];
+  Profile::Get(registry_key, old_value, MAX_PATH);
+  if (_tcscmp(old_value, new_value) == 0)
+    return false;
+
+  Profile::Set(registry_key, new_value);
+  return true;
 }
 
 void
