@@ -23,63 +23,71 @@ Copyright_License {
 
 #include "VarioConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
+#include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "Form/Form.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
 
-class VarioConfigPanel : public XMLWidget {
+enum ControlIndex {
+  AppGaugeVarioSpeedToFly,
+  AppGaugeVarioAvgText,
+  AppGaugeVarioMc,
+  AppGaugeVarioBugs,
+  AppGaugeVarioBallast,
+  AppGaugeVarioGross,
+  AppAveNeedle
+};
+
+
+class VarioConfigPanel : public RowFormWidget {
+public:
+  VarioConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
 };
-
-void
-VarioConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
-
-void
-VarioConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
 
 void
 VarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent,
-             Layout::landscape ? _T("IDR_XML_VARIOCONFIGPANEL") :
-                               _T("IDR_XML_VARIOCONFIGPANEL_L"));
-
   const VarioSettings &settings = CommonInterface::GetUISettings().vario;
 
-  LoadFormProperty(form, _T("prpAppGaugeVarioSpeedToFly"),
-                   settings.ShowSpeedToFly);
+  RowFormWidget::Prepare(parent, rc);
 
-  LoadFormProperty(form, _T("prpAppGaugeVarioAvgText"),
-                   settings.ShowAvgText);
+  // Expert item (TODO)
+  AddBoolean(_("Speed arrows"),
+             _("Whether to show speed command arrows on the vario gauge.  When shown, in cruise mode, "
+                 "arrows point up to command slow down; arrows point down to command speed up."),
+             settings.ShowSpeedToFly);
 
-  LoadFormProperty(form, _T("prpAppGaugeVarioMc"),
-                   settings.ShowMc);
+  // Expert item
+  AddBoolean(_("Show average"),
+             _("Whether to show the average climb rate.  In cruise mode, this switches to showing the "
+                 "average netto airmass rate."),
+             settings.ShowAvgText);
 
-  LoadFormProperty(form, _T("prpAppGaugeVarioBugs"),
-                   settings.ShowBugs);
+  // Expert item
+  AddBoolean(_("Show MacReady"), _("Whether to show the MacCready setting."), settings.ShowMc);
 
-  LoadFormProperty(form, _T("prpAppGaugeVarioBallast"),
-                   settings.ShowBallast);
+  // Expert item
+  AddBoolean(_("Show bugs"), _("Whether to show the bugs percentage."), settings.ShowBugs);
 
-  LoadFormProperty(form, _T("prpAppGaugeVarioGross"),
-                   settings.ShowGross);
+  // Expert item
+  AddBoolean(_("Show ballast"), _("Whether to show the ballast percentage."), settings.ShowBallast);
 
-  LoadFormProperty(form, _T("prpAppAveNeedle"),
-                   settings.ShowAveNeedle);
+  // Expert item
+  AddBoolean(_("Show gross"), _("Whether to show the gross climb rate."), settings.ShowGross);
+
+  // Expert item
+  AddBoolean(_("Averager needle"),
+             _("If true, the vario gauge will display a hollow averager needle.  During cruise, this "
+                 "needle displays the average netto value.  During circling, this needle displays the "
+                 "average gross value."),
+             settings.ShowAveNeedle);
 }
 
 bool
@@ -89,32 +97,19 @@ VarioConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   VarioSettings &settings = CommonInterface::SetUISettings().vario;
 
-  changed |= SaveFormProperty(form, _T("prpAppGaugeVarioSpeedToFly"),
-                              szProfileAppGaugeVarioSpeedToFly,
-                              settings.ShowSpeedToFly);
+  changed |= SaveValue(AppGaugeVarioSpeedToFly, szProfileAppGaugeVarioSpeedToFly, settings.ShowSpeedToFly);
 
-  changed |= SaveFormProperty(form, _T("prpAppGaugeVarioAvgText"),
-                              szProfileAppGaugeVarioAvgText,
-                              settings.ShowAvgText);
+  changed |= SaveValue(AppGaugeVarioAvgText, szProfileAppGaugeVarioAvgText, settings.ShowAvgText);
 
-  changed |= SaveFormProperty(form, _T("prpAppGaugeVarioMc"),
-                              szProfileAppGaugeVarioMc,
-                              settings.ShowMc);
+  changed |= SaveValue(AppGaugeVarioMc, szProfileAppGaugeVarioMc, settings.ShowMc);
 
-  changed |= SaveFormProperty(form, _T("prpAppGaugeVarioBugs"),
-                              szProfileAppGaugeVarioBugs,
-                              settings.ShowBugs);
+  changed |= SaveValue(AppGaugeVarioBugs, szProfileAppGaugeVarioBugs, settings.ShowBugs);
 
-  changed |= SaveFormProperty(form, _T("prpAppGaugeVarioBallast"),
-                              szProfileAppGaugeVarioBallast,
-                              settings.ShowBallast);
+  changed |= SaveValue(AppGaugeVarioBallast, szProfileAppGaugeVarioBallast, settings.ShowBallast);
 
-  changed |= SaveFormProperty(form, _T("prpAppGaugeVarioGross"),
-                              szProfileAppGaugeVarioGross,
-                              settings.ShowGross);
+  changed |= SaveValue(AppGaugeVarioGross, szProfileAppGaugeVarioGross, settings.ShowGross);
 
-  changed |= SaveFormProperty(form, _T("prpAppAveNeedle"), szProfileAppAveNeedle,
-                              settings.ShowAveNeedle);
+  changed |= SaveValue(AppAveNeedle, szProfileAppAveNeedle, settings.ShowAveNeedle);
 
   _changed |= changed;
   _require_restart |= require_restart;
