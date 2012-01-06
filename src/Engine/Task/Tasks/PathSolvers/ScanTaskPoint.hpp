@@ -41,10 +41,19 @@ struct ScanTaskPoint {
   ScanTaskPoint(unsigned _stage_number, unsigned _point_index)
     :stage_number(_stage_number), point_index(_point_index) {}
 
+  /**
+   * Generate a unique key that is used for the std::map comparison
+   * operator.
+   */
+  uint32_t Key() const {
+    /* sorry for this dirty trick, but it speeds up the solver by 20%;
+       language lawyers would say that this cast is not legal, but it
+       works on all platforms we're interested in supporting */
+    return *(const uint32_t *)(const void *)this;
+  }
+
   bool operator<(const ScanTaskPoint &other) const {
-    return stage_number < other.stage_number ||
-      (stage_number == other.stage_number &&
-       point_index < other.point_index);
+    return Key() < other.Key();
   }
 
   /**
