@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-01 22:47+0100\n"
+"POT-Creation-Date: 2012-01-06 01:08+0100\n"
 "PO-Revision-Date: 2011-12-20 19:54+0100\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: src/Task/TaskStore.cpp:74 src/Menu/ExpandMacros.cpp:538
 #: src/Input/InputEventsSettings.cpp:315 src/Dialogs/dlgAnalysis.cpp:347
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:158
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:75
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:76
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:38
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:38
 #: Data/Input/default.xci:311 Data/Input/default.xci:360
@@ -171,7 +171,7 @@ msgstr "Pas en spirale"
 msgid "No Traffic"
 msgstr "Pas de trafic"
 
-#: src/Waypoint/WaypointDetailsReader.cpp:142
+#: src/Waypoint/WaypointDetailsReader.cpp:150
 msgid "Loading Airfield Details File..."
 msgstr "Chargement du fichier des aérodromes..."
 
@@ -296,17 +296,20 @@ msgid "Start"
 msgstr "Démarrer"
 
 #: src/Menu/ExpandMacros.cpp:445
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:110
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:90
+#, no-c-format
 msgid "Long"
 msgstr "Long"
 
 #: src/Menu/ExpandMacros.cpp:449
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:111
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:91
+#, no-c-format
 msgid "Short"
 msgstr "Court"
 
 #: src/Menu/ExpandMacros.cpp:453
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:112
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:92
+#, no-c-format
 msgid "Full"
 msgstr "Complet"
 
@@ -318,8 +321,8 @@ msgstr "Complet"
 #: src/Dialogs/XML.cpp:560 src/Dialogs/StatusPanels/SystemStatusPanel.cpp:78
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:131
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:148
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:109
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:142
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:81
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:89
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:200
 #, no-c-format
 msgid "Off"
@@ -331,7 +334,8 @@ msgstr "Désactiver"
 #: src/Menu/ExpandMacros.cpp:604 src/Input/InputEventsSettings.cpp:441
 #: src/Input/InputEventsSettings.cpp:446 src/Dialogs/XML.cpp:560
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:77
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:143
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:82
+#, no-c-format
 msgid "On"
 msgstr "On"
 
@@ -352,7 +356,7 @@ msgid "Terrain Off"
 msgstr "Relief Off"
 
 #: src/Menu/ExpandMacros.cpp:524 src/Menu/ExpandMacros.cpp:548
-#: src/InfoBoxes/Panel/WindSetup.cpp:94
+#: src/InfoBoxes/Panel/WindSetup.cpp:95
 #: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:57
 #: src/Dialogs/dlgWindSettings.cpp:192
 #, no-c-format
@@ -362,7 +366,7 @@ msgstr "Manuel"
 #: src/Menu/ExpandMacros.cpp:524 src/Menu/ExpandMacros.cpp:548
 #: src/PageSettings.cpp:58 src/PageSettings.cpp:62
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:56
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:144
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:83
 #: Data/Dialogs/dlgBrightness.xml:6
 #, no-c-format
 msgid "Auto"
@@ -666,7 +670,7 @@ msgstr ""
 msgid "Next waypoint"
 msgstr "Prochain point de virage"
 
-#: src/InfoBoxes/Content/Factory.cpp:219 src/InfoBoxes/Content/Task.cpp:80
+#: src/InfoBoxes/Content/Factory.cpp:219 src/InfoBoxes/Content/Task.cpp:82
 #, no-c-format
 msgid "Next"
 msgstr "Suivant"
@@ -859,8 +863,6 @@ msgstr ""
 #: src/Widgets/TrafficWidget.cpp:317 src/Dialogs/DeviceListDialog.cpp:140
 #: src/Dialogs/dlgConfiguration.cpp:97 src/Dialogs/dlgFlarmTraffic.cpp:312
 #: src/Dialogs/dlgFlarmTraffic.cpp:313
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:123
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:126
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:22
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:14 Data/Input/default.xci:554
 #: Data/Input/default.xci:630 Data/Input/default.xci:677
@@ -2110,7 +2112,7 @@ msgid ""
 "estimated wind is used for the calculation."
 msgstr ""
 
-#: src/InfoBoxes/Content/Altitude.cpp:54
+#: src/InfoBoxes/Content/Altitude.cpp:53
 #: src/MapWindow/GlueMapWindowOverlays.cpp:257
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:6
 #: Data/Dialogs/dlgSimulatorPrompt.xml:6
@@ -2118,7 +2120,7 @@ msgstr ""
 msgid "Simulator"
 msgstr "Simulateur"
 
-#: src/InfoBoxes/Content/Altitude.cpp:58 src/PageSettings.cpp:45
+#: src/InfoBoxes/Content/Altitude.cpp:57 src/PageSettings.cpp:45
 #: src/PageSettings.cpp:56 Data/Input/default.xci:724
 #: Data/Input/default.xci:773 Data/Input/default.xci:822
 #: Data/Input/default.xci:885
@@ -2126,67 +2128,68 @@ msgstr "Simulateur"
 msgid "Info"
 msgstr "Info"
 
-#: src/InfoBoxes/Content/Altitude.cpp:62
-#: src/InfoBoxes/Content/MacCready.cpp:62
-#: src/InfoBoxes/Content/Weather.cpp:103 src/Dialogs/dlgConfiguration.cpp:81
+#: src/InfoBoxes/Content/Altitude.cpp:61
+#: src/InfoBoxes/Content/MacCready.cpp:63
+#: src/InfoBoxes/Content/Weather.cpp:105 src/Dialogs/dlgConfiguration.cpp:81
 #, no-c-format
 msgid "Setup"
 msgstr "Configuration"
 
-#: src/InfoBoxes/Content/Altitude.cpp:187
-#: src/InfoBoxes/Content/Altitude.cpp:274
+#: src/InfoBoxes/Content/Altitude.cpp:163
+#: src/InfoBoxes/Content/Altitude.cpp:229
 msgid "no QNH"
 msgstr "Aucun QNH"
 
-#: src/InfoBoxes/Content/MacCready.cpp:58 src/InfoBoxes/Content/Weather.cpp:99
-#: src/Dialogs/DeviceListDialog.cpp:282 Data/Dialogs/dlgConfigFonts_L.xml:11
-#: Data/Dialogs/dlgConfigFonts_L.xml:14 Data/Dialogs/dlgConfigFonts_L.xml:17
-#: Data/Dialogs/dlgConfigFonts_L.xml:20 Data/Dialogs/dlgConfigFonts_L.xml:23
-#: Data/Dialogs/dlgConfigFonts_L.xml:26 Data/Dialogs/dlgConfigFonts_L.xml:29
-#: Data/Dialogs/dlgConfigFonts_L.xml:32 Data/Dialogs/dlgConfigFonts.xml:11
-#: Data/Dialogs/dlgConfigFonts.xml:14 Data/Dialogs/dlgConfigFonts.xml:17
-#: Data/Dialogs/dlgConfigFonts.xml:20 Data/Dialogs/dlgConfigFonts.xml:23
-#: Data/Dialogs/dlgConfigFonts.xml:26 Data/Dialogs/dlgConfigFonts.xml:29
-#: Data/Dialogs/dlgConfigFonts.xml:32 Data/Dialogs/dlgConfigWaypoints_L.xml:7
+#: src/InfoBoxes/Content/MacCready.cpp:59
+#: src/InfoBoxes/Content/Weather.cpp:101 src/Dialogs/DeviceListDialog.cpp:282
+#: Data/Dialogs/dlgConfigFonts_L.xml:11 Data/Dialogs/dlgConfigFonts_L.xml:14
+#: Data/Dialogs/dlgConfigFonts_L.xml:17 Data/Dialogs/dlgConfigFonts_L.xml:20
+#: Data/Dialogs/dlgConfigFonts_L.xml:23 Data/Dialogs/dlgConfigFonts_L.xml:26
+#: Data/Dialogs/dlgConfigFonts_L.xml:29 Data/Dialogs/dlgConfigFonts_L.xml:32
+#: Data/Dialogs/dlgConfigFonts.xml:11 Data/Dialogs/dlgConfigFonts.xml:14
+#: Data/Dialogs/dlgConfigFonts.xml:17 Data/Dialogs/dlgConfigFonts.xml:20
+#: Data/Dialogs/dlgConfigFonts.xml:23 Data/Dialogs/dlgConfigFonts.xml:26
+#: Data/Dialogs/dlgConfigFonts.xml:29 Data/Dialogs/dlgConfigFonts.xml:32
+#: Data/Dialogs/dlgConfigWaypoints_L.xml:7
 #: Data/Dialogs/dlgConfigWaypoints.xml:7 Data/Dialogs/dlgPlanes_L.xml:8
 #: Data/Dialogs/dlgPlanes.xml:8
 #, no-c-format
 msgid "Edit"
 msgstr "Éditer"
 
-#: src/InfoBoxes/Content/MacCready.cpp:89
-#: src/InfoBoxes/Panel/MacCreadySetup.cpp:71
-#: src/InfoBoxes/Panel/MacCreadySetup.cpp:96
+#: src/InfoBoxes/Content/MacCready.cpp:90
+#: src/InfoBoxes/Panel/MacCreadySetup.cpp:72
+#: src/InfoBoxes/Panel/MacCreadySetup.cpp:97
 msgid "AUTO"
 msgstr "AUTO"
 
-#: src/InfoBoxes/Content/MacCready.cpp:91
-#: src/InfoBoxes/Panel/MacCreadySetup.cpp:73
-#: src/InfoBoxes/Panel/MacCreadySetup.cpp:94
+#: src/InfoBoxes/Content/MacCready.cpp:92
+#: src/InfoBoxes/Panel/MacCreadySetup.cpp:74
+#: src/InfoBoxes/Panel/MacCreadySetup.cpp:95
 msgid "MANUAL"
 msgstr "Manuel"
 
-#: src/InfoBoxes/Content/Other.cpp:56
+#: src/InfoBoxes/Content/Other.cpp:57
 msgid "AC Off"
 msgstr "AC Off"
 
-#: src/InfoBoxes/Content/Other.cpp:60
+#: src/InfoBoxes/Content/Other.cpp:61
 msgid "AC ON"
 msgstr "AC ON"
 
-#: src/InfoBoxes/Content/Speed.cpp:156
+#: src/InfoBoxes/Content/Speed.cpp:126
 msgid "BLOCK"
 msgstr "BLOQUER"
 
-#: src/InfoBoxes/Content/Speed.cpp:158
+#: src/InfoBoxes/Content/Speed.cpp:128
 msgid "DOLPHIN"
 msgstr "Dauphin"
 
-#: src/InfoBoxes/Content/Task.cpp:767
+#: src/InfoBoxes/Content/Task.cpp:731
 msgid "Time Below"
 msgstr ""
 
-#: src/InfoBoxes/InfoBoxSettings.cpp:75 src/InfoBoxes/Panel/WindSetup.cpp:95
+#: src/InfoBoxes/InfoBoxSettings.cpp:75 src/InfoBoxes/Panel/WindSetup.cpp:96
 #: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:59
 #: src/Dialogs/dlgWindSettings.cpp:193 Data/Dialogs/dlgVegaDemo.xml:14
 #, no-c-format
@@ -2204,12 +2207,12 @@ msgid "FinalGlide"
 msgstr "Plané final"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:475 src/InfoBoxes/InfoBoxManager.cpp:521
-#: src/Dialogs/dlgConfigInfoboxes.cpp:210
-#: src/Dialogs/dlgConfigInfoboxes.cpp:373
+#: src/Dialogs/dlgConfigInfoboxes.cpp:211
+#: src/Dialogs/dlgConfigInfoboxes.cpp:374
 msgid "InfoBox"
 msgstr "InfoBox"
 
-#: src/InfoBoxes/InfoBoxManager.cpp:483 src/Dialogs/dlgConfigInfoboxes.cpp:214
+#: src/InfoBoxes/InfoBoxManager.cpp:483 src/Dialogs/dlgConfigInfoboxes.cpp:215
 #: src/Dialogs/dlgWeather.cpp:67
 msgid "No help available on this item"
 msgstr "Aucune aide pour cet objet"
@@ -2221,19 +2224,19 @@ msgstr "Aucune aide pour cet objet"
 msgid "N/A"
 msgstr "Indisponible"
 
-#: src/InfoBoxes/Panel/WindSetup.cpp:86 src/Dialogs/dlgWindSettings.cpp:187
+#: src/InfoBoxes/Panel/WindSetup.cpp:87 src/Dialogs/dlgWindSettings.cpp:187
 #, no-c-format
 msgid "External"
 msgstr "Externe"
 
-#: src/InfoBoxes/Panel/WindSetup.cpp:96
+#: src/InfoBoxes/Panel/WindSetup.cpp:97
 #: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:61
 #: src/Dialogs/dlgWindSettings.cpp:194
 #, no-c-format
 msgid "ZigZag"
 msgstr "ZigZag"
 
-#: src/InfoBoxes/Panel/WindSetup.cpp:97
+#: src/InfoBoxes/Panel/WindSetup.cpp:98
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:65
 #: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:63
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:110
@@ -2479,7 +2482,7 @@ msgstr "Trafic FLARM"
 
 #: src/Renderer/MapItemListRenderer.cpp:306
 #: src/Renderer/WaypointListRenderer.cpp:55
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:129
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:100
 #: Data/Dialogs/dlgBasicSettings.xml:23
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:20
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:12
@@ -2487,6 +2490,7 @@ msgstr "Trafic FLARM"
 #: Data/Dialogs/pnlStatusFlight.xml:6
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:22
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:22
+#, no-c-format
 msgid "Altitude"
 msgstr "Altitude"
 
@@ -2808,7 +2812,7 @@ msgid "Australian"
 msgstr "Australien"
 
 #. Read the terrain file
-#: src/UtilsSettings.cpp:122 src/Components.cpp:309
+#: src/UtilsSettings.cpp:122 src/Components.cpp:310
 msgid "Loading Terrain File..."
 msgstr "Chargement du fichier de relief..."
 
@@ -2851,12 +2855,12 @@ msgstr "Attention"
 msgid "Battery low"
 msgstr "Batterie faible"
 
-#: src/Components.cpp:257
+#: src/Components.cpp:258
 msgid "Initialising"
 msgstr "Initialisation"
 
 #. Start the device thread(s)
-#: src/Components.cpp:387
+#: src/Components.cpp:388
 msgid "Starting devices"
 msgstr "Démarrage"
 
@@ -2867,27 +2871,27 @@ msgstr "Démarrage"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Components.cpp:398
+#: src/Components.cpp:399
 msgid "Initialising display"
 msgstr "Initialisation de l'affichage"
 
 #. Show progress dialog
-#: src/Components.cpp:469 src/Components.cpp:500 src/Components.cpp:542
+#: src/Components.cpp:470 src/Components.cpp:501 src/Components.cpp:543
 msgid "Shutdown, please wait..."
 msgstr "Arrêt en cours, merci de patienter..."
 
 #. Stop logger and save igc file
-#: src/Components.cpp:484
+#: src/Components.cpp:485
 msgid "Shutdown, saving logs..."
 msgstr "Arrêt en cours, enregistrement..."
 
 #. Save settings to profile
-#: src/Components.cpp:488
+#: src/Components.cpp:489
 msgid "Shutdown, saving profile..."
 msgstr "Arrêt en cours, enregistrement du profil..."
 
 #. Save the task for the next time
-#: src/Components.cpp:533
+#: src/Components.cpp:534
 msgid "Shutdown, saving task..."
 msgstr "Arrêt en cours, enregistrement du circuit..."
 
@@ -3025,7 +3029,7 @@ msgstr "Périph."
 
 #: src/Dialogs/DeviceListDialog.cpp:278 src/Dialogs/PortMonitor.cpp:130
 #: src/Dialogs/ManageCAI302Dialog.cpp:95 src/Dialogs/ManageFlarmDialog.cpp:72
-#: src/Dialogs/dlgConfigInfoboxes.cpp:417 src/Dialogs/dlgInfoBoxAccess.cpp:134
+#: src/Dialogs/dlgConfigInfoboxes.cpp:418 src/Dialogs/dlgInfoBoxAccess.cpp:134
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:288
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:292
 #: Data/Dialogs/dlgAirspaceColours_L.xml:4
@@ -3260,15 +3264,15 @@ msgstr "Actif"
 #: src/Dialogs/dlgPlanes.cpp:226 src/Dialogs/dlgConfigWaypoints.cpp:53
 #: src/Dialogs/dlgConfigWaypoints.cpp:76 src/Dialogs/dlgConfigWaypoints.cpp:98
 #: src/Dialogs/dlgConfigWaypoints.cpp:115
-#: src/Dialogs/dlgWaypointDetails.cpp:181
-#: src/Dialogs/dlgWaypointDetails.cpp:190
-#: src/Dialogs/dlgWaypointDetails.cpp:232
-#: src/Dialogs/dlgWaypointDetails.cpp:237
-#: src/Dialogs/dlgWaypointDetails.cpp:265
-#: src/Dialogs/dlgWaypointDetails.cpp:270
+#: src/Dialogs/dlgWaypointDetails.cpp:162
+#: src/Dialogs/dlgWaypointDetails.cpp:171
+#: src/Dialogs/dlgWaypointDetails.cpp:213
+#: src/Dialogs/dlgWaypointDetails.cpp:218
+#: src/Dialogs/dlgWaypointDetails.cpp:246
+#: src/Dialogs/dlgWaypointDetails.cpp:251
+#: src/Dialogs/dlgWaypointDetails.cpp:315
 #: src/Dialogs/dlgWaypointDetails.cpp:334
-#: src/Dialogs/dlgWaypointDetails.cpp:353
-#: src/Dialogs/dlgWaypointDetails.cpp:362 src/Dialogs/dlgNOAAList.cpp:125
+#: src/Dialogs/dlgWaypointDetails.cpp:343 src/Dialogs/dlgNOAAList.cpp:125
 #: src/Dialogs/dlgNOAAList.cpp:132 src/Dialogs/dlgNOAAList.cpp:242
 #: src/Dialogs/dlgNOAADetails.cpp:132
 msgid "Error"
@@ -3331,7 +3335,7 @@ msgid "Plane Polar"
 msgstr "Polair du planeur"
 
 #: src/Dialogs/dlgPlanePolar.cpp:58 src/Dialogs/dlgConfiguration.cpp:105
-#: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:128
+#: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:129
 #: Data/Dialogs/dlgPlaneDetails_L.xml:23 Data/Dialogs/dlgPlaneDetails.xml:27
 #: Data/Dialogs/dlgPlanePolar_L.xml:5 Data/Dialogs/dlgPlanePolar.xml:5
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:5
@@ -3342,12 +3346,12 @@ msgstr "Polaire"
 
 #. let the user select
 #: src/Dialogs/dlgPlanePolar.cpp:137
-#: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:182
+#: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:183
 msgid "Load Polar"
 msgstr "Chargement de la polaire"
 
 #: src/Dialogs/dlgPlanePolar.cpp:196
-#: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:244
+#: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:245
 msgid "Load Polar From File"
 msgstr "Charge la polaire depuis le fichier"
 
@@ -3393,8 +3397,7 @@ msgid "Elements"
 msgstr "Eléments de la carte"
 
 #: src/Dialogs/dlgConfiguration.cpp:88
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:11
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:11
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:104
 #, no-c-format
 msgid "Waypoints"
 msgstr ""
@@ -3480,22 +3483,22 @@ msgstr "Fonctionnalités expérimentales"
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr "Paramétrage sauvegardé. Redémarrez XCSoar."
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:101
+#: src/Dialogs/dlgConfigInfoboxes.cpp:102
 msgid "Overwrite?"
 msgstr "Écraser ?"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:101
+#: src/Dialogs/dlgConfigInfoboxes.cpp:102
 msgid "InfoBox paste"
 msgstr "Coller l'InfoBox"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:187 Data/Dialogs/dlgPlanePolar_L.xml:6
+#: src/Dialogs/dlgConfigInfoboxes.cpp:188 Data/Dialogs/dlgPlanePolar_L.xml:6
 #: Data/Dialogs/dlgPlanePolar.xml:6
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:6
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:6
 msgid "Invalid"
 msgstr "Invalide"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:228 src/Dialogs/dlgWaypointEdit.cpp:53
+#: src/Dialogs/dlgConfigInfoboxes.cpp:229 src/Dialogs/dlgWaypointEdit.cpp:53
 #: Data/Dialogs/dlgAirspaceDetails.xml:8
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:6 Data/Dialogs/dlgAirspaceSelect.xml:8
 #: Data/Dialogs/dlgWaypointEdit_L.xml:6 Data/Dialogs/dlgWaypointEdit.xml:6
@@ -3503,19 +3506,19 @@ msgstr "Invalide"
 msgid "Name"
 msgstr "Nom"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:242
+#: src/Dialogs/dlgConfigInfoboxes.cpp:243
 msgid "Panel name"
 msgstr "Nom du tableau de bord"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:390
+#: src/Dialogs/dlgConfigInfoboxes.cpp:391
 msgid "Content"
 msgstr "Contenu"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:423
+#: src/Dialogs/dlgConfigInfoboxes.cpp:424
 msgid "Copy"
 msgstr "Copier"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:429
+#: src/Dialogs/dlgConfigInfoboxes.cpp:430
 msgid "Paste"
 msgstr "Coller"
 
@@ -3657,7 +3660,7 @@ msgid "Display airspaces below the glider or within a margin."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:64
-#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:151
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:179
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:54
 #, no-c-format
 msgid "Default"
@@ -3957,23 +3960,96 @@ msgid ""
 "XCSoar's internal wind calculation."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:106
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:108
+#, fuzzy
+msgid "Auto. blank"
+msgstr "Vent auto."
+
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:109
+msgid ""
+"This determines whether to blank the display after a long period of "
+"inactivity when operating on internal battery power."
+msgstr ""
+
+#. Expert item (TODO)
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:115
+msgid "Events"
+msgstr "Évènements"
+
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:116
+msgid ""
+"The Input Events file defines the menu system and how XCSoar responds to "
+"button presses and events from external devices."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:121
+#, fuzzy
+msgid "Language"
+msgstr "Langue*"
+
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:122
+msgid ""
+"The language options selects translations for English texts to other "
+"languages. Select English for a native interface or Automatic to localise "
+"XCSoar according to the system settings."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:127
 msgid "Automatic"
 msgstr "Automatique"
 
-#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:107
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:128
 msgid "English"
 msgstr "Anglais"
 
-#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:152
+#. Expert item
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:166
+msgid "Status message"
+msgstr "Message d'état"
+
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:167
+msgid ""
+"The status file can be used to define sounds to be played when certain "
+"events occur, and how long various status messages will appear on screen."
+msgstr ""
+"Le fichier de statut peut être utilisé pour définir les sons à jouer lorsque "
+"certains évènements se produisent, et combien de temps les divers messages "
+"de statut apparaissent à l'écran."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:172
+msgid "Menu timeout"
+msgstr "Tps Sortie Menu"
+
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:173
+msgid ""
+"This determines how long menus will appear on screen if the user does not "
+"make any button presses or interacts with the computer."
+msgstr ""
+"Ceci détermine combien de temps sont affichés les menus à l'écran si "
+"l'utilisateur n'appuie sur aucun bouton ou n'interagit pas avec l'appareil."
+
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:180
 #, no-c-format
 msgid "Keyboard"
 msgstr "Clavier"
 
-#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:153
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:181
 #, no-c-format
 msgid "HighScore Style"
 msgstr ""
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:186
+msgid "Text input style"
+msgstr "Style de saisie du texte"
+
+#: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:187
+#, fuzzy
+msgid ""
+"Determines how the user is prompted for text input (filename, teamcode etc.)"
+msgstr ""
+"Détermine comment l'écran est orienté lorsque le planeur est en transition."
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:52
 #, no-c-format
@@ -4458,14 +4534,16 @@ msgstr "Page"
 msgid "Determines the information displayed on different screen pages."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:281
+#: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:282
 msgid "Polar name"
 msgstr "Nom de la polaire"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:105
 #, no-c-format
 msgid "Neither airspace nor terrain is used for route planning."
-msgstr "Ni l'espace aérien ni le relief ne seront utilisés pour la planification de la route."
+msgstr ""
+"Ni l'espace aérien ni le relief ne seront utilisés pour la planification de "
+"la route."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:107
 #, no-c-format
@@ -4586,7 +4664,7 @@ msgid "Uses task glide polar."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:159
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:84
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:85
 #, no-c-format
 msgid "Safety MC"
 msgstr "Mc de Sécurité"
@@ -4607,43 +4685,43 @@ msgid ""
 "and alternate calculations."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:61
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:62
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:9
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:9
 #, fuzzy
 msgid "Arrival height"
 msgstr "Altitude arrivée"
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:62
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:63
 msgid ""
 "The height above terrain that the glider should arrive at for a safe landing."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:67
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:68
 msgid "Terrain height"
 msgstr "Hauteur Sol"
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:68
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:69
 msgid "The height above terrain that the glider must clear during final glide."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:74
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:154
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:75
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:105
 #, no-c-format
 msgid "Simple"
 msgstr "Simple"
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:76
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:77
 #, no-c-format
 msgid "Home"
 msgstr "Accueil"
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:80
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:81
 #, fuzzy
 msgid "Alternates mode"
 msgstr "Déroutements"
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:81
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:82
 msgid ""
 "Determines sorting of alternates in the alternates dialog and in abort "
 "mode:\n"
@@ -4654,7 +4732,7 @@ msgid ""
 "to the configured home waypoint."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:85
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:86
 msgid ""
 "The MacCready setting used, when safety MC is enabled for reach "
 "calculations, in task abort mode and for determining arrival altitude at "
@@ -4664,32 +4742,288 @@ msgstr ""
 "calcul du local, en mode annulation de circuit et pour déterminer l'altitude "
 "d'arrivée sur les aérodromes."
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:90
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:91
 msgid "STF risk factor"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:91
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:92
 msgid ""
 "The STF risk factor reduces the MacCready setting used to calculate speed to "
 "fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for "
 "no compensation, 1.0 scales MC linearly with height."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:101
-msgid "Arrow head"
-msgstr "Pointe de flèche"
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:97
+msgid "Predict wind drift"
+msgstr ""
 
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:102
-msgid "Full arrow"
-msgstr "Flèche Complète"
+#: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:98
+msgid ""
+"Account for wind drift for the predicted circling duration. This reduces the "
+"arrival height for legs with head wind."
+msgstr ""
 
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:155
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:99
+msgid "Map database"
+msgstr "Carte"
+
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:100
+msgid ""
+"The name of the file (.xcm) containing terrain, topography, and optionally "
+"waypoints, their details and airspaces."
+msgstr ""
+"Le nom du fichier (.xcm) contenant le relief, la topographie, et parfois les "
+"points de virage, leur détails et l'espace aérien."
+
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:105
+msgid ""
+"Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
+"dat), Zander files (.wpz) or SeeYou files (.cup)."
+msgstr ""
+
+#. Expert item (TODO)
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:110
+msgid "More waypoints"
+msgstr "Plus de waypoints"
+
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:111
+msgid ""
+"Secondary waypoints file.  This may be used to add waypoints for a "
+"competition."
+msgstr ""
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:115
+#, fuzzy
+msgid "Watched waypoints"
+msgstr "ajouter point de virage"
+
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:116
+msgid ""
+"Waypoint file containing special waypoints for which additional computations "
+"like calculation of arrival height in map display always takes place. Useful "
+"for waypoints like known reliable thermal sources (e.g. powerplants) or "
+"mountain passes."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:121
+msgid "Airspaces"
+msgstr "Espaces aériens"
+
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:121
+msgid "The file name of the primary airspace file."
+msgstr "Le nom du premier fichier d'espace aérien."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:125
+msgid "More airspaces"
+msgstr "Plus d'esp. aér."
+
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:125
+msgid "The file name of the secondary airspace file."
+msgstr "Le nom du second fichier d'espace aérien."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:129
+msgid "Terrain file"
+msgstr "Relief"
+
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:129
+msgid "The name of the file containing digital elevation terrain data."
+msgstr "Le nom du fichier contenant les données d'élévation du terrain."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:133
+msgid "Topography file"
+msgstr "Topographie"
+
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:133
+#, fuzzy
+msgid "Specifies the file defining the topographical features."
+msgstr "Spécifie le mode de remplissage de l'espace aérien."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:137
+msgid "Waypoint details"
+msgstr "Détails waypoints"
+
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:138
+msgid ""
+"The file may contain extracts from enroute supplements or other contributed "
+"information about individual waypoints and airfields."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:81
+#, no-c-format
+msgid "Disable display of track bearing."
+msgstr "Désactiver l'affichage de la route."
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:82
+#, no-c-format
+msgid "Always display track bearing."
+msgstr "Toujours afficher la route."
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:83
+#, no-c-format
+msgid ""
+"Display track bearing if there is a significant difference to plane heading."
+msgstr ""
+"Afficher la route si il y a une différence significative avec la "
+"trajectoire du planeur."
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:87
+#, no-c-format
+msgid ""
+"Determines whether and how long a snail trail is drawn behind the glider."
+msgstr ""
+"Détermine si la trace en spirale est déviée avec le vent quand elle est "
+"affichée en mode spirale."
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:96
+#, no-c-format
+msgid "Sets the type of the snail trail display."
+msgstr "Choisit le type de la trace en spirale à afficher."
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:98
+#, no-c-format
+msgid "Vario #1"
+msgstr "Vario #1"
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:99
+#, no-c-format
+msgid "Vario #2"
+msgstr "Vario #2"
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:106
+#, no-c-format
+msgid "Simplified line graphics, black with white contours."
+msgstr "Symbole simplifié, lignes noires avec contours blancs."
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:107
+#, no-c-format
 msgid "Simple (large)"
 msgstr "Simple (large)"
 
-#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:156
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:108
+#, no-c-format
+msgid "Enlarged simple graphics."
+msgstr "Symbole simplifié agrandi."
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:109
+#, no-c-format
 msgid "Detailed"
 msgstr "Détaillé"
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:110
+#, no-c-format
+msgid "Detailed rendered aircraft graphics."
+msgstr "Symbole du planeur détaillé."
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:115
+#, no-c-format
+msgid "Arrow head"
+msgstr "Pointe de flèche"
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:115
+#, no-c-format
+msgid "Draws an arrow head only."
+msgstr "Affiche seulement la tête de la flèche."
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:116
+#, no-c-format
+msgid "Full arrow"
+msgstr "Flèche Complète"
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:116
+#, no-c-format
+msgid "Draws an arrow head with a dashed arrow line."
+msgstr "Affiche la tête de la flèche et une ligne en pointillés."
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:127
+#, fuzzy
+msgid "Track bearing"
+msgstr "branche"
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:128
+msgid "Display the track bearing (ground track projection) on the map."
+msgstr "Afficher la route sur la carte (la projection au sol de la route)."
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:131
+msgid "FLARM traffic"
+msgstr "Trafic FLARM"
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:131
+msgid "This enables the display of FLARM traffic on the map window."
+msgstr ""
+
+#. Expert item (TODO)
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:135
+msgid "Trail length"
+msgstr "Longueur Trace"
+
+#. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
+#. Expert item
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:138
+#: Data/Dialogs/dlgWindSettings.xml:16
+#: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:8
+msgid "Trail drift"
+msgstr "Dérive Compensée"
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:139
+#: Data/Dialogs/dlgWindSettings.xml:16
+#: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:8
+msgid ""
+"Determines whether the snail trail is drifted with the wind when displayed "
+"in circling mode."
+msgstr ""
+"Détermine si la trace en spirale est déviée avec le vent quand elle est "
+"affichée en mode spirale."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:144
+#, fuzzy
+msgid "Trail type"
+msgstr "Type de circuit"
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:147
+#, fuzzy
+msgid "Trail scaled"
+msgstr "Longueur Trace"
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:148
+msgid ""
+"If set to ON the snail trail width is scaled according to the vario signal."
+msgstr ""
+"Si sur ON, la largeur de la trace en spirale est proportionnelle au signal "
+"du vario."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:152
+msgid "Detour cost markers"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:153
+msgid ""
+"If the aircraft heading deviates from the current waypoint, markers are "
+"displayed at points ahead of the aircraft. The value of each marker is the "
+"extra distance required to reach that point as a percentage of straight-line "
+"distance to the waypoint."
+msgstr ""
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:159
+msgid "Aircraft symbol"
+msgstr "Symbole planeur"
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:162
+msgid "Wind arrow"
+msgstr "Flèche de Vent"
+
+#: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:162
+msgid "Determines the way the wind arrow is drawn on the map."
+msgstr "Détermine la façon dont la flèche du vent est affiché sur la carte."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:74
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:88
@@ -5448,66 +5782,66 @@ msgstr "Non trouvé"
 msgid "Weather parameters"
 msgstr "Paramètres météo"
 
-#: src/Dialogs/dlgWaypointDetails.cpp:181
-#: src/Dialogs/dlgWaypointDetails.cpp:232
-#: src/Dialogs/dlgWaypointDetails.cpp:265
-#: src/Dialogs/dlgWaypointDetails.cpp:353
+#: src/Dialogs/dlgWaypointDetails.cpp:162
+#: src/Dialogs/dlgWaypointDetails.cpp:213
+#: src/Dialogs/dlgWaypointDetails.cpp:246
+#: src/Dialogs/dlgWaypointDetails.cpp:334
 msgid "No task defined."
 msgstr "Pas de circuit défini."
 
-#: src/Dialogs/dlgWaypointDetails.cpp:185
+#: src/Dialogs/dlgWaypointDetails.cpp:166
 msgid "No active task point."
 msgstr "Pas de point actif dans le circuit."
 
-#: src/Dialogs/dlgWaypointDetails.cpp:185
+#: src/Dialogs/dlgWaypointDetails.cpp:166
 msgid "Replace in task"
 msgstr "Remplacer dans circuit"
 
-#: src/Dialogs/dlgWaypointDetails.cpp:190
-#: src/Dialogs/dlgWaypointDetails.cpp:237
-#: src/Dialogs/dlgWaypointDetails.cpp:270
-#: src/Dialogs/dlgWaypointDetails.cpp:362
+#: src/Dialogs/dlgWaypointDetails.cpp:171
+#: src/Dialogs/dlgWaypointDetails.cpp:218
+#: src/Dialogs/dlgWaypointDetails.cpp:251
+#: src/Dialogs/dlgWaypointDetails.cpp:343
 msgid "Task would not be valid after the change."
 msgstr "Le circuit ne serait pas valide après modification."
 
-#: src/Dialogs/dlgWaypointDetails.cpp:241
-#: src/Dialogs/dlgWaypointDetails.cpp:274
+#: src/Dialogs/dlgWaypointDetails.cpp:222
+#: src/Dialogs/dlgWaypointDetails.cpp:255
 msgid "Created Goto Task."
 msgstr ""
 
-#: src/Dialogs/dlgWaypointDetails.cpp:241
-#: src/Dialogs/dlgWaypointDetails.cpp:246
-#: src/Dialogs/dlgWaypointDetails.cpp:274
-#: src/Dialogs/dlgWaypointDetails.cpp:279
+#: src/Dialogs/dlgWaypointDetails.cpp:222
+#: src/Dialogs/dlgWaypointDetails.cpp:227
+#: src/Dialogs/dlgWaypointDetails.cpp:255
+#: src/Dialogs/dlgWaypointDetails.cpp:260
 msgid "Success"
 msgstr ""
 
-#: src/Dialogs/dlgWaypointDetails.cpp:246
-#: src/Dialogs/dlgWaypointDetails.cpp:279
+#: src/Dialogs/dlgWaypointDetails.cpp:227
+#: src/Dialogs/dlgWaypointDetails.cpp:260
 msgid "Created 2-point task from Goto Task."
 msgstr ""
 
-#: src/Dialogs/dlgWaypointDetails.cpp:322
+#: src/Dialogs/dlgWaypointDetails.cpp:303
 msgid "Clear current task?"
 msgstr "Effacer circuit actuel?"
 
-#: src/Dialogs/dlgWaypointDetails.cpp:323
+#: src/Dialogs/dlgWaypointDetails.cpp:304
 msgid "Goto and clear task"
 msgstr "Aller à et effacer circuit"
 
-#: src/Dialogs/dlgWaypointDetails.cpp:334
+#: src/Dialogs/dlgWaypointDetails.cpp:315
 msgid "Unknown error creating task."
 msgstr "Erreur inconnue lors de la création du circuit."
 
-#: src/Dialogs/dlgWaypointDetails.cpp:357
+#: src/Dialogs/dlgWaypointDetails.cpp:338
 msgid "Waypoint not in task."
 msgstr "Point de virage pas dans le circuit."
 
-#: src/Dialogs/dlgWaypointDetails.cpp:357
+#: src/Dialogs/dlgWaypointDetails.cpp:338
 msgid "Remove from task"
 msgstr "Enlever du circuit"
 
-#: src/Dialogs/dlgWaypointDetails.cpp:413
+#: src/Dialogs/dlgWaypointDetails.cpp:403
 #: Data/Dialogs/dlgWaypointDetails_L.xml:3
 #: Data/Dialogs/dlgWaypointDetails.xml:3
 msgid "Waypoint Info"
@@ -5715,14 +6049,6 @@ msgstr ""
 "Activer la lecture vocale de la hauteur au-dessus/dessous du plan d'arrivée "
 "en arrivée."
 
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:29
-msgid ""
-"If set to ON the snail trail width is scaled according to the vario signal."
-msgstr ""
-"Si sur ON, la largeur de la trace en spirale est proportionnelle au signal "
-"du vario."
-
 #: Data/Dialogs/dlgVario_L.xml:12 Data/Dialogs/dlgVario.xml:13
 msgid "TE port"
 msgstr ""
@@ -5800,11 +6126,6 @@ msgstr ""
 msgid "Pilot"
 msgstr "Pilote"
 
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:26
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:26
-msgid "The file name of the primary airspace file."
-msgstr "Le nom du premier fichier d'espace aérien."
-
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:9
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:9
 msgid "Determines how arrival height is displayed in waypoint labels"
@@ -5846,11 +6167,6 @@ msgid ""
 "Optional the amount of water ballast XCSoar refers to as 100% ballast. Set "
 "to zero if it does not apply."
 msgstr ""
-
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:34
-msgid "Terrain file"
-msgstr "Relief"
 
 #: Data/Dialogs/pnlTaskProperties_L.xml:7 Data/Dialogs/pnlTaskProperties.xml:6
 msgid "Minimum AAT task time in minutes."
@@ -5949,12 +6265,6 @@ msgid ""
 "is maximum AAT distance."
 msgstr ""
 
-#: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:9
-#, fuzzy
-msgid "Language"
-msgstr "Langue*"
-
 #: Data/Dialogs/dlgVario_L.xml:382 Data/Dialogs/dlgVario.xml:383
 msgid "Battery low delay"
 msgstr "Délai batterie faible"
@@ -5967,15 +6277,6 @@ msgstr "On-Line Contest"
 #: Data/Dialogs/dlgVario_L.xml:342 Data/Dialogs/dlgVario.xml:343
 msgid "Privacy"
 msgstr "Confidentialité"
-
-#: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:19
-#: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:19
-msgid ""
-"This determines how long menus will appear on screen if the user does not "
-"make any button presses or interacts with the computer."
-msgstr ""
-"Ceci détermine combien de temps sont affichés les menus à l'écran si "
-"l'utilisateur n'appuie sur aucun bouton ou n'interagit pas avec l'appareil."
 
 #: Data/Dialogs/dlgStatusTask.xml:10 Data/Dialogs/dlgTarget_L.xml:33
 #: Data/Dialogs/dlgTarget.xml:15 Data/Dialogs/pnlTaskCalculator_L.xml:33
@@ -6029,16 +6330,6 @@ msgstr "Alt Baro"
 #: Data/Dialogs/pnlStatusFlight.xml:4
 msgid "Latitude"
 msgstr "Latitude"
-
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:39
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:39
-msgid "Topography file"
-msgstr "Topographie"
-
-#: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:4
-msgid "Events"
-msgstr "Évènements"
 
 #: Data/Dialogs/pnlTaskList_L.xml:11 Data/Dialogs/pnlTaskList.xml:7
 msgid "Declare"
@@ -6104,11 +6395,6 @@ msgstr ""
 "style très contrasté (une seule couleur), ou du orange. Le rendu est "
 "différent pour les champs vachables et les aérodromes. Les points "
 "accessibles sont affichés en vert quel que soit le style."
-
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:30
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:30
-msgid "The file name of the secondary airspace file."
-msgstr "Le nom du second fichier d'espace aérien."
 
 #: Data/Dialogs/pnlTaskProperties_L.xml:40
 #: Data/Dialogs/pnlTaskProperties.xml:39
@@ -6189,13 +6475,6 @@ msgstr "Réglage manuel de la direction du vent."
 msgid "Picker"
 msgstr ""
 
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:43
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:43
-msgid ""
-"The file may contain extracts from enroute supplements or other contributed "
-"information about individual waypoints and airfields."
-msgstr ""
-
 #: Data/Dialogs/dlgStatusAircraft.xml:7 Data/Dialogs/pnlStatusTimes.xml:4
 #: Data/Dialogs/Configuration/TimeConfigPanel_L.xml:10
 #: Data/Dialogs/Configuration/TimeConfigPanel.xml:9
@@ -6248,19 +6527,6 @@ msgstr "Activer"
 msgid "Height"
 msgstr "Hauteur"
 
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:39
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:39
-msgid ""
-"Sets the symbol used for the aircraft.\n"
-"[Simple] Simplified line graphics, black with white contours.\n"
-"[Simple (large)] Enlarged simple graphics.\n"
-"[Detailed] Rendered aircraft graphics."
-msgstr ""
-"Détermine le symbole utilisé pour le planeur.\n"
-"[Simple] Symbole simplifié, lignes noires avec contours blancs.\n"
-"[Simple (large)] Symbole simplifié agrandi.\n"
-"[Détaillé] Symbole du planeur détaillé."
-
 #: Data/Dialogs/dlgConfigFonts_L.xml:13 Data/Dialogs/dlgConfigFonts.xml:13
 msgid "InfoBox values, normal"
 msgstr ""
@@ -6278,17 +6544,6 @@ msgstr "Point d'arrivé"
 #: Data/Dialogs/dlgTeamCode_L.xml:18 Data/Dialogs/dlgTeamCode.xml:17
 msgid "Rel. bearing"
 msgstr "Cap Réel"
-
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:44
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:44
-msgid ""
-"Determines the way the wind arrow is drawn on the map.\n"
-"[Arrow head] Draws an arrow head only\n"
-"[Full arrow] Draws an arrow head with a dashed arrow line"
-msgstr ""
-"Détermine la façon dont la flèche du vent est affiché sur la carte.\n"
-"[Arrow head] Affiche seulement la tête de la flèche.\n"
-"[Full arrow] Affiche la tête de la flèche et une ligne en pointillés."
 
 #: Data/Dialogs/dlgSwitches.xml:35
 msgid "Speed command"
@@ -6348,11 +6603,6 @@ msgstr ""
 msgid "TE static cal."
 msgstr ""
 
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:43
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:43
-msgid "Waypoint details"
-msgstr "Détails waypoints"
-
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel_L.xml:25
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel.xml:22
 msgid "Start max. height margin"
@@ -6384,11 +6634,6 @@ msgstr "Symboles terrains posables"
 #: Data/Dialogs/dlgWaypointDetails.xml:32
 msgid "Pan To Waypoint"
 msgstr ""
-
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:9
-msgid "FLARM traffic"
-msgstr "Trafic FLARM"
 
 #: Data/Dialogs/dlgVario_L.xml:401 Data/Dialogs/dlgVario.xml:402
 msgid "V terrain"
@@ -6426,21 +6671,6 @@ msgstr "importer"
 msgid "Cruise volume"
 msgstr "Volume en transition"
 
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:4
-msgid ""
-"Display the track bearing (ground track projection) on the map.\n"
-"[Off] Disable display of track bearing.\n"
-"[On] Always display track bearing.\n"
-"[Auto] Display track bearing if there is a significant difference to plane "
-"heading."
-msgstr ""
-"Afficher la route sur la carte (la projection au sol de la route).\n"
-"[Off] Désactiver l'affichage de la route.\n"
-"[On] Toujours afficher la route.\n"
-"[Auto] Afficher la route si il y a une différence significative avec la "
-"trajectoire du planeur."
-
 #: Data/Dialogs/pnlTaskManagerClose_L.xml:8
 #: Data/Dialogs/pnlTaskManagerClose.xml:8
 msgid "Revert Changes"
@@ -6454,15 +6684,6 @@ msgstr "Annuler les modifications"
 #: Data/Dialogs/dlgVario.xml:229 Data/Dialogs/dlgVario.xml:251
 msgid "Beep type"
 msgstr "Type de beep"
-
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:6
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:6
-msgid ""
-"The name of the file (.xcm) containing terrain, topography, and optionally "
-"waypoints, their details and airspaces."
-msgstr ""
-"Le nom du fichier (.xcm) contenant le relief, la topographie, et parfois les "
-"points de virage, leur détails et l'espace aérien."
 
 #: Data/Dialogs/dlgVario_L.xml:421 Data/Dialogs/dlgVario.xml:422
 msgid "V flap"
@@ -6493,11 +6714,6 @@ msgstr ""
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:39
 msgid "Wing area"
 msgstr "Surface alaire"
-
-#: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:14
-msgid "Status message"
-msgstr "Message d'état"
 
 #: Data/Dialogs/dlgTeamCode_L.xml:3 Data/Dialogs/dlgTeamCode.xml:3
 msgid "Team Code"
@@ -6543,31 +6759,10 @@ msgstr ""
 msgid "Dry mass"
 msgstr ""
 
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:34
-msgid "The name of the file containing digital elevation terrain data."
-msgstr "Le nom du fichier contenant les données d'élévation du terrain."
-
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:17
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:17
 msgid "Lift"
 msgstr "Ascendance"
-
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:21
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:21
-#, fuzzy
-msgid "Watched waypoints"
-msgstr "ajouter point de virage"
-
-#: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:14
-msgid ""
-"The status file can be used to define sounds to be played when certain "
-"events occur, and how long various status messages will appear on screen."
-msgstr ""
-"Le fichier de statut peut être utilisé pour définir les sons à jouer lorsque "
-"certains évènements se produisent, et combien de temps les divers messages "
-"de statut apparaissent à l'écran."
 
 #: Data/Dialogs/dlgConfiguration_L.xml:16 Data/Dialogs/dlgConfiguration.xml:16
 #, fuzzy
@@ -6581,17 +6776,6 @@ msgstr "Intervalle; info"
 #: Data/Dialogs/pnlStatusTask.xml:10
 msgid "Speed average"
 msgstr "Vitesse Moyenne"
-
-#: Data/Dialogs/dlgWindSettings.xml:16
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:19
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:19
-#: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:8
-msgid ""
-"Determines whether the snail trail is drifted with the wind when displayed "
-"in circling mode."
-msgstr ""
-"Détermine si la trace en spirale est déviée avec le vent quand elle est "
-"affichée en mode spirale."
 
 #: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:14
 #: Data/Dialogs/Configuration/TrackingConfigPanel.xml:14
@@ -6618,11 +6802,6 @@ msgstr ""
 msgid "Determines how labels are displayed with each waypoint"
 msgstr ""
 "Détermine comment les étiquettes sont affichées sur chaque point de virage."
-
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:16
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:16
-msgid "More waypoints"
-msgstr "Plus de waypoints"
 
 #: Data/Dialogs/dlgVario_L.xml:3 Data/Dialogs/dlgVario.xml:3
 msgid "Vario Configuration"
@@ -6669,12 +6848,6 @@ msgstr "Échelle de temps utilisée pour la moyenne du vario."
 msgid "FLARM connected"
 msgstr "FLARM connecté"
 
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:24
-#, fuzzy
-msgid "Trail type"
-msgstr "Type de circuit"
-
 #: Data/Dialogs/dlgStatusTask.xml:4 Data/Dialogs/pnlStatusTask.xml:4
 #: Data/Dialogs/pnlTaskCalculator_L.xml:10
 msgid "Assigned task time"
@@ -6694,12 +6867,6 @@ msgstr "Cambridge"
 msgid "Default radius or gate width of the start zone for new tasks."
 msgstr ""
 "Rayon ou longueur par défaut de la zone de départ des nouveaux circuits."
-
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:4
-#, fuzzy
-msgid "Track bearing"
-msgstr "branche"
 
 #: Data/Dialogs/dlgVoice.xml:22
 msgid "MacCready"
@@ -6739,15 +6906,6 @@ msgstr "Heure décollage"
 #: Data/Dialogs/dlgConfigFonts_L.xml:10 Data/Dialogs/dlgConfigFonts.xml:10
 msgid "InfoBox titles"
 msgstr "Titres des InfoBoxes"
-
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:21
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:21
-msgid ""
-"Waypoint file containing special waypoints for which additional computations "
-"like calculation of arrival height in map display always takes place. Useful "
-"for waypoints like known reliable thermal sources (e.g. powerplants) or "
-"mountain passes."
-msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:15
 msgid "Flap neutral"
@@ -6815,11 +6973,6 @@ msgstr ""
 msgid "Details"
 msgstr "Détails"
 
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:24
-msgid "Sets the type of the snail trail display."
-msgstr "Choisit le type de la trace en spirale à afficher."
-
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:32
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:32
 msgid "Units used for task speeds."
@@ -6871,12 +7024,6 @@ msgstr ""
 msgid "Select"
 msgstr "Sélectionner"
 
-#: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:29
-#, fuzzy
-msgid "Auto. blank"
-msgstr "Vent auto."
-
 #: Data/Dialogs/dlgVoice.xml:6
 msgid "Climb rate"
 msgstr "Taux de montée"
@@ -6889,20 +7036,6 @@ msgstr ""
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:17
 msgid "Terrain brightness"
 msgstr "luminosité relief"
-
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:34
-msgid "Detour cost markers"
-msgstr ""
-
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:34
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:34
-msgid ""
-"If the aircraft heading deviates from the current waypoint, markers are "
-"displayed at points ahead of the aircraft. The value of each marker is the "
-"extra distance required to reach that point as a percentage of straight-line "
-"distance to the waypoint."
-msgstr ""
 
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:3
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:3
@@ -7015,12 +7148,6 @@ msgstr ""
 msgid "Finish radial"
 msgstr "Radiale N°2"
 
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:39
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:39
-#, fuzzy
-msgid "Specifies the file defining the topographical features."
-msgstr "Spécifie le mode de remplissage de l'espace aérien."
-
 #: Data/Dialogs/pnlTaskProperties_L.xml:7 Data/Dialogs/pnlTaskProperties.xml:6
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:42
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:42
@@ -7082,11 +7209,6 @@ msgstr ""
 msgid "Gear down"
 msgstr "Train sorti"
 
-#: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:18
-#: Data/Dialogs/Configuration/TrackingConfigPanel.xml:18
-msgid "Password"
-msgstr ""
-
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid "TE vario"
 msgstr ""
@@ -7094,6 +7216,11 @@ msgstr ""
 #: Data/Dialogs/dlgWeather.xml:4
 msgid "Field"
 msgstr "Champ"
+
+#: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:18
+#: Data/Dialogs/Configuration/TrackingConfigPanel.xml:18
+msgid "Password"
+msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:72 Data/Dialogs/dlgVario.xml:73
 msgid "Climb fast trigger"
@@ -7202,14 +7329,14 @@ msgstr "OK Jour"
 msgid "Headset threshold"
 msgstr ""
 
+#: Data/Dialogs/dlgTarget_L.xml:23
+msgid "ETE"
+msgstr "ETA"
+
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:22
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:22
 msgid "Terrain colors"
 msgstr "couleur relief"
-
-#: Data/Dialogs/dlgTarget_L.xml:23
-msgid "ETE"
-msgstr "ETA"
 
 #: Data/Dialogs/dlgSwitches.xml:11
 msgid "Flap positive"
@@ -7234,26 +7361,19 @@ msgstr ""
 msgid "ASI cal."
 msgstr ""
 
+#: Data/Dialogs/dlgWaypointSelect_L.xml:1 Data/Dialogs/dlgWaypointSelect.xml:1
+msgid "Select Waypoint"
+msgstr "Select. Waypoint"
+
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:6
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:6
 #, fuzzy
 msgid "Load Preset"
 msgstr "Chargement de la polaire"
 
-#: Data/Dialogs/dlgWaypointSelect_L.xml:1 Data/Dialogs/dlgWaypointSelect.xml:1
-msgid "Select Waypoint"
-msgstr "Select. Waypoint"
-
 #: Data/Dialogs/dlgVario_L.xml:336 Data/Dialogs/dlgVario.xml:337
 msgid "No aircraft type"
 msgstr "Pas de type d'aéronef"
-
-#: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:29
-msgid ""
-"This determines whether to blank the display after a long period of "
-"inactivity when operating on internal battery power."
-msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:12 Data/Dialogs/dlgVario.xml:13
 msgid "Whether the Total Energy port is connected."
@@ -7400,11 +7520,6 @@ msgstr ""
 msgid "Cruise low cutoff"
 msgstr ""
 
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:44
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:44
-msgid "Wind arrow"
-msgstr "Flèche de Vent"
-
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid ""
 "This produces a fake TE vario gross vertical velocity.  It can be used when "
@@ -7441,12 +7556,6 @@ msgstr "OK Esp."
 #: Data/Dialogs/dlgPlaneDetails_L.xml:33 Data/Dialogs/dlgPlaneDetails.xml:39
 msgid "Max. Ballast"
 msgstr ""
-
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:29
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:29
-#, fuzzy
-msgid "Trail scaled"
-msgstr "Longueur Trace"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:15
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:7
@@ -7488,11 +7597,6 @@ msgstr ""
 #: Data/Dialogs/dlgConfigFonts_L.xml:6 Data/Dialogs/dlgConfigFonts.xml:6
 msgid "Customize fonts"
 msgstr "Personnaliser Polices"
-
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:39
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:39
-msgid "Aircraft symbol"
-msgstr "Symbole planeur"
 
 #: Data/Dialogs/pnlTaskEdit_L.xml:12 Data/Dialogs/pnlTaskEdit.xml:13
 msgid "Clear All"
@@ -7538,14 +7642,6 @@ msgid ""
 "[NET MC/2] LIFT tone when airmass velocity greater than half MC."
 msgstr ""
 
-#: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:9
-msgid ""
-"The language options selects translations for English texts to other "
-"languages. Select English for a native interface or Automatic to localise "
-"XCSoar according to the system settings."
-msgstr ""
-
 #: Data/Dialogs/pnlStatusRules.xml:8
 msgid "Start speed"
 msgstr "Vitesse départ"
@@ -7564,15 +7660,15 @@ msgstr ""
 msgid "Whether to show the gross climb rate."
 msgstr "Affiche ou non le pourcentage des ballasts."
 
+#: Data/Dialogs/dlgVario_L.xml:332 Data/Dialogs/dlgVario.xml:333
+msgid "No mode reports"
+msgstr ""
+
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:4
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:4
 #, fuzzy
 msgid "Draw a digital elevation terrain on the map."
 msgstr "Le nom du fichier contenant les données d'élévation du terrain."
-
-#: Data/Dialogs/dlgVario_L.xml:332 Data/Dialogs/dlgVario.xml:333
-msgid "No mode reports"
-msgstr ""
 
 #: Data/Dialogs/Configuration/AirspaceConfigPanel_L.xml:4
 #: Data/Dialogs/Configuration/AirspaceConfigPanel.xml:4
@@ -7653,11 +7749,6 @@ msgstr "Unités utilisées pour les vitesses du circuit."
 msgid "Remaining time"
 msgstr "Temps restant"
 
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:30
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:30
-msgid "More airspaces"
-msgstr "Plus d'esp. aér."
-
 #: Data/Dialogs/dlgAirspaceColours_L.xml:3
 #: Data/Dialogs/dlgAirspaceColours.xml:3
 msgid "Select Colour"
@@ -7695,21 +7786,9 @@ msgstr "Parcourir"
 msgid "New Task"
 msgstr ""
 
-#: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:4
-msgid ""
-"The Input Events file defines the menu system and how XCSoar responds to "
-"button presses and events from external devices."
-msgstr ""
-
 #: Data/Dialogs/dlgVario_L.xml:84 Data/Dialogs/dlgVario.xml:85
 msgid "Time scale used for cruise speed command averager."
 msgstr ""
-
-#: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:19
-#: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:19
-msgid "Menu timeout"
-msgstr "Tps Sortie Menu"
 
 #: Data/Dialogs/dlgTaskPoint_L.xml:47 Data/Dialogs/dlgTaskPoint.xml:43
 msgid "Inner radius"
@@ -7751,11 +7830,6 @@ msgstr ""
 #, fuzzy
 msgid "LiveTrack24"
 msgstr "branche"
-
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:26
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:26
-msgid "Airspaces"
-msgstr "Espaces aériens"
 
 #: Data/Dialogs/dlgWindSettings.xml:12
 #: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:4
@@ -7839,13 +7913,6 @@ msgstr ""
 msgid "Export"
 msgstr "Exporter"
 
-#: Data/Dialogs/dlgWindSettings.xml:16
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:19
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:19
-#: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:8
-msgid "Trail drift"
-msgstr "Dérive Compensée"
-
 #: Data/Dialogs/dlgPlanePolar_L.xml:45 Data/Dialogs/dlgPlanePolar.xml:57
 msgid "Dry Mass"
 msgstr ""
@@ -7855,20 +7922,20 @@ msgstr ""
 msgid "Achieved speed"
 msgstr "Vitesse réalisée"
 
-#: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:12
-#: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:12
-msgid ""
-"Defines the amount of Phong shading in the terrain rendering.  Use large "
-"values to emphasise terrain slope, smaller values if flying in steep "
-"mountains."
-msgstr ""
-
 #: Data/Dialogs/dlgVario_L.xml:108 Data/Dialogs/dlgVario.xml:109
 msgid "Adjustment to base pitch scale of tones in all modes."
 msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:51
 msgid "TE probe cal."
+msgstr ""
+
+#: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:12
+#: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:12
+msgid ""
+"Defines the amount of Phong shading in the terrain rendering.  Use large "
+"values to emphasise terrain slope, smaller values if flying in steep "
+"mountains."
 msgstr ""
 
 #: Data/Dialogs/dlgFontEdit.xml:4
@@ -7903,11 +7970,6 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:21
 msgid "Friends"
 msgstr ""
-
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:14
-msgid "Trail length"
-msgstr "Longueur Trace"
 
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:27
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:27
@@ -7981,6 +8043,10 @@ msgstr "Temps de vol"
 msgid "Logger interval"
 msgstr "Intervalle d'enregistrement"
 
+#: Data/Dialogs/dlgBasicSettings.xml:7
+msgid "Ballast"
+msgstr "Ballast"
+
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:8
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:8
 msgid ""
@@ -7989,10 +8055,6 @@ msgid ""
 msgstr ""
 "Unité utilisée pour les vitesses air et sol. Une unité différente est "
 "possible pour la vitesse sur circuit."
-
-#: Data/Dialogs/dlgBasicSettings.xml:7
-msgid "Ballast"
-msgstr "Ballast"
 
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:33
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:33
@@ -8006,14 +8068,14 @@ msgstr "Champs vachables"
 msgid "Relocate"
 msgstr ""
 
+#: Data/Dialogs/pnlTaskEdit_L.xml:8 Data/Dialogs/pnlTaskEdit.xml:9
+msgid "Edit Point"
+msgstr ""
+
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:4
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:4
 msgid "Terrain display"
 msgstr "Affichage relief"
-
-#: Data/Dialogs/pnlTaskEdit_L.xml:8 Data/Dialogs/pnlTaskEdit.xml:9
-msgid "Edit Point"
-msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:27
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:27
@@ -8036,15 +8098,6 @@ msgstr "Heure de départ"
 #: Data/Dialogs/pnlTaskManagerClose.xml:5
 msgid "Fly"
 msgstr "Vol"
-
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:14
-#, fuzzy
-msgid ""
-"Determines whether and how long a snail trail is drawn behind the glider"
-msgstr ""
-"Détermine si la trace en spirale est déviée avec le vent quand elle est "
-"affichée en mode spirale."
 
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:16
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:16
@@ -8071,11 +8124,6 @@ msgstr "Ajouter Au Circuit"
 msgid "Task distance"
 msgstr "Distance circuit"
 
-#: Data/Dialogs/Configuration/SymbolsConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/SymbolsConfigPanel.xml:9
-msgid "This enables the display of FLARM traffic on the map window."
-msgstr ""
-
 #: Data/Dialogs/dlgPlaneDetails_L.xml:8 Data/Dialogs/dlgPlaneDetails.xml:10
 msgid "Comp. ID"
 msgstr "n° concours"
@@ -8097,13 +8145,6 @@ msgstr ""
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:8
 msgid "Aircraft/Wind speed"
 msgstr "Vitesse Aéronef/Vent"
-
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:11
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:11
-msgid ""
-"Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
-"dat), Zander files (.wpz) or SeeYou files (.cup)."
-msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:66 Data/Dialogs/dlgVario.xml:67
 msgid ""
@@ -8137,11 +8178,6 @@ msgstr ""
 msgid "Speaker threshold"
 msgstr ""
 
-#: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:24
-msgid "Text input style"
-msgstr "Style de saisie du texte"
-
 #: Data/Dialogs/dlgBasicSettings.xml:15
 msgid "Bugs"
 msgstr ""
@@ -8150,15 +8186,15 @@ msgstr ""
 msgid "Vario Demo"
 msgstr ""
 
+#: Data/Dialogs/dlgStatusSystem.xml:5 Data/Dialogs/pnlStatusSystem.xml:5
+msgid "Satellites in view"
+msgstr "Satellites en vue"
+
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:42
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:42
 #, fuzzy
 msgid "Lat./Lon."
 msgstr "Lat/Lon"
-
-#: Data/Dialogs/dlgStatusSystem.xml:5 Data/Dialogs/pnlStatusSystem.xml:5
-msgid "Satellites in view"
-msgstr "Satellites en vue"
 
 #: Data/Dialogs/dlgTeamCode_L.xml:7 Data/Dialogs/dlgTeamCode.xml:5
 msgid "Flarm Lock"
@@ -8166,13 +8202,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:96 Data/Dialogs/dlgVario.xml:97
 msgid "Base frequency"
-msgstr ""
-
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:16
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:16
-msgid ""
-"Secondary waypoints file.  This may be used to add waypoints for a "
-"competition."
 msgstr ""
 
 #: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:28
@@ -8272,11 +8301,6 @@ msgstr ""
 msgid "Units used for pressures."
 msgstr "Unité des températures"
 
-#: Data/Dialogs/Configuration/SiteConfigPanel_L.xml:6
-#: Data/Dialogs/Configuration/SiteConfigPanel.xml:6
-msgid "Map database"
-msgstr "Carte"
-
 #: Data/Dialogs/dlgWaypointDetails_L.xml:4
 #: Data/Dialogs/dlgWaypointDetails.xml:7 Data/Input/default.xci:368
 #: Data/Input/default.xci:1003
@@ -8286,14 +8310,6 @@ msgstr "Aller à"
 #: Data/Dialogs/pnlTaskList_L.xml:22 Data/Dialogs/pnlTaskList.xml:18
 msgid "Rename"
 msgstr "Renommer"
-
-#: Data/Dialogs/Configuration/InterfaceConfigPanel_L.xml:24
-#: Data/Dialogs/Configuration/InterfaceConfigPanel.xml:24
-#, fuzzy
-msgid ""
-"Determines how the user is prompted for text input (filename, teamcode etc.)"
-msgstr ""
-"Détermine comment l'écran est orienté lorsque le planeur est en transition."
 
 #: Data/Dialogs/dlgVario_L.xml:435 Data/Dialogs/dlgVario.xml:436
 msgid "Needle gauge type"
@@ -8308,14 +8324,14 @@ msgstr "Hauteur relief"
 msgid "Averager needle"
 msgstr ""
 
+#: Data/Dialogs/dlgWaypointEdit.xml:34
+msgid "Lat."
+msgstr ""
+
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:27
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:27
 msgid "Units used for temperature."
 msgstr "Unité des températures"
-
-#: Data/Dialogs/dlgWaypointEdit.xml:34
-msgid "Lat."
-msgstr ""
 
 #: Data/Dialogs/pnlStatusRules.xml:4
 msgid "Valid start"
@@ -8343,6 +8359,11 @@ msgid ""
 "(temperature trace page of Analysis dialog)"
 msgstr ""
 
+#: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:16
+#: Data/Dialogs/dlgFlarmTrafficDetails.xml:8
+msgid "Change callsign"
+msgstr ""
+
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel_L.xml:48
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel.xml:45
 msgid ""
@@ -8357,11 +8378,6 @@ msgid ""
 "[League] The most recent contest with Sprint task rules.\n"
 "[Plus] A combination of Classic and FAI rules. 30% of the FAI score are "
 "added to the Classic score."
-msgstr ""
-
-#: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:16
-#: Data/Dialogs/dlgFlarmTrafficDetails.xml:8
-msgid "Change callsign"
 msgstr ""
 
 #: Data/Input/default.xci:619 Data/Input/default.xci:1147
@@ -8672,6 +8688,39 @@ msgid ""
 msgstr ""
 "METAR\n"
 "TAF"
+
+#~ msgid ""
+#~ "Sets the symbol used for the aircraft.\n"
+#~ "[Simple] Simplified line graphics, black with white contours.\n"
+#~ "[Simple (large)] Enlarged simple graphics.\n"
+#~ "[Detailed] Rendered aircraft graphics."
+#~ msgstr ""
+#~ "Détermine le symbole utilisé pour le planeur.\n"
+#~ "[Simple] Symbole simplifié, lignes noires avec contours blancs.\n"
+#~ "[Simple (large)] Symbole simplifié agrandi.\n"
+#~ "[Détaillé] Symbole du planeur détaillé."
+
+#~ msgid ""
+#~ "Determines the way the wind arrow is drawn on the map.\n"
+#~ "[Arrow head] Draws an arrow head only\n"
+#~ "[Full arrow] Draws an arrow head with a dashed arrow line"
+#~ msgstr ""
+#~ "Détermine la façon dont la flèche du vent est affiché sur la carte.\n"
+#~ "[Arrow head] Affiche seulement la tête de la flèche.\n"
+#~ "[Full arrow] Affiche la tête de la flèche et une ligne en pointillés."
+
+#~ msgid ""
+#~ "Display the track bearing (ground track projection) on the map.\n"
+#~ "[Off] Disable display of track bearing.\n"
+#~ "[On] Always display track bearing.\n"
+#~ "[Auto] Display track bearing if there is a significant difference to "
+#~ "plane heading."
+#~ msgstr ""
+#~ "Afficher la route sur la carte (la projection au sol de la route).\n"
+#~ "[Off] Désactiver l'affichage de la route.\n"
+#~ "[On] Toujours afficher la route.\n"
+#~ "[Auto] Afficher la route si il y a une différence significative avec la "
+#~ "trajectoire du planeur."
 
 #~ msgid ""
 #~ "If set to \"None\", neither airspace or terrain is used for route "
