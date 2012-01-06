@@ -23,24 +23,34 @@ Copyright_License {
 
 #include "WaypointDisplayConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
 #include "DataField/Base.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/CallBackTable.hpp"
+#include "UIGlobals.hpp"
 
-class WaypointDisplayConfigPanel : public XMLWidget {
+enum ControlIndex {
+  WaypointLabels,
+  WaypointArrivalHeightDisplay,
+  WaypointLabelStyle,
+  WaypointLabelSelection,
+  AppIndLandable,
+  AppUseSWLandablesRendering,
+  AppLandableRenderingScale,
+  AppScaleRunwayLength
+};
+
+class WaypointDisplayConfigPanel : public RowFormWidget {
+public:
+  WaypointDisplayConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(100)) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
   void UpdateVisibilities();
 };
 
@@ -49,24 +59,13 @@ public:
 static WaypointDisplayConfigPanel *instance;
 
 void
-WaypointDisplayConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
-
-void
-WaypointDisplayConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
-
-void
 WaypointDisplayConfigPanel::UpdateVisibilities()
 {
-  bool visible = GetFormValueBoolean(form, _T("prpAppUseSWLandablesRendering"));
+  bool visible;
+  SaveValue(AppUseSWLandablesRendering, visible);
 
-  ShowFormControl(form, _T("prpAppLandableRenderingScale"), visible);
-  ShowFormControl(form, _T("prpAppScaleRunwayLength"), visible);
+  GetControl(AppLandableRenderingScale).set_visible(visible);
+  GetControl(AppScaleRunwayLength).set_visible(visible);
 }
 
 static void
@@ -83,21 +82,14 @@ OnRenderingTypeData(gcc_unused DataField *Sender,
   }
 }
 
-gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnRenderingTypeData),
-  DeclareCallBackEntry(NULL)
-};
 
 void
 WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  instance = this;
-  LoadWindow(CallBackTable, parent,
-             Layout::landscape ? _T("IDR_XML_WAYPOINTDISPLAYCONFIGPANEL") :
-                               _T("IDR_XML_WAYPOINTDISPLAYCONFIGPANEL_L"));
+  const WaypointRendererSettings &settings = CommonInterface::GetMapSettings().waypoint;
 
-  const WaypointRendererSettings &settings =
-    CommonInterface::GetMapSettings().waypoint;
+  instance = this;
+  RowFormWidget::Prepare(parent, rc);
 
   static gcc_constexpr_data StaticEnumChoice wp_labels_list[] = {
     { DISPLAYNAME, N_("Full name"),
@@ -111,9 +103,8 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
     { DISPLAYNONE, N_("None"), N_("No waypoint name is displayed.") },
     { 0 }
   };
-
-  LoadFormProperty(form, _T("prpWaypointLabels"), wp_labels_list,
-                   settings.display_text_type);
+  AddEnum(_("Label format"), _("Determines how labels are displayed with each waypoint"),
+          wp_labels_list, settings.display_text_type);
 
   static gcc_constexpr_data StaticEnumChoice wp_arrival_list[] = {
     { WP_ARRIVAL_HEIGHT_NONE, N_("None"),
@@ -126,18 +117,18 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
       N_("Both arrival heights are displayed.") },
     { 0 }
   };
+  // Expert item (TODO)
+  AddEnum(_("Arrival height"), _("Determines how arrival height is displayed in waypoint labels"),
+          wp_arrival_list, settings.arrival_height_display);
 
-  LoadFormProperty(form, _T("prpWaypointArrivalHeightDisplay"), wp_arrival_list,
-                   settings.arrival_height_display);
-
-  static gcc_constexpr_data StaticEnumChoice wp_label_list[] = {
-    { RM_ROUNDED_BLACK, N_("Rounded rectangle") },
-    { RM_OUTLINED_INVERTED, N_("Outlined") },
+  const TCHAR *wp_label_help = N_("Select a label shape.");
+  static const StaticEnumChoice wp_label_list[] = {
+    { RM_ROUNDED_BLACK, N_("Rounded rectangle"), wp_label_help },
+    { RM_OUTLINED_INVERTED, N_("Outlined"), wp_label_help },
     { 0 }
   };
-
-  LoadFormProperty(form, _T("prpWaypointLabelStyle"), wp_label_list,
-                   settings.landable_render_mode);
+  // Expert item
+  AddEnum(_("Label style"), _T(""), wp_label_list, settings.landable_render_mode);
 
   static gcc_constexpr_data StaticEnumChoice wp_selection_list[] = {
     { wlsAllWaypoints, N_("All"), N_("All waypoint labels will be displayed.") },
@@ -148,31 +139,47 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
     { wlsNoWaypoints, N_("None"), N_("No waypoint labels will be displayed.") },
     { 0 }
   };
-
-  LoadFormProperty(form, _T("prpWaypointLabelSelection"), wp_selection_list,
-                   settings.label_selection);
+  // Expert item
+  AddEnum(_("Label visibility"),
+          _("Determines what waypoint labels are displayed for each waypoint (space permitting)."),
+          wp_selection_list, settings.label_selection);
 
   static gcc_constexpr_data StaticEnumChoice wp_style_list[] = {
     { wpLandableWinPilot, N_("Purple circle"),
-      N_("Airports and outlanding fields are displayed as purple circles. If the waypoint is reachable a bigger green circle is added behind the purple one. If the waypoint is blocked by a mountain the green circle will be red instead.") },
+      N_("Airports and outlanding fields are displayed as purple circles. If the waypoint is "
+          "reachable a bigger green circle is added behind the purple one. If the waypoint is "
+          "blocked by a mountain the green circle will be red instead.") },
     { wpLandableAltA, N_("B/W"),
-      N_("Airports and outlanding fields are displayed in white/grey. If the waypoint is reachable the color is changed to green. If the waypoint is blocked by a mountain the color is changed to red instead.") },
+      N_("Airports and outlanding fields are displayed in white/grey. If the waypoint is "
+          "reachable the color is changed to green. If the waypoint is blocked by a mountain "
+          "the color is changed to red instead.") },
     { wpLandableAltB, N_("Traffic lights"),
-      N_("Airports and outlanding fields are displayed in the colors of a traffic light. Green if reachable, Orange if blocked by mountain and red if not reachable at all.") },
+      N_("Airports and outlanding fields are displayed in the colors of a traffic light. "
+          "Green if reachable, Orange if blocked by mountain and red if not reachable at all.") },
     { 0 }
   };
+  AddEnum(_("Landable symbols"),
+          _("Three styles are available: Purple circles (WinPilot style), a high "
+              "contrast (monochrome) style, or orange. The rendering differs for landable "
+              "field and airport. All styles mark the waypoints within reach green."),
+          wp_style_list, settings.landable_style);
 
-  LoadFormProperty(form, _T("prpAppIndLandable"), wp_style_list,
-                   settings.landable_style);
+  // Expert item
+  AddBoolean(_("Detailed landables"),
+             _("[Off] Display fixed icons for landables.\n"
+                 "[On] Show landables with variable information like runway length and heading."),
+             settings.vector_landable_rendering, OnRenderingTypeData);
 
-  LoadFormProperty(form, _T("prpAppUseSWLandablesRendering"),
-                   settings.vector_landable_rendering);
+  // Expert item
+  AddInteger(_("Landable size"),
+             _("A percentage to select the size landables are displayed on the map."),
+             _T("%u %%"), _T("%u"), 50, 200, 10, settings.landable_rendering_scale);
 
-  LoadFormProperty(form, _T("prpAppLandableRenderingScale"),
-                   settings.landable_rendering_scale);
-
-  LoadFormProperty(form, _T("prpAppScaleRunwayLength"),
-                   settings.scale_runway_length);
+  // Expert item
+  AddBoolean(_("Scale runway length"),
+             _("[Off] Display fixed length for runways.\n"
+                 "[On] Scale displayed runway length based on real length."),
+             settings.scale_runway_length);
 
   UpdateVisibilities();
 }
@@ -182,40 +189,29 @@ WaypointDisplayConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
 
-  WaypointRendererSettings &settings =
-    CommonInterface::SetMapSettings().waypoint;
+  WaypointRendererSettings &settings = CommonInterface::SetMapSettings().waypoint;
 
-  changed |= SaveFormPropertyEnum(form, _T("prpWaypointLabels"),
-                                  szProfileDisplayText,
-                                  settings.display_text_type);
+  changed |= SaveValueEnum(WaypointLabels, szProfileDisplayText, settings.display_text_type);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpWaypointArrivalHeightDisplay"),
-                                  szProfileWaypointArrivalHeightDisplay,
-                                  settings.arrival_height_display);
+  changed |= SaveValueEnum(WaypointArrivalHeightDisplay, szProfileWaypointArrivalHeightDisplay,
+                           settings.arrival_height_display);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpWaypointLabelStyle"),
-                                  szProfileWaypointLabelStyle,
-                                  settings.landable_render_mode);
+  changed |= SaveValueEnum(WaypointLabelStyle, szProfileWaypointLabelStyle,
+                           settings.landable_render_mode);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpWaypointLabelSelection"),
-                                  szProfileWaypointLabelSelection,
-                                  settings.label_selection);
+  changed |= SaveValueEnum(WaypointLabelSelection, szProfileWaypointLabelSelection,
+                           settings.label_selection);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpAppIndLandable"),
-                                  szProfileAppIndLandable,
-                                  settings.landable_style);
+  changed |= SaveValueEnum(AppIndLandable, szProfileAppIndLandable, settings.landable_style);
 
-  changed |= SaveFormProperty(form, _T("prpAppUseSWLandablesRendering"),
-                              szProfileAppUseSWLandablesRendering,
-                              settings.vector_landable_rendering);
+  changed |= SaveValue(AppUseSWLandablesRendering, szProfileAppUseSWLandablesRendering,
+                       settings.vector_landable_rendering);
 
-  changed |= SaveFormProperty(form, _T("prpAppLandableRenderingScale"),
-                              szProfileAppLandableRenderingScale,
-                              settings.landable_rendering_scale);
+  changed |= SaveValue(AppLandableRenderingScale, szProfileAppLandableRenderingScale,
+                       settings.landable_rendering_scale);
 
-  changed |= SaveFormProperty(form, _T("prpAppScaleRunwayLength"),
-                              szProfileAppScaleRunwayLength,
-                              settings.scale_runway_length);
+  changed |= SaveValue(AppScaleRunwayLength, szProfileAppScaleRunwayLength,
+                       settings.scale_runway_length);
 
   _changed |= changed;
   _require_restart |= require_restart;

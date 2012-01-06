@@ -306,8 +306,6 @@ IDR_XML_TIMECONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configurat
 IDR_XML_TIMECONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TimeConfigPanel_L.xml.gz"
 IDR_XML_VARIOCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/VarioConfigPanel.xml.gz"
 IDR_XML_VARIOCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/VarioConfigPanel_L.xml.gz"
-IDR_XML_WAYPOINTDISPLAYCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/WaypointDisplayConfigPanel.xml.gz"
-IDR_XML_WAYPOINTDISPLAYCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/WaypointDisplayConfigPanel_L.xml.gz"
 
 // infobox access
 IDR_XML_INFOBOXMACCREADYEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxMacCreadyEdit.xml.gz"
