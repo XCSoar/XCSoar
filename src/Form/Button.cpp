@@ -78,7 +78,7 @@ WndButton::on_right()
 }
 
 bool
-WndButton::on_key_check(unsigned key_code) const
+WndButton::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case VK_LEFT:
@@ -88,12 +88,12 @@ WndButton::on_key_check(unsigned key_code) const
     return right_callback != NULL;
 
   default:
-    return ButtonWindow::on_key_check(key_code);
+    return ButtonWindow::OnKeyCheck(key_code);
   }
 }
 
 bool
-WndButton::on_key_down(unsigned key_code)
+WndButton::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case VK_LEFT:
@@ -103,11 +103,11 @@ WndButton::on_key_down(unsigned key_code)
     return on_right();
   }
 
-  return ButtonWindow::on_key_down(key_code);
+  return ButtonWindow::OnKeyDown(key_code);
 }
 
 void
-WndButton::on_paint(Canvas &canvas)
+WndButton::OnPaint(Canvas &canvas)
 {
   PixelRect rc = {
     PixelScalar(0), PixelScalar(0), PixelScalar(canvas.get_width()),

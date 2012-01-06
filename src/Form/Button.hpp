@@ -131,9 +131,9 @@ private:
   bool on_right();
 
 protected:
-  virtual bool on_key_check(unsigned key_code) const;
-  virtual bool on_key_down(unsigned key_code);
-  virtual void on_paint(Canvas &canvas);
+  virtual bool OnKeyCheck(unsigned key_code) const;
+  virtual bool OnKeyDown(unsigned key_code);
+  virtual void OnPaint(Canvas &canvas);
 };
 
 #endif

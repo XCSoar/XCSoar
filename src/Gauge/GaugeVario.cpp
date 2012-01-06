@@ -70,7 +70,7 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
 }
 
 void
-GaugeVario::on_paint_buffer(Canvas &canvas)
+GaugeVario::OnPaint_buffer(Canvas &canvas)
 {
   const PixelRect rc = get_client_rect();
   const UPixelScalar width = rc.right - rc.left;
@@ -727,9 +727,9 @@ GaugeVario::RenderBugs(Canvas &canvas)
 }
 
 void
-GaugeVario::on_resize(UPixelScalar width, UPixelScalar height)
+GaugeVario::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  BufferWindow::on_resize(width, height);
+  BufferWindow::OnResize(width, height);
 
   /* trigger reinitialisation */
   xoffset = width;

@@ -54,17 +54,17 @@ DockWindow::DeleteWidget()
 }
 
 void
-DockWindow::on_resize(UPixelScalar width, UPixelScalar height)
+DockWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  ContainerWindow::on_resize(width, height);
+  ContainerWindow::OnResize(width, height);
 
   if (widget != NULL)
     widget->Move(get_client_rect());
 }
 
 void
-DockWindow::on_destroy()
+DockWindow::OnDestroy()
 {
   DeleteWidget();
-  ContainerWindow::on_destroy();
+  ContainerWindow::OnDestroy();
 }

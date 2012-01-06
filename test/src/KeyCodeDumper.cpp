@@ -62,32 +62,32 @@ protected:
   }
 
 protected:
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y) {
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) {
     set_focus();
     return true;
   }
 
-  virtual bool on_key_down(unsigned key_code) {
+  virtual bool OnKeyDown(unsigned key_code) {
     add_event(key_code, true);
     return true;
   }
 
-  virtual bool on_key_up(unsigned key_code) {
+  virtual bool OnKeyUp(unsigned key_code) {
     add_event(key_code, false);
     return true;
   }
 
-  virtual void on_setfocus() {
-    PaintWindow::on_setfocus();
+  virtual void OnSetFocus() {
+    PaintWindow::OnSetFocus();
     invalidate();
   }
 
-  virtual void on_killfocus() {
-    PaintWindow::on_killfocus();
+  virtual void OnKillFocus() {
+    PaintWindow::OnKillFocus();
     invalidate();
   }
 
-  virtual void on_paint(Canvas &canvas) {
+  virtual void OnPaint(Canvas &canvas) {
     canvas.SelectWhiteBrush();
     if (has_focus())
       canvas.SelectBlackPen();
@@ -154,20 +154,20 @@ public:
   }
 
 protected:
-  virtual void on_resize(UPixelScalar width, UPixelScalar height) {
-    SingleWindow::on_resize(width, height);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) {
+    SingleWindow::OnResize(width, height);
     key_code_dumper.move(0, 0, width, (height + 1) / 2);
     close_button.move(0, (height + 1) / 2, width, height / 2);
   }
 
-  virtual bool on_command(unsigned id, unsigned code) {
+  virtual bool OnCommand(unsigned id, unsigned code) {
     switch (id) {
     case ID_CLOSE:
       close();
       return true;
     }
 
-    return SingleWindow::on_command(id, code);
+    return SingleWindow::OnCommand(id, code);
   }
 };
 

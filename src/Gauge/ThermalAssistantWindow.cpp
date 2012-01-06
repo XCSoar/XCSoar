@@ -52,9 +52,9 @@ ThermalAssistantWindow::ThermalAssistantWindow(unsigned _padding, bool _small)
 }
 
 void
-ThermalAssistantWindow::on_create()
+ThermalAssistantWindow::OnCreate()
 {
-  BufferWindow::on_create();
+  BufferWindow::OnCreate();
 
   hbBackground.Set(hcBackground);
 
@@ -79,18 +79,18 @@ ThermalAssistantWindow::on_create()
 }
 
 void
-ThermalAssistantWindow::on_destroy()
+ThermalAssistantWindow::OnDestroy()
 {
   hfNoTraffic.Reset();
   hfLabels.Reset();
 
-  BufferWindow::on_destroy();
+  BufferWindow::OnDestroy();
 }
 
 void
-ThermalAssistantWindow::on_resize(UPixelScalar width, UPixelScalar height)
+ThermalAssistantWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  BufferWindow::on_resize(width, height);
+  BufferWindow::OnResize(width, height);
 
   // Calculate Radar size
   radius = min(height, width) / 2 - padding;
@@ -254,7 +254,7 @@ ThermalAssistantWindow::PaintNotCircling(Canvas &canvas) const
 }
 
 void
-ThermalAssistantWindow::on_paint_buffer(Canvas &canvas)
+ThermalAssistantWindow::OnPaint_buffer(Canvas &canvas)
 {
   PaintRadarBackground(canvas);
   if (!derived.circling) {

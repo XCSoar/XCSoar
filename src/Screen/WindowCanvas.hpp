@@ -31,7 +31,7 @@ class PaintWindow;
 
 /**
  * A #Canvas implementation which allows you to draw directly into a
- * #PaintWindow, outside of the PaintWindow::on_paint().
+ * #PaintWindow, outside of the PaintWindow::OnPaint().
  */
 class WindowCanvas : public Canvas {
 #ifdef ENABLE_SDL

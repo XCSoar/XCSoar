@@ -62,30 +62,30 @@ public:
   virtual ~WindowControl(void);
 
   /**
-   * The on_setfocus event is called when the control gets focused
+   * The OnSetFocus event is called when the control gets focused
    * (derived from Window)
    */
-  virtual void on_setfocus();
+  virtual void OnSetFocus();
 
   /**
-   * The on_killfocus event is called when the control loses the focus
+   * The OnKillFocus event is called when the control loses the focus
    * (derived from Window)
    */
-  virtual void on_killfocus();
+  virtual void OnKillFocus();
 
   /**
-   * The on_key_down event is called when a key is pressed while the
+   * The OnKeyDown event is called when a key is pressed while the
    * control is focused
    * (derived from Window)
    */
-  virtual bool on_key_down(unsigned key_code);
+  virtual bool OnKeyDown(unsigned key_code);
 
   /**
-   * The on_key_up event is called when a key is released while the
+   * The OnKeyUp event is called when a key is released while the
    * control is focused
    * (derived from Window)
    */
-  virtual bool on_key_up(unsigned key_code);
+  virtual bool OnKeyUp(unsigned key_code);
 
   /**
    * Opens up a help dialog if a help text exists, or otherwise calls the

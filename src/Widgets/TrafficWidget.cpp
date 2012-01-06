@@ -102,13 +102,13 @@ protected:
   void PaintTaskDirection(Canvas &canvas) const;
 
 protected:
-  virtual void on_create();
-  virtual void on_paint(Canvas &canvas);
-  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
-  virtual bool on_key_down(unsigned key_code);
+  virtual void OnCreate();
+  virtual void OnPaint(Canvas &canvas);
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
+  virtual bool OnKeyDown(unsigned key_code);
   bool on_mouse_gesture(const TCHAR* gesture);
 };
 
@@ -117,9 +117,9 @@ protected:
 static TrafficWidget *instance;
 
 void
-FlarmTrafficControl2::on_create()
+FlarmTrafficControl2::OnCreate()
 {
-  FlarmTrafficWindow::on_create();
+  FlarmTrafficWindow::OnCreate();
 
   Profile::Get(szProfileFlarmSideData, side_display_type);
   Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);
@@ -397,7 +397,7 @@ FlarmTrafficControl2::PaintTrafficInfo(Canvas &canvas) const
 }
 
 void
-FlarmTrafficControl2::on_paint(Canvas &canvas)
+FlarmTrafficControl2::OnPaint(Canvas &canvas)
 {
   canvas.ClearWhite();
 
@@ -504,7 +504,7 @@ TrafficWidget::Update()
 }
 
 bool
-FlarmTrafficControl2::on_mouse_move(PixelScalar x, PixelScalar y,
+FlarmTrafficControl2::OnMouseMove(PixelScalar x, PixelScalar y,
                                    gcc_unused unsigned keys)
 {
   gestures.Update(x, y);
@@ -513,7 +513,7 @@ FlarmTrafficControl2::on_mouse_move(PixelScalar x, PixelScalar y,
 }
 
 bool
-FlarmTrafficControl2::on_mouse_down(PixelScalar x, PixelScalar y)
+FlarmTrafficControl2::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   gestures.Start(x, y, Layout::Scale(20));
 
@@ -521,7 +521,7 @@ FlarmTrafficControl2::on_mouse_down(PixelScalar x, PixelScalar y)
 }
 
 bool
-FlarmTrafficControl2::on_mouse_up(PixelScalar x, PixelScalar y)
+FlarmTrafficControl2::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   const TCHAR *gesture = gestures.Finish();
   if (gesture && on_mouse_gesture(gesture))
@@ -534,7 +534,7 @@ FlarmTrafficControl2::on_mouse_up(PixelScalar x, PixelScalar y)
 }
 
 bool
-FlarmTrafficControl2::on_mouse_double(PixelScalar x, PixelScalar y)
+FlarmTrafficControl2::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
   InputEvents::ShowMenu();
   return true;
@@ -576,7 +576,7 @@ FlarmTrafficControl2::on_mouse_gesture(const TCHAR* gesture)
 }
 
 bool
-FlarmTrafficControl2::on_key_down(unsigned key_code)
+FlarmTrafficControl2::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case VK_UP:
@@ -608,7 +608,7 @@ FlarmTrafficControl2::on_key_down(unsigned key_code)
     return true;
   }
 
-  return FlarmTrafficWindow::on_key_down(key_code) ||
+  return FlarmTrafficWindow::OnKeyDown(key_code) ||
     InputEvents::processKey(key_code);
 }
 

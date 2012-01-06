@@ -52,7 +52,7 @@ TextWindow::set(ContainerWindow &parent, const TCHAR *_text,
 #include "Screen/Canvas.hpp"
 
 void
-TextWindow::on_paint(Canvas &canvas)
+TextWindow::OnPaint(Canvas &canvas)
 {
 #ifndef ENABLE_OPENGL
   canvas.ClearWhite();

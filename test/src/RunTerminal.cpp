@@ -69,17 +69,17 @@ public:
   }
 
 protected:
-  virtual void on_create() {
-    SingleWindow::on_create();
+  virtual void OnCreate() {
+    SingleWindow::OnCreate();
     timer.Schedule(10);
   }
 
-  virtual void on_destroy() {
+  virtual void OnDestroy() {
     timer.Cancel();
-    SingleWindow::on_destroy();
+    SingleWindow::OnDestroy();
   }
 
-  virtual bool on_timer(WindowTimer &_timer) {
+  virtual bool OnTimer(WindowTimer &_timer) {
     if (_timer == timer) {
       unsigned r = rand();
       char ch;
@@ -90,7 +90,7 @@ protected:
       terminal.Write(&ch, 1);
       return true;
     } else
-      return SingleWindow::on_timer(_timer);
+      return SingleWindow::OnTimer(_timer);
   }
 };
 

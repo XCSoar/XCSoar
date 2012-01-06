@@ -173,7 +173,7 @@ EventLoop::Dispatch(const Event &event)
 {
   if (event.type == Event::USER) {
     Window *window = (Window *)event.ptr;
-    window->on_user(event.param);
+    window->OnUser(event.param);
   } else if (event.type == Event::TIMER) {
     AndroidTimer *timer = (AndroidTimer *)event.ptr;
     timer->run();

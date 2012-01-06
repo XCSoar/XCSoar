@@ -54,7 +54,7 @@ public:
   }
 
 protected:
-  void on_paint(Canvas &canvas) {
+  void OnPaint(Canvas &canvas) {
     canvas.ClearWhite();
 
     PixelRect rc = {
@@ -134,17 +134,17 @@ public:
   }
 
 protected:
-  virtual bool on_command(unsigned id, unsigned code) {
+  virtual bool OnCommand(unsigned id, unsigned code) {
     switch (id) {
     case ID_CLOSE:
       close();
       return true;
     }
 
-    return SingleWindow::on_command(id, code);
+    return SingleWindow::OnCommand(id, code);
   }
 
-  virtual bool on_timer(WindowTimer &_timer) {
+  virtual bool OnTimer(WindowTimer &_timer) {
     if (_timer == timer) {
       SpeedVector _wind = wind.GetWind();
 
@@ -157,7 +157,7 @@ protected:
       return true;
     }
 
-    return SingleWindow::on_timer(_timer);
+    return SingleWindow::OnTimer(_timer);
   }
 };
 

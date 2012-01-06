@@ -38,7 +38,7 @@ public:
   }
 
 protected:
-  bool on_mouse_down(PixelScalar x, PixelScalar y);
+  bool OnMouseDown(PixelScalar x, PixelScalar y);
 };
 
 /**
@@ -49,7 +49,7 @@ protected:
  * @return
  */
 bool
-GaugeThermalAssistantWindow::on_mouse_down(PixelScalar x, PixelScalar y)
+GaugeThermalAssistantWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   InputEvents::eventThermalAssistant(_T(""));
   return true;

@@ -32,9 +32,9 @@ Copyright_License {
 #endif
 
 void
-MapWindow::on_resize(UPixelScalar width, UPixelScalar height)
+MapWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  DoubleBufferWindow::on_resize(width, height);
+  DoubleBufferWindow::OnResize(width, height);
 
 #ifndef ENABLE_OPENGL
   ++ui_generation;
@@ -52,9 +52,9 @@ MapWindow::on_resize(UPixelScalar width, UPixelScalar height)
 }
 
 void
-MapWindow::on_create()
+MapWindow::OnCreate()
 {
-  DoubleBufferWindow::on_create();
+  DoubleBufferWindow::OnCreate();
 
 #ifndef ENABLE_OPENGL
   WindowCanvas canvas(*this);
@@ -66,7 +66,7 @@ MapWindow::on_create()
 }
 
 void
-MapWindow::on_destroy()
+MapWindow::OnDestroy()
 {
   SetMarks(NULL);
   airspace_renderer.Clear();
@@ -82,17 +82,17 @@ MapWindow::on_destroy()
     stencil_canvas.reset();
 #endif
 
-  DoubleBufferWindow::on_destroy();
+  DoubleBufferWindow::OnDestroy();
 }
 
 void
-MapWindow::on_paint(Canvas &canvas)
+MapWindow::OnPaint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
-  DoubleBufferWindow::on_paint(canvas);
+  DoubleBufferWindow::OnPaint(canvas);
 #else /* !ENABLE_OPENGL */
   if (buffer_generation == ui_generation)
-    DoubleBufferWindow::on_paint(canvas);
+    DoubleBufferWindow::OnPaint(canvas);
   else if (scale_buffer > 0) {
     /* while zooming/panning, project the current buffer into the
        Canvas */

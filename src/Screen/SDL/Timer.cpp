@@ -61,5 +61,5 @@ Timer::Callback(Uint32 interval, void *param)
 void
 WindowTimer::OnTimer()
 {
-  window.on_timer(*this);
+  window.OnTimer(*this);
 }

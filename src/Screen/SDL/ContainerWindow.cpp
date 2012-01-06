@@ -210,7 +210,7 @@ ContainerWindow::focus_previous_control()
 }
 
 void
-ContainerWindow::on_destroy()
+ContainerWindow::OnDestroy()
 {
   /* destroy all child windows */
   std::list<Window*>::const_iterator i;
@@ -223,67 +223,67 @@ ContainerWindow::on_destroy()
 
   assert(children.empty());
 
-  PaintWindow::on_destroy();
+  PaintWindow::OnDestroy();
 }
 
 bool
-ContainerWindow::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
+ContainerWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   Window *child = event_child_at(x, y);
   if (child != NULL) {
-    child->on_mouse_move(x - child->get_left(), y - child->get_top(), keys);
+    child->OnMouseMove(x - child->get_left(), y - child->get_top(), keys);
     return true;
   }
 
-  return PaintWindow::on_mouse_move(x, y, keys);
+  return PaintWindow::OnMouseMove(x, y, keys);
 }
 
 bool
-ContainerWindow::on_mouse_down(PixelScalar x, PixelScalar y)
+ContainerWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   Window *child = event_child_at(x, y);
   if (child != NULL) {
-    child->on_mouse_down(x - child->get_left(), y - child->get_top());
+    child->OnMouseDown(x - child->get_left(), y - child->get_top());
     return true;
   }
 
-  return PaintWindow::on_mouse_down(x, y);
+  return PaintWindow::OnMouseDown(x, y);
 }
 
 bool
-ContainerWindow::on_mouse_up(PixelScalar x, PixelScalar y)
+ContainerWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   Window *child = event_child_at(x, y);
   if (child != NULL) {
-    child->on_mouse_up(x - child->get_left(), y - child->get_top());
+    child->OnMouseUp(x - child->get_left(), y - child->get_top());
     return true;
   }
 
-  return PaintWindow::on_mouse_up(x, y);
+  return PaintWindow::OnMouseUp(x, y);
 }
 
 bool
-ContainerWindow::on_mouse_double(PixelScalar x, PixelScalar y)
+ContainerWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
   Window *child = event_child_at(x, y);
   if (child != NULL) {
-    child->on_mouse_double(x - child->get_left(), y - child->get_top());
+    child->OnMouseDouble(x - child->get_left(), y - child->get_top());
     return true;
   }
 
-  return PaintWindow::on_mouse_double(x, y);
+  return PaintWindow::OnMouseDouble(x, y);
 }
 
 bool
-ContainerWindow::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
+ContainerWindow::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 {
   Window *child = event_child_at(x, y);
   if (child != NULL) {
-    child->on_mouse_wheel(x - child->get_left(), y - child->get_top(), delta);
+    child->OnMouseWheel(x - child->get_left(), y - child->get_top(), delta);
     return true;
   }
 
-  return PaintWindow::on_mouse_wheel(x, y, delta);
+  return PaintWindow::OnMouseWheel(x, y, delta);
 }
 
 #ifdef HAVE_MULTI_TOUCH
@@ -313,7 +313,7 @@ ContainerWindow::OnMultiTouchUp()
 #endif /* HAVE_MULTI_TOUCH */
 
 void
-ContainerWindow::on_paint(Canvas &canvas)
+ContainerWindow::OnPaint(Canvas &canvas)
 {
   Window *full = NULL;
 
@@ -346,7 +346,7 @@ ContainerWindow::on_paint(Canvas &canvas)
     SubCanvas sub_canvas(canvas, child.get_left(), child.get_top(),
                          child.get_width(), child.get_height());
     child.setup(sub_canvas);
-    child.on_paint(sub_canvas);
+    child.OnPaint(sub_canvas);
   }
 
   assert(full == NULL);

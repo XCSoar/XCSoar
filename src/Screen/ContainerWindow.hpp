@@ -63,21 +63,21 @@ protected:
   virtual const Brush *on_color(Window &window, Canvas &canvas);
 
 #ifndef USE_GDI
-  virtual void on_destroy();
-  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_wheel(PixelScalar x, PixelScalar y, int delta);
+  virtual void OnDestroy();
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta);
 
 #ifdef HAVE_MULTI_TOUCH
   virtual bool OnMultiTouchDown();
   virtual bool OnMultiTouchUp();
 #endif
 
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
 #else /* USE_GDI */
-  virtual LRESULT on_message(HWND hWnd, UINT message,
+  virtual LRESULT OnMessage(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
 #endif
 

@@ -124,11 +124,11 @@ PopupMessage::set(const PixelRect _rc)
                   style);
 
   set_font(Fonts::map_bold);
-  install_wndproc();
+  InstallWndProc();
 }
 
 bool
-PopupMessage::on_mouse_down(PixelScalar x, PixelScalar y)
+PopupMessage::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   // acknowledge with click/touch
   Acknowledge(0);

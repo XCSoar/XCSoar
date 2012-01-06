@@ -55,7 +55,7 @@ AllowDialogMessage(const MSG &msg)
 {
   /* this hack disallows the dialog manager to handle VK_LEFT/VK_RIGHT
      on the Altair; some dialogs use the knob as a hot key, and they
-     can't implement Window::on_key_check() */
+     can't implement Window::OnKeyCheck() */
   if (IsAltair() && (msg.message == WM_KEYDOWN || msg.message == WM_KEYUP) &&
       (msg.wParam == VK_LEFT || msg.wParam == VK_RIGHT))
     return false;

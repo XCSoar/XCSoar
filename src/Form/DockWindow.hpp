@@ -40,7 +40,7 @@ public:
 
   /**
    * Show the specified #Widget.  It will be deleted by this class in
-   * on_destroy().
+   * OnDestroy().
    *
    * This method is only legal after this Window has been created.
    *
@@ -55,8 +55,8 @@ public:
 protected:
   void DeleteWidget();
 
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
-  virtual void on_destroy();
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  virtual void OnDestroy();
 };
 
 #endif

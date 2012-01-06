@@ -98,17 +98,17 @@ TabbedControl::Save(bool &changed, bool &require_restart)
 }
 
 void
-TabbedControl::on_resize(UPixelScalar width, UPixelScalar height)
+TabbedControl::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  ContainerWindow::on_resize(width, height);
+  ContainerWindow::OnResize(width, height);
 
   pager.Move(get_client_rect());
 }
 
 void
-TabbedControl::on_create()
+TabbedControl::OnCreate()
 {
-  ContainerWindow::on_create();
+  ContainerWindow::OnCreate();
 
   const PixelRect rc = get_client_rect();
   pager.Initialise(*this, rc);
@@ -117,10 +117,10 @@ TabbedControl::on_create()
 }
 
 void
-TabbedControl::on_destroy()
+TabbedControl::OnDestroy()
 {
   pager.Hide();
   pager.Unprepare();
 
-  ContainerWindow::on_destroy();
+  ContainerWindow::OnDestroy();
 }

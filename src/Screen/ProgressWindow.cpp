@@ -76,7 +76,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
                    width - progress_height,
                    progress_height, pb_style);
 
-  message.install_wndproc(); // needed for on_color()
+  message.InstallWndProc(); // needed for on_color()
 
   // Set progress bar step size and range
   set_range(0, 1000);
@@ -90,7 +90,7 @@ void
 ProgressWindow::set_message(const TCHAR *text)
 {
   assert_none_locked();
-  assert_thread();
+  AssertThread();
 
   message.set_text(text);
 }
@@ -111,7 +111,7 @@ void
 ProgressWindow::set_pos(unsigned value)
 {
   assert_none_locked();
-  assert_thread();
+  AssertThread();
 
   if (value == position)
     return;
@@ -127,9 +127,9 @@ ProgressWindow::step()
 }
 
 void
-ProgressWindow::on_resize(UPixelScalar width, UPixelScalar height)
+ProgressWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  ContainerWindow::on_resize(width, height);
+  ContainerWindow::OnResize(width, height);
 
   // Make progress bar height proportional to window height
   UPixelScalar progress_height = height / 20;
@@ -150,7 +150,7 @@ ProgressWindow::on_resize(UPixelScalar width, UPixelScalar height)
 }
 
 void
-ProgressWindow::on_paint(Canvas &canvas)
+ProgressWindow::OnPaint(Canvas &canvas)
 {
   canvas.clear(background_color);
 
@@ -170,7 +170,7 @@ ProgressWindow::on_paint(Canvas &canvas)
                  window_width, progress_border_height,
                  bitmap_progress_border);
 
-  ContainerWindow::on_paint(canvas);
+  ContainerWindow::OnPaint(canvas);
 }
 
 const Brush *

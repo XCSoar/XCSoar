@@ -174,7 +174,7 @@ public:
 
 #ifndef USE_GDI
 protected:
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
 #endif /* !USE_GDI */
 };
 

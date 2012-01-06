@@ -50,28 +50,28 @@ class WndProperty : public WindowControl {
     Editor(WndProperty *_parent):parent(_parent) {}
 
     /**
-     * The on_mouse_down event is called when the mouse is pressed over the button
+     * The OnMouseDown event is called when the mouse is pressed over the button
      * (derived from Window)
      */
-    virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+    virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
 
-    virtual bool on_key_check(unsigned key_code) const;
+    virtual bool OnKeyCheck(unsigned key_code) const;
 
     /**
-     * The on_key_down event is called when a key is pressed while the
+     * The OnKeyDown event is called when a key is pressed while the
      * button is focused
      * (derived from Window)
      */
-    virtual bool on_key_down(unsigned key_code);
+    virtual bool OnKeyDown(unsigned key_code);
     /**
-     * The on_key_down event is called when a key is released while the
+     * The OnKeyDown event is called when a key is released while the
      * button is focused
      * (derived from Window)
      */
-    virtual bool on_key_up(unsigned key_code);
+    virtual bool OnKeyUp(unsigned key_code);
 
-    virtual void on_setfocus();
-    virtual void on_killfocus();
+    virtual void OnSetFocus();
+    virtual void OnKillFocus();
   };
 
   friend class Editor;
@@ -151,18 +151,18 @@ public:
   void BeginEditing();
 
 protected:
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
 
   /**
-   * The on_mouse_down event is called when the mouse is pressed over the button
+   * The OnMouseDown event is called when the mouse is pressed over the button
    * (derived from Window)
    */
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
   /**
-   * The on_mouse_up event is called when the mouse is released over the button
+   * The OnMouseUp event is called when the mouse is released over the button
    * (derived from Window)
    */
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
 
 public:
   /**
@@ -191,10 +191,10 @@ public:
 
 private:
   /**
-   * The on_paint event is called when the button needs to be drawn
+   * The OnPaint event is called when the button needs to be drawn
    * (derived from PaintWindow)
    */
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
 
   /** Increases the Editor value */
   int IncValue(void);

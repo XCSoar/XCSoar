@@ -75,8 +75,8 @@ public:
 #endif
 
 protected:
-  virtual bool on_close();
-  virtual void on_destroy();
+  virtual bool OnClose();
+  virtual void OnDestroy();
 };
 
 #endif

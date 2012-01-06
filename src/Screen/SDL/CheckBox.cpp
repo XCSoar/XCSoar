@@ -62,7 +62,7 @@ CheckBox::set_pressed(bool value)
 }
 
 bool
-CheckBox::on_key_down(unsigned key_code)
+CheckBox::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case VK_RETURN:
@@ -71,27 +71,27 @@ CheckBox::on_key_down(unsigned key_code)
     invalidate();
 
     if (!on_clicked() && id != 0 && parent != NULL)
-      parent->on_command(id, 0);
+      parent->OnCommand(id, 0);
     return true;
 
   default:
-    return PaintWindow::on_key_down(key_code);
+    return PaintWindow::OnKeyDown(key_code);
   }
 }
 
 bool
-CheckBox::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
+CheckBox::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (dragging) {
     set_pressed(x >= 0 && y >= 0 &&
                 (unsigned)x < get_width() && (unsigned)y < get_height());
     return true;
   } else
-    return PaintWindow::on_mouse_move(x, y, keys);
+    return PaintWindow::OnMouseMove(x, y, keys);
 }
 
 bool
-CheckBox::on_mouse_down(PixelScalar x, PixelScalar y)
+CheckBox::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   if (is_tab_stop())
     set_focus();
@@ -103,7 +103,7 @@ CheckBox::on_mouse_down(PixelScalar x, PixelScalar y)
 }
 
 bool
-CheckBox::on_mouse_up(PixelScalar x, PixelScalar y)
+CheckBox::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   if (!dragging)
     return true;
@@ -119,36 +119,36 @@ CheckBox::on_mouse_up(PixelScalar x, PixelScalar y)
   invalidate();
 
   if (!on_clicked() && id != 0 && parent != NULL)
-    parent->on_command(id, 0);
+    parent->OnCommand(id, 0);
 
   return true;
 }
 
 void
-CheckBox::on_setfocus()
+CheckBox::OnSetFocus()
 {
-  PaintWindow::on_setfocus();
+  PaintWindow::OnSetFocus();
   invalidate();
 }
 
 void
-CheckBox::on_killfocus()
+CheckBox::OnKillFocus()
 {
-  PaintWindow::on_killfocus();
+  PaintWindow::OnKillFocus();
   invalidate();
 }
 
 bool
-CheckBox::on_cancel_mode()
+CheckBox::OnCancelMode()
 {
   dragging = false;
   set_pressed(false);
 
-  return PaintWindow::on_cancel_mode();
+  return PaintWindow::OnCancelMode();
 }
 
 void
-CheckBox::on_paint(Canvas &canvas)
+CheckBox::OnPaint(Canvas &canvas)
 {
   if (has_focus())
     canvas.clear(COLOR_XCSOAR_DARK);

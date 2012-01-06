@@ -29,7 +29,7 @@ Copyright_License {
 #include "resource.h"
 
 void
-WndCustomButton::on_paint(Canvas &canvas)
+WndCustomButton::OnPaint(Canvas &canvas)
 {
 #ifdef HAVE_CLIPPING
   /* background and selector */

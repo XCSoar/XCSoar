@@ -111,7 +111,7 @@ TopWindow::invalidate()
 
 void
 TopWindow::expose() {
-  on_paint(screen);
+  OnPaint(screen);
   screen.Flip();
 }
 
@@ -175,7 +175,7 @@ TopWindow::on_deactivate()
 }
 
 bool
-TopWindow::on_close()
+TopWindow::OnClose()
 {
   reset();
   return true;
@@ -202,29 +202,29 @@ TopWindow::on_event(const SDL_Event &event)
     if (w == NULL)
       w = this;
 
-    return w->on_key_down(event.key.keysym.sym);
+    return w->OnKeyDown(event.key.keysym.sym);
 
   case SDL_KEYUP:
     w = get_focused_window();
     if (w == NULL)
       w = this;
 
-    return w->on_key_up(event.key.keysym.sym);
+    return w->OnKeyUp(event.key.keysym.sym);
 
   case SDL_MOUSEMOTION:
     // XXX keys
-    return on_mouse_move(event.motion.x, event.motion.y, 0);
+    return OnMouseMove(event.motion.x, event.motion.y, 0);
 
   case SDL_MOUSEBUTTONDOWN:
     if (event.button.button == SDL_BUTTON_WHEELUP)
-      return on_mouse_wheel(event.button.x, event.button.y, 1);
+      return OnMouseWheel(event.button.x, event.button.y, 1);
     else if (event.button.button == SDL_BUTTON_WHEELDOWN)
-      return on_mouse_wheel(event.button.x, event.button.y, -1);
+      return OnMouseWheel(event.button.x, event.button.y, -1);
 
     static PeriodClock double_click;
     return double_click.check_always_update(300)
-      ? on_mouse_down(event.button.x, event.button.y)
-      : on_mouse_double(event.button.x, event.button.y);
+      ? OnMouseDown(event.button.x, event.button.y)
+      : OnMouseDouble(event.button.x, event.button.y);
 
   case SDL_MOUSEBUTTONUP:
     if (event.button.button == SDL_BUTTON_WHEELUP ||
@@ -232,10 +232,10 @@ TopWindow::on_event(const SDL_Event &event)
       /* the wheel has already been handled in SDL_MOUSEBUTTONDOWN */
       return false;
 
-    return on_mouse_up(event.button.x, event.button.y);
+    return OnMouseUp(event.button.x, event.button.y);
 
   case SDL_QUIT:
-    return on_close();
+    return OnClose();
   }
 
   return false;

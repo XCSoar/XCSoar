@@ -91,9 +91,9 @@ public:
     :CrossSectionWindow(look, airspace_look, chart_look) {}
 
 protected:
-  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
 };
 
 class ChartControl: public PaintWindow
@@ -116,11 +116,11 @@ public:
                const ThermalBandLook &thermal_band_look);
 
 protected:
-  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
 
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
 };
 
 ChartControl::ChartControl(ContainerWindow &parent,
@@ -156,7 +156,7 @@ SetCalcCaption(const TCHAR* caption)
 }
 
 void
-ChartControl::on_paint(Canvas &canvas)
+ChartControl::OnPaint(Canvas &canvas)
 {
   assert(glide_computer != NULL);
 
@@ -413,21 +413,21 @@ OnGesture(const TCHAR* gesture)
 }
 
 bool
-ChartControl::on_mouse_down(PixelScalar x, PixelScalar y)
+ChartControl::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   gestures.Start(x, y, Layout::Scale(20));
   return true;
 }
 
 bool
-ChartControl::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
+ChartControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   gestures.Update(x, y);
   return true;
 }
 
 bool
-ChartControl::on_mouse_up(PixelScalar x, PixelScalar y)
+ChartControl::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   const TCHAR* gesture = gestures.Finish();
   if (gesture != NULL)
@@ -437,21 +437,21 @@ ChartControl::on_mouse_up(PixelScalar x, PixelScalar y)
 }
 
 bool
-CrossSectionControl::on_mouse_down(PixelScalar x, PixelScalar y)
+CrossSectionControl::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   gestures.Start(x, y, Layout::Scale(20));
   return true;
 }
 
 bool
-CrossSectionControl::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
+CrossSectionControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   gestures.Update(x, y);
   return true;
 }
 
 bool
-CrossSectionControl::on_mouse_up(PixelScalar x, PixelScalar y)
+CrossSectionControl::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   const TCHAR* gesture = gestures.Finish();
   if (gesture != NULL)

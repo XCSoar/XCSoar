@@ -52,7 +52,7 @@ public:
 
 #ifdef HAVE_CLIPPING
 protected:
-  void on_paint(Canvas &canvas);
+  void OnPaint(Canvas &canvas);
 #endif
 };
 

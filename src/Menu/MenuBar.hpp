@@ -53,7 +53,7 @@ protected:
 
 #ifdef USE_GDI
   protected:
-    virtual LRESULT on_message(HWND hWnd, UINT message,
+    virtual LRESULT OnMessage(HWND hWnd, UINT message,
                                WPARAM wParam, LPARAM lParam);
 #endif
   };

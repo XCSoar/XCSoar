@@ -76,7 +76,7 @@ WndFrame::GetTextHeight()
 }
 
 void
-WndFrame::on_paint(Canvas &canvas)
+WndFrame::OnPaint(Canvas &canvas)
 {
 #ifdef HAVE_CLIPPING
   canvas.clear(look.background_brush);

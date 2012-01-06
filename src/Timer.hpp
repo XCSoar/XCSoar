@@ -136,7 +136,7 @@ private:
   static Uint32 Callback(Uint32 interval, void *param);
 #else
 private:
-  virtual bool on_timer(WindowTimer &timer);
+  virtual bool OnTimer(WindowTimer &timer);
 #endif
 };
 

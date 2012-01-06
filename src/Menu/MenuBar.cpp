@@ -98,7 +98,7 @@ MenuBar::Button::on_clicked()
 
 #ifdef USE_GDI
 LRESULT
-MenuBar::Button::on_message(HWND hWnd, UINT message,
+MenuBar::Button::OnMessage(HWND hWnd, UINT message,
                             WPARAM wParam, LPARAM lParam)
 {
   switch (message) {
@@ -111,7 +111,7 @@ MenuBar::Button::on_message(HWND hWnd, UINT message,
     break;
   }
 
-  return ButtonWindow::on_message(hWnd, message, wParam, lParam);
+  return ButtonWindow::OnMessage(hWnd, message, wParam, lParam);
 }
 #endif
 

@@ -145,7 +145,7 @@ protected:
    * paints the tab buttons
    * @param canvas
    */
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
   //ToDo: support function buttons
 
   /**
@@ -153,17 +153,17 @@ protected:
    * @param key_code
    * @return
    */
-  virtual void on_killfocus();
-  virtual void on_setfocus();
-  virtual bool on_key_check(unsigned key_code) const;
-  virtual bool on_key_down(unsigned key_code);
+  virtual void OnKillFocus();
+  virtual void OnSetFocus();
+  virtual bool OnKeyCheck(unsigned key_code) const;
+  virtual bool OnKeyDown(unsigned key_code);
 
   /**
    * track mouse clicks
    */
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
   void drag_end();
 };
 

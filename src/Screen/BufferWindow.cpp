@@ -28,9 +28,9 @@ Copyright_License {
 #include "Screen/WindowCanvas.hpp"
 
 void
-BufferWindow::on_create()
+BufferWindow::OnCreate()
 {
-  PaintWindow::on_create();
+  PaintWindow::OnCreate();
 
   dirty = true;
 
@@ -39,33 +39,33 @@ BufferWindow::on_create()
 }
 
 void
-BufferWindow::on_destroy()
+BufferWindow::OnDestroy()
 {
-  PaintWindow::on_destroy();
+  PaintWindow::OnDestroy();
 
   buffer.reset();
 }
 
 void
-BufferWindow::on_resize(UPixelScalar width, UPixelScalar height)
+BufferWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
   buffer.resize(width, height);
-  PaintWindow::on_resize(width, height);
+  PaintWindow::OnResize(width, height);
   invalidate();
 }
 
 #endif
 
 void
-BufferWindow::on_paint(Canvas &canvas)
+BufferWindow::OnPaint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   /* paint directly on OpenGL */
-  on_paint_buffer(canvas);
+  OnPaint_buffer(canvas);
 #else
   if (dirty) {
     dirty = false;
-    on_paint_buffer(buffer);
+    OnPaint_buffer(buffer);
   }
 
   canvas.copy(buffer);

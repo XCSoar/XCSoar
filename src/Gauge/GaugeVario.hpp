@@ -112,8 +112,8 @@ protected:
   }
 
 protected:
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
-  virtual void on_paint_buffer(Canvas &canvas);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  virtual void OnPaint_buffer(Canvas &canvas);
 
 private:
   void RenderZero(Canvas &canvas);

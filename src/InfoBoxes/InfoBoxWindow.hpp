@@ -164,7 +164,7 @@ public:
   }
 
 protected:
-  virtual void on_destroy();
+  virtual void OnDestroy();
 
   /**
    * This event handler is called when a key is pressed down while the InfoBox
@@ -172,7 +172,7 @@ protected:
    * @param key_code The code of the key that was pressed
    * @return True if the event has been handled, False otherwise
    */
-  virtual bool on_key_down(unsigned key_code);
+  virtual bool OnKeyDown(unsigned key_code);
   /**
    * This event handler is called when a mouse button is pressed down over
    * the InfoBox
@@ -180,9 +180,9 @@ protected:
    * @param y y-Coordinate where the mouse button was pressed
    * @return True if the event has been handled, False otherwise
    */
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
 
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
 
   /**
    * This event handler is called when a mouse button is double clicked over
@@ -191,25 +191,25 @@ protected:
    * @param y y-Coordinate where the mouse button was pressed
    * @return True if the event has been handled, False otherwise
    */
-  virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
 
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
 
   /**
    * This event handler is called when the InfoBox needs to be repainted
    * @param canvas The canvas to paint on
    */
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
 
-  virtual bool on_cancel_mode();
-  virtual void on_setfocus();
-  virtual void on_killfocus();
+  virtual bool OnCancelMode();
+  virtual void OnSetFocus();
+  virtual void OnKillFocus();
 
   /**
    * This event handler is called when a timer is triggered
    * @param id Id of the timer that triggered the handler
    */
-  virtual bool on_timer(WindowTimer &timer);
+  virtual bool OnTimer(WindowTimer &timer);
 };
 
 #endif

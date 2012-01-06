@@ -39,11 +39,11 @@ PanelControl::PanelControl(ContainerWindow &parent, const DialogLook &look,
 #ifdef HAVE_CLIPPING
 
 void
-PanelControl::on_paint(Canvas &canvas)
+PanelControl::OnPaint(Canvas &canvas)
 {
   canvas.clear(background_color);
 
-  ContainerWindow::on_paint(canvas);
+  ContainerWindow::OnPaint(canvas);
 }
 
 #endif

@@ -42,10 +42,10 @@ Copyright_License {
 #endif
 
 bool
-WndForm::ClientAreaWindow::on_command(unsigned id, unsigned code)
+WndForm::ClientAreaWindow::OnCommand(unsigned id, unsigned code)
 {
   return (command_callback != NULL && command_callback(id))
-    || ContainerWindow::on_command(id, code);
+    || ContainerWindow::OnCommand(id, code);
 }
 
 const Brush *
@@ -66,11 +66,11 @@ WndForm::ClientAreaWindow::on_color(Window &window, Canvas &canvas)
 }
 
 void
-WndForm::ClientAreaWindow::on_paint(Canvas &canvas)
+WndForm::ClientAreaWindow::OnPaint(Canvas &canvas)
 {
   canvas.clear(look.background_color);
 
-  ContainerWindow::on_paint(canvas);
+  ContainerWindow::OnPaint(canvas);
 }
 
 PeriodClock WndForm::time_any_open_close;
@@ -125,7 +125,7 @@ WndForm::SetTimerNotify(TimerNotifyCallback OnTimerNotify, unsigned ms)
 WndForm::~WndForm()
 {
   /* we must override the ~Window() reset call, because in ~Window(),
-     our own on_destroy() method won't be called (during object
+     our own OnDestroy() method won't be called (during object
      destruction, this object loses its identity) */
   reset();
   SubForm::Clear();
@@ -156,38 +156,38 @@ WndForm::GetClientAreaWindow(void)
 }
 
 void
-WndForm::on_resize(UPixelScalar width, UPixelScalar height)
+WndForm::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  ContainerWindow::on_resize(width, height);
+  ContainerWindow::OnResize(width, height);
   UpdateLayout();
 }
 
 void
-WndForm::on_destroy()
+WndForm::OnDestroy()
 {
   if (modal_result == 0)
     modal_result = mrCancel;
 
   timer.Cancel();
 
-  ContainerWindow::on_destroy();
+  ContainerWindow::OnDestroy();
 }
 
 bool
-WndForm::on_timer(WindowTimer &_timer)
+WndForm::OnTimer(WindowTimer &_timer)
 {
   if (_timer == timer) {
     if (timer_notify_callback)
       timer_notify_callback(*this);
     return true;
   } else
-    return ContainerWindow::on_timer(_timer);
+    return ContainerWindow::OnTimer(_timer);
 }
 
 #ifdef WIN32
 
 bool
-WndForm::on_command(unsigned id, unsigned code)
+WndForm::OnCommand(unsigned id, unsigned code)
 {
   switch (id) {
   case IDCANCEL:
@@ -197,7 +197,7 @@ WndForm::on_command(unsigned id, unsigned code)
     return true;
   }
 
-  return ContainerWindow::on_command(id, code);
+  return ContainerWindow::OnCommand(id, code);
 }
 
 #endif
@@ -246,7 +246,7 @@ check_key(ContainerWindow *container, const Event &event)
   if (focused == NULL)
     return false;
 
-  return focused->on_key_check(get_key_code(event));
+  return focused->OnKeyCheck(get_key_code(event));
 }
 
 gcc_pure
@@ -292,7 +292,7 @@ check_key(ContainerWindow *container, const SDL_Event &event)
   if (focused == NULL)
     return false;
 
-  return focused->on_key_check(get_key_code(event));
+  return focused->OnKeyCheck(get_key_code(event));
 }
 
 gcc_pure
@@ -517,9 +517,9 @@ WndForm::ShowModal()
 }
 
 void
-WndForm::on_paint(Canvas &canvas)
+WndForm::OnPaint(Canvas &canvas)
 {
-  ContainerWindow::on_paint(canvas);
+  ContainerWindow::OnPaint(canvas);
 
   // Get window coordinates
   PixelRect rcClient = get_client_rect();

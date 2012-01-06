@@ -61,9 +61,9 @@ FlarmTrafficWindow::WarningMode() const
 }
 
 void
-FlarmTrafficWindow::on_resize(UPixelScalar width, UPixelScalar height)
+FlarmTrafficWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  PaintWindow::on_resize(width, height);
+  PaintWindow::OnResize(width, height);
 
   // Calculate Radar size
   radius = min(height, width) / 2 - padding;
@@ -691,7 +691,7 @@ FlarmTrafficWindow::Paint(Canvas &canvas)
  * @param canvas The canvas to paint on
  */
 void
-FlarmTrafficWindow::on_paint(Canvas &canvas)
+FlarmTrafficWindow::OnPaint(Canvas &canvas)
 {
   canvas.ClearWhite();
   Paint(canvas);

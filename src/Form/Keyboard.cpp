@@ -175,25 +175,25 @@ KeyboardControl::move_buttons()
 }
 
 void
-KeyboardControl::on_paint(Canvas &canvas)
+KeyboardControl::OnPaint(Canvas &canvas)
 {
   canvas.clear(look.background_color);
 
-  ContainerWindow::on_paint(canvas);
+  ContainerWindow::OnPaint(canvas);
 }
 
 bool
-KeyboardControl::on_command(unsigned id, unsigned code)
+KeyboardControl::OnCommand(unsigned id, unsigned code)
 {
   if (id >= 0x20 && mOnCharacter != NULL) {
     mOnCharacter((TCHAR)id);
     return true;
   } else
-    return ContainerWindow::on_command(id, code);
+    return ContainerWindow::OnCommand(id, code);
 }
 
 void
-KeyboardControl::on_resize(UPixelScalar width, UPixelScalar height)
+KeyboardControl::OnResize(UPixelScalar width, UPixelScalar height)
 {
   set_buttons_size();
   resize_buttons();

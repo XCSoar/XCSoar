@@ -193,7 +193,7 @@ TabDisplay::GetButtonIndexAt(RasterPoint p) const
 }
 
 void
-TabDisplay::on_paint(Canvas &canvas)
+TabDisplay::OnPaint(Canvas &canvas)
 {
   canvas.clear(COLOR_BLACK);
   canvas.Select(*look.button.font);
@@ -239,21 +239,21 @@ TabDisplay::on_paint(Canvas &canvas)
 }
 
 void
-TabDisplay::on_killfocus()
+TabDisplay::OnKillFocus()
 {
   invalidate();
-  PaintWindow::on_killfocus();
+  PaintWindow::OnKillFocus();
 }
 
 void
-TabDisplay::on_setfocus()
+TabDisplay::OnSetFocus()
 {
   invalidate();
-  PaintWindow::on_setfocus();
+  PaintWindow::OnSetFocus();
 }
 
 bool
-TabDisplay::on_key_check(unsigned key_code) const
+TabDisplay::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
 
@@ -285,7 +285,7 @@ TabDisplay::on_key_check(unsigned key_code) const
 
 
 bool
-TabDisplay::on_key_down(unsigned key_code)
+TabDisplay::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
 
@@ -327,11 +327,11 @@ TabDisplay::on_key_down(unsigned key_code)
     tab_bar.PreviousPage();
     return true;
   }
-  return PaintWindow::on_key_down(key_code);
+  return PaintWindow::OnKeyDown(key_code);
 }
 
 bool
-TabDisplay::on_mouse_down(PixelScalar x, PixelScalar y)
+TabDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   drag_end();
 
@@ -351,11 +351,11 @@ TabDisplay::on_mouse_down(PixelScalar x, PixelScalar y)
     return true;
   }
 
-  return PaintWindow::on_mouse_down(x, y);
+  return PaintWindow::OnMouseDown(x, y);
 }
 
 bool
-TabDisplay::on_mouse_up(PixelScalar x, PixelScalar y)
+TabDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   RasterPoint Pos;
   Pos.x = x;
@@ -373,12 +373,12 @@ TabDisplay::on_mouse_up(PixelScalar x, PixelScalar y)
     down_index = -1;
     return true;
   } else {
-    return PaintWindow::on_mouse_up(x, y);
+    return PaintWindow::OnMouseUp(x, y);
   }
 }
 
 bool
-TabDisplay::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
+TabDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (down_index == -1)
     return false;

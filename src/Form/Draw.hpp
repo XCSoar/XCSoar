@@ -77,10 +77,10 @@ protected:
   OnMouseDownCallback_t mOnMouseDownCallback;
 
   /** from class PaintWindow */
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
 
   /** from class Window */
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
 };
 
 #endif

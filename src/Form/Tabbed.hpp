@@ -111,9 +111,9 @@ public:
   bool Save(bool &changed, bool &require_restart);
 
 protected:
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
-  virtual void on_create();
-  virtual void on_destroy();
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  virtual void OnCreate();
+  virtual void OnDestroy();
 };
 
 #endif

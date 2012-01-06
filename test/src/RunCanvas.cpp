@@ -199,8 +199,8 @@ private:
   }
 
 protected:
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y) {
-    if (SingleWindow::on_mouse_down(x, y))
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) {
+    if (SingleWindow::OnMouseDown(x, y))
       return true;
 
     page = (page + 1) % 7;
@@ -208,7 +208,7 @@ protected:
     return true;
   }
 
-  virtual bool on_command(unsigned id, unsigned code) {
+  virtual bool OnCommand(unsigned id, unsigned code) {
     switch (id) {
     case ID_CLOSE:
       close();
@@ -227,10 +227,10 @@ protected:
 #endif
     }
 
-    return SingleWindow::on_command(id, code);
+    return SingleWindow::OnCommand(id, code);
   }
 
-  virtual void on_paint(Canvas &canvas) {
+  virtual void OnPaint(Canvas &canvas) {
 #ifndef ENABLE_OPENGL
     if (!buffered) {
 #endif
@@ -242,7 +242,7 @@ protected:
       canvas.copy(buffer);
 #endif
 
-    SingleWindow::on_paint(canvas);
+    SingleWindow::OnPaint(canvas);
   }
 };
 

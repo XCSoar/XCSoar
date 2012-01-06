@@ -38,7 +38,7 @@ public:
   }
 
 protected:
-  virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
 };
 
 #endif

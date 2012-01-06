@@ -75,7 +75,7 @@ Notify::RunNotification()
 #ifdef USE_GDI
 
 bool
-Notify::on_user(unsigned id)
+Notify::OnUser(unsigned id)
 {
   RunNotification();
   return true;

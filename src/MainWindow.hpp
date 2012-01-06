@@ -280,15 +280,15 @@ private:
   void UpdateTrafficGaugeVisibility();
 
 protected:
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
   bool on_activate();
-  void on_setfocus();
-  virtual bool on_key_down(unsigned key_code);
-  bool on_timer(WindowTimer &timer);
-  virtual bool on_user(unsigned id);
-  void on_create();
-  void on_destroy();
-  bool on_close();
+  void OnSetFocus();
+  virtual bool OnKeyDown(unsigned key_code);
+  bool OnTimer(WindowTimer &timer);
+  virtual bool OnUser(unsigned id);
+  void OnCreate();
+  void OnDestroy();
+  bool OnClose();
 
 #ifdef ANDROID
   virtual void on_pause();

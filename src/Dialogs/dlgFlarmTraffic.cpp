@@ -101,11 +101,11 @@ protected:
   void PaintTaskDirection(Canvas &canvas) const;
 
 protected:
-  virtual void on_create();
-  virtual void on_paint(Canvas &canvas);
-  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
+  virtual void OnCreate();
+  virtual void OnPaint(Canvas &canvas);
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
   bool on_mouse_gesture(const TCHAR* gesture);
 };
 
@@ -114,9 +114,9 @@ static FlarmTrafficControl *wdf;
 static CheckBox *auto_zoom, *north_up;
 
 void
-FlarmTrafficControl::on_create()
+FlarmTrafficControl::OnCreate()
 {
-  FlarmTrafficWindow::on_create();
+  FlarmTrafficWindow::OnCreate();
 
   Profile::Get(szProfileFlarmSideData, side_display_type);
   Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);
@@ -393,7 +393,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 }
 
 void
-FlarmTrafficControl::on_paint(Canvas &canvas)
+FlarmTrafficControl::OnPaint(Canvas &canvas)
 {
   canvas.ClearWhite();
 
@@ -583,7 +583,7 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 }
 
 bool
-FlarmTrafficControl::on_mouse_move(PixelScalar x, PixelScalar y,
+FlarmTrafficControl::OnMouseMove(PixelScalar x, PixelScalar y,
                                    gcc_unused unsigned keys)
 {
   gestures.Update(x, y);
@@ -592,7 +592,7 @@ FlarmTrafficControl::on_mouse_move(PixelScalar x, PixelScalar y,
 }
 
 bool
-FlarmTrafficControl::on_mouse_down(PixelScalar x, PixelScalar y)
+FlarmTrafficControl::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   gestures.Start(x, y, Layout::Scale(20));
 
@@ -600,7 +600,7 @@ FlarmTrafficControl::on_mouse_down(PixelScalar x, PixelScalar y)
 }
 
 bool
-FlarmTrafficControl::on_mouse_up(PixelScalar x, PixelScalar y)
+FlarmTrafficControl::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   const TCHAR *gesture = gestures.Finish();
   if (gesture && on_mouse_gesture(gesture))

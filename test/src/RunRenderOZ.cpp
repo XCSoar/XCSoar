@@ -152,17 +152,17 @@ public:
   }
 
 protected:
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
 
-  virtual void on_resize(UPixelScalar width, UPixelScalar height) {
-    PaintWindow::on_resize(width, height);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) {
+    PaintWindow::OnResize(width, height);
     projection.SetScale(fixed(width) / 21000);
     projection.SetScreenOrigin(width / 2, height / 2);
   }
 };
 
 void
-OZWindow::on_paint(Canvas &canvas)
+OZWindow::OnPaint(Canvas &canvas)
 {
   canvas.ClearWhite();
   if (oz == NULL)
@@ -262,14 +262,14 @@ public:
   }
 
 protected:
-  virtual bool on_command(unsigned id, unsigned code) {
+  virtual bool OnCommand(unsigned id, unsigned code) {
     switch (id) {
     case ID_CLOSE:
       close();
       return true;
     }
 
-    return SingleWindow::on_command(id, code);
+    return SingleWindow::OnCommand(id, code);
   }
 };
 

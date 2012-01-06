@@ -60,8 +60,8 @@ Window::set(ContainerWindow *parent,
   if (parent != NULL)
     parent->add_child(*this);
 
-  on_create();
-  on_resize(width, height);
+  OnCreate();
+  OnResize(width, height);
 }
 
 void
@@ -90,14 +90,14 @@ Window::set_focus()
   if (focused)
     return;
 
-  on_setfocus();
+  OnSetFocus();
 }
 
 void
 Window::ClearFocus()
 {
   if (focused) {
-    on_killfocus();
+    OnKillFocus();
 
     assert(!focused);
   }
@@ -107,7 +107,7 @@ void
 Window::set_capture()
 {
   assert_none_locked();
-  assert_thread();
+  AssertThread();
 
   if (parent != NULL)
     parent->set_child_capture(this);
@@ -119,7 +119,7 @@ void
 Window::release_capture()
 {
   assert_none_locked();
-  assert_thread();
+  AssertThread();
 
   capture = false;
 
@@ -160,7 +160,7 @@ Window::expose()
 void
 Window::show()
 {
-  assert_thread();
+  AssertThread();
 
   if (visible)
     return;
@@ -172,7 +172,7 @@ Window::show()
 void
 Window::hide()
 {
-  assert_thread();
+  AssertThread();
 
   if (!visible)
     return;
@@ -185,7 +185,7 @@ void
 Window::bring_to_top()
 {
   assert_none_locked();
-  assert_thread();
+  AssertThread();
 
   parent->bring_child_to_top(*this);
 }
@@ -194,7 +194,7 @@ void
 Window::BringToBottom()
 {
   assert_none_locked();
-  assert_thread();
+  AssertThread();
 
   parent->BringChildToBottom(*this);
 }

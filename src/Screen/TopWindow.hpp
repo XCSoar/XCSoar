@@ -167,7 +167,7 @@ public:
     assert_none_locked();
 
 #ifndef USE_GDI
-    on_close();
+    OnClose();
 #else /* ENABLE_SDL */
     ::SendMessage(hWnd, WM_CLOSE, 0, 0);
 #endif
@@ -201,14 +201,14 @@ protected:
   virtual bool on_deactivate();
 
 #ifdef ENABLE_SDL
-  virtual bool on_close();
+  virtual bool OnClose();
 #else
-  virtual LRESULT on_message(HWND _hWnd, UINT message,
+  virtual LRESULT OnMessage(HWND _hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
 #endif /* !ENABLE_SDL */
 
 #ifdef ANDROID
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
 
   /**
    * @see Event::PAUSE

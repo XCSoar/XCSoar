@@ -81,11 +81,11 @@ Window::created(HWND _hWnd)
   assert(hWnd == NULL);
   hWnd = _hWnd;
 
-  assert_thread();
+  AssertThread();
 }
 
 LRESULT
-Window::on_unhandled_message(HWND hWnd, UINT message,
+Window::OnUnhandledMessage(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam)
 {
   return prev_wndproc != NULL
@@ -94,7 +94,7 @@ Window::on_unhandled_message(HWND hWnd, UINT message,
 }
 
 LRESULT
-Window::on_message(HWND _hWnd, UINT message,
+Window::OnMessage(HWND _hWnd, UINT message,
                        WPARAM wParam, LPARAM lParam)
 {
   if (IsEmbedded() && !IsAltair()) {
@@ -113,30 +113,30 @@ Window::on_message(HWND _hWnd, UINT message,
 
   switch (message) {
   case WM_CREATE:
-    on_create();
+    OnCreate();
     return 0;
 
   case WM_DESTROY:
-    on_destroy();
+    OnDestroy();
     return 0;
 
   case WM_CLOSE:
-    if (on_close())
+    if (OnClose())
       /* true returned: message was handled */
       return 0;
     break;
 
   case WM_SIZE:
-    on_resize(LOWORD(lParam), HIWORD(lParam));
+    OnResize(LOWORD(lParam), HIWORD(lParam));
     return 0;
 
   case WM_MOUSEMOVE:
-    if (on_mouse_move(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), wParam))
+    if (OnMouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), wParam))
       return 0;
     break;
 
   case WM_LBUTTONDOWN:
-    if (on_mouse_down(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
+    if (OnMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
@@ -144,7 +144,7 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_LBUTTONUP:
-    if (on_mouse_up(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
+    if (OnMouseUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
@@ -157,9 +157,9 @@ Window::on_message(HWND _hWnd, UINT message,
          instances of a window class), we just translate
          WM_LBUTTONDBLCLK to WM_LBUTTONDOWN here; this even works for
          built-in window class such as BUTTON */
-      return on_message(_hWnd, WM_LBUTTONDOWN, wParam, lParam);
+      return OnMessage(_hWnd, WM_LBUTTONDOWN, wParam, lParam);
 
-    if (on_mouse_double(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
+    if (OnMouseDouble(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
@@ -169,7 +169,7 @@ Window::on_message(HWND _hWnd, UINT message,
 
 #ifdef WM_MOUSEWHEEL
   case WM_MOUSEWHEEL:
-    if (on_mouse_wheel(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam),
+    if (OnMouseWheel(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam),
                        GET_WHEEL_DELTA_WPARAM(wParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
@@ -179,7 +179,7 @@ Window::on_message(HWND _hWnd, UINT message,
 #endif
 
   case WM_KEYDOWN:
-    if (on_key_down(::TranscodeKey(wParam))) {
+    if (OnKeyDown(::TranscodeKey(wParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
@@ -187,7 +187,7 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_KEYUP:
-    if (on_key_up(::TranscodeKey(wParam))) {
+    if (OnKeyUp(::TranscodeKey(wParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
@@ -195,7 +195,7 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_COMMAND:
-    if (on_command(LOWORD(wParam), HIWORD(wParam))) {
+    if (OnCommand(LOWORD(wParam), HIWORD(wParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
@@ -203,41 +203,41 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_CANCELMODE:
-    if (on_cancel_mode())
+    if (OnCancelMode())
       return 0;
     break;
 
   case WM_SETFOCUS:
-    on_setfocus();
+    OnSetFocus();
     return 0;
 
   case WM_KILLFOCUS:
-    on_killfocus();
+    OnKillFocus();
     return 0;
 
   case WM_TIMER:
-    if (on_timer(*(WindowTimer *)wParam))
+    if (OnTimer(*(WindowTimer *)wParam))
       return 0;
     break;
 
   case WM_PAINT:
     if (custom_painting) {
       PaintCanvas canvas(*this);
-      on_paint(canvas, canvas.get_dirty());
+      OnPaint(canvas, canvas.get_dirty());
       return 0;
     }
     break;
 
   case WM_GETDLGCODE:
-    if (on_key_check(wParam))
+    if (OnKeyCheck(wParam))
       return DLGC_WANTMESSAGE;
     break;
   }
 
-  if (message >= WM_USER && message <= 0x7FFF && on_user(message - WM_USER))
+  if (message >= WM_USER && message <= 0x7FFF && OnUser(message - WM_USER))
     return 0;
 
-  return on_unhandled_message(_hWnd, message, wParam, lParam);
+  return OnUnhandledMessage(_hWnd, message, wParam, lParam);
 }
 
 LRESULT CALLBACK
@@ -269,14 +269,14 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     window = get_unchecked(_hWnd);
   }
 
-  LRESULT result = window->on_message(_hWnd, message, wParam, lParam);
+  LRESULT result = window->OnMessage(_hWnd, message, wParam, lParam);
   assert_none_locked();
 
   return result;
 }
 
 void
-Window::install_wndproc()
+Window::InstallWndProc()
 {
   assert(prev_wndproc == NULL);
 

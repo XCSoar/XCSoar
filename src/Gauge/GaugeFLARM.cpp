@@ -41,7 +41,7 @@ public:
   void Update(const NMEAInfo &gps_info, const TeamCodeSettings &settings);
 
 protected:
-  bool on_mouse_down(PixelScalar x, PixelScalar y);
+  bool OnMouseDown(PixelScalar x, PixelScalar y);
 };
 
 /**
@@ -75,7 +75,7 @@ SmallTrafficWindow::Update(const NMEAInfo &gps_info,
  * @param y y-Coordinate of the click
  */
 bool
-SmallTrafficWindow::on_mouse_down(PixelScalar x, PixelScalar y)
+SmallTrafficWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   dlgFlarmTrafficShowModal();
   return true;

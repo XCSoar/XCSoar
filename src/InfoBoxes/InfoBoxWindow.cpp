@@ -375,16 +375,16 @@ InfoBoxWindow::GetDialogContent()
 }
 
 void
-InfoBoxWindow::on_destroy()
+InfoBoxWindow::OnDestroy()
 {
   focus_timer.Cancel();
-  PaintWindow::on_destroy();
+  PaintWindow::OnDestroy();
 }
 
 void
-InfoBoxWindow::on_resize(UPixelScalar width, UPixelScalar height)
+InfoBoxWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  PaintWindow::on_resize(width, height);
+  PaintWindow::OnResize(width, height);
 
   PixelRect rc = get_client_rect();
 
@@ -416,7 +416,7 @@ InfoBoxWindow::on_resize(UPixelScalar width, UPixelScalar height)
 }
 
 bool
-InfoBoxWindow::on_key_down(unsigned key_code)
+InfoBoxWindow::OnKeyDown(unsigned key_code)
 {
   /* handle local hot key */
 
@@ -451,11 +451,11 @@ InfoBoxWindow::on_key_down(unsigned key_code)
 
   /* call super class */
 
-  return PaintWindow::on_key_down(key_code);
+  return PaintWindow::OnKeyDown(key_code);
 }
 
 bool
-InfoBoxWindow::on_mouse_down(PixelScalar x, PixelScalar y)
+InfoBoxWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   set_capture();
   click_clock.update();
@@ -466,10 +466,10 @@ InfoBoxWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 }
 
 bool
-InfoBoxWindow::on_mouse_up(PixelScalar x, PixelScalar y)
+InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   if (!has_focus())
-    return PaintWindow::on_mouse_up(x, y);
+    return PaintWindow::OnMouseUp(x, y);
 
   if (click_clock.IsDefined()) {
     release_capture();
@@ -484,11 +484,11 @@ InfoBoxWindow::on_mouse_up(PixelScalar x, PixelScalar y)
     click_clock.reset();
     return true;
   } else
-    return PaintWindow::on_mouse_up(x, y);
+    return PaintWindow::OnMouseUp(x, y);
 }
 
 bool
-InfoBoxWindow::on_mouse_double(PixelScalar x, PixelScalar y)
+InfoBoxWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
   if (!IsAltair()) {
     // JMW capture double click, so infoboxes double clicked also bring up menu
@@ -501,25 +501,25 @@ InfoBoxWindow::on_mouse_double(PixelScalar x, PixelScalar y)
 }
 
 void
-InfoBoxWindow::on_paint(Canvas &canvas)
+InfoBoxWindow::OnPaint(Canvas &canvas)
 {
   Paint(canvas);
 }
 
 bool
-InfoBoxWindow::on_cancel_mode()
+InfoBoxWindow::OnCancelMode()
 {
   click_clock.reset();
   release_capture();
-  PaintWindow::on_cancel_mode();
+  PaintWindow::OnCancelMode();
   return false;
 }
 
 void
-InfoBoxWindow::on_setfocus()
+InfoBoxWindow::OnSetFocus()
 {
   // Call the parent function
-  PaintWindow::on_setfocus();
+  PaintWindow::OnSetFocus();
 
   // Start the focus-auto-return timer
   // to automatically return focus back to MapWindow if idle
@@ -530,10 +530,10 @@ InfoBoxWindow::on_setfocus()
 }
 
 void
-InfoBoxWindow::on_killfocus()
+InfoBoxWindow::OnKillFocus()
 {
   // Call the parent function
-  PaintWindow::on_killfocus();
+  PaintWindow::OnKillFocus();
 
   // Destroy the time if it exists
   focus_timer.Cancel();
@@ -543,12 +543,12 @@ InfoBoxWindow::on_killfocus()
 }
 
 bool
-InfoBoxWindow::on_timer(WindowTimer &timer)
+InfoBoxWindow::OnTimer(WindowTimer &timer)
 {
   if (timer == focus_timer) {
     focus_timer.Cancel();
     parent.set_focus();
     return true;
   } else
-    return PaintWindow::on_timer(timer);
+    return PaintWindow::OnTimer(timer);
 }

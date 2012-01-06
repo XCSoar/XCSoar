@@ -191,11 +191,11 @@ public:
 
 protected:
   // events
-  virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_wheel(PixelScalar x, PixelScalar y, int delta);
+  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta);
 
 #ifdef HAVE_MULTI_TOUCH
   virtual bool OnMultiTouchDown();
@@ -210,11 +210,11 @@ protected:
    */
   bool on_mouse_gesture(const TCHAR* gesture);
 
-  virtual bool on_key_down(unsigned key_code);
-  virtual bool on_cancel_mode();
-  virtual void on_paint(Canvas &canvas);
-  virtual void on_paint_buffer(Canvas& canvas);
-  bool on_timer(WindowTimer &timer);
+  virtual bool OnKeyDown(unsigned key_code);
+  virtual bool OnCancelMode();
+  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint_buffer(Canvas& canvas);
+  bool OnTimer(WindowTimer &timer);
 
 private:
   void DrawMapScale(Canvas &canvas, const PixelRect &rc,

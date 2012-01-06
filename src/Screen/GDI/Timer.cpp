@@ -42,7 +42,7 @@ WindowTimer::Cancel()
 }
 
 bool
-Timer::on_timer(WindowTimer &timer)
+Timer::OnTimer(WindowTimer &timer)
 {
   assert(timer == *(WindowTimer *)this);
 

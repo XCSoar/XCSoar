@@ -401,20 +401,20 @@ protected:
    */
   const PixelRect& GetDownButtonRC();
 
-  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-  virtual bool on_key_check(unsigned key_code) const;
-  virtual bool on_key_down(unsigned key_code);
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnKeyCheck(unsigned key_code) const;
+  virtual bool OnKeyDown(unsigned key_code);
   /**
    * canvas is the tabmenu which is the full content window, no content
    * @param canvas
    * Todo: support icons and "ButtonOnly" style
    */
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
 
-  virtual void on_killfocus();
-  virtual void on_setfocus();
+  virtual void OnKillFocus();
+  virtual void OnSetFocus();
 
   /**
    * draw border around main menu

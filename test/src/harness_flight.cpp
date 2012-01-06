@@ -161,7 +161,7 @@ protected:
       }
     }
   }
-  virtual void on_close() {
+  virtual void OnClose() {
     wait_prompt();
   }
 };

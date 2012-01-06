@@ -80,14 +80,14 @@ public:
 protected:
   void set_pressed(bool value);
 
-  virtual bool on_key_down(unsigned key_code);
-  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
-  virtual void on_setfocus();
-  virtual void on_killfocus();
-  virtual bool on_cancel_mode();
-  virtual void on_paint(Canvas &canvas);
+  virtual bool OnKeyDown(unsigned key_code);
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
+  virtual void OnSetFocus();
+  virtual void OnKillFocus();
+  virtual bool OnCancelMode();
+  virtual void OnPaint(Canvas &canvas);
 
   virtual bool on_clicked();
 };

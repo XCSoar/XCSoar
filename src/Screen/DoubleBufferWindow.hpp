@@ -42,7 +42,7 @@ class DoubleBufferWindow : public PaintWindow {
 
   /**
    * Is the buffer dirty, i.e. does it need a full repaint with
-   * on_paint_buffer()?
+   * OnPaint_buffer()?
    */
   bool dirty;
 
@@ -53,9 +53,9 @@ public:
   }
 
 protected:
-  virtual void on_create();
-  virtual void on_destroy();
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void OnCreate();
+  virtual void OnDestroy();
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
 
 #else
   BufferCanvas buffers[2];
@@ -102,18 +102,18 @@ protected:
   }
 
 protected:
-  virtual void on_create();
-  virtual void on_destroy();
+  virtual void OnCreate();
+  virtual void OnDestroy();
 #endif
 
 protected:
-  virtual void on_paint(Canvas &canvas);
-  virtual void on_paint_buffer(Canvas &canvas) = 0;
+  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint_buffer(Canvas &canvas) = 0;
 
 public:
   void repaint() {
 #ifndef ENABLE_OPENGL
-    on_paint_buffer(get_canvas());
+    OnPaint_buffer(get_canvas());
     flip();
 #else
     invalidate();

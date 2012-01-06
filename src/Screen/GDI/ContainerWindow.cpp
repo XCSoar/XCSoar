@@ -68,7 +68,7 @@ ContainerWindow::focus_previous_control()
 }
 
 LRESULT
-ContainerWindow::on_message(HWND hWnd, UINT message,
+ContainerWindow::OnMessage(HWND hWnd, UINT message,
                             WPARAM wParam, LPARAM lParam)
 {
   switch (message) {
@@ -99,7 +99,7 @@ ContainerWindow::on_message(HWND hWnd, UINT message,
 
       Canvas canvas(di->hDC, di->rcItem.right - di->rcItem.left,
                     di->rcItem.bottom - di->rcItem.top);
-      window->on_paint(canvas);
+      window->OnPaint(canvas);
       return TRUE;
     }
 
@@ -113,6 +113,6 @@ ContainerWindow::on_message(HWND hWnd, UINT message,
     break;
   };
 
-  return PaintWindow::on_message(hWnd, message, wParam, lParam);
+  return PaintWindow::OnMessage(hWnd, message, wParam, lParam);
 }
 

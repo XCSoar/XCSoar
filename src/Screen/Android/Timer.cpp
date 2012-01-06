@@ -46,5 +46,5 @@ Timer::Cancel()
 void
 WindowTimer::OnTimer()
 {
-  window.on_timer(*this);
+  window.OnTimer(*this);
 }

@@ -92,9 +92,9 @@ TerminalWindow::Advance()
 }
 
 void
-TerminalWindow::on_create()
+TerminalWindow::OnCreate()
 {
-  PaintWindow::on_create();
+  PaintWindow::OnCreate();
   cell_size = look.font->TextSize(_T("W"));
   cursor_x = 0;
   cursor_y = 0;
@@ -102,9 +102,9 @@ TerminalWindow::on_create()
 }
 
 void
-TerminalWindow::on_resize(UPixelScalar width, UPixelScalar height)
+TerminalWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  PaintWindow::on_resize(width, height);
+  PaintWindow::OnResize(width, height);
 
   data.GrowPreserveFill(std::max(1u, unsigned(width / cell_size.cx)),
                         std::max(1u, unsigned(height / cell_size.cy)),
@@ -118,13 +118,13 @@ TerminalWindow::on_resize(UPixelScalar width, UPixelScalar height)
 }
 
 void
-TerminalWindow::on_paint(Canvas &canvas)
+TerminalWindow::OnPaint(Canvas &canvas)
 {
-  on_paint(canvas, get_client_rect());
+  OnPaint(canvas, get_client_rect());
 }
 
 void
-TerminalWindow::on_paint(Canvas &canvas, const PixelRect &p_dirty)
+TerminalWindow::OnPaint(Canvas &canvas, const PixelRect &p_dirty)
 {
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(look.text_color);

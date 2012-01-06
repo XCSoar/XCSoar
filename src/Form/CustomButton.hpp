@@ -62,10 +62,10 @@ public:
 
 protected:
   /**
-   * The on_paint event is called when the button needs to be drawn
+   * The OnPaint event is called when the button needs to be drawn
    * (derived from PaintWindow)
    */
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
 };
 
 #endif

@@ -159,7 +159,7 @@ protected:
 
   /**
    * The #StopWatch used to benchmark the DrawThread,
-   * i.e. on_paint_buffer().
+   * i.e. OnPaint_buffer().
    */
   ScreenStopWatch draw_sw;
 
@@ -282,12 +282,12 @@ protected:
   }
 
 protected:
-  virtual void on_create();
-  virtual void on_destroy();
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void OnCreate();
+  virtual void OnDestroy();
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
 
-  virtual void on_paint(Canvas& canvas);
-  virtual void on_paint_buffer(Canvas& canvas);
+  virtual void OnPaint(Canvas& canvas);
+  virtual void OnPaint_buffer(Canvas& canvas);
 
 private:
   /**

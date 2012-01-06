@@ -35,7 +35,7 @@ BaseButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
 
   ::SetWindowLong(hWnd, GWL_ID, id);
 
-  install_wndproc();
+  InstallWndProc();
 }
 
 bool
@@ -58,9 +58,9 @@ BaseButtonWindow::Click()
 void
 ButtonWindow::set_text(const TCHAR *_text) {
   assert_none_locked();
-  assert_thread();
+  AssertThread();
 
-  if (get_custom_painting() || _tcschr(_text, _T('&')) == NULL) {
+  if (GetCustomPainting() || _tcschr(_text, _T('&')) == NULL) {
     ::SetWindowText(hWnd, _text);
     return;
   }
@@ -89,7 +89,7 @@ const tstring
 ButtonWindow::get_text() const
 {
   assert_none_locked();
-  assert_thread();
+  AssertThread();
 
   TCHAR buffer[256]; /* should be large enough for buttons */
 
@@ -98,19 +98,19 @@ ButtonWindow::get_text() const
 }
 
 bool
-ButtonWindow::on_key_check(unsigned key_code) const
+ButtonWindow::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case VK_RETURN:
     return true;
 
   default:
-    return BaseButtonWindow::on_key_check(key_code);
+    return BaseButtonWindow::OnKeyCheck(key_code);
   }
 }
 
 bool
-ButtonWindow::on_key_down(unsigned key_code)
+ButtonWindow::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
 #ifdef GNAV
@@ -121,6 +121,6 @@ ButtonWindow::on_key_down(unsigned key_code)
     return true;
 
   default:
-    return BaseButtonWindow::on_key_down(key_code);
+    return BaseButtonWindow::OnKeyDown(key_code);
   }
 }

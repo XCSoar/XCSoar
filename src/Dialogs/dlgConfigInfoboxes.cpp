@@ -46,9 +46,9 @@ Copyright_License {
 
 class InfoBoxPreview : public PaintWindow {
 protected:
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
-  virtual void on_paint(Canvas &canvas);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
+  virtual void OnPaint(Canvas &canvas);
 };
 
 static InfoBoxSettings::Panel data;
@@ -152,21 +152,21 @@ OnContentAccess(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 bool
-InfoBoxPreview::on_mouse_down(PixelScalar x, PixelScalar y)
+InfoBoxPreview::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   SetCurrentInfoBox(this - previews);
   return true;
 }
 
 bool
-InfoBoxPreview::on_mouse_double(PixelScalar x, PixelScalar y)
+InfoBoxPreview::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
   edit_content->BeginEditing();
   return true;
 }
 
 void
-InfoBoxPreview::on_paint(Canvas &canvas)
+InfoBoxPreview::OnPaint(Canvas &canvas)
 {
   const unsigned i = this - previews;
   const bool is_current = i == current_preview;

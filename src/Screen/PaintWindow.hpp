@@ -36,7 +36,7 @@ class ContainerWindow;
 class PaintWindow : public Window {
 private:
   /* hide this method */
-  void install_wndproc();
+  void InstallWndProc();
 
 public:
   PaintWindow() {

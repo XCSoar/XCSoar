@@ -150,7 +150,7 @@ TopWindow::on_deactivate()
 }
 
 LRESULT
-TopWindow::on_message(HWND _hWnd, UINT message,
+TopWindow::OnMessage(HWND _hWnd, UINT message,
                       WPARAM wParam, LPARAM lParam)
 {
   switch (message) {
@@ -169,7 +169,7 @@ TopWindow::on_message(HWND _hWnd, UINT message,
 #endif
     break;
   };
-  return ContainerWindow::on_message(_hWnd, message, wParam, lParam);
+  return ContainerWindow::OnMessage(_hWnd, message, wParam, lParam);
 }
 
 int

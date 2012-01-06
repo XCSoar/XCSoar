@@ -129,7 +129,7 @@ protected:
    * OnPaint event called by the message loop
    * @param canvas Canvas to draw to
    */
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
 };
 
 #endif

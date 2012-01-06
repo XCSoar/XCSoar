@@ -80,24 +80,24 @@ WndListFrame::show_or_hide_scroll_bar()
 }
 
 void
-WndListFrame::on_resize(UPixelScalar width, UPixelScalar height)
+WndListFrame::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  PaintWindow::on_resize(width, height);
+  PaintWindow::OnResize(width, height);
   items_visible = height / item_height;
   show_or_hide_scroll_bar();
 }
 
 void
-WndListFrame::on_setfocus()
+WndListFrame::OnSetFocus()
 {
-  PaintWindow::on_setfocus();
+  PaintWindow::OnSetFocus();
   invalidate_item(cursor);
 }
 
 void
-WndListFrame::on_killfocus()
+WndListFrame::OnKillFocus()
 {
-  PaintWindow::on_killfocus();
+  PaintWindow::OnKillFocus();
   invalidate_item(cursor);
 }
 
@@ -141,7 +141,7 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 }
 
 void
-WndListFrame::on_paint(Canvas &canvas)
+WndListFrame::OnPaint(Canvas &canvas)
 {
   if (PaintItemCallback != NULL)
     DrawItems(canvas, origin, origin + items_visible + 2);
@@ -150,7 +150,7 @@ WndListFrame::on_paint(Canvas &canvas)
 }
 
 void
-WndListFrame::on_paint(Canvas &canvas, const PixelRect &dirty)
+WndListFrame::OnPaint(Canvas &canvas, const PixelRect &dirty)
 {
   if (PaintItemCallback != NULL)
     DrawItems(canvas, origin + dirty.top / item_height,
@@ -296,7 +296,7 @@ WndListFrame::SetOrigin(int i)
 
     /* repaint the scrollbar synchronously; we could invalidate its
        area and repaint asynchronously via WM_PAINT, but then the clip
-       rect passed to on_paint() would be the whole client area */
+       rect passed to OnPaint() would be the whole client area */
     WindowCanvas canvas(*this);
     DrawScrollBar(canvas);
     return;
@@ -313,7 +313,7 @@ WndListFrame::MoveOrigin(int delta)
 }
 
 bool
-WndListFrame::on_key_check(unsigned key_code) const
+WndListFrame::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case VK_RETURN:
@@ -333,7 +333,7 @@ WndListFrame::on_key_check(unsigned key_code) const
 }
 
 bool
-WndListFrame::on_key_down(unsigned key_code)
+WndListFrame::OnKeyDown(unsigned key_code)
 {
   scroll_bar.drag_end(this);
 
@@ -402,11 +402,11 @@ WndListFrame::on_key_down(unsigned key_code)
     MoveCursor(items_visible);
     return true;
   }
-  return PaintWindow::on_key_down(key_code);
+  return PaintWindow::OnKeyDown(key_code);
 }
 
 bool
-WndListFrame::on_mouse_up(PixelScalar x, PixelScalar y)
+WndListFrame::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   if (scroll_bar.is_dragging()) {
     scroll_bar.drag_end(this);
@@ -421,7 +421,7 @@ WndListFrame::on_mouse_up(PixelScalar x, PixelScalar y)
 
     return true;
   } else
-    return PaintWindow::on_mouse_up(x, y);
+    return PaintWindow::OnMouseUp(x, y);
 }
 
 void
@@ -434,7 +434,7 @@ WndListFrame::drag_end()
 }
 
 bool
-WndListFrame::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
+WndListFrame::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   // If we are currently dragging the ScrollBar slider
   if (scroll_bar.is_dragging()) {
@@ -452,11 +452,11 @@ WndListFrame::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
     return true;
   }
 
-  return PaintWindow::on_mouse_move(x, y, keys);
+  return PaintWindow::OnMouseMove(x, y, keys);
 }
 
 bool
-WndListFrame::on_mouse_down(PixelScalar x, PixelScalar y)
+WndListFrame::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   // End any previous drag
   scroll_bar.drag_end(this);
@@ -525,7 +525,7 @@ WndListFrame::on_mouse_down(PixelScalar x, PixelScalar y)
 }
 
 bool
-WndListFrame::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
+WndListFrame::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 {
   scroll_bar.drag_end(this);
   drag_end();
@@ -548,9 +548,9 @@ WndListFrame::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
 }
 
 bool
-WndListFrame::on_cancel_mode()
+WndListFrame::OnCancelMode()
 {
-  PaintWindow::on_cancel_mode();
+  PaintWindow::OnCancelMode();
 
   scroll_bar.drag_end(this);
   drag_end();
@@ -565,7 +565,7 @@ WndListFrame::on_cancel_mode()
 #ifndef _WIN32_WCE
 
 bool
-WndListFrame::on_timer(WindowTimer &timer)
+WndListFrame::OnTimer(WindowTimer &timer)
 {
   if (timer == kinetic_timer) {
     if (kinetic.IsSteady()) {
@@ -576,15 +576,15 @@ WndListFrame::on_timer(WindowTimer &timer)
     return true;
   }
 
-  return PaintWindow::on_timer(timer);
+  return PaintWindow::OnTimer(timer);
 }
 
 void
-WndListFrame::on_destroy()
+WndListFrame::OnDestroy()
 {
   kinetic_timer.Cancel();
 
-  PaintWindow::on_destroy();
+  PaintWindow::OnDestroy();
 }
 
 #endif

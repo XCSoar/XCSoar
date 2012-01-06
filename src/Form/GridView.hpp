@@ -79,7 +79,7 @@ protected:
   signed GetNextEnabledItemIndex(signed currIndex, Direction direction);
 
 #ifdef USE_GDI
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
 #endif
 };
 

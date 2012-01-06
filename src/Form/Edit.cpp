@@ -45,9 +45,9 @@ CanEditInPlace()
 }
 
 bool
-WndProperty::Editor::on_mouse_down(PixelScalar x, PixelScalar y)
+WndProperty::Editor::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  if (parent->on_mouse_down(x, y))
+  if (parent->OnMouseDown(x, y))
     return true;
 
 #ifdef USE_GDI
@@ -59,11 +59,11 @@ WndProperty::Editor::on_mouse_down(PixelScalar x, PixelScalar y)
 
 #endif
 
-  return EditWindow::on_mouse_down(x, y);
+  return EditWindow::OnMouseDown(x, y);
 }
 
 bool
-WndProperty::Editor::on_key_check(unsigned key_code) const
+WndProperty::Editor::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case VK_RETURN:
@@ -76,15 +76,15 @@ WndProperty::Editor::on_key_check(unsigned key_code) const
     return true;
 
   default:
-    return EditWindow::on_key_check(key_code);
+    return EditWindow::OnKeyCheck(key_code);
   }
 }
 
 bool
-WndProperty::Editor::on_key_down(unsigned key_code)
+WndProperty::Editor::OnKeyDown(unsigned key_code)
 {
   // If return key pressed (Compaq uses VKF23)
-  if (key_code == VK_RETURN && parent->on_mouse_down(0, 0))
+  if (key_code == VK_RETURN && parent->OnMouseDown(0, 0))
     return true;
 
   // Check for long key press
@@ -106,11 +106,11 @@ WndProperty::Editor::on_key_down(unsigned key_code)
     return true;
   }
 
-  return EditWindow::on_key_down(key_code);
+  return EditWindow::OnKeyDown(key_code);
 }
 
 bool
-WndProperty::Editor::on_key_up(unsigned key_code)
+WndProperty::Editor::OnKeyUp(unsigned key_code)
 {
   if (KeyTimer(false, key_code)) {
     // activate tool tips if hit return for long time
@@ -123,24 +123,24 @@ WndProperty::Editor::on_key_up(unsigned key_code)
       return true;
   }
 
-  return EditWindow::on_key_up(key_code);
+  return EditWindow::OnKeyUp(key_code);
 }
 
 void
-WndProperty::Editor::on_setfocus()
+WndProperty::Editor::OnSetFocus()
 {
   KeyTimer(true, 0);
-  EditWindow::on_setfocus();
+  EditWindow::OnSetFocus();
   parent->on_editor_setfocus();
   set_selection();
 }
 
 void
-WndProperty::Editor::on_killfocus()
+WndProperty::Editor::OnKillFocus()
 {
   KeyTimer(true, 0);
   parent->on_editor_killfocus();
-  EditWindow::on_killfocus();
+  EditWindow::OnKillFocus();
 }
 
 WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
@@ -161,7 +161,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
   set(parent, rc, style);
 
   edit.set(*this, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y, edit_style);
-  edit.install_wndproc();
+  edit.InstallWndProc();
 
   edit.set_font(*look.text_font);
 
@@ -267,21 +267,21 @@ WndProperty::on_editor_killfocus()
 }
 
 void
-WndProperty::on_resize(UPixelScalar width, UPixelScalar height)
+WndProperty::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  WindowControl::on_resize(width, height);
+  WindowControl::OnResize(width, height);
   UpdateLayout();
 }
 
 bool
-WndProperty::on_mouse_down(PixelScalar x, PixelScalar y)
+WndProperty::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   BeginEditing();
   return true;
 }
 
 bool
-WndProperty::on_mouse_up(PixelScalar x, PixelScalar y)
+WndProperty::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   return true;
 }
@@ -317,7 +317,7 @@ WndProperty::DecValue(void)
 }
 
 void
-WndProperty::on_paint(Canvas &canvas)
+WndProperty::OnPaint(Canvas &canvas)
 {
   const bool focused = edit.has_focus();
 
@@ -331,7 +331,7 @@ WndProperty::on_paint(Canvas &canvas)
       canvas.clear(look.background_color);
   }
 
-  WindowControl::on_paint(canvas);
+  WindowControl::OnPaint(canvas);
 
   /* kludge: don't draw caption if width is too small (but not 0),
      used by the polar configuration panel.  This concept needs to be

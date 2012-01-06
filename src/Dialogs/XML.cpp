@@ -711,7 +711,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     EditWindow *edit;
     window = edit = new EditWindow();
     edit->set(parent, pos.x, pos.y, size.cx, size.cy, edit_style);
-    edit->install_wndproc();
+    edit->InstallWndProc();
     edit->set_font(*xml_dialog_look->text_font);
 
   // ButtonControl (WndButton)

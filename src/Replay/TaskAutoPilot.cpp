@@ -355,7 +355,7 @@ TaskAutoPilot::update_computer(TaskAccessor& task,
                                const AircraftState& state)
 {
   if (!far_from_target(task, state)) {
-    on_close();
+    OnClose();
     return do_advance(task);
   }
 

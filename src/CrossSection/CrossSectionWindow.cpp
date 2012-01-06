@@ -370,7 +370,7 @@ CrossSectionWindow::PaintGrid(Canvas &canvas, Chart &chart)
 }
 
 void
-CrossSectionWindow::on_paint(Canvas &canvas)
+CrossSectionWindow::OnPaint(Canvas &canvas)
 {
   canvas.clear(look.background_color);
   canvas.SetTextColor(look.text_color);

@@ -445,9 +445,9 @@ MainWindow::full_redraw()
 // Windows event handlers
 
 void
-MainWindow::on_resize(UPixelScalar width, UPixelScalar height)
+MainWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  SingleWindow::on_resize(width, height);
+  SingleWindow::OnResize(width, height);
 
   Layout::Initialize(width, height);
 
@@ -476,9 +476,9 @@ MainWindow::on_activate()
 }
 
 void
-MainWindow::on_setfocus()
+MainWindow::OnSetFocus()
 {
-  SingleWindow::on_setfocus();
+  SingleWindow::OnSetFocus();
 
   if (!has_dialog()) {
     /* the main window should never have the keyboard focus; if we
@@ -492,17 +492,17 @@ MainWindow::on_setfocus()
 }
 
 bool
-MainWindow::on_key_down(unsigned key_code)
+MainWindow::OnKeyDown(unsigned key_code)
 {
   return InputEvents::processKey(key_code) ||
-    SingleWindow::on_key_down(key_code);
+    SingleWindow::OnKeyDown(key_code);
 }
 
 bool
-MainWindow::on_timer(WindowTimer &_timer)
+MainWindow::OnTimer(WindowTimer &_timer)
 {
   if (_timer != timer)
-    return SingleWindow::on_timer(_timer);
+    return SingleWindow::OnTimer(_timer);
 
   if (globalRunningEvent.Test()) {
     battery_timer.Process();
@@ -532,7 +532,7 @@ MainWindow::on_timer(WindowTimer &_timer)
 }
 
 bool
-MainWindow::on_user(unsigned id)
+MainWindow::OnUser(unsigned id)
 {
   ProtectedAirspaceWarningManager *airspace_warnings;
 
@@ -575,28 +575,28 @@ MainWindow::on_user(unsigned id)
 }
 
 void
-MainWindow::on_create()
+MainWindow::OnCreate()
 {
-  SingleWindow::on_create();
+  SingleWindow::OnCreate();
 
   timer.Schedule(500); // 2 times per second
 }
 
 void
-MainWindow::on_destroy()
+MainWindow::OnDestroy()
 {
   timer.Cancel();
 
   KillWidget();
 
-  SingleWindow::on_destroy();
+  SingleWindow::OnDestroy();
 }
 
-bool MainWindow::on_close() {
+bool MainWindow::OnClose() {
   if (!IsRunning())
     /* no shutdown dialog if XCSoar hasn't completed initialization
        yet (e.g. if we are in the simulator prompt) */
-    return SingleWindow::on_close();
+    return SingleWindow::OnClose();
 
   if (XCSoarInterface::CheckShutdown()) {
     XCSoarInterface::Shutdown();
@@ -776,7 +776,7 @@ MainWindow::UpdateTrafficGaugeVisibility()
 const MapWindowProjection &
 MainWindow::GetProjection() const
 {
-  assert_thread();
+  AssertThread();
   assert(map != NULL);
 
   return map->VisibleProjection();

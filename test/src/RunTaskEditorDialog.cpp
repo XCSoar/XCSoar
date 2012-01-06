@@ -159,7 +159,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   SingleWindow main_window;
   main_window.set(_T("STATIC"), _T("RunTaskEditorDialog"),
                   0, 0, 640, 480);
-  ((Window &)main_window).install_wndproc();
+  ((Window &)main_window).InstallWndProc();
   main_window.show();
 
   Layout::Initialize(640, 480);

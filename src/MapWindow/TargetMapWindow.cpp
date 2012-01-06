@@ -194,7 +194,7 @@ TargetMapWindow::RenderTrail(Canvas &canvas)
 }
 
 void
-TargetMapWindow::on_paint_buffer(Canvas &canvas)
+TargetMapWindow::OnPaint_buffer(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   /* enable clipping */
@@ -232,9 +232,9 @@ TargetMapWindow::on_paint_buffer(Canvas &canvas)
 }
 
 void
-TargetMapWindow::on_paint(Canvas &canvas)
+TargetMapWindow::OnPaint(Canvas &canvas)
 {
-  BufferWindow::on_paint(canvas);
+  BufferWindow::OnPaint(canvas);
 
   if (drag_mode == DRAG_TARGET)
     TargetPaintDrag(canvas, drag_last);
@@ -309,9 +309,9 @@ TargetMapWindow::SetTarget(unsigned index)
 }
 
 void
-TargetMapWindow::on_resize(UPixelScalar width, UPixelScalar height)
+TargetMapWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  BufferWindow::on_resize(width, height);
+  BufferWindow::OnResize(width, height);
 
 #ifndef ENABLE_OPENGL
   buffer_canvas.grow(width, height);
@@ -326,9 +326,9 @@ TargetMapWindow::on_resize(UPixelScalar width, UPixelScalar height)
 }
 
 void
-TargetMapWindow::on_create()
+TargetMapWindow::OnCreate()
 {
-  BufferWindow::on_create();
+  BufferWindow::OnCreate();
 
   drag_mode = DRAG_NONE;
 
@@ -342,7 +342,7 @@ TargetMapWindow::on_create()
 }
 
 void
-TargetMapWindow::on_destroy()
+TargetMapWindow::OnDestroy()
 {
   SetTerrain(NULL);
   SetTopograpgy(NULL);
@@ -356,5 +356,5 @@ TargetMapWindow::on_destroy()
     stencil_canvas.reset();
 #endif
 
-  BufferWindow::on_destroy();
+  BufferWindow::OnDestroy();
 }

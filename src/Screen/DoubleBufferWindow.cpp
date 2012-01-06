@@ -26,24 +26,24 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 
 void
-DoubleBufferWindow::on_create()
+DoubleBufferWindow::OnCreate()
 {
-  PaintWindow::on_create();
+  PaintWindow::OnCreate();
 
   dirty = true;
 }
 
 void
-DoubleBufferWindow::on_destroy()
+DoubleBufferWindow::OnDestroy()
 {
   buffer.reset();
-  PaintWindow::on_destroy();
+  PaintWindow::OnDestroy();
 }
 
 void
-DoubleBufferWindow::on_resize(UPixelScalar width, UPixelScalar height)
+DoubleBufferWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  PaintWindow::on_resize(width, height);
+  PaintWindow::OnResize(width, height);
   buffer.reset();
   invalidate();
 }
@@ -53,9 +53,9 @@ DoubleBufferWindow::on_resize(UPixelScalar width, UPixelScalar height)
 #include "Screen/WindowCanvas.hpp"
 
 void
-DoubleBufferWindow::on_create()
+DoubleBufferWindow::OnCreate()
 {
-  PaintWindow::on_create();
+  PaintWindow::OnCreate();
 
   WindowCanvas a_canvas(*this);
   buffers[0].set(a_canvas);
@@ -63,9 +63,9 @@ DoubleBufferWindow::on_create()
 }
 
 void
-DoubleBufferWindow::on_destroy()
+DoubleBufferWindow::OnDestroy()
 {
-  PaintWindow::on_destroy();
+  PaintWindow::OnDestroy();
 
   buffers[0].reset();
   buffers[1].reset();
@@ -90,7 +90,7 @@ DoubleBufferWindow::flip()
 #endif
 
 void
-DoubleBufferWindow::on_paint(Canvas &canvas)
+DoubleBufferWindow::OnPaint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   if (!buffer.defined()) {
@@ -101,7 +101,7 @@ DoubleBufferWindow::on_paint(Canvas &canvas)
   if (dirty) {
     dirty = false;
     buffer.Begin(canvas);
-    on_paint_buffer(buffer);
+    OnPaint_buffer(buffer);
     buffer.Commit(canvas);
   } else
     buffer.CopyTo(canvas);

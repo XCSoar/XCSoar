@@ -24,18 +24,18 @@ Copyright_License {
 #include "TargetMapWindow.hpp"
 
 bool
-TargetMapWindow::on_cancel_mode()
+TargetMapWindow::OnCancelMode()
 {
   if (drag_mode != DRAG_NONE) {
     release_capture();
     drag_mode = DRAG_NONE;
   }
 
-  return BufferWindow::on_cancel_mode();
+  return BufferWindow::OnCancelMode();
 }
 
 bool
-TargetMapWindow::on_mouse_down(PixelScalar x, PixelScalar y)
+TargetMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   // Ignore single click event if double click detected
   if (drag_mode != DRAG_NONE)
@@ -57,7 +57,7 @@ TargetMapWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 }
 
 bool
-TargetMapWindow::on_mouse_up(PixelScalar x, PixelScalar y)
+TargetMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   if (drag_mode != DRAG_NONE)
     release_capture();
@@ -78,7 +78,7 @@ TargetMapWindow::on_mouse_up(PixelScalar x, PixelScalar y)
 }
 
 bool
-TargetMapWindow::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
+TargetMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   switch (drag_mode) {
   case DRAG_NONE:

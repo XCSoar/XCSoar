@@ -90,7 +90,7 @@ public:
 
   void set_text(const TCHAR *_text) {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
     text = _text;
     invalidate();
@@ -114,15 +114,15 @@ public:
   virtual bool on_clicked();
 
 protected:
-  bool on_key_check(unsigned key_code) const;
-  virtual bool on_key_down(unsigned key_code);
-  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
-  virtual void on_setfocus();
-  virtual void on_killfocus();
-  virtual bool on_cancel_mode();
-  virtual void on_paint(Canvas &canvas);
+  bool OnKeyCheck(unsigned key_code) const;
+  virtual bool OnKeyDown(unsigned key_code);
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
+  virtual void OnSetFocus();
+  virtual void OnKillFocus();
+  virtual bool OnCancelMode();
+  virtual void OnPaint(Canvas &canvas);
 };
 
 #else /* USE_GDI */
@@ -193,7 +193,7 @@ public:
 
   bool is_down() const {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
     return (Button_GetState(hWnd) & BST_PUSHED) != 0;
   }
@@ -203,8 +203,8 @@ public:
   const tstring get_text() const;
 
 protected:
-  virtual bool on_key_check(unsigned key_code) const;
-  virtual bool on_key_down(unsigned key_code);
+  virtual bool OnKeyCheck(unsigned key_code) const;
+  virtual bool OnKeyDown(unsigned key_code);
 };
 
 #endif /* USE_GDI */

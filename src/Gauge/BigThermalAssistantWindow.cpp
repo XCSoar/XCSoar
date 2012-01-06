@@ -25,7 +25,7 @@ Copyright_License {
 #include "Input/InputEvents.hpp"
 
 bool
-BigThermalAssistantWindow::on_mouse_double(PixelScalar x, PixelScalar y)
+BigThermalAssistantWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
   InputEvents::ShowMenu();
   return true;

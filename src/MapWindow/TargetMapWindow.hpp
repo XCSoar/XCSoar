@@ -192,18 +192,18 @@ private:
   bool TargetDragged(const int x, const int y);
 
 protected:
-  virtual void on_create();
-  virtual void on_destroy();
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void OnCreate();
+  virtual void OnDestroy();
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
 
-  virtual void on_paint_buffer(Canvas& canvas);
-  virtual void on_paint(Canvas& canvas);
+  virtual void OnPaint_buffer(Canvas& canvas);
+  virtual void OnPaint(Canvas& canvas);
 
-  virtual bool on_cancel_mode();
+  virtual bool OnCancelMode();
 
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
 };
 
 #endif

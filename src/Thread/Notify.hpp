@@ -75,7 +75,7 @@ protected:
   virtual void OnNotification() = 0;
 
 #ifdef USE_GDI
-  virtual bool on_user(unsigned id);
+  virtual bool OnUser(unsigned id);
 #endif
 };
 

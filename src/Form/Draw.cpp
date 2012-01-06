@@ -36,7 +36,7 @@ WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerWindow &parent,
 }
 
 void
-WndOwnerDrawFrame::on_paint(Canvas &canvas)
+WndOwnerDrawFrame::OnPaint(Canvas &canvas)
 {
   if (mOnPaintCallback == NULL)
     return;
@@ -45,10 +45,10 @@ WndOwnerDrawFrame::on_paint(Canvas &canvas)
 }
 
 bool
-WndOwnerDrawFrame::on_mouse_down(PixelScalar x, PixelScalar y)
+WndOwnerDrawFrame::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   if (mOnMouseDownCallback)
     return mOnMouseDownCallback(this, x, y);
 
-  return PaintWindow::on_mouse_down(x, y);
+  return PaintWindow::OnMouseDown(x, y);
 }

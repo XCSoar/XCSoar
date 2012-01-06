@@ -64,7 +64,7 @@ void
 ProgressBar::set_range(unsigned min_value, unsigned max_value)
 {
   assert_none_locked();
-  assert_thread();
+  AssertThread();
 
 #ifndef USE_GDI
   this->min_value = min_value;
@@ -82,7 +82,7 @@ void
 ProgressBar::set_position(unsigned value)
 {
   assert_none_locked();
-  assert_thread();
+  AssertThread();
 
 #ifndef USE_GDI
   this->value = value;
@@ -96,7 +96,7 @@ void
 ProgressBar::set_step(unsigned size)
 {
   assert_none_locked();
-  assert_thread();
+  AssertThread();
 
 #ifndef USE_GDI
   step_size = size;
@@ -110,7 +110,7 @@ void
 ProgressBar::step()
 {
   assert_none_locked();
-  assert_thread();
+  AssertThread();
 
 #ifndef USE_GDI
   value += step_size;
@@ -122,7 +122,7 @@ ProgressBar::step()
 
 #ifndef USE_GDI
 void
-ProgressBar::on_paint(Canvas &canvas)
+ProgressBar::OnPaint(Canvas &canvas)
 {
   unsigned position = 0;
   if (min_value < max_value) {

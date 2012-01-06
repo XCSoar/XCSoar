@@ -51,7 +51,7 @@ CheckBoxControl::on_clicked()
 #ifdef _WIN32_WCE
 
 bool
-CheckBoxControl::on_key_check(unsigned key_code) const
+CheckBoxControl::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case VK_RETURN:
@@ -63,7 +63,7 @@ CheckBoxControl::on_key_check(unsigned key_code) const
 }
 
 bool
-CheckBoxControl::on_key_down(unsigned key_code)
+CheckBoxControl::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
 #ifdef GNAV
@@ -75,7 +75,7 @@ CheckBoxControl::on_key_down(unsigned key_code)
     return on_clicked();
   }
 
-  return CheckBox::on_key_down(key_code);
+  return CheckBox::OnKeyDown(key_code);
 }
 
 #endif /* _WIN32_WCE */

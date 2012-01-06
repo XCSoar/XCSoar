@@ -40,7 +40,7 @@ SingleWindow::remove_dialog(WndForm *dialog)
 void
 SingleWindow::CancelDialog()
 {
-  assert_thread();
+  AssertThread();
 
   assert(!dialogs.empty());
 
@@ -49,7 +49,7 @@ SingleWindow::CancelDialog()
 }
 
 bool
-SingleWindow::on_close()
+SingleWindow::OnClose()
 {
   if (!dialogs.empty()) {
     /* close the current dialog instead of the main window */
@@ -57,12 +57,12 @@ SingleWindow::on_close()
     return true;
   }
 
-  return TopWindow::on_close();
+  return TopWindow::OnClose();
 }
 
 void
-SingleWindow::on_destroy()
+SingleWindow::OnDestroy()
 {
-  TopWindow::on_destroy();
+  TopWindow::OnDestroy();
   post_quit();
 }

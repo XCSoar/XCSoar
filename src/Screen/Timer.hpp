@@ -41,7 +41,7 @@ class AndroidTimer;
 
 /**
  * A timer that, once initialized, periodically calls
- * Window::on_timer() after a specified amount of time, until Cancel()
+ * Window::OnTimer() after a specified amount of time, until Cancel()
  * gets called.
  *
  * Initially, this class does not schedule a timer.  It is supposed to

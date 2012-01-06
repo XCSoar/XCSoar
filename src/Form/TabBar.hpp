@@ -130,8 +130,8 @@ public:
   void SetClientOverlapTabs(bool value);
 
 protected:
-  virtual void on_create();
-  virtual void on_destroy();
+  virtual void OnCreate();
+  virtual void OnDestroy();
 };
 
 #endif

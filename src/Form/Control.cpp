@@ -81,16 +81,16 @@ WindowControl::OnHelp()
 }
 
 bool
-WindowControl::on_key_down(unsigned key_code)
+WindowControl::OnKeyDown(unsigned key_code)
 {
   // JMW: HELP
   KeyTimer(true, key_code);
 
-  return ContainerWindow::on_key_down(key_code);
+  return ContainerWindow::OnKeyDown(key_code);
 }
 
 bool
-WindowControl::on_key_up(unsigned key_code)
+WindowControl::OnKeyUp(unsigned key_code)
 {
   // JMW: detect long enter release
   // VENTA4: PNAs don't have Enter, so it should be better to find an alternate solution
@@ -98,19 +98,19 @@ WindowControl::on_key_up(unsigned key_code)
   if (KeyTimer(false, key_code) && key_code == VK_RETURN && OnHelp())
     return true;
 
-  return ContainerWindow::on_key_up(key_code);
+  return ContainerWindow::OnKeyUp(key_code);
 }
 
 void
-WindowControl::on_setfocus()
+WindowControl::OnSetFocus()
 {
-  ContainerWindow::on_setfocus();
+  ContainerWindow::OnSetFocus();
   invalidate();
 }
 
 void
-WindowControl::on_killfocus()
+WindowControl::OnKillFocus()
 {
-  ContainerWindow::on_killfocus();
+  ContainerWindow::OnKillFocus();
   invalidate();
 }

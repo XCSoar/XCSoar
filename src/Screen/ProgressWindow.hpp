@@ -63,8 +63,8 @@ public:
   void step();
 
 protected:
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  virtual void OnPaint(Canvas &canvas);
   virtual const Brush *on_color(Window &window, Canvas &canvas);
 };
 

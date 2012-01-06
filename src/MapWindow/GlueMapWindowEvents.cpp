@@ -44,7 +44,7 @@ using std::min;
 using std::max;
 
 bool
-GlueMapWindow::on_mouse_double(PixelScalar x, PixelScalar y)
+GlueMapWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
   map_item_timer.Cancel();
 
@@ -59,7 +59,7 @@ GlueMapWindow::on_mouse_double(PixelScalar x, PixelScalar y)
 }
 
 bool
-GlueMapWindow::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
+GlueMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   /* allow a bigger threshold on touch screens */
   const int threshold = IsEmbedded() ? 50 : 10;
@@ -89,11 +89,11 @@ GlueMapWindow::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
     return true;
   }
 
-  return MapWindow::on_mouse_move(x, y, keys);
+  return MapWindow::OnMouseMove(x, y, keys);
 }
 
 bool
-GlueMapWindow::on_mouse_down(PixelScalar x, PixelScalar y)
+GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   map_item_timer.Cancel();
 
@@ -138,7 +138,7 @@ GlueMapWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 }
 
 bool
-GlueMapWindow::on_mouse_up(PixelScalar x, PixelScalar y)
+GlueMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   if (drag_mode != DRAG_NONE)
     release_capture();
@@ -219,7 +219,7 @@ GlueMapWindow::on_mouse_up(PixelScalar x, PixelScalar y)
 }
 
 bool
-GlueMapWindow::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
+GlueMapWindow::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 {
   map_item_timer.Cancel();
 
@@ -261,7 +261,7 @@ GlueMapWindow::on_mouse_gesture(const TCHAR* gesture)
 }
 
 bool
-GlueMapWindow::on_key_down(unsigned key_code)
+GlueMapWindow::OnKeyDown(unsigned key_code)
 {
   map_item_timer.Cancel();
 
@@ -273,9 +273,9 @@ GlueMapWindow::on_key_down(unsigned key_code)
 }
 
 bool
-GlueMapWindow::on_cancel_mode()
+GlueMapWindow::OnCancelMode()
 {
-  MapWindow::on_cancel_mode();
+  MapWindow::OnCancelMode();
 
   if (drag_mode != DRAG_NONE) {
 #ifdef HAVE_MULTI_TOUCH
@@ -291,7 +291,7 @@ GlueMapWindow::on_cancel_mode()
 }
 
 void
-GlueMapWindow::on_paint(Canvas &canvas)
+GlueMapWindow::OnPaint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   ExchangeBlackboard();
@@ -300,7 +300,7 @@ GlueMapWindow::on_paint(Canvas &canvas)
   Idle();
 #endif
 
-  MapWindow::on_paint(canvas);
+  MapWindow::OnPaint(canvas);
 
   // Draw center screen cross hair in pan mode
   if (IsPanning())
@@ -308,9 +308,9 @@ GlueMapWindow::on_paint(Canvas &canvas)
 }
 
 void
-GlueMapWindow::on_paint_buffer(Canvas &canvas)
+GlueMapWindow::OnPaint_buffer(Canvas &canvas)
 {
-  MapWindow::on_paint_buffer(canvas);
+  MapWindow::OnPaint_buffer(canvas);
 
   DrawMapScale(canvas, get_client_rect(), render_projection);
   if (IsPanning())
@@ -318,14 +318,14 @@ GlueMapWindow::on_paint_buffer(Canvas &canvas)
 }
 
 bool
-GlueMapWindow::on_timer(WindowTimer &timer)
+GlueMapWindow::OnTimer(WindowTimer &timer)
 {
   if (timer == map_item_timer) {
     map_item_timer.Cancel();
     ShowMapItems(drag_start_geopoint);
     return true;
   } else
-    return MapWindow::on_timer(timer);
+    return MapWindow::OnTimer(timer);
 }
 
 void

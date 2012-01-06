@@ -70,8 +70,8 @@ public:
 
 #ifdef _WIN32_WCE
 protected:
-  virtual bool on_key_check(unsigned key_code) const;
-  virtual bool on_key_down(unsigned key_code);
+  virtual bool OnKeyCheck(unsigned key_code) const;
+  virtual bool OnKeyDown(unsigned key_code);
 #endif
 
 private:

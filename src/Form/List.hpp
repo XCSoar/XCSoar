@@ -252,56 +252,56 @@ protected:
   void DrawScrollBar(Canvas &canvas);
 
   /**
-   * The on_resize event is called when the Control is resized
+   * The OnResize event is called when the Control is resized
    * (derived from Window)
    */
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
 
-  virtual void on_setfocus();
-  virtual void on_killfocus();
-
-  /**
-   * The on_mouse_down event is called when the mouse is pressed over the button
-   * (derived from Window)
-   */
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-  /**
-   * The on_mouse_up event is called when the mouse is released over the button
-   * (derived from Window)
-   */
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
-  /**
-   * The on_mouse_move event is called when the mouse is moved over the button
-   * (derived from Window)
-   */
-  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
-  /**
-   * The on_mouse_wheel event is called when the mouse wheel is turned
-   * (derived from Window)
-   */
-  virtual bool on_mouse_wheel(PixelScalar x, PixelScalar y, int delta);
-
-  virtual bool on_key_check(unsigned key_code) const;
+  virtual void OnSetFocus();
+  virtual void OnKillFocus();
 
   /**
-   * The on_key_down event is called when a key is pressed while the
+   * The OnMouseDown event is called when the mouse is pressed over the button
+   * (derived from Window)
+   */
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  /**
+   * The OnMouseUp event is called when the mouse is released over the button
+   * (derived from Window)
+   */
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
+  /**
+   * The OnMouseMove event is called when the mouse is moved over the button
+   * (derived from Window)
+   */
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
+  /**
+   * The OnMouseWheel event is called when the mouse wheel is turned
+   * (derived from Window)
+   */
+  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta);
+
+  virtual bool OnKeyCheck(unsigned key_code) const;
+
+  /**
+   * The OnKeyDown event is called when a key is pressed while the
    * button is focused
    * (derived from Window)
    */
-  virtual bool on_key_down(unsigned key_code);
+  virtual bool OnKeyDown(unsigned key_code);
 
-  virtual bool on_cancel_mode();
+  virtual bool OnCancelMode();
 
   /**
-   * The on_paint event is called when the button needs to be drawn
+   * The OnPaint event is called when the button needs to be drawn
    * (derived from PaintWindow)
    */
-  virtual void on_paint(Canvas &canvas);
-  virtual void on_paint(Canvas &canvas, const PixelRect &dirty);
+  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas, const PixelRect &dirty);
 
 #ifndef _WIN32_WCE
-  virtual bool on_timer(WindowTimer &timer);
-  virtual void on_destroy();
+  virtual bool OnTimer(WindowTimer &timer);
+  virtual void OnDestroy();
 #endif
 };
 

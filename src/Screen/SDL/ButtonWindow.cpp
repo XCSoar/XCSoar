@@ -50,19 +50,19 @@ ButtonWindow::set_down(bool _down)
 }
 
 bool
-ButtonWindow::on_key_check(unsigned key_code) const
+ButtonWindow::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case VK_RETURN:
     return true;
 
   default:
-    return PaintWindow::on_key_check(key_code);
+    return PaintWindow::OnKeyCheck(key_code);
   }
 }
 
 bool
-ButtonWindow::on_key_down(unsigned key_code)
+ButtonWindow::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case VK_RETURN:
@@ -70,27 +70,27 @@ ButtonWindow::on_key_down(unsigned key_code)
     set_down(false);
 
     if (!on_clicked() && id != 0 && parent != NULL)
-      parent->on_command(id, 0);
+      parent->OnCommand(id, 0);
     return true;
 
   default:
-    return PaintWindow::on_key_down(key_code);
+    return PaintWindow::OnKeyDown(key_code);
   }
 }
 
 bool
-ButtonWindow::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
+ButtonWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (dragging) {
     set_down(x >= 0 && y >= 0 &&
              (unsigned)x < get_width() && (unsigned)y < get_height());
     return true;
   } else
-    return PaintWindow::on_mouse_move(x, y, keys);
+    return PaintWindow::OnMouseMove(x, y, keys);
 }
 
 bool
-ButtonWindow::on_mouse_down(PixelScalar x, PixelScalar y)
+ButtonWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   if (is_tab_stop())
     set_focus();
@@ -102,7 +102,7 @@ ButtonWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 }
 
 bool
-ButtonWindow::on_mouse_up(PixelScalar x, PixelScalar y)
+ButtonWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   if (!dragging)
     return true;
@@ -116,36 +116,36 @@ ButtonWindow::on_mouse_up(PixelScalar x, PixelScalar y)
   set_down(false);
 
   if (!on_clicked() && id != 0 && parent != NULL)
-    parent->on_command(id, 0);
+    parent->OnCommand(id, 0);
 
   return true;
 }
 
 void
-ButtonWindow::on_setfocus()
+ButtonWindow::OnSetFocus()
 {
-  PaintWindow::on_setfocus();
+  PaintWindow::OnSetFocus();
   invalidate();
 }
 
 void
-ButtonWindow::on_killfocus()
+ButtonWindow::OnKillFocus()
 {
-  PaintWindow::on_killfocus();
+  PaintWindow::OnKillFocus();
   invalidate();
 }
 
 bool
-ButtonWindow::on_cancel_mode()
+ButtonWindow::OnCancelMode()
 {
   dragging = false;
   set_down(false);
 
-  return PaintWindow::on_cancel_mode();
+  return PaintWindow::OnCancelMode();
 }
 
 void
-ButtonWindow::on_paint(Canvas &canvas)
+ButtonWindow::OnPaint(Canvas &canvas)
 {
   if (has_focus()) {
     Pen pen(Layout::Scale(1), COLOR_BLACK);

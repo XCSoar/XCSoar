@@ -29,7 +29,7 @@ Copyright_License {
 #include "resource.h"
 
 void
-WndSymbolButton::on_paint(Canvas &canvas)
+WndSymbolButton::OnPaint(Canvas &canvas)
 {
   PixelRect rc = {
     PixelScalar(0), PixelScalar(0), PixelScalar(canvas.get_width()),

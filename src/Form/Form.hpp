@@ -58,9 +58,9 @@ class WndForm : public ContainerWindow, public SubForm
       :look(_look), command_callback(NULL) {}
 
   protected:
-    virtual bool on_command(unsigned id, unsigned code);
+    virtual bool OnCommand(unsigned id, unsigned code);
     virtual const Brush *on_color(Window &window, Canvas &canvas);
-    virtual void on_paint(Canvas &canvas);
+    virtual void OnPaint(Canvas &canvas);
   };
 
 public:
@@ -102,10 +102,10 @@ protected:
   Window *default_focus;
 
   /**
-   * The on_paint event is called when the button needs to be drawn
+   * The OnPaint event is called when the button needs to be drawn
    * (derived from PaintWindow)
    */
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
 
   WindowTimer timer;
 
@@ -181,12 +181,12 @@ public:
   void SetCaption(const TCHAR *_caption);
 
   /** from class Window */
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
-  virtual void on_destroy();
-  virtual bool on_timer(WindowTimer &timer);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  virtual void OnDestroy();
+  virtual bool OnTimer(WindowTimer &timer);
 
 #ifdef WIN32
-  virtual bool on_command(unsigned id, unsigned code);
+  virtual bool OnCommand(unsigned id, unsigned code);
 #endif
 
   void SetKeyDownNotify(KeyDownNotifyCallback KeyDownNotify) {

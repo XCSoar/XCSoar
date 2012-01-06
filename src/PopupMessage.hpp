@@ -153,7 +153,7 @@ private:
   int GetEmptySlot();
 
 protected:
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
 };
 
 #endif

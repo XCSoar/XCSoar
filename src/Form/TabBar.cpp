@@ -154,9 +154,9 @@ TabBarControl::GetTabWidth() const
 }
 
 void
-TabBarControl::on_create()
+TabBarControl::OnCreate()
 {
-  ContainerWindow::on_create();
+  ContainerWindow::OnCreate();
 
   const PixelRect rc = get_client_rect();
   pager.Initialise(*this, rc);
@@ -165,10 +165,10 @@ TabBarControl::on_create()
 }
 
 void
-TabBarControl::on_destroy()
+TabBarControl::OnDestroy()
 {
   pager.Hide();
   pager.Unprepare();
 
-  ContainerWindow::on_destroy();
+  ContainerWindow::OnDestroy();
 }

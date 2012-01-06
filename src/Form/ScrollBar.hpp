@@ -185,14 +185,14 @@ public:
   bool is_dragging() const { return dragging; }
   /**
    * Should be called when beginning to drag
-   * (Called by WndListFrame::on_mouse_down)
+   * (Called by WndListFrame::OnMouseDown)
    * @param w The Window object the ScrollBar is belonging to
    * @param y y-Coordinate
    */
   void drag_begin(Window *w, UPixelScalar y);
   /**
    * Should be called when stopping to drag
-   * (Called by WndListFrame::on_mouse_up)
+   * (Called by WndListFrame::OnMouseUp)
    * @param w The Window object the ScrollBar is belonging to
    */
   void drag_end(Window *w);

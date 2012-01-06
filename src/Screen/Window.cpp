@@ -46,7 +46,7 @@ Window::~Window()
 #ifndef NDEBUG
 
 void
-Window::assert_thread() const
+Window::AssertThread() const
 {
 #ifdef ENABLE_OPENGL
   assert(pthread_equal(pthread_self(), OpenGL::thread));
@@ -77,17 +77,17 @@ Window::reset()
     return;
 
   assert(IsScreenInitialized());
-  assert_thread();
+  AssertThread();
 
 #ifndef USE_GDI
-  on_destroy();
+  OnDestroy();
 
   width = 0;
   height = 0;
 #else /* USE_GDI */
   ::DestroyWindow(hWnd);
 
-  /* the on_destroy() method must have cleared the variable by
+  /* the OnDestroy() method must have cleared the variable by
      now */
   assert(prev_wndproc == NULL || hWnd == NULL);
 
@@ -131,12 +131,12 @@ Window::get_root_owner()
 }
 
 void
-Window::on_create()
+Window::OnCreate()
 {
 }
 
 void
-Window::on_destroy()
+Window::OnDestroy()
 {
 #ifndef USE_GDI
   if (capture)
@@ -160,48 +160,48 @@ Window::on_destroy()
 }
 
 bool
-Window::on_close()
+Window::OnClose()
 {
   return false;
 }
 
 void
-Window::on_resize(UPixelScalar width, UPixelScalar height)
+Window::OnResize(UPixelScalar width, UPixelScalar height)
 {
 }
 
 bool
-Window::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
+Window::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   /* not handled here */
   return false;
 }
 
 bool
-Window::on_mouse_down(PixelScalar x, PixelScalar y)
+Window::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   return false;
 }
 
 bool
-Window::on_mouse_up(PixelScalar x, PixelScalar y)
+Window::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   return false;
 }
 
 bool
-Window::on_mouse_double(PixelScalar x, PixelScalar y)
+Window::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
 #ifndef USE_GDI
   if (!double_clicks)
-    return on_mouse_down(x, y);
+    return OnMouseDown(x, y);
 #endif
 
   return false;
 }
 
 bool
-Window::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
+Window::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 {
   return false;
 }
@@ -223,31 +223,31 @@ Window::OnMultiTouchUp()
 #endif /* HAVE_MULTI_TOUCH */
 
 bool
-Window::on_key_check(unsigned key_code) const
+Window::OnKeyCheck(unsigned key_code) const
 {
   return false;
 }
 
 bool
-Window::on_key_down(unsigned key_code)
+Window::OnKeyDown(unsigned key_code)
 {
   return false;
 }
 
 bool
-Window::on_key_up(unsigned key_code)
+Window::OnKeyUp(unsigned key_code)
 {
   return false;
 }
 
 bool
-Window::on_command(unsigned id, unsigned code)
+Window::OnCommand(unsigned id, unsigned code)
 {
   return false;
 }
 
 bool
-Window::on_cancel_mode()
+Window::OnCancelMode()
 {
 #ifndef USE_GDI
   release_capture();
@@ -257,7 +257,7 @@ Window::on_cancel_mode()
 }
 
 void
-Window::on_setfocus()
+Window::OnSetFocus()
 {
 #ifndef USE_GDI
   assert(!focused);
@@ -267,7 +267,7 @@ Window::on_setfocus()
 }
 
 void
-Window::on_killfocus()
+Window::OnKillFocus()
 {
 #ifndef USE_GDI
   assert(focused);
@@ -279,24 +279,24 @@ Window::on_killfocus()
 }
 
 bool
-Window::on_timer(WindowTimer &timer)
+Window::OnTimer(WindowTimer &timer)
 {
   return false;
 }
 
 bool
-Window::on_user(unsigned id)
+Window::OnUser(unsigned id)
 {
   return false;
 }
 
 void
-Window::on_paint(Canvas &canvas)
+Window::OnPaint(Canvas &canvas)
 {
 }
 
 void
-Window::on_paint(Canvas &canvas, const PixelRect &dirty)
+Window::OnPaint(Canvas &canvas, const PixelRect &dirty)
 {
-  on_paint(canvas);
+  OnPaint(canvas);
 }

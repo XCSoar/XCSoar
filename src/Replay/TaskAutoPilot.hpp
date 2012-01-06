@@ -68,7 +68,7 @@ public:
 protected:
   virtual void on_manual_advance() {};
   virtual void on_mode_change() {};
-  virtual void on_close() {};
+  virtual void OnClose() {};
 };
 
 class GlidePolar;

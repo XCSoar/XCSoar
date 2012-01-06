@@ -426,7 +426,7 @@ TabMenuDisplay::SetSelectedIndex(TabMenuControl::MenuTabIndex di)
 }
 
 bool
-TabMenuDisplay::on_key_check(unsigned key_code) const
+TabMenuDisplay::OnKeyCheck(unsigned key_code) const
 {
  switch (key_code) {
 
@@ -441,7 +441,7 @@ TabMenuDisplay::on_key_check(unsigned key_code) const
 }
 
 bool
-TabMenuDisplay::on_key_down(unsigned key_code)
+TabMenuDisplay::OnKeyDown(unsigned key_code)
 {
  const unsigned page = menu.GetPageNum(selected_index);
 
@@ -461,11 +461,11 @@ TabMenuDisplay::on_key_down(unsigned key_code)
      return true;
    }
  }
- return PaintWindow::on_key_down(key_code);
+ return PaintWindow::OnKeyDown(key_code);
 }
 
 bool
-TabMenuDisplay::on_mouse_down(PixelScalar x, PixelScalar y)
+TabMenuDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   drag_end();
   RasterPoint Pos;
@@ -484,11 +484,11 @@ TabMenuDisplay::on_mouse_down(PixelScalar x, PixelScalar y)
     invalidate();
     return true;
   }
-  return PaintWindow::on_mouse_down(x, y);
+  return PaintWindow::OnMouseDown(x, y);
 }
 
 bool
-TabMenuDisplay::on_mouse_up(PixelScalar x, PixelScalar y)
+TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   RasterPoint Pos;
   Pos.x = x;
@@ -515,7 +515,7 @@ TabMenuDisplay::on_mouse_up(PixelScalar x, PixelScalar y)
 
     return true;
   } else {
-    return PaintWindow::on_mouse_up(x, y);
+    return PaintWindow::OnMouseUp(x, y);
   }
 }
 
@@ -533,7 +533,7 @@ TabMenuDisplay::GetDownButtonRC()
 }
 
 bool
-TabMenuDisplay::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
+TabMenuDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (down_index.IsNone())
     return false;
@@ -675,7 +675,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle)
 }
 
 void
-TabMenuDisplay::on_paint(Canvas &canvas)
+TabMenuDisplay::OnPaint(Canvas &canvas)
 {
   canvas.clear(look.background_color);
   canvas.Select(*look.button.font);
@@ -688,17 +688,17 @@ TabMenuDisplay::on_paint(Canvas &canvas)
 }
 
 void
-TabMenuDisplay::on_killfocus()
+TabMenuDisplay::OnKillFocus()
 {
   invalidate();
-  PaintWindow::on_killfocus();
+  PaintWindow::OnKillFocus();
 }
 
 void
-TabMenuDisplay::on_setfocus()
+TabMenuDisplay::OnSetFocus()
 {
   invalidate();
-  PaintWindow::on_setfocus();
+  PaintWindow::OnSetFocus();
 }
 
 void

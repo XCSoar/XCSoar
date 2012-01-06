@@ -40,7 +40,7 @@ private:
 
   /**
    * Is the buffer dirty, i.e. does it need a full repaint with
-   * on_paint_buffer()?
+   * OnPaint_buffer()?
    */
   bool dirty;
 
@@ -68,15 +68,15 @@ protected:
 
 protected:
 #ifndef ENABLE_OPENGL
-  virtual void on_create();
-  virtual void on_destroy();
+  virtual void OnCreate();
+  virtual void OnDestroy();
 
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
 #endif
 
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
 
-  virtual void on_paint_buffer(Canvas &canvas) = 0;
+  virtual void OnPaint_buffer(Canvas &canvas) = 0;
 };
 
 #endif

@@ -57,14 +57,14 @@ TopWindow::RefreshSize()
 }
 
 void
-TopWindow::on_resize(UPixelScalar width, UPixelScalar height)
+TopWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
   if (native_view != NULL) {
     native_view->SetSize(width, height);
     screen.OnResize(width, height);
   }
 
-  ContainerWindow::on_resize(width, height);
+  ContainerWindow::OnResize(width, height);
 }
 
 void
@@ -144,27 +144,27 @@ TopWindow::on_event(const Event &event)
     if (w == NULL)
       w = this;
 
-    return w->on_key_down(event.param);
+    return w->OnKeyDown(event.param);
 
   case Event::KEY_UP:
     w = get_focused_window();
     if (w == NULL)
       w = this;
 
-    return w->on_key_up(event.param);
+    return w->OnKeyUp(event.param);
 
   case Event::MOUSE_MOTION:
     // XXX keys
-    return on_mouse_move(event.x, event.y, 0);
+    return OnMouseMove(event.x, event.y, 0);
 
   case Event::MOUSE_DOWN:
     static PeriodClock double_click;
     return double_click.check_always_update(300)
-      ? on_mouse_down(event.x, event.y)
-      : on_mouse_double(event.x, event.y);
+      ? OnMouseDown(event.x, event.y)
+      : OnMouseDouble(event.x, event.y);
 
   case Event::MOUSE_UP:
-    return on_mouse_up(event.x, event.y);
+    return OnMouseUp(event.x, event.y);
 
   case Event::POINTER_DOWN:
     return OnMultiTouchDown();

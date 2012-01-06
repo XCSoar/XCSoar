@@ -36,7 +36,7 @@ EditWindow::set(ContainerWindow &parent, PixelScalar left, PixelScalar top,
 }
 
 void
-EditWindow::on_paint(Canvas &canvas)
+EditWindow::OnPaint(Canvas &canvas)
 {
   if (is_enabled()) {
     if (is_read_only())

@@ -77,7 +77,7 @@ public:
 
   void set_text(const TCHAR *_text) {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
 #ifndef USE_GDI
     if (_text != NULL)
@@ -92,7 +92,7 @@ public:
 
 #ifndef USE_GDI
 protected:
-  virtual void on_paint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas);
 #endif /* !USE_GDI */
 };
 

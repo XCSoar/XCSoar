@@ -152,14 +152,14 @@ public:
   }
 
 protected:
-  virtual bool on_command(unsigned id, unsigned code) {
+  virtual bool OnCommand(unsigned id, unsigned code) {
     switch (id) {
     case ID_CLOSE:
       close();
       return true;
     }
 
-    return TopWindow::on_command(id, code);
+    return TopWindow::OnCommand(id, code);
   }
 };
 

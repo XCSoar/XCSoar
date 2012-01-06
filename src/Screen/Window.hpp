@@ -230,7 +230,7 @@ public:
   virtual ~Window();
 
   /**
-   * Activates the on_paint() method.  It is disabled by default
+   * Activates the OnPaint() method.  It is disabled by default
    * because its preparation would needlessly allocate resources.
    */
   void enable_custom_painting() {
@@ -271,15 +271,15 @@ protected:
    * window.
    */
 #ifdef NDEBUG
-  void assert_thread() const {}
+  void AssertThread() const {}
   void AssertThreadOrUndefined() const {}
 #else
-  void assert_thread() const;
+  void AssertThread() const;
   void AssertThreadOrUndefined() const;
 #endif
 
 #ifdef USE_GDI
-  bool get_custom_painting() const {
+  bool GetCustomPainting() const {
     return custom_painting;
   }
 #endif
@@ -386,7 +386,7 @@ public:
 
   void move(PixelScalar left, PixelScalar top) {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
 #ifndef USE_GDI
     this->left = left;
@@ -402,7 +402,7 @@ public:
   void move(PixelScalar left, PixelScalar top,
             UPixelScalar width, UPixelScalar height) {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
 #ifndef USE_GDI
     move(left, top);
@@ -425,7 +425,7 @@ public:
   void fast_move(PixelScalar left, PixelScalar top,
                  UPixelScalar width, UPixelScalar height) {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
 #ifndef USE_GDI
     move(left, top, width, height);
@@ -442,7 +442,7 @@ public:
    */
   void MoveAndShow(const PixelRect rc) {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
 #ifdef USE_GDI
     ::SetWindowPos(hWnd, NULL,
@@ -457,7 +457,7 @@ public:
 
   void resize(UPixelScalar width, UPixelScalar height) {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
 #ifndef USE_GDI
     if (width == this->width && height == this->height)
@@ -467,7 +467,7 @@ public:
     this->height = height;
 
     invalidate();
-    on_resize(width, height);
+    OnResize(width, height);
 #else /* USE_GDI */
     ::SetWindowPos(hWnd, NULL, 0, 0, width, height,
                    SWP_NOMOVE | SWP_NOZORDER |
@@ -482,7 +482,7 @@ public:
 #else
   void bring_to_top() {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
     /* not using BringWindowToTop() because it activates the
        winddow */
@@ -493,7 +493,7 @@ public:
 
   void BringToBottom() {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
     ::SetWindowPos(hWnd, HWND_BOTTOM, 0, 0, 0, 0,
                    SWP_NOMOVE|SWP_NOSIZE|
@@ -503,7 +503,7 @@ public:
 
   void show_on_top() {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
 #ifndef USE_GDI
     bring_to_top();
@@ -517,7 +517,7 @@ public:
 
   void set_font(const Font &_font) {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
 #ifndef USE_GDI
     font = &_font;
@@ -547,13 +547,13 @@ public:
   void hide();
 #else
   void show() {
-    assert_thread();
+    AssertThread();
 
     ::ShowWindow(hWnd, SW_SHOW);
   }
 
   void hide() {
-    assert_thread();
+    AssertThread();
 
     ::ShowWindow(hWnd, SW_HIDE);
   }
@@ -564,7 +564,7 @@ public:
    * parent window's background.
    */
   void fast_hide() {
-    assert_thread();
+    AssertThread();
 
 #ifndef USE_GDI
     hide();
@@ -610,7 +610,7 @@ public:
    * Specifies whether this window can get user input.
    */
   void set_enabled(bool enabled) {
-    assert_thread();
+    AssertThread();
 
 #ifndef USE_GDI
     if (enabled == this->enabled)
@@ -631,7 +631,7 @@ public:
   /**
    * Called by the parent window when this window loses focus, or when
    * one of its (indirect) child windows loses focus.  This method is
-   * responsible for invoking on_killfocus().
+   * responsible for invoking OnKillFocus().
    */
   virtual void ClearFocus();
 
@@ -639,7 +639,7 @@ public:
 
   void set_focus() {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
     ::SetFocus(hWnd);
   }
@@ -663,28 +663,28 @@ public:
 
   void set_capture() {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
     ::SetCapture(hWnd);
   }
 
   void release_capture() {
     assert_none_locked();
-    assert_thread();
+    AssertThread();
 
     ::ReleaseCapture();
   }
 
   WNDPROC set_wndproc(WNDPROC wndproc)
   {
-    assert_thread();
+    AssertThread();
 
     return (WNDPROC)::SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)wndproc);
   }
 
   void set_userdata(void *value)
   {
-    assert_thread();
+    AssertThread();
 
     ::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)value);
   }
@@ -781,13 +781,13 @@ public:
   virtual void expose();
 #else /* USE_GDI */
   HDC BeginPaint(PAINTSTRUCT *ps) {
-    assert_thread();
+    AssertThread();
 
     return ::BeginPaint(hWnd, ps);
   }
 
   void EndPaint(PAINTSTRUCT *ps) {
-    assert_thread();
+    AssertThread();
 
     ::EndPaint(hWnd, ps);
   }
@@ -813,7 +813,7 @@ public:
   /**
    * Converts a #HWND into a #Window pointer.  Returns NULL if the
    * HWND is not a Window peer.  This only works for windows which
-   * have called install_wndproc().
+   * have called InstallWndProc().
    */
   gcc_const
   static Window *get(HWND hWnd) {
@@ -860,15 +860,15 @@ public:
    * @return true on success, false if the window should not be
    * created
    */
-  virtual void on_create();
-  virtual void on_destroy();
-  virtual bool on_close();
-  virtual void on_resize(UPixelScalar width, UPixelScalar height);
-  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
-  virtual bool on_mouse_wheel(PixelScalar x, PixelScalar y, int delta);
+  virtual void OnCreate();
+  virtual void OnDestroy();
+  virtual bool OnClose();
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta);
 
 #ifdef HAVE_MULTI_TOUCH
   /**
@@ -890,43 +890,43 @@ public:
    * dialog manager may use it
    */
   gcc_pure
-  virtual bool on_key_check(unsigned key_code) const;
+  virtual bool OnKeyCheck(unsigned key_code) const;
 
-  virtual bool on_key_down(unsigned key_code);
-  virtual bool on_key_up(unsigned key_code);
-  virtual bool on_command(unsigned id, unsigned code);
-  virtual bool on_cancel_mode();
-  virtual void on_setfocus();
-  virtual void on_killfocus();
-  virtual bool on_timer(WindowTimer &timer);
-  virtual bool on_user(unsigned id);
+  virtual bool OnKeyDown(unsigned key_code);
+  virtual bool OnKeyUp(unsigned key_code);
+  virtual bool OnCommand(unsigned id, unsigned code);
+  virtual bool OnCancelMode();
+  virtual void OnSetFocus();
+  virtual void OnKillFocus();
+  virtual bool OnTimer(WindowTimer &timer);
+  virtual bool OnUser(unsigned id);
 
-  virtual void on_paint(Canvas &canvas);
-  virtual void on_paint(Canvas &canvas, const PixelRect &dirty);
+  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas, const PixelRect &dirty);
 
 #ifdef USE_GDI
   /**
-   * Called by on_message() when the message was not handled by any
+   * Called by OnMessage() when the message was not handled by any
    * virtual method.  Calls the default handler.  This function is
    * virtual, because the Dialog class will have to override it -
    * dialogs have slightly different semantics.
    */
-  virtual LRESULT on_unhandled_message(HWND hWnd, UINT message,
-                                       WPARAM wParam, LPARAM lParam);
+  virtual LRESULT OnUnhandledMessage(HWND hWnd, UINT message,
+                                     WPARAM wParam, LPARAM lParam);
 
-  virtual LRESULT on_message(HWND hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam);
+  virtual LRESULT OnMessage(HWND hWnd, UINT message,
+                            WPARAM wParam, LPARAM lParam);
 #endif /* USE_GDI */
 
 public:
 #ifndef USE_GDI
-  void install_wndproc() {
+  void InstallWndProc() {
     // XXX
   }
 #else /* USE_GDI */
   /**
    * This static method reads the Window* object from GWL_USERDATA and
-   * calls on_message().
+   * calls OnMessage().
    */
   static LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
                                   WPARAM wParam, LPARAM lParam);
@@ -935,7 +935,7 @@ public:
    * Installs Window::WndProc() has the WNDPROC.  This enables the
    * methods on_*() methods, which may be implemented by sub classes.
    */
-  void install_wndproc();
+  void InstallWndProc();
 #endif /* USE_GDI */
 };
 
