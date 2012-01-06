@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef SCANTASKPOINT_HPP
 #define SCANTASKPOINT_HPP
 
+#include "Compiler.h"
+
 #include <stdint.h>
 
 /**
@@ -43,6 +45,14 @@ struct ScanTaskPoint {
     return stage_number < other.stage_number ||
       (stage_number == other.stage_number &&
        point_index < other.point_index);
+  }
+
+  /**
+   * Determine whether a point is a starting point (no previous edges).
+   */
+  gcc_pure
+  bool IsFirst() const {
+    return stage_number == 0;
   }
 };
 

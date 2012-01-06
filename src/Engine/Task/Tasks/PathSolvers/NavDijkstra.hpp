@@ -147,18 +147,6 @@ protected:
   }
 
   /** 
-   * Determine whether a point is a starting point (no previous edges)
-   * 
-   * @param sp Point to test
-   * 
-   * @return True if point is in first layer
-   */
-  gcc_pure
-  bool is_first(const ScanTaskPoint &sp) const {
-    return sp.stage_number == 0;
-  }
-
-  /** 
    * Iterate search algorithm
    * 
    * @param dijkstra Dijkstra structure to iterate
