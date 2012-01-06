@@ -40,8 +40,7 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
   AbstractContest(_trace, finish_alt_diff),
-  NavDijkstra<TracePoint>(false, n_legs + 1, 0),
-   solution_found(false)
+  NavDijkstra<TracePoint>(false, n_legs + 1, 0)
 {
   Reset();
 }
@@ -60,13 +59,7 @@ ContestDijkstra::Score(ContestResult &result)
 {
   assert(num_stages <= MAX_STAGES);
 
-  if (n_points < num_stages)
-    return false;
-  if (AbstractContest::Score(result)) {
-    solution_found = true;
-    return true;
-  }
-  return false;
+  return n_points >= num_stages && AbstractContest::Score(result);
 }
 
 bool
@@ -172,7 +165,7 @@ ContestDijkstra::Solve(bool exhaustive)
 void
 ContestDijkstra::Reset()
 {
-  solution_found = false;
+  best_solution.clear();
   dijkstra.clear();
   clear_trace();
   solution[num_stages - 1].Clear();
@@ -310,12 +303,7 @@ ContestDijkstra::CopySolution(ContestTraceVector &vec) const
 {
   assert(num_stages <= MAX_STAGES);
 
-  vec.clear();
-  if (solution_found) {
-    assert(num_stages <= MAX_STAGES);
-
-    vec = best_solution;
-  }
+  vec = best_solution;
 }
 
 void 

@@ -41,7 +41,6 @@ class ContestDijkstra:
   public AbstractContest,
   public NavDijkstra<TracePoint>
 {
-  bool solution_found;
   bool trace_dirty;
 
   TracePointVector trace; // working trace for solver
