@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-06 01:08+0100\n"
+"POT-Creation-Date: 2012-01-06 21:48+0100\n"
 "PO-Revision-Date: 2011-12-20 19:55+0100\n"
 "Last-Translator: Geir Gronlien <Unknown>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
@@ -371,7 +371,7 @@ msgid "Auto"
 msgstr "Auto"
 
 #: src/Menu/ExpandMacros.cpp:536 src/Input/InputEventsSettings.cpp:313
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:143
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:134
 #, no-c-format
 msgid "All"
 msgstr "Alt"
@@ -384,9 +384,9 @@ msgstr "Oppg./Land."
 #: src/Menu/ExpandMacros.cpp:539 src/Input/InputEventsSettings.cpp:316
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:54
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:104
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:111
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:119
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:148
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:103
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:110
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:139
 #, no-c-format
 msgid "None"
 msgstr "Ingen"
@@ -4717,9 +4717,9 @@ msgid ""
 "and alternate calculations."
 msgstr "Valg av glideytelsen."
 
+#. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:62
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:9
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:121
 #, fuzzy
 msgid "Arrival height"
 msgstr "Ankomsthøyde"
@@ -4920,8 +4920,7 @@ msgstr "Alltid vis retning."
 msgid ""
 "Display track bearing if there is a significant difference to plane heading."
 msgstr ""
-"Kun vis retning ved betydelig avvik mellom flyretning og "
-"farkostens retning."
+"Kun vis retning ved betydelig avvik mellom flyretning og farkostens retning."
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:87
 #, no-c-format
@@ -5170,132 +5169,168 @@ msgstr "fot"
 msgid "meter"
 msgstr "meter"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:103
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:95
 #, no-c-format
 msgid "Full name"
 msgstr "Fullstendig navn"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:104
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:96
 #, no-c-format
 msgid "The full name of each waypoint is displayed."
 msgstr "Hele navnet for vendepunktet vises."
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:105
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:97
 #, no-c-format
 msgid "First word of name"
 msgstr "Første ord av navn"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:106
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:98
 #, no-c-format
 msgid "The first word of the waypoint name is displayed."
 msgstr "Første ord i vendepunktets navn vises."
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:107
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:99
 #, no-c-format
 msgid "First 3 letters"
 msgstr "Første tre bokstaver"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:108
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:100
 #, no-c-format
 msgid "The first 3 letters of the waypoint name are displayed."
 msgstr "De første 3 bokstaver i vendepunktets navn vises."
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:109
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:101
 #, no-c-format
 msgid "First 5 letters"
 msgstr "Første fem bokstaver"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:110
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:102
 #, no-c-format
 msgid "The first 5 letters of the waypoint name are displayed."
 msgstr "De første 5 bokstaver i vendepunktets navn vises."
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:111
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:103
 #, no-c-format
 msgid "No waypoint name is displayed."
 msgstr "Ingen vendepunktsnavn vises."
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:120
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:106
+msgid "Label format"
+msgstr "Etikettformat"
+
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:106
+#, fuzzy
+msgid "Determines how labels are displayed with each waypoint"
+msgstr "Ankomsthøyde vises ikke."
+
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:111
 #, no-c-format
 msgid "No arrival height is displayed."
 msgstr "Ankomsthøyde vises ikke."
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:121
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:112
 #, no-c-format
 msgid "Straight glide"
 msgstr "Direkte glideflukt"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:122
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:113
 #, no-c-format
 msgid "Straight glide arrival height (no terrain is considered)."
 msgstr "Direkte glideflukt ankomsthøyde (tar ingen hensyn til terrenget)"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:123
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:114
 #, no-c-format
 msgid "Terrain avoidance glide"
 msgstr "Unngå terreng glideflukt"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:124
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:115
 #, no-c-format
 msgid "Arrival height considering terrain avoidance"
 msgstr "Ankomsthøyde ved å ta hensyn til terrenget"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:125
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:116
 #, no-c-format
 msgid "Straight & terrain glide"
 msgstr "Rett- & terreng-bane"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:126
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:117
 #, no-c-format
 msgid "Both arrival heights are displayed."
 msgstr "Begge ankomsthøyder vises."
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:134
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:121
+#, fuzzy
+msgid "Determines how arrival height is displayed in waypoint labels"
+msgstr "Ankomsthøyde vises ikke."
+
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:124
+#, no-c-format
+msgid "Select a label shape."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:126
 #, no-c-format
 msgid "Rounded rectangle"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:135
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:127
 #, no-c-format
 msgid "Outlined"
 msgstr "Omriss"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:143
+#. Expert item
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:131
+msgid "Label style"
+msgstr "Etikettstil"
+
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:134
 #, no-c-format
 msgid "All waypoint labels will be displayed."
 msgstr "Alle vendepunkter vises."
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:144
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:135
 #, no-c-format
 msgid "Task waypoints & landables"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:145
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:136
 #, no-c-format
 msgid "All waypoints part of a task and all landables will be displayed."
 msgstr "Alle vendepunkter som hører til oppgaven samt landingsområder vises."
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:146
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:137
 #, no-c-format
 msgid "Task waypoints"
 msgstr "Oppgave vendepunkter"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:147
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:138
 #, no-c-format
 msgid "All waypoints part of a task will be displayed."
 msgstr "Alle vendepunkter som hører til oppgaven vises."
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:148
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:139
 #, no-c-format
 msgid "No waypoint labels will be displayed."
 msgstr "Ingen vendepunktetiketter vises."
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:156
+#. Expert item
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:143
+#, fuzzy
+msgid "Label visibility"
+msgstr "Etikettens synlighet"
+
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:144
+msgid ""
+"Determines what waypoint labels are displayed for each waypoint (space "
+"permitting)."
+msgstr "Ankomsthøyde vises ikke."
+
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:148
 #, no-c-format
 msgid "Purple circle"
 msgstr "Lilla sirkel"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:157
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:149
 #, no-c-format
 msgid ""
 "Airports and outlanding fields are displayed as purple circles. If the "
@@ -5307,12 +5342,12 @@ msgstr ""
 "innenfor rekkevidde vil en grønn sirkel dekke rundt det lilla. Om et fjell "
 "står i veien for glidebanen vil sirkelen være rød."
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:158
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:152
 #, no-c-format
 msgid "B/W"
 msgstr "S/HV"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:159
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:153
 #, no-c-format
 msgid ""
 "Airports and outlanding fields are displayed in white/grey. If the waypoint "
@@ -5323,12 +5358,12 @@ msgstr ""
 "rekkevidde vil fargen endres til grønn. Om et fjell står i veien for "
 "glidebanen vil fargen være rød."
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:160
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:156
 #, no-c-format
 msgid "Traffic lights"
 msgstr "Trafikklys"
 
-#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:161
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:157
 #, no-c-format
 msgid ""
 "Airports and outlanding fields are displayed in the colors of a traffic "
@@ -5338,6 +5373,57 @@ msgstr ""
 "Flyplasser og utelandingsplasser er vist i fargene av et trafikklys. Grønn "
 "er innenfor rekkevidde, oransje om det står et fjell i veien og rød om den "
 "du er for lav."
+
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:161
+msgid "Landable symbols"
+msgstr "Landinger symboler"
+
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:162
+msgid ""
+"Three styles are available: Purple circles (WinPilot style), a high contrast "
+"(monochrome) style, or orange. The rendering differs for landable field and "
+"airport. All styles mark the waypoints within reach green."
+msgstr ""
+"Landingsstil. 3 stiler er tilgjengelige: Lila sirkler (WinPilot), ensfarget "
+"høykontrast, og oransje. Det skilles mellom mulige landinger og flyplasser. "
+"Steder innenfor rekkevidde markeres grønne."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:168
+msgid "Detailed landables"
+msgstr "Landinger, detaljer"
+
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:169
+msgid ""
+"[Off] Display fixed icons for landables.\n"
+"[On] Show landables with variable information like runway length and heading."
+msgstr ""
+"[Av] Vis faste ikoner for mulige landinger.\n"
+"[På] Vis mulige landinger med tilleggsinformasjon som landingsstripelengde "
+"og retning."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:174
+#, fuzzy
+msgid "Landable size"
+msgstr "Visningsstørrelse landinger."
+
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:175
+msgid "A percentage to select the size landables are displayed on the map."
+msgstr "Størrelsen i % på ikoner for landinger vist på kartet."
+
+#. Expert item
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:179
+msgid "Scale runway length"
+msgstr "Skaler flystripelengde"
+
+#: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:180
+msgid ""
+"[Off] Display fixed length for runways.\n"
+"[On] Scale displayed runway length based on real length."
+msgstr ""
+"[Av] Vis flystriper med fast lengde.\n"
+"[På] Skaler vist flystripe i forhold til virkelig lengde."
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:84
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:185
@@ -6163,11 +6249,6 @@ msgstr "Ikke bruk sjekksum"
 msgid "New"
 msgstr "Ny"
 
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:38
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:38
-msgid "Scale runway length"
-msgstr "Skaler flystripelengde"
-
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:22
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:22
 msgid "Defines the color ramp used in terrain rendering."
@@ -6209,12 +6290,6 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:16
 msgid "Pilot"
 msgstr "Pilot"
-
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:9
-#, fuzzy
-msgid "Determines how arrival height is displayed in waypoint labels"
-msgstr "Ankomsthøyde vises ikke."
 
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:5
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:5
@@ -6456,30 +6531,9 @@ msgstr "Solnedgang"
 msgid "Height of font.  65 is large, 20 is very small."
 msgstr "Skriftstørrelse. 65 er stor, 20 er vedlig liten."
 
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:28
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:28
-msgid ""
-"[Off] Display fixed icons for landables.\n"
-"[On] Show landables with variable information like runway length and heading."
-msgstr ""
-"[Av] Vis faste ikoner for mulige landinger.\n"
-"[På] Vis mulige landinger med tilleggsinformasjon som landingsstripelengde "
-"og retning."
-
 #: Data/Dialogs/pnlStatusTimes.xml:7
 msgid "Landing time"
 msgstr "Landingstid"
-
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:23
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:23
-msgid ""
-"Three styles are available: Purple circles (WinPilot style), a high contrast "
-"(monochrome) style, or orange. The rendering differs for landable field and "
-"airport. All styles mark the waypoints within reach green."
-msgstr ""
-"Landingsstil. 3 stiler er tilgjengelige: Lila sirkler (WinPilot), ensfarget "
-"høykontrast, og oransje. Det skilles mellom mulige landinger og flyplasser. "
-"Steder innenfor rekkevidde markeres grønne."
 
 #: Data/Dialogs/pnlTaskProperties_L.xml:40
 #: Data/Dialogs/pnlTaskProperties.xml:39
@@ -6523,12 +6577,6 @@ msgstr "Intervall;  batteri"
 #: Data/Dialogs/dlgVegaDemo.xml:14
 msgid "This forces the variometer into circling or cruise mode"
 msgstr "Tvinger varioen i sirkle- eller glidestrekkmodus"
-
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:18
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:18
-#, fuzzy
-msgid "Label visibility"
-msgstr "Etikettens synlighet"
 
 #: Data/Dialogs/pnlTaskProperties_L.xml:26
 #: Data/Dialogs/pnlTaskProperties.xml:25
@@ -6711,11 +6759,6 @@ msgstr "Bekreft Varsel"
 msgid "Interval; warning"
 msgstr "Intervall; Varsel"
 
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:23
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:23
-msgid "Landable symbols"
-msgstr "Landinger symboler"
-
 #: Data/Dialogs/dlgWaypointDetails_L.xml:32
 #: Data/Dialogs/dlgWaypointDetails.xml:32
 msgid "Pan To Waypoint"
@@ -6889,12 +6932,6 @@ msgstr ""
 "Maksimalhøyde over bakken når oppgavens startpunkt tas. Sett til 0 for "
 "ubegrenset."
 
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:4
-#, fuzzy
-msgid "Determines how labels are displayed with each waypoint"
-msgstr "Ankomsthøyde vises ikke."
-
 #: Data/Dialogs/dlgVario_L.xml:3 Data/Dialogs/dlgVario.xml:3
 msgid "Vario Configuration"
 msgstr "Vario-oppsett"
@@ -7056,13 +7093,6 @@ msgstr "Innvendig radius på OZ sektor."
 #: Data/Dialogs/dlgVario_L.xml:36 Data/Dialogs/dlgVario.xml:37
 msgid "Baud rate Vega"
 msgstr "Baudrate Vega"
-
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:18
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:18
-msgid ""
-"Determines what waypoint labels are displayed for each waypoint (space "
-"permitting)"
-msgstr ""
 
 #: Data/Dialogs/dlgFlarmTraffic_L.xml:4 Data/Dialogs/dlgFlarmTraffic.xml:4
 #: Data/Dialogs/dlgMapItemList_L.xml:7 Data/Dialogs/dlgMapItemList.xml:7
@@ -7284,11 +7314,6 @@ msgstr ""
 #: Data/Dialogs/pnlStatusRules.xml:9
 msgid "Finish min. alt."
 msgstr "Mål min. høyde."
-
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:33
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:33
-msgid "A percentage to select the size landables are displayed on the map."
-msgstr "Størrelsen i % på ikoner for landinger vist på kartet."
 
 #: Data/Dialogs/Configuration/DevicesConfigPanel_L.xml:12
 #: Data/Dialogs/Configuration/DevicesConfigPanel.xml:12
@@ -7543,15 +7568,6 @@ msgstr "Slå på  talemelding på gjennomsnittsstig ved sirkling."
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:30
 msgid "Show gross"
 msgstr "Vis bruto"
-
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:38
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:38
-msgid ""
-"[Off] Display fixed length for runways.\n"
-"[On] Scale displayed runway length based on real length"
-msgstr ""
-"[Av] Vis flystriper med fast lengde.\n"
-"[På] Skaler vist flystripe i forhold til virkelig lengde."
 
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:20
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:20
@@ -8113,11 +8129,6 @@ msgstr ""
 "Ingen maks. starthøyde eller maks. starthastighet. Høyde ved målpassering må "
 "være minst minimumshøyden og mer enn starthøyde minus 1000 meter."
 
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:4
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:4
-msgid "Label format"
-msgstr "Etikettformat"
-
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:6
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:21
 msgid "Friends"
@@ -8209,12 +8220,6 @@ msgid ""
 msgstr ""
 "Enhet brukt for hastigheter som flyhastighet og bakkehastighet. For "
 "oppgavehastigheter kan en uavhengig enhet defineres."
-
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:33
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:33
-#, fuzzy
-msgid "Landable size"
-msgstr "Visningsstørrelse landinger."
 
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:4
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:4 Data/Dialogs/dlgTaskPoint_L.xml:14
@@ -8357,11 +8362,6 @@ msgstr "FLARM kontakt"
 msgid "Base frequency"
 msgstr "Grunntone"
 
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:28
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:28
-msgid "Detailed landables"
-msgstr "Landinger, detaljer"
-
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:27
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:27
 #, fuzzy
@@ -8386,11 +8386,6 @@ msgstr ""
 #: Data/Dialogs/dlgWaypointDetails.xml:27
 msgid "Replace In Task"
 msgstr "Erstatt i Oppgaven"
-
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel_L.xml:14
-#: Data/Dialogs/Configuration/WaypointDisplayConfigPanel.xml:14
-msgid "Label style"
-msgstr "Etikettstil"
 
 #: Data/Dialogs/dlgVario_L.xml:104 Data/Dialogs/dlgVario.xml:105
 msgid "Filter cruise"
