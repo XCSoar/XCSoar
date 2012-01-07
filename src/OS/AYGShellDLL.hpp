@@ -53,12 +53,12 @@ protected:
 public:
   AYGShellDLL()
     :DynamicLibrary(_T("aygshell")),
-     SHFullScreen_p((SHFullScreen_t)lookup(_T("SHFullScreen"))),
-     SHHandleWMActivate_p((SHHandleWMActivate_t)lookup(_T("SHHandleWMActivate"))),
-     SHHandleWMSettingChange_p((SHHandleWMSettingChange_t)lookup(_T("SHHandleWMSettingChange"))),
-     SHSetAppKeyWndAssoc_p((SHSetAppKeyWndAssoc_t)lookup(_T("SHSetAppKeyWndAssoc"))),
-     SHLoadImageFile_p((SHLoadImageFile_t)lookup(_T("SHLoadImageFile"))),
-     SHLoadImageResource_p((SHLoadImageResource_t)lookup(_T("SHLoadImageResource"))) {}
+     SHFullScreen_p((SHFullScreen_t)Lookup(_T("SHFullScreen"))),
+     SHHandleWMActivate_p((SHHandleWMActivate_t)Lookup(_T("SHHandleWMActivate"))),
+     SHHandleWMSettingChange_p((SHHandleWMSettingChange_t)Lookup(_T("SHHandleWMSettingChange"))),
+     SHSetAppKeyWndAssoc_p((SHSetAppKeyWndAssoc_t)Lookup(_T("SHSetAppKeyWndAssoc"))),
+     SHLoadImageFile_p((SHLoadImageFile_t)Lookup(_T("SHLoadImageFile"))),
+     SHLoadImageResource_p((SHLoadImageResource_t)Lookup(_T("SHLoadImageResource"))) {}
 
   BOOL SHFullScreen(HWND hWnd, DWORD flags) const {
     return SHFullScreen_p != NULL

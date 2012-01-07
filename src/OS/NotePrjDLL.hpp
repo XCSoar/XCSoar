@@ -38,8 +38,8 @@ protected:
 public:
   NotePrjDLL()
     :DynamicLibrary(_T("note_prj")),
-     FindFirstFlashCard_p((FindFirstFlashCard_t)lookup(_T("FindFirstFlashCard"))),
-     FindNextFlashCard_p((FindNextFlashCard_t)lookup(_T("FindNextFlashCard"))) {}
+     FindFirstFlashCard_p((FindFirstFlashCard_t)Lookup(_T("FindFirstFlashCard"))),
+     FindNextFlashCard_p((FindNextFlashCard_t)Lookup(_T("FindNextFlashCard"))) {}
 
   HANDLE FindFirstFlashCard(LPWIN32_FIND_DATA lpFindFlashData) const {
     return FindFirstFlashCard_p != NULL

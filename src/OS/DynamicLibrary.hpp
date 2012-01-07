@@ -38,11 +38,11 @@ public:
     ::FreeLibrary(module);
   }
 
-  bool defined() const {
+  bool IsDefined() const {
     return module != NULL;
   }
 
-  FARPROC WINAPI lookup(const TCHAR *name) const {
+  FARPROC WINAPI Lookup(const TCHAR *name) const {
     return ::GetProcAddress(module, name);
   }
 };

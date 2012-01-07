@@ -106,7 +106,7 @@ static HBITMAP
 load_imgdecmp_file(const TCHAR *path)
 {
   ImgDeCmpDLL imgdecmp_dll;
-  if (!imgdecmp_dll.defined())
+  if (!imgdecmp_dll.IsDefined())
     return false;
 
   HANDLE file = ::CreateFile(path, GENERIC_READ, FILE_SHARE_READ, NULL,

@@ -45,7 +45,7 @@ class FlashCardEnumerator {
 public:
 #ifdef HAVE_NOTE_PRJ_DLL
   FlashCardEnumerator()
-    :handle(note_prj.defined()
+    :handle(note_prj.IsDefined()
             ? note_prj.FindFirstFlashCard(&data)
             : ::FindFirstFile(_T(DIR_SEPARATOR_S "*"), &data)),
      first(true) {}
@@ -64,7 +64,7 @@ public:
       return NULL;
 
 #ifdef HAVE_NOTE_PRJ_DLL
-    if (note_prj.defined()) {
+    if (note_prj.IsDefined()) {
       if (first)
         first = false;
       else if (!note_prj.FindNextFlashCard(handle, &data) ||

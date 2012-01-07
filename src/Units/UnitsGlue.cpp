@@ -112,7 +112,7 @@ AutoDetect()
   /* the GetUserDefaultUILanguage() prototype is missing on
      mingw32ce, we have to look it up dynamically */
   DynamicLibrary coreloc_dll(_T("coredll"));
-  if (!coreloc_dll.defined()) {
+  if (!coreloc_dll.IsDefined()) {
     LogStartUp(_T("Units: coredll.dll not found"));
     return 0;
   }
@@ -120,7 +120,7 @@ AutoDetect()
   typedef LANGID WINAPI (*GetUserDefaultUILanguage_t)();
   GetUserDefaultUILanguage_t GetUserDefaultUILanguage =
     (GetUserDefaultUILanguage_t)
-    coreloc_dll.lookup(_T("GetUserDefaultUILanguage"));
+    coreloc_dll.Lookup(_T("GetUserDefaultUILanguage"));
   if (GetUserDefaultUILanguage == NULL) {
     LogStartUp(_T("Units: GetUserDefaultUILanguage() not available"));
     return 0;

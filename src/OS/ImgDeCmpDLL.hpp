@@ -37,7 +37,8 @@ protected:
 public:
   ImgDeCmpDLL()
     :DynamicLibrary(_T("imgdecmp")),
-     DecompressImageIndirect_p((DecompressImageIndirect_t)lookup(_T("DecompressImageIndirect"))) {}
+     DecompressImageIndirect_p((DecompressImageIndirect_t)
+                               Lookup(_T("DecompressImageIndirect"))) {}
 
   HRESULT DecompressImageIndirect(DecompressImageInfo *pParams) const {
     return DecompressImageIndirect_p != NULL
