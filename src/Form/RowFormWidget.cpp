@@ -431,7 +431,7 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
     return false;
 
   value = iround(new_value);
-  Profile::Set(registry_key, new_value);
+  Profile::Set(registry_key, value);
   return true;
 }
 
