@@ -243,7 +243,7 @@ ContestDijkstra::add_edges(const ScanTaskPoint& origin)
 {
   ScanTaskPoint destination(origin.stage_number + 1, origin.point_index);
 
-  find_solution(origin);
+  solution[0] = GetPointFast(FindStart(origin));
 
   // only add last point!
   if (is_final(destination)) {

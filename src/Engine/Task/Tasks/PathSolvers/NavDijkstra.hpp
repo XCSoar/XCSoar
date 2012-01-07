@@ -184,6 +184,32 @@ protected:
     return false; // No path found
   }
 
+  /**
+   * Search the chain for the ScanTaskPoint at the specified stage.
+   */
+  gcc_pure
+  ScanTaskPoint FindStage(ScanTaskPoint p, unsigned stage_number) const {
+    assert(stage_number <= p.stage_number);
+
+    while (p.stage_number > stage_number) {
+#ifndef NDEBUG
+      const ScanTaskPoint o(p);
+#endif
+      p = dijkstra.get_predecessor(p);
+      assert(p.stage_number + 1 == o.stage_number);
+    }
+
+    return p;
+  }
+
+  /**
+   * Find the first ScanTaskPoint in the chain.
+   */
+  gcc_pure
+  ScanTaskPoint FindStart(ScanTaskPoint p) const {
+    return FindStage(p, 0);
+  }
+
   /** 
    * Determine optimal solution by backtracing the Dijkstra tree
    * 
