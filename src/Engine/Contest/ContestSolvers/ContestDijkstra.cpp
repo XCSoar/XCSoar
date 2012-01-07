@@ -43,8 +43,7 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
   AbstractContest(_trace, finish_alt_diff),
-  NavDijkstra<TracePoint>(false, n_legs + 1, 0),
-   solution_found(false)
+  NavDijkstra<TracePoint>(false, n_legs + 1, 0)
 {
   Reset();
 }
@@ -63,13 +62,7 @@ ContestDijkstra::Score(ContestResult &result)
 {
   assert(num_stages <= MAX_STAGES);
 
-  if (n_points < num_stages)
-    return false;
-  if (AbstractContest::Score(result)) {
-    solution_found = true;
-    return true;
-  }
-  return false;
+  return n_points >= num_stages && AbstractContest::Score(result);
 }
 
 bool
@@ -179,8 +172,9 @@ ContestDijkstra::Solve(bool exhaustive)
 void
 ContestDijkstra::Reset()
 {
-  solution_found = false;
+  best_solution.clear();
   dijkstra.clear();
+  solution_valid = false;
   clear_trace();
   solution[num_stages - 1].Clear();
 
@@ -198,6 +192,9 @@ fixed
 ContestDijkstra::CalcTime() const
 {
   assert(num_stages <= MAX_STAGES);
+
+  assert(!solution[num_stages-1].IsDefined() ||
+         !solution[num_stages - 1].IsOlderThan(solution[0]));
 
   if (!solution[num_stages-1].IsDefined())
     return fixed_zero;
@@ -246,8 +243,7 @@ ContestDijkstra::add_start_edges()
 
   for (; destination.point_index != n_points; ++destination.point_index) {
     // only add points that are valid for the finish
-    solution[0] = GetPointFast(destination);
-    if (admit_candidate(end)) {
+    if (admit_candidate(GetPointFast(destination), end)) {
       dijkstra.link(destination, destination, 0);
     }
   }
@@ -258,7 +254,7 @@ ContestDijkstra::add_edges(const ScanTaskPoint& origin)
 {
   ScanTaskPoint destination(origin.stage_number + 1, origin.point_index);
 
-  find_solution(origin);
+  const TracePoint start = GetPointFast(FindStart(origin));
 
   // only add last point!
   if (is_final(destination)) {
@@ -267,7 +263,7 @@ ContestDijkstra::add_edges(const ScanTaskPoint& origin)
   }
 
   for (; destination.point_index != n_points; ++destination.point_index) {
-    if (admit_candidate(destination)) {
+    if (admit_candidate(start, destination)) {
       const unsigned d = get_weighting(origin.stage_number) *
                          distance(origin, destination);
       dijkstra.link(destination, origin, d);
@@ -290,12 +286,13 @@ ContestDijkstra::get_weighting(const unsigned i) const
 }
 
 bool
-ContestDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
+ContestDijkstra::admit_candidate(const TracePoint &start,
+                                 const ScanTaskPoint &candidate) const
 {
   if (!is_final(candidate))
     return true;
   else
-    return IsFinishAltitudeValid(solution[0], GetPointFast(candidate));
+    return IsFinishAltitudeValid(start, GetPointFast(candidate));
 }
 
 bool
@@ -303,7 +300,7 @@ ContestDijkstra::SaveSolution()
 {
   assert(num_stages <= MAX_STAGES);
 
-  if (AbstractContest::SaveSolution()) {
+  if (solution_valid && AbstractContest::SaveSolution()) {
     best_solution.clear();
     for (unsigned i=0; i<num_stages; ++i) {
       best_solution.append(solution[i]);
@@ -319,12 +316,7 @@ ContestDijkstra::CopySolution(ContestTraceVector &vec) const
 {
   assert(num_stages <= MAX_STAGES);
 
-  vec.clear();
-  if (solution_found) {
-    assert(num_stages <= MAX_STAGES);
-
-    vec = best_solution;
-  }
+  vec = best_solution;
 }
 
 void 

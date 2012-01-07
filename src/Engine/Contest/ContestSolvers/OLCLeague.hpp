@@ -36,12 +36,9 @@ class OLCLeague:
 
   ContestTraceVector best_solution;
   ContestTraceVector solution;
-  bool solution_found;
 
 public:
   OLCLeague(const Trace &_trace);
-
-  bool Score(ContestResult &result);
 
   virtual void CopySolution(ContestTraceVector &vec) const;
 

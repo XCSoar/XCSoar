@@ -64,7 +64,7 @@ unsigned
 OLCSprint::find_start() const
 {
   assert(num_stages <= MAX_STAGES);
-  assert(n_points > 0);
+  assert(n_points >= 2);
   ScanTaskPoint start(0, 1);
   const ScanTaskPoint end(0, n_points - 1);
   const auto end_time = GetPointFast(end).GetTime();
@@ -92,9 +92,7 @@ OLCSprint::add_start_edges()
   const ScanTaskPoint start(0, find_start());
   const ScanTaskPoint finish(num_stages - 1, n_points - 1);
 
-  solution[0] = GetPointFast(start);
-
-  if (admit_candidate(finish))
+  if (admit_candidate(GetPointFast(start), finish))
     dijkstra.link(start, start, 0);
 }
 

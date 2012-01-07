@@ -118,7 +118,7 @@ public:
 
 protected:
 
-  /**Applied naming convention
+  /**
    * Perform check on whether score needs to be
    * updated (even if score isn't improved, due to
    * new conditions occuring, e.g. closure of path)
@@ -130,6 +130,13 @@ protected:
   bool IsFinishAltitudeValid(const TracePoint& start,
                              const TracePoint& finish) const;
 
+  /**
+   * Calculate the score of the current solution (see CalcScore()) and
+   * update #best_result (and #best_solution for ContestDijkstra) if
+   * it was improved.
+   *
+   * @return true if #best_result was updated
+   */
   virtual bool SaveSolution();
 
   /**

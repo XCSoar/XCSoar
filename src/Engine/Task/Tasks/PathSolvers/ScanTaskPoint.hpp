@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef SCANTASKPOINT_HPP
 #define SCANTASKPOINT_HPP
 
+#include "Compiler.h"
+
 #include <stdint.h>
 
 /**
@@ -39,11 +41,29 @@ struct ScanTaskPoint {
   ScanTaskPoint(unsigned _stage_number, unsigned _point_index)
     :stage_number(_stage_number), point_index(_point_index) {}
 
-  bool operator<(const ScanTaskPoint &other) const {
-    return stage_number < other.stage_number ||
-      (stage_number == other.stage_number &&
-       point_index < other.point_index);
+  /**
+   * Generate a unique key that is used for the std::map comparison
+   * operator.
+   */
+  uint32_t Key() const {
+    /* sorry for this dirty trick, but it speeds up the solver by 20%;
+       language lawyers would say that this cast is not legal, but it
+       works on all platforms we're interested in supporting */
+    return *reinterpret_cast<const uint32_t *>(this);
   }
-};
+
+  bool operator<(const ScanTaskPoint &other) const {
+    return Key() < other.Key();
+  }
+
+  /**
+   * Determine whether a point is a starting point (no previous edges).
+   */
+  gcc_pure
+  bool IsFirst() const {
+    return stage_number == 0;
+  }
+
+} gcc_aligned(4); /* adjust alignment so the trick in Key() works on ARM */
 
 #endif

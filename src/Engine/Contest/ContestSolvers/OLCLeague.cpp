@@ -43,7 +43,7 @@ void
 OLCLeague::Reset()
 {
   AbstractContest::Reset();
-  solution_found = false;
+  best_solution.clear();
   solution.clear();
   solution_classic.clear();
   for (unsigned i=0; i<5; ++i) {
@@ -92,30 +92,14 @@ OLCLeague::Solve(bool exhaustive)
     solution[index_fill] = solution[index_fill-1];
   }
 
-  solution_found = true;
-
+  SaveSolution();
   return true;
 }
-
-
-bool 
-OLCLeague::Score(ContestResult &result)
-{
-  if (solution_found) {
-    SaveSolution();
-    return AbstractContest::Score(result);
-  }
-  return false;
-}
-
 
 void 
 OLCLeague::CopySolution(ContestTraceVector &vec) const
 {
-  vec.clear();
-  if (solution_found) {
-    vec = best_solution;
-  }
+  vec = best_solution;
 }
 
 
