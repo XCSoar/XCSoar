@@ -147,13 +147,13 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale)
 
     for (unsigned x = height_matrix.get_width(); x > 0; --x) {
       short h = *src++;
-      if (gcc_likely(!RasterBuffer::is_special(h))) {
+      if (gcc_likely(!RasterBuffer::IsSpecial(h))) {
         if (h < 0)
           h = 0;
 
         h = min(254, h >> height_scale);
         *p++ = oColorBuf[h];
-      } else if (RasterBuffer::is_water(h)) {
+      } else if (RasterBuffer::IsWater(h)) {
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];
       } else {
@@ -217,7 +217,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 
     for (unsigned x = 0; x < height_matrix.get_width(); ++x, ++src) {
       short h = *src;
-      if (gcc_likely(!RasterBuffer::is_special(h))) {
+      if (gcc_likely(!RasterBuffer::IsSpecial(h))) {
         if (h < 0)
           h = 0;
 
@@ -249,10 +249,10 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         short h_left = src[-(int)column_minus_index];
         short h_right = src[column_plus_index];
 
-        if (gcc_unlikely(RasterBuffer::is_special(h_above) ||
-                         RasterBuffer::is_special(h_below) ||
-                         RasterBuffer::is_special(h_left) ||
-                         RasterBuffer::is_special(h_right))) {
+        if (gcc_unlikely(RasterBuffer::IsSpecial(h_above) ||
+                         RasterBuffer::IsSpecial(h_below) ||
+                         RasterBuffer::IsSpecial(h_left) ||
+                         RasterBuffer::IsSpecial(h_right))) {
           /* some "special" terrain value surrounding us (water or
              invalid), skip slope calculation */
           *p++ = oColorBuf[h];
@@ -292,7 +292,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
           *p++ = szColorBuf[h + (sval*256)];
 
 #endif
-      } else if (RasterBuffer::is_water(h)) {
+      } else if (RasterBuffer::IsWater(h)) {
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];
       } else {

@@ -410,8 +410,8 @@ GlideComputerAirData::TerrainHeight()
   }
 
   short Alt = terrain->GetTerrainHeight(basic.location);
-  if (RasterBuffer::is_special(Alt)) {
-    if (RasterBuffer::is_water(Alt))
+  if (RasterBuffer::IsSpecial(Alt)) {
+    if (RasterBuffer::IsWater(Alt))
       /* assume water is 0m MSL; that's the best guess */
       Alt = 0;
     else {

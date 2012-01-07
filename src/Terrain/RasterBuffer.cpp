@@ -28,7 +28,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-RasterBuffer::resize(unsigned _width, unsigned _height)
+RasterBuffer::Resize(unsigned _width, unsigned _height)
 {
   assert(_width > 0 && _height > 0);
 
@@ -36,22 +36,22 @@ RasterBuffer::resize(unsigned _width, unsigned _height)
 }
 
 short
-RasterBuffer::get_interpolated(unsigned lx, unsigned ly,
+RasterBuffer::GetInterpolated(unsigned lx, unsigned ly,
                                unsigned ix, unsigned iy) const
 {
-  assert(defined());
-  assert(lx < get_width());
-  assert(ly < get_height());
+  assert(IsDefined());
+  assert(lx < GetWidth());
+  assert(ly < GetHeight());
   assert(ix < 0x100);
   assert(iy < 0x100);
 
   // perform piecewise linear interpolation
-  const unsigned int dx = (lx == get_width() - 1) ? 0 : 1;
-  const unsigned int dy = (ly == get_height() - 1) ? 0 : get_width();
-  const short *tm = get_data_at(lx, ly);
+  const unsigned int dx = (lx == GetWidth() - 1) ? 0 : 1;
+  const unsigned int dy = (ly == GetHeight() - 1) ? 0 : GetWidth();
+  const short *tm = GetDataAt(lx, ly);
 
-  if (is_special(*tm) || is_special(tm[dx]) ||
-      is_special(tm[dy]) || is_special(tm[dx + dy]))
+  if (IsSpecial(*tm) || IsSpecial(tm[dx]) ||
+      IsSpecial(tm[dy]) || IsSpecial(tm[dx + dy]))
     return *tm;
 
   unsigned kx = 0x100 - ix;
@@ -61,26 +61,27 @@ RasterBuffer::get_interpolated(unsigned lx, unsigned ly,
 }
 
 short
-RasterBuffer::get_interpolated(unsigned lx, unsigned ly) const
+RasterBuffer::GetInterpolated(unsigned lx, unsigned ly) const
 {
   // check x in range, and decompose fraction part
   const unsigned int ix = CombinedDivAndMod(lx);
-  if (lx >= get_width())
+  if (lx >= GetWidth())
     return TERRAIN_INVALID;
 
   // check y in range, and decompose fraction part
   const unsigned int iy = CombinedDivAndMod(ly);
-  if (ly >= get_height())
+  if (ly >= GetHeight())
     return TERRAIN_INVALID;
 
-  return get_interpolated(lx, ly, ix, iy);
+  return GetInterpolated(lx, ly, ix, iy);
 }
 
 /**
  * This class implements an algorithm to traverse pixels quickly with
  * only integer addition, no multiplication and division.
  */
-class PixelIterator {
+class PixelIterator
+{
   unsigned src_increment, src_counter;
   unsigned dest_increment, dest_counter;
 
@@ -117,14 +118,14 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
                                  short *gcc_restrict buffer, unsigned size,
                                  bool interpolate) const
 {
-  assert(ax < get_width() << 8);
-  assert(bx < get_width() << 8);
-  assert(y < get_height() << 8);
+  assert(ax < GetWidth() << 8);
+  assert(bx < GetWidth() << 8);
+  assert(y < GetHeight() << 8);
   assert(buffer != NULL);
   assert(size > 0);
 
   if (size == 1) {
-    *buffer = get(ax >> 8, y >> 8);
+    *buffer = Get(ax >> 8, y >> 8);
     return;
   }
 
@@ -140,12 +141,12 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
       unsigned cx = ax + (i * dx) / (int)size;
       const unsigned int ix = CombinedDivAndMod(cx);
 
-      *buffer++ = get_interpolated(cx, cy, ix, iy);
+      *buffer++ = GetInterpolated(cx, cy, ix, iy);
     }
   } else if (gcc_likely(dx > 0)) {
     /* no interpolation needed, forward scan */
 
-    const short *gcc_restrict src = get_data_at(ax >> 8, y >> 8);
+    const short *gcc_restrict src = GetDataAt(ax >> 8, y >> 8);
 
     PixelIterator iterator(dx >> 8, size);
     short *gcc_restrict end = buffer + size;
@@ -158,7 +159,7 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
   } else {
     /* no interpolation needed */
 
-    const short *gcc_restrict src = get_data_at(0, y >> 8);
+    const short *gcc_restrict src = GetDataAt(0, y >> 8);
 
     --size;
     for (int i = 0; (unsigned)i <= size; ++i) {
@@ -174,10 +175,10 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
                        short *gcc_restrict buffer,
                        unsigned size, bool interpolate) const
 {
-  assert(ax < get_width() << 8);
-  assert(ay < get_height() << 8);
-  assert(bx < get_width() << 8);
-  assert(by < get_height() << 8);
+  assert(ax < GetWidth() << 8);
+  assert(ay < GetHeight() << 8);
+  assert(bx < GetWidth() << 8);
+  assert(by < GetHeight() << 8);
   assert(buffer != NULL);
   assert(size > 0);
 
@@ -187,7 +188,7 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
   }
 
   if (size == 1) {
-    *buffer = get(ax >> 8, ay >> 8);
+    *buffer = Get(ax >> 8, ay >> 8);
     return;
   }
 
@@ -203,7 +204,7 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
       const unsigned int ix = CombinedDivAndMod(cx);
       const unsigned int iy = CombinedDivAndMod(cy);
 
-      *buffer++ = get_interpolated(cx, cy, ix, iy);
+      *buffer++ = GetInterpolated(cx, cy, ix, iy);
     }
   } else {
     /* no interpolation needed */
@@ -212,7 +213,7 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
       unsigned cx = ax + (i * dx) / (int)size;
       unsigned cy = ay + (i * dy) / (int)size;
 
-      *buffer++ = get(cx >> 8, cy >> 8);
+      *buffer++ = Get(cx >> 8, cy >> 8);
     }
   }
 }
@@ -223,23 +224,23 @@ RasterBuffer::ScanLineChecked(unsigned ax, unsigned ay,
                               short *buffer, unsigned size,
                               bool interpolate) const
 {
-  if (ax >= get_width() << 8)
-    ax = (get_width() << 8) - 1;
+  if (ax >= GetWidth() << 8)
+    ax = (GetWidth() << 8) - 1;
 
-  if (ay >= get_height() << 8)
-    ay = (get_height() << 8) - 1;
+  if (ay >= GetHeight() << 8)
+    ay = (GetHeight() << 8) - 1;
 
-  if (bx >= get_width() << 8)
-    bx = (get_width() << 8) - 1;
+  if (bx >= GetWidth() << 8)
+    bx = (GetWidth() << 8) - 1;
 
-  if (by >= get_height() << 8)
-    by = (get_height() << 8) - 1;
+  if (by >= GetHeight() << 8)
+    by = (GetHeight() << 8) - 1;
 
   ScanLine(ax, ay, bx, by, buffer, size, interpolate);
 }
 
 short
-RasterBuffer::get_max() const
+RasterBuffer::GetMaximum() const
 {
-  return defined() ? *std::max_element(data.begin(), data.end()) : 0;
+  return IsDefined() ? *std::max_element(data.begin(), data.end()) : 0;
 }

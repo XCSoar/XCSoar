@@ -37,17 +37,17 @@ public:
   static const short TERRAIN_WATER_THRESHOLD = -30000;
 
   gcc_const
-  static bool is_invalid(short h) {
+  static bool IsInvalid(short h) {
     return h == TERRAIN_INVALID;
   }
 
   gcc_const
-  static bool is_water(short h) {
-    return h <= TERRAIN_WATER_THRESHOLD && !is_invalid(h);
+  static bool IsWater(short h) {
+    return h <= TERRAIN_WATER_THRESHOLD && !IsInvalid(h);
   }
 
   gcc_const
-  static bool is_special(short h) {
+  static bool IsSpecial(short h) {
     return h <= TERRAIN_WATER_THRESHOLD;
   }
 
@@ -59,46 +59,46 @@ public:
   RasterBuffer(unsigned _width, unsigned _height)
     :data(_width, _height) {}
 
-  bool defined() const {
+  bool IsDefined() const {
     return data.Defined();
   }
 
-  unsigned get_width() const {
+  unsigned GetWidth() const {
     return data.GetWidth();
   }
 
-  unsigned get_height() const {
+  unsigned GetHeight() const {
     return data.GetHeight();
   }
 
-  short *get_data() {
+  short *GetData() {
     return data.begin();
   }
 
-  const short *get_data() const {
+  const short *GetData() const {
     return data.begin();
   }
 
-  const short *get_data_at(unsigned x, unsigned y) const {
+  const short *GetDataAt(unsigned x, unsigned y) const {
     return data.GetPointerAt(x, y);
   }
 
-  void reset() {
+  void Reset() {
     data.Reset();
   }
 
-  void resize(unsigned _width, unsigned _height);
+  void Resize(unsigned _width, unsigned _height);
 
   gcc_pure
-  short get_interpolated(unsigned lx, unsigned ly,
-                         unsigned ix, unsigned iy) const;
+  short GetInterpolated(unsigned lx, unsigned ly,
+                        unsigned ix, unsigned iy) const;
 
   gcc_pure
-  short get_interpolated(unsigned lx, unsigned ly) const;
+  short GetInterpolated(unsigned lx, unsigned ly) const;
 
   gcc_pure
-  short get(unsigned x, unsigned y) const {
-    return *get_data_at(x, y);
+  short Get(unsigned x, unsigned y) const {
+    return *GetDataAt(x, y);
   }
 
 protected:
@@ -121,7 +121,7 @@ public:
                        short *buffer, unsigned size, bool interpolate) const;
 
   gcc_pure
-  short get_max() const;
+  short GetMaximum() const;
 };
 
 #endif

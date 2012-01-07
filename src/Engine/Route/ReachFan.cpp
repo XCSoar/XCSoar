@@ -45,12 +45,12 @@ ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
   const short h = terrain
     ? terrain->GetHeight(origin)
     : RasterBuffer::TERRAIN_INVALID;
-  const RoughAltitude h2(RasterBuffer::is_special(h) ? 0 : h);
+  const RoughAltitude h2(RasterBuffer::IsSpecial(h) ? 0 : h);
 
   ReachFanParms parms(rpolars, task_proj, (int)terrain_base, terrain);
   const AFlatGeoPoint ao(task_proj.project(origin), origin.altitude);
 
-  if (!RasterBuffer::is_invalid(h) &&
+  if (!RasterBuffer::IsInvalid(h) &&
       (origin.altitude <= h2 + rpolars.GetSafetyHeight())) {
     terrain_base = h2;
     root.DummyReach(ao);
@@ -62,7 +62,7 @@ ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
   else
     root.DummyReach(ao);
 
-  if (!RasterBuffer::is_invalid(h)) {
+  if (!RasterBuffer::IsInvalid(h)) {
     parms.terrain_base = (int)h2;
     parms.terrain_counter = 1;
   } else {

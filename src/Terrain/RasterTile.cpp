@@ -66,7 +66,7 @@ RasterTile::Enable()
   if (!width || !height) {
     Disable();
   } else {
-    buffer.resize(width, height);
+    buffer.Resize(width, height);
   }
 }
 
@@ -81,7 +81,7 @@ RasterTile::GetHeight(unsigned x, unsigned y) const
   assert(x < width);
   assert(y < height);
 
-  return buffer.get(x, y);
+  return buffer.Get(x, y);
 }
 
 short
@@ -102,7 +102,7 @@ RasterTile::GetInterpolatedHeight(unsigned lx, unsigned ly,
   if ((ly -= ystart) >= height)
     return RasterBuffer::TERRAIN_INVALID;
 
-  return buffer.get_interpolated(lx, ly, ix, iy);
+  return buffer.GetInterpolated(lx, ly, ix, iy);
 }
 
 bool
@@ -251,7 +251,7 @@ RasterTileCache::GetHeight(unsigned px, unsigned py) const
     return tile.GetHeight(px, py);
 
   // still not found, so go to overview
-  return Overview.get_interpolated(px << (SUBPIXEL_BITS - OVERVIEW_BITS),
+  return Overview.GetInterpolated(px << (SUBPIXEL_BITS - OVERVIEW_BITS),
                                    py << (SUBPIXEL_BITS - OVERVIEW_BITS));
 }
 
@@ -271,7 +271,7 @@ RasterTileCache::GetInterpolatedHeight(unsigned int lx, unsigned int ly) const
     return tile.GetInterpolatedHeight(px, py, ix, iy);
 
   // still not found, so go to overview
-  return Overview.get_interpolated(lx >> OVERVIEW_BITS,
+  return Overview.GetInterpolated(lx >> OVERVIEW_BITS,
                                    ly >> OVERVIEW_BITS);
 }
 
@@ -285,7 +285,7 @@ RasterTileCache::SetSize(unsigned _width, unsigned _height,
   tile_width = _tile_width;
   tile_height = _tile_height;
 
-  Overview.resize(width >> OVERVIEW_BITS, height >> OVERVIEW_BITS);
+  Overview.Resize(width >> OVERVIEW_BITS, height >> OVERVIEW_BITS);
   overview_width_fine = width << SUBPIXEL_BITS;
   overview_height_fine = height << SUBPIXEL_BITS;
 
@@ -313,7 +313,7 @@ RasterTileCache::Reset()
   segments.clear();
   scan_overview = true;
 
-  Overview.reset();
+  Overview.Reset();
 
   for (auto it = tiles.begin(), end = tiles.end(); it != end; ++it)
     it->Disable();
@@ -582,8 +582,8 @@ RasterTileCache::SaveCache(FILE *file) const
     return false;
 
   /* save overview */
-  size_t overview_size = Overview.get_width() * Overview.get_height();
-  if (fwrite(Overview.get_data(), sizeof(*Overview.get_data()),
+  size_t overview_size = Overview.GetWidth() * Overview.GetHeight();
+  if (fwrite(Overview.GetData(), sizeof(*Overview.GetData()),
              overview_size, file) != overview_size)
     return false;
 
@@ -637,8 +637,8 @@ RasterTileCache::LoadCache(FILE *file)
   }
 
   /* load overview */
-  size_t overview_size = Overview.get_width() * Overview.get_height();
-  if (fread(Overview.get_data(), sizeof(*Overview.get_data()),
+  size_t overview_size = Overview.GetWidth() * Overview.GetHeight();
+  if (fread(Overview.GetData(), sizeof(*Overview.GetData()),
             overview_size, file) != overview_size)
     return false;
 
@@ -1176,15 +1176,15 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_
   // a multiple of 2^OVERVIEW_BITS.
   unsigned x_overview = px >> OVERVIEW_BITS;
   unsigned y_overview = py >> OVERVIEW_BITS;
-  assert(x_overview <= Overview.get_width());
-  assert(y_overview <= Overview.get_height());
+  assert(x_overview <= Overview.GetWidth());
+  assert(y_overview <= Overview.GetHeight());
 
-  if (x_overview == Overview.get_width())
+  if (x_overview == Overview.GetWidth())
     x_overview--;
-  if (y_overview == Overview.get_height())
+  if (y_overview == Overview.GetHeight())
     y_overview--;
 
-  return Overview.get(x_overview, y_overview);
+  return Overview.Get(x_overview, y_overview);
 }
 
 RasterLocation

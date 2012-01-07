@@ -33,7 +33,7 @@ static fixed
 GetElevation(RasterTerrain::Lease &map, const GeoPoint loc)
 {
   short hground = map->GetHeight(loc);
-  if (RasterBuffer::is_special(hground))
+  if (RasterBuffer::IsSpecial(hground))
     hground = 0;
 
   return fixed(hground);

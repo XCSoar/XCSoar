@@ -198,10 +198,10 @@ FlatTriangleFanTree::UpdateTerrainBase(const FlatGeoPoint &o,
     const GeoPoint p = parms.task_proj.unproject(av);
     short h = parms.terrain->GetHeight(p);
 
-    if (RasterBuffer::is_water(h))
+    if (RasterBuffer::IsWater(h))
       /* water: assume 0m MSL */
       parms.terrain_counter++;
-    else if (!RasterBuffer::is_invalid(h)) {
+    else if (!RasterBuffer::IsInvalid(h)) {
       parms.terrain_counter++;
       parms.terrain_base += h;
     }

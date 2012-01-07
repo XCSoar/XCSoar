@@ -91,7 +91,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
     return;
 
   short elevation = terrain->GetTerrainHeight(location);
-  if (RasterBuffer::is_special(elevation))
+  if (RasterBuffer::IsSpecial(elevation))
     return;
 
   StaticString<64> elevation_short, elevation_long;

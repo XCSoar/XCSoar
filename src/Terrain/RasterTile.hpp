@@ -109,15 +109,15 @@ public:
   bool CheckTileVisibility(int view_x, int view_y, unsigned view_radius);
 
   void Disable() {
-    buffer.reset();
+    buffer.Reset();
   }
 
   void Enable();
   bool IsEnabled() const {
-    return buffer.defined();
+    return buffer.IsDefined();
   }
   bool IsDisabled() const {
-    return !buffer.defined();
+    return !buffer.IsDefined();
   }
 
   /**
@@ -144,7 +144,7 @@ public:
                               unsigned ix, unsigned iy) const;
 
   inline short* GetImageBuffer() {
-    return buffer.get_data();
+    return buffer.GetData();
   }
 
   bool VisibilityChanged(int view_x, int view_y, unsigned view_radius);
@@ -407,7 +407,7 @@ public:
   bool TileRequest(unsigned index);
 
   short *GetOverview() {
-    return Overview.get_data();
+    return Overview.GetData();
   }
 
   void SetSize(unsigned width, unsigned height,
@@ -427,7 +427,7 @@ protected:
 
 public:
   short GetMaxElevation() const {
-    return Overview.get_max();
+    return Overview.GetMaximum();
   }
 
   unsigned int GetWidth() const { return width; }

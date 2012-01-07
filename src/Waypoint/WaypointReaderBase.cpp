@@ -147,7 +147,7 @@ WaypointReaderBase::CheckAltitude(Waypoint &new_waypoint) const
 
   // Load waypoint altitude from terrain
   const short t_alt = terrain->GetTerrainHeight(new_waypoint.location);
-  if (RasterBuffer::is_special(t_alt))
+  if (RasterBuffer::IsSpecial(t_alt))
     new_waypoint.altitude = fixed_zero;
   else
     // TERRAIN_VALID

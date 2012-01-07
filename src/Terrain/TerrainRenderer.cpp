@@ -187,7 +187,7 @@ TerrainRenderer::ScanSpotHeights()
   for (unsigned y = 0; y < height_matrix.get_height(); ++y) {
     for (unsigned x = 0; x < height_matrix.get_width(); ++x) {
       short val = *h_buf++;
-      if (RasterBuffer::is_special(val))
+      if (RasterBuffer::IsSpecial(val))
         continue;
 
       if (val > spot_max_val) {
