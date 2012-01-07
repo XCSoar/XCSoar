@@ -235,7 +235,7 @@ protected:
     PixelRect rc;
     rc.left = 0;
     rc.top = (int)(i - origin) * item_height - pixel_pan;
-    rc.right = scroll_bar.get_left(get_size());
+    rc.right = scroll_bar.GetLeft(get_size());
     rc.bottom = rc.top + item_height;
     return rc;
   }

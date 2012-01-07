@@ -72,11 +72,11 @@ WndListFrame::show_or_hide_scroll_bar()
 
   if (length > items_visible)
     // enable the scroll bar
-    scroll_bar.set(size);
+    scroll_bar.SetSize(size);
   else
     // all items are visible
     // -> hide the scroll bar
-    scroll_bar.reset();
+    scroll_bar.Reset();
 }
 
 void
@@ -115,7 +115,7 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   /* enable clipping */
   GLScissor scissor(OpenGL::translate_x,
                     OpenGL::screen_height - OpenGL::translate_y - canvas.get_height() - 1,
-                    scroll_bar.get_left(get_size()), canvas.get_height());
+                    scroll_bar.GetLeft(get_size()), canvas.get_height());
 #endif
 
   unsigned last_item = min(length, end);
@@ -160,11 +160,11 @@ WndListFrame::OnPaint(Canvas &canvas, const PixelRect &dirty)
 }
 
 void WndListFrame::DrawScrollBar(Canvas &canvas) {
-  if (!scroll_bar.defined())
+  if (!scroll_bar.IsDefined())
     return;
 
-  scroll_bar.set_slider(length * item_height, get_height(), GetPixelOrigin());
-  scroll_bar.paint(canvas);
+  scroll_bar.SetSlider(length * item_height, get_height(), GetPixelOrigin());
+  scroll_bar.Paint(canvas);
 }
 
 void
@@ -291,7 +291,7 @@ WndListFrame::SetOrigin(int i)
 #ifdef USE_GDI
   if ((unsigned)abs(delta) < items_visible) {
     PixelRect rc = get_client_rect();
-    rc.right = scroll_bar.get_left(get_size());
+    rc.right = scroll_bar.GetLeft(get_size());
     scroll(0, delta * item_height, rc);
 
     /* repaint the scrollbar synchronously; we could invalidate its
@@ -335,7 +335,7 @@ WndListFrame::OnKeyCheck(unsigned key_code) const
 bool
 WndListFrame::OnKeyDown(unsigned key_code)
 {
-  scroll_bar.drag_end(this);
+  scroll_bar.DragEnd(this);
 
 #ifndef _WIN32_WCE
   kinetic_timer.Cancel();
@@ -408,8 +408,8 @@ WndListFrame::OnKeyDown(unsigned key_code)
 bool
 WndListFrame::OnMouseUp(PixelScalar x, PixelScalar y)
 {
-  if (scroll_bar.is_dragging()) {
-    scroll_bar.drag_end(this);
+  if (scroll_bar.IsDragging()) {
+    scroll_bar.DragEnd(this);
     return true;
   } else if (drag_mode != DragMode::NONE) {
     drag_end();
@@ -437,10 +437,10 @@ bool
 WndListFrame::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   // If we are currently dragging the ScrollBar slider
-  if (scroll_bar.is_dragging()) {
+  if (scroll_bar.IsDragging()) {
     // -> Update ListBox origin
     unsigned value =
-      scroll_bar.drag_move(length * item_height, get_height(), y);
+      scroll_bar.DragMove(length * item_height, get_height(), y);
     SetPixelOrigin(value);
     return true;
   } else if (drag_mode == DragMode::SCROLL) {
@@ -459,7 +459,7 @@ bool
 WndListFrame::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   // End any previous drag
-  scroll_bar.drag_end(this);
+  scroll_bar.DragEnd(this);
   drag_end();
 
 #ifndef _WIN32_WCE
@@ -475,22 +475,22 @@ WndListFrame::OnMouseDown(PixelScalar x, PixelScalar y)
   if (!had_focus)
     set_focus();
 
-  if (scroll_bar.in_slider(Pos)) {
+  if (scroll_bar.IsInsideSlider(Pos)) {
     // if click is on scrollbar handle
     // -> start mouse drag
-    scroll_bar.drag_begin(this, Pos.y);
-  } else if (scroll_bar.in(Pos)) {
+    scroll_bar.DragBegin(this, Pos.y);
+  } else if (scroll_bar.IsInside(Pos)) {
     // if click in scroll bar up/down/pgup/pgdn
-    if (scroll_bar.in_up_arrow(Pos.y))
+    if (scroll_bar.IsInsideUpArrow(Pos.y))
       // up
       MoveOrigin(-1);
-    else if (scroll_bar.in_down_arrow(Pos.y))
+    else if (scroll_bar.IsInsideDownArrow(Pos.y))
       // down
       MoveOrigin(1);
-    else if (scroll_bar.above_slider(Pos.y))
+    else if (scroll_bar.IsAboveSlider(Pos.y))
       // page up
       MoveOrigin(-(int)items_visible);
-    else if (scroll_bar.below_slider(Pos.y))
+    else if (scroll_bar.IsBelowSlider(Pos.y))
       // page down
       MoveOrigin(items_visible);
   } else {
@@ -527,7 +527,7 @@ WndListFrame::OnMouseDown(PixelScalar x, PixelScalar y)
 bool
 WndListFrame::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 {
-  scroll_bar.drag_end(this);
+  scroll_bar.DragEnd(this);
   drag_end();
 
 #ifndef _WIN32_WCE
@@ -552,7 +552,7 @@ WndListFrame::OnCancelMode()
 {
   PaintWindow::OnCancelMode();
 
-  scroll_bar.drag_end(this);
+  scroll_bar.DragEnd(this);
   drag_end();
 
 #ifndef _WIN32_WCE

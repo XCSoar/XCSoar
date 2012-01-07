@@ -54,31 +54,31 @@ public:
   ScrollBar();
 
   /** Returns the width of the ScrollBar */
-  PixelScalar get_width() const {
+  PixelScalar GetWidth() const {
     return rc.right - rc.left;
   }
 
   /** Returns the height of the ScrollBar */
-  PixelScalar get_height() const {
+  PixelScalar GetHeight() const {
     return rc.bottom - rc.top;
   }
 
   /** Returns the height of the slider */
-  PixelScalar get_slider_height() const {
+  PixelScalar GetSliderHeight() const {
     return rc_slider.bottom - rc_slider.top;
   }
 
   /** Returns the height of the scrollable area of the ScrollBar */
-  PixelScalar get_netto_height() const {
-    return get_height() - 2 * get_width() - 1;
+  PixelScalar GetNettoHeight() const {
+    return GetHeight() - 2 * GetWidth() - 1;
   }
 
   /**
    * Returns the height of the visible scroll area of the ScrollBar
    * (the area thats not covered with the slider)
    */
-  PixelScalar get_scroll_height() const {
-    return get_netto_height() - get_slider_height();
+  PixelScalar GetScrollHeight() const {
+    return GetNettoHeight() - GetSliderHeight();
   }
 
   /**
@@ -86,8 +86,8 @@ public:
    * @return True if the ScrollBar is defined,
    * False if it has to be set up first
    */
-  bool defined() const {
-    return get_width() > 0;
+  bool IsDefined() const {
+    return GetWidth() > 0;
   }
 
   /**
@@ -96,8 +96,8 @@ public:
    * @param size Size of the client area including the ScrollBar
    * @return The x-Coordinate of the ScrollBar
    */
-  UPixelScalar get_left(const PixelSize size) const {
-    return defined() ? rc.left : size.cx;
+  UPixelScalar GetLeft(const PixelSize size) const {
+    return IsDefined() ? rc.left : size.cx;
   }
 
   /**
@@ -106,7 +106,7 @@ public:
    * @return True if the given RasterPoint is in the ScrollBar area,
    * False otherwise
    */
-  bool in(const RasterPoint &pt) const {
+  bool IsInside(const RasterPoint &pt) const {
     return ::PtInRect(&rc, pt);
   }
 
@@ -116,7 +116,7 @@ public:
    * @return True if the given RasterPoint is in the slider area,
    * False otherwise
    */
-  bool in_slider(const RasterPoint &pt) const {
+  bool IsInsideSlider(const RasterPoint &pt) const {
     return ::PtInRect(&rc_slider, pt);
   }
 
@@ -126,8 +126,8 @@ public:
    * @return True if the given y-Coordinate is on the up arrow,
    * False otherwise
    */
-  bool in_up_arrow(PixelScalar y) const {
-    return y < rc.top + get_width();
+  bool IsInsideUpArrow(PixelScalar y) const {
+    return y < rc.top + GetWidth();
   }
 
   /**
@@ -136,8 +136,8 @@ public:
    * @return True if the given y-Coordinate is on the down arrow,
    * False otherwise
    */
-  bool in_down_arrow(PixelScalar y) const {
-    return y >= rc.bottom - get_width();
+  bool IsInsideDownArrow(PixelScalar y) const {
+    return y >= rc.bottom - GetWidth();
   }
 
   /**
@@ -146,7 +146,7 @@ public:
    * @return True if the given y-Coordinate is above the slider area,
    * False otherwise
    */
-  bool above_slider(PixelScalar y) const {
+  bool IsAboveSlider(PixelScalar y) const {
     return y < rc_slider.top;
   }
 
@@ -156,7 +156,7 @@ public:
    * @return True if the given y-Coordinate is below the slider area,
    * False otherwise
    */
-  bool below_slider(PixelScalar y) const {
+  bool IsBelowSlider(PixelScalar y) const {
     return y >= rc_slider.bottom;
   }
 
@@ -165,37 +165,43 @@ public:
    * (actually just the height, width is automatically set)
    * @param size Size of the Control the ScrollBar is used with
    */
-  void set(const PixelSize size);
+  void SetSize(const PixelSize size);
+
   /** Resets the ScrollBar (undefines it) */
-  void reset();
+  void Reset();
 
   /** Calculates the size and position of the slider */
-  void set_slider(unsigned size, unsigned view_size, unsigned origin);
+  void SetSlider(unsigned size, unsigned view_size, unsigned origin);
+
   /** Calculates the new origin out of the given y-Coordinate of the drag */
-  unsigned to_origin(unsigned size, unsigned view_size,
-                     PixelScalar y) const;
+  unsigned ToOrigin(unsigned size, unsigned view_size, PixelScalar y) const;
 
   /** Paints the ScollBar */
-  void paint(Canvas &canvas) const;
+  void Paint(Canvas &canvas) const;
 
   /**
    * Returns whether the slider is currently being dragged
    * @return True if the slider is currently being dragged, False otherwise
    */
-  bool is_dragging() const { return dragging; }
+  bool IsDragging() const {
+    return dragging;
+  }
+
   /**
    * Should be called when beginning to drag
    * (Called by WndListFrame::OnMouseDown)
    * @param w The Window object the ScrollBar is belonging to
    * @param y y-Coordinate
    */
-  void drag_begin(Window *w, UPixelScalar y);
+  void DragBegin(Window *w, UPixelScalar y);
+
   /**
    * Should be called when stopping to drag
    * (Called by WndListFrame::OnMouseUp)
    * @param w The Window object the ScrollBar is belonging to
    */
-  void drag_end(Window *w);
+  void DragEnd(Window *w);
+
   /**
    * Should be called while dragging
    * @param size Size of the Scrollbar (not pixelwise)
@@ -203,7 +209,7 @@ public:
    * @param y y-Coordinate
    * @return "Value" of the ScrollBar
    */
-  unsigned drag_move(unsigned  size, unsigned view_size, PixelScalar y) const;
+  unsigned DragMove(unsigned  size, unsigned view_size, PixelScalar y) const;
 };
 
 #endif

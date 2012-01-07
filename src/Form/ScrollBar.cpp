@@ -40,21 +40,20 @@ ScrollBar::ScrollBar()
   :dragging(false)
 {
   // Reset the ScrollBar on creation
-  reset();
+  Reset();
 }
 
 void
-ScrollBar::set(const PixelSize size)
+ScrollBar::SetSize(const PixelSize size)
 {
   UPixelScalar width;
 
   // if the device has a pointer (mouse/touchscreen/etc.)
-  if (HasPointer()) {
+  if (HasPointer())
     width = (unsigned)Layout::Scale(SCROLLBARWIDTH_INITIAL);
-  } else {
+  else
     // thin for ALTAIR b/c no touch screen
     width = SELECTORWIDTH * 2;
-  }
 
   // Update the coordinates of the scrollbar
   rc.left = size.cx - width;
@@ -64,25 +63,25 @@ ScrollBar::set(const PixelSize size)
 }
 
 void
-ScrollBar::reset()
+ScrollBar::Reset()
 {
   SetRectEmpty(&rc);
   SetRectEmpty(&rc_slider);
 }
 
 void
-ScrollBar::set_slider(unsigned size, unsigned view_size,
+ScrollBar::SetSlider(unsigned size, unsigned view_size,
                       unsigned origin)
 {
-  const PixelScalar netto_height = get_netto_height();
+  const PixelScalar netto_height = GetNettoHeight();
 
   // If (no size) slider fills the whole area (no scrolling)
   PixelScalar height = size > 0
     ? (int)(netto_height * view_size / size)
     : netto_height;
   // Prevent the slider from getting to small
-  if (height < get_width())
-    height = get_width();
+  if (height < GetWidth())
+    height = GetWidth();
 
   // Calculate highest origin (counted in ListItems)
   unsigned max_origin = size - view_size;
@@ -98,13 +97,13 @@ ScrollBar::set_slider(unsigned size, unsigned view_size,
 
   // Update slider coordinates
   rc_slider.left = rc.left;
-  rc_slider.top = rc.top + get_width() + top;
+  rc_slider.top = rc.top + GetWidth() + top;
   rc_slider.right = rc.right;
   rc_slider.bottom = rc_slider.top + height;
 }
 
 unsigned
-ScrollBar::to_origin(unsigned size, unsigned view_size,
+ScrollBar::ToOrigin(unsigned size, unsigned view_size,
                      PixelScalar y) const
 {
   // Calculate highest origin (counted in ListItems)
@@ -112,16 +111,16 @@ ScrollBar::to_origin(unsigned size, unsigned view_size,
   if (max_origin <= 0)
     return 0;
 
-  y -= rc.top + get_width();
+  y -= rc.top + GetWidth();
   if (y < 0)
     return 0;
 
-  unsigned origin = y * max_origin / get_scroll_height();
+  unsigned origin = y * max_origin / GetScrollHeight();
   return min(origin, max_origin);
 }
 
 void
-ScrollBar::paint(Canvas &canvas) const
+ScrollBar::Paint(Canvas &canvas) const
 {
   // Prepare Pen
   canvas.SelectBlackPen();
@@ -140,13 +139,13 @@ ScrollBar::paint(Canvas &canvas) const
   // ####  Buttons  ####
   // ###################
 
-  UPixelScalar arrow_padding = max(UPixelScalar(get_width() / 4),
+  UPixelScalar arrow_padding = max(UPixelScalar(GetWidth() / 4),
                                    UPixelScalar(4));
   canvas.SelectBlackBrush();
 
   PixelRect up_arrow_rect = rc;
   ++up_arrow_rect.left;
-  up_arrow_rect.bottom = up_arrow_rect.top + get_width();
+  up_arrow_rect.bottom = up_arrow_rect.top + GetWidth();
   canvas.line(up_arrow_rect.left, up_arrow_rect.bottom,
               up_arrow_rect.right, up_arrow_rect.bottom);
   canvas.DrawButton(up_arrow_rect, false);
@@ -163,7 +162,7 @@ ScrollBar::paint(Canvas &canvas) const
 
   PixelRect down_arrow_rect = rc;
   ++down_arrow_rect.left;
-  down_arrow_rect.top = down_arrow_rect.bottom - get_width();
+  down_arrow_rect.top = down_arrow_rect.bottom - GetWidth();
   canvas.line(down_arrow_rect.left, down_arrow_rect.top - 1,
               down_arrow_rect.right, down_arrow_rect.top - 1);
   canvas.DrawButton(down_arrow_rect, false);
@@ -200,7 +199,7 @@ ScrollBar::paint(Canvas &canvas) const
 }
 
 void
-ScrollBar::drag_begin(Window *w, UPixelScalar y)
+ScrollBar::DragBegin(Window *w, UPixelScalar y)
 {
   // Make sure that we are not dragging already
   assert(!dragging);
@@ -213,7 +212,7 @@ ScrollBar::drag_begin(Window *w, UPixelScalar y)
 }
 
 void
-ScrollBar::drag_end(Window *w)
+ScrollBar::DragEnd(Window *w)
 {
   // If we are not dragging right now -> nothing to end
   if (!dragging)
@@ -225,9 +224,9 @@ ScrollBar::drag_end(Window *w)
 }
 
 unsigned
-ScrollBar::drag_move(unsigned size, unsigned view_size, PixelScalar y) const
+ScrollBar::DragMove(unsigned size, unsigned view_size, PixelScalar y) const
 {
   assert(dragging);
 
-  return to_origin(size, view_size, y - drag_offset);
+  return ToOrigin(size, view_size, y - drag_offset);
 }
