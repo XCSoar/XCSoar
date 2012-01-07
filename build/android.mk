@@ -111,7 +111,11 @@ endif
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/
 	$(Q)$(ANDROID_SDK)/tools/android update project --path $(@D) --target $(ANDROID_PLATFORM)
 ifeq ($(TESTING),y)
+ifeq ($(shell uname -s),Darwin)
 	$(Q)sed -i "" -f build/r.sed $@
+else
+	$(Q)sed -i -f build/r.sed $@
+endif
 endif
 	@touch $@
 
