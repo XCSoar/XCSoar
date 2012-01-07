@@ -147,7 +147,7 @@ protected:
   AllocatedGrid<RasterTile> tiles;
   unsigned short tile_width, tile_height;
 
-  RasterBuffer Overview;
+  RasterBuffer overview;
   bool scan_overview;
   unsigned int width, height;
   unsigned int overview_width_fine, overview_height_fine;
@@ -166,7 +166,7 @@ protected:
    * This is only used by PollTiles() internally, but is stored in the
    * class because it would be too large for the stack.
    */
-  StaticArray<uint16_t, MAX_RTC_TILES> RequestTiles;
+  StaticArray<uint16_t, MAX_RTC_TILES> request_tiles;
 
   /**
    * Progress callbacks for loading the file during startup.
@@ -292,7 +292,7 @@ public:
   bool TileRequest(unsigned index);
 
   short *GetOverview() {
-    return Overview.GetData();
+    return overview.GetData();
   }
 
   void SetSize(unsigned width, unsigned height,
@@ -312,7 +312,7 @@ protected:
 
 public:
   short GetMaxElevation() const {
-    return Overview.GetMaximum();
+    return overview.GetMaximum();
   }
 
   unsigned int GetWidth() const { return width; }

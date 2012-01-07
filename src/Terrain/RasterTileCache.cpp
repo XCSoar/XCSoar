@@ -92,25 +92,25 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius)
   /* query all tiles; all tiles which are either in range or already
      loaded are added to RequestTiles */
 
-  RequestTiles.clear();
-  for (int i = tiles.GetSize() - 1; i >= 0 && !RequestTiles.full(); --i)
+  request_tiles.clear();
+  for (int i = tiles.GetSize() - 1; i >= 0 && !request_tiles.full(); --i)
     if (tiles.GetLinear(i).VisibilityChanged(x, y, radius))
-      RequestTiles.append(i);
+      request_tiles.append(i);
 
   /* reduce if there are too many */
 
-  if (RequestTiles.size() > MAX_ACTIVE_TILES) {
+  if (request_tiles.size() > MAX_ACTIVE_TILES) {
     /* sort by distance */
     const RTDistanceSort sort(*this);
-    std::sort(RequestTiles.begin(), RequestTiles.end(), sort);
+    std::sort(request_tiles.begin(), request_tiles.end(), sort);
 
     /* dispose all tiles which are out of range */
-    for (unsigned i = MAX_ACTIVE_TILES; i < RequestTiles.size(); ++i) {
-      RasterTile &tile = tiles.GetLinear(RequestTiles[i]);
+    for (unsigned i = MAX_ACTIVE_TILES; i < request_tiles.size(); ++i) {
+      RasterTile &tile = tiles.GetLinear(request_tiles[i]);
       tile.Disable();
     }
 
-    RequestTiles.shrink(MAX_ACTIVE_TILES);
+    request_tiles.shrink(MAX_ACTIVE_TILES);
   }
 
   /* fill ActiveTiles and request new tiles */
@@ -118,8 +118,8 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius)
   dirty = false;
 
   unsigned num_activate = 0;
-  for (unsigned i = 0; i < RequestTiles.size(); ++i) {
-    RasterTile &tile = tiles.GetLinear(RequestTiles[i]);
+  for (unsigned i = 0; i < request_tiles.size(); ++i) {
+    RasterTile &tile = tiles.GetLinear(request_tiles[i]);
     if (tile.IsEnabled())
       continue;
 
@@ -158,7 +158,7 @@ RasterTileCache::GetHeight(unsigned px, unsigned py) const
     return tile.GetHeight(px, py);
 
   // still not found, so go to overview
-  return Overview.GetInterpolated(px << (SUBPIXEL_BITS - OVERVIEW_BITS),
+  return overview.GetInterpolated(px << (SUBPIXEL_BITS - OVERVIEW_BITS),
                                    py << (SUBPIXEL_BITS - OVERVIEW_BITS));
 }
 
@@ -178,7 +178,7 @@ RasterTileCache::GetInterpolatedHeight(unsigned int lx, unsigned int ly) const
     return tile.GetInterpolatedHeight(px, py, ix, iy);
 
   // still not found, so go to overview
-  return Overview.GetInterpolated(lx >> OVERVIEW_BITS,
+  return overview.GetInterpolated(lx >> OVERVIEW_BITS,
                                    ly >> OVERVIEW_BITS);
 }
 
@@ -192,7 +192,7 @@ RasterTileCache::SetSize(unsigned _width, unsigned _height,
   tile_width = _tile_width;
   tile_height = _tile_height;
 
-  Overview.Resize(width >> OVERVIEW_BITS, height >> OVERVIEW_BITS);
+  overview.Resize(width >> OVERVIEW_BITS, height >> OVERVIEW_BITS);
   overview_width_fine = width << SUBPIXEL_BITS;
   overview_height_fine = height << SUBPIXEL_BITS;
 
@@ -220,7 +220,7 @@ RasterTileCache::Reset()
   segments.clear();
   scan_overview = true;
 
-  Overview.Reset();
+  overview.Reset();
 
   for (auto it = tiles.begin(), end = tiles.end(); it != end; ++it)
     it->Disable();
@@ -441,7 +441,7 @@ RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
   /* permanently disable the requested tiles which are still not
      loaded, to prevent trying to reload them over and over in a busy
      loop */
-  for (auto it = RequestTiles.begin(), end = RequestTiles.end();
+  for (auto it = request_tiles.begin(), end = request_tiles.end();
       it != end; ++it) {
     RasterTile &tile = tiles.GetLinear(*it);
     if (tile.IsRequested() && !tile.IsEnabled())
@@ -489,8 +489,8 @@ RasterTileCache::SaveCache(FILE *file) const
     return false;
 
   /* save overview */
-  size_t overview_size = Overview.GetWidth() * Overview.GetHeight();
-  if (fwrite(Overview.GetData(), sizeof(*Overview.GetData()),
+  size_t overview_size = overview.GetWidth() * overview.GetHeight();
+  if (fwrite(overview.GetData(), sizeof(*overview.GetData()),
              overview_size, file) != overview_size)
     return false;
 
@@ -544,8 +544,8 @@ RasterTileCache::LoadCache(FILE *file)
   }
 
   /* load overview */
-  size_t overview_size = Overview.GetWidth() * Overview.GetHeight();
-  if (fread(Overview.GetData(), sizeof(*Overview.GetData()),
+  size_t overview_size = overview.GetWidth() * overview.GetHeight();
+  if (fread(overview.GetData(), sizeof(*overview.GetData()),
             overview_size, file) != overview_size)
     return false;
 
@@ -833,7 +833,7 @@ RasterTileCache::ScanTileLine(GridLocation start, GridLocation end,
     /* need range checking in the overview buffer because its size may
        be rounded down, and then the "fine" location may exceed its
        bounds */
-    Overview.ScanLineChecked(start.x >> OVERVIEW_BITS,
+    overview.ScanLineChecked(start.x >> OVERVIEW_BITS,
                              start.y >> OVERVIEW_BITS,
                              end.x >> OVERVIEW_BITS, end.y >> OVERVIEW_BITS,
                              buffer + start.index, end.index - start.index,
@@ -1083,15 +1083,15 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_
   // a multiple of 2^OVERVIEW_BITS.
   unsigned x_overview = px >> OVERVIEW_BITS;
   unsigned y_overview = py >> OVERVIEW_BITS;
-  assert(x_overview <= Overview.GetWidth());
-  assert(y_overview <= Overview.GetHeight());
+  assert(x_overview <= overview.GetWidth());
+  assert(y_overview <= overview.GetHeight());
 
-  if (x_overview == Overview.GetWidth())
+  if (x_overview == overview.GetWidth())
     x_overview--;
-  if (y_overview == Overview.GetHeight())
+  if (y_overview == overview.GetHeight())
     y_overview--;
 
-  return Overview.Get(x_overview, y_overview);
+  return overview.Get(x_overview, y_overview);
 }
 
 RasterLocation
