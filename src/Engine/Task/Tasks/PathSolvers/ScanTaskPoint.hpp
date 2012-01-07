@@ -49,7 +49,7 @@ struct ScanTaskPoint {
     /* sorry for this dirty trick, but it speeds up the solver by 20%;
        language lawyers would say that this cast is not legal, but it
        works on all platforms we're interested in supporting */
-    return *(const uint32_t *)(const void *)this;
+    return *reinterpret_cast<const uint32_t *>(this);
   }
 
   bool operator<(const ScanTaskPoint &other) const {
