@@ -51,6 +51,8 @@ Copyright_License {
 #define gcc_likely(x) __builtin_expect (!!(x), 1)
 #define gcc_unlikely(x) __builtin_expect (!!(x), 0)
 
+#define gcc_aligned(n) __attribute__((aligned(n)))
+
 #else /* ! GCC_VERSION >= 30000 */
 
 /* generic C compiler */
@@ -69,6 +71,8 @@ Copyright_License {
 
 #define gcc_likely(x) (x)
 #define gcc_unlikely(x) (x)
+
+#define gcc_aligned(n)
 
 #endif /* ! GCC_VERSION >= 30000 */
 
