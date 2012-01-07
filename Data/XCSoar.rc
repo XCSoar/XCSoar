@@ -294,8 +294,6 @@ IDR_XML_POLARCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configura
 IDR_XML_POLARCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/PolarConfigPanel_L.xml.gz"
 IDR_XML_TASKDEFAULTSCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TaskDefaultsConfigPanel.xml.gz"
 IDR_XML_TASKDEFAULTSCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TaskDefaultsConfigPanel_L.xml.gz"
-IDR_XML_TASKRULESCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TaskRulesConfigPanel.xml.gz"
-IDR_XML_TASKRULESCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TaskRulesConfigPanel_L.xml.gz"
 IDR_XML_TERRAINDISPLAYCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TerrainDisplayConfigPanel.xml.gz"
 IDR_XML_TERRAINDISPLAYCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TerrainDisplayConfigPanel_L.xml.gz"
 IDR_XML_TRACKINGCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TrackingConfigPanel.xml.gz"

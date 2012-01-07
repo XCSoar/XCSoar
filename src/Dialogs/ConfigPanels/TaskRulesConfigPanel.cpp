@@ -23,90 +23,120 @@ Copyright_License {
 
 #include "TaskRulesConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Profile/Profile.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
 
+enum ControlIndex {
+  StartMaxSpeed,
+  StartMaxSpeedMargin,
+  spacer_1,
+  StartMaxHeight,
+  StartMaxHeightMargin,
+  StartHeightRef,
+  spacer_2,
+  FinishMinHeight,
+  FinishHeightRef,
+  spacer_3,
+  Contests
+};
 
-class TaskRulesConfigPanel : public XMLWidget {
+class TaskRulesConfigPanel : public RowFormWidget {
+public:
+  TaskRulesConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
 };
-
-void
-TaskRulesConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
-
-void
-TaskRulesConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
 
 void
 TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent,
-             Layout::landscape ? _T("IDR_XML_TASKRULESCONFIGPANEL_L") :
-                               _T("IDR_XML_TASKRULESCONFIGPANEL"));
-
   const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
 
-  LoadFormProperty(form, _T("prpStartMaxSpeed"), ugHorizontalSpeed,
-                   task_behaviour.ordered_defaults.start_max_speed);
+  RowFormWidget::Prepare(parent, rc);
 
-  LoadFormProperty(form, _T("prpStartMaxSpeedMargin"), ugHorizontalSpeed,
-                   task_behaviour.start_max_speed_margin);
+  // Expert item (TODO)
+  AddFloat(_("Start max. speed"), _("Maximum speed allowed in start observation zone.  Set to 0 for no limit."),
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(300), fixed(5), false, ugHorizontalSpeed,
+           task_behaviour.ordered_defaults.start_max_speed);
 
+  // Expert item
+  AddFloat(_("Start max. speed margin"),
+           _("Maximum speed above maximum start speed to tolerate.  Set to 0 for no tolerance."),
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(300), fixed(5), false, ugHorizontalSpeed,
+           task_behaviour.start_max_speed_margin);
+
+  AddSpacer();
+
+  // Expert item
+  AddFloat(_("Start max. height"),
+           _("Maximum height based on start height reference (AGL or MSL) while starting the task.  "
+               "Set to 0 for no limit."),
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, ugAltitude,
+           fixed(task_behaviour.ordered_defaults.start_max_height));
+
+  // Expert item
+  AddFloat(_("Start max. height margin"),
+           _("Maximum height above maximum start height to tolerate.  Set to 0 for no tolerance."),
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, ugAltitude,
+           fixed(task_behaviour.start_max_height_margin));
+
+  // Expert item
   static gcc_constexpr_data StaticEnumChoice start_max_height_ref_list[] = {
     { hrAGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point)") },
     { hrMSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level)") },
     { 0 }
   };
-  LoadFormProperty(form, _T("prpStartHeightRef"), start_max_height_ref_list,
-                   task_behaviour.ordered_defaults.start_max_height_ref);
+  AddEnum(_("Start height ref."), _T(""), start_max_height_ref_list,
+          task_behaviour.ordered_defaults.start_max_height_ref);
 
-  LoadFormProperty(form, _T("prpStartMaxHeight"), ugAltitude,
-                   task_behaviour.ordered_defaults.start_max_height);
+  AddSpacer();
 
-  LoadFormProperty(form, _T("prpStartMaxHeightMargin"), ugAltitude,
-                   task_behaviour.start_max_height_margin);
+  // Expert item
+  AddFloat(_("Finish min. height"),
+           _("Minimum height based on finish height reference (AGL or MSL) while finishing the task.  "
+               "Set to 0 for no limit."),
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, ugAltitude,
+           fixed(task_behaviour.ordered_defaults.finish_min_height));
 
+  // Expert item
   static gcc_constexpr_data StaticEnumChoice finish_min_height_ref_list[] = {
     { hrAGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point)") },
     { hrMSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level)") },
     { 0 }
   };
-  LoadFormProperty(form, _T("prpFinishHeightRef"), finish_min_height_ref_list,
-                   task_behaviour.ordered_defaults.finish_min_height_ref);
+  AddEnum(_("Finish height ref."), _T(""), finish_min_height_ref_list,
+          task_behaviour.ordered_defaults.finish_min_height_ref);
 
-  LoadFormProperty(form, _T("prpFinishMinHeight"), ugAltitude,
-                   task_behaviour.ordered_defaults.finish_min_height);
+  AddSpacer();
 
   const StaticEnumChoice contests_list[] = {
-    { OLC_FAI, ContestToString(OLC_FAI) },
-    { OLC_Classic, ContestToString(OLC_Classic) },
-    { OLC_League, ContestToString(OLC_League) },
-    { OLC_Plus, ContestToString(OLC_Plus) },
+    { OLC_FAI, ContestToString(OLC_FAI),
+      N_("Conforms to FAI triangle rules. Three turns and common start and finish. No leg less than 28% "
+          "of total except for tasks longer than 500km: No leg less than 25% or larger than 45%.") },
+    { OLC_Classic, ContestToString(OLC_Classic),
+      N_("Up to seven points including start and finish, finish height must not be lower than "
+          "start height less 1000 meters.") },
+    { OLC_League, ContestToString(OLC_League),
+      N_("The most recent contest with Sprint task rules.") },
+    { OLC_Plus, ContestToString(OLC_Plus),
+      N_("A combination of Classic and FAI rules. 30% of the FAI score are added to the Classic score.") },
     { OLC_XContest, ContestToString(OLC_XContest) },
     { OLC_DHVXC, ContestToString(OLC_DHVXC) },
     { OLC_SISAT, ContestToString(OLC_SISAT) },
     { 0 }
   };
-  LoadFormProperty(form, _T("prpContests"), contests_list,
-                   task_behaviour.contest);
+  AddEnum(_("On-Line Contest"),
+      _("Select the rules used for calculating optimal points for the On-Line Contest. "
+          "The implementation  conforms to the official release 2010, Sept.23."),
+          contests_list, task_behaviour.contest);
 }
 
 
@@ -117,40 +147,26 @@ TaskRulesConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
-
   OrderedTaskBehaviour &otb = task_behaviour.ordered_defaults;
-  changed |= SaveFormProperty(form, _T("prpStartMaxSpeed"),
-                              ugHorizontalSpeed,
-                              otb.start_max_speed,
-                              szProfileStartMaxSpeed);
 
-  changed |= SaveFormProperty(form, _T("prpStartMaxSpeedMargin"),
-                              ugHorizontalSpeed,
-                              task_behaviour.start_max_speed_margin,
-                              szProfileStartMaxSpeedMargin);
+  changed |= SaveValue(StartMaxSpeed, ugHorizontalSpeed, szProfileStartMaxSpeed, otb.start_max_speed);
 
-  changed |= SaveFormProperty(form, _T("prpStartMaxHeight"), ugAltitude,
-                              otb.start_max_height,
-                              szProfileStartMaxHeight);
+  changed |= SaveValue(StartMaxSpeedMargin, ugHorizontalSpeed, szProfileStartMaxSpeedMargin,
+                       task_behaviour.start_max_speed_margin);
 
-  changed |= SaveFormProperty(form, _T("prpStartMaxHeightMargin"), ugAltitude,
-                              task_behaviour.start_max_height_margin,
-                              szProfileStartMaxHeightMargin);
+  changed |= SaveValue(StartMaxHeight, ugAltitude, szProfileStartMaxHeight, otb.start_max_height);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpStartHeightRef"),
-                                  szProfileStartHeightRef,
-                                  otb.start_max_height_ref);
+  changed |= SaveValue(StartMaxHeightMargin, ugAltitude, szProfileStartMaxHeightMargin,
+                       task_behaviour.start_max_height_margin);
 
-  changed |= SaveFormProperty(form, _T("prpFinishMinHeight"), ugAltitude,
-                              otb.finish_min_height,
-                              szProfileFinishMinHeight);
+  changed |= SaveValueEnum(StartHeightRef, szProfileStartHeightRef, otb.start_max_height_ref);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpFinishHeightRef"),
-                                  szProfileFinishHeightRef,
-                                  otb.finish_min_height_ref);
+  changed |= SaveValue(FinishMinHeight, ugAltitude, szProfileFinishMinHeight,
+                       otb.finish_min_height);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpContests"), szProfileOLCRules,
-                                  task_behaviour.contest);
+  changed |= SaveValueEnum(FinishHeightRef, szProfileFinishHeightRef, otb.finish_min_height_ref);
+
+  changed |= SaveValueEnum(Contests, szProfileOLCRules, task_behaviour.contest);
 
   _changed |= changed;
   _require_restart |= require_restart;
