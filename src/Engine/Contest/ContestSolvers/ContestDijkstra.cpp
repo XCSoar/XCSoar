@@ -231,8 +231,7 @@ ContestDijkstra::add_start_edges()
 
   for (; destination.point_index != n_points; ++destination.point_index) {
     // only add points that are valid for the finish
-    solution[0] = GetPointFast(destination);
-    if (admit_candidate(end)) {
+    if (admit_candidate(GetPointFast(destination), end)) {
       dijkstra.link(destination, destination, 0);
     }
   }
@@ -243,7 +242,7 @@ ContestDijkstra::add_edges(const ScanTaskPoint& origin)
 {
   ScanTaskPoint destination(origin.stage_number + 1, origin.point_index);
 
-  solution[0] = GetPointFast(FindStart(origin));
+  const TracePoint start = GetPointFast(FindStart(origin));
 
   // only add last point!
   if (is_final(destination)) {
@@ -252,7 +251,7 @@ ContestDijkstra::add_edges(const ScanTaskPoint& origin)
   }
 
   for (; destination.point_index != n_points; ++destination.point_index) {
-    if (admit_candidate(destination)) {
+    if (admit_candidate(start, destination)) {
       const unsigned d = get_weighting(origin.stage_number) *
                          distance(origin, destination);
       dijkstra.link(destination, origin, d);
@@ -275,12 +274,13 @@ ContestDijkstra::get_weighting(const unsigned i) const
 }
 
 bool
-ContestDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
+ContestDijkstra::admit_candidate(const TracePoint &start,
+                                 const ScanTaskPoint &candidate) const
 {
   if (!is_final(candidate))
     return true;
   else
-    return IsFinishAltitudeValid(solution[0], GetPointFast(candidate));
+    return IsFinishAltitudeValid(start, GetPointFast(candidate));
 }
 
 bool

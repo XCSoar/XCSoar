@@ -92,9 +92,7 @@ OLCSprint::add_start_edges()
   const ScanTaskPoint start(0, find_start());
   const ScanTaskPoint finish(num_stages - 1, n_points - 1);
 
-  solution[0] = GetPointFast(start);
-
-  if (admit_candidate(finish))
+  if (admit_candidate(GetPointFast(start), finish))
     dijkstra.link(start, start, 0);
 }
 
