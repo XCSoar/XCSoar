@@ -46,7 +46,7 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
    flip_orientation(_flipOrientation)
 {
   WindowStyle mystyle;
-  mystyle.tab_stop();
+  mystyle.TabStop();
   set(parent, left, top, width, height, mystyle);
 }
 

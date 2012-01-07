@@ -266,8 +266,8 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look,
   /* create the dialog */
 
   WindowStyle dialog_style;
-  dialog_style.hide();
-  dialog_style.control_parent();
+  dialog_style.Hide();
+  dialog_style.ControlParent();
 
   dialog = new WndForm(parent, look, parent.get_client_rect(),
                        _("Devices"), dialog_style);
@@ -292,8 +292,8 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look,
   font_height = look.list.font->GetHeight();
 
   WindowStyle list_style;
-  list_style.tab_stop();
-  list_style.border();
+  list_style.TabStop();
+  list_style.Border();
 
   list = new WndListFrame(client_area, look, rc.left, rc.top,
                           rc.right - rc.left, rc.bottom - rc.top,

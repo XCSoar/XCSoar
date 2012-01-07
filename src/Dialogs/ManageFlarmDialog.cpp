@@ -55,8 +55,8 @@ ManageFlarmDialog(Device &_device)
   /* create the dialog */
 
   WindowStyle dialog_style;
-  dialog_style.hide();
-  dialog_style.control_parent();
+  dialog_style.Hide();
+  dialog_style.ControlParent();
 
   SingleWindow &parent = UIGlobals::GetMainWindow();
   const DialogLook &look = UIGlobals::GetDialogLook();
@@ -79,7 +79,7 @@ ManageFlarmDialog(Device &_device)
   const UPixelScalar height = Layout::Scale(30);
 
   ButtonWindowStyle button_style;
-  button_style.tab_stop();
+  button_style.TabStop();
 
   WndButton *button;
 

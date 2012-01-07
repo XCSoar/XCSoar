@@ -238,7 +238,7 @@ public:
     const PixelRect rc = get_client_rect();
 
     WindowStyle with_border;
-    with_border.border();
+    with_border.Border();
 
     oz.set(*this, rc.right / 2, 0, rc.right - (rc.right / 2), rc.bottom,
            with_border);

@@ -120,8 +120,8 @@ MenuBar::MenuBar(ContainerWindow &parent)
   const PixelRect rc = parent.get_client_rect();
 
   ButtonWindowStyle style;
-  style.hide();
-  style.border();
+  style.Hide();
+  style.Border();
   style.multiline();
 
   for (unsigned i = 0; i < MAX_BUTTONS; ++i) {

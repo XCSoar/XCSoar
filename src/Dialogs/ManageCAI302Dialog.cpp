@@ -81,8 +81,8 @@ ManageCAI302Dialog(SingleWindow &parent, const DialogLook &look,
   /* create the dialog */
 
   WindowStyle dialog_style;
-  dialog_style.hide();
-  dialog_style.control_parent();
+  dialog_style.Hide();
+  dialog_style.ControlParent();
 
   dialog = new WndForm(parent, look, parent.get_client_rect(),
                        _T("CAI 302"), dialog_style);
@@ -102,7 +102,7 @@ ManageCAI302Dialog(SingleWindow &parent, const DialogLook &look,
   const UPixelScalar height = Layout::Scale(32);
 
   ButtonWindowStyle button_style;
-  button_style.tab_stop();
+  button_style.TabStop();
 
   WndButton *button;
 

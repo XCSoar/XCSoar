@@ -59,7 +59,7 @@ void
 GaugeThermalAssistant::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   WindowStyle style;
-  style.hide();
+  style.Hide();
 
   GaugeThermalAssistantWindow *window =
     new GaugeThermalAssistantWindow(parent, rc, style);

@@ -40,7 +40,7 @@ private:
 
 public:
   PaintWindow() {
-    enable_custom_painting();
+    EnableCustomPainting();
   }
 
 #ifdef USE_GDI

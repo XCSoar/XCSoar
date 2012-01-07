@@ -68,7 +68,7 @@ void
 MapWindow::set(ContainerWindow &parent, const PixelRect &rc)
 {
   WindowStyle style;
-  style.enable_double_clicks();
+  style.EnableDoubleClicks();
   DoubleBufferWindow::set(parent, rc.left, rc.top,
                           rc.right - rc.left, rc.bottom - rc.top,
                           style);

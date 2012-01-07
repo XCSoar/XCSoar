@@ -50,8 +50,8 @@ Window::set(ContainerWindow *parent,
   this->width = width;
   this->height = height;
 
-  tab_stop = window_style.m_tab_stop;
-  control_parent = window_style.m_control_parent;
+  tab_stop = window_style.tab_stop;
+  control_parent = window_style.control_parent;
   visible = window_style.visible;
   enabled = window_style.enabled;
   has_border = window_style.has_border;

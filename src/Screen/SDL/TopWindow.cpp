@@ -53,7 +53,7 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
                UPixelScalar width, UPixelScalar height)
 {
   WindowStyle style;
-  style.popup();
+  style.Popup();
 
   screen.Set(width, height);
 

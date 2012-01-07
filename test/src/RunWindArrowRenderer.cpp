@@ -124,7 +124,7 @@ public:
     const PixelRect rc = get_client_rect();
 
     WindowStyle with_border;
-    with_border.border();
+    with_border.Border();
 
     wind.set(*this, rc.left, rc.top, rc.right, rc.bottom, with_border);
 

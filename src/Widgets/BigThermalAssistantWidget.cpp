@@ -39,7 +39,7 @@ BigThermalAssistantWidget::Prepare(ContainerWindow &parent,
                                    const PixelRect &rc)
 {
   WindowStyle style;
-  style.hide();
+  style.Hide();
 
   BigThermalAssistantWindow *window =
     new BigThermalAssistantWindow(Layout::FastScale(10));

@@ -69,7 +69,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   ContainerWindow &client_area = form.GetClientAreaWindow();
 
   WindowStyle style;
-  style.tab_stop();
+  style.TabStop();
   WndListFrame list(client_area, *dialog_look, 2, 2,
                     client_area.get_width() - 4,
                     client_area.get_height() - 4,

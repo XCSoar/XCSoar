@@ -78,7 +78,7 @@ PeriodClock WndForm::time_any_open_close;
 static WindowStyle
 add_border(WindowStyle style)
 {
-  style.border();
+  style.Border();
   return style;
 }
 
@@ -101,7 +101,7 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
   // Create ClientWindow
 
   WindowStyle client_style;
-  client_style.control_parent();
+  client_style.ControlParent();
   client_area.set(*this, client_rect.left, client_rect.top,
                   client_rect.right - client_rect.left,
                   client_rect.bottom - client_rect.top, client_style);

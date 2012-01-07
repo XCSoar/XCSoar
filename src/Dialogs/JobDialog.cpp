@@ -86,7 +86,7 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
           Job &job, bool cancellable)
 {
   WindowStyle form_style;
-  form_style.hide();
+  form_style.Hide();
   WndForm form(parent, dialog_look,
                parent.get_client_rect(),
                caption);
@@ -100,7 +100,7 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
   JobCancelButton cancel_button(thread);
   if (cancellable) {
     ButtonWindowStyle style;
-    style.tab_stop();
+    style.TabStop();
 
     PixelRect rc = client_area.get_client_rect();
     rc.right -= Layout::Scale(2);

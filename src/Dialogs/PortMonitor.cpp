@@ -113,8 +113,8 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
   /* create the dialog */
 
   WindowStyle dialog_style;
-  dialog_style.hide();
-  dialog_style.control_parent();
+  dialog_style.Hide();
+  dialog_style.ControlParent();
 
   TCHAR buffer[64];
   StaticString<128> caption;

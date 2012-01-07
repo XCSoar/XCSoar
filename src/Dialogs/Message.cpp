@@ -86,8 +86,8 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   // Create dialog
   WindowStyle style;
-  style.hide();
-  style.control_parent();
+  style.Hide();
+  style.ControlParent();
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
   PixelRect form_rc;
@@ -123,7 +123,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   // Create buttons
   WindowStyle button_style;
-  button_style.tab_stop();
+  button_style.TabStop();
 
   uType = uType & 0x000f;
   if (uType == MB_OK || uType == MB_OKCANCEL) {

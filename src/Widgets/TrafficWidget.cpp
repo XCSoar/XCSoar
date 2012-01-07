@@ -618,8 +618,8 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   instance = this;
 
   WindowStyle style;
-  style.hide();
-  style.enable_double_clicks();
+  style.Hide();
+  style.EnableDoubleClicks();
 
   const Look &look = CommonInterface::main_window.GetLook();
   view = new FlarmTrafficControl2(look.flarm_dialog);

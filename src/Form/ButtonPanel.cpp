@@ -27,7 +27,7 @@ Copyright_License {
 
 ButtonPanel::ButtonPanel(ContainerWindow &_parent, const DialogLook &_look)
   :parent(_parent), look(_look), row_count(0) {
-  style.tab_stop();
+  style.TabStop();
   Resized(parent.get_client_rect());
 }
 

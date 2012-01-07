@@ -74,7 +74,7 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
 
   WindowStyle style;
   if (!read_only)
-    style.control_parent();
+    style.ControlParent();
 
   EditWindowStyle edit_style;
   edit_style.vertical_center();
@@ -82,14 +82,14 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
   if (read_only)
     edit_style.read_only();
   else
-    edit_style.tab_stop();
+    edit_style.TabStop();
 
   if (IsEmbedded() || Layout::scale_1024 < 2048)
     /* sunken edge doesn't fit well on the tiny screen of an embedded
        device */
-    edit_style.border();
+    edit_style.Border();
   else
-    edit_style.sunken_edge();
+    edit_style.SunkenEdge();
 
   PanelControl &panel = *(PanelControl *)GetWindow();
   WndProperty *edit =
@@ -460,8 +460,8 @@ RowFormWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
   assert(controls.empty());
 
   WindowStyle style;
-  style.hide();
-  style.control_parent();
+  style.Hide();
+  style.ControlParent();
 
   SetWindow(new PanelControl(parent, look, rc, style));
 }

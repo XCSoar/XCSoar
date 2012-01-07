@@ -53,8 +53,8 @@ public:
 #endif
   }
 
-  void enable_custom_painting() {
-    WindowStyle::enable_custom_painting();
+  void EnableCustomPainting() {
+    WindowStyle::EnableCustomPainting();
 #ifdef USE_GDI
     style |= BS_OWNERDRAW;
 #endif

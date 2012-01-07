@@ -439,7 +439,7 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
   layout = _layout;
 
   WindowStyle style;
-  style.hide();
+  style.Hide();
 
   // create infobox windows
   for (unsigned i = layout.count; i-- > 0;) {

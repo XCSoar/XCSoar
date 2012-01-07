@@ -30,8 +30,8 @@ void
 PanelWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   WindowStyle style;
-  style.control_parent();
-  style.hide();
+  style.ControlParent();
+  style.Hide();
 
   PanelControl *panel = new PanelControl(parent, UIGlobals::GetDialogLook(),
                                          rc,

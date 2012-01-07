@@ -65,7 +65,7 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
                UPixelScalar width, UPixelScalar height)
 {
   WindowStyle style;
-  style.popup();
+  style.Popup();
 
   Window::set(NULL, cls, text, left, top, width, height, style);
 }

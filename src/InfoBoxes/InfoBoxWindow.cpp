@@ -61,7 +61,7 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent,
 {
   data.Clear();
 
-  style.enable_double_clicks();
+  style.EnableDoubleClicks();
   set(parent, x, y, width, height, style);
 
   id = -1;

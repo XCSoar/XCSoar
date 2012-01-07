@@ -502,8 +502,8 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
 
   // Create the dialog
   WindowStyle style;
-  style.hide();
-  style.control_parent();
+  style.Hide();
+  style.ControlParent();
 
   PixelRect form_rc;
   form_rc.left = pos.x;
@@ -604,10 +604,10 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     size.cx = ScaleWidth(size.cx, dialog_style);
 
   if (!StringToIntDflt(node.getAttribute(_T("Visible")), 1))
-    style.hide();
+    style.Hide();
 
   if (StringToIntDflt(node.getAttribute(_T("Border")), 0))
-    style.border();
+    style.Border();
 
   rc.left = pos.x;
   rc.top = pos.y;
@@ -640,25 +640,25 @@ LoadChild(SubForm &form, ContainerWindow &parent,
       GetCallBack(lookup_table, node, _T("OnHelp"));
 
     // Create the Property Control
-    style.control_parent();
+    style.ControlParent();
 
     EditWindowStyle edit_style;
     edit_style.vertical_center();
     if (read_only)
       edit_style.read_only();
     else
-      edit_style.tab_stop();
+      edit_style.TabStop();
 
     if (IsEmbedded() || Layout::scale_1024 < 2048)
       /* sunken edge doesn't fit well on the tiny screen of an
          embedded device */
-      edit_style.border();
+      edit_style.Border();
     else
-      edit_style.sunken_edge();
+      edit_style.SunkenEdge();
 
     if (multi_line) {
       edit_style.multiline();
-      edit_style.vscroll();
+      edit_style.VerticalScroll();
     }
 
     WndProperty *property;
@@ -694,18 +694,18 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     if (read_only)
       edit_style.read_only();
     else
-      edit_style.tab_stop();
+      edit_style.TabStop();
 
     if (IsEmbedded() || Layout::scale_1024 < 2048)
       /* sunken edge doesn't fit well on the tiny screen of an
          embedded device */
-      edit_style.border();
+      edit_style.Border();
     else
-      edit_style.sunken_edge();
+      edit_style.SunkenEdge();
 
     if (multi_line) {
       edit_style.multiline();
-      edit_style.vscroll();
+      edit_style.VerticalScroll();
     }
 
     EditWindow *edit;
@@ -724,7 +724,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     // Create the ButtonControl
 
     ButtonWindowStyle button_style(style);
-    button_style.tab_stop();
+    button_style.TabStop();
     button_style.multiline();
 
     window = new WndButton(parent, *xml_dialog_look, caption,
@@ -739,7 +739,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     // Create the CheckBoxControl
 
-    style.tab_stop();
+    style.TabStop();
 
     window = new CheckBoxControl(parent, *xml_dialog_look, caption,
                                  rc,
@@ -754,7 +754,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     // Create the SymbolButtonControl
 
-    style.tab_stop();
+    style.TabStop();
 
     window = new WndSymbolButton(parent, *xml_dialog_look, caption,
                                  rc,
@@ -764,7 +764,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   } else if (StringIsEqual(node.getName(), _T("Panel"))) {
     // Create the PanelControl
 
-    style.control_parent();
+    style.ControlParent();
 
     PanelControl *frame = new PanelControl(parent, *xml_dialog_look,
                                            rc,
@@ -827,14 +827,14 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     // Create the ListBoxControl
 
-    style.tab_stop();
+    style.TabStop();
 
     if (IsEmbedded() || Layout::scale_1024 < 2048)
       /* sunken edge doesn't fit well on the tiny screen of an
          embedded device */
-      style.border();
+      style.Border();
     else
-      style.sunken_edge();
+      style.SunkenEdge();
 
     window = new WndListFrame(parent, *xml_dialog_look,
                               pos.x, pos.y, size.cx, size.cy,
@@ -845,7 +845,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   } else if (StringIsEqual(node.getName(), _T("Tabbed"))) {
     // Create the TabControl
 
-    style.control_parent();
+    style.ControlParent();
 
     TabbedControl *tabbed = new TabbedControl(parent,
                                               pos.x, pos.y, size.cx, size.cy,
@@ -870,7 +870,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
          (!Layout::landscape && StringToIntDflt(node.getAttribute(_T("Vertical")), 0) ) )
       flip_orientation = true;
 
-    style.control_parent();
+    style.ControlParent();
     TabBarControl *tabbar = new TabBarControl(parent, *xml_dialog_look,
                                               pos.x, pos.y, size.cx, size.cy,
                                               style, flip_orientation);
@@ -880,7 +880,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   } else if (StringIsEqual(node.getName(), _T("TabMenu"))) {
     // Create the TabMenuControl
 
-    style.control_parent();
+    style.ControlParent();
     TabMenuControl *tabmenu = new TabMenuControl(parent,
                                                  /* XXX this cast is
                                                     an ugly hack!

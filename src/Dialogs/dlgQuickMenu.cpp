@@ -136,8 +136,8 @@ dlgQuickMenuShowModal(SingleWindow &parent)
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
   WindowStyle dialogStyle;
-  dialogStyle.hide();
-  dialogStyle.control_parent();
+  dialogStyle.Hide();
+  dialogStyle.ControlParent();
 
   wf = new WndForm(parent, dialog_look, parent.get_client_rect(),
                    _T("Quick Menu"), dialogStyle);
@@ -147,7 +147,7 @@ dlgQuickMenuShowModal(SingleWindow &parent)
   PixelRect r = client_area.get_client_rect();
 
   WindowStyle grid_view_style;
-  grid_view_style.control_parent();
+  grid_view_style.ControlParent();
 
   grid_view = new GridView(client_area,
                            r.left, r.top,
@@ -155,7 +155,7 @@ dlgQuickMenuShowModal(SingleWindow &parent)
                            dialog_look, grid_view_style);
 
   WindowStyle buttonStyle;
-  buttonStyle.tab_stop();
+  buttonStyle.TabStop();
 
   for (unsigned i = 0; i < menu->MAX_ITEMS; ++i) {
     if (buttons.full())

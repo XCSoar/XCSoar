@@ -55,8 +55,8 @@ WidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget &_widget)
   /* create the dialog */
 
   WindowStyle dialog_style;
-  dialog_style.hide();
-  dialog_style.control_parent();
+  dialog_style.Hide();
+  dialog_style.ControlParent();
 
   dialog = new WndForm(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
                        rc,caption, dialog_style);

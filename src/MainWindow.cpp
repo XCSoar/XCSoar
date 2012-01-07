@@ -195,8 +195,8 @@ MainWindow::InitialiseConfigured()
   ReinitialiseLayoutTA(rc, ib_layout);
 
   WindowStyle hidden_border;
-  hidden_border.hide();
-  hidden_border.border();
+  hidden_border.Hide();
+  hidden_border.Border();
 
   ReinitialiseLayout_flarm(rc, ib_layout);
 

@@ -36,7 +36,7 @@ class WndCustomButton : public WndButton
 {
   static inline ButtonWindowStyle custom_painting(ButtonWindowStyle style)
   {
-    style.enable_custom_painting();
+    style.EnableCustomPainting();
     return style;
   }
 

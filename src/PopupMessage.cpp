@@ -113,11 +113,11 @@ PopupMessage::set(const PixelRect _rc)
   rc = _rc;
 
   EditWindowStyle style;
-  style.border();
+  style.Border();
   style.center();
   style.multiline();
   style.read_only();
-  style.hide();
+  style.Hide();
 
   EditWindow::set(parent, rc.left, rc.top,
                   rc.right - rc.left, rc.bottom - rc.top,

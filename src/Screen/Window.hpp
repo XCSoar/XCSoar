@@ -52,7 +52,7 @@ class WindowStyle {
 protected:
   bool visible;
   bool enabled;
-  bool m_tab_stop, m_control_parent;
+  bool tab_stop, control_parent;
   bool double_clicks;
   bool has_border;
   int text_style;
@@ -61,7 +61,7 @@ public:
   gcc_constexpr_ctor
   WindowStyle()
     :visible(true), enabled(true),
-     m_tab_stop(false), m_control_parent(false),
+     tab_stop(false), control_parent(false),
      double_clicks(false), has_border(false),
      text_style(0) {}
 
@@ -88,7 +88,7 @@ public:
 #endif /* USE_GDI */
 
   /** The window is initially not visible. */
-  void hide() {
+  void Hide() {
 #ifndef USE_GDI
     visible = false;
 #else
@@ -100,7 +100,7 @@ public:
    * The window is initially disabled.
    * A disabled window cannot receive input from the user.
    */
-  void disable() {
+  void Disable() {
 #ifndef USE_GDI
     enabled = false;
 #else
@@ -113,9 +113,9 @@ public:
    * user presses the TAB key. Pressing the TAB key changes the keyboard
    * focus to the next control with the WS_TABSTOP style.
    */
-  void tab_stop() {
+  void TabStop() {
 #ifndef USE_GDI
-    m_tab_stop = true;
+    tab_stop = true;
 #else
     style |= WS_TABSTOP;
 #endif
@@ -126,16 +126,16 @@ public:
    * a window with the WS_EX_CONTROLPARENT style, the system recursively
    * searches the window's children.
    */
-  void control_parent() {
+  void ControlParent() {
 #ifndef USE_GDI
-    m_control_parent = true;
+    control_parent = true;
 #else
     ex_style |= WS_EX_CONTROLPARENT;
 #endif
   }
 
   /** The window has a thin-line border. */
-  void border() {
+  void Border() {
 #ifdef USE_GDI
     style |= WS_BORDER;
 #else
@@ -144,34 +144,34 @@ public:
   }
 
   /** The window has a sunken 3D border. */
-  void sunken_edge() {
-    border();
+  void SunkenEdge() {
+    Border();
 #ifdef USE_GDI
     ex_style |= WS_EX_CLIENTEDGE;
 #endif
   }
 
   /** The window has a vertical scroll bar. */
-  void vscroll() {
+  void VerticalScroll() {
 #ifdef USE_GDI
     style |= WS_VSCROLL;
 #endif
   }
 
-  void popup() {
+  void Popup() {
 #ifdef USE_GDI
     style &= ~WS_CHILD;
     style |= WS_SYSMENU;
 #endif
   }
 
-  void enable_custom_painting() {
+  void EnableCustomPainting() {
 #ifdef USE_GDI
     custom_painting = true;
 #endif
   }
 
-  void enable_double_clicks() {
+  void EnableDoubleClicks() {
     double_clicks = true;
   }
 
@@ -233,7 +233,7 @@ public:
    * Activates the OnPaint() method.  It is disabled by default
    * because its preparation would needlessly allocate resources.
    */
-  void enable_custom_painting() {
+  void EnableCustomPainting() {
 #ifdef USE_GDI
     custom_painting = true;
 #endif

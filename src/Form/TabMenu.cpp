@@ -55,7 +55,7 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent,
 
   const PixelRect rc = get_client_rect();
   WindowStyle pager_style;
-  pager_style.control_parent();
+  pager_style.ControlParent();
   pager.set(*this, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
             pager_style);
 
@@ -414,7 +414,7 @@ TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
    selected_index(TabMenuControl::MenuTabIndex::None())
 {
   WindowStyle mystyle;
-  mystyle.tab_stop();
+  mystyle.TabStop();
   set(parent, left, top, width, height, mystyle);
 }
 

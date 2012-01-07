@@ -102,7 +102,7 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(const int id)
   wf = new WndForm(UIGlobals::GetMainWindow(), look, form_rc);
 
   WindowStyle tab_style;
-  tab_style.control_parent();
+  tab_style.ControlParent();
   ContainerWindow &client_area = wf->GetClientAreaWindow();
   const PixelRect rc = client_area.get_client_rect();
   wTabBar = new TabBarControl(client_area, look, rc.left, rc.top,

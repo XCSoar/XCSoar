@@ -85,7 +85,7 @@ void
 GaugeFLARM::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   WindowStyle style;
-  style.hide();
+  style.Hide();
 
   SetWindow(new SmallTrafficWindow(parent, rc, look, style));
 }

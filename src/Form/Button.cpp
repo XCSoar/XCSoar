@@ -38,7 +38,7 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
    left_callback(_left_callback),
    right_callback(_right_callback)
 {
-  style.enable_custom_painting();
+  style.EnableCustomPainting();
   set(parent, Caption, rc, style);
   set_font(*look.button.font);
 }

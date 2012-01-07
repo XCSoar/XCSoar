@@ -328,7 +328,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   info_box_layout = InfoBoxLayout::Calculate(rc, geometry);
 
   WindowStyle preview_style;
-  preview_style.enable_double_clicks();
+  preview_style.EnableDoubleClicks();
   for (unsigned i = 0; i < info_box_layout.count; ++i) {
     rc = info_box_layout.positions[i];
     previews[i].set(client_area, rc.left, rc.top,
@@ -339,18 +339,18 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   rc = info_box_layout.remaining;
 
   WindowStyle style;
-  style.control_parent();
+  style.ControlParent();
 
   EditWindowStyle edit_style;
   edit_style.vertical_center();
-  edit_style.tab_stop();
+  edit_style.TabStop();
 
   if (IsEmbedded() || Layout::scale_1024 < 2048)
     /* sunken edge doesn't fit well on the tiny screen of an
        embedded device */
-    edit_style.border();
+    edit_style.Border();
   else
-    edit_style.sunken_edge();
+    edit_style.SunkenEdge();
 
   PixelRect control_rc = rc;
   control_rc.right -= Layout::FastScale(2);
@@ -359,7 +359,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   const UPixelScalar caption_width = Layout::Scale(60);
 
   ButtonWindowStyle button_style;
-  button_style.tab_stop();
+  button_style.TabStop();
 
   control_rc.bottom = control_rc.top + height;
   buttonPanelName =
