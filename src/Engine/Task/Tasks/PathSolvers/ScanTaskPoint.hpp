@@ -63,6 +63,7 @@ struct ScanTaskPoint {
   bool IsFirst() const {
     return stage_number == 0;
   }
-};
+
+} gcc_aligned(4); /* adjust alignment so the trick in Key() works on ARM */
 
 #endif
