@@ -90,8 +90,8 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   // Expert item
   static gcc_constexpr_data StaticEnumChoice start_max_height_ref_list[] = {
-    { hrAGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point)") },
-    { hrMSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level)") },
+    { hrAGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point).") },
+    { hrMSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level).") },
     { 0 }
   };
   AddEnum(_("Start height ref."), _T(""), start_max_height_ref_list,
@@ -108,8 +108,8 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   // Expert item
   static gcc_constexpr_data StaticEnumChoice finish_min_height_ref_list[] = {
-    { hrAGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point)") },
-    { hrMSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level)") },
+    { hrAGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point).") },
+    { hrMSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level).") },
     { 0 }
   };
   AddEnum(_("Finish height ref."), _T(""), finish_min_height_ref_list,
@@ -128,9 +128,9 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
       N_("The most recent contest with Sprint task rules.") },
     { OLC_Plus, ContestToString(OLC_Plus),
       N_("A combination of Classic and FAI rules. 30% of the FAI score are added to the Classic score.") },
-    { OLC_XContest, ContestToString(OLC_XContest) },
-    { OLC_DHVXC, ContestToString(OLC_DHVXC) },
-    { OLC_SISAT, ContestToString(OLC_SISAT) },
+    { OLC_XContest, ContestToString(OLC_XContest), _T("tbd.") },
+    { OLC_DHVXC, ContestToString(OLC_DHVXC), _T("tbd.") },
+    { OLC_SISAT, ContestToString(OLC_SISAT), _T("tbd.") },
     { 0 }
   };
   AddEnum(_("On-Line Contest"),

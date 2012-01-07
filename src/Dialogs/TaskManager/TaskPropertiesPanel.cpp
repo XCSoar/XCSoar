@@ -49,15 +49,15 @@ TaskPropertiesPanel::InitView()
   WndProperty* wp;
 
   static gcc_constexpr_data StaticEnumChoice start_max_height_ref_list[] = {
-    { hrAGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point)") },
-    { hrMSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level)") },
+    { hrAGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point).") },
+    { hrMSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level).") },
     { 0 }
   };
   LoadFormProperty(form, _T("prpStartHeightRef"), start_max_height_ref_list, hrAGL);
 
   static gcc_constexpr_data StaticEnumChoice finish_min_height_ref_list[] = {
-    { hrAGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point)") },
-    { hrMSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level)") },
+    { hrAGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point).") },
+    { hrMSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level).") },
     { 0 }
   };
   LoadFormProperty(form, _T("prpFinishHeightRef"), finish_min_height_ref_list, hrAGL);
