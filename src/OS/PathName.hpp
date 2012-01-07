@@ -53,14 +53,14 @@ public:
     :allocated(NULL), value(_value) {}
 
   explicit PathName(const char *_value)
-    :allocated(convert(_value)), value(allocated) {}
+    :allocated(Convert(_value)), value(allocated) {}
 
   ~PathName() {
     delete allocated;
   }
 
 protected:
-  static TCHAR *convert(const char *src) {
+  static TCHAR *Convert(const char *src) {
     if (string_is_empty(src))
       return _tcsdup(_T(""));
 
@@ -76,7 +76,7 @@ protected:
 #endif /* !_UNICODE */
 
 public:
-  bool defined() const {
+  bool IsDefined() const {
 #ifdef _UNICODE
     return value != NULL;
 #else
@@ -106,14 +106,14 @@ public:
     :allocated(NULL), value(_value) {}
 
   explicit NarrowPathName(const TCHAR *_value)
-    :allocated(convert(_value)), value(allocated) {}
+    :allocated(Convert(_value)), value(allocated) {}
 
   ~NarrowPathName() {
     delete allocated;
   }
 
 protected:
-  static char *convert(const TCHAR *src) {
+  static char *Convert(const TCHAR *src) {
     if (string_is_empty(src))
       return strdup("");
 
@@ -130,7 +130,7 @@ protected:
 #endif /* !_UNICODE */
 
 public:
-  bool defined() const {
+  bool IsDefined() const {
 #ifdef _UNICODE
     return value != NULL;
 #else
