@@ -29,7 +29,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
-#include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 
