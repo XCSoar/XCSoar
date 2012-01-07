@@ -104,7 +104,7 @@ OnCodeClicked(gcc_unused WndButton &button)
   TrimRight(newTeammateCode);
 
   XCSoarInterface::SetComputerSettings().team_code.Update(newTeammateCode);
-  if (!string_is_empty(XCSoarInterface::GetComputerSettings().team_code.GetCode())) {
+  if (!StringIsEmpty(XCSoarInterface::GetComputerSettings().team_code.GetCode())) {
     XCSoarInterface::SetComputerSettings().team_code_valid = true;
     XCSoarInterface::SetComputerSettings().team_flarm_tracking = false;
   }
@@ -126,7 +126,7 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
   settings.team_flarm_callsign = newTeamFlarmCNTarget;
   settings.team_code_valid = false;
 
-  if (string_is_empty(XCSoarInterface::GetComputerSettings().team_flarm_callsign)) {
+  if (StringIsEmpty(XCSoarInterface::GetComputerSettings().team_flarm_callsign)) {
     settings.team_flarm_tracking = false;
     settings.team_flarm_id.Clear();
     return;

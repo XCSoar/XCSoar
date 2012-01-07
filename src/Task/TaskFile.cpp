@@ -42,7 +42,7 @@ TaskFile*
 TaskFile::Create(const TCHAR* path)
 {
   // If filename is empty or file does not exist
-  if (string_is_empty(path) || !File::Exists(path))
+  if (StringIsEmpty(path) || !File::Exists(path))
     return NULL;
 
   // If XCSoar task file -> return new XCSoarTaskFile

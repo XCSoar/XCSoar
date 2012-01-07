@@ -1203,7 +1203,7 @@ XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
   assert(pEntry);
 
   // If the element has no name then assume this is the head node.
-  if (!string_is_empty(pEntry->lpszName)) {
+  if (!StringIsEmpty(pEntry->lpszName)) {
     // "<elementname "
     cb = nFormat == -1 ? 0 : nFormat;
 
@@ -1245,7 +1245,7 @@ XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
   // Calculate the child format for when we recurse.  This is used to
   // determine the number of spaces used for prefixes.
   if (nFormat != -1) {
-    if (!string_is_empty(pEntry->lpszName))
+    if (!StringIsEmpty(pEntry->lpszName))
       nChildFormat = nFormat + 1;
     else
       nChildFormat = nFormat;
@@ -1266,7 +1266,7 @@ XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
     }
   }
 
-  if (!string_is_empty(pEntry->lpszName) && !pEntry->isDeclaration) {
+  if (!StringIsEmpty(pEntry->lpszName) && !pEntry->isDeclaration) {
     // If we have child entries we need to use long XML notation for
     // closing the element - "<elementname>blah blah blah</elementname>"
     if (bHasChildren) {

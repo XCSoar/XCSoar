@@ -449,7 +449,7 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
       return false;
 
     // XON was received, last record was read already
-    if (string_is_empty(buffer))
+    if (StringIsEmpty(buffer))
       break;
 
     // $PBRTL    Identifier
@@ -543,7 +543,7 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
       return false;
 
     // XON was received
-    if (string_is_empty(buffer))
+    if (StringIsEmpty(buffer))
       break;
 
     if (status_clock.check_update(250)) {

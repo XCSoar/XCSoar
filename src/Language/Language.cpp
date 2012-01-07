@@ -91,7 +91,7 @@ gettext(const TCHAR* text)
   assert(text != NULL);
 
   // If empty string or no language file is loaded -> skip the translation
-  if (string_is_empty(text) || mo_file == NULL)
+  if (StringIsEmpty(text) || mo_file == NULL)
     return text;
 
 #ifdef _UNICODE

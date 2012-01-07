@@ -192,7 +192,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
       // Clear all data.
       current.clear();
 
-    } else if (string_is_empty(buffer) || buffer[0] == _T('#')) {
+    } else if (StringIsEmpty(buffer) || buffer[0] == _T('#')) {
       // Do nothing - we probably just have a comment line
       // NOTE: Do NOT display buffer to user as it may contain an invalid stirng !
 

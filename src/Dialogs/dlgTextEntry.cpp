@@ -235,7 +235,7 @@ dlgTextEntryHighscoreType(SingleWindow &parent, TCHAR *text, int width,
   cursor = 0;
   edittext[0] = 0;
   edittext[1] = 0;
-  if (!string_is_empty(text)) {
+  if (!StringIsEmpty(text)) {
     _tcsupr(text);
     CopyString(edittext, text, max_width);
   }

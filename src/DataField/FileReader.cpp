@@ -376,6 +376,6 @@ DataFieldFileReader::EnsureLoaded()
   if (postponed_sort)
     Sort();
 
-  if (!string_is_empty(postponed_value))
+  if (!StringIsEmpty(postponed_value))
     Lookup(postponed_value);
 }

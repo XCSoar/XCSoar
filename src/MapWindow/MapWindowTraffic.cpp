@@ -98,7 +98,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     // only draw labels if not close to aircraft
     if (dx * dx + dy * dy > Layout::Scale(30 * 30)) {
       // If FLARM callsign/name available draw it to the canvas
-      if (traffic.HasName() && !string_is_empty(traffic.name))
+      if (traffic.HasName() && !StringIsEmpty(traffic.name))
         TextInBox(canvas, traffic.name, sc_name.x, sc_name.y,
                   mode, get_client_rect());
 

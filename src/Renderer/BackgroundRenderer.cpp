@@ -139,7 +139,7 @@ void
 BackgroundRenderer::DrawSpotHeight(Canvas &canvas, LabelBlock &block,
                                    const TCHAR *buffer, RasterPoint pt)
 {
-  if (string_is_empty(buffer))
+  if (StringIsEmpty(buffer))
     return;
 
   PixelRect block_rect;

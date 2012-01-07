@@ -124,7 +124,7 @@ static void UpdateList(void)
   }
 
   const TCHAR *name_filter = wpName->GetDataField()->GetAsString();
-  if (!string_is_empty(name_filter))
+  if (!StringIsEmpty(name_filter))
     airspace_sorter->FilterNamePrefix(AirspaceSelectInfo, name_filter);
 
   wAirspaceList->SetLength(max((size_t)1, AirspaceSelectInfo.size()));

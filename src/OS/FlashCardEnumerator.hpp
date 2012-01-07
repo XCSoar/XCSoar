@@ -70,7 +70,7 @@ public:
       else if (!note_prj.FindNextFlashCard(handle, &data) ||
                /* On my Dell Axim x51v, the last entry returned by
                   FindNextFlashCard() is empty; workaround: */
-               string_is_empty(data.cFileName))
+               StringIsEmpty(data.cFileName))
         return NULL;
       return data.cFileName;
     }

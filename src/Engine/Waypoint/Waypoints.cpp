@@ -76,7 +76,7 @@ const Waypoint *
 Waypoints::WaypointNameTree::Get(const TCHAR *name) const
 {
   TCHAR normalized_name[_tcslen(name) + 1];
-  normalize_search_string(normalized_name, name);
+  NormalizeSearchString(normalized_name, name);
   return get(normalized_name, NULL);
 }
 
@@ -85,7 +85,7 @@ Waypoints::WaypointNameTree::VisitNormalisedPrefix(const TCHAR *prefix,
                                                    WaypointVisitor &visitor) const
 {
   TCHAR normalized[_tcslen(prefix) + 1];
-  normalize_search_string(normalized, prefix);
+  NormalizeSearchString(normalized, prefix);
   VisitorAdapter adapter(visitor);
   visit_prefix(normalized, adapter);
 }
@@ -94,7 +94,7 @@ void
 Waypoints::WaypointNameTree::Add(const Waypoint &wp)
 {
   TCHAR normalized_name[wp.name.length() + 1];
-  normalize_search_string(normalized_name, wp.name.c_str());
+  NormalizeSearchString(normalized_name, wp.name.c_str());
   add(normalized_name, &wp);
 }
 
@@ -102,7 +102,7 @@ void
 Waypoints::WaypointNameTree::Remove(const Waypoint &wp)
 {
   TCHAR normalized_name[wp.name.length() + 1];
-  normalize_search_string(normalized_name, wp.name.c_str());
+  NormalizeSearchString(normalized_name, wp.name.c_str());
   remove(normalized_name, &wp);
 }
 

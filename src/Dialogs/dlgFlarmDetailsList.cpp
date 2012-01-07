@@ -71,17 +71,17 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   tmp.clear();
   if (record != NULL) {
-    if (!string_is_empty(record->pilot))
+    if (!StringIsEmpty(record->pilot))
       tmp = record->pilot;
 
-    if (!string_is_empty(record->plane_type)) {
+    if (!StringIsEmpty(record->plane_type)) {
       if (!tmp.empty())
         tmp.append(_T(" - "));
 
       tmp.append(record->plane_type);
     }
 
-    if (!string_is_empty(record->airfield)) {
+    if (!StringIsEmpty(record->airfield)) {
       if (!tmp.empty())
         tmp.append(_T(" - "));
 

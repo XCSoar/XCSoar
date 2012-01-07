@@ -153,7 +153,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
     if (_tcscmp(value, _T("none")) == 0)
       df.Set(1);
-    else if (!string_is_empty(value) && _tcscmp(value, _T("auto")) != 0) {
+    else if (!StringIsEmpty(value) && _tcscmp(value, _T("auto")) != 0) {
       const TCHAR *base = BaseName(value);
       if (base != NULL)
         df.SetAsString(base);

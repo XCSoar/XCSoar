@@ -255,7 +255,7 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  if (!string_is_empty(misc)) {
+  if (!StringIsEmpty(misc)) {
     TCHAR buffer[MAX_PATH];
     LocalPath(buffer, misc);
 
@@ -282,7 +282,7 @@ InputEvents::eventTaskSave(const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  if (!string_is_empty(misc)) {
+  if (!StringIsEmpty(misc)) {
     TCHAR buffer[MAX_PATH];
     LocalPath(buffer, misc);
     protected_task_manager->TaskSave(buffer);

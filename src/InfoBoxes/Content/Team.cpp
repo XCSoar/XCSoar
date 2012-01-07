@@ -137,7 +137,7 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxData &data)
   // Set Comment
   if (!settings.team_flarm_id.IsDefined())
     data.SetCommentInvalid();
-  else if (!string_is_empty(settings.team_flarm_callsign))
+  else if (!StringIsEmpty(settings.team_flarm_callsign))
     data.SetComment(settings.team_flarm_callsign);
   else
     data.SetComment(_T("???"));
@@ -163,7 +163,7 @@ InfoBoxContentTeamDistance::Update(InfoBoxData &data)
   // Set Comment
   if (!settings.team_flarm_id.IsDefined())
     data.SetCommentInvalid();
-  else if (!string_is_empty(settings.team_flarm_callsign))
+  else if (!StringIsEmpty(settings.team_flarm_callsign))
     data.SetComment(settings.team_flarm_callsign);
   else
     data.SetComment(_T("???"));

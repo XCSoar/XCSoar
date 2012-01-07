@@ -359,7 +359,7 @@ ReadLanguageFile()
   if (_tcscmp(value, _T("none")) == 0)
     return;
 
-  if (string_is_empty(value) || _tcscmp(value, _T("auto")) == 0) {
+  if (StringIsEmpty(value) || _tcscmp(value, _T("auto")) == 0) {
     AutoDetectLanguage();
     return;
   }

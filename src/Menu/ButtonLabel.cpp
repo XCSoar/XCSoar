@@ -88,7 +88,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
     std::copy(text, macros, translatable);
     translatable[macros - text] = _T('\0');
 
-    const TCHAR *translated = string_is_empty(translatable)
+    const TCHAR *translated = StringIsEmpty(translatable)
       ? _T("") : gettext(translatable);
 
     /* concatenate the translated text and the macro output */

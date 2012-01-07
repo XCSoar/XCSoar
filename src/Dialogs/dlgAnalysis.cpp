@@ -152,7 +152,7 @@ SetCalcCaption(const TCHAR* caption)
 {
   assert(wCalc != NULL);
   wCalc->SetCaption(caption);
-  SetCalcVisibility(!string_is_empty(caption));
+  SetCalcVisibility(!StringIsEmpty(caption));
 }
 
 void

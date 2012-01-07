@@ -65,7 +65,7 @@ NextPage(int Step)
   _tcscpy(buffer, _("Checklist"));
 
   if (ChecklistTitle[page] &&
-      !string_is_empty(ChecklistTitle[page]) &&
+      !StringIsEmpty(ChecklistTitle[page]) &&
       _tcslen(ChecklistTitle[page]) < 60) {
     _tcscat(buffer, _T(": "));
     _tcscat(buffer, ChecklistTitle[page]);

@@ -85,7 +85,7 @@ checkFilter(const TCHAR *filename, const TCHAR *filter)
 
   // if invalid or short filter "*" -> return true
   // todo: check for asterisk
-  if (!filter || string_is_empty(filter + 1))
+  if (!filter || StringIsEmpty(filter + 1))
     return true;
 
   // Copy filter without first char into upfilter

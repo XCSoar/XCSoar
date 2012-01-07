@@ -125,7 +125,7 @@ struct WaypointFilterData
   TypeFilter type_index;
 
   bool IsDefined() const {
-    return !string_is_empty(name) || distance_index > 0 ||
+    return !StringIsEmpty(name) || distance_index > 0 ||
       direction_index > 0 || type_index > 0;
   }
 };
@@ -670,7 +670,7 @@ OnFilterNameButton(gcc_unused WndButton &button)
   CopyString(filter_data.name, new_name_filter, NAME_FILTER_LENGTH + 1);
 
   if (name_button) {
-    if (string_is_empty(filter_data.name))
+    if (StringIsEmpty(filter_data.name))
       name_button->SetCaption(_T("*"));
     else
       name_button->SetCaption(filter_data.name);

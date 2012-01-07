@@ -61,7 +61,7 @@ public:
 
 protected:
   static TCHAR *Convert(const char *src) {
-    if (string_is_empty(src))
+    if (StringIsEmpty(src))
       return _tcsdup(_T(""));
 
     TCHAR dest[MAX_PATH];
@@ -114,7 +114,7 @@ public:
 
 protected:
   static char *Convert(const TCHAR *src) {
-    if (string_is_empty(src))
+    if (StringIsEmpty(src))
       return strdup("");
 
     char dest[MAX_PATH];

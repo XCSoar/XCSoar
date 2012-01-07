@@ -82,7 +82,7 @@ void
 SetPrimaryDataPath(const TCHAR *path)
 {
   assert(path != NULL);
-  assert(!string_is_empty(path));
+  assert(!StringIsEmpty(path));
 
   free(data_path);
   data_path = _tcsdup(path);
@@ -104,9 +104,9 @@ LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict subdir,
 {
   assert(data_path != NULL);
   assert(subdir != NULL);
-  assert(!string_is_empty(subdir));
+  assert(!StringIsEmpty(subdir));
   assert(name != NULL);
-  assert(!string_is_empty(name));
+  assert(!StringIsEmpty(name));
 
   memcpy(buffer, data_path, data_path_length * sizeof(data_path[0]));
   buffer[data_path_length] = _T(DIR_SEPARATOR);
@@ -138,14 +138,14 @@ ExpandLocalPath(TCHAR* filein)
   TCHAR output[MAX_PATH];
 
   // Get the relative file name and location (ptr)
-  const TCHAR *ptr = string_after_prefix(filein, local_path_code);
+  const TCHAR *ptr = StringAfterPrefix(filein, local_path_code);
   if (ptr == NULL)
     return;
 
   while (*ptr == _T('/') || *ptr == _T('\\'))
     ++ptr;
 
-  if (string_is_empty(ptr))
+  if (StringIsEmpty(ptr))
     return;
 
   // Replace the code "%LOCAL_PATH%\\" by the full local path (output)
@@ -163,7 +163,7 @@ ContractLocalPath(TCHAR* filein)
   TCHAR output[MAX_PATH];
 
   // Get the relative file name and location (ptr)
-  const TCHAR *ptr = string_after_prefix(filein, data_path);
+  const TCHAR *ptr = StringAfterPrefix(filein, data_path);
   if (ptr == NULL || !is_dir_separator(*ptr))
     return;
 
@@ -317,7 +317,7 @@ GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
     buffer[0] = _T('\0');
 
   bool success = SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, create);
-  if (IsWindowsCE() && !success && !string_is_empty(buffer))
+  if (IsWindowsCE() && !success && !StringIsEmpty(buffer))
     /* MSDN: "If you are using the AYGShell extensions, then this
        function returns FALSE even if successful. If the folder
        represented by the CSIDL does not exist and is not created, a

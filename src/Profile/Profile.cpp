@@ -55,7 +55,7 @@ Profile::Load()
 void
 Profile::LoadFile(const TCHAR *szFile)
 {
-  if (string_is_empty(szFile))
+  if (StringIsEmpty(szFile))
     return;
 
   FileLineReader reader(szFile);
@@ -80,7 +80,7 @@ Profile::Save()
 void
 Profile::SaveFile(const TCHAR *szFile)
 {
-  if (string_is_empty(szFile))
+  if (StringIsEmpty(szFile))
     return;
 
   // Try to open the file for writing
@@ -99,7 +99,7 @@ Profile::SaveFile(const TCHAR *szFile)
 void
 Profile::SetFiles(const TCHAR* override)
 {
-  if (!string_is_empty(override)) {
+  if (!StringIsEmpty(override)) {
     CopyString(startProfileFile, override, MAX_PATH);
     return;
   }
@@ -118,7 +118,7 @@ Profile::SetFiles(const TCHAR* override)
 bool
 Profile::GetPath(const TCHAR *key, TCHAR *value)
 {
-  if (!Get(key, value, MAX_PATH) || string_is_empty(value))
+  if (!Get(key, value, MAX_PATH) || StringIsEmpty(value))
     return false;
 
   ExpandLocalPath(value);
@@ -141,7 +141,7 @@ Profile::SetPath(const TCHAR *key, const TCHAR *value)
 {
   TCHAR path[MAX_PATH];
 
-  if (string_is_empty(value))
+  if (StringIsEmpty(value))
     path[0] = '\0';
   else {
     CopyString(path, value, MAX_PATH);

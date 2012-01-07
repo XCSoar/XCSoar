@@ -124,11 +124,11 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
 
       operation.SetProgressPosition(reader.tell() * 100 / filesize);
     } else if ((filename =
-                string_after_prefix_ci(TempString, _T("image="))) != NULL) {
+                StringAfterPrefixCI(TempString, _T("image="))) != NULL) {
       files_embed.push_back(filename);
     } else {
       // append text to details string
-      if (!string_is_empty(TempString)) {
+      if (!StringIsEmpty(TempString)) {
         Details += TempString;
         Details += _T('\n');
       }

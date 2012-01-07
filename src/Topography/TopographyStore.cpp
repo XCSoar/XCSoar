@@ -98,7 +98,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     // Line format: filename,range,icon,field,r,g,b,pen_width,label_range,important_range
 
     // Ignore comments (lines starting with *) and empty lines
-    if (string_is_empty(line) || line[0] == '*')
+    if (StringIsEmpty(line) || line[0] == '*')
       continue;
 
     // Find first comma to extract shape filename

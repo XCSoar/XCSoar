@@ -59,7 +59,7 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
   reader = NULL;
 
   // If filename is empty -> clear and return NULL pointer
-  if (string_is_empty(filename))
+  if (StringIsEmpty(filename))
     return;
 
   // Test if file exists

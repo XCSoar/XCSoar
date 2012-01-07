@@ -261,7 +261,7 @@ InputEvents::eventBallast(const TCHAR *misc)
 void
 InputEvents::eventProfileLoad(const TCHAR *misc)
 {
-  if (!string_is_empty(misc)) {
+  if (!StringIsEmpty(misc)) {
     Profile::LoadFile(misc);
 
     WaypointFileChanged = true;
@@ -281,7 +281,7 @@ InputEvents::eventProfileLoad(const TCHAR *misc)
 void
 InputEvents::eventProfileSave(const TCHAR *misc)
 {
-  if (!string_is_empty(misc))
+  if (!StringIsEmpty(misc))
     Profile::SaveFile(misc);
 }
 

@@ -34,7 +34,7 @@ Source<char> *
 OpenDataFile(const TCHAR *name)
 {
   assert(name != NULL);
-  assert(!string_is_empty(name));
+  assert(!StringIsEmpty(name));
 
   TCHAR path[MAX_PATH];
   LocalPath(path, name);
@@ -56,7 +56,7 @@ OpenDataTextFile(const TCHAR *name, ConvertLineReader::charset cs)
 {
 #ifdef _UNICODE
   assert(name != NULL);
-  assert(!string_is_empty(name));
+  assert(!StringIsEmpty(name));
 
   TCHAR path[MAX_PATH];
   LocalPath(path, name);
@@ -80,7 +80,7 @@ NLineReader *
 OpenDataTextFileA(const TCHAR *name)
 {
   assert(name != NULL);
-  assert(!string_is_empty(name));
+  assert(!StringIsEmpty(name));
 
   TCHAR path[MAX_PATH];
   LocalPath(path, name);
@@ -101,7 +101,7 @@ TextWriter *
 CreateDataTextFile(const TCHAR *name, bool append)
 {
   assert(name != NULL);
-  assert(!string_is_empty(name));
+  assert(!StringIsEmpty(name));
 
   TCHAR path[MAX_PATH];
   LocalPath(path, name);

@@ -72,7 +72,7 @@ NmeaReplay::GetFilename()
 void
 NmeaReplay::SetFilename(const TCHAR *name)
 {
-  if (!name || string_is_empty(name))
+  if (!name || StringIsEmpty(name))
     return;
 
   if (_tcscmp(file_name, name) != 0)
@@ -122,7 +122,7 @@ NmeaReplay::OpenFile()
   if (reader)
     return true;
 
-  if (string_is_empty(file_name))
+  if (StringIsEmpty(file_name))
     return false;
 
   reader = new FileLineReaderA(file_name);

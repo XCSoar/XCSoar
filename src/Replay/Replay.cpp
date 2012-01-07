@@ -74,7 +74,7 @@ Replay::GetFilename()
 void
 Replay::SetFilename(const TCHAR *name)
 {
-  if (!name || string_is_empty(name)) {
+  if (!name || StringIsEmpty(name)) {
     mode = MODE_DEMO;
     return;
   }

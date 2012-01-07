@@ -68,7 +68,7 @@ OnQuitClicked(gcc_unused WndButton &button)
 static void
 SelectProfile(const TCHAR *path)
 {
-  if (string_is_empty(path))
+  if (StringIsEmpty(path))
     return;
 
   Profile::SetFiles(path);

@@ -457,7 +457,7 @@ static AirspaceClass
 ParseType(const TCHAR* text)
 {
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_class_strings); i++)
-    if (string_after_prefix(text, airspace_class_strings[i].string))
+    if (StringAfterPrefix(text, airspace_class_strings[i].string))
       return airspace_class_strings[i].type;
 
   return OTHER;
@@ -475,7 +475,7 @@ ParseType(const TCHAR* text)
 static const TCHAR *
 value_after_space(const TCHAR *p)
 {
-  if (string_is_empty(p))
+  if (StringIsEmpty(p))
     return p;
 
   if (*p != _T(' '))
@@ -551,12 +551,12 @@ ParseLine(Airspaces &airspace_database, TCHAR *line,
   case _T('V'):
   case _T('v'):
     // Need to set these while in count mode, or DB/DA will crash
-    if ((value = string_after_prefix_ci(skip_spaces(line + 1), _T("X="))) != NULL) {
+    if ((value = StringAfterPrefixCI(skip_spaces(line + 1), _T("X="))) != NULL) {
       if (!ReadCoords(value, temp_area.Center))
         return false;
-    } else if (string_after_prefix_ci(skip_spaces(line + 1), _T("D=-"))) {
+    } else if (StringAfterPrefixCI(skip_spaces(line + 1), _T("D=-"))) {
       temp_area.Rotation = -1;
-    } else if (string_after_prefix_ci(skip_spaces(line + 1), _T("D=+"))) {
+    } else if (StringAfterPrefixCI(skip_spaces(line + 1), _T("D=+"))) {
       temp_area.Rotation = +1;
     }
     break;
@@ -691,7 +691,7 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
   const TCHAR* parameter;
   if ((parameter = _tcsstr(Text, _T(" "))) == NULL)
     return false;
-  if ((parameter = string_after_prefix_ci(parameter, _T(" CENTRE="))) == NULL)
+  if ((parameter = StringAfterPrefixCI(parameter, _T(" CENTRE="))) == NULL)
     return false;
 
   if (!ParseCoordsTNP(parameter, temp_area.Center))
@@ -702,7 +702,7 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
   parameter++;
   if ((parameter = _tcsstr(parameter, _T(" "))) == NULL)
     return false;
-  if ((parameter = string_after_prefix_ci(parameter, _T(" TO="))) == NULL)
+  if ((parameter = StringAfterPrefixCI(parameter, _T(" TO="))) == NULL)
     return false;
 
   GeoPoint to;
@@ -720,14 +720,14 @@ ParseCircleTNP(const TCHAR *Text, TempAirspaceType &temp_area)
   // CIRCLE RADIUS=17.00 CENTRE=N533813 E0095943
 
   const TCHAR* parameter;
-  if ((parameter = string_after_prefix_ci(Text, _T("RADIUS="))) == NULL)
+  if ((parameter = StringAfterPrefixCI(Text, _T("RADIUS="))) == NULL)
     return false;
   temp_area.Radius = Units::ToSysUnit(fixed(_tcstod(parameter, NULL)),
                                       unNauticalMiles);
 
   if ((parameter = _tcsstr(parameter, _T(" "))) == NULL)
     return false;
-  if ((parameter = string_after_prefix_ci(parameter, _T(" CENTRE="))) == NULL)
+  if ((parameter = StringAfterPrefixCI(parameter, _T(" CENTRE="))) == NULL)
     return false;
   ParseCoordsTNP(parameter, temp_area.Center);
 
@@ -744,7 +744,7 @@ ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
     *comment = _T('\0');
 
   const TCHAR* parameter;
-  if ((parameter = string_after_prefix_ci(line, _T("INCLUDE="))) != NULL) {
+  if ((parameter = StringAfterPrefixCI(line, _T("INCLUDE="))) != NULL) {
     if (_tcsicmp(parameter, _T("YES")) == 0)
       ignore = false;
     else if (_tcsicmp(parameter, _T("NO")) == 0)
@@ -756,52 +756,52 @@ ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
   if (ignore)
     return true;
 
-  if ((parameter = string_after_prefix_ci(line, _T("POINT="))) != NULL) {
+  if ((parameter = StringAfterPrefixCI(line, _T("POINT="))) != NULL) {
     GeoPoint TempPoint;
     if (!ParseCoordsTNP(parameter, TempPoint))
       return false;
 
     temp_area.points.push_back(TempPoint);
   } else if ((parameter =
-      string_after_prefix_ci(line, _T("CIRCLE "))) != NULL) {
+      StringAfterPrefixCI(line, _T("CIRCLE "))) != NULL) {
     if (!ParseCircleTNP(parameter, temp_area))
       return false;
 
     temp_area.AddCircle(airspace_database);
     temp_area.resetTNP();
   } else if ((parameter =
-      string_after_prefix_ci(line, _T("CLOCKWISE "))) != NULL) {
+      StringAfterPrefixCI(line, _T("CLOCKWISE "))) != NULL) {
     temp_area.Rotation = 1;
     if (!ParseArcTNP(parameter, temp_area))
       return false;
   } else if ((parameter =
-      string_after_prefix_ci(line, _T("ANTI-CLOCKWISE "))) != NULL) {
+      StringAfterPrefixCI(line, _T("ANTI-CLOCKWISE "))) != NULL) {
     temp_area.Rotation = -1;
     if (!ParseArcTNP(parameter, temp_area))
       return false;
-  } else if ((parameter = string_after_prefix_ci(line, _T("TITLE="))) != NULL) {
+  } else if ((parameter = StringAfterPrefixCI(line, _T("TITLE="))) != NULL) {
     if (!temp_area.points.empty())
       temp_area.AddPolygon(airspace_database);
 
     temp_area.resetTNP();
 
     temp_area.Name = parameter;
-  } else if ((parameter = string_after_prefix_ci(line, _T("TYPE="))) != NULL) {
+  } else if ((parameter = StringAfterPrefixCI(line, _T("TYPE="))) != NULL) {
     if (!temp_area.points.empty())
       temp_area.AddPolygon(airspace_database);
 
     temp_area.resetTNP();
 
     temp_area.Type = ParseTypeTNP(parameter);
-  } else if ((parameter = string_after_prefix_ci(line, _T("CLASS="))) != NULL) {
+  } else if ((parameter = StringAfterPrefixCI(line, _T("CLASS="))) != NULL) {
     temp_area.Type = ParseClassTNP(parameter);
-  } else if ((parameter = string_after_prefix_ci(line, _T("TOPS="))) != NULL) {
+  } else if ((parameter = StringAfterPrefixCI(line, _T("TOPS="))) != NULL) {
     ReadAltitude(parameter, temp_area.Top);
-  } else if ((parameter = string_after_prefix_ci(line, _T("BASE="))) != NULL) {
+  } else if ((parameter = StringAfterPrefixCI(line, _T("BASE="))) != NULL) {
     ReadAltitude(parameter, temp_area.Base);
-  } else if ((parameter = string_after_prefix_ci(line, _T("RADIO="))) != NULL) {
+  } else if ((parameter = StringAfterPrefixCI(line, _T("RADIO="))) != NULL) {
     temp_area.Radio = parameter;
-  } else if ((parameter = string_after_prefix_ci(line, _T("ACTIVE="))) != NULL) {
+  } else if ((parameter = StringAfterPrefixCI(line, _T("ACTIVE="))) != NULL) {
     if (_tcsicmp(parameter, _T("WEEKEND")) == 0)
       temp_area.days_of_operation.set_weekend();
     else if (_tcsicmp(parameter, _T("WEEKDAY")) == 0)
@@ -816,13 +816,13 @@ ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
 static AirspaceFileType
 DetectFileType(const TCHAR *line)
 {
-  if (string_after_prefix_ci(line, _T("INCLUDE=")) ||
-      string_after_prefix_ci(line, _T("TYPE=")) ||
-      string_after_prefix_ci(line, _T("TITLE=")))
+  if (StringAfterPrefixCI(line, _T("INCLUDE=")) ||
+      StringAfterPrefixCI(line, _T("TYPE=")) ||
+      StringAfterPrefixCI(line, _T("TITLE=")))
     return AFT_TNP;
 
-  const TCHAR *p = string_after_prefix_ci(line, _T("AC"));
-  if (p != NULL && (string_is_empty(p) || *p == _T(' ')))
+  const TCHAR *p = StringAfterPrefixCI(line, _T("AC"));
+  if (p != NULL && (StringIsEmpty(p) || *p == _T(' ')))
     return AFT_OPENAIR;
 
   return AFT_UNKNOWN;
@@ -846,7 +846,7 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
   // Iterate through the lines
   for (unsigned LineCount = 1; (line = reader.read()) != NULL; LineCount++) {
     // Skip empty line
-    if (string_is_empty(line))
+    if (StringIsEmpty(line))
       continue;
 
     if (filetype == AFT_UNKNOWN) {

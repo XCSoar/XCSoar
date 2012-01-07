@@ -109,7 +109,7 @@ IgcReplay::GetFilename()
 void
 IgcReplay::SetFilename(const TCHAR *name)
 {
-  if (!name || string_is_empty(name))
+  if (!name || StringIsEmpty(name))
     return;
 
   if (_tcscmp(file_name, name) != 0)
@@ -159,7 +159,7 @@ IgcReplay::OpenFile()
   if (reader)
     return true;
 
-  if (string_is_empty(file_name))
+  if (StringIsEmpty(file_name))
     return false;
 
   reader = new FileLineReaderA(file_name);

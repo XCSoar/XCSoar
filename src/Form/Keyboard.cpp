@@ -48,7 +48,7 @@ KeyboardControl::KeyboardControl(ContainerWindow &parent,
 
   TCHAR caption[] = _T(" ");
 
-  for (const TCHAR *i = keyboard_letters; !string_is_empty(i); ++i) {
+  for (const TCHAR *i = keyboard_letters; !StringIsEmpty(i); ++i) {
     caption[0] = *i;
 
     add_button(caption);
@@ -140,7 +140,7 @@ void
 KeyboardControl::move_buttons_to_row(const TCHAR* buttons, int row,
                                      PixelScalar offset)
 {
-  if (string_is_empty(buttons))
+  if (StringIsEmpty(buttons))
     return;
 
   ButtonWindow *kb;

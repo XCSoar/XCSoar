@@ -66,7 +66,7 @@ WindowControl::SetCaption(const TCHAR *Value)
 int
 WindowControl::OnHelp()
 {
-  if (mHelpText && !string_is_empty(mHelpText)) {
+  if (mHelpText && !StringIsEmpty(mHelpText)) {
     dlgHelpShowModal(*(SingleWindow *)get_root_owner(),
                      gettext(mCaption.c_str()), gettext(mHelpText));
     return 1;

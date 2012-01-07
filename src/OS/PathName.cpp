@@ -46,7 +46,7 @@ BaseName(const TCHAR *path)
   if (p != NULL)
     path = p + 1;
 
-  if (string_is_empty(path))
+  if (StringIsEmpty(path))
     return NULL;
 
   return path;

@@ -50,9 +50,9 @@ LiveTrack24::GetUserID(const TCHAR *username, const TCHAR *password)
   // http://www.livetrack24.com/client.php?op=login&user=<username>&pass=<pass>
 
   assert(username != NULL);
-  assert(!string_is_empty(username));
+  assert(!StringIsEmpty(username));
   assert(password != NULL);
-  assert(!string_is_empty(password));
+  assert(!StringIsEmpty(password));
 
   StaticString<1024> url;
   url.Format(_T("http://%s/client.php?op=login&user=%s&pass=%s"),

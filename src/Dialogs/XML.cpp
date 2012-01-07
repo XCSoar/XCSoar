@@ -118,7 +118,7 @@ LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
 static long
 StringToIntDflt(const TCHAR *string, long _default)
 {
-  if (string == NULL || string_is_empty(string))
+  if (string == NULL || StringIsEmpty(string))
     return _default;
   return _tcstol(string, NULL, 0);
 }
@@ -133,7 +133,7 @@ StringToIntDflt(const TCHAR *string, long _default)
 static double
 StringToFloatDflt(const TCHAR *string, double _default)
 {
-  if (string == NULL || string_is_empty(string))
+  if (string == NULL || StringIsEmpty(string))
     return _default;
   return _tcstod(string, NULL);
 }
@@ -147,7 +147,7 @@ StringToFloatDflt(const TCHAR *string, double _default)
 static const TCHAR *
 StringToStringDflt(const TCHAR *string, const TCHAR *_default)
 {
-  if (string == NULL || string_is_empty(string))
+  if (string == NULL || StringIsEmpty(string))
     return _default;
   return string;
 }
@@ -178,7 +178,7 @@ static DialogStyle
 GetDialogStyle(const XMLNode &node)
 {
   const TCHAR* popup = node.getAttribute(_T("Popup"));
-  if ((popup == NULL) || string_is_empty(popup))
+  if ((popup == NULL) || StringIsEmpty(popup))
     return dialog_style_setting;
   else
     return (DialogStyle)StringToIntDflt(popup, 0);
@@ -309,7 +309,7 @@ static void *
 CallBackLookup(const CallBackTableEntry *lookup_table, const TCHAR *name)
 {
   assert(name != NULL);
-  assert(!string_is_empty(name));
+  assert(!StringIsEmpty(name));
   assert(lookup_table != NULL);
 
   for (const CallBackTableEntry *p = lookup_table;; ++p) {
@@ -329,7 +329,7 @@ GetCallBack(const CallBackTableEntry *lookup_table,
   if (name == NULL)
     return NULL;
 
-  assert(!string_is_empty(name));
+  assert(!StringIsEmpty(name));
 
   return CallBackLookup(lookup_table, name);
 }
@@ -907,7 +907,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   }
 
   if (window != NULL) {
-    if (!string_is_empty(name))
+    if (!StringIsEmpty(name))
       form.AddNamed(name, window);
 
     if (expert)

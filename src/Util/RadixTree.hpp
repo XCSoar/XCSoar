@@ -235,7 +235,7 @@ class RadixTree {
     const TCHAR *match(const TCHAR *key) const {
       const TCHAR *l = label.c_str();
 
-      while (!string_is_empty(key) && *key == *l) {
+      while (!StringIsEmpty(key) && *key == *l) {
         ++key;
         ++l;
       }
@@ -255,7 +255,7 @@ class RadixTree {
     const TCHAR *match_prefix(const TCHAR *prefix) const {
       const TCHAR *l = label.c_str();
 
-      while (!string_is_empty(prefix) && !string_is_empty(l)) {
+      while (!StringIsEmpty(prefix) && !StringIsEmpty(l)) {
         if (*l != *prefix)
           return NULL;
 
@@ -267,7 +267,7 @@ class RadixTree {
     }
 
     T *get(const TCHAR *key) {
-      if (string_is_empty(key))
+      if (StringIsEmpty(key))
         /* found */
         return leaves.GetFirstPointer();
 
@@ -278,7 +278,7 @@ class RadixTree {
     }
 
     const T *get(const TCHAR *key) const {
-      if (string_is_empty(key))
+      if (StringIsEmpty(key))
         /* found */
         return leaves.GetFirstPointer();
 
@@ -290,7 +290,7 @@ class RadixTree {
 
     template<class P>
     T *GetIf(const TCHAR *key, const P &predicate) {
-      if (string_is_empty(key))
+      if (StringIsEmpty(key))
         /* found */
         return leaves.GetIf(predicate);
 
@@ -302,7 +302,7 @@ class RadixTree {
 
     template<class P>
     const T *GetIf(const TCHAR *key, const P &predicate) const {
-      if (string_is_empty(key))
+      if (StringIsEmpty(key))
         /* found */
         return leaves.GetIf(predicate);
 
@@ -313,7 +313,7 @@ class RadixTree {
     }
 
     TCHAR *suggest(const TCHAR *prefix, TCHAR *dest, size_t max_length) const {
-      if (string_is_empty(prefix)) {
+      if (StringIsEmpty(prefix)) {
         /* exact match - return the first character of all child
            nodes */
         TCHAR *retval = dest, *end = dest + max_length - 1;
@@ -390,7 +390,7 @@ class RadixTree {
     void remove_values(const TCHAR *key) {
       assert(key != NULL);
 
-      if (string_is_empty(key)) {
+      if (StringIsEmpty(key)) {
         /* this is the right node */
         remove_values();
       } else {
@@ -409,7 +409,7 @@ class RadixTree {
     bool remove_value(const TCHAR *key, const T &value) {
       assert(key != NULL);
 
-      if (string_is_empty(key)) {
+      if (StringIsEmpty(key)) {
         /* this is the right node */
         return remove_value(value);
       } else {
@@ -517,7 +517,7 @@ class RadixTree {
       if (match == NULL)
         return;
 
-      if (string_is_empty(match))
+      if (StringIsEmpty(match))
         visit_values(visitor);
       else
         visit_children(match, visitor);
@@ -533,7 +533,7 @@ class RadixTree {
       if (match == NULL)
         return;
 
-      if (string_is_empty(match))
+      if (StringIsEmpty(match))
         visit_values(visitor);
       else
         visit_children(match, visitor);
@@ -546,7 +546,7 @@ class RadixTree {
      */
     template<typename V>
     void visit_prefix_children(const TCHAR *prefix, V &visitor) {
-      if (string_is_empty(prefix))
+      if (StringIsEmpty(prefix))
         visit_all_children(visitor);
       else
         for (Node *node = children; node != NULL; node = node->next_sibling)
@@ -560,7 +560,7 @@ class RadixTree {
      */
     template<typename V>
     void visit_prefix_children(const TCHAR *prefix, V &visitor) const {
-      if (string_is_empty(prefix))
+      if (StringIsEmpty(prefix))
         visit_all_children(visitor);
       else
         for (const Node *node = children; node != NULL; node = node->next_sibling)
@@ -578,7 +578,7 @@ class RadixTree {
       if (match == NULL)
         return;
 
-      if (string_is_empty(match)) {
+      if (StringIsEmpty(match)) {
         visit_values(visitor);
         visit_all_children(visitor);
       } else {
@@ -597,7 +597,7 @@ class RadixTree {
       if (match == NULL)
         return;
 
-      if (string_is_empty(match)) {
+      if (StringIsEmpty(match)) {
         visit_values(visitor);
         visit_all_children(visitor);
       } else {
@@ -645,7 +645,7 @@ class RadixTree {
     void add(const TCHAR *key, const T &value) {
       assert(key != NULL);
 
-      if (string_is_empty(key)) {
+      if (StringIsEmpty(key)) {
         /* add to this node */
         add_value(value);
         return;
@@ -671,7 +671,7 @@ class RadixTree {
         /* split existing node */
         m.node->split(m.key - key);
 
-        if (string_is_empty(m.key)) {
+        if (StringIsEmpty(m.key)) {
           /* add to splitted parent node */
           m.node->add_value(value);
         } else {

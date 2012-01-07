@@ -30,7 +30,7 @@ Copyright_License {
 #include <algorithm>
 
 const TCHAR *
-string_after_prefix(const TCHAR *string, const TCHAR *prefix)
+StringAfterPrefix(const TCHAR *string, const TCHAR *prefix)
 {
   assert(string != NULL);
   assert(prefix != NULL);
@@ -43,7 +43,7 @@ string_after_prefix(const TCHAR *string, const TCHAR *prefix)
 
 
 const TCHAR *
-string_after_prefix_ci(const TCHAR *string, const TCHAR *prefix)
+StringAfterPrefixCI(const TCHAR *string, const TCHAR *prefix)
 {
   assert(string != NULL);
   assert(prefix != NULL);
@@ -124,12 +124,12 @@ TrimRight(char *p)
 #endif
 
 TCHAR *
-normalize_search_string(TCHAR *gcc_restrict dest,
+NormalizeSearchString(TCHAR *gcc_restrict dest,
                         const TCHAR *gcc_restrict src)
 {
   TCHAR *retval = dest;
 
-  for (; !string_is_empty(src); ++src)
+  for (; !StringIsEmpty(src); ++src)
     if (_istalnum(*src))
       *dest++ = _totupper(*src);
 

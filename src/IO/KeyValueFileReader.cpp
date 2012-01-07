@@ -30,7 +30,7 @@ KeyValueFileReader::Read(KeyValuePair &pair)
 {
   TCHAR *line;
   while ((line = reader.read()) != NULL) {
-    if (string_is_empty(line) || *line == _T('#'))
+    if (StringIsEmpty(line) || *line == _T('#'))
       continue;
 
     TCHAR *p = _tcschr(line, _T('='));

@@ -31,14 +31,14 @@ Copyright_License {
 #include <assert.h>
 
 static inline bool
-string_is_empty(const TCHAR *string)
+StringIsEmpty(const TCHAR *string)
 {
   return *string == 0;
 }
 
 #ifdef _UNICODE
 static inline bool
-string_is_empty(const char *string)
+StringIsEmpty(const char *string)
 {
   return *string == 0;
 }
@@ -50,7 +50,7 @@ string_is_empty(const char *string)
  * NULL.
  */
 const TCHAR *
-string_after_prefix(const TCHAR *string, const TCHAR *prefix);
+StringAfterPrefix(const TCHAR *string, const TCHAR *prefix);
 
 /**
  * Returns the portion of the string after a prefix.  If the string
@@ -59,7 +59,7 @@ string_after_prefix(const TCHAR *string, const TCHAR *prefix);
  * This function is case-independent.
  */
 const TCHAR *
-string_after_prefix_ci(const TCHAR *string, const TCHAR *prefix);
+StringAfterPrefixCI(const TCHAR *string, const TCHAR *prefix);
 
 /**
  * Copy a string.  If the buffer is too small, then the string is
@@ -122,7 +122,7 @@ TrimRight(char *p);
  * @return the destination buffer
  */
 TCHAR *
-normalize_search_string(TCHAR *dest, const TCHAR *src);
+NormalizeSearchString(TCHAR *dest, const TCHAR *src);
 
 /**
  * Checks whether str1 and str2 are equal.

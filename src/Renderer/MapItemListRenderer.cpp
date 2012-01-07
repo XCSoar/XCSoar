@@ -257,7 +257,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Draw details line
   UPixelScalar left = rc.left + line_height + Layout::FastScale(2);
   OrderedTaskPointRadiusLabel(*item.oz, buffer);
-  if (!string_is_empty(buffer))
+  if (!StringIsEmpty(buffer))
     canvas.text_clipped(left, top2, rc.right - left, buffer);
 
   // Draw waypoint name
