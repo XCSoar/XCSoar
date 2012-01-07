@@ -22,37 +22,34 @@ Copyright_License {
 */
 
 #include "TimeConfigPanel.hpp"
-#include "DataField/Enum.hpp"
-#include "DataField/ComboList.hpp"
 #include "DataField/Float.hpp"
 #include "Form/Form.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
 #include "Form/Frame.hpp"
-#include "Dialogs/ComboPicker.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "LocalTime.hpp"
-#include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
-#include "Asset.hpp"
 #include "Language/Language.hpp"
-#include "DataField/Base.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
 
-class TimeConfigPanel : public XMLWidget {
+enum ControlIndex {
+  UTCOffset,
+  LocalTime
+};
+
+class TimeConfigPanel : public RowFormWidget {
+public:
+  TimeConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+
 private:
   bool loading;
 
 public:
-  TimeConfigPanel() : loading(false) {
-  }
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
   void SetLocalTime(int utc_offset);
 };
 
@@ -61,30 +58,16 @@ public:
 static TimeConfigPanel *instance;
 
 void
-TimeConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
-
-void
-TimeConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
-
-void
 TimeConfigPanel::SetLocalTime(int utc_offset)
 {
-  WndProperty* wp;
   TCHAR temp[20];
   int time(XCSoarInterface::Basic().time);
   Units::TimeToTextHHMMSigned(temp, TimeLocal(time, utc_offset));
 
-  wp = (WndProperty*)form.FindByName(_T("prpLocalTime"));
-  assert(wp != NULL);
+  WndProperty &wp = GetControl(LocalTime);
 
-  wp->SetText(temp);
-  wp->RefreshDisplay();
+  wp.SetText(temp);
+  wp.RefreshDisplay();
 }
 
 static void
@@ -103,31 +86,28 @@ OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnUTCData),
-  DeclareCallBackEntry(NULL)
-};
 
 void
 TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   instance = this;
-  LoadWindow(CallBackTable, parent,
-             Layout::landscape ? _T("IDR_XML_TIMECONFIGPANEL") :
-                               _T("IDR_XML_TIMECONFIGPANEL_L"));
 
-  loading = true;
+  RowFormWidget::Prepare(parent, rc);
 
   int utc_offset = XCSoarInterface::GetComputerSettings().utc_offset;
-  LoadFormProperty(form, _T("prpUTCOffset"),
-                   fixed(iround(fixed(utc_offset) / 1800)) / 2);
+  AddFloat(_("UTC offset"),
+           _("The UTC offset field allows the UTC local time offset to be specified.  The local "
+               "time is displayed below in order to make it easier to verify the correct offset "
+               "has been entered."),
+           _T("%.1f h"), _T("%.1f h"), fixed(-13), fixed(13), fixed(0.5), false,
+           fixed(iround(fixed(utc_offset) / 1800)) / 2, OnUTCData);
 #ifdef WIN32
   if (IsEmbedded() && !IsAltair())
-    ((WndProperty*)form.FindByName(_T("prpUTCOffset")))->set_enabled(false);
+    GetControl(UTCOffset).set_enabled(false);
 #endif
-  SetLocalTime(utc_offset);
 
-  loading = false;
+  Add(_("Local time"), 0, true);
+  SetLocalTime(utc_offset);
 }
 
 bool
@@ -136,7 +116,11 @@ TimeConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool changed = false, require_restart = false;
 
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
-  int ival = iround(GetFormValueFixed(form, _T("prpUTCOffset")) * 3600);
+
+  fixed tmp_ival;
+  SaveValue(UTCOffset, tmp_ival);
+  int ival = iround(tmp_ival * 3600);
+
   if (settings_computer.utc_offset != ival) {
     settings_computer.utc_offset = ival;
 

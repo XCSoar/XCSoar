@@ -302,8 +302,6 @@ IDR_XML_TRACKINGCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Config
 IDR_XML_TRACKINGCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TrackingConfigPanel_L.xml.gz"
 IDR_XML_UNITSCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/UnitsConfigPanel.xml.gz"
 IDR_XML_UNITSCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/UnitsConfigPanel_L.xml.gz"
-IDR_XML_TIMECONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TimeConfigPanel.xml.gz"
-IDR_XML_TIMECONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TimeConfigPanel_L.xml.gz"
 
 // infobox access
 IDR_XML_INFOBOXMACCREADYEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxMacCreadyEdit.xml.gz"
