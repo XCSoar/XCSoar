@@ -222,9 +222,18 @@ RowFormWidget::AddText(const TCHAR *label, const TCHAR *help,
 WndProperty *
 RowFormWidget::AddSpacer(void)
 {
-  // TODO, there might be better ideas to group a row form widget
-  WndProperty *edit = Add(_T(""), 0, true);
-  edit->set_visible(false);
+  assert(IsDefined());
+
+  PixelRect edit_rc = NextControlRect(GetWindow()->get_client_rect(), Layout::Scale(6));
+
+  WindowStyle style;
+  EditWindowStyle edit_style;
+  edit_style.vertical_center();
+  edit_style.read_only();
+
+  PanelControl &panel = *(PanelControl *)GetWindow();
+  WndProperty *edit = new WndProperty(panel, look, _T(""), edit_rc, 0, style, edit_style, NULL);
+  Add(edit);
   return edit;
 }
 
