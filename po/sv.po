@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-06 21:48+0100\n"
-"PO-Revision-Date: 2011-12-22 16:11+0000\n"
+"PO-Revision-Date: 2011-12-30 11:10+0000\n"
 "Last-Translator: 113Bom <Unknown>\n"
 "Language-Team: none\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-22 23:48+0000\n"
+"X-Launchpad-Export-Date: 2012-01-01 09:24+0000\n"
 "X-Generator: Launchpad (build 14560)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -71,7 +71,7 @@ msgstr ""
 
 #: src/ConditionMonitor/ConditionMonitorStartRules.cpp:61
 msgid "Start rules violated"
-msgstr ""
+msgstr "Startvillkor ej uppfyllda"
 
 #: src/ConditionMonitor/ConditionMonitorSunset.cpp:61
 msgid "Expect arrival past sunset"
@@ -183,31 +183,31 @@ msgstr "Föregående brytpunkt"
 
 #: src/Menu/ExpandMacros.cpp:149 src/Menu/ExpandMacros.cpp:169
 msgid "Furthest Landpoint"
-msgstr ""
+msgstr "Mest avlägsna landning"
 
 #: src/Menu/ExpandMacros.cpp:150 src/Menu/ExpandMacros.cpp:170
 msgid "Next Landpoint"
-msgstr ""
+msgstr "Nästa landning"
 
 #: src/Menu/ExpandMacros.cpp:159 src/Menu/ExpandMacros.cpp:179
 msgid "Closest Landpoint"
-msgstr ""
+msgstr "Närmaste landning"
 
 #: src/Menu/ExpandMacros.cpp:160 src/Menu/ExpandMacros.cpp:180
 msgid "Previous Landpoint"
-msgstr ""
+msgstr "Föregående landning"
 
 #: src/Menu/ExpandMacros.cpp:197 src/Menu/ExpandMacros.cpp:227
 msgid "Finish Turnpoint"
-msgstr ""
+msgstr "Mål prytpunkt"
 
 #: src/Menu/ExpandMacros.cpp:203 src/Menu/ExpandMacros.cpp:249
 msgid "Next Startpoint"
-msgstr ""
+msgstr "Nästa startpunkt"
 
 #: src/Menu/ExpandMacros.cpp:209 src/Menu/ExpandMacros.cpp:255
 msgid "Start Turnpoint"
-msgstr ""
+msgstr "Start brytpunkt"
 
 #: src/Menu/ExpandMacros.cpp:233
 msgid "Arm start"
@@ -215,7 +215,7 @@ msgstr "Sätt i startläge."
 
 #: src/Menu/ExpandMacros.cpp:236
 msgid "Arm turn"
-msgstr ""
+msgstr "Arm turn"
 
 #: src/Menu/ExpandMacros.cpp:264
 msgid "Disarm start"
@@ -223,7 +223,7 @@ msgstr "Lämna startläge"
 
 #: src/Menu/ExpandMacros.cpp:267
 msgid "Disarm turn"
-msgstr ""
+msgstr "Disarm turn"
 
 #: src/Menu/ExpandMacros.cpp:277
 msgid ""
@@ -625,7 +625,7 @@ msgstr "Höjdskillnad nästa BP."
 #: src/InfoBoxes/Content/Factory.cpp:199
 #, no-c-format
 msgid "WP AltD"
-msgstr ""
+msgstr "BP Höjddiff."
 
 #: src/InfoBoxes/Content/Factory.cpp:200
 #, no-c-format
@@ -641,7 +641,7 @@ msgstr "Höjd för nästa BP"
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, no-c-format
 msgid "WP AltR"
-msgstr ""
+msgstr "BP höjdb"
 
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
@@ -666,6 +666,9 @@ msgid ""
 "task. (Touchscreen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
+"Namnet på vald brytpunkt. När denna infobox är aktiv, kan du bläddra till "
+"nästa/föregående med hjälp av up/ned knapparna. Detaljerad information om "
+"brytpunkten visas genom att trycka \"Retur\"."
 
 #: src/InfoBoxes/Content/Factory.cpp:228
 #, no-c-format
@@ -687,7 +690,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:238
 #, no-c-format
 msgid "Final altitude required"
-msgstr ""
+msgstr "Höjd som krävs för att nå final"
 
 #: src/InfoBoxes/Content/Factory.cpp:239
 #, no-c-format
@@ -697,49 +700,49 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:240
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr ""
+msgstr "Ytterligare höjd som krävs före att avsluta banan."
 
 #: src/InfoBoxes/Content/Factory.cpp:248
 #, no-c-format
 msgid "Speed task average"
-msgstr ""
+msgstr "Snittfart på bana"
 
 #: src/InfoBoxes/Content/Factory.cpp:249
 #, no-c-format
 msgid "VTask Avg"
-msgstr ""
+msgstr "Snittfart"
 
 #: src/InfoBoxes/Content/Factory.cpp:250
 #, no-c-format
 msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
-msgstr ""
+msgstr "Snittfart på banan, ej kompenserad för höjd."
 
 #: src/InfoBoxes/Content/Factory.cpp:258
 #, no-c-format
 msgid "Final distance"
-msgstr ""
+msgstr "Mål distans"
 
 #: src/InfoBoxes/Content/Factory.cpp:259
 #, no-c-format
 msgid "Fin Dist"
-msgstr ""
+msgstr "Mål dist"
 
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr ""
+msgstr "Distans kvar runt banan till mål."
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
 msgid "Final L/D"
-msgstr ""
+msgstr "Final L/D"
 
 #: src/InfoBoxes/Content/Factory.cpp:269
 #, no-c-format
 msgid "Fin LD"
-msgstr ""
+msgstr "Fin LD"
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
@@ -752,17 +755,23 @@ msgid ""
 "finish by the excess energy height of the glider if its true airspeed is "
 "greater than the MacCready and best LD speeds."
 msgstr ""
+"Glidtalet som kräva för att avsluta banan, utifrån avståndet till mål och "
+"höjden som krävs vid målgång.\r\n"
+"Negativa värden visar att en höjdvinst är nödvändig för att avsluta banan "
+"korrekt.\r\n"
+"Om glidtalet är nära oändligt visas '---'. Notera att värdet som visas kan "
+"vara optimistiskt eftersom hänsyn tas till planets kinetiska energi."
 
 #: src/InfoBoxes/Content/Factory.cpp:278
 #, no-c-format
 msgid "Terrain elevation"
-msgstr ""
+msgstr "Terräng höjd"
 
 #: src/InfoBoxes/Content/Factory.cpp:279
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:8
 #, no-c-format
 msgid "H GND"
-msgstr ""
+msgstr "H Ter"
 
 #: src/InfoBoxes/Content/Factory.cpp:280
 #, no-c-format
@@ -770,16 +779,18 @@ msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
 msgstr ""
+"Det här är markens höjd över havet, hämtat från terräng-filen vid aktuell "
+"GPS-position."
 
 #: src/InfoBoxes/Content/Factory.cpp:288
 #, no-c-format
 msgid "Thermal average"
-msgstr ""
+msgstr "Snittstig"
 
 #: src/InfoBoxes/Content/Factory.cpp:289
 #, no-c-format
 msgid "TC Avg"
-msgstr ""
+msgstr "Stig"
 
 #: src/InfoBoxes/Content/Factory.cpp:290
 #, no-c-format
@@ -787,27 +798,29 @@ msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermaling."
 msgstr ""
+"Blåsans höjdvinst  i meter,  delat med kurvnings-tiden. Kurvning i sjunk ger "
+"negativa världen."
 
 #: src/InfoBoxes/Content/Factory.cpp:298
 #, no-c-format
 msgid "Thermal gain"
-msgstr ""
+msgstr "Höjdvinst"
 
 #: src/InfoBoxes/Content/Factory.cpp:299
 #, no-c-format
 msgid "TC Gain"
-msgstr ""
+msgstr "H vinst"
 
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
 msgid "The altitude gained/lost in the current thermal."
-msgstr ""
+msgstr "Total höjdvinst, eller förlust, i aktuell blåsa."
 
 #: src/InfoBoxes/Content/Factory.cpp:308 src/InfoBoxes/Content/Factory.cpp:309
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:55
 #, no-c-format
 msgid "Track"
-msgstr ""
+msgstr "Bäring"
 
 #: src/InfoBoxes/Content/Factory.cpp:310
 #, no-c-format
@@ -816,6 +829,8 @@ msgid ""
 "active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
+"Magnetisk bäring från GPS'en. (Touchscreen/PC only) Om denna infobox är "
+"aktiv i simulator-mode, så kan höjden ändras med upp/ned tangenterna."
 
 #: src/InfoBoxes/Content/Factory.cpp:318 src/InfoBoxes/Content/Factory.cpp:319
 #: src/InfoBoxes/Content/Factory.cpp:883
@@ -828,7 +843,7 @@ msgstr ""
 #: Data/Input/default.xci:630 Data/Input/default.xci:677
 #, no-c-format
 msgid "Vario"
-msgstr ""
+msgstr "Vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:320
 #, no-c-format
@@ -836,6 +851,8 @@ msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
 "vario total energy vario value if connected to one."
 msgstr ""
+"Momentan vertikal hastighet, med data från GPS'en, eller från en intelligent "
+"vario om en sådan är annsluten."
 
 #: src/InfoBoxes/Content/Factory.cpp:328
 #, no-c-format
@@ -845,7 +862,7 @@ msgstr "Vindstyrka"
 #: src/InfoBoxes/Content/Factory.cpp:329
 #, no-c-format
 msgid "Wind V"
-msgstr ""
+msgstr "Vind H"
 
 #: src/InfoBoxes/Content/Factory.cpp:330
 #, no-c-format
@@ -860,12 +877,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:338
 #, no-c-format
 msgid "Wind bearing"
-msgstr ""
+msgstr "Vindriktning"
 
 #: src/InfoBoxes/Content/Factory.cpp:339
 #, no-c-format
 msgid "Wind B"
-msgstr ""
+msgstr "Vind R"
 
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
@@ -878,18 +895,18 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:348
 #, no-c-format
 msgid "AA time"
-msgstr ""
+msgstr "AA tid"
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
 msgid "AA Time"
-msgstr ""
+msgstr "AA tid"
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
-msgstr ""
+msgstr "Tid på banan för AAT. Värdet visas i rött när all tid förbrukats."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -2910,11 +2927,11 @@ msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:284
 msgid "Monitor"
-msgstr ""
+msgstr "Monitor"
 
 #: src/Dialogs/PortMonitor.cpp:121
 msgid "Port monitor"
-msgstr ""
+msgstr "Port monitor"
 
 #: src/Dialogs/PortMonitor.cpp:131
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:11
@@ -2922,19 +2939,19 @@ msgstr ""
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:9
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:9
 msgid "Clear"
-msgstr "Rensa"
+msgstr "Töm"
 
 #: src/Dialogs/ManageCAI302Dialog.cpp:60
 msgid "Do you really want to delete all flights from the device?"
-msgstr ""
+msgstr "Vill du verkligen ta bort alla sparade flygningar?"
 
 #: src/Dialogs/ManageCAI302Dialog.cpp:133
 msgid "Delete all flights"
-msgstr ""
+msgstr "Ta bort alla flygningar"
 
 #: src/Dialogs/ManageCAI302Dialog.cpp:142 src/Dialogs/ManageFlarmDialog.cpp:92
 msgid "Reboot"
-msgstr ""
+msgstr "Starta om"
 
 #: src/Dialogs/MapItemListDialog.cpp:157 src/Dialogs/MapItemListDialog.cpp:160
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:14
@@ -2943,7 +2960,7 @@ msgstr ""
 #: Data/Dialogs/dlgWaypointSelect.xml:13 Data/Dialogs/dlgWindSettings.xml:8
 #: Data/Dialogs/Infobox/pnlInfoBoxWindEdit.xml:8
 msgid "Direction"
-msgstr "Riktning"
+msgstr "Kurs"
 
 #: src/Dialogs/MapItemListDialog.cpp:167
 #: Data/Dialogs/dlgWaypointDetails_L.xml:16
@@ -2953,26 +2970,26 @@ msgstr "Höjd"
 
 #: src/Dialogs/dlgAirspace.cpp:60 src/Dialogs/dlgAirspace.cpp:86
 msgid "Warn"
-msgstr "Varn"
+msgstr "Varna"
 
 #: src/Dialogs/dlgAirspace.cpp:61 src/Dialogs/dlgAirspace.cpp:90
 #: Data/Input/default.xci:400 Data/Input/default.xci:451
 #: Data/Input/default.xci:871
 msgid "Display"
-msgstr "Visning"
+msgstr "Visa"
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:56
 msgid "Enable airspace again?"
-msgstr ""
+msgstr "Aktivera luftrummet igen?"
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:56
 msgid "Acknowledge for day?"
-msgstr "Bekr. f dag"
+msgstr "Bekräfta i dag?"
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:88
 #: Data/Dialogs/dlgAirspaceWarnings.xml:9
 msgid "Enable"
-msgstr "Välj"
+msgstr "Aktivera"
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:88 Data/Dialogs/dlgAirspaceDetails.xml:6
 msgid "Ack Day"
@@ -2984,7 +3001,7 @@ msgstr "Ingen träff!"
 
 #: src/Dialogs/dlgAirspaceSelect.cpp:281
 msgid "Heading"
-msgstr ""
+msgstr "Riktning"
 
 #: src/Dialogs/dlgAirspaceWarnings.cpp:304
 msgid "No Warnings"
@@ -2993,11 +3010,11 @@ msgstr "Inga varingar"
 #: src/Dialogs/dlgAlternatesList.cpp:69 Data/Input/default.xci:341
 #: Data/Input/default.xci:987
 msgid "Alternates"
-msgstr ""
+msgstr "Alternativ"
 
 #: src/Dialogs/dlgFlarmDetailsList.cpp:93
 msgid "No further information"
-msgstr ""
+msgstr "Ingen ytterligare information"
 
 #: src/Dialogs/dlgAnalysis.cpp:284 src/Dialogs/dlgAnalysis.cpp:293
 #: src/Dialogs/dlgAnalysis.cpp:302 src/Dialogs/dlgAnalysis.cpp:311
@@ -3016,7 +3033,7 @@ msgstr "Barograf"
 #: src/Dialogs/dlgAnalysis.cpp:289 src/Dialogs/dlgAnalysis.cpp:325
 #: src/Dialogs/dlgAnalysis.cpp:334
 msgid "Settings"
-msgstr "Inställning"
+msgstr "Inställningar"
 
 #: src/Dialogs/dlgAnalysis.cpp:294
 msgid "Climb"
@@ -3024,11 +3041,11 @@ msgstr "Stig"
 
 #: src/Dialogs/dlgAnalysis.cpp:298 src/Dialogs/dlgAnalysis.cpp:342
 msgid "Task Calc"
-msgstr "Beräkna"
+msgstr "Beräkna bana"
 
 #: src/Dialogs/dlgAnalysis.cpp:303
 msgid "Thermal Band"
-msgstr ""
+msgstr "Termik höjd"
 
 #: src/Dialogs/dlgAnalysis.cpp:312
 msgid "Wind At Altitude"
@@ -3040,7 +3057,7 @@ msgstr "Ange vind"
 
 #: src/Dialogs/dlgAnalysis.cpp:320
 msgid "Glide Polar"
-msgstr "Glid Polar"
+msgstr "Glid polar"
 
 #: src/Dialogs/dlgAnalysis.cpp:330
 msgid "Temp Trace"
@@ -3052,7 +3069,7 @@ msgstr "Hastighet Bana"
 
 #: src/Dialogs/dlgAnalysis.cpp:351
 msgid "Task calc"
-msgstr "Beräkna"
+msgstr "Beräkna bana"
 
 #: src/Dialogs/dlgAnalysis.cpp:368
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:164
@@ -3061,24 +3078,24 @@ msgstr "Varningar"
 
 #: src/Dialogs/dlgBasicSettings.cpp:57 Data/Dialogs/dlgBasicSettings.xml:4
 msgid "Dump"
-msgstr ""
+msgstr "Töm barlast"
 
 #: src/Dialogs/dlgChecklist.cpp:65 Data/Dialogs/dlgChecklist_L.xml:3
 #: Data/Dialogs/dlgChecklist.xml:3
 msgid "Checklist"
-msgstr ""
+msgstr "Checklista"
 
 #: src/Dialogs/dlgChecklist.cpp:145
 msgid "No checklist loaded"
-msgstr ""
+msgstr "Ingen checklista laddad"
 
 #: src/Dialogs/dlgChecklist.cpp:145
 msgid "Create xcsoar-checklist.txt\n"
-msgstr ""
+msgstr "Skapa xcsoar-checklist.txt\n"
 
 #: src/Dialogs/dlgPlanes.cpp:111
 msgid "Active"
-msgstr ""
+msgstr "Aktivt"
 
 #: src/Dialogs/dlgPlanes.cpp:151 src/Dialogs/dlgPlanes.cpp:186
 #: src/Dialogs/dlgPlanes.cpp:226 src/Dialogs/dlgConfigWaypoints.cpp:53
@@ -3101,7 +3118,7 @@ msgstr "Fel"
 #: src/Dialogs/dlgPlanes.cpp:152
 #, c-format
 msgid "Loading of plane profile \"%s\" failed!"
-msgstr ""
+msgstr "Inläsning av flygplansprofil \"%s\" misslyckades!"
 
 #: src/Dialogs/dlgPlanes.cpp:155 src/Dialogs/dlgPlanes.cpp:290
 #: Data/Dialogs/dlgPlanes_L.xml:10 Data/Dialogs/dlgPlanes.xml:10
@@ -3112,47 +3129,48 @@ msgstr "Ladda"
 #: src/Dialogs/dlgPlanes.cpp:156
 #, c-format
 msgid "Plane profile \"%s\" activated."
-msgstr ""
+msgstr "Flygplansprofil \"%s\" aktiverad"
 
 #: src/Dialogs/dlgPlanes.cpp:185 src/Dialogs/dlgPlanes.cpp:225
 msgid "Please enter the registration of the plane!"
-msgstr ""
+msgstr "Skriv in planets registering!"
 
 #: src/Dialogs/dlgPlanes.cpp:198 src/Dialogs/dlgPlanes.cpp:241
 #, c-format
 msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
 msgstr ""
+"En flygplansprofil  med namnet \"%s\" finns redan. Vill du skriva över?"
 
 #: src/Dialogs/dlgPlanes.cpp:201 src/Dialogs/dlgPlanes.cpp:244
 msgid "Overwrite"
-msgstr ""
+msgstr "Skriv över"
 
 #: src/Dialogs/dlgPlanes.cpp:272
 #, c-format
 msgid "Do you really want to delete plane profile \"%s\"?"
-msgstr ""
+msgstr "Vill du ta bort flygplansprofil \"%s\"?"
 
 #: src/Dialogs/dlgPlanes.cpp:274 Data/Dialogs/dlgConfigWaypoints_L.xml:9
 #: Data/Dialogs/dlgConfigWaypoints.xml:9 Data/Dialogs/dlgPlanes_L.xml:9
 #: Data/Dialogs/dlgPlanes.xml:9 Data/Dialogs/pnlTaskList_L.xml:23
 #: Data/Dialogs/pnlTaskList.xml:19
 msgid "Delete"
-msgstr "Radera"
+msgstr "Ta bort"
 
 #: src/Dialogs/dlgPlanes.cpp:287
 #, c-format
 msgid "Do you want to load plane profile \"%s\"?"
-msgstr ""
+msgstr "Vill du ladda flygplansprofil \"%s\"?"
 
 #: src/Dialogs/dlgPlaneDetails.cpp:41 Data/Dialogs/dlgPlaneDetails_L.xml:3
 #: Data/Dialogs/dlgPlaneDetails.xml:3
 msgid "Plane Details"
-msgstr ""
+msgstr "Flygplansdetaljer"
 
 #: src/Dialogs/dlgPlanePolar.cpp:50 Data/Dialogs/dlgPlanePolar_L.xml:3
 #: Data/Dialogs/dlgPlanePolar.xml:3
 msgid "Plane Polar"
-msgstr ""
+msgstr "Planets polar"
 
 #: src/Dialogs/dlgPlanePolar.cpp:58 src/Dialogs/dlgConfiguration.cpp:105
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:129
@@ -3168,22 +3186,22 @@ msgstr "Polar"
 #: src/Dialogs/dlgPlanePolar.cpp:137
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:183
 msgid "Load Polar"
-msgstr ""
+msgstr "Välj polar"
 
 #: src/Dialogs/dlgPlanePolar.cpp:196
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:245
 msgid "Load Polar From File"
-msgstr ""
+msgstr "Ladda polar från fil"
 
 #: src/Dialogs/dlgConfiguration.cpp:75 src/Dialogs/dlgConfiguration.cpp:85
 #, no-c-format
 msgid "Site Files"
-msgstr ""
+msgstr "Platsbundna filer"
 
 #: src/Dialogs/dlgConfiguration.cpp:76
 #, no-c-format
 msgid "Map Display"
-msgstr "Kartdisplay"
+msgstr "Kartvisning"
 
 #: src/Dialogs/dlgConfiguration.cpp:77 src/Dialogs/dlgConfiguration.cpp:93
 #, no-c-format
@@ -3199,22 +3217,22 @@ msgstr "Visare"
 #: src/Dialogs/dlgConfiguration.cpp:79
 #, no-c-format
 msgid "Task Defaults"
-msgstr ""
+msgstr "Förval för bana"
 
 #: src/Dialogs/dlgConfiguration.cpp:80
 #, no-c-format
 msgid "Look"
-msgstr ""
+msgstr "Utseende"
 
 #: src/Dialogs/dlgConfiguration.cpp:86
 #, no-c-format
 msgid "Orientation"
-msgstr ""
+msgstr "Orientering"
 
 #: src/Dialogs/dlgConfiguration.cpp:87
 #, no-c-format
 msgid "Elements"
-msgstr ""
+msgstr "Element"
 
 #: src/Dialogs/dlgConfiguration.cpp:88
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:104
@@ -3449,9 +3467,9 @@ msgid "All on"
 msgstr "Allt På"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:53
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All airspaces are displayed."
-msgstr "Visa luftrum"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:54
 #, no-c-format
@@ -3532,9 +3550,8 @@ msgstr ""
 
 #. TODO All below is for the Expert
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:167
-#, fuzzy
 msgid "Warning time"
-msgstr "Varningstid*"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:168
 msgid ""
@@ -3543,9 +3560,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:171
-#, fuzzy
 msgid "Acknowledge time"
-msgstr "Bekr. Tid*"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:172
 msgid ""
@@ -3554,9 +3570,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:175
-#, fuzzy
 msgid "Use black outline"
-msgstr "Svart kontur*"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:176
 msgid ""
@@ -3564,18 +3579,16 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:179
-#, fuzzy
 msgid "Airspace fill mode"
-msgstr "Luftrumsdetaljer"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:180
 msgid "Specifies the mode for filling the airspace area."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:185
-#, fuzzy
 msgid "Airspace transparency"
-msgstr "Visa luftrum"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:185
 msgid "If enabled, then airspaces are filled transparently."
@@ -3620,18 +3633,16 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:64
-#, fuzzy
 msgid "Thermal assistant"
-msgstr "Stig senaste 30s"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:65
 msgid "This enables the display of the thermal assistant gauge."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:68
-#, fuzzy
 msgid "Thermal band"
-msgstr "Stig senaste 30s"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:69
 msgid ""
@@ -3670,9 +3681,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:70
-#, fuzzy
 msgid "Auto MC mode"
-msgstr "Auto MacCready På"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:71
 msgid "This option defines which auto MacCready algorithm is used."
@@ -3773,9 +3783,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:108
-#, fuzzy
 msgid "Auto. blank"
-msgstr "Auto Vind"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:109
 msgid ""
@@ -4081,6 +4090,7 @@ msgid "Display orientation"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:140
+#, fuzzy
 msgid "InfoBox geometry"
 msgstr "Infobox Geometri"
 
@@ -4094,7 +4104,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:145
 #, fuzzy
 msgid "FLARM display"
-msgstr "Terräng"
+msgstr "Kartvisning"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:148
 msgid "Tab dialog style"
@@ -4104,7 +4114,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:152
 #, fuzzy
 msgid "Message display"
-msgstr "Terräng"
+msgstr "Visa luftrum"
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:155
@@ -4134,9 +4144,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:169
-#, fuzzy
 msgid "InfoBox border"
-msgstr "InfoBox klistra in"
+msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:67
@@ -4149,9 +4158,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:73
-#, fuzzy
 msgid "Time step circling"
-msgstr "Kurvar inte"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:74
 msgid "This is the time interval between logged points when circling."
@@ -4167,14 +4175,12 @@ msgid "Aircraft type"
 msgstr "Flygplanstyp"
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:83
-#, fuzzy
 msgid "Aircraft reg."
-msgstr "Flygplanstyp"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:87
-#, fuzzy
 msgid "Logger ID"
-msgstr "Logger På"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:90
@@ -4190,9 +4196,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:97
-#, fuzzy
 msgid "Auto. logger"
-msgstr "Stoppa loggern"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:98
 msgid ""
@@ -4348,9 +4353,8 @@ msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:118
-#, fuzzy
 msgid "Route climb"
-msgstr "Snitt Stig"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:119
 msgid ""
@@ -4360,9 +4364,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:124
-#, fuzzy
 msgid "Route ceiling"
-msgstr "Kurvar inte"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:125
 msgid ""
@@ -4398,9 +4401,8 @@ msgstr ""
 
 #. Spacer
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:142
-#, fuzzy
 msgid "Reach mode"
-msgstr "Enhet typ"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:143
 msgid ""
@@ -4409,9 +4411,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:148
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disables the reach display."
-msgstr "Visa luftrum"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:149
 #: src/Dialogs/dlgTaskHelpers.cpp:243
@@ -4435,9 +4437,8 @@ msgid "Shades terrain outside glide reach."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:154
-#, fuzzy
 msgid "Reach display"
-msgstr "Terräng"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:158
 #, no-c-format
@@ -4469,9 +4470,8 @@ msgstr ""
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:62
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:121
-#, fuzzy
 msgid "Arrival height"
-msgstr "Termik höjd"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:63
 msgid ""
@@ -4498,9 +4498,8 @@ msgid "Home"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:81
-#, fuzzy
 msgid "Alternates mode"
-msgstr "Alternativ"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:82
 msgid ""
@@ -4559,9 +4558,8 @@ msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:110
-#, fuzzy
 msgid "More waypoints"
-msgstr "Kartbrytpunkter"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:111
 msgid ""
@@ -4571,9 +4569,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:115
-#, fuzzy
 msgid "Watched waypoints"
-msgstr "Lägg till brytpunkt"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:116
 msgid ""
@@ -4584,9 +4581,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:121
-#, fuzzy
 msgid "Airspaces"
-msgstr "Luftrum"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:121
 msgid "The file name of the primary airspace file."
@@ -4594,9 +4590,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:125
-#, fuzzy
 msgid "More airspaces"
-msgstr "Visa Luftrum På"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:125
 msgid "The file name of the secondary airspace file."
@@ -4604,9 +4599,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:129
-#, fuzzy
 msgid "Terrain file"
-msgstr "Terräng av"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:129
 msgid "The name of the file containing digital elevation terrain data."
@@ -4614,9 +4608,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:133
-#, fuzzy
 msgid "Topography file"
-msgstr "Topografi på"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:133
 msgid "Specifies the file defining the topographical features."
@@ -4624,9 +4617,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:137
-#, fuzzy
 msgid "Waypoint details"
-msgstr "Brytpunktseditor"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:138
 msgid ""
@@ -4662,14 +4654,14 @@ msgid "Sets the type of the snail trail display."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:98
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Vario #1"
-msgstr ""
+msgstr "Vario"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:99
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Vario #2"
-msgstr ""
+msgstr "Vario"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:106
 #, no-c-format
@@ -4717,20 +4709,16 @@ msgid "Draws an arrow head with a dashed arrow line."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:127
-#, fuzzy
 msgid "Track bearing"
-msgstr "Rel.Bäring"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:128
 msgid "Display the track bearing (ground track projection) on the map."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:131
-#, fuzzy
 msgid "FLARM traffic"
 msgstr ""
-"FLARM\n"
-"Detaljer"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:131
 msgid "This enables the display of FLARM traffic on the map window."
@@ -4759,15 +4747,13 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:144
-#, fuzzy
 msgid "Trail type"
-msgstr "Filtyp"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:147
-#, fuzzy
 msgid "Trail scaled"
-msgstr "Spår Längd"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:148
 msgid ""
@@ -4789,15 +4775,13 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:159
-#, fuzzy
 msgid "Aircraft symbol"
-msgstr "Flygplanstyp"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:162
-#, fuzzy
 msgid "Wind arrow"
-msgstr "Full pil"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:162
 msgid "Determines the way the wind arrow is drawn on the map."
@@ -5007,9 +4991,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:131
-#, fuzzy
 msgid "Label style"
-msgstr "Etiketter"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:134
 #, no-c-format
@@ -5105,9 +5088,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:168
-#, fuzzy
 msgid "Detailed landables"
-msgstr "Detaljer"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:169
 msgid ""
@@ -5117,9 +5099,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:174
-#, fuzzy
 msgid "Landable size"
-msgstr "Task & Landables"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:175
 msgid "A percentage to select the size landables are displayed on the map."
@@ -5943,9 +5924,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:5
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:5
-#, fuzzy
 msgid "Speed arrows"
-msgstr "Hastighet över marken"
+msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:17
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:17
@@ -6075,9 +6055,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel_L.xml:48
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel.xml:45
-#, fuzzy
 msgid "On-Line Contest"
-msgstr "OLC"
+msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:342 Data/Dialogs/dlgVario.xml:343
 msgid "Privacy"
@@ -6265,9 +6244,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:8
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:8
-#, fuzzy
 msgid "Topography display"
-msgstr "Topologi display"
+msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:3
 msgid "Switches"
@@ -6287,9 +6265,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:12
 #: Data/Dialogs/Configuration/TrackingConfigPanel.xml:12
-#, fuzzy
 msgid "Enabled"
-msgstr "Välj"
+msgstr ""
 
 #: Data/Dialogs/dlgFontEdit.xml:8
 msgid "Height"
@@ -6301,15 +6278,13 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:10
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:10
-#, fuzzy
 msgid "Show average"
-msgstr "SnittHast"
+msgstr ""
 
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:16
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:16
-#, fuzzy
 msgid "Finish point"
-msgstr "Min Målgångshöjd"
+msgstr ""
 
 #: Data/Dialogs/dlgTeamCode_L.xml:18 Data/Dialogs/dlgTeamCode.xml:17
 msgid "Rel. bearing"
@@ -6372,9 +6347,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel_L.xml:25
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel.xml:22
-#, fuzzy
 msgid "Start max. height margin"
-msgstr "Max Starthöjd"
+msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:114 Data/Dialogs/dlgVario.xml:115
 msgid "Circling deadband type"
@@ -6539,9 +6513,8 @@ msgstr "SnittHast"
 
 #: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:14
 #: Data/Dialogs/Configuration/TrackingConfigPanel.xml:14
-#, fuzzy
 msgid "Username"
-msgstr "Byt namn"
+msgstr ""
 
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:42
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:42
@@ -7284,9 +7257,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:15
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:15
-#, fuzzy
 msgid "Show MacReady"
-msgstr "Ställ MC"
+msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:28 Data/Dialogs/dlgVario.xml:29
 msgid ""
@@ -7432,15 +7404,13 @@ msgstr "Avstånd"
 
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel_L.xml:12
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel.xml:10
-#, fuzzy
 msgid "Start max. speed margin"
-msgstr "Max StartHast"
+msgstr ""
 
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:54
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:54
-#, fuzzy
 msgid "Max. ballast"
-msgstr "Tankar"
+msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:10
 msgid "Enable warnings for final glide through terrain."
@@ -7474,9 +7444,8 @@ msgstr "Starthöjd"
 
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:25
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:25
-#, fuzzy
 msgid "Show ballast"
-msgstr "Tankar"
+msgstr ""
 
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:42
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:42
@@ -7560,9 +7529,8 @@ msgstr "Ändra text"
 
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:15
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:15
-#, fuzzy
 msgid "Whether to show the MacCready setting."
-msgstr "MacCready-värde"
+msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:126 Data/Dialogs/dlgVario.xml:127
 msgid "Cruise deadband type"
@@ -7836,9 +7804,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:8
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:8
-#, fuzzy
 msgid "Aircraft/Wind speed"
-msgstr "Vindstyrka"
+msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:66 Data/Dialogs/dlgVario.xml:67
 msgid ""
@@ -7886,9 +7853,8 @@ msgstr "Satelliter i sikte"
 
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:42
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:42
-#, fuzzy
 msgid "Lat./Lon."
-msgstr "Lat/Long"
+msgstr ""
 
 #: Data/Dialogs/dlgTeamCode_L.xml:7 Data/Dialogs/dlgTeamCode.xml:5
 msgid "Flarm Lock"
@@ -7900,9 +7866,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:27
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:27
-#, fuzzy
 msgid "Turn point"
-msgstr "Nästa brytpunkt"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
 #: Data/Dialogs/pnlTaskProperties.xml:30
@@ -8260,7 +8225,7 @@ msgstr "Sparad i EEPROM"
 
 #: Data/Input/default.xci:666
 msgid "Accel"
-msgstr ""
+msgstr "axa"
 
 #: Data/Input/default.xci:831
 msgid "Credits"
@@ -8310,7 +8275,7 @@ msgstr ""
 
 #: Data/Input/default.xci:913
 msgid "Return"
-msgstr ""
+msgstr "Retur"
 
 #: Data/Input/default.xci:303 Data/Input/default.xci:352
 #: Data/Input/default.xci:864
@@ -8354,18 +8319,6 @@ msgid ""
 msgstr ""
 "METAR\n"
 "TAF"
-
-#, fuzzy
-#~ msgid "Message location"
-#~ msgstr ""
-#~ "Meddelande\n"
-#~ "Repetera"
-
-#~ msgid "Device A"
-#~ msgstr "Enhet A"
-
-#~ msgid "Device B"
-#~ msgstr "Enhet B"
 
 #~ msgid "Declare Task?"
 #~ msgstr "Deklarera Bana?"
@@ -8448,6 +8401,9 @@ msgstr ""
 #~ msgid "Loading Topology File..."
 #~ msgstr "Laddar Topologi-fil.."
 
+#~ msgid "Av climb"
+#~ msgstr "Snitt Stig"
+
 #~ msgid "Best LD"
 #~ msgstr "Bästa L/D"
 
@@ -8465,6 +8421,9 @@ msgstr ""
 
 #~ msgid "Temp trace"
 #~ msgstr "Temp kurva"
+
+#~ msgid "OnLine Contest"
+#~ msgstr "OLC"
 
 #~ msgid "Site"
 #~ msgstr "Data"
@@ -8526,6 +8485,9 @@ msgstr ""
 #~ msgid "White outline"
 #~ msgstr "Vit kontur"
 
+#~ msgid "Alternate"
+#~ msgstr "Alternativ"
+
 #~ msgid "Changes to configuration saved."
 #~ msgstr "Ändring sparad."
 
@@ -8538,6 +8500,9 @@ msgstr ""
 #~ msgid "FALSE"
 #~ msgstr "Nej"
 
+#~ msgid "add waypoint"
+#~ msgstr "Lägg till brytpunkt"
+
 #~ msgid "FAI Sector"
 #~ msgstr "FAI Sektor"
 
@@ -8546,6 +8511,9 @@ msgstr ""
 
 #~ msgid "Info box titles"
 #~ msgstr "Info box titlar"
+
+#~ msgid "Aircraft/wind speed"
+#~ msgstr "Vindstyrka"
 
 #~ msgid "Start max height"
 #~ msgstr "Max Starthöjd"
@@ -8571,11 +8539,26 @@ msgstr ""
 #~ msgid "Online contest"
 #~ msgstr "OLC"
 
+#~ msgid "Map waypoints"
+#~ msgstr "Kartbrytpunkter"
+
 #~ msgid "Locked"
 #~ msgstr "Låst"
 
+#~ msgid "Lat/Lon"
+#~ msgstr "Lat/Long"
+
 #~ msgid "New Waypoint"
 #~ msgstr "Ny Brytpunkt"
+
+#~ msgid "Device A"
+#~ msgstr "Enhet A"
+
+#~ msgid "Acknowledge time*"
+#~ msgstr "Bekr. Tid*"
+
+#~ msgid "Device B"
+#~ msgstr "Enhet B"
 
 #~ msgid "Finish alt min"
 #~ msgstr "Min Målgångshöjd"
@@ -8628,6 +8611,15 @@ msgstr ""
 #~ msgid "Insert in task"
 #~ msgstr "Infoga i Bana"
 
+#~ msgid "Warning time*"
+#~ msgstr "Varningstid*"
+
+#~ msgid "Topology display"
+#~ msgstr "Topologi display"
+
+#~ msgid "File type"
+#~ msgstr "Filtyp"
+
 #~ msgid "Start height ref"
 #~ msgstr "Starthöjd ref"
 
@@ -8636,6 +8628,9 @@ msgstr ""
 
 #~ msgid "Safety lock"
 #~ msgstr "Säkerhetslås"
+
+#~ msgid "Use black outline*"
+#~ msgstr "Svart kontur*"
 
 #~ msgid "AAT min time"
 #~ msgstr "AAT min tid"
