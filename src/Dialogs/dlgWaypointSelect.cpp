@@ -124,7 +124,7 @@ struct WaypointFilterData
   int direction_index;
   TypeFilter type_index;
 
-  bool defined() const {
+  bool IsDefined() const {
     return !string_is_empty(name) || distance_index > 0 ||
       direction_index > 0 || type_index > 0;
   }
@@ -553,7 +553,7 @@ FillList(WaypointSelectInfoVector &list, const Waypoints &src,
 {
   list.clear();
 
-  if (!filter.defined() && src.size() >= 500)
+  if (!filter.IsDefined() && src.size() >= 500)
     return;
 
   FilterWaypointVisitor visitor(filter, location, heading, list);
@@ -732,7 +732,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     canvas.Select(name_font);
     canvas.text(rc.left + line_height + Layout::FastScale(2),
                 rc.top + line_height / 2 - name_font.GetHeight() / 2,
-                filter_data.defined() || way_points.IsEmpty() ?
+                filter_data.IsDefined() || way_points.IsEmpty() ?
                 _("No Match!") : _("Choose a filter or click here"));
     return;
   }
