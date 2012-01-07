@@ -21,29 +21,42 @@ Copyright_License {
 }
 */
 
-#include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
+#include "Language/Language.hpp"
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Components.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "TaskDefaultsConfigPanel.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
 
-class TaskDefaultsConfigPanel : public XMLWidget {
+enum ControlIndex {
+  StartType,
+  StartRadius,
+  spacer_1,
+  FinishType,
+  FinishRadius,
+  spacer_2,
+  TurnpointType,
+  TurnpointRadius,
+  spacer_3,
+  TaskType,
+  AATMinTime,
+  AATTimeMargin
+};
+
+class TaskDefaultsConfigPanel : public RowFormWidget {
+public:
+  TaskDefaultsConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(125)) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
   void SetStartLabel();
   void SetFinishLabel();
 };
@@ -64,69 +77,44 @@ OnFinishType(DataField *Sender, DataField::DataAccessKind_t Mode)
   instance->SetFinishLabel();
 }
 
-void
-TaskDefaultsConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
-
-
-void
-TaskDefaultsConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
-
-
+static const TCHAR *Caption_GateWidth = N_("Gate Width");
+static const TCHAR *Caption_Radius = N_("Radius");
 void
 TaskDefaultsConfigPanel::SetStartLabel()
 {
-  WndProperty *wp = NULL;
-  wp = (WndProperty*)form.FindByName(_T("prpStartRadius"));
-  assert(wp);
-  if (GetFormValueInteger(form, _T("prpStartType")) == AbstractTaskFactory::START_LINE)
-    wp->SetCaption(_T("Gate Width"));
+  WndProperty &wp = GetControl(StartRadius);
+
+  if (GetValueInteger(StartType) == AbstractTaskFactory::START_LINE)
+    wp.SetCaption(Caption_GateWidth);
   else
-    wp->SetCaption(_T("Radius"));
+    wp.SetCaption(Caption_Radius);
 }
 
 void
 TaskDefaultsConfigPanel::SetFinishLabel()
 {
-  WndProperty *wp = NULL;
+  WndProperty &wp = GetControl(FinishRadius);
 
-  wp = (WndProperty*)form.FindByName(_T("prpFinishRadius"));
-  assert(wp);
-  if (GetFormValueInteger(form, _T("prpFinishType")) == AbstractTaskFactory::FINISH_LINE)
-    wp->SetCaption(_T("Gate Width"));
+  if (GetValueInteger(FinishType) == AbstractTaskFactory::FINISH_LINE)
+    wp.SetCaption(Caption_GateWidth);
   else
-    wp->SetCaption(_T("Radius"));
+    wp.SetCaption(Caption_Radius);
 }
 
-
-static gcc_constexpr_data CallBackTableEntry task_defaults_config_panel_callbacks[] = {
-  DeclareCallBackEntry(OnStartType),
-  DeclareCallBackEntry(OnFinishType),
-
-  DeclareCallBackEntry(NULL)
-};
 
 void
 TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-
-  instance = this;
-  LoadWindow(task_defaults_config_panel_callbacks, parent,
-             Layout::landscape ? _T("IDR_XML_TASKDEFAULTSCONFIGPANEL_L") :
-                               _T("IDR_XML_TASKDEFAULTSCONFIGPANEL"));
-
   WndProperty *wp;
   const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
   OrderedTask* temptask = protected_task_manager->TaskBlank();
   temptask->SetFactory(TaskBehaviour::FACTORY_RT);
 
-  wp = (WndProperty*)form.FindByName(_T("prpStartType"));
+  instance = this;
+  RowFormWidget::Prepare(parent, rc);
+
+  wp = AddEnum(_("Start point"), _("Default start type for new tasks you create."), OnStartType);
   if (wp) {
     const auto point_types = temptask->GetFactory().getValidStartTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
@@ -143,10 +131,13 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     wp->RefreshDisplay();
   }
 
-  LoadFormProperty(form, _T("prpStartRadius"), ugDistance,
-                   task_behaviour.sector_defaults.start_radius);
+  AddFloat(Caption_GateWidth, _("Default radius or gate width of the start zone for new tasks."),
+           _T("%.1f %s"), _T("%.1f"), fixed(0.1), fixed(100), fixed(0.5), true, ugDistance,
+           task_behaviour.sector_defaults.start_radius);
 
-  wp = (WndProperty*)form.FindByName(_T("prpFinishType"));
+  AddSpacer();
+
+  wp = AddEnum(_("Finish point"), _("Default finish type for new tasks you create."), OnFinishType);
   if (wp) {
     const auto point_types = temptask->GetFactory().getValidFinishTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
@@ -163,13 +154,15 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     wp->RefreshDisplay();
   }
 
-  LoadFormProperty(form, _T("prpFinishRadius"), ugDistance,
-                   task_behaviour.sector_defaults.finish_radius);
+  AddFloat(Caption_GateWidth, _("Default radius or gate width of the finish zone in new tasks."),
+           _T("%.1f %s"), _T("%.1f"), fixed(0.1), fixed(100), fixed(0.5), true, ugDistance,
+           task_behaviour.sector_defaults.finish_radius);
 
-  wp = (WndProperty*)form.FindByName(_T("prpTurnpointType"));
+  AddSpacer();
+
+  wp = AddEnum(_("Turn point"), _("Default turn point type for new tasks you create."));
   if (wp) {
-    const auto point_types =
-      temptask->GetFactory().getValidIntermediateTypes();
+    const auto point_types = temptask->GetFactory().getValidIntermediateTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 
@@ -185,10 +178,13 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     wp->RefreshDisplay();
   }
 
-  LoadFormProperty(form, _T("prpTurnpointRadius"), ugDistance,
-                   task_behaviour.sector_defaults.turnpoint_radius);
+  AddFloat(Caption_Radius, _("Default radius of turnpoint cylinders and sectors in new tasks."),
+           _T("%.1f %s"), _T("%.1f"), fixed(0.1), fixed(100), fixed(0.5), true, ugDistance,
+           task_behaviour.sector_defaults.turnpoint_radius);
 
-  wp = (WndProperty*)form.FindByName(_T("prpTaskType"));
+  AddSpacer();
+
+  wp = AddEnum(_("Task"), _("Default task type for new tasks you create."));
   if (wp) {
     const std::vector<TaskBehaviour::FactoryType> factory_types =
         temptask->GetFactoryTypes();
@@ -205,14 +201,18 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     wp->RefreshDisplay();
   }
 
-  LoadFormProperty(form, _T("prpAATMinTime"),
-                   (unsigned)(task_behaviour.ordered_defaults.aat_min_time / 60));
+  AddInteger(_("AAT min. time"), _("Default AAT min. time for new AAT tasks."),
+             _T("%u min"), _T("%u"), 1, 500, 1,
+             (unsigned)(task_behaviour.ordered_defaults.aat_min_time / 60));
 
-  LoadFormProperty(form, _T("prpAATTimeMargin"),
-                   (unsigned)(task_behaviour.optimise_targets_margin / 60));
+  AddInteger(_("Optimisation margin"),
+             _("Safety margin for AAT task optimisation.  Optimisation "
+                 "seeks to complete the task at the minimum time plus this margin time."),
+             _T("%u min"), _T("%u"), 0, 30, 1,
+             (unsigned)(task_behaviour.optimise_targets_margin / 60));
 
-  instance->SetStartLabel();
-  instance->SetFinishLabel();
+  SetStartLabel();
+  SetFinishLabel();
 
   delete temptask;
 }
@@ -220,56 +220,39 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 bool
 TaskDefaultsConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
-  bool changed = false, require_restart = false;;
+  bool changed = false, require_restart = false;
 
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
-  WndProperty *wp;
 
-  changed |= SaveFormPropertyEnum(form, _T("prpStartType"),
-                                  szProfileStartType,
-                                  task_behaviour.sector_defaults.start_type);
+  changed |= SaveValueEnum(StartType, szProfileStartType, task_behaviour.sector_defaults.start_type);
 
-  changed |= SaveFormProperty(form, _T("prpStartRadius"),
-                              ugDistance,
-                              task_behaviour.sector_defaults.start_radius,
-                              szProfileStartRadius);
+  changed |= SaveValue(StartRadius, ugDistance, szProfileStartRadius,
+                       task_behaviour.sector_defaults.start_radius);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpTurnpointType"),
-                                  szProfileTurnpointType,
-                                  task_behaviour.sector_defaults.turnpoint_type);
+  changed |= SaveValueEnum(TurnpointType, szProfileTurnpointType,
+                           task_behaviour.sector_defaults.turnpoint_type);
 
-  changed |= SaveFormProperty(form, _T("prpTurnpointRadius"),
-                              ugDistance,
-                              task_behaviour.sector_defaults.turnpoint_radius,
-                              szProfileTurnpointRadius);
+  changed |= SaveValue(TurnpointRadius, ugDistance, szProfileTurnpointRadius,
+                       task_behaviour.sector_defaults.turnpoint_radius);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpFinishType"),
-                                  szProfileFinishType,
-                                  task_behaviour.sector_defaults.finish_type);
+  changed |= SaveValueEnum(FinishType, szProfileFinishType,
+                           task_behaviour.sector_defaults.finish_type);
 
-  changed |= SaveFormProperty(form, _T("prpFinishRadius"),
-                              ugDistance,
-                              task_behaviour.sector_defaults.finish_radius,
-                              szProfileFinishRadius);
+  changed |= SaveValue(FinishRadius, ugDistance, szProfileFinishRadius,
+                       task_behaviour.sector_defaults.finish_radius);
 
-  changed |= SaveFormPropertyEnum(form, _T("prpTaskType"),
-                                  szProfileTaskType,
-                                  task_behaviour.task_type_default);
+  changed |= SaveValueEnum(TaskType, szProfileTaskType, task_behaviour.task_type_default);
 
   unsigned aatminutes = unsigned(task_behaviour.ordered_defaults.aat_min_time) / 60;
-  wp = (WndProperty*)form.FindByName(_T("prpAATMinTime"));
-  if (aatminutes != (unsigned)wp->GetDataField()->GetAsInteger()) {
-    aatminutes = wp->GetDataField()->GetAsInteger();
+  if (SaveValue(AATMinTime, aatminutes)) {
     task_behaviour.ordered_defaults.aat_min_time = fixed(aatminutes * 60);
     Profile::Set(szProfileAATMinTime, aatminutes * 60);
     changed = true;
   }
 
-  unsigned aatmargin = task_behaviour.optimise_targets_margin/60;
-  wp = (WndProperty*)form.FindByName(_T("prpAATTimeMargin"));
-  if (aatmargin != (unsigned)wp->GetDataField()->GetAsInteger()) {
-    aatmargin = wp->GetDataField()->GetAsInteger();
+  unsigned aatmargin = task_behaviour.optimise_targets_margin / 60;
+  if (SaveValue(AATTimeMargin, aatmargin)) {
     task_behaviour.optimise_targets_margin = aatmargin * 60;
     Profile::Set(szProfileAATTimeMargin, aatmargin * 60);
     changed = true;
