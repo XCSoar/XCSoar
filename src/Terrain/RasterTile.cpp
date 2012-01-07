@@ -56,7 +56,7 @@ RasterTile::LoadCache(FILE *file)
   if (fread(&data, sizeof(data), 1, file) != 1)
     return false;
 
-  set(data.xstart, data.ystart, data.xend, data.yend);
+  Set(data.xstart, data.ystart, data.xend, data.yend);
   return true;
 }
 
@@ -146,7 +146,7 @@ RasterTileCache::SetTile(unsigned index,
     /* link current marker segment with this tile */
     segments.last().tile = index;
 
-  tiles.GetLinear(index).set(xstart, ystart, xend, yend);
+  tiles.GetLinear(index).Set(xstart, ystart, xend, yend);
 }
 
 struct RTDistanceSort {
@@ -158,7 +158,7 @@ struct RTDistanceSort {
     const RasterTile &a = rtc.tiles.GetLinear(ai);
     const RasterTile &b = rtc.tiles.GetLinear(bi);
 
-    return a.get_distance() < b.get_distance();
+    return a.GetDistance() < b.GetDistance();
   }
 };
 
@@ -218,7 +218,7 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius)
 
     if (++num_activate <= MAX_ACTIVATE)
       /* request the tile in the current iteration */
-      tile.set_request();
+      tile.SetRequest();
     else
       /* this tile will be loaded in the next iteration */
       dirty = true;
@@ -232,7 +232,7 @@ RasterTileCache::TileRequest(unsigned index)
 {
   RasterTile &tile = tiles.GetLinear(index);
 
-  if (!tile.is_requested())
+  if (!tile.IsRequested())
     return false;
 
   tile.Enable();
@@ -350,7 +350,7 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
 
   long skip_to = segment->file_offset;
   while (segment->IsTileSegment() &&
-         !tiles.GetLinear(segment->tile).is_requested()) {
+         !tiles.GetLinear(segment->tile).IsRequested()) {
     ++segment;
     if (segment >= segments.end())
       /* last segment is hidden; shouldn't happen either, because we
@@ -537,7 +537,7 @@ RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
   for (auto it = RequestTiles.begin(), end = RequestTiles.end();
       it != end; ++it) {
     RasterTile &tile = tiles.GetLinear(*it);
-    if (tile.is_requested() && !tile.IsEnabled())
+    if (tile.IsRequested() && !tile.IsEnabled())
       tile.Clear();
   }
 
@@ -572,7 +572,7 @@ RasterTileCache::SaveCache(FILE *file) const
   /* save tiles */
   unsigned i;
   for (i = 0; i < tiles.GetSize(); ++i)
-    if (tiles.GetLinear(i).defined() &&
+    if (tiles.GetLinear(i).IsDefined() &&
         (fwrite(&i, sizeof(i), 1, file) != 1 ||
          !tiles.GetLinear(i).SaveCache(file)))
       return false;

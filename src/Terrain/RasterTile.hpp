@@ -65,7 +65,7 @@ public:
     :xstart(0), ystart(0), xend(0), yend(0),
      width(0), height(0) {}
 
-  void set(unsigned _xstart, unsigned _ystart,
+  void Set(unsigned _xstart, unsigned _ystart,
            unsigned _xend, unsigned _yend) {
     xstart = _xstart;
     ystart = _ystart;
@@ -83,23 +83,23 @@ public:
     request = false;
   }
 
-  bool defined() const {
+  bool IsDefined() const {
     return width > 0 && height > 0;
   }
 
-  int get_distance() const {
+  int GetDistance() const {
     return distance;
   }
 
-  bool is_requested() const {
+  bool IsRequested() const {
     return request;
   }
 
-  void set_request() {
+  void SetRequest() {
     request = true;
   }
 
-  void clear_request() {
+  void ClearRequest() {
     request = false;
   }
 
