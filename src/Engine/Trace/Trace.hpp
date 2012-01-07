@@ -177,6 +177,9 @@ class Trace : private NonCopyable
      */
     static unsigned time_metric(const TracePoint& last, const TracePoint& node,
                                 const TracePoint& next) {
+      assert(last.time <= node.time);
+      assert(node.time <= next.time);
+
       return (next.time - last.time) -
              std::min(next.time - node.time, node.time - last.time);
     }
