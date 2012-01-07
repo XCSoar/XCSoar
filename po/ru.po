@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-06 21:48+0100\n"
-"PO-Revision-Date: 2011-12-20 19:56+0100\n"
-"Last-Translator: samid <Unknown>\n"
+"PO-Revision-Date: 2012-01-06 20:48+0000\n"
+"Last-Translator: Murat <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-05 06:28+0000\n"
-"X-Generator: Launchpad (build 13830)\n"
+"X-Launchpad-Export-Date: 2012-01-07 09:36+0000\n"
+"X-Generator: Launchpad (build 14640)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -54,9 +54,8 @@ msgid "Airspace"
 msgstr "Воздушное пространство"
 
 #: src/Airspace/AirspaceParser.cpp:875
-#, fuzzy
 msgid "Unknown airspace filetype"
-msgstr "Неизвестный формат файлов"
+msgstr ""
 
 #: src/ConditionMonitor/ConditionMonitorAATTime.cpp:50
 msgid "Expect early task arrival"
@@ -231,16 +230,16 @@ msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
-"Расширение \n"
-"(Вручную)"
+"Расширенный\n"
+"(вручную)"
 
 #: src/Menu/ExpandMacros.cpp:282
 msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
-"Расширение\n"
-"(auto)"
+"Расширенный\n"
+"(авто)"
 
 #: src/Menu/ExpandMacros.cpp:287
 msgid ""
@@ -281,7 +280,7 @@ msgstr "Продолжить"
 #: src/Menu/ExpandMacros.cpp:321 src/Menu/ExpandMacros.cpp:325
 #: src/Dialogs/Message.cpp:169
 msgid "Abort"
-msgstr "Отмена"
+msgstr "Прервать"
 
 #: src/Menu/ExpandMacros.cpp:438 src/Dialogs/dlgBasicSettings.cpp:57
 #: Data/Dialogs/dlgLoggerReplay.xml:12
@@ -296,13 +295,13 @@ msgstr "Старт"
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:90
 #, no-c-format
 msgid "Long"
-msgstr "Long"
+msgstr "Длинный"
 
 #: src/Menu/ExpandMacros.cpp:449
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:91
 #, no-c-format
 msgid "Short"
-msgstr "Short"
+msgstr "Короткий"
 
 #: src/Menu/ExpandMacros.cpp:453
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:92
@@ -430,7 +429,7 @@ msgid ""
 "terrain file. The value is coloured red when the glider is below the terrain "
 "safety clearance height."
 msgstr ""
-"Навигационная высота минус высоту местности, полученную из файла местности. "
+"Навигационная высота минус высота местности, полученную из файла местности. "
 "Значение красного цвета, это когда планер находится ниже безопасной высоты "
 "рельефа."
 
@@ -1013,9 +1012,9 @@ msgid "Indicated Airspeed reported by a supported external intelligent vario."
 msgstr "Скорость полета по данным электронного вариомерта."
 
 #: src/InfoBoxes/Content/Factory.cpp:408
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Barometric altitude"
-msgstr "Высота диапазона"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:409
 #, no-c-format
@@ -1023,13 +1022,11 @@ msgid "Alt. Baro."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:410
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
 msgstr ""
-"Высота полученная из GPS оснащенных барометрическими датчиками или от "
-"электронного вариометра."
 
 #: src/InfoBoxes/Content/Factory.cpp:418
 #, no-c-format
@@ -2028,9 +2025,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:989
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr "Следующая разность высоты"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:990
 #, no-c-format
@@ -2038,13 +2035,11 @@ msgid "WP MC0 AltD"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:991
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
-"Высота прибытия на следующий поворотный сотносительно с безопасной высотой "
-"прибытия."
 
 #: src/InfoBoxes/Content/Factory.cpp:999
 #, no-c-format
@@ -2402,9 +2397,8 @@ msgid "Your Position"
 msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:178
-#, fuzzy
 msgid "Marker"
-msgstr "ОЧИСТКА МЕТОК"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:184
 #, c-format
@@ -2412,14 +2406,12 @@ msgid "dropped at %s"
 msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:211
-#, fuzzy
 msgid "Thermal"
-msgstr "Набор за поток"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:217
-#, fuzzy
 msgid "Avg. lift"
-msgstr "Средн Набор"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:219
 #, c-format
@@ -2468,9 +2460,8 @@ msgid "Arrival Alt"
 msgstr ""
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:101
-#, fuzzy
 msgid "Elevation: "
-msgstr "Высота"
+msgstr ""
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:119
 msgid "GPS not connected"
@@ -2868,9 +2859,8 @@ msgid ""
 msgstr ""
 
 #: src/Widgets/DeviceEditWidget.cpp:463
-#, fuzzy
 msgid "TCP Port"
-msgstr "Порт"
+msgstr ""
 
 #: src/Widgets/DeviceEditWidget.cpp:474
 msgid "Driver"
@@ -2935,7 +2925,7 @@ msgstr "Отмена"
 
 #: src/Dialogs/Message.cpp:175
 msgid "Ignore"
-msgstr "Пропустить"
+msgstr "Игнорировать"
 
 #: src/Dialogs/DeviceListDialog.cpp:111
 #: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:163
@@ -2966,9 +2956,8 @@ msgid "Not connected"
 msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:204
-#, fuzzy
 msgid "Edit device"
-msgstr "Ввод текста"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:273 src/Dialogs/dlgConfiguration.cpp:104
 #: Data/Input/default.xci:611 Data/Input/default.xci:1139
@@ -3325,24 +3314,24 @@ msgid "Gauges"
 msgstr "Датчики"
 
 #: src/Dialogs/dlgConfiguration.cpp:79
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task Defaults"
-msgstr "стандарт"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:80
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Look"
-msgstr "Уточнить"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:86
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Orientation"
-msgstr "Высота"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:87
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Elements"
-msgstr "Элементы карты"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:88
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:104
@@ -3378,19 +3367,19 @@ msgid "Task Rules"
 msgstr "Задача"
 
 #: src/Dialogs/dlgConfiguration.cpp:99
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoint Types"
-msgstr "Добавить точку"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:100
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Language, Input"
-msgstr "Язык"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Screen Layout"
-msgstr "Полноэкранный режим"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:102
 #, no-c-format
@@ -3418,9 +3407,9 @@ msgid "Units"
 msgstr "Единицы измерения"
 
 #: src/Dialogs/dlgConfiguration.cpp:113
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tracking"
-msgstr "Трек"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:116
 #, no-c-format
@@ -3523,9 +3512,8 @@ msgid "Do you want to set this FLARM contact as your new teammate?"
 msgstr ""
 
 #: src/Dialogs/dlgFlarmTrafficDetails.cpp:213
-#, fuzzy
 msgid "New Teammate"
-msgstr "Новое задание"
+msgstr ""
 
 #: src/Dialogs/dlgHelp.cpp:63 Data/Dialogs/dlgComboPicker_L.xml:7
 #: Data/Dialogs/dlgComboPicker.xml:8 Data/Dialogs/dlgHelp_L.xml:3
@@ -3559,9 +3547,9 @@ msgid "Fix invalid"
 msgstr "Полож. ошибочно"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:40
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "2D fix"
-msgstr "3D позиция"
+msgstr ""
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:42
 #, no-c-format
@@ -3580,9 +3568,9 @@ msgid "All on"
 msgstr "Все Вкл."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:53
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All airspaces are displayed."
-msgstr "Фильтр зон ВП"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:54
 #, no-c-format
@@ -3663,9 +3651,8 @@ msgstr ""
 
 #. TODO All below is for the Expert
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:167
-#, fuzzy
 msgid "Warning time"
-msgstr "Время приземл."
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:168
 msgid ""
@@ -3674,9 +3661,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:171
-#, fuzzy
 msgid "Acknowledge time"
-msgstr "Подтвердить на день?"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:172
 msgid ""
@@ -3694,18 +3680,16 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:179
-#, fuzzy
 msgid "Airspace fill mode"
-msgstr "Подробн. Возд.простр."
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:180
 msgid "Specifies the mode for filling the airspace area."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:185
-#, fuzzy
 msgid "Airspace transparency"
-msgstr "Фильтр зон ВП"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:185
 msgid "If enabled, then airspaces are filled transparently."
@@ -3750,18 +3734,16 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:64
-#, fuzzy
 msgid "Thermal assistant"
-msgstr "Набор за поток"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:65
 msgid "This enables the display of the thermal assistant gauge."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:68
-#, fuzzy
 msgid "Thermal band"
-msgstr "Набор за поток"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:69
 msgid ""
@@ -3800,9 +3782,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:70
-#, fuzzy
 msgid "Auto MC mode"
-msgstr "Авто.Маккреди"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:71
 msgid "This option defines which auto MacCready algorithm is used."
@@ -3822,9 +3803,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:82
-#, fuzzy
 msgid "Nav. by baro altitude"
-msgstr "Высота диапазона"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:83
 msgid ""
@@ -3886,18 +3866,16 @@ msgid "Use ZigZag and circling."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:68
-#, fuzzy
 msgid "Auto wind"
-msgstr "Авто. высчитывать снос"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:69
 msgid "This allows switching on or off the automatic wind algorithm."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:72
-#, fuzzy
 msgid "External wind"
-msgstr "Внешнее"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WindConfigPanel.cpp:73
 msgid ""
@@ -3906,9 +3884,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:108
-#, fuzzy
 msgid "Auto. blank"
-msgstr "Авто. высчитывать снос"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:109
 msgid ""
@@ -3928,9 +3905,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:121
-#, fuzzy
 msgid "Language"
-msgstr "Язык"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:122
 msgid ""
@@ -4211,9 +4187,8 @@ msgid "Draws a tab at the top of the InfoBox across the title."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:136
-#, fuzzy
 msgid "Display orientation"
-msgstr "Высота"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:140
 msgid "InfoBox geometry"
@@ -4227,9 +4202,8 @@ msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:145
-#, fuzzy
 msgid "FLARM display"
-msgstr "Показать ландшафт"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:148
 msgid "Tab dialog style"
@@ -4237,21 +4211,18 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:152
-#, fuzzy
 msgid "Message display"
-msgstr "Показать ландшафт"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:155
-#, fuzzy
 msgid "Dialog size"
-msgstr "Диалоговые окна"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:159
-#, fuzzy
 msgid "Inverse InfoBoxes"
-msgstr "ИнфоБоксы по умолчанию"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:159
 msgid "If true, the InfoBoxes are white on black, otherwise black on white."
@@ -4259,9 +4230,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:163
-#, fuzzy
 msgid "Colored InfoBoxes"
-msgstr "Вспомогательные ИнфоБоксы"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:164
 msgid ""
@@ -4271,9 +4241,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:169
-#, fuzzy
 msgid "InfoBox border"
-msgstr "Вставить ИнфоБлок"
+msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:67
@@ -4303,9 +4272,8 @@ msgid "Aircraft type"
 msgstr "Тип планера"
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:83
-#, fuzzy
 msgid "Aircraft reg."
-msgstr "Тип планера"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:87
 msgid "Logger ID"
@@ -4325,9 +4293,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:97
-#, fuzzy
 msgid "Auto. logger"
-msgstr "Остановить запись."
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:98
 msgid ""
@@ -4478,15 +4445,13 @@ msgid "Routes will avoid airspace and terrain."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:115
-#, fuzzy
 msgid "Route mode"
-msgstr "Направление"
+msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:118
-#, fuzzy
 msgid "Route climb"
-msgstr "Направление"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:119
 msgid ""
@@ -4496,9 +4461,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:124
-#, fuzzy
 msgid "Route ceiling"
-msgstr "Нет спирали"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:125
 msgid ""
@@ -4534,9 +4498,8 @@ msgstr ""
 
 #. Spacer
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:142
-#, fuzzy
 msgid "Reach mode"
-msgstr "Модель прибора"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:143
 msgid ""
@@ -4545,9 +4508,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:148
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disables the reach display."
-msgstr "Фильтр зон ВП"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:149
 #: src/Dialogs/dlgTaskHelpers.cpp:243
@@ -4571,9 +4534,8 @@ msgid "Shades terrain outside glide reach."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:154
-#, fuzzy
 msgid "Reach display"
-msgstr "Показать ландшафт"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:158
 #, no-c-format
@@ -4587,9 +4549,9 @@ msgid "Safety MC"
 msgstr "Безопасное MС"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:159
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Uses safety MacCready value"
-msgstr "Установить MC"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:164
@@ -4605,9 +4567,8 @@ msgstr ""
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:62
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:121
-#, fuzzy
 msgid "Arrival height"
-msgstr "Высота потока"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:63
 msgid ""
@@ -4634,9 +4595,8 @@ msgid "Home"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:81
-#, fuzzy
 msgid "Alternates mode"
-msgstr "Настроить"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:82
 msgid ""
@@ -4718,25 +4678,21 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:121
-#, fuzzy
 msgid "Airspaces"
-msgstr "Воздушное пространство"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:121
-#, fuzzy
 msgid "The file name of the primary airspace file."
-msgstr "Отображается полное название каждой точки"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:125
-#, fuzzy
 msgid "More airspaces"
-msgstr "Вкл Зоны воздушного пространства"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:125
-#, fuzzy
 msgid "The file name of the secondary airspace file."
-msgstr "Отображается полное название каждой точки"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:129
@@ -4749,9 +4705,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:133
-#, fuzzy
 msgid "Topography file"
-msgstr "Топография Вкл"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:133
 msgid "Specifies the file defining the topographical features."
@@ -4851,18 +4806,16 @@ msgid "Draws an arrow head with a dashed arrow line."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:127
-#, fuzzy
 msgid "Track bearing"
-msgstr "Курс на команду"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:128
 msgid "Display the track bearing (ground track projection) on the map."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:131
-#, fuzzy
 msgid "FLARM traffic"
-msgstr "Нет движения"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:131
 msgid "This enables the display of FLARM traffic on the map window."
@@ -4891,15 +4844,13 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:144
-#, fuzzy
 msgid "Trail type"
-msgstr "Тип файла"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:147
-#, fuzzy
 msgid "Trail scaled"
-msgstr "Длинна следа"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:148
 msgid ""
@@ -4921,9 +4872,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:159
-#, fuzzy
 msgid "Aircraft symbol"
-msgstr "Тип планера"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:162
@@ -5138,9 +5088,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:131
-#, fuzzy
 msgid "Label style"
-msgstr "Обознач"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:134
 #, no-c-format
@@ -5236,9 +5185,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:168
-#, fuzzy
 msgid "Detailed landables"
-msgstr "Подробно"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:169
 msgid ""
@@ -5248,9 +5196,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:174
-#, fuzzy
 msgid "Landable size"
-msgstr "Задачи и Посадки"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:175
 msgid "A percentage to select the size landables are displayed on the map."
@@ -5766,9 +5713,8 @@ msgstr ""
 
 #: src/Dialogs/dlgWaypointDetails.cpp:222
 #: src/Dialogs/dlgWaypointDetails.cpp:255
-#, fuzzy
 msgid "Created Goto Task."
-msgstr "Создать новую задачу?"
+msgstr ""
 
 #: src/Dialogs/dlgWaypointDetails.cpp:222
 #: src/Dialogs/dlgWaypointDetails.cpp:227
@@ -5860,9 +5806,8 @@ msgstr ""
 
 #: src/Dialogs/dlgNOAAList.cpp:141 src/Dialogs/dlgNOAAList.cpp:151
 #: src/Dialogs/dlgNOAADetails.cpp:74
-#, fuzzy
 msgid "Download"
-msgstr "Скачать полет"
+msgstr ""
 
 #: src/Dialogs/dlgNOAAList.cpp:163 src/Dialogs/dlgNOAADetails.cpp:83
 #, c-format
@@ -5896,16 +5841,14 @@ msgid "Temperature"
 msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:132 src/Weather/NOAAFormatter.cpp:139
-#, fuzzy
 msgid "Dew Point"
-msgstr "Новая точка"
+msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:36
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:36
-#, fuzzy
 msgid "Pressure"
-msgstr "Ход выполнения"
+msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:166
 msgid "Visibility"
@@ -6078,9 +6021,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:5
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:5
-#, fuzzy
 msgid "Speed arrows"
-msgstr "Скорость над землей"
+msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:17
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:17
@@ -6399,9 +6341,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:8
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:8
-#, fuzzy
 msgid "Topography display"
-msgstr "Топография Вкл"
+msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:3
 msgid "Switches"
@@ -6421,9 +6362,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:12
 #: Data/Dialogs/Configuration/TrackingConfigPanel.xml:12
-#, fuzzy
 msgid "Enabled"
-msgstr "Включить"
+msgstr ""
 
 #: Data/Dialogs/dlgFontEdit.xml:8
 msgid "Height"
@@ -6435,15 +6375,13 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:10
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:10
-#, fuzzy
 msgid "Show average"
-msgstr "Средняя скорость"
+msgstr ""
 
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:16
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:16
-#, fuzzy
 msgid "Finish point"
-msgstr "Финишная поворотная точка"
+msgstr ""
 
 #: Data/Dialogs/dlgTeamCode_L.xml:18 Data/Dialogs/dlgTeamCode.xml:17
 msgid "Rel. bearing"
@@ -6659,9 +6597,8 @@ msgid "Lift"
 msgstr "Скороподъемность"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:16 Data/Dialogs/dlgConfiguration.xml:16
-#, fuzzy
 msgid "Configuration Menu"
-msgstr "Конфигурация"
+msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:352 Data/Dialogs/dlgVario.xml:353
 msgid "Interval; info"
@@ -6673,9 +6610,8 @@ msgstr "Средняя скорость"
 
 #: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:14
 #: Data/Dialogs/Configuration/TrackingConfigPanel.xml:14
-#, fuzzy
 msgid "Username"
-msgstr "Переимен."
+msgstr ""
 
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:42
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:42
@@ -7321,9 +7257,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:5
 #: Data/Dialogs/Configuration/TrackingConfigPanel.xml:5
-#, fuzzy
 msgid "Tracking Interval"
-msgstr "Трек"
+msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:10
 msgid "Radio"
@@ -7419,9 +7354,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:15
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:15
-#, fuzzy
 msgid "Show MacReady"
-msgstr "Установить MC"
+msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:28 Data/Dialogs/dlgVario.xml:29
 msgid ""
@@ -7567,15 +7501,13 @@ msgstr "Диапазон"
 
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel_L.xml:12
 #: Data/Dialogs/Configuration/TaskRulesConfigPanel.xml:10
-#, fuzzy
 msgid "Start max. speed margin"
-msgstr "Старт. скорость"
+msgstr ""
 
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:54
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:54
-#, fuzzy
 msgid "Max. ballast"
-msgstr "Балласт"
+msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:10
 msgid "Enable warnings for final glide through terrain."
@@ -7609,9 +7541,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:25
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:25
-#, fuzzy
 msgid "Show ballast"
-msgstr "Балласт"
+msgstr ""
 
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:42
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:42
@@ -7671,9 +7602,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:10
 #: Data/Dialogs/Configuration/TrackingConfigPanel.xml:10
-#, fuzzy
 msgid "LiveTrack24"
-msgstr "Трек"
+msgstr ""
 
 #: Data/Dialogs/dlgWindSettings.xml:12
 #: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:4
@@ -7696,9 +7626,8 @@ msgstr "Ввод текста"
 
 #: Data/Dialogs/Configuration/VarioConfigPanel_L.xml:15
 #: Data/Dialogs/Configuration/VarioConfigPanel.xml:15
-#, fuzzy
 msgid "Whether to show the MacCready setting."
-msgstr "Маккреди настройки"
+msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:126 Data/Dialogs/dlgVario.xml:127
 msgid "Cruise deadband type"
@@ -8034,9 +7963,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:27
 #: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:27
-#, fuzzy
 msgid "Turn point"
-msgstr "Добавить точку"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
 #: Data/Dialogs/pnlTaskProperties.xml:30
@@ -8143,9 +8071,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/UnitsConfigPanel_L.xml:27
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:27
-#, fuzzy
 msgid "Units used for temperature."
-msgstr "Температура за бортом"
+msgstr ""
 
 #: Data/Dialogs/pnlStatusRules.xml:4
 msgid "Valid start"
@@ -8194,9 +8121,8 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:619 Data/Input/default.xci:1147
-#, fuzzy
 msgid "Setup Plane"
-msgstr "Режим настройки"
+msgstr ""
 
 #: Data/Input/default.xci:481 Data/Input/default.xci:1075
 msgid "Topo."
@@ -8268,11 +8194,10 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:513
-#, fuzzy
 msgid ""
 "MacCready\n"
 "-"
-msgstr "Маккреди "
+msgstr ""
 
 #: Data/Input/default.xci:384 Data/Input/default.xci:1019
 msgid ""
@@ -8294,7 +8219,7 @@ msgid ""
 "Wind"
 msgstr ""
 "Настройки\n"
-"ветра"
+"ветер"
 
 #: Data/Input/default.xci:638
 msgid ""
@@ -8388,14 +8313,16 @@ msgid ""
 "Mark\n"
 "Drop"
 msgstr ""
+"Установить\n"
+"метку"
 
 #: Data/Input/default.xci:38
 msgid "Restarting comm. ports"
-msgstr ""
+msgstr "Перезапуск com. портов"
 
 #: Data/Input/default.xci:699
 msgid "Stored to EEPROM"
-msgstr ""
+msgstr "Сохранено в памяти"
 
 #: Data/Input/default.xci:666
 msgid "Accel"
@@ -8411,14 +8338,16 @@ msgid ""
 "Zoom\n"
 "Out"
 msgstr ""
-"Уменьшить\n"
-"\"-\""
+"Масштаб\n"
+"уменьшить"
 
 #: Data/Input/default.xci:714
 msgid ""
 "Climb\n"
 "Demo"
 msgstr ""
+"Подъем\n"
+"демо"
 
 #: Data/Input/default.xci:853
 msgid ""
@@ -8438,13 +8367,12 @@ msgid ""
 "Zoom\n"
 "In"
 msgstr ""
-"Увеличить\n"
-"\"+\""
+"Масштаб\n"
+"увеличить"
 
 #: Data/Input/default.xci:913
-#, fuzzy
 msgid "Return"
-msgstr "Готов повернуть"
+msgstr ""
 
 #: Data/Input/default.xci:303 Data/Input/default.xci:352
 #: Data/Input/default.xci:864
@@ -8470,11 +8398,10 @@ msgid ""
 msgstr "Командный Код"
 
 #: Data/Input/default.xci:506
-#, fuzzy
 msgid ""
 "MacCready\n"
 "+"
-msgstr "Маккреди "
+msgstr ""
 
 #: Data/Input/default.xci:64
 msgid "Landing"
@@ -8485,96 +8412,6 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Message location"
-#~ msgstr "Повторить сообщение"
-
-#~ msgid "Device A"
-#~ msgstr "Прибор A"
-
-#~ msgid "Device B"
-#~ msgstr "Прибор B"
-
-#~ msgid "mph"
-#~ msgstr "миль/ч"
-
-#~ msgid "km/h"
-#~ msgstr "км/час"
-
-#~ msgid "km"
-#~ msgstr "километры"
-
-#~ msgid "C"
-#~ msgstr "C"
-
-#~ msgid "F"
-#~ msgstr "F"
-
-#~ msgid "m/s"
-#~ msgstr "м/с"
-
-#~ msgid "ft/min"
-#~ msgstr "фут/мин"
-
-#~ msgid "OK to invalidate declaration?"
-#~ msgstr "Ок для аннулирования объявленной задачи"
-
-#~ msgid "Task declared"
-#~ msgstr "Упражнение объявлено"
-
-#~ msgid "Pan mode on"
-#~ msgstr "ПЕРЕМЕЩЕНИЕ НА КАРТЕ ВКЛЮЧЕНО"
-
-#~ msgid "Pan mode off"
-#~ msgstr "ПЕРЕМЕЩЕНИЕ НА КАРТЕ ВЫКЛЮЧЕНО"
-
-#~ msgid "Map Projection"
-#~ msgstr "Картографическая проекция"
-
-#~ msgid "Waypoint Display"
-#~ msgstr "Показать точку"
-
-#~ msgid "Terrain Display"
-#~ msgstr "Показать ландшафт"
-
-#~ msgid "User Interface"
-#~ msgstr "Интерфейс пользователя"
-
-#~ msgid "Start Anyway"
-#~ msgstr "Старт по-любому"
-
-#~ msgid "Debounce time"
-#~ msgstr "Время реакции"
-
-#~ msgid "Task Start"
-#~ msgstr "Старт задачи"
-
-#~ msgid "Declared"
-#~ msgstr "Заявлено"
-
-#~ msgid ""
-#~ "Nearest\n"
-#~ "Waypoint"
-#~ msgstr ""
-#~ "Ближайшая\n"
-#~ "точка"
-
-#~ msgid ""
-#~ "Simulation\r\n"
-#~ "nothing is real!"
-#~ msgstr ""
-#~ "Симулятор\r\n"
-#~ "Режим имитации полета!"
-
-#~ msgid "Height barometric"
-#~ msgstr "Высота барометрическая"
-
-#~ msgid "Locked"
-#~ msgstr "Блокир."
-
-#~ msgid "No fix"
-#~ msgstr "Нет положения"
 
 #~ msgid "Previous turnpoint"
 #~ msgstr "прошлый поворотный пункт"
@@ -8627,6 +8464,9 @@ msgstr ""
 #~ msgid "Auxiliary"
 #~ msgstr "Дополнение"
 
+#~ msgid "Task declared"
+#~ msgstr "Упражнение объявлено"
+
 #~ msgid "Next landpoint"
 #~ msgstr "Следующий посадочный пункт"
 
@@ -8643,6 +8483,16 @@ msgstr ""
 #~ msgstr "Топология включена"
 
 #~ msgid ""
+#~ "This is the barometric altitude obtained from a GPS equipped with "
+#~ "pressure sensor, or a supported external intelligent vario."
+#~ msgstr ""
+#~ "Высота полученная из GPS оснащенных барометрическими датчиками или от "
+#~ "электронного вариометра."
+
+#~ msgid "Unknown Filetype."
+#~ msgstr "Неизвестный формат файлов"
+
+#~ msgid ""
 #~ "Error occured,\n"
 #~ "Task NOT Declared!"
 #~ msgstr ""
@@ -8654,6 +8504,16 @@ msgstr ""
 
 #~ msgid "Task Declared!"
 #~ msgstr "Упражнение объявлено!"
+
+#~ msgid "OK to invalidate declaration?"
+#~ msgstr "Ок для аннулирования объявленной задачи"
+
+#~ msgid ""
+#~ "Arrival altitude at the next waypoint relative to the safety arrival "
+#~ "altitude."
+#~ msgstr ""
+#~ "Высота прибытия на следующий поворотный сотносительно с безопасной "
+#~ "высотой прибытия."
 
 #~ msgid ""
 #~ "Arrival altitude at the final task turn point relative to the safety "
@@ -8706,14 +8566,50 @@ msgstr ""
 #~ msgid "Trending Average climb"
 #~ msgstr "Тенденции среднего набора"
 
+#~ msgid "C"
+#~ msgstr "C"
+
+#~ msgid "F"
+#~ msgstr "F"
+
+#~ msgid "ft/min"
+#~ msgstr "фут/мин"
+
+#~ msgid "Terrain Display"
+#~ msgstr "Показать ландшафт"
+
 #~ msgid "System"
 #~ msgstr "Система"
+
+#~ msgid "No fix"
+#~ msgstr "Нет положения"
+
+#~ msgid "Alternate"
+#~ msgstr "Настроить"
+
+#~ msgid "Start Anyway"
+#~ msgstr "Старт по-любому"
 
 #~ msgid "Map waypoints"
 #~ msgstr "Отображение точек на карте"
 
+#~ msgid "Locked"
+#~ msgstr "Блокир."
+
+#~ msgid "Task Start"
+#~ msgstr "Старт задачи"
+
+#~ msgid "Device A"
+#~ msgstr "Прибор A"
+
+#~ msgid "Device B"
+#~ msgstr "Прибор B"
+
 #~ msgid "Volume"
 #~ msgstr "Объем"
+
+#~ msgid "Declared"
+#~ msgstr "Заявлено"
 
 #~ msgid "Set speed remaining"
 #~ msgstr "Расчетная скорость"
@@ -8724,5 +8620,21 @@ msgstr ""
 #~ msgid "Setup ..."
 #~ msgstr "Установки ..."
 
+#~ msgid "Dialog boxes"
+#~ msgstr "Диалоговые окна"
+
+#~ msgid "File type"
+#~ msgstr "Тип файла"
+
 #~ msgid "Glide terrain line"
 #~ msgstr "Отображение долета"
+
+#~ msgid "Marks cleared"
+#~ msgstr "ОЧИСТКА МЕТОК"
+
+#~ msgid ""
+#~ "Nearest\n"
+#~ "Waypoint"
+#~ msgstr ""
+#~ "Ближайшая\n"
+#~ "точка"
