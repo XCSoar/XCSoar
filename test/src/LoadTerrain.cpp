@@ -26,7 +26,7 @@ Copyright_License {
  * for valgrind and profiling.
  */
 
-#include "Terrain/RasterTile.hpp"
+#include "Terrain/RasterTileCache.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
 #include "Operation/Operation.hpp"

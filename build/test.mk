@@ -217,6 +217,7 @@ $(eval $(call link-program,TestTaskWaypoint,TEST_TASKWAYPOINT))
 TEST_TROUTE_SOURCES = \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
@@ -231,6 +232,7 @@ $(eval $(call link-program,test_troute,TEST_TROUTE))
 TEST_REACH_SOURCES = \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
@@ -245,6 +247,7 @@ $(eval $(call link-program,test_reach,TEST_REACH))
 TEST_ROUTE_SOURCES = \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
@@ -913,6 +916,7 @@ $(eval $(call link-program,LoadTopography,LOAD_TOPOGRAPHY))
 
 LOAD_TERRAIN_SOURCES = \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/OS/FileUtil.cpp \
@@ -928,6 +932,7 @@ $(eval $(call link-program,LoadTerrain,LOAD_TERRAIN))
 
 RUN_HEIGHT_MATRIX_SOURCES = \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
@@ -1415,6 +1420,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterTerrain.cpp \
 	$(SRC)/Terrain/RasterWeather.cpp \
@@ -1758,6 +1764,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterTerrain.cpp \
 	$(SRC)/Terrain/TerrainSettings.cpp \
