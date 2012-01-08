@@ -25,11 +25,13 @@ Copyright_License {
 #define NAV_DIJKSTRA_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Util/SliceAllocator.hpp"
 #include "Dijkstra.hpp"
 #include "ScanTaskPoint.hpp"
 #include "Compiler.h"
 
 #include <algorithm>
+#include <map>
 #include <assert.h>
 
 #ifdef INSTRUMENT_TASK
@@ -53,7 +55,15 @@ protected:
     MAX_STAGES = 16,
   };
 
-  Dijkstra<ScanTaskPoint> dijkstra;
+  struct DijkstraMap {
+    template<typename Value>
+    struct Bind : public std::map<ScanTaskPoint, Value,
+                                  std::less<ScanTaskPoint>,
+                                  GlobalSliceAllocator<ScanTaskPoint, 256u>> {
+    };
+  };
+
+  Dijkstra<ScanTaskPoint, DijkstraMap> dijkstra;
 
   /** Number of stages in search */
   unsigned num_stages;

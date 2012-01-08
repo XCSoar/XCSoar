@@ -24,9 +24,6 @@ Copyright_License {
 #ifndef DIJKSTRA_HPP
 #define DIJKSTRA_HPP
 
-#include "Util/SliceAllocator.hpp"
-
-#include <map>
 #include "Util/queue.hpp"
 #include <assert.h>
 #include "Compiler.h"
@@ -44,7 +41,7 @@ extern long count_dijkstra_links;
  * Modifications by John Wharington to track optimal solution
  * @see http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
  */
-template <class Node>
+template<typename Node, typename MapTemplate>
 class Dijkstra
 {
   struct Edge
@@ -56,8 +53,7 @@ class Dijkstra
     Edge(Node _parent, unsigned _value):parent(_parent), value(_value) {}
   };
 
-  typedef std::map<Node, Edge, std::less<Node>,
-                   GlobalSliceAllocator<std::pair<Node, unsigned>, 256u> > edge_map;
+  typedef typename MapTemplate::template Bind<Edge> edge_map;
   typedef typename edge_map::iterator edge_iterator;
   typedef typename edge_map::const_iterator edge_const_iterator;
 
