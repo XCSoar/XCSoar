@@ -25,6 +25,7 @@ Copyright_License {
 #include "Android/Context.hpp"
 #include "Android/NativeView.hpp"
 #include "Android/SoundUtil.hpp"
+#include "Android/Vibrator.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "Screen/Debug.hpp"
@@ -58,6 +59,7 @@ NativeView *native_view;
 EventQueue *event_queue;
 
 SoundUtil *sound_util;
+Vibrator *vibrator;
 
 #ifdef IOIOLIB
 IOIOManager *ioio_manager;
@@ -86,6 +88,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   event_queue = new EventQueue();
 
   sound_util = new SoundUtil(env);
+  vibrator = Vibrator::Create(env, *context);
 
 #ifdef IOIOLIB
   ioio_manager = new IOIOManager(env);
