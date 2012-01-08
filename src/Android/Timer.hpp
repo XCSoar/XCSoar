@@ -36,11 +36,11 @@ class AndroidTimer {
     Bridge(JNIEnv *env, jlong ptr, jint period);
 
     void install() {
-      call_void("install");
+      CallVoid("install");
     }
 
     void uninstall() {
-      call_void("uninstall");
+      CallVoid("uninstall");
     }
   };
 

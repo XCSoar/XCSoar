@@ -33,11 +33,11 @@
 char *
 Java::String::CopyTo(JNIEnv *env, char *buffer, size_t max_size)
 {
-  const char *p = env->GetStringUTFChars(get(), NULL);
+  const char *p = env->GetStringUTFChars(Get(), NULL);
   if (p == NULL)
     return NULL;
 
   char *result = CopyString(buffer, p, max_size);
-  env->ReleaseStringUTFChars(get(), p);
+  env->ReleaseStringUTFChars(Get(), p);
   return result;
 }

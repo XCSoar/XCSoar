@@ -40,7 +40,7 @@ AndroidTimer::Bridge::Bridge(JNIEnv *env, jlong ptr, jint period)
 
   jobject obj = env->NewObject(cls, cid, ptr, period);
 
-  set(env, obj);
+  Set(env, obj);
   env->DeleteLocalRef(obj);
 }
 

@@ -51,15 +51,15 @@ namespace Java {
 
     Object(JNIEnv *env, jobject obj):GlobalRef<jobject>(env, obj) {}
 
-    void call_void(JNIEnv *env, const char *name) {
-      jclass cls = env->GetObjectClass(get());
+    void CallVoid(JNIEnv *env, const char *name) {
+      jclass cls = env->GetObjectClass(Get());
       jmethodID mid = env->GetMethodID(cls, name, "()V");
-      env->CallVoidMethod(get(), mid);
+      env->CallVoidMethod(Get(), mid);
       env->DeleteLocalRef(cls);
     }
 
-    void call_void(const char *name) {
-      call_void(GetEnv(), name);
+    void CallVoid(const char *name) {
+      CallVoid(GetEnv(), name);
     }
   };
 }

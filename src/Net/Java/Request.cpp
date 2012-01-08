@@ -34,19 +34,19 @@ Net::Request::Request(Session &_session, const TCHAR *url,
   :env(Java::GetEnv())
 {
   Java::Class url_class(env, "java/net/URL");
-  jmethodID url_ctor = env->GetMethodID(url_class.get(), "<init>",
+  jmethodID url_ctor = env->GetMethodID(url_class.Get(), "<init>",
                                         "(Ljava/lang/String;)V");
   assert(url_ctor != NULL);
 
   Java::String j_url(env, url);
-  jobject url_object = env->NewObject(url_class.get(), url_ctor, j_url.get());
+  jobject url_object = env->NewObject(url_class.Get(), url_ctor, j_url.Get());
   if (env->ExceptionOccurred() || url_object == NULL) {
     env->ExceptionClear();
     input_stream = NULL;
     return;
   }
 
-  jmethodID url_open = env->GetMethodID(url_class.get(), "openConnection",
+  jmethodID url_open = env->GetMethodID(url_class.Get(), "openConnection",
                                         "()Ljava/net/URLConnection;");
   assert(url_open != NULL);
 
@@ -61,16 +61,16 @@ Net::Request::Request(Session &_session, const TCHAR *url,
 
   Java::Class connection_class(env, env->GetObjectClass(connection));
 
-  set_timeout_method = env->GetMethodID(connection_class.get(),
+  set_timeout_method = env->GetMethodID(connection_class.Get(),
                                         "setConnectTimeout", "(I)V");
   assert(set_timeout_method != NULL);
   env->CallVoidMethod(connection, set_timeout_method, (jint)timeout);
 
-  set_timeout_method = env->GetMethodID(connection_class.get(),
+  set_timeout_method = env->GetMethodID(connection_class.Get(),
                                         "setReadTimeout", "(I)V");
   assert(set_timeout_method != NULL);
 
-  jmethodID get_input_stream = env->GetMethodID(connection_class.get(),
+  jmethodID get_input_stream = env->GetMethodID(connection_class.Get(),
                                                 "getInputStream",
                                                 "()Ljava/io/InputStream;");
   assert(get_input_stream != NULL);
@@ -85,9 +85,9 @@ Net::Request::Request(Session &_session, const TCHAR *url,
   }
 
   Java::Class stream_class(env, env->GetObjectClass(input_stream));
-  read_method = env->GetMethodID(stream_class.get(), "read", "([B)I");
+  read_method = env->GetMethodID(stream_class.Get(), "read", "([B)I");
   assert(read_method != NULL);
-  close_method = env->GetMethodID(stream_class.get(), "close", "()V");
+  close_method = env->GetMethodID(stream_class.Get(), "close", "()V");
   assert(close_method != NULL);
 }
 
@@ -120,10 +120,10 @@ Net::Request::Read(void *buffer, size_t buffer_size, unsigned long timeout)
 
   Java::LocalRef<jbyteArray> array(env,
                                    (jbyteArray)env->NewByteArray(buffer_size));
-  jint nbytes = env->CallIntMethod(input_stream, read_method, array.get());
+  jint nbytes = env->CallIntMethod(input_stream, read_method, array.Get());
   if (nbytes <= 0)
     return 0;
 
-  env->GetByteArrayRegion(array.get(), 0, nbytes, (jbyte *)buffer);
+  env->GetByteArrayRegion(array.Get(), 0, nbytes, (jbyte *)buffer);
   return nbytes;
 }

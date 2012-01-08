@@ -42,7 +42,7 @@ class BluetoothHelper : protected Java::Object {
 
 public:
   ~BluetoothHelper() {
-    call_void("close");
+    CallVoid("close");
   }
 
   /**
@@ -55,19 +55,19 @@ public:
   static BluetoothHelper *connect(JNIEnv *env, const char *address);
 
   void setReadTimeout(JNIEnv *env, int timeout) {
-    env->CallVoidMethod(get(), setReadTimeout_mid, timeout);
+    env->CallVoidMethod(Get(), setReadTimeout_mid, timeout);
   }
 
   int read(JNIEnv *env) {
-    return env->CallIntMethod(get(), read_mid);
+    return env->CallIntMethod(Get(), read_mid);
   }
 
   bool write(JNIEnv *env, int ch) {
-    return env->CallBooleanMethod(get(), write_mid, ch);
+    return env->CallBooleanMethod(Get(), write_mid, ch);
   }
 
   void flush(JNIEnv *env) {
-    env->CallVoidMethod(get(), flush_mid);
+    env->CallVoidMethod(Get(), flush_mid);
   }
 };
 

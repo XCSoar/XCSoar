@@ -65,7 +65,7 @@ BluetoothHelper::connect(JNIEnv *env, const char *address)
   assert(cid != NULL);
 
   const Java::String address2(env, address);
-  jobject obj = env->CallStaticObjectMethod(cls, cid, address2.get());
+  jobject obj = env->CallStaticObjectMethod(cls, cid, address2.Get());
   if (obj == NULL)
     return NULL;
 

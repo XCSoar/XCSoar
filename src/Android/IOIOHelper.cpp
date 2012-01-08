@@ -37,7 +37,7 @@ IOIOHelper::IOIOHelper(JNIEnv *env)
   jobject obj = env->NewObject(cls, cid);
   assert(obj != NULL);
 
-  set(env, obj);
+  Set(env, obj);
 
   env->DeleteLocalRef(obj);
 

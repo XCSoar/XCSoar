@@ -37,7 +37,7 @@ TextUtil::TextUtil(jobject _obj, jclass textUtilClass)
   // get height, ascent_height and capital_height
   assert(midGetFontMetrics);
   jintArray metricsArray = env->NewIntArray(5);
-  env->CallVoidMethod(get(), midGetFontMetrics, metricsArray);
+  env->CallVoidMethod(Get(), midGetFontMetrics, metricsArray);
 
   jint metrics[5];
   env->GetIntArrayRegion(metricsArray, 0, 5, metrics);
@@ -86,7 +86,7 @@ TextUtil::create(const char *facename, int height, bool bold, bool italic)
 
   // construct org.xcsoar.TextUtil object
   localObject = env->NewObject(textUtilClass, midTextUtil,
-                               paramFamilyName.get(),
+                               paramFamilyName.Get(),
                                paramStyle, paramTextSize);
   if (!localObject)
     return NULL;
@@ -105,8 +105,8 @@ TextUtil::getTextBounds(const char *text) const
 
   Java::String text2(env, text);
   jintArray paramExtent = (jintArray)
-    env->CallObjectMethod(get(), midGetTextBounds,
-                          text2.get());
+    env->CallObjectMethod(Get(), midGetTextBounds,
+                          text2.Get());
   if (paramExtent != NULL) {
     env->GetIntArrayRegion(paramExtent, 0, 2, extent);
     env->DeleteLocalRef(paramExtent);
@@ -127,8 +127,8 @@ TextUtil::getTextTextureGL(const char *text) const
 {
   Java::String text2(env, text);
   jintArray jresult = (jintArray)
-    env->CallObjectMethod(get(), midGetTextTextureGL,
-                          text2.get());
+    env->CallObjectMethod(Get(), midGetTextTextureGL,
+                          text2.Get());
   jint result[3];
   if (jresult != NULL) {
     env->GetIntArrayRegion(jresult, 0, 3, result);

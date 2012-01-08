@@ -58,7 +58,7 @@ namespace Java {
       env->DeleteLocalRef(value);
     }
 
-    T get() const {
+    T Get() const {
       return value;
     }
 
@@ -96,13 +96,13 @@ namespace Java {
      * Sets the object, ignoring the previous value.  This is only
      * allowed once after the default constructor was used.
      */
-    void set(JNIEnv *env, T _value) {
+    void Set(JNIEnv *env, T _value) {
       assert(_value != NULL);
 
       value = (T)env->NewGlobalRef(_value);
     }
 
-    T get() const {
+    T Get() const {
       return value;
     }
 

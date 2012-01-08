@@ -55,7 +55,7 @@ namespace Java {
 
     GlobalClass(JNIEnv *env, const char *name) {
       jclass tmp = env->FindClass(name);
-      set(env, tmp);
+      Set(env, tmp);
       env->DeleteLocalRef(tmp);
     }
   };

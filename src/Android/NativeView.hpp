@@ -120,7 +120,7 @@ public:
     jintArray result2 = env->NewIntArray(3);
 
     bool success = env->CallBooleanMethod(obj, load_resource_texture_method,
-                                          name2.get(), result2);
+                                          name2.Get(), result2);
     if (success)
       env->GetIntArrayRegion(result2, 0, 3, result);
 
@@ -134,7 +134,7 @@ public:
     jintArray result2 = env->NewIntArray(3);
 
     bool success = env->CallBooleanMethod(obj, load_file_texture_method,
-                                          pathName2.get(), result2);
+                                          pathName2.Get(), result2);
     if (success)
       env->GetIntArrayRegion(result2, 0, 3, result);
 

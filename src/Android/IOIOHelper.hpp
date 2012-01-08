@@ -48,7 +48,7 @@ public:
    * @return true if connection to IOIO is established, else false
    */
   bool open(JNIEnv *env) {
-    return env->CallBooleanMethod(get(), open_mid);
+    return env->CallBooleanMethod(Get(), open_mid);
   }
 
   /**
@@ -59,7 +59,7 @@ public:
    * @param env
    */
   void close() {
-    call_void("close");
+    CallVoid("close");
   }
 
   /**
@@ -72,7 +72,7 @@ public:
    * opened.  Else false.
    */
   int openUart(JNIEnv *env, unsigned ID, unsigned baud) {
-    return env->CallIntMethod(get(), openUart_mid, ID, (int)baud);
+    return env->CallIntMethod(Get(), openUart_mid, ID, (int)baud);
   }
 
   /**
@@ -81,32 +81,32 @@ public:
    * @param ID ID of Uart (0, 1, 2, 3)
    */
   void closeUart(JNIEnv *env, unsigned ID) {
-    env->CallVoidMethod(get(), closeUart_mid, ID);
+    env->CallVoidMethod(Get(), closeUart_mid, ID);
   }
 
   unsigned setBaudRate(JNIEnv *env, unsigned ID, unsigned baud) {
-    return env->CallIntMethod(get(), setBaudRate_mid, ID, (int)baud);
+    return env->CallIntMethod(Get(), setBaudRate_mid, ID, (int)baud);
   }
 
   unsigned getBaudRate(JNIEnv *env, unsigned ID) {
-    return (unsigned)(env->CallIntMethod(get(), getBaudRate_mid, ID));
+    return (unsigned)(env->CallIntMethod(Get(), getBaudRate_mid, ID));
   }
 
   void setReadTimeout(JNIEnv *env, unsigned ID, int timeout) {
-    env->CallVoidMethod(get(), setReadTimeout_mid, ID, timeout);
+    env->CallVoidMethod(Get(), setReadTimeout_mid, ID, timeout);
   }
 
   int read(JNIEnv *env, unsigned ID) {
-    return env->CallIntMethod(get(), read_mid, ID);
+    return env->CallIntMethod(Get(), read_mid, ID);
   }
 
   bool write(JNIEnv *env, unsigned ID, int ch) {
-    env->CallVoidMethod(get(), write_mid, ID, ch);
+    env->CallVoidMethod(Get(), write_mid, ID, ch);
     return true;
   }
 
   void flush(JNIEnv *env, unsigned ID) {
-    env->CallVoidMethod(get(), flush_mid, ID);
+    env->CallVoidMethod(Get(), flush_mid, ID);
   }
 };
 

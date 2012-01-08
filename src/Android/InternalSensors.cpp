@@ -72,32 +72,32 @@ InternalSensors::~InternalSensors() {
   // Unsubscribe from sensors and the GPS.
   cancelAllSensorSubscriptions();
   JNIEnv *env = Java::GetEnv();
-  env->CallVoidMethod(obj_InternalGPS_.get(),
+  env->CallVoidMethod(obj_InternalGPS_.Get(),
                       mid_gps_setLocationProvider_, NULL);
 }
 
 bool InternalSensors::subscribeToSensor(int id) {
   JNIEnv* env = Java::GetEnv();
-  return env->CallBooleanMethod(obj_NonGPSSensors_.get(),
+  return env->CallBooleanMethod(obj_NonGPSSensors_.Get(),
                                 mid_sensors_subscribeToSensor_, (jint) id);
 }
 
 bool InternalSensors::cancelSensorSubscription(int id) {
   JNIEnv* env = Java::GetEnv();
-  return env->CallBooleanMethod(obj_NonGPSSensors_.get(),
+  return env->CallBooleanMethod(obj_NonGPSSensors_.Get(),
                                 mid_sensors_cancelSensorSubscription_,
                                 (jint) id);
 }
 
 bool InternalSensors::subscribedToSensor(int id) const {
   JNIEnv* env = Java::GetEnv();
-  return env->CallBooleanMethod(obj_NonGPSSensors_.get(),
+  return env->CallBooleanMethod(obj_NonGPSSensors_.Get(),
                                 mid_sensors_subscribedToSensor_, (jint) id);
 }
 
 void InternalSensors::cancelAllSensorSubscriptions() {
   JNIEnv* env = Java::GetEnv();
-  env->CallVoidMethod(obj_NonGPSSensors_.get(),
+  env->CallVoidMethod(obj_NonGPSSensors_.Get(),
                       mid_sensors_cancelAllSensorSubscriptions_);
 }
 
@@ -109,7 +109,7 @@ InternalSensors* InternalSensors::create(JNIEnv* env, Context* context,
       env->GetMethodID(gps_cls, "<init>", "(Landroid/content/Context;I)V");
   assert(gps_ctor_id != NULL);
   jobject gps_obj =
-      env->NewObject(gps_cls, gps_ctor_id, context->get(), index);
+      env->NewObject(gps_cls, gps_ctor_id, context->Get(), index);
   assert(gps_obj != NULL);
 
   // Construct NonGPSSensors object.
@@ -118,7 +118,7 @@ InternalSensors* InternalSensors::create(JNIEnv* env, Context* context,
       env->GetMethodID(sensors_cls, "<init>", "(Landroid/content/Context;I)V");
   assert(sensors_ctor_id != NULL);
   jobject sensors_obj =
-      env->NewObject(sensors_cls, sensors_ctor_id, context->get(), index);
+      env->NewObject(sensors_cls, sensors_ctor_id, context->Get(), index);
   assert(sensors_obj != NULL);
 
   InternalSensors *internal_sensors =
@@ -137,7 +137,7 @@ void InternalSensors::getSubscribableSensors(JNIEnv* env, jobject sensors_obj) {
   assert(mid_sensors_getSubscribableSensors != NULL);
 
   jintArray ss_arr = (jintArray) env->CallObjectMethod(
-      obj_NonGPSSensors_.get(), mid_sensors_getSubscribableSensors);
+      obj_NonGPSSensors_.Get(), mid_sensors_getSubscribableSensors);
   jsize ss_arr_size = env->GetArrayLength(ss_arr);
   jint* ss_arr_elems = env->GetIntArrayElements(ss_arr, NULL);
   subscribable_sensors_.assign(ss_arr_elems, ss_arr_elems + ss_arr_size);

@@ -88,7 +88,7 @@ getExternalStoragePublicDirectory(JNIEnv *env, const char *type)
     return NULL;
   }
 
-  jobject file = env->CallStaticObjectMethod(cls, mid, type2.get());
+  jobject file = env->CallStaticObjectMethod(cls, mid, type2.Get());
   return ToAbsolutePathChecked(env, file);
 }
 
