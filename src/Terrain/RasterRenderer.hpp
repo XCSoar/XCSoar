@@ -65,11 +65,11 @@ public:
   }
 
   unsigned GetWidth() const {
-    return height_matrix.get_width();
+    return height_matrix.GetWidth();
   }
 
   unsigned GetHeight() const {
-    return height_matrix.get_height();
+    return height_matrix.GetHeight();
   }
 
   /**

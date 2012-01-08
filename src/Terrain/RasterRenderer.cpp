@@ -117,11 +117,11 @@ RasterRenderer::GenerateImage(bool do_shading,
                               const Angle sunazimuth)
 {
   if (image == NULL ||
-      height_matrix.get_width() > image->GetWidth() ||
-      height_matrix.get_height() > image->GetHeight()) {
+      height_matrix.GetWidth() > image->GetWidth() ||
+      height_matrix.GetHeight() > image->GetHeight()) {
     delete image;
-    image = new RawBitmap(height_matrix.get_width(),
-                          height_matrix.get_height());
+    image = new RawBitmap(height_matrix.GetWidth(),
+                          height_matrix.GetHeight());
   }
 
   if (quantisation_effective == 0)
@@ -141,11 +141,11 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale)
   const BGRColor *oColorBuf = color_table + 64 * 256;
   BGRColor *dest = image->GetTopRow();
 
-  for (unsigned y = height_matrix.get_height(); y > 0; --y) {
+  for (unsigned y = height_matrix.GetHeight(); y > 0; --y) {
     BGRColor *p = dest;
     dest = image->GetNextRow(dest);
 
-    for (unsigned x = height_matrix.get_width(); x > 0; --x) {
+    for (unsigned x = height_matrix.GetWidth(); x > 0; --x) {
       short h = *src++;
       if (gcc_likely(!RasterBuffer::IsSpecial(h))) {
         if (h < 0)
@@ -181,8 +181,8 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
   PixelRect border;
   border.left = quantisation_effective;
   border.top = quantisation_effective;
-  border.right = height_matrix.get_width() - quantisation_effective;
-  border.bottom = height_matrix.get_height() - quantisation_effective;
+  border.right = height_matrix.GetWidth() - quantisation_effective;
+  border.bottom = height_matrix.GetHeight() - quantisation_effective;
 
   const unsigned height_slope_factor = max(1, (int)pixel_size);
 
@@ -200,22 +200,22 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 
   BGRColor *dest = image->GetTopRow();
 
-  for (unsigned y = 0; y < height_matrix.get_height(); ++y) {
+  for (unsigned y = 0; y < height_matrix.GetHeight(); ++y) {
     const unsigned row_plus_index = y < (unsigned)border.bottom
       ? quantisation_effective
-      : height_matrix.get_height() - 1 - y;
-    const unsigned row_plus_offset = height_matrix.get_width() * row_plus_index;
+      : height_matrix.GetHeight() - 1 - y;
+    const unsigned row_plus_offset = height_matrix.GetWidth() * row_plus_index;
 
     const unsigned row_minus_index = y >= quantisation_effective
       ? quantisation_effective : y;
-    const unsigned row_minus_offset = height_matrix.get_width() * row_minus_index;
+    const unsigned row_minus_offset = height_matrix.GetWidth() * row_minus_index;
 
     const unsigned p31 = row_plus_index + row_minus_index;
 
     BGRColor *p = dest;
     dest = image->GetNextRow(dest);
 
-    for (unsigned x = 0; x < height_matrix.get_width(); ++x, ++src) {
+    for (unsigned x = 0; x < height_matrix.GetWidth(); ++x, ++src) {
       short h = *src;
       if (gcc_likely(!RasterBuffer::IsSpecial(h))) {
         if (h < 0)
@@ -235,7 +235,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 
         const unsigned column_plus_index = x < (unsigned)border.right
           ? quantisation_effective
-          : height_matrix.get_width() - 1 - x;
+          : height_matrix.GetWidth() - 1 - x;
         const unsigned column_minus_index = x >= (unsigned)border.left
           ? quantisation_effective : x;
 
