@@ -93,19 +93,15 @@ dlgStatusShowModal(int start_page)
 
   /* setup tabs */
 
-  const DialogTabStyle_t IconsStyle =
-    CommonInterface::GetUISettings().dialog.tab_style;
+  const bool enable_icons =
+    CommonInterface::GetUISettings().dialog.tab_style
+    == DialogSettings::TabStyle::Icon;
 
-  const Bitmap *FlightIcon = ((IconsStyle == dtIcon) ?
-                              &Graphics::hBmpTabFlight : NULL);
-  const Bitmap *SystemIcon = ((IconsStyle == dtIcon) ?
-                               &Graphics::hBmpTabSystem : NULL);
-  const Bitmap *TaskIcon = ((IconsStyle == dtIcon) ?
-                              &Graphics::hBmpTabTask : NULL);
-  const Bitmap *RulesIcon = ((IconsStyle == dtIcon) ?
-                             &Graphics::hBmpTabRules : NULL);
-  const Bitmap *TimesIcon = ((IconsStyle == dtIcon) ?
-                             &Graphics::hBmpTabTimes : NULL);
+  const Bitmap *FlightIcon = enable_icons ? &Graphics::hBmpTabFlight : NULL;
+  const Bitmap *SystemIcon = enable_icons ? &Graphics::hBmpTabSystem : NULL;
+  const Bitmap *TaskIcon = enable_icons ? &Graphics::hBmpTabTask : NULL;
+  const Bitmap *RulesIcon = enable_icons ? &Graphics::hBmpTabRules : NULL;
+  const Bitmap *TimesIcon = enable_icons ? &Graphics::hBmpTabTimes : NULL;
 
   Widget *flight_panel = new FlightStatusPanel(nearest_waypoint);
   wTabBar->AddTab(flight_panel, _T("Flight"), false, FlightIcon);

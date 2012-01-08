@@ -90,8 +90,10 @@ static const StaticEnumChoice flarm_display_location_list[] = {
 };
 
 static const StaticEnumChoice tabdialog_style_list[] = {
-  { 0, N_("Text"), N_("Show text on tabbed dialogs.") },
-  { 1, N_("Icons"), N_("Show icons on tabbed dialogs.")},
+  { (unsigned)DialogSettings::TabStyle::Text, N_("Text"),
+    N_("Show text on tabbed dialogs.") },
+  { (unsigned)DialogSettings::TabStyle::Icon, N_("Icons"),
+    N_("Show icons on tabbed dialogs.")},
   { 0 }
 };
 
@@ -146,7 +148,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           flarm_display_location_list, ui_settings.flarm_location);
 
   AddEnum(_("Tab dialog style"), _T(""),
-          tabdialog_style_list, CommonInterface::GetUISettings().dialog.tab_style);
+          tabdialog_style_list, (unsigned)ui_settings.dialog.tab_style);
 
   // Expert item
   AddEnum(_("Message display"), _T(""),

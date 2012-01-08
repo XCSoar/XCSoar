@@ -263,16 +263,15 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   Widget *list_tab = new TaskListPanel(*wf, *wTabBar,
                                        &active_task, &task_modified);
 
-  const DialogTabStyle_t IconsStyle =
-    CommonInterface::GetUISettings().dialog.tab_style;
-  const Bitmap *CalcIcon = ((IconsStyle == dtIcon) ?
-                             &Graphics::hBmpTabCalculator : NULL);
-  const Bitmap *TurnPointIcon = ((IconsStyle == dtIcon) ?
-                                  &Graphics::hBmpTabTask : NULL);
-  const Bitmap *BrowseIcon = ((IconsStyle == dtIcon) ?
-                               &Graphics::hBmpTabWrench : NULL);
-  const Bitmap *PropertiesIcon = ((IconsStyle == dtIcon) ?
-                                   &Graphics::hBmpTabSettings : NULL);
+  const bool enable_icons =
+    CommonInterface::GetUISettings().dialog.tab_style
+    == DialogSettings::TabStyle::Icon;
+
+  const Bitmap *CalcIcon = enable_icons ? &Graphics::hBmpTabCalculator : NULL;
+  const Bitmap *TurnPointIcon = enable_icons ? &Graphics::hBmpTabTask : NULL;
+  const Bitmap *BrowseIcon = enable_icons ? &Graphics::hBmpTabWrench : NULL;
+  const Bitmap *PropertiesIcon = enable_icons
+    ? &Graphics::hBmpTabSettings : NULL;
 
   wTabBar->AddTab(wCalculator, _("Calculator"), false, CalcIcon);
 

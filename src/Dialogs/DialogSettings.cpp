@@ -26,6 +26,6 @@ Copyright_License {
 void
 DialogSettings::SetDefaults()
 {
-  text_input_style = tiDefault;
-  tab_style = dtText;
+  text_input_style = TextInputStyle::Default;
+  tab_style = TabStyle::Text;
 }

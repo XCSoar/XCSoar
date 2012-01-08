@@ -24,24 +24,26 @@ Copyright_License {
 #ifndef XCSOAR_DIALOG_SETTINGS_HPP
 #define XCSOAR_DIALOG_SETTINGS_HPP
 
-enum TextInputStyle_t {
-  /**
-   * Use the platform default - i.e. keyboard if the device has a
-   * pointing device.
-   */
-  tiDefault,
-  tiKeyboard,
-  tiHighScore,
-};
-
-enum DialogTabStyle_t {
-  dtText,
-  dtIcon,
-};
+#include <stdint.h>
 
 struct DialogSettings {
-  TextInputStyle_t text_input_style;
-  DialogTabStyle_t tab_style;
+  enum class TextInputStyle : uint8_t {
+    /**
+     * Use the platform default - i.e. keyboard if the device has a
+     * pointing device.
+     */
+    Default,
+    Keyboard,
+    HighScore,
+  };
+
+  enum class TabStyle : uint8_t {
+    Text,
+    Icon,
+  };
+
+  TextInputStyle text_input_style;
+  TabStyle tab_style;
 
   void SetDefaults();
 };

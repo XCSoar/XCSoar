@@ -176,16 +176,17 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
 
   static gcc_constexpr_data StaticEnumChoice text_input_list[] = {
-    { tiDefault, N_("Default") },
-    { tiKeyboard, N_("Keyboard") },
-    { tiHighScore, N_("HighScore Style") },
+    { (unsigned)DialogSettings::TextInputStyle::Default, N_("Default") },
+    { (unsigned)DialogSettings::TextInputStyle::Keyboard, N_("Keyboard") },
+    { (unsigned)DialogSettings::TextInputStyle::HighScore,
+      N_("HighScore Style") },
     { 0 }
   };
 
   // Expert item
   wp = AddEnum(_("Text input style"),
                _("Determines how the user is prompted for text input (filename, teamcode etc.)"),
-               text_input_list, settings.dialog.text_input_style);
+               text_input_list, (unsigned)settings.dialog.text_input_style);
 
   /* on-screen keyboard doesn't work without a pointing device
        (mouse or touch screen), hide the option on Altair */

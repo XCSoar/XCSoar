@@ -262,8 +262,8 @@ dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text, int width,
                       const TCHAR* caption, AllowedCharactersCallback_t accb)
 {
   switch (CommonInterface::GetUISettings().dialog.text_input_style) {
-  case tiDefault:
-  case tiKeyboard:
+  case DialogSettings::TextInputStyle::Default:
+  case DialogSettings::TextInputStyle::Keyboard:
     if (HasPointer())
       return dlgTextEntryKeyboardShowModal(parent, text, width, caption, accb);
     else {
@@ -271,9 +271,10 @@ dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text, int width,
       return true;
     }
 
-  case tiHighScore:
+  case DialogSettings::TextInputStyle::HighScore:
     dlgTextEntryHighscoreType(parent, text, width, caption);
     return true;
   }
+
   return false;
 }
