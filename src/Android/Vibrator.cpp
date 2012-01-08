@@ -21,19 +21,36 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_CONTEXT_HPP
-#define XCSOAR_ANDROID_CONTEXT_HPP
+#include "Vibrator.hpp"
+#include "Context.hpp"
+#include "Java/Class.hpp"
 
-#include "Java/Object.hpp"
+Vibrator::Vibrator(JNIEnv *env, jclass cls, jobject obj)
+  :object(env, obj),
+   cancel_method(env->GetMethodID(cls, "cancel", "()V")),
+   vibrate_method(env->GetMethodID(cls, "vibrate", "(J)V")) {}
 
-class Context : public Java::Object {
-public:
-  Context(JNIEnv *env, jobject obj):Java::Object(env, obj) {
-  }
+Vibrator *
+Vibrator::Create(JNIEnv *env, Context &context)
+{
+  jobject obj = context.GetVibrator(env);
+  if (obj == NULL)
+    return NULL;
 
-  jobject GetSystemService(JNIEnv *env, jstring name);
-  jobject GetSystemService(JNIEnv *env, const char *name);
-  jobject GetVibrator(JNIEnv *env);
-};
+  Java::Class cls(env, env->GetObjectClass(obj));
+  Vibrator *vibrator = new Vibrator(env, cls, obj);
+  env->DeleteLocalRef(obj);
+  return vibrator;
+}
 
-#endif
+void
+Vibrator::Cancel(JNIEnv *env)
+{
+  env->CallVoidMethod(object, cancel_method);
+}
+
+void
+Vibrator::Vibrate(JNIEnv *env, unsigned duration_ms)
+{
+  env->CallVoidMethod(object, vibrate_method, (jlong)duration_ms);
+}

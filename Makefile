@@ -712,6 +712,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/EventBridge.cpp \
 	$(SRC)/Android/BluetoothHelper.cpp \
 	$(SRC)/Android/Battery.cpp \
+	$(SRC)/Android/Vibrator.cpp \
+	$(SRC)/Android/Context.cpp \
 	$(SRC)/Android/Main.cpp
 ifneq ($(IOIOLIB_DIR),)
 XCSOAR_SOURCES += \

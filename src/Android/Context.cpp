@@ -21,19 +21,36 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_CONTEXT_HPP
-#define XCSOAR_ANDROID_CONTEXT_HPP
+#include "Context.hpp"
+#include "Java/Class.hpp"
+#include "Java/String.hpp"
 
-#include "Java/Object.hpp"
+jobject
+Context::GetSystemService(JNIEnv *env, jstring name)
+{
+  assert(env != NULL);
+  assert(name != NULL);
 
-class Context : public Java::Object {
-public:
-  Context(JNIEnv *env, jobject obj):Java::Object(env, obj) {
-  }
+  Java::Class cls(env, env->GetObjectClass(Get()));
+  jmethodID method = env->GetMethodID(cls, "getSystemService",
+                                      "(Ljava/lang/String;)Ljava/lang/Object;");
+  assert(method);
 
-  jobject GetSystemService(JNIEnv *env, jstring name);
-  jobject GetSystemService(JNIEnv *env, const char *name);
-  jobject GetVibrator(JNIEnv *env);
-};
+  return env->CallObjectMethod(Get(), method, name);
+}
 
-#endif
+jobject
+Context::GetSystemService(JNIEnv *env, const char *name)
+{
+  assert(env != NULL);
+  assert(name != NULL);
+
+  Java::String name2(env, name);
+  return GetSystemService(env, name2);
+}
+
+jobject
+Context::GetVibrator(JNIEnv *env)
+{
+  return GetSystemService(env, "vibrator");
+}

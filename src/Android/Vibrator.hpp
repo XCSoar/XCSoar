@@ -21,19 +21,23 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_CONTEXT_HPP
-#define XCSOAR_ANDROID_CONTEXT_HPP
+#ifndef XCSOAR_ANDROID_VIBRATOR_HPP
+#define XCSOAR_ANDROID_VIBRATOR_HPP
 
 #include "Java/Object.hpp"
 
-class Context : public Java::Object {
-public:
-  Context(JNIEnv *env, jobject obj):Java::Object(env, obj) {
-  }
+class Context;
 
-  jobject GetSystemService(JNIEnv *env, jstring name);
-  jobject GetSystemService(JNIEnv *env, const char *name);
-  jobject GetVibrator(JNIEnv *env);
+class Vibrator : Java::Object {
+  Java::Object object;
+  jmethodID cancel_method, vibrate_method;
+
+public:
+  Vibrator(JNIEnv *env, jclass cls, jobject obj);
+  static Vibrator *Create(JNIEnv *env, Context &context);
+
+  void Cancel(JNIEnv *env);
+  void Vibrate(JNIEnv *env, unsigned duration_ms);
 };
 
 #endif
