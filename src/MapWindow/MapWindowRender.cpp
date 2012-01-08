@@ -161,7 +161,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   DrawFLARMTraffic(canvas, aircraft_pos);
 
   // Finally, draw you!
-  if (Basic().connected)
+  if (Basic().location_available)
     AircraftRenderer::Draw(canvas, GetMapSettings(), look.aircraft,
                            Calculated().heading - render_projection.GetScreenAngle(),
                            aircraft_pos);
