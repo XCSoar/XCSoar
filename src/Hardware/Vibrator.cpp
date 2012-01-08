@@ -27,6 +27,8 @@ Copyright_License {
 
 #include "Android/Vibrator.hpp"
 #include "Android/Main.hpp"
+#include "Interface.hpp"
+#include "UISettings.hpp"
 
 bool
 HaveVibrator()
@@ -37,7 +39,8 @@ HaveVibrator()
 void
 VibrateShort()
 {
-  if (vibrator != NULL)
+  if (vibrator != NULL &&
+      CommonInterface::GetUISettings().haptic_feedback == UISettings::HapticFeedback::On)
     vibrator->Vibrate(Java::GetEnv(), 25);
 }
 

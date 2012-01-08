@@ -68,6 +68,8 @@ Profile::Load(UISettings &settings)
   GetEnum(szProfileAppStatusMessageAlignment, settings.popup_message_position);
   GetEnum(szProfileFlarmLocation, settings.flarm_location);
 
+  GetEnum(szProfileHapticFeedback, settings.haptic_feedback);
+
   LoadUnits(settings.units);
   Load(settings.map);
   Load(settings.info_boxes);

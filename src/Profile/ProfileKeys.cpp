@@ -172,6 +172,7 @@ const TCHAR szProfileAppGaugeVarioBallast[] = _T("AppGaugeVarioBallast");
 const TCHAR szProfileAppGaugeVarioGross[] = _T("AppGaugeVarioGross");
 const TCHAR szProfileAppStatusMessageAlignment[] = _T("AppStatusMessageAlignment");
 const TCHAR szProfileAppTextInputStyle[] = _T("AppTextInputStyle");
+const TCHAR szProfileHapticFeedback[] = _T("HapticFeedback");
 const TCHAR szProfileAppDialogTabStyle[] = _T("AppDialogTabStyle");
 const TCHAR szProfileAppDialogStyle[] = _T("AppDialogStyle");
 const TCHAR szProfileAppInfoBoxColors[] = _T("AppInfoBoxColors");

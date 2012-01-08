@@ -39,6 +39,8 @@ UISettings::SetDefaults()
   popup_message_position = smAlignCenter;
   flarm_location = flAuto;
 
+  haptic_feedback = HapticFeedback::Default;
+
   units.SetDefaults();
   map.SetDefaults();
   info_boxes.SetDefaults();

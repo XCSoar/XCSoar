@@ -42,6 +42,7 @@ Copyright_License {
 #include "ConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
+#include "Hardware/Vibrator.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -55,7 +56,8 @@ enum ControlIndex {
 #endif
   StatusFile,
   MenuTimeout,
-  TextInput
+  TextInput,
+  HapticFeedback
 };
 
 class InterfaceConfigPanel : public RowFormWidget {
@@ -191,6 +193,21 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   /* on-screen keyboard doesn't work without a pointing device
        (mouse or touch screen), hide the option on Altair */
   wp->set_visible(HasPointer());
+
+
+#ifdef HAVE_VIBRATOR
+  static gcc_constexpr_data StaticEnumChoice haptic_feedback_list[] = {
+    { (unsigned) UISettings::HapticFeedback::Default, N_("OS settings") },
+    { (unsigned) UISettings::HapticFeedback::Off, N_("Off") },
+    { (unsigned) UISettings::HapticFeedback::On, N_("On") },
+    { 0 }
+  };
+
+  // Expert item
+  wp = AddEnum(_("Haptic feedback"),
+               _("Determines if haptic feedback like vibration is used."),
+               haptic_feedback_list, (unsigned)settings.haptic_feedback);
+#endif /* HAVE_VIBRATOR */
 }
 
 bool
@@ -261,6 +278,10 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   if (HasPointer())
     changed |= SaveValueEnum(TextInput, szProfileAppTextInputStyle, settings.dialog.text_input_style);
+
+#ifdef HAVE_VIBRATOR
+  changed |= SaveValueEnum(HapticFeedback, szProfileHapticFeedback, settings.haptic_feedback);
+#endif
 
   _changed |= changed;
   _require_restart |= require_restart;

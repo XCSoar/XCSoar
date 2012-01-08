@@ -115,6 +115,7 @@ extern const TCHAR szProfileAppGaugeVarioBallast[];
 extern const TCHAR szProfileAppGaugeVarioGross[];
 extern const TCHAR szProfileAppStatusMessageAlignment[];
 extern const TCHAR szProfileAppTextInputStyle[];
+extern const TCHAR szProfileHapticFeedback[];
 extern const TCHAR szProfileAppDialogTabStyle[];
 extern const TCHAR szProfileAppDialogStyle[];
 extern const TCHAR szProfileAppInfoBoxBorder[];

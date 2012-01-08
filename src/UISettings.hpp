@@ -68,6 +68,13 @@ struct UISettings {
     flCentreBottom,
   } flarm_location;
 
+  /** Haptic feedback settings */
+  enum HapticFeedback {
+    Default,
+    Off,
+    On,
+  } haptic_feedback;
+
   UnitSetting units;
   MapSettings map;
   InfoBoxSettings info_boxes;
