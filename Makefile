@@ -536,6 +536,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Asset.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Hardware/DisplayGlue.cpp \
+	$(SRC)/Hardware/Vibrator.cpp \
 	$(SRC)/Language/MOFile.cpp \
 	$(SRC)/Language/Language.cpp \
 	$(SRC)/Language/LanguageGlue.cpp \
