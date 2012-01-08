@@ -71,21 +71,24 @@ OrderedTaskFactoryDescription(TaskBehaviour::FactoryType type)
 {
   switch(type) {
   case TaskBehaviour::FACTORY_RT:
-    return _("Racing task around turn points.  Can also be used for FAI badge and record tasks.  Allows all shapes of observation zones.");
+    return _("Racing task around turn points.  Can also be used for FAI badge and record tasks.  "
+        "Allows all shapes of observation zones.");
   case TaskBehaviour::FACTORY_FAI_GENERAL:
-    return _("FAI rules, allows only FAI start, finish and turn point types, for badges and records.  Enables FAI finish height for final glide calculation");
+    return _("FAI rules, allows only FAI start, finish and turn point types, for badges and "
+        "records.  Enables FAI finish height for final glide calculation.");
   case TaskBehaviour::FACTORY_FAI_TRIANGLE:
-    return _("FAI rules, path from a start to two turn points and return");
+    return _("FAI rules, path from a start to two turn points and return.");
   case TaskBehaviour::FACTORY_FAI_OR:
-    return _("FAI rules, path from start to a single turn point and return");
+    return _("FAI rules, path from start to a single turn point and return.");
   case TaskBehaviour::FACTORY_FAI_GOAL:
-    return _("FAI rules, path from start to a goal destination");
+    return _("FAI rules, path from start to a goal destination.");
   case TaskBehaviour::FACTORY_AAT:
-    return _("Task through assigned areas, minimum task time applies.  Restricted to cylinder and sector observation zones.");
+    return _("Task through assigned areas, minimum task time applies.  Restricted to cylinder "
+        "and sector observation zones.");
   case TaskBehaviour::FACTORY_MIXED:
-    return _("Racing task with a mix of assigned areas and turn points, minimum task time applies");
+    return _("Racing task with a mix of assigned areas and turn points, minimum task time applies.");
   case TaskBehaviour::FACTORY_TOURING:
-    return _("Casual touring task, uses start and finish cylinders and FAI sector turn points");
+    return _("Casual touring task, uses start and finish cylinders and FAI sector turn points.");
   default:
     assert(1);
   }
@@ -274,35 +277,41 @@ OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type)
 {
   switch (type) {
   case AbstractTaskFactory::START_SECTOR:
-    return _("A 90 degree sector with 1km radius. Cross corner edge from inside area to start");
+    return _("A 90 degree sector with 1km radius. Cross corner edge from inside area to start.");
   case AbstractTaskFactory::START_LINE:
-    return _("A straight line start gate.  Cross start gate from inside area to start");
+    return _("A straight line start gate.  Cross start gate from inside area to start.");
   case AbstractTaskFactory::START_CYLINDER:
-    return _("A cylinder.  Exit area to start");
+    return _("A cylinder.  Exit area to start.");
   case AbstractTaskFactory::START_BGA:
-    return _("A 180 degree sector with 5km radius.  Exit area in any direction to start");
+    return _("A 180 degree sector with 5km radius.  Exit area in any direction to start.");
   case AbstractTaskFactory::FAI_SECTOR:
-    return _("A 90 degree sector with 'infinite' length sides.  Cross any edge, scored from corner point");
+    return _("A 90 degree sector with 'infinite' length sides.  Cross any edge, scored from "
+        "corner point.");
   case AbstractTaskFactory::AST_CYLINDER:
-    return _("A cylinder.  Any point within area scored from center");
+    return _("A cylinder.  Any point within area scored from center.");
   case AbstractTaskFactory::KEYHOLE_SECTOR:
-    return _("(German rules) Any point within 1/2 km of center or 10km of a 90 degree sector.  Scored from center");
+    return _("(German rules) Any point within 1/2 km of center or 10km of a 90 degree sector.  "
+        "Scored from center.");
   case AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR:
-    return _("(British rules) Any point within 1/2 km of center or 20km of a 90 degree sector.  Scored from center");
+    return _("(British rules) Any point within 1/2 km of center or 20km of a 90 degree sector.  "
+        "Scored from center.");
   case AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR:
-    return _("(British rules) Any point within 1/2 km of center or 10km of a 180 degree sector.  Scored from center");
+    return _("(British rules) Any point within 1/2 km of center or 10km of a 180 degree sector.  "
+        "Scored from center.");
   case AbstractTaskFactory::AAT_CYLINDER:
-    return _("A cylinder.  Scored by farthest point reached in area");
+    return _("A cylinder.  Scored by farthest point reached in area.");
   case AbstractTaskFactory::AAT_SEGMENT:
-    return _("A sector that can vary in angle and radius.  Scored by farthest point reached inside area");
+    return _("A sector that can vary in angle and radius.  Scored by farthest point reached "
+        "inside area.");
   case AbstractTaskFactory::AAT_ANNULAR_SECTOR:
-    return _("A sector that can vary in angle, inner and outer radius.  Scored by farthest point reached inside area");
+    return _("A sector that can vary in angle, inner and outer radius.  Scored by farthest point "
+        "reached inside area.");
   case AbstractTaskFactory::FINISH_SECTOR:
-    return _("A 90 degree sector with 1km radius.  Cross edge to finish");
+    return _("A 90 degree sector with 1km radius.  Cross edge to finish.");
   case AbstractTaskFactory::FINISH_LINE:
-    return _("Cross finish gate line into area to finish");
+    return _("Cross finish gate line into area to finish.");
   case AbstractTaskFactory::FINISH_CYLINDER:
-    return _("Enter cylinder to finish");
+    return _("Enter cylinder to finish.");
   default:
     assert(1);
   }

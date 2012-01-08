@@ -77,7 +77,7 @@ OnFinishType(DataField *Sender, DataField::DataAccessKind_t Mode)
   instance->SetFinishLabel();
 }
 
-static const TCHAR *Caption_GateWidth = N_("Gate Width");
+static const TCHAR *Caption_GateWidth = N_("Gate width");
 static const TCHAR *Caption_Radius = N_("Radius");
 void
 TaskDefaultsConfigPanel::SetStartLabel()
@@ -85,9 +85,9 @@ TaskDefaultsConfigPanel::SetStartLabel()
   WndProperty &wp = GetControl(StartRadius);
 
   if (GetValueInteger(StartType) == AbstractTaskFactory::START_LINE)
-    wp.SetCaption(Caption_GateWidth);
+    wp.SetCaption(gettext(Caption_GateWidth));
   else
-    wp.SetCaption(Caption_Radius);
+    wp.SetCaption(gettext(Caption_Radius));
 }
 
 void
@@ -96,9 +96,9 @@ TaskDefaultsConfigPanel::SetFinishLabel()
   WndProperty &wp = GetControl(FinishRadius);
 
   if (GetValueInteger(FinishType) == AbstractTaskFactory::FINISH_LINE)
-    wp.SetCaption(Caption_GateWidth);
+    wp.SetCaption(gettext(Caption_GateWidth));
   else
-    wp.SetCaption(Caption_Radius);
+    wp.SetCaption(gettext(Caption_Radius));
 }
 
 

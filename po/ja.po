@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-07 21:05+0100\n"
+"POT-Creation-Date: 2012-01-08 01:25+0100\n"
 "PO-Revision-Date: 2011-12-20 19:55+0100\n"
 "Last-Translator: Masahiro Mori <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -24,8 +24,7 @@ msgstr ""
 #: src/Input/InputEventsSettings.cpp:315 src/Dialogs/dlgAnalysis.cpp:347
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:158
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:75
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:38
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:38
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:187
 #: Data/Input/default.xci:311 Data/Input/default.xci:360
 #: Data/Input/default.xci:957 Data/Input/default.xci:995
 #, no-c-format
@@ -3426,7 +3425,7 @@ msgstr ""
 
 #. valid but unknown number of sats
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:63
-#: src/Dialogs/dlgTaskHelpers.cpp:111
+#: src/Dialogs/dlgTaskHelpers.cpp:114
 msgid "Unknown"
 msgstr ""
 
@@ -4478,7 +4477,7 @@ msgid "Disables the reach display."
 msgstr "空域"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:149
-#: src/Dialogs/dlgTaskHelpers.cpp:243
+#: src/Dialogs/dlgTaskHelpers.cpp:246
 #, no-c-format
 msgid "Line"
 msgstr ""
@@ -5022,6 +5021,81 @@ msgid ""
 "Contest. The implementation  conforms to the official release 2010, Sept.23."
 msgstr ""
 
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:80
+#, no-c-format
+msgid "Gate width"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:81
+#: src/Dialogs/dlgTaskHelpers.cpp:240 src/Dialogs/dlgTaskHelpers.cpp:252
+#: Data/Dialogs/dlgTaskPoint_L.xml:29 Data/Dialogs/dlgTaskPoint_L.xml:35
+#: Data/Dialogs/dlgTaskPoint.xml:25 Data/Dialogs/dlgTaskPoint.xml:31
+#, no-c-format
+msgid "Radius"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:117
+#: Data/Dialogs/pnlStatusRules.xml:7
+msgid "Start point"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:117
+msgid "Default start type for new tasks you create."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:134
+msgid "Default radius or gate width of the start zone for new tasks."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:140
+#, fuzzy
+msgid "Finish point"
+msgstr "フィニッシュ旋回点"
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:140
+msgid "Default finish type for new tasks you create."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:157
+msgid "Default radius or gate width of the finish zone in new tasks."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:163
+#, fuzzy
+msgid "Turn point"
+msgstr "旋回点"
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:163
+msgid "Default turn point type for new tasks you create."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:181
+msgid "Default radius of turnpoint cylinders and sectors in new tasks."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:187
+msgid "Default task type for new tasks you create."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:204
+#: Data/Dialogs/pnlTaskProperties_L.xml:7 Data/Dialogs/pnlTaskProperties.xml:6
+msgid "AAT min. time"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:204
+msgid "Default AAT min. time for new AAT tasks."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:208
+msgid "Optimisation margin"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:209
+msgid ""
+"Safety margin for AAT task optimisation.  Optimisation seeks to complete the "
+"task at the minimum time plus this margin time."
+msgstr ""
+
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:202
 msgid "Sun"
 msgstr "太陽"
@@ -5457,7 +5531,7 @@ msgstr ""
 msgid "FAI badges/records"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:52 src/Dialogs/dlgTaskHelpers.cpp:133
+#: src/Dialogs/dlgTaskHelpers.cpp:52 src/Dialogs/dlgTaskHelpers.cpp:136
 msgid "FAI triangle"
 msgstr ""
 
@@ -5487,305 +5561,298 @@ msgid ""
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:76
+#: src/Dialogs/dlgTaskHelpers.cpp:77
 msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
-"and records.  Enables FAI finish height for final glide calculation"
-msgstr ""
-
-#: src/Dialogs/dlgTaskHelpers.cpp:78
-msgid "FAI rules, path from a start to two turn points and return"
+"and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:80
-msgid "FAI rules, path from start to a single turn point and return"
+msgid "FAI rules, path from a start to two turn points and return."
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:82
-msgid "FAI rules, path from start to a goal destination"
+msgid "FAI rules, path from start to a single turn point and return."
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:84
+msgid "FAI rules, path from start to a goal destination."
+msgstr ""
+
+#: src/Dialogs/dlgTaskHelpers.cpp:86
 msgid ""
 "Task through assigned areas, minimum task time applies.  Restricted to "
 "cylinder and sector observation zones."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:86
+#: src/Dialogs/dlgTaskHelpers.cpp:89
 msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
-"applies"
+"applies."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:88
+#: src/Dialogs/dlgTaskHelpers.cpp:91
 msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
-"points"
+"points."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:115
+#: src/Dialogs/dlgTaskHelpers.cpp:118
 msgid "Goal"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:122
+#: src/Dialogs/dlgTaskHelpers.cpp:125
 msgid "Out and return"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:126
+#: src/Dialogs/dlgTaskHelpers.cpp:129
 msgid "Two legs"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:131
+#: src/Dialogs/dlgTaskHelpers.cpp:134
 msgid "Three legs"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:137
+#: src/Dialogs/dlgTaskHelpers.cpp:140
 msgid "non-FAI triangle"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:141
+#: src/Dialogs/dlgTaskHelpers.cpp:144
 #, c-format
 msgid "%d legs"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:172
+#: src/Dialogs/dlgTaskHelpers.cpp:175
 #, c-format
 msgid "Task is empty (%s)"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:182
+#: src/Dialogs/dlgTaskHelpers.cpp:185
 msgid "max."
 msgstr "最大"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:186
+#: src/Dialogs/dlgTaskHelpers.cpp:189
 msgid "min."
 msgstr "最小"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:194
+#: src/Dialogs/dlgTaskHelpers.cpp:197
 msgid "dist."
 msgstr "距離"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:232 src/Dialogs/dlgTaskHelpers.cpp:325
+#: src/Dialogs/dlgTaskHelpers.cpp:235 src/Dialogs/dlgTaskHelpers.cpp:334
 msgid "FAI quadrant"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:237
+#: src/Dialogs/dlgTaskHelpers.cpp:240
 msgid "Sector"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:237 src/Dialogs/dlgTaskHelpers.cpp:249
-#: Data/Dialogs/dlgTaskPoint_L.xml:29 Data/Dialogs/dlgTaskPoint_L.xml:35
-#: Data/Dialogs/dlgTaskPoint.xml:25 Data/Dialogs/dlgTaskPoint.xml:31
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:31
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:31
-msgid "Radius"
-msgstr ""
-
-#: src/Dialogs/dlgTaskHelpers.cpp:243 Data/Dialogs/dlgTaskPoint_L.xml:23
+#: src/Dialogs/dlgTaskHelpers.cpp:246 Data/Dialogs/dlgTaskPoint_L.xml:23
 #: Data/Dialogs/dlgTaskPoint.xml:19
 msgid "Gate Width"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:249
+#: src/Dialogs/dlgTaskHelpers.cpp:252
 msgid "Cylinder"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:255
+#: src/Dialogs/dlgTaskHelpers.cpp:258
 msgid "DAeC Keyhole"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:259
+#: src/Dialogs/dlgTaskHelpers.cpp:262
 msgid "BGA Fixed Course"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:263
+#: src/Dialogs/dlgTaskHelpers.cpp:266
 msgid "BGA Enhanced Option"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:267
+#: src/Dialogs/dlgTaskHelpers.cpp:270
 msgid "BGA Start Sector"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:277
+#: src/Dialogs/dlgTaskHelpers.cpp:280
 msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
-"start"
+"start."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:279
-msgid "A straight line start gate.  Cross start gate from inside area to start"
-msgstr ""
-
-#: src/Dialogs/dlgTaskHelpers.cpp:281
-msgid "A cylinder.  Exit area to start"
-msgstr ""
-
-#: src/Dialogs/dlgTaskHelpers.cpp:283
+#: src/Dialogs/dlgTaskHelpers.cpp:282
 msgid ""
-"A 180 degree sector with 5km radius.  Exit area in any direction to start"
+"A straight line start gate.  Cross start gate from inside area to start."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:285
+#: src/Dialogs/dlgTaskHelpers.cpp:284
+msgid "A cylinder.  Exit area to start."
+msgstr ""
+
+#: src/Dialogs/dlgTaskHelpers.cpp:286
+msgid ""
+"A 180 degree sector with 5km radius.  Exit area in any direction to start."
+msgstr ""
+
+#: src/Dialogs/dlgTaskHelpers.cpp:288
 msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
-"from corner point"
-msgstr ""
-
-#: src/Dialogs/dlgTaskHelpers.cpp:287
-msgid "A cylinder.  Any point within area scored from center"
-msgstr ""
-
-#: src/Dialogs/dlgTaskHelpers.cpp:289
-msgid ""
-"(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
-"sector.  Scored from center"
+"from corner point."
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:291
-msgid ""
-"(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
-"sector.  Scored from center"
+msgid "A cylinder.  Any point within area scored from center."
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:293
 msgid ""
-"(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
-"sector.  Scored from center"
+"(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
+"sector.  Scored from center."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:295
-msgid "A cylinder.  Scored by farthest point reached in area"
-msgstr ""
-
-#: src/Dialogs/dlgTaskHelpers.cpp:297
+#: src/Dialogs/dlgTaskHelpers.cpp:296
 msgid ""
-"A sector that can vary in angle and radius.  Scored by farthest point "
-"reached inside area"
+"(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
+"sector.  Scored from center."
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:299
 msgid ""
+"(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
+"sector.  Scored from center."
+msgstr ""
+
+#: src/Dialogs/dlgTaskHelpers.cpp:302
+msgid "A cylinder.  Scored by farthest point reached in area."
+msgstr ""
+
+#: src/Dialogs/dlgTaskHelpers.cpp:304
+msgid ""
+"A sector that can vary in angle and radius.  Scored by farthest point "
+"reached inside area."
+msgstr ""
+
+#: src/Dialogs/dlgTaskHelpers.cpp:307
+msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
-"point reached inside area"
+"point reached inside area."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:301
-msgid "A 90 degree sector with 1km radius.  Cross edge to finish"
+#: src/Dialogs/dlgTaskHelpers.cpp:310
+msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:303
-msgid "Cross finish gate line into area to finish"
+#: src/Dialogs/dlgTaskHelpers.cpp:312
+msgid "Cross finish gate line into area to finish."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:305
-msgid "Enter cylinder to finish"
+#: src/Dialogs/dlgTaskHelpers.cpp:314
+msgid "Enter cylinder to finish."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:317
+#: src/Dialogs/dlgTaskHelpers.cpp:326
 msgid "FAI start quadrant"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:319
+#: src/Dialogs/dlgTaskHelpers.cpp:328
 msgid "Start line"
 msgstr "スタート ライン"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:321
+#: src/Dialogs/dlgTaskHelpers.cpp:330
 msgid "Start cylinder"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:323
+#: src/Dialogs/dlgTaskHelpers.cpp:332
 msgid "BGA start sector"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:327
+#: src/Dialogs/dlgTaskHelpers.cpp:336
 msgid "Keyhole sector (DAeC)"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:329
+#: src/Dialogs/dlgTaskHelpers.cpp:338
 msgid "BGA Fixed Course sector"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:331
+#: src/Dialogs/dlgTaskHelpers.cpp:340
 msgid "BGA Enhanced Option Fixed Course sector"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:333
+#: src/Dialogs/dlgTaskHelpers.cpp:342
 msgid "Turn point cylinder"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:335
+#: src/Dialogs/dlgTaskHelpers.cpp:344
 msgid "Area cylinder"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:337
+#: src/Dialogs/dlgTaskHelpers.cpp:346
 msgid "Area sector"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:339
+#: src/Dialogs/dlgTaskHelpers.cpp:348
 msgid "Area sector with inner radius"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:341
+#: src/Dialogs/dlgTaskHelpers.cpp:350
 msgid "FAI finish quadrant"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:343
+#: src/Dialogs/dlgTaskHelpers.cpp:352
 msgid "Finish line"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:345
+#: src/Dialogs/dlgTaskHelpers.cpp:354
 msgid "Finish cylinder"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:358
+#: src/Dialogs/dlgTaskHelpers.cpp:367
 msgid "Save task?"
 msgstr "タスクを保存しますか？"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:358
+#: src/Dialogs/dlgTaskHelpers.cpp:367
 msgid "Task Selection"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:394
+#: src/Dialogs/dlgTaskHelpers.cpp:403
 msgid "No valid start.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:397
+#: src/Dialogs/dlgTaskHelpers.cpp:406
 msgid "No valid finish.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:400
+#: src/Dialogs/dlgTaskHelpers.cpp:409
 msgid "Task not closed.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:403
+#: src/Dialogs/dlgTaskHelpers.cpp:412
 msgid "All turnpoints not the same type.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:406
+#: src/Dialogs/dlgTaskHelpers.cpp:415
 msgid "Incorrect number of turnpoints.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:409
+#: src/Dialogs/dlgTaskHelpers.cpp:418
 msgid "Too many turnpoints.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:412
+#: src/Dialogs/dlgTaskHelpers.cpp:421
 msgid "Not enough turnpoints.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:415
+#: src/Dialogs/dlgTaskHelpers.cpp:424
 msgid "Turnpoints not unique.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:418
+#: src/Dialogs/dlgTaskHelpers.cpp:427
 msgid "Invalid FAI triangle shape.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:421
+#: src/Dialogs/dlgTaskHelpers.cpp:430
 msgid "Empty task.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:424
+#: src/Dialogs/dlgTaskHelpers.cpp:433
 msgid "non-FAI turn points"
 msgstr ""
 
@@ -6060,11 +6127,6 @@ msgstr ""
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:18
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:18
 msgid "Polar W"
-msgstr ""
-
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:5
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:5
-msgid "Default start type for new tasks you create."
 msgstr ""
 
 #: Data/Dialogs/dlgWindSettings.xml:4
@@ -6741,19 +6803,8 @@ msgstr ""
 msgid "PDA power"
 msgstr ""
 
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:46
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:46
-msgid "Optimisation margin"
-msgstr ""
-
 #: Data/Dialogs/dlgVario_L.xml:396 Data/Dialogs/dlgVario.xml:397
 msgid "VNE"
-msgstr ""
-
-#: Data/Dialogs/pnlStatusRules.xml:7
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:5
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:5
-msgid "Start point"
 msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:76 Data/Dialogs/dlgVario.xml:77
@@ -6900,12 +6951,6 @@ msgstr ""
 msgid "Range"
 msgstr ""
 
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:16
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:16
-#, fuzzy
-msgid "Finish point"
-msgstr "フィニッシュ旋回点"
-
 #: Data/Dialogs/dlgTeamCode_L.xml:18 Data/Dialogs/dlgTeamCode.xml:17
 msgid "Rel. bearing"
 msgstr ""
@@ -6932,13 +6977,6 @@ msgstr "XCSoar"
 #: Data/Dialogs/Configuration/UnitsConfigPanel.xml:22
 msgid "Units used for altitude and heights."
 msgstr "高度および高さの単位"
-
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:46
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:46
-msgid ""
-"Safety margin for AAT task optimisation.  Optimisation seeks to complete the "
-"task at the minimum time plus this margin time."
-msgstr ""
 
 #: Data/Dialogs/dlgStatusTask.xml:6 Data/Dialogs/pnlStatusTask.xml:6
 msgid "Remaining time"
@@ -7217,11 +7255,6 @@ msgstr ""
 msgid "Radio com. max. delay"
 msgstr ""
 
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:31
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:31
-msgid "Default radius of turnpoint cylinders and sectors in new tasks."
-msgstr ""
-
 #: Data/Dialogs/dlgTaskPoint_L.xml:35 Data/Dialogs/dlgTaskPoint.xml:31
 msgid "Radius of the OZ sector."
 msgstr ""
@@ -7318,11 +7351,6 @@ msgid ""
 "mountains."
 msgstr ""
 
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:42
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:42
-msgid "Default AAT min. time for new AAT tasks."
-msgstr ""
-
 #: Data/Dialogs/dlgVario.xml:51
 msgid "TE probe cal."
 msgstr ""
@@ -7395,11 +7423,6 @@ msgstr ""
 msgid "FLARM connected"
 msgstr "FLARMが接続されました"
 
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:27
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:27
-msgid "Default turn point type for new tasks you create."
-msgstr ""
-
 #: Data/Dialogs/dlgStatusTask.xml:4 Data/Dialogs/pnlStatusTask.xml:4
 #: Data/Dialogs/pnlTaskCalculator_L.xml:10
 msgid "Assigned task time"
@@ -7446,11 +7469,6 @@ msgstr "ウェイポイント"
 #: Data/Dialogs/dlgVario_L.xml:430 Data/Dialogs/dlgVario.xml:431
 msgid "Cambridge"
 msgstr "ケンブリッジ"
-
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:9
-msgid "Default radius or gate width of the start zone for new tasks."
-msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:31
 msgid "Repeat"
@@ -7581,11 +7599,6 @@ msgstr ""
 msgid "Bold"
 msgstr "太字"
 
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:16
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:16
-msgid "Default finish type for new tasks you create."
-msgstr ""
-
 #: Data/Dialogs/dlgAirspace_L.xml:5 Data/Dialogs/dlgAirspace.xml:5
 msgid "Lookup"
 msgstr ""
@@ -7674,11 +7687,6 @@ msgstr "最高気温"
 
 #: Data/Dialogs/dlgTarget_L.xml:18 Data/Dialogs/dlgTarget.xml:25
 msgid "Radial"
-msgstr ""
-
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:20
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:20
-msgid "Default radius or gate width of the finish zone in new tasks."
 msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:134 Data/Dialogs/dlgVario.xml:135
@@ -7787,12 +7795,6 @@ msgstr ""
 msgid "Base frequency"
 msgstr ""
 
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:27
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:27
-#, fuzzy
-msgid "Turn point"
-msgstr "旋回点"
-
 #: Data/Dialogs/dlgTaskPointType_L.xml:3 Data/Dialogs/dlgTaskPointType.xml:3
 msgid "Task Point Type"
 msgstr ""
@@ -7866,11 +7868,6 @@ msgstr ""
 
 #: Data/Dialogs/pnlTaskCalculator.xml:14
 msgid "Est. task time"
-msgstr ""
-
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:38
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:38
-msgid "Default task type for new tasks you create."
 msgstr ""
 
 #: Data/Dialogs/dlgNOAAList_L.xml:8 Data/Dialogs/dlgNOAAList.xml:6
@@ -7966,12 +7963,6 @@ msgstr ""
 msgid "Height terrain"
 msgstr ""
 
-#: Data/Dialogs/pnlTaskProperties_L.xml:7 Data/Dialogs/pnlTaskProperties.xml:6
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:42
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:42
-msgid "AAT min. time"
-msgstr ""
-
 #: Data/Dialogs/dlgTeamCode_L.xml:11 Data/Dialogs/dlgTeamCode.xml:10
 msgid "Mate code"
 msgstr ""
@@ -8010,14 +8001,6 @@ msgstr "緯度"
 #: Data/Dialogs/pnlStatusRules.xml:4
 msgid "Valid start"
 msgstr ""
-
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:9
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel_L.xml:20
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:9
-#: Data/Dialogs/Configuration/TaskDefaultsConfigPanel.xml:20
-#, fuzzy
-msgid "Length/Radius"
-msgstr "距離"
 
 #: Data/Dialogs/dlgVario_L.xml:374 Data/Dialogs/dlgVario.xml:375
 msgid "Interval; gear"
@@ -8335,6 +8318,10 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Length/Radius"
+#~ msgstr "距離"
 
 #, fuzzy
 #~ msgid "FLARM location"
