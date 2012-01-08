@@ -27,7 +27,7 @@ Copyright_License {
 void
 DockWindow::SetWidget(Widget *_widget)
 {
-  assert(defined());
+  assert(IsDefined());
 
   DeleteWidget();
 

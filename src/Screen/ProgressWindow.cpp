@@ -136,11 +136,11 @@ ProgressWindow::OnResize(UPixelScalar width, UPixelScalar height)
   UPixelScalar progress_horizontal_border = progress_height / 2;
   progress_border_height = progress_height * 2;
 
-  if (message.defined())
+  if (message.IsDefined())
     message.move(0, height - progress_border_height - text_height - (height/48),
                  width, text_height);
 
-  if (progress_bar.defined())
+  if (progress_bar.IsDefined())
     progress_bar.move(progress_horizontal_border,
                       height - progress_border_height + progress_horizontal_border,
                       width - progress_height,

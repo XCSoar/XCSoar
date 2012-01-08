@@ -216,7 +216,7 @@ XCSoarInterface::Startup()
   main_window.set(szTitle,
                   WindowSize.left, WindowSize.top,
                   WindowSize.right, WindowSize.bottom);
-  if (!main_window.defined())
+  if (!main_window.IsDefined())
     return false;
 
   main_window.Initialise();

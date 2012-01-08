@@ -143,7 +143,7 @@ WndForm::UpdateLayout()
   client_rect = rc;
   client_rect.top = title_rect.bottom;
 
-  if (client_area.defined())
+  if (client_area.IsDefined())
     client_area.move(client_rect.left, client_rect.top,
                      client_rect.right - client_rect.left,
                      client_rect.bottom - client_rect.top);
@@ -369,7 +369,7 @@ WndForm::ShowModal()
 
 #define OPENCLOSESUPPRESSTIME 500
 #ifndef USE_GDI
-  ContainerWindow *root = get_root_owner();
+  ContainerWindow *root = GetRootOwner();
   WindowReference old_focus_reference = root->GetFocusedWindowReference();
 #else
   HWND oldFocusHwnd;

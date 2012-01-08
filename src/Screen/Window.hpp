@@ -291,7 +291,7 @@ protected:
 #endif
 
 public:
-  bool defined() const {
+  bool IsDefined() const {
 #ifndef USE_GDI
     return width > 0;
 #else
@@ -382,7 +382,7 @@ public:
    * probably a pointer to the #MainWindow instance.
    */
   gcc_pure
-  ContainerWindow *get_root_owner();
+  ContainerWindow *GetRootOwner();
 
   void move(PixelScalar left, PixelScalar top) {
     assert_none_locked();

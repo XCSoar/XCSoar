@@ -196,7 +196,7 @@ WndProperty::BeginEditing()
        it exists */
     OnHelp();
   } else if (mDataField != NULL && mDataField->SupportCombo) {
-    SingleWindow *root = (SingleWindow *)get_root_owner();
+    SingleWindow *root = (SingleWindow *)GetRootOwner();
 
     /* if this asserton fails, then there no valid root window could
        be found - maybe it didn't register its wndproc? */
@@ -211,7 +211,7 @@ WndProperty::BeginEditing()
       return;
 
     StaticString<EDITSTRINGSIZE> buffer(value);
-    if (!TextEntryDialog(*(SingleWindow *)get_root_owner(), buffer,
+    if (!TextEntryDialog(*(SingleWindow *)GetRootOwner(), buffer,
                          GetCaption()))
       return;
 
@@ -237,7 +237,7 @@ WndProperty::UpdateLayout()
     mEditPos.y = size.cy / 2 - 2 * (DEFAULTBORDERPENWIDTH + 1);
   }
 
-  if (edit.defined())
+  if (edit.IsDefined())
     edit.move(mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y);
 
   invalidate();

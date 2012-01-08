@@ -49,7 +49,7 @@ VirtualCanvas::VirtualCanvas(const Canvas &canvas,
                              UPixelScalar _width, UPixelScalar _height)
   :Canvas(::CreateCompatibleDC(canvas), _width, _height)
 {
-  assert(canvas.defined());
+  assert(canvas.IsDefined());
 }
 
 #endif /* !ENABLE_SDL */
@@ -97,7 +97,7 @@ void
 VirtualCanvas::set(const Canvas &canvas,
                    UPixelScalar _width, UPixelScalar _height)
 {
-  assert(canvas.defined());
+  assert(canvas.IsDefined());
 
 #ifdef ENABLE_SDL
   set(_width, _height);

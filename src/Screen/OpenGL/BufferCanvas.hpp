@@ -46,7 +46,7 @@ public:
     reset();
   }
 
-  bool defined() const {
+  bool IsDefined() const {
     return texture != NULL;
   }
 

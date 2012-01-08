@@ -33,14 +33,14 @@ BufferCanvas::BufferCanvas(const Canvas &canvas,
   :Canvas(_width, _height),
    texture(new GLTexture(_width, _height))
 {
-  assert(canvas.defined());
+  assert(canvas.IsDefined());
 }
 
 void
 BufferCanvas::set(const Canvas &canvas,
                   UPixelScalar _width, UPixelScalar _height)
 {
-  assert(canvas.defined());
+  assert(canvas.IsDefined());
   assert(!active);
 
   reset();
@@ -60,7 +60,7 @@ BufferCanvas::reset()
 void
 BufferCanvas::resize(UPixelScalar _width, UPixelScalar _height)
 {
-  assert(defined());
+  assert(IsDefined());
 
   if (_width == width && _height == height)
     return;
@@ -73,7 +73,7 @@ BufferCanvas::resize(UPixelScalar _width, UPixelScalar _height)
 void
 BufferCanvas::Begin(Canvas &other)
 {
-  assert(defined());
+  assert(IsDefined());
   assert(!active);
 
   x_offset = other.x_offset;
@@ -87,7 +87,7 @@ BufferCanvas::Begin(Canvas &other)
 void
 BufferCanvas::Commit(Canvas &other)
 {
-  assert(defined());
+  assert(IsDefined());
   assert(active);
   assert(x_offset == other.x_offset);
   assert(y_offset == other.y_offset);
@@ -107,7 +107,7 @@ BufferCanvas::Commit(Canvas &other)
 void
 BufferCanvas::CopyTo(Canvas &other)
 {
-  assert(defined());
+  assert(IsDefined());
   assert(!active);
 
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);

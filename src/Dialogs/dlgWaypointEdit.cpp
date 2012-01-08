@@ -65,7 +65,7 @@ static void
 OnNameClicked(gcc_unused WndButton &button)
 {
   StaticString<NAME_SIZE + 1> buff(global_wpt->name.c_str());
-  if (!TextEntryDialog(*(SingleWindow *)button.get_root_owner(), buff))
+  if (!TextEntryDialog(*(SingleWindow *)button.GetRootOwner(), buff))
     return;
 
   global_wpt->name = buff;
@@ -77,7 +77,7 @@ static void
 OnCommentClicked(gcc_unused WndButton &button)
 {
   StaticString<COMMENT_SIZE + 1> buff(global_wpt->comment.c_str());
-  if (!TextEntryDialog(*(SingleWindow *)button.get_root_owner(), buff))
+  if (!TextEntryDialog(*(SingleWindow *)button.GetRootOwner(), buff))
     return;
 
   global_wpt->comment = buff;

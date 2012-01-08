@@ -207,7 +207,7 @@ TopWindow::event_loop()
 
   EventLoop loop(*event_queue, *this);
   Event event;
-  while (defined() && loop.Get(event))
+  while (IsDefined() && loop.Get(event))
     loop.Dispatch(event);
 
   return 0;

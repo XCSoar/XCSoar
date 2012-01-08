@@ -31,7 +31,7 @@ Copyright_License {
 void
 Canvas::line(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by)
 {
-  assert(defined());
+  assert(IsDefined());
 
 #ifndef NOLINETO
   ::MoveToEx(dc, ax, ay, NULL);
@@ -47,7 +47,7 @@ Canvas::DrawTwoLines(PixelScalar ax, PixelScalar ay,
                   PixelScalar bx, PixelScalar by,
                   PixelScalar cx, PixelScalar cy)
 {
-  assert(defined());
+  assert(IsDefined());
 
 #ifndef NOLINETO
   ::MoveToEx(dc, ax, ay, NULL);
@@ -72,7 +72,7 @@ void
 Canvas::DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
                 Angle start, Angle end, bool horizon)
 {
-  assert(defined());
+  assert(IsDefined());
 
   ::Segment(*this, x, y, radius, start, end, horizon);
 }
@@ -82,7 +82,7 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
                 UPixelScalar small_radius, UPixelScalar big_radius,
                 Angle start, Angle end)
 {
-  assert(defined());
+  assert(IsDefined());
 
   ::Annulus(*this, x, y, big_radius, start, end, small_radius);
 }
@@ -92,7 +92,7 @@ Canvas::DrawKeyhole(PixelScalar x, PixelScalar y,
                 UPixelScalar small_radius, UPixelScalar big_radius,
                 Angle start, Angle end)
 {
-  assert(defined());
+  assert(IsDefined());
 
   ::KeyHole(*this, x, y, big_radius, start, end, small_radius);
 }
@@ -100,7 +100,7 @@ Canvas::DrawKeyhole(PixelScalar x, PixelScalar y,
 const PixelSize
 Canvas::CalcTextSize(const TCHAR *text, size_t length) const
 {
-  assert(defined());
+  assert(IsDefined());
 
   PixelSize size;
   ::GetTextExtentPoint(dc, text, length, &size);
@@ -116,7 +116,7 @@ Canvas::CalcTextSize(const TCHAR *text) const
 UPixelScalar
 Canvas::CalcTextHeight(const TCHAR *text) const
 {
-  assert(defined());
+  assert(IsDefined());
 
   TEXTMETRIC tm;
   GetTextMetrics(dc, &tm);
@@ -126,7 +126,7 @@ Canvas::CalcTextHeight(const TCHAR *text) const
 void
 Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
 {
-  assert(defined());
+  assert(IsDefined());
 
   ::ExtTextOut(dc, x, y, 0, NULL, text, _tcslen(text), NULL);
 }
@@ -134,7 +134,7 @@ Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
 void
 Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text, size_t length)
 {
-  assert(defined());
+  assert(IsDefined());
 
   ::ExtTextOut(dc, x, y, 0, NULL, text, length, NULL);
 }
@@ -143,7 +143,7 @@ void
 Canvas::text_opaque(PixelScalar x, PixelScalar y, const PixelRect &rc,
                     const TCHAR *text)
 {
-  assert(defined());
+  assert(IsDefined());
 
   ::ExtTextOut(dc, x, y, ETO_OPAQUE, &rc, text, _tcslen(text), NULL);
 }
@@ -152,7 +152,7 @@ void
 Canvas::text_clipped(PixelScalar x, PixelScalar y, const PixelRect &rc,
                      const TCHAR *text)
 {
-  assert(defined());
+  assert(IsDefined());
 
   ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), NULL);
 }
@@ -174,7 +174,7 @@ Canvas::copy(PixelScalar dest_x, PixelScalar dest_y,
              HBITMAP src, PixelScalar src_x, PixelScalar src_y,
              DWORD dwRop)
 {
-  assert(defined());
+  assert(IsDefined());
   assert(src != NULL);
 
   if (compatible_dc == NULL)
@@ -220,8 +220,8 @@ Canvas::copy(const Bitmap &src)
 void
 Canvas::copy_transparent_black(const Canvas &src)
 {
-  assert(defined());
-  assert(src.defined());
+  assert(IsDefined());
+  assert(src.IsDefined());
 
 #ifdef _WIN32_WCE
   ::TransparentImage(dc, 0, 0, get_width(), get_height(),
@@ -237,8 +237,8 @@ Canvas::copy_transparent_black(const Canvas &src)
 void
 Canvas::copy_transparent_white(const Canvas &src)
 {
-  assert(defined());
-  assert(src.defined());
+  assert(IsDefined());
+  assert(src.IsDefined());
 
 #ifdef _WIN32_WCE
   ::TransparentImage(dc, 0, 0, get_width(), get_height(),
@@ -254,7 +254,7 @@ Canvas::copy_transparent_white(const Canvas &src)
 void
 Canvas::stretch_transparent(const Bitmap &src, Color key)
 {
-  assert(defined());
+  assert(IsDefined());
   assert(src.IsDefined());
 
   if (compatible_dc == NULL)
@@ -279,7 +279,7 @@ Canvas::stretch_transparent(const Bitmap &src, Color key)
 void
 Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
 {
-  assert(defined());
+  assert(IsDefined());
   assert(src.IsDefined());
 
   if (compatible_dc == NULL)
@@ -319,7 +319,7 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
                 PixelScalar src_x, PixelScalar src_y,
                 UPixelScalar src_width, UPixelScalar src_height)
 {
-  assert(defined());
+  assert(IsDefined());
   assert(src != NULL);
 
   if (compatible_dc == NULL)
@@ -338,7 +338,7 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
                 PixelScalar src_x, PixelScalar src_y,
                 UPixelScalar src_width, UPixelScalar src_height)
 {
-  assert(defined());
+  assert(IsDefined());
   assert(src.IsDefined());
 
   stretch(dest_x, dest_y, dest_width, dest_height,

@@ -248,7 +248,7 @@ TopWindow::event_loop()
 
   EventLoop loop(*this);
   SDL_Event event;
-  while (defined() && loop.Get(event))
+  while (IsDefined() && loop.Get(event))
     loop.Dispatch(event);
 
   return 0;

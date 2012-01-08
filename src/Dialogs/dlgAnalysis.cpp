@@ -515,7 +515,7 @@ OnCalcClicked(gcc_unused WndButton &Sender)
 
   if (page == ANALYSIS_PAGE_CLIMB) {
     wf->hide();
-    dlgTaskManagerShowModal(*(SingleWindow *)wf->get_root_owner());
+    dlgTaskManagerShowModal(*(SingleWindow *)wf->GetRootOwner());
     wf->show();
   }
 
@@ -530,7 +530,7 @@ OnCalcClicked(gcc_unused WndButton &Sender)
 
   if ((page == ANALYSIS_PAGE_TASK) || (page == ANALYSIS_PAGE_TASK_SPEED)) {
     wf->hide();
-    dlgTaskManagerShowModal(*(SingleWindow *)wf->get_root_owner());
+    dlgTaskManagerShowModal(*(SingleWindow *)wf->GetRootOwner());
     wf->show();
   }
 

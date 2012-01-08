@@ -56,7 +56,7 @@ public:
   }
 
   gcc_pure
-  bool defined() const {
+  bool IsDefined() const {
     return bitmap.IsDefined();
   }
 

@@ -180,7 +180,7 @@ NewClicked(gcc_unused WndButton &button)
 {
   Plane plane = CommonInterface::GetComputerSettings().plane;
 
-  while (dlgPlaneDetailsShowModal(*(SingleWindow*)dialog->get_root_owner(), plane)) {
+  while (dlgPlaneDetailsShowModal(*(SingleWindow*)dialog->GetRootOwner(), plane)) {
     if (plane.registration.empty()) {
       MessageBoxX(_("Please enter the registration of the plane!"),
                   _("Error"), MB_OK);
@@ -220,7 +220,7 @@ EditClicked(gcc_unused WndButton &button)
   Plane plane;
   PlaneGlue::ReadFile(plane, old_path);
 
-  while (dlgPlaneDetailsShowModal(*(SingleWindow*)dialog->get_root_owner(), plane)) {
+  while (dlgPlaneDetailsShowModal(*(SingleWindow*)dialog->GetRootOwner(), plane)) {
     if (plane.registration.empty()) {
       MessageBoxX(_("Please enter the registration of the plane!"),
                   _("Error"), MB_OK);

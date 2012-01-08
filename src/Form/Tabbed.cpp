@@ -43,7 +43,7 @@ TabbedControl::~TabbedControl()
 void
 TabbedControl::AddPage(Widget *w)
 {
-  assert(defined());
+  assert(IsDefined());
 
   pager.Add(w);
 }

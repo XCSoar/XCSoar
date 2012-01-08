@@ -94,7 +94,7 @@ CancelClicked(gcc_unused WndButton &button)
 static void
 RegistrationClicked(gcc_unused WndButton &button)
 {
-  if (!dlgTextEntryShowModal(*(SingleWindow *)dialog->get_root_owner(),
+  if (!dlgTextEntryShowModal(*(SingleWindow *)dialog->GetRootOwner(),
                              plane.registration.buffer(),
                              plane.registration.MAX_SIZE))
     return;
@@ -106,7 +106,7 @@ RegistrationClicked(gcc_unused WndButton &button)
 static void
 CompetitionIDClicked(gcc_unused WndButton &button)
 {
-  if (!dlgTextEntryShowModal(*(SingleWindow *)dialog->get_root_owner(),
+  if (!dlgTextEntryShowModal(*(SingleWindow *)dialog->GetRootOwner(),
                              plane.competition_id.buffer(),
                              plane.competition_id.MAX_SIZE))
     return;
@@ -117,7 +117,7 @@ CompetitionIDClicked(gcc_unused WndButton &button)
 static void
 TypeClicked(gcc_unused WndButton &button)
 {
-  if (!dlgTextEntryShowModal(*(SingleWindow *)dialog->get_root_owner(),
+  if (!dlgTextEntryShowModal(*(SingleWindow *)dialog->GetRootOwner(),
                              plane.type.buffer(),
                              plane.type.MAX_SIZE))
     return;
@@ -128,7 +128,7 @@ TypeClicked(gcc_unused WndButton &button)
 static void
 PolarClicked(gcc_unused WndButton &button)
 {
-  dlgPlanePolarShowModal(*(SingleWindow*)dialog->get_root_owner(), plane);
+  dlgPlanePolarShowModal(*(SingleWindow*)dialog->GetRootOwner(), plane);
   Update();
 }
 

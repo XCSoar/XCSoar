@@ -238,7 +238,7 @@ OnNameAccess(WndButton &button)
   if (buttonPanelName) {
     TCHAR buffer[data.name.MAX_SIZE];
     _tcscpy(buffer, data.name);
-    if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(), buffer,
+    if (dlgTextEntryShowModal(*(SingleWindow *)button.GetRootOwner(), buffer,
                               data.name.MAX_SIZE,
                               _("Panel name"))) {
       data.name = buffer;

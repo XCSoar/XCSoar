@@ -120,7 +120,7 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
                 UPixelScalar small_radius, UPixelScalar big_radius,
                 Angle start, Angle end)
 {
-  assert(defined());
+  assert(IsDefined());
 
   ::Annulus(*this, x, y, big_radius, start, end, small_radius);
 }
@@ -130,7 +130,7 @@ Canvas::DrawKeyhole(PixelScalar x, PixelScalar y,
                 UPixelScalar small_radius, UPixelScalar big_radius,
                 Angle start, Angle end)
 {
-  assert(defined());
+  assert(IsDefined());
 
   ::KeyHole(*this, x, y, big_radius, start, end, small_radius);
 }
@@ -540,7 +540,7 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
                 PixelScalar src_x, PixelScalar src_y,
                 UPixelScalar src_width, UPixelScalar src_height)
 {
-  assert(defined());
+  assert(IsDefined());
   assert(src.IsDefined());
 
   stretch(dest_x, dest_y, dest_width, dest_height,
@@ -553,7 +553,7 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src)
 {
-  assert(defined());
+  assert(IsDefined());
   assert(src.IsDefined());
 
   SDL_Surface *surface = src.GetNative();

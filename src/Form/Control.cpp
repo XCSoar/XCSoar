@@ -67,7 +67,7 @@ int
 WindowControl::OnHelp()
 {
   if (mHelpText && !StringIsEmpty(mHelpText)) {
-    dlgHelpShowModal(*(SingleWindow *)get_root_owner(),
+    dlgHelpShowModal(*(SingleWindow *)GetRootOwner(),
                      gettext(mCaption.c_str()), gettext(mHelpText));
     return 1;
   }

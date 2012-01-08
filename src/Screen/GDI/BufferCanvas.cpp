@@ -41,7 +41,7 @@ BufferCanvas::~BufferCanvas()
 void BufferCanvas::set(const Canvas &canvas,
                        UPixelScalar _width, UPixelScalar _height)
 {
-  assert(canvas.defined());
+  assert(canvas.IsDefined());
 
   reset();
   VirtualCanvas::set(canvas, _width, _height);

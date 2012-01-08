@@ -176,7 +176,7 @@ TaskListPanel::SaveTask()
   (*active_task)->GetFactory().CheckAddFinish();
 
   if ((*active_task)->CheckTask()) {
-    if (!OrderedTaskSave(*(SingleWindow *)wf.get_root_owner(), **active_task))
+    if (!OrderedTaskSave(*(SingleWindow *)wf.GetRootOwner(), **active_task))
       return;
 
     task_store->Scan();
@@ -277,7 +277,7 @@ TaskListPanel::RenameTask()
 
   ClearSuffix(newname.buffer(), _T(".tsk"));
 
-  if (!TextEntryDialog(*(SingleWindow *)wf.get_root_owner(), newname))
+  if (!TextEntryDialog(*(SingleWindow *)wf.GetRootOwner(), newname))
     return;
 
   newname.append(_T(".tsk"));

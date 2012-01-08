@@ -99,7 +99,7 @@ protected:
   }
 
 public:
-  bool defined() const {
+  bool IsDefined() const {
     return true;
   }
 

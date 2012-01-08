@@ -116,7 +116,7 @@ static void
 AddClicked(gcc_unused WndButton &button)
 {
   TCHAR code[5] = _T("");
-  if (!dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
+  if (!dlgTextEntryShowModal(*(SingleWindow *)button.GetRootOwner(),
                              code, 5, _("Airport ICAO code")))
     return;
 
@@ -182,7 +182,7 @@ static void
 OpenDetails(unsigned index)
 {
   assert(index < list.size());
-  dlgNOAADetailsShowModal(*(SingleWindow *)wf->get_root_owner(),
+  dlgNOAADetailsShowModal(*(SingleWindow *)wf->GetRootOwner(),
                           list[index].iterator);
   UpdateList();
 }

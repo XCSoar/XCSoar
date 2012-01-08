@@ -71,7 +71,7 @@ GetUnitSymbol(Unit unit)
 {
   assert(unit <= unCount);
 
-  return unit_symbols[unit].defined() ? &unit_symbols[unit] : NULL;
+  return unit_symbols[unit].IsDefined() ? &unit_symbols[unit] : NULL;
 }
 
 

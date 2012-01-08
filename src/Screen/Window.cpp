@@ -73,7 +73,7 @@ Window::AssertThreadOrUndefined() const
 void
 Window::reset()
 {
-  if (!defined())
+  if (!IsDefined())
     return;
 
   assert(IsScreenInitialized());
@@ -97,7 +97,7 @@ Window::reset()
 }
 
 ContainerWindow *
-Window::get_root_owner()
+Window::GetRootOwner()
 {
 #ifndef USE_GDI
   if (parent == NULL)

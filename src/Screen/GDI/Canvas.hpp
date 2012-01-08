@@ -80,24 +80,24 @@ protected:
   }
 
 public:
-  bool defined() const {
+  bool IsDefined() const {
     return dc != NULL;
   }
 
   operator HDC() const {
-    assert(defined());
+    assert(IsDefined());
 
     return dc;
   }
 
   UPixelScalar get_width() const {
-    assert(defined());
+    assert(IsDefined());
 
     return width;
   }
 
   UPixelScalar get_height() const {
-    assert(defined());
+    assert(IsDefined());
 
     return height;
   }
@@ -114,7 +114,7 @@ public:
   }
 
   HGDIOBJ SelectObject(HGDIOBJ handle) {
-    assert(defined());
+    assert(IsDefined());
     assert(handle != INVALID_HANDLE_VALUE);
 
     return ::SelectObject(dc, handle);
@@ -161,20 +161,20 @@ public:
   }
 
   void SetTextColor(const Color c) {
-    assert(defined());
+    assert(IsDefined());
 
     ::SetTextColor(dc, c);
   }
 
   gcc_pure
   Color GetTextColor() const {
-    assert(defined());
+    assert(IsDefined());
 
     return Color(::GetTextColor(dc));
   }
 
   void SetBackgroundColor(const Color c) {
-    assert(defined());
+    assert(IsDefined());
 
     ::SetBkColor(dc, c);
   }
@@ -185,32 +185,32 @@ public:
   }
 
   void SetBackgroundOpaque() {
-    assert(defined());
+    assert(IsDefined());
 
     ::SetBkMode(dc, OPAQUE);
   }
 
   void SetBackgroundTransparent() {
-    assert(defined());
+    assert(IsDefined());
 
     ::SetBkMode(dc, TRANSPARENT);
   }
 
   void SetMixCopy() {
-    assert(defined());
+    assert(IsDefined());
 
     ::SetROP2(dc, R2_COPYPEN);
   }
 
   void SetMixMask() {
-    assert(defined());
+    assert(IsDefined());
 
     ::SetROP2(dc, R2_MASKPEN);
   }
 
   void Rectangle(PixelScalar left, PixelScalar top,
                  PixelScalar right, PixelScalar bottom) {
-    assert(defined());
+    assert(IsDefined());
 
     ::Rectangle(dc, left, top, right, bottom);
   }
@@ -234,7 +234,7 @@ public:
   }
 
   void DrawFilledRectangle(const PixelRect &rc, const HWColor color) {
-    assert(defined());
+    assert(IsDefined());
 
     /* this hack allows filling a rectangle with a solid color,
        without the need to create a HBRUSH */
@@ -247,7 +247,7 @@ public:
   }
 
   void DrawFilledRectangle(const PixelRect rc, const Brush &brush) {
-    assert(defined());
+    assert(IsDefined());
 
     ::FillRect(dc, &rc, brush.Native());
   }
@@ -280,7 +280,7 @@ public:
   }
 
   void ClearWhite() {
-    assert(defined());
+    assert(IsDefined());
 
     ::BitBlt(dc, 0, 0, width, height, NULL, 0, 0, WHITENESS);
   }
@@ -289,25 +289,25 @@ public:
                        PixelScalar right, PixelScalar bottom,
                        UPixelScalar ellipse_width,
                        UPixelScalar ellipse_height) {
-    assert(defined());
+    assert(IsDefined());
 
     ::RoundRect(dc, left, top, right, bottom, ellipse_width, ellipse_height);
   }
 
   void DrawRaisedEdge(PixelRect &rc) {
-    assert(defined());
+    assert(IsDefined());
 
     ::DrawEdge(dc, &rc, EDGE_RAISED, BF_ADJUST | BF_FLAT | BF_RECT);
   }
 
   void DrawPolyline(const RasterPoint *lppt, unsigned cPoints) {
-    assert(defined());
+    assert(IsDefined());
 
     ::Polyline(dc, lppt, cPoints);
   }
 
   void polygon(const RasterPoint *lppt, unsigned cPoints) {
-    assert(defined());
+    assert(IsDefined());
 
     ::Polygon(dc, lppt, cPoints);
   }
@@ -334,7 +334,7 @@ public:
   }
 
   void circle(PixelScalar x, PixelScalar y, UPixelScalar radius) {
-    assert(defined());
+    assert(IsDefined());
 
     ::Ellipse(dc, x - radius, y - radius, x + radius, y + radius);
   }
@@ -349,13 +349,13 @@ public:
                    UPixelScalar big_radius, Angle start, Angle end);
 
   void DrawFocusRectangle(PixelRect rc) {
-    assert(defined());
+    assert(IsDefined());
 
     ::DrawFocusRect(dc, &rc);
   }
 
   void DrawButton(PixelRect rc, bool down) {
-    assert(defined());
+    assert(IsDefined());
 
     ::DrawFrameControl(dc, &rc, DFC_BUTTON,
                        DFCS_BUTTONPUSH | (down ? DFCS_PUSHED : 0));
@@ -400,7 +400,7 @@ public:
             UPixelScalar dest_width, UPixelScalar dest_height,
             HDC src, PixelScalar src_x, PixelScalar src_y,
             DWORD dwRop=SRCCOPY) {
-    assert(defined());
+    assert(IsDefined());
     assert(src != NULL);
 
     ::BitBlt(dc, dest_x, dest_y, dest_width, dest_height,
@@ -439,7 +439,7 @@ public:
                HDC src,
                PixelScalar src_x, PixelScalar src_y,
                UPixelScalar src_width, UPixelScalar src_height) {
-    assert(defined());
+    assert(IsDefined());
     assert(src != NULL);
 
     ::StretchBlt(dc, dest_x, dest_y, dest_width, dest_height,
