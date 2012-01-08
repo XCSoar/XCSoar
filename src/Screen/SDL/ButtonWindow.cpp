@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
+#include "Hardware/Vibrator.hpp"
 
 void
 ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
@@ -44,6 +45,10 @@ ButtonWindow::set_down(bool _down)
 {
   if (_down == down)
     return;
+
+#ifdef HAVE_VIBRATOR
+  VibrateShort();
+#endif
 
   down = _down;
   invalidate();
