@@ -220,6 +220,16 @@ public:
    * @param calculated the current set of calculation results
    */
   virtual void OnSysTicker(const DerivedInfo &calculated) = 0;
+
+  /**
+   * Called when data is received and the device is configured to
+   * use the binary data directly.
+   *
+   * @return true when the data has been processed,
+   *         false if more data is necessary
+   */
+  virtual bool DataReceived(const void *data, size_t length,
+                            struct NMEAInfo &info) = 0;
 };
 
 /**
@@ -265,6 +275,11 @@ public:
   }
 
   virtual void OnSysTicker(const DerivedInfo &calculated);
+
+  virtual bool DataReceived(const void *data, size_t length,
+                            struct NMEAInfo &info) {
+    return false;
+  }
 };
 
 /**
@@ -307,6 +322,12 @@ struct DeviceRegister {
      * send data every second.
      */
     NO_TIMEOUT = 0x20,
+
+    /**
+     * Is this device sending GPS data in binary form? The line-based
+     * handler/parser will be disabled in this case.
+     */
+    RAW_GPS_DATA = 0x40,
   };
 
   /**
@@ -372,6 +393,14 @@ struct DeviceRegister {
    */
   bool HasTimeout() const {
     return (Flags & NO_TIMEOUT) == 0;
+  }
+
+  /**
+   * Is this device sending GPS data in binary form? The line-based
+   * handler/parser will be disabled in this case.
+   */
+  bool UsesRawData() const {
+    return (Flags & RAW_GPS_DATA) != 0;
   }
 };
 
