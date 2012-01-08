@@ -21,42 +21,28 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_LOGGER_SETTINGS_HPP
-#define XCSOAR_LOGGER_SETTINGS_HPP
+#include "Logger/FlightLogger.hpp"
+#include "Args.hpp"
+#include "DebugReplay.hpp"
 
-#include "Util/StaticString.hpp"
+#include <stdio.h>
 
-#include <stdint.h>
+int main(int argc, char **argv)
+{
+  Args args(argc, argv, "DRIVER FILE OUTFILE");
+  DebugReplay *replay = CreateDebugReplay(args);
+  if (replay == NULL)
+    return EXIT_FAILURE;
 
-/**
- * Logger settings
- */
-struct LoggerSettings {
-  /**
-   * Enable the #FlightLogger?
-   */
-  bool enable_flight_logger;
+  tstring path = args.ExpectNextT();
+  args.ExpectEnd();
 
-  /** Logger interval in cruise mode */
-  uint16_t time_step_cruise;
+  FlightLogger logger;
+  logger.SetPath(path.c_str());
+  logger.Reset();
 
-  /** Logger interval in circling mode */
-  uint16_t time_step_circling;
+  while (replay->Next())
+    logger.Tick(replay->Basic(), replay->Calculated());
 
-  /** Use short IGC filenames for the logger files */
-  bool short_name;
-
-  enum class AutoLogger: uint8_t {
-    ON,
-    START_ONLY,
-    OFF,
-  } auto_logger;
-
-  StaticString<32> logger_id;
-
-  StaticString<64> pilot_name;
-
-  void SetDefaults();
-};
-
-#endif
+  delete replay;
+}

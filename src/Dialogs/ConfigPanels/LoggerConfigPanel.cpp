@@ -43,7 +43,8 @@ enum ControlIndex {
   CompetitionID,
   LoggerID,
   LoggerShortName,
-  DisableAutoLogger
+  DisableAutoLogger,
+  EnableFlightLogger,
 };
 
 class LoggerConfigPanel : public RowFormWidget {
@@ -102,6 +103,10 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
             "respectively. Disable when flying paragliders."),
           auto_logger_list, (unsigned)logger.auto_logger);
   SetExpertRow(DisableAutoLogger);
+
+  AddBoolean(_("Log book"), _("Logs each start and landing."),
+             logger.enable_flight_logger);
+  SetExpertRow(EnableFlightLogger);
 }
 
 bool
@@ -135,6 +140,16 @@ LoggerConfigPanel::Save(bool &_changed, bool &_require_restart)
   /* GUI label is "Enable Auto Logger" */
   changed |= SaveValueEnum(DisableAutoLogger, szProfileAutoLogger,
                            logger.auto_logger);
+
+  if (SaveValue(EnableFlightLogger, szProfileEnableFlightLogger,
+                logger.enable_flight_logger)) {
+    changed = true;
+
+    /* currently, the GlueFlightLogger instance is created on startup
+       only, which means XCSoar needs to be restarted to apply the new
+       setting */
+    require_restart = true;
+  }
 
   if (changed)
     PlaneGlue::ToProfile(settings_computer.plane);

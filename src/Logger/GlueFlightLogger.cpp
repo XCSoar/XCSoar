@@ -21,42 +21,23 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_LOGGER_SETTINGS_HPP
-#define XCSOAR_LOGGER_SETTINGS_HPP
+#include "GlueFlightLogger.hpp"
+#include "Blackboard/LiveBlackboard.hpp"
 
-#include "Util/StaticString.hpp"
+GlueFlightLogger::GlueFlightLogger(LiveBlackboard &_blackboard)
+  :blackboard(_blackboard)
+{
+  blackboard.AddListener(*this);
+}
 
-#include <stdint.h>
+GlueFlightLogger::~GlueFlightLogger()
+{
+  blackboard.RemoveListener(*this);
+}
 
-/**
- * Logger settings
- */
-struct LoggerSettings {
-  /**
-   * Enable the #FlightLogger?
-   */
-  bool enable_flight_logger;
-
-  /** Logger interval in cruise mode */
-  uint16_t time_step_cruise;
-
-  /** Logger interval in circling mode */
-  uint16_t time_step_circling;
-
-  /** Use short IGC filenames for the logger files */
-  bool short_name;
-
-  enum class AutoLogger: uint8_t {
-    ON,
-    START_ONLY,
-    OFF,
-  } auto_logger;
-
-  StaticString<32> logger_id;
-
-  StaticString<64> pilot_name;
-
-  void SetDefaults();
-};
-
-#endif
+void
+GlueFlightLogger::OnCalculatedUpdate(const MoreData &basic,
+                                     const DerivedInfo &calculated)
+{
+  FlightLogger::Tick(basic, calculated);
+}

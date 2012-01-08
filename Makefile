@@ -317,6 +317,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Logger/NMEALogger.cpp \
 	$(SRC)/Logger/ExternalLogger.cpp \
+	$(SRC)/Logger/FlightLogger.cpp \
+	$(SRC)/Logger/GlueFlightLogger.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/MoreData.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \

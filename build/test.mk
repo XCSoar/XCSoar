@@ -660,6 +660,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
 	lxn2igc \
 	RunIGCWriter \
+	RunFlightLogger \
 	RunCirclingWind RunWindZigZag RunWindEKF \
 	RunCanvas RunMapWindow \
 	RunDialog RunListControl \
@@ -1305,6 +1306,15 @@ RUN_IGC_WRITER_SOURCES = \
 RUN_IGC_WRITER_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_IGC_WRITER_DEPENDS = MATH UTIL
 $(eval $(call link-program,RunIGCWriter,RUN_IGC_WRITER))
+
+RUN_FLIGHT_LOGGER_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/Computer/CirclingComputer.cpp \
+	$(SRC)/Logger/FlightLogger.cpp \
+	$(TEST_SRC_DIR)/RunFlightLogger.cpp
+RUN_FLIGHT_LOGGER_LDADD = $(DEBUG_REPLAY_LDADD)
+RUN_FLIGHT_LOGGER_DEPENDS = MATH UTIL
+$(eval $(call link-program,RunFlightLogger,RUN_FLIGHT_LOGGER))
 
 RUN_CIRCLING_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \

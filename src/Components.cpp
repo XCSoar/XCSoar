@@ -48,6 +48,7 @@ Copyright_License {
 #include "MapSettings.hpp"
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"
+#include "Logger/GlueFlightLogger.hpp"
 #include "Waypoint/WaypointDetailsReader.hpp"
 #include "Screen/Fonts.hpp"
 #include "DeviceBlackboard.hpp"
@@ -119,6 +120,7 @@ MergeThread *merge_thread;
 CalculationThread *calculation_thread;
 
 Logger logger;
+GlueFlightLogger *flight_logger;
 Replay *replay;
 
 #ifdef HAVE_TRACKING
@@ -432,6 +434,12 @@ XCSoarInterface::Startup()
   // Find unique ID of this PDA
   ReadAssetNumber();
 
+  if (CommonInterface::GetComputerSettings().logger.enable_flight_logger) {
+    flight_logger = new GlueFlightLogger(GetLiveBlackboard());
+    LocalPath(path, _T("flights.log"));
+    flight_logger->SetPath(path);
+  }
+
   LogStartUp(_T("ProgramStarted"));
 
   // Give focus to the map
@@ -483,6 +491,9 @@ XCSoarInterface::Shutdown(void)
   // Stop logger and save igc file
   operation.SetText(_("Shutdown, saving logs..."));
   logger.GUIStopLogger(Basic(), true);
+
+  delete flight_logger;
+  flight_logger = NULL;
 
   // Save settings to profile
   operation.SetText(_("Shutdown, saving profile..."));

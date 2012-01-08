@@ -246,6 +246,7 @@ const TCHAR szProfilePredictWindDrift[] = _T("PredictWindDrift");
 const TCHAR szProfileWindArrowStyle[] = _T("WindArrowStyle");
 const TCHAR szProfileAutoLogger[] = _T("AutoLogger");
 const TCHAR szProfileDisableAutoLogger[] = _T("DisableAutoLogger");
+const TCHAR szProfileEnableFlightLogger[] = _T("EnableFlightLogger");
 const TCHAR szProfileMapFile[] = _T("MapFile"); // pL
 const TCHAR szProfileBallastSecsToEmpty[] = _T("BallastSecsToEmpty");
 const TCHAR szProfileUseCustomFonts[] = _T("UseCustomFonts");
