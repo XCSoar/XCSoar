@@ -33,6 +33,7 @@ GlueMapWindow::GlueMapWindow(const Look &look)
    idle_robin(2),
    drag_mode(DRAG_NONE),
    ignore_single_click(false),
+   first_single_click_after_focus(false),
    DisplayMode(DM_CRUISE),
    thermal_band_renderer(look.thermal_band, look.chart),
    final_glide_bar_renderer(look.final_glide_bar, look.map.task),

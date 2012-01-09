@@ -91,8 +91,8 @@ class GlueMapWindow : public MapWindow {
   GestureManager gestures;
   bool ignore_single_click;
 
-  /** if mouse pan drag has moved over ~10 pixels */
-  bool dragOverMinDist;
+  /** single click on un-focused window */
+  bool first_single_click_after_focus;
 
   ZoomClimb_t zoomclimb;
 

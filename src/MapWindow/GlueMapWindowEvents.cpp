@@ -63,9 +63,9 @@ GlueMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   /* allow a bigger threshold on touch screens */
   const int threshold = IsEmbedded() ? 50 : 10;
-  if (drag_mode != DRAG_NONE && !dragOverMinDist &&
+  if (drag_mode != DRAG_NONE && first_single_click_after_focus &&
       (abs(drag_start.x - x) + abs(drag_start.y - y)) > Layout::Scale(threshold))
-    dragOverMinDist = true;
+    first_single_click_after_focus = false;
 
   switch (drag_mode) {
   case DRAG_NONE:
@@ -102,7 +102,7 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
     return true;
 
   mouse_down_clock.update();
-  dragOverMinDist = false;
+  first_single_click_after_focus = !has_focus();
 
   set_focus();
 
@@ -210,7 +210,7 @@ GlueMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
     break;
   }
 
-  if (!dragOverMinDist) {
+  if (!first_single_click_after_focus) {
     map_item_timer.Schedule(200);
     return true;
   }
