@@ -34,6 +34,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Components.hpp"
 #include "DrawThread.hpp"
+#include "FLARM/Glue.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 #include "PeriodClock.hpp"
@@ -75,6 +76,10 @@ XCSoarInterface::ReceiveGPS()
   }
 
   BroadcastGPSUpdate();
+
+  if (!Basic().flarm.traffic.empty())
+    /* auto-load FlarmNet when traffic is seen */
+    LoadFlarmDatabases();
 }
 
 void

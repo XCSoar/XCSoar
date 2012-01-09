@@ -25,6 +25,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Widgets/TrafficWidget.hpp"
+#include "FLARM/Glue.hpp"
 
 /**
  * Evil global variable - please refactor!
@@ -34,6 +35,8 @@ static TrafficWidget *traffic_widget;
 void
 InputEvents::eventTraffic(const TCHAR *misc)
 {
+  LoadFlarmDatabases();
+
   if (StringIsEqual(misc, _T("show"))) {
     if (!CommonInterface::Basic().flarm.available ||
         IsFlavour(_T("Traffic")))

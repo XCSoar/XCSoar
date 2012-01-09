@@ -366,9 +366,6 @@ XCSoarInterface::Startup()
     lease->SetConfig(CommonInterface::GetComputerSettings().airspace.warnings);
   }
 
-  // Read the FLARM details file
-  FlarmDetails::Load();
-
 #ifdef HAVE_NET
   noaa_store = new NOAAStore();
   noaa_store->LoadFromProfile();

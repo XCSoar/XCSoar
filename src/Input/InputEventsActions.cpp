@@ -87,6 +87,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Hardware/AltairControl.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "FLARM/FlarmDetails.hpp"
+#include "FLARM/Glue.hpp"
 #include "Compiler.h"
 #include "Net/Features.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
@@ -234,6 +235,8 @@ InputEvents::eventChecklist(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventFlarmTraffic(gcc_unused const TCHAR *misc)
 {
+  LoadFlarmDatabases();
+
   if (XCSoarInterface::Basic().flarm.available)
     dlgFlarmTrafficShowModal();
 }
@@ -241,6 +244,8 @@ InputEvents::eventFlarmTraffic(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventFlarmDetails(gcc_unused const TCHAR *misc)
 {
+  LoadFlarmDatabases();
+
   StaticString<4> callsign;
   callsign.clear();
   if (!TextEntryDialog(CommonInterface::main_window, callsign,
