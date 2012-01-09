@@ -32,6 +32,7 @@ Copyright_License {
 #include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
+#include "DataField/Enum.hpp"
 
 enum ControlIndex {
   LoggerTimeStepCruise,
@@ -53,6 +54,13 @@ public:
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
+};
+
+static const StaticEnumChoice auto_logger_list[] = {
+  { (unsigned)LoggerSettings::AutoLogger::ON, N_("On"), NULL },
+  { (unsigned)LoggerSettings::AutoLogger::START_ONLY, N_("Start only"), NULL },
+  { (unsigned)LoggerSettings::AutoLogger::OFF, N_("Off"), NULL },
+  { 0 }
 };
 
 void
@@ -94,10 +102,10 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              settings_computer.logger_short_name);
 
   // Expert item
-  AddBoolean(_("Auto. logger"),
-             _("Enables the automatic starting and stopping of logger on takeoff and landing "
-                 "respectively. Disable when flying paragliders."),
-             !settings_computer.auto_logger_disabled);
+  AddEnum(_("Auto. logger"),
+          _("Enables the automatic starting and stopping of logger on takeoff and landing "
+            "respectively. Disable when flying paragliders."),
+          auto_logger_list, (unsigned)settings_computer.auto_logger);
 }
 
 bool
@@ -131,8 +139,8 @@ LoggerConfigPanel::Save(bool &_changed, bool &_require_restart)
                        settings_computer.logger_short_name);
 
   /* GUI label is "Enable Auto Logger" */
-  changed |= SaveValue(DisableAutoLogger, szProfileDisableAutoLogger,
-                       settings_computer.auto_logger_disabled, true);
+  changed |= SaveValueEnum(DisableAutoLogger, szProfileAutoLogger,
+                           settings_computer.auto_logger);
 
   if (changed)
     PlaneGlue::ToProfile(settings_computer.plane);

@@ -17,6 +17,8 @@ Version 6.3 - not yet released
   - added kinetic scrolling for non-WinCE platforms
   - enable font anti-aliasing on Linux and Mac OS X
   - show airspaces in the task manager
+* logger
+  - added "Start only" option for auto logger
 * data files
   - added support for CompeGPS waypoint files
 * internet

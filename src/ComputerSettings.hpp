@@ -123,7 +123,12 @@ struct LoggerSettings {
   uint16_t logger_time_step_circling;
   /** Use short IGC filenames for the logger files */
   bool logger_short_name;
-  bool auto_logger_disabled;
+
+  enum class AutoLogger: uint8_t {
+    ON,
+    START_ONLY,
+    OFF,
+  } auto_logger;
 
   void SetDefaults();
 };
