@@ -163,6 +163,7 @@ GlueMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
   case DRAG_MULTI_TOUCH_PAN:
     follow_mode = FOLLOW_SELF;
     InputEvents::SetPan(true);
+    arm_mapitem_list = false;
     break;
 #endif
 
