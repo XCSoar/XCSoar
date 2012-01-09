@@ -24,6 +24,7 @@ Copyright_License {
 #include "FLARM/FlarmNet.hpp"
 #include "FLARM/FlarmId.hpp"
 #include "FLARM/Record.hpp"
+#include "FLARM/Database.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/CharUtil.hpp"
 #include "IO/LineReader.hpp"
@@ -34,14 +35,13 @@ Copyright_License {
 
 namespace FlarmNet
 {
-  typedef std::map<FlarmId, FlarmRecord> RecordMap;
-  RecordMap record_map;
+  static FlarmDatabase *database;
 }
 
 void
 FlarmNet::Destroy()
 {
-  record_map.clear();
+  delete database;
 }
 
 /**
@@ -107,7 +107,10 @@ unsigned
 FlarmNet::LoadFile(NLineReader &reader)
 {
   // Clear database before adding new entries
-  Destroy();
+  if (database == NULL)
+    database = new FlarmDatabase();
+  else
+    database->Clear();
 
   /* skip first line */
   const char *line = reader.read();
@@ -118,8 +121,7 @@ FlarmNet::LoadFile(NLineReader &reader)
   while ((line = reader.read()) != NULL) {
     FlarmRecord record;
     if (LoadRecord(record, line)) {
-      record_map.insert(std::make_pair(record.GetId(),
-                                       record));
+      database->Insert(record);
       itemCount++;
     }
   }
@@ -140,63 +142,36 @@ FlarmNet::LoadFile(const TCHAR *path)
 const FlarmRecord *
 FlarmNet::FindRecordById(FlarmId id)
 {
-  RecordMap::const_iterator i = record_map.find(id);
-  if (i != record_map.end())
-    return &i->second;
+  if (database == NULL) {
+    return NULL;
+  }
 
-  return NULL;
+  return database->FindRecordById(id);
 }
 
 const FlarmRecord *
 FlarmNet::FindFirstRecordByCallSign(const TCHAR *cn)
 {
-  RecordMap::const_iterator i = record_map.begin();
-  while (i != record_map.end()) {
-    const FlarmRecord &record = i->second;
-    if (StringIsEqual(record.callsign, cn))
-      return &record;
-
-    i++;
-  }
-
-  return NULL;
+  return database != NULL
+    ? database->FindFirstRecordByCallSign(cn)
+    : NULL;
 }
 
 unsigned
 FlarmNet::FindRecordsByCallSign(const TCHAR *cn,
                                 const FlarmRecord *array[], unsigned size)
 {
-  unsigned count = 0;
+  if (database == NULL)
+    return 0;
 
-  RecordMap::const_iterator i = record_map.begin();
-  while (i != record_map.end() && count < size) {
-    const FlarmRecord &record = i->second;
-    if (StringIsEqual(record.callsign, cn)) {
-      array[count] = &record;
-      count++;
-    }
-
-    i++;
-  }
-
-  return count;
+  return database->FindRecordsByCallSign(cn, array, size);
 }
 
 unsigned
 FlarmNet::FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size)
 {
-  unsigned count = 0;
+  if (database == NULL)
+    return 0;
 
-  RecordMap::const_iterator i = record_map.begin();
-  while (i != record_map.end() && count < size) {
-    const FlarmRecord &record = i->second;
-    if (StringIsEqual(record.callsign, cn)) {
-      array[count] = i->first;
-      count++;
-    }
-
-    i++;
-  }
-
-  return count;
+  return database->FindIdsByCallSign(cn, array, size);
 }

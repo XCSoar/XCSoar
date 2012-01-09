@@ -302,6 +302,7 @@ TEST_FLARM_NET_SOURCES = \
 	$(SRC)/FLARM/FlarmNet.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/Record.cpp \
+	$(SRC)/FLARM/Database.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFlarmNet.cpp
 TEST_FLARM_NET_DEPENDS = MATH IO

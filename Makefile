@@ -285,6 +285,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/FLARM/Record.cpp \
+	$(SRC)/FLARM/Database.cpp \
 	$(SRC)/FLARM/FlarmNet.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
