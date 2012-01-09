@@ -460,7 +460,7 @@ WndListFrame::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
       return true;
   }
 
-  if (drag_mode == DragMode::SCROLL || drag_mode == DragMode::CURSOR) {
+  if (drag_mode == DragMode::SCROLL) {
     int new_origin = drag_y - y;
     SetPixelOrigin(new_origin);
 #ifndef _WIN32_WCE
