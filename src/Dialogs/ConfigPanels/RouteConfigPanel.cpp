@@ -78,7 +78,7 @@ OnRouteMode(DataField *Sender,
 {
   const DataFieldEnum &df = *(const DataFieldEnum *)Sender;
   RoutePlannerConfig::Mode mode = (RoutePlannerConfig::Mode)df.GetAsInteger();
-  instance->ShowRouteControls(mode != RoutePlannerConfig::rpNone);
+  instance->ShowRouteControls(mode != RoutePlannerConfig::Mode::NONE);
 }
 
 static void
@@ -88,7 +88,7 @@ OnReachMode(DataField *Sender,
   const DataFieldEnum &df = *(const DataFieldEnum *)Sender;
   RoutePlannerConfig::ReachMode mode =
     (RoutePlannerConfig::ReachMode)df.GetAsInteger();
-  instance->ShowReachControls(mode != RoutePlannerConfig::rmOff);
+  instance->ShowReachControls(mode != RoutePlannerConfig::ReachMode::OFF);
 }
 
 void
@@ -101,18 +101,19 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
   static gcc_constexpr_data StaticEnumChoice route_mode_list[] = {
-    { RoutePlannerConfig::rpNone, N_("None"),
+    { (unsigned)RoutePlannerConfig::Mode::NONE, N_("None"),
       N_("Neither airspace nor terrain is used for route planning.") },
-    { RoutePlannerConfig::rpTerrain, N_("Terrain"),
+    { (unsigned)RoutePlannerConfig::Mode::TERRAIN, N_("Terrain"),
       N_("Routes will avoid terrain.") },
-    { RoutePlannerConfig::rpAirspace, N_("Airspace"),
+    { (unsigned)RoutePlannerConfig::Mode::AIRSPACE, N_("Airspace"),
       N_("Routes will avoid airspace.") },
-    { RoutePlannerConfig::rpBoth, N_("Both"),
+    { (unsigned)RoutePlannerConfig::Mode::BOTH, N_("Both"),
       N_("Routes will avoid airspace and terrain.") },
     { 0 }
   };
 
-  AddEnum(_("Route mode"), _T(""), route_mode_list, route_planner.mode, OnRouteMode);
+  AddEnum(_("Route mode"), _T(""), route_mode_list,
+          (unsigned)route_planner.mode, OnRouteMode);
 
   // Expert item (TODO)
   AddBoolean(_("Route climb"),
@@ -128,11 +129,11 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              route_planner.use_ceiling);
 
   static gcc_constexpr_data StaticEnumChoice turning_reach_list[] = {
-    { RoutePlannerConfig::rmOff, N_("Off"),
+    { (unsigned)RoutePlannerConfig::ReachMode::OFF, N_("Off"),
       N_("Reach calculations disabled.") },
-    { RoutePlannerConfig::rmStraight, N_("Straight"),
+    { (unsigned)RoutePlannerConfig::ReachMode::STRAIGHT, N_("Straight"),
       N_("The reach is from straight line paths from the glider.") },
-    { RoutePlannerConfig::rmTurning, N_("Turning"),
+    { (unsigned)RoutePlannerConfig::ReachMode::TURNING, N_("Turning"),
       N_("The reach is calculated allowing turns around terrain obstacles.") },
     { 0 }
   };
@@ -141,7 +142,8 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddEnum(_("Reach mode"),
           _("How calculations are performed of the reach of the glider with respect to terrain."),
-          turning_reach_list, route_planner.reach_calc_mode, OnReachMode);
+          turning_reach_list, (unsigned)route_planner.reach_calc_mode,
+          OnReachMode);
 
 
   static gcc_constexpr_data StaticEnumChoice final_glide_terrain_list[] = {
@@ -155,18 +157,20 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           settings_computer.final_glide_terrain);
 
   static gcc_constexpr_data StaticEnumChoice reach_polar_list[] = {
-    { RoutePlannerConfig::rpmTask, N_("Task"), N_("Uses task glide polar.") },
-    { RoutePlannerConfig::rpmSafety, N_("Safety MC"), N_("Uses safety MacCready value") },
+    { (unsigned)RoutePlannerConfig::Polar::TASK, N_("Task"),
+      N_("Uses task glide polar.") },
+    { (unsigned)RoutePlannerConfig::Polar::SAFETY, N_("Safety MC"),
+      N_("Uses safety MacCready value") },
     { 0 }
   };
 
   // Expert item
   AddEnum(_("Reach polar"),
           _("This determines the glide performance used in reach, landable arrival, abort and alternate calculations."),
-          reach_polar_list, route_planner.reach_polar_mode);
+          reach_polar_list, (unsigned)route_planner.reach_polar_mode);
 
-  ShowRouteControls(route_planner.mode != RoutePlannerConfig::rpNone);
-  ShowReachControls(route_planner.reach_calc_mode != RoutePlannerConfig::rmOff);
+  ShowRouteControls(route_planner.mode != RoutePlannerConfig::Mode::NONE);
+  ShowReachControls(route_planner.reach_calc_mode != RoutePlannerConfig::ReachMode::OFF);
 }
 
 bool

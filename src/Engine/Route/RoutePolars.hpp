@@ -196,7 +196,7 @@ public:
    * @return True if allow turns, otherwise straight
    */
   bool IsTurningReachEnabled() const {
-    return config.reach_calc_mode == RoutePlannerConfig::rmTurning;
+    return config.IsTurningReachEnabled();
   }
 
   /**

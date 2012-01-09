@@ -274,11 +274,11 @@ AbortTask::UpdateSample(const AircraftState &state, bool full_update)
   // lookup the appropriate polar to use
   const GlidePolar* mode_polar;
   switch (task_behaviour.route_planner.reach_polar_mode) {
-  case RoutePlannerConfig::rpmTask:
+  case RoutePlannerConfig::Polar::TASK:
     mode_polar = &glide_polar;
     // make copy to avoid waste
     break;
-  case RoutePlannerConfig::rpmSafety:
+  case RoutePlannerConfig::Polar::SAFETY:
     mode_polar = &polar_safety;
     break;
   default:

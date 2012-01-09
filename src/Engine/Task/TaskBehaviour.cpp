@@ -80,5 +80,5 @@ TaskBehaviour::DisableAll()
   calc_glide_required = false;
   enable_olc = false;
   ordered_defaults.all_off();
-  route_planner.mode = RoutePlannerConfig::rpNone;
+  route_planner.mode = RoutePlannerConfig::Mode::NONE;
 }

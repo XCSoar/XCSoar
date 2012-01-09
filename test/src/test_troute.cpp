@@ -72,7 +72,7 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
   }
 
   RoutePlannerConfig config;
-  config.mode = RoutePlannerConfig::rpBoth;
+  config.mode = RoutePlannerConfig::Mode::BOTH;
 
   unsigned i=0;
   for (fixed ang=fixed_zero; ang< fixed_two_pi; ang+= fixed_quarter_pi*fixed_half) {

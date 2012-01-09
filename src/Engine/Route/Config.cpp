@@ -25,10 +25,10 @@
 void
 RoutePlannerConfig::SetDefaults()
 {
-  mode = rpNone; // default disable while experimental
+  mode = Mode::NONE; // default disable while experimental
   allow_climb = true;
   use_ceiling = false;
   safety_height_terrain = fixed(150);
-  reach_calc_mode = rmStraight;
-  reach_polar_mode = rpmSafety;
+  reach_calc_mode = ReachMode::STRAIGHT;
+  reach_polar_mode = Polar::SAFETY;
 }

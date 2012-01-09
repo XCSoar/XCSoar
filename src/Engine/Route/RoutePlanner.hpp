@@ -157,7 +157,7 @@ private:
 
   ReachFan reach;
 
-  RoutePlannerConfig::PolarMode reach_polar_mode;
+  RoutePlannerConfig::Polar reach_polar_mode;
 
   mutable unsigned long count_dij;
   mutable unsigned long count_unique;

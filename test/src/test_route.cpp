@@ -133,7 +133,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     route.UpdatePolar(settings, polar, polar, wind);
     route.SetTerrain(&map);
     RoutePlannerConfig config;
-    config.mode = RoutePlannerConfig::rpBoth;
+    config.mode = RoutePlannerConfig::Mode::BOTH;
 
     bool sol = false;
     for (int i = 0; i < NUM_SOL; i++) {

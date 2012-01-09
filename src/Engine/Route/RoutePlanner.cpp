@@ -26,7 +26,7 @@
 #include "Math/FastMath.h"
 
 RoutePlanner::RoutePlanner()
-  :terrain(NULL), planner(0), reach_polar_mode(RoutePlannerConfig::rpmTask)
+  :terrain(NULL), planner(0), reach_polar_mode(RoutePlannerConfig::Polar::TASK)
 #ifndef PLANNER_SET
   , unique_links(50000)
 #endif
@@ -367,12 +367,12 @@ RoutePlanner::UpdatePolar(const GlideSettings &settings,
 {
   rpolars_route.Initialise(settings, task_polar, wind);
   switch (reach_polar_mode) {
-  case RoutePlannerConfig::rpmTask:
+  case RoutePlannerConfig::Polar::TASK:
     rpolars_reach = rpolars_route;
     glide_polar_reach = task_polar;
     // make copy to avoid waste
     break;
-  case RoutePlannerConfig::rpmSafety:
+  case RoutePlannerConfig::Polar::SAFETY:
     rpolars_reach.Initialise(settings, safety_polar, wind);
     glide_polar_reach = safety_polar;
     break;

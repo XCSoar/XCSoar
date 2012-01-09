@@ -27,22 +27,22 @@
 
 struct RoutePlannerConfig
 {
-  enum Mode {
-    rpNone=0,
-    rpTerrain,
-    rpAirspace,
-    rpBoth
+  enum class Mode {
+    NONE,
+    TERRAIN,
+    AIRSPACE,
+    BOTH,
   };
 
-  enum PolarMode {
-    rpmTask=0,
-    rpmSafety
+  enum class Polar {
+    TASK,
+    SAFETY,
   };
 
-  enum ReachMode {
-    rmOff=0,
-    rmStraight,
-    rmTurning
+  enum class ReachMode {
+    OFF,
+    STRAIGHT,
+    TURNING,
   };
 
   Mode mode;
@@ -58,18 +58,24 @@ struct RoutePlannerConfig
   ReachMode reach_calc_mode;
 
   /** Whether reach/abort calculations will use the task or safety polar */
-  PolarMode reach_polar_mode;
+  Polar reach_polar_mode;
 
   void SetDefaults();
 
   bool IsTerrainEnabled() const {
-    return mode== rpTerrain || mode== rpBoth;
+    return mode == Mode::TERRAIN || mode == Mode::BOTH;
   }
+
   bool IsAirspaceEnabled() const {
-    return mode== rpAirspace || mode== rpBoth;
+    return mode == Mode::AIRSPACE || mode== Mode::BOTH;
   }
+
   bool IsReachEnabled() const {
-    return reach_calc_mode != rmOff;
+    return reach_calc_mode != ReachMode::OFF;
+  }
+
+  bool IsTurningReachEnabled() const {
+    return reach_calc_mode == ReachMode::TURNING;
   }
 };
 
