@@ -184,7 +184,7 @@ FlarmNet::FindRecordsByCallSign(const TCHAR *cn,
 }
 
 unsigned
-FlarmNet::FindIdsByCallSign(const TCHAR *cn, const FlarmId *array[], unsigned size)
+FlarmNet::FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size)
 {
   unsigned count = 0;
 
@@ -192,7 +192,7 @@ FlarmNet::FindIdsByCallSign(const TCHAR *cn, const FlarmId *array[], unsigned si
   while (i != record_map.end() && count < size) {
     const FlarmRecord *record = (const FlarmRecord *)(i->second);
     if (StringIsEqual(record->callsign, cn)) {
-      array[count] = (const FlarmId *)(&(i->first));
+      array[count] = i->first;
       count++;
     }
 

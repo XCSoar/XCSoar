@@ -38,8 +38,8 @@ dlgFlarmTrafficShowModal();
 void
 dlgFlarmTrafficDetailsShowModal(FlarmId id);
 
-const FlarmId *
+FlarmId
 dlgFlarmDetailsListShowModal(SingleWindow &parent, const TCHAR *title,
-                             const FlarmId *_array[], unsigned count);
+                             FlarmId array[], unsigned count);
 
 #endif

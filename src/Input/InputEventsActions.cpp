@@ -247,15 +247,15 @@ InputEvents::eventFlarmDetails(gcc_unused const TCHAR *misc)
                        _("Competition ID")))
     return;
 
-  const FlarmId *ids[30];
+  FlarmId ids[30];
   unsigned count = FlarmDetails::FindIdsByCallSign(callsign, ids, 30);
 
   if (count > 0) {
-    const FlarmId *id = dlgFlarmDetailsListShowModal(
+    FlarmId id = dlgFlarmDetailsListShowModal(
         XCSoarInterface::main_window, _("Show details:"), ids, count);
 
-    if (id != NULL && id->IsDefined())
-      dlgFlarmTrafficDetailsShowModal(*id);
+    if (id.IsDefined())
+      dlgFlarmTrafficDetailsShowModal(id);
   } else {
     MessageBoxX(_("Unknown competition number"),
                 _("Not found"), MB_OK | MB_ICONINFORMATION);

@@ -198,14 +198,14 @@ FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name)
 }
 
 unsigned
-FlarmDetails::FindIdsByCallSign(const TCHAR *cn, const FlarmId *array[],
+FlarmDetails::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
                                 unsigned size)
 {
   unsigned count = FlarmNet::FindIdsByCallSign(cn, array, size);
 
   for (unsigned i = 0; i < flarm_names.size() && count < size; i++) {
     if (flarm_names[i].name.equals(cn)) {
-      array[count] = &flarm_names[i].id;
+      array[count] = flarm_names[i].id;
       count++;
     }
   }

@@ -132,17 +132,17 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
     return;
   }
 
-  const FlarmId *ids[30];
+  FlarmId ids[30];
   unsigned count = FlarmDetails::FindIdsByCallSign(
       XCSoarInterface::GetComputerSettings().team_flarm_callsign, ids, 30);
 
   if (count > 0) {
-    const FlarmId *id =
+    const FlarmId id =
       dlgFlarmDetailsListShowModal(UIGlobals::GetMainWindow(),
                                    _("Set new teammate:"), ids, count);
 
-    if (id != NULL && id->IsDefined()) {
-      settings.team_flarm_id = *id;
+    if (id.IsDefined()) {
+      settings.team_flarm_id = id;
       settings.team_flarm_tracking = true;
       return;
     }

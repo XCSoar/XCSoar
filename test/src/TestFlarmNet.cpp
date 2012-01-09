@@ -59,16 +59,16 @@ int main(int argc, char **argv)
   ok1(found4449);
   ok1(found5799);
 
-  const FlarmId *ids[3];
+  FlarmId ids[3];
   ok1(FlarmNet::FindIdsByCallSign(_T("TH"), ids, 3) == 2);
 
   id.Parse("DDA85C", NULL);
   id2.Parse("DDA896", NULL);
   bool foundDDA85C = false, foundDDA896 = false;
   for (unsigned i = 0; i < 2; i++) {
-    if (*ids[i] == id)
+    if (ids[i] == id)
       foundDDA85C = true;
-    if (*ids[i] == id2)
+    if (ids[i] == id2)
       foundDDA896 = true;
   }
   ok1(foundDDA85C);

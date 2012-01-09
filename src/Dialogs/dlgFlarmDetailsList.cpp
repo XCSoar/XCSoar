@@ -35,15 +35,14 @@ Copyright_License {
 
 #include <stdio.h>
 
-const FlarmId **array;
+static const FlarmId *array;
 
 static void
 PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 {
-  assert(array[index] != NULL);
-  assert(array[index]->IsDefined());
+  assert(array[index].IsDefined());
 
-  const FlarmId &id = *array[index];
+  const FlarmId id = array[index];
 
   const Font &name_font = Fonts::map_bold;
   const Font &small_font = Fonts::map_label;
@@ -97,15 +96,17 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
                       rc, tmp);
 }
 
-const FlarmId *
+FlarmId
 dlgFlarmDetailsListShowModal(SingleWindow &parent, const TCHAR *title,
-                             const FlarmId *_array[], unsigned count)
+                             FlarmId _array[], unsigned count)
 {
   assert(count > 0);
 
   array = _array;
   UPixelScalar line_height = Fonts::map_bold.GetHeight() + Layout::Scale(6) +
                          Fonts::map_label.GetHeight();
-  int index = ListPicker(parent, title, count, 0, line_height, PaintListItem, true);
-  return (index < 0 || index >= (int)count) ? NULL : array[index];
+  unsigned index = ListPicker(parent, title, count, 0, line_height, PaintListItem, true);
+  return index < count
+    ? array[index]
+    : FlarmId::Undefined();
 }

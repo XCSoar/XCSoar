@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_ID_HPP
 #define XCSOAR_FLARM_ID_HPP
 
+#include "Compiler.h"
+
 #include <stdint.h>
 #include <tchar.h>
 
@@ -37,7 +39,17 @@ class FlarmId {
 
   uint32_t value;
 
+  gcc_constexpr_ctor
+  FlarmId(uint32_t _value):value(_value) {}
+
 public:
+  FlarmId() = default;
+
+  gcc_constexpr_function
+  static FlarmId Undefined() {
+    return FlarmId(UNDEFINED_VALUE);
+  }
+
   bool IsDefined() const {
     return value != UNDEFINED_VALUE;
   }

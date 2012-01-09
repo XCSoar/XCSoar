@@ -113,7 +113,7 @@ namespace FlarmDetails
   LookupSecondaryIndex(FlarmId id);
 
   unsigned
-  FindIdsByCallSign(const TCHAR *cn, const FlarmId *array[], unsigned size);
+  FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size);
 }
 
 #endif
