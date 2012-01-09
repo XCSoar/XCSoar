@@ -51,7 +51,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
   TCHAR tmp_id[10];
   id.Format(tmp_id);
 
-  const FlarmNet::Record *record = FlarmNet::FindRecordById(id);
+  const FlarmRecord *record = FlarmNet::FindRecordById(id);
   const TCHAR *callsign = FlarmDetails::LookupCallsign(id);
 
   canvas.Select(name_font);

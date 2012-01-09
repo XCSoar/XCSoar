@@ -134,7 +134,7 @@ FlarmDetails::LookupSecondaryIndex(const TCHAR *cn)
   return -1;
 }
 
-const FlarmNet::Record *
+const FlarmRecord *
 FlarmDetails::LookupRecord(FlarmId id)
 {
   // try to find flarm from FlarmNet.org File
@@ -150,7 +150,7 @@ FlarmDetails::LookupCallsign(FlarmId id)
     return flarm_names[index].name;
 
   // try to find flarm from FlarmNet.org File
-  const FlarmNet::Record *record = FlarmNet::FindRecordById(id);
+  const FlarmRecord *record = FlarmNet::FindRecordById(id);
   if (record != NULL)
     return record->callsign;
 
@@ -166,7 +166,7 @@ FlarmDetails::LookupId(const TCHAR *cn)
     return flarm_names[index].id;
 
   // try to find flarm from FlarmNet.org File
-  const FlarmNet::Record *record = FlarmNet::FindFirstRecordByCallSign(cn);
+  const FlarmRecord *record = FlarmNet::FindFirstRecordByCallSign(cn);
   if (record != NULL)
     return record->GetId();
 

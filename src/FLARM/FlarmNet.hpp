@@ -24,9 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_NET_HPP
 #define XCSOAR_FLARM_NET_HPP
 
+#include "Record.hpp"
+
 #include <map>
 #include <tchar.h>
 
+struct FlarmRecord;
 class NLineReader;
 class FlarmId;
 
@@ -35,23 +38,6 @@ class FlarmId;
  */
 namespace FlarmNet
 {
-
-  /**
-   * FlarmNet.org file entry
-   */
-  struct Record
-  {
-    TCHAR id[7];           /**< FLARM id 6 bytes */
-    TCHAR pilot[22];       /**< Name 15 bytes */
-    TCHAR airfield[22];    /**< Airfield 4 bytes */
-    TCHAR plane_type[22];  /**< Aircraft type 1 byte */
-    TCHAR registration[8]; /**< Registration 7 bytes */
-    TCHAR callsign[4];     /**< Callsign 3 bytes */
-    TCHAR frequency[8];    /**< Radio frequency 6 bytes */
-
-    FlarmId GetId() const;
-  };
-
   void Destroy();
 
   unsigned LoadFile(NLineReader &reader);
@@ -69,15 +55,15 @@ namespace FlarmNet
    * @param id FLARM id
    * @return FLARMNetRecord object
    */
-  const Record *FindRecordById(FlarmId id);
+  const FlarmRecord *FindRecordById(FlarmId id);
 
   /**
    * Finds a FLARMNetRecord object based on the given Callsign
    * @param cn Callsign
    * @return FLARMNetRecord object
    */
-  const Record *FindFirstRecordByCallSign(const TCHAR *cn);
-  unsigned FindRecordsByCallSign(const TCHAR *cn, const Record *array[],
+  const FlarmRecord *FindFirstRecordByCallSign(const TCHAR *cn);
+  unsigned FindRecordsByCallSign(const TCHAR *cn, const FlarmRecord *array[],
                                  unsigned size);
   unsigned FindIdsByCallSign(const TCHAR *cn, const FlarmId *array[],
                              unsigned size);
