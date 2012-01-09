@@ -635,7 +635,8 @@ DEBUG_PROGRAM_NAMES = \
 	TestNotify \
 	DebugDisplay \
 	RunFlarmUtils \
-	RunTCPListener
+	RunTCPListener \
+	IGC2NMEA
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += FeedNMEA \
@@ -1993,6 +1994,21 @@ endif
 endif
 
 $(eval $(call link-program,FeedTCPServer,FEED_TCP_SERVER))
+
+IGC2NMEA_SOURCES = \
+	$(SRC)/Replay/IgcReplay.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
+	$(SRC)/Units/System.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
+	$(TEST_SRC_DIR)/IGC2NMEA.cpp
+
+IGC2NMEA_DEPENDS = MATH UTIL
+IGC2NMEA_LDADD = $(DEBUG_REPLAY_LDADD)
+
+$(eval $(call link-program,IGC2NMEA,IGC2NMEA))
 
 TODAY_INSTALL_SOURCES = \
 	$(TEST_SRC_DIR)/TodayInstall.cpp
