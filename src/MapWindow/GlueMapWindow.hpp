@@ -91,8 +91,8 @@ class GlueMapWindow : public MapWindow {
   GestureManager gestures;
   bool ignore_single_click;
 
-  /** single click on un-focused window */
-  bool first_single_click_after_focus;
+  /** flag to indicate if the MapItemList should be shown on mouse up */
+  bool arm_mapitem_list;
 
   ZoomClimb_t zoomclimb;
 
