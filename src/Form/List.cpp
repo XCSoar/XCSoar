@@ -416,9 +416,9 @@ WndListFrame::OnMouseUp(PixelScalar x, PixelScalar y)
   if (drag_mode == DragMode::CURSOR &&
       ActivateCallback != NULL && x >= 0 &&
       x <= ((PixelScalar)get_width() - scroll_bar.GetWidth())) {
-      drag_end();
-      ActivateCallback(GetCursorIndex());
-      return true;
+    drag_end();
+    ActivateCallback(GetCursorIndex());
+    return true;
   }
 
   if (drag_mode == DragMode::SCROLL || drag_mode == DragMode::CURSOR) {
