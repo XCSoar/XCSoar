@@ -34,15 +34,14 @@ Copyright_License {
 
 namespace FlarmNet
 {
-  typedef std::map<FlarmId, FlarmRecord*> RecordMap;
+  typedef std::map<FlarmId, FlarmRecord> RecordMap;
   RecordMap record_map;
 }
 
 void
 FlarmNet::Destroy()
 {
-  for (auto i = record_map.begin(); i != record_map.end(); ++i)
-    delete i->second;
+  record_map.clear();
 }
 
 /**
@@ -81,28 +80,27 @@ LoadString(const char *bytes, int charCount, TCHAR *res)
  *
  * The caller is responsible for deleting the object again!
  */
-static FlarmRecord *
-LoadRecord(const char *line)
+static bool
+LoadRecord(FlarmRecord &record, const char *line)
 {
   if (strlen(line) < 172)
-    return NULL;
+    return false;
 
-  FlarmRecord *record = new FlarmRecord;
-  LoadString(line, 6, record->id);
-  LoadString(line + 12, 21, record->pilot);
-  LoadString(line + 54, 21, record->airfield);
-  LoadString(line + 96, 21, record->plane_type);
-  LoadString(line + 138, 7, record->registration);
-  LoadString(line + 152, 3, record->callsign);
-  LoadString(line + 158, 7, record->frequency);
+  LoadString(line, 6, record.id);
+  LoadString(line + 12, 21, record.pilot);
+  LoadString(line + 54, 21, record.airfield);
+  LoadString(line + 96, 21, record.plane_type);
+  LoadString(line + 138, 7, record.registration);
+  LoadString(line + 152, 3, record.callsign);
+  LoadString(line + 158, 7, record.frequency);
 
   // Terminate callsign string on first whitespace
-  int maxSize = sizeof(record->callsign) / sizeof(TCHAR);
-  for (int i = 0; record->callsign[i] != 0 && i < maxSize; i++)
-    if (IsWhitespaceOrNull(record->callsign[i]))
-      record->callsign[i] = 0;
+  int maxSize = sizeof(record.callsign) / sizeof(TCHAR);
+  for (int i = 0; record.callsign[i] != 0 && i < maxSize; i++)
+    if (IsWhitespaceOrNull(record.callsign[i]))
+      record.callsign[i] = 0;
 
-  return record;
+  return true;
 }
 
 unsigned
@@ -118,9 +116,10 @@ FlarmNet::LoadFile(NLineReader &reader)
 
   int itemCount = 0;
   while ((line = reader.read()) != NULL) {
-    FlarmRecord *record = LoadRecord(line);
-    if (record != NULL) {
-      record_map[record->GetId()] = record;
+    FlarmRecord record;
+    if (LoadRecord(record, line)) {
+      record_map.insert(std::make_pair(record.GetId(),
+                                       record));
       itemCount++;
     }
   }
@@ -143,7 +142,7 @@ FlarmNet::FindRecordById(FlarmId id)
 {
   RecordMap::const_iterator i = record_map.find(id);
   if (i != record_map.end())
-    return i->second;
+    return &i->second;
 
   return NULL;
 }
@@ -153,9 +152,9 @@ FlarmNet::FindFirstRecordByCallSign(const TCHAR *cn)
 {
   RecordMap::const_iterator i = record_map.begin();
   while (i != record_map.end()) {
-    const FlarmRecord *record = (const FlarmRecord *)(i->second);
-    if (StringIsEqual(record->callsign, cn))
-      return record;
+    const FlarmRecord &record = i->second;
+    if (StringIsEqual(record.callsign, cn))
+      return &record;
 
     i++;
   }
@@ -171,9 +170,9 @@ FlarmNet::FindRecordsByCallSign(const TCHAR *cn,
 
   RecordMap::const_iterator i = record_map.begin();
   while (i != record_map.end() && count < size) {
-    const FlarmRecord *record = (const FlarmRecord *)(i->second);
-    if (StringIsEqual(record->callsign, cn)) {
-      array[count] = record;
+    const FlarmRecord &record = i->second;
+    if (StringIsEqual(record.callsign, cn)) {
+      array[count] = &record;
       count++;
     }
 
@@ -190,8 +189,8 @@ FlarmNet::FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size)
 
   RecordMap::const_iterator i = record_map.begin();
   while (i != record_map.end() && count < size) {
-    const FlarmRecord *record = (const FlarmRecord *)(i->second);
-    if (StringIsEqual(record->callsign, cn)) {
+    const FlarmRecord &record = i->second;
+    if (StringIsEqual(record.callsign, cn)) {
       array[count] = i->first;
       count++;
     }
