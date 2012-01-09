@@ -714,6 +714,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Engine/Task/TaskStats/DistanceStat.cpp \
 	$(SRC)/Engine/Task/TaskStats/TaskVario.cpp \
 	$(SRC)/Compatibility/string.c \
+	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
@@ -795,7 +796,6 @@ RUN_LIVETRACK24_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunLiveTrack24.cpp
 RUN_LIVETRACK24_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_LIVETRACK24_DEPENDS = LIBNET MATH UTIL
@@ -1254,7 +1254,6 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunIGCWriter.cpp
 RUN_IGC_WRITER_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_IGC_WRITER_DEPENDS = MATH UTIL
@@ -1264,7 +1263,6 @@ RUN_CIRCLING_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Wind/CirclingWind.cpp \
-	$(SRC)/UtilsFile.cpp\
 	$(TEST_SRC_DIR)/RunCirclingWind.cpp
 RUN_CIRCLING_WIND_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_CIRCLING_WIND_DEPENDS = MATH UTIL
@@ -1273,7 +1271,6 @@ $(eval $(call link-program,RunCirclingWind,RUN_CIRCLING_WIND))
 RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Wind/WindZigZag.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunWindZigZag.cpp
 RUN_WIND_ZIG_ZAG_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_ZIG_ZAG_DEPENDS = MATH UTIL
@@ -1283,7 +1280,6 @@ RUN_WIND_EKF_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Wind/WindEKF.cpp \
 	$(SRC)/Wind/WindEKFGlue.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunWindEKF.cpp
 RUN_WIND_EKF_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_EKF_DEPENDS = MATH UTIL
@@ -1293,7 +1289,6 @@ RUN_TRACE_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
@@ -1310,7 +1305,6 @@ RUN_OLC_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TracePoint.cpp \
