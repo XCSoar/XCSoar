@@ -68,7 +68,7 @@ HexDumpLine(const TCHAR *prefix, unsigned offset,
     line += byte;
   }
 
-  LogStartUp(_T("%s%04x%s"), prefix, offset, line);
+  LogStartUp(_T("%s%04x%s"), prefix, offset, line.c_str());
 }
 
 static inline void
