@@ -316,9 +316,8 @@ DeclareInner(Port &port, const Declaration &declaration,
       return false;
 
     if (i+1>= declaration.Size()) {
-      EWMicroRecorderPrintf(port, _T("%s: %s\r\n"),
-                            _T("TP LatLon"),
-                            _T("0000000N00000000E TURN POINT"));
+      port.FullWriteString("TP LatLon: 0000000N00000000E TURN POINT\r\n",
+                           1000);
     } else {
       const Waypoint &wp = declaration.GetWaypoint(i);
       if (i == 0) {
