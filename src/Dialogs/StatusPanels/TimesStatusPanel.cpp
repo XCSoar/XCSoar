@@ -35,13 +35,10 @@ TimesStatusPanel::Refresh()
   const FlyingState &flight = calculated.flight;
 
   TCHAR Temp[64];
-  fixed sunsettime;
-  int sunsethours;
-  int sunsetmins;
 
-  sunsettime = XCSoarInterface::Calculated().sunset_time;
-  sunsethours = (int)sunsettime;
-  sunsetmins = (int)((sunsettime - fixed(sunsethours)) * 60);
+  fixed sunsettime = calculated.sunset_time;
+  int sunsethours = (int)sunsettime;
+  int sunsetmins = (int)((sunsettime - fixed(sunsethours)) * 60);
 
   _stprintf(Temp, _T("%02d:%02d"), sunsethours, sunsetmins);
   SetFormValue(form, _T("prpSunset"), Temp);
