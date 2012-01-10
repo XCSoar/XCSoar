@@ -56,7 +56,7 @@ DialogLook::Initialise(const Font &caption_font,
 
   list.background_color = COLOR_WHITE;
   list.text_color = COLOR_BLACK;
-  list.selected.background_color = COLOR_LIGHT_GRAY;
+  list.selected.background_color = COLOR_XCSOAR_LIGHT;
   list.selected.text_color = COLOR_BLACK;
   list.font = &list_font;
 }
