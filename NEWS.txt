@@ -9,6 +9,8 @@ Version 6.2.5 - not yet released
   - fix display of "FIN ETE VMG" and "WP ETE VMG"
 * settings
   - fix handling negative UTC offsets
+* devices:
+  - fix regression in EW MicroRecorder task declaration
 
 Version 6.2.4 - 2011/12/24
 * calculations
