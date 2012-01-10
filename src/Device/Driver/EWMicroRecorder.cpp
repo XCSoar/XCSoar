@@ -214,7 +214,7 @@ EWMicroRecorderPrintf(Port &port, const TCHAR *fmt, ...)
 static void
 WritePair(Port &port, const TCHAR *name, const TCHAR *value)
 {
-  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"), name, value);
+  EWMicroRecorderPrintf(port, _T("%s: %s\r\n"), name, value);
 }
 
 static void
@@ -250,7 +250,7 @@ EWMicroRecorderWriteWaypoint(Port &port,
   MinLon = (tmp - DegLon) * 60 * 1000;
 
   EWMicroRecorderPrintf(port,
-                        _T("%-17s %02d%05d%c%03d%05d%c %s\r\n"),
+                        _T("%s: %02d%05d%c%03d%05d%c %s\r\n"),
                         EWType,
                         DegLat, (int)MinLat, NoS,
                         DegLon, (int)MinLon, EoW,
@@ -277,29 +277,30 @@ DeclareInner(Port &port, const Declaration &declaration,
   port.Write(user_data);
 
   port.Write("USER DETAILS\r\n--------------\r\n\r\n");
-  WritePair(port, _T("Pilot Name:"), declaration.pilot_name.c_str());
-  WritePair(port, _T("Competition ID:"), declaration.competition_id.c_str());
-  WritePair(port,  _T("Aircraft Type:"), declaration.aircraft_type.c_str());
-  WritePair(port,  _T("Aircraft ID:"),
+  WritePair(port, _T("Pilot Name"), declaration.pilot_name.c_str());
+  WritePair(port, _T("Competition ID"), declaration.competition_id.c_str());
+  WritePair(port,  _T("Aircraft Type"), declaration.aircraft_type.c_str());
+  WritePair(port,  _T("Aircraft ID"),
             declaration.aircraft_registration.c_str());
   port.Write("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n");
 
-  WritePair(port, _T("Description:"), _T("XCSoar task declaration"));
+  WritePair(port, _T("Description"), _T("XCSoar task declaration"));
 
   for (unsigned i = 0; i < 11; i++) {
     if (env.IsCancelled())
       return false;
 
     if (i+1>= declaration.Size()) {
-      EWMicroRecorderPrintf(port, _T("%-17s %s\r\n"),
-               _T("TP LatLon:"), _T("0000000N00000000E TURN POINT"));
+      EWMicroRecorderPrintf(port, _T("%s: %s\r\n"),
+                            _T("TP LatLon"),
+                            _T("0000000N00000000E TURN POINT"));
     } else {
       const Waypoint &wp = declaration.GetWaypoint(i);
       if (i == 0) {
-        EWMicroRecorderWriteWaypoint(port, wp, _T("Take Off LatLong:"));
-        EWMicroRecorderWriteWaypoint(port, wp, _T("Start LatLon:"));
+        EWMicroRecorderWriteWaypoint(port, wp, _T("Take Off LatLong"));
+        EWMicroRecorderWriteWaypoint(port, wp, _T("Start LatLon"));
       } else if (i + 1 < declaration.Size()) {
-        EWMicroRecorderWriteWaypoint(port, wp, _T("TP LatLon:"));
+        EWMicroRecorderWriteWaypoint(port, wp, _T("TP LatLon"));
       }
     }
   }
