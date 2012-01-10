@@ -63,8 +63,8 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
       mm -= 60;
     }
     // Save the string to the Buffer
-    _stprintf(Buffer, _T("%c%03d")_T(DEG)_T("%02d'%02d\""), EW[sign],
-              dd, mm, ss);
+    _stprintf(Buffer, _T("%03d")_T(DEG)_T("%02d'%02d\" %c"),
+              dd, mm, ss, EW[sign]);
     break;
 
   case CF_DDMMSS_SS:
@@ -76,8 +76,8 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
     // Calculate seconds
     mlong = (mlong - mm) * 60.0;
     // Save the string to the Buffer
-    _stprintf(Buffer, _T("%c%03d")_T(DEG)_T("%02d'%05.2f\""), EW[sign],
-              dd, mm, mlong);
+    _stprintf(Buffer, _T("%03d")_T(DEG)_T("%02d'%05.2f\" %c"),
+              dd, mm, mlong, EW[sign]);
     break;
 
   case CF_DDMM_MMM:
@@ -86,12 +86,12 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
     // Calculate minutes
     mlong = (mlong - dd) * 60.0;
     // Save the string to the Buffer
-    _stprintf(Buffer, _T("%c%03d")_T(DEG)_T("%06.3f'"), EW[sign], dd, mlong);
+    _stprintf(Buffer, _T("%03d")_T(DEG)_T("%06.3f' %c"), dd, mlong, EW[sign]);
     break;
 
   case CF_DD_DDDD:
     // Save the string to the Buffer
-    _stprintf(Buffer, _T("%c%08.4f")_T(DEG), EW[sign], mlong);
+    _stprintf(Buffer, _T("%08.4f %c")_T(DEG), mlong, EW[sign]);
     break;
 
   default:
@@ -130,8 +130,8 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
       mm -= 60;
     }
     // Save the string to the Buffer
-    _stprintf(Buffer, _T("%c%02d")_T(DEG)_T("%02d'%02d\""), EW[sign],
-              dd, mm, ss);
+    _stprintf(Buffer, _T("%02d")_T(DEG)_T("%02d'%02d\" %c"),
+              dd, mm, ss, EW[sign]);
     break;
 
   case CF_DDMMSS_SS:
@@ -143,8 +143,8 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
     // Calculate seconds
     mlat = (mlat - mm) * 60.0;
     // Save the string to the Buffer
-    _stprintf(Buffer, _T("%c%02d")_T(DEG)_T("%02d'%05.2f\""), EW[sign],
-              dd, mm, mlat);
+    _stprintf(Buffer, _T("%02d")_T(DEG)_T("%02d'%05.2f\" %c"),
+              dd, mm, mlat, EW[sign]);
     break;
 
   case CF_DDMM_MMM:
@@ -153,12 +153,12 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
     // Calculate minutes
     mlat = (mlat - dd) * 60.0;
     // Save the string to the Buffer
-    _stprintf(Buffer, _T("%c%02d")_T(DEG)_T("%06.3f'"), EW[sign], dd, mlat);
+    _stprintf(Buffer, _T("%02d")_T(DEG)_T("%06.3f' %c"), dd, mlat, EW[sign]);
     break;
 
   case CF_DD_DDDD:
     // Save the string to the Buffer
-    _stprintf(Buffer, _T("%c%07.4f")_T(DEG), EW[sign], mlat);
+    _stprintf(Buffer, _T("%07.4f %c")_T(DEG), mlat, EW[sign]);
     break;
 
   default:
