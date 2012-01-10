@@ -200,7 +200,7 @@ WriteCleanString(Port &port, const TCHAR *p, unsigned timeout_ms)
   return port.FullWriteString(buffer, timeout_ms);
 }
 
-static void
+static bool
 EWMicroRecorderPrintf(Port &port, const TCHAR *fmt, ...)
 {
   TCHAR EWStr[128];
@@ -214,7 +214,7 @@ EWMicroRecorderPrintf(Port &port, const TCHAR *fmt, ...)
   char buffer[256];
   if (::WideCharToMultiByte(CP_ACP, 0, EWStr, -1, buffer, sizeof(buffer),
                             NULL, NULL) <= 0)
-    return;
+    return false;
 #else
   char *buffer = EWStr;
 #endif
@@ -227,7 +227,7 @@ EWMicroRecorderPrintf(Port &port, const TCHAR *fmt, ...)
 
   CleanString(p);
 
-  port.Write(buffer);
+  return port.FullWriteString(buffer, 1000);
 }
 
 /**
@@ -242,7 +242,7 @@ WritePair(Port &port, const char *name, const TCHAR *value)
     port.FullWrite("\r\n", 2, 500);
 }
 
-static void
+static bool
 EWMicroRecorderWriteWaypoint(Port &port,
                              const Waypoint &way_point, const TCHAR *EWType)
 {
@@ -274,12 +274,12 @@ EWMicroRecorderWriteWaypoint(Port &port,
   DegLon = (int)tmp;
   MinLon = (tmp - DegLon) * 60 * 1000;
 
-  EWMicroRecorderPrintf(port,
-                        _T("%s: %02d%05d%c%03d%05d%c %s\r\n"),
-                        EWType,
-                        DegLat, (int)MinLat, NoS,
-                        DegLon, (int)MinLon, EoW,
-                        way_point.name.c_str());
+  return EWMicroRecorderPrintf(port,
+                               _T("%s: %02d%05d%c%03d%05d%c %s\r\n"),
+                               EWType,
+                               DegLat, (int)MinLat, NoS,
+                               DegLon, (int)MinLon, EoW,
+                               way_point.name.c_str());
 }
 
 static bool
@@ -299,15 +299,20 @@ DeclareInner(Port &port, const Declaration &declaration,
     *p = 0;
 
   port.Write('\x18');         // start to upload file
-  port.Write(user_data);
 
-  port.Write("USER DETAILS\r\n--------------\r\n\r\n");
+  if (!port.FullWriteString(user_data, 5000) ||
+      !port.FullWriteString("USER DETAILS\r\n--------------\r\n\r\n", 1000))
+    return false;
+
   WritePair(port, "Pilot Name", declaration.pilot_name.c_str());
   WritePair(port, "Competition ID", declaration.competition_id.c_str());
   WritePair(port,  "Aircraft Type", declaration.aircraft_type.c_str());
   WritePair(port,  "Aircraft ID",
             declaration.aircraft_registration.c_str());
-  port.Write("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n");
+
+  if (!port.FullWriteString("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n",
+                            1000))
+    return false;
 
   WritePair(port, "Description", _T("XCSoar task declaration"));
 
@@ -356,7 +361,8 @@ EWMicroRecorderDevice::Declare(const Declaration &declaration,
 
   bool success = DeclareInner(port, declaration, env);
 
-  port.Write("!!\r\n");         // go back to NMEA mode
+  // go back to NMEA mode
+  port.FullWrite("!!\r\n", 4, 500);
 
   return success;
 }
