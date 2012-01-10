@@ -162,6 +162,7 @@ DebugReplayIGC::CopyFromFix(const IGCFix &fix)
   basic.date_time_utc.hour = fix.time.hour;
   basic.date_time_utc.minute = fix.time.minute;
   basic.date_time_utc.second = fix.time.second;
+  basic.date_available = true;
   basic.connected.Update(basic.clock);
   basic.location = fix.location;
   basic.location_available.Update(basic.clock);
