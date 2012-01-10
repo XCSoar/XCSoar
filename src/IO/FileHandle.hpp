@@ -26,7 +26,6 @@ Copyright_License {
 
 #include <assert.h>
 #include <stddef.h>
-#include <stdarg.h>
 #include <stdio.h>
 
 #ifdef _UNICODE
@@ -100,33 +99,21 @@ public:
     return fwrite(s, size, length, file);
   }
 
-  void WriteFormatted(const char *format, va_list ap) {
+  template<typename... Args>
+  void WriteFormatted(const char *format, Args&&... args) {
     assert(format != NULL);
     assert(file != NULL);
-    vfprintf(file, format, ap);
-  }
 
-  void WriteFormatted(const char *format, ...) {
-    va_list ap;
-
-    va_start(ap, format);
-    WriteFormatted(format, ap);
-    va_end(ap);
+    ::fprintf(file, format, args...);
   }
 
 #ifdef _UNICODE
-  void WriteFormatted(const TCHAR *format, va_list ap) {
+  template<typename... Args>
+  void WriteFormatted(const TCHAR *format, Args&&... args) {
     assert(format != NULL);
     assert(file != NULL);
-    _vftprintf(file, format, ap);
-  }
 
-  void WriteFormatted(const TCHAR *format, ...) {
-    va_list ap;
-
-    va_start(ap, format);
-    WriteFormatted(format, ap);
-    va_end(ap);
+    ::_ftprintf(file, format, args...);
   }
 #endif
 };
