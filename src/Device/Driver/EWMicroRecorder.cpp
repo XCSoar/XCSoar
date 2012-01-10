@@ -201,33 +201,10 @@ WriteCleanString(Port &port, const TCHAR *p, unsigned timeout_ms)
 }
 
 static bool
-EWMicroRecorderPrintf(Port &port, const TCHAR *fmt, ...)
+WriteLabel(Port &port, const char *name)
 {
-  TCHAR EWStr[128];
-  va_list ap;
-
-  va_start(ap, fmt);
-  _vstprintf(EWStr, fmt, ap);
-  va_end(ap);
-
-#ifdef _UNICODE
-  char buffer[256];
-  if (::WideCharToMultiByte(CP_ACP, 0, EWStr, -1, buffer, sizeof(buffer),
-                            NULL, NULL) <= 0)
-    return false;
-#else
-  char *buffer = EWStr;
-#endif
-
-  char *p = strchr(buffer, ':');
-  if (p != NULL)
-    ++p;
-  else
-    p = buffer;
-
-  CleanString(p);
-
-  return port.FullWriteString(buffer, 1000);
+  return port.FullWriteString(name, 1000) &&
+    port.FullWrite(": ", 2, 500);
 }
 
 /**
@@ -236,22 +213,20 @@ EWMicroRecorderPrintf(Port &port, const TCHAR *fmt, ...)
 static bool
 WritePair(Port &port, const char *name, const TCHAR *value)
 {
-  return port.FullWriteString(name, 1000) &&
-    port.FullWrite(": ", 2, 500) &&
+  return WriteLabel(port, name) &&
     WriteCleanString(port, value, 1000) &&
     port.FullWrite("\r\n", 2, 500);
 }
 
 static bool
-EWMicroRecorderWriteWaypoint(Port &port,
-                             const Waypoint &way_point, const TCHAR *EWType)
+WriteGeoPoint(Port &port, const GeoPoint &value)
 {
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
   TCHAR NoS, EoW;
 
   // prepare latitude
-  tmp = (double)way_point.location.latitude.Degrees();
+  tmp = (double)value.latitude.Degrees();
   NoS = _T('N');
   if (tmp < 0)
     {
@@ -263,7 +238,7 @@ EWMicroRecorderWriteWaypoint(Port &port,
   MinLat = (tmp - DegLat) * 60 * 1000;
 
   // prepare long
-  tmp = (double)way_point.location.longitude.Degrees();
+  tmp = (double)value.longitude.Degrees();
   EoW = _T('E');
   if (tmp < 0)
     {
@@ -274,12 +249,23 @@ EWMicroRecorderWriteWaypoint(Port &port,
   DegLon = (int)tmp;
   MinLon = (tmp - DegLon) * 60 * 1000;
 
-  return EWMicroRecorderPrintf(port,
-                               _T("%s: %02d%05d%c%03d%05d%c %s\r\n"),
-                               EWType,
-                               DegLat, (int)MinLat, NoS,
-                               DegLon, (int)MinLon, EoW,
-                               way_point.name.c_str());
+  char buffer[64];
+  sprintf(buffer, "%02d%05d%c%03d%05d%c",
+          DegLat, (int)MinLat, NoS,
+          DegLon, (int)MinLon, EoW);
+
+  return port.FullWriteString(buffer, 1000);
+}
+
+static bool
+EWMicroRecorderWriteWaypoint(Port &port, const char *type,
+                             const Waypoint &way_point)
+{
+  return WriteLabel(port, type) &&
+    WriteGeoPoint(port, way_point.location) &&
+    port.Write(' ') &&
+    WriteCleanString(port, way_point.name.c_str(), 1000) &&
+    port.FullWrite("\r\n", 2, 500);
 }
 
 static bool
@@ -326,17 +312,17 @@ DeclareInner(Port &port, const Declaration &declaration,
     } else {
       const Waypoint &wp = declaration.GetWaypoint(i);
       if (i == 0) {
-        EWMicroRecorderWriteWaypoint(port, wp, _T("Take Off LatLong"));
-        EWMicroRecorderWriteWaypoint(port, wp, _T("Start LatLon"));
+        EWMicroRecorderWriteWaypoint(port, "Take Off LatLong", wp);
+        EWMicroRecorderWriteWaypoint(port, "Start LatLon", wp);
       } else if (i + 1 < declaration.Size()) {
-        EWMicroRecorderWriteWaypoint(port, wp, _T("TP LatLon"));
+        EWMicroRecorderWriteWaypoint(port, "TP LatLon", wp);
       }
     }
   }
 
   const Waypoint &wp = declaration.GetLastWaypoint();
-  EWMicroRecorderWriteWaypoint(port, wp, _T("Finish LatLon"));
-  EWMicroRecorderWriteWaypoint(port, wp, _T("Land LatLon"));
+  EWMicroRecorderWriteWaypoint(port, "Finish LatLon", wp);
+  EWMicroRecorderWriteWaypoint(port, "Land LatLon", wp);
 
   if (env.IsCancelled())
       return false;
