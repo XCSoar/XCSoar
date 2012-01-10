@@ -40,11 +40,11 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Units/AngleFormatter.hpp"
-#include "Renderer/WaypointIconRenderer.hpp"
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Language/Language.hpp"
+#include "Renderer/OZPreviewRenderer.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -147,11 +147,12 @@ TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
     PixelScalar(rc.top + line_height / 2),
   };
 
-  WaypointIconRenderer wir(CommonInterface::GetMapSettings().waypoint,
-                           CommonInterface::main_window.GetLook().map.waypoint,
-                           canvas);
+  PixelScalar radius = std::min(PixelScalar(line_height / 2
+                                            - Layout::FastScale(4)),
+                                Layout::FastScale(10));
 
-  wir.Draw(tp.GetWaypoint(), pt, WaypointIconRenderer::Unreachable, true);
+  OZPreviewRenderer::Draw(canvas, *tp.GetOZPoint(), pt, radius, CommonInterface::main_window.GetLook().map.task,
+                          CommonInterface::GetMapSettings().airspace, CommonInterface::main_window.GetLook().map.airspace);
 
   // Y-Coordinate of the second row
   PixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
