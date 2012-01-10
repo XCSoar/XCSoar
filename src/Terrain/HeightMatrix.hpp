@@ -50,11 +50,11 @@ public:
   void Fill(const RasterMap &map, const WindowProjection &map_projection,
             unsigned quantisation_pixels, bool interpolate);
 
-  unsigned get_width() const {
+  unsigned GetWidth() const {
     return width;
   }
 
-  unsigned get_height() const {
+  unsigned GetHeight() const {
     return height;
   }
 

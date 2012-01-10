@@ -349,8 +349,17 @@ InputEvents::eventPlaySound(const TCHAR *misc)
 void
 InputEvents::eventAutoLogger(const TCHAR *misc)
 {
-  if (!XCSoarInterface::GetComputerSettings().auto_logger_disabled)
-    eventLogger(misc);
+  LoggerSettings::AutoLogger auto_logger =
+      XCSoarInterface::GetComputerSettings().auto_logger;
+
+  if (auto_logger == LoggerSettings::AutoLogger::OFF)
+    return;
+
+  if (auto_logger == LoggerSettings::AutoLogger::START_ONLY &&
+      !StringIsEqual(misc, _T("start")))
+    return;
+
+  eventLogger(misc);
 }
 
 // Logger

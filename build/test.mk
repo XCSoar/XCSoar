@@ -217,6 +217,7 @@ $(eval $(call link-program,TestTaskWaypoint,TEST_TASKWAYPOINT))
 TEST_TROUTE_SOURCES = \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
@@ -231,6 +232,7 @@ $(eval $(call link-program,test_troute,TEST_TROUTE))
 TEST_REACH_SOURCES = \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
@@ -245,6 +247,7 @@ $(eval $(call link-program,test_reach,TEST_REACH))
 TEST_ROUTE_SOURCES = \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
@@ -632,7 +635,8 @@ DEBUG_PROGRAM_NAMES = \
 	TestNotify \
 	DebugDisplay \
 	RunFlarmUtils \
-	RunTCPListener
+	RunTCPListener \
+	IGC2NMEA
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += FeedNMEA \
@@ -711,6 +715,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Engine/Task/TaskStats/DistanceStat.cpp \
 	$(SRC)/Engine/Task/TaskStats/TaskVario.cpp \
 	$(SRC)/Compatibility/string.c \
+	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
@@ -792,7 +797,6 @@ RUN_LIVETRACK24_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunLiveTrack24.cpp
 RUN_LIVETRACK24_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_LIVETRACK24_DEPENDS = LIBNET MATH UTIL
@@ -913,6 +917,7 @@ $(eval $(call link-program,LoadTopography,LOAD_TOPOGRAPHY))
 
 LOAD_TERRAIN_SOURCES = \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/OS/FileUtil.cpp \
@@ -928,6 +933,7 @@ $(eval $(call link-program,LoadTerrain,LOAD_TERRAIN))
 
 RUN_HEIGHT_MATRIX_SOURCES = \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
@@ -1249,7 +1255,6 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunIGCWriter.cpp
 RUN_IGC_WRITER_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_IGC_WRITER_DEPENDS = MATH UTIL
@@ -1259,7 +1264,6 @@ RUN_CIRCLING_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Wind/CirclingWind.cpp \
-	$(SRC)/UtilsFile.cpp\
 	$(TEST_SRC_DIR)/RunCirclingWind.cpp
 RUN_CIRCLING_WIND_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_CIRCLING_WIND_DEPENDS = MATH UTIL
@@ -1268,7 +1272,6 @@ $(eval $(call link-program,RunCirclingWind,RUN_CIRCLING_WIND))
 RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Wind/WindZigZag.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunWindZigZag.cpp
 RUN_WIND_ZIG_ZAG_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_ZIG_ZAG_DEPENDS = MATH UTIL
@@ -1278,7 +1281,6 @@ RUN_WIND_EKF_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Wind/WindEKF.cpp \
 	$(SRC)/Wind/WindEKFGlue.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/RunWindEKF.cpp
 RUN_WIND_EKF_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_EKF_DEPENDS = MATH UTIL
@@ -1288,7 +1290,6 @@ RUN_TRACE_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
@@ -1305,7 +1306,6 @@ RUN_OLC_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TracePoint.cpp \
@@ -1415,6 +1415,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterTerrain.cpp \
 	$(SRC)/Terrain/RasterWeather.cpp \
@@ -1758,6 +1759,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterTerrain.cpp \
 	$(SRC)/Terrain/TerrainSettings.cpp \
@@ -1992,6 +1994,21 @@ endif
 endif
 
 $(eval $(call link-program,FeedTCPServer,FEED_TCP_SERVER))
+
+IGC2NMEA_SOURCES = \
+	$(SRC)/Replay/IgcReplay.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
+	$(SRC)/Units/System.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
+	$(TEST_SRC_DIR)/IGC2NMEA.cpp
+
+IGC2NMEA_DEPENDS = MATH UTIL
+IGC2NMEA_LDADD = $(DEBUG_REPLAY_LDADD)
+
+$(eval $(call link-program,IGC2NMEA,IGC2NMEA))
 
 TODAY_INSTALL_SOURCES = \
 	$(TEST_SRC_DIR)/TodayInstall.cpp

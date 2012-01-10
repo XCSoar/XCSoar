@@ -518,6 +518,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterTerrain.cpp \
 	$(SRC)/Terrain/RasterWeather.cpp \
 	$(SRC)/Terrain/HeightMatrix.cpp \

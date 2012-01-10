@@ -203,7 +203,7 @@ public:
     return height;
   }
 
-  void stretch_to(UPixelScalar width, UPixelScalar height, Canvas &dest_canvas,
+  void StretchTo(UPixelScalar width, UPixelScalar height, Canvas &dest_canvas,
                   UPixelScalar dest_width, UPixelScalar dest_height) const {
 #ifdef ENABLE_OPENGL
     texture->Bind();

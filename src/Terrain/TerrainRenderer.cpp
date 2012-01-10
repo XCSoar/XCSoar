@@ -184,8 +184,8 @@ TerrainRenderer::ScanSpotHeights()
   const short *h_buf = height_matrix.GetData();
   const unsigned quantisation_pixels = raster_renderer.GetQuantisation();
 
-  for (unsigned y = 0; y < height_matrix.get_height(); ++y) {
-    for (unsigned x = 0; x < height_matrix.get_width(); ++x) {
+  for (unsigned y = 0; y < height_matrix.GetHeight(); ++y) {
+    for (unsigned x = 0; x < height_matrix.GetWidth(); ++x) {
       short val = *h_buf++;
       if (RasterBuffer::IsSpecial(val))
         continue;
@@ -212,8 +212,8 @@ TerrainRenderer::ScanSpotHeights()
 void
 TerrainRenderer::CopyTo(Canvas &canvas, unsigned width, unsigned height) const
 {
-  raster_renderer.GetImage().stretch_to(raster_renderer.get_width(),
-                                        raster_renderer.get_height(), canvas,
+  raster_renderer.GetImage().StretchTo(raster_renderer.GetWidth(),
+                                        raster_renderer.GetHeight(), canvas,
                                         width, height);
 }
 

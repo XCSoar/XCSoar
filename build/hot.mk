@@ -12,6 +12,7 @@ HOT_SOURCES = \
 	$(SRC)/Terrain/HeightMatrix.cpp \
 	$(SRC)/Terrain/RasterRenderer.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \

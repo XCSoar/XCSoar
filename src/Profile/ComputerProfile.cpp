@@ -53,7 +53,15 @@ Profile::Load(LoggerSettings &settings)
   Get(szProfileLoggerTimeStepCruise, settings.logger_time_step_cruise);
   Get(szProfileLoggerTimeStepCircling, settings.logger_time_step_circling);
   Get(szProfileLoggerShort, settings.logger_short_name);
-  Get(szProfileDisableAutoLogger, settings.auto_logger_disabled);
+
+  if (!GetEnum(szProfileAutoLogger, settings.auto_logger)) {
+    // Legacy
+    bool disable_auto_logger;
+    if (Get(szProfileDisableAutoLogger, disable_auto_logger))
+      settings.auto_logger =
+          disable_auto_logger ? LoggerSettings::AutoLogger::OFF :
+                                LoggerSettings::AutoLogger::ON;
+  }
 }
 
 void

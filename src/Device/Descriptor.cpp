@@ -529,6 +529,17 @@ DeviceDescriptor::DataReceived(const void *data, size_t length)
   if (monitor != NULL)
     monitor->DataReceived(data, length);
 
+  // Pass data directly to drivers that use binary data protocols
+  if (driver != NULL && device != NULL && driver->UsesRawData()) {
+    ScopeLock protect(device_blackboard->mutex);
+    NMEAInfo &basic = device_blackboard->SetRealState(index);
+    basic.UpdateClock();
+    if (device->DataReceived(data, length, basic))
+      device_blackboard->ScheduleMerge();
+
+    return;
+  }
+
   PortLineHandler::DataReceived(data, length);
 }
 

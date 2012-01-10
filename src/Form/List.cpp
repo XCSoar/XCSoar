@@ -416,9 +416,9 @@ WndListFrame::OnMouseUp(PixelScalar x, PixelScalar y)
   if (drag_mode == DragMode::CURSOR &&
       ActivateCallback != NULL && x >= 0 &&
       x <= ((PixelScalar)get_width() - scroll_bar.GetWidth())) {
-      drag_end();
-      ActivateCallback(GetCursorIndex());
-      return true;
+    drag_end();
+    ActivateCallback(GetCursorIndex());
+    return true;
   }
 
   if (drag_mode == DragMode::SCROLL || drag_mode == DragMode::CURSOR) {
@@ -460,7 +460,7 @@ WndListFrame::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
       return true;
   }
 
-  if (drag_mode == DragMode::SCROLL || drag_mode == DragMode::CURSOR) {
+  if (drag_mode == DragMode::SCROLL) {
     int new_origin = drag_y - y;
     SetPixelOrigin(new_origin);
 #ifndef _WIN32_WCE
