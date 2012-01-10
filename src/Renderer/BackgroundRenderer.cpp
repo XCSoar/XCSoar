@@ -110,8 +110,8 @@ BackgroundRenderer::SetSunAngle(const WindowProjection& projection,
   if (settings.slope_shading == sstWind && calculated.wind_available)
     SetSunFromWind(projection, calculated.wind);
   else
-    SetSunAngle(projection, (basic.location_available &&
-                             settings.slope_shading == sstSun) ?
+    SetSunAngle(projection, (settings.slope_shading == sstSun &&
+                             calculated.sun_data_available) ?
                              calculated.sun_azimuth :
                              Angle::Degrees(fixed(-45.0)));
 

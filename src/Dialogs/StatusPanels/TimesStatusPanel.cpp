@@ -36,12 +36,16 @@ TimesStatusPanel::Refresh()
 
   TCHAR Temp[64];
 
-  fixed sunsettime = calculated.sunset_time;
-  int sunsethours = (int)sunsettime;
-  int sunsetmins = (int)((sunsettime - fixed(sunsethours)) * 60);
+  if (calculated.sun_data_available) {
+    fixed sunsettime = calculated.sunset_time;
+    int sunsethours = (int)sunsettime;
+    int sunsetmins = (int)((sunsettime - fixed(sunsethours)) * 60);
 
-  _stprintf(Temp, _T("%02d:%02d"), sunsethours, sunsetmins);
-  SetFormValue(form, _T("prpSunset"), Temp);
+    _stprintf(Temp, _T("%02d:%02d"), sunsethours, sunsetmins);
+    SetFormValue(form, _T("prpSunset"), Temp);
+  } else {
+    SetFormValue(form, _T("prpSunset"), _T(""));
+  }
 
   Units::TimeToTextHHMMSigned(Temp, DetectCurrentTime(basic));
   SetFormValue(form, _T("prpLocalTime"), Temp);

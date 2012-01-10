@@ -174,6 +174,7 @@ struct DerivedInfo:
   /** Distance to zoom to for autozoom */
   fixed auto_zoom_distance;
 
+  Validity sun_data_available;
   /** Local time of sunset */
   fixed sunset_time;
   /** Sun's azimuth at the current location and time */

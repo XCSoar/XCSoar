@@ -71,6 +71,7 @@ DerivedInfo::Reset()
   estimated_wind_available.Clear();
   wind_available.Clear();
   head_wind_available.Clear();
+  sun_data_available.Clear();
   task_stats.reset();
   common_stats.reset();
   contest_stats.Reset();
@@ -98,4 +99,5 @@ DerivedInfo::Expire(fixed Time)
   head_wind_available.Expire(Time, fixed(3));
 
   auto_mac_cready_available.Expire(Time, fixed(300));
+  sun_data_available.Expire(Time, fixed(3600));
 }
