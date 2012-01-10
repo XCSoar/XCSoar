@@ -92,7 +92,7 @@ int
 ListPicker(SingleWindow &parent, const TCHAR *caption,
            unsigned num_items, unsigned initial_value,
            UPixelScalar item_height,
-           WndListFrame::PaintItemCallback_t paint_callback, bool update,
+           WndListFrame::PaintItemCallback paint_callback, bool update,
            ListHelpCallback_t _help_callback,
            ItemHelpCallback_t _itemhelp_callback)
 {
