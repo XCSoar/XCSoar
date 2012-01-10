@@ -75,6 +75,13 @@ struct BrokenDate {
   }
 
   /**
+   * Clears the object, to make the Plausible() check returns false.
+   */
+  void Clear() {
+    year = 0;
+  }
+
+  /**
    * Does this object contain plausible values?
    */
   gcc_constexpr_method
