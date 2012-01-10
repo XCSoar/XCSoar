@@ -24,8 +24,12 @@
 #ifndef OBSERVATIONZONE_HPP
 #define OBSERVATIONZONE_HPP
 
-#include "Navigation/Aircraft.hpp"
+#include "Math/fixed.hpp"
+
 #include "Compiler.h"
+
+struct GeoPoint;
+struct AircraftState;
 
 /**
  * Abstract class giving properties of a zone which is used to measure
