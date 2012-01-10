@@ -296,8 +296,6 @@ IDR_XML_TERRAINDISPLAYCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/
 IDR_XML_TERRAINDISPLAYCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TerrainDisplayConfigPanel_L.xml.gz"
 IDR_XML_TRACKINGCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TrackingConfigPanel.xml.gz"
 IDR_XML_TRACKINGCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TrackingConfigPanel_L.xml.gz"
-IDR_XML_UNITSCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/UnitsConfigPanel.xml.gz"
-IDR_XML_UNITSCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/UnitsConfigPanel_L.xml.gz"
 
 // infobox access
 IDR_XML_INFOBOXMACCREADYEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxMacCreadyEdit.xml.gz"
