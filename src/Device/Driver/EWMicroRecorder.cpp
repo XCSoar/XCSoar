@@ -166,6 +166,18 @@ IsValidEWChar(char ch)
     (ch >= '0' && ch <= '9');
 }
 
+/**
+ * Replace all invalid characters according to IsValidEWChar() with a
+ * space.
+ */
+static void
+CleanString(char *p)
+{
+  for (; *p != 0; ++p)
+    if (!IsValidEWChar(*p))
+      *p = ' ';
+}
+
 static void
 EWMicroRecorderPrintf(Port &port, const TCHAR *fmt, ...)
 {
@@ -191,9 +203,7 @@ EWMicroRecorderPrintf(Port &port, const TCHAR *fmt, ...)
   else
     p = buffer;
 
-  for (; *p != 0; ++p)
-    if (!IsValidEWChar(*p))
-      *p = ' ';
+  CleanString(p);
 
   port.Write(buffer);
 }
