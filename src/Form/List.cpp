@@ -309,7 +309,8 @@ WndListFrame::SetOrigin(int i)
 void
 WndListFrame::MoveOrigin(int delta)
 {
-  SetOrigin(origin + delta);
+  int pixel_origin = (int)GetPixelOrigin();
+  SetPixelOrigin(pixel_origin + delta * (int)item_height);
 }
 
 bool
@@ -552,12 +553,10 @@ WndListFrame::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 
   if (delta > 0) {
     // scroll up
-    if (origin > 0)
-      MoveOrigin(-1);
+    MoveOrigin(-1);
   } else if (delta < 0) {
     // scroll down
-    if (origin + items_visible < length)
-      MoveOrigin(1);
+    MoveOrigin(1);
   }
 
   return true;
