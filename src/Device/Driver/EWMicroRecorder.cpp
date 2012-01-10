@@ -36,6 +36,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "PeriodClock.hpp"
 #include "Operation/Operation.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <tchar.h>
 #include <assert.h>
@@ -178,6 +179,27 @@ CleanString(char *p)
       *p = ' ';
 }
 
+/**
+ * Clean a string and write it to the Port.
+ */
+static bool
+WriteCleanString(Port &port, const TCHAR *p, unsigned timeout_ms)
+{
+  char buffer[256];
+
+#ifdef _UNICODE
+  if (::WideCharToMultiByte(CP_ACP, 0, p, -1, buffer, sizeof(buffer),
+                            NULL, NULL) <= 0)
+    return false;
+#else
+  CopyString(buffer, p, sizeof(buffer));
+#endif
+
+  CleanString(buffer);
+
+  return port.FullWriteString(buffer, timeout_ms);
+}
+
 static void
 EWMicroRecorderPrintf(Port &port, const TCHAR *fmt, ...)
 {
@@ -211,10 +233,13 @@ EWMicroRecorderPrintf(Port &port, const TCHAR *fmt, ...)
 /**
  * Write a name/value pair to the EW microRecorder.
  */
-static void
-WritePair(Port &port, const TCHAR *name, const TCHAR *value)
+static bool
+WritePair(Port &port, const char *name, const TCHAR *value)
 {
-  EWMicroRecorderPrintf(port, _T("%s: %s\r\n"), name, value);
+  return port.FullWriteString(name, 1000) &&
+    port.FullWrite(": ", 2, 500) &&
+    WriteCleanString(port, value, 1000) &&
+    port.FullWrite("\r\n", 2, 500);
 }
 
 static void
@@ -277,14 +302,14 @@ DeclareInner(Port &port, const Declaration &declaration,
   port.Write(user_data);
 
   port.Write("USER DETAILS\r\n--------------\r\n\r\n");
-  WritePair(port, _T("Pilot Name"), declaration.pilot_name.c_str());
-  WritePair(port, _T("Competition ID"), declaration.competition_id.c_str());
-  WritePair(port,  _T("Aircraft Type"), declaration.aircraft_type.c_str());
-  WritePair(port,  _T("Aircraft ID"),
+  WritePair(port, "Pilot Name", declaration.pilot_name.c_str());
+  WritePair(port, "Competition ID", declaration.competition_id.c_str());
+  WritePair(port,  "Aircraft Type", declaration.aircraft_type.c_str());
+  WritePair(port,  "Aircraft ID",
             declaration.aircraft_registration.c_str());
   port.Write("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n");
 
-  WritePair(port, _T("Description"), _T("XCSoar task declaration"));
+  WritePair(port, "Description", _T("XCSoar task declaration"));
 
   for (unsigned i = 0; i < 11; i++) {
     if (env.IsCancelled())
