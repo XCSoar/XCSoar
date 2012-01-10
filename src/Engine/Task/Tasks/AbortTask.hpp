@@ -25,12 +25,12 @@
 
 #include "UnorderedTask.hpp"
 #include "BaseTask/UnorderedTaskPoint.hpp"
-#include "Waypoint/Waypoints.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Navigation/SpeedVector.hpp"
 
 #include <vector>
 #include <assert.h>
+
+class Waypoints;
 
 class AbortIntersectionTest {
 public:

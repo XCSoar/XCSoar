@@ -26,6 +26,7 @@
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "TaskSolvers/TaskSolution.hpp"
 #include "Task/TaskEvents.hpp"
+#include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Util/queue.hpp"
 
