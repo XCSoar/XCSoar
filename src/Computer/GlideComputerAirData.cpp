@@ -702,7 +702,8 @@ GlideComputerAirData::ThermalBand()
 void
 GlideComputerAirData::ProcessSun()
 {
-  if (!Basic().location_available)
+  if (!Basic().location_available ||
+      !Basic().date_available)
     return;
 
   DerivedInfo &calculated = SetCalculated();
