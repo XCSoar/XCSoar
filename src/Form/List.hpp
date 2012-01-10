@@ -42,9 +42,9 @@ class ContainerWindow;
  */
 class WndListFrame : public PaintWindow {
 public:
-  typedef void (*ActivateCallback_t)(unsigned idx);
-  typedef void (*CursorCallback_t)(unsigned idx);
-  typedef void (*PaintItemCallback_t)(Canvas &canvas, const PixelRect rc,
+  typedef void (*ActivateCallback)(unsigned idx);
+  typedef void (*CursorCallback)(unsigned idx);
+  typedef void (*PaintItemCallback)(Canvas &canvas, const PixelRect rc,
                                       unsigned idx);
 
 protected:
@@ -107,9 +107,9 @@ protected:
   int drag_y_window;
 
 
-  ActivateCallback_t ActivateCallback;
-  CursorCallback_t CursorCallback;
-  PaintItemCallback_t PaintItemCallback;
+  ActivateCallback activate_callback;
+  CursorCallback cursor_callback;
+  PaintItemCallback paint_item_callback;
 
 #ifndef _WIN32_WCE
   KineticManager kinetic;
@@ -128,23 +128,23 @@ public:
    */
   WndListFrame(ContainerWindow &parent, const DialogLook &look,
                PixelScalar x, PixelScalar y,
-               UPixelScalar Width, UPixelScalar Height,
+               UPixelScalar width, UPixelScalar height,
                const WindowStyle style,
                UPixelScalar _item_height);
 
   /** Sets the function to call when a ListItem is chosen */
-  void SetActivateCallback(ActivateCallback_t cb) {
-    ActivateCallback = cb;
+  void SetActivateCallback(ActivateCallback cb) {
+    activate_callback = cb;
   }
 
   /** Sets the function to call when cursor has changed */
-  void SetCursorCallback(CursorCallback_t cb) {
-    CursorCallback = cb;
+  void SetCursorCallback(CursorCallback cb) {
+    cursor_callback = cb;
   }
 
   /** Sets the function to call when painting an item */
-  void SetPaintItemCallback(PaintItemCallback_t cb) {
-    PaintItemCallback = cb;
+  void SetPaintItemCallback(PaintItemCallback cb) {
+    paint_item_callback = cb;
   }
 
   /**

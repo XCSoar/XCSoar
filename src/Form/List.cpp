@@ -44,25 +44,25 @@ using std::min;
 using std::max;
 
 WndListFrame::WndListFrame(ContainerWindow &parent, const DialogLook &_look,
-                           PixelScalar X, PixelScalar Y,
-                           UPixelScalar Width, UPixelScalar Height,
+                           PixelScalar x, PixelScalar y,
+                           UPixelScalar width, UPixelScalar height,
                            const WindowStyle style,
                            UPixelScalar _item_height)
   :look(_look),
-  item_height(_item_height),
-  length(0),
+   item_height(_item_height),
+   length(0),
    origin(0), pixel_pan(0),
-   items_visible(Height / item_height),
-  cursor(0),
-  drag_mode(DragMode::NONE),
-  ActivateCallback(NULL),
-  CursorCallback(NULL),
-  PaintItemCallback(NULL)
+   items_visible(height / item_height),
+   cursor(0),
+   drag_mode(DragMode::NONE),
+   activate_callback(NULL),
+   cursor_callback(NULL),
+   paint_item_callback(NULL)
 #ifndef _WIN32_WCE
-  , kinetic_timer(*this)
+   , kinetic_timer(*this)
 #endif
 {
-  set(parent, X, Y, Width, Height, style);
+  set(parent, x, y, width, height, style);
 }
 
 void
@@ -126,7 +126,7 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
     else
       canvas.DrawFilledRectangle(rc, look.list.background_color);
 
-    PaintItemCallback(canvas, rc, i);
+    paint_item_callback(canvas, rc, i);
 
     if (has_focus() && i == cursor)
       canvas.DrawFocusRectangle(rc);
@@ -143,7 +143,7 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 void
 WndListFrame::OnPaint(Canvas &canvas)
 {
-  if (PaintItemCallback != NULL)
+  if (paint_item_callback != NULL)
     DrawItems(canvas, origin, origin + items_visible + 2);
 
   DrawScrollBar(canvas);
@@ -152,7 +152,7 @@ WndListFrame::OnPaint(Canvas &canvas)
 void
 WndListFrame::OnPaint(Canvas &canvas, const PixelRect &dirty)
 {
-  if (PaintItemCallback != NULL)
+  if (paint_item_callback != NULL)
     DrawItems(canvas, origin + dirty.top / item_height,
               origin + (dirty.bottom + item_height - 1) / item_height);
 
@@ -238,8 +238,8 @@ WndListFrame::SetCursorIndex(unsigned i)
   cursor = i;
   invalidate_item(cursor);
 
-  if (CursorCallback != NULL)
-    CursorCallback(GetCursorIndex());
+  if (cursor_callback != NULL)
+    cursor_callback(GetCursorIndex());
   return true;
 }
 
@@ -309,7 +309,8 @@ WndListFrame::SetOrigin(int i)
 void
 WndListFrame::MoveOrigin(int delta)
 {
-  SetOrigin(origin + delta);
+  int pixel_origin = (int)GetPixelOrigin();
+  SetPixelOrigin(pixel_origin + delta * (int)item_height);
 }
 
 bool
@@ -317,7 +318,7 @@ WndListFrame::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case VK_RETURN:
-    return ActivateCallback != NULL;
+    return activate_callback != NULL;
 
   case VK_UP:
   case VK_LEFT:
@@ -347,11 +348,11 @@ WndListFrame::OnKeyDown(unsigned key_code)
   case VK_F4:
 #endif
   case VK_RETURN:
-    if (ActivateCallback == NULL)
+    if (activate_callback == NULL)
       break;
 
     if (GetCursorIndex() < GetLength())
-      ActivateCallback(GetCursorIndex());
+      activate_callback(GetCursorIndex());
     return true;
 
   case VK_UP:
@@ -414,10 +415,10 @@ WndListFrame::OnMouseUp(PixelScalar x, PixelScalar y)
   }
 
   if (drag_mode == DragMode::CURSOR &&
-      ActivateCallback != NULL && x >= 0 &&
+      activate_callback != NULL && x >= 0 &&
       x <= ((PixelScalar)get_width() - scroll_bar.GetWidth())) {
     drag_end();
-    ActivateCallback(GetCursorIndex());
+    activate_callback(GetCursorIndex());
     return true;
   }
 
@@ -522,7 +523,7 @@ WndListFrame::OnMouseDown(PixelScalar x, PixelScalar y)
     drag_y = GetPixelOrigin() + y;
     drag_y_window = y;
 
-    if (had_focus && ActivateCallback != NULL &&
+    if (had_focus && activate_callback != NULL &&
         (unsigned)index == GetCursorIndex()) {
       drag_mode = DragMode::CURSOR;
     } else {
@@ -552,12 +553,10 @@ WndListFrame::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 
   if (delta > 0) {
     // scroll up
-    if (origin > 0)
-      MoveOrigin(-1);
+    MoveOrigin(-1);
   } else if (delta < 0) {
     // scroll down
-    if (origin + items_visible < length)
-      MoveOrigin(1);
+    MoveOrigin(1);
   }
 
   return true;
