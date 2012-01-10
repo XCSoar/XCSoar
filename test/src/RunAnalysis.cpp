@@ -225,7 +225,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Layout::Initialize(640, 480);
 
   SingleWindow main_window;
-  main_window.set(_T("STATIC"), _T("RunDialog"),
+  main_window.set(_T("STATIC"), _T("RunAnalysis"),
                   0, 0, 640, 480);
 
   Graphics::Initialise();
