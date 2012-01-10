@@ -31,7 +31,6 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 #include <stddef.h>
-#include <stdarg.h>
 #include <stdio.h>
 
 #ifdef _UNICODE
@@ -148,36 +147,44 @@ public:
   }
 #endif
 
-  void vprintf(const char *fmt, va_list ap) {
+  template<typename... Args>
+  void printf(const char *fmt, Args&&... args) {
     assert(file.IsOpen());
     assert(strchr(fmt, '\r') == NULL);
     assert(strchr(fmt, '\n') == NULL);
 
-    file.WriteFormatted(fmt, ap);
+    file.WriteFormatted(fmt, args...);
   }
 
-  void vprintfln(const char *fmt, va_list ap) {
-    vprintf(fmt, ap);
+  template<typename... Args>
+  void printfln(const char *fmt, Args&&... args) {
+    assert(file.IsOpen());
+    assert(strchr(fmt, '\r') == NULL);
+    assert(strchr(fmt, '\n') == NULL);
+
+    file.WriteFormatted(fmt, args...);
     newline();
   }
 
 #ifdef _UNICODE
-  bool vprintf(const TCHAR *fmt, va_list ap);
+  template<typename... Args>
+  void printf(const TCHAR *fmt, Args&&... args) {
+    assert(file.IsOpen());
+    assert(_tcschr(fmt, _T('\r')) == NULL);
+    assert(_tcschr(fmt, _T('\n')) == NULL);
 
-  bool vprintfln(const TCHAR *fmt, va_list ap) {
-    return vprintf(fmt, ap) && newline();
+    file.WriteFormatted(fmt, args...);
   }
-#endif
 
-  gcc_printf(2, 3)
-  void printf(const char *s, ...);
+  template<typename... Args>
+  void printfln(const TCHAR *fmt, Args&&... args) {
+    assert(file.IsOpen());
+    assert(_tcschr(fmt, _T('\r')) == NULL);
+    assert(_tcschr(fmt, _T('\n')) == NULL);
 
-  gcc_printf(2, 3)
-  void printfln(const char *s, ...);
-
-#ifdef _UNICODE
-  void printf(const TCHAR *s, ...);
-  void printfln(const TCHAR *s, ...);
+    file.WriteFormatted(fmt, args...);
+    newline();
+  }
 #endif
 };
 
