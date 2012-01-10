@@ -54,7 +54,6 @@ Copyright_License {
 #endif /* STOP_WATCH */
 
 #include <tchar.h>
-#include <stdarg.h>
 
 #ifdef ENABLE_OPENGL
 #ifdef ANDROID
