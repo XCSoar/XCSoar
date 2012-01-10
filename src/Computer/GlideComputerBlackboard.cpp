@@ -29,7 +29,6 @@ Copyright_License {
 #include "GlideRatio.hpp"
 
 GlideComputerBlackboard::GlideComputerBlackboard()
-  :ScreenDistanceMeters(fixed(50000))
 {
 }
 

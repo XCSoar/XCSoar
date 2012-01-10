@@ -52,14 +52,6 @@ public:
   const MoreData &LastBasic() const { return last_gps_info; }
   const DerivedInfo& LastCalculated() const { return last_calculated_info; }
 
-  fixed GetScreenDistanceMeters() const {
-    return ScreenDistanceMeters;
-  }
-
-  void SetScreenDistanceMeters(fixed _ScreenDistanceMeters) {
-    ScreenDistanceMeters = _ScreenDistanceMeters;
-  }
-
 protected:
   bool time_advanced() const {
     return Basic().HasTimeAdvancedSince(LastBasic());

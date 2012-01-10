@@ -73,7 +73,6 @@ CalculationThread::Tick()
     ScopeLock protect(mutex);
     // Copy settings form ComputerSettingsBlackboard to GlideComputerBlackboard
     glide_computer.ReadComputerSettings(settings_computer);
-    glide_computer.SetScreenDistanceMeters(screen_distance_meters);
   }
 
   glide_computer.Expire();

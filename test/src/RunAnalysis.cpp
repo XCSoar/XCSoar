@@ -212,7 +212,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   glide_computer.SetTerrain(terrain);
   glide_computer.Initialise();
   glide_computer.ReadComputerSettings(blackboard.GetComputerSettings());
-  glide_computer.SetScreenDistanceMeters(fixed(50000));
 
   ScreenGlobalInit screen_init;
 
