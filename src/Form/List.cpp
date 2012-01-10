@@ -261,12 +261,12 @@ WndListFrame::MoveCursor(int delta)
 void
 WndListFrame::SetPixelPan(UPixelScalar _pixel_pan)
 {
-    if (pixel_pan == _pixel_pan)
-      return;
+  if (pixel_pan == _pixel_pan)
+    return;
 
-    pixel_pan = _pixel_pan;
-    invalidate();
-  }
+  pixel_pan = _pixel_pan;
+  invalidate();
+}
 
 void
 WndListFrame::SetOrigin(int i)
