@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 
 <Form Caption="Analysis">
-  <Custom Name="frmGrid" X="1" Y="1" Width="-1" Height="-92" Border="1" OnCreate="OnCreateChartControl" />
-  <Custom Name="frmCrossSection" X="1" Y="1" Width="-1" Height="-92" Border="1" OnCreate="OnCreateCrossSectionControl" />
+  <Custom Name="frmGrid" Y="0" Height="-90" Border="1" OnCreate="OnCreateChartControl" />
+  <Custom Name="frmCrossSection" Y="0" Height="-90" Border="1" OnCreate="OnCreateCrossSectionControl" />
 
-  <Label Name="frmInfo" X="90" Y="-90" Width="130" Height="88"/>
+  <Label Name="frmInfo" X="82" Y="-88" Width="-2" Height="-2"/>
 
-  <Button Name="cmdCalc" Caption="Calc" X="5" Y="-90" Width="80" Height="28" OnClick="OnCalcClicked" />
+  <Button Name="cmdCalc" Caption="Calc" Y="-90" Width="80" Height="30" OnClick="OnCalcClicked" />
 
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="-60" Width="37" Height="28" OnClick="OnPrevClicked" />
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="48" Y="-60" Width="37" Height="28" OnClick="OnNextClicked" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" Y="-60" Width="40" Height="30" OnClick="OnPrevClicked" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="40" Y="-60" Width="40" Height="30" OnClick="OnNextClicked" />
 
-  <Button Name="cmdClose" Caption="Close" X="5" Y="-30" Width="80" Height="28" OnClick="OnCloseClicked" />
+  <Button Name="cmdClose" Caption="Close" Y="-30" Width="80" Height="30" OnClick="OnCloseClicked" />
 </Form>
