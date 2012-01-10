@@ -413,12 +413,7 @@ UnitsConfigPanel::Save()
   int ival = iround(df.GetAsFixed() * 3600);
   if (settings_computer.UTCOffset != ival) {
     settings_computer.UTCOffset = ival;
-
-    // have to do this because registry variables can't be negative!
-    if (ival < 0)
-      ival += 24 * 3600;
-
-    Profile::Set(szProfileUTCOffset, ival);
+    Profile::Set(szProfileUTCOffsetSigned, ival);
     changed = true;
   }
 

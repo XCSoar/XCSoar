@@ -7,6 +7,8 @@ Version 6.2.5 - not yet released
   - fix time calculation when goal is above aircraft
 * infoboxes
   - fix display of "FIN ETE VMG" and "WP ETE VMG"
+* settings
+  - fix handling negative UTC offsets
 
 Version 6.2.4 - 2011/12/24
 * calculations
