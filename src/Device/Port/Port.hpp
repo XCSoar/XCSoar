@@ -81,6 +81,11 @@ public:
   bool FullWrite(const void *buffer, size_t length, unsigned timeout_ms);
 
   /**
+   * Just like FullWrite(), but write a null-terminated string
+   */
+  bool FullWriteString(const char *s, unsigned timeout_ms);
+
+  /**
    * Flushes the serial port buffers
    */
   virtual void Flush() = 0;
