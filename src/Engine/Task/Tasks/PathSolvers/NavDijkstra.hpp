@@ -25,13 +25,12 @@ Copyright_License {
 #define NAV_DIJKSTRA_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Util/SliceAllocator.hpp"
 #include "Dijkstra.hpp"
 #include "ScanTaskPoint.hpp"
 #include "Compiler.h"
 
 #include <algorithm>
-#include <map>
+#include <unordered_map>
 #include <assert.h>
 
 #ifdef INSTRUMENT_TASK
@@ -56,10 +55,21 @@ protected:
   };
 
   struct DijkstraMap {
+    struct Hash {
+      std::size_t operator()(ScanTaskPoint p) const {
+        return p.Key();
+      }
+    };
+
+    struct Equal {
+      std::size_t operator()(ScanTaskPoint a, ScanTaskPoint b) const {
+        return a.Key() == b.Key();
+      }
+    };
+
     template<typename Value>
-    struct Bind : public std::map<ScanTaskPoint, Value,
-                                  std::less<ScanTaskPoint>,
-                                  GlobalSliceAllocator<ScanTaskPoint, 256u>> {
+    struct Bind : public std::unordered_map<ScanTaskPoint, Value,
+                                            Hash, Equal> {
     };
   };
 
