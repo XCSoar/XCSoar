@@ -222,6 +222,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   ResourceLoader::Init(hInstance);
 #endif
 
+  Layout::Initialize(640, 480);
+
   SingleWindow main_window;
   main_window.set(_T("STATIC"), _T("RunDialog"),
                   0, 0, 640, 480);
