@@ -306,8 +306,8 @@ DeclareInner(Port &port, const Declaration &declaration,
   }
 
   const Waypoint &wp = declaration.GetLastWaypoint();
-  EWMicroRecorderWriteWaypoint(port, wp, _T("Finish LatLon:"));
-  EWMicroRecorderWriteWaypoint(port, wp, _T("Land LatLon:"));
+  EWMicroRecorderWriteWaypoint(port, wp, _T("Finish LatLon"));
+  EWMicroRecorderWriteWaypoint(port, wp, _T("Land LatLon"));
 
   if (env.IsCancelled())
       return false;
