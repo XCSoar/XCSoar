@@ -208,6 +208,15 @@ EWMicroRecorderPrintf(Port &port, const TCHAR *fmt, ...)
   port.Write(buffer);
 }
 
+/**
+ * Write a name/value pair to the EW microRecorder.
+ */
+static void
+WritePair(Port &port, const TCHAR *name, const TCHAR *value)
+{
+  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"), name, value);
+}
+
 static void
 EWMicroRecorderWriteWaypoint(Port &port,
                              const Waypoint &way_point, const TCHAR *EWType)
@@ -268,21 +277,14 @@ DeclareInner(Port &port, const Declaration &declaration,
   port.Write(user_data);
 
   port.Write("USER DETAILS\r\n--------------\r\n\r\n");
-  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-                        _T("Pilot Name:"), declaration.pilot_name.c_str());
-  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-                        _T("Competition ID:"),
-                        declaration.competition_id.c_str());
-  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-                        _T("Aircraft Type:"),
-                        declaration.aircraft_type.c_str());
-  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-                        _T("Aircraft ID:"),
-                        declaration.aircraft_registration.c_str());
+  WritePair(port, _T("Pilot Name:"), declaration.pilot_name.c_str());
+  WritePair(port, _T("Competition ID:"), declaration.competition_id.c_str());
+  WritePair(port,  _T("Aircraft Type:"), declaration.aircraft_type.c_str());
+  WritePair(port,  _T("Aircraft ID:"),
+            declaration.aircraft_registration.c_str());
   port.Write("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n");
 
-  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-                        _T("Description:"), _T("XCSoar task declaration"));
+  WritePair(port, _T("Description:"), _T("XCSoar task declaration"));
 
   for (unsigned i = 0; i < 11; i++) {
     if (env.IsCancelled())
