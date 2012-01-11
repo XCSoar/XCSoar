@@ -12,6 +12,8 @@ Version 6.2.5 - not yet released
 * devices:
   - fix regression in EW MicroRecorder task declaration
   - EW MicroRecorder: make task declaration cancellable
+* Windows
+  - fix freeze on the Windows Mobile "Today" screen
 
 Version 6.2.4 - 2011/12/24
 * calculations
