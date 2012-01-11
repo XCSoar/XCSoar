@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 
 <Form Caption="Configuration">
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="-72" Width="40" Height="35" OnClick="OnPrevClicked" />
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="45" Y="-72" Width="40" Height="35" OnClick="OnNextClicked" />
-  <Button Name="cmdClose" Caption="Close" X="5" Y="-37" Width="80" Height="35" OnClick="OnCloseClicked" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="-30" Width="60" Height="30" OnClick="OnPrevClicked" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="60" Y="-30" Width="60" Height="30" OnClick="OnNextClicked" />
+  <Button Name="cmdClose" Caption="Close" X="120" Y="-30" Height="30" OnClick="OnCloseClicked" />
 
-  <CheckBox Name="Expert" Caption="Expert" X="95" Y="-30" Width="65" Height="20" OnClick="OnUserLevel"/>
+  <CheckBox Name="Expert" Caption="Expert" X="5" Y="-55" Width="65" Height="20" OnClick="OnUserLevel"/>
 
-  <Button Name="cmdFonts" Caption="Fonts" X="95" Y="-72" Width="80" Height="35" Visible="0"/>
-  <Button Name="cmdWaypoints" Caption="Waypts." X="95" Y="-72" Width="80" Height="35" Visible="0"/>
+  <Button Name="cmdFonts" Caption="Fonts" X="120" Y="-60" Width="120" Height="30" Visible="0"/>
+  <Button Name="cmdWaypoints" Caption="Waypts." X="120" Y="-60" Width="120" Height="30" Visible="0"/>
 
-  <Button Name="cmdLoadPolarFile" Caption="Import" X="-144" Y="-72" Width="70" Height="35" Visible="0"/>
-  <Button Name="cmdSavePolarFile" Caption="Export" X="-72" Y="-72" Width="70" Height="35" Visible="0"/>
-  <Button Name="cmdLoadInternalPolar" Caption="List" X="-72" Y="-37" Width="70" Height="35" Visible="0"/>
+  <Button Name="cmdLoadPolarFile" Caption="Import" X="-120" Y="-90" Width="60" Height="30" Visible="0"/>
+  <Button Name="cmdSavePolarFile" Caption="Export" X="-60" Y="-90" Width="60" Height="30" Visible="0"/>
+  <Button Name="cmdLoadInternalPolar" Caption="List" X="120" Y="-60" Width="120" Height="30" Visible="0"/>
+
   <TabMenu Name="TabMenu" Caption="Configuration Menu" X="0" Y="0">
   </TabMenu>
-
 </Form>
