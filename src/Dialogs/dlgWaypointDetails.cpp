@@ -512,6 +512,19 @@ UpdateSunsetTime(const GeoPoint &location, const BrokenDateTime &date_time)
   wp->SetText(buffer);
 }
 
+/**
+ * Show the GlideResult in the form control.
+ */
+static void
+ShowGlideResult(WndProperty &wp, const GlideResult &result)
+{
+  StaticString<64> buffer;
+  buffer.Format(_T("%.0f %s"),
+                (double)Units::ToUserAltitude(result.altitude_difference),
+                Units::GetAltitudeName());
+  wp.SetText(buffer);
+}
+
 static void
 UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
                        const MoreData &basic, const DerivedInfo &calculated,
@@ -547,10 +560,7 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
       basic.nav_altitude, calculated.wind,
       settings_computer.task.glide, glide_polar);
 
-  buffer.Format(_T("%.0f %s"),
-                (double)Units::ToUserAltitude(r.altitude_difference),
-                Units::GetAltitudeName());
-  wp->SetText(buffer);
+  ShowGlideResult(*wp, r);
 
   // alt reqd at safety mc
   wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
@@ -562,10 +572,7 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
       basic.nav_altitude, calculated.wind,
       settings_computer.task.glide, safety_polar);
 
-  buffer.Format(_T("%.0f %s"),
-                (double)Units::ToUserAltitude(r.altitude_difference),
-                Units::GetAltitudeName());
-  wp->SetText(buffer);
+  ShowGlideResult(*wp, r);
 }
 
 void 
