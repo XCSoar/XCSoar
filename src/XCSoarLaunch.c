@@ -247,13 +247,15 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
   SendMessage(GetParent(hWnd), TODAYM_DRAWWATERMARK, 0, (LPARAM)&dwi);
 
   for (int i = 0; i < FileListCnt; i++) {
-    SelectObject(tempdc, FileList[i].bitmap);
+    HBITMAP old_bitmap = SelectObject(tempdc, FileList[i].bitmap);
 
     TransparentImage(drawdc,
                      FileList[i].rc.left, FileList[i].rc.top,
                      FileList[i].rc.right - FileList[i].rc.left,
                      FileList[i].rc.bottom - FileList[i].rc.top,
                      tempdc, 0, 0, IconSizeX, IconSizeY, RGB(0, 0, 255));
+
+    SelectObject(tempdc, old_bitmap);
   }
 
   if (SelItem >= 0 && ButtonDown) {
@@ -261,12 +263,13 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 
     HBITMAP neg_bmp = CreateCompatibleBitmap(hdc, IconSizeX, IconSizeY);
     HDC neg_dc = CreateCompatibleDC(hdc);
-    SelectObject(neg_dc, neg_bmp);
+    HBITMAP neg_old = SelectObject(neg_dc, neg_bmp);
 
     /* create an inverted bitmap */
-    SelectObject(tempdc, FileList[i].bitmap);
+    HBITMAP temp_old = SelectObject(tempdc, FileList[i].bitmap);
     BitBlt(neg_dc, 0, 0, IconSizeX, IconSizeY,
            tempdc, 0, 0, NOTSRCCOPY);
+    SelectObject(tempdc, temp_old);
 
     /* draw it (with inverted transparent color) */
     TransparentImage(drawdc,
@@ -275,6 +278,7 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
                      FileList[i].rc.bottom - FileList[i].rc.top,
                      neg_dc, 0, 0, IconSizeX, IconSizeY, RGB(255, 255, 0));
 
+    SelectObject(neg_dc, neg_old);
     DeleteDC(neg_dc);
     DeleteObject(neg_bmp);
   }
