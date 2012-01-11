@@ -202,7 +202,7 @@ ifeq ($(TARGET),ANDROID)
     TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=vfp -mthumb-interwork
     HAVE_FPU := y
   else
-    TARGET_ARCH += -march=armv5te -mtune=xscale -msoft-float -mthumb-interwork
+    TARGET_ARCH += -march=armv6 -mtune=xscale -msoft-float -mthumb-interwork
     HAVE_FPU := n
   endif
   endif
