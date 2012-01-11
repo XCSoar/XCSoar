@@ -44,10 +44,32 @@ Install()
 }
 
 static bool
+Enable()
+{
+  RegistryKey key(HKEY_LOCAL_MACHINE,
+                  _T("\\Software\\Microsoft\\Today\\Items\\XCSoar"), false);
+  return !key.error() &&
+    key.set_value(_T("Enabled"), DWORD(1));
+}
+
+static bool
+Disable()
+{
+  RegistryKey key(HKEY_LOCAL_MACHINE,
+                  _T("\\Software\\Microsoft\\Today\\Items\\XCSoar"), false);
+  return !key.error() &&
+    key.set_value(_T("Enabled"), DWORD(0));
+}
+
+static bool
 Do(LPCTSTR cmd)
 {
   if (_tcscmp(cmd, _T("uninstall")) == 0)
-    return Uninstall();
+    return Disable() && Uninstall();
+  else if (_tcscmp(cmd, _T("enable")) == 0)
+    return Enable();
+  else if (_tcscmp(cmd, _T("disable")) == 0)
+    return Disable();
   else
     return Install();
 }
