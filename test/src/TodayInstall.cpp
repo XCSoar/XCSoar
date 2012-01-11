@@ -43,17 +43,24 @@ Install()
     key.set_value(_T("DLL"), _T("\\Windows\\XCSoarLaunch.dll"));
 }
 
+static bool
+Do(LPCTSTR cmd)
+{
+  if (_tcscmp(cmd, _T("uninstall")) == 0)
+    return Uninstall();
+  else
+    return Install();
+}
+
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         LPTSTR lpCmdLine,
         int nCmdShow)
 {
-  bool success = _tcscmp(lpCmdLine, _T("uninstall")) == 0
-    ? Uninstall()
-    : Install();
-
-  if (success)
+  if (Do(lpCmdLine)) {
     SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
-
-  return success ? 0 : 1;
+    return 0;
+  } else {
+    return 1;
+  }
 }
