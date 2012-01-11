@@ -461,6 +461,12 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     break;
 
+  case WM_CANCELMODE:
+    SelItem = -1;
+    InvalidateRect(hWnd, NULL, FALSE);
+    /* DefWindowProc() will do the rest (release mouse capture) */
+    return DefWindowProc(hWnd, msg, wParam, lParam);
+
   case WM_PAINT:
     hdc = BeginPaint(hWnd, &ps);
     OnPaint(hWnd, hdc, &ps);
