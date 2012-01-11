@@ -49,13 +49,11 @@ static GlidePolar glide_polar;
 static void
 SetButtons()
 {
-  WndButton* wb;
-
-  if ((wb = (WndButton *)wf->FindByName(_T("cmdDump"))) != NULL) {
-    wb->set_visible(glide_polar.HasBallast());
-    wb->SetCaption(XCSoarInterface::GetComputerSettings().ballast_timer_active ?
-                   _("Stop") : _("Dump"));
-  }
+  WndButton* wb = (WndButton *)wf->FindByName(_T("cmdDump"));
+  assert(wb != NULL);
+  wb->set_visible(glide_polar.HasBallast());
+  wb->SetCaption(XCSoarInterface::GetComputerSettings().ballast_timer_active ?
+                 _("Stop") : _("Dump"));
 }
 
 static void
@@ -151,29 +149,26 @@ OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 static void
 SetBallast(void)
 {
-  WndProperty* wp;
+  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpBallast"));
+  assert(wp != NULL);
+  if (glide_polar.IsBallastable()) {
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(glide_polar.GetBallastLitres());
+  } else
+    wp->hide();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpBallast"));
-  if (wp) {
-    if (glide_polar.IsBallastable()) {
-      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-      df.SetAsFloat(glide_polar.GetBallastLitres());
-    } else
-      wp->hide();
+  wp->RefreshDisplay();
 
-    wp->RefreshDisplay();
-  }
   wp = (WndProperty*)wf->FindByName(_T("prpWingLoading"));
-  if (wp) {
-    const fixed wl = glide_polar.GetWingLoading();
-    if (wl > fixed_zero) {
-      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-      df.SetAsFloat(wl);
-    } else
-      wp->hide();
+  assert(wp != NULL);
+  const fixed wl = glide_polar.GetWingLoading();
+  if (wl > fixed_zero) {
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(wl);
+  } else
+    wp->hide();
 
-    wp->RefreshDisplay();
-  }
+  wp->RefreshDisplay();
 }
 
 /**
@@ -272,7 +267,8 @@ dlgBasicSettingsShowModal()
 
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpQNH"));
-  if (wp) {
+  assert(wp != NULL);
+  {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
 
     df.SetMin(Units::ToUserPressure(Units::ToSysUnit(fixed(850), unHectoPascal)));
@@ -283,8 +279,10 @@ dlgBasicSettingsShowModal()
     df.SetFormat(Units::GetFormatUserPressure());
     wp->RefreshDisplay();
   }
+
   wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));
-  if (wp) {
+  assert(wp != NULL);
+  {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetMin(Units::ToUserTemperature(Units::ToSysUnit(fixed(-50), unGradCelcius)));
     df.SetMax(Units::ToUserTemperature(Units::ToSysUnit(fixed(60), unGradCelcius)));
