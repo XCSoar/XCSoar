@@ -54,7 +54,7 @@ SetButtons()
   if ((wb = (WndButton *)wf->FindByName(_T("cmdDump"))) != NULL) {
     wb->set_visible(glide_polar.HasBallast());
     wb->SetCaption(XCSoarInterface::GetComputerSettings().ballast_timer_active ?
-        _("Stop") : _("Dump"));
+                   _("Stop") : _("Dump"));
   }
 }
 
@@ -115,11 +115,11 @@ static void
 RefreshAltitudeControl()
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  ComputerSettings &settings_computer =
-    CommonInterface::SetComputerSettings();
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
 
   if (basic.pressure_altitude_available && settings_computer.pressure_available)
-    ShowAltitude(settings_computer.pressure.PressureAltitudeToQNHAltitude(basic.pressure_altitude));
+    ShowAltitude(settings_computer.pressure.PressureAltitudeToQNHAltitude(
+                 basic.pressure_altitude));
   else if (basic.baro_altitude_available)
     ShowAltitude(basic.baro_altitude);
   else
@@ -131,8 +131,7 @@ OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
   const NMEAInfo &basic = CommonInterface::Basic();
-  ComputerSettings &settings_computer =
-    CommonInterface::SetComputerSettings();
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
 
   switch (Mode) {
   case DataField::daChange:
@@ -185,8 +184,9 @@ SetBallast(void)
 static void
 OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  if (protected_task_manager != NULL &&
-      XCSoarInterface::GetComputerSettings().ballast_timer_active && !changed) {
+  if (protected_task_manager != NULL
+      && XCSoarInterface::GetComputerSettings().ballast_timer_active
+      && !changed) {
     /* get new GlidePolar values */
     glide_polar = CommonInterface::GetComputerSettings().glide_polar_task;
 
@@ -210,6 +210,7 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
     SetBallastTimer(glide_polar.HasBallast() &&
                     !XCSoarInterface::GetComputerSettings().ballast_timer_active);
     break;
+
   case DataField::daChange:
     glide_polar.SetBallastLitres(df.GetAsFixed());
     changed = true;
@@ -237,7 +238,6 @@ OnBugsData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnBugsData),
-
   DeclareCallBackEntry(OnBallastData),
   DeclareCallBackEntry(OnQnhData),
   DeclareCallBackEntry(OnCloseClicked),
@@ -253,7 +253,7 @@ dlgBasicSettingsShowModal()
   glide_polar = settings.glide_polar_task;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
-                      _T("IDR_XML_BASICSETTINGS"));
+                  _T("IDR_XML_BASICSETTINGS"));
   if (wf == NULL)
     return;
 
@@ -265,8 +265,10 @@ dlgBasicSettingsShowModal()
   SetButtons();
 
   SetBallast();
-  LoadFormProperty(*wf, _T("prpBugs"), (fixed_one - glide_polar.GetBugs()) * 100);
-  LoadFormProperty(*wf, _T("prpQNH"), Units::ToUserPressure(settings.pressure.GetHectoPascal()));
+  LoadFormProperty(*wf, _T("prpBugs"),
+                   (fixed_one - glide_polar.GetBugs()) * 100);
+  LoadFormProperty(*wf, _T("prpQNH"),
+                   Units::ToUserPressure(settings.pressure.GetHectoPascal()));
 
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpQNH"));
@@ -278,9 +280,9 @@ dlgBasicSettingsShowModal()
     df.SetStep(Units::ToUserPressure(Units::ToSysUnit(fixed_one, unHectoPascal)));
     df.SetUnits(Units::GetPressureName());
     df.SetStep(Units::PressureStep());
-    df.SetFormat( Units::GetFormatUserPressure());
+    df.SetFormat(Units::GetFormatUserPressure());
     wp->RefreshDisplay();
-}
+  }
   wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
@@ -301,8 +303,8 @@ dlgBasicSettingsShowModal()
         protected_task_manager->SetGlidePolar(glide_polar);
     }
 
-    SaveFormProperty(*wf, _T("prpTemperature"),
-                     ugTemperature, settings.forecast_temperature);
+    SaveFormProperty(*wf, _T("prpTemperature"), ugTemperature,
+                     settings.forecast_temperature);
   }
 
   delete wf;
