@@ -27,7 +27,7 @@ Copyright_License {
 #include <tchar.h>
 
 static bool
-uninstall()
+Uninstall()
 {
   RegistryKey key(HKEY_LOCAL_MACHINE,
                   _T("\\Software\\Microsoft\\Today\\Items\\XCSoar"), false);
@@ -35,7 +35,7 @@ uninstall()
 }
 
 static bool
-install()
+Install()
 {
   RegistryKey key(HKEY_LOCAL_MACHINE,
                   _T("\\Software\\Microsoft\\Today\\Items\\XCSoar"), false);
@@ -49,8 +49,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 {
   bool success = _tcscmp(lpCmdLine, _T("uninstall")) == 0
-    ? uninstall()
-    : install();
+    ? Uninstall()
+    : Install();
 
   if (success)
     SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
