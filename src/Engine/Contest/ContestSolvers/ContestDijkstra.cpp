@@ -142,7 +142,7 @@ ContestDijkstra::Solve(bool exhaustive)
   if (trace_dirty) {
     trace_dirty = false;
 
-    dijkstra.restart(ScanTaskPoint(0, 0));
+    dijkstra.clear();
     start_search();
     add_start_edges();
     if (dijkstra.empty()) {
@@ -224,8 +224,6 @@ ContestDijkstra::CalcScore() const
 void
 ContestDijkstra::add_start_edges()
 {
-  dijkstra.pop();
-
   assert(num_stages <= MAX_STAGES);
   assert(n_points > 0);
 
