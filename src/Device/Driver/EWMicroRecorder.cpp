@@ -38,12 +38,8 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Util/StringUtil.hpp"
 
-#include <tchar.h>
 #include <assert.h>
 #include <stdio.h>
-#include <string.h>
-#include <stdarg.h>
-#include <assert.h>
 
 #ifdef _UNICODE
 #include <windows.h>
