@@ -46,7 +46,15 @@
 #endif
 #endif /* !__linux__ */
 
-#if defined(__i386__) || defined(__x86_64__)
+/* x86 always allows unaligned access */
+#if defined(__i386__) || defined(__x86_64__) || \
+  /* ARM has it from ARMv6 on */ \
+  defined(__ARM_ARCH_6__) || \
+  defined(__ARM_ARCH_7__) || \
+  defined(__ARM_ARCH_7A__) || \
+  /* _M_ARM is the Microsoft way of checking the ARM generation \
+     (supported by mingw32ce) */ \
+  (defined(_M_ARM) && _M_ARM >= 6)
 #ifndef FORCE_ALIGNED_READ_WRITE
 #define CAN_READ_WRITE_UNALIGNED
 #endif
