@@ -61,6 +61,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
     return 0;
   } else {
+    MessageBox(NULL, _T("Error"), NULL, MB_ICONEXCLAMATION|MB_OK);
     return 1;
   }
 }
