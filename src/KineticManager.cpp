@@ -35,6 +35,7 @@ KineticManager::MouseDown(int x)
   steady = false;
   last = x;
   clock.update();
+  v = fixed_zero;
 }
 
 void
