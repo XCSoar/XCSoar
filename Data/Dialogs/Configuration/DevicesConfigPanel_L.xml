@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 
 <Panel Name="frmComm">
-  <List Name="list" X="2" Y="2" Width="-2" Height="50" ItemHeight="18" Border="1"/>
-  <Widget Name="edit" X="2" Y="52" Width="-1" Height="-48" Border="1"/>
+  <List Name="list" Height="50" ItemHeight="18" Border="1"/>
+  <Widget Name="edit" X="2" Y="52" Width="-2" Height="160" Border="1"/>
 
-  <Edit Name="prpSetSystemTimeFromGPS" Caption="Use GPS time" Expert="1" X="2" Y="-46" Width="-2" Height="22" CaptionWidth="150"
+  <Edit Name="prpSetSystemTimeFromGPS" Caption="Use GPS time" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
     Help="If enabled sets the clock of the computer to the GPS time once a fix is set. This is only necessary if your computer does not have a real-time clock with battery backup or your computer frequently runs out of battery power or otherwise loses time.">
     <DataField DataType="boolean" />
   </Edit>
 
-  <Edit Name="prpIgnoreNMEAChecksum" Caption="Ignore checksum" Expert="1" X="2" Y="-24" Width="-2" Height="22" CaptionWidth="150"
+  <Edit Name="prpIgnoreNMEAChecksum" Caption="Ignore checksum" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
     Help="If your GPS device outputs invalid NMEA checksums, this will allow it's data to be used anyway">
     <DataField DataType="boolean"/>
   </Edit>
