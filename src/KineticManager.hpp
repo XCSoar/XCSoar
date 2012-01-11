@@ -70,7 +70,11 @@ public:
    */
   void MouseUp(int x);
 
-  /** Returns the current position of the kinetic movement */
+  /**
+   * Returns the current position of the kinetic movement.
+   * Sets the steady flag to true if the kinetic motion is
+   * not active (@see IsSteady())
+   */
   int GetPosition();
 
   /** Returns whether the kinetic movement is still active */

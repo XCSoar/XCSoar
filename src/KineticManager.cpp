@@ -35,6 +35,7 @@ KineticManager::MouseDown(int x)
   steady = false;
   last = x;
   clock.update();
+  v = fixed_zero;
 }
 
 void
@@ -63,8 +64,6 @@ KineticManager::MouseMove(int x)
 void
 KineticManager::MouseUp(int x)
 {
-  MouseMove(x);
-
   // Calculate end position of the kinetic movement
   end = last + (int)((v / 2) * stopping_time);
 }
