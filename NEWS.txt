@@ -11,6 +11,7 @@ Version 6.2.5 - not yet released
   - fix handling negative UTC offsets
 * devices:
   - fix regression in EW MicroRecorder task declaration
+  - EW MicroRecorder: make task declaration cancellable
 
 Version 6.2.4 - 2011/12/24
 * calculations
