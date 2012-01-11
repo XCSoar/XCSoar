@@ -399,7 +399,6 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     SelItem = Point2Item(LOWORD(lParam), HIWORD(lParam));
     ButtonDown = true;
     InvalidateRect(hWnd, NULL, FALSE);
-    UpdateWindow(hWnd);
 #ifdef ENABLE_TOOLTIPS
     rg.cbSize = sizeof(SHRGINFO);
     rg.hwndClient = hWnd;
@@ -447,7 +446,6 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     SelItem = -1;
     InvalidateRect(hWnd, NULL, FALSE);
-    UpdateWindow(hWnd);
     break;
 
   case WM_MOUSEMOVE:
