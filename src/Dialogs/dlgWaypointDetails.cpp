@@ -42,9 +42,10 @@ Copyright_License {
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "GlideSolvers/GlideState.hpp"
+#include "GlideSolvers/MacCready.hpp"
 #include "Task/TaskManager.hpp"
 #include "Task/MapTaskManager.hpp"
-#include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Compiler.h"
@@ -532,15 +533,17 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
   GlidePolar glide_polar = settings_computer.glide_polar_task;
   const GlidePolar &safety_polar = calculated.glide_polar_safety;
 
+  const GlideState glide_state(basic.location.DistanceBearing(waypoint.location),
+                               waypoint.altitude + settings_computer.task.safety_height_arrival,
+                               basic.nav_altitude,
+                               calculated.wind);
+
   // alt reqd at current mc
   WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
   assert(wp != NULL);
 
-  GlideResult r = TaskSolution::GlideSolutionRemaining(
-      basic.location, waypoint.location,
-      waypoint.altitude + settings_computer.task.safety_height_arrival,
-      basic.nav_altitude, calculated.wind,
-      settings_computer.task.glide, glide_polar);
+  GlideResult r = MacCready::Solve(settings_computer.task.glide,
+                                   glide_polar, glide_state);
 
   ShowGlideResult(*wp, r);
 
@@ -549,11 +552,8 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
   assert(wp != NULL);
 
   glide_polar.SetMC(fixed_zero);
-  r = TaskSolution::GlideSolutionRemaining(
-      basic.location, waypoint.location,
-      waypoint.altitude + settings_computer.task.safety_height_arrival,
-      basic.nav_altitude, calculated.wind,
-      settings_computer.task.glide, glide_polar);
+  r = MacCready::Solve(settings_computer.task.glide,
+                       glide_polar, glide_state);
 
   ShowGlideResult(*wp, r);
 
@@ -561,11 +561,8 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
   wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
   assert(wp != NULL);
 
-  r = TaskSolution::GlideSolutionRemaining(
-      basic.location, waypoint.location,
-      waypoint.altitude + settings_computer.task.safety_height_arrival,
-      basic.nav_altitude, calculated.wind,
-      settings_computer.task.glide, safety_polar);
+  r = MacCready::Solve(settings_computer.task.glide,
+                       safety_polar, glide_state);
 
   ShowGlideResult(*wp, r);
 }
