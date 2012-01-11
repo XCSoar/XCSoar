@@ -124,7 +124,8 @@ GlueMapWindow::SetMapScale(const fixed x)
 {
   MapWindow::SetMapScale(x);
 
-  if (GetDisplayMode() == DM_CIRCLING && SettingsMap().CircleZoom)
+  if (GetDisplayMode() == DM_CIRCLING &&
+      CommonInterface::SettingsMap().CircleZoom)
     // save cruise scale
     zoomclimb.ClimbScale = visible_projection.GetScale();
   else
@@ -160,7 +161,7 @@ GlueMapWindow::SwitchZoomClimb()
 {
   bool isclimb = (GetDisplayMode() == DM_CIRCLING);
 
-  if (SettingsMap().CircleZoom) {
+  if (CommonInterface::SettingsMap().CircleZoom) {
     if (isclimb != zoomclimb.last_isclimb) {
       if (isclimb) {
         // save cruise scale
@@ -231,7 +232,7 @@ GlueMapWindow::UpdateMapScale()
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const SETTINGS_MAP &settings = CommonInterface::SettingsMap();
 
-  if (GetDisplayMode() == DM_CIRCLING && SettingsMap().CircleZoom)
+  if (GetDisplayMode() == DM_CIRCLING && settings.CircleZoom)
     return;
 
   if (!IsNearSelf())
@@ -242,7 +243,7 @@ GlueMapWindow::UpdateMapScale()
     // Calculate distance percentage between plane symbol and map edge
     // 50: centered  100: at edge of map
     int AutoZoomFactor = (GetDisplayMode() == DM_CIRCLING) ?
-                                 50 : 100 - SettingsMap().GliderScreenPosition;
+                                 50 : 100 - settings.GliderScreenPosition;
     // Leave 5% of full distance for target display
     AutoZoomFactor -= 5;
     // Adjust to account for map scale units
@@ -250,7 +251,7 @@ GlueMapWindow::UpdateMapScale()
     wpd = wpd / ((fixed) AutoZoomFactor / fixed_int_constant(100));
     // Clip map auto zoom range to reasonable values
     wpd = max(fixed_int_constant(525),
-              min(SettingsMap().MaxAutoZoomDistance / fixed_int_constant(10), wpd));
+              min(settings.MaxAutoZoomDistance / fixed_int_constant(10), wpd));
     visible_projection.SetFreeMapScale(wpd);
   }
 }
