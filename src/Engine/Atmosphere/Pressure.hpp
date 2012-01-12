@@ -49,6 +49,17 @@ public:
   AtmosphericPressure() = default;
 
   /**
+   * Returns an object representing zero pressure.  This value doesn't
+   * make a lot of practical sense (unless you're an astronaut), but
+   * it may be used internally to mark an instance of this class
+   * "invalid".
+   */
+  static gcc_constexpr_function
+  AtmosphericPressure Zero() {
+    return AtmosphericPressure(fixed_zero);
+  }
+
+  /**
    * Returns an object representing the standard pressure (1013.25
    * hPa).
    */
