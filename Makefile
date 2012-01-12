@@ -268,6 +268,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Operation/MessageOperationEnvironment.cpp \
 	$(SRC)/Operation/ThreadedOperationEnvironment.cpp \
 	$(SRC)/Operation/VerboseOperationEnvironment.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/ConditionMonitor/ConditionMonitor.cpp \

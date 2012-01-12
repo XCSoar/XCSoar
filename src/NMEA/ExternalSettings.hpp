@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "NMEA/Validity.hpp"
 #include "Math/fixed.hpp"
-#include "Engine/Atmosphere/Pressure.hpp"
+#include "Atmosphere/Pressure.hpp"
 
 /**
  * Settings received from an external device.

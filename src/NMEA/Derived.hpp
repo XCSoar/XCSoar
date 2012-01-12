@@ -42,7 +42,7 @@ Copyright_License {
 #include "Engine/Navigation/TraceHistory.hpp"
 #include "DateTime.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
-#include "Engine/Atmosphere/Pressure.hpp"
+#include "Atmosphere/Pressure.hpp"
 #include "Engine/Route/Route.hpp"
 #include "Util/TypeTraits.hpp"
 

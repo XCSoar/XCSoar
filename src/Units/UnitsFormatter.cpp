@@ -26,7 +26,7 @@ Copyright_License {
 #include "Units/Descriptor.hpp"
 #include "Math/Angle.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
-#include "Engine/Atmosphere/Pressure.hpp"
+#include "Atmosphere/Pressure.hpp"
 #include "DateTime.hpp"
 #include "Util/StringUtil.hpp"
 

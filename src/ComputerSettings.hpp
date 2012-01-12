@@ -27,7 +27,7 @@ Copyright_License {
 #include "FLARM/FlarmId.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
-#include "Engine/Atmosphere/Pressure.hpp"
+#include "Atmosphere/Pressure.hpp"
 #include "Engine/Route/Config.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/TypeTraits.hpp"

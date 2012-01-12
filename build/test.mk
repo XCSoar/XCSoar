@@ -115,7 +115,7 @@ TEST_METAR_PARSER_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Util/StringUtil.cpp \
-	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestMETARParser.cpp
 TEST_METAR_PARSER_DEPENDS = MATH
@@ -480,7 +480,7 @@ TEST_LOGGER_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
-	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
@@ -528,7 +528,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
-	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
@@ -701,7 +701,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Engine/Util/DiffFilter.cpp \
 	$(SRC)/Engine/Util/ZeroFinder.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
-	$(SRC)/Engine/Atmosphere/Pressure.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Engine/Navigation/Aircraft.cpp \
 	$(SRC)/Engine/Navigation/GeoPoint.cpp \
 	$(SRC)/Engine/Navigation/Geometry/GeoVector.cpp \
@@ -775,7 +775,7 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp \
 	$(SRC)/Weather/METARParser.cpp \
-	$(SRC)/Engine/Atmosphere/Pressure.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
@@ -1090,7 +1090,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
-	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \

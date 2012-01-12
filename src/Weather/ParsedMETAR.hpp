@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Engine/Navigation/SpeedVector.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
-#include "Engine/Atmosphere/Pressure.hpp"
+#include "Atmosphere/Pressure.hpp"
 #include "Util/StaticString.hpp"
 
 #include <stdint.h>
