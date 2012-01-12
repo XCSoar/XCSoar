@@ -34,6 +34,7 @@ Copyright_License {
 #endif
 
 #include <SDL_endian.h>
+#include <SDL_image.h>
 
   #ifdef WIN32
     #include <windows.h>
@@ -147,7 +148,7 @@ bool
 Bitmap::LoadFile(const TCHAR *path)
 {
   NarrowPathName narrow_path(path);
-  SDL_Surface *original = ::SDL_LoadBMP(narrow_path);
+  SDL_Surface *original = ::IMG_Load(narrow_path);
   return original != NULL && Load(original);
 }
 
