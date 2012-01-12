@@ -39,6 +39,7 @@ AbstractTask::AbstractTask(enum Type _type, TaskEvents &te,
    mc_lpf(fixed(8)),
    ce_lpf(fixed(60)),
    em_lpf(fixed(60)),
+   mc_lpf_valid(false),
    trigger_auto(false)
 {
    stats.reset();
@@ -58,6 +59,7 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
 
   if (task_behaviour.auto_mc_mode == TaskBehaviour::AUTOMC_CLIMBAVERAGE) {
     stats.mc_best = mc_lpf.reset(fallback_mc);
+    mc_lpf_valid = false;
     trigger_auto = false;
     return false;
   }
@@ -81,7 +83,7 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
     trigger_auto = true;
   }
 
-  if (trigger_auto) {
+  if (trigger_auto && mc_lpf_valid) {
     // smooth out updates
     stats.mc_best = std::max(mc_lpf.update(mc_found), fixed_zero);
     glide_polar.SetMC(stats.mc_best);
@@ -280,7 +282,7 @@ AbstractTask::UpdateStatsTimes(const AircraftState &state)
 void
 AbstractTask::ResetAutoMC()
 {
-  stats.mc_best = mc_lpf.reset(glide_polar.GetMC());
+  mc_lpf_valid = false;
   trigger_auto = false;
 }
 

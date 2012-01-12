@@ -68,6 +68,11 @@ private:
   /** low pass filter on effective MC calculations */
   Filter em_lpf;
 
+  /**
+   * True when #mc_lpf has been initialised.
+   */
+  bool mc_lpf_valid;
+
   /** whether auto MC has been triggered (above final glide) */
   bool trigger_auto;
 
