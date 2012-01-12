@@ -31,4 +31,5 @@ test/data/private
 /.project
 /.cproject
 .DS_Store
+massif.out.*
 build/local-config.mk

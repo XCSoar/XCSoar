@@ -185,6 +185,7 @@ const TCHAR szProfileAppAveNeedle[] = _T("AppAveNeedle");
 
 const TCHAR szProfileAutoAdvance[] = _T("AutoAdvance");
 const TCHAR szProfileUTCOffset[] = _T("UTCOffset");
+const TCHAR szProfileUTCOffsetSigned[] = _T("UTCOffsetSigned");
 const TCHAR szProfileBlockSTF[] = _T("BlockSpeedToFly");
 const TCHAR szProfileAutoZoom[] = _T("AutoZoom");
 const TCHAR szProfileMenuTimeout[] = _T("MenuTimeout");

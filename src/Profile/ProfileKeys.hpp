@@ -123,6 +123,7 @@ extern const TCHAR szProfileAppInfoBoxModel[]; // VENTA-ADDON MODEL CHANGE
 extern const TCHAR szProfileAppAveNeedle[];
 extern const TCHAR szProfileAutoAdvance[];
 extern const TCHAR szProfileUTCOffset[];
+extern const TCHAR szProfileUTCOffsetSigned[];
 extern const TCHAR szProfileBlockSTF[];
 extern const TCHAR szProfileAutoZoom[];
 extern const TCHAR szProfileMenuTimeout[];

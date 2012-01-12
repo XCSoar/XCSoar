@@ -87,7 +87,6 @@ OLCSprint::add_start_edges()
   assert(num_stages <= MAX_STAGES);
   assert(num_stages > 0);
   assert(n_points > 0);
-  dijkstra.pop();
 
   const ScanTaskPoint start(0, find_start());
   const ScanTaskPoint finish(num_stages - 1, n_points - 1);

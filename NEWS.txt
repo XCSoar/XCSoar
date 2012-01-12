@@ -32,8 +32,18 @@ Version 6.3 - not yet released
 Version 6.2.5 - not yet released
 * calculations
   - fix time calculation when goal is above aircraft
+  - fix minor OLC miscalculation
 * infoboxes
   - fix display of "FIN ETE VMG" and "WP ETE VMG"
+* settings
+  - fix handling negative UTC offsets
+* devices:
+  - fix regression in EW MicroRecorder task declaration
+  - EW MicroRecorder: make task declaration cancellable
+* Android
+  - fix black screen after resume
+* Windows
+  - fix freeze on the Windows Mobile "Today" screen
 
 Version 6.2.4 - 2011/12/24
 * calculations

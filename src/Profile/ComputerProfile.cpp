@@ -127,7 +127,17 @@ Profile::Load(ComputerSettings &settings)
   GetEnum(szProfileAverEffTime, settings.average_eff_time);
 
   Get(szProfileSetSystemTimeFromGPS, settings.set_system_time_from_gps);
-  Get(szProfileUTCOffset, settings.utc_offset);
+
+  // NOTE: Until 6.2.4 utc_offset was stored as a positive int in the
+  // settings file (with negative offsets stored as "utc_offset + 24 * 3600").
+  // Later versions will create a new signed settings key.
+  if (!Get(szProfileUTCOffsetSigned, settings.utc_offset)) {
+    if (Get(szProfileUTCOffset, settings.utc_offset)) {
+      if (settings.utc_offset > 12 * 3600)
+        settings.utc_offset = (settings.utc_offset % (24 * 3600)) - 24 * 3600;
+    }
+  }
+
   if (settings.utc_offset > 13 * 3600 || settings.utc_offset < -13 * 3600)
     settings.utc_offset = 0;
 

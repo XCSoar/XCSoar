@@ -179,6 +179,10 @@ TopWindow::on_event(const Event &event)
          resumed */
       return true;
 
+    if ((unsigned)event.x == get_width() && (unsigned)event.y == get_height())
+      /* no-op */
+      return true;
+
     /* it seems the first page flip after a display orientation change
        is ignored on Android (tested on a Dell Streak / Android
        2.2.2); let's do one dummy call before we really draw

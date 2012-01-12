@@ -237,13 +237,15 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
   SendMessage(GetParent(hWnd), TODAYM_DRAWWATERMARK, 0, (LPARAM)&dwi);
 
   for (int i = 0; i < FileListCnt; i++) {
-    SelectObject(tempdc, FileList[i].bitmap);
+    HBITMAP old_bitmap = SelectObject(tempdc, FileList[i].bitmap);
 
     TransparentImage(drawdc,
                      FileList[i].rc.left, FileList[i].rc.top,
                      FileList[i].rc.right - FileList[i].rc.left,
                      FileList[i].rc.bottom - FileList[i].rc.top,
                      tempdc, 0, 0, IconSizeX, IconSizeY, RGB(0, 0, 255));
+
+    SelectObject(tempdc, old_bitmap);
   }
 
   if (SelItem >= 0 && ButtonDown) {
@@ -251,12 +253,13 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 
     HBITMAP neg_bmp = CreateCompatibleBitmap(hdc, IconSizeX, IconSizeY);
     HDC neg_dc = CreateCompatibleDC(hdc);
-    SelectObject(neg_dc, neg_bmp);
+    HBITMAP neg_old = SelectObject(neg_dc, neg_bmp);
 
     /* create an inverted bitmap */
-    SelectObject(tempdc, FileList[i].bitmap);
+    HBITMAP temp_old = SelectObject(tempdc, FileList[i].bitmap);
     BitBlt(neg_dc, 0, 0, IconSizeX, IconSizeY,
            tempdc, 0, 0, NOTSRCCOPY);
+    SelectObject(tempdc, temp_old);
 
     /* draw it (with inverted transparent color) */
     TransparentImage(drawdc,
@@ -265,6 +268,7 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
                      FileList[i].rc.bottom - FileList[i].rc.top,
                      neg_dc, 0, 0, IconSizeX, IconSizeY, RGB(255, 255, 0));
 
+    SelectObject(neg_dc, neg_old);
     DeleteDC(neg_dc);
     DeleteObject(neg_bmp);
   }
@@ -376,7 +380,6 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     SelItem = Point2Item(LOWORD(lParam), HIWORD(lParam));
     ButtonDown = true;
     InvalidateRect(hWnd, NULL, FALSE);
-    UpdateWindow(hWnd);
 #ifdef ENABLE_TOOLTIPS
     rg.cbSize = sizeof(SHRGINFO);
     rg.hwndClient = hWnd;
@@ -424,7 +427,6 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     SelItem = -1;
     InvalidateRect(hWnd, NULL, FALSE);
-    UpdateWindow(hWnd);
     break;
 
   case WM_MOUSEMOVE:
@@ -439,6 +441,12 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
 
     break;
+
+  case WM_CANCELMODE:
+    SelItem = -1;
+    InvalidateRect(hWnd, NULL, FALSE);
+    /* DefWindowProc() will do the rest (release mouse capture) */
+    return DefWindowProc(hWnd, msg, wParam, lParam);
 
   case WM_PAINT:
     hdc = BeginPaint(hWnd, &ps);
@@ -492,53 +500,4 @@ InitializeCustomItem(TODAYLISTITEM *ptli, HWND pWnd)
     return NULL;
 
   return InitInstance(pWnd, ptli);
-}
-
-gcc_unused
-BOOL APIENTRY
-CustomItemOptionsDlgProc(HWND hDlg, UINT uMsg, UINT wParam,
-                         gcc_unused LONG lParam)
-{
-  SHINITDLGINFO shidi;
-  // LVCOLUMN lvc;
-  // LV_ITEM lvi;
-  // int ItemIndex;
-  // int i;
-
-  switch (uMsg) {
-  case WM_INITDIALOG:
-    shidi.dwMask = SHIDIM_FLAGS;
-    shidi.dwFlags = SHIDIF_DONEBUTTON | SHIDIF_SIPDOWN |
-      SHIDIF_SIZEDLGFULLSCREEN;
-    shidi.hDlg = hDlg;
-    SHInitDialog(&shidi);
-
-    SetWindowText(hDlg, TEXT("XCSoarLaunch"));
-    break;
-
-  case WM_COMMAND:
-    switch (LOWORD(wParam)) {
-    case IDC_BUTTON_UNINSTALL:
-      if (MessageBox(hDlg, TEXT("Delete today information?"),
-                     TEXT("Uninstall"), MB_ICONSTOP | MB_YESNO) == IDYES) {
-        RegDeleteKey(HKEY_LOCAL_MACHINE,
-                     TEXT("Software\\Microsoft\\Today\\Items\\XCSoarLaunch"));
-        MessageBox(hDlg, TEXT("Information was deleted. Please uninstall."),
-                   TEXT("Info"), MB_OK | MB_ICONINFORMATION);
-      }
-
-      EndDialog(hDlg, IDOK);
-      break;
-
-    case IDOK:
-      EndDialog(hDlg, IDOK);
-      break;
-    }
-    break;
-
-  default:
-    return FALSE;
-  }
-
-  return TRUE;
 }

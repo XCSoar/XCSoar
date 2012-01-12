@@ -85,7 +85,12 @@ class Dijkstra
    */
   reservable_priority_queue<Value, std::vector<Value>, Rank> q;
 
-  edge_iterator cur;
+  /**
+   * The value of the current edge, i.e. the one that was consumed by
+   * pop().
+   */
+  unsigned current_value;
+
   const bool m_min;
 
 public:
@@ -133,6 +138,8 @@ public:
 
     // Clear edge_map
     edges.clear();
+
+    current_value = 0;
   }
 
   /**
@@ -161,7 +168,8 @@ public:
    * @return Node for processing
    */
   const Node &pop() {
-    cur = q.top().iterator;
+    edge_const_iterator cur(q.top().iterator);
+    current_value = cur->second.value;
 
     do
       q.pop();
@@ -181,7 +189,7 @@ public:
 #ifdef INSTRUMENT_TASK
     count_dijkstra_links++;
 #endif
-    push(node, parent, cur->second.value + adjust_edge_value(edge_value)); 
+    push(node, parent, current_value + adjust_edge_value(edge_value));
   }
 
   /**

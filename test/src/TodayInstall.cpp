@@ -27,7 +27,7 @@ Copyright_License {
 #include <tchar.h>
 
 static bool
-uninstall()
+Uninstall()
 {
   RegistryKey key(HKEY_LOCAL_MACHINE,
                   _T("\\Software\\Microsoft\\Today\\Items\\XCSoar"), false);
@@ -35,7 +35,7 @@ uninstall()
 }
 
 static bool
-install()
+Install()
 {
   RegistryKey key(HKEY_LOCAL_MACHINE,
                   _T("\\Software\\Microsoft\\Today\\Items\\XCSoar"), false);
@@ -43,17 +43,47 @@ install()
     key.set_value(_T("DLL"), _T("\\Windows\\XCSoarLaunch.dll"));
 }
 
+static bool
+Enable()
+{
+  RegistryKey key(HKEY_LOCAL_MACHINE,
+                  _T("\\Software\\Microsoft\\Today\\Items\\XCSoar"), false);
+  return !key.error() &&
+    key.set_value(_T("Enabled"), DWORD(1));
+}
+
+static bool
+Disable()
+{
+  RegistryKey key(HKEY_LOCAL_MACHINE,
+                  _T("\\Software\\Microsoft\\Today\\Items\\XCSoar"), false);
+  return !key.error() &&
+    key.set_value(_T("Enabled"), DWORD(0));
+}
+
+static bool
+Do(LPCTSTR cmd)
+{
+  if (_tcscmp(cmd, _T("uninstall")) == 0)
+    return Disable() && Uninstall();
+  else if (_tcscmp(cmd, _T("enable")) == 0)
+    return Enable();
+  else if (_tcscmp(cmd, _T("disable")) == 0)
+    return Disable();
+  else
+    return Install();
+}
+
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         LPTSTR lpCmdLine,
         int nCmdShow)
 {
-  bool success = _tcscmp(lpCmdLine, _T("uninstall")) == 0
-    ? uninstall()
-    : install();
-
-  if (success)
+  if (Do(lpCmdLine)) {
     SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
-
-  return success ? 0 : 1;
+    return 0;
+  } else {
+    MessageBox(NULL, _T("Error"), NULL, MB_ICONEXCLAMATION|MB_OK);
+    return 1;
+  }
 }

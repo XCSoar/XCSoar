@@ -105,7 +105,8 @@ EWMicroRecorderDevice::ParseNMEA(const char *String, NMEAInfo &info)
 }
 
 static bool
-TryConnect(Port &port, char *user_data)
+TryConnect(Port &port, char *user_data, size_t max_user_data,
+           OperationEnvironment &env)
 {
   int retries=10;
 
@@ -120,7 +121,8 @@ TryConnect(Port &port, char *user_data)
     clock.update();
 
     int i;
-    while ((i = port.GetChar()) != EOF && !clock.check(8000)) {
+    while ((i = port.GetChar()) != EOF && !clock.check(8000) &&
+           !env.IsCancelled()) {
       char ch = (char)i;
 
       if (!started && ch == '-')
@@ -133,7 +135,7 @@ TryConnect(Port &port, char *user_data)
           // found end of file
           return true;
         } else {
-          if (user_size < sizeof(user_data) - 1) {
+          if (user_size < max_user_data - 1) {
             user_data[user_size] = ch;
             user_size++;
           }
@@ -273,7 +275,7 @@ DeclareInner(Port &port, const Declaration &declaration,
 
   char user_data[2500];
 
-  if (!TryConnect(port, user_data) || env.IsCancelled())
+  if (!TryConnect(port, user_data, sizeof(user_data), env))
     return false;
 
   char *p = strstr(user_data, "USER DETAILS");

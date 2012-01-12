@@ -130,7 +130,7 @@ NormalizeSearchString(TCHAR *gcc_restrict dest,
   TCHAR *retval = dest;
 
   for (; !StringIsEmpty(src); ++src)
-    if (_istalnum(*src))
+    if (static_cast<unsigned>(*src) < 128 && _istalnum(*src))
       *dest++ = _totupper(*src);
 
   *dest = _T('\0');

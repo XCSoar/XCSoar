@@ -211,7 +211,6 @@ OLCTriangle::add_start_edges()
   // use last point as single start,
   // this is out of order but required
 
-  dijkstra.pop();
   ScanTaskPoint destination(0, n_points-1);
   dijkstra.link(destination, destination, 0);
 }

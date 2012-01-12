@@ -124,11 +124,7 @@ TimeConfigPanel::Save(bool &_changed, bool &_require_restart)
   if (settings_computer.utc_offset != ival) {
     settings_computer.utc_offset = ival;
 
-    // have to do this because registry variables can't be negative!
-    if (ival < 0)
-      ival += 24 * 3600;
-
-    Profile::Set(szProfileUTCOffset, ival);
+    Profile::Set(szProfileUTCOffsetSigned, ival);
     changed = true;
   }
   _changed |= changed;
