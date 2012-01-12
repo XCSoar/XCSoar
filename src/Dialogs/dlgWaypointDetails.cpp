@@ -518,10 +518,9 @@ UpdateSunsetTime(const GeoPoint &location, const BrokenDateTime &date_time)
 static void
 ShowGlideResult(WndProperty &wp, const GlideResult &result)
 {
-  StaticString<64> buffer;
-  buffer.Format(_T("%.0f %s"),
-                (double)Units::ToUserAltitude(result.altitude_difference),
-                Units::GetAltitudeName());
+  TCHAR buffer[64];
+  Units::FormatUserArrival(result.altitude_difference,
+                           buffer, ARRAY_SIZE(buffer));
   wp.SetText(buffer);
 }
 
