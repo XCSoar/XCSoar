@@ -27,6 +27,7 @@ Copyright_License {
 
 #include "Units/Units.hpp"
 #include "Units/Descriptor.hpp"
+#include "Engine/Atmosphere/Pressure.hpp"
 
 UnitSetting Units::current = {
   unKiloMeter,
@@ -145,4 +146,10 @@ const TCHAR *
 Units::GetPressureName()
 {
   return GetUnitName(GetUserPressureUnit());
+}
+
+AtmosphericPressure
+Units::FromUserPressure(fixed value)
+{
+  return AtmosphericPressure::HectoPascal(ToSysPressure(value));
 }

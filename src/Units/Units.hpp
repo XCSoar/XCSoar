@@ -31,6 +31,8 @@ Copyright_License {
 
 #include <tchar.h>
 
+class AtmosphericPressure;
+
 #define DEG "°"
 
 /**
@@ -225,6 +227,14 @@ namespace Units
   {
     return ToSysUnit(Value, current.pressure_unit);
   }
+
+  /**
+   * Convert a pressure value from the user unit to an
+   * #AtmosphericPressure object.
+   */
+  gcc_const
+  AtmosphericPressure
+  FromUserPressure(fixed value);
 };
 
 #endif
