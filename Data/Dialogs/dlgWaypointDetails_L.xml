@@ -21,7 +21,10 @@
     <Edit Name="prpMc2" Caption="Alt. diff. MC current" Height="20" CaptionWidth="138" ReadOnly="1" />
   </Panel>
 
-  <TextEdit Name="frmDetails" X="70" Y="0" ReadOnly="1" MultiLine="1" />
+  <Panel Name="frmDetails" X="70" Y="0">
+    <List Name="Files" Y="0" ItemHeight="18" />
+    <TextEdit Name="Details" Y="0" ReadOnly="1" MultiLine="1" />
+  </Panel>
 
   <Panel Name="frmCommands" X="70" Y="0" Visible="0">
     <Button Name="cmdReplace" Caption="Replace In Task" X="40" Y="10" Width="-50" Height="30" OnClick="OnReplaceClicked" />

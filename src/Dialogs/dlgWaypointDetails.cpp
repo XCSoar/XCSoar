@@ -56,13 +56,18 @@ Copyright_License {
 #include "Units/AngleFormatter.hpp"
 #include "Util/Macros.hpp"
 
+#ifdef ANDROID
+#include "Android/NativeView.hpp"
+#include "Android/Main.hpp"
+#endif
+
 #include <assert.h>
 #include <stdio.h>
 #include <windef.h> /* for MAX_PATH */
 
 static int page = 0;
 static WndForm *wf = NULL;
-static EditWindow *wDetails = NULL;
+static WndFrame *wDetails = NULL;
 static WndFrame *wInfo = NULL;
 static WndFrame *wCommand = NULL;
 static WndOwnerDrawFrame *wImage = NULL;
@@ -84,6 +89,9 @@ NextPage(int Step)
       page = 0;
     // skip wDetails frame, if there are no details
   } while (page == 1 &&
+#ifdef ANDROID
+           waypoint->files_external.empty() &&
+#endif
            waypoint->details.empty());
 
   wInfo->set_visible(page == 0);
@@ -372,6 +380,30 @@ OnImagePaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
     canvas.copy(images[page-3]);
 }
 
+#ifdef ANDROID
+
+// TODO: support other platforms
+
+static void
+OnFileListEnter(gcc_unused unsigned i)
+{
+  if (i < waypoint->files_external.size()) {
+    TCHAR path[MAX_PATH];
+    LocalPath(path, waypoint->files_external[i].c_str());
+
+    native_view->openFile(path);
+  }
+}
+
+static void
+OnFileListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
+{
+  canvas.text(paint_rc.left + Layout::Scale(2),
+              paint_rc.top + Layout::Scale(2),
+              waypoint->files_external[i].c_str());
+}
+#endif
+
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
     DeclareCallBackEntry(OnNextClicked),
     DeclareCallBackEntry(OnPrevClicked),
@@ -611,9 +643,34 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   assert(wCommand != NULL);
   wCommand->hide();
 
-  wDetails = (EditWindow*)wf->FindByName(_T("frmDetails"));
+  wDetails = (WndFrame *)wf->FindByName(_T("frmDetails"));
   assert(wDetails != NULL);
-  wDetails->set_text(waypoint->details.c_str());
+
+  WndListFrame *wFilesList = (WndListFrame *)wf->FindByName(_T("Files"));
+  assert(wFilesList != NULL);
+
+  EditWindow *wDetailsText = (EditWindow *)wf->FindByName(_T("Details"));
+  assert(wDetailsText != NULL);
+  wDetailsText->set_text(waypoint->details.c_str());
+
+#ifdef ANDROID
+  int num_files = waypoint->files_external.size();
+  if (num_files > 0) {
+    wFilesList->SetPaintItemCallback(OnFileListItemPaint);
+    wFilesList->SetCursorCallback(OnFileListEnter);
+    wFilesList->SetActivateCallback(OnFileListEnter);
+
+    unsigned list_height = wFilesList->GetItemHeight() * std::min(num_files, 5);
+    wFilesList->resize(wFilesList->get_width(), list_height);
+    wFilesList->SetLength(num_files);
+
+    PixelRect rc = wDetailsText->get_position();
+    rc.top += list_height;
+    wDetailsText->move(rc);
+  }
+#else
+  wFilesList->hide();
+#endif
 
   wImage = (WndOwnerDrawFrame *)wf->FindByName(_T("frmImage"));
   assert(wImage != NULL);
