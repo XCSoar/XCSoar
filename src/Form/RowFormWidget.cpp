@@ -260,6 +260,27 @@ RowFormWidget::AddFileReader(const TCHAR *label, const TCHAR *help,
   return edit;
 }
 
+void
+RowFormWidget::LoadValue(unsigned i, fixed value)
+{
+  WndProperty &control = GetControl(i);
+  DataFieldFloat &df = *(DataFieldFloat *)control.GetDataField();
+  assert(df.GetType() == DataField::TYPE_REAL);
+  df.SetAsFloat(value);
+  control.RefreshDisplay();
+}
+
+void
+RowFormWidget::LoadValue(unsigned i, fixed value, UnitGroup unit_group)
+{
+  const Unit unit = Units::GetUserUnitByGroup(unit_group);
+  WndProperty &control = GetControl(i);
+  DataFieldFloat &df = *(DataFieldFloat *)control.GetDataField();
+  assert(df.GetType() == DataField::TYPE_REAL);
+  df.SetAsFloat(Units::ToUserUnit(value, unit));
+  df.SetUnits(Units::GetUnitName(unit));
+  control.RefreshDisplay();
+}
 
 bool
 RowFormWidget::GetValueBoolean(unsigned i) const

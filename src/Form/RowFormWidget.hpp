@@ -131,6 +131,9 @@ public:
     return *df;
   }
 
+  void LoadValue(unsigned i, fixed value);
+  void LoadValue(unsigned i, fixed value, UnitGroup unit_group);
+
   gcc_pure
   bool GetValueBoolean(unsigned i) const;
 
