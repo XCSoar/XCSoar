@@ -89,8 +89,7 @@ test_replay()
   task_manager.SetTaskBehaviour(task_behaviour);
 
   OrderedTask* blank = 
-    new OrderedTask(default_events, task_manager.GetTaskBehaviour(),
-                    glide_polar);
+    new OrderedTask(default_events, task_manager.GetTaskBehaviour());
 
   OrderedTask* t = task_load(blank);
   if (t) {

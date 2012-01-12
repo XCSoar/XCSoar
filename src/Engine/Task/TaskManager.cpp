@@ -32,9 +32,9 @@
 TaskManager::TaskManager(TaskEvents &te,
                          const Waypoints &wps): 
   glide_polar(fixed_zero), safety_polar(fixed_one),
-  task_ordered(te, task_behaviour, glide_polar),
-  task_goto(te, task_behaviour, glide_polar, wps),
-  task_abort(te, task_behaviour, glide_polar, safety_polar, wps),
+  task_ordered(te, task_behaviour),
+  task_goto(te, task_behaviour, wps),
+  task_abort(te, task_behaviour, wps),
   mode(MODE_NULL),
   active_task(NULL) {
   null_stats.reset();
@@ -289,7 +289,7 @@ TaskManager::Update(const AircraftState &state,
 
   if (task_ordered.TaskSize() > 1)
     // always update ordered task
-    retval |= task_ordered.Update(state, state_last);
+    retval |= task_ordered.Update(state, state_last, glide_polar);
 
   // inform the abort task whether it is running as the task or not  
   task_abort.SetActive(active_task == &task_abort);
@@ -309,13 +309,13 @@ TaskManager::Update(const AircraftState &state,
 
   task_abort.SetTaskDestination(*destination);
 
-  retval |= task_abort.Update(state, state_last);
+  retval |= task_abort.Update(state, state_last, GetReachPolar());
 
   if (active_task 
       && (active_task != &task_ordered)
       && (active_task != &task_abort))
     // update mode task for any that have not yet run
-    retval |= active_task->Update(state, state_last);
+    retval |= active_task->Update(state, state_last, glide_polar);
 
   UpdateCommonStats(state);
 
@@ -327,8 +327,13 @@ TaskManager::UpdateIdle(const AircraftState& state)
 {
   bool retval = false;
 
-  if (active_task)
-    retval |= active_task->UpdateIdle(state);
+  if (active_task) {
+    const GlidePolar &polar = active_task == &task_abort
+      ? GetReachPolar()
+      : glide_polar;
+
+    retval |= active_task->UpdateIdle(state, polar);
+  }
 
   return retval;
 }
@@ -568,10 +573,9 @@ TaskManager::TargetLock(const unsigned index, bool do_lock)
 }
 
 OrderedTask* 
-TaskManager::Clone(TaskEvents &te, const TaskBehaviour &tb,
-                   const GlidePolar &gp) const
+TaskManager::Clone(TaskEvents &te, const TaskBehaviour &tb) const
 {
-  return task_ordered.Clone(te, tb, gp);
+  return task_ordered.Clone(te, tb);
 }
 
 bool 

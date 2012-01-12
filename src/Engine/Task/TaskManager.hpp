@@ -301,9 +301,8 @@ public:
    *
    * @return Initialised object
    */
-  gcc_malloc gcc_pure
-  OrderedTask* Clone(TaskEvents &te, const TaskBehaviour &tb,
-                     const GlidePolar &gp) const;
+  gcc_malloc
+  OrderedTask *Clone(TaskEvents &te, const TaskBehaviour &tb) const;
 
   /**
    * Copy task into this task
@@ -378,6 +377,24 @@ public:
   gcc_pure
   GlidePolar GetSafetyPolar() const {
     return safety_polar;
+  }
+
+  /**
+   * Return a reference to the polar that should be used for reach
+   * calculations.
+   */
+  gcc_pure
+  const GlidePolar &GetReachPolar() const {
+    switch (task_behaviour.route_planner.reach_polar_mode) {
+    case RoutePlannerConfig::Polar::TASK:
+      return glide_polar;
+
+    case RoutePlannerConfig::Polar::SAFETY:
+      return safety_polar;
+    }
+
+    assert(false);
+    return glide_polar;
   }
 
   /**

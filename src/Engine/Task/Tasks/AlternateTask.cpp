@@ -32,10 +32,8 @@
 const unsigned AlternateTask::max_alternates = 6;
 
 AlternateTask::AlternateTask(TaskEvents &te, const TaskBehaviour &tb,
-                             const GlidePolar &_glide_polar,
-                             const GlidePolar &_safety_polar,
                              const Waypoints &wps):
-  AbortTask(te, tb, _glide_polar, _safety_polar, wps),
+  AbortTask(te, tb, wps),
   best_alternate_id(UINT_MAX)
 {
   alternates.reserve(64);

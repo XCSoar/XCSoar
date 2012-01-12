@@ -94,13 +94,11 @@ public:
    * 
    * @param te Task events
    * @param tb Task behaviour
-   * @param gp Glide Polar
    * 
    * @return Initialised object
    */
   OrderedTask(TaskEvents &te, 
-              const TaskBehaviour &tb,
-              const GlidePolar &gp);
+              const TaskBehaviour &tb);
   virtual ~OrderedTask();
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb);
@@ -152,13 +150,11 @@ public:
    *
    * @param te Task events
    * @param tb Task behaviour
-   * @param gp Glide Polar
    *
    * @return Initialised object
    */
-  gcc_malloc gcc_pure
-  OrderedTask* Clone(TaskEvents &te, const TaskBehaviour &tb,
-                     const GlidePolar &gp) const;
+  gcc_malloc
+  OrderedTask *Clone(TaskEvents &te, const TaskBehaviour &tb) const;
 
   /**
    * Copy task into this task
@@ -383,9 +379,9 @@ public:
    *
    * @return True if internal state changes
    */
-  bool UpdateSample(const AircraftState &state_now, 
-                     const bool full_update);
-
+  virtual bool UpdateSample(const AircraftState &state_now,
+                            const GlidePolar &glide_polar,
+                            const bool full_update);
 
   /**
    * Update internal states (non-essential) for housework, or where functions are slow
@@ -395,7 +391,8 @@ public:
    *
    * @return True if internal state changed
    */
-  bool UpdateIdle(const AircraftState& state_now);
+  virtual bool UpdateIdle(const AircraftState& state_now,
+                          const GlidePolar &glide_polar);
 
   /**
    * Return size of task
@@ -634,6 +631,7 @@ protected:
    * @param leg Glide result for current leg of task
    */
   void GlideSolutionTravelled(const AircraftState &state_now, 
+                              const GlidePolar &glide_polar,
                                 GlideResult &total,
                                 GlideResult &leg);
 
@@ -651,13 +649,14 @@ protected:
    * @param total_t_elapsed Total planned task time (s)
    * @param leg_t_elapsed Leg planned task time (s)
    */
-  void GlideSolutionPlanned(const AircraftState &state_now, 
-                              GlideResult &total,
-                              GlideResult &leg,
-                              DistanceStat &total_remaining_effective,
-                              DistanceStat &leg_remaining_effective,
-                              const GlideResult &solution_remaining_total,
-                              const GlideResult &solution_remaining_leg);
+  virtual void GlideSolutionPlanned(const AircraftState &state_now,
+                                    const GlidePolar &glide_polar,
+                                    GlideResult &total,
+                                    GlideResult &leg,
+                                    DistanceStat &total_remaining_effective,
+                                    DistanceStat &leg_remaining_effective,
+                                    const GlideResult &solution_remaining_total,
+                                    const GlideResult &solution_remaining_leg);
 
   /**
    * Calculate/search for best MC, being the highest MC value to produce a
@@ -668,7 +667,9 @@ protected:
    *
    * @return true if solution is valid
    */
-  bool CalcBestMC(const AircraftState &state_now, fixed& best) const;
+  virtual bool CalcBestMC(const AircraftState &state_now,
+                          const GlidePolar &glide_polar,
+                          fixed& best) const;
 
   /**
    * Calculate virtual sink rate of aircraft that allows a pure glide solution
@@ -679,7 +680,8 @@ protected:
    *
    * @return Sink rate of aircraft (m/s)
    */
-  fixed CalcRequiredGlide(const AircraftState &state_now) const;
+  virtual fixed CalcRequiredGlide(const AircraftState &state_now,
+                                  const GlidePolar &glide_polar) const;
 
   /**
    * Calculate cruise efficiency for the travelled part of the task.
@@ -691,9 +693,13 @@ protected:
    *
    * @return True if cruise efficiency is updated
    */
-  bool CalcCruiseEfficiency(const AircraftState &state_now, fixed& value) const;
+  virtual bool CalcCruiseEfficiency(const AircraftState &state_now,
+                                    const GlidePolar &glide_polar,
+                                    fixed &value) const;
 
-  bool CalcEffectiveMC(const AircraftState &state_now, fixed& value) const;
+  virtual bool CalcEffectiveMC(const AircraftState &state_now,
+                               const GlidePolar &glide_polar,
+                               fixed &value) const;
 
   /**
    * Optimise target ranges (for adjustable tasks) to produce an estimated
@@ -706,6 +712,7 @@ protected:
    * @return Target range parameter (0-1)
    */
   fixed CalcMinTarget(const AircraftState &state_now, 
+                      const GlidePolar &glide_polar,
                         const fixed t_target);
 
   /**

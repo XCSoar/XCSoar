@@ -29,13 +29,12 @@
 #include "Task/TaskBehaviour.hpp"
 
 AbstractTask::AbstractTask(enum Type _type, TaskEvents &te,
-                           const TaskBehaviour &tb, const GlidePolar &gp)
+                           const TaskBehaviour &tb)
   :TaskInterface(_type),
    active_task_point(0),
    active_task_point_last(0-1),
    task_events(te),
    task_behaviour(tb),
-   glide_polar(gp),
    mc_lpf(fixed(8)),
    ce_lpf(fixed(60)),
    em_lpf(fixed(60)),
@@ -65,7 +64,7 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
   }
 
   fixed mc_found;
-  if (CalcBestMC(state, mc_found)) {
+  if (CalcBestMC(state, glide_polar, mc_found)) {
     // improved solution found, activate auto fg mode
     if (mc_found > stats.mc_best)
       trigger_auto = true;
@@ -96,11 +95,12 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
 }
 
 bool 
-AbstractTask::UpdateIdle(const AircraftState &state)
+AbstractTask::UpdateIdle(const AircraftState &state,
+                         const GlidePolar &glide_polar)
 {
   if (TaskStarted() && task_behaviour.calc_cruise_efficiency) {
     fixed val = fixed_one;
-    if (CalcCruiseEfficiency(state, val))
+    if (CalcCruiseEfficiency(state, glide_polar, val))
       stats.cruise_efficiency = std::max(ce_lpf.update(val), fixed_zero);
   } else {
     stats.cruise_efficiency = ce_lpf.reset(fixed_one);
@@ -108,14 +108,14 @@ AbstractTask::UpdateIdle(const AircraftState &state)
 
   if (TaskStarted() && task_behaviour.calc_effective_mc) {
     fixed val = glide_polar.GetMC();
-    if (CalcEffectiveMC(state, val))
+    if (CalcEffectiveMC(state, glide_polar, val))
       stats.effective_mc = std::max(em_lpf.update(val), fixed_zero);
   } else {
     stats.effective_mc = em_lpf.reset(glide_polar.GetMC());
   }
 
   if (task_behaviour.calc_glide_required)
-    UpdateStatsGlide(state);
+    UpdateStatsGlide(state, glide_polar);
   else
     stats.glide_required = fixed_zero; // error
 
@@ -182,7 +182,8 @@ CalculatePirker(DistanceStat &pirker, const DistanceStat &planned,
 }
 
 void
-AbstractTask::UpdateGlideSolutions(const AircraftState &state)
+AbstractTask::UpdateGlideSolutions(const AircraftState &state,
+                                   const GlidePolar &glide_polar)
 {
   GlideSolutionRemaining(state, glide_polar, stats.total.solution_remaining,
                            stats.current_leg.solution_remaining);
@@ -199,10 +200,12 @@ AbstractTask::UpdateGlideSolutions(const AircraftState &state)
     stats.current_leg.solution_mc0 = stats.current_leg.solution_remaining;
   }
 
-  GlideSolutionTravelled(state, stats.total.solution_travelled,
+  GlideSolutionTravelled(state, glide_polar,
+                         stats.total.solution_travelled,
                            stats.current_leg.solution_travelled);
 
-  GlideSolutionPlanned(state, stats.total.solution_planned,
+  GlideSolutionPlanned(state, glide_polar,
+                       stats.total.solution_planned,
                          stats.current_leg.solution_planned,
                          stats.total.remaining_effective,
                          stats.current_leg.remaining_effective,
@@ -225,7 +228,8 @@ AbstractTask::UpdateGlideSolutions(const AircraftState &state)
 
 bool
 AbstractTask::Update(const AircraftState &state, 
-                     const AircraftState &state_last)
+                     const AircraftState &state_last,
+                     const GlidePolar &glide_polar)
 {
   stats.task_valid = CheckTask();
   stats.has_targets = HasTargets();
@@ -236,8 +240,8 @@ AbstractTask::Update(const AircraftState &state,
 
   UpdateStatsTimes(state);
   UpdateStatsDistances(state.location, full_update);
-  UpdateGlideSolutions(state);
-  bool sample_updated = UpdateSample(state, full_update);
+  UpdateGlideSolutions(state, glide_polar);
+  bool sample_updated = UpdateSample(state, glide_polar, full_update);
   UpdateStatsSpeeds(state, state_last);
   UpdateFlightMode();
 
@@ -263,9 +267,11 @@ AbstractTask::UpdateStatsSpeeds(const AircraftState &state,
 }
 
 void
-AbstractTask::UpdateStatsGlide(const AircraftState &state)
+AbstractTask::UpdateStatsGlide(const AircraftState &state,
+                               const GlidePolar &glide_polar)
 {
-  stats.glide_required = AngleToGradient(CalcRequiredGlide(state));
+  stats.glide_required = AngleToGradient(CalcRequiredGlide(state,
+                                                           glide_polar));
 }
 
 void
@@ -313,7 +319,9 @@ AbstractTask::CalcLegGradient(const AircraftState &aircraft) const
 }
 
 bool 
-AbstractTask::CalcEffectiveMC(const AircraftState &state_now, fixed& val) const
+AbstractTask::CalcEffectiveMC(const AircraftState &state_now,
+                              const GlidePolar &glide_polar,
+                              fixed &val) const
 {
   val = glide_polar.GetMC();
   return true;

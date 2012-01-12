@@ -36,11 +36,10 @@ public:
    * 
    * @param te Task events callback class (shared among all tasks) 
    * @param tb Global task behaviour settings
-   * @param gp Global glide polar used for navigation calculations
    * 
    */
   UnorderedTask(const enum Type _type, TaskEvents &te,
-                const TaskBehaviour &tb, const GlidePolar &gp);
+                const TaskBehaviour &tb);
 
   fixed GetFinishHeight() const;
 
@@ -61,26 +60,31 @@ protected:
 
   bool CheckTask() const;
 
-  bool CalcBestMC(const AircraftState &state_now, fixed& best) const;
+  virtual bool CalcBestMC(const AircraftState &state_now,
+                          const GlidePolar &glide_polar,
+                          fixed& best) const;
 
-  fixed CalcRequiredGlide(const AircraftState &state_now) const;
+  virtual fixed CalcRequiredGlide(const AircraftState &state_now,
+                                  const GlidePolar &glide_polar) const;
 
   void GlideSolutionRemaining(const AircraftState &state_now, 
                                 const GlidePolar &polar,
                                 GlideResult &total,
                                 GlideResult &leg);
 
-  void GlideSolutionTravelled(const AircraftState &state_now, 
+  virtual void GlideSolutionTravelled(const AircraftState &state_now,
+                                      const GlidePolar &glide_polar,
                                         GlideResult &total,
                                         GlideResult &leg);
 
-  void GlideSolutionPlanned(const AircraftState &state_now,
-                                      GlideResult &total,
-                                      GlideResult &leg,
-                              DistanceStat &total_remaining_effective,
-                              DistanceStat &leg_remaining_effective,
-                              const GlideResult &solution_remaining_total,
-                              const GlideResult &solution_remaining_leg);
+  virtual void GlideSolutionPlanned(const AircraftState &state_now,
+                                    const GlidePolar &glide_polar,
+                                    GlideResult &total,
+                                    GlideResult &leg,
+                                    DistanceStat &total_remaining_effective,
+                                    DistanceStat &leg_remaining_effective,
+                                    const GlideResult &solution_remaining_total,
+                                    const GlideResult &solution_remaining_leg);
 
   fixed ScanTotalStartTime(const AircraftState &state_now);
 

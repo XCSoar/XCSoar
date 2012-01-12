@@ -26,15 +26,16 @@
 #include "TaskSolvers/TaskSolution.hpp"
 
 UnorderedTask::UnorderedTask(const enum Type _type, TaskEvents &te,
-                             const TaskBehaviour &tb,
-                             const GlidePolar &gp):
-  AbstractTask(_type, te, tb, gp)
+                             const TaskBehaviour &tb):
+  AbstractTask(_type, te, tb)
 {
 }
 
 
 bool 
-UnorderedTask::CalcBestMC(const AircraftState &aircraft, fixed& best) const
+UnorderedTask::CalcBestMC(const AircraftState &aircraft,
+                          const GlidePolar &glide_polar,
+                          fixed& best) const
 {
   TaskPoint *tp = GetActiveTaskPoint();
   if (!tp) {
@@ -52,7 +53,8 @@ UnorderedTask::CheckTask() const
 }
 
 fixed 
-UnorderedTask::CalcRequiredGlide(const AircraftState &aircraft) const
+UnorderedTask::CalcRequiredGlide(const AircraftState &aircraft,
+                                 const GlidePolar &glide_polar) const
 {
   TaskPoint *tp = GetActiveTaskPoint();
   if (!tp) {
@@ -84,6 +86,7 @@ UnorderedTask::GlideSolutionRemaining(const AircraftState &state,
 
 void 
 UnorderedTask::GlideSolutionTravelled(const AircraftState &state, 
+                                      const GlidePolar &glide_polar,
                                         GlideResult &total,
                                         GlideResult &leg)
 {
@@ -95,6 +98,7 @@ UnorderedTask::GlideSolutionTravelled(const AircraftState &state,
 
 void 
 UnorderedTask::GlideSolutionPlanned(const AircraftState &state, 
+                                    const GlidePolar &glide_polar,
                                       GlideResult &total,
                                       GlideResult &leg,
                                       DistanceStat &total_remaining_effective,

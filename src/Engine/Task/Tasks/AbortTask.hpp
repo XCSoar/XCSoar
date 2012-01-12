@@ -106,7 +106,6 @@ protected:
 
 private:
   unsigned active_waypoint;
-  const GlidePolar &polar_safety;
   bool reachable_landable;
 
 public:
@@ -120,8 +119,7 @@ public:
    * 
    * @return Initialised object (with nothing in task)
    */
-  AbortTask(TaskEvents &te, const TaskBehaviour &tb, const GlidePolar &gp,
-            const GlidePolar &safety_polar,
+  AbortTask(TaskEvents &te, const TaskBehaviour &tb,
             const Waypoints &wps);
   virtual ~AbortTask();
 
@@ -183,8 +181,9 @@ public:
    *
    * @return True if internal state changes
    */
-  bool UpdateSample(const AircraftState &state_now, 
-                     bool full_update);
+  virtual bool UpdateSample(const AircraftState &state_now,
+                            const GlidePolar &glide_polar,
+                            bool full_update);
 
   /**
    * Determine if any landable reachable waypoints were found in the
@@ -244,7 +243,8 @@ protected:
    * @return Distance (m) of approximate glide range of aircraft
    */
   gcc_pure
-  fixed GetAbortRange(const AircraftState &state_now) const;
+  fixed GetAbortRange(const AircraftState &state_now,
+                      const GlidePolar &glide_polar) const;
 
   /**
    * Fill abort task list with candidate waypoints given a list of

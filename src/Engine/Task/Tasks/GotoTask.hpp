@@ -44,7 +44,6 @@ public:
    * 
    * @param te Task events callback class (shared among all tasks) 
    * @param tb Global task behaviour settings
-   * @param gp Global glide polar used for navigation calculations
    * @param wps Waypoints container to be scanned for takeoff
    * 
    * @return Initialised object (with no waypoint to go to)
@@ -52,7 +51,6 @@ public:
 
   GotoTask(TaskEvents &te, 
            const TaskBehaviour &tb,
-           const GlidePolar &gp,
            const Waypoints &wps);
   ~GotoTask();
 
@@ -110,8 +108,9 @@ public:
  *
  * @return True if internal state changes
  */
-  bool UpdateSample(const AircraftState &state_now, 
-                     const bool full_update);
+  virtual bool UpdateSample(const AircraftState &state_now,
+                            const GlidePolar &glide_polar,
+                            const bool full_update);
 
   /**
    * When called on takeoff, creates a default goto task

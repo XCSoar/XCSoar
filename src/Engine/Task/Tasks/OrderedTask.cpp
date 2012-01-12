@@ -398,15 +398,16 @@ OrderedTask::check_transition_point(OrderedTaskPoint& point,
 // ADDITIONAL FUNCTIONS
 
 bool 
-OrderedTask::UpdateIdle(const AircraftState& state)
+OrderedTask::UpdateIdle(const AircraftState &state,
+                        const GlidePolar &glide_polar)
 {
-  bool retval = AbstractTask::UpdateIdle(state);
+  bool retval = AbstractTask::UpdateIdle(state, glide_polar);
 
   if (HasStart()
       && (task_behaviour.optimise_targets_range)
       && (get_ordered_task_behaviour().aat_min_time > fixed_zero)) {
 
-    CalcMinTarget(state,
+    CalcMinTarget(state, glide_polar,
                     get_ordered_task_behaviour().aat_min_time + fixed(task_behaviour.optimise_targets_margin));
 
     if (task_behaviour.optimise_targets_bearing) {
@@ -427,6 +428,7 @@ OrderedTask::UpdateIdle(const AircraftState& state)
 
 bool 
 OrderedTask::UpdateSample(const AircraftState &state,
+                          const GlidePolar &glide_polar,
                            const bool full_update)
 {
   return true;
@@ -711,6 +713,7 @@ OrderedTask::GlideSolutionRemaining(const AircraftState &aircraft,
 
 void
 OrderedTask::GlideSolutionTravelled(const AircraftState &aircraft,
+                                    const GlidePolar &glide_polar,
                                       GlideResult &total,
                                       GlideResult &leg)
 {
@@ -722,6 +725,7 @@ OrderedTask::GlideSolutionTravelled(const AircraftState &aircraft,
 
 void
 OrderedTask::GlideSolutionPlanned(const AircraftState &aircraft,
+                                  const GlidePolar &glide_polar,
                                     GlideResult &total,
                                     GlideResult &leg,
                                     DistanceStat &total_remaining_effective,
@@ -748,7 +752,8 @@ OrderedTask::GlideSolutionPlanned(const AircraftState &aircraft,
 // Auxiliary glide functions
 
 fixed
-OrderedTask::CalcRequiredGlide(const AircraftState &aircraft) const
+OrderedTask::CalcRequiredGlide(const AircraftState &aircraft,
+                               const GlidePolar &glide_polar) const
 {
   TaskGlideRequired bgr(task_points, active_task_point, aircraft,
                         task_behaviour.glide, glide_polar);
@@ -756,7 +761,9 @@ OrderedTask::CalcRequiredGlide(const AircraftState &aircraft) const
 }
 
 bool
-OrderedTask::CalcBestMC(const AircraftState &aircraft, fixed& best) const
+OrderedTask::CalcBestMC(const AircraftState &aircraft,
+                        const GlidePolar &glide_polar,
+                        fixed &best) const
 {
   // note setting of lower limit on mc
   TaskBestMc bmc(task_points, active_task_point, aircraft,
@@ -779,7 +786,9 @@ OrderedTask::allow_incremental_boundary_stats(const AircraftState &aircraft) con
 }
 
 bool
-OrderedTask::CalcCruiseEfficiency(const AircraftState &aircraft, fixed& val) const
+OrderedTask::CalcCruiseEfficiency(const AircraftState &aircraft,
+                                  const GlidePolar &glide_polar,
+                                  fixed &val) const
 {
   if (allow_incremental_boundary_stats(aircraft)) {
     TaskCruiseEfficiency bce(task_points, active_task_point, aircraft,
@@ -793,7 +802,9 @@ OrderedTask::CalcCruiseEfficiency(const AircraftState &aircraft, fixed& val) con
 }
 
 bool 
-OrderedTask::CalcEffectiveMC(const AircraftState &aircraft, fixed& val) const
+OrderedTask::CalcEffectiveMC(const AircraftState &aircraft,
+                             const GlidePolar &glide_polar,
+                             fixed &val) const
 {
   if (allow_incremental_boundary_stats(aircraft)) {
     TaskEffectiveMacCready bce(task_points, active_task_point, aircraft,
@@ -808,7 +819,9 @@ OrderedTask::CalcEffectiveMC(const AircraftState &aircraft, fixed& val) const
 
 
 fixed
-OrderedTask::CalcMinTarget(const AircraftState &aircraft, const fixed t_target)
+OrderedTask::CalcMinTarget(const AircraftState &aircraft,
+                           const GlidePolar &glide_polar,
+                           const fixed t_target)
 {
   if (stats.distance_max > stats.distance_min) {
     // only perform scan if modification is possible
@@ -862,9 +875,8 @@ OrderedTask::~OrderedTask()
 }
 
 OrderedTask::OrderedTask(TaskEvents &te, 
-                         const TaskBehaviour &tb,
-                         const GlidePolar &gp):
-  AbstractTask(ORDERED, te, tb, gp),
+                         const TaskBehaviour &tb):
+  AbstractTask(ORDERED, te, tb),
   taskpoint_start(NULL),
   taskpoint_finish(NULL),
   factory_mode(TaskBehaviour::FACTORY_RT),
@@ -1094,10 +1106,9 @@ OrderedTask::GetTaskRadius(const GeoPoint& fallback_location) const
 }
 
 OrderedTask* 
-OrderedTask::Clone(TaskEvents &te, const TaskBehaviour &tb,
-                   const GlidePolar &gp) const
+OrderedTask::Clone(TaskEvents &te, const TaskBehaviour &tb) const
 {
-  OrderedTask* new_task = new OrderedTask(te, tb, gp);
+  OrderedTask* new_task = new OrderedTask(te, tb);
 
   new_task->m_ordered_behaviour = m_ordered_behaviour;
 

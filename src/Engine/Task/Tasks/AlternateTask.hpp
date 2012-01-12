@@ -59,14 +59,11 @@ public:
    * 
    * @param te Task events callback class (shared among all tasks) 
    * @param tb Global task behaviour settings
-   * @param glide_polar global glide polar used for navigation calculations
-   * @param safety_polar global safety polar
    * @param wps Waypoints container to be scanned during updates
    * 
    * @return Initialised object (with nothing in task)
    */
   AlternateTask(TaskEvents &te, const TaskBehaviour &tb,
-                const GlidePolar &glide_polar, const GlidePolar &safety_polar,
                 const Waypoints &wps);
 
   void Reset();

@@ -27,9 +27,8 @@
 
 GotoTask::GotoTask(TaskEvents &te, 
                    const TaskBehaviour &tb,
-                   const GlidePolar &gp,
                    const Waypoints &wps)
-  :UnorderedTask(GOTO, te,tb,gp),
+  :UnorderedTask(GOTO, te, tb),
    tp(NULL),
    waypoints(wps)
 {
@@ -71,6 +70,7 @@ GotoTask::SetActiveTaskPoint(unsigned index)
 
 bool 
 GotoTask::UpdateSample(gcc_unused const AircraftState &state,
+                       gcc_unused const GlidePolar &glide_polar,
                         gcc_unused const bool full_update)
 {
   return false; // nothing to do

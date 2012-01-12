@@ -33,6 +33,7 @@ struct TaskBehaviour;
 class TaskStats;
 class TaskWaypoint;
 class TaskPoint;
+class GlidePolar;
 
 /**
  *  Abstract interface for all tasks and task manager.  This defines
@@ -107,7 +108,8 @@ public:
    * @return True if internal state changed
    */
   virtual bool Update(const AircraftState &state_now,
-                      const AircraftState &state_last) = 0;
+                      const AircraftState &state_last,
+                      const GlidePolar &glide_polar) = 0;
 
   /**
    * Update internal states (non-essential) for housework, or where functions are slow
@@ -117,7 +119,8 @@ public:
    *
    * @return True if internal state changed
    */
-  virtual bool UpdateIdle(const AircraftState &state_now) = 0;
+  virtual bool UpdateIdle(const AircraftState &state_now,
+                          const GlidePolar &glide_polar) = 0;
 };
 
 #endif //TASKINTERFACE_H

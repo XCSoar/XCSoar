@@ -31,12 +31,11 @@ static OrderedTask* task_load(OrderedTask* task) {
 static bool
 test_load_task()
 {
-  GlidePolar glide_polar(fixed(4.0));
   TaskBehaviour task_behaviour;
   TaskEventsPrint default_events(verbose);
 
   OrderedTask* blank = 
-    new OrderedTask(default_events, task_behaviour, glide_polar);
+    new OrderedTask(default_events, task_behaviour);
 
   OrderedTask* t = task_load(blank);
   delete blank;

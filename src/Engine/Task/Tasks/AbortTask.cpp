@@ -34,14 +34,11 @@ const fixed AbortTask::min_search_range(50000.0);
 const fixed AbortTask::max_search_range(100000.0);
 
 AbortTask::AbortTask(TaskEvents &_task_events, const TaskBehaviour &_task_behaviour,
-                     const GlidePolar &_glide_polar,
-                     const GlidePolar &_safety_polar,
                      const Waypoints &wps)
-  :UnorderedTask(ABORT, _task_events, _task_behaviour, _glide_polar),
+  :UnorderedTask(ABORT, _task_events, _task_behaviour),
    waypoints(wps),
    intersection_test(NULL),
-   active_waypoint(0),
-   polar_safety(_safety_polar)
+   active_waypoint(0)
 {
   task_points.reserve(32);
 }
@@ -100,11 +97,12 @@ AbortTask::Clear()
 }
 
 fixed
-AbortTask::GetAbortRange(const AircraftState &state) const
+AbortTask::GetAbortRange(const AircraftState &state,
+                         const GlidePolar &glide_polar) const
 {
   // always scan at least min range or approx glide range
   return min(max_search_range,
-             max(min_search_range, state.altitude * polar_safety.GetBestLD()));
+             max(min_search_range, state.altitude * glide_polar.GetBestLD()));
 }
 
 bool
@@ -237,7 +235,9 @@ AbortTask::ClientUpdate(const AircraftState &state_now, bool reachable)
 }
 
 bool 
-AbortTask::UpdateSample(const AircraftState &state, bool full_update)
+AbortTask::UpdateSample(const AircraftState &state,
+                        const GlidePolar &glide_polar,
+                        bool full_update)
 {
   Clear();
 
@@ -250,41 +250,26 @@ AbortTask::UpdateSample(const AircraftState &state, bool full_update)
   approx_waypoints.reserve(128);
 
   WaypointVisitorVector wvv(approx_waypoints);
-  waypoints.VisitWithinRange(state.location, GetAbortRange(state), wvv);
+  waypoints.VisitWithinRange(state.location,
+                             GetAbortRange(state, glide_polar), wvv);
   if (approx_waypoints.empty()) {
     /** @todo increase range */
     return false;
   }
 
-  // lookup the appropriate polar to use
-  const GlidePolar* mode_polar;
-  switch (task_behaviour.route_planner.reach_polar_mode) {
-  case RoutePlannerConfig::Polar::TASK:
-    mode_polar = &glide_polar;
-    // make copy to avoid waste
-    break;
-  case RoutePlannerConfig::Polar::SAFETY:
-    mode_polar = &polar_safety;
-    break;
-  default:
-    assert(false);
-    return false;
-  }
-  assert(mode_polar);
-
   // sort by alt difference
 
   // first try with final glide only
-  reachable_landable |=  FillReachable(state, approx_waypoints, *mode_polar,
+  reachable_landable |=  FillReachable(state, approx_waypoints, glide_polar,
                                        true, true, true);
-  reachable_landable |=  FillReachable(state, approx_waypoints, *mode_polar,
+  reachable_landable |=  FillReachable(state, approx_waypoints, glide_polar,
                                        false, true, true);
 
   // inform clients that the landable reachable scan has been performed 
   ClientUpdate(state, true);
 
   // now try without final glide constraint and not preferring airports
-  FillReachable(state, approx_waypoints, *mode_polar, false, false, false);
+  FillReachable(state, approx_waypoints, glide_polar, false, false, false);
 
   // inform clients that the landable unreachable scan has been performed 
   ClientUpdate(state, false);
