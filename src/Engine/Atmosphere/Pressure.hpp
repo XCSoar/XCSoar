@@ -52,7 +52,7 @@ public:
    * Returns an object representing zero pressure.  This value doesn't
    * make a lot of practical sense (unless you're an astronaut), but
    * it may be used internally to mark an instance of this class
-   * "invalid".
+   * "invalid" (IsPlausible() returns false).
    */
   static gcc_constexpr_function
   AtmosphericPressure Zero() {
@@ -76,6 +76,14 @@ public:
   static gcc_constexpr_function
   AtmosphericPressure HectoPascal(fixed value) {
     return AtmosphericPressure(value);
+  }
+
+  /**
+   * Is this a plausible value?
+   */
+  gcc_constexpr_method
+  bool IsPlausible() const {
+    return qnh > fixed(100) && qnh < fixed(1200);
   }
 
   fixed GetPascal() const {
