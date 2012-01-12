@@ -34,6 +34,8 @@ Copyright_License {
 #include "IO/ConfiguredFile.hpp"
 #include "Operation/Operation.hpp"
 
+#include <vector>
+
 static const Waypoint *
 find_waypoint(Waypoints &way_points, const TCHAR *name)
 {
@@ -70,9 +72,9 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
 
   Waypoint new_wp(*wp);
   new_wp.details = Details.c_str();
-  new_wp.files_embed = files_embed;
+  new_wp.files_embed.assign(files_embed.begin(), files_embed.end());
 #ifdef ANDROID
-  new_wp.files_external = files_external;
+  new_wp.files_external.assign(files_external.begin(), files_external.end());
 #endif
   way_points.Replace(*wp, new_wp);
   way_points.Optimise();

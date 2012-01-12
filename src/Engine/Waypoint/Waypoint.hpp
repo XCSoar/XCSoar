@@ -29,7 +29,7 @@
 #include "Navigation/Flat/FlatGeoPoint.hpp"
 #include "RadioFrequency.hpp"
 #include "Runway.hpp"
-#include <vector>
+#include <forward_list>
 
 #ifdef DO_PRINT
 #include <iostream>
@@ -123,10 +123,10 @@ struct Waypoint {
   /** Airfield or additional (long) details */
   tstring details;
   /** Additional files to be displayed in the WayointDetails dialog */
-  std::vector<tstring> files_embed;
+  std::forward_list<tstring> files_embed;
 #ifdef ANDROID
   /** Additional files to be opened by external programs */
-  std::vector<tstring> files_external;
+  std::forward_list<tstring> files_external;
 #endif
 
   /**

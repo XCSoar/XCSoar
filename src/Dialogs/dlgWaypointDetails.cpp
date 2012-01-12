@@ -387,20 +387,22 @@ OnImagePaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 static void
 OnFileListEnter(gcc_unused unsigned i)
 {
-  if (i < waypoint->files_external.size()) {
-    TCHAR path[MAX_PATH];
-    LocalPath(path, waypoint->files_external[i].c_str());
+  auto file = waypoint->files_external.begin();
+  std::advance(file, i);
 
-    native_view->openFile(path);
-  }
+  TCHAR path[MAX_PATH];
+  LocalPath(path, file->c_str());
+
+  native_view->openFile(path);
 }
 
 static void
 OnFileListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
 {
+  auto file = waypoint->files_external.begin();
+  std::advance(file, i);
   canvas.text(paint_rc.left + Layout::Scale(2),
-              paint_rc.top + Layout::Scale(2),
-              waypoint->files_external[i].c_str());
+              paint_rc.top + Layout::Scale(2), file->c_str());
 }
 #endif
 
@@ -654,7 +656,8 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   wDetailsText->set_text(waypoint->details.c_str());
 
 #ifdef ANDROID
-  int num_files = waypoint->files_external.size();
+  int num_files = std::distance(waypoint->files_external.begin(),
+                                waypoint->files_external.end());
   if (num_files > 0) {
     wFilesList->SetPaintItemCallback(OnFileListItemPaint);
     wFilesList->SetCursorCallback(OnFileListEnter);
@@ -692,7 +695,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
 
   for (auto it = waypoint->files_embed.begin(),
        it_end = waypoint->files_embed.end();
-       it < it_end && !images.full(); it++) {
+       it != it_end && !images.full(); it++) {
     TCHAR path[MAX_PATH];
     LocalPath(path, it->c_str());
     if (!images.append().LoadFile(path))
