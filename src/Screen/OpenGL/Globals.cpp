@@ -31,6 +31,8 @@ namespace OpenGL {
   bool vertex_buffer_object;
 #endif
 
+  bool frame_buffer_object;
+
   UPixelScalar screen_width, screen_height;
 
   PixelScalar translate_x, translate_y;

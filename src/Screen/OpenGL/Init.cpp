@@ -107,6 +107,14 @@ SupportsNonPowerOfTwoTextures()
     (have_gles() && SupportsNonPowerOfTwoTexturesGLES());
 }
 
+gcc_pure
+static bool
+CheckFBO()
+{
+  return OpenGL::IsExtensionSupported("GL_ARB_framebuffer_object") ||
+    (have_gles() && OpenGL::IsExtensionSupported("GL_OES_framebuffer_object"));
+}
+
 void
 OpenGL::SetupContext()
 {
@@ -117,6 +125,8 @@ OpenGL::SetupContext()
 
   vertex_buffer_object = EnableVBO();
 #endif
+
+  frame_buffer_object = CheckFBO();
 
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_DITHER);

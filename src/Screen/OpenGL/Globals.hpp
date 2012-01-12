@@ -60,6 +60,12 @@ namespace OpenGL {
 #endif
 
   /**
+   * Is the extension GL_ARB_framebuffer_object or
+   * GL_OES_framebuffer_object present?
+   */
+  extern bool frame_buffer_object;
+
+  /**
    * The dimensions of the screen in pixels.
    */
   extern UPixelScalar screen_width, screen_height;
