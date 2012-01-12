@@ -49,6 +49,7 @@ TopWindow::RefreshSize()
     if (!resized)
       return;
 
+    resized = false;
     width = new_width;
     height = new_height;
   }
