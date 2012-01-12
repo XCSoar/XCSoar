@@ -245,10 +245,10 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   static const TCHAR *units_lat_lon_help = _("Units used for latitude and longitude.");
   static const StaticEnumChoice units_lat_lon_list[] = {
-    { 0, _T("DDMMSS"), units_lat_lon_help },
-    { 1, _T("DDMMSS.ss"), units_lat_lon_help },
-    { 2, _T("DDMM.mmm"), units_lat_lon_help },
-    { 3, _T("DD.dddd"), units_lat_lon_help },
+    { CF_DDMMSS, _T("DDMMSS"), units_lat_lon_help },
+    { CF_DDMMSS_SS, _T("DDMMSS.ss"), units_lat_lon_help },
+    { CF_DDMM_MMM, _T("DDMM.mmm"), units_lat_lon_help },
+    { CF_DD_DDDD, _T("DD.dddd"), units_lat_lon_help },
     { 0 }
   };
   AddEnum(_("Lat./Lon."), _T(""), units_lat_lon_list, config.coordinate_format);
