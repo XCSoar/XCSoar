@@ -303,8 +303,7 @@ DataFieldFloat::CreateComboListStepping()
   SetDisableSpeedUp(false);
   SetDetachGUI(false); // disable dispaly of inc/dec/change values
 
-  if (iSelectedIndex >= 0)
-    SetAsFloat(fSavedValue);
+  Set(fSavedValue);
 
   combo_list->ComboPopupItemSavedIndex = iSelectedIndex;
 
