@@ -44,6 +44,6 @@ int main(int argc, char **argv)
   writer.writeln("An ASCII line: ü");
   writer.writeln(_T("A UNICODE line: ü"));
   writer.printfln("An ASCII line: ü%s", "ä");
-  writer.printfln(_T("An ASCII line: ü%s"), _T("a"));
-  writer.printfln(_T("An ASCII line: ü%s"), _T("ä"));
+  writer.printfln(_T("A UNICODE line: ü%s"), _T("a"));
+  writer.printfln(_T("A UNICODE line: ü%s"), _T("ä"));
 }
