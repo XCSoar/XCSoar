@@ -536,7 +536,7 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
   const GlideState glide_state(basic.location.DistanceBearing(waypoint.location),
                                waypoint.altitude + settings_computer.task.safety_height_arrival,
                                basic.nav_altitude,
-                               calculated.wind);
+                               calculated.GetWindOrZero());
 
   // alt reqd at current mc
   WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
