@@ -32,4 +32,24 @@ Copyright_License {
  */
 static gcc_constexpr_data fixed CELSIUS_OFFSET(273.15);
 
+/**
+ * Convert a temperature from Kelvin to degrees Celsius.
+ */
+gcc_constexpr_function
+static inline fixed
+KelvinToCelsius(fixed kelvin)
+{
+  return kelvin - CELSIUS_OFFSET;
+}
+
+/**
+ * Convert a temperature from degrees Celsius to Kelvin.
+ */
+gcc_constexpr_function
+static inline fixed
+CelsiusToKelvin(fixed celsius)
+{
+  return celsius + CELSIUS_OFFSET;
+}
+
 #endif

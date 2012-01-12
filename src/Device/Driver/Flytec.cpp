@@ -28,6 +28,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Units/System.hpp"
+#include "Atmosphere/Temperature.hpp"
 #include "Device/Port/Port.hpp"
 #include "PeriodClock.hpp"
 #include "Util/Macros.hpp"
@@ -107,7 +108,7 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEAInfo &info)
   info.temperature_available =
     line.read_checked_compare(value, "C");
   if (info.temperature_available)
-    info.temperature = Units::ToSysUnit(value, unGradCelcius);
+    info.temperature = CelsiusToKelvin(value);
 
   return true;
 }
@@ -226,10 +227,10 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
   bool balloon_temperature_available = line.read_checked(balloon_temperature);
 
   if (balloon_temperature_available) {
-    info.temperature = Units::ToSysUnit(balloon_temperature, unGradCelcius);
+    info.temperature = CelsiusToKelvin(balloon_temperature);
     info.temperature_available = true;
   } else if (pcb_temperature_available) {
-    info.temperature = Units::ToSysUnit(pcb_temperature, unGradCelcius);
+    info.temperature = CelsiusToKelvin(pcb_temperature);
     info.temperature_available = true;
   }
 

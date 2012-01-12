@@ -25,6 +25,7 @@ Copyright_License {
 #include "METAR.hpp"
 #include "ParsedMETAR.hpp"
 #include "Units/System.hpp"
+#include "Atmosphere/Temperature.hpp"
 #include "Compatibility/string.h"
 
 #include <tchar.h>
@@ -259,7 +260,7 @@ ParseTemperature(const TCHAR *token, fixed &temperature)
   if (negative)
     _temperature = -_temperature;
 
-  temperature = Units::ToSysUnit(fixed(_temperature), unGradCelcius);
+  temperature = CelsiusToKelvin(fixed(_temperature));
   return endptr;
 }
 
@@ -323,8 +324,8 @@ ParseAdditionalTemperatures(const TCHAR *token, ParsedMETAR &parsed)
   if (dew_point >= 1000)
     dew_point = -dew_point + 1000;
 
-  parsed.temperature = Units::ToSysUnit(fixed(temperature) / 10, unGradCelcius);
-  parsed.dew_point = Units::ToSysUnit(fixed(dew_point) / 10, unGradCelcius);
+  parsed.temperature = CelsiusToKelvin(fixed(temperature) / 10);
+  parsed.dew_point = CelsiusToKelvin(fixed(dew_point) / 10);
   parsed.temperatures_available = true;
   return true;
 }

@@ -24,8 +24,7 @@ Copyright_License {
 #include "Atmosphere/CuSonde.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-
-#include "Units/Units.hpp"
+#include "Temperature.hpp"
 
 #include <math.h>
 #include <stdlib.h> /* for abs() */
@@ -145,7 +144,7 @@ CuSonde::updateMeasurements(const NMEAInfo &basic,
   if (level > last_level) {
     // we round down (level) because of potential lag of temp sensor
     cslevels[level].updateTemps(basic.humidity,
-        Units::ToUserUnit(basic.temperature, unGradCelcius));
+                                KelvinToCelsius(basic.temperature));
 
     fixed h_agl = fixed(level * HEIGHT_STEP) - hGround;
     cslevels[level].updateThermalIndex(h_agl, maxGroundTemperature);
@@ -159,7 +158,7 @@ CuSonde::updateMeasurements(const NMEAInfo &basic,
   } else {
     // we round up (level+1) because of potential lag of temp sensor
     cslevels[level + 1].updateTemps(basic.humidity,
-        Units::ToUserUnit(basic.temperature, unGradCelcius));
+                                    KelvinToCelsius(basic.temperature));
 
     fixed h_agl = fixed((level + 1) * HEIGHT_STEP) - hGround;
     cslevels[level + 1].updateThermalIndex(h_agl, maxGroundTemperature);

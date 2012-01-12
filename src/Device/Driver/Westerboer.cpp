@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
 #include "Units/System.hpp"
+#include "Atmosphere/Temperature.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
@@ -95,7 +96,7 @@ PWES0(NMEAInputLine &line, NMEAInfo &info)
   }
 
   if (line.read_checked(i)) {
-    info.temperature = Units::ToSysUnit(fixed(i) / 10, unGradCelcius);
+    info.temperature = CelsiusToKelvin(fixed(i) / 10);
     info.temperature_available = true;
   }
 

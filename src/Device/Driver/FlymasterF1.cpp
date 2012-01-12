@@ -26,7 +26,7 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
-#include "Units/System.hpp"
+#include "Atmosphere/Temperature.hpp"
 
 #include <stdlib.h>
 #include <math.h>
@@ -67,7 +67,7 @@ VARIO(NMEAInputLine &line, NMEAInfo &info)
   }
 
   if (line.read_checked(value)) {
-    info.temperature = Units::ToSysUnit(value, unGradCelcius);
+    info.temperature = CelsiusToKelvin(value);
     info.temperature_available = true;
   }
 

@@ -28,6 +28,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "Atmosphere/Temperature.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -128,7 +129,7 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
 
   info.temperature_available = line.read_checked(value);
   if (info.temperature_available)
-    info.temperature = Units::ToSysUnit(value, unGradCelcius);
+    info.temperature = CelsiusToKelvin(value);
 
   return true;
 }

@@ -27,6 +27,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
+#include "Atmosphere/Temperature.hpp"
 
 #include <stdlib.h>
 #include <math.h>
@@ -86,7 +87,7 @@ LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
   fixed oat;
   info.temperature_available = line.read_checked(oat);
   if (info.temperature_available)
-    info.temperature = Units::ToSysUnit(oat, unGradCelcius);
+    info.temperature = CelsiusToKelvin(oat);
 
   line.skip(5);
 
@@ -131,7 +132,7 @@ LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
   fixed oat;
   info.temperature_available = line.read_checked(oat);
   if (info.temperature_available)
-    info.temperature = Units::ToSysUnit(oat, unGradCelcius);
+    info.temperature = CelsiusToKelvin(oat);
 
   // 5 = compass [degrees]
   /* XXX unsupported by XCSoar */

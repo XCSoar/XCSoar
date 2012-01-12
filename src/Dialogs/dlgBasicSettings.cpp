@@ -29,7 +29,7 @@ Copyright_License {
 #include "ComputerSettings.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Atmosphere/CuSonde.hpp"
+#include "Atmosphere/Temperature.hpp"
 #include "DataField/Base.hpp"
 #include "DataField/Float.hpp"
 #include "MainWindow.hpp"
@@ -282,8 +282,8 @@ dlgBasicSettingsShowModal()
   assert(wp != NULL);
   {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetMin(Units::ToUserTemperature(Units::ToSysUnit(fixed(-50), unGradCelcius)));
-    df.SetMax(Units::ToUserTemperature(Units::ToSysUnit(fixed(60), unGradCelcius)));
+    df.SetMin(Units::ToUserTemperature(CelsiusToKelvin(fixed(-50))));
+    df.SetMax(Units::ToUserTemperature(CelsiusToKelvin(fixed(60))));
     df.SetUnits(Units::GetTemperatureName());
     df.Set(Units::ToUserTemperature(settings.forecast_temperature));
     wp->RefreshDisplay();
