@@ -138,7 +138,6 @@ extern const TCHAR szProfileEnableThermalProfile[];
 extern const TCHAR szProfileTrailDrift[];
 extern const TCHAR szProfileDetourCostMarker[];
 extern const TCHAR szProfileDisplayTrackBearing[];
-extern const TCHAR szProfileUnitsPresetName[];
 extern const TCHAR szProfileGliderScreenPosition[];
 extern const TCHAR szProfileSetSystemTimeFromGPS[];
 

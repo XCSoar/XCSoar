@@ -102,6 +102,12 @@ struct UnitSetting
    */
   gcc_pure
   Unit GetByGroup(UnitGroup group) const;
+
+  /**
+   *  Comparison is done only for the units, the coord.format is excluded.
+   *  @return True for an equal units part of the set.
+   */
+  bool CompareUnitsOnly(const UnitSetting &right) const;
 };
 
 #endif

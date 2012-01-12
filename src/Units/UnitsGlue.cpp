@@ -25,7 +25,6 @@ Copyright_License {
 #include "Units/Settings.hpp"
 #include "Units/UnitsStore.hpp"
 #include "LogFile.hpp"
-#include "Profile/Profile.hpp"
 
 #include <tchar.h>
 
@@ -189,6 +188,5 @@ const UnitSetting &
 Units::LoadFromOSLanguage()
 {
   unsigned index = AutoDetect();
-  Profile::Set(szProfileUnitsPresetName, Units::Store::GetName(index));
   return Units::Store::Read(index);
 }

@@ -28,7 +28,7 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsStore.hpp"
-#include "Profile/Profile.hpp"
+#include "Profile/ProfileKeys.hpp"
 #include "Interface.hpp"
 #include "Asset.hpp"
 #include "Language/Language.hpp"
@@ -55,16 +55,16 @@ static const TCHAR *custom_preset_label = N_("Custom");
 
 class UnitsConfigPanel : public RowFormWidget {
 private:
-  bool loading;
+  bool loading, checking;
 
 public:
   UnitsConfigPanel() : RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)),
-                          loading(false) {}
+                          loading(false), checking(false) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
   void UpdateUnitFields(const UnitSetting &units);
-  void SetToCustom(DataField::DataAccessKind_t mode);
+  void PresetCheck(DataField::DataAccessKind_t mode);
 };
 
 /** XXX this hack is needed because the form callbacks don't get a
@@ -74,6 +74,9 @@ static UnitsConfigPanel *instance;
 void
 UnitsConfigPanel::UpdateUnitFields(const UnitSetting &units)
 {
+  if (checking)
+    return;
+
   loading = true;
 
   GetDataField(UnitsSpeed).SetAsInteger(units.speed_unit);
@@ -97,6 +100,8 @@ UnitsConfigPanel::UpdateUnitFields(const UnitSetting &units)
   GetDataField(UnitsPressure).SetAsInteger(units.pressure_unit);
   GetControl(UnitsPressure).RefreshDisplay();
 
+  // Ignore the coord.format for the preset selection.
+
   loading = false;
 }
 
@@ -108,22 +113,34 @@ OnUnitsPreset(DataField *Sender, DataField::DataAccessKind_t Mode)
     // First selection means not to load any preset.
     const UnitSetting& units = Units::Store::Read(result-1);
     instance->UpdateUnitFields(units);
-
-    Profile::Set(szProfileUnitsPresetName, Units::Store::GetName(result-1));
   }
 }
 
 void
-UnitsConfigPanel::SetToCustom(DataField::DataAccessKind_t mode)
+UnitsConfigPanel::PresetCheck(DataField::DataAccessKind_t mode)
 {
   switch (mode) {
   case DataField::daChange:
+  {
+    UnitSetting current_dlg_set;
+
     if (!loading) {
-      Profile::Set(szProfileUnitsPresetName, custom_preset_label);
-      GetDataField(UnitsPreset).SetAsString(custom_preset_label);
+      current_dlg_set.speed_unit = (Unit)GetValueInteger((unsigned)UnitsSpeed);
+      current_dlg_set.wind_speed_unit = current_dlg_set.speed_unit;
+      current_dlg_set.distance_unit = (Unit)GetValueInteger((unsigned)UnitsDistance);
+      current_dlg_set.vertical_speed_unit = (Unit)GetValueInteger((unsigned)UnitsLift);
+      current_dlg_set.altitude_unit = (Unit)GetValueInteger((unsigned)UnitsAltitude);
+      current_dlg_set.temperature_unit = (Unit)GetValueInteger((unsigned)UnitsTemperature);
+      current_dlg_set.task_speed_unit = (Unit)GetValueInteger((unsigned)UnitsTaskSpeed);
+      current_dlg_set.pressure_unit = (Unit)GetValueInteger((unsigned)UnitsPressure);
+
+      checking = true;
+      GetDataField(UnitsPreset).SetAsInteger(Units::Store::EqualsPresetUnits(current_dlg_set));
       GetControl(UnitsPreset).RefreshDisplay();
+      checking = false;
     }
     break;
+  }
 
   case DataField::daSpecial:
     return;
@@ -133,7 +150,7 @@ UnitsConfigPanel::SetToCustom(DataField::DataAccessKind_t mode)
 static void
 OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  instance->SetToCustom(Mode);
+  instance->PresetCheck(Mode);
 }
 
 void
@@ -150,15 +167,12 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
     df.EnableItemHelp(true);
 
-    df.addEnumText(custom_preset_label, (unsigned)0, _("My individual set of units."));
+    df.addEnumText(gettext(custom_preset_label), (unsigned)0, _("My individual set of units."));
     unsigned len = Units::Store::Count();
     for (unsigned i = 0; i < len; i++)
       df.addEnumText(Units::Store::GetName(i), i+1, preset_help);
 
-    TCHAR tmp_text[100];
-    Profile::Get(szProfileUnitsPresetName, tmp_text, 100);
-    df.SetAsString(tmp_text);
-
+    df.SetAsInteger(Units::Store::EqualsPresetUnits(config));
     wp->GetDataField()->SetDataAccessCallback(OnUnitsPreset);
     wp->RefreshDisplay();
   }

@@ -42,6 +42,12 @@ namespace Units
     const UnitSetting& Read(unsigned i);
 
     unsigned Count();
+
+    /**
+     * Only the units part of the structure is addressed.
+     * @return Index + 1 if an equivalent set is found, else 0.
+     */
+    unsigned EqualsPresetUnits(const UnitSetting &config);
   }
 }
 
