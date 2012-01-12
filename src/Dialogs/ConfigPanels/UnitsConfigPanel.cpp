@@ -163,19 +163,17 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   static const TCHAR * preset_help = N_("Load a set of units.");
   WndProperty *wp = AddEnum(_("Preset"), _T(""));
-  if (wp != NULL) {
-    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
-    df.EnableItemHelp(true);
+  DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
+  df.EnableItemHelp(true);
 
-    df.addEnumText(gettext(custom_preset_label), (unsigned)0, _("My individual set of units."));
-    unsigned len = Units::Store::Count();
-    for (unsigned i = 0; i < len; i++)
-      df.addEnumText(Units::Store::GetName(i), i+1, preset_help);
+  df.addEnumText(gettext(custom_preset_label), (unsigned)0, _("My individual set of units."));
+  unsigned len = Units::Store::Count();
+  for (unsigned i = 0; i < len; i++)
+    df.addEnumText(Units::Store::GetName(i), i+1, preset_help);
 
-    df.SetAsInteger(Units::Store::EqualsPresetUnits(config));
-    wp->GetDataField()->SetDataAccessCallback(OnUnitsPreset);
-    wp->RefreshDisplay();
-  }
+  df.SetAsInteger(Units::Store::EqualsPresetUnits(config));
+  wp->GetDataField()->SetDataAccessCallback(OnUnitsPreset);
+  wp->RefreshDisplay();
 
   AddSpacer();
 
