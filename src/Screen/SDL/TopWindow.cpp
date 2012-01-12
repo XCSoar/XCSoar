@@ -136,7 +136,7 @@ TopWindow::refresh()
 
     screen.Set();
 
-    SurfaceCreated();
+    ::SurfaceCreated();
 
     if (resized) {
       resized = false;
