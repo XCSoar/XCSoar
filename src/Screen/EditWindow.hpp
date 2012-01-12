@@ -140,7 +140,8 @@ public:
     assert_none_locked();
 
 #ifndef USE_GDI
-    // XXX
+    read_only = value;
+    invalidate();
 #else
     ::SendMessage(hWnd, EM_SETREADONLY, (WPARAM)(BOOL)value, 0L);
 #endif
