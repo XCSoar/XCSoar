@@ -46,6 +46,7 @@ BufferCanvas::set(const Canvas &canvas,
   reset();
   texture = new GLTexture(_width, _height);
   Canvas::set(_width, _height);
+  AddSurfaceListener(*this);
 }
 
 void
@@ -53,8 +54,12 @@ BufferCanvas::reset()
 {
   assert(!active);
 
-  delete texture;
-  texture = NULL;
+  if (IsDefined()) {
+    RemoveSurfaceListener(*this);
+
+    delete texture;
+    texture = NULL;
+  }
 }
 
 void
@@ -130,6 +135,5 @@ BufferCanvas::surface_destroyed()
   /* discard the buffer when the Android app is suspended; it needs a
      full redraw to restore it after resuming */
 
-  delete texture;
-  texture = NULL;
+  reset();
 }
