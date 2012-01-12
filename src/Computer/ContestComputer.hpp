@@ -34,8 +34,7 @@ class ContestComputer {
   ContestManager contest_manager;
 
 public:
-  ContestComputer(const Trace &trace_full, const Trace &trace_sprint)
-    :contest_manager(OLC_Sprint, trace_full, trace_sprint) {}
+  ContestComputer(const Trace &trace_full, const Trace &trace_sprint);
 
   void Reset() {
     contest_manager.Reset();

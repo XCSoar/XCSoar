@@ -49,6 +49,13 @@ class ContestDijkstra:
    */
   Serial modify_serial;
 
+  /**
+   * Do an incremental analysis, attempting to improve the result in
+   * each iteration?  If set, then only the last point is considered
+   * as finish point, and start points are selected according to this.
+   */
+  bool incremental;
+
   bool trace_dirty;
 
   TracePointVector trace; // working trace for solver
@@ -78,6 +85,10 @@ public:
   ContestDijkstra(const Trace &_trace, 
                   const unsigned n_legs,
                   const unsigned finish_alt_diff = 1000);
+
+  void SetIncremental(bool _incremental) {
+    incremental = _incremental;
+  }
 
   bool Score(ContestResult &result);
 

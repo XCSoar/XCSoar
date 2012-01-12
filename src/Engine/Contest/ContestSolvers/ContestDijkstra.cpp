@@ -42,7 +42,8 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
   AbstractContest(_trace, finish_alt_diff),
-  NavDijkstra(false, n_legs + 1)
+  NavDijkstra(false, n_legs + 1),
+  incremental(false)
 {
   assert(num_stages <= MAX_STAGES);
 
@@ -252,9 +253,8 @@ ContestDijkstra::add_start_edges()
   for (ScanTaskPoint destination(0, 0), end(0, n_points);
        destination != end; destination.IncrementPointIndex()) {
     // only add points that are valid for the finish
-    if (admit_candidate(GetPointFast(destination), finish)) {
+    if (!incremental || admit_candidate(GetPointFast(destination), finish))
       dijkstra.link(destination, destination, 0);
-    }
   }
 }
 
@@ -267,7 +267,7 @@ ContestDijkstra::add_edges(const ScanTaskPoint origin)
   const TracePoint start = GetPointFast(FindStart(origin));
 
   // only add last point!
-  if (is_final(destination)) {
+  if (incremental && is_final(destination)) {
     assert(n_points > 0);
     destination.SetPointIndex(n_points - 1);
   }

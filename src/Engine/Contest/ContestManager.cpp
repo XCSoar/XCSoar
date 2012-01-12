@@ -45,6 +45,19 @@ ContestManager::ContestManager(const Contests _contest,
 }
 
 void
+ContestManager::SetIncremental(bool incremental)
+{
+  olc_sprint.SetIncremental(incremental);
+  olc_fai.SetIncremental(incremental);
+  olc_classic.SetIncremental(incremental);
+  olc_xcontest_free.SetIncremental(incremental);
+  olc_xcontest_triangle.SetIncremental(incremental);
+  olc_dhvxc_free.SetIncremental(incremental);
+  olc_dhvxc_triangle.SetIncremental(incremental);
+  olc_sisat.SetIncremental(incremental);
+}
+
+void
 ContestManager::SetHandicap(unsigned handicap)
 {
   olc_sprint.SetHandicap(handicap);

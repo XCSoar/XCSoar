@@ -25,6 +25,13 @@ Copyright_License {
 #include "ComputerSettings.hpp"
 #include "NMEA/Derived.hpp"
 
+ContestComputer::ContestComputer(const Trace &trace_full,
+                                 const Trace &trace_sprint)
+  :contest_manager(OLC_Sprint, trace_full, trace_sprint)
+{
+  contest_manager.SetIncremental(true);
+}
+
 void
 ContestComputer::Solve(const ComputerSettings &settings_computer,
                        DerivedInfo &calculated)

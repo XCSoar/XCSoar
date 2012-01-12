@@ -75,6 +75,8 @@ public:
   ContestManager(const Contests _contest,
                  const Trace &trace_full, const Trace &trace_sprint);
 
+  void SetIncremental(bool incremental);
+
   void SetContest(Contests _contest) {
     contest = _contest;
   }
