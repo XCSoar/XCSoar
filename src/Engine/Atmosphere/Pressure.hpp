@@ -67,7 +67,7 @@ public:
     return AtmosphericPressure(value);
   }
 
-  fixed GetPascal() {
+  fixed GetPascal() const {
     return GetHectoPascal() * 100;
   }
 
