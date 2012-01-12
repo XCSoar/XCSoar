@@ -27,11 +27,6 @@ Copyright_License {
 
 #include "Units/Units.hpp"
 #include "Units/Descriptor.hpp"
-#include "Math/Angle.hpp"
-
-#include <stdlib.h>
-#include <math.h>
-#include <tchar.h>
 
 UnitSetting Units::current = {
   unKiloMeter,

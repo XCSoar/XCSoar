@@ -30,7 +30,6 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <tchar.h>
-class Angle;
 
 #define DEG "°"
 
