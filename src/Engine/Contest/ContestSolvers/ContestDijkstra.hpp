@@ -121,11 +121,6 @@ protected:
   virtual void add_edges(const ScanTaskPoint &curNode);
 
   /**
-   * Set weightings of each leg.  Default is constant weighting.
-   */
-  virtual void set_weightings();
-
-  /**
    * Retrieve weighting of specified leg
    * @param index Index of leg
    * @return Weighting of leg

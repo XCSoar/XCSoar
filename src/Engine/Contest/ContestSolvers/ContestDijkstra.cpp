@@ -44,17 +44,12 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
   AbstractContest(_trace, finish_alt_diff),
   NavDijkstra<TracePoint>(false, n_legs + 1)
 {
-  Reset();
-}
-
-void
-ContestDijkstra::set_weightings()
-{
   assert(num_stages <= MAX_STAGES);
 
   std::fill(m_weightings, m_weightings + num_stages - 1, 5);
-}
 
+  Reset();
+}
 
 bool
 ContestDijkstra::Score(ContestResult &result)
@@ -118,7 +113,6 @@ bool
 ContestDijkstra::Solve(bool exhaustive)
 {
   if (dijkstra.empty()) {
-    set_weightings();
     dijkstra.reserve(CONTEST_QUEUE_SIZE);
   }
 

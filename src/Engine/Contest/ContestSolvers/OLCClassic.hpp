@@ -33,9 +33,6 @@ class OLCClassic:
 {
 public:
   OLCClassic(const Trace &_trace);
-
-protected:
-  void set_weightings();
 };
 
 #endif

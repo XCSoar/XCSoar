@@ -40,8 +40,6 @@ public:
 
 protected:
   virtual fixed CalcScore() const;
-
-  void set_weightings();
 };
 
 #endif

@@ -27,15 +27,6 @@ XContestFree::XContestFree(const Trace &_trace,
   ContestDijkstra(_trace, 4, 1000),
   is_dhv(_is_dhv) {}
 
-void 
-XContestFree::set_weightings()
-{
-  m_weightings[0] = 5;
-  m_weightings[1] = 5;
-  m_weightings[2] = 5;
-  m_weightings[3] = 5;
-}
-
 fixed
 XContestFree::CalcScore() const
 {
