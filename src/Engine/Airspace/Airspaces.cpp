@@ -259,7 +259,7 @@ Airspaces::insert(AbstractAirspace* asp)
 
   // reset QNH to zero so set_pressure_levels will be triggered next update
   // this allows for airspaces to be add at any time
-  m_QNH = fixed_zero;
+  m_QNH = AtmosphericPressure::Zero();
 
   // reset day to all so set_activity will be triggered next update
   // this allows for airspaces to be add at any time
@@ -319,8 +319,8 @@ Airspaces::~Airspaces()
 void 
 Airspaces::set_flight_levels(const AtmosphericPressure &press)
 {
-  if (press.GetHectoPascal() != m_QNH) {
-    m_QNH = press.GetHectoPascal();
+  if ((int)press.GetHectoPascal() != (int)m_QNH.GetHectoPascal()) {
+    m_QNH = press;
 
     for (auto v = airspace_tree.begin(); v != airspace_tree.end(); ++v)
       v->set_flight_level(press);

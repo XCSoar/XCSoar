@@ -27,12 +27,12 @@
 #include "Predicate/AirspacePredicate.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Navigation/TaskProjection.hpp"
+#include "Atmosphere/Pressure.hpp"
 #include "Compiler.h"
 
 #include <deque>
 
 class RasterTerrain;
-class AtmosphericPressure;
 class AirspaceVisitor;
 class AirspaceIntersectionVisitor;
 
@@ -65,7 +65,7 @@ class Airspaces:
   public AirspacesInterface,
   private NonCopyable
 {
-  fixed m_QNH;
+  AtmosphericPressure m_QNH;
   AirspaceActivity m_day;
 
   bool m_owner;
@@ -85,7 +85,7 @@ public:
    *
    * @return empty Airspaces class.
    */
-  Airspaces():m_QNH(0), m_owner(true) {}
+  Airspaces():m_QNH(AtmosphericPressure::Zero()), m_owner(true) {}
 
   /**
    * Make a copy of the airspaces metadata
