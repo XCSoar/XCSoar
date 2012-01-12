@@ -267,6 +267,7 @@ UnitsConfigPanel::Save(bool &_changed, bool &_require_restart)
    * so changes to Units settings should be processed after all other form settings
    */
   changed |= SaveValueEnum(UnitsSpeed, szProfileSpeedUnitsValue, config.speed_unit);
+  config.wind_speed_unit = config.speed_unit; // Mapping the wind speed to the speed unit
 
   changed |= SaveValueEnum(UnitsDistance, szProfileDistanceUnitsValue, config.distance_unit);
 
