@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Units/Descriptor.hpp"
 #include "Units/Units.hpp"
+#include "Atmosphere/Temperature.hpp"
 
 //SI to Local Units
 
@@ -40,7 +41,7 @@ const UnitDescriptor Units::unit_descriptors[] = {
   { _T("ft"), fixed_constant(3.2808399, 0x347e51faLL), fixed_zero },
   { _T("FL"), fixed_constant(0.032808399, 0x866219LL), fixed_zero },
   { _T("K"), fixed_one, fixed_zero },
-  { _T(DEG)_T("C"), fixed_one, fixed_constant(-273.15, -73323144806LL) },
+  { _T(DEG)_T("C"), fixed_one, -CELSIUS_OFFSET },
   { _T(DEG)_T("F"), fixed_constant(1.8, 0x1cccccccLL),
     fixed_constant(-459.67, -123391726059LL) },
   { _T("hPa"), fixed_one, fixed_zero },
