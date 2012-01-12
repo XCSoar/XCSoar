@@ -95,14 +95,12 @@ public:
    * @param te Task events
    * @param tb Task behaviour
    * @param gp Glide Polar
-   * @param do_reserve Whether to reserve dijkstra queue storage
    * 
    * @return Initialised object
    */
   OrderedTask(TaskEvents &te, 
               const TaskBehaviour &tb,
-              const GlidePolar &gp,
-              const bool do_reserve=false);
+              const GlidePolar &gp);
   virtual ~OrderedTask();
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb);

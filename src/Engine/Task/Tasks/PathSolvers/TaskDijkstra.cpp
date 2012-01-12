@@ -23,8 +23,8 @@
 #include "TaskDijkstra.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 
-TaskDijkstra::TaskDijkstra(OrderedTask& _task, bool is_min, const bool do_reserve):
-  NavDijkstra<SearchPoint> (is_min, 0, do_reserve? DIJKSTRA_QUEUE_SIZE: 0),
+TaskDijkstra::TaskDijkstra(OrderedTask& _task, bool is_min):
+  NavDijkstra<SearchPoint> (is_min, 0),
   task(_task)
 {
 }
@@ -79,6 +79,8 @@ TaskDijkstra::add_edges(const ScanTaskPoint& curNode)
 void 
 TaskDijkstra::add_start_edges(const SearchPoint &currentLocation)
 {
+  dijkstra.reserve(DIJKSTRA_QUEUE_SIZE);
+
   ScanTaskPoint destination(active_stage, 0);
   const unsigned dsize = get_size(destination.stage_number);
 

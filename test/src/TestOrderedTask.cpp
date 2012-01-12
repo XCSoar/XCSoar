@@ -190,7 +190,7 @@ CheckLegEqualsTotal(const GlideResult &leg, const GlideResult &total)
 static void
 TestFlightToFinish(fixed aircraft_altitude)
 {
-  OrderedTask task(task_events, task_behaviour, glide_polar, true);
+  OrderedTask task(task_events, task_behaviour, glide_polar);
   const StartPoint tp1(new CylinderZone(wp1.location),
                        wp1, task_behaviour, ordered_task_behaviour);
   task.Append(tp1);
@@ -230,7 +230,7 @@ TestFlightToFinish(fixed aircraft_altitude)
 static void
 TestSimpleTask()
 {
-  OrderedTask task(task_events, task_behaviour, glide_polar, true);
+  OrderedTask task(task_events, task_behaviour, glide_polar);
   const StartPoint tp1(new CylinderZone(wp1.location),
                        wp1, task_behaviour, ordered_task_behaviour);
   task.Append(tp1);
@@ -266,7 +266,7 @@ TestSimpleTask()
 static void
 TestHighFinish()
 {
-  OrderedTask task(task_events, task_behaviour, glide_polar, true);
+  OrderedTask task(task_events, task_behaviour, glide_polar);
   const StartPoint tp1(new CylinderZone(wp1.location),
                        wp1, task_behaviour, ordered_task_behaviour);
   task.Append(tp1);
@@ -308,7 +308,7 @@ TestHighFinish()
 static void
 TestHighTP()
 {
-  OrderedTask task(task_events, task_behaviour, glide_polar, true);
+  OrderedTask task(task_events, task_behaviour, glide_polar);
   const StartPoint tp1(new CylinderZone(wp1.location),
                        wp1, task_behaviour, ordered_task_behaviour);
   task.Append(tp1);
@@ -343,7 +343,7 @@ TestHighTP()
 static void
 TestHighTPFinal()
 {
-  OrderedTask task(task_events, task_behaviour, glide_polar, true);
+  OrderedTask task(task_events, task_behaviour, glide_polar);
   const StartPoint tp1(new CylinderZone(wp1.location),
                        wp1, task_behaviour, ordered_task_behaviour);
   task.Append(tp1);
@@ -378,7 +378,7 @@ TestHighTPFinal()
 static void
 TestLowTPFinal()
 {
-  OrderedTask task(task_events, task_behaviour, glide_polar, true);
+  OrderedTask task(task_events, task_behaviour, glide_polar);
   const Waypoint wp1b = MakeWaypoint(wp1, 1500);
   const StartPoint tp1(new CylinderZone(wp1b.location),
                        wp1b, task_behaviour, ordered_task_behaviour);

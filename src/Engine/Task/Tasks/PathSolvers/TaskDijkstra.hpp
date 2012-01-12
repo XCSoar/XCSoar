@@ -61,10 +61,8 @@ public:
    *
    * @param _task The task to find max/min distances for
    * @param is_min Whether this will be used to minimise or maximise distances
-   * @param do_reserve Whether to reserve dijkstra queue
    */
-  TaskDijkstra(OrderedTask& _task, const bool is_min,
-               const bool do_reserve=false);
+  TaskDijkstra(OrderedTask& _task, const bool is_min);
 
 protected:
   gcc_pure

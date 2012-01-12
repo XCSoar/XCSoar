@@ -99,10 +99,8 @@ public:
    *
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  Dijkstra(const bool is_min = true,
-           unsigned reserve_default = DIJKSTRA_QUEUE_SIZE)
+  Dijkstra(const bool is_min = true)
     :m_min(is_min) {
-    reserve(reserve_default);
   }
 
   /**

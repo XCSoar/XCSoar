@@ -32,7 +32,7 @@
 TaskManager::TaskManager(TaskEvents &te,
                          const Waypoints &wps): 
   glide_polar(fixed_zero),
-  task_ordered(te, task_behaviour, glide_polar, true),
+  task_ordered(te, task_behaviour, glide_polar),
   task_goto(te, task_behaviour, glide_polar, wps),
   task_abort(te, task_behaviour, glide_polar, wps),
   mode(MODE_NULL),

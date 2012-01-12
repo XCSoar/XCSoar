@@ -863,8 +863,7 @@ OrderedTask::~OrderedTask()
 
 OrderedTask::OrderedTask(TaskEvents &te, 
                          const TaskBehaviour &tb,
-                         const GlidePolar &gp,
-                         const bool do_reserve):
+                         const GlidePolar &gp):
   AbstractTask(ORDERED, te, tb, gp),
   taskpoint_start(NULL),
   taskpoint_finish(NULL),
@@ -872,8 +871,7 @@ OrderedTask::OrderedTask(TaskEvents &te,
   active_factory(NULL),
   m_ordered_behaviour(tb.ordered_defaults),
   task_advance(m_ordered_behaviour),
-  dijkstra_min(*this, do_reserve),
-  dijkstra_max(*this, do_reserve)
+  dijkstra_min(*this), dijkstra_max(*this)
 {
   active_factory = new RTTaskFactory(*this, task_behaviour);
   active_factory->update_ordered_task_behaviour(m_ordered_behaviour);

@@ -42,7 +42,7 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
   AbstractContest(_trace, finish_alt_diff),
-  NavDijkstra<TracePoint>(false, n_legs + 1, 0)
+  NavDijkstra<TracePoint>(false, n_legs + 1)
 {
   Reset();
 }
