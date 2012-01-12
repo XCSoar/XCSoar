@@ -31,10 +31,10 @@
 
 TaskManager::TaskManager(TaskEvents &te,
                          const Waypoints &wps): 
-  glide_polar(fixed_zero),
+  glide_polar(fixed_zero), safety_polar(fixed_one),
   task_ordered(te, task_behaviour, glide_polar),
   task_goto(te, task_behaviour, glide_polar, wps),
-  task_abort(te, task_behaviour, glide_polar, wps),
+  task_abort(te, task_behaviour, glide_polar, safety_polar, wps),
   mode(MODE_NULL),
   active_task(NULL) {
   null_stats.reset();
@@ -44,6 +44,8 @@ void
 TaskManager::SetTaskBehaviour(const TaskBehaviour& behaviour)
 {
   task_behaviour = behaviour;
+
+  safety_polar.SetMC(task_behaviour.safety_mc);
 
   task_ordered.SetTaskBehaviour(behaviour);
   task_goto.SetTaskBehaviour(behaviour);
@@ -396,6 +398,9 @@ void
 TaskManager::SetGlidePolar(const GlidePolar &_glide_polar)
 {
   glide_polar = _glide_polar;
+
+  safety_polar = glide_polar;
+  safety_polar.SetMC(task_behaviour.safety_mc);
 }
 
 fixed 

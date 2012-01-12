@@ -34,12 +34,14 @@ const fixed AbortTask::min_search_range(50000.0);
 const fixed AbortTask::max_search_range(100000.0);
 
 AbortTask::AbortTask(TaskEvents &_task_events, const TaskBehaviour &_task_behaviour,
-                     const GlidePolar &_glide_polar, const Waypoints &wps)
+                     const GlidePolar &_glide_polar,
+                     const GlidePolar &_safety_polar,
+                     const Waypoints &wps)
   :UnorderedTask(ABORT, _task_events, _task_behaviour, _glide_polar),
    waypoints(wps),
    intersection_test(NULL),
    active_waypoint(0),
-   polar_safety(_glide_polar)
+   polar_safety(_safety_polar)
 {
   task_points.reserve(32);
 }
@@ -103,22 +105,6 @@ AbortTask::GetAbortRange(const AircraftState &state) const
   // always scan at least min range or approx glide range
   return min(max_search_range,
              max(min_search_range, state.altitude * polar_safety.GetBestLD()));
-}
-
-GlidePolar
-AbortTask::GetSafetyPolar() const
-{
-  const fixed mc_safety = task_behaviour.safety_mc;
-  GlidePolar polar = glide_polar;
-  polar.SetMC(mc_safety);
-  return polar;
-}
-
-void
-AbortTask::UpdatePolar(const SpeedVector& wind)
-{
-  // glide_polar for task
-  polar_safety = GetSafetyPolar();
 }
 
 bool
@@ -253,7 +239,6 @@ AbortTask::ClientUpdate(const AircraftState &state_now, bool reachable)
 bool 
 AbortTask::UpdateSample(const AircraftState &state, bool full_update)
 {
-  UpdatePolar(state.wind);
   Clear();
 
   const unsigned active_waypoint_on_entry =

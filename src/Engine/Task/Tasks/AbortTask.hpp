@@ -106,7 +106,7 @@ protected:
 
 private:
   unsigned active_waypoint;
-  GlidePolar polar_safety;
+  const GlidePolar &polar_safety;
   bool reachable_landable;
 
 public:
@@ -121,6 +121,7 @@ public:
    * @return Initialised object (with nothing in task)
    */
   AbortTask(TaskEvents &te, const TaskBehaviour &tb, const GlidePolar &gp,
+            const GlidePolar &safety_polar,
             const Waypoints &wps);
   virtual ~AbortTask();
 
@@ -206,13 +207,6 @@ public:
   GeoVector GetHomeVector(const AircraftState &state) const;
   const Waypoint *GetHome() const;
 
-  /**
-   * Retrieve copy of safety glide polar used by task system
-   *
-   * @return Copy of safety glide polar
-   */
-  GlidePolar GetSafetyPolar() const;
-
   GeoPoint GetTaskCenter(const GeoPoint &fallback_location) const;
   fixed GetTaskRadius(const GeoPoint &fallback_location) const;
 
@@ -251,13 +245,6 @@ protected:
    */
   gcc_pure
   fixed GetAbortRange(const AircraftState &state_now) const;
-
-  /**
-   * Propagate changes to safety glide polar from global glide polar.
-   *
-   * @param wind Wind at aircraft
-   */
-  void UpdatePolar(const SpeedVector& wind);
 
   /**
    * Fill abort task list with candidate waypoints given a list of

@@ -61,6 +61,12 @@ public:
 private:
   GlidePolar glide_polar;
 
+  /**
+   * Same as #glide_polar, but with the "safety" MacCready setting
+   * applied.
+   */
+  GlidePolar safety_polar;
+
   TaskBehaviour task_behaviour;
   OrderedTask task_ordered;
   GotoTask task_goto;
@@ -371,7 +377,7 @@ public:
    */
   gcc_pure
   GlidePolar GetSafetyPolar() const {
-    return task_abort.GetSafetyPolar();
+    return safety_polar;
   }
 
   /**
