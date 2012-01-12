@@ -138,10 +138,7 @@ TopWindow::refresh()
 
     ::SurfaceCreated();
 
-    if (resized) {
-      resized = false;
-      resize(new_width, new_height);
-    }
+    RefreshSize();
   }
 
   if (paused || !surface_valid)
