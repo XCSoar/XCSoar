@@ -148,6 +148,12 @@ Units::GetPressureName()
   return GetUnitName(GetUserPressureUnit());
 }
 
+fixed
+Units::ToUserPressure(AtmosphericPressure value)
+{
+  return ToUserPressure(value.GetHectoPascal());
+}
+
 AtmosphericPressure
 Units::FromUserPressure(fixed value)
 {

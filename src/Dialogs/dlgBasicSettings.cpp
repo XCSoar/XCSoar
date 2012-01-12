@@ -261,7 +261,7 @@ dlgBasicSettingsShowModal()
   LoadFormProperty(*wf, _T("prpBugs"),
                    (fixed_one - glide_polar.GetBugs()) * 100);
   LoadFormProperty(*wf, _T("prpQNH"),
-                   Units::ToUserPressure(settings.pressure.GetHectoPascal()));
+                   Units::ToUserPressure(settings.pressure));
 
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpQNH"));

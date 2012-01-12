@@ -222,6 +222,10 @@ namespace Units
     return ToUserUnit(Value, current.pressure_unit);
   }
 
+  gcc_const
+  fixed
+  ToUserPressure(AtmosphericPressure value);
+
   static inline fixed
   ToSysPressure(fixed Value)
   {
