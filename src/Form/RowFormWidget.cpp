@@ -266,7 +266,7 @@ RowFormWidget::LoadValue(unsigned i, fixed value)
   WndProperty &control = GetControl(i);
   DataFieldFloat &df = *(DataFieldFloat *)control.GetDataField();
   assert(df.GetType() == DataField::TYPE_REAL);
-  df.SetAsFloat(value);
+  df.Set(value);
   control.RefreshDisplay();
 }
 
@@ -277,7 +277,7 @@ RowFormWidget::LoadValue(unsigned i, fixed value, UnitGroup unit_group)
   WndProperty &control = GetControl(i);
   DataFieldFloat &df = *(DataFieldFloat *)control.GetDataField();
   assert(df.GetType() == DataField::TYPE_REAL);
-  df.SetAsFloat(Units::ToUserUnit(value, unit));
+  df.Set(Units::ToUserUnit(value, unit));
   df.SetUnits(Units::GetUnitName(unit));
   control.RefreshDisplay();
 }
