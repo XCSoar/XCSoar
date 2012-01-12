@@ -64,6 +64,9 @@ ContestDijkstra::master_is_updated() const
 {
   assert(num_stages <= MAX_STAGES);
 
+  if (modify_serial != trace_master.GetModifySerial())
+    return true;
+
   if (n_points < num_stages)
     return true;
 
@@ -98,6 +101,7 @@ ContestDijkstra::update_trace()
 
   trace.reserve(trace_master.GetMaxSize());
   trace_master.get_trace_points(trace);
+  modify_serial = trace_master.GetModifySerial();
   n_points = trace.size();
   trace_dirty = true;
 
@@ -130,7 +134,8 @@ ContestDijkstra::Solve(bool exhaustive)
     if (!trace_dirty) {
       return true;
     }
-  } else if (exhaustive || n_points < num_stages) {
+  } else if (exhaustive || n_points < num_stages ||
+             modify_serial != trace_master.GetModifySerial()) {
     update_trace();
     if (n_points < num_stages)
       return true;

@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef OLC_DIJKSTRA_HPP
 #define OLC_DIJKSTRA_HPP
 
+#include "Util/Serial.hpp"
 #include "AbstractContest.hpp"
 #include "Task/Tasks/PathSolvers/NavDijkstra.hpp"
 
@@ -41,6 +42,13 @@ class ContestDijkstra:
   public AbstractContest,
   public NavDijkstra<TracePoint>
 {
+  /**
+   * This attribute tracks Trace::GetModifySerial().  It is updated
+   * when a new copy of the master Trace is obtained, and is used to
+   * check if that copy should be replaced with a new one.
+   */
+  Serial modify_serial;
+
   bool trace_dirty;
 
   TracePointVector trace; // working trace for solver
