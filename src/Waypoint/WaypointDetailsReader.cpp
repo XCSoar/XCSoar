@@ -69,6 +69,7 @@ find_waypoint(Waypoints &way_points, const TCHAR *name)
 static void
 SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
                    const tstring &Details,
+                   const std::vector<tstring> &files_external,
                    const std::vector<tstring> &files_embed)
 {
   const Waypoint *wp = find_waypoint(way_points, name);
@@ -78,6 +79,9 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
   Waypoint new_wp(*wp);
   new_wp.details = Details.c_str();
   new_wp.files_embed = files_embed;
+#ifdef ANDROID
+  new_wp.files_external = files_external;
+#endif
   way_points.Replace(*wp, new_wp);
   way_points.Optimise();
 }
@@ -90,7 +94,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
                      OperationEnvironment &operation)
 {
   tstring Details;
-  std::vector<tstring> files_embed;
+  std::vector<tstring> files_external, files_embed;
   TCHAR Name[201];
   const TCHAR *filename;
 
@@ -106,9 +110,11 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
   while ((TempString = reader.read()) != NULL) {
     if (TempString[0] == _T('[')) { // Look for start
       if (inDetails)
-        SetAirfieldDetails(way_points, Name, Details, files_embed);
+        SetAirfieldDetails(way_points, Name, Details, files_external,
+                           files_embed);
 
       Details.clear();
+      files_external.clear();
       files_embed.clear();
 
       // extract name
@@ -126,6 +132,11 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
     } else if ((filename =
                 StringAfterPrefixCI(TempString, _T("image="))) != NULL) {
       files_embed.push_back(filename);
+    } else if ((filename =
+                StringAfterPrefixCI(TempString, _T("file="))) != NULL) {
+#ifdef ANDROID
+      files_external.push_back(filename);
+#endif
     } else {
       // append text to details string
       if (!StringIsEmpty(TempString)) {
@@ -136,7 +147,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
   }
 
   if (inDetails)
-    SetAirfieldDetails(way_points, Name, Details, files_embed);
+    SetAirfieldDetails(way_points, Name, Details, files_external, files_embed);
 }
 
 /**

@@ -124,6 +124,10 @@ struct Waypoint {
   tstring details;
   /** Additional files to be displayed in the WayointDetails dialog */
   std::vector<tstring> files_embed;
+#ifdef ANDROID
+  /** Additional files to be opened by external programs */
+  std::vector<tstring> files_external;
+#endif
 
   /**
    * Constructor for real waypoints
