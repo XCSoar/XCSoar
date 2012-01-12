@@ -112,10 +112,6 @@ ContestDijkstra::update_trace()
 bool
 ContestDijkstra::Solve(bool exhaustive)
 {
-  if (dijkstra.empty()) {
-    dijkstra.reserve(CONTEST_QUEUE_SIZE);
-  }
-
   assert(num_stages <= MAX_STAGES);
 
   if (dijkstra.empty()) {
@@ -141,6 +137,8 @@ ContestDijkstra::Solve(bool exhaustive)
     trace_dirty = false;
 
     dijkstra.clear();
+    dijkstra.reserve(CONTEST_QUEUE_SIZE);
+
     start_search();
     add_start_edges();
     if (dijkstra.empty()) {
