@@ -27,12 +27,6 @@ Copyright_License {
 #include "Screen/OpenGL/Types.hpp"
 #include "Screen/OpenGL/Features.hpp"
 
-#ifdef HAVE_GLES
-#define RASTER_POINT_SIZE 4
-#else
-#define RASTER_POINT_SIZE 8
-#endif
-
 typedef GLvalue PixelScalar;
 typedef GLuvalue UPixelScalar;
 
@@ -41,11 +35,7 @@ struct RasterPoint {
    * Type to be used by vector math, where a range of
    * max(GLvalue)*max(GLvalue) is needed.
    */
-#ifdef HAVE_GLES
   typedef int SquareType;
-#else
-  typedef float SquareType;
-#endif
   PixelScalar x, y;
 };
 

@@ -26,8 +26,6 @@ Copyright_License {
 
 #include <SDL.h>
 
-#define RASTER_POINT_SIZE 4
-
 typedef Sint16 PixelScalar;
 typedef Uint16 UPixelScalar;
 

@@ -42,19 +42,18 @@ Copyright_License {
 
 unsigned
 PolygonToTriangles(const RasterPoint *points, unsigned num_points,
-                   GLushort *triangles, unsigned min_distance)
+                   AllocatedArray<GLushort> &triangles,
+                   unsigned min_distance)
 {
   return 0;
 }
 
-#if RASTER_POINT_SIZE != SHAPE_POINT_SIZE
 unsigned
 PolygonToTriangles(const ShapePoint *points, unsigned num_points,
                    GLushort *triangles, unsigned min_distance)
 {
   return 0;
 }
-#endif
 
 unsigned
 TriangleToStrip(GLushort *triangles, unsigned index_count,

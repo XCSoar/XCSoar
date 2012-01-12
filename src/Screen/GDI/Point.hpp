@@ -26,7 +26,6 @@ Copyright_License {
 
 #include <windef.h>
 
-#define RASTER_POINT_SIZE 8  // size in bytes
 #define RasterPoint tagPOINT
 #define PixelSize tagSIZE
 #define PixelRect tagRECT

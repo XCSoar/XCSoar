@@ -27,15 +27,6 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
-#define SHAPE_POINT_SIZE 8
-
-#if RASTER_POINT_SIZE == SHAPE_POINT_SIZE
-
-typedef RasterPoint ShapePoint;
-typedef PixelScalar ShapeScalar;
-
-#else
-
 typedef int32_t ShapeScalar;
 struct ShapePoint {
   /**
@@ -51,7 +42,5 @@ manhattan_distance(ShapePoint a, ShapePoint b)
 {
   return abs(a.x - b.x) + abs(a.y - b.y);
 }
-
-#endif
 
 #endif

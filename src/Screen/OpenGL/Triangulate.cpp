@@ -112,16 +112,10 @@ Normalize(RasterPoint *v, float length)
   v->y = floor(v->y * scale + 0.5f);
 }
 
-#if RASTER_POINT_SIZE == SHAPE_POINT_SIZE
-unsigned static
-_PolygonToTriangles(const RasterPoint *points, unsigned num_points,
-                    GLushort *triangles, unsigned min_distance)
-#else
 template <typename PT>
 static unsigned
 _PolygonToTriangles(const PT *points, unsigned num_points,
                     GLushort *triangles, unsigned min_distance)
-#endif
 {
   // no redundant start/end please
   if (num_points >= 1 &&
