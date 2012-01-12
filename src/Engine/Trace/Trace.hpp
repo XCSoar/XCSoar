@@ -321,6 +321,22 @@ public:
   }
 
   /**
+   * Returns a #Serial that gets incremented when data gets appended
+   * to the #Trace.
+   */
+  const Serial &GetAppendSerial() const {
+    return append_serial;
+  }
+
+  /**
+   * Returns a #Serial that gets incremented when iterators get
+   * invalidated (e.g. when the #Trace gets cleared or optimised).
+   */
+  const Serial &GetModifySerial() const {
+    return modify_serial;
+  }
+
+  /**
    * Re-balance kd-tree periodically 
    *
    * @return True if trace store was optimised
@@ -359,22 +375,6 @@ private:
     assert(!empty());
 
     return *static_cast<TraceDelta *>(chronological_list.GetNext());
-  }
-
-  /**
-   * Returns a #Serial that gets incremented when data gets appended
-   * to the #Trace.
-   */
-  const Serial &GetAppendSerial() const {
-    return append_serial;
-  }
-
-  /**
-   * Returns a #Serial that gets incremented when iterators get
-   * invalidated (e.g. when the #Trace gets cleared or optimised).
-   */
-  const Serial &GetModifySerial() const {
-    return modify_serial;
   }
 
   gcc_pure
