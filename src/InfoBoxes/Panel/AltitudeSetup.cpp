@@ -66,7 +66,7 @@ PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode)
   case DataField::daChange:
     settings_computer.pressure = Units::FromUserPressure(Sender->GetAsFixed());
     settings_computer.pressure_available.Update(CommonInterface::Basic().clock);
-    device_blackboard->SetQNH(Units::ToSysPressure(Sender->GetAsFixed()));
+    device_blackboard->SetQNH(Units::FromUserPressure(Sender->GetAsFixed()));
     break;
 
   case DataField::daSpecial:

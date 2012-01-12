@@ -32,7 +32,7 @@ Copyright_License {
 
 #include <cassert>
 
-class GlidePolar;
+class AtmosphericPressure;
 
 /**
  * Blackboard used by com devices: can write NMEA_INFO, reads DERIVED_INFO.
@@ -118,7 +118,7 @@ public:
   void SetTrack(Angle val);
   void SetSpeed(fixed val);
   void SetAltitude(fixed alt);
-  void SetQNH(fixed qnh);
+  void SetQNH(AtmosphericPressure qnh);
   void SetMC(fixed mc);
 
   /**
