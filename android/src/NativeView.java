@@ -31,6 +31,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
+import java.io.File;
 import android.util.Log;
 import android.app.Activity;
 import android.view.MotionEvent;
@@ -39,12 +40,15 @@ import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.os.Build;
 import android.os.Handler;
+import android.net.Uri;
+import android.content.Intent;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
+import android.webkit.MimeTypeMap;
 
 /**
  * A #View which calls the native part of XCSoar.
@@ -412,6 +416,28 @@ class NativeView extends SurfaceView
     Bitmap bmp = BitmapFactory.decodeFile(pathName, opts);
 
     return bitmapToOpenGL(bmp, result);
+  }
+
+  /**
+   * Starts a VIEW intent for a given file
+   */
+  private void openFile(String pathName) {
+    Intent intent = new Intent();
+    intent.setAction(Intent.ACTION_VIEW);
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK +
+                    Intent.FLAG_RECEIVER_REPLACE_PENDING);
+    File file = new File(pathName);
+
+    try {
+      String extension = pathName.substring(pathName.lastIndexOf(".") + 1);
+      MimeTypeMap mime = MimeTypeMap.getSingleton();
+      String mimeType = mime.getMimeTypeFromExtension(extension);
+
+      intent.setDataAndType(Uri.fromFile(file), mimeType);
+      getContext().startActivity(intent);
+    } catch (Exception e) {
+      Log.e(TAG, "NativeView.openFile('" + pathName + "') error: " + e);
+    }
   }
 
   private void swap() {
