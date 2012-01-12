@@ -22,95 +22,165 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 #include "ComputerSettings.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Atmosphere/Temperature.hpp"
-#include "DataField/Base.hpp"
 #include "DataField/Float.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
+#include "Interface.hpp"
 #include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Form/RowFormWidget.hpp"
+#include "Form/Button.hpp"
+#include "Form/Form.hpp"
+#include "Form/ButtonPanel.hpp"
+#include "Screen/Layout.hpp"
+#include "Language/Language.hpp"
 #include "Compiler.h"
 
 #include <math.h>
 
-static WndForm *wf = NULL;
+enum ControlIndex {
+  Ballast,
+  WingLoading,
+  Bugs,
+  QNH,
+  Altitude,
+  Temperature,
+};
 
-static bool changed = false;
+class FlightSetupPanel : public RowFormWidget {
+  WndButton &dump_button;
 
-static GlidePolar glide_polar;
+  GlidePolar glide_polar;
+  bool glide_polar_modified;
 
-static void
-SetButtons()
-{
-  WndButton* wb = (WndButton *)wf->FindByName(_T("cmdDump"));
-  assert(wb != NULL);
-  wb->set_visible(glide_polar.HasBallast());
-  wb->SetCaption(XCSoarInterface::GetComputerSettings().ballast_timer_active ?
-                 _("Stop") : _("Dump"));
-}
+  fixed last_altitude;
 
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
+public:
+  FlightSetupPanel(WndButton &_dump_button)
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(78)),
+     dump_button(_dump_button),
+     glide_polar(CommonInterface::GetComputerSettings().glide_polar_task),
+     glide_polar_modified(false),
+     last_altitude(-2)
+  {}
 
-static void
-SetBallastTimer(bool active)
-{
-  if (protected_task_manager == NULL)
-    return;
+  void SetButtons();
+  void SetBallast();
+  void SavePolar();
+  void SetBallastTimer(bool active);
+  void FlipBallastTimer();
 
-  if (active == XCSoarInterface::GetComputerSettings().ballast_timer_active)
-    return;
-
-  if (active && changed) {
-    /* apply the new ballast settings before starting the timer */
-    CommonInterface::SetComputerSettings().glide_polar_task = glide_polar;
-    protected_task_manager->SetGlidePolar(glide_polar);
-    changed = false;
+  void SetBallastLitres(fixed ballast_litres) {
+    glide_polar.SetBallastLitres(ballast_litres);
+    glide_polar_modified = true;
+    SetButtons();
+    SetBallast();
   }
 
-  XCSoarInterface::SetComputerSettings().ballast_timer_active = active;
+  void SetBugs(fixed bugs) {
+    glide_polar.SetBugs(bugs);
+    glide_polar_modified = true;
+  }
 
+  void ShowAltitude(fixed altitude);
+  void RefreshAltitudeControl();
+  void SetQNH(AtmosphericPressure qnh);
+
+  void OnTimer();
+
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+};
+
+static WndForm *wf;
+static FlightSetupPanel *instance;
+
+void
+FlightSetupPanel::SetButtons()
+{
+  dump_button.set_visible(glide_polar.HasBallast());
+
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+  dump_button.SetCaption(settings.ballast_timer_active
+                         ? _("Stop") : _("Dump"));
+}
+
+void
+FlightSetupPanel::SetBallast()
+{
+  WndProperty &ballast_control = GetControl(Ballast);
+  if (glide_polar.IsBallastable()) {
+    ballast_control.show();
+    LoadValue(Ballast, glide_polar.GetBallastLitres());
+  } else
+    ballast_control.hide();
+
+  WndProperty &wing_loading_control = GetControl(WingLoading);
+  const fixed wl = glide_polar.GetWingLoading();
+  if (positive(wl)) {
+    wing_loading_control.show();
+    LoadValue(WingLoading, wl);
+  } else
+    wing_loading_control.hide();
+}
+
+void
+FlightSetupPanel::SavePolar()
+{
+  if (!glide_polar_modified)
+    return;
+
+  glide_polar_modified = false;
+  CommonInterface::SetComputerSettings().glide_polar_task = glide_polar;
+
+  if (protected_task_manager != NULL)
+    protected_task_manager->SetGlidePolar(glide_polar);
+}
+
+void
+FlightSetupPanel::SetBallastTimer(bool active)
+{
+  if (!glide_polar.HasBallast())
+    active = false;
+
+  ComputerSettings &settings = CommonInterface::SetComputerSettings();
+  if (active == settings.ballast_timer_active)
+    return;
+
+  if (active)
+    /* apply the new ballast settings before starting the timer */
+    SavePolar();
+
+  settings.ballast_timer_active = active;
   SetButtons();
 }
 
-static void
-OnBallastDump(gcc_unused WndButton &Sender)
+void
+FlightSetupPanel::FlipBallastTimer()
 {
-  SetBallastTimer(!XCSoarInterface::GetComputerSettings().ballast_timer_active);
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+  SetBallastTimer(!settings.ballast_timer_active);
 }
 
-static void
-ShowAltitude(fixed altitude)
+void
+FlightSetupPanel::ShowAltitude(fixed altitude)
 {
-  static fixed last(-2);
+  if (fabs(altitude - last_altitude) >= fixed_one) {
+    last_altitude = altitude;
+    LoadValue(Altitude, altitude, ugAltitude);
+  }
 
-  if (fabs(altitude - last) < fixed_one)
-    return;
-
-  last = altitude;
-
-  LoadFormProperty(*wf, _T("prpAltitude"), ugAltitude, altitude);
-  ShowFormControl(*wf, _T("prpAltitude"), true);
+  GetControl(Altitude).show();
 }
 
-static void
-HideAltitude()
-{
-  ShowFormControl(*wf, _T("prpAltitude"), false);
-}
-
-static void
-RefreshAltitudeControl()
+void
+FlightSetupPanel::RefreshAltitudeControl()
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
@@ -121,73 +191,35 @@ RefreshAltitudeControl()
   else if (basic.baro_altitude_available)
     ShowAltitude(basic.baro_altitude);
   else
-    HideAltitude();
+    GetControl(Altitude).hide();
 }
 
-static void
-OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
+void
+FlightSetupPanel::SetQNH(AtmosphericPressure qnh)
 {
-  DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
   const NMEAInfo &basic = CommonInterface::Basic();
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
 
-  switch (Mode) {
-  case DataField::daChange:
-    settings_computer.pressure = Units::FromUserPressure(Sender->GetAsFixed());
-    settings_computer.pressure_available.Update(basic.clock);
-    device_blackboard->SetQNH(Units::FromUserPressure(Sender->GetAsFixed()));
-    RefreshAltitudeControl();
-    break;
+  settings_computer.pressure = qnh;
+  settings_computer.pressure_available.Update(basic.clock);
 
-  case DataField::daSpecial:
-    return;
-  }
+  if (device_blackboard != NULL)
+    device_blackboard->SetQNH(qnh);
+
+  RefreshAltitudeControl();
 }
 
-static void
-SetBallast(void)
+void
+FlightSetupPanel::OnTimer()
 {
-  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpBallast"));
-  assert(wp != NULL);
-  if (glide_polar.IsBallastable()) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(glide_polar.GetBallastLitres());
-  } else
-    wp->hide();
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
-  wp->RefreshDisplay();
-
-  wp = (WndProperty*)wf->FindByName(_T("prpWingLoading"));
-  assert(wp != NULL);
-  const fixed wl = glide_polar.GetWingLoading();
-  if (wl > fixed_zero) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(wl);
-  } else
-    wp->hide();
-
-  wp->RefreshDisplay();
-}
-
-/**
- * This function is called repeatedly by the timer and updates the
- * current altitude and ballast. The ballast can change without user
- * input due to the dump function.
- */
-static void
-OnTimerNotify(gcc_unused WndForm &Sender)
-{
-  if (protected_task_manager != NULL
-      && XCSoarInterface::GetComputerSettings().ballast_timer_active
-      && !changed) {
+  if (settings.ballast_timer_active && !glide_polar_modified) {
     /* get new GlidePolar values */
     glide_polar = CommonInterface::GetComputerSettings().glide_polar_task;
 
     /* display the new values on the screen */
     SetBallast();
-
-    /* SetBallast() may have set the "changed" flag, reset it */
-    changed = false;
   }
 
   RefreshAltitudeControl();
@@ -200,15 +232,11 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daSpecial:
-    SetBallastTimer(glide_polar.HasBallast() &&
-                    !XCSoarInterface::GetComputerSettings().ballast_timer_active);
+    instance->FlipBallastTimer();
     break;
 
   case DataField::daChange:
-    glide_polar.SetBallastLitres(df.GetAsFixed());
-    changed = true;
-    SetButtons();
-    SetBallast();
+    instance->SetBallastLitres(df.GetAsFixed());
     break;
   }
 }
@@ -220,8 +248,7 @@ OnBugsData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daChange:
-    glide_polar.SetBugs(fixed_one - (Sender->GetAsFixed() / 100));
-    changed = true;
+    instance->SetBugs(fixed_one - (Sender->GetAsFixed() / 100));
     break;
 
   case DataField::daSpecial:
@@ -229,79 +256,164 @@ OnBugsData(DataField *_Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnBugsData),
-  DeclareCallBackEntry(OnBallastData),
-  DeclareCallBackEntry(OnQnhData),
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(OnBallastDump),
-  DeclareCallBackEntry(NULL)
-};
+static void
+OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
+{
+  DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
+
+  switch (Mode) {
+  case DataField::daChange:
+    instance->SetQNH(Units::FromUserPressure(Sender->GetAsFixed()));
+    break;
+
+  case DataField::daSpecial:
+    return;
+  }
+}
+
+void
+FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  RowFormWidget::Prepare(parent, rc);
+
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+
+  AddFloat(_("Ballast"),
+           _("Ballast of the glider.  Increase this value if the pilot/cockpit load is greater than the reference pilot weight of the glide polar (typically 75kg).  Press ENTER on this field to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."),
+           _T("%.0f l"), _T("%.0f"),
+           fixed_zero, fixed(500), fixed(5), false,
+           fixed_zero,
+           OnBallastData);
+
+  WndProperty *wp =
+    AddFloat(_("Wing loading"), NULL,
+             _T("%.1f kg/m2"), _T("%.1f"),
+             fixed_zero, fixed_zero, fixed_zero, false,
+             fixed_zero);
+  wp->SetReadOnly();
+
+  AddFloat(_("Bugs"),
+           _("How clean the glider is. Set to 0% for clean, larger numbers as the wings pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."),
+           _T("%.0f %%"), _T("%.0f"),
+           fixed_zero, fixed(50), fixed_one, false,
+           (fixed_one - glide_polar.GetBugs()) * 100,
+           OnBugsData);
+
+  wp = AddFloat(_("QNH"),
+                _("Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected."),
+                Units::GetFormatUserPressure(), Units::GetFormatUserPressure(),
+                Units::ToUserPressure(Units::ToSysUnit(fixed(850), unHectoPascal)),
+                Units::ToUserPressure(Units::ToSysUnit(fixed(1300), unHectoPascal)),
+                Units::PressureStep(), false,
+                Units::ToUserPressure(settings.pressure),
+                OnQnhData);
+  {
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetUnits(Units::GetPressureName());
+    wp->RefreshDisplay();
+  }
+
+  wp = AddFloat(_("Altitude"), NULL,
+                _T("%.0f %s"), _T("%.0f"),
+                fixed_zero, fixed_zero, fixed_zero, false,
+                ugAltitude, fixed_zero);
+  wp->SetReadOnly();
+
+  wp = AddFloat(_("Max. temp."),
+                _("Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)"),
+                _T("%.0f %s"), _T("%.0f"),
+                Units::ToUserTemperature(CelsiusToKelvin(fixed(-50))),
+                Units::ToUserTemperature(CelsiusToKelvin(fixed(60))),
+                fixed_one, false,
+                Units::ToUserTemperature(settings.forecast_temperature));
+  {
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetUnits(Units::GetTemperatureName());
+    wp->RefreshDisplay();
+  }
+
+  OnTimer();
+  SetButtons();
+  SetBallast();
+}
+
+bool
+FlightSetupPanel::Save(bool &changed, bool &require_restart)
+{
+  ComputerSettings &settings = CommonInterface::SetComputerSettings();
+
+  changed |= glide_polar_modified;
+
+  SavePolar();
+
+  changed |= SaveValue(Temperature, ugTemperature,
+                       settings.forecast_temperature);
+
+  return true;
+}
+
+static void
+OnCloseClicked(gcc_unused WndButton &Sender)
+{
+  wf->SetModalResult(mrOK);
+}
+
+static void
+OnBallastDump(gcc_unused WndButton &Sender)
+{
+  instance->FlipBallastTimer();
+}
+
+/**
+ * This function is called repeatedly by the timer and updates the
+ * current altitude and ballast. The ballast can change without user
+ * input due to the dump function.
+ */
+static void
+OnTimerNotify(gcc_unused WndForm &Sender)
+{
+  instance->OnTimer();
+}
 
 void
 dlgBasicSettingsShowModal()
 {
-  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+  const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
-  glide_polar = settings.glide_polar_task;
+  const PixelRect dialog_rc = {
+    0, 0, Layout::Scale(173), Layout::Scale(220),
+  };
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
-                  _T("IDR_XML_BASICSETTINGS"));
-  if (wf == NULL)
-    return;
+  WindowStyle dialog_style;
+  dialog_style.Hide();
+  dialog_style.ControlParent();
 
-  changed = false;
-
+  wf = new WndForm(UIGlobals::GetMainWindow(), dialog_look,
+                   dialog_rc, _("Flight Setup"), dialog_style);
   wf->SetTimerNotify(OnTimerNotify);
-  OnTimerNotify(*wf);
 
-  SetButtons();
+  ContainerWindow &client_area = wf->GetClientAreaWindow();
 
-  SetBallast();
-  LoadFormProperty(*wf, _T("prpBugs"),
-                   (fixed_one - glide_polar.GetBugs()) * 100);
-  LoadFormProperty(*wf, _T("prpQNH"),
-                   Units::ToUserPressure(settings.pressure));
+  ButtonPanel buttons(client_area, dialog_look);
+  WndButton &dump_button = *buttons.Add(_("Dump"), OnBallastDump);
+  buttons.Add(_("OK"), OnCloseClicked);
 
-  WndProperty* wp;
-  wp = (WndProperty*)wf->FindByName(_T("prpQNH"));
-  assert(wp != NULL);
-  {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+  const PixelRect remaining_rc = buttons.GetRemainingRect();
 
-    df.SetMin(Units::ToUserPressure(Units::ToSysUnit(fixed(850), unHectoPascal)));
-    df.SetMax(Units::ToUserPressure(Units::ToSysUnit(fixed(1300), unHectoPascal)));
-    df.SetStep(Units::ToUserPressure(Units::ToSysUnit(fixed_one, unHectoPascal)));
-    df.SetUnits(Units::GetPressureName());
-    df.SetStep(Units::PressureStep());
-    df.SetFormat(Units::GetFormatUserPressure());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));
-  assert(wp != NULL);
-  {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetMin(Units::ToUserTemperature(CelsiusToKelvin(fixed(-50))));
-    df.SetMax(Units::ToUserTemperature(CelsiusToKelvin(fixed(60))));
-    df.SetUnits(Units::GetTemperatureName());
-    df.Set(Units::ToUserTemperature(settings.forecast_temperature));
-    wp->RefreshDisplay();
-  }
+  instance = new FlightSetupPanel(dump_button);
+  Widget &widget = *instance;
+  widget.Initialise(client_area, remaining_rc);
+  widget.Prepare(client_area, remaining_rc);
+  widget.Show(remaining_rc);
 
   if (wf->ShowModal() == mrOK) {
-    ComputerSettings &settings = CommonInterface::SetComputerSettings();
-
-    if (changed) {
-      settings.glide_polar_task = glide_polar;
-
-      if (protected_task_manager != NULL)
-        protected_task_manager->SetGlidePolar(glide_polar);
-    }
-
-    SaveFormProperty(*wf, _T("prpTemperature"), ugTemperature,
-                     settings.forecast_temperature);
+    bool changed, require_restart;
+    widget.Save(changed, require_restart);
   }
+
+  widget.Hide();
+  widget.Unprepare();
+  delete instance;
 
   delete wf;
 }

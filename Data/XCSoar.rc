@@ -215,7 +215,6 @@ IDR_XML_AIRSPACESELECT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgAirspa
 IDR_XML_AIRSPACEWARNINGS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgAirspaceWarnings.xml.gz"
 IDR_XML_ANALYSIS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgAnalysis.xml.gz"
 IDR_XML_ANALYSIS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgAnalysis_L.xml.gz"
-IDR_XML_BASICSETTINGS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgBasicSettings.xml.gz"
 IDR_XML_BRIGHTNESS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgBrightness.xml.gz"
 IDR_XML_CHECKLIST XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgChecklist.xml.gz"
 IDR_XML_CHECKLIST_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgChecklist_L.xml.gz"
