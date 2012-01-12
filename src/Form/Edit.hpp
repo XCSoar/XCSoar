@@ -143,6 +143,10 @@ public:
     edit.set_enabled(enabled);
   }
 
+  void SetReadOnly(bool read_only=true) {
+    edit.set_read_only(read_only);
+  }
+
   /**
    * Starts  interactively  editing  the  value.   If  a  ComboBox  is
    * available, then the ComboPicker  will be launched, otherwise, the
