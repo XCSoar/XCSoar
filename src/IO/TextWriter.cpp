@@ -68,4 +68,26 @@ TextWriter::write(const TCHAR *s)
   return write(s, _tcslen(s));
 }
 
+bool
+TextWriter::printf(const TCHAR *fmt, ...)
+{
+  assert(!error());
+  assert(fmt != NULL);
+  assert(_tcschr(fmt, _T('\r')) == NULL);
+  assert(_tcschr(fmt, _T('\n')) == NULL);
+
+  /* assume 4 kB is enough for one line */
+  size_t buffer_size = 4096;
+  TCHAR *buffer = format_buffer.get(buffer_size);
+  if (buffer == NULL)
+    return false;
+
+  va_list ap;
+  va_start(ap, fmt);
+  _vsntprintf(buffer, buffer_size, fmt, ap);
+  va_end(ap);
+
+  return write(buffer);
+}
+
 #endif /* _UNICODE */

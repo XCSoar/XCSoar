@@ -167,23 +167,11 @@ public:
   }
 
 #ifdef _UNICODE
-  template<typename... Args>
-  void printf(const TCHAR *fmt, Args&&... args) {
-    assert(file.IsOpen());
-    assert(_tcschr(fmt, _T('\r')) == NULL);
-    assert(_tcschr(fmt, _T('\n')) == NULL);
-
-    file.WriteFormatted(fmt, args...);
-  }
+  bool printf(const TCHAR *s, ...);
 
   template<typename... Args>
-  void printfln(const TCHAR *fmt, Args&&... args) {
-    assert(file.IsOpen());
-    assert(_tcschr(fmt, _T('\r')) == NULL);
-    assert(_tcschr(fmt, _T('\n')) == NULL);
-
-    file.WriteFormatted(fmt, args...);
-    newline();
+  bool printfln(const TCHAR *fmt, Args&&... args) {
+    return printf(fmt, args...) && newline();
   }
 #endif
 };
