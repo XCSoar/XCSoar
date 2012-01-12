@@ -51,8 +51,6 @@ enum ControlIndex {
   UnitsLatLon
 };
 
-static const TCHAR *custom_preset_label = N_("Custom");
-
 class UnitsConfigPanel : public RowFormWidget {
 public:
   UnitsConfigPanel()
@@ -140,7 +138,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
   df.EnableItemHelp(true);
 
-  df.addEnumText(gettext(custom_preset_label), (unsigned)0, _("My individual set of units."));
+  df.addEnumText(_("Custom"), (unsigned)0, _("My individual set of units."));
   unsigned len = Units::Store::Count();
   for (unsigned i = 0; i < len; i++)
     df.addEnumText(Units::Store::GetName(i), i+1, preset_help);
