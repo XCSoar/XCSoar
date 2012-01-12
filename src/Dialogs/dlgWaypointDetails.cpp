@@ -542,11 +542,7 @@ UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
       basic.nav_altitude, calculated.wind,
       settings_computer.task.glide, glide_polar);
 
-  StaticString<64> buffer;
-  buffer.Format(_T("%.0f %s"),
-                (double)Units::ToUserAltitude(r.altitude_difference),
-                Units::GetAltitudeName());
-  wp->SetText(buffer);
+  ShowGlideResult(*wp, r);
 
   // alt reqd at mc 0
   wp = (WndProperty *)wf->FindByName(_T("prpMc0"));
