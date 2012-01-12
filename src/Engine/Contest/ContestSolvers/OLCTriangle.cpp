@@ -86,18 +86,16 @@ OLCTriangle::path_closed() const
 
   // note this may fail if resolution of sampled trace is too low
   assert(n_points > 0);
-  const ScanTaskPoint end(0, n_points-1);
+
+  const GeoPoint end_location = GetPoint(n_points - 1).get_location();
+
   fixed d_min(-1);
 
-  ScanTaskPoint start(0, 0);
-
   assert(first_tp < n_points);
-  for (start.point_index = 0; start.point_index <= first_tp;
-       ++start.point_index) {
 
+  for (unsigned start_index = 0; start_index <= first_tp; ++start_index) {
     const fixed d_this =
-      GetPointFast(start).get_location().Distance(
-        GetPointFast(end).get_location());
+      GetPoint(start_index).get_location().Distance(end_location);
 
     if (!positive(d_min) || (d_this < d_min)) {
       d_min = d_this;
@@ -292,9 +290,7 @@ OLCTriangle::CalcTime() const
   if (!n_points)
     return fixed_zero;
 
-  const ScanTaskPoint start(0, 0);
-  const ScanTaskPoint end(0, n_points-1);
-  return fixed(GetPointFast(end).DeltaTime(GetPointFast(start)));
+  return fixed(GetPoint(n_points - 1).DeltaTime(GetPoint(0)));
 }
 
 

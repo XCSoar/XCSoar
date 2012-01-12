@@ -48,10 +48,8 @@ XContestTriangle::CalcDistance() const
     return fixed_zero;
 
   // approximation for now: gap is distance from start to finish
-  const ScanTaskPoint start(0, 0);
-  const ScanTaskPoint end(num_stages-1, n_points-1);
-
-  const fixed d_gap = GetPointFast(start).get_location().Distance(GetPointFast(end).get_location());
+  const fixed d_gap = GetPoint(0).get_location()
+    .Distance(GetPoint(n_points - 1).get_location());
 
   // award no points if gap is >20% of triangle
 

@@ -96,6 +96,13 @@ public:
 
 protected:
   gcc_pure
+  const TracePoint &GetPoint(unsigned i) const {
+    assert(i < n_points);
+
+    return trace[i];
+  }
+
+  gcc_pure
   const TracePoint &GetPointFast(const ScanTaskPoint &sp) const {
     assert(sp.point_index < n_points);
     return trace[sp.point_index];

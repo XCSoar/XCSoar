@@ -65,20 +65,20 @@ OLCSprint::find_start() const
 {
   assert(num_stages <= MAX_STAGES);
   assert(n_points >= 2);
-  ScanTaskPoint start(0, 1);
-  const ScanTaskPoint end(0, n_points - 1);
-  const auto end_time = GetPointFast(end).GetTime();
+
+  unsigned start_index = 1;
+  const auto end_time = GetPoint(n_points - 1).GetTime();
   if (end_time > 9000) {
     // fast forward to 2.5 hours before finish
     const unsigned start_time = end_time-9000;
-    assert(start.point_index < n_points);
-    while (GetPointFast(start).GetTime() < start_time) {
-      ++start.point_index;
-      assert(start.point_index < n_points);
+    assert(start_index < n_points);
+    while (GetPoint(start_index).GetTime() < start_time) {
+      ++start_index;
+      assert(start_index < n_points);
     }
   }
 
-  return start.point_index;
+  return start_index;
 }
 
 void
