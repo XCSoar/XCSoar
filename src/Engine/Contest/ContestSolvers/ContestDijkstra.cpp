@@ -64,7 +64,7 @@ ContestDijkstra::master_is_updated() const
 {
   assert(num_stages <= MAX_STAGES);
 
-  if (trace_master.empty() || n_points < num_stages)
+  if (n_points < num_stages)
     return true;
 
   // find min distance and time step within this trace
@@ -114,6 +114,12 @@ ContestDijkstra::Solve(bool exhaustive)
 {
   assert(num_stages <= MAX_STAGES);
 
+  if (trace_master.size() < num_stages) {
+    /* not enough data in master trace */
+    clear_trace();
+    return true;
+  }
+
   if (dijkstra.empty()) {
 
     update_trace();
@@ -124,14 +130,13 @@ ContestDijkstra::Solve(bool exhaustive)
     if (!trace_dirty) {
       return true;
     }
-  } else if (exhaustive) {
+  } else if (exhaustive || n_points < num_stages) {
     update_trace();
     if (n_points < num_stages)
       return true;
-  } else if (n_points < num_stages) {
-    update_trace();
-    return true;
   }
+
+  assert(n_points >= num_stages);
 
   if (trace_dirty) {
     trace_dirty = false;
