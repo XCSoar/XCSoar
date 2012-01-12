@@ -34,8 +34,7 @@ TaskDijkstraMax::distance_max()
   if (!refresh_task())
     return false;
 
-  const ScanTaskPoint start(0, 0);
-  dijkstra.restart(start);
+  dijkstra.clear();
   return run();
 }
 

@@ -79,9 +79,6 @@ TaskDijkstra::add_edges(const ScanTaskPoint& curNode)
 void 
 TaskDijkstra::add_start_edges(const SearchPoint &currentLocation)
 {
-  // need to remove dummy first point
-  dijkstra.pop();
-
   ScanTaskPoint destination(active_stage, 0);
   const unsigned dsize = get_size(destination.stage_number);
 

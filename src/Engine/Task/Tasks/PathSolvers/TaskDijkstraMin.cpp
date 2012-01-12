@@ -34,9 +34,7 @@ TaskDijkstraMin::distance_min(const SearchPoint &currentLocation)
   if (!refresh_task())
     return false;
 
-  const ScanTaskPoint start(max(1, (int)active_stage) - 1, 0);
-
-  dijkstra.restart(start);
+  dijkstra.clear();
   if (active_stage)
     add_start_edges(currentLocation);
   return run();
