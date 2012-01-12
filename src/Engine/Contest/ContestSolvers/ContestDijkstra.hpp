@@ -130,7 +130,13 @@ protected:
    * @param index Index of leg
    * @return Weighting of leg
    */
-  unsigned get_weighting(const unsigned index) const;
+  gcc_pure
+  unsigned get_weighting(const unsigned index) const {
+    assert(num_stages <= MAX_STAGES);
+    assert(index + 1 < num_stages);
+
+    return m_weightings[index];
+  }
 
   /**
    * Perform actions required at start of new search

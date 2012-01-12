@@ -274,14 +274,6 @@ ContestDijkstra::get_point(const ScanTaskPoint &sp) const
   return GetPointFast(sp);
 }
 
-unsigned
-ContestDijkstra::get_weighting(const unsigned i) const
-{
-  assert(num_stages <= MAX_STAGES);
-  assert(i+1 < num_stages);
-  return m_weightings[i];
-}
-
 bool
 ContestDijkstra::admit_candidate(const TracePoint &start,
                                  const ScanTaskPoint &candidate) const
