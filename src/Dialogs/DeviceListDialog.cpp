@@ -201,9 +201,9 @@ OnEditClicked(gcc_unused WndButton &button)
   DeviceDescriptor &descriptor = device_list[indices[current]];
   DeviceEditWidget widget(descriptor.GetConfig());
 
-  if (!WidgetDialog(_("Edit device"),
-                    UIGlobals::GetMainWindow().get_client_rect(),
-                    widget))
+  if (!DefaultWidgetDialog(_("Edit device"),
+                           UIGlobals::GetMainWindow().get_client_rect(),
+                           widget))
     /* not modified */
     return;
 

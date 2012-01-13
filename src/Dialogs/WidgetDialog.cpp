@@ -29,50 +29,74 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 
-static Widget *widget;
-static WndForm *dialog;
-static bool changed;
-
-static void
-OnOKClicked(gcc_unused WndButton &button)
+gcc_const
+static WindowStyle
+GetDialogStyle()
 {
-  bool require_restart;
-  if (widget->Save(changed, require_restart))
-    dialog->SetModalResult(mrOK);
+  WindowStyle style;
+  style.Hide();
+  style.ControlParent();
+  return style;
+}
+
+WidgetDialog::WidgetDialog(const TCHAR *caption, const PixelRect &rc,
+                           Widget *_widget)
+  :WndForm(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+           rc, caption, GetDialogStyle()),
+   buttons(GetClientAreaWindow(), UIGlobals::GetDialogLook()),
+   widget(GetClientAreaWindow(), _widget),
+   changed(false)
+{
+  widget.Move(buttons.GetRemainingRect());
+}
+
+int
+WidgetDialog::ShowModal()
+{
+  /* update layout, just in case buttons were added */
+  widget.Move(buttons.GetRemainingRect());
+
+  widget.Show();
+  return WndForm::ShowModal();
+}
+
+void
+WidgetDialog::OnAction(int id)
+{
+  if (id == mrOK) {
+    bool require_restart;
+    if (!widget.Get()->Save(changed, require_restart))
+      return;
+  }
+
+  WndForm::OnAction(id);
+}
+
+void
+WidgetDialog::OnDestroy()
+{
+  widget.Unprepare();
+}
+
+void
+WidgetDialog::OnResize(UPixelScalar width, UPixelScalar height)
+{
+  WndForm::OnResize(width, height);
+  buttons.Resized(get_client_rect());
+  widget.Move(buttons.GetRemainingRect());
 }
 
 bool
-WidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget &_widget)
+DefaultWidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget &widget)
 {
-  widget = &_widget;
+  WidgetDialog dialog(caption, rc, &widget);
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
 
-  /* create the dialog */
+  dialog.ShowModal();
 
-  WindowStyle dialog_style;
-  dialog_style.Hide();
-  dialog_style.ControlParent();
+  /* the caller manages the Widget */
+  dialog.StealWidget();
 
-  dialog = new WndForm(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-                       rc,caption, dialog_style);
-
-  ContainerWindow &client_area = dialog->GetClientAreaWindow();
-
-  ButtonPanel buttons(client_area, UIGlobals::GetDialogLook());
-  buttons.Add(_("OK"), OnOKClicked);
-  buttons.Add(_("Cancel"), dialog, mrCancel);
-
-  const PixelRect remaining_rc = buttons.GetRemainingRect();
-
-  widget->Initialise(client_area, remaining_rc);
-  widget->Prepare(client_area, remaining_rc);
-  widget->Show(remaining_rc);
-
-  changed = false;
-  dialog->ShowModal();
-
-  widget->Hide();
-  widget->Unprepare();
-  delete dialog;
-
-  return changed;
+  return dialog.GetChanged();
 }

@@ -25,10 +25,61 @@ Copyright_License {
 #define XCSOAR_WIDGET_DIALOG_HPP
 
 #include "Screen/Point.hpp"
+#include "Form/Form.hpp"
+#include "Form/ButtonPanel.hpp"
+#include "Form/ManagedWidget.hpp"
 
 #include <tchar.h>
 
 class Widget;
+
+class WidgetDialog : public WndForm {
+  ButtonPanel buttons;
+
+  ManagedWidget widget;
+
+  bool changed;
+
+public:
+  WidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget *widget);
+
+  bool GetChanged() const {
+    return changed;
+  }
+
+  Widget &GetWidget() {
+    assert(widget.IsDefined());
+    return *widget.Get();
+  }
+
+  Widget *StealWidget() {
+    assert(widget.IsDefined());
+    widget.Unprepare();
+    return widget.Steal();
+  }
+
+  WndButton *AddButton(const TCHAR *caption,
+                       WndButton::ClickNotifyCallback callback) {
+    return buttons.Add(caption, callback);
+  }
+
+  WndButton *AddButton(const TCHAR *caption,
+                       ActionListener *listener, int id) {
+    return buttons.Add(caption, listener, id);
+  }
+
+  WndButton *AddButton(const TCHAR *caption, int modal_result) {
+    return AddButton(caption, this, modal_result);
+  }
+
+  int ShowModal();
+
+  virtual void OnAction(int id);
+
+protected:
+  virtual void OnDestroy();
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+};
 
 /**
  * Show a #Widget in a dialog, with OK and Cancel buttons.
@@ -39,6 +90,6 @@ class Widget;
  * @return true if changed data was saved
  */
 bool
-WidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget &widget);
+DefaultWidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget &widget);
 
 #endif
