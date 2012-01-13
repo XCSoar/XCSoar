@@ -124,3 +124,17 @@ ButtonPanel::Add(const TCHAR *caption,
 
   return button;
 }
+
+WndButton *
+ButtonPanel::Add(const TCHAR *caption, ActionListener *listener, int id)
+{
+  if (row_count == 0 || buttons.size() % row_capacity == 0)
+    Resized(parent.get_client_rect(), buttons.size() + 1);
+
+  const PixelRect r = GetButtonRect(buttons.size());
+  WndButton *button = new WndButton(parent, look, caption,
+                                    r, style, listener, id);
+  buttons.append(button);
+
+  return button;
+}

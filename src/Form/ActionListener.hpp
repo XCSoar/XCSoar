@@ -21,42 +21,18 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORM_BUTTON_PANEL_HPP
-#define XCSOAR_FORM_BUTTON_PANEL_HPP
+#ifndef XCSOAR_FORM_ACTION_LISTENER_HPP
+#define XCSOAR_FORM_ACTION_LISTENER_HPP
 
-#include "Util/StaticArray.hpp"
-#include "Form/Button.hpp"
-
-class ButtonPanel {
-  ContainerWindow &parent;
-  const DialogLook &look;
-  ButtonWindowStyle style;
-
-  StaticArray<WndButton *, 8u> buttons;
-
-  PixelRect rc, remaining;
-  unsigned child_size, row_capacity, row_count;
-
-  bool vertical;
-
+/**
+ * An interface to be implemented by classes that want to listen on
+ * actions (e.g. clicks on a button).
+ *
+ * @see WndButton::SetListener()
+ */
+class ActionListener {
 public:
-  ButtonPanel(ContainerWindow &parent, const DialogLook &look);
-  ~ButtonPanel();
-
-  void Resized(const PixelRect &area, unsigned count=0);
-
-  const PixelRect &GetRemainingRect() const {
-    return remaining;
-  }
-
-  WndButton *Add(const TCHAR *caption,
-                 WndButton::ClickNotifyCallback callback);
-
-  WndButton *Add(const TCHAR *caption, ActionListener *listener, int id);
-
-protected:
-  PixelRect GetButtonRect(unsigned i) const;
-  void MoveButtons();
+  virtual void OnAction(int id) = 0;
 };
 
 #endif

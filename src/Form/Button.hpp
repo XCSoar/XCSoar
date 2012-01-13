@@ -27,8 +27,11 @@ Copyright_License {
 #include "Screen/ButtonWindow.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 
+#include <assert.h>
+
 struct DialogLook;
 class ContainerWindow;
+class ActionListener;
 
 /**
  * This class is used for creating buttons.
@@ -44,6 +47,8 @@ protected:
   ButtonRenderer renderer;
 
 private:
+  ActionListener *listener;
+
   /**
    * The callback-function that should be called when the button is pressed
    * @see SetOnClickNotify()
@@ -77,6 +82,20 @@ public:
             LeftRightNotifyCallback left_callback = NULL,
             LeftRightNotifyCallback right_callback = NULL);
 
+  WndButton(ContainerWindow &parent, const DialogLook &look,
+            const TCHAR *caption, const PixelRect &rc,
+            ButtonWindowStyle style,
+            ActionListener *listener, int id);
+
+  /**
+   * Set the object that will receive click events.
+   */
+  void SetListener(ActionListener *_listener) {
+    assert(click_callback == NULL);
+
+    listener = _listener;
+  }
+
   /**
    * Sets the function that should be called when the button is pressed
    * @param Function Pointer to the function to be called
@@ -84,6 +103,8 @@ public:
   void
   SetOnClickNotify(ClickNotifyCallback _click_callback)
   {
+    assert(listener == NULL);
+
     click_callback = _click_callback;
   }
 

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Form/Button.hpp"
+#include "Form/ActionListener.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Key.h"
 #include "Screen/Canvas.hpp"
@@ -34,6 +35,7 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
                      LeftRightNotifyCallback _left_callback,
                      LeftRightNotifyCallback _right_callback)
   :look(_look), renderer(look.button),
+   listener(NULL),
    click_callback(_click_callback),
    left_callback(_left_callback),
    right_callback(_right_callback)
@@ -43,9 +45,28 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
   set_font(*look.button.font);
 }
 
+
+WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
+                     const TCHAR *caption, const PixelRect &rc,
+                     ButtonWindowStyle style,
+                     ActionListener *_listener, int id)
+  :look(_look), renderer(look.button),
+   listener(_listener),
+   click_callback(NULL), left_callback(NULL), right_callback(NULL)
+{
+  style.EnableCustomPainting();
+  set(parent, caption, id, rc, style);
+  set_font(*look.button.font);
+}
+
 bool
 WndButton::on_clicked()
 {
+  if (listener != NULL) {
+    listener->OnAction(GetID());
+    return true;
+  }
+
   // Call the OnClick function
   if (click_callback != NULL) {
     click_callback(*this);

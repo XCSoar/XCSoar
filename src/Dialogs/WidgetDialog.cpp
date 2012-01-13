@@ -41,12 +41,6 @@ OnOKClicked(gcc_unused WndButton &button)
     dialog->SetModalResult(mrOK);
 }
 
-static void
-OnCancelClicked(gcc_unused WndButton &button)
-{
-  dialog->SetModalResult(mrCancel);
-}
-
 bool
 WidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget &_widget)
 {
@@ -65,7 +59,7 @@ WidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget &_widget)
 
   ButtonPanel buttons(client_area, UIGlobals::GetDialogLook());
   buttons.Add(_("OK"), OnOKClicked);
-  buttons.Add(_("Cancel"), OnCancelClicked);
+  buttons.Add(_("Cancel"), dialog, mrCancel);
 
   const PixelRect remaining_rc = buttons.GetRemainingRect();
 
