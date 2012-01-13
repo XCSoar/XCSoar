@@ -31,17 +31,12 @@ static const fixed MinTurnRate(4);
 static const fixed CruiseClimbSwitch(15);
 static const fixed ClimbCruiseSwitch(10);
 
-/**
- * Calculates the turn rate
- */
 void
 CirclingComputer::TurnRate(CirclingInfo &circling_info,
                            const NMEAInfo &basic, const NMEAInfo &last_basic,
                            const DerivedInfo &calculated,
                            const DerivedInfo &last_calculated)
 {
-  // Calculate turn rate
-
   if (!basic.time_available || !last_basic.time_available ||
       !calculated.flight.flying) {
     circling_info.turn_rate = fixed_zero;
