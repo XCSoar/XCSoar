@@ -67,7 +67,6 @@ public:
   void SetWeather(const RasterWeather *weather);
 
 private:
-  void SetSunFromWind(const WindowProjection& proj, const SpeedVector& wind);
   void SetSunAngle(const WindowProjection& proj, Angle angle);
   static void DrawSpotHeight(Canvas &canvas,  LabelBlock &block,
                              const TCHAR *Buffer, RasterPoint pt);

@@ -107,25 +107,18 @@ BackgroundRenderer::SetSunAngle(const WindowProjection& projection,
                                 const NMEAInfo &basic,
                                 const DerivedInfo &calculated)
 {
-  if (settings.slope_shading == sstWind && calculated.wind_available)
-    SetSunFromWind(projection, calculated.wind);
+  if (settings.slope_shading == sstWind &&
+      calculated.wind_available &&
+      calculated.wind.norm >= fixed_half)
+    SetSunAngle(projection, calculated.wind.bearing);
+
+  else if (settings.slope_shading == sstSun &&
+           calculated.sun_data_available)
+    SetSunAngle(projection, calculated.sun_azimuth);
+
   else
-    SetSunAngle(projection, (settings.slope_shading == sstSun &&
-                             calculated.sun_data_available) ?
-                             calculated.sun_azimuth :
-                             Angle::Degrees(fixed(-45.0)));
-
-}
-
-void
-BackgroundRenderer::SetSunFromWind(const WindowProjection& projection,
-                                    const SpeedVector& wind)
-{
-  // draw sun from constant angle if very low wind speed
-  if (wind.norm < fixed_half)
     SetSunAngle(projection, Angle::Degrees(fixed(-45.0)));
-  else
-    SetSunAngle(projection, wind.bearing);
+
 }
 
 void
