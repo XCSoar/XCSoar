@@ -190,19 +190,10 @@ DataFieldFloat::CreateComboListStepping()
   const fixed ComboListInitValue(-99999);
   const fixed ComboFloatPrec(0.0001); //rounds float errors to this precision
 
-  fixed fNext = ComboListInitValue;
   fixed fCurrent = ComboListInitValue;
   fixed fLast = ComboListInitValue;
-  TCHAR sTemp[ComboPopupITEMMAX];
 
-  int iListCount = 0;
   int iSelectedIndex = -1;
-  int iStepDirection = 1; // for integer & float step may be negative
-  fixed fBeforeDec = fixed_zero, fAfterDec = fixed_zero, fSavedValue = fixed_zero;
-
-  fNext = ComboListInitValue;
-  fCurrent = ComboListInitValue;
-  fLast = ComboListInitValue;
 
   SetDisableSpeedUp(true);
   SetDetachGUI(true); // disable display of inc/dec/change values
@@ -213,23 +204,22 @@ DataFieldFloat::CreateComboListStepping()
   CopyString(PropertyValueSaved, false);
   CopyString(PropertyValueSavedFormatted, true);
 
-  fSavedValue = GetAsFixed();
+  const fixed fSavedValue = GetAsFixed();
   Inc();
-  fBeforeDec = GetAsFixed();
+  const fixed fBeforeDec = GetAsFixed();
   Dec();
-  fAfterDec = GetAsFixed();
+  const fixed fAfterDec = GetAsFixed();
 
-  if (fAfterDec < fBeforeDec)
-    iStepDirection = 1;
-  else
-    iStepDirection = -1;
+  // for integer & float step may be negative
+  const int iStepDirection = fAfterDec < fBeforeDec ? 1 : -1;
 
   // reset datafield to top of list (or for large floats, away from selected
   // item so it will be in the middle)
+  int iListCount;
   for (iListCount = 0; iListCount < ComboList::MAX_SIZE / 2; iListCount++) {
     // for floats, go half way down only
     Dec();
-    fNext = GetAsFixed();
+    const fixed fNext = GetAsFixed();
 
     if (fabs(fNext - fCurrent) < ComboFloatPrec) // we're at start of the list
       break;
@@ -240,7 +230,6 @@ DataFieldFloat::CreateComboListStepping()
     fCurrent = fNext;
   }
 
-  fNext = ComboListInitValue;
   fCurrent = ComboListInitValue;
   fLast = ComboListInitValue;
 
@@ -276,11 +265,12 @@ DataFieldFloat::CreateComboListStepping()
       iSelectedIndex = combo_list->size();
     }
 
+    TCHAR sTemp[ComboPopupITEMMAX];
     CopyString(sTemp, true); // can't call GetAsString & GetAsStringFormatted together (same output buffer)
     combo_list->Append(0, GetAsString(), sTemp);
 
     Inc();
-    fNext = GetAsFixed();
+    const fixed fNext = GetAsFixed();
 
     if (fabs(fNext - fCurrent) < ComboFloatPrec)
       // we're at start of the list
