@@ -73,6 +73,7 @@ WidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget &_widget)
   widget->Prepare(client_area, remaining_rc);
   widget->Show(remaining_rc);
 
+  changed = false;
   dialog->ShowModal();
 
   widget->Hide();
