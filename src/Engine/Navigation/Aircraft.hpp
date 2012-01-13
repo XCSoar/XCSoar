@@ -146,15 +146,18 @@ struct AircraftState:
   //   Time
   //##########
 
-  fixed time; /**< global time (seconds UTC) */
+  /** global time (seconds UTC) */
+  fixed time;
 
   //################
   //   Navigation
   //################
 
-  GeoPoint location; /**< location of aircraft */
+  /** location of aircraft */
+  GeoPoint location;
 
-  Angle track; /**< track angle in degrees true */
+  /** track angle in degrees true */
+  Angle track;
 
   //##################
   //   Acceleration
@@ -167,15 +170,16 @@ struct AircraftState:
    */
   fixed g_load;
 
-  SpeedVector wind; /**< Wind speed, direction at aircraft */
+  /** Wind speed, direction at aircraft */
+  SpeedVector wind;
 
-/**
- * Calculate predicted state in future.
- * Assumes aircraft will continue along current TrackBearing and Speed with
- * constant climb speed
- * @param in_time Time step for extrapolation (s)
- * @return Predicted aircraft state in in_time seconds
- */
+  /**
+   * Calculate predicted state in future.
+   * Assumes aircraft will continue along current TrackBearing and Speed with
+   * constant climb speed
+   * @param in_time Time step for extrapolation (s)
+   * @return Predicted aircraft state in in_time seconds
+   */
   gcc_pure
   AircraftState GetPredictedState(const fixed& in_time) const;
 
