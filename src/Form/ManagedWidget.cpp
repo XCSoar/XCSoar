@@ -70,6 +70,7 @@ ManagedWidget::Show()
     return;
 
   if (!prepared) {
+    widget->Initialise(parent, position);
     widget->Prepare(parent, position);
     prepared = true;
     visible = false;

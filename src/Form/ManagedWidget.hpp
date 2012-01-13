@@ -68,6 +68,10 @@ public:
   }
 
   void Clear();
+
+  /**
+   * @param widget an uninitialised Widget
+   */
   void Set(Widget *widget);
 
   Widget *Get() {
