@@ -713,4 +713,5 @@ GlideComputerAirData::ProcessSun()
 
   calculated.sunset_time = fixed(sun.time_of_sunset);
   calculated.sun_azimuth = sun.azimuth;
+  calculated.sun_data_available.Update(Basic().clock);
 }
