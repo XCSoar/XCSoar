@@ -38,7 +38,7 @@ BackgroundRenderer::BackgroundRenderer():
   terrain(NULL),
   weather(NULL),
   renderer(NULL),
-  shading_angle(Angle::Degrees(fixed(45)))
+  shading_angle(Angle::Degrees(fixed(-45)))
 {
 }
 
