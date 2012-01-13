@@ -25,18 +25,21 @@ Copyright_License {
 #include "Widget.hpp"
 
 void
-ManagedWidget::Clear()
+ManagedWidget::Unprepare()
 {
-  if (widget == NULL)
+  Hide();
+
+  if (!IsPrepared())
     return;
 
-  if (prepared) {
-    if (visible) {
-      widget->Leave();
-      widget->Hide();
-    }
-    widget->Unprepare();
-  }
+  prepared = false;
+  widget->Unprepare();
+}
+
+void
+ManagedWidget::Clear()
+{
+  Unprepare();
 
   delete widget;
   widget = NULL;

@@ -70,6 +70,7 @@ public:
     return IsPrepared() && visible;
   }
 
+  void Unprepare();
   void Clear();
 
   /**
