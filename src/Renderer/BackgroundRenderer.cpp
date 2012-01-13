@@ -107,12 +107,12 @@ BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
                                     const NMEAInfo &basic,
                                     const DerivedInfo &calculated)
 {
-  if (settings.slope_shading == sstWind &&
+  if (settings.slope_shading == SlopeShading::WIND &&
       calculated.wind_available &&
       calculated.wind.norm >= fixed_half)
     SetShadingAngle(projection, calculated.wind.bearing);
 
-  else if (settings.slope_shading == sstSun &&
+  else if (settings.slope_shading == SlopeShading::SUN &&
            calculated.sun_data_available)
     SetShadingAngle(projection, calculated.sun_azimuth);
 

@@ -172,7 +172,7 @@ SetDefaults(MapSettings &settings_map)
   settings_map.topography_enabled = true;
   settings_map.terrain.SetDefaults();
   settings_map.terrain.enable = true;
-  settings_map.terrain.slope_shading = sstFixed;
+  settings_map.terrain.slope_shading = SlopeShading::FIXED;
 }
 
 static void

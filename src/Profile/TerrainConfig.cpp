@@ -31,14 +31,14 @@ Profile::LoadTerrainRendererSettings(TerrainRendererSettings &settings)
 {
   Get(szProfileDrawTerrain, settings.enable);
 
-  int Temp = settings.slope_shading;
+  uint8_t Temp = (uint8_t)settings.slope_shading;
   if (!Get(szProfileSlopeShadingType, Temp)) {
     bool old_profile_setting = true;
     if (Get(szProfileSlopeShading, old_profile_setting))
       // 0: OFF, 3: Wind
       Temp = old_profile_setting ? 3 : 0;
   }
-  settings.slope_shading = (SlopeShadingType_t)Temp;
+  settings.slope_shading = (SlopeShading)Temp;
 
   Get(szProfileTerrainContrast, settings.contrast);
   Get(szProfileTerrainBrightness, settings.brightness);

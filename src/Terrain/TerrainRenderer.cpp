@@ -245,7 +245,8 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   const unsigned height_scale = 4;
   const int interp_levels = 2;
   const bool is_terrain = true;
-  const bool do_shading = is_terrain && settings.slope_shading != sstOff;
+  const bool do_shading = is_terrain &&
+                          settings.slope_shading != SlopeShading::OFF;
 
   const ColorRamp *const color_ramp = &terrain_colors[settings.ramp][0];
   if (color_ramp != last_color_ramp) {

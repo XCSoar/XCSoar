@@ -153,7 +153,7 @@ TerrainDisplayConfigPanel::OnPreviewPaint(Canvas &canvas)
   projection.SetScreenOrigin(canvas.get_width() / 2, canvas.get_height() / 2);
 
   Angle sun_azimuth(Angle::Degrees(fixed(-45)));
-  if (terrain_settings.slope_shading == sstSun &&
+  if (terrain_settings.slope_shading == SlopeShading::SUN &&
       XCSoarInterface::Calculated().sun_data_available)
     sun_azimuth = XCSoarInterface::Calculated().sun_azimuth;
 
@@ -202,7 +202,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     dfe->addEnumText(_("Fixed"));
     dfe->addEnumText(_("Sun"));
     dfe->addEnumText(_("Wind"));
-    dfe->Set(terrain.slope_shading);
+    dfe->Set((int)terrain.slope_shading);
     wp->RefreshDisplay();
   }
 
@@ -245,7 +245,7 @@ TerrainDisplayConfigPanel::Save(bool &_changed, bool &_require_restart)
   Profile::Set(szProfileTerrainContrast, terrain_settings.contrast);
   Profile::Set(szProfileTerrainBrightness, terrain_settings.brightness);
   Profile::Set(szProfileTerrainRamp, terrain_settings.ramp);
-  Profile::Set(szProfileSlopeShadingType, terrain_settings.slope_shading);
+  Profile::SetEnum(szProfileSlopeShadingType, terrain_settings.slope_shading);
 
   changed |= SaveFormProperty(form, _T("prpEnableTopography"),
                               szProfileDrawTopography,

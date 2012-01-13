@@ -24,11 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_SETTINGS_HPP
 #define XCSOAR_TERRAIN_SETTINGS_HPP
 
-enum SlopeShadingType_t {
-  sstOff,
-  sstFixed,
-  sstSun,
-  sstWind,
+#include <stdint.h>
+
+enum class SlopeShading: uint8_t {
+  OFF,
+  FIXED,
+  SUN,
+  WIND,
 };
 
 struct TerrainRendererSettings {
@@ -38,7 +40,7 @@ struct TerrainRendererSettings {
   /**
    * Apply slope shading to the terrain?
    */
-  SlopeShadingType_t slope_shading;
+  SlopeShading slope_shading;
 
   /** Terrain contrast percentage */
   short contrast;
