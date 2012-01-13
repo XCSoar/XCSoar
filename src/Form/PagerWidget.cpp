@@ -160,6 +160,42 @@ PagerWidget::Previous(bool wrap)
   return SetCurrent(i - 1);
 }
 
+PixelSize
+PagerWidget::GetMinimumSize() const
+{
+  /* determine the largest "minimum" size of all pages */
+
+  PixelSize result{0, 0};
+
+  for (auto i = children.begin(), end = children.end(); i != end; ++i) {
+    PixelSize size = i->widget->GetMinimumSize();
+    if (size.cx > result.cx)
+      result.cx = size.cx;
+    if (size.cy > result.cy)
+      result.cy = size.cy;
+  }
+
+  return result;
+}
+
+PixelSize
+PagerWidget::GetMaximumSize() const
+{
+  /* determine the largest "maximum" size of all pages */
+
+  PixelSize result{0, 0};
+
+  for (auto i = children.begin(), end = children.end(); i != end; ++i) {
+    PixelSize size = i->widget->GetMaximumSize();
+    if (size.cx > result.cx)
+      result.cx = size.cx;
+    if (size.cy > result.cy)
+      result.cy = size.cy;
+  }
+
+  return result;
+}
+
 void
 PagerWidget::Initialise(ContainerWindow &_parent, const PixelRect &rc)
 {

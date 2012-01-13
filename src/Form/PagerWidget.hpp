@@ -128,6 +128,8 @@ public:
   }
 
   /* methods from Widget */
+  virtual PixelSize GetMinimumSize() const;
+  virtual PixelSize GetMaximumSize() const;
   virtual void Initialise(ContainerWindow &parent, const PixelRect &rc);
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void Unprepare();

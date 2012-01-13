@@ -31,6 +31,18 @@ NullWidget::~NullWidget()
 {
 }
 
+PixelSize
+NullWidget::GetMinimumSize() const
+{
+  return PixelSize{0,0};
+}
+
+PixelSize
+NullWidget::GetMaximumSize() const
+{
+  return PixelSize{0,0};
+}
+
 void
 NullWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {

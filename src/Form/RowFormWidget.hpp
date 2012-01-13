@@ -215,6 +215,8 @@ protected:
     return next;
   }
 
+  virtual PixelSize GetMinimumSize() const;
+  virtual PixelSize GetMaximumSize() const;
   virtual void Initialise(ContainerWindow &parent, const PixelRect &rc);
   virtual void Show(const PixelRect &rc);
   virtual void Hide();

@@ -24,6 +24,7 @@ Copyright_License {
 #include "Form/RowFormWidget.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Panel.hpp"
+#include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Integer.hpp"
@@ -39,6 +40,16 @@ Copyright_License {
 
 #include <windef.h>
 #include <assert.h>
+
+/**
+ * Returns the minimum height of an edit control.
+ */
+gcc_pure
+static UPixelScalar
+GetMinimumControlHeight()
+{
+  return Layout::Scale(22);
+}
 
 RowFormWidget::RowFormWidget(const DialogLook &_look,
                              UPixelScalar _caption_width)
@@ -474,6 +485,25 @@ RowFormWidget::SaveValueFileReader(unsigned i, const TCHAR *registry_key)
 
   Profile::Set(registry_key, new_value);
   return true;
+}
+
+PixelSize
+RowFormWidget::GetMinimumSize() const
+{
+  const UPixelScalar value_width =
+    look.text_font->TextSize(_T("Foo Bar Foo Bar")).cx;
+
+  return PixelSize{
+    PixelScalar(caption_width + value_width),
+    PixelScalar(controls.size() * GetMinimumControlHeight()),
+  };
+}
+
+PixelSize
+RowFormWidget::GetMaximumSize() const
+{
+  // XXX implement
+  return GetMinimumSize();
 }
 
 void

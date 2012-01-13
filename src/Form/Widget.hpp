@@ -48,6 +48,23 @@ public:
   virtual ~Widget();
 
   /**
+   * Estimate the minimum recommended size.  May return zero if the
+   * method has no special implementation.  This is called after
+   * Prepare().
+   */
+  gcc_pure
+  virtual PixelSize GetMinimumSize() const = 0;
+
+  /**
+   * Estimate the maximum recommended size; the Widget may become
+   * larger, but that is of little use.  May return zero if the method
+   * has no special implementation.  This is called after
+   * Prepare().
+   */
+  gcc_pure
+  virtual PixelSize GetMaximumSize() const = 0;
+
+  /**
    * Called as early as possible after the Widget has been added to
    * the container.  If needed, an implementation might decide to
    * create the Window here, but it is suggested to postpone it to
@@ -141,6 +158,8 @@ class NullWidget : public Widget {
 public:
   virtual ~NullWidget();
 
+  virtual PixelSize GetMinimumSize() const;
+  virtual PixelSize GetMaximumSize() const;
   virtual void Initialise(ContainerWindow &parent, const PixelRect &rc);
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void Unprepare();
