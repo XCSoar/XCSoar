@@ -36,20 +36,20 @@ GridView::GridView(ContainerWindow &parent,
  :look(_look)
 {
   set(parent, x, y, width, height, style);
-  columnWidth = Layout::Scale(78);
-  rowHeight = Layout::Scale(42);
-  horizontalSpacing = Layout::Scale(0);
-  verticalSpacing = Layout::Scale(0);
+  column_width = Layout::Scale(78);
+  row_height = Layout::Scale(42);
+  horizontal_spacing = Layout::Scale(0);
+  vertical_spacing = Layout::Scale(0);
   const PixelRect rc = get_client_rect();
-  numColumns = (rc.right - rc.left + horizontalSpacing)
-    / (columnWidth + horizontalSpacing);
-  if (numColumns == 0)
-    numColumns = 1;
-  numRows = (rc.bottom - rc.top + verticalSpacing)
-    / (rowHeight + verticalSpacing);
-  if (numRows == 0)
-    numRows = 1;
-  currentPage = 0;
+  num_columns = (rc.right - rc.left + horizontal_spacing)
+    / (column_width + horizontal_spacing);
+  if (num_columns == 0)
+    num_columns = 1;
+  num_rows = (rc.bottom - rc.top + vertical_spacing)
+    / (row_height + vertical_spacing);
+  if (num_rows == 0)
+    num_rows = 1;
+  current_page = 0;
 }
 
 void
@@ -62,37 +62,37 @@ GridView::SetItems(const TrivialArray<Window *, MAX_ITEMS> &items)
 UPixelScalar
 GridView::GetColumnWidth() const
 {
-  return columnWidth;
+  return column_width;
 }
 
 UPixelScalar
 GridView::GetRowHeight() const
 {
-  return rowHeight;
+  return row_height;
 }
 
 unsigned
 GridView::GetCurrentPage() const
 {
-  return currentPage;
+  return current_page;
 }
 
 unsigned
 GridView::GetNumColumns() const
 {
-  return numColumns;
+  return num_columns;
 }
 
 unsigned
 GridView::GetNumRows() const
 {
-  return numRows;
+  return num_rows;
 }
 
 void
 GridView::SetNumRows(unsigned _numRows)
 {
-  numRows = _numRows;
+  num_rows = _numRows;
   RefreshLayout();
 }
 
@@ -100,29 +100,29 @@ void
 GridView::RefreshLayout()
 {
   const PixelRect rc = get_client_rect();
-  unsigned maxColumns = (rc.right - rc.left + horizontalSpacing)
-    / (columnWidth + horizontalSpacing);
+  unsigned maxColumns = (rc.right - rc.left + horizontal_spacing)
+    / (column_width + horizontal_spacing);
   if (maxColumns == 0)
     maxColumns = 1;
 
-  unsigned maxRows = (rc.bottom - rc.top + verticalSpacing)
-    / (rowHeight + verticalSpacing);
+  unsigned maxRows = (rc.bottom - rc.top + vertical_spacing)
+    / (row_height + vertical_spacing);
   if (maxRows == 0)
     maxRows = 1;
 
-  if (maxColumns < numColumns)
-     numColumns = maxColumns;
+  if (maxColumns < num_columns)
+     num_columns = maxColumns;
 
-  if (maxRows < numRows)
-    numRows = maxRows;
+  if (maxRows < num_rows)
+    num_rows = maxRows;
 
-  unsigned pageSize = numColumns * numRows;
+  unsigned pageSize = num_columns * num_rows;
 
   // Center grid in the client area
-  unsigned reminderH = rc.right - rc.left + horizontalSpacing
-    - numColumns * (columnWidth + horizontalSpacing);
-  unsigned reminderV = rc.bottom - rc.top + verticalSpacing
-    - numRows * (rowHeight + verticalSpacing);
+  unsigned reminderH = rc.right - rc.left + horizontal_spacing
+    - num_columns * (column_width + horizontal_spacing);
+  unsigned reminderV = rc.bottom - rc.top + vertical_spacing
+    - num_rows * (row_height + vertical_spacing);
   unsigned leftOrigin = rc.left + reminderH / 2;
   unsigned topOrigin= rc.top + reminderV / 2;
 
@@ -131,18 +131,18 @@ GridView::RefreshLayout()
   // the current page remains unchanged
   signed focusPos = GetIndexOfItemInFocus();
   if (focusPos != -1)
-    currentPage = focusPos / pageSize;
+    current_page = focusPos / pageSize;
 
   for (unsigned i = items.size(); i--;) {
     unsigned pagePos = i % pageSize;
     unsigned itemPage = i / pageSize;
-    unsigned colNum = pagePos % numColumns;
-    unsigned rowNum = pagePos / numColumns;
+    unsigned colNum = pagePos % num_columns;
+    unsigned rowNum = pagePos / num_columns;
 
-    items[i]->move(leftOrigin + colNum * (columnWidth + horizontalSpacing),
-                   topOrigin + rowNum * (rowHeight + verticalSpacing),
-                   columnWidth, rowHeight);
-    items[i]->set_visible(itemPage == currentPage);
+    items[i]->move(leftOrigin + colNum * (column_width + horizontal_spacing),
+                   topOrigin + rowNum * (row_height + vertical_spacing),
+                   column_width, row_height);
+    items[i]->set_visible(itemPage == current_page);
   }
 }
 
@@ -167,17 +167,17 @@ void
 GridView::ShowNextPage(Direction direction)
 {
   signed newPos = -1;
-  unsigned pageSize = numColumns * numRows;
+  unsigned pageSize = num_columns * num_rows;
   unsigned lastPage = items.size() / pageSize;
 
-  if (direction == Direction::LEFT && currentPage > 0)
-    currentPage--;
-  else if (direction == Direction::RIGHT && currentPage < lastPage)
-    currentPage++;
+  if (direction == Direction::LEFT && current_page > 0)
+    current_page--;
+  else if (direction == Direction::RIGHT && current_page < lastPage)
+    current_page++;
   else
     return;
 
-  unsigned currentPageSize = currentPage == lastPage
+  unsigned currentPageSize = current_page == lastPage
     ? items.size() % pageSize
     : pageSize;
 
@@ -185,19 +185,19 @@ GridView::ShowNextPage(Direction direction)
 
   if (focusPos != -1) {
     unsigned oldPagePos = focusPos % pageSize;
-    unsigned oldRowNum = oldPagePos / numColumns;
+    unsigned oldRowNum = oldPagePos / num_columns;
 
     if (direction == Direction::LEFT)
       // last column in the same row
-      newPos = currentPage * pageSize + (oldRowNum + 1) * numColumns - 1;
+      newPos = current_page * pageSize + (oldRowNum + 1) * num_columns - 1;
     else { // direction == Direction::RIGHT
       // first column in the same row
-      newPos = currentPage * pageSize + oldRowNum * numColumns;
+      newPos = current_page * pageSize + oldRowNum * num_columns;
 
       if (newPos >= (signed)items.size()) {
         // first columns in the last row
-        newPos = currentPage * pageSize + currentPageSize
-          - (currentPageSize - 1) % numColumns - 1;
+        newPos = current_page * pageSize + currentPageSize
+          - (currentPageSize - 1) % num_columns - 1;
       }
     }
   }
@@ -208,16 +208,16 @@ GridView::ShowNextPage(Direction direction)
        Tab/Shift-Tab behavior instead */
     if (!items[newPos]->has_focus()) {
       if (direction == Direction::LEFT)
-        newPos = GetNextEnabledItemIndex(currentPage * pageSize
+        newPos = GetNextEnabledItemIndex(current_page * pageSize
                                          + currentPageSize, direction);
       else
-        newPos = GetNextEnabledItemIndex(currentPage * pageSize - 1,
+        newPos = GetNextEnabledItemIndex(current_page * pageSize - 1,
                                          direction);
 
       // set focus only if it is on the same page
       if (newPos != -1 &&
-          newPos >= (signed)(currentPage * pageSize) &&
-          newPos < (signed)(currentPage * pageSize + currentPageSize)) {
+          newPos >= (signed)(current_page * pageSize) &&
+          newPos < (signed)(current_page * pageSize + currentPageSize)) {
         items[newPos]->set_focus();
       }
     } else if (focusPos != -1) {
@@ -260,10 +260,10 @@ GridView::GetNextEnabledItemIndex(signed currIndex, Direction direction) const
 signed
 GridView::GetNextItemIndex(unsigned currIndex, Direction direction) const
 {
-  unsigned pageSize = numColumns * numRows;
+  unsigned pageSize = num_columns * num_rows;
   unsigned pagePos = currIndex % pageSize;
-  unsigned colNum = pagePos % numColumns;
-  unsigned rowNum = pagePos / numColumns;
+  unsigned colNum = pagePos % num_columns;
+  unsigned rowNum = pagePos / num_columns;
   signed nextPos = -1;
 
   switch(direction) {
@@ -273,18 +273,18 @@ GridView::GetNextItemIndex(unsigned currIndex, Direction direction) const
     break;
 
   case Direction::RIGHT:
-    if (colNum + 1 < numColumns && currIndex + 1 < items.size())
+    if (colNum + 1 < num_columns && currIndex + 1 < items.size())
       nextPos = currIndex + 1;
     break;
 
   case Direction::UP:
     if (rowNum > 0)
-      nextPos = currIndex - numColumns;
+      nextPos = currIndex - num_columns;
     break;
 
   case Direction::DOWN:
-    if (rowNum + 1 < numRows && currIndex + numColumns < items.size())
-      nextPos = currIndex + numColumns;
+    if (rowNum + 1 < num_rows && currIndex + num_columns < items.size())
+      nextPos = currIndex + num_columns;
     break;
   }
 

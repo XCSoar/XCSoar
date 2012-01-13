@@ -46,13 +46,13 @@ public:
 
 protected:
   StaticArray<Window *, MAX_ITEMS> items;
-  UPixelScalar columnWidth;
-  UPixelScalar rowHeight;
-  UPixelScalar horizontalSpacing;
-  UPixelScalar verticalSpacing;
-  unsigned numColumns;
-  unsigned numRows;
-  unsigned currentPage;
+  UPixelScalar column_width;
+  UPixelScalar row_height;
+  UPixelScalar horizontal_spacing;
+  UPixelScalar vertical_spacing;
+  unsigned num_columns;
+  unsigned num_rows;
+  unsigned current_page;
   const DialogLook &look;
 
 public:
