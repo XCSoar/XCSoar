@@ -27,9 +27,9 @@ Copyright_License {
 #include "ComputerSettings.hpp"
 #include "Math/LowPassFilter.hpp"
 
-static const fixed MinTurnRate(4);
-static const fixed CruiseClimbSwitch(15);
-static const fixed ClimbCruiseSwitch(10);
+static const fixed min_turn_rate(4);
+static const fixed cruise_climb_switch(15);
+static const fixed climb_cruise_switch(10);
 
 void
 CirclingComputer::TurnRate(CirclingInfo &circling_info,
@@ -48,13 +48,13 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
     return;
 
   // Calculate time passed since last calculation
-  const fixed dT = basic.time - last_basic.time;
-  assert(positive(dT));
+  const fixed dt = basic.time - last_basic.time;
+  assert(positive(dt));
 
   circling_info.turn_rate =
-    (basic.track - last_basic.track).AsDelta().Degrees() / dT;
+    (basic.track - last_basic.track).AsDelta().Degrees() / dt;
   circling_info.turn_rate_heading =
-    (calculated.heading - last_calculated.heading).AsDelta().Degrees() / dT;
+    (calculated.heading - last_calculated.heading).AsDelta().Degrees() / dt;
 }
 
 void
@@ -70,31 +70,32 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
 
   // JMW limit rate to 50 deg per second otherwise a big spike
   // will cause spurious lock on circling for a long time
-  fixed Rate = max(fixed(-50), min(fixed(50), calculated.turn_rate));
+  fixed turn_rate = max(fixed(-50), min(fixed(50), calculated.turn_rate));
 
   // Make the turn rate more smooth using the LowPassFilter
-  Rate = LowPassFilter(last_calculated.turn_rate_smoothed, Rate, fixed(0.3));
-  circling_info.turn_rate_smoothed = Rate;
-  circling_info.turning = fabs(Rate) >= MinTurnRate;
+  turn_rate = LowPassFilter(last_calculated.turn_rate_smoothed,
+                            turn_rate, fixed(0.3));
+  circling_info.turn_rate_smoothed = turn_rate;
+  circling_info.turning = fabs(turn_rate) >= min_turn_rate;
 
   // Force cruise or climb mode if external device says so
-  bool forcecruise = false;
-  bool forcecircling = false;
+  bool force_cruise = false;
+  bool force_circling = false;
   if (settings_computer.external_trigger_cruise_enabled && !basic.gps.replay) {
     switch (basic.switch_state.flight_mode) {
     case SwitchInfo::FlightMode::UNKNOWN:
-      forcecircling = false;
-      forcecruise = false;
+      force_circling = false;
+      force_cruise = false;
       break;
 
     case SwitchInfo::FlightMode::CIRCLING:
-      forcecircling = true;
-      forcecruise = false;
+      force_circling = true;
+      force_cruise = false;
       break;
 
     case SwitchInfo::FlightMode::CRUISE:
-      forcecircling = false;
-      forcecruise = true;
+      force_circling = false;
+      force_cruise = true;
       break;
     }
   }
@@ -102,7 +103,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   switch (calculated.turn_mode) {
   case CirclingMode::CRUISE:
     // If (in cruise mode and beginning of circling detected)
-    if (circling_info.turning || forcecircling) {
+    if (circling_info.turning || force_circling) {
       // Remember the start values of the turn
       circling_info.turn_start_time = basic.time;
       circling_info.turn_start_location = basic.location;
@@ -110,17 +111,17 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
       circling_info.turn_start_energy_height = basic.energy_height;
       circling_info.turn_mode = CirclingMode::POSSIBLE_CLIMB;
     }
-    if (!forcecircling)
+    if (!force_circling)
       break;
 
   case CirclingMode::POSSIBLE_CLIMB:
-    if (forcecruise) {
+    if (force_cruise) {
       circling_info.turn_mode = CirclingMode::CRUISE;
       break;
     }
-    if (circling_info.turning || forcecircling) {
-      if (((basic.time - calculated.turn_start_time) > CruiseClimbSwitch)
-          || forcecircling) {
+    if (circling_info.turning || force_circling) {
+      if (((basic.time - calculated.turn_start_time) > cruise_climb_switch)
+          || force_circling) {
         // yes, we are certain now that we are circling
         circling_info.circling = true;
 
@@ -140,7 +141,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     break;
 
   case CirclingMode::CLIMB:
-    if (!circling_info.turning || forcecruise) {
+    if (!circling_info.turning || force_cruise) {
       // Remember the end values of the turn
       circling_info.turn_start_time = basic.time;
       circling_info.turn_start_location = basic.location;
@@ -150,18 +151,18 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
       // JMW Transition to cruise, due to not properly turning
       circling_info.turn_mode = CirclingMode::POSSIBLE_CRUISE;
     }
-    if (!forcecruise)
+    if (!force_cruise)
       break;
 
   case CirclingMode::POSSIBLE_CRUISE:
-    if (forcecircling) {
+    if (force_circling) {
       circling_info.turn_mode = CirclingMode::CLIMB;
       break;
     }
 
-    if (!circling_info.turning || forcecruise) {
-      if (((basic.time - circling_info.turn_start_time) > ClimbCruiseSwitch)
-          || forcecruise) {
+    if (!circling_info.turning || force_cruise) {
+      if (((basic.time - circling_info.turn_start_time) > climb_cruise_switch)
+          || force_cruise) {
         // yes, we are certain now that we are cruising again
         circling_info.circling = false;
 
