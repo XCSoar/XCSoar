@@ -51,6 +51,9 @@ public:
   ManagedWidget(ContainerWindow &_parent)
     :parent(_parent), widget(NULL) {}
 
+  ManagedWidget(ContainerWindow &_parent, Widget *_widget)
+    :parent(_parent), widget(_widget), prepared(false) {}
+
   ~ManagedWidget() {
     Clear();
   }
