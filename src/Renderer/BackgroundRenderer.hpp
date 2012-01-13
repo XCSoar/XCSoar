@@ -47,7 +47,7 @@ class BackgroundRenderer {
   const RasterTerrain *terrain;
   const RasterWeather *weather;
   TerrainRenderer *renderer;
-  Angle sun_azimuth;
+  Angle shading_angle;
 
 public:
   BackgroundRenderer();
@@ -59,15 +59,15 @@ public:
 
   bool DrawSpotHeights(Canvas& canvas, LabelBlock& block);
 
-  void SetSunAngle(const WindowProjection &projection,
-                   const TerrainRendererSettings &settings,
-                   const NMEAInfo &basic, const DerivedInfo &calculated);
+  void SetShadingAngle(const WindowProjection &projection,
+                       const TerrainRendererSettings &settings,
+                       const NMEAInfo &basic, const DerivedInfo &calculated);
   void Reset();
   void SetTerrain(const RasterTerrain *terrain);
   void SetWeather(const RasterWeather *weather);
 
 private:
-  void SetSunAngle(const WindowProjection& proj, Angle angle);
+  void SetShadingAngle(const WindowProjection& proj, Angle angle);
   static void DrawSpotHeight(Canvas &canvas,  LabelBlock &block,
                              const TCHAR *Buffer, RasterPoint pt);
 };

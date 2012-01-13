@@ -110,8 +110,8 @@ TargetMapWindow::set(ContainerWindow &parent,
 void
 TargetMapWindow::RenderTerrain(Canvas &canvas)
 {
-  background.SetSunAngle(projection, GetMapSettings().terrain,
-                         Basic(), Calculated());
+  background.SetShadingAngle(projection, GetMapSettings().terrain,
+                             Basic(), Calculated());
   background.Draw(canvas, projection, GetMapSettings().terrain);
 }
 

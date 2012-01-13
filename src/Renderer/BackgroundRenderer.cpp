@@ -38,7 +38,7 @@ BackgroundRenderer::BackgroundRenderer():
   terrain(NULL),
   weather(NULL),
   renderer(NULL),
-  sun_azimuth(Angle::Degrees(fixed(45)))
+  shading_angle(Angle::Degrees(fixed(45)))
 {
 }
 
@@ -97,35 +97,35 @@ BackgroundRenderer::Draw(Canvas& canvas,
   }
 
   renderer->SetSettings(terrain_settings);
-  renderer->Generate(proj, sun_azimuth);
+  renderer->Generate(proj, shading_angle);
   renderer->Draw(canvas, proj);
 }
 
 void
-BackgroundRenderer::SetSunAngle(const WindowProjection& projection,
-                                const TerrainRendererSettings &settings,
-                                const NMEAInfo &basic,
-                                const DerivedInfo &calculated)
+BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
+                                    const TerrainRendererSettings &settings,
+                                    const NMEAInfo &basic,
+                                    const DerivedInfo &calculated)
 {
   if (settings.slope_shading == sstWind &&
       calculated.wind_available &&
       calculated.wind.norm >= fixed_half)
-    SetSunAngle(projection, calculated.wind.bearing);
+    SetShadingAngle(projection, calculated.wind.bearing);
 
   else if (settings.slope_shading == sstSun &&
            calculated.sun_data_available)
-    SetSunAngle(projection, calculated.sun_azimuth);
+    SetShadingAngle(projection, calculated.sun_azimuth);
 
   else
-    SetSunAngle(projection, Angle::Degrees(fixed(-45.0)));
+    SetShadingAngle(projection, Angle::Degrees(fixed(-45.0)));
 
 }
 
 void
-BackgroundRenderer::SetSunAngle(const WindowProjection& projection,
-                                Angle angle)
+BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
+                                    Angle angle)
 {
-  sun_azimuth = angle - projection.GetScreenAngle();
+  shading_angle = angle - projection.GetScreenAngle();
 }
 
 void

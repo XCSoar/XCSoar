@@ -32,7 +32,7 @@ Copyright_License {
 void
 MapWindow::RenderTerrain(Canvas &canvas)
 {
-  background.SetSunAngle(render_projection, GetMapSettings().terrain,
+  background.SetShadingAngle(render_projection, GetMapSettings().terrain,
                            Basic(), Calculated());
   background.Draw(canvas, render_projection, GetMapSettings().terrain);
 }
