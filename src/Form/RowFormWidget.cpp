@@ -48,8 +48,10 @@ RowFormWidget::RowFormWidget(const DialogLook &_look,
 
 RowFormWidget::~RowFormWidget()
 {
-  PanelControl *panel = (PanelControl *)GetWindow();
-  delete panel;
+  if (IsDefined()) {
+    PanelControl *panel = (PanelControl *)GetWindow();
+    delete panel;
+  }
 }
 
 void
