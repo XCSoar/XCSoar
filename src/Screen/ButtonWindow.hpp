@@ -88,6 +88,10 @@ public:
     set(parent, text, 0, rc, style);
   }
 
+  unsigned GetID() const {
+    return id;
+  }
+
   void set_text(const TCHAR *_text) {
     assert_none_locked();
     AssertThread();
