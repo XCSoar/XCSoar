@@ -104,7 +104,6 @@ BackgroundRenderer::Draw(Canvas& canvas,
 void
 BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
                                     const TerrainRendererSettings &settings,
-                                    const NMEAInfo &basic,
                                     const DerivedInfo &calculated)
 {
   if (settings.slope_shading == SlopeShading::WIND &&

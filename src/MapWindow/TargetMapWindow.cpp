@@ -111,7 +111,7 @@ void
 TargetMapWindow::RenderTerrain(Canvas &canvas)
 {
   background.SetShadingAngle(projection, GetMapSettings().terrain,
-                             Basic(), Calculated());
+                             Calculated());
   background.Draw(canvas, projection, GetMapSettings().terrain);
 }
 

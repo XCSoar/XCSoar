@@ -61,7 +61,7 @@ public:
 
   void SetShadingAngle(const WindowProjection &projection,
                        const TerrainRendererSettings &settings,
-                       const NMEAInfo &basic, const DerivedInfo &calculated);
+                       const DerivedInfo &calculated);
   void Reset();
   void SetTerrain(const RasterTerrain *terrain);
   void SetWeather(const RasterWeather *weather);
