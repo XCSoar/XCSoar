@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 #include "ComputerSettings.hpp"
@@ -53,8 +54,13 @@ enum ControlIndex {
   Temperature,
 };
 
-class FlightSetupPanel : public RowFormWidget {
-  WndButton &dump_button;
+enum Actions {
+  DUMP = 100,
+};
+
+class FlightSetupPanel : public RowFormWidget,
+                         public ActionListener {
+  WndButton *dump_button;
 
   GlidePolar glide_polar;
   bool glide_polar_modified;
@@ -62,13 +68,17 @@ class FlightSetupPanel : public RowFormWidget {
   fixed last_altitude;
 
 public:
-  FlightSetupPanel(WndButton &_dump_button)
+  FlightSetupPanel()
     :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(78)),
-     dump_button(_dump_button),
+     dump_button(NULL),
      glide_polar(CommonInterface::GetComputerSettings().glide_polar_task),
      glide_polar_modified(false),
      last_altitude(-2)
   {}
+
+  void SetDumpButton(WndButton *_dump_button) {
+    dump_button = _dump_button;
+  }
 
   void SetButtons();
   void SetBallast();
@@ -96,19 +106,20 @@ public:
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
+
+  virtual void OnAction(int id);
 };
 
-static WndForm *wf;
 static FlightSetupPanel *instance;
 
 void
 FlightSetupPanel::SetButtons()
 {
-  dump_button.set_visible(glide_polar.HasBallast());
+  dump_button->set_visible(glide_polar.HasBallast());
 
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
-  dump_button.SetCaption(settings.ballast_timer_active
-                         ? _("Stop") : _("Dump"));
+  dump_button->SetCaption(settings.ballast_timer_active
+                          ? _("Stop") : _("Dump"));
 }
 
 void
@@ -352,16 +363,11 @@ FlightSetupPanel::Save(bool &changed, bool &require_restart)
   return true;
 }
 
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
+void
+FlightSetupPanel::OnAction(int id)
 {
-  wf->SetModalResult(mrOK);
-}
-
-static void
-OnBallastDump(gcc_unused WndButton &Sender)
-{
-  instance->FlipBallastTimer();
+  if (id == DUMP)
+    FlipBallastTimer();
 }
 
 /**
@@ -378,42 +384,16 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 void
 dlgBasicSettingsShowModal()
 {
-  const DialogLook &dialog_look = UIGlobals::GetDialogLook();
-
   const PixelRect dialog_rc = {
     0, 0, Layout::Scale(173), Layout::Scale(220),
   };
 
-  WindowStyle dialog_style;
-  dialog_style.Hide();
-  dialog_style.ControlParent();
+  instance = new FlightSetupPanel();
 
-  wf = new WndForm(UIGlobals::GetMainWindow(), dialog_look,
-                   dialog_rc, _("Flight Setup"), dialog_style);
-  wf->SetTimerNotify(OnTimerNotify);
+  WidgetDialog dialog(_("Flight Setup"), dialog_rc, instance);
+  dialog.SetTimerNotify(OnTimerNotify);
+  instance->SetDumpButton(dialog.AddButton(_("Dump"), instance, DUMP));
+  dialog.AddButton(_("OK"), mrOK);
 
-  ContainerWindow &client_area = wf->GetClientAreaWindow();
-
-  ButtonPanel buttons(client_area, dialog_look);
-  WndButton &dump_button = *buttons.Add(_("Dump"), OnBallastDump);
-  buttons.Add(_("OK"), OnCloseClicked);
-
-  const PixelRect remaining_rc = buttons.GetRemainingRect();
-
-  instance = new FlightSetupPanel(dump_button);
-  Widget &widget = *instance;
-  widget.Initialise(client_area, remaining_rc);
-  widget.Prepare(client_area, remaining_rc);
-  widget.Show(remaining_rc);
-
-  if (wf->ShowModal() == mrOK) {
-    bool changed, require_restart;
-    widget.Save(changed, require_restart);
-  }
-
-  widget.Hide();
-  widget.Unprepare();
-  delete instance;
-
-  delete wf;
+  dialog.ShowModal();
 }
