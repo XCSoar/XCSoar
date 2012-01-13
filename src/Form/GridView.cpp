@@ -150,7 +150,7 @@ GridView::RefreshLayout()
  * -1 means that there is no window in focus
  */
 signed
-GridView::GetIndexOfItemInFocus()
+GridView::GetIndexOfItemInFocus() const
 {
   signed index = -1;
   for (unsigned i = items.size(); i--;) {
@@ -235,7 +235,7 @@ GridView::ShowNextPage(Direction direction)
 }
 
 signed
-GridView::GetNextEnabledItemIndex(signed currIndex, Direction direction)
+GridView::GetNextEnabledItemIndex(signed currIndex, Direction direction) const
 {
   signed nextPos = -1;
   if (direction == Direction::UP || direction == Direction::LEFT) {
@@ -258,7 +258,7 @@ GridView::GetNextEnabledItemIndex(signed currIndex, Direction direction)
  * going to a different page
  */
 signed
-GridView::GetNextItemIndex(unsigned currIndex, Direction direction)
+GridView::GetNextItemIndex(unsigned currIndex, Direction direction) const
 {
   unsigned pageSize = numColumns * numRows;
   unsigned pagePos = currIndex % pageSize;

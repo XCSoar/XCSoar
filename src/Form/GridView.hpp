@@ -69,14 +69,14 @@ public:
   unsigned GetNumColumns() const;
   unsigned GetNumRows() const;
   void SetNumRows(unsigned numRows);
-  signed GetIndexOfItemInFocus();
+  signed GetIndexOfItemInFocus() const;
   void MoveFocus(Direction direction);
   void ShowNextPage(Direction direction = Direction::RIGHT);
   void RefreshLayout();
 
 protected:
-  signed GetNextItemIndex(unsigned currIndex, Direction direction);
-  signed GetNextEnabledItemIndex(signed currIndex, Direction direction);
+  signed GetNextItemIndex(unsigned currIndex, Direction direction) const;
+  signed GetNextEnabledItemIndex(signed currIndex, Direction direction) const;
 
 #ifdef USE_GDI
   virtual void OnPaint(Canvas &canvas);
