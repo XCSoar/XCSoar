@@ -46,6 +46,7 @@ TEST1_LDLIBS = \
 
 define link-harness-program
 $(1)_SOURCES = \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/$(1).cpp
 $(1)_LDADD = $(TEST1_LDADD)
@@ -126,6 +127,7 @@ TEST_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -255,12 +257,14 @@ TEST_ROUTE_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/test_route.cpp
 TEST_ROUTE_DEPENDS = TEST1 JASPER
 $(eval $(call link-program,test_route,TEST_ROUTE))
 
 TEST_REPLAY_TASK_SOURCES = \
 	$(SRC)/xmlParser.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/test_replay_task.cpp
 TEST_REPLAY_TASK_DEPENDS = TEST1
 $(eval $(call link-program,test_replay_task,TEST_REPLAY_TASK))
@@ -273,6 +277,7 @@ $(eval $(call link-program,TestMathTables,TEST_MATH_TABLES))
 
 TEST_LOAD_TASK_SOURCES = \
 	$(SRC)/xmlParser.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/test_load_task.cpp
 TEST_LOAD_TASK_DEPENDS = TEST1
 $(eval $(call link-program,test_load_task,TEST_LOAD_TASK))
@@ -998,6 +1003,7 @@ RUN_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -1117,6 +1123,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -1181,6 +1188,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
@@ -1219,6 +1227,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
@@ -1487,6 +1496,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
@@ -1825,6 +1835,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/UtilsFile.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
@@ -1875,6 +1886,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
