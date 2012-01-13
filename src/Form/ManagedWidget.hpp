@@ -58,6 +58,16 @@ public:
     Clear();
   }
 
+  /**
+   * Return the Widget object (in the current state), and "forget"
+   * about it.
+   */
+  Widget *Steal() {
+    Widget *result = widget;
+    widget = NULL;
+    return result;
+  }
+
   bool IsDefined() const {
     return widget != NULL;
   }
