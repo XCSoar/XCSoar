@@ -46,11 +46,10 @@ namespace SunEphemeris
   /**
    * Calculates all sun-related important times
    * depending on time of year and location
-   * @param Location Location to be used in calculation
-   * @param Basic NMEA_INFO for current date
-   * @param Calculated DERIVED_INFO (not yet used)
-   * @param TimeZone The timezone
-   * @return Sunset time
+   * @param location Where?
+   * @param date_time When?
+   * @param time_zone UTC offset for When?
+   * @return Attributes of the sun
    */
   Result CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
                       fixed time_zone);
