@@ -160,7 +160,11 @@ PaintDeviceListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
   const TCHAR *name = config.GetPortName(buffer1, 128);
 
   if (config.UsesDriver()) {
-    _sntprintf(buffer2, 128, _("%s on %s"), config.driver_name.c_str(), name);
+    const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
+    const TCHAR *driver_name = (driver != NULL) ? driver->display_name :
+                                                  config.driver_name.c_str();
+
+    _sntprintf(buffer2, 128, _("%s on %s"), driver_name, name);
     name = buffer2;
   }
 
