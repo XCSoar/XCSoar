@@ -26,20 +26,22 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "LocalTime.hpp"
+#include "Math/SunEphemeris.hpp"
 
 void
 TimesStatusPanel::Refresh()
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  const DerivedInfo &calculated = CommonInterface::Calculated();
-  const FlyingState &flight = calculated.flight;
+  const FlyingState &flight = CommonInterface::Calculated().flight;
 
   TCHAR Temp[64];
 
-  if (calculated.sun_data_available) {
-    fixed sunsettime = calculated.sunset_time;
-    int sunsethours = (int)sunsettime;
-    int sunsetmins = (int)((sunsettime - fixed(sunsethours)) * 60);
+  if (basic.location_available && basic.date_available) {
+    SunEphemeris::Result sun = SunEphemeris::CalcSunTimes(
+        basic.location, basic.date_time_utc, fixed(GetUTCOffset()) / 3600);
+
+    int sunsethours = (int)sun.time_of_sunset;
+    int sunsetmins = (int)((sun.time_of_sunset - fixed(sunsethours)) * 60);
 
     _stprintf(Temp, _T("%02d:%02d"), sunsethours, sunsetmins);
     SetFormValue(form, _T("prpSunset"), Temp);
