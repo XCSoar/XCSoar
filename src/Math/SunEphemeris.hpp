@@ -53,6 +53,16 @@ namespace SunEphemeris
    */
   Result CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
                       fixed time_zone);
+
+  /**
+   * Calculates only the sun's azimuth
+   * @param location Where?
+   * @param date_time When?
+   * @param time_zone UTC offset for When?
+   * @return Attributes of the sun
+   */
+  Angle CalcAzimuth(const GeoPoint &location, const BrokenDateTime &date_time,
+                    fixed time_zone);
 }
 
 #endif

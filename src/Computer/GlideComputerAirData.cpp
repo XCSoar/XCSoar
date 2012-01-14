@@ -708,9 +708,7 @@ GlideComputerAirData::ProcessSun()
 
   DerivedInfo &calculated = SetCalculated();
 
-  SunEphemeris::Result sun = SunEphemeris::CalcSunTimes(
+  calculated.sun_azimuth = SunEphemeris::CalcAzimuth(
       Basic().location, Basic().date_time_utc, fixed(GetUTCOffset()) / 3600);
-
-  calculated.sun_azimuth = sun.azimuth;
   calculated.sun_data_available.Update(Basic().clock);
 }

@@ -222,3 +222,26 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
 
   return result;
 }
+
+Angle
+SunEphemeris::CalcAzimuth(const GeoPoint &location,
+                          const BrokenDateTime &date_time,
+                          const fixed time_zone)
+{
+  assert(date_time.Plausible());
+
+  fixed days_to_j2000 = FNday(date_time);
+
+  Angle l = GetMeanSunLongitude(days_to_j2000);
+
+  // Use GetEclipticLongitude to find the ecliptic longitude of the Sun
+  Angle lambda = GetEclipticLongitude(days_to_j2000, l);
+
+  // Obliquity of the ecliptic
+  Angle obliquity = Angle::Degrees(fixed(23.439) - fixed(.0000004) * days_to_j2000);
+
+  // Find the DEC of the Sun
+  Angle delta = Angle::Radians(asin(obliquity.sin() * lambda.sin()));
+
+  return CalculateAzimuth(location, date_time, time_zone, delta);
+}
