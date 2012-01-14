@@ -97,6 +97,24 @@ public:
       return false;
   }
 
+  /**
+   * Checks if the time stamp is older than the given time.
+   *
+   * @param now the current time stamp in seconds
+   * @param max_age the maximum age in seconds
+   * @return true if the value is expired
+   */
+  bool IsOlderThan(fixed _now, fixed _max_age) const {
+    if (!IsValid())
+      return true;
+
+    const uint32_t now = Import(_now);
+    const uint32_t max_age = Import(_max_age);
+
+    return (now < last || /* time warp? */
+            now > last + max_age); /* expired? */
+  }
+
   bool IsValid() const {
     return last > 0;
   }

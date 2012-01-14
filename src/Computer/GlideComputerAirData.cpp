@@ -708,6 +708,11 @@ GlideComputerAirData::ProcessSun()
 
   DerivedInfo &calculated = SetCalculated();
 
+  // Only calculate new azimuth if data is older than 15 minutes
+  if (!calculated.sun_data_available.IsOlderThan(Basic().clock, fixed(15 * 60)))
+    return;
+
+  // Calculate new azimuth
   calculated.sun_azimuth = SunEphemeris::CalcAzimuth(
       Basic().location, Basic().date_time_utc, fixed(GetUTCOffset()) / 3600);
   calculated.sun_data_available.Update(Basic().clock);
