@@ -44,6 +44,7 @@ Copyright_License {
 #include "Device/Driver/Flytec.hpp"
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Driver/Westerboer.hpp"
+#include "Device/Driver/WesterboerVW921.hpp"
 #include "Device/Driver/FLARM.hpp"
 #include "Util/Macros.hpp"
 
@@ -72,6 +73,7 @@ static const struct DeviceRegister *const DeviceRegister[] = {
   &westerboer_device_driver,
   &imi_device_driver,
   &flarm_device,
+  &westerboer_vw921_device_driver,
   NULL
 };
 

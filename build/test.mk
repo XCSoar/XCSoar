@@ -508,6 +508,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Driver/Leonardo.cpp \
 	$(SRC)/Device/Driver/ILEC.cpp \
 	$(SRC)/Device/Driver/Westerboer.cpp \
+	$(SRC)/Device/Driver/WesterboerVW921.cpp \
 	$(SRC)/Device/Driver/PosiGraph.cpp \
 	$(SRC)/Device/Driver/Vega.cpp \
 	$(SRC)/Device/Driver/Zander.cpp \
