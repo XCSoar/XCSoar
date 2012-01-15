@@ -259,14 +259,11 @@ HeightReferenceType
 Deserialiser::height_ref(const TCHAR *nodename) const
 {
   tstring type;
-  if (!m_node.get_attribute(nodename, type)) {
-    return hrAGL;
-  }
+  if (m_node.get_attribute(nodename, type) &&
+      StringIsEqual(type.c_str(), _T("MSL")))
+    return hrMSL;
 
-  if (StringIsEqual(type.c_str(), _T("AGL")))
-    return hrAGL;
-
-  return hrMSL;
+  return hrAGL;
 }
 
 TaskBehaviour::FactoryType
