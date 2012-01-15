@@ -49,18 +49,20 @@ TaskPropertiesPanel::InitView()
   WndProperty* wp;
 
   static gcc_constexpr_data StaticEnumChoice start_max_height_ref_list[] = {
-    { hrAGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point).") },
-    { hrMSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level).") },
+    { (unsigned)HeightReferenceType::AGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point).") },
+    { (unsigned)HeightReferenceType::MSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level).") },
     { 0 }
   };
-  LoadFormProperty(form, _T("prpStartHeightRef"), start_max_height_ref_list, hrAGL);
+  LoadFormProperty(form, _T("prpStartHeightRef"), start_max_height_ref_list,
+                   (unsigned)HeightReferenceType::AGL);
 
   static gcc_constexpr_data StaticEnumChoice finish_min_height_ref_list[] = {
-    { hrAGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point).") },
-    { hrMSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level).") },
+    { (unsigned)HeightReferenceType::AGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point).") },
+    { (unsigned)HeightReferenceType::MSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level).") },
     { 0 }
   };
-  LoadFormProperty(form, _T("prpFinishHeightRef"), finish_min_height_ref_list, hrAGL);
+  LoadFormProperty(form, _T("prpFinishHeightRef"), finish_min_height_ref_list,
+                   (unsigned)HeightReferenceType::AGL);
 
   wp = (WndProperty *)form.FindByName(_T("prpTaskType"));
   if (wp) {
@@ -109,10 +111,10 @@ TaskPropertiesPanel::RefreshView()
                    ugAltitude, p.finish_min_height);
 
   ShowFormControl(form, _T("prpStartHeightRef"), !fai_start_finish);
-  LoadFormProperty(form, _T("prpStartHeightRef"), p.start_max_height_ref);
+  LoadFormProperty(form, _T("prpStartHeightRef"), (unsigned)p.start_max_height_ref);
 
   ShowFormControl(form, _T("prpFinishHeightRef"), !fai_start_finish);
-  LoadFormProperty(form, _T("prpFinishHeightRef"), p.finish_min_height_ref);
+  LoadFormProperty(form, _T("prpFinishHeightRef"), (unsigned)p.finish_min_height_ref);
 
   wTaskView->invalidate();
 

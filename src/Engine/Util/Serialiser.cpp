@@ -239,9 +239,9 @@ const TCHAR*
 Serialiser::height_ref(HeightReferenceType the_height_ref) const
 {
   switch(the_height_ref) {
-  case hrAGL:
+  case HeightReferenceType::AGL:
     return _T("AGL");
-  case hrMSL:
+  case HeightReferenceType::MSL:
     return _T("MSL");
   }
   return NULL;

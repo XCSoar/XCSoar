@@ -489,7 +489,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   if (factType == TaskBehaviour::FactoryType::AAT ||
       factType == TaskBehaviour::FactoryType::RACING) {
     beh.start_max_height = (unsigned)task_info.max_start_altitude;
-    beh.start_max_height_ref = hrMSL;
+    beh.start_max_height_ref = HeightReferenceType::MSL;
   }
   task->set_ordered_task_behaviour(beh);
 

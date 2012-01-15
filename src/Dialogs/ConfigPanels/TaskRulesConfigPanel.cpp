@@ -90,12 +90,12 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   // Expert item
   static gcc_constexpr_data StaticEnumChoice start_max_height_ref_list[] = {
-    { hrAGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point).") },
-    { hrMSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level).") },
+    { (unsigned)HeightReferenceType::AGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point).") },
+    { (unsigned)HeightReferenceType::MSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level).") },
     { 0 }
   };
   AddEnum(_("Start height ref."), _T(""), start_max_height_ref_list,
-          task_behaviour.ordered_defaults.start_max_height_ref);
+          (unsigned)task_behaviour.ordered_defaults.start_max_height_ref);
 
   AddSpacer();
 
@@ -108,12 +108,12 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   // Expert item
   static gcc_constexpr_data StaticEnumChoice finish_min_height_ref_list[] = {
-    { hrAGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point).") },
-    { hrMSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level).") },
+    { (unsigned)HeightReferenceType::AGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point).") },
+    { (unsigned)HeightReferenceType::MSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level).") },
     { 0 }
   };
   AddEnum(_("Finish height ref."), _T(""), finish_min_height_ref_list,
-          task_behaviour.ordered_defaults.finish_min_height_ref);
+          (unsigned)task_behaviour.ordered_defaults.finish_min_height_ref);
 
   AddSpacer();
 

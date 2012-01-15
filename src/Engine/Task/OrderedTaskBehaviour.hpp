@@ -24,12 +24,14 @@
 
 #include "Math/fixed.hpp"
 
+#include <stdint.h>
+
 struct AircraftState;
 struct TaskStartMargins;
 
-enum HeightReferenceType {
-  hrAGL,
-  hrMSL,
+enum class HeightReferenceType: uint8_t {
+  AGL,
+  MSL,
 };
 
 /**

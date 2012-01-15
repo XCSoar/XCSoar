@@ -64,7 +64,7 @@ FinishPoint::GetElevation() const
   } else {
     return max(nominal_elevation,
                fixed(m_ordered_task_behaviour.finish_min_height) +
-               (m_ordered_task_behaviour.finish_min_height_ref == hrAGL ?
+               (m_ordered_task_behaviour.finish_min_height_ref == HeightReferenceType::AGL ?
                  GetBaseElevation() : fixed_zero));
   }
 }

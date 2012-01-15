@@ -261,9 +261,9 @@ Deserialiser::height_ref(const TCHAR *nodename) const
   tstring type;
   if (m_node.get_attribute(nodename, type) &&
       StringIsEqual(type.c_str(), _T("MSL")))
-    return hrMSL;
+    return HeightReferenceType::MSL;
 
-  return hrAGL;
+  return HeightReferenceType::AGL;
 }
 
 TaskBehaviour::FactoryType
