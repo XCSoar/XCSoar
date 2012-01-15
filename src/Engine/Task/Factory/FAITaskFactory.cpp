@@ -130,7 +130,6 @@ FAITaskFactory::GetPointDefaultSizes(const LegalPointType type,
                                           fixed &turnpoint_radius,
                                           fixed &finish_radius) const
 {
-  start_radius = finish_radius = fixed(1000);
   turnpoint_radius = fixed(500);
 
   switch (type) {
@@ -152,6 +151,7 @@ FAITaskFactory::GetPointDefaultSizes(const LegalPointType type,
   case FINISH_SECTOR:
   case FINISH_CYLINDER:
   case START_BGA:
+    start_radius = finish_radius = fixed(1000);
     break;
   }
 }
