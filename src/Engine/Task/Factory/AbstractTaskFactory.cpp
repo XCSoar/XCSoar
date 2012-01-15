@@ -1099,7 +1099,7 @@ AbstractTaskFactory::TestFAITriangle(const fixed d1, const fixed d2,
   const fixed d_wp = d1 + d2 + d3;
   const fixed d_wp28 = d_wp * fixed(0.28);
 
-  /**
+  /*
    * A triangle is a valid FAI-triangle, if no side is less than
    * 28% of the total length (total length less than 750 km), or no
    * side is less than 25% or larger than 45% of the total length
