@@ -108,7 +108,7 @@ DemoReplayGlue::ResetTime()
 }
 
 void
-DemoReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
+DemoReplayGlue::OnAdvance(const GeoPoint &loc, const fixed speed,
                            const Angle bearing, const fixed alt,
                            const fixed baroalt, const fixed t)
 {
@@ -118,8 +118,8 @@ DemoReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
 void
 DemoReplayGlue::Start()
 {
-  ProtectedTaskManager::ExclusiveLease task_manager(*m_task_manager);
-  ProtectedTaskAccessor ta(task_manager, fixed_zero);
+  ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
+  ProtectedTaskAccessor ta(protected_task_manager, fixed_zero);
   parms.realistic();
   parms.start_alt = device_blackboard->Basic().nav_altitude;
   DemoReplay::Start(ta, device_blackboard->Basic().location);
@@ -129,7 +129,7 @@ DemoReplayGlue::Start()
 }
 
 void
-DemoReplayGlue::on_stop()
+DemoReplayGlue::OnStop()
 {
   device_blackboard->StopReplay();
 }
@@ -148,12 +148,12 @@ DemoReplayGlue::Update()
     floor_alt += device_blackboard->Calculated().terrain_altitude;
   }
 
-  ProtectedTaskManager::ExclusiveLease task_manager(*m_task_manager);
-  ProtectedTaskAccessor ta(task_manager, floor_alt);
+  ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
+  ProtectedTaskAccessor ta(protected_task_manager, floor_alt);
   bool retval = DemoReplay::Update(ta);
 
   const AircraftState s = aircraft.GetState();
-  on_advance(s.location, s.ground_speed, s.track, s.altitude,
+  OnAdvance(s.location, s.ground_speed, s.track, s.altitude,
              s.altitude, s.time);
 
   return retval;

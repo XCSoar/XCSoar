@@ -57,7 +57,7 @@ DemoReplay::Stop()
 {
   autopilot.Stop();
   enabled = false;
-  on_stop();
+  OnStop();
 }
 
 bool

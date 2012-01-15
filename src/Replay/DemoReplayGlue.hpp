@@ -33,21 +33,22 @@ class DemoReplayGlue:
   public DemoReplay
 {
   PeriodClock clock;
-  ProtectedTaskManager* m_task_manager;
+  ProtectedTaskManager* task_manager;
 
 public:
-  DemoReplayGlue(ProtectedTaskManager& task_manager):
-    m_task_manager(&task_manager) {};
+  DemoReplayGlue(ProtectedTaskManager &_task_manager)
+    :task_manager(&_task_manager) {}
 
   virtual void Start();
   virtual bool Update();
+
 protected:
   virtual bool UpdateTime();
   virtual void ResetTime();
-  virtual void on_advance(const GeoPoint &loc,
-                          const fixed speed, const Angle bearing,
-                          const fixed alt, const fixed baroalt, const fixed t);
-  virtual void on_stop();
+  virtual void OnAdvance(const GeoPoint &loc, const fixed speed,
+                         const Angle bearing, const fixed alt,
+                         const fixed baroalt, const fixed t);
+  virtual void OnStop();
 };
 
 #endif
