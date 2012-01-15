@@ -291,4 +291,28 @@ WriteUnalignedBE16(uint16_t *p, uint16_t value)
 #endif
 }
 
+gcc_pure
+static inline uint32_t
+ReadUnalignedLE32(const uint32_t *p)
+{
+#ifdef CAN_READ_WRITE_UNALIGNED
+  return FromLE32(*p);
+#else
+  const uint8_t *c = (const uint8_t *)p;
+  return c[0] | (c[1] << 8) | (c[2] << 16) | (c[3] << 24);
+#endif
+}
+
+gcc_pure
+static inline uint32_t
+ReadUnalignedBE32(const uint32_t *p)
+{
+#ifdef CAN_READ_WRITE_UNALIGNED
+  return FromBE32(*p);
+#else
+  const uint8_t *c = (const uint8_t *)p;
+  return c[3] | (c[2] << 8) | (c[1] << 16) | (c[0] << 24);
+#endif
+}
+
 #endif
