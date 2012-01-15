@@ -46,6 +46,7 @@ public:
                         const void *data, size_t length, struct NMEAInfo &info);
 
   void SentenceZero(const void *data, size_t length, struct NMEAInfo &info);
+  void SentenceTwo(const void *data, size_t length, struct NMEAInfo &info);
   void SentenceFive(const void *data, size_t length, struct NMEAInfo &info);
 };
 
@@ -166,6 +167,8 @@ WesterboerVW921Device::SentenceReceived(unsigned sentence_number,
   case 0:
     SentenceZero(data, length, info);
     break;
+  case 2:
+    SentenceTwo(data, length, info);
   case 5:
     SentenceFive(data, length, info);
     break;
@@ -266,6 +269,16 @@ WesterboerVW921Device::SentenceZero(const void *_data, size_t length,
 
     info.location_available.Update(info.clock);
   }
+}
+
+void
+WesterboerVW921Device::SentenceTwo(const void *_data, size_t length,
+                                   struct NMEAInfo &info)
+{
+  const uint8_t *data = (const uint8_t *)_data;
+
+  uint8_t mc_value = *(data + 13);
+  info.settings.ProvideMacCready(fixed(mc_value) / 2, info.clock);
 }
 
 void
