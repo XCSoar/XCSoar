@@ -28,6 +28,7 @@ Copyright_License {
 #include "Form/Widget.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
+#include "Screen/SingleWindow.hpp"
 
 gcc_const
 static WindowStyle
@@ -45,6 +46,19 @@ WidgetDialog::WidgetDialog(const TCHAR *caption, const PixelRect &rc,
            rc, caption, GetDialogStyle()),
    buttons(GetClientAreaWindow(), UIGlobals::GetDialogLook()),
    widget(GetClientAreaWindow(), _widget),
+   auto_size(false),
+   changed(false)
+{
+  widget.Move(buttons.GetRemainingRect());
+}
+
+WidgetDialog::WidgetDialog(const TCHAR *caption, Widget *_widget)
+  :WndForm(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+           UIGlobals::GetMainWindow().get_client_rect(),
+           caption, GetDialogStyle()),
+   buttons(GetClientAreaWindow(), UIGlobals::GetDialogLook()),
+   widget(GetClientAreaWindow(), _widget),
+   auto_size(true),
    changed(false)
 {
   widget.Move(buttons.GetRemainingRect());
@@ -53,6 +67,28 @@ WidgetDialog::WidgetDialog(const TCHAR *caption, const PixelRect &rc,
 int
 WidgetDialog::ShowModal()
 {
+  if (auto_size) {
+    widget.Prepare();
+
+    const PixelSize this_size = get_size();
+    const PixelRect cur_rc = buttons.GetRemainingRect();
+    const PixelSize cur_size = {
+      PixelScalar(cur_rc.right - cur_rc.left),
+      PixelScalar(cur_rc.bottom - cur_rc.top),
+    };
+    const PixelSize max_size = widget.Get()->GetMaximumSize();
+    PixelSize new_size = cur_size;
+
+    if (max_size.cx > 0 && max_size.cx < new_size.cx)
+      new_size.cx = max_size.cx;
+
+    if (max_size.cy > 0 && max_size.cy < new_size.cy)
+      new_size.cy = max_size.cy;
+
+    resize(new_size.cx + (this_size.cx - cur_size.cx),
+           new_size.cy + (this_size.cy - cur_size.cy));
+  }
+
   /* update layout, just in case buttons were added */
   widget.Move(buttons.GetRemainingRect());
 

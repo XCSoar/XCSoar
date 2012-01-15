@@ -384,13 +384,9 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 void
 dlgBasicSettingsShowModal()
 {
-  const PixelRect dialog_rc = {
-    0, 0, Layout::Scale(173), Layout::Scale(220),
-  };
-
   instance = new FlightSetupPanel();
 
-  WidgetDialog dialog(_("Flight Setup"), dialog_rc, instance);
+  WidgetDialog dialog(_("Flight Setup"), instance);
   dialog.SetTimerNotify(OnTimerNotify);
   instance->SetDumpButton(dialog.AddButton(_("Dump"), instance, DUMP));
   dialog.AddButton(_("OK"), mrOK);
