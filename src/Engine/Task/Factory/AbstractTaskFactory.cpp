@@ -296,14 +296,10 @@ AbstractTaskFactory::GetPointDefaultSizes(const LegalPointType type,
 OrderedTaskPoint*
 AbstractTaskFactory::CreatePoint(const LegalPointType type,
                                  const Waypoint &wp,
-                                 const fixed _start_radius,
-                                 const fixed _turnpoint_radius,
-                                 const fixed _finish_radius) const
+                                 fixed start_radius,
+                                 fixed turnpoint_radius,
+                                 fixed finish_radius) const
 {
-  fixed start_radius = _start_radius;
-  fixed turnpoint_radius = _turnpoint_radius;
-  fixed finish_radius = _finish_radius;
-
   GetPointDefaultSizes(type, start_radius, turnpoint_radius, finish_radius);
 
   switch (type) {

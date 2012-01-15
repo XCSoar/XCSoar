@@ -314,9 +314,9 @@ public:
   gcc_pure gcc_malloc
   OrderedTaskPoint* CreatePoint(const LegalPointType type,
                                 const Waypoint &wp,
-                                const fixed _start_radius,
-                                const fixed _turnpoint_radius,
-                                const fixed _finish_radius) const;
+                                const fixed start_radius,
+                                const fixed turnpoint_radius,
+                                const fixed finish_radius) const;
 
   /**
    * Create start point of specified type
