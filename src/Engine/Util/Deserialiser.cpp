@@ -275,26 +275,26 @@ Deserialiser::task_factory_type() const
   tstring type;
   if (!m_node.get_attribute(_T("type"),type)) {
     assert(1);
-    return TaskBehaviour::FACTORY_FAI_GENERAL;
+    return TaskBehaviour::FactoryType::FAI_GENERAL;
   }
 
   if (StringIsEqual(type.c_str(), _T("FAIGeneral")))
-    return TaskBehaviour::FACTORY_FAI_GENERAL;
+    return TaskBehaviour::FactoryType::FAI_GENERAL;
   else if (StringIsEqual(type.c_str(), _T("FAITriangle")))
-    return TaskBehaviour::FACTORY_FAI_TRIANGLE;
+    return TaskBehaviour::FactoryType::FAI_TRIANGLE;
   else if (StringIsEqual(type.c_str(), _T("FAIOR")))
-    return TaskBehaviour::FACTORY_FAI_OR;
+    return TaskBehaviour::FactoryType::FAI_OR;
   else if (StringIsEqual(type.c_str(), _T("FAIGoal")))
-    return TaskBehaviour::FACTORY_FAI_GOAL;
+    return TaskBehaviour::FactoryType::FAI_GOAL;
   else if (StringIsEqual(type.c_str(), _T("RT")))
-    return TaskBehaviour::FACTORY_RT;
+    return TaskBehaviour::FactoryType::RACING;
   else if (StringIsEqual(type.c_str(), _T("AAT")))
-    return TaskBehaviour::FACTORY_AAT;
+    return TaskBehaviour::FactoryType::AAT;
   else if (StringIsEqual(type.c_str(), _T("Mixed")))
-    return TaskBehaviour::FACTORY_MIXED;
+    return TaskBehaviour::FactoryType::MIXED;
   else if (StringIsEqual(type.c_str(), _T("Touring")))
-    return TaskBehaviour::FACTORY_TOURING;
+    return TaskBehaviour::FactoryType::TOURING;
 
   assert(1);
-  return TaskBehaviour::FACTORY_FAI_GENERAL;
+  return TaskBehaviour::FactoryType::FAI_GENERAL;
 }

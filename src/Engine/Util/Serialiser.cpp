@@ -251,21 +251,21 @@ const TCHAR*
 Serialiser::task_factory_type(TaskBehaviour::FactoryType the_type) const
 {
   switch(the_type) {
-  case TaskBehaviour::FACTORY_FAI_GENERAL:
+  case TaskBehaviour::FactoryType::FAI_GENERAL:
     return _T("FAIGeneral");
-  case TaskBehaviour::FACTORY_FAI_TRIANGLE:
+  case TaskBehaviour::FactoryType::FAI_TRIANGLE:
     return _T("FAITriangle");
-  case TaskBehaviour::FACTORY_FAI_OR:
+  case TaskBehaviour::FactoryType::FAI_OR:
     return _T("FAIOR");
-  case TaskBehaviour::FACTORY_FAI_GOAL:
+  case TaskBehaviour::FactoryType::FAI_GOAL:
     return _T("FAIGoal");
-  case TaskBehaviour::FACTORY_RT:
+  case TaskBehaviour::FactoryType::RACING:
     return _T("RT");
-  case TaskBehaviour::FACTORY_AAT:
+  case TaskBehaviour::FactoryType::AAT:
     return _T("AAT");
-  case TaskBehaviour::FACTORY_MIXED:
+  case TaskBehaviour::FactoryType::MIXED:
     return _T("Mixed");
-  case TaskBehaviour::FACTORY_TOURING:
+  case TaskBehaviour::FactoryType::TOURING:
     return _T("Touring");
   }
 

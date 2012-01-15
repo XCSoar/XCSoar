@@ -32,10 +32,10 @@
 
 struct AircraftState;
 
-enum AbortTaskMode {
-  atmSimple,
-  atmTask,
-  atmHome,
+enum class AbortTaskMode: uint8_t {
+  SIMPLE,
+  TASK,
+  HOME,
 };
 
 /**
@@ -78,15 +78,15 @@ struct TaskBehaviour : public TaskStartMargins {
    * Enumeration of factory types.  This is the set of
    * types of ordered task that can be created.
    */
-  enum FactoryType {
-    FACTORY_FAI_GENERAL = 0,
-    FACTORY_FAI_TRIANGLE,
-    FACTORY_FAI_OR,
-    FACTORY_FAI_GOAL,
-    FACTORY_RT,
-    FACTORY_AAT,
-    FACTORY_MIXED,
-    FACTORY_TOURING
+  enum class FactoryType: uint8_t {
+    FAI_GENERAL = 0,
+    FAI_TRIANGLE,
+    FAI_OR,
+    FAI_GOAL,
+    RACING,
+    AAT,
+    MIXED,
+    TOURING
   };
 
   GlideSettings glide;
@@ -104,13 +104,13 @@ struct TaskBehaviour : public TaskStartMargins {
   bool auto_mc;
 
   /** Enumeration of auto MC modes */
-  enum AutoMCMode {
+  enum class AutoMCMode: uint8_t {
     /** Final glide only */
-    AUTOMC_FINALGLIDE = 0,
+    FINALGLIDE = 0,
     /** Climb average */
-    AUTOMC_CLIMBAVERAGE,
+    CLIMBAVERAGE,
     /** Final glide if above FG, else climb average */
-    AUTOMC_BOTH
+    BOTH
   };
 
   /** Options for auto MC calculations */
@@ -156,9 +156,9 @@ struct TaskBehaviour : public TaskStartMargins {
 
   /**
    * How should the Abort/Alternate task work like:
-   * atmSimple: sort only by arrival height and wp type
-   * atmTask: sort also by deflection from current turnpoint
-   * atmHome: sort also by deflection from home
+   * AbortTaskMode::SIMPLE: sort only by arrival height and wp type
+   * AbortTaskMode::TASK: sort also by deflection from current turnpoint
+   * AbortTaskMode::HOME: sort also by deflection from home
    */
   AbortTaskMode abort_task_mode;
 

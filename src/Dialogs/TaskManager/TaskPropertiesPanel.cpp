@@ -86,7 +86,7 @@ TaskPropertiesPanel::RefreshView()
   const TaskBehaviour::FactoryType ftype = ordered_task->get_factory_type();
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
 
-  bool aat_types = (ftype == TaskBehaviour::FACTORY_AAT);
+  bool aat_types = (ftype == TaskBehaviour::FactoryType::AAT);
   bool fai_start_finish = p.fai_finish;
 
   LoadFormProperty(form, _T("prpTaskType"),(int)ftype);

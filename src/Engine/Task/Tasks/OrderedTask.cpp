@@ -879,7 +879,7 @@ OrderedTask::OrderedTask(TaskEvents &te,
   AbstractTask(ORDERED, te, tb),
   taskpoint_start(NULL),
   taskpoint_finish(NULL),
-  factory_mode(TaskBehaviour::FACTORY_RT),
+  factory_mode(TaskBehaviour::FactoryType::RACING),
   active_factory(NULL),
   m_ordered_behaviour(tb.ordered_defaults),
   task_advance(m_ordered_behaviour),
@@ -1245,7 +1245,7 @@ OrderedTask::SetFactory(const TaskBehaviour::FactoryType the_factory)
   if (factory_mode == the_factory)
     return factory_mode;
 
-  if (the_factory != TaskBehaviour::FACTORY_MIXED) {
+  if (the_factory != TaskBehaviour::FactoryType::MIXED) {
     // can switch from anything to mixed, otherwise need reset
     Reset();
 
@@ -1257,28 +1257,28 @@ OrderedTask::SetFactory(const TaskBehaviour::FactoryType the_factory)
   delete active_factory;
 
   switch (factory_mode) {
-  case TaskBehaviour::FACTORY_RT:
+  case TaskBehaviour::FactoryType::RACING:
     active_factory = new RTTaskFactory(*this, task_behaviour);
     break;
-  case TaskBehaviour::FACTORY_FAI_GENERAL:
+  case TaskBehaviour::FactoryType::FAI_GENERAL:
     active_factory = new FAITaskFactory(*this, task_behaviour);
     break;
-  case TaskBehaviour::FACTORY_FAI_TRIANGLE:
+  case TaskBehaviour::FactoryType::FAI_TRIANGLE:
     active_factory = new FAITriangleTaskFactory(*this, task_behaviour);
     break;
-  case TaskBehaviour::FACTORY_FAI_OR:
+  case TaskBehaviour::FactoryType::FAI_OR:
     active_factory = new FAIORTaskFactory(*this, task_behaviour);
     break;
-  case TaskBehaviour::FACTORY_FAI_GOAL:
+  case TaskBehaviour::FactoryType::FAI_GOAL:
     active_factory = new FAIGoalTaskFactory(*this, task_behaviour);
     break;
-  case TaskBehaviour::FACTORY_AAT:
+  case TaskBehaviour::FactoryType::AAT:
     active_factory = new AATTaskFactory(*this, task_behaviour);
     break;
-  case TaskBehaviour::FACTORY_MIXED:
+  case TaskBehaviour::FactoryType::MIXED:
     active_factory = new MixedTaskFactory(*this, task_behaviour);
     break;
-  case TaskBehaviour::FACTORY_TOURING:
+  case TaskBehaviour::FactoryType::TOURING:
     active_factory = new TouringTaskFactory(*this, task_behaviour);
     break;
   };
@@ -1304,9 +1304,9 @@ OrderedTask::GetFactoryTypes(bool all) const
 {
   /// @todo: check transform types if all=false
   std::vector<TaskBehaviour::FactoryType> f_list;
-  f_list.push_back(TaskBehaviour::FACTORY_RT);
-  f_list.push_back(TaskBehaviour::FACTORY_AAT);
-  f_list.push_back(TaskBehaviour::FACTORY_FAI_GENERAL);
+  f_list.push_back(TaskBehaviour::FactoryType::RACING);
+  f_list.push_back(TaskBehaviour::FactoryType::AAT);
+  f_list.push_back(TaskBehaviour::FactoryType::FAI_GENERAL);
   return f_list;
 }
 

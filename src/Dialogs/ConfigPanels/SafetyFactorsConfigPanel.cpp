@@ -71,15 +71,15 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            ugAltitude, task_behaviour.route_planner.safety_height_terrain);
 
   static gcc_constexpr_data StaticEnumChoice abort_task_mode_list[] = {
-    { atmSimple, N_("Simple") },
-    { atmTask, N_("Task") },
-    { atmHome, N_("Home") },
+    { (unsigned)AbortTaskMode::SIMPLE, N_("Simple") },
+    { (unsigned)AbortTaskMode::TASK, N_("Task") },
+    { (unsigned)AbortTaskMode::HOME, N_("Home") },
     { 0 }
   };
 
   AddEnum(_("Alternates mode"),
           _("Determines sorting of alternates in the alternates dialog and in abort mode:\n[Simple] The alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height.\n[Task] The sorting will also take the current task direction into account.\n[Home] The sorting will try to find landing options in the current direction to the configured home waypoint."),
-          abort_task_mode_list, task_behaviour.abort_task_mode);
+          abort_task_mode_list, (unsigned)task_behaviour.abort_task_mode);
 
   AddFloat(_("Safety MC"),
            _("The MacCready setting used, when safety MC is enabled for reach calculations, in task abort mode and for determining arrival altitude at airfields."),

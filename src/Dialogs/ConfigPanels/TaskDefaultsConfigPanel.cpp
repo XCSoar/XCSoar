@@ -109,7 +109,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
   OrderedTask* temptask = protected_task_manager->TaskBlank();
-  temptask->SetFactory(TaskBehaviour::FACTORY_RT);
+  temptask->SetFactory(TaskBehaviour::FactoryType::RACING);
 
   instance = this;
   RowFormWidget::Prepare(parent, rc);

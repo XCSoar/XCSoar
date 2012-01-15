@@ -57,19 +57,19 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
   static gcc_constexpr_data StaticEnumChoice auto_mc_list[] = {
-    { TaskBehaviour::AUTOMC_FINALGLIDE, N_("Final glide"),
+    { (unsigned)TaskBehaviour::AutoMCMode::FINALGLIDE, N_("Final glide"),
       N_("Adjusts MC for fastest arrival.  For OLC sprint tasks, the MacCready is adjusted in "
           "order to cover the greatest distance in the remaining time and reach the finish height.") },
-    { TaskBehaviour::AUTOMC_CLIMBAVERAGE, N_("Trending average climb"),
+    { (unsigned)TaskBehaviour::AutoMCMode::CLIMBAVERAGE, N_("Trending average climb"),
       N_("Sets MC to the trending average climb rate based on all climbs.") },
-    { TaskBehaviour::AUTOMC_BOTH, N_("Both"),
+    { (unsigned)TaskBehaviour::AutoMCMode::BOTH, N_("Both"),
       N_("Uses trending average during task, then fastest arrival when in final glide mode.") },
     { 0 }
   };
 
   AddEnum(_("Auto MC mode"),
           _("This option defines which auto MacCready algorithm is used."),
-          auto_mc_list, settings_computer.task.auto_mc_mode);
+          auto_mc_list, (unsigned)settings_computer.task.auto_mc_mode);
 
   // TODO All below is for the Expert
   AddBoolean(_("Block speed to fly"),

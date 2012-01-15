@@ -56,7 +56,7 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
     return false;
   }
 
-  if (task_behaviour.auto_mc_mode == TaskBehaviour::AUTOMC_CLIMBAVERAGE) {
+  if (task_behaviour.auto_mc_mode == TaskBehaviour::AutoMCMode::CLIMBAVERAGE) {
     stats.mc_best = mc_lpf.reset(fallback_mc);
     mc_lpf_valid = false;
     trigger_auto = false;
@@ -74,7 +74,7 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
   }
 
   if (!trigger_auto &&
-      task_behaviour.auto_mc_mode == TaskBehaviour::AUTOMC_FINALGLIDE &&
+      task_behaviour.auto_mc_mode == TaskBehaviour::AutoMCMode::FINALGLIDE &&
       stats.mc_best >= fixed(0.05)) {
     /* no solution, but forced final glide AutoMacCready - converge to
        zero */

@@ -308,15 +308,15 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
   if (!turnpoint_infos.valid)
     return NULL;
 
-  if (factType == TaskBehaviour::FACTORY_RT &&
+  if (factType == TaskBehaviour::FactoryType::RACING &&
       is_intermediate && isKeyhole(turnpoint_infos))
     oz = new KeyholeZone(wp->location);
 
-  else if (factType == TaskBehaviour::FACTORY_RT &&
+  else if (factType == TaskBehaviour::FactoryType::RACING &&
       is_intermediate && isBGAEnhancedOptionZone(turnpoint_infos))
     oz = new BGAEnhancedOptionZone(wp->location);
 
-  else if (factType == TaskBehaviour::FACTORY_RT &&
+  else if (factType == TaskBehaviour::FactoryType::RACING &&
       is_intermediate && isBGAFixedCourseZone(turnpoint_infos))
     oz = new BGAFixedCourseZone(wp->location);
 
@@ -327,7 +327,7 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
   else if (fabs(turnpoint_infos.angle1.Degrees() - fixed(180)) < fixed(1) )
     oz = new CylinderZone(wp->location, turnpoint_infos.radius1);
 
-  else if (factType == TaskBehaviour::FACTORY_RT) {
+  else if (factType == TaskBehaviour::FactoryType::RACING) {
 
     // XCSoar does not support fixed sectors for RT
     if (turnpoint_infos.style == SeeYouTurnpointInformation::FIXED)
@@ -408,7 +408,7 @@ CreatePoint(unsigned pos, unsigned n_waypoints, const Waypoint *wp,
   else if (pos == n_waypoints - 1)
     pt = (oz ? fact.CreateFinish(oz, *wp) : fact.CreateFinish(*wp));
 
-  else if (factType == TaskBehaviour::FACTORY_RT)
+  else if (factType == TaskBehaviour::FactoryType::RACING)
     pt = (oz ? fact.CreateASTPoint(oz, *wp) : fact.CreateIntermediate(*wp));
 
   else
@@ -478,16 +478,16 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     return NULL;
 
   task->SetFactory(task_info.wp_dis ?
-                    TaskBehaviour::FACTORY_RT : TaskBehaviour::FACTORY_AAT);
+                    TaskBehaviour::FactoryType::RACING : TaskBehaviour::FactoryType::AAT);
   AbstractTaskFactory& fact = task->GetFactory();
   const TaskBehaviour::FactoryType factType = task->get_factory_type();
 
   OrderedTaskBehaviour beh = task->get_ordered_task_behaviour();
-  if (factType == TaskBehaviour::FACTORY_AAT) {
+  if (factType == TaskBehaviour::FactoryType::AAT) {
     beh.aat_min_time = task_info.task_time;
   }
-  if (factType == TaskBehaviour::FACTORY_AAT ||
-      factType == TaskBehaviour::FACTORY_RT) {
+  if (factType == TaskBehaviour::FactoryType::AAT ||
+      factType == TaskBehaviour::FactoryType::RACING) {
     beh.start_max_height = (unsigned)task_info.max_start_altitude;
     beh.start_max_height_ref = hrMSL;
   }

@@ -297,11 +297,11 @@ TaskManager::Update(const AircraftState &state,
   // and tell it where the task destination is (if any)
   const GeoPoint *destination = &state.location;
 
-  if (task_behaviour.abort_task_mode == atmHome) {
+  if (task_behaviour.abort_task_mode == AbortTaskMode::HOME) {
     const Waypoint *home = task_abort.GetHome();
     if (home)
       destination = &home->location;
-  } else if (task_behaviour.abort_task_mode == atmTask) {
+  } else if (task_behaviour.abort_task_mode == AbortTaskMode::TASK) {
     const TaskWaypoint *twp = GetActiveTaskPoint();
     if (twp)
       destination = &(twp->GetLocationRemaining());
@@ -428,7 +428,7 @@ TaskManager::UpdateAutoMC(const AircraftState& state_now,
   if (!task_behaviour.auto_mc) 
     return false;
 
-  if (task_behaviour.auto_mc_mode == TaskBehaviour::AUTOMC_FINALGLIDE)
+  if (task_behaviour.auto_mc_mode == TaskBehaviour::AutoMCMode::FINALGLIDE)
     return false;
 
   if (positive(fallback_mc)) {

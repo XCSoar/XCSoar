@@ -32,7 +32,7 @@ bool test_task_bad(TaskManager& task_manager,
 {
   test_task_random(task_manager,waypoints,2);
 
-  task_manager.SetFactory(TaskBehaviour::FACTORY_RT);
+  task_manager.SetFactory(TaskBehaviour::FactoryType::RACING);
   AbstractTaskFactory& fact = task_manager.GetFactory();
 
   const Waypoint* wp = random_waypoint(waypoints);
@@ -48,7 +48,7 @@ bool test_task_bad(TaskManager& task_manager,
 
   // test it is bad for AAT
 
-  task_manager.SetFactory(TaskBehaviour::FACTORY_AAT);
+  task_manager.SetFactory(TaskBehaviour::FactoryType::AAT);
 
   AbstractTaskFactory& bfact = task_manager.GetFactory();
 

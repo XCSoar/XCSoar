@@ -51,7 +51,7 @@ TaskBehaviour::SetDefaults()
   optimise_targets_bearing = true;
   optimise_targets_margin = 300;
   auto_mc = false;
-  auto_mc_mode = AUTOMC_CLIMBAVERAGE;
+  auto_mc_mode = AutoMCMode::CLIMBAVERAGE;
   calc_cruise_efficiency = true;
   calc_effective_mc = true;
   calc_glide_required = true;
@@ -62,12 +62,12 @@ TaskBehaviour::SetDefaults()
   contest_handicap = 100;
   safety_mc = fixed_half;
   safety_height_arrival = fixed(300);
-  task_type_default = FACTORY_RT;
+  task_type_default = FactoryType::RACING;
   sector_defaults.SetDefaults();
   ordered_defaults.SetDefaults();
   route_planner.SetDefaults();
   enable_trace = true;
-  abort_task_mode = atmSimple;
+  abort_task_mode = AbortTaskMode::SIMPLE;
 }
 
 void
