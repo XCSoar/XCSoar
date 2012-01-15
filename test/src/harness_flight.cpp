@@ -131,9 +131,6 @@ private:
   TaskManager& task_manager;
 };
 
-//////////////////////////////////////////////////////////////
-
-
 class PrintTaskAutoPilot: public TaskAutoPilot
 {
 public:
