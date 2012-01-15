@@ -44,7 +44,7 @@ public:
 
   virtual ~FAITaskFactory() {};
 
-  virtual void update_ordered_task_behaviour(OrderedTaskBehaviour& to); 
+  virtual void UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to); 
 
   /**
    * Check whether task is complete and valid according to factory rules
@@ -52,7 +52,7 @@ public:
    *
    * @return True if task is valid according to factory rules
    */
-  virtual bool validate();
+  virtual bool Validate();
 
 
   /**
@@ -63,7 +63,7 @@ public:
    * similar to type of tp
    */
   virtual gcc_pure
-  LegalPointType getMutatedPointType(const OrderedTaskPoint &tp) const;
+  LegalPointType GetMutatedPointType(const OrderedTaskPoint &tp) const;
 
 
   /**
@@ -78,7 +78,7 @@ public:
    * sets radiuses FAI defaults
    */
   virtual gcc_pure
-  void getPointDefaultSizes(const LegalPointType type,
+  void GetPointDefaultSizes(const LegalPointType type,
                                             fixed &start_radius,
                                             fixed &turnpoint_radius,
                                             fixed &finish_radius) const;

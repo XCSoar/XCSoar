@@ -403,16 +403,16 @@ CreatePoint(unsigned pos, unsigned n_waypoints, const Waypoint *wp,
   OrderedTaskPoint *pt = NULL;
 
   if (pos == 0)
-    pt = (oz ? fact.createStart(oz, *wp) : fact.createStart(*wp));
+    pt = (oz ? fact.CreateStart(oz, *wp) : fact.CreateStart(*wp));
 
   else if (pos == n_waypoints - 1)
-    pt = (oz ? fact.createFinish(oz, *wp) : fact.createFinish(*wp));
+    pt = (oz ? fact.CreateFinish(oz, *wp) : fact.CreateFinish(*wp));
 
   else if (factType == TaskBehaviour::FACTORY_RT)
-    pt = (oz ? fact.createAST(oz, *wp) : fact.createIntermediate(*wp));
+    pt = (oz ? fact.CreateASTPoint(oz, *wp) : fact.CreateIntermediate(*wp));
 
   else
-    pt = (oz ? fact.createAAT(oz, *wp) : fact.createIntermediate(*wp));
+    pt = (oz ? fact.CreateAATPoint(oz, *wp) : fact.CreateIntermediate(*wp));
 
   return pt;
 }
@@ -535,7 +535,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
                                        fact, oz, factType);
 
     if (pt != NULL)
-      fact.append(*pt, false);
+      fact.Append(*pt, false);
 
     delete pt;
   }

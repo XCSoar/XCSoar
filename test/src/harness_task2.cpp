@@ -37,14 +37,14 @@ bool test_task_bad(TaskManager& task_manager,
 
   const Waypoint* wp = random_waypoint(waypoints);
 
-  ok (!fact.createFinish((AbstractTaskFactory::LegalPointType)20,*wp),"bad finish type",0);
-  ok (!fact.createStart((AbstractTaskFactory::LegalPointType)20,*wp),"bad start type",0);
-  ok (!fact.createIntermediate((AbstractTaskFactory::LegalPointType)20,*wp),"bad intermediate type",0);
+  ok (!fact.CreateFinish((AbstractTaskFactory::LegalPointType)20,*wp),"bad finish type",0);
+  ok (!fact.CreateStart((AbstractTaskFactory::LegalPointType)20,*wp),"bad start type",0);
+  ok (!fact.CreateIntermediate((AbstractTaskFactory::LegalPointType)20,*wp),"bad intermediate type",0);
 
   // now create a taskpoint from FAI
 
   AbstractTaskFactory::LegalPointType s =
-    fact.getIntermediateTypes()[(rand() % fact.getIntermediateTypes().size())];
+    fact.GetIntermediateTypes()[(rand() % fact.GetIntermediateTypes().size())];
 
   // test it is bad for AAT
 
@@ -52,16 +52,16 @@ bool test_task_bad(TaskManager& task_manager,
 
   AbstractTaskFactory& bfact = task_manager.GetFactory();
 
-  ok (!bfact.createIntermediate(s,*wp),"bad intermediate type (after task change)",0);
+  ok (!bfact.CreateIntermediate(s,*wp),"bad intermediate type (after task change)",0);
 
-  bfact.remove(1);
-  ok (bfact.validate(),"ok with one tp",0);
+  bfact.Remove(1);
+  ok (bfact.Validate(),"ok with one tp",0);
 
-  bfact.remove(1);
-  ok (bfact.validate(),"ok with zero tps (just start and finish)",0);
+  bfact.Remove(1);
+  ok (bfact.Validate(),"ok with zero tps (just start and finish)",0);
 
-  ok (bfact.remove(task_manager.TaskSize()-1,false),"remove finish manually",0);
-  ok (!bfact.validate(),"aat is invalid (no finish)",0);
+  ok (bfact.Remove(task_manager.TaskSize()-1,false),"remove finish manually",0);
+  ok (!bfact.Validate(),"aat is invalid (no finish)",0);
 
   return true;
 }

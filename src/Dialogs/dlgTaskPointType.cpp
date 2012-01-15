@@ -53,7 +53,7 @@ static void OnCloseClicked(gcc_unused WndButton &Sender)
 static AbstractTaskFactory::LegalPointType
 get_point_type() 
 {
-  return ordered_task->GetFactory().getType(*point);
+  return ordered_task->GetFactory().GetType(*point);
 }
 
 
@@ -115,15 +115,15 @@ SetPointType(AbstractTaskFactory::LegalPointType type)
     AbstractTaskFactory &factory = ordered_task->GetFactory();
 
     if (point) {
-      point = factory.createMutatedPoint(*point, type);
+      point = factory.CreateMutatedPoint(*point, type);
       if (point == NULL)
         return false;
 
-      if (factory.replace(*point, active_index, true))
+      if (factory.Replace(*point, active_index, true))
         task_modified = true;
       delete point;
     } else {
-      if (factory.validFinishType(type) &&
+      if (factory.IsValidFinishType(type) &&
           ordered_task->get_ordered_task_behaviour().is_closed)
         way_point = &(ordered_task->get_tp(0)->GetWaypoint());
       else
@@ -136,11 +136,11 @@ SetPointType(AbstractTaskFactory::LegalPointType type)
       if (!way_point)
         return false;
 
-      point = factory.createPoint(type, *way_point);
+      point = factory.CreatePoint(type, *way_point);
       if (point == NULL)
         return false;
 
-      if (factory.append(*point, true))
+      if (factory.Append(*point, true))
         task_modified = true;
 
       delete point;
@@ -218,7 +218,7 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
   wPointTypes = (WndListFrame*)wf->FindByName(_T("frmPointTypes"));
   assert(wPointTypes != NULL);
 
-  point_types = ordered_task->GetFactory().getValidTypes(index);
+  point_types = ordered_task->GetFactory().GetValidTypes(index);
   if (point_types.empty()) {
     assert(1);
     return false;

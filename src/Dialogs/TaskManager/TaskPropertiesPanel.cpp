@@ -258,7 +258,7 @@ TaskPropertiesPanel::Leave()
 {
   ReadValues();
   if (orig_taskType != ordered_task->get_factory_type())
-    ordered_task->GetFactory().mutate_tps_to_task_type();
+    ordered_task->GetFactory().MutateTPsToTaskType();
 
   return true;
 }

@@ -59,7 +59,7 @@ public:
   }
   bool has_entered(unsigned index) const {
     AbstractTaskFactory &fact = task->GetFactory();
-    return fact.has_entered(index);
+    return fact.HasEntered(index);
   }
   const ElementStat leg_stats() const {
     return task->GetStats().current_leg;

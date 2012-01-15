@@ -30,9 +30,9 @@ FAIGoalTaskFactory::FAIGoalTaskFactory(OrderedTask& _task,
 }
 
 void 
-FAIGoalTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
+FAIGoalTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
 {
-  FAITaskFactory::update_ordered_task_behaviour(to);
+  FAITaskFactory::UpdateOrderedTaskBehaviour(to);
   to.is_closed = false;
   to.min_points = 2;
   to.max_points = 2;

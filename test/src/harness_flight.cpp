@@ -100,7 +100,7 @@ public:
   }
   bool has_entered(unsigned index) const {
     AbstractTaskFactory &fact = task_manager.GetFactory();
-    return fact.has_entered(index);
+    return fact.HasEntered(index);
   }
   const ElementStat leg_stats() const {
     return task_manager.GetStats().current_leg;

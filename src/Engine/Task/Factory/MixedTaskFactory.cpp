@@ -62,7 +62,7 @@ MixedTaskFactory::MixedTaskFactory(OrderedTask& _task,
 }
 
 void 
-MixedTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
+MixedTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
 {
   to.task_scored = true;
   to.fai_finish = false;  

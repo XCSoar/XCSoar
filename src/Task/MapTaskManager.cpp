@@ -56,7 +56,7 @@ AppendToTask(OrderedTask *task, const Waypoint &waypoint)
 
   const AbstractTaskFactory &factory = task->GetFactory();
   OrderedTaskPoint *task_point =
-      (OrderedTaskPoint *)factory.createIntermediate(waypoint);
+      (OrderedTaskPoint *)factory.CreateIntermediate(waypoint);
   if (task_point == NULL)
     return MapTaskManager::UNMODIFIED;
 
@@ -78,7 +78,7 @@ MutateFromGoto(OrderedTask *task, const Waypoint &finish_waypoint,
 {
   const AbstractTaskFactory &factory = task->GetFactory();
   OrderedTaskPoint *start_point =
-      (OrderedTaskPoint *)factory.createStart(start_waypoint);
+      (OrderedTaskPoint *)factory.CreateStart(start_waypoint);
   if (start_point == NULL)
     return MapTaskManager::UNMODIFIED;
 
@@ -88,7 +88,7 @@ MutateFromGoto(OrderedTask *task, const Waypoint &finish_waypoint,
     return MapTaskManager::UNMODIFIED;
 
   OrderedTaskPoint *finish_point =
-      (OrderedTaskPoint *)factory.createFinish(finish_waypoint);
+      (OrderedTaskPoint *)factory.CreateFinish(finish_waypoint);
   if (finish_point == NULL)
     return MapTaskManager::UNMODIFIED;
 
@@ -167,7 +167,7 @@ InsertInTask(OrderedTask *task, const Waypoint &waypoint)
 
   const AbstractTaskFactory &factory = task->GetFactory();
   OrderedTaskPoint *task_point =
-      (OrderedTaskPoint *)factory.createIntermediate(waypoint);
+      (OrderedTaskPoint *)factory.CreateIntermediate(waypoint);
   if (task_point == NULL)
     return MapTaskManager::UNMODIFIED;
 
@@ -301,7 +301,7 @@ RemoveFromTask(OrderedTask *task, const Waypoint &waypoint)
 
   int i = GetIndexInTask(*task, waypoint);
   if (i >= 0)
-    task->GetFactory().remove(i);
+    task->GetFactory().Remove(i);
 
   // if finish was removed
   if (i == (int)task->TaskSize())

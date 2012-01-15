@@ -183,7 +183,7 @@ TaskListPanel::SaveTask()
     RefreshView();
   } else {
     MessageBoxX(getTaskValidationErrors(
-        (*active_task)->GetFactory().getValidationErrors()), _("Task not saved"),
+        (*active_task)->GetFactory().GetValidationErrors()), _("Task not saved"),
         MB_ICONEXCLAMATION);
   }
 }
@@ -390,7 +390,7 @@ TaskListPanel::OnDeclareClicked()
 {
   if (!(*active_task)->CheckTask()) {
     const AbstractTaskFactory::TaskValidationErrorVector errors =
-      (*active_task)->GetFactory().getValidationErrors();
+      (*active_task)->GetFactory().GetValidationErrors();
     MessageBoxX(getTaskValidationErrors(errors), _("Declare task"),
                 MB_ICONEXCLAMATION);
     return;

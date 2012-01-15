@@ -74,27 +74,27 @@ Deserialiser::deserialise_point(OrderedTask& data)
 
   if (StringIsEqual(type.c_str(), _T("Start"))) {
     if ((oz = oser.deserialise_oz(*wp, false)) != NULL)
-      pt = fact.createStart(oz, *wp);
+      pt = fact.CreateStart(oz, *wp);
   } else if (StringIsEqual(type.c_str(), _T("OptionalStart"))) {
     if ((oz = oser.deserialise_oz(*wp, false)) != NULL) {
-      pt = fact.createStart(oz, *wp);
-      fact.append_optional_start(*pt);
+      pt = fact.CreateStart(oz, *wp);
+      fact.AppendOptionalStart(*pt);
       delete pt; // don't let generic code below add it
       pt = NULL;
     }
   } else if (StringIsEqual(type.c_str(), _T("Turn"))) {
     if ((oz = oser.deserialise_oz(*wp, true)) != NULL)
-      pt = fact.createAST(oz, *wp);
+      pt = fact.CreateASTPoint(oz, *wp);
   } else if (StringIsEqual(type.c_str(), _T("Area"))) {
     if ((oz = oser.deserialise_oz(*wp, true)) != NULL)
-      pt = fact.createAAT(oz, *wp);
+      pt = fact.CreateAATPoint(oz, *wp);
   } else if (StringIsEqual(type.c_str(), _T("Finish"))) {
     if ((oz = oser.deserialise_oz(*wp, false)) != NULL)
-      pt = fact.createFinish(oz, *wp);
+      pt = fact.CreateFinish(oz, *wp);
   } 
 
   if (pt != NULL) {
-    fact.append(*pt, false);
+    fact.Append(*pt, false);
     delete pt;
   }
 

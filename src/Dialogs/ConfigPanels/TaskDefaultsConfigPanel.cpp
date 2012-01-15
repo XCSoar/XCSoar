@@ -116,7 +116,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   wp = AddEnum(_("Start point"), _("Default start type for new tasks you create."), OnStartType);
   if (wp) {
-    const auto point_types = temptask->GetFactory().getValidStartTypes();
+    const auto point_types = temptask->GetFactory().GetValidStartTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 
@@ -139,7 +139,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   wp = AddEnum(_("Finish point"), _("Default finish type for new tasks you create."), OnFinishType);
   if (wp) {
-    const auto point_types = temptask->GetFactory().getValidFinishTypes();
+    const auto point_types = temptask->GetFactory().GetValidFinishTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 
@@ -162,7 +162,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   wp = AddEnum(_("Turn point"), _("Default turn point type for new tasks you create."));
   if (wp) {
-    const auto point_types = temptask->GetFactory().getValidIntermediateTypes();
+    const auto point_types = temptask->GetFactory().GetValidIntermediateTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 

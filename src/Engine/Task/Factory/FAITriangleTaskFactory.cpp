@@ -30,18 +30,18 @@ FAITriangleTaskFactory::FAITriangleTaskFactory(OrderedTask& _task,
 }
 
 bool 
-FAITriangleTaskFactory::validate()
+FAITriangleTaskFactory::Validate()
 {
 
-  bool valid = FAITaskFactory::validate();
+  bool valid = FAITaskFactory::Validate();
 
   return valid && AbstractTaskFactory::TestFAITriangle();
 }
 
 void 
-FAITriangleTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
+FAITriangleTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
 {
-  FAITaskFactory::update_ordered_task_behaviour(to);
+  FAITaskFactory::UpdateOrderedTaskBehaviour(to);
   to.min_points = 4;
   to.max_points = 4;
 }

@@ -56,7 +56,7 @@ AATTaskFactory::AATTaskFactory(OrderedTask& _task, const TaskBehaviour &tb)
 }
 
 void 
-AATTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
+AATTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
 {
   to.task_scored = true;
   to.homogeneous_tps = false;
@@ -67,9 +67,9 @@ AATTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 }
 
 AbstractTaskFactory::LegalPointType
-AATTaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
+AATTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
 {
-  const LegalPointType oldtype = getType(tp);
+  const LegalPointType oldtype = GetType(tp);
   LegalPointType newtype = oldtype;
 
   switch (oldtype) {
@@ -83,7 +83,7 @@ AATTaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
   case KEYHOLE_SECTOR:
   case BGAFIXEDCOURSE_SECTOR:
   case BGAENHANCEDOPTION_SECTOR:
-    newtype = AbstractTaskFactory::getMutatedPointType(tp);
+    newtype = AbstractTaskFactory::GetMutatedPointType(tp);
     break;
 
   case FINISH_SECTOR:

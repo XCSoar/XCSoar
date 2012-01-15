@@ -50,7 +50,7 @@ TouringTaskFactory::TouringTaskFactory(OrderedTask& _task,
 }
 
 void 
-TouringTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
+TouringTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
 {
   to.task_scored = false;
   to.aat_min_time = fixed_zero;

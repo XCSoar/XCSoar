@@ -52,19 +52,19 @@ FAITaskFactory::FAITaskFactory(OrderedTask& _task,
 }
 
 bool
-FAITaskFactory::validate()
+FAITaskFactory::Validate()
 {
-  bool valid = AbstractTaskFactory::validate();
+  bool valid = AbstractTaskFactory::Validate();
 
-  if (!is_unique()) {
-    addValidationError(TURNPOINTS_NOT_UNIQUE);
+  if (!IsUnique()) {
+    AddValidationError(TURNPOINTS_NOT_UNIQUE);
     // warning only
   }
   return valid;
 }
 
 void 
-FAITaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
+FAITaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
 {
   to.task_scored = true;
   to.fai_finish = true;  
@@ -81,9 +81,9 @@ FAITaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 }
 
 AbstractTaskFactory::LegalPointType
-FAITaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
+FAITaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
 {
-  const LegalPointType oldtype = getType(tp);
+  const LegalPointType oldtype = GetType(tp);
   LegalPointType newtype = oldtype;
 
   switch (oldtype) {
@@ -125,7 +125,7 @@ FAITaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
 }
 
 void
-FAITaskFactory::getPointDefaultSizes(const LegalPointType type,
+FAITaskFactory::GetPointDefaultSizes(const LegalPointType type,
                                           fixed &start_radius,
                                           fixed &turnpoint_radius,
                                           fixed &finish_radius) const

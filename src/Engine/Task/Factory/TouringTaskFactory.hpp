@@ -42,7 +42,7 @@ public:
 
   ~TouringTaskFactory() {};
 
-  void update_ordered_task_behaviour(OrderedTaskBehaviour& to); 
+  void UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to); 
 };
 
 #endif

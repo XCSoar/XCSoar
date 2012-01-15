@@ -42,14 +42,14 @@ public:
 
   ~RTTaskFactory() {};
 
-  void update_ordered_task_behaviour(OrderedTaskBehaviour& to); 
+  void UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to); 
 
 /** 
  * Check whether task is complete and valid according to factory rules
  * 
  * @return True if task is valid according to factory rules
  */
-  virtual bool validate();
+  virtual bool Validate();
 
   /**
    * swaps AAT OZs for AST_CYLINDERs
@@ -58,7 +58,7 @@ public:
    * similar to type of tp
    */
   virtual gcc_pure
-  LegalPointType getMutatedPointType(const OrderedTaskPoint &tp) const;
+  LegalPointType GetMutatedPointType(const OrderedTaskPoint &tp) const;
 };
 
 #endif

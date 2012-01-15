@@ -123,7 +123,7 @@ OnOptionalStartListEnter(unsigned ItemIndex)
     if (!way_point)
       return;
 
-    if (factory.append_optional_start(*way_point)) {
+    if (factory.AppendOptionalStart(*way_point)) {
       task_modified = true;
     }
   }

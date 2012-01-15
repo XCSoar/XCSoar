@@ -58,15 +58,15 @@ RTTaskFactory::RTTaskFactory(OrderedTask& _task,
 }
 
 bool 
-RTTaskFactory::validate()
+RTTaskFactory::Validate()
 {
-  bool valid = AbstractTaskFactory::validate();
+  bool valid = AbstractTaskFactory::Validate();
 
   return valid;
 }
 
 void 
-RTTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
+RTTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
 {
   to.task_scored = true;
   to.homogeneous_tps = false;
@@ -77,9 +77,9 @@ RTTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 }
 
 AbstractTaskFactory::LegalPointType
-RTTaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
+RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
 {
-  const LegalPointType oldtype = getType(tp);
+  const LegalPointType oldtype = GetType(tp);
   LegalPointType newtype = oldtype;
 
   switch (oldtype) {

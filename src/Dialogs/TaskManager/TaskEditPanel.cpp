@@ -235,14 +235,14 @@ TaskEditPanel::OnTaskListEnter(unsigned ItemIndex)
       return;
 
     if (ItemIndex == 0) {
-      point = (OrderedTaskPoint*)factory.createStart(*way_point);
+      point = (OrderedTaskPoint*)factory.CreateStart(*way_point);
     } else {
-      point = (OrderedTaskPoint*)factory.createIntermediate(*way_point);
+      point = (OrderedTaskPoint*)factory.CreateIntermediate(*way_point);
      }
     if (point == NULL)
       return;
 
-    if (factory.append(*point, true))
+    if (factory.Append(*point, true))
       *task_modified = true;
 
     delete point;
@@ -286,7 +286,7 @@ TaskEditPanel::MoveUp()
   if (index == 0)
     return;
 
-  if (!ordered_task->GetFactory().swap(index - 1, true))
+  if (!ordered_task->GetFactory().Swap(index - 1, true))
     return;
 
   wTaskPoints->SetCursorIndex(index - 1);
@@ -311,7 +311,7 @@ TaskEditPanel::MoveDown()
   if (index >= ordered_task->TaskSize())
     return;
 
-  if (!ordered_task->GetFactory().swap(index, true))
+  if (!ordered_task->GetFactory().Swap(index, true))
     return;
 
   wTaskPoints->SetCursorIndex(index + 1);

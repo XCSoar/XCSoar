@@ -30,9 +30,9 @@ FAIORTaskFactory::FAIORTaskFactory(OrderedTask& _task,
 }
 
 void 
-FAIORTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
+FAIORTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
 {
-  FAITaskFactory::update_ordered_task_behaviour(to);
+  FAITaskFactory::UpdateOrderedTaskBehaviour(to);
   to.min_points = 3;
   to.max_points = 3;
   to.is_closed = true;

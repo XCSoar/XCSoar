@@ -468,7 +468,7 @@ OrderedTask::set_neighbours(unsigned position)
 bool
 OrderedTask::CheckTask() const
 {
-  return this->GetFactory().validate();
+  return this->GetFactory().Validate();
 }
 
 AATPoint*
@@ -886,7 +886,7 @@ OrderedTask::OrderedTask(TaskEvents &te,
   dijkstra_min(*this), dijkstra_max(*this)
 {
   active_factory = new RTTaskFactory(*this, task_behaviour);
-  active_factory->update_ordered_task_behaviour(m_ordered_behaviour);
+  active_factory->UpdateOrderedTaskBehaviour(m_ordered_behaviour);
 }
 
 static void
@@ -1282,7 +1282,7 @@ OrderedTask::SetFactory(const TaskBehaviour::FactoryType the_factory)
     active_factory = new TouringTaskFactory(*this, task_behaviour);
     break;
   };
-  active_factory->update_ordered_task_behaviour(m_ordered_behaviour);
+  active_factory->UpdateOrderedTaskBehaviour(m_ordered_behaviour);
 
   return factory_mode;
 }

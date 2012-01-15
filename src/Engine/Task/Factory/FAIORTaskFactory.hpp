@@ -42,7 +42,7 @@ public:
 
   virtual ~FAIORTaskFactory() {};
 
-  virtual void update_ordered_task_behaviour(OrderedTaskBehaviour& to); 
+  virtual void UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to); 
 };
 
 #endif

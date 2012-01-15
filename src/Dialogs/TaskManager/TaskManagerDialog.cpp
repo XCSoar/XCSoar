@@ -178,7 +178,7 @@ dlgTaskManager::CommitTaskChanges()
   }
 
   MessageBoxX(getTaskValidationErrors(
-    active_task->GetFactory().getValidationErrors()),
+    active_task->GetFactory().GetValidationErrors()),
     _("Validation Errors"), MB_ICONEXCLAMATION);
 
   return (MessageBoxX(_("Task not valid. Changes will be lost.\nContinue?"),
