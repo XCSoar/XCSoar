@@ -81,7 +81,7 @@ struct VisibleWaypoint {
     const fixed elevation = waypoint->altitude +
       task_behaviour.safety_height_arrival;
     const AGeoPoint p_dest (waypoint->location, elevation);
-    if (route_planner.find_positive_arrival(p_dest, arrival_height_terrain,
+    if (route_planner.FindPositiveArrival(p_dest, arrival_height_terrain,
                                             arrival_height_glide)) {
       const RoughAltitude h_base(elevation);
       arrival_height_terrain -= h_base;

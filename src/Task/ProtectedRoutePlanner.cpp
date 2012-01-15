@@ -27,7 +27,7 @@ void
 ProtectedRoutePlanner::SetTerrain(const RasterTerrain *terrain)
 {
   ExclusiveLease lease(*this);
-  lease->set_terrain(terrain);
+  lease->SetTerrain(terrain);
 }
 
 void
@@ -37,7 +37,7 @@ ProtectedRoutePlanner::SetPolars(const GlideSettings &settings,
                                  const SpeedVector &wind)
 {
   ExclusiveLease lease(*this);
-  lease->update_polar(settings, glide_polar, safety_polar, wind);
+  lease->UpdatePolar(settings, glide_polar, safety_polar, wind);
 }
 
 void
@@ -47,8 +47,8 @@ ProtectedRoutePlanner::SolveRoute(const AGeoPoint &dest,
                                   const RoughAltitude h_ceiling)
 {
   ExclusiveLease lease(*this);
-  lease->synchronise(airspaces, dest, start);
-  lease->solve(dest, start, config, h_ceiling);
+  lease->Synchronise(airspaces, dest, start);
+  lease->Solve(dest, start, config, h_ceiling);
 }
 
 bool
@@ -57,7 +57,7 @@ ProtectedRoutePlanner::Intersection(const AGeoPoint &origin,
                                     GeoPoint &intx) const
 {
   Lease lease(*this);
-  return lease->intersection(origin, destination, intx);
+  return lease->Intersection(origin, destination, intx);
 }
 
 void
@@ -67,7 +67,7 @@ ProtectedRoutePlanner::SolveReach(const AGeoPoint &origin,
                                   const bool do_solve)
 {
   ExclusiveLease lease(*this);
-  lease->solve_reach(origin, config, h_ceiling, do_solve);
+  lease->SolveReach(origin, config, h_ceiling, do_solve);
 }
 
 void
@@ -75,5 +75,5 @@ ProtectedRoutePlanner::AcceptInRange(const GeoBounds &bounds,
                                      TriangleFanVisitor &visitor) const
 {
   Lease lease(*this);
-  lease->accept_in_range(bounds, visitor);
+  lease->AcceptInRange(bounds, visitor);
 }

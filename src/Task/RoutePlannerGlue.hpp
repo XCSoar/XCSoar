@@ -30,52 +30,50 @@ class RasterTerrain;
 
 class RoutePlannerGlue {
   const RasterTerrain *terrain;
-  AirspaceRoute m_planner;
+  AirspaceRoute planner;
 
 public:
-  RoutePlannerGlue(const Airspaces& master);
+  RoutePlannerGlue(const Airspaces &master);
 
-  void set_terrain(const RasterTerrain *_terrain);
+  void SetTerrain(const RasterTerrain *terrain);
 
-  void update_polar(const GlideSettings &settings,
-                    const GlidePolar& polar,
-                    const GlidePolar& safety_polar,
-                    const SpeedVector& wind) {
-    m_planner.UpdatePolar(settings, polar, safety_polar, wind);
+  void UpdatePolar(const GlideSettings &settings,
+                   const GlidePolar &polar,
+                   const GlidePolar &safety_polar,
+                   const SpeedVector &wind) {
+    planner.UpdatePolar(settings, polar, safety_polar, wind);
   }
 
-  void synchronise(const Airspaces& master,
-                   const AGeoPoint& origin,
-                   const AGeoPoint& destination) {
-    m_planner.Synchronise(master, origin, destination);
+  void Synchronise(const Airspaces &master, const AGeoPoint &origin,
+                   const AGeoPoint &destination) {
+    planner.Synchronise(master, origin, destination);
   }
-  void reset() {
-    m_planner.Reset();
+
+  void Reset() {
+    planner.Reset();
   }
-  bool solve(const AGeoPoint& origin,
-             const AGeoPoint& destination,
-             const RoutePlannerConfig& config,
+
+  bool Solve(const AGeoPoint &origin, const AGeoPoint &destination,
+             const RoutePlannerConfig &config,
              const RoughAltitude h_ceiling);
 
   const Route &GetSolution() const {
-    return m_planner.GetSolution();
+    return planner.GetSolution();
   }
 
-  void solve_reach(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                   RoughAltitude h_ceiling, bool do_solve);
+  void SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
+                  RoughAltitude h_ceiling, bool do_solve);
 
-  bool find_positive_arrival(const AGeoPoint& dest,
-                             RoughAltitude &arrival_height_reach,
-                             RoughAltitude &arrival_height_direct) const;
+  bool FindPositiveArrival(const AGeoPoint &dest,
+                           RoughAltitude &arrival_height_reach,
+                           RoughAltitude &arrival_height_direct) const;
 
-  void accept_in_range(const GeoBounds& bounds,
-                       TriangleFanVisitor& visitor) const;
+  void AcceptInRange(const GeoBounds &bounds, TriangleFanVisitor &visitor) const;
 
-  bool intersection(const AGeoPoint& origin,
-                    const AGeoPoint& destination,
-                    GeoPoint& intx) const;
+  bool Intersection(const AGeoPoint &origin, const AGeoPoint &destination,
+                    GeoPoint &intx) const;
 
-  RoughAltitude get_terrain_base() const;
+  RoughAltitude GetTerrainBase() const;
 };
 
 #endif

@@ -50,7 +50,7 @@ public:
 
   void Reset() {
     ExclusiveLease lease(*this);
-    lease->reset();
+    lease->Reset();
   }
 
   void SetTerrain(const RasterTerrain *terrain);

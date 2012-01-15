@@ -106,7 +106,7 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
         calculated.planned_route = route_planner.GetSolution();
 
         calculated.terrain_warning =
-          route_planner.intersection(start, dest,
+          route_planner.Intersection(start, dest,
                                      calculated.terrain_warning_location);
       }
       return;
@@ -140,7 +140,7 @@ GlideComputerRoute::Reach(const MoreData &basic, DerivedInfo &calculated,
     protected_route_planner.SolveReach(start, config, h_ceiling, do_solve);
 
     if (do_solve) {
-      calculated.terrain_base = route_planner.get_terrain_base();
+      calculated.terrain_base = route_planner.GetTerrainBase();
       calculated.terrain_base_valid = true;
     }
   }

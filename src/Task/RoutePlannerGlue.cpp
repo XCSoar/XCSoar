@@ -27,75 +27,75 @@
 #include "NMEA/Derived.hpp"
 #include <assert.h>
 
-RoutePlannerGlue::RoutePlannerGlue(const Airspaces& master):
+RoutePlannerGlue::RoutePlannerGlue(const Airspaces &master):
   terrain(NULL),
-  m_planner(master)
+  planner(master)
 {
 }
 
 void
-RoutePlannerGlue::set_terrain(const RasterTerrain *_terrain)
+RoutePlannerGlue::SetTerrain(const RasterTerrain *_terrain)
 {
   terrain = _terrain;
   if (terrain) {
     RasterTerrain::Lease lease(*terrain);
-    m_planner.Reset();
-    m_planner.SetTerrain(&terrain->map);
+    planner.Reset();
+    planner.SetTerrain(&terrain->map);
   } else {
-    m_planner.Reset();
-    m_planner.SetTerrain(NULL);
+    planner.Reset();
+    planner.SetTerrain(NULL);
   }
 }
 
 bool
-RoutePlannerGlue::solve(const AGeoPoint& origin,
-                        const AGeoPoint& destination,
-                        const RoutePlannerConfig& config,
+RoutePlannerGlue::Solve(const AGeoPoint &origin,
+                        const AGeoPoint &destination,
+                        const RoutePlannerConfig &config,
                         const RoughAltitude h_ceiling)
 {
   RasterTerrain::Lease lease(*terrain);
-  return m_planner.Solve(origin, destination, config, h_ceiling);
+  return planner.Solve(origin, destination, config, h_ceiling);
 }
 
 void
-RoutePlannerGlue::solve_reach(const AGeoPoint &origin,
+RoutePlannerGlue::SolveReach(const AGeoPoint &origin,
                               const RoutePlannerConfig &config,
                               const RoughAltitude h_ceiling, const bool do_solve)
 {
   if (terrain) {
     RasterTerrain::Lease lease(*terrain);
-    m_planner.SolveReach(origin, config, h_ceiling, do_solve);
+    planner.SolveReach(origin, config, h_ceiling, do_solve);
   } else {
-    m_planner.SolveReach(origin, config, h_ceiling, do_solve);
+    planner.SolveReach(origin, config, h_ceiling, do_solve);
   }
 }
 
 bool
-RoutePlannerGlue::find_positive_arrival(const AGeoPoint& dest,
+RoutePlannerGlue::FindPositiveArrival(const AGeoPoint &dest,
                                         RoughAltitude &arrival_height_reach,
                                         RoughAltitude &arrival_height_direct) const
 {
-  return m_planner.FindPositiveArrival(dest, arrival_height_reach, arrival_height_direct);
+  return planner.FindPositiveArrival(dest, arrival_height_reach, arrival_height_direct);
 }
 
 void
-RoutePlannerGlue::accept_in_range(const GeoBounds& bounds,
-                                  TriangleFanVisitor& visitor) const
+RoutePlannerGlue::AcceptInRange(const GeoBounds &bounds,
+                                  TriangleFanVisitor &visitor) const
 {
-  m_planner.AcceptInRange(bounds, visitor);
+  planner.AcceptInRange(bounds, visitor);
 }
 
 bool
-RoutePlannerGlue::intersection(const AGeoPoint& origin,
-                               const AGeoPoint& destination,
-                               GeoPoint& intx) const
+RoutePlannerGlue::Intersection(const AGeoPoint &origin,
+                               const AGeoPoint &destination,
+                               GeoPoint &intx) const
 {
   RasterTerrain::Lease lease(*terrain);
-  return m_planner.Intersection(origin, destination, intx);
+  return planner.Intersection(origin, destination, intx);
 }
 
 RoughAltitude
-RoutePlannerGlue::get_terrain_base() const
+RoutePlannerGlue::GetTerrainBase() const
 {
-  return m_planner.GetTerrainBase();
+  return planner.GetTerrainBase();
 }

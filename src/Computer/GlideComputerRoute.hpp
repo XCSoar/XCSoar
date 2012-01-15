@@ -66,7 +66,7 @@ public:
    * container.  Call this before modifying the container.
    */
   void ClearAirspaces() {
-    route_planner.reset();
+    route_planner.Reset();
   }
 
   void ResetFlight();
