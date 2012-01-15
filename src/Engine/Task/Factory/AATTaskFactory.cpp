@@ -25,20 +25,20 @@ Copyright_License {
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Util/Macros.hpp"
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t aat_start_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType aat_start_types[] = {
   AbstractTaskFactory::START_LINE,
   AbstractTaskFactory::START_CYLINDER,
   AbstractTaskFactory::START_SECTOR,
   AbstractTaskFactory::START_BGA,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t aat_im_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType aat_im_types[] = {
   AbstractTaskFactory::AAT_CYLINDER,
   AbstractTaskFactory::AAT_SEGMENT,
   AbstractTaskFactory::AAT_ANNULAR_SECTOR,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t aat_finish_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType aat_finish_types[] = {
   AbstractTaskFactory::FINISH_LINE,
   AbstractTaskFactory::FINISH_CYLINDER,
   AbstractTaskFactory::FINISH_SECTOR,
@@ -66,11 +66,11 @@ AATTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
   to.start_requires_arm = true;
 }
 
-AbstractTaskFactory::LegalPointType_t
+AbstractTaskFactory::LegalPointType
 AATTaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
 {
-  const LegalPointType_t oldtype = getType(tp);
-  LegalPointType_t newtype = oldtype;
+  const LegalPointType oldtype = getType(tp);
+  LegalPointType newtype = oldtype;
 
   switch (oldtype) {
 

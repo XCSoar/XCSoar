@@ -37,13 +37,13 @@ bool test_task_bad(TaskManager& task_manager,
 
   const Waypoint* wp = random_waypoint(waypoints);
 
-  ok (!fact.createFinish((AbstractTaskFactory::LegalPointType_t)20,*wp),"bad finish type",0);
-  ok (!fact.createStart((AbstractTaskFactory::LegalPointType_t)20,*wp),"bad start type",0);
-  ok (!fact.createIntermediate((AbstractTaskFactory::LegalPointType_t)20,*wp),"bad intermediate type",0);
+  ok (!fact.createFinish((AbstractTaskFactory::LegalPointType)20,*wp),"bad finish type",0);
+  ok (!fact.createStart((AbstractTaskFactory::LegalPointType)20,*wp),"bad start type",0);
+  ok (!fact.createIntermediate((AbstractTaskFactory::LegalPointType)20,*wp),"bad intermediate type",0);
 
   // now create a taskpoint from FAI
 
-  AbstractTaskFactory::LegalPointType_t s = 
+  AbstractTaskFactory::LegalPointType s =
     fact.getIntermediateTypes()[(rand() % fact.getIntermediateTypes().size())];
 
   // test it is bad for AAT

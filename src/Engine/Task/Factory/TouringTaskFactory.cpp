@@ -25,15 +25,15 @@
 #include "Task/OrderedTaskBehaviour.hpp"
 #include "Util/Macros.hpp"
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t touring_start_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType touring_start_types[] = {
   AbstractTaskFactory::START_CYLINDER,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t touring_im_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType touring_im_types[] = {
   AbstractTaskFactory::FAI_SECTOR,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t touring_finish_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType touring_finish_types[] = {
   AbstractTaskFactory::FINISH_CYLINDER,
 };
 

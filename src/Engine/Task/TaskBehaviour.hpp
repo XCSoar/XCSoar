@@ -45,15 +45,15 @@ enum AbortTaskMode {
 struct SectorDefaults
 {
   /** default start type for new tasks */
-  AbstractTaskFactory::LegalPointType_t start_type;
+  AbstractTaskFactory::LegalPointType start_type;
   /** default start radius or line length for new tasks */
   fixed start_radius;
   /** default intermediate type for new tasks */
-  AbstractTaskFactory::LegalPointType_t turnpoint_type;
+  AbstractTaskFactory::LegalPointType turnpoint_type;
   /** default intermediate point radius for new tasks */
   fixed turnpoint_radius;
   /** default finish type for new tasks */
-  AbstractTaskFactory::LegalPointType_t finish_type;
+  AbstractTaskFactory::LegalPointType finish_type;
   /** default finish radius or line length for new tasks */
   fixed finish_radius;
 

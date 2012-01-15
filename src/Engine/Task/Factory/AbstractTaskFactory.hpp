@@ -60,7 +60,7 @@ class AbstractTaskFactory: private NonCopyable
 {
 public:
   /** Legal types based on position */
-  enum LegalAbstractPointType_t {
+  enum LegalAbstractPointType: uint8_t {
     POINT_START,
     POINT_AAT,
     POINT_AST,
@@ -68,10 +68,10 @@ public:
   };
 
   /** Vector of legal abstract point types (non-OZ specific) */
-  typedef std::vector<LegalAbstractPointType_t> LegalAbstractVector;
+  typedef std::vector<LegalAbstractPointType> LegalAbstractVector;
 
   /** Legal types of points with observation zones */
-  enum LegalPointType_t {
+  enum LegalPointType: uint8_t {
     START_SECTOR = 0,
     START_LINE,
     START_CYLINDER,
@@ -90,12 +90,12 @@ public:
   };
 
   /** Vector of legal point types */
-  typedef std::vector<LegalPointType_t> LegalPointVector;
+  typedef std::vector<LegalPointType> LegalPointVector;
 
-  typedef ConstArray<LegalPointType_t> LegalPointConstArray;
+  typedef ConstArray<LegalPointType> LegalPointConstArray;
 
   /** Task Validation Error Types */
-  enum TaskValidationErrorType_t {
+  enum TaskValidationErrorType: uint8_t {
     NO_VALID_START,
     NO_VALID_FINISH,
     TASK_NOT_CLOSED,
@@ -110,7 +110,7 @@ public:
   };
 
   /** Vector of errors returned by validation routine */
-  typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
+  typedef std::vector<TaskValidationErrorType> TaskValidationErrorVector;
 
 protected:
   /** task managed by this factory */
@@ -284,7 +284,7 @@ public:
    * sets radiuses to the correct default for that task type or general defaults
    */
   virtual gcc_pure
-  void getPointDefaultSizes(const LegalPointType_t type, fixed &start_radius,
+  void getPointDefaultSizes(const LegalPointType type, fixed &start_radius,
                             fixed &turnpoint_radius, fixed &finish_radius) const;
 
   /** 
@@ -296,7 +296,7 @@ public:
    * @return Initialised object.  Transfers ownership to client.
    */
   gcc_pure gcc_malloc
-  OrderedTaskPoint* createPoint(const LegalPointType_t type,
+  OrderedTaskPoint* createPoint(const LegalPointType type,
                                 const Waypoint &wp) const;
 
   /**
@@ -311,7 +311,7 @@ public:
    * @return Initialised object.  Transfers ownership to client.
    */
   gcc_pure gcc_malloc
-  OrderedTaskPoint* createPoint(const LegalPointType_t type,
+  OrderedTaskPoint* createPoint(const LegalPointType type,
                                 const Waypoint &wp,
                                 const fixed _start_radius,
                                 const fixed _turnpoint_radius,
@@ -326,7 +326,7 @@ public:
    * @return Initialised StartPoint if valid, otherwise NULL
    */
   gcc_pure gcc_malloc
-  StartPoint* createStart(const LegalPointType_t type, const Waypoint &wp) const;
+  StartPoint* createStart(const LegalPointType type, const Waypoint &wp) const;
 
   /**
    * Create intermediate point of specified type
@@ -337,7 +337,7 @@ public:
    * @return Initialised IntermediateTaskPoint if valid, otherwise NULL
    */
   gcc_pure gcc_malloc
-  IntermediateTaskPoint* createIntermediate(const LegalPointType_t type,
+  IntermediateTaskPoint* createIntermediate(const LegalPointType type,
                                             const Waypoint &wp) const;
 
   /**
@@ -349,7 +349,7 @@ public:
    * @return Initialised FinishPoint if valid, otherwise NULL
    */
   gcc_pure gcc_malloc
-  FinishPoint* createFinish(const LegalPointType_t type,
+  FinishPoint* createFinish(const LegalPointType type,
                             const Waypoint &wp) const;
 
   /**
@@ -402,7 +402,7 @@ public:
    */
   gcc_pure gcc_malloc
   OrderedTaskPoint* createMutatedPoint(const OrderedTaskPoint &tp,
-                                       const LegalPointType_t newtype) const;
+                                       const LegalPointType newtype) const;
 
   /**
   * Returns "suggested/best" type for the current factory based on the type
@@ -417,7 +417,7 @@ public:
   * @return The suggested mutated type for the current factory
   */
   virtual gcc_pure
-  LegalPointType_t getMutatedPointType(const OrderedTaskPoint &tp) const;
+  LegalPointType getMutatedPointType(const OrderedTaskPoint &tp) const;
 
 
   /**
@@ -483,7 +483,7 @@ public:
    * @return True if type is valid
    */
   gcc_pure
-  virtual bool validAbstractType(LegalAbstractPointType_t type,
+  virtual bool validAbstractType(LegalAbstractPointType type,
                                  const unsigned position) const;
 
   /**
@@ -555,7 +555,7 @@ public:
    * @return Type of supplied point
    */
   gcc_pure
-  LegalPointType_t getType(const OrderedTaskPoint &point) const;
+  LegalPointType getType(const OrderedTaskPoint &point) const;
 
   /**
    * Determines whether task is closed (finish same as start)
@@ -588,7 +588,7 @@ public:
    * @return True if type is valid
    */
   gcc_pure
-  bool validFinishType(LegalPointType_t type) const;
+  bool validFinishType(LegalPointType type) const;
 
   /**
    * Determine if a type is valid for a StartPoint
@@ -598,7 +598,7 @@ public:
    * @return True if type is valid
    */
   gcc_pure
-  bool validStartType(LegalPointType_t type) const;
+  bool validStartType(LegalPointType type) const;
 
   /**
    * Determine if a type is valid for an IntermediateTaskPoint
@@ -608,7 +608,7 @@ public:
    * @return True if type is valid
    */
   gcc_pure
-  bool validIntermediateType(LegalPointType_t type) const;
+  bool validIntermediateType(LegalPointType type) const;
 
   /**
    * removes excess turnpoints from end of task if the
@@ -707,7 +707,7 @@ protected:
    *
    * @param e The validation error type to be added
    */
-  void addValidationError(TaskValidationErrorType_t e);
+  void addValidationError(TaskValidationErrorType e);
 
 private:
   /**

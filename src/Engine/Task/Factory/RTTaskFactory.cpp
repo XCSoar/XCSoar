@@ -24,14 +24,14 @@
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Util/Macros.hpp"
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t rt_start_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType rt_start_types[] = {
   AbstractTaskFactory::START_LINE,
   AbstractTaskFactory::START_CYLINDER,
   AbstractTaskFactory::START_SECTOR,
   AbstractTaskFactory::START_BGA,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t rt_im_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType rt_im_types[] = {
   AbstractTaskFactory::AST_CYLINDER,
   AbstractTaskFactory::KEYHOLE_SECTOR,
   AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR,
@@ -39,7 +39,7 @@ static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t rt_im_types[] = 
   AbstractTaskFactory::FAI_SECTOR,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t rt_finish_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType rt_finish_types[] = {
   AbstractTaskFactory::FINISH_LINE,
   AbstractTaskFactory::FINISH_CYLINDER,
   AbstractTaskFactory::FINISH_SECTOR,
@@ -76,11 +76,11 @@ RTTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
   to.start_requires_arm = true;
 }
 
-AbstractTaskFactory::LegalPointType_t
+AbstractTaskFactory::LegalPointType
 RTTaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
 {
-  const LegalPointType_t oldtype = getType(tp);
-  LegalPointType_t newtype = oldtype;
+  const LegalPointType oldtype = getType(tp);
+  LegalPointType newtype = oldtype;
 
   switch (oldtype) {
 

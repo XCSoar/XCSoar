@@ -50,14 +50,14 @@ static void OnCloseClicked(gcc_unused WndButton &Sender)
   wf->SetModalResult(mrOK);
 }
 
-static AbstractTaskFactory::LegalPointType_t
+static AbstractTaskFactory::LegalPointType
 get_point_type() 
 {
   return ordered_task->GetFactory().getType(*point);
 }
 
 
-static AbstractTaskFactory::LegalPointType_t
+static AbstractTaskFactory::LegalPointType
 get_cursor_type() 
 {
   return point_types[wPointTypes->GetCursorIndex()];
@@ -94,7 +94,7 @@ OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
 }
 
 static bool
-SetPointType(AbstractTaskFactory::LegalPointType_t type)
+SetPointType(AbstractTaskFactory::LegalPointType type)
 {
   bool apply = false;
 

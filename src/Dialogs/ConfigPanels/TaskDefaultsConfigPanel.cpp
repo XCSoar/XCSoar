@@ -122,7 +122,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
     for (auto i = point_types.begin(), end = point_types.end();
          i != end; ++i) {
-      const AbstractTaskFactory::LegalPointType_t type = *i;
+      const AbstractTaskFactory::LegalPointType type = *i;
       dfe->addEnumText(OrderedTaskPointName(type), (unsigned)type,
                        OrderedTaskPointDescription(type));
       if (type == task_behaviour.sector_defaults.start_type)
@@ -145,7 +145,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
     for (auto i = point_types.begin(), end = point_types.end();
          i != end; ++i) {
-      const AbstractTaskFactory::LegalPointType_t type = *i;
+      const AbstractTaskFactory::LegalPointType type = *i;
       dfe->addEnumText(OrderedTaskPointName(type), (unsigned)type,
                        OrderedTaskPointDescription(type));
       if (type == task_behaviour.sector_defaults.finish_type)
@@ -168,7 +168,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
     for (auto i = point_types.begin(), end = point_types.end();
          i != end; ++i) {
-      const AbstractTaskFactory::LegalPointType_t type = *i;
+      const AbstractTaskFactory::LegalPointType type = *i;
       dfe->addEnumText(OrderedTaskPointName(type), (unsigned)type,
                        OrderedTaskPointDescription(type));
       if (type == task_behaviour.sector_defaults.turnpoint_type) {

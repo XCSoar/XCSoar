@@ -47,12 +47,12 @@ void OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* radius)
 bool OrderedTaskSave(SingleWindow &parent,
                      const OrderedTask& task, bool noask=false);
 
-const TCHAR* OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type);
-const TCHAR* OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type);
+const TCHAR* OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType type);
+const TCHAR* OrderedTaskPointName(AbstractTaskFactory::LegalPointType type);
 const TCHAR* getTaskValidationErrors(
    const AbstractTaskFactory::TaskValidationErrorVector v);
 const TCHAR* TaskValidationError(
-   AbstractTaskFactory::TaskValidationErrorType_t type);
+   AbstractTaskFactory::TaskValidationErrorType type);
 
 #endif
 

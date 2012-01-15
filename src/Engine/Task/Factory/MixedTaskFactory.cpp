@@ -25,14 +25,14 @@
 #include "Task/OrderedTaskBehaviour.hpp"
 #include "Util/Macros.hpp"
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t mixed_start_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType mixed_start_types[] = {
   AbstractTaskFactory::START_LINE,
   AbstractTaskFactory::START_CYLINDER,
   AbstractTaskFactory::START_BGA,
   AbstractTaskFactory::START_SECTOR,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t mixed_im_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType mixed_im_types[] = {
   AbstractTaskFactory::FAI_SECTOR,
   AbstractTaskFactory::AST_CYLINDER,
   AbstractTaskFactory::AAT_CYLINDER,
@@ -43,7 +43,7 @@ static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t mixed_im_types[]
   AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t mixed_finish_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType mixed_finish_types[] = {
   AbstractTaskFactory::FINISH_SECTOR,
   AbstractTaskFactory::FINISH_LINE,
   AbstractTaskFactory::FINISH_CYLINDER,

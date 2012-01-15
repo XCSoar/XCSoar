@@ -55,7 +55,7 @@ public:
    * similar to type of tp
    */
   virtual gcc_pure
-  LegalPointType_t getMutatedPointType(const OrderedTaskPoint &tp) const;
+  LegalPointType getMutatedPointType(const OrderedTaskPoint &tp) const;
 };
 
 

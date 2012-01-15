@@ -24,17 +24,17 @@
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Util/Macros.hpp"
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t fai_start_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType fai_start_types[] = {
   AbstractTaskFactory::START_SECTOR,
   AbstractTaskFactory::START_LINE,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t fai_im_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType fai_im_types[] = {
   AbstractTaskFactory::FAI_SECTOR,
   AbstractTaskFactory::AST_CYLINDER,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType_t fai_finish_types[] = {
+static gcc_constexpr_data AbstractTaskFactory::LegalPointType fai_finish_types[] = {
   AbstractTaskFactory::FINISH_SECTOR,
   AbstractTaskFactory::FINISH_LINE,
 };
@@ -80,11 +80,11 @@ FAITaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
   to.start_requires_arm = false;
 }
 
-AbstractTaskFactory::LegalPointType_t
+AbstractTaskFactory::LegalPointType
 FAITaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
 {
-  const LegalPointType_t oldtype = getType(tp);
-  LegalPointType_t newtype = oldtype;
+  const LegalPointType oldtype = getType(tp);
+  LegalPointType newtype = oldtype;
 
   switch (oldtype) {
 
@@ -125,7 +125,7 @@ FAITaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
 }
 
 void
-FAITaskFactory::getPointDefaultSizes(const LegalPointType_t type,
+FAITaskFactory::getPointDefaultSizes(const LegalPointType type,
                                           fixed &start_radius,
                                           fixed &turnpoint_radius,
                                           fixed &finish_radius) const

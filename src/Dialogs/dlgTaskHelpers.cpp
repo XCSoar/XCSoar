@@ -273,7 +273,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
 }
 
 const TCHAR*
-OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type)
+OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType type)
 {
   switch (type) {
   case AbstractTaskFactory::START_SECTOR:
@@ -319,7 +319,7 @@ OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type)
 }
 
 const TCHAR*
-OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
+OrderedTaskPointName(AbstractTaskFactory::LegalPointType type)
 {
   switch (type) {
   case AbstractTaskFactory::START_SECTOR:
@@ -396,7 +396,7 @@ getTaskValidationErrors(const AbstractTaskFactory::TaskValidationErrorVector v)
   //  _tcscat(err, OrderedTaskFactory_OneValidationError(v[i]);
 }
 const TCHAR*
-TaskValidationError(AbstractTaskFactory::TaskValidationErrorType_t type)
+TaskValidationError(AbstractTaskFactory::TaskValidationErrorType type)
 {
   switch (type) {
   case AbstractTaskFactory::NO_VALID_START:

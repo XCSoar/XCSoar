@@ -788,7 +788,7 @@ bool test_task_random(TaskManager& task_manager,
   task_report(task_manager, "# adding start\n");
   wp = random_waypoint(waypoints);
   if (wp) {
-    AbstractTaskFactory::LegalPointType_t s = 
+    AbstractTaskFactory::LegalPointType s =
       fact.getStartTypes()[(rand() % fact.getStartTypes().size())];
 
     tp = fact.createStart(s,*wp);
@@ -805,7 +805,7 @@ bool test_task_random(TaskManager& task_manager,
     task_report(task_manager, "# adding intermediate\n");
     wp = random_waypoint(waypoints);
     if (wp) {
-      AbstractTaskFactory::LegalPointType_t s = 
+      AbstractTaskFactory::LegalPointType s =
         fact.getIntermediateTypes()[(rand() % fact.getIntermediateTypes().size())];
 
       tp = fact.createIntermediate(s,*wp);
@@ -819,7 +819,7 @@ bool test_task_random(TaskManager& task_manager,
   task_report(task_manager, "# adding finish\n");
   wp = random_waypoint(waypoints);
   if (wp) {
-    AbstractTaskFactory::LegalPointType_t s = 
+    AbstractTaskFactory::LegalPointType s =
       fact.getFinishTypes()[(rand() % fact.getFinishTypes().size())];
 
     tp = fact.createFinish(s,*wp);
@@ -880,7 +880,7 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
   test_note("# adding start\n");
   wp = random_waypoint(waypoints);
   if (wp) {
-    AbstractTaskFactory::LegalPointType_t s =
+    AbstractTaskFactory::LegalPointType s =
       fact.getStartTypes()[(rand() % fact.getStartTypes().size())];
 
     tp = fact.createStart(s,*wp);
@@ -894,7 +894,7 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
     test_note("# adding intermediate\n");
     wp = random_waypoint(waypoints);
     if (wp) {
-      AbstractTaskFactory::LegalPointType_t s =
+      AbstractTaskFactory::LegalPointType s =
         fact.getIntermediateTypes()[(rand() % fact.getIntermediateTypes().size())];
 
       tp = fact.createIntermediate(s,*wp);
@@ -908,7 +908,7 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
   test_note("# adding finish\n");
   wp = random_waypoint(waypoints);
   if (wp) {
-    AbstractTaskFactory::LegalPointType_t s =
+    AbstractTaskFactory::LegalPointType s =
       fact.getFinishTypes()[(rand() % fact.getFinishTypes().size())];
 
     tp = fact.createFinish(s,*wp);
