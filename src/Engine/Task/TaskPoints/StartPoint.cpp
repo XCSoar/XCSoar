@@ -70,7 +70,7 @@ StartPoint::UpdateSampleNear(const AircraftState& state,
                                const TaskProjection &projection)
 {
   if (IsInSector(state)) {
-    if (!m_ordered_task_behaviour.check_start_speed(state, margins)) {
+    if (!m_ordered_task_behaviour.CheckStartSpeed(state, margins)) {
       task_events.StartSpeedWarning();
     }
   }
@@ -139,7 +139,7 @@ StartPoint::IsInSector(const AircraftState &state) const
   if (!ObservationZoneClient::IsInSector(state)) 
     return false;
 
-  return m_ordered_task_behaviour.check_start_height(state, margins,
+  return m_ordered_task_behaviour.CheckStartHeight(state, margins,
                                                      GetBaseElevation());
 }
 
@@ -148,11 +148,11 @@ StartPoint::CheckExitTransition(const AircraftState & ref_now,
                                   const AircraftState & ref_last) const
 {
   const bool now_in_height = 
-    m_ordered_task_behaviour.check_start_height(ref_now,
+    m_ordered_task_behaviour.CheckStartHeight(ref_now,
                                                 margins,
                                                 GetBaseElevation());
   const bool last_in_height = 
-    m_ordered_task_behaviour.check_start_height(ref_last,
+    m_ordered_task_behaviour.CheckStartHeight(ref_last,
                                                 margins,
                                                 GetBaseElevation());
 

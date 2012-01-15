@@ -42,9 +42,9 @@ OrderedTaskBehaviour::SetDefaults()
 }
 
 bool 
-OrderedTaskBehaviour::check_start_speed(const AircraftState &state,
-                                        const TaskStartMargins &behaviour,
-                                        const bool with_margin) const
+OrderedTaskBehaviour::CheckStartSpeed(const AircraftState &state,
+                                      const TaskStartMargins &behaviour,
+                                      const bool with_margin) const
 {
   if (start_max_speed == fixed_zero)
     return true;
@@ -58,10 +58,10 @@ OrderedTaskBehaviour::check_start_speed(const AircraftState &state,
 }
 
 bool 
-OrderedTaskBehaviour::check_start_height(const AircraftState &state,
-                                         const TaskStartMargins &behaviour,
-                                         const fixed spAlt,
-                                         const bool with_margin) const
+OrderedTaskBehaviour::CheckStartHeight(const AircraftState &state,
+                                       const TaskStartMargins &behaviour,
+                                       const fixed start_elevation,
+                                       const bool with_margin) const
 {
   if (start_max_height == 0)
     return true;
@@ -74,12 +74,12 @@ OrderedTaskBehaviour::check_start_height(const AircraftState &state,
   if (start_max_height_ref == hrMSL)
     return state.altitude <= fixed(start_max_height + margin);
   else
-    return state.altitude <= (fixed(start_max_height + margin) + spAlt);
+    return state.altitude <= (fixed(start_max_height + margin) + start_elevation);
 }
 
 bool 
-OrderedTaskBehaviour::check_finish_height(const AircraftState &state,
-                                          const fixed fpAlt) const
+OrderedTaskBehaviour::CheckFinishHeight(const AircraftState &state,
+                                        const fixed finish_elevation) const
 {
   if (finish_min_height == 0)
     return true;
@@ -87,5 +87,5 @@ OrderedTaskBehaviour::check_finish_height(const AircraftState &state,
   if (finish_min_height_ref == hrMSL)
     return state.altitude >= fixed(finish_min_height);
   else
-    return state.altitude >= (fixed(finish_min_height) + fpAlt);
+    return state.altitude >= (fixed(finish_min_height) + finish_elevation);
 }

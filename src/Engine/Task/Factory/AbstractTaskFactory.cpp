@@ -582,7 +582,7 @@ AbstractTaskFactory::IsPositionIntermediate(const unsigned position) const
   if (position + 1 < GetOrderedTaskBehaviour().min_points)
     return true;
 
-  if (GetOrderedTaskBehaviour().is_fixed_size())
+  if (GetOrderedTaskBehaviour().IsFixedSize())
     return (position + 1 < GetOrderedTaskBehaviour().max_points);
   else if (m_task.TaskSize() < GetOrderedTaskBehaviour().min_points)
     return true;
@@ -601,7 +601,7 @@ AbstractTaskFactory::IsPositionFinish(const unsigned position) const
   if (position + 1 > GetOrderedTaskBehaviour().max_points)
     return false;
 
-  if (GetOrderedTaskBehaviour().is_fixed_size())
+  if (GetOrderedTaskBehaviour().IsFixedSize())
     return (position + 1 == GetOrderedTaskBehaviour().max_points);
   else
     return (position + 1 >= m_task.TaskSize());
@@ -828,7 +828,7 @@ AbstractTaskFactory::Validate()
     valid = false;
   }
 
-  if (GetOrderedTaskBehaviour().is_fixed_size()) {
+  if (GetOrderedTaskBehaviour().IsFixedSize()) {
     if (m_task.TaskSize() != GetOrderedTaskBehaviour().max_points) {
       AddValidationError(INCORRECT_NUMBER_TURNPOINTS);
       valid = false;

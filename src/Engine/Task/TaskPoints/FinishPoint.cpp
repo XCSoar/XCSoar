@@ -96,7 +96,7 @@ FinishPoint::IsInSector(const AircraftState &state) const
 bool
 FinishPoint::is_in_height_limit(const AircraftState &state) const
 {
-  if (!m_ordered_task_behaviour.check_finish_height(state, GetBaseElevation()))
+  if (!m_ordered_task_behaviour.CheckFinishHeight(state, GetBaseElevation()))
     return false;
 
   if (m_ordered_task_behaviour.fai_finish)

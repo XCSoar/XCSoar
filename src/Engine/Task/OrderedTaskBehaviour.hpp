@@ -79,9 +79,9 @@ struct OrderedTaskBehaviour {
    *
    * @return True if within limits
    */
-  bool check_start_speed(const AircraftState &state, 
-                         const TaskStartMargins &margins,
-                         const bool with_margin=false) const;
+  bool CheckStartSpeed(const AircraftState &state,
+                       const TaskStartMargins &margins,
+                       const bool with_margin = false) const;
 
   /**
    * Check whether aircraft height is within start height limit
@@ -93,10 +93,10 @@ struct OrderedTaskBehaviour {
    *
    * @return True if within limits
    */
-  bool check_start_height(const AircraftState &state,
-                          const TaskStartMargins &margins,
-                          const fixed spAlt,
-                          const bool with_margin=false) const;
+  bool CheckStartHeight(const AircraftState &state,
+                        const TaskStartMargins &margins,
+                        const fixed start_elevation,
+                        const bool with_margin = false) const;
 
   /**
    * Check whether aircraft height is within finish height limit
@@ -106,14 +106,15 @@ struct OrderedTaskBehaviour {
    *
    * @return True if within limits
    */
-  bool check_finish_height(const AircraftState &state, const fixed fpAlt) const;
+  bool CheckFinishHeight(const AircraftState &state,
+                         const fixed finish_elevation) const;
 
 
   /**
    * Convenience function (used primarily for testing) to disable
    * all expensive task behaviour functions.
    */
-  void all_off() {
+  void AllOff() {
     task_scored = false;
   }
 
@@ -122,7 +123,7 @@ struct OrderedTaskBehaviour {
    *
    * @return True if task is fixed size
    */
-  bool is_fixed_size() const {
+  bool IsFixedSize() const {
     return min_points == max_points;
   }
 };
