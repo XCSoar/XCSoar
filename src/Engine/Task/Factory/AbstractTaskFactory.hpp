@@ -128,7 +128,7 @@ protected:
   /** list of errors returned by task validation */
   TaskValidationErrorVector m_validation_errors;
 
-public:
+protected:
   /**
    * Constructor
    *
@@ -144,6 +144,7 @@ public:
      m_intermediate_types(_intermediate_types),
      m_finish_types(_finish_types) {}
 
+public:
   virtual ~AbstractTaskFactory() {}
 
   /// @todo should be abstract
