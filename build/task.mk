@@ -54,6 +54,7 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Task/TaskBehaviour.cpp \
 	$(ENGINE_SRC_DIR)/Task/OrderedTaskBehaviour.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskManager.cpp \
+	$(ENGINE_SRC_DIR)/Task/FAITriangleValidator.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/AbstractTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/RTTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/FAITaskFactory.cpp \

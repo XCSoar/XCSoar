@@ -33,6 +33,7 @@ Copyright_License {
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/SectorZone.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
+#include "Task/FAITriangleValidator.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
 
@@ -132,7 +133,7 @@ TaskSummaryShape(OrderedTask* task, TCHAR* text)
   case 4:
     if (!task->GetFactory().IsUnique() ||!task->GetFactory().IsClosed())
       _tcscpy(text, _("Three legs"));
-    else if (task->GetFactory().TestFAITriangle()) {
+    else if (FAITriangleValidator::Validate(*task)) {
       _tcscpy(text, _("FAI triangle"));
       FAIShape = true;
     }

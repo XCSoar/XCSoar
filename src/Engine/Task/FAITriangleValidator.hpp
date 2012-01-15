@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -20,29 +21,17 @@
 }
  */
 
-#include "FAITriangleTaskFactory.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
-#include "Task/FAITriangleValidator.hpp"
+#ifndef FAI_TRIANGLE_VALIDATOR_HPP
+#define FAI_TRIANGLE_VALIDATOR_HPP
 
-FAITriangleTaskFactory::FAITriangleTaskFactory(OrderedTask& _task,
-                               const TaskBehaviour &tb):
-  FAITaskFactory(_task, tb)
+#include "Math/fixed.hpp"
+
+class OrderedTask;
+
+namespace FAITriangleValidator
 {
+  bool TestDistances(const fixed d1, const fixed d2, const fixed d3);
+  bool Validate(const OrderedTask &task);
 }
 
-bool 
-FAITriangleTaskFactory::Validate()
-{
-
-  bool valid = FAITaskFactory::Validate();
-
-  return valid && FAITriangleValidator::Validate(m_task);
-}
-
-void 
-FAITriangleTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
-{
-  FAITaskFactory::UpdateOrderedTaskBehaviour(to);
-  to.min_points = 4;
-  to.max_points = 4;
-}
+#endif

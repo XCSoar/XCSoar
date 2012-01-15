@@ -41,7 +41,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "StringUtil.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
-#include "Task/Factory/AbstractTaskFactory.hpp"
+#include "Task/FAITriangleValidator.hpp"
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
 #include "Util/Macros.hpp"
@@ -290,7 +290,7 @@ public:
     if ((d1 < min_fai_leg) || (d2 < min_fai_leg) || (d3 < min_fai_leg))
       return false;
 
-    return AbstractTaskFactory::TestFAITriangle(d1, d2, d3);
+    return FAITriangleValidator::TestDistances(d1, d2, d3);
   }
 
   /**
