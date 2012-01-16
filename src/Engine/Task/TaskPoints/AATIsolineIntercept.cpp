@@ -19,24 +19,20 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "AATIsolineIntercept.hpp"
 
-AATIsolineIntercept::AATIsolineIntercept(const AATPoint& ap):
-  AATIsoline(ap)
+AATIsolineIntercept::AATIsolineIntercept(const AATPoint& ap)
+  :AATIsoline(ap)
 {
 }
 
-
-bool 
-AATIsolineIntercept::intercept(const AATPoint &ap,
-                               const AircraftState &state,
-                               const double bearing_offset,
-                               GeoPoint& ip) const
+bool
+AATIsolineIntercept::intercept(const AATPoint &ap, const AircraftState &state,
+                               const double bearing_offset, GeoPoint& ip) const
 {
   AircraftState s1, s2;
-  if (ell.IntersectExtended(state.location,
-                             s1.location, s2.location)) 
-  {
+  if (ell.IntersectExtended(state.location, s1.location, s2.location)) {
     if (ap.IsInSector(s1)) {
       ip = s1.location;
       return true;
@@ -48,4 +44,3 @@ AATIsolineIntercept::intercept(const AATPoint &ap,
   }
   return false;
 }
-
