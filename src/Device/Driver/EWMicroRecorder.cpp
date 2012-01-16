@@ -114,10 +114,10 @@ TryConnect(Port &port, char *user_data, size_t max_user_data,
   bool started = false;
 
   PeriodClock clock;
-  clock.update();
+  clock.Update();
 
   int i;
-  while ((i = port.GetChar()) != EOF && !clock.check(8000) &&
+  while ((i = port.GetChar()) != EOF && !clock.Check(8000) &&
          !env.IsCancelled()) {
     char ch = (char)i;
 

@@ -458,7 +458,7 @@ bool
 InfoBoxWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   set_capture();
-  click_clock.update();
+  click_clock.Update();
 
   // if single clicked -> focus the InfoBoxWindow
   set_focus();
@@ -475,13 +475,13 @@ InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
     release_capture();
 
     if ((unsigned)x < get_width() && (unsigned)y < get_height() &&
-        click_clock.check(1000)) {
+        click_clock.Check(1000)) {
       force_draw_selector = true;
       InfoBoxManager::ShowDlgInfoBox(id);
       force_draw_selector = false;
     }
 
-    click_clock.reset();
+    click_clock.Reset();
     return true;
   } else
     return PaintWindow::OnMouseUp(x, y);
@@ -509,7 +509,7 @@ InfoBoxWindow::OnPaint(Canvas &canvas)
 bool
 InfoBoxWindow::OnCancelMode()
 {
-  click_clock.reset();
+  click_clock.Reset();
   release_capture();
   PaintWindow::OnCancelMode();
   return false;

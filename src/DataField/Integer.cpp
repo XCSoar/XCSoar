@@ -106,21 +106,21 @@ DataFieldInteger::SpeedUp(bool keyup)
   if (keyup != DataFieldKeyUp) {
     mSpeedup = 0;
     DataFieldKeyUp = keyup;
-    last_step.update();
+    last_step.Update();
     return 1;
   }
 
-  if (!last_step.check(200)) {
+  if (!last_step.Check(200)) {
     mSpeedup++;
     if (mSpeedup > 5) {
       res = 10;
-      last_step.update_offset(350);
+      last_step.UpdateWithOffset(350);
       return (res);
     }
   } else
     mSpeedup = 0;
 
-  last_step.update();
+  last_step.Update();
 
   return res;
 }

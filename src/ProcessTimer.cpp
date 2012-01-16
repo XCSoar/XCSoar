@@ -354,13 +354,13 @@ ProcessTimer::Process(void)
       itimeout = ConnectionProcessTimer(itimeout);
   } else {
     static PeriodClock m_clock;
-    if (m_clock.elapsed() < 0)
-      m_clock.update();
+    if (m_clock.Elapsed() < 0)
+      m_clock.Update();
 
     if (replay && replay->Update()) {
-      m_clock.update();
-    } else if (m_clock.elapsed() >= 1000) {
-      m_clock.update();
+      m_clock.Update();
+    } else if (m_clock.Elapsed() >= 1000) {
+      m_clock.Update();
       device_blackboard->ProcessSimulation();
     }
   }

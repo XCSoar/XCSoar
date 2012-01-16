@@ -104,7 +104,7 @@ PopupMessage::PopupMessage(const StatusMessageList &_status_messages,
    nvisible(0),
    enable_sound(true)
 {
-  clock.update();
+  clock.Update();
 }
 
 void
@@ -194,7 +194,7 @@ PopupMessage::Render()
     return false;
   }
 
-  int fpsTime = clock.elapsed();
+  int fpsTime = clock.Elapsed();
 
   // this has to be done quickly, since it happens in GUI thread
   // at subsecond interval
@@ -261,7 +261,7 @@ void
 PopupMessage::AddMessage(int tshow, int type, const TCHAR *Text)
 {
   int i;
-  int fpsTime = clock.elapsed();
+  int fpsTime = clock.Elapsed();
   i = GetEmptySlot();
 
   messages[i].Set(type, tshow, Text, fpsTime);
@@ -276,7 +276,7 @@ PopupMessage::Repeat(int type)
 
   mutex.Lock();
 
-  int fpsTime = clock.elapsed();
+  int fpsTime = clock.Elapsed();
 
   // find most recent non-visible message
 
@@ -302,7 +302,7 @@ PopupMessage::Acknowledge(int type)
 {
   ScopeLock protect(mutex);
   int i;
-  int fpsTime = clock.elapsed();
+  int fpsTime = clock.Elapsed();
 
   for (i = 0; i < MAXMESSAGES; i++) {
     if (messages[i].texpiry > messages[i].tstart &&

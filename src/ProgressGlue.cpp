@@ -46,7 +46,7 @@ ProgressGlue::Create(const TCHAR *text)
   global_progress_window->set_pos(0);
 
   CommonInterface::main_window.refresh();
-  throttle_clock.reset();
+  throttle_clock.Reset();
 }
 
 void
@@ -56,7 +56,7 @@ ProgressGlue::Resize(UPixelScalar width, UPixelScalar height)
     return;
 
   global_progress_window->move(0, 0, width, height);
-  throttle_clock.reset();
+  throttle_clock.Reset();
 }
 
 void
@@ -72,7 +72,7 @@ ProgressGlue::Step()
   if (global_progress_window == NULL)
     return;
 
-  if (!throttle_clock.check_update(200))
+  if (!throttle_clock.CheckUpdate(200))
     return;
 
   global_progress_window->step();
@@ -86,7 +86,7 @@ ProgressGlue::SetValue(unsigned value)
   if (global_progress_window == NULL)
     return;
 
-  if (!throttle_clock.check_update(200))
+  if (!throttle_clock.CheckUpdate(200))
     return;
 
   global_progress_window->set_pos(value);
@@ -101,7 +101,7 @@ ProgressGlue::SetRange(unsigned value)
     return;
 
   global_progress_window->set_range(0, value);
-  throttle_clock.reset();
+  throttle_clock.Reset();
 }
 
 void
@@ -111,5 +111,5 @@ ProgressGlue::SetStep(int step)
     return;
 
   global_progress_window->set_step(step);
-  throttle_clock.reset();
+  throttle_clock.Reset();
 }

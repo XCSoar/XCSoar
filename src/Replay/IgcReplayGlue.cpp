@@ -40,11 +40,11 @@ IgcReplayGlue::UpdateTime()
 {
   // Allow for poor time slicing, we never get called more
   // than 4 times per second, so this will yield 1 second updates
-  if (!clock.check(760))
+  if (!clock.Check(760))
     return false;
 
-  t_simulation += time_scale * max(clock.elapsed(), 0) / 1000;
-  clock.update();
+  t_simulation += time_scale * max(clock.Elapsed(), 0) / 1000;
+  clock.Update();
 
   return true;
 }
@@ -52,7 +52,7 @@ IgcReplayGlue::UpdateTime()
 void
 IgcReplayGlue::ResetTime()
 {
-  clock.reset();
+  clock.Reset();
   t_simulation = fixed_zero;
 }
 

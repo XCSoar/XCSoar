@@ -106,11 +106,11 @@ NmeaReplayGlue::on_bad_file()
 bool
 NmeaReplayGlue::UpdateTime()
 {
-  return clock.check_update(1000);
+  return clock.CheckUpdate(1000);
 }
 
 void
 NmeaReplayGlue::ResetTime()
 {
-  clock.reset();
+  clock.Reset();
 }

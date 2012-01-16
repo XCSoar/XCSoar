@@ -42,11 +42,11 @@ bool
 Port::FullWrite(const void *buffer, size_t length, unsigned timeout_ms)
 {
   PeriodClock timeout;
-  timeout.update();
+  timeout.Update();
 
   const char *p = (const char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.check(timeout_ms))
+    if (timeout.Check(timeout_ms))
       return false;
 
     size_t nbytes = Write(p, end - p);
@@ -80,20 +80,20 @@ Port::FullFlush(unsigned timeout_ms)
   Flush();
 
   PeriodClock clock;
-  clock.update();
+  clock.Update();
   char buffer[0x100];
-  while (Read(buffer, sizeof(buffer)) && !clock.check(timeout_ms)) {}
+  while (Read(buffer, sizeof(buffer)) && !clock.Check(timeout_ms)) {}
 }
 
 bool
 Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
 {
   PeriodClock timeout;
-  timeout.update();
+  timeout.Update();
 
   char *p = (char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.check(timeout_ms))
+    if (timeout.Check(timeout_ms))
       return false;
 
     int nbytes = Read(p, end - p);
@@ -112,7 +112,7 @@ Port::ExpectString(const char *token, unsigned timeout_ms)
   assert(token != NULL);
 
   PeriodClock timeout;
-  timeout.update();
+  timeout.Update();
 
   const char *p = token;
   while (*p != '\0') {
@@ -121,7 +121,7 @@ Port::ExpectString(const char *token, unsigned timeout_ms)
       return false;
 
     if (ch != *p++) {
-      if (timeout.check(timeout_ms))
+      if (timeout.Check(timeout_ms))
         /* give up after 2 seconds (is that enough for all
            devices?) */
         return false;

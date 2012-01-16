@@ -70,7 +70,7 @@ DeviceDescriptor::Open(Port &_port, const DeviceRegister &_driver,
   assert(device == NULL);
   assert(!ticker);
 
-  reopen_clock.update();
+  reopen_clock.Update();
 
   device_blackboard->mutex.Lock();
   device_blackboard->SetRealState(index).Reset();
@@ -199,7 +199,7 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
   if (IsAltair() || !config.IsAvailable() || IsConnected() ||
       (driver != NULL && !driver->HasTimeout()) ||
       /* attempt to reopen a failed device every 30 seconds */
-      !reopen_clock.check_update(30000))
+      !reopen_clock.CheckUpdate(30000))
     return;
 
   TCHAR buffer[64];

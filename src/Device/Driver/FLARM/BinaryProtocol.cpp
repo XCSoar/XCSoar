@@ -38,12 +38,12 @@ FlarmDevice::SendEscaped(const void *buffer, size_t length, unsigned timeout_ms)
   assert(length > 0);
 
   PeriodClock timeout;
-  timeout.update();
+  timeout.Update();
 
   // Send data byte-by-byte including escaping
   const char *p = (const char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.check(timeout_ms))
+    if (timeout.Check(timeout_ms))
       return false;
 
     // Check for bytes that need to be escaped and send
@@ -74,12 +74,12 @@ FlarmDevice::ReceiveEscaped(void *buffer, size_t length, unsigned timeout_ms)
   assert(length > 0);
 
   PeriodClock timeout;
-  timeout.update();
+  timeout.Update();
 
   // Receive data byte-by-byte including escaping until buffer is full
   char *p = (char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.check(timeout_ms))
+    if (timeout.Check(timeout_ms))
       return false;
 
     // Read single character from port
@@ -97,7 +97,7 @@ FlarmDevice::ReceiveEscaped(void *buffer, size_t length, unsigned timeout_ms)
       // Read next character after the ESCAPE
       int c2;
       while ((c2 = port.GetChar()) == -1)
-        if (timeout.check(timeout_ms))
+        if (timeout.Check(timeout_ms))
           return false;
 
       switch (c2) {
@@ -135,9 +135,9 @@ FlarmDevice::WaitForStartByte(unsigned timeout_ms)
 {
   assert(in_binary_mode);
   PeriodClock timeout;
-  timeout.update();
+  timeout.Update();
 
-  while (!timeout.check(timeout_ms))
+  while (!timeout.Check(timeout_ms))
     if (port.GetChar() == FLARM_STARTFRAME)
       return true;
 
@@ -217,17 +217,17 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
                               unsigned timeout_ms)
 {
   PeriodClock timeout;
-  timeout.update();
+  timeout.Update();
 
   // Receive frames until timeout or expected frame found
-  while (!timeout.check(timeout_ms)) {
+  while (!timeout.Check(timeout_ms)) {
     // Wait until the next start byte comes around
-    if (!WaitForStartByte(timeout_ms - timeout.elapsed()))
+    if (!WaitForStartByte(timeout_ms - timeout.Elapsed()))
       continue;
 
     // Read the following FrameHeader
     FrameHeader header;
-    if (!ReceiveFrameHeader(header, timeout_ms - timeout.elapsed()))
+    if (!ReceiveFrameHeader(header, timeout_ms - timeout.Elapsed()))
       continue;
 
     // Read and check length of the FrameHeader
@@ -240,7 +240,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
 
     // Read payload and check length
     data.GrowDiscard(length);
-    if (!ReceiveEscaped(data.begin(), length, timeout_ms - timeout.elapsed()))
+    if (!ReceiveEscaped(data.begin(), length, timeout_ms - timeout.Elapsed()))
       continue;
 
     // Verify CRC
@@ -282,29 +282,29 @@ bool
 FlarmDevice::BinaryPing(unsigned timeout_ms)
 {
   PeriodClock timeout;
-  timeout.update();
+  timeout.Update();
 
   // Create header for sending a binary ping request
   FrameHeader header = PrepareFrameHeader(MT_PING);
 
   // Send request and wait for positive answer
   return SendStartByte() &&
-         SendFrameHeader(header, timeout_ms - timeout.elapsed()) &&
-         WaitForACK(header.GetSequenceNumber(), timeout_ms - timeout.elapsed());
+         SendFrameHeader(header, timeout_ms - timeout.Elapsed()) &&
+         WaitForACK(header.GetSequenceNumber(), timeout_ms - timeout.Elapsed());
 }
 
 bool
 FlarmDevice::BinaryReset(unsigned timeout_ms)
 {
   PeriodClock timeout;
-  timeout.update();
+  timeout.Update();
 
   // Create header for sending a binary reset request
   FrameHeader header = PrepareFrameHeader(MT_EXIT);
 
   // Send request and wait for positive answer
   return SendStartByte() &&
-         SendFrameHeader(header, timeout_ms - timeout.elapsed());
+         SendFrameHeader(header, timeout_ms - timeout.Elapsed());
 }
 
 bool

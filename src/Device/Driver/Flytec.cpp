@@ -284,9 +284,9 @@ static bool
 ExpectCharacter(Port &port, char c, unsigned timeout_ms)
 {
   PeriodClock timeout;
-  timeout.update();
+  timeout.Update();
 
-  while (!timeout.check(timeout_ms))
+  while (!timeout.Check(timeout_ms))
     if (port.GetChar() == c)
       return true;
 
@@ -303,11 +303,11 @@ static bool
 ReceiveLine(Port &port, char *buffer, size_t length, unsigned timeout_ms)
 {
   PeriodClock timeout;
-  timeout.update();
+  timeout.Update();
 
   char *p = (char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.check(timeout_ms))
+    if (timeout.Check(timeout_ms))
       return false;
 
     // Read single character from port
@@ -509,7 +509,7 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
                              const TCHAR *path, OperationEnvironment &env)
 {
   PeriodClock status_clock;
-  status_clock.update();
+  status_clock.Update();
 
   // Request flight record
   char buffer[256];
@@ -547,7 +547,7 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
     if (StringIsEmpty(buffer))
       break;
 
-    if (status_clock.check_update(250)) {
+    if (status_clock.CheckUpdate(250)) {
       // Parse the fix time
       BrokenTime time;
       if (IGCParseFixTime(buffer, time)) {

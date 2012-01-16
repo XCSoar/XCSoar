@@ -38,7 +38,7 @@ RateLimiter::Trigger()
     return;
 
   unsigned schedule_ms = delay_ms;
-  int elapsed = clock.elapsed();
+  int elapsed = clock.Elapsed();
   if (elapsed >= 0 && (unsigned)elapsed < period_ms)
     schedule_ms += period_ms - elapsed;
 
@@ -50,6 +50,6 @@ RateLimiter::OnTimer()
 {
   Timer::Cancel();
 
-  clock.update();
+  clock.Update();
   Run();
 }

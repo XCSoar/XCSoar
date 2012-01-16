@@ -30,7 +30,7 @@ void
 MapWindowTimer::StartTimer()
 {
   // Saves the current tick count (time) as start time
-  timestamp_newdata.update();
+  timestamp_newdata.Update();
 }
 
 /**
@@ -42,7 +42,7 @@ MapWindowTimer::StartTimer()
 bool
 MapWindowTimer::RenderTimeAvailable()
 {
-  if (!timestamp_newdata.check(700))
+  if (!timestamp_newdata.Check(700))
     // it's been less than 700 ms since last data
     // was posted
     return true;

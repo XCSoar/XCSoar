@@ -61,13 +61,13 @@ WorkerThread::Run()
 
     /* do the actual work */
     if (period_min > 0)
-      clock.update();
+      clock.Update();
 
     Tick();
 
     unsigned idle = idle_min;
     if (period_min > 0) {
-      unsigned elapsed = clock.elapsed();
+      unsigned elapsed = clock.Elapsed();
       if (elapsed + idle < period_min)
         idle = period_min - elapsed;
     }

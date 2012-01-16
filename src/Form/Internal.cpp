@@ -35,7 +35,7 @@ KeyTimer(bool isdown, unsigned thekey)
   static PeriodClock fps_time_down;
   static unsigned savedKey = 0;
 
-  if (thekey == savedKey && fps_time_down.check_update(2000)) {
+  if (thekey == savedKey && fps_time_down.CheckUpdate(2000)) {
     savedKey = 0;
     return true;
   }
@@ -45,7 +45,7 @@ KeyTimer(bool isdown, unsigned thekey)
   } else {
     // key is lowered
     if (thekey != savedKey) {
-      fps_time_down.update();
+      fps_time_down.Update();
       savedKey = thekey;
     }
   }

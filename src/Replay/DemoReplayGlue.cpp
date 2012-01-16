@@ -95,16 +95,16 @@ private:
 bool
 DemoReplayGlue::UpdateTime()
 {
-  if (!clock.check(1000))
+  if (!clock.Check(1000))
     return false;
-  clock.update();
+  clock.Update();
   return true;
 }
 
 void
 DemoReplayGlue::ResetTime()
 {
-  clock.reset();
+  clock.Reset();
 }
 
 void

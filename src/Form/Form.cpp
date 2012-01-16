@@ -377,7 +377,7 @@ WndForm::ShowModal()
 
   PeriodClock enter_clock;
   if (IsEmbedded() && !IsAltair())
-    enter_clock.update();
+    enter_clock.Update();
 
   show_on_top();
 
@@ -395,7 +395,7 @@ WndForm::ShowModal()
     focus_first_control();
 
   bool hastimed = false;
-  WndForm::time_any_open_close.update(); // when current dlg opens or child closes
+  WndForm::time_any_open_close.Update(); // when current dlg opens or child closes
 
   main_window.add_dialog(this);
 
@@ -432,7 +432,7 @@ WndForm::ShowModal()
     // hack to stop exiting immediately
     if (IsEmbedded() && !IsAltair() && !hastimed &&
         IsUserInput(event)) {
-      if (!enter_clock.check(200))
+      if (!enter_clock.Check(200))
         /* ignore user input in the first 200ms */
         continue;
       else
@@ -440,7 +440,7 @@ WndForm::ShowModal()
     }
 
     if (IsEmbedded() && is_mouse_up(event) &&
-        !time_any_open_close.check(OPENCLOSESUPPRESSTIME))
+        !time_any_open_close.Check(OPENCLOSESUPPRESSTIME))
       /* prevents child click from being repeat-handled by parent if
          buttons overlap */
       continue;
@@ -501,7 +501,7 @@ WndForm::ShowModal()
   main_window.remove_dialog(this);
 
   // static.  this is current open/close or child open/close
-  WndForm::time_any_open_close.update();
+  WndForm::time_any_open_close.Update();
 
 #ifdef USE_GDI
   SetFocus(oldFocusHwnd);

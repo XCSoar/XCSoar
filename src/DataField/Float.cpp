@@ -147,20 +147,20 @@ DataFieldFloat::SpeedUp(bool keyup)
   if (keyup != DataFieldKeyUp) {
     mSpeedup = 0;
     DataFieldKeyUp = keyup;
-    last_step.update();
+    last_step.Update();
     return fixed_one;
   }
 
-  if (!last_step.check(200)) {
+  if (!last_step.Check(200)) {
     mSpeedup++;
     if (mSpeedup > 5) {
-      last_step.update_offset(350);
+      last_step.UpdateWithOffset(350);
       return fixed_ten;
     }
   } else
     mSpeedup = 0;
 
-  last_step.update();
+  last_step.Update();
 
   return fixed_one;
 }

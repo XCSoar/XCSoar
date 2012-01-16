@@ -47,13 +47,13 @@ Volkslogger::Handshake(Port &port, OperationEnvironment &env,
                        unsigned timeout_ms)
 {
   PeriodClock clock;
-  clock.update();
+  clock.Update();
 
   do { // Solange R's aussenden, bis ein L zurückkommt
     port.Write('R');
     env.Sleep(30);
 
-    if (clock.check(timeout_ms))
+    if (clock.Check(timeout_ms))
       return false;
   } while (port.GetChar() != 'L');
 
@@ -69,7 +69,7 @@ Volkslogger::Handshake(Port &port, OperationEnvironment &env,
         return true;
     }
 
-    if (clock.check(timeout_ms))
+    if (clock.Check(timeout_ms))
       return false;
   }
 }
@@ -122,11 +122,11 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
   /* wait for confirmation */
   const unsigned timeout_ms = 4000;
   PeriodClock clock;
-  clock.update();
+  clock.Update();
 
   int c;
   while ((c = port.GetChar()) < 0) {
-    if (clock.check(timeout_ms))
+    if (clock.Check(timeout_ms))
       return false;
   }
 
@@ -179,14 +179,14 @@ Volkslogger::WaitForACK(Port &port, OperationEnvironment &env)
   const unsigned timeout_ms = 30000;
 
   PeriodClock clock;
-  clock.update();
+  clock.Update();
 
   int ch;
   while (true) {
     ch = port.GetChar();
     if (ch == ACK)
       return true;
-    else if (ch < 0 || env.IsCancelled() || clock.check(timeout_ms))
+    else if (ch < 0 || env.IsCancelled() || clock.Check(timeout_ms))
       return false;
   }
 }

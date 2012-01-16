@@ -56,11 +56,11 @@ BatteryTimer::Process()
     } else {
       if (Power::Battery::RemainingPercentValid &&
           Power::Battery::RemainingPercent < BATTERY_WARNING) {
-        if (last_warning.check_update(BATTERY_REMINDER))
+        if (last_warning.CheckUpdate(BATTERY_REMINDER))
           // TODO feature: Show the user what the batt status is.
           Message::AddMessage(_("Battery low"));
       } else {
-        last_warning.reset();
+        last_warning.Reset();
       }
     }
   }

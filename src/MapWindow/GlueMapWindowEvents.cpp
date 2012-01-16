@@ -48,7 +48,7 @@ GlueMapWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
   map_item_timer.Cancel();
 
-  mouse_down_clock.update();
+  mouse_down_clock.Update();
 
   if (IsPanning())
     return true;
@@ -101,7 +101,7 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
   if (ignore_single_click || drag_mode != DRAG_NONE)
     return true;
 
-  mouse_down_clock.update();
+  mouse_down_clock.Update();
   arm_mapitem_list = has_focus();
 
   set_focus();
@@ -149,8 +149,8 @@ GlueMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
     return true;
   }
 
-  int click_time = mouse_down_clock.elapsed();
-  mouse_down_clock.reset();
+  int click_time = mouse_down_clock.Elapsed();
+  mouse_down_clock.Reset();
 
   DragMode old_drag_mode = drag_mode;
   drag_mode = DRAG_NONE;

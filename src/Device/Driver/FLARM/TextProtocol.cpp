@@ -46,14 +46,14 @@ FlarmDevice::Receive(const char *prefix, char *buffer, size_t length,
   assert(prefix != NULL);
 
   PeriodClock timeout;
-  timeout.update();
+  timeout.Update();
 
   if (!port.ExpectString(prefix, timeout_ms))
     return false;
 
   char *p = (char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.check(timeout_ms))
+    if (timeout.Check(timeout_ms))
       return false;
 
     // Read single character from port

@@ -53,7 +53,7 @@ GlideComputer::GlideComputer(const Waypoints &_way_points,
   team_code_ref_id(-1)
 {
   events.SetComputer(*this);
-  idle_clock.update();
+  idle_clock.Update();
 }
 
 /**
@@ -136,7 +136,7 @@ GlideComputer::ProcessGPS()
   // Update the ConditionMonitors
   ConditionMonitorsUpdate(*this);
 
-  return idle_clock.check_update(500);
+  return idle_clock.CheckUpdate(500);
 }
 
 /**
@@ -188,7 +188,7 @@ GlideComputer::CalculateOwnTeamCode()
     return;
 
   // Only calculate every 10sec otherwise cancel calculation
-  if (!last_team_code_update.check_update(10000))
+  if (!last_team_code_update.CheckUpdate(10000))
     return;
 
   // Get bearing and distance to the reference waypoint

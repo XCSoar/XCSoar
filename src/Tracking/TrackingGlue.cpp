@@ -66,7 +66,7 @@ TrackingGlue::OnTimer(const NMEAInfo &basic, const DerivedInfo &calculated)
     /* can't track without a valid GPS fix */
     return;
 
-  if (!clock.check_update(settings.interval * 1000))
+  if (!clock.CheckUpdate(settings.interval * 1000))
     /* later */
     return;
 

@@ -32,10 +32,10 @@ Copyright_License {
  */
 class PeriodClock {
 protected:
-  typedef unsigned stamp_t;
+  typedef unsigned Stamp;
 
 private:
-  stamp_t last;
+  Stamp last;
 
 public:
   /**
@@ -48,7 +48,7 @@ public:
   PeriodClock():last(0) {}
 
 protected:
-  static stamp_t get_now() {
+  static Stamp get_now() {
     return MonotonicClockMS();
   }
 
@@ -60,7 +60,7 @@ public:
   /**
    * Resets the clock.
    */
-  void reset() {
+  void Reset() {
     last = 0;
   }
 
@@ -68,7 +68,7 @@ public:
    * Returns the number of milliseconds elapsed since the last
    * update().  Returns -1 if update() was never called.
    */
-  int elapsed() const {
+  int Elapsed() const {
     if (last == 0)
       return -1;
 
@@ -81,14 +81,14 @@ public:
    *
    * @param duration the duration in milliseconds
    */
-  bool check(unsigned duration) const {
+  bool Check(unsigned duration) const {
     return get_now() >= last + duration;
   }
 
   /**
    * Updates the time stamp, setting it to the current clock.
    */
-  void update() {
+  void Update() {
     last = get_now();
   }
 
@@ -96,8 +96,8 @@ public:
    * Updates the time stamp, setting it to the current clock plus the
    * specified offset.
    */
-  void update_offset(int offset) {
-    update();
+  void UpdateWithOffset(int offset) {
+    Update();
     last += offset;
   }
 
@@ -107,8 +107,8 @@ public:
    *
    * @param duration the duration in milliseconds
    */
-  bool check_update(unsigned duration) {
-    stamp_t now = get_now();
+  bool CheckUpdate(unsigned duration) {
+    Stamp now = get_now();
     if (now >= last + duration) {
       last = now;
       return true;
@@ -122,8 +122,8 @@ public:
    *
    * @param duration the duration in milliseconds
    */
-  bool check_always_update(unsigned duration) {
-    stamp_t now = get_now();
+  bool CheckAlwaysUpdate(unsigned duration) {
+    Stamp now = get_now();
     bool ret = now > last + duration;
     last = now;
     return ret;

@@ -34,7 +34,7 @@ KineticManager::MouseDown(int x)
 {
   steady = false;
   last = x;
-  clock.update();
+  clock.Update();
   v = fixed_zero;
 }
 
@@ -42,14 +42,14 @@ void
 KineticManager::MouseMove(int x)
 {
   // Get time since last position update
-  int dt = clock.elapsed();
+  int dt = clock.Elapsed();
 
   // Filter fast updates to get a better velocity
   if (dt < 15)
     return;
 
   // Update clock for next event
-  clock.update();
+  clock.Update();
 
   // Calculate value delta
   int dx = x - last;
@@ -72,7 +72,7 @@ int
 KineticManager::GetPosition()
 {
   // Get time that has passed since the end of the manual movement
-  int t = clock.elapsed();
+  int t = clock.Elapsed();
 
   // If more time has passed than allocated for the kinetic movement
   if (t >= stopping_time) {
