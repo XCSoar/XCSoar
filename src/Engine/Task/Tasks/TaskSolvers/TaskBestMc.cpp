@@ -19,37 +19,38 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "TaskBestMc.hpp"
 #include <math.h>
 #include "Util/Tolerances.hpp"
 #include <algorithm>
 
-/// @todo only engage this class if above final glide at mc=0
+// @todo only engage this class if above final glide at mc=0
 
 TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
                        const unsigned activeTaskPoint,
                        const AircraftState &_aircraft,
                        const GlideSettings &settings, const GlidePolar &_gp,
-                       const fixed _mc_min):
-  ZeroFinder(_mc_min, fixed(10.0), fixed(TOLERANCE_BEST_MC)),
-  tm(tps, activeTaskPoint, settings, _gp),
-  aircraft(_aircraft) 
+                       const fixed _mc_min)
+  :ZeroFinder(_mc_min, fixed(10.0), fixed(TOLERANCE_BEST_MC)),
+   tm(tps, activeTaskPoint, settings, _gp),
+   aircraft(_aircraft)
 {
 }
 
 TaskBestMc::TaskBestMc(TaskPoint* tp,
                        const AircraftState &_aircraft,
-                       const GlideSettings &settings, const GlidePolar &_gp):
-  ZeroFinder(fixed(0.1), fixed(10.0), fixed(TOLERANCE_BEST_MC)),
-  tm(tp, settings, _gp),
-  aircraft(_aircraft) 
+                       const GlideSettings &settings, const GlidePolar &_gp)
+  :ZeroFinder(fixed(0.1), fixed(10.0), fixed(TOLERANCE_BEST_MC)),
+   tm(tp, settings, _gp),
+   aircraft(_aircraft)
 {
 }
 
 #define fixed_tiny fixed(0.001)
 
-fixed 
-TaskBestMc::f(const fixed mc) 
+fixed
+TaskBestMc::f(const fixed mc)
 {
   tm.set_mc(max(fixed_tiny, mc));
   res = tm.glide_solution(aircraft);
@@ -57,28 +58,28 @@ TaskBestMc::f(const fixed mc)
   return res.altitude_difference;
 }
 
-bool TaskBestMc::valid(const fixed mc) 
+bool
+TaskBestMc::valid(const fixed mc)
 {
-  return res.IsOk()
-    && (res.altitude_difference >= -tolerance*fixed_two*res.vector.distance);
+  return res.IsOk() &&
+         res.altitude_difference >= -tolerance * fixed_two * res.vector.distance;
 }
 
-fixed 
-TaskBestMc::search(const fixed mc) 
+fixed
+TaskBestMc::search(const fixed mc)
 {
   // only search if mc zero is valid
   f(fixed_zero);
   if (valid(fixed_zero)) {
     fixed a = find_zero(mc);
-    if (valid(a)) {
+    if (valid(a))
       return a;
-    }
   }
   return mc;
 }
 
-bool 
-TaskBestMc::search(const fixed mc, fixed& result) 
+bool
+TaskBestMc::search(const fixed mc, fixed& result)
 {
   // only search if mc zero is valid
   f(fixed_zero);
@@ -92,4 +93,3 @@ TaskBestMc::search(const fixed mc, fixed& result)
   result = mc;
   return false;
 }
-
