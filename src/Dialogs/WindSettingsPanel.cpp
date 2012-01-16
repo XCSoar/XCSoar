@@ -32,7 +32,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 
 WindSettingsPanel::WindSettingsPanel(bool _edit_manual_wind)
-  :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)),
+  :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(100)),
    edit_manual_wind(_edit_manual_wind) {}
 
 void
