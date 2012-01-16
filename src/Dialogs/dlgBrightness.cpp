@@ -51,7 +51,7 @@ static int BrightnessValue = 0;
 
 static void UpdateValues() {
   static PeriodClock last_time;
-  if (!last_time.check_update(200))
+  if (!last_time.CheckUpdate(200))
     return;
 
   if (EnableAutoBrightness) {
