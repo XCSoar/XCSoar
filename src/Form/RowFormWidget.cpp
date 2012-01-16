@@ -66,15 +66,15 @@ RowFormWidget::~RowFormWidget()
 }
 
 void
-RowFormWidget::Add(WndProperty *edit)
+RowFormWidget::Add(Row::Type type, Window *window)
 {
   assert(IsDefined());
 #ifndef USE_GDI
-  assert(edit->GetParent() == GetWindow());
+  assert(window->GetParent() == GetWindow());
 #endif
-  assert(edit->is_visible());
+  assert(window->is_visible());
 
-  rows.push_back(edit);
+  rows.push_back(Row(type, window));
 }
 
 WndProperty *
@@ -112,7 +112,7 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
   if (help != NULL)
     edit->SetHelpText(help);
 
-  Add(edit);
+  Add(Row::Type::EDIT, edit);
   return edit;
 }
 
@@ -558,6 +558,6 @@ RowFormWidget::SetFocus()
   if (rows.empty())
     return false;
 
-  GetControl(0).set_focus();
+  GetRow(0).set_focus();
   return true;
 }

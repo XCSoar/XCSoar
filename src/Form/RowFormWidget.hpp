@@ -43,12 +43,26 @@ struct StaticEnumChoice;
  */
 class RowFormWidget : public WindowWidget {
   struct Row {
-    WndProperty *window;
+    enum class Type : uint8_t {
+      /**
+       * A generic #Window.
+       */
+      GENERIC,
+
+      /**
+       * A #WndProperty.
+       */
+      EDIT,
+    };
+
+    Type type;
+
+    Window *window;
 
     Row() = default;
 
-    Row(WndProperty *_window)
-      :window(_window) {
+    Row(Type _type, Window *_window)
+      :type(_type), window(_window) {
       assert(_window != NULL);
     }
 
@@ -68,16 +82,18 @@ class RowFormWidget : public WindowWidget {
 
     gcc_pure
     WndProperty &GetControl() {
+      assert(type == Type::EDIT);
       assert(window != NULL);
 
-      return *window;
+      return *(WndProperty *)window;
     }
 
     gcc_pure
     const WndProperty &GetControl() const {
+      assert(type == Type::EDIT);
       assert(window != NULL);
 
-      return *window;
+      return *(WndProperty *)window;
     }
 
     gcc_pure
@@ -97,7 +113,13 @@ public:
   RowFormWidget(const DialogLook &look, UPixelScalar caption_width);
   virtual ~RowFormWidget();
 
-  void Add(WndProperty *edit);
+protected:
+  void Add(Row::Type type, Window *window);
+
+public:
+  void Add(Window *window) {
+    Add(Row::Type::GENERIC, window);
+  }
 
   WndProperty *Add(const TCHAR *label, const TCHAR *help=NULL,
                    bool read_only=false);
@@ -146,6 +168,16 @@ public:
 
   WndProperty *AddFileReader(const TCHAR *label, const TCHAR *help,
                              const TCHAR *registry_key, const TCHAR *filters);
+
+  gcc_pure
+  Window &GetRow(unsigned i) {
+    return rows[i].GetWindow();
+  }
+
+  gcc_pure
+  const Window &GetRow(unsigned i) const {
+    return rows[i].GetWindow();
+  }
 
   gcc_pure
   WndProperty &GetControl(unsigned i) {
