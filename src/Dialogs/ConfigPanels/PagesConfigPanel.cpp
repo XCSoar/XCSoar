@@ -99,19 +99,13 @@ PagesConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   PageSettings &settings = CommonInterface::SetUISettings().pages;
   for (unsigned int i = 0; i < PageSettings::MAX_PAGES; i++) {
-    unsigned int tmp_page_selection;
-    if (SaveValueEnum(i, tmp_page_selection)) {
-      PageSettings::PageLayout *currentPL = &settings.pages[i];
-      const PageSettings::PageLayout *setPL =
-        PossiblePageLayout(tmp_page_selection);
-      if (! (*currentPL == *setPL)) {
-        SetLayout(i, *setPL);
-
-        *currentPL = *setPL;
-        Profile::Save(*currentPL, i);
-
-        changed = true;
-      }
+    PageSettings::PageLayout *currentPL = &settings.pages[i];
+    const PageSettings::PageLayout *setPL = PossiblePageLayout(GetValueInteger(i));
+    if (! (*currentPL == *setPL)) {
+      SetLayout(i, *setPL);
+      *currentPL = *setPL;
+      Profile::Save(*currentPL, i);
+      changed = true;
     }
   }
   _changed |= changed;
