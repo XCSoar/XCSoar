@@ -58,6 +58,9 @@ static const UnitSymbolStrings symbol_strings[] = {
   { _T("in"), _T("Hg") },
 };
 
+static_assert(ARRAY_SIZE(symbol_strings) == (size_t)Unit::COUNT,
+              "number of unit symbols does not match number of units");
+
 PixelSize
 UnitSymbolRenderer::GetSize(const Canvas &canvas, const Unit unit)
 {

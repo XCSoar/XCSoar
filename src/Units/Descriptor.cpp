@@ -24,6 +24,7 @@ Copyright_License {
 #include "Units/Descriptor.hpp"
 #include "Units/Units.hpp"
 #include "Atmosphere/Temperature.hpp"
+#include "Util/Macros.hpp"
 
 //SI to Local Units
 
@@ -49,6 +50,9 @@ const UnitDescriptor Units::unit_descriptors[] = {
   { _T("mmHg"), fixed(0.7500616827041698), fixed_zero },
   { _T("inHg"), fixed(0.0295287441401431), fixed_zero },
 };
+
+static_assert(ARRAY_SIZE(Units::unit_descriptors) == (size_t)Unit::COUNT,
+              "number of unit descriptions does not match number of units");
 
 const TCHAR *
 Units::GetUnitName(Unit unit)
