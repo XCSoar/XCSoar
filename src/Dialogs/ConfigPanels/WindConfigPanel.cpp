@@ -27,5 +27,5 @@ Copyright_License {
 Widget *
 CreateWindConfigPanel()
 {
-  return new WindSettingsPanel();
+  return new WindSettingsPanel(false);
 }

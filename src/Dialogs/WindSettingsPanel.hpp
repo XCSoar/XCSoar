@@ -30,10 +30,19 @@ class WindSettingsPanel : public RowFormWidget {
   enum ControlIndex {
     AutoWind,
     ExternalWind,
+    Speed,
+    Direction,
   };
 
+  const bool edit_manual_wind;
+
+  bool external_wind;
+
 public:
-  WindSettingsPanel();
+  /**
+   * @param manual_wind edit the manual wind setting
+   */
+  WindSettingsPanel(bool edit_manual_wind);
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);

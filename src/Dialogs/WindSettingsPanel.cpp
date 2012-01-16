@@ -24,19 +24,23 @@ Copyright_License {
 #include "WindSettingsPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/Float.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
+#include "Units/Units.hpp"
 
-WindSettingsPanel::WindSettingsPanel()
-  :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+WindSettingsPanel::WindSettingsPanel(bool _edit_manual_wind)
+  :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)),
+   edit_manual_wind(_edit_manual_wind) {}
 
 void
 WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   RowFormWidget::Prepare(parent, rc);
 
+  const NMEAInfo &basic = CommonInterface::Basic();
   const WindSettings &settings = XCSoarInterface::GetComputerSettings();
 
   static gcc_constexpr_data StaticEnumChoice auto_wind_list[] = {
@@ -59,11 +63,38 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              _("If enabled, then the wind vector received from external devices overrides "
                  "XCSoar's internal wind calculation."),
              settings.use_external_wind);
+
+  if (edit_manual_wind) {
+    external_wind = settings.use_external_wind &&
+      basic.external_wind_available;
+
+    SpeedVector manual_wind = CommonInterface::Calculated().GetWindOrZero();
+
+    WndProperty *wp =
+      AddFloat(_("Speed"), _("Manual adjustment of wind speed."),
+               _T("%.0f %s"), _T("%.0f"),
+               fixed_zero,
+               Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200),
+                                                       Unit::KILOMETER_PER_HOUR)),
+               fixed_one, false,
+               Units::ToUserWindSpeed(manual_wind.norm));
+    wp->set_enabled(!external_wind);
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetUnits(Units::GetWindSpeedName());
+    wp->RefreshDisplay();
+
+    wp = AddFloat(_("Direction"), _("Manual adjustment of wind direction."),
+                  _T("%.0f°"), _T("%.0f"),
+                  fixed_zero, fixed(355), fixed(5), false,
+                  manual_wind.bearing.Degrees());
+    wp->set_enabled(!external_wind);
+  }
 }
 
 bool
 WindSettingsPanel::Save(bool &_changed, bool &_require_restart)
 {
+  const NMEAInfo &basic = CommonInterface::Basic();
   WindSettings &settings = XCSoarInterface::SetComputerSettings();
 
   bool changed = false;
@@ -76,6 +107,12 @@ WindSettingsPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValue(ExternalWind, szProfileExternalWind,
                        settings.use_external_wind);
+
+  if (edit_manual_wind && !external_wind) {
+    settings.manual_wind.norm = Units::ToSysWindSpeed(GetValueFloat(Speed));
+    settings.manual_wind.bearing = Angle::Degrees(GetValueFloat(Direction));
+    settings.manual_wind_available.Update(basic.clock);
+  }
 
   _changed |= changed;
   return true;
