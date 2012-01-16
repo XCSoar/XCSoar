@@ -138,6 +138,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/ManageCAI302Dialog.cpp \
 	$(SRC)/Dialogs/ManageFlarmDialog.cpp \
 	$(SRC)/Dialogs/MapItemListDialog.cpp \
+	$(SRC)/Dialogs/WindSettingsPanel.cpp \
 	$(SRC)/Dialogs/dlgAirspace.cpp \
 	$(SRC)/Dialogs/dlgAirspaceColours.cpp \
 	$(SRC)/Dialogs/dlgAirspacePatterns.cpp \

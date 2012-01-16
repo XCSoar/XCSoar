@@ -21,11 +21,22 @@ Copyright_License {
 }
 */
 
-#include "WindConfigPanel.hpp"
-#include "Dialogs/WindSettingsPanel.hpp"
+#ifndef XCSOAR_WIND_SETTINGS_PANEL_HPP
+#define XCSOAR_WIND_SETTINGS_PANEL_HPP
 
-Widget *
-CreateWindConfigPanel()
-{
-  return new WindSettingsPanel();
-}
+#include "Form/RowFormWidget.hpp"
+
+class WindSettingsPanel : public RowFormWidget {
+  enum ControlIndex {
+    AutoWind,
+    ExternalWind,
+  };
+
+public:
+  WindSettingsPanel();
+
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+};
+
+#endif
