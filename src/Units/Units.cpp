@@ -119,6 +119,12 @@ Units::GetVerticalSpeedName()
 }
 
 const TCHAR *
+Units::GetWindSpeedName()
+{
+  return GetUnitName(GetUserWindSpeedUnit());
+}
+
+const TCHAR *
 Units::GetDistanceName()
 {
   return GetUnitName(GetUserDistanceUnit());

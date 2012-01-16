@@ -118,6 +118,9 @@ namespace Units
   const TCHAR *GetVerticalSpeedName();
 
   gcc_pure
+  const TCHAR *GetWindSpeedName();
+
+  gcc_pure
   const TCHAR *GetDistanceName();
 
   gcc_pure
