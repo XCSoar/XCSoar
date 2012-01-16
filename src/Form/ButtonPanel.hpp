@@ -43,6 +43,12 @@ public:
   ButtonPanel(ContainerWindow &parent, const DialogLook &look);
   ~ButtonPanel();
 
+  /**
+   * Call this when the client area of the parent window has been
+   * resized.
+   *
+   * @param count don't use
+   */
   void Resized(const PixelRect &area, unsigned count=0);
 
   const PixelRect &GetRemainingRect() const {
