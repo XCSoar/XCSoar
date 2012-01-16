@@ -117,10 +117,7 @@ TimeConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
 
-  fixed tmp_ival;
-  SaveValue(UTCOffset, tmp_ival);
-  int ival = iround(tmp_ival * 3600);
-
+  int ival = iround(GetValueFloat(UTCOffset) * 3600);
   if (settings_computer.utc_offset != ival) {
     settings_computer.utc_offset = ival;
 
