@@ -38,11 +38,11 @@ class AATPoint: public IntermediateTaskPoint
 {
   friend class PrintHelper;
 
-  /**< Location of target within OZ */
+  /** Location of target within OZ */
   GeoPoint m_target_location;
-  /**< Saved location of target within OZ */
+  /** Saved location of target within OZ */
   GeoPoint m_target_save;
-  /**< Whether target can float */
+  /** Whether target can float */
   bool m_target_locked;
 
 public:
