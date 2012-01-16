@@ -75,6 +75,18 @@ Window::to_screen(PixelRect &rc) const
   }
 }
 
+void
+Window::set_enabled(bool enabled)
+{
+  assert_thread();
+
+  if (enabled == this->enabled)
+    return;
+
+  this->enabled = enabled;
+  invalidate();
+}
+
 Window *
 Window::get_focused_window()
 {

@@ -575,19 +575,15 @@ public:
   /**
    * Specifies whether this window can get user input.
    */
+#ifdef USE_GDI
   void set_enabled(bool enabled) {
     assert_thread();
 
-#ifndef USE_GDI
-    if (enabled == this->enabled)
-      return;
-
-    this->enabled = enabled;
-    invalidate();
-#else
     ::EnableWindow(hWnd, enabled);
-#endif
   }
+#else
+  void set_enabled(bool enabled);
+#endif
 
 #ifndef USE_GDI
 
