@@ -25,8 +25,9 @@
 
 #include "TaskMacCreadyRemaining.hpp"
 #include "Util/ZeroFinder.hpp"
-#include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/AATIsolineSegment.hpp"
+
+class StartPoint;
 
 /**
  * Adjust target lateral offset for active task point to minimise
@@ -36,7 +37,6 @@
  * - Merge with TaskMinTarget?
  * - Refactor, since passing in AATPoint is a hack
  */
-
 class TaskOptTarget: 
   public ZeroFinder
 {

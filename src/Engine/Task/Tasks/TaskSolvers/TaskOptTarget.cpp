@@ -24,6 +24,7 @@
 #include <math.h>
 #include "Util/Tolerances.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
+#include "Task/TaskPoints/StartPoint.hpp"
 
 TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const unsigned activeTaskPoint,
