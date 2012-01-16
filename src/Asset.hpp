@@ -250,6 +250,17 @@ HasPointer()
 }
 
 /**
+ * Does this device have a touch screen?  This is useful to know for
+ * sizing controls, as a touch screen may require bigger areas.
+ */
+gcc_constexpr_function
+static inline bool
+HasTouchScreen()
+{
+  return IsAndroid() || (IsWindowsCE() && !IsAltair());
+}
+
+/**
  * Does this device have a keyboard device?
  * @return True if a keyboard is assumed for the hardware
  * that XCSoar is running on, False if the hardware has no keyboard
