@@ -88,18 +88,20 @@ ButtonPanel::Resized(const PixelRect &area, unsigned count)
   child_size = vertical ? Layout::Scale(30) : (area.right - area.left) / 3;
   UPixelScalar row_height = vertical ? Layout::Scale(80) : Layout::Scale(35);
 
-  UPixelScalar pixel_size = vertical
-    ? (area.bottom - area.top)
-    : (area.right - area.left);
-  row_capacity = pixel_size / child_size;
+  UPixelScalar total_width = area.right - area.left;
+  UPixelScalar total_height = area.bottom - area.top;
+  if (!vertical)
+    std::swap(total_width, total_height);
+
+  row_capacity = total_width / child_size;
   if (row_capacity == 0)
     row_capacity = 1;
 
   row_count = (count + row_capacity - 1) / row_capacity;
-  if (row_count >= 2 && row_count * row_height > pixel_size / 2)
+  if (row_count >= 2 && row_count * row_height > total_height / 2)
     /* the buttons should not occupy more than half of the client
        area */
-    row_count = pixel_size / row_height / 2;
+    row_count = total_height / row_height / 2;
 
   if (vertical) {
     rc.right = rc.left + row_height * row_count;
