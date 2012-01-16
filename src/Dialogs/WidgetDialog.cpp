@@ -82,7 +82,7 @@ void
 WidgetDialog::OnResize(UPixelScalar width, UPixelScalar height)
 {
   WndForm::OnResize(width, height);
-  buttons.Resized(get_client_rect());
+  buttons.Resized(GetClientAreaWindow().get_client_rect());
   widget.Move(buttons.GetRemainingRect());
 }
 
