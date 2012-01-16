@@ -66,6 +66,13 @@ class RowFormWidget : public WindowWidget {
       assert(_window != NULL);
     }
 
+    /**
+     * Delete the #Window object.
+     */
+    void Delete() {
+      delete window;
+    }
+
     gcc_pure
     Window &GetWindow() {
       assert(window != NULL);

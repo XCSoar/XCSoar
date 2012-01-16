@@ -63,6 +63,10 @@ RowFormWidget::~RowFormWidget()
     PanelControl *panel = (PanelControl *)GetWindow();
     delete panel;
   }
+
+  /* destroy all rows */
+  for (auto i = rows.begin(), end = rows.end(); i != end; ++i)
+    i->Delete();
 }
 
 void
