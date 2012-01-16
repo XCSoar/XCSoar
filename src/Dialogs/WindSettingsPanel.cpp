@@ -64,7 +64,7 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 bool
 WindSettingsPanel::Save(bool &_changed, bool &_require_restart)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
 
@@ -76,8 +76,6 @@ WindSettingsPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValue(ExternalWind, szProfileExternalWind, settings_computer.use_external_wind);
 
-   _changed |= changed;
-  _require_restart |= require_restart;
-
+  _changed |= changed;
   return true;
 }
