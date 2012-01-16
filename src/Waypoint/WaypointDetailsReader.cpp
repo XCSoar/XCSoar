@@ -41,6 +41,7 @@ find_waypoint(Waypoints &way_points, const TCHAR *name)
   if (wp != NULL)
     return wp;
 
+  // TODO: Comments please! What is this supposed to do? Why do we need it?
   size_t name_length = _tcslen(name);
   TCHAR buffer[name_length + 4];
   _tcscpy(buffer, name);
@@ -53,15 +54,6 @@ find_waypoint(Waypoints &way_points, const TCHAR *name)
   wp = way_points.LookupName(buffer);
   if (wp != NULL)
     return wp;
-
-  if (name_length > 5 && _tcscmp(name + name_length - 5, _T("=HOME")) == 0) {
-    buffer[name_length - 5] = _T('\0');
-    wp = way_points.LookupName(buffer);
-    if (wp != NULL) {
-      XCSoarInterface::SetComputerSettings().SetHome(*wp);
-      return wp;
-    }
-  }
 
   return NULL;
 }
