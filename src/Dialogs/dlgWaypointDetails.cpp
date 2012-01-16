@@ -71,9 +71,12 @@ static WndFrame *wDetails = NULL;
 static WndFrame *wInfo = NULL;
 static WndFrame *wCommand = NULL;
 static WndOwnerDrawFrame *wImage = NULL;
+static WndButton *wMagnify = NULL;
+static WndButton *wShrink = NULL;
 static const Waypoint *waypoint = NULL;
 
 static StaticArray<Bitmap, 5> images;
+static int zoom = 0;
 
 static void
 NextPage(int Step)
@@ -98,6 +101,35 @@ NextPage(int Step)
   wDetails->set_visible(page == 1);
   wCommand->set_visible(page == 2);
   wImage->set_visible(page >= 3);
+  zoom = 0;
+  wMagnify->set_visible(page >= 3);
+  wMagnify->set_enabled(true);
+  wShrink->set_visible(page >= 3);
+  wShrink->set_enabled(false);
+}
+
+static void
+OnMagnifyClicked(gcc_unused WndButton &button)
+{
+  if (zoom >= 5)
+    return;
+  zoom++;
+
+  wMagnify->set_enabled(zoom < 5);
+  wShrink->set_enabled(zoom > 0);
+  wImage->invalidate();
+}
+
+static void
+OnShrinkClicked(gcc_unused WndButton &button)
+{
+  if (zoom <= 0)
+    return;
+  zoom--;
+
+  wMagnify->set_enabled(zoom < 5);
+  wShrink->set_enabled(zoom > 0);
+  wImage->invalidate();
 }
 
 static void
@@ -376,8 +408,44 @@ static void
 OnImagePaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   canvas.ClearWhite();
-  if (page >= 3 && page < 3 + (int)images.size())
-    canvas.copy(images[page-3]);
+  if (page >= 3 && page < 3 + (int)images.size()) {
+    Bitmap &img = images[page-3];
+    static const int zoom_factors[] = { 1, 2, 4, 8, 16, 32 };
+    RasterPoint img_pos, screen_pos;
+    PixelSize screen_size;
+    PixelSize img_size = img.GetSize();
+    fixed scale = std::min((fixed)canvas.get_width() / (fixed)img_size.cx,
+                           (fixed)canvas.get_height() / (fixed)img_size.cy) *
+                  zoom_factors[zoom];
+
+    // centered image and optionally zoomed into the center of the image
+    fixed scaled_size = img_size.cx * scale;
+    if (scaled_size <= (fixed)canvas.get_width()) {
+      img_pos.x = 0;
+      screen_pos.x = (int) (((fixed)canvas.get_width() - scaled_size) / 2);
+      screen_size.cx = (int) scaled_size;
+    } else {
+      scaled_size = (fixed)canvas.get_width() / scale;
+      img_pos.x = (int) (((fixed)img_size.cx - scaled_size) / 2);
+      img_size.cx = (int) scaled_size;
+      screen_pos.x = 0;
+      screen_size.cx = canvas.get_width();
+    }
+    scaled_size = img_size.cy * scale;
+    if (scaled_size <= (fixed)canvas.get_height()) {
+      img_pos.y = 0;
+      screen_pos.y = (int) (((fixed)canvas.get_height() - scaled_size) / 2);
+      screen_size.cy = (int) scaled_size;
+    } else {
+      scaled_size = (fixed)canvas.get_height() / scale;
+      img_pos.y = (int) (((fixed)img_size.cy - scaled_size) / 2);
+      img_size.cy = (int) scaled_size;
+      screen_pos.y = 0;
+      screen_size.cy = canvas.get_height();
+    }
+    canvas.stretch(screen_pos.x, screen_pos.y, screen_size.cx, screen_size.cy,
+                   img, img_pos.x, img_pos.y, img_size.cx, img_size.cy);
+  }
 }
 
 #ifdef ANDROID
@@ -407,6 +475,8 @@ OnFileListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
 #endif
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+    DeclareCallBackEntry(OnMagnifyClicked),
+    DeclareCallBackEntry(OnShrinkClicked),
     DeclareCallBackEntry(OnNextClicked),
     DeclareCallBackEntry(OnPrevClicked),
     DeclareCallBackEntry(OnGotoClicked),
@@ -676,6 +746,10 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
 
   wImage = (WndOwnerDrawFrame *)wf->FindByName(_T("frmImage"));
   assert(wImage != NULL);
+  wMagnify = (WndButton *)wf->FindByName(_T("cmdMagnify"));
+  assert(wMagnify != NULL);
+  wShrink = (WndButton *)wf->FindByName(_T("cmdShrink"));
+  assert(wShrink != NULL);
 
   if (!allow_navigation) {
     WndButton* butnav = (WndButton *)wf->FindByName(_T("cmdPrev"));
