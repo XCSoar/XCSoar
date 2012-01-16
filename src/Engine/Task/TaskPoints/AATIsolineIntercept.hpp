@@ -55,7 +55,7 @@ public:
    *
    * @return True if intercept is found and within OZ
    */
-  bool intercept(const AATPoint &ap, const AircraftState &state,
+  bool Intercept(const AATPoint &ap, const AircraftState &state,
                  const double bearing_offset, GeoPoint &ip) const;
 };
 

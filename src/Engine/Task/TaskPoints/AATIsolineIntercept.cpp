@@ -28,7 +28,7 @@ AATIsolineIntercept::AATIsolineIntercept(const AATPoint& ap)
 }
 
 bool
-AATIsolineIntercept::intercept(const AATPoint &ap, const AircraftState &state,
+AATIsolineIntercept::Intercept(const AATPoint &ap, const AircraftState &state,
                                const double bearing_offset, GeoPoint& ip) const
 {
   AircraftState s1, s2;
