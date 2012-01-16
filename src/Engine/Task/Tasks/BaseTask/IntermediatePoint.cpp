@@ -23,7 +23,7 @@
 #include "IntermediatePoint.hpp"
 #include "Task/TaskBehaviour.hpp"
 
-IntermediateTaskPoint::IntermediateTaskPoint(enum Type _type,
+IntermediateTaskPoint::IntermediateTaskPoint(Type _type,
                                              ObservationZonePoint *_oz,
                                              const Waypoint &wp,
                                              const TaskBehaviour &tb,

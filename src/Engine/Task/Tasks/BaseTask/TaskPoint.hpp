@@ -38,7 +38,7 @@ class TaskPoint
 public:
   friend class PrintHelper;
 
-  enum Type {
+  enum Type: uint8_t {
     UNORDERED,
     START,
     AST,

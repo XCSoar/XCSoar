@@ -90,7 +90,7 @@ public:
    *
    * @return Partially initialised object
    */
-  OrderedTaskPoint(enum Type _type, ObservationZonePoint* _oz,
+  OrderedTaskPoint(Type _type, ObservationZonePoint* _oz,
                    const Waypoint &wp,
                    const OrderedTaskBehaviour &to,
                    const bool b_scored=false);

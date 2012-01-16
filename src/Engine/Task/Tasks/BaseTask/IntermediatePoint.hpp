@@ -50,7 +50,7 @@ public:
    *
    * @return Partially-initialised object
    */
-  IntermediateTaskPoint(enum Type _type, ObservationZonePoint *_oz,
+  IntermediateTaskPoint(Type _type, ObservationZonePoint *_oz,
                         const Waypoint &wp,
                         const TaskBehaviour &tb,
                         const OrderedTaskBehaviour &to,

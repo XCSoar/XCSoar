@@ -32,7 +32,7 @@
 #include <assert.h>
 #include <math.h>
 
-OrderedTaskPoint::OrderedTaskPoint(enum Type _type, ObservationZonePoint* _oz,
+OrderedTaskPoint::OrderedTaskPoint(Type _type, ObservationZonePoint* _oz,
                                    const Waypoint &wp,
                                    const OrderedTaskBehaviour &to,
                                    const bool b_scored)
