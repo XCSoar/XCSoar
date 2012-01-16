@@ -57,6 +57,12 @@ ifeq ($(DEBUG),n)
 endif
 	$(TEX_RUN) $<
 
+# Generate a HTML version of the manual with latex2html
+$(MANUAL_OUTPUT_DIR)/html/index.html: $(DOC)/manual/en/XCSoar-manual.tex \
+	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) \
+	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/html/dirstamp
+	$(TEX_VARS) latex2html -dir $(@D) $<
+
 $(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf: $(DOC)/manual/en/XCSoar-developer-manual.tex $(TEX_INCLUDES_EN) \
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 ifeq ($(DEBUG),n)
