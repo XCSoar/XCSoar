@@ -37,7 +37,7 @@ GlideResult::GlideResult(const GlideState &task, const fixed V):
   altitude_difference(task.altitude_difference),
   effective_wind_speed(task.wind.norm),
   effective_wind_angle(task.effective_wind_angle),
-  validity(Validity::RESULT_NOSOLUTION)
+  validity(Validity::NO_SOLUTION)
 {
 }
 
@@ -162,5 +162,5 @@ GlideResult::FinalGlideStartLocation(const GeoPoint &location) const
 void
 GlideResult::Reset()
 {
-  validity = Validity::RESULT_NOSOLUTION;
+  validity = Validity::NO_SOLUTION;
 }

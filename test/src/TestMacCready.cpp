@@ -55,7 +55,7 @@ Test(const fixed distance, const fixed altitude, const SpeedVector wind)
   if (-initial_climb_distance >= distance ||
       (!positive(mc) && !positive(v_climb_progress))) {
     /* reachable by pure glide */
-    ok1(result.validity == GlideResult::Validity::RESULT_OK);
+    ok1(result.validity == GlideResult::Validity::OK);
 
     const fixed height_glide = distance / ld_ground;
     const fixed height_climb = fixed_zero;
@@ -76,7 +76,7 @@ Test(const fixed distance, const fixed altitude, const SpeedVector wind)
 
   if (!positive(v_climb_progress)) {
     /* excessive wind */
-    ok1(result.validity == GlideResult::Validity::RESULT_WIND_EXCESSIVE);
+    ok1(result.validity == GlideResult::Validity::WIND_EXCESSIVE);
     return;
   }
 
@@ -103,7 +103,7 @@ Test(const fixed distance, const fixed altitude, const SpeedVector wind)
     ? (wind.norm > fixed(5) ? 5 : 10)
     : ACCURACY;
 
-  ok1(result.validity == GlideResult::Validity::RESULT_OK);
+  ok1(result.validity == GlideResult::Validity::OK);
   ok1(equals(result.head_wind, wind.norm));
   ok1(equals(result.vector.distance, distance));
   ok1(equals(result.height_climb, height_climb, accuracy));

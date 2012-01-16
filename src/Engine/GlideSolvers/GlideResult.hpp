@@ -44,13 +44,13 @@ struct GlideResult {
    */
   enum class Validity : uint8_t {
     /** Solution is achievable */
-    RESULT_OK = 0,
+    OK = 0,
     /** Wind is too strong to allow progress */
-    RESULT_WIND_EXCESSIVE,
+    WIND_EXCESSIVE,
     /** Expected climb rate is too low to allow progress */
-    RESULT_MACCREADY_INSUFFICIENT,
+    MACCREADY_INSUFFICIENT,
     /** Solution not computed or algorithm failed */
-    RESULT_NOSOLUTION
+    NO_SOLUTION
   };
 
   /**
@@ -136,7 +136,7 @@ struct GlideResult {
   GlideResult(const GlideState &task, const fixed V);
 
   bool IsDefined() const {
-    return validity != Validity::RESULT_NOSOLUTION;
+    return validity != Validity::NO_SOLUTION;
   }
 
   /**
@@ -169,7 +169,7 @@ struct GlideResult {
   bool
   IsOk() const
   {
-    return validity == Validity::RESULT_OK;
+    return validity == Validity::OK;
   }
 
   /**
