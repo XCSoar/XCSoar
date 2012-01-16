@@ -80,6 +80,11 @@ public:
     return IsPrepared() && visible;
   }
 
+  /**
+   * Ensure that the Widget is prepared.
+   */
+  void Prepare();
+
   void Unprepare();
   void Clear();
 

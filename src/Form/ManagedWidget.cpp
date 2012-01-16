@@ -65,6 +65,20 @@ ManagedWidget::Move(const PixelRect &_position)
 }
 
 void
+ManagedWidget::Prepare()
+{
+  assert(have_position);
+
+  if (widget == NULL || prepared)
+    return;
+
+  widget->Initialise(parent, position);
+  widget->Prepare(parent, position);
+  prepared = true;
+  visible = false;
+}
+
+void
 ManagedWidget::Show()
 {
   assert(have_position);
@@ -72,12 +86,7 @@ ManagedWidget::Show()
   if (widget == NULL)
     return;
 
-  if (!prepared) {
-    widget->Initialise(parent, position);
-    widget->Prepare(parent, position);
-    prepared = true;
-    visible = false;
-  }
+  Prepare();
 
   if (!visible) {
     visible = true;
