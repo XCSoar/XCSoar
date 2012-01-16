@@ -47,6 +47,10 @@ Copyright_License {
 
 static WndForm *wf;
 static WndListFrame *station_list;
+static WndButton *add_button;
+static WndButton *update_button;
+static WndButton *remove_button;
+static WndButton *details_button;
 
 struct NOAAListItem
 {
@@ -76,6 +80,13 @@ UpdateList()
 
   station_list->SetLength(list.size());
   station_list->invalidate();
+
+  add_button->set_enabled(!list.full());
+
+  bool empty = list.empty();
+  update_button->set_enabled(empty);
+  remove_button->set_enabled(empty);
+  details_button->set_enabled(empty);
 }
 
 static void
@@ -227,6 +238,19 @@ dlgNOAAListShowModal(SingleWindow &parent)
   station_list->SetItemHeight(item_height);
   station_list->SetPaintItemCallback(PaintListItem);
   station_list->SetActivateCallback(ListItemSelected);
+
+  add_button = (WndButton *)wf->FindByName(_T("AddButton"));
+  assert(add_button != NULL);
+
+  update_button = (WndButton *)wf->FindByName(_T("UpdateButton"));
+  assert(update_button != NULL);
+
+  remove_button = (WndButton *)wf->FindByName(_T("RemoveButton"));
+  assert(remove_button != NULL);
+
+  details_button = (WndButton *)wf->FindByName(_T("DetailsButton"));
+  assert(details_button != NULL);
+
   UpdateList();
 
   wf->ShowModal();

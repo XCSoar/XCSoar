@@ -75,6 +75,22 @@ Window::to_screen(PixelRect &rc) const
   }
 }
 
+void
+Window::set_enabled(bool enabled)
+{
+  AssertThread();
+
+  if (enabled == this->enabled)
+    return;
+
+  if (!enabled && has_focus())
+    /* cancel dragging before disabling this Window */
+    OnCancelMode();
+
+  this->enabled = enabled;
+  invalidate();
+}
+
 Window *
 Window::get_focused_window()
 {

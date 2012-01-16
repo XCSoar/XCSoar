@@ -199,12 +199,18 @@ TopWindow::on_event(const SDL_Event &event)
     if (w == NULL)
       w = this;
 
+    if (!w->is_enabled())
+      return false;
+
     return w->OnKeyDown(event.key.keysym.sym);
 
   case SDL_KEYUP:
     w = get_focused_window();
     if (w == NULL)
       w = this;
+
+    if (!w->is_enabled())
+      return false;
 
     return w->OnKeyUp(event.key.keysym.sym);
 

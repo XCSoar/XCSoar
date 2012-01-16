@@ -140,6 +140,12 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
   if (help_callback == NULL)
     help_button->hide();
 
+  if (num_items == 0) {
+    WndButton *select_button = (WndButton *)wf->FindByName(_T("cmdClose"));
+    assert(select_button != NULL);
+    select_button->set_enabled(false);
+  }
+
   if (update)
     wf->SetTimerNotify(OnTimerNotify);
 
