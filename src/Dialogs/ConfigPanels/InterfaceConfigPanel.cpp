@@ -267,9 +267,7 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   require_restart |= changed |= SaveValueFileReader(StatusFile, szProfileStatusFile);
 
-  unsigned menu_timeout;
-  SaveValue(MenuTimeout, menu_timeout);
-  menu_timeout *= 2;
+  unsigned menu_timeout = GetValueInteger(MenuTimeout) * 2;
   if (settings.menu_timeout != menu_timeout) {
     settings.menu_timeout = menu_timeout;
     Profile::Set(szProfileMenuTimeout, menu_timeout);
