@@ -279,7 +279,6 @@ IDR_XML_WAYPOINTEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypointEd
 IDR_XML_WAYPOINTEDIT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypointEdit_L.xml.gz"
 IDR_XML_WAYPOINTSELECT XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypointSelect.xml.gz"
 IDR_XML_WAYPOINTSELECT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypointSelect_L.xml.gz"
-IDR_XML_WINDSETTINGS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWindSettings.xml.gz"
 IDR_XML_WEATHER XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWeather.xml.gz"
 
 // configuration menu
