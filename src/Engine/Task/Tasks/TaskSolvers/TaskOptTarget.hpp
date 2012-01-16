@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef TASKOPTTARGET_HPP
 #define TASKOPTTARGET_HPP
 
@@ -39,24 +40,30 @@
 class TaskOptTarget: 
   public ZeroFinder
 {
-  TaskMacCreadyRemaining tm; /**< Object to calculate remaining task statistics */
-  GlideResult res; /**< Glide solution used in search */
-  const AircraftState &aircraft; /**< Observer */
-  StartPoint *tp_start; /**< Start of task */
-  AATPoint &tp_current; /**< Active AATPoint */
-  AATIsolineSegment iso; /**< Isoline for active AATPoint target */
+  /** Object to calculate remaining task statistics */
+  TaskMacCreadyRemaining tm;
+  /** Glide solution used in search */
+  GlideResult res;
+  /** Observer */
+  const AircraftState &aircraft;
+  /** Start of task */
+  StartPoint *tp_start;
+  /** Active AATPoint */
+  AATPoint &tp_current;
+  /** Isoline for active AATPoint target */
+  AATIsolineSegment iso;
 
 public:
-/** 
- * Constructor for ordered task points
- * 
- * @param tps Vector of ordered task points comprising the task
- * @param activeTaskPoint Current active task point in sequence
- * @param _aircraft Current aircraft state
- * @param _gp Glide polar to copy for calculations
- * @param _tp_current Active AATPoint
- * @param _ts StartPoint of task (to initiate scans)
- */
+  /**
+   * Constructor for ordered task points
+   *
+   * @param tps Vector of ordered task points comprising the task
+   * @param activeTaskPoint Current active task point in sequence
+   * @param _aircraft Current aircraft state
+   * @param _gp Glide polar to copy for calculations
+   * @param _tp_current Active AATPoint
+   * @param _ts StartPoint of task (to initiate scans)
+   */
   TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                 const unsigned activeTaskPoint,
                 const AircraftState &_aircraft,
@@ -64,33 +71,35 @@ public:
                 AATPoint& _tp_current,
                 const TaskProjection &projection,
                 StartPoint *_ts);
-  virtual ~TaskOptTarget() {};
+
+  virtual ~TaskOptTarget() {}
 
   virtual fixed f(const fixed p);
 
-/** 
- * Test validity of a solution given search parameter
- * 
- * @param p Search parameter (isoline parameter [0,1])
- * 
- * @return True if solution is valid
- */
+  /**
+   * Test validity of a solution given search parameter
+   *
+   * @param p Search parameter (isoline parameter [0,1])
+   *
+   * @return True if solution is valid
+   */
   virtual bool valid(const fixed p);
 
-/** 
- * Search for active task point's target isoline to minimise elapsed time
- * to finish.
- *
- * Running this adjusts the target values for the active task point. 
- * 
- * @param p Default isoline value (0-1)
- * 
- * @return Isoline value for solution
- */
+  /**
+   * Search for active task point's target isoline to minimise elapsed time
+   * to finish.
+   *
+   * Running this adjusts the target values for the active task point.
+   *
+   * @param p Default isoline value (0-1)
+   *
+   * @return Isoline value for solution
+   */
   virtual fixed search(const fixed p);
 
 private:
-  void set_target(const fixed p); /**< Sets target location along isoline */
+  /** Sets target location along isoline */
+  void set_target(const fixed p);
 };
 
 

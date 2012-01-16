@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "TaskOptTarget.hpp"
 #include <math.h>
 #include "Util/Tolerances.hpp"
@@ -30,19 +31,18 @@ TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const GlidePolar &_gp,
                              AATPoint &_tp_current,
                              const TaskProjection &projection,
-                             StartPoint *_ts):
-  ZeroFinder(fixed(0.02), fixed(0.98), fixed(TOLERANCE_OPT_TARGET)),
-  tm(tps, activeTaskPoint, settings, _gp),
-  aircraft(_aircraft),
-  tp_start(_ts),
-  tp_current(_tp_current),
-  iso(_tp_current, projection)
+                             StartPoint *_ts)
+  :ZeroFinder(fixed(0.02), fixed(0.98), fixed(TOLERANCE_OPT_TARGET)),
+   tm(tps, activeTaskPoint, settings, _gp),
+   aircraft(_aircraft),
+   tp_start(_ts),
+   tp_current(_tp_current),
+   iso(_tp_current, projection)
 {
-
 }
 
-fixed 
-TaskOptTarget::f(const fixed p) 
+fixed
+TaskOptTarget::f(const fixed p)
 {
   // set task targets
   set_target(p);
@@ -52,22 +52,22 @@ TaskOptTarget::f(const fixed p)
   return res.time_elapsed;
 }
 
-bool 
-TaskOptTarget::valid(const fixed tp) 
+bool
+TaskOptTarget::valid(const fixed tp)
 {
   f(tp);
   return res.IsOk();
 }
 
-fixed 
-TaskOptTarget::search(const fixed tp) 
+fixed
+TaskOptTarget::search(const fixed tp)
 {
   if (tp_current.IsTargetLocked()) {
     // can't move, don't bother
     return -fixed_one;
   }
   if (iso.IsValid()) {
-      tm.target_save();
+    tm.target_save();
     const fixed t = find_min(tp);
     if (!valid(t)) {
       // invalid, so restore old value
@@ -81,10 +81,10 @@ TaskOptTarget::search(const fixed tp)
   }
 }
 
-void 
+void
 TaskOptTarget::set_target(const fixed p)
 {
-  const GeoPoint loc = iso.Parametric(min(xmax,max(xmin,p)));
+  const GeoPoint loc = iso.Parametric(min(xmax, max(xmin, p)));
   tp_current.set_target(loc);
   tp_start->scan_distance_remaining(aircraft.location);
 }
