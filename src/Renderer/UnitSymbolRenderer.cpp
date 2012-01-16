@@ -52,6 +52,7 @@ static const UnitSymbolStrings symbol_strings[] = {
   { _T(DEG), _T("C") },
   { _T(DEG), _T("F") },
   { _T("h"), _T("Pa") },
+  { NULL, _T("mb") },
   { _T("mm"), _T("Hg") },
   { _T("in"), _T("Hg") },
 };
