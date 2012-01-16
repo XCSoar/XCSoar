@@ -44,9 +44,9 @@ void
 PolarInfo::GetString(TCHAR* line, size_t size, bool include_v_no) const
 {
   fixed V1, V2, V3;
-  V1 = Units::ToUserUnit(v1, unKiloMeterPerHour);
-  V2 = Units::ToUserUnit(v2, unKiloMeterPerHour);
-  V3 = Units::ToUserUnit(v3, unKiloMeterPerHour);
+  V1 = Units::ToUserUnit(v1, Unit::KILOMETER_PER_HOUR);
+  V2 = Units::ToUserUnit(v2, Unit::KILOMETER_PER_HOUR);
+  V3 = Units::ToUserUnit(v3, Unit::KILOMETER_PER_HOUR);
 
   if (include_v_no)
     _sntprintf(line, size, _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
@@ -82,7 +82,7 @@ PolarInfo::ReadString(const TCHAR *line)
   if (*p != _T(','))
     return false;
 
-  polar.v1 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), unKiloMeterPerHour);
+  polar.v1 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
@@ -90,7 +90,7 @@ PolarInfo::ReadString(const TCHAR *line)
   if (*p != _T(','))
     return false;
 
-  polar.v2 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), unKiloMeterPerHour);
+  polar.v2 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
@@ -98,7 +98,7 @@ PolarInfo::ReadString(const TCHAR *line)
   if (*p != _T(','))
     return false;
 
-  polar.v3 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), unKiloMeterPerHour);
+  polar.v3 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 

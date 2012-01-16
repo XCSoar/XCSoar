@@ -64,13 +64,13 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   // Expert item (TODO)
   AddFloat(_("Start max. speed"), _("Maximum speed allowed in start observation zone.  Set to 0 for no limit."),
-           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(300), fixed(5), false, ugHorizontalSpeed,
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(300), fixed(5), false, UnitGroup::HORIZONTAL_SPEED,
            task_behaviour.ordered_defaults.start_max_speed);
 
   // Expert item
   AddFloat(_("Start max. speed margin"),
            _("Maximum speed above maximum start speed to tolerate.  Set to 0 for no tolerance."),
-           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(300), fixed(5), false, ugHorizontalSpeed,
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(300), fixed(5), false, UnitGroup::HORIZONTAL_SPEED,
            task_behaviour.start_max_speed_margin);
 
   AddSpacer();
@@ -79,13 +79,13 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Start max. height"),
            _("Maximum height based on start height reference (AGL or MSL) while starting the task.  "
                "Set to 0 for no limit."),
-           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, ugAltitude,
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, UnitGroup::ALTITUDE,
            fixed(task_behaviour.ordered_defaults.start_max_height));
 
   // Expert item
   AddFloat(_("Start max. height margin"),
            _("Maximum height above maximum start height to tolerate.  Set to 0 for no tolerance."),
-           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, ugAltitude,
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, UnitGroup::ALTITUDE,
            fixed(task_behaviour.start_max_height_margin));
 
   // Expert item
@@ -103,7 +103,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Finish min. height"),
            _("Minimum height based on finish height reference (AGL or MSL) while finishing the task.  "
                "Set to 0 for no limit."),
-           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, ugAltitude,
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, UnitGroup::ALTITUDE,
            fixed(task_behaviour.ordered_defaults.finish_min_height));
 
   // Expert item
@@ -149,19 +149,19 @@ TaskRulesConfigPanel::Save(bool &_changed, bool &_require_restart)
   TaskBehaviour &task_behaviour = settings_computer.task;
   OrderedTaskBehaviour &otb = task_behaviour.ordered_defaults;
 
-  changed |= SaveValue(StartMaxSpeed, ugHorizontalSpeed, szProfileStartMaxSpeed, otb.start_max_speed);
+  changed |= SaveValue(StartMaxSpeed, UnitGroup::HORIZONTAL_SPEED, szProfileStartMaxSpeed, otb.start_max_speed);
 
-  changed |= SaveValue(StartMaxSpeedMargin, ugHorizontalSpeed, szProfileStartMaxSpeedMargin,
+  changed |= SaveValue(StartMaxSpeedMargin, UnitGroup::HORIZONTAL_SPEED, szProfileStartMaxSpeedMargin,
                        task_behaviour.start_max_speed_margin);
 
-  changed |= SaveValue(StartMaxHeight, ugAltitude, szProfileStartMaxHeight, otb.start_max_height);
+  changed |= SaveValue(StartMaxHeight, UnitGroup::ALTITUDE, szProfileStartMaxHeight, otb.start_max_height);
 
-  changed |= SaveValue(StartMaxHeightMargin, ugAltitude, szProfileStartMaxHeightMargin,
+  changed |= SaveValue(StartMaxHeightMargin, UnitGroup::ALTITUDE, szProfileStartMaxHeightMargin,
                        task_behaviour.start_max_height_margin);
 
   changed |= SaveValueEnum(StartHeightRef, szProfileStartHeightRef, otb.start_max_height_ref);
 
-  changed |= SaveValue(FinishMinHeight, ugAltitude, szProfileFinishMinHeight,
+  changed |= SaveValue(FinishMinHeight, UnitGroup::ALTITUDE, szProfileFinishMinHeight,
                        otb.finish_min_height);
 
   changed |= SaveValueEnum(FinishHeightRef, szProfileFinishHeightRef, otb.finish_min_height_ref);

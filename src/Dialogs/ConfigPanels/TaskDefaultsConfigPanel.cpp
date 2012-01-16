@@ -132,7 +132,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 
   AddFloat(Caption_GateWidth, _("Default radius or gate width of the start zone for new tasks."),
-           _T("%.1f %s"), _T("%.1f"), fixed(0.1), fixed(100), fixed(0.5), true, ugDistance,
+           _T("%.1f %s"), _T("%.1f"), fixed(0.1), fixed(100), fixed(0.5), true, UnitGroup::DISTANCE,
            task_behaviour.sector_defaults.start_radius);
 
   AddSpacer();
@@ -155,7 +155,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 
   AddFloat(Caption_GateWidth, _("Default radius or gate width of the finish zone in new tasks."),
-           _T("%.1f %s"), _T("%.1f"), fixed(0.1), fixed(100), fixed(0.5), true, ugDistance,
+           _T("%.1f %s"), _T("%.1f"), fixed(0.1), fixed(100), fixed(0.5), true, UnitGroup::DISTANCE,
            task_behaviour.sector_defaults.finish_radius);
 
   AddSpacer();
@@ -179,7 +179,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 
   AddFloat(Caption_Radius, _("Default radius of turnpoint cylinders and sectors in new tasks."),
-           _T("%.1f %s"), _T("%.1f"), fixed(0.1), fixed(100), fixed(0.5), true, ugDistance,
+           _T("%.1f %s"), _T("%.1f"), fixed(0.1), fixed(100), fixed(0.5), true, UnitGroup::DISTANCE,
            task_behaviour.sector_defaults.turnpoint_radius);
 
   AddSpacer();
@@ -227,19 +227,19 @@ TaskDefaultsConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValueEnum(StartType, szProfileStartType, task_behaviour.sector_defaults.start_type);
 
-  changed |= SaveValue(StartRadius, ugDistance, szProfileStartRadius,
+  changed |= SaveValue(StartRadius, UnitGroup::DISTANCE, szProfileStartRadius,
                        task_behaviour.sector_defaults.start_radius);
 
   changed |= SaveValueEnum(TurnpointType, szProfileTurnpointType,
                            task_behaviour.sector_defaults.turnpoint_type);
 
-  changed |= SaveValue(TurnpointRadius, ugDistance, szProfileTurnpointRadius,
+  changed |= SaveValue(TurnpointRadius, UnitGroup::DISTANCE, szProfileTurnpointRadius,
                        task_behaviour.sector_defaults.turnpoint_radius);
 
   changed |= SaveValueEnum(FinishType, szProfileFinishType,
                            task_behaviour.sector_defaults.finish_type);
 
-  changed |= SaveValue(FinishRadius, ugDistance, szProfileFinishRadius,
+  changed |= SaveValue(FinishRadius, UnitGroup::DISTANCE, szProfileFinishRadius,
                        task_behaviour.sector_defaults.finish_radius);
 
   changed |= SaveValueEnum(TaskType, szProfileTaskType, task_behaviour.task_type_default);

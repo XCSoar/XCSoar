@@ -197,7 +197,7 @@ InfoBoxContentFlightLevel::Update(InfoBoxData &data)
     CommonInterface::GetComputerSettings();
 
   if (basic.pressure_altitude_available) {
-    fixed Altitude = Units::ToUserUnit(basic.pressure_altitude, unFeet);
+    fixed Altitude = Units::ToUserUnit(basic.pressure_altitude, Unit::FEET);
 
     // Title color black
     data.SetTitleColor(0);
@@ -212,7 +212,7 @@ InfoBoxContentFlightLevel::Update(InfoBoxData &data)
              settings_computer.pressure_available) {
     // Take gps altitude as baro altitude. This is inaccurate but still fits our needs.
     const AtmosphericPressure &qnh = settings_computer.pressure;
-    fixed Altitude = Units::ToUserUnit(qnh.QNHAltitudeToPressureAltitude(basic.gps_altitude), unFeet);
+    fixed Altitude = Units::ToUserUnit(qnh.QNHAltitudeToPressureAltitude(basic.gps_altitude), Unit::FEET);
 
     // Title color red
     data.SetTitleColor(1);

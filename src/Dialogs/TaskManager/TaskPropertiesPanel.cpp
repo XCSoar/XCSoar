@@ -100,15 +100,15 @@ TaskPropertiesPanel::RefreshView()
 
   ShowFormControl(form, _T("prpStartMaxSpeed"), !fai_start_finish);
   LoadFormProperty(form, _T("prpStartMaxSpeed"),
-                   ugHorizontalSpeed, p.start_max_speed);
+                   UnitGroup::HORIZONTAL_SPEED, p.start_max_speed);
 
   ShowFormControl(form, _T("prpStartMaxHeight"), !fai_start_finish);
   LoadFormProperty(form, _T("prpStartMaxHeight"),
-                   ugAltitude, p.start_max_height);
+                   UnitGroup::ALTITUDE, p.start_max_height);
 
   ShowFormControl(form, _T("prpFinishMinHeight"), !fai_start_finish);
   LoadFormProperty(form, _T("prpFinishMinHeight"),
-                   ugAltitude, p.finish_min_height);
+                   UnitGroup::ALTITUDE, p.finish_min_height);
 
   ShowFormControl(form, _T("prpStartHeightRef"), !fai_start_finish);
   LoadFormProperty(form, _T("prpStartHeightRef"), (unsigned)p.start_max_height_ref);

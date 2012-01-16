@@ -54,7 +54,7 @@ PZAN2(NMEAInputLine &line, NMEAInfo &info)
   fixed vtas, wnet;
 
   if (line.read_checked(vtas))
-    info.ProvideTrueAirspeed(Units::ToSysUnit(vtas, unKiloMeterPerHour));
+    info.ProvideTrueAirspeed(Units::ToSysUnit(vtas, Unit::KILOMETER_PER_HOUR));
 
   if (line.read_checked(wnet))
     info.ProvideTotalEnergyVario((wnet - fixed(10000)) / 100);
@@ -88,7 +88,7 @@ PZAN3(NMEAInputLine &line, NMEAInfo &info)
 
   if (okay == 'A') {
     SpeedVector wind(Angle::Degrees(fixed(direction)),
-                     Units::ToSysUnit(fixed(speed), unKiloMeterPerHour));
+                     Units::ToSysUnit(fixed(speed), Unit::KILOMETER_PER_HOUR));
     info.ProvideExternalWind(wind);
   }
 

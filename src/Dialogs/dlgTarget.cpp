@@ -286,11 +286,11 @@ RefreshCalculator()
 
   const ElementStat &total = CommonInterface::Calculated().task_stats.total;
   if (total.remaining_effective.IsDefined())
-    LoadFormProperty(*wf, _T("prpSpeedRemaining"), ugTaskSpeed,
+    LoadFormProperty(*wf, _T("prpSpeedRemaining"), UnitGroup::TASK_SPEED,
                      total.remaining_effective.get_speed());
 
   if (total.travelled.IsDefined())
-    LoadOptionalFormProperty(*wf, _T("prpSpeedAchieved"), ugTaskSpeed,
+    LoadOptionalFormProperty(*wf, _T("prpSpeedAchieved"), UnitGroup::TASK_SPEED,
                              total.travelled.get_speed());
 }
 

@@ -213,7 +213,7 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
     return false;
 
   if (format == 'f' || format == 'F')
-    value = Units::ToSysUnit(value, unFeet);
+    value = Units::ToSysUnit(value, Unit::FEET);
 
   value_r = value;
   return true;
@@ -444,7 +444,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
     info.location = location;
 
   if (ground_speed_available) {
-    info.ground_speed = Units::ToSysUnit(speed, unKnots);
+    info.ground_speed = Units::ToSysUnit(speed, Unit::KNOTS);
     info.ground_speed_available.Update(info.clock);
   }
 
@@ -630,7 +630,7 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEAInfo &info)
   fixed vario;
   if (line.read_checked(vario)) {
     // Properly convert to m/s
-    vario = Units::ToSysUnit((vario - fixed(200)) / 10, unKnots);
+    vario = Units::ToSysUnit((vario - fixed(200)) / 10, Unit::KNOTS);
     info.ProvideTotalEnergyVario(vario);
   }
 
@@ -641,14 +641,14 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEAInfo &info)
   fixed baro_altitude;
   if (line.read_checked(baro_altitude)) {
     // Properly convert to meter
-    baro_altitude = Units::ToSysUnit(baro_altitude - fixed(2000), unFeet);
+    baro_altitude = Units::ToSysUnit(baro_altitude - fixed(2000), Unit::FEET);
     info.ProvidePressureAltitude(baro_altitude);
   }
 
   // Parse true airspeed
   fixed vtas;
   if (line.read_checked(vtas))
-    info.ProvideTrueAirspeed(Units::ToSysUnit(vtas, unKnots));
+    info.ProvideTrueAirspeed(Units::ToSysUnit(vtas, Unit::KNOTS));
 
   return true;
 }

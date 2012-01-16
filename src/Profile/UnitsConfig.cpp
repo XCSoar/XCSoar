@@ -29,7 +29,7 @@ Copyright_License {
 static bool
 ApplyUnit(Unit &value, Unit new_value)
 {
-  if (new_value == unUndef)
+  if (new_value == Unit::UNDEFINED)
     return false;
 
   value = new_value;
@@ -42,16 +42,16 @@ ImportSpeedUnit(unsigned tmp)
 {
   switch (tmp) {
   case 0:
-    return unStatuteMilesPerHour;
+    return Unit::STATUTE_MILESPerHour;
 
   case 1:
-    return unKnots;
+    return Unit::KNOTS;
 
   case 2:
-    return unKiloMeterPerHour;
+    return Unit::KILOMETER_PER_HOUR;
 
   default:
-    return unUndef;
+    return Unit::UNDEFINED;
   }
 }
 
@@ -68,16 +68,16 @@ ImportVerticalSpeedUnit(unsigned tmp)
 {
   switch (tmp) {
   case 0:
-    return unKnots;
+    return Unit::KNOTS;
 
   case 1:
-    return unMeterPerSecond;
+    return Unit::METER_PER_SECOND;
 
   case 2:
-    return unFeetPerMinute;
+    return Unit::FEET_PER_MINUTE;
 
   default:
-    return unUndef;
+    return Unit::UNDEFINED;
   }
 }
 
@@ -94,16 +94,16 @@ ImportDistanceUnit(unsigned tmp)
 {
   switch (tmp) {
   case 0:
-    return unStatuteMiles;
+    return Unit::STATUTE_MILES;
 
   case 1:
-    return unNauticalMiles;
+    return Unit::NAUTICAL_MILES;
 
   case 2:
-    return unKiloMeter;
+    return Unit::KILOMETER;
 
   default:
-    return unUndef;
+    return Unit::UNDEFINED;
   }
 }
 
@@ -120,13 +120,13 @@ ImportAltitudeUnit(unsigned tmp)
 {
   switch (tmp) {
   case 0:
-    return unFeet;
+    return Unit::FEET;
 
   case 1:
-    return unMeter;
+    return Unit::METER;
 
   default:
-    return unUndef;
+    return Unit::UNDEFINED;
   }
 }
 
@@ -143,13 +143,13 @@ ImportTemperatureUnit(unsigned tmp)
 {
   switch (tmp) {
   case 0:
-    return unGradCelcius;
+    return Unit::DEGREES_CELCIUS;
 
   case 1:
-    return unGradFahrenheit;
+    return Unit::DEGREES_FAHRENHEIT;
 
   default:
-    return unUndef;
+    return Unit::UNDEFINED;
   }
 }
 
@@ -165,8 +165,8 @@ gcc_const
 static bool
 ValidPressureUnit(Unit unit)
 {
-  return unit == unHectoPascal || unit == unMilliBar ||
-    unit == unTorr || unit == unInchMercury;
+  return unit == Unit::HECTOPASCAL || unit == Unit::MILLIBAR ||
+    unit == Unit::TORR || unit == Unit::INCH_MERCURY;
 }
 
 static bool

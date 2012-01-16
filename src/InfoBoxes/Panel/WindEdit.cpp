@@ -98,7 +98,7 @@ WindEditPanel::Show(const PixelRect &rc)
   if (wp) {
     wp->set_enabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
+    df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), Unit::KILOMETER_PER_HOUR)));
     df.SetUnits(Units::GetSpeedName());
     df.Set(Units::ToUserWindSpeed(wind.norm));
     wp->RefreshDisplay();

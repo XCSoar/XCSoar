@@ -61,7 +61,7 @@ GlidePolarTest::Init()
   // MC zero
   polar.mc = fixed_zero;
 
-  polar.SetVMax(Units::ToSysUnit(fixed(200), unKiloMeterPerHour), false);
+  polar.SetVMax(Units::ToSysUnit(fixed(200), Unit::KILOMETER_PER_HOUR), false);
 }
 
 void
@@ -73,9 +73,9 @@ GlidePolarTest::TestBasic()
   ok1(equals(polar.polar.b, polar.ideal_polar.b));
   ok1(equals(polar.polar.c, polar.ideal_polar.c));
 
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), unKiloMeterPerHour)), 0.606));
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(120), unKiloMeterPerHour)), 0.99));
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(160), unKiloMeterPerHour)), 1.918));
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), Unit::KILOMETER_PER_HOUR)), 0.606));
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(120), Unit::KILOMETER_PER_HOUR)), 0.99));
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(160), Unit::KILOMETER_PER_HOUR)), 1.918));
 
   ok1(equals(polar.GetSMax(), polar.SinkRate(polar.GetVMax())));
 
@@ -116,11 +116,11 @@ GlidePolarTest::TestBallast()
   ok1(equals(polar.polar.b, polar.ideal_polar.b));
   ok1(equals(polar.polar.c, polar.ideal_polar.c * loading_factor));
 
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), unKiloMeterPerHour)),
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), Unit::KILOMETER_PER_HOUR)),
              0.640739));
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(120), unKiloMeterPerHour)),
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(120), Unit::KILOMETER_PER_HOUR)),
              0.928976));
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(160), unKiloMeterPerHour)),
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(160), Unit::KILOMETER_PER_HOUR)),
              1.722908));
 
   ok1(equals(polar.GetVMin(), 21.44464));
@@ -140,11 +140,11 @@ GlidePolarTest::TestBugs()
   ok1(equals(polar.polar.b, polar.ideal_polar.b * fixed_four / 3));
   ok1(equals(polar.polar.c, polar.ideal_polar.c * fixed_four / 3));
 
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), unKiloMeterPerHour)),
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), Unit::KILOMETER_PER_HOUR)),
              0.808));
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(120), unKiloMeterPerHour)),
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(120), Unit::KILOMETER_PER_HOUR)),
              1.32));
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(160), unKiloMeterPerHour)),
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(160), Unit::KILOMETER_PER_HOUR)),
              2.557333));
 
   ok1(equals(polar.GetVMin(), 19.93464));

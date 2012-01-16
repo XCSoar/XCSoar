@@ -53,5 +53,5 @@ const UnitDescriptor Units::unit_descriptors[] = {
 const TCHAR *
 Units::GetUnitName(Unit unit)
 {
-  return unit_descriptors[unit].name;
+  return unit_descriptors[(unsigned)unit].name;
 }

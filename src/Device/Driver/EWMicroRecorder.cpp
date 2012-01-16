@@ -71,7 +71,7 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
     return false;
 
   if (unit == _T('f') || unit == _T('F'))
-    value = Units::ToSysUnit(value, unFeet);
+    value = Units::ToSysUnit(value, Unit::FEET);
 
   value_r = value;
   return true;

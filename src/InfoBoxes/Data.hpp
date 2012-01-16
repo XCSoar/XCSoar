@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_INFO_BOX_DATA_HPP
 
 #include "Util/StaticString.hpp"
-#include "Util/TinyEnum.hpp"
 #include "Units/Settings.hpp"
 #include "Math/fixed.hpp"
 
@@ -38,7 +37,7 @@ struct InfoBoxData {
   StaticString<32> value;
   StaticString<32> comment;
 
-  TinyEnum<Unit> value_unit;
+  Unit value_unit;
 
   uint8_t title_color, value_color, comment_color;
 

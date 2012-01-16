@@ -75,9 +75,9 @@ TaskCalculatorPanel::Refresh()
     : fixed_zero;
 
   if (positive(rPlanned))
-    LoadFormProperty(form, _T("prpDistance"), ugDistance, rPlanned);
+    LoadFormProperty(form, _T("prpDistance"), UnitGroup::DISTANCE, rPlanned);
 
-  LoadFormProperty(form, _T("prpMacCready"), ugVerticalSpeed,
+  LoadFormProperty(form, _T("prpMacCready"), UnitGroup::VERTICAL_SPEED,
                    CommonInterface::GetComputerSettings().glide_polar_task.GetMC());
   LoadFormProperty(form, _T("prpEffectiveMacCready"), emc);
 
@@ -99,11 +99,11 @@ TaskCalculatorPanel::Refresh()
   */
 
   if (task_stats.total.remaining_effective.IsDefined())
-    LoadFormProperty(form, _T("prpSpeedRemaining"), ugTaskSpeed,
+    LoadFormProperty(form, _T("prpSpeedRemaining"), UnitGroup::TASK_SPEED,
                      task_stats.total.remaining_effective.get_speed());
 
   if (task_stats.total.travelled.IsDefined())
-    LoadFormProperty(form, _T("prpSpeedAchieved"), ugTaskSpeed,
+    LoadFormProperty(form, _T("prpSpeedAchieved"), UnitGroup::TASK_SPEED,
                      task_stats.total.travelled.get_speed());
 
   LoadFormProperty(form, _T("prpCruiseEfficiency"),

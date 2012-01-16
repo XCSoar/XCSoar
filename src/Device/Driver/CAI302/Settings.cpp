@@ -39,7 +39,7 @@ CAI302Device::Open(gcc_unused OperationEnvironment &env)
 bool
 CAI302Device::PutMacCready(fixed MacCready)
 {
-  unsigned mac_cready = uround(Units::ToUserUnit(MacCready * 10, unKnots));
+  unsigned mac_cready = uround(Units::ToUserUnit(MacCready * 10, Unit::KNOTS));
 
   char szTmp[32];
   sprintf(szTmp, "!g,m%u\r", mac_cready);

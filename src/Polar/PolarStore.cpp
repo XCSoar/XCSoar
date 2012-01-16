@@ -36,11 +36,11 @@ PolarStore::Item::ToPolarInfo() const
 
   polar.reference_mass = fixed(reference_mass);
   polar.max_ballast = fixed(max_ballast);
-  polar.v1 = Units::ToSysUnit(fixed(v1), unKiloMeterPerHour);
+  polar.v1 = Units::ToSysUnit(fixed(v1), Unit::KILOMETER_PER_HOUR);
   polar.w1 = fixed(w1);
-  polar.v2 = Units::ToSysUnit(fixed(v2), unKiloMeterPerHour);
+  polar.v2 = Units::ToSysUnit(fixed(v2), Unit::KILOMETER_PER_HOUR);
   polar.w2 = fixed(w2);
-  polar.v3 = Units::ToSysUnit(fixed(v3), unKiloMeterPerHour);
+  polar.v3 = Units::ToSysUnit(fixed(v3), Unit::KILOMETER_PER_HOUR);
   polar.w3 = fixed(w3);
   polar.wing_area = fixed(wing_area);
   polar.v_no = fixed(v_no);

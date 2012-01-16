@@ -62,7 +62,7 @@ Update()
   if (teamcode_info.teammate_available) {
     LoadFormProperty(*wf, _T("prpBearing"),
                      teamcode_info.teammate_vector.bearing.Degrees());
-    LoadFormProperty(*wf, _T("prpRange"), ugDistance,
+    LoadFormProperty(*wf, _T("prpRange"), UnitGroup::DISTANCE,
                      teamcode_info.teammate_vector.distance);
   }
 

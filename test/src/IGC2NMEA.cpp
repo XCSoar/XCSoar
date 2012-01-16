@@ -87,7 +87,7 @@ IGCConverterReplay::on_advance(const GeoPoint &loc, const fixed speed,
   gprmc.append(lat_sign ? ",N" : ",S");
   gprmc.AppendFormat(",%03d%06.3f", lon_d, lon_ms);
   gprmc.append(lon_sign ? ",E" : ",W");
-  gprmc.AppendFormat(",%.0f", (double)Units::ToUserUnit(speed, unKnots));
+  gprmc.AppendFormat(",%.0f", (double)Units::ToUserUnit(speed, Unit::KNOTS));
   gprmc.AppendFormat(",%.0f", (double)bearing.Degrees());
   AppendNMEAChecksum(gprmc.buffer());
 

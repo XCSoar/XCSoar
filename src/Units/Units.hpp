@@ -50,7 +50,7 @@ namespace Units
    * @return The user-specified coordinate format
    */
   gcc_pure
-  CoordinateFormats GetCoordinateFormat();
+  CoordinateFormat GetCoordinateFormat();
 
   /**
    * Returns the user-specified unit for a horizontal distance

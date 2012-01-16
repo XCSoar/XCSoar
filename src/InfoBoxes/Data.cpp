@@ -35,7 +35,7 @@ InfoBoxData::SetInvalid()
 {
   SetAllColors(0);
   SetValueInvalid();
-  SetValueUnit(unUndef);
+  SetValueUnit(Unit::UNDEFINED);
   SetCommentInvalid();
 }
 
@@ -43,7 +43,7 @@ void
 InfoBoxData::SetValueInvalid()
 {
   SetValue(_T("---"));
-  SetValueUnit(unUndef);
+  SetValueUnit(Unit::UNDEFINED);
 }
 
 void

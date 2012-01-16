@@ -101,7 +101,7 @@ RefreshView()
     ShowFormControl(*wf, _T("frmOZSector"), true);
 
     LoadFormProperty(*wf, _T("prpOZSectorRadius"),
-                     ugDistance, ((const SectorZone &)oz).getRadius());
+                     UnitGroup::DISTANCE, ((const SectorZone &)oz).getRadius());
     LoadFormProperty(*wf, _T("prpOZSectorStartRadial"),
                      ((const SectorZone &)oz).getStartRadial().Degrees());
     LoadFormProperty(*wf, _T("prpOZSectorFinishRadial"),
@@ -109,7 +109,7 @@ RefreshView()
 
     if (oz.shape == ObservationZonePoint::ANNULAR_SECTOR) {
       LoadFormProperty(*wf, _T("prpOZSectorInnerRadius"),
-                       ugDistance, ((const AnnularSectorZone &)oz).getInnerRadius());
+                       UnitGroup::DISTANCE, ((const AnnularSectorZone &)oz).getInnerRadius());
 
       ShowFormControl(*wf, _T("prpOZSectorInnerRadius"), true);
     } else
@@ -120,14 +120,14 @@ RefreshView()
   case ObservationZonePoint::LINE:
     ShowFormControl(*wf, _T("frmOZLine"), true);
 
-    LoadFormProperty(*wf, _T("prpOZLineLength"), ugDistance,
+    LoadFormProperty(*wf, _T("prpOZLineLength"), UnitGroup::DISTANCE,
                      ((const LineSectorZone &)oz).getLength());
     break;
 
   case ObservationZonePoint::CYLINDER:
     ShowFormControl(*wf, _T("frmOZCylinder"), true);
 
-    LoadFormProperty(*wf, _T("prpOZCylinderRadius"), ugDistance,
+    LoadFormProperty(*wf, _T("prpOZCylinderRadius"), UnitGroup::DISTANCE,
                      ((const CylinderZone &)oz).getRadius());
     break;
 

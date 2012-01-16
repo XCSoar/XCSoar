@@ -111,9 +111,9 @@ AltitudeSetupPanel::Show(const PixelRect &rc)
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
 
-    df.SetMin(Units::ToUserPressure(Units::ToSysUnit(fixed(850), unHectoPascal)));
-    df.SetMax(Units::ToUserPressure(Units::ToSysUnit(fixed(1300), unHectoPascal)));
-    df.SetStep(Units::ToUserPressure(Units::ToSysUnit(fixed_one, unHectoPascal)));
+    df.SetMin(Units::ToUserPressure(Units::ToSysUnit(fixed(850), Unit::HECTOPASCAL)));
+    df.SetMax(Units::ToUserPressure(Units::ToSysUnit(fixed(1300), Unit::HECTOPASCAL)));
+    df.SetStep(Units::ToUserPressure(Units::ToSysUnit(fixed_one, Unit::HECTOPASCAL)));
     df.SetUnits(Units::GetPressureName());
     df.SetStep(Units::PressureStep());
     df.SetFormat(Units::GetFormatUserPressure());

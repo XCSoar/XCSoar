@@ -65,7 +65,7 @@ Update()
   LoadFormProperty(*dialog, _T("MaxBallastEdit"), plane.max_ballast);
   LoadFormProperty(*dialog, _T("DumpTimeEdit"), plane.dump_time);
   LoadFormProperty(*dialog, _T("MaxSpeedEdit"),
-                   ugHorizontalSpeed, plane.max_speed);
+                   UnitGroup::HORIZONTAL_SPEED, plane.max_speed);
 }
 
 static void
@@ -76,7 +76,7 @@ UpdatePlane()
   SaveFormProperty(*dialog, _T("MaxBallastEdit"), plane.max_ballast);
   SaveFormProperty(*dialog, _T("DumpTimeEdit"), plane.dump_time);
   SaveFormProperty(*dialog, _T("MaxSpeedEdit"),
-                   ugHorizontalSpeed, plane.max_speed);
+                   UnitGroup::HORIZONTAL_SPEED, plane.max_speed);
 }
 
 static void

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
+#include "Util/Macros.hpp"
 
 #include <tchar.h>
 #include <cstdio>
@@ -60,12 +61,12 @@ static const UnitSymbolStrings symbol_strings[] = {
 PixelSize
 UnitSymbolRenderer::GetSize(const Canvas &canvas, const Unit unit)
 {
-  assert(unit < unCount);
+  assert((size_t)unit < ARRAY_SIZE(symbol_strings));
 
-  if (unit == unUndef)
+  if (unit == Unit::UNDEFINED)
     return {0, 0};
 
-  const UnitSymbolStrings &strings = symbol_strings[unit];
+  const UnitSymbolStrings &strings = symbol_strings[(unsigned)unit];
 
   if (!strings.line1 && !strings.line2)
     return {0, 0};
@@ -88,12 +89,12 @@ UnitSymbolRenderer::GetSize(const Canvas &canvas, const Unit unit)
 UPixelScalar
 UnitSymbolRenderer::GetAscentHeight(const Font &font, const Unit unit)
 {
-  assert(unit < unCount);
+  assert((size_t)unit < ARRAY_SIZE(symbol_strings));
 
-  if (unit == unUndef)
+  if (unit == Unit::UNDEFINED)
     return 0;
 
-  const UnitSymbolStrings &strings = symbol_strings[unit];
+  const UnitSymbolStrings &strings = symbol_strings[(unsigned)unit];
 
   if (!strings.line1 && !strings.line2)
     return 0;
@@ -110,12 +111,12 @@ void
 UnitSymbolRenderer::Draw(Canvas &canvas, const RasterPoint pos,
                          const Unit unit)
 {
-  assert(unit < unCount);
+  assert((size_t)unit < ARRAY_SIZE(symbol_strings));
 
-  if (unit == unUndef)
+  if (unit == Unit::UNDEFINED)
     return;
 
-  const UnitSymbolStrings &strings = symbol_strings[unit];
+  const UnitSymbolStrings &strings = symbol_strings[(unsigned)unit];
 
   if (!strings.line1 && !strings.line2)
     return;

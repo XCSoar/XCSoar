@@ -86,7 +86,7 @@ TrackingGlue::OnTimer(const NMEAInfo &basic, const DerivedInfo &calculated)
     ? (unsigned)basic.gps_altitude
     : 0u;
   ground_speed = basic.ground_speed_available
-    ? (unsigned)Units::ToUserUnit(basic.ground_speed, unKiloMeterPerHour)
+    ? (unsigned)Units::ToUserUnit(basic.ground_speed, Unit::KILOMETER_PER_HOUR)
     : 0u;
   track = basic.track_available
     ? basic.track

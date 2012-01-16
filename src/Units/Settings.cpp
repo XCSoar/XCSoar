@@ -26,50 +26,50 @@ Copyright_License {
 void
 UnitSetting::SetDefaults()
 {
-  distance_unit = unKiloMeter;
-  altitude_unit = unMeter;
-  temperature_unit = unGradCelcius;
-  speed_unit = unKiloMeterPerHour;
-  vertical_speed_unit = unMeterPerSecond;
-  wind_speed_unit = unKiloMeterPerHour;
-  task_speed_unit = unKiloMeterPerHour;
-  pressure_unit = unHectoPascal;
-  coordinate_format = CF_DDMMSS;
+  distance_unit = Unit::KILOMETER;
+  altitude_unit = Unit::METER;
+  temperature_unit = Unit::DEGREES_CELCIUS;
+  speed_unit = Unit::KILOMETER_PER_HOUR;
+  vertical_speed_unit = Unit::METER_PER_SECOND;
+  wind_speed_unit = Unit::KILOMETER_PER_HOUR;
+  task_speed_unit = Unit::KILOMETER_PER_HOUR;
+  pressure_unit = Unit::HECTOPASCAL;
+  coordinate_format = CoordinateFormat::DDMMSS;
 }
 
 Unit
 UnitSetting::GetByGroup(UnitGroup group) const
 {
   switch (group) {
-  case ugNone:
+  case UnitGroup::NONE:
     break;
 
-  case ugDistance:
+  case UnitGroup::DISTANCE:
     return distance_unit;
 
-  case ugAltitude:
+  case UnitGroup::ALTITUDE:
     return altitude_unit;
 
-  case ugTemperature:
+  case UnitGroup::TEMPERATURE:
     return temperature_unit;
 
-  case ugHorizontalSpeed:
+  case UnitGroup::HORIZONTAL_SPEED:
     return speed_unit;
 
-  case ugVerticalSpeed:
+  case UnitGroup::VERTICAL_SPEED:
     return vertical_speed_unit;
 
-  case ugWindSpeed:
+  case UnitGroup::WIND_SPEED:
     return wind_speed_unit;
 
-  case ugTaskSpeed:
+  case UnitGroup::TASK_SPEED:
     return task_speed_unit;
 
-  case ugPressure:
+  case UnitGroup::PRESSURE:
     return pressure_unit;
   }
 
-  return unUndef;
+  return Unit::UNDEFINED;
 }
 
 bool

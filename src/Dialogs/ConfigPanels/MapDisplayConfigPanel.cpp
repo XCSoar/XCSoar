@@ -134,7 +134,7 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Max. auto zoom distance"),
            _("The upper limit for auto zoom distance."),
            _T("%.0f %s"), _T("%.0f"), fixed(20), fixed(250), fixed(10), false,
-           ugDistance, settings_map.max_auto_zoom_distance);
+           UnitGroup::DISTANCE, settings_map.max_auto_zoom_distance);
 
   UpdateVisibilities();
 }
@@ -161,7 +161,7 @@ MapDisplayConfigPanel::Save(bool &_changed, bool &require_restart)
   changed |= SaveValue(CirclingZoom, szProfileCircleZoom,
                        settings_map.circle_zoom_enabled);
 
-  changed |= SaveValue(MaxAutoZoomDistance, ugDistance,
+  changed |= SaveValue(MaxAutoZoomDistance, UnitGroup::DISTANCE,
                        szProfileMaxAutoZoomDistance,
                        settings_map.max_auto_zoom_distance);
 

@@ -184,7 +184,7 @@ FlightSetupPanel::ShowAltitude(fixed altitude)
 {
   if (fabs(altitude - last_altitude) >= fixed_one) {
     last_altitude = altitude;
-    LoadValue(Altitude, altitude, ugAltitude);
+    LoadValue(Altitude, altitude, UnitGroup::ALTITUDE);
   }
 
   GetControl(Altitude).show();
@@ -313,8 +313,8 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wp = AddFloat(_("QNH"),
                 _("Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected."),
                 Units::GetFormatUserPressure(), Units::GetFormatUserPressure(),
-                Units::ToUserPressure(Units::ToSysUnit(fixed(850), unHectoPascal)),
-                Units::ToUserPressure(Units::ToSysUnit(fixed(1300), unHectoPascal)),
+                Units::ToUserPressure(Units::ToSysUnit(fixed(850), Unit::HECTOPASCAL)),
+                Units::ToUserPressure(Units::ToSysUnit(fixed(1300), Unit::HECTOPASCAL)),
                 Units::PressureStep(), false,
                 Units::ToUserPressure(settings.pressure),
                 OnQnhData);
@@ -327,7 +327,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wp = AddFloat(_("Altitude"), NULL,
                 _T("%.0f %s"), _T("%.0f"),
                 fixed_zero, fixed_zero, fixed_zero, false,
-                ugAltitude, fixed_zero);
+                UnitGroup::ALTITUDE, fixed_zero);
   wp->SetReadOnly();
 
   wp = AddFloat(_("Max. temp."),
@@ -357,7 +357,7 @@ FlightSetupPanel::Save(bool &changed, bool &require_restart)
 
   SavePolar();
 
-  changed |= SaveValue(Temperature, ugTemperature,
+  changed |= SaveValue(Temperature, UnitGroup::TEMPERATURE,
                        settings.forecast_temperature);
 
   return true;

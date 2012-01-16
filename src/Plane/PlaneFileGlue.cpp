@@ -36,7 +36,7 @@ ReadPolar(const TCHAR *string, Plane &plane)
 {
   TCHAR *p;
 
-  fixed v1 = Units::ToSysUnit(fixed(_tcstod(string, &p)), unKiloMeterPerHour);
+  fixed v1 = Units::ToSysUnit(fixed(_tcstod(string, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
@@ -44,7 +44,7 @@ ReadPolar(const TCHAR *string, Plane &plane)
   if (*p != _T(','))
     return false;
 
-  fixed v2 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), unKiloMeterPerHour);
+  fixed v2 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
@@ -52,7 +52,7 @@ ReadPolar(const TCHAR *string, Plane &plane)
   if (*p != _T(','))
     return false;
 
-  fixed v3 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), unKiloMeterPerHour);
+  fixed v3 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
@@ -190,9 +190,9 @@ PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
 
   writer.Write(_T("PolarName"), plane.polar_name);
 
-  fixed V1 = Units::ToUserUnit(plane.v1, unKiloMeterPerHour);
-  fixed V2 = Units::ToUserUnit(plane.v2, unKiloMeterPerHour);
-  fixed V3 = Units::ToUserUnit(plane.v3, unKiloMeterPerHour);
+  fixed V1 = Units::ToUserUnit(plane.v1, Unit::KILOMETER_PER_HOUR);
+  fixed V2 = Units::ToUserUnit(plane.v2, Unit::KILOMETER_PER_HOUR);
+  fixed V3 = Units::ToUserUnit(plane.v3, Unit::KILOMETER_PER_HOUR);
   tmp.Format(_T("%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
              (double)V1, (double)plane.w1,
              (double)V2, (double)plane.w2,

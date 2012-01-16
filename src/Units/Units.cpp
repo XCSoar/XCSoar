@@ -30,14 +30,14 @@ Copyright_License {
 #include "Atmosphere/Pressure.hpp"
 
 UnitSetting Units::current = {
-  unKiloMeter,
-  unMeter,
-  unGradCelcius,
-  unKiloMeterPerHour,
-  unMeterPerSecond,
-  unKiloMeterPerHour,
-  unKiloMeterPerHour,
-  unHectoPascal,
+  Unit::KILOMETER,
+  Unit::METER,
+  Unit::DEGREES_CELCIUS,
+  Unit::KILOMETER_PER_HOUR,
+  Unit::METER_PER_SECOND,
+  Unit::KILOMETER_PER_HOUR,
+  Unit::KILOMETER_PER_HOUR,
+  Unit::HECTOPASCAL,
 };
 
 void
@@ -46,7 +46,7 @@ Units::SetConfig(const UnitSetting &new_config)
   current = new_config;
 }
 
-CoordinateFormats
+CoordinateFormat
 Units::GetCoordinateFormat()
 {
   return current.coordinate_format;

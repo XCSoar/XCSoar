@@ -62,13 +62,13 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            _("The height above terrain that the glider should arrive at for a safe landing."),
            _T("%.0f %s"), _T("%.0f"),
            fixed_zero, fixed(10000), fixed(100), false,
-           ugAltitude, task_behaviour.safety_height_arrival);
+           UnitGroup::ALTITUDE, task_behaviour.safety_height_arrival);
 
   AddFloat(_("Terrain height"),
            _("The height above terrain that the glider must clear during final glide."),
            _T("%.0f %s"), _T("%.0f"),
            fixed_zero, fixed(10000), fixed(100), false,
-           ugAltitude, task_behaviour.route_planner.safety_height_terrain);
+           UnitGroup::ALTITUDE, task_behaviour.route_planner.safety_height_terrain);
 
   static gcc_constexpr_data StaticEnumChoice abort_task_mode_list[] = {
     { (unsigned)AbortTaskMode::SIMPLE, N_("Simple") },
@@ -85,7 +85,7 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            _("The MacCready setting used, when safety MC is enabled for reach calculations, in task abort mode and for determining arrival altitude at airfields."),
            _T("%.1f %s"), _T("%.1f"),
            fixed_zero, fixed_ten, fixed(0.1), false,
-           ugVerticalSpeed, task_behaviour.safety_mc);
+           UnitGroup::VERTICAL_SPEED, task_behaviour.safety_mc);
 
   AddFloat(_("STF risk factor"),
            _("The STF risk factor reduces the MacCready setting used to calculate speed to fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for no compensation, 1.0 scales MC linearly with height."),
@@ -106,18 +106,18 @@ SafetyFactorsConfigPanel::Save(bool &_changed, bool &_require_restart)
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
 
-  changed |= SaveValue(ArrivalHeight, ugAltitude,
+  changed |= SaveValue(ArrivalHeight, UnitGroup::ALTITUDE,
                        szProfileSafetyAltitudeArrival,
                        task_behaviour.safety_height_arrival);
 
-  changed |= SaveValue(TerrainHeight, ugAltitude,
+  changed |= SaveValue(TerrainHeight, UnitGroup::ALTITUDE,
                        szProfileSafetyAltitudeTerrain,
                        task_behaviour.route_planner.safety_height_terrain);
 
   changed |= SaveValueEnum(AlternateMode, szProfileAbortTaskMode,
                            task_behaviour.abort_task_mode);
 
-  if (SaveValue(SafetyMC, ugVerticalSpeed, task_behaviour.safety_mc)) {
+  if (SaveValue(SafetyMC, UnitGroup::VERTICAL_SPEED, task_behaviour.safety_mc)) {
     Profile::Set(szProfileSafetyMacCready,
                  iround(task_behaviour.safety_mc * 10));
     changed = true;

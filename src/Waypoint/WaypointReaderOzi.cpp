@@ -113,7 +113,7 @@ WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
     return false;
 
   if (ParseNumber(params[14], value) && value != -777)
-    new_waypoint.altitude = Units::ToSysUnit(fixed(value), unFeet);
+    new_waypoint.altitude = Units::ToSysUnit(fixed(value), Unit::FEET);
   else if (!CheckAltitude(new_waypoint))
     return false;
 

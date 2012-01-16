@@ -497,7 +497,7 @@ CreateOriginalWaypoints()
   wp4.altitude = fixed(123);
   wp4.name = _T("Red Square");
   wp4.runway.SetDirection(Angle::Degrees(fixed(90)));
-  wp4.runway.SetLength((unsigned)Units::ToSysUnit(fixed(0.01), unStatuteMiles));
+  wp4.runway.SetLength((unsigned)Units::ToSysUnit(fixed(0.01), Unit::STATUTE_MILES));
 
   wp4.type = Waypoint::Type::OUTLANDING;
   wp4.flags.turn_point = true;

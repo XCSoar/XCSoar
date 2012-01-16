@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Canvas.hpp"
+#include "Util/Macros.hpp"
 #include "resource.h"
 
 #include <assert.h>
@@ -38,40 +39,41 @@ UnitSymbol::get_origin(enum kind kind) const
   return origin;
 }
 
-static UnitSymbol unit_symbols[unCount];
+static UnitSymbol unit_symbols[(unsigned)Unit::COUNT];
 
 void
 LoadUnitSymbols()
 {
-  unit_symbols[unKiloMeter].load(IDB_UNIT_KM, 5, 11);
-  unit_symbols[unNauticalMiles].load(IDB_UNIT_NM, 5, 11);
-  unit_symbols[unStatuteMiles].load(IDB_UNIT_SM, 5, 11);
-  unit_symbols[unKiloMeterPerHour].load(IDB_UNIT_KMH, 10, 11);
-  unit_symbols[unKnots].load(IDB_UNIT_KT, 5, 11);
-  unit_symbols[unStatuteMilesPerHour].load(IDB_UNIT_MPH, 10, 11);
-  unit_symbols[unMeterPerSecond].load(IDB_UNIT_MS, 5, 11);
-  unit_symbols[unFeetPerMinute].load(IDB_UNIT_FPM, 5, 11);
-  unit_symbols[unMeter].load(IDB_UNIT_M, 5, 11);
-  unit_symbols[unFeet].load(IDB_UNIT_FT, 5, 11);
-  unit_symbols[unFlightLevel].load(IDB_UNIT_FL, 5, 11);
-  unit_symbols[unKelvin].load(IDB_UNIT_DegK, 5, 11);
-  unit_symbols[unGradCelcius].load(IDB_UNIT_DegC, 5, 11);
-  unit_symbols[unGradFahrenheit].load(IDB_UNIT_DegF, 5, 11);
+  unit_symbols[(unsigned)Unit::KILOMETER].load(IDB_UNIT_KM, 5, 11);
+  unit_symbols[(unsigned)Unit::NAUTICAL_MILES].load(IDB_UNIT_NM, 5, 11);
+  unit_symbols[(unsigned)Unit::STATUTE_MILES].load(IDB_UNIT_SM, 5, 11);
+  unit_symbols[(unsigned)Unit::KILOMETER_PER_HOUR].load(IDB_UNIT_KMH, 10, 11);
+  unit_symbols[(unsigned)Unit::KNOTS].load(IDB_UNIT_KT, 5, 11);
+  unit_symbols[(unsigned)Unit::STATUTE_MILESPerHour].load(IDB_UNIT_MPH, 10, 11);
+  unit_symbols[(unsigned)Unit::METER_PER_SECOND].load(IDB_UNIT_MS, 5, 11);
+  unit_symbols[(unsigned)Unit::FEET_PER_MINUTE].load(IDB_UNIT_FPM, 5, 11);
+  unit_symbols[(unsigned)Unit::METER].load(IDB_UNIT_M, 5, 11);
+  unit_symbols[(unsigned)Unit::FEET].load(IDB_UNIT_FT, 5, 11);
+  unit_symbols[(unsigned)Unit::FLIGHT_LEVEL].load(IDB_UNIT_FL, 5, 11);
+  unit_symbols[(unsigned)Unit::KELVIN].load(IDB_UNIT_DegK, 5, 11);
+  unit_symbols[(unsigned)Unit::DEGREES_CELCIUS].load(IDB_UNIT_DegC, 5, 11);
+  unit_symbols[(unsigned)Unit::DEGREES_FAHRENHEIT].load(IDB_UNIT_DegF, 5, 11);
 }
 
 void
 DeinitialiseUnitSymbols()
 {
-  for (unsigned i = 0; i < unCount; ++i)
+  for (unsigned i = 0; i < (unsigned)Unit::COUNT; ++i)
     unit_symbols[i].reset();
 }
 
 const UnitSymbol *
 GetUnitSymbol(Unit unit)
 {
-  assert(unit <= unCount);
+  assert((size_t)unit < ARRAY_SIZE(unit_symbols));
 
-  return unit_symbols[unit].IsDefined() ? &unit_symbols[unit] : NULL;
+  return unit_symbols[(unsigned)unit].IsDefined() ?
+         &unit_symbols[(unsigned)unit] : NULL;
 }
 
 

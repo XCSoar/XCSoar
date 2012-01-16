@@ -113,17 +113,17 @@ TestTasman()
   ok1(nmea_info.total_energy_vario_available);
   ok1(equals(nmea_info.total_energy_vario, fixed_zero));
   ok1(nmea_info.pressure_altitude_available);
-  ok1(equals(nmea_info.pressure_altitude, Units::ToSysUnit(fixed(426), unFeet)));
+  ok1(equals(nmea_info.pressure_altitude, Units::ToSysUnit(fixed(426), Unit::FEET)));
   ok1(nmea_info.airspeed_available);
   ok1(equals(nmea_info.true_airspeed, fixed_zero));
 
   ok1(parser.ParseLine("$PTAS1,234,000,00426,062*26", nmea_info));
   ok1(nmea_info.total_energy_vario_available);
-  ok1(equals(nmea_info.total_energy_vario, Units::ToSysUnit(fixed(3.4), unKnots)));
+  ok1(equals(nmea_info.total_energy_vario, Units::ToSysUnit(fixed(3.4), Unit::KNOTS)));
   ok1(nmea_info.pressure_altitude_available);
-  ok1(equals(nmea_info.pressure_altitude, Units::ToSysUnit(fixed(-1574), unFeet)));
+  ok1(equals(nmea_info.pressure_altitude, Units::ToSysUnit(fixed(-1574), Unit::FEET)));
   ok1(nmea_info.airspeed_available);
-  ok1(equals(nmea_info.true_airspeed, Units::ToSysUnit(fixed(62), unKnots)));
+  ok1(equals(nmea_info.true_airspeed, Units::ToSysUnit(fixed(62), Unit::KNOTS)));
 }
 
 static void
@@ -301,7 +301,7 @@ TestFlymasterF1()
   ok1(!nmea_info.voltage_available);
   ok1(nmea_info.temperature_available);
   ok1(equals(nmea_info.temperature,
-             Units::ToSysUnit(fixed(21.3), unGradCelcius)));
+             Units::ToSysUnit(fixed(21.3), Unit::DEGREES_CELCIUS)));
   ok1(!nmea_info.baro_altitude_available);
   ok1(!nmea_info.pressure_altitude_available);
   ok1(nmea_info.static_pressure_available);
@@ -409,7 +409,7 @@ TestFlytec()
   ok1(nmea_info.battery_level_available);
   ok1(equals(nmea_info.battery_level, (88.0 + 38.0) / 2));
   ok1(nmea_info.temperature_available);
-  ok1(equals(nmea_info.temperature, Units::ToSysUnit(fixed(23), unGradCelcius)));
+  ok1(equals(nmea_info.temperature, Units::ToSysUnit(fixed(23), Unit::DEGREES_CELCIUS)));
 
   nmea_info.Reset();
   nmea_info.clock = fixed_one;
@@ -434,7 +434,7 @@ TestFlytec()
   ok1(nmea_info.battery_level_available);
   ok1(equals(nmea_info.battery_level, 38.0));
   ok1(nmea_info.temperature_available);
-  ok1(equals(nmea_info.temperature, Units::ToSysUnit(fixed(17), unGradCelcius)));
+  ok1(equals(nmea_info.temperature, Units::ToSysUnit(fixed(17), Unit::DEGREES_CELCIUS)));
 
   delete device;
 }

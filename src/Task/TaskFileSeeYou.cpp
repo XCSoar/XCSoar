@@ -137,7 +137,7 @@ ParseMaxAlt(const TCHAR* str)
     return fixed_zero;
 
   if (_tcslen(end) >= 2 && end[0] == _T('f') && end[1] == _T('t'))
-    maxalt = Units::ToSysUnit(maxalt, unFeet);
+    maxalt = Units::ToSysUnit(maxalt, Unit::FEET);
 
   return maxalt;
 }

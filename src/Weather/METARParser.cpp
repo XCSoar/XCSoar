@@ -170,7 +170,7 @@ ParseWind(const TCHAR *token, ParsedMETAR &parsed)
   if (_tcsicmp(endptr, _T("MPS")) == 0)
     parsed.wind.norm = fixed(wind_code);
   else if (_tcsicmp(endptr, _T("KT")) == 0)
-    parsed.wind.norm = Units::ToSysUnit(fixed(wind_code), unKnots);
+    parsed.wind.norm = Units::ToSysUnit(fixed(wind_code), Unit::KNOTS);
   else
     return false;
 
@@ -376,7 +376,7 @@ ParseQNH(const TCHAR *token, ParsedMETAR &parsed)
       return false;
 
     parsed.qnh = AtmosphericPressure::HectoPascal(Units::ToSysUnit(fixed(inch_hg) / 100,
-                                                                   unInchMercury));
+                                                                   Unit::INCH_MERCURY));
     parsed.qnh_available = true;
     return true;
   }

@@ -37,7 +37,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 
   if (bearing_valid && norm_valid) {
     value_r.bearing = Angle::Degrees(bearing);
-    value_r.norm = Units::ToSysUnit(norm, unKiloMeterPerHour);
+    value_r.norm = Units::ToSysUnit(norm, Unit::KILOMETER_PER_HOUR);
     return true;
   } else
     return false;
@@ -73,7 +73,7 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
 
   if (tas_available)
     info.ProvideTrueAirspeedWithAltitude(Units::ToSysUnit(airspeed,
-                                                          unKiloMeterPerHour),
+                                                          Unit::KILOMETER_PER_HOUR),
                                          alt);
 
   if (line.read_checked(value))

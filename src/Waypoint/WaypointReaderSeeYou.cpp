@@ -76,7 +76,7 @@ ParseAltitude(const TCHAR* src, fixed& dest)
   // Convert to system unit if necessary
   TCHAR unit = *endptr;
   if (unit == 'F' || unit == 'f')
-    dest = Units::ToSysUnit(dest, unFeet);
+    dest = Units::ToSysUnit(dest, Unit::FEET);
 
   // Save altitude
   return true;
@@ -96,9 +96,9 @@ ParseDistance(const TCHAR* src, fixed& dest)
   // Convert to system unit if necessary, assume m as default
   TCHAR* unit = endptr;
   if (_tcsicmp(unit, _T("ml")) == 0)
-    dest = Units::ToSysUnit(dest, unStatuteMiles);
+    dest = Units::ToSysUnit(dest, Unit::STATUTE_MILES);
   else if (_tcsicmp(unit, _T("nm")) == 0)
-    dest = Units::ToSysUnit(dest, unNauticalMiles);
+    dest = Units::ToSysUnit(dest, Unit::NAUTICAL_MILES);
 
   // Save distance
   return true;

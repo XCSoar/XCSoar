@@ -81,12 +81,12 @@ Update()
   UpdateCaption();
 
   loading = true;
-  LoadFormProperty(*dialog, _T("V1Edit"), ugHorizontalSpeed, plane.v1);
-  LoadFormProperty(*dialog, _T("V2Edit"), ugHorizontalSpeed, plane.v2);
-  LoadFormProperty(*dialog, _T("V3Edit"), ugHorizontalSpeed, plane.v3);
-  LoadFormProperty(*dialog, _T("W1Edit"), ugVerticalSpeed, plane.w1);
-  LoadFormProperty(*dialog, _T("W2Edit"), ugVerticalSpeed, plane.w2);
-  LoadFormProperty(*dialog, _T("W3Edit"), ugVerticalSpeed, plane.w3);
+  LoadFormProperty(*dialog, _T("V1Edit"), UnitGroup::HORIZONTAL_SPEED, plane.v1);
+  LoadFormProperty(*dialog, _T("V2Edit"), UnitGroup::HORIZONTAL_SPEED, plane.v2);
+  LoadFormProperty(*dialog, _T("V3Edit"), UnitGroup::HORIZONTAL_SPEED, plane.v3);
+  LoadFormProperty(*dialog, _T("W1Edit"), UnitGroup::VERTICAL_SPEED, plane.w1);
+  LoadFormProperty(*dialog, _T("W2Edit"), UnitGroup::VERTICAL_SPEED, plane.w2);
+  LoadFormProperty(*dialog, _T("W3Edit"), UnitGroup::VERTICAL_SPEED, plane.w3);
 
   LoadFormProperty(*dialog, _T("ReferenceMassEdit"), plane.reference_mass);
   LoadFormProperty(*dialog, _T("DryMassEdit"), plane.dry_mass);
@@ -99,12 +99,12 @@ Update()
 static void
 UpdatePlane()
 {
-  SaveFormProperty(*dialog, _T("V1Edit"), ugHorizontalSpeed, plane.v1);
-  SaveFormProperty(*dialog, _T("V2Edit"), ugHorizontalSpeed, plane.v2);
-  SaveFormProperty(*dialog, _T("V3Edit"), ugHorizontalSpeed, plane.v3);
-  SaveFormProperty(*dialog, _T("W1Edit"), ugVerticalSpeed, plane.w1);
-  SaveFormProperty(*dialog, _T("W2Edit"), ugVerticalSpeed, plane.w2);
-  SaveFormProperty(*dialog, _T("W3Edit"), ugVerticalSpeed, plane.w3);
+  SaveFormProperty(*dialog, _T("V1Edit"), UnitGroup::HORIZONTAL_SPEED, plane.v1);
+  SaveFormProperty(*dialog, _T("V2Edit"), UnitGroup::HORIZONTAL_SPEED, plane.v2);
+  SaveFormProperty(*dialog, _T("V3Edit"), UnitGroup::HORIZONTAL_SPEED, plane.v3);
+  SaveFormProperty(*dialog, _T("W1Edit"), UnitGroup::VERTICAL_SPEED, plane.w1);
+  SaveFormProperty(*dialog, _T("W2Edit"), UnitGroup::VERTICAL_SPEED, plane.w2);
+  SaveFormProperty(*dialog, _T("W3Edit"), UnitGroup::VERTICAL_SPEED, plane.w3);
 
   SaveFormProperty(*dialog, _T("ReferenceMassEdit"), plane.reference_mass);
   SaveFormProperty(*dialog, _T("DryMassEdit"), plane.dry_mass);
@@ -152,9 +152,9 @@ ListClicked(gcc_unused WndButton &button)
   if (item.v_no > 0.0)
     plane.max_speed = fixed(item.v_no);
 
-  plane.v1 = Units::ToSysUnit(fixed(item.v1), unKiloMeterPerHour);
-  plane.v2 = Units::ToSysUnit(fixed(item.v2), unKiloMeterPerHour);
-  plane.v3 = Units::ToSysUnit(fixed(item.v3), unKiloMeterPerHour);
+  plane.v1 = Units::ToSysUnit(fixed(item.v1), Unit::KILOMETER_PER_HOUR);
+  plane.v2 = Units::ToSysUnit(fixed(item.v2), Unit::KILOMETER_PER_HOUR);
+  plane.v3 = Units::ToSysUnit(fixed(item.v3), Unit::KILOMETER_PER_HOUR);
   plane.w1 = fixed(item.w1);
   plane.w2 = fixed(item.w2);
   plane.w3 = fixed(item.w3);

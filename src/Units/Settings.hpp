@@ -26,51 +26,53 @@ Copyright_License {
 
 #include "Compiler.h"
 
-enum CoordinateFormats {
-  CF_DDMMSS = 0,
-  CF_DDMMSS_SS,
-  CF_DDMM_MMM,
-  CF_DD_DDDD,
+#include <stdint.h>
+
+enum class CoordinateFormat: uint8_t {
+  DDMMSS = 0,
+  DDMMSS_SS,
+  DDMM_MMM,
+  DD_DDDD,
 };
 
-enum Unit {
-  unUndef,
-  unKiloMeter,
-  unNauticalMiles,
-  unStatuteMiles,
-  unKiloMeterPerHour,
-  unKnots,
-  unStatuteMilesPerHour,
-  unMeterPerSecond,
-  unFeetPerMinute,
-  unMeter,
-  unFeet,
-  unFlightLevel,
-  unKelvin,
-  unGradCelcius, // K = C° + 273,15
-  unGradFahrenheit, // K = (°F + 459,67) / 1,8
-  unHectoPascal,
-  unMilliBar,
-  unTorr,
-  unInchMercury,
+enum class Unit: uint8_t {
+  UNDEFINED,
+  KILOMETER,
+  NAUTICAL_MILES,
+  STATUTE_MILES,
+  KILOMETER_PER_HOUR,
+  KNOTS,
+  STATUTE_MILESPerHour,
+  METER_PER_SECOND,
+  FEET_PER_MINUTE,
+  METER,
+  FEET,
+  FLIGHT_LEVEL,
+  KELVIN,
+  DEGREES_CELCIUS, // K = C° + 273,15
+  DEGREES_FAHRENHEIT, // K = (°F + 459,67) / 1,8
+  HECTOPASCAL,
+  MILLIBAR,
+  TORR,
+  INCH_MERCURY,
 
   /**
    * The sentinel: the number of units in this enum.
    */
-  unCount
+  COUNT
 };
 
-enum UnitGroup
+enum class UnitGroup: uint8_t
 {
-  ugNone,
-  ugDistance,
-  ugAltitude,
-  ugTemperature,
-  ugHorizontalSpeed,
-  ugVerticalSpeed,
-  ugWindSpeed,
-  ugTaskSpeed,
-  ugPressure,
+  NONE,
+  DISTANCE,
+  ALTITUDE,
+  TEMPERATURE,
+  HORIZONTAL_SPEED,
+  VERTICAL_SPEED,
+  WIND_SPEED,
+  TASK_SPEED,
+  PRESSURE,
 };
 
 struct UnitSetting
@@ -93,7 +95,7 @@ struct UnitSetting
   Unit pressure_unit;
 
   /** Unit for lat/lon */
-  CoordinateFormats coordinate_format;
+  CoordinateFormat coordinate_format;
 
   void SetDefaults();
 

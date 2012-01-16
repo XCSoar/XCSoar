@@ -45,7 +45,7 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
   double mlong(Longitude.AbsoluteDegrees());
 
   switch (current.coordinate_format) {
-  case CF_DDMMSS:
+  case CoordinateFormat::DDMMSS:
     // Calculate degrees
     dd = (int)mlong;
     // Calculate minutes
@@ -67,7 +67,7 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
               dd, mm, ss, EW[sign]);
     break;
 
-  case CF_DDMMSS_SS:
+  case CoordinateFormat::DDMMSS_SS:
     // Calculate degrees
     dd = (int)mlong;
     // Calculate minutes
@@ -80,7 +80,7 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
               dd, mm, mlong, EW[sign]);
     break;
 
-  case CF_DDMM_MMM:
+  case CoordinateFormat::DDMM_MMM:
     // Calculate degrees
     dd = (int)mlong;
     // Calculate minutes
@@ -89,7 +89,7 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
     _stprintf(Buffer, _T("%03d")_T(DEG)_T("%06.3f' %c"), dd, mlong, EW[sign]);
     break;
 
-  case CF_DD_DDDD:
+  case CoordinateFormat::DD_DDDD:
     // Save the string to the Buffer
     _stprintf(Buffer, _T("%08.4f %c")_T(DEG), mlong, EW[sign]);
     break;
@@ -112,7 +112,7 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
   double mlat(Latitude.AbsoluteDegrees());
 
   switch (current.coordinate_format) {
-  case CF_DDMMSS:
+  case CoordinateFormat::DDMMSS:
     // Calculate degrees
     dd = (int)mlat;
     // Calculate minutes
@@ -134,7 +134,7 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
               dd, mm, ss, EW[sign]);
     break;
 
-  case CF_DDMMSS_SS:
+  case CoordinateFormat::DDMMSS_SS:
     // Calculate degrees
     dd = (int)mlat;
     // Calculate minutes
@@ -147,7 +147,7 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
               dd, mm, mlat, EW[sign]);
     break;
 
-  case CF_DDMM_MMM:
+  case CoordinateFormat::DDMM_MMM:
     // Calculate degrees
     dd = (int)mlat;
     // Calculate minutes
@@ -156,7 +156,7 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
     _stprintf(Buffer, _T("%02d")_T(DEG)_T("%06.3f' %c"), dd, mlat, EW[sign]);
     break;
 
-  case CF_DD_DDDD:
+  case CoordinateFormat::DD_DDDD:
     // Save the string to the Buffer
     _stprintf(Buffer, _T("%07.4f %c")_T(DEG), mlat, EW[sign]);
     break;
@@ -204,7 +204,7 @@ Units::FormatUserAltitude(fixed Altitude, TCHAR *buffer, size_t size,
                           bool IncludeUnit)
 {
   FormatInteger(buffer, size, Altitude,
-                unit_descriptors[current.altitude_unit], IncludeUnit);
+                unit_descriptors[(unsigned)current.altitude_unit], IncludeUnit);
 }
 
 gcc_const
@@ -212,11 +212,11 @@ static Unit
 GetAlternateUnit(Unit unit)
 {
   switch (unit) {
-  case unMeter:
-    return unFeet;
+  case Unit::METER:
+    return Unit::FEET;
 
-  case unFeet:
-    return unMeter;
+  case Unit::FEET:
+    return Unit::METER;
 
   default:
     return unit;
@@ -228,7 +228,7 @@ Units::FormatAlternateUserAltitude(fixed Altitude, TCHAR *buffer, size_t size,
                                    bool IncludeUnit)
 {
   FormatInteger(buffer, size, Altitude,
-                unit_descriptors[GetAlternateUnit(current.altitude_unit)],
+                unit_descriptors[(unsigned)GetAlternateUnit(current.altitude_unit)],
                 IncludeUnit);
 }
 
@@ -239,7 +239,7 @@ void
 Units::FormatUserArrival(fixed Altitude, TCHAR *buffer, size_t size,
                          bool IncludeUnit)
 {
-  const UnitDescriptor *pU = &unit_descriptors[current.altitude_unit];
+  const UnitDescriptor *pU = &unit_descriptors[(unsigned)current.altitude_unit];
 
   Altitude = Altitude * pU->factor_to_user; // + pU->ToUserOffset;
 
@@ -256,7 +256,7 @@ Units::FormatUserDistance(fixed Distance, TCHAR *buffer, size_t size,
   int prec;
   fixed value;
 
-  const UnitDescriptor *pU = &unit_descriptors[current.distance_unit];
+  const UnitDescriptor *pU = &unit_descriptors[(unsigned)current.distance_unit];
 
   value = Distance * pU->factor_to_user; // + pU->ToUserOffset;
 
@@ -268,20 +268,20 @@ Units::FormatUserDistance(fixed Distance, TCHAR *buffer, size_t size,
     prec = 2;
   else {
     prec = 2;
-    if (current.distance_unit == unKiloMeter) {
+    if (current.distance_unit == Unit::KILOMETER) {
       prec = 0;
-      pU = &unit_descriptors[unMeter];
+      pU = &unit_descriptors[(unsigned)Unit::METER];
       value = Distance * pU->factor_to_user;
     }
-    if (current.distance_unit == unNauticalMiles ||
-        current.distance_unit == unStatuteMiles) {
-      pU = &unit_descriptors[unFeet];
+    if (current.distance_unit == Unit::NAUTICAL_MILES ||
+        current.distance_unit == Unit::STATUTE_MILES) {
+      pU = &unit_descriptors[(unsigned)Unit::FEET];
       value = Distance * pU->factor_to_user;
       if (value < fixed(1000)) {
         prec = 0;
       } else {
         prec = 1;
-        pU = &unit_descriptors[current.distance_unit];
+        pU = &unit_descriptors[(unsigned)current.distance_unit];
         value = Distance * pU->factor_to_user;
       }
     }
@@ -300,28 +300,28 @@ Units::FormatUserMapScale(fixed Distance, TCHAR *buffer,
   int prec;
   fixed value;
 
-  const UnitDescriptor *pU = &unit_descriptors[current.distance_unit];
+  const UnitDescriptor *pU = &unit_descriptors[(unsigned)current.distance_unit];
 
   value = Distance * pU->factor_to_user; // + pU->ToUserOffset;
 
   if (value >= fixed(9.999))
     prec = 0;
-  else if ((current.distance_unit == unKiloMeter && value >= fixed(0.999)) ||
-           (current.distance_unit != unKiloMeter && value >= fixed(0.160)))
+  else if ((current.distance_unit == Unit::KILOMETER && value >= fixed(0.999)) ||
+           (current.distance_unit != Unit::KILOMETER && value >= fixed(0.160)))
     prec = 1;
   else if (!IncludeUnit)
     prec = 2;
   else {
     prec = 2;
-    if (current.distance_unit == unKiloMeter) {
+    if (current.distance_unit == Unit::KILOMETER) {
       prec = 0;
-      pU = &unit_descriptors[unMeter];
+      pU = &unit_descriptors[(unsigned)Unit::METER];
       value = Distance * pU->factor_to_user;
     }
-    if (current.distance_unit == unNauticalMiles ||
-        current.distance_unit == unStatuteMiles) {
+    if (current.distance_unit == Unit::NAUTICAL_MILES ||
+        current.distance_unit == Unit::STATUTE_MILES) {
       prec = 0;
-      pU = &unit_descriptors[unFeet];
+      pU = &unit_descriptors[(unsigned)Unit::FEET];
       value = Distance * pU->factor_to_user;
     }
   }
@@ -354,7 +354,7 @@ Units::FormatUserSpeed(fixed Speed, TCHAR *buffer, size_t size,
 {
   FormatSpeed(Speed, buffer, size,
               IncludeUnit, Precision,
-              unit_descriptors[current.speed_unit]);
+              unit_descriptors[(unsigned)current.speed_unit]);
 }
 
 void
@@ -363,7 +363,7 @@ Units::FormatUserWindSpeed(fixed Speed, TCHAR *buffer, size_t size,
 {
   FormatSpeed(Speed, buffer, size,
               IncludeUnit, Precision,
-              unit_descriptors[current.wind_speed_unit]);
+              unit_descriptors[(unsigned)current.wind_speed_unit]);
 }
 
 void
@@ -372,14 +372,14 @@ Units::FormatUserTaskSpeed(fixed value, TCHAR *buffer, size_t max_size,
 {
   FormatSpeed(value, buffer, max_size,
               include_unit, precision,
-              unit_descriptors[current.task_speed_unit]);
+              unit_descriptors[(unsigned)current.task_speed_unit]);
 }
 
 void
 Units::FormatUserVSpeed(fixed Speed, TCHAR *buffer, size_t size,
                         bool IncludeUnit)
 {
-  const UnitDescriptor *pU = &unit_descriptors[current.vertical_speed_unit];
+  const UnitDescriptor *pU = &unit_descriptors[(unsigned)current.vertical_speed_unit];
 
   Speed = Speed * pU->factor_to_user;
 
@@ -407,7 +407,7 @@ Units::FormatUserPressure(AtmosphericPressure pressure, TCHAR *Buffer,
                           size_t size, bool IncludeUnit)
 {
   TCHAR sTmp[16];
-  const UnitDescriptor *pU = &unit_descriptors[current.pressure_unit];
+  const UnitDescriptor *pU = &unit_descriptors[(unsigned)current.pressure_unit];
 
   fixed _pressure = pressure.GetHectoPascal() * pU->factor_to_user;
 
@@ -431,7 +431,7 @@ Units::FormatUserPressure(AtmosphericPressure pressure, TCHAR *Buffer,
 const TCHAR*
 Units::GetFormatUserPressure()
 {
-  if (current.pressure_unit == unInchMercury)
+  if (current.pressure_unit == Unit::INCH_MERCURY)
     return _T("%.2f");
   else
     return _T("%.f");
@@ -440,7 +440,7 @@ Units::GetFormatUserPressure()
 fixed
 Units::PressureStep()
 {
-  if (current.pressure_unit == unInchMercury)
+  if (current.pressure_unit == Unit::INCH_MERCURY)
     return fixed(0.01);
   else
     return fixed_one;

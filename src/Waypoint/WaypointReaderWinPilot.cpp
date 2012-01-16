@@ -135,7 +135,7 @@ ParseAltitude(const TCHAR* src, fixed& dest)
   // Convert to system unit if necessary
   TCHAR unit = *endptr;
   if (unit == 'F' || unit == 'f')
-    dest = Units::ToSysUnit(dest, unFeet);
+    dest = Units::ToSysUnit(dest, Unit::FEET);
 
   // Save altitude
   return true;

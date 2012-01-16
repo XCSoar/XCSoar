@@ -86,9 +86,9 @@ PWES0(NMEAInputLine &line, NMEAInfo &info)
   bool have_tas = line.read_checked(k);
   if (have_ias && have_tas)
     info.ProvideBothAirspeeds(Units::ToSysUnit(fixed(i) / 10,
-                                               unKiloMeterPerHour),
+                                               Unit::KILOMETER_PER_HOUR),
                               Units::ToSysUnit(fixed(k) / 10,
-                                               unKiloMeterPerHour));
+                                               Unit::KILOMETER_PER_HOUR));
 
   if (line.read_checked(i)) {
     info.voltage = fixed(i) / 10;

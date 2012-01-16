@@ -120,14 +120,14 @@ cai_w(NMEAInputLine &line, NMEAInfo &info)
 
   if (line.read_checked(value))
     info.ProvideTotalEnergyVario(Units::ToSysUnit((value - fixed(200)) / 10,
-                                                  unKnots));
+                                                  Unit::KNOTS));
 
   line.skip(2);
 
   int i;
 
   if (line.read_checked(i))
-    info.settings.ProvideMacCready(Units::ToSysUnit(fixed(i) / 10, unKnots),
+    info.settings.ProvideMacCready(Units::ToSysUnit(fixed(i) / 10, Unit::KNOTS),
                                    info.clock);
 
   if (line.read_checked(i))

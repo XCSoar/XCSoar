@@ -50,7 +50,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
     //
     // This seems to differ from the output that the LX devices are giving !!
     value_r.bearing = Angle::Degrees(bearing).Reciprocal();
-    value_r.norm = Units::ToSysUnit(norm, unKiloMeterPerHour);
+    value_r.norm = Units::ToSysUnit(norm, Unit::KILOMETER_PER_HOUR);
     return true;
   } else
     return false;
@@ -83,7 +83,7 @@ cLXWP0(NMEAInputLine &line, NMEAInfo &info)
 
   if (tas_available)
     info.ProvideTrueAirspeedWithAltitude(Units::ToSysUnit(airspeed,
-                                                               unKiloMeterPerHour),
+                                                               Unit::KILOMETER_PER_HOUR),
                                               alt);
 
   // ToDo check if QNH correction is needed!

@@ -79,25 +79,25 @@ UnitsConfigPanel::UpdateUnitFields(const UnitSetting &units)
 
   loading = true;
 
-  GetDataField(UnitsSpeed).SetAsInteger(units.speed_unit);
+  GetDataField(UnitsSpeed).SetAsInteger((unsigned)units.speed_unit);
   GetControl(UnitsSpeed).RefreshDisplay();
 
-  GetDataField(UnitsDistance).SetAsInteger(units.distance_unit);
+  GetDataField(UnitsDistance).SetAsInteger((unsigned)units.distance_unit);
   GetControl(UnitsDistance).RefreshDisplay();
 
-  GetDataField(UnitsLift).SetAsInteger(units.vertical_speed_unit);
+  GetDataField(UnitsLift).SetAsInteger((unsigned)units.vertical_speed_unit);
   GetControl(UnitsLift).RefreshDisplay();
 
-  GetDataField(UnitsAltitude).SetAsInteger(units.altitude_unit);
+  GetDataField(UnitsAltitude).SetAsInteger((unsigned)units.altitude_unit);
   GetControl(UnitsAltitude).RefreshDisplay();
 
-  GetDataField(UnitsTemperature).SetAsInteger(units.temperature_unit);
+  GetDataField(UnitsTemperature).SetAsInteger((unsigned)units.temperature_unit);
   GetControl(UnitsTemperature).RefreshDisplay();
 
-  GetDataField(UnitsTaskSpeed).SetAsInteger(units.task_speed_unit);
+  GetDataField(UnitsTaskSpeed).SetAsInteger((unsigned)units.task_speed_unit);
   GetControl(UnitsTaskSpeed).RefreshDisplay();
 
-  GetDataField(UnitsPressure).SetAsInteger(units.pressure_unit);
+  GetDataField(UnitsPressure).SetAsInteger((unsigned)units.pressure_unit);
   GetControl(UnitsPressure).RefreshDisplay();
 
   // Ignore the coord.format for the preset selection.
@@ -181,9 +181,9 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   static const TCHAR * units_speed_help = N_("Units used for airspeed and ground speed.  "
       "A separate unit is available for task speeds.");
   static const StaticEnumChoice  units_speed_list[] = {
-    { unStatuteMilesPerHour,  _T("mph"), units_speed_help },
-    { unKnots,                N_("knots"), units_speed_help },
-    { unKiloMeterPerHour,     _T("km/h"), units_speed_help },
+    { (unsigned)Unit::STATUTE_MILESPerHour,  _T("mph"), units_speed_help },
+    { (unsigned)Unit::KNOTS,                N_("knots"), units_speed_help },
+    { (unsigned)Unit::KILOMETER_PER_HOUR,     _T("km/h"), units_speed_help },
     { 0 }
   };
   AddEnum(_("Aircraft/Wind speed"), _T(""), units_speed_list, (unsigned int)config.speed_unit, OnFieldData);
@@ -191,67 +191,74 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   static const TCHAR *units_distance_help = _("Units used for horizontal distances e.g. "
       "range to waypoint, distance to go.");
   static const StaticEnumChoice  units_distance_list[] = {
-    { unStatuteMiles,  _T("sm"), units_distance_help },
-    { unNauticalMiles, _T("nm"), units_distance_help },
-    { unKiloMeter,     _T("km"), units_distance_help },
+    { (unsigned)Unit::STATUTE_MILES,  _T("sm"), units_distance_help },
+    { (unsigned)Unit::NAUTICAL_MILES, _T("nm"), units_distance_help },
+    { (unsigned)Unit::KILOMETER,     _T("km"), units_distance_help },
     { 0 }
   };
-  AddEnum(_("Distance"), _T(""), units_distance_list, config.distance_unit, OnFieldData);
+  AddEnum(_("Distance"), _T(""), units_distance_list,
+          (unsigned)config.distance_unit, OnFieldData);
 
   static const TCHAR *units_lift_help = _("Units used for vertical speeds (variometer).");
   static const StaticEnumChoice  units_lift_list[] = {
-    { unKnots,          N_("knots"), units_lift_help },
-    { unMeterPerSecond, _T("m/s"), units_lift_help },
-    { unFeetPerMinute,  _T("ft/min"), units_lift_help },
+    { (unsigned)Unit::KNOTS,          N_("knots"), units_lift_help },
+    { (unsigned)Unit::METER_PER_SECOND, _T("m/s"), units_lift_help },
+    { (unsigned)Unit::FEET_PER_MINUTE,  _T("ft/min"), units_lift_help },
     { 0 }
   };
-  AddEnum(_("Lift"), _T(""), units_lift_list, config.vertical_speed_unit, OnFieldData);
+  AddEnum(_("Lift"), _T(""), units_lift_list,
+          (unsigned)config.vertical_speed_unit, OnFieldData);
 
   static const TCHAR *units_altitude_help = _("Units used for altitude and heights.");
   static const StaticEnumChoice  units_altitude_list[] = {
-    { unFeet,  N_("foot"), units_altitude_help },
-    { unMeter, N_("meter"), units_altitude_help },
+    { (unsigned)Unit::FEET,  N_("foot"), units_altitude_help },
+    { (unsigned)Unit::METER, N_("meter"), units_altitude_help },
     { 0 }
   };
-  AddEnum(_("Altitude"), _T(""), units_altitude_list, config.altitude_unit, OnFieldData);
+  AddEnum(_("Altitude"), _T(""), units_altitude_list,
+          (unsigned)config.altitude_unit, OnFieldData);
 
   static const TCHAR *units_temperature_help = _("Units used for temperature.");
   static const StaticEnumChoice  units_temperature_list[] = {
-    { unGradCelcius,    _T(DEG "C"), units_temperature_help },
-    { unGradFahrenheit, _T(DEG "F"), units_temperature_help },
+    { (unsigned)Unit::DEGREES_CELCIUS,    _T(DEG "C"), units_temperature_help },
+    { (unsigned)Unit::DEGREES_FAHRENHEIT, _T(DEG "F"), units_temperature_help },
     { 0 }
   };
-  AddEnum(_("Temperature"), _T(""), units_temperature_list, config.temperature_unit, OnFieldData);
+  AddEnum(_("Temperature"), _T(""), units_temperature_list,
+          (unsigned)config.temperature_unit, OnFieldData);
 
   static const TCHAR *units_taskspeed_help = _("Units used for task speeds.");
   static const StaticEnumChoice  units_taskspeed_list[] = {
-    { unStatuteMilesPerHour,  _T("mph"), units_taskspeed_help },
-    { unKnots,                N_("knots"), units_taskspeed_help },
-    { unKiloMeterPerHour,     _T("km/h"), units_taskspeed_help },
+    { (unsigned)Unit::STATUTE_MILESPerHour,  _T("mph"), units_taskspeed_help },
+    { (unsigned)Unit::KNOTS,                N_("knots"), units_taskspeed_help },
+    { (unsigned)Unit::KILOMETER_PER_HOUR,     _T("km/h"), units_taskspeed_help },
     { 0 }
   };
-  AddEnum(_("Task speed"), _T(""), units_taskspeed_list, config.task_speed_unit, OnFieldData);
+  AddEnum(_("Task speed"), _T(""), units_taskspeed_list,
+          (unsigned)config.task_speed_unit, OnFieldData);
 
   static const TCHAR *units_pressure_help = _("Units used for pressures.");
   static const StaticEnumChoice pressure_labels_list[] = {
-    { unHectoPascal, _T("hPa"), units_pressure_help },
-    { unMilliBar,    _T("mb"), units_pressure_help },
-    { unInchMercury, _T("inHg"), units_pressure_help },
+    { (unsigned)Unit::HECTOPASCAL, _T("hPa"), units_pressure_help },
+    { (unsigned)Unit::MILLIBAR,    _T("mb"), units_pressure_help },
+    { (unsigned)Unit::INCH_MERCURY, _T("inHg"), units_pressure_help },
     { 0 }
   };
-  AddEnum(_("Pressure"), _T(""), pressure_labels_list, config.pressure_unit, OnFieldData);
+  AddEnum(_("Pressure"), _T(""), pressure_labels_list,
+          (unsigned)config.pressure_unit, OnFieldData);
 
   AddSpacer();
 
   static const TCHAR *units_lat_lon_help = _("Units used for latitude and longitude.");
   static const StaticEnumChoice units_lat_lon_list[] = {
-    { CF_DDMMSS, _T("DDMMSS"), units_lat_lon_help },
-    { CF_DDMMSS_SS, _T("DDMMSS.ss"), units_lat_lon_help },
-    { CF_DDMM_MMM, _T("DDMM.mmm"), units_lat_lon_help },
-    { CF_DD_DDDD, _T("DD.dddd"), units_lat_lon_help },
+    { (unsigned)CoordinateFormat::DDMMSS, _T("DDMMSS"), units_lat_lon_help },
+    { (unsigned)CoordinateFormat::DDMMSS_SS, _T("DDMMSS.ss"), units_lat_lon_help },
+    { (unsigned)CoordinateFormat::DDMM_MMM, _T("DDMM.mmm"), units_lat_lon_help },
+    { (unsigned)CoordinateFormat::DD_DDDD, _T("DD.dddd"), units_lat_lon_help },
     { 0 }
   };
-  AddEnum(_("Lat./Lon."), _T(""), units_lat_lon_list, config.coordinate_format);
+  AddEnum(_("Lat./Lon."), _T(""), units_lat_lon_list,
+          (unsigned)config.coordinate_format);
 }
 
 bool

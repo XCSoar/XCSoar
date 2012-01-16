@@ -155,11 +155,11 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddFloat(_("Clip altitude"),
            _("For clip airspace mode, this is the altitude below which airspace is displayed."),
-           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(20000), fixed(100), false, ugAltitude, fixed(renderer.clip_altitude));
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(20000), fixed(100), false, UnitGroup::ALTITUDE, fixed(renderer.clip_altitude));
 
   AddFloat(_("Margin"),
            _("For auto and all below airspace mode, this is the altitude above/below which airspace is included."),
-           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(100), false, ugAltitude, fixed(computer.warnings.AltWarningMargin));
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(100), false, UnitGroup::ALTITUDE, fixed(computer.warnings.AltWarningMargin));
 
   AddBoolean(_("Warnings"), _("Enable/disable all airspace warnings."), computer.enable_warnings, OnAirspaceWarning);
 
@@ -204,9 +204,9 @@ AirspaceConfigPanel::Save(bool &_changed, bool &require_restart)
 
   changed |= SaveValueEnum(AirspaceDisplay, szProfileAltMode, renderer.altitude_mode);
 
-  changed |= SaveValue(ClipAltitude, ugAltitude, szProfileClipAlt, renderer.clip_altitude);
+  changed |= SaveValue(ClipAltitude, UnitGroup::ALTITUDE, szProfileClipAlt, renderer.clip_altitude);
 
-  changed |= SaveValue(AltWarningMargin, ugAltitude, szProfileAltMargin, computer.warnings.AltWarningMargin);
+  changed |= SaveValue(AltWarningMargin, UnitGroup::ALTITUDE, szProfileAltMargin, computer.warnings.AltWarningMargin);
 
   changed |= SaveValue(AirspaceWarnings, szProfileAirspaceWarning, computer.enable_warnings);
 

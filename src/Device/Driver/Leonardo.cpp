@@ -46,7 +46,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
   bool bearing_valid = line.read_checked(bearing);
 
   if (bearing_valid && norm_valid) {
-    value_r.norm = Units::ToSysUnit(norm, unKiloMeterPerHour);
+    value_r.norm = Units::ToSysUnit(norm, Unit::KILOMETER_PER_HOUR);
     value_r.bearing = Angle::Degrees(bearing);
     return true;
   } else
@@ -74,7 +74,7 @@ LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
   // 2 = airspeed [km/h]
   /* XXX is that TAS or IAS? */
   if (line.read_checked(value))
-    info.ProvideTrueAirspeed(Units::ToSysUnit(value, unKiloMeterPerHour));
+    info.ProvideTrueAirspeed(Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR));
 
   // 3 = netto vario [dm/s]
   if (line.read_checked(value))
@@ -126,7 +126,7 @@ LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
   // 3 = airspeed [km/h]
   /* XXX is that TAS or IAS? */
   if (line.read_checked(value))
-    info.ProvideTrueAirspeed(Units::ToSysUnit(value, unKiloMeterPerHour));
+    info.ProvideTrueAirspeed(Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR));
 
   // 4 = temperature [deg C]
   fixed oat;

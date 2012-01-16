@@ -71,20 +71,20 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
   bool vtas_av = line.read_checked(vtas);
 
   if (line.read_checked(value))
-    info.ProvideTotalEnergyVario(Units::ToSysUnit(value, unKnots));
+    info.ProvideTotalEnergyVario(Units::ToSysUnit(value, Unit::KNOTS));
 
   if (line.read_checked(value))
-    info.settings.ProvideMacCready(Units::ToSysUnit(value, unKnots),
+    info.settings.ProvideMacCready(Units::ToSysUnit(value, Unit::KNOTS),
                                    info.clock);
 
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
   ///  oldGlidePolar::SetMacCready(info.MacCready);
 
   if (line.read_checked(value) && vtas_av)
-    info.ProvideBothAirspeeds(Units::ToSysUnit(sqrt(value), unKnots),
-                              Units::ToSysUnit(vtas, unKnots));
+    info.ProvideBothAirspeeds(Units::ToSysUnit(sqrt(value), Unit::KNOTS),
+                              Units::ToSysUnit(vtas, Unit::KNOTS));
   else if (vtas_av)
-    info.ProvideTrueAirspeed(Units::ToSysUnit(vtas, unKnots));
+    info.ProvideTrueAirspeed(Units::ToSysUnit(vtas, Unit::KNOTS));
 
   // RMN: Changed bugs-calculation, swapped ballast and bugs to suit
   // the B50-string for Borgelt, it's % degradation, for us, it is %
@@ -153,7 +153,7 @@ B50Device::PutMacCready(fixed mac_cready)
   /* the Borgelt B800 understands the CAI302 "!g" command for
      MacCready, ballast and bugs */
 
-  unsigned mac_cready2 = uround(Units::ToUserUnit(mac_cready * 10, unKnots));
+  unsigned mac_cready2 = uround(Units::ToUserUnit(mac_cready * 10, Unit::KNOTS));
 
   char buffer[32];
   sprintf(buffer, "!g,m%u\r", mac_cready2);

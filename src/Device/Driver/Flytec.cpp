@@ -65,7 +65,7 @@ FlytecParseBRSF(NMEAInputLine &line, NMEAInfo &info)
   // 0 = indicated or true airspeed [km/h]
   if (line.read_checked(value))
     // XXX is that TAS or IAS?  Documentation isn't clear.
-    info.ProvideBothAirspeeds(Units::ToSysUnit(value, unKiloMeterPerHour));
+    info.ProvideBothAirspeeds(Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR));
 
   // 1 = integrated vario [dm/s]
   // 2 = altitude A2 [m] (XXX what's this?)
@@ -102,7 +102,7 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEAInfo &info)
   // 8,9 = indicated or true airspeed, unit
   if (line.read_checked_compare(value, "KH"))
     // XXX is that TAS or IAS?  Documentation isn't clear.
-    info.ProvideBothAirspeeds(Units::ToSysUnit(value, unKiloMeterPerHour));
+    info.ProvideBothAirspeeds(Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR));
 
   // 10,11 = temperature, unit
   info.temperature_available =

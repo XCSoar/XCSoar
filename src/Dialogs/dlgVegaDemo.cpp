@@ -124,8 +124,8 @@ dlgVegaDemoShowModal()
   VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"));
   VarioWriteNMEA(_T("PDVSC,S,DemoMode,3"));
 
-  LoadFormProperty(*wf, _T("prpVegaDemoW"), ugVerticalSpeed, VegaDemoW);
-  LoadFormProperty(*wf, _T("prpVegaDemoV"), ugVerticalSpeed, VegaDemoV);
+  LoadFormProperty(*wf, _T("prpVegaDemoW"), UnitGroup::VERTICAL_SPEED, VegaDemoW);
+  LoadFormProperty(*wf, _T("prpVegaDemoV"), UnitGroup::VERTICAL_SPEED, VegaDemoV);
   LoadFormProperty(*wf, _T("prpVegaDemoAudioClimb"), VegaDemoAudioClimb);
 
   wf->ShowModal();

@@ -167,7 +167,7 @@ InitFields()
   {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetDataAccessCallback(OnDataAccess);
-    df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
+    df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), Unit::KILOMETER_PER_HOUR)));
     df.SetUnits(Units::GetSpeedName());
   }
 

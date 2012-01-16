@@ -245,7 +245,7 @@ ShowParseWarning(int line, const TCHAR* str)
 static void
 ReadAltitude(const TCHAR *Text, AirspaceAltitude &Alt)
 {
-  Unit unit = unFeet;
+  Unit unit = Unit::FEET;
   enum { MSL, AGL, SFC, FL, STD, UNLIMITED } type = MSL;
   fixed altitude = fixed_zero;
 
@@ -269,7 +269,7 @@ ReadAltitude(const TCHAR *Text, AirspaceAltitude &Alt)
       type = FL;
       p += 2;
     } else if (*p == _T('F') || *p == _T('f')) {
-      unit = unFeet;
+      unit = Unit::FEET;
       ++p;
 
       if (*p == _T('T') || *p == _T('t'))
@@ -278,7 +278,7 @@ ReadAltitude(const TCHAR *Text, AirspaceAltitude &Alt)
       type = MSL;
       p += 3;
     } else if (*p == _T('M') || *p == _T('m')) {
-      unit = unMeter;
+      unit = Unit::METER;
       ++p;
     } else if (_tcsnicmp(p, _T("STD"), 3) == 0) {
       type = STD;
@@ -326,7 +326,7 @@ ReadAltitude(const TCHAR *Text, AirspaceAltitude &Alt)
 
   if (type == STD) {
     Alt.type = AirspaceAltitude::FL;
-    Alt.flight_level = Units::ToUserUnit(altitude, unFlightLevel);
+    Alt.flight_level = Units::ToUserUnit(altitude, Unit::FLIGHT_LEVEL);
     return;
   }
 }
@@ -424,7 +424,7 @@ ParseArcBearings(const TCHAR *Text, TempAirspaceType &temp_area)
 {
   // Determine radius and start/end bearing
   TCHAR *Stop;
-  temp_area.Radius = Units::ToSysUnit(fixed(_tcstod(&Text[2], &Stop)), unNauticalMiles);
+  temp_area.Radius = Units::ToSysUnit(fixed(_tcstod(&Text[2], &Stop)), Unit::NAUTICAL_MILES);
   Angle StartBearing = Angle::Degrees(fixed(_tcstod(&Stop[1], &Stop))).AsBearing();
   Angle EndBearing = Angle::Degrees(fixed(_tcstod(&Stop[1], &Stop))).AsBearing();
 
@@ -529,7 +529,7 @@ ParseLine(Airspaces &airspace_database, TCHAR *line,
     case _T('C'):
     case _T('c'):
       temp_area.Radius = Units::ToSysUnit(fixed(_tcstod(&line[2], NULL)),
-                                          unNauticalMiles);
+                                          Unit::NAUTICAL_MILES);
       temp_area.AddCircle(airspace_database);
       temp_area.reset();
       break;
@@ -723,7 +723,7 @@ ParseCircleTNP(const TCHAR *Text, TempAirspaceType &temp_area)
   if ((parameter = StringAfterPrefixCI(Text, _T("RADIUS="))) == NULL)
     return false;
   temp_area.Radius = Units::ToSysUnit(fixed(_tcstod(parameter, NULL)),
-                                      unNauticalMiles);
+                                      Unit::NAUTICAL_MILES);
 
   if ((parameter = _tcsstr(parameter, _T(" "))) == NULL)
     return false;
