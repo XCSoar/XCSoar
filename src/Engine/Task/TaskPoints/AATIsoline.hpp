@@ -24,7 +24,8 @@
 #define AATISOLINE_HPP
 
 #include "Navigation/Geometry/GeoEllipse.hpp"
-#include "AATPoint.hpp"
+
+class AATPoint;
 
 /**
  *  Object representing an isoline, being the locus

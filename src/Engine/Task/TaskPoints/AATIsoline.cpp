@@ -21,6 +21,7 @@
  */
 
 #include "AATIsoline.hpp"
+#include "AATPoint.hpp"
 
 AATIsoline::AATIsoline(const AATPoint& ap, const TaskProjection &projection)
   :ell(ap.get_previous()->GetLocationRemaining(),
