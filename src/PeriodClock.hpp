@@ -27,7 +27,7 @@ Copyright_License {
 #include "OS/Clock.hpp"
 
 /**
- * This is a stopwatch which saves the timestamp of an even, and can
+ * This is a stopwatch which saves the timestamp of an event, and can
  * check whether a specified time span has passed since then.
  */
 class PeriodClock {
