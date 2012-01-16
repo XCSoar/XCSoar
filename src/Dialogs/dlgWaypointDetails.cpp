@@ -667,10 +667,9 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
     PixelRect rc = wDetailsText->get_position();
     rc.top += list_height;
     wDetailsText->move(rc);
-  }
-#else
-  wFilesList->hide();
+  } else
 #endif
+    wFilesList->hide();
 
   wImage = (WndOwnerDrawFrame *)wf->FindByName(_T("frmImage"));
   assert(wImage != NULL);
