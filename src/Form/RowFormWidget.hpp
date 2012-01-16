@@ -103,6 +103,19 @@ class RowFormWidget : public WindowWidget {
       return *(WndProperty *)window;
     }
 
+    /**
+     * Will this row grow when there is excess screen space?
+     */
+    bool IsElastic() const {
+      return type == Type::EDIT;
+    }
+
+    gcc_pure
+    UPixelScalar GetMinimumHeight() const;
+
+    gcc_pure
+    UPixelScalar GetMaximumHeight() const;
+
     gcc_pure
     PixelScalar GetBottom() const {
       assert(window != NULL);

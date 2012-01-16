@@ -51,6 +51,49 @@ GetMinimumControlHeight()
   return Layout::Scale(22);
 }
 
+/**
+ * Returns the maximum height of an edit control.
+ */
+gcc_pure
+static UPixelScalar
+GetMaximumControlHeight()
+{
+  if (!HasTouchScreen())
+    return GetMinimumControlHeight();
+
+  /* larger rows for touch screens */
+  // XXX make this dpi-aware and use physical sizes
+  return Layout::Scale(44);
+}
+
+UPixelScalar
+RowFormWidget::Row::GetMinimumHeight() const
+{
+  switch (type) {
+  case Type::GENERIC:
+    break;
+
+  case Type::EDIT:
+    return GetMinimumControlHeight();
+  }
+
+  return window->get_height();
+}
+
+UPixelScalar
+RowFormWidget::Row::GetMaximumHeight() const
+{
+  switch (type) {
+  case Type::GENERIC:
+    break;
+
+  case Type::EDIT:
+    return GetMaximumControlHeight();
+  }
+
+  return window->get_height();
+}
+
 RowFormWidget::RowFormWidget(const DialogLook &_look,
                              UPixelScalar _caption_width)
   :look(_look), caption_width(_caption_width)
@@ -495,13 +538,56 @@ void
 RowFormWidget::UpdateLayout()
 {
   PixelRect current_rect = GetWindow()->get_client_rect();
+  const unsigned total_height = current_rect.bottom - current_rect.top;
   current_rect.bottom = current_rect.top;
 
+  /* first row traversal: count the number of "elastic" rows and
+     determine the minimum total height */
+  unsigned min_height = 0;
+  unsigned n_elastic = 0;
   for (auto i = rows.begin(), end = rows.end(); i != end; ++i) {
+    min_height += i->GetMinimumHeight();
+    if (i->IsElastic())
+      ++n_elastic;
+  }
+
+  /* how much excess height in addition to the minimum height? */
+  unsigned excess_height = min_height < total_height
+    ? total_height - min_height
+    : 0;
+
+  /* second row traversal: now move and resize the rows */
+  for (auto i = rows.begin(), end = rows.end(); i != end; ++i) {
+    /* determine this row's height */
+    UPixelScalar height;
+    if (excess_height > 0 && i->IsElastic()) {
+      assert(n_elastic > 0);
+
+      /* distribute excess height among all elastic rows */
+      unsigned grow_height = excess_height / n_elastic;
+      if (grow_height > 0) {
+        height = i->GetMinimumHeight() + grow_height;
+        const UPixelScalar max_height = i->GetMaximumHeight();
+        if (height > max_height) {
+          /* never grow beyond declared maximum height */
+          height = max_height;
+          grow_height = max_height - height;
+        }
+
+        excess_height -= grow_height;
+      }
+
+      --n_elastic;
+    } else
+      height = i->GetMinimumHeight();
+
+    /* finally move and resize */
     Window &window = i->GetWindow();
-    NextControlRect(current_rect, window.get_height());
+    NextControlRect(current_rect, height);
     window.move(current_rect);
   }
+
+  assert(excess_height == 0 || n_elastic == 0);
 }
 
 PixelSize
@@ -510,17 +596,24 @@ RowFormWidget::GetMinimumSize() const
   const UPixelScalar value_width =
     look.text_font->TextSize(_T("Foo Bar Foo Bar")).cx;
 
-  return PixelSize{
-    PixelScalar(caption_width + value_width),
-    PixelScalar(rows.size() * GetMinimumControlHeight()),
-  };
+  PixelSize size{ PixelScalar(caption_width + value_width), 0 };
+  for (auto i = rows.begin(), end = rows.end(); i != end; ++i)
+    size.cy += i->GetMinimumHeight();
+
+  return size;
 }
 
 PixelSize
 RowFormWidget::GetMaximumSize() const
 {
-  // XXX implement
-  return GetMinimumSize();
+  const UPixelScalar value_width =
+    look.text_font->TextSize(_T("Foo Bar Foo Bar")).cx;
+
+  PixelSize size{ PixelScalar(caption_width + value_width), 0 };
+  for (auto i = rows.begin(), end = rows.end(); i != end; ++i)
+    size.cy += i->GetMaximumHeight();
+
+  return size;
 }
 
 void
