@@ -219,7 +219,6 @@ protected:
   virtual PixelSize GetMaximumSize() const;
   virtual void Initialise(ContainerWindow &parent, const PixelRect &rc);
   virtual void Show(const PixelRect &rc);
-  virtual void Hide();
   virtual void Move(const PixelRect &rc);
   virtual bool SetFocus();
 };

@@ -537,13 +537,6 @@ RowFormWidget::Show(const PixelRect &rc)
 }
 
 void
-RowFormWidget::Hide()
-{
-  PanelControl &panel = *(PanelControl *)GetWindow();
-  panel.fast_hide();
-}
-
-void
 RowFormWidget::Move(const PixelRect &rc)
 {
   PanelControl &panel = *(PanelControl *)GetWindow();
