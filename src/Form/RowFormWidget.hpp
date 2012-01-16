@@ -215,6 +215,11 @@ protected:
     return next;
   }
 
+  /**
+   * Recalculate all button positions.
+   */
+  void UpdateLayout();
+
   virtual PixelSize GetMinimumSize() const;
   virtual PixelSize GetMaximumSize() const;
   virtual void Initialise(ContainerWindow &parent, const PixelRect &rc);

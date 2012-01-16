@@ -487,6 +487,18 @@ RowFormWidget::SaveValueFileReader(unsigned i, const TCHAR *registry_key)
   return true;
 }
 
+void
+RowFormWidget::UpdateLayout()
+{
+  PixelRect current_rect = GetWindow()->get_client_rect();
+  current_rect.bottom = current_rect.top;
+
+  for (auto i = controls.begin(), end = controls.end(); i != end; ++i) {
+    NextControlRect(current_rect, (*i)->get_height());
+    (*i)->move(current_rect);
+  }
+}
+
 PixelSize
 RowFormWidget::GetMinimumSize() const
 {
@@ -525,13 +537,7 @@ RowFormWidget::Show(const PixelRect &rc)
   PanelControl &panel = *(PanelControl *)GetWindow();
   panel.move(rc);
 
-  PixelRect current_rect = panel.get_client_rect();
-  current_rect.bottom = current_rect.top;
-
-  for (auto i = controls.begin(), end = controls.end(); i != end; ++i) {
-    NextControlRect(current_rect, (*i)->get_height());
-    (*i)->move(current_rect);
-  }
+  UpdateLayout();
 
   panel.show();
 }
@@ -542,13 +548,7 @@ RowFormWidget::Move(const PixelRect &rc)
   PanelControl &panel = *(PanelControl *)GetWindow();
   panel.move(rc);
 
-  PixelRect current_rect = panel.get_client_rect();
-  current_rect.bottom = current_rect.top;
-
-  for (auto i = controls.begin(), end = controls.end(); i != end; ++i) {
-    NextControlRect(current_rect, (*i)->get_height());
-    (*i)->move(current_rect);
-  }
+  UpdateLayout();
 }
 
 bool
