@@ -96,7 +96,7 @@ ButtonPanel::Resized(const PixelRect &area, unsigned count)
     row_capacity = 1;
 
   row_count = (count + row_capacity - 1) / row_capacity;
-  if (row_count * row_height > pixel_size / 2)
+  if (row_count >= 2 && row_count * row_height > pixel_size / 2)
     /* the buttons should not occupy more than half of the client
        area */
     row_count = pixel_size / row_height / 2;
