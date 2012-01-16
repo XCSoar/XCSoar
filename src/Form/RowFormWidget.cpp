@@ -74,7 +74,7 @@ RowFormWidget::Add(WndProperty *edit)
 #endif
   assert(edit->is_visible());
 
-  controls.push_back(edit);
+  rows.push_back(edit);
 }
 
 WndProperty *
@@ -493,9 +493,10 @@ RowFormWidget::UpdateLayout()
   PixelRect current_rect = GetWindow()->get_client_rect();
   current_rect.bottom = current_rect.top;
 
-  for (auto i = controls.begin(), end = controls.end(); i != end; ++i) {
-    NextControlRect(current_rect, (*i)->get_height());
-    (*i)->move(current_rect);
+  for (auto i = rows.begin(), end = rows.end(); i != end; ++i) {
+    Window &window = i->GetWindow();
+    NextControlRect(current_rect, window.get_height());
+    window.move(current_rect);
   }
 }
 
@@ -507,7 +508,7 @@ RowFormWidget::GetMinimumSize() const
 
   return PixelSize{
     PixelScalar(caption_width + value_width),
-    PixelScalar(controls.size() * GetMinimumControlHeight()),
+    PixelScalar(rows.size() * GetMinimumControlHeight()),
   };
 }
 
@@ -522,7 +523,7 @@ void
 RowFormWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
   assert(!IsDefined());
-  assert(controls.empty());
+  assert(rows.empty());
 
   WindowStyle style;
   style.Hide();
@@ -554,7 +555,7 @@ RowFormWidget::Move(const PixelRect &rc)
 bool
 RowFormWidget::SetFocus()
 {
-  if (controls.empty())
+  if (rows.empty())
     return false;
 
   GetControl(0).set_focus();

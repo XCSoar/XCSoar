@@ -42,10 +42,56 @@ struct StaticEnumChoice;
  * methods!
  */
 class RowFormWidget : public WindowWidget {
+  struct Row {
+    WndProperty *window;
+
+    Row() = default;
+
+    Row(WndProperty *_window)
+      :window(_window) {
+      assert(_window != NULL);
+    }
+
+    gcc_pure
+    Window &GetWindow() {
+      assert(window != NULL);
+
+      return *window;
+    }
+
+    gcc_pure
+    const Window &GetWindow() const {
+      assert(window != NULL);
+
+      return *window;
+    }
+
+    gcc_pure
+    WndProperty &GetControl() {
+      assert(window != NULL);
+
+      return *window;
+    }
+
+    gcc_pure
+    const WndProperty &GetControl() const {
+      assert(window != NULL);
+
+      return *window;
+    }
+
+    gcc_pure
+    PixelScalar GetBottom() const {
+      assert(window != NULL);
+
+      return window->get_position().bottom;
+    }
+  };
+
   const DialogLook &look;
   UPixelScalar caption_width;
 
-  StaticArray<WndProperty *, 32u> controls;
+  StaticArray<Row, 32u> rows;
 
 public:
   RowFormWidget(const DialogLook &look, UPixelScalar caption_width);
@@ -103,18 +149,12 @@ public:
 
   gcc_pure
   WndProperty &GetControl(unsigned i) {
-    assert(i < (unsigned)controls.size());
-    assert(controls[i] != NULL);
-
-    return *controls[i];
+    return rows[i].GetControl();
   }
 
   gcc_pure
   const WndProperty &GetControl(unsigned i) const {
-    assert(i < (unsigned)controls.size());
-    assert(controls[i] != NULL);
-
-    return *controls[i];
+    return rows[i].GetControl();
   }
 
   gcc_pure
@@ -209,8 +249,8 @@ protected:
     assert(IsDefined());
 
     PixelRect next = rc;
-    if (!controls.empty())
-      next.top = controls.back()->get_position().bottom;
+    if (!rows.empty())
+      next.top = rows.back().GetBottom();
     next.bottom = next.top + height;
     return next;
   }
