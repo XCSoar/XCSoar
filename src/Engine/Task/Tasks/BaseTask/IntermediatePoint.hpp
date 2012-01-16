@@ -32,32 +32,29 @@
  * how scoring is performed within.
  * All IntermediatePoints shall have a preceding and following
  * taskpoint.
- *
  */
-
 class IntermediateTaskPoint: 
   public OrderedTaskPoint 
 {
   fixed safety_height_terrain;
 
 public:    
-/** 
- * Constructor.
- * 
- * @param _oz Observation zone attached to this point
- * @param wp Waypoint origin of turnpoint
- * @param tb TaskBehaviour defining options (esp safety heights)
- * @param to OrderedTaskBehaviour defining task options
- * @param b_scored Whether distance within OZ is scored 
- * 
- * @return Partially-initialised object
- */
-
-  IntermediateTaskPoint(enum Type _type, ObservationZonePoint* _oz,
-                    const Waypoint & wp, 
-                    const TaskBehaviour& tb,
-                    const OrderedTaskBehaviour& to,
-                        const bool b_scored=false);
+  /**
+   * Constructor.
+   *
+   * @param _oz Observation zone attached to this point
+   * @param wp Waypoint origin of turnpoint
+   * @param tb TaskBehaviour defining options (esp safety heights)
+   * @param to OrderedTaskBehaviour defining task options
+   * @param b_scored Whether distance within OZ is scored
+   *
+   * @return Partially-initialised object
+   */
+  IntermediateTaskPoint(enum Type _type, ObservationZonePoint *_oz,
+                        const Waypoint &wp,
+                        const TaskBehaviour &tb,
+                        const OrderedTaskBehaviour &to,
+                        const bool b_scored = false);
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb);
 
@@ -66,14 +63,14 @@ public:
     return get_previous() != NULL && get_next() != NULL;
   }
 
-/** 
- * Retrieve elevation of taskpoint, taking into account
- * rules and safety margins.
- * 
- * @return Minimum allowable elevation of task point
- */
+  /**
+   * Retrieve elevation of taskpoint, taking into account
+   * rules and safety margins.
+   *
+   * @return Minimum allowable elevation of task point
+   */
   gcc_pure
   fixed GetElevation() const;
-
 };
+
 #endif //INTERMEDIATEPOINT_H
