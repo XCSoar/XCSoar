@@ -61,9 +61,9 @@ OrderedTaskFactoryName(TaskBehaviour::FactoryType type)
     return _("Mixed");
   case TaskBehaviour::FactoryType::TOURING:
     return _("Touring");
-  default:
-    assert(1);
   }
+
+  assert(1);
   return NULL;
 }
 
@@ -90,9 +90,9 @@ OrderedTaskFactoryDescription(TaskBehaviour::FactoryType type)
     return _("Racing task with a mix of assigned areas and turn points, minimum task time applies.");
   case TaskBehaviour::FactoryType::TOURING:
     return _("Casual touring task, uses start and finish cylinders and FAI sector turn points.");
-  default:
-    assert(1);
   }
+
+  assert(1);
   return NULL;
 }
 
