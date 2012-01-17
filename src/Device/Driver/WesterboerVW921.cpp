@@ -50,6 +50,24 @@ public:
   void SentenceFive(const void *data, size_t length, struct NMEAInfo &info);
 };
 
+static uint8_t
+CalculateChecksum(const void *_data, size_t length)
+{
+  const uint8_t *data = (const uint8_t *)_data;
+
+  uint8_t checksum = 0;
+  for (unsigned i = 0; i < length; ++i, ++data)
+    checksum ^= *data;
+
+  return checksum;
+}
+
+static bool
+CheckChecksum(const void *data, size_t length)
+{
+  return CalculateChecksum(data, length) == 0;
+}
+
 bool
 WesterboerVW921Device::DataReceived(const void *_data, size_t length,
                                     struct NMEAInfo &info)
@@ -107,10 +125,11 @@ WesterboerVW921Device::DataReceived(const void *_data, size_t length,
       if (remaining_length < sentence_length)
         break;
 
-      // Ignore checksum because we don't have any
-      // information on it from Westerboer
-
-      // uint8_t checksum = (uint8_t)dollar[3];
+      if (!CheckChecksum(dollar, sentence_length)) {
+        // Skip this sentence
+        buffer.Consume(dollar - range.data + 1);
+        continue;
+      }
 
       // Read the sentence identification number
       uint8_t sentence_number = (uint8_t)dollar[4];
