@@ -90,12 +90,12 @@ public:
   }
 
   fixed DeltaAdvance(const fixed now) {
-    if (CheckReverse(now)) {
+    if (CheckReverse(now))
       return fixed_minus_one;
-    }
+
     // check if time has advanced past dt
-    if (now-last>=dt) {
-      fixed dt=now-last;
+    if (now - last >= dt) {
+      fixed dt = now - last;
       Update(now);
       return dt;
     } else {
@@ -111,9 +111,9 @@ public:
    * @return
    */
   bool CheckAdvance(const fixed now, const fixed dt) {
-    if (CheckReverse(now)) {
+    if (CheckReverse(now))
       return false;
-    }
+
     if (now >= last + dt) {
       Update(now);
       return true;
