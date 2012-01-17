@@ -24,9 +24,9 @@
     <Edit Name="prpMc2" Caption="Alt. diff. MC current" Height="22" CaptionWidth="150" ReadOnly="1" />
   </Panel>
 
-  <Panel Name="frmDetails" X="0" Y="0" Height="-39">
-    <List Name="Files" Y="0" Height="-35" ItemHeight="18" />
-    <TextEdit Name="Details" Y="0" Height="-35" ReadOnly="1" MultiLine="1" />
+  <Panel Name="frmDetails" X="0" Y="0" Height="-35">
+    <List Name="Files" Y="0" ItemHeight="18" />
+    <TextEdit Name="Details" Y="0" ReadOnly="1" MultiLine="1" />
   </Panel>
 
   <Panel Name="frmCommands" Y="0" Height="-35" Visible="0">
