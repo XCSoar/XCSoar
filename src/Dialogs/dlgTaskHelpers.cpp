@@ -63,7 +63,7 @@ OrderedTaskFactoryName(TaskBehaviour::FactoryType type)
     return _("Touring");
   }
 
-  assert(1);
+  assert(false);
   return NULL;
 }
 
@@ -92,7 +92,7 @@ OrderedTaskFactoryDescription(TaskBehaviour::FactoryType type)
     return _("Casual touring task, uses start and finish cylinders and FAI sector turn points.");
   }
 
-  assert(1);
+  assert(false);
   return NULL;
 }
 
@@ -234,43 +234,45 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
   switch (ozp.shape) {
   case ObservationZonePoint::FAI_SECTOR:
     _tcscpy(buffer, _("FAI quadrant"));
-    break;
+    return;
 
   case ObservationZonePoint::SECTOR:
   case ObservationZonePoint::ANNULAR_SECTOR:
     _stprintf(buffer,_T("%s  - %s: %.1f%s"), _("Sector"), _("Radius"),
               (double)Units::ToUserDistance(((const SectorZone &)ozp).getRadius()),
               Units::GetDistanceName());
-    break;
+    return;
 
   case ObservationZonePoint::LINE:
     _stprintf(buffer,_T("%s  - %s: %.1f%s"), _("Line"), _("Gate Width"),
               (double)Units::ToUserDistance(((const LineSectorZone &)ozp).getLength()),
               Units::GetDistanceName());
-    break;
+    return;
 
   case ObservationZonePoint::CYLINDER:
     _stprintf(buffer,_T("%s  - %s: %.1f%s"), _("Cylinder"), _("Radius"),
               (double)Units::ToUserDistance(((const CylinderZone &)ozp).getRadius()),
               Units::GetDistanceName());
-    break;
+    return;
 
   case ObservationZonePoint::KEYHOLE:
     _tcscpy(buffer, _("DAeC Keyhole"));
-    break;
+    return;
 
   case ObservationZonePoint::BGAFIXEDCOURSE:
     _tcscpy(buffer, _("BGA Fixed Course"));
-    break;
+    return;
 
   case ObservationZonePoint::BGAENHANCEDOPTION:
     _tcscpy(buffer, _("BGA Enhanced Option"));
-    break;
+    return;
 
   case ObservationZonePoint::BGA_START:
     _tcscpy(buffer, _("BGA Start Sector"));
-    break;
+    return;
   }
+
+  assert(false);
 }
 
 const TCHAR*
@@ -313,9 +315,9 @@ OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType type)
     return _("Cross finish gate line into area to finish.");
   case AbstractTaskFactory::FINISH_CYLINDER:
     return _("Enter cylinder to finish.");
-  default:
-    assert(1);
   }
+
+  assert(false);
   return NULL;
 }
 
@@ -353,9 +355,9 @@ OrderedTaskPointName(AbstractTaskFactory::LegalPointType type)
     return _("Finish line");
   case AbstractTaskFactory::FINISH_CYLINDER:
     return _("Finish cylinder");
-  default:
-    assert(1);
   }
+
+  assert(false);
   return NULL;
 }
 
@@ -421,5 +423,6 @@ TaskValidationError(AbstractTaskFactory::TaskValidationErrorType type)
     return _("non-FAI turn points");
   }
 
-  return _T("");
+  assert(false);
+  return NULL;
 }
