@@ -377,16 +377,13 @@ WndProperty::RefreshDisplay()
     edit.set_text(mDataField->GetAsDisplayString());
 }
 
-DataField *
+void
 WndProperty::SetDataField(DataField *Value)
 {
-  DataField *res = mDataField;
-
   if (mDataField != Value) {
     if (mDataField != NULL) {
       if (!mDataField->Unuse()) {
         delete (mDataField);
-        res = NULL;
       }
     }
 
@@ -398,6 +395,4 @@ WndProperty::SetDataField(DataField *Value)
 
     RefreshDisplay();
   }
-
-  return res;
 }

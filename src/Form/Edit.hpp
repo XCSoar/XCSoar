@@ -185,7 +185,7 @@ public:
     return mDataField;
   }
 
-  DataField *SetDataField(DataField *Value);
+  void SetDataField(DataField *Value);
 
   /**
    * Sets the Editors text to the given Value
