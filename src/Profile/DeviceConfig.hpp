@@ -138,6 +138,20 @@ struct DeviceConfig {
     return UsesDriver(port_type);
   }
 
+  /**
+   * Is this port type a server?
+   *
+   * This is used to determine if the port should automatically be
+   * restarted after a certain time without GPS connection.
+   */
+  static bool IsServer(enum port_type port_type) {
+    return port_type == TCP_LISTENER;
+  }
+
+  bool IsServer() const {
+    return IsServer(port_type);
+  }
+
   bool IsDriver(const TCHAR *name) const {
     return UsesDriver() && driver_name.equals(name);
   }
