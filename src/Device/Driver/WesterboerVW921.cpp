@@ -169,6 +169,7 @@ WesterboerVW921Device::SentenceReceived(unsigned sentence_number,
     break;
   case 2:
     SentenceTwo(data, length, info);
+    break;
   case 5:
     SentenceFive(data, length, info);
     break;
