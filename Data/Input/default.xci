@@ -35,7 +35,6 @@ event=Beep
 mode=default
 type=gce
 data=COMMPORT_RESTART
-event=StatusMessage Restarting comm. ports
 
 mode=default
 type=gce
