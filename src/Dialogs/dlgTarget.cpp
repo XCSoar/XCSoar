@@ -199,9 +199,8 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
   return false;
 }
 
-/* Lock target fields
- * if turnpoint does not have
- * adjustable target
+/**
+ * Locks target fields if turnpoint does not have adjustable target
  */
 static void
 LockCalculatorUI()
@@ -217,9 +216,8 @@ LockCalculatorUI()
     wp->set_enabled(IsLocked);
 }
 
-/*
- * Refresh UI based on location of target
- * and current task stats
+/**
+ * Refreshes UI based on location of target and current task stats
  */
 static void
 RefreshCalculator()
@@ -353,7 +351,7 @@ OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-/*
+/**
  * reads Radial from the screen UI,  translates it from [90, -90]
  * to [180, -180] based on whether the Range variable is positive or negative
  */
@@ -393,7 +391,8 @@ SetTarget()
   map->SetTarget(target_point);
 }
 
-/* resets the target point and reads its polar coordinates
+/**
+ * resets the target point and reads its polar coordinates
  * from the AATPoint's target
  */
 static void
@@ -409,7 +408,7 @@ RefreshTargetPoint(void)
   }
 }
 
-/*
+/**
  * handles UI event where task point is changed
  */
 static void
@@ -463,11 +462,9 @@ GetTaskData(DataFieldEnum &df)
   return true;
 }
 
-/*
- * Reads task points from the
- * protected task manager
- * and loads the Task Point UI
- * and initializes the pan mode on the map
+/**
+ * Reads task points from the protected task manager
+ * and loads the Task Point UI and initializes the pan mode on the map
  */
 static bool
 InitTargetPoints()
