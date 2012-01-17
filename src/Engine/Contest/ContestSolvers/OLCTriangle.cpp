@@ -69,10 +69,9 @@ OLCTriangle::leg_distance(const unsigned index) const
   // leg 1: 2-3
   // leg 2: 3-1
 
-  const GeoPoint &p_start = solution[index].get_location();
-  const GeoPoint &p_dest = (index < 2)? 
-    solution[index+1].get_location():
-    solution[0].get_location();
+  const GeoPoint &p_start = GetPoint(solution[index]).get_location();
+  const GeoPoint &p_dest =
+    GetPoint(solution[index < 2 ? index + 1 : 0]).get_location();
 
   return p_start.Distance(p_dest);
 }
@@ -333,10 +332,8 @@ OLCTriangle::SaveSolution()
   if (AbstractContest::SaveSolution()) {
     best_solution.clear();
 
-    best_solution.append(solution[3]);
-    best_solution.append(solution[1]);
-    best_solution.append(solution[2]);
-    best_solution.append(solution[0]);
+    for (int i = 3; i >= 0; --i)
+      best_solution.append(GetPoint(solution[i]));
 
     return true;
   }

@@ -24,7 +24,7 @@
 #include "Task/Tasks/OrderedTask.hpp"
 
 TaskDijkstra::TaskDijkstra(OrderedTask& _task, bool is_min):
-  NavDijkstra<SearchPoint> (is_min, 0),
+  NavDijkstra(is_min, 0),
   task(_task)
 {
 }
@@ -56,12 +56,6 @@ TaskDijkstra::get_size(const unsigned stage) const
 
 const SearchPoint &
 TaskDijkstra::GetPointFast(const ScanTaskPoint &sp) const
-{
-  return task.get_tp_search_points(sp.stage_number)[sp.point_index];
-}
-
-const SearchPoint &
-TaskDijkstra::get_point(const ScanTaskPoint &sp) const
 {
   return task.get_tp_search_points(sp.stage_number)[sp.point_index];
 }

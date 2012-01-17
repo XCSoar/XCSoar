@@ -29,7 +29,6 @@ Copyright_License {
 #include "ScanTaskPoint.hpp"
 #include "Compiler.h"
 
-#include <algorithm>
 #include <unordered_map>
 #include <assert.h>
 
@@ -45,7 +44,6 @@ extern long count_dijkstra_queries;
  *
  * NavDijkstra<SearchPoint>
  */
-template <class T>
 class NavDijkstra: 
   private NonCopyable 
 {
@@ -77,7 +75,12 @@ protected:
 
   /** Number of stages in search */
   unsigned num_stages;
-  T solution[MAX_STAGES];
+
+  /**
+   * An array containing the point index for each of the solution's stages.
+   */
+  unsigned solution[MAX_STAGES];
+
   bool solution_valid;
 
 protected:
@@ -102,9 +105,6 @@ protected:
   void set_stages(const unsigned _num_stages) {
     assert(_num_stages <= MAX_STAGES);
     num_stages =_num_stages;
-    if (num_stages) {
-      std::fill(solution, solution + num_stages, T());
-    }
   }
 
   /** 
@@ -117,15 +117,6 @@ protected:
   virtual bool finish_satisfied(const ScanTaskPoint &sp) const {
     return true;
   }
-
-  /** 
-   * Retrieve point
-   * 
-   * @param sp Index to point to retrieve
-   * 
-   * @return Point at index position
-   */
-  virtual const T &get_point(const ScanTaskPoint &sp) const = 0;
 
   /** 
    * Add edges from an origin node
@@ -222,7 +213,7 @@ protected:
 
     do {
       last_stage_number = p.stage_number;
-      solution[p.stage_number] = get_point(p);
+      solution[p.stage_number] = p.point_index;
       p = dijkstra.get_predecessor(p);
     } while (p.stage_number != last_stage_number);
   }

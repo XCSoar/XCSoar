@@ -40,7 +40,7 @@ Copyright_License {
  */
 class ContestDijkstra:
   public AbstractContest,
-  public NavDijkstra<TracePoint>
+  public NavDijkstra
 {
   /**
    * This attribute tracks Trace::GetModifySerial().  It is updated
@@ -129,9 +129,6 @@ protected:
    */
   bool admit_candidate(const TracePoint &start,
                        const ScanTaskPoint &candidate) const;
-
-  const TracePoint &get_point(const ScanTaskPoint &sp) const;
-
 
   virtual void add_edges(const ScanTaskPoint &curNode);
 

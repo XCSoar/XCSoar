@@ -47,8 +47,7 @@ class OrderedTask;
  *
  * This uses a Dijkstra search and so is O(N log(N)).
  */
-class TaskDijkstra: 
-  public NavDijkstra<SearchPoint>
+class TaskDijkstra : public NavDijkstra
 {
 protected:
   OrderedTask &task;
@@ -73,14 +72,13 @@ public:
   const SearchPoint &GetSolution(unsigned stage) const {
     assert(stage < num_stages);
 
-    return solution[stage];
+    return GetPointFast(ScanTaskPoint(stage, solution[stage]));
   }
 
 protected:
   gcc_pure
   const SearchPoint &GetPointFast(const ScanTaskPoint &sp) const;
 
-  const SearchPoint &get_point(const ScanTaskPoint &sp) const;
   bool run();
 
   /**

@@ -42,7 +42,7 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
   AbstractContest(_trace, finish_alt_diff),
-  NavDijkstra<TracePoint>(false, n_legs + 1)
+  NavDijkstra(false, n_legs + 1)
 {
   assert(num_stages <= MAX_STAGES);
 
@@ -196,7 +196,8 @@ ContestDijkstra::CalcTime() const
   if (!solution_valid)
     return fixed_zero;
 
-  return fixed(solution[num_stages - 1].DeltaTime(solution[0]));
+  return fixed(GetPoint(solution[num_stages - 1])
+               .DeltaTime(GetPoint(solution[0])));
 }
 
 fixed
@@ -205,8 +206,12 @@ ContestDijkstra::CalcDistance() const
   assert(num_stages <= MAX_STAGES);
 
   fixed dist = fixed_zero;
-  for (unsigned i = 0; i + 1 < num_stages; ++i)
-    dist += solution[i].distance(solution[i + 1].get_location());
+  GeoPoint previous = GetPoint(solution[0]).get_location();
+  for (unsigned i = 1; i < num_stages; ++i) {
+    const GeoPoint &current = GetPoint(solution[i]).get_location();
+    dist += current.Distance(previous);
+    previous = current;
+  }
 
   return dist;
 }
@@ -217,9 +222,12 @@ ContestDijkstra::CalcScore() const
   assert(num_stages <= MAX_STAGES);
 
   fixed score = fixed_zero;
-  for (unsigned i = 0; i + 1 < num_stages; ++i)
-    score += get_weighting(i) *
-             solution[i].distance(solution[i + 1].get_location());
+  GeoPoint previous = GetPoint(solution[0]).get_location();
+  for (unsigned i = 1; i < num_stages; ++i) {
+    const GeoPoint &current = GetPoint(solution[i]).get_location();
+    score += get_weighting(i - 1) * current.Distance(previous);
+    previous = current;
+  }
 
   #define fixed_fifth fixed(0.0002)
   score *= fixed_fifth;
@@ -266,12 +274,6 @@ ContestDijkstra::add_edges(const ScanTaskPoint& origin)
   }
 }
 
-const TracePoint &
-ContestDijkstra::get_point(const ScanTaskPoint &sp) const
-{
-  return GetPointFast(sp);
-}
-
 bool
 ContestDijkstra::admit_candidate(const TracePoint &start,
                                  const ScanTaskPoint &candidate) const
@@ -290,7 +292,7 @@ ContestDijkstra::SaveSolution()
   if (solution_valid && AbstractContest::SaveSolution()) {
     best_solution.clear();
     for (unsigned i=0; i<num_stages; ++i) {
-      best_solution.append(solution[i]);
+      best_solution.append(GetPoint(solution[i]));
     }
     return true;
   }

@@ -46,7 +46,7 @@ OLCSISAT::CalcScore() const
   // build convex hull from solution
   SearchPointVector spv;
   for (unsigned i = 0; i < num_stages; ++i)
-    spv.push_back(solution[i]);
+    spv.push_back(GetPoint(solution[i]));
 
   spv.PruneInterior();
 
@@ -62,7 +62,7 @@ OLCSISAT::CalcScore() const
   }
 
   // R distance (start to end)
-  const fixed R = solution[0].distance(solution[num_stages - 1].get_location());
+  const fixed R = GetPoint(solution[0]).distance(GetPoint(solution[num_stages - 1]).get_location());
 
   // V zigzag-free distance
   const fixed V = G - R;
