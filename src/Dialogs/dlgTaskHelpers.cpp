@@ -387,14 +387,11 @@ getTaskValidationErrors(const AbstractTaskFactory::TaskValidationErrorVector v)
   static TCHAR err[MAX_PATH];
   err[0] = '\0';
 
-  for (unsigned i = 0; i < v.size(); i++) {
-
-    if ((_tcslen(err) + _tcslen(TaskValidationError(v[i]))) < MAX_PATH) {
+  for (unsigned i = 0; i < v.size(); i++)
+    if ((_tcslen(err) + _tcslen(TaskValidationError(v[i]))) < MAX_PATH)
       _tcscat(err, TaskValidationError(v[i]));
-    }
-  }
+
   return err;
-  //  _tcscat(err, OrderedTaskFactory_OneValidationError(v[i]);
 }
 const TCHAR*
 TaskValidationError(AbstractTaskFactory::TaskValidationErrorType type)
