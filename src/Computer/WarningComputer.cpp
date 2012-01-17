@@ -50,7 +50,7 @@ WarningComputer::Update(const ComputerSettings &settings_computer,
                         AirspaceWarningsInfo &result)
 {
   if (!basic.HasTimeAdvancedSince(last_basic) ||
-      !clock.check_advance(basic.time))
+      !clock.CheckAdvance(basic.time))
     return;
 
   airspaces.set_flight_levels(settings_computer.pressure);

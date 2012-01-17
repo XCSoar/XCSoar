@@ -46,7 +46,7 @@ public:
   /**
    * Resets the clock.
    */
-  void reset() {
+  void Reset() {
     last = fixed_zero;
   }
 
@@ -62,7 +62,7 @@ public:
    * @param now Current time
    * @return True if time has been reversed, False otherwise
    */
-  bool check_reverse(const fixed now) {
+  bool CheckReverse(const fixed now) {
     if (now<last) {
       Update(now);
       return true;
@@ -75,7 +75,7 @@ public:
    * Set dt to a new value defined by _dt
    * @param _dt The new value fot dt
    */
-  void set_dt(const fixed _dt) {
+  void SetDT(const fixed _dt) {
     dt = _dt;
   }
 
@@ -85,12 +85,12 @@ public:
    * @param now Current time
    * @see check_advance(fixed, fixed)
    */
-  bool check_advance(const fixed now) {
-    return check_advance(now, dt);
+  bool CheckAdvance(const fixed now) {
+    return CheckAdvance(now, dt);
   }
 
-  fixed delta_advance(const fixed now) {
-    if (check_reverse(now)) {
+  fixed DeltaAdvance(const fixed now) {
+    if (CheckReverse(now)) {
       return fixed_minus_one;
     }
     // check if time has advanced past dt
@@ -110,8 +110,8 @@ public:
    * @param dt The timestep in milliseconds
    * @return
    */
-  bool check_advance(const fixed now, const fixed dt) {
-    if (check_reverse(now)) {
+  bool CheckAdvance(const fixed now, const fixed dt) {
+    if (CheckReverse(now)) {
       return false;
     }
     if (now >= last + dt) {

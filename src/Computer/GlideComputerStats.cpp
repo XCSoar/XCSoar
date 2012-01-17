@@ -66,20 +66,20 @@ GlideComputerStats::DoLogging(const MoreData &basic,
 
   // log points more often in circling mode
   if (calculated.circling)
-    log_clock.set_dt(fixed(settings_logger.logger_time_step_circling));
+    log_clock.SetDT(fixed(settings_logger.logger_time_step_circling));
   else
-    log_clock.set_dt(fixed(settings_logger.logger_time_step_cruise));
+    log_clock.SetDT(fixed(settings_logger.logger_time_step_cruise));
 
   if (fast_log_num) {
-    log_clock.set_dt(fixed_one);
+    log_clock.SetDT(fixed_one);
     fast_log_num--;
   }
 
-  if (log_clock.check_advance(basic.time) && logger != NULL)
+  if (log_clock.CheckAdvance(basic.time) && logger != NULL)
       logger->LogPoint(basic);
 
   if (calculated.flight.flying &&
-      stats_clock.check_advance(basic.time)) {
+      stats_clock.CheckAdvance(basic.time)) {
     flightstats.AddAltitudeTerrain(calculated.flight.flight_time,
                                    calculated.terrain_altitude);
 

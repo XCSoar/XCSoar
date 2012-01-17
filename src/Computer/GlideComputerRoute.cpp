@@ -44,8 +44,8 @@ GlideComputerRoute::GlideComputerRoute(const Airspaces &airspace_database)
 void
 GlideComputerRoute::ResetFlight()
 {
-  route_clock.reset();
-  reach_clock.reset();
+  route_clock.Reset();
+  reach_clock.Reset();
   protected_route_planner.Reset();
 }
 
@@ -87,7 +87,7 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
   if (terrain) {
     if (sol.IsDefined()) {
       const AGeoPoint dest(v.EndPoint(start), sol.min_height);
-      bool dirty = route_clock.check_advance(basic.time);
+      bool dirty = route_clock.CheckAdvance(basic.time);
 
       if (!dirty) {
         dirty = calculated.common_stats.active_taskpoint_index != last_calculated.common_stats.active_taskpoint_index;
@@ -96,8 +96,8 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
         dirty |= calculated.common_stats.mode_ordered != last_calculated.common_stats.mode_ordered;
         if (dirty) {
           // restart clock
-          route_clock.check_advance(basic.time);
-          route_clock.reset();
+          route_clock.CheckAdvance(basic.time);
+          route_clock.Reset();
         }
       }
 
@@ -136,7 +136,7 @@ GlideComputerRoute::Reach(const MoreData &basic, DerivedInfo &calculated,
   const RoughAltitude h_ceiling((short)std::max((int)basic.nav_altitude + 500,
                                                 (int)calculated.thermal_band.working_band_ceiling));
 
-  if (reach_clock.check_advance(basic.time)) {
+  if (reach_clock.CheckAdvance(basic.time)) {
     protected_route_planner.SolveReach(start, config, h_ceiling, do_solve);
 
     if (do_solve) {
