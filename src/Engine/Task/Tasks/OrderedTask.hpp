@@ -60,7 +60,6 @@ class OrderedTask:
 {
 public:
   friend class Serialiser;
-  friend class TaskDijkstra;
   friend class PrintHelper;
 
   typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector; /**< Storage type of task points */ 
@@ -472,6 +471,7 @@ public:
 protected:
   bool IsScored() const;
 
+public:
   /**
    * Retrieve vector of search points to be used in max/min distance
    * scans (by TaskDijkstra).
@@ -482,6 +482,7 @@ protected:
    */
   const SearchPointVector& get_tp_search_points(unsigned tp) const;
 
+protected:
   /**
    * Set task point's minimum distance value (by TaskDijkstra).
    *
