@@ -309,6 +309,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Computer/GlideComputerTask.cpp \
 	$(SRC)/Computer/GlideComputerInterface.cpp \
 	$(SRC)/GlideRatio.cpp \
+	$(SRC)/BallastDumpManager.cpp \
 	$(SRC)/Logger/Logger.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \
 	$(SRC)/Logger/LoggerGRecord.cpp \

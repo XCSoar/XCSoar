@@ -40,7 +40,7 @@ Copyright_License {
 #include "Replay/Replay.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "GPSClock.hpp"
+#include "BallastDumpManager.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "Tracking/TrackingGlue.hpp"
 
@@ -214,45 +214,20 @@ BallastDumpProcessTimer()
   ComputerSettings &settings_computer =
     CommonInterface::SetComputerSettings();
 
-  static bool last_ballast_timer_active = false;
-
-  if (!settings_computer.ballast_timer_active) {
-    last_ballast_timer_active = false;
-    return;
-  }
-
-  // We don't know how fast the water is flowing so don't pretend that we do
-  if (settings_computer.plane.dump_time <= 0) {
-    settings_computer.ballast_timer_active = false;
-    return;
-  }
-
-  // only update once every second
-  static GPSClock ballast_clock(fixed_one);
-
-  const NMEAInfo &basic = CommonInterface::Basic();
-
-  if (!last_ballast_timer_active) {
-    ballast_clock.Update(basic.time);
-    last_ballast_timer_active = true;
-    return;
-  }
-
-  fixed dt = ballast_clock.delta_advance(basic.time);
-  if (negative(dt))
-    return;
-
   GlidePolar &glide_polar = settings_computer.glide_polar_task;
-  fixed ballast = glide_polar.GetBallast();
-  fixed percent_per_second = fixed_one / settings_computer.plane.dump_time;
 
-  ballast -= dt * percent_per_second;
-  if (negative(ballast)) {
+  static BallastDumpManager ballast_manager;
+
+  // Start/Stop the BallastDumpManager
+  ballast_manager.SetEnabled(settings_computer.ballast_timer_active);
+
+  // If the BallastDumpManager is not enabled we must not call Update()
+  if (!ballast_manager.IsEnabled())
+    return;
+
+  if (!ballast_manager.Update(glide_polar, settings_computer.plane.dump_time))
+    // Plane is dry now -> disable ballast_timer
     settings_computer.ballast_timer_active = false;
-    ballast = fixed_zero;
-  }
-
-  glide_polar.SetBallast(ballast);
 
   if (protected_task_manager != NULL)
     protected_task_manager->SetGlidePolar(glide_polar);
