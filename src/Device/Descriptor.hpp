@@ -163,11 +163,11 @@ public:
 
   bool OpenInternalSensors();
 
-  bool Open(OperationEnvironment &env);
+  bool Open(OperationEnvironment &env, bool show_error_messages = true);
 
   void Close();
 
-  bool Reopen(OperationEnvironment &env);
+  bool Reopen(OperationEnvironment &env, bool show_error_messages = true);
 
   /**
    * Call this periodically to auto-reopen a failed device after a
