@@ -43,11 +43,23 @@ class ContestDijkstra:
   protected NavDijkstra
 {
   /**
+   * This attribute tracks Trace::GetAppendSerial().  It is updated
+   * when appnew copy of the master Trace is obtained, and is used to
+   * check if that copy should be replaced with a new one.
+   */
+  Serial append_serial;
+
+  /**
    * This attribute tracks Trace::GetModifySerial().  It is updated
    * when a new copy of the master Trace is obtained, and is used to
    * check if that copy should be replaced with a new one.
    */
   Serial modify_serial;
+
+  /**
+   * Is this a contest that allows continuous analysis?
+   */
+  const bool continuous;
 
   /**
    * Do an incremental analysis, attempting to improve the result in
@@ -58,11 +70,25 @@ class ContestDijkstra:
 
   bool trace_dirty;
 
+  /**
+   * Did the last Dijkstra search finish (even if without a valid
+   * solution)?  This means the Dijkstra object still contains valid
+   * data, and may be resumed with new data.  This flag gets cleared
+   * when Trace or Dijkstra get cleared.
+   */
+  bool finished;
+
   TracePointVector trace; // working trace for solver
 
 protected:
   /** Number of points in current trace set */
   unsigned n_points;
+
+  /**
+   * The index of the first finish candidate.  During incremental
+   * scan, only the new trace points are considered.
+   */
+  unsigned first_finish_candidate;
 
   /** Weightings applied to each leg distance */
   unsigned m_weightings[MAX_STAGES];
@@ -78,6 +104,7 @@ public:
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
   ContestDijkstra(const Trace &_trace, 
+                  bool continuous,
                   const unsigned n_legs,
                   const unsigned finish_alt_diff = 1000);
 
@@ -100,6 +127,23 @@ protected:
   }
 
   void ClearTrace();
+
+  /**
+   * Copy points that were added to the end of the master Trace.
+   *
+   * @return true if new points were added
+   */
+  bool UpdateTraceTail();
+
+  void AddEdges(ScanTaskPoint origin, unsigned first_point);
+
+  /**
+   * Restart the solver with the new points added by
+   * UpdateTraceTail().
+   *
+   * @param first_point the first point that was added
+   */
+  void AddIncrementalEdges(unsigned first_point);
 
   /**
    * Retrieve weighting of specified leg

@@ -352,6 +352,15 @@ public:
   void get_trace_points(TracePointVector& iov) const;
 
   /**
+   * Update the given #TracePointVector after points were appended to
+   * this object.  This must not be called after thinning has
+   * occurred, see GetModifySerial().
+   *
+   * @return true if new points were added
+   */
+  bool SyncTracePoints(TracePointVector &v) const;
+
+  /**
    * Fill the vector with trace points, not before #min_time, minimum
    * resolution #min_distance.
    */

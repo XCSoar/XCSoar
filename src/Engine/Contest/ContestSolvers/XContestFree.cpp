@@ -24,7 +24,7 @@
 
 XContestFree::XContestFree(const Trace &_trace,
                            const bool _is_dhv):
-  ContestDijkstra(_trace, 4, 1000),
+  ContestDijkstra(_trace, true, 4, 1000),
   is_dhv(_is_dhv) {}
 
 fixed

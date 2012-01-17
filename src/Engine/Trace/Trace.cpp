@@ -338,6 +338,22 @@ Trace::get_trace_points(TracePointVector& iov) const
   std::copy(begin(), end(), std::back_inserter(iov));
 }
 
+bool
+Trace::SyncTracePoints(TracePointVector &v) const
+{
+  assert(v.size() <= size());
+
+  if (v.size() == size())
+    /* no news */
+    return false;
+
+  v.reserve(size());
+  std::copy(std::prev(end(), size() - v.size()), end(),
+            std::back_inserter(v));
+  assert(v.size() == size());
+  return true;
+}
+
 void
 Trace::GetTracePoints(TracePointVector &v, unsigned min_time,
                       const GeoPoint &location, fixed min_distance) const

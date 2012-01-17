@@ -52,7 +52,7 @@
 */
 
 OLCSprint::OLCSprint(const Trace &_trace):
-  ContestDijkstra(_trace, 4, 0) {}
+  ContestDijkstra(_trace, false, 4, 0) {}
 
 void
 OLCSprint::Reset()

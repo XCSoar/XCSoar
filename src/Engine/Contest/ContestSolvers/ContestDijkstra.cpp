@@ -33,10 +33,12 @@ Copyright_License {
 #define CONTEST_QUEUE_SIZE DIJKSTRA_QUEUE_SIZE
 
 ContestDijkstra::ContestDijkstra(const Trace &_trace,
+                                 bool _continuous,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
   AbstractContest(_trace, finish_alt_diff),
   NavDijkstra(n_legs + 1),
+  continuous(_continuous),
   incremental(false)
 {
   assert(num_stages <= MAX_STAGES);
@@ -63,6 +65,9 @@ ContestDijkstra::IsMasterUpdated() const
   if (modify_serial != trace_master.GetModifySerial())
     return true;
 
+  if (continuous)
+    return false;
+
   if (n_points < num_stages)
     return true;
 
@@ -84,22 +89,50 @@ void
 ContestDijkstra::ClearTrace()
 {
   trace_dirty = true;
+  finished = false;
   trace.clear();
   n_points = 0;
 }
 
+bool
+ContestDijkstra::UpdateTraceTail()
+{
+  assert(continuous);
+  assert(incremental);
+  assert(finished);
+  assert(modify_serial == trace_master.GetModifySerial());
+
+  if (!trace_master.SyncTracePoints(trace))
+    /* no new points */
+    return false;
+
+  n_points = trace.size();
+  return true;
+}
 
 void
 ContestDijkstra::UpdateTrace()
 {
-  if (!IsMasterUpdated())
+  if (!IsMasterUpdated()) {
+    if (finished && append_serial != trace_master.GetAppendSerial()) {
+      const unsigned old_size = n_points;
+      if (UpdateTraceTail())
+        /* new data from the master trace, start incremental solver */
+        AddIncrementalEdges(old_size);
+    }
+
     return;
+  }
 
   trace.reserve(trace_master.GetMaxSize());
   trace_master.get_trace_points(trace);
+  append_serial = trace_master.GetAppendSerial();
   modify_serial = trace_master.GetModifySerial();
   n_points = trace.size();
   trace_dirty = true;
+  finished = false;
+
+  first_finish_candidate = incremental ? n_points - 1 : 0;
 
   if (n_points<2) return;
 }
@@ -118,15 +151,15 @@ ContestDijkstra::Solve(bool exhaustive)
     return true;
   }
 
-  if (dijkstra.IsEmpty()) {
+  if (finished || dijkstra.IsEmpty()) {
     UpdateTrace();
+
     if (n_points < num_stages)
       return true;
 
     // don't re-start search unless we have had new data appear
-    if (!trace_dirty) {
+    if (!trace_dirty && !finished)
       return true;
-    }
   } else if (exhaustive || n_points < num_stages ||
              modify_serial != trace_master.GetModifySerial()) {
     UpdateTrace();
@@ -138,6 +171,7 @@ ContestDijkstra::Solve(bool exhaustive)
 
   if (trace_dirty) {
     trace_dirty = false;
+    finished = false;
 
     dijkstra.Clear();
     dijkstra.Reserve(CONTEST_QUEUE_SIZE);
@@ -150,7 +184,13 @@ ContestDijkstra::Solve(bool exhaustive)
   }
 
   if (DistanceGeneral(exhaustive ? 0 - 1 : 25)) {
-    dijkstra.Clear();
+    if (incremental && continuous)
+      /* enable the incremental solver, which considers the existing
+         Dijkstra edge map */
+      finished = true;
+    else
+      /* start the next iteration from scratch */
+      dijkstra.Clear();
 
     if (solution_valid)
       SaveSolution();
@@ -241,20 +281,21 @@ ContestDijkstra::AddStartEdges()
 }
 
 void
-ContestDijkstra::AddEdges(const ScanTaskPoint origin)
+ContestDijkstra::AddEdges(const ScanTaskPoint origin,
+                          const unsigned first_point)
 {
   ScanTaskPoint destination(origin.GetStageNumber() + 1,
-                            origin.GetPointIndex());
+                            std::max(origin.GetPointIndex(), first_point));
 
   const int min_altitude = IsFinal(destination)
     ? GetMinimumFinishAltitude(GetPoint(FindStart(origin)))
     : 0;
 
-  // only add last point!
-  if (incremental && IsFinal(destination)) {
-    assert(n_points > 0);
-    destination.SetPointIndex(n_points - 1);
-  }
+  if (IsFinal(destination) &&
+      first_finish_candidate > destination.GetPointIndex())
+    /* limit the number of finish candidates during incremental
+       search */
+    destination.SetPointIndex(first_finish_candidate);
 
   const unsigned weight = GetStageWeight(origin.GetStageNumber());
 
@@ -265,6 +306,50 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin)
       Link(destination, origin, d);
     }
   }
+
+}
+
+void
+ContestDijkstra::AddEdges(const ScanTaskPoint origin)
+{
+  AddEdges(origin, 0);
+}
+
+void
+ContestDijkstra::AddIncrementalEdges(unsigned first_point)
+{
+  assert(first_point < n_points);
+  assert(continuous);
+  assert(incremental);
+  assert(finished);
+
+  finished = false;
+  first_finish_candidate = first_point;
+
+  /* we need a copy of the current edge map, because the following
+     loop will modify it, invalidating the iterator */
+  const Dijkstra::EdgeMap edges = dijkstra.GetEdgeMap();
+
+  /* establish links between each old node and each new node, to
+     initiate the follow-up search, hoping a better solution will be
+     found here */
+  for (auto i = edges.begin(), end = edges.end(); i != end; ++i) {
+    if (IsFinal(i->first))
+      /* ignore final nodes */
+      continue;
+
+    /* "seek" the Dijkstra object to the current "old" node */
+    dijkstra.SetCurrentValue(i->second.value);
+
+    /* add edges from the current "old" node to all "new" nodes
+       (first_point .. n_points-1) */
+    AddEdges(i->first, first_point);
+  }
+
+  /* see if new start points are possible now (due to relaxed start
+     height constraints); duplicates will be ignored by the Dijkstra
+     class */
+  AddStartEdges();
 }
 
 bool

@@ -40,6 +40,7 @@ Copyright_License {
 template<typename Node, typename MapTemplate>
 class Dijkstra
 {
+public:
   struct Edge
   {
     Node parent;
@@ -53,6 +54,7 @@ class Dijkstra
   typedef typename EdgeMap::iterator edge_iterator;
   typedef typename EdgeMap::const_iterator edge_const_iterator;
 
+private:
   struct Value
   {
     unsigned edge_value;
@@ -118,6 +120,15 @@ public:
   }
 
   /**
+   * Return a reference to the current edge map.  This hack is needed
+   * for "continuous" search, see
+   * ContestDijkstra::AddIncrementalEdges().
+   */
+  const EdgeMap &GetEdgeMap() const {
+    return edges;
+  }
+
+  /**
    * Test whether queue is empty
    *
    * @return True if no more nodes to search
@@ -135,6 +146,14 @@ public:
   gcc_pure
   unsigned GetQueueSize() const {
     return q.size();
+  }
+
+  /**
+   * Hack to allow incremental / continuous runs, see
+   * ContestDijkstra::AddIncrementalEdges().
+   */
+  void SetCurrentValue(unsigned value) {
+    current_value = value;
   }
 
   /**
@@ -191,6 +210,18 @@ public:
    */
   void Reserve(unsigned size) {
     q.reserve(size);
+  }
+
+  /**
+   * Clear the queue and re-insert all known links.
+   */
+  void RestartQueue() {
+    // Clear the search queue
+    while (!q.empty())
+      q.pop();
+
+    for (auto i = edges.begin(), end = edges.end(); i != end; ++i)
+      q.push(Value(i->second.value, i));
   }
 
 private:

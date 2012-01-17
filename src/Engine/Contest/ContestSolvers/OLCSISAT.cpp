@@ -25,7 +25,7 @@
 #include "Navigation/SearchPointVector.hpp"
 
 OLCSISAT::OLCSISAT(const Trace &_trace)
-  :ContestDijkstra(_trace, 6, 1000) {}
+  :ContestDijkstra(_trace, true, 6, 1000) {}
 
 /*
   S = total path distance
