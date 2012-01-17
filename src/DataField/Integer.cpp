@@ -170,6 +170,7 @@ DataFieldInteger::CreateComboList() const
 
   if (mValue > last) {
     /* the current value out of range - append it here */
+    last = mValue;
     AppendComboValue(*combo_list, mValue);
     combo_list->ComboPopupItemSavedIndex = combo_list->size();
   }
