@@ -456,7 +456,7 @@ GetTaskData(DataFieldEnum &df)
   for (unsigned i = ActiveTaskPointOnEntry; i < TaskSize; i++) {
     StaticString<80u> label;
     label.Format(_T("%d %s"), i,
-                 task.GetTaskPoint(i)->GetWaypoint().name.c_str());
+                 task.GetTaskPoint(i).GetWaypoint().name.c_str());
     df.addEnumText(label.c_str());
   }
 

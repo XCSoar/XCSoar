@@ -138,7 +138,7 @@ TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  const OrderedTaskPoint &tp = *ordered_task->GetTaskPoint(DrawListIndex);
+  const OrderedTaskPoint &tp = ordered_task->GetTaskPoint(DrawListIndex);
   GeoVector leg = tp.leg_vector_nominal();
   bool show_leg_info = leg.distance > fixed(0.01);
 

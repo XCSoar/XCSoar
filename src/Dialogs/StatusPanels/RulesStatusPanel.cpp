@@ -87,7 +87,7 @@ RulesStatusPanel::Refresh()
 
     if (task_manager->GetMode() == TaskManager::MODE_ORDERED &&
         task.TaskSize() > 0)
-      CopyString(Temp, task.GetTaskPoint(0)->GetWaypoint().name.c_str(),
+      CopyString(Temp, task.GetTaskPoint(0).GetWaypoint().name.c_str(),
                  ARRAY_SIZE(Temp));
     else
       Temp[0] = _T('\0');

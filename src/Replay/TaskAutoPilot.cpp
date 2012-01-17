@@ -278,7 +278,7 @@ TaskAutoPilot::far_from_target(const TaskAccessor& task, const AircraftState& st
     // cheat for non-ordered tasks
     return d_far;
 
-  bool entered = task.has_entered(awp);
+  bool entered = awp >= task.size() || task.has_entered(awp);
 
   if (current_has_target(task))
     return d_far || !entered;

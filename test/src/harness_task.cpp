@@ -343,8 +343,7 @@ bool test_task_type_manip(TaskManager& task_manager,
   fact.MutateTPsToTaskType();
 
   test_note("# checking mutated start..\n");
-  if (!fact.IsValidStartType(
-      fact.GetType(*task_manager.GetOrderedTask().GetTaskPoint(0))))
+  if (!fact.IsValidStartType(fact.GetType(task_manager.GetOrderedTask().GetTaskPoint(0))))
     return false;
 
 
@@ -356,15 +355,13 @@ bool test_task_type_manip(TaskManager& task_manager,
   for (unsigned i = 1; i < (task_manager.TaskSize() - 1); i++) {
     sprintf(tmp, "# checking mutated intermediate point %d..\n", i);
     test_note(tmp);
-    if (!fact.IsValidIntermediateType(
-        fact.GetType(*task_manager.GetOrderedTask().GetTaskPoint(i))))
+    if (!fact.IsValidIntermediateType(fact.GetType(task_manager.GetOrderedTask().GetTaskPoint(i))))
       return false;
   }
 
   test_note("# checking mutated finish..\n");
   if (!fact.IsValidFinishType(
-      fact.GetType(*task_manager.GetOrderedTask().GetTaskPoint(
-          task_manager.TaskSize() - 1))))
+      fact.GetType(task_manager.GetOrderedTask().GetTaskPoint(task_manager.TaskSize() - 1))))
     return false;
 
   test_note("# validating task..\n");

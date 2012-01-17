@@ -396,8 +396,8 @@ AbstractTaskFactory::Append(const OrderedTaskPoint &new_tp,
 
     if (m_task.HasFinish()) {
       // old finish must be mutated into an intermediate point
-      IntermediateTaskPoint* sp = CreateIntermediate(m_task.GetTaskPoint(
-          m_task.TaskSize() - 1)->GetWaypoint());
+      IntermediateTaskPoint* sp =
+        CreateIntermediate(m_task.GetTaskPoint(m_task.TaskSize() - 1).GetWaypoint());
 
       m_task.Replace(*sp, m_task.TaskSize()-1);
       delete sp;
@@ -462,7 +462,7 @@ AbstractTaskFactory::Insert(const OrderedTaskPoint &new_tp,
       if (m_task.HasStart()) {
         // old start must be mutated into an intermediate point
         IntermediateTaskPoint* sp =
-            CreateIntermediate(m_task.GetTaskPoint(0)->GetWaypoint());
+          CreateIntermediate(m_task.GetTaskPoint(0).GetWaypoint());
         m_task.Replace(*sp, 0);
         delete sp;
       }
@@ -507,15 +507,15 @@ AbstractTaskFactory::Remove(const unsigned position,
         return m_task.Remove(0);
       } else {
         // create new start point from next point
-        StartPoint* sp = CreateStart(m_task.GetTaskPoint(1)->GetWaypoint());
+        StartPoint* sp = CreateStart(m_task.GetTaskPoint(1).GetWaypoint());
         bool success = m_task.Remove(0) && m_task.Replace(*sp, 0);
         delete sp;
         return success;
       }
     } else if (IsPositionFinish(position - 1) && (position + 1 == m_task.TaskSize())) {
       // create new finish from previous point
-      FinishPoint* sp = CreateFinish(
-          m_task.GetTaskPoint(position - 1)->GetWaypoint());
+      FinishPoint *sp =
+        CreateFinish(m_task.GetTaskPoint(position - 1).GetWaypoint());
       bool success = m_task.Remove(position) &&
         m_task.Replace(*sp, position - 1);
       delete sp;
@@ -532,8 +532,8 @@ AbstractTaskFactory::Remove(const unsigned position,
 bool 
 AbstractTaskFactory::HasEntered(unsigned position) const
 {
-  if (m_task.GetTaskPoint(position))
-    return m_task.GetTaskPoint(position)->HasEntered();
+  if (m_task.IsValidIndex(position))
+    return m_task.GetTaskPoint(position).HasEntered();
 
   return true;
 }
@@ -546,8 +546,8 @@ AbstractTaskFactory::Swap(const unsigned position, const bool auto_mutate)
   if (position >= m_task.TaskSize() - 1)
     return false;
 
-  const OrderedTaskPoint* orig = m_task.GetTaskPoint(position+1);
-  if (!Insert(*orig, position, auto_mutate))
+  const OrderedTaskPoint &orig = m_task.GetTaskPoint(position + 1);
+  if (!Insert(orig, position, auto_mutate))
     return false;
 
   return Remove(position+2, auto_mutate);
@@ -558,7 +558,7 @@ AbstractTaskFactory::Relocate(const unsigned position,
                               const Waypoint& waypoint)
 {
   m_task.Relocate(position, waypoint);
-  return *m_task.GetTaskPoint(position);
+  return m_task.GetTaskPoint(position);
 }
 
 const OrderedTaskBehaviour& 

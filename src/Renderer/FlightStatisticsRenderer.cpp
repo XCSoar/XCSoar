@@ -106,7 +106,7 @@ static void DrawLegs(Chart& chart,
 
   const OrderedTask &task = task_manager.GetOrderedTask();
   for (unsigned i = 0, n = task.TaskSize(); i < n; ++i) {
-    const OrderedTaskPoint &tp = *task.GetTaskPoint(i);
+    const OrderedTaskPoint &tp = task.GetTaskPoint(i);
     if (!IsTaskLegVisible(tp))
       continue;
 

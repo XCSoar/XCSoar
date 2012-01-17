@@ -180,10 +180,14 @@ public:
    *
    * @param index Index of task point sequence
    *
-   * @return OrderedTaskPoint at index (or NULL if out of range)
+   * @return OrderedTaskPoint at index
    */
   gcc_pure
-  const OrderedTaskPoint* GetTaskPoint(const unsigned index) const;
+  const OrderedTaskPoint &GetTaskPoint(const unsigned index) const {
+    assert(index < task_points.size());
+
+    return *task_points[index];
+  }
 
   /**
    * Determine whether active task point optionally shifted points to
@@ -388,6 +392,14 @@ public:
    */
   virtual bool UpdateIdle(const AircraftState& state_now,
                           const GlidePolar &glide_polar);
+
+  /**
+   * Check whether the task point with the specified index exists.
+   */
+  gcc_pure
+  bool IsValidIndex(unsigned i) const {
+    return i < task_points.size();
+  }
 
   /**
    * Return size of task

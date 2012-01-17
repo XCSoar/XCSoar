@@ -388,8 +388,8 @@ TaskManager::TaskSize() const
 GeoPoint 
 TaskManager::RandomPointInTask(const unsigned index, const fixed mag) const
 {
-  if (active_task == &task_ordered && index < TaskSize())
-    return task_ordered.GetTaskPoint(index)->GetRandomPointInSector(mag);
+  if (active_task == &task_ordered && task_ordered.IsValidIndex(index))
+    return task_ordered.GetTaskPoint(index).GetRandomPointInSector(mag);
 
   if (index <= TaskSize())
     return active_task->GetActiveTaskPoint()->GetLocation();
@@ -468,11 +468,8 @@ TaskManager::IsInSector (const unsigned index, const AircraftState &ref,
     if (ap)
       return ap->IsInSector(ref);
   }
-  else {
-    const OrderedTaskPoint *p = task_ordered.GetTaskPoint(index);
-    if (p)
-      return p->IsInSector(ref);
-  }
+  else
+    return task_ordered.GetTaskPoint(index).IsInSector(ref);
 
   return false;
 }

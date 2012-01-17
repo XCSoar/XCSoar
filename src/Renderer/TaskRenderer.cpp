@@ -64,7 +64,7 @@ TaskRenderer::Draw(const OrderedTask &task)
 
     tpv.SetModeOptional(false);
     for (unsigned j = 0, end = task.TaskSize(); j < end; ++j)
-      tpv.Draw(*task.GetTaskPoint(j), (RenderTaskPoint::Layer)i);
+      tpv.Draw(task.GetTaskPoint(j), (RenderTaskPoint::Layer)i);
   }
 }
 

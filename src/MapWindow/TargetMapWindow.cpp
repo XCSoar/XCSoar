@@ -290,12 +290,12 @@ TargetMapWindow::SetTarget(unsigned index)
   {
     ProtectedTaskManager::Lease lease(*task);
     const OrderedTask &o_task = lease->GetOrderedTask();
-    const OrderedTaskPoint *tp = o_task.GetTaskPoint(index);
-    if (tp == NULL)
+    if (!o_task.IsValidIndex(index))
       return;
 
-    location = tp->GetLocation();
-    radius = std::max(GetRadius(*tp) * fixed(1.3), fixed(2000));
+    const OrderedTaskPoint &tp = o_task.GetTaskPoint(index);
+    location = tp.GetLocation();
+    radius = std::max(GetRadius(tp) * fixed(1.3), fixed(2000));
   }
 
   projection.SetGeoLocation(location);

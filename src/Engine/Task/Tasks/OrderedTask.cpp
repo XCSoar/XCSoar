@@ -990,15 +990,6 @@ OrderedTask::Reset()
   SetActiveTaskPoint(0);
 }
 
-const OrderedTaskPoint* 
-OrderedTask::GetTaskPoint(const unsigned index) const
-{
-  if (index >= task_points.size())
-    return NULL;
-
-  return task_points[index];
-}
-
 bool 
 OrderedTask::TaskFinished() const
 {
