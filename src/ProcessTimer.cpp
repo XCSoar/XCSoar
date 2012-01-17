@@ -214,13 +214,12 @@ BallastDumpProcessTimer()
   ComputerSettings &settings_computer =
     CommonInterface::SetComputerSettings();
 
-  if (!settings_computer.ballast_timer_active)
+  static bool last_ballast_timer_active = false;
+
+  if (!settings_computer.ballast_timer_active) {
+    last_ballast_timer_active = false;
     return;
-
-  // only update every 5 seconds to stop flooding the devices
-  static GPSClock ballast_clock(fixed(5));
-
-  const NMEAInfo &basic = CommonInterface::Basic();
+  }
 
   // We don't know how fast the water is flowing so don't pretend that we do
   if (settings_computer.plane.dump_time <= 0) {
@@ -228,8 +227,18 @@ BallastDumpProcessTimer()
     return;
   }
 
-  fixed dt = ballast_clock.delta_advance(basic.time);
+  // only update once every second
+  static GPSClock ballast_clock(fixed_one);
 
+  const NMEAInfo &basic = CommonInterface::Basic();
+
+  if (!last_ballast_timer_active) {
+    ballast_clock.Update(basic.time);
+    last_ballast_timer_active = true;
+    return;
+  }
+
+  fixed dt = ballast_clock.delta_advance(basic.time);
   if (negative(dt))
     return;
 
