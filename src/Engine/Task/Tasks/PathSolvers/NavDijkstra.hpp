@@ -94,23 +94,6 @@ protected:
     set_stages(_num_stages);
   }
 
-public:
-  /**
-   * Test whether two points (as previous search locations) are significantly
-   * different to warrant a new search
-   *
-   * @param a1 First point to compare
-   * @param a2 Second point to compare
-   * @param dist_threshold Threshold distance for significance
-   *
-   * @return True if distance is significant
-   */
-  gcc_pure
-  static bool distance_is_significant(const T& a1, const T& a2,
-                                      const unsigned dist_threshold = 1) {
-    return a1.FlatSquareDistance(a2) > (dist_threshold * dist_threshold);
-  }
-
 protected:
   /** 
    * Set the number of stages to search for, and clear the solution

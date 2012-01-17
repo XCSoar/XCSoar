@@ -1015,6 +1015,23 @@ OrderedTask::TaskStarted(bool soft) const
   return false;
 }
 
+/**
+ * Test whether two points (as previous search locations) are significantly
+ * different to warrant a new search
+ *
+ * @param a1 First point to compare
+ * @param a2 Second point to compare
+ * @param dist_threshold Threshold distance for significance
+ *
+ * @return True if distance is significant
+ */
+gcc_pure
+static bool
+distance_is_significant(const SearchPoint &a1, const SearchPoint &a2,
+                        const unsigned dist_threshold = 1)
+{
+  return a1.FlatSquareDistance(a2) > (dist_threshold * dist_threshold);
+}
 
 bool 
 OrderedTask::distance_is_significant(const GeoPoint &location,
@@ -1022,7 +1039,7 @@ OrderedTask::distance_is_significant(const GeoPoint &location,
 {
   SearchPoint a1(location, task_projection);
   SearchPoint a2(location_last, task_projection);
-  return TaskDijkstra::distance_is_significant(a1, a2);
+  return ::distance_is_significant(a1, a2);
 }
 
 
