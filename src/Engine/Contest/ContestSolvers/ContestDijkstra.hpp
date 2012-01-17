@@ -112,8 +112,8 @@ protected:
 
   gcc_pure
   const TracePoint &GetPointFast(const ScanTaskPoint sp) const {
-    assert(sp.point_index < n_points);
-    return trace[sp.point_index];
+    assert(sp.GetPointIndex() < n_points);
+    return trace[sp.GetPointIndex()];
   }
 
   /** Update working trace from master --- never to be done during a solution! */

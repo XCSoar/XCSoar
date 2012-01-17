@@ -33,27 +33,54 @@ Copyright_License {
  * number (turn point number); second element is the index in the
  * #TracePointVector / #SearchPointVector.
  */
-struct ScanTaskPoint {
-  uint16_t stage_number;
+class ScanTaskPoint {
+  uint32_t value;
 
-  uint16_t point_index;
-
-  ScanTaskPoint(unsigned _stage_number, unsigned _point_index)
-    :stage_number(_stage_number), point_index(_point_index) {}
+public:
+  gcc_constexpr_ctor
+  ScanTaskPoint(unsigned stage_number, unsigned point_index)
+    :value((stage_number << 16) | point_index) {}
 
   /**
    * Generate a unique key that is used for the std::map comparison
    * operator.
    */
+  gcc_constexpr_method
   uint32_t Key() const {
-    /* sorry for this dirty trick, but it speeds up the solver by 20%;
-       language lawyers would say that this cast is not legal, but it
-       works on all platforms we're interested in supporting */
-    return *reinterpret_cast<const uint32_t *>(this);
+    return value;
   }
 
+  gcc_constexpr_method
+  bool operator==(const ScanTaskPoint other) const {
+    return Key() == other.Key();
+  }
+
+  gcc_constexpr_method
+  bool operator!=(const ScanTaskPoint other) const {
+    return Key() != other.Key();
+  }
+
+  gcc_constexpr_method
   bool operator<(const ScanTaskPoint other) const {
     return Key() < other.Key();
+  }
+
+  gcc_constexpr_method
+  unsigned GetStageNumber() const {
+    return value >> 16;
+  }
+
+  gcc_constexpr_method
+  unsigned GetPointIndex() const {
+    return value & 0xffff;
+  }
+
+  void SetPointIndex(unsigned i) {
+    value = (value & 0xffff0000) | i;
+  }
+
+  void IncrementPointIndex() {
+    ++value;
   }
 
   /**
@@ -61,9 +88,8 @@ struct ScanTaskPoint {
    */
   gcc_pure
   bool IsFirst() const {
-    return stage_number == 0;
+    return GetStageNumber() == 0;
   }
-
-} gcc_aligned(4); /* adjust alignment so the trick in Key() works on ARM */
+};
 
 #endif

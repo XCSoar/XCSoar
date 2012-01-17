@@ -242,11 +242,12 @@ ContestDijkstra::add_start_edges()
   assert(n_points > 0);
 
   ScanTaskPoint destination(0, 0);
-  const ScanTaskPoint end(num_stages-1, n_points-1);
+  const ScanTaskPoint finish(num_stages-1, n_points-1);
 
-  for (; destination.point_index != n_points; ++destination.point_index) {
+  for (ScanTaskPoint destination(0, 0), end(0, n_points);
+       destination != end; destination.IncrementPointIndex()) {
     // only add points that are valid for the finish
-    if (admit_candidate(GetPointFast(destination), end)) {
+    if (admit_candidate(GetPointFast(destination), finish)) {
       dijkstra.link(destination, destination, 0);
     }
   }
@@ -255,19 +256,21 @@ ContestDijkstra::add_start_edges()
 void
 ContestDijkstra::add_edges(const ScanTaskPoint origin)
 {
-  ScanTaskPoint destination(origin.stage_number + 1, origin.point_index);
+  ScanTaskPoint destination(origin.GetStageNumber() + 1,
+                            origin.GetPointIndex());
 
   const TracePoint start = GetPointFast(FindStart(origin));
 
   // only add last point!
   if (is_final(destination)) {
     assert(n_points > 0);
-    destination.point_index = n_points - 1;
+    destination.SetPointIndex(n_points - 1);
   }
 
-  const unsigned weight = get_weighting(origin.stage_number);
+  const unsigned weight = get_weighting(origin.GetStageNumber());
 
-  for (; destination.point_index != n_points; ++destination.point_index) {
+  for (const ScanTaskPoint end(destination.GetStageNumber(), n_points);
+       destination != end; destination.IncrementPointIndex()) {
     if (admit_candidate(start, destination)) {
       const unsigned d = weight * distance(origin, destination);
       dijkstra.link(destination, origin, d);

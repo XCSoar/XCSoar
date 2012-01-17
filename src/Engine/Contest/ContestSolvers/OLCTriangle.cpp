@@ -216,21 +216,21 @@ OLCTriangle::add_start_edges()
 void 
 OLCTriangle::add_edges(const ScanTaskPoint origin)
 {
-  assert(origin.point_index < n_points);
+  assert(origin.GetPointIndex() < n_points);
 
-  switch (origin.stage_number) {
+  switch (origin.GetStageNumber()) {
   case 0:
     // add points up to finish
-    for (ScanTaskPoint destination(origin.stage_number + 1, 0);
-         destination.point_index < origin.point_index;
-         ++destination.point_index) {
+    for (ScanTaskPoint destination(origin.GetStageNumber() + 1, 0),
+           end(origin.GetStageNumber() + 1, origin.GetPointIndex());
+         destination != end; destination.IncrementPointIndex()) {
       const unsigned d = 
         distance(origin, destination);
 
       if (!is_fai || (4*d >= best_d)) { // no reason to add candidate if worse
                                         // than 25% rule for FAI tasks
         dijkstra.link(destination, origin,
-                      get_weighting(origin.stage_number) * d);
+                      get_weighting(origin.GetStageNumber()) * d);
       }
 
     }
@@ -240,9 +240,10 @@ OLCTriangle::add_edges(const ScanTaskPoint origin)
 
     // give first leg points to penultimate node
     TriangleSecondLeg sl(is_fai, GetPointFast(previous), GetPointFast(origin));
-    for (ScanTaskPoint destination(origin.stage_number + 1,
-                                   origin.point_index + 1);
-         destination.point_index < n_points-1; ++destination.point_index) {
+    for (ScanTaskPoint destination(origin.GetStageNumber() + 1,
+                                   origin.GetPointIndex() + 1),
+           end(origin.GetStageNumber() + 1, n_points - 1);
+         destination != end; destination.IncrementPointIndex()) {
       TriangleSecondLeg::Result result = sl.Calculate(GetPointFast(destination),
                                                       best_d);
       const unsigned d = result.leg_distance;
@@ -250,21 +251,21 @@ OLCTriangle::add_edges(const ScanTaskPoint origin)
         best_d = result.total_distance;
 
         dijkstra.link(destination, origin,
-                      get_weighting(origin.stage_number) * d);
+                      get_weighting(origin.GetStageNumber()) * d);
 
         // we have an improved solution
         is_complete = true;
 
         // need to scan again whether path is closed
         is_closed = false;
-        first_tp = origin.point_index;
+        first_tp = origin.GetPointIndex();
       }
     }
   }
     break;
   case 2:
     // dummy just to close the triangle
-    dijkstra.link(ScanTaskPoint(origin.stage_number + 1, n_points - 1),
+    dijkstra.link(ScanTaskPoint(origin.GetStageNumber() + 1, n_points - 1),
                   origin, 0);
     break;
   default:

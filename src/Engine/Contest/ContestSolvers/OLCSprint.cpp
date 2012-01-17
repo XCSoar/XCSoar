@@ -98,7 +98,7 @@ OLCSprint::add_start_edges()
 void 
 OLCSprint::add_edges(const ScanTaskPoint origin)
 {
-  const ScanTaskPoint destination(origin.stage_number + 1, n_points - 1);
+  const ScanTaskPoint destination(origin.GetStageNumber() + 1, n_points - 1);
   if (!is_final(destination)) {
     ContestDijkstra::add_edges(origin);
     return;
@@ -106,7 +106,7 @@ OLCSprint::add_edges(const ScanTaskPoint origin)
   /*
     For final, only add last valid point
    */
-  const unsigned d = get_weighting(origin.stage_number) *
+  const unsigned d = get_weighting(origin.GetStageNumber()) *
     distance(origin, destination);
   dijkstra.link(destination, origin, d);
 }

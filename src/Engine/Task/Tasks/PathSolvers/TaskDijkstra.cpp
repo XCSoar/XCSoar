@@ -57,16 +57,17 @@ TaskDijkstra::get_size(const unsigned stage) const
 const SearchPoint &
 TaskDijkstra::GetPointFast(const ScanTaskPoint sp) const
 {
-  return task.get_tp_search_points(sp.stage_number)[sp.point_index];
+  return task.get_tp_search_points(sp.GetStageNumber())[sp.GetPointIndex()];
 }
 
 void
 TaskDijkstra::add_edges(const ScanTaskPoint curNode)
 {
-  ScanTaskPoint destination(curNode.stage_number + 1, 0);
-  const unsigned dsize = get_size(destination.stage_number);
+  ScanTaskPoint destination(curNode.GetStageNumber() + 1, 0);
+  const unsigned dsize = get_size(destination.GetStageNumber());
 
-  for (; destination.point_index != dsize; ++destination.point_index)
+  for (const ScanTaskPoint end(destination.GetStageNumber(), dsize);
+       destination != end; destination.IncrementPointIndex())
     dijkstra.link(destination, curNode, distance(curNode, destination));
 }
 
@@ -76,9 +77,10 @@ TaskDijkstra::add_start_edges(const SearchPoint &currentLocation)
   dijkstra.reserve(DIJKSTRA_QUEUE_SIZE);
 
   ScanTaskPoint destination(active_stage, 0);
-  const unsigned dsize = get_size(destination.stage_number);
+  const unsigned dsize = get_size(active_stage);
 
-  for (; destination.point_index != dsize; ++destination.point_index)
+  for (const ScanTaskPoint end(active_stage, dsize);
+       destination != end; destination.IncrementPointIndex())
     dijkstra.link(destination, destination,
                   distance(destination, currentLocation));
 }

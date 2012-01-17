@@ -135,7 +135,7 @@ protected:
   gcc_pure
   bool is_final(const ScanTaskPoint sp) const {
     assert(num_stages <= MAX_STAGES);
-    return (unsigned)(sp.stage_number + 1) == num_stages;
+    return (unsigned)(sp.GetStageNumber() + 1) == num_stages;
   }
 
   /** 
@@ -181,14 +181,14 @@ protected:
    */
   gcc_pure
   ScanTaskPoint FindStage(ScanTaskPoint p, unsigned stage_number) const {
-    assert(stage_number <= p.stage_number);
+    assert(stage_number <= p.GetStageNumber());
 
-    while (p.stage_number > stage_number) {
+    while (p.GetStageNumber() > stage_number) {
 #ifndef NDEBUG
       const ScanTaskPoint o(p);
 #endif
       p = dijkstra.get_predecessor(p);
-      assert(p.stage_number + 1 == o.stage_number);
+      assert(p.GetStageNumber() + 1 == o.GetStageNumber());
     }
 
     return p;
@@ -212,10 +212,10 @@ protected:
     unsigned last_stage_number;
 
     do {
-      last_stage_number = p.stage_number;
-      solution[p.stage_number] = p.point_index;
+      last_stage_number = p.GetStageNumber();
+      solution[p.GetStageNumber()] = p.GetPointIndex();
       p = dijkstra.get_predecessor(p);
-    } while (p.stage_number != last_stage_number);
+    } while (p.GetStageNumber() != last_stage_number);
   }
 };
 
