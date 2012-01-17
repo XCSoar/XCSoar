@@ -157,7 +157,7 @@ RefreshView()
     wb->SetCaption(tmp);
   }
 
-  EnableSizeEdit(ordered_task->get_factory_type() != TaskBehaviour::FactoryType::FAI_GENERAL);
+  EnableSizeEdit(ordered_task->get_factory_type() != TaskFactoryType::FAI_GENERAL);
 
   StaticString<100> name_prefix_buffer, type_buffer;
 

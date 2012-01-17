@@ -66,7 +66,7 @@ TaskPropertiesPanel::InitView()
 
   wp = (WndProperty *)form.FindByName(_T("prpTaskType"));
   if (wp) {
-    const std::vector<TaskBehaviour::FactoryType> factory_types =
+    const std::vector<TaskFactoryType> factory_types =
         ordered_task->GetFactoryTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
@@ -85,10 +85,10 @@ TaskPropertiesPanel::InitView()
 void
 TaskPropertiesPanel::RefreshView()
 {
-  const TaskBehaviour::FactoryType ftype = ordered_task->get_factory_type();
+  const TaskFactoryType ftype = ordered_task->get_factory_type();
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
 
-  bool aat_types = (ftype == TaskBehaviour::FactoryType::AAT);
+  bool aat_types = (ftype == TaskFactoryType::AAT);
   bool fai_start_finish = p.fai_finish;
 
   LoadFormProperty(form, _T("prpTaskType"),(int)ftype);
@@ -127,7 +127,7 @@ TaskPropertiesPanel::ReadValues()
 {
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
 
-  TaskBehaviour::FactoryType newtype = ordered_task->get_factory_type();
+  TaskFactoryType newtype = ordered_task->get_factory_type();
   *task_changed |= SaveFormPropertyEnum(form, _T("prpTaskType"), newtype);
 
   fixed min_time = GetFormValueFixed(form, _T("prpMinTime")) * 60;
@@ -194,8 +194,8 @@ OnFAIFinishHeightData(DataField *Sender, DataField::DataAccessKind_t Mode)
 void
 TaskPropertiesPanel::OnTaskTypeChange(DataFieldEnum &df)
 {
-  const TaskBehaviour::FactoryType newtype =
-    (TaskBehaviour::FactoryType)df.GetAsInteger();
+  const TaskFactoryType newtype =
+    (TaskFactoryType)df.GetAsInteger();
   if (newtype != ordered_task->get_factory_type()) {
     ReadValues();
     ordered_task->SetFactory(newtype);

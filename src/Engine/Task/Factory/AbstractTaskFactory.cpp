@@ -979,7 +979,7 @@ AbstractTaskFactory::MutateTPsToTaskType()
   for (unsigned int i = 0; i < m_task.TaskSize(); i++) {
     OrderedTaskPoint *tp = m_task.get_tp(i);
     if (!IsValidType(*tp, i) ||
-        (m_task.get_factory_type() == TaskBehaviour::FactoryType::FAI_GENERAL)) {
+        (m_task.get_factory_type() == TaskFactoryType::FAI_GENERAL)) {
 
       LegalPointType newtype = GetMutatedPointType(*tp);
       if (IsPositionFinish(i)) {

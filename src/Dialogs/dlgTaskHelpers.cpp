@@ -42,24 +42,24 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 const TCHAR*
-OrderedTaskFactoryName(TaskBehaviour::FactoryType type)
+OrderedTaskFactoryName(TaskFactoryType type)
 {
   switch(type) {
-  case TaskBehaviour::FactoryType::RACING:
+  case TaskFactoryType::RACING:
     return _("Racing");
-  case TaskBehaviour::FactoryType::FAI_GENERAL:
+  case TaskFactoryType::FAI_GENERAL:
     return _("FAI badges/records");
-  case TaskBehaviour::FactoryType::FAI_TRIANGLE:
+  case TaskFactoryType::FAI_TRIANGLE:
     return _("FAI triangle");
-  case TaskBehaviour::FactoryType::FAI_OR:
+  case TaskFactoryType::FAI_OR:
     return _("FAI out and return");
-  case TaskBehaviour::FactoryType::FAI_GOAL:
+  case TaskFactoryType::FAI_GOAL:
     return _("FAI goal");
-  case TaskBehaviour::FactoryType::AAT:
+  case TaskFactoryType::AAT:
     return _("AAT");
-  case TaskBehaviour::FactoryType::MIXED:
+  case TaskFactoryType::MIXED:
     return _("Mixed");
-  case TaskBehaviour::FactoryType::TOURING:
+  case TaskFactoryType::TOURING:
     return _("Touring");
   }
 
@@ -68,27 +68,27 @@ OrderedTaskFactoryName(TaskBehaviour::FactoryType type)
 }
 
 const TCHAR*
-OrderedTaskFactoryDescription(TaskBehaviour::FactoryType type)
+OrderedTaskFactoryDescription(TaskFactoryType type)
 {
   switch(type) {
-  case TaskBehaviour::FactoryType::RACING:
+  case TaskFactoryType::RACING:
     return _("Racing task around turn points.  Can also be used for FAI badge and record tasks.  "
         "Allows all shapes of observation zones.");
-  case TaskBehaviour::FactoryType::FAI_GENERAL:
+  case TaskFactoryType::FAI_GENERAL:
     return _("FAI rules, allows only FAI start, finish and turn point types, for badges and "
         "records.  Enables FAI finish height for final glide calculation.");
-  case TaskBehaviour::FactoryType::FAI_TRIANGLE:
+  case TaskFactoryType::FAI_TRIANGLE:
     return _("FAI rules, path from a start to two turn points and return.");
-  case TaskBehaviour::FactoryType::FAI_OR:
+  case TaskFactoryType::FAI_OR:
     return _("FAI rules, path from start to a single turn point and return.");
-  case TaskBehaviour::FactoryType::FAI_GOAL:
+  case TaskFactoryType::FAI_GOAL:
     return _("FAI rules, path from start to a goal destination.");
-  case TaskBehaviour::FactoryType::AAT:
+  case TaskFactoryType::AAT:
     return _("Task through assigned areas, minimum task time applies.  Restricted to cylinder "
         "and sector observation zones.");
-  case TaskBehaviour::FactoryType::MIXED:
+  case TaskFactoryType::MIXED:
     return _("Racing task with a mix of assigned areas and turn points, minimum task time applies.");
-  case TaskBehaviour::FactoryType::TOURING:
+  case TaskFactoryType::TOURING:
     return _("Casual touring task, uses start and finish cylinders and FAI sector turn points.");
   }
 
@@ -153,7 +153,7 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
   const TaskStats &stats = task->GetStats();
   TCHAR summary_shape[100];
   bool FAIShape = TaskSummaryShape(task, summary_shape);
-  if (FAIShape || task->get_factory_type() == TaskBehaviour::FactoryType::FAI_GENERAL) {
+  if (FAIShape || task->get_factory_type() == TaskFactoryType::FAI_GENERAL) {
     if (!task->GetFactory().ValidateFAIOZs()) {
       _tcscat(summary_shape, _T("/ "));
       _tcscat(summary_shape, getTaskValidationErrors(

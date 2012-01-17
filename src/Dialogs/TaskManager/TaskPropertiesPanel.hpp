@@ -38,7 +38,7 @@ class TaskPropertiesPanel : public XMLWidget {
   OrderedTask **ordered_task_pointer, *ordered_task;
   bool *task_changed;
 
-  TaskBehaviour::FactoryType orig_taskType;
+  TaskFactoryType orig_taskType;
 
 public:
   TaskPropertiesPanel(OrderedTask **_active_task, bool *_task_modified)

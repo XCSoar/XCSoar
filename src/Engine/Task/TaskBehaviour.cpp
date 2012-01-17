@@ -62,7 +62,7 @@ TaskBehaviour::SetDefaults()
   contest_handicap = 100;
   safety_mc = fixed_half;
   safety_height_arrival = fixed(300);
-  task_type_default = FactoryType::RACING;
+  task_type_default = TaskFactoryType::RACING;
   sector_defaults.SetDefaults();
   ordered_defaults.SetDefaults();
   route_planner.SetDefaults();

@@ -109,7 +109,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
   OrderedTask* temptask = protected_task_manager->TaskBlank();
-  temptask->SetFactory(TaskBehaviour::FactoryType::RACING);
+  temptask->SetFactory(TaskFactoryType::RACING);
 
   instance = this;
   RowFormWidget::Prepare(parent, rc);
@@ -186,7 +186,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   wp = AddEnum(_("Task"), _("Default task type for new tasks you create."));
   if (wp) {
-    const std::vector<TaskBehaviour::FactoryType> factory_types =
+    const std::vector<TaskFactoryType> factory_types =
         temptask->GetFactoryTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);

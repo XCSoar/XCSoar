@@ -325,15 +325,15 @@ bool test_task_type_manip(TaskManager& task_manager,
 
   switch (rand() %3) {
   case 0:
-    task_manager.SetFactory(TaskBehaviour::FactoryType::AAT);
+    task_manager.SetFactory(TaskFactoryType::AAT);
     test_note("# switched FACTORY TYPE to AAT\n");
     break;
   case 1:
-    task_manager.SetFactory(TaskBehaviour::FactoryType::RACING);
+    task_manager.SetFactory(TaskFactoryType::RACING);
     test_note("# switched FACTORY TYPE to RT\n");
     break;
   case 2:
-    task_manager.SetFactory(TaskBehaviour::FactoryType::FAI_GENERAL);
+    task_manager.SetFactory(TaskFactoryType::FAI_GENERAL);
     test_note("# switched FACTORY TYPE to FAI GENERAL\n");
     break;
   default:
@@ -377,7 +377,7 @@ bool test_task_type_manip(TaskManager& task_manager,
   }
 
   if (task_manager.GetOrderedTask().get_factory_type() ==
-                                      TaskBehaviour::FactoryType::FAI_GENERAL) {
+                                      TaskFactoryType::FAI_GENERAL) {
     test_note("# checking OZs for FAI task..\n");
     if (!fact.ValidateFAIOZs())
       return false;
@@ -395,7 +395,7 @@ bool test_task_mixed(TaskManager& task_manager,
   OrderedTaskPoint *tp;
   const Waypoint *wp;
 
-  task_manager.SetFactory(TaskBehaviour::FactoryType::MIXED);
+  task_manager.SetFactory(TaskFactoryType::MIXED);
   AbstractTaskFactory &fact = task_manager.GetFactory();
 
   task_report(task_manager, "# adding start\n");
@@ -491,7 +491,7 @@ bool test_task_mixed(TaskManager& task_manager,
 bool test_task_fai(TaskManager& task_manager,
                    const Waypoints &waypoints)
 {
-  task_manager.SetFactory(TaskBehaviour::FactoryType::FAI_GENERAL);
+  task_manager.SetFactory(TaskFactoryType::FAI_GENERAL);
   AbstractTaskFactory &fact = task_manager.GetFactory();
   const Waypoint *wp;
 
@@ -556,7 +556,7 @@ bool test_task_aat(TaskManager& task_manager,
   const TaskProjection &projection =
     task_manager.GetOrderedTask().GetTaskProjection();
 
-  task_manager.SetFactory(TaskBehaviour::FactoryType::AAT);
+  task_manager.SetFactory(TaskFactoryType::AAT);
   AbstractTaskFactory &fact = task_manager.GetFactory();
   const Waypoint *wp;
 
@@ -630,7 +630,7 @@ bool test_task_or(TaskManager& task_manager,
 {
   const Waypoint *wp;
 
-  task_manager.SetFactory(TaskBehaviour::FactoryType::FAI_OR);
+  task_manager.SetFactory(TaskFactoryType::FAI_OR);
   AbstractTaskFactory &fact = task_manager.GetFactory();
 
   task_report(task_manager, "# adding start\n");
@@ -684,7 +684,7 @@ bool test_task_dash(TaskManager& task_manager,
 {
   const Waypoint *wp;
 
-  task_manager.SetFactory(TaskBehaviour::FactoryType::TOURING);
+  task_manager.SetFactory(TaskFactoryType::TOURING);
   AbstractTaskFactory &fact = task_manager.GetFactory();
 
   task_report(task_manager, "# adding start\n");
@@ -728,7 +728,7 @@ bool test_task_fg(TaskManager& task_manager,
 {
   const Waypoint *wp;
 
-  task_manager.SetFactory(TaskBehaviour::FactoryType::FAI_GOAL);
+  task_manager.SetFactory(TaskFactoryType::FAI_GOAL);
   AbstractTaskFactory &fact = task_manager.GetFactory();
 
   task_report(task_manager, "# adding start\n");
@@ -784,7 +784,7 @@ bool test_task_random(TaskManager& task_manager,
 
   OrderedTaskPoint *tp;
 
-  task_manager.SetFactory(TaskBehaviour::FactoryType::MIXED);
+  task_manager.SetFactory(TaskFactoryType::MIXED);
   AbstractTaskFactory &fact = task_manager.GetFactory();
 
   task_report(task_manager, "# adding start\n");
@@ -857,17 +857,17 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
 
   switch (rand() %3) {
   case 0:
-    task_manager.SetFactory(TaskBehaviour::FactoryType::AAT);
+    task_manager.SetFactory(TaskFactoryType::AAT);
     strcpy(tskType,"AAT");
     test_note("# creating random AAT task\n");
     break;
   case 1:
-    task_manager.SetFactory(TaskBehaviour::FactoryType::RACING);
+    task_manager.SetFactory(TaskFactoryType::RACING);
     strcpy(tskType,"RT");
     test_note("# creating random RT task\n");
     break;
   case 2:
-    task_manager.SetFactory(TaskBehaviour::FactoryType::FAI_GENERAL);
+    task_manager.SetFactory(TaskFactoryType::FAI_GENERAL);
     strcpy(tskType,"FAI");
     test_note("# creating random FAI GENERAL\n");
     break;
@@ -925,7 +925,7 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
     return false;
   }
   if (task_manager.GetOrderedTask().get_factory_type()
-      == TaskBehaviour::FactoryType::FAI_GENERAL)
+      == TaskFactoryType::FAI_GENERAL)
   {
     test_note("# checking OZs for FAI General..\n");
     if (!fact.ValidateFAIOZs())

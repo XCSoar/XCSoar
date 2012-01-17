@@ -250,24 +250,24 @@ Serialiser::height_ref(HeightReferenceType the_height_ref) const
 }
 
 const TCHAR* 
-Serialiser::task_factory_type(TaskBehaviour::FactoryType the_type) const
+Serialiser::task_factory_type(TaskFactoryType the_type) const
 {
   switch(the_type) {
-  case TaskBehaviour::FactoryType::FAI_GENERAL:
+  case TaskFactoryType::FAI_GENERAL:
     return _T("FAIGeneral");
-  case TaskBehaviour::FactoryType::FAI_TRIANGLE:
+  case TaskFactoryType::FAI_TRIANGLE:
     return _T("FAITriangle");
-  case TaskBehaviour::FactoryType::FAI_OR:
+  case TaskFactoryType::FAI_OR:
     return _T("FAIOR");
-  case TaskBehaviour::FactoryType::FAI_GOAL:
+  case TaskFactoryType::FAI_GOAL:
     return _T("FAIGoal");
-  case TaskBehaviour::FactoryType::RACING:
+  case TaskFactoryType::RACING:
     return _T("RT");
-  case TaskBehaviour::FactoryType::AAT:
+  case TaskFactoryType::AAT:
     return _T("AAT");
-  case TaskBehaviour::FactoryType::MIXED:
+  case TaskFactoryType::MIXED:
     return _T("Mixed");
-  case TaskBehaviour::FactoryType::TOURING:
+  case TaskFactoryType::TOURING:
     return _T("Touring");
   }
 

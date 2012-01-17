@@ -29,6 +29,7 @@
 #include "Engine/Route/Config.hpp"
 #include "GlideSolvers/GlideSettings.hpp"
 #include "Util/TypeTraits.hpp"
+#include "Task/Factory/TaskFactoryType.hpp"
 
 struct AircraftState;
 
@@ -74,21 +75,6 @@ struct TaskStartMargins {
  *  Typical uses might be default values, and simple aspects of task behaviour.
  */
 struct TaskBehaviour : public TaskStartMargins {
-  /**
-   * Enumeration of factory types.  This is the set of
-   * types of ordered task that can be created.
-   */
-  enum class FactoryType: uint8_t {
-    FAI_GENERAL = 0,
-    FAI_TRIANGLE,
-    FAI_OR,
-    FAI_GOAL,
-    RACING,
-    AAT,
-    MIXED,
-    TOURING
-  };
-
   GlideSettings glide;
 
   /**
@@ -143,7 +129,7 @@ struct TaskBehaviour : public TaskStartMargins {
   fixed safety_height_arrival;
 
   /** Default task type to use for new tasks */
-  FactoryType task_type_default;
+  TaskFactoryType task_type_default;
 
   /** Default sector info for new ordered task */
   SectorDefaults sector_defaults;

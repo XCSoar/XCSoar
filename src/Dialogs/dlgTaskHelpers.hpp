@@ -31,8 +31,8 @@ Copyright_License {
 
 class SingleWindow;
 
-const TCHAR* OrderedTaskFactoryDescription(TaskBehaviour::FactoryType type);
-const TCHAR* OrderedTaskFactoryName(TaskBehaviour::FactoryType type);
+const TCHAR* OrderedTaskFactoryDescription(TaskFactoryType type);
+const TCHAR* OrderedTaskFactoryName(TaskFactoryType type);
 
 /**
  *
