@@ -24,19 +24,19 @@
 #define ORDEREDTASK_H
 
 #include "Navigation/TaskProjection.hpp"
+#include "Navigation/SearchPointVector.hpp"
 #include "AbstractTask.hpp"
-#include "Task/TaskPoints/StartPoint.hpp"
-#include "Task/TaskPoints/FinishPoint.hpp"
-#include <vector>
-#include "GlideSolvers/MacCready.hpp"
 #include "PathSolvers/TaskDijkstraMin.hpp"
 #include "PathSolvers/TaskDijkstraMax.hpp"
 #include "Task/TaskAdvanceSmart.hpp"
 #include "Task/TaskBehaviour.hpp"
 
 #include <assert.h>
+#include <vector>
 
 class OrderedTaskPoint;
+class StartPoint;
+class FinishPoint;
 class AbstractTaskFactory;
 class Waypoints;
 class AATPoint;

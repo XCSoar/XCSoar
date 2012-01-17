@@ -30,6 +30,7 @@ Copyright_License {
 
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
+#include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 
 #include <assert.h>

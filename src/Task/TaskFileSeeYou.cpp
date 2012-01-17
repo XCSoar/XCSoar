@@ -35,6 +35,8 @@
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/BGAFixedCourseZone.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
+#include "Task/TaskPoints/StartPoint.hpp"
+#include "Task/TaskPoints/FinishPoint.hpp"
 #include "Operation/Operation.hpp"
 #include "Units/System.hpp"
 

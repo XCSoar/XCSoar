@@ -43,6 +43,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
+#include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 #include "Language/Language.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 

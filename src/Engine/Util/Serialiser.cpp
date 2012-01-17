@@ -23,6 +23,8 @@
 #include "Serialiser.hpp"
 #include "Task/OrderedTaskBehaviour.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
+#include "Task/TaskPoints/StartPoint.hpp"
+#include "Task/TaskPoints/FinishPoint.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"

@@ -25,6 +25,8 @@
 
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
+#include "Task/TaskPoints/StartPoint.hpp"
+#include "Task/TaskPoints/FinishPoint.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"

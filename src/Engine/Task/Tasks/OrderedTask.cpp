@@ -24,6 +24,8 @@
 #include "Task/TaskEvents.hpp"
 #include "Task/TaskAdvance.hpp"
 #include "BaseTask/OrderedTaskPoint.hpp"
+#include "Task/TaskPoints/StartPoint.hpp"
+#include "Task/TaskPoints/FinishPoint.hpp"
 #include "TaskSolvers/TaskMacCreadyTravelled.hpp"
 #include "TaskSolvers/TaskMacCreadyRemaining.hpp"
 #include "TaskSolvers/TaskMacCreadyTotal.hpp"

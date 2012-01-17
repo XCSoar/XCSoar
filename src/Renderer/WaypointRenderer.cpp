@@ -39,6 +39,8 @@ Copyright_License {
 #include "Engine/Task/Tasks/TaskSolvers/TaskSolution.hpp"
 #include "Engine/Task/TaskPoints/AATPoint.hpp"
 #include "Engine/Task/TaskPoints/ASTPoint.hpp"
+#include "Engine/Task/TaskPoints/StartPoint.hpp"
+#include "Engine/Task/TaskPoints/FinishPoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
 #include "Screen/Icon.hpp"
