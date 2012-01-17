@@ -883,7 +883,7 @@ OrderedTask::~OrderedTask()
 
   delete active_factory;
 
-#ifdef __clang__
+#if defined(__clang__) || GCC_VERSION >= 40700
   /* no, TaskDijkstra{Min,Max} really don't need a virtual
      destructor */
 #pragma GCC diagnostic push
@@ -893,7 +893,7 @@ OrderedTask::~OrderedTask()
   delete dijkstra_min;
   delete dijkstra_max;
 
-#ifdef __clang__
+#if defined(__clang__) || GCC_VERSION >= 40700
 #pragma GCC diagnostic pop
 #endif
 }
