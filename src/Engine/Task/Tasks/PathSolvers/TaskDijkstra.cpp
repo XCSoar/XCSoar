@@ -92,7 +92,7 @@ TaskDijkstra::add_start_edges(const SearchPoint &currentLocation)
 bool
 TaskDijkstra::run()
 {
-  const bool retval = distance_general();
+  const bool retval = distance_general() && solution_valid;
   if (retval)
     save();
   dijkstra.clear();
