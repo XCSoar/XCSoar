@@ -140,6 +140,8 @@ DeviceDescriptor::Open(OperationEnvironment &env)
     return false;
   }
 
+  reopen_clock.update();
+
   Port *port = OpenPort(config, *this);
   if (port == NULL) {
     TCHAR name_buffer[64];
