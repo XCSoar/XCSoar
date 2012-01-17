@@ -254,7 +254,7 @@ ThermalAssistantWindow::PaintNotCircling(Canvas &canvas) const
 }
 
 void
-ThermalAssistantWindow::OnPaint_buffer(Canvas &canvas)
+ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
 {
   PaintRadarBackground(canvas);
   if (!derived.circling) {

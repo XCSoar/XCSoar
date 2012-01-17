@@ -194,7 +194,7 @@ TargetMapWindow::RenderTrail(Canvas &canvas)
 }
 
 void
-TargetMapWindow::OnPaint_buffer(Canvas &canvas)
+TargetMapWindow::OnPaintBuffer(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   /* enable clipping */

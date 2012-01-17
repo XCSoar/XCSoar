@@ -174,7 +174,7 @@ MapWindow::UpdateWeather()
  * Handles the drawing of the moving map and is called by the DrawThread
  */
 void
-MapWindow::OnPaint_buffer(Canvas &canvas)
+MapWindow::OnPaintBuffer(Canvas &canvas)
 {
 #ifndef ENABLE_OPENGL
   unsigned render_generation = ui_generation;

@@ -40,7 +40,7 @@ private:
 
   /**
    * Is the buffer dirty, i.e. does it need a full repaint with
-   * OnPaint_buffer()?
+   * OnPaintBuffer()?
    */
   bool dirty;
 
@@ -76,7 +76,7 @@ protected:
 
   virtual void OnPaint(Canvas &canvas);
 
-  virtual void OnPaint_buffer(Canvas &canvas) = 0;
+  virtual void OnPaintBuffer(Canvas &canvas) = 0;
 };
 
 #endif

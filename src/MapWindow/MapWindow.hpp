@@ -159,7 +159,7 @@ protected:
 
   /**
    * The #StopWatch used to benchmark the DrawThread,
-   * i.e. OnPaint_buffer().
+   * i.e. OnPaintBuffer().
    */
   ScreenStopWatch draw_sw;
 
@@ -287,7 +287,7 @@ protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height);
 
   virtual void OnPaint(Canvas& canvas);
-  virtual void OnPaint_buffer(Canvas& canvas);
+  virtual void OnPaintBuffer(Canvas& canvas);
 
 private:
   /**

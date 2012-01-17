@@ -113,7 +113,7 @@ protected:
 
 protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height);
-  virtual void OnPaint_buffer(Canvas &canvas);
+  virtual void OnPaintBuffer(Canvas &canvas);
 
 private:
   void RenderZero(Canvas &canvas);

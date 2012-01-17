@@ -70,7 +70,7 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
 }
 
 void
-GaugeVario::OnPaint_buffer(Canvas &canvas)
+GaugeVario::OnPaintBuffer(Canvas &canvas)
 {
   const PixelRect rc = get_client_rect();
   const UPixelScalar width = rc.right - rc.left;

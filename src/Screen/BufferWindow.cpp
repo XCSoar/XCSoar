@@ -61,11 +61,11 @@ BufferWindow::OnPaint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   /* paint directly on OpenGL */
-  OnPaint_buffer(canvas);
+  OnPaintBuffer(canvas);
 #else
   if (dirty) {
     dirty = false;
-    OnPaint_buffer(buffer);
+    OnPaintBuffer(buffer);
   }
 
   canvas.copy(buffer);

@@ -213,7 +213,7 @@ protected:
   virtual bool OnKeyDown(unsigned key_code);
   virtual bool OnCancelMode();
   virtual void OnPaint(Canvas &canvas);
-  virtual void OnPaint_buffer(Canvas& canvas);
+  virtual void OnPaintBuffer(Canvas& canvas);
   bool OnTimer(WindowTimer &timer);
 
 private:

@@ -101,7 +101,7 @@ DoubleBufferWindow::OnPaint(Canvas &canvas)
   if (dirty) {
     dirty = false;
     buffer.Begin(canvas);
-    OnPaint_buffer(buffer);
+    OnPaintBuffer(buffer);
     buffer.Commit(canvas);
   } else
     buffer.CopyTo(canvas);
