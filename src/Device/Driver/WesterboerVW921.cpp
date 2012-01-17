@@ -170,9 +170,6 @@ WesterboerVW921Device::SentenceReceived(unsigned sentence_number,
   case 2:
     SentenceTwo(data, length, info);
     break;
-  case 5:
-    SentenceFive(data, length, info);
-    break;
   default:
     break;
   }
@@ -280,24 +277,6 @@ WesterboerVW921Device::SentenceTwo(const void *_data, size_t length,
 
   uint8_t mc_value = *(data + 13);
   info.settings.ProvideMacCready(fixed(mc_value) / 2, info.clock);
-}
-
-void
-WesterboerVW921Device::SentenceFive(const void *_data, size_t length,
-                                    struct NMEAInfo &info)
-{
-  const uint8_t *data = (const uint8_t *)_data;
-
-  /*
-  Received sentence #5 with length = 30
-  24 77 1e 6b 05 ff ff 00   41 00 00 80 62 d5 b1 7d
-  5a 0d c9 08 53 74 61 72   74 50 6b 74 00 00
-  */
-
-  info.location.latitude = Angle::Radians(fixed(ReadFloat(data + 11)));
-  info.location.longitude = Angle::Radians(fixed(ReadFloat(data + 15)));
-
-  info.location_available.Update(info.clock);
 }
 
 static Device *
