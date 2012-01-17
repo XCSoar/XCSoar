@@ -177,7 +177,6 @@ ContestDijkstra::Reset()
   dijkstra.clear();
   solution_valid = false;
   clear_trace();
-  solution[num_stages - 1].Clear();
 
   AbstractContest::Reset();
 
@@ -194,13 +193,10 @@ ContestDijkstra::CalcTime() const
 {
   assert(num_stages <= MAX_STAGES);
 
-  assert(!solution[num_stages-1].IsDefined() ||
-         !solution[num_stages - 1].IsOlderThan(solution[0]));
-
-  if (!solution[num_stages-1].IsDefined())
+  if (!solution_valid)
     return fixed_zero;
-  else 
-    return fixed(solution[num_stages - 1].DeltaTime(solution[0]));
+
+  return fixed(solution[num_stages - 1].DeltaTime(solution[0]));
 }
 
 fixed
