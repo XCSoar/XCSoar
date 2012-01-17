@@ -156,7 +156,7 @@ struct DeviceConfig {
   }
 
   bool UsesTCPPort() const {
-    return UsesDriver(port_type);
+    return UsesTCPPort(port_type);
   }
 
   bool IsDriver(const TCHAR *name) const {
