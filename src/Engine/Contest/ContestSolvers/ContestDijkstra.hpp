@@ -165,7 +165,7 @@ protected:
    */
   gcc_pure
   unsigned distance(const ScanTaskPoint &curNode,
-                    const TracePoint &currentLocation) const {
+                    const SearchPoint &currentLocation) const {
     return GetPointFast(curNode).flat_distance(currentLocation);
   }
 

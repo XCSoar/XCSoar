@@ -110,11 +110,11 @@ OLCTriangle::path_closed() const
 
 class TriangleSecondLeg {
   const bool is_fai;
-  const TracePoint a, b;
+  const SearchPoint a, b;
   const unsigned df_1;
 
 public:
-  TriangleSecondLeg(bool _fai, const TracePoint &_a, const TracePoint &_b)
+  TriangleSecondLeg(bool _fai, const SearchPoint &_a, const SearchPoint &_b)
     :is_fai(_fai), a(_a), b(_b), df_1(a.flat_distance(b)) {}
 
   struct Result {
@@ -125,11 +125,11 @@ public:
   };
 
   gcc_pure
-  Result Calculate(const TracePoint &c, unsigned best) const;
+  Result Calculate(const SearchPoint &c, unsigned best) const;
 };
 
 TriangleSecondLeg::Result
-TriangleSecondLeg::Calculate(const TracePoint &c, unsigned best) const
+TriangleSecondLeg::Calculate(const SearchPoint &c, unsigned best) const
 {
   // this is a heuristic to remove invalid triangles
   // we do as much of this in flat projection for speed
