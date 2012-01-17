@@ -51,13 +51,20 @@ public:
   }
 
   /**
+   * Updates the clock.
+   */
+  void Update(fixed now) {
+    last = now;
+  }
+
+  /**
    * Checks whether the GPS time was reversed
    * @param now Current time
    * @return True if time has been reversed, False otherwise
    */
   bool check_reverse(const fixed now) {
     if (now<last) {
-      last=now;
+      Update(now);
       return true;
     } else {
       return false;
@@ -89,7 +96,7 @@ public:
     // check if time has advanced past dt
     if (now-last>=dt) {
       fixed dt=now-last;
-      last= now;
+      Update(now);
       return dt;
     } else {
       return fixed_zero;
@@ -108,7 +115,7 @@ public:
       return false;
     }
     if (now >= last + dt) {
-      last = now;
+      Update(now);
       return true;
     } else
       return false;
