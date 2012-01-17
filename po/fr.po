@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-10 21:28+0000\n"
-"X-Generator: Launchpad (build 14640)\n"
+"X-Launchpad-Export-Date: 2012-01-17 13:56+0000\n"
+"X-Generator: Launchpad (build 14676)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -5120,11 +5120,11 @@ msgstr "AGL"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:93
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:52
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Reference AGL for start maximum height rule (above start point)."
 msgstr ""
 "Altitude QFE de référence pour la règle de hauteur maximale de départ (par "
-"rapport au point de départ)."
+"rapport au point de départ)"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:94
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:112
@@ -5136,11 +5136,11 @@ msgstr "MSL"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:94
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:53
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Reference MSL for start maximum height rule (above sea level)."
 msgstr ""
 "Altitude QNH de référence pour la règle de hauteur maximale de départ (par "
-"rapport au niveau de la mer)."
+"rapport au niveau de la mer)"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:97
 #: Data/Dialogs/pnlTaskProperties_L.xml:21
@@ -5166,19 +5166,19 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:111
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:59
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Reference AGL for finish minimum height rule (above finish point)."
 msgstr ""
 "Altitude QFE de référence pour la règle de hauteur minimum d'arrivée (par "
-"rapport au point d'arrivée)."
+"rapport au point d'arrivée)"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:112
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:60
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Reference MSL for finish minimum height rule (above sea level)."
 msgstr ""
 "Altitude QNH de référence pour la règle de hauteur minimum d'arrivée (par "
-"rapport au niveau de la mer)."
+"rapport au niveau de la mer)"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:115
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
@@ -5521,17 +5521,17 @@ msgstr "Aucun nom de waypoint n'est affiché."
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:143
-#, fuzzy
 msgid "Label visibility"
-msgstr "Visibilité étiquettes"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:144
+#, fuzzy
 msgid ""
 "Determines what waypoint labels are displayed for each waypoint (space "
 "permitting)."
 msgstr ""
 "Détermine quelle étiquette est affichée pour chaque point de virage (selon "
-"l'espace disponible)."
+"l'espace disponible)"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:148
 #, no-c-format
@@ -5624,6 +5624,7 @@ msgid "Scale runway length"
 msgstr "Longueur de piste à l'échelle"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:180
+#, fuzzy
 msgid ""
 "[Off] Display fixed length for runways.\n"
 "[On] Scale displayed runway length based on real length."
@@ -5798,16 +5799,19 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:80
+#, fuzzy
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr "Règles FAI, trajet jusqu'à deux points de virage et retour."
+msgstr "Règles FAI, trajet jusqu'à deux points de virage et retour"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:82
+#, fuzzy
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr "Règles FAI, trajet aller-retour jusqu'à un unique point de virage."
+msgstr "Règles FAI, trajet aller-retour jusqu'à un unique point de virage"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:84
+#, fuzzy
 msgid "FAI rules, path from start to a goal destination."
-msgstr "Règles FAI, aller simple d'un point de départ à un objectif."
+msgstr "Règles FAI, aller simple d'un point de départ à un objectif"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:86
 msgid ""
@@ -5816,12 +5820,13 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:89
+#, fuzzy
 msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
 msgstr ""
 "Circuit de vitesse avec un mélange de zones affectées et de points de "
-"virage, un temps minimum s'applique au circuit."
+"virage, un temps minimum s'applique au circuit"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:91
 msgid ""
@@ -5905,6 +5910,7 @@ msgid "BGA Start Sector"
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:280
+#, fuzzy
 msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
 "start."
@@ -5914,14 +5920,14 @@ msgstr "Un secteur de 90 degrés et de 1km de rayon. Couper le bord pour finir."
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
 msgstr ""
-"Une ligne droite. Couper la ligne à partir de l'intérieur de la zone pour le "
-"départ."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:284
+#, fuzzy
 msgid "A cylinder.  Exit area to start."
-msgstr "Un cylindre. Sortir de la zone pour démarrer."
+msgstr "Un cylindre. Sortir de la zone pour démarrer"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:286
+#, fuzzy
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start."
 msgstr ""
@@ -5929,6 +5935,7 @@ msgstr ""
 "n'importe quelle direction pour démarrer."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:288
+#, fuzzy
 msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point."
@@ -5973,16 +5980,19 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:310
+#, fuzzy
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
 msgstr "Un secteur de 90 degrés et de 1km de rayon. Couper le bord pour finir."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:312
+#, fuzzy
 msgid "Cross finish gate line into area to finish."
-msgstr "Couper la ligne vers l'intérieur de la zone pour finir."
+msgstr "Couper la ligne vers l'intérieur de la zone pour finir"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:314
+#, fuzzy
 msgid "Enter cylinder to finish."
-msgstr "Entrer dans le cylindre pour finir."
+msgstr "Entrer dans le cylindre pour finir"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:326
 msgid "FAI start quadrant"
