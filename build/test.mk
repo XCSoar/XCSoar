@@ -644,6 +644,7 @@ DEBUG_PROGRAM_NAMES = \
 	DebugDisplay \
 	RunFlarmUtils \
 	RunTCPListener \
+	TaskInfo \
 	IGC2NMEA
 
 ifeq ($(TARGET),UNIX)
@@ -2009,6 +2010,12 @@ endif
 endif
 
 $(eval $(call link-program,FeedTCPServer,FEED_TCP_SERVER))
+
+TASK_INFO_SOURCES = \
+	$(SRC)/xmlParser.cpp \
+	$(TEST_SRC_DIR)/TaskInfo.cpp
+TASK_INFO_DEPENDS = ENGINE IO MATH UTIL
+$(eval $(call link-program,TaskInfo,TASK_INFO))
 
 IGC2NMEA_SOURCES = \
 	$(SRC)/Replay/IgcReplay.cpp \
