@@ -143,7 +143,7 @@ DataFieldInteger::CreateComboList() const
   unsigned surrounding_items = ComboList::MAX_SIZE / 2 - 2;
 
   /* the value aligned to mStep */
-  int corrected_value = ((mValue - mMin) / mStep) * mStep;
+  int corrected_value = ((mValue - mMin) / mStep) * mStep + mMin;
 
   int first = corrected_value - (int)surrounding_items * mStep;
   if (first > mMin)
