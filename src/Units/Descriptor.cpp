@@ -57,5 +57,9 @@ static_assert(ARRAY_SIZE(Units::unit_descriptors) == (size_t)Unit::COUNT,
 const TCHAR *
 Units::GetUnitName(Unit unit)
 {
-  return unit_descriptors[(unsigned)unit].name;
+  const unsigned i = (unsigned)unit;
+  assert(i < ARRAY_SIZE(unit_descriptors));
+  assert(unit_descriptors[i].name != NULL);
+
+  return unit_descriptors[i].name;
 }
