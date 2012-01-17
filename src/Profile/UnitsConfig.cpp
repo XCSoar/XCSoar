@@ -45,7 +45,7 @@ ImportSpeedUnit(unsigned tmp)
 {
   switch (tmp) {
   case 0:
-    return Unit::STATUTE_MILESPerHour;
+    return Unit::STATUTE_MILES_PER_HOUR;
 
   case 1:
     return Unit::KNOTS;
@@ -70,7 +70,7 @@ static bool
 ValidSpeedUnit(Unit unit)
 {
   return unit == Unit::KILOMETER_PER_HOUR || unit == Unit::KNOTS ||
-    unit == Unit::STATUTE_MILESPerHour || unit == Unit::METER_PER_SECOND ||
+    unit == Unit::STATUTE_MILES_PER_HOUR || unit == Unit::METER_PER_SECOND ||
     unit == Unit::FEET_PER_MINUTE;
 }
 

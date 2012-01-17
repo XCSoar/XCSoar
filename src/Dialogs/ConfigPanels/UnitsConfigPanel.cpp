@@ -152,7 +152,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   static const TCHAR * units_speed_help = N_("Units used for airspeed and ground speed.  "
       "A separate unit is available for task speeds.");
   static const StaticEnumChoice  units_speed_list[] = {
-    { (unsigned)Unit::STATUTE_MILESPerHour,  _T("mph"), units_speed_help },
+    { (unsigned)Unit::STATUTE_MILES_PER_HOUR,  _T("mph"), units_speed_help },
     { (unsigned)Unit::KNOTS,                N_("knots"), units_speed_help },
     { (unsigned)Unit::KILOMETER_PER_HOUR,     _T("km/h"), units_speed_help },
     { 0 }
@@ -200,7 +200,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   static const TCHAR *units_taskspeed_help = _("Units used for task speeds.");
   static const StaticEnumChoice  units_taskspeed_list[] = {
-    { (unsigned)Unit::STATUTE_MILESPerHour,  _T("mph"), units_taskspeed_help },
+    { (unsigned)Unit::STATUTE_MILES_PER_HOUR,  _T("mph"), units_taskspeed_help },
     { (unsigned)Unit::KNOTS,                N_("knots"), units_taskspeed_help },
     { (unsigned)Unit::KILOMETER_PER_HOUR,     _T("km/h"), units_taskspeed_help },
     { 0 }

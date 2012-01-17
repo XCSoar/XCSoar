@@ -63,7 +63,7 @@ static gcc_constexpr_data UnitStoreItem Presets[] =
     Unit::KNOTS,
     Unit::KNOTS,
     Unit::KNOTS,
-    Unit::STATUTE_MILESPerHour,
+    Unit::STATUTE_MILES_PER_HOUR,
     Unit::INCH_MERCURY,
     CoordinateFormat::DDMMSS,
   } },

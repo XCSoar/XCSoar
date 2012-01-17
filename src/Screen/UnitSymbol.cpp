@@ -49,7 +49,7 @@ LoadUnitSymbols()
   unit_symbols[(unsigned)Unit::STATUTE_MILES].load(IDB_UNIT_SM, 5, 11);
   unit_symbols[(unsigned)Unit::KILOMETER_PER_HOUR].load(IDB_UNIT_KMH, 10, 11);
   unit_symbols[(unsigned)Unit::KNOTS].load(IDB_UNIT_KT, 5, 11);
-  unit_symbols[(unsigned)Unit::STATUTE_MILESPerHour].load(IDB_UNIT_MPH, 10, 11);
+  unit_symbols[(unsigned)Unit::STATUTE_MILES_PER_HOUR].load(IDB_UNIT_MPH, 10, 11);
   unit_symbols[(unsigned)Unit::METER_PER_SECOND].load(IDB_UNIT_MS, 5, 11);
   unit_symbols[(unsigned)Unit::FEET_PER_MINUTE].load(IDB_UNIT_FPM, 5, 11);
   unit_symbols[(unsigned)Unit::METER].load(IDB_UNIT_M, 5, 11);
