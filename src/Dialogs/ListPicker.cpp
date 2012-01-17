@@ -141,7 +141,7 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
     help_button->hide();
 
   if (num_items == 0) {
-    WndButton *select_button = (WndButton *)wf->FindByName(_T("cmdClose"));
+    WndButton *select_button = (WndButton *)wf->FindByName(_T("SelectButton"));
     assert(select_button != NULL);
     select_button->set_enabled(false);
   }
