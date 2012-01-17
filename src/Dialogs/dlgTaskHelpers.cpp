@@ -402,37 +402,26 @@ TaskValidationError(AbstractTaskFactory::TaskValidationErrorType type)
   switch (type) {
   case AbstractTaskFactory::NO_VALID_START:
     return _("No valid start.\n");
-    break;
   case AbstractTaskFactory::NO_VALID_FINISH:
     return _("No valid finish.\n");
-    break;
   case AbstractTaskFactory::TASK_NOT_CLOSED:
     return _("Task not closed.\n");
-    break;
   case AbstractTaskFactory::TASK_NOT_HOMOGENEOUS:
     return _("All turnpoints not the same type.\n");
-    break;
   case AbstractTaskFactory::INCORRECT_NUMBER_TURNPOINTS:
     return _("Incorrect number of turnpoints.\n");
-    break;
   case AbstractTaskFactory::EXCEEDS_MAX_TURNPOINTS:
     return _("Too many turnpoints.\n");
-    break;
   case AbstractTaskFactory::UNDER_MIN_TURNPOINTS:
     return _("Not enough turnpoints.\n");
-    break;
   case AbstractTaskFactory::TURNPOINTS_NOT_UNIQUE:
     return _("Turnpoints not unique.\n");
-    break;
   case AbstractTaskFactory::INVALID_FAI_TRIANGLE_GEOMETRY:
     return _("Invalid FAI triangle shape.\n");
-    break;
   case AbstractTaskFactory::EMPTY_TASK:
     return _("Empty task.\n");
-    break;
   case AbstractTaskFactory::NON_FAI_OZS:
     return _("non-FAI turn points");
-    break;
   }
 
   return _T("");
