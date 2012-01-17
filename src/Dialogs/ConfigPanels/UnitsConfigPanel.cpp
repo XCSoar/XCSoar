@@ -54,12 +54,9 @@ enum ControlIndex {
 static const TCHAR *custom_preset_label = N_("Custom");
 
 class UnitsConfigPanel : public RowFormWidget {
-private:
-  bool loading, checking;
-
 public:
-  UnitsConfigPanel() : RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)),
-                          loading(false), checking(false) {}
+  UnitsConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
@@ -74,35 +71,15 @@ static UnitsConfigPanel *instance;
 void
 UnitsConfigPanel::UpdateUnitFields(const UnitSetting &units)
 {
-  if (checking)
-    return;
-
-  loading = true;
-
-  GetDataField(UnitsSpeed).SetAsInteger((unsigned)units.speed_unit);
-  GetControl(UnitsSpeed).RefreshDisplay();
-
-  GetDataField(UnitsDistance).SetAsInteger((unsigned)units.distance_unit);
-  GetControl(UnitsDistance).RefreshDisplay();
-
-  GetDataField(UnitsLift).SetAsInteger((unsigned)units.vertical_speed_unit);
-  GetControl(UnitsLift).RefreshDisplay();
-
-  GetDataField(UnitsAltitude).SetAsInteger((unsigned)units.altitude_unit);
-  GetControl(UnitsAltitude).RefreshDisplay();
-
-  GetDataField(UnitsTemperature).SetAsInteger((unsigned)units.temperature_unit);
-  GetControl(UnitsTemperature).RefreshDisplay();
-
-  GetDataField(UnitsTaskSpeed).SetAsInteger((unsigned)units.task_speed_unit);
-  GetControl(UnitsTaskSpeed).RefreshDisplay();
-
-  GetDataField(UnitsPressure).SetAsInteger((unsigned)units.pressure_unit);
-  GetControl(UnitsPressure).RefreshDisplay();
+  LoadValueEnum(UnitsSpeed, units.speed_unit);
+  LoadValueEnum(UnitsDistance, units.distance_unit);
+  LoadValueEnum(UnitsLift, units.vertical_speed_unit);
+  LoadValueEnum(UnitsAltitude, units.altitude_unit);
+  LoadValueEnum(UnitsTemperature, units.temperature_unit);
+  LoadValueEnum(UnitsTaskSpeed, units.task_speed_unit);
+  LoadValueEnum(UnitsPressure, units.pressure_unit);
 
   // Ignore the coord.format for the preset selection.
-
-  loading = false;
 }
 
 static void
@@ -124,21 +101,16 @@ UnitsConfigPanel::PresetCheck(DataField::DataAccessKind_t mode)
   {
     UnitSetting current_dlg_set;
 
-    if (!loading) {
-      current_dlg_set.speed_unit = (Unit)GetValueInteger((unsigned)UnitsSpeed);
-      current_dlg_set.wind_speed_unit = current_dlg_set.speed_unit;
-      current_dlg_set.distance_unit = (Unit)GetValueInteger((unsigned)UnitsDistance);
-      current_dlg_set.vertical_speed_unit = (Unit)GetValueInteger((unsigned)UnitsLift);
-      current_dlg_set.altitude_unit = (Unit)GetValueInteger((unsigned)UnitsAltitude);
-      current_dlg_set.temperature_unit = (Unit)GetValueInteger((unsigned)UnitsTemperature);
-      current_dlg_set.task_speed_unit = (Unit)GetValueInteger((unsigned)UnitsTaskSpeed);
-      current_dlg_set.pressure_unit = (Unit)GetValueInteger((unsigned)UnitsPressure);
+    current_dlg_set.speed_unit = (Unit)GetValueInteger((unsigned)UnitsSpeed);
+    current_dlg_set.wind_speed_unit = current_dlg_set.speed_unit;
+    current_dlg_set.distance_unit = (Unit)GetValueInteger((unsigned)UnitsDistance);
+    current_dlg_set.vertical_speed_unit = (Unit)GetValueInteger((unsigned)UnitsLift);
+    current_dlg_set.altitude_unit = (Unit)GetValueInteger((unsigned)UnitsAltitude);
+    current_dlg_set.temperature_unit = (Unit)GetValueInteger((unsigned)UnitsTemperature);
+    current_dlg_set.task_speed_unit = (Unit)GetValueInteger((unsigned)UnitsTaskSpeed);
+    current_dlg_set.pressure_unit = (Unit)GetValueInteger((unsigned)UnitsPressure);
 
-      checking = true;
-      GetDataField(UnitsPreset).SetAsInteger(Units::Store::EqualsPresetUnits(current_dlg_set));
-      GetControl(UnitsPreset).RefreshDisplay();
-      checking = false;
-    }
+    LoadValueEnum(UnitsPreset, Units::Store::EqualsPresetUnits(current_dlg_set));
     break;
   }
 
@@ -171,9 +143,8 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   for (unsigned i = 0; i < len; i++)
     df.addEnumText(Units::Store::GetName(i), i+1, preset_help);
 
-  df.SetAsInteger(Units::Store::EqualsPresetUnits(config));
+  LoadValueEnum(UnitsPreset, Units::Store::EqualsPresetUnits(config));
   wp->GetDataField()->SetDataAccessCallback(OnUnitsPreset);
-  wp->RefreshDisplay();
 
   AddSpacer();
 

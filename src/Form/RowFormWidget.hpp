@@ -223,6 +223,13 @@ public:
     return *df;
   }
 
+  void LoadValueEnum(unsigned i, int value);
+
+  template<typename T>
+  void LoadValueEnum(unsigned i, T value) {
+    LoadValueEnum(i, (int)value);
+  }
+
   void LoadValue(unsigned i, fixed value);
   void LoadValue(unsigned i, fixed value, UnitGroup unit_group);
 

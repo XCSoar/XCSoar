@@ -321,6 +321,16 @@ RowFormWidget::AddFileReader(const TCHAR *label, const TCHAR *help,
 }
 
 void
+RowFormWidget::LoadValueEnum(unsigned i, int value)
+{
+  WndProperty &control = GetControl(i);
+  DataFieldEnum &df = *(DataFieldEnum *)control.GetDataField();
+  assert(df.GetType() == DataField::TYPE_ENUM);
+  df.Set(value);
+  control.RefreshDisplay();
+}
+
+void
 RowFormWidget::LoadValue(unsigned i, fixed value)
 {
   WndProperty &control = GetControl(i);
