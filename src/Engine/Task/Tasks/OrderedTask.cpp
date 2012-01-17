@@ -51,6 +51,8 @@
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Task/TaskStats/TaskSummary.hpp"
+#include "PathSolvers/TaskDijkstraMin.hpp"
+#include "PathSolvers/TaskDijkstraMax.hpp"
 
 static void
 SetTaskBehaviour(OrderedTask::OrderedTaskPointVector &vector,
@@ -152,8 +154,11 @@ fixed
 OrderedTask::scan_distance_min(const GeoPoint &location, bool full)
 {
   if (full) {
+    if (dijkstra_min == NULL)
+      dijkstra_min = new TaskDijkstraMin(*this);
+
     SearchPoint ac(location, task_projection);
-    dijkstra_min.distance_min(ac);
+    dijkstra_min->distance_min(ac);
     m_location_min_last = location;
   }
   return taskpoint_start->scan_distance_min();
@@ -175,7 +180,10 @@ OrderedTask::scan_distance_max()
     active_task_point--;
     taskpoint_start->scan_active(task_points[active_task_point]);
   }
-  dijkstra_max.distance_max();
+
+  if (dijkstra_max == NULL)
+    dijkstra_max = new TaskDijkstraMax(*this);
+  dijkstra_max->distance_max();
 
   if (atp) {
     active_task_point = atp;
@@ -874,6 +882,20 @@ OrderedTask::~OrderedTask()
   }
 
   delete active_factory;
+
+#ifdef __clang__
+  /* no, TaskDijkstra{Min,Max} really don't need a virtual
+     destructor */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+#endif
+
+  delete dijkstra_min;
+  delete dijkstra_max;
+
+#ifdef __clang__
+#pragma GCC diagnostic pop
+#endif
 }
 
 OrderedTask::OrderedTask(TaskEvents &te, 
@@ -885,7 +907,7 @@ OrderedTask::OrderedTask(TaskEvents &te,
   active_factory(NULL),
   m_ordered_behaviour(tb.ordered_defaults),
   task_advance(m_ordered_behaviour),
-  dijkstra_min(*this), dijkstra_max(*this)
+  dijkstra_min(NULL), dijkstra_max(NULL)
 {
   active_factory = new RTTaskFactory(*this, task_behaviour);
   active_factory->UpdateOrderedTaskBehaviour(m_ordered_behaviour);

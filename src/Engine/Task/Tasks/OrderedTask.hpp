@@ -26,8 +26,6 @@
 #include "Navigation/TaskProjection.hpp"
 #include "Navigation/SearchPointVector.hpp"
 #include "AbstractTask.hpp"
-#include "PathSolvers/TaskDijkstraMin.hpp"
-#include "PathSolvers/TaskDijkstraMax.hpp"
 #include "Task/TaskAdvanceSmart.hpp"
 #include "Task/TaskBehaviour.hpp"
 
@@ -38,6 +36,8 @@ class OrderedTaskPoint;
 class StartPoint;
 class FinishPoint;
 class AbstractTaskFactory;
+class TaskDijkstraMin;
+class TaskDijkstraMax;
 class Waypoints;
 class AATPoint;
 class FlatBoundingBox;
@@ -82,8 +82,8 @@ private:
   AbstractTaskFactory* active_factory;
   OrderedTaskBehaviour m_ordered_behaviour;
   TaskAdvanceSmart task_advance;
-  TaskDijkstraMin dijkstra_min;
-  TaskDijkstraMax dijkstra_max;
+  TaskDijkstraMin *dijkstra_min;
+  TaskDijkstraMax *dijkstra_max;
 
 public:
   /** 
