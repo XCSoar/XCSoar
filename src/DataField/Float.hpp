@@ -86,7 +86,7 @@ public:
   virtual void SetAsString(const TCHAR *Value);
 
 protected:
-  ComboList *CreateComboListStepping();
+  void AppendComboValue(ComboList &combo_list, fixed value) const;
 };
 
 #endif

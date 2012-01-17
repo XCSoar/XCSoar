@@ -141,9 +141,6 @@ DataFieldFloat::SpeedUp(bool keyup)
   if (IsAltair())
     return fixed_one;
 
-  if (GetDisableSpeedUp() == true)
-    return fixed_one;
-
   if (keyup != DataFieldKeyUp) {
     mSpeedup = 0;
     DataFieldKeyUp = keyup;
@@ -171,131 +168,59 @@ DataFieldFloat::SetFromCombo(int iDataFieldIndex, TCHAR *sValue)
   SetAsString(sValue);
 }
 
+void
+DataFieldFloat::AppendComboValue(ComboList &combo_list, fixed value) const
+{
+  TCHAR a[edit_format.MAX_SIZE], b[display_format.MAX_SIZE];
+  _stprintf(a, edit_format, (double)value);
+  _stprintf(b, display_format, (double)value, unit.c_str());
+  combo_list.Append(combo_list.size(), a, b);
+}
+
 ComboList *
 DataFieldFloat::CreateComboList() const
 {
-  DataFieldFloat clone(*this);
-  return clone.CreateComboListStepping();
-}
-
-enum { ComboPopupITEMMAX = 100 };
-
-ComboList *
-DataFieldFloat::CreateComboListStepping()
-{
-  // for DataFieldInteger and DataFieldFloat
-  // builds ComboPopupItemList[] by calling CreateItem for each item in list
-  // sets ComboPopupItemSavedIndex (global)
-  // returns ComboPopupItemCount
-  const fixed ComboListInitValue(-99999);
-  const fixed ComboFloatPrec(0.0001); //rounds float errors to this precision
-
-  fixed fCurrent = ComboListInitValue;
-  fixed fLast = ComboListInitValue;
-
-  int iSelectedIndex = -1;
-
-  SetDisableSpeedUp(true);
-  SetDetachGUI(true); // disable display of inc/dec/change values
-
-  // get step direction for int & float so we can detect if we skipped the value while iterating later
-  TCHAR PropertyValueSaved[ComboPopupITEMMAX];
-  TCHAR PropertyValueSavedFormatted[ComboPopupITEMMAX];
-  CopyString(PropertyValueSaved, false);
-  CopyString(PropertyValueSavedFormatted, true);
-
-  const fixed fSavedValue = GetAsFixed();
-  Inc();
-  const fixed fBeforeDec = GetAsFixed();
-  Dec();
-  const fixed fAfterDec = GetAsFixed();
-
-  // for integer & float step may be negative
-  const int iStepDirection = fAfterDec < fBeforeDec ? 1 : -1;
-
-  // reset datafield to top of list (or for large floats, away from selected
-  // item so it will be in the middle)
-  int iListCount;
-  for (iListCount = 0; iListCount < ComboList::MAX_SIZE / 2; iListCount++) {
-    // for floats, go half way down only
-    Dec();
-    const fixed fNext = GetAsFixed();
-
-    if (fabs(fNext - fCurrent) < ComboFloatPrec) // we're at start of the list
-      break;
-    if (fabs(fNext - fLast) < ComboFloatPrec) // don't repeat Yes/No/etc  (is this needed w/out Bool?)
-      break;
-
-    fLast = fCurrent;
-    fCurrent = fNext;
-  }
-
-  fCurrent = ComboListInitValue;
-  fLast = ComboListInitValue;
-
-  fCurrent = GetAsFixed();
-
   ComboList *combo_list = new ComboList();
 
-  // if we stopped before hitting start of list create <<Less>> value at top of list
-  if (iListCount == ComboList::MAX_SIZE / 2) {
-    // this data index item is checked on close of dialog
+  /* how many items before and after the current value? */
+  unsigned surrounding_items = ComboList::MAX_SIZE / 2 - 2;
+
+  /* the value aligned to mStep */
+  fixed corrected_value = int((mValue - mMin) / mStep) * mStep + mMin;
+
+  fixed first = corrected_value - surrounding_items * mStep;
+  if (first > mMin)
+    /* there are values before "first" - give the user a choice */
     combo_list->Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
-  }
+  else if (first < mMin)
+    first = mMin;
 
-  // now we're at the beginning of the list, so load forward until end
-  for (iListCount = 0; iListCount < ComboList::MAX_SIZE - 3; iListCount++) {
-    // stop at LISTMAX-3 b/c it may make an additional item if it's "off step", and
-    // potentially two more items for <<More>> and << Less>>
+  fixed last = std::min(first + surrounding_items * mStep * 2, mMax);
 
-    // test if we've stepped over the selected value which was not a multiple of the "step"
-    if (iSelectedIndex == -1) {
-      // not found yet
-      if (iStepDirection * GetAsFixed() >
-          (fSavedValue + ComboFloatPrec * iStepDirection)) {
-        // step was too large, we skipped the selected value, so add it now
-        iSelectedIndex =
-          combo_list->Append(0, PropertyValueSaved,
-                             PropertyValueSavedFormatted);
-      }
+  bool found_current = false;
+  for (fixed i = first; i <= last; i += mStep) {
+    if (!found_current && mValue <= i) {
+      if (mValue < i)
+        /* the current value is not listed - insert it here */
+        AppendComboValue(*combo_list, mValue);
+
+      combo_list->ComboPopupItemSavedIndex = combo_list->size();
+      found_current = true;
     }
 
-    if (iSelectedIndex == -1 && fabs(fCurrent - fSavedValue) < ComboFloatPrec) {
-      // selected item index
-      iSelectedIndex = combo_list->size();
-    }
-
-    TCHAR sTemp[ComboPopupITEMMAX];
-    CopyString(sTemp, true); // can't call GetAsString & GetAsStringFormatted together (same output buffer)
-    combo_list->Append(0, GetAsString(), sTemp);
-
-    Inc();
-    const fixed fNext = GetAsFixed();
-
-    if (fabs(fNext - fCurrent) < ComboFloatPrec)
-      // we're at start of the list
-      break;
-
-    if ((fabs(fNext - fLast) < ComboFloatPrec) && combo_list->size() > 0)
-      //we're at the end of the range
-      break;
-
-    fLast = fCurrent;
-    fCurrent = fNext;
+    AppendComboValue(*combo_list, i);
   }
 
-  // if we stopped before hitting end of list create <<More>> value at end of list
-  if (iListCount == ComboList::MAX_SIZE - 3) {
-    // this data index item is checked on close of dialog
+  if (mValue > last) {
+    /* the current value out of range - append it here */
+    last = mValue;
+    AppendComboValue(*combo_list, mValue);
+    combo_list->ComboPopupItemSavedIndex = combo_list->size();
+  }
+
+  if (last < mMax)
+    /* there are values after "last" - give the user a choice */
     combo_list->Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
-  }
-
-  SetDisableSpeedUp(false);
-  SetDetachGUI(false); // disable dispaly of inc/dec/change values
-
-  Set(fSavedValue);
-
-  combo_list->ComboPopupItemSavedIndex = iSelectedIndex;
 
   return combo_list;
 }

@@ -61,7 +61,6 @@ protected:
 
 private:
   int mUsageCounter;
-  bool mDisableSpeedup;
   bool mDetachGUI;
 
 public:
@@ -107,9 +106,6 @@ public:
   }
   virtual void EnableItemHelp(bool value) {};
 
-  // allows combolist to iterate all values
-  void SetDisableSpeedUp(bool bDisable) { mDisableSpeedup = bDisable; }
-  bool GetDisableSpeedUp(void) { return mDisableSpeedup; }
   // allows combolist to iterate all values w/out triggering external events
   void SetDetachGUI(bool bDetachGUI) { mDetachGUI = bDetachGUI; }
   bool GetDetachGUI(void) { return mDetachGUI; }
