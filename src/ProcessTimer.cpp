@@ -225,8 +225,8 @@ BallastDumpProcessTimer()
     return;
   }
 
-  // only update every 5 seconds to stop flooding the devices
-  static GPSClock ballast_clock(fixed(5));
+  // only update once every second
+  static GPSClock ballast_clock(fixed_one);
 
   const NMEAInfo &basic = CommonInterface::Basic();
 
