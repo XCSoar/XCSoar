@@ -196,8 +196,8 @@ DeviceDescriptor::Reopen(OperationEnvironment &env)
 void
 DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 {
-  if (IsAltair() || !config.IsAvailable() || IsConnected() ||
-      (driver != NULL && !driver->HasTimeout()) ||
+  if (IsAltair() || !config.IsAvailable() || config.IsServer() ||
+      IsConnected() || (driver != NULL && !driver->HasTimeout()) ||
       /* attempt to reopen a failed device every 30 seconds */
       !reopen_clock.CheckUpdate(30000))
     return;
