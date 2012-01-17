@@ -51,16 +51,14 @@ class ProtectedTaskManager: public Guard<TaskManager>
 {
 protected:
   const TaskBehaviour &task_behaviour;
-  TaskEvents &task_events;
   ReachIntersectionTest intersection_test;
 
   static const TCHAR default_task_path[];
 
 public:
-  ProtectedTaskManager(TaskManager &_task_manager, const TaskBehaviour &tb,
-                       TaskEvents &te)
+  ProtectedTaskManager(TaskManager &_task_manager, const TaskBehaviour &tb)
     :Guard<TaskManager>(_task_manager),
-     task_behaviour(tb), task_events(te)
+     task_behaviour(tb)
     {}
   
   ~ProtectedTaskManager();

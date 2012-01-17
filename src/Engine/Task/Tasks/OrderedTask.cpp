@@ -309,14 +309,16 @@ OrderedTask::CheckTransitions(const AircraftState &state,
           SetActiveTaskPoint(i);
           taskpoint_start->scan_active(task_points[active_task_point]);
           
-          task_events.ActiveAdvanced(*task_points[i], i);
+          if (task_events != NULL)
+            task_events->ActiveAdvanced(*task_points[i], i);
 
           // on sector exit, must update samples since start sector
           // exit transition clears samples
           full_update = true;
         }
       } else if (!last_request_armed && task_advance.request_armed()) {
-        task_events.RequestArm(*task_points[i]);
+        if (task_events != NULL)
+          task_events->RequestArm(*task_points[i]);
       }
     }
   }
@@ -329,11 +331,13 @@ OrderedTask::CheckTransitions(const AircraftState &state,
   if (stats.task_started)
     taskpoint_finish->set_fai_finish_height(GetStartState().altitude - fixed(1000));
 
-  if (stats.task_started && !last_started)
-    task_events.TaskStart();
+  if (task_events != NULL) {
+    if (stats.task_started && !last_started)
+      task_events->TaskStart();
 
-  if (stats.task_finished && !last_finished)
-    task_events.TaskFinish();
+    if (stats.task_finished && !last_finished)
+      task_events->TaskFinish();
+  }
 
   return full_update;
 }
@@ -386,12 +390,16 @@ OrderedTask::check_transition_point(OrderedTaskPoint& point,
 
   if (nearby && point.TransitionEnter(state, state_last)) {
     transition_enter = true;
-    task_events.EnterTransition(point);
+
+    if (task_events != NULL)
+      task_events->EnterTransition(point);
   }
   
   if (nearby && point.TransitionExit(state, state_last, task_projection)) {
     transition_exit = true;
-    task_events.ExitTransition(point);
+
+    if (task_events != NULL)
+      task_events->ExitTransition(point);
     
     // detect restart
     if (is_start && last_started)
@@ -898,9 +906,8 @@ OrderedTask::~OrderedTask()
 #endif
 }
 
-OrderedTask::OrderedTask(TaskEvents &te, 
-                         const TaskBehaviour &tb):
-  AbstractTask(ORDERED, te, tb),
+OrderedTask::OrderedTask(const TaskBehaviour &tb):
+  AbstractTask(ORDERED, tb),
   taskpoint_start(NULL),
   taskpoint_finish(NULL),
   factory_mode(TaskBehaviour::FactoryType::RACING),
@@ -1130,9 +1137,9 @@ OrderedTask::GetTaskRadius(const GeoPoint& fallback_location) const
 }
 
 OrderedTask* 
-OrderedTask::Clone(TaskEvents &te, const TaskBehaviour &tb) const
+OrderedTask::Clone(const TaskBehaviour &tb) const
 {
-  OrderedTask* new_task = new OrderedTask(te, tb);
+  OrderedTask* new_task = new OrderedTask(tb);
 
   new_task->m_ordered_behaviour = m_ordered_behaviour;
 

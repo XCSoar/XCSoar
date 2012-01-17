@@ -34,9 +34,9 @@ const unsigned AbortTask::max_abort = 10;
 const fixed AbortTask::min_search_range(50000.0);
 const fixed AbortTask::max_search_range(100000.0);
 
-AbortTask::AbortTask(TaskEvents &_task_events, const TaskBehaviour &_task_behaviour,
+AbortTask::AbortTask(const TaskBehaviour &_task_behaviour,
                      const Waypoints &wps)
-  :UnorderedTask(ABORT, _task_events, _task_behaviour),
+  :UnorderedTask(ABORT, _task_behaviour),
    waypoints(wps),
    intersection_test(NULL),
    active_waypoint(0)
@@ -279,7 +279,8 @@ AbortTask::UpdateSample(const AircraftState &state,
     const TaskWaypoint &task_point = task_points[active_task_point];
     active_waypoint = task_point.GetWaypoint().id;
     if (is_active && (active_waypoint_on_entry != active_waypoint)) {
-      task_events.ActiveChanged(task_point);
+      if (task_events != NULL)
+        task_events->ActiveChanged(task_point);
       return true;
     }
   }

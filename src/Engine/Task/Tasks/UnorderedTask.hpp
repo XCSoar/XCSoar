@@ -34,11 +34,10 @@ public:
   /** 
    * Base constructor.
    * 
-   * @param te Task events callback class (shared among all tasks) 
    * @param tb Global task behaviour settings
    * 
    */
-  UnorderedTask(const enum Type _type, TaskEvents &te,
+  UnorderedTask(const enum Type _type,
                 const TaskBehaviour &tb);
 
   fixed GetFinishHeight() const;

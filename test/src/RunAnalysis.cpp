@@ -195,14 +195,14 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   blackboard.SetComputerSettings().SetDefaults();
 
   GlideComputerTaskEvents task_events;
-  TaskManager task_manager(task_events, way_points);
+  TaskManager task_manager(way_points);
+  task_manager.SetTaskEvents(task_events);
 
   Airspaces airspace_database;
   AirspaceWarningManager airspace_warning(airspace_database);
 
   ProtectedTaskManager protected_task_manager(task_manager,
-                                              blackboard.GetComputerSettings().task,
-                                              task_events);
+                                              blackboard.GetComputerSettings().task);
 
   LoadFiles(airspace_database);
 

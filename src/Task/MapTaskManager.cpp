@@ -23,7 +23,6 @@
 #include "Task/MapTaskManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
-#include "Engine/Task/TaskEvents.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 
@@ -105,12 +104,10 @@ MapTaskManager::TaskEditResult
 MapTaskManager::AppendToTask(const Waypoint &waypoint)
 {
   assert(protected_task_manager != NULL);
-  TaskEvents task_events;
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   TaskEditResult result = MapTaskManager::UNMODIFIED;
   if (task_manager->GetOrderedTask().CheckTask()) {
-    OrderedTask *task = task_manager->Clone(task_events,
-                                            GetTaskBehaviour());
+    OrderedTask *task = task_manager->Clone(GetTaskBehaviour());
     result = AppendToTask(task, waypoint);
     if (result == SUCCESS)
       task_manager->Commit(*task);
@@ -125,8 +122,7 @@ MapTaskManager::AppendToTask(const Waypoint &waypoint)
       break;
     case TaskManager::MODE_GOTO:
     {
-      OrderedTask *task = task_manager->Clone(task_events,
-                                              GetTaskBehaviour());
+      OrderedTask *task = task_manager->Clone(GetTaskBehaviour());
       const TaskWaypoint *OldGotoTWP = task_manager->GetActiveTaskPoint();
       if (!OldGotoTWP)
         break;
@@ -184,12 +180,10 @@ MapTaskManager::TaskEditResult
 MapTaskManager::InsertInTask(const Waypoint &waypoint)
 {
   assert(protected_task_manager != NULL);
-  TaskEvents task_events;
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   TaskEditResult result = MapTaskManager::UNMODIFIED;
   if (task_manager->GetOrderedTask().CheckTask()) {
-    OrderedTask *task = task_manager->Clone(task_events,
-                                            GetTaskBehaviour());
+    OrderedTask *task = task_manager->Clone(GetTaskBehaviour());
 
     result = InsertInTask(task, waypoint);
     if (result == SUCCESS)
@@ -205,8 +199,7 @@ MapTaskManager::InsertInTask(const Waypoint &waypoint)
       break;
     case TaskManager::MODE_GOTO:
     {
-      OrderedTask *task = task_manager->Clone(task_events,
-                                              GetTaskBehaviour());
+      OrderedTask *task = task_manager->Clone(GetTaskBehaviour());
       const TaskWaypoint *OldGotoTWP = task_manager->GetActiveTaskPoint();
       if (!OldGotoTWP)
         break;
@@ -246,10 +239,8 @@ MapTaskManager::TaskEditResult
 MapTaskManager::ReplaceInTask(const Waypoint &waypoint)
 {
   assert(protected_task_manager != NULL);
-  TaskEvents task_events;
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  OrderedTask *task = task_manager->Clone(task_events,
-                                          GetTaskBehaviour());
+  OrderedTask *task = task_manager->Clone(GetTaskBehaviour());
 
   TaskEditResult result = ReplaceInTask(task, waypoint);
   if (result == SUCCESS)
@@ -320,10 +311,8 @@ MapTaskManager::TaskEditResult
 MapTaskManager::RemoveFromTask(const Waypoint &wp)
 {
   assert(protected_task_manager != NULL);
-  TaskEvents task_events;
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  OrderedTask *task = task_manager->Clone(task_events,
-                                          GetTaskBehaviour());
+  OrderedTask *task = task_manager->Clone(GetTaskBehaviour());
 
   TaskEditResult result = RemoveFromTask(task, wp);
   if (result == SUCCESS)

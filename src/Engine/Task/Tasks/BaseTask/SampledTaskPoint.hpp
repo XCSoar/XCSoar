@@ -119,7 +119,7 @@ public:
    * @return True if internal state changed
    */
   virtual bool UpdateSampleNear(const AircraftState &state,
-                                TaskEvents &task_events,
+                                TaskEvents *task_events,
                                 const TaskProjection &projection);
 
   /**
@@ -131,7 +131,7 @@ public:
    * @return True if internal state changed
    */
   virtual bool UpdateSampleFar(const AircraftState &state,
-                               TaskEvents &task_events,
+                               TaskEvents *task_events,
                                const TaskProjection &projection) {
     return false;
   }

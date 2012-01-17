@@ -28,12 +28,12 @@
 #include "Task/TaskEvents.hpp"
 #include "Task/TaskBehaviour.hpp"
 
-AbstractTask::AbstractTask(enum Type _type, TaskEvents &te,
+AbstractTask::AbstractTask(enum Type _type,
                            const TaskBehaviour &tb)
   :TaskInterface(_type),
    active_task_point(0),
    active_task_point_last(0-1),
-   task_events(te),
+   task_events(NULL),
    task_behaviour(tb),
    mc_lpf(fixed(8)),
    ce_lpf(fixed(60)),
@@ -333,5 +333,6 @@ AbstractTask::UpdateFlightMode()
   if (!stats.calc_flight_mode())
     return;
 
-  task_events.FlightModeTransition(stats.flight_mode_final_glide);
+  if (task_events != NULL)
+    task_events->FlightModeTransition(stats.flight_mode_final_glide);
 }

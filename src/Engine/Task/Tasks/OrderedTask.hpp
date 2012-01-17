@@ -92,13 +92,11 @@ public:
    * \todo
    * - default values in constructor
    * 
-   * @param te Task events
    * @param tb Task behaviour
    * 
    * @return Initialised object
    */
-  OrderedTask(TaskEvents &te, 
-              const TaskBehaviour &tb);
+  OrderedTask(const TaskBehaviour &tb);
   virtual ~OrderedTask();
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb);
@@ -154,7 +152,7 @@ public:
    * @return Initialised object
    */
   gcc_malloc
-  OrderedTask *Clone(TaskEvents &te, const TaskBehaviour &tb) const;
+  OrderedTask *Clone(const TaskBehaviour &tb) const;
 
   /**
    * Copy task into this task

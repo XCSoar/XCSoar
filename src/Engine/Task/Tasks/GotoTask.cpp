@@ -25,10 +25,9 @@
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/TaskBehaviour.hpp"
 
-GotoTask::GotoTask(TaskEvents &te, 
-                   const TaskBehaviour &tb,
+GotoTask::GotoTask(const TaskBehaviour &tb,
                    const Waypoints &wps)
-  :UnorderedTask(GOTO, te, tb),
+  :UnorderedTask(GOTO, tb),
    tp(NULL),
    waypoints(wps)
 {

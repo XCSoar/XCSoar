@@ -29,12 +29,11 @@
 // uses delegate pattern
 
 
-TaskManager::TaskManager(TaskEvents &te,
-                         const Waypoints &wps): 
-  glide_polar(fixed_zero), safety_polar(fixed_one),
-  task_ordered(te, task_behaviour),
-  task_goto(te, task_behaviour, wps),
-  task_abort(te, task_behaviour, wps),
+TaskManager::TaskManager(const Waypoints &wps)
+  :glide_polar(fixed_zero), safety_polar(fixed_one),
+   task_ordered(task_behaviour),
+   task_goto(task_behaviour, wps),
+   task_abort(task_behaviour, wps),
   mode(MODE_NULL),
   active_task(NULL) {
   null_stats.reset();
@@ -573,9 +572,9 @@ TaskManager::TargetLock(const unsigned index, bool do_lock)
 }
 
 OrderedTask* 
-TaskManager::Clone(TaskEvents &te, const TaskBehaviour &tb) const
+TaskManager::Clone(const TaskBehaviour &tb) const
 {
-  return task_ordered.Clone(te, tb);
+  return task_ordered.Clone(tb);
 }
 
 bool 

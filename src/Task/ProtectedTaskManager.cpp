@@ -154,21 +154,21 @@ OrderedTask*
 ProtectedTaskManager::TaskClone() const
 {
   Lease lease(*this);
-  return lease->Clone(task_events, task_behaviour);
+  return lease->Clone(task_behaviour);
 }
 
 OrderedTask* 
 ProtectedTaskManager::TaskCopy(const OrderedTask &that) const
 {
   Lease lease(*this);
-  return that.Clone(task_events, task_behaviour);
+  return that.Clone(task_behaviour);
 }
 
 OrderedTask* 
 ProtectedTaskManager::TaskBlank() const
 {
   Lease lease(*this);
-  return new OrderedTask(task_events, task_behaviour);
+  return new OrderedTask(task_behaviour);
 }
 
 bool

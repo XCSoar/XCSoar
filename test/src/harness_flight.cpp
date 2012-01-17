@@ -344,7 +344,8 @@ test_flight(TestFlightComponents components, int test_num, int n_wind,
     distance_counts();
 
   TaskEventsPrint default_events(verbose);
-  TaskManager task_manager(default_events, waypoints);
+  TaskManager task_manager(waypoints);
+  task_manager.SetTaskEvents(default_events);
   task_manager.SetGlidePolar(glide_polar);
 
   task_manager.GetOrderedTaskBehaviour().aat_min_time = aat_min_time(test_num);

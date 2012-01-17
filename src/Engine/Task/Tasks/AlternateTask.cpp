@@ -31,9 +31,9 @@
 
 const unsigned AlternateTask::max_alternates = 6;
 
-AlternateTask::AlternateTask(TaskEvents &te, const TaskBehaviour &tb,
+AlternateTask::AlternateTask(const TaskBehaviour &tb,
                              const Waypoints &wps):
-  AbortTask(te, tb, wps),
+  AbortTask(tb, wps),
   best_alternate_id(UINT_MAX)
 {
   alternates.reserve(64);
@@ -79,7 +79,9 @@ AlternateTask::CheckAlternateChanged()
   // send notification on change
   if (best_alternate_id != id) {
     best_alternate_id = id;
-    task_events.AlternateTransition();
+
+    if (task_events != NULL)
+      task_events->AlternateTransition();
   }
 }
 

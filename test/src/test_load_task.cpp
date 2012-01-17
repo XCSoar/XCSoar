@@ -1,6 +1,5 @@
 #include "test_debug.hpp"
 #include "harness_aircraft.hpp"
-#include "TaskEventsPrint.hpp"
 #include "Task/TaskManager.hpp"
 #include "UtilsText.hpp"
 #include <fstream>
@@ -32,10 +31,8 @@ static bool
 test_load_task()
 {
   TaskBehaviour task_behaviour;
-  TaskEventsPrint default_events(verbose);
 
-  OrderedTask* blank = 
-    new OrderedTask(default_events, task_behaviour);
+  OrderedTask *blank = new OrderedTask(task_behaviour);
 
   OrderedTask* t = task_load(blank);
   delete blank;

@@ -37,7 +37,8 @@ test_olc(int n_wind, Contests olc_type)
 
   TaskEventsPrint default_events(verbose);
 
-  TaskManager task_manager(default_events, waypoints);
+  TaskManager task_manager(waypoints);
+  task_manager.SetTaskEvents(default_events);
 
   TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
   task_behaviour.DisableAll();

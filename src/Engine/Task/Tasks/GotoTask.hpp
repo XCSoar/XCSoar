@@ -42,15 +42,13 @@ public:
   /** 
    * Base constructor.
    * 
-   * @param te Task events callback class (shared among all tasks) 
    * @param tb Global task behaviour settings
    * @param wps Waypoints container to be scanned for takeoff
    * 
    * @return Initialised object (with no waypoint to go to)
    */
 
-  GotoTask(TaskEvents &te, 
-           const TaskBehaviour &tb,
+  GotoTask(const TaskBehaviour &tb,
            const Waypoints &wps);
   ~GotoTask();
 

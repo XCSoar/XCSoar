@@ -37,7 +37,7 @@ SampledTaskPoint::SampledTaskPoint(Type _type, const Waypoint & wp,
 
 bool 
 SampledTaskPoint::UpdateSampleNear(const AircraftState& state,
-                                     TaskEvents &task_events,
+                                   TaskEvents *task_events,
                                      const TaskProjection &projection)
 {
   if (!IsInSector(state))

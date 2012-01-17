@@ -36,7 +36,8 @@ test_abort(int n_wind)
 
   TaskEventsPrint default_events(verbose);
 
-  TaskManager task_manager(default_events, waypoints);
+  TaskManager task_manager(waypoints);
+  task_manager.SetTaskEvents(default_events);
 
   TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
   task_behaviour.DisableAll();
@@ -66,7 +67,8 @@ test_goto(int n_wind, unsigned id, bool auto_mc)
 
   TaskEventsPrint default_events(verbose);
 
-  TaskManager task_manager(default_events, waypoints);
+  TaskManager task_manager(waypoints);
+  task_manager.SetTaskEvents(default_events);
 
   TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
   task_behaviour.DisableAll();
@@ -99,7 +101,8 @@ test_null()
 
   TaskEventsPrint default_events(verbose);
 
-  TaskManager task_manager(default_events, waypoints);
+  TaskManager task_manager(waypoints);
+  task_manager.SetTaskEvents(default_events);
 
   TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
   task_behaviour.DisableAll();

@@ -66,14 +66,13 @@ StartPoint::set_neighbours(OrderedTaskPoint* _prev,
 
 bool 
 StartPoint::UpdateSampleNear(const AircraftState& state,
-                               TaskEvents &task_events,
+                             TaskEvents *task_events,
                                const TaskProjection &projection)
 {
-  if (IsInSector(state)) {
-    if (!m_ordered_task_behaviour.CheckStartSpeed(state, margins)) {
-      task_events.StartSpeedWarning();
-    }
-  }
+  if (task_events != NULL && IsInSector(state) &&
+      !m_ordered_task_behaviour.CheckStartSpeed(state, margins))
+    task_events->StartSpeedWarning();
+
   return OrderedTaskPoint::UpdateSampleNear(state, task_events, projection);
 }
 

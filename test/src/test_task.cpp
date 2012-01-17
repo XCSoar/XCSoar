@@ -23,7 +23,6 @@
 #include "harness_task.hpp"
 #include "harness_waypoints.hpp"
 #include "test_debug.hpp"
-#include "TaskEventsPrint.hpp"
 
 int main(int argc, char** argv)
 {
@@ -35,37 +34,32 @@ int main(int argc, char** argv)
   #define NUM_TYPE_MANIPS 50
   plan_tests(NUM_TASKS+2+NUM_RANDOM+8+NUM_TYPE_MANIPS);
 
-  TaskEventsPrint default_events(verbose);
   GlidePolar glide_polar(fixed_two);
 
   Waypoints waypoints;
   setup_waypoints(waypoints);
 
   {
-    TaskManager task_manager(default_events,
-                             waypoints);
+    TaskManager task_manager(waypoints);
     task_manager.SetGlidePolar(glide_polar);
     test_task_bad(task_manager,waypoints);
   }
 
   {
     for (unsigned i = 0; i < NUM_TYPE_MANIPS; i++) {
-      TaskManager task_manager(default_events,
-                               waypoints);
+      TaskManager task_manager(waypoints);
       ok(test_task_type_manip(task_manager,waypoints, i+2), "construction: task type manip", 0);
     }
   }
 
   for (int i=0; i<NUM_TASKS+2; i++) {
-    TaskManager task_manager(default_events,
-                             waypoints);
+    TaskManager task_manager(waypoints);
     task_manager.SetGlidePolar(glide_polar);
     ok(test_task(task_manager, waypoints, i),test_name("construction",i,0),0);
   }
 
   for (int i=0; i<NUM_RANDOM; i++) {
-    TaskManager task_manager(default_events,
-                             waypoints);
+    TaskManager task_manager(waypoints);
     task_manager.SetGlidePolar(glide_polar);
     ok(test_task(task_manager, waypoints, 7),test_name("construction",7,0),0);
   }

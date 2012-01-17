@@ -86,12 +86,17 @@ public:
   /**
    * Constructor for task manager
    *
-   * @param te Task events callback object
    * @param wps Waypoint system for use by AbortTask
    *
    * @return Initialised object
    */
-  TaskManager(TaskEvents &te, const Waypoints &wps);
+  TaskManager(const Waypoints &wps);
+
+  void SetTaskEvents(TaskEvents &_task_events) {
+    task_ordered.SetTaskEvents(_task_events);
+    task_goto.SetTaskEvents(_task_events);
+    task_abort.SetTaskEvents(_task_events);
+  }
 
   /**
    * Returns a reference to the OrderedTask instance, even if it is
@@ -302,7 +307,7 @@ public:
    * @return Initialised object
    */
   gcc_malloc
-  OrderedTask *Clone(TaskEvents &te, const TaskBehaviour &tb) const;
+  OrderedTask *Clone(const TaskBehaviour &tb) const;
 
   /**
    * Copy task into this task

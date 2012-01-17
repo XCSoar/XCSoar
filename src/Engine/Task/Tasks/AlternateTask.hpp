@@ -57,13 +57,12 @@ public:
   /** 
    * Base constructor.
    * 
-   * @param te Task events callback class (shared among all tasks) 
    * @param tb Global task behaviour settings
    * @param wps Waypoints container to be scanned during updates
    * 
    * @return Initialised object (with nothing in task)
    */
-  AlternateTask(TaskEvents &te, const TaskBehaviour &tb,
+  AlternateTask(const TaskBehaviour &tb,
                 const Waypoints &wps);
 
   void Reset();

@@ -298,13 +298,13 @@ XCSoarInterface::Startup()
 #endif
 
   // Initialize main blackboard data
-  task_manager = new TaskManager(task_events, way_points);
+  task_manager = new TaskManager(way_points);
+  task_manager->SetTaskEvents(task_events);
   task_manager->Reset();
 
   protected_task_manager =
     new ProtectedTaskManager(*task_manager,
-                             XCSoarInterface::GetComputerSettings().task,
-                             task_events);
+                             XCSoarInterface::GetComputerSettings().task);
 
   // Read the terrain file
   operation.SetText(_("Loading Terrain File..."));

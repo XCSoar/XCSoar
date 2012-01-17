@@ -52,7 +52,7 @@ protected:
   TaskStats stats;
   TaskStatsComputer stats_computer;
   /** reference to task events (feedback) */
-  TaskEvents &task_events;
+  TaskEvents *task_events;
 
   /** settings */
   TaskBehaviour task_behaviour;
@@ -78,10 +78,19 @@ public:
    * Base constructor.  Sets time constants of Best Mc and cruise efficiency
    * low pass filters.
    * 
-   * @param te Task events callback class (shared among all tasks) 
    * @param tb Global task behaviour settings
    */
-  AbstractTask(Type _type, TaskEvents &te, const TaskBehaviour &tb);
+  AbstractTask(Type _type, const TaskBehaviour &tb);
+
+  /**
+   * Set the handler for task events.  This method may be called only
+   * once.
+   */
+  void SetTaskEvents(TaskEvents &_task_events) {
+    assert(task_events == NULL);
+
+    task_events = &_task_events;
+  }
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb) {
     task_behaviour = tb;

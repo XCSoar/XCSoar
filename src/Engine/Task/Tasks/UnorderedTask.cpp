@@ -25,9 +25,9 @@
 #include "TaskSolvers/TaskGlideRequired.hpp"
 #include "TaskSolvers/TaskSolution.hpp"
 
-UnorderedTask::UnorderedTask(const enum Type _type, TaskEvents &te,
+UnorderedTask::UnorderedTask(const enum Type _type,
                              const TaskBehaviour &tb):
-  AbstractTask(_type, te, tb)
+  AbstractTask(_type, tb)
 {
 }
 

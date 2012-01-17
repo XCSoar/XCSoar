@@ -76,8 +76,8 @@ test_replay()
   AircraftState state_last;
 
   TaskEventsPrint default_events(verbose);
-  TaskManager task_manager(default_events,
-                           waypoints);
+  TaskManager task_manager(waypoints);
+  task_manager.SetTaskEvents(default_events);
 
   glide_polar.SetBallast(fixed(1.0));
 
@@ -88,8 +88,7 @@ test_replay()
   task_behaviour.enable_trace = false;
   task_manager.SetTaskBehaviour(task_behaviour);
 
-  OrderedTask* blank = 
-    new OrderedTask(default_events, task_manager.GetTaskBehaviour());
+  OrderedTask* blank = new OrderedTask(task_manager.GetTaskBehaviour());
 
   OrderedTask* t = task_load(blank);
   if (t) {

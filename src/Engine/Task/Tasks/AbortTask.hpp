@@ -112,14 +112,13 @@ public:
   /** 
    * Base constructor.
    * 
-   * @param te Task events callback class (shared among all tasks) 
    * @param tb Global task behaviour settings
    * @param gp Global glide polar used for navigation calculations
    * @param wps Waypoints container to be scanned during updates
    * 
    * @return Initialised object (with nothing in task)
    */
-  AbortTask(TaskEvents &te, const TaskBehaviour &tb,
+  AbortTask(const TaskBehaviour &tb,
             const Waypoints &wps);
   virtual ~AbortTask();
 
