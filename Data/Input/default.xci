@@ -728,6 +728,7 @@ mode=Info1
 type=key
 data=6
 event=FlarmTraffic
+event=Mode default
 label=FLARM Radar$(CheckFLARM)
 location=5
 
@@ -801,6 +802,7 @@ mode=Info2
 type=key
 data=9
 event=FlarmDetails
+event=Mode default
 label=FLARM\nDetails
 location=8
 
