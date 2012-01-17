@@ -172,14 +172,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
 
 WndProperty::~WndProperty(void)
 {
-  if (mDataField != NULL) {
-    if (!mDataField->Unuse()) {
-      delete mDataField;
-      mDataField = NULL;
-    } else {
-      assert(0);
-    }
-  }
+  delete mDataField;
 }
 
 void
@@ -380,19 +373,12 @@ WndProperty::RefreshDisplay()
 void
 WndProperty::SetDataField(DataField *Value)
 {
-  if (mDataField != Value) {
-    if (mDataField != NULL) {
-      if (!mDataField->Unuse()) {
-        delete (mDataField);
-      }
-    }
+  assert(mDataField == NULL || mDataField != Value);
 
-    Value->Use();
+  delete mDataField;
+  mDataField = Value;
 
-    mDataField = Value;
+  UpdateLayout();
 
-    UpdateLayout();
-
-    RefreshDisplay();
-  }
+  RefreshDisplay();
 }

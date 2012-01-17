@@ -60,7 +60,6 @@ protected:
   bool mItemHelp;
 
 private:
-  int mUsageCounter;
   bool mDetachGUI;
 
 public:
@@ -92,18 +91,6 @@ public:
   virtual void SetAsInteger(int Value);
   virtual void SetAsString(const TCHAR *Value);
 
-  void
-  Use(void)
-  {
-    mUsageCounter++;
-  }
-
-  int
-  Unuse(void)
-  {
-    mUsageCounter--;
-    return mUsageCounter;
-  }
   virtual void EnableItemHelp(bool value) {};
 
   // allows combolist to iterate all values w/out triggering external events
