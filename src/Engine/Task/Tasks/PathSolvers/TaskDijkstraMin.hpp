@@ -48,9 +48,6 @@ public:
    * @return True if succeeded
    */
   bool distance_min(const SearchPoint& location);
-
-private:
-  virtual void save();
 };
 
 #endif

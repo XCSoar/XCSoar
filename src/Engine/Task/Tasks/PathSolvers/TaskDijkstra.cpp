@@ -93,8 +93,6 @@ bool
 TaskDijkstra::run()
 {
   const bool retval = distance_general() && solution_valid;
-  if (retval)
-    save();
   dijkstra.clear();
   return retval;
 }

@@ -45,11 +45,3 @@ TaskDijkstraMin::distance_min(const SearchPoint &currentLocation)
   return run();
 }
 
-
-void
-TaskDijkstraMin::save()
-{
-  for (unsigned j = active_stage; j != num_stages; ++j)
-    task.set_tp_search_min(j, solution[j]);
-}
-

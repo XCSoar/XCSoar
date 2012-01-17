@@ -26,6 +26,8 @@
 #include "NavDijkstra.hpp"
 #include "Navigation/SearchPoint.hpp"
 
+#include <assert.h>
+
 class OrderedTask;
 
 /**
@@ -64,13 +66,22 @@ public:
    */
   TaskDijkstra(OrderedTask& _task, const bool is_min);
 
+  /**
+   * Returns the solution point for the specified task point.  Call
+   * this after run() has returned true.
+   */
+  const SearchPoint &GetSolution(unsigned stage) const {
+    assert(stage < num_stages);
+
+    return solution[stage];
+  }
+
 protected:
   gcc_pure
   const SearchPoint &GetPointFast(const ScanTaskPoint &sp) const;
 
   const SearchPoint &get_point(const ScanTaskPoint &sp) const;
   bool run();
-  virtual void save() = 0;
 
   /**
    * Update internal details required from the task

@@ -61,8 +61,6 @@ class OrderedTask:
 public:
   friend class Serialiser;
   friend class TaskDijkstra;
-  friend class TaskDijkstraMin;
-  friend class TaskDijkstraMax;
   friend class PrintHelper;
 
   typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector; /**< Storage type of task points */ 

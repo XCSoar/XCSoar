@@ -158,7 +158,11 @@ OrderedTask::scan_distance_min(const GeoPoint &location, bool full)
       dijkstra_min = new TaskDijkstraMin(*this);
 
     SearchPoint ac(location, task_projection);
-    dijkstra_min->distance_min(ac);
+    if (dijkstra_min->distance_min(ac)) {
+      for (unsigned i = GetActiveIndex(), end = TaskSize(); i != end; ++i)
+        set_tp_search_min(i, dijkstra_min->GetSolution(i));
+    }
+
     m_location_min_last = location;
   }
   return taskpoint_start->scan_distance_min();
@@ -183,7 +187,16 @@ OrderedTask::scan_distance_max()
 
   if (dijkstra_max == NULL)
     dijkstra_max = new TaskDijkstraMax(*this);
-  dijkstra_max->distance_max();
+
+  if (dijkstra_max->distance_max()) {
+    for (unsigned i = 0, active = GetActiveIndex(), end = TaskSize();
+         i != end; ++i) {
+      const SearchPoint &solution = dijkstra_max->GetSolution(i);
+      set_tp_search_max(i, solution);
+      if (i <= active)
+        set_tp_search_achieved(i, solution);
+    }
+  }
 
   if (atp) {
     active_task_point = atp;

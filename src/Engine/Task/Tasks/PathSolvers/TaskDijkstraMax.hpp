@@ -43,9 +43,6 @@ public:
    * @return True if succeeded
    */
   bool distance_max();
-
-private:
-  virtual void save();
 };
 
 #endif
