@@ -36,6 +36,9 @@ ApplyUnit(Unit &value, Unit new_value)
   return true;
 }
 
+/**
+ * Convert XCSoar <= 6.2 profile value.
+ */
 gcc_const
 static Unit
 ImportSpeedUnit(unsigned tmp)
@@ -56,12 +59,39 @@ ImportSpeedUnit(unsigned tmp)
 }
 
 static bool
-GetSpeedUnit(const TCHAR *key, Unit &value)
+GetLegacySpeedUnit(const TCHAR *key, Unit &value)
 {
   unsigned tmp;
   return Profile::Get(key, tmp) && ApplyUnit(value, ImportSpeedUnit(tmp));
 }
 
+gcc_const
+static bool
+ValidSpeedUnit(Unit unit)
+{
+  return unit == Unit::KILOMETER_PER_HOUR || unit == Unit::KNOTS ||
+    unit == Unit::STATUTE_MILESPerHour || unit == Unit::METER_PER_SECOND ||
+    unit == Unit::FEET_PER_MINUTE;
+}
+
+static bool
+GetSpeedUnit(const TCHAR *key, const TCHAR *legacy_key, Unit &value_r)
+{
+  Unit tmp;
+  if (!Profile::GetEnum(key, tmp))
+    /* migrate from XCSoar <= 6.2 profile */
+    return GetLegacySpeedUnit(legacy_key, value_r);
+
+  if (!ValidSpeedUnit(tmp))
+    return false;
+
+  value_r = tmp;
+  return true;
+}
+
+/**
+ * Convert XCSoar <= 6.2 profile value.
+ */
 gcc_const
 static Unit
 ImportVerticalSpeedUnit(unsigned tmp)
@@ -82,12 +112,30 @@ ImportVerticalSpeedUnit(unsigned tmp)
 }
 
 static bool
-GetVerticalSpeedUnit(const TCHAR *key, Unit &value)
+GetLegacyVerticalSpeedUnit(const TCHAR *key, Unit &value)
 {
   unsigned tmp;
   return Profile::Get(key, tmp) && ApplyUnit(value, ImportVerticalSpeedUnit(tmp));
 }
 
+static bool
+GetVerticalSpeedUnit(const TCHAR *key, const TCHAR *legacy_key, Unit &value_r)
+{
+  Unit tmp;
+  if (!Profile::GetEnum(key, tmp))
+    /* migrate from XCSoar <= 6.2 profile */
+    return GetLegacyVerticalSpeedUnit(legacy_key, value_r);
+
+  if (!ValidSpeedUnit(tmp))
+    return false;
+
+  value_r = tmp;
+  return true;
+}
+
+/**
+ * Convert XCSoar <= 6.2 profile value.
+ */
 gcc_const
 static Unit
 ImportDistanceUnit(unsigned tmp)
@@ -108,12 +156,39 @@ ImportDistanceUnit(unsigned tmp)
 }
 
 static bool
-GetDistanceUnit(const TCHAR *key, Unit &value)
+GetLegacyDistanceUnit(const TCHAR *key, Unit &value)
 {
   unsigned tmp;
   return Profile::Get(key, tmp) && ApplyUnit(value, ImportDistanceUnit(tmp));
 }
 
+gcc_const
+static bool
+ValidDistanceUnit(Unit unit)
+{
+  return unit == Unit::KILOMETER || unit == Unit::NAUTICAL_MILES ||
+    unit == Unit::STATUTE_MILES || unit == Unit::METER ||
+    unit == Unit::FEET || unit == Unit::FLIGHT_LEVEL;
+}
+
+static bool
+GetDistanceUnit(const TCHAR *key, const TCHAR *legacy_key, Unit &value_r)
+{
+  Unit tmp;
+  if (!Profile::GetEnum(key, tmp))
+    /* migrate from XCSoar <= 6.2 profile */
+    return GetLegacyDistanceUnit(legacy_key, value_r);
+
+  if (!ValidDistanceUnit(tmp))
+    return false;
+
+  value_r = tmp;
+  return true;
+}
+
+/**
+ * Convert XCSoar <= 6.2 profile value.
+ */
 gcc_const
 static Unit
 ImportAltitudeUnit(unsigned tmp)
@@ -131,12 +206,30 @@ ImportAltitudeUnit(unsigned tmp)
 }
 
 static bool
-GetAltitudeUnit(const TCHAR *key, Unit &value)
+GetLegacyAltitudeUnit(const TCHAR *key, Unit &value)
 {
   unsigned tmp;
   return Profile::Get(key, tmp) && ApplyUnit(value, ImportAltitudeUnit(tmp));
 }
 
+static bool
+GetAltitudeUnit(const TCHAR *key, const TCHAR *legacy_key, Unit &value_r)
+{
+  Unit tmp;
+  if (!Profile::GetEnum(key, tmp))
+    /* migrate from XCSoar <= 6.2 profile */
+    return GetLegacyAltitudeUnit(legacy_key, value_r);
+
+  if (!ValidDistanceUnit(tmp))
+    return false;
+
+  value_r = tmp;
+  return true;
+}
+
+/**
+ * Convert XCSoar <= 6.2 profile value.
+ */
 gcc_const
 static Unit
 ImportTemperatureUnit(unsigned tmp)
@@ -154,11 +247,34 @@ ImportTemperatureUnit(unsigned tmp)
 }
 
 static bool
-GetTemperatureUnit(const TCHAR *key, Unit &value)
+GetLegacyTemperatureUnit(const TCHAR *key, Unit &value)
 {
   unsigned tmp;
   return Profile::Get(key, tmp) &&
     ApplyUnit(value, ImportTemperatureUnit(tmp));
+}
+
+gcc_const
+static bool
+ValidTemperatureUnit(Unit unit)
+{
+  return unit == Unit::KELVIN || unit == Unit::DEGREES_CELCIUS ||
+    unit == Unit::DEGREES_FAHRENHEIT;
+}
+
+static bool
+GetTemperatureUnit(const TCHAR *key, const TCHAR *legacy_key, Unit &value_r)
+{
+  Unit tmp;
+  if (!Profile::GetEnum(key, tmp))
+    /* migrate from XCSoar <= 6.2 profile */
+    return GetLegacyTemperatureUnit(legacy_key, value_r);
+
+  if (!ValidTemperatureUnit(tmp))
+    return false;
+
+  value_r = tmp;
+  return true;
 }
 
 gcc_const
@@ -187,12 +303,17 @@ Profile::LoadUnits(UnitSetting &config)
 
   GetEnum(szProfileLatLonUnits, config.coordinate_format);
 
-  GetSpeedUnit(szProfileSpeedUnitsValue, config.speed_unit);
-  GetSpeedUnit(szProfileSpeedUnitsValue, config.wind_speed_unit);
-  GetSpeedUnit(szProfileTaskSpeedUnitsValue, config.task_speed_unit);
-  GetDistanceUnit(szProfileDistanceUnitsValue, config.distance_unit);
-  GetAltitudeUnit(szProfileAltitudeUnitsValue, config.altitude_unit);
-  GetTemperatureUnit(szProfileTemperatureUnitsValue, config.temperature_unit);
-  GetVerticalSpeedUnit(szProfileLiftUnitsValue, config.vertical_speed_unit);
+  GetSpeedUnit(szProfileSpeedUnitsValue, _T("Speed"), config.speed_unit);
+  config.wind_speed_unit = config.speed_unit;
+  GetSpeedUnit(szProfileTaskSpeedUnitsValue, _T("TaskSpeed"),
+               config.task_speed_unit);
+  GetDistanceUnit(szProfileDistanceUnitsValue, _T("Distance"),
+                  config.distance_unit);
+  GetAltitudeUnit(szProfileAltitudeUnitsValue, _T("Altitude"),
+                  config.altitude_unit);
+  GetTemperatureUnit(szProfileTemperatureUnitsValue, _T("Temperature"),
+                     config.temperature_unit);
+  GetVerticalSpeedUnit(szProfileLiftUnitsValue, _T("Lift"),
+                       config.vertical_speed_unit);
   GetPressureUnit(szProfilePressureUnitsValue, config.pressure_unit);
 }
