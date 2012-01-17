@@ -100,4 +100,7 @@ protected:
 bool
 DefaultWidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget &widget);
 
+bool
+DefaultWidgetDialog(const TCHAR *caption, Widget &widget);
+
 #endif
