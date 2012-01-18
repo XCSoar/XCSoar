@@ -84,7 +84,8 @@ TEST_NAMES = \
 	TestIGCParser \
 	TestByteOrder \
 	TestByteOrder2 \
-	TestStrings
+	TestStrings \
+	TestUnitsFormatter
 
 TESTS = $(call name-to-bin,$(TEST_NAMES))
 
@@ -345,6 +346,18 @@ TEST_UNITS_SOURCES = \
 	$(TEST_SRC_DIR)/TestUnits.cpp
 TEST_UNITS_DEPENDS = MATH
 $(eval $(call link-program,TestUnits,TEST_UNITS))
+
+TEST_UNITS_FORMATTER_SOURCES = \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
+	$(SRC)/Units/Settings.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestUnitsFormatter.cpp
+TEST_UNITS_FORMATTER_DEPENDS = MATH
+$(eval $(call link-program,TestUnitsFormatter,TEST_UNITS_FORMATTER))
 
 TEST_STRINGS_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \
