@@ -47,10 +47,17 @@ FormatInteger(TCHAR *buffer, size_t size,
 }
 
 void
+Units::FormatAltitude(TCHAR *buffer, size_t size, fixed value, Unit unit,
+                      bool include_unit)
+{
+  FormatInteger(buffer, size, value, unit, include_unit);
+}
+
+void
 Units::FormatUserAltitude(fixed value, TCHAR *buffer, size_t size,
                           bool include_unit)
 {
-  FormatInteger(buffer, size, value, current.altitude_unit, include_unit);
+  FormatAltitude(buffer, size, value, current.altitude_unit, include_unit);
 }
 
 gcc_const
@@ -73,8 +80,8 @@ void
 Units::FormatAlternateUserAltitude(fixed value, TCHAR *buffer, size_t size,
                                    bool include_unit)
 {
-  FormatInteger(buffer, size, value, GetAlternateUnit(current.altitude_unit),
-                include_unit);
+  FormatAltitude(buffer, size, value, GetAlternateUnit(current.altitude_unit),
+                 include_unit);
 }
 
 // JMW, what does this do?

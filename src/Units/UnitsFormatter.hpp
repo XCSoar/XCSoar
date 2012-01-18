@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_UNITS_FORMATTER_HPP
 #define XCSOAR_UNITS_FORMATTER_HPP
 
+#include "Units/Unit.hpp"
 #include "Math/fixed.hpp"
 
 #include <tchar.h>
@@ -35,6 +36,17 @@ class AtmosphericPressure;
  */
 namespace Units
 {
+  /**
+   * Converts an altitude into a formatted string
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   * @param value the altitude
+   * @param unit the altitude unit (e.g. meters, feet, ...)
+   * @param include_unit include the unit into the string?
+   */
+  void FormatAltitude(TCHAR *buffer, size_t size, fixed value, Unit unit,
+                      bool include_unit = true);
+
   /**
    * Converts a double-based Altitude into a formatted string
    * @param Altitude The double-based Altitude
