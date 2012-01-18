@@ -40,6 +40,17 @@ struct GeoPoint;
  */
 class GrahamScan: private NonCopyable
 {
+  std::list< SearchPoint > raw_points;
+  SearchPoint *left;
+  SearchPoint *right;
+  std::vector< SearchPoint* > upper_partition_points;
+  std::vector< SearchPoint* > lower_partition_points;
+  std::vector< SearchPoint* > lower_hull;
+  std::vector< SearchPoint* > upper_hull;
+  SearchPointVector &raw_vector;
+  const unsigned size;
+  const fixed tolerance;
+
 public :
 /** 
  * Constructor.  Note that this class should be used temporarily only
@@ -67,17 +78,6 @@ private :
                        const GeoPoint& p1,
                        const GeoPoint& p2,
                        const fixed& _tolerance);
-
-  std::list< SearchPoint > raw_points;
-  SearchPoint *left;
-  SearchPoint *right;
-  std::vector< SearchPoint* > upper_partition_points;
-  std::vector< SearchPoint* > lower_partition_points;
-  std::vector< SearchPoint* > lower_hull;
-  std::vector< SearchPoint* > upper_hull;
-  SearchPointVector &raw_vector;
-  const unsigned size;
-  const fixed tolerance;
 };
 
 
