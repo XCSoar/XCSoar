@@ -158,7 +158,6 @@ protected:
         find_solution(destination);
         if (finish_satisfied(destination)) {
           solution_valid = true;
-          dijkstra.clear();
           return true;
         }
       } else {

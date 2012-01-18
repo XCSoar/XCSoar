@@ -166,6 +166,8 @@ ContestDijkstra::Solve(bool exhaustive)
 #endif
 
   if (distance_general(exhaustive ? 0 - 1 : 25)) {
+    dijkstra.clear();
+
     if (solution_valid)
       SaveSolution();
 
