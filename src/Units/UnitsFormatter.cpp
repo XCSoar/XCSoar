@@ -35,14 +35,14 @@ Copyright_License {
 #include <tchar.h>
 
 bool
-Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
+Units::LongitudeToString(Angle longitude, TCHAR *buffer, gcc_unused size_t size)
 {
   static gcc_constexpr_data TCHAR EW[] = _T("WEE");
   int dd, mm, ss;
 
   // Calculate Longitude sign
-  int sign = Longitude.Sign()+1;
-  double mlong(Longitude.AbsoluteDegrees());
+  int sign = longitude.Sign()+1;
+  double mlong(longitude.AbsoluteDegrees());
 
   switch (current.coordinate_format) {
   case CoordinateFormat::DDMMSS:
@@ -62,8 +62,8 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
       dd++;
       mm -= 60;
     }
-    // Save the string to the Buffer
-    _stprintf(Buffer, _T("%03d")_T(DEG)_T("%02d'%02d\" %c"),
+    // Save the string to the buffer
+    _stprintf(buffer, _T("%03d")_T(DEG)_T("%02d'%02d\" %c"),
               dd, mm, ss, EW[sign]);
     break;
 
@@ -75,8 +75,8 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
     mm = (int)(mlong);
     // Calculate seconds
     mlong = (mlong - mm) * 60.0;
-    // Save the string to the Buffer
-    _stprintf(Buffer, _T("%03d")_T(DEG)_T("%02d'%05.2f\" %c"),
+    // Save the string to the buffer
+    _stprintf(buffer, _T("%03d")_T(DEG)_T("%02d'%05.2f\" %c"),
               dd, mm, mlong, EW[sign]);
     break;
 
@@ -85,13 +85,13 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
     dd = (int)mlong;
     // Calculate minutes
     mlong = (mlong - dd) * 60.0;
-    // Save the string to the Buffer
-    _stprintf(Buffer, _T("%03d")_T(DEG)_T("%06.3f' %c"), dd, mlong, EW[sign]);
+    // Save the string to the buffer
+    _stprintf(buffer, _T("%03d")_T(DEG)_T("%06.3f' %c"), dd, mlong, EW[sign]);
     break;
 
   case CoordinateFormat::DD_DDDD:
-    // Save the string to the Buffer
-    _stprintf(Buffer, _T("%08.4f %c")_T(DEG), mlong, EW[sign]);
+    // Save the string to the buffer
+    _stprintf(buffer, _T("%08.4f %c")_T(DEG), mlong, EW[sign]);
     break;
 
   default:
@@ -102,14 +102,14 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
 }
 
 bool
-Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
+Units::LatitudeToString(Angle latitude, TCHAR *buffer, gcc_unused size_t size)
 {
   static gcc_constexpr_data TCHAR EW[] = _T("SNN");
   int dd, mm, ss;
 
   // Calculate Latitude sign
-  int sign = Latitude.Sign()+1;
-  double mlat(Latitude.AbsoluteDegrees());
+  int sign = latitude.Sign()+1;
+  double mlat(latitude.AbsoluteDegrees());
 
   switch (current.coordinate_format) {
   case CoordinateFormat::DDMMSS:
@@ -129,8 +129,8 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
       dd++;
       mm -= 60;
     }
-    // Save the string to the Buffer
-    _stprintf(Buffer, _T("%02d")_T(DEG)_T("%02d'%02d\" %c"),
+    // Save the string to the buffer
+    _stprintf(buffer, _T("%02d")_T(DEG)_T("%02d'%02d\" %c"),
               dd, mm, ss, EW[sign]);
     break;
 
@@ -142,8 +142,8 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
     mm = (int)(mlat);
     // Calculate seconds
     mlat = (mlat - mm) * 60.0;
-    // Save the string to the Buffer
-    _stprintf(Buffer, _T("%02d")_T(DEG)_T("%02d'%05.2f\" %c"),
+    // Save the string to the buffer
+    _stprintf(buffer, _T("%02d")_T(DEG)_T("%02d'%05.2f\" %c"),
               dd, mm, mlat, EW[sign]);
     break;
 
@@ -152,13 +152,13 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
     dd = (int)mlat;
     // Calculate minutes
     mlat = (mlat - dd) * 60.0;
-    // Save the string to the Buffer
-    _stprintf(Buffer, _T("%02d")_T(DEG)_T("%06.3f' %c"), dd, mlat, EW[sign]);
+    // Save the string to the buffer
+    _stprintf(buffer, _T("%02d")_T(DEG)_T("%06.3f' %c"), dd, mlat, EW[sign]);
     break;
 
   case CoordinateFormat::DD_DDDD:
-    // Save the string to the Buffer
-    _stprintf(Buffer, _T("%07.4f %c")_T(DEG), mlat, EW[sign]);
+    // Save the string to the buffer
+    _stprintf(buffer, _T("%07.4f %c")_T(DEG), mlat, EW[sign]);
     break;
 
   default:
@@ -200,11 +200,11 @@ FormatInteger(TCHAR *buffer, size_t size,
 }
 
 void
-Units::FormatUserAltitude(fixed Altitude, TCHAR *buffer, size_t size,
-                          bool IncludeUnit)
+Units::FormatUserAltitude(fixed value, TCHAR *buffer, size_t size,
+                          bool include_unit)
 {
-  FormatInteger(buffer, size, Altitude,
-                unit_descriptors[(unsigned)current.altitude_unit], IncludeUnit);
+  unsigned index = (unsigned)current.altitude_unit;
+  FormatInteger(buffer, size, value, unit_descriptors[index], include_unit);
 }
 
 gcc_const
@@ -224,110 +224,112 @@ GetAlternateUnit(Unit unit)
 }
 
 void
-Units::FormatAlternateUserAltitude(fixed Altitude, TCHAR *buffer, size_t size,
-                                   bool IncludeUnit)
+Units::FormatAlternateUserAltitude(fixed value, TCHAR *buffer, size_t size,
+                                   bool include_unit)
 {
-  FormatInteger(buffer, size, Altitude,
-                unit_descriptors[(unsigned)GetAlternateUnit(current.altitude_unit)],
-                IncludeUnit);
+  unsigned index = (unsigned)GetAlternateUnit(current.altitude_unit);
+  FormatInteger(buffer, size, value, unit_descriptors[index], include_unit);
 }
 
 // JMW, what does this do?
 // TB: It seems to be the same as FormatUserAltitude() but it includes the
 //     sign (+/-) in the output (see _stprintf())
 void
-Units::FormatUserArrival(fixed Altitude, TCHAR *buffer, size_t size,
-                         bool IncludeUnit)
+Units::FormatUserArrival(fixed value, TCHAR *buffer, size_t size,
+                         bool include_unit)
 {
-  const UnitDescriptor *pU = &unit_descriptors[(unsigned)current.altitude_unit];
+  const UnitDescriptor *descriptor =
+      &unit_descriptors[(unsigned)current.altitude_unit];
 
-  Altitude = Altitude * pU->factor_to_user; // + pU->ToUserOffset;
+  value = value * descriptor->factor_to_user; // + descriptor->ToUserOffset;
 
-  if (IncludeUnit)
-    _sntprintf(buffer, size, _T("%+d %s"), iround(Altitude), pU->name);
+  if (include_unit)
+    _sntprintf(buffer, size, _T("%+d %s"), iround(value), descriptor->name);
   else
-    _sntprintf(buffer, size, _T("%+d"), iround(Altitude));
+    _sntprintf(buffer, size, _T("%+d"), iround(value));
 }
 
 void
-Units::FormatUserDistance(fixed Distance, TCHAR *buffer, size_t size,
-                          bool IncludeUnit)
+Units::FormatUserDistance(fixed _value, TCHAR *buffer, size_t size,
+                          bool include_unit)
 {
   int prec;
   fixed value;
 
-  const UnitDescriptor *pU = &unit_descriptors[(unsigned)current.distance_unit];
+  const UnitDescriptor *descriptor =
+      &unit_descriptors[(unsigned)current.distance_unit];
 
-  value = Distance * pU->factor_to_user; // + pU->ToUserOffset;
+  value = _value * descriptor->factor_to_user; // + descriptor->ToUserOffset;
 
   if (value >= fixed(100))
     prec = 0;
   else if (value > fixed_ten)
     prec = 1;
-  else if (!IncludeUnit)
+  else if (!include_unit)
     prec = 2;
   else {
     prec = 2;
     if (current.distance_unit == Unit::KILOMETER) {
       prec = 0;
-      pU = &unit_descriptors[(unsigned)Unit::METER];
-      value = Distance * pU->factor_to_user;
+      descriptor = &unit_descriptors[(unsigned)Unit::METER];
+      value = _value * descriptor->factor_to_user;
     }
     if (current.distance_unit == Unit::NAUTICAL_MILES ||
         current.distance_unit == Unit::STATUTE_MILES) {
-      pU = &unit_descriptors[(unsigned)Unit::FEET];
-      value = Distance * pU->factor_to_user;
+      descriptor = &unit_descriptors[(unsigned)Unit::FEET];
+      value = _value * descriptor->factor_to_user;
       if (value < fixed(1000)) {
         prec = 0;
       } else {
         prec = 1;
-        pU = &unit_descriptors[(unsigned)current.distance_unit];
-        value = Distance * pU->factor_to_user;
+        descriptor = &unit_descriptors[(unsigned)current.distance_unit];
+        value = _value * descriptor->factor_to_user;
       }
     }
   }
 
-  if (IncludeUnit)
-    _sntprintf(buffer, size, _T("%.*f %s"), prec, (double)value, pU->name);
+  if (include_unit)
+    _sntprintf(buffer, size, _T("%.*f %s"), prec, (double)value, descriptor->name);
   else
     _sntprintf(buffer, size, _T("%.*f"), prec, (double)value);
 }
 
 void
-Units::FormatUserMapScale(fixed Distance, TCHAR *buffer,
-                          size_t size, bool IncludeUnit)
+Units::FormatUserMapScale(fixed _value, TCHAR *buffer,
+                          size_t size, bool include_unit)
 {
   int prec;
   fixed value;
 
-  const UnitDescriptor *pU = &unit_descriptors[(unsigned)current.distance_unit];
+  const UnitDescriptor *descriptor =
+      &unit_descriptors[(unsigned)current.distance_unit];
 
-  value = Distance * pU->factor_to_user; // + pU->ToUserOffset;
+  value = _value * descriptor->factor_to_user; // + descriptor->ToUserOffset;
 
   if (value >= fixed(9.999))
     prec = 0;
   else if ((current.distance_unit == Unit::KILOMETER && value >= fixed(0.999)) ||
            (current.distance_unit != Unit::KILOMETER && value >= fixed(0.160)))
     prec = 1;
-  else if (!IncludeUnit)
+  else if (!include_unit)
     prec = 2;
   else {
     prec = 2;
     if (current.distance_unit == Unit::KILOMETER) {
       prec = 0;
-      pU = &unit_descriptors[(unsigned)Unit::METER];
-      value = Distance * pU->factor_to_user;
+      descriptor = &unit_descriptors[(unsigned)Unit::METER];
+      value = _value * descriptor->factor_to_user;
     }
     if (current.distance_unit == Unit::NAUTICAL_MILES ||
         current.distance_unit == Unit::STATUTE_MILES) {
       prec = 0;
-      pU = &unit_descriptors[(unsigned)Unit::FEET];
-      value = Distance * pU->factor_to_user;
+      descriptor = &unit_descriptors[(unsigned)Unit::FEET];
+      value = _value * descriptor->factor_to_user;
     }
   }
 
-  if (IncludeUnit)
-    _sntprintf(buffer, size, _T("%.*f %s"), prec, (double)value, pU->name);
+  if (include_unit)
+    _sntprintf(buffer, size, _T("%.*f %s"), prec, (double)value, descriptor->name);
   else
     _sntprintf(buffer, size, _T("%.*f"), prec, (double)value);
 }
@@ -349,20 +351,20 @@ FormatSpeed(fixed value, TCHAR *buffer, size_t max_size,
 }
 
 void
-Units::FormatUserSpeed(fixed Speed, TCHAR *buffer, size_t size,
-                       bool IncludeUnit, bool Precision)
+Units::FormatUserSpeed(fixed value, TCHAR *buffer, size_t size,
+                       bool include_unit, bool precision)
 {
-  FormatSpeed(Speed, buffer, size,
-              IncludeUnit, Precision,
+  FormatSpeed(value, buffer, size,
+              include_unit, precision,
               unit_descriptors[(unsigned)current.speed_unit]);
 }
 
 void
-Units::FormatUserWindSpeed(fixed Speed, TCHAR *buffer, size_t size,
-                           bool IncludeUnit, bool Precision)
+Units::FormatUserWindSpeed(fixed value, TCHAR *buffer, size_t size,
+                           bool include_unit, bool precision)
 {
-  FormatSpeed(Speed, buffer, size,
-              IncludeUnit, Precision,
+  FormatSpeed(value, buffer, size,
+              include_unit, precision,
               unit_descriptors[(unsigned)current.wind_speed_unit]);
 }
 
@@ -376,54 +378,56 @@ Units::FormatUserTaskSpeed(fixed value, TCHAR *buffer, size_t max_size,
 }
 
 void
-Units::FormatUserVSpeed(fixed Speed, TCHAR *buffer, size_t size,
-                        bool IncludeUnit)
+Units::FormatUserVSpeed(fixed value, TCHAR *buffer, size_t size,
+                        bool include_unit)
 {
-  const UnitDescriptor *pU = &unit_descriptors[(unsigned)current.vertical_speed_unit];
+  const UnitDescriptor *descriptor =
+      &unit_descriptors[(unsigned)current.vertical_speed_unit];
 
-  Speed = Speed * pU->factor_to_user;
+  value = value * descriptor->factor_to_user;
 
-  if (IncludeUnit)
-    _sntprintf(buffer, size, _T("%+.1f %s"), (double)Speed, pU->name);
+  if (include_unit)
+    _sntprintf(buffer, size, _T("%+.1f %s"), (double)value, descriptor->name);
   else
-    _sntprintf(buffer, size, _T("%+.1f"), (double)Speed);
+    _sntprintf(buffer, size, _T("%+.1f"), (double)value);
 }
 
 void
-Units::FormatUserTemperature(fixed temperature, TCHAR *buffer, size_t size,
+Units::FormatUserTemperature(fixed value, TCHAR *buffer, size_t size,
                              bool include_unit)
 {
-  temperature = ToUserTemperature(temperature);
+  value = ToUserTemperature(value);
 
   if (include_unit)
-    _sntprintf(buffer, size, _T("%.0f %s"), (double)temperature,
+    _sntprintf(buffer, size, _T("%.0f %s"), (double)value,
                GetTemperatureName());
   else
-    _sntprintf(buffer, size, _T("%.0f"), (double)temperature);
+    _sntprintf(buffer, size, _T("%.0f"), (double)value);
 }
 
 bool
-Units::FormatUserPressure(AtmosphericPressure pressure, TCHAR *Buffer,
-                          size_t size, bool IncludeUnit)
+Units::FormatUserPressure(AtmosphericPressure pressure, TCHAR *buffer,
+                          size_t size, bool include_unit)
 {
-  TCHAR sTmp[16];
-  const UnitDescriptor *pU = &unit_descriptors[(unsigned)current.pressure_unit];
+  TCHAR buffer2[16];
+  const UnitDescriptor *descriptor =
+      &unit_descriptors[(unsigned)current.pressure_unit];
 
-  fixed _pressure = pressure.GetHectoPascal() * pU->factor_to_user;
+  fixed _pressure = pressure.GetHectoPascal() * descriptor->factor_to_user;
 
-  if (IncludeUnit) {
-    TCHAR sFormat[8];
-    _tcscpy( sFormat, GetFormatUserPressure());
-    _tcscat( sFormat, _T(" %s") );
-    _stprintf(sTmp, sFormat, (double)_pressure, pU->name);
+  if (include_unit) {
+    TCHAR format[8];
+    _tcscpy(format, GetFormatUserPressure());
+    _tcscat(format, _T(" %s") );
+    _stprintf(buffer2, format, (double)_pressure, descriptor->name);
   } else
-    _stprintf(sTmp, GetFormatUserPressure(),  (double)_pressure);
+    _stprintf(buffer2, GetFormatUserPressure(),  (double)_pressure);
 
-  if (_tcslen(sTmp) < size - 1) {
-    _tcscpy(Buffer, sTmp);
+  if (_tcslen(buffer2) < size - 1) {
+    _tcscpy(buffer, buffer2);
     return true;
   } else {
-    CopyString(Buffer, sTmp, size);
+    CopyString(buffer, buffer2, size);
     return false;
   }
 }
@@ -447,34 +451,34 @@ Units::PressureStep()
 }
 
 void
-Units::TimeToTextHHMMSigned(TCHAR* text, int d)
+Units::TimeToTextHHMMSigned(TCHAR* buffer, int _time)
 {
-  bool negative = (d < 0);
-  const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(d));
+  bool negative = (_time < 0);
+  const BrokenTime time = BrokenTime::FromSecondOfDayChecked(abs(_time));
   if (negative)
-    _stprintf(text, _T("-%02u:%02u"), t.hour, t.minute);
+    _stprintf(buffer, _T("-%02u:%02u"), time.hour, time.minute);
   else
-    _stprintf(text, _T("%02u:%02u"), t.hour, t.minute);
+    _stprintf(buffer, _T("%02u:%02u"), time.hour, time.minute);
 }
 
 void
-Units::TimeToTextSmart(TCHAR* HHMMSSSmart, TCHAR* SSSmart,int d)
+Units::TimeToTextSmart(TCHAR *buffer1, TCHAR *buffer2, int _time)
 {
-  if ((unsigned) abs(d) >= 24u * 3600u) {
-    _tcscpy(HHMMSSSmart, _T(">24h"));
-    SSSmart[0] = '\0';
+  if ((unsigned)abs(_time) >= 24u * 3600u) {
+    _tcscpy(buffer1, _T(">24h"));
+    buffer2[0] = '\0';
     return;
   }
 
-  const BrokenTime t = BrokenTime::FromSecondOfDay(abs(d));
+  const BrokenTime time = BrokenTime::FromSecondOfDay(abs(_time));
 
-  if (t.hour > 0) { // hh:mm, ss
+  if (time.hour > 0) { // hh:mm, ss
     // Set Value
-    _stprintf(HHMMSSSmart, _T("%02u:%02u"), t.hour, t.minute);
-    _stprintf(SSSmart, _T("%02u"), t.second);
+    _stprintf(buffer1, _T("%02u:%02u"), time.hour, time.minute);
+    _stprintf(buffer2, _T("%02u"), time.second);
 
   } else { // mm:ss
-    _stprintf(HHMMSSSmart, _T("%02u:%02u"), t.minute, t.second);
-      SSSmart[0] = '\0';
+    _stprintf(buffer1, _T("%02u:%02u"), time.minute, time.second);
+      buffer2[0] = '\0';
   }
 }

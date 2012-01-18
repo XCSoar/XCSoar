@@ -38,20 +38,20 @@ class AtmosphericPressure;
 namespace Units
 {
   /**
-   * Converts a double-based Longitude into a formatted string
-   * @param Longitude The double-based Longitude
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
+   * Converts a double-based longitude into a formatted string
+   * @param longitude The double-based longitude
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
    */
-  bool LongitudeToString(Angle Longitude, TCHAR *Buffer, size_t size);
+  bool LongitudeToString(Angle longitude, TCHAR *buffer, size_t size);
 
   /**
    * Converts a double-based Latitude into a formatted string
    * @param Latitude The double-based Latitude
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
    */
-  bool LatitudeToString(Angle Latitude, TCHAR *Buffer, size_t size);
+  bool LatitudeToString(Angle latitude, TCHAR *buffer, size_t size);
 
   /**
    * Convert a GeoPoint into a formatted string.
@@ -61,62 +61,62 @@ namespace Units
   /**
    * Converts a double-based Altitude into a formatted string
    * @param Altitude The double-based Altitude
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
    */
-  void FormatUserAltitude(fixed Altitude, TCHAR *buffer, size_t size,
-                          bool IncludeUnit = true);
+  void FormatUserAltitude(fixed value, TCHAR *buffer, size_t size,
+                          bool include_unit = true);
 
   /**
    * Converts a double-based Altitude into a formatted string of the alternate
    * altitude format
    * @param Altitude The double-based Altitude
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
    */
-  void FormatAlternateUserAltitude(fixed Altitude, TCHAR *buffer,
-                                   size_t size, bool IncludeUnit = true);
+  void FormatAlternateUserAltitude(fixed value, TCHAR *buffer, size_t size,
+                                   bool include_unit = true);
 
   /**
    * Converts a double-based Arrival Altitude into a formatted string
    * @param Altitude The double-based Arrival Altitude
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
    */
-  void FormatUserArrival(fixed Altitude, TCHAR *buffer, size_t size,
-                         bool IncludeUnit = true);
+  void FormatUserArrival(fixed value, TCHAR *buffer, size_t size,
+                         bool include_unit = true);
 
   /**
    * Converts a double-based horizontal Distance into a formatted string
    * @param Distance The double-based Distance
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
    */
-  void FormatUserDistance(fixed Distance, TCHAR *buffer, size_t size,
-                          bool IncludeUnit = true);
+  void FormatUserDistance(fixed value, TCHAR *buffer, size_t size,
+                          bool include_unit = true);
 
-  void FormatUserMapScale(fixed Distance, TCHAR *buffer,
-                          size_t size, bool IncludeUnit = true);
-
-  /**
-   * Converts a double-based Speed into a formatted string
-   * @param Speed The double-based Speed
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
-   */
-  void FormatUserSpeed(fixed Altitude, TCHAR *buffer, size_t size,
-                       bool IncludeUnit = true, bool Precision = true);
+  void FormatUserMapScale(fixed value, TCHAR *buffer, size_t size,
+                          bool include_unit = true);
 
   /**
    * Converts a double-based Speed into a formatted string
    * @param Speed The double-based Speed
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   * @return True if buffer long enough, False otherwise
    */
-  void FormatUserWindSpeed(fixed speed, TCHAR *buffer, size_t size,
-                           bool IncludeUnit = true, bool Precision = true);
+  void FormatUserSpeed(fixed value, TCHAR *buffer, size_t size,
+                       bool include_unit = true, bool Precision = true);
+
+  /**
+   * Converts a double-based Speed into a formatted string
+   * @param Speed The double-based Speed
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   * @return True if buffer long enough, False otherwise
+   */
+  void FormatUserWindSpeed(fixed value, TCHAR *buffer, size_t size,
+                           bool include_unit = true, bool Precision = true);
 
   /**
    * Convert a speed [m/s] to the user's task speed and format it into
@@ -130,36 +130,36 @@ namespace Units
   /**
    * Converts a double-based vertical Speed into a formatted string
    * @param Speed The double-based vertical Speed
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   * @return True if buffer long enough, False otherwise
    */
-  void FormatUserVSpeed(fixed Altitude, TCHAR *buffer, size_t size,
-                        bool IncludeUnit = true);
+  void FormatUserVSpeed(fixed value, TCHAR *buffer, size_t size,
+                        bool include_unit = true);
 
   /**
    * Converts a temperature into a formatted string
    * @param temperature The double-based vertical Speed
-   * @param buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
    */
-  void FormatUserTemperature(fixed temperature, TCHAR *buffer, size_t size,
+  void FormatUserTemperature(fixed value, TCHAR *buffer, size_t size,
                              bool include_unit = true);
 
   /**
    * Converts a double-based Pressure into a formatted string
    * @param Pressure The double-based Pressure
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   * @return True if buffer long enough, False otherwise
    */
-  bool FormatUserPressure(AtmosphericPressure pressure, TCHAR *Buffer, size_t size,
-                        bool IncludeUnit = true);
+  bool FormatUserPressure(AtmosphericPressure value, TCHAR *buffer, size_t size,
+                          bool include_unit = true);
   /**
    * Give the proper format to display the pressure
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   * @return True if buffer long enough, False otherwise
    */
 
   const TCHAR* GetFormatUserPressure();
@@ -173,20 +173,18 @@ namespace Units
 
   /**
    * precedes with "-" if time is negative
-   * @param text returns HHMM
-   * @param d input seconds
+   * @param buffer returns HHMM
+   * @param time input seconds
    */
-  void TimeToTextHHMMSigned(TCHAR* text, int d);
+  void TimeToTextHHMMSigned(TCHAR* buffer, int time);
 
   /**
    * sets HHMMSSSmart and SSSmart
-   * if hours > 0, returns HHMM in HHMMSSSmart and SS in SSSmart
-   * if hours == 0, returns MMSS in HHMMSSSmart and "" in SSSmart
-   * @param HHMMSSSmart buffer
-   * @param SSSmart buffer
+   * if hours > 0, returns HHMM in buffer1 and SS in buffer2
+   * if hours == 0, returns MMSS in buffer1 and "" in buffer2
    * @param d input seconds
    */
-  void TimeToTextSmart(TCHAR* HHMMSSSmart, TCHAR* SSSmart,int d);
+  void TimeToTextSmart(TCHAR *buffer1, TCHAR *buffer2, int time);
 };
 
 #endif
