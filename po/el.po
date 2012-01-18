@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-17 15:00+0100\n"
-"PO-Revision-Date: 2011-12-20 19:53+0100\n"
+"PO-Revision-Date: 2012-01-17 18:22+0000\n"
 "Last-Translator: Kostas Hellas <Unknown>\n"
 "Language-Team: none\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-12 08:28+0000\n"
-"X-Generator: Launchpad (build 14458)\n"
+"X-Launchpad-Export-Date: 2012-01-18 22:00+0000\n"
+"X-Generator: Launchpad (build 14681)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -110,7 +110,7 @@ msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:91
 msgid "Task declared!"
-msgstr "Η [Διαδρομή] επιβεβαιώθηκε!"
+msgstr "Η Διαδρομή επιβεβαιώθηκε!"
 
 #: src/Logger/ExternalLogger.cpp:109
 msgid "No logger connected"
@@ -122,18 +122,17 @@ msgid "Declare task"
 msgstr "Δήλωσε Διαδρομή"
 
 #: src/Logger/ExternalLogger.cpp:268
-#, fuzzy
 msgid "Failed to enable download mode."
-msgstr "Απέτυχε το \"κατέβασμα\" της πτήσης"
+msgstr "Απέτυχε η ενεργοποίηση της κατάστασης \"Κατεβάσματος\""
 
 #: src/Logger/ExternalLogger.cpp:269 src/Logger/ExternalLogger.cpp:278
 #: src/Logger/ExternalLogger.cpp:286 src/Logger/ExternalLogger.cpp:305
 msgid "Download flight"
-msgstr "\"κατέβασμα\" πτήσης"
+msgstr "\"Κατέβασμα\" πτήσης"
 
 #: src/Logger/ExternalLogger.cpp:277
 msgid "Failed to download flight list."
-msgstr "Απέτυχε το \"κατέβασμα\" της λίστας πτήσεων"
+msgstr "Απέτυχε το \"Κατέβασμα\" της λίστας πτήσεων"
 
 #: src/Logger/ExternalLogger.cpp:285
 msgid "Logger is empty."
@@ -141,7 +140,7 @@ msgstr "Το αρχείο καταγραφής είναι άδειο"
 
 #: src/Logger/ExternalLogger.cpp:304
 msgid "Failed to download flight."
-msgstr "Απέτυχε το \"κατέβασμα\" της πτήσης"
+msgstr "Απέτυχε το \"Κατέβασμα\" της πτήσης"
 
 #: src/Replay/IgcReplayGlue.cpp:79
 msgid "Could not open IGC file!"
@@ -169,7 +168,7 @@ msgstr "Χωρίς κυκλοφορία"
 
 #: src/Waypoint/WaypointDetailsReader.cpp:155
 msgid "Loading Airfield Details File..."
-msgstr "\"Φόρτωση\" λεπτομερειών Εναερίου Χώρου  Αρχείο..."
+msgstr "\"Φόρτωση\" αρχείου λεπτομερειών Εναερίου Χώρου..."
 
 #: src/Menu/ExpandMacros.cpp:122 src/Menu/ExpandMacros.cpp:132
 #: src/Menu/ExpandMacros.cpp:198 src/Menu/ExpandMacros.cpp:228
@@ -275,7 +274,7 @@ msgstr ""
 
 #: src/Menu/ExpandMacros.cpp:321 src/Menu/ExpandMacros.cpp:325
 msgid "Resume"
-msgstr "Συνέχεια"
+msgstr "Συνέχιση"
 
 #: src/Menu/ExpandMacros.cpp:321 src/Menu/ExpandMacros.cpp:325
 #: src/Dialogs/Message.cpp:169
@@ -468,7 +467,7 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
-"Η πραγματική - μαγνητική κατεύθυνση (αζιμούθιο) στο επόμενο Σημείο "
+"Η πραγματική - μαγνητική κατεύθυνση {αζιμούθιο) στο επόμενο Σημείο "
 "Διέλευσης. Για ΑΑΤ διαδρομές αυτή είναι η πραγματική κατεύθυνση προς τον "
 "στόχο εντός του ΑΑΤ τομέα."
 
@@ -685,7 +684,7 @@ msgstr ""
 "Το όνομα του επιλεγμένου Σημείου Στροφής. Όταν αυτό το πεδίο είναι ενεργό, "
 "χρησιμοποιώντας τα πάνω / κάτω βέλη επιλέγουμε το επόμενο / προηγούμενο "
 "Σημείο Διέλευσης στην Διαδρομή. (Οθόνη Αφής / PC μόνο) Πατώντας το πλήκτρο "
-"enter δρομέα εμφανίζει τις λεπτομέρειες σημείο."
+"enter εμφανίζει λεπτομέρειες του Σημείο Διέλευσης."
 
 #: src/InfoBoxes/Content/Factory.cpp:228
 #, no-c-format
@@ -758,12 +757,12 @@ msgstr "Απόσταση για ολοκλήρωση διαμέσου των υ�
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
 msgid "Final L/D"
-msgstr "ΤελικόςΛΚ"
+msgstr "Τελικός ΛΚ"
 
 #: src/InfoBoxes/Content/Factory.cpp:269
 #, no-c-format
 msgid "Fin LD"
-msgstr "ΤελικόςΛΚ"
+msgstr "ΤελικΛΚ"
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
@@ -785,7 +784,7 @@ msgstr ""
 "μειώνει το ύψος που απαιτείται για να ολοκληρωθεί η Διαδρομή από την "
 "περίσσεια ενέργειας ύψους του ανεμόπτερου αν η πραγματική Ταχύτητα Ανέμου "
 "είναι μεγαλύτερη από την MacCready και καλύτερη των ταχυτήτων Μεγάλης "
-"Απόστασης (LD)."
+"Απόστασης (ΜΑ)."
 
 #: src/InfoBoxes/Content/Factory.cpp:278
 #, no-c-format
@@ -940,7 +939,9 @@ msgstr "ΥπολΧρονΔ"
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
-msgstr "Χρόνος που υπολείπεται για την καθορισμένης Διαδρομής"
+msgstr ""
+"Χρόνος που υπολείπεται για την καθορισμένης Διαδρομής. Κοκκινίζει  όταν ο "
+"χρόνος έχει λήξει."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -988,13 +989,13 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
-"Η μέση εφικτή ταχύτητα, για τη μέγιστη δυνατή απόσταση που απομένει στον "
-"ελάχιστο χρόνο της καθορισμένης Διαδρομής."
+"Η μέση εφικτή ταχύτητα για τη μέγιστη δυνατή απόσταση που απομένει στον "
+"ελάχιστο χρόνο της Καθορισμένης Διαδρομής."
 
 #: src/InfoBoxes/Content/Factory.cpp:388
 #, no-c-format
 msgid "AA speed min. distance"
-msgstr ""
+msgstr "ΤαχΜικΑποσΚΔ"
 
 #: src/InfoBoxes/Content/Factory.cpp:389
 #, no-c-format
@@ -1966,23 +1967,21 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:989
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr "Διαφορά ύψους από το επόμενο ΣΔ"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:990
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP MC0 AltD"
-msgstr "ΥψΑποΕπομΣΔ"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:991
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
-"Υψόμετρο άφιξης στο επόμενο Σημείο Διέλευσης σε σχέση με το ύψος ασφαλούς "
-"άφιξης."
 
 #: src/InfoBoxes/Content/Factory.cpp:999
 #, no-c-format
@@ -2344,9 +2343,8 @@ msgid "dropped at %s"
 msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:211
-#, fuzzy
 msgid "Thermal"
-msgstr "Θερμικό κέρδος ύψους"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:217
 msgid "Avg. lift"
@@ -2790,9 +2788,8 @@ msgid ""
 msgstr ""
 
 #: src/Widgets/DeviceEditWidget.cpp:463
-#, fuzzy
 msgid "TCP Port"
-msgstr "Θύρα"
+msgstr ""
 
 #: src/Widgets/DeviceEditWidget.cpp:474
 msgid "Driver"
@@ -3024,9 +3021,8 @@ msgid "Use ZigZag and circling."
 msgstr ""
 
 #: src/Dialogs/WindSettingsPanel.cpp:58
-#, fuzzy
 msgid "Auto wind"
-msgstr "Αυτόματα"
+msgstr ""
 
 #: src/Dialogs/WindSettingsPanel.cpp:59
 msgid "This allows switching on or off the automatic wind algorithm."
@@ -3347,9 +3343,9 @@ msgid "Gauges"
 msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:79
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task Defaults"
-msgstr "Κανόνες Διαδρομής"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:80
 #, no-c-format
@@ -3357,9 +3353,9 @@ msgid "Look"
 msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:86
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Orientation"
-msgstr "Κατεύθυν."
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:87
 #, no-c-format
@@ -3400,14 +3396,14 @@ msgid "Task Rules"
 msgstr "Κανόνες Διαδρομής"
 
 #: src/Dialogs/dlgConfiguration.cpp:99
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoint Types"
-msgstr "Επόμενο Σημείο Στροφής"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:100
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Language, Input"
-msgstr "Γλώσσα"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:101
 #, no-c-format
@@ -3437,9 +3433,9 @@ msgid "Units"
 msgstr "Μονάδες μέτρησης"
 
 #: src/Dialogs/dlgConfiguration.cpp:113
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tracking"
-msgstr "Ίχνος"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:116
 #, no-c-format
@@ -3596,9 +3592,9 @@ msgid "All on"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:53
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All airspaces are displayed."
-msgstr "Εμφάν. Εναέριου Χώρ."
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:54
 #, no-c-format
@@ -3654,9 +3650,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:156
-#, fuzzy
 msgid "Clip altitude"
-msgstr "Άνεμος σε Υψόμετρο"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:157
 msgid ""
@@ -3700,9 +3695,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:175
-#, fuzzy
 msgid "Use black outline"
-msgstr "Λευκό περίγραμμα"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:176
 msgid ""
@@ -3710,18 +3704,16 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:179
-#, fuzzy
 msgid "Airspace fill mode"
-msgstr "Λεπτομέριες Εναέριου χώρου"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:180
 msgid "Specifies the mode for filling the airspace area."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:185
-#, fuzzy
 msgid "Airspace transparency"
-msgstr "Εμφάν. Εναέριου Χώρ."
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:185
 msgid "If enabled, then airspaces are filled transparently."
@@ -3733,9 +3725,8 @@ msgid "Generic"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/ExperimentalConfigPanel.cpp:65
-#, fuzzy
 msgid "Device model"
-msgstr "Συσκευές"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/ExperimentalConfigPanel.cpp:66
 msgid ""
@@ -3767,18 +3758,16 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:64
-#, fuzzy
 msgid "Thermal assistant"
-msgstr "Θερμικό κέρδος ύψους"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:65
 msgid "This enables the display of the thermal assistant gauge."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:68
-#, fuzzy
 msgid "Thermal band"
-msgstr "Θερμικό κέρδος ύψους"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:69
 msgid ""
@@ -3788,9 +3777,8 @@ msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:62
-#, fuzzy
 msgid "Speed arrows"
-msgstr "Ταχύτητα εδάφους"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:63
 msgid ""
@@ -3801,9 +3789,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:68
-#, fuzzy
 msgid "Show average"
-msgstr "Μ.Ο. Ταχύτητας"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:69
 msgid ""
@@ -3813,14 +3800,12 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:74
-#, fuzzy
 msgid "Show MacReady"
-msgstr "Ορισμ. MacCready"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:74
-#, fuzzy
 msgid "Whether to show the MacCready setting."
-msgstr "Ρυθμίσεις MacCready"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:77
@@ -3833,9 +3818,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:80
-#, fuzzy
 msgid "Show ballast"
-msgstr "Έρμα"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:80
 msgid "Whether to show the ballast percentage."
@@ -3976,9 +3960,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:123
-#, fuzzy
 msgid "Language"
-msgstr "Γλώσσα"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:124
 msgid ""
@@ -4038,9 +4021,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:200
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "OS settings"
-msgstr "Ρυθμίσεις"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:207
@@ -4273,9 +4256,8 @@ msgid "Draws a tab at the top of the InfoBox across the title."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:138
-#, fuzzy
 msgid "Display orientation"
-msgstr "Κατεύθυν."
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:142
 msgid "InfoBox geometry"
@@ -4289,9 +4271,8 @@ msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:147
-#, fuzzy
 msgid "FLARM display"
-msgstr "Οθόνη Εδάφους"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:150
 msgid "Tab dialog style"
@@ -4299,9 +4280,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:154
-#, fuzzy
 msgid "Message display"
-msgstr "Οθόνη Εδάφους"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:157
@@ -4334,9 +4314,9 @@ msgid "InfoBox border"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:61
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start only"
-msgstr "Αρχικό Σημείο"
+msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:75
@@ -4349,9 +4329,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:81
-#, fuzzy
 msgid "Time step circling"
-msgstr "Χωρίς περιστροφή (κύκλωση)"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:82
 msgid "This is the time interval between logged points when circling."
@@ -4367,14 +4346,12 @@ msgid "Aircraft type"
 msgstr "Τύπος Αεροσκάφους"
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:91
-#, fuzzy
 msgid "Aircraft reg."
-msgstr "Τύπος Αεροσκάφους"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:95
-#, fuzzy
 msgid "Logger ID"
-msgstr "Καταγραφέας"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:98
@@ -4390,9 +4367,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:105
-#, fuzzy
 msgid "Auto. logger"
-msgstr "Διακοπή καταγραφής"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:106
 msgid ""
@@ -4559,9 +4535,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:125
-#, fuzzy
 msgid "Route ceiling"
-msgstr "Χωρίς περιστροφή (κύκλωση)"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:126
 msgid ""
@@ -4607,9 +4582,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:150
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disables the reach display."
-msgstr "Εμφάν. Εναέριου Χώρ."
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:151
 #: src/Dialogs/dlgTaskHelpers.cpp:247
@@ -4633,9 +4608,8 @@ msgid "Shades terrain outside glide reach."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:156
-#, fuzzy
 msgid "Reach display"
-msgstr "Οθόνη Εδάφους"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:161
 #, no-c-format
@@ -4649,9 +4623,9 @@ msgid "Safety MC"
 msgstr "Ασφαλές Mc"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:163
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Uses safety MacCready value"
-msgstr "Ορισμ. MacCready"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:168
@@ -4667,9 +4641,8 @@ msgstr ""
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:61
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:119
-#, fuzzy
 msgid "Arrival height"
-msgstr "Υψος Θερμικού"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:62
 msgid ""
@@ -4696,9 +4669,8 @@ msgid "Home"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:80
-#, fuzzy
 msgid "Alternates mode"
-msgstr "Εναλλακτικά"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:81
 msgid ""
@@ -4757,9 +4729,8 @@ msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:110
-#, fuzzy
 msgid "More waypoints"
-msgstr "Σημεία Χάρτη"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:111
 msgid ""
@@ -4769,9 +4740,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:115
-#, fuzzy
 msgid "Watched waypoints"
-msgstr "Πρόσθεση Σημείου"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:116
 msgid ""
@@ -4782,9 +4752,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:121
-#, fuzzy
 msgid "Airspaces"
-msgstr "Εναέριος Χώρος"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:121
 msgid "The file name of the primary airspace file."
@@ -4792,9 +4761,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:125
-#, fuzzy
 msgid "More airspaces"
-msgstr "Εμφάνιση εναέριου χώρου ON"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:125
 msgid "The file name of the secondary airspace file."
@@ -4811,9 +4779,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:133
-#, fuzzy
 msgid "Topography file"
-msgstr "Τοπογραφικό Ενεργό"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:133
 msgid "Specifies the file defining the topographical features."
@@ -4821,9 +4788,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:137
-#, fuzzy
 msgid "Waypoint details"
-msgstr "Σημεία"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:138
 msgid ""
@@ -4864,9 +4830,9 @@ msgid "Vario #1"
 msgstr "Βαρόμετρο #1"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:99
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vario #2"
-msgstr "Βαρόμετρο #2"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:106
 #, no-c-format
@@ -4914,18 +4880,16 @@ msgid "Draws an arrow head with a dashed arrow line."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:127
-#, fuzzy
 msgid "Track bearing"
-msgstr "Ίχνος"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:128
 msgid "Display the track bearing (ground track projection) on the map."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:131
-#, fuzzy
 msgid "FLARM traffic"
-msgstr "Χωρίς κυκλοφορία"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:131
 msgid "This enables the display of FLARM traffic on the map window."
@@ -4952,15 +4916,13 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:144
-#, fuzzy
 msgid "Trail type"
-msgstr "Ίχνος"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:147
-#, fuzzy
 msgid "Trail scaled"
-msgstr "Μήκος Ίχνους"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:148
 msgid ""
@@ -4982,9 +4944,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:159
-#, fuzzy
 msgid "Aircraft symbol"
-msgstr "Τύπος Αεροσκάφους"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:162
@@ -5012,9 +4973,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:71
-#, fuzzy
 msgid "Start max. speed margin"
-msgstr "Αρχική max ταχύτητα"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:72
 msgid ""
@@ -5040,9 +5000,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:86
-#, fuzzy
 msgid "Start max. height margin"
-msgstr "Αρχικό max ύψος"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:87
 msgid ""
@@ -5182,9 +5141,8 @@ msgid "Default radius or gate width of the start zone for new tasks."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:140
-#, fuzzy
 msgid "Finish point"
-msgstr "Τελικό Σημείο Στροφής"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:140
 msgid "Default finish type for new tasks you create."
@@ -5195,9 +5153,8 @@ msgid "Default radius or gate width of the finish zone in new tasks."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:163
-#, fuzzy
 msgid "Turn point"
-msgstr "Επόμενο Σημείο Στροφής"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:163
 msgid "Default turn point type for new tasks you create."
@@ -5277,9 +5234,8 @@ msgid "Load a set of units."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:137
-#, fuzzy
 msgid "Preset"
-msgstr "Επαναφορά"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:141
 msgid "My individual set of units."
@@ -5492,9 +5448,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:129
-#, fuzzy
 msgid "Label style"
-msgstr "Στοιχεία Χάρτη"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:132
 #, no-c-format
@@ -5601,9 +5556,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:172
-#, fuzzy
 msgid "Landable size"
-msgstr "Διαδρομή & Πιθανές Προσγειώσεις"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:173
 msgid "A percentage to select the size landables are displayed on the map."
@@ -6209,9 +6163,8 @@ msgstr ""
 
 #: src/Dialogs/dlgNOAAList.cpp:152 src/Dialogs/dlgNOAAList.cpp:162
 #: src/Dialogs/dlgNOAADetails.cpp:74
-#, fuzzy
 msgid "Download"
-msgstr "\"κατέβασμα\" πτήσης"
+msgstr ""
 
 #: src/Dialogs/dlgNOAAList.cpp:174 src/Dialogs/dlgNOAADetails.cpp:83
 #, c-format
@@ -6238,9 +6191,8 @@ msgid "METAR and TAF"
 msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:132 src/Weather/NOAAFormatter.cpp:139
-#, fuzzy
 msgid "Dew Point"
-msgstr "Νέο Σημείο"
+msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:166
 msgid "Visibility"
@@ -6471,9 +6423,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:59
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:59
-#, fuzzy
 msgid "Dump time"
-msgstr "ΥπολΧρονΔ"
+msgstr ""
 
 #: Data/Dialogs/dlgWeather.xml:3
 msgid "Weather Forecast"
@@ -6757,9 +6708,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TrackingConfigPanel.xml:5
 #: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:5
-#, fuzzy
 msgid "Tracking Interval"
-msgstr "Ίχνος"
+msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:12
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:12
@@ -7048,9 +6998,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:8
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:8
-#, fuzzy
 msgid "Topography display"
-msgstr "Οθόνη Τοπολογίας"
+msgstr ""
 
 #: Data/Dialogs/dlgWaypointDetails.xml:33
 #: Data/Dialogs/dlgWaypointDetails_L.xml:33
@@ -7118,9 +7067,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:54
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:54
-#, fuzzy
 msgid "Max. ballast"
-msgstr "Έρμα"
+msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:10
 msgid "Enable warnings for final glide through terrain."
@@ -7248,9 +7196,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TrackingConfigPanel.xml:10
 #: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:10
-#, fuzzy
 msgid "LiveTrack24"
-msgstr "Ίχνος"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:115 Data/Dialogs/dlgVario_L.xml:114
 msgid "Circling deadband type"
@@ -7458,9 +7405,8 @@ msgid "Export"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:17 Data/Dialogs/dlgConfiguration_L.xml:17
-#, fuzzy
 msgid "Configuration Menu"
-msgstr "Διαμόρφωση"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:353 Data/Dialogs/dlgVario_L.xml:352
 msgid "Interval; info"
@@ -7481,9 +7427,8 @@ msgstr "Μ.Ο. Ταχύτητας"
 
 #: Data/Dialogs/Configuration/TrackingConfigPanel.xml:14
 #: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:14
-#, fuzzy
 msgid "Username"
-msgstr "Μετονομασία"
+msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:12
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:12
@@ -8169,11 +8114,10 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:513
-#, fuzzy
 msgid ""
 "MacCready\n"
 "-"
-msgstr "Ορισμ. MacCready"
+msgstr ""
 
 #: Data/Input/default.xci:384 Data/Input/default.xci:1021
 msgid ""
@@ -8358,11 +8302,10 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:506
-#, fuzzy
 msgid ""
 "MacCready\n"
 "+"
-msgstr "Ορισμ. MacCready"
+msgstr ""
 
 #: Data/Input/default.xci:64
 msgid "Landing"
@@ -8373,29 +8316,6 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Device A"
-#~ msgstr "Συσκευές"
-
-#, fuzzy
-#~ msgid "Device B"
-#~ msgstr "Συσκευές"
-
-#~ msgid "OK to invalidate declaration?"
-#~ msgstr "Ακύρωση της δήλωσης;"
-
-#~ msgid "Task declared"
-#~ msgstr "Η Διαδρομή δηλώθηκε"
-
-#~ msgid "Terrain Display"
-#~ msgstr "Εμφάνιση Εδάφους"
-
-#~ msgid "Start Anyway"
-#~ msgstr "Εκκίνηση Anyway"
-
-#~ msgid "Task Start"
-#~ msgstr "Εναρξη Διαδρομής"
 
 #~ msgid "Task Declared!"
 #~ msgstr "Δήλωση Διαδρομής!"
@@ -8409,6 +8329,9 @@ msgstr ""
 #~ msgid "Logger OFF"
 #~ msgstr "Καταγραφέας OFF"
 
+#~ msgid "Task Start"
+#~ msgstr "Εναρξη Διαδρομής"
+
 #~ msgid "Task Finish"
 #~ msgstr "Τέλος Διαδρομής"
 
@@ -8418,8 +8341,14 @@ msgstr ""
 #~ msgid "Configuration saved"
 #~ msgstr "Εγκατάσταση Αποθηκέυτηκε"
 
+#~ msgid "Wind at Altitude"
+#~ msgstr "Άνεμος σε Υψόμετρο"
+
 #~ msgid "Site"
 #~ msgstr "Τοποθεσία"
+
+#~ msgid "Terrain Display"
+#~ msgstr "Εμφάνιση Εδάφους"
 
 #~ msgid "Safety factors"
 #~ msgstr "Παράγοντες ασφαλείας"
@@ -8460,11 +8389,20 @@ msgstr ""
 #~ msgid "3 minutes"
 #~ msgstr "3 Λεπτά"
 
+#~ msgid "White outline"
+#~ msgstr "Λευκό περίγραμμα"
+
+#~ msgid "Alternate"
+#~ msgstr "Εναλλακτικά"
+
 #~ msgid "Changes to configuration saved."
 #~ msgstr "Αλλαγές στη διαμόρφωση αποθηκεύτηκαν."
 
 #~ msgid "System"
 #~ msgstr "Σύστημα"
+
+#~ msgid "add waypoint"
+#~ msgstr "Πρόσθεση Σημείου"
 
 #~ msgid "Append to task"
 #~ msgstr "Προσάρτηση στην Διαδρομή"
@@ -8478,8 +8416,14 @@ msgstr ""
 #~ msgid "Start max speed"
 #~ msgstr "Αρχική max ταχύτητα"
 
+#~ msgid "Start Anyway"
+#~ msgstr "Εκκίνηση Anyway"
+
 #~ msgid "Max height gain"
 #~ msgstr "Max κερδ/μένο ύψος"
+
+#~ msgid "Map waypoints"
+#~ msgstr "Σημεία Χάρτη"
 
 #~ msgid "New Waypoint"
 #~ msgstr "Νέο Σημείο"
@@ -8517,6 +8461,9 @@ msgstr ""
 #~ msgid "Warning time*"
 #~ msgstr "Προειδοποίηση Χρόνου*"
 
+#~ msgid "Topology display"
+#~ msgstr "Οθόνη Τοπολογίας"
+
 #~ msgid "Start height ref"
 #~ msgstr "Αναφορά αρχικού ύψ."
 
@@ -8543,3 +8490,9 @@ msgstr ""
 
 #~ msgid "Final Glide Through Terrain"
 #~ msgstr "Τελική Πορεία Μέσω Εδάφους"
+
+#~ msgid "OK to invalidate declaration?"
+#~ msgstr "Ακύρωση της δήλωσης;"
+
+#~ msgid "Task declared"
+#~ msgstr "Η Διαδρομή δηλώθηκε"
