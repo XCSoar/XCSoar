@@ -85,29 +85,6 @@ public:
     incremental = _incremental;
   }
 
-  bool Score(ContestResult &result);
-
-  virtual void CopySolution(ContestTraceVector &vec) const;
-
-protected:
-  virtual fixed CalcDistance() const;
-  virtual fixed CalcScore() const;
-  virtual fixed CalcTime() const;
-
-public:
-  /**
-   * Reset the optimiser as if never flown
-   */
-  virtual void Reset();
-
-  /**
-   * Update the solver.  The solver is incremental, so this method can
-   * be safely called every time step.
-   *
-   * @return True if solver completed in this call
-   */
-  virtual bool Solve(bool exhaustive);
-
 protected:
   gcc_pure
   const TracePoint &GetPoint(unsigned i) const {
@@ -122,12 +99,7 @@ protected:
     return trace[sp.GetPointIndex()];
   }
 
-  /** Update working trace from master --- never to be done during a solution! */
-  virtual void update_trace();
-
   void clear_trace();
-
-  virtual void add_edges(ScanTaskPoint curNode);
 
   /**
    * Retrieve weighting of specified leg
@@ -141,13 +113,6 @@ protected:
 
     return m_weightings[index];
   }
-
-  /**
-   * Perform actions required at start of new search
-   */
-  virtual void start_search();
-
-  virtual bool SaveSolution();
 
   /** 
    * Distance function for free point
@@ -177,10 +142,36 @@ protected:
   }
 
 private:
-  virtual void add_start_edges();
-
   gcc_pure
   bool master_is_updated() const;
+
+protected:
+  /** Update working trace from master --- never to be done during a solution! */
+  virtual void update_trace();
+
+  /**
+   * Perform actions required at start of new search
+   */
+  virtual void start_search();
+  virtual void add_start_edges();
+
+public:
+  /* public virtual methods from AbstractContest */
+  virtual bool Solve(bool exhaustive);
+  virtual bool Score(ContestResult &result);
+  virtual void CopySolution(ContestTraceVector &vec) const;
+  virtual void Reset();
+
+protected:
+  /* protected virtual methods from AbstractContest */
+  virtual fixed CalcDistance() const;
+  virtual fixed CalcScore() const;
+  virtual fixed CalcTime() const;
+  virtual bool SaveSolution();
+
+protected:
+  /* methods from NavDijkstra */
+  virtual void add_edges(ScanTaskPoint curNode);
 };
 
 #endif
