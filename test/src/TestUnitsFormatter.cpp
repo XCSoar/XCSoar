@@ -159,6 +159,41 @@ TestSpeed()
 }
 
 static void
+TestVerticalSpeed()
+{
+  TCHAR buffer[256];
+
+  // Test FormatVerticalSpeed()
+  Units::FormatVerticalSpeed(buffer, ARRAY_SIZE(buffer),
+                             fixed(1.42), Unit::METER_PER_SECOND);
+  ok1(StringIsEqual(buffer, _T("+1.4 m/s")));
+
+  Units::FormatVerticalSpeed(buffer, ARRAY_SIZE(buffer),
+                             fixed(1.42), Unit::METER_PER_SECOND, false);
+  ok1(StringIsEqual(buffer, _T("+1.4")));
+
+  Units::FormatVerticalSpeed(buffer, ARRAY_SIZE(buffer),
+                             Units::ToSysUnit(fixed(2.47), Unit::KNOTS),
+                             Unit::KNOTS);
+  ok1(StringIsEqual(buffer, _T("+2.5 kt")));
+
+  Units::FormatVerticalSpeed(buffer, ARRAY_SIZE(buffer),
+                             Units::ToSysUnit(fixed(2.47), Unit::KNOTS),
+                             Unit::KNOTS, false);
+  ok1(StringIsEqual(buffer, _T("+2.5")));
+
+  Units::FormatVerticalSpeed(buffer, ARRAY_SIZE(buffer),
+                             Units::ToSysUnit(fixed(245.4), Unit::FEET_PER_MINUTE),
+                             Unit::FEET_PER_MINUTE);
+  ok1(StringIsEqual(buffer, _T("+245.4 fpm")));
+
+  Units::FormatVerticalSpeed(buffer, ARRAY_SIZE(buffer),
+                             Units::ToSysUnit(fixed(245.4), Unit::FEET_PER_MINUTE),
+                             Unit::FEET_PER_MINUTE, false);
+  ok1(StringIsEqual(buffer, _T("+245.4")));
+}
+
+static void
 TestTemperature()
 {
   TCHAR buffer[256];
@@ -247,11 +282,12 @@ TestPressure()
 int
 main(int argc, char **argv)
 {
-  plan_tests(39);
+  plan_tests(45);
 
   TestAltitude();
   TestRelativeAltitude();
   TestSpeed();
+  TestVerticalSpeed();
   TestTemperature();
   TestPressure();
 

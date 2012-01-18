@@ -225,18 +225,24 @@ Units::FormatUserTaskSpeed(fixed value, TCHAR *buffer, size_t size,
 }
 
 void
+Units::FormatVerticalSpeed(TCHAR *buffer, size_t size, fixed value, Unit unit,
+                           bool include_unit)
+{
+  value = ToUserUnit(value, unit);
+
+  if (include_unit)
+    _sntprintf(buffer, size, _T("%+.1f %s"), (double)value,
+               Units::unit_descriptors[(unsigned)unit].name);
+  else
+    _sntprintf(buffer, size, _T("%+.1f"), (double)value);
+}
+
+void
 Units::FormatUserVSpeed(fixed value, TCHAR *buffer, size_t size,
                         bool include_unit)
 {
-  const UnitDescriptor *descriptor =
-      &unit_descriptors[(unsigned)current.vertical_speed_unit];
-
-  value = value * descriptor->factor_to_user;
-
-  if (include_unit)
-    _sntprintf(buffer, size, _T("%+.1f %s"), (double)value, descriptor->name);
-  else
-    _sntprintf(buffer, size, _T("%+.1f"), (double)value);
+  FormatVerticalSpeed(buffer, size, value, current.vertical_speed_unit,
+                      include_unit);
 }
 
 void

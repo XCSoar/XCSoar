@@ -140,6 +140,17 @@ namespace Units
                            bool include_unit=true, bool precision=true);
 
   /**
+   * Converts a vertical speed into a formatted string
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   * @param value the vertical speed
+   * @param unit the vertical speed unit (e.g. m/s, feet/min, ...)
+   * @param include_unit include the unit into the string?
+   */
+  void FormatVerticalSpeed(TCHAR *buffer, size_t size, fixed value, Unit unit,
+                           bool include_unit = true);
+
+  /**
    * Converts a double-based vertical Speed into a formatted string
    * @param Speed The double-based vertical Speed
    * @param buffer buffer string to write to (pointer)
