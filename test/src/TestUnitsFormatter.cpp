@@ -26,10 +26,9 @@
 #include "Util/StringUtil.hpp"
 #include "TestUtil.hpp"
 
-int main(int argc, char **argv)
+static void
+TestAltitude()
 {
-  plan_tests(25);
-
   TCHAR buffer[256];
 
   // Test FormatAltitude()
@@ -54,6 +53,12 @@ int main(int argc, char **argv)
   Units::FormatAltitude(buffer, ARRAY_SIZE(buffer), fixed(-1234),
                         Unit::METER, false);
   ok1(StringIsEqual(buffer, _T("-1234")));
+}
+
+static void
+TestRelativeAltitude()
+{
+  TCHAR buffer[256];
 
   // Test FormatRelativeAltitude()
   Units::FormatRelativeAltitude(buffer, ARRAY_SIZE(buffer), fixed(1234),
@@ -81,6 +86,12 @@ int main(int argc, char **argv)
   Units::FormatRelativeAltitude(buffer, ARRAY_SIZE(buffer), fixed(-1234),
                         Unit::METER, false);
   ok1(StringIsEqual(buffer, _T("-1234")));
+}
+
+static void
+TestSpeed()
+{
+  TCHAR buffer[256];
 
   // Test FormatSpeed()
   Units::FormatSpeed(buffer, ARRAY_SIZE(buffer),
@@ -143,6 +154,16 @@ int main(int argc, char **argv)
                      Units::ToSysUnit(fixed(83.43), Unit::STATUTE_MILES_PER_HOUR),
                      Unit::STATUTE_MILES_PER_HOUR, true, true);
   ok1(StringIsEqual(buffer, _T("83.4 mph")));
+}
+
+int
+main(int argc, char **argv)
+{
+  plan_tests(25);
+
+  TestAltitude();
+  TestRelativeAltitude();
+  TestSpeed();
 
   return exit_status();
 }
