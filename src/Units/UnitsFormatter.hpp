@@ -151,6 +151,17 @@ namespace Units
 
   /**
    * Converts a temperature into a formatted string
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   * @param value the temperature
+   * @param unit the temperature unit
+   * @param include_unit include the unit into the string?
+   */
+  void FormatTemperature(TCHAR *buffer, size_t size, fixed value, Unit unit,
+                         bool include_unit = true);
+
+  /**
+   * Converts a temperature into a formatted string
    * @param temperature The double-based vertical Speed
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer

@@ -22,6 +22,7 @@
 
 #include "Units/UnitsFormatter.hpp"
 #include "Units/System.hpp"
+#include "Units/Units.hpp"
 #include "Util/Macros.hpp"
 #include "Util/StringUtil.hpp"
 #include "Atmosphere/Pressure.hpp"
@@ -158,6 +159,41 @@ TestSpeed()
 }
 
 static void
+TestTemperature()
+{
+  TCHAR buffer[256];
+
+  // Test FormatTemperature()
+  Units::FormatTemperature(buffer, ARRAY_SIZE(buffer),
+                           fixed(293.93), Unit::KELVIN);
+  ok1(StringIsEqual(buffer, _T("294 K")));
+
+  Units::FormatTemperature(buffer, ARRAY_SIZE(buffer),
+                           fixed(293.93), Unit::KELVIN, false);
+  ok1(StringIsEqual(buffer, _T("294")));
+
+  Units::FormatTemperature(buffer, ARRAY_SIZE(buffer),
+                           Units::ToSysUnit(fixed(13.4), Unit::DEGREES_CELCIUS),
+                           Unit::DEGREES_CELCIUS);
+  ok1(StringIsEqual(buffer, _T("13 " DEG "C")));
+
+  Units::FormatTemperature(buffer, ARRAY_SIZE(buffer),
+                           Units::ToSysUnit(fixed(13.4), Unit::DEGREES_CELCIUS),
+                           Unit::DEGREES_CELCIUS, false);
+  ok1(StringIsEqual(buffer, _T("13")));
+
+  Units::FormatTemperature(buffer, ARRAY_SIZE(buffer),
+                           Units::ToSysUnit(fixed(92.7), Unit::DEGREES_FAHRENHEIT),
+                           Unit::DEGREES_FAHRENHEIT);
+  ok1(StringIsEqual(buffer, _T("93 " DEG "F")));
+
+  Units::FormatTemperature(buffer, ARRAY_SIZE(buffer),
+                           Units::ToSysUnit(fixed(92.7), Unit::DEGREES_FAHRENHEIT),
+                           Unit::DEGREES_FAHRENHEIT, false);
+  ok1(StringIsEqual(buffer, _T("93")));
+}
+
+static void
 TestPressure()
 {
   TCHAR buffer[256];
@@ -211,11 +247,12 @@ TestPressure()
 int
 main(int argc, char **argv)
 {
-  plan_tests(33);
+  plan_tests(39);
 
   TestAltitude();
   TestRelativeAltitude();
   TestSpeed();
+  TestTemperature();
   TestPressure();
 
   return exit_status();

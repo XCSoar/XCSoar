@@ -240,16 +240,23 @@ Units::FormatUserVSpeed(fixed value, TCHAR *buffer, size_t size,
 }
 
 void
-Units::FormatUserTemperature(fixed value, TCHAR *buffer, size_t size,
-                             bool include_unit)
+Units::FormatTemperature(TCHAR *buffer, size_t size, fixed value, Unit unit,
+                         bool include_unit)
 {
-  value = ToUserTemperature(value);
+  value = ToUserUnit(value, unit);
 
   if (include_unit)
     _sntprintf(buffer, size, _T("%.0f %s"), (double)value,
-               GetTemperatureName());
+               Units::unit_descriptors[(unsigned)unit].name);
   else
     _sntprintf(buffer, size, _T("%.0f"), (double)value);
+}
+
+void
+Units::FormatUserTemperature(fixed value, TCHAR *buffer, size_t size,
+                             bool include_unit)
+{
+  FormatTemperature(buffer, size, value, current.temperature_unit, include_unit);
 }
 
 void
