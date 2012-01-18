@@ -185,6 +185,96 @@ TestDistance()
 }
 
 static void
+TestSmallDistance()
+{
+  TCHAR buffer[256];
+
+  // Test FormatSmallDistance()
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer), fixed(123.4),
+                             Unit::METER);
+  ok1(StringIsEqual(buffer, _T("123 m")));
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer), fixed(123.4),
+                             Unit::METER, false);
+  ok1(StringIsEqual(buffer, _T("123")));
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer), fixed(123.4),
+                             Unit::METER, true, 1);
+  ok1(StringIsEqual(buffer, _T("123.4 m")));
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer), fixed(123.4),
+                             Unit::METER, false, 1);
+  ok1(StringIsEqual(buffer, _T("123.4")));
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer), fixed(123.4),
+                             Unit::METER, true, 2);
+  ok1(StringIsEqual(buffer, _T("123.40 m")));
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer), fixed(123.4),
+                             Unit::METER, false, 2);
+  ok1(StringIsEqual(buffer, _T("123.40")));
+
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer), fixed(123.4),
+                             Unit::KILOMETER);
+  ok1(StringIsEqual(buffer, _T("123 m")));
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer), fixed(123.4),
+                             Unit::KILOMETER, false);
+  ok1(StringIsEqual(buffer, _T("123")));
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer), fixed(123.4),
+                             Unit::KILOMETER, true, 1);
+  ok1(StringIsEqual(buffer, _T("123.4 m")));
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer), fixed(123.4),
+                             Unit::KILOMETER, false, 1);
+  ok1(StringIsEqual(buffer, _T("123.4")));
+
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer),
+                             Units::ToSysUnit(fixed(123.4), Unit::FEET),
+                             Unit::NAUTICAL_MILES);
+  ok1(StringIsEqual(buffer, _T("123 ft")));
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer),
+                             Units::ToSysUnit(fixed(123.4), Unit::FEET),
+                             Unit::NAUTICAL_MILES, false);
+  ok1(StringIsEqual(buffer, _T("123")));
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer),
+                             Units::ToSysUnit(fixed(123.4), Unit::FEET),
+                             Unit::NAUTICAL_MILES, true, 1);
+  ok1(StringIsEqual(buffer, _T("123.4 ft")));
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer),
+                             Units::ToSysUnit(fixed(123.4), Unit::FEET),
+                             Unit::NAUTICAL_MILES, false, 1);
+  ok1(StringIsEqual(buffer, _T("123.4")));
+
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer),
+                             Units::ToSysUnit(fixed(123.4), Unit::FEET),
+                             Unit::STATUTE_MILES);
+  ok1(StringIsEqual(buffer, _T("123 ft")));
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer),
+                             Units::ToSysUnit(fixed(123.4), Unit::FEET),
+                             Unit::STATUTE_MILES, false);
+  ok1(StringIsEqual(buffer, _T("123")));
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer),
+                             Units::ToSysUnit(fixed(123.4), Unit::FEET),
+                             Unit::STATUTE_MILES, true, 1);
+  ok1(StringIsEqual(buffer, _T("123.4 ft")));
+
+  Units::FormatSmallDistance(buffer, ARRAY_SIZE(buffer),
+                             Units::ToSysUnit(fixed(123.4), Unit::FEET),
+                             Unit::STATUTE_MILES, false, 1);
+  ok1(StringIsEqual(buffer, _T("123.4")));
+}
+
+static void
 TestSpeed()
 {
   TCHAR buffer[256];
@@ -376,11 +466,12 @@ TestPressure()
 int
 main(int argc, char **argv)
 {
-  plan_tests(63);
+  plan_tests(81);
 
   TestAltitude();
   TestRelativeAltitude();
   TestDistance();
+  TestSmallDistance();
   TestSpeed();
   TestVerticalSpeed();
   TestTemperature();

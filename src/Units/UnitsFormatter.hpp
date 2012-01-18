@@ -99,6 +99,33 @@ namespace Units
                       bool include_unit = true, int precision = 0);
 
   /**
+   * Converts a distance into a formatted string using the smaller version
+   * of the distance unit (km -> m, nm -> ft, sm -> ft)
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   * @param value the distance
+   * @param unit the distance unit (e.g. m, ft, km, nm, sm)
+   * @param include_unit include the unit into the string?
+   * @param precision the number of decimal places
+   * @return the unit used for output formatting
+   */
+  Unit FormatSmallDistance(TCHAR *buffer, size_t size, fixed value, Unit unit,
+                           bool include_unit = true, int precision = 0);
+
+  /**
+   * Converts a distance into a formatted string using the smaller version
+   * of the user-defined distance unit (km -> m, nm -> ft, sm -> ft)
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   * @param value the distance
+   * @param include_unit include the unit into the string?
+   * @param precision the number of decimal places
+   * @return the unit used for output formatting
+   */
+  Unit FormatSmallUserDistance(TCHAR *buffer, size_t size, fixed value,
+                               bool include_unit = true, int precision = 0);
+
+  /**
    * Converts a double-based horizontal Distance into a formatted string
    * @param Distance The double-based Distance
    * @param buffer buffer string to write to (pointer)

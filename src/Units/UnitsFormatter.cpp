@@ -113,6 +113,47 @@ Units::FormatDistance(TCHAR *buffer, size_t size, fixed value, Unit unit,
     _sntprintf(buffer, size, _T("%.*f"), precision, (double)value);
 }
 
+gcc_const
+static Unit
+GetSmallerDistanceUnit(Unit unit)
+{
+  switch (unit) {
+  case Unit::KILOMETER:
+    return Unit::METER;
+
+  case Unit::NAUTICAL_MILES:
+  case Unit::STATUTE_MILES:
+    return Unit::FEET;
+
+  default:
+    return unit;
+  }
+}
+
+Unit
+Units::FormatSmallDistance(TCHAR *buffer, size_t size, fixed value, Unit unit,
+                           bool include_unit, int precision)
+{
+  unit = GetSmallerDistanceUnit(unit);
+  value = Units::ToUserUnit(value, unit);
+
+  if (include_unit)
+    _sntprintf(buffer, size, _T("%.*f %s"), precision, (double)value,
+               Units::unit_descriptors[(unsigned)unit].name);
+  else
+    _sntprintf(buffer, size, _T("%.*f"), precision, (double)value);
+
+  return unit;
+}
+
+Unit
+Units::FormatSmallUserDistance(TCHAR *buffer, size_t size, fixed value,
+                           bool include_unit, int precision)
+{
+  return FormatSmallDistance(buffer, size, value, current.distance_unit,
+                             include_unit, precision);
+}
+
 static void
 GetBestDistanceFormat(fixed _value, bool include_unit,
                       Unit &unit, int &precision)
