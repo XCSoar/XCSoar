@@ -191,6 +191,15 @@ public:
   static void SetMacCready(fixed mc, bool to_devices=true);
 
   /**
+   * Configure a new MacCready setting in #ComputerSettings, and
+   * forward it to all XCSoar modules that want it. Also switch
+   * to manual MC mode.
+   *
+   * @param to_devices send the new settings to all devices?
+   */
+  static void SetManualMacCready(fixed mc, bool to_devices=true);
+
+  /**
    * Call this after MapSettings has been modified with
    * SetMapSettings().  It sends the new values to all sub systems,
    * and optionally forces a redraw.

@@ -42,6 +42,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "CalculationThread.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Profile/Profile.hpp"
 #include "UIState.hpp"
 
 UIState CommonInterface::ui_state;
@@ -148,6 +149,17 @@ ActionInterface::SetMacCready(fixed mc, bool to_devices)
 
   if (to_devices)
     device_blackboard->SetMC(mc);
+}
+
+void ActionInterface::SetManualMacCready(fixed mc, bool to_devices)
+{
+  TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
+  if (task_behaviour.auto_mc) {
+    task_behaviour.auto_mc = false;
+    Profile::Set(szProfileAutoMc, false);
+  }
+
+  SetMacCready(mc, to_devices);
 }
 
 void
