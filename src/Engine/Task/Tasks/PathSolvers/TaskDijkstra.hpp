@@ -117,7 +117,13 @@ protected:
 
 private:
   void calculate_sizes();
-  unsigned get_size(const unsigned stage) const;
+
+  gcc_pure
+  unsigned get_size(const unsigned stage) const {
+    assert(stage < num_stages);
+
+    return sp_sizes[stage];
+  }
 
 protected:
   /* methods from NavDijkstra */

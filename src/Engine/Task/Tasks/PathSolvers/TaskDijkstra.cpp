@@ -48,12 +48,6 @@ TaskDijkstra::calculate_sizes()
     sp_sizes[stage] = task.get_tp_search_points(stage).size();
 }
 
-unsigned
-TaskDijkstra::get_size(const unsigned stage) const
-{
-  return sp_sizes[stage];
-}
-
 const SearchPoint &
 TaskDijkstra::GetPointFast(const ScanTaskPoint sp) const
 {
