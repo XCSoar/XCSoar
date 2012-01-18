@@ -99,6 +99,8 @@ ParseDistance(const TCHAR* src, fixed& dest)
     dest = Units::ToSysUnit(dest, Unit::STATUTE_MILES);
   else if (_tcsicmp(unit, _T("nm")) == 0)
     dest = Units::ToSysUnit(dest, Unit::NAUTICAL_MILES);
+  else if (_tcsicmp(unit, _T("ft")) == 0)
+    dest = Units::ToSysUnit(dest, Unit::FEET);
 
   // Save distance
   return true;
