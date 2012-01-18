@@ -37,7 +37,7 @@ static void
 SetVSpeed(InfoBoxData &data, fixed value)
 {
   TCHAR buffer[32];
-  Units::FormatUserVSpeed(value, buffer, 32, false);
+  Units::FormatUserVerticalSpeed(value, buffer, 32, false);
   data.SetValue(buffer[0] == _T('+') ? buffer + 1 : buffer);
   data.SetValueUnit(Units::current.vertical_speed_unit);
 }

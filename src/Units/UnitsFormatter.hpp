@@ -83,8 +83,8 @@ namespace Units
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
    */
-  void FormatUserArrival(fixed value, TCHAR *buffer, size_t size,
-                         bool include_unit = true);
+  void FormatRelativeUserAltitude(fixed value, TCHAR *buffer, size_t size,
+                                  bool include_unit = true);
 
   /**
    * Converts a distance into a formatted string
@@ -146,8 +146,8 @@ namespace Units
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
    */
-  Unit FormatUserDistance(fixed value, TCHAR *buffer, size_t size,
-                          bool include_unit = true);
+  Unit FormatUserDistanceSmart(fixed value, TCHAR *buffer, size_t size,
+                               bool include_unit = true);
 
   Unit FormatUserMapScale(fixed value, TCHAR *buffer, size_t size,
                           bool include_unit = true);
@@ -224,8 +224,8 @@ namespace Units
    * @param size Size of the buffer
    * @return True if buffer long enough, False otherwise
    */
-  void FormatUserVSpeed(fixed value, TCHAR *buffer, size_t size,
-                        bool include_unit = true);
+  void FormatUserVerticalSpeed(fixed value, TCHAR *buffer, size_t size,
+                               bool include_unit = true);
 
   /**
    * Converts a temperature into a formatted string
@@ -280,7 +280,7 @@ namespace Units
    * @param size Size of the buffer
    * @return True if buffer long enough, False otherwise
    */
-  const TCHAR* GetFormatUserPressure(bool include_unit = false);
+  const TCHAR* GetUserPressureFormat(bool include_unit = false);
 
   /**
    * Give the basic step size for pressure editing

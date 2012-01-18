@@ -114,8 +114,8 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Draw distance and arrival altitude
   StaticString<256> buffer;
   TCHAR dist[20], alt[20], radio[20];
-  Units::FormatUserDistance(distance, dist, ARRAY_SIZE(dist), true);
-  Units::FormatUserArrival(arrival_altitude, alt, ARRAY_SIZE(alt), true);
+  Units::FormatUserDistanceSmart(distance, dist, ARRAY_SIZE(dist), true);
+  Units::FormatRelativeUserAltitude(arrival_altitude, alt, ARRAY_SIZE(alt), true);
   buffer.Format(_T("%s: %s - %s: %s"), _("Distance"), dist,
                 _("Arrival Alt"), alt);
 
@@ -162,7 +162,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Draw leg distance
   UPixelScalar leg_info_width = 0;
   if (vector) {
-    Units::FormatUserDistance(vector->distance, buffer.buffer(),
+    Units::FormatUserDistanceSmart(vector->distance, buffer.buffer(),
                               buffer.MAX_SIZE, true);
     UPixelScalar width = leg_info_width = canvas.CalcTextWidth(buffer.c_str());
     canvas.text(rc.right - Layout::FastScale(2) - width,

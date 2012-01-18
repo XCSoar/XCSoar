@@ -312,7 +312,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   wp = AddFloat(_("QNH"),
                 _("Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected."),
-                Units::GetFormatUserPressure(), Units::GetFormatUserPressure(),
+                Units::GetUserPressureFormat(), Units::GetUserPressureFormat(),
                 Units::ToUserPressure(Units::ToSysUnit(fixed(850), Unit::HECTOPASCAL)),
                 Units::ToUserPressure(Units::ToSysUnit(fixed(1300), Unit::HECTOPASCAL)),
                 Units::GetUserPressureStep(), false,

@@ -540,7 +540,7 @@ UpdateDistanceBearing(const GeoPoint &own_location,
   GeoVector vector = own_location.DistanceBearing(waypoint_location);
 
   TCHAR distance_buffer[32];
-  Units::FormatUserDistance(vector.distance, distance_buffer,
+  Units::FormatUserDistanceSmart(vector.distance, distance_buffer,
                             ARRAY_SIZE(distance_buffer));
 
   TCHAR buffer[64];
@@ -626,7 +626,7 @@ static void
 ShowGlideResult(WndProperty &wp, const GlideResult &result)
 {
   TCHAR buffer[64];
-  Units::FormatUserArrival(result.altitude_difference,
+  Units::FormatRelativeUserAltitude(result.altitude_difference,
                            buffer, ARRAY_SIZE(buffer));
   wp.SetText(buffer);
 }

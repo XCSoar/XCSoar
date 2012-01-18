@@ -169,12 +169,12 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
     } else {
       TCHAR vis_buffer[32];
       if (parsed.visibility >= 9999) {
-        Units::FormatUserDistance(fixed(10000),
+        Units::FormatUserDistanceSmart(fixed(10000),
                                   vis_buffer, ARRAY_SIZE(vis_buffer));
 
         buffer.AppendFormat(_("more than %s"), vis_buffer);
       } else {
-        Units::FormatUserDistance(fixed(parsed.visibility),
+        Units::FormatUserDistanceSmart(fixed(parsed.visibility),
                                   vis_buffer, ARRAY_SIZE(vis_buffer));
         buffer += vis_buffer;
       }

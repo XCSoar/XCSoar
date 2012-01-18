@@ -29,7 +29,7 @@ void
 InfoBoxData::SetValueFromDistance(fixed new_value)
 {
   Unit distance_unit =
-    Units::FormatUserDistance(new_value, value.buffer(), value.MAX_SIZE, false);
+    Units::FormatUserDistanceSmart(new_value, value.buffer(), value.MAX_SIZE, false);
   SetValueUnit(distance_unit);
 }
 
@@ -43,7 +43,7 @@ InfoBoxData::SetValueFromAltitude(fixed new_value)
 void
 InfoBoxData::SetValueFromArrival(fixed new_value)
 {
-  Units::FormatUserArrival(new_value, value.buffer(), value.MAX_SIZE, false);
+  Units::FormatRelativeUserAltitude(new_value, value.buffer(), value.MAX_SIZE, false);
   SetValueUnit(Units::current.altitude_unit);
 }
 

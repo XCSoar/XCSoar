@@ -93,7 +93,7 @@ InfoBoxContentSpark::label_vspeed(InfoBoxData &data,
     return;
 
   TCHAR sTmp[32];
-  Units::FormatUserVSpeed(var.last(), sTmp,
+  Units::FormatUserVerticalSpeed(var.last(), sTmp,
                           ARRAY_SIZE(sTmp));
   data.SetComment(sTmp);
 

@@ -149,7 +149,7 @@ ShowMapItemListDialog(SingleWindow &parent)
 
   TCHAR info_buffer[256], distance_buffer[32], direction_buffer[32];
   if (vector.IsValid()) {
-    Units::FormatUserDistance(vector.distance, distance_buffer, 32);
+    Units::FormatUserDistanceSmart(vector.distance, distance_buffer, 32);
     FormatBearing(direction_buffer, ARRAY_SIZE(direction_buffer),
                   vector.bearing, _T("T"));
     _stprintf(info_buffer, _T("%s: %s - %s: %s"),

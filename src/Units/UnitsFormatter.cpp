@@ -93,8 +93,8 @@ Units::FormatRelativeAltitude(TCHAR *buffer, size_t size, fixed value,
 }
 
 void
-Units::FormatUserArrival(fixed value, TCHAR *buffer, size_t size,
-                         bool include_unit)
+Units::FormatRelativeUserAltitude(fixed value, TCHAR *buffer, size_t size,
+                                  bool include_unit)
 {
   FormatRelativeAltitude(buffer, size, value, current.altitude_unit,
                          include_unit);
@@ -190,8 +190,8 @@ Units::FormatDistanceSmart(TCHAR *buffer, size_t size, fixed value, Unit unit,
 }
 
 Unit
-Units::FormatUserDistance(fixed value, TCHAR *buffer, size_t size,
-                          bool include_unit)
+Units::FormatUserDistanceSmart(fixed value, TCHAR *buffer, size_t size,
+                               bool include_unit)
 {
   return FormatDistanceSmart(buffer, size, value, current.distance_unit,
                              include_unit);
@@ -274,8 +274,8 @@ Units::FormatVerticalSpeed(TCHAR *buffer, size_t size, fixed value, Unit unit,
 }
 
 void
-Units::FormatUserVSpeed(fixed value, TCHAR *buffer, size_t size,
-                        bool include_unit)
+Units::FormatUserVerticalSpeed(fixed value, TCHAR *buffer, size_t size,
+                               bool include_unit)
 {
   FormatVerticalSpeed(buffer, size, value, current.vertical_speed_unit,
                       include_unit);
@@ -332,7 +332,7 @@ Units::GetPressureFormat(Unit unit, bool include_unit)
 }
 
 const TCHAR*
-Units::GetFormatUserPressure(bool include_unit)
+Units::GetUserPressureFormat(bool include_unit)
 {
   return GetPressureFormat(current.pressure_unit);
 }

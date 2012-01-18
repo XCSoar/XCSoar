@@ -105,7 +105,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
       if (traffic.climb_rate_avg30s >= fixed(0.1)) {
         // If average climb data available draw it to the canvas
         TCHAR label_avg[100];
-        Units::FormatUserVSpeed(traffic.climb_rate_avg30s, label_avg, 100, false);
+        Units::FormatUserVerticalSpeed(traffic.climb_rate_avg30s, label_avg, 100, false);
         TextInBox(canvas, label_avg, sc_av.x, sc_av.y, mode, get_client_rect());
       }
     }

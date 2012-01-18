@@ -156,7 +156,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
     }
   } else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
-    Units::FormatUserVSpeed(mc,
+    Units::FormatUserVerticalSpeed(mc,
                             Temp, ARRAY_SIZE(Temp),
                             false);
     Message::AddMessage(_("MacCready "), Temp);

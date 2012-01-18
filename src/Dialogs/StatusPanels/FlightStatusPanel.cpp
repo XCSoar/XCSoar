@@ -67,7 +67,7 @@ FlightStatusPanel::Refresh()
     FormatBearing(buffer.buffer(), buffer.MAX_SIZE, vec.bearing, _T(""));
     SetFormValue(form, _T("prpBearing"), buffer);
 
-    Units::FormatUserDistance(vec.distance, buffer.buffer(), buffer.MAX_SIZE);
+    Units::FormatUserDistanceSmart(vec.distance, buffer.buffer(), buffer.MAX_SIZE);
     SetFormValue(form, _T("prpDistance"), buffer);
   } else {
     SetFormValue(form, _T("prpNear"), _T("-"));

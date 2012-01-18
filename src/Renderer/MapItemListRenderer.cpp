@@ -214,7 +214,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   StaticString<256> buffer;
   TCHAR lift_buffer[32], time_buffer[32];
-  Units::FormatUserVSpeed(thermal.lift_rate, lift_buffer, 32);
+  Units::FormatUserVerticalSpeed(thermal.lift_rate, lift_buffer, 32);
   TimeToTextHHMMSigned(time_buffer, TimeLocal((int)thermal.time));
   buffer.Format(_T("%s: %s"), _("Avg. lift"), lift_buffer);
   buffer.append(_T(" - "));
@@ -309,7 +309,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   }
   if (traffic.climb_rate_avg30s_available) {
     TCHAR tmp[15];
-    Units::FormatUserVSpeed(traffic.climb_rate_avg30s, tmp, 15);
+    Units::FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, 15);
     info_string.AppendFormat(_T(" - %s: %s"), _("Vario"), tmp);
   }
   canvas.Select(small_font);

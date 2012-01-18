@@ -55,14 +55,14 @@ TaskStatusPanel::Refresh()
   SetFormValue(form, _T("prpRemainingTime"), Temp);
 
   if (task_stats.total.planned.IsDefined()) {
-    Units::FormatUserDistance(task_stats.total.planned.get_distance(),
+    Units::FormatUserDistanceSmart(task_stats.total.planned.get_distance(),
                               Temp, ARRAY_SIZE(Temp));
     SetFormValue(form, _T("prpTaskDistance"), Temp);
   } else
     SetFormValue(form, _T("prpTaskDistance"), _T(""));
 
   if (task_stats.total.remaining.IsDefined()) {
-    Units::FormatUserDistance(task_stats.total.remaining.get_distance(),
+    Units::FormatUserDistanceSmart(task_stats.total.remaining.get_distance(),
                               Temp, ARRAY_SIZE(Temp));
     SetFormValue(form, _T("prpRemainingDistance"), Temp);
   }
