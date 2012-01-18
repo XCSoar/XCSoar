@@ -186,9 +186,8 @@ Units::FormatUserMapScale(fixed _value, TCHAR *buffer,
 }
 
 static void
-FormatSpeed(fixed value, TCHAR *buffer, size_t max_size,
-            bool include_unit, bool precision,
-            const Unit unit)
+FormatSpeed(TCHAR *buffer, size_t max_size,
+            fixed value, const Unit unit, bool include_unit, bool precision)
 {
   value = Units::ToUserUnit(value, unit);
 
@@ -205,27 +204,24 @@ void
 Units::FormatUserSpeed(fixed value, TCHAR *buffer, size_t size,
                        bool include_unit, bool precision)
 {
-  FormatSpeed(value, buffer, size,
-              include_unit, precision,
-              current.speed_unit);
+  FormatSpeed(buffer, size, value, current.speed_unit,
+              include_unit, precision);
 }
 
 void
 Units::FormatUserWindSpeed(fixed value, TCHAR *buffer, size_t size,
                            bool include_unit, bool precision)
 {
-  FormatSpeed(value, buffer, size,
-              include_unit, precision,
-              current.wind_speed_unit);
+  FormatSpeed(buffer, size, value, current.wind_speed_unit,
+              include_unit, precision);
 }
 
 void
-Units::FormatUserTaskSpeed(fixed value, TCHAR *buffer, size_t max_size,
+Units::FormatUserTaskSpeed(fixed value, TCHAR *buffer, size_t size,
                            bool include_unit, bool precision)
 {
-  FormatSpeed(value, buffer, max_size,
-              include_unit, precision,
-              current.task_speed_unit);
+  FormatSpeed(buffer, size, value, current.task_speed_unit,
+              include_unit, precision);
 }
 
 void
