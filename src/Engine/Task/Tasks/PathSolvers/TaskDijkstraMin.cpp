@@ -29,21 +29,21 @@ TaskDijkstraMin::TaskDijkstraMin(OrderedTask& _task)
 }
 
 bool
-TaskDijkstraMin::distance_min(const SearchPoint &currentLocation)
+TaskDijkstraMin::DistanceMin(const SearchPoint &currentLocation)
 {
-  if (!refresh_task())
+  if (!RefreshTask())
     return false;
 
-  dijkstra.reserve(256);
+  dijkstra.Reserve(256);
 
   if (active_stage > 0) {
-    dijkstra.clear();
-    add_start_edges(currentLocation);
+    dijkstra.Clear();
+    AddStartEdges(currentLocation);
   } else {
     const ScanTaskPoint start(0, 0);
-    dijkstra.restart(start);
+    dijkstra.Restart(start);
   }
 
-  return run();
+  return Run();
 }
 

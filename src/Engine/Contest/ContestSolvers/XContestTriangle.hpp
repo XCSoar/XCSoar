@@ -40,11 +40,13 @@ public:
   XContestTriangle(const Trace &_trace,
                    const bool _is_dhv=false);
 
-  virtual bool Solve(bool exhaustive);
-
-  void swap_mode();
+  void SwapMode() {
+    is_fai = !is_fai;
+  }
 
 protected:
+  /* virtual methods from AbstractContest */
+  virtual bool Solve(bool exhaustive);
   virtual fixed CalcScore() const;
   virtual fixed CalcDistance() const;
 };

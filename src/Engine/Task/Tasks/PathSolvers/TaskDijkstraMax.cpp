@@ -29,14 +29,14 @@ TaskDijkstraMax::TaskDijkstraMax(OrderedTask& _task)
 }
 
 bool
-TaskDijkstraMax::distance_max()
+TaskDijkstraMax::DistanceMax()
 {
-  if (!refresh_task())
+  if (!RefreshTask())
     return false;
 
-  dijkstra.reserve(256);
+  dijkstra.Reserve(256);
 
   const ScanTaskPoint start(0, 0);
-  dijkstra.restart(start);
-  return run();
+  dijkstra.Restart(start);
+  return Run();
 }

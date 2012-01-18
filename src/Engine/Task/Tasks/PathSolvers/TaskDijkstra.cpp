@@ -30,9 +30,9 @@ TaskDijkstra::TaskDijkstra(OrderedTask& _task, bool is_min):
 }
 
 bool
-TaskDijkstra::refresh_task()
+TaskDijkstra::RefreshTask()
 {
-  set_stages(task.TaskSize());
+  SetStageCount(task.TaskSize());
   if (num_stages < 2)
     return false;
 
@@ -45,39 +45,39 @@ TaskDijkstra::refresh_task()
 }
 
 const SearchPoint &
-TaskDijkstra::GetPointFast(const ScanTaskPoint sp) const
+TaskDijkstra::GetPoint(const ScanTaskPoint sp) const
 {
   return task.get_tp_search_points(sp.GetStageNumber())[sp.GetPointIndex()];
 }
 
 void
-TaskDijkstra::add_edges(const ScanTaskPoint curNode)
+TaskDijkstra::AddEdges(const ScanTaskPoint curNode)
 {
   ScanTaskPoint destination(curNode.GetStageNumber() + 1, 0);
-  const unsigned dsize = get_size(destination.GetStageNumber());
+  const unsigned dsize = GetStageSize(destination.GetStageNumber());
 
   for (const ScanTaskPoint end(destination.GetStageNumber(), dsize);
        destination != end; destination.IncrementPointIndex())
-    dijkstra.link(destination, curNode, distance(curNode, destination));
+    dijkstra.Link(destination, curNode, CalcDistance(curNode, destination));
 }
 
 void 
-TaskDijkstra::add_start_edges(const SearchPoint &currentLocation)
+TaskDijkstra::AddStartEdges(const SearchPoint &currentLocation)
 {
   ScanTaskPoint destination(active_stage, 0);
-  const unsigned dsize = get_size(active_stage);
+  const unsigned dsize = GetStageSize(active_stage);
 
   for (const ScanTaskPoint end(active_stage, dsize);
        destination != end; destination.IncrementPointIndex())
-    dijkstra.link(destination, destination,
-                  distance(destination, currentLocation));
+    dijkstra.Link(destination, destination,
+                  CalcDistance(destination, currentLocation));
 }
 
 bool
-TaskDijkstra::run()
+TaskDijkstra::Run()
 {
   solution_valid = false;
-  const bool retval = distance_general() && solution_valid;
-  dijkstra.clear();
+  const bool retval = DistanceGeneral() && solution_valid;
+  dijkstra.Clear();
   return retval;
 }

@@ -47,7 +47,7 @@ public:
    * @param location Location of aircraft
    * @return True if succeeded
    */
-  bool distance_min(const SearchPoint& location);
+  bool DistanceMin(const SearchPoint& location);
 };
 
 #endif

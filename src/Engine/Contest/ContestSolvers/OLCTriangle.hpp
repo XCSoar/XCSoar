@@ -45,24 +45,26 @@ public:
   void Reset();
 
 protected:
-  virtual bool SaveSolution();
+  gcc_pure
+  fixed CalcLegDistance(unsigned i) const;
 
+  gcc_pure
+  bool IsPathClosed() const;
+
+protected:
+  /* methods from AbstractContest */
+  virtual bool UpdateScore();
   virtual fixed CalcScore() const;
   virtual fixed CalcDistance() const;
   virtual fixed CalcTime() const;
+  virtual bool SaveSolution();
 
-  fixed leg_distance(unsigned i) const;
+  /* methods from NavDijkstra */
+  virtual void AddEdges(ScanTaskPoint curNode);
 
-  bool path_closed() const;
-
-  void add_edges(ScanTaskPoint curNode);
-
-  void start_search();
-
-  bool UpdateScore();
-
-private:
-  void add_start_edges();
+  /* methods from ContestDijkstra */
+  virtual void StartSearch();
+  virtual void AddStartEdges();
 };
 
 #endif

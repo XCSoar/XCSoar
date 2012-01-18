@@ -90,7 +90,7 @@ protected:
   NavDijkstra(const bool is_min, const unsigned _num_stages)
     :dijkstra(is_min), solution_valid(false)
   {
-    set_stages(_num_stages);
+    SetStageCount(_num_stages);
   }
 
 protected:
@@ -98,7 +98,7 @@ protected:
    * Set the number of stages to search for, and clear the solution
    * array
    */
-  void set_stages(const unsigned _num_stages) {
+  void SetStageCount(const unsigned _num_stages) {
     assert(_num_stages <= MAX_STAGES);
     num_stages =_num_stages;
   }
@@ -110,7 +110,7 @@ protected:
    * 
    * @return True if this terminal point completes a valid solution
    */
-  virtual bool finish_satisfied(const ScanTaskPoint sp) const {
+  bool IsFinishSatisfied(const ScanTaskPoint sp) const {
     return true;
   }
 
@@ -119,7 +119,7 @@ protected:
    * 
    * @param curNode Origin node to add edges from
    */
-  virtual void add_edges(const ScanTaskPoint curNode) = 0;
+  virtual void AddEdges(const ScanTaskPoint curNode) = 0;
 
   /** 
    * Determine whether a point is terminal (no further edges)
@@ -129,7 +129,7 @@ protected:
    * @return True if point is terminal
    */
   gcc_pure
-  bool is_final(const ScanTaskPoint sp) const {
+  bool IsFinal(const ScanTaskPoint sp) const {
     assert(num_stages <= MAX_STAGES);
     return (unsigned)(sp.GetStageNumber() + 1) == num_stages;
   }
@@ -142,19 +142,19 @@ protected:
    * 
    * @return True if algorithm returns a terminal path or no path found
    */
-  bool distance_general(unsigned max_steps = 0 - 1) {
-    while (!dijkstra.empty()) {
-      const ScanTaskPoint destination = dijkstra.pop();
+  bool DistanceGeneral(unsigned max_steps = 0 - 1) {
+    while (!dijkstra.IsEmpty()) {
+      const ScanTaskPoint destination = dijkstra.Pop();
 
-      if (is_final(destination)) {
-        find_solution(destination);
-        if (finish_satisfied(destination)) {
+      if (IsFinal(destination)) {
+        FindSolution(destination);
+        if (IsFinishSatisfied(destination)) {
           solution_valid = true;
           return true;
         }
       } else {
-        add_edges(destination);
-        if (dijkstra.empty())
+        AddEdges(destination);
+        if (dijkstra.IsEmpty())
           return true; // error, no way to reach final
       }
 
@@ -178,7 +178,7 @@ protected:
 #ifndef NDEBUG
       const ScanTaskPoint o(p);
 #endif
-      p = dijkstra.get_predecessor(p);
+      p = dijkstra.GetPredecessor(p);
       assert(p.GetStageNumber() + 1 == o.GetStageNumber());
     }
 
@@ -198,14 +198,14 @@ protected:
    * 
    * @param destination Terminal point to query
    */
-  void find_solution(const ScanTaskPoint destination) {
+  void FindSolution(const ScanTaskPoint destination) {
     ScanTaskPoint p(destination); 
     unsigned last_stage_number;
 
     do {
       last_stage_number = p.GetStageNumber();
       solution[p.GetStageNumber()] = p.GetPointIndex();
-      p = dijkstra.get_predecessor(p);
+      p = dijkstra.GetPredecessor(p);
     } while (p.GetStageNumber() != last_stage_number);
   }
 };

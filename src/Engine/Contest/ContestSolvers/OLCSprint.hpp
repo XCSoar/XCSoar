@@ -39,16 +39,19 @@ public:
 
   void Reset();
 
-protected:
-  fixed CalcScore() const;
-
-  void add_edges(ScanTaskPoint origin);
-
-  virtual void update_trace();
-
 private:
-  void add_start_edges();
   unsigned find_start() const;
+
+protected:
+  /* methods from AbstractContest */
+  virtual fixed CalcScore() const;
+
+  /* methods from NavDijkstra */
+  void AddEdges(ScanTaskPoint origin);
+
+  /* methods from ContestDijkstra */
+  virtual void UpdateTrace();
+  virtual void AddStartEdges();
 };
 
 #endif

@@ -63,7 +63,7 @@ OLCTriangle::Reset()
 
 
 fixed
-OLCTriangle::leg_distance(const unsigned index) const
+OLCTriangle::CalcLegDistance(const unsigned index) const
 {  
   // leg 0: 1-2
   // leg 1: 2-3
@@ -78,7 +78,7 @@ OLCTriangle::leg_distance(const unsigned index) const
 
 
 bool 
-OLCTriangle::path_closed() const
+OLCTriangle::IsPathClosed() const
 {
 
   // RESERVED FOR FUTURE USE: DO NOT DELETE
@@ -203,18 +203,18 @@ TriangleSecondLeg::Calculate(const SearchPoint &c, unsigned best) const
 
 
 void
-OLCTriangle::add_start_edges()
+OLCTriangle::AddStartEdges()
 {
   // use last point as single start,
   // this is out of order but required
 
   ScanTaskPoint destination(0, n_points-1);
-  dijkstra.link(destination, destination, 0);
+  dijkstra.Link(destination, destination, 0);
 }
 
 
 void 
-OLCTriangle::add_edges(const ScanTaskPoint origin)
+OLCTriangle::AddEdges(const ScanTaskPoint origin)
 {
   assert(origin.GetPointIndex() < n_points);
 
@@ -224,34 +224,33 @@ OLCTriangle::add_edges(const ScanTaskPoint origin)
     for (ScanTaskPoint destination(origin.GetStageNumber() + 1, 0),
            end(origin.GetStageNumber() + 1, origin.GetPointIndex());
          destination != end; destination.IncrementPointIndex()) {
-      const unsigned d = 
-        distance(origin, destination);
+      const unsigned d = CalcEdgeDistance(origin, destination);
 
       if (!is_fai || (4*d >= best_d)) { // no reason to add candidate if worse
                                         // than 25% rule for FAI tasks
-        dijkstra.link(destination, origin,
-                      get_weighting(origin.GetStageNumber()) * d);
+        dijkstra.Link(destination, origin,
+                      GetStageWeight(origin.GetStageNumber()) * d);
       }
 
     }
     break;
   case 1: {
-    ScanTaskPoint previous = dijkstra.get_predecessor(origin);
+    ScanTaskPoint previous = dijkstra.GetPredecessor(origin);
 
     // give first leg points to penultimate node
-    TriangleSecondLeg sl(is_fai, GetPointFast(previous), GetPointFast(origin));
+    TriangleSecondLeg sl(is_fai, GetPoint(previous), GetPoint(origin));
     for (ScanTaskPoint destination(origin.GetStageNumber() + 1,
                                    origin.GetPointIndex() + 1),
            end(origin.GetStageNumber() + 1, n_points - 1);
          destination != end; destination.IncrementPointIndex()) {
-      TriangleSecondLeg::Result result = sl.Calculate(GetPointFast(destination),
+      TriangleSecondLeg::Result result = sl.Calculate(GetPoint(destination),
                                                       best_d);
       const unsigned d = result.leg_distance;
       if (d) {
         best_d = result.total_distance;
 
-        dijkstra.link(destination, origin,
-                      get_weighting(origin.GetStageNumber()) * d);
+        dijkstra.Link(destination, origin,
+                      GetStageWeight(origin.GetStageNumber()) * d);
 
         // we have an improved solution
         is_complete = true;
@@ -265,7 +264,7 @@ OLCTriangle::add_edges(const ScanTaskPoint origin)
     break;
   case 2:
     // dummy just to close the triangle
-    dijkstra.link(ScanTaskPoint(origin.GetStageNumber() + 1, n_points - 1),
+    dijkstra.Link(ScanTaskPoint(origin.GetStageNumber() + 1, n_points - 1),
                   origin, 0);
     break;
   default:
@@ -278,7 +277,7 @@ fixed
 OLCTriangle::CalcDistance() const
 {
   if (is_complete) {
-    return leg_distance(0)+leg_distance(1)+leg_distance(2);
+    return CalcLegDistance(0) + CalcLegDistance(1) + CalcLegDistance(2);
   } else {
     return fixed_zero;
   }
@@ -303,7 +302,7 @@ OLCTriangle::CalcScore() const
 }
 
 void
-OLCTriangle::start_search()
+OLCTriangle::StartSearch()
 {
 }
 
@@ -314,7 +313,7 @@ OLCTriangle::UpdateScore()
   // RESERVED FOR FUTURE USE: DO NOT DELETE
   /*
   if (positive(get_best_score()) && !is_closed) {
-    if (path_closed()) {
+    if (IsPathClosed()) {
       std::cout << "complete, closed\n";
       is_closed = true;
     } else {

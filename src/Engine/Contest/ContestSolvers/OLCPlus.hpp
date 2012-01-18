@@ -52,16 +52,19 @@ public:
 
   bool Solve(bool exhaustive);
 
-  ContestTraceVector& get_solution_classic() {
+  ContestTraceVector &GetClassicSolution() {
     return solution_classic;
   }
-  ContestTraceVector& get_solution_fai() {
+
+  ContestTraceVector &GetFAISolution() {
     return solution_fai;
   }
-  ContestResult& get_result_classic() {
+
+  ContestResult &GetClassicResult() {
     return result_classic;
   }
-  ContestResult& get_result_fai() {
+
+  ContestResult &GetFAIResult() {
     return result_fai;
   }
 };

@@ -94,12 +94,12 @@ protected:
   }
 
   gcc_pure
-  const TracePoint &GetPointFast(const ScanTaskPoint sp) const {
+  const TracePoint &GetPoint(const ScanTaskPoint sp) const {
     assert(sp.GetPointIndex() < n_points);
     return trace[sp.GetPointIndex()];
   }
 
-  void clear_trace();
+  void ClearTrace();
 
   /**
    * Retrieve weighting of specified leg
@@ -107,7 +107,7 @@ protected:
    * @return Weighting of leg
    */
   gcc_pure
-  unsigned get_weighting(const unsigned index) const {
+  unsigned GetStageWeight(const unsigned index) const {
     assert(num_stages <= MAX_STAGES);
     assert(index + 1 < num_stages);
 
@@ -123,9 +123,9 @@ protected:
    * @return Distance (flat) from origin to destination
    */
   gcc_pure
-  unsigned distance(const ScanTaskPoint curNode,
-                    const SearchPoint &currentLocation) const {
-    return GetPointFast(curNode).flat_distance(currentLocation);
+  unsigned EdgeDistance(const ScanTaskPoint curNode,
+                        const SearchPoint &currentLocation) const {
+    return GetPoint(curNode).flat_distance(currentLocation);
   }
 
   /** 
@@ -137,23 +137,23 @@ protected:
    * @return Distance (flat) from origin to destination
    */
   gcc_pure
-  unsigned distance(const ScanTaskPoint s1, const ScanTaskPoint s2) const {
-    return GetPointFast(s1).flat_distance(GetPointFast(s2));
+  unsigned CalcEdgeDistance(const ScanTaskPoint s1, const ScanTaskPoint s2) const {
+    return GetPoint(s1).flat_distance(GetPoint(s2));
   }
 
 private:
   gcc_pure
-  bool master_is_updated() const;
+  bool IsMasterUpdated() const;
 
 protected:
   /** Update working trace from master --- never to be done during a solution! */
-  virtual void update_trace();
+  virtual void UpdateTrace();
 
   /**
    * Perform actions required at start of new search
    */
-  virtual void start_search();
-  virtual void add_start_edges();
+  virtual void StartSearch();
+  virtual void AddStartEdges();
 
 public:
   /* public virtual methods from AbstractContest */
@@ -171,7 +171,7 @@ protected:
 
 protected:
   /* methods from NavDijkstra */
-  virtual void add_edges(ScanTaskPoint curNode);
+  virtual void AddEdges(ScanTaskPoint curNode);
 };
 
 #endif

@@ -69,9 +69,3 @@ XContestTriangle::Solve(bool exhaustive)
 
   return true;
 }
-
-void
-XContestTriangle::swap_mode()
-{
-  is_fai = !is_fai;
-}

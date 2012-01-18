@@ -82,7 +82,7 @@ OLCSprint::find_start() const
 }
 
 void
-OLCSprint::add_start_edges()
+OLCSprint::AddStartEdges()
 {
   assert(num_stages <= MAX_STAGES);
   assert(num_stages > 0);
@@ -92,24 +92,24 @@ OLCSprint::add_start_edges()
 
   const ScanTaskPoint start(0, find_start());
 
-  if (GetPointFast(start).GetIntegerAltitude() <= max_altitude)
-    dijkstra.link(start, start, 0);
+  if (GetPoint(start).GetIntegerAltitude() <= max_altitude)
+    dijkstra.Link(start, start, 0);
 }
 
 void 
-OLCSprint::add_edges(const ScanTaskPoint origin)
+OLCSprint::AddEdges(const ScanTaskPoint origin)
 {
   const ScanTaskPoint destination(origin.GetStageNumber() + 1, n_points - 1);
-  if (!is_final(destination)) {
-    ContestDijkstra::add_edges(origin);
+  if (!IsFinal(destination)) {
+    ContestDijkstra::AddEdges(origin);
     return;
   }
   /*
     For final, only add last valid point
    */
-  const unsigned d = get_weighting(origin.GetStageNumber()) *
-    distance(origin, destination);
-  dijkstra.link(destination, origin, d);
+  const unsigned d = GetStageWeight(origin.GetStageNumber()) *
+    CalcEdgeDistance(origin, destination);
+  dijkstra.Link(destination, origin, d);
 }
 
 fixed
@@ -119,7 +119,7 @@ OLCSprint::CalcScore() const
 }
 
 void
-OLCSprint::update_trace() {
+OLCSprint::UpdateTrace() {
 
   // since this is online, all solutions must have start to end of trace
   // satisfy the finish altitude requirements.  otherwise there is no point
@@ -130,7 +130,7 @@ OLCSprint::update_trace() {
   // will be lower than this but the fewer wasted cpu cycles the better.
 
   if (trace_master.size() < 2) {
-    clear_trace();
+    ClearTrace();
     return;
   }
 
@@ -140,9 +140,9 @@ OLCSprint::update_trace() {
   };
 
   if (!IsFinishAltitudeValid(e[0], e[1])) {
-    clear_trace();
+    ClearTrace();
     return;
   }
 
-  ContestDijkstra::update_trace();
+  ContestDijkstra::UpdateTrace();
 }

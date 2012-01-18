@@ -72,21 +72,21 @@ public:
   const SearchPoint &GetSolution(unsigned stage) const {
     assert(stage < num_stages);
 
-    return GetPointFast(ScanTaskPoint(stage, solution[stage]));
+    return GetPoint(ScanTaskPoint(stage, solution[stage]));
   }
 
 protected:
   gcc_pure
-  const SearchPoint &GetPointFast(ScanTaskPoint sp) const;
+  const SearchPoint &GetPoint(ScanTaskPoint sp) const;
 
-  bool run();
+  bool Run();
 
   /**
    * Update internal details required from the task
    */
-  bool refresh_task();
+  bool RefreshTask();
 
-  void add_start_edges(const SearchPoint &loc);
+  void AddStartEdges(const SearchPoint &loc);
 
   /** 
    * Distance function for free point
@@ -97,9 +97,9 @@ protected:
    * @return Distance (flat) from origin to destination
    */
   gcc_pure
-  unsigned distance(const ScanTaskPoint curNode,
-                    const SearchPoint &currentLocation) const {
-    return GetPointFast(curNode).flat_distance(currentLocation);
+  unsigned CalcDistance(const ScanTaskPoint curNode,
+                        const SearchPoint &currentLocation) const {
+    return GetPoint(curNode).flat_distance(currentLocation);
   }
 
   /** 
@@ -111,13 +111,13 @@ protected:
    * @return Distance (flat) from origin to destination
    */
   gcc_pure
-  unsigned distance(const ScanTaskPoint s1, const ScanTaskPoint s2) const {
-    return GetPointFast(s1).flat_distance(GetPointFast(s2));
+  unsigned CalcDistance(const ScanTaskPoint s1, const ScanTaskPoint s2) const {
+    return GetPoint(s1).flat_distance(GetPoint(s2));
   }
 
 private:
   gcc_pure
-  unsigned get_size(const unsigned stage) const {
+  unsigned GetStageSize(const unsigned stage) const {
     assert(stage < num_stages);
 
     return sp_sizes[stage];
@@ -125,7 +125,7 @@ private:
 
 protected:
   /* methods from NavDijkstra */
-  virtual void add_edges(ScanTaskPoint curNode);
+  virtual void AddEdges(ScanTaskPoint curNode);
 };
 
 #endif

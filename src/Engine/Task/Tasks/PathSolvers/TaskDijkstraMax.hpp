@@ -42,7 +42,7 @@ public:
    *
    * @return True if succeeded
    */
-  bool distance_max();
+  bool DistanceMax();
 };
 
 #endif

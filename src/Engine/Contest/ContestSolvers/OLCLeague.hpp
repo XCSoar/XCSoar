@@ -61,7 +61,7 @@ public:
    */
   virtual bool Solve(bool exhaustive);
 
-  ContestTraceVector& get_solution_classic() {
+  ContestTraceVector &GetSolutionClassic() {
     return solution_classic;
   }
 

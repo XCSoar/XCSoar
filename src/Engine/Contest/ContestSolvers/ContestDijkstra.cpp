@@ -56,7 +56,7 @@ ContestDijkstra::Score(ContestResult &result)
 }
 
 bool
-ContestDijkstra::master_is_updated() const
+ContestDijkstra::IsMasterUpdated() const
 {
   assert(num_stages <= MAX_STAGES);
 
@@ -81,7 +81,7 @@ ContestDijkstra::master_is_updated() const
 
 
 void
-ContestDijkstra::clear_trace()
+ContestDijkstra::ClearTrace()
 {
   trace_dirty = true;
   trace.clear();
@@ -90,9 +90,9 @@ ContestDijkstra::clear_trace()
 
 
 void
-ContestDijkstra::update_trace()
+ContestDijkstra::UpdateTrace()
 {
-  if (!master_is_updated())
+  if (!IsMasterUpdated())
     return;
 
   trace.reserve(trace_master.GetMaxSize());
@@ -114,13 +114,12 @@ ContestDijkstra::Solve(bool exhaustive)
 
   if (trace_master.size() < num_stages) {
     /* not enough data in master trace */
-    clear_trace();
+    ClearTrace();
     return true;
   }
 
-  if (dijkstra.empty()) {
-
-    update_trace();
+  if (dijkstra.IsEmpty()) {
+    UpdateTrace();
     if (n_points < num_stages)
       return true;
 
@@ -130,7 +129,7 @@ ContestDijkstra::Solve(bool exhaustive)
     }
   } else if (exhaustive || n_points < num_stages ||
              modify_serial != trace_master.GetModifySerial()) {
-    update_trace();
+    UpdateTrace();
     if (n_points < num_stages)
       return true;
   }
@@ -140,36 +139,36 @@ ContestDijkstra::Solve(bool exhaustive)
   if (trace_dirty) {
     trace_dirty = false;
 
-    dijkstra.clear();
-    dijkstra.reserve(CONTEST_QUEUE_SIZE);
+    dijkstra.Clear();
+    dijkstra.Reserve(CONTEST_QUEUE_SIZE);
 
-    start_search();
-    add_start_edges();
-    if (dijkstra.empty()) {
+    StartSearch();
+    AddStartEdges();
+    if (dijkstra.IsEmpty()) {
       return true;
     }
   }
 
-  if (distance_general(exhaustive ? 0 - 1 : 25)) {
-    dijkstra.clear();
+  if (DistanceGeneral(exhaustive ? 0 - 1 : 25)) {
+    dijkstra.Clear();
 
     if (solution_valid)
       SaveSolution();
 
-    update_trace();
+    UpdateTrace();
     return true;
   }
 
-  return !dijkstra.empty();
+  return !dijkstra.IsEmpty();
 }
 
 void
 ContestDijkstra::Reset()
 {
   best_solution.clear();
-  dijkstra.clear();
+  dijkstra.Clear();
   solution_valid = false;
-  clear_trace();
+  ClearTrace();
 
   AbstractContest::Reset();
 }
@@ -212,7 +211,7 @@ ContestDijkstra::CalcScore() const
   GeoPoint previous = GetPoint(solution[0]).get_location();
   for (unsigned i = 1; i < num_stages; ++i) {
     const GeoPoint &current = GetPoint(solution[i]).get_location();
-    score += get_weighting(i - 1) * current.Distance(previous);
+    score += GetStageWeight(i - 1) * current.Distance(previous);
     previous = current;
   }
 
@@ -223,7 +222,7 @@ ContestDijkstra::CalcScore() const
 }
 
 void
-ContestDijkstra::add_start_edges()
+ContestDijkstra::AddStartEdges()
 {
   assert(num_stages <= MAX_STAGES);
   assert(n_points > 0);
@@ -236,34 +235,34 @@ ContestDijkstra::add_start_edges()
        destination != end; destination.IncrementPointIndex()) {
     // only add points that are valid for the finish
     if (!incremental ||
-        GetPointFast(destination).GetIntegerAltitude() <= max_altitude)
-      dijkstra.link(destination, destination, 0);
+        GetPoint(destination).GetIntegerAltitude() <= max_altitude)
+      dijkstra.Link(destination, destination, 0);
   }
 }
 
 void
-ContestDijkstra::add_edges(const ScanTaskPoint origin)
+ContestDijkstra::AddEdges(const ScanTaskPoint origin)
 {
   ScanTaskPoint destination(origin.GetStageNumber() + 1,
                             origin.GetPointIndex());
 
-  const int min_altitude = is_final(destination)
-    ? GetMinimumFinishAltitude(GetPointFast(FindStart(origin)))
+  const int min_altitude = IsFinal(destination)
+    ? GetMinimumFinishAltitude(GetPoint(FindStart(origin)))
     : 0;
 
   // only add last point!
-  if (incremental && is_final(destination)) {
+  if (incremental && IsFinal(destination)) {
     assert(n_points > 0);
     destination.SetPointIndex(n_points - 1);
   }
 
-  const unsigned weight = get_weighting(origin.GetStageNumber());
+  const unsigned weight = GetStageWeight(origin.GetStageNumber());
 
   for (const ScanTaskPoint end(destination.GetStageNumber(), n_points);
        destination != end; destination.IncrementPointIndex()) {
-    if (GetPointFast(destination).GetIntegerAltitude() >= min_altitude) {
-      const unsigned d = weight * distance(origin, destination);
-      dijkstra.link(destination, origin, d);
+    if (GetPoint(destination).GetIntegerAltitude() >= min_altitude) {
+      const unsigned d = weight * CalcEdgeDistance(origin, destination);
+      dijkstra.Link(destination, origin, d);
     }
   }
 }
@@ -294,7 +293,7 @@ ContestDijkstra::CopySolution(ContestTraceVector &vec) const
 }
 
 void 
-ContestDijkstra::start_search()
+ContestDijkstra::StartSearch()
 {
   // nothing required by default
 }

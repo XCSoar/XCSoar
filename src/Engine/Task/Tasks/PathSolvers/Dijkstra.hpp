@@ -49,9 +49,9 @@ class Dijkstra
     Edge(Node _parent, unsigned _value):parent(_parent), value(_value) {}
   };
 
-  typedef typename MapTemplate::template Bind<Edge> edge_map;
-  typedef typename edge_map::iterator edge_iterator;
-  typedef typename edge_map::const_iterator edge_const_iterator;
+  typedef typename MapTemplate::template Bind<Edge> EdgeMap;
+  typedef typename EdgeMap::iterator edge_iterator;
+  typedef typename EdgeMap::const_iterator edge_const_iterator;
 
   struct Value
   {
@@ -74,7 +74,7 @@ class Dijkstra
    * Stores the predecessor and value of each node.  It is updated by
    * push(), if a value lower than the current one is found.
    */
-  edge_map edges;
+  EdgeMap edges;
 
   /**
    * A sorted list of all possible node paths, lowest distance first.
@@ -87,7 +87,7 @@ class Dijkstra
    */
   unsigned current_value;
 
-  const bool m_min;
+  const bool is_min;
 
 public:
   /**
@@ -95,8 +95,8 @@ public:
    *
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  Dijkstra(const bool is_min = true)
-    :m_min(is_min) {
+  Dijkstra(const bool _is_min = true)
+    :is_min(_is_min) {
   }
 
   /**
@@ -105,11 +105,11 @@ public:
    * @param n Node to start
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  Dijkstra(const Node node, const bool is_min = true,
+  Dijkstra(const Node node, const bool _is_min = true,
            unsigned reserve_default = DIJKSTRA_QUEUE_SIZE)
-    :m_min(is_min) {
-    reserve(reserve_default);
-    push(node, node, 0);
+    :is_min(_is_min) {
+    Reserve(reserve_default);
+    Push(node, node, 0);
   }
 
   /**
@@ -117,20 +117,20 @@ public:
    *
    * @param n Node to start
    */
-  void restart(const Node node) {
-    clear();
-    push(node, node, 0);
+  void Restart(const Node node) {
+    Clear();
+    Push(node, node, 0);
   }
 
   /** 
    * Clears the queues
    */
-  void clear() {
+  void Clear() {
     // Clear the search queue
     while (!q.empty())
       q.pop();
 
-    // Clear edge_map
+    // Clear EdgeMap
     edges.clear();
 
     current_value = 0;
@@ -142,7 +142,7 @@ public:
    * @return True if no more nodes to search
    */
   gcc_pure
-  bool empty() const {
+  bool IsEmpty() const {
     return q.empty();
   }
 
@@ -152,7 +152,7 @@ public:
    * @return Queue size in elements
    */
   gcc_pure
-  unsigned queue_size() const {
+  unsigned GetQueueSize() const {
     return q.size();
   }
 
@@ -161,7 +161,7 @@ public:
    *
    * @return Node for processing
    */
-  Node pop() {
+  Node Pop() {
     edge_const_iterator cur(q.top().iterator);
     current_value = cur->second.value;
 
@@ -179,8 +179,8 @@ public:
    * @param pn Predecessor of destination node
    * @param e Edge distance
    */
-  void link(const Node node, const Node parent, unsigned edge_value) {
-    push(node, parent, current_value + adjust_edge_value(edge_value));
+  void Link(const Node node, const Node parent, unsigned edge_value) {
+    Push(node, parent, current_value + AdjustEdgeValue(edge_value));
   }
 
   /**
@@ -191,7 +191,7 @@ public:
    * @return Predecessor node
    */
   gcc_pure
-  Node get_predecessor(const Node node) const {
+  Node GetPredecessor(const Node node) const {
     // Try to find the given node in the node_parent_map
     edge_const_iterator it = edges.find(node);
     if (it == edges.end())
@@ -208,7 +208,7 @@ public:
   /**
    * Reserve queue size (if available)
    */
-  void reserve(unsigned size) {
+  void Reserve(unsigned size) {
     q.reserve(size);
   }
 
@@ -218,8 +218,8 @@ private:
    * result is metric to be minimised
    */
   gcc_pure
-  unsigned adjust_edge_value(const unsigned edge_value) const {
-    return m_min ? edge_value : DIJKSTRA_MINMAX_OFFSET - edge_value;
+  unsigned AdjustEdgeValue(const unsigned edge_value) const {
+    return is_min ? edge_value : DIJKSTRA_MINMAX_OFFSET - edge_value;
   }
 
   /**
@@ -229,8 +229,8 @@ private:
    * @param pn Previous node
    * @param e Edge distance (previous to this)
    */
-  void push(const Node node, const Node parent, unsigned edge_value = 0) {
-    // Try to find the given node n in the edge_map
+  void Push(const Node node, const Node parent, unsigned edge_value = 0) {
+    // Try to find the given node n in the EdgeMap
     edge_iterator it = edges.find(node);
     if (it == edges.end())
       // first entry
