@@ -47,7 +47,7 @@ class OrderedTask;
  *
  * This uses a Dijkstra search and so is O(N log(N)).
  */
-class TaskDijkstra : public NavDijkstra
+class TaskDijkstra : protected NavDijkstra
 {
 protected:
   OrderedTask &task;
