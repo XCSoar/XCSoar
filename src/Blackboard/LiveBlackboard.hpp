@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_LIVE_BLACKBOARD_HPP
 
 #include "FullBlackboard.hpp"
+#include "Util/DebugFlag.hpp"
 
 #include <list>
 
