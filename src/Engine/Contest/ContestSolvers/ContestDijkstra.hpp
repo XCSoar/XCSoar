@@ -40,7 +40,7 @@ Copyright_License {
  */
 class ContestDijkstra:
   public AbstractContest,
-  public NavDijkstra
+  protected NavDijkstra
 {
   /**
    * This attribute tracks Trace::GetModifySerial().  It is updated
