@@ -24,6 +24,7 @@
 #include "Units/System.hpp"
 #include "Util/Macros.hpp"
 #include "Util/StringUtil.hpp"
+#include "Atmosphere/Pressure.hpp"
 #include "TestUtil.hpp"
 
 static void
@@ -156,14 +157,66 @@ TestSpeed()
   ok1(StringIsEqual(buffer, _T("83.4 mph")));
 }
 
+static void
+TestPressure()
+{
+  TCHAR buffer[256];
+
+  // Test FormatPressure()
+  Units::FormatPressure(buffer, ARRAY_SIZE(buffer),
+                        AtmosphericPressure::HectoPascal(fixed(1013.25)),
+                        Unit::HECTOPASCAL);
+  ok1(StringIsEqual(buffer, _T("1013 hPa")));
+
+  Units::FormatPressure(buffer, ARRAY_SIZE(buffer),
+                        AtmosphericPressure::HectoPascal(fixed(1013.25)),
+                        Unit::HECTOPASCAL, false);
+  ok1(StringIsEqual(buffer, _T("1013")));
+
+  Units::FormatPressure(buffer, ARRAY_SIZE(buffer),
+                        AtmosphericPressure::HectoPascal(fixed(1013.25)),
+                        Unit::MILLIBAR);
+  ok1(StringIsEqual(buffer, _T("1013 mb")));
+
+  Units::FormatPressure(buffer, ARRAY_SIZE(buffer),
+                        AtmosphericPressure::HectoPascal(fixed(1013.25)),
+                        Unit::MILLIBAR, false);
+  ok1(StringIsEqual(buffer, _T("1013")));
+
+  Units::FormatPressure(buffer, ARRAY_SIZE(buffer),
+                        AtmosphericPressure::HectoPascal(
+                            Units::ToSysUnit(fixed(103), Unit::TORR)),
+                        Unit::TORR);
+  ok1(StringIsEqual(buffer, _T("103 mmHg")));
+
+  Units::FormatPressure(buffer, ARRAY_SIZE(buffer),
+                        AtmosphericPressure::HectoPascal(
+                            Units::ToSysUnit(fixed(103), Unit::TORR)),
+                        Unit::TORR, false);
+  ok1(StringIsEqual(buffer, _T("103")));
+
+  Units::FormatPressure(buffer, ARRAY_SIZE(buffer),
+                        AtmosphericPressure::HectoPascal(
+                            Units::ToSysUnit(fixed(29.92), Unit::INCH_MERCURY)),
+                        Unit::INCH_MERCURY);
+  ok1(StringIsEqual(buffer, _T("29.92 inHg")));
+
+  Units::FormatPressure(buffer, ARRAY_SIZE(buffer),
+                        AtmosphericPressure::HectoPascal(
+                            Units::ToSysUnit(fixed(29.92), Unit::INCH_MERCURY)),
+                        Unit::INCH_MERCURY, false);
+  ok1(StringIsEqual(buffer, _T("29.92")));
+}
+
 int
 main(int argc, char **argv)
 {
-  plan_tests(25);
+  plan_tests(33);
 
   TestAltitude();
   TestRelativeAltitude();
   TestSpeed();
+  TestPressure();
 
   return exit_status();
 }

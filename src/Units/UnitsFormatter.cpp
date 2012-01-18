@@ -253,27 +253,33 @@ Units::FormatUserTemperature(fixed value, TCHAR *buffer, size_t size,
 }
 
 void
-Units::FormatUserPressure(AtmosphericPressure pressure, TCHAR *buffer,
-                          size_t size, bool include_unit)
+Units::FormatPressure(TCHAR *buffer, size_t size, AtmosphericPressure pressure,
+                      Unit unit, bool include_unit)
 {
   TCHAR buffer2[16];
-  const UnitDescriptor *descriptor =
-      &unit_descriptors[(unsigned)current.pressure_unit];
 
-  fixed _pressure = pressure.GetHectoPascal() * descriptor->factor_to_user;
+  fixed _pressure = ToUserUnit(pressure.GetHectoPascal(), unit);
 
   if (include_unit) {
     TCHAR format[8];
-    _tcscpy(format, GetFormatUserPressure());
+    _tcscpy(format, GetPressureFormat(unit));
     _tcscat(format, _T(" %s") );
-    _stprintf(buffer2, format, (double)_pressure, descriptor->name);
+    _stprintf(buffer2, format, (double)_pressure,
+              Units::unit_descriptors[(unsigned)unit].name);
   } else
-    _stprintf(buffer2, GetFormatUserPressure(),  (double)_pressure);
+    _stprintf(buffer2, GetPressureFormat(unit),  (double)_pressure);
 
   if (_tcslen(buffer2) < size - 1)
     _tcscpy(buffer, buffer2);
   else
     CopyString(buffer, buffer2, size);
+}
+
+void
+Units::FormatUserPressure(AtmosphericPressure pressure, TCHAR *buffer,
+                          size_t size, bool include_unit)
+{
+  FormatPressure(buffer, size, pressure, current.pressure_unit, include_unit);
 }
 
 const TCHAR*

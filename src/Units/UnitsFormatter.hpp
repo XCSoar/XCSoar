@@ -159,6 +159,17 @@ namespace Units
                              bool include_unit = true);
 
   /**
+   * Converts a pressure into a formatted string
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   * @param value the pressure
+   * @param unit the pressure unit (e.g. meters, feet, ...)
+   * @param include_unit include the unit into the string?
+   */
+  void FormatPressure(TCHAR *buffer, size_t size, AtmosphericPressure value,
+                      Unit unit, bool include_unit = true);
+
+  /**
    * Converts a double-based Pressure into a formatted string
    * @param Pressure The double-based Pressure
    * @param buffer buffer string to write to (pointer)
