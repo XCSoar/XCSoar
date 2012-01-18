@@ -34,13 +34,14 @@ Copyright_License {
 
 static void
 FormatInteger(TCHAR *buffer, size_t size,
-              const fixed value, const UnitDescriptor &unit, bool include_unit)
+              const fixed value, const Unit unit, bool include_unit)
 {
-  const fixed uvalue = value * unit.factor_to_user + unit.offset_to_user;
+  const fixed uvalue = Units::ToUserUnit(value, unit);
   const int ivalue = iround(uvalue);
 
   if (include_unit)
-    _sntprintf(buffer, size, _T("%d %s"), ivalue, unit.name);
+    _sntprintf(buffer, size, _T("%d %s"), ivalue,
+               Units::unit_descriptors[(unsigned)unit].name);
   else
     _sntprintf(buffer, size, _T("%d"), ivalue);
 }
@@ -49,8 +50,7 @@ void
 Units::FormatUserAltitude(fixed value, TCHAR *buffer, size_t size,
                           bool include_unit)
 {
-  unsigned index = (unsigned)current.altitude_unit;
-  FormatInteger(buffer, size, value, unit_descriptors[index], include_unit);
+  FormatInteger(buffer, size, value, current.altitude_unit, include_unit);
 }
 
 gcc_const
@@ -73,8 +73,8 @@ void
 Units::FormatAlternateUserAltitude(fixed value, TCHAR *buffer, size_t size,
                                    bool include_unit)
 {
-  unsigned index = (unsigned)GetAlternateUnit(current.altitude_unit);
-  FormatInteger(buffer, size, value, unit_descriptors[index], include_unit);
+  FormatInteger(buffer, size, value, GetAlternateUnit(current.altitude_unit),
+                include_unit);
 }
 
 // JMW, what does this do?
