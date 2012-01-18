@@ -121,6 +121,13 @@ protected:
    */
   virtual void AddEdges(const ScanTaskPoint curNode) = 0;
 
+  gcc_pure
+  bool IsFinal(unsigned stage_number) const {
+    assert(stage_number < num_stages);
+
+    return stage_number + 1 == num_stages;
+  }
+
   /** 
    * Determine whether a point is terminal (no further edges)
    * 
@@ -131,7 +138,8 @@ protected:
   gcc_pure
   bool IsFinal(const ScanTaskPoint sp) const {
     assert(num_stages <= MAX_STAGES);
-    return (unsigned)(sp.GetStageNumber() + 1) == num_stages;
+
+    return IsFinal(sp.GetStageNumber());
   }
 
   /** 
