@@ -28,15 +28,24 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(2);
+  plan_tests(4);
 
   TCHAR buffer[256];
+
+  // Test FormatAltitude()
   Units::FormatAltitude(buffer, ARRAY_SIZE(buffer), fixed(1234), Unit::METER);
   ok1(StringIsEqual(buffer, _T("1234 m")));
 
   Units::FormatAltitude(buffer, ARRAY_SIZE(buffer),
                         Units::ToSysUnit(fixed(1234), Unit::FEET), Unit::FEET);
   ok1(StringIsEqual(buffer, _T("1234 ft")));
+
+  Units::FormatAltitude(buffer, ARRAY_SIZE(buffer), fixed(-1234), Unit::METER);
+  ok1(StringIsEqual(buffer, _T("-1234 m")));
+
+  Units::FormatAltitude(buffer, ARRAY_SIZE(buffer),
+                        Units::ToSysUnit(fixed(-1234), Unit::FEET), Unit::FEET);
+  ok1(StringIsEqual(buffer, _T("-1234 ft")));
 
   return exit_status();
 }
