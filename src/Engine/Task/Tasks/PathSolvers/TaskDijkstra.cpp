@@ -74,8 +74,6 @@ TaskDijkstra::add_edges(const ScanTaskPoint curNode)
 void 
 TaskDijkstra::add_start_edges(const SearchPoint &currentLocation)
 {
-  dijkstra.reserve(DIJKSTRA_QUEUE_SIZE);
-
   ScanTaskPoint destination(active_stage, 0);
   const unsigned dsize = get_size(active_stage);
 
