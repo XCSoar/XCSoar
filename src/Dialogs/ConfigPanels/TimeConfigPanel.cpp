@@ -25,7 +25,7 @@ Copyright_License {
 #include "DataField/Float.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/TimeFormatter.hpp"
 #include "LocalTime.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
@@ -62,7 +62,7 @@ TimeConfigPanel::SetLocalTime(int utc_offset)
 {
   TCHAR temp[20];
   int time(XCSoarInterface::Basic().time);
-  Units::TimeToTextHHMMSigned(temp, TimeLocal(time, utc_offset));
+  TimeToTextHHMMSigned(temp, TimeLocal(time, utc_offset));
 
   WndProperty &wp = GetControl(LocalTime);
 

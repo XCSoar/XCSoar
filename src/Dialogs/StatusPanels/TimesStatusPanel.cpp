@@ -24,7 +24,7 @@ Copyright_License {
 #include "TimesStatusPanel.hpp"
 #include "Interface.hpp"
 #include "Form/Util.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/TimeFormatter.hpp"
 #include "LocalTime.hpp"
 #include "Math/SunEphemeris.hpp"
 
@@ -49,18 +49,18 @@ TimesStatusPanel::Refresh()
     SetFormValue(form, _T("prpSunset"), _T(""));
   }
 
-  Units::TimeToTextHHMMSigned(Temp, DetectCurrentTime(basic));
+  TimeToTextHHMMSigned(Temp, DetectCurrentTime(basic));
   SetFormValue(form, _T("prpLocalTime"), Temp);
 
   if (positive(flight.flight_time)) {
-    Units::TimeToTextHHMMSigned(Temp, TimeLocal((long)flight.takeoff_time));
+    TimeToTextHHMMSigned(Temp, TimeLocal((long)flight.takeoff_time));
     SetFormValue(form, _T("prpTakeoffTime"), Temp);
   } else {
     SetFormValue(form, _T("prpTakeoffTime"), _T(""));
   }
 
   if (!flight.flying && positive(flight.flight_time)) {
-    Units::TimeToTextHHMMSigned(Temp,
+    TimeToTextHHMMSigned(Temp,
                       TimeLocal((long)(flight.takeoff_time
                                        + flight.flight_time)));
     SetFormValue(form, _T("prpLandingTime"), Temp);
@@ -69,7 +69,7 @@ TimesStatusPanel::Refresh()
   }
 
   if (positive(flight.flight_time)) {
-    Units::TimeToTextHHMMSigned(Temp, (int)flight.flight_time);
+    TimeToTextHHMMSigned(Temp, (int)flight.flight_time);
     SetFormValue(form, _T("prpFlightTime"), Temp);
   } else {
     SetFormValue(form, _T("prpFlightTime"), _T(""));

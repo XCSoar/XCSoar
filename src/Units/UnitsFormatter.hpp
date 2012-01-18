@@ -159,21 +159,6 @@ namespace Units
    */
 
   fixed PressureStep();
-
-  /**
-   * precedes with "-" if time is negative
-   * @param buffer returns HHMM
-   * @param time input seconds
-   */
-  void TimeToTextHHMMSigned(TCHAR* buffer, int time);
-
-  /**
-   * sets HHMMSSSmart and SSSmart
-   * if hours > 0, returns HHMM in buffer1 and SS in buffer2
-   * if hours == 0, returns MMSS in buffer1 and "" in buffer2
-   * @param d input seconds
-   */
-  void TimeToTextSmart(TCHAR *buffer1, TCHAR *buffer2, int time);
 };
 
 #endif

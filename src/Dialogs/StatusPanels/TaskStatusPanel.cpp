@@ -26,6 +26,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/TimeFormatter.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 
@@ -40,17 +41,17 @@ TaskStatusPanel::Refresh()
 
   TCHAR Temp[80];
 
-  Units::TimeToTextHHMMSigned(Temp, (int)protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
+  TimeToTextHHMMSigned(Temp, (int)protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
   ShowFormControl(form, _T("prpTaskTime"), task_stats.has_targets);
   if (task_stats.has_targets)
     SetFormValue(form, _T("prpTaskTime"), Temp);
 
   int ete_time(task_stats.total.time_elapsed +
                task_stats.total.time_remaining);
-  Units::TimeToTextHHMMSigned(Temp, ete_time);
+  TimeToTextHHMMSigned(Temp, ete_time);
   SetFormValue(form, _T("prpETETime"), Temp);
 
-  Units::TimeToTextHHMMSigned(Temp, (int)task_stats.total.time_remaining);
+  TimeToTextHHMMSigned(Temp, (int)task_stats.total.time_remaining);
   SetFormValue(form, _T("prpRemainingTime"), Temp);
 
   if (task_stats.total.planned.IsDefined()) {

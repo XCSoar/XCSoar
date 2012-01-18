@@ -25,7 +25,7 @@ Copyright_License {
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "LocalTime.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/TimeFormatter.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -75,7 +75,7 @@ InfoBoxContentTimeFlight::Update(InfoBoxData &data)
 
   // Set Value
   TCHAR value[32], comment[32];
-  Units::TimeToTextSmart(value, comment,
+  TimeToTextSmart(value, comment,
                          (int)XCSoarInterface::Calculated().flight.flight_time);
 
   data.SetValue(value);

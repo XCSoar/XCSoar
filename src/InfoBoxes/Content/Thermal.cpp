@@ -25,6 +25,7 @@ Copyright_License {
 #include "InfoBoxes/Data.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/TimeFormatter.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -99,7 +100,7 @@ InfoBoxContentThermalLastTime::Update(InfoBoxData &data)
   // Set Value
 
   TCHAR value[32], comment[32];
-  Units::TimeToTextSmart(value, comment, (int)thermal.duration);
+  TimeToTextSmart(value, comment, (int)thermal.duration);
 
   data.SetValue(value);
   data.SetComment(comment);

@@ -28,6 +28,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "LocalTime.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/TimeFormatter.hpp"
 #include "Language/Language.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Form/Util.hpp"
@@ -55,7 +56,7 @@ RulesStatusPanel::Refresh()
   AircraftState start_state = protected_task_manager->GetStartState();
 
   if (common_stats.task_started) {
-    Units::TimeToTextHHMMSigned(Temp, (int)TimeLocal((int)start_state.time));
+    TimeToTextHHMMSigned(Temp, (int)TimeLocal((int)start_state.time));
     SetFormValue(form, _T("prpStartTime"), Temp);
   } else {
     SetFormValue(form, _T("prpStartTime"), _T(""));

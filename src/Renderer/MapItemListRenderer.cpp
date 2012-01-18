@@ -34,6 +34,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Units/GeoPointFormatter.hpp"
+#include "Units/TimeFormatter.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Language/Language.hpp"
@@ -181,7 +182,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, buffer);
 
   TCHAR time_buffer[32];
-  Units::TimeToTextHHMMSigned(time_buffer, TimeLocal(marker.time.GetSecondOfDay()));
+  TimeToTextHHMMSigned(time_buffer, TimeLocal(marker.time.GetSecondOfDay()));
   buffer.Format(_("dropped at %s"), time_buffer);
   canvas.Select(small_font);
   canvas.text_clipped(left,
@@ -214,7 +215,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   StaticString<256> buffer;
   TCHAR lift_buffer[32], time_buffer[32];
   Units::FormatUserVSpeed(thermal.lift_rate, lift_buffer, 32);
-  Units::TimeToTextHHMMSigned(time_buffer, TimeLocal((int)thermal.time));
+  TimeToTextHHMMSigned(time_buffer, TimeLocal((int)thermal.time));
   buffer.Format(_T("%s: %s"), _("Avg. lift"), lift_buffer);
   buffer.append(_T(" - "));
   buffer.AppendFormat(_("left at %s"), time_buffer);

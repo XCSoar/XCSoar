@@ -1739,6 +1739,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/GeoPointFormatter.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
+	$(SRC)/Units/TimeFormatter.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Screen/Layout.cpp \

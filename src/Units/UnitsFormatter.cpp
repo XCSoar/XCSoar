@@ -302,36 +302,3 @@ Units::PressureStep()
   else
     return fixed_one;
 }
-
-void
-Units::TimeToTextHHMMSigned(TCHAR* buffer, int _time)
-{
-  bool negative = (_time < 0);
-  const BrokenTime time = BrokenTime::FromSecondOfDayChecked(abs(_time));
-  if (negative)
-    _stprintf(buffer, _T("-%02u:%02u"), time.hour, time.minute);
-  else
-    _stprintf(buffer, _T("%02u:%02u"), time.hour, time.minute);
-}
-
-void
-Units::TimeToTextSmart(TCHAR *buffer1, TCHAR *buffer2, int _time)
-{
-  if ((unsigned)abs(_time) >= 24u * 3600u) {
-    _tcscpy(buffer1, _T(">24h"));
-    buffer2[0] = '\0';
-    return;
-  }
-
-  const BrokenTime time = BrokenTime::FromSecondOfDay(abs(_time));
-
-  if (time.hour > 0) { // hh:mm, ss
-    // Set Value
-    _stprintf(buffer1, _T("%02u:%02u"), time.hour, time.minute);
-    _stprintf(buffer2, _T("%02u"), time.second);
-
-  } else { // mm:ss
-    _stprintf(buffer1, _T("%02u:%02u"), time.minute, time.second);
-      buffer2[0] = '\0';
-  }
-}

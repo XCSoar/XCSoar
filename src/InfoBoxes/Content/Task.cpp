@@ -33,6 +33,7 @@ Copyright_License {
 #include "Engine/Util/Gradient.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/TimeFormatter.hpp"
 #include "Language/Language.hpp"
 
 #include <tchar.h>
@@ -180,7 +181,7 @@ InfoBoxContentNextETE::Update(InfoBoxData &data)
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
   const int dd = (int)task_stats.current_leg.time_remaining;
-  Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+  TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
   data.SetValue(HHMMSSsmart);
   data.SetComment(SSsmart);
@@ -328,7 +329,7 @@ InfoBoxContentFinalETE::Update(InfoBoxData &data)
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
   const int dd = abs((int)task_stats.total.time_remaining);
-  Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+  TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
   data.SetValue(HHMMSSsmart);
   data.SetComment(SSsmart);
@@ -554,7 +555,7 @@ InfoBoxContentTaskAATime::Update(InfoBoxData &data)
 
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
-  Units::TimeToTextSmart(HHMMSSsmart, SSsmart,
+  TimeToTextSmart(HHMMSSsmart, SSsmart,
                          abs((int) common_stats.aat_time_remaining));
 
   data.UnsafeFormatValue(negative(common_stats.aat_time_remaining) ?
@@ -584,7 +585,7 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxData &data)
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
   const int dd = abs((int)diff);
-  Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+  TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
   data.UnsafeFormatValue(negative(diff) ? _T("-%s") : _T("%s"), HHMMSSsmart);
 
@@ -725,7 +726,7 @@ InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxData &data)
 
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
-  Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+  TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
   data.SetValue(HHMMSSsmart);
   data.SetComment(_("Time Below"));
@@ -756,7 +757,7 @@ InfoBoxContentNextETEVMG::Update(InfoBoxData &data)
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
   const int dd = (int)(d/v);
-  Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+  TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
   data.SetValue(HHMMSSsmart);
   data.SetComment(SSsmart);
@@ -787,7 +788,7 @@ InfoBoxContentFinalETEVMG::Update(InfoBoxData &data)
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
   const int dd = (int)(d/v);
-  Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+  TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
   data.SetValue(HHMMSSsmart);
   data.SetComment(SSsmart);

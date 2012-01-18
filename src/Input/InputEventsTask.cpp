@@ -30,6 +30,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Protection.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/TimeFormatter.hpp"
 #include "Units/Units.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
@@ -302,7 +303,7 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     TCHAR TempAlt[40];
     TCHAR TempSpeed[40];
     
-    Units::TimeToTextHHMMSigned(TempTime, (int)TimeLocal((int)start_state.time));
+    TimeToTextHHMMSigned(TempTime, (int)TimeLocal((int)start_state.time));
     Units::FormatUserAltitude(start_state.altitude,
                               TempAlt, sizeof(TempAlt)/sizeof(TCHAR), true);
     Units::FormatUserSpeed(start_state.ground_speed,
