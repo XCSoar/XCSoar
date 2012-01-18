@@ -186,17 +186,17 @@ Units::FormatUserMapScale(fixed _value, TCHAR *buffer,
 }
 
 static void
-FormatSpeed(TCHAR *buffer, size_t max_size,
+FormatSpeed(TCHAR *buffer, size_t size,
             fixed value, const Unit unit, bool include_unit, bool precision)
 {
   value = Units::ToUserUnit(value, unit);
 
   const int prec = precision && value < fixed(100);
   if (include_unit)
-    _sntprintf(buffer, max_size, _T("%.*f %s"),
+    _sntprintf(buffer, size, _T("%.*f %s"),
                prec, (double)value, Units::unit_descriptors[(unsigned)unit].name);
   else
-    _sntprintf(buffer, max_size, _T("%.*f"),
+    _sntprintf(buffer, size, _T("%.*f"),
                prec, (double)value);
 }
 
