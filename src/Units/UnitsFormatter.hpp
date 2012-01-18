@@ -28,8 +28,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-class Angle;
-struct GeoPoint;
 class AtmosphericPressure;
 
 /**
@@ -37,27 +35,6 @@ class AtmosphericPressure;
  */
 namespace Units
 {
-  /**
-   * Converts a double-based longitude into a formatted string
-   * @param longitude The double-based longitude
-   * @param buffer buffer string to write to (pointer)
-   * @param size Size of the buffer
-   */
-  bool LongitudeToString(Angle longitude, TCHAR *buffer, size_t size);
-
-  /**
-   * Converts a double-based Latitude into a formatted string
-   * @param Latitude The double-based Latitude
-   * @param buffer buffer string to write to (pointer)
-   * @param size Size of the buffer
-   */
-  bool LatitudeToString(Angle latitude, TCHAR *buffer, size_t size);
-
-  /**
-   * Convert a GeoPoint into a formatted string.
-   */
-  TCHAR *FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size);
-
   /**
    * Converts a double-based Altitude into a formatted string
    * @param Altitude The double-based Altitude

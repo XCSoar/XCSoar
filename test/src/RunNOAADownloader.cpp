@@ -28,6 +28,7 @@ Copyright_License {
 #include "ConsoleJobRunner.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/GeoPointFormatter.hpp"
 #include "Util/Macros.hpp"
 
 #include <cstdio>

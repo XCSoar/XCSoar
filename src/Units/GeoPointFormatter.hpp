@@ -1,0 +1,59 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://www.xcsoar.org/
+  Copyright (C) 2000-2012 The XCSoar Project
+  A detailed list of copyright holders can be found in the file "AUTHORS".
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+*/
+
+#ifndef XCSOAR_GEOPOINT_FORMATTER_HPP
+#define XCSOAR_GEOPOINT_FORMATTER_HPP
+
+#include <tchar.h>
+
+class Angle;
+struct GeoPoint;
+
+/**
+ * Namespace to manage unit display.
+ */
+namespace Units
+{
+  /**
+   * Converts a double-based longitude into a formatted string
+   * @param longitude The double-based longitude
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   */
+  bool LongitudeToString(Angle longitude, TCHAR *buffer, size_t size);
+
+  /**
+   * Converts a double-based Latitude into a formatted string
+   * @param Latitude The double-based Latitude
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   */
+  bool LatitudeToString(Angle latitude, TCHAR *buffer, size_t size);
+
+  /**
+   * Convert a GeoPoint into a formatted string.
+   */
+  TCHAR *FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size);
+};
+
+#endif

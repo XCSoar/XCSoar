@@ -554,6 +554,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/UnitsGlue.cpp \
 	$(SRC)/Units/UnitsStore.cpp \
+	$(SRC)/Units/GeoPointFormatter.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \

@@ -35,6 +35,7 @@ Copyright_License {
 #include "Screen/UnitSymbol.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Units/GeoPointFormatter.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "UIState.hpp"
 #include "Interface.hpp"
