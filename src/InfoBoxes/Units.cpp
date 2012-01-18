@@ -28,8 +28,9 @@ Copyright_License {
 void
 InfoBoxData::SetValueFromDistance(fixed new_value)
 {
-  Units::FormatUserDistance(new_value, value.buffer(), value.MAX_SIZE, false);
-  SetValueUnit(Units::current.distance_unit);
+  Unit distance_unit =
+    Units::FormatUserDistance(new_value, value.buffer(), value.MAX_SIZE, false);
+  SetValueUnit(distance_unit);
 }
 
 void
