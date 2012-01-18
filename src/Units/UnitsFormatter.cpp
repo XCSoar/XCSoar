@@ -187,49 +187,13 @@ Units::FormatDistanceSmart(TCHAR *buffer, size_t size, fixed value, Unit unit,
 
   return unit;
 }
-static void
-GetBestDistanceFormat(fixed _value, bool include_unit,
-                      Unit &unit, int &precision)
-{
-  Unit base_unit = unit;
-  fixed value = Units::ToUserUnit(_value, unit);
-
-  if (value >= fixed(100))
-    precision = 0;
-  else if (value > fixed_ten)
-    precision = 1;
-  else if (!include_unit)
-    precision = 2;
-  else {
-    precision = 2;
-    if (base_unit == Unit::KILOMETER) {
-      precision = 0;
-      unit = Unit::METER;
-    }
-    if (base_unit == Unit::NAUTICAL_MILES ||
-        base_unit == Unit::STATUTE_MILES) {
-      unit = Unit::FEET;
-      value = Units::ToUserUnit(_value, unit);
-      if (value < fixed(1000)) {
-        precision = 0;
-      } else {
-        precision = 1;
-        unit = base_unit;
-      }
-    }
-  }
-}
 
 Unit
 Units::FormatUserDistance(fixed value, TCHAR *buffer, size_t size,
                           bool include_unit)
 {
-  int prec;
-  Unit unit = current.distance_unit;
-  GetBestDistanceFormat(value, include_unit, unit, prec);
-
-  FormatDistance(buffer, size, value, unit, include_unit, prec);
-  return unit;
+  return FormatDistanceSmart(buffer, size, value, current.distance_unit,
+                             include_unit);
 }
 
 void
