@@ -33,12 +33,12 @@ FlatBoundingBox::Distance(const FlatBoundingBox &f) const
   if (Overlaps(f))
     return 0;
 
-  long dx = max(0, min(f.bb_ll.Longitude - bb_ur.Longitude,
-                       bb_ll.Longitude - f.bb_ur.Longitude));
-  long dy = max(0, min(f.bb_ll.Latitude - bb_ur.Latitude,
-                       bb_ll.Latitude - f.bb_ur.Latitude));
+  int dx = max(0, min(f.bb_ll.Longitude - bb_ur.Longitude,
+                      bb_ll.Longitude - f.bb_ur.Longitude));
+  int dy = max(0, min(f.bb_ll.Latitude - bb_ur.Latitude,
+                      bb_ll.Latitude - f.bb_ur.Latitude));
 
-  return lhypot(dx, dy);
+  return ihypot(dx, dy);
 }
 
 bool

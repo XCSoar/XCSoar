@@ -200,6 +200,14 @@ unsigned int isqrt4(unsigned long val);
 #endif
 
 gcc_const
+static inline unsigned
+ihypot(int x, int y)
+{
+  const long lx = x, ly = y;
+  return isqrt4(lx * lx + ly * ly);
+}
+
+gcc_const
 static inline unsigned long
 lhypot(long x, long y)
 {
