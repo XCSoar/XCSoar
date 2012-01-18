@@ -145,7 +145,7 @@ TestDistance()
   Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
                         Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
                         Unit::NAUTICAL_MILES);
-  ok1(StringIsEqual(buffer, _T("123 nm")));
+  ok1(StringIsEqual(buffer, _T("123 NM")));
 
   Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
                         Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
@@ -155,7 +155,7 @@ TestDistance()
   Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
                         Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
                         Unit::NAUTICAL_MILES, true, 1);
-  ok1(StringIsEqual(buffer, _T("123.4 nm")));
+  ok1(StringIsEqual(buffer, _T("123.4 NM")));
 
   Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
                         Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
@@ -166,7 +166,7 @@ TestDistance()
   Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
                         Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
                         Unit::STATUTE_MILES);
-  ok1(StringIsEqual(buffer, _T("123 sm")));
+  ok1(StringIsEqual(buffer, _T("123 mi")));
 
   Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
                         Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
@@ -176,7 +176,7 @@ TestDistance()
   Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
                         Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
                         Unit::STATUTE_MILES, true, 1);
-  ok1(StringIsEqual(buffer, _T("123.4 sm")));
+  ok1(StringIsEqual(buffer, _T("123.4 mi")));
 
   Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
                         Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
@@ -355,19 +355,19 @@ TestDistanceSmart()
                     _T("2345"));
 
   TestDistanceSmart(Units::ToSysUnit(fixed(0.61), Unit::NAUTICAL_MILES),
-                    Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("0.61 nm"),
+                    Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("0.61 NM"),
                     _T("0.61"));
 
   TestDistanceSmart(Units::ToSysUnit(fixed(1.234), Unit::NAUTICAL_MILES),
-                    Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("1.23 nm"),
+                    Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("1.23 NM"),
                     _T("1.23"));
 
   TestDistanceSmart(Units::ToSysUnit(fixed(12.34), Unit::NAUTICAL_MILES),
-                    Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("12.3 nm"),
+                    Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("12.3 NM"),
                     _T("12.3"));
 
   TestDistanceSmart(Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
-                    Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("123 nm"),
+                    Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("123 NM"),
                     _T("123"));
 
   // Test Statute Miles
@@ -381,19 +381,19 @@ TestDistanceSmart()
                     Unit::STATUTE_MILES, Unit::FEET, _T("2345 ft"), _T("2345"));
 
   TestDistanceSmart(Units::ToSysUnit(fixed(0.71), Unit::STATUTE_MILES),
-                    Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("0.71 sm"),
+                    Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("0.71 mi"),
                     _T("0.71"));
 
   TestDistanceSmart(Units::ToSysUnit(fixed(1.234), Unit::STATUTE_MILES),
-                    Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("1.23 sm"),
+                    Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("1.23 mi"),
                     _T("1.23"));
 
   TestDistanceSmart(Units::ToSysUnit(fixed(12.34), Unit::STATUTE_MILES),
-                    Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("12.3 sm"),
+                    Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("12.3 mi"),
                     _T("12.3"));
 
   TestDistanceSmart(Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
-                    Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("123 sm"),
+                    Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("123 mi"),
                     _T("123"));
 
   // Test thresholds
