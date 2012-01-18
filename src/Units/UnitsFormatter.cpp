@@ -34,23 +34,24 @@ Copyright_License {
 
 static void
 FormatInteger(TCHAR *buffer, size_t size,
-              const fixed value, const Unit unit, bool include_unit)
+              const fixed value, const Unit unit, bool include_unit,
+              bool include_sign)
 {
   const fixed uvalue = Units::ToUserUnit(value, unit);
   const int ivalue = iround(uvalue);
 
   if (include_unit)
-    _sntprintf(buffer, size, _T("%d %s"), ivalue,
+    _sntprintf(buffer, size, include_sign ? _T("%+d %s") : _T("%d %s"), ivalue,
                Units::unit_descriptors[(unsigned)unit].name);
   else
-    _sntprintf(buffer, size, _T("%d"), ivalue);
+    _sntprintf(buffer, size, include_sign ? _T("%+d") : _T("%d"), ivalue);
 }
 
 void
 Units::FormatAltitude(TCHAR *buffer, size_t size, fixed value, Unit unit,
                       bool include_unit)
 {
-  FormatInteger(buffer, size, value, unit, include_unit);
+  FormatInteger(buffer, size, value, unit, include_unit, false);
 }
 
 void
@@ -88,14 +89,7 @@ void
 Units::FormatRelativeAltitude(TCHAR *buffer, size_t size, fixed value,
                               Unit unit, bool include_unit)
 {
-  const fixed uvalue = Units::ToUserUnit(value, unit);
-  const int ivalue = iround(uvalue);
-
-  if (include_unit)
-    _sntprintf(buffer, size, _T("%+d %s"), ivalue,
-               Units::unit_descriptors[(unsigned)unit].name);
-  else
-    _sntprintf(buffer, size, _T("%+d"), ivalue);
+  FormatInteger(buffer, size, value, unit, include_unit, true);
 }
 
 void
