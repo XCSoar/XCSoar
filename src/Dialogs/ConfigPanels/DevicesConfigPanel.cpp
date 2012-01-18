@@ -195,9 +195,6 @@ DevicesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   list->SetLength(2);
   list->SetCursorCallback(DeviceListCursorCallback);
 
-  LoadFormProperty(form, _T("prpSetSystemTimeFromGPS"),
-                   CommonInterface::GetComputerSettings().set_system_time_from_gps);
-
   LoadFormProperty(form, _T("prpIgnoreNMEAChecksum"),
                    NMEAParser::ignore_checksum);
 }
@@ -210,10 +207,6 @@ DevicesConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   if (!SaveDeviceConfig())
     return false;
-
-  changed |= SaveFormProperty(form, _T("prpSetSystemTimeFromGPS"),
-                              szProfileSetSystemTimeFromGPS,
-                              CommonInterface::SetComputerSettings().set_system_time_from_gps);
 
   changed |= SaveFormProperty(form, _T("prpIgnoreNMEAChecksum"),
                               szProfileIgnoreNMEAChecksum,
