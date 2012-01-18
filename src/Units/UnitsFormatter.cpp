@@ -84,22 +84,26 @@ Units::FormatAlternateUserAltitude(fixed value, TCHAR *buffer, size_t size,
                  include_unit);
 }
 
-// JMW, what does this do?
-// TB: It seems to be the same as FormatUserAltitude() but it includes the
-//     sign (+/-) in the output (see _stprintf())
+void
+Units::FormatRelativeAltitude(TCHAR *buffer, size_t size, fixed value,
+                              Unit unit, bool include_unit)
+{
+  const fixed uvalue = Units::ToUserUnit(value, unit);
+  const int ivalue = iround(uvalue);
+
+  if (include_unit)
+    _sntprintf(buffer, size, _T("%+d %s"), ivalue,
+               Units::unit_descriptors[(unsigned)unit].name);
+  else
+    _sntprintf(buffer, size, _T("%+d"), ivalue);
+}
+
 void
 Units::FormatUserArrival(fixed value, TCHAR *buffer, size_t size,
                          bool include_unit)
 {
-  const UnitDescriptor *descriptor =
-      &unit_descriptors[(unsigned)current.altitude_unit];
-
-  value = value * descriptor->factor_to_user; // + descriptor->ToUserOffset;
-
-  if (include_unit)
-    _sntprintf(buffer, size, _T("%+d %s"), iround(value), descriptor->name);
-  else
-    _sntprintf(buffer, size, _T("%+d"), iround(value));
+  FormatRelativeAltitude(buffer, size, value, current.altitude_unit,
+                         include_unit);
 }
 
 void

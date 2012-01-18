@@ -67,6 +67,17 @@ namespace Units
                                    bool include_unit = true);
 
   /**
+   * Converts an signed altitude into a formatted string
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   * @param value the altitude
+   * @param unit the altitude unit (e.g. meters, feet, ...)
+   * @param include_unit include the unit into the string?
+   */
+  void FormatRelativeAltitude(TCHAR *buffer, size_t size, fixed value,
+                              Unit unit, bool include_unit = true);
+
+  /**
    * Converts a double-based Arrival Altitude into a formatted string
    * @param Altitude The double-based Arrival Altitude
    * @param buffer buffer string to write to (pointer)
