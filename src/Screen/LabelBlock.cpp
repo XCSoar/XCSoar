@@ -68,5 +68,8 @@ bool LabelBlock::check(const PixelRect rc)
     return false;
 
   buckets[top].Add(rc);
+  if (bottom < BUCKET_COUNT && top != bottom)
+    buckets[bottom].Add(rc);
+
   return true;
 }
