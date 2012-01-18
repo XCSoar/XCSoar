@@ -277,12 +277,15 @@ Units::FormatUserPressure(AtmosphericPressure pressure, TCHAR *buffer,
 }
 
 const TCHAR*
+Units::GetPressureFormat(Unit unit)
+{
+  return unit == Unit::INCH_MERCURY ? _T("%.2f") : _T("%.f");
+}
+
+const TCHAR*
 Units::GetFormatUserPressure()
 {
-  if (current.pressure_unit == Unit::INCH_MERCURY)
-    return _T("%.2f");
-  else
-    return _T("%.f");
+  return GetPressureFormat(current.pressure_unit);
 }
 
 fixed

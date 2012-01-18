@@ -168,6 +168,13 @@ namespace Units
                           bool include_unit = true);
 
   /**
+   * Returns the proper format to display the pressure
+   * @param unit the pressure unit
+   * @return the format
+   */
+  const TCHAR* GetPressureFormat(Unit unit);
+
+  /**
    * Give the proper format to display the pressure
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
