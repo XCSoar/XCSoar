@@ -183,7 +183,7 @@ namespace Units
    * @param unit the pressure unit
    * @return the format
    */
-  const TCHAR* GetPressureFormat(Unit unit);
+  const TCHAR* GetPressureFormat(Unit unit, bool include_unit = false);
 
   /**
    * Give the proper format to display the pressure
@@ -191,7 +191,7 @@ namespace Units
    * @param size Size of the buffer
    * @return True if buffer long enough, False otherwise
    */
-  const TCHAR* GetFormatUserPressure();
+  const TCHAR* GetFormatUserPressure(bool include_unit = false);
 
   /**
    * Give the basic step size for pressure editing

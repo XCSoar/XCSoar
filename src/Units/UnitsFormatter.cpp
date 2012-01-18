@@ -260,14 +260,11 @@ Units::FormatPressure(TCHAR *buffer, size_t size, AtmosphericPressure pressure,
 
   fixed _pressure = ToUserUnit(pressure.GetHectoPascal(), unit);
 
-  if (include_unit) {
-    TCHAR format[8];
-    _tcscpy(format, GetPressureFormat(unit));
-    _tcscat(format, _T(" %s") );
-    _stprintf(buffer2, format, (double)_pressure,
+  if (include_unit)
+    _stprintf(buffer2, GetPressureFormat(unit, include_unit), (double)_pressure,
               Units::unit_descriptors[(unsigned)unit].name);
-  } else
-    _stprintf(buffer2, GetPressureFormat(unit),  (double)_pressure);
+  else
+    _stprintf(buffer2, GetPressureFormat(unit, include_unit), (double)_pressure);
 
   if (_tcslen(buffer2) < size - 1)
     _tcscpy(buffer, buffer2);
@@ -283,13 +280,16 @@ Units::FormatUserPressure(AtmosphericPressure pressure, TCHAR *buffer,
 }
 
 const TCHAR*
-Units::GetPressureFormat(Unit unit)
+Units::GetPressureFormat(Unit unit, bool include_unit)
 {
-  return unit == Unit::INCH_MERCURY ? _T("%.2f") : _T("%.f");
+  if (include_unit)
+    return unit == Unit::INCH_MERCURY ? _T("%.2f %s") : _T("%.f %s");
+  else
+    return unit == Unit::INCH_MERCURY ? _T("%.2f") : _T("%.f");
 }
 
 const TCHAR*
-Units::GetFormatUserPressure()
+Units::GetFormatUserPressure(bool include_unit)
 {
   return GetPressureFormat(current.pressure_unit);
 }
