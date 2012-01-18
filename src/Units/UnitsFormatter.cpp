@@ -179,10 +179,11 @@ GetBestDistancePrecision(fixed value, Unit unit, fixed threshold = fixed(100))
 
 Unit
 Units::FormatDistanceSmart(TCHAR *buffer, size_t size, fixed value, Unit unit,
-                           bool include_unit)
+                           bool include_unit, fixed small_unit_threshold,
+                           fixed precision_threshold)
 {
-  unit = GetBestDistanceUnit(value, unit);
-  int precision = GetBestDistancePrecision(value, unit);
+  unit = GetBestDistanceUnit(value, unit, small_unit_threshold);
+  int precision = GetBestDistancePrecision(value, unit, precision_threshold);
   FormatDistance(buffer, size, value, unit, include_unit, precision);
 
   return unit;

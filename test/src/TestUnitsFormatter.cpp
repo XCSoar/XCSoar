@@ -277,16 +277,20 @@ TestSmallDistance()
 static void
 TestDistanceSmart(fixed value, Unit unit, Unit expected_unit,
                   const TCHAR *expected_output_with_unit,
-                  const TCHAR *expected_output_without_unit)
+                  const TCHAR *expected_output_without_unit,
+                  fixed small_unit_threshold = fixed(2500),
+                  fixed precision_threshold = fixed(100))
 {
   TCHAR buffer[256];
 
-  ok1(Units::FormatDistanceSmart(buffer, ARRAY_SIZE(buffer),
-                                 value, unit) == expected_unit);
+  ok1(Units::FormatDistanceSmart(buffer, ARRAY_SIZE(buffer), value, unit, true,
+                                 small_unit_threshold, precision_threshold) ==
+      expected_unit);
   ok1(StringIsEqual(buffer, expected_output_with_unit));
 
-  ok1(Units::FormatDistanceSmart(buffer, ARRAY_SIZE(buffer),
-                                 value, unit, false) == expected_unit);
+  ok1(Units::FormatDistanceSmart(buffer, ARRAY_SIZE(buffer), value, unit, false,
+                                 small_unit_threshold, precision_threshold) ==
+      expected_unit);
   ok1(StringIsEqual(buffer, expected_output_without_unit));
 }
 
@@ -391,6 +395,20 @@ TestDistanceSmart()
   TestDistanceSmart(Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
                     Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("123 sm"),
                     _T("123"));
+
+  // Test thresholds
+  TestDistanceSmart(Units::ToSysUnit(fixed(0.9), Unit::KILOMETER),
+                    Unit::KILOMETER, Unit::METER, _T("900 m"), _T("900"), fixed(1000));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(1.1), Unit::KILOMETER),
+                    Unit::KILOMETER, Unit::KILOMETER, _T("1.10 km"), _T("1.10"), fixed(1000));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(1.1), Unit::KILOMETER),
+                    Unit::KILOMETER, Unit::KILOMETER, _T("1.1 km"), _T("1.1"), fixed(1000), fixed(10));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(1.1), Unit::KILOMETER),
+                    Unit::KILOMETER, Unit::KILOMETER, _T("1 km"), _T("1"), fixed(1000), fixed(1));
+
 }
 
 static void
@@ -585,7 +603,7 @@ TestPressure()
 int
 main(int argc, char **argv)
 {
-  plan_tests(189);
+  plan_tests(205);
 
   TestAltitude();
   TestRelativeAltitude();

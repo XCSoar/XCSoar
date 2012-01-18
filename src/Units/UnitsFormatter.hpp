@@ -136,7 +136,9 @@ namespace Units
    * @return the unit used for output formatting
    */
   Unit FormatDistanceSmart(TCHAR *buffer, size_t size, fixed value, Unit unit,
-                           bool include_unit = true);
+                           bool include_unit = true,
+                           fixed small_unit_threshold = fixed(2500),
+                           fixed precision_threshold = fixed(100));
 
   /**
    * Converts a double-based horizontal Distance into a formatted string
