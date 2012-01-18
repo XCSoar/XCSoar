@@ -330,6 +330,7 @@ bool
 OLCTriangle::SaveSolution()
 {
   assert(num_stages <= MAX_STAGES);
+  assert(solution_valid);
 
   if (AbstractContest::SaveSolution()) {
     best_solution.clear();

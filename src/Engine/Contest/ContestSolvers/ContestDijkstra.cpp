@@ -56,7 +56,8 @@ ContestDijkstra::Score(ContestResult &result)
 {
   assert(num_stages <= MAX_STAGES);
 
-  return n_points >= num_stages && AbstractContest::Score(result);
+  return n_points >= num_stages && solution_valid &&
+    AbstractContest::Score(result);
 }
 
 bool
@@ -118,6 +119,8 @@ ContestDijkstra::Solve(bool exhaustive)
 {
   assert(num_stages <= MAX_STAGES);
 
+  solution_valid = false;
+
   if (trace_master.size() < num_stages) {
     /* not enough data in master trace */
     clear_trace();
@@ -162,7 +165,9 @@ ContestDijkstra::Solve(bool exhaustive)
 #endif
 
   if (distance_general(exhaustive ? 0 - 1 : 25)) {
-    SaveSolution();
+    if (solution_valid)
+      SaveSolution();
+
     update_trace();
     return true;
   }
@@ -192,9 +197,7 @@ fixed
 ContestDijkstra::CalcTime() const
 {
   assert(num_stages <= MAX_STAGES);
-
-  if (!solution_valid)
-    return fixed_zero;
+  assert(solution_valid);
 
   return fixed(GetPoint(solution[num_stages - 1])
                .DeltaTime(GetPoint(solution[0])));
@@ -204,6 +207,7 @@ fixed
 ContestDijkstra::CalcDistance() const
 {
   assert(num_stages <= MAX_STAGES);
+  assert(solution_valid);
 
   fixed dist = fixed_zero;
   GeoPoint previous = GetPoint(solution[0]).get_location();
@@ -220,6 +224,7 @@ fixed
 ContestDijkstra::CalcScore() const
 {
   assert(num_stages <= MAX_STAGES);
+  assert(solution_valid);
 
   fixed score = fixed_zero;
   GeoPoint previous = GetPoint(solution[0]).get_location();
@@ -292,6 +297,7 @@ bool
 ContestDijkstra::SaveSolution()
 {
   assert(num_stages <= MAX_STAGES);
+  assert(solution_valid);
 
   if (solution_valid && AbstractContest::SaveSolution()) {
     best_solution.clear();

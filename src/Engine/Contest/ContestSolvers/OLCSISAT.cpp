@@ -43,6 +43,8 @@ OLCSISAT::OLCSISAT(const Trace &_trace)
 fixed
 OLCSISAT::CalcScore() const
 {
+  assert(solution_valid);
+
   // build convex hull from solution
   SearchPointVector spv;
   for (unsigned i = 0; i < num_stages; ++i)
