@@ -116,8 +116,6 @@ protected:
   }
 
 private:
-  void calculate_sizes();
-
   gcc_pure
   unsigned get_size(const unsigned stage) const {
     assert(stage < num_stages);

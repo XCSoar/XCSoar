@@ -37,15 +37,11 @@ TaskDijkstra::refresh_task()
     return false;
 
   active_stage = task.GetActiveTaskPointIndex();
-  calculate_sizes();
-  return true;
-}
 
-void
-TaskDijkstra::calculate_sizes()
-{
   for (unsigned stage = 0; stage != num_stages; ++stage)
     sp_sizes[stage] = task.get_tp_search_points(stage).size();
+
+  return true;
 }
 
 const SearchPoint &
