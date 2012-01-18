@@ -40,8 +40,6 @@ std::string task_file = "";
 #ifdef INSTRUMENT_TASK
 extern long count_mc;
 long count_intersections;
-long count_dijkstra_links = 0;
-long count_dijkstra_queries = 0;
 extern unsigned n_queries;
 extern unsigned count_distbearing;
 #endif
@@ -61,13 +59,6 @@ void distance_counts() {
       printf("#     intersection tests/q %d\n",(unsigned)(count_intersections/n_queries));
       printf("#    (total queries %d)\n\n",n_queries);
     }
-    if (count_dijkstra_queries>0) {
-      printf("#     dijkstra links/q %d\n", (unsigned)(count_dijkstra_links/count_dijkstra_queries));
-    }
-
-    printf("#     count_olc_solve %d\n", (int)ContestDijkstra::count_olc_solve);
-    printf("#     count_olc_trace %d\n", (int)ContestDijkstra::count_olc_trace);
-    printf("#     count_olc_size %d\n",ContestDijkstra::count_olc_size);
 #endif
     printf("#    (total cycles %d)\n#\n",n_samples);
 #ifdef INSTRUMENT_ZERO
@@ -79,13 +70,10 @@ void distance_counts() {
   }
   n_samples = 0;
 #ifdef INSTRUMENT_TASK
-  count_dijkstra_links = 0;
-  count_dijkstra_queries = 0;
   count_intersections = 0;
   n_queries = 0;
   count_distbearing = 0;
   count_mc = 0;
-  count_olc = 0;
 #endif
 #ifdef INSTRUMENT_ZERO
   zero_skipped = 0;
