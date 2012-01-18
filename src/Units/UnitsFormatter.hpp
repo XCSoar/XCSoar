@@ -163,9 +163,8 @@ namespace Units
    * @param Pressure The double-based Pressure
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
-   * @return True if buffer long enough, False otherwise
    */
-  bool FormatUserPressure(AtmosphericPressure value, TCHAR *buffer, size_t size,
+  void FormatUserPressure(AtmosphericPressure value, TCHAR *buffer, size_t size,
                           bool include_unit = true);
 
   /**

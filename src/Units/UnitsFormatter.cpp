@@ -252,7 +252,7 @@ Units::FormatUserTemperature(fixed value, TCHAR *buffer, size_t size,
     _sntprintf(buffer, size, _T("%.0f"), (double)value);
 }
 
-bool
+void
 Units::FormatUserPressure(AtmosphericPressure pressure, TCHAR *buffer,
                           size_t size, bool include_unit)
 {
@@ -270,13 +270,10 @@ Units::FormatUserPressure(AtmosphericPressure pressure, TCHAR *buffer,
   } else
     _stprintf(buffer2, GetFormatUserPressure(),  (double)_pressure);
 
-  if (_tcslen(buffer2) < size - 1) {
+  if (_tcslen(buffer2) < size - 1)
     _tcscpy(buffer, buffer2);
-    return true;
-  } else {
+  else
     CopyString(buffer, buffer2, size);
-    return false;
-  }
 }
 
 const TCHAR*
