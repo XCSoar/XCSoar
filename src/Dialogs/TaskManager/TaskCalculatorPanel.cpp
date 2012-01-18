@@ -134,13 +134,13 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
       MACCREADY = XCSoarInterface::Calculated().total_height_gain /
                   XCSoarInterface::Calculated().time_climb;
       df->Set(Units::ToUserVSpeed(MACCREADY));
-      ActionInterface::SetMacCready(MACCREADY);
+      ActionInterface::SetManualMacCready(MACCREADY);
       instance->Refresh();
     }
     break;
   case DataField::daChange:
     MACCREADY = Units::ToSysVSpeed(df->GetAsFixed());
-    ActionInterface::SetMacCready(MACCREADY);
+    ActionInterface::SetManualMacCready(MACCREADY);
     instance->Refresh();
     break;
   }

@@ -135,10 +135,10 @@ InputEvents::eventMacCready(const TCHAR *misc)
 
   if (StringIsEqual(misc, _T("up"))) {
     mc = std::min(mc + Units::ToSysVSpeed(fixed_one / fixed(10)), fixed(5));
-    ActionInterface::SetMacCready(mc);
+    ActionInterface::SetManualMacCready(mc);
   } else if (StringIsEqual(misc, _T("down"))) {
     mc = std::max(mc - Units::ToSysVSpeed(fixed_one / fixed(10)), fixed_zero);
-    ActionInterface::SetMacCready(mc);
+    ActionInterface::SetManualMacCready(mc);
   } else if (StringIsEqual(misc, _T("auto toggle"))) {
     task_behaviour.auto_mc = !task_behaviour.auto_mc;
     Profile::Set(szProfileAutoMc, task_behaviour.auto_mc);

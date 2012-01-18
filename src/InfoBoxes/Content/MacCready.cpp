@@ -107,16 +107,12 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
   switch (keycode) {
   case ibkUp:
     mc = std::min(mc + Units::ToSysVSpeed(fixed_one / 10), fixed(5));
-    ActionInterface::SetMacCready(mc);
-    task_behaviour.auto_mc = false;
-    Profile::Set(szProfileAutoMc, false);
+    ActionInterface::SetManualMacCready(mc);
     return true;
 
   case ibkDown:
     mc = std::max(mc - Units::ToSysVSpeed(fixed_one / 10), fixed_zero);
-    ActionInterface::SetMacCready(mc);
-    task_behaviour.auto_mc = false;
-    Profile::Set(szProfileAutoMc, false);
+    ActionInterface::SetManualMacCready(mc);
     return true;
 
   case ibkLeft:
@@ -153,7 +149,7 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
 
   } else if (_tcscmp(misc, _T("+0.5")) == 0) {
     mc = std::min(mc + Units::ToSysVSpeed(fixed_half), fixed(5));
-    ActionInterface::SetMacCready(mc);
+    ActionInterface::SetManualMacCready(mc);
     return true;
 
   } else if (_tcscmp(misc, _T("-0.1")) == 0) {
@@ -161,7 +157,7 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
 
   } else if (_tcscmp(misc, _T("-0.5")) == 0) {
     mc = std::max(mc - Units::ToSysVSpeed(fixed_half), fixed_zero);
-    ActionInterface::SetMacCready(mc);
+    ActionInterface::SetManualMacCready(mc);
     return true;
 
   } else if (_tcscmp(misc, _T("mode")) == 0) {
