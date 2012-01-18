@@ -144,7 +144,7 @@ namespace Units
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
    */
-  void FormatUserDistance(fixed value, TCHAR *buffer, size_t size,
+  Unit FormatUserDistance(fixed value, TCHAR *buffer, size_t size,
                           bool include_unit = true);
 
   void FormatUserMapScale(fixed value, TCHAR *buffer, size_t size,

@@ -220,7 +220,7 @@ GetBestDistanceFormat(fixed _value, bool include_unit,
   }
 }
 
-void
+Unit
 Units::FormatUserDistance(fixed value, TCHAR *buffer, size_t size,
                           bool include_unit)
 {
@@ -229,6 +229,7 @@ Units::FormatUserDistance(fixed value, TCHAR *buffer, size_t size,
   GetBestDistanceFormat(value, include_unit, unit, prec);
 
   FormatDistance(buffer, size, value, unit, include_unit, prec);
+  return unit;
 }
 
 void
