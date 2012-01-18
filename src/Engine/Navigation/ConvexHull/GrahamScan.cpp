@@ -191,7 +191,10 @@ bool
 GrahamScan::prune_interior()
 {
   SearchPointVector res;
-  res.reserve(size);
+
+  /* the result is usually one more than the input vector - is that a
+     bug? */
+  res.reserve(size + 1);
 
   if (size<3) {
     std::copy(raw_points.begin(), raw_points.end(),
