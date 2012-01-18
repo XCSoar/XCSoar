@@ -29,12 +29,14 @@ Copyright_License {
 
 class Canvas;
 class Font;
+struct InfoBoxLook;
 
 namespace UnitSymbolRenderer
 {
   PixelSize GetSize(const Canvas &canvas, const Unit unit);
   UPixelScalar GetAscentHeight(const Font &font, const Unit unit);
-  void Draw(Canvas &canvas, const RasterPoint pos, const Unit unit);
+  void Draw(Canvas &canvas, const RasterPoint pos, const Unit unit,
+            const InfoBoxLook &look);
 }
 
 #endif

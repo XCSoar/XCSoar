@@ -46,6 +46,7 @@ struct InfoBoxLook {
   const Font *small_font;
 #ifndef GNAV
   const Font *unit_font;
+  Pen unit_fraction_pen;
 #endif
 
   Color colors[6];

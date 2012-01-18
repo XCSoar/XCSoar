@@ -53,6 +53,7 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors)
   small_font = &Fonts::infobox_small;
 #ifndef GNAV
   unit_font = &Fonts::infobox_units;
+  unit_fraction_pen.Set(1, value.fg_color);
 #endif
 
   colors[0] = border_color;

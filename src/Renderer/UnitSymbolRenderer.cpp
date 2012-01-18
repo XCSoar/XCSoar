@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/InfoBoxLook.hpp"
 #include "Util/Macros.hpp"
 
 #include <tchar.h>
@@ -34,28 +35,29 @@ Copyright_License {
 struct UnitSymbolStrings {
   const TCHAR *line1;
   const TCHAR *line2;
+  bool is_fraction;
 };
 
 static const UnitSymbolStrings symbol_strings[] = {
   { NULL, NULL },
-  { _T("k"), _T("m") },
-  { _T("N"), _T("M") },
-  { _T("S"), _T("M") },
-  { _T("km"), _T("h") },
-  { _T("k"), _T("t") },
-  { _T("mp"), _T("h") },
-  { _T("m"), _T("s") },
-  { _T("fp"), _T("m") },
-  { NULL, _T("m") },
-  { NULL, _T("ft") },
-  { _T("F"), _T("L") },
-  { NULL, _T("K") },
-  { _T(DEG), _T("C") },
-  { _T(DEG), _T("F") },
-  { _T("h"), _T("Pa") },
-  { NULL, _T("mb") },
-  { _T("mm"), _T("Hg") },
-  { _T("in"), _T("Hg") },
+  { _T("k"), _T("m"), false },
+  { _T("N"), _T("M"), false },
+  { _T("S"), _T("M"), false },
+  { _T("km"), _T("h"), true },
+  { _T("k"), _T("t"), false },
+  { _T("mp"), _T("h"), false },
+  { _T("m"), _T("s"), true },
+  { _T("fp"), _T("m"), false },
+  { NULL, _T("m"), false },
+  { NULL, _T("ft"), false },
+  { _T("F"), _T("L"), false },
+  { NULL, _T("K"), false },
+  { _T(DEG), _T("C"), false },
+  { _T(DEG), _T("F"), false },
+  { _T("h"), _T("Pa"), false },
+  { NULL, _T("mb"), false },
+  { _T("mm"), _T("Hg"), false },
+  { _T("in"), _T("Hg"), false },
 };
 
 static_assert(ARRAY_SIZE(symbol_strings) == (size_t)Unit::COUNT,
@@ -112,7 +114,7 @@ UnitSymbolRenderer::GetAscentHeight(const Font &font, const Unit unit)
 
 void
 UnitSymbolRenderer::Draw(Canvas &canvas, const RasterPoint pos,
-                         const Unit unit)
+                         const Unit unit, const InfoBoxLook &look)
 {
   assert((size_t)unit < ARRAY_SIZE(symbol_strings));
 
@@ -135,10 +137,20 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const RasterPoint pos,
   PixelSize size2 = canvas.CalcTextSize(strings.line2);
 
   if (size1.cx > size2.cx) {
+    if (strings.is_fraction) {
+      canvas.Select(look.unit_fraction_pen);
+      canvas.line(pos.x, pos.y + size1.cy, pos.x + size1.cx, pos.y + size1.cy);
+    }
+
     canvas.text(pos.x, pos.y, strings.line1);
     PixelScalar x = pos.x + (size1.cx - size2.cx) / 2;
     canvas.text(x, pos.y + size1.cy, strings.line2);
   } else {
+    if (strings.is_fraction) {
+      canvas.Select(look.unit_fraction_pen);
+      canvas.line(pos.x, pos.y + size1.cy, pos.x + size2.cx, pos.y + size1.cy);
+    }
+
     PixelScalar x = pos.x + (size2.cx - size1.cx) / 2;
     canvas.text(x, pos.y, strings.line1);
     canvas.text(pos.x, pos.y + size1.cy, strings.line2);
