@@ -32,10 +32,6 @@ Copyright_License {
 #include <unordered_map>
 #include <assert.h>
 
-#ifdef INSTRUMENT_TASK
-extern long count_dijkstra_queries;
-#endif
-
 /**
  * Abstract class for A* /Dijkstra searches of nav points, managing
  * edges in multiple stages (corresponding to turn points).
@@ -147,10 +143,6 @@ protected:
    * @return True if algorithm returns a terminal path or no path found
    */
   bool distance_general(unsigned max_steps = 0 - 1) {
-#ifdef INSTRUMENT_TASK
-    count_dijkstra_queries++;
-#endif
-
     while (!dijkstra.empty()) {
       const ScanTaskPoint destination = dijkstra.pop();
 

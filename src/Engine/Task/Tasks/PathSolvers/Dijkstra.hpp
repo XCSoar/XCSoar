@@ -28,10 +28,6 @@ Copyright_License {
 #include <assert.h>
 #include "Compiler.h"
 
-#ifdef INSTRUMENT_TASK
-extern long count_dijkstra_links;
-#endif
-
 #define DIJKSTRA_MINMAX_OFFSET 134217727
 
 #define DIJKSTRA_QUEUE_SIZE 20000
@@ -184,9 +180,6 @@ public:
    * @param e Edge distance
    */
   void link(const Node node, const Node parent, unsigned edge_value) {
-#ifdef INSTRUMENT_TASK
-    count_dijkstra_links++;
-#endif
     push(node, parent, current_value + adjust_edge_value(edge_value));
   }
 
