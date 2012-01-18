@@ -28,7 +28,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(8);
+  plan_tests(12);
 
   TCHAR buffer[256];
 
@@ -46,6 +46,14 @@ int main(int argc, char **argv)
   Units::FormatAltitude(buffer, ARRAY_SIZE(buffer),
                         Units::ToSysUnit(fixed(-1234), Unit::FEET), Unit::FEET);
   ok1(StringIsEqual(buffer, _T("-1234 ft")));
+
+  Units::FormatAltitude(buffer, ARRAY_SIZE(buffer), fixed(1234),
+                        Unit::METER, false);
+  ok1(StringIsEqual(buffer, _T("1234")));
+
+  Units::FormatAltitude(buffer, ARRAY_SIZE(buffer), fixed(-1234),
+                        Unit::METER, false);
+  ok1(StringIsEqual(buffer, _T("-1234")));
 
   // Test FormatRelativeAltitude()
   Units::FormatRelativeAltitude(buffer, ARRAY_SIZE(buffer), fixed(1234),
@@ -65,6 +73,14 @@ int main(int argc, char **argv)
                                 Units::ToSysUnit(fixed(-1234), Unit::FEET),
                                 Unit::FEET);
   ok1(StringIsEqual(buffer, _T("-1234 ft")));
+
+  Units::FormatRelativeAltitude(buffer, ARRAY_SIZE(buffer), fixed(1234),
+                        Unit::METER, false);
+  ok1(StringIsEqual(buffer, _T("+1234")));
+
+  Units::FormatRelativeAltitude(buffer, ARRAY_SIZE(buffer), fixed(-1234),
+                        Unit::METER, false);
+  ok1(StringIsEqual(buffer, _T("-1234")));
 
   return exit_status();
 }
