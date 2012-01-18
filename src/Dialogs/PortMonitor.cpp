@@ -37,6 +37,7 @@ Copyright_License {
 static DeviceDescriptor *device;
 static WndForm *dialog;
 static TerminalWindow *terminal;
+static bool paused;
 
 /**
  * A bridge between Port::Handler and TerminalWindow: copy all data
@@ -84,6 +85,8 @@ private:
   }
 };
 
+static PortTerminalBridge *bridge;
+
 static void
 OnClearClicked(gcc_unused WndButton &button)
 {
@@ -101,6 +104,20 @@ OnReconnectClicked(gcc_unused WndButton &button)
 {
   MessageOperationEnvironment env;
   device->Reopen(env);
+}
+
+static void
+OnPauseClicked(WndButton &button)
+{
+  paused = !paused;
+
+  if (paused) {
+    button.SetCaption(_("Resume"));
+    device->SetMonitor(NULL);
+  } else {
+    button.SetCaption(_("Pause"));
+    device->SetMonitor(bridge);
+  }
 }
 
 void
@@ -130,6 +147,7 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
   buttons.Add(_("Close"), OnCloseClicked);
   buttons.Add(_("Clear"), OnClearClicked);
   buttons.Add(_("Reconnect"), OnReconnectClicked);
+  buttons.Add(_("Pause"), OnPauseClicked);
 
   const PixelRect rc = buttons.GetRemainingRect();
 
@@ -139,8 +157,9 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
   terminal->set(dialog->GetClientAreaWindow(), rc.left, rc.top,
                 rc.right - rc.left, rc.bottom - rc.top);
 
-  PortTerminalBridge *bridge = new PortTerminalBridge(*terminal);
+  bridge = new PortTerminalBridge(*terminal);
   device->SetMonitor(bridge);
+  paused = false;
 
   /* run it */
 
