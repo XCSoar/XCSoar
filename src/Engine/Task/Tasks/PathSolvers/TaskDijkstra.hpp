@@ -77,7 +77,7 @@ public:
 
 protected:
   gcc_pure
-  const SearchPoint &GetPointFast(const ScanTaskPoint &sp) const;
+  const SearchPoint &GetPointFast(ScanTaskPoint sp) const;
 
   bool run();
 
@@ -97,7 +97,7 @@ protected:
    * @return Distance (flat) from origin to destination
    */
   gcc_pure
-  unsigned distance(const ScanTaskPoint &curNode,
+  unsigned distance(const ScanTaskPoint curNode,
                     const SearchPoint &currentLocation) const {
     return GetPointFast(curNode).flat_distance(currentLocation);
   }
@@ -111,7 +111,7 @@ protected:
    * @return Distance (flat) from origin to destination
    */
   gcc_pure
-  unsigned distance(const ScanTaskPoint &s1, const ScanTaskPoint &s2) const {
+  unsigned distance(const ScanTaskPoint s1, const ScanTaskPoint s2) const {
     return GetPointFast(s1).flat_distance(GetPointFast(s2));
   }
 
@@ -119,7 +119,7 @@ private:
   void calculate_sizes();
   unsigned get_size(const unsigned stage) const;
 
-  void add_edges(const ScanTaskPoint &curNode);
+  void add_edges(ScanTaskPoint curNode);
 };
 
 #endif

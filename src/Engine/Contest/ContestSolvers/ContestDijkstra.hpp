@@ -111,7 +111,7 @@ protected:
   }
 
   gcc_pure
-  const TracePoint &GetPointFast(const ScanTaskPoint &sp) const {
+  const TracePoint &GetPointFast(const ScanTaskPoint sp) const {
     assert(sp.point_index < n_points);
     return trace[sp.point_index];
   }
@@ -128,9 +128,9 @@ protected:
    * @return True if candidate is valid
    */
   bool admit_candidate(const TracePoint &start,
-                       const ScanTaskPoint &candidate) const;
+                       const ScanTaskPoint candidate) const;
 
-  virtual void add_edges(const ScanTaskPoint &curNode);
+  virtual void add_edges(ScanTaskPoint curNode);
 
   /**
    * Retrieve weighting of specified leg
@@ -161,7 +161,7 @@ protected:
    * @return Distance (flat) from origin to destination
    */
   gcc_pure
-  unsigned distance(const ScanTaskPoint &curNode,
+  unsigned distance(const ScanTaskPoint curNode,
                     const SearchPoint &currentLocation) const {
     return GetPointFast(curNode).flat_distance(currentLocation);
   }
@@ -175,7 +175,7 @@ protected:
    * @return Distance (flat) from origin to destination
    */
   gcc_pure
-  unsigned distance(const ScanTaskPoint &s1, const ScanTaskPoint &s2) const {
+  unsigned distance(const ScanTaskPoint s1, const ScanTaskPoint s2) const {
     return GetPointFast(s1).flat_distance(GetPointFast(s2));
   }
 

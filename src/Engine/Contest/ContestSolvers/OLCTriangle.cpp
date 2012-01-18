@@ -214,7 +214,7 @@ OLCTriangle::add_start_edges()
 
 
 void 
-OLCTriangle::add_edges(const ScanTaskPoint& origin)
+OLCTriangle::add_edges(const ScanTaskPoint origin)
 {
   assert(origin.point_index < n_points);
 

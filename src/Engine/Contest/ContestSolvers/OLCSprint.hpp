@@ -42,7 +42,7 @@ public:
 protected:
   fixed CalcScore() const;
 
-  void add_edges(const ScanTaskPoint &origin);
+  void add_edges(ScanTaskPoint origin);
 
   virtual void update_trace();
 

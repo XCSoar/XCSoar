@@ -55,7 +55,7 @@ protected:
 
   bool path_closed() const;
 
-  void add_edges(const ScanTaskPoint &curNode);
+  void add_edges(ScanTaskPoint curNode);
 
   void start_search();
 

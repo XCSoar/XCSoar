@@ -114,7 +114,7 @@ protected:
    * 
    * @return True if this terminal point completes a valid solution
    */
-  virtual bool finish_satisfied(const ScanTaskPoint &sp) const {
+  virtual bool finish_satisfied(const ScanTaskPoint sp) const {
     return true;
   }
 
@@ -123,7 +123,7 @@ protected:
    * 
    * @param curNode Origin node to add edges from
    */
-  virtual void add_edges(const ScanTaskPoint &curNode) = 0;
+  virtual void add_edges(const ScanTaskPoint curNode) = 0;
 
   /** 
    * Determine whether a point is terminal (no further edges)
@@ -133,7 +133,7 @@ protected:
    * @return True if point is terminal
    */
   gcc_pure
-  bool is_final(const ScanTaskPoint &sp) const {
+  bool is_final(const ScanTaskPoint sp) const {
     assert(num_stages <= MAX_STAGES);
     return (unsigned)(sp.stage_number + 1) == num_stages;
   }
@@ -207,7 +207,7 @@ protected:
    * 
    * @param destination Terminal point to query
    */
-  void find_solution(const ScanTaskPoint &destination) {
+  void find_solution(const ScanTaskPoint destination) {
     ScanTaskPoint p(destination); 
     unsigned last_stage_number;
 

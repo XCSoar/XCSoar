@@ -96,7 +96,7 @@ OLCSprint::add_start_edges()
 }
 
 void 
-OLCSprint::add_edges(const ScanTaskPoint &origin)
+OLCSprint::add_edges(const ScanTaskPoint origin)
 {
   const ScanTaskPoint destination(origin.stage_number + 1, n_points - 1);
   if (!is_final(destination)) {

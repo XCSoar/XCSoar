@@ -253,7 +253,7 @@ ContestDijkstra::add_start_edges()
 }
 
 void
-ContestDijkstra::add_edges(const ScanTaskPoint& origin)
+ContestDijkstra::add_edges(const ScanTaskPoint origin)
 {
   ScanTaskPoint destination(origin.stage_number + 1, origin.point_index);
 
@@ -277,7 +277,7 @@ ContestDijkstra::add_edges(const ScanTaskPoint& origin)
 
 bool
 ContestDijkstra::admit_candidate(const TracePoint &start,
-                                 const ScanTaskPoint &candidate) const
+                                 const ScanTaskPoint candidate) const
 {
   if (!is_final(candidate))
     return true;

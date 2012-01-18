@@ -109,7 +109,7 @@ public:
    * @param n Node to start
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  Dijkstra(const Node &node, const bool is_min = true,
+  Dijkstra(const Node node, const bool is_min = true,
            unsigned reserve_default = DIJKSTRA_QUEUE_SIZE)
     :m_min(is_min) {
     reserve(reserve_default);
@@ -121,7 +121,7 @@ public:
    *
    * @param n Node to start
    */
-  void restart(const Node &node) {
+  void restart(const Node node) {
     clear();
     push(node, node, 0);
   }
@@ -165,7 +165,7 @@ public:
    *
    * @return Node for processing
    */
-  const Node &pop() {
+  Node pop() {
     edge_const_iterator cur(q.top().iterator);
     current_value = cur->second.value;
 
@@ -183,7 +183,7 @@ public:
    * @param pn Predecessor of destination node
    * @param e Edge distance
    */
-  void link(const Node &node, const Node &parent, unsigned edge_value) {
+  void link(const Node node, const Node parent, unsigned edge_value) {
 #ifdef INSTRUMENT_TASK
     count_dijkstra_links++;
 #endif
@@ -198,7 +198,7 @@ public:
    * @return Predecessor node
    */
   gcc_pure
-  Node get_predecessor(const Node &node) const {
+  Node get_predecessor(const Node node) const {
     // Try to find the given node in the node_parent_map
     edge_const_iterator it = edges.find(node);
     if (it == edges.end())
@@ -236,7 +236,7 @@ private:
    * @param pn Previous node
    * @param e Edge distance (previous to this)
    */
-  void push(const Node &node, const Node &parent, unsigned edge_value = 0) {
+  void push(const Node node, const Node parent, unsigned edge_value = 0) {
     // Try to find the given node n in the edge_map
     edge_iterator it = edges.find(node);
     if (it == edges.end())

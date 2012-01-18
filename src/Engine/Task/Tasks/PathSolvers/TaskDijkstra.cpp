@@ -55,13 +55,13 @@ TaskDijkstra::get_size(const unsigned stage) const
 }
 
 const SearchPoint &
-TaskDijkstra::GetPointFast(const ScanTaskPoint &sp) const
+TaskDijkstra::GetPointFast(const ScanTaskPoint sp) const
 {
   return task.get_tp_search_points(sp.stage_number)[sp.point_index];
 }
 
 void
-TaskDijkstra::add_edges(const ScanTaskPoint& curNode)
+TaskDijkstra::add_edges(const ScanTaskPoint curNode)
 {
   ScanTaskPoint destination(curNode.stage_number + 1, 0);
   const unsigned dsize = get_size(destination.stage_number);

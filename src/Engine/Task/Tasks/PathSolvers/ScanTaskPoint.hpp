@@ -52,7 +52,7 @@ struct ScanTaskPoint {
     return *reinterpret_cast<const uint32_t *>(this);
   }
 
-  bool operator<(const ScanTaskPoint &other) const {
+  bool operator<(const ScanTaskPoint other) const {
     return Key() < other.Key();
   }
 
