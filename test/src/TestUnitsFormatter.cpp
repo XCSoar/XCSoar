@@ -185,12 +185,12 @@ TestVerticalSpeed()
   Units::FormatVerticalSpeed(buffer, ARRAY_SIZE(buffer),
                              Units::ToSysUnit(fixed(245.4), Unit::FEET_PER_MINUTE),
                              Unit::FEET_PER_MINUTE);
-  ok1(StringIsEqual(buffer, _T("+245.4 fpm")));
+  ok1(StringIsEqual(buffer, _T("+245 fpm")));
 
   Units::FormatVerticalSpeed(buffer, ARRAY_SIZE(buffer),
                              Units::ToSysUnit(fixed(245.4), Unit::FEET_PER_MINUTE),
                              Unit::FEET_PER_MINUTE, false);
-  ok1(StringIsEqual(buffer, _T("+245.4")));
+  ok1(StringIsEqual(buffer, _T("+245")));
 }
 
 static void

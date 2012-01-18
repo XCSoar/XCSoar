@@ -224,6 +224,21 @@ Units::FormatUserTaskSpeed(fixed value, TCHAR *buffer, size_t size,
               include_unit, precision);
 }
 
+const TCHAR*
+Units::GetVerticalSpeedFormat(Unit unit, bool include_unit)
+{
+  if (include_unit)
+    return unit == Unit::FEET_PER_MINUTE ? _T("%+.0f %s") : _T("%+.1f %s");
+  else
+    return unit == Unit::FEET_PER_MINUTE ? _T("%+.0f") : _T("%+.1f");
+}
+
+const TCHAR*
+Units::GetUserVerticalSpeedFormat(bool include_unit)
+{
+  return GetPressureFormat(current.vertical_speed_unit);
+}
+
 void
 Units::FormatVerticalSpeed(TCHAR *buffer, size_t size, fixed value, Unit unit,
                            bool include_unit)
@@ -231,10 +246,11 @@ Units::FormatVerticalSpeed(TCHAR *buffer, size_t size, fixed value, Unit unit,
   value = ToUserUnit(value, unit);
 
   if (include_unit)
-    _sntprintf(buffer, size, _T("%+.1f %s"), (double)value,
-               Units::unit_descriptors[(unsigned)unit].name);
+    _sntprintf(buffer, size, GetVerticalSpeedFormat(unit, include_unit),
+               (double)value, Units::unit_descriptors[(unsigned)unit].name);
   else
-    _sntprintf(buffer, size, _T("%+.1f"), (double)value);
+    _sntprintf(buffer, size, GetVerticalSpeedFormat(unit, include_unit),
+               (double)value);
 }
 
 void

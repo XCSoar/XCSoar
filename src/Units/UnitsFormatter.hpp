@@ -140,6 +140,19 @@ namespace Units
                            bool include_unit=true, bool precision=true);
 
   /**
+   * Returns the proper format to display the vertical speed
+   * @param unit the pressure unit
+   * @return the format
+   */
+  const TCHAR* GetVerticalSpeedFormat(Unit unit, bool include_unit = false);
+
+  /**
+   * Give the proper format to display the vertical speed
+   * @return the format
+   */
+  const TCHAR* GetUserVerticalSpeedFormat(bool include_unit = false);
+
+  /**
    * Converts a vertical speed into a formatted string
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
