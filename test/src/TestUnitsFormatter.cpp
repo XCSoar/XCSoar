@@ -275,6 +275,125 @@ TestSmallDistance()
 }
 
 static void
+TestDistanceSmart(fixed value, Unit unit, Unit expected_unit,
+                  const TCHAR *expected_output_with_unit,
+                  const TCHAR *expected_output_without_unit)
+{
+  TCHAR buffer[256];
+
+  ok1(Units::FormatDistanceSmart(buffer, ARRAY_SIZE(buffer),
+                                 value, unit) == expected_unit);
+  ok1(StringIsEqual(buffer, expected_output_with_unit));
+
+  ok1(Units::FormatDistanceSmart(buffer, ARRAY_SIZE(buffer),
+                                 value, unit, false) == expected_unit);
+  ok1(StringIsEqual(buffer, expected_output_without_unit));
+}
+
+static void
+TestDistanceSmart()
+{
+  // Test FormatDistanceSmart()
+
+  // Test Meter
+  TestDistanceSmart(fixed(0.1234), Unit::METER, Unit::METER, _T("0.12 m"),
+                    _T("0.12"));
+
+  TestDistanceSmart(fixed(1.234), Unit::METER, Unit::METER, _T("1.23 m"),
+                    _T("1.23"));
+
+  TestDistanceSmart(fixed(12.34), Unit::METER, Unit::METER, _T("12.3 m"),
+                    _T("12.3"));
+
+  TestDistanceSmart(fixed(123.4), Unit::METER, Unit::METER, _T("123 m"),
+                    _T("123"));
+
+  TestDistanceSmart(fixed(1234), Unit::METER, Unit::METER, _T("1234 m"),
+                    _T("1234"));
+
+  TestDistanceSmart(fixed(12345), Unit::METER, Unit::METER, _T("12345 m"),
+                    _T("12345"));
+
+  TestDistanceSmart(fixed(123456), Unit::METER, Unit::METER, _T("123456 m"),
+                    _T("123456"));
+
+  // Test Kilometer
+  TestDistanceSmart(Units::ToSysUnit(fixed(0.1234), Unit::KILOMETER),
+                    Unit::KILOMETER, Unit::METER, _T("123 m"), _T("123"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(1.234), Unit::KILOMETER),
+                    Unit::KILOMETER, Unit::METER, _T("1234 m"), _T("1234"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(2.345), Unit::KILOMETER),
+                    Unit::KILOMETER, Unit::METER, _T("2345 m"), _T("2345"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(2.634), Unit::KILOMETER),
+                    Unit::KILOMETER, Unit::KILOMETER, _T("2.63 km"),
+                    _T("2.63"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(12.34), Unit::KILOMETER),
+                    Unit::KILOMETER, Unit::KILOMETER, _T("12.3 km"),
+                    _T("12.3"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(123.4), Unit::KILOMETER),
+                    Unit::KILOMETER, Unit::KILOMETER, _T("123 km"), _T("123"));
+
+  // Test Nautical Miles
+  TestDistanceSmart(Units::ToSysUnit(fixed(123.4), Unit::FEET),
+                    Unit::NAUTICAL_MILES, Unit::FEET, _T("123 ft"), _T("123"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(1234), Unit::FEET),
+                    Unit::NAUTICAL_MILES, Unit::FEET, _T("1234 ft"),
+                    _T("1234"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(2345), Unit::FEET),
+                    Unit::NAUTICAL_MILES, Unit::FEET, _T("2345 ft"),
+                    _T("2345"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(0.61), Unit::NAUTICAL_MILES),
+                    Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("0.61 nm"),
+                    _T("0.61"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(1.234), Unit::NAUTICAL_MILES),
+                    Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("1.23 nm"),
+                    _T("1.23"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(12.34), Unit::NAUTICAL_MILES),
+                    Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("12.3 nm"),
+                    _T("12.3"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
+                    Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("123 nm"),
+                    _T("123"));
+
+  // Test Statute Miles
+  TestDistanceSmart(Units::ToSysUnit(fixed(123.4), Unit::FEET),
+                    Unit::STATUTE_MILES, Unit::FEET, _T("123 ft"), _T("123"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(1234), Unit::FEET),
+                    Unit::STATUTE_MILES, Unit::FEET, _T("1234 ft"), _T("1234"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(2345), Unit::FEET),
+                    Unit::STATUTE_MILES, Unit::FEET, _T("2345 ft"), _T("2345"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(0.71), Unit::STATUTE_MILES),
+                    Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("0.71 sm"),
+                    _T("0.71"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(1.234), Unit::STATUTE_MILES),
+                    Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("1.23 sm"),
+                    _T("1.23"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(12.34), Unit::STATUTE_MILES),
+                    Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("12.3 sm"),
+                    _T("12.3"));
+
+  TestDistanceSmart(Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
+                    Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("123 sm"),
+                    _T("123"));
+}
+
+static void
 TestSpeed()
 {
   TCHAR buffer[256];
@@ -466,12 +585,13 @@ TestPressure()
 int
 main(int argc, char **argv)
 {
-  plan_tests(81);
+  plan_tests(189);
 
   TestAltitude();
   TestRelativeAltitude();
   TestDistance();
   TestSmallDistance();
+  TestDistanceSmart();
   TestSpeed();
   TestVerticalSpeed();
   TestTemperature();

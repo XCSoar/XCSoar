@@ -154,6 +154,39 @@ Units::FormatSmallUserDistance(TCHAR *buffer, size_t size, fixed value,
                              include_unit, precision);
 }
 
+static Unit
+GetBestDistanceUnit(fixed value, Unit unit, fixed threshold = fixed(2500))
+{
+  Unit small_unit = GetSmallerDistanceUnit(unit);
+  if (small_unit == unit)
+    return unit;
+
+  fixed small_value = Units::ToUserUnit(value, small_unit);
+  return small_value > threshold ? unit : small_unit;
+}
+
+static int
+GetBestDistancePrecision(fixed value, Unit unit, fixed threshold = fixed(100))
+{
+  value = Units::ToUserUnit(value, unit);
+  if (value >= threshold)
+    return 0;
+  else if (value > threshold / 10)
+    return 1;
+  else
+    return 2;
+}
+
+Unit
+Units::FormatDistanceSmart(TCHAR *buffer, size_t size, fixed value, Unit unit,
+                           bool include_unit)
+{
+  unit = GetBestDistanceUnit(value, unit);
+  int precision = GetBestDistancePrecision(value, unit);
+  FormatDistance(buffer, size, value, unit, include_unit, precision);
+
+  return unit;
+}
 static void
 GetBestDistanceFormat(fixed _value, bool include_unit,
                       Unit &unit, int &precision)

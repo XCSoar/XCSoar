@@ -126,6 +126,19 @@ namespace Units
                                bool include_unit = true, int precision = 0);
 
   /**
+   * Converts a distance into a formatted string. Changes the unit if
+   * the numbers get small.
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   * @param value the distance
+   * @param unit the distance unit (e.g. m, ft, km, nm, sm)
+   * @param include_unit include the unit into the string?
+   * @return the unit used for output formatting
+   */
+  Unit FormatDistanceSmart(TCHAR *buffer, size_t size, fixed value, Unit unit,
+                           bool include_unit = true);
+
+  /**
    * Converts a double-based horizontal Distance into a formatted string
    * @param Distance The double-based Distance
    * @param buffer buffer string to write to (pointer)
