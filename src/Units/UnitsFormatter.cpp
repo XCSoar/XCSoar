@@ -113,40 +113,48 @@ Units::FormatDistance(TCHAR *buffer, size_t size, fixed value, Unit unit,
     _sntprintf(buffer, size, _T("%.*f"), precision, (double)value);
 }
 
-void
-Units::FormatUserDistance(fixed _value, TCHAR *buffer, size_t size,
-                          bool include_unit)
+static void
+GetBestDistanceFormat(fixed _value, bool include_unit,
+                      Unit &unit, int &precision)
 {
-  Unit unit = current.distance_unit;
-  fixed value = ToUserUnit(_value, unit);
+  Unit base_unit = unit;
+  fixed value = Units::ToUserUnit(_value, unit);
 
-  int prec;
   if (value >= fixed(100))
-    prec = 0;
+    precision = 0;
   else if (value > fixed_ten)
-    prec = 1;
+    precision = 1;
   else if (!include_unit)
-    prec = 2;
+    precision = 2;
   else {
-    prec = 2;
-    if (current.distance_unit == Unit::KILOMETER) {
-      prec = 0;
+    precision = 2;
+    if (base_unit == Unit::KILOMETER) {
+      precision = 0;
       unit = Unit::METER;
     }
-    if (current.distance_unit == Unit::NAUTICAL_MILES ||
-        current.distance_unit == Unit::STATUTE_MILES) {
+    if (base_unit == Unit::NAUTICAL_MILES ||
+        base_unit == Unit::STATUTE_MILES) {
       unit = Unit::FEET;
-      value = ToUserUnit(_value, unit);
+      value = Units::ToUserUnit(_value, unit);
       if (value < fixed(1000)) {
-        prec = 0;
+        precision = 0;
       } else {
-        prec = 1;
-        unit = current.distance_unit;
+        precision = 1;
+        unit = base_unit;
       }
     }
   }
+}
 
-  FormatDistance(buffer, size, _value, unit, include_unit, prec);
+void
+Units::FormatUserDistance(fixed value, TCHAR *buffer, size_t size,
+                          bool include_unit)
+{
+  int prec;
+  Unit unit = current.distance_unit;
+  GetBestDistanceFormat(value, include_unit, unit, prec);
+
+  FormatDistance(buffer, size, value, unit, include_unit, prec);
 }
 
 void
