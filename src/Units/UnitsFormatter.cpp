@@ -256,20 +256,14 @@ void
 Units::FormatPressure(TCHAR *buffer, size_t size, AtmosphericPressure pressure,
                       Unit unit, bool include_unit)
 {
-  TCHAR buffer2[16];
-
   fixed _pressure = ToUserUnit(pressure.GetHectoPascal(), unit);
 
   if (include_unit)
-    _stprintf(buffer2, GetPressureFormat(unit, include_unit), (double)_pressure,
-              Units::unit_descriptors[(unsigned)unit].name);
+    _sntprintf(buffer, size, GetPressureFormat(unit, include_unit),
+               (double)_pressure, Units::unit_descriptors[(unsigned)unit].name);
   else
-    _stprintf(buffer2, GetPressureFormat(unit, include_unit), (double)_pressure);
-
-  if (_tcslen(buffer2) < size - 1)
-    _tcscpy(buffer, buffer2);
-  else
-    CopyString(buffer, buffer2, size);
+    _sntprintf(buffer, size, GetPressureFormat(unit, include_unit),
+               (double)_pressure);
 }
 
 void
