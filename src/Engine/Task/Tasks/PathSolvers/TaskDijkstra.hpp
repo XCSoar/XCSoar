@@ -119,7 +119,9 @@ private:
   void calculate_sizes();
   unsigned get_size(const unsigned stage) const;
 
-  void add_edges(ScanTaskPoint curNode);
+protected:
+  /* methods from NavDijkstra */
+  virtual void add_edges(ScanTaskPoint curNode);
 };
 
 #endif
