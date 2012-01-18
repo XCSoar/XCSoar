@@ -31,7 +31,7 @@ Copyright_License {
 const UnitDescriptor Units::unit_descriptors[] = {
   { NULL, fixed_one, fixed_zero },
   { _T("km"), fixed_constant(0.001, 0x41893LL), fixed_zero },
-  { _T("nm"), fixed_constant(0.000539956803, 0x2362fLL), fixed_zero },
+  { _T("NM"), fixed_constant(0.000539956803, 0x2362fLL), fixed_zero },
   { _T("sm"), fixed_constant(0.000621371192, 0x28b8eLL), fixed_zero },
   { _T("km/h"), fixed_constant(3.6, 0x39999999LL), fixed_zero },
   { _T("kt"), fixed_constant(1.94384449, 0x1f19fcaeLL), fixed_zero },
