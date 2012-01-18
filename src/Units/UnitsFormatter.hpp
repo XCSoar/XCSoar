@@ -194,11 +194,17 @@ namespace Units
   const TCHAR* GetFormatUserPressure();
 
   /**
+   * Give the basic step size for pressure editing
+   * @param unit the pressure unit
+   * @return the step size
+   */
+  fixed GetPressureStep(Unit unit);
+
+  /**
    * Give the basic step for pressure editing
    * @return the step
    */
-
-  fixed PressureStep();
+  fixed GetUserPressureStep();
 };
 
 #endif

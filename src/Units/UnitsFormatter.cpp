@@ -295,10 +295,13 @@ Units::GetFormatUserPressure()
 }
 
 fixed
-Units::PressureStep()
+Units::GetPressureStep(Unit unit)
 {
-  if (current.pressure_unit == Unit::INCH_MERCURY)
-    return fixed(0.01);
-  else
-    return fixed_one;
+  return unit == Unit::INCH_MERCURY ? fixed(0.01) : fixed_one;
+}
+
+fixed
+Units::GetUserPressureStep()
+{
+  return GetPressureStep(current.pressure_unit);
 }

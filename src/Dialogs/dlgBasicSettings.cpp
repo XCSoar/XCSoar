@@ -315,7 +315,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                 Units::GetFormatUserPressure(), Units::GetFormatUserPressure(),
                 Units::ToUserPressure(Units::ToSysUnit(fixed(850), Unit::HECTOPASCAL)),
                 Units::ToUserPressure(Units::ToSysUnit(fixed(1300), Unit::HECTOPASCAL)),
-                Units::PressureStep(), false,
+                Units::GetUserPressureStep(), false,
                 Units::ToUserPressure(settings.pressure),
                 OnQnhData);
   {
