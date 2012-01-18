@@ -105,7 +105,7 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
                     OperationEnvironment &env)
 {
   if (!LX::CommandMode(port))
-      return false;
+    return false;
 
   port.Flush();
   if (!LX::SendCommand(port, LX::READ_FLIGHT_LIST))
