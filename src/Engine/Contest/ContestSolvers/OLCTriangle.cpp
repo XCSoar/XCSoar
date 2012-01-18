@@ -217,12 +217,11 @@ void
 OLCTriangle::add_edges(const ScanTaskPoint& origin)
 {
   assert(origin.point_index < n_points);
-  ScanTaskPoint destination(origin.stage_number + 1, origin.point_index + 1);
 
-  switch (destination.stage_number) {
-  case 1:
+  switch (origin.stage_number) {
+  case 0:
     // add points up to finish
-    for (destination.point_index = 0;
+    for (ScanTaskPoint destination(origin.stage_number + 1, 0);
          destination.point_index < origin.point_index;
          ++destination.point_index) {
       const unsigned d = 
@@ -236,12 +235,14 @@ OLCTriangle::add_edges(const ScanTaskPoint& origin)
 
     }
     break;
-  case 2: {
+  case 1: {
     ScanTaskPoint previous = dijkstra.get_predecessor(origin);
 
     // give first leg points to penultimate node
     TriangleSecondLeg sl(is_fai, GetPointFast(previous), GetPointFast(origin));
-    for (; destination.point_index < n_points-1; ++destination.point_index) {
+    for (ScanTaskPoint destination(origin.stage_number + 1,
+                                   origin.point_index + 1);
+         destination.point_index < n_points-1; ++destination.point_index) {
       TriangleSecondLeg::Result result = sl.Calculate(GetPointFast(destination),
                                                       best_d);
       const unsigned d = result.leg_distance;
@@ -261,10 +262,10 @@ OLCTriangle::add_edges(const ScanTaskPoint& origin)
     }
   }
     break;
-  case 3:
+  case 2:
     // dummy just to close the triangle
-    destination.point_index = n_points - 1;
-    dijkstra.link(destination, origin, 0);
+    dijkstra.link(ScanTaskPoint(origin.stage_number + 1, n_points - 1),
+                  origin, 0);
     break;
   default:
     assert(1);
