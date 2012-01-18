@@ -63,7 +63,7 @@ Units::FormatUserAltitude(fixed value, TCHAR *buffer, size_t size,
 
 gcc_const
 static Unit
-GetAlternateUnit(Unit unit)
+GetAlternateAltitudeUnit(Unit unit)
 {
   switch (unit) {
   case Unit::METER:
@@ -81,8 +81,8 @@ void
 Units::FormatAlternateUserAltitude(fixed value, TCHAR *buffer, size_t size,
                                    bool include_unit)
 {
-  FormatAltitude(buffer, size, value, GetAlternateUnit(current.altitude_unit),
-                 include_unit);
+  FormatAltitude(buffer, size, value,
+                 GetAlternateAltitudeUnit(current.altitude_unit), include_unit);
 }
 
 void
