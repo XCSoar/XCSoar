@@ -36,7 +36,8 @@ Copyright_License {
 
 enum ControlIndex {
   UTCOffset,
-  LocalTime
+  LocalTime,
+  SystemTimeFromGPS
 };
 
 class TimeConfigPanel : public RowFormWidget {
@@ -94,7 +95,9 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-  int utc_offset = XCSoarInterface::GetComputerSettings().utc_offset;
+  const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
+
+  int utc_offset = settings_computer.utc_offset;
   AddFloat(_("UTC offset"),
            _("The UTC offset field allows the UTC local time offset to be specified.  The local "
                "time is displayed below in order to make it easier to verify the correct offset "
@@ -108,6 +111,14 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   Add(_("Local time"), 0, true);
   SetLocalTime(utc_offset);
+
+  // Expert item
+  AddBoolean(_("Use GPS time"),
+             _("If enabled sets the clock of the computer to the GPS time once a fix "
+               "is set. This is only necessary if your computer does not have a "
+               "real-time clock with battery backup or your computer frequently runs "
+               "out of battery power or otherwise loses time."),
+             settings_computer.set_system_time_from_gps);
 }
 
 bool
@@ -124,6 +135,10 @@ TimeConfigPanel::Save(bool &_changed, bool &_require_restart)
     Profile::Set(szProfileUTCOffsetSigned, ival);
     changed = true;
   }
+
+  changed |= SaveValue(SystemTimeFromGPS, szProfileSetSystemTimeFromGPS,
+                       settings_computer.set_system_time_from_gps);
+
   _changed |= changed;
   _require_restart |= require_restart;
 
