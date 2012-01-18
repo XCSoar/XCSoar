@@ -265,10 +265,11 @@ ContestDijkstra::add_edges(const ScanTaskPoint& origin)
     destination.point_index = n_points - 1;
   }
 
+  const unsigned weight = get_weighting(origin.stage_number);
+
   for (; destination.point_index != n_points; ++destination.point_index) {
     if (admit_candidate(start, destination)) {
-      const unsigned d = get_weighting(origin.stage_number) *
-                         distance(origin, destination);
+      const unsigned d = weight * distance(origin, destination);
       dijkstra.link(destination, origin, d);
     }
   }
