@@ -42,7 +42,7 @@ static const UnitSymbolStrings symbol_strings[] = {
   { NULL, NULL },
   { _T("k"), _T("m"), false },
   { _T("N"), _T("M"), false },
-  { _T("S"), _T("M"), false },
+  { NULL, _T("mi"), false },
   { _T("km"), _T("h"), true },
   { _T("k"), _T("t"), false },
   { _T("mp"), _T("h"), false },
