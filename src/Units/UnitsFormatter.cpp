@@ -196,7 +196,7 @@ Units::FormatUserDistance(fixed value, TCHAR *buffer, size_t size,
                              include_unit);
 }
 
-void
+Unit
 Units::FormatUserMapScale(fixed _value, TCHAR *buffer,
                           size_t size, bool include_unit)
 {
@@ -225,6 +225,7 @@ Units::FormatUserMapScale(fixed _value, TCHAR *buffer,
   }
 
   FormatDistance(buffer, size, _value, unit, include_unit, prec);
+  return unit;
 }
 
 void

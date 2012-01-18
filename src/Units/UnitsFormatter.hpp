@@ -147,7 +147,7 @@ namespace Units
   Unit FormatUserDistance(fixed value, TCHAR *buffer, size_t size,
                           bool include_unit = true);
 
-  void FormatUserMapScale(fixed value, TCHAR *buffer, size_t size,
+  Unit FormatUserMapScale(fixed value, TCHAR *buffer, size_t size,
                           bool include_unit = true);
 
   /**
