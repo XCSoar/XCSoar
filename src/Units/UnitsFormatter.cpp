@@ -198,35 +198,11 @@ Units::FormatUserDistance(fixed value, TCHAR *buffer, size_t size,
 }
 
 Unit
-Units::FormatUserMapScale(fixed _value, TCHAR *buffer,
+Units::FormatUserMapScale(fixed value, TCHAR *buffer,
                           size_t size, bool include_unit)
 {
-  Unit unit = current.distance_unit;
-  fixed value = ToUserUnit(_value, unit);
-
-  int prec;
-  if (value >= fixed(9.999))
-    prec = 0;
-  else if ((current.distance_unit == Unit::KILOMETER && value >= fixed(0.999)) ||
-           (current.distance_unit != Unit::KILOMETER && value >= fixed(0.160)))
-    prec = 1;
-  else if (!include_unit)
-    prec = 2;
-  else {
-    prec = 2;
-    if (current.distance_unit == Unit::KILOMETER) {
-      prec = 0;
-      unit = Unit::METER;
-    }
-    if (current.distance_unit == Unit::NAUTICAL_MILES ||
-        current.distance_unit == Unit::STATUTE_MILES) {
-      prec = 0;
-      unit = Unit::FEET;
-    }
-  }
-
-  FormatDistance(buffer, size, _value, unit, include_unit, prec);
-  return unit;
+  return FormatDistanceSmart(buffer, size, value, current.distance_unit,
+                             include_unit, fixed(1000), fixed(9.999));
 }
 
 void
