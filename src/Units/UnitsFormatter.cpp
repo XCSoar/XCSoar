@@ -185,8 +185,8 @@ Units::FormatUserMapScale(fixed _value, TCHAR *buffer,
     _sntprintf(buffer, size, _T("%.*f"), prec, (double)value);
 }
 
-static void
-FormatSpeed(TCHAR *buffer, size_t size,
+void
+Units::FormatSpeed(TCHAR *buffer, size_t size,
             fixed value, const Unit unit, bool include_unit, bool precision)
 {
   value = Units::ToUserUnit(value, unit);

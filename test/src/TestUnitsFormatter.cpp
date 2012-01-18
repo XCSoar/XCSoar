@@ -28,7 +28,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(12);
+  plan_tests(25);
 
   TCHAR buffer[256];
 
@@ -81,6 +81,68 @@ int main(int argc, char **argv)
   Units::FormatRelativeAltitude(buffer, ARRAY_SIZE(buffer), fixed(-1234),
                         Unit::METER, false);
   ok1(StringIsEqual(buffer, _T("-1234")));
+
+  // Test FormatSpeed()
+  Units::FormatSpeed(buffer, ARRAY_SIZE(buffer),
+                     fixed(23.46), Unit::METER_PER_SECOND);
+  ok1(StringIsEqual(buffer, _T("23 m/s")));
+
+  Units::FormatSpeed(buffer, ARRAY_SIZE(buffer),
+                     fixed(23.46), Unit::METER_PER_SECOND, true, true);
+  ok1(StringIsEqual(buffer, _T("23.5 m/s")));
+
+  Units::FormatSpeed(buffer, ARRAY_SIZE(buffer),
+                     fixed(23.46), Unit::METER_PER_SECOND, false);
+  ok1(StringIsEqual(buffer, _T("23")));
+
+  Units::FormatSpeed(buffer, ARRAY_SIZE(buffer),
+                     fixed(23.46), Unit::METER_PER_SECOND, false, true);
+  ok1(StringIsEqual(buffer, _T("23.5")));
+
+  Units::FormatSpeed(buffer, ARRAY_SIZE(buffer),
+                     Units::ToSysUnit(fixed(123.43), Unit::KILOMETER_PER_HOUR),
+                     Unit::KILOMETER_PER_HOUR);
+  ok1(StringIsEqual(buffer, _T("123 km/h")));
+
+  Units::FormatSpeed(buffer, ARRAY_SIZE(buffer),
+                     Units::ToSysUnit(fixed(123.43), Unit::KILOMETER_PER_HOUR),
+                     Unit::KILOMETER_PER_HOUR, true, true);
+  ok1(StringIsEqual(buffer, _T("123 km/h")));
+
+  Units::FormatSpeed(buffer, ARRAY_SIZE(buffer),
+                     Units::ToSysUnit(fixed(83.43), Unit::KILOMETER_PER_HOUR),
+                     Unit::KILOMETER_PER_HOUR, true, true);
+  ok1(StringIsEqual(buffer, _T("83.4 km/h")));
+
+  Units::FormatSpeed(buffer, ARRAY_SIZE(buffer),
+                     Units::ToSysUnit(fixed(123.43), Unit::KNOTS),
+                     Unit::KNOTS);
+  ok1(StringIsEqual(buffer, _T("123 kt")));
+
+  Units::FormatSpeed(buffer, ARRAY_SIZE(buffer),
+                     Units::ToSysUnit(fixed(123.43), Unit::KNOTS),
+                     Unit::KNOTS, true, true);
+  ok1(StringIsEqual(buffer, _T("123 kt")));
+
+  Units::FormatSpeed(buffer, ARRAY_SIZE(buffer),
+                     Units::ToSysUnit(fixed(83.43), Unit::KNOTS),
+                     Unit::KNOTS, true, true);
+  ok1(StringIsEqual(buffer, _T("83.4 kt")));
+
+  Units::FormatSpeed(buffer, ARRAY_SIZE(buffer),
+                     Units::ToSysUnit(fixed(123.43), Unit::STATUTE_MILES_PER_HOUR),
+                     Unit::STATUTE_MILES_PER_HOUR);
+  ok1(StringIsEqual(buffer, _T("123 mph")));
+
+  Units::FormatSpeed(buffer, ARRAY_SIZE(buffer),
+                     Units::ToSysUnit(fixed(123.43), Unit::STATUTE_MILES_PER_HOUR),
+                     Unit::STATUTE_MILES_PER_HOUR, true, true);
+  ok1(StringIsEqual(buffer, _T("123 mph")));
+
+  Units::FormatSpeed(buffer, ARRAY_SIZE(buffer),
+                     Units::ToSysUnit(fixed(83.43), Unit::STATUTE_MILES_PER_HOUR),
+                     Unit::STATUTE_MILES_PER_HOUR, true, true);
+  ok1(StringIsEqual(buffer, _T("83.4 mph")));
 
   return exit_status();
 }

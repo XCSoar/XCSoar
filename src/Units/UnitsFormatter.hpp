@@ -98,6 +98,9 @@ namespace Units
   void FormatUserMapScale(fixed value, TCHAR *buffer, size_t size,
                           bool include_unit = true);
 
+  void FormatSpeed(TCHAR *buffer, size_t size, fixed value, const Unit unit,
+                   bool include_unit = true, bool precision = false);
+
   /**
    * Converts a double-based Speed into a formatted string
    * @param Speed The double-based Speed
