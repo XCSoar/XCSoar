@@ -67,10 +67,10 @@ namespace Units
                                    bool include_unit = true);
 
   /**
-   * Converts an signed altitude into a formatted string
+   * Converts an signed/relative altitude into a formatted string
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
-   * @param value the altitude
+   * @param value the relative altitude
    * @param unit the altitude unit (e.g. meters, feet, ...)
    * @param include_unit include the unit into the string?
    */
@@ -98,6 +98,15 @@ namespace Units
   void FormatUserMapScale(fixed value, TCHAR *buffer, size_t size,
                           bool include_unit = true);
 
+  /**
+   * Converts a speed into a formatted string
+   * @param buffer buffer string to write to (pointer)
+   * @param size Size of the buffer
+   * @param value the speed
+   * @param unit the speed unit (e.g. km/h, knots, mph, ...)
+   * @param include_unit include the unit into the string?
+   * @param precision if true shows one decimal place if the speed is low
+   */
   void FormatSpeed(TCHAR *buffer, size_t size, fixed value, const Unit unit,
                    bool include_unit = true, bool precision = false);
 
@@ -158,13 +167,13 @@ namespace Units
    */
   bool FormatUserPressure(AtmosphericPressure value, TCHAR *buffer, size_t size,
                           bool include_unit = true);
+
   /**
    * Give the proper format to display the pressure
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
    * @return True if buffer long enough, False otherwise
    */
-
   const TCHAR* GetFormatUserPressure();
 
   /**
