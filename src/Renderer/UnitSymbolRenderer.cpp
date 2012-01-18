@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
-#include "Look/InfoBoxLook.hpp"
+#include "Screen/Pen.hpp"
 #include "Util/Macros.hpp"
 
 #include <tchar.h>
@@ -114,7 +114,7 @@ UnitSymbolRenderer::GetAscentHeight(const Font &font, const Unit unit)
 
 void
 UnitSymbolRenderer::Draw(Canvas &canvas, const RasterPoint pos,
-                         const Unit unit, const InfoBoxLook &look)
+                         const Unit unit, const Pen &unit_fraction_pen)
 {
   assert((size_t)unit < ARRAY_SIZE(symbol_strings));
 
@@ -138,7 +138,7 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const RasterPoint pos,
 
   if (size1.cx > size2.cx) {
     if (strings.is_fraction) {
-      canvas.Select(look.unit_fraction_pen);
+      canvas.Select(unit_fraction_pen);
       canvas.line(pos.x, pos.y + size1.cy, pos.x + size1.cx, pos.y + size1.cy);
     }
 
@@ -147,7 +147,7 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const RasterPoint pos,
     canvas.text(x, pos.y + size1.cy, strings.line2);
   } else {
     if (strings.is_fraction) {
-      canvas.Select(look.unit_fraction_pen);
+      canvas.Select(unit_fraction_pen);
       canvas.line(pos.x, pos.y + size1.cy, pos.x + size2.cx, pos.y + size1.cy);
     }
 

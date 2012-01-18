@@ -171,7 +171,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
       UnitSymbolRenderer::Draw(canvas,
                                { PixelScalar(x + value_size.cx),
                                  PixelScalar(y + ascent_height - unit_height) },
-                               data.value_unit, look);
+                               data.value_unit, look.unit_fraction_pen);
     }
     return;
   }
