@@ -101,17 +101,26 @@ Units::FormatUserArrival(fixed value, TCHAR *buffer, size_t size,
 }
 
 void
+Units::FormatDistance(TCHAR *buffer, size_t size, fixed value, Unit unit,
+                      bool include_unit, int precision)
+{
+  value = Units::ToUserUnit(value, unit);
+
+  if (include_unit)
+    _sntprintf(buffer, size, _T("%.*f %s"), precision, (double)value,
+               Units::unit_descriptors[(unsigned)unit].name);
+  else
+    _sntprintf(buffer, size, _T("%.*f"), precision, (double)value);
+}
+
+void
 Units::FormatUserDistance(fixed _value, TCHAR *buffer, size_t size,
                           bool include_unit)
 {
+  Unit unit = current.distance_unit;
+  fixed value = ToUserUnit(_value, unit);
+
   int prec;
-  fixed value;
-
-  const UnitDescriptor *descriptor =
-      &unit_descriptors[(unsigned)current.distance_unit];
-
-  value = _value * descriptor->factor_to_user; // + descriptor->ToUserOffset;
-
   if (value >= fixed(100))
     prec = 0;
   else if (value > fixed_ten)
@@ -122,41 +131,32 @@ Units::FormatUserDistance(fixed _value, TCHAR *buffer, size_t size,
     prec = 2;
     if (current.distance_unit == Unit::KILOMETER) {
       prec = 0;
-      descriptor = &unit_descriptors[(unsigned)Unit::METER];
-      value = _value * descriptor->factor_to_user;
+      unit = Unit::METER;
     }
     if (current.distance_unit == Unit::NAUTICAL_MILES ||
         current.distance_unit == Unit::STATUTE_MILES) {
-      descriptor = &unit_descriptors[(unsigned)Unit::FEET];
-      value = _value * descriptor->factor_to_user;
+      unit = Unit::FEET;
+      value = ToUserUnit(_value, unit);
       if (value < fixed(1000)) {
         prec = 0;
       } else {
         prec = 1;
-        descriptor = &unit_descriptors[(unsigned)current.distance_unit];
-        value = _value * descriptor->factor_to_user;
+        unit = current.distance_unit;
       }
     }
   }
 
-  if (include_unit)
-    _sntprintf(buffer, size, _T("%.*f %s"), prec, (double)value, descriptor->name);
-  else
-    _sntprintf(buffer, size, _T("%.*f"), prec, (double)value);
+  FormatDistance(buffer, size, _value, unit, include_unit, prec);
 }
 
 void
 Units::FormatUserMapScale(fixed _value, TCHAR *buffer,
                           size_t size, bool include_unit)
 {
+  Unit unit = current.distance_unit;
+  fixed value = ToUserUnit(_value, unit);
+
   int prec;
-  fixed value;
-
-  const UnitDescriptor *descriptor =
-      &unit_descriptors[(unsigned)current.distance_unit];
-
-  value = _value * descriptor->factor_to_user; // + descriptor->ToUserOffset;
-
   if (value >= fixed(9.999))
     prec = 0;
   else if ((current.distance_unit == Unit::KILOMETER && value >= fixed(0.999)) ||
@@ -168,21 +168,16 @@ Units::FormatUserMapScale(fixed _value, TCHAR *buffer,
     prec = 2;
     if (current.distance_unit == Unit::KILOMETER) {
       prec = 0;
-      descriptor = &unit_descriptors[(unsigned)Unit::METER];
-      value = _value * descriptor->factor_to_user;
+      unit = Unit::METER;
     }
     if (current.distance_unit == Unit::NAUTICAL_MILES ||
         current.distance_unit == Unit::STATUTE_MILES) {
       prec = 0;
-      descriptor = &unit_descriptors[(unsigned)Unit::FEET];
-      value = _value * descriptor->factor_to_user;
+      unit = Unit::FEET;
     }
   }
 
-  if (include_unit)
-    _sntprintf(buffer, size, _T("%.*f %s"), prec, (double)value, descriptor->name);
-  else
-    _sntprintf(buffer, size, _T("%.*f"), prec, (double)value);
+  FormatDistance(buffer, size, _value, unit, include_unit, prec);
 }
 
 void

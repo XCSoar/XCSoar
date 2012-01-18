@@ -91,6 +91,100 @@ TestRelativeAltitude()
 }
 
 static void
+TestDistance()
+{
+  TCHAR buffer[256];
+
+  // Test FormatDistance()
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        fixed(123.4), Unit::METER);
+  ok1(StringIsEqual(buffer, _T("123 m")));
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        fixed(123.4), Unit::METER, false);
+  ok1(StringIsEqual(buffer, _T("123")));
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        fixed(123.4), Unit::METER, true, 1);
+  ok1(StringIsEqual(buffer, _T("123.4 m")));
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        fixed(123.4), Unit::METER, false, 1);
+  ok1(StringIsEqual(buffer, _T("123.4")));
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        fixed(123.4), Unit::METER, true, 2);
+  ok1(StringIsEqual(buffer, _T("123.40 m")));
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        fixed(123.4), Unit::METER, false, 2);
+  ok1(StringIsEqual(buffer, _T("123.40")));
+
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        Units::ToSysUnit(fixed(123.4), Unit::KILOMETER),
+                        Unit::KILOMETER);
+  ok1(StringIsEqual(buffer, _T("123 km")));
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        Units::ToSysUnit(fixed(123.4), Unit::KILOMETER),
+                        Unit::KILOMETER, false);
+  ok1(StringIsEqual(buffer, _T("123")));
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        Units::ToSysUnit(fixed(123.4), Unit::KILOMETER),
+                        Unit::KILOMETER, true, 1);
+  ok1(StringIsEqual(buffer, _T("123.4 km")));
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        Units::ToSysUnit(fixed(123.4), Unit::KILOMETER),
+                        Unit::KILOMETER, false, 1);
+  ok1(StringIsEqual(buffer, _T("123.4")));
+
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
+                        Unit::NAUTICAL_MILES);
+  ok1(StringIsEqual(buffer, _T("123 nm")));
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
+                        Unit::NAUTICAL_MILES, false);
+  ok1(StringIsEqual(buffer, _T("123")));
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
+                        Unit::NAUTICAL_MILES, true, 1);
+  ok1(StringIsEqual(buffer, _T("123.4 nm")));
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
+                        Unit::NAUTICAL_MILES, false, 1);
+  ok1(StringIsEqual(buffer, _T("123.4")));
+
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
+                        Unit::STATUTE_MILES);
+  ok1(StringIsEqual(buffer, _T("123 sm")));
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
+                        Unit::STATUTE_MILES, false);
+  ok1(StringIsEqual(buffer, _T("123")));
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
+                        Unit::STATUTE_MILES, true, 1);
+  ok1(StringIsEqual(buffer, _T("123.4 sm")));
+
+  Units::FormatDistance(buffer, ARRAY_SIZE(buffer),
+                        Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
+                        Unit::STATUTE_MILES, false, 1);
+  ok1(StringIsEqual(buffer, _T("123.4")));
+}
+
+static void
 TestSpeed()
 {
   TCHAR buffer[256];
@@ -282,10 +376,11 @@ TestPressure()
 int
 main(int argc, char **argv)
 {
-  plan_tests(45);
+  plan_tests(63);
 
   TestAltitude();
   TestRelativeAltitude();
+  TestDistance();
   TestSpeed();
   TestVerticalSpeed();
   TestTemperature();
