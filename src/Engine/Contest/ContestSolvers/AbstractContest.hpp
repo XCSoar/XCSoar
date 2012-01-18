@@ -130,6 +130,16 @@ protected:
   bool IsFinishAltitudeValid(const TracePoint& start,
                              const TracePoint& finish) const;
 
+  gcc_pure
+  int GetMaximumStartAltitude(const TracePoint &finish) const {
+    return finish.GetIntegerAltitude() + finish_alt_diff;
+  }
+
+  gcc_pure
+  int GetMinimumFinishAltitude(const TracePoint &start) const {
+    return start.GetIntegerAltitude() - finish_alt_diff;
+  }
+
   /**
    * Calculate the score of the current solution (see CalcScore()) and
    * update #best_result (and #best_solution for ContestDijkstra) if

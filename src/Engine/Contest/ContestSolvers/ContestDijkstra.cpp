@@ -247,13 +247,15 @@ ContestDijkstra::add_start_edges()
   assert(num_stages <= MAX_STAGES);
   assert(n_points > 0);
 
-  ScanTaskPoint destination(0, 0);
-  const ScanTaskPoint finish(num_stages-1, n_points-1);
+  const int max_altitude = incremental
+    ? GetMaximumStartAltitude(GetPoint(n_points - 1))
+    : 0;
 
   for (ScanTaskPoint destination(0, 0), end(0, n_points);
        destination != end; destination.IncrementPointIndex()) {
     // only add points that are valid for the finish
-    if (!incremental || admit_candidate(GetPointFast(destination), finish))
+    if (!incremental ||
+        GetPointFast(destination).GetIntegerAltitude() <= max_altitude)
       dijkstra.link(destination, destination, 0);
   }
 }
@@ -264,7 +266,9 @@ ContestDijkstra::add_edges(const ScanTaskPoint origin)
   ScanTaskPoint destination(origin.GetStageNumber() + 1,
                             origin.GetPointIndex());
 
-  const TracePoint start = GetPointFast(FindStart(origin));
+  const int min_altitude = is_final(destination)
+    ? GetMinimumFinishAltitude(GetPointFast(FindStart(origin)))
+    : 0;
 
   // only add last point!
   if (incremental && is_final(destination)) {
@@ -276,21 +280,11 @@ ContestDijkstra::add_edges(const ScanTaskPoint origin)
 
   for (const ScanTaskPoint end(destination.GetStageNumber(), n_points);
        destination != end; destination.IncrementPointIndex()) {
-    if (admit_candidate(start, destination)) {
+    if (GetPointFast(destination).GetIntegerAltitude() >= min_altitude) {
       const unsigned d = weight * distance(origin, destination);
       dijkstra.link(destination, origin, d);
     }
   }
-}
-
-bool
-ContestDijkstra::admit_candidate(const TracePoint &start,
-                                 const ScanTaskPoint candidate) const
-{
-  if (!is_final(candidate))
-    return true;
-  else
-    return IsFinishAltitudeValid(start, GetPointFast(candidate));
 }
 
 bool

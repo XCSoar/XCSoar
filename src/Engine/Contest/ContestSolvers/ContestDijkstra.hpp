@@ -132,15 +132,6 @@ protected:
 
   void clear_trace();
 
-  /**
-   * Determine if a trace point can be added to the search list
-   *
-   * @param candidate The index to the candidate
-   * @return True if candidate is valid
-   */
-  bool admit_candidate(const TracePoint &start,
-                       const ScanTaskPoint candidate) const;
-
   virtual void add_edges(ScanTaskPoint curNode);
 
   /**

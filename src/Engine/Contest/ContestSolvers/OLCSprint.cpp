@@ -88,10 +88,11 @@ OLCSprint::add_start_edges()
   assert(num_stages > 0);
   assert(n_points > 0);
 
-  const ScanTaskPoint start(0, find_start());
-  const ScanTaskPoint finish(num_stages - 1, n_points - 1);
+  const int max_altitude = GetMaximumStartAltitude(GetPoint(n_points - 1));
 
-  if (admit_candidate(GetPointFast(start), finish))
+  const ScanTaskPoint start(0, find_start());
+
+  if (GetPointFast(start).GetIntegerAltitude() <= max_altitude)
     dijkstra.link(start, start, 0);
 }
 
