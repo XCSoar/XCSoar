@@ -88,6 +88,13 @@ public:
   virtual bool OnKeyUp(unsigned key_code);
 
   /**
+   * Does this control have a help text?
+   */
+  bool HasHelp() const {
+    return mHelpText != NULL || mOnHelpCallback != NULL;
+  }
+
+  /**
    * Opens up a help dialog if a help text exists, or otherwise calls the
    * function defined by mOnHelpCallback
    * @return

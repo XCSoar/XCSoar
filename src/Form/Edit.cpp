@@ -69,7 +69,7 @@ WndProperty::Editor::OnKeyCheck(unsigned key_code) const
   case VK_RETURN:
     return is_read_only() ||
       (parent->mDataField != NULL && parent->mDataField->SupportCombo) ||
-      !CanEditInPlace();
+      !CanEditInPlace() || parent->HasHelp();
 
   case VK_LEFT:
   case VK_RIGHT:
