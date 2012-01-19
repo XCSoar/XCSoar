@@ -34,6 +34,7 @@ Copyright_License {
 #include "DataField/Float.hpp"
 #include "DataField/Integer.hpp"
 #include "DataField/String.hpp"
+#include "DataField/Time.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Interface.hpp"
@@ -513,6 +514,14 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
   if (_tcsicmp(data_type, _T("double")) == 0)
     return new DataFieldFloat(edit_format, display_format, min, max,
                               fixed_zero, fixed(step), fine, callback);
+
+  if (_tcsicmp(data_type, _T("time")) == 0) {
+    DataFieldTime *df = new DataFieldTime((int)min, (int)max, 0,
+                                          (unsigned)step, callback);
+    unsigned max_token = StringToIntDflt(node.getAttribute(_T("MaxTokens")), 2);
+    df->SetMaxTokenNumber(max_token);
+    return df;
+  }
 
   if (_tcsicmp(data_type, _T("integer")) == 0)
     return new DataFieldInteger(edit_format, display_format, (int)min, (int)max,

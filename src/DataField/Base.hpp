@@ -42,6 +42,7 @@ public:
     TYPE_REAL,
     TYPE_ENUM,
     TYPE_FILE,
+    TYPE_TIME,
   };
 
   enum DataAccessKind_t {
