@@ -42,6 +42,7 @@ Copyright_License {
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Units/Units.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "Util/Macros.hpp"
 
 #include <stdio.h>
 
@@ -71,20 +72,29 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
 
   UPixelScalar padding = Layout::FastScale(4);
   UPixelScalar height = Fonts::map_bold.GetHeight();
+  PixelScalar y = center.y + padding;
 
-  StaticString<64> latitude, longitude;
-  FormatLatitude(location.latitude, latitude.buffer(), latitude.MAX_SIZE);
-  FormatLongitude(location.longitude, longitude.buffer(), longitude.MAX_SIZE);
+  TCHAR buffer[256];
+  FormatGeoPoint(location, buffer, ARRAY_SIZE(buffer), _T('\n'));
 
-  TextInBox(canvas, latitude,
-            center.x + padding, center.y + padding, mode,
-            render_projection.GetScreenWidth(),
-            render_projection.GetScreenHeight());
+  TCHAR *start = buffer;
+  while (true) {
+    TCHAR *newline = _tcschr(start, _T('\n'));
+    if (newline != NULL)
+      *newline = _T('\0');
 
-  TextInBox(canvas, longitude,
-            center.x + padding, center.y + height + padding, mode,
-            render_projection.GetScreenWidth(),
-            render_projection.GetScreenHeight());
+    TextInBox(canvas, start,
+              center.x + padding, y, mode,
+              render_projection.GetScreenWidth(),
+              render_projection.GetScreenHeight());
+
+    y += height;
+
+    if (newline == NULL)
+      break;
+
+    start = newline + 1;
+  }
 
   if (!terrain)
     return;
@@ -101,7 +111,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
   elevation_long += elevation_short;
 
   TextInBox(canvas, elevation_long,
-            center.x + padding, center.y + 2 * height + padding, mode,
+            center.x + padding, y, mode,
             render_projection.GetScreenWidth(),
             render_projection.GetScreenHeight());
 }
