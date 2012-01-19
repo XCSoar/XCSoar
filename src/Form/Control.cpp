@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Dialogs/Dialogs.h"
 #include "Util/StringUtil.hpp"
-#include "Language/Language.hpp"
 
 #include <stdlib.h>
 
@@ -68,7 +67,7 @@ WindowControl::OnHelp()
 {
   if (mHelpText) {
     dlgHelpShowModal(*(SingleWindow *)GetRootOwner(),
-                     gettext(mCaption.c_str()), gettext(mHelpText));
+                     mCaption.c_str(), mHelpText);
     return true;
   }
 
