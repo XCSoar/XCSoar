@@ -63,9 +63,21 @@ public:
     return *this;
   }
 
+  CastIterator<VT,IT> operator++(int) {
+    CastIterator<VT,IT> old = *this;
+    iterator++;
+    return old;
+  }
+
   CastIterator<VT,IT> &operator--() {
     iterator = --iterator;
     return *this;
+  }
+
+  CastIterator<VT,IT> operator--(int) {
+    CastIterator<VT,IT> old = *this;
+    iterator--;
+    return old;
   }
 
   bool operator==(const CastIterator<VT,IT> &other) const {
