@@ -315,9 +315,21 @@ public:
       return *this;
     }
 
+    const_iterator operator++(int) {
+      const_iterator old = *this;
+      current = current->next;
+      return old;
+    }
+
     const_iterator &operator--() {
       current = current->prev;
       return *this;
+    }
+
+    const_iterator operator--(int) {
+      const_iterator old = *this;
+      current = current->prev;
+      return old;
     }
 
     bool operator==(const const_iterator &other) const {
@@ -371,9 +383,21 @@ public:
       return *this;
     }
 
+    const_reverse_iterator operator++(int) {
+      const_reverse_iterator old = *this;
+      current = current->prev;
+      return old;
+    }
+
     const_reverse_iterator &operator--() {
       current = current->next;
       return *this;
+    }
+
+    const_reverse_iterator operator--(int) {
+      const_reverse_iterator old = *this;
+      current = current->next;
+      return old;
     }
 
     bool operator==(const const_reverse_iterator &other) const {
