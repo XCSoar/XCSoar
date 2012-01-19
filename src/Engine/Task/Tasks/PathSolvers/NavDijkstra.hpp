@@ -67,7 +67,9 @@ protected:
     };
   };
 
-  Dijkstra<ScanTaskPoint, DijkstraMap> dijkstra;
+  typedef ::Dijkstra<ScanTaskPoint, DijkstraMap> Dijkstra;
+
+  Dijkstra dijkstra;
 
   /** Number of stages in search */
   unsigned num_stages;
