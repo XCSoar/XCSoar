@@ -93,7 +93,7 @@ OLCSprint::AddStartEdges()
   const ScanTaskPoint start(0, find_start());
 
   if (GetPoint(start).GetIntegerAltitude() <= max_altitude)
-    dijkstra.Link(start, start, 0);
+    Link(start, start, 0);
 }
 
 void 
@@ -109,7 +109,7 @@ OLCSprint::AddEdges(const ScanTaskPoint origin)
    */
   const unsigned d = GetStageWeight(origin.GetStageNumber()) *
     CalcEdgeDistance(origin, destination);
-  dijkstra.Link(destination, origin, d);
+  Link(destination, origin, d);
 }
 
 fixed

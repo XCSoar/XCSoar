@@ -209,7 +209,7 @@ OLCTriangle::AddStartEdges()
   // this is out of order but required
 
   ScanTaskPoint destination(0, n_points-1);
-  dijkstra.Link(destination, destination, 0);
+  Link(destination, destination, 0);
 }
 
 
@@ -228,8 +228,7 @@ OLCTriangle::AddEdges(const ScanTaskPoint origin)
 
       if (!is_fai || (4*d >= best_d)) { // no reason to add candidate if worse
                                         // than 25% rule for FAI tasks
-        dijkstra.Link(destination, origin,
-                      GetStageWeight(origin.GetStageNumber()) * d);
+        Link(destination, origin, GetStageWeight(origin.GetStageNumber()) * d);
       }
 
     }
@@ -249,8 +248,7 @@ OLCTriangle::AddEdges(const ScanTaskPoint origin)
       if (d) {
         best_d = result.total_distance;
 
-        dijkstra.Link(destination, origin,
-                      GetStageWeight(origin.GetStageNumber()) * d);
+        Link(destination, origin, GetStageWeight(origin.GetStageNumber()) * d);
 
         // we have an improved solution
         is_complete = true;
@@ -264,8 +262,7 @@ OLCTriangle::AddEdges(const ScanTaskPoint origin)
     break;
   case 2:
     // dummy just to close the triangle
-    dijkstra.Link(ScanTaskPoint(origin.GetStageNumber() + 1, n_points - 1),
-                  origin, 0);
+    Link(ScanTaskPoint(origin.GetStageNumber() + 1, n_points - 1), origin, 0);
     break;
   default:
     assert(1);

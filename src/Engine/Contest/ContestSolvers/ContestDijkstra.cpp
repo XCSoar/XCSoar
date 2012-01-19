@@ -236,7 +236,7 @@ ContestDijkstra::AddStartEdges()
     // only add points that are valid for the finish
     if (!incremental ||
         GetPoint(destination).GetIntegerAltitude() <= max_altitude)
-      dijkstra.Link(destination, destination, 0);
+      Link(destination, destination, 0);
   }
 }
 
@@ -262,7 +262,7 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin)
        destination != end; destination.IncrementPointIndex()) {
     if (GetPoint(destination).GetIntegerAltitude() >= min_altitude) {
       const unsigned d = weight * CalcEdgeDistance(origin, destination);
-      dijkstra.Link(destination, origin, d);
+      Link(destination, origin, d);
     }
   }
 }

@@ -144,6 +144,11 @@ protected:
     return IsFinal(sp.GetStageNumber());
   }
 
+  void Link(const ScanTaskPoint node, const ScanTaskPoint parent,
+            unsigned value) {
+    dijkstra.Link(node, parent, value);
+  }
+
   /** 
    * Iterate search algorithm
    * 
