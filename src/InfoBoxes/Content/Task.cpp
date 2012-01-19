@@ -51,7 +51,7 @@ InfoBoxContentBearing::Update(InfoBoxData &data)
   }
 
   // Set Value
-  data.SetValue(vector_remaining.bearing, _T("T"));
+  data.SetValue(vector_remaining.bearing);
 }
 
 void

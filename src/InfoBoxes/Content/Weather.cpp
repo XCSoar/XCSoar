@@ -133,7 +133,7 @@ InfoBoxContentWindSpeed::Update(InfoBoxData &data)
   data.SetValueUnit(Units::current.wind_speed_unit);
 
   // Set Comment
-  data.SetComment(info.wind.bearing, _T("T"));
+  data.SetComment(info.wind.bearing);
 }
 
 void
@@ -145,7 +145,7 @@ InfoBoxContentWindBearing::Update(InfoBoxData &data)
     return;
   }
 
-  data.SetValue(info.wind.bearing, _T("T"));
+  data.SetValue(info.wind.bearing);
 }
 
 void

@@ -171,7 +171,7 @@ TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
                 (name_font.GetHeight() - small_font.GetHeight()) / 2, buffer);
 
     // Draw leg bearing
-    FormatBearing(buffer, ARRAY_SIZE(buffer), leg.bearing, _T("T"));
+    FormatBearing(buffer, ARRAY_SIZE(buffer), leg.bearing);
     width = canvas.CalcTextWidth(buffer);
     canvas.text(rc.right - Layout::FastScale(2) - width, top2, buffer);
 

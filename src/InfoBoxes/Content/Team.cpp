@@ -100,7 +100,7 @@ InfoBoxContentTeamBearing::Update(InfoBoxData &data)
 
   if (teamcode_info.teammate_available) {
     // Set Value
-    data.SetValue(teamcode_info.teammate_vector.bearing, _T("T"));
+    data.SetValue(teamcode_info.teammate_vector.bearing);
   }
   else
     data.SetValueInvalid();

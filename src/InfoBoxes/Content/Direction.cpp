@@ -39,7 +39,7 @@ InfoBoxContentTrack::Update(InfoBoxData &data)
     data.SetInvalid();
     return;
   }
-  data.SetValue(XCSoarInterface::Basic().track, _T("T"));
+  data.SetValue(XCSoarInterface::Basic().track);
 }
 
 bool
