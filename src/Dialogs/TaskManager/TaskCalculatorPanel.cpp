@@ -27,11 +27,13 @@ Copyright_License {
 #include "Dialogs/CallBackTable.hpp"
 #include "Interface.hpp"
 #include "Units/Units.hpp"
+#include "Units/UnitsFormatter.hpp"
 #include "DataField/Float.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/Util.hpp"
+#include "Form/Edit.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Icon.hpp"
 #include "Look/DialogLook.hpp"
@@ -208,6 +210,17 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   LoadWindow(task_calculator_callbacks, parent,
              Layout::landscape
              ? _T("IDR_XML_TASKCALCULATOR_L") : _T("IDR_XML_TASKCALCULATOR"));
+
+  WndProperty *wp = (WndProperty *)form.FindByName(_T("prpMacCready"));
+  assert(wp != NULL);
+
+  DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
+  assert(df != NULL);
+
+  df->SetFormat(Units::GetUserVerticalSpeedFormat());
+  df->SetMin(fixed_zero);
+  df->SetMax(Units::ToUserVSpeed(fixed(5)));
+  df->SetStep(Units::GetUserVerticalSpeedStep());
 }
 
 void

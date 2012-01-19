@@ -106,12 +106,14 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 
   switch (keycode) {
   case ibkUp:
-    mc = std::min(mc + Units::ToSysVSpeed(fixed_one / 10), fixed(5));
+    mc = std::min(mc + Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep()),
+                  fixed(5));
     ActionInterface::SetManualMacCready(mc);
     return true;
 
   case ibkDown:
-    mc = std::max(mc - Units::ToSysVSpeed(fixed_one / 10), fixed_zero);
+    mc = std::max(mc - Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep()),
+                  fixed_zero);
     ActionInterface::SetManualMacCready(mc);
     return true;
 
@@ -145,18 +147,26 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
   fixed mc = polar.GetMC();
 
   if (_tcscmp(misc, _T("+0.1")) == 0) {
-    return HandleKey(ibkUp);
+    mc = std::min(mc + Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep()),
+                  fixed(5));
+    ActionInterface::SetManualMacCready(mc);
+    return true;
 
   } else if (_tcscmp(misc, _T("+0.5")) == 0) {
-    mc = std::min(mc + Units::ToSysVSpeed(fixed_half), fixed(5));
+    mc = std::min(mc + Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep() * 5),
+                  fixed(5));
     ActionInterface::SetManualMacCready(mc);
     return true;
 
   } else if (_tcscmp(misc, _T("-0.1")) == 0) {
-    return HandleKey(ibkDown);
+    mc = std::max(mc - Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep()),
+                  fixed_zero);
+    ActionInterface::SetManualMacCready(mc);
+    return true;
 
   } else if (_tcscmp(misc, _T("-0.5")) == 0) {
-    mc = std::max(mc - Units::ToSysVSpeed(fixed_half), fixed_zero);
+    mc = std::max(mc - Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep() * 5),
+                  fixed_zero);
     ActionInterface::SetManualMacCready(mc);
     return true;
 

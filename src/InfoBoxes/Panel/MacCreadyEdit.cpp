@@ -27,10 +27,12 @@ Copyright_License {
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Form/TabBar.hpp"
+#include "Form/Button.hpp"
 #include "Form/XMLWidget.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-
-class WndButton;
+#include "Util/Macros.hpp"
+#include "Units/UnitsFormatter.hpp"
+#include "Units/Units.hpp"
 
 class MacCreadyEditPanel : public XMLWidget {
   unsigned id;
@@ -85,6 +87,36 @@ void
 MacCreadyEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   LoadWindow(call_back_table, parent, _T("IDR_XML_INFOBOXMACCREADYEDIT"));
+
+  TCHAR caption[16];
+
+  WndButton *button = (WndButton *)form.FindByName(_T("cmdPlusBig"));
+  assert(button != NULL);
+  Units::FormatUserVerticalSpeed(
+      Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep() * 5), caption,
+      ARRAY_SIZE(caption), false);
+  button->SetCaption(caption);
+
+  button = (WndButton *)form.FindByName(_T("cmdPlusSmall"));
+  assert(button != NULL);
+  Units::FormatUserVerticalSpeed(
+      Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep()), caption,
+      ARRAY_SIZE(caption), false);
+  button->SetCaption(caption);
+
+  button = (WndButton *)form.FindByName(_T("cmdMinusBig"));
+  assert(button != NULL);
+  Units::FormatUserVerticalSpeed(
+      Units::ToSysVSpeed(-Units::GetUserVerticalSpeedStep() * 5), caption,
+      ARRAY_SIZE(caption), false);
+  button->SetCaption(caption);
+
+  button = (WndButton *)form.FindByName(_T("cmdMinusSmall"));
+  assert(button != NULL);
+  Units::FormatUserVerticalSpeed(
+      Units::ToSysVSpeed(-Units::GetUserVerticalSpeedStep()), caption,
+      ARRAY_SIZE(caption), false);
+  button->SetCaption(caption);
 }
 
 Widget *
