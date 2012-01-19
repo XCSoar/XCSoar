@@ -26,12 +26,21 @@ Copyright_License {
 
 #include "Compiler.h"
 
+#include <stdint.h>
+
 /**
  * Returns the value of a monotonic clock in milliseconds.
  */
 gcc_pure
 unsigned
 MonotonicClockMS();
+
+/**
+ * Returns the value of a monotonic clock in microseconds.
+ */
+gcc_pure
+uint64_t
+MonotonicClockUS();
 
 /**
  * Query the UTC offset from the OS.
