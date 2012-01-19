@@ -47,40 +47,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Dialogs/CallBackTable.hpp"
 
-#ifdef _WIN32_WCE
-#include "Device/Windows/Enumerator.hpp"
-#endif
-
-#ifdef ANDROID
-#include "Android/BluetoothHelper.hpp"
-#ifdef IOIOLIB
-#include "Device/Port/AndroidIOIOUartPort.hpp"
-#endif
-#endif
-
-
-static const struct {
-  DeviceConfig::PortType type;
-  const TCHAR *label;
-} port_types[] = {
-  { DeviceConfig::PortType::DISABLED, N_("Disabled") },
-#ifdef _WIN32_WCE
-  { DeviceConfig::PortType::AUTO, N_("GPS Intermediate Driver") },
-#endif
-#ifdef ANDROID
-  { DeviceConfig::PortType::INTERNAL, N_("Built-in GPS") },
-#endif
-
-  /* label not translated for now, until we have a TCP port
-     selection UI */
-  { DeviceConfig::PortType::TCP_LISTENER, _T("TCP port") },
-
-  { DeviceConfig::PortType::SERIAL, NULL } /* sentinel */
-};
-
-/** the number of fixed port types (excludes Serial, Bluetooth and IOIOUart) */
-static const unsigned num_port_types = ARRAY_SIZE(port_types) - 1;
-
 class DevicesConfigPanel : public XMLWidget {
   DeviceConfig device_config[NUMDEV];
 
