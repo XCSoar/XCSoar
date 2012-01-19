@@ -569,14 +569,14 @@ RowFormWidget::UpdateLayout()
   /* second row traversal: now move and resize the rows */
   for (auto i = rows.begin(), end = rows.end(); i != end; ++i) {
     /* determine this row's height */
-    UPixelScalar height;
+    UPixelScalar height = i->GetMinimumHeight();
     if (excess_height > 0 && i->IsElastic()) {
       assert(n_elastic > 0);
 
       /* distribute excess height among all elastic rows */
       unsigned grow_height = excess_height / n_elastic;
       if (grow_height > 0) {
-        height = i->GetMinimumHeight() + grow_height;
+        height += grow_height;
         const UPixelScalar max_height = i->GetMaximumHeight();
         if (height > max_height) {
           /* never grow beyond declared maximum height */
@@ -588,8 +588,7 @@ RowFormWidget::UpdateLayout()
       }
 
       --n_elastic;
-    } else
-      height = i->GetMinimumHeight();
+    }
 
     /* finally move and resize */
     Window &window = i->GetWindow();
