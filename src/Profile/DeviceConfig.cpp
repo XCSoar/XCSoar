@@ -255,6 +255,14 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
     else
       config.driver_name.clear();
   }
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("SyncFromDevice"));
+  if (!Get(buffer, config.sync_from_device))
+    config.sync_from_device = true;
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("SyncToDevice"));
+  if (!Get(buffer, config.sync_to_device))
+    config.sync_to_device = true;
 }
 
 static const TCHAR *
@@ -327,4 +335,10 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
   _tcscpy(buffer, _T("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
   Set(buffer, config.driver_name);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("SyncFromDevice"));
+  Set(buffer, config.sync_from_device);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("SyncToDevice"));
+  Set(buffer, config.sync_to_device);
 }

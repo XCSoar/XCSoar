@@ -118,6 +118,16 @@ struct DeviceConfig {
   unsigned tcp_port;
 
   /**
+   * Should XCSoar send MC value, bug, ballast, etc. to the device
+   */
+  bool sync_to_device;
+
+  /**
+   * Should XCSoar use the MC value, bug, ballast, etc. received from the device
+   */
+  bool sync_from_device;
+
+  /**
    * Does this port type use a baud rate?
    */
   static bool UsesSpeed(PortType port_type) {
@@ -192,6 +202,8 @@ struct DeviceConfig {
     path.clear();
     bluetooth_mac.clear();
     driver_name.clear();
+    sync_from_device = true;
+    sync_to_device = true;
   }
 
   /**
