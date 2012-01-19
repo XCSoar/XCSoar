@@ -35,13 +35,12 @@ TaskDijkstraMin::DistanceMin(const SearchPoint &currentLocation)
     return false;
 
   dijkstra.Reserve(256);
+  dijkstra.Clear();
 
   if (active_stage > 0) {
-    dijkstra.Clear();
     AddStartEdges(currentLocation);
   } else {
-    const ScanTaskPoint start(0, 0);
-    dijkstra.Restart(start);
+    LinkStart(ScanTaskPoint(0, 0));
   }
 
   return Run();

@@ -35,8 +35,7 @@ TaskDijkstraMax::DistanceMax()
     return false;
 
   dijkstra.Reserve(256);
-
-  const ScanTaskPoint start(0, 0);
-  dijkstra.Restart(start);
+  dijkstra.Clear();
+  LinkStart(ScanTaskPoint(0, 0));
   return Run();
 }

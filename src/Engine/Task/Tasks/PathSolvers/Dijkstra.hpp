@@ -103,16 +103,6 @@ public:
     Push(node, node, 0);
   }
 
-  /**
-   * Resets as if constructed afresh
-   *
-   * @param n Node to start
-   */
-  void Restart(const Node node) {
-    Clear();
-    Push(node, node, 0);
-  }
-
   /** 
    * Clears the queues
    */
