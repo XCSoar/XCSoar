@@ -84,6 +84,10 @@ PWES0(NMEAInputLine &line, NMEAInfo &info)
                               Units::ToSysUnit(fixed(k) / 10,
                                                Unit::KILOMETER_PER_HOUR));
 
+  else if (!have_ias && have_tas)
+    info.ProvideTrueAirspeed(Units::ToSysUnit(fixed(k) / 10,
+                                              Unit::KILOMETER_PER_HOUR));
+
   if (line.read_checked(i)) {
     info.voltage = fixed(i) / 10;
     info.voltage_available.Update(info.clock);
