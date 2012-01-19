@@ -210,27 +210,6 @@ GetCaption(const XMLNode &node)
   if (tmp[0] == _T('\0'))
     return tmp;
 
-  size_t length = _tcslen(tmp);
-  assert(length > 0);
-  if (length < 256 && tmp[length - 1] == _T('*')) {
-    /* remove the trailing asterisk before the translation, and
-       re-append it to the translated string */
-    static TCHAR buffer[256];
-    _tcscpy(buffer, tmp);
-    buffer[length - 1] = _T('\0');
-    const TCHAR *translated = gettext(buffer);
-    if (translated == buffer)
-      return tmp;
-
-    length = _tcslen(translated);
-    if (length >= 255)
-      return translated;
-
-    _tcscpy(buffer, translated);
-    _tcscat(buffer, _T("*"));
-    return buffer;
-  }
-
   return gettext(tmp);
 }
 
