@@ -73,9 +73,6 @@ SetXMLDialogLook(const DialogLook &_dialog_look)
 // used when stretching dialog and components
 static int dialog_width_scale = 1024;
 
-// used when loading stand-alone XML file with no form control
-static DialogStyle dialog_style_last = dsFullWidth;
-
 struct ControlSize: public PixelSize
 {
   bool no_scaling;
@@ -98,14 +95,13 @@ typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
 static Window *
 LoadChild(SubForm &form, ContainerWindow &parent,
           const CallBackTableEntry *lookup_table, XMLNode node,
-          const DialogStyle dialog_style, int bottom_most = 0,
+          int bottom_most = 0,
           WindowStyle style=WindowStyle());
 
 static void
 LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
                     const CallBackTableEntry *lookup_table,
-                    const XMLNode *node,
-                    const DialogStyle dialog_style);
+                    const XMLNode *node);
 
 /**
  * Converts a String into an Integer and returns
@@ -168,24 +164,10 @@ StringToColor(const TCHAR *string, Color &color)
   return true;
 }
 
-/**
- * Returns the dialog style property ("Popup") of the given node
- * @param xNode The node to check
- * @return Dialog style (DialogStyle_t), Default = FullWidth
- */
-static DialogStyle
-GetDialogStyle(const XMLNode &node)
-{
-  const TCHAR* popup = node.getAttribute(_T("Popup"));
-  if ((popup == NULL) || StringIsEmpty(popup))
-    return UIGlobals::GetDialogSettings().dialog_style;
-  else
-    return (DialogStyle)StringToIntDflt(popup, 0);
-}
-
 static int 
-ScaleWidth(const int x, const DialogStyle dialog_style)
+ScaleWidth(const int x)
 {
+  const DialogStyle dialog_style = UIGlobals::GetDialogSettings().dialog_style;
   if (dialog_style == dsFullWidth || dialog_style == dsScaledBottom)
     // stretch width to fill screen horizontally
     return x * dialog_width_scale / 1024;
@@ -366,13 +348,13 @@ LoadXMLFromResource(const TCHAR *resource)
 }
 
 static void
-InitScaleWidth(const PixelSize size, const PixelRect rc,
-               const DialogStyle dialog_style)
+InitScaleWidth(const PixelSize size, const PixelRect rc)
 {
   // No need to calculate the scale factor on platforms that don't scale
   if (!Layout::ScaleSupported())
     return;
 
+  const DialogStyle dialog_style = UIGlobals::GetDialogSettings().dialog_style;
   if (dialog_style == dsFullWidth || dialog_style == dsScaledBottom)
     dialog_width_scale = (rc.right - rc.left) * 1024 / size.cx;
   else
@@ -405,12 +387,8 @@ LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
   XMLNode *node = LoadXMLFromResource(resource);
   assert(node != NULL);
 
-  // use style of last form loaded
-  DialogStyle dialog_style = dialog_style_last;
-
   // load only one top-level control.
-  Window *window = LoadChild(*form, parent, lookup_table, *node,
-                             dialog_style, 0, style);
+  Window *window = LoadChild(*form, parent, lookup_table, *node, 0, style);
   delete node;
 
   assert(!XMLNode::GlobalError);
@@ -444,20 +422,16 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   // If the main XMLNode is of type "Form"
   assert(StringIsEqual(node->getName(), _T("Form")));
 
-  // Determine the dialog style of the dialog
-  DialogStyle dialog_style = GetDialogStyle(*node);
-  dialog_style_last = dialog_style;
-
   // Determine the dialog size
   const TCHAR* caption = GetCaption(*node);
   const PixelRect rc = target_rc ? *target_rc : parent.get_client_rect();
   ControlPosition pos = GetPosition(*node, rc, 0);
   ControlSize size = GetSize(*node, rc, pos);
 
-  InitScaleWidth(size, rc, dialog_style);
+  InitScaleWidth(size, rc);
 
   // Correct dialog size and position for dialog style
-  switch (dialog_style) {
+  switch (UIGlobals::GetDialogSettings().dialog_style) {
   case dsFullWidth:
     pos.x = rc.left;
     pos.y = rc.top;
@@ -493,7 +467,7 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
 
   // Load the children controls
   LoadChildrenFromXML(*form, form->GetClientAreaWindow(),
-                      lookup_table, node, dialog_style);
+                      lookup_table, node);
   delete node;
 
   // If XML error occurred -> Error messagebox + cancel
@@ -557,12 +531,11 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
  * @param form the SubForm object
  * @param LookUpTable The parent CallBackTable
  * @param node The XMLNode that represents the control
- * @param eDialogStyle The parent's dialog style
  */
 static Window *
 LoadChild(SubForm &form, ContainerWindow &parent,
           const CallBackTableEntry *lookup_table, XMLNode node,
-          const DialogStyle dialog_style, int bottom_most,
+          int bottom_most,
           WindowStyle style)
 {
   Window *window = NULL;
@@ -574,11 +547,11 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   PixelRect rc = parent.get_client_rect();
   ControlPosition pos = GetPosition(node, rc, bottom_most);
   if (!pos.no_scaling)
-    pos.x = ScaleWidth(pos.x, dialog_style);
+    pos.x = ScaleWidth(pos.x);
 
   ControlSize size = GetSize(node, rc, pos);
   if (!size.no_scaling)
-    size.cx = ScaleWidth(size.cx, dialog_style);
+    size.cx = ScaleWidth(size.cx);
 
   if (!StringToIntDflt(node.getAttribute(_T("Visible")), 1))
     style.Hide();
@@ -601,7 +574,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     if (Layout::ScaleSupported())
       caption_width = Layout::Scale(caption_width);
 
-    caption_width = ScaleWidth(caption_width, dialog_style);
+    caption_width = ScaleWidth(caption_width);
 
     // Determine whether the control is multiline or readonly
     bool multi_line = StringToIntDflt(node.getAttribute(_T("MultiLine")), 0);
@@ -751,7 +724,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     // Load children controls from the XMLNode
     LoadChildrenFromXML(form, *frame,
-                        lookup_table, &node, dialog_style);
+                        lookup_table, &node);
 
   // KeyboardControl
   } else if (StringIsEqual(node.getName(), _T("Keyboard"))) {
@@ -834,7 +807,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
       // Load each child control from the child nodes
       Window *child = LoadChild(form, *tabbed,
                                 lookup_table,
-                                *i, dialog_style);
+                                *i);
       if (child != NULL)
         tabbed->AddClient(child);
     }
@@ -903,13 +876,11 @@ LoadChild(SubForm &form, ContainerWindow &parent,
  * @param Parent The parent control
  * @param LookUpTable The parents CallBackTable
  * @param Node The XMLNode that represents the parent control
- * @param eDialogStyle The parent's dialog style
  */
 static void
 LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
                     const CallBackTableEntry *lookup_table,
-                    const XMLNode *node,
-                    const DialogStyle dialog_style)
+                    const XMLNode *node)
 {
   unsigned bottom_most = 0;
 
@@ -917,7 +888,7 @@ LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
   for (auto i = node->begin(), end = node->end(); i != end; ++i) {
     // Load each child control from the child nodes
     Window *window = LoadChild(form, parent, lookup_table,
-                               *i, dialog_style,
+                               *i,
                                bottom_most);
     if (window == NULL)
       continue;
