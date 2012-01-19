@@ -270,7 +270,7 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEAInfo &info)
   info.settings = settings_received;
 
   if (device != NULL && device->ParseNMEA(line, info)) {
-    info.connected.Update(fixed(MonotonicClockMS()) / 1000);
+    info.connected.Update(info.clock);
 
     /* clear the settings when the values are the same that we already
        sent to the device */
