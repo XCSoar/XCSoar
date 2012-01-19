@@ -505,8 +505,7 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
 }
 
 static DataField *
-LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable,
-              const DialogStyle eDialogStyle)
+LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
 {
   TCHAR data_type[32];
   TCHAR display_format[32];
@@ -657,8 +656,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     if (data_field_node != NULL) {
       // -> Load the first DataField control
       DataField *data_field =
-        LoadDataField(*data_field_node,
-                      lookup_table, dialog_style);
+        LoadDataField(*data_field_node, lookup_table);
 
       if (data_field != NULL)
         // Tell the Property control about the DataField control
