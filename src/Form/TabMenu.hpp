@@ -146,6 +146,10 @@ public:
                  const WindowStyle style = WindowStyle());
   ~TabMenuControl();
 
+  void UpdateLayout() {
+    pager.UpdateLayout();
+  }
+
   const StaticArray<OneSubMenuButton *, 32> &GetTabButtons() {
     return buttons;
   }

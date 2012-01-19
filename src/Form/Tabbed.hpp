@@ -110,6 +110,12 @@ public:
    */
   bool Save(bool &changed, bool &require_restart);
 
+  /**
+   * Calls Widget::Move() again on the current Widget.  This may be
+   * used to trick the Widget into updating its layout.
+   */
+  void UpdateLayout();
+
 protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height);
   virtual void OnCreate();

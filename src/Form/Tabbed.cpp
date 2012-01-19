@@ -98,11 +98,17 @@ TabbedControl::Save(bool &changed, bool &require_restart)
 }
 
 void
+TabbedControl::UpdateLayout()
+{
+  pager.Move(get_client_rect());
+}
+
+void
 TabbedControl::OnResize(UPixelScalar width, UPixelScalar height)
 {
   ContainerWindow::OnResize(width, height);
 
-  pager.Move(get_client_rect());
+  UpdateLayout();
 }
 
 void
