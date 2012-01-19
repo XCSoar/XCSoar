@@ -43,7 +43,6 @@ static gcc_constexpr_data UnitStoreItem Presets[] =
     Unit::KILOMETER_PER_HOUR,
     Unit::KILOMETER_PER_HOUR,
     Unit::HECTOPASCAL,
-    CoordinateFormat::DDMMSS,
   } },
   { N_("British"), {
     Unit::KILOMETER,
@@ -54,7 +53,6 @@ static gcc_constexpr_data UnitStoreItem Presets[] =
     Unit::KNOTS,
     Unit::KILOMETER_PER_HOUR,
     Unit::MILLIBAR,
-    CoordinateFormat::DDMMSS,
   } },
   { N_("American"), {
     Unit::STATUTE_MILES,
@@ -65,7 +63,6 @@ static gcc_constexpr_data UnitStoreItem Presets[] =
     Unit::KNOTS,
     Unit::STATUTE_MILES_PER_HOUR,
     Unit::INCH_MERCURY,
-    CoordinateFormat::DDMMSS,
   } },
   { N_("Australian"), {
     Unit::KILOMETER,
@@ -76,7 +73,6 @@ static gcc_constexpr_data UnitStoreItem Presets[] =
     Unit::KNOTS,
     Unit::KILOMETER_PER_HOUR,
     Unit::HECTOPASCAL,
-    CoordinateFormat::DDMMSS,
   } }
 };
 

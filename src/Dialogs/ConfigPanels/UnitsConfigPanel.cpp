@@ -128,7 +128,9 @@ OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
 void
 UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  const UnitSetting &config = CommonInterface::SetUISettings().units;
+  const UnitSetting &config = CommonInterface::GetUISettings().units;
+  const CoordinateFormat coordinate_format =
+      CommonInterface::GetUISettings().coordinate_format;
 
   RowFormWidget::Prepare(parent, rc);
   instance = this;
@@ -229,7 +231,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
   AddEnum(_("Lat./Lon."), _T(""), units_lat_lon_list,
-          (unsigned)config.coordinate_format);
+          (unsigned)coordinate_format);
 }
 
 bool
@@ -238,6 +240,8 @@ UnitsConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool changed = false, require_restart = false;
 
   UnitSetting &config = CommonInterface::SetUISettings().units;
+  CoordinateFormat &coordinate_format =
+      CommonInterface::SetUISettings().coordinate_format;
 
   /* the Units settings affect how other form values are read and translated
    * so changes to Units settings should be processed after all other form settings
@@ -257,7 +261,7 @@ UnitsConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValueEnum(UnitsPressure, szProfilePressureUnitsValue, config.pressure_unit);
 
-  changed |= SaveValueEnum(UnitsLatLon, szProfileLatLonUnits, config.coordinate_format);
+  changed |= SaveValueEnum(UnitsLatLon, szProfileLatLonUnits, coordinate_format);
 
   _changed |= changed;
   _require_restart |= require_restart;

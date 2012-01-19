@@ -31,6 +31,7 @@ Copyright_License {
 #include "PageSettings.hpp"
 #include "Dialogs/DialogSettings.hpp"
 #include "Util/TypeTraits.hpp"
+#include "Geo/CoordinateFormat.hpp"
 
 /**
  * User interface settings.
@@ -74,6 +75,8 @@ struct UISettings {
     Off,
     On,
   } haptic_feedback;
+
+  CoordinateFormat coordinate_format;
 
   UnitSetting units;
   MapSettings map;

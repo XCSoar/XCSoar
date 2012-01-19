@@ -46,13 +46,6 @@ namespace Units
   void SetConfig(const UnitSetting &new_config);
 
   /**
-   * Returns the user-specified coordinate format
-   * @return The user-specified coordinate format
-   */
-  gcc_pure
-  CoordinateFormat GetCoordinateFormat();
-
-  /**
    * Returns the user-specified unit for a horizontal distance
    * @return The user-specified unit for a horizontal distance
    */

@@ -70,6 +70,8 @@ Profile::Load(UISettings &settings)
 
   GetEnum(szProfileHapticFeedback, settings.haptic_feedback);
 
+  GetEnum(szProfileLatLonUnits, settings.coordinate_format);
+
   LoadUnits(settings.units);
   Load(settings.map);
   Load(settings.info_boxes);

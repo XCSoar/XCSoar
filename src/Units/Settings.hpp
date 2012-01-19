@@ -62,9 +62,6 @@ struct UnitSetting
   /** Unit for pressures */
   Unit pressure_unit;
 
-  /** Unit for lat/lon */
-  CoordinateFormat coordinate_format;
-
   void SetDefaults();
 
   /**

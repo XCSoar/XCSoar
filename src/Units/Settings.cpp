@@ -34,7 +34,6 @@ UnitSetting::SetDefaults()
   wind_speed_unit = Unit::KILOMETER_PER_HOUR;
   task_speed_unit = Unit::KILOMETER_PER_HOUR;
   pressure_unit = Unit::HECTOPASCAL;
-  coordinate_format = CoordinateFormat::DDMMSS;
 }
 
 Unit

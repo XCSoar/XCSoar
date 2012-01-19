@@ -301,8 +301,6 @@ Profile::LoadUnits(UnitSetting &config)
 {
   config = Units::LoadFromOSLanguage();
 
-  GetEnum(szProfileLatLonUnits, config.coordinate_format);
-
   GetSpeedUnit(szProfileSpeedUnitsValue, _T("Speed"), config.speed_unit);
   config.wind_speed_unit = config.speed_unit;
   GetSpeedUnit(szProfileTaskSpeedUnitsValue, _T("TaskSpeed"),

@@ -42,12 +42,6 @@ Units::SetConfig(const UnitSetting &new_config)
   current = new_config;
 }
 
-CoordinateFormat
-Units::GetCoordinateFormat()
-{
-  return current.coordinate_format;
-}
-
 Unit
 Units::GetUserDistanceUnit()
 {

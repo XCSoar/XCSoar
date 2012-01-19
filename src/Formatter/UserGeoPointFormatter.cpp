@@ -25,22 +25,25 @@ Copyright_License {
 #include "GeoPointFormatter.hpp"
 #include "Math/Angle.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
-#include "Units/Units.hpp"
+#include "Interface.hpp"
 
 bool
 FormatLongitude(Angle longitude, TCHAR *buffer, size_t size)
 {
-  return FormatLongitude(longitude, buffer, size, Units::GetCoordinateFormat());
+  return FormatLongitude(longitude, buffer, size,
+                         CommonInterface::GetUISettings().coordinate_format);
 }
 
 bool
 FormatLatitude(Angle latitude, TCHAR *buffer, size_t size)
 {
-  return FormatLatitude(latitude, buffer, size, Units::GetCoordinateFormat());
+  return FormatLatitude(latitude, buffer, size,
+                        CommonInterface::GetUISettings().coordinate_format);
 }
 
 TCHAR *
 FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size)
 {
-  return FormatGeoPoint(location, buffer, size, Units::GetCoordinateFormat());
+  return FormatGeoPoint(location, buffer, size,
+                        CommonInterface::GetUISettings().coordinate_format);
 }

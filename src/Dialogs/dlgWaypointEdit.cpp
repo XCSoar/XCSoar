@@ -89,7 +89,7 @@ static void
 SetUnits()
 {
   WndProperty* wp;
-  switch (Units::GetCoordinateFormat()) {
+  switch (CommonInterface::GetUISettings().coordinate_format) {
   case CoordinateFormat::DDMMSS: // ("DDMMSS");
   case CoordinateFormat::DDMMSS_SS: // ("DDMMSS.ss");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
@@ -180,7 +180,7 @@ SetValues()
 
   LoadFormProperty(*wf, _T("prpLongitudeD"), dd);
 
-  switch (Units::GetCoordinateFormat()) {
+  switch (CommonInterface::GetUISettings().coordinate_format) {
   case CoordinateFormat::DDMMSS: // ("DDMMSS");
   case CoordinateFormat::DDMMSS_SS: // ("DDMMSS.ss");
     LoadFormProperty(*wf, _T("prpLongitudeM"), mm);
@@ -213,7 +213,7 @@ SetValues()
   wp->GetDataField()->SetAsInteger(dd);
   wp->RefreshDisplay();
 
-  switch (Units::GetCoordinateFormat()) {
+  switch (CommonInterface::GetUISettings().coordinate_format) {
   case CoordinateFormat::DDMMSS: // ("DDMMSS");
   case CoordinateFormat::DDMMSS_SS: // ("DDMMSS.ss");
     LoadFormProperty(*wf, _T("prpLatitudeM"), mm);
@@ -261,7 +261,7 @@ GetValues()
   sign = GetFormValueInteger(*wf, _T("prpLongitudeSign")) == 1;
   dd = GetFormValueInteger(*wf, _T("prpLongitudeD"));
 
-  switch (Units::GetCoordinateFormat()) {
+  switch (CommonInterface::GetUISettings().coordinate_format) {
   case CoordinateFormat::DDMMSS: // ("DDMMSS");
   case CoordinateFormat::DDMMSS_SS: // ("DDMMSS.ss");
     mm = GetFormValueInteger(*wf, _T("prpLongitudeM"));
@@ -287,7 +287,7 @@ GetValues()
   sign = GetFormValueInteger(*wf, _T("prpLatitudeSign")) == 1;
   dd = GetFormValueInteger(*wf, _T("prpLatitudeD"));
 
-  switch (Units::GetCoordinateFormat()) {
+  switch (CommonInterface::GetUISettings().coordinate_format) {
   case CoordinateFormat::DDMMSS: // ("DDMMSS");
   case CoordinateFormat::DDMMSS_SS: // ("DDMMSS.ss");
     mm = GetFormValueInteger(*wf, _T("prpLatitudeM"));
