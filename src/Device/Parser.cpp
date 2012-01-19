@@ -45,11 +45,10 @@ Copyright_License {
 using std::min;
 using std::max;
 
-bool NMEAParser::ignore_checksum;
-
 int NMEAParser::start_day = -1;
 
-NMEAParser::NMEAParser()
+NMEAParser::NMEAParser(bool _ignore_checksum)
+  :ignore_checksum(_ignore_checksum)
 {
   Reset();
 }
@@ -70,7 +69,7 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
   if (string[0] != '$')
     return false;
 
-  if (!NMEAChecksum(string))
+  if (!ignore_checksum && !NMEAChecksum(string))
     return false;
 
   NMEAInputLine line(string);
@@ -604,7 +603,7 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEAInfo &info)
 bool
 NMEAParser::NMEAChecksum(const char *string)
 {
-  return ignore_checksum || VerifyNMEAChecksum(string);
+  return VerifyNMEAChecksum(string);
 }
 
 bool

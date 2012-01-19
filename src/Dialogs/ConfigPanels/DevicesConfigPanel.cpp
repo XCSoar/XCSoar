@@ -160,9 +160,6 @@ DevicesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   list->SetPaintItemCallback(PaintDeviceListItem);
   list->SetLength(2);
   list->SetCursorCallback(DeviceListCursorCallback);
-
-  LoadFormProperty(form, _T("prpIgnoreNMEAChecksum"),
-                   NMEAParser::ignore_checksum);
 }
 
 
@@ -173,10 +170,6 @@ DevicesConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   if (!SaveDeviceConfig())
     return false;
-
-  changed |= SaveFormProperty(form, _T("prpIgnoreNMEAChecksum"),
-                              szProfileIgnoreNMEAChecksum,
-                              NMEAParser::ignore_checksum);
 
   if (DevicePortChanged) {
     changed = true;

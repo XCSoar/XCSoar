@@ -61,14 +61,13 @@ Simulator::GenerateFLARMTraffic(NMEAInfo &basic)
   int track = -(int)angle.AsBearing().Degrees();
   unsigned alarm_level = (i % 30 > 13 ? 0 : (i % 30 > 5 ? 2 : 1));
 
-  NMEAParser parser;
+  NMEAParser parser(true);
   char buffer[50];
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   sprintf(buffer, "$PFLAA,%d,%d,%d,%d,2,DDA85C,%d,0,35,0,1",
           alarm_level, north, east, alt, track);
-  AppendNMEAChecksum(buffer);
   parser.ParseLine(buffer, basic);
 
   alt = (angle.ifastcosine()) / 10;
@@ -80,13 +79,11 @@ Simulator::GenerateFLARMTraffic(NMEAInfo &basic)
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   sprintf(buffer, "$PFLAA,0,%d,%d,%d,2,AA9146,,,,,1",
           north, east, alt);
-  AppendNMEAChecksum(buffer);
   parser.ParseLine(buffer, basic);
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
   sprintf(buffer, "$PFLAU,2,1,2,1,%d", alarm_level);
-  AppendNMEAChecksum(buffer);
   parser.ParseLine(buffer, basic);
 }
 

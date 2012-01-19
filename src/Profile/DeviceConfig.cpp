@@ -263,6 +263,11 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("SyncToDevice"));
   if (!Get(buffer, config.sync_to_device))
     config.sync_to_device = true;
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("IgnoreChecksum"));
+  if (!Get(buffer, config.ignore_checksum) &&
+      !Get(szProfileIgnoreNMEAChecksum, config.ignore_checksum))
+    config.ignore_checksum = false;
 }
 
 static const TCHAR *
@@ -341,4 +346,7 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("SyncToDevice"));
   Set(buffer, config.sync_to_device);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("IgnoreChecksum"));
+  Set(buffer, config.ignore_checksum);
 }

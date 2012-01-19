@@ -128,6 +128,11 @@ struct DeviceConfig {
   bool sync_from_device;
 
   /**
+   * Should XCSoar ignore the received checksums and mark everything as valid
+   */
+  bool ignore_checksum;
+
+  /**
    * Does this port type use a baud rate?
    */
   static bool UsesSpeed(PortType port_type) {
@@ -204,6 +209,7 @@ struct DeviceConfig {
     driver_name.clear();
     sync_from_device = true;
     sync_to_device = true;
+    ignore_checksum = false;
   }
 
   /**

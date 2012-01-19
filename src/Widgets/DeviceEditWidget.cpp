@@ -46,6 +46,7 @@
 
 enum ControlIndex {
   Port, BaudRate, BulkBaudRate, TCPPort, Driver, SyncFromDevice, SyncToDevice,
+  IgnoreCheckSum,
 };
 
 static gcc_constexpr_data struct {
@@ -396,6 +397,12 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config)
       *(DataFieldBoolean *)sync_to_control.GetDataField();
   sync_to_df.Set(config.sync_to_device);
   sync_to_control.RefreshDisplay();
+
+  WndProperty &ignore_checksum_control = GetControl(IgnoreCheckSum);
+  DataFieldBoolean &ignore_checksum_df =
+      *(DataFieldBoolean *)ignore_checksum_control.GetDataField();
+  ignore_checksum_df.Set(config.ignore_checksum);
+  ignore_checksum_control.RefreshDisplay();
 }
 
 gcc_pure
@@ -470,6 +477,7 @@ DeviceEditWidget::UpdateVisibilities()
                                          CanReceiveSettings(GetDataField(Driver)));
   GetControl(SyncToDevice).set_visible(DeviceConfig::UsesDriver(type) &&
                                        CanSendSettings(GetDataField(Driver)));
+  GetControl(IgnoreCheckSum).set_visible(DeviceConfig::UsesDriver(type));
 }
 
 static void
@@ -529,6 +537,11 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
              _("This option lets you configure if XCSoar should send settings "
                "like the MacCready value, bugs and ballast to the device."),
              config.sync_to_device);
+
+  AddBoolean(_("Ignore checksum"),
+             _("If your GPS device outputs invalid NMEA checksums, this will "
+               "allow it's data to be used anyway."),
+             config.ignore_checksum);
 
   port_df->SetDetachGUI(false);
   driver_df->SetDetachGUI(false);
@@ -621,6 +634,8 @@ DeviceEditWidget::Save(bool &_changed, bool &require_restart)
 
     if (CanSendSettings(GetDataField(Driver)))
       changed |= SaveValue(SyncToDevice, config.sync_to_device);
+
+    changed |= SaveValue(IgnoreCheckSum, config.ignore_checksum);
   }
 
   _changed |= changed;

@@ -34,10 +34,7 @@ struct GeoPoint;
 
 class NMEAParser
 {
-public:
-  static bool ignore_checksum;
-
-private:
+  bool ignore_checksum;
   static int start_day;
   fixed last_time;
 
@@ -47,7 +44,7 @@ public:
   bool use_geoid;
 
 public:
-  NMEAParser();
+  NMEAParser(bool ignore_checksum = false);
 
   /**
    * Resets the NMEAParser
@@ -56,6 +53,10 @@ public:
 
   void SetReal(bool _real) {
     real = _real;
+  }
+
+  void SetIgnoreChecksum(bool _ignore_checksum) {
+    ignore_checksum = _ignore_checksum;
   }
 
   void DisableGeoid() {

@@ -55,6 +55,8 @@ NmeaReplayGlue::Start()
   DeviceConfig config;
   Profile::GetDeviceConfig(0, config);
 
+  parser->SetIgnoreChecksum(config.ignore_checksum);
+
   /* instantiate it */
   const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
   assert(driver != NULL);

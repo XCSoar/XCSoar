@@ -96,8 +96,6 @@ devStartup()
 
   DeviceDescriptor *pDevNmeaOut = NULL;
 
-  Profile::Get(szProfileIgnoreNMEAChecksum, NMEAParser::ignore_checksum);
-
   bool none_available = true;
   for (unsigned i = 0; i < NUMDEV; ++i) {
     device_list[i].SetIndex(i);

@@ -90,6 +90,7 @@ DeviceDescriptor::Open(Port &_port, const DeviceRegister &_driver,
 
   parser.Reset();
   parser.SetReal(_tcscmp(driver->name, _T("Condor")) != 0);
+  parser.SetIgnoreChecksum(config.ignore_checksum);
   if (config.IsDriver(_T("Condor")))
     parser.DisableGeoid();
 
