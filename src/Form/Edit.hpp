@@ -151,8 +151,10 @@ public:
    * Starts  interactively  editing  the  value.   If  a  ComboBox  is
    * available, then the ComboPicker  will be launched, otherwise, the
    * focus and cursor is set to the control.
+   *
+   * @return false on failure
    */
-  void BeginEditing();
+  bool BeginEditing();
 
 protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height);

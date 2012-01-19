@@ -181,13 +181,13 @@ WndProperty::SetText(const TCHAR *Value)
   edit.set_text(Value);
 }
 
-void
+bool
 WndProperty::BeginEditing()
 {
   if (edit.is_read_only()) {
     /* this would display xml file help on a read-only wndproperty if
        it exists */
-    OnHelp();
+    return OnHelp();
   } else if (mDataField != NULL && mDataField->SupportCombo) {
     SingleWindow *root = (SingleWindow *)GetRootOwner();
 
@@ -196,21 +196,25 @@ WndProperty::BeginEditing()
     assert(root != NULL);
 
     dlgComboPicker(*root, this);
+    return true;
   } else if (CanEditInPlace()) {
     edit.set_focus();
+    return true;
   } else if (mDataField != NULL) {
     const TCHAR *value = mDataField->GetAsString();
     if (value == NULL)
-      return;
+      return false;
 
     StaticString<EDITSTRINGSIZE> buffer(value);
     if (!TextEntryDialog(*(SingleWindow *)GetRootOwner(), buffer,
                          GetCaption()))
-      return;
+      return true;
 
     mDataField->SetAsString(buffer);
     RefreshDisplay();
-  }
+    return true;
+  } else
+    return false;
 }
 
 void
@@ -271,8 +275,7 @@ WndProperty::OnResize(UPixelScalar width, UPixelScalar height)
 bool
 WndProperty::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  BeginEditing();
-  return true;
+  return BeginEditing();
 }
 
 bool
