@@ -168,7 +168,7 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
 
 TCHAR *
 FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
-               CoordinateFormat format)
+               CoordinateFormat format, TCHAR seperator)
 {
   if (!FormatLatitude(location.latitude, buffer, size, format))
     return NULL;
@@ -177,7 +177,7 @@ FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
   if (p >= end)
     return NULL;
 
-  *p++ = _T(' ');
+  *p++ = seperator;
 
   if (!FormatLongitude(location.longitude, p, end - p, format))
     return NULL;

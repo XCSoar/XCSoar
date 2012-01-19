@@ -48,6 +48,7 @@ bool FormatLatitude(Angle latitude, TCHAR *buffer, size_t size);
 /**
  * Convert a GeoPoint into a formatted string.
  */
-TCHAR *FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size);
+TCHAR *FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
+                      TCHAR seperator = _T(' '));
 
 #endif
