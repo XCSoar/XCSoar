@@ -87,16 +87,6 @@ WndProperty::Editor::OnKeyDown(unsigned key_code)
   if (key_code == VK_RETURN && parent->OnMouseDown(0, 0))
     return true;
 
-  // Check for long key press
-  // tmep hack, do not process nav keys
-  if (KeyTimer(true, key_code)) {
-    // Activate Help dialog
-    if (key_code == VK_RETURN) {
-      if (parent->OnHelp())
-        return true;
-    }
-  }
-
   switch (key_code) {
   case VK_RIGHT:
     parent->IncValue();
@@ -106,6 +96,7 @@ WndProperty::Editor::OnKeyDown(unsigned key_code)
     return true;
   }
 
+  KeyTimer(true, key_code);
   return EditWindow::OnKeyDown(key_code);
 }
 

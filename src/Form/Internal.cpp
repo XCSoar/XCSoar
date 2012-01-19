@@ -41,7 +41,7 @@ KeyTimer(bool isdown, unsigned thekey)
     return false;
   }
 
-  if (fps_time_down.CheckUpdate(2000)) {
+  if (!isdown && fps_time_down.CheckUpdate(2000)) {
     savedKey = 0;
     return true;
   }
