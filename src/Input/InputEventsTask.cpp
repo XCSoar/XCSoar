@@ -307,9 +307,9 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     
     TimeToTextHHMMSigned(TempTime, (int)TimeLocal((int)start_state.time));
     Units::FormatUserAltitude(start_state.altitude,
-                              TempAlt, sizeof(TempAlt)/sizeof(TCHAR), true);
+                              TempAlt, ARRAY_SIZE(TempAlt), true);
     Units::FormatUserSpeed(start_state.ground_speed,
-                           TempSpeed, sizeof(TempSpeed)/sizeof(TCHAR), true);
+                           TempSpeed, ARRAY_SIZE(TempSpeed), true);
     
     TCHAR TempAll[120];
     _stprintf(TempAll, _T("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"),

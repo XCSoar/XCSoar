@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Profile/FontConfig.hpp"
 #include "Profile/Profile.hpp"
+#include "Util/Macros.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -122,7 +123,7 @@ Profile::GetFont(const TCHAR *key, LOGFONT* lplf)
   assert(key[0] != '\0');
   assert(lplf != NULL);
 
-  if (Get(key, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
+  if (Get(key, Buffer, ARRAY_SIZE(Buffer)))
     return GetFontFromString(Buffer, lplf);
 
   return false;
