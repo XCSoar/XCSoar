@@ -31,14 +31,15 @@ Copyright_License {
 #include <stdlib.h>
 
 bool
-Units::LongitudeToString(Angle longitude, TCHAR *buffer, size_t size)
+LongitudeToString(Angle longitude, TCHAR *buffer, size_t size)
 {
-  return LongitudeToString(longitude, buffer, size, current.coordinate_format);
+  return LongitudeToString(longitude, buffer, size,
+                           Units::GetCoordinateFormat());
 }
 
 bool
-Units::LongitudeToString(Angle longitude, TCHAR *buffer, size_t size,
-                         CoordinateFormat format)
+LongitudeToString(Angle longitude, TCHAR *buffer, size_t size,
+                  CoordinateFormat format)
 {
   static gcc_constexpr_data TCHAR EW[] = _T("WEE");
   int dd, mm, ss;
@@ -105,14 +106,14 @@ Units::LongitudeToString(Angle longitude, TCHAR *buffer, size_t size,
 }
 
 bool
-Units::LatitudeToString(Angle latitude, TCHAR *buffer, size_t size)
+LatitudeToString(Angle latitude, TCHAR *buffer, size_t size)
 {
-  return LatitudeToString(latitude, buffer, size, current.coordinate_format);
+  return LatitudeToString(latitude, buffer, size, Units::GetCoordinateFormat());
 }
 
 bool
-Units::LatitudeToString(Angle latitude, TCHAR *buffer, size_t size,
-                        CoordinateFormat format)
+LatitudeToString(Angle latitude, TCHAR *buffer, size_t size,
+                 CoordinateFormat format)
 {
   static gcc_constexpr_data TCHAR EW[] = _T("SNN");
   int dd, mm, ss;
@@ -179,14 +180,14 @@ Units::LatitudeToString(Angle latitude, TCHAR *buffer, size_t size,
 }
 
 TCHAR *
-Units::FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size)
+FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size)
 {
-  return FormatGeoPoint(location, buffer, size, current.coordinate_format);
+  return FormatGeoPoint(location, buffer, size, Units::GetCoordinateFormat());
 }
 
 TCHAR *
-Units::FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
-                      CoordinateFormat format)
+FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
+               CoordinateFormat format)
 {
   if (!LatitudeToString(location.latitude, buffer, size, format))
     return NULL;

@@ -73,10 +73,8 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
   UPixelScalar height = Fonts::map_bold.GetHeight();
 
   StaticString<64> latitude, longitude;
-  Units::LatitudeToString(location.latitude,
-                          latitude.buffer(), latitude.MAX_SIZE);
-  Units::LongitudeToString(location.longitude,
-                           longitude.buffer(), longitude.MAX_SIZE);
+  LatitudeToString(location.latitude, latitude.buffer(), latitude.MAX_SIZE);
+  LongitudeToString(location.longitude, longitude.buffer(), longitude.MAX_SIZE);
 
   TextInBox(canvas, latitude,
             center.x + padding, center.y + padding, mode,

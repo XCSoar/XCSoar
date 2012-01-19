@@ -96,7 +96,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                       _("Your Position"));
 
   TCHAR buffer[128];
-  Units::FormatGeoPoint(item.location, buffer, 128);
+  FormatGeoPoint(item.location, buffer, 128);
 
   canvas.Select(small_font);
   canvas.text_clipped(left,

@@ -526,7 +526,7 @@ UpdateLocation(const GeoPoint &location)
   assert(wp != NULL);
 
   TCHAR buffer[64];
-  if (Units::FormatGeoPoint(location, buffer, ARRAY_SIZE(buffer)) != NULL)
+  if (FormatGeoPoint(location, buffer, ARRAY_SIZE(buffer)) != NULL)
     wp->SetText(buffer);
 }
 
