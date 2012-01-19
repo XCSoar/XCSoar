@@ -35,6 +35,7 @@ const struct DeviceRegister lxDevice = {
   _T("LX"),
   _T("LX / Colibri"),
   DeviceRegister::DECLARE | DeviceRegister::LOGGER |
-  DeviceRegister::BULK_BAUD_RATE,
+  DeviceRegister::BULK_BAUD_RATE |
+  DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
   LXCreateOnPort,
 };

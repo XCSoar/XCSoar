@@ -171,6 +171,6 @@ B50CreateOnPort(const DeviceConfig &config, Port &com_port)
 const struct DeviceRegister b50Device = {
   _T("Borgelt B50"),
   _T("Borgelt B50/B800"),
-  0,
+  DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
   B50CreateOnPort,
 };

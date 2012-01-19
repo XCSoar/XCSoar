@@ -409,6 +409,7 @@ VegaCreateOnPort(const DeviceConfig &config, Port &com_port)
 const struct DeviceRegister vgaDevice = {
   _T("Vega"),
   _T("Vega"),
-  DeviceRegister::MANAGE,
+  DeviceRegister::MANAGE |
+  DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
   VegaCreateOnPort,
 };

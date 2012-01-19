@@ -328,6 +328,18 @@ struct DeviceRegister {
      * handler/parser will be disabled in this case.
      */
     RAW_GPS_DATA = 0x40,
+
+    /**
+     * Is this driver able to receive settings like MC value,
+     * bugs or ballast from the device?
+     */
+    RECEIVE_SETTINGS = 0x80,
+
+    /**
+     * Is this driver able to send settings like MC value,
+     * bugs or ballast to the device?
+     */
+    SEND_SETTINGS = 0x100,
   };
 
   /**
@@ -350,6 +362,22 @@ struct DeviceRegister {
    * Create an instance of this driver for the given NMEA port.
    */
   Device *(*CreateOnPort)(const DeviceConfig &config, Port &com_port);
+
+  /**
+   * Is this driver able to receive settings like MC value,
+   * bugs or ballast from the device?
+   */
+  bool CanReceiveSettings() const {
+    return (flags & RECEIVE_SETTINGS) != 0;
+  }
+
+  /**
+   * Is this driver able to send settings like MC value,
+   * bugs or ballast to the device?
+   */
+  bool CanSendSettings() const {
+    return (flags & SEND_SETTINGS) != 0;
+  }
 
   /**
    * Is this the NMEA out driver?
