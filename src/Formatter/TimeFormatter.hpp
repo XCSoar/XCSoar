@@ -31,7 +31,7 @@ Copyright_License {
  * @param buffer returns HHMM
  * @param time input seconds
  */
-void TimeToTextHHMMSigned(TCHAR* buffer, int time);
+void FormatSignedTimeHHMM(TCHAR* buffer, int time);
 
 /**
  * sets HHMMSSSmart and SSSmart

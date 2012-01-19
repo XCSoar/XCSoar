@@ -63,7 +63,7 @@ TimeConfigPanel::SetLocalTime(int utc_offset)
 {
   TCHAR temp[20];
   int time(XCSoarInterface::Basic().time);
-  TimeToTextHHMMSigned(temp, TimeLocal(time, utc_offset));
+  FormatSignedTimeHHMM(temp, TimeLocal(time, utc_offset));
 
   WndProperty &wp = GetControl(LocalTime);
 

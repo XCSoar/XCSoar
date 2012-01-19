@@ -49,18 +49,18 @@ TimesStatusPanel::Refresh()
     SetFormValue(form, _T("prpSunset"), _T(""));
   }
 
-  TimeToTextHHMMSigned(Temp, DetectCurrentTime(basic));
+  FormatSignedTimeHHMM(Temp, DetectCurrentTime(basic));
   SetFormValue(form, _T("prpLocalTime"), Temp);
 
   if (positive(flight.flight_time)) {
-    TimeToTextHHMMSigned(Temp, TimeLocal((long)flight.takeoff_time));
+    FormatSignedTimeHHMM(Temp, TimeLocal((long)flight.takeoff_time));
     SetFormValue(form, _T("prpTakeoffTime"), Temp);
   } else {
     SetFormValue(form, _T("prpTakeoffTime"), _T(""));
   }
 
   if (!flight.flying && positive(flight.flight_time)) {
-    TimeToTextHHMMSigned(Temp,
+    FormatSignedTimeHHMM(Temp,
                       TimeLocal((long)(flight.takeoff_time
                                        + flight.flight_time)));
     SetFormValue(form, _T("prpLandingTime"), Temp);
@@ -69,7 +69,7 @@ TimesStatusPanel::Refresh()
   }
 
   if (positive(flight.flight_time)) {
-    TimeToTextHHMMSigned(Temp, (int)flight.flight_time);
+    FormatSignedTimeHHMM(Temp, (int)flight.flight_time);
     SetFormValue(form, _T("prpFlightTime"), Temp);
   } else {
     SetFormValue(form, _T("prpFlightTime"), _T(""));

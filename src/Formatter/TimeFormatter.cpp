@@ -29,7 +29,7 @@ Copyright_License {
 #include <stdlib.h>
 
 void
-TimeToTextHHMMSigned(TCHAR* buffer, int _time)
+FormatSignedTimeHHMM(TCHAR* buffer, int _time)
 {
   bool negative = (_time < 0);
   const BrokenTime time = BrokenTime::FromSecondOfDayChecked(abs(_time));

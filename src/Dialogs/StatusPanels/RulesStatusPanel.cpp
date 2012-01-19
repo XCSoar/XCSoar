@@ -56,7 +56,7 @@ RulesStatusPanel::Refresh()
   AircraftState start_state = protected_task_manager->GetStartState();
 
   if (common_stats.task_started) {
-    TimeToTextHHMMSigned(Temp, (int)TimeLocal((int)start_state.time));
+    FormatSignedTimeHHMM(Temp, (int)TimeLocal((int)start_state.time));
     SetFormValue(form, _T("prpStartTime"), Temp);
   } else {
     SetFormValue(form, _T("prpStartTime"), _T(""));

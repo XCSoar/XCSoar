@@ -386,7 +386,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
         derived.contest_stats.GetResult(1);
 
     TCHAR timetext1[100];
-    TimeToTextHHMMSigned(timetext1, (int)result.time);
+    FormatSignedTimeHHMM(timetext1, (int)result.time);
     TCHAR distance_classic[100];
     Units::FormatUserDistanceSmart(result_classic.distance, distance_classic, 100);
     TCHAR distance_fai[100];
@@ -410,7 +410,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
         derived.contest_stats.GetResult(1);
 
     TCHAR timetext1[100];
-    TimeToTextHHMMSigned(timetext1, (int)result_free.time);
+    FormatSignedTimeHHMM(timetext1, (int)result_free.time);
     TCHAR distance[100];
     Units::FormatUserDistanceSmart(result_free.distance, distance, 100);
     TCHAR distance_fai[100];
@@ -440,7 +440,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
         derived.contest_stats.GetResult(result_index);
 
     TCHAR timetext1[100];
-    TimeToTextHHMMSigned(timetext1, (int)result_olc.time);
+    FormatSignedTimeHHMM(timetext1, (int)result_olc.time);
     TCHAR distance[100];
     Units::FormatUserDistanceSmart(result_olc.distance, distance, 100);
     TCHAR speed[100];
@@ -646,8 +646,8 @@ FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) c
     TCHAR timetext1[100];
     TCHAR timetext2[100];
     if (common.ordered_has_targets) {
-      TimeToTextHHMMSigned(timetext1, (int)common.task_time_remaining);
-      TimeToTextHHMMSigned(timetext2, (int)common.aat_time_remaining);
+      FormatSignedTimeHHMM(timetext1, (int)common.task_time_remaining);
+      FormatSignedTimeHHMM(timetext2, (int)common.aat_time_remaining);
 
       if (Layout::landscape) {
         _stprintf(sTmp,
@@ -670,7 +670,7 @@ FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) c
             Units::GetTaskSpeedName());
       }
     } else {
-      TimeToTextHHMMSigned(timetext1, (int)common.task_time_remaining);
+      FormatSignedTimeHHMM(timetext1, (int)common.task_time_remaining);
       _stprintf(sTmp, _T("%s: %s\r\n%s: %5.0f %s\r\n"),
                 _("Task to go"), timetext1, _("Distance to go"),
                 (double)Units::ToUserDistance(d_remaining),

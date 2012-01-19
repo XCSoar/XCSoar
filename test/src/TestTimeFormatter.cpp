@@ -30,37 +30,37 @@ TestHHMM()
 {
   TCHAR buffer[256];
 
-  TimeToTextHHMMSigned(buffer, 0);
+  FormatSignedTimeHHMM(buffer, 0);
   ok1(StringIsEqual(buffer, _T("00:00")));
 
-  TimeToTextHHMMSigned(buffer, 1);
+  FormatSignedTimeHHMM(buffer, 1);
   ok1(StringIsEqual(buffer, _T("00:00")));
 
-  TimeToTextHHMMSigned(buffer, 59);
+  FormatSignedTimeHHMM(buffer, 59);
   ok1(StringIsEqual(buffer, _T("00:00")));
 
-  TimeToTextHHMMSigned(buffer, 60);
+  FormatSignedTimeHHMM(buffer, 60);
   ok1(StringIsEqual(buffer, _T("00:01")));
 
-  TimeToTextHHMMSigned(buffer, 60 * 5);
+  FormatSignedTimeHHMM(buffer, 60 * 5);
   ok1(StringIsEqual(buffer, _T("00:05")));
 
-  TimeToTextHHMMSigned(buffer, 60 * 59);
+  FormatSignedTimeHHMM(buffer, 60 * 59);
   ok1(StringIsEqual(buffer, _T("00:59")));
 
-  TimeToTextHHMMSigned(buffer, 60 * 60);
+  FormatSignedTimeHHMM(buffer, 60 * 60);
   ok1(StringIsEqual(buffer, _T("01:00")));
 
-  TimeToTextHHMMSigned(buffer, 60 * 60 * 3 + 60 * 25);
+  FormatSignedTimeHHMM(buffer, 60 * 60 * 3 + 60 * 25);
   ok1(StringIsEqual(buffer, _T("03:25")));
 
-  TimeToTextHHMMSigned(buffer, 60 * 60 * 19 + 60 * 47);
+  FormatSignedTimeHHMM(buffer, 60 * 60 * 19 + 60 * 47);
   ok1(StringIsEqual(buffer, _T("19:47")));
 
-  TimeToTextHHMMSigned(buffer, -(60 * 59));
+  FormatSignedTimeHHMM(buffer, -(60 * 59));
   ok1(StringIsEqual(buffer, _T("-00:59")));
 
-  TimeToTextHHMMSigned(buffer, -(60 * 60 * 19 + 60 * 47));
+  FormatSignedTimeHHMM(buffer, -(60 * 60 * 19 + 60 * 47));
   ok1(StringIsEqual(buffer, _T("-19:47")));
 }
 

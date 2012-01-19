@@ -41,17 +41,17 @@ TaskStatusPanel::Refresh()
 
   TCHAR Temp[80];
 
-  TimeToTextHHMMSigned(Temp, (int)protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
+  FormatSignedTimeHHMM(Temp, (int)protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
   ShowFormControl(form, _T("prpTaskTime"), task_stats.has_targets);
   if (task_stats.has_targets)
     SetFormValue(form, _T("prpTaskTime"), Temp);
 
   int ete_time(task_stats.total.time_elapsed +
                task_stats.total.time_remaining);
-  TimeToTextHHMMSigned(Temp, ete_time);
+  FormatSignedTimeHHMM(Temp, ete_time);
   SetFormValue(form, _T("prpETETime"), Temp);
 
-  TimeToTextHHMMSigned(Temp, (int)task_stats.total.time_remaining);
+  FormatSignedTimeHHMM(Temp, (int)task_stats.total.time_remaining);
   SetFormValue(form, _T("prpRemainingTime"), Temp);
 
   if (task_stats.total.planned.IsDefined()) {
