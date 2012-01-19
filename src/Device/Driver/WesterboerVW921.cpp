@@ -213,6 +213,18 @@ WesterboerVW921Device::SentenceZero(const void *_data, size_t length,
   // 5      Byte  Flight status (Bitmask)
   // 6      Byte  Flight status 2 (Bitmask)
   // Bit 7 : External Switch (1=Climbing, 0=Cruise)
+
+  uint8_t flight_status2 = *(data + 6);
+  if ((flight_status2 & (1 << 7)) == 0) {
+    info.switch_state.flight_mode = SwitchInfo::FlightMode::CRUISE;
+    info.switch_state.speed_command = true;
+  } else {
+    info.switch_state.flight_mode = SwitchInfo::FlightMode::CIRCLING;
+    info.switch_state.speed_command = false;
+  }
+
+  info.switch_state_available = true;
+
   // 7      Byte  GPS status (Bitmask)
   // Bit 3: GPS-Status-Flag ("A"-valid position/"V"- NAV receiver warning)
   // 8      Byte  GPS status 2 (Bitmask)
