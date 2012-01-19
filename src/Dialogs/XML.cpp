@@ -670,7 +670,8 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     property->SetOnHelpCallback(help_callback);
 
     // Load the help text
-    property->SetHelpText(StringToStringDflt(node.getAttribute(_T("Help")), _T("")));
+    property->SetHelpText(StringToStringDflt(node.getAttribute(_T("Help")),
+                                             NULL));
 
     // If the control has (at least) one DataField child control
     const XMLNode *data_field_node = node.getChildNode(_T("DataField"));
