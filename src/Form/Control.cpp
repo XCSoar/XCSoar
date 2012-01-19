@@ -63,21 +63,21 @@ WindowControl::SetCaption(const TCHAR *Value)
   }
 }
 
-int
+bool
 WindowControl::OnHelp()
 {
   if (mHelpText && !StringIsEmpty(mHelpText)) {
     dlgHelpShowModal(*(SingleWindow *)GetRootOwner(),
                      gettext(mCaption.c_str()), gettext(mHelpText));
-    return 1;
+    return true;
   }
 
   if (mOnHelpCallback) {
     (mOnHelpCallback)(this);
-    return 1;
+    return true;
   }
 
-  return 0;
+  return false;
 }
 
 bool

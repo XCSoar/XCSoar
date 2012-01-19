@@ -92,7 +92,7 @@ public:
    * function defined by mOnHelpCallback
    * @return
    */
-  int OnHelp();
+  bool OnHelp();
 
   /**
    * Sets the function that should be called when the help button is pressed
