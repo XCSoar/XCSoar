@@ -61,15 +61,15 @@ static RouteConfigPanel *instance;
 void
 RouteConfigPanel::ShowRouteControls(bool show)
 {
-  GetControl(RoutePlannerAllowClimb).set_visible(show);
-  GetControl(RoutePlannerUseCeiling).set_visible(show);
+  SetRowVisible(RoutePlannerAllowClimb, show);
+  SetRowVisible(RoutePlannerUseCeiling, show);
 }
 
 void
 RouteConfigPanel::ShowReachControls(bool show)
 {
-  GetControl(FinalGlideTerrain).set_visible(show);
-  GetControl(ReachPolarMode).set_visible(show);
+  SetRowVisible(FinalGlideTerrain, show);
+  SetRowVisible(ReachPolarMode, show);
 }
 
 static void

@@ -98,7 +98,6 @@ void
 InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const UISettings &settings = CommonInterface::GetUISettings();
-  WndProperty *wp;
 
   RowFormWidget::Prepare(parent, rc);
 
@@ -120,6 +119,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                 szProfileInputFile, _T("*.xci\0"));
 
 #ifndef HAVE_NATIVE_GETTEXT
+  WndProperty *wp;
   wp = AddEnum(_("Language"),
                _("The language options selects translations for English texts to other "
                    "languages. Select English for a native interface or Automatic to localise "
@@ -186,14 +186,13 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
 
   // Expert item
-  wp = AddEnum(_("Text input style"),
-               _("Determines how the user is prompted for text input (filename, teamcode etc.)"),
-               text_input_list, (unsigned)settings.dialog.text_input_style);
+  AddEnum(_("Text input style"),
+          _("Determines how the user is prompted for text input (filename, teamcode etc.)"),
+          text_input_list, (unsigned)settings.dialog.text_input_style);
 
   /* on-screen keyboard doesn't work without a pointing device
-       (mouse or touch screen), hide the option on Altair */
-  wp->set_visible(HasPointer());
-
+     (mouse or touch screen), hide the option on Altair */
+  SetRowVisible(TextInput, HasPointer());
 
 #ifdef HAVE_VIBRATOR
   static gcc_constexpr_data StaticEnumChoice haptic_feedback_list[] = {

@@ -77,9 +77,7 @@ static MapDisplayConfigPanel *instance;
 void
 MapDisplayConfigPanel::UpdateVisibilities()
 {
-  bool northup = GetValueInteger(OrientationCruise) == NORTHUP;
-
-  GetControl(MapShiftBias).set_visible(northup);
+  SetRowVisible(MapShiftBias, GetValueInteger(OrientationCruise) == NORTHUP);
 }
 
 static void

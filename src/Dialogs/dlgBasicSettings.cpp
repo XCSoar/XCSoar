@@ -125,20 +125,15 @@ FlightSetupPanel::SetButtons()
 void
 FlightSetupPanel::SetBallast()
 {
-  WndProperty &ballast_control = GetControl(Ballast);
-  if (glide_polar.IsBallastable()) {
-    ballast_control.show();
+  const bool ballastable = glide_polar.IsBallastable();
+  SetRowVisible(Ballast, ballastable);
+  if (ballastable)
     LoadValue(Ballast, glide_polar.GetBallastLitres());
-  } else
-    ballast_control.hide();
 
-  WndProperty &wing_loading_control = GetControl(WingLoading);
   const fixed wl = glide_polar.GetWingLoading();
-  if (positive(wl)) {
-    wing_loading_control.show();
+  SetRowVisible(WingLoading, positive(wl));
+  if (positive(wl))
     LoadValue(WingLoading, wl);
-  } else
-    wing_loading_control.hide();
 }
 
 void
@@ -187,7 +182,7 @@ FlightSetupPanel::ShowAltitude(fixed altitude)
     LoadValue(Altitude, altitude, UnitGroup::ALTITUDE);
   }
 
-  GetControl(Altitude).show();
+  ShowRow(Altitude);
 }
 
 void
@@ -202,7 +197,7 @@ FlightSetupPanel::RefreshAltitudeControl()
   else if (basic.baro_altitude_available)
     ShowAltitude(basic.baro_altitude);
   else
-    GetControl(Altitude).hide();
+    HideRow(Altitude);
 }
 
 void

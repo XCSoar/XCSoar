@@ -135,9 +135,9 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-  WndProperty *wp = AddEnum(_("Display orientation"), _T(""),
-                            display_orientation_list, Profile::GetDisplayOrientation());
-  wp->set_visible(Display::RotateSupported());
+  AddEnum(_("Display orientation"), _T(""),
+          display_orientation_list, Profile::GetDisplayOrientation());
+  SetRowVisible(DisplayOrientation, Display::RotateSupported());
 
   AddEnum(_("InfoBox geometry"),
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),

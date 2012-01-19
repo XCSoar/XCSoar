@@ -63,9 +63,9 @@ static SymbolsConfigPanel *instance;
 void
 SymbolsConfigPanel::ShowTrailControls(bool show)
 {
-  GetControl(TrailDrift).set_visible(show);
-  GetControl(SnailType).set_visible(show);
-  GetControl(SnailWidthScale).set_visible(show);
+  SetRowVisible(TrailDrift, show);
+  SetRowVisible(SnailType, show);
+  SetRowVisible(SnailWidthScale, show);
 }
 
 static void

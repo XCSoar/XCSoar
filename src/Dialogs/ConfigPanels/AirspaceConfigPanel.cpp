@@ -101,15 +101,15 @@ OnAirspaceModeClicked(gcc_unused WndButton &button)
 void
 AirspaceConfigPanel::ShowDisplayControls(AirspaceDisplayMode_t mode)
 {
-  GetControl(ClipAltitude).set_visible(mode == CLIP);
-  GetControl(AltWarningMargin).set_visible(mode == AUTO || mode == ALLBELOW);
+  SetRowVisible(ClipAltitude, mode == CLIP);
+  SetRowVisible(AltWarningMargin, mode == AUTO || mode == ALLBELOW);
 }
 
 void
 AirspaceConfigPanel::ShowWarningControls(bool visible)
 {
-  GetControl(WarningTime).set_visible(visible);
-  GetControl(AcknowledgeTime).set_visible(visible);
+  SetRowVisible(WarningTime, visible);
+  SetRowVisible(AcknowledgeTime, visible);
 }
 
 static void

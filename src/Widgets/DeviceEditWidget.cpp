@@ -467,17 +467,17 @@ DeviceEditWidget::UpdateVisibilities()
 {
   const DeviceConfig::PortType type = GetPortType(GetDataField(Port));
 
-  GetControl(BaudRate).set_visible(DeviceConfig::UsesSpeed(type));
-  GetControl(BulkBaudRate).set_visible(DeviceConfig::UsesSpeed(type) &&
-                                       DeviceConfig::UsesDriver(type) &&
-                                       SupportsBulkBaudRate(GetDataField(Driver)));
-  GetControl(TCPPort).set_visible(DeviceConfig::UsesTCPPort(type));
-  GetControl(Driver).set_visible(DeviceConfig::UsesDriver(type));
-  GetControl(SyncFromDevice).set_visible(DeviceConfig::UsesDriver(type) &&
-                                         CanReceiveSettings(GetDataField(Driver)));
-  GetControl(SyncToDevice).set_visible(DeviceConfig::UsesDriver(type) &&
-                                       CanSendSettings(GetDataField(Driver)));
-  GetControl(IgnoreCheckSum).set_visible(DeviceConfig::UsesDriver(type));
+  SetRowVisible(BaudRate, DeviceConfig::UsesSpeed(type));
+  SetRowVisible(BulkBaudRate, DeviceConfig::UsesSpeed(type) &&
+                DeviceConfig::UsesDriver(type) &&
+                SupportsBulkBaudRate(GetDataField(Driver)));
+  SetRowVisible(TCPPort, DeviceConfig::UsesTCPPort(type));
+  SetRowVisible(Driver, DeviceConfig::UsesDriver(type));
+  SetRowVisible(SyncFromDevice, DeviceConfig::UsesDriver(type) &&
+                CanReceiveSettings(GetDataField(Driver)));
+  SetRowVisible(SyncToDevice, DeviceConfig::UsesDriver(type) &&
+                CanSendSettings(GetDataField(Driver)));
+  SetRowVisible(IgnoreCheckSum, DeviceConfig::UsesDriver(type));
 }
 
 static void

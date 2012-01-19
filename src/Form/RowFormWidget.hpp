@@ -58,6 +58,12 @@ class RowFormWidget : public WindowWidget {
     Type type;
 
     /**
+     * Shall this row be visible?  The "expert" flag overrides it in
+     * global "non-expert" mode.
+     */
+    bool visible;
+
+    /**
      * If true, then the row is only visible in "expert" mode.
      */
     bool expert;
@@ -67,7 +73,7 @@ class RowFormWidget : public WindowWidget {
     Row() = default;
 
     Row(Type _type, Window *_window)
-      :type(_type), expert(false), window(_window) {
+      :type(_type), visible(true), expert(false), window(_window) {
       assert(_window != NULL);
     }
 
@@ -202,6 +208,16 @@ public:
   gcc_pure
   const Window &GetRow(unsigned i) const {
     return rows[i].GetWindow();
+  }
+
+  void SetRowVisible(unsigned i, bool visible);
+
+  void ShowRow(unsigned i) {
+    SetRowVisible(i, true);
+  }
+
+  void HideRow(unsigned i) {
+    SetRowVisible(i, false);
   }
 
   /**

@@ -115,6 +115,20 @@ RowFormWidget::~RowFormWidget()
 }
 
 void
+RowFormWidget::SetRowVisible(unsigned i, bool visible)
+{
+  Row &row = rows[i];
+  if (visible == row.visible)
+    return;
+
+  row.visible = visible;
+  if (!visible)
+    row.GetWindow().hide();
+  else if (!row.expert || UIGlobals::GetDialogSettings().expert)
+    row.GetWindow().show();
+}
+
+void
 RowFormWidget::SetExpertRow(unsigned i)
 {
   Row &row = rows[i];
