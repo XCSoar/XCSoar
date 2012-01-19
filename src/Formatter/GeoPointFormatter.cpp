@@ -32,13 +32,13 @@ Copyright_License {
 #include <stdlib.h>
 
 bool
-Units::LongitudeToString(Angle longitude, TCHAR *buffer, gcc_unused size_t size)
+Units::LongitudeToString(Angle longitude, TCHAR *buffer, size_t size)
 {
   static gcc_constexpr_data TCHAR EW[] = _T("WEE");
   int dd, mm, ss;
 
   // Calculate Longitude sign
-  int sign = longitude.Sign()+1;
+  int sign = longitude.Sign() + 1;
   double mlong(longitude.AbsoluteDegrees());
 
   switch (current.coordinate_format) {
@@ -60,7 +60,7 @@ Units::LongitudeToString(Angle longitude, TCHAR *buffer, gcc_unused size_t size)
       mm -= 60;
     }
     // Save the string to the buffer
-    _stprintf(buffer, _T("%03d")_T(DEG)_T("%02d'%02d\" %c"),
+    _sntprintf(buffer, size, _T("%03d")_T(DEG)_T("%02d'%02d\" %c"),
               dd, mm, ss, EW[sign]);
     break;
 
@@ -73,7 +73,7 @@ Units::LongitudeToString(Angle longitude, TCHAR *buffer, gcc_unused size_t size)
     // Calculate seconds
     mlong = (mlong - mm) * 60.0;
     // Save the string to the buffer
-    _stprintf(buffer, _T("%03d")_T(DEG)_T("%02d'%05.2f\" %c"),
+    _sntprintf(buffer, size, _T("%03d")_T(DEG)_T("%02d'%05.2f\" %c"),
               dd, mm, mlong, EW[sign]);
     break;
 
@@ -83,12 +83,12 @@ Units::LongitudeToString(Angle longitude, TCHAR *buffer, gcc_unused size_t size)
     // Calculate minutes
     mlong = (mlong - dd) * 60.0;
     // Save the string to the buffer
-    _stprintf(buffer, _T("%03d")_T(DEG)_T("%06.3f' %c"), dd, mlong, EW[sign]);
+    _sntprintf(buffer, size, _T("%03d")_T(DEG)_T("%06.3f' %c"), dd, mlong, EW[sign]);
     break;
 
   case CoordinateFormat::DD_DDDD:
     // Save the string to the buffer
-    _stprintf(buffer, _T("%08.4f %c")_T(DEG), mlong, EW[sign]);
+    _sntprintf(buffer, size, _T("%08.4f %c")_T(DEG), mlong, EW[sign]);
     break;
 
   default:
@@ -99,13 +99,13 @@ Units::LongitudeToString(Angle longitude, TCHAR *buffer, gcc_unused size_t size)
 }
 
 bool
-Units::LatitudeToString(Angle latitude, TCHAR *buffer, gcc_unused size_t size)
+Units::LatitudeToString(Angle latitude, TCHAR *buffer, size_t size)
 {
   static gcc_constexpr_data TCHAR EW[] = _T("SNN");
   int dd, mm, ss;
 
   // Calculate Latitude sign
-  int sign = latitude.Sign()+1;
+  int sign = latitude.Sign() + 1;
   double mlat(latitude.AbsoluteDegrees());
 
   switch (current.coordinate_format) {
@@ -127,7 +127,7 @@ Units::LatitudeToString(Angle latitude, TCHAR *buffer, gcc_unused size_t size)
       mm -= 60;
     }
     // Save the string to the buffer
-    _stprintf(buffer, _T("%02d")_T(DEG)_T("%02d'%02d\" %c"),
+    _sntprintf(buffer, size, _T("%02d")_T(DEG)_T("%02d'%02d\" %c"),
               dd, mm, ss, EW[sign]);
     break;
 
@@ -140,7 +140,7 @@ Units::LatitudeToString(Angle latitude, TCHAR *buffer, gcc_unused size_t size)
     // Calculate seconds
     mlat = (mlat - mm) * 60.0;
     // Save the string to the buffer
-    _stprintf(buffer, _T("%02d")_T(DEG)_T("%02d'%05.2f\" %c"),
+    _sntprintf(buffer, size, _T("%02d")_T(DEG)_T("%02d'%05.2f\" %c"),
               dd, mm, mlat, EW[sign]);
     break;
 
@@ -150,12 +150,12 @@ Units::LatitudeToString(Angle latitude, TCHAR *buffer, gcc_unused size_t size)
     // Calculate minutes
     mlat = (mlat - dd) * 60.0;
     // Save the string to the buffer
-    _stprintf(buffer, _T("%02d")_T(DEG)_T("%06.3f' %c"), dd, mlat, EW[sign]);
+    _sntprintf(buffer, size, _T("%02d")_T(DEG)_T("%06.3f' %c"), dd, mlat, EW[sign]);
     break;
 
   case CoordinateFormat::DD_DDDD:
     // Save the string to the buffer
-    _stprintf(buffer, _T("%07.4f %c")_T(DEG), mlat, EW[sign]);
+    _sntprintf(buffer, size, _T("%07.4f %c")_T(DEG), mlat, EW[sign]);
     break;
 
   default:
