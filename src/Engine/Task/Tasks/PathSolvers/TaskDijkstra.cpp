@@ -33,9 +33,11 @@ TaskDijkstra::TaskDijkstra(OrderedTask& _task, bool _is_min):
 bool
 TaskDijkstra::RefreshTask()
 {
-  SetStageCount(task.TaskSize());
-  if (num_stages < 2)
+  const unsigned task_size = task.TaskSize();
+  if (task_size < 2 || task_size > MAX_STAGES)
     return false;
+
+  SetStageCount(task_size);
 
   active_stage = task.GetActiveTaskPointIndex();
 
