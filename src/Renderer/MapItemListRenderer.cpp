@@ -105,10 +105,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 }
 
 void
-MapItemListRenderer::Draw(
-    Canvas &canvas, const PixelRect rc, const AirspaceMapItem &item,
-    const AirspaceLook &look,
-    const AirspaceRendererSettings &renderer_settings)
+MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                          const AirspaceMapItem &item, const AirspaceLook &look,
+                          const AirspaceRendererSettings &renderer_settings)
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
@@ -319,11 +318,10 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 }
 
 void
-MapItemListRenderer::Draw(
-    Canvas &canvas, const PixelRect rc, const MapItem &item,
-    const MapLook &look,
-    const TrafficLook &traffic_look,
-    const MapSettings &settings)
+MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                          const MapItem &item, const MapLook &look,
+                          const TrafficLook &traffic_look,
+                          const MapSettings &settings)
 {
   switch (item.type) {
   case MapItem::SELF:
