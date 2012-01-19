@@ -102,7 +102,7 @@ Units::Store::EqualsPresetUnits(const UnitSetting &config)
   unsigned len = Count();
   for (unsigned i = 0; i < len; i++) {
     // Search for the units, but ignore the coord.format
-    if (config.CompareUnitsOnly(Presets[i].Units)) {
+    if (config == Presets[i].Units) {
       return i+1;
       break;
     }

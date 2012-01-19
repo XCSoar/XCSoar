@@ -72,7 +72,7 @@ UnitSetting::GetByGroup(UnitGroup group) const
 }
 
 bool
-UnitSetting::CompareUnitsOnly(const UnitSetting &right) const
+UnitSetting::operator==(const UnitSetting &right) const
 {
   return (distance_unit == right.distance_unit &&
       altitude_unit == right.altitude_unit &&
