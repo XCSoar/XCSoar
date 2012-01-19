@@ -178,13 +178,13 @@ InfoBoxContentNextETE::Update(InfoBoxData &data)
 
   assert(!negative(task_stats.current_leg.time_remaining));
 
-  TCHAR HHMMSSsmart[32];
-  TCHAR SSsmart[32];
+  TCHAR value[32];
+  TCHAR comment[32];
   const int dd = (int)task_stats.current_leg.time_remaining;
-  TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+  TimeToTextSmart(value, comment, dd);
 
-  data.SetValue(HHMMSSsmart);
-  data.SetComment(SSsmart);
+  data.SetValue(value);
+  data.SetComment(comment);
 }
 
 void
@@ -326,13 +326,13 @@ InfoBoxContentFinalETE::Update(InfoBoxData &data)
 
   assert(!negative(task_stats.total.time_remaining));
 
-  TCHAR HHMMSSsmart[32];
-  TCHAR SSsmart[32];
+  TCHAR value[32];
+  TCHAR comment[32];
   const int dd = abs((int)task_stats.total.time_remaining);
-  TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+  TimeToTextSmart(value, comment, dd);
 
-  data.SetValue(HHMMSSsmart);
-  data.SetComment(SSsmart);
+  data.SetValue(value);
+  data.SetComment(comment);
 }
 
 void
@@ -553,16 +553,16 @@ InfoBoxContentTaskAATime::Update(InfoBoxData &data)
     return;
   }
 
-  TCHAR HHMMSSsmart[32];
-  TCHAR SSsmart[32];
-  TimeToTextSmart(HHMMSSsmart, SSsmart,
+  TCHAR value[32];
+  TCHAR comment[32];
+  TimeToTextSmart(value, comment,
                          abs((int) common_stats.aat_time_remaining));
 
   data.UnsafeFormatValue(negative(common_stats.aat_time_remaining) ?
-                            _T("-%s") : _T("%s"), HHMMSSsmart);
+                            _T("-%s") : _T("%s"), value);
   data.SetValueColor(negative(common_stats.aat_time_remaining) ? 1 : 0);
 
-  data.SetComment(SSsmart);
+  data.SetComment(comment);
 }
 
 void
@@ -582,14 +582,14 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxData &data)
   fixed diff = task_stats.total.time_remaining -
     common_stats.aat_time_remaining;
 
-  TCHAR HHMMSSsmart[32];
-  TCHAR SSsmart[32];
+  TCHAR value[32];
+  TCHAR comment[32];
   const int dd = abs((int)diff);
-  TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+  TimeToTextSmart(value, comment, dd);
 
-  data.UnsafeFormatValue(negative(diff) ? _T("-%s") : _T("%s"), HHMMSSsmart);
+  data.UnsafeFormatValue(negative(diff) ? _T("-%s") : _T("%s"), value);
 
-  data.SetComment(SSsmart);
+  data.SetComment(comment);
 
   // Set Color (red/blue/black)
   data.SetValueColor(negative(diff) ? 1 :
@@ -724,11 +724,11 @@ InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxData &data)
   const int dd = (int)(XCSoarInterface::Basic().time -
       common_stats.TimeUnderStartMaxHeight);
 
-  TCHAR HHMMSSsmart[32];
-  TCHAR SSsmart[32];
-  TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+  TCHAR value[32];
+  TCHAR comment[32];
+  TimeToTextSmart(value, comment, dd);
 
-  data.SetValue(HHMMSSsmart);
+  data.SetValue(value);
   data.SetComment(_("Time Below"));
 }
 
@@ -754,13 +754,13 @@ InfoBoxContentNextETEVMG::Update(InfoBoxData &data)
     return;
   }
 
-  TCHAR HHMMSSsmart[32];
-  TCHAR SSsmart[32];
+  TCHAR value[32];
+  TCHAR comment[32];
   const int dd = (int)(d/v);
-  TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+  TimeToTextSmart(value, comment, dd);
 
-  data.SetValue(HHMMSSsmart);
-  data.SetComment(SSsmart);
+  data.SetValue(value);
+  data.SetComment(comment);
 }
 
 void
@@ -785,11 +785,11 @@ InfoBoxContentFinalETEVMG::Update(InfoBoxData &data)
     return;
   }
 
-  TCHAR HHMMSSsmart[32];
-  TCHAR SSsmart[32];
+  TCHAR value[32];
+  TCHAR comment[32];
   const int dd = (int)(d/v);
-  TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+  TimeToTextSmart(value, comment, dd);
 
-  data.SetValue(HHMMSSsmart);
-  data.SetComment(SSsmart);
+  data.SetValue(value);
+  data.SetComment(comment);
 }
