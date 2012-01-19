@@ -208,6 +208,8 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
       config.path = _T("COM3:");
     else if (IsAltair() && n == 2)
       config.path = _T("COM2:");
+    else
+      config.port_type = DeviceConfig::PortType::DISABLED;
   }
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("BaudRate"));
