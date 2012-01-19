@@ -112,7 +112,7 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
 
-  AddEnum(_("Route mode"), _T(""), route_mode_list,
+  AddEnum(_("Route mode"), NULL, route_mode_list,
           (unsigned)route_planner.mode, OnRouteMode);
 
   AddBoolean(_("Route climb"),
@@ -153,7 +153,7 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
 
-  AddEnum(_("Reach display"), _T(""), final_glide_terrain_list,
+  AddEnum(_("Reach display"), NULL, final_glide_terrain_list,
           settings_computer.final_glide_terrain);
 
   static gcc_constexpr_data StaticEnumChoice reach_polar_list[] = {

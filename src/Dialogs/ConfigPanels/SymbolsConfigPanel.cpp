@@ -131,7 +131,7 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("FLARM traffic"), _("This enables the display of FLARM traffic on the map window."),
              settings_map.show_flarm_on_map);
 
-  AddEnum(_("Trail length"), _T(""), trail_length_list, settings_map.trail_length, OnTrailLength);
+  AddEnum(_("Trail length"), NULL, trail_length_list, settings_map.trail_length, OnTrailLength);
   SetExpertRow(Trail);
 
   AddBoolean(_("Trail drift"),
@@ -140,7 +140,7 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              settings_map.trail_drift_enabled);
   SetExpertRow(TrailDrift);
 
-  AddEnum(_("Trail type"), _T(""), trail_type_list, (int)settings_map.snail_type);
+  AddEnum(_("Trail type"), NULL, trail_type_list, (int)settings_map.snail_type);
   SetExpertRow(SnailType);
 
   AddBoolean(_("Trail scaled"),
@@ -155,7 +155,7 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              settings_map.detour_cost_markers_enabled);
   SetExpertRow(DetourCostMarker);
 
-  AddEnum(_("Aircraft symbol"), _T(""), aircraft_symbol_list, settings_map.aircraft_symbol);
+  AddEnum(_("Aircraft symbol"), NULL, aircraft_symbol_list, settings_map.aircraft_symbol);
   SetExpertRow(AircraftSymbol);
 
   AddEnum(_("Wind arrow"), _("Determines the way the wind arrow is drawn on the map."),

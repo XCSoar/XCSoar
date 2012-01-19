@@ -94,7 +94,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)HeightReferenceType::MSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level).") },
     { 0 }
   };
-  AddEnum(_("Start height ref."), _T(""), start_max_height_ref_list,
+  AddEnum(_("Start height ref."), NULL, start_max_height_ref_list,
           (unsigned)task_behaviour.ordered_defaults.start_max_height_ref);
   SetExpertRow(StartHeightRef);
 
@@ -113,7 +113,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)HeightReferenceType::MSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level).") },
     { 0 }
   };
-  AddEnum(_("Finish height ref."), _T(""), finish_min_height_ref_list,
+  AddEnum(_("Finish height ref."), NULL, finish_min_height_ref_list,
           (unsigned)task_behaviour.ordered_defaults.finish_min_height_ref);
   SetExpertRow(FinishHeightRef);
 

@@ -136,7 +136,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   instance = this;
 
   static const TCHAR * preset_help = N_("Load a set of units.");
-  WndProperty *wp = AddEnum(_("Preset"), _T(""));
+  WndProperty *wp = AddEnum(_("Preset"), NULL);
   DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
   df.EnableItemHelp(true);
 
@@ -159,7 +159,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)Unit::KILOMETER_PER_HOUR,     _T("km/h"), units_speed_help },
     { 0 }
   };
-  AddEnum(_("Aircraft/Wind speed"), _T(""), units_speed_list, (unsigned int)config.speed_unit, OnFieldData);
+  AddEnum(_("Aircraft/Wind speed"), NULL, units_speed_list, (unsigned int)config.speed_unit, OnFieldData);
 
   static const TCHAR *units_distance_help = _("Units used for horizontal distances e.g. "
       "range to waypoint, distance to go.");
@@ -169,7 +169,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)Unit::KILOMETER,     _T("km"), units_distance_help },
     { 0 }
   };
-  AddEnum(_("Distance"), _T(""), units_distance_list,
+  AddEnum(_("Distance"), NULL, units_distance_list,
           (unsigned)config.distance_unit, OnFieldData);
 
   static const TCHAR *units_lift_help = _("Units used for vertical speeds (variometer).");
@@ -179,7 +179,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)Unit::FEET_PER_MINUTE,  _T("ft/min"), units_lift_help },
     { 0 }
   };
-  AddEnum(_("Lift"), _T(""), units_lift_list,
+  AddEnum(_("Lift"), NULL, units_lift_list,
           (unsigned)config.vertical_speed_unit, OnFieldData);
 
   static const TCHAR *units_altitude_help = _("Units used for altitude and heights.");
@@ -188,7 +188,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)Unit::METER, N_("meter"), units_altitude_help },
     { 0 }
   };
-  AddEnum(_("Altitude"), _T(""), units_altitude_list,
+  AddEnum(_("Altitude"), NULL, units_altitude_list,
           (unsigned)config.altitude_unit, OnFieldData);
 
   static const TCHAR *units_temperature_help = _("Units used for temperature.");
@@ -197,7 +197,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)Unit::DEGREES_FAHRENHEIT, _T(DEG "F"), units_temperature_help },
     { 0 }
   };
-  AddEnum(_("Temperature"), _T(""), units_temperature_list,
+  AddEnum(_("Temperature"), NULL, units_temperature_list,
           (unsigned)config.temperature_unit, OnFieldData);
 
   static const TCHAR *units_taskspeed_help = _("Units used for task speeds.");
@@ -207,7 +207,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)Unit::KILOMETER_PER_HOUR,     _T("km/h"), units_taskspeed_help },
     { 0 }
   };
-  AddEnum(_("Task speed"), _T(""), units_taskspeed_list,
+  AddEnum(_("Task speed"), NULL, units_taskspeed_list,
           (unsigned)config.task_speed_unit, OnFieldData);
 
   static const TCHAR *units_pressure_help = _("Units used for pressures.");
@@ -217,7 +217,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)Unit::INCH_MERCURY, _T("inHg"), units_pressure_help },
     { 0 }
   };
-  AddEnum(_("Pressure"), _T(""), pressure_labels_list,
+  AddEnum(_("Pressure"), NULL, pressure_labels_list,
           (unsigned)config.pressure_unit, OnFieldData);
 
   AddSpacer();
@@ -231,7 +231,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)CoordinateFormat::UTM, _T("UTM"), units_lat_lon_help },
     { 0 }
   };
-  AddEnum(_("Lat./Lon."), _T(""), units_lat_lon_list,
+  AddEnum(_("Lat./Lon."), NULL, units_lat_lon_list,
           (unsigned)coordinate_format);
 }
 

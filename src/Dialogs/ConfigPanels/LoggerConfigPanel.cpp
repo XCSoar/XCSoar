@@ -85,14 +85,14 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   TCHAR tmp_text[100];
   Profile::Get(szProfilePilotName, tmp_text, 100);
-  AddText(_("Pilot name"), _T(""), tmp_text);
+  AddText(_("Pilot name"), NULL, tmp_text);
 
-  AddText(_("Aircraft type"), _T(""), plane.type);
-  AddText(_("Aircraft reg."), _T(""), plane.registration);
-  AddText(_("Competition ID"), _T(""), plane.competition_id);
+  AddText(_("Aircraft type"), NULL, plane.type);
+  AddText(_("Aircraft reg."), NULL, plane.registration);
+  AddText(_("Competition ID"), NULL, plane.competition_id);
 
   Profile::Get(szProfileLoggerID, tmp_text, 100);
-  AddText(_("Logger ID"), _T(""), tmp_text);
+  AddText(_("Logger ID"), NULL, tmp_text);
 
   AddBoolean(_("Short file name"),
              _("This determines whether the logger uses the short IGC file name or the "

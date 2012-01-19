@@ -135,7 +135,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-  AddEnum(_("Display orientation"), _T(""),
+  AddEnum(_("Display orientation"), NULL,
           display_orientation_list, Profile::GetDisplayOrientation());
   SetRowVisible(DisplayOrientation, Display::RotateSupported());
 
@@ -143,18 +143,18 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, InfoBoxLayout::InfoBoxGeometry);
 
-  AddEnum(_("FLARM display"), _T(""),
+  AddEnum(_("FLARM display"), NULL,
           flarm_display_location_list, ui_settings.flarm_location);
   SetExpertRow(AppFlarmLocation);
 
-  AddEnum(_("Tab dialog style"), _T(""),
+  AddEnum(_("Tab dialog style"), NULL,
           tabdialog_style_list, (unsigned)ui_settings.dialog.tab_style);
 
-  AddEnum(_("Message display"), _T(""),
+  AddEnum(_("Message display"), NULL,
           popup_msg_position_list, ui_settings.popup_message_position);
   SetExpertRow(AppStatusMessageAlignment);
 
-  AddEnum(_("Dialog size"), _T(""),
+  AddEnum(_("Dialog size"), NULL,
           dialog_style_list, ui_settings.dialog.dialog_style);
   SetExpertRow(DialogStyle);
 
@@ -168,7 +168,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              ui_settings.info_boxes.use_colors);
   SetExpertRow(AppInfoBoxColors);
 
-  AddEnum(_("InfoBox border"), _T(""), infobox_border_list, ui_settings.info_boxes.border_style);
+  AddEnum(_("InfoBox border"), NULL, infobox_border_list, ui_settings.info_boxes.border_style);
   SetExpertRow(AppInfoBoxBorder);
 }
 
