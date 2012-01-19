@@ -38,7 +38,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "Util/Macros.hpp"
 #include "Units/Units.hpp"
-#include "Units/AngleFormatter.hpp"
+#include "Formatter/AngleFormatter.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

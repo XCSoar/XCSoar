@@ -25,7 +25,7 @@ Copyright_License {
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "LocalTime.hpp"
-#include "Units/TimeFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
 
 #include <tchar.h>
 #include <stdio.h>

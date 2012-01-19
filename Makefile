@@ -554,13 +554,13 @@ XCSOAR_SOURCES := \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/UnitsGlue.cpp \
 	$(SRC)/Units/UnitsStore.cpp \
-	$(SRC)/Units/GeoPointFormatter.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
-	$(SRC)/Units/TimeFormatter.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/Settings.cpp \
-	$(SRC)/Units/AngleFormatter.cpp \
+	$(SRC)/Formatter/AngleFormatter.cpp \
 	$(SRC)/FLARM/FlarmDetails.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsSettings.cpp \

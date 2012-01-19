@@ -48,7 +48,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Units/Units.hpp"
-#include "Units/AngleFormatter.hpp"
+#include "Formatter/AngleFormatter.hpp"
 
 #include <algorithm>
 #include <list>

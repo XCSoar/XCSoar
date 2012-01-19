@@ -33,7 +33,7 @@ Copyright_License {
 #include "Engine/Util/Gradient.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Units/TimeFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "Language/Language.hpp"
 
 #include <tchar.h>

@@ -43,7 +43,7 @@
 #include "MainWindow.hpp"
 #include "Components.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Units/AngleFormatter.hpp"
+#include "Formatter/AngleFormatter.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"

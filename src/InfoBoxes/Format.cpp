@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Data.hpp"
-#include "Units/AngleFormatter.hpp"
+#include "Formatter/AngleFormatter.hpp"
 #include "Math/Angle.hpp"
 
 void

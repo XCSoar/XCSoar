@@ -52,9 +52,9 @@ Copyright_License {
 #include "Compatibility/path.h"
 #include "Input/InputEvents.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Units/GeoPointFormatter.hpp"
+#include "Formatter/GeoPointFormatter.hpp"
 #include "Units/Units.hpp"
-#include "Units/AngleFormatter.hpp"
+#include "Formatter/AngleFormatter.hpp"
 #include "Util/Macros.hpp"
 
 #ifdef ANDROID

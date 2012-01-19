@@ -796,7 +796,7 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Weather/NOAAStore.cpp \
 	$(SRC)/Weather/METARParser.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
-	$(SRC)/Units/GeoPointFormatter.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
@@ -1491,7 +1491,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Units/GeoPointFormatter.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFile.cpp \
@@ -1750,9 +1750,9 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Units/GeoPointFormatter.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
-	$(SRC)/Units/TimeFormatter.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Screen/Layout.cpp \
@@ -1878,7 +1878,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Units/GeoPointFormatter.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
@@ -1954,7 +1954,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
-	$(SRC)/Units/GeoPointFormatter.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Waypoint/WaypointGlue.cpp \

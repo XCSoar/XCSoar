@@ -24,7 +24,7 @@ Copyright_License {
 #include "TimesStatusPanel.hpp"
 #include "Interface.hpp"
 #include "Form/Util.hpp"
-#include "Units/TimeFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "LocalTime.hpp"
 #include "Math/SunEphemeris.hpp"
 

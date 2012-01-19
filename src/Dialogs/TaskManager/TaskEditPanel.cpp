@@ -39,7 +39,7 @@ Copyright_License {
 #include "Form/TabBar.hpp"
 #include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Units/AngleFormatter.hpp"
+#include "Formatter/AngleFormatter.hpp"
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
 #include "Task/Tasks/OrderedTask.hpp"

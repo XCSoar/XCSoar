@@ -44,7 +44,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Units/AngleFormatter.hpp"
+#include "Formatter/AngleFormatter.hpp"
 #include "Util/Macros.hpp"
 
 static const MapLook *look;

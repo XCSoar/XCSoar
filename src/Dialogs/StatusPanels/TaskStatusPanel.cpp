@@ -26,7 +26,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Units/TimeFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 

@@ -25,7 +25,7 @@ Copyright_License {
 #include "DataField/Float.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
-#include "Units/TimeFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "LocalTime.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"

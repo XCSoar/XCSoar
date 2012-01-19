@@ -25,7 +25,7 @@ Copyright_License {
 #include "InfoBoxes/Data.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Units/TimeFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
