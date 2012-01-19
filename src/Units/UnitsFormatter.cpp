@@ -33,7 +33,7 @@ Copyright_License {
 #include <stdlib.h>
 
 static void
-FormatInteger(TCHAR *buffer, size_t size,
+FormatInteger(TCHAR *buffer,
               const fixed value, const Unit unit, bool include_unit,
               bool include_sign)
 {
@@ -41,24 +41,24 @@ FormatInteger(TCHAR *buffer, size_t size,
   const int ivalue = iround(uvalue);
 
   if (include_unit)
-    _sntprintf(buffer, size, include_sign ? _T("%+d %s") : _T("%d %s"), ivalue,
+    _stprintf(buffer, include_sign ? _T("%+d %s") : _T("%d %s"), ivalue,
                Units::GetUnitName(unit));
   else
-    _sntprintf(buffer, size, include_sign ? _T("%+d") : _T("%d"), ivalue);
+    _stprintf(buffer, include_sign ? _T("%+d") : _T("%d"), ivalue);
 }
 
 void
-Units::FormatAltitude(TCHAR *buffer, size_t size, fixed value, Unit unit,
+Units::FormatAltitude(TCHAR *buffer, fixed value, Unit unit,
                       bool include_unit)
 {
-  FormatInteger(buffer, size, value, unit, include_unit, false);
+  FormatInteger(buffer, value, unit, include_unit, false);
 }
 
 void
-Units::FormatUserAltitude(fixed value, TCHAR *buffer, size_t size,
+Units::FormatUserAltitude(fixed value, TCHAR *buffer,
                           bool include_unit)
 {
-  FormatAltitude(buffer, size, value, current.altitude_unit, include_unit);
+  FormatAltitude(buffer, value, current.altitude_unit, include_unit);
 }
 
 gcc_const
@@ -78,39 +78,39 @@ GetAlternateAltitudeUnit(Unit unit)
 }
 
 void
-Units::FormatAlternateUserAltitude(fixed value, TCHAR *buffer, size_t size,
+Units::FormatAlternateUserAltitude(fixed value, TCHAR *buffer,
                                    bool include_unit)
 {
-  FormatAltitude(buffer, size, value,
-                 GetAlternateAltitudeUnit(current.altitude_unit), include_unit);
+  FormatAltitude(buffer, value, GetAlternateAltitudeUnit(current.altitude_unit),
+                 include_unit);
 }
 
 void
-Units::FormatRelativeAltitude(TCHAR *buffer, size_t size, fixed value,
+Units::FormatRelativeAltitude(TCHAR *buffer, fixed value,
                               Unit unit, bool include_unit)
 {
-  FormatInteger(buffer, size, value, unit, include_unit, true);
+  FormatInteger(buffer, value, unit, include_unit, true);
 }
 
 void
-Units::FormatRelativeUserAltitude(fixed value, TCHAR *buffer, size_t size,
+Units::FormatRelativeUserAltitude(fixed value, TCHAR *buffer,
                                   bool include_unit)
 {
-  FormatRelativeAltitude(buffer, size, value, current.altitude_unit,
+  FormatRelativeAltitude(buffer, value, current.altitude_unit,
                          include_unit);
 }
 
 void
-Units::FormatDistance(TCHAR *buffer, size_t size, fixed value, Unit unit,
+Units::FormatDistance(TCHAR *buffer, fixed value, Unit unit,
                       bool include_unit, int precision)
 {
   value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
-    _sntprintf(buffer, size, _T("%.*f %s"), precision, (double)value,
+    _stprintf(buffer, _T("%.*f %s"), precision, (double)value,
                Units::GetUnitName(unit));
   else
-    _sntprintf(buffer, size, _T("%.*f"), precision, (double)value);
+    _stprintf(buffer, _T("%.*f"), precision, (double)value);
 }
 
 gcc_const
@@ -131,26 +131,26 @@ GetSmallerDistanceUnit(Unit unit)
 }
 
 Unit
-Units::FormatSmallDistance(TCHAR *buffer, size_t size, fixed value, Unit unit,
+Units::FormatSmallDistance(TCHAR *buffer, fixed value, Unit unit,
                            bool include_unit, int precision)
 {
   unit = GetSmallerDistanceUnit(unit);
   value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
-    _sntprintf(buffer, size, _T("%.*f %s"), precision, (double)value,
+    _stprintf(buffer, _T("%.*f %s"), precision, (double)value,
                Units::GetUnitName(unit));
   else
-    _sntprintf(buffer, size, _T("%.*f"), precision, (double)value);
+    _stprintf(buffer, _T("%.*f"), precision, (double)value);
 
   return unit;
 }
 
 Unit
-Units::FormatSmallUserDistance(TCHAR *buffer, size_t size, fixed value,
+Units::FormatSmallUserDistance(TCHAR *buffer, fixed value,
                            bool include_unit, int precision)
 {
-  return FormatSmallDistance(buffer, size, value, current.distance_unit,
+  return FormatSmallDistance(buffer, value, current.distance_unit,
                              include_unit, precision);
 }
 
@@ -178,70 +178,66 @@ GetBestDistancePrecision(fixed value, Unit unit, fixed threshold = fixed(100))
 }
 
 Unit
-Units::FormatDistanceSmart(TCHAR *buffer, size_t size, fixed value, Unit unit,
+Units::FormatDistanceSmart(TCHAR *buffer, fixed value, Unit unit,
                            bool include_unit, fixed small_unit_threshold,
                            fixed precision_threshold)
 {
   unit = GetBestDistanceUnit(value, unit, small_unit_threshold);
   int precision = GetBestDistancePrecision(value, unit, precision_threshold);
-  FormatDistance(buffer, size, value, unit, include_unit, precision);
+  FormatDistance(buffer, value, unit, include_unit, precision);
 
   return unit;
 }
 
 Unit
-Units::FormatUserDistanceSmart(fixed value, TCHAR *buffer, size_t size,
+Units::FormatUserDistanceSmart(fixed value, TCHAR *buffer,
                                bool include_unit)
 {
-  return FormatDistanceSmart(buffer, size, value, current.distance_unit,
+  return FormatDistanceSmart(buffer, value, current.distance_unit,
                              include_unit);
 }
 
 Unit
 Units::FormatUserMapScale(fixed value, TCHAR *buffer,
-                          size_t size, bool include_unit)
+                          bool include_unit)
 {
-  return FormatDistanceSmart(buffer, size, value, current.distance_unit,
+  return FormatDistanceSmart(buffer, value, current.distance_unit,
                              include_unit, fixed(1000), fixed(9.999));
 }
 
 void
-Units::FormatSpeed(TCHAR *buffer, size_t size,
+Units::FormatSpeed(TCHAR *buffer,
             fixed value, const Unit unit, bool include_unit, bool precision)
 {
   value = Units::ToUserUnit(value, unit);
 
   const int prec = precision && value < fixed(100);
   if (include_unit)
-    _sntprintf(buffer, size, _T("%.*f %s"),
-               prec, (double)value, Units::GetUnitName(unit));
+    _stprintf(buffer, _T("%.*f %s"), prec, (double)value,
+               Units::GetUnitName(unit));
   else
-    _sntprintf(buffer, size, _T("%.*f"),
-               prec, (double)value);
+    _stprintf(buffer, _T("%.*f"), prec, (double)value);
 }
 
 void
-Units::FormatUserSpeed(fixed value, TCHAR *buffer, size_t size,
+Units::FormatUserSpeed(fixed value, TCHAR *buffer,
                        bool include_unit, bool precision)
 {
-  FormatSpeed(buffer, size, value, current.speed_unit,
-              include_unit, precision);
+  FormatSpeed(buffer, value, current.speed_unit, include_unit, precision);
 }
 
 void
-Units::FormatUserWindSpeed(fixed value, TCHAR *buffer, size_t size,
+Units::FormatUserWindSpeed(fixed value, TCHAR *buffer,
                            bool include_unit, bool precision)
 {
-  FormatSpeed(buffer, size, value, current.wind_speed_unit,
-              include_unit, precision);
+  FormatSpeed(buffer, value, current.wind_speed_unit, include_unit, precision);
 }
 
 void
-Units::FormatUserTaskSpeed(fixed value, TCHAR *buffer, size_t size,
+Units::FormatUserTaskSpeed(fixed value, TCHAR *buffer,
                            bool include_unit, bool precision)
 {
-  FormatSpeed(buffer, size, value, current.task_speed_unit,
-              include_unit, precision);
+  FormatSpeed(buffer, value, current.task_speed_unit, include_unit, precision);
 }
 
 const TCHAR*
@@ -279,66 +275,62 @@ Units::GetUserVerticalSpeedStep()
 }
 
 void
-Units::FormatVerticalSpeed(TCHAR *buffer, size_t size, fixed value, Unit unit,
+Units::FormatVerticalSpeed(TCHAR *buffer, fixed value, Unit unit,
                            bool include_unit)
 {
   value = ToUserUnit(value, unit);
 
   if (include_unit)
-    _sntprintf(buffer, size, GetVerticalSpeedFormat(unit, include_unit),
-               (double)value, Units::GetUnitName(unit));
+    _stprintf(buffer, GetVerticalSpeedFormat(unit, include_unit), (double)value,
+               Units::GetUnitName(unit));
   else
-    _sntprintf(buffer, size, GetVerticalSpeedFormat(unit, include_unit),
-               (double)value);
+    _stprintf(buffer, GetVerticalSpeedFormat(unit, include_unit), (double)value);
 }
 
 void
-Units::FormatUserVerticalSpeed(fixed value, TCHAR *buffer, size_t size,
+Units::FormatUserVerticalSpeed(fixed value, TCHAR *buffer,
                                bool include_unit)
 {
-  FormatVerticalSpeed(buffer, size, value, current.vertical_speed_unit,
-                      include_unit);
+  FormatVerticalSpeed(buffer, value, current.vertical_speed_unit, include_unit);
 }
 
 void
-Units::FormatTemperature(TCHAR *buffer, size_t size, fixed value, Unit unit,
+Units::FormatTemperature(TCHAR *buffer, fixed value, Unit unit,
                          bool include_unit)
 {
   value = ToUserUnit(value, unit);
 
   if (include_unit)
-    _sntprintf(buffer, size, _T("%.0f %s"), (double)value,
-               Units::GetUnitName(unit));
+    _stprintf(buffer, _T("%.0f %s"), (double)value, Units::GetUnitName(unit));
   else
-    _sntprintf(buffer, size, _T("%.0f"), (double)value);
+    _stprintf(buffer, _T("%.0f"), (double)value);
 }
 
 void
-Units::FormatUserTemperature(fixed value, TCHAR *buffer, size_t size,
+Units::FormatUserTemperature(fixed value, TCHAR *buffer,
                              bool include_unit)
 {
-  FormatTemperature(buffer, size, value, current.temperature_unit, include_unit);
+  FormatTemperature(buffer, value, current.temperature_unit, include_unit);
 }
 
 void
-Units::FormatPressure(TCHAR *buffer, size_t size, AtmosphericPressure pressure,
+Units::FormatPressure(TCHAR *buffer, AtmosphericPressure pressure,
                       Unit unit, bool include_unit)
 {
   fixed _pressure = ToUserUnit(pressure.GetHectoPascal(), unit);
 
   if (include_unit)
-    _sntprintf(buffer, size, GetPressureFormat(unit, include_unit),
-               (double)_pressure, Units::GetUnitName(unit));
+    _stprintf(buffer, GetPressureFormat(unit, include_unit), (double)_pressure,
+              Units::GetUnitName(unit));
   else
-    _sntprintf(buffer, size, GetPressureFormat(unit, include_unit),
-               (double)_pressure);
+    _stprintf(buffer, GetPressureFormat(unit, include_unit), (double)_pressure);
 }
 
 void
 Units::FormatUserPressure(AtmosphericPressure pressure, TCHAR *buffer,
-                          size_t size, bool include_unit)
+                          bool include_unit)
 {
-  FormatPressure(buffer, size, pressure, current.pressure_unit, include_unit);
+  FormatPressure(buffer, pressure, current.pressure_unit, include_unit);
 }
 
 const TCHAR*

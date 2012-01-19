@@ -93,29 +93,25 @@ MacCreadyEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   WndButton *button = (WndButton *)form.FindByName(_T("cmdPlusBig"));
   assert(button != NULL);
   Units::FormatUserVerticalSpeed(
-      Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep() * 5), caption,
-      ARRAY_SIZE(caption), false);
+      Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep() * 5), caption, false);
   button->SetCaption(caption);
 
   button = (WndButton *)form.FindByName(_T("cmdPlusSmall"));
   assert(button != NULL);
   Units::FormatUserVerticalSpeed(
-      Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep()), caption,
-      ARRAY_SIZE(caption), false);
+      Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep()), caption, false);
   button->SetCaption(caption);
 
   button = (WndButton *)form.FindByName(_T("cmdMinusBig"));
   assert(button != NULL);
   Units::FormatUserVerticalSpeed(
-      Units::ToSysVSpeed(-Units::GetUserVerticalSpeedStep() * 5), caption,
-      ARRAY_SIZE(caption), false);
+      Units::ToSysVSpeed(-Units::GetUserVerticalSpeedStep() * 5), caption, false);
   button->SetCaption(caption);
 
   button = (WndButton *)form.FindByName(_T("cmdMinusSmall"));
   assert(button != NULL);
   Units::FormatUserVerticalSpeed(
-      Units::ToSysVSpeed(-Units::GetUserVerticalSpeedStep()), caption,
-      ARRAY_SIZE(caption), false);
+      Units::ToSysVSpeed(-Units::GetUserVerticalSpeedStep()), caption, false);
   button->SetCaption(caption);
 }
 

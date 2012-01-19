@@ -593,8 +593,7 @@ UpdateRunwayInformation(const Runway &runway)
       buffer += _T("; ");
 
     TCHAR length_buffer[16];
-    Units::FormatSmallUserDistance(length_buffer, ARRAY_SIZE(length_buffer),
-                                   fixed(runway.GetLength()));
+    Units::FormatSmallUserDistance(length_buffer, fixed(runway.GetLength()));
     buffer += length_buffer;
   }
 

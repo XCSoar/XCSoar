@@ -44,7 +44,7 @@ namespace Units
    * @param unit the altitude unit (e.g. meters, feet, ...)
    * @param include_unit include the unit into the string?
    */
-  void FormatAltitude(TCHAR *buffer, size_t size, fixed value, Unit unit,
+  void FormatAltitude(TCHAR *buffer, fixed value, Unit unit,
                       bool include_unit = true);
 
   /**
@@ -53,7 +53,7 @@ namespace Units
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
    */
-  void FormatUserAltitude(fixed value, TCHAR *buffer, size_t size,
+  void FormatUserAltitude(fixed value, TCHAR *buffer,
                           bool include_unit = true);
 
   /**
@@ -63,7 +63,7 @@ namespace Units
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
    */
-  void FormatAlternateUserAltitude(fixed value, TCHAR *buffer, size_t size,
+  void FormatAlternateUserAltitude(fixed value, TCHAR *buffer,
                                    bool include_unit = true);
 
   /**
@@ -74,8 +74,8 @@ namespace Units
    * @param unit the altitude unit (e.g. meters, feet, ...)
    * @param include_unit include the unit into the string?
    */
-  void FormatRelativeAltitude(TCHAR *buffer, size_t size, fixed value,
-                              Unit unit, bool include_unit = true);
+  void FormatRelativeAltitude(TCHAR *buffer, fixed value, Unit unit,
+                              bool include_unit = true);
 
   /**
    * Converts a double-based Arrival Altitude into a formatted string
@@ -83,7 +83,7 @@ namespace Units
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
    */
-  void FormatRelativeUserAltitude(fixed value, TCHAR *buffer, size_t size,
+  void FormatRelativeUserAltitude(fixed value, TCHAR *buffer,
                                   bool include_unit = true);
 
   /**
@@ -95,7 +95,7 @@ namespace Units
    * @param include_unit include the unit into the string?
    * @param precision the number of decimal places
    */
-  void FormatDistance(TCHAR *buffer, size_t size, fixed value, const Unit unit,
+  void FormatDistance(TCHAR *buffer, fixed value, const Unit unit,
                       bool include_unit = true, int precision = 0);
 
   /**
@@ -109,7 +109,7 @@ namespace Units
    * @param precision the number of decimal places
    * @return the unit used for output formatting
    */
-  Unit FormatSmallDistance(TCHAR *buffer, size_t size, fixed value, Unit unit,
+  Unit FormatSmallDistance(TCHAR *buffer, fixed value, Unit unit,
                            bool include_unit = true, int precision = 0);
 
   /**
@@ -122,7 +122,7 @@ namespace Units
    * @param precision the number of decimal places
    * @return the unit used for output formatting
    */
-  Unit FormatSmallUserDistance(TCHAR *buffer, size_t size, fixed value,
+  Unit FormatSmallUserDistance(TCHAR *buffer, fixed value,
                                bool include_unit = true, int precision = 0);
 
   /**
@@ -135,7 +135,7 @@ namespace Units
    * @param include_unit include the unit into the string?
    * @return the unit used for output formatting
    */
-  Unit FormatDistanceSmart(TCHAR *buffer, size_t size, fixed value, Unit unit,
+  Unit FormatDistanceSmart(TCHAR *buffer, fixed value, Unit unit,
                            bool include_unit = true,
                            fixed small_unit_threshold = fixed(2500),
                            fixed precision_threshold = fixed(100));
@@ -146,10 +146,10 @@ namespace Units
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
    */
-  Unit FormatUserDistanceSmart(fixed value, TCHAR *buffer, size_t size,
+  Unit FormatUserDistanceSmart(fixed value, TCHAR *buffer,
                                bool include_unit = true);
 
-  Unit FormatUserMapScale(fixed value, TCHAR *buffer, size_t size,
+  Unit FormatUserMapScale(fixed value, TCHAR *buffer,
                           bool include_unit = true);
 
   /**
@@ -161,7 +161,7 @@ namespace Units
    * @param include_unit include the unit into the string?
    * @param precision if true shows one decimal place if the speed is low
    */
-  void FormatSpeed(TCHAR *buffer, size_t size, fixed value, const Unit unit,
+  void FormatSpeed(TCHAR *buffer, fixed value, const Unit unit,
                    bool include_unit = true, bool precision = false);
 
   /**
@@ -171,7 +171,7 @@ namespace Units
    * @param size Size of the buffer
    * @return True if buffer long enough, False otherwise
    */
-  void FormatUserSpeed(fixed value, TCHAR *buffer, size_t size,
+  void FormatUserSpeed(fixed value, TCHAR *buffer,
                        bool include_unit = true, bool Precision = true);
 
   /**
@@ -181,7 +181,7 @@ namespace Units
    * @param size Size of the buffer
    * @return True if buffer long enough, False otherwise
    */
-  void FormatUserWindSpeed(fixed value, TCHAR *buffer, size_t size,
+  void FormatUserWindSpeed(fixed value, TCHAR *buffer,
                            bool include_unit = true, bool Precision = true);
 
   /**
@@ -190,7 +190,7 @@ namespace Units
    *
    * @param value the speed value [m/s]
    */
-  void FormatUserTaskSpeed(fixed value, TCHAR *buffer, size_t max_size,
+  void FormatUserTaskSpeed(fixed value, TCHAR *buffer,
                            bool include_unit=true, bool precision=true);
 
   /**
@@ -227,7 +227,7 @@ namespace Units
    * @param unit the vertical speed unit (e.g. m/s, feet/min, ...)
    * @param include_unit include the unit into the string?
    */
-  void FormatVerticalSpeed(TCHAR *buffer, size_t size, fixed value, Unit unit,
+  void FormatVerticalSpeed(TCHAR *buffer, fixed value, Unit unit,
                            bool include_unit = true);
 
   /**
@@ -237,7 +237,7 @@ namespace Units
    * @param size Size of the buffer
    * @return True if buffer long enough, False otherwise
    */
-  void FormatUserVerticalSpeed(fixed value, TCHAR *buffer, size_t size,
+  void FormatUserVerticalSpeed(fixed value, TCHAR *buffer,
                                bool include_unit = true);
 
   /**
@@ -248,7 +248,7 @@ namespace Units
    * @param unit the temperature unit
    * @param include_unit include the unit into the string?
    */
-  void FormatTemperature(TCHAR *buffer, size_t size, fixed value, Unit unit,
+  void FormatTemperature(TCHAR *buffer, fixed value, Unit unit,
                          bool include_unit = true);
 
   /**
@@ -257,7 +257,7 @@ namespace Units
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
    */
-  void FormatUserTemperature(fixed value, TCHAR *buffer, size_t size,
+  void FormatUserTemperature(fixed value, TCHAR *buffer,
                              bool include_unit = true);
 
   /**
@@ -268,8 +268,8 @@ namespace Units
    * @param unit the pressure unit (e.g. meters, feet, ...)
    * @param include_unit include the unit into the string?
    */
-  void FormatPressure(TCHAR *buffer, size_t size, AtmosphericPressure value,
-                      Unit unit, bool include_unit = true);
+  void FormatPressure(TCHAR *buffer, AtmosphericPressure value, Unit unit,
+                      bool include_unit = true);
 
   /**
    * Converts a double-based Pressure into a formatted string
@@ -277,7 +277,7 @@ namespace Units
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
    */
-  void FormatUserPressure(AtmosphericPressure value, TCHAR *buffer, size_t size,
+  void FormatUserPressure(AtmosphericPressure value, TCHAR *buffer,
                           bool include_unit = true);
 
   /**

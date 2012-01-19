@@ -478,9 +478,9 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   TCHAR tmp[10];
 
   if (side_display_type == 1)
-    Units::FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, 10, false);
+    Units::FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, false);
   else
-    Units::FormatRelativeUserAltitude(traffic.relative_altitude, tmp, 10, true);
+    Units::FormatRelativeUserAltitude(traffic.relative_altitude, tmp, true);
 
   PixelSize sz = canvas.CalcTextSize(tmp);
 

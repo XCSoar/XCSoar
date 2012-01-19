@@ -29,35 +29,33 @@ void
 InfoBoxData::SetValueFromDistance(fixed new_value)
 {
   Unit distance_unit =
-    Units::FormatUserDistanceSmart(new_value, value.buffer(), value.MAX_SIZE, false);
+    Units::FormatUserDistanceSmart(new_value, value.buffer(), false);
   SetValueUnit(distance_unit);
 }
 
 void
 InfoBoxData::SetValueFromAltitude(fixed new_value)
 {
-  Units::FormatUserAltitude(new_value, value.buffer(), value.MAX_SIZE, false);
+  Units::FormatUserAltitude(new_value, value.buffer(), false);
   SetValueUnit(Units::current.altitude_unit);
 }
 
 void
 InfoBoxData::SetValueFromArrival(fixed new_value)
 {
-  Units::FormatRelativeUserAltitude(new_value, value.buffer(), value.MAX_SIZE, false);
+  Units::FormatRelativeUserAltitude(new_value, value.buffer(), false);
   SetValueUnit(Units::current.altitude_unit);
 }
 
 void
 InfoBoxData::SetValueFromSpeed(fixed new_value, bool precision)
 {
-  Units::FormatUserSpeed(new_value, value.buffer(), value.MAX_SIZE,
-                         false, precision);
+  Units::FormatUserSpeed(new_value, value.buffer(), false, precision);
   SetValueUnit(Units::current.speed_unit);
 }
 
 void
 InfoBoxData::SetCommentFromAlternateAltitude(fixed new_value)
 {
-  Units::FormatAlternateUserAltitude(new_value,
-                                     comment.buffer(), comment.MAX_SIZE);
+  Units::FormatAlternateUserAltitude(new_value, comment.buffer());
 }

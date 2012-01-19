@@ -168,8 +168,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   }
 
   Units::FormatUserAltitude(calculated.task_stats.total.solution_remaining.altitude_difference,
-                            Value, ARRAY_SIZE(Value),
-                            false);
+                            Value, false);
 
   if (Offset >= 0)
     Offset = GlideBar[2].y + Offset + Layout::Scale(5);

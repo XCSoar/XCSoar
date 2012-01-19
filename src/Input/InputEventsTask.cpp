@@ -158,9 +158,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
     }
   } else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
-    Units::FormatUserVerticalSpeed(mc,
-                            Temp, ARRAY_SIZE(Temp),
-                            false);
+    Units::FormatUserVerticalSpeed(mc, Temp, false);
     Message::AddMessage(_("MacCready "), Temp);
   }
 }
@@ -306,10 +304,8 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     TCHAR TempSpeed[40];
     
     FormatSignedTimeHHMM(TempTime, (int)TimeLocal((int)start_state.time));
-    Units::FormatUserAltitude(start_state.altitude,
-                              TempAlt, ARRAY_SIZE(TempAlt), true);
-    Units::FormatUserSpeed(start_state.ground_speed,
-                           TempSpeed, ARRAY_SIZE(TempSpeed), true);
+    Units::FormatUserAltitude(start_state.altitude, TempAlt, true);
+    Units::FormatUserSpeed(start_state.ground_speed,TempSpeed, true);
     
     TCHAR TempAll[120];
     _stprintf(TempAll, _T("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"),
