@@ -496,6 +496,9 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
     break;
 
   case InfoBoxLayout::ibSquare:
+    border |= BORDERLEFT;
+    if (i != 0)
+      border |= BORDERTOP;
     break;
 
   case InfoBoxLayout::ibRight12:
