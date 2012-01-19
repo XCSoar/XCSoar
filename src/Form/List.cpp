@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Form/List.hpp"
-#include "Form/Internal.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Key.h"
