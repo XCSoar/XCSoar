@@ -45,6 +45,11 @@ struct DialogSettings {
   TextInputStyle text_input_style;
   TabStyle tab_style;
 
+  /**
+   * Show the "expert" settings?
+   */
+  bool expert;
+
   void SetDefaults();
 };
 

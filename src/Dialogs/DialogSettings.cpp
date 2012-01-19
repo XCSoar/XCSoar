@@ -28,4 +28,5 @@ DialogSettings::SetDefaults()
 {
   text_input_style = TextInputStyle::Default;
   tab_style = TabStyle::Text;
+  expert = false;
 }

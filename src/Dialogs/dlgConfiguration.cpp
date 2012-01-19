@@ -59,6 +59,7 @@ Copyright_License {
 #include "ConfigPanels/TaskDefaultsConfigPanel.hpp"
 #include "ConfigPanels/InfoBoxesConfigPanel.hpp"
 #include "ConfigPanels/ExperimentalConfigPanel.hpp"
+#include "Interface.hpp"
 
 #ifdef HAVE_TRACKING
 #include "ConfigPanels/TrackingConfigPanel.hpp"
@@ -128,8 +129,10 @@ ConfigPanel::GetForm()
 static void
 OnUserLevel(CheckBoxControl &control)
 {
-  Profile::Set(szProfileUserLevel, control.get_checked());
-  wf->FilterAdvanced(control.get_checked());
+  const bool expert = control.get_checked();
+  CommonInterface::SetUISettings().dialog.expert = expert;
+  Profile::Set(szProfileUserLevel, expert);
+  wf->FilterAdvanced(expert);
 }
 
 static void
@@ -223,9 +226,7 @@ PrepareConfigurationDialog()
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  bool expert_mode = false;
-  Profile::Get(szProfileUserLevel, expert_mode);
-
+  bool expert_mode = CommonInterface::GetUISettings().dialog.expert;
   CheckBox *cb = (CheckBox *)wf->FindByName(_T("Expert"));
   cb->set_checked(expert_mode);
   wf->FilterAdvanced(expert_mode);
