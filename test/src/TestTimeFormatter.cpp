@@ -64,12 +64,63 @@ TestHHMM()
   ok1(StringIsEqual(buffer, _T("-19:47")));
 }
 
+static void
+TestTwoLines()
+{
+  TCHAR buffer[256], buffer2[256];
+
+  TimeToTextSmart(buffer, buffer2, 0);
+  ok1(StringIsEqual(buffer, _T("00:00")));
+  ok1(StringIsEqual(buffer2, _T("")));
+
+  TimeToTextSmart(buffer, buffer2, 1);
+  ok1(StringIsEqual(buffer, _T("00:01")));
+  ok1(StringIsEqual(buffer2, _T("")));
+
+  TimeToTextSmart(buffer, buffer2, 59);
+  ok1(StringIsEqual(buffer, _T("00:59")));
+  ok1(StringIsEqual(buffer2, _T("")));
+
+  TimeToTextSmart(buffer, buffer2, 60);
+  ok1(StringIsEqual(buffer, _T("01:00")));
+  ok1(StringIsEqual(buffer2, _T("")));
+
+  TimeToTextSmart(buffer, buffer2, 60 * 5);
+  ok1(StringIsEqual(buffer, _T("05:00")));
+  ok1(StringIsEqual(buffer2, _T("")));
+
+  TimeToTextSmart(buffer, buffer2, 60 * 59);
+  ok1(StringIsEqual(buffer, _T("59:00")));
+  ok1(StringIsEqual(buffer2, _T("")));
+
+  TimeToTextSmart(buffer, buffer2, 60 * 60);
+  ok1(StringIsEqual(buffer, _T("01:00")));
+  ok1(StringIsEqual(buffer2, _T("00")));
+
+  TimeToTextSmart(buffer, buffer2, 60 * 60 * 3 + 60 * 25 + 13);
+  ok1(StringIsEqual(buffer, _T("03:25")));
+  ok1(StringIsEqual(buffer2, _T("13")));
+
+  TimeToTextSmart(buffer, buffer2, 60 * 60 * 19 + 60 * 47 + 28);
+  ok1(StringIsEqual(buffer, _T("19:47")));
+  ok1(StringIsEqual(buffer2, _T("28")));
+
+  TimeToTextSmart(buffer, buffer2, -(60 * 59));
+  ok1(StringIsEqual(buffer, _T("59:00")));
+  ok1(StringIsEqual(buffer2, _T("")));
+
+  TimeToTextSmart(buffer, buffer2, -(60 * 60 * 19 + 60 * 47 + 28));
+  ok1(StringIsEqual(buffer, _T("19:47")));
+  ok1(StringIsEqual(buffer2, _T("28")));
+}
+
 int
 main(int argc, char **argv)
 {
-  plan_tests(11);
+  plan_tests(33);
 
   TestHHMM();
+  TestTwoLines();
 
   return exit_status();
 }
