@@ -31,6 +31,7 @@ enum class CoordinateFormat: uint8_t {
   DDMMSS_SS,
   DDMM_MMM,
   DD_DDDD,
+  UTM,
 };
 
 #endif

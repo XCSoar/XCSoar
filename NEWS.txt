@@ -21,6 +21,7 @@ Version 6.3 - not yet released
   - enable font anti-aliasing on Linux and Mac OS X
   - show airspaces in the task manager
   - larger form rows on touch screens
+  - added UTM coordinate format
 * logger
   - added "Start only" option for auto logger
 * data files

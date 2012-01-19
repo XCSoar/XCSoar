@@ -228,6 +228,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)CoordinateFormat::DDMMSS_SS, _T("DDMMSS.ss"), units_lat_lon_help },
     { (unsigned)CoordinateFormat::DDMM_MMM, _T("DDMM.mmm"), units_lat_lon_help },
     { (unsigned)CoordinateFormat::DD_DDDD, _T("DD.dddd"), units_lat_lon_help },
+    { (unsigned)CoordinateFormat::UTM, _T("UTM"), units_lat_lon_help },
     { 0 }
   };
   AddEnum(_("Lat./Lon."), _T(""), units_lat_lon_list,

@@ -156,6 +156,8 @@ SetUnits()
     wp->hide();
 
     break;
+  case CoordinateFormat::UTM:
+    break;
   }
 }
 
@@ -194,6 +196,8 @@ SetValues()
     LoadFormProperty(*wf, _T("prpLongitudeDDDD"),
                      10000 * (fixed)(mm + ss) / 3600);
     break;
+  case CoordinateFormat::UTM:
+    break;
   }
 
   global_wpt->location.latitude.ToDMS(dd, mm, ss, sign);
@@ -226,6 +230,8 @@ SetValues()
   case CoordinateFormat::DD_DDDD: // ("DD.dddd");
     LoadFormProperty(*wf, _T("prpLatitudeDDDD"),
                      10000 * (fixed)(mm + ss) / 3600);
+    break;
+  case CoordinateFormat::UTM:
     break;
   }
 
@@ -277,6 +283,8 @@ GetValues()
     mm = GetFormValueInteger(*wf, _T("prpLongitudeDDDD"));
     num = dd + mm / 10000;
     break;
+  case CoordinateFormat::UTM:
+    break;
   }
 
   if (!sign)
@@ -302,6 +310,8 @@ GetValues()
   case CoordinateFormat::DD_DDDD: // ("DD.dddd");
     mm = GetFormValueInteger(*wf, _T("prpLatitudeDDDD"));
     num = dd + mm / 10000;
+    break;
+  case CoordinateFormat::UTM:
     break;
   }
 
@@ -364,6 +374,14 @@ dlgWaypointEditShowModal(Waypoint &way_point)
   SetUnits();
 
   SetValues();
+
+  if (CommonInterface::GetUISettings().coordinate_format ==
+      CoordinateFormat::UTM) {
+    MessageBoxX(
+        _("Sorry, the waypoint editor is not yet available for the UTM coordinate format."),
+        _("Waypoint Editor"), MB_OK);
+    return false;
+  }
 
   wf->SetModalResult(mrCancel);
 

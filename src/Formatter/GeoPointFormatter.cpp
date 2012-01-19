@@ -26,6 +26,7 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Util/StringUtil.hpp"
+#include "Geo/UTM.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -166,10 +167,24 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
   return true;
 }
 
+static TCHAR *
+FormatUTM(const GeoPoint &location, TCHAR *buffer, size_t size,
+          TCHAR seperator = _T(' '))
+{
+  UTM utm = UTM::FromGeoPoint(location);
+  _sntprintf(buffer, size, _T("%u%c%c%.0f%c%.0f"), utm.zone_number,
+             utm.zone_letter, seperator, (double)utm.easting, seperator,
+             (double)utm.northing);
+  return buffer;
+}
+
 TCHAR *
 FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
                CoordinateFormat format, TCHAR seperator)
 {
+  if (format == CoordinateFormat::UTM)
+    return FormatUTM(location, buffer, size, seperator);
+
   if (!FormatLatitude(location.latitude, buffer, size, format))
     return NULL;
 

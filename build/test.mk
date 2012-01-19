@@ -804,6 +804,7 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/DateTime.cpp \
+	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Net/ToBuffer.cpp \
 	$(TEST_SRC_DIR)/ConsoleJobRunner.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
