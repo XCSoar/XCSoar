@@ -36,13 +36,7 @@ Copyright_License {
 
 /**
  * Device driver for Westerboer VW1150.
- *
- * Unfortunately, Westerboer refuses to publish technical
- * documentation.  I was able to obtain a PDF document describing the
- * NMEA sentences implemented in this driver, but Peter Maciejewski
- * from Westerboer asked me to remove the PDF from my web site, for
- * copyright violation.  -- Max Kellermann
- *
+ * @see http://www.westerboer.de/PDF/VW1150/Datensaetze_V1.2.pdf
  */
 class WesterboerDevice : public AbstractDevice {
   Port &port;
@@ -56,7 +50,7 @@ public:
 };
 
 /**
- * $PWES0,DD,VVVV,MMMM,NNNN,BBBB,SSSS,AAAAA,QQQQQ,IIII,TTTT,UUU,CCC*CS<CR><LF>
+ * $PWES0,DD,VVVV,MMMM,NNNN,BBBB,SSSS,AAAAA,QQQQQ,IIII,TTTT,UUU,CCCC*CS<CR><LF>
  */
 static bool
 PWES0(NMEAInputLine &line, NMEAInfo &info)
