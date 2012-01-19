@@ -34,6 +34,13 @@ Copyright_License {
 bool
 Units::LongitudeToString(Angle longitude, TCHAR *buffer, size_t size)
 {
+  return LongitudeToString(longitude, buffer, size, current.coordinate_format);
+}
+
+bool
+Units::LongitudeToString(Angle longitude, TCHAR *buffer, size_t size,
+                         CoordinateFormat format)
+{
   static gcc_constexpr_data TCHAR EW[] = _T("WEE");
   int dd, mm, ss;
 
@@ -41,7 +48,7 @@ Units::LongitudeToString(Angle longitude, TCHAR *buffer, size_t size)
   int sign = longitude.Sign() + 1;
   double mlong(longitude.AbsoluteDegrees());
 
-  switch (current.coordinate_format) {
+  switch (format) {
   case CoordinateFormat::DDMMSS:
     // Calculate degrees
     dd = (int)mlong;
@@ -101,6 +108,13 @@ Units::LongitudeToString(Angle longitude, TCHAR *buffer, size_t size)
 bool
 Units::LatitudeToString(Angle latitude, TCHAR *buffer, size_t size)
 {
+  return LatitudeToString(latitude, buffer, size, current.coordinate_format);
+}
+
+bool
+Units::LatitudeToString(Angle latitude, TCHAR *buffer, size_t size,
+                        CoordinateFormat format)
+{
   static gcc_constexpr_data TCHAR EW[] = _T("SNN");
   int dd, mm, ss;
 
@@ -108,7 +122,7 @@ Units::LatitudeToString(Angle latitude, TCHAR *buffer, size_t size)
   int sign = latitude.Sign() + 1;
   double mlat(latitude.AbsoluteDegrees());
 
-  switch (current.coordinate_format) {
+  switch (format) {
   case CoordinateFormat::DDMMSS:
     // Calculate degrees
     dd = (int)mlat;
@@ -168,7 +182,14 @@ Units::LatitudeToString(Angle latitude, TCHAR *buffer, size_t size)
 TCHAR *
 Units::FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size)
 {
-  if (!LatitudeToString(location.latitude, buffer, size))
+  return FormatGeoPoint(location, buffer, size, current.coordinate_format);
+}
+
+TCHAR *
+Units::FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
+                      CoordinateFormat format)
+{
+  if (!LatitudeToString(location.latitude, buffer, size, format))
     return NULL;
 
   TCHAR *end = buffer + size, *p = buffer + _tcslen(buffer);
@@ -177,7 +198,7 @@ Units::FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size)
 
   *p++ = _T(' ');
 
-  if (!LongitudeToString(location.longitude, p, end - p))
+  if (!LongitudeToString(location.longitude, p, end - p, format))
     return NULL;
 
   return buffer;
