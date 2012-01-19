@@ -113,7 +113,19 @@ PWES1(NMEAInputLine &line, NMEAInfo &info)
   if (line.read_checked(i))
     info.settings.ProvideMacCready(fixed(i) / 10, info.clock);
 
-  line.skip(4);
+  if (line.read_checked(i)) {
+    if (i == 0) {
+      info.switch_state.flight_mode = SwitchInfo::FlightMode::CIRCLING;
+      info.switch_state.speed_command = false;
+      info.switch_state_available = true;
+    } else if (i == 1) {
+      info.switch_state.flight_mode = SwitchInfo::FlightMode::CRUISE;
+      info.switch_state.speed_command = true;
+      info.switch_state_available = true;
+    }
+  }
+
+  line.skip(3);
 
   if (line.read_checked(i))
     info.settings.ProvideWingLoading(fixed(i) / 10, info.clock);
