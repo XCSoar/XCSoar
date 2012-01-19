@@ -344,7 +344,7 @@ struct DeviceRegister {
   /**
    * A bit set describing the features of this driver.
    */
-  unsigned int Flags;
+  unsigned int flags;
 
   /**
    * Create an instance of this driver for the given NMEA port.
@@ -355,14 +355,14 @@ struct DeviceRegister {
    * Is this the NMEA out driver?
    */
   bool IsNMEAOut() const {
-    return (Flags & NMEA_OUT) != 0;
+    return (flags & NMEA_OUT) != 0;
   }
 
   /**
    * Does this driver support task declaration with Device::Declare()?
    */
   bool CanDeclare() const {
-    return (Flags & DECLARE) != 0;
+    return (flags & DECLARE) != 0;
   }
 
   /**
@@ -370,7 +370,7 @@ struct DeviceRegister {
    * See Device::ReadFlightList(), Device::DownloadFlight().
    */
   bool IsLogger() const {
-    return (Flags & LOGGER) != 0;
+    return (flags & LOGGER) != 0;
   }
 
   /**
@@ -378,21 +378,21 @@ struct DeviceRegister {
    * of a "Manage" dialog?
    */
   bool IsManageable() const {
-    return (Flags & MANAGE) != 0;
+    return (flags & MANAGE) != 0;
   }
 
   /**
    * Does this driver support switching to a "bulk" baud rate?
    */
   bool SupportsBulkBaudRate() const {
-    return (Flags & BULK_BAUD_RATE) != 0;
+    return (flags & BULK_BAUD_RATE) != 0;
   }
 
   /**
    * Shall devices be restarted automatically when they time out?
    */
   bool HasTimeout() const {
-    return (Flags & NO_TIMEOUT) == 0;
+    return (flags & NO_TIMEOUT) == 0;
   }
 
   /**
@@ -400,7 +400,7 @@ struct DeviceRegister {
    * handler/parser will be disabled in this case.
    */
   bool UsesRawData() const {
-    return (Flags & RAW_GPS_DATA) != 0;
+    return (flags & RAW_GPS_DATA) != 0;
   }
 };
 
