@@ -1491,7 +1491,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFile.cpp \
@@ -1751,7 +1750,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
-	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/LocalPath.cpp \
@@ -1878,7 +1876,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
@@ -1954,7 +1951,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
-	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Waypoint/WaypointGlue.cpp \
