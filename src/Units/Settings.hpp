@@ -24,17 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_UNITS_SETTINGS_HPP
 #define XCSOAR_UNITS_SETTINGS_HPP
 
+#include "Geo/CoordinateFormat.hpp"
 #include "Unit.hpp"
 #include "Compiler.h"
 
 #include <stdint.h>
-
-enum class CoordinateFormat: uint8_t {
-  DDMMSS = 0,
-  DDMMSS_SS,
-  DDMM_MMM,
-  DD_DDDD,
-};
 
 enum class UnitGroup: uint8_t
 {
