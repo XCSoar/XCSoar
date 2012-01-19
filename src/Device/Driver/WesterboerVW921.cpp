@@ -46,6 +46,7 @@ public:
                         const void *data, size_t length, struct NMEAInfo &info);
 
   void SentenceZero(const void *data, size_t length, struct NMEAInfo &info);
+  void SentenceOne(const void *data, size_t length, struct NMEAInfo &info);
   void SentenceTwo(const void *data, size_t length, struct NMEAInfo &info);
 };
 
@@ -185,6 +186,9 @@ WesterboerVW921Device::SentenceReceived(unsigned sentence_number,
   case 0:
     SentenceZero(data, length, info);
     break;
+  case 1:
+    SentenceOne(data, length, info);
+    break;
   case 2:
     SentenceTwo(data, length, info);
     break;
@@ -296,6 +300,44 @@ WesterboerVW921Device::SentenceZero(const void *_data, size_t length,
     info.location.longitude = Angle::Radians(fixed(ReadFloat(data + 39)));
 
     info.location_available.Update(info.clock);
+  }
+}
+
+void
+WesterboerVW921Device::SentenceOne(const void *_data, size_t length,
+                                   struct NMEAInfo &info)
+{
+  const uint8_t *data = (const uint8_t *)_data;
+
+  // Sentence one exists in multiple versions based on firmware version
+  if (length == 31) {
+    // According to test device
+
+    fixed wing_loading = fixed(ReadFloat(data + 13));
+    info.settings.ProvideWingLoading(wing_loading, info.clock);
+
+    uint8_t polar_type = *(data + 30);
+    if (polar_type == 0)
+      info.settings.ProvideBugs(fixed_one, info.clock);
+    else if (polar_type == 1)
+      info.settings.ProvideBugs(fixed(0.85), info.clock);
+    else if (polar_type == 2)
+      info.settings.ProvideBugs(fixed(0.95), info.clock);
+
+  } else if (length == 26) {
+    // According to version 3.30 documentation
+
+    int16_t wing_loading =
+        ReadUnalignedLE16((const uint16_t *)(const void *)(data + 11));
+    info.settings.ProvideWingLoading(fixed(wing_loading) / 10, info.clock);
+
+    uint8_t polar_type = *(data + 13);
+    if (polar_type == 0)
+      info.settings.ProvideBugs(fixed_one, info.clock);
+    else if (polar_type == 1)
+      info.settings.ProvideBugs(fixed(0.95), info.clock);
+    else if (polar_type == 2)
+      info.settings.ProvideBugs(fixed(0.85), info.clock);
   }
 }
 
