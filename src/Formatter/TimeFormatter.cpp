@@ -24,6 +24,7 @@ Copyright_License {
 #include "TimeFormatter.hpp"
 #include "DateTime.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StaticString.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -58,5 +59,116 @@ FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, int _time)
   } else { // mm:ss
     _stprintf(buffer1, _T("%02u:%02u"), time.minute, time.second);
       buffer2[0] = '\0';
+  }
+}
+
+static void
+CalculateTimespanComponents(unsigned timespan, unsigned &days, unsigned &hours,
+                            unsigned &minutes, unsigned &seconds)
+{
+  if (timespan >= 24u * 60u * 60u) {
+    days = timespan / (24u * 60u * 60u);
+    timespan -= days * (24u * 60u * 60u);
+  } else
+    days = 0;
+
+  if (timespan >= 60u * 60u) {
+    hours = timespan / (60u * 60u);
+    timespan -= hours * (60u * 60u);
+  } else
+    hours = 0;
+
+  if (timespan >= 60u) {
+    minutes = timespan / 60u;
+    timespan -= minutes * 60u;
+  } else
+    minutes = 0;
+
+  seconds = timespan;
+}
+
+void
+FormatTimespanSmart(TCHAR *buffer, unsigned timespan, unsigned max_tokens,
+                    const TCHAR *separator)
+{
+  assert(max_tokens > 0 && max_tokens <= 4);
+
+  unsigned days, hours, minutes, seconds;
+  CalculateTimespanComponents(timespan, days, hours, minutes, seconds);
+
+  unsigned token = 0;
+  bool show_days = false, show_hours = false;
+  bool show_minutes = false, show_seconds = false;
+
+  // Days
+  if (days != 0) {
+    show_days = true;
+    token++;
+  }
+
+  // Hours
+  if (token < max_tokens) {
+    if (hours != 0) {
+      show_hours = true;
+      token++;
+    } else if (token != 0) {
+      if (token + 1 < max_tokens && minutes != 0)
+        show_hours = true;
+      else if (token + 2 < max_tokens && seconds != 0)
+        show_hours = true;
+
+      token++;
+    }
+  }
+
+  // Minutes
+  if (token < max_tokens) {
+    if (minutes != 0 ) {
+      show_minutes = true;
+      token++;
+    } else if (token != 0) {
+      if (token + 1 < max_tokens && seconds != 0)
+        show_minutes = true;
+
+      token++;
+    }
+  }
+
+  // Seconds
+  if (token < max_tokens && (seconds != 0 || token == 0))
+    show_seconds = true;
+
+  // Output
+  *buffer = _T('\0');
+
+  StaticString<16> component_buffer;
+
+  if (show_days) {
+    component_buffer.Format(_T("%u days"), days);
+    _tcscat(buffer, component_buffer);
+  }
+
+  if (show_hours) {
+    if (!StringIsEmpty(buffer))
+      _tcscat(buffer, separator);
+
+    component_buffer.Format(_T("%u h"), hours);
+    _tcscat(buffer, component_buffer);
+  }
+
+  if (show_minutes) {
+    if (!StringIsEmpty(buffer))
+      _tcscat(buffer, separator);
+
+    component_buffer.Format(_T("%u min"), minutes);
+    _tcscat(buffer, component_buffer);
+  }
+
+  if (show_seconds) {
+    if (!StringIsEmpty(buffer))
+      _tcscat(buffer, separator);
+
+    component_buffer.Format(_T("%u sec"), seconds);
+    _tcscat(buffer, component_buffer);
   }
 }
