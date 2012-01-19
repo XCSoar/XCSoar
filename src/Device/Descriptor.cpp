@@ -272,6 +272,9 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEAInfo &info)
   if (device != NULL && device->ParseNMEA(line, info)) {
     info.connected.Update(info.clock);
 
+    if (!config.sync_from_device)
+      info.settings = old_settings;
+
     /* clear the settings when the values are the same that we already
        sent to the device */
     const ExternalSettings old_received = settings_received;
@@ -324,7 +327,8 @@ DeviceDescriptor::WriteNMEA(const TCHAR *line)
 bool
 DeviceDescriptor::PutMacCready(fixed value)
 {
-  if (device == NULL || settings_sent.CompareMacCready(value))
+  if (device == NULL || settings_sent.CompareMacCready(value) ||
+      !config.sync_to_device)
     return true;
 
   if (!device->PutMacCready(value))
@@ -341,7 +345,8 @@ DeviceDescriptor::PutMacCready(fixed value)
 bool
 DeviceDescriptor::PutBugs(fixed value)
 {
-  if (device == NULL || settings_sent.CompareBugs(value))
+  if (device == NULL || settings_sent.CompareBugs(value) ||
+      !config.sync_to_device)
     return true;
 
   if (!device->PutBugs(value))
@@ -358,7 +363,8 @@ DeviceDescriptor::PutBugs(fixed value)
 bool
 DeviceDescriptor::PutBallast(fixed value)
 {
-  if (device == NULL || settings_sent.CompareBallastFraction(value))
+  if (device == NULL || settings_sent.CompareBallastFraction(value) ||
+      !config.sync_to_device)
     return true;
 
   if (!device->PutBallast(value))
@@ -375,25 +381,29 @@ DeviceDescriptor::PutBallast(fixed value)
 bool
 DeviceDescriptor::PutVolume(int volume)
 {
-  return device != NULL ? device->PutVolume(volume) : true;
+  return device != NULL && config.sync_to_device ?
+        device->PutVolume(volume) : true;
 }
 
 bool
 DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency)
 {
-  return device != NULL ? device->PutActiveFrequency(frequency) : true;
+  return device != NULL && config.sync_to_device ?
+         device->PutActiveFrequency(frequency) : true;
 }
 
 bool
 DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency)
 {
-  return device != NULL ? device->PutStandbyFrequency(frequency) : true;
+  return device != NULL && config.sync_to_device ?
+         device->PutStandbyFrequency(frequency) : true;
 }
 
 bool
 DeviceDescriptor::PutQNH(const AtmosphericPressure &value)
 {
-  if (device == NULL || settings_sent.CompareQNH(value))
+  if (device == NULL || settings_sent.CompareQNH(value) ||
+      !config.sync_to_device)
     return true;
 
   if (!device->PutQNH(value))
@@ -538,8 +548,15 @@ DeviceDescriptor::DataReceived(const void *data, size_t length)
     ScopeLock protect(device_blackboard->mutex);
     NMEAInfo &basic = device_blackboard->SetRealState(index);
     basic.UpdateClock();
-    if (device->DataReceived(data, length, basic))
+
+    const ExternalSettings old_settings = basic.settings;
+
+    if (device->DataReceived(data, length, basic)) {
+      if (!config.sync_from_device)
+        basic.settings = old_settings;
+
       device_blackboard->ScheduleMerge();
+    }
 
     return;
   }
