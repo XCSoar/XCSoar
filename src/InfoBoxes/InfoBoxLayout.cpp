@@ -268,8 +268,6 @@ InfoBoxLayout::ValidateGeometry(InfoBoxLayout::Geometry geometry,
       break;
 
     case ibSquare:
-      return ibRight8;
-
     case ibRight12:
     case ibRight24:
       break;

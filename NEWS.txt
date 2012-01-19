@@ -8,6 +8,8 @@ Version 6.2.5 - not yet released
   - fix minor OLC miscalculation
 * infoboxes
   - fix display of "FIN ETE VMG" and "WP ETE VMG"
+* user interface
+  - enable 5 InfoBoxes on the right in landscape mode
 * settings
   - fix handling negative UTC offsets
 * devices:
