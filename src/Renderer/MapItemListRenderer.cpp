@@ -180,9 +180,11 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.Select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, buffer);
 
-  TCHAR time_buffer[32];
+  TCHAR time_buffer[32], timespan_buffer[32];
   FormatSignedTimeHHMM(time_buffer, TimeLocal(marker.time.GetSecondOfDay()));
-  buffer.Format(_("dropped at %s"), time_buffer);
+  FormatTimespanSmart(timespan_buffer, BrokenDateTime::NowUTC() - marker.time);
+  buffer.Format(_("dropped %s ago"), timespan_buffer);
+  buffer.AppendFormat(_T(" (%s)"), time_buffer);
   canvas.Select(small_font);
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
@@ -212,12 +214,20 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, _("Thermal"));
 
   StaticString<256> buffer;
-  TCHAR lift_buffer[32], time_buffer[32];
+  TCHAR lift_buffer[32], time_buffer[32], timespan_buffer[32];
   Units::FormatUserVerticalSpeed(thermal.lift_rate, lift_buffer, 32);
   FormatSignedTimeHHMM(time_buffer, TimeLocal((int)thermal.time));
+
+  int timespan = BrokenDateTime::NowUTC().GetSecondOfDay() - (int)thermal.time;
+  if (timespan < 0)
+    timespan += 24 * 60 * 60;
+
+  FormatTimespanSmart(timespan_buffer, timespan);
+
   buffer.Format(_T("%s: %s"), _("Avg. lift"), lift_buffer);
   buffer.append(_T(" - "));
-  buffer.AppendFormat(_("left at %s"), time_buffer);
+  buffer.AppendFormat(_("left %s ago"), timespan_buffer);
+  buffer.AppendFormat(_T(" (%s)"), time_buffer);
   canvas.Select(small_font);
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
