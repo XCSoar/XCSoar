@@ -88,7 +88,7 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
 
   case CoordinateFormat::DD_DDDD:
     // Save the string to the buffer
-    _sntprintf(buffer, size, _T("%08.4f %c")_T(DEG), mlong, EW[sign]);
+    _sntprintf(buffer, size, _T("%08.4f" DEG " %c"), mlong, EW[sign]);
     break;
 
   default:
@@ -156,7 +156,7 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
 
   case CoordinateFormat::DD_DDDD:
     // Save the string to the buffer
-    _sntprintf(buffer, size, _T("%07.4f %c")_T(DEG), mlat, EW[sign]);
+    _sntprintf(buffer, size, _T("%07.4f" DEG " %c"), mlat, EW[sign]);
     break;
 
   default:
