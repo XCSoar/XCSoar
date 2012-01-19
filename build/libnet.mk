@@ -23,8 +23,7 @@ LIBNET_SOURCES += \
 	$(SRC)/Net/CURL/Request.cpp \
 	$(SRC)/Net/CURL/Init.cpp
 
-CURL_CPPFLAGS := $(shell $(PKG_CONFIG) libcurl --cflags)
-CURL_LDLIBS := $(shell $(PKG_CONFIG) libcurl --libs)
+$(eval $(call pkg-config-library,CURL,libcurl))
 
 LIBNET_CPPFLAGS = $(CURL_CPPFLAGS)
 LIBNET_LDLIBS = $(CURL_LDLIBS)
