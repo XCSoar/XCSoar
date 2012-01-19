@@ -39,6 +39,6 @@ void FormatSignedTimeHHMM(TCHAR* buffer, int time);
  * if hours == 0, returns MMSS in buffer1 and "" in buffer2
  * @param d input seconds
  */
-void TimeToTextSmart(TCHAR *buffer1, TCHAR *buffer2, int time);
+void FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, int time);
 
 #endif

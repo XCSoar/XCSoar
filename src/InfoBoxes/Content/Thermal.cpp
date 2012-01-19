@@ -100,7 +100,7 @@ InfoBoxContentThermalLastTime::Update(InfoBoxData &data)
   // Set Value
 
   TCHAR value[32], comment[32];
-  TimeToTextSmart(value, comment, (int)thermal.duration);
+  FormatTimeTwoLines(value, comment, (int)thermal.duration);
 
   data.SetValue(value);
   data.SetComment(comment);

@@ -40,7 +40,7 @@ FormatSignedTimeHHMM(TCHAR* buffer, int _time)
 }
 
 void
-TimeToTextSmart(TCHAR *buffer1, TCHAR *buffer2, int _time)
+FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, int _time)
 {
   if ((unsigned)abs(_time) >= 24u * 3600u) {
     _tcscpy(buffer1, _T(">24h"));

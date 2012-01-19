@@ -181,7 +181,7 @@ InfoBoxContentNextETE::Update(InfoBoxData &data)
   TCHAR value[32];
   TCHAR comment[32];
   const int dd = (int)task_stats.current_leg.time_remaining;
-  TimeToTextSmart(value, comment, dd);
+  FormatTimeTwoLines(value, comment, dd);
 
   data.SetValue(value);
   data.SetComment(comment);
@@ -329,7 +329,7 @@ InfoBoxContentFinalETE::Update(InfoBoxData &data)
   TCHAR value[32];
   TCHAR comment[32];
   const int dd = abs((int)task_stats.total.time_remaining);
-  TimeToTextSmart(value, comment, dd);
+  FormatTimeTwoLines(value, comment, dd);
 
   data.SetValue(value);
   data.SetComment(comment);
@@ -555,7 +555,7 @@ InfoBoxContentTaskAATime::Update(InfoBoxData &data)
 
   TCHAR value[32];
   TCHAR comment[32];
-  TimeToTextSmart(value, comment,
+  FormatTimeTwoLines(value, comment,
                          abs((int) common_stats.aat_time_remaining));
 
   data.UnsafeFormatValue(negative(common_stats.aat_time_remaining) ?
@@ -585,7 +585,7 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxData &data)
   TCHAR value[32];
   TCHAR comment[32];
   const int dd = abs((int)diff);
-  TimeToTextSmart(value, comment, dd);
+  FormatTimeTwoLines(value, comment, dd);
 
   data.UnsafeFormatValue(negative(diff) ? _T("-%s") : _T("%s"), value);
 
@@ -726,7 +726,7 @@ InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxData &data)
 
   TCHAR value[32];
   TCHAR comment[32];
-  TimeToTextSmart(value, comment, dd);
+  FormatTimeTwoLines(value, comment, dd);
 
   data.SetValue(value);
   data.SetComment(_("Time Below"));
@@ -757,7 +757,7 @@ InfoBoxContentNextETEVMG::Update(InfoBoxData &data)
   TCHAR value[32];
   TCHAR comment[32];
   const int dd = (int)(d/v);
-  TimeToTextSmart(value, comment, dd);
+  FormatTimeTwoLines(value, comment, dd);
 
   data.SetValue(value);
   data.SetComment(comment);
@@ -788,7 +788,7 @@ InfoBoxContentFinalETEVMG::Update(InfoBoxData &data)
   TCHAR value[32];
   TCHAR comment[32];
   const int dd = (int)(d/v);
-  TimeToTextSmart(value, comment, dd);
+  FormatTimeTwoLines(value, comment, dd);
 
   data.SetValue(value);
   data.SetComment(comment);

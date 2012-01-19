@@ -75,7 +75,7 @@ InfoBoxContentTimeFlight::Update(InfoBoxData &data)
 
   // Set Value
   TCHAR value[32], comment[32];
-  TimeToTextSmart(value, comment,
+  FormatTimeTwoLines(value, comment,
                          (int)XCSoarInterface::Calculated().flight.flight_time);
 
   data.SetValue(value);
