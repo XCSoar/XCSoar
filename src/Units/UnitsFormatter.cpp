@@ -42,7 +42,7 @@ FormatInteger(TCHAR *buffer, size_t size,
 
   if (include_unit)
     _sntprintf(buffer, size, include_sign ? _T("%+d %s") : _T("%d %s"), ivalue,
-               Units::unit_descriptors[(unsigned)unit].name);
+               Units::GetUnitName(unit));
   else
     _sntprintf(buffer, size, include_sign ? _T("%+d") : _T("%d"), ivalue);
 }
@@ -108,7 +108,7 @@ Units::FormatDistance(TCHAR *buffer, size_t size, fixed value, Unit unit,
 
   if (include_unit)
     _sntprintf(buffer, size, _T("%.*f %s"), precision, (double)value,
-               Units::unit_descriptors[(unsigned)unit].name);
+               Units::GetUnitName(unit));
   else
     _sntprintf(buffer, size, _T("%.*f"), precision, (double)value);
 }
@@ -139,7 +139,7 @@ Units::FormatSmallDistance(TCHAR *buffer, size_t size, fixed value, Unit unit,
 
   if (include_unit)
     _sntprintf(buffer, size, _T("%.*f %s"), precision, (double)value,
-               Units::unit_descriptors[(unsigned)unit].name);
+               Units::GetUnitName(unit));
   else
     _sntprintf(buffer, size, _T("%.*f"), precision, (double)value);
 
@@ -214,7 +214,7 @@ Units::FormatSpeed(TCHAR *buffer, size_t size,
   const int prec = precision && value < fixed(100);
   if (include_unit)
     _sntprintf(buffer, size, _T("%.*f %s"),
-               prec, (double)value, Units::unit_descriptors[(unsigned)unit].name);
+               prec, (double)value, Units::GetUnitName(unit));
   else
     _sntprintf(buffer, size, _T("%.*f"),
                prec, (double)value);
@@ -286,7 +286,7 @@ Units::FormatVerticalSpeed(TCHAR *buffer, size_t size, fixed value, Unit unit,
 
   if (include_unit)
     _sntprintf(buffer, size, GetVerticalSpeedFormat(unit, include_unit),
-               (double)value, Units::unit_descriptors[(unsigned)unit].name);
+               (double)value, Units::GetUnitName(unit));
   else
     _sntprintf(buffer, size, GetVerticalSpeedFormat(unit, include_unit),
                (double)value);
@@ -308,7 +308,7 @@ Units::FormatTemperature(TCHAR *buffer, size_t size, fixed value, Unit unit,
 
   if (include_unit)
     _sntprintf(buffer, size, _T("%.0f %s"), (double)value,
-               Units::unit_descriptors[(unsigned)unit].name);
+               Units::GetUnitName(unit));
   else
     _sntprintf(buffer, size, _T("%.0f"), (double)value);
 }
@@ -328,7 +328,7 @@ Units::FormatPressure(TCHAR *buffer, size_t size, AtmosphericPressure pressure,
 
   if (include_unit)
     _sntprintf(buffer, size, GetPressureFormat(unit, include_unit),
-               (double)_pressure, Units::unit_descriptors[(unsigned)unit].name);
+               (double)_pressure, Units::GetUnitName(unit));
   else
     _sntprintf(buffer, size, GetPressureFormat(unit, include_unit),
                (double)_pressure);
