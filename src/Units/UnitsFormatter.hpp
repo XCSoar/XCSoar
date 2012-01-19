@@ -207,6 +207,19 @@ namespace Units
   const TCHAR* GetUserVerticalSpeedFormat(bool include_unit = false);
 
   /**
+   * Give the basic step size for pressure editing
+   * @param unit the pressure unit
+   * @return the step size
+   */
+  fixed GetVerticalSpeedStep(Unit unit);
+
+  /**
+   * Give the basic step for pressure editing
+   * @return the step
+   */
+  fixed GetUserVerticalSpeedStep();
+
+  /**
    * Converts a vertical speed into a formatted string
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer

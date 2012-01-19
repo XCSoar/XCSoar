@@ -259,6 +259,25 @@ Units::GetUserVerticalSpeedFormat(bool include_unit)
   return GetPressureFormat(current.vertical_speed_unit);
 }
 
+fixed
+Units::GetVerticalSpeedStep(Unit unit)
+{
+  switch (unit) {
+  case Unit::FEET_PER_MINUTE:
+    return fixed_ten;
+  case Unit::KNOTS:
+    return fixed(0.2);
+  default:
+    return fixed(0.1);
+  }
+}
+
+fixed
+Units::GetUserVerticalSpeedStep()
+{
+  return GetVerticalSpeedStep(current.vertical_speed_unit);
+}
+
 void
 Units::FormatVerticalSpeed(TCHAR *buffer, size_t size, fixed value, Unit unit,
                            bool include_unit)
