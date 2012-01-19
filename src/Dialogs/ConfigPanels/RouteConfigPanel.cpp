@@ -115,18 +115,18 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Route mode"), _T(""), route_mode_list,
           (unsigned)route_planner.mode, OnRouteMode);
 
-  // Expert item (TODO)
   AddBoolean(_("Route climb"),
              _("When enabled and MC is positive, route planning allows climbs between the aircraft "
                  "location and destination."),
              route_planner.allow_climb);
+  SetExpertRow(RoutePlannerAllowClimb);
 
-  // Expert item
   AddBoolean(_("Route ceiling"),
              _("When enabled, route planning climbs are limited to ceiling defined by greater of "
                  "current aircraft altitude plus 500 m and the thermal ceiling.  If disabled, "
                  "climbs are unlimited."),
              route_planner.use_ceiling);
+  SetExpertRow(RoutePlannerUseCeiling);
 
   static gcc_constexpr_data StaticEnumChoice turning_reach_list[] = {
     { (unsigned)RoutePlannerConfig::ReachMode::OFF, N_("Off"),
@@ -164,10 +164,10 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
 
-  // Expert item
   AddEnum(_("Reach polar"),
           _("This determines the glide performance used in reach, landable arrival, abort and alternate calculations."),
           reach_polar_list, (unsigned)route_planner.reach_polar_mode);
+  SetExpertRow(ReachPolarMode);
 
   ShowRouteControls(route_planner.mode != RoutePlannerConfig::Mode::NONE);
   ShowReachControls(route_planner.reach_calc_mode != RoutePlannerConfig::ReachMode::OFF);

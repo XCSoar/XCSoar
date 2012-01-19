@@ -115,9 +115,10 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
       N_("Both arrival heights are displayed.") },
     { 0 }
   };
-  // Expert item (TODO)
+
   AddEnum(_("Arrival height"), _("Determines how arrival height is displayed in waypoint labels"),
           wp_arrival_list, settings.arrival_height_display);
+  SetExpertRow(WaypointArrivalHeightDisplay);
 
   const TCHAR *wp_label_help = N_("Select a label shape.");
   static const StaticEnumChoice wp_label_list[] = {
@@ -125,8 +126,9 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
     { RM_OUTLINED_INVERTED, N_("Outlined"), wp_label_help },
     { 0 }
   };
-  // Expert item
+
   AddEnum(_("Label style"), _T(""), wp_label_list, settings.landable_render_mode);
+  SetExpertRow(WaypointLabelStyle);
 
   static gcc_constexpr_data StaticEnumChoice wp_selection_list[] = {
     { wlsAllWaypoints, N_("All"), N_("All waypoint labels will be displayed.") },
@@ -137,10 +139,11 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
     { wlsNoWaypoints, N_("None"), N_("No waypoint labels will be displayed.") },
     { 0 }
   };
-  // Expert item
+
   AddEnum(_("Label visibility"),
           _("Determines what waypoint labels are displayed for each waypoint (space permitting)."),
           wp_selection_list, settings.label_selection);
+  SetExpertRow(WaypointLabelSelection);
 
   static gcc_constexpr_data StaticEnumChoice wp_style_list[] = {
     { wpLandableWinPilot, N_("Purple circle"),
@@ -162,22 +165,22 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
               "field and airport. All styles mark the waypoints within reach green."),
           wp_style_list, settings.landable_style);
 
-  // Expert item
   AddBoolean(_("Detailed landables"),
              _("[Off] Display fixed icons for landables.\n"
                  "[On] Show landables with variable information like runway length and heading."),
              settings.vector_landable_rendering, OnRenderingTypeData);
+  SetExpertRow(AppUseSWLandablesRendering);
 
-  // Expert item
   AddInteger(_("Landable size"),
              _("A percentage to select the size landables are displayed on the map."),
              _T("%u %%"), _T("%u"), 50, 200, 10, settings.landable_rendering_scale);
+  SetExpertRow(AppLandableRenderingScale);
 
-  // Expert item
   AddBoolean(_("Scale runway length"),
              _("[Off] Display fixed length for runways.\n"
                  "[On] Scale displayed runway length based on real length."),
              settings.scale_runway_length);
+  SetExpertRow(AppScaleRunwayLength);
 
   UpdateVisibilities();
 }

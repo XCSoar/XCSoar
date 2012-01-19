@@ -131,36 +131,36 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("FLARM traffic"), _("This enables the display of FLARM traffic on the map window."),
              settings_map.show_flarm_on_map);
 
-  // Expert item (TODO)
   AddEnum(_("Trail length"), _T(""), trail_length_list, settings_map.trail_length, OnTrailLength);
+  SetExpertRow(Trail);
 
-  // Expert item
   AddBoolean(_("Trail drift"),
              _("Determines whether the snail trail is drifted with the wind when displayed in "
                  "circling mode."),
              settings_map.trail_drift_enabled);
+  SetExpertRow(TrailDrift);
 
-  // Expert item
   AddEnum(_("Trail type"), _T(""), trail_type_list, (int)settings_map.snail_type);
+  SetExpertRow(SnailType);
 
-  // Expert item
   AddBoolean(_("Trail scaled"),
              _("If set to ON the snail trail width is scaled according to the vario signal."),
              settings_map.snail_scaling_enabled);
+  SetExpertRow(SnailWidthScale);
 
-  // Expert item
   AddBoolean(_("Detour cost markers"),
              _("If the aircraft heading deviates from the current waypoint, markers are displayed "
                  "at points ahead of the aircraft. The value of each marker is the extra distance "
                  "required to reach that point as a percentage of straight-line distance to the waypoint."),
              settings_map.detour_cost_markers_enabled);
+  SetExpertRow(DetourCostMarker);
 
-  // Expert item
   AddEnum(_("Aircraft symbol"), _T(""), aircraft_symbol_list, settings_map.aircraft_symbol);
+  SetExpertRow(AircraftSymbol);
 
-  // Expert item
   AddEnum(_("Wind arrow"), _("Determines the way the wind arrow is drawn on the map."),
           wind_arrow_list, settings_map.wind_arrow_style);
+  SetExpertRow(WindArrowStyle);
 
   ShowTrailControls(settings_map.trail_length != TRAIL_OFF);
 }

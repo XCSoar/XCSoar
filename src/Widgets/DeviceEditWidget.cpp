@@ -542,6 +542,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
              _("If your GPS device outputs invalid NMEA checksums, this will "
                "allow it's data to be used anyway."),
              config.ignore_checksum);
+  SetExpertRow(IgnoreCheckSum);
 
   port_df->SetDetachGUI(false);
   driver_df->SetDetachGUI(false);

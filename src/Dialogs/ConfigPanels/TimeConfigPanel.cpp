@@ -112,13 +112,13 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   Add(_("Local time"), 0, true);
   SetLocalTime(utc_offset);
 
-  // Expert item
   AddBoolean(_("Use GPS time"),
              _("If enabled sets the clock of the computer to the GPS time once a fix "
                "is set. This is only necessary if your computer does not have a "
                "real-time clock with battery backup or your computer frequently runs "
                "out of battery power or otherwise loses time."),
              settings_computer.set_system_time_from_gps);
+  SetExpertRow(SystemTimeFromGPS);
 }
 
 bool

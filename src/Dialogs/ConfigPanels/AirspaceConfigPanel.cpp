@@ -167,24 +167,29 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddInteger(_("Warning time"),
              _("This is the time before an airspace incursion is estimated at which the system will warn the pilot."),
              _T("%u s"), _T("%u"), 10, 1000, 5, computer.warnings.WarningTime);
+  SetExpertRow(WarningTime);
 
   AddInteger(_("Acknowledge time"),
              _("This is the time period in which an acknowledged airspace warning will not be repeated."),
              _T("%u s"), _T("%u"), 10, 1000, 5, computer.warnings.AcknowledgementTime);
+  SetExpertRow(AcknowledgeTime);
 
   AddBoolean(_("Use black outline"),
              _("Draw a black outline around each airspace rather than the airspace color."),
              renderer.black_outline);
+  SetExpertRow(UseBlackOutline);
 
   AddEnum(_("Airspace fill mode"),
           _("Specifies the mode for filling the airspace area."),
           as_fill_mode_list, renderer.fill_mode);
+  SetExpertRow(AirspaceFillMode);
 
 #if !defined(ENABLE_OPENGL) && defined(HAVE_ALPHA_BLEND)
-  if (AlphaBlendAvailable())
+  if (AlphaBlendAvailable()) {
     AddBoolean(_("Airspace transparency"), _("If enabled, then airspaces are filled transparently."),
                renderer.transparency);
-  else
+    SetExpertRow(AirspaceTransparency);
+  }
 #endif
 
   ShowDisplayControls(renderer.altitude_mode); // TODO make this work the first time

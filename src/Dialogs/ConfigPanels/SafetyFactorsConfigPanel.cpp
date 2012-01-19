@@ -86,16 +86,19 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            _T("%.1f %s"), _T("%.1f"),
            fixed_zero, fixed_ten, fixed(0.1), false,
            UnitGroup::VERTICAL_SPEED, task_behaviour.safety_mc);
+  SetExpertRow(SafetyMC);
 
   AddFloat(_("STF risk factor"),
            _("The STF risk factor reduces the MacCready setting used to calculate speed to fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for no compensation, 1.0 scales MC linearly with height."),
            _T("%.1f %s"), _T("%.1f"),
            fixed_zero, fixed_one, fixed(0.1), false,
            task_behaviour.risk_gamma);
+  SetExpertRow(RiskFactor);
 
   AddBoolean(_("Predict wind drift"),
              _("Account for wind drift for the predicted circling duration. This reduces the arrival height for legs with head wind."),
              task_behaviour.glide.predict_wind_drift);
+  SetExpertRow(PredictWindDrift);
 }
 
 bool

@@ -71,23 +71,25 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("This option defines which auto MacCready algorithm is used."),
           auto_mc_list, (unsigned)settings_computer.task.auto_mc_mode);
 
-  // TODO All below is for the Expert
   AddBoolean(_("Block speed to fly"),
              _("If enabled, the command speed in cruise is set to the MacCready speed to fly in "
                  "no vertical air-mass movement. If disabled, the command speed in cruise is set "
                  "to the dolphin speed to fly, equivalent to the MacCready speed with vertical "
                  "air-mass movement."),
              settings_computer.block_stf_enabled);
+  SetExpertRow(BlockSTF);
 
   AddBoolean(_("Nav. by baro altitude"),
              _("When enabled and if connected to a barometric altimeter, barometric altitude is "
                  "used for all navigation functions. Otherwise GPS altitude is used."),
              settings_computer.nav_baro_altitude_enabled);
+  SetExpertRow(EnableNavBaroAltitude);
 
   AddBoolean(_("Flap forces cruise"),
              _("When Vega variometer is connected and this option is true, the positive flap "
                  "setting switches the flight mode between circling and cruise."),
              settings_computer.external_trigger_cruise_enabled);
+  SetExpertRow(EnableExternalTriggerCruise);
 
   static gcc_constexpr_data StaticEnumChoice aver_eff_list[] = {
     { ae15seconds, _T("15 s"), N_("Preferred period for paragliders.") },
@@ -103,6 +105,7 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("Here you can decide on how many seconds of flight this calculation must be done. "
               "Normally for gliders a good value is 90-120 seconds, and for paragliders 15 seconds."),
           aver_eff_list, settings_computer.average_eff_time);
+  SetExpertRow(AverEffTime);
 }
 
 bool

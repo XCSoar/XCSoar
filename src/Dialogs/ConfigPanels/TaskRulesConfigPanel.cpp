@@ -62,33 +62,33 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-  // Expert item (TODO)
   AddFloat(_("Start max. speed"), _("Maximum speed allowed in start observation zone.  Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(300), fixed(5), false, UnitGroup::HORIZONTAL_SPEED,
            task_behaviour.ordered_defaults.start_max_speed);
+  SetExpertRow(StartMaxSpeed);
 
-  // Expert item
   AddFloat(_("Start max. speed margin"),
            _("Maximum speed above maximum start speed to tolerate.  Set to 0 for no tolerance."),
            _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(300), fixed(5), false, UnitGroup::HORIZONTAL_SPEED,
            task_behaviour.start_max_speed_margin);
+  SetExpertRow(StartMaxSpeedMargin);
 
   AddSpacer();
+  SetExpertRow(spacer_1);
 
-  // Expert item
   AddFloat(_("Start max. height"),
            _("Maximum height based on start height reference (AGL or MSL) while starting the task.  "
                "Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, UnitGroup::ALTITUDE,
            fixed(task_behaviour.ordered_defaults.start_max_height));
+  SetExpertRow(StartMaxHeight);
 
-  // Expert item
   AddFloat(_("Start max. height margin"),
            _("Maximum height above maximum start height to tolerate.  Set to 0 for no tolerance."),
            _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, UnitGroup::ALTITUDE,
            fixed(task_behaviour.start_max_height_margin));
+  SetExpertRow(StartMaxHeightMargin);
 
-  // Expert item
   static gcc_constexpr_data StaticEnumChoice start_max_height_ref_list[] = {
     { (unsigned)HeightReferenceType::AGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point).") },
     { (unsigned)HeightReferenceType::MSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level).") },
@@ -96,17 +96,18 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
   AddEnum(_("Start height ref."), _T(""), start_max_height_ref_list,
           (unsigned)task_behaviour.ordered_defaults.start_max_height_ref);
+  SetExpertRow(StartHeightRef);
 
   AddSpacer();
+  SetExpertRow(spacer_2);
 
-  // Expert item
   AddFloat(_("Finish min. height"),
            _("Minimum height based on finish height reference (AGL or MSL) while finishing the task.  "
                "Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, UnitGroup::ALTITUDE,
            fixed(task_behaviour.ordered_defaults.finish_min_height));
+  SetExpertRow(FinishMinHeight);
 
-  // Expert item
   static gcc_constexpr_data StaticEnumChoice finish_min_height_ref_list[] = {
     { (unsigned)HeightReferenceType::AGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point).") },
     { (unsigned)HeightReferenceType::MSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level).") },
@@ -114,8 +115,10 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
   AddEnum(_("Finish height ref."), _T(""), finish_min_height_ref_list,
           (unsigned)task_behaviour.ordered_defaults.finish_min_height_ref);
+  SetExpertRow(FinishHeightRef);
 
   AddSpacer();
+  SetExpertRow(spacer_3);
 
   const StaticEnumChoice contests_list[] = {
     { OLC_FAI, ContestToString(OLC_FAI),

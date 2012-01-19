@@ -106,38 +106,38 @@ SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                     "Zander files (.wpz) or SeeYou files (.cup)."),
                 szProfileWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
 
-  // Expert item (TODO)
   AddFileReader(_("More waypoints"),
                 _("Secondary waypoints file.  This may be used to add waypoints for a competition."),
                 szProfileAdditionalWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
+  SetExpertRow(AdditionalWaypointFile);
 
-  // Expert item
   AddFileReader(_("Watched waypoints"),
                 _("Waypoint file containing special waypoints for which additional computations like "
                     "calculation of arrival height in map display always takes place. Useful for "
                     "waypoints like known reliable thermal sources (e.g. powerplants) or mountain passes."),
                 szProfileWatchedWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
+  SetExpertRow(WatchedWaypointFile);
 
   AddFileReader(_("Airspaces"), _("The file name of the primary airspace file."),
                 szProfileAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
 
-  // Expert item
   AddFileReader(_("More airspaces"), _("The file name of the secondary airspace file."),
                 szProfileAdditionalAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
+  SetExpertRow(AdditionalAirspaceFile);
 
-  // Expert item
   AddFileReader(_("Terrain file"), _("The name of the file containing digital elevation terrain data."),
                 szProfileTerrainFile, _T("*.jp2\0"));
+  SetExpertRow(TerrainFile);
 
-  // Expert item
   AddFileReader(_("Topography file"), _("Specifies the file defining the topographical features."),
                 szProfileTopographyFile, _T("*.tpl\0"));
+  SetExpertRow(TopographyFile);
 
-  // Expert item
   AddFileReader(_("Waypoint details"),
                 _("The file may contain extracts from enroute supplements or other contributed "
                     "information about individual waypoints and airfields."),
                 szProfileAirfieldFile, _T("*.txt\0"));
+  SetExpertRow(AirfieldFile);
 }
 
 bool

@@ -112,11 +112,11 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              settings.enable_auto_blank);
 #endif
 
-  // Expert item (TODO)
   AddFileReader(_("Events"),
                 _("The Input Events file defines the menu system and how XCSoar responds to "
                     "button presses and events from external devices."),
                 szProfileInputFile, _T("*.xci\0"));
+  SetExpertRow(InputFile);
 
 #ifndef HAVE_NATIVE_GETTEXT
   WndProperty *wp;
@@ -164,18 +164,17 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 #endif /* !HAVE_NATIVE_GETTEXT */
 
-  // Expert item
   AddFileReader(_("Status message"),
                 _("The status file can be used to define sounds to be played when certain "
                     "events occur, and how long various status messages will appear on screen."),
                 szProfileStatusFile, _T("*.xcs\0"));
+  SetExpertRow(StatusFile);
 
-  // Expert item
   AddInteger(_("Menu timeout"),
              _("This determines how long menus will appear on screen if the user does not make any button "
                  "presses or interacts with the computer."),
              _T("%u s"), _T("%u"), 1, 60, 1, settings.menu_timeout / 2);
-
+  SetExpertRow(MenuTimeout);
 
   static gcc_constexpr_data StaticEnumChoice text_input_list[] = {
     { (unsigned)DialogSettings::TextInputStyle::Default, N_("Default") },
@@ -185,10 +184,10 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
 
-  // Expert item
   AddEnum(_("Text input style"),
           _("Determines how the user is prompted for text input (filename, teamcode etc.)"),
           text_input_list, (unsigned)settings.dialog.text_input_style);
+  SetExpertRow(TextInput);
 
   /* on-screen keyboard doesn't work without a pointing device
      (mouse or touch screen), hide the option on Altair */
@@ -202,10 +201,10 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
 
-  // Expert item
   wp = AddEnum(_("Haptic feedback"),
                _("Determines if haptic feedback like vibration is used."),
                haptic_feedback_list, (unsigned)settings.haptic_feedback);
+  SetExpertRow(HapticFeedback);
 #endif /* HAVE_VIBRATOR */
 }
 

@@ -60,6 +60,7 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("Auto close FLARM"),
              _("Setting this to \"On\" will automatically close the FLARM dialog if there is no traffic. \"Off\" will keep the dialog open even without current traffic."),
              ui_settings.auto_close_flarm_dialog);
+  SetExpertRow(AutoCloseFlarmDialog);
 
   AddBoolean(_("Thermal assistant"),
              _("This enables the display of the thermal assistant gauge."),

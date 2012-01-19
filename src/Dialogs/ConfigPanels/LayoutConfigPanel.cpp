@@ -143,32 +143,33 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, InfoBoxLayout::InfoBoxGeometry);
 
-  // Expert item (TODO)
   AddEnum(_("FLARM display"), _T(""),
           flarm_display_location_list, ui_settings.flarm_location);
+  SetExpertRow(AppFlarmLocation);
 
   AddEnum(_("Tab dialog style"), _T(""),
           tabdialog_style_list, (unsigned)ui_settings.dialog.tab_style);
 
-  // Expert item
   AddEnum(_("Message display"), _T(""),
           popup_msg_position_list, ui_settings.popup_message_position);
-          // Expert item
+  SetExpertRow(AppStatusMessageAlignment);
+
   AddEnum(_("Dialog size"), _T(""),
           dialog_style_list, ui_settings.dialog.dialog_style);
+  SetExpertRow(DialogStyle);
 
-  // Expert item
   AddBoolean(_("Inverse InfoBoxes"), _("If true, the InfoBoxes are white on black, otherwise black on white."),
              ui_settings.info_boxes.inverse);
+  SetExpertRow(AppInverseInfoBox);
 
-  // Expert item
   AddBoolean(_("Colored InfoBoxes"),
              _("If true, certain InfoBoxes will have coloured text.  For example, the active waypoint "
                  "InfoBox will be blue when the glider is above final glide."),
              ui_settings.info_boxes.use_colors);
+  SetExpertRow(AppInfoBoxColors);
 
-  // Expert item
   AddEnum(_("InfoBox border"), _T(""), infobox_border_list, ui_settings.info_boxes.border_style);
+  SetExpertRow(AppInfoBoxBorder);
 }
 
 bool

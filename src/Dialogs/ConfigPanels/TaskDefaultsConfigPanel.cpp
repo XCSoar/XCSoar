@@ -210,6 +210,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                  "seeks to complete the task at the minimum time plus this margin time."),
              _T("%u min"), _T("%u"), 0, 30, 1,
              (unsigned)(task_behaviour.optimise_targets_margin / 60));
+  SetExpertRow(AATTimeMargin);
 
   SetStartLabel();
   SetFinishLabel();

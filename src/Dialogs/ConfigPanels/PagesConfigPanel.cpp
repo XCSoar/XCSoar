@@ -81,6 +81,9 @@ PagesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     WndProperty* wp = AddEnum(caption,
                              _("Determines the information displayed on different screen pages."),
                              empty_list, 0);
+    if (i >= 3)
+      SetExpertRow(i);
+
     if (wp) {
       DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
       UpdateComboBox(dfe, i);

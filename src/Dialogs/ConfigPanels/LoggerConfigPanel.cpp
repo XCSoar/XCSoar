@@ -71,17 +71,17 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-  // Expert item (TODO)
   AddInteger(_("Time step cruise"),
            _("This is the time interval between logged points when not circling."),
            _T("%u s"), _T("%u"), 1, 30, 1,
            settings_computer.logger_time_step_cruise);
+  SetExpertRow(LoggerTimeStepCruise);
 
-  // Expert item
   AddInteger(_("Time step circling"),
           _("This is the time interval between logged points when circling."),
           _T("%u s"), _T("%u"),  1, 30, 1,
           settings_computer.logger_time_step_circling);
+  SetExpertRow(LoggerTimeStepCircling);
 
   TCHAR tmp_text[100];
   Profile::Get(szProfilePilotName, tmp_text, 100);
@@ -94,18 +94,18 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   Profile::Get(szProfileLoggerID, tmp_text, 100);
   AddText(_("Logger ID"), _T(""), tmp_text);
 
-  // Expert item
   AddBoolean(_("Short file name"),
              _("This determines whether the logger uses the short IGC file name or the "
                  "long IGC file name. Example short name (81HXABC1.IGC), long name "
                  "(2008-01-18-XXX-ABC-01.IGC)."),
              settings_computer.logger_short_name);
+  SetExpertRow(LoggerShortName);
 
-  // Expert item
   AddEnum(_("Auto. logger"),
           _("Enables the automatic starting and stopping of logger on takeoff and landing "
             "respectively. Disable when flying paragliders."),
           auto_logger_list, (unsigned)settings_computer.auto_logger);
+  SetExpertRow(DisableAutoLogger);
 }
 
 bool

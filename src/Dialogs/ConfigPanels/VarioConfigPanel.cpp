@@ -58,36 +58,36 @@ VarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-  // Expert item (TODO)
   AddBoolean(_("Speed arrows"),
              _("Whether to show speed command arrows on the vario gauge.  When shown, in cruise mode, "
                  "arrows point up to command slow down; arrows point down to command speed up."),
              settings.ShowSpeedToFly);
+  SetExpertRow(AppGaugeVarioSpeedToFly);
 
-  // Expert item
   AddBoolean(_("Show average"),
              _("Whether to show the average climb rate.  In cruise mode, this switches to showing the "
                  "average netto airmass rate."),
              settings.ShowAvgText);
+  SetExpertRow(AppGaugeVarioAvgText);
 
-  // Expert item
   AddBoolean(_("Show MacReady"), _("Whether to show the MacCready setting."), settings.ShowMc);
+  SetExpertRow(AppGaugeVarioMc);
 
-  // Expert item
   AddBoolean(_("Show bugs"), _("Whether to show the bugs percentage."), settings.ShowBugs);
+  SetExpertRow(AppGaugeVarioBugs);
 
-  // Expert item
   AddBoolean(_("Show ballast"), _("Whether to show the ballast percentage."), settings.ShowBallast);
+  SetExpertRow(AppGaugeVarioBallast);
 
-  // Expert item
   AddBoolean(_("Show gross"), _("Whether to show the gross climb rate."), settings.ShowGross);
+  SetExpertRow(AppGaugeVarioGross);
 
-  // Expert item
   AddBoolean(_("Averager needle"),
              _("If true, the vario gauge will display a hollow averager needle.  During cruise, this "
                  "needle displays the average netto value.  During circling, this needle displays the "
                  "average gross value."),
              settings.ShowAveNeedle);
+  SetExpertRow(AppAveNeedle);
 }
 
 bool
