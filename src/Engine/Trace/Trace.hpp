@@ -415,6 +415,8 @@ public:
     typedef const TracePoint *pointer;
     typedef const TracePoint &reference;
 
+    const_iterator() = default;
+
     const TracePoint &operator*() const {
       const TraceDelta &td = (const TraceDelta &)*iterator;
       return td.point;
@@ -493,6 +495,8 @@ public:
     typedef const TracePoint value_type;
     typedef const TracePoint *pointer;
     typedef const TracePoint &reference;
+
+    const_reverse_iterator() = default;
 
     const TracePoint &operator*() const {
       const TraceDelta &td = (const TraceDelta &)*iterator;
