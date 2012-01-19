@@ -24,6 +24,8 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/DialogSettings.hpp"
+#include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "xmlParser.hpp"
 #include "DataField/Boolean.hpp"
@@ -70,9 +72,6 @@ SetXMLDialogLook(const DialogLook &_dialog_look)
 
 // used when stretching dialog and components
 static int dialog_width_scale = 1024;
-
-// to full width of screen
-DialogStyle dialog_style_setting = dsFullWidth;
 
 // used when loading stand-alone XML file with no form control
 static DialogStyle dialog_style_last = dsFullWidth;
@@ -179,7 +178,7 @@ GetDialogStyle(const XMLNode &node)
 {
   const TCHAR* popup = node.getAttribute(_T("Popup"));
   if ((popup == NULL) || StringIsEmpty(popup))
-    return dialog_style_setting;
+    return UIGlobals::GetDialogSettings().dialog_style;
   else
     return (DialogStyle)StringToIntDflt(popup, 0);
 }

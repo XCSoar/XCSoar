@@ -37,8 +37,6 @@ Profile::Use()
 
   Load(CommonInterface::SetComputerSettings());
   Load(CommonInterface::SetUISettings());
-
-  GetEnum(szProfileAppDialogStyle, dialog_style_setting);
 }
 
 void

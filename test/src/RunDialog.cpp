@@ -22,6 +22,8 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/DialogSettings.hpp"
+#include "UIGlobals.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
@@ -42,6 +44,14 @@ Copyright_License {
 #endif
 
 void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
+
+static DialogSettings dialog_settings;
+
+const DialogSettings &
+UIGlobals::GetDialogSettings()
+{
+  return dialog_settings;
+}
 
 #ifndef WIN32
 int main(int argc, char **argv)
@@ -96,6 +106,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.show();
 
   Fonts::Initialize();
+
+  dialog_settings.SetDefaults();
 
   DialogLook dialog_look;
   dialog_look.Initialise(Fonts::map_bold, Fonts::map,

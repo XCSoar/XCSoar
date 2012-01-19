@@ -39,6 +39,8 @@ Copyright_License {
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/AirspaceWarningDialog.hpp"
+#include "Dialogs/DialogSettings.hpp"
+#include "UIGlobals.hpp"
 #include "Airspace/AirspaceParser.hpp"
 #include "Airspace/AirspaceGlue.hpp"
 #include "Profile/Profile.hpp"
@@ -78,6 +80,14 @@ TaskFile*
 TaskFile::Create(const TCHAR* path)
 {
   return NULL;
+}
+
+static DialogSettings dialog_settings;
+
+const DialogSettings &
+UIGlobals::GetDialogSettings()
+{
+  return dialog_settings;
 }
 
 void dlgBasicSettingsShowModal() {}
@@ -231,6 +241,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Graphics::Initialise();
 
   Fonts::Initialize();
+
+  dialog_settings.SetDefaults();
 
   Look *look = new Look();
   look->Initialise();

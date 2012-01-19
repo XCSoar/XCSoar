@@ -155,7 +155,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           popup_msg_position_list, ui_settings.popup_message_position);
           // Expert item
   AddEnum(_("Dialog size"), _T(""),
-          dialog_style_list, dialog_style_setting);
+          dialog_style_list, ui_settings.dialog.dialog_style);
 
   // Expert item
   AddBoolean(_("Inverse InfoBoxes"), _("If true, the InfoBoxes are white on black, otherwise black on white."),
@@ -202,7 +202,8 @@ LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValueEnum(AppStatusMessageAlignment, szProfileAppStatusMessageAlignment,
                            ui_settings.popup_message_position);
 
-  changed |= SaveValueEnum(DialogStyle, szProfileAppDialogStyle, dialog_style_setting);
+  changed |= SaveValueEnum(DialogStyle, szProfileAppDialogStyle,
+                           ui_settings.dialog.dialog_style);
 
   changed |= require_restart |=
     SaveValueEnum(AppInfoBoxBorder, szProfileAppInfoBoxBorder, ui_settings.info_boxes.border_style);

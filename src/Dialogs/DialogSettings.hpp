@@ -26,6 +26,23 @@ Copyright_License {
 
 #include <stdint.h>
 
+/**
+ * Dialog display styles
+ */
+enum DialogStyle
+{
+  /** cover screen, stretch controls horizontally */
+  dsFullWidth = 0,
+  /** stretch only frame to maintain aspect ratio */
+  dsScaled,
+  /** like eDialogScaled but center dialog in screen */
+  dsScaledCentered,
+  /** don't adjust at all (same as !Layout::ScaleSupported()) */
+  dsFixed,
+  /** stretch horizontal and place to bottom */
+  dsScaledBottom
+};
+
 struct DialogSettings {
   enum class TextInputStyle : uint8_t {
     /**
@@ -41,6 +58,8 @@ struct DialogSettings {
     Text,
     Icon,
   };
+
+  DialogStyle dialog_style;
 
   TextInputStyle text_input_style;
   TabStyle tab_style;

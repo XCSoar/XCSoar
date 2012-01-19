@@ -49,6 +49,7 @@ Profile::Load(VarioSettings &settings)
 void
 Profile::Load(DialogSettings &settings)
 {
+  GetEnum(szProfileAppDialogStyle, settings.dialog_style);
   GetEnum(szProfileAppTextInputStyle, settings.text_input_style);
   GetEnum(szProfileAppDialogTabStyle, settings.tab_style);
   Get(szProfileUserLevel, settings.expert);

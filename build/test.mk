@@ -1553,6 +1553,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
+	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/ResourceLoader.cpp \
@@ -1820,6 +1821,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
+	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
@@ -1906,6 +1908,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/dlgAirspaceWarnings.cpp \
+	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Audio/Sound.cpp \
 	$(SRC)/Screen/Layout.cpp \

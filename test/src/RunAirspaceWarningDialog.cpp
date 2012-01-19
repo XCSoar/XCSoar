@@ -29,7 +29,8 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/AirspaceWarningDialog.hpp"
-#include "UtilsSystem.hpp"
+#include "Dialogs/DialogSettings.hpp"
+#include "UIGlobals.hpp"
 #include "Profile/Profile.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceParser.hpp"
@@ -49,6 +50,14 @@ Copyright_License {
 InterfaceBlackboard CommonInterface::blackboard;
 
 ProtectedAirspaceWarningManager *airspace_warnings;
+
+static DialogSettings dialog_settings;
+
+const DialogSettings &
+UIGlobals::GetDialogSettings()
+{
+  return dialog_settings;
+}
 
 void
 dlgAirspaceDetails(const AbstractAirspace &the_airspace,
@@ -114,6 +123,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Layout::Initialize(640, 480);
 
   Fonts::Initialize();
+
+  dialog_settings.SetDefaults();
 
   DialogLook dialog_look;
   dialog_look.Initialise(Fonts::map_bold, Fonts::map,
