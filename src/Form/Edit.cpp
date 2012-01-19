@@ -218,6 +218,8 @@ WndProperty::UpdateLayout()
 {
   const PixelSize size = get_size();
 
+  const UPixelScalar DEFAULTBORDERPENWIDTH = Layout::FastScale(1);
+
   if (mCaptionWidth >= 0) {
     mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1)*2;
     mEditSize.y = size.cy - 2 * (DEFAULTBORDERPENWIDTH + 1);

@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FORM_INTERNAL_HPP
 #define XCSOAR_FORM_INTERNAL_HPP
 
-#define DEFAULTBORDERPENWIDTH Layout::FastScale(1)
-
 bool
 KeyTimer(bool isdown, unsigned key_code);
 
