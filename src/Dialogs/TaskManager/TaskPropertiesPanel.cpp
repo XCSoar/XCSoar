@@ -94,7 +94,7 @@ TaskPropertiesPanel::RefreshView()
   LoadFormProperty(form, _T("prpTaskType"),(int)ftype);
 
   ShowFormControl(form, _T("prpMinTime"), aat_types);
-  LoadFormProperty(form, _T("prpMinTime"), p.aat_min_time / 60);
+  LoadFormProperty(form, _T("prpMinTime"), (int)p.aat_min_time);
 
   LoadFormProperty(form, _T("prpFAIFinishHeight"), p.fai_finish);
 
@@ -130,9 +130,9 @@ TaskPropertiesPanel::ReadValues()
   TaskFactoryType newtype = ordered_task->get_factory_type();
   *task_changed |= SaveFormPropertyEnum(form, _T("prpTaskType"), newtype);
 
-  fixed min_time = GetFormValueFixed(form, _T("prpMinTime")) * 60;
-  if (min_time != p.aat_min_time) {
-    p.aat_min_time = min_time;
+  int min_time = GetFormValueInteger(form, _T("prpMinTime"));
+  if (min_time != (int)p.aat_min_time) {
+    p.aat_min_time = fixed(min_time);
     *task_changed = true;
   }
 
