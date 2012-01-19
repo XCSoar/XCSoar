@@ -31,15 +31,15 @@ Copyright_License {
 #include <stdlib.h>
 
 bool
-LongitudeToString(Angle longitude, TCHAR *buffer, size_t size)
+FormatLongitude(Angle longitude, TCHAR *buffer, size_t size)
 {
-  return LongitudeToString(longitude, buffer, size,
+  return FormatLongitude(longitude, buffer, size,
                            Units::GetCoordinateFormat());
 }
 
 bool
-LongitudeToString(Angle longitude, TCHAR *buffer, size_t size,
-                  CoordinateFormat format)
+FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
+                CoordinateFormat format)
 {
   static gcc_constexpr_data TCHAR EW[] = _T("WEE");
   int dd, mm, ss;
@@ -106,14 +106,14 @@ LongitudeToString(Angle longitude, TCHAR *buffer, size_t size,
 }
 
 bool
-LatitudeToString(Angle latitude, TCHAR *buffer, size_t size)
+FormatLatitude(Angle latitude, TCHAR *buffer, size_t size)
 {
-  return LatitudeToString(latitude, buffer, size, Units::GetCoordinateFormat());
+  return FormatLatitude(latitude, buffer, size, Units::GetCoordinateFormat());
 }
 
 bool
-LatitudeToString(Angle latitude, TCHAR *buffer, size_t size,
-                 CoordinateFormat format)
+FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
+               CoordinateFormat format)
 {
   static gcc_constexpr_data TCHAR EW[] = _T("SNN");
   int dd, mm, ss;
@@ -189,7 +189,7 @@ TCHAR *
 FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
                CoordinateFormat format)
 {
-  if (!LatitudeToString(location.latitude, buffer, size, format))
+  if (!FormatLatitude(location.latitude, buffer, size, format))
     return NULL;
 
   TCHAR *end = buffer + size, *p = buffer + _tcslen(buffer);
@@ -198,7 +198,7 @@ FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
 
   *p++ = _T(' ');
 
-  if (!LongitudeToString(location.longitude, p, end - p, format))
+  if (!FormatLongitude(location.longitude, p, end - p, format))
     return NULL;
 
   return buffer;

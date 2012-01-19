@@ -37,10 +37,10 @@ struct GeoPoint;
  * @param buffer buffer string to write to (pointer)
  * @param size Size of the buffer
  */
-bool LongitudeToString(Angle longitude, TCHAR *buffer, size_t size,
-                       CoordinateFormat format);
+bool FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
+                     CoordinateFormat format);
 
-bool LongitudeToString(Angle longitude, TCHAR *buffer, size_t size);
+bool FormatLongitude(Angle longitude, TCHAR *buffer, size_t size);
 
 /**
  * Converts a double-based Latitude into a formatted string
@@ -48,10 +48,10 @@ bool LongitudeToString(Angle longitude, TCHAR *buffer, size_t size);
  * @param buffer buffer string to write to (pointer)
  * @param size Size of the buffer
  */
-bool LatitudeToString(Angle latitude, TCHAR *buffer, size_t size,
-                      CoordinateFormat format);
+bool FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
+                    CoordinateFormat format);
 
-bool LatitudeToString(Angle latitude, TCHAR *buffer, size_t size);
+bool FormatLatitude(Angle latitude, TCHAR *buffer, size_t size);
 
 /**
  * Convert a GeoPoint into a formatted string.
