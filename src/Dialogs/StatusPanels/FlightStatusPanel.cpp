@@ -39,11 +39,8 @@ FlightStatusPanel::Refresh()
 
   StaticString<32> buffer;
 
-  FormatLongitude(basic.location.longitude, buffer.buffer(), buffer.MAX_SIZE);
-  SetFormValue(form, _T("prpLongitude"), buffer);
-
-  FormatLatitude(basic.location.latitude, buffer.buffer(), buffer.MAX_SIZE);
-  SetFormValue(form, _T("prpLatitude"), buffer);
+  FormatGeoPoint(basic.location, buffer.buffer(), buffer.MAX_SIZE);
+  SetFormValue(form, _T("prpLocation"), buffer);
 
   if (basic.gps_altitude_available) {
     Units::FormatUserAltitude(basic.gps_altitude,
