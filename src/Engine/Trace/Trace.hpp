@@ -410,10 +410,10 @@ public:
 
   public:
     typedef std::forward_iterator_tag iterator_category;
-    typedef TracePoint value_type;
-    typedef TracePoint *pointer;
-    typedef TracePoint &reference;
     typedef ptrdiff_t difference_type;
+    typedef const TracePoint value_type;
+    typedef const TracePoint *pointer;
+    typedef const TracePoint &reference;
 
     const TracePoint &operator*() const {
       const TraceDelta &td = (const TraceDelta &)*iterator;
@@ -472,10 +472,10 @@ public:
 
   public:
     typedef std::forward_iterator_tag iterator_category;
-    typedef TracePoint value_type;
-    typedef TracePoint *pointer;
-    typedef TracePoint &reference;
     typedef ptrdiff_t difference_type;
+    typedef const TracePoint value_type;
+    typedef const TracePoint *pointer;
+    typedef const TracePoint &reference;
 
     const TracePoint &operator*() const {
       const TraceDelta &td = (const TraceDelta &)*iterator;
