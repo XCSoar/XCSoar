@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Form/ScrollBar.hpp"
-#include "Form/Internal.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Window.hpp"
@@ -50,10 +49,10 @@ ScrollBar::SetSize(const PixelSize size)
 
   // if the device has a pointer (mouse/touchscreen/etc.)
   if (HasPointer())
-    width = (unsigned)Layout::Scale(SCROLLBARWIDTH_INITIAL);
+    width = Layout::Scale(24);
   else
     // thin for ALTAIR b/c no touch screen
-    width = SELECTORWIDTH * 2;
+    width = Layout::Scale(8);
 
   // Update the coordinates of the scrollbar
   rc.left = size.cx - width;

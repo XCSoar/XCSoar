@@ -24,13 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_INTERNAL_HPP
 #define XCSOAR_FORM_INTERNAL_HPP
 
-#include "Screen/Point.hpp"
-
 #define DEFAULTBORDERPENWIDTH Layout::FastScale(1)
-#define SELECTORWIDTH Layout::FastScale(4)
-
-struct DialogLook;
-class Canvas;
 
 bool
 KeyTimer(bool isdown, unsigned key_code);

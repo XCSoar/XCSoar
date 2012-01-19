@@ -46,10 +46,6 @@ protected:
   PixelRect rc_slider;
 
 public:
-  enum {
-    SCROLLBARWIDTH_INITIAL = 24,
-  };
-
   /** Constructor of the ScrollBar class */
   ScrollBar();
 
