@@ -93,7 +93,7 @@ OLCSprint::AddStartEdges()
   const ScanTaskPoint start(0, find_start());
 
   if (GetPoint(start).GetIntegerAltitude() <= max_altitude)
-    Link(start, start, 0);
+    LinkStart(start);
 }
 
 void 

@@ -72,8 +72,7 @@ TaskDijkstra::AddStartEdges(const SearchPoint &currentLocation)
 
   for (const ScanTaskPoint end(active_stage, dsize);
        destination != end; destination.IncrementPointIndex())
-    Link(destination, destination,
-         CalcDistance(destination, currentLocation));
+    LinkStart(destination, CalcDistance(destination, currentLocation));
 }
 
 bool

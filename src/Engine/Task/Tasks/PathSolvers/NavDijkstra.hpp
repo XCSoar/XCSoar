@@ -149,6 +149,10 @@ protected:
     dijkstra.Link(node, parent, value);
   }
 
+  void LinkStart(const ScanTaskPoint node, unsigned value=0) {
+    Link(node, node, value);
+  }
+
   /** 
    * Iterate search algorithm
    * 

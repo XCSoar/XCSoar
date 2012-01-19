@@ -236,7 +236,7 @@ ContestDijkstra::AddStartEdges()
     // only add points that are valid for the finish
     if (!incremental ||
         GetPoint(destination).GetIntegerAltitude() <= max_altitude)
-      Link(destination, destination, 0);
+      LinkStart(destination);
   }
 }
 

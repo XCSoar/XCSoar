@@ -209,7 +209,7 @@ OLCTriangle::AddStartEdges()
   // this is out of order but required
 
   ScanTaskPoint destination(0, n_points-1);
-  Link(destination, destination, 0);
+  LinkStart(destination);
 }
 
 
