@@ -141,6 +141,11 @@ protected:
     return GetPoint(s1).flat_distance(GetPoint(s2));
   }
 
+  void Link(const ScanTaskPoint node, const ScanTaskPoint parent,
+            unsigned value) {
+    NavDijkstra::Link(node, parent, DIJKSTRA_MINMAX_OFFSET - value);
+  }
+
 private:
   gcc_pure
   bool IsMasterUpdated() const;

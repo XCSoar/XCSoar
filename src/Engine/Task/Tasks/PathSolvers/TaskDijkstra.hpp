@@ -56,6 +56,8 @@ protected:
 private:
   unsigned sp_sizes[MAX_STAGES];
 
+  const bool is_min;
+
 public:
   /**
    * Constructor
@@ -85,6 +87,14 @@ protected:
    * Update internal details required from the task
    */
   bool RefreshTask();
+
+  void Link(const ScanTaskPoint node, const ScanTaskPoint parent,
+            unsigned value) {
+    if (!is_min)
+      value = DIJKSTRA_MINMAX_OFFSET - value;
+
+    NavDijkstra::Link(node, parent, value);
+  }
 
   void AddStartEdges(const SearchPoint &loc);
 

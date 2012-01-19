@@ -36,7 +36,7 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
   AbstractContest(_trace, finish_alt_diff),
-  NavDijkstra(false, n_legs + 1),
+  NavDijkstra(n_legs + 1),
   incremental(false)
 {
   assert(num_stages <= MAX_STAGES);

@@ -23,9 +23,10 @@
 #include "TaskDijkstra.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 
-TaskDijkstra::TaskDijkstra(OrderedTask& _task, bool is_min):
-  NavDijkstra(is_min, 0),
-  task(_task)
+TaskDijkstra::TaskDijkstra(OrderedTask& _task, bool _is_min):
+  NavDijkstra(0),
+  task(_task),
+  is_min(_is_min)
 {
 }
 

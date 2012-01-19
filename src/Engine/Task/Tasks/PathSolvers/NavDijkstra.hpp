@@ -89,8 +89,8 @@ protected:
    * 
    * @return Initialised object
    */
-  NavDijkstra(const bool is_min, const unsigned _num_stages)
-    :dijkstra(is_min), solution_valid(false)
+  NavDijkstra(const unsigned _num_stages)
+    :solution_valid(false)
   {
     SetStageCount(_num_stages);
   }

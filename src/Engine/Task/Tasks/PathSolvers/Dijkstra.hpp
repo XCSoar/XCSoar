@@ -87,27 +87,18 @@ class Dijkstra
    */
   unsigned current_value;
 
-  const bool is_min;
-
 public:
   /**
    * Default constructor
-   *
-   * @param is_min Whether this algorithm will search for min or max distance
    */
-  Dijkstra(const bool _is_min = true)
-    :is_min(_is_min) {
-  }
+  Dijkstra() = default;
 
   /**
    * Constructor
    *
    * @param n Node to start
-   * @param is_min Whether this algorithm will search for min or max distance
    */
-  Dijkstra(const Node node, const bool _is_min = true,
-           unsigned reserve_default = DIJKSTRA_QUEUE_SIZE)
-    :is_min(_is_min) {
+  Dijkstra(const Node node, unsigned reserve_default = DIJKSTRA_QUEUE_SIZE) {
     Reserve(reserve_default);
     Push(node, node, 0);
   }
@@ -180,7 +171,7 @@ public:
    * @param e Edge distance
    */
   void Link(const Node node, const Node parent, unsigned edge_value) {
-    Push(node, parent, current_value + AdjustEdgeValue(edge_value));
+    Push(node, parent, current_value + edge_value);
   }
 
   /**
@@ -213,15 +204,6 @@ public:
   }
 
 private:
-  /** 
-   * Return edge value adjusted for flipping if maximim is sought ---
-   * result is metric to be minimised
-   */
-  gcc_pure
-  unsigned AdjustEdgeValue(const unsigned edge_value) const {
-    return is_min ? edge_value : DIJKSTRA_MINMAX_OFFSET - edge_value;
-  }
-
   /**
    * Add node to search queue
    *
