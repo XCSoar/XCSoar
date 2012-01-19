@@ -47,7 +47,6 @@ public:
 
   void SentenceZero(const void *data, size_t length, struct NMEAInfo &info);
   void SentenceTwo(const void *data, size_t length, struct NMEAInfo &info);
-  void SentenceFive(const void *data, size_t length, struct NMEAInfo &info);
 };
 
 static uint8_t
