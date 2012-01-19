@@ -33,7 +33,7 @@ Copyright_License {
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Formatter/GeoPointFormatter.hpp"
+#include "Formatter/UserGeoPointFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"

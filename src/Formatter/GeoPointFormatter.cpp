@@ -31,13 +31,6 @@ Copyright_License {
 #include <stdlib.h>
 
 bool
-FormatLongitude(Angle longitude, TCHAR *buffer, size_t size)
-{
-  return FormatLongitude(longitude, buffer, size,
-                           Units::GetCoordinateFormat());
-}
-
-bool
 FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
                 CoordinateFormat format)
 {
@@ -106,12 +99,6 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
 }
 
 bool
-FormatLatitude(Angle latitude, TCHAR *buffer, size_t size)
-{
-  return FormatLatitude(latitude, buffer, size, Units::GetCoordinateFormat());
-}
-
-bool
 FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
                CoordinateFormat format)
 {
@@ -177,12 +164,6 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
   }
 
   return true;
-}
-
-TCHAR *
-FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size)
-{
-  return FormatGeoPoint(location, buffer, size, Units::GetCoordinateFormat());
 }
 
 TCHAR *

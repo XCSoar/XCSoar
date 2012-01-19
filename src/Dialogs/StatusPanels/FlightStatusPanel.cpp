@@ -28,7 +28,7 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Formatter/AngleFormatter.hpp"
-#include "Formatter/GeoPointFormatter.hpp"
+#include "Formatter/UserGeoPointFormatter.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 
 void

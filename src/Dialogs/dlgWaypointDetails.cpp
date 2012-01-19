@@ -52,7 +52,7 @@ Copyright_License {
 #include "Compatibility/path.h"
 #include "Input/InputEvents.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Formatter/GeoPointFormatter.hpp"
+#include "Formatter/UserGeoPointFormatter.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Util/Macros.hpp"

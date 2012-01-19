@@ -21,10 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_GEOPOINT_FORMATTER_HPP
-#define XCSOAR_GEOPOINT_FORMATTER_HPP
-
-#include "Geo/CoordinateFormat.hpp"
+#ifndef XCSOAR_USER_GEOPOINT_FORMATTER_HPP
+#define XCSOAR_USER_GEOPOINT_FORMATTER_HPP
 
 #include <tchar.h>
 
@@ -37,8 +35,7 @@ struct GeoPoint;
  * @param buffer buffer string to write to (pointer)
  * @param size Size of the buffer
  */
-bool FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
-                     CoordinateFormat format);
+bool FormatLongitude(Angle longitude, TCHAR *buffer, size_t size);
 
 /**
  * Converts a double-based Latitude into a formatted string
@@ -46,13 +43,11 @@ bool FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
  * @param buffer buffer string to write to (pointer)
  * @param size Size of the buffer
  */
-bool FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
-                    CoordinateFormat format);
+bool FormatLatitude(Angle latitude, TCHAR *buffer, size_t size);
 
 /**
  * Convert a GeoPoint into a formatted string.
  */
-TCHAR *FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
-                      CoordinateFormat format);
+TCHAR *FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size);
 
 #endif
