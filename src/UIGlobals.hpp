@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 
 class SingleWindow;
+struct DialogSettings;
 struct DialogLook;
 
 /**
@@ -43,6 +44,9 @@ struct DialogLook;
 namespace UIGlobals {
   gcc_const
   SingleWindow &GetMainWindow();
+
+  gcc_const
+  const DialogSettings &GetDialogSettings();
 
   gcc_const
   const DialogLook &GetDialogLook();

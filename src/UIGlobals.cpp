@@ -32,6 +32,12 @@ UIGlobals::GetMainWindow()
   return CommonInterface::main_window;
 }
 
+const DialogSettings &
+UIGlobals::GetDialogSettings()
+{
+  return CommonInterface::GetUISettings().dialog;
+}
+
 const DialogLook &
 UIGlobals::GetDialogLook()
 {

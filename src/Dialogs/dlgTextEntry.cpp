@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/DialogSettings.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Key.h"
 #include "Form/Form.hpp"
@@ -33,7 +34,7 @@ Copyright_License {
 #include "MapSettings.hpp"
 #include "Asset.hpp"
 #include "StringUtil.hpp"
-#include "Interface.hpp"
+#include "UIGlobals.hpp"
 #include "Util/Macros.hpp"
 
 #include <algorithm>
@@ -261,7 +262,7 @@ bool
 dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text, int width,
                       const TCHAR* caption, AllowedCharactersCallback_t accb)
 {
-  switch (CommonInterface::GetUISettings().dialog.text_input_style) {
+  switch (UIGlobals::GetDialogSettings().text_input_style) {
   case DialogSettings::TextInputStyle::Default:
   case DialogSettings::TextInputStyle::Keyboard:
     if (HasPointer())
