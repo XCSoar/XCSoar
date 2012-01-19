@@ -409,7 +409,7 @@ public:
       :iterator(_iterator) {}
 
   public:
-    typedef std::forward_iterator_tag iterator_category;
+    typedef ListHead::const_iterator::iterator_category iterator_category;
     typedef ptrdiff_t difference_type;
     typedef const TracePoint value_type;
     typedef const TracePoint *pointer;
@@ -428,6 +428,23 @@ public:
     const_iterator &operator++() {
       ++iterator;
       return *this;
+    }
+
+    const_iterator operator++(int) {
+      const_iterator old = *this;
+      iterator++;
+      return old;
+    }
+
+    const_iterator &operator--() {
+      --iterator;
+      return *this;
+    }
+
+    const_iterator operator--(int) {
+      const_iterator old = *this;
+      iterator--;
+      return old;
     }
 
     const_iterator &NextSquareRange(unsigned sq_resolution,
@@ -490,6 +507,23 @@ public:
     const_reverse_iterator &operator++() {
       ++iterator;
       return *this;
+    }
+
+    const_reverse_iterator operator++(int) {
+      const_reverse_iterator old = *this;
+      iterator++;
+      return old;
+    }
+
+    const_reverse_iterator &operator--() {
+      --iterator;
+      return *this;
+    }
+
+    const_reverse_iterator operator--(int) {
+      const_reverse_iterator old = *this;
+      iterator--;
+      return old;
     }
 
     bool operator==(const const_reverse_iterator &other) const {
