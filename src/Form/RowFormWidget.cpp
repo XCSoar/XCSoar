@@ -25,6 +25,8 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/Panel.hpp"
 #include "Look/DialogLook.hpp"
+#include "Dialogs/DialogSettings.hpp"
+#include "UIGlobals.hpp"
 #include "Screen/Layout.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Integer.hpp"
@@ -110,6 +112,14 @@ RowFormWidget::~RowFormWidget()
   /* destroy all rows */
   for (auto i = rows.begin(), end = rows.end(); i != end; ++i)
     i->Delete();
+}
+
+void
+RowFormWidget::SetExpertRow(unsigned i)
+{
+  Row &row = rows[i];
+  assert(!row.expert);
+  row.expert = true;
 }
 
 void
@@ -551,11 +561,16 @@ RowFormWidget::UpdateLayout()
   const unsigned total_height = current_rect.bottom - current_rect.top;
   current_rect.bottom = current_rect.top;
 
+  const bool expert = UIGlobals::GetDialogSettings().expert;
+
   /* first row traversal: count the number of "elastic" rows and
      determine the minimum total height */
   unsigned min_height = 0;
   unsigned n_elastic = 0;
   for (auto i = rows.begin(), end = rows.end(); i != end; ++i) {
+    if (i->expert && !expert)
+      continue;
+
     min_height += i->GetMinimumHeight();
     if (i->IsElastic())
       ++n_elastic;
@@ -568,6 +583,17 @@ RowFormWidget::UpdateLayout()
 
   /* second row traversal: now move and resize the rows */
   for (auto i = rows.begin(), end = rows.end(); i != end; ++i) {
+    Window &window = i->GetWindow();
+
+    if (i->expert) {
+      if (!expert) {
+        window.hide();
+        continue;
+      }
+
+      window.show();
+    }
+
     /* determine this row's height */
     UPixelScalar height = i->GetMinimumHeight();
     if (excess_height > 0 && i->IsElastic()) {
@@ -591,7 +617,6 @@ RowFormWidget::UpdateLayout()
     }
 
     /* finally move and resize */
-    Window &window = i->GetWindow();
     NextControlRect(current_rect, height);
     window.move(current_rect);
   }

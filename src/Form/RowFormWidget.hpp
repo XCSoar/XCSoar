@@ -57,12 +57,17 @@ class RowFormWidget : public WindowWidget {
 
     Type type;
 
+    /**
+     * If true, then the row is only visible in "expert" mode.
+     */
+    bool expert;
+
     Window *window;
 
     Row() = default;
 
     Row(Type _type, Window *_window)
-      :type(_type), window(_window) {
+      :type(_type), expert(false), window(_window) {
       assert(_window != NULL);
     }
 
@@ -198,6 +203,13 @@ public:
   const Window &GetRow(unsigned i) const {
     return rows[i].GetWindow();
   }
+
+  /**
+   * Enable the "expert" flag on this row: hide unless the form is in
+   * "expert" mode.  This must be called before the first Show()
+   * invocation.
+   */
+  void SetExpertRow(unsigned i);
 
   gcc_pure
   WndProperty &GetControl(unsigned i) {

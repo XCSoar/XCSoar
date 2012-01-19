@@ -133,6 +133,7 @@ OnUserLevel(CheckBoxControl &control)
   CommonInterface::SetUISettings().dialog.expert = expert;
   Profile::Set(szProfileUserLevel, expert);
   wf->FilterAdvanced(expert);
+  wTabMenu->UpdateLayout();
 }
 
 static void
