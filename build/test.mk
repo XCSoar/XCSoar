@@ -85,7 +85,8 @@ TEST_NAMES = \
 	TestByteOrder \
 	TestByteOrder2 \
 	TestStrings \
-	TestUnitsFormatter
+	TestUnitsFormatter \
+	TestGeoPointFormatter
 
 TESTS = $(call name-to-bin,$(TEST_NAMES))
 
@@ -358,6 +359,15 @@ TEST_UNITS_FORMATTER_SOURCES = \
 	$(TEST_SRC_DIR)/TestUnitsFormatter.cpp
 TEST_UNITS_FORMATTER_DEPENDS = MATH
 $(eval $(call link-program,TestUnitsFormatter,TEST_UNITS_FORMATTER))
+
+TEST_GEO_POINT_FORMATTER_SOURCES = \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
+	$(SRC)/Geo/UTM.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestGeoPointFormatter.cpp
+TEST_GEO_POINT_FORMATTER_DEPENDS = MATH
+$(eval $(call link-program,TestGeoPointFormatter,TEST_GEO_POINT_FORMATTER))
 
 TEST_STRINGS_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \
