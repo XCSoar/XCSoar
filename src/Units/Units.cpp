@@ -21,10 +21,6 @@ Copyright_License {
 }
 */
 
-// TODO code: units stuff
-// - check buffer size in LongitudeToString and LatiditudeToString
-// - unit dialog support
-
 #include "Units/Units.hpp"
 #include "Units/Descriptor.hpp"
 #include "Atmosphere/Pressure.hpp"
