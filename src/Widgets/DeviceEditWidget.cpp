@@ -29,6 +29,7 @@
 #include "Language/Language.hpp"
 #include "Compatibility/string.h"
 #include "DataField/Enum.hpp"
+#include "DataField/Boolean.hpp"
 #include "Device/Register.hpp"
 #include "Device/Driver.hpp"
 
@@ -44,7 +45,7 @@
 #endif
 
 enum ControlIndex {
-  Port, BaudRate, BulkBaudRate, TCPPort, Driver,
+  Port, BaudRate, BulkBaudRate, TCPPort, Driver, SyncFromDevice, SyncToDevice,
 };
 
 static gcc_constexpr_data struct {
@@ -383,6 +384,18 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config)
   DataFieldEnum &driver_df = *(DataFieldEnum *)driver_control.GetDataField();
   driver_df.SetAsString(config.driver_name);
   driver_control.RefreshDisplay();
+
+  WndProperty &sync_from_control = GetControl(SyncFromDevice);
+  DataFieldBoolean &sync_from_df =
+      *(DataFieldBoolean *)sync_from_control.GetDataField();
+  sync_from_df.Set(config.sync_from_device);
+  sync_from_control.RefreshDisplay();
+
+  WndProperty &sync_to_control = GetControl(SyncToDevice);
+  DataFieldBoolean &sync_to_df =
+      *(DataFieldBoolean *)sync_to_control.GetDataField();
+  sync_to_df.Set(config.sync_to_device);
+  sync_to_control.RefreshDisplay();
 }
 
 gcc_pure
@@ -398,6 +411,36 @@ SupportsBulkBaudRate(const DataField &df)
     return false;
 
   return driver->SupportsBulkBaudRate();
+}
+
+gcc_pure
+static bool
+CanReceiveSettings(const DataField &df)
+{
+  const TCHAR *driver_name = df.GetAsString();
+  if (driver_name == NULL)
+    return false;
+
+  const struct DeviceRegister *driver = FindDriverByName(driver_name);
+  if (driver == NULL)
+    return false;
+
+  return driver->CanReceiveSettings();
+}
+
+gcc_pure
+static bool
+CanSendSettings(const DataField &df)
+{
+  const TCHAR *driver_name = df.GetAsString();
+  if (driver_name == NULL)
+    return false;
+
+  const struct DeviceRegister *driver = FindDriverByName(driver_name);
+  if (driver == NULL)
+    return false;
+
+  return driver->CanSendSettings();
 }
 
 gcc_pure
@@ -423,6 +466,10 @@ DeviceEditWidget::UpdateVisibilities()
                                        SupportsBulkBaudRate(GetDataField(Driver)));
   GetControl(TCPPort).set_visible(DeviceConfig::UsesTCPPort(type));
   GetControl(Driver).set_visible(DeviceConfig::UsesDriver(type));
+  GetControl(SyncFromDevice).set_visible(DeviceConfig::UsesDriver(type) &&
+                                         CanReceiveSettings(GetDataField(Driver)));
+  GetControl(SyncToDevice).set_visible(DeviceConfig::UsesDriver(type) &&
+                                       CanSendSettings(GetDataField(Driver)));
 }
 
 static void
@@ -472,6 +519,16 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   driver_df->SetAsString(config.driver_name);
 
   Add(_("Driver"), NULL, driver_df);
+
+  AddBoolean(_("Sync. from device"),
+             _("This option lets you configure if XCSoar should use settings "
+               "like the MacCready value, bugs and ballast from the device."),
+             config.sync_from_device);
+
+  AddBoolean(_("Sync. to device"),
+             _("This option lets you configure if XCSoar should send settings "
+               "like the MacCready value, bugs and ballast to the device."),
+             config.sync_to_device);
 
   port_df->SetDetachGUI(false);
   driver_df->SetDetachGUI(false);
@@ -555,9 +612,16 @@ DeviceEditWidget::Save(bool &_changed, bool &require_restart)
     changed |= SaveValue(TCPPort, config.tcp_port);
 
 
-  if (config.UsesDriver())
+  if (config.UsesDriver()) {
     changed |= SaveValue(Driver, config.driver_name.buffer(),
                          config.driver_name.MAX_SIZE);
+
+    if (CanReceiveSettings(GetDataField(Driver)))
+      changed |= SaveValue(SyncFromDevice, config.sync_from_device);
+
+    if (CanSendSettings(GetDataField(Driver)))
+      changed |= SaveValue(SyncToDevice, config.sync_to_device);
+  }
 
   _changed |= changed;
   return true;

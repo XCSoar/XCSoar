@@ -2,9 +2,9 @@
 
 <Panel Name="frmComm">
   <List Name="list" X="2" Y="2" Width="-2" Height="50" ItemHeight="18" Border="1"/>
-  <Widget Name="edit" X="2" Y="52" Width="-1" Height="-48" Border="1"/>
+  <Widget Name="edit" X="2" Y="52" Width="-1" Height="-23" Border="1"/>
 
-  <Edit Name="prpIgnoreNMEAChecksum" Caption="Ignore checksum" Expert="1" X="2" Y="-24" Width="-2" Height="22" CaptionWidth="80"
+  <Edit Name="prpIgnoreNMEAChecksum" Caption="Ignore checksum" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="80"
    Help="If your GPS device outputs invalid NMEA checksums, this will allow it's data to be used anyway">
     <DataField DataType="boolean"/>
   </Edit>
