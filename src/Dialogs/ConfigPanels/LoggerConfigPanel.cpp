@@ -71,16 +71,14 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-  AddInteger(_("Time step cruise"),
-           _("This is the time interval between logged points when not circling."),
-           _T("%u s"), _T("%u"), 1, 30, 1,
-           settings_computer.logger_time_step_cruise);
+  AddTime(_("Time step cruise"),
+          _("This is the time interval between logged points when not circling."),
+          1, 30, 1, settings_computer.logger_time_step_cruise);
   SetExpertRow(LoggerTimeStepCruise);
 
-  AddInteger(_("Time step circling"),
+  AddTime(_("Time step circling"),
           _("This is the time interval between logged points when circling."),
-          _T("%u s"), _T("%u"),  1, 30, 1,
-          settings_computer.logger_time_step_circling);
+          1, 30, 1, settings_computer.logger_time_step_circling);
   SetExpertRow(LoggerTimeStepCircling);
 
   TCHAR tmp_text[100];

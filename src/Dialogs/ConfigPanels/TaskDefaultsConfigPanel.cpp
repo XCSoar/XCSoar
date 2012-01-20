@@ -201,15 +201,13 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     wp->RefreshDisplay();
   }
 
-  AddInteger(_("AAT min. time"), _("Default AAT min. time for new AAT tasks."),
-             _T("%u min"), _T("%u"), 1, 500, 1,
-             (unsigned)(task_behaviour.ordered_defaults.aat_min_time / 60));
+  AddTime(_("AAT min. time"), _("Default AAT min. time for new AAT tasks."),
+          60, 10 * 60 * 60, 60, (unsigned)task_behaviour.ordered_defaults.aat_min_time);
 
-  AddInteger(_("Optimisation margin"),
-             _("Safety margin for AAT task optimisation.  Optimisation "
-                 "seeks to complete the task at the minimum time plus this margin time."),
-             _T("%u min"), _T("%u"), 0, 30, 1,
-             (unsigned)(task_behaviour.optimise_targets_margin / 60));
+  AddTime(_("Optimisation margin"),
+          _("Safety margin for AAT task optimisation.  Optimisation "
+            "seeks to complete the task at the minimum time plus this margin time."),
+          0, 30 * 60, 60, (unsigned)task_behaviour.optimise_targets_margin);
   SetExpertRow(AATTimeMargin);
 
   SetStartLabel();
@@ -245,17 +243,17 @@ TaskDefaultsConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValueEnum(TaskType, szProfileTaskType, task_behaviour.task_type_default);
 
-  unsigned aatminutes = unsigned(task_behaviour.ordered_defaults.aat_min_time) / 60;
+  unsigned aatminutes = (unsigned)task_behaviour.ordered_defaults.aat_min_time;
   if (SaveValue(AATMinTime, aatminutes)) {
-    task_behaviour.ordered_defaults.aat_min_time = fixed(aatminutes * 60);
-    Profile::Set(szProfileAATMinTime, aatminutes * 60);
+    task_behaviour.ordered_defaults.aat_min_time = fixed(aatminutes);
+    Profile::Set(szProfileAATMinTime, aatminutes);
     changed = true;
   }
 
-  unsigned aatmargin = task_behaviour.optimise_targets_margin / 60;
+  unsigned aatmargin = task_behaviour.optimise_targets_margin;
   if (SaveValue(AATTimeMargin, aatmargin)) {
-    task_behaviour.optimise_targets_margin = aatmargin * 60;
-    Profile::Set(szProfileAATTimeMargin, aatmargin * 60);
+    task_behaviour.optimise_targets_margin = aatmargin;
+    Profile::Set(szProfileAATTimeMargin, aatmargin);
     changed = true;
   }
 

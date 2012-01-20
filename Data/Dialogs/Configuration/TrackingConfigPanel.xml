@@ -3,7 +3,7 @@
 <Panel>
 
   <Edit Name="TrackingInterval" Caption="Tracking Interval" X="2" Y="2" Width="-2" Height="22" CaptionWidth="80">
-    <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="5" Max="3600" Step="5" />
+    <DataField DataType="time" Min="5" Max="3600" Step="5" />
   </Edit>
 
   <Panel X="2" Y="26" Width="-2" Height="87" Border="1">

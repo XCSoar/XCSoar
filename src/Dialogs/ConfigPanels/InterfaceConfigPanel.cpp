@@ -170,10 +170,10 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                 szProfileStatusFile, _T("*.xcs\0"));
   SetExpertRow(StatusFile);
 
-  AddInteger(_("Menu timeout"),
-             _("This determines how long menus will appear on screen if the user does not make any button "
-                 "presses or interacts with the computer."),
-             _T("%u s"), _T("%u"), 1, 60, 1, settings.menu_timeout / 2);
+  AddTime(_("Menu timeout"),
+          _("This determines how long menus will appear on screen if the user does not make any button "
+            "presses or interacts with the computer."),
+          1, 60, 1, settings.menu_timeout / 2);
   SetExpertRow(MenuTimeout);
 
   static gcc_constexpr_data StaticEnumChoice text_input_list[] = {

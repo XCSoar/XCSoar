@@ -163,15 +163,14 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddBoolean(_("Warnings"), _("Enable/disable all airspace warnings."), computer.enable_warnings, OnAirspaceWarning);
 
-  // TODO All below is for the Expert
-  AddInteger(_("Warning time"),
-             _("This is the time before an airspace incursion is estimated at which the system will warn the pilot."),
-             _T("%u s"), _T("%u"), 10, 1000, 5, computer.warnings.WarningTime);
+  AddTime(_("Warning time"),
+          _("This is the time before an airspace incursion is estimated at which the system will warn the pilot."),
+          10, 1000, 5, computer.warnings.WarningTime);
   SetExpertRow(WarningTime);
 
-  AddInteger(_("Acknowledge time"),
-             _("This is the time period in which an acknowledged airspace warning will not be repeated."),
-             _T("%u s"), _T("%u"), 10, 1000, 5, computer.warnings.AcknowledgementTime);
+  AddTime(_("Acknowledge time"),
+          _("This is the time period in which an acknowledged airspace warning will not be repeated."),
+          10, 1000, 5, computer.warnings.AcknowledgementTime);
   SetExpertRow(AcknowledgeTime);
 
   AddBoolean(_("Use black outline"),

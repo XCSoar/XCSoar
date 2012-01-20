@@ -58,6 +58,6 @@
 
   <Edit Name="prpBallastSecsToEmpty" Caption="Dump time" X="2" Width="-2" Height="22" CaptionWidth="150"
     Help="The time in seconds to dump full ballast.">
-    <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="10" Max="300" Step="5"/>
+    <DataField DataType="time" Min="10" Max="300" Step="5"/>
   </Edit>
 </Panel>

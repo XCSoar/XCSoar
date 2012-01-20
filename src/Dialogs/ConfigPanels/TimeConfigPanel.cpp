@@ -98,12 +98,11 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
 
   int utc_offset = settings_computer.utc_offset;
-  AddFloat(_("UTC offset"),
-           _("The UTC offset field allows the UTC local time offset to be specified.  The local "
-               "time is displayed below in order to make it easier to verify the correct offset "
-               "has been entered."),
-           _T("%.1f h"), _T("%.1f h"), fixed(-13), fixed(13), fixed(0.5), false,
-           fixed(iround(fixed(utc_offset) / 1800)) / 2, OnUTCData);
+  AddTime(_("UTC offset"),
+          _("The UTC offset field allows the UTC local time offset to be specified.  The local "
+            "time is displayed below in order to make it easier to verify the correct offset "
+            "has been entered."),
+           -13 * 60 * 60, 13  * 60 * 60, 30 * 60, utc_offset, 2, OnUTCData);
 #ifdef WIN32
   if (IsEmbedded() && !IsAltair())
     GetControl(UTCOffset).set_enabled(false);
@@ -128,7 +127,7 @@ TimeConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
 
-  int ival = iround(GetValueFloat(UTCOffset) * 3600);
+  int ival = GetValueInteger(UTCOffset);
   if (settings_computer.utc_offset != ival) {
     settings_computer.utc_offset = ival;
 
