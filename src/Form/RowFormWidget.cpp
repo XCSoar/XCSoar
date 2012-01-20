@@ -34,6 +34,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/String.hpp"
 #include "DataField/FileReader.hpp"
+#include "DataField/Time.hpp"
 #include "Language/Language.hpp"
 #include "Profile/Profile.hpp"
 #include "Units/Units.hpp"
@@ -299,6 +300,20 @@ RowFormWidget::AddText(const TCHAR *label, const TCHAR *help,
   WndProperty *edit = Add(label, help);
   DataFieldString *df = new DataFieldString(content, callback);
 
+  edit->SetDataField(df);
+  return edit;
+}
+
+WndProperty *
+RowFormWidget::AddTime(const TCHAR *label, const TCHAR *help,
+                       int min_value, int max_value, unsigned step,
+                       int value, unsigned max_tokens,
+                       DataField::DataAccessCallback_t callback)
+{
+  WndProperty *edit = Add(label, help);
+  DataFieldTime *df = new DataFieldTime(min_value, max_value, value,
+                                        step, callback);
+  df->SetMaxTokenNumber(max_tokens);
   edit->SetDataField(df);
   return edit;
 }

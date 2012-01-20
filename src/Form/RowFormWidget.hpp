@@ -195,6 +195,11 @@ public:
                        const TCHAR *content, bool editable=true,
                        DataField::DataAccessCallback_t callback=NULL);
 
+  WndProperty *AddTime(const TCHAR *label, const TCHAR *help,
+                       int min_value, int max_value, unsigned step,
+                       int value, unsigned max_tokens = 2,
+                       DataField::DataAccessCallback_t callback=NULL);
+
   WndProperty *AddSpacer(void);
 
   WndProperty *AddFileReader(const TCHAR *label, const TCHAR *help,
