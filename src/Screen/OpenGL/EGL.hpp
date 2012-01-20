@@ -21,25 +21,24 @@ Copyright_License {
 }
 */
 
-#include "Screen/OpenGL/Globals.hpp"
-#include "Screen/OpenGL/Debug.hpp"
+#ifndef XCSOAR_OPENGL_EGL_HPP
+#define XCSOAR_OPENGL_EGL_HPP
 
-namespace OpenGL {
-  bool egl;
+/**
+ * Attempt to load libEGL.so with dlopen(), and look up the EGL
+ * functions which we need.
+ *
+ * @return true if libEGL.so is available, false to fall back to
+ * Android JNI calls
+ */
+bool
+EGLInit();
 
-  bool texture_non_power_of_two;
+/**
+ * Swap the OpenGL buffers.  Calling this function is only legal if
+ * EGLInit() was successful.
+ */
+void
+EGLSwapBuffers();
 
-#ifdef ANDROID
-  bool vertex_buffer_object;
 #endif
-
-  bool frame_buffer_object;
-
-  UPixelScalar screen_width, screen_height;
-
-  PixelScalar translate_x, translate_y;
-
-#ifndef NDEBUG
-  pthread_t thread;
-#endif
-};

@@ -33,6 +33,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp
 ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/OpenGL/EGL.cpp \
 	$(SCREEN_SRC_DIR)/Android/Timer.cpp \
 	$(SCREEN_SRC_DIR)/Android/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/Android/SingleWindow.cpp \
@@ -108,7 +109,11 @@ SCREEN_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS)
 SCREEN_LDLIBS = $(SDL_LDLIBS) $(GDI_LDLIBS)
 
 ifeq ($(TARGET),ANDROID)
-SCREEN_LDLIBS += -lGLESv1_CM
+SCREEN_LDLIBS += -lGLESv1_CM -ldl
+
+# for dynamic EGL detection
+SCREEN_LDLIBS += -ldl
+$(call SRC_TO_OBJ,$(SCREEN_SRC_DIR)/OpenGL/EGL.cpp): ANDROID_PLATFORM = android-9
 endif
 
 $(eval $(call link-library,screen,SCREEN))

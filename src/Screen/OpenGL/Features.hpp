@@ -33,6 +33,12 @@ Copyright_License {
 #ifdef ANDROID
 
 /**
+ * The EGL API is available.  May require a runtime check
+ * (OpenGL::egl).
+ */
+#define HAVE_EGL
+
+/**
  * Running on OpenGL/ES.
  */
 #define HAVE_GLES

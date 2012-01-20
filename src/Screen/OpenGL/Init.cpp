@@ -34,6 +34,10 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 #endif
 
+#ifdef HAVE_EGL
+#include "EGL.hpp"
+#endif
+
 #include <string.h>
 
 void
@@ -118,6 +122,10 @@ CheckFBO()
 void
 OpenGL::SetupContext()
 {
+#ifdef HAVE_EGL
+  egl = EGLInit();
+#endif
+
   texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
 
 #ifdef ANDROID

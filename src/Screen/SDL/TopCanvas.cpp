@@ -27,6 +27,12 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Init.hpp"
+#include "Screen/OpenGL/Features.hpp"
+#endif
+
+#ifdef HAVE_EGL
+#include "Screen/OpenGL/EGL.hpp"
+#include "Screen/OpenGL/Globals.hpp"
 #endif
 
 #ifdef ANDROID
@@ -119,6 +125,15 @@ TopCanvas::Fullscreen()
 void
 TopCanvas::Flip()
 {
+#ifdef HAVE_EGL
+  if (OpenGL::egl) {
+    /* if native EGL support was detected, we can circumvent the JNI
+       call */
+    EGLSwapBuffers();
+    return;
+  }
+#endif
+
 #ifdef ANDROID
   native_view->swap();
 #elif defined(ENABLE_OPENGL)
