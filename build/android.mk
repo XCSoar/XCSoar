@@ -29,9 +29,8 @@ ANDROID_ABI_DIR = $(ANDROID_BUILD)/libs/$(ANDROID_ABI)
 ANDROID_ALL_ABIS = armeabi armeabi-v7a
 ANDROID_LIB_DIR = /opt/android/libs/$(ANDROID_ABI)
 
-ANDROID_LIB_NAMES =
-ANDROID_LIB_FILES = $(patsubst %,$(ANDROID_LIB_DIR)/lib%.so,$(ANDROID_LIB_NAMES))
-ANDROID_SO_FILES = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES))
+ANDROID_LIB_NAMES = xcsoar
+ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES))
 
 ifneq ($(V),2)
 ANT += -quiet
@@ -138,7 +137,7 @@ ALL_SO += $$(ANDROID_BUILD)/build/libs/$(2)/lib$(1).so
 $$(ANDROID_BUILD)/build/libs/$(2)/lib$(1).so: $$(OUT)/$(3)/bin/lib$(1).so | $$(ANDROID_BUILD)/build/libs/$(2)/dirstamp
 	$$(Q)cp $$< $$@
 
-$$(OUT)/$(3)/bin/$(1).so:
+$$(OUT)/$(3)/bin/lib$(1).so:
 	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) IOIOLIB_DIR=$$(IOIOLIB_DIR) $$@
 
 endef
@@ -149,7 +148,7 @@ $(eval $(call generate-abi,$(1),armeabi,ANDROID))
 $(eval $(call generate-abi,$(1),armeabi-v7a,ANDROID7))
 endef
 
-$(eval $(call generate-all-abis,xcsoar))
+$(foreach NAME,$(ANDROID_LIB_NAMES),$(eval $(call generate-all-abis,$(NAME))))
 
 $(ANDROID_BIN)/XCSoar-debug.apk: $(ALL_SO) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) android/src/*.java
 	@$(NQ)echo "  ANT     $@"
@@ -172,13 +171,10 @@ $(call SRC_TO_OBJ,$(SRC)/Android/Timer.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/InternalSensors.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/Battery.cpp): $(NATIVE_HEADERS)
 
-$(ANDROID_ABI_DIR)/libxcsoar.so: $(TARGET_BIN_DIR)/libxcsoar.so | $(ANDROID_ABI_DIR)/dirstamp
+$(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(TARGET_BIN_DIR)/lib%.so $(ANDROID_ABI_DIR)/dirstamp
 	cp $< $@
 
-$(ANDROID_SO_FILES): $(ANDROID_ABI_DIR)/lib%.so: $(ANDROID_LIB_DIR)/lib%.so
-	cp $< $@
-
-$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_ABI_DIR)/libxcsoar.so $(ANDROID_SO_FILES) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) android/src/*.java
+$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_LIB_BUILD) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) android/src/*.java
 	@$(NQ)echo "  ANT     $@"
 	$(Q)cd $(ANDROID_BUILD) && $(ANT) debug
 
