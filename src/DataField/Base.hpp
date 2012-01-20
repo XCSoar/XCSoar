@@ -64,9 +64,11 @@ protected:
 private:
   bool mDetachGUI;
 
-public:
+protected:
   DataField(Type _type, bool support_combo,
             DataAccessCallback_t OnDataAccess = NULL);
+
+public:
   virtual ~DataField(void) {}
 
   void SetDataAccessCallback(DataAccessCallback_t _data_access_callback) {
