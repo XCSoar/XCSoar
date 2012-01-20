@@ -259,7 +259,7 @@ struct ComputerSettings:
   /** Update system time from GPS time */
   bool set_system_time_from_gps;
 
-  /** local time adjustment */
+  /** local time adjustment (in seconds) */
   int utc_offset;
 
   /**
