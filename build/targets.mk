@@ -409,15 +409,9 @@ endif
 ######## output files
 
 TARGET_EXEEXT = .exe
-NOSTRIP_SUFFIX = -ns
-
-ifeq ($(TARGET),WINE)
-  NOSTRIP_SUFFIX :=
-endif
 
 ifeq ($(TARGET),UNIX)
   TARGET_EXEEXT :=
-  NOSTRIP_SUFFIX :=
 endif
 
 ifeq ($(TARGET),ANDROID)
