@@ -402,7 +402,6 @@ endif
 ifeq ($(TARGET),ANDROID)
   TARGET_LDLIBS += -lc -lm
   TARGET_LDLIBS += -llog
-  TARGET_LDLIBS += -lGLESv1_CM
   TARGET_LDADD += $(ANDROID_TOOLCHAIN)/lib/gcc/$(ANDROID_ABI4)/$(ANDROID_GCC_VERSION)/libgcc.a
 endif
 
