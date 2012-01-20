@@ -3086,7 +3086,7 @@ msgid "Bugs"
 msgstr ""
 
 #: src/Dialogs/dlgBasicSettings.cpp:307
-#, c-format
+#, no-c-format
 msgid ""
 "How clean the glider is. Set to 0% for clean, larger numbers as the wings "
 "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."
