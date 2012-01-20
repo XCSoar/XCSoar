@@ -80,14 +80,13 @@ struct VisibleWaypoint {
   void CalculateReachability(const RoutePlannerGlue &route_planner,
                              const TaskBehaviour &task_behaviour)
   {
-    const fixed elevation = waypoint->altitude +
-      task_behaviour.safety_height_arrival;
+    const RoughAltitude elevation(waypoint->altitude +
+                                  task_behaviour.safety_height_arrival);
     const AGeoPoint p_dest (waypoint->location, elevation);
     if (route_planner.FindPositiveArrival(p_dest, arrival_height_terrain,
                                             arrival_height_glide)) {
-      const RoughAltitude h_base(elevation);
-      arrival_height_terrain -= h_base;
-      arrival_height_glide -= h_base;
+      arrival_height_terrain -= elevation;
+      arrival_height_glide -= elevation;
     }
 
     if (!arrival_height_glide.IsPositive())
