@@ -33,7 +33,7 @@ public class Loader {
 
   static {
     try {
-      System.loadLibrary("application");
+      System.loadLibrary("xcsoar");
       loaded = true;
     } catch (UnsatisfiedLinkError e) {
       Log.e(TAG, e.getMessage());

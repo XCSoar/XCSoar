@@ -127,18 +127,18 @@ ifeq ($(FAT_BINARY),y)
 
 # generate a "fat" APK file with binaries for all ABIs
 
-ALL_SO = $(patsubst %,$(ANDROID_BUILD)/libs/%/libapplication.so,$(ANDROID_ALL_ABIS))
+ALL_SO = $(patsubst %,$(ANDROID_BUILD)/libs/%/libxcsoar.so,$(ANDROID_ALL_ABIS))
 
-$(ANDROID_BUILD)/libs/armeabi/libapplication.so: $(OUT)/ANDROID/build/libs/armeabi/libapplication.so | $(ANDROID_BUILD)/libs/armeabi/dirstamp
+$(ANDROID_BUILD)/libs/armeabi/libxcsoar.so: $(OUT)/ANDROID/build/libs/armeabi/libxcsoar.so | $(ANDROID_BUILD)/libs/armeabi/dirstamp
 	$(Q)cp $< $@
 
-$(OUT)/ANDROID/build/libs/armeabi/libapplication.so:
+$(OUT)/ANDROID/build/libs/armeabi/libxcsoar.so:
 	$(Q)$(MAKE) TARGET=ANDROID DEBUG=$(DEBUG) $@
 
-$(ANDROID_BUILD)/libs/armeabi-v7a/libapplication.so: $(OUT)/ANDROID7/build/libs/armeabi-v7a/libapplication.so | $(ANDROID_BUILD)/libs/armeabi-v7a/dirstamp
+$(ANDROID_BUILD)/libs/armeabi-v7a/libxcsoar.so: $(OUT)/ANDROID7/build/libs/armeabi-v7a/libxcsoar.so | $(ANDROID_BUILD)/libs/armeabi-v7a/dirstamp
 	$(Q)cp $< $@
 
-$(OUT)/ANDROID7/build/libs/armeabi-v7a/libapplication.so:
+$(OUT)/ANDROID7/build/libs/armeabi-v7a/libxcsoar.so:
 	$(Q)$(MAKE) TARGET=ANDROID7 DEBUG=$(DEBUG) $@
 
 $(ANDROID_BIN)/XCSoar-debug.apk: $(ALL_SO) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) android/src/*.java
@@ -162,13 +162,13 @@ $(call SRC_TO_OBJ,$(SRC)/Android/Timer.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/InternalSensors.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/Battery.cpp): $(NATIVE_HEADERS)
 
-$(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libapplication.so: $(TARGET_BIN_DIR)/xcsoar.so | $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/dirstamp
+$(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libxcsoar.so: $(TARGET_BIN_DIR)/xcsoar.so | $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/dirstamp
 	cp $< $@
 
 $(ANDROID_SO_FILES): $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/lib%.so: $(ANDROID_LIB_DIR)/lib%.so
 	cp $< $@
 
-$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libapplication.so $(ANDROID_SO_FILES) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) android/src/*.java
+$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libxcsoar.so $(ANDROID_SO_FILES) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) android/src/*.java
 	@$(NQ)echo "  ANT     $@"
 	$(Q)cd $(ANDROID_BUILD) && $(ANT) debug
 
@@ -185,7 +185,7 @@ $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES)): $(NATIVE_PREFIX)%.h: $(ANDR
 	$(Q)javah -classpath $(ANDROID_JNI)/classes -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
 	@touch $@
 
-$(ANDROID_BIN)/XCSoar-unsigned.apk: $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libapplication.so $(ANDROID_SO_FILES) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) android/src/*.java
+$(ANDROID_BIN)/XCSoar-unsigned.apk: $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libxcsoar.so $(ANDROID_SO_FILES) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) android/src/*.java
 	@$(NQ)echo "  ANT     $@"
 	$(Q)cd $(ANDROID_BUILD) && $(ANT) release
 
