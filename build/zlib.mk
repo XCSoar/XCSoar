@@ -13,6 +13,16 @@ endif
 ZLIB_CPPFLAGS =
 
 else
+ifeq ($(TARGET),ANDROID)
+
+# use the native zlib on ANDROID, see
+# android-ndk-*/docs/STABLE-APIS.html
+
+ZLIB_CPPFLAGS =
+ZLIB_LDADD = $(ANDROID_TARGET_ROOT)/usr/lib/libz.so
+ZLIB_LDLIBS =
+
+else
 
 ZLIB_SRC_DIR = $(SRC)/zlib
 ZLIB_SOURCES = \
@@ -35,4 +45,5 @@ ZLIB_CPPFLAGS = -I$(ZLIB_SRC_DIR)
 
 $(eval $(call link-library,zlip,ZLIB))
 
+endif
 endif
