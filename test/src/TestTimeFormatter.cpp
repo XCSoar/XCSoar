@@ -115,7 +115,7 @@ TestTwoLines()
 }
 
 static void
-TestSmart(unsigned time, const TCHAR *expected_output1,
+TestSmart(int time, const TCHAR *expected_output1,
           const TCHAR *expected_output2, const TCHAR *expected_output3,
           const TCHAR *expected_output4, const TCHAR *separator = _T(" "))
 {
@@ -166,12 +166,16 @@ TestSmart()
   TestSmart(60 * 60 * 24 * 3 + 60 * 60 * 19 + 60 * 47 + 5, _T("3 days"),
             _T("3 days 19 h"), _T("3 days 19 h 47 min"),
             _T("3 days 19 h 47 min 5 sec"));
+
+  TestSmart(-(60 * 60 * 24 * 3 + 60 * 60 * 19 + 60 * 47 + 5), _T("-3 days"),
+            _T("-3 days 19 h"), _T("-3 days 19 h 47 min"),
+            _T("-3 days 19 h 47 min 5 sec"));
 }
 
 int
 main(int argc, char **argv)
 {
-  plan_tests(85);
+  plan_tests(89);
 
   TestHHMM();
   TestTwoLines();

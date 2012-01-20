@@ -88,13 +88,13 @@ CalculateTimespanComponents(unsigned timespan, unsigned &days, unsigned &hours,
 }
 
 void
-FormatTimespanSmart(TCHAR *buffer, unsigned timespan, unsigned max_tokens,
+FormatTimespanSmart(TCHAR *buffer, int timespan, unsigned max_tokens,
                     const TCHAR *separator)
 {
   assert(max_tokens > 0 && max_tokens <= 4);
 
   unsigned days, hours, minutes, seconds;
-  CalculateTimespanComponents(timespan, days, hours, minutes, seconds);
+  CalculateTimespanComponents(abs(timespan), days, hours, minutes, seconds);
 
   unsigned token = 0;
   bool show_days = false, show_hours = false;
@@ -139,6 +139,11 @@ FormatTimespanSmart(TCHAR *buffer, unsigned timespan, unsigned max_tokens,
     show_seconds = true;
 
   // Output
+  if (timespan < 0) {
+    *buffer = _T('-');
+    buffer++;
+  }
+
   *buffer = _T('\0');
 
   StaticString<16> component_buffer;
