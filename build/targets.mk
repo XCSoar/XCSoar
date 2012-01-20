@@ -293,7 +293,7 @@ ifeq ($(TARGET),WINE)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_CPPFLAGS += -I$(ANDROID_TARGET_ROOT)/usr/include
+  TARGET_CPPFLAGS += --sysroot=$(ANDROID_TARGET_ROOT)
   TARGET_CPPFLAGS += -DANDROID
   CXXFLAGS += -D__STDC_VERSION__=199901L
 
@@ -368,6 +368,8 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_LDFLAGS += -nostdlib -Wl,-shared,-Bsymbolic -Wl,--no-undefined
+  TARGET_LDFLAGS += --sysroot=$(ANDROID_TARGET_ROOT)
+  TARGET_LDFLAGS += -L$(ANDROID_TARGET_ROOT)/usr/lib
 
   ifeq ($(ARMV7),y)
     TARGET_LDFLAGS += -Wl,--fix-cortex-a8
@@ -398,9 +400,9 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libGLESv1_CM.so
-  TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libc.so $(ANDROID_TARGET_ROOT)/usr/lib/libm.so
-  TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/liblog.so
+  TARGET_LDLIBS += -lc -lm
+  TARGET_LDLIBS += -llog
+  TARGET_LDLIBS += -lGLESv1_CM
   TARGET_LDADD += $(ANDROID_TOOLCHAIN)/lib/gcc/$(ANDROID_ABI4)/$(ANDROID_GCC_VERSION)/libgcc.a
 endif
 
