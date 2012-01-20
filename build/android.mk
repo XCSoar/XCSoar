@@ -128,19 +128,28 @@ ifeq ($(FAT_BINARY),y)
 
 # generate a "fat" APK file with binaries for all ABIs
 
-ALL_SO = $(patsubst %,$(ANDROID_BUILD)/libs/%/libxcsoar.so,$(ANDROID_ALL_ABIS))
+ALL_SO =
 
-$(ANDROID_BUILD)/libs/armeabi/libxcsoar.so: $(OUT)/ANDROID/build/libs/armeabi/libxcsoar.so | $(ANDROID_BUILD)/libs/armeabi/dirstamp
-	$(Q)cp $< $@
+# Example: $(eval $(call generate-abi,xcsoar,armeabi-v7a,ANDROID7))
+define generate-abi
 
-$(OUT)/ANDROID/build/libs/armeabi/libxcsoar.so:
-	$(Q)$(MAKE) TARGET=ANDROID DEBUG=$(DEBUG) $@
+ALL_SO += $$(ANDROID_BUILD)/build/libs/$(2)/lib$(1).so
 
-$(ANDROID_BUILD)/libs/armeabi-v7a/libxcsoar.so: $(OUT)/ANDROID7/build/libs/armeabi-v7a/libxcsoar.so | $(ANDROID_BUILD)/libs/armeabi-v7a/dirstamp
-	$(Q)cp $< $@
+$$(ANDROID_BUILD)/build/libs/$(2)/lib$(1).so: $$(OUT)/$(3)/bin/$(1).so | $$(ANDROID_BUILD)/build/libs/$(2)/dirstamp
+	$$(Q)cp $$< $$@
 
-$(OUT)/ANDROID7/build/libs/armeabi-v7a/libxcsoar.so:
-	$(Q)$(MAKE) TARGET=ANDROID7 DEBUG=$(DEBUG) $@
+$$(OUT)/$(3)/bin/$(1).so:
+	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) IOIOLIB_DIR=$$(IOIOLIB_DIR) $$@
+
+endef
+
+# Example: $(eval $(call generate-abi,xcsoar))
+define generate-all-abis
+$(eval $(call generate-abi,$(1),armeabi,ANDROID))
+$(eval $(call generate-abi,$(1),armeabi-v7a,ANDROID7))
+endef
+
+$(eval $(call generate-all-abis,xcsoar))
 
 $(ANDROID_BIN)/XCSoar-debug.apk: $(ALL_SO) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) android/src/*.java
 	@$(NQ)echo "  ANT     $@"
