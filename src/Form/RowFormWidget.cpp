@@ -349,7 +349,7 @@ RowFormWidget::LoadValueEnum(unsigned i, int value)
 {
   WndProperty &control = GetControl(i);
   DataFieldEnum &df = *(DataFieldEnum *)control.GetDataField();
-  assert(df.GetType() == DataField::TYPE_ENUM);
+  assert(df.GetType() == DataField::Type::ENUM);
   df.Set(value);
   control.RefreshDisplay();
 }
@@ -359,7 +359,7 @@ RowFormWidget::LoadValue(unsigned i, fixed value)
 {
   WndProperty &control = GetControl(i);
   DataFieldFloat &df = *(DataFieldFloat *)control.GetDataField();
-  assert(df.GetType() == DataField::TYPE_REAL);
+  assert(df.GetType() == DataField::Type::REAL);
   df.Set(value);
   control.RefreshDisplay();
 }
@@ -370,7 +370,7 @@ RowFormWidget::LoadValue(unsigned i, fixed value, UnitGroup unit_group)
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
   WndProperty &control = GetControl(i);
   DataFieldFloat &df = *(DataFieldFloat *)control.GetDataField();
-  assert(df.GetType() == DataField::TYPE_REAL);
+  assert(df.GetType() == DataField::Type::REAL);
   df.Set(Units::ToUserUnit(value, unit));
   df.SetUnits(Units::GetUnitName(unit));
   control.RefreshDisplay();
@@ -381,7 +381,7 @@ RowFormWidget::GetValueBoolean(unsigned i) const
 {
   const DataFieldBoolean &df =
     (const DataFieldBoolean &)GetDataField(i);
-  assert(df.GetType() == DataField::TYPE_BOOLEAN);
+  assert(df.GetType() == DataField::Type::BOOLEAN);
   return df.GetAsBoolean();
 }
 
@@ -396,7 +396,7 @@ RowFormWidget::GetValueFloat(unsigned i) const
 {
   const DataFieldFloat &df =
     (const DataFieldFloat &)GetDataField(i);
-  assert(df.GetType() == DataField::TYPE_REAL);
+  assert(df.GetType() == DataField::Type::REAL);
   return df.GetAsFixed();
 }
 
@@ -497,7 +497,7 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group, fixed &value) const
 {
   const DataFieldFloat &df =
     (const DataFieldFloat &)GetDataField(i);
-  assert(df.GetType() == DataField::TYPE_REAL);
+  assert(df.GetType() == DataField::Type::REAL);
 
   fixed new_value = df.GetAsFixed();
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
@@ -516,7 +516,7 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
 {
   const DataFieldFloat &df =
     (const DataFieldFloat &)GetDataField(i);
-  assert(df.GetType() == DataField::TYPE_REAL);
+  assert(df.GetType() == DataField::Type::REAL);
 
   fixed new_value = df.GetAsFixed();
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
@@ -536,7 +536,8 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
 {
   const DataFieldFloat &df =
     (const DataFieldFloat &)GetDataField(i);
-  assert(df.GetType() == DataField::TYPE_INTEGER || df.GetType() == DataField::TYPE_REAL);
+  assert(df.GetType() == DataField::Type::INTEGER ||
+         df.GetType() == DataField::Type::REAL);
 
   fixed new_value = df.GetAsFixed();
   const Unit unit = Units::GetUserUnitByGroup(unit_group);

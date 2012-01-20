@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <tchar.h>
+#include <stdint.h>
 
 #define OUTBUFFERSIZE 128
 
@@ -35,14 +36,14 @@ class ComboList;
 class DataField
 {
 public:
-  enum Type {
-    TYPE_STRING,
-    TYPE_BOOLEAN,
-    TYPE_INTEGER,
-    TYPE_REAL,
-    TYPE_ENUM,
-    TYPE_FILE,
-    TYPE_TIME,
+  enum class Type : uint8_t {
+    STRING,
+    BOOLEAN,
+    INTEGER,
+    REAL,
+    ENUM,
+    FILE,
+    TIME,
   };
 
   enum DataAccessKind_t {

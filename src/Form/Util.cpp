@@ -79,7 +79,7 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name, bool value)
     return;
 
   DataFieldBoolean &df = *(DataFieldBoolean *)ctl->GetDataField();
-  assert(df.GetType() == DataField::TYPE_BOOLEAN);
+  assert(df.GetType() == DataField::Type::BOOLEAN);
   df.Set(value);
   ctl->RefreshDisplay();
 }
@@ -120,7 +120,7 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name,
   assert(ctl != NULL);
 
   DataFieldEnum &df = *(DataFieldEnum *)ctl->GetDataField();
-  assert(df.GetType() == DataField::TYPE_ENUM);
+  assert(df.GetType() == DataField::Type::ENUM);
   if (list[0].help != NULL)
     df.EnableItemHelp(true);
 
@@ -139,7 +139,7 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name, fixed value)
   assert(ctl != NULL);
 
   DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
-  assert(df.GetType() == DataField::TYPE_REAL);
+  assert(df.GetType() == DataField::Type::REAL);
   df.Set(value);
   ctl->RefreshDisplay();
 }
@@ -155,7 +155,7 @@ LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
     return;
 
   DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
-  assert(df.GetType() == DataField::TYPE_REAL);
+  assert(df.GetType() == DataField::Type::REAL);
   df.Set(value);
   ctl->RefreshDisplay();
 }
@@ -171,7 +171,7 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name,
   assert(ctl != NULL);
 
   DataFieldString &df = *(DataFieldString *)ctl->GetDataField();
-  assert(df.GetType() == DataField::TYPE_STRING);
+  assert(df.GetType() == DataField::Type::STRING);
 
   df.Set(value);
   ctl->RefreshDisplay();
@@ -197,7 +197,7 @@ GetFormValueFixed(const SubForm &form, const TCHAR *control_name)
   assert(control != NULL);
 
   const DataFieldFloat &df = *(const DataFieldFloat *)control->GetDataField();
-  assert(df.GetType() == DataField::TYPE_REAL);
+  assert(df.GetType() == DataField::Type::REAL);
   return df.GetAsFixed();
 }
 
@@ -212,7 +212,7 @@ GetFormValueBoolean(const SubForm &form, const TCHAR *control_name)
 
   const DataFieldBoolean &df =
     *(const DataFieldBoolean *)control->GetDataField();
-  assert(df.GetType() == DataField::TYPE_BOOLEAN);
+  assert(df.GetType() == DataField::Type::BOOLEAN);
   return df.GetAsBoolean();
 }
 
@@ -226,7 +226,7 @@ GetFormValueString(const SubForm &form, const TCHAR *control_name)
   assert(control != NULL);
 
   const DataFieldString &df = *(const DataFieldString *)control->GetDataField();
-  assert(df.GetType() == DataField::TYPE_STRING);
+  assert(df.GetType() == DataField::Type::STRING);
 
   return df.GetAsString();
 }

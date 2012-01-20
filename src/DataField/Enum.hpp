@@ -78,7 +78,7 @@ private:
 
 public:
   DataFieldEnum(DataAccessCallback_t OnDataAccess) :
-    DataField(TYPE_ENUM, true, OnDataAccess),
+    DataField(Type::ENUM, true, OnDataAccess),
     value(0) {}
 
   gcc_pure
