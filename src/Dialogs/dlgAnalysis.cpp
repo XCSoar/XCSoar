@@ -42,7 +42,12 @@ Copyright_License {
 #include "Compiler.h"
 #include "Units/UnitsFormatter.hpp"
 #include "Renderer/FlightStatisticsRenderer.hpp"
+#include "Renderer/GlidePolarRenderer.hpp"
+#include "Renderer/BarographRenderer.hpp"
+#include "Renderer/ClimbChartRenderer.hpp"
 #include "Renderer/ThermalBandRenderer.hpp"
+#include "Renderer/WindChartRenderer.hpp"
+#include "Renderer/CuRenderer.hpp"
 #include "GestureManager.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -178,16 +183,16 @@ ChartControl::OnPaint(Canvas &canvas)
 
   // background is painted in the base-class
 
-  const FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
-                                    chart_look, look->map);
-
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
-    fs.RenderBarograph(canvas, rcgfx, basic,
-                       calculated, protected_task_manager);
+    RenderBarograph(canvas, rcgfx, chart_look,
+                    glide_computer->GetFlightStats(),
+                    basic, calculated, protected_task_manager);
     break;
   case ANALYSIS_PAGE_CLIMB:
-    fs.RenderClimb(canvas, rcgfx, settings_computer.glide_polar_task);
+    RenderClimbChart(canvas, rcgfx, chart_look,
+                     glide_computer->GetFlightStats(),
+                     settings_computer.glide_polar_task);
     break;
   case ANALYSIS_PAGE_THERMAL_BAND:
   {
@@ -207,22 +212,27 @@ ChartControl::OnPaint(Canvas &canvas)
   }
     break;
   case ANALYSIS_PAGE_WIND:
-    fs.RenderWind(canvas, rcgfx, basic,
-                  glide_computer->GetWindStore());
+    RenderWindChart(canvas, rcgfx, chart_look,
+                    glide_computer->GetFlightStats(),
+                    basic, glide_computer->GetWindStore());
     break;
   case ANALYSIS_PAGE_POLAR:
-    fs.RenderGlidePolar(canvas, rcgfx, calculated.climb_history,
-                        settings_computer,
-                        settings_computer.glide_polar_task);
+    RenderGlidePolar(canvas, rcgfx, look->chart,
+                     calculated.climb_history,
+                     settings_computer,
+                     settings_computer.glide_polar_task);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
-    fs.RenderTemperature(canvas, rcgfx, glide_computer->GetCuSonde());
+    RenderTemperatureChart(canvas, rcgfx, chart_look,
+                           glide_computer->GetCuSonde());
     break;
   case ANALYSIS_PAGE_TASK:
     if (protected_task_manager != NULL) {
       const TraceComputer *trace_computer = glide_computer != NULL
         ? &glide_computer->GetTraceComputer()
         : NULL;
+      const FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
+                                        chart_look, look->map);
       fs.RenderTask(canvas, rcgfx, basic, calculated,
                     settings_computer, settings_map,
                     *protected_task_manager,
@@ -231,6 +241,8 @@ ChartControl::OnPaint(Canvas &canvas)
     break;
   case ANALYSIS_PAGE_OLC:
     if (glide_computer != NULL) {
+      const FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
+                                        chart_look, look->map);
       fs.RenderOLC(canvas, rcgfx, basic, calculated,
                    settings_computer, settings_map,
                    calculated.contest_stats,
@@ -240,8 +252,9 @@ ChartControl::OnPaint(Canvas &canvas)
   case ANALYSIS_PAGE_TASK_SPEED:
     if (protected_task_manager != NULL) {
       ProtectedTaskManager::Lease task(*protected_task_manager);
-      fs.RenderSpeed(canvas, rcgfx, basic,
-                     calculated, task);
+      RenderSpeed(canvas, rcgfx, chart_look,
+                  glide_computer->GetFlightStats(),
+                  basic, calculated, task);
     }
     break;
   default:
@@ -284,7 +297,7 @@ Update(void)
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
               _("Barograph"));
     wf->SetCaption(sTmp);
-    fs.CaptionBarograph(sTmp);
+    BarographCaption(sTmp, glide_computer->GetFlightStats());
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Settings"));
     break;
@@ -293,7 +306,7 @@ Update(void)
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
               _("Climb"));
     wf->SetCaption(sTmp);
-    fs.CaptionClimb(sTmp);
+    ClimbChartCaption(sTmp, glide_computer->GetFlightStats());
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Task Calc"));
     break;
@@ -302,7 +315,7 @@ Update(void)
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
               _("Thermal Band"));
     wf->SetCaption(sTmp);
-    fs.CaptionClimb(sTmp);
+    ClimbChartCaption(sTmp, glide_computer->GetFlightStats());
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_T(""));
     break;
@@ -320,7 +333,7 @@ Update(void)
               _("Glide Polar"), _("Mass"),
               (int)settings_computer.glide_polar_task.GetTotalMass());
     wf->SetCaption(sTmp);
-    fs.CaptionPolar(sTmp, settings_computer.glide_polar_task);
+    GlidePolarCaption(sTmp, settings_computer.glide_polar_task);
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Settings"));
    break;
@@ -329,7 +342,7 @@ Update(void)
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
               _("Temp Trace"));
     wf->SetCaption(sTmp);
-    fs.CaptionTempTrace(sTmp, glide_computer->GetCuSonde());
+    TemperatureChartCaption(sTmp, glide_computer->GetCuSonde());
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Settings"));
     break;

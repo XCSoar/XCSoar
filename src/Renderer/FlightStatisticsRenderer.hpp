@@ -31,25 +31,17 @@ Copyright_License {
 
 struct NMEAInfo;
 struct DerivedInfo;
-class ClimbHistory;
-class TracePointVector;
 struct TaskBehaviour;
 struct ComputerSettings;
 struct MapSettings;
 class Canvas;
-class WindStore;
-class Airspaces;
-class RasterTerrain;
 class GlidePolar;
-class Chart;
-class TaskManager;
 class ProtectedTaskManager;
 class TraceComputer;
 class FlightStatistics;
 struct ContestStatistics;
 struct ChartLook;
 struct MapLook;
-class CuSonde;
 
 class FlightStatisticsRenderer {
   const FlightStatistics &fs;
@@ -64,31 +56,6 @@ public:
                            const MapLook &_map_look);
 
 public:
-  void RenderBarograph(Canvas &canvas, const PixelRect rc,
-                       const NMEAInfo &nmea_info,
-                       const DerivedInfo &derived_info,
-                       const ProtectedTaskManager *task) const;
-
-  void RenderBarographSpark(Canvas &canvas, const PixelRect rc, bool inverse,
-                            const NMEAInfo &nmea_info,
-                            const DerivedInfo &derived_info,
-                            const ProtectedTaskManager *task) const;
-
-  void RenderClimb(Canvas &canvas, const PixelRect rc,
-                   const GlidePolar& glide_polar) const;
-
-  void RenderGlidePolar(Canvas &canvas, const PixelRect rc,
-                        const ClimbHistory &climb_history,
-                        const ComputerSettings &settings_computer,
-                        const GlidePolar& glide_polar) const;
-
-  void RenderWind(Canvas &canvas, const PixelRect rc,
-                  const NMEAInfo &nmea_info,
-                  const WindStore &wind_store) const;
-
-  void RenderTemperature(Canvas &canvas, const PixelRect rc,
-                         const CuSonde &cu_sonde) const;
-
   void RenderOLC(Canvas &canvas, const PixelRect rc,
                  const NMEAInfo &nmea_info,
                  const DerivedInfo &calculated,
@@ -105,16 +72,6 @@ public:
                   const ProtectedTaskManager &task,
                   const TraceComputer *trace_computer) const;
 
-  void RenderSpeed(Canvas &canvas, const PixelRect rc,
-                   const NMEAInfo &nmea_info,
-                   const DerivedInfo &derived_info,
-                   const TaskManager &task) const;
-
-  void CaptionBarograph(TCHAR *sTmp);
-  void CaptionClimb(TCHAR* sTmp);
-  void CaptionPolar(TCHAR * sTmp, const GlidePolar& glide_polar) const;
-
-  void CaptionTempTrace(TCHAR *sTmp, const CuSonde &cu_sonde) const;
   void CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) const;
   void CaptionOLC(TCHAR *sTmp, const TaskBehaviour &task_behaviour,
                   const DerivedInfo &derived) const;

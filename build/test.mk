@@ -1829,7 +1829,11 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/Renderer/FlightStatisticsRenderer.cpp \
+	$(SRC)/Renderer/BarographRenderer.cpp \
+	$(SRC)/Renderer/ClimbChartRenderer.cpp \
+	$(SRC)/Renderer/GlidePolarRenderer.cpp \
 	$(SRC)/Renderer/ThermalBandRenderer.cpp \
+	$(SRC)/Renderer/WindChartRenderer.cpp \
 	$(SRC)/Renderer/CuRenderer.cpp \
 	$(SRC)/GlideRatio.cpp \
 	$(SRC)/Computer/AutoQNH.cpp \

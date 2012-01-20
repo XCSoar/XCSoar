@@ -537,6 +537,10 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/Renderer/FlightStatisticsRenderer.cpp \
+	$(SRC)/Renderer/BarographRenderer.cpp \
+	$(SRC)/Renderer/ClimbChartRenderer.cpp \
+	$(SRC)/Renderer/GlidePolarRenderer.cpp \
+	$(SRC)/Renderer/WindChartRenderer.cpp \
 	$(SRC)/Renderer/CuRenderer.cpp \
 	\
 	$(SRC)/Simulator.cpp \

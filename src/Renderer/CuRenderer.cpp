@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "FlightStatisticsRenderer.hpp"
+#include "CuRenderer.hpp"
 #include "Atmosphere/CuSonde.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
@@ -34,9 +34,9 @@ using std::min;
 using std::max;
 
 void
-FlightStatisticsRenderer::RenderTemperature(Canvas &canvas,
-                                            const PixelRect rc,
-                                            const CuSonde &cu_sonde) const
+RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
+                       const ChartLook &chart_look,
+                       const CuSonde &cu_sonde)
 {
   Chart chart(chart_look, canvas, rc);
 
@@ -118,8 +118,7 @@ FlightStatisticsRenderer::RenderTemperature(Canvas &canvas,
 }
 
 void
-FlightStatisticsRenderer::CaptionTempTrace(TCHAR *sTmp,
-                                           const CuSonde &cu_sonde) const
+TemperatureChartCaption(TCHAR *sTmp, const CuSonde &cu_sonde)
 {
   _stprintf(sTmp, _T("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
             _("Thermal height"),

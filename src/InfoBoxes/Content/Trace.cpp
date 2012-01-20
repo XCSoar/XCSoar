@@ -24,7 +24,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Trace.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-#include "Renderer/FlightStatisticsRenderer.hpp"
+#include "Renderer/BarographRenderer.hpp"
 #include "Renderer/TraceHistoryRenderer.hpp"
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/TaskProgressRenderer.hpp"
@@ -136,12 +136,11 @@ void
 InfoBoxContentBarogram::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   const Look &look = CommonInterface::main_window.GetLook();
-  FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
-                              look.chart, look.map);
-  fs.RenderBarographSpark(canvas, get_spark_rect(infobox),
-                          infobox.GetLook().inverse,
-                          XCSoarInterface::Basic(),
-                          XCSoarInterface::Calculated(), protected_task_manager);
+  RenderBarographSpark(canvas, get_spark_rect(infobox), look.chart,
+                       infobox.GetLook().inverse,
+                       glide_computer->GetFlightStats(),
+                       XCSoarInterface::Basic(),
+                       XCSoarInterface::Calculated(), protected_task_manager);
 }
 
 bool
