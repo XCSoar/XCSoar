@@ -108,9 +108,6 @@ else
 PROGRAM_NAME = XCSoar
 endif
 
-OUTPUTS := $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(TARGET_EXEEXT) $(VALI_XCS)
-OUTPUTS += $(XCSOARSETUP_DLL) $(XCSOARLAUNCH_DLL)
-
 include $(topdir)/build/dist.mk
 include $(topdir)/build/install.mk
 
@@ -792,6 +789,9 @@ $(eval $(call link-program,$(PROGRAM_NAME),XCSOAR))
 
 include $(topdir)/build/gettext.mk
 include $(topdir)/build/cab.mk
+
+OUTPUTS := $(XCSOAR_BIN) $(VALI_XCS_BIN)
+OUTPUTS += $(XCSOARSETUP_DLL) $(XCSOARLAUNCH_DLL)
 
 all: $(OUTPUTS)
 everything: $(OUTPUTS) debug build-check build-harness
