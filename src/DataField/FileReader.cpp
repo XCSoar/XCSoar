@@ -88,7 +88,7 @@ DataFieldFileReader::Item::~Item()
 }
 
 DataFieldFileReader::DataFieldFileReader(DataAccessCallback_t OnDataAccess)
-  :DataField(TYPE_FILE, OnDataAccess),
+  :DataField(TYPE_FILE, true, OnDataAccess),
    // Set selection to zero
    mValue(0),
    nullable(true),
@@ -97,9 +97,6 @@ DataFieldFileReader::DataFieldFileReader(DataAccessCallback_t OnDataAccess)
 {
   // Fill first entry -> always exists and is blank
   files.append();
-
-  // This type of DataField supports the combolist
-  SupportCombo = true;
 }
 
 void

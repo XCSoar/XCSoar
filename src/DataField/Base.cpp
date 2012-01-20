@@ -29,8 +29,9 @@ Copyright_License {
 
 enum { ComboPopupITEMMAX = 100 };
 
-DataField::DataField(Type _type, DataAccessCallback_t OnDataAccess)
-  :type(_type),
+DataField::DataField(Type _type, bool _support_combo,
+                     DataAccessCallback_t OnDataAccess)
+  :SupportCombo(_support_combo), type(_type),
    mOnDataAccess(OnDataAccess),
    mItemHelp(false), mDetachGUI(false)
 {

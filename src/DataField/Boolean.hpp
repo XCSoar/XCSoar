@@ -38,11 +38,9 @@ private:
 public:
   DataFieldBoolean(bool Default, const TCHAR *TextTrue, const TCHAR *TextFalse,
                    DataAccessCallback_t OnDataAccess)
-    :DataField(TYPE_BOOLEAN, OnDataAccess),
+    :DataField(TYPE_BOOLEAN, true, OnDataAccess),
      mValue(Default),
-     true_text(TextTrue), false_text(TextFalse) {
-    SupportCombo = true;
-  }
+     true_text(TextTrue), false_text(TextFalse) {}
 
   void Inc(void);
   void Dec(void);

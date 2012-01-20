@@ -47,12 +47,9 @@ protected:
 public:
   DataFieldTime(int _min, int _max, int _value, unsigned _step,
                 DataAccessCallback_t OnDataAccess)
-    :DataField(TYPE_TIME, OnDataAccess),
+    :DataField(TYPE_TIME, true, OnDataAccess),
      value(_value), min(_min), max(_max), step(_step), max_tokens(2),
-     speedup(0)
-  {
-    SupportCombo = true;
-  }
+     speedup(0) {}
 
 
   void Inc(void);

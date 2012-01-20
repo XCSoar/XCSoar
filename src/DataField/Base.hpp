@@ -52,7 +52,8 @@ public:
 
   typedef void (*DataAccessCallback_t)(DataField * Sender, DataAccessKind_t Mode);
 
-  bool SupportCombo;  // all Types dataField support combolist except DataFieldString.
+  // all Types dataField support combolist except DataFieldString.
+  const bool SupportCombo;
 
 protected:
   const Type type;
@@ -64,7 +65,7 @@ private:
   bool mDetachGUI;
 
 public:
-  DataField(Type _type,
+  DataField(Type _type, bool support_combo,
             DataAccessCallback_t OnDataAccess = NULL);
   virtual ~DataField(void) {}
 

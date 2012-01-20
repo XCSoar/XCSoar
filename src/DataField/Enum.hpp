@@ -78,11 +78,8 @@ private:
 
 public:
   DataFieldEnum(DataAccessCallback_t OnDataAccess) :
-    DataField(TYPE_ENUM, OnDataAccess),
-    value(0)
-  {
-    SupportCombo = true;
-  }
+    DataField(TYPE_ENUM, true, OnDataAccess),
+    value(0) {}
 
   gcc_pure
   bool Exists(const TCHAR *text) const {

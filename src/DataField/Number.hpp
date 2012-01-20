@@ -37,7 +37,7 @@ public:
   void SetFormat(const TCHAR *text);
 
 protected:
-  NumberDataField(Type type,
+  NumberDataField(Type type, bool support_combo,
                   const TCHAR *edit_format, const TCHAR *display_format,
                   DataAccessCallback_t OnDataAccess = NULL);
 };
