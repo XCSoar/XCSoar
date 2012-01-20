@@ -367,7 +367,7 @@ ifeq ($(TARGET_IS_DARWIN),y)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_LDFLAGS += -nostdlib -Wl,-shared,-Bsymbolic -Wl,--no-undefined
+  TARGET_LDFLAGS += -Wl,--no-undefined
   TARGET_LDFLAGS += --sysroot=$(ANDROID_TARGET_ROOT)
   TARGET_LDFLAGS += -L$(ANDROID_TARGET_ROOT)/usr/lib
 
@@ -415,5 +415,5 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_EXEEXT := .so
+  TARGET_EXEEXT :=
 endif

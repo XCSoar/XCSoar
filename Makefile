@@ -785,7 +785,11 @@ endif
 
 XCSOAR_STRIP = y
 
+ifeq ($(TARGET),ANDROID)
+$(eval $(call link-shared-library,$(PROGRAM_NAME),XCSOAR))
+else
 $(eval $(call link-program,$(PROGRAM_NAME),XCSOAR))
+endif
 
 include $(topdir)/build/gettext.mk
 include $(topdir)/build/cab.mk

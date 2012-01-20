@@ -135,7 +135,7 @@ define generate-abi
 
 ALL_SO += $$(ANDROID_BUILD)/build/libs/$(2)/lib$(1).so
 
-$$(ANDROID_BUILD)/build/libs/$(2)/lib$(1).so: $$(OUT)/$(3)/bin/$(1).so | $$(ANDROID_BUILD)/build/libs/$(2)/dirstamp
+$$(ANDROID_BUILD)/build/libs/$(2)/lib$(1).so: $$(OUT)/$(3)/bin/lib$(1).so | $$(ANDROID_BUILD)/build/libs/$(2)/dirstamp
 	$$(Q)cp $$< $$@
 
 $$(OUT)/$(3)/bin/$(1).so:
@@ -172,7 +172,7 @@ $(call SRC_TO_OBJ,$(SRC)/Android/Timer.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/InternalSensors.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/Battery.cpp): $(NATIVE_HEADERS)
 
-$(ANDROID_ABI_DIR)/libxcsoar.so: $(TARGET_BIN_DIR)/xcsoar.so | $(ANDROID_ABI_DIR)/dirstamp
+$(ANDROID_ABI_DIR)/libxcsoar.so: $(TARGET_BIN_DIR)/libxcsoar.so | $(ANDROID_ABI_DIR)/dirstamp
 	cp $< $@
 
 $(ANDROID_SO_FILES): $(ANDROID_ABI_DIR)/lib%.so: $(ANDROID_LIB_DIR)/lib%.so
