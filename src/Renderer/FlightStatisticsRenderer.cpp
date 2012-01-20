@@ -93,7 +93,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
 void
 FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
                                      const TaskBehaviour &task_behaviour,
-                                     const DerivedInfo &derived) const
+                                     const DerivedInfo &derived)
 {
   if (task_behaviour.contest == OLC_Plus) {
     const ContestResult& result =
@@ -217,7 +217,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 }
 
 void
-FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) const
+FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived)
 {
   const CommonStats &common = derived.common_stats;
 

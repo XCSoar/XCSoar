@@ -72,9 +72,9 @@ public:
                   const ProtectedTaskManager &task,
                   const TraceComputer *trace_computer) const;
 
-  void CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) const;
-  void CaptionOLC(TCHAR *sTmp, const TaskBehaviour &task_behaviour,
-                  const DerivedInfo &derived) const;
+  static void CaptionTask(TCHAR *sTmp, const DerivedInfo &derived);
+  static void CaptionOLC(TCHAR *sTmp, const TaskBehaviour &task_behaviour,
+                         const DerivedInfo &derived);
 };
 
 #endif

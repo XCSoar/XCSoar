@@ -289,9 +289,6 @@ Update(void)
   const ComputerSettings &settings_computer = blackboard->GetComputerSettings();
   const DerivedInfo &calculated = blackboard->Calculated();
 
-  FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
-                              look->chart, look->map);
-
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
@@ -359,7 +356,7 @@ Update(void)
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
               _("Task"));
     wf->SetCaption(sTmp);
-    fs.CaptionTask(sTmp, calculated);
+    FlightStatisticsRenderer::CaptionTask(sTmp, calculated);
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Task calc"));
     break;
@@ -369,7 +366,7 @@ Update(void)
               ContestToString(settings_computer.task.contest));
     wf->SetCaption(sTmp);
     SetCalcCaption(_T(""));
-    fs.CaptionOLC(sTmp, settings_computer.task, calculated);
+    FlightStatisticsRenderer::CaptionOLC(sTmp, settings_computer.task, calculated);
     wInfo->SetCaption(sTmp);
     break;
 
