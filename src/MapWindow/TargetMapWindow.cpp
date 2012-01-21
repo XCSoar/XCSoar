@@ -214,6 +214,11 @@ TargetMapWindow::OnPaintBuffer(Canvas &canvas)
   // Render airspace
   RenderAirspace(canvas);
 
+#ifdef ENABLE_OPENGL
+  /* desaturate the map background, to focus on the task */
+  canvas.FadeToWhite(0x80);
+#endif
+
   // Render task, waypoints
   DrawTask(canvas);
   DrawWaypoints(canvas);

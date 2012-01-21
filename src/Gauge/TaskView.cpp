@@ -35,6 +35,8 @@
 
 #ifndef ENABLE_OPENGL
 #include "Screen/BufferCanvas.hpp"
+#else
+#include "Screen/OpenGL/Scope.hpp"
 #endif
 
 static void
@@ -66,6 +68,11 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
                            projection,
                            settings_map.airspace);
   }
+
+#ifdef ENABLE_OPENGL
+  /* desaturate the map background, to focus on the task */
+  canvas.FadeToWhite(0xc0);
+#endif
 
   OZRenderer ozv(task_look, airspace_look, settings_map.airspace);
   RenderTaskPoint tpv(canvas, projection, task_look,

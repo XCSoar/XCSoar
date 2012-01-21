@@ -76,6 +76,22 @@ Canvas::OutlineRectangleGL(PixelScalar left, PixelScalar top,
 }
 
 void
+Canvas::FadeToWhite(GLubyte alpha)
+{
+  const GLEnable blend(GL_BLEND);
+  const Color color(0xff, 0xff, 0xff, alpha);
+  clear(color);
+}
+
+void
+Canvas::FadeToWhite(PixelRect rc, GLubyte alpha)
+{
+  const GLEnable blend(GL_BLEND);
+  const Color color(0xff, 0xff, 0xff, alpha);
+  DrawFilledRectangle(rc.left, rc.right, rc.right, rc.bottom, color);
+}
+
+void
 Canvas::DrawRaisedEdge(PixelRect &rc)
 {
   Pen bright(1, Color(240, 240, 240));

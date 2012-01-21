@@ -224,6 +224,15 @@ public:
     OutlineRectangleGL(left, top, right, bottom);
   }
 
+  /**
+   * Fade to white.  This enables GL_BLEND and disables it before
+   * returning.
+   *
+   * @param alpha the alpha value, 0=no change, 0xff=fully white.
+   */
+  void FadeToWhite(PixelRect rc, GLubyte alpha);
+  void FadeToWhite(GLubyte alpha);
+
   void clear() {
     Rectangle(0, 0, get_width(), get_height());
   }
