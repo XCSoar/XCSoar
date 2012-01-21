@@ -26,6 +26,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/TextEntry.hpp"
 #include "Form/Form.hpp"
+#include "Form/Frame.hpp"
 #include "Form/Button.hpp"
 #include "Form/Edit.hpp"
 #include "Screen/Layout.hpp"
@@ -63,6 +64,7 @@ static WndButton *buttonPanelName;
 static WndProperty *edit_select;
 static WndProperty *edit_content;
 static WndButton *buttonPaste;
+static WndFrame *edit_content_description;
 
 static void
 RefreshPasteButton()
@@ -71,11 +73,20 @@ RefreshPasteButton()
 }
 
 static void
+RefreshEditContentDescription()
+{
+  DataFieldEnum &df = *(DataFieldEnum *)edit_content->GetDataField();
+  edit_content_description->SetText(df.GetHelp() != NULL ? df.GetHelp() :
+                                                           _T(""));
+}
+
+static void
 RefreshEditContent()
 {
   DataFieldEnum &df = *(DataFieldEnum *)edit_content->GetDataField();
   df.Set(data.contents[current_preview]);
   edit_content->RefreshDisplay();
+  RefreshEditContentDescription();
 }
 
 static void
@@ -149,6 +160,7 @@ OnContentAccess(DataField *Sender, DataField::DataAccessKind_t Mode)
 
   data.contents[current_preview] = (InfoBoxFactory::t_InfoBox)dfe.GetAsInteger();
   previews[current_preview].invalidate();
+  RefreshEditContentDescription();
 }
 
 bool
@@ -406,6 +418,14 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   edit_content->SetDataField(dfe);
   edit_content->SetOnHelpCallback(OnContentHelp);
+
+  control_rc.top += height;
+  control_rc.bottom += height * 5;
+  edit_content_description = new WndFrame(client_area, dialog_look,
+                                          control_rc.left, control_rc.top,
+                                          control_rc.right - control_rc.left,
+                                          control_rc.bottom - control_rc.top,
+                                          style);
 
   RefreshEditContent();
 
