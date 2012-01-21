@@ -507,10 +507,12 @@ InfoBoxManager::ShowInfoBoxPicker(const int id)
   const InfoBoxFactory::t_InfoBox old_type = panel.contents[i];
 
   ComboList list;
-  for (unsigned j = InfoBoxFactory::MIN_TYPE_VAL; j < InfoBoxFactory::NUM_TYPES; j++)
+  for (unsigned j = InfoBoxFactory::MIN_TYPE_VAL; j < InfoBoxFactory::NUM_TYPES; j++) {
+    const TCHAR * desc = InfoBoxFactory::GetDescription((t_InfoBox) j);
     list.Append(j, gettext(InfoBoxFactory::GetName((t_InfoBox) j)),
                 gettext(InfoBoxFactory::GetName((t_InfoBox) j)),
-                InfoBoxFactory::GetDescription((t_InfoBox) j));
+                desc != NULL ? gettext(desc) : NULL);
+  }
 
   list.Sort();
   list.ComboPopupItemSavedIndex = list.LookUp(old_type);
