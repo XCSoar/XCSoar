@@ -91,9 +91,8 @@ PolarGlue::LoadFromOldProfile(PolarInfo &polar)
 bool
 PolarGlue::LoadFromProfile(PolarInfo &polar)
 {
-  TCHAR polar_string[255];
-  if (Profile::Get(szProfilePolar, polar_string, 255) &&
-      polar_string[0] != 0 &&
+  const TCHAR *polar_string = Profile::Get(szProfilePolar);
+  if (polar_string != NULL && !StringIsEmpty(polar_string) &&
       polar.ReadString(polar_string)) {
     return true;
   }

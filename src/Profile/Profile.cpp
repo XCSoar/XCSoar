@@ -118,10 +118,11 @@ Profile::SetFiles(const TCHAR* override)
 bool
 Profile::GetPath(const TCHAR *key, TCHAR *value)
 {
-  if (!Get(key, value, MAX_PATH) || StringIsEmpty(value))
+  const TCHAR *p = Get(key);
+  if (p == NULL || StringIsEmpty(p))
     return false;
 
-  ExpandLocalPath(value);
+  ExpandLocalPath(value, p);
   return true;
 }
 
@@ -129,10 +130,9 @@ bool
 Profile::GetPathIsEqual(const TCHAR *key, const TCHAR *value)
 {
   TCHAR saved[MAX_PATH];
-  if (!Get(key, saved, MAX_PATH))
+  if (!GetPath(key, saved))
     return false;
 
-  ExpandLocalPath(saved);
   return StringIsEqual(saved, value);
 }
 

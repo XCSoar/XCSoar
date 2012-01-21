@@ -32,10 +32,7 @@ void
 LoadFormPropertyFromProfile(SubForm &form, const TCHAR *control_name,
                             const TCHAR *profile_key)
 {
-  TCHAR buffer[512];
-  const TCHAR *value = Profile::Get(profile_key, buffer, 512)
-    ? buffer
-    : _T("");
+  const TCHAR *value = Profile::Get(profile_key, _T(""));
   LoadFormProperty(form, control_name, value);
 }
 
@@ -199,11 +196,7 @@ SaveFormPropertyToProfile(const SubForm &form, const TCHAR *control_name,
   const TCHAR *value = GetFormValueString(form, control_name);
   assert(value != NULL);
 
-  TCHAR buffer[512];
-  const TCHAR *old = Profile::Get(profile_key, buffer, 512)
-    ? buffer
-    : _T("");
-
+  const TCHAR *old = Profile::Get(profile_key, _T(""));
   if (_tcscmp(value, old) == 0)
     return false;
 

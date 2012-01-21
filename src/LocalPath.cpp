@@ -133,14 +133,14 @@ normalize_backslashes(TCHAR *p)
 static const TCHAR local_path_code[] = _T("%LOCAL_PATH%\\");
 
 void
-ExpandLocalPath(TCHAR* filein)
+ExpandLocalPath(TCHAR *dest, const TCHAR *src)
 {
-  TCHAR output[MAX_PATH];
-
   // Get the relative file name and location (ptr)
-  const TCHAR *ptr = StringAfterPrefix(filein, local_path_code);
-  if (ptr == NULL)
+  const TCHAR *ptr = StringAfterPrefix(src, local_path_code);
+  if (ptr == NULL) {
+    _tcscpy(dest, src);
     return;
+  }
 
   while (*ptr == _T('/') || *ptr == _T('\\'))
     ++ptr;
@@ -149,12 +149,10 @@ ExpandLocalPath(TCHAR* filein)
     return;
 
   // Replace the code "%LOCAL_PATH%\\" by the full local path (output)
-  LocalPath(output, ptr);
-  // ... and copy it to the buffer (filein)
-  _tcscpy(filein, output);
+  LocalPath(dest, ptr);
 
   // Normalize the backslashes (if necessary)
-  normalize_backslashes(filein);
+  normalize_backslashes(dest);
 }
 
 void

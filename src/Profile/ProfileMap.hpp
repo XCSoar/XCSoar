@@ -35,6 +35,17 @@ class KeyValueFileWriter;
 
 namespace ProfileMap {
   /**
+   * Look up a string value in the profile.
+   *
+   * @param key name of the value
+   * @param default_value a value to be returned when the key does not exist
+   * @return the value (gets invalidated by any write access to the
+   * profile), or default_value if the key does not exist
+   */
+  gcc_pure
+  const TCHAR *Get(const TCHAR *key, const TCHAR *default_value=NULL);
+
+  /**
    * Reads a value from the profile map
    * @param key Name of the value that should be read
    * @param value Pointer to the output buffer
@@ -52,8 +63,8 @@ namespace ProfileMap {
   static inline bool Get(const TCHAR *key, int &value)
   {
     // Try to read the profile map
-    TCHAR str[50];
-    if (!Get(key, str, 50))
+    const TCHAR *str = Get(key);
+    if (str == NULL)
       return false;
 
     // Parse the string for a number
@@ -70,8 +81,8 @@ namespace ProfileMap {
   static inline bool Get(const TCHAR *key, short &value)
   {
     // Try to read the profile map
-    TCHAR str[50];
-    if (!Get(key, str, 50))
+    const TCHAR *str = Get(key);
+    if (str == NULL)
       return false;
 
     // Parse the string for a number
@@ -88,8 +99,8 @@ namespace ProfileMap {
   static inline bool Get(const TCHAR *key, bool &value)
   {
     // Try to read the profile map
-    TCHAR str[5];
-    if (!Get(key, str, 5))
+    const TCHAR *str = Get(key);
+    if (str == NULL)
       return false;
 
     // Save value to output parameter value and return success
@@ -100,8 +111,8 @@ namespace ProfileMap {
   static inline bool Get(const TCHAR *key, unsigned &value)
   {
     // Try to read the profile map
-    TCHAR str[50];
-    if (!Get(key, str, 50))
+    const TCHAR *str = Get(key);
+    if (str == NULL)
       return false;
 
     // Parse the string for a unsigned number

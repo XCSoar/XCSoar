@@ -117,16 +117,12 @@ GetFontFromString(const TCHAR *Buffer1, LOGFONT* lplf)
 bool
 Profile::GetFont(const TCHAR *key, LOGFONT* lplf)
 {
-  TCHAR Buffer[128];
-
   assert(key != NULL);
   assert(key[0] != '\0');
   assert(lplf != NULL);
 
-  if (Get(key, Buffer, ARRAY_SIZE(Buffer)))
-    return GetFontFromString(Buffer, lplf);
-
-  return false;
+  const TCHAR *value = Get(key);
+  return value != NULL && GetFontFromString(value, lplf);
 }
 
 void

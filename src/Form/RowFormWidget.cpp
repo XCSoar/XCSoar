@@ -598,8 +598,7 @@ RowFormWidget::SaveValueFileReader(unsigned i, const TCHAR *registry_key)
   _tcscpy(new_value, dfe->GetPathFile());
   ContractLocalPath(new_value);
 
-  TCHAR old_value[MAX_PATH];
-  Profile::Get(registry_key, old_value, MAX_PATH);
+  const TCHAR *old_value = Profile::Get(registry_key, _T(""));
   if (_tcscmp(old_value, new_value) == 0)
     return false;
 

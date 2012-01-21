@@ -63,11 +63,11 @@ NOAAStore::LoadFromString(const TCHAR *string)
 bool
 NOAAStore::LoadFromProfile()
 {
-  TCHAR buffer[120];
-  if (!Profile::Get(szProfileWeatherStations, buffer, 120))
+  const TCHAR *stations = Profile::Get(szProfileWeatherStations);
+  if (stations == NULL)
     return false;
 
-  return LoadFromString(buffer);
+  return LoadFromString(stations);
 }
 
 void

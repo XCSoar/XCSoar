@@ -32,8 +32,8 @@ void
 Profile::Load(LiveTrack24Settings &settings)
 {
   Get(ProfileLiveTrack24Enabled, settings.enabled);
-  Get(ProfileLiveTrack24Username, settings.username);
-  Get(ProfileLiveTrack24Password, settings.password);
+  settings.username = Get(ProfileLiveTrack24Username, _T(""));
+  settings.password = Get(ProfileLiveTrack24Password, _T(""));
 }
 
 void

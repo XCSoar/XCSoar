@@ -34,6 +34,16 @@ namespace ProfileMap {
   static map_t map;
 }
 
+const TCHAR *
+ProfileMap::Get(const TCHAR *key, const TCHAR *default_value)
+{
+  map_t::const_iterator it = map.find(key);
+  if (it == map.end())
+    return default_value;
+
+  return it->second.c_str();
+}
+
 bool
 ProfileMap::Get(const TCHAR *key, TCHAR *value, size_t max_size)
 {

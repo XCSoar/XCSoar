@@ -78,7 +78,8 @@ LocalPath(TCHAR *buffer, const TCHAR *subdir, const TCHAR *name);
  * the XCSoarData folder
  * @param filein Pointer to the string to convert
  */
-void ExpandLocalPath(TCHAR* filein);
+void
+ExpandLocalPath(TCHAR *dest, const TCHAR *src);
 
 /**
  * Converts a file path from full pathname to a shorter version with the

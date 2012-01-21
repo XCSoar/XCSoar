@@ -29,11 +29,11 @@ Copyright_License {
 bool
 Profile::GetGeoPoint(const TCHAR *key, GeoPoint &value)
 {
-  TCHAR buffer[128];
-  if (!Get(key, buffer, 128))
+  const TCHAR *p = Get(key);
+  if (p == NULL)
     return false;
 
-  TCHAR *p = buffer, *endptr;
+  TCHAR *endptr;
   double longitude = _tcstod(p, &endptr);
   if (endptr == p || *endptr != _T(' ') ||
       longitude < -180.0 || longitude > 180.0)

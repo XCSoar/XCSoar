@@ -61,7 +61,7 @@ Profile::Load(InfoBoxSettings &settings)
 
     if (i >= settings.PREASSIGNED_PANELS) {
       _stprintf(profileKey, _T("InfoBoxPanel%uName"), i);
-      Get(profileKey, panel.name);
+      panel.name = Get(profileKey, _T(""));
       if (panel.name.empty())
         _stprintf(panel.name.buffer(), _T("AUX-%u"), i-2);
     }

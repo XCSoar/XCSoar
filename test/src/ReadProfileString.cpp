@@ -49,8 +49,8 @@ int main(int argc, char **argv) {
   Profile::Load();
   DeinitialiseDataPath();
 
-  TCHAR value[1024];
-  if (Profile::Get(name, value, 1024)) {
+  const TCHAR *value = Profile::Get(name);
+  if (value != NULL) {
     _putts(value);
     return 0;
   } else {

@@ -39,17 +39,10 @@ PlaneGlue::FromProfile(Plane &plane)
       PlaneGlue::ReadFile(plane, plane_path.c_str()))
     return;
 
-  if (!Profile::Get(szProfileAircraftReg, plane.registration))
-    plane.registration.clear();
-
-  if (!Profile::Get(szProfileCompetitionId, plane.competition_id))
-    plane.competition_id.clear();
-
-  if (!Profile::Get(szProfileAircraftType, plane.type))
-    plane.type.clear();
-
-  if (!Profile::Get(szProfilePolarName, plane.polar_name))
-    plane.polar_name.clear();
+  plane.registration = Profile::Get(szProfileAircraftReg, _T(""));
+  plane.competition_id = Profile::Get(szProfileCompetitionId, _T(""));
+  plane.type = Profile::Get(szProfileAircraftType, _T(""));
+  plane.polar_name = Profile::Get(szProfilePolarName, _T(""));
 
   PolarInfo polar = PolarGlue::LoadFromProfile();
   plane.v1 = polar.v1;
