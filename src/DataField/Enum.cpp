@@ -154,6 +154,17 @@ DataFieldEnum::GetAsDisplayString() const
   }
 }
 
+const TCHAR *
+DataFieldEnum::GetHelp() const
+{
+  if (entries.empty()) {
+    return NULL;
+  } else {
+    assert(value < entries.size());
+    return entries[value].GetHelp();
+  }
+}
+
 void
 DataFieldEnum::Set(int Value)
 {

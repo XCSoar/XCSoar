@@ -118,6 +118,11 @@ public:
   virtual const TCHAR *GetAsDisplayString() const;
 
   /**
+   * @return help of current enum item or NULL if current item has no help
+   */
+  const TCHAR *GetHelp() const;
+
+  /**
    * @param value True if display item help in text box below picker
    * Displays help strings associated with enums Items
    */
