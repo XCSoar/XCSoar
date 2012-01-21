@@ -396,10 +396,12 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   dfe = new DataFieldEnum(OnContentAccess);
   for (unsigned i = InfoBoxFactory::MIN_TYPE_VAL; i < InfoBoxFactory::NUM_TYPES; i++) {
     const TCHAR *name = InfoBoxFactory::GetName((InfoBoxFactory::t_InfoBox) i);
+    const TCHAR *desc = InfoBoxFactory::GetDescription((InfoBoxFactory::t_InfoBox) i);
     if (name != NULL)
-      dfe->addEnumText(gettext(name), i);
+      dfe->addEnumText(gettext(name), i, desc != NULL ? gettext(desc) : NULL);
   }
 
+  dfe->EnableItemHelp(true);
   dfe->Sort(0);
 
   edit_content->SetDataField(dfe);
