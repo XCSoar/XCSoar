@@ -58,39 +58,38 @@ Deserialiser::deserialise_point(OrderedTask& data)
     return;
   }
 
-  DataNode* oz_node = m_node.get_child_by_name(_T("ObservationZone"));
-  if (oz_node == NULL) {
-    delete wp_node;
-    delete wp;
-    return;
-  }
-
-  Deserialiser oser(*oz_node, waypoints);
+  DataNode *oz_node = m_node.get_child_by_name(_T("ObservationZone"));
 
   AbstractTaskFactory& fact = data.get_factory();
 
   ObservationZonePoint* oz = NULL;
   OrderedTaskPoint *pt = NULL;
 
+  if (oz_node != NULL) {
+    bool is_turnpoint = _tcscmp(type.c_str(), _T("Turn")) == 0 ||
+                        _tcscmp(type.c_str(), _T("Area")) == 0;
+
+    Deserialiser oser(*oz_node, waypoints);
+    oz = oser.deserialise_oz(*wp, is_turnpoint);
+  }
+
   if (_tcscmp(type.c_str(), _T("Start")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, false)) != NULL)
-      pt = fact.createStart(oz, *wp);
+    pt = (oz != NULL) ? fact.createStart(oz, *wp) : fact.createStart(*wp);
+
   } else if (_tcscmp(type.c_str(), _T("OptionalStart")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, false)) != NULL) {
-      pt = fact.createStart(oz, *wp);
-      fact.append_optional_start(*pt);
-      delete pt; // don't let generic code below add it
-      pt = NULL;
-    }
+    pt = (oz != NULL) ? fact.createStart(oz, *wp) : fact.createStart(*wp);
+    fact.append_optional_start(*pt);
+    delete pt; // don't let generic code below add it
+    pt = NULL;
+
   } else if (_tcscmp(type.c_str(), _T("Turn")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, true)) != NULL)
-      pt = fact.createAST(oz, *wp);
+    pt = (oz != NULL) ? fact.createAST(oz, *wp) : fact.createIntermediate(*wp);
+
   } else if (_tcscmp(type.c_str(), _T("Area")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, true)) != NULL)
-      pt = fact.createAAT(oz, *wp);
+    pt = (oz != NULL) ? fact.createAAT(oz, *wp) : fact.createIntermediate(*wp);
+
   } else if (_tcscmp(type.c_str(), _T("Finish")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, false)) != NULL)
-      pt = fact.createFinish(oz, *wp);
+    pt = (oz != NULL) ? fact.createFinish(oz, *wp) : fact.createFinish(*wp);
   } 
 
   if (pt != NULL) {
