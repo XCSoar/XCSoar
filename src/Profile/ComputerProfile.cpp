@@ -62,6 +62,11 @@ Profile::Load(LoggerSettings &settings)
           disable_auto_logger ? LoggerSettings::AutoLogger::OFF :
                                 LoggerSettings::AutoLogger::ON;
   }
+
+  Get(szProfileLoggerID, settings.logger_id.buffer(),
+      settings.logger_id.MAX_SIZE);
+  Get(szProfilePilotName, settings.pilot_name.buffer(),
+      settings.pilot_name.MAX_SIZE);
 }
 
 void

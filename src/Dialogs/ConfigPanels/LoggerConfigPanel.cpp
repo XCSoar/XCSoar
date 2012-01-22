@@ -82,16 +82,13 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           1, 30, 1, logger.time_step_circling);
   SetExpertRow(LoggerTimeStepCircling);
 
-  TCHAR tmp_text[100];
-  Profile::Get(szProfilePilotName, tmp_text, 100);
-  AddText(_("Pilot name"), NULL, tmp_text);
+  AddText(_("Pilot name"), NULL, logger.pilot_name);
 
   AddText(_("Aircraft type"), NULL, plane.type);
   AddText(_("Aircraft reg."), NULL, plane.registration);
   AddText(_("Competition ID"), NULL, plane.competition_id);
 
-  Profile::Get(szProfileLoggerID, tmp_text, 100);
-  AddText(_("Logger ID"), NULL, tmp_text);
+  AddText(_("Logger ID"), NULL, logger.logger_id);
 
   AddBoolean(_("Short file name"),
              _("This determines whether the logger uses the short IGC file name or the "
@@ -122,16 +119,15 @@ LoggerConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValue(LoggerTimeStepCircling, szProfileLoggerTimeStepCircling,
                        logger.time_step_circling);
 
-  TCHAR tmp_text[100];
-  Profile::Get(szProfilePilotName, tmp_text, 100);
-  changed |= SaveValue(PilotName, szProfilePilotName, tmp_text, 100);
+  changed |= SaveValue(LoggerID, szProfilePilotName,
+                       logger.pilot_name.buffer(), logger.pilot_name.MAX_SIZE);
 
   changed |= SaveValue(AircraftType, plane.type.buffer(), plane.type.MAX_SIZE);
   changed |= SaveValue(AircraftReg, plane.registration.buffer(), plane.registration.MAX_SIZE);
   changed |= SaveValue(CompetitionID, plane.competition_id.buffer(), plane.competition_id.MAX_SIZE);
 
-  Profile::Get(szProfileLoggerID, tmp_text, 100);
-  changed |= SaveValue(LoggerID, szProfileLoggerID, tmp_text, 100);
+  changed |= SaveValue(LoggerID, szProfileLoggerID,
+                       logger.logger_id.buffer(), logger.logger_id.MAX_SIZE);
 
   changed |= SaveValue(LoggerShortName, szProfileLoggerShort,
                        logger.short_name);

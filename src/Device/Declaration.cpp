@@ -22,6 +22,8 @@ Copyright_License {
 */
 
 #include "Declaration.hpp"
+#include "Logger/Settings.hpp"
+#include "Plane/Plane.hpp"
 #include "Engine/Task/Tasks/BaseTask/ObservationZonePoint.hpp"
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
@@ -64,7 +66,13 @@ Declaration::TurnPoint::TurnPoint(const OrderedTaskPoint &tp)
 {
 }
 
-Declaration::Declaration(const OrderedTask* task)
+Declaration::Declaration(const LoggerSettings &logger_settings,
+                         const Plane &plane,
+                         const OrderedTask* task)
+  :pilot_name(logger_settings.pilot_name),
+   aircraft_type(plane.type),
+   aircraft_registration(plane.registration),
+   competition_id(plane.competition_id)
 {
   if (task)
     for (unsigned i = 0; i < task->TaskSize(); i++)

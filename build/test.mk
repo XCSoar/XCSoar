@@ -527,6 +527,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Port/NullPort.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Driver/BorgeltB50.cpp \
 	$(SRC)/Device/Driver/Condor.cpp \

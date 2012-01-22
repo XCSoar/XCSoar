@@ -30,7 +30,6 @@
 #include "LogFile.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Asset.hpp"
-#include "Profile/DeclarationConfig.hpp"
 #include "ComputerSettings.hpp"
 
 void
@@ -90,8 +89,7 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
     return;
 
   OrderedTask* task = protected_task_manager.TaskClone();
-  Declaration decl(task);
-  Profile::GetDeclarationConfig(decl, settings.plane);
+  const Declaration decl(settings.logger, settings.plane, task);
 
   if (task) {
     delete task;

@@ -26,6 +26,8 @@ Copyright_License {
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
+#include "Logger/Settings.hpp"
+#include "Plane/Plane.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "OS/PathName.hpp"
@@ -88,11 +90,14 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  Declaration declaration(NULL);
-  declaration.pilot_name = _T("Foo Bar");
-  declaration.aircraft_type = _T("Cirrus");
-  declaration.aircraft_registration = _T("D-3003");
-  declaration.competition_id = _T("33");
+  LoggerSettings logger_settings;
+  logger_settings.pilot_name = _T("Foo Bar");
+  Plane plane;
+  plane.registration = _T("D-3003");
+  plane.competition_id = _T("33");
+  plane.type = _T("Cirrus");
+
+  Declaration declaration(logger_settings, plane, NULL);
 
   declaration.Append(MakeWaypoint(_T("Bergneustadt"), 488,
                                   7.7061111111111114, 51.051944444444445));

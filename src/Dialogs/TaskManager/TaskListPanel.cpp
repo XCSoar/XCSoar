@@ -46,7 +46,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Screen/Layout.hpp"
 #include "Device/Declaration.hpp"
-#include "Profile/DeclarationConfig.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
@@ -396,8 +395,8 @@ TaskListPanel::OnDeclareClicked()
     return;
   }
 
-  Declaration decl(*active_task);
-  Profile::GetDeclarationConfig(decl, CommonInterface::GetComputerSettings().plane);
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+  Declaration decl(settings.logger, settings.plane, *active_task);
   ExternalLogger::Declare(decl, way_points.GetHome());
 }
 

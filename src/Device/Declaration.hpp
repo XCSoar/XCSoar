@@ -32,6 +32,8 @@ Copyright_License {
 #include <vector>
 #include <tchar.h>
 
+struct LoggerSettings;
+struct Plane;
 class OrderedTask;
 class OrderedTaskPoint;
 
@@ -58,7 +60,8 @@ struct Declaration {
   StaticString<8> competition_id;
   std::vector<TurnPoint> turnpoints;
 
-  Declaration(const OrderedTask* task);
+  Declaration(const LoggerSettings &logger_settings, const Plane &plane,
+              const OrderedTask* task);
 
   void Append(const Waypoint &waypoint) {
     turnpoints.push_back(waypoint);

@@ -407,6 +407,9 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
                         const LoggerSettings &settings,
                         const TCHAR *asset_number, const Declaration &decl)
 {
+  if (!settings.logger_id.empty())
+    asset_number = settings.logger_id.c_str();
+
   // chars must be legal in file names
   char logger_id[4];
   for (unsigned i = 0; i < 3; i++)

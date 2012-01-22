@@ -54,6 +54,7 @@ IsAlphaNum(TCHAR c)
     (c >= _T('0') && c <= _T('9'));
 }
 
+gcc_unused
 static bool
 SetAssetNumber(const TCHAR *p)
 {
@@ -183,11 +184,7 @@ ReadUUID(void)
  */
 void ReadAssetNumber(void)
 {
-  TCHAR buffer[ARRAY_SIZE(asset_number)];
-  if (Profile::Get(szProfileLoggerID, buffer, ARRAY_SIZE(buffer)) &&
-      SetAssetNumber(buffer)) {
-    LogStartUp(_T("Asset ID: %s (reg)"), asset_number);
-  } else if (ReadCompaqID()) {
+  if (ReadCompaqID()) {
     LogStartUp(_T("Asset ID: %s (compaq)"), asset_number);
   } else if (ReadUUID()) {
     LogStartUp(_T("Asset ID: %s (uuid)"), asset_number);

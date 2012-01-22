@@ -43,11 +43,12 @@
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
 #include "Device/Port/NullPort.hpp"
+#include "Logger/Settings.hpp"
+#include "Plane/Plane.hpp"
 #include "NMEA/Info.hpp"
 #include "Protection.hpp"
 #include "Input/InputEvents.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "Engine/Waypoint/Waypoints.hpp"
 #include "Operation/Operation.hpp"
 #include "FaultInjectionPort.hpp"
 #include "TestUtil.hpp"
@@ -779,8 +780,6 @@ TestZander()
   delete device;
 }
 
-Declaration::Declaration(OrderedTask const*) {}
-
 static void
 TestDeclare(const struct DeviceRegister &driver)
 {
@@ -788,11 +787,14 @@ TestDeclare(const struct DeviceRegister &driver)
   Device *device = driver.CreateOnPort(dummy_config, port);
   ok1(device != NULL);
 
-  Declaration declaration(NULL);
-  declaration.pilot_name = _T("Foo Bar");
-  declaration.aircraft_type = _T("Cirrus");
-  declaration.aircraft_registration = _T("D-3003");
-  declaration.competition_id = _T("33");
+  LoggerSettings logger_settings;
+  logger_settings.pilot_name = _T("Foo Bar");
+  Plane plane;
+  plane.registration = _T("D-3003");
+  plane.competition_id = _T("33");
+  plane.type = _T("Cirrus");
+
+  Declaration declaration(logger_settings, plane, NULL);
   const GeoPoint gp(Angle::Degrees(fixed(7.7061111111111114)),
                     Angle::Degrees(fixed(51.051944444444445)));
   Waypoint wp(gp);

@@ -47,8 +47,11 @@ struct LoggerSettings {
     OFF,
   } auto_logger;
 
+  StaticString<32> logger_id;
+
+  StaticString<64> pilot_name;
+
   void SetDefaults();
 };
 
 #endif
-
