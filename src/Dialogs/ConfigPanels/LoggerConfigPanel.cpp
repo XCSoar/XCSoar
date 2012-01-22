@@ -114,13 +114,11 @@ LoggerConfigPanel::Save(bool &_changed, bool &_require_restart)
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   Plane &plane = settings_computer.plane;
 
-  unsigned int tmp_value = settings_computer.logger_time_step_cruise;
-  changed |= SaveValue(LoggerTimeStepCruise, szProfileLoggerTimeStepCruise, tmp_value);
-  settings_computer.logger_time_step_cruise = tmp_value;
+  changed |= SaveValue(LoggerTimeStepCruise, szProfileLoggerTimeStepCruise,
+                       settings_computer.logger_time_step_cruise);
 
-  tmp_value = settings_computer.logger_time_step_circling;
-  changed |= SaveValue(LoggerTimeStepCircling, szProfileLoggerTimeStepCircling, tmp_value);
-  settings_computer.logger_time_step_circling = tmp_value;
+  changed |= SaveValue(LoggerTimeStepCircling, szProfileLoggerTimeStepCircling,
+                       settings_computer.logger_time_step_circling);
 
   TCHAR tmp_text[100];
   Profile::Get(szProfilePilotName, tmp_text, 100);
