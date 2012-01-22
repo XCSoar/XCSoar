@@ -46,6 +46,7 @@ enum BorderKind_t {
 
 struct InfoBoxSettings;
 struct InfoBoxLook;
+struct UnitsLook;
 
 class InfoBoxWindow : public PaintWindow
 {
@@ -58,6 +59,7 @@ private:
 
   const InfoBoxSettings &settings;
   const InfoBoxLook &look;
+  const UnitsLook &units_look;
 
   int border_kind;
 
@@ -131,6 +133,7 @@ public:
   InfoBoxWindow(ContainerWindow &parent, PixelScalar x, PixelScalar y,
                 UPixelScalar width, UPixelScalar height, int border_flags,
                 const InfoBoxSettings &settings, const InfoBoxLook &_look,
+                const UnitsLook &units_look,
                 WindowStyle style=WindowStyle());
 
   ~InfoBoxWindow();

@@ -433,7 +433,7 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
 
 void
 InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
-                       const InfoBoxLook &look)
+                       const InfoBoxLook &look, const UnitsLook &units_look)
 {
   const InfoBoxSettings &settings =
     CommonInterface::GetUISettings().info_boxes;
@@ -452,7 +452,8 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
     InfoBoxes[i] = new InfoBoxWindow(XCSoarInterface::main_window,
                                      rc.left, rc.top,
                                      rc.right - rc.left, rc.bottom - rc.top,
-                                     Border, settings, look, style);
+                                     Border, settings, look, units_look,
+                                     style);
   }
 
   InfoBoxesHidden = true;

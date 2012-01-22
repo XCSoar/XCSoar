@@ -20,18 +20,10 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "Screen/Graphics.hpp"
-#include "Screen/Point.hpp"
-#include "Screen/UnitSymbol.hpp"
-#include "Screen/Layout.hpp"
-#include "Screen/Bitmap.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Color.hpp"
-#include "Screen/Pen.hpp"
-#include "Screen/Canvas.hpp"
-#include "MapSettings.hpp"
-#include "resource.h"
-#include "Asset.hpp"
 #include "LogFile.hpp"
 
 Brush Graphics::hbGround;
@@ -47,15 +39,11 @@ Graphics::Initialise()
 
   LogStartUp(_T("Initialise graphics"));
 
-  LoadUnitSymbols();
-
   hbGround.Set(GroundColor);
 }
 
 void
 Graphics::Deinitialise()
 {
-  DeinitialiseUnitSymbols();
-
   hbGround.Reset();
 }

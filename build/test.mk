@@ -1783,6 +1783,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Look/Look.cpp \
+	$(SRC)/Look/UnitsLook.cpp \
 	$(SRC)/Look/IconLook.cpp \
 	$(SRC)/Look/MapLook.cpp \
 	$(SRC)/Look/WindArrowLook.cpp \

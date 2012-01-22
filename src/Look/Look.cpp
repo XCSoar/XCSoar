@@ -41,6 +41,7 @@ Look::InitialiseConfigured(const UISettings &settings)
   dialog.Initialise(Fonts::map_bold, Fonts::map,
                     Fonts::map_bold, Fonts::map_bold);
   terminal.Initialise(Fonts::monospace);
+  units.Initialise();
   vario.Initialise(settings.info_boxes.inverse,
                    settings.info_boxes.use_colors,
                    Fonts::title, Fonts::cdi);

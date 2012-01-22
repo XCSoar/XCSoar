@@ -30,6 +30,7 @@ Copyright_License {
 #include "Blackboard/FullBlackboard.hpp"
 
 struct VarioLook;
+struct UnitsLook;
 class ContainerWindow;
 class UnitSymbol;
 
@@ -39,7 +40,6 @@ struct DrawInfo_t {
   RasterPoint orgText;
   fixed lastValue;
   TCHAR   lastText[32];
-  const UnitSymbol *last_unit_symbol;
 };
 
 class GaugeVario : public BufferWindow
@@ -90,6 +90,7 @@ private:
 public:
   GaugeVario(const FullBlackboard &blackboard,
              ContainerWindow &parent, const VarioLook &look,
+             const UnitsLook &units_look,
              PixelScalar left, PixelScalar top,
              UPixelScalar width, UPixelScalar height,
              const WindowStyle style=WindowStyle());

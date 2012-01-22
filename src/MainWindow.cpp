@@ -183,7 +183,7 @@ MainWindow::InitialiseConfigured()
   look->InitialiseConfigured(CommonInterface::GetUISettings());
 
   LogStartUp(_T("Create info boxes"));
-  InfoBoxManager::Create(rc, ib_layout, look->info_box);
+  InfoBoxManager::Create(rc, ib_layout, look->info_box, look->units);
   map_rect = ib_layout.remaining;
 
   LogStartUp(_T("Create button labels"));
@@ -243,7 +243,7 @@ MainWindow::ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout)
 
   if (!vario.IsDefined())
     vario.Set(new GlueGaugeVario(CommonInterface::GetLiveBlackboard(),
-                                 look->vario));
+                                 look->vario, look->units));
 
   vario.Move(layout.vario);
   vario.Show();
@@ -291,7 +291,7 @@ MainWindow::ReinitialiseLayout()
 
   Fonts::SizeInfoboxFont(ib_layout.control_width);
 
-  InfoBoxManager::Create(rc, ib_layout, look->info_box);
+  InfoBoxManager::Create(rc, ib_layout, look->info_box, look->units);
   InfoBoxManager::ProcessTimer();
   map_rect = ib_layout.remaining;
 

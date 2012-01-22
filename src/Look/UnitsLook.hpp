@@ -21,28 +21,25 @@ Copyright_License {
 }
 */
 
+#ifndef XCSOAR_UNITS_LOOK_HPP
+#define XCSOAR_UNITS_LOOK_HPP
+
 #include "Screen/UnitSymbol.hpp"
-#include "Screen/Canvas.hpp"
+#include "Units/Unit.hpp"
+#include "Util/Macros.hpp"
 
-#include <assert.h>
+struct UnitsLook {
+  UnitSymbol symbols[(unsigned)Unit::COUNT];
 
-const RasterPoint
-UnitSymbol::get_origin(enum kind kind) const
-{
-  assert(kind >= 0 && kind < 4);
+  void Initialise();
 
-  RasterPoint origin;
-  origin.x = size.cx * kind;
-  origin.y = 0;
-  return origin;
-}
+  gcc_pure
+  const UnitSymbol *GetSymbol(Unit unit) const {
+    assert((size_t)unit < ARRAY_SIZE(symbols));
 
-void 
-UnitSymbol::draw(Canvas& canvas, PixelScalar x, PixelScalar y) const
-{
-  const RasterPoint BmpPos = get_origin(UnitSymbol::NORMAL);
-  const PixelSize size = get_size();
-  canvas.scale_copy(x, y, bitmap,
-		    BmpPos.x, BmpPos.y,
-		    size.cx, size.cy);
-}
+    const UnitSymbol &symbol = symbols[(unsigned)unit];
+    return symbol.IsDefined() ? &symbol : NULL;
+  }
+};
+
+#endif

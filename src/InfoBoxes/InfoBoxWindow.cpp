@@ -24,6 +24,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Look/InfoBoxLook.hpp"
+#include "Look/UnitsLook.hpp"
 #include "Input/InputEvents.hpp"
 #include "Compatibility/string.h"
 #include "Renderer/UnitSymbolRenderer.hpp"
@@ -51,10 +52,12 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent,
                              PixelScalar x, PixelScalar y,
                              UPixelScalar width, UPixelScalar height,
                              int border_flags, const InfoBoxSettings &_settings,
-                             const InfoBoxLook &_look, WindowStyle style)
+                             const InfoBoxLook &_look,
+                             const UnitsLook &_units_look,
+                             WindowStyle style)
   :content(NULL),
    parent(_parent),
-   settings(_settings), look(_look),
+   settings(_settings), look(_look), units_look(_units_look),
    border_kind(border_flags),
    force_draw_selector(false),
    focus_timer(*this)
@@ -190,7 +193,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   }
 
   PixelSize unit_size;
-  const UnitSymbol *unit_symbol = GetUnitSymbol(data.value_unit);
+  const UnitSymbol *unit_symbol = units_look.GetSymbol(data.value_unit);
   if (unit_symbol != NULL) {
     unit_size = unit_symbol->get_size();
   } else {

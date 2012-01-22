@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Gauge/GaugeVario.hpp"
 #include "Look/VarioLook.hpp"
+#include "Look/UnitsLook.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/FastPixelRotation.hpp"
@@ -44,6 +45,7 @@ using std::max;
 
 GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
                        ContainerWindow &parent, const VarioLook &_look,
+                       const UnitsLook &units_look,
                        PixelScalar left, PixelScalar top,
                        UPixelScalar width, UPixelScalar height,
                        const WindowStyle style)
@@ -64,7 +66,7 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
 
   set(parent, left, top, width, height, style);
 
-  unit_symbol = GetUnitSymbol(Units::current.vertical_speed_unit);
+  unit_symbol = units_look.GetSymbol(Units::current.vertical_speed_unit);
 
   hide();
 }
@@ -343,7 +345,6 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
 
     diValue->lastValue = fixed(-9999);
     diValue->lastText[0] = '\0';
-    diValue->last_unit_symbol = NULL;
     diValue->InitDone = true;
   }
 
@@ -364,7 +365,6 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
 
     diLabel->lastValue = fixed(-9999);
     diLabel->lastText[0] = '\0';
-    diLabel->last_unit_symbol = NULL;
     diLabel->InitDone = true;
   }
 
@@ -407,8 +407,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
     }
   }
 
-  if (!is_persistent() || (dirty && unit_symbol != NULL &&
-                           diLabel->last_unit_symbol != unit_symbol)) {
+  if (!is_persistent()) {
     RasterPoint BitmapUnitPos = unit_symbol->get_origin(look.inverse
                                                   ? UnitSymbol::INVERSE_GRAY
                                                   : UnitSymbol::GRAY);
@@ -418,8 +417,6 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
                       *unit_symbol,
                       BitmapUnitPos.x, BitmapUnitPos.y,
                       BitmapUnitSize.cx, BitmapUnitSize.cy);
-
-    diLabel->last_unit_symbol = unit_symbol;
   }
 }
 

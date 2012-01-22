@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Trace.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "Renderer/BarographRenderer.hpp"
 #include "Renderer/TraceHistoryRenderer.hpp"
 #include "Renderer/ThermalBandRenderer.hpp"

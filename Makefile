@@ -651,6 +651,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Look/MarkerLook.cpp \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
 	$(SRC)/Look/IconLook.cpp \
+	$(SRC)/Look/UnitsLook.cpp \
 	\
 	$(SRC)/Polar/PolarGlue.cpp \
 	$(SRC)/Polar/PolarFileGlue.cpp \

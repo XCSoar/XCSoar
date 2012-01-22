@@ -32,6 +32,7 @@ Copyright_License {
 struct InfoBoxSettings;
 
 struct InfoBoxLook;
+struct UnitsLook;
 class InfoBoxWindow;
 
 namespace InfoBoxLayout {
@@ -66,7 +67,7 @@ namespace InfoBoxManager
   void SetDirty();
 
   void Create(PixelRect rc, const InfoBoxLayout::Layout &layout,
-              const InfoBoxLook &look);
+              const InfoBoxLook &look, const UnitsLook &units_look);
   void Destroy();
   void Show();
   void Hide();

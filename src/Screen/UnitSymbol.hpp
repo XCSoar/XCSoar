@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_UNIT_SYMBOL_HPP
 #define XCSOAR_SCREEN_UNIT_SYMBOL_HPP
 
-#include "Units/Settings.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Point.hpp"
 #include "Compiler.h"
@@ -77,15 +76,6 @@ public:
 
   void draw(Canvas& canvas, PixelScalar x, PixelScalar y) const;
 };
-
-void
-LoadUnitSymbols();
-
-void
-DeinitialiseUnitSymbols();
-
-const UnitSymbol *
-GetUnitSymbol(Unit unit);
 
 #endif
 
