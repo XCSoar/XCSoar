@@ -114,7 +114,6 @@ void
 Profile::Load(ComputerSettings &settings)
 {
   Load((WindSettings &)settings);
-  Load((LoggerSettings &)settings);
   Load((SoundSettings &)settings);
   Load((TeamCodeSettings &)settings);
   Load((VoiceSettings &)settings);
@@ -142,6 +141,7 @@ Profile::Load(ComputerSettings &settings)
     settings.utc_offset = 0;
 
   Load(settings.task);
+  Load(settings.logger);
 
 #ifdef HAVE_TRACKING
   Load(settings.tracking);
