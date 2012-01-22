@@ -37,15 +37,6 @@ WindSettings::SetDefaults()
 }
 
 void
-LoggerSettings::SetDefaults()
-{
-  logger_time_step_cruise = 5;
-  logger_time_step_circling = 1;
-  logger_short_name = false;
-  auto_logger = AutoLogger::ON;
-}
-
-void
 PolarSettings::SetDefaults()
 {
   ballast_timer_active = false;

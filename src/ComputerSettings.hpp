@@ -35,7 +35,7 @@ Copyright_License {
 #include "Tracking/TrackingSettings.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
 #include "NMEA/Validity.hpp"
-
+#include "Logger/Settings.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "TeamCodeCalculation.hpp"
 #include "Plane/Plane.hpp"
@@ -112,26 +112,6 @@ struct WindSettings {
 };
 
 static_assert(is_trivial<WindSettings>::value, "type is not trivial");
-
-/**
- * Logger settings
- */
-struct LoggerSettings {
-  /** Logger interval in cruise mode */
-  uint16_t logger_time_step_cruise;
-  /** Logger interval in circling mode */
-  uint16_t logger_time_step_circling;
-  /** Use short IGC filenames for the logger files */
-  bool logger_short_name;
-
-  enum class AutoLogger: uint8_t {
-    ON,
-    START_ONLY,
-    OFF,
-  } auto_logger;
-
-  void SetDefaults();
-};
 
 /**
  * Glide polar settings
