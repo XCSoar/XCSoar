@@ -159,10 +159,6 @@ void ReadAssetNumber(void)
   memset(strAssetNumber, 0, MAX_LOADSTRING * sizeof(TCHAR));
   // JMW clear this first just to be safe.
 
-#ifndef _WIN32_WCE
-  return;
-#endif
-
   Profile::Get(szProfileLoggerID, val, 100);
   int ifound = 0;
   int len = _tcslen(val);
@@ -177,6 +173,10 @@ void ReadAssetNumber(void)
       return;
     }
   }
+
+#ifndef _WIN32_WCE
+  return;
+#endif
 
   if(strAssetNumber[0] != '\0') {
     LogStartUp(_T("Asset ID: %s (?)"), strAssetNumber);
