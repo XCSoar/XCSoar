@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-17 15:00+0100\n"
-"PO-Revision-Date: 2012-01-19 21:46+0000\n"
+"PO-Revision-Date: 2012-01-21 16:28+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-20 08:52+0000\n"
+"X-Launchpad-Export-Date: 2012-01-22 08:01+0000\n"
 "X-Generator: Launchpad (build 14700)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -1485,7 +1485,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:638
 #, no-c-format
 msgid "Team bearing"
-msgstr ""
+msgstr "Relèvement de l'équipier"
 
 #: src/InfoBoxes/Content/Factory.cpp:639
 #, no-c-format
@@ -1502,19 +1502,19 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:648
 #, no-c-format
 msgid "Team bearing difference"
-msgstr ""
+msgstr "Gisement de l'équipier"
 
 #: src/InfoBoxes/Content/Factory.cpp:649
 #, no-c-format
 msgid "Team Bd"
-msgstr ""
+msgstr "Gsmt. Eqp."
 
 #: src/InfoBoxes/Content/Factory.cpp:650
 #, no-c-format
 msgid ""
 "The relative bearing to the team aircraft location at the last reported team "
 "code."
-msgstr ""
+msgstr "Le gisement (relèvemfnt moins le cap) vers l'équipier"
 
 #: src/InfoBoxes/Content/Factory.cpp:658
 #, no-c-format
@@ -2085,12 +2085,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:989
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr ""
+msgstr "Prochaine différence d'altitude au calage MC 0"
 
 #: src/InfoBoxes/Content/Factory.cpp:990
 #, no-c-format
 msgid "WP MC0 AltD"
-msgstr ""
+msgstr "WPT MC0 AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:991
 #, no-c-format
@@ -2098,16 +2098,18 @@ msgid ""
 "Arrival altitude at the next waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
+"Marge d'altitude au prochain point de virage au cslage MC 0, par rapport à "
+"la hauteur de sécurité"
 
 #: src/InfoBoxes/Content/Factory.cpp:999
 #, no-c-format
 msgid "Head wind component"
-msgstr ""
+msgstr "Composante de vent de face"
 
 #: src/InfoBoxes/Content/Factory.cpp:1000
 #, no-c-format
 msgid "Head wind"
-msgstr ""
+msgstr "Vent de face"
 
 #: src/InfoBoxes/Content/Factory.cpp:1001
 #, no-c-format
@@ -2116,6 +2118,9 @@ msgid ""
 "ground speed if airspeed is available from external device. Otherwise the "
 "estimated wind is used for the calculation."
 msgstr ""
+"Composante de vent de face. Calculée à partir de la vitesse air vraie et de "
+"la route instantanée GPS si la vitesse air est disponible à partir d'un "
+"équipement externe. Sinon l'estimation interne du vent est utilisée."
 
 #: src/InfoBoxes/Content/Altitude.cpp:53
 #: src/MapWindow/GlueMapWindowOverlays.cpp:257
@@ -2337,7 +2342,7 @@ msgstr "Prêt à débuter"
 
 #: src/Input/InputEventsTask.cpp:86
 msgid "Hold start"
-msgstr ""
+msgstr "Ignore Départ"
 
 #: src/Input/InputEventsTask.cpp:89
 msgid "Ready to turn"
@@ -2345,7 +2350,7 @@ msgstr "Prêt pour tourner"
 
 #: src/Input/InputEventsTask.cpp:92
 msgid "Hold turn"
-msgstr ""
+msgstr "Ignore virage"
 
 #: src/Input/InputEventsTask.cpp:152
 msgid "Auto. MacCready on"
@@ -2447,7 +2452,7 @@ msgstr "Carte et InfoBoxes"
 
 #: src/Renderer/MapItemListRenderer.cpp:94
 msgid "Your Position"
-msgstr ""
+msgstr "Votre position"
 
 #: src/Renderer/MapItemListRenderer.cpp:178
 msgid "Marker"
@@ -3299,7 +3304,7 @@ msgid "Bugs"
 msgstr ""
 
 #: src/Dialogs/dlgBasicSettings.cpp:307
-#, c-format
+#, no-c-format
 msgid ""
 "How clean the glider is. Set to 0% for clean, larger numbers as the wings "
 "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."
