@@ -84,9 +84,9 @@ UpdateList()
   add_button->set_enabled(!list.full());
 
   bool empty = list.empty();
-  update_button->set_enabled(empty);
-  remove_button->set_enabled(empty);
-  details_button->set_enabled(empty);
+  update_button->set_enabled(!empty);
+  remove_button->set_enabled(!empty);
+  details_button->set_enabled(!empty);
 }
 
 static void
