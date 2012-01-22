@@ -22,11 +22,13 @@ Copyright_License {
 */
 
 #include "Asset.hpp"
+#include "Util/Macros.hpp"
 #include "Profile/Profile.hpp"
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
+#include "IO/FileHandle.hpp"
 #include "Sizes.h"
 
 #if defined(WIN32) && (!defined(__GNUC__) || defined(_WIN32_WCE))
@@ -59,15 +61,17 @@ ReadCompaqID(void)
     CloseHandle(pi.hThread);
   }
 
-  FILE *file = _tfopen(_T("\\windows\\cpqAssetData.dat"), _T("rb"));
-  if (file == NULL) {
-    // MessageBoxX(hWnd, _T("Unable to open asset data file."), _T("Error!"), MB_OK);
+  FileHandle file(_T("\\windows\\cpqAssetData.dat"), _T("rb"));
+  if (!file.IsOpen() || !file.Seek(976, SEEK_SET))
     return;
-  }
-  fseek(file, 976, SEEK_SET);
-  memset(strAssetNumber, 0, 64 * sizeof(TCHAR));
-  fread(&strAssetNumber, 64, 1, file);
-  fclose(file);
+
+  TCHAR buffer[ARRAY_SIZE(strAssetNumber)];
+  size_t length = file.Read(buffer, ARRAY_SIZE(buffer) - 1, sizeof(buffer[0]));
+  if (length < 3)
+    return;
+
+  buffer[length] = _T('\0');
+  _tcscpy(strAssetNumber, buffer);
 #endif
 }
 
