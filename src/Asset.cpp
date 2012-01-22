@@ -201,8 +201,6 @@ void
 InitAsset()
 {
 #ifdef HAVE_MODEL_TYPE
-  int Temp = (int)MODELTYPE_PNA_PNA;
-  Profile::Get(szProfileAppInfoBoxModel, Temp);
-  GlobalModelType = (ModelType)Temp;
-  #endif
+  Profile::GetEnum(szProfileAppInfoBoxModel, GlobalModelType);
+#endif
 }
