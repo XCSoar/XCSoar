@@ -168,7 +168,7 @@ IGCWriter::WriteHeader(const BrokenDateTime &DateTime,
                        const TCHAR *pilot_name, const TCHAR *aircraft_model,
                        const TCHAR *aircraft_registration,
                        const TCHAR *competition_id,
-                       const TCHAR *strAssetNumber, const TCHAR *driver_name)
+                       const char *logger_id, const TCHAR *driver_name)
 {
   /*
    * HFDTE141203  <- should be UTC, same as time in filename
@@ -185,14 +185,13 @@ IGCWriter::WriteHeader(const BrokenDateTime &DateTime,
    */
 
   assert(DateTime.Plausible());
+  assert(logger_id != NULL);
+  assert(strlen(logger_id) == 3);
 
   char buffer[100];
 
   // Flight recorder ID number MUST go first..
-  sprintf(buffer, "AXCS%c%c%c",
-          (char)strAssetNumber[0],
-          (char)strAssetNumber[1],
-          (char)strAssetNumber[2]);
+  sprintf(buffer, "AXCS%s", logger_id);
   WriteLine(buffer);
 
   sprintf(buffer, "HFDTE%02u%02u%02u",

@@ -212,21 +212,16 @@ IsAlphaNum (TCHAR c)
 void
 LoggerImpl::StartLogger(const NMEAInfo &gps_info,
                         const LoggerSettings &settings,
-                        const TCHAR *_asset_number)
+                        const char *logger_id)
 {
-  int i;
-
-  // chars must be legal in file names
-  TCHAR asset_number[3];
-  for (i = 0; i < 3; i++)
-    asset_number[i] = IsAlphaNum(_asset_number[i]) ?
-                      _asset_number[i] : _T('A');
+  assert(logger_id != NULL);
+  assert(strlen(logger_id) == 3);
 
   LocalPath(filename, _T("logs"));
   Directory::Create(filename);
 
   StaticString<64> name;
-  for (i = 1; i < 99; i++) {
+  for (int i = 1; i < 99; i++) {
     // 2003-12-31-XXX-987-01.igc
     // long filename form of IGC file.
     // XXX represents manufacturer code
@@ -237,9 +232,9 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
                   gps_info.date_time_utc.year,
                   gps_info.date_time_utc.month,
                   gps_info.date_time_utc.day,
-                  asset_number[0],
-                  asset_number[1],
-                  asset_number[2], i);
+                  logger_id[0],
+                  logger_id[1],
+                  logger_id[2], i);
     } else {
       // Short file name
       TCHAR cyear, cmonth, cday, cflight;
@@ -248,7 +243,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
       cday = NumToIGCChar(gps_info.date_time_utc.day);
       cflight = NumToIGCChar(i);
       name.Format(_T("%c%c%cX%c%c%c%c.igc"), cyear, cmonth, cday,
-                  asset_number[0], asset_number[1], asset_number[2],
+                  logger_id[0], logger_id[1], logger_id[2],
                   cflight);
     }
 
@@ -412,7 +407,13 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
                         const LoggerSettings &settings,
                         const TCHAR *asset_number, const Declaration &decl)
 {
-  StartLogger(gps_info, settings, asset_number);
+  // chars must be legal in file names
+  char logger_id[4];
+  for (unsigned i = 0; i < 3; i++)
+    logger_id[i] = IsAlphaNum(asset_number[i]) ? asset_number[i] : _T('A');
+  logger_id[3] = _T('\0');
+
+  StartLogger(gps_info, settings, logger_id);
 
   DeviceConfig device_config;
   // this is only the XCSoar Simulator, not Condor etc, so don't use Simulator flag
@@ -424,7 +425,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name,
                       decl.aircraft_type, decl.aircraft_registration,
                       decl.competition_id,
-                      asset_number, device_config.driver_name);
+                      logger_id, device_config.driver_name);
 
   if (decl.Size()) {
     BrokenDateTime FirstDateTime = !pre_takeoff_buffer.empty()

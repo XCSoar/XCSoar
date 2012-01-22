@@ -130,8 +130,12 @@ public:
   void ClearBuffer();
 
 private:
+  /**
+   * @param logger_id the ID of the logger, consisting of exactly 3
+   * alphanumeric characters (plain ASCII)
+   */
   void StartLogger(const NMEAInfo &gps_info, const LoggerSettings &settings,
-                   const TCHAR *asset_number);
+                   const char *logger_id);
   
 private:
   void LogPointToBuffer(const NMEAInfo &gps_info);

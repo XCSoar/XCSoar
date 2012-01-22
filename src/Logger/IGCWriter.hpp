@@ -88,11 +88,15 @@ private:
   static int GetSIU(const NMEAInfo &gps_info);
 
 public:
+  /**
+   * @param logger_id the ID of the logger, consisting of exactly 3
+   * alphanumeric characters (plain ASCII)
+   */
   void WriteHeader(const BrokenDateTime &DateTime,
                    const TCHAR *pilot_name, const TCHAR *aircraft_model,
                    const TCHAR *aircraft_registration,
                    const TCHAR *competition_id,
-                   const TCHAR *strAssetNumber, const TCHAR *driver_name);
+                   const char *logger_id, const TCHAR *driver_name);
 
   void AddDeclaration(const GeoPoint &location, const TCHAR *ID);
   void StartDeclaration(const BrokenDateTime &FirstDateTime,

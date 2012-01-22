@@ -114,7 +114,7 @@ int main(int argc, char **argv)
   IGCWriter writer(path, i);
 
   writer.WriteHeader(i.date_time_utc, _T("Pilot Name"), _T("ASK-21"),
-                     _T("D-1234"), _T("34"), _T("foo"), _T("bar"));
+                     _T("D-1234"), _T("34"), "FOO", _T("bar"));
   writer.StartDeclaration(i.date_time_utc, 3);
   writer.AddDeclaration(home, _T("Bergneustadt"));
   writer.AddDeclaration(tp, _T("Suhl"));
