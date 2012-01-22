@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "TargetMapWindow.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyRenderer.hpp"

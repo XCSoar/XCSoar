@@ -38,7 +38,6 @@ Copyright_License {
 #include "Compiler.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/Init.hpp"
-#include "Screen/Graphics.hpp"
 #include "Net/Init.hpp"
 #include "UtilsSystem.hpp"
 #include "ResourceLoader.hpp"
@@ -110,7 +109,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   DisallowLanguage();
 
   Fonts::Deinitialize();
-  Graphics::Deinitialise();
 
   DeinitialiseDataPath();
   Net::Deinitialise();

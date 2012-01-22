@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "CrossSectionLook.hpp"
-#include "Screen/Graphics.hpp"
 
 void
 CrossSectionLook::Initialise()
@@ -30,7 +29,11 @@ CrossSectionLook::Initialise()
   background_color = COLOR_WHITE;
   text_color = COLOR_BLACK;
 
-  terrain_brush.Set(Graphics::GroundColor);
+  sky_color = Color(0x0a, 0xb9, 0xf3);
+  terrain_color = Color(0x80, 0x45, 0x15);
+  terrain_brush.Set(terrain_color);
+  sea_color = Color(0xbd, 0xc5, 0xd5); // ICAO open water area
+
   grid_pen.Set(Pen::DASH, 1, Color(0x60, 0x60, 0x60));
   aircraft_brush.Set(text_color);
 }

@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "TraceHistoryLook.hpp"
-#include "Screen/Graphics.hpp"
 
 void
 TraceHistoryLook::Initialise(bool _inverse)

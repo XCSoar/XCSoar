@@ -46,9 +46,10 @@ Look::InitialiseConfigured(const UISettings &settings)
                    settings.info_boxes.use_colors,
                    Fonts::title, Fonts::cdi);
   chart.Initialise(Fonts::map_label);
-  thermal_band.Initialise(settings.info_boxes.inverse);
-  trace_history.Initialise(settings.info_boxes.inverse);
   cross_section.Initialise();
+  thermal_band.Initialise(settings.info_boxes.inverse,
+                          cross_section.sky_color);
+  trace_history.Initialise(settings.info_boxes.inverse);
   info_box.Initialise(settings.info_boxes.inverse,
                       settings.info_boxes.use_colors);
   final_glide_bar.Initialise();

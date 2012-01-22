@@ -185,7 +185,7 @@ ChartControl::OnPaint(Canvas &canvas)
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
-    RenderBarograph(canvas, rcgfx, chart_look,
+    RenderBarograph(canvas, rcgfx, chart_look, look->cross_section,
                     glide_computer->GetFlightStats(),
                     basic, calculated, protected_task_manager);
     break;

@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "BarographRenderer.hpp"
+#include "Look/CrossSectionLook.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Chart.hpp"
-#include "Screen/Graphics.hpp"
 #include "Units/Units.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "NMEA/Info.hpp"
@@ -110,6 +110,7 @@ DrawLegs(Chart& chart,
 void
 RenderBarographSpark(Canvas &canvas, const PixelRect rc,
                      const ChartLook &chart_look,
+                     const CrossSectionLook &cross_section_look,
                      bool inverse,
                      const FlightStatistics &fs,
                      const NMEAInfo &nmea_info,
@@ -135,7 +136,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
   }
 
   canvas.SelectNullPen();
-  canvas.Select(Graphics::hbGround);
+  canvas.Select(cross_section_look.terrain_brush);
 
   chart.DrawFilledLineGraph(fs.Altitude_Terrain);
 
@@ -146,6 +147,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
 void
 RenderBarograph(Canvas &canvas, const PixelRect rc,
                 const ChartLook &chart_look,
+                const CrossSectionLook &cross_section_look,
                 const FlightStatistics &fs,
                 const NMEAInfo &nmea_info,
                 const DerivedInfo &derived_info,
@@ -170,7 +172,7 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   }
 
   canvas.SelectNullPen();
-  canvas.Select(Graphics::hbGround);
+  canvas.Select(cross_section_look.terrain_brush);
 
   chart.DrawFilledLineGraph(fs.Altitude_Terrain);
   canvas.SelectWhitePen();

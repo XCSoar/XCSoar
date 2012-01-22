@@ -30,7 +30,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Input/InputEvents.hpp"
 #include "Menu/ButtonLabel.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Blank.hpp"
 #include "Dialogs/AirspaceWarningDialog.hpp"
@@ -138,9 +137,6 @@ MainWindow::Initialise()
   PixelRect rc = get_client_rect();
 
   Layout::Initialize(rc.right - rc.left, rc.bottom - rc.top);
-
-  // color/pattern chart (must have infobox geometry before this)
-  Graphics::Initialise();
 
   LogStartUp(_T("Initialise fonts"));
   if (!Fonts::Initialize()) {

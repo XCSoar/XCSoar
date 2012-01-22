@@ -27,7 +27,6 @@
 #include "Screen/Fonts.hpp"
 #include "Screen/Chart.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Graphics.hpp"
 #include "Look/CrossSectionLook.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/AirspaceIntersectionVisitor.hpp"

@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "DialogLook.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 
 #ifdef EYE_CANDY

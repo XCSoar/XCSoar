@@ -30,7 +30,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "LogFile.hpp"
-#include "Screen/Graphics.hpp"
 #include "Language/Language.hpp"
 #include "Dialogs/XML.hpp"
 #include "Form/RowFormWidget.hpp"

@@ -31,7 +31,6 @@ Copyright_License {
 #include "Profile/InfoBoxConfig.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/Graphics.hpp"
 #include "Hardware/Battery.hpp"
 #include "MainWindow.hpp"
 #include "Language/Language.hpp"

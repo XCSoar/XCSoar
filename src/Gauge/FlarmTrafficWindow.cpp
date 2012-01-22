@@ -30,7 +30,6 @@
 #include "Units/Units.hpp"
 #include "Math/Screen.hpp"
 #include "Language/Language.hpp"
-#include "Screen/Graphics.hpp"
 #include "Util/Macros.hpp"
 
 #include <assert.h>

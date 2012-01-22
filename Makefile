@@ -622,7 +622,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/CustomFonts.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
-	$(SRC)/Screen/Graphics.cpp \
 	$(SRC)/Screen/TextInBox.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \

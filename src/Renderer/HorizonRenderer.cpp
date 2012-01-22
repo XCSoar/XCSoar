@@ -24,11 +24,13 @@ Copyright_License {
 #include "HorizonRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Graphics.hpp"
+#include "Look/CrossSectionLook.hpp"
 #include "NMEA/Info.hpp"
 
 void
-HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc, const NMEAInfo &Basic)
+HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
+                      const CrossSectionLook &look,
+                      const NMEAInfo &Basic)
 {
   /*
   This feature of having a backup artificial horizon based on inferred
@@ -48,9 +50,9 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc, const NMEAInfo &Basic
   const int radius = min(rc.right - rc.left, rc.bottom - rc.top) / 2 -
                      Layout::Scale(1);
 
-  Pen hpHorizonSky(Layout::Scale(1), DarkColor(Graphics::skyColor));
-  Brush hbHorizonSky(Graphics::skyColor);
-  Pen hpHorizonGround(Layout::Scale(1), DarkColor(Graphics::GroundColor));
+  Pen hpHorizonSky(Layout::Scale(1), DarkColor(look.sky_color));
+  Brush hbHorizonSky(look.sky_color);
+  Pen hpHorizonGround(Layout::Scale(1), DarkColor(look.terrain_color));
 
 #define fixed_div fixed(1.0 / 50.0)
 #define fixed_89 fixed_int_constant(89)
@@ -70,7 +72,7 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc, const NMEAInfo &Basic
 
   // draw ground part
   canvas.Select(hpHorizonGround);
-  canvas.Select(Graphics::hbGround);
+  canvas.Select(look.terrain_brush);
   canvas.DrawSegment(center.x, center.y, radius, alpha1, alpha2, true);
 
   // draw aircraft symbol

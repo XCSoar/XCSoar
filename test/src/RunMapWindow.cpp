@@ -25,7 +25,6 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Init.hpp"
 #include "ResourceLoader.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -287,8 +286,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow window(*map_look, *traffic_look);
   window.set(0, 0, 640, 480);
 
-  Graphics::Initialise();
-
   GenerateBlackboard(window.map, settings_map);
   Fonts::Initialize();
 #ifndef ENABLE_OPENGL
@@ -300,7 +297,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   window.reset();
 
   Fonts::Deinitialize();
-  Graphics::Deinitialise();
 
   delete terrain;
   delete topography;

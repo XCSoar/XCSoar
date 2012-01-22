@@ -22,16 +22,15 @@ Copyright_License {
 */
 
 #include "ThermalBandLook.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 
 void
-ThermalBandLook::Initialise(bool _inverse)
+ThermalBandLook::Initialise(bool _inverse, Color sky_color)
 {
   inverse = _inverse;
 
-  brush.Set(Graphics::skyColor);
-  pen.Set(Layout::Scale(1), DarkColor(Graphics::skyColor));
+  brush.Set(sky_color);
+  pen.Set(Layout::Scale(1), DarkColor(sky_color));
 
   white_pen.Set(2, COLOR_WHITE);
   black_pen.Set(2, COLOR_BLACK);

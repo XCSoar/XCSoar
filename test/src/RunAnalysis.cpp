@@ -26,7 +26,6 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Init.hpp"
 #include "ResourceLoader.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -238,8 +237,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.set(_T("STATIC"), _T("RunAnalysis"),
                   0, 0, 640, 480);
 
-  Graphics::Initialise();
-
   Fonts::Initialize();
 
   dialog_settings.SetDefaults();
@@ -259,7 +256,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   delete look;
   Fonts::Deinitialize();
-  Graphics::Deinitialise();
 
   delete terrain;
 

@@ -51,7 +51,6 @@ Copyright_License {
 #include "Waypoint/WaypointGlue.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Language/LanguageGlue.hpp"
-#include "Screen/Graphics.hpp"
 #include "Units/Units.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug

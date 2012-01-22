@@ -135,7 +135,8 @@ void
 InfoBoxContentBarogram::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   const Look &look = CommonInterface::main_window.GetLook();
-  RenderBarographSpark(canvas, get_spark_rect(infobox), look.chart,
+  RenderBarographSpark(canvas, get_spark_rect(infobox),
+                       look.chart, look.cross_section,
                        infobox.GetLook().inverse,
                        glide_computer->GetFlightStats(),
                        XCSoarInterface::Basic(),

@@ -58,7 +58,6 @@ Copyright_License {
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
 #include "Audio/VarioSound.h"
-#include "Screen/Graphics.hpp"
 #include "Screen/Busy.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "Polar/Polar.hpp"

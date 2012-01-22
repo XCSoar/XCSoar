@@ -26,12 +26,15 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
+struct CrossSectionLook;
 struct NMEAInfo;
 class Canvas;
 
 namespace HorizonRenderer
 {
-  void Draw(Canvas &canvas, const PixelRect &rc, const NMEAInfo &Basic);
+  void Draw(Canvas &canvas, const PixelRect &rc,
+            const CrossSectionLook &look,
+            const NMEAInfo &Basic);
 }
 
 #endif

@@ -1472,7 +1472,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
 	$(SRC)/Screen/Fonts.cpp \
-	$(SRC)/Screen/Graphics.cpp \
 	$(SRC)/Screen/TextInBox.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Ramp.cpp \
@@ -1779,7 +1778,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/Chart.cpp \
-	$(SRC)/Screen/Graphics.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Look/Look.cpp \

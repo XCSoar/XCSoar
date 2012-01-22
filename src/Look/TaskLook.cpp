@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "TaskLook.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Graphics.hpp"
 #include "resource.h"
 
 void

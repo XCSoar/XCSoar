@@ -30,7 +30,6 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Android/Event.hpp"
 #include "Screen/OpenGL/Init.hpp"
 #include "Simulator.hpp"
@@ -115,7 +114,6 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   CommonInterface::main_window.reset();
   DisallowLanguage();
   Fonts::Deinitialize();
-  Graphics::Deinitialise();
 #ifdef IOIOLIB
   delete ioio_manager;
 #endif

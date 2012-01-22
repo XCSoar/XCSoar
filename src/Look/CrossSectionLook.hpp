@@ -34,8 +34,14 @@ struct CrossSectionLook {
   /** Text color */
   Color text_color;
 
+  Color sky_color;
+
+  Color terrain_color;
+
   /** Brush used to draw the terrain polygon */
   Brush terrain_brush;
+
+  Color sea_color;
 
   /** Pen used to draw the grid */
   Pen grid_pen;
