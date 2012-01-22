@@ -282,8 +282,6 @@ IDR_XML_WAYPOINTSELECT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypoi
 IDR_XML_WEATHER XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWeather.xml.gz"
 
 // configuration menu
-IDR_XML_AIRSPACECONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/AirspaceConfigPanel.xml.gz"
-IDR_XML_AIRSPACECONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/AirspaceConfigPanel_L.xml.gz"
 IDR_XML_DEVICESCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/DevicesConfigPanel.xml.gz"
 IDR_XML_DEVICESCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/DevicesConfigPanel_L.xml.gz"
 IDR_XML_INFOBOXESCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/InfoBoxesConfigPanel.xml.gz"

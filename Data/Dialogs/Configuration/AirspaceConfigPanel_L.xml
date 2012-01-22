@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-
-<Panel Name="frmAirspace">
-  <Button Name="cmdAirspaceColours" Caption="Colours" X="100" Y="2" Width="70" Height="22" OnClick="OnAirspaceColoursClicked" />
-  <Button Name="cmdAirspaceMode" Caption="Filter" X="170" Y="2" Width="70" Height="22" OnClick="OnAirspaceModeClicked" />
-
-</Panel>

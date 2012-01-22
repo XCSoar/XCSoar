@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "AirspaceConfigPanel.hpp"
+#include "ConfigPanel.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
 #include "Form/Button.hpp"
@@ -32,7 +33,6 @@ Copyright_License {
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 
@@ -71,14 +71,20 @@ static const StaticEnumChoice  as_fill_mode_list[] = {
 };
 
 class AirspaceConfigPanel : public RowFormWidget {
+private:
+  WndButton *buttonColors, *buttonMode;
+
 public:
   AirspaceConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
   void ShowDisplayControls(AirspaceDisplayMode_t mode);
   void ShowWarningControls(bool visible);
+  void SetButtonsVisible(bool active);
 };
 
 
@@ -112,6 +118,36 @@ AirspaceConfigPanel::ShowWarningControls(bool visible)
   SetRowVisible(AcknowledgeTime, visible);
 }
 
+void
+AirspaceConfigPanel::SetButtonsVisible(bool active)
+{
+  if (buttonColors != NULL)
+    buttonColors->set_visible(active);
+
+  if (buttonMode != NULL)
+    buttonMode->set_visible(active);
+}
+
+void
+AirspaceConfigPanel::Show(const PixelRect &rc)
+{
+  if (buttonColors != NULL)
+    buttonColors->set_text(_("Colours"));
+
+  if (buttonMode != NULL)
+    buttonMode->set_text(_("Filter"));
+
+  SetButtonsVisible(true);
+  RowFormWidget::Show(rc);
+}
+
+void
+AirspaceConfigPanel::Hide()
+{
+  RowFormWidget::Hide();
+  SetButtonsVisible(false);
+}
+
 static void
 OnAirspaceDisplay(DataField *Sender,
                   DataField::DataAccessKind_t Mode)
@@ -128,14 +164,6 @@ OnAirspaceWarning(DataField *Sender,
   const DataFieldBoolean &df = *(const DataFieldBoolean *)Sender;
   instance->ShowWarningControls(df.GetAsBoolean());
 }
-
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = { // TODO remove it
-  DeclareCallBackEntry(OnAirspaceColoursClicked),
-  DeclareCallBackEntry(OnAirspaceModeClicked),
-  DeclareCallBackEntry(OnAirspaceDisplay),
-  DeclareCallBackEntry(OnAirspaceWarning),
-  DeclareCallBackEntry(NULL)
-};
 
 void
 AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
@@ -190,6 +218,14 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     SetExpertRow(AirspaceTransparency);
   }
 #endif
+
+  buttonColors = ConfigPanel::GetExtraButton(1);
+  assert(buttonColors != NULL);
+  buttonColors->SetOnClickNotify(OnAirspaceColoursClicked);
+
+  buttonMode = ConfigPanel::GetExtraButton(2);
+  assert(buttonMode != NULL);
+  buttonMode->SetOnClickNotify(OnAirspaceModeClicked);
 
   ShowDisplayControls(renderer.altitude_mode); // TODO make this work the first time
   ShowWarningControls(computer.enable_warnings);
@@ -249,28 +285,3 @@ CreateAirspaceConfigPanel()
   return new AirspaceConfigPanel();
 }
 
-
-// TODO Find a solution for the two buttons on the AirspaceConfig Panel
-// and remove the code below
-
-#include "Form/XMLWidget.hpp"
-
-class AirspaceTmpButtonPanel : public XMLWidget {
-public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-};
-
-
-void
-AirspaceTmpButtonPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
-{
-  LoadWindow(CallBackTable, parent,
-             Layout::landscape ? _T("IDR_XML_AIRSPACECONFIGPANEL") :
-                               _T("IDR_XML_AIRSPACECONFIGPANEL_L"));
-}
-
-Widget *
-CreateAirspaceTmpButtonPanel()
-{
-  return new AirspaceTmpButtonPanel();
-}

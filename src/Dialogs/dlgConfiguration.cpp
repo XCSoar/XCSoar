@@ -89,7 +89,6 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Waypoints"), 1, CreateWaypointDisplayConfigPanel },
   {N_("Terrain"), 1, CreateTerrainDisplayConfigPanel },
   {N_("Airspace"), 1, CreateAirspaceConfigPanel },
-  {_T("AirspaceTmp"), 1, CreateAirspaceTmpButtonPanel },
   {N_("Safety Factors"), 2, CreateSafetyFactorsConfigPanel },
   {N_("Glide Computer"), 2, CreateGlideComputerConfigPanel },
   {N_("Wind"), 2, CreateWindConfigPanel },
@@ -124,6 +123,25 @@ ConfigPanel::GetForm()
   assert(wf != NULL);
 
   return *wf;
+}
+
+WndButton *
+ConfigPanel::GetExtraButton(unsigned number)
+{
+  assert(number>=1 && number<=2);
+
+  WndButton *ExtraButton = NULL;
+
+  switch (number) {
+  case 1:
+    ExtraButton = (WndButton *)wf->FindByName(_T("cmdExtra1"));
+    break;
+  case 2:
+    ExtraButton = (WndButton *)wf->FindByName(_T("cmdExtra2"));
+    break;
+  }
+
+  return ExtraButton;
 }
 
 static void
