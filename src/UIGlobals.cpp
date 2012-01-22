@@ -43,3 +43,9 @@ UIGlobals::GetDialogLook()
 {
   return CommonInterface::main_window.GetLook().dialog;
 }
+
+const IconLook &
+UIGlobals::GetIconLook()
+{
+  return CommonInterface::main_window.GetLook().icon;
+}

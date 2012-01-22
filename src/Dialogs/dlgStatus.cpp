@@ -25,6 +25,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "UIGlobals.hpp"
+#include "Look/IconLook.hpp"
 #include "StatusPanels/FlightStatusPanel.hpp"
 #include "StatusPanels/TaskStatusPanel.hpp"
 #include "StatusPanels/RulesStatusPanel.hpp"
@@ -44,7 +45,6 @@ Copyright_License {
 #include "Compiler.h"
 
 #include "Form/TabBar.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 
 #include <assert.h>
@@ -97,11 +97,12 @@ dlgStatusShowModal(int start_page)
     CommonInterface::GetUISettings().dialog.tab_style
     == DialogSettings::TabStyle::Icon;
 
-  const Bitmap *FlightIcon = enable_icons ? &Graphics::hBmpTabFlight : NULL;
-  const Bitmap *SystemIcon = enable_icons ? &Graphics::hBmpTabSystem : NULL;
-  const Bitmap *TaskIcon = enable_icons ? &Graphics::hBmpTabTask : NULL;
-  const Bitmap *RulesIcon = enable_icons ? &Graphics::hBmpTabRules : NULL;
-  const Bitmap *TimesIcon = enable_icons ? &Graphics::hBmpTabTimes : NULL;
+  const IconLook &icons = UIGlobals::GetIconLook();
+  const Bitmap *FlightIcon = enable_icons ? &icons.hBmpTabFlight : NULL;
+  const Bitmap *SystemIcon = enable_icons ? &icons.hBmpTabSystem : NULL;
+  const Bitmap *TaskIcon = enable_icons ? &icons.hBmpTabTask : NULL;
+  const Bitmap *RulesIcon = enable_icons ? &icons.hBmpTabRules : NULL;
+  const Bitmap *TimesIcon = enable_icons ? &icons.hBmpTabTimes : NULL;
 
   Widget *flight_panel = new FlightStatusPanel(nearest_waypoint);
   wTabBar->AddTab(flight_panel, _T("Flight"), false, FlightIcon);

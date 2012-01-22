@@ -20,42 +20,29 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#include "Screen/Graphics.hpp"
-#include "Screen/Point.hpp"
-#include "Screen/UnitSymbol.hpp"
-#include "Screen/Layout.hpp"
+
+#ifndef XCSOAR_ICON_LOOK_HPP
+#define XCSOAR_ICON_LOOK_HPP
+
 #include "Screen/Bitmap.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Color.hpp"
-#include "Screen/Pen.hpp"
-#include "Screen/Canvas.hpp"
-#include "MapSettings.hpp"
-#include "resource.h"
-#include "Asset.hpp"
-#include "LogFile.hpp"
 
-Brush Graphics::hbGround;
+/**
+ * This class manages the icons of various XCSoar dialogs.
+ */
+struct IconLook {
+  // task dialog
+  Bitmap hBmpTabTask;
+  Bitmap hBmpTabWrench;
+  Bitmap hBmpTabSettings;
+  Bitmap hBmpTabCalculator;
 
-const Color Graphics::GroundColor = Color(0x80,0x45,0x15);
-const Color Graphics::skyColor = Color(0x0a,0xb9,0xf3);
-const Color Graphics::seaColor = Color(0xbd,0xc5,0xd5); // ICAO open water area
+  // status dialog
+  Bitmap hBmpTabFlight;
+  Bitmap hBmpTabSystem;
+  Bitmap hBmpTabRules;
+  Bitmap hBmpTabTimes;
 
-void
-Graphics::Initialise()
-{
-  /// @todo enhancement: support red/green color blind pilots with adjusted colour scheme
+  void Initialise();
+};
 
-  LogStartUp(_T("Initialise graphics"));
-
-  LoadUnitSymbols();
-
-  hbGround.Set(GroundColor);
-}
-
-void
-Graphics::Deinitialise()
-{
-  DeinitialiseUnitSymbols();
-
-  hbGround.Reset();
-}
+#endif

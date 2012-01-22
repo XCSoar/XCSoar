@@ -650,6 +650,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Look/AircraftLook.cpp \
 	$(SRC)/Look/MarkerLook.cpp \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
+	$(SRC)/Look/IconLook.cpp \
 	\
 	$(SRC)/Polar/PolarGlue.cpp \
 	$(SRC)/Polar/PolarFileGlue.cpp \

@@ -36,6 +36,7 @@ Copyright_License {
 #include "Gauge/FlarmTrafficLook.hpp"
 #include "InfoBoxLook.hpp"
 #include "FinalGlideBarLook.hpp"
+#include "IconLook.hpp"
 
 struct UISettings;
 
@@ -53,6 +54,7 @@ struct Look {
   FlarmTrafficLook flarm_dialog;
   InfoBoxLook info_box;
   FinalGlideBarLook final_glide_bar;
+  IconLook icon;
 
   void Initialise();
   void InitialiseConfigured(const UISettings &settings);

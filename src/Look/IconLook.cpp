@@ -20,42 +20,22 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#include "Screen/Graphics.hpp"
-#include "Screen/Point.hpp"
-#include "Screen/UnitSymbol.hpp"
+
+#include "IconLook.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Bitmap.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Color.hpp"
-#include "Screen/Pen.hpp"
-#include "Screen/Canvas.hpp"
-#include "MapSettings.hpp"
+
 #include "resource.h"
-#include "Asset.hpp"
-#include "LogFile.hpp"
-
-Brush Graphics::hbGround;
-
-const Color Graphics::GroundColor = Color(0x80,0x45,0x15);
-const Color Graphics::skyColor = Color(0x0a,0xb9,0xf3);
-const Color Graphics::seaColor = Color(0xbd,0xc5,0xd5); // ICAO open water area
 
 void
-Graphics::Initialise()
+IconLook::Initialise()
 {
-  /// @todo enhancement: support red/green color blind pilots with adjusted colour scheme
+  hBmpTabTask.Load(Layout::scale > 1 ? IDB_TASK_HD : IDB_TASK);
+  hBmpTabWrench.Load(Layout::scale > 1 ? IDB_WRENCH_HD : IDB_WRENCH);
+  hBmpTabSettings.Load(Layout::scale > 1 ? IDB_SETTINGS_HD : IDB_SETTINGS);
+  hBmpTabCalculator.Load(Layout::scale > 1 ? IDB_CALCULATOR_HD : IDB_CALCULATOR);
 
-  LogStartUp(_T("Initialise graphics"));
-
-  LoadUnitSymbols();
-
-  hbGround.Set(GroundColor);
-}
-
-void
-Graphics::Deinitialise()
-{
-  DeinitialiseUnitSymbols();
-
-  hbGround.Reset();
+  hBmpTabFlight.Load(Layout::scale > 1 ? IDB_GLOBE_HD : IDB_GLOBE);
+  hBmpTabSystem.Load(Layout::scale > 1 ? IDB_DEVICE_HD : IDB_DEVICE);
+  hBmpTabRules.Load(Layout::scale > 1 ? IDB_RULES_HD : IDB_RULES);
+  hBmpTabTimes.Load(Layout::scale > 1 ? IDB_CLOCK_HD : IDB_CLOCK);
 }

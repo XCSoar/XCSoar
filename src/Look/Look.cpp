@@ -52,4 +52,5 @@ Look::InitialiseConfigured(const UISettings &settings)
                       settings.info_boxes.use_colors);
   final_glide_bar.Initialise();
   map.Initialise(settings.map);
+  icon.Initialise();
 }

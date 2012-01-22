@@ -27,6 +27,8 @@ Copyright_License {
 #include "TaskPropertiesPanel.hpp"
 #include "TaskListPanel.hpp"
 #include "TaskClosePanel.hpp"
+#include "UIGlobals.hpp"
+#include "Look/IconLook.hpp"
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
@@ -37,7 +39,6 @@ Copyright_License {
 #include "Gauge/TaskView.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/Graphics.hpp"
 #include "Task/TaskStore.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
@@ -267,11 +268,12 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     CommonInterface::GetUISettings().dialog.tab_style
     == DialogSettings::TabStyle::Icon;
 
-  const Bitmap *CalcIcon = enable_icons ? &Graphics::hBmpTabCalculator : NULL;
-  const Bitmap *TurnPointIcon = enable_icons ? &Graphics::hBmpTabTask : NULL;
-  const Bitmap *BrowseIcon = enable_icons ? &Graphics::hBmpTabWrench : NULL;
+  const IconLook &icons = UIGlobals::GetIconLook();
+  const Bitmap *CalcIcon = enable_icons ? &icons.hBmpTabCalculator : NULL;
+  const Bitmap *TurnPointIcon = enable_icons ? &icons.hBmpTabTask : NULL;
+  const Bitmap *BrowseIcon = enable_icons ? &icons.hBmpTabWrench : NULL;
   const Bitmap *PropertiesIcon = enable_icons
-    ? &Graphics::hBmpTabSettings : NULL;
+    ? &icons.hBmpTabSettings : NULL;
 
   wTabBar->AddTab(wCalculator, _("Calculator"), false, CalcIcon);
 

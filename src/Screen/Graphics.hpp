@@ -24,25 +24,12 @@ Copyright_License {
 #ifndef SCREEN_GRAPHICS_HPP
 #define SCREEN_GRAPHICS_HPP
 
-class Bitmap;
 class Brush;
 struct Color;
 
 namespace Graphics {
   void Initialise();
   void Deinitialise();
-
-  // task dialog
-  extern Bitmap hBmpTabTask;
-  extern Bitmap hBmpTabWrench;
-  extern Bitmap hBmpTabSettings;
-  extern Bitmap hBmpTabCalculator;
-
-  // status dialog
-  extern Bitmap hBmpTabFlight;
-  extern Bitmap hBmpTabSystem;
-  extern Bitmap hBmpTabRules;
-  extern Bitmap hBmpTabTimes;
 
   extern Brush hbGround;
 
