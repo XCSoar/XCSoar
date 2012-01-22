@@ -201,13 +201,6 @@ void
 InitAsset()
 {
 #ifdef HAVE_MODEL_TYPE
-  /*
-  LocalPath is called for the very first time by CreateDirectoryIfAbsent.
-  In order to be able in the future to behave differently for each PNA device
-  and maybe also for common PDAs, we need to know the PNA/PDA Model Type
-  BEFORE calling LocalPath. This was critical.
-   */
-
   int Temp = (int)MODELTYPE_PNA_PNA;
   Profile::Get(szProfileAppInfoBoxModel, Temp);
   GlobalModelType = (ModelType)Temp;
