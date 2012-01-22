@@ -79,13 +79,20 @@ static const StaticEnumChoice info_box_geometry_list[] = {
 
 const TCHAR *flarm_display_help = N_("Choose a location for the FLARM display.");
 static const StaticEnumChoice flarm_display_location_list[] = {
-  { UISettings::flAuto, N_("Auto (follow infoboxes)"), flarm_display_help },
-  { UISettings::flTopLeft, N_("Top Left"), flarm_display_help },
-  { UISettings::flTopRight, N_("Top Right"), flarm_display_help },
-  { UISettings::flBottomLeft, N_("Bottom Left"), flarm_display_help },
-  { UISettings::flBottomRight, N_("Bottom Right"), flarm_display_help },
-  { UISettings::flCentreTop, N_("Centre Top"), flarm_display_help },
-  { UISettings::flCentreBottom, N_("Centre Bottom"), flarm_display_help },
+  { (unsigned)TrafficSettings::GaugeLocation::Auto,
+    N_("Auto (follow infoboxes)"), flarm_display_help },
+  { (unsigned)TrafficSettings::GaugeLocation::TopLeft,
+    N_("Top Left"), flarm_display_help },
+  { (unsigned)TrafficSettings::GaugeLocation::TopRight,
+    N_("Top Right"), flarm_display_help },
+  { (unsigned)TrafficSettings::GaugeLocation::BottomLeft,
+    N_("Bottom Left"), flarm_display_help },
+  { (unsigned)TrafficSettings::GaugeLocation::BottomRight,
+    N_("Bottom Right"), flarm_display_help },
+  { (unsigned)TrafficSettings::GaugeLocation::CentreTop,
+    N_("Centre Top"), flarm_display_help },
+  { (unsigned)TrafficSettings::GaugeLocation::CentreBottom,
+    N_("Centre Bottom"), flarm_display_help },
   { 0 }
 };
 
@@ -143,8 +150,8 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, InfoBoxLayout::InfoBoxGeometry);
 
-  AddEnum(_("FLARM display"), NULL,
-          flarm_display_location_list, ui_settings.flarm_location);
+  AddEnum(_("FLARM display"), NULL, flarm_display_location_list,
+          (unsigned)ui_settings.traffic.gauge_location);
   SetExpertRow(AppFlarmLocation);
 
   AddEnum(_("Tab dialog style"), NULL,
@@ -196,7 +203,8 @@ LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
     SaveValueEnum(AppInfoBoxGeom, szProfileInfoBoxGeometry, InfoBoxLayout::InfoBoxGeometry);
 
   info_box_geometry_changed |=
-    SaveValueEnum(AppFlarmLocation, szProfileFlarmLocation, ui_settings.flarm_location);
+    SaveValueEnum(AppFlarmLocation, szProfileFlarmLocation,
+                  ui_settings.traffic.gauge_location);
 
   changed |= info_box_geometry_changed;
 

@@ -555,7 +555,7 @@ SetButtonsEnabled(bool enabled)
 static void
 Update()
 {
-  if (XCSoarInterface::GetUISettings().auto_close_flarm_dialog &&
+  if (XCSoarInterface::GetUISettings().traffic.auto_close_dialog &&
       (!XCSoarInterface::Basic().flarm.available ||
        XCSoarInterface::Basic().flarm.GetActiveTrafficCount() == 0))
     wf->SetModalResult(mrOK);

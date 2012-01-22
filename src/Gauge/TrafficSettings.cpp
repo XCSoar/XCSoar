@@ -21,30 +21,12 @@ Copyright_License {
 }
 */
 
-#include "UISettings.hpp"
-#include "Asset.hpp"
+#include "TrafficSettings.hpp"
 
 void
-UISettings::SetDefaults()
+TrafficSettings::SetDefaults()
 {
-  menu_timeout = 8 * 4;
-
-  custom_fonts = false;
-  enable_auto_blank = false;
-
-  enable_thermal_assistant_gauge = true;
-
-  popup_message_position = smAlignCenter;
-
-  haptic_feedback = HapticFeedback::Default;
-
-  coordinate_format = CoordinateFormat::DDMMSS;
-
-  units.SetDefaults();
-  map.SetDefaults();
-  info_boxes.SetDefaults();
-  vario.SetDefaults();
-  traffic.SetDefaults();
-  pages.SetDefaults();
-  dialog.SetDefaults();
+  enable_gauge = true;
+  auto_close_dialog = false;
+  gauge_location = GaugeLocation::Auto;
 }

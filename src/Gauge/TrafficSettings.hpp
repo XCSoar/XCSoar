@@ -21,30 +21,30 @@ Copyright_License {
 }
 */
 
-#include "UISettings.hpp"
-#include "Asset.hpp"
+#ifndef XCSOAR_TRAFFIC_SETTINGS_HPP
+#define XCSOAR_TRAFFIC_SETTINGS_HPP
 
-void
-UISettings::SetDefaults()
-{
-  menu_timeout = 8 * 4;
+#include <stdint.h>
 
-  custom_fonts = false;
-  enable_auto_blank = false;
+struct TrafficSettings {
+  /** Show traffic radar if traffic present? */
+  bool enable_gauge;
 
-  enable_thermal_assistant_gauge = true;
+  /** Automatically close the traffic dialog when no traffic present? */
+  bool auto_close_dialog;
 
-  popup_message_position = smAlignCenter;
+  /** Location of Flarm radar */
+  enum class GaugeLocation : uint8_t {
+    Auto,
+    TopLeft,
+    TopRight,
+    BottomLeft,
+    BottomRight,
+    CentreTop,
+    CentreBottom,
+  } gauge_location;
 
-  haptic_feedback = HapticFeedback::Default;
+  void SetDefaults();
+};
 
-  coordinate_format = CoordinateFormat::DDMMSS;
-
-  units.SetDefaults();
-  map.SetDefaults();
-  info_boxes.SetDefaults();
-  vario.SetDefaults();
-  traffic.SetDefaults();
-  pages.SetDefaults();
-  dialog.SetDefaults();
-}
+#endif

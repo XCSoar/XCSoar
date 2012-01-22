@@ -599,7 +599,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       OutBuffer, _T("$(AirSpaceOnShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 
-  CondReplaceInString(CommonInterface::GetUISettings().enable_flarm_gauge,
+  CondReplaceInString(CommonInterface::GetUISettings().traffic.enable_gauge,
                       OutBuffer, _T("$(FlarmDispToggleActionName)"),
                       _("Off"), _("On"), Size);
 

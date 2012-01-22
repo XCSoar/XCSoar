@@ -31,6 +31,7 @@ Copyright_License {
 
 namespace Profile {
   static void Load(VarioSettings &settings);
+  static void Load(TrafficSettings &settings);
   static void Load(DialogSettings &settings);
 };
 
@@ -44,6 +45,14 @@ Profile::Load(VarioSettings &settings)
   Get(szProfileAppGaugeVarioBallast, settings.ShowBallast);
   Get(szProfileAppGaugeVarioGross, settings.ShowGross);
   Get(szProfileAppAveNeedle, settings.ShowAveNeedle);
+}
+
+void
+Profile::Load(TrafficSettings &settings)
+{
+  Get(szProfileEnableFLARMGauge, settings.enable_gauge);
+  Get(szProfileAutoCloseFlarmDialog, settings.auto_close_dialog);
+  GetEnum(szProfileFlarmLocation, settings.gauge_location);
 }
 
 void
@@ -63,12 +72,9 @@ Profile::Load(UISettings &settings)
   Get(szProfileUseCustomFonts, settings.custom_fonts);
   Get(szProfileAutoBlank, settings.enable_auto_blank);
 
-  Get(szProfileEnableFLARMGauge, settings.enable_flarm_gauge);
-  Get(szProfileAutoCloseFlarmDialog, settings.auto_close_flarm_dialog);
   Get(szProfileEnableTAGauge, settings.enable_thermal_assistant_gauge);
 
   GetEnum(szProfileAppStatusMessageAlignment, settings.popup_message_position);
-  GetEnum(szProfileFlarmLocation, settings.flarm_location);
 
   GetEnum(szProfileHapticFeedback, settings.haptic_feedback);
 
@@ -78,6 +84,7 @@ Profile::Load(UISettings &settings)
   Load(settings.map);
   Load(settings.info_boxes);
   Load(settings.vario);
+  Load(settings.traffic);
   Load(settings.pages);
   Load(settings.dialog);
 }

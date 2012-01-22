@@ -55,11 +55,11 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddBoolean(_("FLARM radar"),
              _("This enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."),
-             ui_settings.enable_flarm_gauge);
+             ui_settings.traffic.enable_gauge);
 
   AddBoolean(_("Auto close FLARM"),
              _("Setting this to \"On\" will automatically close the FLARM dialog if there is no traffic. \"Off\" will keep the dialog open even without current traffic."),
-             ui_settings.auto_close_flarm_dialog);
+             ui_settings.traffic.auto_close_dialog);
   SetExpertRow(AutoCloseFlarmDialog);
 
   AddBoolean(_("Thermal assistant"),
@@ -79,10 +79,10 @@ GaugesConfigPanel::Save(bool &_changed, bool &_require_restart)
   UISettings &ui_settings = CommonInterface::SetUISettings();
 
   changed |= SaveValue(EnableFLARMGauge, szProfileEnableFLARMGauge,
-                       ui_settings.enable_flarm_gauge);
+                       ui_settings.traffic.enable_gauge);
 
   changed |= SaveValue(AutoCloseFlarmDialog, szProfileAutoCloseFlarmDialog,
-                       ui_settings.auto_close_flarm_dialog);
+                       ui_settings.traffic.auto_close_dialog);
 
   changed |= SaveValue(EnableTAGauge, szProfileEnableTAGauge,
                        ui_settings.enable_thermal_assistant_gauge);

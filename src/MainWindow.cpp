@@ -335,54 +335,55 @@ MainWindow::ReinitialiseLayout()
 void 
 MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout ib_layout)
 {
-  UISettings::FlarmLocation val = CommonInterface::GetUISettings().flarm_location;
+  TrafficSettings::GaugeLocation val =
+    CommonInterface::GetUISettings().traffic.gauge_location;
 
   // Automatic mode - follow info boxes
-  if (val == UISettings::flAuto) {
+  if (val == TrafficSettings::GaugeLocation::Auto) {
     switch (InfoBoxLayout::InfoBoxGeometry) {
     case InfoBoxLayout::ibTop8:
-      val = UISettings::flTopRight;
+      val = TrafficSettings::GaugeLocation::TopRight;
       break;
     case InfoBoxLayout::ibLeft8:
-      val = UISettings::flBottomLeft;
+      val = TrafficSettings::GaugeLocation::BottomLeft;
       break;
     case InfoBoxLayout::ibTop12:
-      val = UISettings::flTopLeft;
+      val = TrafficSettings::GaugeLocation::TopLeft;
       break;
     default:
-      val = UISettings::flBottomRight;    // Assume bottom right unles...
+      val = TrafficSettings::GaugeLocation::BottomRight;    // Assume bottom right unles...
       break;
     }
   }
 
   switch (val) {
-  case UISettings::flTopLeft:
+  case TrafficSettings::GaugeLocation::TopLeft:
     rc.right = rc.left + ib_layout.control_width * 2;
     ++rc.left;
     rc.bottom = rc.top + ib_layout.control_height * 2;
     ++rc.top;
     break;
 
-  case UISettings::flTopRight:
+  case TrafficSettings::GaugeLocation::TopRight:
     rc.left = rc.right - ib_layout.control_width * 2 + 1;
     rc.bottom = rc.top + ib_layout.control_height * 2;
     ++rc.top;
     break;
 
-  case UISettings::flBottomLeft:
+  case TrafficSettings::GaugeLocation::BottomLeft:
     rc.right = rc.left + ib_layout.control_width * 2;
     ++rc.left;
     rc.top = rc.bottom - ib_layout.control_height * 2 + 1;
     break;
 
-  case UISettings::flCentreTop:
+  case TrafficSettings::GaugeLocation::CentreTop:
     rc.left = (rc.left + rc.right) / 2 - ib_layout.control_width;
     rc.right = rc.left + ib_layout.control_width * 2 - 1;
     rc.bottom = rc.top + ib_layout.control_height * 2;
     ++rc.top;
     break;
 
-  case UISettings::flCentreBottom:
+  case TrafficSettings::GaugeLocation::CentreBottom:
     rc.left = (rc.left + rc.right) / 2 - ib_layout.control_width;
     rc.right = rc.left + ib_layout.control_width * 2 - 1;
     rc.top = rc.bottom - ib_layout.control_height * 2 + 1;
@@ -740,7 +741,7 @@ MainWindow::UpdateTrafficGaugeVisibility()
   const FlarmState &flarm = CommonInterface::Basic().flarm;
   bool traffic_visible =
     (force_traffic_gauge ||
-     (CommonInterface::GetUISettings().enable_flarm_gauge &&
+     (CommonInterface::GetUISettings().traffic.enable_gauge &&
       flarm.available && !flarm.traffic.empty())) &&
     !CommonInterface::GetUIState().screen_blanked &&
     /* hide the traffic gauge while the traffic widget is visible, to
@@ -792,7 +793,7 @@ void
 MainWindow::ToggleForceFLARMRadar()
 {
   force_traffic_gauge = !force_traffic_gauge;
-  CommonInterface::SetUISettings().enable_flarm_gauge = force_traffic_gauge;
+  CommonInterface::SetUISettings().traffic.enable_gauge = force_traffic_gauge;
 }
 
 #ifdef ANDROID

@@ -28,6 +28,7 @@ Copyright_License {
 #include "MapSettings.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Gauge/VarioSettings.hpp"
+#include "Gauge/TrafficSettings.hpp"
 #include "PageSettings.hpp"
 #include "Dialogs/DialogSettings.hpp"
 #include "Util/TypeTraits.hpp"
@@ -44,12 +45,6 @@ struct UISettings {
 
   bool enable_auto_blank;
 
-  /** Show FLARM radar if traffic present */
-  bool enable_flarm_gauge;
-
-  /** Automatically close the FLARM dialog when no traffic present */
-  bool auto_close_flarm_dialog;
-
   /** Show ThermalAssistant if circling */
   bool enable_thermal_assistant_gauge;
 
@@ -57,17 +52,6 @@ struct UISettings {
     smAlignCenter = 0,
     smAlignTopLeft,
   } popup_message_position;
-
-  /** Location of Flarm radar */
-  enum FlarmLocation {
-    flAuto,
-    flTopLeft,
-    flTopRight,
-    flBottomLeft,
-    flBottomRight,
-    flCentreTop,
-    flCentreBottom,
-  } flarm_location;
 
   /** Haptic feedback settings */
   enum HapticFeedback {
@@ -82,6 +66,7 @@ struct UISettings {
   MapSettings map;
   InfoBoxSettings info_boxes;
   VarioSettings vario;
+  TrafficSettings traffic;
   PageSettings pages;
   DialogSettings dialog;
 
