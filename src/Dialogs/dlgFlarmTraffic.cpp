@@ -118,9 +118,11 @@ FlarmTrafficControl::OnCreate()
 {
   FlarmTrafficWindow::OnCreate();
 
+  const TrafficSettings &settings = CommonInterface::GetUISettings().traffic;
+
   Profile::Get(szProfileFlarmSideData, side_display_type);
-  Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);
-  Profile::Get(szProfileFlarmNorthUp, enable_north_up);
+  enable_auto_zoom = settings.auto_zoom;
+  enable_north_up = settings.north_up;
 }
 
 unsigned
@@ -144,7 +146,8 @@ FlarmTrafficControl::GetZoomDistance(unsigned zoom)
 void
 FlarmTrafficControl::SetNorthUp(bool enabled)
 {
-  enable_north_up = enabled;
+  TrafficSettings &settings = CommonInterface::SetUISettings().traffic;
+  settings.north_up = enable_north_up = enabled;
   Profile::Set(szProfileFlarmNorthUp, enabled);
   north_up->set_checked(enabled);
 }
@@ -152,7 +155,8 @@ FlarmTrafficControl::SetNorthUp(bool enabled)
 void
 FlarmTrafficControl::SetAutoZoom(bool enabled)
 {
-  enable_auto_zoom = enabled;
+  TrafficSettings &settings = CommonInterface::SetUISettings().traffic;
+  settings.auto_zoom = enable_auto_zoom = enabled;
   Profile::Set(szProfileFlarmAutoZoom, enabled);
   auto_zoom->set_checked(enabled);
 }

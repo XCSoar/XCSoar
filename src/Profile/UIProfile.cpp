@@ -52,6 +52,8 @@ Profile::Load(TrafficSettings &settings)
 {
   Get(szProfileEnableFLARMGauge, settings.enable_gauge);
   Get(szProfileAutoCloseFlarmDialog, settings.auto_close_dialog);
+  Get(szProfileFlarmAutoZoom, settings.auto_zoom);
+  Get(szProfileFlarmNorthUp, settings.north_up);
   GetEnum(szProfileFlarmLocation, settings.gauge_location);
 }
 

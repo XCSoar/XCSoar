@@ -28,5 +28,7 @@ TrafficSettings::SetDefaults()
 {
   enable_gauge = true;
   auto_close_dialog = false;
+  auto_zoom = true;
+  north_up = false;
   gauge_location = GaugeLocation::Auto;
 }

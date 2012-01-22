@@ -33,6 +33,10 @@ struct TrafficSettings {
   /** Automatically close the traffic dialog when no traffic present? */
   bool auto_close_dialog;
 
+  bool auto_zoom;
+
+  bool north_up;
+
   /** Location of Flarm radar */
   enum class GaugeLocation : uint8_t {
     Auto,
