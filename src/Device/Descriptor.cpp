@@ -142,6 +142,8 @@ DeviceDescriptor::Open(OperationEnvironment &env, bool show_error_messages)
     return false;
   }
 
+  reopen_clock.Update();
+
   Port *port = OpenPort(config, *this);
   if (port == NULL) {
     if (show_error_messages) {

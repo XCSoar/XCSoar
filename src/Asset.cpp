@@ -22,11 +22,13 @@ Copyright_License {
 */
 
 #include "Asset.hpp"
+#include "Util/Macros.hpp"
 #include "Profile/Profile.hpp"
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
+#include "IO/FileHandle.hpp"
 #include "Sizes.h"
 
 #if defined(WIN32) && (!defined(__GNUC__) || defined(_WIN32_WCE))
@@ -43,14 +45,38 @@ TCHAR asset_number[MAX_LOADSTRING] = _T(""); //4G17DW31L0HY");
 ModelType global_model_type = MODELTYPE_PNA_PNA;
 #endif
 
-static void
+gcc_const
+static bool
+IsAlphaNum(TCHAR c)
+{
+  return (c >= _T('A') && c <= _T('Z')) ||
+    (c >= _T('a') && c <= _T('z')) ||
+    (c >= _T('0') && c <= _T('9'));
+}
+
+static bool
+SetAssetNumber(const TCHAR *p)
+{
+  size_t length = 0;
+  while (length < ARRAY_SIZE(asset_number) - 1 && *p != _T('\0')) {
+    if (IsAlphaNum(*p))
+      asset_number[length++] = *p;
+    ++p;
+  }
+
+  if (length < 3) {
+    asset_number[0] = _T('\0');
+    return false;
+  }
+
+  return true;
+}
+
+static bool
 ReadCompaqID(void)
 {
 #if defined(_WIN32_WCE)
   PROCESS_INFORMATION pi;
-
-  if(asset_number[0] != '\0')
-    return;
 
   if (CreateProcess(_T("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL,
                     FALSE, 0, NULL, NULL, NULL, &pi)) {
@@ -59,19 +85,20 @@ ReadCompaqID(void)
     CloseHandle(pi.hThread);
   }
 
-  FILE *file = _tfopen(_T("\\windows\\cpqAssetData.dat"), _T("rb"));
-  if (file == NULL) {
-    // MessageBoxX(hWnd, _T("Unable to open asset data file."), _T("Error!"), MB_OK);
-    return;
-  }
-  fseek(file, 976, SEEK_SET);
-  memset(asset_number, 0, 64 * sizeof(TCHAR));
-  fread(&asset_number, 64, 1, file);
-  fclose(file);
+  FileHandle file(_T("\\windows\\cpqAssetData.dat"), _T("rb"));
+  if (!file.IsOpen() || !file.Seek(976, SEEK_SET))
+    return false;
+
+  TCHAR buffer[ARRAY_SIZE(asset_number)];
+  size_t length = file.Read(buffer, ARRAY_SIZE(buffer) - 1, sizeof(buffer[0]));
+  buffer[length] = _T('\0');
+  return SetAssetNumber(buffer);
+#else
+  return false;
 #endif
 }
 
-static void
+static bool
 ReadUUID(void)
 {
 #if defined(_WIN32_WCE) && defined(IOCTL_HAL_GET_DEVICEID) && defined(FILE_DEVICE_HAL)
@@ -94,56 +121,60 @@ ReadUUID(void)
   // 3) take first 16 bytes of buffer and process.  Buffer returned may be any size
   // First try exactly 16 bytes, some older PDAs require exactly 16 byte buffer
 
-    asset_number[0]= '\0';
+  asset_number[0]= '\0';
 
-    iBuffSizeIn = sizeof(Guid);
-    memset(GUIDbuffer, 0, iBuffSizeIn);
-    fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer,
-                           iBuffSizeIn, &uNumReturned);
-    if(fRes == false) {
-      // try larger buffer
+  iBuffSizeIn = sizeof(Guid);
+  memset(GUIDbuffer, 0, iBuffSizeIn);
+  fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer,
+                         iBuffSizeIn, &uNumReturned);
+  if(fRes == false) {
+    // try larger buffer
+    eLast = GetLastError();
+    if (ERROR_INSUFFICIENT_BUFFER != eLast)
+      return false;
+    else {
+      // wrong buffer
+      iBuffSizeIn = uNumReturned;
+      memset(GUIDbuffer, 0, iBuffSizeIn);
+      fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer,
+                             iBuffSizeIn, &uNumReturned);
       eLast = GetLastError();
-      if (ERROR_INSUFFICIENT_BUFFER != eLast)
-        return;
-      else {
-        // wrong buffer
-        iBuffSizeIn = uNumReturned;
-        memset(GUIDbuffer, 0, iBuffSizeIn);
-        fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer,
-                               iBuffSizeIn, &uNumReturned);
-        eLast = GetLastError();
 
-        if(fRes == false)
-          return;
-      }
+      if(fRes == false)
+        return false;
     }
+  }
 
-    // here assume we have data in GUIDbuffer of length uNumReturned
-    memcpy(&Guid, GUIDbuffer, sizeof(Guid));
+  // here assume we have data in GUIDbuffer of length uNumReturned
+  memcpy(&Guid, GUIDbuffer, sizeof(Guid));
 
-    temp = Guid.Data2;
-    temp = temp << 16;
-    temp += Guid.Data3;
+  temp = Guid.Data2;
+  temp = temp << 16;
+  temp += Guid.Data3;
 
-    Asset = temp ^ Guid.Data1;
+  Asset = temp ^ Guid.Data1;
 
-    temp = 0;
-    for(i = 0; i < 4; i++) {
-      temp = temp << 8;
-      temp += Guid.Data4[i];
-    }
+  temp = 0;
+  for(i = 0; i < 4; i++) {
+    temp = temp << 8;
+    temp += Guid.Data4[i];
+  }
 
-    Asset = Asset ^ temp;
+  Asset = Asset ^ temp;
 
-    temp = 0;
-    for(i = 0; i < 4; i++) {
-      temp = temp << 8;
-      temp += Guid.Data4[i + 4];
-    }
+  temp = 0;
+  for(i = 0; i < 4; i++) {
+    temp = temp << 8;
+    temp += Guid.Data4[i + 4];
+  }
 
-    Asset = Asset ^ temp;
+  Asset = Asset ^ temp;
 
-    _stprintf(asset_number, _T("%08X%08X"), Asset, Guid.Data1);
+  TCHAR buffer[20];
+  _stprintf(asset_number, _T("%08X%08X"), Asset, Guid.Data1);
+  return SetAssetNumber(buffer);
+#else
+  return false;
 #endif
 }
 
@@ -152,71 +183,24 @@ ReadUUID(void)
  */
 void ReadAssetNumber(void)
 {
-  TCHAR val[MAX_PATH];
-
-  val[0]= _T('\0');
-
-  memset(asset_number, 0, MAX_LOADSTRING * sizeof(TCHAR));
-  // JMW clear this first just to be safe.
-
-#ifndef _WIN32_WCE
-  return;
-#endif
-
-  Profile::Get(szProfileLoggerID, val, 100);
-  int ifound = 0;
-  int len = _tcslen(val);
-  for (int i = 0; i < len; i++) {
-    if (((val[i] >= _T('A')) && (val[i] <= _T('Z')))
-        || ((val[i] >= _T('0')) && (val[i] <= _T('9')))) {
-      asset_number[ifound]= val[i];
-      ifound++;
-    }
-    if (ifound >= 3) {
-      LogStartUp(_T("Asset ID: %s (reg)"), asset_number);
-      return;
-    }
-  }
-
-  if(asset_number[0] != '\0') {
-    LogStartUp(_T("Asset ID: %s (?)"), asset_number);
-    return;
-  }
-
-  ReadCompaqID();
-  if(asset_number[0] != '\0') {
+  TCHAR buffer[ARRAY_SIZE(asset_number)];
+  if (Profile::Get(szProfileLoggerID, buffer, ARRAY_SIZE(buffer)) &&
+      SetAssetNumber(buffer)) {
+    LogStartUp(_T("Asset ID: %s (reg)"), asset_number);
+  } else if (ReadCompaqID()) {
     LogStartUp(_T("Asset ID: %s (compaq)"), asset_number);
-    return;
-  }
-
-  ReadUUID();
-  if(asset_number[0] != '\0') {
+  } else if (ReadUUID()) {
     LogStartUp(_T("Asset ID: %s (uuid)"), asset_number);
-    return;
+  } else {
+    _tcscpy(asset_number, _T("AAA"));
+    LogStartUp(_T("Asset ID: %s (fallback)"), asset_number);
   }
-
-  asset_number[0]= _T('A');
-  asset_number[1]= _T('A');
-  asset_number[2]= _T('A');
-
-  LogStartUp(_T("Asset ID: %s (fallback)"), asset_number);
-
-  return;
 }
 
 void
 InitAsset()
 {
 #ifdef HAVE_MODEL_TYPE
-  /*
-  LocalPath is called for the very first time by CreateDirectoryIfAbsent.
-  In order to be able in the future to behave differently for each PNA device
-  and maybe also for common PDAs, we need to know the PNA/PDA Model Type
-  BEFORE calling LocalPath. This was critical.
-   */
-
-  int Temp = (int)MODELTYPE_PNA_PNA;
-  Profile::Get(szProfileAppInfoBoxModel, Temp);
-  global_model_type = (ModelType)Temp;
+  Profile::GetEnum(szProfileAppInfoBoxModel, global_model_type);
 #endif
 }
