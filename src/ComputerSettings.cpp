@@ -102,7 +102,6 @@ void
 ComputerSettings::SetDefaults()
 {
   WindSettings::SetDefaults();
-  LoggerSettings::SetDefaults();
   PolarSettings::SetDefaults();
   SoundSettings::SetDefaults();
   TeamCodeSettings::SetDefaults();
@@ -120,6 +119,7 @@ ComputerSettings::SetDefaults()
   pressure_available.Clear();
   airspace.SetDefaults();
   task.SetDefaults();
+  logger.SetDefaults();
 
 #ifdef HAVE_TRACKING
   tracking.SetDefaults();

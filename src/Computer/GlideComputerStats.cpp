@@ -66,9 +66,9 @@ GlideComputerStats::DoLogging(const MoreData &basic,
 
   // log points more often in circling mode
   if (calculated.circling)
-    log_clock.SetDT(fixed(settings_logger.logger_time_step_circling));
+    log_clock.SetDT(fixed(settings_logger.time_step_circling));
   else
-    log_clock.SetDT(fixed(settings_logger.logger_time_step_cruise));
+    log_clock.SetDT(fixed(settings_logger.time_step_cruise));
 
   if (fast_log_num) {
     log_clock.SetDT(fixed_one);

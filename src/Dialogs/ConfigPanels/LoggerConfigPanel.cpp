@@ -67,18 +67,19 @@ void
 LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
+  const LoggerSettings &logger = settings_computer.logger;
   const Plane &plane = settings_computer.plane;
 
   RowFormWidget::Prepare(parent, rc);
 
   AddTime(_("Time step cruise"),
           _("This is the time interval between logged points when not circling."),
-          1, 30, 1, settings_computer.logger_time_step_cruise);
+          1, 30, 1, logger.time_step_cruise);
   SetExpertRow(LoggerTimeStepCruise);
 
   AddTime(_("Time step circling"),
           _("This is the time interval between logged points when circling."),
-          1, 30, 1, settings_computer.logger_time_step_circling);
+          1, 30, 1, logger.time_step_circling);
   SetExpertRow(LoggerTimeStepCircling);
 
   TCHAR tmp_text[100];
@@ -96,13 +97,13 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              _("This determines whether the logger uses the short IGC file name or the "
                  "long IGC file name. Example short name (81HXABC1.IGC), long name "
                  "(2008-01-18-XXX-ABC-01.IGC)."),
-             settings_computer.logger_short_name);
+             logger.short_name);
   SetExpertRow(LoggerShortName);
 
   AddEnum(_("Auto. logger"),
           _("Enables the automatic starting and stopping of logger on takeoff and landing "
             "respectively. Disable when flying paragliders."),
-          auto_logger_list, (unsigned)settings_computer.auto_logger);
+          auto_logger_list, (unsigned)logger.auto_logger);
   SetExpertRow(DisableAutoLogger);
 }
 
@@ -112,13 +113,14 @@ LoggerConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool changed = false, require_restart = false;
 
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
+  LoggerSettings &logger = settings_computer.logger;
   Plane &plane = settings_computer.plane;
 
   changed |= SaveValue(LoggerTimeStepCruise, szProfileLoggerTimeStepCruise,
-                       settings_computer.logger_time_step_cruise);
+                       logger.time_step_cruise);
 
   changed |= SaveValue(LoggerTimeStepCircling, szProfileLoggerTimeStepCircling,
-                       settings_computer.logger_time_step_circling);
+                       logger.time_step_circling);
 
   TCHAR tmp_text[100];
   Profile::Get(szProfilePilotName, tmp_text, 100);
@@ -132,11 +134,11 @@ LoggerConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValue(LoggerID, szProfileLoggerID, tmp_text, 100);
 
   changed |= SaveValue(LoggerShortName, szProfileLoggerShort,
-                       settings_computer.logger_short_name);
+                       logger.short_name);
 
   /* GUI label is "Enable Auto Logger" */
   changed |= SaveValueEnum(DisableAutoLogger, szProfileAutoLogger,
-                           settings_computer.auto_logger);
+                           logger.auto_logger);
 
   if (changed)
     PlaneGlue::ToProfile(settings_computer.plane);

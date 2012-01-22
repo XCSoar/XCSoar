@@ -33,11 +33,13 @@ Copyright_License {
  */
 struct LoggerSettings {
   /** Logger interval in cruise mode */
-  uint16_t logger_time_step_cruise;
+  uint16_t time_step_cruise;
+
   /** Logger interval in circling mode */
-  uint16_t logger_time_step_circling;
+  uint16_t time_step_circling;
+
   /** Use short IGC filenames for the logger files */
-  bool logger_short_name;
+  bool short_name;
 
   enum class AutoLogger: uint8_t {
     ON,

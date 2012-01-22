@@ -147,7 +147,7 @@ GlideComputer::ProcessIdle(bool exhaustive)
 {
   // Log GPS fixes for internal usage
   // (snail trail, stats, olc, ...)
-  DoLogging(Basic(), LastBasic(), Calculated(), GetComputerSettings());
+  DoLogging(Basic(), LastBasic(), Calculated(), GetComputerSettings().logger);
 
   GlideComputerTask::ProcessIdle(Basic(), SetCalculated(), GetComputerSettings(),
                                  exhaustive);

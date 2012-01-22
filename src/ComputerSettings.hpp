@@ -224,7 +224,6 @@ enum AverageEffTime {
 
 struct ComputerSettings: 
   public WindSettings,
-  public LoggerSettings,
   public PolarSettings,
   public SoundSettings,
   public TeamCodeSettings,
@@ -260,6 +259,8 @@ struct ComputerSettings:
   Plane plane;
 
   TaskBehaviour task;
+
+  LoggerSettings logger;
 
 #ifdef HAVE_TRACKING
   TrackingSettings tracking;

@@ -215,7 +215,8 @@ IsAlphaNum (TCHAR c)
 
 void
 LoggerImpl::StartLogger(const NMEAInfo &gps_info,
-    const ComputerSettings &settings, const TCHAR *_asset_number)
+                        const LoggerSettings &settings,
+                        const TCHAR *_asset_number)
 {
   int i;
 
@@ -234,7 +235,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
     // long filename form of IGC file.
     // XXX represents manufacturer code
 
-    if (!settings.logger_short_name) {
+    if (!settings.short_name) {
       // Long file name
       name.Format(_T("%04u-%02u-%02u-XCS-%c%c%c-%02d.igc"),
                   gps_info.date_time_utc.year,
@@ -412,7 +413,7 @@ LoggerImpl::LoggerClearFreeSpace(const NMEAInfo &gps_info)
 // TODO: fix scope so only gui things can start it
 void
 LoggerImpl::StartLogger(const NMEAInfo &gps_info,
-                        const ComputerSettings &settings,
+                        const LoggerSettings &settings,
                         const TCHAR *asset_number, const Declaration &decl)
 {
   StartLogger(gps_info, settings, asset_number);

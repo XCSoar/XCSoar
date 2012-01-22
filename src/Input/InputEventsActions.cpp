@@ -355,7 +355,7 @@ void
 InputEvents::eventAutoLogger(const TCHAR *misc)
 {
   LoggerSettings::AutoLogger auto_logger =
-      XCSoarInterface::GetComputerSettings().auto_logger;
+    CommonInterface::GetComputerSettings().logger.auto_logger;
 
   if (auto_logger == LoggerSettings::AutoLogger::OFF)
     return;

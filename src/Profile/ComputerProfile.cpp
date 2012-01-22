@@ -50,9 +50,9 @@ Profile::Load(WindSettings &settings)
 void
 Profile::Load(LoggerSettings &settings)
 {
-  Get(szProfileLoggerTimeStepCruise, settings.logger_time_step_cruise);
-  Get(szProfileLoggerTimeStepCircling, settings.logger_time_step_circling);
-  Get(szProfileLoggerShort, settings.logger_short_name);
+  Get(szProfileLoggerTimeStepCruise, settings.time_step_cruise);
+  Get(szProfileLoggerTimeStepCircling, settings.time_step_circling);
+  Get(szProfileLoggerShort, settings.short_name);
 
   if (!GetEnum(szProfileAutoLogger, settings.auto_logger)) {
     // Legacy
