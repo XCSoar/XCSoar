@@ -45,14 +45,38 @@ TCHAR strAssetNumber[MAX_LOADSTRING] = _T(""); //4G17DW31L0HY");
 ModelType GlobalModelType = MODELTYPE_PNA_PNA;
 #endif
 
-static void
+gcc_const
+static bool
+IsAlphaNum(TCHAR c)
+{
+  return (c >= _T('A') && c <= _T('Z')) ||
+    (c >= _T('a') && c <= _T('z')) ||
+    (c >= _T('0') && c <= _T('9'));
+}
+
+static bool
+SetAssetNumber(const TCHAR *p)
+{
+  size_t length = 0;
+  while (length < ARRAY_SIZE(strAssetNumber) - 1 && *p != _T('\0')) {
+    if (IsAlphaNum(*p))
+      strAssetNumber[length++] = *p;
+    ++p;
+  }
+
+  if (length < 3) {
+    strAssetNumber[0] = _T('\0');
+    return false;
+  }
+
+  return true;
+}
+
+static bool
 ReadCompaqID(void)
 {
 #if defined(_WIN32_WCE)
   PROCESS_INFORMATION pi;
-
-  if(strAssetNumber[0] != '\0')
-    return;
 
   if (CreateProcess(_T("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL,
                     FALSE, 0, NULL, NULL, NULL, &pi)) {
@@ -63,19 +87,18 @@ ReadCompaqID(void)
 
   FileHandle file(_T("\\windows\\cpqAssetData.dat"), _T("rb"));
   if (!file.IsOpen() || !file.Seek(976, SEEK_SET))
-    return;
+    return false;
 
   TCHAR buffer[ARRAY_SIZE(strAssetNumber)];
   size_t length = file.Read(buffer, ARRAY_SIZE(buffer) - 1, sizeof(buffer[0]));
-  if (length < 3)
-    return;
-
   buffer[length] = _T('\0');
-  _tcscpy(strAssetNumber, buffer);
+  return SetAssetNumber(buffer);
+#else
+  return false;
 #endif
 }
 
-static void
+static bool
 ReadUUID(void)
 {
 #if defined(_WIN32_WCE) && defined(IOCTL_HAL_GET_DEVICEID) && defined(FILE_DEVICE_HAL)
@@ -98,56 +121,60 @@ ReadUUID(void)
   // 3) take first 16 bytes of buffer and process.  Buffer returned may be any size
   // First try exactly 16 bytes, some older PDAs require exactly 16 byte buffer
 
-    strAssetNumber[0]= '\0';
+  strAssetNumber[0]= '\0';
 
-    iBuffSizeIn = sizeof(Guid);
-    memset(GUIDbuffer, 0, iBuffSizeIn);
-    fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer,
-                           iBuffSizeIn, &uNumReturned);
-    if(fRes == false) {
-      // try larger buffer
+  iBuffSizeIn = sizeof(Guid);
+  memset(GUIDbuffer, 0, iBuffSizeIn);
+  fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer,
+                         iBuffSizeIn, &uNumReturned);
+  if(fRes == false) {
+    // try larger buffer
+    eLast = GetLastError();
+    if (ERROR_INSUFFICIENT_BUFFER != eLast)
+      return false;
+    else {
+      // wrong buffer
+      iBuffSizeIn = uNumReturned;
+      memset(GUIDbuffer, 0, iBuffSizeIn);
+      fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer,
+                             iBuffSizeIn, &uNumReturned);
       eLast = GetLastError();
-      if (ERROR_INSUFFICIENT_BUFFER != eLast)
-        return;
-      else {
-        // wrong buffer
-        iBuffSizeIn = uNumReturned;
-        memset(GUIDbuffer, 0, iBuffSizeIn);
-        fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer,
-                               iBuffSizeIn, &uNumReturned);
-        eLast = GetLastError();
 
-        if(fRes == false)
-          return;
-      }
+      if(fRes == false)
+        return false;
     }
+  }
 
-    // here assume we have data in GUIDbuffer of length uNumReturned
-    memcpy(&Guid, GUIDbuffer, sizeof(Guid));
+  // here assume we have data in GUIDbuffer of length uNumReturned
+  memcpy(&Guid, GUIDbuffer, sizeof(Guid));
 
-    temp = Guid.Data2;
-    temp = temp << 16;
-    temp += Guid.Data3;
+  temp = Guid.Data2;
+  temp = temp << 16;
+  temp += Guid.Data3;
 
-    Asset = temp ^ Guid.Data1;
+  Asset = temp ^ Guid.Data1;
 
-    temp = 0;
-    for(i = 0; i < 4; i++) {
-      temp = temp << 8;
-      temp += Guid.Data4[i];
-    }
+  temp = 0;
+  for(i = 0; i < 4; i++) {
+    temp = temp << 8;
+    temp += Guid.Data4[i];
+  }
 
-    Asset = Asset ^ temp;
+  Asset = Asset ^ temp;
 
-    temp = 0;
-    for(i = 0; i < 4; i++) {
-      temp = temp << 8;
-      temp += Guid.Data4[i + 4];
-    }
+  temp = 0;
+  for(i = 0; i < 4; i++) {
+    temp = temp << 8;
+    temp += Guid.Data4[i + 4];
+  }
 
-    Asset = Asset ^ temp;
+  Asset = Asset ^ temp;
 
-    _stprintf(strAssetNumber, _T("%08X%08X"), Asset, Guid.Data1);
+  TCHAR buffer[20];
+  _stprintf(strAssetNumber, _T("%08X%08X"), Asset, Guid.Data1);
+  return SetAssetNumber(buffer);
+#else
+  return false;
 #endif
 }
 
@@ -156,56 +183,18 @@ ReadUUID(void)
  */
 void ReadAssetNumber(void)
 {
-  TCHAR val[MAX_PATH];
-
-  val[0]= _T('\0');
-
-  memset(strAssetNumber, 0, MAX_LOADSTRING * sizeof(TCHAR));
-  // JMW clear this first just to be safe.
-
-  Profile::Get(szProfileLoggerID, val, 100);
-  int ifound = 0;
-  int len = _tcslen(val);
-  for (int i = 0; i < len; i++) {
-    if (((val[i] >= _T('A')) && (val[i] <= _T('Z')))
-        || ((val[i] >= _T('0')) && (val[i] <= _T('9')))) {
-      strAssetNumber[ifound]= val[i];
-      ifound++;
-    }
-    if (ifound >= 3) {
-      LogStartUp(_T("Asset ID: %s (reg)"), strAssetNumber);
-      return;
-    }
-  }
-
-#ifndef _WIN32_WCE
-  return;
-#endif
-
-  if(strAssetNumber[0] != '\0') {
-    LogStartUp(_T("Asset ID: %s (?)"), strAssetNumber);
-    return;
-  }
-
-  ReadCompaqID();
-  if(strAssetNumber[0] != '\0') {
+  TCHAR buffer[ARRAY_SIZE(strAssetNumber)];
+  if (Profile::Get(szProfileLoggerID, buffer, ARRAY_SIZE(buffer)) &&
+      SetAssetNumber(buffer)) {
+    LogStartUp(_T("Asset ID: %s (reg)"), strAssetNumber);
+  } else if (ReadCompaqID()) {
     LogStartUp(_T("Asset ID: %s (compaq)"), strAssetNumber);
-    return;
-  }
-
-  ReadUUID();
-  if(strAssetNumber[0] != '\0') {
+  } else if (ReadUUID()) {
     LogStartUp(_T("Asset ID: %s (uuid)"), strAssetNumber);
-    return;
+  } else {
+    _tcscpy(strAssetNumber, _T("AAA"));
+    LogStartUp(_T("Asset ID: %s (fallback)"), strAssetNumber);
   }
-
-  strAssetNumber[0]= _T('A');
-  strAssetNumber[1]= _T('A');
-  strAssetNumber[2]= _T('A');
-
-  LogStartUp(_T("Asset ID: %s (fallback)"), strAssetNumber);
-
-  return;
 }
 
 void
