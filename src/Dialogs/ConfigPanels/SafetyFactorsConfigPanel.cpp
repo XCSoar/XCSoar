@@ -88,7 +88,7 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(SafetyMC);
 
   AddFloat(_("STF risk factor"),
-           _("The STF risk factor reduces the MacCready setting used to calculate speed to fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for no compensation, 1.0 scales MC linearly with height."),
+           _("The STF risk factor reduces the MacCready setting used to calculate speed to fly as the glider gets low, in order to compensate for risk. Set to 0.0 for no compensation, 1.0 scales MC linearly with current height (with reference to height of the maximum climb). If considered, 0.3 is recommended."),
            _T("%.1f %s"), _T("%.1f"),
            fixed_zero, fixed_one, fixed(0.1), false,
            task_behaviour.risk_gamma);
