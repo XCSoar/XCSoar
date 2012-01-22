@@ -22,20 +22,16 @@
 */
 
 #include "Logger/LoggerImpl.hpp"
-#include "Version.hpp"
+#include "Logger/Settings.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "LogFile.hpp"
-#include "Asset.hpp"
 #include "UtilsSystem.hpp"
 #include "UtilsFile.hpp"
 #include "LocalPath.hpp"
 #include "Device/Declaration.hpp"
-#include "Compatibility/path.h"
 #include "Compatibility/dirent.h"
-#include "ComputerSettings.hpp"
 #include "NMEA/Info.hpp"
 #include "Simulator.hpp"
-#include "Interface.hpp"
 #include "OS/FileUtil.hpp"
 
 #ifdef HAVE_POSIX
