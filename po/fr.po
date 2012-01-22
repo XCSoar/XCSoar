@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-17 15:00+0100\n"
-"PO-Revision-Date: 2012-01-21 16:28+0000\n"
+"PO-Revision-Date: 2012-01-22 11:20+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-22 08:01+0000\n"
+"X-Launchpad-Export-Date: 2012-01-22 13:28+0000\n"
 "X-Generator: Launchpad (build 14700)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -535,9 +535,9 @@ msgid ""
 "mode, pressing the up and down arrows adjusts the speed, and left and right "
 "turn the glider."
 msgstr ""
-"Vitesse sol mesurée par le GPS. Si cette InfoBox est active en mode "
-"simulation, alors les flèches haut et bas modifient la vitesse, et les "
-"flèches gauche et droite tournent le planeur."
+"Vitesse sol mesurée par le GPS. Si l'InfoBox est active en mode simulation, "
+"alors les flêches haut et bas ajustent la vitesse, et les flêches gauche et "
+"droite tournent le planeur."
 
 #: src/InfoBoxes/Content/Factory.cpp:148
 #, no-c-format
@@ -844,7 +844,7 @@ msgstr "Altitude gagnée/perdue dans le thermique actuel."
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:55
 #, no-c-format
 msgid "Track"
-msgstr "branche"
+msgstr "Route"
 
 #: src/InfoBoxes/Content/Factory.cpp:310
 #, no-c-format
@@ -1519,17 +1519,19 @@ msgstr "Le gisement (relèvemfnt moins le cap) vers l'équipier"
 #: src/InfoBoxes/Content/Factory.cpp:658
 #, no-c-format
 msgid "Team range"
-msgstr ""
+msgstr "Distance équippier"
 
 #: src/InfoBoxes/Content/Factory.cpp:659
 #, no-c-format
 msgid "Team Dis"
-msgstr ""
+msgstr "Dist Eqp"
 
 #: src/InfoBoxes/Content/Factory.cpp:660
 #, no-c-format
 msgid "The range to the team aircraft location at the last reported team code."
 msgstr ""
+"Distance à l'appareil équipier, mesurée à partir du dernier code d'équipier "
+"reçu."
 
 #: src/InfoBoxes/Content/Factory.cpp:668
 #, no-c-format
@@ -1715,7 +1717,7 @@ msgstr "Affiche le nom et le cap de la 2e option d'atterrissage."
 #: src/InfoBoxes/Content/Factory.cpp:772
 #, no-c-format
 msgid "Alternate 1 GR"
-msgstr "Finesse déroutement 1"
+msgstr "Fin dégagt 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:773
 #, no-c-format
@@ -1728,8 +1730,8 @@ msgid ""
 "Geometric gradient to the arrival height above the best alternate. This is "
 "not adjusted for total energy."
 msgstr ""
-"Plan d'arrivée sur le point de déroutement le plus accessible (en finesse). "
-"N'est pas compensé en énergie totale."
+"Finesse nécessaire pour arriver au premier dégagement. N'est pas compensé en "
+"énergie totale."
 
 #: src/InfoBoxes/Content/Factory.cpp:782 src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
@@ -1928,7 +1930,7 @@ msgstr "Trace des cercles dans les thermiques"
 #: src/InfoBoxes/Content/Factory.cpp:903
 #, no-c-format
 msgid "TC Circling"
-msgstr "Trace cercle"
+msgstr "TC Spirale"
 
 #: src/InfoBoxes/Content/Factory.cpp:904
 #, no-c-format
@@ -2136,7 +2138,7 @@ msgstr "Simulateur"
 #: Data/Input/default.xci:887
 #, no-c-format
 msgid "Info"
-msgstr "Info"
+msgstr "Info."
 
 #: src/InfoBoxes/Content/Altitude.cpp:61
 #: src/InfoBoxes/Content/MacCready.cpp:63
@@ -2294,11 +2296,11 @@ msgstr "Enregistreur NMEA OFF"
 
 #: src/Input/InputEventsActions.cpp:419
 msgid "Logger on"
-msgstr "Logger ON"
+msgstr "Enregistrement ON"
 
 #: src/Input/InputEventsActions.cpp:421
 msgid "Logger off"
-msgstr "Logger OFF"
+msgstr "Enregistrement OFF"
 
 #: src/Input/InputEventsActions.cpp:588
 msgid "Map labels on"
@@ -2913,6 +2915,8 @@ msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
 msgstr ""
+"Vitesse de transmission (en baud) pour les transferts volumineux, tels que "
+"déclaration de tâche ou téléchargement du fichier de vol."
 
 #: src/Widgets/DeviceEditWidget.cpp:463
 msgid "TCP Port"
@@ -3217,7 +3221,7 @@ msgstr "Pas d'Alerte"
 #: src/Dialogs/dlgAlternatesList.cpp:69 Data/Input/default.xci:341
 #: Data/Input/default.xci:989
 msgid "Alternates"
-msgstr "Déroutements"
+msgstr "Dégagmts"
 
 #: src/Dialogs/dlgFlarmDetailsList.cpp:92
 msgid "No further information"
@@ -4896,7 +4900,7 @@ msgstr ""
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:110
 msgid "More waypoints"
-msgstr "Plus de waypoints"
+msgstr "Autres waypoints"
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:111
 msgid ""
@@ -4928,7 +4932,7 @@ msgstr "Le nom du premier fichier d'espace aérien."
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:125
 msgid "More airspaces"
-msgstr "Plus d'esp. aér."
+msgstr "Autres esp. aér."
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:125
 msgid "The file name of the secondary airspace file."
@@ -5781,7 +5785,7 @@ msgstr ""
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:185
 #: Data/Dialogs/dlgTaskManager.xml:3 Data/Dialogs/dlgTaskManager_L.xml:3
 msgid "Task Manager"
-msgstr "Gestionnaire des circuits"
+msgstr "Gestion des circuits"
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:182
 msgid "Validation Errors"
@@ -7442,7 +7446,7 @@ msgstr "Intervalle; avertissement"
 #: Data/Dialogs/dlgWaypointDetails.xml:35
 #: Data/Dialogs/dlgWaypointDetails_L.xml:35
 msgid "Pan To Waypoint"
-msgstr ""
+msgstr "Panor. au WP"
 
 #: Data/Dialogs/dlgVario.xml:402 Data/Dialogs/dlgVario_L.xml:401
 msgid "V terrain"
@@ -8129,11 +8133,11 @@ msgstr ""
 
 #: Data/Dialogs/dlgNOAAList.xml:6 Data/Dialogs/dlgNOAAList_L.xml:8
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 #: Data/Dialogs/dlgStatusSystem.xml:6 Data/Dialogs/pnlStatusSystem.xml:6
 msgid "Variometer"
-msgstr ""
+msgstr "Variomètre"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
@@ -8149,7 +8153,7 @@ msgstr "v"
 
 #: Data/Dialogs/dlgWaypointEdit.xml:10
 msgid "Lon."
-msgstr ""
+msgstr "Long."
 
 #: Data/Dialogs/dlgFontEdit.xml:4
 msgid "Font face"
@@ -8157,7 +8161,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:325 Data/Dialogs/dlgVario_L.xml:324
 msgid "Flarm interface"
-msgstr ""
+msgstr "Interface du Flarm"
 
 #: Data/Dialogs/dlgSwitches.xml:45
 msgid "User middle"
@@ -8175,7 +8179,7 @@ msgstr "Aller à"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:3 Data/Input/default.xci:586
 msgid "Replay"
-msgstr ""
+msgstr "Rejouer"
 
 #: Data/Dialogs/dlgAirspaceSelect.xml:4 Data/Dialogs/dlgAirspaceSelect_L.xml:4
 msgid "Filter..."
@@ -8184,7 +8188,7 @@ msgstr "Filtre..."
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:59
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:59
 msgid "The time in seconds to dump full ballast."
-msgstr ""
+msgstr "Durée en secondes de vidange complète des ballasts."
 
 #: Data/Dialogs/pnlStatusRules.xml:10
 msgid "Valid finish"
@@ -8192,7 +8196,7 @@ msgstr "Arrivée Valide"
 
 #: Data/Dialogs/dlgVario.xml:436 Data/Dialogs/dlgVario_L.xml:435
 msgid "Needle gauge type"
-msgstr ""
+msgstr "Indication à aiguille"
 
 #: Data/Dialogs/dlgVario.xml:17 Data/Dialogs/dlgVario_L.xml:16
 msgid "Pitot port"
@@ -8208,12 +8212,12 @@ msgstr "Hauteur relief"
 
 #: Data/Dialogs/dlgTeamCode.xml:11 Data/Dialogs/dlgTeamCode_L.xml:11
 msgid "Mate code"
-msgstr ""
+msgstr "Code équipier"
 
 #: Data/Dialogs/dlgNOAADetails.xml:6 Data/Dialogs/dlgNOAADetails_L.xml:6
 #: Data/Dialogs/dlgNOAAList.xml:7 Data/Dialogs/dlgNOAAList_L.xml:9
 msgid "Update"
-msgstr ""
+msgstr "Mettre à jour"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:14
 msgid "Top"
@@ -8227,14 +8231,18 @@ msgid ""
 "battery backup or your computer frequently runs out of battery power or "
 "otherwise loses time."
 msgstr ""
+"Si activé, alors règle l'heure de l'appareil sur l'heure GPS dès qu'une "
+"position est déterminée. Ceci n'est nécessaire que si votre appareil ne "
+"dispose pas d'une horloge avec batterie de sauvegarde ou si votre appareil "
+"perd l'heure d'une quelconque manière."
 
 #: Data/Dialogs/pnlStatusRules.xml:9
 msgid "Finish min. alt."
-msgstr ""
+msgstr "Alt. Min. Arr."
 
 #: Data/Dialogs/dlgWaypointEdit.xml:34
 msgid "Lat."
-msgstr ""
+msgstr "Lat."
 
 #: Data/Dialogs/pnlStatusRules.xml:4
 msgid "Valid start"
@@ -8250,6 +8258,8 @@ msgid ""
 "If your GPS device outputs invalid NMEA checksums, this will allow it's data "
 "to be used anyway"
 msgstr ""
+"Permet l'utilisation de données GPS malgré une somme de controle (checksum) "
+"invalide."
 
 #: Data/Dialogs/dlgSwitches.xml:7
 msgid "Airbrake locked"
@@ -8303,6 +8313,8 @@ msgid ""
 "Cruise\n"
 "Demo"
 msgstr ""
+"Démo\n"
+"Transition"
 
 #: Data/Input/default.xci:692
 msgid ""
@@ -8389,6 +8401,8 @@ msgid ""
 "Pan\n"
 "Off"
 msgstr ""
+"Panor.\n"
+"OFF"
 
 #: Data/Input/default.xci:814 Data/Input/default.xci:1204
 msgid "Thermal Assistant"
@@ -8403,8 +8417,8 @@ msgid ""
 "Nearest\n"
 "Airspace"
 msgstr ""
-"Esp. Aér.\n"
-"le + proche"
+"Esp.Aér.le\n"
+"+ proche"
 
 #: Data/Input/default.xci:529 Data/Input/default.xci:1094
 msgid ""
@@ -8485,7 +8499,7 @@ msgstr "Enregistré dans l'EEPROM"
 
 #: Data/Input/default.xci:666
 msgid "Accel"
-msgstr ""
+msgstr "Accel"
 
 #: Data/Input/default.xci:833
 msgid "Credits"
@@ -8496,7 +8510,7 @@ msgstr "Crédits"
 msgid ""
 "Zoom\n"
 "Out"
-msgstr "Dézoomer"
+msgstr "Dézoom"
 
 #: Data/Input/default.xci:714
 msgid ""
@@ -8527,24 +8541,23 @@ msgstr ""
 msgid ""
 "Zoom\n"
 "In"
-msgstr "Zoomer"
+msgstr "Zoom"
 
 #: Data/Input/default.xci:915
 msgid "Return"
-msgstr ""
+msgstr "Retour"
 
 #: Data/Input/default.xci:303 Data/Input/default.xci:352
 #: Data/Input/default.xci:866
 msgid "Nav"
-msgstr "Nav"
+msgstr "Nav."
 
 #: Data/Input/default.xci:570 Data/Input/default.xci:1118
 msgid ""
 "Settings\n"
 "Airspace"
 msgstr ""
-"Réglages\n"
-"Espaces\n"
+"Régl.Esp.\n"
 "Aériens"
 
 #: Data/Input/default.xci:700
@@ -8561,7 +8574,7 @@ msgstr "Equipe"
 msgid ""
 "MacCready\n"
 "+"
-msgstr ""
+msgstr "MacCready"
 
 #: Data/Input/default.xci:64
 msgid "Landing"
