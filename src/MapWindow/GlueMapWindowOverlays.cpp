@@ -26,7 +26,6 @@ Copyright_License {
 #include "Look/TaskLook.hpp"
 #include "Screen/Icon.hpp"
 #include "Language/Language.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Logger/Logger.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -121,13 +120,13 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
                              const NMEAInfo &info) const
 {
   const TCHAR *txt;
-  MaskedIcon *icon;
+  const MaskedIcon *icon;
 
   if (!info.connected) {
-    icon = &Graphics::hGPSStatus2;
+    icon = &look.hGPSStatus2;
     txt = _("GPS not connected");
   } else if (!info.location_available) {
-    icon = &Graphics::hGPSStatus1;
+    icon = &look.hGPSStatus1;
     txt = _("GPS waiting for fix");
   } else
     // early exit
@@ -155,7 +154,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
   // draw logger status
   if (logger != NULL && logger->IsLoggerActive()) {
     bool flip = (Basic().date_time_utc.second % 2) == 0;
-    MaskedIcon &icon = flip ? Graphics::hLogger : Graphics::hLoggerOff;
+    const MaskedIcon &icon = flip ? look.hLogger : look.hLoggerOff;
     offset = icon.GetSize().cx;
     icon.Draw(canvas, rc.right - offset, rc.bottom - icon.GetSize().cy);
   }
@@ -164,13 +163,13 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
   const MaskedIcon *bmp;
 
   if (task != NULL && (task->GetMode() == TaskManager::MODE_ABORT))
-    bmp = &Graphics::hAbort;
+    bmp = &look.hAbort;
   else if (GetDisplayMode() == DM_CIRCLING)
-    bmp = &Graphics::hClimb;
+    bmp = &look.hClimb;
   else if (GetDisplayMode() == DM_FINAL_GLIDE)
-    bmp = &Graphics::hFinalGlide;
+    bmp = &look.hFinalGlide;
   else
-    bmp = &Graphics::hCruise;
+    bmp = &look.hCruise;
 
   offset += bmp->GetSize().cx + Layout::Scale(6);
 

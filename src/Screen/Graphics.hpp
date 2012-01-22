@@ -24,26 +24,13 @@ Copyright_License {
 #ifndef SCREEN_GRAPHICS_HPP
 #define SCREEN_GRAPHICS_HPP
 
-#include "Sizes.h"
-#include "Screen/Point.hpp"
-#include "Screen/Features.hpp"
-
 class Bitmap;
-class MaskedIcon;
 class Brush;
 struct Color;
-class Pen;
-
-class Canvas;
-class Angle;
 
 namespace Graphics {
   void Initialise();
   void Deinitialise();
-
-  extern MaskedIcon hLogger, hLoggerOff;
-  extern MaskedIcon hCruise, hClimb, hFinalGlide, hAbort;
-  extern MaskedIcon hGPSStatus1, hGPSStatus2;
 
   // task dialog
   extern Bitmap hBmpTabTask;

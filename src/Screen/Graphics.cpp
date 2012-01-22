@@ -25,7 +25,6 @@ Copyright_License {
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Bitmap.hpp"
-#include "Screen/Icon.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Pen.hpp"
@@ -34,11 +33,6 @@ Copyright_License {
 #include "resource.h"
 #include "Asset.hpp"
 #include "LogFile.hpp"
-
-MaskedIcon Graphics::hLogger, Graphics::hLoggerOff;
-MaskedIcon Graphics::hCruise, Graphics::hClimb,
-           Graphics::hFinalGlide, Graphics::hAbort;
-MaskedIcon Graphics::hGPSStatus1, Graphics::hGPSStatus2;
 
 Bitmap Graphics::hBmpTabTask;
 Bitmap Graphics::hBmpTabWrench;
@@ -65,16 +59,6 @@ Graphics::Initialise()
 
   LoadUnitSymbols();
 
-  hGPSStatus1.Load(IDB_GPSSTATUS1, IDB_GPSSTATUS1_HD, false);
-  hGPSStatus2.Load(IDB_GPSSTATUS2, IDB_GPSSTATUS2_HD, false);
-  hLogger.Load(IDB_LOGGER, IDB_LOGGER_HD);
-  hLoggerOff.Load(IDB_LOGGEROFF, IDB_LOGGEROFF_HD);
-
-  hCruise.Load(IDB_CRUISE, IDB_CRUISE_HD, false);
-  hClimb.Load(IDB_CLIMB, IDB_CLIMB_HD, false);
-  hFinalGlide.Load(IDB_FINALGLIDE, IDB_FINALGLIDE_HD, false);
-  hAbort.Load(IDB_ABORT, IDB_ABORT_HD, false);
-
   hBmpTabTask.Load((Layout::scale > 1) ? IDB_TASK_HD : IDB_TASK);
   hBmpTabWrench.Load((Layout::scale > 1) ? IDB_WRENCH_HD : IDB_WRENCH);
   hBmpTabSettings.Load((Layout::scale > 1) ? IDB_SETTINGS_HD : IDB_SETTINGS);
@@ -92,16 +76,6 @@ void
 Graphics::Deinitialise()
 {
   DeinitialiseUnitSymbols();
-
-  hGPSStatus1.Reset();
-  hGPSStatus2.Reset();
-  hLogger.Reset();
-  hLoggerOff.Reset();
-
-  hCruise.Reset();
-  hClimb.Reset();
-  hFinalGlide.Reset();
-  hAbort.Reset();
 
   hBmpTabTask.Reset();
   hBmpTabWrench.Reset();

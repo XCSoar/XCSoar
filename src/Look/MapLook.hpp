@@ -74,6 +74,10 @@ struct MapLook {
   MaskedIcon map_scale_left_icon;
   MaskedIcon map_scale_right_icon;
 
+  MaskedIcon hLogger, hLoggerOff;
+  MaskedIcon hCruise, hClimb, hFinalGlide, hAbort;
+  MaskedIcon hGPSStatus1, hGPSStatus2;
+
   void Initialise(const struct MapSettings &settings);
 };
 
