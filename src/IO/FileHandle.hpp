@@ -72,6 +72,21 @@ public:
     return fflush(file) == 0;
   }
 
+  bool Seek(long offset, int whence) {
+    assert(file != NULL);
+    return fseek(file, offset, whence) == 0;
+  }
+
+  long Tell() {
+    assert(file != NULL);
+    return ftell(file);
+  }
+
+  size_t Read(void *ptr, size_t size, size_t nmemb) {
+    assert(file != NULL);
+    return fread(ptr, size, nmemb, file);
+  }
+
   /** Writes a character to the file */
   int Write(int ch) {
     assert(file != NULL);
