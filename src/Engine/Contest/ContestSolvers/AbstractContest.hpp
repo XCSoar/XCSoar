@@ -23,7 +23,6 @@
 #ifndef ABSTRACT_CONTEST_HPP
 #define ABSTRACT_CONTEST_HPP
 
-#include "Task/Tasks/PathSolvers/ScanTaskPoint.hpp"
 #include "Math/fixed.hpp"
 #include "../ContestResult.hpp"
 

@@ -22,8 +22,6 @@ Copyright_License {
 */
 
 #include "ContestDijkstra.hpp"
-#include "Trace/Trace.hpp"
-
 
 AbstractContest::AbstractContest(const Trace &_trace,
                                  const unsigned _finish_alt_diff):
