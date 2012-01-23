@@ -278,7 +278,7 @@ Display::RotateRestore()
 #endif
 }
 
-int
+unsigned
 Display::GetXDPI()
 {
 #ifdef WIN32
@@ -289,7 +289,7 @@ Display::GetXDPI()
 #endif
 }
 
-int
+unsigned
 Display::GetYDPI()
 {
 #ifdef WIN32
