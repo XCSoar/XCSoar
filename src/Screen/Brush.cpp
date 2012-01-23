@@ -46,6 +46,11 @@ Brush::set(const Color c)
 void
 Brush::set(const Bitmap &bitmap)
 {
+  /* GDI works best when the bitmap is 8x8 - to avoid bad performance,
+     disallow using any other bitmap size */
+  assert(bitmap.get_size().cx == 8);
+  assert(bitmap.get_size().cy == 8);
+
   reset();
   brush = ::CreatePatternBrush(bitmap.native());
 }
