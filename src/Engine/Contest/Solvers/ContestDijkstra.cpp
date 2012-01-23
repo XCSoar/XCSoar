@@ -76,7 +76,7 @@ ContestDijkstra::IsMasterUpdated() const
   const unsigned threshold_distance_trace = trace_master.average_delta_distance();
 
   const TracePoint &last_master = trace_master.back();
-  const TracePoint &last_point = trace.back();
+  const TracePoint &last_point = *trace.back();
 
   // update trace if time and distance are greater than significance thresholds
 
@@ -125,7 +125,7 @@ ContestDijkstra::UpdateTrace()
   }
 
   trace.reserve(trace_master.GetMaxSize());
-  trace_master.get_trace_points(trace);
+  trace_master.GetTracePoints(trace);
   append_serial = trace_master.GetAppendSerial();
   modify_serial = trace_master.GetModifySerial();
   n_points = trace.size();

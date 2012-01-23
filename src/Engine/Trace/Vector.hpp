@@ -38,4 +38,13 @@ public:
   TaskProjection GetBounds(const GeoPoint &fallback_location) const;
 };
 
+/**
+ * A direct-access storage for TracePoint pointers that refer to
+ * elements of a Trace.  Be careful: all pointers get invalidated when
+ * the Trace gets thinned.  Be sure to check Trace::GetModifySerial()
+ * for updates.
+ */
+class TracePointerVector : public std::vector<const TracePoint *> {
+};
+
 #endif

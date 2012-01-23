@@ -349,8 +349,56 @@ Trace::get_trace_points(TracePointVector& iov) const
   std::copy(begin(), end(), std::back_inserter(iov));
 }
 
+template<typename I>
+class PointerIterator {
+  I i;
+
+public:
+  typedef typename I::iterator_category iterator_category;
+  typedef typename I::pointer value_type;
+  typedef typename I::pointer *pointer;
+  typedef value_type &reference;
+  typedef typename I::difference_type difference_type;
+
+  PointerIterator() = default;
+  explicit PointerIterator(I _i):i(_i) {}
+  PointerIterator<I> &operator=(const PointerIterator<I> &other) = default;
+
+  PointerIterator<I> &operator--() {
+    --i;
+    return *this;
+  }
+
+  PointerIterator<I> &operator++() {
+    ++i;
+    return *this;
+  }
+
+  typename I::pointer operator*() {
+    return &*i;
+  }
+
+  bool operator==(const PointerIterator<I> &other) const {
+    return i == other.i;
+  }
+
+  bool operator!=(const PointerIterator<I> &other) const {
+    return i != other.i;
+  }
+};
+
+void
+Trace::GetTracePoints(TracePointerVector &v) const
+{
+  v.clear();
+  v.reserve(size());
+  std::copy(PointerIterator<decltype(begin())>(begin()),
+            PointerIterator<decltype(end())>(end()),
+            std::back_inserter(v));
+}
+
 bool
-Trace::SyncTracePoints(TracePointVector &v) const
+Trace::SyncTracePoints(TracePointerVector &v) const
 {
   assert(v.size() <= size());
 
@@ -359,7 +407,9 @@ Trace::SyncTracePoints(TracePointVector &v) const
     return false;
 
   v.reserve(size());
-  std::copy(std::prev(end(), size() - v.size()), end(),
+
+  PointerIterator<decltype(end())> e(end());
+  std::copy(std::prev(e, size() - v.size()), e,
             std::back_inserter(v));
   assert(v.size() == size());
   return true;

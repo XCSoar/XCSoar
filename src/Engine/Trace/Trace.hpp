@@ -39,6 +39,7 @@ Copyright_License {
 
 struct AircraftState;
 class TracePointVector;
+class TracePointerVector;
 
 /**
  * This class uses a smart thinning algorithm to limit the number of items
@@ -346,13 +347,18 @@ public:
   void get_trace_points(TracePointVector& iov) const;
 
   /**
+   * Retrieve a vector of trace points sorted by time
+   */
+  void GetTracePoints(TracePointerVector &v) const;
+
+  /**
    * Update the given #TracePointVector after points were appended to
    * this object.  This must not be called after thinning has
    * occurred, see GetModifySerial().
    *
    * @return true if new points were added
    */
-  bool SyncTracePoints(TracePointVector &v) const;
+  bool SyncTracePoints(TracePointerVector &v) const;
 
   /**
    * Fill the vector with trace points, not before #min_time, minimum

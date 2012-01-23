@@ -79,7 +79,12 @@ class ContestDijkstra:
    */
   bool finished;
 
-  TracePointVector trace; // working trace for solver
+  /**
+   * Working trace for solver.  This contains pointers to trace_master
+   * records, which get invalidated when the trace gets thinned.  Be
+   * careful!
+   */
+  TracePointerVector trace;
 
 protected:
   /** Number of points in current trace set */
@@ -118,13 +123,12 @@ protected:
   const TracePoint &GetPoint(unsigned i) const {
     assert(i < n_points);
 
-    return trace[i];
+    return *trace[i];
   }
 
   gcc_pure
   const TracePoint &GetPoint(const ScanTaskPoint sp) const {
-    assert(sp.GetPointIndex() < n_points);
-    return trace[sp.GetPointIndex()];
+    return GetPoint(sp.GetPointIndex());
   }
 
   void ClearTrace();
