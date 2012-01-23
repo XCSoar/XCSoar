@@ -27,6 +27,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 
 class WndProperty;
+class WndButton;
 
 namespace ConfigPanel {
   /**
@@ -34,7 +35,7 @@ namespace ConfigPanel {
    */
   gcc_pure
   WndForm &GetForm();
-
+  WndButton *GetExtraButton(unsigned);
 };
 
 #endif
