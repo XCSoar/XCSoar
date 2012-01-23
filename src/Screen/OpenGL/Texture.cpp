@@ -125,10 +125,12 @@ LoadLuminanceTexture(const SDL_Surface *surface)
 {
   assert(IsLuminanceFormat(surface->format));
 
-  UPixelScalar pitch = surface->pitch / surface->format->BytesPerPixel;
-  LoadTextureAutoAlign(GL_LUMINANCE, pitch, surface->h,
+  glPixelStorei(GL_UNPACK_ROW_LENGTH,
+                surface->pitch / surface->format->BytesPerPixel);
+  LoadTextureAutoAlign(GL_LUMINANCE, surface->w, surface->h,
                        GL_LUMINANCE, GL_UNSIGNED_BYTE,
                        surface->pixels);
+  glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
   return true;
 }
 
@@ -181,9 +183,11 @@ LoadSurfaceIntoTexture(const SDL_Surface *surface)
   } else
     return false;
 
-  UPixelScalar pitch = surface->pitch / fmt->BytesPerPixel;
-  LoadTextureAutoAlign(GL_RGB, pitch, surface->h,
+  glPixelStorei(GL_UNPACK_ROW_LENGTH,
+                surface->pitch / surface->format->BytesPerPixel);
+  LoadTextureAutoAlign(GL_RGB, surface->w, surface->h,
                        format, type, surface->pixels);
+  glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
   return true;
 }
 
