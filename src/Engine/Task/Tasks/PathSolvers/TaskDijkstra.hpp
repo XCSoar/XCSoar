@@ -23,7 +23,7 @@
 #ifndef TASK_DIJKSTRA_HPP
 #define TASK_DIJKSTRA_HPP
 
-#include "NavDijkstra.hpp"
+#include "PathSolvers/NavDijkstra.hpp"
 #include "Navigation/SearchPoint.hpp"
 
 #include <assert.h>

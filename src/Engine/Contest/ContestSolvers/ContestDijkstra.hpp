@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/Serial.hpp"
 #include "AbstractContest.hpp"
-#include "Task/Tasks/PathSolvers/NavDijkstra.hpp"
+#include "PathSolvers/NavDijkstra.hpp"
 
 #include <assert.h>
 
