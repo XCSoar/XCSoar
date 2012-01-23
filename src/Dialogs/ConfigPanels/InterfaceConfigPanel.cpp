@@ -28,7 +28,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "Form/XMLWidget.hpp"
 #include "DataField/FileReader.hpp"
 #include "DataField/Enum.hpp"
 #include "Dialogs/Dialogs.h"
@@ -74,10 +73,19 @@ public:
   virtual void Hide();
 };
 
+static void
+OnFonts(gcc_unused WndButton &button)
+{
+  dlgConfigFontsShowModal();
+}
+
 void
 InterfaceConfigPanel::Show(const PixelRect &rc)
 {
+  buttonFonts->set_text(_("Fonts"));
+  buttonFonts->SetOnClickNotify(OnFonts);
   buttonFonts->show();
+
   RowFormWidget::Show(rc);
 }
 
@@ -85,13 +93,8 @@ void
 InterfaceConfigPanel::Hide()
 {
   buttonFonts->hide();
-  RowFormWidget::Hide();
-}
 
-static void
-OnFonts(gcc_unused WndButton &button)
-{
-  dlgConfigFontsShowModal();
+  RowFormWidget::Hide();
 }
 
 void
@@ -101,9 +104,8 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-  buttonFonts = ((WndButton *)ConfigPanel::GetForm().FindByName(_T("cmdFonts")));
+  buttonFonts = ConfigPanel::GetExtraButton(1);
   assert(buttonFonts);
-  buttonFonts->SetOnClickNotify(OnFonts);
 
 #ifdef HAVE_BLANK
   AddBoolean(_("Auto. blank"),

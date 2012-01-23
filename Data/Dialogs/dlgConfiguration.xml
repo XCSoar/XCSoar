@@ -7,7 +7,6 @@
 
   <CheckBox Name="Expert" Caption="Expert" X="5" Y="-55" Width="65" Height="20" OnClick="OnUserLevel"/>
 
-  <Button Name="cmdFonts" Caption="Fonts" X="120" Y="-60" Width="120" Height="30" Visible="0"/>
   <Button Name="cmdWaypoints" Caption="Waypts." X="120" Y="-60" Width="120" Height="30" Visible="0"/>
 
   <Button Name="cmdExtra2" X="120" Y="-90" Height="30" Visible="0"/>

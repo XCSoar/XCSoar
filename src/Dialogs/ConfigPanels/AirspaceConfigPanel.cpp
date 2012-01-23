@@ -131,11 +131,15 @@ AirspaceConfigPanel::SetButtonsVisible(bool active)
 void
 AirspaceConfigPanel::Show(const PixelRect &rc)
 {
-  if (buttonColors != NULL)
+  if (buttonColors != NULL) {
     buttonColors->set_text(_("Colours"));
+    buttonColors->SetOnClickNotify(OnAirspaceColoursClicked);
+  }
 
-  if (buttonMode != NULL)
+  if (buttonMode != NULL) {
     buttonMode->set_text(_("Filter"));
+    buttonMode->SetOnClickNotify(OnAirspaceModeClicked);
+  }
 
   SetButtonsVisible(true);
   RowFormWidget::Show(rc);
@@ -221,11 +225,9 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   buttonColors = ConfigPanel::GetExtraButton(1);
   assert(buttonColors != NULL);
-  buttonColors->SetOnClickNotify(OnAirspaceColoursClicked);
 
   buttonMode = ConfigPanel::GetExtraButton(2);
   assert(buttonMode != NULL);
-  buttonMode->SetOnClickNotify(OnAirspaceModeClicked);
 
   ShowDisplayControls(renderer.altitude_mode); // TODO make this work the first time
   ShowWarningControls(computer.enable_warnings);
