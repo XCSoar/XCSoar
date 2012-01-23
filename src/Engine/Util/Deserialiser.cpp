@@ -61,38 +61,39 @@ Deserialiser::deserialise_point(OrderedTask& data)
   }
 
   DataNode *oz_node = m_node.GetChildNamed(_T("ObservationZone"));
-  if (oz_node == NULL) {
-    delete wp_node;
-    delete wp;
-    return;
-  }
-
-  Deserialiser oser(*oz_node, waypoints);
 
   AbstractTaskFactory& fact = data.GetFactory();
 
   ObservationZonePoint* oz = NULL;
   OrderedTaskPoint *pt = NULL;
 
+  if (oz_node != NULL) {
+    bool is_turnpoint = StringIsEqual(type.c_str(), _T("Turn")) ||
+                        StringIsEqual(type.c_str(), _T("Area"));
+
+    Deserialiser oser(*oz_node, waypoints);
+    oz = oser.deserialise_oz(*wp, is_turnpoint);
+  }
+
   if (StringIsEqual(type.c_str(), _T("Start"))) {
-    if ((oz = oser.deserialise_oz(*wp, false)) != NULL)
-      pt = fact.CreateStart(oz, *wp);
+    pt = (oz != NULL) ? fact.CreateStart(oz, *wp) : fact.CreateStart(*wp);
+
   } else if (StringIsEqual(type.c_str(), _T("OptionalStart"))) {
-    if ((oz = oser.deserialise_oz(*wp, false)) != NULL) {
-      pt = fact.CreateStart(oz, *wp);
-      fact.AppendOptionalStart(*pt);
-      delete pt; // don't let generic code below add it
-      pt = NULL;
-    }
+    pt = (oz != NULL) ? fact.CreateStart(oz, *wp) : fact.CreateStart(*wp);
+    fact.AppendOptionalStart(*pt);
+    delete pt; // don't let generic code below add it
+    pt = NULL;
+
   } else if (StringIsEqual(type.c_str(), _T("Turn"))) {
-    if ((oz = oser.deserialise_oz(*wp, true)) != NULL)
-      pt = fact.CreateASTPoint(oz, *wp);
+    pt = (oz != NULL) ? fact.CreateASTPoint(oz, *wp)
+                      : fact.CreateIntermediate(*wp);
+
   } else if (StringIsEqual(type.c_str(), _T("Area"))) {
-    if ((oz = oser.deserialise_oz(*wp, true)) != NULL)
-      pt = fact.CreateAATPoint(oz, *wp);
+    pt = (oz != NULL) ? fact.CreateAATPoint(oz, *wp)
+                      : fact.CreateIntermediate(*wp);
+
   } else if (StringIsEqual(type.c_str(), _T("Finish"))) {
-    if ((oz = oser.deserialise_oz(*wp, false)) != NULL)
-      pt = fact.CreateFinish(oz, *wp);
+    pt = (oz != NULL) ? fact.CreateFinish(oz, *wp) : fact.CreateFinish(*wp);
   } 
 
   if (pt != NULL) {
