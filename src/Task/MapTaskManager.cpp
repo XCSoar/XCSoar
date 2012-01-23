@@ -135,8 +135,6 @@ MapTaskManager::AppendToTask(const Waypoint &waypoint)
       delete task;
       break;
     }
-    default:
-      break;
     }
   }
   return result;
@@ -210,8 +208,6 @@ MapTaskManager::InsertInTask(const Waypoint &waypoint)
       delete task;
       break;
     }
-    default:
-      break;
     }
   }
   return result;

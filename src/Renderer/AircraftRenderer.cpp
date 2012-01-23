@@ -176,7 +176,6 @@ AircraftRenderer::Draw(Canvas &canvas, const MapSettings &settings_map,
     DrawSimpleAircraft(canvas, look, angle, aircraft_pos, true);
     break;
   case acSimple:
-  default:
     DrawSimpleAircraft(canvas, look, angle, aircraft_pos, false);
     break;
   }

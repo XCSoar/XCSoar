@@ -240,8 +240,6 @@ InputEvents::eventAbortTask(const TCHAR *misc)
     case TaskManager::MODE_ABORT:
       task_manager->Resume();
       break;
-    default:
-      break;
     }
   }
 
