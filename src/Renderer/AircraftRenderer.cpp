@@ -174,7 +174,6 @@ DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
     DrawSimpleAircraft(canvas, look, angle, aircraft_pos, true);
     break;
   case acSimple:
-  default:
     DrawSimpleAircraft(canvas, look, angle, aircraft_pos, false);
     break;
   }

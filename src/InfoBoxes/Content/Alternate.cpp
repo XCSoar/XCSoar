@@ -94,8 +94,6 @@ InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
   case ibkDown:
     index++;
     break;
-  default:
-    return false;
   }
 
   return true;
@@ -172,8 +170,6 @@ InfoBoxContentAlternateGR::HandleKey(const InfoBoxKeyCodes keycode)
   case ibkDown:
     index++;
     break;
-  default:
-    return false;
   }
 
   return true;

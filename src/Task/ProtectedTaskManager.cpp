@@ -130,8 +130,6 @@ ProtectedTaskManager::incrementActiveTaskPointArm(int offset)
       lease->get_task_advance().set_armed(false);
     }
     break;
-  default:
-    assert(1);
   }
 }
 

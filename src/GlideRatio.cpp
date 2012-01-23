@@ -55,9 +55,11 @@ GlideRatioCalculator::init(const SETTINGS_COMPUTER &settings)
   case ae3minutes:
     bsize = 180; // probably too long interval
     break;
+#ifndef __clang__
   default:
     bsize = 3; // make it evident
     break;
+#endif
   }
 
   assert(bsize >= 3);

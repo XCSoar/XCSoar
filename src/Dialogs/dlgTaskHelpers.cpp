@@ -60,8 +60,6 @@ OrderedTaskFactoryName(TaskBehaviour::Factory_t type)
     return _("Mixed");
   case TaskBehaviour::FACTORY_TOURING:
     return _("Touring");
-  default:
-    assert(1);
   }
   return NULL;
 }
@@ -86,8 +84,6 @@ OrderedTaskFactoryDescription(TaskBehaviour::Factory_t type)
     return _("Racing task with a mix of assigned areas and turn points, minimum task time applies");
   case TaskBehaviour::FACTORY_TOURING:
     return _("Casual touring task, uses start and finish cylinders and FAI sector turn points");
-  default:
-    assert(1);
   }
   return NULL;
 }
@@ -302,8 +298,6 @@ OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type)
     return _("Cross line into area to finish");
   case AbstractTaskFactory::FINISH_CYLINDER:
     return _("Enter cylinder to finish");
-  default:
-    assert(1);
   }
   return NULL;
 }
@@ -342,8 +336,6 @@ OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
     return _("Finish line");
   case AbstractTaskFactory::FINISH_CYLINDER:
     return _("Finish cylinder");
-  default:
-    assert(1);
   }
   return NULL;
 }

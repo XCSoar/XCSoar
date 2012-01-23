@@ -182,9 +182,5 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
       circling_info.turn_mode = CLIMB;
     }
     break;
-
-  default:
-    // error, go to cruise
-    circling_info.turn_mode = CRUISE;
   }
 }
