@@ -93,7 +93,7 @@ class Trace : private NonCopyable
        don't), but to avoid std::set's overhead for duplicate
        elimination */
     typedef std::multiset<TraceDelta, DeltaRankOp,
-                          GlobalSliceAllocator<TraceDelta, 256u> > List;
+                          GlobalSliceAllocator<TraceDelta, 128u> > List;
     typedef List::iterator iterator;
     typedef List::const_iterator const_iterator;
 

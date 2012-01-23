@@ -39,8 +39,8 @@
 static Trace full_trace(60, Trace::null_time, 100);
 static Trace sprint_trace(0, 9000, 50);
 #else
-static Trace full_trace(60);
-static Trace sprint_trace(0, 9000, 300);
+static Trace full_trace(60, Trace::null_time, 512);
+static Trace sprint_trace(0, 9000, 128);
 #endif
 
 ContestManager olc_classic(OLC_Classic, full_trace, sprint_trace);

@@ -41,7 +41,7 @@ class TraceComputer {
    */
   mutable Mutex mutex;
 
-  Trace full, sprint;
+  Trace full, contest, sprint;
 
   fixed last_time;
 
@@ -62,6 +62,14 @@ public:
    */
   const Trace &GetFull() const {
     return full;
+  }
+
+  /**
+   * Returns an unprotected reference to the contest trace.  This
+   * object may be used only inside the #CalculationThread.
+   */
+  const Trace &GetContest() const {
+    return sprint;
   }
 
   /**
