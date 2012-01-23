@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Vector.hpp"
-#include "Navigation/TracePoint.hpp"
+#include "Point.hpp"
 #include "Navigation/TaskProjection.hpp"
 
 TaskProjection

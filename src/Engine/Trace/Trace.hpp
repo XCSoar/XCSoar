@@ -24,12 +24,12 @@ Copyright_License {
 #ifndef TRACE_HPP
 #define TRACE_HPP
 
+#include "Point.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/SliceAllocator.hpp"
 #include "Util/ListHead.hpp"
 #include "Util/CastIterator.hpp"
 #include "Util/Serial.hpp"
-#include "Navigation/TracePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Compiler.h"
 

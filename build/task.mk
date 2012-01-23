@@ -34,7 +34,6 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/TracePoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/GrahamScan.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/PolygonInterior.cpp \
@@ -135,6 +134,7 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Route/FlatTriangleFan.cpp \
 	$(ENGINE_SRC_DIR)/Route/FlatTriangleFanTree.cpp \
 	$(ENGINE_SRC_DIR)/Route/ReachFan.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Vector.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \

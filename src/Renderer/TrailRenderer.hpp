@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/AllocatedArray.hpp"
 #include "Screen/Point.hpp"
-#include "Engine/Navigation/TracePoint.hpp"
+#include "Engine/Trace/Point.hpp"
 #include "Engine/Trace/Vector.hpp"
 
 class Canvas;

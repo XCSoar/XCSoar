@@ -1337,11 +1337,11 @@ RUN_TRACE_SOURCES = \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/TracePoint.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/RunTrace.cpp
 RUN_TRACE_LDADD = $(DEBUG_REPLAY_LDADD)
@@ -1354,12 +1354,12 @@ RUN_OLC_SOURCES = \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/TracePoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatRay.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/GrahamScan.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/PolygonInterior.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Contest/ContestManager.cpp \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/Contests.cpp \

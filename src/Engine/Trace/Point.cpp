@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -20,40 +21,14 @@
 }
 */
 
-#ifndef CONTEST_RESULT_HPP
-#define CONTEST_RESULT_HPP
+#include "Point.hpp"
+#include "Navigation/Aircraft.hpp"
 
-#include "Trace/Point.hpp"
-#include "Util/TrivialArray.hpp"
-#include "Util/TypeTraits.hpp"
-
-struct ContestResult
+TracePoint::TracePoint(const AircraftState &state):
+  SearchPoint(state.location),
+  time((int)state.time),
+  drift_factor(sigmoid(state.altitude_agl / 100) * 256),
+  altitude(state.altitude),
+  vario(state.netto_vario)
 {
-  /** Score (pts) according to OLC rule */
-  fixed score;
-  /** Optimum distance (m) travelled according to OLC rule */
-  fixed distance;
-  /** Time (s) of optimised OLC path */
-  fixed time;
-  /** Speed (m/s) of optimised OLC path */
-  fixed speed;
-
-  void Reset() {
-    score = fixed_zero;
-    distance = fixed_zero;
-    time = fixed_zero;
-    speed = fixed_zero;
-  }
-
-  bool IsDefined() const {
-    return positive(score);
-  }
-};
-
-static_assert(is_trivial<ContestResult>::value, "type is not trivial");
-
-class ContestTraceVector: public TrivialArray<TracePoint, 10> {};
-
-static_assert(is_trivial_ndebug<ContestTraceVector>::value, "type is not trivial");
-
-#endif
+}
