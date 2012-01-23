@@ -33,10 +33,9 @@ class TaskProjection;
 class TracePoint;
 
 class TracePointVector : public std::vector<TracePoint> {
+public:
+  gcc_pure
+  TaskProjection GetBounds(const GeoPoint &fallback_location) const;
 };
-
-gcc_pure
-TaskProjection get_bounds(const TracePointVector &vec,
-                          const GeoPoint &fallback_location);
 
 #endif

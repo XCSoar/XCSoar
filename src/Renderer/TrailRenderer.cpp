@@ -60,7 +60,7 @@ TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
 TaskProjection
 TrailRenderer::GetBounds(const GeoPoint fallback_location) const
 {
-  return get_bounds(trace, fallback_location);
+  return trace.GetBounds(fallback_location);
 }
 
 /**

@@ -26,12 +26,12 @@ Copyright_License {
 #include "Navigation/TaskProjection.hpp"
 
 TaskProjection
-get_bounds(const TracePointVector &trace, const GeoPoint &fallback_location)
+TracePointVector::GetBounds(const GeoPoint &fallback_location) const
 {
   TaskProjection task_projection;
 
   task_projection.reset(fallback_location);
-  for (auto it = trace.begin(); it != trace.end(); ++it)
+  for (auto it = begin(); it != end(); ++it)
     task_projection.scan_location(it->get_location());
 
   task_projection.update_fast();
