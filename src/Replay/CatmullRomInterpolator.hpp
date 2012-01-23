@@ -107,12 +107,6 @@ public:
 
     const fixed u = time_fraction(time, false);
 
-    if (!positive(u))
-      return p[1];
-
-    if (u > fixed_one)
-      return p[2];
-
     /*
       ps = ( c0   c1    c2  c3)
            [  0    1     0   0] 1
