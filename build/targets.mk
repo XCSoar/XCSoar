@@ -207,6 +207,10 @@ ifeq ($(TARGET),ANDROID)
     HAVE_FPU := y
   else
     TARGET_ARCH += -march=armv6 -mtune=xscale -msoft-float -mthumb-interwork
+    ifneq ($(DEBUG),n)
+      # ARMv5 in the debug build, to allow installation on the emulator
+      TARGET_ARCH := $(subst armv6,armv5te,$(TARGET_ARCH))
+    endif
     HAVE_FPU := n
   endif
   endif
