@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-17 15:00+0100\n"
-"PO-Revision-Date: 2012-01-19 10:40+0000\n"
+"PO-Revision-Date: 2012-01-23 21:41+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-20 08:52+0000\n"
-"X-Generator: Launchpad (build 14700)\n"
+"X-Launchpad-Export-Date: 2012-01-23 22:32+0000\n"
+"X-Generator: Launchpad (build 14713)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -4274,16 +4274,17 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:200
 #, no-c-format
 msgid "OS settings"
-msgstr ""
+msgstr "OS Einstellungen"
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:207
 msgid "Haptic feedback"
-msgstr ""
+msgstr "Haptische Rückmeldung"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:208
 msgid "Determines if haptic feedback like vibration is used."
 msgstr ""
+"Bestimmt ob eine haptische Rückmeldung wie z.B. Vibration verwendet wird."
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:52
 #, no-c-format
@@ -4573,7 +4574,7 @@ msgstr "InfoBox Rahmen"
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:61
 #, no-c-format
 msgid "Start only"
-msgstr ""
+msgstr "Nur Start"
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:75
@@ -5362,6 +5363,8 @@ msgstr "AGL"
 #, no-c-format
 msgid "Reference AGL for start maximum height rule (above start point)."
 msgstr ""
+"GND wird als Referenz für die maximale Abflughöhenregel verwendet (über dem "
+"Startpunkt)."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:94
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:112
@@ -5376,6 +5379,8 @@ msgstr "MSL"
 #, no-c-format
 msgid "Reference MSL for start maximum height rule (above sea level)."
 msgstr ""
+"MSL wird als Referenz für die maximale Abflughöhenregel verwendet (über "
+"Meeres Niveau)."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:97
 #: Data/Dialogs/pnlTaskProperties.xml:20
@@ -5406,12 +5411,16 @@ msgstr ""
 #, no-c-format
 msgid "Reference AGL for finish minimum height rule (above finish point)."
 msgstr ""
+"GND wird als Referenz für die minimale Ankunftshöhenregel verwendet (über "
+"dem Zielpunkt)."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:112
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:61
 #, no-c-format
 msgid "Reference MSL for finish minimum height rule (above sea level)."
 msgstr ""
+"MSL wird als Referenz für die minimale Ankunftshöhenregel verwendet (über "
+"Meeres Niveau)."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:115
 #: Data/Dialogs/pnlTaskProperties.xml:30
@@ -5426,6 +5435,10 @@ msgid ""
 "leg less than 28% of total except for tasks longer than 500km: No leg less "
 "than 25% or larger than 45%."
 msgstr ""
+"Gleich lautend zu den FAI Dreiecksregeln. Drei Wenden wobei Abflug und Ziel "
+"identisch sind. Kein Schenkel darf kürzer als 28% der Gesamtstrecke sein, "
+"mit Ausnahme bei Aufgaben über 500km: Es darf kein Schenkel kleiner 25%, "
+"oder größer als 45% sein."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:125
 #, no-c-format
@@ -5437,7 +5450,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:128
 #, no-c-format
 msgid "The most recent contest with Sprint task rules."
-msgstr ""
+msgstr "Der aktuellste Contest mit Sprint Wettbewerbsregeln."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:130
 #, no-c-format
@@ -5445,6 +5458,8 @@ msgid ""
 "A combination of Classic and FAI rules. 30% of the FAI score are added to "
 "the Classic score."
 msgstr ""
+"eine Kombination aus Classic und FAI Regeln. 30% der FAI Punkte werden zur "
+"Classic Wertung dazu gezählt."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:136
 msgid "On-Line Contest"
@@ -5571,20 +5586,20 @@ msgstr "Grau"
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:54
 #, no-c-format
 msgid "Custom"
-msgstr ""
+msgstr "Benutzerdefiniert"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:136
 #, no-c-format
 msgid "Load a set of units."
-msgstr ""
+msgstr "Lade vordefinierte Maßeinheiten."
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:137
 msgid "Preset"
-msgstr ""
+msgstr "Vorauswahl"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:141
 msgid "My individual set of units."
-msgstr ""
+msgstr "Meine eigenen Maßeinheiten."
 
 #. Should be all Expert items (TODO)
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:152
@@ -5616,7 +5631,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:173
 msgid "Units used for vertical speeds (variometer)."
-msgstr ""
+msgstr "Einheiten für Vertikalgeschwindigkeiten (Variometer)."
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:180
 msgid "Lift"
@@ -5789,7 +5804,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:122
 #, no-c-format
 msgid "Select a label shape."
-msgstr ""
+msgstr "Wähle eine Beschriftungsform."
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:124
 #, no-c-format
@@ -5945,6 +5960,8 @@ msgid ""
 "[Off] Display fixed length for runways.\n"
 "[On] Scale displayed runway length based on real length."
 msgstr ""
+"[Aus] Zeige eine feste Bahnlänge.\n"
+"[Ein] Skalierte Anzeige der Bahnlänge anhand der realen Länge."
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:84
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:185
@@ -6112,6 +6129,8 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
+"FAI Regeln, erlaubt nur den FAI Start-, Ziel- und Wendepunkttyp, für "
+"Abzeichen/Rekorde. Aktiviert die FAI Höhe für die Endanflugberechnung."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:81
 msgid "FAI rules, path from a start to two turn points and return."
@@ -6138,12 +6157,14 @@ msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
 msgstr ""
+"Geschwindigkeitsaufgabe mit einer Mischung aus zugewiesenen Gebieten und "
+"Wendepunkten, minimale Flugzeit wird angewendet."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:92
 msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
-msgstr ""
+msgstr "Gelegenheits Aufgabe mit Abflug- und Zielzylinder und FAI Sektorwenden"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:119
 msgid "Goal"
@@ -6229,11 +6250,11 @@ msgstr ""
 #: src/Dialogs/dlgTaskHelpers.cpp:283
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
-msgstr ""
+msgstr "Ein geradliniges Tor. Überquere die Torlinie von innerhalb nach außen."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:285
 msgid "A cylinder.  Exit area to start."
-msgstr ""
+msgstr "Ein Zylinder. Verlasse ihn für einen Abflug."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:287
 msgid ""
@@ -6255,18 +6276,24 @@ msgid ""
 "(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Deutsche Regeln) Jeder Punkt innerhalb 0,5km vom Zentrum, oder 10km in "
+"einem 90° Sektor. Gewertet wird das Zentrum."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:297
 msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Britische Regeln) Jeder Punkt innerhalb 0,5km vom Zentrum, oder 20km in "
+"einem 90° Sektor. Gewertet wird das Zentrum."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:300
 msgid ""
 "(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Britische Regeln) Jeder Punkt innerhalb 0,5km vom Zentrum, oder 10km in "
+"einem 180° Sektor. Gewertet wird das Zentrum."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:303
 msgid "A cylinder.  Scored by farthest point reached in area."
