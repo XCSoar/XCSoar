@@ -30,7 +30,7 @@ Copyright_License {
 #include <limits.h>
 
 // set size of reserved queue elements (may differ from Dijkstra default)
-#define CONTEST_QUEUE_SIZE DIJKSTRA_QUEUE_SIZE
+static gcc_constexpr_data unsigned CONTEST_QUEUE_SIZE = 20000;
 
 ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  bool _continuous,

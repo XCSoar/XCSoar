@@ -30,8 +30,6 @@ Copyright_License {
 
 #define DIJKSTRA_MINMAX_OFFSET 134217727
 
-#define DIJKSTRA_QUEUE_SIZE 20000
-
 /**
  * Dijkstra search algorithm.
  * Modifications by John Wharington to track optimal solution
@@ -94,16 +92,6 @@ public:
    * Default constructor
    */
   Dijkstra() = default;
-
-  /**
-   * Constructor
-   *
-   * @param n Node to start
-   */
-  Dijkstra(const Node node, unsigned reserve_default = DIJKSTRA_QUEUE_SIZE) {
-    Reserve(reserve_default);
-    Push(node, node, 0);
-  }
 
   /** 
    * Clears the queues
