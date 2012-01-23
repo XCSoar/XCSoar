@@ -159,20 +159,6 @@ protected:
   }
 
   /** 
-   * Distance function for free point
-   * 
-   * @param curNode Destination node
-   * @param currentLocation Origin location
-   * 
-   * @return Distance (flat) from origin to destination
-   */
-  gcc_pure
-  unsigned EdgeDistance(const ScanTaskPoint curNode,
-                        const SearchPoint &currentLocation) const {
-    return GetPoint(curNode).flat_distance(currentLocation);
-  }
-
-  /** 
    * Distance function for edges
    * 
    * @param s1 Origin node
