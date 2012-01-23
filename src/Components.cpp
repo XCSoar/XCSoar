@@ -73,6 +73,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "IO/FileCache.hpp"
 #include "Hardware/AltairControl.hpp"
+#include "Hardware/Display.hpp"
 #include "Hardware/DisplayGlue.hpp"
 #include "Compiler.h"
 #include "NMEA/Aircraft.hpp"
@@ -208,6 +209,8 @@ XCSoarInterface::Startup()
   //If "XCSoar" is already running, stop this instance
   if (MainWindow::find(szTitle))
     return false;
+
+  LogStartUp(_T("Display dpi=%u,%u"), Display::GetXDPI(), Display::GetYDPI());
 
   // Creates the main window
   LogStartUp(_T("Create main window"));
