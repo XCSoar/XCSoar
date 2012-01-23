@@ -63,9 +63,6 @@ TestOLC(DebugReplay &replay)
     full_trace.append(state);
     sprint_trace.append(state);
 
-    full_trace.optimise_if_old();
-    sprint_trace.optimise_if_old();
-
     olc_sprint.UpdateIdle();
   }
 

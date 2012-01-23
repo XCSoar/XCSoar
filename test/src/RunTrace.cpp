@@ -41,7 +41,6 @@ int main(int argc, char **argv)
     const AircraftState state =
       ToAircraftState(replay->Basic(), replay->Calculated());
     trace.append(state);
-    trace.optimise_if_old();
   }
 
   delete replay;

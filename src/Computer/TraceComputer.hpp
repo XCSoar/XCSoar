@@ -89,8 +89,6 @@ public:
 
   void Update(const ComputerSettings &settings_computer,
               const AircraftState &state);
-  void Idle(const ComputerSettings &settings_computer,
-            const AircraftState &state);
 };
 
 #endif

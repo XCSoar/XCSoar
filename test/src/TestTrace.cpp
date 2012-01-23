@@ -48,9 +48,6 @@ on_advance(Trace &trace,
 
   if (t>fixed_one) {
     trace.append(new_state);
-
-    trace.optimise_if_old();
-
   }
 // get the trace, just so it's included in timing
   TracePointVector v;

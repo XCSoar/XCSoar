@@ -194,7 +194,6 @@ test_replay(const Contests olc_type,
       flying_computer.Compute(glide_polar.GetVTakeoff(), sim.state, sim.state);
 
       trace_computer.Update(settings_computer, sim.state);
-      trace_computer.Idle(settings_computer, sim.state);
 
       contest_manager.UpdateIdle();
   

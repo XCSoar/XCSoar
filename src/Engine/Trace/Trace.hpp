@@ -336,13 +336,6 @@ public:
     return modify_serial;
   }
 
-  /**
-   * Re-balance kd-tree periodically 
-   *
-   * @return True if trace store was optimised
-   */
-  bool optimise_if_old();
-
   /** 
    * Retrieve a vector of trace points sorted by time
    * 
@@ -380,6 +373,17 @@ public:
   }
 
 private:
+  /**
+   * Helper function for Thin().
+   */
+  void Thin2();
+
+  /**
+   * Thin the trace: remove old and irrelevant points to make room for
+   * more points.
+   */
+  void Thin();
+
   TraceDelta &GetFront() {
     assert(!empty());
 

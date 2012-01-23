@@ -229,6 +229,11 @@ Trace::append(const AircraftState& state)
     // only add one item per two seconds
     return;
 
+  if (size() >= m_max_points)
+    Thin();
+
+  assert(size() < m_max_points);
+
   TracePoint tp(state);
   tp.project(task_projection);
 
@@ -297,37 +302,42 @@ Trace::calc_average_delta_time(const unsigned no_thin) const
   return (end_time - start_time) / counter;
 }
 
-bool
-Trace::optimise_if_old()
+void
+Trace::Thin2()
+{
+  const unsigned target_size = m_opt_points;
+  assert(size() > target_size);
+
+  // first remove points outside max time range
+  erase_earlier_than(get_min_time());
+  if (size() <= target_size)
+    return;
+
+  // if still too big, remove points based on line simplification
+  erase_delta(target_size, no_thin_time);
+  if (size() <= target_size)
+    return;
+
+  // if still too big, thin again, ignoring recency
+  erase_delta(target_size, no_thin_time);
+  assert(size() <= target_size);
+}
+
+void
+Trace::Thin()
 {
   assert(cached_size == delta_list.size());
   assert(cached_size == chronological_list.Count());
+  assert(size() == m_max_points);
 
-  if (size() >= m_max_points) {
-    // first remove points outside max time range
-    bool updated = erase_earlier_than(get_min_time());
+  Thin2();
 
-    if (size() >= m_opt_points)
-      // if still too big, remove points based on line simplification
-      updated |= erase_delta(m_opt_points, no_thin_time);
-
-    if (!updated)
-      return false;
-
-  } else if (size() * 2 == m_max_points) {
-    // half size, appropriate time to remove old points
-    if (!erase_earlier_than(get_min_time()))
-      return false;
-
-  } else
-    return false;
+  assert(size() < m_max_points);
 
   m_average_delta_distance = calc_average_delta_distance(no_thin_time);
   m_average_delta_time = calc_average_delta_time(no_thin_time);
 
   ++modify_serial;
-
-  return true;
 }
 
 void

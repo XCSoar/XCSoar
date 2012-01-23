@@ -86,21 +86,3 @@ TraceComputer::Update(const ComputerSettings &settings_computer,
   if (settings_computer.task.enable_olc)
     sprint.append(state);
 }
-
-void
-TraceComputer::Idle(const ComputerSettings &settings_computer,
-                    const AircraftState &state)
-{
-  if (!state.flying)
-    return;
-
-  if (settings_computer.task.enable_olc ||
-      settings_computer.task.enable_trace) {
-    mutex.Lock();
-    full.optimise_if_old();
-    mutex.Unlock();
-  }
-
-  if (settings_computer.task.enable_olc)
-    sprint.optimise_if_old();
-}

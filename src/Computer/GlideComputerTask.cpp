@@ -132,8 +132,6 @@ GlideComputerTask::ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
 
   const AircraftState as = ToAircraftState(basic, calculated);
 
-  trace.Idle(settings_computer, as);
-
   ProtectedTaskManager::ExclusiveLease _task(task);
   _task->UpdateIdle(as);
 }
