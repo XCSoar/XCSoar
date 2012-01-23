@@ -23,15 +23,15 @@
 #ifndef ONLINE_CONTEST_HPP
 #define ONLINE_CONTEST_HPP
 
-#include "ContestSolvers/OLCSprint.hpp"
-#include "ContestSolvers/OLCFAI.hpp"
-#include "ContestSolvers/OLCClassic.hpp"
-#include "ContestSolvers/OLCLeague.hpp"
-#include "ContestSolvers/OLCPlus.hpp"
-#include "ContestSolvers/XContestFree.hpp"
-#include "ContestSolvers/XContestTriangle.hpp"
-#include "ContestSolvers/OLCSISAT.hpp"
-#include "ContestSolvers/Contests.hpp"
+#include "Solvers/OLCSprint.hpp"
+#include "Solvers/OLCFAI.hpp"
+#include "Solvers/OLCClassic.hpp"
+#include "Solvers/OLCLeague.hpp"
+#include "Solvers/OLCPlus.hpp"
+#include "Solvers/XContestFree.hpp"
+#include "Solvers/XContestTriangle.hpp"
+#include "Solvers/OLCSISAT.hpp"
+#include "Solvers/Contests.hpp"
 #include "ContestStatistics.hpp"
 
 class Trace;

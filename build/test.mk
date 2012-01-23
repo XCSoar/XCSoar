@@ -1362,18 +1362,18 @@ RUN_OLC_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/PolygonInterior.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Contest/ContestManager.cpp \
-	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/Contests.cpp \
-	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/AbstractContest.cpp \
-	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/ContestDijkstra.cpp \
-	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCLeague.cpp \
-	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCSprint.cpp \
-	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCClassic.cpp \
-	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCTriangle.cpp \
-	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCFAI.cpp \
-	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCPlus.cpp \
-	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/XContestFree.cpp \
-	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/XContestTriangle.cpp \
-	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCSISAT.cpp \
+	$(ENGINE_SRC_DIR)/Contest/Solvers/Contests.cpp \
+	$(ENGINE_SRC_DIR)/Contest/Solvers/AbstractContest.cpp \
+	$(ENGINE_SRC_DIR)/Contest/Solvers/ContestDijkstra.cpp \
+	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCLeague.cpp \
+	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCSprint.cpp \
+	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCClassic.cpp \
+	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCTriangle.cpp \
+	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCFAI.cpp \
+	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCPlus.cpp \
+	$(ENGINE_SRC_DIR)/Contest/Solvers/XContestFree.cpp \
+	$(ENGINE_SRC_DIR)/Contest/Solvers/XContestTriangle.cpp \
+	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCSISAT.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/ContestPrinting.cpp \
