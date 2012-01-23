@@ -38,6 +38,7 @@ Copyright_License {
 #include <stdio.h>
 
 struct AircraftState;
+class TracePointVector;
 
 /**
  * This class uses a smart thinning algorithm to limit the number of items

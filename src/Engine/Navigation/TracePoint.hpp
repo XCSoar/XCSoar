@@ -8,7 +8,6 @@
 #include "Compiler.h"
 
 #include <assert.h>
-#include <vector>
 
 struct AircraftState;
 
@@ -121,15 +120,6 @@ public:
 };
 
 static_assert(is_trivial_ndebug<TracePoint>::value, "type is not trivial");
-
-class TracePointVector : public std::vector<TracePoint> {
-};
-
-class TaskProjection;
-
-gcc_pure
-TaskProjection get_bounds(const TracePointVector& vec,
-                          const GeoPoint &fallback_location);
 
 #endif
 

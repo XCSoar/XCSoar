@@ -136,6 +136,7 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Route/FlatTriangleFanTree.cpp \
 	$(ENGINE_SRC_DIR)/Route/ReachFan.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Vector.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoints.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/WaypointVisitor.cpp \

@@ -27,6 +27,7 @@ Copyright_License {
 #include "Util/Serial.hpp"
 #include "AbstractContest.hpp"
 #include "PathSolvers/NavDijkstra.hpp"
+#include "Trace/Vector.hpp"
 
 #include <assert.h>
 
