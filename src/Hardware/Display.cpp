@@ -284,6 +284,8 @@ Display::GetXDPI()
 #ifdef WIN32
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSX);
+#elif defined(ANDROID)
+  return native_view->GetXDPI();
 #else
   return 96;
 #endif
@@ -295,6 +297,8 @@ Display::GetYDPI()
 #ifdef WIN32
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSY);
+#elif defined(ANDROID)
+  return native_view->GetYDPI();
 #else
   return 96;
 #endif

@@ -35,6 +35,7 @@ class NativeView {
   Java::Object obj;
 
   unsigned width, height;
+  unsigned xdpi, ydpi;
   unsigned sdk_version;
   char product[20];
 
@@ -66,9 +67,12 @@ public:
   };
 
   NativeView(JNIEnv *_env, jobject _obj, unsigned _width, unsigned _height,
+             unsigned _xdpi, unsigned _ydpi,
              unsigned _sdk_version, jstring _product)
     :env(_env), obj(env, _obj),
-     width(_width), height(_height), sdk_version(_sdk_version) {
+     width(_width), height(_height),
+     xdpi(_xdpi), ydpi(_ydpi),
+     sdk_version(_sdk_version) {
     Java::String product2(env, _product);
     product2.CopyTo(env, product, sizeof(product));
     Java::Class cls(env, "org/xcsoar/NativeView");
@@ -87,6 +91,14 @@ public:
 
   unsigned get_width() const { return width; }
   unsigned get_height() const { return height; }
+
+  unsigned GetXDPI() const {
+    return xdpi;
+  }
+
+  unsigned GetYDPI() const {
+    return ydpi;
+  }
 
   void SetSize(unsigned _width, unsigned _height) {
     width = _width;

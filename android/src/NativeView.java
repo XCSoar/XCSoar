@@ -33,6 +33,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import java.io.File;
 import android.util.Log;
+import android.util.DisplayMetrics;
 import android.app.Activity;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
@@ -239,7 +240,10 @@ class NativeView extends SurfaceView
     initGL(getHolder());
 
     android.graphics.Rect r = getHolder().getSurfaceFrame();
+    DisplayMetrics metrics = new DisplayMetrics();
+    ((Activity)getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
     if (initializeNative(getContext(), r.width(), r.height(),
+                         (int)metrics.xdpi, (int)metrics.ydpi,
                          Build.VERSION.SDK_INT, Build.PRODUCT))
         runNative();
     deinitializeNative();
@@ -249,6 +253,7 @@ class NativeView extends SurfaceView
 
   protected native boolean initializeNative(Context context,
                                             int width, int height,
+                                            int xdpi, int ydpi,
                                             int sdk_version, String product);
   protected native void runNative();
   protected native void deinitializeNative();
