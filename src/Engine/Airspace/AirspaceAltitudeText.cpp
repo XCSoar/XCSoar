@@ -48,7 +48,6 @@ AirspaceAltitude::GetAsTextUnits(const bool concise) const
                   Units::GetAltitudeName());
     break;
   case UNDEFINED:
-  default:
     buffer.clear();
     break;
   }

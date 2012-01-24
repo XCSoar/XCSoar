@@ -422,6 +422,9 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
       HandleExtConfig(file, *packet.ext_config, context.b_ext, 'I', 36);
       break;
 
+#ifdef __clang__
+#pragma GCC diagnostic ignored "-Wswitch-redundant-default"
+#endif
     default:
       if (*packet.cmd < 0x40) {
         data += sizeof(*packet.string);

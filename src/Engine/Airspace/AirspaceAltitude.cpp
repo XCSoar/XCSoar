@@ -63,7 +63,6 @@ AirspaceAltitude::GetAsText(const bool concise) const
     buffer.Format(_T("%d"), iround(altitude));
     break;
   case UNDEFINED:
-  default:
     buffer.clear();
     break;
   }

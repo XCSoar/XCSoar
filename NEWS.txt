@@ -39,6 +39,7 @@ Version 6.2.5 - not yet released
   - fix time calculation when goal is above aircraft
   - fix minor OLC miscalculation
   - enable the logger ID on all platforms
+  - prevent spikes and jumps during IGC replay
 * infoboxes
   - fix display of "FIN ETE VMG" and "WP ETE VMG"
 * user interface

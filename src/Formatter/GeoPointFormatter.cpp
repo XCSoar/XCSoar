@@ -92,7 +92,7 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
     _sntprintf(buffer, size, _T("%08.4f" DEG " %c"), mlong, sign);
     break;
 
-  default:
+  case CoordinateFormat::UTM:
     return false;
   }
 
@@ -160,7 +160,7 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
     _sntprintf(buffer, size, _T("%07.4f" DEG " %c"), mlat, sign);
     break;
 
-  default:
+  case CoordinateFormat::UTM:
     return false;
   }
 
