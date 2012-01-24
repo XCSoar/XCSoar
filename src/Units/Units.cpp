@@ -226,9 +226,10 @@ Units::GetUserUnitByGroup(UnitGroup_t UnitGroup)
     return GetUserWindSpeedUnit();
   case ugTaskSpeed:
     return GetUserTaskSpeedUnit();
-  default:
-    return unUndef;
   }
+
+  assert(false);
+  return unUndef;
 }
 
 const TCHAR *

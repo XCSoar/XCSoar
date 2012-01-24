@@ -90,9 +90,6 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
     // Save the string to the Buffer
     _stprintf(Buffer, _T("%c%08.4f")_T(DEG), EW[sign], mlong);
     break;
-
-  default:
-    return false;
   }
 
   return true;
@@ -157,9 +154,6 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
     // Save the string to the Buffer
     _stprintf(Buffer, _T("%c%07.4f")_T(DEG), EW[sign], mlat);
     break;
-
-  default:
-    return false;
   }
 
   return true;

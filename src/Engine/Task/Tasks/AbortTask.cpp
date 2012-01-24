@@ -283,9 +283,11 @@ AbortTask::update_sample(const AircraftState &state, bool full_update)
   case RoutePlannerConfig::rpmSafety:
     mode_polar = &polar_safety;
     break;
+#ifndef __clang__
   default:
     assert(false);
     return false;
+#endif
   }
   assert(mode_polar);
 

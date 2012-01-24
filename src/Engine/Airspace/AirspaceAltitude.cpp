@@ -61,7 +61,6 @@ AirspaceAltitude::GetAsText(const bool concise) const
     _stprintf(buffer, _T("%d"), iround(altitude));
     break;
   case UNDEFINED:
-  default:
     buffer[0] = _T('\0');
     break;
   }

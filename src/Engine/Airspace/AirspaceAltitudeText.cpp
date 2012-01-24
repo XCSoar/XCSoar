@@ -47,7 +47,6 @@ AirspaceAltitude::GetAsTextUnits(const bool concise) const
               iround(Units::ToUserAltitude(altitude)), Units::GetAltitudeName());
     break;
   case UNDEFINED:
-  default:
     buffer[0] = _T('\0');
     break;
   };
