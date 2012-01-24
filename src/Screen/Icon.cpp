@@ -95,6 +95,14 @@ MaskedIcon::draw(Canvas &canvas, int x, int y) const
   texture.draw(x - origin.x, y - origin.y, size.cx, size.cy,
                size.cx, 0, size.cx, size.cy);
 #else
+
+#ifdef USE_GDI
+  /* our icons are monochrome bitmaps, and GDI uses current colors of
+     the destination HDC when blitting from a monochrome HDC */
+  canvas.set_text_color(COLOR_BLACK);
+  canvas.set_background_color(COLOR_WHITE);
+#endif
+
   canvas.copy_or(x - origin.x, y - origin.y, size.cx, size.cy,
                  bitmap, 0, 0);
   canvas.copy_and(x - origin.x, y - origin.y, size.cx, size.cy,
