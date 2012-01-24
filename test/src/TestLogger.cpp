@@ -58,7 +58,7 @@ CheckTextFile(const TCHAR *path, const char *const* expect)
 }
 
 static const char *const expect[] = {
-  "AXCSfoo",
+  "AXCSFOO",
   "HFDTE040910",
   "HFFXA50",
   "HFPLTPILOT:Pilot Name",
