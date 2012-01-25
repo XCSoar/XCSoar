@@ -195,7 +195,6 @@ $(eval $(call link-program,TestZeroFinder,TEST_ZEROFINDER))
 TEST_TASKPOINT_SOURCES = \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTaskPoint.cpp
@@ -206,7 +205,6 @@ TEST_TASKWAYPOINT_SOURCES = \
 	$(SRC)/Util/UTF8.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
