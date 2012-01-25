@@ -753,7 +753,6 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Engine/Task/TaskStats/ElementStat.cpp \
 	$(SRC)/Engine/Task/TaskStats/DistanceStat.cpp \
 	$(SRC)/Engine/Task/TaskStats/TaskVario.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
@@ -999,7 +998,6 @@ RUN_INPUT_PARSER_SOURCES = \
 	$(SRC)/Input/InputParser.cpp \
 	$(SRC)/Menu/MenuData.cpp \
 	$(SRC)/UtilsText.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunInputParser.cpp
 RUN_INPUT_PARSER_DEPENDS = IO UTIL
@@ -1051,7 +1049,6 @@ READ_PORT_SOURCES = \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/ReadPort.cpp
 ifeq ($(HAVE_POSIX),y)
 READ_PORT_SOURCES += \
@@ -1071,7 +1068,6 @@ RUN_PORT_HANDLER_SOURCES = \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/RunPortHandler.cpp
 ifeq ($(HAVE_POSIX),y)
 RUN_PORT_HANDLER_SOURCES += \
@@ -1091,7 +1087,6 @@ RUN_TCP_LISTENER_SOURCES = \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(SRC)/Device/Port/TCPPort.cpp \
 	$(TEST_SRC_DIR)/RunTCPListener.cpp
 
@@ -1126,7 +1121,6 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
@@ -1154,7 +1148,6 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -1219,7 +1212,6 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -1258,7 +1250,6 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -1298,7 +1289,6 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Logger/LoggerGRecord.cpp \
 	$(SRC)/Logger/LoggerEPE.cpp \
 	$(SRC)/Logger/MD5.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/RunIGCWriter.cpp
 RUN_IGC_WRITER_LDADD = $(DEBUG_REPLAY_LDADD)
@@ -1582,7 +1572,6 @@ RUN_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunDialog.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(SRC)/Compatibility/fmode.c
 RUN_DIALOG_LDADD = \
 	$(RESOURCE_BINARY) \
@@ -1875,7 +1864,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(SRC)/IO/ConfiguredFile.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Device/Port/Port.cpp \
@@ -1940,7 +1928,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
@@ -2001,7 +1988,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
@@ -2051,7 +2037,6 @@ FEED_TCP_SERVER_SOURCES = \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
-	$(SRC)/Compatibility/string.c \
 	$(SRC)/Device/Port/TCPPort.cpp \
 	$(TEST_SRC_DIR)/FeedTCPServer.cpp
 

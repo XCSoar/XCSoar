@@ -582,7 +582,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Audio/Sound.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \
 	$(SRC)/Compatibility/fmode.c \
-	$(SRC)/Compatibility/string.c 	\
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Earth.cpp \
 	$(SRC)/Profile/TrackingProfile.cpp \
