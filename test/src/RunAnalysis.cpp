@@ -71,8 +71,6 @@ Copyright_License {
 #include "ConditionMonitor/ConditionMonitors.hpp"
 #include "Input/InputQueue.hpp"
 #include "Logger/Logger.hpp"
-#include "ThermalBase.hpp"
-#include "ThermalLocator.hpp"
 #include "LocalTime.hpp"
 
 TaskFile*
@@ -107,16 +105,6 @@ bool InputEvents::processGlideComputer(unsigned) { return false; }
 void Logger::LogStartEvent(const NMEAInfo &gps_info) {}
 void Logger::LogFinishEvent(const NMEAInfo &gps_info) {}
 void Logger::LogPoint(const NMEAInfo &gps_info) {}
-ThermalLocator::ThermalLocator() {}
-void ThermalLocator::Reset() {}
-
-void
-ThermalLocator::Process(const bool circling,
-                        const fixed time, 
-                        const GeoPoint &location, 
-                        const fixed w,
-                        const SpeedVector wind,
-                        ThermalLocatorInfo& therm) {}
 
 bool
 InputEvents::processNmea(unsigned key)
@@ -125,12 +113,6 @@ InputEvents::processNmea(unsigned key)
 }
 
 int GetUTCOffset() { return 0; }
-
-void
-EstimateThermalBase(const GeoPoint Thermal_Location,
-                    const fixed altitude, const fixed wthermal,
-                    const SpeedVector wind,
-                    GeoPoint &ground_location, fixed &ground_alt) {}
 
 /* done with fake symbols. */
 

@@ -459,7 +459,7 @@ TEST_FLAT_LINE_DEPENDS = MATH
 $(eval $(call link-program,TestFlatLine,TEST_FLAT_LINE))
 
 TEST_THERMALBASE_SOURCES = \
-	$(SRC)/ThermalBase.cpp \
+	$(SRC)/Computer/ThermalBase.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
@@ -1844,6 +1844,8 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/ThermalBandRenderer.cpp \
 	$(SRC)/Renderer/WindChartRenderer.cpp \
 	$(SRC)/Renderer/CuRenderer.cpp \
+	$(SRC)/Computer/ThermalLocator.cpp \
+	$(SRC)/Computer/ThermalBase.cpp \
 	$(SRC)/Computer/GlideRatioCalculator.cpp \
 	$(SRC)/Computer/AutoQNH.cpp \
 	$(SRC)/Computer/BasicComputer.cpp \

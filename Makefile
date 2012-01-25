@@ -298,6 +298,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Computer/ContestComputer.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/Computer/WarningComputer.cpp \
+	$(SRC)/Computer/ThermalLocator.cpp \
+	$(SRC)/Computer/ThermalBase.cpp \
 	$(SRC)/Computer/GlideRatioCalculator.cpp \
 	$(SRC)/Computer/GlideComputer.cpp \
 	$(SRC)/Computer/GlideComputerBlackboard.cpp \
@@ -345,8 +347,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Replay/TaskAutoPilot.cpp \
 	$(SRC)/Replay/AircraftSim.cpp \
 	$(SRC)/TeamCodeCalculation.cpp \
-	$(SRC)/ThermalLocator.cpp \
-	$(SRC)/ThermalBase.cpp \
 	$(SRC)/Waypoint/WaypointGlue.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \

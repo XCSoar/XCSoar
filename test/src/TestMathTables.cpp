@@ -21,7 +21,7 @@
 */
 
 #include "Math/FastMath.h"
-#include "ThermalLocator.hpp"
+#include "Computer/ThermalLocator.hpp"
 #include "TestUtil.hpp"
 
 static inline double
