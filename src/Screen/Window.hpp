@@ -294,10 +294,6 @@ public:
   }
 
 #ifndef USE_GDI
-  void clear_parent() {
-    parent = NULL;
-  }
-
   int get_top() const {
     return top;
   }
