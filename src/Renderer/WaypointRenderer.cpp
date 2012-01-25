@@ -200,7 +200,7 @@ protected:
     if (!way_point.IsLandable() && !way_point.flags.watched)
       return;
 
-    if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_LD) {
+    if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR) {
       if (!basic.location_available || !basic.NavAltitudeAvailable())
         return;
 
@@ -212,14 +212,14 @@ protected:
         return;
 
       const fixed distance = basic.location.Distance(way_point.location);
-      const fixed ld = distance / delta_h;
-      if (!GradientValid(ld))
+      const fixed gr = distance / delta_h;
+      if (!GradientValid(gr))
         return;
 
       size_t length = _tcslen(buffer);
       if (length > 0)
         buffer[length++] = _T(':');
-      _stprintf(buffer + length, _T("%u"), uround(ld));
+      _stprintf(buffer + length, _T("%u"), uround(gr));
       return;
     }
 

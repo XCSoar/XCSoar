@@ -14,7 +14,8 @@ Version 6.3 - not yet released
   - show new map items list on click
   - reduce map jiggling, improved E Ink display support
   - multi-touch drag triggers pan
-  - waypoint labels: support "required L/D" instead of "arrival height"
+  - waypoint labels: support "required glide ratio" instead of
+    "arrival height"
 * user interface
   - show METAR data in natural language
   - sort METAR stations by name
