@@ -306,7 +306,7 @@ AirspaceWarningManager::UpdateTask(const AircraftState &state,
     /* glide solver failed, cannot continue */
     return false;
 
-  AirspaceAircraftPerformanceTask perf_task(state, glide_polar,
+  AirspaceAircraftPerformanceTask perf_task(glide_polar,
                                             current_leg.solution_remaining);
   GeoPoint location_tp = current_leg.location_remaining;
   const fixed time_remaining = solution.time_elapsed;

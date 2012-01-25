@@ -247,8 +247,7 @@ AirspaceAircraftPerformance::solution_exists(const fixed &distance_max,
   return true;
 }
 
-AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const AircraftState &state,
-                                                                 const GlidePolar &polar,
+AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const GlidePolar &polar,
                                                                  const GlideResult &solution)
 {
   const fixed time_remaining = solution.time_elapsed;
