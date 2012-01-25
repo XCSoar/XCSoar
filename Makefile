@@ -298,6 +298,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Computer/ContestComputer.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/Computer/WarningComputer.cpp \
+	$(SRC)/Computer/GlideRatioCalculator.cpp \
 	$(SRC)/Computer/GlideComputer.cpp \
 	$(SRC)/Computer/GlideComputerBlackboard.cpp \
 	$(SRC)/Computer/GlideComputerAirData.cpp \
@@ -305,7 +306,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Computer/GlideComputerRoute.cpp \
 	$(SRC)/Computer/GlideComputerTask.cpp \
 	$(SRC)/Computer/GlideComputerInterface.cpp \
-	$(SRC)/GlideRatio.cpp \
 	$(SRC)/BallastDumpManager.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Logger/Logger.cpp \

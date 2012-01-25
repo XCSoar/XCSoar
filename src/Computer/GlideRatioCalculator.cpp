@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "GlideRatio.hpp"
+#include "GlideRatioCalculator.hpp"
 #include "Math/LowPassFilter.hpp"
 #include "ComputerSettings.hpp"
 #include "Util/Macros.hpp"

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "GlideComputerBlackboard.hpp"
 #include "AutoQNH.hpp"
-#include "GlideRatio.hpp"
+#include "GlideRatioCalculator.hpp"
 #include "FlyingComputer.hpp"
 #include "CirclingComputer.hpp"
 #include "WindComputer.hpp"

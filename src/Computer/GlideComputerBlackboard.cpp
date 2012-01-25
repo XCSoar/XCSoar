@@ -26,7 +26,6 @@ Copyright_License {
 #include "ComputerSettings.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-#include "GlideRatio.hpp"
 
 GlideComputerBlackboard::GlideComputerBlackboard()
 {
