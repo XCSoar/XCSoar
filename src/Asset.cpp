@@ -29,7 +29,6 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "IO/FileHandle.hpp"
-#include "Sizes.h"
 
 #if defined(WIN32) && (!defined(__GNUC__) || defined(_WIN32_WCE))
 #include <windows.h>
@@ -39,7 +38,7 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 // Registration Data
-TCHAR asset_number[MAX_LOADSTRING] = _T(""); //4G17DW31L0HY");
+TCHAR asset_number[100] = _T(""); //4G17DW31L0HY");
 
 #ifdef HAVE_MODEL_TYPE
 ModelType global_model_type = MODELTYPE_PNA_PNA;

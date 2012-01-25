@@ -76,7 +76,7 @@ OnNameClicked(gcc_unused WndButton &button)
 static void
 OnCommentClicked(gcc_unused WndButton &button)
 {
-  StaticString<COMMENT_SIZE + 1> buff(global_wpt->comment.c_str());
+  StaticString<51> buff(global_wpt->comment.c_str());
   if (!TextEntryDialog(*(SingleWindow *)button.GetRootOwner(), buff))
     return;
 

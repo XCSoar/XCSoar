@@ -21,7 +21,6 @@
  */
 #include "TaskManager.hpp"
 #include "Visitors/TaskPointVisitor.hpp"
-#include "Sizes.h"
 #include "Tasks/TaskSolvers/TaskSolution.hpp"
 #include "Tasks/BaseTask/UnorderedTaskPoint.hpp"
 #include "Util/StringUtil.hpp"
