@@ -122,6 +122,9 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
     { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::GLIDE_AND_TERRAIN,
       N_("Straight & terrain glide"),
       N_("Both arrival heights are displayed.") },
+    { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_LD,
+      N_("Required L/D"),
+      N_("The required glide ratio.") },
     { 0 }
   };
 

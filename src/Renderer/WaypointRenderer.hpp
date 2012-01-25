@@ -34,6 +34,7 @@ class MapWindowProjection;
 class Waypoints;
 class GlidePolar;
 struct TaskBehaviour;
+struct MoreData;
 class ProtectedTaskManager;
 class ProtectedRoutePlanner;
 
@@ -65,6 +66,7 @@ public:
               const MapWindowProjection &projection,
               const struct WaypointRendererSettings &settings,
               const TaskBehaviour &task_behaviour,
+              const MoreData &basic,
               const ProtectedTaskManager *task,
               const ProtectedRoutePlanner *route_planner);
 

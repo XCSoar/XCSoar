@@ -30,5 +30,6 @@ MapWindow::DrawWaypoints(Canvas &canvas)
   waypoint_renderer.render(canvas, label_block,
                             render_projection, GetMapSettings().waypoint,
                             GetComputerSettings().task,
+                           Basic(),
                             task, route_planner);
 }

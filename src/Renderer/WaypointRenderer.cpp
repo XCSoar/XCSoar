@@ -28,6 +28,7 @@ Copyright_License {
 #include "MapWindow/MapWindowLabels.hpp"
 #include "ComputerSettings.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
+#include "Engine/Util/Gradient.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
@@ -48,6 +49,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Screen/Layout.hpp"
 #include "Util/StaticArray.hpp"
+#include "NMEA/MoreData.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -116,6 +118,7 @@ class WaypointVisitorMap:
   const WaypointRendererSettings &settings;
   const WaypointLook &look;
   const TaskBehaviour &task_behaviour;
+  const MoreData &basic;
 
   TCHAR sAltUnit[4];
   bool task_valid;
@@ -136,11 +139,13 @@ public:
   WaypointVisitorMap(const MapWindowProjection &_projection,
                      const WaypointRendererSettings &_settings,
                      const WaypointLook &_look,
-                     const TaskBehaviour &_task_behaviour):
-    projection(_projection),
-    settings(_settings), look(_look), task_behaviour(_task_behaviour),
-    task_valid(false),
-    labels(projection.GetScreenWidth(), projection.GetScreenHeight())
+                     const TaskBehaviour &_task_behaviour,
+                     const MoreData &_basic)
+    :projection(_projection),
+     settings(_settings), look(_look), task_behaviour(_task_behaviour),
+     basic(_basic),
+     task_valid(false),
+     labels(projection.GetScreenWidth(), projection.GetScreenHeight())
   {
     _tcscpy(sAltUnit, Units::GetAltitudeName());
   }
@@ -194,6 +199,31 @@ protected:
 
     if (!way_point.IsLandable() && !way_point.flags.watched)
       return;
+
+    if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_LD) {
+      if (!basic.location_available || !basic.NavAltitudeAvailable())
+        return;
+
+      const fixed safety_height = way_point.IsLandable()
+        ? task_behaviour.safety_height_arrival
+        : task_behaviour.route_planner.safety_height_terrain;
+      const fixed target_altitude = way_point.altitude + safety_height;
+      const fixed delta_h = basic.nav_altitude - target_altitude;
+      if (!positive(delta_h))
+        /* no L/D if below waypoint */
+        return;
+
+      const fixed distance = basic.location.Distance(way_point.location);
+      const fixed ld = distance / delta_h;
+      if (!GradientValid(ld))
+        return;
+
+      size_t length = _tcslen(buffer);
+      if (length > 0)
+        buffer[length++] = _T(':');
+      _stprintf(buffer + length, _T("%u"), uround(ld));
+      return;
+    }
 
     if (arrival_height_glide <= 0 && !way_point.flags.watched)
       return;
@@ -387,13 +417,14 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
                          const MapWindowProjection &projection,
                          const struct WaypointRendererSettings &settings,
                          const TaskBehaviour &task_behaviour,
+                         const MoreData &basic,
                          const ProtectedTaskManager *task,
                          const ProtectedRoutePlanner *route_planner)
 {
   if ((way_points == NULL) || way_points->IsEmpty())
     return;
 
-  WaypointVisitorMap v(projection, settings, look, task_behaviour);
+  WaypointVisitorMap v(projection, settings, look, task_behaviour, basic);
 
   if (task != NULL) {
     ProtectedTaskManager::Lease task_manager(*task);
