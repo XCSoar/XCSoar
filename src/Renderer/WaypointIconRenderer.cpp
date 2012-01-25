@@ -143,7 +143,9 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
   fixed radius = fixed_int_constant(10) * scale;
 
   canvas.SelectBlackPen();
-  if (settings.landable_style == wpLandableWinPilot) {
+
+  switch (settings.landable_style) {
+  case WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE:
     // Render landable with reachable state
     if (reachable != Unreachable) {
       canvas.Select(reachable == ReachableTerrain
@@ -153,14 +155,9 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
                        radius + half(radius));
     }
     canvas.Select(look.magenta_brush);
-  } else if (settings.landable_style == wpLandableAltB) {
-    if (reachable != Unreachable)
-      canvas.Select(reachable == ReachableTerrain
-                    ? look.reachable_brush
-                    : look.orange_brush);
-    else
-      canvas.Select(look.unreachable_brush);
-  } else {
+    break;
+
+  case WaypointRendererSettings::LandableStyle::BW:
     if (reachable != Unreachable)
       canvas.Select(reachable == ReachableTerrain
                     ? look.reachable_brush
@@ -169,7 +166,18 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
       canvas.Select(look.white_brush);
     else
       canvas.Select(look.light_gray_brush);
+    break;
+
+  case WaypointRendererSettings::LandableStyle::TRAFFIC_LIGHTS:
+    if (reachable != Unreachable)
+      canvas.Select(reachable == ReachableTerrain
+                    ? look.reachable_brush
+                    : look.orange_brush);
+    else
+      canvas.Select(look.unreachable_brush);
+    break;
   }
+
   DrawLandableBase(canvas, point, waypoint.IsAirport(), radius);
 
   // Render runway indication

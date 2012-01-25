@@ -26,50 +26,45 @@ Copyright_License {
 
 #include "Screen/TextInBox.hpp"
 
-enum DisplayTextType_t {
-  DISPLAYNAME = 0,
-  OBSOLETE_DONT_USE_DISPLAYNUMBER,
-  DISPLAYFIRSTFIVE,
-  DISPLAYNONE,
-  DISPLAYFIRSTTHREE,
-  OBSOLETE_DONT_USE_DISPLAYNAMEIFINTASK,
-  DISPLAYUNTILSPACE
-};
-
-enum WaypointArrivalHeightDisplay_t {
-  WP_ARRIVAL_HEIGHT_NONE = 0,
-  WP_ARRIVAL_HEIGHT_GLIDE,
-  WP_ARRIVAL_HEIGHT_TERRAIN,
-  WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN
-};
-
-enum WaypointLabelSelection_t {
-  wlsAllWaypoints,
-  wlsTaskAndLandableWaypoints,
-  wlsTaskWaypoints,
-  wlsNoWaypoints
-};
-
-enum IndLandable_t {
-  wpLandableWinPilot = 0,
-  wpLandableAltA,
-  wpLandableAltB,
-};
+#include <stdint.h>
 
 struct WaypointRendererSettings {
   /** What type of text to draw next to the waypoint icon */
-  DisplayTextType_t display_text_type;
+  enum class DisplayTextType : uint8_t {
+    NAME = 0,
+    OBSOLETE_DONT_USE_NUMBER,
+    FIRST_FIVE,
+    NONE,
+    FIRST_THREE,
+    OBSOLETE_DONT_USE_NAMEIFINTASK,
+    FIRST_WORD,
+  } display_text_type;
 
   /** Which arrival height to display next to waypoint labels */
-  WaypointArrivalHeightDisplay_t arrival_height_display;
+
+  enum class ArrivalHeightDisplay : uint8_t {
+    NONE = 0,
+    GLIDE,
+    TERRAIN,
+    GLIDE_AND_TERRAIN,
+  } arrival_height_display;
 
   /** What type of waypoint labels to render */
-  WaypointLabelSelection_t label_selection;
+  enum class LabelSelection : uint8_t {
+    ALL,
+    TASK_AND_LANDABLE,
+    TASK,
+    NONE,
+  } label_selection;
 
   /** What type of waypoint labels to render */
   RenderMode landable_render_mode;
 
-  IndLandable_t landable_style;
+  enum class LandableStyle : uint8_t {
+    PURPLE_CIRCLE,
+    BW,
+    TRAFFIC_LIGHTS,
+  } landable_style;
 
   bool vector_landable_rendering;
 
@@ -78,12 +73,12 @@ struct WaypointRendererSettings {
   int landable_rendering_scale;
 
   void SetDefaults() {
-    display_text_type = DISPLAYFIRSTFIVE;
-    arrival_height_display = WP_ARRIVAL_HEIGHT_GLIDE;
-    label_selection = wlsAllWaypoints;
+    display_text_type = DisplayTextType::FIRST_FIVE;
+    arrival_height_display = ArrivalHeightDisplay::GLIDE;
+    label_selection = LabelSelection::ALL;
     landable_render_mode = RM_ROUNDED_BLACK;
 
-    landable_style = wpLandableWinPilot;
+    landable_style = LandableStyle::PURPLE_CIRCLE;
     vector_landable_rendering = true;
     scale_runway_length = false;
     landable_rendering_scale = 100;

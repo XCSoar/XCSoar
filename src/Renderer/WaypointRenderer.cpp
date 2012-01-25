@@ -155,23 +155,23 @@ protected:
       return;
 
     switch (settings.display_text_type) {
-    case DISPLAYNAME:
+    case WaypointRendererSettings::DisplayTextType::NAME:
       _tcscpy(Buffer, way_point.name.c_str());
       break;
 
-    case DISPLAYFIRSTFIVE:
+    case WaypointRendererSettings::DisplayTextType::FIRST_FIVE:
       CopyString(Buffer, way_point.name.c_str(), 6);
       break;
 
-    case DISPLAYFIRSTTHREE:
+    case WaypointRendererSettings::DisplayTextType::FIRST_THREE:
       CopyString(Buffer, way_point.name.c_str(), 4);
       break;
 
-    case DISPLAYNONE:
+    case WaypointRendererSettings::DisplayTextType::NONE:
       Buffer[0] = '\0';
       break;
 
-    case DISPLAYUNTILSPACE:
+    case WaypointRendererSettings::DisplayTextType::FIRST_WORD:
       _tcscpy(Buffer, way_point.name.c_str());
       TCHAR *tmp;
       tmp = _tcsstr(Buffer, _T(" "));
@@ -198,14 +198,14 @@ protected:
     if (arrival_height_glide <= 0 && !way_point.flags.watched)
       return;
 
-    if (settings.arrival_height_display == WP_ARRIVAL_HEIGHT_NONE)
+    if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::NONE)
       return;
 
     size_t length = _tcslen(buffer);
     int uah_glide = (int)Units::ToUserAltitude(fixed(arrival_height_glide));
     int uah_terrain = (int)Units::ToUserAltitude(fixed(arrival_height_terrain));
 
-    if (settings.arrival_height_display == WP_ARRIVAL_HEIGHT_TERRAIN) {
+    if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::TERRAIN) {
       if (arrival_height_terrain > 0) {
         if (length > 0)
           buffer[length++] = _T(':');
@@ -217,7 +217,7 @@ protected:
     if (length > 0)
       buffer[length++] = _T(':');
 
-    if (settings.arrival_height_display == WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN &&
+    if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::GLIDE_AND_TERRAIN &&
         arrival_height_glide > 0 && arrival_height_terrain > 0) {
       int altd = abs(int(fixed(arrival_height_glide - arrival_height_terrain)));
       if (altd >= 10 && (altd * 100) / arrival_height_glide > 5) {
@@ -242,15 +242,15 @@ protected:
 
     // Determine whether to draw the waypoint label or not
     switch (settings.label_selection) {
-    case wlsNoWaypoints:
+    case WaypointRendererSettings::LabelSelection::NONE:
       return;
 
-    case wlsTaskWaypoints:
+    case WaypointRendererSettings::LabelSelection::TASK:
       if (!vwp.in_task && task_valid && !watchedWaypoint)
         return;
       break;
 
-    case wlsTaskAndLandableWaypoints:
+    case WaypointRendererSettings::LabelSelection::TASK_AND_LANDABLE:
       if (!vwp.in_task && task_valid && !watchedWaypoint &&
           !way_point.IsLandable())
         return;
@@ -282,7 +282,7 @@ protected:
 
     RasterPoint sc = vwp.point;
     if ((vwp.reachable != WaypointRenderer::Unreachable &&
-         settings.landable_style == wpLandableWinPilot) ||
+         settings.landable_style == WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE) ||
         settings.vector_landable_rendering)
       // make space for the green circle
       sc.x += 5;

@@ -31,16 +31,16 @@ WaypointRendererSettings::LoadFromProfile()
 
   // NOTE: WaypointLabelSelection must be loaded after this code
   GetEnum(szProfileDisplayText, display_text_type);
-  if (display_text_type == OBSOLETE_DONT_USE_DISPLAYNAMEIFINTASK) {
+  if (display_text_type == DisplayTextType::OBSOLETE_DONT_USE_NAMEIFINTASK) {
     // pref migration. The migrated value of DisplayTextType and
     // WaypointLabelSelection will not be written to the config file
     // unless the user explicitly changes the corresponding setting manually.
     // This requires ordering because a manually changed WaypointLabelSelection
     // may be overwritten by the following migration code.
-    display_text_type = DISPLAYNAME;
-    label_selection = wlsTaskWaypoints;
-  } else if (display_text_type == OBSOLETE_DONT_USE_DISPLAYNUMBER)
-    display_text_type = DISPLAYNAME;
+    display_text_type = DisplayTextType::NAME;
+    label_selection = LabelSelection::TASK;
+  } else if (display_text_type == DisplayTextType::OBSOLETE_DONT_USE_NUMBER)
+    display_text_type = DisplayTextType::NAME;
 
   // NOTE: DisplayTextType must be loaded before this code
   //       due to pref migration dependencies!

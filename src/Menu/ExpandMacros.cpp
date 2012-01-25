@@ -538,7 +538,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                                            N_("Task"),
                                            N_("None") };
     static gcc_constexpr_data unsigned int n = ARRAY_SIZE(labels);
-    unsigned int i = GetMapSettings().waypoint.label_selection;
+    unsigned int i = (unsigned)GetMapSettings().waypoint.label_selection;
     ReplaceInString(OutBuffer, _T("$(MapLabelsToggleActionName)"),
                     gettext(labels[(i + 1) % n]), Size);
   }

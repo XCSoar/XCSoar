@@ -47,14 +47,17 @@ WaypointLook::Initialise(const WaypointRendererSettings &settings)
   magenta_brush.Set(COLOR_MAGENTA);
   orange_brush.Set(COLOR_ORANGE);
 
-  if (settings.landable_style == wpLandableWinPilot) {
+  switch (settings.landable_style) {
+  case WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE:
     airport_reachable_icon.Load(IDB_REACHABLE, IDB_REACHABLE_HD);
     airport_marginal_icon.Load(IDB_MARGINAL, IDB_MARGINAL_HD);
     airport_unreachable_icon.Load(IDB_LANDABLE, IDB_LANDABLE_HD);
     field_reachable_icon.Load(IDB_REACHABLE, IDB_REACHABLE_HD);
     field_marginal_icon.Load(IDB_MARGINAL, IDB_MARGINAL_HD);
     field_unreachable_icon.Load(IDB_LANDABLE, IDB_LANDABLE_HD);
-  } else if (settings.landable_style == wpLandableAltA) {
+    break;
+
+  case WaypointRendererSettings::LandableStyle::BW:
     airport_reachable_icon.Load(IDB_AIRPORT_REACHABLE,
                                     IDB_AIRPORT_REACHABLE_HD);
     airport_marginal_icon.Load(IDB_AIRPORT_MARGINAL,
@@ -67,7 +70,9 @@ WaypointLook::Initialise(const WaypointRendererSettings &settings)
                                  IDB_OUTFIELD_MARGINAL_HD);
     field_unreachable_icon.Load(IDB_OUTFIELD_UNREACHABLE,
                                     IDB_OUTFIELD_UNREACHABLE_HD);
-  } else if (settings.landable_style == wpLandableAltB) {
+    break;
+
+  case WaypointRendererSettings::LandableStyle::TRAFFIC_LIGHTS:
     airport_reachable_icon.Load(IDB_AIRPORT_REACHABLE,
                                     IDB_AIRPORT_REACHABLE_HD);
     airport_marginal_icon.Load(IDB_AIRPORT_MARGINAL2,
@@ -80,5 +85,6 @@ WaypointLook::Initialise(const WaypointRendererSettings &settings)
                                  IDB_OUTFIELD_MARGINAL2_HD);
     field_unreachable_icon.Load(IDB_OUTFIELD_UNREACHABLE2,
                                     IDB_OUTFIELD_UNREACHABLE2_HD);
+    break;
   }
 }

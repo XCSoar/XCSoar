@@ -173,7 +173,7 @@ TargetMapWindow::DrawWaypoints(Canvas &canvas)
 {
   const MapSettings &settings_map = GetMapSettings();
   WaypointRendererSettings settings = settings_map.waypoint;
-  settings.display_text_type = DISPLAYNAME;
+  settings.display_text_type = WaypointRendererSettings::DisplayTextType::NAME;
 
   way_point_renderer.render(canvas, label_block,
                             projection, settings,

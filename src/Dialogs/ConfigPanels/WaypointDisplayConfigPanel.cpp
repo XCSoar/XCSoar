@@ -90,34 +90,43 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
   RowFormWidget::Prepare(parent, rc);
 
   static gcc_constexpr_data StaticEnumChoice wp_labels_list[] = {
-    { DISPLAYNAME, N_("Full name"),
+    { (unsigned)WaypointRendererSettings::DisplayTextType::NAME,
+      N_("Full name"),
       N_("The full name of each waypoint is displayed.") },
-    { DISPLAYUNTILSPACE, N_("First word of name"),
+    { (unsigned)WaypointRendererSettings::DisplayTextType::FIRST_WORD,
+      N_("First word of name"),
       N_("The first word of the waypoint name is displayed.") },
-    { DISPLAYFIRSTTHREE, N_("First 3 letters"),
+    { (unsigned)WaypointRendererSettings::DisplayTextType::FIRST_THREE,
+      N_("First 3 letters"),
       N_("The first 3 letters of the waypoint name are displayed.") },
-    { DISPLAYFIRSTFIVE, N_("First 5 letters"),
+    { (unsigned)WaypointRendererSettings::DisplayTextType::FIRST_FIVE,
+      N_("First 5 letters"),
       N_("The first 5 letters of the waypoint name are displayed.") },
-    { DISPLAYNONE, N_("None"), N_("No waypoint name is displayed.") },
+    { (unsigned)WaypointRendererSettings::DisplayTextType::NONE,
+      N_("None"), N_("No waypoint name is displayed.") },
     { 0 }
   };
   AddEnum(_("Label format"), _("Determines how labels are displayed with each waypoint"),
-          wp_labels_list, settings.display_text_type);
+          wp_labels_list, (unsigned)settings.display_text_type);
 
   static gcc_constexpr_data StaticEnumChoice wp_arrival_list[] = {
-    { WP_ARRIVAL_HEIGHT_NONE, N_("None"),
+    { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::NONE,
+      N_("None"),
       N_("No arrival height is displayed.") },
-    { WP_ARRIVAL_HEIGHT_GLIDE, N_("Straight glide"),
+    { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::GLIDE,
+      N_("Straight glide"),
       N_("Straight glide arrival height (no terrain is considered).") },
-    { WP_ARRIVAL_HEIGHT_TERRAIN, N_("Terrain avoidance glide"),
+    { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::TERRAIN,
+      N_("Terrain avoidance glide"),
       N_("Arrival height considering terrain avoidance") },
-    { WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN, N_("Straight & terrain glide"),
+    { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::GLIDE_AND_TERRAIN,
+      N_("Straight & terrain glide"),
       N_("Both arrival heights are displayed.") },
     { 0 }
   };
 
   AddEnum(_("Arrival height"), _("Determines how arrival height is displayed in waypoint labels"),
-          wp_arrival_list, settings.arrival_height_display);
+          wp_arrival_list, (unsigned)settings.arrival_height_display);
   SetExpertRow(WaypointArrivalHeightDisplay);
 
   const TCHAR *wp_label_help = N_("Select a label shape.");
@@ -131,30 +140,37 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
   SetExpertRow(WaypointLabelStyle);
 
   static gcc_constexpr_data StaticEnumChoice wp_selection_list[] = {
-    { wlsAllWaypoints, N_("All"), N_("All waypoint labels will be displayed.") },
-    { wlsTaskAndLandableWaypoints, N_("Task waypoints & landables"),
+    { (unsigned)WaypointRendererSettings::LabelSelection::ALL,
+      N_("All"), N_("All waypoint labels will be displayed.") },
+    { (unsigned)WaypointRendererSettings::LabelSelection::TASK_AND_LANDABLE,
+      N_("Task waypoints & landables"),
       N_("All waypoints part of a task and all landables will be displayed.") },
-    { wlsTaskWaypoints, N_("Task waypoints"),
+    { (unsigned)WaypointRendererSettings::LabelSelection::TASK,
+      N_("Task waypoints"),
       N_("All waypoints part of a task will be displayed.") },
-    { wlsNoWaypoints, N_("None"), N_("No waypoint labels will be displayed.") },
+    { (unsigned)WaypointRendererSettings::LabelSelection::NONE,
+      N_("None"), N_("No waypoint labels will be displayed.") },
     { 0 }
   };
 
   AddEnum(_("Label visibility"),
           _("Determines what waypoint labels are displayed for each waypoint (space permitting)."),
-          wp_selection_list, settings.label_selection);
+          wp_selection_list, (unsigned)settings.label_selection);
   SetExpertRow(WaypointLabelSelection);
 
   static gcc_constexpr_data StaticEnumChoice wp_style_list[] = {
-    { wpLandableWinPilot, N_("Purple circle"),
+    { (unsigned)WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE,
+      N_("Purple circle"),
       N_("Airports and outlanding fields are displayed as purple circles. If the waypoint is "
           "reachable a bigger green circle is added behind the purple one. If the waypoint is "
           "blocked by a mountain the green circle will be red instead.") },
-    { wpLandableAltA, N_("B/W"),
+    { (unsigned)WaypointRendererSettings::LandableStyle::BW,
+      N_("B/W"),
       N_("Airports and outlanding fields are displayed in white/grey. If the waypoint is "
           "reachable the color is changed to green. If the waypoint is blocked by a mountain "
           "the color is changed to red instead.") },
-    { wpLandableAltB, N_("Traffic lights"),
+    { (unsigned)WaypointRendererSettings::LandableStyle::TRAFFIC_LIGHTS,
+      N_("Traffic lights"),
       N_("Airports and outlanding fields are displayed in the colors of a traffic light. "
           "Green if reachable, Orange if blocked by mountain and red if not reachable at all.") },
     { 0 }
@@ -163,7 +179,7 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
           _("Three styles are available: Purple circles (WinPilot style), a high "
               "contrast (monochrome) style, or orange. The rendering differs for landable "
               "field and airport. All styles mark the waypoints within reach green."),
-          wp_style_list, settings.landable_style);
+          wp_style_list, (unsigned)settings.landable_style);
 
   AddBoolean(_("Detailed landables"),
              _("[Off] Display fixed icons for landables.\n"

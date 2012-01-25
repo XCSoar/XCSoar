@@ -307,6 +307,11 @@ InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
   }
 }
 
+#if GCC_VERSION >= 40400 && GCC_VERSION < 40500
+/* workaround for bogus warning on Android's gcc 4.4 */
+#pragma GCC diagnostic ignored "-Wtype-limits"
+#endif
+
 void
 InputEvents::eventDeclutterLabels(const TCHAR *misc)
 {
@@ -320,19 +325,20 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
                                           _T("task"),
                                           _T("none")};
 
-  WaypointLabelSelection_t &wls =
+  WaypointRendererSettings::LabelSelection &wls =
     XCSoarInterface::SetMapSettings().waypoint.label_selection;
   if (StringIsEqual(misc, _T("toggle")))
-    wls = (WaypointLabelSelection_t) ((wls + 1) %  n);
+    wls = WaypointRendererSettings::LabelSelection(((unsigned)wls + 1) %  n);
   else if (StringIsEqual(misc, _T("show")) && (unsigned int) wls < n) {
     TCHAR tbuf[64];
-    _stprintf(tbuf, _T("%s: %s"), _("Waypoint labels"), gettext(msg[wls]));
+    _stprintf(tbuf, _T("%s: %s"), _("Waypoint labels"),
+              gettext(msg[(unsigned)wls]));
     Message::AddMessage(tbuf);
   }
   else {
     for (unsigned int i=0; i<n; i++)
       if (StringIsEqual(misc, actions[i]))
-        wls = (WaypointLabelSelection_t) i;
+        wls = (WaypointRendererSettings::LabelSelection)i;
   }
 
   ActionInterface::SendMapSettings(true);
