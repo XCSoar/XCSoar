@@ -7,8 +7,6 @@
 // max length of waypoint comment names
 #define COMMENT_SIZE 50
 
-#define MAXSTARTPOINTS 10
-
 #define MAX_LOADSTRING 100
 
 #define NUMAIRSPACECOLORS 16
