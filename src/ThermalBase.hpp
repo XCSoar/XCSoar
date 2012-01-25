@@ -26,11 +26,14 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
+class RasterTerrain;
 struct GeoPoint;
 struct SpeedVector;
 
-void EstimateThermalBase(const GeoPoint location, const fixed altitude,
-                         const fixed average, const SpeedVector wind,
-                         GeoPoint &ground_location, fixed &ground_alt);
+void
+EstimateThermalBase(const RasterTerrain *terrain,
+                    const GeoPoint location, const fixed altitude,
+                    const fixed average, const SpeedVector wind,
+                    GeoPoint &ground_location, fixed &ground_alt);
 
 #endif

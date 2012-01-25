@@ -24,7 +24,6 @@ Copyright_License {
 #include "ThermalBase.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterMap.hpp"
-#include "Components.hpp"
 #include "Math/Earth.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
@@ -40,7 +39,8 @@ GetElevation(RasterTerrain::Lease &map, const GeoPoint loc)
 }
 
 void
-EstimateThermalBase(const GeoPoint location, const fixed altitude,
+EstimateThermalBase(const RasterTerrain *terrain,
+                    const GeoPoint location, const fixed altitude,
                     const fixed average, const SpeedVector wind,
                     GeoPoint &ground_location, fixed &ground_alt)
 {

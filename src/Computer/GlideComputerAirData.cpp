@@ -585,7 +585,7 @@ GlideComputerAirData::ThermalSources()
 
   GeoPoint ground_location;
   fixed ground_altitude = fixed_minus_one;
-  EstimateThermalBase(thermal_locator.estimate_location,
+  EstimateThermalBase(terrain, thermal_locator.estimate_location,
                       Basic().nav_altitude,
                       calculated.last_thermal.lift_rate,
                       calculated.GetWindOrZero(),
