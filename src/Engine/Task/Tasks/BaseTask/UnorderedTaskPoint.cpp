@@ -59,7 +59,7 @@ const AircraftState&
 UnorderedTaskPoint::GetEnteredState() const 
 {
   // this should never get called
-  static const AircraftState null_state;
+  static AircraftState null_state;
   return null_state;
 }
 

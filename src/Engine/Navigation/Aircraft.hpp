@@ -22,6 +22,7 @@
 #ifndef AIRCRAFT_HPP
 #define AIRCRAFT_HPP
 
+#include "Util/TypeTraits.hpp"
 #include "GeoPoint.hpp"
 #include "SpeedVector.hpp"
 #include "Compiler.h"
@@ -74,8 +75,6 @@ struct SpeedState
  */
 struct AltitudeState 
 {
-  AltitudeState();
-
   //##############
   //   Altitude
   //##############
@@ -140,8 +139,6 @@ struct AircraftState:
   public VarioState,
   public FlyingState
 {
-  AircraftState();
-
   //##########
   //   Time
   //##########
@@ -185,5 +182,7 @@ struct AircraftState:
 
   void Reset();
 };
+
+static_assert(is_trivial<AircraftState>::value, "type is not trivial");
 
 #endif

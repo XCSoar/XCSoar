@@ -33,12 +33,6 @@ AircraftState::GetPredictedState(const fixed &in_time) const
   return state_next;
 }
 
-AircraftState::AircraftState():
-  AltitudeState(),
-  g_load(fixed_one)
-{
-}
-
 void
 AircraftState::Reset()
 {
@@ -47,11 +41,6 @@ AircraftState::Reset()
 
   g_load = fixed_one;
   wind = SpeedVector::Zero();
-}
-
-AltitudeState::AltitudeState()
-{
-  Reset();
 }
 
 void
