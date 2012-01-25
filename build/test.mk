@@ -46,6 +46,7 @@ TEST1_LDLIBS = \
 
 define link-harness-program
 $(1)_SOURCES = \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/$(1).cpp
@@ -168,6 +169,7 @@ TEST_MAC_CREADY_DEPENDS = ENGINE MATH UTIL
 $(eval $(call link-program,TestMacCready,TEST_MAC_CREADY))
 
 TEST_ORDERED_TASK_SOURCES = \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestOrderedTask.cpp
 TEST_ORDERED_TASK_OBJS = $(call SRC_TO_OBJ,$(TEST_ORDERED_TASK_SOURCES))
@@ -244,6 +246,7 @@ TEST_REACH_DEPENDS = TEST1 JASPER
 $(eval $(call link-program,test_reach,TEST_REACH))
 
 TEST_ROUTE_SOURCES = \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
 	$(SRC)/Terrain/RasterTileCache.cpp \
@@ -260,6 +263,7 @@ TEST_ROUTE_DEPENDS = TEST1 JASPER
 $(eval $(call link-program,test_route,TEST_ROUTE))
 
 TEST_REPLAY_TASK_SOURCES = \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/test_replay_task.cpp
@@ -275,6 +279,7 @@ $(eval $(call link-program,TestMathTables,TEST_MATH_TABLES))
 TEST_LOAD_TASK_SOURCES = \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/test_load_task.cpp
 TEST_LOAD_TASK_DEPENDS = TEST1
 $(eval $(call link-program,test_load_task,TEST_LOAD_TASK))
@@ -513,7 +518,6 @@ TEST_LOGGER_SOURCES = \
 	$(SRC)/Util/UTF8.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -564,7 +568,6 @@ TEST_DRIVER_SOURCES = \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
@@ -837,6 +840,7 @@ RUN_LIVETRACK24_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/RunLiveTrack24.cpp
 RUN_LIVETRACK24_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_LIVETRACK24_DEPENDS = LIBNET MATH UTIL
@@ -1290,6 +1294,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Logger/LoggerEPE.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/RunIGCWriter.cpp
 RUN_IGC_WRITER_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_IGC_WRITER_DEPENDS = MATH UTIL
@@ -1299,6 +1304,7 @@ RUN_FLIGHT_LOGGER_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Logger/FlightLogger.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/RunFlightLogger.cpp
 RUN_FLIGHT_LOGGER_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_FLIGHT_LOGGER_DEPENDS = MATH UTIL
@@ -1308,6 +1314,7 @@ RUN_CIRCLING_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Wind/CirclingWind.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/RunCirclingWind.cpp
 RUN_CIRCLING_WIND_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_CIRCLING_WIND_DEPENDS = MATH UTIL
@@ -1316,6 +1323,7 @@ $(eval $(call link-program,RunCirclingWind,RUN_CIRCLING_WIND))
 RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Wind/WindZigZag.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/RunWindZigZag.cpp
 RUN_WIND_ZIG_ZAG_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_ZIG_ZAG_DEPENDS = MATH UTIL
@@ -1325,6 +1333,7 @@ RUN_WIND_EKF_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Wind/WindEKF.cpp \
 	$(SRC)/Wind/WindEKFGlue.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/RunWindEKF.cpp
 RUN_WIND_EKF_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_EKF_DEPENDS = MATH UTIL
@@ -1334,6 +1343,7 @@ RUN_TRACE_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
@@ -1350,6 +1360,7 @@ RUN_OLC_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
@@ -1409,6 +1420,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
@@ -1737,6 +1749,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/NMEA/ClimbHistory.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \
@@ -1894,6 +1907,7 @@ $(eval $(call link-program,RunAnalysis,RUN_ANALYSIS))
 
 RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/DateTime.cpp \

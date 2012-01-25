@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -18,35 +19,33 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
+*/
+
+#ifndef XCSOAR_FLYING_STATE_HPP
+#define XCSOAR_FLYING_STATE_HPP
+
+#include "Math/fixed.hpp"
+#include "Util/TypeTraits.hpp"
+
+/**
+ * Structure for flying state (takeoff/landing)
  */
-
-#include "Navigation/Aircraft.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
-
-AircraftState 
-AircraftState::GetPredictedState(const fixed &in_time) const
+struct FlyingState
 {
-  AircraftState state_next = *this;
-  GeoVector vec(ground_speed * in_time, track);
-  state_next.location = vec.EndPoint(location);
-  state_next.altitude += vario * in_time;
-  return state_next;
-}
+  /** True if airborne, False otherwise */
+  bool flying;
+  /** Detects when glider is on ground for several seconds */
+  bool on_ground;
 
-void
-AircraftState::Reset()
-{
-  AltitudeState::Reset();
-  FlyingState::Reset();
+  /** Time of flight */
+  fixed flight_time;
+  /** Time of takeoff */
+  fixed takeoff_time;
 
-  g_load = fixed_one;
-  wind = SpeedVector::Zero();
-}
+  /** Reset flying state as if never flown */
+  void Reset();
+};
 
-void
-AltitudeState::Reset()
-{
-  altitude = fixed_zero;
-  working_band_fraction = fixed_zero;
-  altitude_agl = fixed_zero;
-}
+static_assert(is_trivial<FlyingState>::value, "type is not trivial");
+
+#endif

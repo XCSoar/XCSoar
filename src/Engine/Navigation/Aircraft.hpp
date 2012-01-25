@@ -23,6 +23,7 @@
 #define AIRCRAFT_HPP
 
 #include "Util/TypeTraits.hpp"
+#include "NMEA/FlyingState.hpp"
 #include "GeoPoint.hpp"
 #include "SpeedVector.hpp"
 #include "Compiler.h"
@@ -108,27 +109,6 @@ struct VarioState
    */
   fixed netto_vario;
 };
-
-/**
- * Structure for flying state (takeoff/landing)
- */
-struct FlyingState
-{
-  /** True if airborne, False otherwise */
-  bool flying;
-  /** Detects when glider is on ground for several seconds */
-  bool on_ground;
-
-  /** Time of flight */
-  fixed flight_time;
-  /** Time of takeoff */
-  fixed takeoff_time;
-
-  /** Reset flying state as if never flown */
-  void Reset();
-};
-
-static_assert(is_trivial<FlyingState>::value, "type is not trivial");
 
 /**
  * Compound structure defining an aircraft state
