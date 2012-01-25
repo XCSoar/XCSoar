@@ -40,7 +40,6 @@
 static TaskBehaviour task_behaviour;
 static OrderedTaskBehaviour ordered_task_behaviour;
 static GlidePolar glide_polar(fixed_zero);
-static const AircraftState aircraft_zero;
 
 static GeoPoint
 MakeGeoPoint(double longitude, double latitude)
@@ -200,7 +199,8 @@ TestFlightToFinish(fixed aircraft_altitude)
 
   ok1(task.CheckTask());
 
-  AircraftState aircraft = aircraft_zero;
+  AircraftState aircraft;
+  aircraft.Reset();
   aircraft.location = wp1.location;
   aircraft.altitude = aircraft_altitude;
   task.Update(aircraft, aircraft, glide_polar);
@@ -239,7 +239,8 @@ TestSimpleTask()
 
   ok1(task.CheckTask());
 
-  AircraftState aircraft = aircraft_zero;
+  AircraftState aircraft;
+  aircraft.Reset();
   aircraft.location = MakeGeoPoint(0, 44.5);
   aircraft.altitude = fixed(1700);
   task.Update(aircraft, aircraft, glide_polar);
@@ -278,7 +279,8 @@ TestHighFinish()
 
   ok1(task.CheckTask());
 
-  AircraftState aircraft = aircraft_zero;
+  AircraftState aircraft;
+  aircraft.Reset();
   aircraft.location = wp1.location;
   aircraft.altitude = fixed(1000);
   task.Update(aircraft, aircraft, glide_polar);
@@ -323,7 +325,8 @@ TestHighTP()
 
   ok1(task.CheckTask());
 
-  AircraftState aircraft = aircraft_zero;
+  AircraftState aircraft;
+  aircraft.Reset();
   aircraft.location = wp1.location;
   aircraft.altitude = fixed(2000);
   task.Update(aircraft, aircraft, glide_polar);
@@ -358,7 +361,8 @@ TestHighTPFinal()
 
   ok1(task.CheckTask());
 
-  AircraftState aircraft = aircraft_zero;
+  AircraftState aircraft;
+  aircraft.Reset();
   aircraft.location = wp1.location;
   aircraft.altitude = fixed(1200);
   task.Update(aircraft, aircraft, glide_polar);
@@ -392,7 +396,8 @@ TestLowTPFinal()
 
   ok1(task.CheckTask());
 
-  AircraftState aircraft = aircraft_zero;
+  AircraftState aircraft;
+  aircraft.Reset();
   aircraft.location = wp1.location;
   aircraft.altitude = fixed(2500);
   task.Update(aircraft, aircraft, glide_polar);
