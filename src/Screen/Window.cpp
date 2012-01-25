@@ -140,6 +140,8 @@ bool
 Window::on_destroy()
 {
 #ifndef USE_GDI
+  visible = false;
+
   if (capture)
     release_capture();
 
