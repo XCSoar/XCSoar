@@ -204,9 +204,7 @@ protected:
       if (!basic.location_available || !basic.NavAltitudeAvailable())
         return;
 
-      const fixed safety_height = way_point.IsLandable()
-        ? task_behaviour.safety_height_arrival
-        : task_behaviour.route_planner.safety_height_terrain;
+      const fixed safety_height = task_behaviour.safety_height_arrival;
       const fixed target_altitude = way_point.altitude + safety_height;
       const fixed delta_h = basic.nav_altitude - target_altitude;
       if (!positive(delta_h))
