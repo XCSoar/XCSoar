@@ -29,6 +29,7 @@
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver/FLARM.hpp"
 #include "Device/Driver/FlymasterF1.hpp"
+#include "Device/Driver/FlyNet.hpp"
 #include "Device/Driver/Flytec.hpp"
 #include "Device/Driver/Leonardo.hpp"
 #include "Device/Driver/LX.hpp"
@@ -317,6 +318,52 @@ TestFlymasterF1()
                         nmea_info));
   ok1(nmea_info.voltage_available);
   ok1(equals(nmea_info.voltage, 12.7));
+
+  delete device;
+}
+
+static void
+TestFlyNet()
+{
+  NullPort null;
+  Device *device = flynet_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = fixed_one;
+
+  ok1(device->ParseNMEA("_PRS 00017CBA", nmea_info));
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure.GetPascal(), 97466));
+
+  nmea_info.Reset();
+  nmea_info.clock = fixed_one;
+
+  ok1(device->ParseNMEA("_PRS 00018BCD", nmea_info));
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure.GetPascal(), 101325));
+
+  nmea_info.Reset();
+  nmea_info.clock = fixed_one;
+
+  ok1(device->ParseNMEA("_BAT 0", nmea_info));
+  ok1(nmea_info.battery_level_available);
+  ok1(equals(nmea_info.battery_level, 0));
+
+  nmea_info.Reset();
+  nmea_info.clock = fixed_one;
+
+  ok1(device->ParseNMEA("_BAT 7", nmea_info));
+  ok1(nmea_info.battery_level_available);
+  ok1(equals(nmea_info.battery_level, 70));
+
+  nmea_info.Reset();
+  nmea_info.clock = fixed_one;
+
+  ok1(device->ParseNMEA("_BAT A", nmea_info));
+  ok1(nmea_info.battery_level_available);
+  ok1(equals(nmea_info.battery_level, 100));
 
   delete device;
 }
@@ -845,7 +892,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(442);
+  plan_tests(458);
 
   TestGeneric();
   TestTasman();
@@ -861,6 +908,7 @@ int main(int argc, char **argv)
   TestVega();
   TestWesterboer();
   TestZander();
+  TestFlyNet();
 
   /* XXX the Triadis drivers have too many dependencies, not enabling
      for now */

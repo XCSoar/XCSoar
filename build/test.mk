@@ -536,6 +536,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Driver/EW.cpp \
 	$(SRC)/Device/Driver/EWMicroRecorder.cpp \
 	$(SRC)/Device/Driver/FlymasterF1.cpp \
+	$(SRC)/Device/Driver/FlyNet.cpp \
 	$(SRC)/Device/Driver/Flytec.cpp \
 	$(SRC)/Device/Driver/Leonardo.cpp \
 	$(SRC)/Device/Driver/ILEC.cpp \
@@ -577,7 +578,7 @@ TEST_DRIVER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/TestDriver.cpp
-TEST_DRIVER_DEPENDS = MATH IO
+TEST_DRIVER_DEPENDS = MATH IO DRIVER
 $(eval $(call link-program,TestDriver,TEST_DRIVER))
 
 TEST_WAY_POINT_FILE_SOURCES = \

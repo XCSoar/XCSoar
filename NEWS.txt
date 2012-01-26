@@ -9,6 +9,7 @@ Version 6.3 - not yet released
   - COM port monitor
   - added separate FLARM driver for declaration and IGC file download
   - added driver for the Westerboer VW921/VW922 devices
+  - added driver for the FlyNet variometer
 * map
   - airspace rendering fixed
   - show new map items list on click
