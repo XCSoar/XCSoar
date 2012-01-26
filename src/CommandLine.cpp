@@ -93,6 +93,14 @@ void ParseCommandLine(Args args)
     }
 #endif
 
+#if defined(_WIN32) && !defined(_WIN32_WCE) && !defined(__WINE__)
+    if (strcmp(s, "-console") == 0) {
+      AllocConsole();
+      freopen("CONOUT$", "wb", stdout);
+      continue;
+    }
+#endif
+
     args.UsageError();
   }
 
