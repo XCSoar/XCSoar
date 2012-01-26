@@ -48,8 +48,8 @@ Test(const fixed distance, const fixed altitude, const SpeedVector wind)
   const fixed mc = glide_polar.GetMC();
   const fixed v_climb_progress = mc * ld_ground - state.head_wind;
 
-  const fixed initial_climb_distance = state.altitude_difference * ld_ground;
-  if (-initial_climb_distance >= distance ||
+  const fixed initial_glide_distance = state.altitude_difference * ld_ground;
+  if (initial_glide_distance >= distance ||
       (!positive(mc) && !positive(v_climb_progress))) {
     /* reachable by pure glide */
     ok1(result.validity == GlideResult::RESULT_OK);
@@ -78,10 +78,10 @@ Test(const fixed distance, const fixed altitude, const SpeedVector wind)
   }
 
   /*
-  const fixed drifted_distance = (distance - initial_climb_distance)
+  const fixed drifted_distance = (distance - initial_glide_distance)
     * state.head_wind / v_climb_progress;
     */
-  const fixed drifted_height_climb = (distance - initial_climb_distance)
+  const fixed drifted_height_climb = (distance - initial_glide_distance)
     * mc / v_climb_progress;
   const fixed drifted_height_glide =
     drifted_height_climb + state.altitude_difference;
