@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-17 15:00+0100\n"
-"PO-Revision-Date: 2012-01-23 21:15+0000\n"
+"PO-Revision-Date: 2012-01-25 21:46+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-23 22:32+0000\n"
-"X-Generator: Launchpad (build 14713)\n"
+"X-Launchpad-Export-Date: 2012-01-26 13:52+0000\n"
+"X-Generator: Launchpad (build 14719)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -116,7 +116,7 @@ msgstr "Circuit déclaré"
 
 #: src/Logger/ExternalLogger.cpp:109
 msgid "No logger connected"
-msgstr "Pas d'enregistreur connecté"
+msgstr "Pas de logger externe connecté"
 
 #: src/Logger/ExternalLogger.cpp:110
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:394
@@ -138,7 +138,7 @@ msgstr "Impossible de télécharger la liste de vol."
 
 #: src/Logger/ExternalLogger.cpp:285
 msgid "Logger is empty."
-msgstr "Enregistreur vide."
+msgstr "Logger ext. vide"
 
 #: src/Logger/ExternalLogger.cpp:304
 msgid "Failed to download flight."
@@ -281,7 +281,7 @@ msgstr "Reprendre"
 #: src/Menu/ExpandMacros.cpp:321 src/Menu/ExpandMacros.cpp:325
 #: src/Dialogs/Message.cpp:169
 msgid "Abort"
-msgstr "Abandonner"
+msgstr "Abandon"
 
 #: src/Menu/ExpandMacros.cpp:438 src/Dialogs/dlgBasicSettings.cpp:122
 #: Data/Dialogs/dlgLoggerReplay.xml:12
@@ -2316,11 +2316,11 @@ msgstr "Zoom auto OFF"
 
 #: src/Input/InputEventsMap.cpp:94
 msgid "Circling zoom on"
-msgstr "Zoom Thermique ON"
+msgstr "Zoom en spirale ON"
 
 #: src/Input/InputEventsMap.cpp:96
 msgid "Circling zoom off"
-msgstr "Zoom Thermique OFF"
+msgstr "Zoom en spirale OFF"
 
 #: src/Input/InputEventsAirspace.cpp:64
 msgid "Show airspace off"
@@ -3101,7 +3101,7 @@ msgstr "Télécharger le vol"
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:282
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:296
 msgid "Manage"
-msgstr "Configurer"
+msgstr "General"
 
 #: src/Dialogs/DeviceListDialog.cpp:282
 msgid "Monitor"
@@ -3584,7 +3584,7 @@ msgstr "Modes InfoBoxes"
 #: Data/Input/default.xci:1126
 #, no-c-format
 msgid "Logger"
-msgstr "Enregistreur"
+msgstr "Enregistr."
 
 #: src/Dialogs/dlgConfiguration.cpp:107
 #, no-c-format
@@ -3944,7 +3944,7 @@ msgstr "Affiche l'assistant en spirale"
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:68
 msgid "Thermal band"
-msgstr "Assistant spriale"
+msgstr "Profil d'ascendance"
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:69
 msgid ""
@@ -4143,13 +4143,15 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:110
 msgid "Auto. blank"
-msgstr ""
+msgstr "Exinction auto."
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:111
 msgid ""
 "This determines whether to blank the display after a long period of "
 "inactivity when operating on internal battery power."
 msgstr ""
+"Activation de l'extinction automatique de l'écran après une certaine durée "
+"d'inactivité, lorsqu'utilisé sur batterie."
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:117
@@ -4592,7 +4594,7 @@ msgstr ""
 #. Expert item
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:105
 msgid "Auto. logger"
-msgstr "Enregistreur auto."
+msgstr "Enregistr. auto."
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:106
 msgid ""
@@ -4657,7 +4659,7 @@ msgstr ""
 #: Data/Dialogs/pnlTaskCalculator.xml:4 Data/Dialogs/pnlTaskCalculator_L.xml:5
 #, no-c-format
 msgid "Target"
-msgstr "Destination"
+msgstr "Objectif"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
@@ -4666,7 +4668,7 @@ msgstr "Utiliser le waypoint cible actuel comme base."
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:107
 msgid "Cruise orientation"
-msgstr ""
+msgstr "Orientation en transition"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:108
 msgid "Determines how the screen is rotated with the glider"
@@ -4674,7 +4676,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:113
 msgid "Circling orientation"
-msgstr ""
+msgstr "Orientation en spirale"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:114
 msgid "Determines how the screen is rotated with the glider while circling"
@@ -4682,7 +4684,7 @@ msgstr "Détermine comment l'écran est orienté avec le planeur en spirale"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:119
 msgid "Circling zoom"
-msgstr "Zoom Thermique"
+msgstr "Zoom en spirale"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:120
 msgid ""
@@ -4712,7 +4714,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:134
 msgid "Max. auto zoom distance"
-msgstr ""
+msgstr "Max. dist. zoom auto"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:135
 msgid "The upper limit for auto zoom distance."
@@ -4766,6 +4768,8 @@ msgid ""
 "When enabled and MC is positive, route planning allows climbs between the "
 "aircraft location and destination."
 msgstr ""
+"Si activé et MacCready positif, alors le calcul de la trajectoire autorise "
+"les montées entre la position appareil et la destination."
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:125
@@ -4940,7 +4944,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:90
 msgid "STF risk factor"
-msgstr "Facteur de risque STF"
+msgstr "Coef. risque sur calage"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:91
 msgid ""
@@ -4985,7 +4989,7 @@ msgstr ""
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:110
 msgid "More waypoints"
-msgstr "Autres waypoints"
+msgstr "Autres wpts."
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:111
 msgid ""
@@ -4996,7 +5000,7 @@ msgstr ""
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:115
 msgid "Watched waypoints"
-msgstr ""
+msgstr "Waypoints spéc."
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:116
 msgid ""
@@ -5044,7 +5048,7 @@ msgstr ""
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:137
 msgid "Waypoint details"
-msgstr "Détails waypoints"
+msgstr "Détails wpts."
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:138
 msgid ""
@@ -5140,11 +5144,11 @@ msgstr "Affiche la tête de la flèche et une ligne en pointillés."
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:127
 msgid "Track bearing"
-msgstr ""
+msgstr "Route instantanée"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:128
 msgid "Display the track bearing (ground track projection) on the map."
-msgstr "Afficher la route sur la carte (la projection au sol de la route)."
+msgstr "Affichage de la route sur la carte (projection au sol de la route)."
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:131
 msgid "FLARM traffic"
@@ -5178,12 +5182,12 @@ msgstr ""
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:144
 msgid "Trail type"
-msgstr ""
+msgstr "Type de la trace"
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:147
 msgid "Trail scaled"
-msgstr ""
+msgstr "Epaississement de la trace"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:148
 msgid ""
@@ -5195,7 +5199,7 @@ msgstr ""
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:152
 msgid "Detour cost markers"
-msgstr ""
+msgstr "Indicateurs du détour"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:153
 msgid ""
@@ -5819,7 +5823,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:159
 msgid "Landable symbols"
-msgstr "Symboles terrains posables"
+msgstr "Symbo. dégagmts"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:160
 msgid ""
@@ -5858,7 +5862,7 @@ msgstr ""
 #. Expert item
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:177
 msgid "Scale runway length"
-msgstr "Longueur de piste à l'échelle"
+msgstr "Piste à l'échelle"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:178
 msgid ""
@@ -5891,7 +5895,7 @@ msgstr "Calculateur"
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:279
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:293
 msgid "Turn Points"
-msgstr "Points de virage"
+msgstr "Pts de virage"
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:284
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:298
@@ -6041,7 +6045,7 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:85
 msgid "FAI rules, path from start to a goal destination."
-msgstr ""
+msgstr "Règles FAI, pour trajet du point de départ au point d'arrivée."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:87
 msgid ""
@@ -6856,7 +6860,7 @@ msgstr "A-"
 
 #: Data/Dialogs/dlgWaypointSelect.xml:1 Data/Dialogs/dlgWaypointSelect_L.xml:1
 msgid "Select Waypoint"
-msgstr "Select. Waypoint"
+msgstr "Selection Waypoint"
 
 #: Data/Dialogs/dlgWaypointDetails.xml:19
 #: Data/Dialogs/dlgWaypointDetails_L.xml:19
@@ -7448,11 +7452,11 @@ msgstr ""
 
 #: Data/Dialogs/pnlTaskList.xml:8 Data/Dialogs/pnlTaskList_L.xml:12
 msgid "Browse"
-msgstr "Parcourir"
+msgstr "Circuits enregistrés"
 
 #: Data/Dialogs/pnlTaskList.xml:6 Data/Dialogs/pnlTaskList_L.xml:10
 msgid "New Task"
-msgstr ""
+msgstr "Nouveau circuit"
 
 #: Data/Dialogs/dlgTarget.xml:4 Data/Dialogs/dlgTarget_L.xml:6
 msgid "This sets the task point for review."
@@ -8101,7 +8105,7 @@ msgstr ""
 #: Data/Dialogs/dlgWaypointSelect.xml:19
 #: Data/Dialogs/dlgWaypointSelect_L.xml:17
 msgid "Select"
-msgstr "Sélectionner"
+msgstr "Sélection"
 
 #: Data/Dialogs/dlgVoice.xml:6
 msgid "Climb rate"
@@ -8383,8 +8387,8 @@ msgid ""
 "Waypoint\n"
 "List"
 msgstr ""
-"Liste Pts\n"
-"de Virage"
+"Liste des\n"
+"waypoints"
 
 #: Data/Input/default.xci:498 Data/Input/default.xci:547
 #: Data/Input/default.xci:596 Data/Input/default.xci:880
@@ -8473,7 +8477,7 @@ msgstr "Marker déposé"
 
 #: Data/Input/default.xci:603 Data/Input/default.xci:1133
 msgid "Raw Logger"
-msgstr "Enregistreur brut"
+msgstr "Logger brut"
 
 #: Data/Input/default.xci:537 Data/Input/default.xci:1102
 msgid ""
