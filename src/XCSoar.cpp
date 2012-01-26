@@ -42,6 +42,9 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "ResourceLoader.hpp"
 #include "Language/Language.hpp"
+#include "Util/Args.hpp"
+
+static const char *Usage = "";
 
 /**
  * Main entry point for the whole XCSoar application
@@ -73,14 +76,10 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   // Read options from the command line
 #ifndef WIN32
-  const TCHAR *lpCmdLine = argc >= 2 ? argv[1] : _T("");
-#elif !defined(_WIN32_WCE)
-  /* on Windows (non-CE), the lpCmdLine argument is narrow, and we
-     have to use GetCommandLine() to get the UNICODE string */
-  LPCTSTR lpCmdLine = GetCommandLine();
+  ParseCommandLine(Args(argc, argv, Usage));
+#else
+  ParseCommandLine(Args(GetCommandLine(), Usage));
 #endif
-
-  ParseCommandLine(lpCmdLine);
 
   ScreenGlobalInit screen_init;
 
