@@ -119,6 +119,14 @@ TestWind(const SpeedVector &wind)
   Test(fixed(10000), fixed_zero, wind);
   Test(fixed(10000), fixed(100), wind);
   Test(fixed(10000), fixed(200), wind);
+
+  Test(fixed(1000), fixed(-500), wind);
+  Test(fixed(1000), fixed(-100), wind);
+  Test(fixed(1000), fixed_zero, wind);
+  Test(fixed(1000), fixed(100), wind);
+  Test(fixed(1000), fixed(500), wind);
+  Test(fixed(100000), fixed(-1000), wind);
+  Test(fixed(100000), fixed(4000), wind);
 }
 
 static void
@@ -129,11 +137,12 @@ TestAll()
   TestWind(SpeedVector(Angle::zero(), fixed(5)));
   TestWind(SpeedVector(Angle::zero(), fixed(10)));
   TestWind(SpeedVector(Angle::zero(), fixed(15)));
+  TestWind(SpeedVector(Angle::zero(), fixed(30)));
 }
 
 int main(int argc, char **argv)
 {
-  plan_tests(760);
+  plan_tests(2095);
 
   TestAll();
 
