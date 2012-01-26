@@ -68,19 +68,6 @@ StringMallocParse(const TCHAR* old_string)
   return _tcsdup(buffer);
 }
 
-/**
- * Converts a char array to a TCHAR array
- * @param pszDest TCHAR array (Output)
- * @param pszSrc char array (Input)
- */
-void
-ConvertCToT(TCHAR *pszDest, const char *pszSrc)
-{
-  do {
-    *pszDest++ = (TCHAR)*pszSrc;
-  } while (*pszSrc++ != '\0');
-}
-
 int
 TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines)
 {

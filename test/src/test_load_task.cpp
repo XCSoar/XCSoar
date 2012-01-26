@@ -1,7 +1,6 @@
 #include "test_debug.hpp"
 #include "harness_aircraft.hpp"
 #include "Task/TaskManager.hpp"
-#include "UtilsText.hpp"
 #include <fstream>
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
@@ -10,8 +9,7 @@
 #include "Util/DataNodeXML.hpp"
 
 static OrderedTask* task_load(OrderedTask* task) {
-  TCHAR szFilename[MAX_PATH];
-  ConvertCToT(szFilename, task_file.c_str());
+  PathName szFilename(task_file.c_str());
   DataNode* root = DataNodeXML::load(szFilename);
   if (!root)
     return NULL;

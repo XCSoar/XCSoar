@@ -2,10 +2,10 @@
 #include "harness_aircraft.hpp"
 #include "Replay/IgcReplay.hpp"
 #include "Computer/TraceComputer.hpp"
-#include "UtilsText.hpp"
 #include "Computer/FlyingComputer.hpp"
 #include "Engine/Contest/ContestManager.hpp"
 #include "ComputerSettings.hpp"
+#include "OS/PathName.hpp"
 
 #include <fstream>
 
@@ -133,8 +133,7 @@ test_replay(const Contests olc_type,
   AircraftState state_last;
 
   ReplayLoggerSim sim;
-  TCHAR szFilename[MAX_PATH];
-  ConvertCToT(szFilename, replay_file.c_str());
+  PathName szFilename(replay_file.c_str());
   sim.SetFilename(szFilename);
 
   ComputerSettings settings_computer;

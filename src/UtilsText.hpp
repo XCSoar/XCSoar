@@ -28,8 +28,6 @@ Copyright_License {
 // Parse string (new lines etc) and malloc the string
 TCHAR* StringMallocParse(const TCHAR* old_string);
 
-void ConvertCToT(TCHAR *pszDest, const char *pszSrc);
-
 int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines);
 
 #endif

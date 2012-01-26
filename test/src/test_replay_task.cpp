@@ -3,8 +3,8 @@
 #include "TaskEventsPrint.hpp"
 #include "Replay/IgcReplay.hpp"
 #include "Task/TaskManager.hpp"
-#include "UtilsText.hpp"
 #include "Computer/FlyingComputer.hpp"
+#include "OS/PathName.hpp"
 
 #include <fstream>
 
@@ -12,8 +12,7 @@
 #include "Util/DataNodeXML.hpp"
 
 static OrderedTask* task_load(OrderedTask* task) {
-  TCHAR szFilename[MAX_PATH];
-  ConvertCToT(szFilename, task_file.c_str());
+  PathName szFilename(task_file.c_str());
   DataNode* root = DataNodeXML::load(szFilename);
   if (!root)
     return NULL;
@@ -103,8 +102,7 @@ test_replay()
   ReplayLoggerSim sim;
   sim.state.netto_vario = fixed_zero;
 
-  TCHAR szFilename[MAX_PATH];
-  ConvertCToT(szFilename, replay_file.c_str());
+  PathName szFilename(replay_file.c_str());
   sim.SetFilename(szFilename);
 
   sim.Start();
