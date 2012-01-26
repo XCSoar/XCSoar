@@ -27,8 +27,6 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Simulator.hpp"
 
-#include <windef.h> /* for MAX_PATH */
-
 #if !defined(_WIN32_WCE)
 int SCREENWIDTH = 640;
 int SCREENHEIGHT = 480;
