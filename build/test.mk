@@ -683,12 +683,14 @@ DEBUG_PROGRAM_NAMES = \
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += FeedNMEA \
 	FeedTCP \
-	FeedTCPServer
+	FeedTCPServer \
+	FeedFlyNetData
 endif
 
 ifeq ($(TARGET),PC)
 DEBUG_PROGRAM_NAMES += FeedTCP \
-  FeedTCPServer
+  FeedTCPServer \
+  FeedFlyNetData
 endif
 
 ifeq ($(HAVE_NET),y)
@@ -2053,6 +2055,22 @@ endif
 endif
 
 $(eval $(call link-program,FeedTCPServer,FEED_TCP_SERVER))
+
+FEED_FLYNET_DATA_SOURCES = \
+	$(SRC)/Math/fixed.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Util/StringUtil.cpp \
+	$(TEST_SRC_DIR)/FeedFlyNetData.cpp
+
+ifeq ($(HAVE_POSIX),n)
+ifeq ($(HAVE_CE),y)
+FEED_FLYNET_DATA_LDLIBS += -lwinsock
+else
+FEED_FLYNET_DATA_LDLIBS += -lws2_32
+endif
+endif
+
+$(eval $(call link-program,FeedFlyNetData,FEED_FLYNET_DATA))
 
 TASK_INFO_SOURCES = \
 	$(SRC)/xmlParser.cpp \
