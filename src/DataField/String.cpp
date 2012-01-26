@@ -30,9 +30,7 @@ DataFieldString::SetAsString(const TCHAR *Value)
     return;
 
   mValue = Value;
-
-  if (!GetDetachGUI() && mOnDataAccess != NULL)
-    (mOnDataAccess)(this, daChange);
+  Modified();
 }
 
 void

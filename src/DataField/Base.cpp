@@ -31,10 +31,20 @@ enum { ComboPopupITEMMAX = 100 };
 
 DataField::DataField(Type _type, bool _support_combo,
                      DataAccessCallback_t OnDataAccess)
-  :SupportCombo(_support_combo), type(_type),
-   mOnDataAccess(OnDataAccess),
+  :mOnDataAccess(OnDataAccess),
+   SupportCombo(_support_combo), type(_type),
    mItemHelp(false), mDetachGUI(false)
 {
+}
+
+void
+DataField::Modified()
+{
+  if (GetDetachGUI())
+    return;
+
+  if (mOnDataAccess != NULL)
+    mOnDataAccess(this, daChange);
 }
 
 void

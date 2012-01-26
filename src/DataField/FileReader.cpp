@@ -244,8 +244,7 @@ DataFieldFileReader::Set(int Value)
 
   if ((unsigned)Value < files.size()) {
     mValue = Value;
-    if (mOnDataAccess != NULL)
-      mOnDataAccess(this, daChange);
+    Modified();
   }
 }
 
@@ -256,8 +255,7 @@ DataFieldFileReader::Inc(void)
 
   if (mValue < files.size() - 1) {
     mValue++;
-    if (mOnDataAccess != NULL)
-      mOnDataAccess(this, daChange);
+    Modified();
   }
 }
 
@@ -266,8 +264,7 @@ DataFieldFileReader::Dec(void)
 {
   if (mValue > 0) {
     mValue--;
-    if (mOnDataAccess != NULL)
-      mOnDataAccess(this, daChange);
+    Modified();
   }
 }
 

@@ -53,13 +53,14 @@ public:
 
   typedef void (*DataAccessCallback_t)(DataField * Sender, DataAccessKind_t Mode);
 
+  DataAccessCallback_t mOnDataAccess;
+
   // all Types dataField support combolist except DataFieldString.
   const bool SupportCombo;
 
 protected:
   const Type type;
 
-  DataAccessCallback_t mOnDataAccess;
   bool mItemHelp;
 
 private:
@@ -113,6 +114,13 @@ public:
   bool GetItemHelpEnabled() { return mItemHelp; }
 
   void CopyString(TCHAR * szStringOut, bool bFormatted);
+
+protected:
+  /**
+   * Notify interested parties that the value of this object has
+   * been modified.
+   */
+  void Modified();
 };
 
 #endif

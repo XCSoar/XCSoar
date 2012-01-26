@@ -201,8 +201,7 @@ DataFieldEnum::Inc(void)
 
   if (value < entries.size() - 1) {
     value++;
-    if (!GetDetachGUI() && mOnDataAccess != NULL)
-      (mOnDataAccess)(this, daChange);
+    Modified();
   }
 }
 
@@ -218,8 +217,7 @@ DataFieldEnum::Dec(void)
 
   if (value > 0) {
     value--;
-    if (!GetDetachGUI() && mOnDataAccess != NULL)
-      (mOnDataAccess)(this, daChange);
+    Modified();
   }
 }
 
@@ -284,8 +282,7 @@ DataFieldEnum::SetIndex(unsigned new_value, bool invoke_callback)
     return;
 
   value = new_value;
-  if (invoke_callback && !GetDetachGUI() && mOnDataAccess != NULL)
-    mOnDataAccess(this, daChange);
+  Modified();
 }
 
 unsigned

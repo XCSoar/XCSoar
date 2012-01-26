@@ -67,8 +67,7 @@ DataFieldBoolean::SetAsBoolean(bool Value)
 {
   if (mValue != Value) {
     mValue = Value;
-    if (!GetDetachGUI() && mOnDataAccess != NULL)
-      (mOnDataAccess)(this, daChange);
+    Modified();
   }
 }
 

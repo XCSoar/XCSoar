@@ -69,8 +69,7 @@ DataFieldInteger::SetAsInteger(int Value)
     Value = mMax;
   if (mValue != Value) {
     mValue = Value;
-    if (!GetDetachGUI() && mOnDataAccess != NULL)
-      (mOnDataAccess)(this, daChange);
+    Modified();
   }
 }
 
