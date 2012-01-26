@@ -28,7 +28,7 @@ Copyright_License {
 #include "IO/LineReader.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/StaticString.hpp"
-#include "UtilsText.hpp"
+#include "Util/EscapeBackslash.hpp"
 #include "LogFile.hpp"
 #include "Compatibility/string.h" /* for _ttoi() */
 
@@ -93,7 +93,7 @@ struct EventBuilder {
       if (location > 0) {
         // Only copy this once per object - save string space
         if (!new_label) {
-          new_label = StringMallocParse(label);
+          new_label = UnescapeBackslash(label);
         }
 
         config.AppendMenu(mode_id, new_label, location, event_id);
@@ -230,7 +230,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
 
             pt2Event event = InputEvents::findEvent(d_event);
             if (event) {
-              TCHAR *allocated = StringMallocParse(d_misc);
+              TCHAR *allocated = UnescapeBackslash(d_misc);
               current.event_id = config.AppendEvent(event, allocated,
                                                     current.event_id);
 

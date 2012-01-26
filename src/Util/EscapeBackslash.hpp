@@ -21,13 +21,10 @@ Copyright_License {
 }
 */
 
-#include "UtilsText.hpp"
-#include "Compatibility/string.h"
+#ifndef XCSOAR_UTIL_ESCAPE_BACKSLASH_HPP
+#define XCSOAR_UTIL_ESCAPE_BACKSLASH_HPP
 
-#include <assert.h>
-#include <stdlib.h>
-#include <string.h>
-#include <windef.h>
+#include <tchar.h>
 
 /**
  * Parses the special characters (cr, lf, back slash) in the old_string and
@@ -36,34 +33,6 @@ Copyright_License {
  * @return The new parsed string
  */
 TCHAR *
-StringMallocParse(const TCHAR* old_string)
-{
-  TCHAR buffer[2048]; // Note - max size of any string we cope with here !
+UnescapeBackslash(const TCHAR *old_string);
 
-  unsigned int used = 0;
-
-  for (unsigned int i = 0; i < _tcslen(old_string); i++) {
-    if (used < 2045) {
-      if (old_string[i] == '\\') {
-        if (old_string[i + 1] == 'r') {
-          buffer[used++] = '\r';
-          i++;
-        } else if (old_string[i + 1] == 'n') {
-          buffer[used++] = '\n';
-          i++;
-        } else if (old_string[i + 1] == '\\') {
-          buffer[used++] = '\\';
-          i++;
-        } else {
-          buffer[used++] = old_string[i];
-        }
-      } else {
-        buffer[used++] = old_string[i];
-      }
-    }
-  }
-
-  buffer[used++] = _T('\0');
-
-  return _tcsdup(buffer);
-}
+#endif

@@ -29,7 +29,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
 #include "LocalTime.hpp"
-#include "UtilsText.hpp"
 #include "OS/PathName.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "ComputerSettings.hpp"

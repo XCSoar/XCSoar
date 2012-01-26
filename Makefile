@@ -571,7 +571,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/FlarmDetails.cpp \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
-	$(SRC)/UtilsText.cpp \
 	$(SRC)/CommandLine.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/SystemLoad.cpp \

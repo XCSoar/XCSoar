@@ -28,7 +28,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "StringUtil.hpp"
-#include "UtilsText.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "IO/ConfiguredFile.hpp"

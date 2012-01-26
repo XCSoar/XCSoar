@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "LocalPath.hpp"
-#include "UtilsText.hpp"
 #include "MainWindow.hpp"
 #include "StringUtil.hpp"
 #include "IO/DataFile.hpp"

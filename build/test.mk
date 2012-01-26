@@ -1001,7 +1001,6 @@ RUN_INPUT_PARSER_SOURCES = \
 	$(SRC)/Input/InputConfig.cpp \
 	$(SRC)/Input/InputParser.cpp \
 	$(SRC)/Menu/MenuData.cpp \
-	$(SRC)/UtilsText.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunInputParser.cpp
 RUN_INPUT_PARSER_DEPENDS = IO UTIL
@@ -1105,7 +1104,6 @@ $(eval $(call link-program,RunTCPListener,RUN_TCP_LISTENER))
 
 RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
-	$(SRC)/UtilsText.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Port/Port.cpp \
@@ -1520,7 +1518,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
-	$(SRC)/UtilsText.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/Earth.cpp \
@@ -1568,7 +1565,6 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \
-	$(SRC)/UtilsText.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
@@ -1936,7 +1932,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/Clock.cpp \
-	$(SRC)/UtilsText.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -1981,7 +1976,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \

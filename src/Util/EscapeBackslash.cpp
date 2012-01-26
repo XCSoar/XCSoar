@@ -20,12 +20,40 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#if !defined(XCSOAR_UTILS_TEXT_H)
-#define XCSOAR_UTILS_TEXT_H
 
-#include <tchar.h>
+#include "EscapeBackslash.hpp"
 
-// Parse string (new lines etc) and malloc the string
-TCHAR* StringMallocParse(const TCHAR* old_string);
+#include <string.h>
 
-#endif
+TCHAR *
+UnescapeBackslash(const TCHAR* old_string)
+{
+  TCHAR buffer[2048]; // Note - max size of any string we cope with here !
+
+  unsigned int used = 0;
+
+  for (unsigned int i = 0; i < _tcslen(old_string); i++) {
+    if (used < 2045) {
+      if (old_string[i] == '\\') {
+        if (old_string[i + 1] == 'r') {
+          buffer[used++] = '\r';
+          i++;
+        } else if (old_string[i + 1] == 'n') {
+          buffer[used++] = '\n';
+          i++;
+        } else if (old_string[i + 1] == '\\') {
+          buffer[used++] = '\\';
+          i++;
+        } else {
+          buffer[used++] = old_string[i];
+        }
+      } else {
+        buffer[used++] = old_string[i];
+      }
+    }
+  }
+
+  buffer[used++] = _T('\0');
+
+  return _tcsdup(buffer);
+}

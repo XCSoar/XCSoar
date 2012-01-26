@@ -25,7 +25,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
-#include "UtilsText.hpp"
+#include "Util/EscapeBackslash.hpp"
 #include "StringUtil.hpp"
 #include "IO/ConfiguredFile.hpp"
 
@@ -134,7 +134,7 @@ StatusMessageList::LoadFile(TLineReader &reader)
           // JMW fix memory leak
           free((void*)const_cast<TCHAR *>(*location));
         }
-        *location = StringMallocParse(value);
+        *location = UnescapeBackslash(value);
       }
     }
   }

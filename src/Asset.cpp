@@ -24,7 +24,6 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Util/Macros.hpp"
 #include "Profile/Profile.hpp"
-#include "UtilsText.hpp"
 #include "LogFile.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"

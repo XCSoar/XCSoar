@@ -70,7 +70,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Gauge/GaugeFLARM.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "UtilsText.hpp"
 #include "StringUtil.hpp"
 #include "Audio/Sound.hpp"
 #include "Interface.hpp"
