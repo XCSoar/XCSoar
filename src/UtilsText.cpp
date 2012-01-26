@@ -67,27 +67,3 @@ StringMallocParse(const TCHAR* old_string)
 
   return _tcsdup(buffer);
 }
-
-int
-TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines)
-{
-  assert(LineOffsets != NULL);
-  assert(maxLines > 0);
-
-  if (text == NULL || text[0] == 0)
-    return 0;
-
-  int nTextLines = 0;
-  const TCHAR *p = text;
-
-  do {
-    const TCHAR *newline = _tcschr(p, _T('\n'));
-    if (newline == NULL)
-      break;
-
-    LineOffsets[nTextLines++] = p - text;
-    p = newline + 1;
-  } while (nTextLines < maxLines);
-
-  return nTextLines;
-}
