@@ -25,11 +25,11 @@ Copyright_License {
 #define ARGS_HPP
 
 #include "Compiler.h"
+#include "Util/tstring.hpp"
 
-#if defined(_UNICODE) || defined(WIN32)
+#ifdef _UNICODE
 #include "OS/PathName.hpp"
 #endif
-#include "Util/tstring.hpp"
 
 #include <list>
 #include <algorithm>
@@ -83,9 +83,8 @@ public:
     delete[] cmdline;
   }
 
-  void ParseCommandLine(const TCHAR *_cmdline) {
-    NarrowPathName convert(_cmdline);
-    cmdline = strdup(convert);
+  void ParseCommandLine(const char *_cmdline) {
+    cmdline = strdup(_cmdline);
 
     char *p = cmdline;
     name = p;
@@ -105,6 +104,13 @@ public:
       args.push_back(p);
     }
   }
+
+#ifdef _UNICODE
+  void ParseCommandLine(const TCHAR *_cmdline) {
+    NarrowPathName convert(_cmdline);
+    ParseCommandLine(convert);
+  }
+#endif
 #endif
 
   Args &operator=(const Args &other) = delete;
