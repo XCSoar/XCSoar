@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "DebugReplay.hpp"
-#include "Args.hpp"
+#include "Util/Args.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"

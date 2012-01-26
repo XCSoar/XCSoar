@@ -25,7 +25,7 @@
 #include "Contest/ContestManager.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 #include "Printing.hpp"
-#include "Args.hpp"
+#include "Util/Args.hpp"
 #include "DebugReplay.hpp"
 #include "NMEA/Aircraft.hpp"
 
