@@ -46,66 +46,51 @@ void ParseCommandLine(Args args)
     if (s[1] == '-')
       s++;
 
-#ifdef SIMULATOR_AVAILABLE
-    if (strcmp(s, "-simulator") == 0) {
-      global_simulator_flag = true;
-      sim_set_in_cmd_line_flag = true;
-      continue;
-    }
-
-    if (strcmp(s, "-fly") == 0) {
-      global_simulator_flag=false;
-      sim_set_in_cmd_line_flag=true;
-      continue;
-    }
-#endif
-
     if (strncmp(s, "-profile=", 9) == 0) {
       s += 9;
       PathName convert(s);
       Profile::SetFiles(convert);
-      continue;
     }
-
+#ifdef SIMULATOR_AVAILABLE
+    else if (strcmp(s, "-simulator") == 0) {
+      global_simulator_flag = true;
+      sim_set_in_cmd_line_flag = true;
+    }
+    else if (strcmp(s, "-fly") == 0) {
+      global_simulator_flag=false;
+      sim_set_in_cmd_line_flag=true;
+    }
+#endif
 #if !defined(_WIN32_WCE)
-    if (isdigit(s[1])) {
+    else if (isdigit(s[1])) {
       char *p;
       SCREENWIDTH = strtol(s+1, &p, 10);
       if (*p != 'x' && *p != 'X')
         args.UsageError();
       s = p;
       SCREENHEIGHT = strtol(s+1, &p, 10);
-      continue;
     }
-
-    if (strcmp(s, "-portrait") == 0) {
+    else if (strcmp(s, "-portrait") == 0) {
       SCREENWIDTH = 480;
       SCREENHEIGHT = 640;
-      continue;
     }
-
-    if (strcmp(s, "-square") == 0) {
+    else if (strcmp(s, "-square") == 0) {
       SCREENWIDTH = 480;
       SCREENHEIGHT = 480;
-      continue;
     }
-
-    if (strcmp(s, "-small") == 0) {
+    else if (strcmp(s, "-small") == 0) {
       SCREENWIDTH = 320;
       SCREENHEIGHT = 240;
-      continue;
     }
 #endif
-
 #if defined(_WIN32) && !defined(_WIN32_WCE) && !defined(__WINE__)
-    if (strcmp(s, "-console") == 0) {
+    else if (strcmp(s, "-console") == 0) {
       AllocConsole();
       freopen("CONOUT$", "wb", stdout);
-      continue;
     }
 #endif
-
-    args.UsageError();
+    else
+      args.UsageError();
   }
 
 #if !defined(_WIN32_WCE)
