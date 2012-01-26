@@ -198,6 +198,13 @@ public:
   }
 
   /**
+   * Calculate the airspeed for the best glide ratio over ground,
+   * considering the given head wind.
+   */
+  gcc_pure
+  fixed GetBestGlideRatioSpeed(fixed head_wind) const;
+
+  /**
    * Takeoff speed
    * @return Takeoff speed threshold (m/s)
    */
