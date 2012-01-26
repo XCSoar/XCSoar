@@ -57,8 +57,8 @@ ComputePressure(NMEAInfo &basic, const ComputerSettings &settings_computer)
   const bool static_pressure_available = basic.static_pressure_available;
   const bool pressure_altitude_available = basic.pressure_altitude_available;
 
-  if (!basic.static_pressure_available) {
-    if (basic.pressure_altitude_available) {
+  if (!static_pressure_available) {
+    if (pressure_altitude_available) {
       basic.static_pressure =
         AtmosphericPressure::PressureAltitudeToStaticPressure(basic.pressure_altitude);
       basic.static_pressure_available = basic.pressure_altitude_available;
@@ -69,7 +69,7 @@ ComputePressure(NMEAInfo &basic, const ComputerSettings &settings_computer)
     }
   }
 
-  if (!basic.pressure_altitude_available) {
+  if (!pressure_altitude_available) {
     if (static_pressure_available) {
       basic.pressure_altitude =
         AtmosphericPressure::StaticPressureToPressureAltitude(basic.static_pressure);
