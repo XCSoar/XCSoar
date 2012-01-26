@@ -42,9 +42,22 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "ResourceLoader.hpp"
 #include "Language/Language.hpp"
+#include "Simulator.hpp"
 #include "Util/Args.hpp"
 
-static const char *Usage = "";
+static const char *Usage = "\n"
+#ifdef SIMULATOR_AVAILABLE
+  "  -simulator      bypass startup-screen, use simulator mode directly\n"
+  "  -fly            bypass startup-screen, use fly mode directly\n"
+#endif
+  "  -profile=fname  load profile from file fname\n"
+#if !defined(_WIN32_WCE)
+  "  -WIDTHxHEIGHT   use screen resolution WIDTH x HEIGHT\n"
+  "  -portrait       use a 480x640 screen resolution\n"
+  "  -square         use a 480x480 screen resolution\n"
+  "  -small          use a 320x240 screen resolution\n"
+#endif
+  ;
 
 /**
  * Main entry point for the whole XCSoar application
