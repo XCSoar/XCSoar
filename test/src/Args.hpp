@@ -64,6 +64,15 @@ public:
 #endif
   }
 
+  Args(const Args &other) = delete;
+
+  Args(Args &&other):name(other.name), usage(other.usage) {
+    std::swap(args, other.args);
+#ifdef WIN32
+    std::swap(cmdline, other.cmdline);
+#endif
+  }
+
 #ifdef WIN32
   Args(const TCHAR *_cmdline, const char *_usage)
     :usage(_usage) {
@@ -93,6 +102,8 @@ public:
     delete[] cmdline;
   }
 #endif
+
+  Args &operator=(const Args &other) = delete;
 
   bool IsEmpty() const {
     return args.empty();
