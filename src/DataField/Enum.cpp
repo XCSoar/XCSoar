@@ -282,7 +282,9 @@ DataFieldEnum::SetIndex(unsigned new_value, bool invoke_callback)
     return;
 
   value = new_value;
-  Modified();
+
+  if (invoke_callback)
+    Modified();
 }
 
 unsigned
