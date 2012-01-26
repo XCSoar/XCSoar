@@ -27,6 +27,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Util/Deserialiser.hpp"
 #include "Engine/Util/DataNodeXML.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <assert.h>
 
@@ -44,7 +45,7 @@ TaskFileXCSoar::GetTask(const Waypoints *waypoints, unsigned index) const
     return NULL;
 
   // Check if root node is a <Task> node
-  if (_tcscmp(root->get_name(), _T("Task")) != 0) {
+  if (!StringIsEqual(root->get_name(), _T("Task"))) {
     delete root;
     return NULL;
   }
