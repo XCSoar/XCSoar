@@ -54,20 +54,22 @@ Test(const fixed distance, const fixed altitude, const SpeedVector wind)
     /* reachable by pure glide */
     ok1(result.validity == GlideResult::RESULT_OK);
 
-    const fixed height_glide = distance / ld_ground;
+    const fixed best_speed =
+      glide_polar.GetBestGlideRatioSpeed(state.head_wind);
+    const fixed best_sink = glide_polar.SinkRate(best_speed);
+    const fixed ld_ground2 = positive(mc)
+      ? ld_ground
+      : (best_speed - state.head_wind) / best_sink;
+
+    const fixed height_glide = distance / ld_ground2;
     const fixed height_climb = fixed_zero;
     const fixed altitude_difference = altitude - height_glide;
 
-    /* more tolerance with strong wind because this unit test doesn't
-       optimise pure glide */
-    const int accuracy = wind.norm > fixed_ten
-      ? 5 : (wind.norm > fixed_one ? 10 : ACCURACY);
-
     ok1(equals(result.head_wind, wind.norm));
     ok1(equals(result.vector.Distance, distance));
-    ok1(equals(result.height_climb, height_climb, accuracy));
-    ok1(equals(result.height_glide, height_glide, accuracy));
-    ok1(equals(result.altitude_difference, altitude_difference, accuracy));
+    ok1(equals(result.height_climb, height_climb));
+    ok1(equals(result.height_glide, height_glide));
+    ok1(equals(result.altitude_difference, altitude_difference));
     return;
   }
 
