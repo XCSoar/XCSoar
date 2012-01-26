@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-17 15:00+0100\n"
-"PO-Revision-Date: 2011-12-20 15:44+0000\n"
+"PO-Revision-Date: 2012-01-25 23:48+0000\n"
 "Last-Translator: Xavi Domingo <xavi@santmodest.net>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-20 16:36+0000\n"
-"X-Generator: Launchpad (build 14538)\n"
+"X-Launchpad-Export-Date: 2012-01-26 13:52+0000\n"
+"X-Generator: Launchpad (build 14719)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -96,17 +96,19 @@ msgstr "Detener Registro"
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "Declare task?"
-msgstr ""
+msgstr "Declarar Manga"
 
 #: src/Logger/ExternalLogger.cpp:86
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
+"Error \n"
+"Aun no se Declaro una Manga!"
 
 #: src/Logger/ExternalLogger.cpp:91
 msgid "Task declared!"
-msgstr ""
+msgstr "Manga Declarada"
 
 #: src/Logger/ExternalLogger.cpp:109
 msgid "No logger connected"
@@ -119,7 +121,7 @@ msgstr "Declarar tarea"
 
 #: src/Logger/ExternalLogger.cpp:268
 msgid "Failed to enable download mode."
-msgstr ""
+msgstr "Habilitacion de Modo de Descarga Fallida."
 
 #: src/Logger/ExternalLogger.cpp:269 src/Logger/ExternalLogger.cpp:278
 #: src/Logger/ExternalLogger.cpp:286 src/Logger/ExternalLogger.cpp:305
@@ -174,7 +176,7 @@ msgstr "Siguiente Turnpoint"
 #: src/Menu/ExpandMacros.cpp:127 src/Menu/ExpandMacros.cpp:137
 #: src/Menu/ExpandMacros.cpp:210 src/Menu/ExpandMacros.cpp:256
 msgid "Previous Turnpoint"
-msgstr ""
+msgstr "Turnpoint Anterior"
 
 #: src/Menu/ExpandMacros.cpp:149 src/Menu/ExpandMacros.cpp:169
 msgid "Furthest Landpoint"
@@ -194,7 +196,7 @@ msgstr ""
 
 #: src/Menu/ExpandMacros.cpp:197 src/Menu/ExpandMacros.cpp:227
 msgid "Finish Turnpoint"
-msgstr ""
+msgstr "Turnpoint Final"
 
 #: src/Menu/ExpandMacros.cpp:203 src/Menu/ExpandMacros.cpp:249
 msgid "Next Startpoint"
@@ -336,19 +338,19 @@ msgstr "Activado"
 
 #: src/Menu/ExpandMacros.cpp:476 src/Menu/ExpandMacros.cpp:502
 msgid "Topography On"
-msgstr ""
+msgstr "Activar Topografía"
 
 #: src/Menu/ExpandMacros.cpp:480 src/Menu/ExpandMacros.cpp:506
 msgid "Terrain On"
-msgstr ""
+msgstr "Terreno On"
 
 #: src/Menu/ExpandMacros.cpp:484 src/Menu/ExpandMacros.cpp:510
 msgid "Terrain + Topography"
-msgstr ""
+msgstr "Terreno + Topografía"
 
 #: src/Menu/ExpandMacros.cpp:488 src/Menu/ExpandMacros.cpp:514
 msgid "Terrain Off"
-msgstr ""
+msgstr "Ocultar Terreno"
 
 #: src/Menu/ExpandMacros.cpp:524 src/Menu/ExpandMacros.cpp:548
 #: src/InfoBoxes/Panel/WindSetup.cpp:95 src/Dialogs/WindSettingsPanel.cpp:47
@@ -374,7 +376,7 @@ msgstr "Todo"
 #: src/Menu/ExpandMacros.cpp:537 src/Input/InputEventsSettings.cpp:314
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Manga & Aterrizajes"
 
 #: src/Menu/ExpandMacros.cpp:539 src/Input/InputEventsSettings.cpp:316
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:54
@@ -3144,7 +3146,7 @@ msgid "Bugs"
 msgstr ""
 
 #: src/Dialogs/dlgBasicSettings.cpp:307
-#, c-format
+#, no-c-format
 msgid ""
 "How clean the glider is. Set to 0% for clean, larger numbers as the wings "
 "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."
@@ -3559,9 +3561,9 @@ msgid "All on"
 msgstr "Todos sobre"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:53
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All airspaces are displayed."
-msgstr "Despliegue del Espacio Aéreo"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:54
 #, no-c-format
@@ -3671,18 +3673,16 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:179
-#, fuzzy
 msgid "Airspace fill mode"
-msgstr "Detalles del Espacio Aéreo"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:180
 msgid "Specifies the mode for filling the airspace area."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:185
-#, fuzzy
 msgid "Airspace transparency"
-msgstr "Despliegue del Espacio Aéreo"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:185
 msgid "If enabled, then airspaces are filled transparently."
@@ -3727,18 +3727,16 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:64
-#, fuzzy
 msgid "Thermal assistant"
-msgstr "Ganancia en la ultima termica"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:65
 msgid "This enables the display of the thermal assistant gauge."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:68
-#, fuzzy
 msgid "Thermal band"
-msgstr "Ganancia en la ultima termica"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:69
 msgid ""
@@ -3748,9 +3746,8 @@ msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:62
-#, fuzzy
 msgid "Speed arrows"
-msgstr "Velocidad respecto a la tierra"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:63
 msgid ""
@@ -3761,9 +3758,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:68
-#, fuzzy
 msgid "Show average"
-msgstr "Velocidad Promedio"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:69
 msgid ""
@@ -3773,9 +3769,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:74
-#, fuzzy
 msgid "Show MacReady"
-msgstr "Fijar MacCready"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:74
 msgid "Whether to show the MacCready setting."
@@ -3792,9 +3787,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:80
-#, fuzzy
 msgid "Show ballast"
-msgstr "Lastre"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:80
 msgid "Whether to show the ballast percentage."
@@ -3914,9 +3908,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:110
-#, fuzzy
 msgid "Auto. blank"
-msgstr "Viento Auto"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:111
 msgid ""
@@ -3997,9 +3990,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:200
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "OS settings"
-msgstr "Configuraciones"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:207
@@ -4247,9 +4240,8 @@ msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:147
-#, fuzzy
 msgid "FLARM display"
-msgstr "Despliegue del Terreno"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:150
 msgid "Tab dialog style"
@@ -4257,15 +4249,13 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:154
-#, fuzzy
 msgid "Message display"
-msgstr "Despliegue del Terreno"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:157
-#, fuzzy
 msgid "Dialog size"
-msgstr "Cajones de diálogo"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:161
@@ -4289,14 +4279,13 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:171
-#, fuzzy
 msgid "InfoBox border"
-msgstr "Pegado a InfoBox"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:61
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start only"
-msgstr "Punto de Salida"
+msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:75
@@ -4326,9 +4315,8 @@ msgid "Aircraft type"
 msgstr "Tipo de Aeronave"
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:91
-#, fuzzy
 msgid "Aircraft reg."
-msgstr "Tipo de Aeronave"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:95
 msgid "Logger ID"
@@ -4348,9 +4336,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:105
-#, fuzzy
 msgid "Auto. logger"
-msgstr "Detener Registro"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:106
 msgid ""
@@ -4506,9 +4493,8 @@ msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:119
-#, fuzzy
 msgid "Route climb"
-msgstr "Ascendencia Promedio"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:120
 msgid ""
@@ -4518,9 +4504,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:125
-#, fuzzy
 msgid "Route ceiling"
-msgstr "Sin circular"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:126
 msgid ""
@@ -4556,9 +4541,8 @@ msgstr ""
 
 #. Spacer
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:143
-#, fuzzy
 msgid "Reach mode"
-msgstr "Modelo del Dispositivo"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:144
 msgid ""
@@ -4567,9 +4551,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:150
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disables the reach display."
-msgstr "Despliegue del Espacio Aéreo"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:151
 #: src/Dialogs/dlgTaskHelpers.cpp:247
@@ -4593,9 +4577,8 @@ msgid "Shades terrain outside glide reach."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:156
-#, fuzzy
 msgid "Reach display"
-msgstr "Despliegue del Terreno"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:161
 #, no-c-format
@@ -4609,9 +4592,9 @@ msgid "Safety MC"
 msgstr "Mc de Seguridad"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:163
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Uses safety MacCready value"
-msgstr "Fijar MacCready"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:168
@@ -4627,9 +4610,8 @@ msgstr ""
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:61
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:119
-#, fuzzy
 msgid "Arrival height"
-msgstr "Altura de Terma"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:62
 msgid ""
@@ -4656,9 +4638,8 @@ msgid "Home"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:80
-#, fuzzy
 msgid "Alternates mode"
-msgstr "Nombre Alternativa 1"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:81
 msgid ""
@@ -4717,9 +4698,8 @@ msgstr ""
 
 #. Expert item (TODO)
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:110
-#, fuzzy
 msgid "More waypoints"
-msgstr "Waypoints en Mapa"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:111
 msgid ""
@@ -4729,9 +4709,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:115
-#, fuzzy
 msgid "Watched waypoints"
-msgstr "Agregar Waypoint"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:116
 msgid ""
@@ -4742,9 +4721,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:121
-#, fuzzy
 msgid "Airspaces"
-msgstr "Espacio aéreo"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:121
 msgid "The file name of the primary airspace file."
@@ -4752,9 +4730,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:125
-#, fuzzy
 msgid "More airspaces"
-msgstr "Mostrar Espacio Aéreo ON"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:125
 msgid "The file name of the secondary airspace file."
@@ -4771,9 +4748,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:133
-#, fuzzy
 msgid "Topography file"
-msgstr "Etiquetas de Topología"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:133
 msgid "Specifies the file defining the topographical features."
@@ -4781,9 +4757,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:137
-#, fuzzy
 msgid "Waypoint details"
-msgstr "Editor de Waypoints"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:138
 msgid ""
@@ -4874,18 +4849,16 @@ msgid "Draws an arrow head with a dashed arrow line."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:127
-#, fuzzy
 msgid "Track bearing"
-msgstr "Acimut del Equipo"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:128
 msgid "Display the track bearing (ground track projection) on the map."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:131
-#, fuzzy
 msgid "FLARM traffic"
-msgstr "No hay tráfico"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:131
 msgid "This enables the display of FLARM traffic on the map window."
@@ -4912,15 +4885,13 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:144
-#, fuzzy
 msgid "Trail type"
-msgstr "Tipo de Archivo"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:147
-#, fuzzy
 msgid "Trail scaled"
-msgstr "Longitud del Rastro"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:148
 msgid ""
@@ -4942,9 +4913,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:159
-#, fuzzy
 msgid "Aircraft symbol"
-msgstr "Tipo de Aeronave"
+msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:162
@@ -4972,9 +4942,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:71
-#, fuzzy
 msgid "Start max. speed margin"
-msgstr "Máxima Velocidad de Salida"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:72
 msgid ""
@@ -5000,9 +4969,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:86
-#, fuzzy
 msgid "Start max. height margin"
-msgstr "Máxima Altura de Salida"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:87
 msgid ""
@@ -5106,9 +5074,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:136
-#, fuzzy
 msgid "On-Line Contest"
-msgstr "OnLine Contest"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:137
 msgid ""
@@ -5143,9 +5110,8 @@ msgid "Default radius or gate width of the start zone for new tasks."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:140
-#, fuzzy
 msgid "Finish point"
-msgstr "Punto de referencia final"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:140
 msgid "Default finish type for new tasks you create."
@@ -5156,9 +5122,8 @@ msgid "Default radius or gate width of the finish zone in new tasks."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:163
-#, fuzzy
 msgid "Turn point"
-msgstr "Siguiente Turnpoint"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:163
 msgid "Default turn point type for new tasks you create."
@@ -5238,9 +5203,8 @@ msgid "Load a set of units."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:137
-#, fuzzy
 msgid "Preset"
-msgstr "Reiniciar"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:141
 msgid "My individual set of units."
@@ -5271,9 +5235,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:173
-#, fuzzy
 msgid "Units used for vertical speeds (variometer)."
-msgstr "Tempetatura Exterior"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:180
 msgid "Lift"
@@ -5294,9 +5257,8 @@ msgid "meter"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:192
-#, fuzzy
 msgid "Units used for temperature."
-msgstr "Tempetatura Exterior"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:198
 #: src/Weather/NOAAFormatter.cpp:114 src/Weather/NOAAFormatter.cpp:121
@@ -5455,9 +5417,8 @@ msgstr ""
 
 #. Expert item
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:129
-#, fuzzy
 msgid "Label style"
-msgstr "Etiquetas"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:132
 #, no-c-format
@@ -7006,9 +6967,8 @@ msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:8
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:8
-#, fuzzy
 msgid "Topography display"
-msgstr "Pantalla de Topología"
+msgstr ""
 
 #: Data/Dialogs/dlgWaypointDetails.xml:33
 #: Data/Dialogs/dlgWaypointDetails_L.xml:33
@@ -7043,9 +7003,8 @@ msgstr "Distancia Remanente"
 
 #: Data/Dialogs/Configuration/TrackingConfigPanel.xml:12
 #: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:12
-#, fuzzy
 msgid "Enabled"
-msgstr "Habilitar"
+msgstr ""
 
 #: Data/Dialogs/dlgFontEdit.xml:8
 msgid "Height"
@@ -7077,9 +7036,8 @@ msgstr "Rel. Dirección"
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:54
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:54
-#, fuzzy
 msgid "Max. ballast"
-msgstr "Lastre"
+msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:10
 msgid "Enable warnings for final glide through terrain."
@@ -7438,9 +7396,8 @@ msgstr "Velocidad Promedio"
 
 #: Data/Dialogs/Configuration/TrackingConfigPanel.xml:14
 #: Data/Dialogs/Configuration/TrackingConfigPanel_L.xml:14
-#, fuzzy
 msgid "Username"
-msgstr "Renombrar"
+msgstr ""
 
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel.xml:12
 #: Data/Dialogs/Configuration/TerrainDisplayConfigPanel_L.xml:12
@@ -8341,18 +8298,6 @@ msgid ""
 "TAF"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Message location"
-#~ msgstr ""
-#~ "Mensaje\n"
-#~ "Repetir"
-
-#~ msgid "Device A"
-#~ msgstr "Dispositivo A"
-
-#~ msgid "Device B"
-#~ msgstr "Dispositivo B"
-
 #~ msgid "Next landpoint"
 #~ msgstr "Siguiente punto de aterrizaje"
 
@@ -8395,6 +8340,9 @@ msgstr ""
 
 #~ msgid "Last Thermal Time"
 #~ msgstr "Tiempo en la ultima termica"
+
+#~ msgid "Last Thermal Gain"
+#~ msgstr "Ganancia en la ultima termica"
 
 #~ msgid "Last Thermal Average"
 #~ msgstr "Promedio de la ultima termica"
@@ -8462,6 +8410,9 @@ msgstr ""
 #~ msgid "Previous landpoint"
 #~ msgstr "Lugar de atterizaje anterior"
 
+#~ msgid "Finish turnpoint"
+#~ msgstr "Punto de referencia final"
+
 #~ msgid "Start turnpoint"
 #~ msgstr "Punto de referencia inicial"
 
@@ -8526,6 +8477,9 @@ msgstr ""
 #~ msgid "Terrain "
 #~ msgstr "Terreno "
 
+#~ msgid "Outside Air Temperature"
+#~ msgstr "Tempetatura Exterior"
+
 #~ msgid "MaxTemp"
 #~ msgstr "TempMax"
 
@@ -8534,6 +8488,9 @@ msgstr ""
 
 #~ msgid "Forecast Temperature"
 #~ msgstr "Temperatura Prevista"
+
+#~ msgid "Team Bearing"
+#~ msgstr "Acimut del Equipo"
 
 #~ msgid "Team Bearing Diff"
 #~ msgstr "Diferencia del Acimut de Equipo"
@@ -8560,6 +8517,9 @@ msgstr ""
 
 #~ msgid "Battery Percent"
 #~ msgstr "Porcentaje de Batería"
+
+#~ msgid "Alternate1 name"
+#~ msgstr "Nombre Alternativa 1"
 
 #~ msgid "L/D Average"
 #~ msgstr "L/D Medio"
@@ -8676,6 +8636,9 @@ msgstr ""
 #~ msgid "Loading Topology File..."
 #~ msgstr "Cargando archivo de Topología..."
 
+#~ msgid "Av climb"
+#~ msgstr "Ascendencia Promedio"
+
 #~ msgid "Best LD"
 #~ msgstr "Mejor Planeo"
 
@@ -8775,6 +8738,9 @@ msgstr ""
 #~ msgid "FALSE"
 #~ msgstr "FALSO"
 
+#~ msgid "add waypoint"
+#~ msgstr "Agregar Waypoint"
+
 #~ msgid "FAI Sector"
 #~ msgstr "Sector FAI"
 
@@ -8787,8 +8753,14 @@ msgstr ""
 #~ msgid "Aircraft/wind speed"
 #~ msgstr "Velocidad del Viento/Aeronave"
 
+#~ msgid "Start max height"
+#~ msgstr "Máxima Altura de Salida"
+
 #~ msgid "Info box values"
 #~ msgstr "Valores de InfoBox"
+
+#~ msgid "Start max speed"
+#~ msgstr "Máxima Velocidad de Salida"
 
 #~ msgid "Start Anyway"
 #~ msgstr "Iniciar de todos modos"
@@ -8802,14 +8774,26 @@ msgstr ""
 #~ msgid "Max height gain"
 #~ msgstr "Máxima Ganancia Altura"
 
+#~ msgid "Online contest"
+#~ msgstr "OnLine Contest"
+
+#~ msgid "Map waypoints"
+#~ msgstr "Waypoints en Mapa"
+
 #~ msgid "Locked"
 #~ msgstr "Bloqueado"
 
 #~ msgid "New Waypoint"
 #~ msgstr "Nuevo Waypoint"
 
+#~ msgid "Device A"
+#~ msgstr "Dispositivo A"
+
 #~ msgid "Acknowledge time*"
 #~ msgstr "Reconocimiento de tiempo*"
+
+#~ msgid "Device B"
+#~ msgstr "Dispositivo B"
 
 #~ msgid "Finish alt min"
 #~ msgstr "Mínima Altura de Meta"
@@ -8859,11 +8843,23 @@ msgstr ""
 #~ msgid "Setup ..."
 #~ msgstr "Configurar..."
 
+#~ msgid "Dialog boxes"
+#~ msgstr "Cajones de diálogo"
+
+#~ msgid "Topology labels"
+#~ msgstr "Etiquetas de Topología"
+
 #~ msgid "Insert in task"
 #~ msgstr "Insertar en Manga"
 
 #~ msgid "Warning time*"
 #~ msgstr "tiempo de Advertencia*"
+
+#~ msgid "Topology display"
+#~ msgstr "Pantalla de Topología"
+
+#~ msgid "File type"
+#~ msgstr "Tipo de Archivo"
 
 #~ msgid "Start height ref"
 #~ msgstr "Referencia Alt. de Salida"
@@ -8909,12 +8905,3 @@ msgstr ""
 
 #~ msgid "Waiting for GPS Fix"
 #~ msgstr "Esperando calcular señal de GPS"
-
-#~ msgid "Pan mode on"
-#~ msgstr "Modo Pan ON"
-
-#~ msgid "Pan mode off"
-#~ msgstr "Modo Pan OFF"
-
-#~ msgid "Debounce time"
-#~ msgstr "Horario de Retorno"
