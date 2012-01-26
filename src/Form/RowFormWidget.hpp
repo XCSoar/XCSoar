@@ -272,6 +272,15 @@ public:
     return *df;
   }
 
+  /**
+   * Compare a row's data field with the given reference (by their
+   * addresses).
+   */
+  gcc_pure
+  bool IsDataField(unsigned i, const DataField &df) const {
+    return &df == &GetDataField(i);
+  }
+
   void LoadValueEnum(unsigned i, int value);
 
   template<typename T>
