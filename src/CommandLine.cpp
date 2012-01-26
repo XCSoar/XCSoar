@@ -42,6 +42,10 @@ void ParseCommandLine(Args args)
     if (*s != '-')
       args.UsageError();
 
+    // Also accept "--" prefix for arguments. Usually used on UNIX for long options
+    if (s[1] == '-')
+      s++;
+
 #ifdef SIMULATOR_AVAILABLE
     if (strcmp(s, "-simulator") == 0) {
       global_simulator_flag = true;
