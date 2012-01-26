@@ -38,22 +38,32 @@ TaskFileXCSoar::GetTask(const Waypoints *waypoints, unsigned index) const
   if (protected_task_manager == NULL)
     return NULL;
 
+  // Load root node
   DataNode* root = DataNodeXML::load(path);
   if (!root)
     return NULL;
 
-  if (_tcscmp(root->get_name(), _T("Task")) == 0) {
-    OrderedTask* task = protected_task_manager->TaskBlank();
-    Deserialiser des(*root, waypoints);
-    des.deserialise(*task);
-    if (task->CheckTask()) {
-      delete root;
-      return task;
-    }
+  // Check if root node is a <Task> node
+  if (_tcscmp(root->get_name(), _T("Task")) != 0) {
+    delete root;
+    return NULL;
+  }
+
+  // Create a blank task
+  OrderedTask* task = protected_task_manager->TaskBlank();
+
+  // Read the task from the XML file
+  Deserialiser des(*root, waypoints);
+  des.deserialise(*task);
+
+  // Check if the task is valid
+  if (!task->CheckTask()) {
     delete task;
     delete root;
     return NULL;
   }
+
+  // Return the parsed task
   delete root;
-  return NULL;
+  return task;
 }
