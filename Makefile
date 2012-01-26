@@ -569,7 +569,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Formatter/AngleFormatter.cpp \
 	$(SRC)/FLARM/FlarmDetails.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsText.cpp \

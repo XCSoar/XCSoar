@@ -584,7 +584,7 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/UtilsFile.cpp \
+	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -730,6 +730,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/OS/Clock.cpp \
+	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/FLARM/State.cpp \
@@ -756,7 +757,6 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Engine/Task/TaskStats/ElementStat.cpp \
 	$(SRC)/Engine/Task/TaskStats/DistanceStat.cpp \
 	$(SRC)/Engine/Task/TaskStats/TaskVario.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
@@ -1018,7 +1018,6 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1522,7 +1521,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/UtilsText.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/Earth.cpp \
@@ -1571,7 +1569,6 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/UtilsText.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
@@ -1755,7 +1752,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/GestureManager.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
@@ -1891,7 +1887,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
@@ -1942,7 +1937,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/UtilsText.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -1989,7 +1983,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
-	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \

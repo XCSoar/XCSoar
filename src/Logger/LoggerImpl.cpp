@@ -26,13 +26,13 @@
 #include "Profile/DeviceConfig.hpp"
 #include "LogFile.hpp"
 #include "UtilsSystem.hpp"
-#include "UtilsFile.hpp"
 #include "LocalPath.hpp"
 #include "Device/Declaration.hpp"
 #include "Compatibility/dirent.h"
 #include "NMEA/Info.hpp"
 #include "Simulator.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/PathName.hpp"
 
 #ifdef HAVE_POSIX
 #include <unistd.h>

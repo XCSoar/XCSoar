@@ -26,7 +26,6 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Profile/Profile.hpp"
 #include "StringUtil.hpp"
-#include "UtilsFile.hpp"
 #include "LogFile.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -36,6 +35,7 @@ Copyright_License {
 #include "NMEA/Aircraft.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "IO/TextWriter.hpp"
+#include "OS/PathName.hpp"
 #include "Waypoint/WaypointWriter.hpp"
 #include "Operation/Operation.hpp"
 

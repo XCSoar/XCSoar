@@ -22,12 +22,10 @@ Copyright_License {
 */
 
 #include "Task/TaskFile.hpp"
-
 #include "Task/TaskFileXCSoar.hpp"
 #include "Task/TaskFileSeeYou.hpp"
-
 #include "OS/FileUtil.hpp"
-#include "UtilsFile.hpp"
+#include "OS/PathName.hpp"
 #include "Util/StringUtil.hpp"
 
 #include <assert.h>

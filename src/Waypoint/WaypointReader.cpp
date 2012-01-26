@@ -33,7 +33,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "OS/FileUtil.hpp"
-#include "UtilsFile.hpp"
+#include "OS/PathName.hpp"
 #include "IO/ZipSource.hpp"
 
 bool

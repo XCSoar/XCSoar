@@ -22,9 +22,8 @@
 */
 
 #include "Replay/Replay.hpp"
-
 #include "Util/StringUtil.hpp"
-#include "UtilsFile.hpp"
+#include "OS/PathName.hpp"
 
 void
 Replay::Stop()
