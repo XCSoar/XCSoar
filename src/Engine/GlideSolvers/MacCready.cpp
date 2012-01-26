@@ -246,7 +246,7 @@ MacCready::solve(const GlideState &task) const
   // task partial climb-cruise, partial glide
 
   // calc first final glide part
-  GlideResult result_fg = optimise_glide(task, true);
+  GlideResult result_fg = solve_glide(task, glide_polar.GetVBestLD(), true);
   if (result_fg.validity == GlideResult::RESULT_OK &&
       !positive(task.vector.Distance - result_fg.vector.Distance))
     // whole task final glided
@@ -330,8 +330,7 @@ public:
 GlideResult
 MacCready::optimise_glide(const GlideState &task, const bool allow_partial) const
 {
-  if (positive(glide_polar.GetMC()))
-    return solve_glide(task, glide_polar.GetVBestLD(), allow_partial);
+  assert(!positive(glide_polar.GetMC()));
 
   MacCreadyVopt mcvopt(task, *this, glide_polar.GetInvMC(),
                        glide_polar.GetVMin(), glide_polar.GetVMax(),
