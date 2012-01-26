@@ -45,12 +45,6 @@ class Args {
   char *cmdline;
 #endif
 
-  gcc_noreturn
-  void UsageError() {
-    fprintf(stderr, "Usage: %s %s\n", name, usage);
-    exit(EXIT_FAILURE);
-  }
-
 public:
   Args(int argc, char **argv, const char *_usage)
     :name(argv[0]), usage(_usage) {
@@ -114,6 +108,12 @@ public:
 #endif
 
   Args &operator=(const Args &other) = delete;
+
+  gcc_noreturn
+  void UsageError() {
+    fprintf(stderr, "Usage: %s %s\n", name, usage);
+    exit(EXIT_FAILURE);
+  }
 
   bool IsEmpty() const {
     return args.empty();
