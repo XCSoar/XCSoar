@@ -76,6 +76,14 @@ public:
 #ifdef WIN32
   Args(const TCHAR *_cmdline, const char *_usage)
     :usage(_usage) {
+    ParseCommandLine(_cmdline);
+  }
+
+  ~Args() {
+    delete[] cmdline;
+  }
+
+  void ParseCommandLine(const TCHAR *_cmdline) {
     NarrowPathName convert(_cmdline);
     cmdline = strdup(convert);
 
@@ -96,10 +104,6 @@ public:
       p = space;
       args.push_back(p);
     }
-  }
-
-  ~Args() {
-    delete[] cmdline;
   }
 #endif
 
