@@ -79,6 +79,9 @@ RowFormWidget::Row::GetMinimumHeight() const
 
   case Type::EDIT:
     return GetMinimumControlHeight();
+
+  case Type::REMAINING:
+    return GetMinimumControlHeight();
   }
 
   return window->get_height();
@@ -93,6 +96,9 @@ RowFormWidget::Row::GetMaximumHeight() const
 
   case Type::EDIT:
     return GetMaximumControlHeight();
+
+  case Type::REMAINING:
+    return 4096;
   }
 
   return window->get_height();
@@ -146,6 +152,8 @@ RowFormWidget::Add(Row::Type type, Window *window)
   assert(window->GetParent() == GetWindow());
 #endif
   assert(window->is_visible());
+  /* cannot append rows after a REMAINING row */
+  assert(rows.empty() || rows.back().type != Row::Type::REMAINING);
 
   rows.push_back(Row(type, window));
 }

@@ -54,6 +54,13 @@ class RowFormWidget : public WindowWidget {
        * A #WndProperty.
        */
       EDIT,
+
+      /**
+       * A generic #Window that fills the remaining vertical space at
+       * the bottom.  It must be the last row, and there can only be
+       * one.
+       */
+      REMAINING,
     };
 
     Type type;
@@ -119,7 +126,7 @@ class RowFormWidget : public WindowWidget {
      * Will this row grow when there is excess screen space?
      */
     bool IsElastic() const {
-      return type == Type::EDIT;
+      return type == Type::EDIT || type == Type::REMAINING;
     }
 
     gcc_pure
@@ -151,6 +158,14 @@ protected:
 public:
   void Add(Window *window) {
     Add(Row::Type::GENERIC, window);
+  }
+
+  /**
+   * Add a #Window that fills the remaining vertical space at the
+   * bottom.  It must be the last row, and there can only be one.
+   */
+  void AddRemaining(Window *window) {
+    Add(Row::Type::REMAINING, window);
   }
 
   WndProperty *Add(const TCHAR *label, const TCHAR *help=NULL,
