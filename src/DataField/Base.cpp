@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DataField/Base.hpp"
+#include "DataField/Listener.hpp"
 #include "Util/StringUtil.hpp"
 #include "Compiler.h"
 
@@ -31,7 +32,7 @@ enum { ComboPopupITEMMAX = 100 };
 
 DataField::DataField(Type _type, bool _support_combo,
                      DataAccessCallback_t OnDataAccess)
-  :mOnDataAccess(OnDataAccess),
+  :listener(NULL), mOnDataAccess(OnDataAccess),
    SupportCombo(_support_combo), type(_type),
    mItemHelp(false), mDetachGUI(false)
 {
@@ -43,14 +44,18 @@ DataField::Modified()
   if (GetDetachGUI())
     return;
 
-  if (mOnDataAccess != NULL)
+  if (listener != NULL)
+    listener->OnModified(*this);
+  else if (mOnDataAccess != NULL)
     mOnDataAccess(this, daChange);
 }
 
 void
 DataField::Special(void)
 {
-  if (mOnDataAccess != NULL)
+  if (listener != NULL)
+    listener->OnSpecial(*this);
+  else if (mOnDataAccess != NULL)
     mOnDataAccess(this, daSpecial);
 }
 

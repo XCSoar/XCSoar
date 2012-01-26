@@ -25,6 +25,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/Draw.hpp"
+#include "DataField/Listener.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
 #include "Language/Language.hpp"
@@ -51,7 +52,7 @@ enum ControlIndex {
   TerrainPreview,
 };
 
-class TerrainDisplayConfigPanel : public RowFormWidget {
+class TerrainDisplayConfigPanel : public RowFormWidget, DataFieldListener {
 
 protected:
   TerrainRendererSettings terrain_settings;
@@ -63,9 +64,11 @@ public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
   void ShowTerrainControls();
-  void OnChangeTerrain();
-  void OnEnableTerrain(bool value);
   void OnPreviewPaint(Canvas &canvas);
+
+protected:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
 };
 
 /** XXX this hack is needed because the form callbacks don't get a
@@ -97,40 +100,24 @@ PercentToByte(short percent)
 }
 
 void
-TerrainDisplayConfigPanel::OnEnableTerrain(bool value)
+TerrainDisplayConfigPanel::OnModified(DataField &df)
 {
-  terrain_settings.enable = value;
-  ShowTerrainControls();
-}
+  if (IsDataField(EnableTerrain, df)) {
+    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
+    terrain_settings.enable = dfb.GetAsBoolean();
+    ShowTerrainControls();
+  } else {
+    terrain_settings.slope_shading = (SlopeShading)
+      GetValueInteger(TerrainSlopeShading);
+    terrain_settings.contrast = PercentToByte(GetValueInteger(TerrainContrast));
+    terrain_settings.brightness =
+      PercentToByte(GetValueInteger(TerrainBrightness));
+    terrain_settings.ramp = GetValueInteger(TerrainColors);
 
-static void
-OnEnableTerrain(DataField *Sender,
-                DataField::DataAccessKind_t Mode)
-{
-  const DataFieldBoolean &df = *(const DataFieldBoolean *)Sender;
-  instance->OnEnableTerrain(df.GetAsBoolean());
-}
-
-void
-TerrainDisplayConfigPanel::OnChangeTerrain()
-{
-  terrain_settings.slope_shading = (SlopeShading)
-    GetValueInteger(TerrainSlopeShading);
-  terrain_settings.contrast = PercentToByte(GetValueInteger(TerrainContrast));
-  terrain_settings.brightness =
-    PercentToByte(GetValueInteger(TerrainBrightness));
-  terrain_settings.ramp = GetValueInteger(TerrainColors);
-
-  // invalidate terrain preview
-  if (terrain != NULL)
-    ((WndOwnerDrawFrame &)GetRow(TerrainPreview)).invalidate();
-}
-
-static void
-OnChangeTerrain(gcc_unused DataField *Sender,
-                gcc_unused DataField::DataAccessKind_t Mode)
-{
-  instance->OnChangeTerrain();
+    // invalidate terrain preview
+    if (terrain != NULL)
+      ((WndOwnerDrawFrame &)GetRow(TerrainPreview)).invalidate();
+  }
 }
 
 void
@@ -173,7 +160,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("Terrain display"),
              _("Draw a digital elevation terrain on the map."),
              terrain.enable);
-  GetDataField(EnableTerrain).SetDataAccessCallback(::OnEnableTerrain);
+  GetDataField(EnableTerrain).SetListener(this);
 
   AddBoolean(_("Topography display"),
              _("Draw topographical features (roads, rivers, lakes etc.) on the map."),
@@ -193,7 +180,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Terrain colors"),
           _("Defines the color ramp used in terrain rendering."),
           terrain_ramp_list, terrain.ramp);
-  GetDataField(TerrainColors).SetDataAccessCallback(::OnChangeTerrain);
+  GetDataField(TerrainColors).SetListener(this);
 
   static gcc_constexpr_data StaticEnumChoice slope_shading_list[] = {
     { (unsigned)SlopeShading::OFF, N_("Off"), },
@@ -206,19 +193,19 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Slope shading"),
           _("The terrain can be shaded among slopes to indicate either wind direction, sun position or a fixed shading from north-east."),
           slope_shading_list, (unsigned)terrain.slope_shading);
-  GetDataField(TerrainSlopeShading).SetDataAccessCallback(::OnChangeTerrain);
+  GetDataField(TerrainSlopeShading).SetListener(this);
 
   AddInteger(_("Terrain contrast"),
              _("Defines the amount of Phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains."),
              _T("%d"), _T("%d"), 0, 100, 5,
              ByteToPercent(terrain.contrast));
-  GetDataField(TerrainContrast).SetDataAccessCallback(::OnChangeTerrain);
+  GetDataField(TerrainContrast).SetListener(this);
 
   AddInteger(_("Terrain brightness"),
              _("Defines the brightness (whiteness) of the terrain rendering.  This controls the average illumination of the terrain."),
              _T("%d"), _T("%d"), 0, 100, 5,
              ByteToPercent(terrain.brightness));
-  GetDataField(TerrainBrightness).SetDataAccessCallback(::OnChangeTerrain);
+  GetDataField(TerrainBrightness).SetListener(this);
 
   if (::terrain != NULL)
     AddRemaining(new WndOwnerDrawFrame(*(ContainerWindow *)GetWindow(),

@@ -26,11 +26,13 @@ Copyright_License {
 
 #include "Compiler.h"
 
+#include <assert.h>
 #include <tchar.h>
 #include <stdint.h>
 
 #define OUTBUFFERSIZE 128
 
+class DataFieldListener;
 class ComboList;
 
 class DataField
@@ -53,6 +55,8 @@ public:
 
   typedef void (*DataAccessCallback_t)(DataField * Sender, DataAccessKind_t Mode);
 
+  DataFieldListener *listener;
+
   DataAccessCallback_t mOnDataAccess;
 
   // all Types dataField support combolist except DataFieldString.
@@ -73,7 +77,17 @@ protected:
 public:
   virtual ~DataField(void) {}
 
+  void SetListener(DataFieldListener *_listener) {
+    assert(mOnDataAccess == NULL);
+    assert(listener == NULL);
+    assert(_listener != NULL);
+
+    listener = _listener;
+  }
+
   void SetDataAccessCallback(DataAccessCallback_t _data_access_callback) {
+    assert(listener == NULL);
+
     mOnDataAccess = _data_access_callback;
   }
 
