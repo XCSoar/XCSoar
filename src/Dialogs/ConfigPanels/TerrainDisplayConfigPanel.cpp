@@ -24,9 +24,7 @@ Copyright_License {
 #include "TerrainDisplayConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
-#include "Form/Form.hpp"
+#include "Form/Draw.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
 #include "Language/Language.hpp"
@@ -37,42 +35,38 @@ Copyright_License {
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/CallBackTable.hpp"
+#include "UIGlobals.hpp"
 
 class WndOwnerDrawFrame;
 
-class TerrainDisplayConfigPanel : public XMLWidget {
+enum ControlIndex {
+  EnableTerrain,
+  EnableTopography,
+  TerrainColors,
+  TerrainSlopeShading,
+  TerrainContrast,
+  TerrainBrightness,
+  TerrainPreview,
+};
+
+class TerrainDisplayConfigPanel : public RowFormWidget {
 
 protected:
   TerrainRendererSettings terrain_settings;
 
 public:
+  TerrainDisplayConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
   void ShowTerrainControls();
   void OnChangeTerrain();
   void OnEnableTerrain(bool value);
   void OnPreviewPaint(Canvas &canvas);
 };
-
-void
-TerrainDisplayConfigPanel::Show(const PixelRect &rc)
-{
-  ShowFormControl(form, _T("frmPreview"), terrain != NULL);
-
-  XMLWidget::Show(rc);
-}
-
-void
-TerrainDisplayConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
 
 /** XXX this hack is needed because the form callbacks don't get a
     context pointer - please refactor! */
@@ -82,11 +76,12 @@ void
 TerrainDisplayConfigPanel::ShowTerrainControls()
 {
   bool show = terrain_settings.enable;
-  ShowFormControl(form, _T("prpSlopeShadingType"), show);
-  ShowFormControl(form, _T("prpTerrainContrast"), show);
-  ShowFormControl(form, _T("prpTerrainBrightness"), show);
-  ShowFormControl(form, _T("prpTerrainRamp"), show);
-  ShowFormControl(form, _T("frmPreview"), show);
+  SetRowVisible(TerrainColors, show);
+  SetRowVisible(TerrainSlopeShading, show);
+  SetRowVisible(TerrainContrast, show);
+  SetRowVisible(TerrainBrightness, show);
+  if (terrain != NULL)
+    SetRowVisible(TerrainPreview, show);
 }
 
 static short
@@ -119,19 +114,16 @@ OnEnableTerrain(DataField *Sender,
 void
 TerrainDisplayConfigPanel::OnChangeTerrain()
 {
-  GetFormValueEnum(form, _T("prpSlopeShadingType"),
-                   terrain_settings.slope_shading);
-  terrain_settings.contrast =
-    PercentToByte(GetFormValueInteger(form, _T("prpTerrainContrast")));
+  terrain_settings.slope_shading = (SlopeShading)
+    GetValueInteger(TerrainSlopeShading);
+  terrain_settings.contrast = PercentToByte(GetValueInteger(TerrainContrast));
   terrain_settings.brightness =
-    PercentToByte(GetFormValueInteger(form, _T("prpTerrainBrightness")));
-  terrain_settings.ramp =
-    (short) GetFormValueInteger(form, _T("prpTerrainRamp"));
+    PercentToByte(GetValueInteger(TerrainBrightness));
+  terrain_settings.ramp = GetValueInteger(TerrainColors);
 
   // invalidate terrain preview
-  PaintWindow *w = (PaintWindow *)form.FindByName(_T("frmPreview"));
-  if (w)
-    w->invalidate();
+  if (terrain != NULL)
+    ((WndOwnerDrawFrame &)GetRow(TerrainPreview)).invalidate();
 }
 
 static void
@@ -168,65 +160,71 @@ OnPreviewPaint(gcc_unused WndOwnerDrawFrame *Sender,
   instance->OnPreviewPaint(canvas);
 }
 
-gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnEnableTerrain),
-  DeclareCallBackEntry(OnChangeTerrain),
-  DeclareCallBackEntry(OnPreviewPaint),
-  DeclareCallBackEntry(NULL)
-};
-
 void
 TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   instance = this;
 
-  const MapSettings &settings_map = CommonInterface::GetMapSettings();
+  RowFormWidget::Prepare(parent, rc);
 
-  LoadWindow(CallBackTable, parent,
-             Layout::landscape ? _T("IDR_XML_TERRAINDISPLAYCONFIGPANEL_L") :
-                               _T("IDR_XML_TERRAINDISPLAYCONFIGPANEL"));
+  const MapSettings &settings_map = CommonInterface::GetMapSettings();
   const TerrainRendererSettings &terrain = settings_map.terrain;
 
-  WndProperty *wp;
+  AddBoolean(_("Terrain display"),
+             _("Draw a digital elevation terrain on the map."),
+             terrain.enable);
+  GetDataField(EnableTerrain).SetDataAccessCallback(::OnEnableTerrain);
 
-  LoadFormProperty(form, _T("prpEnableTerrain"), terrain.enable);
+  AddBoolean(_("Topography display"),
+             _("Draw topographical features (roads, rivers, lakes etc.) on the map."),
+             settings_map.topography_enabled);
 
-  LoadFormProperty(form, _T("prpEnableTopography"),
-                   settings_map.topography_enabled);
+  static gcc_constexpr_data StaticEnumChoice terrain_ramp_list[] = {
+    { 0, N_("Low lands"), },
+    { 1, N_("Imhof 7"), },
+    { 2, N_("Imhof 4"), },
+    { 3, N_("Imhof 12"), },
+    { 4, N_("Imhof Atlas"), },
+    { 5, N_("ICAO"), },
+    { 6, N_("Grey"), },
+    { 0 }
+  };
 
-  wp = (WndProperty*)form.FindByName(_T("prpSlopeShadingType"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"));
-    dfe->addEnumText(_("Fixed"));
-    dfe->addEnumText(_("Sun"));
-    dfe->addEnumText(_("Wind"));
-    dfe->Set((int)terrain.slope_shading);
-    wp->RefreshDisplay();
-  }
+  AddEnum(_("Terrain colors"),
+          _("Defines the color ramp used in terrain rendering."),
+          terrain_ramp_list, terrain.ramp);
+  GetDataField(TerrainColors).SetDataAccessCallback(::OnChangeTerrain);
 
-  LoadFormProperty(form, _T("prpTerrainContrast"),
-                   ByteToPercent(terrain.contrast));
+  static gcc_constexpr_data StaticEnumChoice slope_shading_list[] = {
+    { (unsigned)SlopeShading::OFF, N_("Off"), },
+    { (unsigned)SlopeShading::FIXED, N_("Fixed"), },
+    { (unsigned)SlopeShading::SUN, N_("Sun"), },
+    { (unsigned)SlopeShading::WIND, N_("Wind"), },
+    { 0 }
+  };
 
-  LoadFormProperty(form, _T("prpTerrainBrightness"),
-                   ByteToPercent(terrain.brightness));
+  AddEnum(_("Slope shading"),
+          _("The terrain can be shaded among slopes to indicate either wind direction, sun position or a fixed shading from north-east."),
+          slope_shading_list, (unsigned)terrain.slope_shading);
+  GetDataField(TerrainSlopeShading).SetDataAccessCallback(::OnChangeTerrain);
 
-  wp = (WndProperty*)form.FindByName(_T("prpTerrainRamp"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Low lands"));
-    dfe->addEnumText(_("Mountainous"));
-    dfe->addEnumText(_("Imhof 7"));
-    dfe->addEnumText(_("Imhof 4"));
-    dfe->addEnumText(_("Imhof 12"));
-    dfe->addEnumText(_("Imhof Atlas"));
-    dfe->addEnumText(_("ICAO"));
-    dfe->addEnumText(_("Grey"));
-    dfe->Set(terrain.ramp);
-    wp->RefreshDisplay();
-  }
+  AddInteger(_("Terrain contrast"),
+             _("Defines the amount of Phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains."),
+             _T("%d"), _T("%d"), 0, 100, 5,
+             ByteToPercent(terrain.contrast));
+  GetDataField(TerrainContrast).SetDataAccessCallback(::OnChangeTerrain);
+
+  AddInteger(_("Terrain brightness"),
+             _("Defines the brightness (whiteness) of the terrain rendering.  This controls the average illumination of the terrain."),
+             _T("%d"), _T("%d"), 0, 100, 5,
+             ByteToPercent(terrain.brightness));
+  GetDataField(TerrainBrightness).SetDataAccessCallback(::OnChangeTerrain);
+
+  if (::terrain != NULL)
+    AddRemaining(new WndOwnerDrawFrame(*(ContainerWindow *)GetWindow(),
+                                       0, 0, 100, 100,
+                                       WindowStyle(),
+                                       ::OnPreviewPaint));
 
   terrain_settings = terrain;
   ShowTerrainControls();
@@ -247,9 +245,8 @@ TerrainDisplayConfigPanel::Save(bool &_changed, bool &_require_restart)
   Profile::Set(szProfileTerrainRamp, terrain_settings.ramp);
   Profile::SetEnum(szProfileSlopeShadingType, terrain_settings.slope_shading);
 
-  changed |= SaveFormProperty(form, _T("prpEnableTopography"),
-                              szProfileDrawTopography,
-                              settings_map.topography_enabled);
+  changed |= SaveValue(EnableTopography, szProfileDrawTopography,
+                       settings_map.topography_enabled);
 
   _changed |= changed;
   _require_restart |= require_restart;
