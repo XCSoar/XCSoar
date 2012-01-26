@@ -1,8 +1,9 @@
 xcsoar (6.2.5) unstable; urgency=low
 
+  * new release
   * move vali-xcs to a separate package
 
- --
+ -- Max Kellermann <max@duempel.org>  Fri, 27 Jan 2012 00:53:50 +0100
 
 xcsoar (6.2.4) unstable; urgency=low
 
