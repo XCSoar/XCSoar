@@ -46,6 +46,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   const Font &name_font = Fonts::map_bold;
   const Font &small_font = Fonts::map_label;
+  canvas.SetTextColor(COLOR_BLACK);
 
   TCHAR tmp_id[10];
   id.Format(tmp_id);

@@ -730,6 +730,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
     const UPixelScalar line_height = rc.bottom - rc.top;
     const Font &name_font = Fonts::map_bold;
+    canvas.SetTextColor(COLOR_BLACK);
     canvas.Select(name_font);
     canvas.text(rc.left + line_height + Layout::FastScale(2),
                 rc.top + line_height / 2 - name_font.GetHeight() / 2,
