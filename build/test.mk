@@ -307,6 +307,7 @@ TEST_FLARM_NET_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/FLARM/FlarmNet.cpp \
+	$(SRC)/FLARM/FlarmNetReader.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/Record.cpp \
 	$(SRC)/FLARM/Database.cpp \
