@@ -36,6 +36,9 @@ void
 WindEKFGlue::Reset()
 {
   reset_pending = true;
+  last_ground_speed_available.Clear();
+  last_airspeed_available.Clear();
+
   ResetBlackout();
 }
 
@@ -56,6 +59,15 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
     ResetBlackout();
     return Result(0);
   }
+
+  const bool speed_updated =
+    basic.ground_speed_available.Modified(last_ground_speed_available) &&
+    basic.airspeed_available.Modified(last_airspeed_available);
+  last_ground_speed_available = basic.ground_speed_available;
+  last_airspeed_available = basic.airspeed_available;
+  if (!speed_updated)
+    /* no updated speed values from instrument, don't invoke WindEKF */
+    return Result(0);
 
   // temporary manoeuvering, dont append this point
   unsigned time(basic.time);

@@ -25,6 +25,7 @@ Copyright_License {
 #define WINDEKF_GLUE_HPP
 
 #include "WindEKF.hpp"
+#include "NMEA/Validity.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
 
 struct NMEAInfo;
@@ -42,6 +43,12 @@ class WindEKFGlue
    * available.
    */
   bool reset_pending;
+
+  /**
+   * These attributes are used to check if updated values are
+   * available since the last call.
+   */
+  Validity last_ground_speed_available, last_airspeed_available;
 
   unsigned time_blackout;
 
