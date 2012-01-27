@@ -56,11 +56,8 @@ protected:
   static const TCHAR default_task_path[];
 
 public:
-  ProtectedTaskManager(TaskManager &_task_manager, const TaskBehaviour &tb)
-    :Guard<TaskManager>(_task_manager),
-     task_behaviour(tb)
-    {}
-  
+  ProtectedTaskManager(TaskManager &_task_manager, const TaskBehaviour &tb);
+
   ~ProtectedTaskManager();
 
   // common accessors for ui and calc clients
