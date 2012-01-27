@@ -63,27 +63,31 @@ WindEKF::CovariancePrediction(float dT)
   //    dimensions equal to the number of disturbance noise variables
 
   float Dummy[NUMX][NUMX], dTsq;
-  uint8_t i, j, k;
 
   //  Pnew = (I+F*T)*P*(I+F*T)' + T^2*G*Q*G' = T^2[(P/T + F*P)*(I/T + F') + G*Q*G')]
 
   dTsq = dT * dT;
 
-  for (i = 0; i < NUMX; i++)	// Calculate Dummy = (P/T +F*P)
-    for (j = 0; j < NUMX; j++) {
+  // Calculate Dummy = (P/T +F*P)
+  for (unsigned i = 0; i < NUMX; i++) {
+    for (unsigned j = 0; j < NUMX; j++) {
       Dummy[i][j] = P[i][j] / dT;
-      for (k = 0; k < NUMX; k++)
+      for (unsigned k = 0; k < NUMX; k++)
         Dummy[i][j] += F[i][k] * P[k][j];
     }
-  for (i = 0; i < NUMX; i++)	// Calculate Pnew = Dummy/T + Dummy*F' + G*Qw*G'
-    for (j = i; j < NUMX; j++) {	// Use symmetry, ie only find upper triangular
+  }
+
+  // Calculate Pnew = Dummy/T + Dummy*F' + G*Qw*G'
+  for (unsigned i = 0; i < NUMX; i++) {
+    for (unsigned j = i; j < NUMX; j++) {	// Use symmetry, ie only find upper triangular
       P[i][j] = Dummy[i][j] / dT;
-      for (k = 0; k < NUMX; k++)
+      for (unsigned k = 0; k < NUMX; k++)
         P[i][j] += Dummy[i][k] * F[j][k];	// P = Dummy/T + Dummy*F'
-      for (k = 0; k < NUMW; k++)
+      for (unsigned k = 0; k < NUMW; k++)
         P[i][j] += Q[k] * G[i][k] * G[j][k];	// P = Dummy/T + Dummy*F' + G*Q*G'
       P[j][i] = P[i][j] = P[i][j] * dTsq;	// Pnew = T^2*P and fill in lower triangular;
     }
+  }
 }
 
 void
