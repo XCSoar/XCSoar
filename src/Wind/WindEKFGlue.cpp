@@ -39,6 +39,7 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
 
   // reset if flight hasnt started or airspeed instrument not available
   if (!derived.flight.flying ||
+      !basic.track_available || !basic.ground_speed_available ||
       !basic.airspeed_available || !basic.airspeed_real ||
       basic.true_airspeed < fixed_one) {
     reset();
