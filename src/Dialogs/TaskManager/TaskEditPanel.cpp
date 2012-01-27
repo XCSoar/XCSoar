@@ -128,7 +128,6 @@ TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = Fonts::map_bold;
   const Font &small_font = Fonts::map_label;
-  canvas.SetTextColor(COLOR_BLACK);
 
   // Draw "Add turnpoint" label
   if (DrawListIndex == ordered_task->TaskSize()) {
@@ -161,6 +160,7 @@ TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 
   // Use small font for details
   canvas.Select(small_font);
+  canvas.SetTextColor(COLOR_BLACK);
 
   UPixelScalar leg_info_width = 0;
   if (show_leg_info) {
