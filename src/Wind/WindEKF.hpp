@@ -25,20 +25,21 @@ Copyright_License {
 #define WINDEKF_HPP
 
 #include "Math/fixed.hpp"
+#include "Compiler.h"
 
 class WindEKF {
   // constants/macros/typdefs
 
-  #define NUMX 3
+  static gcc_constexpr_data unsigned NUMX = 3;
 
-  /// number of plant noise inputs, w is disturbance noise vector
-  #define NUMW 3
+  /** number of plant noise inputs, w is disturbance noise vector */
+  static gcc_constexpr_data unsigned NUMW = 3;
 
-  /// number of measurements, v is the measurement noise vector
-  #define NUMV 1
+  /** number of measurements, v is the measurement noise vector */
+  static gcc_constexpr_data unsigned NUMV = 1;
 
-  /// number of deterministic inputs, U is the input vector
-  #define NUMU 2
+  /** number of deterministic inputs, U is the input vector */
+  static gcc_constexpr_data unsigned NUMU = 2;
 
   /// linearized system matrices
   float F[NUMX][NUMX], G[NUMX][NUMW], H[NUMV][NUMX];

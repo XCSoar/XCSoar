@@ -224,8 +224,8 @@ void WindEKF::LinearizeH(float gps_vel[2])
 
 void WindEKF::Init()
 {
-  for (int i = 0; i < NUMX; i++) {
-    for (int j = 0; j < NUMX; j++) {
+  for (unsigned i = 0; i < NUMX; i++) {
+    for (unsigned j = 0; j < NUMX; j++) {
       P[i][j] = 0; // zero all terms
     }
   }
