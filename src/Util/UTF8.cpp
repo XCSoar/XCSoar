@@ -88,6 +88,19 @@ FindNonASCIIOrZero(const char *p)
   return p;
 }
 
+char *
+Latin1ToUTF8(unsigned char ch, char *buffer)
+{
+  if (IsASCII(ch)) {
+    *buffer++ = ch;
+  } else {
+    *buffer++ = 0xc0 | (ch >> 6);
+    *buffer++ = 0x80 | (ch & 0x3f);
+  }
+
+  return buffer;
+}
+
 const char *
 Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
              size_t buffer_size)
