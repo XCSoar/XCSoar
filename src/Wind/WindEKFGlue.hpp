@@ -30,8 +30,10 @@ Copyright_License {
 struct NMEAInfo;
 struct DerivedInfo;
 
-class WindEKFGlue: protected WindEKF
+class WindEKFGlue
 {
+  WindEKF ekf;
+
   unsigned time_blackout;
 
 public:

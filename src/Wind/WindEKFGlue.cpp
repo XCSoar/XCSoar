@@ -71,10 +71,10 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
 
   float dT = 1.0;
 
-  StatePrediction(gps_vel, dT);
-  Correction(dynamic_pressure, gps_vel);
+  ekf.StatePrediction(gps_vel, dT);
+  ekf.Correction(dynamic_pressure, gps_vel);
   // CovariancePrediction(dT);
-  const float* x = get_state();
+  const float* x = ekf.get_state();
 
   Result res;
   static int j=0;
@@ -104,5 +104,5 @@ WindEKFGlue::in_blackout(const unsigned time) const
 WindEKFGlue::WindEKFGlue()
 {
   reset();
-  Init();
+  ekf.Init();
 }
