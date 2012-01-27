@@ -39,6 +39,7 @@ int main(int argc, char **argv)
   printf("# time quality wind_bearing (deg) wind_speed (m/s) grndspeed (m/s) tas (m/s) bearing (deg)\n");
 
   WindEKFGlue wind_ekf;
+  wind_ekf.Reset();
 
   while (replay->Next()) {
     const MoreData &data = replay->Basic();

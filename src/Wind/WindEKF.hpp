@@ -54,9 +54,6 @@ class WindEKF {
   float K[NUMX][NUMV];
 
 public:
-  WindEKF() {
-    Init();
-  }
   void Init();
   void StatePrediction(float gps_vel[2], float dT);
   void Correction(fixed dynamic_pressure, float gps_vel[2]);

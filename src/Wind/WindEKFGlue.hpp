@@ -34,6 +34,15 @@ class WindEKFGlue
 {
   WindEKF ekf;
 
+  /**
+   * When this flag is true, then WindEKF::Init() should be called
+   * before the WindEKF object is used.  This flag is used to postpone
+   * the initialisation to the time when WindEKF is really needed, to
+   * reduce the Reset() overhead when no airspeed indicator is
+   * available.
+   */
+  bool reset_pending;
+
   unsigned time_blackout;
 
 public:
@@ -46,15 +55,15 @@ public:
     Result(int _quality):quality(_quality) {}
   };
 
-  WindEKFGlue();
+  void Reset();
 
   Result Update(const NMEAInfo &basic, const DerivedInfo &derived);
 
-  void reset() {
+private:
+  void ResetBlackout() {
     time_blackout = (unsigned)-1;
   }
 
-private:
   bool in_blackout(const unsigned time) const;
   void blackout(const unsigned time);
 };

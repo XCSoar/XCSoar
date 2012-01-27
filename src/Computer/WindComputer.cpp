@@ -32,7 +32,7 @@ WindComputer::Reset()
   last_circling = false;
 
   circling_wind.Reset();
-  wind_ekf.reset();
+  wind_ekf.Reset();
   wind_store.reset();
 }
 

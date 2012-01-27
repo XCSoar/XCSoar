@@ -32,17 +32,28 @@ Copyright_License {
  */
 #define BLACKOUT_TIME 3
 
+void
+WindEKFGlue::Reset()
+{
+  reset_pending = true;
+  ResetBlackout();
+}
+
 WindEKFGlue::Result
 WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
 {
   // @todo accuracy: correct TAS for vertical speed if dynamic pullup
 
   // reset if flight hasnt started or airspeed instrument not available
-  if (!derived.flight.flying ||
-      !basic.track_available || !basic.ground_speed_available ||
+  if (!derived.flight.flying) {
+    Reset();
+    return Result(0);
+  }
+
+  if (!basic.track_available || !basic.ground_speed_available ||
       !basic.airspeed_available || !basic.airspeed_real ||
       basic.true_airspeed < fixed_one) {
-    reset();
+    ResetBlackout();
     return Result(0);
   }
 
@@ -70,6 +81,12 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   gps_vel[1] = (float)(gps_north * basic.ground_speed);
 
   float dT = 1.0;
+
+  if (reset_pending) {
+    /* do the postponed WindEKF reset */
+    reset_pending = false;
+    ekf.Init();
+  }
 
   ekf.StatePrediction(gps_vel, dT);
   ekf.Correction(dynamic_pressure, gps_vel);
@@ -99,10 +116,4 @@ bool
 WindEKFGlue::in_blackout(const unsigned time) const
 {
   return (time < time_blackout + BLACKOUT_TIME);
-}
-
-WindEKFGlue::WindEKFGlue()
-{
-  reset();
-  ekf.Init();
 }
