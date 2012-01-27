@@ -239,6 +239,11 @@ MacCready::SolveGlide(const GlideState &task, const fixed v_set,
   result.altitude_difference -= result.height_glide;
   result.distance_to_final = fixed_zero;
 
+  const fixed inv_mc = glide_polar.GetInvMC();
+  if(positive(inv_mc))
+    // equivalent time to gain the height that was used
+    result.time_virtual = result.height_glide * inv_mc;
+
   return result;
 }
 
@@ -275,8 +280,10 @@ MacCready::Solve(const GlideState &task) const
   if (!positive(task.vector.distance))
     return SolveVertical(task);
 
-  if (!positive(glide_polar.GetMC()) ||
-      !settings.predict_wind_drift)
+  if (!settings.predict_wind_drift && positive(glide_polar.GetMC()))
+    return SolveGlide(task, glide_polar.GetVBestLD());
+
+  if (!positive(glide_polar.GetMC()))
     // whole task must be glide
     return OptimiseGlide(task, false);
 
@@ -287,7 +294,7 @@ MacCready::Solve(const GlideState &task) const
   // task partial climb-cruise, partial glide
 
   // calc first final glide part
-  GlideResult result_fg = OptimiseGlide(task, true);
+  GlideResult result_fg = SolveGlide(task, glide_polar.GetVBestLD(), true);
   if (result_fg.validity == GlideResult::Validity::OK &&
       !positive(task.vector.distance - result_fg.vector.distance))
     // whole task final glided
@@ -306,7 +313,7 @@ MacCready::Solve(const GlideState &task) const
 }
 
 /**
- * Class used to find VOpt for a MacCready setting, for final glide
+ * Class used to find VOpt to optimize glide distance, for final glide
  * calculations.  Intended to be used temporarily only.
  */
 class MacCreadyVopt: public ZeroFinder
@@ -347,13 +354,13 @@ public:
    *   fail with too small df/dx
    *
    * @param V cruise true air speed (m/s)
-   * @return Virtual speed (m/s) of flight
+   * @return Inverse LD
    */
   fixed
   f(const fixed v)
   {
     res = mac.SolveGlide(task, v, allow_partial);
-    return res.CalcVInvSpeed(inv_mc) * fixed_360;
+    return res.height_glide / res.vector.distance * fixed_360;
   }
   
   /**
@@ -371,6 +378,8 @@ public:
 GlideResult
 MacCready::OptimiseGlide(const GlideState &task, const bool allow_partial) const
 {
+  assert(!positive(glide_polar.GetMC()));
+
   MacCreadyVopt mc_vopt(task, *this, glide_polar.GetInvMC(),
                        glide_polar.GetVMin(), glide_polar.GetVMax(),
                        allow_partial);

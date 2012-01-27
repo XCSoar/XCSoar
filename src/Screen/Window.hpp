@@ -300,10 +300,6 @@ public:
   }
 
 #ifndef USE_GDI
-  void clear_parent() {
-    parent = NULL;
-  }
-
   PixelScalar get_top() const {
     return top;
   }

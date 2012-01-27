@@ -233,17 +233,6 @@ struct GlideResult {
   void Add(const GlideResult &s2);
 
   /**
-   * Calculate virtual inverse speed of solution.  This is defined as
-   * the (time elapsed plus the time required to recover the altitude
-   * expended in cruise) divided by the distance divided.
-   *
-   * @param inv_mc Inverse of MC value (s/m), negative if MC is zero
-   *
-   * @return Inverse of Virtual speed (s/m)
-   */
-  fixed CalcVInvSpeed(const fixed inv_mc);
-
-  /**
    * Find the gradient of this solution relative to ground.
    * (does not use up AltitudeDifference)
    *

@@ -103,32 +103,6 @@ GlideResult::Add(const GlideResult &s2)
   time_virtual += s2.time_virtual;
 }
 
-#define fixed_bignum fixed_int_constant(1000000) // error condition
-
-fixed
-GlideResult::CalcVInvSpeed(const fixed inv_mc)
-{
-  if (!IsOk()) {
-    time_virtual = fixed_zero;
-    return fixed_bignum;
-  }
-
-  if (vector.distance < fixed_one) {
-    time_virtual = fixed_zero;
-    return fixed_zero;
-  }
-
-  if (!positive(inv_mc)) {
-    time_virtual = fixed_zero;
-    // minimise 1.0/LD over ground
-    return height_glide / vector.distance;
-  }
-
-  // equivalent time to gain the height that was used
-  time_virtual = height_glide * inv_mc;
-  return (time_elapsed + time_virtual) / vector.distance;
-}
-
 fixed
 GlideResult::GlideAngleGround() const
 {

@@ -139,6 +139,8 @@ void
 Window::OnDestroy()
 {
 #ifndef USE_GDI
+  visible = false;
+
   if (capture)
     release_capture();
 

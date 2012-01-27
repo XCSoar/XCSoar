@@ -51,26 +51,28 @@ Test(const fixed distance, const fixed altitude, const SpeedVector wind)
   const fixed mc = glide_polar.GetMC();
   const fixed v_climb_progress = mc * ld_ground - state.head_wind;
 
-  const fixed initial_climb_distance = state.altitude_difference * ld_ground;
-  if (-initial_climb_distance >= distance ||
+  const fixed initial_glide_distance = state.altitude_difference * ld_ground;
+  if (initial_glide_distance >= distance ||
       (!positive(mc) && !positive(v_climb_progress))) {
     /* reachable by pure glide */
     ok1(result.validity == GlideResult::Validity::OK);
 
-    const fixed height_glide = distance / ld_ground;
+    const fixed best_speed =
+      glide_polar.GetBestGlideRatioSpeed(state.head_wind);
+    const fixed best_sink = glide_polar.SinkRate(best_speed);
+    const fixed ld_ground2 = positive(mc)
+      ? ld_ground
+      : (best_speed - state.head_wind) / best_sink;
+
+    const fixed height_glide = distance / ld_ground2;
     const fixed height_climb = fixed_zero;
     const fixed altitude_difference = altitude - height_glide;
 
-    /* more tolerance with strong wind because this unit test doesn't
-       optimise pure glide */
-    const int accuracy = wind.norm > fixed_ten
-      ? 5 : (wind.norm > fixed_one ? 10 : ACCURACY);
-
     ok1(equals(result.head_wind, wind.norm));
     ok1(equals(result.vector.distance, distance));
-    ok1(equals(result.height_climb, height_climb, accuracy));
-    ok1(equals(result.height_glide, height_glide, accuracy));
-    ok1(equals(result.altitude_difference, altitude_difference, accuracy));
+    ok1(equals(result.height_climb, height_climb));
+    ok1(equals(result.height_glide, height_glide));
+    ok1(equals(result.altitude_difference, altitude_difference));
     return;
   }
 
@@ -81,10 +83,10 @@ Test(const fixed distance, const fixed altitude, const SpeedVector wind)
   }
 
   /*
-  const fixed drifted_distance = (distance - initial_climb_distance)
+  const fixed drifted_distance = (distance - initial_glide_distance)
     * state.head_wind / v_climb_progress;
     */
-  const fixed drifted_height_climb = (distance - initial_climb_distance)
+  const fixed drifted_height_climb = (distance - initial_glide_distance)
     * mc / v_climb_progress;
   const fixed drifted_height_glide =
     drifted_height_climb + state.altitude_difference;
@@ -120,6 +122,14 @@ TestWind(const SpeedVector &wind)
   Test(fixed(10000), fixed_zero, wind);
   Test(fixed(10000), fixed(100), wind);
   Test(fixed(10000), fixed(200), wind);
+
+  Test(fixed(1000), fixed(-500), wind);
+  Test(fixed(1000), fixed(-100), wind);
+  Test(fixed(1000), fixed_zero, wind);
+  Test(fixed(1000), fixed(100), wind);
+  Test(fixed(1000), fixed(500), wind);
+  Test(fixed(100000), fixed(-1000), wind);
+  Test(fixed(100000), fixed(4000), wind);
 }
 
 static void
@@ -130,11 +140,12 @@ TestAll()
   TestWind(SpeedVector(Angle::Zero(), fixed(5)));
   TestWind(SpeedVector(Angle::Zero(), fixed(10)));
   TestWind(SpeedVector(Angle::Zero(), fixed(15)));
+  TestWind(SpeedVector(Angle::Zero(), fixed(30)));
 }
 
 int main(int argc, char **argv)
 {
-  plan_tests(760);
+  plan_tests(2095);
 
   glide_settings.SetDefaults();
 

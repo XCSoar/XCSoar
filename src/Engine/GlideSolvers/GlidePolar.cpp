@@ -382,6 +382,18 @@ GlidePolar::GetRiskMC(fixed height_fraction, const fixed riskGamma) const
 }
 
 fixed
+GlidePolar::GetBestGlideRatioSpeed(fixed head_wind) const
+{
+  fixed s = sqr(head_wind) +
+    (mc + polar.c + polar.b * head_wind) / polar.a;
+  if (negative(s))
+    /* should never happen, but just in case */
+    return GetVMax();
+
+  return head_wind + sqrt(s);
+}
+
+fixed
 GlidePolar::GetVTakeoff() const
 {
   return half(GetVMin());
