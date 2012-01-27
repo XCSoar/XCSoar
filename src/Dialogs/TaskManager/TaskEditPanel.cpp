@@ -132,6 +132,7 @@ TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
   // Draw "Add turnpoint" label
   if (DrawListIndex == ordered_task->TaskSize()) {
     canvas.Select(name_font);
+    canvas.SetTextColor(COLOR_BLACK);
     _stprintf(buffer, _T("  (%s)"), _("Add Turnpoint"));
     canvas.text(rc.left + line_height + Layout::FastScale(2),
                 rc.top + line_height / 2 - name_font.GetHeight() / 2, buffer);
