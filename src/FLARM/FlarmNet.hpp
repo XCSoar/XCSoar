@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Record.hpp"
 
-#include <map>
 #include <tchar.h>
 
 struct FlarmRecord;
