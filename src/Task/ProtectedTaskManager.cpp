@@ -31,6 +31,14 @@ Copyright_License {
 
 #include <windef.h> // for MAX_PATH
 
+ProtectedTaskManager::ProtectedTaskManager(TaskManager &_task_manager,
+                                           const TaskBehaviour &tb)
+  :Guard<TaskManager>(_task_manager),
+   task_behaviour(tb)
+{
+  _task_manager.SetTaskBehaviour(task_behaviour);
+}
+
 ProtectedTaskManager::~ProtectedTaskManager() {
   ExclusiveLease lease(*this);
   lease->SetIntersectionTest(NULL); // de-register
