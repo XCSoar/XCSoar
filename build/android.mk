@@ -132,9 +132,9 @@ ALL_SO =
 # Example: $(eval $(call generate-abi,xcsoar,armeabi-v7a,ANDROID7))
 define generate-abi
 
-ALL_SO += $$(ANDROID_BUILD)/build/libs/$(2)/lib$(1).so
+ALL_SO += $$(ANDROID_BUILD)/libs/$(2)/lib$(1).so
 
-$$(ANDROID_BUILD)/build/libs/$(2)/lib$(1).so: $$(OUT)/$(3)/bin/lib$(1).so | $$(ANDROID_BUILD)/build/libs/$(2)/dirstamp
+$$(ANDROID_BUILD)/libs/$(2)/lib$(1).so: $$(OUT)/$(3)/bin/lib$(1).so | $$(ANDROID_BUILD)/libs/$(2)/dirstamp
 	$$(Q)cp $$< $$@
 
 $$(OUT)/$(3)/bin/lib$(1).so:
