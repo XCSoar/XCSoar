@@ -294,7 +294,7 @@ void
 GlideComputer::OnTakeoff()
 {
   // reset stats on takeoff
-  ResetFlight();
+  GlideComputerAirData::ResetFlight();
 
   // save stats in case we never finish
   SaveFinish();
