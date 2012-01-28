@@ -82,6 +82,11 @@ CirclingWind::NewSample(const MoreData &info)
     // only work if we are in active mode
     return Result(0);
 
+  if (!info.track_available || !info.ground_speed_available) {
+    Reset();
+    return Result(0);
+  }
+
   Vector curVector;
 
   bool fullCircle = false;
