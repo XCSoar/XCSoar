@@ -63,6 +63,7 @@ GlideComputerAirData::ResetFlight(const bool full)
   gr_calculator.Initialize(GetComputerSettings());
 
   flying_computer.Reset();
+  thermal_band_computer.Reset();
   wind_computer.Reset();
 }
 
@@ -473,8 +474,6 @@ GlideComputerAirData::PercentCircling()
 {
   DerivedInfo &calculated = SetCalculated();
 
-  WorkingBand();
-
   // TODO accuracy: TB: this would only work right if called every ONE second!
 
   // JMW circling % only when really circling,
@@ -488,10 +487,6 @@ GlideComputerAirData::PercentCircling()
 
     // Add the Vario signal to the total climb height
     calculated.total_height_gain += Basic().gps_vario;
-
-    // call ThermalBand function here because it is then explicitly
-    // tied to same condition as %circling calculations
-    ThermalBand();
   } else {
     // Add one second to the cruise time
     // timeCruising += (Basic->Time-LastTime);
@@ -531,6 +526,10 @@ GlideComputerAirData::Turning()
 
   // Calculate circling time percentage and call thermal band calculation
   PercentCircling();
+
+  thermal_band_computer.Compute(Basic(), Calculated(),
+                                SetCalculated().thermal_band,
+                                GetComputerSettings());
 }
 
 void
@@ -615,58 +614,6 @@ void
 GlideComputerAirData::OnDepartedThermal()
 {
   ThermalSources();
-}
-
-void
-GlideComputerAirData::WorkingBand()
-{
-  const DerivedInfo &calculated = Calculated();
-  ThermalBandInfo &tbi = SetCalculated().thermal_band;
-
-  const fixed h_safety =
-    GetComputerSettings().task.route_planner.safety_height_terrain +
-    Calculated().GetTerrainBaseFallback();
-
-  tbi.working_band_height = Basic().TE_altitude - h_safety;
-  if (negative(tbi.working_band_height)) {
-    tbi.working_band_fraction = fixed_zero;
-    return;
-  }
-
-  const fixed max_height = calculated.thermal_band.max_thermal_height;
-  if (positive(max_height))
-    tbi.working_band_fraction = tbi.working_band_height / max_height;
-  else
-    tbi.working_band_fraction = fixed_one;
-
-  tbi.working_band_ceiling = std::max(max_height + h_safety,
-                                      Basic().TE_altitude);
-}
-
-void
-GlideComputerAirData::ThermalBand()
-{
-  if (!time_advanced())
-    return;
-
-  // JMW TODO accuracy: Should really work out dt here,
-  //           but i'm assuming constant time steps
-
-  ThermalBandInfo &tbi = SetCalculated().thermal_band;
-
-  const fixed dheight = tbi.working_band_height;
-
-  if (!positive(dheight))
-    return; // nothing to do.
-
-  if (tbi.max_thermal_height == fixed_zero)
-    tbi.max_thermal_height = dheight;
-
-  // only do this if in thermal and have been climbing
-  if ((!Calculated().circling) || negative(Calculated().average))
-    return;
-
-  tbi.Add(dheight, Basic().brutto_vario);
 }
 
 void

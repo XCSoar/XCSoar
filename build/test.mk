@@ -1842,6 +1842,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/CuRenderer.cpp \
 	$(SRC)/Computer/ThermalLocator.cpp \
 	$(SRC)/Computer/ThermalBase.cpp \
+	$(SRC)/Computer/ThermalBandComputer.cpp \
 	$(SRC)/Computer/GlideRatioCalculator.cpp \
 	$(SRC)/Computer/AutoQNH.cpp \
 	$(SRC)/Computer/BasicComputer.cpp \

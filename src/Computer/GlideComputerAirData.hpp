@@ -29,6 +29,7 @@ Copyright_License {
 #include "GlideRatioCalculator.hpp"
 #include "FlyingComputer.hpp"
 #include "CirclingComputer.hpp"
+#include "ThermalBandComputer.hpp"
 #include "WindComputer.hpp"
 #include "ThermalLocator.hpp"
 #include "Util/WindowFilter.hpp"
@@ -53,6 +54,7 @@ class GlideComputerAirData: virtual public GlideComputerBlackboard {
 
   FlyingComputer flying_computer;
   CirclingComputer circling_computer;
+  ThermalBandComputer thermal_band_computer;
   WindComputer wind_computer;
 
   ThermalLocator thermallocator;
@@ -144,8 +146,6 @@ private:
    *  LastThermalAverageSmooth
    */
   void LastThermalStats();
-  void WorkingBand();
-  void ThermalBand();
 
   /**
    * Calculate the circling time percentage and call the thermal band calculation
