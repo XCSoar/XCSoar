@@ -107,8 +107,6 @@ protected:
    */
   void TakeoffLanding();
 
-  virtual void OnSwitchClimbMode(bool isclimb, bool left);
-
 private:
 
   /**
@@ -120,10 +118,8 @@ private:
   gcc_pure
   bool DetermineTeamCodeRefLocation();
 
-  void CheckTeammateRange();
   void CalculateTeammateBearingRange();
   void CalculateOwnTeamCode();
-  void CheckTraffic();
 };
 
 #endif

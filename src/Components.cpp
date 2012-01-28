@@ -67,6 +67,7 @@ Copyright_License {
 #include "resource.h"
 #include "Computer/GlideComputer.hpp"
 #include "Computer/GlideComputerInterface.hpp"
+#include "Computer/Events.hpp"
 #include "StatusMessage.hpp"
 #include "MergeThread.hpp"
 #include "CalculationThread.hpp"
@@ -137,6 +138,8 @@ ProtectedTaskManager *protected_task_manager;
 Airspaces airspace_database;
 
 GlideComputer *glide_computer;
+
+static GlideComputerEvents glide_computer_events;
 
 #ifdef GNAV
 AltairControl altair_control;
@@ -434,6 +437,9 @@ XCSoarInterface::Startup()
   // Find unique ID of this PDA
   ReadAssetNumber();
 
+  glide_computer_events.Reset();
+  GetLiveBlackboard().AddListener(glide_computer_events);
+
   if (CommonInterface::GetComputerSettings().logger.enable_flight_logger) {
     flight_logger = new GlueFlightLogger(GetLiveBlackboard());
     LocalPath(path, _T("flights.log"));
@@ -494,6 +500,8 @@ XCSoarInterface::Shutdown(void)
 
   delete flight_logger;
   flight_logger = NULL;
+
+  GetLiveBlackboard().RemoveListener(glide_computer_events);
 
   // Save settings to profile
   operation.SetText(_("Shutdown, saving profile..."));

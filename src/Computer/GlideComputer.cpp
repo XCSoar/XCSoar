@@ -29,7 +29,6 @@ Copyright_License {
 #include "TeamCodeCalculation.hpp"
 #include "PeriodClock.hpp"
 #include "GlideComputerInterface.hpp"
-#include "Input/InputQueue.hpp"
 #include "ComputerSettings.hpp"
 #include "Math/Earth.hpp"
 #include "Logger/Logger.hpp"
@@ -124,10 +123,6 @@ GlideComputer::ProcessGPS()
 
   // Calculate the bearing and range of the teammate
   CalculateTeammateBearingRange();
-
-  // Calculate the bearing and range of the teammate
-  // (if teammate is a FLARM target)
-  CheckTraffic();
 
   vegavoice.Update(basic, Calculated(), GetComputerSettings());
 
@@ -258,35 +253,15 @@ GlideComputer::CalculateTeammateBearingRange()
     ComputeFlarmTeam(basic.location, team_code_ref_location,
                      basic.flarm, settings_computer.team_flarm_id,
                      teamcode_info);
-    CheckTeammateRange();
   } else if (settings_computer.team_code_valid) {
     teamcode_info.flarm_teammate_code_available = false;
 
     ComputeTeamCode(basic.location, team_code_ref_location,
                     settings_computer.team_code,
                     teamcode_info);
-    CheckTeammateRange();
   } else {
     teamcode_info.teammate_available = false;
     teamcode_info.flarm_teammate_code_available = false;
-  }
-}
-
-void
-GlideComputer::CheckTeammateRange()
-{
-  static bool InTeamSector = false;
-
-  // Hysteresis for GlideComputerEvent
-  // If (closer than 100m to the teammates last position and "event" not reset)
-  if (Calculated().teammate_vector.distance < fixed(100) &&
-      InTeamSector == false) {
-    InTeamSector = true;
-    // Raise GCE_TEAM_POS_REACHED event
-    InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
-  } else if (Calculated().teammate_vector.distance > fixed(300)) {
-    // Reset "event" when distance is greater than 300m again
-    InTeamSector = false;
   }
 }
 
@@ -298,8 +273,6 @@ GlideComputer::OnTakeoff()
 
   // save stats in case we never finish
   SaveFinish();
-
-  InputEvents::processGlideComputer(GCE_TAKEOFF);
 }
 
 void
@@ -310,8 +283,6 @@ GlideComputer::OnLanding()
 
   if (Calculated().common_stats.task_finished)
     RestoreFinish();
-
-  InputEvents::processGlideComputer(GCE_LANDING);
 }
 
 void
@@ -321,40 +292,6 @@ GlideComputer::TakeoffLanding()
     OnTakeoff();
   else if (!Calculated().flight.flying && LastCalculated().flight.flying)
     OnLanding();
-}
-
-void
-GlideComputer::OnSwitchClimbMode(bool isclimb, bool left)
-{
-  GlideComputerAirData::OnSwitchClimbMode(isclimb, left);
-
-  if (isclimb) {
-    InputEvents::processGlideComputer(GCE_FLIGHTMODE_CLIMB);
-  } else {
-    InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
-  }
-}
-
-void
-GlideComputer::CheckTraffic()
-{
-  const NMEAInfo &basic = Basic();
-  const NMEAInfo &last_basic = LastBasic();
-
-  if (!basic.flarm.available || !last_basic.flarm.available)
-    return;
-
-  if (basic.flarm.rx && last_basic.flarm.rx == 0)
-    // traffic has appeared..
-    InputEvents::processGlideComputer(GCE_FLARM_TRAFFIC);
-
-  if (basic.flarm.rx == 0 && last_basic.flarm.rx)
-    // traffic has disappeared..
-    InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
-
-  if (basic.flarm.new_traffic)
-    // new traffic has appeared
-    InputEvents::processGlideComputer(GCE_FLARM_NEWTRAFFIC);
 }
 
 void 

@@ -88,7 +88,7 @@ private:
   void OnDepartedThermal();
 
 protected:
-  virtual void OnSwitchClimbMode(bool isclimb, bool left);
+  void OnSwitchClimbMode(bool isclimb, bool left);
 
   /**
    * 1. Detects time retreat and calls ResetFlight if GPS lost
