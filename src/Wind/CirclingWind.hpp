@@ -27,6 +27,7 @@ Copyright_License {
 #include "Vector.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Util/StaticArray.hpp"
+#include "NMEA/Validity.hpp"
 
 struct MoreData;
 struct DerivedInfo;
@@ -46,6 +47,8 @@ class CirclingWind
     fixed time;
     fixed mag;
   };
+
+  Validity last_track_available, last_ground_speed_available;
 
   // we are counting the number of circles, the first onces are probably not very round
   int circle_count;

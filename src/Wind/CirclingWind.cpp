@@ -82,10 +82,18 @@ CirclingWind::NewSample(const MoreData &info)
     // only work if we are in active mode
     return Result(0);
 
-  if (!info.track_available || !info.ground_speed_available) {
+  if (last_track_available.FixTimeWarp(info.track_available) ||
+      last_ground_speed_available.FixTimeWarp(info.ground_speed_available))
+    /* time warp: start from scratch */
     Reset();
+
+  if (!info.track_available.Modified(last_track_available) ||
+      !info.ground_speed_available.Modified(last_ground_speed_available))
+    /* no updated GPS fix */
     return Result(0);
-  }
+
+  last_track_available = info.track_available;
+  last_ground_speed_available = info.ground_speed_available;
 
   Vector curVector;
 
