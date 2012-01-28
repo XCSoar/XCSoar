@@ -49,23 +49,13 @@ class CirclingWind
 
   // we are counting the number of circles, the first onces are probably not very round
   int circle_count;
-  // true = left, false = right
-  bool circling_left;
   // active is set to true or false by the slot_newFlightMode slot
   bool active;
   int circle_deg;
   Angle last_track;
-  bool past_halfway;
   Vector min_vector;
   Vector max_vector;
-  bool current_mode_ok;
   bool first;
-  int start_circle;
-
-  GeoPoint climb_startpos;
-  GeoPoint climb_endpos;
-  fixed climb_starttime;
-  fixed climb_endtime;
 
   StaticArray<Sample, 50> samples;
 
@@ -92,7 +82,7 @@ public:
   /**
    * Called if the flightmode changes
    */
-  void NewFlightMode(const DerivedInfo &derived, bool left, int marker);
+  void NewFlightMode(const DerivedInfo &derived);
 
   /**
    * Called if a new sample is available in the samplelist.

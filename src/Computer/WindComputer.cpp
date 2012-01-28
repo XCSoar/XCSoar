@@ -43,7 +43,7 @@ WindComputer::Compute(const ComputerSettings &settings,
 {
   if (settings.CirclingWindEnabled() &&
       calculated.circling != last_circling)
-    circling_wind.NewFlightMode(calculated, calculated.TurningLeft(), 0);
+    circling_wind.NewFlightMode(calculated);
 
 last_circling = calculated.circling;
 

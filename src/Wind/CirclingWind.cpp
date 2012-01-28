@@ -69,12 +69,9 @@ void
 CirclingWind::Reset()
 {
   circle_count = 0;
-  circling_left = false;
   active = false;
   circle_deg = 0;
   last_track = Angle::Zero();
-  past_halfway = false;
-  current_mode_ok = false;
   first = true;
 }
 
@@ -137,20 +134,6 @@ CirclingWind::NewSample(const MoreData &info)
     first = true;
     samples.clear();
 
-    if (start_circle > 1)
-      start_circle--;
-
-    if (start_circle == 1) {
-      climb_startpos = GeoPoint(info.location.longitude,
-                               info.location.latitude);
-      climb_starttime = info.time;
-      start_circle = 0;
-    }
-
-    climb_endpos = GeoPoint(info.location.longitude,
-                           info.location.latitude);
-    climb_endtime = info.time;
-
     //no need to reset fullCircle, it will automaticly be reset in the next itteration.
   }
 
@@ -160,8 +143,7 @@ CirclingWind::NewSample(const MoreData &info)
 }
 
 void
-CirclingWind::NewFlightMode(const DerivedInfo &derived,
-                                 bool left, int marker)
+CirclingWind::NewFlightMode(const DerivedInfo &derived)
 {
   // we are inactive by default
   active = false;
@@ -171,17 +153,11 @@ CirclingWind::NewFlightMode(const DerivedInfo &derived,
   // number of turns in this thermal only.
   circle_count = 0;
 
-  // ignore first two circles in thermal drift calcs
-  start_circle = 3;
-
   circle_deg = 0;
-  current_mode_ok = derived.circling;
 
   // we are not circling? Exit function!
-  if (!current_mode_ok)
+  if (!derived.circling)
     return;
-
-  circling_left = left;
 
   // initialize analyser-parameters
   active = true;
