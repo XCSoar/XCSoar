@@ -105,7 +105,7 @@ CirclingWind::NewSample(const MoreData &info)
   if (!samples.full()) {
     Sample &sample = samples.append();
     sample.v = curVector;
-    sample.time = info.time;
+    sample.time = info.clock;
     sample.mag = info.ground_speed;
   } else {
     // TODO code: give error, too many wind samples
