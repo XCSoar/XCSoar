@@ -99,8 +99,14 @@ public:
   }
 
 protected:
-  virtual void OnTakeoff();
-  virtual void OnLanding();
+  void OnTakeoff();
+  void OnLanding();
+
+  /**
+   * Detects takeoff and landing events
+   */
+  void TakeoffLanding();
+
   virtual void OnSwitchClimbMode(bool isclimb, bool left);
 
 private:

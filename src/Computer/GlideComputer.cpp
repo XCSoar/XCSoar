@@ -108,6 +108,8 @@ GlideComputer::ProcessGPS()
   if (!FlightTimes())
     return false;
 
+  TakeoffLanding();
+
   if (!time_retreated())
     GlideComputerTask::ProcessAutoTask(basic, calculated, LastCalculated());
 
@@ -291,15 +293,34 @@ GlideComputer::CheckTeammateRange()
 void
 GlideComputer::OnTakeoff()
 {
-  GlideComputerAirData::OnTakeoff();
+  // reset stats on takeoff
+  ResetFlight();
+
+  // save stats in case we never finish
+  SaveFinish();
+
   InputEvents::processGlideComputer(GCE_TAKEOFF);
 }
 
 void
 GlideComputer::OnLanding()
 {
-  GlideComputerAirData::OnLanding();
+  // JMWX  restore data calculated at finish so
+  // user can review flight as at finish line
+
+  if (Calculated().common_stats.task_finished)
+    RestoreFinish();
+
   InputEvents::processGlideComputer(GCE_LANDING);
+}
+
+void
+GlideComputer::TakeoffLanding()
+{
+  if (Calculated().flight.flying && !LastCalculated().flight.flying)
+    OnTakeoff();
+  else if (!Calculated().flight.flying && LastCalculated().flight.flying)
+    OnLanding();
 }
 
 void

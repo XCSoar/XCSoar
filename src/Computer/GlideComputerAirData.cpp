@@ -451,7 +451,6 @@ GlideComputerAirData::FlightTimes()
   }
 
   FlightState(GetComputerSettings().glide_polar_task);
-  TakeoffLanding();
 
   return true;
 }
@@ -461,35 +460,6 @@ GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
 {
   flying_computer.Compute(glide_polar.GetVTakeoff(), Basic(), LastBasic(),
                           Calculated(), SetCalculated().flight);
-}
-
-void
-GlideComputerAirData::TakeoffLanding()
-{
-  if (Calculated().flight.flying && !LastCalculated().flight.flying)
-    OnTakeoff();
-  else if (!Calculated().flight.flying && LastCalculated().flight.flying)
-    OnLanding();
-}
-
-void
-GlideComputerAirData::OnLanding()
-{
-  // JMWX  restore data calculated at finish so
-  // user can review flight as at finish line
-
-  if (Calculated().common_stats.task_finished)
-    RestoreFinish();
-}
-
-void
-GlideComputerAirData::OnTakeoff()
-{
-  // reset stats on takeoff
-  ResetFlight();
-
-  // save stats in case we never finish
-  SaveFinish();
 }
 
 void

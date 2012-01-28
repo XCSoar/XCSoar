@@ -84,9 +84,6 @@ protected:
    */
   void ProcessVertical();
 
-  virtual void OnTakeoff();
-  virtual void OnLanding();
-
 private:
   void OnDepartedThermal();
 
@@ -130,10 +127,6 @@ private:
   void TerrainHeight();
   void FlightState(const GlidePolar& glide_polar);
 
-  /**
-   * Detects takeoff and landing events
-   */
-  void TakeoffLanding();
   void ThermalSources();
 
   /**
