@@ -70,7 +70,7 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
     return Result(0);
 
   // temporary manoeuvering, dont append this point
-  unsigned time(basic.time);
+  unsigned time(basic.clock);
   if ((fabs(derived.turn_rate) > fixed(20)) ||
       (fabs(basic.acceleration.g_load - fixed_one) > fixed(0.3))) {
 
