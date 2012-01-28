@@ -108,6 +108,7 @@ GlideComputerAirData::ProcessVertical()
   AverageClimbRate();
   CurrentThermal();
   UpdateLiftDatabase();
+  MaxHeightGain();
 }
 
 void
