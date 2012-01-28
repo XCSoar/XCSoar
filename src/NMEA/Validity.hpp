@@ -43,6 +43,11 @@ class Validity {
   }
 
   gcc_pure
+  static uint32_t Import(unsigned time) {
+    return (uint32_t)(time * 64);
+  }
+
+  gcc_pure
   static fixed Export(uint32_t i) {
     return fixed(i) / 64;
   }
@@ -153,6 +158,30 @@ public:
       return true;
     } else
       return false;
+  }
+
+  /**
+   * Check this stored Validity object for a time warp and clear if it
+   * one has occurred.  If this object is invalid, it is not
+   * considered a time wrap, even if the current object is valid.
+   *
+   * @param current the current "real" time stamp
+   * @param max_period if time in "current" has advanced more than
+   * this number of seconds, consider this a time warp, too
+   * @return true if a time warp has occurred and this object has been
+   * cleared, false if this object is within range
+   */
+  bool FixTimeWarp(const Validity &current, unsigned max_period=300) {
+    if (!IsValid())
+      return false;
+
+    if (last + Import(max_period) < current.last || last > current.last) {
+      /* out of range, this is a time warp */
+      Clear();
+      return true;
+    }
+
+    return false;
   }
 
   operator bool() const {

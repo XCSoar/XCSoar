@@ -60,14 +60,18 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
     return Result(0);
   }
 
-  const bool speed_updated =
-    basic.ground_speed_available.Modified(last_ground_speed_available) &&
-    basic.airspeed_available.Modified(last_airspeed_available);
-  last_ground_speed_available = basic.ground_speed_available;
-  last_airspeed_available = basic.airspeed_available;
-  if (!speed_updated)
+  if (last_ground_speed_available.FixTimeWarp(basic.ground_speed_available) ||
+      last_airspeed_available.FixTimeWarp(basic.airspeed_available))
+    /* time warp: start from scratch */
+    Reset();
+
+  if (!basic.ground_speed_available.Modified(last_ground_speed_available) ||
+      !basic.airspeed_available.Modified(last_airspeed_available))
     /* no updated speed values from instrument, don't invoke WindEKF */
     return Result(0);
+
+  last_ground_speed_available = basic.ground_speed_available;
+  last_airspeed_available = basic.airspeed_available;
 
   // temporary manoeuvering, dont append this point
   unsigned time(basic.clock);
