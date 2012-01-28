@@ -31,8 +31,12 @@ MoreData::Reset()
   TE_altitude = fixed_zero;
 
   gps_vario = gps_vario_TE = fixed_zero;
-  brutto_vario = fixed_zero;
+  gps_vario_available.Clear();
+
   netto_vario = fixed_zero;
+
+  brutto_vario = fixed_zero;
+  brutto_vario_available.Clear();
 
   NMEAInfo::Reset();
 }

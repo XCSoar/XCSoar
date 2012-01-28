@@ -40,6 +40,7 @@ FillVario(MoreData &data)
 {
   if (data.total_energy_vario_available) {
     data.brutto_vario = data.total_energy_vario;
+    data.brutto_vario_available = data.total_energy_vario_available;
 
     if (!data.netto_vario_available)
       /* copy the NettoVario value from BruttoVario; it will be
@@ -210,6 +211,7 @@ ComputeGPSVario(MoreData &basic, const MoreData &last)
 
   if (!basic.NavAltitudeAvailable() || !last.NavAltitudeAvailable()) {
     basic.gps_vario = basic.gps_vario_TE = fixed_zero;
+    basic.gps_vario_available.Clear();
     return;
   }
 
@@ -222,14 +224,21 @@ ComputeGPSVario(MoreData &basic, const MoreData &last)
   // estimate value from GPS
   basic.gps_vario = Gain / dT;
   basic.gps_vario_TE = GainTE / dT;
+  basic.gps_vario_available = basic.baro_altitude_available
+    ? basic.baro_altitude_available
+    : basic.gps_altitude_available;
 }
 
 static void
 ComputeBruttoVario(MoreData &basic)
 {
-  basic.brutto_vario = basic.total_energy_vario_available
-    ? basic.total_energy_vario
-    : basic.gps_vario;
+  if (basic.total_energy_vario_available) {
+    basic.brutto_vario = basic.total_energy_vario;
+    basic.brutto_vario_available = basic.total_energy_vario_available;
+  } else {
+    basic.brutto_vario = basic.gps_vario;
+    basic.brutto_vario_available = basic.gps_vario_available;
+  }
 }
 
 /**

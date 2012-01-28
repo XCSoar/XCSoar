@@ -47,12 +47,16 @@ struct MoreData : public NMEAInfo {
   /** GPS-based vario including energy height */
   fixed gps_vario_TE;
 
+  Validity gps_vario_available;
+
   /**
    * Current vertical speed (total energy).  This is set to
    * TotalEnergyVario if available, and falls back to GPSVario.  It is
    * maintained by DeviceBlackboard::Vario().
    */
   fixed brutto_vario;
+
+  Validity brutto_vario_available;
 
   void Reset();
 
