@@ -55,8 +55,7 @@ public:
   void Reset();
 
   void Compute(const ComputerSettings &settings,
-               const MoreData &basic, const NMEAInfo &last_basic,
-               DerivedInfo &calculated);
+               const MoreData &basic, DerivedInfo &calculated);
 
   void ComputeHeadWind(const NMEAInfo &basic, DerivedInfo &calculated);
 

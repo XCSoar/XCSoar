@@ -114,8 +114,7 @@ void
 GlideComputerAirData::Wind()
 {
   wind_computer.Compute(GetComputerSettings(),
-                        Basic(), LastBasic(),
-                        SetCalculated());
+                        Basic(), SetCalculated());
 }
 
 void

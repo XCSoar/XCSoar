@@ -38,8 +38,7 @@ WindComputer::Reset()
 
 void
 WindComputer::Compute(const ComputerSettings &settings,
-                      const MoreData &basic, const NMEAInfo &last_basic,
-                      DerivedInfo &calculated)
+                      const MoreData &basic, DerivedInfo &calculated)
 {
   if (settings.CirclingWindEnabled() &&
       calculated.circling != last_circling)
@@ -47,7 +46,7 @@ WindComputer::Compute(const ComputerSettings &settings,
 
 last_circling = calculated.circling;
 
-  if (!calculated.flight.flying || !basic.HasTimeAdvancedSince(last_basic))
+  if (!calculated.flight.flying)
     return;
 
   if (settings.CirclingWindEnabled() &&
