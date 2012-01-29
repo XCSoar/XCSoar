@@ -114,9 +114,17 @@ CRITICAL_SECTION  CritSec_VarioSoundV;
 unsigned short audio_beepfrequency = 17;
 unsigned short audio_soundfrequency = 3276;
 unsigned short audio_altsoundfrequency = 3276;
-unsigned char audio_soundtype = 0; // start in silence
 unsigned char audio_deadband_hi = 100;
 unsigned char audio_deadband_low = 100;
+
+enum class SoundType : unsigned char {
+  SILENCE,
+  SHORT_BEEPS,
+  LONG_BEEPS,
+  SOLID,
+  TWO_BEEPS,
+  EQUAL_BEEPS,
+} audio_soundtype = SoundType::SILENCE; // start in silence
 
 // Corrections for phase, must be global.
 unsigned char audio_phase = 0;
@@ -198,26 +206,26 @@ unsigned char audio_sound_beep(unsigned short i) {
   BeepData.Advance = false;
 
   switch (audio_soundtype) {
-  case 0: // silence
+  case SoundType::SILENCE: // silence
     BeepData.Advance=true;
     return 0;
-  case 1: // positive sound, short beep
+  case SoundType::SHORT_BEEPS: // positive sound, short beep
     if (phase<64) {
       BeepData.Advance=true;
       return 1;
     }
     else
       return 0;
-  case 2: // negative sound, long beep
+  case SoundType::LONG_BEEPS: // negative sound, long beep
     if (phase<200) {
       BeepData.Advance=true;
       return 1;
     } else
       return 0;
-  case 3: // solid sound
+  case SoundType::SOLID: // solid sound
     BeepData.Advance=true;
     return 1;
-  case 4: // two short beeps
+  case SoundType::TWO_BEEPS: // two short beeps
     if (phase<24) {
       BeepData.Advance = true;
       return 1;
@@ -226,7 +234,7 @@ unsigned char audio_sound_beep(unsigned short i) {
       return 1;
     }
     return 0;
-  case 5: // equal beep
+  case SoundType::EQUAL_BEEPS: // equal beep
     if (phase<128) {
       BeepData.Advance=true;
       return 1;
@@ -1698,7 +1706,7 @@ void audio_soundmode_cruise(void) {
 
   short vthis;
 
-  audio_soundtype = 0; // quiet
+  audio_soundtype = SoundType::SILENCE; // quiet
 
   if ((audiofilter.vstfsmooth>1)||(audiofilter.vstfsmooth< -1)) {
     // only make sounds required if speed is more than 10% too fast
@@ -1709,14 +1717,14 @@ void audio_soundmode_cruise(void) {
 
     if (audiofilter.vstfsmooth>0) { // slow down
 
-      audio_soundtype = 2; // long beeps
+      audio_soundtype = SoundType::LONG_BEEPS; // long beeps
       audio_beepfrequency = audio_delaytable(10); // long period
       audio_soundfrequency = audio_frequencytable((unsigned char)vthis);
 
     } else
     if (audiofilter.vstfsmooth<0) { // speed up
 
-      audio_soundtype = 4; // double beep
+      audio_soundtype = SoundType::TWO_BEEPS; // double beep
       audio_beepfrequency = audio_delaytable(10); // long period
       audio_soundfrequency = audio_frequencytable((unsigned char)vthis);
 
@@ -1745,15 +1753,15 @@ void audio_soundmode_climb(void) {
   audio_altsoundfrequency = audio_soundfrequency;
 
   if (audiofilter.vcur>= audio_deadband_hi) {
-    audio_soundtype = 1;
+    audio_soundtype = SoundType::SHORT_BEEPS;
   } else if (suppressdeadband && (audiofilter.vsmooth>=100)) {
-    audio_soundtype = 1;
+    audio_soundtype = SoundType::SHORT_BEEPS;
   } else if (audiofilter.vcur<= audio_deadband_low) {
-    audio_soundtype = 3;
+    audio_soundtype = SoundType::SOLID;
   } else if (suppressdeadband && (audiofilter.vsmooth<100)) {
-    audio_soundtype = 3;
+    audio_soundtype = SoundType::SOLID;
   } else {
-    audio_soundtype = 0;
+    audio_soundtype = SoundType::SILENCE;
   }
 
 }
@@ -1771,7 +1779,7 @@ void audio_soundmode_stall(short delta) {
 
   audio_soundfrequency = audio_frequencytable((unsigned char)(100-mag));
   audio_altsoundfrequency = audio_frequencytable((unsigned char)(100+mag));
-  audio_soundtype = 5; // even beep
+  audio_soundtype = SoundType::EQUAL_BEEPS; // even beep
 }
 
 void audio_soundmode(short vinst, short vstf) {
