@@ -24,9 +24,11 @@ Copyright_License {
 
 
 #include "VarioSound.h"
+#include "WaveThread.h"
 #include "Math/Constants.h"
 
 #include <math.h>
+#include <stdlib.h>
 
 BOOL APIENTRY DllMain( HANDLE hModule,
                        DWORD  ul_reason_for_call,
@@ -44,9 +46,6 @@ BOOL APIENTRY DllMain( HANDLE hModule,
   return TRUE;
 }
 
-
-#include <stdlib.h>
-
 double randomgaussian() {
 #ifdef SIMULATENOISE
   double k1;
@@ -62,8 +61,6 @@ double randomgaussian() {
   return 0.0;
 #endif
 }
-
-#include "WaveThread.h"
 
 CWaveOutThread variosound_waveOut;
 
@@ -1776,8 +1773,6 @@ void audio_soundmode_stall(short delta) {
   audio_altsoundfrequency = audio_frequencytable((unsigned char)(100+mag));
   audio_soundtype = 5; // even beep
 }
-
-#include "externs.h"
 
 void audio_soundmode(short vinst, short vstf) {
 
