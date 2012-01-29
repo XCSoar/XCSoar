@@ -24,6 +24,7 @@ Copyright_License {
 #include "InfoBoxesConfigPanel.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/Button.hpp"
+#include "Form/ActionListener.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Interface.hpp"
 #include "LogFile.hpp"
@@ -36,40 +37,24 @@ Copyright_License {
 #include "UIGlobals.hpp"
 
 
-class InfoBoxesConfigPanel : public RowFormWidget {
+class InfoBoxesConfigPanel : public RowFormWidget,
+                             public ActionListener {
 public:
   InfoBoxesConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
 
-private:
-  WndButton *buttons[InfoBoxSettings::MAX_PANELS];
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  void OnInfoBoxesButton(WndButton &button);
-  unsigned ButtonIndex(const WndButton *button);
+  virtual void OnAction(int id);
 };
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static InfoBoxesConfigPanel *instance;
-
-unsigned
-InfoBoxesConfigPanel::ButtonIndex(const WndButton *button)
-{
-  for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; i++)
-    if (button == buttons[i])
-      return i;
-  // Not reached
-  return 0;
-}
-
 void
-InfoBoxesConfigPanel::OnInfoBoxesButton(WndButton &button)
+InfoBoxesConfigPanel::OnAction(int id)
 {
   InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
 
-  unsigned i = ButtonIndex(&button);
+  unsigned i = (unsigned)id;
   InfoBoxSettings::Panel &data = settings.panels[i];
 
   bool changed =
@@ -81,14 +66,8 @@ InfoBoxesConfigPanel::OnInfoBoxesButton(WndButton &button)
     Profile::Save(data, i);
     Profile::Save();
     LogDebug(_T("InfoBox configuration: Changes saved"));
-    buttons[i]->SetCaption(gettext(data.name));
+    ((WndButton &)GetRow(i)).SetCaption(gettext(data.name));
   }
-}
-
-static void
-OnInfoBoxesButton(WndButton &button)
-{
-  instance->OnInfoBoxesButton(button);
 }
 
 void
@@ -96,21 +75,12 @@ InfoBoxesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const InfoBoxSettings &settings = CommonInterface::GetUISettings().info_boxes;
 
-  instance = this;
   RowFormWidget::Prepare(parent, rc);
 
-  ButtonWindowStyle button_style;
-  button_style.TabStop();
-  button_style.multiline();
-  const PixelRect button_rc = {0, 0, Layout::FastScale(60), Layout::FastScale(24)};
   for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; i++) {
     const InfoBoxSettings::Panel &data = settings.panels[i];
 
-    buttons[i] = new WndButton(*(ContainerWindow *)GetWindow(),
-                               ConfigPanel::GetForm().GetLook(),
-                               gettext(data.name), button_rc,
-                               button_style, ::OnInfoBoxesButton);
-    Add(buttons[i]);
+    AddButton(gettext(data.name), this, i);
     if (i>2)
       SetExpertRow(i);
   }
