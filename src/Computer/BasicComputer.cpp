@@ -115,8 +115,10 @@ ComputeNavAltitude(MoreData &basic,
 static void
 ComputeTrack(NMEAInfo &basic, const NMEAInfo &last)
 {
-  if (basic.track_available || !basic.location_available ||
-      !last.location_available)
+  if (basic.track_available ||
+      !basic.location_available ||
+      !last.location_available ||
+      !basic.location_available.Modified(last.location_available))
     return;
 
   const GeoVector v = last.location.DistanceBearing(basic.location);
@@ -309,10 +311,11 @@ BasicComputer::Compute(MoreData &data, const MoreData &last,
                        const DerivedInfo &calculated,
                        const ComputerSettings &settings_computer)
 {
+  ComputeTrack(data, last);
+
   if (!data.HasTimeAdvancedSince(last))
     return;
 
-  ComputeTrack(data, last);
   ComputeGroundSpeed(data, last);
   ComputeAirspeed(data, calculated);
   ComputeEnergyHeight(data);
