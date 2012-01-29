@@ -35,6 +35,7 @@ Copyright_License {
 
 struct DialogLook;
 struct StaticEnumChoice;
+class ActionListener;
 
 /**
  * A #Widget that contains #WndProperty controls, one in a row.
@@ -220,6 +221,8 @@ public:
 
   WndProperty *AddFileReader(const TCHAR *label, const TCHAR *help,
                              const TCHAR *registry_key, const TCHAR *filters);
+
+  void AddButton(const TCHAR *label, ActionListener *listener=NULL, int id=0);
 
   gcc_pure
   Window &GetRow(unsigned i) {

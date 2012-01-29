@@ -24,6 +24,7 @@ Copyright_License {
 #include "Form/RowFormWidget.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Panel.hpp"
+#include "Form/Button.hpp"
 #include "Look/DialogLook.hpp"
 #include "Dialogs/DialogSettings.hpp"
 #include "UIGlobals.hpp"
@@ -366,6 +367,24 @@ RowFormWidget::AddFileReader(const TCHAR *label, const TCHAR *help,
   edit->RefreshDisplay();
 
   return edit;
+}
+
+void
+RowFormWidget::AddButton(const TCHAR *label, ActionListener *listener, int id)
+{
+  assert(IsDefined());
+
+  PixelRect button_rc = NextControlRect(GetWindow()->get_client_rect(), Layout::Scale(22));
+
+  ButtonWindowStyle button_style;
+  button_style.TabStop();
+  button_style.multiline();
+
+  ContainerWindow &panel = *(ContainerWindow *)GetWindow();
+
+  WndButton *button = new WndButton(panel, look, label, button_rc, button_style, listener, id);
+
+  Add(button);
 }
 
 void
