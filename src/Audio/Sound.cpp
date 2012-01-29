@@ -46,7 +46,7 @@ PlayResource(const TCHAR *resource_name)
 #elif defined(WIN32) && !defined(GNAV)
 
   if (_tcsstr(resource_name, TEXT(".wav")))
-    return sndPlaySound (resource_name, SND_ASYNC | SND_NODEFAULT );
+    return sndPlaySound(resource_name, SND_ASYNC | SND_NODEFAULT);
 
   ResourceLoader::Data data = ResourceLoader::Load(resource_name, _T("WAVE"));
   return data.first != NULL &&
