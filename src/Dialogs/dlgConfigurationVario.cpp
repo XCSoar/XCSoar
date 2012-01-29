@@ -529,6 +529,7 @@ UpdateParameters(bool first)
   VegaConfigurationUpdated(_T("HasAccelerometer"), first);
   VegaConfigurationUpdated(_T("HasTemperature"), first);
   VegaConfigurationUpdated(_T("FlarmConnected"), first);
+  VegaConfigurationUpdated(_T("EnablePDASupply"), first);
 
   VegaConfigurationUpdated(_T("TotalEnergyMixingRatio"), first);
   VegaConfigurationUpdated(_T("CalibrationAirSpeed"), first);
@@ -541,7 +542,6 @@ UpdateParameters(bool first)
   VegaConfigurationUpdated(_T("AccelerometerOffsetX"), first);
   VegaConfigurationUpdated(_T("AccelerometerOffsetY"), first);
 
-  //  VegaConfigurationUpdated(_T("PDAPower"), first);
   VegaConfigurationUpdated(_T("ToneAveragerVarioTimeScale"), first);
   VegaConfigurationUpdated(_T("ToneAveragerCruiseTimeScale"), first);
   VegaConfigurationUpdated(_T("ToneMeanVolumeCircling"), first);
