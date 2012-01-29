@@ -77,7 +77,6 @@ public:
     return wind_computer.GetWindStore();
   }
 
-protected:
   void ResetFlight(DerivedInfo &calculated, const ComputerSettings &settings,
                    const bool full=true);
 
@@ -98,6 +97,7 @@ protected:
 protected:
   void OnSwitchClimbMode(const ComputerSettings &settings);
 
+public:
   /**
    * 1. Detects time retreat and calls ResetFlight if GPS lost
    * 2. Detects change in replay status and calls ResetFlight if so

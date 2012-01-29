@@ -44,11 +44,11 @@ class RasterTerrain;
 // do not replicate the large items or items that should be singletons
 // OR: just make them static?
 
-class GlideComputer
-  : public GlideComputerBlackboard,
-    public GlideComputerAirData, public GlideComputerTask,
-    public GlideComputerStats
+class GlideComputer : public GlideComputerBlackboard
 {
+  GlideComputerAirData air_data_computer;
+  GlideComputerTask task_computer;
+  GlideComputerStats stats_computer;
   CuComputer cu_computer;
   WarningComputer warning_computer;
 
@@ -70,6 +70,10 @@ public:
 
   void SetTerrain(RasterTerrain *_terrain);
 
+  void SetLogger(Logger *logger) {
+    stats_computer.SetLogger(logger);
+  }
+
   void ResetFlight(const bool full=true);
   void Initialise();
 
@@ -88,6 +92,10 @@ public:
   void OnFinishTask();
   void OnTransitionEnter();
 
+  const WindStore &GetWindStore() const {
+    return air_data_computer.GetWindStore();
+  }
+
   const CuSonde &GetCuSonde() const {
     return cu_computer.GetCuSonde();
   }
@@ -98,6 +106,22 @@ public:
 
   const ProtectedAirspaceWarningManager &GetAirspaceWarnings() const {
     return warning_computer.GetManager();
+  }
+
+  const TraceComputer &GetTraceComputer() const {
+    return task_computer.GetTraceComputer();
+  }
+
+  const ProtectedRoutePlanner &GetProtectedRoutePlanner() const {
+    return task_computer.GetProtectedRoutePlanner();
+  }
+
+  void ClearAirspaces() {
+    task_computer.ClearAirspaces();
+  }
+
+  const FlightStatistics &GetFlightStats() const {
+    return stats_computer.GetFlightStats();
   }
 
 protected:

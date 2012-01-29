@@ -59,9 +59,8 @@ public:
   FlightStatistics &GetFlightStats() { return flightstats; }
   const FlightStatistics &GetFlightStats() const { return flightstats; }
 
-protected:
   void ResetFlight(const bool full = true);
-  void StartTask();
+  void StartTask(const NMEAInfo &basic);
   bool DoLogging(const MoreData &basic, const NMEAInfo &last_basic,
                  const DerivedInfo &calculated,
                  const LoggerSettings &settings_logger);
@@ -72,7 +71,7 @@ private:
   void OnClimbCeiling(const DerivedInfo &calculated);
   void OnDepartedThermal(const DerivedInfo &calculated);
 
-protected:
+public:
   /**
    * Check of climbing has started or ended, and collect statistics
    * about that.

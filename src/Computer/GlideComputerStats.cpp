@@ -44,9 +44,12 @@ GlideComputerStats::ResetFlight(const bool full)
 }
 
 void
-GlideComputerStats::StartTask()
+GlideComputerStats::StartTask(const NMEAInfo &basic)
 {
   flightstats.StartTask();
+
+  if (logger != NULL)
+    logger->LogFinishEvent(basic);
 }
 
 /**

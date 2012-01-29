@@ -66,7 +66,6 @@ public:
     trace.LockedCopyTo(v, min_time, location, resolution);
   }
 
-protected:
   void ProcessBasicTask(const MoreData &basic, const MoreData &last_basic,
                         DerivedInfo &calculated,
                         const DerivedInfo &last_calculated,
@@ -74,18 +73,17 @@ protected:
   void ProcessMoreTask(const MoreData &basic, DerivedInfo &calculated,
                        const DerivedInfo &last_calculated,
                        const ComputerSettings &settings_computer);
+
   void ResetFlight(const bool full=true);
 
   void SetTerrain(const RasterTerrain* _terrain);
 
-public:
   /**
    * Auto-create a task on takeoff that leads back home.
    */
   void ProcessAutoTask(const NMEAInfo &basic, const DerivedInfo &calculated,
                        const DerivedInfo &last_calculated);
 
-protected:
   void ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
                    const ComputerSettings &settings_computer,
                    bool exhaustive=false);

@@ -45,8 +45,8 @@ GlideComputer::GlideComputer(const Waypoints &_way_points,
                              Airspaces &_airspace_database,
                              ProtectedTaskManager &task,
                              GlideComputerTaskEvents& events):
-  GlideComputerAirData(_way_points),
-  GlideComputerTask(task, _airspace_database),
+  air_data_computer(_way_points),
+  task_computer(task, _airspace_database),
   warning_computer(_airspace_database),
   waypoints(_way_points),
   team_code_ref_id(-1)
@@ -63,10 +63,9 @@ void
 GlideComputer::ResetFlight(const bool full)
 {
   GlideComputerBlackboard::ResetFlight(full);
-  GlideComputerAirData::ResetFlight(SetCalculated(), GetComputerSettings(),
-                                    full);
-  GlideComputerTask::ResetFlight(full);
-  GlideComputerStats::ResetFlight(full);
+  air_data_computer.ResetFlight(SetCalculated(), GetComputerSettings(), full);
+  task_computer.ResetFlight(full);
+  stats_computer.ResetFlight(full);
 
   cu_computer.Reset();
   warning_computer.Reset(Basic(), Calculated());
@@ -95,31 +94,33 @@ GlideComputer::ProcessGPS()
   calculated.Expire(basic.clock);
 
   // Process basic information
-  ProcessBasic(Basic(), SetCalculated(), GetComputerSettings());
+  air_data_computer.ProcessBasic(Basic(), SetCalculated(),
+                                 GetComputerSettings());
 
   // Process basic task information
-  ProcessBasicTask(basic, LastBasic(),
-                   calculated, LastCalculated(),
-                   GetComputerSettings());
-  ProcessMoreTask(basic, calculated, LastCalculated(),
-                  GetComputerSettings());
+  task_computer.ProcessBasicTask(basic, LastBasic(),
+                                 calculated, LastCalculated(),
+                                 GetComputerSettings());
+  task_computer.ProcessMoreTask(basic, calculated, LastCalculated(),
+                                GetComputerSettings());
 
   // Check if everything is okay with the gps time and process it
-  if (!FlightTimes(Basic(), LastBasic(), SetCalculated(),
-                   GetComputerSettings()))
+  if (!air_data_computer.FlightTimes(Basic(), LastBasic(), SetCalculated(),
+                                     GetComputerSettings()))
     return false;
 
   TakeoffLanding();
 
   if (!time_retreated())
-    GlideComputerTask::ProcessAutoTask(basic, calculated, LastCalculated());
+    task_computer.ProcessAutoTask(basic, calculated, LastCalculated());
 
   // Process extended information
-  ProcessVertical(Basic(), LastBasic(), SetCalculated(), LastCalculated(),
-                  GetComputerSettings());
+  air_data_computer.ProcessVertical(Basic(), LastBasic(),
+                                    SetCalculated(), LastCalculated(),
+                                    GetComputerSettings());
 
   if (!time_retreated())
-    GlideComputerStats::ProcessClimbEvents(calculated, LastCalculated());
+    stats_computer.ProcessClimbEvents(calculated, LastCalculated());
 
   // Calculate the team code
   CalculateOwnTeamCode();
@@ -147,10 +148,11 @@ GlideComputer::ProcessIdle(bool exhaustive)
 {
   // Log GPS fixes for internal usage
   // (snail trail, stats, olc, ...)
-  DoLogging(Basic(), LastBasic(), Calculated(), GetComputerSettings().logger);
+  stats_computer.DoLogging(Basic(), LastBasic(), Calculated(),
+                           GetComputerSettings().logger);
 
-  GlideComputerTask::ProcessIdle(Basic(), SetCalculated(), GetComputerSettings(),
-                                 exhaustive);
+  task_computer.ProcessIdle(Basic(), SetCalculated(), GetComputerSettings(),
+                            exhaustive);
 
   if (time_advanced())
     warning_computer.Update(GetComputerSettings(), Basic(), LastBasic(),
@@ -272,7 +274,7 @@ void
 GlideComputer::OnTakeoff()
 {
   // reset stats on takeoff
-  GlideComputerAirData::ResetFlight(SetCalculated(), GetComputerSettings());
+  air_data_computer.ResetFlight(SetCalculated(), GetComputerSettings());
 
   // save stats in case we never finish
   SaveFinish();
@@ -301,31 +303,25 @@ void
 GlideComputer::OnStartTask()
 {
   GlideComputerBlackboard::StartTask();
-  GlideComputerStats::StartTask();
-
-  if (logger != NULL)
-    logger->LogStartEvent(Basic());
+  stats_computer.StartTask(Basic());
 }
 
 void 
 GlideComputer::OnFinishTask()
 {
   SaveFinish();
-
-  if (logger != NULL)
-    logger->LogFinishEvent(Basic());
 }
 
 void
 GlideComputer::OnTransitionEnter()
 {
-  GlideComputerStats::SetFastLogging();
+  stats_computer.SetFastLogging();
 }
 
 
 void
 GlideComputer::SetTerrain(RasterTerrain* _terrain)
 {
-  GlideComputerAirData::SetTerrain(_terrain);
-  GlideComputerTask::SetTerrain(_terrain);
+  air_data_computer.SetTerrain(_terrain);
+  task_computer.SetTerrain(_terrain);
 }
