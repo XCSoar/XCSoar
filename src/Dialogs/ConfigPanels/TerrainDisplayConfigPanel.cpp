@@ -168,12 +168,13 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   static gcc_constexpr_data StaticEnumChoice terrain_ramp_list[] = {
     { 0, N_("Low lands"), },
-    { 1, N_("Imhof 7"), },
-    { 2, N_("Imhof 4"), },
-    { 3, N_("Imhof 12"), },
-    { 4, N_("Imhof Atlas"), },
-    { 5, N_("ICAO"), },
-    { 6, N_("Grey"), },
+    { 1, N_("Mountainous"), },
+    { 2, N_("Imhof 7"), },
+    { 3, N_("Imhof 4"), },
+    { 4, N_("Imhof 12"), },
+    { 5, N_("Imhof Atlas"), },
+    { 6, N_("ICAO"), },
+    { 7, N_("Grey"), },
     { 0 }
   };
 
