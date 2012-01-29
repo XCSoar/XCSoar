@@ -554,6 +554,18 @@ MainWindow::OnUser(unsigned id)
 
   case CMD_GPS_UPDATE:
     XCSoarInterface::ReceiveGPS();
+
+    /*
+     * Update the infoboxes if no location is available
+     *
+     * (if the location is available the CalculationThread will send the
+     * CMD_CALCULATED_UPDATE message which will update them)
+     */
+    if (!CommonInterface::Basic().location_available) {
+      InfoBoxManager::SetDirty();
+      InfoBoxManager::ProcessTimer();
+    }
+
     return true;
 
   case CMD_CALCULATED_UPDATE:
