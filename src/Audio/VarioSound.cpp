@@ -47,9 +47,6 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 
 #include <stdlib.h>
 
-#ifdef DEBUGAUDIO
-#endif
-
 double randomgaussian() {
 #ifdef SIMULATENOISE
   double k1;
