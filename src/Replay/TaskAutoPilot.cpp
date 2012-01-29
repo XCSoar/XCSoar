@@ -154,8 +154,8 @@ TaskAutoPilot::update_mode(const TaskAccessor& task,
 {
   switch (acstate) {
   case Cruise:
-    if ((awp>0) &&
-        (task.distance_to_final()<= state.ground_speed)) {
+    /* XXX this condition is probably broken */
+    if (awp > 0 && !negative(task.remaining_alt_difference())) {
       acstate = FinalGlide;
       on_mode_change();
     } else {
@@ -172,8 +172,8 @@ TaskAutoPilot::update_mode(const TaskAccessor& task,
     }
     break;
   case Climb:
-    if ((awp>0) &&
-        (task.distance_to_final()<= state.ground_speed)) {
+    /* XXX this condition is probably broken */
+    if (awp > 0 && !negative(task.remaining_alt_difference())) {
       acstate = FinalGlide;
       on_mode_change();
     } else if (state.altitude>=fixed_1500) {

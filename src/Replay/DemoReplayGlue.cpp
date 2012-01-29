@@ -71,9 +71,6 @@ public:
       return floor_alt;
     }
   }
-  fixed distance_to_final() const {
-    return task->GetStats().total.solution_remaining.distance_to_final;
-  }
   fixed remaining_alt_difference() const {
     return task->GetStats().total.solution_remaining.altitude_difference;
   }

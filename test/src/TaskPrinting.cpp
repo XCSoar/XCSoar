@@ -356,7 +356,6 @@ std::ostream& operator<< (std::ostream& f,
   }
   f << "#    EffectiveWindSpeed  " <<  gl.effective_wind_speed << " (m/s)\n";
   f << "#    EffectiveWindAngle  " <<  gl.effective_wind_angle << " (deg)\n";
-  f << "#    DistanceToFinal     " <<  gl.distance_to_final << " (m)\n";
   if (gl.IsFinalGlide()) {
     f << "#    On final glide\n";
   }

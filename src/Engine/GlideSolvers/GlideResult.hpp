@@ -87,8 +87,6 @@ struct GlideResult {
    */
   GeoVector vector;
 
-  /** Distance to go before final glide (m) */
-  fixed distance_to_final;
   /** Track bearing in cruise for optimal drift compensation (deg true) */
   Angle cruise_track_bearing;
 
@@ -153,12 +151,6 @@ struct GlideResult {
    */
   gcc_pure
   bool IsFinalGlide() const;
-
-  /**
-   * Convenience function, returns location of start of final glide component
-   */
-  gcc_pure
-  GeoPoint FinalGlideStartLocation(const GeoPoint &location) const;
 
   /**
    * Check whether task is partially achievable.  It will

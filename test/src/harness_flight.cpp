@@ -112,9 +112,6 @@ public:
       return fixed_300;
     }
   }
-  fixed distance_to_final() const {
-    return task_manager.GetStats().total.solution_remaining.distance_to_final;
-  }
   fixed remaining_alt_difference() const {
     return task_manager.GetStats().total.solution_remaining.altitude_difference;
   }

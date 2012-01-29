@@ -237,7 +237,6 @@ MacCready::SolveGlide(const GlideState &task, const fixed v_set,
   result.height_climb = fixed_zero;
   result.height_glide = time_cruise * sink_rate;
   result.altitude_difference -= result.height_glide;
-  result.distance_to_final = fixed_zero;
 
   const fixed inv_mc = glide_polar.GetInvMC();
   if(positive(inv_mc))

@@ -33,7 +33,6 @@ GlideResult::GlideResult(const GlideState &task, const fixed V):
 #endif
   min_height(task.min_height),
   vector(task.vector),
-  distance_to_final(task.vector.distance),
   altitude_difference(task.altitude_difference),
   effective_wind_speed(task.wind.norm),
   effective_wind_angle(task.effective_wind_angle),
@@ -99,7 +98,6 @@ GlideResult::Add(const GlideResult &s2)
   time_elapsed += s2.time_elapsed;
   height_glide += s2.height_glide;
   height_climb += s2.height_climb;
-  distance_to_final += s2.distance_to_final;
   time_virtual += s2.time_virtual;
 }
 
@@ -125,12 +123,6 @@ bool
 GlideResult::IsFinalGlide() const 
 {
   return IsOk() && !negative(altitude_difference) && !positive(height_climb);
-}
-
-GeoPoint 
-GlideResult::FinalGlideStartLocation(const GeoPoint &location) const
-{
-  return vector.IntermediatePoint(location, distance_to_final);
 }
 
 void

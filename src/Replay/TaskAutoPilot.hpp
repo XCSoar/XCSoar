@@ -107,9 +107,6 @@ public:
   virtual fixed target_height() const = 0;
 
   gcc_pure
-  virtual fixed distance_to_final() const = 0;
-
-  gcc_pure
   virtual fixed remaining_alt_difference() const = 0;
 
   gcc_pure

@@ -89,7 +89,6 @@ CheckLeg(const TaskWaypoint &tp, const AircraftState &aircraft,
   const GeoVector vector = aircraft.location.DistanceBearing(destination);
   const fixed ld = glide_polar.GetBestLD();
   const fixed height_above_min = aircraft.altitude - min_arrival_alt;
-  const fixed distance_above_min = height_above_min * ld;
   const fixed height_consumption = vector.distance / ld;
   const ElementStat &leg = stats.current_leg;
   const GlideResult &solution_remaining = leg.solution_remaining;
@@ -110,17 +109,13 @@ CheckLeg(const TaskWaypoint &tp, const AircraftState &aircraft,
 
   if (height_above_min >= height_consumption) {
     /* straight glide */
-    ok1(equals(solution_remaining.distance_to_final, 0));
     ok1(equals(solution_remaining.height_climb, 0));
   } else if (positive(glide_polar.GetMC())) {
     /* climb required */
-    ok1(equals(solution_remaining.distance_to_final,
-               vector.distance - std::max(distance_above_min, fixed_zero)));
     ok1(equals(solution_remaining.height_climb,
                height_consumption - height_above_min));
   } else {
     /* climb required, but not possible (MC=0) */
-    ok1(equals(solution_remaining.distance_to_final, 0)); // XXX is this correct?
     ok1(equals(solution_remaining.height_climb, 0));
   }
 }
@@ -180,7 +175,6 @@ CheckLegEqualsTotal(const GlideResult &leg, const GlideResult &total)
   ok1(total.IsOk());
   ok1(equals(total.height_climb, leg.height_climb));
   ok1(equals(total.height_glide, leg.height_glide));
-  ok1(equals(total.distance_to_final, leg.distance_to_final));
   ok1(equals(total.altitude_difference, leg.altitude_difference));
   ok1(equals(total.GetRequiredAltitude(), leg.GetRequiredAltitude()));
 }
