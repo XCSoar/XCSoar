@@ -45,10 +45,11 @@ public:
    *
    * @param data the current sensor data structure
    * @param last the previous sensor data structure
+   * @param last_gps the previous GPS fix
    * @param calculations the most up-to-date version of calculated values
    * @param settings_computer the computer settings
    */
-  void Compute(MoreData &data, const MoreData &last,
+  void Compute(MoreData &data, const MoreData &last, const MoreData &last_gps,
                const DerivedInfo &calculated,
                const ComputerSettings &settings_computer);
 };

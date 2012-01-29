@@ -205,30 +205,67 @@ ComputeEnergyHeight(MoreData &basic)
  * Sets Vario to GPSVario or received Vario data from instrument
  */
 static void
-ComputeGPSVario(MoreData &basic, const MoreData &last)
+ComputeGPSVario(MoreData &basic,
+                const MoreData &last, const MoreData &last_gps)
 {
-  assert(basic.time_available);
-  assert(last.time_available);
-  assert(basic.time > last.time);
+  if (basic.pressure_altitude_available && last.pressure_altitude_available) {
+    /* prefer pressure altitude for the "GPS" vario, even if navigate
+       by GPS altitude is configured, because pressure altitude is
+       expected to be more exact */
 
-  if (!basic.NavAltitudeAvailable() || !last.NavAltitudeAvailable()) {
+    /* use the "Validity" time stamp, because it reflects when this
+       altitude was measured, and GPS time may not be available */
+    const fixed delta_t =
+      basic.pressure_altitude_available.GetTimeDifference(last.pressure_altitude_available);
+
+    if (positive(delta_t)) {
+      /* only update when a new value was received */
+
+      fixed delta_h = basic.pressure_altitude - last.pressure_altitude;
+      fixed delta_e = basic.energy_height - last.energy_height;
+
+      basic.gps_vario = delta_h / delta_t;
+      basic.gps_vario_TE = (delta_h + delta_e) / delta_t;
+      basic.gps_vario_available = basic.pressure_altitude_available;
+    }
+  } else if (basic.baro_altitude_available && last.baro_altitude_available) {
+    /* barometric altitude is also ok, but it's rare that it is
+       available when pressure altitude is not */
+
+    const fixed delta_t =
+      basic.baro_altitude_available.GetTimeDifference(last.baro_altitude_available);
+
+    if (positive(delta_t)) {
+      /* only update when a new value was received */
+
+      fixed delta_h = basic.baro_altitude - last.baro_altitude;
+      fixed delta_e = basic.energy_height - last.energy_height;
+
+      basic.gps_vario = delta_h / delta_t;
+      basic.gps_vario_TE = (delta_h + delta_e) / delta_t;
+      basic.gps_vario_available = basic.baro_altitude_available;
+    }
+  } else if (basic.gps_altitude_available && last_gps.gps_altitude_available &&
+             basic.time_available && last_gps.time_available) {
+    /* use the GPS time stamp, because it reflects when this altitude
+       was measured by the GPS receiver; the Validity object just
+       shows when this value was parsed by XCSoar */
+    const fixed delta_t = basic.time - last_gps.time;
+
+    if (positive(delta_t)) {
+      /* only update when a new value was received */
+
+      fixed delta_h = basic.gps_altitude - last_gps.gps_altitude;
+      fixed delta_e = basic.energy_height - last_gps.energy_height;
+
+      basic.gps_vario = delta_h / delta_t;
+      basic.gps_vario_TE = (delta_h + delta_e) / delta_t;
+      basic.gps_vario_available = basic.gps_altitude_available;
+    }
+  } else {
     basic.gps_vario = basic.gps_vario_TE = fixed_zero;
     basic.gps_vario_available.Clear();
-    return;
   }
-
-  // Calculate time passed since last calculation
-  const fixed dT = basic.time - last.time;
-
-  const fixed Gain = basic.nav_altitude - last.nav_altitude;
-  const fixed GainTE = basic.TE_altitude - last.TE_altitude;
-
-  // estimate value from GPS
-  basic.gps_vario = Gain / dT;
-  basic.gps_vario_TE = GainTE / dT;
-  basic.gps_vario_available = basic.baro_altitude_available
-    ? basic.baro_altitude_available
-    : basic.gps_altitude_available;
 }
 
 static void
@@ -307,19 +344,20 @@ BasicComputer::Fill(MoreData &data, const ComputerSettings &settings_computer)
 }
 
 void
-BasicComputer::Compute(MoreData &data, const MoreData &last,
+BasicComputer::Compute(MoreData &data,
+                       const MoreData &last, const MoreData &last_gps,
                        const DerivedInfo &calculated,
                        const ComputerSettings &settings_computer)
 {
-  ComputeTrack(data, last);
+  ComputeTrack(data, last_gps);
 
-  if (!data.HasTimeAdvancedSince(last))
-    return;
+  if (data.HasTimeAdvancedSince(last_gps)) {
+    ComputeGroundSpeed(data, last_gps);
+    ComputeAirspeed(data, calculated);
+  }
 
-  ComputeGroundSpeed(data, last);
-  ComputeAirspeed(data, calculated);
   ComputeEnergyHeight(data);
-  ComputeGPSVario(data, last);
+  ComputeGPSVario(data, last, last_gps);
   ComputeBruttoVario(data);
   ComputeNettoVario(data, calculated);
   ComputeDynamics(data, calculated);
