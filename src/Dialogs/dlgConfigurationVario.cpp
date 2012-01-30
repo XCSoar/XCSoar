@@ -605,10 +605,15 @@ UpdateParameters(bool first)
 }
 
 static void
-PageSwitched()
+UpdateCaption()
 {
   wf->SetCaption(captions[tabbed->GetCurrentPage()]);
+}
 
+static void
+PageSwitched()
+{
+  UpdateCaption();
   UpdateParameters(false);
 }
 
@@ -964,7 +969,7 @@ dlgConfigurationVarioShowModal(void)
   tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(tabbed != NULL);
 
-  PageSwitched();
+  UpdateCaption();
 
   // populate enums
 
