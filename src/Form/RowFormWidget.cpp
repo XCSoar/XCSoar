@@ -79,6 +79,7 @@ RowFormWidget::Row::GetMinimumHeight() const
     break;
 
   case Type::EDIT:
+  case Type::BUTTON:
     return GetMinimumControlHeight();
 
   case Type::REMAINING:
@@ -96,6 +97,7 @@ RowFormWidget::Row::GetMaximumHeight() const
     break;
 
   case Type::EDIT:
+  case Type::BUTTON:
     return GetMaximumControlHeight();
 
   case Type::REMAINING:
@@ -384,7 +386,7 @@ RowFormWidget::AddButton(const TCHAR *label, ActionListener *listener, int id)
 
   WndButton *button = new WndButton(panel, look, label, button_rc, button_style, listener, id);
 
-  Add(button);
+  Add(Row::Type::BUTTON, button);
 }
 
 void

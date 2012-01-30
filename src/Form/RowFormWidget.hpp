@@ -57,6 +57,11 @@ class RowFormWidget : public WindowWidget {
       EDIT,
 
       /**
+       * A #WndButton.
+       */
+      BUTTON,
+
+      /**
        * A generic #Window that fills the remaining vertical space at
        * the bottom.  It must be the last row, and there can only be
        * one.
@@ -127,7 +132,8 @@ class RowFormWidget : public WindowWidget {
      * Will this row grow when there is excess screen space?
      */
     bool IsElastic() const {
-      return type == Type::EDIT || type == Type::REMAINING;
+      return type == Type::EDIT || type == Type::BUTTON ||
+        type == Type::REMAINING;
     }
 
     gcc_pure
