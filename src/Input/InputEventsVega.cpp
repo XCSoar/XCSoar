@@ -23,9 +23,40 @@ Copyright_License {
 
 #include "InputEvents.hpp"
 #include "Dialogs/Vega.hpp"
-#include "Device/device.hpp"
+#include "Device/List.hpp"
+#include "Device/Descriptor.hpp"
+#include "Device/Driver/Vega/Internal.hpp"
 #include "Util/StringUtil.hpp"
 #include "Interface.hpp"
+
+static VegaDevice *
+GetVegaDevice(DeviceDescriptor &device)
+{
+  return device.IsOpen() && !device.IsBusy() && device.IsVega() &&
+    device.GetDevice() != NULL
+    ? (VegaDevice *)device.GetDevice()
+    : NULL;
+}
+
+static void
+AllVegasSendSetting(const char *name, int value)
+{
+  for (unsigned i = 0; i < NUMDEV; ++i) {
+    VegaDevice *vega = GetVegaDevice(device_list[i]);
+    if (vega != NULL)
+      vega->SendSetting(name, value);
+  }
+}
+
+static void
+AllVegasRequestSetting(const char *name)
+{
+  for (unsigned i = 0; i < NUMDEV; ++i) {
+    VegaDevice *vega = GetVegaDevice(device_list[i]);
+    if (vega != NULL)
+      vega->RequestSetting(name);
+  }
+}
 
 // AdjustVarioFilter
 // When connected to the Vega variometer, this adjusts
@@ -48,38 +79,38 @@ InputEvents::eventAdjustVarioFilter(const TCHAR *misc)
 {
   static int naccel = 0;
   if (StringIsEqual(misc, _T("slow")))
-    VarioWriteNMEA(_T("PDVSC,S,VarioTimeConstant,3"));
+    AllVegasSendSetting("VarioTimeConstant", 3);
   else if (StringIsEqual(misc, _T("medium")))
-    VarioWriteNMEA(_T("PDVSC,S,VarioTimeConstant,2"));
+    AllVegasSendSetting("VarioTimeConstant", 2);
   else if (StringIsEqual(misc, _T("fast")))
-    VarioWriteNMEA(_T("PDVSC,S,VarioTimeConstant,1"));
-  else if (StringIsEqual(misc, _T("statistics"))) {
-    VarioWriteNMEA(_T("PDVSC,S,Diagnostics,1"));
-  } else if (StringIsEqual(misc, _T("diagnostics"))) {
-    VarioWriteNMEA(_T("PDVSC,S,Diagnostics,2"));
-  } else if (StringIsEqual(misc, _T("psraw")))
-    VarioWriteNMEA(_T("PDVSC,S,Diagnostics,3"));
+    AllVegasSendSetting("VarioTimeConstant", 1);
+  else if (StringIsEqual(misc, _T("statistics")))
+    AllVegasSendSetting("Diagnostics", 1);
+  else if (StringIsEqual(misc, _T("diagnostics")))
+    AllVegasSendSetting("Diagnostics", 2);
+  else if (StringIsEqual(misc, _T("psraw")))
+    AllVegasSendSetting("Diagnostics", 3);
   else if (StringIsEqual(misc, _T("switch")))
-    VarioWriteNMEA(_T("PDVSC,S,Diagnostics,4"));
+    AllVegasSendSetting("Diagnostics", 4);
   else if (StringIsEqual(misc, _T("democlimb"))) {
-    VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"));
-    VarioWriteNMEA(_T("PDVSC,S,DemoMode,2"));
+    AllVegasSendSetting("DemoMode", 0);
+    AllVegasSendSetting("DemoMode", 2);
   } else if (StringIsEqual(misc, _T("demostf"))) {
-    VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"));
-    VarioWriteNMEA(_T("PDVSC,S,DemoMode,1"));
+    AllVegasSendSetting("DemoMode", 0);
+    AllVegasSendSetting("DemoMode", 1);
   } else if (StringIsEqual(misc, _T("accel"))) {
     switch (naccel) {
     case 0:
-      VarioWriteNMEA(_T("PDVSC,R,AccelerometerSlopeX"));
+      AllVegasRequestSetting("AccelerometerSlopeX");
       break;
     case 1:
-      VarioWriteNMEA(_T("PDVSC,R,AccelerometerSlopeY"));
+      AllVegasRequestSetting("AccelerometerSlopeY");
       break;
     case 2:
-      VarioWriteNMEA(_T("PDVSC,R,AccelerometerOffsetX"));
+      AllVegasRequestSetting("AccelerometerOffsetX");
       break;
     case 3:
-      VarioWriteNMEA(_T("PDVSC,R,AccelerometerOffsetY"));
+      AllVegasRequestSetting("AccelerometerOffsetY");
       break;
     default:
       naccel = 0;
@@ -94,22 +125,22 @@ InputEvents::eventAdjustVarioFilter(const TCHAR *misc)
   } else if (StringIsEqual(misc, _T("zero"))) {
     // zero, no mixing
     if (!CommonInterface::Calculated().flight.flying) {
-      VarioWriteNMEA(_T("PDVSC,S,ZeroASI,1"));
+      AllVegasSendSetting("ZeroASI", 1);
     }
   } else if (StringIsEqual(misc, _T("save"))) {
-    VarioWriteNMEA(_T("PDVSC,S,StoreToEeprom,2"));
+    AllVegasSendSetting("StoreToEeprom", 2);
 
   // accel calibration
   } else if (!CommonInterface::Calculated().flight.flying) {
     if (StringIsEqual(misc, _T("X1")))
-      VarioWriteNMEA(_T("PDVSC,S,CalibrateAccel,1"));
+      AllVegasSendSetting("CalibrateAccel", 1);
     else if (StringIsEqual(misc, _T("X2")))
-      VarioWriteNMEA(_T("PDVSC,S,CalibrateAccel,2"));
+      AllVegasSendSetting("CalibrateAccel", 2);
     else if (StringIsEqual(misc, _T("X3")))
-      VarioWriteNMEA(_T("PDVSC,S,CalibrateAccel,3"));
+      AllVegasSendSetting("CalibrateAccel", 3);
     else if (StringIsEqual(misc, _T("X4")))
-      VarioWriteNMEA(_T("PDVSC,S,CalibrateAccel,4"));
+      AllVegasSendSetting("CalibrateAccel", 4);
     else if (StringIsEqual(misc, _T("X5")))
-      VarioWriteNMEA(_T("PDVSC,S,CalibrateAccel,5"));
+      AllVegasSendSetting("CalibrateAccel", 5);
   }
 }
