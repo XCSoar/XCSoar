@@ -156,6 +156,10 @@ private:
   bool on_right();
 
 protected:
+#ifdef USE_GDI
+  virtual void OnKillFocus();
+#endif
+
   virtual bool OnKeyCheck(unsigned key_code) const;
   virtual bool OnKeyDown(unsigned key_code);
   virtual void OnPaint(Canvas &canvas);

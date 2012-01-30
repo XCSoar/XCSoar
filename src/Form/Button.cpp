@@ -110,6 +110,20 @@ WndButton::on_right()
   return false;
 }
 
+#ifdef USE_GDI
+
+void
+WndButton::OnKillFocus()
+{
+  ButtonWindow::OnKillFocus();
+
+  /* GDI's "BUTTON" class does not repaint when the window loses
+     focus, but our custom style requires it */
+  ::InvalidateRect(hWnd, NULL, false);
+}
+
+#endif
+
 bool
 WndButton::OnKeyCheck(unsigned key_code) const
 {
