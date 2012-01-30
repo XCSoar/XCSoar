@@ -109,6 +109,10 @@ public:
     mOnHelpCallback = Function;
   }
 
+  bool HasCaption() const {
+    return !mCaption.empty();
+  }
+
   /**
    * Returns the Caption/Text of the Control
    * @return The Caption/Text of the Control
