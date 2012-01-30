@@ -86,10 +86,10 @@ private:
 
   /** Editor Control */
   Editor edit;
-  /** Size of the Editor Control */
-  RasterPoint mEditSize;
+
   /** Position of the Editor Control */
-  RasterPoint mEditPos;
+  PixelRect edit_rc;
+
   /** Width reserved for the caption of the Control */
   int  mCaptionWidth;
 

@@ -151,7 +151,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
 
   set(parent, rc, style);
 
-  edit.set(*this, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y, edit_style);
+  edit.set(*this, edit_rc, edit_style);
   edit.InstallWndProc();
 
   edit.set_font(*look.text_font);
@@ -211,24 +211,25 @@ WndProperty::BeginEditing()
 void
 WndProperty::UpdateLayout()
 {
-  const PixelSize size = get_size();
+  edit_rc = get_client_rect();
 
   const UPixelScalar DEFAULTBORDERPENWIDTH = Layout::FastScale(1);
 
   if (mCaptionWidth >= 0) {
-    mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1)*2;
-    mEditSize.y = size.cy - 2 * (DEFAULTBORDERPENWIDTH + 1);
-    mEditPos.x = mCaptionWidth + (DEFAULTBORDERPENWIDTH + 1);
-    mEditPos.y = (DEFAULTBORDERPENWIDTH + 1);
+    edit_rc.left += mCaptionWidth + (DEFAULTBORDERPENWIDTH + 1);
+    edit_rc.top += (DEFAULTBORDERPENWIDTH + 1);
+    edit_rc.right -= (DEFAULTBORDERPENWIDTH + 1);
+    edit_rc.bottom -= (DEFAULTBORDERPENWIDTH + 1);
   } else {
-    mEditSize.x = size.cx - 2 * (DEFAULTBORDERPENWIDTH + 1);
-    mEditSize.y = size.cy / 2;
-    mEditPos.x = (DEFAULTBORDERPENWIDTH + 2);
-    mEditPos.y = size.cy / 2 - 2 * (DEFAULTBORDERPENWIDTH + 1);
+    edit_rc.left += (DEFAULTBORDERPENWIDTH + 1);
+    edit_rc.top = (edit_rc.top + edit_rc.bottom) / 2
+      - 2 * (DEFAULTBORDERPENWIDTH + 1);
+    edit_rc.right -= (DEFAULTBORDERPENWIDTH + 1);
+    edit_rc.bottom -= (DEFAULTBORDERPENWIDTH + 1);
   }
 
   if (edit.IsDefined())
-    edit.move(mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y);
+    edit.move(edit_rc);
 
   invalidate();
 }
@@ -336,8 +337,8 @@ WndProperty::OnPaint(Canvas &canvas)
 
     RasterPoint org;
     if (mCaptionWidth < 0) {
-      org.x = mEditPos.x;
-      org.y = mEditPos.y - tsize.cy;
+      org.x = edit_rc.left;
+      org.y = edit_rc.top - tsize.cy;
     } else {
       org.x = mCaptionWidth - (tsize.cx + 1);
       org.y = (get_size().cy - tsize.cy) / 2;
