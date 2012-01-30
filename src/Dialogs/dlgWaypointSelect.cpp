@@ -33,6 +33,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "Profile/Profile.hpp"
 #include "OS/PathName.hpp"
+#include "Compatibility/path.h"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Components.hpp"
@@ -56,7 +57,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <windef.h> /* for MAX_PATH */
 
 class FAITrianglePointValidator;
 
@@ -202,6 +202,26 @@ InitializeDirection(bool only_heading)
   }
 }
 
+/**
+ * Gets a path from the profile and return its base name only.
+ */
+gcc_pure
+static const TCHAR *
+GetProfilePathBase(const TCHAR *key)
+{
+  const TCHAR *p = Profile::Get(key);
+  if (p == NULL)
+    return NULL;
+
+  if (DIR_SEPARATOR != '\\') {
+    const TCHAR *backslash = _tcsrchr(p, '\\');
+    if (backslash != NULL)
+      p = backslash + 1;
+  }
+
+  return BaseName(p);
+}
+
 static void
 PrepareData(void)
 {
@@ -231,16 +251,14 @@ PrepareData(void)
     DataFieldEnum* data_field = (DataFieldEnum*)type_filter->GetDataField();
     data_field->addEnumTexts(type_filter_items);
 
-    TCHAR path[MAX_PATH];
-    const TCHAR * t;
-    if (Profile::GetPath(szProfileWaypointFile, path)) {
-      t = BaseName(path);
-      data_field->replaceEnumText(TF_FILE_1, t);
-    }
-    if (Profile::GetPath(szProfileAdditionalWaypointFile, path)) {
-      t = BaseName(path);
-      data_field->replaceEnumText(TF_FILE_2, t);
-    }
+    const TCHAR *p = GetProfilePathBase(szProfileWaypointFile);
+    if (p != NULL)
+      data_field->replaceEnumText(TF_FILE_1, p);
+
+    p = GetProfilePathBase(szProfileAdditionalWaypointFile);
+    if (p != NULL)
+      data_field->replaceEnumText(TF_FILE_2, p);
+
     data_field->SetAsInteger(filter_data.type_index);
     type_filter->RefreshDisplay();
   }
