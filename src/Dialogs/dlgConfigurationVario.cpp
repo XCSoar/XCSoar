@@ -29,14 +29,18 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Device/device.hpp"
+#include "Device/Descriptor.hpp"
+#include "Device/Driver/Vega/Internal.hpp"
 #include "Profile/Profile.hpp"
 #include "DataField/Enum.hpp"
 #include "UIGlobals.hpp"
 #include "Simulator.hpp"
 #include "Compiler.h"
 #include "OS/Sleep.h"
+#include "Util/Macros.hpp"
 
 #include <assert.h>
+#include <string.h>
 
 static const TCHAR *const captions[] = {
   _T(" 1 Hardware"),
@@ -145,29 +149,58 @@ static bool changed = false, dirty = false;
 static WndForm *wf = NULL;
 static TabbedControl *tabbed;
 
+static VegaDevice *
+GetVegaDevice(DeviceDescriptor &device)
+{
+  return device.IsOpen() && device.IsVega() &&
+    device.GetDevice() != NULL
+    ? (VegaDevice *)device.GetDevice()
+    : NULL;
+}
+
+static VegaDevice *
+FindVegaDevice()
+{
+  DeviceDescriptor *device = devVarioFindVega();
+  return device != NULL
+    ? GetVegaDevice(*device)
+    : NULL;
+}
+
 static bool
-VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
+VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
                          long ext_setvalue = 0)
 {
+  VegaDevice *device = FindVegaDevice();
+  if (device == NULL)
+    return false;
+
+#ifdef _UNICODE
+  TCHAR tname[64];
+  if (MultiByteToWideChar(CP_UTF8, 0, name, -1, tname, ARRAY_SIZE(tname)) <= 0)
+    return false;
+#else
+  const char *tname = name;
+#endif
+
   TCHAR updatename[100];
   TCHAR fullname[100];
   TCHAR propname[100];
-  TCHAR requesttext[100];
   unsigned updated = 0;
   unsigned lvalue = 0;
 
   WndProperty* wp;
 
-  _stprintf(updatename, _T("Vega%sUpdated"), name);
-  _stprintf(fullname, _T("Vega%s"), name);
-  _stprintf(propname, _T("prp%s"), name);
+  _stprintf(updatename, _T("Vega%sUpdated"), tname);
+  _stprintf(fullname, _T("Vega%s"), tname);
+  _stprintf(propname, _T("prp%s"), tname);
 
   if (first) {
     Profile::Set(updatename, 0);
     // we are not ready, haven't received value from vario
     // (do request here)
-    _stprintf(requesttext, _T("PDVSC,R,%s"), name);
-    VarioWriteNMEA(requesttext);
+    if (!device->RequestSetting(name))
+      return false;
 
     if (!is_simulator())
       Sleep(250);
@@ -179,8 +212,9 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
       wp->GetDataField()->SetAsInteger((int)ext_setvalue);
       wp->RefreshDisplay();
     }
-    _stprintf(requesttext, _T("PDVSC,S,%s,%ld"), name, ext_setvalue);
-    VarioWriteNMEA(requesttext);
+
+    if (!device->SendSetting(name, ext_setvalue))
+      return false;
 
     if (!is_simulator())
       Sleep(250);
@@ -195,7 +229,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
   }
 
   // hack, fix the -1 (plug and play settings)
-  if (_tcscmp(name, _T("HasTemperature")) == 0) {
+  if (strcmp(name, "HasTemperature") == 0) {
     if (lvalue >= 255)
       lvalue = 2;
   }
@@ -240,13 +274,13 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
           // note that this code currently won't work for longs
 
           // hack, fix the -1 (plug and play settings)
-          if (_tcscmp(name, _T("HasTemperature")) == 0) {
+          if (strcmp(name, "HasTemperature") == 0) {
             if (newval == 2)
               newval = 255;
           }
 
-          _stprintf(requesttext, _T("PDVSC,S,%s,%d"), name, newval);
-          VarioWriteNMEA(requesttext);
+          if (!device->SendSetting(name, newval))
+            return false;
 
           if (!is_simulator())
             Sleep(250);
@@ -403,75 +437,75 @@ SetParametersScheme(int schemetype)
     return;
 
 
-  VegaConfigurationUpdated(_T("ToneClimbComparisonType"), false, true,
+  VegaConfigurationUpdated("ToneClimbComparisonType", false, true,
                            VegaSchemes[schemetype].ToneClimbComparisonType);
-  VegaConfigurationUpdated(_T("ToneCruiseLiftDetectionType"), false, true,
+  VegaConfigurationUpdated("ToneCruiseLiftDetectionType", false, true,
                            VegaSchemes[schemetype].ToneLiftComparisonType);
 
-  VegaConfigurationUpdated(_T("ToneCruiseFasterBeepType"), false, true,
+  VegaConfigurationUpdated("ToneCruiseFasterBeepType", false, true,
                            VegaSchemes[schemetype].ToneCruiseFasterBeepType);
-  VegaConfigurationUpdated(_T("ToneCruiseFasterPitchScheme"), false, true,
+  VegaConfigurationUpdated("ToneCruiseFasterPitchScheme", false, true,
                            VegaSchemes[schemetype].ToneCruiseFasterPitchScheme);
-  VegaConfigurationUpdated(_T("ToneCruiseFasterPitchScale"), false, true,
+  VegaConfigurationUpdated("ToneCruiseFasterPitchScale", false, true,
                            VegaSchemes[schemetype].ToneCruiseFasterPitchScale);
-  VegaConfigurationUpdated(_T("ToneCruiseFasterPeriodScheme"), false, true,
+  VegaConfigurationUpdated("ToneCruiseFasterPeriodScheme", false, true,
                            VegaSchemes[schemetype].ToneCruiseFasterPeriodScheme);
-  VegaConfigurationUpdated(_T("ToneCruiseFasterPeriodScale"), false, true,
+  VegaConfigurationUpdated("ToneCruiseFasterPeriodScale", false, true,
                            VegaSchemes[schemetype].ToneCruiseFasterPeriodScale);
 
-  VegaConfigurationUpdated(_T("ToneCruiseSlowerBeepType"), false, true,
+  VegaConfigurationUpdated("ToneCruiseSlowerBeepType", false, true,
                            VegaSchemes[schemetype].ToneCruiseSlowerBeepType);
-  VegaConfigurationUpdated(_T("ToneCruiseSlowerPitchScheme"), false, true,
+  VegaConfigurationUpdated("ToneCruiseSlowerPitchScheme", false, true,
                            VegaSchemes[schemetype].ToneCruiseSlowerPitchScheme);
-  VegaConfigurationUpdated(_T("ToneCruiseSlowerPitchScale"), false, true,
+  VegaConfigurationUpdated("ToneCruiseSlowerPitchScale", false, true,
                            VegaSchemes[schemetype].ToneCruiseSlowerPitchScale);
-  VegaConfigurationUpdated(_T("ToneCruiseSlowerPeriodScheme"), false, true,
+  VegaConfigurationUpdated("ToneCruiseSlowerPeriodScheme", false, true,
                            VegaSchemes[schemetype].ToneCruiseSlowerPeriodScheme);
-  VegaConfigurationUpdated(_T("ToneCruiseSlowerPeriodScale"), false, true,
+  VegaConfigurationUpdated("ToneCruiseSlowerPeriodScale", false, true,
                            VegaSchemes[schemetype].ToneCruiseSlowerPeriodScale);
 
-  VegaConfigurationUpdated(_T("ToneCruiseLiftBeepType"), false, true,
+  VegaConfigurationUpdated("ToneCruiseLiftBeepType", false, true,
                            VegaSchemes[schemetype].ToneCruiseLiftBeepType);
-  VegaConfigurationUpdated(_T("ToneCruiseLiftPitchScheme"), false, true,
+  VegaConfigurationUpdated("ToneCruiseLiftPitchScheme", false, true,
                            VegaSchemes[schemetype].ToneCruiseLiftPitchScheme);
-  VegaConfigurationUpdated(_T("ToneCruiseLiftPitchScale"), false, true,
+  VegaConfigurationUpdated("ToneCruiseLiftPitchScale", false, true,
                            VegaSchemes[schemetype].ToneCruiseLiftPitchScale);
-  VegaConfigurationUpdated(_T("ToneCruiseLiftPeriodScheme"), false, true,
+  VegaConfigurationUpdated("ToneCruiseLiftPeriodScheme", false, true,
                            VegaSchemes[schemetype].ToneCruiseLiftPeriodScheme);
-  VegaConfigurationUpdated(_T("ToneCruiseLiftPeriodScale"), false, true,
+  VegaConfigurationUpdated("ToneCruiseLiftPeriodScale", false, true,
                            VegaSchemes[schemetype].ToneCruiseLiftPeriodScale);
 
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiBeepType"), false, true,
+  VegaConfigurationUpdated("ToneCirclingClimbingHiBeepType", false, true,
                            VegaSchemes[schemetype].ToneCirclingClimbingHiBeepType);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPitchScheme"), false, true,
+  VegaConfigurationUpdated("ToneCirclingClimbingHiPitchScheme", false, true,
                            VegaSchemes[schemetype].ToneCirclingClimbingHiPitchScheme);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPitchScale"), false, true,
+  VegaConfigurationUpdated("ToneCirclingClimbingHiPitchScale", false, true,
                            VegaSchemes[schemetype].ToneCirclingClimbingHiPitchScale);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPeriodScheme"), false, true,
+  VegaConfigurationUpdated("ToneCirclingClimbingHiPeriodScheme", false, true,
                            VegaSchemes[schemetype].ToneCirclingClimbingHiPeriodScheme);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPeriodScale"), false, true,
+  VegaConfigurationUpdated("ToneCirclingClimbingHiPeriodScale", false, true,
                            VegaSchemes[schemetype].ToneCirclingClimbingHiPeriodScale);
 
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowBeepType"), false, true,
+  VegaConfigurationUpdated("ToneCirclingClimbingLowBeepType", false, true,
                            VegaSchemes[schemetype].ToneCirclingClimbingLowBeepType);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPitchScheme"), false, true,
+  VegaConfigurationUpdated("ToneCirclingClimbingLowPitchScheme", false, true,
                            VegaSchemes[schemetype].ToneCirclingClimbingLowPitchScheme);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPitchScale"), false, true,
+  VegaConfigurationUpdated("ToneCirclingClimbingLowPitchScale", false, true,
                            VegaSchemes[schemetype].ToneCirclingClimbingLowPitchScale);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPeriodScheme"), false, true,
+  VegaConfigurationUpdated("ToneCirclingClimbingLowPeriodScheme", false, true,
                            VegaSchemes[schemetype].ToneCirclingClimbingLowPeriodScheme);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPeriodScale"), false, true,
+  VegaConfigurationUpdated("ToneCirclingClimbingLowPeriodScale", false, true,
                            VegaSchemes[schemetype].ToneCirclingClimbingLowPeriodScale);
 
-  VegaConfigurationUpdated(_T("ToneCirclingDescendingBeepType"), false, true,
+  VegaConfigurationUpdated("ToneCirclingDescendingBeepType", false, true,
                            VegaSchemes[schemetype].ToneCirclingDescendingBeepType);
-  VegaConfigurationUpdated(_T("ToneCirclingDescendingPitchScheme"), false, true,
+  VegaConfigurationUpdated("ToneCirclingDescendingPitchScheme", false, true,
                            VegaSchemes[schemetype].ToneCirclingDescendingPitchScheme);
-  VegaConfigurationUpdated(_T("ToneCirclingDescendingPitchScale"), false, true,
+  VegaConfigurationUpdated("ToneCirclingDescendingPitchScale", false, true,
                            VegaSchemes[schemetype].ToneCirclingDescendingPitchScale);
-  VegaConfigurationUpdated(_T("ToneCirclingDescendingPeriodScheme"), false, true,
+  VegaConfigurationUpdated("ToneCirclingDescendingPeriodScheme", false, true,
                            VegaSchemes[schemetype].ToneCirclingDescendingPeriodScheme);
-  VegaConfigurationUpdated(_T("ToneCirclingDescendingPeriodScale"), false, true,
+  VegaConfigurationUpdated("ToneCirclingDescendingPeriodScale", false, true,
                            VegaSchemes[schemetype].ToneCirclingDescendingPeriodScale);
 
   MessageBoxX(_("Audio scheme updated."),
@@ -481,129 +515,129 @@ SetParametersScheme(int schemetype)
 static void
 UpdateParametersScheme(bool first)
 {
-  VegaConfigurationUpdated(_T("ToneClimbComparisonType"), first);
-  VegaConfigurationUpdated(_T("ToneCruiseLiftDetectionType"), first);
+  VegaConfigurationUpdated("ToneClimbComparisonType", first);
+  VegaConfigurationUpdated("ToneCruiseLiftDetectionType", first);
 
-  VegaConfigurationUpdated(_T("ToneCruiseFasterBeepType"), first);
-  VegaConfigurationUpdated(_T("ToneCruiseFasterPitchScheme"), first);
-  VegaConfigurationUpdated(_T("ToneCruiseFasterPitchScale"), first);
-  VegaConfigurationUpdated(_T("ToneCruiseFasterPeriodScheme"), first);
-  VegaConfigurationUpdated(_T("ToneCruiseFasterPeriodScale"), first);
+  VegaConfigurationUpdated("ToneCruiseFasterBeepType", first);
+  VegaConfigurationUpdated("ToneCruiseFasterPitchScheme", first);
+  VegaConfigurationUpdated("ToneCruiseFasterPitchScale", first);
+  VegaConfigurationUpdated("ToneCruiseFasterPeriodScheme", first);
+  VegaConfigurationUpdated("ToneCruiseFasterPeriodScale", first);
 
-  VegaConfigurationUpdated(_T("ToneCruiseSlowerBeepType"), first);
-  VegaConfigurationUpdated(_T("ToneCruiseSlowerPitchScheme"), first);
-  VegaConfigurationUpdated(_T("ToneCruiseSlowerPitchScale"), first);
-  VegaConfigurationUpdated(_T("ToneCruiseSlowerPeriodScheme"), first);
-  VegaConfigurationUpdated(_T("ToneCruiseSlowerPeriodScale"), first);
+  VegaConfigurationUpdated("ToneCruiseSlowerBeepType", first);
+  VegaConfigurationUpdated("ToneCruiseSlowerPitchScheme", first);
+  VegaConfigurationUpdated("ToneCruiseSlowerPitchScale", first);
+  VegaConfigurationUpdated("ToneCruiseSlowerPeriodScheme", first);
+  VegaConfigurationUpdated("ToneCruiseSlowerPeriodScale", first);
 
-  VegaConfigurationUpdated(_T("ToneCruiseLiftBeepType"), first);
-  VegaConfigurationUpdated(_T("ToneCruiseLiftPitchScheme"), first);
-  VegaConfigurationUpdated(_T("ToneCruiseLiftPitchScale"), first);
-  VegaConfigurationUpdated(_T("ToneCruiseLiftPeriodScheme"), first);
-  VegaConfigurationUpdated(_T("ToneCruiseLiftPeriodScale"), first);
+  VegaConfigurationUpdated("ToneCruiseLiftBeepType", first);
+  VegaConfigurationUpdated("ToneCruiseLiftPitchScheme", first);
+  VegaConfigurationUpdated("ToneCruiseLiftPitchScale", first);
+  VegaConfigurationUpdated("ToneCruiseLiftPeriodScheme", first);
+  VegaConfigurationUpdated("ToneCruiseLiftPeriodScale", first);
 
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiBeepType"), first);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPitchScheme"), first);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPitchScale"), first);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPeriodScheme"), first);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPeriodScale"), first);
+  VegaConfigurationUpdated("ToneCirclingClimbingHiBeepType", first);
+  VegaConfigurationUpdated("ToneCirclingClimbingHiPitchScheme", first);
+  VegaConfigurationUpdated("ToneCirclingClimbingHiPitchScale", first);
+  VegaConfigurationUpdated("ToneCirclingClimbingHiPeriodScheme", first);
+  VegaConfigurationUpdated("ToneCirclingClimbingHiPeriodScale", first);
 
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowBeepType"), first);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPitchScheme"), first);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPitchScale"), first);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPeriodScheme"), first);
-  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPeriodScale"), first);
+  VegaConfigurationUpdated("ToneCirclingClimbingLowBeepType", first);
+  VegaConfigurationUpdated("ToneCirclingClimbingLowPitchScheme", first);
+  VegaConfigurationUpdated("ToneCirclingClimbingLowPitchScale", first);
+  VegaConfigurationUpdated("ToneCirclingClimbingLowPeriodScheme", first);
+  VegaConfigurationUpdated("ToneCirclingClimbingLowPeriodScale", first);
 
-  VegaConfigurationUpdated(_T("ToneCirclingDescendingBeepType"), first);
-  VegaConfigurationUpdated(_T("ToneCirclingDescendingPitchScheme"), first);
-  VegaConfigurationUpdated(_T("ToneCirclingDescendingPitchScale"), first);
-  VegaConfigurationUpdated(_T("ToneCirclingDescendingPeriodScheme"), first);
-  VegaConfigurationUpdated(_T("ToneCirclingDescendingPeriodScale"), first);
+  VegaConfigurationUpdated("ToneCirclingDescendingBeepType", first);
+  VegaConfigurationUpdated("ToneCirclingDescendingPitchScheme", first);
+  VegaConfigurationUpdated("ToneCirclingDescendingPitchScale", first);
+  VegaConfigurationUpdated("ToneCirclingDescendingPeriodScheme", first);
+  VegaConfigurationUpdated("ToneCirclingDescendingPeriodScale", first);
 }
 
 static void
 UpdateParameters(bool first)
 {
-  VegaConfigurationUpdated(_T("HasPressureTE"), first);
-  VegaConfigurationUpdated(_T("HasPressurePitot"), first);
-  VegaConfigurationUpdated(_T("HasPressureStatic"), first);
-  VegaConfigurationUpdated(_T("HasPressureStall"), first);
-  VegaConfigurationUpdated(_T("HasAccelerometer"), first);
-  VegaConfigurationUpdated(_T("HasTemperature"), first);
-  VegaConfigurationUpdated(_T("FlarmConnected"), first);
+  VegaConfigurationUpdated("HasPressureTE", first);
+  VegaConfigurationUpdated("HasPressurePitot", first);
+  VegaConfigurationUpdated("HasPressureStatic", first);
+  VegaConfigurationUpdated("HasPressureStall", first);
+  VegaConfigurationUpdated("HasAccelerometer", first);
+  VegaConfigurationUpdated("HasTemperature", first);
+  VegaConfigurationUpdated("FlarmConnected", first);
 
-  VegaConfigurationUpdated(_T("TotalEnergyMixingRatio"), first);
-  VegaConfigurationUpdated(_T("CalibrationAirSpeed"), first);
-  VegaConfigurationUpdated(_T("CalibrationTEStatic"), first);
-  VegaConfigurationUpdated(_T("CalibrationTEDynamic"), first);
-  VegaConfigurationUpdated(_T("CalibrationTEProbe"), first);
+  VegaConfigurationUpdated("TotalEnergyMixingRatio", first);
+  VegaConfigurationUpdated("CalibrationAirSpeed", first);
+  VegaConfigurationUpdated("CalibrationTEStatic", first);
+  VegaConfigurationUpdated("CalibrationTEDynamic", first);
+  VegaConfigurationUpdated("CalibrationTEProbe", first);
 
-  VegaConfigurationUpdated(_T("AccelerometerSlopeX"), first);
-  VegaConfigurationUpdated(_T("AccelerometerSlopeY"), first);
-  VegaConfigurationUpdated(_T("AccelerometerOffsetX"), first);
-  VegaConfigurationUpdated(_T("AccelerometerOffsetY"), first);
+  VegaConfigurationUpdated("AccelerometerSlopeX", first);
+  VegaConfigurationUpdated("AccelerometerSlopeY", first);
+  VegaConfigurationUpdated("AccelerometerOffsetX", first);
+  VegaConfigurationUpdated("AccelerometerOffsetY", first);
 
-  //  VegaConfigurationUpdated(_T("PDAPower"), first);
-  VegaConfigurationUpdated(_T("ToneAveragerVarioTimeScale"), first);
-  VegaConfigurationUpdated(_T("ToneAveragerCruiseTimeScale"), first);
-  VegaConfigurationUpdated(_T("ToneMeanVolumeCircling"), first);
-  VegaConfigurationUpdated(_T("ToneMeanVolumeCruise"), first);
-  VegaConfigurationUpdated(_T("ToneBaseFrequencyOffset"), first);
-  VegaConfigurationUpdated(_T("TonePitchScale"), first);
+  //  VegaConfigurationUpdated("PDAPower", first);
+  VegaConfigurationUpdated("ToneAveragerVarioTimeScale", first);
+  VegaConfigurationUpdated("ToneAveragerCruiseTimeScale", first);
+  VegaConfigurationUpdated("ToneMeanVolumeCircling", first);
+  VegaConfigurationUpdated("ToneMeanVolumeCruise", first);
+  VegaConfigurationUpdated("ToneBaseFrequencyOffset", first);
+  VegaConfigurationUpdated("TonePitchScale", first);
 
-  VegaConfigurationUpdated(_T("ToneDeadbandCirclingType"), first);
-  VegaConfigurationUpdated(_T("ToneDeadbandCirclingHigh"), first);
-  VegaConfigurationUpdated(_T("ToneDeadbandCirclingLow"), first);
-  VegaConfigurationUpdated(_T("ToneDeadbandCruiseType"), first);
-  VegaConfigurationUpdated(_T("ToneDeadbandCruiseHigh"), first);
-  VegaConfigurationUpdated(_T("ToneDeadbandCruiseLow"), first);
+  VegaConfigurationUpdated("ToneDeadbandCirclingType", first);
+  VegaConfigurationUpdated("ToneDeadbandCirclingHigh", first);
+  VegaConfigurationUpdated("ToneDeadbandCirclingLow", first);
+  VegaConfigurationUpdated("ToneDeadbandCruiseType", first);
+  VegaConfigurationUpdated("ToneDeadbandCruiseHigh", first);
+  VegaConfigurationUpdated("ToneDeadbandCruiseLow", first);
 
   UpdateParametersScheme(first);
 
-  VegaConfigurationUpdated(_T("VarioTimeConstantCircling"), first);
-  VegaConfigurationUpdated(_T("VarioTimeConstantCruise"), first);
+  VegaConfigurationUpdated("VarioTimeConstantCircling", first);
+  VegaConfigurationUpdated("VarioTimeConstantCruise", first);
 
-  VegaConfigurationUpdated(_T("UTCOffset"), first);
-  VegaConfigurationUpdated(_T("IGCLoging"), first);
-  VegaConfigurationUpdated(_T("IGCLoggerInterval"), first);
-  VegaConfigurationUpdated(_T("MuteVarioOnPlay"), first);
-  VegaConfigurationUpdated(_T("MuteVarioOnCom"), first);
-  VegaConfigurationUpdated(_T("VarioRelativeMuteVol"), first);
-  VegaConfigurationUpdated(_T("VoiceRelativeMuteVol"), first);
-  VegaConfigurationUpdated(_T("MuteComSpkThreshold"), first);
-  VegaConfigurationUpdated(_T("MuteComPhnThreshold"), first);
-  VegaConfigurationUpdated(_T("MinUrgentVolume"), first);
-  VegaConfigurationUpdated(_T("FlarmMaxObjectsReported"), first);
-  VegaConfigurationUpdated(_T("FlarmMaxObjectsReportedOnCircling"), first);
-  VegaConfigurationUpdated(_T("FlarmUserInterface"), first);
-  VegaConfigurationUpdated(_T("KeepOnStraightFlightMode"), first);
-  VegaConfigurationUpdated(_T("DontReportTraficModeChanges"), first);
-  VegaConfigurationUpdated(_T("DontReportGliderType"), first);
-  VegaConfigurationUpdated(_T("FlarmPrivacyFlag"), first);
-  VegaConfigurationUpdated(_T("FlarmAircraftType"), first);
+  VegaConfigurationUpdated("UTCOffset", first);
+  VegaConfigurationUpdated("IGCLoging", first);
+  VegaConfigurationUpdated("IGCLoggerInterval", first);
+  VegaConfigurationUpdated("MuteVarioOnPlay", first);
+  VegaConfigurationUpdated("MuteVarioOnCom", first);
+  VegaConfigurationUpdated("VarioRelativeMuteVol", first);
+  VegaConfigurationUpdated("VoiceRelativeMuteVol", first);
+  VegaConfigurationUpdated("MuteComSpkThreshold", first);
+  VegaConfigurationUpdated("MuteComPhnThreshold", first);
+  VegaConfigurationUpdated("MinUrgentVolume", first);
+  VegaConfigurationUpdated("FlarmMaxObjectsReported", first);
+  VegaConfigurationUpdated("FlarmMaxObjectsReportedOnCircling", first);
+  VegaConfigurationUpdated("FlarmUserInterface", first);
+  VegaConfigurationUpdated("KeepOnStraightFlightMode", first);
+  VegaConfigurationUpdated("DontReportTraficModeChanges", first);
+  VegaConfigurationUpdated("DontReportGliderType", first);
+  VegaConfigurationUpdated("FlarmPrivacyFlag", first);
+  VegaConfigurationUpdated("FlarmAircraftType", first);
 
-  VegaConfigurationUpdated(_T("FlarmInfoRepeatTime"), first);
-  VegaConfigurationUpdated(_T("FlarmCautionRepeatTime"), first);
-  VegaConfigurationUpdated(_T("FlarmWarningRepeatTime"), first);
-  VegaConfigurationUpdated(_T("GearOnDelay"), first);
-  VegaConfigurationUpdated(_T("GearOffDelay"), first);
-  VegaConfigurationUpdated(_T("GearRepeatTime"), first);
-  VegaConfigurationUpdated(_T("PlyMaxComDelay"), first);
-  VegaConfigurationUpdated(_T("BatLowDelay"), first);
-  VegaConfigurationUpdated(_T("BatEmptyDelay"), first);
-  VegaConfigurationUpdated(_T("BatRepeatTime"), first);
+  VegaConfigurationUpdated("FlarmInfoRepeatTime", first);
+  VegaConfigurationUpdated("FlarmCautionRepeatTime", first);
+  VegaConfigurationUpdated("FlarmWarningRepeatTime", first);
+  VegaConfigurationUpdated("GearOnDelay", first);
+  VegaConfigurationUpdated("GearOffDelay", first);
+  VegaConfigurationUpdated("GearRepeatTime", first);
+  VegaConfigurationUpdated("PlyMaxComDelay", first);
+  VegaConfigurationUpdated("BatLowDelay", first);
+  VegaConfigurationUpdated("BatEmptyDelay", first);
+  VegaConfigurationUpdated("BatRepeatTime", first);
 
-  VegaConfigurationUpdated(_T("NeedleGaugeType"), first);
+  VegaConfigurationUpdated("NeedleGaugeType", first);
 
-  VegaConfigurationUpdated(_T("VelocityNeverExceed"), first);
-  VegaConfigurationUpdated(_T("VelocitySafeTerrain"), first);
-  VegaConfigurationUpdated(_T("TerrainSafetyHeight"), first);
-  VegaConfigurationUpdated(_T("VelocityManoeuvering"), first);
-  VegaConfigurationUpdated(_T("VelocityAirbrake"), first);
-  VegaConfigurationUpdated(_T("VelocityFlap"), first);
-  VegaConfigurationUpdated(_T("LedBrightness"), first);
+  VegaConfigurationUpdated("VelocityNeverExceed", first);
+  VegaConfigurationUpdated("VelocitySafeTerrain", first);
+  VegaConfigurationUpdated("TerrainSafetyHeight", first);
+  VegaConfigurationUpdated("VelocityManoeuvering", first);
+  VegaConfigurationUpdated("VelocityAirbrake", first);
+  VegaConfigurationUpdated("VelocityFlap", first);
+  VegaConfigurationUpdated("LedBrightness", first);
 
-  VegaConfigurationUpdated(_T("BaudRateA"), first);
+  VegaConfigurationUpdated("BaudRateA", first);
 }
 
 static void
@@ -648,7 +682,10 @@ OnSaveClicked(gcc_unused WndButton &Sender)
   // make sure changes are sent to device
   if (dirty) {
     dirty = false;
-    VarioWriteNMEA(_T("PDVSC,S,StoreToEeprom,2"));
+
+    VegaDevice *device = FindVegaDevice();
+    if (device != NULL)
+      device->SendSetting("StoreToEeprom", 2);
   }
 
   if (!is_simulator())
