@@ -422,6 +422,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Input/InputEvents.cpp \
 	$(SRC)/Input/InputEventsActions.cpp \
 	$(SRC)/Input/InputEventsDevice.cpp \
+	$(SRC)/Input/InputEventsVega.cpp \
 	$(SRC)/Input/InputEventsInfoBox.cpp \
 	$(SRC)/Input/InputEventsMap.cpp \
 	$(SRC)/Input/InputEventsAirspace.cpp \
