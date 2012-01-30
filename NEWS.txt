@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.2.6 - not yet released
+
 Version 6.2.5 - 2012/01/27
 * calculations
   - fix time calculation when goal is above aircraft
