@@ -24,10 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_VEGA_HPP
 #define XCSOAR_DIALOGS_VEGA_HPP
 
+class Device;
+
 void
 dlgVegaDemoShowModal();
 
 bool
-dlgConfigurationVarioShowModal();
+dlgConfigurationVarioShowModal(Device &device);
 
 #endif

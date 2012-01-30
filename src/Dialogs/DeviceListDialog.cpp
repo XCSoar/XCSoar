@@ -238,7 +238,7 @@ OnManageClicked(gcc_unused WndButton &button)
   if (descriptor.IsDriver(_T("FLARM")))
     ManageFlarmDialog(*device);
   if (descriptor.IsDriver(_T("Vega")))
-    dlgConfigurationVarioShowModal();
+    dlgConfigurationVarioShowModal(*device);
   descriptor.SetBusy(false);
 }
 

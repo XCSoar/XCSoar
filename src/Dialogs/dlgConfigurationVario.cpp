@@ -145,36 +145,15 @@ static const TCHAR *const needle_gauge_types[] = {
   NULL
 };
 
+static VegaDevice *device;
 static bool changed = false, dirty = false;
 static WndForm *wf = NULL;
 static TabbedControl *tabbed;
-
-static VegaDevice *
-GetVegaDevice(DeviceDescriptor &device)
-{
-  return device.IsOpen() && device.IsVega() &&
-    device.GetDevice() != NULL
-    ? (VegaDevice *)device.GetDevice()
-    : NULL;
-}
-
-static VegaDevice *
-FindVegaDevice()
-{
-  DeviceDescriptor *device = devVarioFindVega();
-  return device != NULL
-    ? GetVegaDevice(*device)
-    : NULL;
-}
 
 static bool
 VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
                          long ext_setvalue = 0)
 {
-  VegaDevice *device = FindVegaDevice();
-  if (device == NULL)
-    return false;
-
 #ifdef _UNICODE
   TCHAR tname[64];
   if (MultiByteToWideChar(CP_UTF8, 0, name, -1, tname, ARRAY_SIZE(tname)) <= 0)
@@ -680,13 +659,8 @@ OnSaveClicked(gcc_unused WndButton &Sender)
 {
   UpdateParameters(false);
   // make sure changes are sent to device
-  if (dirty) {
+  if (dirty && device->SendSetting("StoreToEeprom", 2))
     dirty = false;
-
-    VegaDevice *device = FindVegaDevice();
-    if (device != NULL)
-      device->SendSetting("StoreToEeprom", 2);
-  }
 
   if (!is_simulator())
     Sleep(500);
@@ -991,8 +965,9 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 };
 
 bool
-dlgConfigurationVarioShowModal(void)
+dlgConfigurationVarioShowModal(Device &_device)
 {
+  device = (VegaDevice *)&_device;
   changed = false;
 
   if (!is_simulator() && devVarioFindVega() == NULL) {
