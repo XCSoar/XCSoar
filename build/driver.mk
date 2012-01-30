@@ -56,12 +56,19 @@ FLARM_SOURCES = \
 	$(DRIVER_SRC_DIR)/FLARM/BinaryProtocol.cpp \
 	$(DRIVER_SRC_DIR)/FLARM/TextProtocol.cpp
 
+VEGA_SOURCES = \
+	$(DRIVER_SRC_DIR)/Vega/Misc.cpp \
+	$(DRIVER_SRC_DIR)/Vega/Parser.cpp \
+	$(DRIVER_SRC_DIR)/Vega/Settings.cpp \
+	$(DRIVER_SRC_DIR)/Vega/Register.cpp
+
 DRIVER_SOURCES = \
 	$(VOLKSLOGGER_SOURCES) \
 	$(CAI302_SOURCES) \
 	$(IMI_SOURCES) \
 	$(LX_SOURCES) \
 	$(FLARM_SOURCES) \
+	$(VEGA_SOURCES) \
 	$(DRIVER_SRC_DIR)/AltairPro.cpp \
 	$(DRIVER_SRC_DIR)/BorgeltB50.cpp \
 	$(DRIVER_SRC_DIR)/CaiGpsNav.cpp \
@@ -75,7 +82,6 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/Leonardo.cpp \
 	$(DRIVER_SRC_DIR)/NmeaOut.cpp \
 	$(DRIVER_SRC_DIR)/PosiGraph.cpp \
-	$(DRIVER_SRC_DIR)/Vega.cpp \
 	$(DRIVER_SRC_DIR)/XCOM760.cpp \
 	$(DRIVER_SRC_DIR)/ILEC.cpp \
 	$(DRIVER_SRC_DIR)/Westerboer.cpp \

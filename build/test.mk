@@ -544,13 +544,13 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Driver/Westerboer.cpp \
 	$(SRC)/Device/Driver/WesterboerVW921.cpp \
 	$(SRC)/Device/Driver/PosiGraph.cpp \
-	$(SRC)/Device/Driver/Vega.cpp \
 	$(SRC)/Device/Driver/Zander.cpp \
 	$(CAI302_SOURCES) \
 	$(IMI_SOURCES) \
 	$(LX_SOURCES) \
 	$(FLARM_SOURCES) \
 	$(VOLKSLOGGER_SOURCES) \
+	$(VEGA_SOURCES) \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \

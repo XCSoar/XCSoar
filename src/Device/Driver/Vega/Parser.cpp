@@ -21,24 +21,22 @@ Copyright_License {
 }
 */
 
-#include "Device/Driver/Vega.hpp"
-#include "Device/Internal.hpp"
-#include "Device/Driver.hpp"
+#include "Internal.hpp"
 #include "Message.hpp"
 #include "Profile/Profile.hpp"
-#include "DeviceBlackboard.hpp"
 #include "Input/InputQueue.hpp"
-#include "LogFile.hpp"
+#include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
-#include <math.h>
 #include <algorithm>
 
-using std::max;
+#ifdef _UNICODE
+#include <windows.h>
+#endif
 
 #define INPUT_BIT_FLAP_POS                  0 // 1 flap pos
 #define INPUT_BIT_FLAP_ZERO                 1 // 1 flap zero
@@ -55,39 +53,6 @@ using std::max;
 #define INPUT_BIT_USERSWDOWN                25
 #define OUTPUT_BIT_CIRCLING                 0  // 1 if circling
 #define OUTPUT_BIT_FLAP_LANDING             7  // 1 if positive flap
-
-class VegaDevice : public AbstractDevice {
-private:
-  Port &port;
-
-  /**
-   * The most recent QNH value, written by SetQNH(), read by
-   * VarioWriteSettings().
-   */
-  AtmosphericPressure qnh;
-
-  bool detected;
-
-public:
-  VegaDevice(Port &_port)
-    :port(_port), qnh(AtmosphericPressure::Standard()), detected(false) {}
-
-protected:
-  void VarioWriteSettings(const DerivedInfo &calculated) const;
-
-public:
-  virtual void LinkTimeout();
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
-  virtual bool PutQNH(const AtmosphericPressure& pres);
-  virtual void OnSysTicker(const DerivedInfo &calculated);
-};
-
-void
-VegaDevice::LinkTimeout()
-{
-  AbstractDevice::LinkTimeout();
-  detected = false;
-}
 
 static bool
 PDSWC(NMEAInputLine &line, NMEAInfo &info)
@@ -210,9 +175,9 @@ PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
   long value = line.read(0L);
 
   if (strcmp(name, "ToneDeadbandCruiseLow") == 0)
-    value = max(value, -value);
+    value = std::max(value, -value);
   if (strcmp(name, "ToneDeadbandCirclingLow") == 0)
-    value = max(value, -value);
+    value = std::max(value, -value);
 
   TCHAR regname[100] = _T("Vega");
 
@@ -363,60 +328,3 @@ VegaDevice::ParseNMEA(const char *String, NMEAInfo &info)
   else
     return false;
 }
-
-void
-VegaDevice::VarioWriteSettings(const DerivedInfo &calculated) const
-{
-    char mcbuf[100];
-
-    sprintf(mcbuf, "PDVMC,%d,%d,%d,%d,%d",
-            iround(calculated.common_stats.current_mc*10),
-            iround(calculated.V_stf*10),
-            calculated.circling,
-            iround(calculated.terrain_altitude),
-            uround(qnh.GetHectoPascal() * 10));
-
-    PortWriteNMEA(port, mcbuf);
-}
-
-bool
-VegaDevice::PutQNH(const AtmosphericPressure& pres)
-{
-  qnh = pres;
-
-  return true;
-}
-
-void
-VegaDevice::OnSysTicker(const DerivedInfo &calculated)
-{
-  if (detected)
-    VarioWriteSettings(calculated);
-
-#ifdef UAV_APPLICATION
-  const ThermalLocatorInfo &t = calculated.thermal_locator;
-  char tbuf[100];
-  sprintf(tbuf, "PTLOC,%d,%3.5f,%3.5f,%g,%g",
-          (int)(t.estimate_valid),
-          (double)t.estimate_location.Longitude.Degrees(),
-          (double)t.estimate_location.Latitude.Degrees(),
-          (double)fixed_zero,
-          (double)fixed_zero);
-
-  PortWriteNMEA(port, tbuf);
-#endif
-}
-
-static Device *
-VegaCreateOnPort(const DeviceConfig &config, Port &com_port)
-{
-  return new VegaDevice(com_port);
-}
-
-const struct DeviceRegister vgaDevice = {
-  _T("Vega"),
-  _T("Vega"),
-  DeviceRegister::MANAGE |
-  DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
-  VegaCreateOnPort,
-};
