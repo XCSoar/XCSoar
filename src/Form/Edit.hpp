@@ -136,6 +136,13 @@ public:
     mOnDataChangeNotify = data_change_callback;
   }
 
+  /**
+   * Returns the recommended caption width, measured by the dialog
+   * font.
+   */
+  gcc_pure
+  UPixelScalar GetRecommendedCaptionWidth() const;
+
   void SetCaptionWidth(PixelScalar caption_width);
 
   void RefreshDisplay(void);

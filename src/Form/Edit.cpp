@@ -166,6 +166,12 @@ WndProperty::~WndProperty(void)
   delete mDataField;
 }
 
+UPixelScalar
+WndProperty::GetRecommendedCaptionWidth() const
+{
+  return look.text_font->TextSize(mCaption).cx;
+}
+
 void
 WndProperty::SetCaptionWidth(PixelScalar _caption_width)
 {
