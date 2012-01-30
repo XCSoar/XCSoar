@@ -164,6 +164,7 @@ const ColorRamp terrain_colors[8][NUM_COLOR_RAMP_LEVELS] = {
 // this is for TerrainInfo.StepSize = 0.0025;
 TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain)
   :terrain(_terrain),
+   last_sun_azimuth(Angle::Zero()),
    last_color_ramp(NULL)
 {
   assert(terrain != NULL);

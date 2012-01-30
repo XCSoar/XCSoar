@@ -37,6 +37,10 @@ Version 6.3 - not yet released
   - support reverse screen modes for Galaxy Tab
   - support baro sensor
 
+Version 6.2.6 - not yet released
+* devices:
+  - Vega: fix Vega configuration dialog
+
 Version 6.2.5 - 2012/01/27
 * calculations
   - fix time calculation when goal is above aircraft

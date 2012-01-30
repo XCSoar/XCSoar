@@ -214,13 +214,20 @@ PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
   if (strcmp(name, "ToneDeadbandCirclingLow") == 0)
     value = max(value, -value);
 
-  TCHAR regname[100];
+  TCHAR regname[100] = _T("Vega");
 
-  _stprintf(regname, _T("Vega%sUpdated"), name);
-  Profile::Set(regname, 1);
+#ifdef _UNICODE
+  if (MultiByteToWideChar(CP_UTF8, 0, name, -1,
+                          regname + 4, ARRAY_SIZE(regname) - 16) <= 0)
+    return true;
+#else
+  _tcscat(regname, name);
+#endif
 
-  _stprintf(regname, _T("Vega%s"), name);
   Profile::Set(regname, value);
+
+  _tcscat(regname, _T("Updated"));
+  Profile::Set(regname, 1);
 
   return true;
 }
