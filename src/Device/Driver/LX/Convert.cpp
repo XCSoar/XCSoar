@@ -423,7 +423,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
       break;
 
 #ifdef __clang__
-#pragma GCC diagnostic ignored "-Wswitch-redundant-default"
+#pragma GCC diagnostic ignored "-Wcovered-switch-default"
 #endif
     default:
       if (*packet.cmd < 0x40) {
