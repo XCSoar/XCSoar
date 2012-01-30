@@ -47,6 +47,10 @@ protected:
   ButtonRenderer renderer;
 
 private:
+#ifdef USE_GDI
+  int id;
+#endif
+
   ActionListener *listener;
 
   /**

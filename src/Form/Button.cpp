@@ -49,13 +49,22 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
 WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
                      const TCHAR *caption, const PixelRect &rc,
                      ButtonWindowStyle style,
-                     ActionListener *_listener, int id)
+                     ActionListener *_listener, int _id)
   :look(_look), renderer(look.button),
+#ifdef USE_GDI
+   id(_id),
+#endif
    listener(_listener),
    click_callback(NULL), left_callback(NULL), right_callback(NULL)
 {
   style.EnableCustomPainting();
-  set(parent, caption, id, rc, style);
+#ifdef USE_GDI
+  /* use BaseButtonWindow::COMMAND_BOUNCE_ID */
+  set(parent, caption, rc, style);
+#else
+  /* our custom SDL/OpenGL button doesn't need this hack */
+  set(parent, caption, _id, rc, style);
+#endif
   set_font(*look.button.font);
 }
 
@@ -63,7 +72,10 @@ bool
 WndButton::on_clicked()
 {
   if (listener != NULL) {
-    listener->OnAction(GetID());
+#ifndef USE_GDI
+    unsigned id = GetID();
+#endif
+    listener->OnAction(id);
     return true;
   }
 
