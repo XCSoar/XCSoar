@@ -26,6 +26,12 @@ Copyright_License {
 
 #include "Device/Driver.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "Thread/Mutex.hpp"
+
+#include <map>
+#include <string>
+
+class NMEAInputLine;
 
 class VegaDevice : public AbstractDevice {
 private:
@@ -38,6 +44,16 @@ private:
   AtmosphericPressure qnh;
 
   bool detected;
+
+  /**
+   * This #Mutex protects the #settings map.
+   */
+  mutable Mutex settings_mutex;
+
+  /**
+   * Settings that were received in PDVSC sentences.
+   */
+  std::map<std::string, int> settings;
 
 public:
   VegaDevice(Port &_port)
@@ -60,8 +76,18 @@ public:
    */
   bool RequestSetting(const char *name);
 
+  /**
+   * Look up the given setting in the table of received values.  The
+   * first element is a "found" flag, and if that is true, the second
+   * element is the value.
+   */
+  gcc_pure
+  std::pair<bool, int> GetSetting(const char *name) const;
+
 protected:
   void VarioWriteSettings(const DerivedInfo &calculated) const;
+
+  bool PDVSC(NMEAInputLine &line, NMEAInfo &info);
 
 public:
   virtual void LinkTimeout();

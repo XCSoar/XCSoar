@@ -34,6 +34,12 @@ Copyright_License {
 bool
 VegaDevice::SendSetting(const char *name, int value)
 {
+  /* erase the old value from the settings map, because we expect to
+     receive the new one now */
+  settings_mutex.Lock();
+  settings.erase(name);
+  settings_mutex.Unlock();
+
   char buffer[64];
   sprintf(buffer, "PDVSC,S,%s,%d", name, value);
   return PortWriteNMEA(port, buffer);
@@ -45,6 +51,17 @@ VegaDevice::RequestSetting(const char *name)
   char buffer[64];
   sprintf(buffer, "PDVSC,R,%s", name);
   return PortWriteNMEA(port, buffer);
+}
+
+std::pair<bool, int>
+VegaDevice::GetSetting(const char *name) const
+{
+  ScopeLock protect(settings_mutex);
+  auto i = settings.find(name);
+  if (i == settings.end())
+    return std::make_pair(false, 0);
+
+  return std::make_pair(true, i->second);
 }
 
 void

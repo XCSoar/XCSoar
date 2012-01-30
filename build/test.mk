@@ -527,6 +527,7 @@ TEST_LOGGER_DEPENDS = IO MATH
 $(eval $(call link-program,TestLogger,TEST_LOGGER))
 
 TEST_DRIVER_SOURCES = \
+	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Device/Port/NullPort.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
@@ -574,7 +575,6 @@ TEST_DRIVER_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(TEST_SRC_DIR)/tap.c \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
@@ -706,6 +706,7 @@ endif
 DEBUG_PROGRAMS = $(call name-to-bin,$(DEBUG_PROGRAM_NAMES))
 
 DEBUG_REPLAY_SOURCES = \
+	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Port/NullPort.cpp \
 	$(SRC)/Device/Driver.cpp \
@@ -763,7 +764,6 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Engine/Task/TaskStats/DistanceStat.cpp \
 	$(SRC)/Engine/Task/TaskStats/TaskVario.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/DebugReplay.cpp
@@ -1108,6 +1108,7 @@ endif
 $(eval $(call link-program,RunTCPListener,RUN_TCP_LISTENER))
 
 RUN_DEVICE_DRIVER_SOURCES = \
+	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
@@ -1132,7 +1133,6 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/RunDeviceDriver.cpp
@@ -1154,13 +1154,13 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/RunDeclare.cpp
@@ -1188,9 +1188,9 @@ RUN_VEGA_SETTINGS_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/Thread/Mutex.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/RunVegaSettings.cpp
 ifeq ($(HAVE_POSIX),y)
 RUN_VEGA_SETTINGS_SOURCES += \
@@ -1246,12 +1246,12 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/RunFlightList.cpp
@@ -1284,12 +1284,12 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/RunDownloadFlight.cpp

@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Message.hpp"
-#include "Profile/Profile.hpp"
 #include "Input/InputQueue.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -159,8 +158,8 @@ PDAAV(NMEAInputLine &line, gcc_unused NMEAInfo &info)
   return true;
 }
 
-static bool
-PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
+bool
+VegaDevice::PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
 {
   char responsetype[10];
   line.read(responsetype, 10);
@@ -189,12 +188,10 @@ PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
   _tcscat(regname, name);
 #endif
 
-  int old_value;
-  if (Profile::Get(regname, old_value) && old_value == value)
-    /* value hasn't changed; don't set the "Updated" flag */
-    return true;
+  settings_mutex.Lock();
+  settings[name] = value;
+  settings_mutex.Unlock();
 
-  Profile::Set(regname, value);
   return true;
 }
 

@@ -294,33 +294,12 @@ GetSettingControl(const char *name)
 static bool
 GetSettingValue(const char *name, int &value_r)
 {
-#ifdef _UNICODE
-  TCHAR tname[64];
-  if (MultiByteToWideChar(CP_UTF8, 0, name, -1, tname, ARRAY_SIZE(tname)) <= 0)
+  const auto x = device->GetSetting(name);
+  if (!x.first)
     return false;
-#else
-  const char *tname = name;
-#endif
 
-  TCHAR key[64] = _T("Vega");
-  _tcscat(key, tname);
-  return Profile::Get(key, value_r);
-}
-
-static void
-SetSettingValue(const char *name, int value)
-{
-#ifdef _UNICODE
-  TCHAR tname[64];
-  if (MultiByteToWideChar(CP_UTF8, 0, name, -1, tname, ARRAY_SIZE(tname)) <= 0)
-    return;
-#else
-  const char *tname = name;
-#endif
-
-  TCHAR key[64] = _T("Vega");
-  _tcscat(key, tname);
-  Profile::Set(key, value);
+  value_r = x.second;
+  return true;
 }
 
 static void
@@ -382,7 +361,6 @@ UpdateControl(const char *name, int &value_r)
       Sleep(250);
 
     changed = dirty = true;
-    SetSettingValue(name, ui_value);
     value_r = ui_value;
 
     return true;
