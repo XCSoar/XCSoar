@@ -39,7 +39,6 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"
-#include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "Compiler.h"
 
@@ -69,7 +68,7 @@ class FlightSetupPanel : public RowFormWidget,
 
 public:
   FlightSetupPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(78)),
+    :RowFormWidget(UIGlobals::GetDialogLook()),
      dump_button(NULL),
      glide_polar(CommonInterface::GetComputerSettings().glide_polar_task),
      glide_polar_modified(false),

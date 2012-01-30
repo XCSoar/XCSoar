@@ -27,12 +27,11 @@ Copyright_License {
 #include "DataField/Float.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "Units/Units.hpp"
 
 WindSettingsPanel::WindSettingsPanel(bool _edit_manual_wind)
-  :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(100)),
+  :RowFormWidget(UIGlobals::GetDialogLook()),
    edit_manual_wind(_edit_manual_wind) {}
 
 void

@@ -29,7 +29,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "Screen/Layout.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "UIGlobals.hpp"
 
@@ -48,7 +47,7 @@ enum ControlIndex {
 class SymbolsConfigPanel : public RowFormWidget {
 public:
   SymbolsConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);

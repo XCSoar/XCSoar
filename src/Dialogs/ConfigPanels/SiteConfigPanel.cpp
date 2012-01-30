@@ -34,7 +34,6 @@ Copyright_License {
 #include "ConfigPanel.hpp"
 #include "SiteConfigPanel.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 
 enum ControlIndex {
@@ -53,7 +52,7 @@ enum ControlIndex {
 class SiteConfigPanel : public RowFormWidget {
 public:
   SiteConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(100)), buttonWaypoints(0) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()), buttonWaypoints(0) {}
 
 private:
   WndButton *buttonWaypoints;

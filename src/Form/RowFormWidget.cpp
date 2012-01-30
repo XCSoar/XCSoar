@@ -107,9 +107,8 @@ RowFormWidget::Row::GetMaximumHeight() const
   return window->get_height();
 }
 
-RowFormWidget::RowFormWidget(const DialogLook &_look,
-                             UPixelScalar _caption_width)
-  :look(_look), caption_width(_caption_width)
+RowFormWidget::RowFormWidget(const DialogLook &_look)
+  :look(_look)
 {
 }
 
@@ -191,7 +190,7 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
   PanelControl &panel = *(PanelControl *)GetWindow();
   WndProperty *edit =
     new WndProperty(panel, look, label,
-                    edit_rc, (*label == '\0') ? 0 : caption_width,
+                    edit_rc, (*label == '\0') ? 0 : 100,
                     style, edit_style, NULL);
   if (help != NULL)
     edit->SetHelpText(help);
@@ -635,10 +634,31 @@ RowFormWidget::SaveValueFileReader(unsigned i, const TCHAR *registry_key)
   return true;
 }
 
+UPixelScalar
+RowFormWidget::GetRecommendedCaptionWidth() const
+{
+  const bool expert = UIGlobals::GetDialogSettings().expert;
+
+  UPixelScalar w = 0;
+  for (auto i = rows.begin(), end = rows.end(); i != end; ++i) {
+    if (i->expert && !expert)
+      continue;
+
+    if (i->type == Row::Type::EDIT) {
+      unsigned x = i->GetControl().GetRecommendedCaptionWidth();
+      if (x > w)
+        w = x;
+    }
+  }
+
+  return w;
+}
+
 void
 RowFormWidget::UpdateLayout()
 {
   PixelRect current_rect = GetWindow()->get_client_rect();
+  const unsigned total_width = current_rect.right - current_rect.left;
   const unsigned total_height = current_rect.bottom - current_rect.top;
   current_rect.bottom = current_rect.top;
 
@@ -648,6 +668,7 @@ RowFormWidget::UpdateLayout()
      determine the minimum total height */
   unsigned min_height = 0;
   unsigned n_elastic = 0;
+  unsigned caption_width = 0;
   for (auto i = rows.begin(), end = rows.end(); i != end; ++i) {
     if (i->expert && !expert)
       continue;
@@ -655,7 +676,16 @@ RowFormWidget::UpdateLayout()
     min_height += i->GetMinimumHeight();
     if (i->IsElastic())
       ++n_elastic;
+
+    if (i->type == Row::Type::EDIT) {
+      unsigned cw = i->GetControl().GetRecommendedCaptionWidth();
+      if (cw > caption_width)
+        caption_width = cw;
+    }
   }
+
+  if (caption_width / 3 > total_width * 2)
+    caption_width = total_width * 2 / 3;
 
   /* how much excess height in addition to the minimum height? */
   unsigned excess_height = min_height < total_height
@@ -674,6 +704,10 @@ RowFormWidget::UpdateLayout()
 
       window.show();
     }
+
+    if (caption_width > 0 && i->type == Row::Type::EDIT &&
+        i->GetControl().HasCaption())
+      i->GetControl().SetCaptionWidth(caption_width);
 
     /* determine this row's height */
     UPixelScalar height = i->GetMinimumHeight();
@@ -711,7 +745,7 @@ RowFormWidget::GetMinimumSize() const
   const UPixelScalar value_width =
     look.text_font->TextSize(_T("Foo Bar Foo Bar")).cx;
 
-  PixelSize size{ PixelScalar(caption_width + value_width), 0 };
+  PixelSize size{ PixelScalar(GetRecommendedCaptionWidth() + value_width), 0 };
   for (auto i = rows.begin(), end = rows.end(); i != end; ++i)
     size.cy += i->GetMinimumHeight();
 
@@ -724,7 +758,7 @@ RowFormWidget::GetMaximumSize() const
   const UPixelScalar value_width =
     look.text_font->TextSize(_T("Foo Bar Foo Bar")).cx;
 
-  PixelSize size{ PixelScalar(caption_width + value_width), 0 };
+  PixelSize size{ PixelScalar(GetRecommendedCaptionWidth() + value_width), 0 };
   for (auto i = rows.begin(), end = rows.end(); i != end; ++i)
     size.cy += i->GetMaximumHeight();
 

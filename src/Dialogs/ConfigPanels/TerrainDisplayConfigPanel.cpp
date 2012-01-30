@@ -37,7 +37,6 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 
 class WndOwnerDrawFrame;
@@ -59,7 +58,7 @@ protected:
 
 public:
   TerrainDisplayConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);

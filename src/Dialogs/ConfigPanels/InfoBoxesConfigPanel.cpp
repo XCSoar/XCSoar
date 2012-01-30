@@ -31,7 +31,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Dialogs/dlgConfigInfoboxes.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "Screen/Layout.hpp"
 #include "ConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
@@ -41,7 +40,7 @@ class InfoBoxesConfigPanel : public RowFormWidget,
                              public ActionListener {
 public:
   InfoBoxesConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);

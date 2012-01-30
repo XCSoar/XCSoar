@@ -23,7 +23,6 @@
 
 #include "DeviceEditWidget.hpp"
 #include "UIGlobals.hpp"
-#include "Screen/Layout.hpp"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
@@ -350,7 +349,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config)
 }
 
 DeviceEditWidget::DeviceEditWidget(const DeviceConfig &_config)
-  :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(80)),
+  :RowFormWidget(UIGlobals::GetDialogLook()),
    config(_config) {}
 
 

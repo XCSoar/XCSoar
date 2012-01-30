@@ -25,7 +25,6 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Interface.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 
@@ -40,7 +39,7 @@ class GaugesConfigPanel : public RowFormWidget {
 
 public:
   GaugesConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);

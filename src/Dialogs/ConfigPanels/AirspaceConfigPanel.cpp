@@ -32,7 +32,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
-#include "Screen/Layout.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 
@@ -76,7 +75,7 @@ private:
 
 public:
   AirspaceConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);

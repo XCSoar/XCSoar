@@ -31,8 +31,8 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
+#include "Asset.hpp"
 
 enum ControlIndex {
   UTCOffset,
@@ -43,7 +43,7 @@ enum ControlIndex {
 class TimeConfigPanel : public RowFormWidget {
 public:
   TimeConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 private:
   bool loading;

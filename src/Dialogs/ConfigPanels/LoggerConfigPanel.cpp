@@ -30,7 +30,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "DataField/Enum.hpp"
 
@@ -50,7 +49,7 @@ enum ControlIndex {
 class LoggerConfigPanel : public RowFormWidget {
 public:
   LoggerConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);

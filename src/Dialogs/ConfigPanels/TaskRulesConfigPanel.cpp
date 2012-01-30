@@ -27,7 +27,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 
 enum ControlIndex {
@@ -47,7 +46,7 @@ enum ControlIndex {
 class TaskRulesConfigPanel : public RowFormWidget {
 public:
   TaskRulesConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);

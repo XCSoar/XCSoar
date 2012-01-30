@@ -27,7 +27,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Form/Form.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 
 enum ControlIndex {
@@ -44,7 +43,7 @@ enum ControlIndex {
 class VarioConfigPanel : public RowFormWidget {
 public:
   VarioConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);

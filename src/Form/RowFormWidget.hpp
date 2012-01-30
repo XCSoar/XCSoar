@@ -151,12 +151,11 @@ class RowFormWidget : public WindowWidget {
   };
 
   const DialogLook &look;
-  UPixelScalar caption_width;
 
   StaticArray<Row, 32u> rows;
 
 public:
-  RowFormWidget(const DialogLook &look, UPixelScalar caption_width);
+  RowFormWidget(const DialogLook &look);
   virtual ~RowFormWidget();
 
 protected:
@@ -365,6 +364,9 @@ public:
   bool SaveValueFileReader(unsigned i, const TCHAR *registry_key);
 
 protected:
+  gcc_pure
+  UPixelScalar GetRecommendedCaptionWidth() const;
+
   void NextControlRect(PixelRect &rc, UPixelScalar height) {
     assert(IsDefined());
 

@@ -28,7 +28,6 @@ Copyright_License {
 #include "Asset.hpp"
 #include "ExperimentalConfigPanel.hpp"
 #include "Language/Language.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 
 enum ControlIndex {
@@ -50,7 +49,7 @@ static const StaticEnumChoice  model_type_list[] = {
 class ExperimentalConfigPanel : public RowFormWidget {
 public:
   ExperimentalConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);

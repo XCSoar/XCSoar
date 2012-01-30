@@ -26,7 +26,6 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/Util.hpp"
 #include "Form/Form.hpp"
-#include "Screen/Layout.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "DataField/FileReader.hpp"
 #include "DataField/Enum.hpp"
@@ -62,7 +61,7 @@ enum ControlIndex {
 class InterfaceConfigPanel : public RowFormWidget {
 public:
   InterfaceConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)), buttonFonts(0) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()), buttonFonts(0) {}
 
   WndButton *buttonFonts;
 

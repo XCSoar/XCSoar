@@ -29,7 +29,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "DataField/Base.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 
 enum ControlIndex {
@@ -45,7 +44,7 @@ enum ControlIndex {
 class RouteConfigPanel : public RowFormWidget {
 public:
   RouteConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(150)) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);

@@ -33,7 +33,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Dialogs/XML.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 
 enum ControlIndex {
@@ -127,7 +126,7 @@ static const StaticEnumChoice infobox_border_list[] = {
 class LayoutConfigPanel : public RowFormWidget {
 public:
   LayoutConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(110)) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);

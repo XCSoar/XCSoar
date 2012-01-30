@@ -28,7 +28,6 @@ Copyright_License {
 #include "Profile/PageProfile.hpp"
 #include "Interface.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 
 #include <stdio.h>
@@ -39,7 +38,7 @@ using namespace Pages;
 class PagesConfigPanel : public RowFormWidget {
 public:
   PagesConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook(), Layout::Scale(50)) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
