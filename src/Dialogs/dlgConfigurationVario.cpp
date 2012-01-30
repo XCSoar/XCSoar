@@ -139,7 +139,7 @@ static const TCHAR *const needle_gauge_types[] = {
   NULL
 };
 
-static bool changed = false, dirty = false;
+static bool changed, dirty;
 static WndForm *wf = NULL;
 static TabbedControl *tabbed;
 
@@ -953,7 +953,7 @@ FillEnums(void)
 bool
 dlgConfigurationVarioShowModal(void)
 {
-  changed = false;
+  changed = dirty = false;
 
   if (!is_simulator() && devVarioFindVega() == NULL) {
     MessageBoxX(_("No communication with Vega."), _("Vega error"), MB_OK);
