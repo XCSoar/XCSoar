@@ -28,17 +28,23 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
 
-void
+bool
 PortWriteNMEA(Port *port, const char *line)
 {
   assert(port != NULL);
   assert(line != NULL);
 
-  port->Write('$');
-  port->Write(line);
+  /* reasonable hard-coded timeout; do we need to make this a
+     parameter? */
+  const unsigned timeout_ms = 1000;
+
+  if (!port->Write('$') ||
+      !port->FullWrite(line, strlen(line), timeout_ms))
+    return false;
 
   char checksum[16];
   sprintf(checksum, "*%02X\r\n", NMEAChecksum(line));
-  port->Write(checksum);
+  return port->FullWrite(checksum, strlen(checksum), timeout_ms);
 }

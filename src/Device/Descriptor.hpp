@@ -217,9 +217,9 @@ private:
   bool ParseNMEA(const char *line, struct NMEAInfo &info);
 
 public:
-  void WriteNMEA(const char *line);
+  bool WriteNMEA(const char *line);
 #ifdef _UNICODE
-  void WriteNMEA(const TCHAR *line);
+  bool WriteNMEA(const TCHAR *line);
 #endif
 
   bool PutMacCready(fixed MacCready);

@@ -294,30 +294,29 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEAInfo &info)
   return false;
 }
 
-void
+bool
 DeviceDescriptor::WriteNMEA(const char *line)
 {
   assert(line != NULL);
 
-  if (Com != NULL)
-    PortWriteNMEA(Com, line);
+  return Com != NULL && PortWriteNMEA(Com, line);
 }
 
 #ifdef _UNICODE
-void
+bool
 DeviceDescriptor::WriteNMEA(const TCHAR *line)
 {
   assert(line != NULL);
 
   if (Com == NULL)
-    return;
+    return false;
 
   char buffer[_tcslen(line) * 4 + 1];
   if (::WideCharToMultiByte(CP_ACP, 0, line, -1, buffer, sizeof(buffer),
                             NULL, NULL) <= 0)
-    return;
+    return false;
 
-  WriteNMEA(buffer);
+  return WriteNMEA(buffer);
 }
 #endif
 

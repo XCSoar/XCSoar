@@ -378,8 +378,7 @@ VegaDevice::PutVoice(const TCHAR *Sentence)
   const char *buffer = Sentence;
 #endif
 
-  PortWriteNMEA(port, buffer);
-  return true;
+  return PortWriteNMEA(port, buffer);
 }
 
 void
