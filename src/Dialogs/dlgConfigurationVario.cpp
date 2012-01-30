@@ -225,7 +225,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
         if (newval != lvalue) {
           // value has changed
           Profile::Set(updatename, 2);
-          Profile::Set(fullname, lvalue);
+          Profile::Set(fullname, newval);
 
           changed = true;
 

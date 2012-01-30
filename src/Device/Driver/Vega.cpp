@@ -226,6 +226,11 @@ PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
   _tcscat(regname, name);
 #endif
 
+  int old_value;
+  if (Profile::Get(regname, old_value) && old_value == value)
+    /* value hasn't changed; don't set the "Updated" flag */
+    return true;
+
   Profile::Set(regname, value);
 
   _tcscat(regname, _T("Updated"));
