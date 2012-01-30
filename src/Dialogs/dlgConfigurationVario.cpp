@@ -139,7 +139,7 @@ static const TCHAR *const needle_gauge_types[] = {
   NULL
 };
 
-static bool changed = false;
+static bool changed = false, dirty = false;
 static WndForm *wf = NULL;
 static TabbedControl *tabbed;
 
@@ -232,7 +232,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
           Profile::Set(updatename, 2);
           Profile::Set(fullname, newval);
 
-          changed = true;
+          changed = dirty = true;
 
           // maybe represent all as text?
           // note that this code currently won't work for longs
@@ -644,7 +644,10 @@ OnSaveClicked(gcc_unused WndButton &Sender)
 {
   UpdateParameters(false);
   // make sure changes are sent to device
-  VarioWriteNMEA(_T("PDVSC,S,StoreToEeprom,2"));
+  if (dirty) {
+    dirty = false;
+    VarioWriteNMEA(_T("PDVSC,S,StoreToEeprom,2"));
+  }
 
   if (!is_simulator())
     Sleep(500);
