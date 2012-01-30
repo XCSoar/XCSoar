@@ -67,7 +67,10 @@ ProfileMap::Export(KeyValueFileWriter &writer)
   // Iterate through the profile maps
   for (map_t::const_iterator it_str = map.begin();
        it_str != map.end(); it_str++)
-    writer.Write(it_str->first.c_str(), it_str->second.c_str());
+    /* ignore the "Vega*" values; the Vega driver abuses the profile
+       to pass messages between the driver and the user interface */
+    if (_tcsncmp(it_str->first.c_str(), _T("Vega"), 4) != 0)
+      writer.Write(it_str->first.c_str(), it_str->second.c_str());
 }
 
 void
