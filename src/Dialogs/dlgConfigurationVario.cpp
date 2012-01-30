@@ -201,11 +201,15 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
   if (first) {
     // at start, set from last known registry value, this
     // helps if variables haven't been modified.
+    Profile::Set(updatename, 2);
+
     wp = (WndProperty*)wf->FindByName(propname);
     if (wp) {
       wp->GetDataField()->SetAsInteger(lvalue);
       wp->RefreshDisplay();
     }
+
+    return false;
   }
 
   if (Profile::Get(updatename, updated)) {
