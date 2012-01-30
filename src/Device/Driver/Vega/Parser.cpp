@@ -172,7 +172,7 @@ PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
     // ignore error responses...
     return true;
 
-  long value = line.read(0L);
+  int value = line.read(0);
 
   if (strcmp(name, "ToneDeadbandCruiseLow") == 0)
     value = std::max(value, -value);
@@ -188,6 +188,11 @@ PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
 #else
   _tcscat(regname, name);
 #endif
+
+  int old_value;
+  if (Profile::Get(regname, old_value) && old_value == value)
+    /* value hasn't changed; don't set the "Updated" flag */
+    return true;
 
   Profile::Set(regname, value);
 

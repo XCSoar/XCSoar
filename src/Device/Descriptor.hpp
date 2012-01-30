@@ -229,9 +229,9 @@ public:
     monitor = _monitor;
   }
 
-  void WriteNMEA(const char *line);
+  bool WriteNMEA(const char *line);
 #ifdef _UNICODE
-  void WriteNMEA(const TCHAR *line);
+  bool WriteNMEA(const TCHAR *line);
 #endif
 
   bool PutMacCready(fixed MacCready);

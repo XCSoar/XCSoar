@@ -180,7 +180,8 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size)
   assert(Buffer != NULL);
 
   // eg $PDVSC,S,FOO,BAR*<cr>\r\n
-  PortWriteNMEA(port, Buffer);
+  if (!PortWriteNMEA(port, Buffer))
+    return false;
 
   Buffer[6] = _T('A');
   char *comma = strchr(&Buffer[8], ',');

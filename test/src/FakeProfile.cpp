@@ -34,6 +34,12 @@ Profile::SetFiles(const TCHAR* override)
 {
 }
 
+const TCHAR *
+ProfileMap::Get(const TCHAR *key, const TCHAR *default_value)
+{
+  return NULL;
+}
+
 bool
 ProfileMap::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
 {

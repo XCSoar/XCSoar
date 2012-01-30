@@ -38,8 +38,9 @@ class Port;
  *
  * @param port the port to write to
  * @param line the line without asterisk, checksum and newline
+ * @return true on success
  */
-void
+bool
 PortWriteNMEA(Port &port, const char *line);
 
 #endif
