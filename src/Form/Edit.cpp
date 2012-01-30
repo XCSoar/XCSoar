@@ -142,7 +142,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
                          const EditWindowStyle edit_style,
                          DataChangeCallback_t DataChangeNotify)
   :look(_look), edit(this),
-   mCaptionWidth(CaptionWidth),
+   caption_width(CaptionWidth),
    mOnDataChangeNotify(DataChangeNotify),
    mOnClickUpNotify(NULL), mOnClickDownNotify(NULL),
    mDataField(NULL)
@@ -215,8 +215,8 @@ WndProperty::UpdateLayout()
 
   const UPixelScalar DEFAULTBORDERPENWIDTH = Layout::FastScale(1);
 
-  if (mCaptionWidth >= 0) {
-    edit_rc.left += mCaptionWidth + (DEFAULTBORDERPENWIDTH + 1);
+  if (caption_width >= 0) {
+    edit_rc.left += caption_width + (DEFAULTBORDERPENWIDTH + 1);
     edit_rc.top += (DEFAULTBORDERPENWIDTH + 1);
     edit_rc.right -= (DEFAULTBORDERPENWIDTH + 1);
     edit_rc.bottom -= (DEFAULTBORDERPENWIDTH + 1);
@@ -326,7 +326,7 @@ WndProperty::OnPaint(Canvas &canvas)
   /* kludge: don't draw caption if width is too small (but not 0),
      used by the polar configuration panel.  This concept needs to be
      redesigned. */
-  if (mCaptionWidth != 0 && !mCaption.empty()) {
+  if (caption_width != 0 && !mCaption.empty()) {
     canvas.SetTextColor(focused
                           ? look.focused.text_color
                           : look.text_color);
@@ -336,11 +336,11 @@ WndProperty::OnPaint(Canvas &canvas)
     PixelSize tsize = canvas.CalcTextSize(mCaption.c_str());
 
     RasterPoint org;
-    if (mCaptionWidth < 0) {
+    if (caption_width < 0) {
       org.x = edit_rc.left;
       org.y = edit_rc.top - tsize.cy;
     } else {
-      org.x = mCaptionWidth - (tsize.cx + 1);
+      org.x = caption_width - (tsize.cx + 1);
       org.y = (get_size().cy - tsize.cy) / 2;
     }
 
@@ -350,7 +350,7 @@ WndProperty::OnPaint(Canvas &canvas)
     if (have_clipping())
       canvas.text(org.x, org.y, mCaption.c_str());
     else
-      canvas.text_clipped(org.x, org.y, mCaptionWidth - org.x,
+      canvas.text_clipped(org.x, org.y, caption_width - org.x,
                           mCaption.c_str());
   }
 }

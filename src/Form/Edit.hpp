@@ -91,7 +91,7 @@ private:
   PixelRect edit_rc;
 
   /** Width reserved for the caption of the Control */
-  int  mCaptionWidth;
+  PixelScalar caption_width;
 
   /** Function to call when the Editor data has changed */
   DataChangeCallback_t mOnDataChangeNotify;
