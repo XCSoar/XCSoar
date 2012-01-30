@@ -209,7 +209,7 @@ PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
     // ignore error responses...
     return true;
 
-  long value = line.read(0L);
+  int value = line.read(0);
 
   if (strcmp(name, "ToneDeadbandCruiseLow") == 0)
     value = max(value, -value);
