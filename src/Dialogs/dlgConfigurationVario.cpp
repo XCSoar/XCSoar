@@ -31,7 +31,7 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Profile/Profile.hpp"
 #include "DataField/Enum.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 #include "Simulator.hpp"
 #include "Compiler.h"
 #include "OS/Sleep.h"
@@ -963,8 +963,9 @@ dlgConfigurationVarioShowModal(void)
     return false;
   }
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window, Layout::landscape ?
-                  _T("IDR_XML_VARIO_L") : _T("IDR_XML_VARIO_L"));
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+                  Layout::landscape
+                  ? _T("IDR_XML_VARIO_L") : _T("IDR_XML_VARIO_L"));
   if (!wf)
     return false;
 
