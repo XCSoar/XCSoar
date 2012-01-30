@@ -109,6 +109,9 @@ public:
            UPixelScalar width, UPixelScalar height,
            const EditWindowStyle style);
 
+  void set(ContainerWindow &parent, const PixelRect rc,
+           const EditWindowStyle style);
+
   unsigned get_row_count() const {
     assert_none_locked();
 

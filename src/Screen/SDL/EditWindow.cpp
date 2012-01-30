@@ -36,6 +36,15 @@ EditWindow::set(ContainerWindow &parent, PixelScalar left, PixelScalar top,
 }
 
 void
+EditWindow::set(ContainerWindow &parent, const PixelRect rc,
+                const EditWindowStyle style)
+{
+  read_only = style.is_read_only;
+
+  Window::set(&parent, rc, style);
+}
+
+void
 EditWindow::OnPaint(Canvas &canvas)
 {
   if (is_enabled()) {
