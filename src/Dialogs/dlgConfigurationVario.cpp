@@ -141,7 +141,7 @@ static const TCHAR *const needle_gauge_types[] = {
   NULL
 };
 
-static bool changed = false;
+static bool changed = false, dirty = false;
 static WndForm *wf = NULL;
 static TabbedControl *tabbed;
 
@@ -192,21 +192,26 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
     // vario hasn't set the value in the registry yet,
     // so no sensible defaults
     return false;
-  } else {
-    // hack, fix the -1 (plug and play settings)
-    if (_tcscmp(name, _T("HasTemperature")) == 0) {
-      if (lvalue >= 255)
-        lvalue = 2;
+  }
+
+  // hack, fix the -1 (plug and play settings)
+  if (_tcscmp(name, _T("HasTemperature")) == 0) {
+    if (lvalue >= 255)
+      lvalue = 2;
+  }
+
+  if (first) {
+    // at start, set from last known registry value, this
+    // helps if variables haven't been modified.
+    Profile::Set(updatename, 2);
+
+    wp = (WndProperty*)wf->FindByName(propname);
+    if (wp) {
+      wp->GetDataField()->SetAsInteger(lvalue);
+      wp->RefreshDisplay();
     }
-    if (first) {
-      // at start, set from last known registry value, this
-      // helps if variables haven't been modified.
-      wp = (WndProperty*)wf->FindByName(propname);
-      if (wp) {
-        wp->GetDataField()->SetAsInteger(lvalue);
-        wp->RefreshDisplay();
-      }
-    }
+
+    return false;
   }
 
   if (Profile::Get(updatename, updated)) {
@@ -229,7 +234,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
           Profile::Set(updatename, 2);
           Profile::Set(fullname, newval);
 
-          changed = true;
+          changed = dirty = true;
 
           // maybe represent all as text?
           // note that this code currently won't work for longs
@@ -602,10 +607,15 @@ UpdateParameters(bool first)
 }
 
 static void
-PageSwitched()
+UpdateCaption()
 {
   wf->SetCaption(captions[tabbed->GetCurrentPage()]);
+}
 
+static void
+PageSwitched()
+{
+  UpdateCaption();
   UpdateParameters(false);
 }
 
@@ -636,7 +646,10 @@ OnSaveClicked(gcc_unused WndButton &Sender)
 {
   UpdateParameters(false);
   // make sure changes are sent to device
-  VarioWriteNMEA(_T("PDVSC,S,StoreToEeprom,2"));
+  if (dirty) {
+    dirty = false;
+    VarioWriteNMEA(_T("PDVSC,S,StoreToEeprom,2"));
+  }
 
   if (!is_simulator())
     Sleep(500);
@@ -960,7 +973,7 @@ dlgConfigurationVarioShowModal(void)
   tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(tabbed != NULL);
 
-  PageSwitched();
+  UpdateCaption();
 
   // populate enums
 
