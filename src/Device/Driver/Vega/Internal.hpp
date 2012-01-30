@@ -43,6 +43,23 @@ public:
   VegaDevice(Port &_port)
     :port(_port), qnh(AtmosphericPressure::Standard()), detected(false) {}
 
+  /**
+   * Write an integer setting to the Vega.
+   *
+   * @return true if sending the command has succeeded (it does not
+   * indicate whether the Vega has understood and processed it)
+   */
+  bool SendSetting(const char *name, int value);
+
+  /**
+   * Request an integer setting from the Vega.  The Vega will send the
+   * value, but this method will not wait for that.
+   *
+   * @return true if sending the command has succeeded (it does not
+   * indicate whether the Vega has understood and processed it)
+   */
+  bool RequestSetting(const char *name);
+
 protected:
   void VarioWriteSettings(const DerivedInfo &calculated) const;
 

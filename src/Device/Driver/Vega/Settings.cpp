@@ -31,6 +31,22 @@ Copyright_License {
 #include <windows.h>
 #endif
 
+bool
+VegaDevice::SendSetting(const char *name, int value)
+{
+  char buffer[64];
+  sprintf(buffer, "PDVSC,S,%s,%d", name, value);
+  return PortWriteNMEA(port, buffer);
+}
+
+bool
+VegaDevice::RequestSetting(const char *name)
+{
+  char buffer[64];
+  sprintf(buffer, "PDVSC,R,%s", name);
+  return PortWriteNMEA(port, buffer);
+}
+
 void
 VegaDevice::VarioWriteSettings(const DerivedInfo &calculated) const
 {
