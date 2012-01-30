@@ -136,6 +136,8 @@ public:
     mOnDataChangeNotify = data_change_callback;
   }
 
+  void SetCaptionWidth(PixelScalar caption_width);
+
   void RefreshDisplay(void);
 
   void set_enabled(bool enabled) {

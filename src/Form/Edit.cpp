@@ -167,6 +167,16 @@ WndProperty::~WndProperty(void)
 }
 
 void
+WndProperty::SetCaptionWidth(PixelScalar _caption_width)
+{
+  if (caption_width == _caption_width)
+    return;
+
+  caption_width = _caption_width;
+  UpdateLayout();
+}
+
+void
 WndProperty::SetText(const TCHAR *Value)
 {
   edit.set_text(Value);
