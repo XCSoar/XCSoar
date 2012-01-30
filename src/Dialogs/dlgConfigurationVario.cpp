@@ -190,20 +190,21 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
     // vario hasn't set the value in the registry yet,
     // so no sensible defaults
     return false;
-  } else {
-    // hack, fix the -1 (plug and play settings)
-    if (_tcscmp(name, _T("HasTemperature")) == 0) {
-      if (lvalue >= 255)
-        lvalue = 2;
-    }
-    if (first) {
-      // at start, set from last known registry value, this
-      // helps if variables haven't been modified.
-      wp = (WndProperty*)wf->FindByName(propname);
-      if (wp) {
-        wp->GetDataField()->SetAsInteger(lvalue);
-        wp->RefreshDisplay();
-      }
+  }
+
+  // hack, fix the -1 (plug and play settings)
+  if (_tcscmp(name, _T("HasTemperature")) == 0) {
+    if (lvalue >= 255)
+      lvalue = 2;
+  }
+
+  if (first) {
+    // at start, set from last known registry value, this
+    // helps if variables haven't been modified.
+    wp = (WndProperty*)wf->FindByName(propname);
+    if (wp) {
+      wp->GetDataField()->SetAsInteger(lvalue);
+      wp->RefreshDisplay();
     }
   }
 
