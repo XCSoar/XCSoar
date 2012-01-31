@@ -272,9 +272,8 @@ static bool changed = false, dirty = false;
 static WndForm *wf = NULL;
 static TabbedControl *tabbed;
 
-static bool
-VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
-                         int ext_setvalue = 0)
+static WndProperty *
+GetSettingControl(const char *name)
 {
 #ifdef _UNICODE
   TCHAR tname[64];
@@ -284,20 +283,88 @@ VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
   const char *tname = name;
 #endif
 
-  TCHAR updatename[100];
-  TCHAR fullname[100];
-  TCHAR propname[100];
+  TCHAR buffer[64] = _T("prp");
+  _tcscat(buffer, tname);
+  return (WndProperty *)wf->FindByName(buffer);
+}
+
+static bool
+GetSettingValue(const char *name, int &value_r)
+{
+#ifdef _UNICODE
+  TCHAR tname[64];
+  if (MultiByteToWideChar(CP_UTF8, 0, name, -1, tname, ARRAY_SIZE(tname)) <= 0)
+    return false;
+#else
+  const char *tname = name;
+#endif
+
+  TCHAR key[64] = _T("Vega");
+  _tcscat(key, tname);
+  return Profile::Get(key, value_r);
+}
+
+static void
+SetSettingValue(const char *name, int value)
+{
+#ifdef _UNICODE
+  TCHAR tname[64];
+  if (MultiByteToWideChar(CP_UTF8, 0, name, -1, tname, ARRAY_SIZE(tname)) <= 0)
+    return;
+#else
+  const char *tname = name;
+#endif
+
+  TCHAR key[64] = _T("Vega");
+  _tcscat(key, tname);
+  Profile::Set(key, value);
+}
+
+gcc_pure
+static unsigned
+GetSettingUpdated(const char *name)
+{
+#ifdef _UNICODE
+  TCHAR tname[64];
+  if (MultiByteToWideChar(CP_UTF8, 0, name, -1, tname, ARRAY_SIZE(tname)) <= 0)
+    return false;
+#else
+  const char *tname = name;
+#endif
+
+  TCHAR key[64] = _T("Vega");
+  _tcscat(key, tname);
+  _tcscat(key, _T("Updated"));
   unsigned updated = 0;
-  unsigned lvalue = 0;
+  Profile::Get(key, updated);
+  return updated;
+}
 
-  WndProperty* wp;
+static void
+SetSettingUpdated(const char *name, unsigned updated)
+{
+#ifdef _UNICODE
+  TCHAR tname[64];
+  if (MultiByteToWideChar(CP_UTF8, 0, name, -1, tname, ARRAY_SIZE(tname)) <= 0)
+    return;
+#else
+  const char *tname = name;
+#endif
 
-  _stprintf(updatename, _T("Vega%sUpdated"), tname);
-  _stprintf(fullname, _T("Vega%s"), tname);
-  _stprintf(propname, _T("prp%s"), tname);
+  TCHAR key[64] = _T("Vega");
+  _tcscat(key, tname);
+  _tcscat(key, _T("Updated"));
+  Profile::Set(key, updated);
+}
+
+static bool
+VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
+                         int ext_setvalue = 0)
+{
+  WndProperty *wp = GetSettingControl(name);
 
   if (first) {
-    Profile::Set(updatename, 0);
+    SetSettingUpdated(name, 0);
     // we are not ready, haven't received value from vario
     // (do request here)
     if (!device->RequestSetting(name))
@@ -308,7 +375,6 @@ VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
   }
 
   if (setvalue) {
-    wp = (WndProperty*)wf->FindByName(propname);
     if (wp) {
       wp->GetDataField()->SetAsInteger((int)ext_setvalue);
       wp->RefreshDisplay();
@@ -323,7 +389,8 @@ VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
     return true;
   }
 
-  if (!Profile::Get(fullname, lvalue)) {
+  int lvalue;
+  if (!GetSettingValue(name, lvalue)) {
     // vario hasn't set the value in the registry yet,
     // so no sensible defaults
     return false;
@@ -338,9 +405,8 @@ VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
   if (first) {
     // at start, set from last known registry value, this
     // helps if variables haven't been modified.
-    Profile::Set(updatename, 2);
+    SetSettingUpdated(name, 2);
 
-    wp = (WndProperty*)wf->FindByName(propname);
     if (wp) {
       wp->GetDataField()->SetAsInteger(lvalue);
       wp->RefreshDisplay();
@@ -349,48 +415,46 @@ VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
     return false;
   }
 
-  if (Profile::Get(updatename, updated)) {
-    if (updated == 1) {
-      // value is updated externally, so set the property and can proceed
-      // to editing values
-      Profile::Set(updatename, 2);
+  const unsigned updated = GetSettingUpdated(name);
+  if (updated == 1) {
+    // value is updated externally, so set the property and can proceed
+    // to editing values
+    SetSettingUpdated(name, 2);
 
-      wp = (WndProperty*)wf->FindByName(propname);
-      if (wp) {
-        wp->GetDataField()->SetAsInteger(lvalue);
-        wp->RefreshDisplay();
-      }
-    } else if (updated == 2) {
-      wp = (WndProperty*)wf->FindByName(propname);
-      if (wp) {
-        unsigned newval = (wp->GetDataField()->GetAsInteger());
-        if (newval != lvalue) {
-          // value has changed
-          Profile::Set(updatename, 2);
-          Profile::Set(fullname, newval);
+    if (wp) {
+      wp->GetDataField()->SetAsInteger(lvalue);
+      wp->RefreshDisplay();
+    }
+  } else if (updated == 2) {
+    if (wp) {
+      int newval = wp->GetDataField()->GetAsInteger();
+      if (newval != lvalue) {
+        // value has changed
+        SetSettingUpdated(name, 2);
+        SetSettingValue(name, newval);
 
-          changed = dirty = true;
+        changed = dirty = true;
 
-          // maybe represent all as text?
-          // note that this code currently won't work for ints
+        // maybe represent all as text?
+        // note that this code currently won't work for ints
 
-          // hack, fix the -1 (plug and play settings)
-          if (strcmp(name, "HasTemperature") == 0) {
-            if (newval == 2)
-              newval = 255;
-          }
-
-          if (!device->SendSetting(name, newval))
-            return false;
-
-          if (!is_simulator())
-            Sleep(250);
-
-          return true;
+        // hack, fix the -1 (plug and play settings)
+        if (strcmp(name, "HasTemperature") == 0) {
+          if (newval == 2)
+            newval = 255;
         }
+
+        if (!device->SendSetting(name, newval))
+          return false;
+
+        if (!is_simulator())
+          Sleep(250);
+
+        return true;
       }
     }
   }
+
   return false;
 }
 
