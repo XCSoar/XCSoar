@@ -29,6 +29,7 @@ VegaDevice::LinkTimeout()
 {
   AbstractDevice::LinkTimeout();
   detected = false;
+  settings.clear();
 }
 
 void
