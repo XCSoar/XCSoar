@@ -372,12 +372,6 @@ InitControl(const char *name)
     return;
   }
 
-  // hack, fix the -1 (plug and play settings)
-  if (strcmp(name, "HasTemperature") == 0) {
-    if (lvalue >= 255)
-      lvalue = 2;
-  }
-
   // at start, set from last known registry value, this
   // helps if variables haven't been modified.
   SetSettingUpdated(name, 2);
@@ -415,12 +409,6 @@ UpdateControl(const char *name)
     return false;
   }
 
-  // hack, fix the -1 (plug and play settings)
-  if (strcmp(name, "HasTemperature") == 0) {
-    if (lvalue >= 255)
-      lvalue = 2;
-  }
-
   const unsigned updated = GetSettingUpdated(name);
   if (updated == 1) {
     // value is updated externally, so set the property and can proceed
@@ -437,15 +425,6 @@ UpdateControl(const char *name)
       SetSettingValue(name, newval);
 
       changed = dirty = true;
-
-      // maybe represent all as text?
-      // note that this code currently won't work for ints
-
-      // hack, fix the -1 (plug and play settings)
-      if (strcmp(name, "HasTemperature") == 0) {
-        if (newval == 2)
-          newval = 255;
-      }
 
       if (!device->SendSetting(name, newval))
         return false;
@@ -895,7 +874,7 @@ FillEnums(void)
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_T("Off"));
     dfe->addEnumText(_T("On"));
-    dfe->addEnumText(_T("AUTO"));
+    dfe->AddChoice(255, _T("AUTO"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }
