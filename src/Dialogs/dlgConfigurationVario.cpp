@@ -597,11 +597,11 @@ UpdateParameters(bool first)
   VegaConfigurationUpdated(_T("VelocitySafeTerrain"), first);
   VegaConfigurationUpdated(_T("TerrainSafetyHeight"), first);
   VegaConfigurationUpdated(_T("VelocityManoeuvering"), first);
-  VegaConfigurationUpdated(_T("VelocityAirbrake"), first);
+  VegaConfigurationUpdated(_T("VelocityAirBrake"), first);
   VegaConfigurationUpdated(_T("VelocityFlap"), first);
   VegaConfigurationUpdated(_T("LedBrightness"), first);
 
-  VegaConfigurationUpdated(_T("BaudRateA"), first);
+  VegaConfigurationUpdated(_T("BaudrateA"), first);
 }
 
 static void
@@ -794,7 +794,7 @@ FillEnums(void)
 {
   WndProperty *wp;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpBaudRateA"));
+  wp = (WndProperty*)wf->FindByName(_T("prpBaudrateA"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
