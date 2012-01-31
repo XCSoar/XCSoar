@@ -34,7 +34,7 @@
         <DataField DataType="enum"/>
       </Edit>
     
-      <Edit Name="prpBaudRateA" Caption="Baud rate Vega" X="2" Width="235" Height="22" CaptionWidth="150" Help="Baud rate of serial device connected to Vega port X1.  Use this as necessary when using a third party GPS or data-logger instead of FLARM.  If FLARM is connected the baud rate will be fixed at 38400.  For OzFLARM, the value can be set to 19200.">
+      <Edit Name="prpBaudrateA" Caption="Baud rate Vega" X="2" Width="235" Height="22" CaptionWidth="150" Help="Baud rate of serial device connected to Vega port X1.  Use this as necessary when using a third party GPS or data-logger instead of FLARM.  If FLARM is connected the baud rate will be fixed at 38400.  For OzFLARM, the value can be set to 19200.">
         <DataField DataType="enum"/>
       </Edit>
     
@@ -414,7 +414,7 @@
        <DataField DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min="0" Max="2000" Step="10"/>
       </Edit>
     
-      <Edit Name="prpVelocityAirbrake" Caption="V airbrake"
+      <Edit Name="prpVelocityAirBrake" Caption="V airbrake"
  X="2" Width="235" Height="22" CaptionWidth="150">
        <DataField DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min="0" Max="2000" Step="10"/>
       </Edit>

@@ -253,11 +253,11 @@ static const char *const vega_setting_names[] = {
   "VelocitySafeTerrain",
   "TerrainSafetyHeight",
   "VelocityManoeuvering",
-  "VelocityAirbrake",
+  "VelocityAirBrake",
   "VelocityFlap",
   "LedBrightness",
 
-  "BaudRateA",
+  "BaudrateA",
 
   NULL
 };
@@ -270,7 +270,7 @@ static const char *const vega_setting_names[] = {
 static int vega_setting_values[ARRAY_SIZE(vega_setting_names) - 1];
 
 static VegaDevice *device;
-static bool changed = false, dirty = false;
+static bool changed, dirty;
 static WndForm *wf = NULL;
 static TabbedControl *tabbed;
 
@@ -781,7 +781,7 @@ FillEnums(void)
 {
   WndProperty *wp;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpBaudRateA"));
+  wp = (WndProperty*)wf->FindByName(_T("prpBaudrateA"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
@@ -954,7 +954,7 @@ bool
 dlgConfigurationVarioShowModal(Device &_device)
 {
   device = (VegaDevice *)&_device;
-  changed = false;
+  changed = dirty = false;
 
   if (devVarioFindVega() == NULL) {
     MessageBoxX(_("No communication with Vega."), _("Vega error"), MB_OK);
