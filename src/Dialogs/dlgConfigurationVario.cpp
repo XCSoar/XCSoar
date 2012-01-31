@@ -160,11 +160,6 @@ static const char *const vega_setting_names[] = {
   "CalibrationTEDynamic",
   "CalibrationTEProbe",
 
-  "AccelerometerSlopeX",
-  "AccelerometerSlopeY",
-  "AccelerometerOffsetX",
-  "AccelerometerOffsetY",
-
   //  "PDAPower",
   "ToneAveragerVarioTimeScale",
   "ToneAveragerCruiseTimeScale",
