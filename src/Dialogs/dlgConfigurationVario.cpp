@@ -305,13 +305,6 @@ GetSettingValue(const char *name, int &value_r)
 static void
 InitControl(const char *name, int &value_r)
 {
-  // we are not ready, haven't received value from vario
-  // (do request here)
-  if (!device->RequestSetting(name))
-    return;
-
-  Sleep(250);
-
   int lvalue;
   if (!GetSettingValue(name, lvalue)) {
     // vario hasn't set the value in the registry yet,
@@ -370,9 +363,68 @@ UpdateControl(const char *name, int &value_r)
     return false;
 }
 
+gcc_pure
+static bool
+SettingExists(const char *name)
+{
+  return device->GetSetting(name).first;
+}
+
+/**
+ * Wait for a setting to be received from the Vega.
+ */
+static bool
+WaitForSetting(const char *name, unsigned timeout_ms)
+{
+  for (unsigned i = 0; i < timeout_ms / 100; ++i) {
+    if (SettingExists(name))
+      return true;
+    Sleep(100);
+  }
+
+  return false;
+}
+
+static bool
+RequestAll(const char *const*names)
+{
+  assert(names != NULL);
+  assert(*names != NULL);
+
+  /* long timeout for first response */
+  unsigned timeout_ms = 3000;
+
+  /* the first response that we're still waiting for */
+  const char *const*start = names;
+
+  for (const char *const*i = names; *i != NULL; ++i) {
+    /* send up to 4 requests at a time */
+    if (i - start >= 4) {
+      /* queue is long enough: wait for one response */
+      WaitForSetting(*start, timeout_ms);
+
+      /* reduce timeout for follow-up responses */
+      timeout_ms = 1000;
+
+      ++start;
+    }
+
+    if (!device->RequestSetting(*i))
+      return false;
+  }
+
+  /* wait for the remaining responses */
+  for (const char *const*i = start; *i != NULL; ++i)
+    WaitForSetting(*i, 500);
+
+  return true;
+}
+
 static void
 InitControls(const char *const*names, int *values)
 {
+  RequestAll(names);
+
   for (; *names != NULL; ++names, ++values)
     InitControl(*names, *values);
 }
