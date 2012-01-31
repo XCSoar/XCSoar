@@ -195,10 +195,6 @@ PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
     return true;
 
   Profile::Set(regname, value);
-
-  _tcscat(regname, _T("Updated"));
-  Profile::Set(regname, 1);
-
   return true;
 }
 

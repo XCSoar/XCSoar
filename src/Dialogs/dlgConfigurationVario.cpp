@@ -262,6 +262,13 @@ static const char *const vega_setting_names[] = {
   NULL
 };
 
+/**
+ * This array contains the values that were filled into the form, and
+ * is later used to check if the user has changed anything.  Only
+ * modified values will be sent to the Vega.
+ */
+static int vega_setting_values[ARRAY_SIZE(vega_setting_names) - 1];
+
 static VegaDevice *device;
 static bool changed = false, dirty = false;
 static WndForm *wf = NULL;
@@ -316,47 +323,9 @@ SetSettingValue(const char *name, int value)
   Profile::Set(key, value);
 }
 
-gcc_pure
-static unsigned
-GetSettingUpdated(const char *name)
-{
-#ifdef _UNICODE
-  TCHAR tname[64];
-  if (MultiByteToWideChar(CP_UTF8, 0, name, -1, tname, ARRAY_SIZE(tname)) <= 0)
-    return false;
-#else
-  const char *tname = name;
-#endif
-
-  TCHAR key[64] = _T("Vega");
-  _tcscat(key, tname);
-  _tcscat(key, _T("Updated"));
-  unsigned updated = 0;
-  Profile::Get(key, updated);
-  return updated;
-}
-
 static void
-SetSettingUpdated(const char *name, unsigned updated)
+InitControl(const char *name, int &value_r)
 {
-#ifdef _UNICODE
-  TCHAR tname[64];
-  if (MultiByteToWideChar(CP_UTF8, 0, name, -1, tname, ARRAY_SIZE(tname)) <= 0)
-    return;
-#else
-  const char *tname = name;
-#endif
-
-  TCHAR key[64] = _T("Vega");
-  _tcscat(key, tname);
-  _tcscat(key, _T("Updated"));
-  Profile::Set(key, updated);
-}
-
-static void
-InitControl(const char *name)
-{
-  SetSettingUpdated(name, 0);
   // we are not ready, haven't received value from vario
   // (do request here)
   if (!device->RequestSetting(name))
@@ -374,7 +343,7 @@ InitControl(const char *name)
 
   // at start, set from last known registry value, this
   // helps if variables haven't been modified.
-  SetSettingUpdated(name, 2);
+  value_r = lvalue;
 
   WndProperty &wp = GetSettingControl(name);
   wp.GetDataField()->SetAsInteger(lvalue);
@@ -398,59 +367,50 @@ SetControl(const char *name, int value)
 }
 
 static bool
-UpdateControl(const char *name)
+UpdateControl(const char *name, int &value_r)
 {
   WndProperty &wp = GetSettingControl(name);
+  const int ui_value = wp.GetDataField()->GetAsInteger();
 
-  int lvalue;
-  if (!GetSettingValue(name, lvalue)) {
-    // vario hasn't set the value in the registry yet,
-    // so no sensible defaults
-    return false;
-  }
+  int device_value;
+  if (ui_value != value_r) {
+    /* value has been changed by the user */
+    if (!device->SendSetting(name, ui_value))
+      return false;
 
-  const unsigned updated = GetSettingUpdated(name);
-  if (updated == 1) {
-    // value is updated externally, so set the property and can proceed
-    // to editing values
-    SetSettingUpdated(name, 2);
+    if (!is_simulator())
+      Sleep(250);
 
-    wp.GetDataField()->SetAsInteger(lvalue);
+    changed = dirty = true;
+    SetSettingValue(name, ui_value);
+    value_r = ui_value;
+
+    return true;
+  } else if (GetSettingValue(name, device_value) &&
+             device_value != ui_value) {
+    /* value has been changed by the Vega */
+    value_r = device_value;
+
+    wp.GetDataField()->SetAsInteger(device_value);
     wp.RefreshDisplay();
-  } else if (updated == 2) {
-    int newval = wp.GetDataField()->GetAsInteger();
-    if (newval != lvalue) {
-      // value has changed
-      SetSettingUpdated(name, 2);
-      SetSettingValue(name, newval);
 
-      changed = dirty = true;
-
-      if (!device->SendSetting(name, newval))
-        return false;
-
-      if (!is_simulator())
-        Sleep(250);
-
-      return true;
-    }
-  }
-
-  return false;
+    return false;
+  } else
+    return false;
 }
 
 static void
-InitControls(const char *const*names)
+InitControls(const char *const*names, int *values)
 {
-  for (; *names != NULL; ++names)
-    InitControl(*names);
+  for (; *names != NULL; ++names, ++values)
+    InitControl(*names, *values);
 }
 
 static void
-UpdateControls(const char *const*names)
+UpdateControls(const char *const*names, int *values)
 {
-  for (; *names != NULL; ++names)
-    UpdateControl(*names);
+  for (; *names != NULL; ++names, ++values)
+    UpdateControl(*names, *values);
 }
 
 struct VEGA_SCHEME
@@ -674,7 +634,7 @@ SetParametersScheme(int schemetype)
 static void
 UpdateParameters()
 {
-  UpdateControls(vega_setting_names);
+  UpdateControls(vega_setting_names, vega_setting_values);
 }
 
 static void
@@ -1050,7 +1010,7 @@ dlgConfigurationVarioShowModal(Device &_device)
 
   FillEnums();
 
-  InitControls(vega_setting_names);
+  InitControls(vega_setting_names, vega_setting_values);
 
   wf->ShowModal();
 
