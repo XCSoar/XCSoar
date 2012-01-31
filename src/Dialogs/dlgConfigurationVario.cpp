@@ -310,8 +310,7 @@ InitControl(const char *name, int &value_r)
   if (!device->RequestSetting(name))
     return;
 
-  if (!is_simulator())
-    Sleep(250);
+  Sleep(250);
 
   int lvalue;
   if (!GetSettingValue(name, lvalue)) {
@@ -339,9 +338,6 @@ SetControl(const char *name, int value)
   if (!device->SendSetting(name, value))
     return false;
 
-  if (!is_simulator())
-    Sleep(250);
-
   return true;
 }
 
@@ -356,9 +352,6 @@ UpdateControl(const char *name, int &value_r)
     /* value has been changed by the user */
     if (!device->SendSetting(name, ui_value))
       return false;
-
-    if (!is_simulator())
-      Sleep(250);
 
     changed = dirty = true;
     value_r = ui_value;
@@ -657,9 +650,6 @@ OnSaveClicked(gcc_unused WndButton &Sender)
   // make sure changes are sent to device
   if (dirty && device->SendSetting("StoreToEeprom", 2))
     dirty = false;
-
-  if (!is_simulator())
-    Sleep(500);
 }
 
 static void
@@ -966,7 +956,7 @@ dlgConfigurationVarioShowModal(Device &_device)
   device = (VegaDevice *)&_device;
   changed = false;
 
-  if (!is_simulator() && devVarioFindVega() == NULL) {
+  if (devVarioFindVega() == NULL) {
     MessageBoxX(_("No communication with Vega."), _("Vega error"), MB_OK);
     return false;
   }
