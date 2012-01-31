@@ -267,20 +267,21 @@ static bool changed = false, dirty = false;
 static WndForm *wf = NULL;
 static TabbedControl *tabbed;
 
-static WndProperty *
+static WndProperty &
 GetSettingControl(const char *name)
 {
 #ifdef _UNICODE
   TCHAR tname[64];
-  if (MultiByteToWideChar(CP_UTF8, 0, name, -1, tname, ARRAY_SIZE(tname)) <= 0)
-    return false;
+  MultiByteToWideChar(CP_UTF8, 0, name, -1, tname, ARRAY_SIZE(tname));
 #else
   const char *tname = name;
 #endif
 
   TCHAR buffer[64] = _T("prp");
   _tcscat(buffer, tname);
-  return (WndProperty *)wf->FindByName(buffer);
+  WndProperty *control = (WndProperty *)wf->FindByName(buffer);
+  assert(control != NULL);
+  return *control;
 }
 
 static bool
@@ -356,7 +357,7 @@ static bool
 VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
                          int ext_setvalue = 0)
 {
-  WndProperty *wp = GetSettingControl(name);
+  WndProperty &wp = GetSettingControl(name);
 
   if (first) {
     SetSettingUpdated(name, 0);
@@ -370,10 +371,8 @@ VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
   }
 
   if (setvalue) {
-    if (wp) {
-      wp->GetDataField()->SetAsInteger((int)ext_setvalue);
-      wp->RefreshDisplay();
-    }
+    wp.GetDataField()->SetAsInteger((int)ext_setvalue);
+    wp.RefreshDisplay();
 
     if (!device->SendSetting(name, ext_setvalue))
       return false;
@@ -402,10 +401,8 @@ VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
     // helps if variables haven't been modified.
     SetSettingUpdated(name, 2);
 
-    if (wp) {
-      wp->GetDataField()->SetAsInteger(lvalue);
-      wp->RefreshDisplay();
-    }
+    wp.GetDataField()->SetAsInteger(lvalue);
+    wp.RefreshDisplay();
 
     return false;
   }
@@ -416,37 +413,33 @@ VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
     // to editing values
     SetSettingUpdated(name, 2);
 
-    if (wp) {
-      wp->GetDataField()->SetAsInteger(lvalue);
-      wp->RefreshDisplay();
-    }
+    wp.GetDataField()->SetAsInteger(lvalue);
+    wp.RefreshDisplay();
   } else if (updated == 2) {
-    if (wp) {
-      int newval = wp->GetDataField()->GetAsInteger();
-      if (newval != lvalue) {
-        // value has changed
-        SetSettingUpdated(name, 2);
-        SetSettingValue(name, newval);
+    int newval = wp.GetDataField()->GetAsInteger();
+    if (newval != lvalue) {
+      // value has changed
+      SetSettingUpdated(name, 2);
+      SetSettingValue(name, newval);
 
-        changed = dirty = true;
+      changed = dirty = true;
 
-        // maybe represent all as text?
-        // note that this code currently won't work for ints
+      // maybe represent all as text?
+      // note that this code currently won't work for ints
 
-        // hack, fix the -1 (plug and play settings)
-        if (strcmp(name, "HasTemperature") == 0) {
-          if (newval == 2)
-            newval = 255;
-        }
-
-        if (!device->SendSetting(name, newval))
-          return false;
-
-        if (!is_simulator())
-          Sleep(250);
-
-        return true;
+      // hack, fix the -1 (plug and play settings)
+      if (strcmp(name, "HasTemperature") == 0) {
+        if (newval == 2)
+          newval = 255;
       }
+
+      if (!device->SendSetting(name, newval))
+        return false;
+
+      if (!is_simulator())
+        Sleep(250);
+
+      return true;
     }
   }
 
