@@ -353,35 +353,60 @@ SetSettingUpdated(const char *name, unsigned updated)
   Profile::Set(key, updated);
 }
 
+static void
+InitControl(const char *name)
+{
+  SetSettingUpdated(name, 0);
+  // we are not ready, haven't received value from vario
+  // (do request here)
+  if (!device->RequestSetting(name))
+    return;
+
+  if (!is_simulator())
+    Sleep(250);
+
+  int lvalue;
+  if (!GetSettingValue(name, lvalue)) {
+    // vario hasn't set the value in the registry yet,
+    // so no sensible defaults
+    return;
+  }
+
+  // hack, fix the -1 (plug and play settings)
+  if (strcmp(name, "HasTemperature") == 0) {
+    if (lvalue >= 255)
+      lvalue = 2;
+  }
+
+  // at start, set from last known registry value, this
+  // helps if variables haven't been modified.
+  SetSettingUpdated(name, 2);
+
+  WndProperty &wp = GetSettingControl(name);
+  wp.GetDataField()->SetAsInteger(lvalue);
+  wp.RefreshDisplay();
+}
+
 static bool
-VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
-                         int ext_setvalue = 0)
+SetControl(const char *name, int value)
 {
   WndProperty &wp = GetSettingControl(name);
+  wp.GetDataField()->SetAsInteger(value);
+  wp.RefreshDisplay();
 
-  if (first) {
-    SetSettingUpdated(name, 0);
-    // we are not ready, haven't received value from vario
-    // (do request here)
-    if (!device->RequestSetting(name))
-      return false;
+  if (!device->SendSetting(name, value))
+    return false;
 
-    if (!is_simulator())
-      Sleep(250);
-  }
+  if (!is_simulator())
+    Sleep(250);
 
-  if (setvalue) {
-    wp.GetDataField()->SetAsInteger((int)ext_setvalue);
-    wp.RefreshDisplay();
+  return true;
+}
 
-    if (!device->SendSetting(name, ext_setvalue))
-      return false;
-
-    if (!is_simulator())
-      Sleep(250);
-
-    return true;
-  }
+static bool
+UpdateControl(const char *name)
+{
+  WndProperty &wp = GetSettingControl(name);
 
   int lvalue;
   if (!GetSettingValue(name, lvalue)) {
@@ -394,17 +419,6 @@ VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
   if (strcmp(name, "HasTemperature") == 0) {
     if (lvalue >= 255)
       lvalue = 2;
-  }
-
-  if (first) {
-    // at start, set from last known registry value, this
-    // helps if variables haven't been modified.
-    SetSettingUpdated(name, 2);
-
-    wp.GetDataField()->SetAsInteger(lvalue);
-    wp.RefreshDisplay();
-
-    return false;
   }
 
   const unsigned updated = GetSettingUpdated(name);
@@ -447,10 +461,17 @@ VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
 }
 
 static void
-UpdateControls(const char *const*names, bool first)
+InitControls(const char *const*names)
 {
   for (; *names != NULL; ++names)
-    VegaConfigurationUpdated(*names, first);
+    InitControl(*names);
+}
+
+static void
+UpdateControls(const char *const*names)
+{
+  for (; *names != NULL; ++names)
+    UpdateControl(*names);
 }
 
 struct VEGA_SCHEME
@@ -596,86 +617,85 @@ SetParametersScheme(int schemetype)
                  MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
+  SetControl("ToneClimbComparisonType",
+             VegaSchemes[schemetype].ToneClimbComparisonType);
+  SetControl("ToneCruiseLiftDetectionType",
+             VegaSchemes[schemetype].ToneLiftComparisonType);
 
-  VegaConfigurationUpdated("ToneClimbComparisonType", false, true,
-                           VegaSchemes[schemetype].ToneClimbComparisonType);
-  VegaConfigurationUpdated("ToneCruiseLiftDetectionType", false, true,
-                           VegaSchemes[schemetype].ToneLiftComparisonType);
+  SetControl("ToneCruiseFasterBeepType",
+             VegaSchemes[schemetype].ToneCruiseFasterBeepType);
+  SetControl("ToneCruiseFasterPitchScheme",
+             VegaSchemes[schemetype].ToneCruiseFasterPitchScheme);
+  SetControl("ToneCruiseFasterPitchScale",
+             VegaSchemes[schemetype].ToneCruiseFasterPitchScale);
+  SetControl("ToneCruiseFasterPeriodScheme",
+             VegaSchemes[schemetype].ToneCruiseFasterPeriodScheme);
+  SetControl("ToneCruiseFasterPeriodScale",
+             VegaSchemes[schemetype].ToneCruiseFasterPeriodScale);
 
-  VegaConfigurationUpdated("ToneCruiseFasterBeepType", false, true,
-                           VegaSchemes[schemetype].ToneCruiseFasterBeepType);
-  VegaConfigurationUpdated("ToneCruiseFasterPitchScheme", false, true,
-                           VegaSchemes[schemetype].ToneCruiseFasterPitchScheme);
-  VegaConfigurationUpdated("ToneCruiseFasterPitchScale", false, true,
-                           VegaSchemes[schemetype].ToneCruiseFasterPitchScale);
-  VegaConfigurationUpdated("ToneCruiseFasterPeriodScheme", false, true,
-                           VegaSchemes[schemetype].ToneCruiseFasterPeriodScheme);
-  VegaConfigurationUpdated("ToneCruiseFasterPeriodScale", false, true,
-                           VegaSchemes[schemetype].ToneCruiseFasterPeriodScale);
+  SetControl("ToneCruiseSlowerBeepType",
+             VegaSchemes[schemetype].ToneCruiseSlowerBeepType);
+  SetControl("ToneCruiseSlowerPitchScheme",
+             VegaSchemes[schemetype].ToneCruiseSlowerPitchScheme);
+  SetControl("ToneCruiseSlowerPitchScale",
+             VegaSchemes[schemetype].ToneCruiseSlowerPitchScale);
+  SetControl("ToneCruiseSlowerPeriodScheme",
+             VegaSchemes[schemetype].ToneCruiseSlowerPeriodScheme);
+  SetControl("ToneCruiseSlowerPeriodScale",
+             VegaSchemes[schemetype].ToneCruiseSlowerPeriodScale);
 
-  VegaConfigurationUpdated("ToneCruiseSlowerBeepType", false, true,
-                           VegaSchemes[schemetype].ToneCruiseSlowerBeepType);
-  VegaConfigurationUpdated("ToneCruiseSlowerPitchScheme", false, true,
-                           VegaSchemes[schemetype].ToneCruiseSlowerPitchScheme);
-  VegaConfigurationUpdated("ToneCruiseSlowerPitchScale", false, true,
-                           VegaSchemes[schemetype].ToneCruiseSlowerPitchScale);
-  VegaConfigurationUpdated("ToneCruiseSlowerPeriodScheme", false, true,
-                           VegaSchemes[schemetype].ToneCruiseSlowerPeriodScheme);
-  VegaConfigurationUpdated("ToneCruiseSlowerPeriodScale", false, true,
-                           VegaSchemes[schemetype].ToneCruiseSlowerPeriodScale);
+  SetControl("ToneCruiseLiftBeepType",
+             VegaSchemes[schemetype].ToneCruiseLiftBeepType);
+  SetControl("ToneCruiseLiftPitchScheme",
+             VegaSchemes[schemetype].ToneCruiseLiftPitchScheme);
+  SetControl("ToneCruiseLiftPitchScale",
+             VegaSchemes[schemetype].ToneCruiseLiftPitchScale);
+  SetControl("ToneCruiseLiftPeriodScheme",
+             VegaSchemes[schemetype].ToneCruiseLiftPeriodScheme);
+  SetControl("ToneCruiseLiftPeriodScale",
+             VegaSchemes[schemetype].ToneCruiseLiftPeriodScale);
 
-  VegaConfigurationUpdated("ToneCruiseLiftBeepType", false, true,
-                           VegaSchemes[schemetype].ToneCruiseLiftBeepType);
-  VegaConfigurationUpdated("ToneCruiseLiftPitchScheme", false, true,
-                           VegaSchemes[schemetype].ToneCruiseLiftPitchScheme);
-  VegaConfigurationUpdated("ToneCruiseLiftPitchScale", false, true,
-                           VegaSchemes[schemetype].ToneCruiseLiftPitchScale);
-  VegaConfigurationUpdated("ToneCruiseLiftPeriodScheme", false, true,
-                           VegaSchemes[schemetype].ToneCruiseLiftPeriodScheme);
-  VegaConfigurationUpdated("ToneCruiseLiftPeriodScale", false, true,
-                           VegaSchemes[schemetype].ToneCruiseLiftPeriodScale);
+  SetControl("ToneCirclingClimbingHiBeepType",
+             VegaSchemes[schemetype].ToneCirclingClimbingHiBeepType);
+  SetControl("ToneCirclingClimbingHiPitchScheme",
+             VegaSchemes[schemetype].ToneCirclingClimbingHiPitchScheme);
+  SetControl("ToneCirclingClimbingHiPitchScale",
+             VegaSchemes[schemetype].ToneCirclingClimbingHiPitchScale);
+  SetControl("ToneCirclingClimbingHiPeriodScheme",
+             VegaSchemes[schemetype].ToneCirclingClimbingHiPeriodScheme);
+  SetControl("ToneCirclingClimbingHiPeriodScale",
+             VegaSchemes[schemetype].ToneCirclingClimbingHiPeriodScale);
 
-  VegaConfigurationUpdated("ToneCirclingClimbingHiBeepType", false, true,
-                           VegaSchemes[schemetype].ToneCirclingClimbingHiBeepType);
-  VegaConfigurationUpdated("ToneCirclingClimbingHiPitchScheme", false, true,
-                           VegaSchemes[schemetype].ToneCirclingClimbingHiPitchScheme);
-  VegaConfigurationUpdated("ToneCirclingClimbingHiPitchScale", false, true,
-                           VegaSchemes[schemetype].ToneCirclingClimbingHiPitchScale);
-  VegaConfigurationUpdated("ToneCirclingClimbingHiPeriodScheme", false, true,
-                           VegaSchemes[schemetype].ToneCirclingClimbingHiPeriodScheme);
-  VegaConfigurationUpdated("ToneCirclingClimbingHiPeriodScale", false, true,
-                           VegaSchemes[schemetype].ToneCirclingClimbingHiPeriodScale);
+  SetControl("ToneCirclingClimbingLowBeepType",
+             VegaSchemes[schemetype].ToneCirclingClimbingLowBeepType);
+  SetControl("ToneCirclingClimbingLowPitchScheme",
+             VegaSchemes[schemetype].ToneCirclingClimbingLowPitchScheme);
+  SetControl("ToneCirclingClimbingLowPitchScale",
+             VegaSchemes[schemetype].ToneCirclingClimbingLowPitchScale);
+  SetControl("ToneCirclingClimbingLowPeriodScheme",
+             VegaSchemes[schemetype].ToneCirclingClimbingLowPeriodScheme);
+  SetControl("ToneCirclingClimbingLowPeriodScale",
+             VegaSchemes[schemetype].ToneCirclingClimbingLowPeriodScale);
 
-  VegaConfigurationUpdated("ToneCirclingClimbingLowBeepType", false, true,
-                           VegaSchemes[schemetype].ToneCirclingClimbingLowBeepType);
-  VegaConfigurationUpdated("ToneCirclingClimbingLowPitchScheme", false, true,
-                           VegaSchemes[schemetype].ToneCirclingClimbingLowPitchScheme);
-  VegaConfigurationUpdated("ToneCirclingClimbingLowPitchScale", false, true,
-                           VegaSchemes[schemetype].ToneCirclingClimbingLowPitchScale);
-  VegaConfigurationUpdated("ToneCirclingClimbingLowPeriodScheme", false, true,
-                           VegaSchemes[schemetype].ToneCirclingClimbingLowPeriodScheme);
-  VegaConfigurationUpdated("ToneCirclingClimbingLowPeriodScale", false, true,
-                           VegaSchemes[schemetype].ToneCirclingClimbingLowPeriodScale);
-
-  VegaConfigurationUpdated("ToneCirclingDescendingBeepType", false, true,
-                           VegaSchemes[schemetype].ToneCirclingDescendingBeepType);
-  VegaConfigurationUpdated("ToneCirclingDescendingPitchScheme", false, true,
-                           VegaSchemes[schemetype].ToneCirclingDescendingPitchScheme);
-  VegaConfigurationUpdated("ToneCirclingDescendingPitchScale", false, true,
-                           VegaSchemes[schemetype].ToneCirclingDescendingPitchScale);
-  VegaConfigurationUpdated("ToneCirclingDescendingPeriodScheme", false, true,
-                           VegaSchemes[schemetype].ToneCirclingDescendingPeriodScheme);
-  VegaConfigurationUpdated("ToneCirclingDescendingPeriodScale", false, true,
-                           VegaSchemes[schemetype].ToneCirclingDescendingPeriodScale);
+  SetControl("ToneCirclingDescendingBeepType",
+             VegaSchemes[schemetype].ToneCirclingDescendingBeepType);
+  SetControl("ToneCirclingDescendingPitchScheme",
+             VegaSchemes[schemetype].ToneCirclingDescendingPitchScheme);
+  SetControl("ToneCirclingDescendingPitchScale",
+             VegaSchemes[schemetype].ToneCirclingDescendingPitchScale);
+  SetControl("ToneCirclingDescendingPeriodScheme",
+             VegaSchemes[schemetype].ToneCirclingDescendingPeriodScheme);
+  SetControl("ToneCirclingDescendingPeriodScale",
+             VegaSchemes[schemetype].ToneCirclingDescendingPeriodScale);
 
   MessageBoxX(_("Audio scheme updated."),
               _("Vega Audio"), MB_OK);
 }
 
 static void
-UpdateParameters(bool first)
+UpdateParameters()
 {
-  UpdateControls(vega_setting_names, first);
+  UpdateControls(vega_setting_names);
 }
 
 static void
@@ -688,7 +708,7 @@ static void
 PageSwitched()
 {
   UpdateCaption();
-  UpdateParameters(false);
+  UpdateParameters();
 }
 
 static void
@@ -708,7 +728,7 @@ OnPrevClicked(gcc_unused WndButton &Sender)
 static void
 OnCloseClicked(gcc_unused WndButton &button)
 {
-  UpdateParameters(false);
+  UpdateParameters();
   // make sure changes are sent to device
   wf->SetModalResult(mrOK);
 }
@@ -716,7 +736,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 static void
 OnSaveClicked(gcc_unused WndButton &Sender)
 {
-  UpdateParameters(false);
+  UpdateParameters();
   // make sure changes are sent to device
   if (dirty && device->SendSetting("StoreToEeprom", 2))
     dirty = false;
@@ -729,7 +749,7 @@ static void
 OnDemoClicked(gcc_unused WndButton &Sender)
 {
   // retrieve changes from form
-  UpdateParameters(false);
+  UpdateParameters();
   dlgVegaDemoShowModal();
 }
 
@@ -1051,11 +1071,11 @@ dlgConfigurationVarioShowModal(Device &_device)
 
   FillEnums();
 
-  UpdateParameters(true);
+  InitControls(vega_setting_names);
 
   wf->ShowModal();
 
-  UpdateParameters(false);
+  UpdateParameters();
 
   delete wf;
   wf = NULL;
