@@ -676,6 +676,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunAirspaceWarningDialog \
 	TestNotify \
 	DebugDisplay \
+	RunVegaSettings \
 	RunFlarmUtils \
 	RunTCPListener \
 	TaskInfo \
@@ -1176,6 +1177,34 @@ RUN_DECLARE_SOURCES += \
 endif
 RUN_DECLARE_DEPENDS = DRIVER ENGINE MATH UTIL IO
 $(eval $(call link-program,RunDeclare,RUN_DECLARE))
+
+RUN_VEGA_SETTINGS_SOURCES = \
+	$(VEGA_SOURCES) \
+	$(SRC)/Device/Port/Port.cpp \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Internal.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(TEST_SRC_DIR)/FakeVega.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/RunVegaSettings.cpp
+ifeq ($(HAVE_POSIX),y)
+RUN_VEGA_SETTINGS_SOURCES += \
+	$(SRC)/Device/Port/TTYPort.cpp
+else
+RUN_VEGA_SETTINGS_SOURCES += \
+	$(SRC)/Device/Port/SerialPort.cpp
+endif
+ifeq ($(HAVE_CE),y)
+RUN_VEGA_SETTINGS_SOURCES += \
+	$(SRC)/Device/Port/Widcomm.cpp
+endif
+RUN_VEGA_SETTINGS_DEPENDS = MATH UTIL IO
+$(eval $(call link-program,RunVegaSettings,RUN_VEGA_SETTINGS))
 
 RUN_FLARM_UTILS_SOURCES = \
 	$(SRC)/Device/Port/Port.cpp \
