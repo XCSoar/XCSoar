@@ -145,6 +145,128 @@ static const TCHAR *const needle_gauge_types[] = {
   NULL
 };
 
+static const char *const vega_setting_names[] = {
+  "HasPressureTE",
+  "HasPressurePitot",
+  "HasPressureStatic",
+  "HasPressureStall",
+  "HasAccelerometer",
+  "HasTemperature",
+  "FlarmConnected",
+
+  "TotalEnergyMixingRatio",
+  "CalibrationAirSpeed",
+  "CalibrationTEStatic",
+  "CalibrationTEDynamic",
+  "CalibrationTEProbe",
+
+  "AccelerometerSlopeX",
+  "AccelerometerSlopeY",
+  "AccelerometerOffsetX",
+  "AccelerometerOffsetY",
+
+  //  "PDAPower",
+  "ToneAveragerVarioTimeScale",
+  "ToneAveragerCruiseTimeScale",
+  "ToneMeanVolumeCircling",
+  "ToneMeanVolumeCruise",
+  "ToneBaseFrequencyOffset",
+  "TonePitchScale",
+
+  "ToneDeadbandCirclingType",
+  "ToneDeadbandCirclingHigh",
+  "ToneDeadbandCirclingLow",
+  "ToneDeadbandCruiseType",
+  "ToneDeadbandCruiseHigh",
+  "ToneDeadbandCruiseLow",
+
+  "ToneClimbComparisonType",
+  "ToneCruiseLiftDetectionType",
+
+  "ToneCruiseFasterBeepType",
+  "ToneCruiseFasterPitchScheme",
+  "ToneCruiseFasterPitchScale",
+  "ToneCruiseFasterPeriodScheme",
+  "ToneCruiseFasterPeriodScale",
+
+  "ToneCruiseSlowerBeepType",
+  "ToneCruiseSlowerPitchScheme",
+  "ToneCruiseSlowerPitchScale",
+  "ToneCruiseSlowerPeriodScheme",
+  "ToneCruiseSlowerPeriodScale",
+
+  "ToneCruiseLiftBeepType",
+  "ToneCruiseLiftPitchScheme",
+  "ToneCruiseLiftPitchScale",
+  "ToneCruiseLiftPeriodScheme",
+  "ToneCruiseLiftPeriodScale",
+
+  "ToneCirclingClimbingHiBeepType",
+  "ToneCirclingClimbingHiPitchScheme",
+  "ToneCirclingClimbingHiPitchScale",
+  "ToneCirclingClimbingHiPeriodScheme",
+  "ToneCirclingClimbingHiPeriodScale",
+
+  "ToneCirclingClimbingLowBeepType",
+  "ToneCirclingClimbingLowPitchScheme",
+  "ToneCirclingClimbingLowPitchScale",
+  "ToneCirclingClimbingLowPeriodScheme",
+  "ToneCirclingClimbingLowPeriodScale",
+
+  "ToneCirclingDescendingBeepType",
+  "ToneCirclingDescendingPitchScheme",
+  "ToneCirclingDescendingPitchScale",
+  "ToneCirclingDescendingPeriodScheme",
+  "ToneCirclingDescendingPeriodScale",
+
+  "VarioTimeConstantCircling",
+  "VarioTimeConstantCruise",
+
+  "UTCOffset",
+  "IGCLoging",
+  "IGCLoggerInterval",
+  "MuteVarioOnPlay",
+  "MuteVarioOnCom",
+  "VarioRelativeMuteVol",
+  "VoiceRelativeMuteVol",
+  "MuteComSpkThreshold",
+  "MuteComPhnThreshold",
+  "MinUrgentVolume",
+  "FlarmMaxObjectsReported",
+  "FlarmMaxObjectsReportedOnCircling",
+  "FlarmUserInterface",
+  "KeepOnStraightFlightMode",
+  "DontReportTraficModeChanges",
+  "DontReportGliderType",
+  "FlarmPrivacyFlag",
+  "FlarmAircraftType",
+
+  "FlarmInfoRepeatTime",
+  "FlarmCautionRepeatTime",
+  "FlarmWarningRepeatTime",
+  "GearOnDelay",
+  "GearOffDelay",
+  "GearRepeatTime",
+  "PlyMaxComDelay",
+  "BatLowDelay",
+  "BatEmptyDelay",
+  "BatRepeatTime",
+
+  "NeedleGaugeType",
+
+  "VelocityNeverExceed",
+  "VelocitySafeTerrain",
+  "TerrainSafetyHeight",
+  "VelocityManoeuvering",
+  "VelocityAirbrake",
+  "VelocityFlap",
+  "LedBrightness",
+
+  "BaudRateA",
+
+  NULL
+};
+
 static VegaDevice *device;
 static bool changed = false, dirty = false;
 static WndForm *wf = NULL;
@@ -270,6 +392,13 @@ VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
     }
   }
   return false;
+}
+
+static void
+UpdateControls(const char *const*names, bool first)
+{
+  for (; *names != NULL; ++names)
+    VegaConfigurationUpdated(*names, first);
 }
 
 struct VEGA_SCHEME
@@ -492,131 +621,9 @@ SetParametersScheme(int schemetype)
 }
 
 static void
-UpdateParametersScheme(bool first)
-{
-  VegaConfigurationUpdated("ToneClimbComparisonType", first);
-  VegaConfigurationUpdated("ToneCruiseLiftDetectionType", first);
-
-  VegaConfigurationUpdated("ToneCruiseFasterBeepType", first);
-  VegaConfigurationUpdated("ToneCruiseFasterPitchScheme", first);
-  VegaConfigurationUpdated("ToneCruiseFasterPitchScale", first);
-  VegaConfigurationUpdated("ToneCruiseFasterPeriodScheme", first);
-  VegaConfigurationUpdated("ToneCruiseFasterPeriodScale", first);
-
-  VegaConfigurationUpdated("ToneCruiseSlowerBeepType", first);
-  VegaConfigurationUpdated("ToneCruiseSlowerPitchScheme", first);
-  VegaConfigurationUpdated("ToneCruiseSlowerPitchScale", first);
-  VegaConfigurationUpdated("ToneCruiseSlowerPeriodScheme", first);
-  VegaConfigurationUpdated("ToneCruiseSlowerPeriodScale", first);
-
-  VegaConfigurationUpdated("ToneCruiseLiftBeepType", first);
-  VegaConfigurationUpdated("ToneCruiseLiftPitchScheme", first);
-  VegaConfigurationUpdated("ToneCruiseLiftPitchScale", first);
-  VegaConfigurationUpdated("ToneCruiseLiftPeriodScheme", first);
-  VegaConfigurationUpdated("ToneCruiseLiftPeriodScale", first);
-
-  VegaConfigurationUpdated("ToneCirclingClimbingHiBeepType", first);
-  VegaConfigurationUpdated("ToneCirclingClimbingHiPitchScheme", first);
-  VegaConfigurationUpdated("ToneCirclingClimbingHiPitchScale", first);
-  VegaConfigurationUpdated("ToneCirclingClimbingHiPeriodScheme", first);
-  VegaConfigurationUpdated("ToneCirclingClimbingHiPeriodScale", first);
-
-  VegaConfigurationUpdated("ToneCirclingClimbingLowBeepType", first);
-  VegaConfigurationUpdated("ToneCirclingClimbingLowPitchScheme", first);
-  VegaConfigurationUpdated("ToneCirclingClimbingLowPitchScale", first);
-  VegaConfigurationUpdated("ToneCirclingClimbingLowPeriodScheme", first);
-  VegaConfigurationUpdated("ToneCirclingClimbingLowPeriodScale", first);
-
-  VegaConfigurationUpdated("ToneCirclingDescendingBeepType", first);
-  VegaConfigurationUpdated("ToneCirclingDescendingPitchScheme", first);
-  VegaConfigurationUpdated("ToneCirclingDescendingPitchScale", first);
-  VegaConfigurationUpdated("ToneCirclingDescendingPeriodScheme", first);
-  VegaConfigurationUpdated("ToneCirclingDescendingPeriodScale", first);
-}
-
-static void
 UpdateParameters(bool first)
 {
-  VegaConfigurationUpdated("HasPressureTE", first);
-  VegaConfigurationUpdated("HasPressurePitot", first);
-  VegaConfigurationUpdated("HasPressureStatic", first);
-  VegaConfigurationUpdated("HasPressureStall", first);
-  VegaConfigurationUpdated("HasAccelerometer", first);
-  VegaConfigurationUpdated("HasTemperature", first);
-  VegaConfigurationUpdated("FlarmConnected", first);
-
-  VegaConfigurationUpdated("TotalEnergyMixingRatio", first);
-  VegaConfigurationUpdated("CalibrationAirSpeed", first);
-  VegaConfigurationUpdated("CalibrationTEStatic", first);
-  VegaConfigurationUpdated("CalibrationTEDynamic", first);
-  VegaConfigurationUpdated("CalibrationTEProbe", first);
-
-  VegaConfigurationUpdated("AccelerometerSlopeX", first);
-  VegaConfigurationUpdated("AccelerometerSlopeY", first);
-  VegaConfigurationUpdated("AccelerometerOffsetX", first);
-  VegaConfigurationUpdated("AccelerometerOffsetY", first);
-
-  //  VegaConfigurationUpdated("PDAPower", first);
-  VegaConfigurationUpdated("ToneAveragerVarioTimeScale", first);
-  VegaConfigurationUpdated("ToneAveragerCruiseTimeScale", first);
-  VegaConfigurationUpdated("ToneMeanVolumeCircling", first);
-  VegaConfigurationUpdated("ToneMeanVolumeCruise", first);
-  VegaConfigurationUpdated("ToneBaseFrequencyOffset", first);
-  VegaConfigurationUpdated("TonePitchScale", first);
-
-  VegaConfigurationUpdated("ToneDeadbandCirclingType", first);
-  VegaConfigurationUpdated("ToneDeadbandCirclingHigh", first);
-  VegaConfigurationUpdated("ToneDeadbandCirclingLow", first);
-  VegaConfigurationUpdated("ToneDeadbandCruiseType", first);
-  VegaConfigurationUpdated("ToneDeadbandCruiseHigh", first);
-  VegaConfigurationUpdated("ToneDeadbandCruiseLow", first);
-
-  UpdateParametersScheme(first);
-
-  VegaConfigurationUpdated("VarioTimeConstantCircling", first);
-  VegaConfigurationUpdated("VarioTimeConstantCruise", first);
-
-  VegaConfigurationUpdated("UTCOffset", first);
-  VegaConfigurationUpdated("IGCLoging", first);
-  VegaConfigurationUpdated("IGCLoggerInterval", first);
-  VegaConfigurationUpdated("MuteVarioOnPlay", first);
-  VegaConfigurationUpdated("MuteVarioOnCom", first);
-  VegaConfigurationUpdated("VarioRelativeMuteVol", first);
-  VegaConfigurationUpdated("VoiceRelativeMuteVol", first);
-  VegaConfigurationUpdated("MuteComSpkThreshold", first);
-  VegaConfigurationUpdated("MuteComPhnThreshold", first);
-  VegaConfigurationUpdated("MinUrgentVolume", first);
-  VegaConfigurationUpdated("FlarmMaxObjectsReported", first);
-  VegaConfigurationUpdated("FlarmMaxObjectsReportedOnCircling", first);
-  VegaConfigurationUpdated("FlarmUserInterface", first);
-  VegaConfigurationUpdated("KeepOnStraightFlightMode", first);
-  VegaConfigurationUpdated("DontReportTraficModeChanges", first);
-  VegaConfigurationUpdated("DontReportGliderType", first);
-  VegaConfigurationUpdated("FlarmPrivacyFlag", first);
-  VegaConfigurationUpdated("FlarmAircraftType", first);
-
-  VegaConfigurationUpdated("FlarmInfoRepeatTime", first);
-  VegaConfigurationUpdated("FlarmCautionRepeatTime", first);
-  VegaConfigurationUpdated("FlarmWarningRepeatTime", first);
-  VegaConfigurationUpdated("GearOnDelay", first);
-  VegaConfigurationUpdated("GearOffDelay", first);
-  VegaConfigurationUpdated("GearRepeatTime", first);
-  VegaConfigurationUpdated("PlyMaxComDelay", first);
-  VegaConfigurationUpdated("BatLowDelay", first);
-  VegaConfigurationUpdated("BatEmptyDelay", first);
-  VegaConfigurationUpdated("BatRepeatTime", first);
-
-  VegaConfigurationUpdated("NeedleGaugeType", first);
-
-  VegaConfigurationUpdated("VelocityNeverExceed", first);
-  VegaConfigurationUpdated("VelocitySafeTerrain", first);
-  VegaConfigurationUpdated("TerrainSafetyHeight", first);
-  VegaConfigurationUpdated("VelocityManoeuvering", first);
-  VegaConfigurationUpdated("VelocityAirbrake", first);
-  VegaConfigurationUpdated("VelocityFlap", first);
-  VegaConfigurationUpdated("LedBrightness", first);
-
-  VegaConfigurationUpdated("BaudRateA", first);
+  UpdateControls(vega_setting_names, first);
 }
 
 static void
