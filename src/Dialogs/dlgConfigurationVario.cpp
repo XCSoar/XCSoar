@@ -274,7 +274,7 @@ static TabbedControl *tabbed;
 
 static bool
 VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
-                         long ext_setvalue = 0)
+                         int ext_setvalue = 0)
 {
 #ifdef _UNICODE
   TCHAR tname[64];
@@ -372,7 +372,7 @@ VegaConfigurationUpdated(const char *name, bool first, bool setvalue = false,
           changed = dirty = true;
 
           // maybe represent all as text?
-          // note that this code currently won't work for longs
+          // note that this code currently won't work for ints
 
           // hack, fix the -1 (plug and play settings)
           if (strcmp(name, "HasTemperature") == 0) {
@@ -403,44 +403,44 @@ UpdateControls(const char *const*names, bool first)
 
 struct VEGA_SCHEME
 {
-  long ToneClimbComparisonType;
-  long ToneLiftComparisonType;
+  int ToneClimbComparisonType;
+  int ToneLiftComparisonType;
 
-  long ToneCruiseFasterBeepType;
-  long ToneCruiseFasterPitchScheme;
-  long ToneCruiseFasterPitchScale;
-  long ToneCruiseFasterPeriodScheme;
-  long ToneCruiseFasterPeriodScale;
+  int ToneCruiseFasterBeepType;
+  int ToneCruiseFasterPitchScheme;
+  int ToneCruiseFasterPitchScale;
+  int ToneCruiseFasterPeriodScheme;
+  int ToneCruiseFasterPeriodScale;
 
-  long ToneCruiseSlowerBeepType;
-  long ToneCruiseSlowerPitchScheme;
-  long ToneCruiseSlowerPitchScale;
-  long ToneCruiseSlowerPeriodScheme;
-  long ToneCruiseSlowerPeriodScale;
+  int ToneCruiseSlowerBeepType;
+  int ToneCruiseSlowerPitchScheme;
+  int ToneCruiseSlowerPitchScale;
+  int ToneCruiseSlowerPeriodScheme;
+  int ToneCruiseSlowerPeriodScale;
 
-  long ToneCruiseLiftBeepType;
-  long ToneCruiseLiftPitchScheme;
-  long ToneCruiseLiftPitchScale;
-  long ToneCruiseLiftPeriodScheme;
-  long ToneCruiseLiftPeriodScale;
+  int ToneCruiseLiftBeepType;
+  int ToneCruiseLiftPitchScheme;
+  int ToneCruiseLiftPitchScale;
+  int ToneCruiseLiftPeriodScheme;
+  int ToneCruiseLiftPeriodScale;
 
-  long ToneCirclingClimbingHiBeepType;
-  long ToneCirclingClimbingHiPitchScheme;
-  long ToneCirclingClimbingHiPitchScale;
-  long ToneCirclingClimbingHiPeriodScheme;
-  long ToneCirclingClimbingHiPeriodScale;
+  int ToneCirclingClimbingHiBeepType;
+  int ToneCirclingClimbingHiPitchScheme;
+  int ToneCirclingClimbingHiPitchScale;
+  int ToneCirclingClimbingHiPeriodScheme;
+  int ToneCirclingClimbingHiPeriodScale;
 
-  long ToneCirclingClimbingLowBeepType;
-  long ToneCirclingClimbingLowPitchScheme;
-  long ToneCirclingClimbingLowPitchScale;
-  long ToneCirclingClimbingLowPeriodScheme;
-  long ToneCirclingClimbingLowPeriodScale;
+  int ToneCirclingClimbingLowBeepType;
+  int ToneCirclingClimbingLowPitchScheme;
+  int ToneCirclingClimbingLowPitchScale;
+  int ToneCirclingClimbingLowPeriodScheme;
+  int ToneCirclingClimbingLowPeriodScale;
 
-  long ToneCirclingDescendingBeepType;
-  long ToneCirclingDescendingPitchScheme;
-  long ToneCirclingDescendingPitchScale;
-  long ToneCirclingDescendingPeriodScheme;
-  long ToneCirclingDescendingPeriodScale;
+  int ToneCirclingDescendingBeepType;
+  int ToneCirclingDescendingPitchScheme;
+  int ToneCirclingDescendingPitchScale;
+  int ToneCirclingDescendingPeriodScheme;
+  int ToneCirclingDescendingPeriodScale;
 
 };
 
