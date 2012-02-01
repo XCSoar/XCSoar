@@ -409,7 +409,7 @@ RequestAll(const char *const*names)
       ++start;
     }
 
-    if (!device->RequestSetting(*i))
+    if (!SettingExists(*i) && !device->RequestSetting(*i))
       return false;
   }
 
