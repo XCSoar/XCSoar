@@ -76,7 +76,7 @@ public:
     return pager.GetCurrentIndex();
   }
 
-  const Widget *GetCurrentWidget() const {
+  const Widget &GetCurrentWidget() const {
     return pager.GetCurrentWidget();
   }
 

@@ -82,10 +82,10 @@ public:
     return current;
   }
 
-  const Widget *GetCurrentWidget() const {
+  const Widget &GetCurrentWidget() const {
     assert(!children.empty());
 
-    return children[current].widget;
+    return *children[current].widget;
   }
 
   /**
