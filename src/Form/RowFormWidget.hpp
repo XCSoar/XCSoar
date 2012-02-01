@@ -289,6 +289,7 @@ public:
     return &df == &GetDataField(i);
   }
 
+  void LoadValue(unsigned i, int value);
   void LoadValueEnum(unsigned i, int value);
 
   template<typename T>

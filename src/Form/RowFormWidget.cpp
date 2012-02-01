@@ -389,6 +389,16 @@ RowFormWidget::AddButton(const TCHAR *label, ActionListener *listener, int id)
 }
 
 void
+RowFormWidget::LoadValue(unsigned i, int value)
+{
+  WndProperty &control = GetControl(i);
+  DataFieldInteger &df = *(DataFieldInteger *)control.GetDataField();
+  assert(df.GetType() == DataField::Type::INTEGER);
+  df.Set(value);
+  control.RefreshDisplay();
+}
+
+void
 RowFormWidget::LoadValueEnum(unsigned i, int value)
 {
   WndProperty &control = GetControl(i);
