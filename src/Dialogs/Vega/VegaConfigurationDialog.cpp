@@ -64,6 +64,16 @@ static const TCHAR *const captions[] = {
   _T("19 Display"),
 };
 
+static const TCHAR *const audio_pages[] = {
+  _T("CruiseFaster"),
+  _T("CruiseSlower"),
+  _T("CruiseLift"),
+  _T("CirclingClimbingHi"),
+  _T("CirclingClimbingLow"),
+  _T("CirclingDescending"),
+  NULL
+};
+
 static const TCHAR *const beep_types[] = {
   _T("Silence"),
   _T("Short"),
@@ -820,12 +830,8 @@ FillAudioEnums(const TCHAR* name)
 static void
 FillAllAudioEnums(void)
 {
-  FillAudioEnums(_T("CruiseFaster"));
-  FillAudioEnums(_T("CruiseSlower"));
-  FillAudioEnums(_T("CruiseLift"));
-  FillAudioEnums(_T("CirclingClimbingHi"));
-  FillAudioEnums(_T("CirclingClimbingLow"));
-  FillAudioEnums(_T("CirclingDescending"));
+  for (auto i = audio_pages; *i != NULL; ++i)
+    FillAudioEnums(*i);
 }
 
 static void
