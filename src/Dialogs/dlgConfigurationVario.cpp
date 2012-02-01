@@ -535,7 +535,6 @@ UpdateParameters(bool first)
   VegaConfigurationUpdated(_T("CalibrationAirSpeed"), first);
   VegaConfigurationUpdated(_T("CalibrationTEStatic"), first);
   VegaConfigurationUpdated(_T("CalibrationTEDynamic"), first);
-  VegaConfigurationUpdated(_T("CalibrationTEProbe"), first);
 
   VegaConfigurationUpdated(_T("AccelerometerSlopeX"), first);
   VegaConfigurationUpdated(_T("AccelerometerSlopeY"), first);
