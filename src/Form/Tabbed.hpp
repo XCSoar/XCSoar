@@ -72,6 +72,14 @@ public:
     return pager.GetSize();
   }
 
+  Widget &GetPage(unsigned i) {
+    return pager.GetWidget(i);
+  }
+
+  const Widget &GetPage(unsigned i) const {
+    return pager.GetWidget(i);
+  }
+
   unsigned GetCurrentPage() const {
     return pager.GetCurrentIndex();
   }
