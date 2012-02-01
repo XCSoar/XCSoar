@@ -286,8 +286,6 @@ IDR_XML_DEVICESCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configu
 IDR_XML_DEVICESCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/DevicesConfigPanel_L.xml.gz"
 IDR_XML_POLARCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/PolarConfigPanel.xml.gz"
 IDR_XML_POLARCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/PolarConfigPanel_L.xml.gz"
-IDR_XML_TRACKINGCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TrackingConfigPanel.xml.gz"
-IDR_XML_TRACKINGCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/TrackingConfigPanel_L.xml.gz"
 
 // infobox access
 IDR_XML_INFOBOXMACCREADYEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxMacCreadyEdit.xml.gz"

@@ -23,27 +23,32 @@ Copyright_License {
 
 #include "TrackingConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Profile/Profile.hpp"
 #include "Form/Edit.hpp"
-#include "Form/CheckBox.hpp"
-#include "Form/Util.hpp"
-#include "Form/Form.hpp"
 #include "DataField/Boolean.hpp"
 #include "Language/Language.hpp"
 #include "Tracking/TrackingSettings.hpp"
 #include "DataField/Base.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Interface.hpp"
+#include "UIGlobals.hpp"
 
-class TrackingConfigPanel : public XMLWidget {
+enum ControlIndex {
+  TrackingInterval,
+  Spacer,
+  LT24Enabled,
+  LT24Username,
+  LT24Password
+};
+
+class TrackingConfigPanel : public RowFormWidget {
+public:
+  TrackingConfigPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
   void SetEnabled(bool enabled);
 };
 
@@ -52,55 +57,39 @@ public:
 static TrackingConfigPanel *instance;
 
 void
-TrackingConfigPanel::Show(const PixelRect &rc)
-{
-  XMLWidget::Show(rc);
-}
-
-void
-TrackingConfigPanel::Hide()
-{
-  XMLWidget::Hide();
-}
-
-void
 TrackingConfigPanel::SetEnabled(bool enabled)
 {
-  ((WndProperty *)form.FindByName(_T("LT24Username")))->set_enabled(enabled);
-  ((WndProperty *)form.FindByName(_T("LT24Password")))->set_enabled(enabled);
+  GetControl(LT24Username).set_enabled(enabled);
+  GetControl(LT24Password).set_enabled(enabled);
 }
 
 static void
-OnLT24Enabled(CheckBoxControl &control)
+OnLT24Enabled(DataField * Sender, DataField::DataAccessKind_t Mode)
 {
-  instance->SetEnabled(control.get_checked());
+  const DataFieldBoolean &df = *(const DataFieldBoolean *)Sender;
+  instance->SetEnabled(df.GetAsBoolean());
 }
-
-gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnLT24Enabled),
-  DeclareCallBackEntry(NULL)
-};
 
 void
 TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  instance = this;
-
   const TrackingSettings &settings =
     CommonInterface::GetComputerSettings().tracking;
 
-  LoadWindow(CallBackTable, parent,
-             Layout::landscape ? _T("IDR_XML_TRACKINGCONFIGPANEL") :
-                               _T("IDR_XML_TRACKINGCONFIGPANEL_L"));
+  RowFormWidget::Prepare(parent, rc);
+  instance = this;
 
-  LoadFormProperty(form, _T("TrackingInterval"), settings.interval);
 
-  CheckBox *cb = (CheckBox *)form.FindByName(_T("LT24Enabled"));
-  cb->set_checked(settings.livetrack24.enabled);
+  AddTime(_("Tracking Interval"), _T(""), 5, 3600, 5, settings.interval);
+
+  AddSpacer();
+
+  AddBoolean(_T("LiveTrack24"),  _T(""), settings.livetrack24.enabled, ::OnLT24Enabled);
+
+  AddText(_("Username"), _T(""), settings.livetrack24.username, settings.livetrack24.enabled);
+  AddText(_("Password"), _T(""), settings.livetrack24.password, settings.livetrack24.enabled);
+
   SetEnabled(settings.livetrack24.enabled);
-
-  LoadFormProperty(form, _T("LT24Username"), settings.livetrack24.username);
-  LoadFormProperty(form, _T("LT24Password"), settings.livetrack24.password);
 }
 
 bool
@@ -111,25 +100,15 @@ TrackingConfigPanel::Save(bool &_changed, bool &_require_restart)
   TrackingSettings &settings =
     CommonInterface::SetComputerSettings().tracking;
 
-  CheckBox *cb = (CheckBox *)form.FindByName(_T("LT24Enabled"));
+  changed |= SaveValue(TrackingInterval, ProfileTrackingInterval, settings.interval);
 
-  changed |= (cb->get_checked() != settings.livetrack24.enabled);
-  settings.livetrack24.enabled = cb->get_checked();
+  changed |= SaveValue(LT24Enabled, ProfileLiveTrack24Enabled, settings.livetrack24.enabled);
 
-  changed |= SaveFormProperty(form, _T("LT24Username"),
-                              settings.livetrack24.username);
-  changed |= SaveFormProperty(form, _T("LT24Password"),
-                              settings.livetrack24.password);
+  changed |= SaveValue(LT24Username, ProfileLiveTrack24Username,
+                       settings.livetrack24.username.buffer(), settings.livetrack24.username.MAX_SIZE);
 
-  changed |= SaveFormProperty(form, _T("TrackingInterval"), settings.interval);
-
-  if (changed) {
-    Profile::Set(ProfileTrackingInterval, settings.interval);
-
-    Profile::Set(ProfileLiveTrack24Enabled, settings.livetrack24.enabled);
-    Profile::Set(ProfileLiveTrack24Username, settings.livetrack24.username);
-    Profile::Set(ProfileLiveTrack24Password, settings.livetrack24.password);
-  }
+  changed |= SaveValue(LT24Password, ProfileLiveTrack24Password,
+                       settings.livetrack24.password.buffer(), settings.livetrack24.password.MAX_SIZE);
 
   _changed |= changed;
   _require_restart |= require_restart;
