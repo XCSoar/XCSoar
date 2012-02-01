@@ -174,14 +174,13 @@ static const char *const vega_setting_names[] = {
   "HasAccelerometer",
   "HasTemperature",
   "FlarmConnected",
+  "EnablePDASupply",
 
   "TotalEnergyMixingRatio",
   "CalibrationAirSpeed",
   "CalibrationTEStatic",
   "CalibrationTEDynamic",
-  "CalibrationTEProbe",
 
-  //  "PDAPower",
   "ToneAveragerVarioTimeScale",
   "ToneAveragerCruiseTimeScale",
   "ToneMeanVolumeCircling",
