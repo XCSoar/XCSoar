@@ -23,6 +23,19 @@ Copyright_License {
 
 #include "VegaDialogs.hpp"
 #include "Schemes.hpp"
+#include "HardwareParameters.hpp"
+#include "CalibrationParameters.hpp"
+#include "AudioModeParameters.hpp"
+#include "AudioDeadbandParameters.hpp"
+#include "AudioParameters.hpp"
+#include "LoggerParameters.hpp"
+#include "MixerParameters.hpp"
+#include "FlarmAlertParameters.hpp"
+#include "FlarmIdentificationParameters.hpp"
+#include "FlarmRepeatParameters.hpp"
+#include "AlertParameters.hpp"
+#include "LimitParameters.hpp"
+#include "DisplayParameters.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Message.hpp"
@@ -75,386 +88,10 @@ static const char *const audio_pages[] = {
   NULL
 };
 
-static const TCHAR *const audio_pages_t[] = {
-  _T("CruiseFaster"),
-  _T("CruiseSlower"),
-  _T("CruiseLift"),
-  _T("CirclingClimbingHi"),
-  _T("CirclingClimbingLow"),
-  _T("CirclingDescending"),
-  NULL
-};
-
-static const TCHAR *const beep_types[] = {
-  _T("Silence"),
-  _T("Short"),
-  _T("Medium"),
-  _T("Long"),
-  _T("Continuous"),
-  _T("Short double"),
-  NULL
-};
-
-static const TCHAR *const pitch_schemes[] = {
-  _T("Constant high"),
-  _T("Constant medium"),
-  _T("Constant low"),
-  _T("Speed percent"),
-  _T("Speed error"),
-  _T("Vario gross"),
-  _T("Vario net"),
-  _T("Vario relative"),
-  _T("Vario gross/relative"),
-  NULL
-};
-
-static const TCHAR *const period_schemes[] = {
-  _T("Constant high"),
-  _T("Constant medium"),
-  _T("Constant low"),
-  _T("Speed percent"),
-  _T("Speed error"),
-  _T("Vario gross"),
-  _T("Vario net"),
-  _T("Vario relative"),
-  _T("Vario gross/relative"),
-  _T("Intermittent"),
-  NULL
-};
-
-static const TCHAR *const scales[] = {
-  _T("+Linear"),
-  _T("+Low end"),
-  _T("+High end"),
-  _T("-Linear"),
-  _T("-Low end"),
-  _T("-High end"),
-  NULL
-};
-
-static const TCHAR *const flarm_user_interfaces[] = {
-  _T("LED+Buzzer"),
-  _T("None"),
-  _T("Buzzer"),
-  _T("LED"),
-  NULL
-};
-
-static const TCHAR *const flarm_aircraft_types[] = {
-  _T("Undefined"),
-  _T("Glider"),
-  _T("Tow plane"),
-  _T("Helicopter"),
-  _T("Parachute"),
-  _T("Drop plane"),
-  _T("Fixed hangglider"),
-  _T("Soft paraglider"),
-  _T("Powered aircraft"),
-  _T("Jet aircraft"),
-  _T("UFO"),
-  _T("Baloon"),
-  _T("Blimp, Zeppelin"),
-  _T("UAV (Drone)"),
-  _T("Static"),
-  NULL
-};
-
-static const TCHAR *const needle_gauge_types[] = {
-  _T("None"),
-  _T("LX"),
-  _T("Analog"),
-  NULL
-};
-
-static const char *const vega_setting_names[] = {
-  "HasPressureTE",
-  "HasPressurePitot",
-  "HasPressureStatic",
-  "HasPressureStall",
-  "HasAccelerometer",
-  "HasTemperature",
-  "FlarmConnected",
-  "EnablePDASupply",
-
-  "TotalEnergyMixingRatio",
-  "CalibrationAirSpeed",
-  "CalibrationTEStatic",
-  "CalibrationTEDynamic",
-
-  "ToneAveragerVarioTimeScale",
-  "ToneAveragerCruiseTimeScale",
-  "ToneMeanVolumeCircling",
-  "ToneMeanVolumeCruise",
-  "ToneBaseFrequencyOffset",
-  "TonePitchScale",
-
-  "ToneDeadbandCirclingType",
-  "ToneDeadbandCirclingHigh",
-  "ToneDeadbandCirclingLow",
-  "ToneDeadbandCruiseType",
-  "ToneDeadbandCruiseHigh",
-  "ToneDeadbandCruiseLow",
-
-  "ToneClimbComparisonType",
-  "ToneCruiseLiftDetectionType",
-
-  "ToneCruiseFasterBeepType",
-  "ToneCruiseFasterPitchScheme",
-  "ToneCruiseFasterPitchScale",
-  "ToneCruiseFasterPeriodScheme",
-  "ToneCruiseFasterPeriodScale",
-
-  "ToneCruiseSlowerBeepType",
-  "ToneCruiseSlowerPitchScheme",
-  "ToneCruiseSlowerPitchScale",
-  "ToneCruiseSlowerPeriodScheme",
-  "ToneCruiseSlowerPeriodScale",
-
-  "ToneCruiseLiftBeepType",
-  "ToneCruiseLiftPitchScheme",
-  "ToneCruiseLiftPitchScale",
-  "ToneCruiseLiftPeriodScheme",
-  "ToneCruiseLiftPeriodScale",
-
-  "ToneCirclingClimbingHiBeepType",
-  "ToneCirclingClimbingHiPitchScheme",
-  "ToneCirclingClimbingHiPitchScale",
-  "ToneCirclingClimbingHiPeriodScheme",
-  "ToneCirclingClimbingHiPeriodScale",
-
-  "ToneCirclingClimbingLowBeepType",
-  "ToneCirclingClimbingLowPitchScheme",
-  "ToneCirclingClimbingLowPitchScale",
-  "ToneCirclingClimbingLowPeriodScheme",
-  "ToneCirclingClimbingLowPeriodScale",
-
-  "ToneCirclingDescendingBeepType",
-  "ToneCirclingDescendingPitchScheme",
-  "ToneCirclingDescendingPitchScale",
-  "ToneCirclingDescendingPeriodScheme",
-  "ToneCirclingDescendingPeriodScale",
-
-  "VarioTimeConstantCircling",
-  "VarioTimeConstantCruise",
-
-  "UTCOffset",
-  "IGCLoging",
-  "IGCLoggerInterval",
-  "MuteVarioOnPlay",
-  "MuteVarioOnCom",
-  "VarioRelativeMuteVol",
-  "VoiceRelativeMuteVol",
-  "MuteComSpkThreshold",
-  "MuteComPhnThreshold",
-  "MinUrgentVolume",
-  "FlarmMaxObjectsReported",
-  "FlarmMaxObjectsReportedOnCircling",
-  "FlarmUserInterface",
-  "KeepOnStraightFlightMode",
-  "DontReportTraficModeChanges",
-  "DontReportGliderType",
-  "FlarmPrivacyFlag",
-  "FlarmAircraftType",
-
-  "FlarmInfoRepeatTime",
-  "FlarmCautionRepeatTime",
-  "FlarmWarningRepeatTime",
-  "GearOnDelay",
-  "GearOffDelay",
-  "GearRepeatTime",
-  "PlyMaxComDelay",
-  "BatLowDelay",
-  "BatEmptyDelay",
-  "BatRepeatTime",
-
-  "NeedleGaugeType",
-
-  "VelocityNeverExceed",
-  "VelocitySafeTerrain",
-  "TerrainSafetyHeight",
-  "VelocityManoeuvering",
-  "VelocityAirBrake",
-  "VelocityFlap",
-  "LedBrightness",
-
-  "BaudrateA",
-
-  NULL
-};
-
-/**
- * This array contains the values that were filled into the form, and
- * is later used to check if the user has changed anything.  Only
- * modified values will be sent to the Vega.
- */
-static int vega_setting_values[ARRAY_SIZE(vega_setting_names) - 1];
-
 static VegaDevice *device;
 static bool changed, dirty;
 static WndForm *wf = NULL;
 static TabbedControl *tabbed;
-
-static WndProperty &
-GetSettingControl(const char *name)
-{
-#ifdef _UNICODE
-  TCHAR tname[64];
-  MultiByteToWideChar(CP_UTF8, 0, name, -1, tname, ARRAY_SIZE(tname));
-#else
-  const char *tname = name;
-#endif
-
-  TCHAR buffer[64] = _T("prp");
-  _tcscat(buffer, tname);
-  WndProperty *control = (WndProperty *)wf->FindByName(buffer);
-  assert(control != NULL);
-  return *control;
-}
-
-static bool
-GetSettingValue(const char *name, int &value_r)
-{
-  const auto x = device->GetSetting(name);
-  if (!x.first)
-    return false;
-
-  value_r = x.second;
-  return true;
-}
-
-static void
-InitControl(const char *name, int &value_r)
-{
-  int lvalue;
-  if (!GetSettingValue(name, lvalue)) {
-    // vario hasn't set the value in the registry yet,
-    // so no sensible defaults
-    return;
-  }
-
-  // at start, set from last known registry value, this
-  // helps if variables haven't been modified.
-  value_r = lvalue;
-
-  WndProperty &wp = GetSettingControl(name);
-  wp.GetDataField()->SetAsInteger(lvalue);
-  wp.RefreshDisplay();
-}
-
-static bool
-SetControl(const char *name, int value)
-{
-  WndProperty &wp = GetSettingControl(name);
-  wp.GetDataField()->SetAsInteger(value);
-  wp.RefreshDisplay();
-
-  if (!device->SendSetting(name, value))
-    return false;
-
-  return true;
-}
-
-static bool
-UpdateControl(const char *name, int &value_r)
-{
-  WndProperty &wp = GetSettingControl(name);
-  const int ui_value = wp.GetDataField()->GetAsInteger();
-
-  int device_value;
-  if (ui_value != value_r) {
-    /* value has been changed by the user */
-    if (!device->SendSetting(name, ui_value))
-      return false;
-
-    changed = dirty = true;
-    value_r = ui_value;
-
-    return true;
-  } else if (GetSettingValue(name, device_value) &&
-             device_value != ui_value) {
-    /* value has been changed by the Vega */
-    value_r = device_value;
-
-    wp.GetDataField()->SetAsInteger(device_value);
-    wp.RefreshDisplay();
-
-    return false;
-  } else
-    return false;
-}
-
-gcc_pure
-static bool
-SettingExists(const char *name)
-{
-  return device->GetSetting(name).first;
-}
-
-/**
- * Wait for a setting to be received from the Vega.
- */
-static bool
-WaitForSetting(const char *name, unsigned timeout_ms)
-{
-  for (unsigned i = 0; i < timeout_ms / 100; ++i) {
-    if (SettingExists(name))
-      return true;
-    Sleep(100);
-  }
-
-  return false;
-}
-
-static bool
-RequestAll(const char *const*names)
-{
-  assert(names != NULL);
-  assert(*names != NULL);
-
-  /* long timeout for first response */
-  unsigned timeout_ms = 3000;
-
-  /* the first response that we're still waiting for */
-  const char *const*start = names;
-
-  for (const char *const*i = names; *i != NULL; ++i) {
-    /* send up to 4 requests at a time */
-    if (i - start >= 4) {
-      /* queue is long enough: wait for one response */
-      WaitForSetting(*start, timeout_ms);
-
-      /* reduce timeout for follow-up responses */
-      timeout_ms = 1000;
-
-      ++start;
-    }
-
-    if (!SettingExists(*i) && !device->RequestSetting(*i))
-      return false;
-  }
-
-  /* wait for the remaining responses */
-  for (const char *const*i = start; *i != NULL; ++i)
-    WaitForSetting(*i, 500);
-
-  return true;
-}
-
-static void
-InitControls(const char *const*names, int *values)
-{
-  RequestAll(names);
-
-  for (; *names != NULL; ++names, ++values)
-    InitControl(*names, *values);
-}
-
-static void
-UpdateControls(const char *const*names, int *values)
-{
-  for (; *names != NULL; ++names, ++values)
-    UpdateControl(*names, *values);
-}
 
 static void
 SetParametersScheme(int schemetype)
@@ -464,36 +101,18 @@ SetParametersScheme(int schemetype)
                  MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
-  SetControl("ToneClimbComparisonType",
-             VegaSchemes[schemetype].ToneClimbComparisonType);
-  SetControl("ToneCruiseLiftDetectionType",
-             VegaSchemes[schemetype].ToneLiftComparisonType);
+  const VEGA_SCHEME &scheme = VegaSchemes[schemetype];
+
+  tabbed->PreparePage(2);
+  LoadAudioModeScheme((VegaParametersWidget &)tabbed->GetPage(2), scheme);
 
   for (unsigned i = 0; audio_pages[i] != NULL; ++i) {
-    const VEGA_SCHEME::Audio &data = VegaSchemes[schemetype].audio[i];
-    const char *page = audio_pages[i];
-    char name[64];
-
-    sprintf(name, "Tone%sBeepType", page);
-    SetControl(name, data.beep_type);
-    sprintf(name, "Tone%sPitchScheme", page);
-    SetControl(name, data.pitch_scheme);
-    sprintf(name, "Tone%sPitchScale", page);
-    SetControl(name, data.pitch_scale);
-    sprintf(name, "Tone%sPeriodScheme", page);
-    SetControl(name, data.period_scheme);
-    sprintf(name, "Tone%sPeriodScale", page);
-    SetControl(name, data.period_scheme);
+    tabbed->PreparePage(4 + i);
+    ((VegaAudioParametersWidget &)tabbed->GetPage(4 + i)).LoadScheme(scheme.audio[i]);
   }
 
   MessageBoxX(_("Audio scheme updated."),
               _("Vega Audio"), MB_OK);
-}
-
-static void
-UpdateParameters()
-{
-  UpdateControls(vega_setting_names, vega_setting_values);
 }
 
 static void
@@ -506,7 +125,6 @@ static void
 PageSwitched()
 {
   UpdateCaption();
-  UpdateParameters();
 }
 
 static void
@@ -526,7 +144,10 @@ OnPrevClicked(gcc_unused WndButton &Sender)
 static void
 OnCloseClicked(gcc_unused WndButton &button)
 {
-  UpdateParameters();
+  bool require_restart = false;
+  if (!tabbed->Save(changed, require_restart))
+    return;
+
   // make sure changes are sent to device
   wf->SetModalResult(mrOK);
 }
@@ -534,7 +155,13 @@ OnCloseClicked(gcc_unused WndButton &button)
 static void
 OnSaveClicked(gcc_unused WndButton &Sender)
 {
-  UpdateParameters();
+  bool _changed = false, require_restart = false;
+  if (!tabbed->Save(_changed, require_restart))
+    return;
+
+  changed |= _changed;
+  dirty |= changed;
+
   // make sure changes are sent to device
   if (dirty && device->SendSetting("StoreToEeprom", 2))
     dirty = false;
@@ -544,32 +171,11 @@ static void
 OnDemoClicked(gcc_unused WndButton &Sender)
 {
   // retrieve changes from form
-  UpdateParameters();
+  bool require_restart = false;
+  if (!tabbed->Save(changed, require_restart))
+    return;
+
   dlgVegaDemoShowModal();
-}
-
-static void
-OnSchemeVegaClicked(gcc_unused WndButton &Sender)
-{
-  SetParametersScheme(0);
-}
-
-static void
-OnSchemeBorgeltClicked(gcc_unused WndButton &Sender)
-{
-  SetParametersScheme(1);
-}
-
-static void
-OnSchemeCambridgeClicked(gcc_unused WndButton &Sender)
-{
-  SetParametersScheme(2);
-}
-
-static void
-OnSchemeZanderClicked(gcc_unused WndButton &Sender)
-{
-  SetParametersScheme(3);
 }
 
 static bool
@@ -601,224 +207,74 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
   }
 }
 
-static void
-FillAudioEnums(const TCHAR* name)
+class VegaSchemeButtonsPage : public RowFormWidget, ActionListener {
+public:
+  VegaSchemeButtonsPage(const DialogLook &look)
+    :RowFormWidget(look) {}
+
+  /* methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) {
+    RowFormWidget::Prepare(parent, rc);
+
+    AddButton(_T("Vega"), this, 0);
+    AddButton(_T("Borgelt"), this, 1);
+    AddButton(_T("Cambridge"), this, 2);
+    AddButton(_T("Zander"), this, 3);
+  }
+
+  /* methods from ActionListener */
+  virtual void OnAction(int id) {
+    SetParametersScheme(id);
+  }
+};
+
+static Window *
+OnCreatePager(ContainerWindow &parent,
+              PixelScalar left, PixelScalar top,
+              UPixelScalar width, UPixelScalar height,
+              const WindowStyle style)
 {
-  WndProperty *wp;
-  TCHAR fullname[100];
+  tabbed = new TabbedControl(parent, left, top, width, height, style);
 
-  _stprintf(fullname, _T("prpTone%sBeepType"), name);
-  wp = (WndProperty*)wf->FindByName(fullname);
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumTexts(beep_types);
-    wp->RefreshDisplay();
-  }
+  const DialogLook &look = UIGlobals::GetDialogLook();
 
-  _stprintf(fullname, _T("prpTone%sPitchScheme"), name);
-  wp = (WndProperty*)wf->FindByName(fullname);
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumTexts(pitch_schemes);
-    wp->RefreshDisplay();
-  }
+  tabbed->AddPage(new VegaParametersWidget(look, *device, hardware_parameters));
+  tabbed->AddPage(new VegaParametersWidget(look, *device,
+                                           calibration_parameters));
+  tabbed->AddPage(new VegaParametersWidget(look, *device,
+                                           audio_mode_parameters));
+  tabbed->AddPage(new VegaParametersWidget(look, *device,
+                                           audio_deadband_parameters));
+  tabbed->AddPage(new VegaAudioParametersWidget(look, *device,
+                                                "CruiseFaster"));
+  tabbed->AddPage(new VegaAudioParametersWidget(look, *device,
+                                                "CruiseSlower"));
+  tabbed->AddPage(new VegaAudioParametersWidget(look, *device,
+                                                "CruiseLift"));
+  tabbed->AddPage(new VegaAudioParametersWidget(look, *device,
+                                                "CirclingClimbingHi"));
+  tabbed->AddPage(new VegaAudioParametersWidget(look, *device,
+                                                "CirclingClimbingLow"));
+  tabbed->AddPage(new VegaAudioParametersWidget(look, *device,
+                                                "CirclingDescending"));
+  tabbed->AddPage(new VegaParametersWidget(look, *device,
+                                           logger_parameters));
+  tabbed->AddPage(new VegaParametersWidget(look, *device,
+                                           mixer_parameters));
+  tabbed->AddPage(new VegaParametersWidget(look, *device,
+                                           flarm_alert_parameters));
+  tabbed->AddPage(new VegaParametersWidget(look, *device,
+                                           flarm_id_parameters));
+  tabbed->AddPage(new VegaParametersWidget(look, *device,
+                                           flarm_repeat_parameters));
+  tabbed->AddPage(new VegaParametersWidget(look, *device, alert_parameters));
+  tabbed->AddPage(new VegaParametersWidget(look, *device, limit_parameters));
 
-  _stprintf(fullname, _T("prpTone%sPeriodScheme"), name);
-  wp = (WndProperty*)wf->FindByName(fullname);
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumTexts(period_schemes);
-    wp->RefreshDisplay();
-  }
+  tabbed->AddPage(new VegaSchemeButtonsPage(look));
 
-  _stprintf(fullname, _T("prpTone%sPitchScale"), name);
-  wp = (WndProperty*)wf->FindByName(fullname);
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumTexts(scales);
-    wp->RefreshDisplay();
-  }
+  tabbed->AddPage(new VegaParametersWidget(look, *device, display_parameters));
 
-  _stprintf(fullname, _T("prpTone%sPeriodScale"), name);
-  wp = (WndProperty*)wf->FindByName(fullname);
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumTexts(scales);
-    wp->RefreshDisplay();
-  }
-}
-
-static void
-FillAllAudioEnums(void)
-{
-  for (auto i = audio_pages_t; *i != NULL; ++i)
-    FillAudioEnums(*i);
-}
-
-static void
-FillEnums(void)
-{
-  WndProperty *wp;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpBaudrateA"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("Auto"));
-    dfe->addEnumText(_T("4800"));
-    dfe->addEnumText(_T("9600"));
-    dfe->addEnumText(_T("19200"));
-    dfe->addEnumText(_T("38400"));
-    dfe->addEnumText(_T("57600"));
-    dfe->addEnumText(_T("115200"));
-    dfe->Set(0);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpHasTemperature"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("Off"));
-    dfe->addEnumText(_T("On"));
-    dfe->AddChoice(255, _T("AUTO"));
-    dfe->Set(0);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpToneClimbComparisonType"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("None"));
-    dfe->addEnumText(_T("Gross>MacCready"));
-    dfe->addEnumText(_T("Gross>Average"));
-    dfe->Set(0);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpToneCruiseLiftDetectionType"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("Disabled"));
-    dfe->addEnumText(_T("Relative>0"));
-    dfe->addEnumText(_T("Relative>MacCready/2"));
-    dfe->addEnumText(_T("Gross>0"));
-    dfe->addEnumText(_T("Net>MacCready/2"));
-    dfe->addEnumText(_T("Relative>MacCready"));
-    dfe->addEnumText(_T("Net>MacCready"));
-    dfe->Set(0);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpVarioTimeConstantCircling"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T(" 1.0s"));
-    dfe->addEnumText(_T(" 1.3s"));
-    dfe->addEnumText(_T(" 1.8s"));
-    dfe->addEnumText(_T(" 2.7s"));
-    dfe->Set(0);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpVarioTimeConstantCruise"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T(" 1.0s"));
-    dfe->addEnumText(_T(" 1.3s"));
-    dfe->addEnumText(_T(" 1.8s"));
-    dfe->addEnumText(_T(" 2.7s"));
-    dfe->Set(0);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpToneAveragerVarioTimeScale"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T(" 0.0s"));
-    dfe->addEnumText(_T(" 0.8s"));
-    dfe->addEnumText(_T(" 1.7s"));
-    dfe->addEnumText(_T(" 3.5s"));
-    dfe->addEnumText(_T(" 7.5s"));
-    dfe->addEnumText(_T("15.0s"));
-    dfe->addEnumText(_T("30.0s"));
-    dfe->Set(0);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpToneAveragerCruiseTimeScale"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T(" 0.0s"));
-    dfe->addEnumText(_T(" 0.8s"));
-    dfe->addEnumText(_T(" 1.7s"));
-    dfe->addEnumText(_T(" 3.5s"));
-    dfe->addEnumText(_T(" 7.5s"));
-    dfe->addEnumText(_T("15.0s"));
-    dfe->addEnumText(_T("30.0s"));
-    dfe->Set(0);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpToneDeadbandCirclingType"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("Step"));
-    dfe->addEnumText(_T("Ramp"));
-    dfe->Set(0);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpToneDeadbandCruiseType"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("Step"));
-    dfe->addEnumText(_T("Ramp"));
-    dfe->Set(0);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFlarmUserInterface"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumTexts(flarm_user_interfaces);
-    dfe->Set(0);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFlarmAircraftType"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumTexts(flarm_aircraft_types);
-    dfe->Set(0);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpNeedleGaugeType"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumTexts(needle_gauge_types);
-    dfe->Set(0);
-    wp->RefreshDisplay();
-  }
-
-  FillAllAudioEnums();
+  return tabbed;
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
@@ -826,11 +282,8 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(OnDemoClicked),
   DeclareCallBackEntry(OnSaveClicked),
-  DeclareCallBackEntry(OnSchemeVegaClicked),
-  DeclareCallBackEntry(OnSchemeBorgeltClicked),
-  DeclareCallBackEntry(OnSchemeCambridgeClicked),
-  DeclareCallBackEntry(OnSchemeZanderClicked),
   DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnCreatePager),
   DeclareCallBackEntry(NULL)
 };
 
@@ -853,20 +306,9 @@ dlgConfigurationVarioShowModal(Device &_device)
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
-  assert(tabbed != NULL);
-
   UpdateCaption();
 
-  // populate enums
-
-  FillEnums();
-
-  InitControls(vega_setting_names, vega_setting_values);
-
   wf->ShowModal();
-
-  UpdateParameters();
 
   delete wf;
   wf = NULL;

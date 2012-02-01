@@ -8,6 +8,7 @@ MSGMERGE = msgmerge
 
 GETTEXT_PACKAGE = xcsoar
 GETTEXT_SOURCES = $(XCSOAR_SOURCES) \
+	$(wildcard $(SRC)/Dialogs/Vega/*Parameters.hpp) \
 	$(DRIVER_SOURCES)
 GETTEXT_DIALOGS = $(wildcard Data/Dialogs/*.xml)
 GETTEXT_DIALOGS += $(wildcard Data/Dialogs/Configuration/*.xml)
