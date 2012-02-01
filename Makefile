@@ -134,6 +134,8 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/PortMonitor.cpp \
 	$(SRC)/Dialogs/ManageCAI302Dialog.cpp \
 	$(SRC)/Dialogs/ManageFlarmDialog.cpp \
+	$(SRC)/Dialogs/Vega/VegaConfigurationDialog.cpp \
+	$(SRC)/Dialogs/Vega/VegaDemoDialog.cpp \
 	$(SRC)/Dialogs/MapItemListDialog.cpp \
 	$(SRC)/Dialogs/WindSettingsPanel.cpp \
 	$(SRC)/Dialogs/dlgAirspace.cpp \
@@ -156,7 +158,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgConfigFonts.cpp \
 	$(SRC)/Dialogs/dlgConfigInfoboxes.cpp \
 	$(SRC)/Dialogs/dlgConfigWaypoints.cpp \
-	$(SRC)/Dialogs/dlgConfigurationVario.cpp \
 	$(SRC)/Dialogs/dlgFlarmTraffic.cpp \
 	$(SRC)/Dialogs/dlgFlarmTrafficDetails.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
@@ -215,7 +216,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgTeamCode.cpp \
 	$(SRC)/Dialogs/dlgTextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
-	$(SRC)/Dialogs/dlgVegaDemo.cpp \
 	$(SRC)/Dialogs/dlgVoice.cpp \
 	$(SRC)/Dialogs/dlgWeather.cpp \
 	$(SRC)/Dialogs/dlgWaypointDetails.cpp \
