@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "VegaDialogs.hpp"
+#include "Schemes.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Message.hpp"
@@ -445,141 +446,6 @@ UpdateControls(const char *const*names, int *values)
   for (; *names != NULL; ++names, ++values)
     UpdateControl(*names, *values);
 }
-
-struct VEGA_SCHEME
-{
-  int ToneClimbComparisonType;
-  int ToneLiftComparisonType;
-
-  int ToneCruiseFasterBeepType;
-  int ToneCruiseFasterPitchScheme;
-  int ToneCruiseFasterPitchScale;
-  int ToneCruiseFasterPeriodScheme;
-  int ToneCruiseFasterPeriodScale;
-
-  int ToneCruiseSlowerBeepType;
-  int ToneCruiseSlowerPitchScheme;
-  int ToneCruiseSlowerPitchScale;
-  int ToneCruiseSlowerPeriodScheme;
-  int ToneCruiseSlowerPeriodScale;
-
-  int ToneCruiseLiftBeepType;
-  int ToneCruiseLiftPitchScheme;
-  int ToneCruiseLiftPitchScale;
-  int ToneCruiseLiftPeriodScheme;
-  int ToneCruiseLiftPeriodScale;
-
-  int ToneCirclingClimbingHiBeepType;
-  int ToneCirclingClimbingHiPitchScheme;
-  int ToneCirclingClimbingHiPitchScale;
-  int ToneCirclingClimbingHiPeriodScheme;
-  int ToneCirclingClimbingHiPeriodScale;
-
-  int ToneCirclingClimbingLowBeepType;
-  int ToneCirclingClimbingLowPitchScheme;
-  int ToneCirclingClimbingLowPitchScale;
-  int ToneCirclingClimbingLowPeriodScheme;
-  int ToneCirclingClimbingLowPeriodScale;
-
-  int ToneCirclingDescendingBeepType;
-  int ToneCirclingDescendingPitchScheme;
-  int ToneCirclingDescendingPitchScale;
-  int ToneCirclingDescendingPeriodScheme;
-  int ToneCirclingDescendingPeriodScale;
-
-};
-
-// Value used for comparison in climb tone
-#define  X_NONE 0
-#define  X_MACCREADY 1
-#define  X_AVERAGE 2
-
-// Condition for detecting lift in cruise mode
-#define  Y_NONE 0
-#define  Y_RELATIVE_ZERO 1
-#define  Y_RELATIVE_MACCREADY_HALF 2
-#define  Y_GROSS_ZERO 3
-#define  Y_NET_MACCREADY_HALF 4
-#define  Y_RELATIVE_MACCREADY 5
-#define  Y_NET_MACCREADY 6
-
-// Beep types
-#define  BEEPTYPE_SILENCE 0
-#define  BEEPTYPE_SHORT 1
-#define  BEEPTYPE_MEDIUM 2
-#define  BEEPTYPE_LONG 3
-#define  BEEPTYPE_CONTINUOUS 4
-#define  BEEPTYPE_SHORTDOUBLE 5
-
-// Pitch value schemes
-#define  PITCH_CONST_HI 0
-#define  PITCH_CONST_MEDIUM 1
-#define  PITCH_CONST_LO 2
-#define  PITCH_SPEED_PERCENT 3
-#define  PITCH_SPEED_ERROR 4
-#define  PITCH_VARIO_GROSS 5
-#define  PITCH_VARIO_NET 6
-#define  PITCH_VARIO_RELATIVE 7
-#define  PITCH_VARIO_GROSSRELATIVE 8
-
-// Beep period value schemes
-#define  PERIOD_CONST_HI 0
-#define  PERIOD_CONST_MEDIUM 1
-#define  PERIOD_CONST_LO 2
-#define  PERIOD_SPEED_PERCENT 3
-#define  PERIOD_SPEED_ERROR 4
-#define  PERIOD_VARIO_GROSS 5
-#define  PERIOD_VARIO_NET 6
-#define  PERIOD_VARIO_RELATIVE 7
-#define  PERIOD_VARIO_GROSSRELATIVE 8
-#define  PERIOD_CONST_INTERMITTENT 9
-
-// Scaling schemes applied to pitch and period
-#define  SCALE_LINEAR 0
-#define  SCALE_LOWEND 1
-#define  SCALE_HIGHEND 2
-#define  SCALE_LINEAR_NEG 3
-#define  SCALE_LOWEND_NEG 4
-#define  SCALE_HIGHEND_NEG 5
-
-static gcc_constexpr_data VEGA_SCHEME VegaSchemes[4]= {
-  // Vega
-  {X_NONE, Y_RELATIVE_MACCREADY_HALF,
-   BEEPTYPE_LONG, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_INTERMITTENT, SCALE_LINEAR,
-   BEEPTYPE_SHORTDOUBLE, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_INTERMITTENT, SCALE_LINEAR,
-   BEEPTYPE_SHORT, PITCH_VARIO_RELATIVE, SCALE_LINEAR, PERIOD_VARIO_RELATIVE, SCALE_LINEAR,
-   BEEPTYPE_SHORT, PITCH_VARIO_GROSS, SCALE_LINEAR, PERIOD_VARIO_GROSS, SCALE_LINEAR,
-   BEEPTYPE_MEDIUM, PITCH_VARIO_GROSS, SCALE_LINEAR, PERIOD_VARIO_GROSS, SCALE_LINEAR,
-   BEEPTYPE_CONTINUOUS, PITCH_VARIO_GROSS, SCALE_LINEAR, PERIOD_CONST_HI, SCALE_LINEAR},
-
-  // Borgelt
-  {X_AVERAGE, Y_RELATIVE_MACCREADY,
-   BEEPTYPE_LONG, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_INTERMITTENT, SCALE_LINEAR,
-   BEEPTYPE_SHORTDOUBLE, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_INTERMITTENT, SCALE_LINEAR,
-   BEEPTYPE_MEDIUM, PITCH_VARIO_RELATIVE, SCALE_LINEAR, PERIOD_VARIO_RELATIVE, SCALE_LINEAR,
-   BEEPTYPE_MEDIUM, PITCH_VARIO_GROSS, SCALE_LINEAR, PERIOD_VARIO_GROSS, SCALE_LINEAR,
-   BEEPTYPE_LONG, PITCH_VARIO_GROSS, SCALE_LINEAR, PERIOD_VARIO_GROSS, SCALE_LINEAR,
-   BEEPTYPE_CONTINUOUS, PITCH_VARIO_GROSS, SCALE_LINEAR, PERIOD_CONST_HI, SCALE_LINEAR},
-
-  // Cambridge
-  {X_NONE, Y_RELATIVE_ZERO, // should be net>zero
-   BEEPTYPE_CONTINUOUS, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_HI, SCALE_LINEAR,
-   BEEPTYPE_SHORTDOUBLE, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_LO, SCALE_LINEAR,
-   BEEPTYPE_SHORT, PITCH_VARIO_RELATIVE, SCALE_LINEAR, PERIOD_VARIO_RELATIVE, SCALE_LINEAR,
-   BEEPTYPE_SHORT, PITCH_VARIO_GROSS, SCALE_LINEAR, PERIOD_VARIO_GROSS, SCALE_LINEAR,
-   BEEPTYPE_SHORT, PITCH_VARIO_GROSS, SCALE_LINEAR, PERIOD_VARIO_GROSS, SCALE_LINEAR,
-   BEEPTYPE_CONTINUOUS, PITCH_VARIO_GROSS, SCALE_LINEAR, PERIOD_CONST_HI, SCALE_LINEAR},
-
-  // Zander
-  {X_NONE, Y_RELATIVE_ZERO, // should be net>zero
-   BEEPTYPE_CONTINUOUS, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_HI, SCALE_LINEAR,
-   BEEPTYPE_SHORTDOUBLE, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_LO, SCALE_LINEAR,
-   BEEPTYPE_CONTINUOUS, PITCH_VARIO_RELATIVE, SCALE_LINEAR, PERIOD_CONST_LO, SCALE_LINEAR,
-   BEEPTYPE_SHORT, PITCH_VARIO_GROSS, SCALE_LINEAR, PERIOD_CONST_LO, SCALE_LINEAR,
-   BEEPTYPE_SHORT, PITCH_VARIO_GROSS, SCALE_LINEAR, PERIOD_CONST_LO, SCALE_LINEAR,
-   BEEPTYPE_LONG, PITCH_VARIO_GROSS, SCALE_LINEAR, PERIOD_CONST_MEDIUM, SCALE_LINEAR},
-
-};
 
 static void
 SetParametersScheme(int schemetype)
