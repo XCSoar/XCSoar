@@ -65,7 +65,17 @@ static const TCHAR *const captions[] = {
   _T("19 Display"),
 };
 
-static const TCHAR *const audio_pages[] = {
+static const char *const audio_pages[] = {
+  "CruiseFaster",
+  "CruiseSlower",
+  "CruiseLift",
+  "CirclingClimbingHi",
+  "CirclingClimbingLow",
+  "CirclingDescending",
+  NULL
+};
+
+static const TCHAR *const audio_pages_t[] = {
   _T("CruiseFaster"),
   _T("CruiseSlower"),
   _T("CruiseLift"),
@@ -460,71 +470,22 @@ SetParametersScheme(int schemetype)
   SetControl("ToneCruiseLiftDetectionType",
              VegaSchemes[schemetype].ToneLiftComparisonType);
 
-  SetControl("ToneCruiseFasterBeepType",
-             VegaSchemes[schemetype].ToneCruiseFasterBeepType);
-  SetControl("ToneCruiseFasterPitchScheme",
-             VegaSchemes[schemetype].ToneCruiseFasterPitchScheme);
-  SetControl("ToneCruiseFasterPitchScale",
-             VegaSchemes[schemetype].ToneCruiseFasterPitchScale);
-  SetControl("ToneCruiseFasterPeriodScheme",
-             VegaSchemes[schemetype].ToneCruiseFasterPeriodScheme);
-  SetControl("ToneCruiseFasterPeriodScale",
-             VegaSchemes[schemetype].ToneCruiseFasterPeriodScale);
+  for (unsigned i = 0; audio_pages[i] != NULL; ++i) {
+    const VEGA_SCHEME::Audio &data = VegaSchemes[schemetype].audio[i];
+    const char *page = audio_pages[i];
+    char name[64];
 
-  SetControl("ToneCruiseSlowerBeepType",
-             VegaSchemes[schemetype].ToneCruiseSlowerBeepType);
-  SetControl("ToneCruiseSlowerPitchScheme",
-             VegaSchemes[schemetype].ToneCruiseSlowerPitchScheme);
-  SetControl("ToneCruiseSlowerPitchScale",
-             VegaSchemes[schemetype].ToneCruiseSlowerPitchScale);
-  SetControl("ToneCruiseSlowerPeriodScheme",
-             VegaSchemes[schemetype].ToneCruiseSlowerPeriodScheme);
-  SetControl("ToneCruiseSlowerPeriodScale",
-             VegaSchemes[schemetype].ToneCruiseSlowerPeriodScale);
-
-  SetControl("ToneCruiseLiftBeepType",
-             VegaSchemes[schemetype].ToneCruiseLiftBeepType);
-  SetControl("ToneCruiseLiftPitchScheme",
-             VegaSchemes[schemetype].ToneCruiseLiftPitchScheme);
-  SetControl("ToneCruiseLiftPitchScale",
-             VegaSchemes[schemetype].ToneCruiseLiftPitchScale);
-  SetControl("ToneCruiseLiftPeriodScheme",
-             VegaSchemes[schemetype].ToneCruiseLiftPeriodScheme);
-  SetControl("ToneCruiseLiftPeriodScale",
-             VegaSchemes[schemetype].ToneCruiseLiftPeriodScale);
-
-  SetControl("ToneCirclingClimbingHiBeepType",
-             VegaSchemes[schemetype].ToneCirclingClimbingHiBeepType);
-  SetControl("ToneCirclingClimbingHiPitchScheme",
-             VegaSchemes[schemetype].ToneCirclingClimbingHiPitchScheme);
-  SetControl("ToneCirclingClimbingHiPitchScale",
-             VegaSchemes[schemetype].ToneCirclingClimbingHiPitchScale);
-  SetControl("ToneCirclingClimbingHiPeriodScheme",
-             VegaSchemes[schemetype].ToneCirclingClimbingHiPeriodScheme);
-  SetControl("ToneCirclingClimbingHiPeriodScale",
-             VegaSchemes[schemetype].ToneCirclingClimbingHiPeriodScale);
-
-  SetControl("ToneCirclingClimbingLowBeepType",
-             VegaSchemes[schemetype].ToneCirclingClimbingLowBeepType);
-  SetControl("ToneCirclingClimbingLowPitchScheme",
-             VegaSchemes[schemetype].ToneCirclingClimbingLowPitchScheme);
-  SetControl("ToneCirclingClimbingLowPitchScale",
-             VegaSchemes[schemetype].ToneCirclingClimbingLowPitchScale);
-  SetControl("ToneCirclingClimbingLowPeriodScheme",
-             VegaSchemes[schemetype].ToneCirclingClimbingLowPeriodScheme);
-  SetControl("ToneCirclingClimbingLowPeriodScale",
-             VegaSchemes[schemetype].ToneCirclingClimbingLowPeriodScale);
-
-  SetControl("ToneCirclingDescendingBeepType",
-             VegaSchemes[schemetype].ToneCirclingDescendingBeepType);
-  SetControl("ToneCirclingDescendingPitchScheme",
-             VegaSchemes[schemetype].ToneCirclingDescendingPitchScheme);
-  SetControl("ToneCirclingDescendingPitchScale",
-             VegaSchemes[schemetype].ToneCirclingDescendingPitchScale);
-  SetControl("ToneCirclingDescendingPeriodScheme",
-             VegaSchemes[schemetype].ToneCirclingDescendingPeriodScheme);
-  SetControl("ToneCirclingDescendingPeriodScale",
-             VegaSchemes[schemetype].ToneCirclingDescendingPeriodScale);
+    sprintf(name, "Tone%sBeepType", page);
+    SetControl(name, data.beep_type);
+    sprintf(name, "Tone%sPitchScheme", page);
+    SetControl(name, data.pitch_scheme);
+    sprintf(name, "Tone%sPitchScale", page);
+    SetControl(name, data.pitch_scale);
+    sprintf(name, "Tone%sPeriodScheme", page);
+    SetControl(name, data.period_scheme);
+    sprintf(name, "Tone%sPeriodScale", page);
+    SetControl(name, data.period_scheme);
+  }
 
   MessageBoxX(_("Audio scheme updated."),
               _("Vega Audio"), MB_OK);
@@ -696,7 +657,7 @@ FillAudioEnums(const TCHAR* name)
 static void
 FillAllAudioEnums(void)
 {
-  for (auto i = audio_pages; *i != NULL; ++i)
+  for (auto i = audio_pages_t; *i != NULL; ++i)
     FillAudioEnums(*i);
 }
 
