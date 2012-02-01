@@ -76,6 +76,14 @@ public:
     return children.size();
   }
 
+  const Widget &GetWidget(unsigned i) const {
+    return *children[i].widget;
+  }
+
+  Widget &GetWidget(unsigned i) {
+    return *children[i].widget;
+  }
+
   unsigned GetCurrentIndex() const {
     assert(!children.empty());
 
@@ -85,7 +93,7 @@ public:
   const Widget &GetCurrentWidget() const {
     assert(!children.empty());
 
-    return *children[current].widget;
+    return GetWidget(current);
   }
 
   /**
