@@ -69,6 +69,19 @@ PagerWidget::Clear()
   children.clear();
 }
 
+void
+PagerWidget::PrepareWidget(unsigned i)
+{
+  assert(initialised);
+  assert(prepared);
+
+  Child &child = children[i];
+  if (!child.prepared) {
+    child.prepared = true;
+    child.widget->Prepare(*parent, position);
+  }
+}
+
 bool
 PagerWidget::SetCurrent(unsigned i, bool click)
 {

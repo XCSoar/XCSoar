@@ -80,6 +80,10 @@ public:
     return pager.GetWidget(i);
   }
 
+  void PreparePage(unsigned i) {
+    pager.PrepareWidget(i);
+  }
+
   unsigned GetCurrentPage() const {
     return pager.GetCurrentIndex();
   }

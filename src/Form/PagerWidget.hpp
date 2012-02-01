@@ -84,6 +84,13 @@ public:
     return *children[i].widget;
   }
 
+  /**
+   * Ensure that the specified #Widget is "prepared".  Calling this
+   * method is only legal if this #PagerWidget has been prepared
+   * already, too.
+   */
+  void PrepareWidget(unsigned i);
+
   unsigned GetCurrentIndex() const {
     assert(!children.empty());
 
