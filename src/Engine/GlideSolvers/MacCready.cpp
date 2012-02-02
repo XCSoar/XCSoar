@@ -264,6 +264,26 @@ MacCready::SolveSink(const GlideState &task, const fixed sink_rate) const
 }
 
 GlideResult
+MacCready::SolveStraight(const GlideState &task) const
+{
+  if (!glide_polar.IsValid()) {
+    /* can't solve without a valid GlidePolar() */
+    GlideResult result;
+    result.Reset();
+    return result;
+  }
+
+  if (!positive(task.vector.distance))
+    return SolveVertical(task);
+
+  if (!positive(glide_polar.GetMC()))
+    // whole task must be glide
+    return OptimiseGlide(task);
+
+  return SolveGlide(task, glide_polar.GetVBestLD());
+}
+
+GlideResult
 MacCready::Solve(const GlideState &task) const
 {
   if (!glide_polar.IsValid()) {

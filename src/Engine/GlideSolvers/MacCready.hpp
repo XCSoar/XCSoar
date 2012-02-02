@@ -80,6 +80,12 @@ public:
                                const GlidePolar &glide_polar,
                                const GlideState &task, const fixed sink_rate);
 
+  /**
+   * Like Solve(), but always assume straight glide, no cruise.
+   */
+  gcc_pure
+  GlideResult SolveStraight(const GlideState &task) const;
+
   /** 
    * Calculates the glide solution for a classical MacCready theory task.
    * Internally different calculations are used depending on the nature of the
