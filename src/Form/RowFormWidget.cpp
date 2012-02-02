@@ -165,8 +165,7 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
 {
   assert(IsDefined());
 
-  PixelRect edit_rc = NextControlRect(GetWindow()->get_client_rect(),
-                                      Layout::Scale(22));
+  const PixelRect edit_rc = InitialControlRect(GetMinimumControlHeight());
 
   WindowStyle style;
   if (!read_only)
@@ -334,7 +333,7 @@ RowFormWidget::AddSpacer(void)
 {
   assert(IsDefined());
 
-  PixelRect edit_rc = NextControlRect(GetWindow()->get_client_rect(), Layout::Scale(6));
+  const PixelRect edit_rc = InitialControlRect(Layout::Scale(6));
 
   WindowStyle style;
   EditWindowStyle edit_style;
@@ -375,7 +374,7 @@ RowFormWidget::AddButton(const TCHAR *label, ActionListener *listener, int id)
 {
   assert(IsDefined());
 
-  PixelRect button_rc = NextControlRect(GetWindow()->get_client_rect(), Layout::Scale(22));
+  const PixelRect button_rc = InitialControlRect(GetMinimumControlHeight());
 
   ButtonWindowStyle button_style;
   button_style.TabStop();
