@@ -59,6 +59,8 @@ public:
   MacCready(const GlideSettings &settings, const GlidePolar &_glide_polar,
             const fixed _cruise_efficiency);
 
+  MacCready(const GlideSettings &settings, const GlidePolar &glide_polar);
+
   /** 
    * Calculates the glide solution with a specified sink rate (or lift rate)
    * instead of the actual sink rate supplied by the glide polar.
