@@ -95,6 +95,7 @@ GlideResult::Add(const GlideResult &s2)
     min_arrival_altitude = s2.min_arrival_altitude;
   }
 
+  pure_glide_height += s2.pure_glide_height;
   time_elapsed += s2.time_elapsed;
   height_glide += s2.height_glide;
   height_climb += s2.height_climb;
@@ -105,7 +106,7 @@ fixed
 GlideResult::GlideAngleGround() const
 {
   if (positive(vector.distance))
-    return height_glide / vector.distance;
+    return pure_glide_height / vector.distance;
 
   return fixed_int_constant(1000);
 }
@@ -114,7 +115,7 @@ fixed
 GlideResult::DestinationAngleGround() const
 {
   if (positive(vector.distance))
-    return (altitude_difference+height_glide) / vector.distance;
+    return (altitude_difference + pure_glide_height) / vector.distance;
 
   return fixed_int_constant(1000);
 }

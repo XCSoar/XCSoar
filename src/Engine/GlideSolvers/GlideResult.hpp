@@ -88,6 +88,17 @@ struct GlideResult {
    */
   GeoVector vector;
 
+  /**
+   * The total height that would be glided straight along the vector
+   * if the target were reachable by pure glide (i.e. ignoring current
+   * aircraft altitude, minimum arrival altitude and cruise
+   * efficiency).  Wind is considered, but not additional wind drift
+   * while circling.
+   *
+   * This attribute is only valid when validity==OK.
+   */
+  fixed pure_glide_height;
+
   /** Track bearing in cruise for optimal drift compensation (deg true) */
   Angle cruise_track_bearing;
 
@@ -176,12 +187,12 @@ struct GlideResult {
   }
 
   /**
-   * Absolute altitude required to solve this task [m MSL].  This is
-   * the current aircraft altitude plus #altitude_difference.
+   * Altitude required at the start of the task to solve it in
+   * pure glide [m MSL].
    */
   gcc_pure
   fixed GetRequiredAltitude() const {
-    return min_arrival_altitude + height_glide;
+    return min_arrival_altitude + pure_glide_height;
   }
 
   /**
@@ -203,7 +214,7 @@ struct GlideResult {
    */
   gcc_pure
   fixed GetArrivalAltitude(fixed start_altitude) const {
-    return start_altitude - height_glide;
+    return start_altitude - pure_glide_height;
   }
 
   /**

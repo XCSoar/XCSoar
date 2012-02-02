@@ -66,6 +66,7 @@ MacCready::SolveVertical(const GlideState &task) const
 
   if (!negative(task.altitude_difference)) {
     // immediate solution
+    result.pure_glide_height = fixed_zero;
     result.height_climb = fixed_zero;
     result.height_glide = fixed_zero;
     result.time_elapsed = fixed_zero;
@@ -91,6 +92,7 @@ MacCready::SolveVertical(const GlideState &task) const
   // from (1)
   const fixed time_cruise = task.wind.norm * time_climb / denom1; 
 
+  result.pure_glide_height = fixed_zero;
   result.time_elapsed = time_cruise + time_climb;
   result.height_climb = -task.altitude_difference;
   result.height_glide = fixed_zero;
@@ -196,6 +198,7 @@ MacCready::SolveCruise(const GlideState &task) const
   result.effective_wind_speed *= rho_plus_one;
 
   result.validity = GlideResult::Validity::OK;
+  result.pure_glide_height = task.vector.distance / glide_polar.GetBestLD();
 
   return result;
 }
@@ -220,6 +223,7 @@ MacCready::SolveGlide(const GlideState &task, const fixed v_set,
   }
 
   result.validity = GlideResult::Validity::OK;
+  result.pure_glide_height = task.vector.distance / glide_polar.GetBestLD();
 
   if (allow_partial) {
     const fixed Vndh = estimated_speed * task.altitude_difference;

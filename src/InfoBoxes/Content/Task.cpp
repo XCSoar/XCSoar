@@ -261,7 +261,7 @@ InfoBoxContentNextAltitudeArrival::Update(InfoBoxData &data)
   const MoreData &basic = CommonInterface::Basic();
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
-  if (!task_stats.task_valid || !next_solution.IsFinalGlide()) {
+  if (!task_stats.task_valid || !next_solution.IsAchievable()) {
     data.SetInvalid();
     return;
   }
