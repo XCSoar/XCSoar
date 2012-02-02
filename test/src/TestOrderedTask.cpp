@@ -421,7 +421,7 @@ TestAll()
 
 int main(int argc, char **argv)
 {
-  plan_tests(796);
+  plan_tests(756);
 
   task_behaviour.SetDefaults();
 
