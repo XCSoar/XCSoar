@@ -11,18 +11,7 @@
 
   <Button Name="cmdClose" Caption="Close" Y="-35" Width="70" Height="35" OnClick="OnCloseClicked" />
 
-  <Panel Name="frmInfos" X="70" Y="0">
-    <Edit Name="prpWpComment" Caption="Comment" Height="40" CaptionWidth="88" ReadOnly="1" MultiLine="1" />
-    <Edit Name="Radio" Caption="Radio frequency" Height="20" CaptionWidth="88" ReadOnly="1" />
-    <Edit Name="Runway" Caption="Runway" Height="20" CaptionWidth="88" ReadOnly="1" />
-    <Edit Name="Location" Caption="Location" Height="20" CaptionWidth="88" ReadOnly="1" />
-    <Edit Name="prpAltitude" Caption="Elevation" Height="20" CaptionWidth="138" ReadOnly="1" />
-    <Edit Name="prpSunset" Caption="Sunset" Height="20" CaptionWidth="138" ReadOnly="1" />
-    <Edit Name="BearingDistance" Caption="Bearing and Distance" Height="20" CaptionWidth="138" ReadOnly="1" />
-    <Edit Name="prpMc0" Caption="Alt. diff. MC 0" Height="20" CaptionWidth="138" ReadOnly="1" />
-    <Edit Name="prpMc1" Caption="Alt. diff. MC safety" Height="20" CaptionWidth="138" ReadOnly="1" />
-    <Edit Name="prpMc2" Caption="Alt. diff. MC current" Height="20" CaptionWidth="138" ReadOnly="1" />
-  </Panel>
+  <Widget Name="info" X="70" Y="0"/>
 
   <Panel Name="frmDetails" X="70" Y="0">
     <List Name="Files" Y="0" ItemHeight="18" />

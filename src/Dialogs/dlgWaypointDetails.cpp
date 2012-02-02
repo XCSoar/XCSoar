@@ -22,13 +22,16 @@ Copyright_License {
 */
 
 #include "Dialogs/Waypoint.hpp"
+#include "Dialogs/Waypoint/WaypointInfoWidget.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/XML.hpp"
+#include "UIGlobals.hpp"
 #include "Form/Form.hpp"
 #include "Form/Edit.hpp"
 #include "Form/List.hpp"
 #include "Form/Button.hpp"
+#include "Form/DockWindow.hpp"
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
 #include "LocalTime.hpp"
@@ -74,7 +77,7 @@ class WndOwnerDrawFrame;
 static int page = 0;
 static WndForm *wf = NULL;
 static Window *wDetails = NULL;
-static Window *wInfo = NULL;
+static DockWindow *wInfo = NULL;
 static Window *wCommand = NULL;
 static PaintWindow *wImage = NULL;
 static WndButton *wMagnify = NULL;
@@ -514,176 +517,10 @@ UpdateCaption(const TCHAR *waypoint_name)
   wf->SetCaption(buffer);
 }
 
-static void
-UpdateComment(const TCHAR *comment)
-{
-  WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpWpComment"));
-  assert(wp != NULL);
-  wp->SetText(comment);
-}
-
-static void
-UpdateLocation(const GeoPoint &location)
-{
-  WndProperty *wp = (WndProperty *)wf->FindByName(_T("Location"));
-  assert(wp != NULL);
-
-  TCHAR buffer[64];
-  if (FormatGeoPoint(location, buffer, ARRAY_SIZE(buffer)) != NULL)
-    wp->SetText(buffer);
-}
-
-static void
-UpdateDistanceBearing(const GeoPoint &own_location,
-                      const GeoPoint &waypoint_location)
-{
-  WndProperty *wp = (WndProperty *)wf->FindByName(_T("BearingDistance"));
-  assert(wp != NULL);
-
-  GeoVector vector = own_location.DistanceBearing(waypoint_location);
-
-  TCHAR distance_buffer[32];
-  Units::FormatUserDistanceSmart(vector.distance, distance_buffer,
-                            ARRAY_SIZE(distance_buffer));
-
-  TCHAR buffer[64];
-  FormatBearing(buffer, ARRAY_SIZE(buffer), vector.bearing, distance_buffer);
-
-  wp->SetText(buffer);
-}
-
-static void
-UpdateElevation(fixed elevation)
-{
-  WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpAltitude"));
-  assert(wp != NULL);
-
-  TCHAR buffer[64];
-  Units::FormatUserAltitude(elevation, buffer, ARRAY_SIZE(buffer));
-  wp->SetText(buffer);
-}
-
-static void
-UpdateRadioFrequency(const RadioFrequency &radio_frequency)
-{
-  if (!radio_frequency.IsDefined())
-    return;
-
-  WndProperty *wp = (WndProperty *)wf->FindByName(_T("Radio"));
-  assert(wp != NULL);
-
-  TCHAR buffer[64];
-  if (radio_frequency.Format(buffer, ARRAY_SIZE(buffer)) != NULL) {
-    _tcscat(buffer, _T(" MHz"));
-    wp->SetText(buffer);
-  }
-}
-
-static void
-UpdateRunwayInformation(const Runway &runway)
-{
-  WndProperty *wp = (WndProperty *)wf->FindByName(_T("Runway"));
-  assert(wp != NULL);
-
-  StaticString<64> buffer;
-  if (runway.IsDirectionDefined())
-    buffer.Format(_T("%02u"), runway.GetDirectionName());
-  else
-    buffer.clear();
-
-  if (runway.IsLengthDefined()) {
-    if (!buffer.empty())
-      buffer += _T("; ");
-
-    TCHAR length_buffer[16];
-    Units::FormatSmallUserDistance(length_buffer, fixed(runway.GetLength()));
-    buffer += length_buffer;
-  }
-
-  wp->SetText(buffer);
-}
-
-static void
-UpdateSunsetTime(const GeoPoint &location, const BrokenDateTime &date_time)
-{
-  WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpSunset"));
-  assert(wp != NULL);
-
-  SunEphemeris::Result sun = SunEphemeris::CalcSunTimes(
-      location, date_time, fixed(GetUTCOffset()) / 3600);
-
-  int sunset_hour = (int)sun.time_of_sunset;
-  int sunset_minute = (int)((sun.time_of_sunset - fixed(sunset_hour)) * 60);
-
-  StaticString<64> buffer;
-  buffer.Format(_T("%02d:%02d"), sunset_hour, sunset_minute);
-
-  wp->SetText(buffer);
-}
-
-/**
- * Show the GlideResult in the form control.
- */
-static void
-ShowGlideResult(WndProperty &wp, const GlideResult &result)
-{
-  TCHAR buffer[64];
-  Units::FormatRelativeUserAltitude(result.altitude_difference,
-                           buffer, ARRAY_SIZE(buffer));
-  wp.SetText(buffer);
-}
-
-static void
-UpdateArrivalAltitudes(const ComputerSettings &settings_computer,
-                       const MoreData &basic, const DerivedInfo &calculated,
-                       const Waypoint &waypoint)
-{
-  GlidePolar glide_polar = settings_computer.glide_polar_task;
-  const GlidePolar &safety_polar = calculated.glide_polar_safety;
-
-  const GlideState glide_state(basic.location.DistanceBearing(waypoint.location),
-                               waypoint.altitude + settings_computer.task.safety_height_arrival,
-                               basic.nav_altitude,
-                               calculated.GetWindOrZero());
-
-  // alt reqd at current mc
-  WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
-  assert(wp != NULL);
-
-  GlideResult r = MacCready::Solve(settings_computer.task.glide,
-                                   glide_polar, glide_state);
-
-  ShowGlideResult(*wp, r);
-
-  // alt reqd at mc 0
-  wp = (WndProperty *)wf->FindByName(_T("prpMc0"));
-  assert(wp != NULL);
-
-  glide_polar.SetMC(fixed_zero);
-  r = MacCready::Solve(settings_computer.task.glide,
-                       glide_polar, glide_state);
-
-  ShowGlideResult(*wp, r);
-
-  // alt reqd at safety mc
-  wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
-  assert(wp != NULL);
-
-  r = MacCready::Solve(settings_computer.task.glide,
-                       safety_polar, glide_state);
-
-  ShowGlideResult(*wp, r);
-}
-
 void 
 dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
                             bool allow_navigation)
 {
-  const MoreData &basic = CommonInterface::Basic();
-  const DerivedInfo &calculated = CommonInterface::Calculated();
-  const ComputerSettings &settings_computer =
-    CommonInterface::GetComputerSettings();
-
   waypoint = &_waypoint;
 
   wf = LoadDialog(CallBackTable, parent,
@@ -692,27 +529,13 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   assert(wf != NULL);
 
   UpdateCaption(waypoint->name.c_str());
-  UpdateComment(waypoint->comment.c_str());
-
-  UpdateLocation(waypoint->location);
-
-  if (basic.location_available)
-    UpdateDistanceBearing(basic.location, waypoint->location);
-
-  UpdateElevation(waypoint->altitude);
-  UpdateRadioFrequency(waypoint->radio_frequency);
-  UpdateRunwayInformation(waypoint->runway);
-
-  if (basic.connected)
-    UpdateSunsetTime(waypoint->location, basic.date_time_utc);
-
-  if (protected_task_manager != NULL)
-    UpdateArrivalAltitudes(settings_computer, basic, calculated, *waypoint);
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  wInfo = wf->FindByName(_T("frmInfos"));
+  wInfo = (DockWindow *)wf->FindByName(_T("info"));
   assert(wInfo != NULL);
+  wInfo->SetWidget(new WaypointInfoWidget(UIGlobals::GetDialogLook(),
+                                          _waypoint));
 
   wCommand = wf->FindByName(_T("frmCommands"));
   assert(wCommand != NULL);

@@ -175,6 +175,8 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/StatusPanels/RulesStatusPanel.cpp \
 	$(SRC)/Dialogs/StatusPanels/TimesStatusPanel.cpp \
 	\
+	$(SRC)/Dialogs/Waypoint/WaypointInfoWidget.cpp \
+	\
 	$(SRC)/Dialogs/dlgSwitches.cpp \
 	\
 	$(SRC)/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp \
