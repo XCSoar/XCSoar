@@ -276,12 +276,12 @@ MacCready::Solve(const GlideState &task) const
   if (!positive(task.vector.distance))
     return SolveVertical(task);
 
-  if (!settings.predict_wind_drift && positive(glide_polar.GetMC()))
-    return SolveGlide(task, glide_polar.GetVBestLD());
-
   if (!positive(glide_polar.GetMC()))
     // whole task must be glide
     return OptimiseGlide(task, false);
+
+  if (!settings.predict_wind_drift)
+    return SolveGlide(task, glide_polar.GetVBestLD());
 
   if (negative(task.altitude_difference))
     // whole task climb-cruise
