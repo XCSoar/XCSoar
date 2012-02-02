@@ -44,9 +44,23 @@ WaypointInfoWidget::AddGlideResult(const TCHAR *label,
                                    const GlideResult &result)
 {
   TCHAR buffer[64];
-  Units::FormatRelativeUserAltitude(result.altitude_difference,
-                                    buffer, ARRAY_SIZE(buffer));
-  AddReadOnly(label, NULL, buffer);
+
+  switch (result.validity) {
+  case GlideResult::Validity::OK:
+    Units::FormatRelativeUserAltitude(result.altitude_difference,
+                                      buffer, ARRAY_SIZE(buffer));
+    AddReadOnly(label, NULL, buffer);
+    break;
+
+  case GlideResult::Validity::WIND_EXCESSIVE:
+  case GlideResult::Validity::MACCREADY_INSUFFICIENT:
+    AddReadOnly(label, NULL, _("Too much wind"));
+    break;
+
+  case GlideResult::Validity::NO_SOLUTION:
+    AddReadOnly(label, NULL, _("No solution"));
+    break;
+  }
 }
 
 void
