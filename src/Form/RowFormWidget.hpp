@@ -47,6 +47,11 @@ class RowFormWidget : public WindowWidget {
   struct Row {
     enum class Type : uint8_t {
       /**
+       * A dummy entry without a #Window.  Its height is zero.
+       */
+      DUMMY,
+
+      /**
        * A generic #Window.
        */
       GENERIC,
@@ -86,8 +91,14 @@ class RowFormWidget : public WindowWidget {
 
     Row() = default;
 
+    Row(Type _type)
+      :type(_type), visible(false), expert(false), window(NULL) {
+      assert(_type == Type::DUMMY);
+    }
+
     Row(Type _type, Window *_window)
       :type(_type), visible(true), expert(false), window(_window) {
+      assert(_type != Type::DUMMY);
       assert(_window != NULL);
     }
 
@@ -155,6 +166,15 @@ protected:
   void Add(Row::Type type, Window *window);
 
 public:
+  /**
+   * Add a "dummy" row.  It does not have a #Window and its height is
+   * zero.  This may be used to "reserve" a row index when a row is
+   * not present in a certain instance of the form.
+   */
+  void AddDummy() {
+    rows.push_back(Row::Type::DUMMY);
+  }
+
   void Add(Window *window) {
     Add(Row::Type::GENERIC, window);
   }

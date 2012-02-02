@@ -75,6 +75,9 @@ UPixelScalar
 RowFormWidget::Row::GetMinimumHeight() const
 {
   switch (type) {
+  case Type::DUMMY:
+    return 0;
+
   case Type::GENERIC:
     break;
 
@@ -93,6 +96,9 @@ UPixelScalar
 RowFormWidget::Row::GetMaximumHeight() const
 {
   switch (type) {
+  case Type::DUMMY:
+    return 0;
+
   case Type::GENERIC:
     break;
 
@@ -703,6 +709,9 @@ RowFormWidget::UpdateLayout()
 
   /* second row traversal: now move and resize the rows */
   for (auto i = rows.begin(), end = rows.end(); i != end; ++i) {
+    if (i->type == Row::Type::DUMMY)
+      continue;
+
     Window &window = i->GetWindow();
 
     if (i->expert) {
