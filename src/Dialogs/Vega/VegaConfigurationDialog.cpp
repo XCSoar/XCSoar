@@ -110,9 +110,6 @@ SetParametersScheme(int schemetype)
     tabbed->PreparePage(4 + i);
     ((VegaAudioParametersWidget &)tabbed->GetPage(4 + i)).LoadScheme(scheme.audio[i]);
   }
-
-  MessageBoxX(_("Audio scheme updated."),
-              _("Vega Audio"), MB_OK);
 }
 
 static void
@@ -292,11 +289,6 @@ dlgConfigurationVarioShowModal(Device &_device)
 {
   device = (VegaDevice *)&_device;
   changed = dirty = false;
-
-  if (devVarioFindVega() == NULL) {
-    MessageBoxX(_("No communication with Vega."), _("Vega error"), MB_OK);
-    return false;
-  }
 
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape
