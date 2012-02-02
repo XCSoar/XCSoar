@@ -204,6 +204,15 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
   return edit;
 }
 
+void
+RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
+                           const TCHAR *text)
+{
+  WndProperty *control = Add(label, help, true);
+  if (text != NULL)
+    control->SetText(text);
+}
+
 WndProperty *
 RowFormWidget::Add(const TCHAR *label, const TCHAR *help,
                    DataField *df)

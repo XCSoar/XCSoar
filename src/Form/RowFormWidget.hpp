@@ -190,6 +190,13 @@ public:
   WndProperty *Add(const TCHAR *label, const TCHAR *help=NULL,
                    bool read_only=false);
 
+  /**
+   * Add a read-only control.  You can use SetText() to update its
+   * text.
+   */
+  void AddReadOnly(const TCHAR *label, const TCHAR *help=NULL,
+                   const TCHAR *text=NULL);
+
   WndProperty *Add(const TCHAR *label, const TCHAR *help,
                    DataField *df);
 
@@ -277,6 +284,17 @@ public:
   gcc_pure
   const WndProperty &GetControl(unsigned i) const {
     return rows[i].GetControl();
+  }
+
+  /**
+   * Update the text of a multi line control.
+   */
+  void SetText(unsigned i, const TCHAR *text) {
+    assert(text != NULL);
+
+    WndProperty &control = GetControl(i);
+    assert(control.GetDataField() == NULL);
+    control.SetText(text);
   }
 
   gcc_pure
