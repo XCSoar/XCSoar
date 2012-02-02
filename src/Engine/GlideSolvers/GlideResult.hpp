@@ -75,9 +75,10 @@ struct GlideResult {
 #endif
 
   /**
-   * Altitude [m above MSL] of target.  Immutable input value.
+   * The minimum altitude for arrival at the target (i.e. target
+   * altitude plus safety margin).  Immutable input value.
    */
-  fixed min_height;
+  fixed min_arrival_altitude;
 
   /**
    * Cruise vector of this result.  Usually, this equals the remaining
@@ -180,7 +181,7 @@ struct GlideResult {
    */
   gcc_pure
   fixed GetRequiredAltitude() const {
-    return min_height + height_glide;
+    return min_arrival_altitude + height_glide;
   }
 
   /**

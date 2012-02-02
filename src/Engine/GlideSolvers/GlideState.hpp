@@ -33,8 +33,13 @@ struct GlideState
 {
   /** Distance/bearing of task */
   GeoVector vector;
-  /** Height (m above MSL) of end */
-  fixed min_height;
+
+  /**
+   * The minimum altitude for arrival at the target (i.e. target
+   * altitude plus safety margin).
+   */
+  fixed min_arrival_altitude;
+
   /** Wind vector (deg True) */
   SpeedVector wind;
   /** Aircraft height less target height */

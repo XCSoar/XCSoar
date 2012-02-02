@@ -29,9 +29,9 @@ GlideResult::GlideResult(const GlideState &task, const fixed V):
   head_wind(task.head_wind),
   v_opt(V),
 #ifndef NDEBUG
-  start_altitude(task.min_height + task.altitude_difference),
+  start_altitude(task.min_arrival_altitude + task.altitude_difference),
 #endif
-  min_height(task.min_height),
+  min_arrival_altitude(task.min_arrival_altitude),
   vector(task.vector),
   altitude_difference(task.altitude_difference),
   effective_wind_speed(task.wind.norm),
@@ -78,21 +78,21 @@ GlideResult::Add(const GlideResult &s2)
        PARTIAL */
     return;
 
-  if (s2.GetRequiredAltitude() < min_height) {
+  if (s2.GetRequiredAltitude() < min_arrival_altitude) {
     /* must meet the safety height of the first leg */
-    assert(s2.min_height < s2.GetArrivalAltitude(min_height));
+    assert(s2.min_arrival_altitude < s2.GetArrivalAltitude(min_arrival_altitude));
 
     /* calculate a new minimum arrival height that considers the
        "mountain top" in the middle */
-    min_height = s2.GetArrivalAltitude(min_height);
+    min_arrival_altitude = s2.GetArrivalAltitude(min_arrival_altitude);
   } else {
     /* must meet the safety height of the second leg */
 
     /* apply the increased altitude requirement */
-    altitude_difference -= s2.GetRequiredAltitude() - min_height;
+    altitude_difference -= s2.GetRequiredAltitude() - min_arrival_altitude;
 
     /* adopt the minimum height of the second leg */
-    min_height = s2.min_height;
+    min_arrival_altitude = s2.min_arrival_altitude;
   }
 
   time_elapsed += s2.time_elapsed;

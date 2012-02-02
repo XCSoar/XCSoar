@@ -78,8 +78,8 @@ GlideState::CalcAverageSpeed(const fixed Veff) const
 GlideState::GlideState(const GeoVector &vector, const fixed htarget,
                        fixed altitude, const SpeedVector wind) :
   vector(vector),
-  min_height(htarget),
-  altitude_difference(altitude - min_height)
+  min_arrival_altitude(htarget),
+  altitude_difference(altitude - min_arrival_altitude)
 {
   CalcSpeedups(wind);
 }

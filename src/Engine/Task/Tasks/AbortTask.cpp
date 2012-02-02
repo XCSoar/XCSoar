@@ -165,7 +165,7 @@ AbortTask::FillReachable(const AircraftState &state,
 
       if (intersection_test && final_glide && is_reachable_final)
         intersects = intersection_test->Intersects(
-            AGeoPoint(v->waypoint.location, result.min_height));
+            AGeoPoint(v->waypoint.location, result.min_arrival_altitude));
 
       if (!intersects) {
         q.push(Alternate(v->waypoint, result));
