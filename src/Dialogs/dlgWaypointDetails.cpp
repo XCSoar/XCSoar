@@ -67,10 +67,10 @@ Copyright_License {
 
 static int page = 0;
 static WndForm *wf = NULL;
-static WndFrame *wDetails = NULL;
-static WndFrame *wInfo = NULL;
-static WndFrame *wCommand = NULL;
-static WndOwnerDrawFrame *wImage = NULL;
+static Window *wDetails = NULL;
+static Window *wInfo = NULL;
+static Window *wCommand = NULL;
+static PaintWindow *wImage = NULL;
 static WndButton *wMagnify = NULL;
 static WndButton *wShrink = NULL;
 static const Waypoint *waypoint = NULL;
@@ -707,14 +707,14 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  wInfo = (WndFrame *)wf->FindByName(_T("frmInfos"));
+  wInfo = wf->FindByName(_T("frmInfos"));
   assert(wInfo != NULL);
 
-  wCommand = (WndFrame *)wf->FindByName(_T("frmCommands"));
+  wCommand = wf->FindByName(_T("frmCommands"));
   assert(wCommand != NULL);
   wCommand->hide();
 
-  wDetails = (WndFrame *)wf->FindByName(_T("frmDetails"));
+  wDetails = wf->FindByName(_T("frmDetails"));
   assert(wDetails != NULL);
 
   WndListFrame *wFilesList = (WndListFrame *)wf->FindByName(_T("Files"));
@@ -743,7 +743,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
 #endif
     wFilesList->hide();
 
-  wImage = (WndOwnerDrawFrame *)wf->FindByName(_T("frmImage"));
+  wImage = (PaintWindow *)wf->FindByName(_T("frmImage"));
   assert(wImage != NULL);
   wMagnify = (WndButton *)wf->FindByName(_T("cmdMagnify"));
   assert(wMagnify != NULL);
