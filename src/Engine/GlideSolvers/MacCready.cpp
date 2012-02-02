@@ -32,8 +32,6 @@
 #include <algorithm>
 #include <assert.h>
 
-#define fixed_1mil fixed_int_constant(1000000)
-
 #ifdef INSTRUMENT_TASK
 // global, used for test harness
 long count_mc = 0;
@@ -262,13 +260,7 @@ MacCready::SolveGlide(const GlideState &task, const fixed v_set,
 GlideResult
 MacCready::SolveSink(const GlideState &task, const fixed sink_rate) const
 {
-  const fixed height_offset = fixed_1mil;
-  GlideState virtual_task = task;
-  virtual_task.altitude_difference += height_offset;
-  GlideResult result = SolveGlide(virtual_task, glide_polar.GetVBestLD(),
-                                  sink_rate);
-  result.altitude_difference -= height_offset;
-  return result;
+  return SolveGlide(task, glide_polar.GetVBestLD(), sink_rate);
 }
 
 GlideResult
