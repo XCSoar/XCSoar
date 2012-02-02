@@ -97,7 +97,7 @@ static void
 SetParametersScheme(int schemetype)
 {
   if(MessageBoxX(_("Set new audio scheme?  Old values will be lost."),
-                 _("Vega Audio"),
+                 _T("Vega"),
                  MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
