@@ -22,14 +22,16 @@ Copyright_License {
 */
 
 #include "Dialogs/Waypoint.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Engine/Task/TaskEvents.hpp"
-#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
+#include "Dialogs/Message.hpp"
+#include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
+#include "Form/Edit.hpp"
+#include "Form/List.hpp"
+#include "Form/Button.hpp"
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
 #include "LocalTime.hpp"
-#include "OS/PathName.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "ComputerSettings.hpp"
 #include "LocalPath.hpp"
@@ -39,6 +41,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "Interface.hpp"
 #include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideState.hpp"
@@ -55,6 +58,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Util/Macros.hpp"
+#include "Language/Language.hpp"
 
 #ifdef ANDROID
 #include "Android/NativeView.hpp"
@@ -64,6 +68,8 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 #include <windef.h> /* for MAX_PATH */
+
+class WndOwnerDrawFrame;
 
 static int page = 0;
 static WndForm *wf = NULL;
@@ -316,9 +322,7 @@ goto_and_clear_task(const Waypoint &wp)
 
   protected_task_manager->DoGoto(wp);
   TaskEvents task_events;
-  const OrderedTask blank(task_events,
-                          XCSoarInterface::GetComputerSettings(),
-                          XCSoarInterface::Calculated().glide_polar_task);
+  const OrderedTask blank(XCSoarInterface::GetComputerSettings().task);
   protected_task_manager->task_commit(blank);
 
   return SUCCESS;
