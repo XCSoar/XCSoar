@@ -85,6 +85,9 @@ RowFormWidget::Row::GetMinimumHeight() const
   case Type::BUTTON:
     return GetMinimumControlHeight();
 
+  case Type::MULTI_LINE:
+    return GetMinimumControlHeight() * 2;
+
   case Type::REMAINING:
     return GetMinimumControlHeight();
   }
@@ -105,6 +108,9 @@ RowFormWidget::Row::GetMaximumHeight() const
   case Type::EDIT:
   case Type::BUTTON:
     return GetMaximumControlHeight();
+
+  case Type::MULTI_LINE:
+    return GetMinimumControlHeight() * 3;
 
   case Type::REMAINING:
     return 4096;
@@ -382,6 +388,42 @@ RowFormWidget::AddFileReader(const TCHAR *label, const TCHAR *help,
   edit->RefreshDisplay();
 
   return edit;
+}
+
+void
+RowFormWidget::AddMultiLine(const TCHAR *label, const TCHAR *help,
+                            const TCHAR *text)
+{
+  assert(IsDefined());
+
+  PixelRect edit_rc = InitialControlRect(GetMinimumControlHeight());
+
+  WindowStyle style;
+
+  EditWindowStyle edit_style;
+  edit_style.multiline();
+  edit_style.VerticalScroll();
+  edit_style.read_only();
+
+  if (IsEmbedded() || Layout::scale_1024 < 2048)
+    /* sunken edge doesn't fit well on the tiny screen of an embedded
+       device */
+    edit_style.Border();
+  else
+    edit_style.SunkenEdge();
+
+  PanelControl &panel = *(PanelControl *)GetWindow();
+  WndProperty *edit =
+    new WndProperty(panel, look, label,
+                    edit_rc, (*label == '\0') ? 0 : 100,
+                    style, edit_style, NULL);
+  if (help != NULL)
+    edit->SetHelpText(help);
+
+  if (text != NULL)
+    edit->SetText(text);
+
+  Add(Row::Type::MULTI_LINE, edit);
 }
 
 void

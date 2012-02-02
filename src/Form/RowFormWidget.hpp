@@ -62,6 +62,11 @@ class RowFormWidget : public WindowWidget {
       EDIT,
 
       /**
+       * A multi-line #WndProperty.
+       */
+      MULTI_LINE,
+
+      /**
        * A #WndButton.
        */
       BUTTON,
@@ -247,6 +252,13 @@ public:
   WndProperty *AddFileReader(const TCHAR *label, const TCHAR *help,
                              const TCHAR *registry_key, const TCHAR *filters);
 
+  /**
+   * Add a read-only multi-line control.  You can use
+   * SetMultiLineText() to update its text.
+   */
+  void AddMultiLine(const TCHAR *label, const TCHAR *help=NULL,
+                    const TCHAR *text=NULL);
+
   void AddButton(const TCHAR *label, ActionListener *listener=NULL, int id=0);
 
   gcc_pure
@@ -293,6 +305,18 @@ public:
     assert(text != NULL);
 
     WndProperty &control = GetControl(i);
+    assert(control.GetDataField() == NULL);
+    control.SetText(text);
+  }
+
+  /**
+   * Update the text of a multi line control.
+   */
+  void SetMultiLineText(unsigned i, const TCHAR *text) {
+    assert(text != NULL);
+    assert(rows[i].type == Row::Type::MULTI_LINE);
+
+    WndProperty &control = *(WndProperty *)rows[i].window;
     assert(control.GetDataField() == NULL);
     control.SetText(text);
   }
