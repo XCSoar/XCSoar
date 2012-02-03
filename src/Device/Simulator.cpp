@@ -94,13 +94,8 @@ Simulator::Touch(NMEAInfo &basic)
 
   basic.UpdateClock();
   basic.connected.Update(basic.clock);
-  basic.gps.satellites_used_available.Clear();
   basic.gps.simulator = true;
   basic.gps.real = false;
-
-#ifdef ANDROID
-  basic.gps.android_internal_gps = false;
-#endif
 
   basic.location_available.Update(basic.clock);
   basic.gps_altitude_available.Update(basic.clock);
