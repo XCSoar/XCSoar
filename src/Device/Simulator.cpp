@@ -98,7 +98,14 @@ Simulator::Touch(NMEAInfo &basic)
   basic.gps.real = false;
 
   basic.location_available.Update(basic.clock);
+  basic.track_available.Update(basic.clock);
+  basic.ground_speed_available.Update(basic.clock);
   basic.gps_altitude_available.Update(basic.clock);
+
+  basic.time_available.Update(basic.clock);
+  basic.time += fixed_one;
+  (BrokenTime &)basic.date_time_utc =
+    BrokenTime::FromSecondOfDayChecked((unsigned)basic.time);
 }
 
 void
@@ -110,13 +117,6 @@ Simulator::Process(NMEAInfo &basic)
 
   basic.location = FindLatitudeLongitude(basic.location, basic.track,
                                          basic.ground_speed);
-  basic.track_available.Update(basic.clock);
-  basic.ground_speed_available.Update(basic.clock);
-
-  basic.time_available.Update(basic.clock);
-  basic.time += fixed_one;
-  (BrokenTime &)basic.date_time_utc =
-    BrokenTime::FromSecondOfDayChecked((unsigned)basic.time);
 
   // use this to test FLARM parsing/display
   if (IsDebug() && !IsAltair())
