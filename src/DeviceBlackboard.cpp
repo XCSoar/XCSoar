@@ -173,7 +173,6 @@ DeviceBlackboard::SetSpeed(fixed val)
 
   simulator.Touch(basic);
   basic.ground_speed = val;
-  basic.ProvideBothAirspeeds(val);
 
   ScheduleMerge();
 }
@@ -208,8 +207,6 @@ DeviceBlackboard::SetAltitude(fixed val)
 
   simulator.Touch(basic);
   basic.gps_altitude = val;
-  basic.ProvidePressureAltitude(val);
-  basic.ProvideBaroAltitudeTrue(val);
 
   ScheduleMerge();
 }

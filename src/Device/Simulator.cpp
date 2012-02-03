@@ -126,8 +126,4 @@ Simulator::Process(NMEAInfo &basic)
   // use this to test FLARM parsing/display
   if (IsDebug() && !IsAltair())
     GenerateFLARMTraffic(basic);
-
-  // clear Airspeed as it is not available in simulation mode
-  basic.airspeed_available.Clear();
-  basic.airspeed_real = false;
 }
