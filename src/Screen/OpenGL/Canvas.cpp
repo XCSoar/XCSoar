@@ -242,7 +242,7 @@ Canvas::circle(int x, int y, unsigned radius)
     /* draw a "small" circle with VBO */
 
     OpenGL::small_circle_buffer->Bind();
-    glVertexPointer(2, GL_VALUE, 0, NULL);
+    glVertexPointer(2, GL_SHORT, 0, NULL);
 
     glPushMatrix();
 
@@ -271,7 +271,7 @@ Canvas::circle(int x, int y, unsigned radius)
     /* draw a "big" circle with VBO */
 
     OpenGL::circle_buffer->Bind();
-    glVertexPointer(2, GL_VALUE, 0, NULL);
+    glVertexPointer(2, GL_SHORT, 0, NULL);
 
     glPushMatrix();
 
