@@ -44,7 +44,7 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name,
   DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
   assert(df.GetType() == DataField::Type::REAL);
   df.SetUnits(Units::GetUnitName(unit));
-  df.SetAsInteger(iround(Units::ToUserUnit(fixed(value), unit)));
+  df.Set(fixed(iround(Units::ToUserUnit(fixed(value), unit))));
   ctl->RefreshDisplay();
 }
 
@@ -81,7 +81,7 @@ LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
   DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
   assert(df.GetType() == DataField::Type::REAL);
   df.SetUnits(Units::GetUnitName(unit));
-  df.SetAsInteger(iround(Units::ToUserUnit(fixed(value), unit)));
+  df.Set(fixed(iround(Units::ToUserUnit(fixed(value), unit))));
   ctl->RefreshDisplay();
 }
 
