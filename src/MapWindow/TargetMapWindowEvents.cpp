@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "TargetMapWindow.hpp"
+#include "Screen/Layout.hpp"
 
 bool
 TargetMapWindow::OnCancelMode()
@@ -51,6 +52,11 @@ TargetMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
     drag_mode = DRAG_TARGET;
     set_capture();
     return true;
+  } else if (isInSector(x, y)) {
+    drag_mode = DRAG_OZ;
+    set_capture();
+    PaintWindow::invalidate();
+    return true;
   }
 
   return false;
@@ -70,6 +76,10 @@ TargetMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
     break;
 
   case DRAG_TARGET:
+    TargetDragged(drag_last.x, drag_last.y);
+    return true;
+
+  case DRAG_OZ:
     TargetDragged(drag_last.x, drag_last.y);
     return true;
   }
@@ -93,6 +103,17 @@ TargetMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
          icon on top */
       PaintWindow::invalidate();
     }
+    return true;
+
+  case DRAG_OZ:
+    if (manhattan_distance(drag_last, RasterPoint{x,y}) > (unsigned)Layout::Scale(10)) {
+      /* cancel the target move click when the finger has moved too
+         far since it was pressed down */
+      release_capture();
+      drag_mode = DRAG_NONE;
+      PaintWindow::invalidate();
+    }
+
     return true;
   }
 

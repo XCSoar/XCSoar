@@ -25,6 +25,7 @@ Version 6.3 - not yet released
   - show airspaces in the task manager
   - larger form rows on touch screens
   - added UTM coordinate format
+  - single click in target dialog moves the target
 * logger
   - added "Start only" option for auto logger
 * data files

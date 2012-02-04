@@ -81,6 +81,13 @@ class TargetMapWindow : public BufferWindow {
   enum DragMode {
     DRAG_NONE,
     DRAG_TARGET,
+
+    /**
+     * User has pressed the finger on the observation zone; if he
+     * releases and hasn't moved the finger, the target will be moved
+     * here (without having to drag the target explicitly).
+     */
+    DRAG_OZ,
   } drag_mode;
 
   RasterPoint drag_start, drag_last;
