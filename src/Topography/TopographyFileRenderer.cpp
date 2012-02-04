@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "Screen/Features.hpp"
+#include "Screen/Layout.hpp"
 #include "Math/Matrix2D.hpp"
 #include "shapelib/mapserver.h"
 #include "Util/AllocatedArray.hpp"
@@ -156,7 +157,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
 #ifdef ENABLE_OPENGL
   const unsigned level = file.GetThinningLevel(map_scale);
-  const unsigned min_distance = file.GetMinimumPointDistance(level);
+  const unsigned min_distance = file.GetMinimumPointDistance(level)
+    / Layout::Scale(1);
 
 #ifndef HAVE_GLES
   float opengl_matrix[16];

@@ -24,7 +24,6 @@ Copyright_License {
 #include "Topography/TopographyFile.hpp"
 #include "Topography/XShape.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Screen/Layout.hpp"
 
 #include <zzip/lib.h>
 
@@ -191,11 +190,11 @@ TopographyFile::GetMinimumPointDistance(unsigned level) const
 {
   switch (level) {
     case 1:
-      return (unsigned)(fixed(4) * scale_threshold / Layout::Scale(30));
+      return (unsigned)(fixed(4) * scale_threshold / 30);
     case 2:
-      return (unsigned)(fixed(6) * scale_threshold / Layout::Scale(30));
+      return (unsigned)(fixed(6) * scale_threshold / 30);
     case 3:
-      return (unsigned)(fixed(9) * scale_threshold / Layout::Scale(30));
+      return (unsigned)(fixed(9) * scale_threshold / 30);
   }
   return 1;
 }
