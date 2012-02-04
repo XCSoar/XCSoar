@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "WindowProjection.hpp"
-#include "Screen/Layout.hpp"
 
 bool
 WindowProjection::GeoVisible(const GeoPoint &loc) const
@@ -54,12 +53,6 @@ void
 WindowProjection::SetScaleFromRadius(fixed radius)
 {
   SetScale(fixed(GetMinScreenDistance()) / (radius * 2));
-}
-
-int
-WindowProjection::GetMapResolutionFactor()
-{
-  return Layout::Scale(30);
 }
 
 fixed

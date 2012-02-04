@@ -332,7 +332,6 @@ $(eval $(call link-program,TestClimbAvCalc,TEST_CLIMB_AV_CALC))
 
 TEST_PROJECTION_SOURCES = \
 	$(SRC)/Projection/Projection.cpp \
-	$(SRC)/Screen/Layout.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestProjection.cpp
 TEST_PROJECTION_DEPENDS = MATH

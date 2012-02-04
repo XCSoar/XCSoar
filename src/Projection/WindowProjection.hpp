@@ -169,8 +169,10 @@ public:
   void UpdateScreenBounds();
 
 protected:
-  gcc_const
-  static int GetMapResolutionFactor();
+  gcc_pure
+  int GetMapResolutionFactor() const {
+    return GetMinScreenDistance() / 8;
+  }
 };
 
 #endif

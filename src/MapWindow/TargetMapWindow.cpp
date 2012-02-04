@@ -101,7 +101,7 @@ TargetMapWindow::set(ContainerWindow &parent,
                      UPixelScalar width, UPixelScalar height,
                      WindowStyle style)
 {
-  projection.SetFreeMapScale(fixed_int_constant(5000));
+  projection.SetScale(fixed(0.01));
 
   BufferWindow::set(parent, left, top, width, height, style);
 }
