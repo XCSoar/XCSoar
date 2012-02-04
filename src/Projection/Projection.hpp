@@ -83,7 +83,9 @@ public:
   fixed GetMapScale() const;
 
   gcc_pure
-  fixed GetScale() const;
+  fixed GetScale() const {
+    return scale;
+  }
 
   /**
    * Sets the scaling factor
