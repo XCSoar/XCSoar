@@ -47,6 +47,8 @@ namespace Layout
    */
   extern unsigned small_scale;
 
+  extern UPixelScalar minimum_control_height, maximum_control_height;
+
   /**
    * Initializes the screen layout information provided by this
    * namespace.
@@ -117,6 +119,26 @@ namespace Layout
   ScaleY(PixelScalar y)
   {
     return y;
+  }
+
+  /**
+   * Returns the minimum height of an dialog control.
+   */
+  gcc_pure
+  static inline UPixelScalar
+  GetMinimumControlHeight()
+  {
+    return minimum_control_height;
+  }
+
+  /**
+   * Returns the maximum useful height of a dialog control.
+   */
+  gcc_pure
+  static inline UPixelScalar
+  GetMaximumControlHeight()
+  {
+    return maximum_control_height;
   }
 }
 

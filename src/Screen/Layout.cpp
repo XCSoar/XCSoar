@@ -35,6 +35,7 @@ namespace Layout
   int scale = 1;
   unsigned scale_1024 = 1024;
   unsigned small_scale = 1024;
+  UPixelScalar minimum_control_height = 22, maximum_control_height = 44;
 }
 
 void
@@ -50,4 +51,14 @@ Layout::Initialize(unsigned width, unsigned height)
   scale = scale_1024 / 1024;
 
   small_scale = (scale_1024 - 1024) / 2 + 1024;
+
+  minimum_control_height = Scale(22);
+
+  if (HasTouchScreen()) {
+    /* larger rows for touch screens */
+    // XXX make this dpi-aware and use physical sizes
+    maximum_control_height = minimum_control_height * 2;
+  } else {
+    maximum_control_height = minimum_control_height;
+  }
 }

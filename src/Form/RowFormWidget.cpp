@@ -46,31 +46,6 @@ Copyright_License {
 #include <assert.h>
 #include <limits.h>
 
-/**
- * Returns the minimum height of an edit control.
- */
-gcc_pure
-static UPixelScalar
-GetMinimumControlHeight()
-{
-  return Layout::Scale(22);
-}
-
-/**
- * Returns the maximum height of an edit control.
- */
-gcc_pure
-static UPixelScalar
-GetMaximumControlHeight()
-{
-  if (!HasTouchScreen())
-    return GetMinimumControlHeight();
-
-  /* larger rows for touch screens */
-  // XXX make this dpi-aware and use physical sizes
-  return Layout::Scale(44);
-}
-
 UPixelScalar
 RowFormWidget::Row::GetMinimumHeight() const
 {
@@ -83,13 +58,13 @@ RowFormWidget::Row::GetMinimumHeight() const
 
   case Type::EDIT:
   case Type::BUTTON:
-    return GetMinimumControlHeight();
+    return Layout::GetMinimumControlHeight();
 
   case Type::MULTI_LINE:
-    return GetMinimumControlHeight() * 2;
+    return Layout::GetMinimumControlHeight() * 2;
 
   case Type::REMAINING:
-    return GetMinimumControlHeight();
+    return Layout::GetMinimumControlHeight();
   }
 
   return window->get_height();
@@ -107,10 +82,10 @@ RowFormWidget::Row::GetMaximumHeight() const
 
   case Type::EDIT:
   case Type::BUTTON:
-    return GetMaximumControlHeight();
+    return Layout::GetMaximumControlHeight();
 
   case Type::MULTI_LINE:
-    return GetMinimumControlHeight() * 3;
+    return Layout::GetMinimumControlHeight() * 3;
 
   case Type::REMAINING:
     return 4096;
@@ -177,7 +152,8 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
 {
   assert(IsDefined());
 
-  const PixelRect edit_rc = InitialControlRect(GetMinimumControlHeight());
+  const PixelRect edit_rc =
+    InitialControlRect(Layout::GetMinimumControlHeight());
 
   WindowStyle style;
   if (!read_only)
@@ -396,7 +372,8 @@ RowFormWidget::AddMultiLine(const TCHAR *label, const TCHAR *help,
 {
   assert(IsDefined());
 
-  PixelRect edit_rc = InitialControlRect(GetMinimumControlHeight());
+  const PixelRect edit_rc =
+    InitialControlRect(Layout::GetMinimumControlHeight());
 
   WindowStyle style;
 
@@ -431,7 +408,8 @@ RowFormWidget::AddButton(const TCHAR *label, ActionListener *listener, int id)
 {
   assert(IsDefined());
 
-  const PixelRect button_rc = InitialControlRect(GetMinimumControlHeight());
+  const PixelRect button_rc =
+    InitialControlRect(Layout::GetMinimumControlHeight());
 
   ButtonWindowStyle button_style;
   button_style.TabStop();
