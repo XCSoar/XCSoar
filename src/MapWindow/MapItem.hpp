@@ -49,6 +49,12 @@ struct MapItem
 
 protected:
   MapItem(Type _type):type(_type) {}
+
+public:
+  /* we need this virtual dummy destructor, because there is code that
+     "deletes" MapItem objects without knowing that it's really a
+     TaskOZMapItem */
+  virtual ~MapItem() {}
 };
 
 struct SelfMapItem: public MapItem
