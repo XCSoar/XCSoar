@@ -18,14 +18,7 @@
     <TextEdit Name="Details" Y="0" ReadOnly="1" MultiLine="1" />
   </Panel>
 
-  <Panel Name="frmCommands" X="70" Y="0" Visible="0">
-    <Button Name="cmdReplace" Caption="Replace In Task" X="40" Y="10" Width="-50" Height="30" OnClick="OnReplaceClicked" />
-    <Button Name="cmdInserInTask" Caption="Insert In Task" X="40" Width="-50" Height="30" OnClick="OnInsertInTaskClicked" />
-    <Button Name="cmdAppendInTask" Caption="Append To Task" X="40" Width="-50" Height="30" OnClick="OnAppendInTaskClicked" />
-    <Button Name="cmdRemoveFromTask" Caption="Remove From Task" X="40" Width="-50" Height="30" OnClick="OnRemoveFromTaskClicked" />
-    <Button Name="cmdNewHome" Caption="Set As New Home" X="40" Width="-50" Height="30" OnClick="OnNewHomeClicked" />
-    <Button Name="cmdActivatePan" Caption="Pan To Waypoint" X="40" Width="-50" Height="30" OnClick="OnActivatePanClicked" />
-  </Panel>
+  <Widget Name="commands" X="70" Y="0"/>
 
   <Canvas Name="frmImage" X="70" Y="0" Visible="0" Border="1" OnPaint="OnImagePaint"/>
 </Form>

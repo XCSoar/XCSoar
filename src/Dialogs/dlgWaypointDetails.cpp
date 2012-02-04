@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/Waypoint/WaypointInfoWidget.hpp"
+#include "Dialogs/Waypoint/WaypointCommandsWidget.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/XML.hpp"
@@ -32,10 +33,7 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Form/Button.hpp"
 #include "Form/DockWindow.hpp"
-#include "Protection.hpp"
 #include "Math/Earth.hpp"
-#include "LocalTime.hpp"
-#include "Math/SunEphemeris.hpp"
 #include "ComputerSettings.hpp"
 #include "LocalPath.hpp"
 #include "Screen/Bitmap.hpp"
@@ -43,23 +41,15 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
-#include "MapWindow/GlueMapWindow.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideState.hpp"
 #include "GlideSolvers/MacCready.hpp"
 #include "Task/TaskManager.hpp"
-#include "Task/MapTaskManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Waypoint/WaypointGlue.hpp"
 #include "Compiler.h"
 #include "Compatibility/path.h"
-#include "Input/InputEvents.hpp"
-#include "Units/UnitsFormatter.hpp"
-#include "Formatter/UserGeoPointFormatter.hpp"
-#include "Units/Units.hpp"
-#include "Formatter/AngleFormatter.hpp"
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
 
@@ -78,7 +68,7 @@ static int page = 0;
 static WndForm *wf = NULL;
 static Window *wDetails = NULL;
 static DockWindow *wInfo = NULL;
-static Window *wCommand = NULL;
+static DockWindow *wCommand = NULL;
 static PaintWindow *wImage = NULL;
 static WndButton *wMagnify = NULL;
 static WndButton *wShrink = NULL;
@@ -198,123 +188,6 @@ OnGotoClicked(gcc_unused WndButton &button)
   CommonInterface::main_window.full_redraw();
 }
 
-static void
-OnReplaceClicked(gcc_unused WndButton &button)
-{
-  if (protected_task_manager == NULL)
-    return;
-
-  switch (MapTaskManager::ReplaceInTask(*waypoint)) {
-  case MapTaskManager::SUCCESS:
-    protected_task_manager->TaskSaveDefault();
-    wf->SetModalResult(mrOK);
-    break;
-  case MapTaskManager::NOTASK:
-    MessageBoxX(_("No task defined."), _("Error"),
-                MB_OK | MB_ICONEXCLAMATION);
-    break;
-  case MapTaskManager::UNMODIFIED:
-    MessageBoxX(_("No active task point."), _("Replace in task"),
-                MB_OK | MB_ICONINFORMATION);
-    break;
-
-  case MapTaskManager::INVALID:
-    MessageBoxX(_("Task would not be valid after the change."), _("Error"),
-                MB_OK | MB_ICONEXCLAMATION);
-    break;
-  case MapTaskManager::MUTATED_TO_GOTO:
-  case MapTaskManager::MUTATED_FROM_GOTO:
-    break;
-  }
-}
-
-static void 
-OnNewHomeClicked(gcc_unused WndButton &button)
-{
-  assert(waypoint != NULL);
-
-  ComputerSettings &settings_computer =
-    CommonInterface::SetComputerSettings();
-
-  settings_computer.SetHome(*waypoint);
-
-  {
-    ScopeSuspendAllThreads suspend;
-    WaypointGlue::SetHome(way_points, terrain,
-                          settings_computer,
-                          false);
-  }
-
-  wf->SetModalResult(mrOK);
-}
-
-static void
-OnInsertInTaskClicked(gcc_unused WndButton &button)
-{
-  if (protected_task_manager == NULL)
-    return;
-
-  switch (MapTaskManager::InsertInTask(*waypoint)) {
-  case MapTaskManager::SUCCESS:
-    protected_task_manager->TaskSaveDefault();
-    wf->SetModalResult(mrOK);
-    break;
-
-  case MapTaskManager::NOTASK:
-    MessageBoxX(_("No task defined."), _("Error"),
-                MB_OK | MB_ICONEXCLAMATION);
-    break;
-  case MapTaskManager::UNMODIFIED:
-  case MapTaskManager::INVALID:
-    MessageBoxX(_("Task would not be valid after the change."), _("Error"),
-                MB_OK | MB_ICONEXCLAMATION);
-    break;
-  case MapTaskManager::MUTATED_TO_GOTO:
-    MessageBoxX(_("Created Goto Task."), _("Success"),
-                MB_OK | MB_ICONEXCLAMATION);
-    wf->SetModalResult(mrOK);
-    break;
-  case MapTaskManager::MUTATED_FROM_GOTO:
-    MessageBoxX(_("Created 2-point task from Goto Task."), _("Success"),
-                MB_OK | MB_ICONEXCLAMATION);
-    wf->SetModalResult(mrOK);
-    break;
-  }
-}
-
-static void
-OnAppendInTaskClicked(gcc_unused WndButton &button)
-{
-  if (protected_task_manager == NULL)
-    return;
-
-  switch (MapTaskManager::AppendToTask(*waypoint)) {
-  case MapTaskManager::SUCCESS:
-    protected_task_manager->TaskSaveDefault();
-    wf->SetModalResult(mrOK);
-    break;
-  case MapTaskManager::NOTASK:
-    MessageBoxX(_("No task defined."), _("Error"),
-                MB_OK | MB_ICONEXCLAMATION);
-    break;
-  case MapTaskManager::UNMODIFIED:
-  case MapTaskManager::INVALID:
-    MessageBoxX(_("Task would not be valid after the change."), _("Error"),
-                MB_OK | MB_ICONEXCLAMATION);
-    break;
-  case MapTaskManager::MUTATED_TO_GOTO:
-    MessageBoxX(_("Created Goto Task."), _("Success"),
-                MB_OK | MB_ICONEXCLAMATION);
-    wf->SetModalResult(mrOK);
-    break;
-  case MapTaskManager::MUTATED_FROM_GOTO:
-    MessageBoxX(_("Created 2-point task from Goto Task."), _("Success"),
-                MB_OK | MB_ICONEXCLAMATION);
-    wf->SetModalResult(mrOK);
-    break;
-  }
-}
-
 #if 0
 // JMW disabled until 6.2 work, see #996
 static task_edit_result
@@ -367,49 +240,6 @@ OnGotoAndClearTaskClicked(gcc_unused WndButton &button)
   }
 }
 #endif
-
-static void
-OnRemoveFromTaskClicked(gcc_unused WndButton &button)
-{
-  if (protected_task_manager == NULL)
-    return;
-
-  switch (MapTaskManager::RemoveFromTask(*waypoint)) {
-  case MapTaskManager::SUCCESS:
-    protected_task_manager->TaskSaveDefault();
-    wf->SetModalResult(mrOK);
-    break;
-  case MapTaskManager::NOTASK:
-    MessageBoxX(_("No task defined."), _("Error"),
-                MB_OK | MB_ICONEXCLAMATION);
-    break;
-  case MapTaskManager::UNMODIFIED:
-    MessageBoxX(_("Waypoint not in task."), _("Remove from task"),
-                MB_OK | MB_ICONINFORMATION);
-    break;
-
-  case MapTaskManager::INVALID:
-    MessageBoxX(_("Task would not be valid after the change."), _("Error"),
-                MB_OK | MB_ICONEXCLAMATION);
-    break;
-  case MapTaskManager::MUTATED_FROM_GOTO:
-  case MapTaskManager::MUTATED_TO_GOTO:
-    break;
-  }
-}
-
-static void
-OnActivatePanClicked(gcc_unused WndButton &button)
-{
-  GlueMapWindow *map_window = CommonInterface::main_window.ActivateMap();
-  if (map_window == NULL)
-    return;
-
-  map_window->PanTo(waypoint->location);
-  XCSoarInterface::main_window.SetFullScreen(true);
-  InputEvents::setMode(InputEvents::MODE_PAN);
-  wf->SetModalResult(mrOK);
-}
 
 static void
 OnImagePaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
@@ -488,26 +318,9 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
     DeclareCallBackEntry(OnPrevClicked),
     DeclareCallBackEntry(OnGotoClicked),
     DeclareCallBackEntry(OnCloseClicked),
-    DeclareCallBackEntry(OnReplaceClicked),
-    DeclareCallBackEntry(OnInsertInTaskClicked),
-    DeclareCallBackEntry(OnAppendInTaskClicked),
-    DeclareCallBackEntry(OnRemoveFromTaskClicked),
-    DeclareCallBackEntry(OnNewHomeClicked),
-    DeclareCallBackEntry(OnActivatePanClicked),
     DeclareCallBackEntry(OnImagePaint),
     DeclareCallBackEntry(NULL)
 };
-
-static void
-ShowTaskCommands()
-{
-  if (protected_task_manager == NULL)
-    return;
-
-  WndButton *wb = ((WndButton *)wf->FindByName(_T("cmdRemoveFromTask")));
-  assert(wb != NULL);
-  wb->set_visible(MapTaskManager::GetIndexInTask(*waypoint) >= 0);
-}
 
 static void
 UpdateCaption(const TCHAR *waypoint_name)
@@ -537,8 +350,11 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   wInfo->SetWidget(new WaypointInfoWidget(UIGlobals::GetDialogLook(),
                                           _waypoint));
 
-  wCommand = wf->FindByName(_T("frmCommands"));
+  wCommand = (DockWindow *)wf->FindByName(_T("commands"));
   assert(wCommand != NULL);
+  wCommand->SetWidget(new WaypointCommandsWidget(UIGlobals::GetDialogLook(),
+                                                 wf, _waypoint,
+                                                 protected_task_manager));
   wCommand->hide();
 
   wDetails = wf->FindByName(_T("frmDetails"));
@@ -590,8 +406,6 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
     assert(butnav != NULL);
     butnav->hide();
   }
-
-  ShowTaskCommands();
 
   for (auto it = waypoint->files_embed.begin(),
        it_end = waypoint->files_embed.end();

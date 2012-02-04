@@ -176,6 +176,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/StatusPanels/TimesStatusPanel.cpp \
 	\
 	$(SRC)/Dialogs/Waypoint/WaypointInfoWidget.cpp \
+	$(SRC)/Dialogs/Waypoint/WaypointCommandsWidget.cpp \
 	\
 	$(SRC)/Dialogs/dlgSwitches.cpp \
 	\
