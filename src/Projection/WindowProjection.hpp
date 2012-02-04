@@ -137,7 +137,7 @@ public:
   /**
    * Returns the length of the larger edge of the map area in pixels.
    */
-  long GetScreenDistance() const
+  unsigned GetScreenDistance() const
   {
     return std::max(GetScreenHeight(), GetScreenWidth());
   }
@@ -145,7 +145,7 @@ public:
   /**
    * Returns the length of the smaller edge of the map area in pixels.
    */
-  long GetMinScreenDistance() const
+  unsigned GetMinScreenDistance() const
   {
     return std::min(GetScreenHeight(), GetScreenWidth());
   }
