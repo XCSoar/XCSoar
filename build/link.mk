@@ -38,6 +38,13 @@ ifeq ($$(TARGET),WINE)
 $(2)_STRIP := n
 endif
 
+# Disable stripping on UNIX, because that should usually be done
+# during installation (the Debian package is explicitly stripped), and
+# we often need the debug symbols while developing.
+ifeq ($$(TARGET),UNIX)
+$(2)_STRIP := n
+endif
+
 ifeq ($$($(2)_STRIP),y)
 $(2)_NOSTRIP = $$(TARGET_BIN_DIR)/$(1)-ns$$(TARGET_EXEEXT)
 else
