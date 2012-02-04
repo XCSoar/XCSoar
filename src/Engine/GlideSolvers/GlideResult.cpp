@@ -78,18 +78,19 @@ GlideResult::Add(const GlideResult &s2)
        PARTIAL */
     return;
 
-  if (s2.GetRequiredAltitude() < min_arrival_altitude) {
+  if (s2.GetRequiredAltitudeWithDrift() < min_arrival_altitude) {
     /* must meet the safety height of the first leg */
-    assert(s2.min_arrival_altitude < s2.GetArrivalAltitude(min_arrival_altitude));
+    assert(s2.min_arrival_altitude < s2.GetArrivalAltitudeWithDrift(min_arrival_altitude));
 
     /* calculate a new minimum arrival height that considers the
        "mountain top" in the middle */
-    min_arrival_altitude = s2.GetArrivalAltitude(min_arrival_altitude);
+    min_arrival_altitude = s2.GetArrivalAltitudeWithDrift(min_arrival_altitude);
   } else {
     /* must meet the safety height of the second leg */
 
     /* apply the increased altitude requirement */
-    altitude_difference -= s2.GetRequiredAltitude() - min_arrival_altitude;
+    altitude_difference -=
+      s2.GetRequiredAltitudeWithDrift() - min_arrival_altitude;
 
     /* adopt the minimum height of the second leg */
     min_arrival_altitude = s2.min_arrival_altitude;

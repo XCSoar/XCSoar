@@ -228,6 +228,27 @@ struct GlideResult {
   }
 
   /**
+   * Altitude required at the start of the task, considering wind
+   * drift while circling [m MSL].  This is a theoretical value,
+   * because this altitude will probably never actually be reached.
+   */
+  gcc_pure
+  fixed GetRequiredAltitudeWithDrift() const {
+    return min_arrival_altitude + height_glide;
+  }
+
+  /**
+   * Like GetArrivalAltitude(), but considers wind drift while
+   * circling.
+   *
+   * @param start_altitude the current aircraft altitude
+   */
+  gcc_pure
+  fixed GetArrivalAltitudeWithDrift(fixed start_altitude) const {
+    return start_altitude - height_glide;
+  }
+
+  /**
    * Adds another GlideResult to this.  This is used to
    * accumulate GlideResults for a sequence of task segments.
    * The order is important.
