@@ -91,6 +91,19 @@ public:
   void SetScale(const fixed _scale);
 
   /**
+   * Convert a pixel distance to a physical length in meters.
+   */
+  gcc_pure
+  fixed DistancePixelsToMeters(const int x) const {
+    return fixed(x) / GetScale();
+  }
+
+  gcc_pure
+  fixed DistanceMetersToPixels(const fixed distance) const {
+    return distance * GetScale();
+  }
+
+  /**
    * Convert a pixel distance to an angle on Earth's surface.
    */
   gcc_pure

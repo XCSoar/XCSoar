@@ -127,16 +127,6 @@ public:
     return pt;
   }
 
-  gcc_pure
-  fixed DistancePixelsToMeters(const int x) const {
-    return fixed(x) / GetScale();
-  }
-
-  gcc_pure
-  fixed DistanceMetersToPixels(const fixed distance) const {
-    return distance * GetScale();
-  }
-
   /**
    * Returns the width of the map area in meters.
    */

@@ -65,7 +65,7 @@ WindowProjection::GetMapResolutionFactor()
 fixed
 WindowProjection::GetMapScale() const
 {
-  return fixed(GetMapResolutionFactor()) / GetScale();
+  return DistancePixelsToMeters(GetMapResolutionFactor());
 }
 
 fixed
