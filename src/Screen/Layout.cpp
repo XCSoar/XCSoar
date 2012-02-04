@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Layout.hpp"
+#include "Hardware/Display.hpp"
 
 #include <algorithm>
 
@@ -56,8 +57,9 @@ Layout::Initialize(unsigned width, unsigned height)
 
   if (HasTouchScreen()) {
     /* larger rows for touch screens */
-    // XXX make this dpi-aware and use physical sizes
-    maximum_control_height = minimum_control_height * 2;
+    maximum_control_height = Display::GetYDPI() * 3 / 7;
+    if (maximum_control_height < minimum_control_height)
+      maximum_control_height = minimum_control_height;
   } else {
     maximum_control_height = minimum_control_height;
   }

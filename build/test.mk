@@ -929,6 +929,7 @@ ADD_CHECKSUM_DEPENDS = IO
 $(eval $(call link-program,AddChecksum,ADD_CHECKSUM))
 
 KEY_CODE_DUMPER_SOURCES = \
+	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -955,7 +956,6 @@ LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/LoadTopography.cpp
@@ -1421,6 +1421,7 @@ RUN_OLC_DEPENDS = UTIL MATH
 $(eval $(call link-program,RunOLCAnalysis,RUN_OLC))
 
 RUN_CANVAS_SOURCES = \
+	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -1509,6 +1510,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Terrain/TerrainRenderer.cpp \
 	$(SRC)/Terrain/TerrainSettings.cpp \
 	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
+	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/TextInBox.cpp \
@@ -1591,6 +1593,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/DateTime.cpp \
+	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/ResourceLoader.cpp \
@@ -1620,6 +1623,7 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Notify.cpp \
+	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
@@ -1646,6 +1650,7 @@ RUN_TERMINAL_SOURCES = \
 	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/TerminalWindow.cpp \
@@ -1665,6 +1670,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
+	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Projection/Projection.cpp \
@@ -1688,6 +1694,7 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Math/Screen.cpp \
+	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
@@ -1718,6 +1725,7 @@ RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \
+	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Util/StringUtil.cpp \
@@ -1741,6 +1749,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/JobThread.cpp \
+	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/DialogLook.cpp \
@@ -1809,6 +1818,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/Chart.cpp \
@@ -1954,6 +1964,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Audio/Sound.cpp \
+	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/CustomFonts.cpp \
@@ -1999,6 +2010,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(SRC)/LocalTime.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
+	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Task/TaskFile.cpp \
