@@ -24,7 +24,6 @@ Copyright_License {
 #include "Projection.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Angle.hpp"
-#include "Screen/Layout.hpp"
 
 Projection::Projection() :
   geo_location(Angle::Zero(), Angle::Zero()),
@@ -33,12 +32,6 @@ Projection::Projection() :
   SetScale(fixed_one);
   screen_origin.x = 0;
   screen_origin.y = 0;
-}
-
-fixed
-Projection::GetMapScale() const
-{
-  return fixed(GetMapResolutionFactor()) / scale;
 }
 
 GeoPoint
@@ -80,10 +73,4 @@ Projection::SetScale(const fixed _scale)
   draw_scale = fixed_earth_r * scale;
   // Save inverted value for faster calculations
   inv_draw_scale = fixed_one / draw_scale;
-}
-
-int
-Projection::GetMapResolutionFactor()
-{
-  return Layout::Scale(30);
 }

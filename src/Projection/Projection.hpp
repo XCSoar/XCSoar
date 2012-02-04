@@ -80,9 +80,6 @@ public:
   Projection();
 
   gcc_pure
-  fixed GetMapScale() const;
-
-  gcc_pure
   fixed GetScale() const {
     return scale;
   }

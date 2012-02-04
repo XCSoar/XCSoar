@@ -87,6 +87,9 @@ public:
     SetScreenSize(rc.right - rc.left, rc.bottom - rc.top);
   }
 
+  gcc_pure
+  fixed GetMapScale() const;
+
   /**
    * Configure the scale so a centered circle with the specified
    * radius is visible.
@@ -174,6 +177,10 @@ public:
 
   /** Updates the cached screenbounds_latlon member */
   void UpdateScreenBounds();
+
+protected:
+  gcc_const
+  static int GetMapResolutionFactor();
 };
 
 #endif
