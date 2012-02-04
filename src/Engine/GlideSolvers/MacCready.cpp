@@ -198,7 +198,8 @@ MacCready::SolveCruise(const GlideState &task) const
   result.effective_wind_speed *= rho_plus_one;
 
   result.validity = GlideResult::Validity::OK;
-  result.pure_glide_height = task.vector.distance / glide_polar.GetBestLD();
+  result.pure_glide_height = task.vector.distance /
+    glide_polar.GetLDOverGround(task.vector.bearing, task.wind);
 
   return result;
 }
@@ -223,7 +224,8 @@ MacCready::SolveGlide(const GlideState &task, const fixed v_set,
   }
 
   result.validity = GlideResult::Validity::OK;
-  result.pure_glide_height = task.vector.distance / glide_polar.GetBestLD();
+  result.pure_glide_height = task.vector.distance /
+    glide_polar.GetLDOverGround(task.vector.bearing, task.wind);
 
   if (allow_partial) {
     const fixed Vndh = estimated_speed * task.altitude_difference;
