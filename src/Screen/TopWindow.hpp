@@ -185,6 +185,16 @@ public:
    */
   void AnnounceResize(UPixelScalar width, UPixelScalar height);
 
+  bool ResumeSurface();
+
+  /**
+   * Reinitialise the OpenGL surface if the Android Activity has been
+   * resumed.
+   *
+   * @return true if there is a valid OpenGL surface
+   */
+  bool CheckResumeSurface();
+
   /**
    * Synchronously update the size of the TopWindow to the new OpenGL
    * surface dimensions.

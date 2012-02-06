@@ -39,6 +39,38 @@ TopWindow::AnnounceResize(UPixelScalar width, UPixelScalar height)
   new_height = height;
 }
 
+bool
+TopWindow::ResumeSurface()
+{
+  /* Try to reinitialize OpenGL.  This often fails on the first
+     attempt (IllegalArgumentException "Make sure the SurfaceView or
+     associated SurfaceHolder has a valid Surface"), therefore we're
+     trying again until we're successful. */
+
+  assert(paused);
+
+  if (!native_view->initSurface())
+    /* failed - retry later */
+    return false;
+
+  paused = false;
+  resumed = false;
+
+  screen.Set();
+
+  ::SurfaceCreated();
+
+  RefreshSize();
+
+  return true;
+}
+
+bool
+TopWindow::CheckResumeSurface()
+{
+  return (!resumed || ResumeSurface()) && !paused && surface_valid;
+}
+
 void
 TopWindow::RefreshSize()
 {
