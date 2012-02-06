@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Screen/Fonts.hpp"
+#include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/AnyCanvas.hpp"
 
 /// values inside infoboxes  like numbers, etc.
 Font Fonts::infobox;
@@ -113,7 +113,6 @@ SizeLogFont(LOGFONT &logfont, UPixelScalar width, const TCHAR* str)
 {
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.
-  AnyCanvas canvas;
   PixelSize tsize;
   do {
     --logfont.lfHeight;
@@ -122,8 +121,7 @@ SizeLogFont(LOGFONT &logfont, UPixelScalar width, const TCHAR* str)
     if (!font.Set(logfont))
       break;
 
-    canvas.Select(font);
-    tsize = canvas.CalcTextSize(str);
+    tsize = font.TextSize(str);
   } while ((unsigned)tsize.cx > width);
 
   ++logfont.lfHeight;
