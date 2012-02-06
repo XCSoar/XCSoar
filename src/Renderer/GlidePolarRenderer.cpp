@@ -106,6 +106,8 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   chart.DrawXLabel(_T("V"));
   chart.DrawYLabel(_T("w"));
 
+  canvas.Select(*chart_look.label_font);
+
   StaticString<80> text;
   canvas.SetBackgroundTransparent();
 

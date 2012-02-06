@@ -42,9 +42,23 @@ struct ChartLook {
 
   Pen pens[STYLE_COUNT];
 
+  /**
+   * Font for miscellaneous labels in the chart.
+   */
+  const Font *label_font;
+
+  /**
+   * Font for the two axis labels.
+   */
   const Font *axis_label_font;
 
-  void Initialise(const Font &axis_label_font);
+  /**
+   * Font for tick values along the axis.
+   */
+  const Font *axis_value_font;
+
+  void Initialise(const Font &label_font,
+                  const Font &axis_label_font, const Font &axis_value_font);
 
   const Pen &GetPen(Style style) const {
     unsigned i = (unsigned)style;

@@ -25,7 +25,9 @@ Copyright_License {
 #include "Asset.hpp"
 
 void
-ChartLook::Initialise(const Font &_axis_label_font)
+ChartLook::Initialise(const Font &_label_font,
+                      const Font &_axis_label_font,
+                      const Font &_axis_value_font)
 {
   pens[STYLE_BLUETHIN].Set(Pen::DASH, IsAltair() ? 1 : 2, Color(0, 50, 255));
   pens[STYLE_REDTHICK].Set(Pen::DASH, 3, Color(200, 50, 50));
@@ -33,5 +35,7 @@ ChartLook::Initialise(const Font &_axis_label_font)
   pens[STYLE_MEDIUMBLACK].Set(IsAltair() ? 1 : 2, Color(50, 243, 45));
   pens[STYLE_THINDASHPAPER].Set(Pen::DASH, 1, Color(0xB0, 0xB0, 0xB0));
 
+  label_font = &_label_font;
   axis_label_font = &_axis_label_font;
+  axis_value_font = &_axis_value_font;
 }

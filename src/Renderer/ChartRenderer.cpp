@@ -160,6 +160,7 @@ ChartRenderer::StyleLine(const RasterPoint l1, const RasterPoint l2,
 void
 ChartRenderer::DrawLabel(const TCHAR *text, const fixed xv, const fixed yv)
 {
+  canvas.Select(*look.label_font);
   PixelSize tsize = canvas.CalcTextSize(text);
 
   PixelScalar x = PixelScalar((xv - x_min) * xscale) + rc.left - tsize.cx / 2 + PaddingLeft;
@@ -174,6 +175,7 @@ ChartRenderer::DrawNoData()
 {
   const TCHAR *text = _("No data");
 
+  canvas.Select(*look.label_font);
   PixelSize tsize = canvas.CalcTextSize(text);
 
   PixelScalar x = (rc.left + rc.right - tsize.cx) / 2;
@@ -400,6 +402,8 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
   if (!positive(tic_step))
     return;
 
+  canvas.Select(*look.axis_value_font);
+
   RasterPoint line[2];
 
   PixelScalar xmin, ymin, xmax, ymax;
@@ -482,6 +486,8 @@ ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
 {
   if (!positive(tic_step))
     return;
+
+  canvas.Select(*look.axis_value_font);
 
   RasterPoint line[2];
 
