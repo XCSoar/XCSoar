@@ -78,8 +78,8 @@ RenderShadowedText(Canvas &canvas, const TCHAR* text,
   canvas.SetBackgroundTransparent();
 
   canvas.SetTextColor(inverted ? COLOR_BLACK : COLOR_WHITE);
-  canvas.text(x + Layout::FastScale(1), y, text);
-  canvas.text(x - Layout::FastScale(1), y, text);
+  canvas.text(x + Layout::SmallScale(1), y, text);
+  canvas.text(x - Layout::SmallScale(1), y, text);
   canvas.text(x, y + 1, text);
   canvas.text(x, y - 1, text);
 
