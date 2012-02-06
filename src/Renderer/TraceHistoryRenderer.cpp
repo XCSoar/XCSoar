@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "TraceHistoryRenderer.hpp"
+#include "ChartRenderer.hpp"
 #include "Navigation/TraceHistory.hpp"
-#include "Screen/Chart.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/TraceHistoryLook.hpp"
@@ -32,7 +32,7 @@ Copyright_License {
 #include <algorithm>
 
 void
-TraceHistoryRenderer::scale_chart(Chart &chart,
+TraceHistoryRenderer::scale_chart(ChartRenderer &chart,
                                   const TraceVariableHistory& var,
                                   const bool centered) const
 {
@@ -59,7 +59,7 @@ TraceHistoryRenderer::scale_chart(Chart &chart,
 }
 
 void
-TraceHistoryRenderer::render_axis(Chart &chart,
+TraceHistoryRenderer::render_axis(ChartRenderer &chart,
                                   const TraceVariableHistory& var) const
 {
   chart.DrawLine(fixed_zero, fixed_zero, 
@@ -69,7 +69,7 @@ TraceHistoryRenderer::render_axis(Chart &chart,
 
 
 void 
-TraceHistoryRenderer::render_line(Chart &chart,
+TraceHistoryRenderer::render_line(ChartRenderer &chart,
                                   const TraceVariableHistory& var) const
 {
   fixed x_last, y_last;
@@ -93,7 +93,7 @@ static int sgn(const fixed x) {
 }
 
 void 
-TraceHistoryRenderer::render_filled_posneg(Chart &chart,
+TraceHistoryRenderer::render_filled_posneg(ChartRenderer &chart,
                                            const TraceVariableHistory& var) const
 {
   fixed x_last(fixed_zero), y_last(fixed_zero);
@@ -136,7 +136,7 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
                                   const bool centered,
                                   const fixed mc) const
 {
-  Chart chart(chart_look, canvas, rc);
+  ChartRenderer chart(chart_look, canvas, rc);
   scale_chart(chart, var, centered);
   chart.ScaleYFromValue(mc);
   // render_line(chart, var);

@@ -30,7 +30,7 @@ Copyright_License {
 struct TraceHistoryLook;
 struct VarioLook;
 struct ChartLook;
-class Chart;
+class ChartRenderer;
 class Canvas;
 class TraceVariableHistory;
 
@@ -52,17 +52,17 @@ public:
                    const fixed mc=fixed_zero) const;
 
 private:
-  void scale_chart(Chart &chart,
+  void scale_chart(ChartRenderer &chart,
                    const TraceVariableHistory& var,
                    const bool centered) const;
 
-  void render_axis(Chart &chart,
+  void render_axis(ChartRenderer &chart,
                    const TraceVariableHistory& var) const;
 
-  void render_line(Chart &chart,
+  void render_line(ChartRenderer &chart,
                    const TraceVariableHistory& var) const;
 
-  void render_filled_posneg(Chart &chart,
+  void render_filled_posneg(ChartRenderer &chart,
                             const TraceVariableHistory& var) const;
 };
 

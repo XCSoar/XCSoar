@@ -29,7 +29,7 @@ Copyright_License {
 
 struct ThermalBandLook;
 struct ChartLook;
-class Chart;
+class ChartRenderer;
 class Canvas;
 struct MoreData;
 struct DerivedInfo;
@@ -66,14 +66,14 @@ protected:
   void _DrawThermalBand(const MoreData &basic,
                         const DerivedInfo& calculated,
                         const ComputerSettings &settings_computer,
-                        Chart &chart,
+                        ChartRenderer &chart,
                         const TaskBehaviour& task_props,
                         const bool is_infobox,
                         const OrderedTaskBehaviour* ordered_props) const;
 
   void scale_chart(const DerivedInfo &calculated,
                    const ComputerSettings &settings_computer,
-                   Chart &chart) const;
+                   ChartRenderer &chart) const;
 };
 
 #endif

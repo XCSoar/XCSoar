@@ -453,6 +453,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Projection/CompareProjection.cpp \
+	$(SRC)/Renderer/ChartRenderer.cpp \
 	$(SRC)/Renderer/BackgroundRenderer.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/RenderTaskPoint.cpp \
@@ -625,7 +626,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Math/SunEphemeris.cpp \
 	\
 	$(SRC)/Screen/Blank.cpp \
-	$(SRC)/Screen/Chart.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/CustomFonts.cpp \
 	$(SRC)/Screen/Layout.cpp \

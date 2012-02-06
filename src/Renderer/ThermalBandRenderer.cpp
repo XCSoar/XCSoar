@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "ThermalBandRenderer.hpp"
+#include "ChartRenderer.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "ComputerSettings.hpp"
-#include "Screen/Chart.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/ThermalBandLook.hpp"
 #include <algorithm>
@@ -36,7 +36,7 @@ Copyright_License {
 void
 ThermalBandRenderer::scale_chart(const DerivedInfo &calculated,
                                  const ComputerSettings &settings_computer,
-                                 Chart &chart) const
+                                 ChartRenderer &chart) const
 {
   chart.ScaleYFromValue(fixed_zero);
   chart.ScaleYFromValue(calculated.thermal_band.max_thermal_height);
@@ -51,7 +51,7 @@ void
 ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
                                       const DerivedInfo& calculated,
                                       const ComputerSettings &settings_computer,
-                                      Chart &chart,
+                                      ChartRenderer &chart,
                                       const TaskBehaviour& task_props,
                                       const bool is_infobox,
                                       const OrderedTaskBehaviour *ordered_props) const
@@ -180,7 +180,7 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
                                      const bool is_map,
                                      const OrderedTaskBehaviour *ordered_props) const
 {
-  Chart chart(chart_look, canvas, rc);
+  ChartRenderer chart(chart_look, canvas, rc);
   if (is_map) {
     chart.PaddingBottom = 0;
     chart.PaddingLeft = 0;
@@ -209,7 +209,7 @@ ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
                                           const PixelRect &rc,
                                           const TaskBehaviour &task_props) const
 {
-  Chart chart(chart_look, canvas, rc);
+  ChartRenderer chart(chart_look, canvas, rc);
   chart.PaddingBottom = 0;
   chart.PaddingLeft = Layout::Scale(3);
   scale_chart(calculated, settings_computer, chart);

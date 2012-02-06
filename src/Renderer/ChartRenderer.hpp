@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef CHART_HPP
-#define CHART_HPP
+#ifndef XCSOAR_CHART_RENDERER_HPP
+#define XCSOAR_CHART_RENDERER_HPP
 
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
@@ -38,7 +38,7 @@ class Canvas;
 class Brush;
 class Pen;
 
-class Chart
+class ChartRenderer
 {
 private:
   const ChartLook &look;
@@ -51,7 +51,8 @@ public:
   int PaddingBottom;
 
 public:
-  Chart(const ChartLook &look, Canvas &the_canvas, const PixelRect the_rc);
+  ChartRenderer(const ChartLook &look, Canvas &the_canvas,
+                const PixelRect the_rc);
 
   void Reset();
 

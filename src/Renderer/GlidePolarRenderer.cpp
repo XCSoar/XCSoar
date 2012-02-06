@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "GlidePolarRenderer.hpp"
+#include "ChartRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Chart.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
@@ -57,7 +57,7 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
                  const ComputerSettings &settings_computer,
                  const GlidePolar &glide_polar)
 {
-  Chart chart(chart_look, canvas, rc);
+  ChartRenderer chart(chart_look, canvas, rc);
   Pen blue_pen(2, COLOR_BLUE);
 
   chart.ScaleYFromValue(fixed_zero);

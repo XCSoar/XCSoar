@@ -22,10 +22,10 @@
 */
 
 #include "CrossSectionWindow.hpp"
+#include "Renderer/ChartRenderer.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/Chart.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/CrossSectionLook.hpp"
 #include "Look/AirspaceLook.hpp"
@@ -50,8 +50,8 @@ class AirspaceIntersectionVisitorSlice: public AirspaceIntersectionVisitor
 {
   /** Canvas to draw on */
   Canvas& canvas;
-  /** Chart for scaling the airspace CrossSection */
-  Chart& chart;
+  /** ChartRenderer for scaling the airspace CrossSection */
+  ChartRenderer &chart;
   /** MapSettings for reading airspace colors, pen and brushes */
   const AirspaceRendererSettings &settings;
 
@@ -66,12 +66,12 @@ public:
   /**
    * Constructor of the AirspaceIntersectionVisitorSlice class
    * @param _canvas The canvas to draw to
-   * @param _chart Chart instance for scaling coordinates
+   * @param _chart ChartRenderer instance for scaling coordinates
    * @param _settings settings for colors, pens and brushes
    * @param _start GeoPoint at the left of the CrossSection
    * @param _state AltitudeState instance used for AGL-based airspaces
    */
-  AirspaceIntersectionVisitorSlice(Canvas &_canvas, Chart &_chart,
+  AirspaceIntersectionVisitorSlice(Canvas &_canvas, ChartRenderer &_chart,
                                    const AirspaceRendererSettings &_settings,
                                    const AirspaceLook &_airspace_look,
                                    const GeoPoint _start,
@@ -246,7 +246,7 @@ CrossSectionWindow::Paint(Canvas &canvas, const PixelRect rc)
   fixed hmin = max(fixed_zero, gps_info.nav_altitude - fixed(3300));
   fixed hmax = max(fixed(3300), gps_info.nav_altitude + fixed(1000));
 
-  Chart chart(chart_look, canvas, rc);
+  ChartRenderer chart(chart_look, canvas, rc);
   chart.ResetScale();
   chart.ScaleXFromValue(fixed_zero);
   chart.ScaleXFromValue(vec.distance);
@@ -261,7 +261,7 @@ CrossSectionWindow::Paint(Canvas &canvas, const PixelRect rc)
 }
 
 void
-CrossSectionWindow::PaintAirspaces(Canvas &canvas, Chart &chart)
+CrossSectionWindow::PaintAirspaces(Canvas &canvas, ChartRenderer &chart)
 {
   // Quit early if no airspace database available
   if (airspace_database == NULL)
@@ -280,7 +280,7 @@ CrossSectionWindow::PaintAirspaces(Canvas &canvas, Chart &chart)
 }
 
 void
-CrossSectionWindow::PaintTerrain(Canvas &canvas, Chart &chart)
+CrossSectionWindow::PaintTerrain(Canvas &canvas, ChartRenderer &chart)
 {
   if (terrain == NULL)
     return;
@@ -325,7 +325,7 @@ CrossSectionWindow::PaintTerrain(Canvas &canvas, Chart &chart)
 }
 
 void
-CrossSectionWindow::PaintGlide(Chart &chart)
+CrossSectionWindow::PaintGlide(ChartRenderer &chart)
 {
   if (gps_info.ground_speed > fixed(10)) {
     fixed t = vec.distance / gps_info.ground_speed;
@@ -336,7 +336,7 @@ CrossSectionWindow::PaintGlide(Chart &chart)
 }
 
 void
-CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
+CrossSectionWindow::PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
                                   const PixelRect rc)
 {
   canvas.Select(look.aircraft_brush);
@@ -355,7 +355,7 @@ CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
 }
 
 void
-CrossSectionWindow::PaintGrid(Canvas &canvas, Chart &chart)
+CrossSectionWindow::PaintGrid(Canvas &canvas, ChartRenderer &chart)
 {
   canvas.SetTextColor(look.text_color);
 

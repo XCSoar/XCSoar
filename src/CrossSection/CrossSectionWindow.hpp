@@ -34,7 +34,7 @@ struct AirspaceLook;
 struct ChartLook;
 class Airspaces;
 class RasterTerrain;
-class Chart;
+class ChartRenderer;
 
 /**
  * A Window which renders a terrain and airspace cross-section
@@ -119,11 +119,12 @@ public:
   }
 
 protected:
-  void PaintAirspaces(Canvas &canvas, Chart &chart);
-  void PaintTerrain(Canvas &canvas, Chart &chart);
-  void PaintGlide(Chart &chart);
-  void PaintAircraft(Canvas &canvas, const Chart &chart, const PixelRect rc);
-  void PaintGrid(Canvas &canvas, Chart &chart);
+  void PaintAirspaces(Canvas &canvas, ChartRenderer &chart);
+  void PaintTerrain(Canvas &canvas, ChartRenderer &chart);
+  void PaintGlide(ChartRenderer &chart);
+  void PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
+                     const PixelRect rc);
+  void PaintGrid(Canvas &canvas, ChartRenderer &chart);
 
   /**
    * OnPaint event called by the message loop

@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "CuRenderer.hpp"
+#include "ChartRenderer.hpp"
 #include "Atmosphere/CuSonde.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
-#include "Screen/Chart.hpp"
 
 #include <algorithm>
 #include <stdio.h>
@@ -38,7 +38,7 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
                        const ChartLook &chart_look,
                        const CuSonde &cu_sonde)
 {
-  Chart chart(chart_look, canvas, rc);
+  ChartRenderer chart(chart_look, canvas, rc);
 
   int hmin = 10000;
   int hmax = -10000;

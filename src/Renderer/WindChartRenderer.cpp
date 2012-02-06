@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "WindChartRenderer.hpp"
+#include "ChartRenderer.hpp"
 #include "Wind/WindStore.hpp"
 #include "FlightStatistics.hpp"
 #include "NMEA/Info.hpp"
 #include "Math/LeastSquares.hpp"
-#include "Screen/Chart.hpp"
 #include "Units/Units.hpp"
 
 void
@@ -44,7 +44,7 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   fixed mag;
 
   LeastSquares windstats_mag;
-  Chart chart(chart_look, canvas, rc);
+  ChartRenderer chart(chart_look, canvas, rc);
 
   if (fs.Altitude_Ceiling.y_max - fs.Altitude_Ceiling.y_min <= fixed_ten) {
     chart.DrawNoData();

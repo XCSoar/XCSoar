@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "FlightStatisticsRenderer.hpp"
+#include "ChartRenderer.hpp"
 #include "FlightStatistics.hpp"
 #include "Util/Macros.hpp"
 #include "Look/MapLook.hpp"
@@ -42,7 +43,6 @@ Copyright_License {
 #include "Renderer/RenderTaskPoint.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
-#include "Screen/Chart.hpp"
 #include "Computer/TraceComputer.hpp"
 
 #include <algorithm>
@@ -69,7 +69,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
                                     const TraceComputer &trace_computer) const
 {
   if (!trail_renderer.LoadTrace(trace_computer)) {
-    Chart chart(chart_look, canvas, rc);
+    ChartRenderer chart(chart_look, canvas, rc);
     chart.DrawNoData();
     return;
   }
@@ -185,7 +185,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
                                      const ProtectedTaskManager &_task_manager,
                                      const TraceComputer *trace_computer) const
 {
-  Chart chart(chart_look, canvas, rc);
+  ChartRenderer chart(chart_look, canvas, rc);
 
   ChartProjection proj;
 

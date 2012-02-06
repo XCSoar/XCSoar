@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "ClimbChartRenderer.hpp"
+#include "ChartRenderer.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Chart.hpp"
 #include "Units/Units.hpp"
 #include "FlightStatistics.hpp"
 #include "Language/Language.hpp"
@@ -58,7 +58,7 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
                  const FlightStatistics &fs,
                  const GlidePolar &glide_polar)
 {
-  Chart chart(chart_look, canvas, rc);
+  ChartRenderer chart(chart_look, canvas, rc);
 
   if (fs.ThermalAverage.sum_n < 1) {
     chart.DrawNoData();

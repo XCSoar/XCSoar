@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "BarographRenderer.hpp"
+#include "ChartRenderer.hpp"
 #include "Look/CrossSectionLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Chart.hpp"
 #include "Units/Units.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "NMEA/Info.hpp"
@@ -79,7 +79,7 @@ IsTaskLegVisible(const OrderedTaskPoint &tp)
 }
 
 static void
-DrawLegs(Chart& chart,
+DrawLegs(ChartRenderer &chart,
          const TaskManager &task_manager,
          const NMEAInfo& basic,
          const DerivedInfo& calculated,
@@ -118,7 +118,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
                      const ProtectedTaskManager *_task)
 {
   ScopeLock lock(fs.mutexStats);
-  Chart chart(chart_look, canvas, rc);
+  ChartRenderer chart(chart_look, canvas, rc);
   chart.PaddingBottom = 0;
   chart.PaddingLeft = 0;
 
@@ -153,7 +153,7 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
                 const DerivedInfo &derived_info,
                 const ProtectedTaskManager *_task)
 {
-  Chart chart(chart_look, canvas, rc);
+  ChartRenderer chart(chart_look, canvas, rc);
 
   if (fs.Altitude.sum_n < 2) {
     chart.DrawNoData();
@@ -200,7 +200,7 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
             const DerivedInfo &derived_info,
             const TaskManager &task)
 {
-  Chart chart(chart_look, canvas, rc);
+  ChartRenderer chart(chart_look, canvas, rc);
 
   if ((fs.Task_Speed.sum_n < 2) || !task.CheckOrderedTask()) {
     chart.DrawNoData();

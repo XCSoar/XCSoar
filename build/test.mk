@@ -1799,6 +1799,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Projection/MapWindowProjection.cpp \
 	$(SRC)/Projection/ChartProjection.cpp \
+	$(SRC)/Renderer/ChartRenderer.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \
 	$(SRC)/Renderer/RenderTaskPoint.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \
@@ -1817,7 +1818,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
-	$(SRC)/Screen/Chart.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Look/Look.cpp \
