@@ -33,7 +33,6 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
 #include "LocalPath.hpp"
-#include "MainWindow.hpp"
 #include "Components.hpp"
 #include "Profile/Profile.hpp"
 #include "Task/ProtectedTaskManager.hpp"

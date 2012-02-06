@@ -27,7 +27,6 @@ Copyright_License {
 #include "Dialogs/TextEntry.hpp"
 #include "Screen/Layout.hpp"
 #include "Plane/Plane.hpp"
-#include "MainWindow.hpp"
 
 #include <cstdio>
 

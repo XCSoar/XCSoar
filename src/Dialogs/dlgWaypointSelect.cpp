@@ -43,7 +43,6 @@ Copyright_License {
 #include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/FAITriangleValidator.hpp"
-#include "MainWindow.hpp"
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/DialogLook.hpp"

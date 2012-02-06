@@ -34,8 +34,8 @@ Copyright_License {
 #include "Plane/Plane.hpp"
 #include "OS/FileUtil.hpp"
 #include "LocalPath.hpp"
-#include "MainWindow.hpp"
 #include "Units/Units.hpp"
+#include "UIGlobals.hpp"
 
 #include <cstdio>
 
@@ -133,7 +133,7 @@ ListClicked(gcc_unused WndButton &button)
   list.Sort();
 
   // let the user select
-  int result = ComboPicker(XCSoarInterface::main_window,
+  int result = ComboPicker(UIGlobals::GetMainWindow(),
                            _("Load Polar"), list, NULL);
   if (result < 0)
     return;
@@ -192,7 +192,7 @@ ImportClicked(gcc_unused WndButton &button)
   list.Sort();
 
   // let the user select
-  int result = ComboPicker(XCSoarInterface::main_window,
+  int result = ComboPicker(UIGlobals::GetMainWindow(),
                            _("Load Polar From File"), list, NULL);
   if (result < 0)
     return;

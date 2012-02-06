@@ -30,7 +30,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "StringUtil.hpp"
@@ -359,7 +359,7 @@ dlgWaypointEditShowModal(Waypoint &way_point)
 {
   global_wpt = &way_point;
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ?
                   _T("IDR_XML_WAYPOINTEDIT_L") : _T("IDR_XML_WAYPOINTEDIT"));
   assert(wf != NULL);

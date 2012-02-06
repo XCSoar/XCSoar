@@ -30,8 +30,8 @@ Copyright_License {
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/FlarmId.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StaticString.hpp"
 #include "Language/Language.hpp"
-#include "MainWindow.hpp"
 
 #include <stdio.h>
 

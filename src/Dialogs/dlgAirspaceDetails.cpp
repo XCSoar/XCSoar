@@ -29,9 +29,9 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
-#include "MainWindow.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Units/Units.hpp"
+#include "UIGlobals.hpp"
 
 #include "Compiler.h"
 
@@ -142,7 +142,7 @@ dlgAirspaceDetails(const AbstractAirspace& the_airspace,
   airspace = &the_airspace;
   airspace_warnings = _airspace_warnings;
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   _T("IDR_XML_AIRSPACEDETAILS"));
   assert(wf != NULL);
 

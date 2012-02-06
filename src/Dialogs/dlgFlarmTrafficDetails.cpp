@@ -40,7 +40,7 @@
 #include "Screen/Layout.hpp"
 #include "Engine/Math/Earth.hpp"
 #include "LocalPath.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Formatter/AngleFormatter.hpp"
@@ -241,7 +241,7 @@ OnCallsignClicked(gcc_unused WndButton &Sender)
 {
   StaticString<21> newName;
   newName.clear();
-  if (TextEntryDialog(XCSoarInterface::main_window, newName,
+  if (TextEntryDialog(UIGlobals::GetMainWindow(), newName,
                       _("Competition ID")) &&
       FlarmDetails::AddSecondaryItem(target_id, newName))
     FlarmDetails::SaveSecondary();
@@ -304,7 +304,7 @@ dlgFlarmTrafficDetailsShowModal(FlarmId id)
 
   // Load dialog from XML
   wf = LoadDialog(CallBackTable,
-      XCSoarInterface::main_window, Layout::landscape ?
+      UIGlobals::GetMainWindow(), Layout::landscape ?
       _T("IDR_XML_FLARMTRAFFICDETAILS_L") : _T("IDR_XML_FLARMTRAFFICDETAILS"));
   assert(wf != NULL);
 

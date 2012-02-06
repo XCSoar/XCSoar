@@ -30,6 +30,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceClass.hpp"
@@ -173,7 +174,7 @@ dlgAirspaceShowModal(bool coloredit)
 {
   colormode = coloredit;
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   !Layout::landscape ? _T("IDR_XML_AIRSPACE_L") :
                                        _T("IDR_XML_AIRSPACE"));
   assert(wf != NULL);

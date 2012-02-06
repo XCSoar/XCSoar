@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "LocalPath.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 #include "StringUtil.hpp"
 #include "IO/DataFile.hpp"
 #include "Compiler.h"
@@ -204,7 +204,7 @@ dlgChecklistShowModal(void)
     first = false;
   }
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                       Layout::landscape ?
                       _T("IDR_XML_CHECKLIST_L") : _T("IDR_XML_CHECKLIST"));
   if (!wf)

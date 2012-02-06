@@ -28,7 +28,6 @@ Copyright_License {
 #include "Airspace/AirspaceSorter.hpp"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
-#include "MainWindow.hpp"
 #include "DataField/String.hpp"
 #include "DataField/Enum.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
@@ -39,6 +38,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/AngleFormatter.hpp"
+#include "UIGlobals.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -388,7 +388,7 @@ PrepareAirspaceSelectDialog()
 {
   gcc_unused ScopeBusyIndicator busy;
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_AIRSPACESELECT_L") :
                                       _T("IDR_XML_AIRSPACESELECT"));
   assert(wf != NULL);

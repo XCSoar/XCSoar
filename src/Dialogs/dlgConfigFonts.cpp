@@ -28,7 +28,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/FontConfig.hpp"
 #include "Screen/Layout.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 #include "DataField/Boolean.hpp"
 #include "Util/StringUtil.hpp"
 #include "Compiler.h"
@@ -266,7 +266,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 
 void dlgConfigFontsShowModal()
 {
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ?
                   _T("IDR_XML_CONFIG_FONTS_L") : _T("IDR_XML_CONFIG_FONTS"));
 
