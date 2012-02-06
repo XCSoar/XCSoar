@@ -81,15 +81,18 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height)
 #endif
   }
 
-#ifdef ENABLE_OPENGL
 #ifndef ANDROID
-  ::SDL_SetVideoMode(width, height, 0, flags);
+  SDL_Surface *s = ::SDL_SetVideoMode(width, height, 0, flags);
+  if (s == NULL)
+    return;
 #endif
+
+#ifdef ENABLE_OPENGL
   OpenGL::SetupContext();
   OpenGL::SetupViewport(width, height);
   Canvas::set(width, height);
 #else
-  Canvas::set(::SDL_SetVideoMode(width, height, 0, flags));
+  Canvas::set(s);
 #endif
 }
 
