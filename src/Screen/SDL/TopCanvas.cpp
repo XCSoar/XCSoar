@@ -43,7 +43,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-TopCanvas::Set(UPixelScalar width, UPixelScalar height)
+TopCanvas::Set(UPixelScalar width, UPixelScalar height, bool full_screen)
 {
 #ifndef ANDROID
   Uint32 flags = SDL_ANYFORMAT;
@@ -67,11 +67,10 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height)
     flags |= SDL_SWSURFACE;
 #endif /* !ENABLE_OPENGL */
 
-  if (IsEmbedded()) {
+  if (full_screen)
 #ifndef ANDROID
     flags |= SDL_FULLSCREEN;
 #endif
-  }
 
 #ifndef ANDROID
   SDL_Surface *s = ::SDL_SetVideoMode(width, height, 0, flags);

@@ -42,6 +42,44 @@ Copyright_License {
 struct Event;
 #endif
 
+class TopWindowStyle : public WindowStyle {
+#if defined(ENABLE_SDL) && !defined(ANDROID)
+  bool full_screen;
+#endif
+
+public:
+  TopWindowStyle()
+#if defined(ENABLE_SDL) && !defined(ANDROID)
+    :full_screen(false)
+#endif
+  {
+    Popup();
+  }
+
+  TopWindowStyle(const WindowStyle other)
+    :WindowStyle(other)
+#if defined(ENABLE_SDL) && !defined(ANDROID)
+    , full_screen(false)
+#endif
+  {
+    Popup();
+  }
+
+  void FullScreen() {
+#if defined(ENABLE_SDL) && !defined(ANDROID)
+    full_screen = true;
+#endif
+  }
+
+  bool GetFullScreen() const {
+#if defined(ENABLE_SDL) && !defined(ANDROID)
+    return full_screen;
+#else
+    return false;
+#endif
+  }
+};
+
 /**
  * A top-level full-screen window.
  */
@@ -108,7 +146,8 @@ public:
 
   static bool find(const TCHAR *cls, const TCHAR *text);
 
-  void set(const TCHAR *cls, const TCHAR *text, PixelRect rc);
+  void set(const TCHAR *cls, const TCHAR *text, PixelRect rc,
+           TopWindowStyle style=TopWindowStyle());
 
 #ifdef _WIN32_WCE
   void reset();

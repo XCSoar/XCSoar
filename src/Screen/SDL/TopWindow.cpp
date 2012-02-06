@@ -46,15 +46,13 @@ TopWindow::find(const TCHAR *cls, const TCHAR *text)
 }
 
 void
-TopWindow::set(const TCHAR *cls, const TCHAR *text, PixelRect rc)
+TopWindow::set(const TCHAR *cls, const TCHAR *text, PixelRect rc,
+               TopWindowStyle style)
 {
-  WindowStyle style;
-  style.Popup();
-
   const UPixelScalar width = rc.right - rc.left;
   const UPixelScalar height = rc.bottom - rc.top;
 
-  screen.Set(width, height);
+  screen.Set(width, height, style.GetFullScreen());
 
   ContainerWindow::set(NULL, 0, 0, width, height, style);
 

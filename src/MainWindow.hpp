@@ -127,7 +127,8 @@ protected:
   void KillWidget();
 
 public:
-  void Set(const TCHAR *text, PixelRect rc);
+  void Set(const TCHAR *text, PixelRect rc,
+           TopWindowStyle style=TopWindowStyle());
 
   void Initialise();
   void InitialiseConfigured();

@@ -60,11 +60,9 @@ TopWindow::find(const TCHAR *cls, const TCHAR *text)
 }
 
 void
-TopWindow::set(const TCHAR *cls, const TCHAR *text, PixelRect rc)
+TopWindow::set(const TCHAR *cls, const TCHAR *text, PixelRect rc,
+               TopWindowStyle style)
 {
-  WindowStyle style;
-  style.Popup();
-
   Window::set(NULL, cls, text, rc, style);
 }
 
