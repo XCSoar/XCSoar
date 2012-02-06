@@ -70,14 +70,6 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height)
   if (IsEmbedded()) {
 #ifndef ANDROID
     flags |= SDL_FULLSCREEN;
-
-    /* select a full-screen video mode */
-    SDL_Rect **modes = SDL_ListModes(NULL, flags);
-    if (modes == NULL)
-      return;
-
-    width = modes[0]->w;
-    height = modes[0]->h;
 #endif
   }
 

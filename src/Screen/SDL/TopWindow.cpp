@@ -57,10 +57,6 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
 
   screen.Set(width, height);
 
-  /* apply the mode which was chosen by TopCanvas */
-  width = screen.get_width();
-  height = screen.get_height();
-
   ContainerWindow::set(NULL, 0, 0, width, height, style);
 
 #ifndef ANDROID
