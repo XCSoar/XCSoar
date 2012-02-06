@@ -31,6 +31,10 @@ namespace CommandLine {
 #if !defined(_WIN32_WCE)
   unsigned width = 640, height = 480;
 #endif
+
+#if defined(ENABLE_SDL) && !defined(ANDROID)
+  bool full_screen = false;
+#endif
 }
 
 void
@@ -81,6 +85,11 @@ CommandLine::Parse(Args args)
     else if (strcmp(s, "-small") == 0) {
       width = 320;
       height = 240;
+    }
+#endif
+#ifdef HAVE_CMDLINE_FULLSCREEN
+    else if (strcmp(s, "-fullscreen") == 0) {
+      full_screen = true;
     }
 #endif
 #if defined(_WIN32) && !defined(_WIN32_WCE) && !defined(__WINE__)

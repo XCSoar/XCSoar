@@ -62,6 +62,7 @@ Copyright_License {
 #include "Screen/Busy.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "Polar/Polar.hpp"
+#include "CommandLine.hpp"
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
 #include "resource.h"
@@ -219,7 +220,12 @@ XCSoarInterface::Startup()
 
   // Creates the main window
   LogStartUp(_T("Create main window"));
-  main_window.Set(szTitle, SystemWindowSize());
+
+  TopWindowStyle style;
+  if (CommandLine::full_screen)
+    style.FullScreen();
+
+  main_window.Set(szTitle, SystemWindowSize(), style);
   if (!main_window.IsDefined())
     return false;
 

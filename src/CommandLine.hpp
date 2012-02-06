@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_OS_COMMAND_LINE_HPP
 #define XCSOAR_OS_COMMAND_LINE_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 class Args;
@@ -31,6 +33,13 @@ class Args;
 namespace CommandLine {
 #ifndef _WIN32_WCE
   extern unsigned width, height;
+#endif
+
+#if defined(ENABLE_SDL) && !defined(ANDROID)
+#define HAVE_CMDLINE_FULLSCREEN
+  extern bool full_screen;
+#else
+  static gcc_constexpr_data bool full_screen = false;
 #endif
 
 /**

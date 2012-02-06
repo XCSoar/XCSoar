@@ -57,6 +57,9 @@ static const char *Usage = "\n"
   "  -square         use a 480x480 screen resolution\n"
   "  -small          use a 320x240 screen resolution\n"
 #endif
+#ifdef HAVE_CMDLINE_FULLSCREEN
+  "  -fullscreen     full-screen mode\n"
+#endif
 #if defined(_WIN32) && !defined(_WIN32_WCE)&& !defined(__WINE__)
   "  -console        open debug output console\n"
 #endif
