@@ -580,7 +580,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/FlarmDetails.cpp \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
-	$(SRC)/CommandLine.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/SystemLoad.cpp \
 	$(SRC)/OS/FileUtil.cpp \
@@ -751,6 +750,7 @@ endif
 
 else
 XCSOAR_SOURCES += \
+	$(SRC)/CommandLine.cpp \
 	$(SRC)/Hardware/Battery.cpp \
 	$(SRC)/XCSoar.cpp
 endif

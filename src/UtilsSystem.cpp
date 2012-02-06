@@ -29,6 +29,11 @@ Copyright_License {
 #include "OS/MemInfo.hpp"
 #include "Screen/Point.hpp"
 
+#ifdef ANDROID
+#include "Android/NativeView.hpp"
+#include "Android/Main.hpp"
+#endif
+
 #include <tchar.h>
 
 #ifdef HAVE_POSIX
@@ -127,6 +132,9 @@ SystemWindowSize()
   #ifdef WIN32
   WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
   WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
+#elif defined(ANDROID)
+  WindowSize.right = native_view->get_width();
+  WindowSize.bottom = native_view->get_height();
   #else /* !WIN32 */
   /// @todo implement this properly for SDL/UNIX
   WindowSize.right = SCREENWIDTH;
