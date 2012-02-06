@@ -35,9 +35,9 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "Form/Edit.hpp"
 #include "Screen/Icon.hpp"
+#include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "Look/Look.hpp"
-#include "MainWindow.hpp"
+#include "Look/MapLook.hpp"
 #include "Language/Language.hpp"
 
 class WndButton;
@@ -172,8 +172,7 @@ OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
     canvas.Select(*instance->GetLook().small_font);
     const int textheight = canvas.CalcTextHeight(message);
 
-    const AirspaceLook &look =
-      CommonInterface::main_window.GetLook().map.airspace;
+    const AirspaceLook &look = UIGlobals::GetMapLook().airspace;
     const MaskedIcon *bmp = &look.intercept_icon;
     const int offsetx = bmp->GetSize().cx;
     const int offsety = canvas.get_height() - bmp->GetSize().cy;

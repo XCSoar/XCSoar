@@ -44,7 +44,9 @@ Copyright_License {
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/FAITriangleValidator.hpp"
 #include "MainWindow.hpp"
-#include "Look/Look.hpp"
+#include "UIGlobals.hpp"
+#include "Look/MapLook.hpp"
+#include "Look/DialogLook.hpp"
 #include "Util/Macros.hpp"
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Units/Units.hpp"
@@ -747,7 +749,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
     const UPixelScalar line_height = rc.bottom - rc.top;
     const Font &name_font =
-      *CommonInterface::main_window.GetLook().dialog.list.font;
+      *UIGlobals::GetDialogLook().list.font;
     canvas.SetTextColor(COLOR_BLACK);
     canvas.Select(name_font);
     canvas.text(rc.left + line_height + Layout::FastScale(2),
@@ -763,8 +765,8 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   WaypointListRenderer::Draw(canvas, rc, *info.waypoint,
                              GeoVector(info.distance, info.direction),
-                             CommonInterface::main_window.GetLook().dialog,
-                             CommonInterface::main_window.GetLook().map.waypoint,
+                             UIGlobals::GetDialogLook(),
+                             UIGlobals::GetMapLook().waypoint,
                              CommonInterface::GetMapSettings().waypoint);
 }
 
@@ -869,8 +871,7 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &_location,
   dialog->SetKeyDownNotify(FormKeyDown);
 #endif
 
-  const DialogLook &dialog_look =
-    CommonInterface::main_window.GetLook().dialog;
+  const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
   waypoint_list = (WndListFrame*)dialog->FindByName(_T("frmWaypointList"));
   assert(waypoint_list != NULL);

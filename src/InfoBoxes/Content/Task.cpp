@@ -28,13 +28,13 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
-#include "MainWindow.hpp"
 #include "LocalTime.hpp"
 #include "Engine/Util/Gradient.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Language/Language.hpp"
+#include "UIGlobals.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -134,7 +134,7 @@ InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
   case ibkEnter:
     const Waypoint *wp = protected_task_manager->GetActiveWaypoint();
     if (wp) {
-      dlgWaypointDetailsShowModal(XCSoarInterface::main_window, *wp);
+      dlgWaypointDetailsShowModal(UIGlobals::GetMainWindow(), *wp);
       return true;
     }
   }
@@ -526,8 +526,7 @@ InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
   case ibkEnter:
-    dlgAnalysisShowModal(XCSoarInterface::main_window,
-                         CommonInterface::main_window.GetLook(),
+    dlgAnalysisShowModal(UIGlobals::GetMainWindow(), UIGlobals::GetLook(),
                          CommonInterface::Full(), *glide_computer,
                          protected_task_manager,
                          &airspace_database,

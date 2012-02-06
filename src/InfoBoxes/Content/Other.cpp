@@ -30,7 +30,7 @@ Copyright_License {
 #include "OS/MemInfo.hpp"
 #include "Asset.hpp"
 #include "Language/Language.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 
 #include <tchar.h>
@@ -167,7 +167,7 @@ void
 InfoBoxContentHorizon::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   if (CommonInterface::Basic().acceleration.available) {
-    const Look &look = CommonInterface::main_window.GetLook();
+    const Look &look = UIGlobals::GetLook();
     HorizonRenderer::Draw(canvas, infobox.GetValueAndCommentRect(),
                           look.cross_section,
                 CommonInterface::Basic());

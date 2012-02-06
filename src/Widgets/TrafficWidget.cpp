@@ -29,7 +29,7 @@
 #include "Screen/Key.h"
 #include "Form/CheckBox.hpp"
 #include "Form/Button.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Profile/Profile.hpp"
 #include "Compiler.h"
@@ -625,7 +625,7 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.EnableDoubleClicks();
 
-  const Look &look = CommonInterface::main_window.GetLook();
+  const Look &look = UIGlobals::GetLook();
   view = new FlarmTrafficControl2(look.flarm_dialog);
   view->set(parent, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
             style);

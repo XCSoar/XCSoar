@@ -28,8 +28,10 @@ Copyright_License {
 
 class SingleWindow;
 struct DialogSettings;
+struct Look;
 struct DialogLook;
 struct IconLook;
+struct MapLook;
 
 /**
  * This namespace provides helper functions to access generic global
@@ -50,10 +52,16 @@ namespace UIGlobals {
   const DialogSettings &GetDialogSettings();
 
   gcc_const
+  const Look &GetLook();
+
+  gcc_const
   const DialogLook &GetDialogLook();
 
   gcc_const
   const IconLook &GetIconLook();
+
+  gcc_const
+  const MapLook &GetMapLook();
 };
 
 #endif

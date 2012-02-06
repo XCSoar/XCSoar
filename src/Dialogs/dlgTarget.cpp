@@ -24,12 +24,12 @@ Copyright_License {
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Look/Look.hpp"
+#include "UIGlobals.hpp"
+#include "Look/MapLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "DataField/Enum.hpp"
 #include "DataField/Float.hpp"
-#include "MainWindow.hpp"
 #include "MapWindow/TargetMapWindow.hpp"
 #include "Components.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
@@ -64,10 +64,9 @@ OnCreateMap(ContainerWindow &parent, PixelScalar left, PixelScalar top,
             UPixelScalar width, UPixelScalar height,
             const WindowStyle style)
 {
-  const Look &look = CommonInterface::main_window.GetLook();
-
-  map = new TargetMapWindow(look.map.waypoint, look.map.airspace,
-                            look.map.trail, look.map.task, look.map.aircraft);
+  const MapLook &look = UIGlobals::GetMapLook();
+  map = new TargetMapWindow(look.waypoint, look.airspace,
+                            look.trail, look.task, look.aircraft);
   map->SetTerrain(terrain);
   map->SetTopograpgy(topography);
   map->SetAirspaces(&airspace_database);
@@ -517,7 +516,7 @@ dlgTargetShowModal(int TargetPoint)
   if (protected_task_manager == NULL)
     return;
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_TARGET_L") :
                                       _T("IDR_XML_TARGET"));
   assert(wf != NULL);

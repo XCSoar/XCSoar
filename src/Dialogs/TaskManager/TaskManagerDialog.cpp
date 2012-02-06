@@ -45,7 +45,6 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "Protection.hpp"
 #include "Look/Look.hpp"
-#include "MainWindow.hpp"
 #include "Form/TabBar.hpp"
 #include "Form/Panel.hpp"
 
@@ -133,11 +132,11 @@ dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   GLCanvasScissor scissor(canvas);
 #endif
 
-  const Look &look = CommonInterface::main_window.GetLook();
+  const MapLook &look = UIGlobals::GetMapLook();
   PaintTask(canvas, Sender->get_client_rect(), *active_task,
             XCSoarInterface::Basic().location,
             XCSoarInterface::GetMapSettings(),
-            look.map.task, look.map.airspace,
+            look.task, look.airspace,
             terrain, &airspace_database);
 }
 
@@ -253,7 +252,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     wBlackRect->show_on_top();
   }
 
-  const Look &look = CommonInterface::main_window.GetLook();
+  const MapLook &look = UIGlobals::GetMapLook();
 
   Widget *wProps = new TaskPropertiesPanel(&active_task, &task_modified);
 
@@ -261,7 +260,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
   Widget *wCalculator = new TaskCalculatorPanel(*wf, &task_modified);
 
-  Widget *wEdit = new TaskEditPanel(*wf, look.map.task, look.map.airspace,
+  Widget *wEdit = new TaskEditPanel(*wf, look.task, look.airspace,
                                     &active_task, &task_modified);
 
   Widget *list_tab = new TaskListPanel(*wf, *wTabBar,

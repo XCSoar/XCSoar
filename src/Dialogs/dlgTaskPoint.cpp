@@ -41,8 +41,8 @@ Copyright_License {
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Gauge/TaskView.hpp"
 #include "Compiler.h"
-#include "Look/Look.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
+#include "Look/MapLook.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
@@ -283,11 +283,11 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   GLCanvasScissor scissor(canvas);
 #endif
 
-  const Look &look = CommonInterface::main_window.GetLook();
+  const MapLook &look = UIGlobals::GetMapLook();
   PaintTaskPoint(canvas, rc, *ordered_task, *tp,
                  XCSoarInterface::Basic().location,
                  XCSoarInterface::GetMapSettings(),
-                 look.map.task, look.map.airspace,
+                 look.task, look.airspace,
                  terrain, &airspace_database);
 }
 

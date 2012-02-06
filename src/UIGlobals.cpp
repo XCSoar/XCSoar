@@ -38,6 +38,12 @@ UIGlobals::GetDialogSettings()
   return CommonInterface::GetUISettings().dialog;
 }
 
+const Look &
+UIGlobals::GetLook()
+{
+  return CommonInterface::main_window.GetLook();
+}
+
 const DialogLook &
 UIGlobals::GetDialogLook()
 {
@@ -48,4 +54,10 @@ const IconLook &
 UIGlobals::GetIconLook()
 {
   return CommonInterface::main_window.GetLook().icon;
+}
+
+const MapLook &
+UIGlobals::GetMapLook()
+{
+  return CommonInterface::main_window.GetLook().map;
 }

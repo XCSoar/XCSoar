@@ -25,8 +25,8 @@ Copyright_License {
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
-#include "MainWindow.hpp"
-#include "Look/Look.hpp"
+#include "UIGlobals.hpp"
+#include "Look/MapLook.hpp"
 
 #include <assert.h>
 
@@ -40,8 +40,7 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < NUMAIRSPACECOLORS);
 
-  const AirspaceLook &look =
-    CommonInterface::main_window.GetLook().map.airspace;
+  const AirspaceLook &look = UIGlobals::GetMapLook().airspace;
 
   canvas.SelectBlackPen();
 #ifndef HAVE_HATCHED_BRUSH
@@ -80,17 +79,10 @@ dlgAirspaceColoursShowModal(void)
 {
   ItemIndex = -1;
 
-  if (!Layout::landscape) {
-    wf = LoadDialog(CallBackTable,
-        XCSoarInterface::main_window, _T("IDR_XML_AIRSPACECOLOURS_L"));
-  } else {
-    wf = LoadDialog(CallBackTable,
-        XCSoarInterface::main_window, _T("IDR_XML_AIRSPACECOLOURS"));
-  }
-
-  if (!wf)
-    return -1;
-
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+                  Layout::landscape
+                  ? _T("IDR_XML_AIRSPACECOLOURS")
+                  : _T("IDR_XML_AIRSPACECOLOURS_L"));
   assert(wf != NULL);
 
   wAirspaceColoursList = (WndListFrame*)wf->FindByName(

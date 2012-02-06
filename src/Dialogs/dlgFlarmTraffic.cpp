@@ -38,7 +38,7 @@
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Form/CheckBox.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Profile/Profile.hpp"
 #include "Compiler.h"
@@ -657,7 +657,7 @@ OnCreateFlarmTrafficControl(ContainerWindow &parent,
                             UPixelScalar width, UPixelScalar height,
                             const WindowStyle style)
 {
-  const Look &look = CommonInterface::main_window.GetLook();
+  const Look &look = UIGlobals::GetLook();
   wdf = new FlarmTrafficControl(look.flarm_dialog);
   wdf->set(parent, left, top, width, height, style);
 
@@ -688,11 +688,10 @@ dlgFlarmTrafficShowModal()
     return;
 
   // Load dialog from XML
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_FLARMTRAFFIC_L") :
                                       _T("IDR_XML_FLARMTRAFFIC"));
-  if (!wf)
-    return;
+  assert(wf != NULL);
 
   // Set dialog events
   wf->SetKeyDownNotify(FormKeyDown);

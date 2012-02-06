@@ -27,9 +27,9 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
-#include "MainWindow.hpp"
 #include "Interface.hpp"
-#include "Look/Look.hpp"
+#include "UIGlobals.hpp"
+#include "Look/MapLook.hpp"
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Language/Language.hpp"
 
@@ -52,8 +52,8 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   WaypointListRenderer::Draw(canvas, rc, waypoint, solution.vector.distance,
                              solution.altitude_difference,
-                             CommonInterface::main_window.GetLook().dialog,
-                             CommonInterface::main_window.GetLook().map.waypoint,
+                             UIGlobals::GetDialogLook(),
+                             UIGlobals::GetMapLook().waypoint,
                              CommonInterface::GetMapSettings().waypoint);
 }
 
@@ -65,7 +65,7 @@ dlgAlternatesListShowModal(SingleWindow &parent)
 
   UpdateAlternates();
 
-  const DialogLook &look = CommonInterface::main_window.GetLook().dialog;
+  const DialogLook &look = UIGlobals::GetDialogLook();
   int i = ListPicker(parent, _("Alternates"), alternates.size(), 0,
                      WaypointListRenderer::GetHeight(look),
                      PaintListItem, true);

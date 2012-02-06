@@ -26,9 +26,8 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Form/List.hpp"
 #include "Screen/Layout.hpp"
-#include "MainWindow.hpp"
-#include "Look/Look.hpp"
-#include "Interface.hpp"
+#include "UIGlobals.hpp"
+#include "Look/MapLook.hpp"
 
 #include <assert.h>
 
@@ -44,8 +43,7 @@ OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
   assert(i < NUMAIRSPACECOLORS);
 
-  const AirspaceLook &look =
-    CommonInterface::main_window.GetLook().map.airspace;
+  const AirspaceLook &look = UIGlobals::GetMapLook().airspace;
 
   canvas.SetBackgroundTransparent();
   canvas.Select(look.brushes[i]);
@@ -76,19 +74,10 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[]={
 
 
 int dlgAirspacePatternsShowModal(void){
-  if (!Layout::landscape) {
-    wf = LoadDialog(CallBackTable,
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_AIRSPACEPATTERNS_L"));
-  } else {
-    wf = LoadDialog(CallBackTable,
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_AIRSPACEPATTERNS"));
-  }
-
-  if (!wf)
-    return -1;
-
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+                  Layout::landscape
+                  ? _T("IDR_XML_AIRSPACEPATTERNS")
+                  : _T("IDR_XML_AIRSPACEPATTERNS_L"));
   assert(wf!=NULL);
 
   WndListFrame *wAirspacePatternsList =

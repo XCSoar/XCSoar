@@ -27,6 +27,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
+#include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Form/List.hpp"
 #include "Form/Draw.hpp"
@@ -39,8 +40,8 @@ Copyright_License {
 #include "Gauge/TaskView.hpp"
 #include "OS/FileUtil.hpp"
 #include "Logger/ExternalLogger.hpp"
-#include "Look/Look.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
+#include "Look/MapLook.hpp"
 #include "Simulator.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
@@ -116,11 +117,11 @@ TaskListPanel::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   GLCanvasScissor scissor(canvas);
 #endif
 
-  const Look &look = CommonInterface::main_window.GetLook();
+  const MapLook &look = UIGlobals::GetMapLook();
   PaintTask(canvas, Sender->get_client_rect(), *ordered_task,
             XCSoarInterface::Basic().location,
             XCSoarInterface::GetMapSettings(),
-            look.map.task, look.map.airspace,
+            look.task, look.airspace,
             terrain, &airspace_database);
 }
 

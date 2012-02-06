@@ -34,7 +34,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Screen/Layout.hpp"
 #include "Protection.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
@@ -59,7 +59,7 @@ InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
   if (var.empty())
     return;
 
-  const Look &look = CommonInterface::main_window.GetLook();
+  const Look &look = UIGlobals::GetLook();
   TraceHistoryRenderer renderer(look.trace_history, look.vario, look.chart);
   renderer.RenderVario(canvas, get_spark_rect(infobox), var, center,
                        CommonInterface::GetComputerSettings().glide_polar_task.GetMC());
@@ -134,7 +134,7 @@ InfoBoxContentBarogram::Update(InfoBoxData &data)
 void
 InfoBoxContentBarogram::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  const Look &look = CommonInterface::main_window.GetLook();
+  const Look &look = UIGlobals::GetLook();
   RenderBarographSpark(canvas, get_spark_rect(infobox),
                        look.chart, look.cross_section,
                        infobox.GetLook().inverse,
@@ -148,8 +148,8 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
   case ibkEnter:
-    dlgAnalysisShowModal(XCSoarInterface::main_window,
-                         CommonInterface::main_window.GetLook(),
+    dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
+                         UIGlobals::GetLook(),
                          CommonInterface::Full(), *glide_computer,
                          protected_task_manager,
                          &airspace_database,
@@ -169,7 +169,7 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  const Look &look = CommonInterface::main_window.GetLook();
+  const Look &look = UIGlobals::GetLook();
   ThermalBandRenderer renderer(look.thermal_band, look.chart);
   renderer.DrawThermalBandSpark(CommonInterface::Basic(),
                                 CommonInterface::Calculated(),
@@ -189,7 +189,7 @@ InfoBoxContentThermalBand::Update(InfoBoxData &data)
 void
 InfoBoxContentTaskProgress::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  const Look &look = CommonInterface::main_window.GetLook();
+  const Look &look = UIGlobals::GetLook();
   TaskProgressRenderer renderer(look.map.task);
   renderer.Draw(CommonInterface::Calculated().
                 common_stats.ordered_summary,
