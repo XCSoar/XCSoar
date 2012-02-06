@@ -28,6 +28,7 @@ class SingleWindow;
 struct MapItem;
 class MapItemList;
 struct GeoVector;
+struct DialogLook;
 struct MapLook;
 struct TrafficLook;
 struct MapSettings;
@@ -39,6 +40,7 @@ void
 ShowMapItemListDialog(SingleWindow &parent,
                       const GeoVector &_vector,
                       const MapItemList &_list, short _elevation,
+                      const DialogLook &_dialog_look,
                       const MapLook &_look,
                       const TrafficLook &_traffic_look,
                       const MapSettings &_settings,

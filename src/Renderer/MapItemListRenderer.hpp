@@ -28,6 +28,7 @@ Copyright_License {
 
 class Canvas;
 struct MapItem;
+struct DialogLook;
 struct MapLook;
 struct TrafficLook;
 struct MapSettings;
@@ -35,6 +36,7 @@ struct MapSettings;
 namespace MapItemListRenderer
 {
   void Draw(Canvas &canvas, const PixelRect rc, const MapItem &item,
+            const DialogLook &dialog_look,
             const MapLook &look,
             const TrafficLook &traffic_look,
             const MapSettings &settings);

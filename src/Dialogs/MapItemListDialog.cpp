@@ -23,12 +23,12 @@ Copyright_License {
 
 #include "Dialogs/MapItemListDialog.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/AnyCanvas.hpp"
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/Traffic.hpp"
+#include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Navigation/Geometry/GeoVector.hpp"
 #include "Terrain/RasterBuffer.hpp"
@@ -47,6 +47,7 @@ Copyright_License {
 #include "Formatter/AngleFormatter.hpp"
 #include "Util/Macros.hpp"
 
+static const DialogLook *dialog_look;
 static const MapLook *look;
 static const TrafficLook *traffic_look;
 static const MapSettings *settings;
@@ -80,7 +81,9 @@ static void
 PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
   const MapItem &item = *(*list)[idx];
-  MapItemListRenderer::Draw(canvas, rc, item, *look, *traffic_look, *settings);
+  MapItemListRenderer::Draw(canvas, rc, item,
+                            *dialog_look, *look, *traffic_look,
+                            *settings);
 }
 
 static void
@@ -118,8 +121,8 @@ ShowMapItemListDialog(SingleWindow &parent)
 {
   unsigned num_items = list->size();
 
-  UPixelScalar item_height = Fonts::map_bold.GetHeight() + Layout::Scale(6) +
-                             Fonts::map_label.GetHeight();
+  UPixelScalar item_height = dialog_look->list.font->GetHeight()
+    + Layout::Scale(6) + dialog_look->small_font->GetHeight();
 
   assert(num_items <= 0x7fffffff);
   assert(item_height > 0);
@@ -220,6 +223,7 @@ void
 ShowMapItemListDialog(SingleWindow &parent,
                       const GeoVector &_vector,
                       const MapItemList &_list, short _elevation,
+                      const DialogLook &_dialog_look,
                       const MapLook &_look,
                       const TrafficLook &_traffic_look,
                       const MapSettings &_settings,
@@ -241,6 +245,7 @@ ShowMapItemListDialog(SingleWindow &parent,
     list = &_list;
     elevation = _elevation;
 
+    dialog_look = &_dialog_look,
     look = &_look;
     traffic_look = &_traffic_look;
     settings = &_settings;

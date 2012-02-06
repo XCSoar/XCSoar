@@ -24,8 +24,8 @@ Copyright_License {
 #include "MapItemListRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 #include "MapWindow/MapItem.hpp"
+#include "Look/DialogLook.hpp"
 #include "Look/MapLook.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
@@ -51,10 +51,11 @@ Copyright_License {
 namespace MapItemListRenderer
 {
   void Draw(Canvas &canvas, const PixelRect rc, const SelfMapItem &item,
+            const DialogLook &dialog_look,
             const AircraftLook &look, const MapSettings &settings);
 
   void Draw(Canvas &canvas, const PixelRect rc, const AirspaceMapItem &item,
-            const AirspaceLook &look,
+            const DialogLook &dialog_look, const AirspaceLook &look,
             const AirspaceRendererSettings &renderer_settings);
 
   void Draw(Canvas &canvas, const PixelRect rc, const WaypointMapItem &item,
@@ -62,22 +63,25 @@ namespace MapItemListRenderer
             const WaypointRendererSettings &renderer_settings);
 
   void Draw(Canvas &canvas, const PixelRect rc, const MarkerMapItem &item,
-            const MarkerLook &look);
+            const DialogLook &dialog_look, const MarkerLook &look);
 
   void Draw(Canvas &canvas, const PixelRect rc, const TaskOZMapItem &item,
+            const DialogLook &dialog_look,
             const TaskLook &look, const AirspaceLook &airspace_look,
             const AirspaceRendererSettings &airspace_settings);
 
   void Draw(Canvas &canvas, const PixelRect rc, const TrafficMapItem &item,
-            const TrafficLook &traffic_look);
+            const DialogLook &dialog_look, const TrafficLook &traffic_look);
 
   void Draw(Canvas &canvas, const PixelRect rc, const ThermalMapItem &item,
-            const MapLook &look);
+            const DialogLook &dialog_look, const MapLook &look);
 }
 
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const SelfMapItem &item, const AircraftLook &look,
+                          const SelfMapItem &item,
+                          const DialogLook &dialog_look,
+                          const AircraftLook &look,
                           const MapSettings &settings)
 {
   const PixelScalar line_height = rc.bottom - rc.top;
@@ -86,8 +90,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                      (PixelScalar)(rc.top + line_height / 2) };
   AircraftRenderer::Draw(canvas, settings, look, item.bearing, pt);
 
-  const Font &name_font = Fonts::map_bold;
-  const Font &small_font = Fonts::map_label;
+  const Font &name_font = *dialog_look.list.font;
+  const Font &small_font = *dialog_look.small_font;
   canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
@@ -106,7 +110,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const AirspaceMapItem &item, const AirspaceLook &look,
+                          const AirspaceMapItem &item,
+                          const DialogLook &dialog_look,
+                          const AirspaceLook &look,
                           const AirspaceRendererSettings &renderer_settings)
 {
   const PixelScalar line_height = rc.bottom - rc.top;
@@ -121,8 +127,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
                                 renderer_settings, look);
 
-  const Font &name_font = Fonts::map_bold;
-  const Font &small_font = Fonts::map_label;
+  const Font &name_font = *dialog_look.list.font;
+  const Font &small_font = *dialog_look.small_font;
   canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
@@ -158,7 +164,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const MarkerMapItem &item, const MarkerLook &look)
+                          const MarkerMapItem &item,
+                          const DialogLook &dialog_look,
+                          const MarkerLook &look)
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
@@ -169,8 +177,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   look.icon.Draw(canvas, pt);
 
-  const Font &name_font = Fonts::map_bold;
-  const Font &small_font = Fonts::map_label;
+  const Font &name_font = *dialog_look.list.font;
+  const Font &small_font = *dialog_look.small_font;
   canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
@@ -193,7 +201,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const ThermalMapItem &item, const MapLook &look)
+                          const ThermalMapItem &item,
+                          const DialogLook &dialog_look,
+                          const MapLook &look)
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
@@ -204,8 +214,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   look.thermal_source_icon.Draw(canvas, pt);
 
-  const Font &name_font = Fonts::map_bold;
-  const Font &small_font = Fonts::map_label;
+  const Font &name_font = *dialog_look.list.font;
+  const Font &small_font = *dialog_look.small_font;
   canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
@@ -237,6 +247,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const TaskOZMapItem &item,
+                          const DialogLook &dialog_look,
                           const TaskLook &look, const AirspaceLook &airspace_look,
                           const AirspaceRendererSettings &airspace_settings)
 {
@@ -253,8 +264,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   OZPreviewRenderer::Draw(canvas, oz, pt, radius, look,
                           airspace_settings, airspace_look);
 
-  const Font &name_font = Fonts::map_bold;
-  const Font &small_font = Fonts::map_label;
+  const Font &name_font = *dialog_look.list.font;
+  const Font &small_font = *dialog_look.small_font;
   canvas.SetTextColor(COLOR_BLACK);
 
   TCHAR buffer[256];
@@ -282,6 +293,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const TrafficMapItem &item,
+                          const DialogLook &dialog_look,
                           const TrafficLook &traffic_look)
 {
   const PixelScalar line_height = rc.bottom - rc.top;
@@ -294,8 +306,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   TrafficRenderer::Draw(canvas, traffic_look, traffic, traffic.track, pt);
 
   // Now render the text information
-  const Font &name_font = Fonts::map_bold;
-  const Font &small_font = Fonts::map_label;
+  const Font &name_font = *dialog_look.list.font;
+  const Font &small_font = *dialog_look.small_font;
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
 
   canvas.SetTextColor(COLOR_BLACK);
@@ -329,16 +341,19 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const MapItem &item, const MapLook &look,
+                          const MapItem &item,
+                          const DialogLook &dialog_look, const MapLook &look,
                           const TrafficLook &traffic_look,
                           const MapSettings &settings)
 {
   switch (item.type) {
   case MapItem::SELF:
-    Draw(canvas, rc, (const SelfMapItem &)item, look.aircraft, settings);
+    Draw(canvas, rc, (const SelfMapItem &)item,
+         dialog_look, look.aircraft, settings);
     break;
   case MapItem::AIRSPACE:
-    Draw(canvas, rc, (const AirspaceMapItem &)item, look.airspace,
+    Draw(canvas, rc, (const AirspaceMapItem &)item,
+         dialog_look, look.airspace,
          settings.airspace);
     break;
   case MapItem::WAYPOINT:
@@ -346,17 +361,18 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
          settings.waypoint);
     break;
   case MapItem::TASK_OZ:
-    Draw(canvas, rc, (const TaskOZMapItem &)item, look.task, look.airspace,
+    Draw(canvas, rc, (const TaskOZMapItem &)item,
+         dialog_look, look.task, look.airspace,
          settings.airspace);
     break;
   case MapItem::MARKER:
-    Draw(canvas, rc, (const MarkerMapItem &)item, look.marker);
+    Draw(canvas, rc, (const MarkerMapItem &)item, dialog_look, look.marker);
     break;
   case MapItem::TRAFFIC:
-    Draw(canvas, rc, (const TrafficMapItem &)item, traffic_look);
+    Draw(canvas, rc, (const TrafficMapItem &)item, dialog_look, traffic_look);
     break;
   case MapItem::THERMAL:
-    Draw(canvas, rc, (const ThermalMapItem &)item, look);
+    Draw(canvas, rc, (const ThermalMapItem &)item, dialog_look, look);
     break;
   }
 }

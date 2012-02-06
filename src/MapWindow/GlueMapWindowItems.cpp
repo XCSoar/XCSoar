@@ -84,8 +84,9 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location) const
   if (list.empty())
     return false;
 
-  ShowMapItemListDialog(UIGlobals::GetMainWindow(), vector, list,
-                        elevation, look, traffic_look, GetMapSettings(),
+  ShowMapItemListDialog(UIGlobals::GetMainWindow(), vector, list, elevation,
+                        UIGlobals::GetDialogLook(), look, traffic_look,
+                        GetMapSettings(),
                         glide_computer != NULL
                         ? &glide_computer->GetAirspaceWarnings() : NULL);
   return true;
