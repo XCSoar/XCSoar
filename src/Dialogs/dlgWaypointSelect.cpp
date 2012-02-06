@@ -27,7 +27,6 @@ Copyright_License {
 #include "Dialogs/CallBackTable.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 #include "Compatibility/string.h"
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
@@ -747,7 +746,8 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     assert(i == 0);
 
     const UPixelScalar line_height = rc.bottom - rc.top;
-    const Font &name_font = Fonts::map_bold;
+    const Font &name_font =
+      *CommonInterface::main_window.GetLook().dialog.list.font;
     canvas.SetTextColor(COLOR_BLACK);
     canvas.Select(name_font);
     canvas.text(rc.left + line_height + Layout::FastScale(2),
@@ -763,6 +763,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   WaypointListRenderer::Draw(canvas, rc, *info.waypoint,
                              GeoVector(info.distance, info.direction),
+                             CommonInterface::main_window.GetLook().dialog,
                              CommonInterface::main_window.GetLook().map.waypoint,
                              CommonInterface::GetMapSettings().waypoint);
 }
@@ -868,13 +869,14 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &_location,
   dialog->SetKeyDownNotify(FormKeyDown);
 #endif
 
+  const DialogLook &dialog_look =
+    CommonInterface::main_window.GetLook().dialog;
+
   waypoint_list = (WndListFrame*)dialog->FindByName(_T("frmWaypointList"));
   assert(waypoint_list != NULL);
   waypoint_list->SetActivateCallback(OnWaypointListEnter);
   waypoint_list->SetPaintItemCallback(OnPaintListItem);
-  UPixelScalar line_height = Fonts::map_bold.GetHeight() + Layout::Scale(6) +
-                         Fonts::map_label.GetHeight();
-  waypoint_list->SetItemHeight(line_height);
+  waypoint_list->SetItemHeight(WaypointListRenderer::GetHeight(dialog_look));
 
   name_button = (WndButton*)dialog->FindByName(_T("cmdFltName"));
   name_button->SetOnLeftNotify(OnFilterNameButtonLeft);

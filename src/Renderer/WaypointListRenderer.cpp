@@ -24,7 +24,7 @@ Copyright_License {
 #include "WaypointListRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
+#include "Look/DialogLook.hpp"
 #include "Look/WaypointLook.hpp"
 #include "Renderer/WaypointIconRenderer.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -41,7 +41,8 @@ Copyright_License {
 namespace WaypointListRenderer
 {
   void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
-            const GeoVector *vector, const WaypointLook &look,
+            const GeoVector *vector,
+            const DialogLook &dialog_look, const WaypointLook &look,
             const WaypointRendererSettings &settings);
 }
 
@@ -65,33 +66,45 @@ FormatWaypointDetails(Buffer &buffer, const Waypoint &waypoint)
   }
 }
 
+UPixelScalar
+WaypointListRenderer::GetHeight(const DialogLook &look)
+{
+  return look.list.font->GetHeight() + Layout::Scale(6)
+    + look.small_font->GetHeight();
+}
+
 void
 WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                           const Waypoint &waypoint, const WaypointLook &look,
+                           const Waypoint &waypoint,
+                           const DialogLook &dialog_look,
+                           const WaypointLook &look,
                            const WaypointRendererSettings &renderer_settings)
 {
-  Draw(canvas, rc, waypoint, NULL, look, renderer_settings);
+  Draw(canvas, rc, waypoint, NULL, dialog_look, look, renderer_settings);
 }
 
 void
 WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const Waypoint &waypoint, const GeoVector &vector,
+                           const DialogLook &dialog_look,
                            const WaypointLook &look,
                            const WaypointRendererSettings &settings)
 {
-  Draw(canvas, rc, waypoint, &vector, look, settings);
+  Draw(canvas, rc, waypoint, &vector, dialog_look, look, settings);
 }
 
 void
 WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const Waypoint &waypoint, fixed distance,
-                           fixed arrival_altitude, const WaypointLook &look,
+                           fixed arrival_altitude,
+                           const DialogLook &dialog_look,
+                           const WaypointLook &look,
                            const WaypointRendererSettings &settings)
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
-  const Font &name_font = Fonts::map_bold;
-  const Font &small_font = Fonts::map_label;
+  const Font &name_font = *dialog_look.list.font;
+  const Font &small_font = *dialog_look.small_font;
   canvas.SetTextColor(COLOR_BLACK);
 
   // Draw icon
@@ -136,13 +149,14 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 void
 WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const Waypoint &waypoint, const GeoVector *vector,
+                           const DialogLook &dialog_look,
                            const WaypointLook &look,
                            const WaypointRendererSettings &settings)
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
-  const Font &name_font = Fonts::map_bold;
-  const Font &small_font = Fonts::map_label;
+  const Font &name_font = *dialog_look.list.font;
+  const Font &small_font = *dialog_look.small_font;
   canvas.SetTextColor(COLOR_BLACK);
 
   Buffer buffer;

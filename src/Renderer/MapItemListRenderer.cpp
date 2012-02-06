@@ -59,7 +59,7 @@ namespace MapItemListRenderer
             const AirspaceRendererSettings &renderer_settings);
 
   void Draw(Canvas &canvas, const PixelRect rc, const WaypointMapItem &item,
-            const WaypointLook &look,
+            const DialogLook &dialog_look, const WaypointLook &look,
             const WaypointRendererSettings &renderer_settings);
 
   void Draw(Canvas &canvas, const PixelRect rc, const MarkerMapItem &item,
@@ -156,10 +156,13 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const WaypointMapItem &item, const WaypointLook &look,
+                          const WaypointMapItem &item,
+                          const DialogLook &dialog_look,
+                          const WaypointLook &look,
                           const WaypointRendererSettings &renderer_settings)
 {
-  WaypointListRenderer::Draw(canvas, rc, item.waypoint, look, renderer_settings);
+  WaypointListRenderer::Draw(canvas, rc, item.waypoint,
+                             dialog_look, look, renderer_settings);
 }
 
 void
@@ -357,7 +360,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
          settings.airspace);
     break;
   case MapItem::WAYPOINT:
-    Draw(canvas, rc, (const WaypointMapItem &)item, look.waypoint,
+    Draw(canvas, rc, (const WaypointMapItem &)item,
+         dialog_look, look.waypoint,
          settings.waypoint);
     break;
   case MapItem::TASK_OZ:

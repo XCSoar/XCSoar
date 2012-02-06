@@ -25,7 +25,6 @@ Copyright_License {
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "MainWindow.hpp"
@@ -53,6 +52,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   WaypointListRenderer::Draw(canvas, rc, waypoint, solution.vector.distance,
                              solution.altitude_difference,
+                             CommonInterface::main_window.GetLook().dialog,
                              CommonInterface::main_window.GetLook().map.waypoint,
                              CommonInterface::GetMapSettings().waypoint);
 }
@@ -64,10 +64,11 @@ dlgAlternatesListShowModal(SingleWindow &parent)
     return;
 
   UpdateAlternates();
-  UPixelScalar line_height = Fonts::map_bold.GetHeight() + Layout::Scale(6) +
-                         Fonts::map_label.GetHeight();
+
+  const DialogLook &look = CommonInterface::main_window.GetLook().dialog;
   int i = ListPicker(parent, _("Alternates"), alternates.size(), 0,
-                     line_height, PaintListItem, true);
+                     WaypointListRenderer::GetHeight(look),
+                     PaintListItem, true);
 
   if (i < 0 || (unsigned)i >= alternates.size())
     return;

@@ -30,22 +30,27 @@ Copyright_License {
 class Canvas;
 struct Waypoint;
 struct GeoVector;
+struct DialogLook;
 struct WaypointLook;
 struct WaypointRendererSettings;
 
 namespace WaypointListRenderer
 {
+  gcc_pure
+  UPixelScalar GetHeight(const DialogLook &dialog_look);
 
   void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
-            const WaypointLook &look,
+            const DialogLook &dialog_look, const WaypointLook &look,
             const WaypointRendererSettings &renderer_settings);
 
   void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
-            const GeoVector &vector, const WaypointLook &look,
+            const GeoVector &vector,
+            const DialogLook &dialog_look, const WaypointLook &look,
             const WaypointRendererSettings &settings);
 
   void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
-            fixed distance, fixed arrival_altitude, const WaypointLook &look,
+            fixed distance, fixed arrival_altitude,
+            const DialogLook &dialog_look, const WaypointLook &look,
             const WaypointRendererSettings &settings);
 }
 
