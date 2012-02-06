@@ -284,11 +284,6 @@ HasColors()
   return true;
 }
 
-#ifndef _WIN32_WCE
-extern int SCREENWIDTH;
-extern int SCREENHEIGHT;
-#endif
-
 void InitAsset();
 
 #endif

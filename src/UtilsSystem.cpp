@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "UtilsSystem.hpp"
-#include "Asset.hpp"
+#include "CommandLine.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "OS/FileUtil.hpp"

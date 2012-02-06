@@ -28,6 +28,11 @@ Copyright_License {
 
 class Args;
 
+#ifndef _WIN32_WCE
+extern int SCREENWIDTH;
+extern int SCREENHEIGHT;
+#endif
+
 /**
  * Reads and parses arguments/options from the command line
  * @param CommandLine command line argument string
