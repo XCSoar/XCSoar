@@ -54,12 +54,6 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height)
   flags |= SDL_OPENGL;
 #endif
 #else /* !ENABLE_OPENGL */
-  /* double buffering temporarily disabled on Android because
-     Android's SDL port doesn't allow locking it then (which we need
-     for SDL_gfx) */
-  if (!IsAndroid())
-    flags |= SDL_DOUBLEBUF;
-
   /* we need async screen updates as long as we don't have a global
      frame rate */
   flags |= SDL_ASYNCBLIT;
@@ -67,10 +61,7 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height)
   const SDL_VideoInfo *info = SDL_GetVideoInfo();
   assert(info != NULL);
 
-  /* hardware surface temporarily disabled on Android because
-     Android's SDL port doesn't allow locking it then (which we need
-     for SDL_gfx) */
-  if (!IsAndroid() && info->hw_available)
+  if (info->hw_available)
     flags |= SDL_HWSURFACE;
   else
     flags |= SDL_SWSURFACE;
