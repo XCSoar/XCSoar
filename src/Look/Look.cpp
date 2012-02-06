@@ -28,7 +28,7 @@ Copyright_License {
 void
 Look::Initialise()
 {
-  dialog.Initialise(Fonts::map_bold, Fonts::map,
+  dialog.Initialise(Fonts::map_bold, Fonts::map, Fonts::map_label,
                     Fonts::map_bold, Fonts::map_bold);
   traffic.Initialise();
   flarm_dialog.Initialise(traffic, false);
@@ -38,7 +38,7 @@ Look::Initialise()
 void
 Look::InitialiseConfigured(const UISettings &settings)
 {
-  dialog.Initialise(Fonts::map_bold, Fonts::map,
+  dialog.Initialise(Fonts::map_bold, Fonts::map, Fonts::map_label,
                     Fonts::map_bold, Fonts::map_bold);
   terminal.Initialise(Fonts::monospace);
   units.Initialise();

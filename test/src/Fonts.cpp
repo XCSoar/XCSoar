@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
 
-Font normal_font, bold_font;
+Font normal_font, small_font, bold_font;
 
 static void
 InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
@@ -69,6 +69,9 @@ InitialiseFonts()
   InitialiseLogfont(&lf, face, FontHeight / 2);
   normal_font.Set(lf);
 
+  InitialiseLogfont(&lf, face, FontHeight / 2 - Layout::Scale(2));
+  small_font.Set(lf);
+
   InitialiseLogfont(&lf, face, FontHeight / 2, true);
   bold_font.Set(lf);
 }
@@ -77,5 +80,6 @@ void
 DeinitialiseFonts()
 {
   bold_font.Reset();
+  small_font.Reset();
   normal_font.Reset();
 }

@@ -57,7 +57,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   InitialiseFonts();
   DialogLook *dialog_look = new DialogLook();
-  dialog_look->Initialise(bold_font, normal_font, bold_font, bold_font);
+  dialog_look->Initialise(bold_font, normal_font, small_font,
+                          bold_font, bold_font);
 
   SingleWindow main_window;
   main_window.set(_T("STATIC"), _T("RunListControl"),

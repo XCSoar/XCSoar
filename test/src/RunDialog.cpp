@@ -110,7 +110,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   dialog_settings.SetDefaults();
 
   DialogLook dialog_look;
-  dialog_look.Initialise(Fonts::map_bold, Fonts::map,
+  dialog_look.Initialise(Fonts::map_bold, Fonts::map, Fonts::map_label,
                          Fonts::map_bold, Fonts::map_bold);
   SetXMLDialogLook(dialog_look);
 

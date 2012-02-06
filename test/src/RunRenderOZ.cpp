@@ -297,7 +297,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   InitialiseFonts();
   DialogLook *look = new DialogLook();
-  look->Initialise(bold_font, normal_font, bold_font, bold_font);
+  look->Initialise(bold_font, normal_font, small_font, bold_font, bold_font);
 
   TaskLook *task_look = new TaskLook();
   task_look->Initialise();

@@ -52,7 +52,7 @@ struct DialogLook {
 
   Brush background_brush;
 
-  const Font *text_font;
+  const Font *text_font, *small_font;
 
   struct {
     Color background_color, text_color;
@@ -73,7 +73,7 @@ struct DialogLook {
   ButtonLook button;
 
   void Initialise(const Font &caption_font,
-                  const Font &text_font,
+                  const Font &text_font, const Font &small_font,
                   const Font &button_font,
                   const Font &list_font);
 
