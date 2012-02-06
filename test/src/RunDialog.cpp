@@ -91,18 +91,18 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     return 1;
   }
 
-  unsigned screen_width = 320, screen_height = 240;
+  PixelRect screen_rc{0, 0, 320, 240};
   if (argc > 2 && _tcscmp(argv[2], _T("-portrait")) == 0) {
-    screen_width = 240;
-    screen_height = 320;
+    screen_rc.right = 240;
+    screen_rc.bottom = 320;
   }
 
   ScreenGlobalInit screen_init;
 
-  Layout::Initialize(screen_width, screen_height);
+  Layout::Initialize(screen_rc.right - screen_rc.left,
+                     screen_rc.bottom - screen_rc.top);
   SingleWindow main_window;
-  main_window.set(_T("STATIC"), _T("RunDialog"),
-                  0, 0, screen_width, screen_height);
+  main_window.set(_T("STATIC"), _T("RunDialog"), screen_rc);
   main_window.show();
 
   Fonts::Initialize();

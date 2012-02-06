@@ -219,10 +219,7 @@ XCSoarInterface::Startup()
 
   // Creates the main window
   LogStartUp(_T("Create main window"));
-  PixelRect WindowSize = SystemWindowSize();
-  main_window.set(szTitle,
-                  WindowSize.left, WindowSize.top,
-                  WindowSize.right, WindowSize.bottom);
+  main_window.Set(szTitle, SystemWindowSize());
   if (!main_window.IsDefined())
     return false;
 

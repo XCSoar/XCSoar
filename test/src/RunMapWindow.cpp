@@ -123,10 +123,8 @@ public:
   }
 #endif /* USE_GDI */
 
-  void set(PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height) {
-    SingleWindow::set(_T("RunMapWindow"), _T("RunMapWindow"),
-                      left, top, width, height);
+  void set(PixelRect _rc) {
+    SingleWindow::set(_T("RunMapWindow"), _T("RunMapWindow"), _rc);
 
     PixelRect rc = get_client_rect();
     map.set(*this, rc);
@@ -284,7 +282,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   traffic_look->Initialise();
 
   TestWindow window(*map_look, *traffic_look);
-  window.set(0, 0, 640, 480);
+  window.set(PixelRect{0, 0, 640, 480});
 
   GenerateBlackboard(window.map, settings_map);
   Fonts::Initialize();

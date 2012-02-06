@@ -108,9 +108,7 @@ public:
 
   static bool find(const TCHAR *cls, const TCHAR *text);
 
-  void set(const TCHAR *cls, const TCHAR *text,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height);
+  void set(const TCHAR *cls, const TCHAR *text, PixelRect rc);
 
 #ifdef _WIN32_WCE
   void reset();

@@ -229,11 +229,8 @@ public:
   }
 #endif /* USE_GDI */
 
-  void set(const DialogLook &look,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height) {
-    SingleWindow::set(_T("RunRenderOZ"), _T("RunRenderOZ"),
-                      left, top, width, height);
+  void set(const DialogLook &look, PixelRect _rc) {
+    SingleWindow::set(_T("RunRenderOZ"), _T("RunRenderOZ"), _rc);
 
     const PixelRect rc = get_client_rect();
 
@@ -306,7 +303,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   airspace_look->Initialise(airspace_renderer_settings);
 
   TestWindow window(*task_look, *airspace_look);
-  window.set(*look, 0, 0, 480, 480);
+  window.set(*look, PixelRect{0, 0, 480, 480});
 
   window.show();
   window.event_loop();

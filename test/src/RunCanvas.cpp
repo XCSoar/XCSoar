@@ -80,10 +80,8 @@ public:
   }
 #endif /* USE_GDI */
 
-  void set(PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height) {
-    SingleWindow::set(_T("RunCanvas"), _T("RunCanvas"),
-                      left, top, width, height);
+  void set(PixelRect _rc) {
+    SingleWindow::set(_T("RunCanvas"), _T("RunCanvas"), _rc);
 
     PixelRect rc = get_client_rect();
 
@@ -266,7 +264,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   TestWindow window;
-  window.set(0, 0, 250, 250);
+  window.set(PixelRect{0, 0, 250, 250});
   window.show();
 
   window.event_loop();

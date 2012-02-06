@@ -117,7 +117,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   SingleWindow main_window;
   main_window.set(_T("STATIC"), _T("RunAirspaceWarningDialog"),
-                  0, 0, 640, 480);
+                  PixelRect{0, 0, 640, 480});
   main_window.show();
 
   Layout::Initialize(640, 480);

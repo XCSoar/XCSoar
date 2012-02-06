@@ -120,11 +120,15 @@ SystemWindowSize()
   PixelRect WindowSize;
 
 #if defined(WIN32) && !defined(_WIN32_WCE)
-  WindowSize.right = SCREENWIDTH + 2 * GetSystemMetrics(SM_CXFIXEDFRAME);
-  WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - WindowSize.right) / 2;
-  WindowSize.bottom = SCREENHEIGHT + 2 * GetSystemMetrics(SM_CYFIXEDFRAME) +
-                      GetSystemMetrics(SM_CYCAPTION);
-  WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - WindowSize.bottom) / 2;
+  unsigned width = SCREENWIDTH + 2 * GetSystemMetrics(SM_CXFIXEDFRAME);
+  unsigned height = SCREENHEIGHT + 2 * GetSystemMetrics(SM_CYFIXEDFRAME)
+    + GetSystemMetrics(SM_CYCAPTION);
+
+  WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - width) / 2;
+  WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - height) / 2;
+
+  WindowSize.right = WindowSize.left + width;
+  WindowSize.bottom = WindowSize.top + height;
 #else
   WindowSize.left = 0;
   WindowSize.top = 0;

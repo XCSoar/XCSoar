@@ -115,10 +115,9 @@ public:
   }
 #endif /* USE_GDI */
 
-  void Set(PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height) {
+  void Set(PixelRect _rc) {
     SingleWindow::set(_T("RunWindArrowRenderer"), _T("RunWindArrowRenderer"),
-                      left, top, width, height);
+                      _rc);
 
     const PixelRect rc = get_client_rect();
 
@@ -186,7 +185,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   wind_look.Initialise();
 
   TestWindow window(wind_look);
-  window.Set(0, 0, 160, 160);
+  window.Set(PixelRect{0, 0, 160, 160});
 
   window.show();
   window.event_loop();

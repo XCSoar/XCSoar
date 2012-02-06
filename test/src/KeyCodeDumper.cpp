@@ -135,15 +135,14 @@ public:
   }
 #endif /* USE_GDI */
 
-  void set(PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height) {
-    SingleWindow::set(_T("KeyCodeDumper"), _T("KeyCodeDumper"),
-                      left, top, width, height);
+  void set(PixelRect _rc) {
+    SingleWindow::set(_T("KeyCodeDumper"), _T("KeyCodeDumper"), _rc);
 
     PixelRect rc = get_client_rect();
 
-    key_code_dumper.set(*this, rc.left, rc.top,
-                        rc.right - rc.left, (rc.bottom - rc.top + 1) / 2);
+    PixelRect d_rc = rc;
+    d_rc.bottom = (rc.top + rc.bottom + 1) / 2;
+    key_code_dumper.set(*this, d_rc);
 
     PixelRect button_rc = rc;
     button_rc.top = (rc.top + rc.bottom + 1) / 2;
@@ -191,7 +190,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   TestWindow window;
-  window.set(0, 0, 240, 100);
+  window.set(PixelRect{0, 0, 240, 100});
   window.show();
 
   window.event_loop();

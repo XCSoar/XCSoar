@@ -127,9 +127,7 @@ protected:
   void KillWidget();
 
 public:
-  void set(const TCHAR *text,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height);
+  void Set(const TCHAR *text, PixelRect rc);
 
   void Initialise();
   void InitialiseConfigured();

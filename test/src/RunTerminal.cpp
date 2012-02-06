@@ -57,10 +57,8 @@ public:
   }
 #endif /* USE_GDI */
 
-  void set(PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height) {
-    SingleWindow::set(_T("RunTerminal"), _T("RunTerminal"),
-                      left, top, width, height);
+  void set(PixelRect _rc) {
+    SingleWindow::set(_T("RunTerminal"), _T("RunTerminal"), _rc);
 
     PixelRect rc = get_client_rect();
 
@@ -118,7 +116,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   look.Initialise(Fonts::monospace);
 
   TestWindow window(look);
-  window.set(0, 0, 400, 400);
+  window.set(PixelRect{0, 0, 400, 400});
   window.show();
 
   window.event_loop();

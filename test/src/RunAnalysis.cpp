@@ -217,7 +217,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   SingleWindow main_window;
   main_window.set(_T("STATIC"), _T("RunAnalysis"),
-                  0, 0, 640, 480);
+                  PixelRect{0, 0, 640, 480});
 
   Fonts::Initialize();
 

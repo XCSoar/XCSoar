@@ -105,11 +105,9 @@ MainWindow::register_class(HINSTANCE hInstance)
 #endif /* USE_GDI */
 
 void
-MainWindow::set(const TCHAR* text,
-                PixelScalar left, PixelScalar top,
-                UPixelScalar width, UPixelScalar height)
+MainWindow::Set(const TCHAR* text, PixelRect rc)
 {
-  SingleWindow::set(_T("XCSoarMain"), text, left, top, width, height);
+  SingleWindow::set(_T("XCSoarMain"), text, rc);
 }
 
 gcc_noreturn

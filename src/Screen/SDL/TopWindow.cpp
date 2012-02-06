@@ -48,12 +48,13 @@ TopWindow::find(const TCHAR *cls, const TCHAR *text)
 }
 
 void
-TopWindow::set(const TCHAR *cls, const TCHAR *text,
-               PixelScalar left, PixelScalar top,
-               UPixelScalar width, UPixelScalar height)
+TopWindow::set(const TCHAR *cls, const TCHAR *text, PixelRect rc)
 {
   WindowStyle style;
   style.Popup();
+
+  const UPixelScalar width = rc.right - rc.left;
+  const UPixelScalar height = rc.bottom - rc.top;
 
   screen.Set(width, height);
 

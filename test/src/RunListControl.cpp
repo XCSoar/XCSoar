@@ -50,10 +50,11 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
-  const unsigned screen_width = 640, screen_height = 480;
+  PixelRect screen_rc{0, 0, 640, 480};
 
   ScreenGlobalInit screen_init;
-  Layout::Initialize(screen_width, screen_height);
+  Layout::Initialize(screen_rc.right - screen_rc.left,
+                     screen_rc.bottom - screen_rc.top);
 
   InitialiseFonts();
   DialogLook *dialog_look = new DialogLook();
@@ -61,8 +62,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                           bold_font, bold_font);
 
   SingleWindow main_window;
-  main_window.set(_T("STATIC"), _T("RunListControl"),
-                  0, 0, screen_width, screen_height);
+  main_window.set(_T("STATIC"), _T("RunListControl"), screen_rc);
   main_window.show();
 
   WndForm form(main_window, *dialog_look, main_window.get_client_rect(),
