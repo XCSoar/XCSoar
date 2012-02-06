@@ -34,7 +34,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Form/Util.hpp"
 #include "Form/Edit.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Icon.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/Look.hpp"
@@ -170,7 +169,7 @@ OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   if (instance->IsTaskModified()) {
     const TCHAR* message = _("Calculator excludes unsaved task changes!");
-    canvas.Select(Fonts::title);
+    canvas.Select(*instance->GetLook().small_font);
     const int textheight = canvas.CalcTextHeight(message);
 
     const AirspaceLook &look =

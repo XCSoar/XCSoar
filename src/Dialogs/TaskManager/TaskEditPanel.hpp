@@ -27,6 +27,9 @@ Copyright_License {
 #include "Form/XMLWidget.hpp"
 
 class WndForm;
+struct DialogLook;
+struct TaskLook;
+struct AirspaceLook;
 class OrderedTask;
 class WndListFrame;
 class WndOwnerDrawFrame;
@@ -35,6 +38,9 @@ class Canvas;
 
 class TaskEditPanel : public XMLWidget {
   WndForm &wf;
+
+  const TaskLook &task_look;
+  const AirspaceLook &airspace_look;
 
   OrderedTask **ordered_task_pointer, *ordered_task;
   bool *task_modified;
@@ -45,8 +51,10 @@ class TaskEditPanel : public XMLWidget {
 
 public:
   TaskEditPanel(WndForm &_wf,
+                const TaskLook &_task_look, const AirspaceLook &_airspace_look,
                 OrderedTask **_active_task, bool *_task_modified)
     :wf(_wf),
+     task_look(_task_look), airspace_look(_airspace_look),
      ordered_task_pointer(_active_task), task_modified(_task_modified) {}
 
   void UpdateButtons();

@@ -30,7 +30,6 @@ Copyright_License {
 #include "Dialogs/Waypoint.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "Screen/Fonts.hpp"
 #include "Interface.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Form/Frame.hpp"
@@ -40,12 +39,14 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Formatter/AngleFormatter.hpp"
-#include "MainWindow.hpp"
-#include "Look/Look.hpp"
+#include "Look/DialogLook.hpp"
+#include "Look/TaskLook.hpp"
+#include "Look/AirspaceLook.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 #include "Language/Language.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
+#include "Util/Macros.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -126,8 +127,8 @@ TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 
   TCHAR buffer[120];
 
-  const Font &name_font = Fonts::map_bold;
-  const Font &small_font = Fonts::map_label;
+  const Font &name_font = *wf.GetLook().list.font;
+  const Font &small_font = *wf.GetLook().small_font;
 
   // Draw "Add turnpoint" label
   if (DrawListIndex == ordered_task->TaskSize()) {
@@ -153,8 +154,9 @@ TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
                                             - Layout::FastScale(4)),
                                 Layout::FastScale(10));
 
-  OZPreviewRenderer::Draw(canvas, *tp.GetOZPoint(), pt, radius, CommonInterface::main_window.GetLook().map.task,
-                          CommonInterface::GetMapSettings().airspace, CommonInterface::main_window.GetLook().map.airspace);
+  OZPreviewRenderer::Draw(canvas, *tp.GetOZPoint(), pt, radius, task_look,
+                          CommonInterface::GetMapSettings().airspace,
+                          airspace_look);
 
   // Y-Coordinate of the second row
   PixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
@@ -398,8 +400,8 @@ TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wSummary = (WndFrame *)form.FindByName(_T("frmSummary"));
   assert(wSummary);
 
-  UPixelScalar line_height = Fonts::map_bold.GetHeight() + Layout::Scale(6) +
-    Fonts::map_label.GetHeight();
+  UPixelScalar line_height = wf.GetLook().list.font->GetHeight()
+    + Layout::Scale(6) + wf.GetLook().small_font->GetHeight();
   wTaskPoints->SetItemHeight(line_height);
   wTaskPoints->SetActivateCallback(::OnTaskListEnter);
   wTaskPoints->SetPaintItemCallback(::OnTaskPaintListItem);

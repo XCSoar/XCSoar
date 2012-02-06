@@ -253,13 +253,16 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     wBlackRect->show_on_top();
   }
 
+  const Look &look = CommonInterface::main_window.GetLook();
+
   Widget *wProps = new TaskPropertiesPanel(&active_task, &task_modified);
 
   Widget *wClose = new TaskClosePanel(&task_modified);
 
   Widget *wCalculator = new TaskCalculatorPanel(*wf, &task_modified);
 
-  Widget *wEdit = new TaskEditPanel(*wf, &active_task, &task_modified);
+  Widget *wEdit = new TaskEditPanel(*wf, look.map.task, look.map.airspace,
+                                    &active_task, &task_modified);
 
   Widget *list_tab = new TaskListPanel(*wf, *wTabBar,
                                        &active_task, &task_modified);
