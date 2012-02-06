@@ -28,8 +28,7 @@ Copyright_License {
 #include "Simulator.hpp"
 
 #if !defined(_WIN32_WCE)
-int SCREENWIDTH = 640;
-int SCREENHEIGHT = 480;
+unsigned SCREENWIDTH = 640, SCREENHEIGHT = 480;
 #endif
 
 void ParseCommandLine(Args args)

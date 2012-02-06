@@ -29,8 +29,7 @@ Copyright_License {
 class Args;
 
 #ifndef _WIN32_WCE
-extern int SCREENWIDTH;
-extern int SCREENHEIGHT;
+extern unsigned SCREENWIDTH, SCREENHEIGHT;
 #endif
 
 /**
