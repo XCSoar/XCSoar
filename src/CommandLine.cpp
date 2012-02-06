@@ -27,11 +27,14 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Simulator.hpp"
 
+namespace CommandLine {
 #if !defined(_WIN32_WCE)
-unsigned SCREENWIDTH = 640, SCREENHEIGHT = 480;
+  unsigned width = 640, height = 480;
 #endif
+}
 
-void ParseCommandLine(Args args)
+void
+CommandLine::Parse(Args args)
 {
   while (!args.IsEmpty()) {
     const char *s = args.GetNext();
@@ -61,23 +64,23 @@ void ParseCommandLine(Args args)
 #if !defined(_WIN32_WCE)
     else if (isdigit(s[1])) {
       char *p;
-      SCREENWIDTH = strtol(s+1, &p, 10);
+      width = strtol(s+1, &p, 10);
       if (*p != 'x' && *p != 'X')
         args.UsageError();
       s = p;
-      SCREENHEIGHT = strtol(s+1, &p, 10);
+      height = strtol(s+1, &p, 10);
     }
     else if (strcmp(s, "-portrait") == 0) {
-      SCREENWIDTH = 480;
-      SCREENHEIGHT = 640;
+      width = 480;
+      height = 640;
     }
     else if (strcmp(s, "-square") == 0) {
-      SCREENWIDTH = 480;
-      SCREENHEIGHT = 480;
+      width = 480;
+      height = 480;
     }
     else if (strcmp(s, "-small") == 0) {
-      SCREENWIDTH = 320;
-      SCREENHEIGHT = 240;
+      width = 320;
+      height = 240;
     }
 #endif
 #if defined(_WIN32) && !defined(_WIN32_WCE) && !defined(__WINE__)
@@ -91,8 +94,8 @@ void ParseCommandLine(Args args)
   }
 
 #if !defined(_WIN32_WCE)
-  if (SCREENWIDTH < 240 || SCREENWIDTH > 4096 ||
-      SCREENHEIGHT < 240 || SCREENHEIGHT > 4096)
+  if (width < 240 || width > 4096 ||
+      height < 240 || height > 4096)
     args.UsageError();
 #endif
 }

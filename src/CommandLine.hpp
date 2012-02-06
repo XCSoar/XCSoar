@@ -28,15 +28,16 @@ Copyright_License {
 
 class Args;
 
+namespace CommandLine {
 #ifndef _WIN32_WCE
-extern unsigned SCREENWIDTH, SCREENHEIGHT;
+  extern unsigned width, height;
 #endif
 
 /**
  * Reads and parses arguments/options from the command line
  * @param CommandLine command line argument string
  */
-void
-ParseCommandLine(Args args);
+  void Parse(Args args);
+}
 
 #endif

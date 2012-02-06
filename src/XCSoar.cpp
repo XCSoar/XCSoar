@@ -92,9 +92,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   // Read options from the command line
 #ifndef WIN32
-  ParseCommandLine(Args(argc, argv, Usage));
+  CommandLine::Parse(Args(argc, argv, Usage));
 #else
-  ParseCommandLine(Args(GetCommandLine(), Usage));
+  CommandLine::Parse(Args(GetCommandLine(), Usage));
 #endif
 
   ScreenGlobalInit screen_init;

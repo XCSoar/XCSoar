@@ -120,8 +120,8 @@ SystemWindowSize()
   PixelRect WindowSize;
 
 #if defined(WIN32) && !defined(_WIN32_WCE)
-  unsigned width = SCREENWIDTH + 2 * GetSystemMetrics(SM_CXFIXEDFRAME);
-  unsigned height = SCREENHEIGHT + 2 * GetSystemMetrics(SM_CYFIXEDFRAME)
+  unsigned width = CommandLine::width + 2 * GetSystemMetrics(SM_CXFIXEDFRAME);
+  unsigned height = CommandLine::height + 2 * GetSystemMetrics(SM_CYFIXEDFRAME)
     + GetSystemMetrics(SM_CYCAPTION);
 
   WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - width) / 2;
@@ -141,8 +141,8 @@ SystemWindowSize()
   WindowSize.bottom = native_view->get_height();
   #else /* !WIN32 */
   /// @todo implement this properly for SDL/UNIX
-  WindowSize.right = SCREENWIDTH;
-  WindowSize.bottom = SCREENHEIGHT;
+  WindowSize.right = CommandLine::width;
+  WindowSize.bottom = CommandLine::height;
   #endif /* !WIN32 */
 
 #endif
