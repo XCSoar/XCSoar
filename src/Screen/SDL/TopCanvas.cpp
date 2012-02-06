@@ -68,10 +68,7 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height)
 #endif /* !ENABLE_OPENGL */
 
   if (IsEmbedded()) {
-#if defined(ANDROID)
-    width = native_view->get_width();
-    height = native_view->get_height();
-#else
+#ifndef ANDROID
     flags |= SDL_FULLSCREEN;
 
     /* select a full-screen video mode */
