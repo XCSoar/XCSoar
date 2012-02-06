@@ -26,7 +26,6 @@ Copyright_License {
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 #include "Components.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "DataField/Float.hpp"
@@ -43,6 +42,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
+#include "Look/DialogLook.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
@@ -410,13 +410,15 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
   assert(wTaskView != NULL);
 
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
   WndFrame* wType = (WndFrame*) wf->FindByName(_T("lblType"));
   assert (wType);
-  wType->SetFont(Fonts::map_bold);
+  wType->SetFont(*look.caption.font);
 
   WndFrame* wLocation = (WndFrame*) wf->FindByName(_T("lblLocation"));
   assert (wLocation);
-  wLocation->SetFont(Fonts::map_bold);
+  wLocation->SetFont(*look.caption.font);
 
   do {
     RefreshView();

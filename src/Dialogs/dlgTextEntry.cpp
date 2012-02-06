@@ -25,7 +25,6 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/DialogSettings.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Key.h"
 #include "Form/Form.hpp"
 #include "Form/Draw.hpp"
@@ -35,6 +34,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "StringUtil.hpp"
 #include "UIGlobals.hpp"
+#include "Look/DialogLook.hpp"
 #include "Util/Macros.hpp"
 
 #include <algorithm>
@@ -69,7 +69,8 @@ OnTextPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
   canvas.clear(Color(0x40, 0x40, 0x00));
 
   // Do the actual painting of the text
-  canvas.Select(Fonts::map);
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  canvas.Select(*look.text_font);
 
   PixelSize tsize = canvas.CalcTextSize(edittext);
   PixelSize tsizec = canvas.CalcTextSize(edittext, cursor);

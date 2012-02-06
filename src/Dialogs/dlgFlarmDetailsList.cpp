@@ -25,17 +25,26 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/ListPicker.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 #include "FLARM/FlarmNet.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/FlarmId.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/StaticString.hpp"
 #include "Language/Language.hpp"
+#include "UIGlobals.hpp"
+#include "Look/DialogLook.hpp"
 
 #include <stdio.h>
 
 static const FlarmId *array;
+
+gcc_pure
+static UPixelScalar
+GetRowHeight(const DialogLook &look)
+{
+  return look.list.font->GetHeight() + Layout::Scale(6)
+    + look.small_font->GetHeight();
+}
 
 static void
 PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
@@ -44,8 +53,10 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   const FlarmId id = array[index];
 
-  const Font &name_font = Fonts::map_bold;
-  const Font &small_font = Fonts::map_label;
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  const Font &name_font = *look.list.font;
+  const Font &small_font = *look.small_font;
+
   canvas.SetTextColor(COLOR_BLACK);
 
   TCHAR tmp_id[10];
@@ -104,8 +115,7 @@ dlgFlarmDetailsListShowModal(SingleWindow &parent, const TCHAR *title,
   assert(count > 0);
 
   array = _array;
-  UPixelScalar line_height = Fonts::map_bold.GetHeight() + Layout::Scale(6) +
-                         Fonts::map_label.GetHeight();
+  UPixelScalar line_height = GetRowHeight(UIGlobals::GetDialogLook());
   unsigned index = ListPicker(parent, title, count, 0, line_height, PaintListItem, true);
   return index < count
     ? array[index]

@@ -29,6 +29,7 @@ Copyright_License {
 #include "tchar.h"
 
 struct DialogLook;
+struct InfoBoxLook;
 class SingleWindow;
 
 /**
@@ -37,6 +38,7 @@ class SingleWindow;
 bool
 dlgConfigInfoboxesShowModal(SingleWindow &parent,
                             const DialogLook &dialog_look,
+                            const InfoBoxLook &look,
                             InfoBoxLayout::Geometry geometry,
                             InfoBoxSettings::Panel &data,
                             bool allow_name_change);

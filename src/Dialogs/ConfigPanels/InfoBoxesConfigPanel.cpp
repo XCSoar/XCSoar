@@ -31,10 +31,9 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Dialogs/dlgConfigInfoboxes.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "ConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
-
+#include "Look/Look.hpp"
 
 class InfoBoxesConfigPanel : public RowFormWidget,
                              public ActionListener {
@@ -57,8 +56,9 @@ InfoBoxesConfigPanel::OnAction(int id)
   InfoBoxSettings::Panel &data = settings.panels[i];
 
   bool changed =
-    dlgConfigInfoboxesShowModal(ConfigPanel::GetForm().GetMainWindow(),
-                                ConfigPanel::GetForm().GetLook(),
+    dlgConfigInfoboxesShowModal(UIGlobals::GetMainWindow(),
+                                UIGlobals::GetDialogLook(),
+                                UIGlobals::GetLook().info_box,
                                 InfoBoxLayout::InfoBoxGeometry, data,
                                 i >= InfoBoxSettings::PREASSIGNED_PANELS);
   if (changed) {

@@ -25,7 +25,6 @@ Copyright_License {
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 #include "Plane/Plane.hpp"
 #include "Plane/PlaneGlue.hpp"
 #include "Plane/PlaneFileGlue.hpp"
@@ -36,6 +35,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "Profile/Profile.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "UIGlobals.hpp"
+#include "Look/DialogLook.hpp"
 
 #include <vector>
 #include <assert.h>
@@ -65,6 +66,14 @@ class PlaneFileVisitor: public File::Visitor
     list.push_back(item);
   }
 };
+
+gcc_pure
+static UPixelScalar
+GetRowHeight(const DialogLook &look)
+{
+  return look.list.font->GetHeight() + Layout::Scale(6)
+    + look.small_font->GetHeight();
+}
 
 static void
 UpdateList()
@@ -100,8 +109,10 @@ OnPlaneListPaint(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < list.size());
 
-  const Font &name_font = Fonts::map_bold;
-  const Font &details_font = Fonts::map_label;
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  const Font &name_font = *look.list.font;
+  const Font &details_font = *look.small_font;
+
   canvas.SetTextColor(COLOR_BLACK);
   canvas.Select(name_font);
 
@@ -308,8 +319,7 @@ dlgPlanesShowModal(SingleWindow &parent)
                       _T("IDR_XML_PLANES_L") : _T("IDR_XML_PLANES"));
   assert(dialog != NULL);
 
-  UPixelScalar item_height = Fonts::map_bold.GetHeight() + Layout::Scale(6) +
-                         Fonts::map_label.GetHeight();
+  UPixelScalar item_height = GetRowHeight(UIGlobals::GetDialogLook());
 
   plane_list = (WndListFrame*)dialog->FindByName(_T("List"));
   assert(plane_list != NULL);

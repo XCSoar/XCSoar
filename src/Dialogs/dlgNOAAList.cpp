@@ -31,12 +31,13 @@ Copyright_License {
 
 #ifdef HAVE_NET
 
+#include "UIGlobals.hpp"
+#include "Look/DialogLook.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/XML.hpp"
 #include "Form/List.hpp"
 #include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/METAR.hpp"
@@ -63,6 +64,14 @@ struct NOAAListItem
 };
 
 static TrivialArray<NOAAListItem, 20> list;
+
+gcc_pure
+static UPixelScalar
+GetRowHeight(const DialogLook &look)
+{
+  return look.list.font->GetHeight() + Layout::Scale(6)
+    + look.small_font->GetHeight();
+}
 
 static void
 UpdateList()
@@ -94,8 +103,9 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 {
   assert(index < list.size());
 
-  const Font &code_font = Fonts::map_bold;
-  const Font &details_font = Fonts::map_label;
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  const Font &code_font = *look.list.font;
+  const Font &details_font = *look.small_font;
 
   canvas.Select(code_font);
 
@@ -230,12 +240,9 @@ dlgNOAAListShowModal(SingleWindow &parent)
                   _T("IDR_XML_NOAA_LIST"));
   assert(wf != NULL);
 
-  UPixelScalar item_height = Fonts::map_bold.GetHeight() + Layout::Scale(6) +
-                         Fonts::map_label.GetHeight();
-
   station_list = (WndListFrame *)wf->FindByName(_T("StationList"));
   assert(station_list != NULL);
-  station_list->SetItemHeight(item_height);
+  station_list->SetItemHeight(GetRowHeight(UIGlobals::GetDialogLook()));
   station_list->SetPaintItemCallback(PaintListItem);
   station_list->SetActivateCallback(ListItemSelected);
 

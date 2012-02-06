@@ -30,7 +30,6 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/Edit.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "DataField/Enum.hpp"
 #include "Compiler.h"
@@ -38,6 +37,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
+#include "Look/InfoBoxLook.hpp"
 #include "Language/Language.hpp"
 #include "Compiler.h"
 
@@ -52,6 +52,7 @@ protected:
   virtual void OnPaint(Canvas &canvas);
 };
 
+static const InfoBoxLook *look;
 static InfoBoxSettings::Panel data;
 static WndForm *wf = NULL;
 static InfoBoxSettings::Panel clipboard;
@@ -201,7 +202,7 @@ InfoBoxPreview::OnPaint(Canvas &canvas)
   else
     caption = gettext(caption);
 
-  canvas.Select(Fonts::title);
+  canvas.Select(*look->title.font);
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(is_current ? COLOR_WHITE : COLOR_BLACK);
   canvas.text(2, 2, caption);
@@ -318,11 +319,13 @@ OnKeyDown(WndForm &sender, unsigned key_code)
 bool
 dlgConfigInfoboxesShowModal(SingleWindow &parent,
                             const DialogLook &dialog_look,
+                            const InfoBoxLook &_look,
                             InfoBoxLayout::Geometry geometry,
                             InfoBoxSettings::Panel &data_r,
                             bool allow_name_change)
 {
   current_preview = 0;
+  look = &_look;
   data = data_r;
 
   PixelRect rc = parent.get_client_rect();
