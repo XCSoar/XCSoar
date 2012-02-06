@@ -1691,8 +1691,6 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \
-	$(SRC)/Look/DialogLook.cpp \
-	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
@@ -1700,7 +1698,6 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/Screen/LabelBlock.cpp \
 	$(SRC)/Screen/TextInBox.cpp \
 	$(SRC)/Look/WindArrowLook.cpp \
-	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/FileUtil.cpp \
@@ -1712,7 +1709,6 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
-	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunWindArrowRenderer.cpp
 RUN_WIND_ARROW_RENDERER_LDADD = $(RESOURCE_BINARY)
 RUN_WIND_ARROW_RENDERER_DEPENDS = ENGINE_CORE FORM SCREEN MATH

@@ -115,8 +115,7 @@ public:
   }
 #endif /* USE_GDI */
 
-  void set(const DialogLook &look,
-           PixelScalar left, PixelScalar top,
+  void Set(PixelScalar left, PixelScalar top,
            UPixelScalar width, UPixelScalar height) {
     SingleWindow::set(_T("RunWindArrowRenderer"), _T("RunWindArrowRenderer"),
                       left, top, width, height);
@@ -182,21 +181,16 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   Fonts::Initialize();
-  InitialiseFonts();
-  DialogLook *look = new DialogLook();
-  look->Initialise(bold_font, normal_font, bold_font, bold_font);
 
   WindArrowLook wind_look;
   wind_look.Initialise();
 
   TestWindow window(wind_look);
-  window.set(*look, 0, 0, 160, 160);
+  window.Set(0, 0, 160, 160);
 
   window.show();
   window.event_loop();
 
-  delete look;
-  DeinitialiseFonts();
   Fonts::Deinitialize();
 
   return 0;
