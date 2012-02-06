@@ -88,5 +88,5 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
   chart.DrawTrendN(fs.ThermalAverage, ChartLook::STYLE_BLUETHIN);
 
   chart.DrawXLabel(_T("n"));
-  chart.DrawYLabel(_T("w"));
+  chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());
 }

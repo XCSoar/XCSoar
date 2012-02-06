@@ -364,8 +364,8 @@ CrossSectionWindow::PaintGrid(Canvas &canvas, ChartRenderer &chart)
   chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)), fixed_zero,
                   look.grid_pen, fixed(1000), true);
 
-  chart.DrawXLabel(_T("D"));
-  chart.DrawYLabel(_T("h"));
+  chart.DrawXLabel(_T("D"), Units::GetDistanceName());
+  chart.DrawYLabel(_T("h"), Units::GetAltitudeName());
 }
 
 void

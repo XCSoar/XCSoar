@@ -29,6 +29,7 @@ Copyright_License {
 #include "Math/FastRotation.hpp"
 #include "Asset.hpp"
 #include "Math/LeastSquares.hpp"
+#include "Util/StaticString.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -199,6 +200,17 @@ ChartRenderer::DrawXLabel(const TCHAR *text)
 }
 
 void
+ChartRenderer::DrawXLabel(const TCHAR *text, const TCHAR *unit)
+{
+  assert(text != NULL);
+  assert(unit != NULL);
+
+  StaticString<64> buffer;
+  buffer.UnsafeFormat(_T("%s [%s]"), text, unit);
+  DrawXLabel(buffer);
+}
+
+void
 ChartRenderer::DrawYLabel(const TCHAR *text)
 {
   canvas.Select(*look.axis_label_font);
@@ -209,6 +221,17 @@ ChartRenderer::DrawYLabel(const TCHAR *text)
 
   canvas.SetBackgroundTransparent();
   canvas.text(x, y, text);
+}
+
+void
+ChartRenderer::DrawYLabel(const TCHAR *text, const TCHAR *unit)
+{
+  assert(text != NULL);
+  assert(unit != NULL);
+
+  StaticString<64> buffer;
+  buffer.UnsafeFormat(_T("%s [%s]"), text, unit);
+  DrawYLabel(buffer);
 }
 
 void

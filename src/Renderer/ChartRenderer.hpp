@@ -97,7 +97,11 @@ public:
                  const fixed unit_step, bool draw_units = false);
 
   void DrawXLabel(const TCHAR *text);
+  void DrawXLabel(const TCHAR *text, const TCHAR *unit);
+
   void DrawYLabel(const TCHAR *text);
+  void DrawYLabel(const TCHAR *text, const TCHAR *unit);
+
   void DrawLabel(const TCHAR *text, const fixed xv, const fixed yv);
   void DrawArrow(const fixed x, const fixed y, const fixed mag,
                  const Angle angle, ChartLook::Style Style);

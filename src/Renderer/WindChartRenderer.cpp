@@ -100,6 +100,6 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
                     mag * WINDVECTORMAG, angle, ChartLook::STYLE_MEDIUMBLACK);
   }
 
-  chart.DrawXLabel(_T("w"));
-  chart.DrawYLabel(_T("h"));
+  chart.DrawXLabel(_T("w"), Units::GetSpeedName());
+  chart.DrawYLabel(_T("h"), Units::GetAltitudeName());
 }

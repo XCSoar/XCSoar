@@ -103,8 +103,8 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
                  MACCREADY + ff * glide_polar.GetVMax(),
                  ChartLook::STYLE_REDTHICK);
 
-  chart.DrawXLabel(_T("V"));
-  chart.DrawYLabel(_T("w"));
+  chart.DrawXLabel(_T("V"), Units::GetSpeedName());
+  chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());
 
   canvas.Select(*chart_look.label_font);
 

@@ -113,7 +113,7 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
     }
   }
 
-  chart.DrawXLabel(_T("T")_T(DEG));
+  chart.DrawXLabel(_T("T"), _T(DEG "C"));
   chart.DrawYLabel(_T("h"));
 }
 

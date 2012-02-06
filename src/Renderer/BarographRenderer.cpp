@@ -188,8 +188,8 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   chart.DrawTrend(fs.Altitude_Base, ChartLook::STYLE_BLUETHIN);
   chart.DrawTrend(fs.Altitude_Ceiling, ChartLook::STYLE_BLUETHIN);
 
-  chart.DrawXLabel(_T("t (hr)"));
-  chart.DrawYLabel(_T("h"));
+  chart.DrawXLabel(_T("t"), _T("hr"));
+  chart.DrawYLabel(_T("h"), Units::GetAltitudeName());
 }
 
 void
@@ -222,6 +222,6 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
   chart.DrawLineGraph(fs.Task_Speed, ChartLook::STYLE_MEDIUMBLACK);
   chart.DrawTrend(fs.Task_Speed, ChartLook::STYLE_BLUETHIN);
 
-  chart.DrawXLabel(_T("t (hr)"));
-  chart.DrawYLabel(_T("V"));
+  chart.DrawXLabel(_T("t"), _T("hr"));
+  chart.DrawYLabel(_T("h"), Units::GetTaskSpeedName());
 }
