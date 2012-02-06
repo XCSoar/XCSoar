@@ -28,7 +28,14 @@ Copyright_License {
 
 class TopCanvas : public Canvas {
 public:
-  void Set(UPixelScalar width = 640, UPixelScalar height = 480);
+  void Set(UPixelScalar width, UPixelScalar height);
+
+#ifdef ENABLE_OPENGL
+  /**
+   * Initialise the new OpenGL context.
+   */
+  void Resume();
+#endif
 
   void OnResize(UPixelScalar width, UPixelScalar height);
 

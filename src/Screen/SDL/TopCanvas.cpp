@@ -88,6 +88,17 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height)
 #endif
 }
 
+#ifdef ENABLE_OPENGL
+
+void
+TopCanvas::Resume()
+{
+  OpenGL::SetupContext();
+  OpenGL::SetupViewport(width, height);
+}
+
+#endif
+
 void
 TopCanvas::OnResize(UPixelScalar width, UPixelScalar height)
 {

@@ -56,7 +56,7 @@ TopWindow::ResumeSurface()
   paused = false;
   resumed = false;
 
-  screen.Set();
+  screen.Resume();
 
   ::SurfaceCreated();
 
