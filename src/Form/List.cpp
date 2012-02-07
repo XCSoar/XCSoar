@@ -327,7 +327,14 @@ WndListFrame::OnKeyCheck(unsigned key_code) const
          switch to the previous dialog page */
       return true;
 
+    return GetCursorIndex() > 0;
+
   case VK_UP:
+    if (!HasPointer() && IsShort())
+      /* no page up/down behaviour in short lists on Altair; this
+         rotation knob should move focus */
+      return false;
+
     return GetCursorIndex() > 0;
 
   case VK_RIGHT:
@@ -336,7 +343,14 @@ WndListFrame::OnKeyCheck(unsigned key_code) const
          switch to the next dialog page */
       return true;
 
+    return GetCursorIndex() + 1 < length;
+
   case VK_DOWN:
+    if (!HasPointer() && IsShort())
+      /* no page up/down behaviour in short lists on Altair; this
+         rotation knob should move focus */
+      return false;
+
     return GetCursorIndex() + 1 < length;
 
   default:

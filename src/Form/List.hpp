@@ -173,6 +173,15 @@ public:
   void SetLength(unsigned n);
 
   /**
+   * Check whether the length of the list is below a certain
+   * threshold.  Small lists may have different behaviour on some
+   * platforms (e.g. Altair).
+   */
+  bool IsShort() const {
+    return length <= 8 || length <= items_visible;
+  }
+
+  /**
    * Returns the current cursor position
    * @return The current cursor position
    */
