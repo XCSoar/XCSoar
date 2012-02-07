@@ -89,3 +89,9 @@ DumpPort::Read(void *buffer, size_t size)
   return nbytes;
 }
 
+Port::WaitResult
+DumpPort::WaitRead(unsigned timeout_ms)
+{
+  LogStartUp(_T("WaitRead %u"), timeout_ms);
+  return other.WaitRead(timeout_ms);
+}

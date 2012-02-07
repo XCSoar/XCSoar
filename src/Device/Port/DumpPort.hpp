@@ -43,6 +43,7 @@ public:
   virtual bool StopRxThread();
   virtual bool StartRxThread();
   virtual int Read(void *buffer, size_t size);
+  virtual WaitResult WaitRead(unsigned timeout_ms);
 };
 
 #endif
