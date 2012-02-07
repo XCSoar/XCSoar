@@ -75,12 +75,23 @@ struct DialogLook {
       Color background_color, text_color;
     } focused;
 
+    /**
+     * Colors for the selected item when the mouse/finger is pressed.
+     */
+    struct {
+      Color background_color, text_color;
+    } pressed;
+
     const Font *font;
 
     gcc_pure
-    Color GetBackgroundColor(bool is_selected, bool is_focused) const {
+    Color GetBackgroundColor(bool is_selected, bool is_focused,
+                             bool is_pressed) const {
       return is_selected
-        ? (is_focused ? focused.background_color : selected.background_color)
+        ? (is_pressed
+           ? pressed.background_color
+           : (is_focused
+              ? focused.background_color : selected.background_color))
         : background_color;
     }
   } list;

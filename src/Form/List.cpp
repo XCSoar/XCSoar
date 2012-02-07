@@ -120,11 +120,12 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   unsigned last_item = min(length, end);
 
   const bool focused = has_focus();
+  const bool pressed = drag_mode == DragMode::CURSOR;
 
   for (unsigned i = start; i < last_item; i++) {
     canvas.DrawFilledRectangle(rc,
                                look.list.GetBackgroundColor(i == cursor,
-                                                            focused));
+                                                            focused, pressed));
 
     paint_item_callback(canvas, rc, i);
 
@@ -449,6 +450,9 @@ void
 WndListFrame::drag_end()
 {
   if (drag_mode != DragMode::NONE) {
+    if (drag_mode == DragMode::CURSOR)
+      invalidate_item(cursor);
+
     drag_mode = DragMode::NONE;
     release_capture();
   }
@@ -465,9 +469,10 @@ WndListFrame::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
     SetPixelOrigin(value);
     return true;
   } else if (drag_mode == DragMode::CURSOR) {
-    if (abs(y - drag_y_window) > ((int)item_height / 5))
+    if (abs(y - drag_y_window) > ((int)item_height / 5)) {
       drag_mode = DragMode::SCROLL;
-    else
+      invalidate_item(cursor);
+    } else
       return true;
   }
 
@@ -536,6 +541,7 @@ WndListFrame::OnMouseDown(PixelScalar x, PixelScalar y)
     if (had_focus && activate_callback != NULL &&
         (unsigned)index == GetCursorIndex()) {
       drag_mode = DragMode::CURSOR;
+      invalidate_item(cursor);
     } else {
       // If item was not selected before
       // -> select it
