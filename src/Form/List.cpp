@@ -251,7 +251,7 @@ WndListFrame::MoveCursor(int delta)
   int new_cursor = cursor + delta;
   if (new_cursor < 0)
     new_cursor = 0;
-  else if ((unsigned)new_cursor > length)
+  else if ((unsigned)new_cursor >= length)
     new_cursor = length - 1;
 
   SetCursorIndex(new_cursor);
