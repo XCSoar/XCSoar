@@ -874,6 +874,7 @@ RowFormWidget::SetFocus()
   if (rows.empty())
     return false;
 
-  GetRow(0).set_focus();
+  PanelControl &panel = *(PanelControl *)GetWindow();
+  panel.focus_first_control();
   return true;
 }
