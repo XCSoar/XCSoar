@@ -130,7 +130,12 @@ PaintDeviceListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     const TCHAR *driver_name = (driver != NULL) ? driver->display_name :
                                                   config.driver_name.c_str();
 
-    _sntprintf(buffer2, 128, _("%s on %s"), driver_name, name);
+    _sntprintf(buffer2, 128, _("%c: %s on %s"),
+               TCHAR('A' + idx), driver_name, name);
+    name = buffer2;
+  } else {
+    _sntprintf(buffer2, 128, _("%c: %s"),
+               TCHAR('A' + idx), name);
     name = buffer2;
   }
 
