@@ -513,9 +513,9 @@ TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 const PixelRect&
-TabMenuDisplay::GetDownButtonRC()
+TabMenuDisplay::GetDownButtonRC() const
 {
-  TabMenuControl &tb = GetTabMenuBar();
+  const TabMenuControl &tb = GetTabMenuBar();
 
   if (down_index.IsSub()) {
     int page = tb.GetPageNum(down_index);
@@ -545,9 +545,9 @@ TabMenuDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 }
 
 void
-TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas)
+TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas) const
 {
-  TabMenuControl &tb = GetTabMenuBar();
+  const TabMenuControl &tb = GetTabMenuBar();
   const UPixelScalar bwidth = GetTabLineHeight();
 
   const PixelRect rcFirst = tb.GetMainMenuButtonSize(0);
@@ -562,21 +562,24 @@ TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas)
 }
 
 void
-TabMenuDisplay::PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle)
+TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
+                                   const unsigned CaptionStyle) const
 {
-  TabMenuControl &tb = GetTabMenuBar();
+  const TabMenuControl &tb = GetTabMenuBar();
   PaintMainMenuBorder(canvas);
 
   const bool is_focused = has_focus();
 
   for (auto i = tb.GetMainMenuButtons().begin(),
          end = tb.GetMainMenuButtons().end(); i != end; ++i) {
+    const OneMainMenuButton &button = **i;
+
     bool inverse = false;
-    const bool isDown = (*i)->main_menu_index == down_index.main_index &&
+    const bool isDown = button.main_menu_index == down_index.main_index &&
       !down_index.IsSub() && !drag_off_button;
 
     const bool is_selected = isDown ||
-      (*i)->main_menu_index == selected_index.main_index;
+      button.main_menu_index == selected_index.main_index;
 
     canvas.SetTextColor(look.list.GetTextColor(is_selected, is_focused,
                                                isDown));
@@ -584,17 +587,17 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle)
                                                            is_focused,
                                                            isDown));
 
-    const PixelRect rc = tb.GetMainMenuButtonSize((*i)->main_menu_index);
-    TabDisplay::PaintButton(canvas, CaptionStyle, gettext((*i)->caption), rc,
+    const PixelRect rc = tb.GetMainMenuButtonSize(button.main_menu_index);
+    TabDisplay::PaintButton(canvas, CaptionStyle, gettext(button.caption), rc,
                             false, NULL, isDown, inverse);
   }
 }
 
 void
 TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas,
-                                   const OneMainMenuButton &main_button)
+                                   const OneMainMenuButton &main_button) const
 {
-  TabMenuControl &tb = GetTabMenuBar();
+  const TabMenuControl &tb = GetTabMenuBar();
   const UPixelScalar bwidth =  GetTabLineHeight();
   const UPixelScalar subTop =
     tb.GetSubMenuButtonSize(main_button.first_page_index).top;
@@ -608,9 +611,10 @@ TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas,
 }
 
 void
-TabMenuDisplay::PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle)
+TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
+                                  const unsigned CaptionStyle) const
 {
-  TabMenuControl &tb = GetTabMenuBar();
+  const TabMenuControl &tb = GetTabMenuBar();
 
   if (selected_index.IsNone())
     return;
@@ -630,15 +634,15 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle)
          end = std::next(tb.GetTabButtons().begin(),
                          main_button.last_page_index + 1);
        j != end; ++j) {
-    OneSubMenuButton *i = *j;
+    const OneSubMenuButton &button = **j;
 
     bool inverse = false;
 
-    const bool is_pressed = i->menu.sub_index == down_index.sub_index &&
+    const bool is_pressed = button.menu.sub_index == down_index.sub_index &&
       !drag_off_button;
 
     const bool is_selected = is_pressed ||
-      i->menu.sub_index == selected_index.sub_index;
+      button.menu.sub_index == selected_index.sub_index;
 
     canvas.SetTextColor(look.list.GetTextColor(is_selected, is_focused,
                                                is_pressed));
@@ -646,10 +650,10 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle)
                                                            is_focused,
                                                            is_pressed));
 
-    const PixelRect &rc = tb.GetSubMenuButtonSize(i->page_index);
-    TabDisplay::PaintButton(canvas, CaptionStyle, gettext(i->caption), rc,
+    const PixelRect &rc = tb.GetSubMenuButtonSize(button.page_index);
+    TabDisplay::PaintButton(canvas, CaptionStyle, gettext(button.caption), rc,
                             false, NULL,
-                            i->menu.sub_index == selected_index.sub_index,
+                            button.menu.sub_index == selected_index.sub_index,
                             inverse);
   }
 }

@@ -150,7 +150,7 @@ public:
     pager.UpdateLayout();
   }
 
-  const StaticArray<OneSubMenuButton *, 32> &GetTabButtons() {
+  const StaticArray<OneSubMenuButton *, 32> &GetTabButtons() const {
     return buttons;
   }
 
@@ -286,7 +286,7 @@ public:
   }
 
   const StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS>
-      &GetMainMenuButtons() { return main_menu_buttons; }
+      &GetMainMenuButtons() const { return main_menu_buttons; }
 
 protected:
   /**
@@ -414,12 +414,16 @@ protected:
     return menu;
   }
 
+  const TabMenuControl &GetTabMenuBar() const {
+    return menu;
+  }
+
   void drag_end();
 
   /**
    * @return Rect of button holding down pointer capture
    */
-  const PixelRect& GetDownButtonRC();
+  const PixelRect& GetDownButtonRC() const;
 
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
@@ -439,11 +443,11 @@ protected:
   /**
    * draw border around main menu
    */
-  void PaintMainMenuBorder(Canvas &canvas);
-  void PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle);
+  void PaintMainMenuBorder(Canvas &canvas) const;
+  void PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle) const;
   void PaintSubMenuBorder(Canvas &canvas,
-                          const OneMainMenuButton &main_button);
-  void PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle);
+                          const OneMainMenuButton &main_button) const;
+  void PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle) const;
 };
 
 /**
