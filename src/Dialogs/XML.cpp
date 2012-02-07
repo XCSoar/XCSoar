@@ -860,6 +860,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     window = create_callback(parent, pos.x, pos.y, size.cx, size.cy, style);
   } else if (StringIsEqual(node.getName(), _T("Widget"))) {
+    style.ControlParent();
     DockWindow *dock = new DockWindow();
     dock->set(parent, rc, style);
     window = dock;
