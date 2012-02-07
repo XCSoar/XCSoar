@@ -99,7 +99,7 @@ TabMenuControl::HighlightNextMenuItem()
 {
   const unsigned page = GetPageNum(GetTabMenuDisplay()->GetSelectedIndex());
 
- if (page < GetNumPages() - 1) // don't wrap
+ if (page + 1 < GetNumPages()) // don't wrap
    SetLastContentPage(page + 1);
  else
    if (page >= GetNumPages()) // initial state is menu (page == NunPages)
