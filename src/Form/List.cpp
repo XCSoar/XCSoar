@@ -359,11 +359,12 @@ WndListFrame::OnKeyDown(unsigned key_code)
   case VK_F4:
 #endif
   case VK_RETURN:
-    if (activate_callback == NULL)
+    if (IsEmpty() || activate_callback == NULL)
       break;
 
-    if (GetCursorIndex() < GetLength())
-      activate_callback(GetCursorIndex());
+    assert(GetCursorIndex() < GetLength());
+
+    activate_callback(GetCursorIndex());
     return true;
 
   case VK_UP:

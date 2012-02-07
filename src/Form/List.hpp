@@ -157,6 +157,10 @@ public:
 
   void SetItemHeight(UPixelScalar _item_height);
 
+  bool IsEmpty() const {
+    return length == 0;
+  }
+
   /**
    * Returns the number of items in the list
    * @return The number of items in the list
