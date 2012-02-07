@@ -47,6 +47,20 @@ public:
   typedef void (*PaintItemCallback)(Canvas &canvas, const PixelRect rc,
                                       unsigned idx);
 
+  struct Handler {
+    virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                             unsigned idx) = 0;
+
+    virtual void OnCursorMoved(unsigned index) {}
+
+    gcc_pure
+    virtual bool CanActivateItem(unsigned index) const {
+      return false;
+    }
+
+    virtual void OnActivateItem(unsigned index) {}
+  };
+
 protected:
   const DialogLook &look;
 
@@ -106,6 +120,7 @@ protected:
    */
   int drag_y_window;
 
+  Handler *handler;
 
   ActivateCallback activate_callback;
   CursorCallback cursor_callback;
@@ -125,18 +140,34 @@ public:
               PixelRect rc, const WindowStyle style,
               UPixelScalar _item_height);
 
+  void SetHandler(Handler *_handler) {
+    assert(handler == NULL);
+    assert(_handler != NULL);
+    assert(activate_callback == NULL);
+    assert(cursor_callback == NULL);
+    assert(paint_item_callback == NULL);
+
+    handler = _handler;
+  }
+
   /** Sets the function to call when a ListItem is chosen */
   void SetActivateCallback(ActivateCallback cb) {
+    assert(handler == NULL);
+
     activate_callback = cb;
   }
 
   /** Sets the function to call when cursor has changed */
   void SetCursorCallback(CursorCallback cb) {
+    assert(handler == NULL);
+
     cursor_callback = cb;
   }
 
   /** Sets the function to call when painting an item */
   void SetPaintItemCallback(PaintItemCallback cb) {
+    assert(handler == NULL);
+
     paint_item_callback = cb;
   }
 
@@ -229,6 +260,10 @@ public:
   void MoveOrigin(int delta);
 
 protected:
+  gcc_pure
+  bool CanActivateItem() const;
+  void ActivateItem();
+
   /** Checks whether a ScrollBar is needed and shows/hides it */
   void show_or_hide_scroll_bar();
 

@@ -48,7 +48,9 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Dialogs/CallBackTable.hpp"
 
-class DevicesConfigPanel : public XMLWidget, DeviceEditWidget::Listener {
+class DevicesConfigPanel
+  : public XMLWidget, private ListControl::Handler,
+    private DeviceEditWidget::Listener {
   unsigned current_device;
   bool current_modified;
 
@@ -92,20 +94,22 @@ public:
   }
 
   void ShowDevice(unsigned idx);
-  void ActivateDevice(unsigned idx);
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void Move(const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
 
 private:
+  /* virtual methods from List::Handler */
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx);
+  virtual void OnCursorMoved(unsigned index);
+  virtual bool CanActivateItem(unsigned index) const;
+  virtual void OnActivateItem(unsigned index);
+
   /* virtual methods from DeviceEditWidget::Listener */
   virtual void OnModified(DeviceEditWidget &widget);
 };
-
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static DevicesConfigPanel *instance;
 
 bool
 DevicesConfigPanel::SaveDeviceConfig()
@@ -138,29 +142,30 @@ DevicesConfigPanel::ShowDevice(unsigned idx)
   GetEditWidget().SetConfig(GetDeviceConfig(current_device));
 }
 
+bool
+DevicesConfigPanel::CanActivateItem(unsigned index) const
+{
+  return true;
+}
+
 void
-DevicesConfigPanel::ActivateDevice(unsigned idx)
+DevicesConfigPanel::OnActivateItem(unsigned idx)
 {
   ShowDevice(idx);
   GetEditWidget().SetFocus();
 }
 
-static void
-DeviceListCursorCallback(unsigned idx)
+void
+DevicesConfigPanel::OnCursorMoved(unsigned idx)
 {
-  instance->ShowDevice(idx);
+  ShowDevice(idx);
 }
 
-static void
-DeviceListActivateCallback(unsigned idx)
+void
+DevicesConfigPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                                unsigned idx)
 {
-  instance->ActivateDevice(idx);
-}
-
-static void
-PaintDeviceListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
-{
-  const DeviceConfig &config = instance->GetListItemConfig(idx);
+  const DeviceConfig &config = GetListItemConfig(idx);
 
   const UPixelScalar margin = Layout::Scale(2);
 
@@ -191,7 +196,6 @@ PaintDeviceListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 void
 DevicesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  instance = this;
   LoadWindow(NULL, parent,
              Layout::landscape ? _T("IDR_XML_DEVICESCONFIGPANEL") :
                                _T("IDR_XML_DEVICESCONFIGPANEL_L"));
@@ -206,10 +210,8 @@ DevicesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   ListControl *list = (ListControl *)form.FindByName(_T("list"));
   assert(list != NULL);
-  list->SetPaintItemCallback(PaintDeviceListItem);
+  list->SetHandler(this);
   list->SetLength(NUMDEV);
-  list->SetCursorCallback(DeviceListCursorCallback);
-  list->SetActivateCallback(DeviceListActivateCallback);
 }
 
 void

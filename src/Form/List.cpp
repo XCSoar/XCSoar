@@ -51,6 +51,7 @@ ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
    origin(0), pixel_pan(0),
    cursor(0),
    drag_mode(DragMode::NONE),
+   handler(NULL),
    activate_callback(NULL),
    cursor_callback(NULL),
    paint_item_callback(NULL)
@@ -59,6 +60,30 @@ ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
 #endif
 {
   set(parent, rc, style);
+}
+
+bool
+ListControl::CanActivateItem() const
+{
+  if (IsEmpty())
+    return false;
+
+  return handler != NULL
+    ? handler->CanActivateItem(GetCursorIndex())
+    : activate_callback != NULL;
+}
+
+void
+ListControl::ActivateItem()
+{
+  assert(CanActivateItem());
+
+  unsigned index = GetCursorIndex();
+  assert(index < GetLength());
+  if (handler != NULL)
+    handler->OnActivateItem(index);
+  else if (activate_callback != NULL)
+    activate_callback(index);
 }
 
 void
@@ -127,7 +152,10 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
                                                             focused,
                                                             pressed));
 
-    paint_item_callback(canvas, rc, i);
+    if (handler != NULL)
+      handler->OnPaintItem(canvas, rc, i);
+    else
+      paint_item_callback(canvas, rc, i);
 
     if (focused && selected)
       canvas.DrawFocusRectangle(rc);
@@ -144,7 +172,7 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 void
 ListControl::OnPaint(Canvas &canvas)
 {
-  if (paint_item_callback != NULL)
+  if (handler != NULL || paint_item_callback != NULL)
     DrawItems(canvas, origin, origin + items_visible + 2);
 
   DrawScrollBar(canvas);
@@ -153,7 +181,7 @@ ListControl::OnPaint(Canvas &canvas)
 void
 ListControl::OnPaint(Canvas &canvas, const PixelRect &dirty)
 {
-  if (paint_item_callback != NULL)
+  if (handler != NULL || paint_item_callback != NULL)
     DrawItems(canvas, origin + (dirty.top + pixel_pan) / item_height,
               origin + (dirty.bottom + pixel_pan + item_height - 1) / item_height);
 
@@ -240,8 +268,10 @@ ListControl::SetCursorIndex(unsigned i)
   cursor = i;
   invalidate_item(cursor);
 
-  if (cursor_callback != NULL)
-    cursor_callback(GetCursorIndex());
+  if (handler != NULL)
+    handler->OnCursorMoved(i);
+  else if (cursor_callback != NULL)
+    cursor_callback(i);
   return true;
 }
 
@@ -320,7 +350,7 @@ ListControl::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case VK_RETURN:
-    return activate_callback != NULL;
+    return CanActivateItem();
 
   case VK_LEFT:
     if (!HasPointer())
@@ -374,12 +404,8 @@ ListControl::OnKeyDown(unsigned key_code)
   case VK_APP4:
 #endif
   case VK_RETURN:
-    if (IsEmpty() || activate_callback == NULL)
-      break;
-
-    assert(GetCursorIndex() < GetLength());
-
-    activate_callback(GetCursorIndex());
+    if (CanActivateItem())
+      ActivateItem();
     return true;
 
   case VK_UP:
@@ -443,10 +469,8 @@ ListControl::OnMouseUp(PixelScalar x, PixelScalar y)
 
   if (drag_mode == DragMode::CURSOR &&
       x >= 0 && x <= ((PixelScalar)get_width() - scroll_bar.GetWidth())) {
-    assert(activate_callback != NULL);
-
     drag_end();
-    activate_callback(GetCursorIndex());
+    ActivateItem();
     return true;
   }
 
@@ -555,8 +579,8 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
     drag_y = GetPixelOrigin() + y;
     drag_y_window = y;
 
-    if (had_focus && activate_callback != NULL &&
-        (unsigned)index == GetCursorIndex()) {
+    if (had_focus && (unsigned)index == GetCursorIndex() &&
+        CanActivateItem()) {
       drag_mode = DragMode::CURSOR;
       invalidate_item(cursor);
     } else {

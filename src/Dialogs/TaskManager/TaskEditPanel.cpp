@@ -119,8 +119,8 @@ OnClearAllClicked(gcc_unused WndButton &Sender)
 }
 
 void
-TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
-                                   unsigned DrawListIndex)
+TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned DrawListIndex)
 {
   assert(DrawListIndex <= ordered_task->TaskSize());
 
@@ -200,16 +200,10 @@ TaskEditPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
                       rc.right - leg_info_width - left, buffer);
 }
 
-static void
-OnTaskPaintListItem(Canvas &canvas, const PixelRect rc, unsigned DrawListIndex)
-{
-  instance->OnTaskPaintListItem(canvas, rc, DrawListIndex);
-}
-
 void
 TaskEditPanel::OnEditTurnpointClicked()
 {
-  OnTaskListEnter(wTaskPoints->GetCursorIndex());
+  EditTaskPoint(wTaskPoints->GetCursorIndex());
 }
 
 static void
@@ -218,8 +212,14 @@ OnEditTurnpointClicked(gcc_unused WndButton &Sender)
   instance->OnEditTurnpointClicked();
 }
 
+bool
+TaskEditPanel::CanActivateItem(unsigned index) const
+{
+  return true;
+}
+
 void
-TaskEditPanel::OnTaskListEnter(unsigned ItemIndex)
+TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
 {
   if (ItemIndex < ordered_task->TaskSize()) {
     if (dlgTaskPointShowModal(wf.GetMainWindow(), &ordered_task, ItemIndex)) {
@@ -257,16 +257,16 @@ TaskEditPanel::OnTaskListEnter(unsigned ItemIndex)
   }
 }
 
-static void
-OnTaskListEnter(unsigned ItemIndex)
+void
+TaskEditPanel::OnActivateItem(unsigned index)
 {
-  instance->OnTaskListEnter(ItemIndex);
+  EditTaskPoint(index);
 }
 
-static void
-OnTaskCursorCallback(gcc_unused unsigned i)
+void
+TaskEditPanel::OnCursorMoved(unsigned index)
 {
-  instance->UpdateButtons();
+  UpdateButtons();
 }
 
 void
@@ -404,9 +404,7 @@ TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   UPixelScalar line_height = wf.GetLook().list.font->GetHeight()
     + Layout::Scale(6) + wf.GetLook().small_font->GetHeight();
   wTaskPoints->SetItemHeight(line_height);
-  wTaskPoints->SetActivateCallback(::OnTaskListEnter);
-  wTaskPoints->SetPaintItemCallback(::OnTaskPaintListItem);
-  wTaskPoints->SetCursorCallback(::OnTaskCursorCallback);
+  wTaskPoints->SetHandler(this);
 }
 
 void

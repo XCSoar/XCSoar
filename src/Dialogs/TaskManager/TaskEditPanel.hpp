@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_TASK_EDIT_PANEL_HPP
 
 #include "Form/XMLWidget.hpp"
+#include "Form/List.hpp"
 
 class WndForm;
 struct DialogLook;
@@ -36,7 +37,7 @@ class WndOwnerDrawFrame;
 class WndFrame;
 class Canvas;
 
-class TaskEditPanel : public XMLWidget {
+class TaskEditPanel : public XMLWidget, private ListControl::Handler {
   WndForm &wf;
 
   const TaskLook &task_look;
@@ -64,13 +65,10 @@ public:
 
   void OnClearAllClicked();
   void OnEditTurnpointClicked();
-  void OnTaskListEnter(unsigned ItemIndex);
+  void EditTaskPoint(unsigned ItemIndex);
   void OnMakeFinish();
 
   bool OnKeyDown(unsigned key_code);
-
-  void OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
-                           unsigned DrawListIndex);
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void ReClick();
@@ -79,6 +77,14 @@ public:
 
 protected:
   void RefreshView();
+
+private:
+  /* virtual methods from List::Handler */
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx);
+  virtual void OnCursorMoved(unsigned index);
+  virtual bool CanActivateItem(unsigned index) const;
+  virtual void OnActivateItem(unsigned index);
 };
 
 #endif
