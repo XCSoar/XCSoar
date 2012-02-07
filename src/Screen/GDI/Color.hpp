@@ -100,7 +100,9 @@ struct Color {
   Color
   Highlight() const
   {
-    return Color((value + 0x00ffffff * 3) / 4);
+    return Color((Red() + 0xff * 3) / 4,
+                 (Green() + 0xff * 3) / 4,
+                 (Blue() + 0xff * 3) / 4);
   }
 };
 
