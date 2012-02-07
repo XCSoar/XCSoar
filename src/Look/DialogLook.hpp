@@ -85,6 +85,17 @@ struct DialogLook {
     const Font *font;
 
     gcc_pure
+    Color GetTextColor(bool is_selected, bool is_focused,
+                       bool is_pressed) const {
+      return is_selected
+        ? (is_pressed
+           ? pressed.text_color
+           : (is_focused
+              ? focused.text_color : selected.text_color))
+        : text_color;
+    }
+
+    gcc_pure
     Color GetBackgroundColor(bool is_selected, bool is_focused,
                              bool is_pressed) const {
       return is_selected
