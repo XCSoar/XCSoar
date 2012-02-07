@@ -814,18 +814,6 @@ endif
 all: $(OUTPUTS)
 everything: $(OUTPUTS) debug build-check build-harness
 
-####### products
-
-ifeq ($(HAVE_CE),y)
-
-SYNCE_PCP = synce-pcp
-
-install: XCSoar.exe
-	@echo Copying to device...
-	$(SYNCE_PCP) -f XCSoar.exe ':/Program Files/XCSoar/XCSoar.exe'
-
-endif
-
 clean: FORCE
 	@$(NQ)echo "cleaning all"
 	$(Q)rm -rf $(OUT)
