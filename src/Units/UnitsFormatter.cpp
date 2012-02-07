@@ -252,7 +252,7 @@ Units::GetVerticalSpeedFormat(Unit unit, bool include_unit)
 const TCHAR*
 Units::GetUserVerticalSpeedFormat(bool include_unit)
 {
-  return GetPressureFormat(current.vertical_speed_unit);
+  return GetVerticalSpeedFormat(current.vertical_speed_unit);
 }
 
 fixed
