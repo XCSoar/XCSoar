@@ -24,7 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_TIME_FORMATTER_HPP
 #define XCSOAR_TIME_FORMATTER_HPP
 
+#include "Math/fixed.hpp"
+
 #include <tchar.h>
+
+void FormatTime(TCHAR* buffer, fixed time);
+void FormatTimeLong(TCHAR* buffer, fixed time);
 
 /**
  * precedes with "-" if time is negative

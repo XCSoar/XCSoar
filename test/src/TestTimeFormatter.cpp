@@ -26,6 +26,84 @@
 #include "TestUtil.hpp"
 
 static void
+TestFormat()
+{
+  TCHAR buffer[256];
+
+  FormatTime(buffer, fixed(0));
+  ok1(StringIsEqual(buffer, _T("00:00:00")));
+
+  FormatTime(buffer, fixed(1));
+  ok1(StringIsEqual(buffer, _T("00:00:01")));
+
+  FormatTime(buffer, fixed(59));
+  ok1(StringIsEqual(buffer, _T("00:00:59")));
+
+  FormatTime(buffer, fixed(60));
+  ok1(StringIsEqual(buffer, _T("00:01:00")));
+
+  FormatTime(buffer, fixed(60 * 5));
+  ok1(StringIsEqual(buffer, _T("00:05:00")));
+
+  FormatTime(buffer, fixed(60 * 59));
+  ok1(StringIsEqual(buffer, _T("00:59:00")));
+
+  FormatTime(buffer, fixed(60 * 60));
+  ok1(StringIsEqual(buffer, _T("01:00:00")));
+
+  FormatTime(buffer, fixed(60 * 60 * 3 + 60 * 25));
+  ok1(StringIsEqual(buffer, _T("03:25:00")));
+
+  FormatTime(buffer, fixed(60 * 60 * 19 + 60 * 47 + 43));
+  ok1(StringIsEqual(buffer, _T("19:47:43")));
+
+  FormatTime(buffer, fixed(-(60 * 59)));
+  ok1(StringIsEqual(buffer, _T("-00:59:00")));
+
+  FormatTime(buffer, fixed(-(60 * 60 * 19 + 60 * 47 + 43)));
+  ok1(StringIsEqual(buffer, _T("-19:47:43")));
+}
+
+static void
+TestFormatLong()
+{
+  TCHAR buffer[256];
+
+  FormatTimeLong(buffer, fixed(0));
+  ok1(StringIsEqual(buffer, _T("00:00:00.000")));
+
+  FormatTimeLong(buffer, fixed(1.123));
+  ok1(StringIsEqual(buffer, _T("00:00:01.123")));
+
+  FormatTimeLong(buffer, fixed(59));
+  ok1(StringIsEqual(buffer, _T("00:00:59.000")));
+
+  FormatTimeLong(buffer, fixed(60.001));
+  ok1(StringIsEqual(buffer, _T("00:01:00.001")));
+
+  FormatTimeLong(buffer, fixed(60 * 5));
+  ok1(StringIsEqual(buffer, _T("00:05:00.000")));
+
+  FormatTimeLong(buffer, fixed(60 * 59));
+  ok1(StringIsEqual(buffer, _T("00:59:00.000")));
+
+  FormatTimeLong(buffer, fixed(60 * 60));
+  ok1(StringIsEqual(buffer, _T("01:00:00.000")));
+
+  FormatTimeLong(buffer, fixed(60 * 60 * 3 + 60 * 25));
+  ok1(StringIsEqual(buffer, _T("03:25:00.000")));
+
+  FormatTimeLong(buffer, fixed(60 * 60 * 19 + 60 * 47 + 43.765));
+  ok1(StringIsEqual(buffer, _T("19:47:43.765")));
+
+  FormatTimeLong(buffer, fixed(-(60 * 59)));
+  ok1(StringIsEqual(buffer, _T("-00:59:00.000")));
+
+  FormatTimeLong(buffer, fixed(-(60 * 60 * 19 + 60 * 47 + 43.765)));
+  ok1(StringIsEqual(buffer, _T("-19:47:43.765")));
+}
+
+static void
 TestHHMM()
 {
   TCHAR buffer[256];
@@ -175,8 +253,10 @@ TestSmart()
 int
 main(int argc, char **argv)
 {
-  plan_tests(89);
+  plan_tests(111);
 
+  TestFormat();
+  TestFormatLong();
   TestHHMM();
   TestTwoLines();
   TestSmart();
