@@ -247,6 +247,7 @@ InputEvents::eventBallast(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
     _stprintf(Temp, _T("%d"), (int)(BALLAST * 100));
+    /* xgettext:no-c-format */
     Message::AddMessage(_("Ballast %"), Temp);
   }
 

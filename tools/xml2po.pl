@@ -60,6 +60,7 @@ sub quote($) {
 
 foreach my $value (keys %strings) {
     print "#: @{[join(' ', @{$strings{$value}})]}\n";
+    print "#, no-c-format\n" if "@{[quote $value]}" =~ m/%/;
     print "msgid \"@{[quote $value]}\"\n";
     print "msgstr \"\"\n";
     print "\n";

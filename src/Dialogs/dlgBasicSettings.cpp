@@ -297,8 +297,9 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              fixed_zero);
   wp->SetReadOnly();
 
-  AddFloat(_("Bugs"),
-           _("How clean the glider is. Set to 0% for clean, larger numbers as the wings pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."),
+  AddFloat(_("Bugs"), /* xgettext:no-c-format */
+           _("How clean the glider is. Set to 0% for clean, larger numbers as the wings "
+               "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."),
            _T("%.0f %%"), _T("%.0f"),
            fixed_zero, fixed(50), fixed_one, false,
            (fixed_one - glide_polar.GetBugs()) * 100,
