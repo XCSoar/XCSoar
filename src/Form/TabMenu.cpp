@@ -428,8 +428,21 @@ TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
 void
 TabMenuDisplay::SetSelectedIndex(TabMenuControl::MenuTabIndex di)
 {
+  if (di == selected_index)
+    return;
+
+  if (SupportsPartialRedraw() && di.main_index == selected_index.main_index &&
+      di.sub_index < menu.GetMainMenuButton(di.main_index)->NumSubMenus() &&
+      selected_index.sub_index < menu.GetMainMenuButton(di.main_index)->NumSubMenus()) {
+    const OneMainMenuButton &main_button = *menu.GetMainMenuButton(di.main_index);
+    invalidate(menu.GetSubMenuButtonSize(main_button.first_page_index +
+                                         selected_index.sub_index));
+    invalidate(menu.GetSubMenuButtonSize(main_button.first_page_index +
+                                         di.sub_index));
+  } else
+    invalidate();
+
   selected_index = di;
-  invalidate();
 }
 
 bool
