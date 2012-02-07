@@ -67,7 +67,22 @@ struct DialogLook {
       Color background_color, text_color;
     } selected;
 
+    /**
+     * Colors for the selected item when the list has the keyboard
+     * focus.
+     */
+    struct {
+      Color background_color, text_color;
+    } focused;
+
     const Font *font;
+
+    gcc_pure
+    Color GetBackgroundColor(bool is_selected, bool is_focused) const {
+      return is_selected
+        ? (is_focused ? focused.background_color : selected.background_color)
+        : background_color;
+    }
   } list;
 
   ButtonLook button;
