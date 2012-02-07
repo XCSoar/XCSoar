@@ -113,6 +113,17 @@ WndButton::on_right()
 #ifdef USE_GDI
 
 void
+WndButton::OnSetFocus()
+{
+  ButtonWindow::OnSetFocus();
+
+  /* GDI's "BUTTON" class on Windows CE Core (e.g. Altair) does not
+     repaint when the window gets focus, but our custom style requires
+     it */
+  ::InvalidateRect(hWnd, NULL, false);
+}
+
+void
 WndButton::OnKillFocus()
 {
   ButtonWindow::OnKillFocus();

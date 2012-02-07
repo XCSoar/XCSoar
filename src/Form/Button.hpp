@@ -157,6 +157,7 @@ private:
 
 protected:
 #ifdef USE_GDI
+  virtual void OnSetFocus();
   virtual void OnKillFocus();
 #endif
 
