@@ -400,6 +400,13 @@ TabMenuControl::GotoMenuPage()
   return GetMenuPage();
 }
 
+void
+TabMenuControl::FocusMenuPage()
+{
+  GotoMenuPage();
+  tab_display->set_focus();
+}
+
 // TabMenuDisplay Functions
 TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
                                const DialogLook &_look,

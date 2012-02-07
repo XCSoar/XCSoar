@@ -186,9 +186,10 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 #ifdef GNAV
   case '6':
 #endif
-    if (wTabMenu->IsCurrentPageTheMenu())
+    if (wTabMenu->IsCurrentPageTheMenu()) {
+      wTabMenu->FocusMenuPage();
       wTabMenu->HighlightPreviousMenuItem();
-    else {
+    } else {
       wTabMenu->PreviousPage();
       ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
     }
@@ -198,9 +199,10 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 #ifdef GNAV
   case '7':
 #endif
-    if (wTabMenu->IsCurrentPageTheMenu())
+    if (wTabMenu->IsCurrentPageTheMenu()) {
+      wTabMenu->FocusMenuPage();
       wTabMenu->HighlightNextMenuItem();
-    else {
+    } else {
       wTabMenu->NextPage();
       ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
     }

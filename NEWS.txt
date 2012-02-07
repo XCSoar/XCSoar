@@ -41,6 +41,8 @@ Version 6.3 - not yet released
 * Android
   - support reverse screen modes for Galaxy Tab
   - support baro sensor
+* Altair
+  - fix configuration dialog navigation
 
 Version 6.2.6 - not yet released
 * devices:
