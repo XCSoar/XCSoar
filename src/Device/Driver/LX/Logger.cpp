@@ -111,7 +111,7 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
   if (!LX::SendCommand(port, LX::READ_FLIGHT_LIST))
     return false;
 
-  bool success = true;
+  bool success = false;
   while (!flight_list.full()) {
     LX::FlightInfo flight;
     if (!LX::ReadCRC(port, &flight, sizeof(flight)))
