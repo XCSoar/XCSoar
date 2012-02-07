@@ -34,10 +34,8 @@ FormatSignedTimeHHMM(TCHAR* buffer, int _time)
 {
   bool negative = (_time < 0);
   const BrokenTime time = BrokenTime::FromSecondOfDayChecked(abs(_time));
-  if (negative)
-    _stprintf(buffer, _T("-%02u:%02u"), time.hour, time.minute);
-  else
-    _stprintf(buffer, _T("%02u:%02u"), time.hour, time.minute);
+  _stprintf(buffer, negative ? _T("-%02u:%02u") : _T("%02u:%02u"),
+            time.hour, time.minute);
 }
 
 void
