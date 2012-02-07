@@ -226,21 +226,18 @@ final class IOIOHelper {
 
     /**
      * reads one byte
-     * waits for up to 100 ms if no data is available to read
-     * after waiting, returns -1 if no data is available or
-     * character read if data is available.
+     * waits timeout ms if no data is available, then checks again for data
+     * returns -1 if no data is available or
+     * the character read if data is available.
      */
     synchronized public int read() {
       try {
-        final int step = 10;
-        int timeleft = inputTimeout;
-        while (timeleft > 0 && input.available() <= 0) {
-          wait(step);
-          timeleft -= step;
+        if (input.available() <= 0) {
+          wait(inputTimeout);
+          if (input.available() <= 0)
+            return -1;
         }
-        if (input.available() <= 0)
-          return -1;
-
+        	
         int r = input.read() & 0xFF;
         return r;
       } catch (Exception e) {
