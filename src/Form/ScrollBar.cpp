@@ -56,7 +56,7 @@ ScrollBar::SetSize(const PixelSize size)
     width = Layout::Scale(16);
   else
     // thin for ALTAIR b/c no touch screen
-    width = Layout::Scale(8);
+    width = Layout::SmallScale(12);
 
   // Update the coordinates of the scrollbar
   rc.left = size.cx - width;
