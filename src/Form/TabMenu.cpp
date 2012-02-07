@@ -212,10 +212,7 @@ TabMenuControl::GetMenuButtonWidth() const
 const PixelRect&
 TabMenuControl::GetMainMenuButtonSize(unsigned i) const
 {
-  const static PixelRect rcFallback = {0, 0, 0, 0};
-
-  if (i >= main_menu_buttons.size())
-    return rcFallback;
+  assert(i < main_menu_buttons.size());
 
   if (main_menu_buttons[i]->but_size.left < main_menu_buttons[i]->but_size.right)
     return main_menu_buttons[i]->but_size;
@@ -236,10 +233,7 @@ TabMenuControl::GetMainMenuButtonSize(unsigned i) const
 const PixelRect&
 TabMenuControl::GetSubMenuButtonSize(unsigned page) const
 {
-  const static PixelRect rcFallback = {0, 0, 0, 0};
-
-  if (page >= buttons.size())
-    return rcFallback;
+  assert(page < buttons.size());
 
   if (buttons[page]->but_size.left < buttons[page]->but_size.right)
     return buttons[page]->but_size;
