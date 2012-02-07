@@ -807,6 +807,10 @@ include $(topdir)/build/cab.mk
 OUTPUTS := $(XCSOAR_BIN) $(VALI_XCS_BIN)
 OUTPUTS += $(XCSOARSETUP_DLL) $(XCSOARLAUNCH_DLL)
 
+ifeq ($(TARGET),ANDROID)
+OUTPUTS += $(ANDROID_BIN)/XCSoar-debug.apk
+endif
+
 all: $(OUTPUTS)
 everything: $(OUTPUTS) debug build-check build-harness
 
