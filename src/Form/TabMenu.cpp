@@ -588,13 +588,6 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle)
     TabDisplay::PaintButton(canvas, CaptionStyle, gettext((*i)->caption), rc,
                             false, NULL, isDown, inverse);
   }
-  if (has_focus()) {
-    PixelRect rcFocus;
-    rcFocus.top = rcFocus.left = 0;
-    rcFocus.right = canvas.get_width();
-    rcFocus.bottom = canvas.get_height();
-    canvas.DrawFocusRectangle(rcFocus);
-  }
 }
 
 void
