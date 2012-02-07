@@ -53,7 +53,7 @@ ScrollBar::SetSize(const PixelSize size)
     width = Layout::Scale(24);
   else if (HasPointer())
     /* with a mouse, the scroll bar can be smaller */
-    width = Layout::Scale(16);
+    width = Layout::SmallScale(16);
   else
     // thin for ALTAIR b/c no touch screen
     width = Layout::SmallScale(12);
