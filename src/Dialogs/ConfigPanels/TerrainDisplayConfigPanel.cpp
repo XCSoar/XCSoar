@@ -207,11 +207,14 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              ByteToPercent(terrain.brightness));
   GetDataField(TerrainBrightness).SetListener(this);
 
-  if (::terrain != NULL)
+  if (::terrain != NULL) {
+    WindowStyle style;
+    style.Border();
     AddRemaining(new WndOwnerDrawFrame(*(ContainerWindow *)GetWindow(),
                                        0, 0, 100, 100,
-                                       WindowStyle(),
+                                       style,
                                        ::OnPreviewPaint));
+  }
 
   terrain_settings = terrain;
   ShowTerrainControls();
