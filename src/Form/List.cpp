@@ -319,12 +319,22 @@ WndListFrame::OnKeyCheck(unsigned key_code) const
   case VK_RETURN:
     return activate_callback != NULL;
 
-  case VK_UP:
   case VK_LEFT:
+    if (!HasPointer())
+      /* no wrap-around on Altair, as VK_LEFT is usually used to
+         switch to the previous dialog page */
+      return true;
+
+  case VK_UP:
     return GetCursorIndex() > 0;
 
-  case VK_DOWN:
   case VK_RIGHT:
+    if (!HasPointer())
+      /* no wrap-around on Altair, as VK_RIGHT is usually used to
+         switch to the next dialog page */
+      return true;
+
+  case VK_DOWN:
     return GetCursorIndex() + 1 < length;
 
   default:
