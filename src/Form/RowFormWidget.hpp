@@ -457,6 +457,8 @@ protected:
    */
   void UpdateLayout();
 
+public:
+  /* virtual methods from Widget */
   virtual PixelSize GetMinimumSize() const;
   virtual PixelSize GetMaximumSize() const;
   virtual void Initialise(ContainerWindow &parent, const PixelRect &rc);
