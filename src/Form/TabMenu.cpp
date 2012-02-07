@@ -44,7 +44,7 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent,
                                PixelScalar x, PixelScalar y,
                                UPixelScalar _width, UPixelScalar _height,
                                const WindowStyle style)
-  :last_content(MenuTabIndex::None()),
+  :last_content_page(-1),
    caption(_caption),
    setting_up(true),
    form(_form),
@@ -137,14 +137,14 @@ TabMenuControl::SetCurrentPage(unsigned page)
 
   if (page == GetMenuPage()) {
     form.SetCaption(caption);
-    const MenuTabIndex di = last_content;
+    const MenuTabIndex di = FindPage(last_content_page);
     this->GetTabMenuDisplay()->SetSelectedIndex(di);
 
   } else {
     const PageItem& theitem = GetPageItem(page);
     SetLastContentPage(page);
     const OneMainMenuButton &main_button =
-      GetMainMenuButton(last_content.main_index);
+      GetMainMenuButton(theitem.main_menu_index);
     StaticString<128> caption;
     caption.Format(_T("%s > %s"),
                    gettext(main_button.caption),
@@ -155,8 +155,8 @@ TabMenuControl::SetCurrentPage(unsigned page)
 
 void TabMenuControl::SetLastContentPage(unsigned page)
 {
-  last_content = FindPage(page);
-  GetTabMenuDisplay()->SetSelectedIndex(last_content);
+  last_content_page = page;
+  GetTabMenuDisplay()->SetSelectedIndex(FindPage(page));
 }
 
 int

@@ -119,7 +119,7 @@ protected:
   /* holds pointer to array of menus info (must be sorted by MenuGroup) */
   PageItem const *pages;
 
-  MenuTabIndex last_content;
+  unsigned last_content_page;
 
   StaticString<256u> caption;
 
@@ -288,7 +288,7 @@ public:
    */
   gcc_pure
   unsigned GetLastContentPage() const {
-    return GetPageNum(last_content);
+    return last_content_page;
   }
 
   const StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS>
