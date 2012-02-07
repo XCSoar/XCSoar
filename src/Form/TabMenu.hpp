@@ -169,6 +169,12 @@ public:
                 unsigned num_menu_captions);
 
   /**
+   * Locate the page index in the menu.
+   */
+  gcc_pure
+  MenuTabIndex FindPage(unsigned page) const;
+
+  /**
    * @return true if currently displaying the menu page
    */
   gcc_pure
@@ -479,17 +485,12 @@ public:
   /* index to Pages array of last page in submenu */
   const unsigned last_page_index;
 
-  /* index of button in MainMenu */
-  const unsigned main_menu_index;
-
   OneMainMenuButton(const TCHAR* _Caption,
                     unsigned _first_page_index,
-                    unsigned _last_page_index,
-                    unsigned _main_menu_index)
+                    unsigned _last_page_index)
     :OneTabButton(_Caption, false, NULL),
      first_page_index(_first_page_index),
-     last_page_index(_last_page_index),
-     main_menu_index(_main_menu_index)
+     last_page_index(_last_page_index)
   {
   }
 
