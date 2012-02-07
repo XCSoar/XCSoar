@@ -82,6 +82,12 @@ NullPort::Read(void *Buffer, size_t Size)
   return -1;
 }
 
+Port::WaitResult
+NullPort::WaitRead(unsigned timeout_ms)
+{
+  return WaitResult::FAILED;
+}
+
 void
 NullPort::DataReceived(const void *data, size_t length)
 {

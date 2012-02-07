@@ -42,6 +42,7 @@ public:
   virtual bool StopRxThread();
   virtual bool StartRxThread();
   virtual int Read(void *Buffer, size_t Size);
+  virtual WaitResult WaitRead(unsigned timeout_ms);
 
 private:
   virtual void DataReceived(const void *data, size_t length);

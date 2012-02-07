@@ -50,4 +50,5 @@ IOIOHelper::IOIOHelper(JNIEnv *env)
   read_mid = env->GetMethodID(cls, "read", "(I)I");
   write_mid = env->GetMethodID(cls, "write", "(IB)V");
   flush_mid = env->GetMethodID(cls, "flush", "(I)V");
+  waitRead_method = env->GetMethodID(cls, "waitRead", "(II)I");
 }

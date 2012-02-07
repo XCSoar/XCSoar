@@ -92,6 +92,10 @@ final class BluetoothHelper {
     return input.read();
   }
 
+  public int waitRead(int timeout) {
+    return input.waitRead(timeout);
+  }
+
   public boolean write(byte ch) {
     return output.write(ch);
   }

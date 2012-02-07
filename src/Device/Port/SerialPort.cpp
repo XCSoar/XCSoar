@@ -33,6 +33,7 @@ Copyright_License {
 
 #include <windows.h>
 
+#include <algorithm>
 #include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
@@ -562,4 +563,25 @@ SerialPort::Read(void *Buffer, size_t Size)
     return -1;
   }
 #endif
+}
+
+Port::WaitResult
+SerialPort::WaitRead(unsigned timeout_ms)
+{
+  unsigned remaining = timeout_ms;
+
+  while (true) {
+    int pending = GetDataPending();
+    if (pending > 0)
+      return WaitResult::READY;
+    else if (pending < 0)
+      return WaitResult::FAILED;
+
+    if (remaining == 0)
+      return WaitResult::TIMEOUT;
+
+    const unsigned t = std::min(remaining, 500u);
+    remaining -= t;
+    Sleep(t);
+  }
 }

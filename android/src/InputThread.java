@@ -147,4 +147,18 @@ class InputThread extends Thread {
 
     return ch;
   }
+
+  synchronized public int waitRead(int wait_timeout) {
+    if (head >= tail) {
+      try {
+        wait(wait_timeout);
+      } catch (InterruptedException e) {
+        return 2; /* WaitResult::FAILED */
+      }
+    }
+
+    return head >= tail
+      ? 1 /* WaitResult::TIMEOUT */
+      : 0; /* WaitResult::READY */
+  }
 }

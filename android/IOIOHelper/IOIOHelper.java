@@ -249,6 +249,24 @@ final class IOIOHelper {
       }
     }
 
+    synchronized public int waitRead(int timeout_ms) {
+      try {
+        final int step = 10;
+        int timeleft = timeout_ms;
+        while (timeleft > 0 && input.available() <= 0) {
+          wait(step);
+          timeleft -= step;
+        }
+        if (input.available() <= 0)
+          return 1; /* WaitResult::TIMEOUT */
+
+        return 0; /* WaitResult::READY */
+      } catch (Exception e) {
+        Log.e("IOIOHelper", "IOIOJRead() Unexpected exception caught", e);
+        return 2; /* WaitResult::FAILED */
+      }
+    }
+
     public void write(byte ch) {
       if (uart == null)
         return;
@@ -327,6 +345,10 @@ final class IOIOHelper {
    */
   public int read(int ID) {
     return xuarts_[ID].read();
+  }
+
+  public int waitRead(int id, int timeout) {
+    return xuarts_[id].waitRead(timeout);
   }
 
   /**

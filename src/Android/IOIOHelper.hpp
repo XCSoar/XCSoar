@@ -34,6 +34,7 @@ private:
   jmethodID setReadTimeout_mid;
   jmethodID setBaudRate_mid, getBaudRate_mid;
   jmethodID read_mid, write_mid, flush_mid;
+  jmethodID waitRead_method;
 
 public:
   IOIOHelper(JNIEnv *env);
@@ -98,6 +99,10 @@ public:
 
   int read(JNIEnv *env, unsigned ID) {
     return env->CallIntMethod(Get(), read_mid, ID);
+  }
+
+  int waitRead(JNIEnv *env, unsigned ID, unsigned timeout_ms) {
+    return env->CallIntMethod(Get(), waitRead_method, ID, timeout_ms);
   }
 
   bool write(JNIEnv *env, unsigned ID, int ch) {

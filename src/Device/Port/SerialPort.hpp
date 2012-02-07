@@ -120,6 +120,7 @@ public:
   virtual bool StartRxThread();
 
   virtual int Read(void *Buffer, size_t Size);
+  virtual WaitResult WaitRead(unsigned timeout_ms);
 
 protected:
   /**

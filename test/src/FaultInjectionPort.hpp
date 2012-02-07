@@ -86,6 +86,12 @@ public:
     std::fill(p, p + Size, ' ');
     return Size;
   }
+
+  virtual WaitResult WaitRead(unsigned timeout_ms) {
+    return inject_port_fault > 0
+      ? WaitResult::READY
+      : WaitResult::FAILED;
+  }
 };
 
 Port::Port(Handler &_handler)
@@ -130,6 +136,12 @@ bool
 Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
 {
   return Read(buffer, length) == (int)length;
+}
+
+Port::WaitResult
+Port::WaitRead(OperationEnvironment &env, unsigned timeout_ms)
+{
+  return WaitRead(timeout_ms);
 }
 
 bool

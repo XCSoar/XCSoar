@@ -260,3 +260,27 @@ TCPPort::Read(void *buffer, size_t length)
 
   return read(ufd, buffer, length);
 }
+
+Port::WaitResult
+TCPPort::WaitRead(unsigned timeout_ms)
+{
+  if (connection_fd < 0)
+    return WaitResult::FAILED;
+
+  fd_set rfds;
+  FD_ZERO(&rfds);
+  unsigned ufd = connection_fd;
+  FD_SET(ufd, &rfds);
+
+  struct timeval timeout;
+  timeout.tv_sec = timeout_ms / 1000;
+  timeout.tv_usec = (timeout_ms % 1000) * 1000;
+
+  int ret = select(ufd + 1, &rfds, NULL, NULL, &timeout);
+  if (ret > 0)
+    return WaitResult::READY;
+  else if (ret == 0)
+    return WaitResult::TIMEOUT;
+  else
+    return WaitResult::FAILED;
+}

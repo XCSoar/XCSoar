@@ -26,11 +26,40 @@ Copyright_License {
 
 #include <stddef.h>
 
+class OperationEnvironment;
+
 /**
  * Generic Port thread handler class
  */
 class Port {
 public:
+  /**
+   * Warning: these enum integer values are hard-coded in the
+   * Android/Java class InputThread.
+   */
+  enum class WaitResult {
+    /**
+     * The port is ready; the desired operation will not block.
+     */
+    READY,
+
+    /**
+     * Timeout has expired.
+     */
+    TIMEOUT,
+
+    /**
+     * An I/O error has occurred, and the port shall not be used.
+     */
+    FAILED,
+
+    /**
+     * The operation was cancelled, probably by
+     * OperationEnvironment::IsCancelled().
+     */
+    CANCELLED,
+  };
+
   /**
    * Interface with callbacks for the #Port class.
    */
@@ -137,6 +166,11 @@ public:
   virtual int Read(void *Buffer, size_t Size) = 0;
 
   /**
+   * Wait until data becomes available or the timeout expires.
+   */
+  virtual WaitResult WaitRead(unsigned timeout_ms) = 0;
+
+  /**
    * Force flushing the receive buffers, by trying to read from the
    * port until it times out.
    *
@@ -155,6 +189,16 @@ public:
    * @return true on success
    */
   bool FullRead(void *buffer, size_t length, unsigned timeout_ms);
+
+  /**
+   * Wait until data becomes available, the timeout expires or the
+   * operation gets cancelled.
+   *
+   * @param timeout_ms give up after this number of milliseconds
+   * @param env an OperationEnvironment that allows cancelling the
+   * operation
+   */
+  WaitResult WaitRead(OperationEnvironment &env, unsigned timeout_ms);
 
   bool ExpectString(const char *token, unsigned timeout_ms = 2000);
 };

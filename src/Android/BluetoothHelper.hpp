@@ -31,6 +31,7 @@ class BluetoothHelper : protected Java::Object {
   Java::GlobalRef<jclass> cls;
   jmethodID setReadTimeout_mid;
   jmethodID read_mid, write_mid, flush_mid;
+  jmethodID waitRead_method;
 
   BluetoothHelper(JNIEnv *env, jclass _cls, jobject obj)
     :Java::Object(env, obj), cls(env, _cls) {
@@ -38,6 +39,7 @@ class BluetoothHelper : protected Java::Object {
     read_mid = env->GetMethodID(cls, "read", "()I");
     write_mid = env->GetMethodID(cls, "write", "(B)Z");
     flush_mid = env->GetMethodID(cls, "flush", "()V");
+    waitRead_method = env->GetMethodID(cls, "waitRead", "(I)I");
   }
 
 public:
@@ -60,6 +62,10 @@ public:
 
   int read(JNIEnv *env) {
     return env->CallIntMethod(Get(), read_mid);
+  }
+
+  int waitRead(JNIEnv *env, unsigned timeout_ms) {
+    return env->CallIntMethod(Get(), waitRead_method, timeout_ms);
   }
 
   bool write(JNIEnv *env, int ch) {

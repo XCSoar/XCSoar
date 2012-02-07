@@ -23,7 +23,9 @@ Copyright_License {
 
 #include "Port.hpp"
 #include "PeriodClock.hpp"
+#include "Operation/Operation.hpp"
 
+#include <algorithm>
 #include <assert.h>
 #include <string.h>
 
@@ -104,6 +106,28 @@ Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
   }
 
   return true;
+}
+
+Port::WaitResult
+Port::WaitRead(OperationEnvironment &env, unsigned timeout_ms)
+{
+  unsigned remaining = timeout_ms;
+
+  do {
+    /* this loop is ugly, and should be redesigned when we have
+       non-blocking I/O in all Port implementations */
+    const unsigned t = std::min(remaining, 500u);
+    WaitResult result = WaitRead(t);
+    if (result != WaitResult::TIMEOUT)
+      return result;
+
+    if (env.IsCancelled())
+      return WaitResult::CANCELLED;
+
+    remaining -= t;
+  } while (remaining > 0);
+
+  return WaitResult::TIMEOUT;
 }
 
 bool

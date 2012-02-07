@@ -174,3 +174,9 @@ AndroidBluetoothPort::Read(void *Buffer, size_t Size)
   *(uint8_t *)Buffer = ch;
   return 1;
 }
+
+Port::WaitResult
+AndroidBluetoothPort::WaitRead(unsigned timeout_ms)
+{
+  return (Port::WaitResult)helper->waitRead(Java::GetEnv(), timeout_ms);
+}

@@ -159,3 +159,10 @@ AndroidIOIOUartPort::Read(void *Buffer, size_t Size)
   *(uint8_t *)Buffer = ch;
   return 1;
 }
+
+Port::WaitResult
+AndroidIOIOUartPort::WaitRead(unsigned timeout_ms)
+{
+  return (Port::WaitResult)helper->waitRead(Java::GetEnv(), UartID,
+                                            timeout_ms);
+}

@@ -268,16 +268,27 @@ TTYPort::SetBaudrate(unsigned BaudRate)
 int
 TTYPort::Read(void *Buffer, size_t Size)
 {
-  if (fd < 0)
+  if (WaitRead(rx_timeout) != WaitResult::READY)
     return -1;
+
+  return read(fd, Buffer, Size);
+}
+
+Port::WaitResult
+TTYPort::WaitRead(unsigned timeout_ms)
+{
+  if (fd < 0)
+    return WaitResult::FAILED;
 
   struct pollfd pfd;
   pfd.fd = fd;
   pfd.events = POLLIN;
 
-  int ret = poll(&pfd, 1, rx_timeout);
-  if (ret != 1)
-    return -1;
-
-  return read(fd, Buffer, Size);
+  int ret = poll(&pfd, 1, timeout_ms);
+  if (ret > 0)
+    return WaitResult::READY;
+  else if (ret == 0)
+    return WaitResult::TIMEOUT;
+  else
+    return WaitResult::FAILED;
 }
