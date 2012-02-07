@@ -352,16 +352,17 @@ TabMenuControl::InitMenu(const PageItem pages_in[],
 TabMenuControl::MenuTabIndex
 TabMenuControl::FindPage(unsigned page) const
 {
-  for (auto begin = main_menu_buttons.begin(),
-         end = main_menu_buttons.end(), i = begin;
-       i != end; ++i) {
-    const OneMainMenuButton &button = **i;
-    if (page >= button.first_page_index && page <= button.last_page_index)
-      return MenuTabIndex(std::distance(begin, i),
-                          page - button.first_page_index);
-  }
+  if (page >= GetNumPages())
+    return MenuTabIndex::None();
 
-  return MenuTabIndex::None();
+  const unsigned main_index = pages[page].main_menu_index;
+  const unsigned first_page_index =
+    main_menu_buttons[main_index]->first_page_index;
+  assert(page >= first_page_index);
+  assert(page <= main_menu_buttons[main_index]->last_page_index);
+  const unsigned sub_index = page - first_page_index;
+
+  return MenuTabIndex(main_index, sub_index);
 }
 
 unsigned
