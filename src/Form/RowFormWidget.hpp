@@ -82,6 +82,12 @@ class RowFormWidget : public WindowWidget {
     Type type;
 
     /**
+     * Shall this row be available?  If not, it is hidden and no
+     * screen space is reserved for it.
+     */
+    bool available;
+
+    /**
      * Shall this row be visible?  The "expert" flag overrides it in
      * global "non-expert" mode.
      */
@@ -97,12 +103,14 @@ class RowFormWidget : public WindowWidget {
     Row() = default;
 
     Row(Type _type)
-      :type(_type), visible(false), expert(false), window(NULL) {
+      :type(_type), available(true), visible(false), expert(false),
+       window(NULL) {
       assert(_type == Type::DUMMY);
     }
 
     Row(Type _type, Window *_window)
-      :type(_type), visible(true), expert(false), window(_window) {
+      :type(_type), available(true), visible(true), expert(false),
+       window(_window) {
       assert(_type != Type::DUMMY);
       assert(_window != NULL);
     }
@@ -270,6 +278,11 @@ public:
   const Window &GetRow(unsigned i) const {
     return rows[i].GetWindow();
   }
+
+  /**
+   * Modify the "available" flag on this row.
+   */
+  void SetRowAvailable(unsigned i, bool available);
 
   void SetRowVisible(unsigned i, bool visible);
 

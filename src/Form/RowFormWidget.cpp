@@ -112,6 +112,23 @@ RowFormWidget::~RowFormWidget()
 }
 
 void
+RowFormWidget::SetRowAvailable(unsigned i, bool available)
+{
+  Row &row = rows[i];
+  if (available == row.available)
+    return;
+
+  row.available = available;
+  if (!available)
+    row.GetWindow().hide();
+  else if (row.visible &&
+           (!row.expert || UIGlobals::GetDialogSettings().expert))
+    row.GetWindow().show();
+
+  UpdateLayout();
+}
+
+void
 RowFormWidget::SetRowVisible(unsigned i, bool visible)
 {
   Row &row = rows[i];
@@ -121,7 +138,8 @@ RowFormWidget::SetRowVisible(unsigned i, bool visible)
   row.visible = visible;
   if (!visible)
     row.GetWindow().hide();
-  else if (!row.expert || UIGlobals::GetDialogSettings().expert)
+  else if (row.available &&
+           (!row.expert || UIGlobals::GetDialogSettings().expert))
     row.GetWindow().show();
 }
 
@@ -685,7 +703,7 @@ RowFormWidget::GetRecommendedCaptionWidth() const
 
   UPixelScalar w = 0;
   for (auto i = rows.begin(), end = rows.end(); i != end; ++i) {
-    if (i->expert && !expert)
+    if (!i->available || (i->expert && !expert))
       continue;
 
     if (i->type == Row::Type::EDIT) {
@@ -714,7 +732,7 @@ RowFormWidget::UpdateLayout()
   unsigned n_elastic = 0;
   unsigned caption_width = 0;
   for (auto i = rows.begin(), end = rows.end(); i != end; ++i) {
-    if (i->expert && !expert)
+    if (!i->available || (i->expert && !expert))
       continue;
 
     min_height += i->GetMinimumHeight();
@@ -742,6 +760,11 @@ RowFormWidget::UpdateLayout()
       continue;
 
     Window &window = i->GetWindow();
+
+    if (!i->available) {
+      window.hide();
+      continue;
+    }
 
     if (i->expert) {
       if (!expert) {
