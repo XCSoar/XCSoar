@@ -321,11 +321,9 @@ protected:
    *
    * @param sub_menu_index Index of submenu item within in submenu
    * @param item The PageItem to be created
-   * @param page Index to the page array
    */
   void CreateSubMenuItem(const unsigned sub_menu_index,
-                         const PageItem &item,
-                         const unsigned page);
+                         const PageItem &item);
 
   /** for each main menu item:
    *   adds to the MainMenuButtons array
@@ -462,14 +460,11 @@ protected:
 class OneSubMenuButton : public OneTabButton {
 public:
   const TabMenuControl::MenuTabIndex menu;
-  const unsigned page_index;
 
 public:
-  OneSubMenuButton(const TCHAR* _Caption, TabMenuControl::MenuTabIndex i,
-                   unsigned _page_index)
+  OneSubMenuButton(const TCHAR* _Caption, TabMenuControl::MenuTabIndex i)
     :OneTabButton(_Caption, false, NULL),
-     menu(i),
-     page_index(_page_index)
+     menu(i)
   {
   }
 };
