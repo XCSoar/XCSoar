@@ -35,10 +35,6 @@ Copyright_License {
 #endif
 
 
-/**
- * Saves the given string (Str) to the logfile
- * @param Str String to be logged
- */
 void
 LogStartUp(const TCHAR *Str, ...)
 {

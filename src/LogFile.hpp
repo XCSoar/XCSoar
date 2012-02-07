@@ -40,6 +40,10 @@ Copyright_License {
 
 #endif /* NDEBUG */
 
+/**
+ * Saves the given string (Str) to the logfile
+ * @param Str String to be logged
+ */
 #ifndef _UNICODE
 gcc_printf(1, 2)
 #endif
