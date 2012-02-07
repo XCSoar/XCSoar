@@ -466,11 +466,13 @@ DeviceEditWidget::UpdateVisibilities()
 {
   const DeviceConfig::PortType type = GetPortType(GetDataField(Port));
 
-  SetRowVisible(BaudRate, DeviceConfig::UsesSpeed(type));
+  SetRowAvailable(BaudRate, DeviceConfig::UsesSpeed(type));
+  SetRowAvailable(BulkBaudRate, DeviceConfig::UsesSpeed(type) &&
+                  DeviceConfig::UsesDriver(type));
   SetRowVisible(BulkBaudRate, DeviceConfig::UsesSpeed(type) &&
                 DeviceConfig::UsesDriver(type) &&
                 SupportsBulkBaudRate(GetDataField(Driver)));
-  SetRowVisible(TCPPort, DeviceConfig::UsesTCPPort(type));
+  SetRowAvailable(TCPPort, DeviceConfig::UsesTCPPort(type));
   SetRowVisible(Driver, DeviceConfig::UsesDriver(type));
   SetRowVisible(SyncFromDevice, DeviceConfig::UsesDriver(type) &&
                 CanReceiveSettings(GetDataField(Driver)));
