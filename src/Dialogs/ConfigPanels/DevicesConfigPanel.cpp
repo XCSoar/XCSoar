@@ -158,7 +158,7 @@ DevicesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   WndListFrame *list = (WndListFrame *)form.FindByName(_T("list"));
   assert(list != NULL);
   list->SetPaintItemCallback(PaintDeviceListItem);
-  list->SetLength(2);
+  list->SetLength(NUMDEV);
   list->SetCursorCallback(DeviceListCursorCallback);
 }
 

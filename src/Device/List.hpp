@@ -30,13 +30,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_LIST_HPP
 
 enum {
-#ifdef GNAV
-  /* the Altair has a third (hidden) device for NmeaOut (Twin
-     Altair) */
-  NUMDEV = 3,
-#else
-  NUMDEV = 2,
-#endif
+  NUMDEV = 4,
 };
 
 class DeviceDescriptor;
