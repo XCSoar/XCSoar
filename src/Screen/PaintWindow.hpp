@@ -86,6 +86,19 @@ public:
         window_style);
   }
 
+  gcc_constexpr_function
+  static bool SupportsPartialRedraw() {
+#ifdef USE_GDI
+    /* we can use the GDI function InvalidateRect() with a non-NULL
+       RECT */
+    return true;
+#else
+    /* SDL and OpenGL can't do partial redraws, they always repaint
+       the whole screen */
+    return false;
+#endif
+  }
+
   /**
    * Invalidates the visible area and schedules a repaint (which will
    * occur in the main thread).
