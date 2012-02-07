@@ -217,14 +217,24 @@ public:
    * @return pointer to button or NULL if index is out of range
    */
   gcc_pure
-  const OneMainMenuButton *GetMainMenuButton(unsigned main_menu_index) const;
+  const OneMainMenuButton &GetMainMenuButton(unsigned main_menu_index) const {
+    assert(main_menu_index < main_menu_buttons.size());
+    assert(main_menu_buttons[main_menu_index] != NULL);
+
+    return *main_menu_buttons[main_menu_index];
+  }
 
   /**
    * @param page
    * @return pointer to button or NULL if index is out of range
    */
   gcc_pure
-  const OneSubMenuButton *GetSubMenuButton(unsigned page) const;
+  const OneSubMenuButton &GetSubMenuButton(unsigned page) const {
+    assert(page < GetNumPages() && page < buttons.size());
+    assert(buttons[page] != NULL);
+
+    return *buttons[page];
+  }
 
   /**
    * @param Pos position of pointer
@@ -431,7 +441,8 @@ protected:
    */
   void PaintMainMenuBorder(Canvas &canvas);
   void PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle);
-  void PaintSubMenuBorder(Canvas &canvas, const OneMainMenuButton *butMain);
+  void PaintSubMenuBorder(Canvas &canvas,
+                          const OneMainMenuButton &main_button);
   void PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle);
 };
 
