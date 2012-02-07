@@ -240,7 +240,7 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page) const
 
   const PageItem &item = this->GetPageItem(page);
   const OneMainMenuButton &main_button = GetMainMenuButton(item.main_menu_index);
-  const OneSubMenuButton &sub_button = GetSubMenuButton(page);
+  const unsigned sub_index = page - main_button.first_page_index;
 
   PixelRect &rc = buttons[page]->but_size;
 
@@ -259,7 +259,7 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page) const
       (topMainMenuItemWOffset + SubMenuHeight <= tabHeight) ?
        topMainMenuItemWOffset : tabHeight - SubMenuHeight - offset;
 
-  rc.top = subMenuTop + sub_button.menu.sub_index * itemHeight;
+  rc.top = subMenuTop + sub_index * itemHeight;
   rc.top += GetButtonVerticalOffset();
   rc.bottom = rc.top + butHeight;
 
@@ -292,8 +292,7 @@ TabMenuControl::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
 }
 
 void
-TabMenuControl::CreateSubMenuItem(const unsigned sub_menu_index,
-                                  const PageItem &item)
+TabMenuControl::CreateSubMenuItem(const PageItem &item)
 {
   assert(item.main_menu_index < MAX_MAIN_MENU_ITEMS);
 
@@ -303,9 +302,7 @@ TabMenuControl::CreateSubMenuItem(const unsigned sub_menu_index,
   pager.AddPage(widget);
 
   OneSubMenuButton *b =
-    new OneSubMenuButton(item.menu_caption,
-                         MenuTabIndex(item.main_menu_index,
-                                      sub_menu_index));
+    new OneSubMenuButton(item.menu_caption);
   buttons.append(b);
 }
 
@@ -321,7 +318,7 @@ TabMenuControl::CreateSubMenu(const PageItem pages_in[], unsigned NumPages,
   for (unsigned i = 0; i < NumPages; i++) {
     const PageItem& item = pages_in[i];
     if (item.main_menu_index == main_menu_index) {
-      CreateSubMenuItem(subMenuIndex, item);
+      CreateSubMenuItem(item);
       firstPageIndex = min(i, firstPageIndex);
       subMenuIndex++;
     }
@@ -347,7 +344,7 @@ TabMenuControl::InitMenu(const PageItem pages_in[],
     CreateSubMenu(pages_in, num_pages, main_menu_captions[i], i);
 
   pager.AddClient(tab_display);
-  buttons.append(new OneSubMenuButton(caption, MenuTabIndex::None()));
+  buttons.append(new OneSubMenuButton(caption));
 
   assert(GetNumPages() == num_pages);
 }
@@ -632,18 +629,20 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
 
   const bool is_focused = has_focus();
 
-  for (unsigned page_index = main_button.first_page_index,
-         last_page_index = main_button.last_page_index;
+  for (unsigned first_page_index = main_button.first_page_index,
+         last_page_index = main_button.last_page_index,
+         page_index = first_page_index;
        page_index <= last_page_index; ++page_index) {
     const OneSubMenuButton &button = tb.GetSubMenuButton(page_index);
+    const unsigned sub_index = page_index - first_page_index;
 
     bool inverse = false;
 
-    const bool is_pressed = button.menu.sub_index == down_index.sub_index &&
+    const bool is_pressed = sub_index == down_index.sub_index &&
       !drag_off_button;
 
     const bool is_selected = is_pressed ||
-      button.menu.sub_index == selected_index.sub_index;
+      sub_index == selected_index.sub_index;
 
     canvas.SetTextColor(look.list.GetTextColor(is_selected, is_focused,
                                                is_pressed));
@@ -654,7 +653,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
     const PixelRect &rc = tb.GetSubMenuButtonSize(page_index);
     TabDisplay::PaintButton(canvas, CaptionStyle, gettext(button.caption), rc,
                             false, NULL,
-                            button.menu.sub_index == selected_index.sub_index,
+                            sub_index == selected_index.sub_index,
                             inverse);
   }
 }

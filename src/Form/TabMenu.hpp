@@ -319,11 +319,9 @@ protected:
    * appends a submenu button to the buttons array and
    * loads it's XML file
    *
-   * @param sub_menu_index Index of submenu item within in submenu
    * @param item The PageItem to be created
    */
-  void CreateSubMenuItem(const unsigned sub_menu_index,
-                         const PageItem &item);
+  void CreateSubMenuItem(const PageItem &item);
 
   /** for each main menu item:
    *   adds to the MainMenuButtons array
@@ -459,12 +457,8 @@ protected:
  */
 class OneSubMenuButton : public OneTabButton {
 public:
-  const TabMenuControl::MenuTabIndex menu;
-
-public:
-  OneSubMenuButton(const TCHAR* _Caption, TabMenuControl::MenuTabIndex i)
-    :OneTabButton(_Caption, false, NULL),
-     menu(i)
+  OneSubMenuButton(const TCHAR* _Caption)
+    :OneTabButton(_Caption, false, NULL)
   {
   }
 };
