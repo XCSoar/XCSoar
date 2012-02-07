@@ -69,6 +69,7 @@ public:
   }
 
   void ShowDevice(unsigned idx);
+  void ActivateDevice(unsigned idx);
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
@@ -109,10 +110,23 @@ DevicesConfigPanel::ShowDevice(unsigned idx)
   GetEditWidget().SetConfig(device_config[current_device]);
 }
 
+void
+DevicesConfigPanel::ActivateDevice(unsigned idx)
+{
+  ShowDevice(idx);
+  GetEditWidget().SetFocus();
+}
+
 static void
 DeviceListCursorCallback(unsigned idx)
 {
   instance->ShowDevice(idx);
+}
+
+static void
+DeviceListActivateCallback(unsigned idx)
+{
+  instance->ActivateDevice(idx);
 }
 
 static void
@@ -165,6 +179,7 @@ DevicesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   list->SetPaintItemCallback(PaintDeviceListItem);
   list->SetLength(NUMDEV);
   list->SetCursorCallback(DeviceListCursorCallback);
+  list->SetActivateCallback(DeviceListActivateCallback);
 }
 
 
@@ -193,4 +208,3 @@ CreateDevicesConfigPanel()
 {
   return new DevicesConfigPanel();
 }
-
