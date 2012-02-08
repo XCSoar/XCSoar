@@ -51,6 +51,15 @@ public:
     return !dialogs.empty();
   }
 
+  /**
+   * Check whether the specified dialog is the top-most one.
+   */
+  bool IsTopDialog(WndForm &dialog) {
+    assert(HasDialog());
+
+    return &dialog == dialogs.top();
+  }
+
 #ifndef USE_GDI
 protected:
   gcc_pure
