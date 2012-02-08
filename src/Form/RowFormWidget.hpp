@@ -334,6 +334,11 @@ public:
   void SetExpertRow(unsigned i);
 
   gcc_pure
+  Window &GetGeneric(unsigned i) {
+    return rows[i].GetWindow();
+  }
+
+  gcc_pure
   WndProperty &GetControl(unsigned i) {
     return rows[i].GetControl();
   }
