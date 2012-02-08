@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-07 00:51+0100\n"
-"PO-Revision-Date: 2012-02-08 19:39+0000\n"
+"PO-Revision-Date: 2012-02-08 21:16+0000\n"
 "Last-Translator: Wil Crielaars <kawa1998@home.nl>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-08 19:56+0000\n"
+"X-Launchpad-Export-Date: 2012-02-08 22:28+0000\n"
 "X-Generator: Launchpad (build 14747)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -1001,7 +1001,7 @@ msgstr "Aangewezen vliegsnelheid (IAS)"
 #: src/InfoBoxes/Content/Factory.cpp:399
 #, no-c-format
 msgid "V IAS"
-msgstr ""
+msgstr "V IAS"
 
 #: src/InfoBoxes/Content/Factory.cpp:400
 #, no-c-format
@@ -1016,7 +1016,7 @@ msgstr "Barometrische hoogte."
 #: src/InfoBoxes/Content/Factory.cpp:409
 #, no-c-format
 msgid "Alt. Baro."
-msgstr ""
+msgstr "Alt. Baro."
 
 #: src/InfoBoxes/Content/Factory.cpp:410
 #, no-c-format
@@ -1035,7 +1035,7 @@ msgstr "McCready snelheid"
 #: src/InfoBoxes/Content/Factory.cpp:419
 #, no-c-format
 msgid "V MC"
-msgstr ""
+msgstr "V MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:420
 #, no-c-format
@@ -1109,7 +1109,7 @@ msgstr "L/D voor volgend keerpunt"
 #: src/InfoBoxes/Content/Factory.cpp:459
 #, no-c-format
 msgid "WP LD"
-msgstr ""
+msgstr "WP LD"
 
 #: src/InfoBoxes/Content/Factory.cpp:460
 #, no-c-format
@@ -1164,7 +1164,7 @@ msgstr "Opdracht tijd vereist."
 #: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
 msgid "Fin ETE"
-msgstr ""
+msgstr "Fin ETE"
 
 #: src/InfoBoxes/Content/Factory.cpp:490
 #, no-c-format
@@ -1183,7 +1183,7 @@ msgstr "Volgende tijd nodig."
 #: src/InfoBoxes/Content/Factory.cpp:499
 #, no-c-format
 msgid "WP ETE"
-msgstr ""
+msgstr "WP ETE"
 
 #: src/InfoBoxes/Content/Factory.cpp:500
 #, no-c-format
@@ -1202,7 +1202,7 @@ msgstr "dolfijn snelheid"
 #: src/InfoBoxes/Content/Factory.cpp:509
 #, no-c-format
 msgid "V Opt"
-msgstr ""
+msgstr "V Opt"
 
 #: src/InfoBoxes/Content/Factory.cpp:510
 #, no-c-format
@@ -1256,7 +1256,7 @@ msgstr "opdracht aankomsttijd"
 #: src/InfoBoxes/Content/Factory.cpp:529
 #, no-c-format
 msgid "Fin ETA"
-msgstr ""
+msgstr "Fin ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
@@ -1275,7 +1275,7 @@ msgstr "aankomsttijd volgend punt"
 #: src/InfoBoxes/Content/Factory.cpp:539
 #, no-c-format
 msgid "WP ETA"
-msgstr ""
+msgstr "WP ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:540
 #, no-c-format
@@ -1294,7 +1294,7 @@ msgstr "Koersafwijking volgend keerpunt"
 #: src/InfoBoxes/Content/Factory.cpp:549
 #, no-c-format
 msgid "Brng D"
-msgstr ""
+msgstr "Brng D"
 
 #: src/InfoBoxes/Content/Factory.cpp:550
 #, no-c-format
@@ -1363,6 +1363,11 @@ msgid ""
 "and relative humidity probe. (Touchscreen/PC only) Pressing the up/down "
 "cursor keys adjusts this forecast temperature."
 msgstr ""
+"Voorspelde grond temperatuur van het thuis vliegveld, gebruikt voor het "
+"schatten van de convectie hoogte en wolkenbasis in combinatie met "
+"buitenlucht temperatuur en relatieve luchtvochtigheids sensor.\r\n"
+"(Alleen voor Touchscreen / PC) Door de op / neer cursor toetsen te drukken "
+"veranderd de prognose temperatuur."
 
 #: src/InfoBoxes/Content/Factory.cpp:588
 #, no-c-format
@@ -1372,12 +1377,12 @@ msgstr "AA afstand rondom doel"
 #: src/InfoBoxes/Content/Factory.cpp:589
 #, no-c-format
 msgid "AA Dtgt"
-msgstr ""
+msgstr "AA Dtgt"
 
 #: src/InfoBoxes/Content/Factory.cpp:590
 #, no-c-format
 msgid "Assigned Area Task distance around target points for remainder of task."
-msgstr ""
+msgstr "AAT afstand rondom streefscore voor de rest van de taak."
 
 #: src/InfoBoxes/Content/Factory.cpp:598
 #, no-c-format
@@ -1387,7 +1392,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:599
 #, no-c-format
 msgid "AA Vtgt"
-msgstr ""
+msgstr "AA Vtgt"
 
 #: src/InfoBoxes/Content/Factory.cpp:600
 #, no-c-format
@@ -1427,7 +1432,7 @@ msgstr "Werkelijke vliegsnelheid (TAS)"
 #: src/InfoBoxes/Content/Factory.cpp:619
 #, no-c-format
 msgid "V TAS"
-msgstr ""
+msgstr "V TAS"
 
 #: src/InfoBoxes/Content/Factory.cpp:620
 #, no-c-format
@@ -1464,7 +1469,7 @@ msgstr "Team koers"
 #: src/InfoBoxes/Content/Factory.cpp:639
 #, no-c-format
 msgid "Tm Brng"
-msgstr ""
+msgstr "Tm Brng"
 
 #: src/InfoBoxes/Content/Factory.cpp:640
 #, no-c-format
@@ -1481,7 +1486,7 @@ msgstr "Team koers verschil"
 #: src/InfoBoxes/Content/Factory.cpp:649
 #, no-c-format
 msgid "Team Bd"
-msgstr ""
+msgstr "Team Bd"
 
 #: src/InfoBoxes/Content/Factory.cpp:650
 #, no-c-format
@@ -1500,7 +1505,7 @@ msgstr "team range"
 #: src/InfoBoxes/Content/Factory.cpp:659
 #, no-c-format
 msgid "Team Dis"
-msgstr ""
+msgstr "Team Dis"
 
 #: src/InfoBoxes/Content/Factory.cpp:660
 #, no-c-format
@@ -1515,7 +1520,7 @@ msgstr "momentane opdracht snelheid"
 #: src/InfoBoxes/Content/Factory.cpp:669
 #, no-c-format
 msgid "V Tsk Ins"
-msgstr ""
+msgstr "V Tsk Ins"
 
 #: src/InfoBoxes/Content/Factory.cpp:670
 #, no-c-format
@@ -1532,7 +1537,7 @@ msgstr "afstand uit"
 #: src/InfoBoxes/Content/Factory.cpp:679
 #, no-c-format
 msgid "Home Dis"
-msgstr ""
+msgstr "Home Dis"
 
 #: src/InfoBoxes/Content/Factory.cpp:680
 #, no-c-format
@@ -1547,7 +1552,7 @@ msgstr "snelheid over opdracht"
 #: src/InfoBoxes/Content/Factory.cpp:689
 #, no-c-format
 msgid "V Tsk Ach"
-msgstr ""
+msgstr "V Tsk Ach"
 
 #: src/InfoBoxes/Content/Factory.cpp:690
 #, no-c-format
@@ -1564,7 +1569,7 @@ msgstr "AAT verschiltijd"
 #: src/InfoBoxes/Content/Factory.cpp:699
 #, no-c-format
 msgid "AA dT"
-msgstr ""
+msgstr "AA dT"
 
 #: src/InfoBoxes/Content/Factory.cpp:700
 #, no-c-format
@@ -1586,7 +1591,7 @@ msgstr "Thermisch totaal gemiddelde"
 #: src/InfoBoxes/Content/Factory.cpp:709
 #, no-c-format
 msgid "TC All"
-msgstr ""
+msgstr "TC All"
 
 #: src/InfoBoxes/Content/Factory.cpp:710
 #, no-c-format
@@ -1601,7 +1606,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:719
 #, no-c-format
 msgid "RH Trend"
-msgstr ""
+msgstr "RH Tendens"
 
 #: src/InfoBoxes/Content/Factory.cpp:720
 #, no-c-format
@@ -1661,37 +1666,38 @@ msgstr "Alternatief 1 naam"
 #: src/InfoBoxes/Content/Factory.cpp:753
 #, no-c-format
 msgid "Altrn 1"
-msgstr ""
+msgstr "Altrn 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:754
 #, no-c-format
 msgid "Displays name and bearing to the best alternate landing location."
-msgstr ""
+msgstr "Geeft naam en koers naar de beste alternatieve landingsplaats weer."
 
 #: src/InfoBoxes/Content/Factory.cpp:762
 #, no-c-format
 msgid "Alternate 2 name"
-msgstr ""
+msgstr "Alternatief 2 naam"
 
 #: src/InfoBoxes/Content/Factory.cpp:763
 #, no-c-format
 msgid "Altrn 2"
-msgstr ""
+msgstr "Altrn 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:764
 #, no-c-format
 msgid "Displays name and bearing to the second alternate landing location."
 msgstr ""
+"Geeft naam en koers naar de tweede beste alternatieve landingsplaats weer."
 
 #: src/InfoBoxes/Content/Factory.cpp:772
 #, no-c-format
 msgid "Alternate 1 GR"
-msgstr ""
+msgstr "Alternatief 1 GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:773
 #, no-c-format
 msgid "Altrn1 GR"
-msgstr ""
+msgstr "Altrn1 GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:774
 #, no-c-format
@@ -1727,7 +1733,7 @@ msgstr "L/D gemiddeld"
 #: src/InfoBoxes/Content/Factory.cpp:793
 #, no-c-format
 msgid "L/D Avg"
-msgstr ""
+msgstr "L/D Avg"
 
 #: src/InfoBoxes/Content/Factory.cpp:794
 #, no-c-format
@@ -1742,6 +1748,15 @@ msgid ""
 "it's exactly the distance you have made even in a zigzag glide. This value "
 "is not calculated while circling. "
 msgstr ""
+"De behaalde afstand in de geconfigureerde tijdsduur, gedeeld door de "
+"sindsdien verloren hoogte. Negatieve waarden worden weergegeven als ^ ^ ^ en "
+"geven klimmen aan tijdens kruisen (hoogte winst). Na 200 LD wordt de waarde "
+"weergegeven als + + +. U kunt de tijdsduur van middeling instellen in het "
+"speciale config menu. Aanbevolen waarden voor deze configuratie zijn 60, 90 "
+"of 120: lagere waarden wordt uitgesloten voor LD INST, en hogere waarden "
+"wordt uitgesloten voor LD Cruise. Merk op dat de afstand niet de rechte lijn "
+"tussen uw oude en huidige positie is: het is precies de afstand die je hebt "
+"gemaakt, zelfs in een zig-zag vlucht. "
 
 #: src/InfoBoxes/Content/Factory.cpp:802
 #, no-c-format
@@ -1751,7 +1766,7 @@ msgstr "experimenteel1"
 #: src/InfoBoxes/Content/Factory.cpp:803
 #, no-c-format
 msgid "Exp1"
-msgstr ""
+msgstr "Exp1"
 
 #: src/InfoBoxes/Content/Factory.cpp:812
 #, no-c-format
@@ -1769,6 +1784,8 @@ msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
 "On-Line Contest rule set."
 msgstr ""
+"Momentele beoordeling van de gevlogen afstand volgens de geconfigureerde On-"
+"Line Contest regels."
 
 #: src/InfoBoxes/Content/Factory.cpp:822
 #, no-c-format
@@ -1778,7 +1795,7 @@ msgstr "experimenteel2"
 #: src/InfoBoxes/Content/Factory.cpp:823
 #, no-c-format
 msgid "Exp2"
-msgstr ""
+msgstr "Exp2"
 
 #: src/InfoBoxes/Content/Factory.cpp:832
 #, no-c-format
@@ -1793,22 +1810,22 @@ msgstr "CPU(processor)"
 #: src/InfoBoxes/Content/Factory.cpp:834
 #, no-c-format
 msgid "CPU load consumed by XCSoar averaged over 5 seconds."
-msgstr ""
+msgstr "CPU-belasting verbruikt door XCSoar gemiddeld over 5 seconden."
 
 #: src/InfoBoxes/Content/Factory.cpp:842
 #, no-c-format
 msgid "Next altitude arrival"
-msgstr ""
+msgstr "Volgende aankomsthoogte"
 
 #: src/InfoBoxes/Content/Factory.cpp:843
 #, no-c-format
 msgid "WP AltA"
-msgstr ""
+msgstr "WP AltA"
 
 #: src/InfoBoxes/Content/Factory.cpp:844
 #, no-c-format
 msgid "Absolute arrival altitude at the next waypoint in final glide."
-msgstr ""
+msgstr "Absolute aankomst hoogte bij de ​​volgende waypoint tijdens final-glide."
 
 #: src/InfoBoxes/Content/Factory.cpp:852 src/InfoBoxes/Content/Factory.cpp:853
 #, no-c-format
@@ -1818,7 +1835,7 @@ msgstr "RAM Beschikbaar"
 #: src/InfoBoxes/Content/Factory.cpp:854
 #, no-c-format
 msgid "Free RAM as reported by OS."
-msgstr ""
+msgstr "Vrije geheugen gemeld door besturingssysteem."
 
 #: src/InfoBoxes/Content/Factory.cpp:862
 #, no-c-format
@@ -1847,12 +1864,12 @@ msgstr "Barogram"
 #: src/InfoBoxes/Content/Factory.cpp:874
 #, no-c-format
 msgid "Trace of altitude during flight"
-msgstr ""
+msgstr "Spoor van de hoogte tijdens de vlucht"
 
 #: src/InfoBoxes/Content/Factory.cpp:882
 #, no-c-format
 msgid "Vario trace"
-msgstr ""
+msgstr "Vario spoor"
 
 #: src/InfoBoxes/Content/Factory.cpp:884
 #, no-c-format
@@ -1860,11 +1877,13 @@ msgid ""
 "Trace of vertical speed, as reported by the GPS, or the intelligent vario "
 "total energy vario value if connected to one."
 msgstr ""
+"Spoor van de verticale snelheid, gemeld door de GPS, of de intelligente "
+"vario's  totale energie-vario waarde indien aangesloten."
 
 #: src/InfoBoxes/Content/Factory.cpp:892
 #, no-c-format
 msgid "Netto vario trace"
-msgstr ""
+msgstr "Netto vario spoor"
 
 #: src/InfoBoxes/Content/Factory.cpp:894
 #, no-c-format
@@ -1872,16 +1891,18 @@ msgid ""
 "Trace of vertical speed of air-mass, equal to vario value less the glider's "
 "estimated sink rate."
 msgstr ""
+"Spoor van de verticale snelheid van de lucht-massa, die gelijk is aan de "
+"vario waarde verminderd met de geschatte daalsnelheid van het zweefvliegtuig."
 
 #: src/InfoBoxes/Content/Factory.cpp:902
 #, no-c-format
 msgid "Thermal circling trace"
-msgstr ""
+msgstr "Thermisch thermieken spoor"
 
 #: src/InfoBoxes/Content/Factory.cpp:903
 #, no-c-format
 msgid "TC Circling"
-msgstr ""
+msgstr "TC Thermieken"
 
 #: src/InfoBoxes/Content/Factory.cpp:904
 #, no-c-format
@@ -1889,6 +1910,8 @@ msgid ""
 "Trace of average climb rate each turn in circling, based of the reported GPS "
 "altitude, or vario if available."
 msgstr ""
+"Spoor van de gemiddelde stijgsnelheid elke cirkel tijdens thermieken, op "
+"basis van de gerapporteerde GPS hoogte, of vario indien beschikbaar."
 
 #: src/InfoBoxes/Content/Factory.cpp:912 src/InfoBoxes/Content/Factory.cpp:913
 #, no-c-format
@@ -1901,6 +1924,8 @@ msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
 "height (vertical axis)."
 msgstr ""
+"Grafiek gemiddelde stijgsnelheid tijdens thermieken (horizontale as) als "
+"functie van de hoogte (verticale as)."
 
 #: src/InfoBoxes/Content/Factory.cpp:922
 #, no-c-format
@@ -1918,11 +1943,13 @@ msgid ""
 "Clock-like display of distance remaining along task, showing achieved "
 "taskpoints."
 msgstr ""
+"Klok-achtige weergave van de resterende afstand tijdens de taak, en behaalde "
+"score."
 
 #: src/InfoBoxes/Content/Factory.cpp:932
 #, no-c-format
 msgid "Time under max. start height"
-msgstr ""
+msgstr "Tijd onder max. starthoogte"
 
 #: src/InfoBoxes/Content/Factory.cpp:933
 #, no-c-format
@@ -1934,16 +1961,18 @@ msgstr "Starthoogte"
 msgid ""
 "The contiguous period the ship has been below the task start max. height."
 msgstr ""
+"De aaneengesloten periode dat het schip lager is dan de opdracht  max. "
+"starthoogte."
 
 #: src/InfoBoxes/Content/Factory.cpp:942
 #, no-c-format
 msgid "Task time to go (ground speed)"
-msgstr ""
+msgstr "Rest opdracht tijd (grondsnelheid)"
 
 #: src/InfoBoxes/Content/Factory.cpp:943
 #, no-c-format
 msgid "Fin ETE VMG"
-msgstr ""
+msgstr "Fin ETE VMG"
 
 #: src/InfoBoxes/Content/Factory.cpp:944
 #, no-c-format
@@ -1951,6 +1980,8 @@ msgid ""
 "Estimated time required to complete task, assuming current ground speed is "
 "maintained."
 msgstr ""
+"Geschatte tijd die nodig is om taak uit te voeren, indien de huidige "
+"grondsnelheid wordt gehandhaafd."
 
 #: src/InfoBoxes/Content/Factory.cpp:952
 #, no-c-format
@@ -1972,7 +2003,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:961
 #, no-c-format
 msgid "Attitude indicator"
-msgstr ""
+msgstr "Hoogtemeter"
 
 #: src/InfoBoxes/Content/Factory.cpp:962
 #, no-c-format
@@ -1989,7 +2020,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:970
 #, no-c-format
 msgid "Nearest airspace horizontal"
-msgstr ""
+msgstr "Dichtstbijzijnde horizontale luchtruim"
 
 #: src/InfoBoxes/Content/Factory.cpp:971
 #, no-c-format
@@ -1999,12 +2030,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:972
 #, no-c-format
 msgid "The horizontal distance to the nearest airspace"
-msgstr ""
+msgstr "De horizontale afstand tot dichtsbijzijnde luchtruim"
 
 #: src/InfoBoxes/Content/Factory.cpp:979
 #, no-c-format
 msgid "Nearest airspace vertical"
-msgstr ""
+msgstr "Dichtsbijzijnde verticale luchtruim"
 
 #: src/InfoBoxes/Content/Factory.cpp:980
 #, no-c-format
@@ -8389,13 +8420,15 @@ msgstr ""
 
 #: Data/Input/default.xci:59
 msgid "Landing"
-msgstr ""
+msgstr "Landing"
 
 #: Data/Input/default.xci:735 Data/Input/default.xci:1159
 msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+"METAR\n"
+"TAF"
 
 #~ msgid "Thermal last 30 sec"
 #~ msgstr "stijgen laatste 30 sec"
