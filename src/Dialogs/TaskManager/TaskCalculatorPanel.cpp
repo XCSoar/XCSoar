@@ -80,7 +80,8 @@ TaskCalculatorPanel::Refresh()
 
   LoadFormProperty(form, _T("prpMacCready"), UnitGroup::VERTICAL_SPEED,
                    CommonInterface::GetComputerSettings().glide_polar_task.GetMC());
-  LoadFormProperty(form, _T("prpEffectiveMacCready"), emc);
+  LoadFormProperty(form, _T("prpEffectiveMacCready"), UnitGroup::VERTICAL_SPEED,
+                   emc);
 
   if (positive(rPlanned)) {
     fixed rMax = task_stats.distance_max;
