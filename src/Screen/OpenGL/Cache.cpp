@@ -45,7 +45,6 @@ Copyright_License {
  */
 struct TextCacheKey {
   const Font *font;
-  UPixelScalar height;
   const char *text;
   char *allocated;
   size_t hash;
@@ -55,7 +54,7 @@ struct TextCacheKey {
 #else
   /* workaround for gcc version in the Android NDK */
   TextCacheKey(const TextCacheKey &other)
-    :font(other.font), height(other.height),
+    :font(other.font),
      text(other.text), allocated(NULL),
      hash(other.hash) {
     if (other.allocated != NULL)
@@ -64,14 +63,14 @@ struct TextCacheKey {
 #endif
 
   TextCacheKey(TextCacheKey &&other)
-    :font(other.font), height(other.height),
+    :font(other.font),
      text(other.text), allocated(other.allocated),
      hash(other.hash) {
     other.allocated = NULL;
   }
 
   TextCacheKey(const Font &_font, const char *_text)
-    :font(&_font), height(_font.GetHeight()), text(_text), allocated(NULL) {}
+    :font(&_font), text(_text), allocated(NULL) {}
 
   ~TextCacheKey() {
     free(allocated);
@@ -91,7 +90,6 @@ struct TextCacheKey {
 
   TextCacheKey &operator=(TextCacheKey &&other) {
     font = other.font;
-    height = other.height;
     text = other.text;
     std::swap(allocated, other.allocated);
     hash = other.hash;
@@ -100,7 +98,7 @@ struct TextCacheKey {
 
   gcc_pure
   bool operator==(const TextCacheKey &other) const {
-    return font == other.font && height == other.height &&
+    return font == other.font &&
       StringIsEqual(text, other.text);
   }
 
@@ -120,7 +118,7 @@ struct TextCacheKey {
 
     gcc_pure
     size_t operator()(const TextCacheKey &key) const {
-      return (size_t)(const void *)key.font ^ key.height
+      return (size_t)(const void *)key.font
         ^ string_hash(key.text);
     }
   };
