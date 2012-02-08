@@ -24,6 +24,7 @@ Copyright_License {
 #include "UnitsConfigPanel.hpp"
 #include "UIGlobals.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/Listener.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Units/Units.hpp"
@@ -50,20 +51,23 @@ enum ControlIndex {
   UnitsLatLon
 };
 
-class UnitsConfigPanel : public RowFormWidget {
+class UnitsConfigPanel
+  : public RowFormWidget, DataFieldListener {
 public:
   UnitsConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
+  void UpdateUnitFields(const UnitSetting &units);
+  void PresetCheck();
+
+  /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  void UpdateUnitFields(const UnitSetting &units);
-  void PresetCheck(DataField::DataAccessKind_t mode);
-};
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static UnitsConfigPanel *instance;
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
+};
 
 void
 UnitsConfigPanel::UpdateUnitFields(const UnitSetting &units)
@@ -79,47 +83,34 @@ UnitsConfigPanel::UpdateUnitFields(const UnitSetting &units)
   // Ignore the coord.format for the preset selection.
 }
 
-static void
-OnUnitsPreset(DataField *Sender, DataField::DataAccessKind_t Mode)
+void
+UnitsConfigPanel::PresetCheck()
 {
-  int result = instance->GetValueInteger(UnitsPreset);
-  if (result > 0) {
-    // First selection means not to load any preset.
-    const UnitSetting& units = Units::Store::Read(result-1);
-    instance->UpdateUnitFields(units);
-  }
+  UnitSetting current_dlg_set;
+  current_dlg_set.speed_unit = (Unit)GetValueInteger((unsigned)UnitsSpeed);
+  current_dlg_set.wind_speed_unit = current_dlg_set.speed_unit;
+  current_dlg_set.distance_unit = (Unit)GetValueInteger((unsigned)UnitsDistance);
+  current_dlg_set.vertical_speed_unit = (Unit)GetValueInteger((unsigned)UnitsLift);
+  current_dlg_set.altitude_unit = (Unit)GetValueInteger((unsigned)UnitsAltitude);
+  current_dlg_set.temperature_unit = (Unit)GetValueInteger((unsigned)UnitsTemperature);
+  current_dlg_set.task_speed_unit = (Unit)GetValueInteger((unsigned)UnitsTaskSpeed);
+  current_dlg_set.pressure_unit = (Unit)GetValueInteger((unsigned)UnitsPressure);
+
+  LoadValueEnum(UnitsPreset, Units::Store::EqualsPresetUnits(current_dlg_set));
 }
 
 void
-UnitsConfigPanel::PresetCheck(DataField::DataAccessKind_t mode)
+UnitsConfigPanel::OnModified(DataField &df)
 {
-  switch (mode) {
-  case DataField::daChange:
-  {
-    UnitSetting current_dlg_set;
-
-    current_dlg_set.speed_unit = (Unit)GetValueInteger((unsigned)UnitsSpeed);
-    current_dlg_set.wind_speed_unit = current_dlg_set.speed_unit;
-    current_dlg_set.distance_unit = (Unit)GetValueInteger((unsigned)UnitsDistance);
-    current_dlg_set.vertical_speed_unit = (Unit)GetValueInteger((unsigned)UnitsLift);
-    current_dlg_set.altitude_unit = (Unit)GetValueInteger((unsigned)UnitsAltitude);
-    current_dlg_set.temperature_unit = (Unit)GetValueInteger((unsigned)UnitsTemperature);
-    current_dlg_set.task_speed_unit = (Unit)GetValueInteger((unsigned)UnitsTaskSpeed);
-    current_dlg_set.pressure_unit = (Unit)GetValueInteger((unsigned)UnitsPressure);
-
-    LoadValueEnum(UnitsPreset, Units::Store::EqualsPresetUnits(current_dlg_set));
-    break;
-  }
-
-  case DataField::daSpecial:
-    return;
-  }
-}
-
-static void
-OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  instance->PresetCheck(Mode);
+  if (IsDataField(UnitsPreset, df)) {
+    int result = df.GetAsInteger();
+    if (result > 0) {
+      // First selection means not to load any preset.
+      const UnitSetting &units = Units::Store::Read(result - 1);
+      UpdateUnitFields(units);
+    }
+  } else
+    PresetCheck();
 }
 
 void
@@ -130,7 +121,6 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
       CommonInterface::GetUISettings().coordinate_format;
 
   RowFormWidget::Prepare(parent, rc);
-  instance = this;
 
   static const TCHAR * preset_help = N_("Load a set of units.");
   WndProperty *wp = AddEnum(_("Preset"), NULL);
@@ -143,7 +133,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     df.addEnumText(Units::Store::GetName(i), i+1, preset_help);
 
   LoadValueEnum(UnitsPreset, Units::Store::EqualsPresetUnits(config));
-  wp->GetDataField()->SetDataAccessCallback(OnUnitsPreset);
+  wp->GetDataField()->SetListener(this);
 
   AddSpacer();
 
@@ -156,7 +146,8 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)Unit::KILOMETER_PER_HOUR,     _T("km/h"), units_speed_help },
     { 0 }
   };
-  AddEnum(_("Aircraft/Wind speed"), NULL, units_speed_list, (unsigned int)config.speed_unit, OnFieldData);
+  AddEnum(_("Aircraft/Wind speed"), NULL, units_speed_list,
+          (unsigned int)config.speed_unit, this);
 
   static const TCHAR *units_distance_help = _("Units used for horizontal distances e.g. "
       "range to waypoint, distance to go.");
@@ -167,7 +158,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
   AddEnum(_("Distance"), NULL, units_distance_list,
-          (unsigned)config.distance_unit, OnFieldData);
+          (unsigned)config.distance_unit, this);
 
   static const TCHAR *units_lift_help = _("Units used for vertical speeds (variometer).");
   static const StaticEnumChoice  units_lift_list[] = {
@@ -177,7 +168,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
   AddEnum(_("Lift"), NULL, units_lift_list,
-          (unsigned)config.vertical_speed_unit, OnFieldData);
+          (unsigned)config.vertical_speed_unit, this);
 
   static const TCHAR *units_altitude_help = _("Units used for altitude and heights.");
   static const StaticEnumChoice  units_altitude_list[] = {
@@ -186,7 +177,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
   AddEnum(_("Altitude"), NULL, units_altitude_list,
-          (unsigned)config.altitude_unit, OnFieldData);
+          (unsigned)config.altitude_unit, this);
 
   static const TCHAR *units_temperature_help = _("Units used for temperature.");
   static const StaticEnumChoice  units_temperature_list[] = {
@@ -195,7 +186,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
   AddEnum(_("Temperature"), NULL, units_temperature_list,
-          (unsigned)config.temperature_unit, OnFieldData);
+          (unsigned)config.temperature_unit, this);
 
   static const TCHAR *units_taskspeed_help = _("Units used for task speeds.");
   static const StaticEnumChoice  units_taskspeed_list[] = {
@@ -205,7 +196,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
   AddEnum(_("Task speed"), NULL, units_taskspeed_list,
-          (unsigned)config.task_speed_unit, OnFieldData);
+          (unsigned)config.task_speed_unit, this);
 
   static const TCHAR *units_pressure_help = _("Units used for pressures.");
   static const StaticEnumChoice pressure_labels_list[] = {
@@ -215,7 +206,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
   AddEnum(_("Pressure"), NULL, pressure_labels_list,
-          (unsigned)config.pressure_unit, OnFieldData);
+          (unsigned)config.pressure_unit, this);
 
   AddSpacer();
 

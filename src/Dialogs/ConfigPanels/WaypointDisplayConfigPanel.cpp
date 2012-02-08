@@ -24,6 +24,7 @@ Copyright_License {
 #include "WaypointDisplayConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/Listener.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
@@ -42,20 +43,23 @@ enum ControlIndex {
   AppScaleRunwayLength
 };
 
-class WaypointDisplayConfigPanel : public RowFormWidget {
+class WaypointDisplayConfigPanel
+  : public RowFormWidget, DataFieldListener {
 public:
   WaypointDisplayConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
+  void UpdateVisibilities();
+
+  /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  void UpdateVisibilities();
-};
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static WaypointDisplayConfigPanel *instance;
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
+};
 
 void
 WaypointDisplayConfigPanel::UpdateVisibilities()
@@ -65,27 +69,18 @@ WaypointDisplayConfigPanel::UpdateVisibilities()
   SetRowVisible(AppScaleRunwayLength, visible);
 }
 
-static void
-OnRenderingTypeData(gcc_unused DataField *Sender,
-                    DataField::DataAccessKind_t Mode)
+void
+WaypointDisplayConfigPanel::OnModified(DataField &df)
 {
-  switch (Mode) {
-  case DataField::daChange: {
-    instance->UpdateVisibilities();
-    break;
-  }
-  case DataField::daSpecial:
-    return;
-  }
+  if (IsDataField(AppUseSWLandablesRendering, df))
+    UpdateVisibilities();
 }
-
 
 void
 WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const WaypointRendererSettings &settings = CommonInterface::GetMapSettings().waypoint;
 
-  instance = this;
   RowFormWidget::Prepare(parent, rc);
 
   static gcc_constexpr_data StaticEnumChoice wp_labels_list[] = {
@@ -185,7 +180,7 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
   AddBoolean(_("Detailed landables"),
              _("[Off] Display fixed icons for landables.\n"
                  "[On] Show landables with variable information like runway length and heading."),
-             settings.vector_landable_rendering, OnRenderingTypeData);
+             settings.vector_landable_rendering, this);
   SetExpertRow(AppUseSWLandablesRendering);
 
   AddInteger(_("Landable size"),

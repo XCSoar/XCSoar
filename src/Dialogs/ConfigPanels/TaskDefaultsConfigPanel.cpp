@@ -24,6 +24,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Language/Language.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/Listener.hpp"
 #include "Interface.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
@@ -48,36 +49,37 @@ enum ControlIndex {
   AATTimeMargin
 };
 
-class TaskDefaultsConfigPanel : public RowFormWidget {
+class TaskDefaultsConfigPanel
+  : public RowFormWidget, DataFieldListener {
 public:
   TaskDefaultsConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
   void SetStartLabel();
   void SetFinishLabel();
+
+  /* methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
 };
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static TaskDefaultsConfigPanel *instance;
-
-static void
-OnStartType(DataField *Sender, DataField::DataAccessKind_t Mode)
+void
+TaskDefaultsConfigPanel::OnModified(DataField &df)
 {
-  instance->SetStartLabel();
-}
-
-static void
-OnFinishType(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  instance->SetFinishLabel();
+  if (IsDataField(StartType, df))
+    SetStartLabel();
+  else if (IsDataField(FinishType, df))
+    SetFinishLabel();
 }
 
 static const TCHAR *Caption_GateWidth = N_("Gate width");
 static const TCHAR *Caption_Radius = N_("Radius");
+
 void
 TaskDefaultsConfigPanel::SetStartLabel()
 {
@@ -110,10 +112,11 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   OrderedTask* temptask = protected_task_manager->TaskBlank();
   temptask->SetFactory(TaskFactoryType::RACING);
 
-  instance = this;
   RowFormWidget::Prepare(parent, rc);
 
-  wp = AddEnum(_("Start point"), _("Default start type for new tasks you create."), OnStartType);
+  wp = AddEnum(_("Start point"),
+               _("Default start type for new tasks you create."),
+               this);
   if (wp) {
     const auto point_types = temptask->GetFactory().GetValidStartTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
@@ -136,7 +139,9 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddSpacer();
 
-  wp = AddEnum(_("Finish point"), _("Default finish type for new tasks you create."), OnFinishType);
+  wp = AddEnum(_("Finish point"),
+               _("Default finish type for new tasks you create."),
+               this);
   if (wp) {
     const auto point_types = temptask->GetFactory().GetValidFinishTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();

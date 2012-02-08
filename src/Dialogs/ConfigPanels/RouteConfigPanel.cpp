@@ -24,6 +24,7 @@ Copyright_License {
 #include "RouteConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/Listener.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
@@ -41,21 +42,24 @@ enum ControlIndex {
   ReachPolarMode
 };
 
-class RouteConfigPanel : public RowFormWidget {
+class RouteConfigPanel
+  : public RowFormWidget, DataFieldListener {
 public:
   RouteConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
   void ShowRouteControls(bool show);
   void ShowReachControls(bool show);
-};
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static RouteConfigPanel *instance;
+  /* methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
+};
 
 void
 RouteConfigPanel::ShowRouteControls(bool show)
@@ -71,23 +75,18 @@ RouteConfigPanel::ShowReachControls(bool show)
   SetRowVisible(ReachPolarMode, show);
 }
 
-static void
-OnRouteMode(DataField *Sender,
-            DataField::DataAccessKind_t Mode)
+void
+RouteConfigPanel::OnModified(DataField &df)
 {
-  const DataFieldEnum &df = *(const DataFieldEnum *)Sender;
-  RoutePlannerConfig::Mode mode = (RoutePlannerConfig::Mode)df.GetAsInteger();
-  instance->ShowRouteControls(mode != RoutePlannerConfig::Mode::NONE);
-}
-
-static void
-OnReachMode(DataField *Sender,
-            DataField::DataAccessKind_t Mode)
-{
-  const DataFieldEnum &df = *(const DataFieldEnum *)Sender;
-  RoutePlannerConfig::ReachMode mode =
-    (RoutePlannerConfig::ReachMode)df.GetAsInteger();
-  instance->ShowReachControls(mode != RoutePlannerConfig::ReachMode::OFF);
+  if (IsDataField(RoutePlannerMode, df)) {
+    RoutePlannerConfig::Mode mode =
+      (RoutePlannerConfig::Mode)df.GetAsInteger();
+    ShowRouteControls(mode != RoutePlannerConfig::Mode::NONE);
+  } else if (IsDataField(TurningReach, df)) {
+    RoutePlannerConfig::ReachMode mode =
+      (RoutePlannerConfig::ReachMode)df.GetAsInteger();
+    ShowReachControls(mode != RoutePlannerConfig::ReachMode::OFF);
+  }
 }
 
 void
@@ -96,7 +95,6 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
   const RoutePlannerConfig &route_planner = settings_computer.task.route_planner;
 
-  instance = this;
   RowFormWidget::Prepare(parent, rc);
 
   static gcc_constexpr_data StaticEnumChoice route_mode_list[] = {
@@ -112,7 +110,7 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
 
   AddEnum(_("Route mode"), NULL, route_mode_list,
-          (unsigned)route_planner.mode, OnRouteMode);
+          (unsigned)route_planner.mode, this);
 
   AddBoolean(_("Route climb"),
              _("When enabled and MC is positive, route planning allows climbs between the aircraft "
@@ -142,8 +140,7 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Reach mode"),
           _("How calculations are performed of the reach of the glider with respect to terrain."),
           turning_reach_list, (unsigned)route_planner.reach_calc_mode,
-          OnReachMode);
-
+          this);
 
   static gcc_constexpr_data StaticEnumChoice final_glide_terrain_list[] = {
     { FeaturesSettings::FGT_OFF, N_("Off"), N_("Disables the reach display.") },

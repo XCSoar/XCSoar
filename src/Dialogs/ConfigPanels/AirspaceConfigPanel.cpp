@@ -25,6 +25,7 @@ Copyright_License {
 #include "ConfigPanel.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
+#include "DataField/Listener.hpp"
 #include "Form/Button.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Dialogs/Airspace.hpp"
@@ -69,7 +70,8 @@ static const StaticEnumChoice  as_fill_mode_list[] = {
   { 0 }
 };
 
-class AirspaceConfigPanel : public RowFormWidget {
+class AirspaceConfigPanel
+  : public RowFormWidget, DataFieldListener {
 private:
   WndButton *buttonColors, *buttonMode;
 
@@ -77,19 +79,20 @@ public:
   AirspaceConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
+  void ShowDisplayControls(AirspaceDisplayMode_t mode);
+  void ShowWarningControls(bool visible);
+  void SetButtonsVisible(bool active);
+
+  /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
   virtual void Show(const PixelRect &rc);
   virtual void Hide();
-  void ShowDisplayControls(AirspaceDisplayMode_t mode);
-  void ShowWarningControls(bool visible);
-  void SetButtonsVisible(bool active);
+
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
 };
-
-
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static AirspaceConfigPanel *instance;
 
 static void
 OnAirspaceColoursClicked(gcc_unused WndButton &button)
@@ -151,21 +154,16 @@ AirspaceConfigPanel::Hide()
   SetButtonsVisible(false);
 }
 
-static void
-OnAirspaceDisplay(DataField *Sender,
-                  DataField::DataAccessKind_t Mode)
+void
+AirspaceConfigPanel::OnModified(DataField &df)
 {
-  const DataFieldEnum &df = *(const DataFieldEnum *)Sender;
-  AirspaceDisplayMode_t mode = (AirspaceDisplayMode_t)df.GetAsInteger();
-  instance->ShowDisplayControls(mode);
-}
-
-static void
-OnAirspaceWarning(DataField *Sender,
-                  DataField::DataAccessKind_t Mode)
-{
-  const DataFieldBoolean &df = *(const DataFieldBoolean *)Sender;
-  instance->ShowWarningControls(df.GetAsBoolean());
+  if (IsDataField(AirspaceDisplay, df)) {
+    AirspaceDisplayMode_t mode = (AirspaceDisplayMode_t)df.GetAsInteger();
+    ShowDisplayControls(mode);
+  } else if (IsDataField(AirspaceWarnings, df)) {
+    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
+    ShowWarningControls(dfb.GetAsBoolean());
+  }
 }
 
 void
@@ -176,13 +174,11 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const AirspaceRendererSettings &renderer =
     CommonInterface::GetMapSettings().airspace;
 
-  instance = this;
-
   RowFormWidget::Prepare(parent, rc);
 
   AddEnum(_("Airspace display"),
           _("Controls filtering of airspace for display and warnings.  The airspace filter button also allows filtering of display and warnings independently for each airspace class."),
-          as_display_list ,renderer.altitude_mode, OnAirspaceDisplay);
+          as_display_list ,renderer.altitude_mode, this);
 
   AddFloat(_("Clip altitude"),
            _("For clip airspace mode, this is the altitude below which airspace is displayed."),
@@ -192,7 +188,8 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            _("For auto and all below airspace mode, this is the altitude above/below which airspace is included."),
            _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(100), false, UnitGroup::ALTITUDE, fixed(computer.warnings.AltWarningMargin));
 
-  AddBoolean(_("Warnings"), _("Enable/disable all airspace warnings."), computer.enable_warnings, OnAirspaceWarning);
+  AddBoolean(_("Warnings"), _("Enable/disable all airspace warnings."),
+             computer.enable_warnings, this);
 
   AddTime(_("Warning time"),
           _("This is the time before an airspace incursion is estimated at which the system will warn the pilot."),

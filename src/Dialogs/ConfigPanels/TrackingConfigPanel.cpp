@@ -25,6 +25,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Form/Edit.hpp"
 #include "DataField/Boolean.hpp"
+#include "DataField/Listener.hpp"
 #include "Language/Language.hpp"
 #include "Tracking/TrackingSettings.hpp"
 #include "DataField/Base.hpp"
@@ -41,20 +42,23 @@ enum ControlIndex {
   LT24Password
 };
 
-class TrackingConfigPanel : public RowFormWidget {
+class TrackingConfigPanel
+  : public RowFormWidget, DataFieldListener {
 public:
   TrackingConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
+  void SetEnabled(bool enabled);
+
+  /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  void SetEnabled(bool enabled);
-};
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static TrackingConfigPanel *instance;
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
+};
 
 void
 TrackingConfigPanel::SetEnabled(bool enabled)
@@ -63,11 +67,13 @@ TrackingConfigPanel::SetEnabled(bool enabled)
   GetControl(LT24Password).set_enabled(enabled);
 }
 
-static void
-OnLT24Enabled(DataField * Sender, DataField::DataAccessKind_t Mode)
+void
+TrackingConfigPanel::OnModified(DataField &df)
 {
-  const DataFieldBoolean &df = *(const DataFieldBoolean *)Sender;
-  instance->SetEnabled(df.GetAsBoolean());
+  if (IsDataField(LT24Enabled, df)) {
+    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
+    SetEnabled(dfb.GetAsBoolean());
+  }
 }
 
 void
@@ -77,14 +83,12 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     CommonInterface::GetComputerSettings().tracking;
 
   RowFormWidget::Prepare(parent, rc);
-  instance = this;
-
 
   AddTime(_("Tracking Interval"), _T(""), 5, 3600, 5, settings.interval);
 
   AddSpacer();
 
-  AddBoolean(_T("LiveTrack24"),  _T(""), settings.livetrack24.enabled, ::OnLT24Enabled);
+  AddBoolean(_T("LiveTrack24"),  _T(""), settings.livetrack24.enabled, this);
 
   AddText(_("Username"), _T(""), settings.livetrack24.username, settings.livetrack24.enabled);
   AddText(_("Password"), _T(""), settings.livetrack24.password, settings.livetrack24.enabled);

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "TimeConfigPanel.hpp"
 #include "DataField/Float.hpp"
+#include "DataField/Listener.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Formatter/TimeFormatter.hpp"
@@ -40,7 +41,8 @@ enum ControlIndex {
   SystemTimeFromGPS
 };
 
-class TimeConfigPanel : public RowFormWidget {
+class TimeConfigPanel
+  : public RowFormWidget, DataFieldListener {
 public:
   TimeConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -49,14 +51,16 @@ private:
   bool loading;
 
 public:
+  void SetLocalTime(int utc_offset);
+
+  /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  void SetLocalTime(int utc_offset);
-};
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static TimeConfigPanel *instance;
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
+};
 
 void
 TimeConfigPanel::SetLocalTime(int utc_offset)
@@ -71,28 +75,19 @@ TimeConfigPanel::SetLocalTime(int utc_offset)
   wp.RefreshDisplay();
 }
 
-static void
-OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
+void
+TimeConfigPanel::OnModified(DataField &df)
 {
-  switch(Mode) {
-  case DataField::daChange:
-  {
-    DataFieldFloat &df = *(DataFieldFloat *)Sender;
-    int ival = iround(df.GetAsFixed() * 3600);
-    instance->SetLocalTime(ival);
-    break;
-  }
-  case DataField::daSpecial:
-    return;
+  if (IsDataField(UTCOffset, df)) {
+    DataFieldFloat &df2 = (DataFieldFloat &)df;
+    int ival = iround(df2.GetAsFixed() * 3600);
+    SetLocalTime(ival);
   }
 }
-
 
 void
 TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  instance = this;
-
   RowFormWidget::Prepare(parent, rc);
 
   const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
@@ -102,7 +97,7 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("The UTC offset field allows the UTC local time offset to be specified.  The local "
             "time is displayed below in order to make it easier to verify the correct offset "
             "has been entered."),
-           -13 * 60 * 60, 13  * 60 * 60, 30 * 60, utc_offset, 2, OnUTCData);
+           -13 * 60 * 60, 13  * 60 * 60, 30 * 60, utc_offset, 2, this);
 #ifdef WIN32
   if (IsEmbedded() && !IsAltair())
     GetControl(UTCOffset).set_enabled(false);

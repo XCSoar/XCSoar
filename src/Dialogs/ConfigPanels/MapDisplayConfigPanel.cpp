@@ -25,6 +25,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/Listener.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Form/RowFormWidget.hpp"
@@ -58,20 +59,22 @@ static const StaticEnumChoice shift_bias_list[] = {
   { 0 }
 };
 
-class MapDisplayConfigPanel : public RowFormWidget {
-
+class MapDisplayConfigPanel
+  : public RowFormWidget, DataFieldListener {
 public:
   MapDisplayConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
+  void UpdateVisibilities();
+
+  /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  void UpdateVisibilities();
-};
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static MapDisplayConfigPanel *instance;
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
+};
 
 void
 MapDisplayConfigPanel::UpdateVisibilities()
@@ -79,24 +82,19 @@ MapDisplayConfigPanel::UpdateVisibilities()
   SetRowVisible(MapShiftBias, GetValueInteger(OrientationCruise) == NORTHUP);
 }
 
-static void
-OnShiftTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
+void
+MapDisplayConfigPanel::OnModified(DataField &df)
 {
-  switch (Mode) {
-  case DataField::daChange: {
-    instance->UpdateVisibilities();
-    break;
-  }
-  case DataField::daSpecial:
-    return;
+  if (IsDataField(OrientationCruise, df) ||
+      IsDataField(OrientationCircling, df) ||
+      IsDataField(MapShiftBias, df)) {
+    UpdateVisibilities();
   }
 }
 
 void
 MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  instance = this;
-
   RowFormWidget::Prepare(parent, rc);
 
   const MapSettings &settings_map = CommonInterface::GetMapSettings();
@@ -105,13 +103,13 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("Determines how the screen is rotated with the glider"),
           orientation_list,
           settings_map.cruise_orientation,
-          OnShiftTypeData);
+          this);
 
   AddEnum(_("Circling orientation"),
           _("Determines how the screen is rotated with the glider while circling"),
           orientation_list,
           settings_map.circling_orientation,
-          OnShiftTypeData);
+          this);
 
   AddBoolean(_("Circling zoom"),
              _("If enabled, then the map will zoom in automatically when entering circling mode and zoom out automatically when leaving circling mode."),
@@ -121,7 +119,7 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("Determines what is used to shift the glider from the map center"),
           shift_bias_list,
           settings_map.map_shift_bias,
-          OnShiftTypeData);
+          this);
   SetExpertRow(MapShiftBias);
 
   AddInteger(_("Glider position offset"),

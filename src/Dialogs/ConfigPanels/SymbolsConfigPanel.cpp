@@ -25,6 +25,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Base.hpp"
+#include "DataField/Listener.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
@@ -44,20 +45,23 @@ enum ControlIndex {
   WindArrowStyle
 };
 
-class SymbolsConfigPanel : public RowFormWidget {
+class SymbolsConfigPanel
+  : public RowFormWidget, DataFieldListener {
 public:
   SymbolsConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
+  void ShowTrailControls(bool show);
+
+  /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
-  void ShowTrailControls(bool show);
-};
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static SymbolsConfigPanel *instance;
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
+};
 
 void
 SymbolsConfigPanel::ShowTrailControls(bool show)
@@ -67,13 +71,13 @@ SymbolsConfigPanel::ShowTrailControls(bool show)
   SetRowVisible(SnailWidthScale, show);
 }
 
-static void
-OnTrailLength(DataField *Sender,
-              DataField::DataAccessKind_t Mode)
+void
+SymbolsConfigPanel::OnModified(DataField &df)
 {
-  const DataFieldEnum &df = *(const DataFieldEnum *)Sender;
-  TrailLength trail_length = (TrailLength)df.GetAsInteger();
-  instance->ShowTrailControls(trail_length != TRAIL_OFF);
+  if (IsDataField(Trail, df)) {
+    TrailLength trail_length = (TrailLength)df.GetAsInteger();
+    ShowTrailControls(trail_length != TRAIL_OFF);
+  }
 }
 
 static const StaticEnumChoice  track_bearing_mode_list[] = {
@@ -121,8 +125,6 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const MapSettings &settings_map = CommonInterface::GetMapSettings();
 
-  instance = this;
-
   AddEnum(_("Track bearing"),
           _("Display the track bearing (ground track projection) on the map."),
           track_bearing_mode_list, settings_map.display_track_bearing);
@@ -130,7 +132,8 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("FLARM traffic"), _("This enables the display of FLARM traffic on the map window."),
              settings_map.show_flarm_on_map);
 
-  AddEnum(_("Trail length"), NULL, trail_length_list, settings_map.trail_length, OnTrailLength);
+  AddEnum(_("Trail length"), NULL, trail_length_list,
+          settings_map.trail_length, this);
   SetExpertRow(Trail);
 
   AddBoolean(_("Trail drift"),
