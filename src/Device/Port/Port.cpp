@@ -165,8 +165,10 @@ Port::WaitForChar(const char token, OperationEnvironment &env,
   PeriodClock timeout;
   timeout.Update();
 
+  unsigned remaining = timeout_ms;
+
   while (true) {
-    WaitResult wait_result = WaitRead(env, timeout_ms - timeout.Elapsed());
+    WaitResult wait_result = WaitRead(env, remaining);
     if (wait_result != WaitResult::READY)
       // Operation canceled, Timeout expired or I/O error occurred
       return wait_result;
@@ -175,6 +177,12 @@ Port::WaitForChar(const char token, OperationEnvironment &env,
     int ch = GetChar();
     if (ch == token)
       break;
+
+    unsigned elapsed = timeout.Elapsed();
+    if (elapsed >= timeout_ms)
+      return WaitResult::TIMEOUT;
+
+    remaining = timeout_ms - elapsed;
   }
 
   return WaitResult::READY;
