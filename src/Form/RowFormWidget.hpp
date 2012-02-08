@@ -406,6 +406,7 @@ public:
   }
 
   void LoadValue(unsigned i, int value);
+  void LoadValue(unsigned i, bool value);
   void LoadValueEnum(unsigned i, int value);
 
   template<typename T>

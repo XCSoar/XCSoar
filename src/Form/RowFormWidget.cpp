@@ -451,6 +451,16 @@ RowFormWidget::LoadValue(unsigned i, int value)
 }
 
 void
+RowFormWidget::LoadValue(unsigned i, bool value)
+{
+  WndProperty &control = GetControl(i);
+  DataFieldBoolean &df = *(DataFieldBoolean *)control.GetDataField();
+  assert(df.GetType() == DataField::Type::BOOLEAN);
+  df.Set(value);
+  control.RefreshDisplay();
+}
+
+void
 RowFormWidget::LoadValueEnum(unsigned i, int value)
 {
   WndProperty &control = GetControl(i);
