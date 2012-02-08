@@ -201,6 +201,18 @@ public:
   WaitResult WaitRead(OperationEnvironment &env, unsigned timeout_ms);
 
   bool ExpectString(const char *token, unsigned timeout_ms = 2000);
+
+  /**
+   * Wait until the expected character is received, the timeout expires
+   * or the operation gets canceled.
+   *
+   * @param token The expected character
+   * @param env An OperationEnvironment that allows canceling the
+   * operation
+   * @param timeout_ms give up after this number of milliseconds
+   */
+  WaitResult WaitForChar(const char token, OperationEnvironment &env,
+                         unsigned timeout_ms);
 };
 
 #endif
