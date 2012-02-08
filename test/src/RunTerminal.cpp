@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/TerminalWindow.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Timer.hpp"
 #include "Look/TerminalLook.hpp"
 
 #include <stdlib.h>

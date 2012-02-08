@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/SingleWindow.hpp"
+#include "Form/Form.hpp"
 
 void
 SingleWindow::AddDialog(WndForm *dialog)

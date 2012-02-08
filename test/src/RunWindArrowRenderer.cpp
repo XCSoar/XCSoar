@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Timer.hpp"
 #include "Fonts.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/WindArrowLook.hpp"

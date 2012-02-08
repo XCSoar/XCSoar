@@ -32,6 +32,7 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Interface.hpp"
 #include "Screen/SingleWindow.hpp"
+#include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Form/List.hpp"
 #include "Form/Draw.hpp"

@@ -35,6 +35,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
 #include "Form/List.hpp"
 #include "Form/Button.hpp"
 #include "Screen/Layout.hpp"

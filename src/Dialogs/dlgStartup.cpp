@@ -27,6 +27,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
+#include "Form/Form.hpp"
 #include "Form/Draw.hpp"
 #include "Form/Edit.hpp"
 #include "DataField/Enum.hpp"

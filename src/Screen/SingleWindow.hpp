@@ -25,10 +25,11 @@ Copyright_License {
 #define XCSOAR_SCREEN_SINGLE_WINDOW_HXX
 
 #include "Screen/TopWindow.hpp"
-#include "Form/Form.hpp"
 
 #include <stack>
 #include <assert.h>
+
+class WndForm;
 
 /**
  * The single top-level window of an application.  When it is closed,

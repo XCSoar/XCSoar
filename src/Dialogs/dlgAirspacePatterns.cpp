@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
 #include "Form/List.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"

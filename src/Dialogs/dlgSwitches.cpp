@@ -25,6 +25,7 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "UIGlobals.hpp"
+#include "Form/Form.hpp"
 #include "Form/Util.hpp"
 #include "Units/Units.hpp"
 #include "DataField/Boolean.hpp"
