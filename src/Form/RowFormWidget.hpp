@@ -217,6 +217,13 @@ public:
                           bool value=false,
                           DataField::DataAccessCallback_t callback=NULL);
 
+  WndProperty *AddBoolean(const TCHAR *label, const TCHAR *help,
+                          bool value, DataFieldListener *listener) {
+    WndProperty *control = AddBoolean(label, help, value);
+    control->GetDataField()->SetListener(listener);
+    return control;
+  }
+
   WndProperty *AddInteger(const TCHAR *label, const TCHAR *help,
                           const TCHAR *display_format,
                           const TCHAR *edit_format,
@@ -244,7 +251,22 @@ public:
                        DataField::DataAccessCallback_t callback=NULL);
 
   WndProperty *AddEnum(const TCHAR *label, const TCHAR *help,
+                       const StaticEnumChoice *list, unsigned value,
+                       DataFieldListener *listener) {
+    WndProperty *control = AddEnum(label, help, list, value);
+    control->GetDataField()->SetListener(listener);
+    return control;
+  }
+
+  WndProperty *AddEnum(const TCHAR *label, const TCHAR *help,
                        DataField::DataAccessCallback_t callback=NULL);
+
+  WndProperty *AddEnum(const TCHAR *label, const TCHAR *help,
+                       DataFieldListener *listener) {
+    WndProperty *control = AddEnum(label, help);
+    control->GetDataField()->SetListener(listener);
+    return control;
+  }
 
   WndProperty *AddText(const TCHAR *label, const TCHAR *help,
                        const TCHAR *content, bool editable=true,
@@ -254,6 +276,16 @@ public:
                        int min_value, int max_value, unsigned step,
                        int value, unsigned max_tokens = 2,
                        DataField::DataAccessCallback_t callback=NULL);
+
+  WndProperty *AddTime(const TCHAR *label, const TCHAR *help,
+                       int min_value, int max_value, unsigned step,
+                       int value, unsigned max_tokens,
+                       DataFieldListener *listener) {
+    WndProperty *control = AddTime(label, help, min_value, max_tokens, step,
+                                   value, max_tokens);
+    control->GetDataField()->SetListener(listener);
+    return control;
+  }
 
   WndProperty *AddSpacer(void);
 
