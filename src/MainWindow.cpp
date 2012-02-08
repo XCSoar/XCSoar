@@ -261,7 +261,7 @@ MainWindow::ReinitialiseLayout()
 {
   if (map == NULL) {
 #ifdef ANDROID
-    if (has_dialog())
+    if (HasDialog())
       dialogs.top()->ReinitialiseLayout();  // adapt simulator prompt
 #endif
     /* without the MapWindow, it is safe to assume that the MainWindow
@@ -318,7 +318,7 @@ MainWindow::ReinitialiseLayout()
 
 #ifdef ANDROID
   // move topmost dialog to fit into the current layout, or close it
-  if (has_dialog())
+  if (HasDialog())
     dialogs.top()->ReinitialiseLayout();
 #endif
 
@@ -475,7 +475,7 @@ MainWindow::OnSetFocus()
 {
   SingleWindow::OnSetFocus();
 
-  if (!has_dialog()) {
+  if (!HasDialog()) {
     /* the main window should never have the keyboard focus; if we
        happen to get the focus despite of that, forward it to the map
        window to make keyboard shortcuts work */
@@ -509,7 +509,7 @@ MainWindow::OnTimer(WindowTimer &_timer)
     } else if (!CommonInterface::Calculated().circling ||
                InputEvents::IsFlavour(_T("TA"))) {
       thermal_assistant.Hide();
-    } else if (!has_dialog()) {
+    } else if (!HasDialog()) {
       if (!thermal_assistant.IsDefined())
         thermal_assistant.Set(new GaugeThermalAssistant(CommonInterface::GetLiveBlackboard()));
 
@@ -763,7 +763,7 @@ MainWindow::UpdateTrafficGaugeVisibility()
   }
 
   if (traffic_visible) {
-    if (has_dialog())
+    if (HasDialog())
       return;
 
     if (!traffic_gauge.IsDefined())
@@ -807,7 +807,7 @@ MainWindow::ToggleForceFLARMRadar()
 void
 MainWindow::on_pause()
 {
-  if (!IsRunning() && has_dialog())
+  if (!IsRunning() && HasDialog())
     /* suspending before initialization has finished doesn't leave
        anything worth resuming, so let's just quit now */
     CancelDialog();

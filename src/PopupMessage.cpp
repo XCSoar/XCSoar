@@ -188,7 +188,7 @@ PopupMessage::Render()
     return false;
 
   mutex.Lock();
-  if (parent.has_dialog()) {
+  if (parent.HasDialog()) {
     mutex.Unlock();
     return false;
   }

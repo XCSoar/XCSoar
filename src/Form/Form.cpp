@@ -396,7 +396,7 @@ WndForm::ShowModal()
   bool hastimed = false;
   WndForm::time_any_open_close.Update(); // when current dlg opens or child closes
 
-  main_window.add_dialog(this);
+  main_window.AddDialog(this);
 
 #ifndef USE_GDI
   main_window.refresh();
@@ -497,7 +497,7 @@ WndForm::ShowModal()
     loop.Dispatch(event);
   } // End Modal Loop
 
-  main_window.remove_dialog(this);
+  main_window.RemoveDialog(this);
 
   // static.  this is current open/close or child open/close
   WndForm::time_any_open_close.Update();

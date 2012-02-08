@@ -39,15 +39,15 @@ protected:
   std::stack<WndForm *> dialogs;
 
 public:
-  void add_dialog(WndForm *dialog);
-  void remove_dialog(WndForm *dialog);
+  void AddDialog(WndForm *dialog);
+  void RemoveDialog(WndForm *dialog);
 
   /**
    * Forcefully cancel the top-most dialog.
    */
   void CancelDialog();
 
-  bool has_dialog() {
+  bool HasDialog() {
     return !dialogs.empty();
   }
 

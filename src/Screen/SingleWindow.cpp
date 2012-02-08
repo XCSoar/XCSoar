@@ -24,13 +24,13 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 
 void
-SingleWindow::add_dialog(WndForm *dialog)
+SingleWindow::AddDialog(WndForm *dialog)
 {
   dialogs.push(dialog);
 }
 
 void
-SingleWindow::remove_dialog(WndForm *dialog)
+SingleWindow::RemoveDialog(WndForm *dialog)
 {
   assert(dialog == dialogs.top());
 
