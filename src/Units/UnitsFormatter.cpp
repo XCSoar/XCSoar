@@ -243,7 +243,7 @@ Units::FormatUserTaskSpeed(fixed value, TCHAR *buffer,
 const TCHAR*
 Units::GetVerticalSpeedFormat(Unit unit, bool include_unit, bool include_sign)
 {
-  static const TCHAR *format[2][2][2]= {
+  static const TCHAR *const format[2][2][2]= {
     //      0 0 0       0 0 1            0 1 0          0 1 1
     { { _T("%.1f"), _T("%+.1f") }, { _T("%.1f %s"), _T("%+.1f %s") } },
     //      1 0 0       1 0 1            1 1 0          1 1 1
