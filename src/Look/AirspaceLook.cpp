@@ -53,7 +53,7 @@ void
 AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
 {
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
-    pens[i].Set(Layout::Scale(2),
+    pens[i].Set(Layout::ScalePenWidth(2),
                 colors[settings.colours[i]]);
 
   // airspace brushes and colors
@@ -79,9 +79,9 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
       solid_brushes[i].Set(colors[i]);
 #endif
 
-  thick_pen.Set(Layout::Scale(10), COLOR_BLACK);
+  thick_pen.Set(Layout::ScalePenWidth(10), COLOR_BLACK);
 #ifndef ENABLE_OPENGL
-  medium_pen.Set(Pen::SOLID, Layout::Scale(3), COLOR_BLACK);
+  medium_pen.Set(Pen::SOLID, Layout::ScalePenWidth(3), COLOR_BLACK);
 #endif
 
   intercept_icon.Load(IDB_AIRSPACEI, IDB_AIRSPACEI_HD);

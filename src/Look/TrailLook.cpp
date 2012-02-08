@@ -51,7 +51,7 @@ TrailLook::Initialise(const MapSettings &settings_map)
   };
 
   PixelScalar iwidth;
-  PixelScalar minwidth = Layout::Scale(2);
+  PixelScalar minwidth = Layout::ScalePenWidth(2);
 
   for (unsigned i = 0; i < NUMSNAILCOLORS; ++i) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
@@ -67,7 +67,7 @@ TrailLook::Initialise(const MapSettings &settings_map)
     else
       iwidth = max(minwidth,
                    PixelScalar((i - NUMSNAILCOLORS / 2) *
-                               Layout::Scale(16) / NUMSNAILCOLORS));
+                               Layout::ScalePenWidth(16) / NUMSNAILCOLORS));
 
     hpSnail[i].Set(minwidth, color);
     hpSnailVario[i].Set(iwidth, color);

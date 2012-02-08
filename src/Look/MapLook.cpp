@@ -45,21 +45,21 @@ MapLook::Initialise(const struct MapSettings &settings)
   hTerrainWarning.Load(IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD);
 
   compass_brush.Set(Color(207, 207, 207));
-  compass_pen.Set(Layout::Scale(1), COLOR_GRAY);
+  compass_pen.Set(Layout::ScalePenWidth(1), COLOR_GRAY);
 
   traffic_safe_icon.Load(IDB_TRAFFIC_SAFE, IDB_TRAFFIC_SAFE_HD, false);
   traffic_warning_icon.Load(IDB_TRAFFIC_WARNING, IDB_TRAFFIC_WARNING_HD, false);
   traffic_alarm_icon.Load(IDB_TRAFFIC_ALARM, IDB_TRAFFIC_ALARM_HD, false);
 
   static gcc_constexpr_data Color clrSepia(0x78,0x31,0x18);
-  reach_pen.Set(Pen::DASH, Layout::Scale(1), clrSepia);
-  reach_pen_thick.Set(Pen::DASH, Layout::Scale(2), clrSepia);
+  reach_pen.Set(Pen::DASH, Layout::ScalePenWidth(1), clrSepia);
+  reach_pen_thick.Set(Pen::DASH, Layout::ScalePenWidth(2), clrSepia);
 
   track_line_pen.Set(3, COLOR_GRAY);
 
-  contest_pens[0].Set(Layout::Scale(1)+2, COLOR_RED);
-  contest_pens[1].Set(Layout::Scale(1)+1, COLOR_ORANGE);
-  contest_pens[2].Set(Layout::Scale(1), COLOR_BLUE);
+  contest_pens[0].Set(Layout::ScalePenWidth(1) + 2, COLOR_RED);
+  contest_pens[1].Set(Layout::ScalePenWidth(1) + 1, COLOR_ORANGE);
+  contest_pens[2].Set(Layout::ScalePenWidth(1), COLOR_BLUE);
 
   thermal_source_icon.Load(IDB_THERMALSOURCE, IDB_THERMALSOURCE_HD);
 

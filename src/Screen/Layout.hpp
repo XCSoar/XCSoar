@@ -47,6 +47,8 @@ namespace Layout
    */
   extern unsigned small_scale;
 
+  extern unsigned pen_width_scale;
+
   extern UPixelScalar minimum_control_height, maximum_control_height;
 
   /**
@@ -106,6 +108,16 @@ namespace Layout
       return x;
 
     return (x * (int)small_scale) >> 10;
+  }
+
+  gcc_const
+  static inline unsigned
+  ScalePenWidth(unsigned width)
+  {
+    if (!ScaleSupported())
+      return width;
+
+    return (width * pen_width_scale) >> 10;
   }
 
   /**

@@ -36,12 +36,15 @@ namespace Layout
   int scale = 1;
   unsigned scale_1024 = 1024;
   unsigned small_scale = 1024;
+  unsigned pen_width_scale = 1024;
   UPixelScalar minimum_control_height = 22, maximum_control_height = 44;
 }
 
 void
 Layout::Initialize(unsigned width, unsigned height)
 {
+  const unsigned x_dpi = Display::GetXDPI();
+
   landscape = width > height;
   square = width == height;
 
@@ -52,6 +55,8 @@ Layout::Initialize(unsigned width, unsigned height)
   scale = scale_1024 / 1024;
 
   small_scale = (scale_1024 - 1024) / 2 + 1024;
+
+  pen_width_scale = std::max(1024u, x_dpi * 1024u / 80u);
 
   minimum_control_height = Scale(22);
 
