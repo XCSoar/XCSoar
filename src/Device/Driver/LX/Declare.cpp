@@ -160,7 +160,7 @@ DeclareInner(Port &port, const Declaration &declaration,
   env.SetProgressRange(5);
   env.SetProgressPosition(0);
 
-  if (!LX::CommandMode(port))
+  if (!LX::CommandMode(port, env))
       return false;
 
   if (env.IsCancelled())
@@ -194,7 +194,7 @@ DeclareInner(Port &port, const Declaration &declaration,
 
   writer.Write(&lxDevice_Declaration, sizeof(lxDevice_Declaration));
   writer.Flush();
-  if (!LX::ExpectACK(port))
+  if (!LX::ExpectACK(port, env))
     return false;
 
   if (env.IsCancelled())
@@ -206,7 +206,7 @@ DeclareInner(Port &port, const Declaration &declaration,
   env.SetProgressPosition(5);
 
   writer.Flush();
-  return LX::ExpectACK(port);
+  return LX::ExpectACK(port, env);
 }
 
 bool

@@ -47,8 +47,6 @@ namespace LX {
     READ_LOGGER_DATA = 0xe6,
   };
 
-  static const char LX_ACK_STRING[] = { ACK, 0 };
-
 #pragma pack(push, 1) // force byte alignment
 
   /**
@@ -145,9 +143,9 @@ namespace LX {
 #pragma pack(pop)
 
   static inline bool
-  ExpectACK(Port &port)
+  ExpectACK(Port &port, OperationEnvironment &env)
   {
-    return port.ExpectString(LX_ACK_STRING);
+    return port.WaitForChar(ACK, env, 2000) == Port::WaitResult::READY;
   }
 
   /**
@@ -156,9 +154,9 @@ namespace LX {
    * @return true on success
    */
   static inline bool
-  Connect(Port &port)
+  Connect(Port &port, OperationEnvironment &env)
   {
-    return port.Write(SYN) && ExpectACK(port);
+    return port.Write(SYN) && ExpectACK(port, env);
   }
 
   /**
@@ -166,7 +164,7 @@ namespace LX {
    * receive timeout, sends SYN three times and waits for ACK.
    */
   bool
-  CommandMode(Port &port);
+  CommandMode(Port &port, OperationEnvironment &env);
 
   /**
    * Enter command mode without waiting for ACK.

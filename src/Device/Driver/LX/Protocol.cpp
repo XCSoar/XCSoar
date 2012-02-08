@@ -25,7 +25,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 
 bool
-LX::CommandMode(Port &port)
+LX::CommandMode(Port &port, OperationEnvironment &env)
 {
   /* switch to command mode, first attempt */
   port.Write(SYN);
@@ -37,7 +37,7 @@ LX::CommandMode(Port &port)
   /* the port is clean now; try the SYN/ACK procedure up to three
      times */
   return port.SetRxTimeout(500) &&
-    (Connect(port) || Connect(port) || Connect(port)) &&
+    (Connect(port, env) || Connect(port, env) || Connect(port, env)) &&
     /* ... and configure the timeout */
     port.SetRxTimeout(5000);
 }
