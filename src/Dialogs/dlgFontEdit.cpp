@@ -32,6 +32,10 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Compiler.h"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Cache.hpp"
+#endif
+
 enum ControlIndex {
 #ifdef USE_GDI
   Face,
@@ -108,6 +112,10 @@ FontEditWidget::UpdatePreview()
   SaveValues();
 
   font.Set(data);
+
+#ifdef ENABLE_OPENGL
+  TextCache::Flush();
+#endif
 
   WndFrame &preview = (WndFrame &)GetGeneric(Preview);
   if (font.IsDefined()) {
