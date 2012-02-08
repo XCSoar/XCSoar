@@ -215,7 +215,7 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
   assert(df != NULL);
 
-  df->SetFormat(Units::GetUserVerticalSpeedFormat());
+  df->SetFormat(Units::GetUserVerticalSpeedFormat(false, false));
   df->SetMin(fixed_zero);
   df->SetMax(Units::ToUserVSpeed(fixed(5)));
   df->SetStep(Units::GetUserVerticalSpeedStep());
