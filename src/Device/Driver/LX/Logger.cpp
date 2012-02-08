@@ -111,9 +111,6 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
   if (!LX::SendCommand(port, LX::READ_FLIGHT_LIST))
     return false;
 
-  if (port.WaitRead(env, 20000) != Port::WaitResult::READY)
-    return false;
-
   bool success = true;
   while (!flight_list.full()) {
     LX::FlightInfo flight;
