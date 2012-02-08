@@ -24,6 +24,7 @@ ifeq ($(HOST_IS_DARWIN),y)
 else
   ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux_x86
 endif
+ANDROID_SDK_PLATFORM_DIR = $(ANDROID_SDK)/platforms/$(ANDROID_PLATFORM)
 ANDROID_ABI = $(ANDROID_ABI3)
 ANDROID_ABI_DIR = $(ANDROID_BUILD)/libs/$(ANDROID_ABI)
 ANDROID_ALL_ABIS = armeabi armeabi-v7a
@@ -189,7 +190,7 @@ $(ANDROID_JNI)/classes/$(CLASS_CLASS): $(NATIVE_SOURCES) $(ANDROID_JNI)/build.xm
 
 $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES)): $(NATIVE_PREFIX)%.h: $(ANDROID_JNI)/classes/$(CLASS_CLASS)
 	@$(NQ)echo "  JAVAH   $@"
-	$(Q)javah -classpath $(ANDROID_JNI)/classes -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
+	$(Q)javah -classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(ANDROID_JNI)/classes -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
 	@touch $@
 
 $(ANDROID_BIN)/XCSoar-unsigned.apk: $(ANDROID_ABI_DIR)/libxcsoar.so $(ANDROID_SO_FILES) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) android/src/*.java
