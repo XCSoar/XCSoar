@@ -38,9 +38,9 @@ namespace TextCache {
   PixelSize LookupSize(const Font &font, const char *text);
 
   gcc_pure
-  GLTexture *get(const Font *font, const char *text);
+  GLTexture *Get(const Font *font, const char *text);
 
-  void flush();
+  void Flush();
 };
 
 #endif

@@ -106,7 +106,7 @@ TopWindow::on_pause()
   if (paused)
     return;
 
-  TextCache::flush();
+  TextCache::Flush();
   OpenGL::DeinitShapes();
 
   SurfaceDestroyed();

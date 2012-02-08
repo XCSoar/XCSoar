@@ -190,7 +190,7 @@ TextCache::LookupSize(const Font &font, const char *text)
 }
 
 GLTexture *
-TextCache::get(const Font *font, const char *text)
+TextCache::Get(const Font *font, const char *text)
 {
   assert(pthread_equal(pthread_self(), OpenGL::thread));
   assert(font != NULL);
@@ -241,7 +241,7 @@ TextCache::get(const Font *font, const char *text)
 }
 
 void
-TextCache::flush()
+TextCache::Flush()
 {
   assert(pthread_equal(pthread_self(), OpenGL::thread));
 

@@ -169,5 +169,5 @@ OpenGL::Deinitialise()
 {
   DeinitShapes();
 
-  TextCache::flush();
+  TextCache::Flush();
 }
