@@ -186,7 +186,7 @@ namespace LX {
 
   bool
   ReceivePacket(Port &port, Command command,
-                void *data, size_t length,
+                void *data, size_t length, OperationEnvironment &env,
                 unsigned timeout_ms=5000);
 
   gcc_const
@@ -198,7 +198,8 @@ namespace LX {
   calc_crc(const void *p0, size_t len, uint8_t crc);
 
   bool
-  ReadCRC(Port &port, void *buffer, size_t length, unsigned timeout_ms=5000);
+  ReadCRC(Port &port, void *buffer, size_t length, OperationEnvironment &env,
+          unsigned timeout_ms = 5000);
 
   /**
    * Writes data to a #Port, and keeps track of the CRC.
