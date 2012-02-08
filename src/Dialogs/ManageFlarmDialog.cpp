@@ -71,7 +71,7 @@ ManageFlarmDialog(Device &_device)
   ButtonPanel buttons(client_area, look);
   buttons.Add(_("Close"), OnCloseClicked);
 
-  const PixelRect rc = buttons.GetRemainingRect();
+  const PixelRect rc = buttons.UpdateLayout();
 
   /* create the command buttons */
 

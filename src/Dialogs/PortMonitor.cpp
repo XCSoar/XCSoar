@@ -149,7 +149,7 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
   buttons.Add(_("Reconnect"), OnReconnectClicked);
   buttons.Add(_("Pause"), OnPauseClicked);
 
-  const PixelRect rc = buttons.GetRemainingRect();
+  const PixelRect rc = buttons.UpdateLayout();
 
   /* create the terminal */
 

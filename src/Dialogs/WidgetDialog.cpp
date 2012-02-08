@@ -49,7 +49,7 @@ WidgetDialog::WidgetDialog(const TCHAR *caption, const PixelRect &rc,
    auto_size(false),
    changed(false)
 {
-  widget.Move(buttons.GetRemainingRect());
+  widget.Move(buttons.UpdateLayout());
 }
 
 WidgetDialog::WidgetDialog(const TCHAR *caption, Widget *_widget)
@@ -61,20 +61,21 @@ WidgetDialog::WidgetDialog(const TCHAR *caption, Widget *_widget)
    auto_size(true),
    changed(false)
 {
-  widget.Move(buttons.GetRemainingRect());
+  widget.Move(buttons.UpdateLayout());
 }
 
 int
 WidgetDialog::ShowModal()
 {
+  PixelRect remaining = buttons.UpdateLayout();
+
   if (auto_size) {
     widget.Prepare();
 
     const PixelSize this_size = get_size();
-    const PixelRect cur_rc = buttons.GetRemainingRect();
     const PixelSize cur_size = {
-      PixelScalar(cur_rc.right - cur_rc.left),
-      PixelScalar(cur_rc.bottom - cur_rc.top),
+      PixelScalar(remaining.right - remaining.left),
+      PixelScalar(remaining.bottom - remaining.top),
     };
     const PixelSize max_size = widget.Get()->GetMaximumSize();
     PixelSize new_size = cur_size;
@@ -88,9 +89,6 @@ WidgetDialog::ShowModal()
     resize(new_size.cx + (this_size.cx - cur_size.cx),
            new_size.cy + (this_size.cy - cur_size.cy));
   }
-
-  /* update layout, just in case buttons were added */
-  widget.Move(buttons.GetRemainingRect());
 
   widget.Show();
   return WndForm::ShowModal();
@@ -118,8 +116,7 @@ void
 WidgetDialog::OnResize(UPixelScalar width, UPixelScalar height)
 {
   WndForm::OnResize(width, height);
-  buttons.Resized(GetClientAreaWindow().get_client_rect());
-  widget.Move(buttons.GetRemainingRect());
+  widget.Move(buttons.UpdateLayout());
 }
 
 bool

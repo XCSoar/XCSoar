@@ -22,13 +22,13 @@ Copyright_License {
 */
 
 #include "Form/ButtonPanel.hpp"
+#include "Look/DialogLook.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
 
 ButtonPanel::ButtonPanel(ContainerWindow &_parent, const DialogLook &_look)
-  :parent(_parent), look(_look), row_count(0) {
+  :parent(_parent), look(_look) {
   style.TabStop();
-  Resized(parent.get_client_rect());
 }
 
 ButtonPanel::~ButtonPanel()
@@ -38,92 +38,31 @@ ButtonPanel::~ButtonPanel()
 }
 
 PixelRect
-ButtonPanel::GetButtonRect(unsigned i) const
+ButtonPanel::UpdateLayout(const PixelRect rc)
 {
-  unsigned row = i / row_capacity;
-  unsigned column = i % row_capacity;
-  PixelRect r;
-  if (vertical) {
-    const UPixelScalar width = Layout::Scale(80);
-    const UPixelScalar height = Layout::Scale(30);
+  if (buttons.empty())
+    return rc;
 
-    r.left = rc.left + row * width;
-    r.top = rc.top + column * height;
-    r.right = r.left + width;
-    r.bottom = r.top + height;
-  } else {
-    const UPixelScalar width = (rc.right - rc.left) / 3;
-    const UPixelScalar height = Layout::Scale(35);
-
-    r.left = rc.left + column * width;
-    r.top = rc.top + height * row;
-    r.right = r.left + width;
-    r.bottom = r.top + height;
-  }
-
-  return r;
+  const bool landscape = rc.right - rc.left > rc.bottom - rc.top;
+  return landscape
+    ? LeftLayout(rc)
+    : BottomLayout(rc);
 }
 
-void
-ButtonPanel::MoveButtons()
+PixelRect
+ButtonPanel::UpdateLayout()
 {
-  for (unsigned i = 0; i < buttons.size(); ++i) {
-    const PixelRect r = GetButtonRect(i);
-    buttons[i]->move(r.left, r.top,
-                     r.right - r.left, r.bottom - r.top);
-  }
+  return UpdateLayout(parent.get_client_rect());
 }
 
-void
-ButtonPanel::Resized(const PixelRect &area, unsigned count)
-{
-  rc = remaining = area;
-
-  const bool landscape = area.right - area.left > area.bottom - area.top;
-  vertical = landscape;
-
-  if (count == 0)
-    count = buttons.size();
-
-  child_size = vertical ? Layout::Scale(30) : (area.right - area.left) / 3;
-  UPixelScalar row_height = vertical ? Layout::Scale(80) : Layout::Scale(35);
-
-  UPixelScalar total_width = area.right - area.left;
-  UPixelScalar total_height = area.bottom - area.top;
-  if (!vertical)
-    std::swap(total_width, total_height);
-
-  row_capacity = total_width / child_size;
-  if (row_capacity == 0)
-    row_capacity = 1;
-
-  row_count = (count + row_capacity - 1) / row_capacity;
-  if (row_count >= 2 && row_count * row_height > total_height / 2)
-    /* the buttons should not occupy more than half of the client
-       area */
-    row_count = total_height / row_height / 2;
-
-  if (vertical) {
-    rc.right = rc.left + row_height * row_count;
-    remaining.left = rc.right;
-  } else {
-    rc.top = rc.bottom - row_height * row_count;
-    remaining.bottom = rc.top;
-  }
-
-  MoveButtons();
-}
+static gcc_constexpr_data PixelRect dummy_rc = { 0, 0, 100, 40 };
 
 WndButton *
 ButtonPanel::Add(const TCHAR *caption,
                  WndButton::ClickNotifyCallback callback)
 {
-  if (row_count == 0 || buttons.size() % row_capacity == 0)
-    Resized(parent.get_client_rect(), buttons.size() + 1);
-
-  const PixelRect r = GetButtonRect(buttons.size());
   WndButton *button = new WndButton(parent, look, caption,
-                                    r, style, callback);
+                                    dummy_rc, style, callback);
   buttons.append(button);
 
   return button;
@@ -132,13 +71,120 @@ ButtonPanel::Add(const TCHAR *caption,
 WndButton *
 ButtonPanel::Add(const TCHAR *caption, ActionListener *listener, int id)
 {
-  if (row_count == 0 || buttons.size() % row_capacity == 0)
-    Resized(parent.get_client_rect(), buttons.size() + 1);
-
-  const PixelRect r = GetButtonRect(buttons.size());
   WndButton *button = new WndButton(parent, look, caption,
-                                    r, style, listener, id);
+                                    dummy_rc, style, listener, id);
   buttons.append(button);
 
   return button;
+}
+
+UPixelScalar
+ButtonPanel::Width(unsigned i) const
+{
+  return look.button.font->TextSize(buttons[i]->get_text().c_str()).cx +
+    Layout::SmallScale(8);
+}
+
+UPixelScalar
+ButtonPanel::RangeMaxWidth(unsigned start, unsigned end) const
+{
+  UPixelScalar max_width = Layout::Scale(50);
+  for (unsigned i = start; i < end; ++i) {
+    UPixelScalar width = Width(i);
+    if (width > max_width)
+      max_width = width;
+  }
+
+  return max_width;
+}
+
+PixelRect
+ButtonPanel::VerticalRange(PixelRect rc, unsigned start, unsigned end)
+{
+  const unsigned n = end - start;
+  assert(n > 0);
+
+  const UPixelScalar width = RangeMaxWidth(start, end);
+  const UPixelScalar total_height = rc.bottom - rc.top;
+  const UPixelScalar max_height = n * Layout::GetMaximumControlHeight();
+  const UPixelScalar row_height = std::min(total_height, max_height) / n;
+
+  PixelRect button_rc = {
+    rc.left, rc.top, PixelScalar(rc.left + width),
+    PixelScalar(rc.top + row_height),
+  };
+  rc.left += width;
+
+  for (unsigned i = start; i < end; ++i) {
+    buttons[i]->move(button_rc);
+
+    button_rc.top = button_rc.bottom;
+    button_rc.bottom += row_height;
+  }
+
+  return rc;
+}
+
+PixelRect
+ButtonPanel::HorizontalRange(PixelRect rc, unsigned start, unsigned end)
+{
+  const unsigned n = end - start;
+  assert(n > 0);
+
+  const UPixelScalar total_width = rc.right - rc.left;
+  const UPixelScalar row_height = Layout::GetMaximumControlHeight();
+  const UPixelScalar width = total_width / n;
+
+  PixelRect button_rc = {
+    rc.left, PixelScalar(rc.bottom - row_height),
+    PixelScalar(rc.left + width), rc.bottom,
+  };
+  rc.bottom -= row_height;
+
+  for (unsigned i = start; i < end; ++i) {
+    buttons[i]->move(button_rc);
+
+    button_rc.left = button_rc.right;
+    button_rc.right += width;
+  }
+
+  return rc;
+}
+
+PixelRect
+ButtonPanel::LeftLayout(PixelRect rc)
+{
+  assert(!buttons.empty());
+
+  return VerticalRange(rc, 0, buttons.size());
+}
+
+PixelRect
+ButtonPanel::BottomLayout(PixelRect rc)
+{
+  assert(!buttons.empty());
+
+  const UPixelScalar total_width = rc.right - rc.left;
+
+  unsigned end = buttons.size();
+  while (end > 0) {
+    unsigned start = end - 1;
+    UPixelScalar max_width = Width(start);
+    while (start > 0) {
+      --start;
+      UPixelScalar width = Width(start);
+      UPixelScalar new_width = std::max(width, max_width);
+      if ((end - start) * new_width > total_width) {
+        ++start;
+        break;
+      }
+
+      max_width = new_width;
+    }
+
+    rc = HorizontalRange(rc, start, end);
+    end = start;
+  }
+
+  return rc;
 }

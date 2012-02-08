@@ -34,35 +34,44 @@ class ButtonPanel {
 
   StaticArray<WndButton *, 8u> buttons;
 
-  PixelRect rc, remaining;
-  unsigned child_size, row_capacity, row_count;
-
-  bool vertical;
-
 public:
   ButtonPanel(ContainerWindow &parent, const DialogLook &look);
   ~ButtonPanel();
-
-  /**
-   * Call this when the client area of the parent window has been
-   * resized.
-   *
-   * @param count don't use
-   */
-  void Resized(const PixelRect &area, unsigned count=0);
-
-  const PixelRect &GetRemainingRect() const {
-    return remaining;
-  }
 
   WndButton *Add(const TCHAR *caption,
                  WndButton::ClickNotifyCallback callback);
 
   WndButton *Add(const TCHAR *caption, ActionListener *listener, int id);
 
+  /**
+   * Call this after all buttons have been added or after the parent
+   * window has been resized.
+   *
+   * @return the remaining rectangle
+   */
+  PixelRect UpdateLayout(PixelRect rc);
+  PixelRect UpdateLayout();
+
 protected:
-  PixelRect GetButtonRect(unsigned i) const;
-  void MoveButtons();
+  gcc_pure
+  UPixelScalar Width(unsigned i) const;
+
+  gcc_pure
+  UPixelScalar RangeMaxWidth(unsigned start, unsigned end) const;
+
+  PixelRect VerticalRange(PixelRect rc, unsigned start, unsigned end);
+
+  PixelRect HorizontalRange(PixelRect rc, unsigned start, unsigned end);
+
+  /**
+   * Move buttons in columns on the left.
+   */
+  PixelRect LeftLayout(PixelRect rc);
+
+  /**
+   * Move buttons to rows on the bottom.
+   */
+  PixelRect BottomLayout(PixelRect rc);
 };
 
 #endif

@@ -281,7 +281,7 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look,
   manage_button = buttons.Add(_("Manage"), OnManageClicked);
   monitor_button = buttons.Add(_("Monitor"), OnMonitorClicked);
 
-  const PixelRect rc = buttons.GetRemainingRect();
+  const PixelRect rc = buttons.UpdateLayout();
 
   /* create the list */
 
