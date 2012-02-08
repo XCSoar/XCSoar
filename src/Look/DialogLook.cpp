@@ -42,6 +42,7 @@ DialogLook::Initialise(const Font &caption_font,
   caption.background_bitmap.Load(IDB_DIALOGTITLE);
 #else
   caption.background_color = COLOR_XCSOAR_DARK;
+  caption.inactive_background_color = COLOR_GRAY;
 #endif
 
   SetBackgroundColor(Color(0xe2, 0xdc, 0xbe));

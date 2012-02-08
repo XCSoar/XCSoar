@@ -546,7 +546,9 @@ WndForm::OnPaint(Canvas &canvas)
     canvas.text(title_rect.left + Layout::FastScale(2), title_rect.top,
                 caption.c_str());
 #else
-    canvas.SetBackgroundColor(look.caption.background_color);
+    canvas.SetBackgroundColor(main_window.IsTopDialog(*this)
+                              ? look.caption.background_color
+                              : look.caption.inactive_background_color);
     canvas.text_opaque(title_rect.left + Layout::FastScale(2),
                        title_rect.top, title_rect, caption.c_str());
 #endif

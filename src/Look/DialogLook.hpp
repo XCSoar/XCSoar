@@ -45,6 +45,7 @@ struct DialogLook {
     Bitmap background_bitmap;
 #else
     Color background_color;
+    Color inactive_background_color;
 #endif
   } caption;
 
