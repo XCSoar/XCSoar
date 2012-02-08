@@ -144,8 +144,10 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(const int id)
   wf->SetCaption(buffer);
   wf->ShowModeless();
 
-  bool changed = false, require_restart = false;
-  wTabBar->Save(changed, require_restart);
+  if (wf->IsDefined()) {
+    bool changed = false, require_restart = false;
+    wTabBar->Save(changed, require_restart);
+  }
 
   delete wTabBar;
   delete wf;

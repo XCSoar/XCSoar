@@ -263,12 +263,9 @@ PrepareConfigurationDialog()
     wTabMenu->SetLastContentPage(current_page);
 }
 
-void dlgConfigurationShowModal(void)
+static void
+Save()
 {
-  PrepareConfigurationDialog();
-
-  wf->ShowModal();
-
   /* save page number for next time this dialog is opened */
   current_page = wTabMenu->GetLastContentPage();
 
@@ -285,6 +282,16 @@ void dlgConfigurationShowModal(void)
       MessageBoxX(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
                   _T(""), MB_OK);
   }
+}
+
+void dlgConfigurationShowModal(void)
+{
+  PrepareConfigurationDialog();
+
+  wf->ShowModal();
+
+  if (wf->IsDefined())
+    Save();
 
   delete wf;
   wf = NULL;
