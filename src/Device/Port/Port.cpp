@@ -108,6 +108,42 @@ Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
   return true;
 }
 
+bool
+Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
+               unsigned timeout_ms)
+{
+  PeriodClock timeout;
+  timeout.Update();
+
+  unsigned remaining = timeout_ms;
+
+  char *p = (char *)buffer, *end = p + length;
+  while (p < end) {
+    WaitResult wait_result = WaitRead(env, remaining);
+    if (wait_result != WaitResult::READY)
+      // Operation canceled, Timeout expired or I/O error occurred
+      return false;
+
+    int nbytes = Read(p, end - p);
+    if (nbytes <= 0)
+      /*
+       * Error occured, or no data read, which is also an error
+       * when WaitRead returns READY
+       */
+      return false;
+
+    p += nbytes;
+
+    unsigned elapsed = timeout.Elapsed();
+    if (elapsed >= timeout_ms)
+      return false;
+
+    remaining = timeout_ms - elapsed;
+  }
+
+  return true;
+}
+
 Port::WaitResult
 Port::WaitRead(OperationEnvironment &env, unsigned timeout_ms)
 {

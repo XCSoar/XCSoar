@@ -191,6 +191,20 @@ public:
   bool FullRead(void *buffer, size_t length, unsigned timeout_ms);
 
   /**
+   * Read data from the serial port, take care for partial reads.
+   *
+   * Note that this port's receive timeout is still in effect for each
+   * individual read operation.
+   *
+   * @param env an OperationEnvironment that allows canceling the
+   * operation
+   * @param timeout_ms give up after this number of milliseconds
+   * @return true on success
+   */
+  bool FullRead(void *buffer, size_t length, OperationEnvironment &env,
+                unsigned timeout_ms);
+
+  /**
    * Wait until data becomes available, the timeout expires or the
    * operation gets cancelled.
    *
