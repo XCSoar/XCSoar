@@ -179,7 +179,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
 
   uint8_t *data = new uint8_t[total_length], *p = data;
   for (unsigned i = 0; i < LX::MemorySection::N && lengths[i] > 0; ++i) {
-    if (!LX::ReceivePacket(port, LX::READ_LOGGER_DATA,
+    if (!LX::ReceivePacket(port, (enum LX::command)(LX::READ_LOGGER_DATA + i),
                            p, lengths[i], 60000)) {
       free(data);
       return false;
