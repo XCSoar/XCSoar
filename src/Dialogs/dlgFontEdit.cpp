@@ -22,159 +22,167 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "DataField/Boolean.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Form/RowFormWidget.hpp"
+#include "Form/ActionListener.hpp"
+#include "Screen/Layout.hpp"
 #include "DataField/Enum.hpp"
-#include "DataField/Integer.hpp"
+#include "DataField/Listener.hpp"
 #include "Util/StringUtil.hpp"
 #include "UIGlobals.hpp"
 #include "Compiler.h"
 
-#include <stdio.h>
-
-static WndForm *wf = NULL;
-static LOGFONT NewLogFont;
-static LOGFONT resetLogFont;
-static Font NewFont;
-
-static void LoadGUI();
-
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static void
-OnCancelClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrCancel);
-}
-
-static void
-OnResetClicked(gcc_unused WndButton &Sender)
-{
-  NewLogFont = resetLogFont;
-  LoadGUI();
-}
-
-static void
-GetLogFont(LOGFONT &logfont)
-{
+enum ControlIndex {
 #ifdef USE_GDI
-  WndProperty* wp;
-  wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
-  if (wp)
-    CopyString(logfont.lfFaceName,
-               wp->GetDataField()->GetAsString(), LF_FACESIZE);
+  Face,
 #endif
-
-  logfont.lfHeight = GetFormValueInteger(*wf, _T("prpFontHeight"));
-  logfont.lfWeight = GetFormValueBoolean(*wf, _T("prpFontWeight")) ? 700 : 500;
-  logfont.lfItalic = GetFormValueBoolean(*wf, _T("prpFontItalic"));
-}
-
-static void RedrawSampleFont(void)
-{
-  GetLogFont(NewLogFont);
-  NewFont.Set(NewLogFont);
-
-  WndFrame *wp = (WndFrame *)wf->FindByName(_T("prpFontSample"));
-  if (wp) {
-    if (NewFont.IsDefined()) {
-      wp->SetFont(NewFont);
-      wp->SetCaption(_("Sample Text\n123"));
-    } else {
-      wp->SetCaption(_("Font not found."));
-    }
-  }
-}
-
-static void
-OnData(gcc_unused DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  if (Mode == DataField::daChange)
-    RedrawSampleFont();
-}
-
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnData),
-  DeclareCallBackEntry(OnResetClicked),
-  DeclareCallBackEntry(OnCancelClicked),
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(NULL)
+  Height,
+  Weight,
+  Italic,
+  Preview,
 };
 
-static void
-InitGUI(const TCHAR * FontDescription)
-{
-  StaticString<128> title;
-  title.Format(_T("%s: %s"), _("Edit Font"), FontDescription);
-  wf->SetCaption(title);
+class FontEditWidget
+  : public RowFormWidget, public ActionListener, DataFieldListener{
+  LOGFONT data, default_data;
 
-  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
-  if (wp) {
-#ifndef USE_GDI
-    /* we cannot obtain a list of fonts on SDL/OpenGL currently */
-    wp->hide();
-#else
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("Tahoma"));
-    dfe->addEnumText(_T("TahomaBD"));
-    dfe->addEnumText(_T("DejaVu Sans Condensed"));
-    // RLD ToDo code: add more font faces, and validate their availabiliy
-#endif
+  Font font;
+
+public:
+  FontEditWidget(const LOGFONT &_data, const LOGFONT &_default_data)
+    :RowFormWidget(UIGlobals::GetDialogLook()),
+     data(_data), default_data(_default_data) {}
+
+  const LOGFONT &GetData() const {
+    return data;
   }
-}
 
-static void
-LoadGUI()
+  void Load();
+  void SaveValues();
+  void UpdatePreview();
+
+  /* methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+
+  /* methods from ActionListener */
+  virtual void OnAction(int id);
+
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
+};
+
+void
+FontEditWidget::Load()
 {
 #ifdef USE_GDI
-  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
-  if (wp) {
-    DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->SetStringAutoAdd(NewLogFont.lfFaceName);
-    wp->RefreshDisplay();
+  {
+    DataFieldEnum &df = (DataFieldEnum &)GetDataField(Face);
+    df.SetStringAutoAdd(data.lfFaceName);
+    GetControl(Face).RefreshDisplay();
   }
 #endif
 
-  LoadFormProperty(*wf, _T("prpFontHeight"), (unsigned)NewLogFont.lfHeight);
-  LoadFormProperty(*wf, _T("prpFontWeight"), NewLogFont.lfWeight > 500);
-  LoadFormProperty(*wf, _T("prpFontItalic"), !!NewLogFont.lfItalic);
+  LoadValue(Height, (int)data.lfHeight);
+  LoadValue(Weight, data.lfWeight > 500);
+  LoadValue(Italic, !!data.lfItalic);
 
-  RedrawSampleFont();
+  UpdatePreview();
 }
 
+void
+FontEditWidget::SaveValues()
+{
+#ifdef USE_GDI
+  CopyString(data.lfFaceName, GetDataField(Face).GetAsString(), LF_FACESIZE);
+#endif
+
+  data.lfHeight = GetValueInteger(Height);
+  data.lfWeight = GetValueBoolean(Weight) ? 700 : 500;
+  data.lfItalic = GetValueBoolean(Italic);
+}
+
+void
+FontEditWidget::UpdatePreview()
+{
+  SaveValues();
+
+  font.Set(data);
+
+  WndFrame &preview = (WndFrame &)GetGeneric(Preview);
+  if (font.IsDefined()) {
+    preview.SetFont(font);
+    preview.SetCaption(_("Sample Text\n123"));
+  } else {
+    preview.SetCaption(_("Font not found."));
+  }
+}
+
+void
+FontEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  RowFormWidget::Prepare(parent, rc);
+
+#ifdef USE_GDI
+  WndProperty *wp = AddEnum(_("Font face"), NULL, this);
+  {
+    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
+    df.addEnumText(_T("Tahoma"));
+    df.addEnumText(_T("TahomaBD"));
+    df.addEnumText(_T("DejaVu Sans Condensed"));
+  }
+#else
+  /* we cannot obtain a list of fonts on SDL/OpenGL currently */
+#endif
+
+  AddInteger(_("Height"), NULL, _T("%d"), _T("%d"),
+             1, 200, 1, 0, this);
+
+  AddBoolean(_T("Bold"), NULL, false, this);
+  AddBoolean(_T("Italic"), NULL, false, this);
+
+  WndFrame *preview = new WndFrame(*(ContainerWindow *)GetWindow(),
+                                   UIGlobals::GetDialogLook(),
+                                   0, 0, Layout::Scale(250), Layout::Scale(100));
+  preview->SetText(_("My Sample"));
+  Add(preview);
+
+  Load();
+}
+
+void
+FontEditWidget::OnModified(DataField &df)
+{
+  UpdatePreview();
+}
+
+void
+FontEditWidget::OnAction(int id)
+{
+  data = default_data;
+  Load();
+}
 
 bool
 dlgFontEditShowModal(const TCHAR * FontDescription,
                      LOGFONT &log_font,
                      LOGFONT autoLogFont)
 {
-  bool bRetVal = false;
+  StaticString<128> title;
+  title.Format(_T("%s: %s"), _("Edit Font"), FontDescription);
 
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  _T("IDR_XML_FONTEDIT"));
-  if (wf == NULL)
+  FontEditWidget *widget =
+    new FontEditWidget(log_font, autoLogFont);
+
+  WidgetDialog dialog(title, widget);
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Reset"), widget, 1);
+  dialog.AddButton(_("Cancel"), mrCancel);
+
+  if (dialog.ShowModal() != mrOK)
     return false;
 
-  NewLogFont = log_font;
-  resetLogFont = autoLogFont;
-
-  InitGUI(FontDescription);
-  LoadGUI();
-
-  if (wf->ShowModal() == mrOK) {
-    log_font = NewLogFont;
-    bRetVal = true;
-  }
-
-  delete wf;
-
-  NewFont.Reset();
-
-  return bRetVal;
+  widget->SaveValues();
+  log_font = widget->GetData();
+  return true;
 }
