@@ -76,6 +76,14 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height, bool full_screen)
   SDL_Surface *s = ::SDL_SetVideoMode(width, height, 0, flags);
   if (s == NULL)
     return;
+
+#ifdef ENABLE_OPENGL
+  if (full_screen)
+    /* after a X11 mode switch to full-screen mode, the first
+       SDL_GL_SwapBuffers() call gets ignored; could be a SDL bug, and
+       the following dummy call works around it: */
+    ::SDL_GL_SwapBuffers();
+#endif
 #endif
 
 #ifdef ENABLE_OPENGL
