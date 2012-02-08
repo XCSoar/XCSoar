@@ -131,7 +131,7 @@ TextInBox(Canvas &canvas, const TCHAR* text, PixelScalar x, PixelScalar y,
 
     canvas.SelectWhiteBrush();
     canvas.DrawRoundRectangle(rc.left, rc.top, rc.right, rc.bottom,
-                           Layout::Scale(8), Layout::Scale(8));
+                              Layout::SmallScale(8), Layout::SmallScale(8));
 
     canvas.SetBackgroundTransparent();
     canvas.SetTextColor(COLOR_BLACK);
