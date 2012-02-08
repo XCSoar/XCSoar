@@ -230,6 +230,17 @@ public:
                           int min_value, int max_value, int step, int value,
                           DataField::DataAccessCallback_t callback=NULL);
 
+  WndProperty *AddInteger(const TCHAR *label, const TCHAR *help,
+                          const TCHAR *display_format,
+                          const TCHAR *edit_format,
+                          int min_value, int max_value, int step, int value,
+                          DataFieldListener *listener) {
+    WndProperty *control = AddInteger(label, help, display_format, edit_format,
+                                      min_value, max_value, step, value);
+    control->GetDataField()->SetListener(listener);
+    return control;
+  }
+
   WndProperty *AddFloat(const TCHAR *label, const TCHAR *help,
                         const TCHAR *display_format,
                         const TCHAR *edit_format,
