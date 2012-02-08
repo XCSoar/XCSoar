@@ -220,6 +220,15 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   df->SetMin(fixed_zero);
   df->SetMax(Units::ToUserVSpeed(fixed(5)));
   df->SetStep(Units::GetUserVerticalSpeedStep());
+
+  wp = (WndProperty *)form.FindByName(_T("prpEffectiveMacCready"));
+  assert(wp != NULL);
+
+  df = (DataFieldFloat *)wp->GetDataField();
+  assert(df != NULL);
+
+  df->SetFormat(Units::GetUserVerticalSpeedFormat(false, false));
+
 }
 
 void
