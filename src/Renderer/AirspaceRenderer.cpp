@@ -133,7 +133,6 @@ class AirspaceVisitorRenderer : public AirspaceVisitor, protected MapCanvas
   const AirspaceLook &airspace_look;
   const AirspaceWarningCopy& m_warnings;
   const AirspaceRendererSettings &settings;
-  Pen pen_thick;
 
 public:
   AirspaceVisitorRenderer(Canvas &_canvas, const WindowProjection &_projection,
@@ -144,8 +143,7 @@ public:
                _projection.GetScreenBounds().Scale(fixed(1.1))),
      airspace_look(_airspace_look),
      m_warnings(warnings),
-     settings(_settings),
-     pen_thick(Layout::Scale(10), Color(0x00, 0x00, 0x00))
+     settings(_settings)
   {
     glStencilMask(0xff);
     glClear(GL_STENCIL_BUFFER_BIT);
@@ -167,17 +165,17 @@ public:
       setup_interior(airspace);
       if (m_warnings.is_warning(airspace) ||
           m_warnings.is_inside(airspace) ||
-          pen_thick.GetWidth() >= 2 * screen_radius) {
+          airspace_look.thick_pen.GetWidth() >= 2 * screen_radius) {
         // fill whole circle
         canvas.circle(screen_center.x, screen_center.y, screen_radius);
       } else {
         // draw a ring inside the circle
         Color color = airspace_look.colors[settings.colours[airspace.GetType()]];
-        Pen pen_donut(pen_thick.GetWidth() / 2, color.WithAlpha(90));
+        Pen pen_donut(airspace_look.thick_pen.GetWidth() / 2, color.WithAlpha(90));
         canvas.SelectHollowBrush();
         canvas.Select(pen_donut);
         canvas.circle(screen_center.x, screen_center.y,
-                      screen_radius - pen_thick.GetWidth() / 4);
+                      screen_radius - airspace_look.thick_pen.GetWidth() / 4);
       }
     }
 
@@ -257,7 +255,7 @@ private:
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     canvas.SelectHollowBrush();
-    canvas.Select(pen_thick);
+    canvas.Select(airspace_look.thick_pen);
   }
 
   void clear_fillstencil() {
@@ -267,7 +265,7 @@ private:
     glStencilOp(GL_KEEP, GL_KEEP, GL_ZERO);
 
     canvas.SelectHollowBrush();
-    canvas.Select(pen_thick);
+    canvas.Select(airspace_look.thick_pen);
   }
 };
 
@@ -363,9 +361,7 @@ public:
                      const AirspaceLook &_airspace_look)
     :MapDrawHelper(_helper),
      airspace_look(_airspace_look),
-     m_warnings(warnings),
-     pen_thick(Pen::SOLID, Layout::Scale(10), Color(0x00, 0x00, 0x00)),
-     pen_medium(Pen::SOLID, Layout::Scale(3), Color(0x00, 0x00, 0x00))
+     m_warnings(warnings)
   {
     switch (settings.fill_mode) {
     case AirspaceRendererSettings::AS_FILL_DEFAULT:
@@ -436,9 +432,9 @@ private:
 
     if (m_warnings.is_warning(airspace) || m_warnings.is_inside(airspace)) {
       m_stencil.SelectBlackBrush();
-      m_stencil.Select(pen_medium);
+      m_stencil.Select(airspace_look.medium_pen);
     } else {
-      m_stencil.Select(pen_thick);
+      m_stencil.Select(airspace_look.thick_pen);
       m_stencil.SelectHollowBrush();
     }
 
@@ -446,8 +442,6 @@ private:
   }
 
   const AirspaceWarningCopy& m_warnings;
-  Pen pen_thick;
-  Pen pen_medium;
 };
 
 class AirspaceOutlineRenderer

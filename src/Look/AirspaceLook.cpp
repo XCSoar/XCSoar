@@ -79,5 +79,10 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
       solid_brushes[i].Set(colors[i]);
 #endif
 
+  thick_pen.Set(Layout::Scale(10), COLOR_BLACK);
+#ifndef ENABLE_OPENGL
+  medium_pen.Set(Pen::SOLID, Layout::Scale(3), COLOR_BLACK);
+#endif
+
   intercept_icon.Load(IDB_AIRSPACEI, IDB_AIRSPACEI_HD);
 }
