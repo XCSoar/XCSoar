@@ -38,8 +38,6 @@ static LOGFONT NewLogFont;
 static LOGFONT resetLogFont;
 static Font NewFont;
 
-static bool locked;
-
 static void LoadGUI();
 
 static void
@@ -96,7 +94,7 @@ static void RedrawSampleFont(void)
 static void
 OnData(gcc_unused DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  if (!locked && Mode == DataField::daChange)
+  if (Mode == DataField::daChange)
     RedrawSampleFont();
 }
 
@@ -134,28 +132,11 @@ InitGUI(const TCHAR * FontDescription)
 static void
 LoadGUI()
 {
-  assert(!locked);
-  locked = true;
-
 #ifdef USE_GDI
   WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
   if (wp) {
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
-    if (dfe) {
-      dfe->Set(0);
-
-      unsigned i;
-      for (i = 0; i < dfe->Count(); i++) {
-        if (_tcsncmp(dfe->GetAsString(), NewLogFont.lfFaceName, LF_FACESIZE)
-            == 0)
-          break;
-
-        dfe->Inc();
-      }
-
-      if (i == dfe->Count())
-        dfe->Set(dfe->addEnumText(NewLogFont.lfFaceName));
-    }
+    dfe->SetStringAutoAdd(NewLogFont.lfFaceName);
     wp->RefreshDisplay();
   }
 #endif
@@ -163,8 +144,6 @@ LoadGUI()
   LoadFormProperty(*wf, _T("prpFontHeight"), (unsigned)NewLogFont.lfHeight);
   LoadFormProperty(*wf, _T("prpFontWeight"), NewLogFont.lfWeight > 500);
   LoadFormProperty(*wf, _T("prpFontItalic"), !!NewLogFont.lfItalic);
-
-  locked = false;
 
   RedrawSampleFont();
 }

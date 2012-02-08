@@ -173,6 +173,21 @@ DataFieldEnum::Set(int Value)
     SetIndex(i, false);
 }
 
+int
+DataFieldEnum::SetStringAutoAdd(const TCHAR *text)
+{
+  int index = Find(text);
+  if (index >= 0) {
+    SetIndex(index, false);
+    return entries[index].GetId();
+  } else {
+    index = entries.size();
+    unsigned id = addEnumText(text);
+    SetIndex(index, false);
+    return id;
+  }
+}
+
 void
 DataFieldEnum::SetAsInteger(int Value)
 {

@@ -130,6 +130,14 @@ public:
 
   void Set(int Value);
 
+  /**
+   * Set the value to the specified string.  If there is no choice
+   * with the string, a new one is added.
+   *
+   * @return the new integer value
+   */
+  int SetStringAutoAdd(const TCHAR *text);
+
   virtual void SetAsInteger(int Value);
   virtual void SetAsString(const TCHAR *Value);
   void Sort(int startindex = 0);
