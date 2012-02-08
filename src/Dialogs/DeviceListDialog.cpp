@@ -145,7 +145,7 @@ PaintDevice(Canvas &canvas, const PixelRect rc, unsigned i)
 
     canvas.text(rc.left + margin, rc.top + 2 * margin + font_height,
                 buffer1);
-  } else {
+  } else if (!is_simulator()) {
     canvas.text(rc.left + margin, rc.top + 2 * margin + font_height,
                 _("Not connected"));
   }
