@@ -241,18 +241,25 @@ Units::FormatUserTaskSpeed(fixed value, TCHAR *buffer,
 }
 
 const TCHAR*
-Units::GetVerticalSpeedFormat(Unit unit, bool include_unit)
+Units::GetVerticalSpeedFormat(Unit unit, bool include_unit, bool include_sign)
 {
-  if (include_unit)
-    return unit == Unit::FEET_PER_MINUTE ? _T("%+.0f %s") : _T("%+.1f %s");
-  else
-    return unit == Unit::FEET_PER_MINUTE ? _T("%+.0f") : _T("%+.1f");
+  static const TCHAR *format[2][2][2]= {
+    //      0 0 0       0 0 1            0 1 0          0 1 1
+    { { _T("%.1f"), _T("%+.1f") }, { _T("%.1f %s"), _T("%+.1f %s") } },
+    //      1 0 0       1 0 1            1 1 0          1 1 1
+    { { _T("%.0f"), _T("%+.0f") }, { _T("%.0f %s"), _T("%+.0f %s") } }
+  };
+
+  return format[unit == Unit::FEET_PER_MINUTE]
+               [include_unit == true]
+               [include_sign == true];
 }
 
 const TCHAR*
-Units::GetUserVerticalSpeedFormat(bool include_unit)
+Units::GetUserVerticalSpeedFormat(bool include_unit, bool include_sign)
 {
-  return GetVerticalSpeedFormat(current.vertical_speed_unit);
+  return GetVerticalSpeedFormat(current.vertical_speed_unit, include_unit,
+                                include_sign);
 }
 
 fixed
@@ -276,22 +283,24 @@ Units::GetUserVerticalSpeedStep()
 
 void
 Units::FormatVerticalSpeed(TCHAR *buffer, fixed value, Unit unit,
-                           bool include_unit)
+                           bool include_unit, bool include_sign)
 {
   value = ToUserUnit(value, unit);
 
   if (include_unit)
-    _stprintf(buffer, GetVerticalSpeedFormat(unit, include_unit), (double)value,
-               Units::GetUnitName(unit));
+    _stprintf(buffer, GetVerticalSpeedFormat(unit, include_unit, include_sign),
+              (double)value, Units::GetUnitName(unit));
   else
-    _stprintf(buffer, GetVerticalSpeedFormat(unit, include_unit), (double)value);
+    _stprintf(buffer, GetVerticalSpeedFormat(unit, include_unit, include_sign),
+              (double)value);
 }
 
 void
 Units::FormatUserVerticalSpeed(fixed value, TCHAR *buffer,
-                               bool include_unit)
+                               bool include_unit, bool include_sign)
 {
-  FormatVerticalSpeed(buffer, value, current.vertical_speed_unit, include_unit);
+  FormatVerticalSpeed(buffer, value, current.vertical_speed_unit,
+                      include_unit, include_sign);
 }
 
 void

@@ -196,15 +196,21 @@ namespace Units
   /**
    * Returns the proper format to display the vertical speed
    * @param unit the pressure unit
+   * @param include_unit include the unit into the string?
+   * @param include_sign include the sign into the string?
    * @return the format
    */
-  const TCHAR* GetVerticalSpeedFormat(Unit unit, bool include_unit = false);
+  const TCHAR* GetVerticalSpeedFormat(Unit unit, bool include_unit = false,
+                                      bool include_sign = true);
 
   /**
    * Give the proper format to display the vertical speed
+   * @param include_unit include the unit into the string?
+   * @param include_sign include the sign into the string?
    * @return the format
    */
-  const TCHAR* GetUserVerticalSpeedFormat(bool include_unit = false);
+  const TCHAR* GetUserVerticalSpeedFormat(bool include_unit = false,
+                                          bool include_sign = true);
 
   /**
    * Give the basic step size for pressure editing
@@ -226,19 +232,21 @@ namespace Units
    * @param value the vertical speed
    * @param unit the vertical speed unit (e.g. m/s, feet/min, ...)
    * @param include_unit include the unit into the string?
+   * @param include_sign include the sign into the string?
    */
   void FormatVerticalSpeed(TCHAR *buffer, fixed value, Unit unit,
-                           bool include_unit = true);
+                           bool include_unit = true, bool include_sign = true);
 
   /**
    * Converts a double-based vertical Speed into a formatted string
    * @param Speed The double-based vertical Speed
    * @param buffer buffer string to write to (pointer)
    * @param size Size of the buffer
+   * @param include_sign include the sign into the string?
    * @return True if buffer long enough, False otherwise
    */
   void FormatUserVerticalSpeed(fixed value, TCHAR *buffer,
-                               bool include_unit = true);
+                               bool include_unit = true, bool include_sign = true);
 
   /**
    * Converts a temperature into a formatted string
