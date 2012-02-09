@@ -75,6 +75,13 @@ namespace Display {
   RotateRestore();
 
   /**
+   * Sets the displays x/y DPI
+   * @param x Number of pixels per logical inch along the screen width
+   * @param y Number of pixels per logical inch along the screen height
+   */
+  void SetDPI(unsigned x_dpi, unsigned y_dpi);
+
+  /**
    * Returns the number of pixels per logical inch along the screen width
    * @return Number of pixels per logical inch along the screen width
    */

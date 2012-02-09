@@ -38,6 +38,11 @@ Copyright_License {
 #include <windows.h>
 #endif
 
+#if !defined(ANDROID) && !defined(_WIN32_WCE)
+  static unsigned forced_x_dpi = 0;
+  static unsigned forced_y_dpi = 0;
+#endif
+
 #ifdef HAVE_HARDWARE_BLANK
 
 #include "Hardware/VideoPower.h"
@@ -278,9 +283,22 @@ Display::RotateRestore()
 #endif
 }
 
+void
+Display::SetDPI(unsigned x_dpi, unsigned y_dpi)
+{
+#if !defined(ANDROID) && !defined(_WIN32_WCE)
+  forced_x_dpi = x_dpi;
+  forced_y_dpi = y_dpi;
+#endif
+}
+
 unsigned
 Display::GetXDPI()
 {
+#if !defined(ANDROID) && !defined(_WIN32_WCE)
+  if (forced_x_dpi > 0)
+    return forced_x_dpi;
+#endif
 #ifdef WIN32
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSX);
@@ -294,6 +312,10 @@ Display::GetXDPI()
 unsigned
 Display::GetYDPI()
 {
+#if !defined(ANDROID) && !defined(_WIN32_WCE)
+  if (forced_y_dpi > 0)
+    return forced_y_dpi;
+#endif
 #ifdef WIN32
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSY);
