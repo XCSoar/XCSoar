@@ -72,10 +72,7 @@ WidgetDialog::AutoSize()
   widget.Prepare();
 
   const PixelSize this_size = get_size();
-  const PixelSize cur_size = {
-    PixelScalar(remaining.right - remaining.left),
-    PixelScalar(remaining.bottom - remaining.top),
-  };
+  const PixelSize cur_size = GetPixelRectSize(remaining);
   const PixelSize max_size = widget.Get()->GetMaximumSize();
   PixelSize new_size = cur_size;
 

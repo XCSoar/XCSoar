@@ -32,6 +32,8 @@ Copyright_License {
 #include "Screen/GDI/Point.hpp"
 #endif
 
+#include "Compiler.h"
+
 #include <stdlib.h>
 
 /**
@@ -41,6 +43,14 @@ static inline unsigned
 manhattan_distance(RasterPoint a, RasterPoint b)
 {
   return abs(a.x - b.x) + abs(a.y - b.y);
+}
+
+gcc_const
+static inline PixelSize
+GetPixelRectSize(const PixelRect rc)
+{
+  return { PixelScalar(rc.right - rc.left),
+      PixelScalar(rc.bottom - rc.top) };
 }
 
 #endif
