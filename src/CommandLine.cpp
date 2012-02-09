@@ -25,6 +25,7 @@ Copyright_License {
 #include "Util/Args.hpp"
 #include "Profile/Profile.hpp"
 #include "OS/PathName.hpp"
+#include "Hardware/Display.hpp"
 #include "Simulator.hpp"
 
 namespace CommandLine {
@@ -96,6 +97,23 @@ CommandLine::Parse(Args args)
     else if (strcmp(s, "-console") == 0) {
       AllocConsole();
       freopen("CONOUT$", "wb", stdout);
+    }
+#endif
+#if !defined(ANDROID) && !defined(_WIN32_WCE)
+    else if (strncmp(s, "-dpi=", 5) == 0) {
+      unsigned x_dpi, y_dpi;
+      char *p;
+      x_dpi = strtol(s+5, &p, 10);
+      if (*p == 'x' || *p == 'X') {
+        s = p;
+        y_dpi = strtol(s+1, &p, 10);
+      } else
+        y_dpi = x_dpi;
+
+      if (x_dpi < 32 || x_dpi > 512 || y_dpi < 32 || y_dpi > 512)
+        args.UsageError();
+
+      Display::SetDPI(x_dpi, y_dpi);
     }
 #endif
     else
