@@ -533,11 +533,13 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
              _("This option lets you configure if XCSoar should use settings "
                "like the MacCready value, bugs and ballast from the device."),
              config.sync_from_device);
+  SetExpertRow(SyncFromDevice);
 
   AddBoolean(_("Sync. to device"),
              _("This option lets you configure if XCSoar should send settings "
                "like the MacCready value, bugs and ballast to the device."),
              config.sync_to_device);
+  SetExpertRow(SyncToDevice);
 
   AddBoolean(_("Ignore checksum"),
              _("If your GPS device outputs invalid NMEA checksums, this will "
