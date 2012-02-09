@@ -84,6 +84,9 @@ public:
 
   virtual void OnAction(int id);
 
+private:
+  void AutoSize();
+
 protected:
   virtual void OnDestroy();
   virtual void OnResize(UPixelScalar width, UPixelScalar height);

@@ -64,31 +64,36 @@ WidgetDialog::WidgetDialog(const TCHAR *caption, Widget *_widget)
   widget.Move(buttons.UpdateLayout());
 }
 
-int
-WidgetDialog::ShowModal()
+void
+WidgetDialog::AutoSize()
 {
   PixelRect remaining = buttons.UpdateLayout();
 
-  if (auto_size) {
-    widget.Prepare();
+  widget.Prepare();
 
-    const PixelSize this_size = get_size();
-    const PixelSize cur_size = {
-      PixelScalar(remaining.right - remaining.left),
-      PixelScalar(remaining.bottom - remaining.top),
-    };
-    const PixelSize max_size = widget.Get()->GetMaximumSize();
-    PixelSize new_size = cur_size;
+  const PixelSize this_size = get_size();
+  const PixelSize cur_size = {
+    PixelScalar(remaining.right - remaining.left),
+    PixelScalar(remaining.bottom - remaining.top),
+  };
+  const PixelSize max_size = widget.Get()->GetMaximumSize();
+  PixelSize new_size = cur_size;
 
-    if (max_size.cx > 0 && max_size.cx < new_size.cx)
-      new_size.cx = max_size.cx;
+  if (max_size.cx > 0 && max_size.cx < new_size.cx)
+    new_size.cx = max_size.cx;
 
-    if (max_size.cy > 0 && max_size.cy < new_size.cy)
-      new_size.cy = max_size.cy;
+  if (max_size.cy > 0 && max_size.cy < new_size.cy)
+    new_size.cy = max_size.cy;
 
-    resize(new_size.cx + (this_size.cx - cur_size.cx),
-           new_size.cy + (this_size.cy - cur_size.cy));
-  }
+  resize(new_size.cx + (this_size.cx - cur_size.cx),
+         new_size.cy + (this_size.cy - cur_size.cy));
+}
+
+int
+WidgetDialog::ShowModal()
+{
+  if (auto_size)
+    AutoSize();
 
   widget.Show();
   return WndForm::ShowModal();
