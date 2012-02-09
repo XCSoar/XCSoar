@@ -57,6 +57,10 @@ static const char *Usage = "\n"
   "  -square         use a 480x480 screen resolution\n"
   "  -small          use a 320x240 screen resolution\n"
 #endif
+#if !defined(ANDROID) && !defined(_WIN32_WCE)
+  "  -dpi=DPI        force usage of DPI for pixel density\n"
+  "  -dpi=XDPIxYDPI  force usage of XDPI and YDPI for pixel density\n"
+#endif
 #ifdef HAVE_CMDLINE_FULLSCREEN
   "  -fullscreen     full-screen mode\n"
 #endif
