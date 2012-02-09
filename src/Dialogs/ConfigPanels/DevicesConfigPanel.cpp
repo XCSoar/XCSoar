@@ -72,6 +72,7 @@ public:
   void ActivateDevice(unsigned idx);
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Move(const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
 };
 
@@ -182,6 +183,16 @@ DevicesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   list->SetActivateCallback(DeviceListActivateCallback);
 }
 
+void
+DevicesConfigPanel::Move(const PixelRect &rc)
+{
+  XMLWidget::Move(rc);
+
+  /* update "expert" rows (hack) */
+  DockWindow *dock = (DockWindow *)form.FindByName(_T("edit"));
+  assert(dock != NULL);
+  dock->MoveWidget();
+}
 
 bool
 DevicesConfigPanel::Save(bool &_changed, bool &_require_restart)

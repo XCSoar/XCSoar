@@ -54,6 +54,14 @@ DockWindow::DeleteWidget()
 }
 
 void
+DockWindow::MoveWidget()
+{
+  assert(widget != NULL);
+
+  widget->Move(get_client_rect());
+}
+
+void
 DockWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
   ContainerWindow::OnResize(width, height);

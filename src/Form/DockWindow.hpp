@@ -52,6 +52,13 @@ public:
     return widget;
   }
 
+  /**
+   * Call Widget::Move() again.  This should never be needed, as the
+   * Widget is supposed to be at the position already.  It's a hack to
+   * force RowFormWidget to reconsider the visibility of all rows.
+   */
+  void MoveWidget();
+
 protected:
   void DeleteWidget();
 
