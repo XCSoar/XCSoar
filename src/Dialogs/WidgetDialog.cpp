@@ -29,6 +29,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Screen/SingleWindow.hpp"
+#include "Screen/Layout.hpp"
 
 gcc_const
 static WindowStyle
@@ -67,23 +68,45 @@ WidgetDialog::WidgetDialog(const TCHAR *caption, Widget *_widget)
 void
 WidgetDialog::AutoSize()
 {
-  PixelRect remaining = buttons.UpdateLayout();
+  const PixelRect parent_rc = GetParentClientRect();
+  const PixelSize parent_size = GetPixelRectSize(parent_rc);
 
   widget.Prepare();
+  PixelSize max_size = widget.Get()->GetMaximumSize();
+  max_size.cy += GetTitleHeight();
 
-  const PixelSize this_size = get_size();
-  const PixelSize cur_size = GetPixelRectSize(remaining);
-  const PixelSize max_size = widget.Get()->GetMaximumSize();
-  PixelSize new_size = cur_size;
+  const PixelScalar max_height_with_buttons =
+    max_size.cy + Layout::GetMaximumControlHeight();
+  if (max_height_with_buttons >= parent_size.cy) {
+    /* need full height, buttons must be left */
+    PixelRect rc = parent_rc;
+    if (max_size.cy < parent_size.cy)
+      rc.bottom = rc.top + max_size.cy;
 
-  if (max_size.cx > 0 && max_size.cx < new_size.cx)
-    new_size.cx = max_size.cx;
+    PixelRect remaining = buttons.LeftLayout(rc);
+    PixelSize remaining_size = GetPixelRectSize(remaining);
+    if (remaining_size.cx > max_size.cx)
+      rc.right -= remaining_size.cx - max_size.cx;
 
-  if (max_size.cy > 0 && max_size.cy < new_size.cy)
-    new_size.cy = max_size.cy;
+    move(rc);
+    widget.Move(buttons.LeftLayout());
+    return;
+  }
 
-  resize(new_size.cx + (this_size.cx - cur_size.cx),
-         new_size.cy + (this_size.cy - cur_size.cy));
+  /* see if buttons fit at the bottom */
+
+  PixelRect rc = parent_rc;
+  if (max_size.cx < parent_size.cx)
+    rc.right = rc.left + max_size.cx;
+
+  PixelRect remaining = buttons.BottomLayout(rc);
+  PixelSize remaining_size = GetPixelRectSize(remaining);
+
+  if (remaining_size.cy > max_size.cy)
+    rc.bottom -= remaining_size.cy - max_size.cy;
+
+  move(rc);
+  widget.Move(buttons.BottomLayout());
 }
 
 int
@@ -118,6 +141,10 @@ void
 WidgetDialog::OnResize(UPixelScalar width, UPixelScalar height)
 {
   WndForm::OnResize(width, height);
+
+  if (auto_size)
+    return;
+
   widget.Move(buttons.UpdateLayout());
 }
 
