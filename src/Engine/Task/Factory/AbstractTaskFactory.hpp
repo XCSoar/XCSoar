@@ -30,6 +30,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 #include <vector>
+#include <stdint.h>
 
 class AATPoint;
 class StartPoint;
