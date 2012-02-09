@@ -34,7 +34,7 @@ CXX_FEATURES += -fvisibility=hidden
 C_FEATURES += -fvisibility=hidden
 endif
 
-ifeq ($(DEBUG)$(HAVE_WIN32),nn)
+ifeq ($(DEBUG)$(HAVE_WIN32)$(TARGET_IS_DARWIN),nnn)
 CXX_FEATURES += -ffunction-sections
 C_FEATURES += -ffunction-sections
 TARGET_LDFLAGS += -Wl,--gc-sections
