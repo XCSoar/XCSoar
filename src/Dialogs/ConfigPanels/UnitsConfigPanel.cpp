@@ -136,8 +136,8 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wp->GetDataField()->SetListener(this);
 
   AddSpacer();
+  SetExpertRow(spacer_1);
 
-  // Should be all Expert items (TODO)
   static const TCHAR * units_speed_help = N_("Units used for airspeed and ground speed.  "
       "A separate unit is available for task speeds.");
   static const StaticEnumChoice  units_speed_list[] = {
@@ -148,6 +148,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
   AddEnum(_("Aircraft/Wind speed"), NULL, units_speed_list,
           (unsigned int)config.speed_unit, this);
+  SetExpertRow(UnitsSpeed);
 
   static const TCHAR *units_distance_help = _("Units used for horizontal distances e.g. "
       "range to waypoint, distance to go.");
@@ -159,6 +160,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
   AddEnum(_("Distance"), NULL, units_distance_list,
           (unsigned)config.distance_unit, this);
+  SetExpertRow(UnitsDistance);
 
   static const TCHAR *units_lift_help = _("Units used for vertical speeds (variometer).");
   static const StaticEnumChoice  units_lift_list[] = {
@@ -169,6 +171,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
   AddEnum(_("Lift"), NULL, units_lift_list,
           (unsigned)config.vertical_speed_unit, this);
+  SetExpertRow(UnitsLift);
 
   static const TCHAR *units_altitude_help = _("Units used for altitude and heights.");
   static const StaticEnumChoice  units_altitude_list[] = {
@@ -178,6 +181,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
   AddEnum(_("Altitude"), NULL, units_altitude_list,
           (unsigned)config.altitude_unit, this);
+  SetExpertRow(UnitsAltitude);
 
   static const TCHAR *units_temperature_help = _("Units used for temperature.");
   static const StaticEnumChoice  units_temperature_list[] = {
@@ -187,6 +191,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
   AddEnum(_("Temperature"), NULL, units_temperature_list,
           (unsigned)config.temperature_unit, this);
+  SetExpertRow(UnitsTemperature);
 
   static const TCHAR *units_taskspeed_help = _("Units used for task speeds.");
   static const StaticEnumChoice  units_taskspeed_list[] = {
@@ -197,6 +202,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
   AddEnum(_("Task speed"), NULL, units_taskspeed_list,
           (unsigned)config.task_speed_unit, this);
+  SetExpertRow(UnitsTaskSpeed);
 
   static const TCHAR *units_pressure_help = _("Units used for pressures.");
   static const StaticEnumChoice pressure_labels_list[] = {
@@ -207,8 +213,10 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
   AddEnum(_("Pressure"), NULL, pressure_labels_list,
           (unsigned)config.pressure_unit, this);
+  SetExpertRow(UnitsPressure);
 
   AddSpacer();
+  SetExpertRow(spacer_2);
 
   static const TCHAR *units_lat_lon_help = _("Units used for latitude and longitude.");
   static const StaticEnumChoice units_lat_lon_list[] = {
@@ -221,6 +229,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
   AddEnum(_("Lat./Lon."), NULL, units_lat_lon_list,
           (unsigned)coordinate_format);
+  SetExpertRow(UnitsLatLon);
 }
 
 bool
