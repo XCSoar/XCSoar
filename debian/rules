@@ -12,8 +12,6 @@ else
   OPTIONS += DEBUG=n
 endif
 
-OPTIONS += -j8
-
 build: debian/stamp-build
 debian/stamp-build:
 	dh_testdir
