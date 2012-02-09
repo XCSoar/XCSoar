@@ -75,6 +75,14 @@ Window::to_screen(PixelRect &rc) const
   }
 }
 
+PixelRect
+Window::GetParentClientRect() const
+{
+  assert(parent != NULL);
+
+  return parent->get_client_rect();
+}
+
 void
 Window::set_enabled(bool enabled)
 {

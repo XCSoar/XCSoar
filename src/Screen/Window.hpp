@@ -31,6 +31,8 @@ Copyright_License {
 #include "Thread/Debug.hpp"
 #include "Compiler.h"
 
+#include <assert.h>
+
 #ifdef USE_GDI
 #include <windows.h>
 #endif /* GDI */
@@ -761,6 +763,24 @@ public:
     s.cy = rc.bottom;
     return s;
   }
+
+  /**
+   * Returns the parent's client area rectangle.
+   */
+#ifdef USE_GDI
+  gcc_pure
+  PixelRect GetParentClientRect() const {
+    HWND hParent = ::GetParent(hWnd);
+    assert(hParent != NULL);
+
+    PixelRect rc;
+    ::GetClientRect(hParent, &rc);
+    return rc;
+  }
+#else
+  gcc_pure
+  PixelRect GetParentClientRect() const;
+#endif
 
 #ifndef USE_GDI
   void setup(Canvas &canvas);
