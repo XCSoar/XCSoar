@@ -6,9 +6,9 @@ Build-Depends: debhelper (>= 5),
  libboost-dev,
  libsdl1.2-dev, libsdl-ttf2.0-dev, libsdl-image1.2-dev,
  libgl-dev,
- libgconf2-dev,
+ libcurl-dev,
  librsvg2-bin, imagemagick (>= 7:6.4), xsltproc,
- texlive, texlive-latex-extra
+ texlive, texlive-latex-extra, latex-xcolor, pgf
 Standards-Version: 3.9.1.0
 Homepage: http://www.xcsoar.org/
 
