@@ -86,9 +86,6 @@ PagesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     if (wp) {
       DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
       UpdateComboBox(dfe, i);
-// TODO     if (i>2 && !Expert) {
-//        wp->set_visible(false);
-//      }
       wp->RefreshDisplay();
     }
   }
