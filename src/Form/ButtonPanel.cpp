@@ -160,6 +160,12 @@ ButtonPanel::LeftLayout(PixelRect rc)
 }
 
 PixelRect
+ButtonPanel::LeftLayout()
+{
+  return LeftLayout(parent.get_client_rect());
+}
+
+PixelRect
 ButtonPanel::BottomLayout(PixelRect rc)
 {
   assert(!buttons.empty());
@@ -187,4 +193,10 @@ ButtonPanel::BottomLayout(PixelRect rc)
   }
 
   return rc;
+}
+
+PixelRect
+ButtonPanel::BottomLayout()
+{
+  return BottomLayout(parent.get_client_rect());
 }

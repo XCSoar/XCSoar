@@ -52,6 +52,18 @@ public:
   PixelRect UpdateLayout(PixelRect rc);
   PixelRect UpdateLayout();
 
+  /**
+   * Move buttons in columns on the left.
+   */
+  PixelRect LeftLayout(PixelRect rc);
+  PixelRect LeftLayout();
+
+  /**
+   * Move buttons to rows on the bottom.
+   */
+  PixelRect BottomLayout(PixelRect rc);
+  PixelRect BottomLayout();
+
 protected:
   gcc_pure
   UPixelScalar Width(unsigned i) const;
@@ -62,16 +74,6 @@ protected:
   PixelRect VerticalRange(PixelRect rc, unsigned start, unsigned end);
 
   PixelRect HorizontalRange(PixelRect rc, unsigned start, unsigned end);
-
-  /**
-   * Move buttons in columns on the left.
-   */
-  PixelRect LeftLayout(PixelRect rc);
-
-  /**
-   * Move buttons to rows on the bottom.
-   */
-  PixelRect BottomLayout(PixelRect rc);
 };
 
 #endif
