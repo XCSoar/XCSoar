@@ -836,7 +836,7 @@ PixelSize
 RowFormWidget::GetMaximumSize() const
 {
   const UPixelScalar value_width =
-    look.text_font->TextSize(_T("Foo Bar Foo Bar")).cx;
+    look.text_font->TextSize(_T("Foo Bar Foo Bar")).cx * 2;
 
   PixelSize size{ PixelScalar(GetRecommendedCaptionWidth() + value_width), 0 };
   for (auto i = rows.begin(), end = rows.end(); i != end; ++i)
