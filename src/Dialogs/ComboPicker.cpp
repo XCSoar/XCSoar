@@ -27,20 +27,23 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "DataField/ComboList.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
+#include "Look/DialogLook.hpp"
 
 #include <assert.h>
 
 static WndProperty *wComboPopupWndProperty;
 static DataField *ComboPopupDataField;
 static const ComboList *ComboListPopup;
+static UPixelScalar padding;
 
 static void
 OnPaintComboPopupListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < (unsigned)ComboListPopup->size());
 
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + Layout::FastScale(2), rc,
+  canvas.text_clipped(rc.left + padding,
+                      rc.top + padding, rc,
                       (*ComboListPopup)[i].StringValueFormatted);
 }
 static const TCHAR*
@@ -60,10 +63,21 @@ ComboPicker(SingleWindow &parent, const TCHAR *caption,
 {
   ComboListPopup = &combo_list;
 
+  const UPixelScalar font_height =
+    UIGlobals::GetDialogLook().text_font->GetHeight() + Layout::FastScale(2);
+  const UPixelScalar max_height = Layout::GetMaximumControlHeight();
+  const UPixelScalar row_height = font_height >= max_height
+    ? font_height
+    /* this formula is supposed to be a compromise between too small
+       and too large: */
+    : (font_height + max_height) / 2;
+
+  padding = (row_height - font_height) / 2;
+
   return ListPicker(parent, caption,
                     combo_list.size(),
                     combo_list.ComboPopupItemSavedIndex,
-                    Layout::Scale(18),
+                    row_height,
                     OnPaintComboPopupListItem, false,
                     help_callback,
                     enable_item_help ? OnItemHelp : NULL);

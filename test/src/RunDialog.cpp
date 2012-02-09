@@ -46,11 +46,18 @@ Copyright_License {
 void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
 
 static DialogSettings dialog_settings;
+static DialogLook dialog_look;
 
 const DialogSettings &
 UIGlobals::GetDialogSettings()
 {
   return dialog_settings;
+}
+
+const DialogLook &
+UIGlobals::GetDialogLook()
+{
+  return dialog_look;
 }
 
 #ifndef WIN32
@@ -109,7 +116,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   dialog_settings.SetDefaults();
 
-  DialogLook dialog_look;
   dialog_look.Initialise(Fonts::map_bold, Fonts::map, Fonts::map_label,
                          Fonts::map_bold, Fonts::map_bold);
   SetXMLDialogLook(dialog_look);

@@ -80,11 +80,18 @@ TaskFile::Create(const TCHAR* path)
 }
 
 static DialogSettings dialog_settings;
+static const DialogLook *dialog_look;
 
 const DialogSettings &
 UIGlobals::GetDialogSettings()
 {
   return dialog_settings;
+}
+
+const DialogLook &
+UIGlobals::GetDialogLook()
+{
+  return *dialog_look;
 }
 
 void dlgBasicSettingsShowModal() {}
@@ -228,6 +235,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   look->InitialiseConfigured(blackboard.GetUISettings());
 
   SetXMLDialogLook(look->dialog);
+
+  dialog_look = &look->dialog;
 
   main_window.show();
 
