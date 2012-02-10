@@ -69,7 +69,7 @@ struct ProjectedFan {
   }
 
   void DrawOutline(unsigned start) const {
-    glDrawArrays(GL_LINE_STRIP, start, size);
+    glDrawArrays(GL_LINE_LOOP, start, size);
   }
 #else
   void DrawFill(Canvas &canvas, const RasterPoint *points) const {
