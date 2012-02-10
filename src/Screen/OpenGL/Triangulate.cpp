@@ -46,17 +46,6 @@ PolygonRotatesLeft(const PT *points, unsigned num_points)
 }
 
 /**
- * Test whether the area of a triangle is zero, or not.
- */
-template <typename PT>
-static inline bool
-TriangleEmpty(const PT &a, const PT &b, const PT &c)
-{
-  return ((b.x - a.x) * (typename PT::SquareType)(c.y - b.y) -
-          (b.y - a.y) * (typename PT::SquareType)(c.x - b.x)) == 0;
-}
-
-/**
  * Test whether point p ist left of line (a,b) or not
  */
 template <typename PT>
@@ -98,6 +87,16 @@ LeftBend(const PT &a, const PT &b, const PT &c)
 {
   return (b.x - a.x) * (typename PT::SquareType)(c.y - b.y) -
          (b.y - a.y) * (typename PT::SquareType)(c.x - b.x);
+}
+
+/**
+ * Test whether the area of a triangle is zero, or not.
+ */
+template <typename PT>
+static inline bool
+TriangleEmpty(const PT &a, const PT &b, const PT &c)
+{
+  return LeftBend(a, b, c) == 0;
 }
 
 /**
