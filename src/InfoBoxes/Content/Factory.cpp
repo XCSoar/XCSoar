@@ -750,7 +750,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // e_Alternate_1_Name
   {
     N_("Alternate 1 name"),
-    N_("Altrn 1"),
+    N_("Altn 1"),
     N_("Displays name and bearing to the best alternate landing location."),
     IBFHelperInt<InfoBoxContentAlternateName, 0>::Create,
     e_Alternate_2_Name, // Altern2 name
@@ -760,7 +760,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // e_Alternate_2_Name
   {
     N_("Alternate 2 name"),
-    N_("Altrn 2"),
+    N_("Altn 2"),
     N_("Displays name and bearing to the second alternate landing location."),
     IBFHelperInt<InfoBoxContentAlternateName, 1>::Create,
     e_Alternate_1_GR, // Altern1 GR
@@ -770,7 +770,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // e_Alternate_1_GR
   {
     N_("Alternate 1 GR"),
-    N_("Altrn1 GR"),
+    N_("Altn1 GR"),
     N_("Geometric gradient to the arrival height above the best alternate. This is not adjusted for total energy."),
     IBFHelperInt<InfoBoxContentAlternateGR, 0>::Create,
     e_Alternate_1_Name, // Altern1 name
