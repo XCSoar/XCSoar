@@ -71,7 +71,7 @@ PointLeftOfLine(const PT &p, const PT &a, const PT &b)
   typename PT::SquareType apy = p.y - a.y;
 
   // almost distance point from line (normal has to be normalized for that)
-  return (nx * apx + ny * apy) >= 0;
+  return (nx * apx + ny * apy) > 0;
 }
 
 /**
@@ -89,13 +89,15 @@ InsideTriangle(const PT &p, const PT &a, const PT &b, const PT &c)
 
 /**
  * Test whether the line a,b,c makes a bend to the left or not.
+ *
+ * @return: positive if a,b,c turns left, zero for a spike, negative otherwise
  */
 template <typename PT>
-static inline bool
+static inline typename PT::SquareType
 LeftBend(const PT &a, const PT &b, const PT &c)
 {
-  return ((b.x - a.x) * (typename PT::SquareType)(c.y - b.y) -
-          (b.y - a.y) * (typename PT::SquareType)(c.x - b.x)) > 0;
+  return (b.x - a.x) * (typename PT::SquareType)(c.y - b.y) -
+         (b.y - a.y) * (typename PT::SquareType)(c.x - b.x);
 }
 
 /**
@@ -183,8 +185,14 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
   GLushort *t = triangles;
   for (unsigned a = start, b = next[a], c = next[b], heat = 0;
        num_points > 2; a = b, b = c, c = next[c]) {
-    if (LeftBend(points[a], points[b], points[c])) {
-      bool ear_cuttable = true;
+    typename PT::SquareType bendiness =
+      LeftBend(points[a], points[b], points[c]);
+
+    // left bend, spike or line with a redundant point in the middle
+    bool ear_cuttable = (bendiness >= 0);
+
+    if (bendiness > 0) {
+      // left bend
       for (unsigned p = next[c]; p != a; p = next[p]) {
         if (InsideTriangle(points[p], points[a], points[b], points[c])) {
           ear_cuttable = false;
@@ -196,15 +204,19 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
         *t++ = a;
         *t++ = b;
         *t++ = c;
-        // remove node b from polygon
-        next[a] = c;
-        num_points--;
-        // 'a' should stay the same in the next loop
-        b = a;
-        // reset heat
-        heat = 0;
       }
     }
+
+    if (ear_cuttable) {
+      // remove node b from polygon
+      next[a] = c;
+      num_points--;
+      // 'a' should stay the same in the next loop
+      b = a;
+      // reset heat
+      heat = 0;
+    }
+
     if (heat++ > num_points) {
       // if polygon edges overlap we may loop endlessly
       //LogDebug(_T("polygon_to_triangle: bad polygon"));
