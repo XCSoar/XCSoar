@@ -118,9 +118,7 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
                     GLushort *triangles, unsigned min_distance)
 {
   // no redundant start/end please
-  if (num_points >= 1 &&
-      points[0].x == points[num_points - 1].x &&
-      points[0].y == points[num_points - 1].y)
+  if (num_points >= 1 && points[0] == points[num_points - 1])
     num_points--;
 
   if (num_points < 3)
@@ -413,7 +411,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
     a = b - 1;
 
     // skip identical points before b
-    while (a >= points && a->x == b->x && a->y == b->y)
+    while (a >= points && *a == *b)
       a--;
 
     if (a < points)
@@ -426,7 +424,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
     b = a + 1;
 
     // skip identical points after a
-    while (b != points_end && a->x == b->x && a->y == b->y)
+    while (b != points_end && *a == *b)
       b++;
 
     if (b == points_end)
@@ -437,7 +435,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
   }
 
   // skip identical points after b
-  while (c != points_end && b->x == c->x && b->y == c->y)
+  while (c != points_end && *b == *c)
     c++;
 
   if (!loop) {
@@ -500,7 +498,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
       b = c;
       c++;
 
-      while (c != points_end && b->x == c->x && b->y == c->y)
+      while (c != points_end && *b == *c)
         // skip identical points
         c++;
     }
