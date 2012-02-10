@@ -1661,8 +1661,8 @@ msgstr "Alternar nome 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:753
 #, no-c-format
-msgid "Altrn 1"
-msgstr "Altrn 1"
+msgid "Altn 1"
+msgstr "Altn 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:754
 #, no-c-format
@@ -1676,8 +1676,8 @@ msgstr "Nome 2 alternativo"
 
 #: src/InfoBoxes/Content/Factory.cpp:763
 #, no-c-format
-msgid "Altrn 2"
-msgstr "Altrn 2"
+msgid "Altn 2"
+msgstr "Altn 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:764
 #, no-c-format
@@ -1691,8 +1691,8 @@ msgstr "Grad Alternativo 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:773
 #, no-c-format
-msgid "Altrn1 GR"
-msgstr "Grad Altrn 1"
+msgid "Altn1 GR"
+msgstr "Grad Altn 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:774
 #, no-c-format

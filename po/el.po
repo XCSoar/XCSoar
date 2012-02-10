@@ -1619,7 +1619,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:753
 #, no-c-format
-msgid "Altrn 1"
+msgid "Altn 1"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:754
@@ -1634,7 +1634,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:763
 #, no-c-format
-msgid "Altrn 2"
+msgid "Altn 2"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:764
@@ -1649,7 +1649,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:773
 #, no-c-format
-msgid "Altrn1 GR"
+msgid "Altn1 GR"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:774
