@@ -480,8 +480,8 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
-"Rechtweisende Peilung zum nächsten Wegpunkt. Bei AA Aufgaben ist das die "
-"rechtweisende Peilung zum Ziel im AA Sektor."
+"Rechtweisende Peilung zum nächsten Wegpunkt. Bei AAT Aufgaben ist das die "
+"rechtweisende Peilung zum Ziel im AAT Sektor."
 
 #: src/InfoBoxes/Content/Factory.cpp:118
 #, no-c-format
@@ -636,8 +636,8 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
-"Strecke zum ausgewählten Wegpunkt. Für AA Aufgaben ist dies die Strecke bis "
-"zum Ziel im AA Sektor."
+"Strecke zum ausgewählten Wegpunkt. Für AAT Aufgaben ist dies die Strecke bis "
+"zum Ziel im AAT Sektor."
 
 #: src/InfoBoxes/Content/Factory.cpp:198
 #, no-c-format
@@ -929,12 +929,12 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:348
 #, no-c-format
-msgid "AA time"
+msgid "AAT time"
 msgstr "AAT - Zeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
-msgid "AA Time"
+msgid "AAT Time"
 msgstr "AAT - Zeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:350
@@ -942,48 +942,48 @@ msgstr "AAT - Zeit"
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
 msgstr ""
-"Verbleibende Zeit für die AA Aufgabe; schaltet auf Rot wenn die Zeit "
+"Verbleibende Zeit für die AAT Aufgabe; schaltet auf Rot wenn die Zeit "
 "verstrichen ist."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
-msgid "AA max. distance "
+msgid "AAT max. distance "
 msgstr "AAT - max. Distanz "
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 #, no-c-format
-msgid "AA Dmax"
-msgstr "AA Dmax"
+msgid "AAT Dmax"
+msgstr "AAT Dmax"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
-msgstr "Maximale mögliche Strecke für den Abschluss der AA Aufgabe."
+msgstr "Maximale mögliche Strecke für den Abschluss der AAT Aufgabe."
 
 #: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
-msgid "AA min. distance"
+msgid "AAT min. distance"
 msgstr "AAT - min. Distanz"
 
 #: src/InfoBoxes/Content/Factory.cpp:369
 #, no-c-format
-msgid "AA Dmin"
-msgstr "AA Dmin"
+msgid "AAT Dmin"
+msgstr "AAT Dmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:370
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr "Minimal mögliche Strecke für die verbleibende AA Aufgabe."
+msgstr "Minimal mögliche Strecke für die verbleibende AAT Aufgabe."
 
 #: src/InfoBoxes/Content/Factory.cpp:378
 #, no-c-format
-msgid "AA speed max. distance"
+msgid "AAT speed max. distance"
 msgstr "AAT - max. Geschwindigkeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:379
 #, no-c-format
-msgid "AA Vmax"
-msgstr "AA Vmax"
+msgid "AAT Vmax"
+msgstr "AAT Vmax"
 
 #: src/InfoBoxes/Content/Factory.cpp:380
 #, no-c-format
@@ -991,18 +991,18 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
-"Erreichbare mittlere AA Geschwindigkeit, wenn die maximal mögliche Strecke "
+"Erreichbare mittlere AAT Geschwindigkeit, wenn die maximal mögliche Strecke "
 "in der Mindest-AA-Aufgabenzeit abgeschlossen wird."
 
 #: src/InfoBoxes/Content/Factory.cpp:388
 #, no-c-format
-msgid "AA speed min. distance"
+msgid "AAT speed min. distance"
 msgstr "AAT - Geschwindigkeit für min. Distanz"
 
 #: src/InfoBoxes/Content/Factory.cpp:389
 #, no-c-format
-msgid "AA Vmin"
-msgstr "AA Vmin"
+msgid "AAT Vmin"
+msgstr "AAT Vmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
@@ -1010,7 +1010,7 @@ msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
-"Erreichbare mittlere AA Geschwindigkeit, wenn die minimal mögliche Strecke "
+"Erreichbare mittlere AAT Geschwindigkeit, wenn die minimal mögliche Strecke "
 "in der Mindest-AA-Aufgabenzeit abgeschlossen wird."
 
 #: src/InfoBoxes/Content/Factory.cpp:398
@@ -1392,13 +1392,13 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:588
 #, no-c-format
-msgid "AA distance around target"
+msgid "AAT distance around target"
 msgstr "AAT - Restdistanz zum Ziel"
 
 #: src/InfoBoxes/Content/Factory.cpp:589
 #, no-c-format
-msgid "AA Dtgt"
-msgstr "AA DZiel"
+msgid "AAT Dtgt"
+msgstr "AAT DZiel"
 
 #: src/InfoBoxes/Content/Factory.cpp:590
 #, no-c-format
@@ -1407,13 +1407,13 @@ msgstr "Verbleibende Strecke der Assigned Area Aufgabe um alle Zielpunkte."
 
 #: src/InfoBoxes/Content/Factory.cpp:598
 #, no-c-format
-msgid "AA speed around target"
+msgid "AAT speed around target"
 msgstr "AAT - Geschwindigkeit für geplante Strecke"
 
 #: src/InfoBoxes/Content/Factory.cpp:599
 #, no-c-format
-msgid "AA Vtgt"
-msgstr "AA VZiel"
+msgid "AAT Vtgt"
+msgstr "AAT VZiel"
 
 #: src/InfoBoxes/Content/Factory.cpp:600
 #, no-c-format
@@ -1583,13 +1583,13 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:698
 #, no-c-format
-msgid "AA delta time"
+msgid "AAT delta time"
 msgstr "AAT - Differenzzeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:699
 #, no-c-format
-msgid "AA dT"
-msgstr "AA dT"
+msgid "AAT dT"
+msgstr "AAT dT"
 
 #: src/InfoBoxes/Content/Factory.cpp:700
 #, no-c-format
@@ -7889,12 +7889,12 @@ msgstr "Abfluggeschwindigkeit"
 
 #: Data/Dialogs/dlgTarget.xml:10 Data/Dialogs/dlgTarget_L.xml:28
 msgid ""
-"AA Delta Time - Difference between estimated task time and AAT minimum time. "
+"AAT Delta Time - Difference between estimated task time and AAT minimum time. "
 "Colored red if negative (expected arrival too early), or blue if in sector "
 "and can turn now with estimated arrival time greater than AAT time plus 5 "
 "minutes."
 msgstr ""
-"AA Delta Zeit - die Differenz zwischen geschätzter Aufgabenzeit und "
+"AAT Delta Zeit - die Differenz zwischen geschätzter Aufgabenzeit und "
 "minimaler AAT Zeit. Der Wert wird rot gefärbt wenn die Ankunft zu früh "
 "erwartet wird, oder blau wenn im Sektor gewendet werden kann und die "
 "geschätzte Ankunftszeit mehr als 5 Minuten nach der AAT Zeit liegt."
@@ -8141,10 +8141,6 @@ msgstr "Wölbklappen negativ"
 #: Data/Dialogs/pnlStatusFlight.xml:6
 msgid "Max. height gain"
 msgstr "Max. Höhengewinn"
-
-#: Data/Dialogs/pnlTaskCalculator.xml:10
-msgid "AAT time"
-msgstr "AAT Zeit"
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:33
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:33
@@ -9311,16 +9307,16 @@ msgstr ""
 #~ msgid "Task Arrival Time"
 #~ msgstr "Aufgabe - Ankunftszeit"
 
-#~ msgid "AA Speed Min"
+#~ msgid "AAT Speed Min"
 #~ msgstr "AAT - min. Geschwindigkeit"
 
-#~ msgid "AA Distance Min"
+#~ msgid "AAT Distance Min"
 #~ msgstr "AAT - min. Distanz"
 
-#~ msgid "AA Speed Max"
+#~ msgid "AAT Speed Max"
 #~ msgstr "AAT - max. Geschwindigkeit"
 
-#~ msgid "AA Distance Max"
+#~ msgid "AAT Distance Max"
 #~ msgstr "AAT - max. Distanz"
 
 #~ msgid "Team Bearing"
@@ -9872,10 +9868,10 @@ msgstr ""
 #~ msgstr "Eigenschaften der Aufgabe"
 
 #~ msgid ""
-#~ "AA Speed - Assigned Area Task average speed achievable around target "
+#~ "AAT Speed - Assigned Area Task average speed achievable around target "
 #~ "points remaining in minimum AAT time."
 #~ msgstr ""
-#~ "AA Geschwindigkeit - Für die Assigned Area Aufgabe erreichbare mittlere "
+#~ "AAT Geschwindigkeit - Für die Assigned Area Aufgabe erreichbare mittlere "
 #~ "\r\n"
 #~ "Geschwindigkeit um alle Zielpunkte in minimaler Aufgabenzeit."
 
@@ -10498,10 +10494,10 @@ msgstr ""
 #~ msgid "L/D Average"
 #~ msgstr "Gleitzahl - Mittelwert"
 
-#~ msgid "AA Delta Time"
+#~ msgid "AAT Delta Time"
 #~ msgstr "AAT - Differenzzeit"
 
-#~ msgid "AA Distance Tgt"
+#~ msgid "AAT Distance Tgt"
 #~ msgstr "AAT - Restdistanz zum Ziel"
 
 #~ msgid "Distance Vario"
@@ -10528,7 +10524,7 @@ msgstr ""
 #~ msgid "Thermal last 30 sec"
 #~ msgstr "Vario - 30 sec. Mittel"
 
-#~ msgid "AA Speed Tgt"
+#~ msgid "AAT Speed Tgt"
 #~ msgstr "AAT - m. Geschwindigkeit zum Ziel"
 
 #~ msgid "Alternate1 GR"

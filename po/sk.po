@@ -921,13 +921,13 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:348
 #, no-c-format
-msgid "AA time"
-msgstr "AA Čas"
+msgid "AAT time"
+msgstr "AAT Čas"
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
-msgid "AA Time"
-msgstr "AA Čas"
+msgid "AAT Time"
+msgstr "AAT Čas"
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
@@ -937,13 +937,13 @@ msgstr "Zostávajúci čas pre AAT úlohu. Sčervená ak čas vypršal."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
-msgid "AA max. distance "
-msgstr "AA Max vzdialenosť "
+msgid "AAT max. distance "
+msgstr "AAT Max vzdialenosť "
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 #, no-c-format
-msgid "AA Dmax"
-msgstr "AA Vzmax"
+msgid "AAT Dmax"
+msgstr "AAT Vzmax"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 #, no-c-format
@@ -952,13 +952,13 @@ msgstr "Maximálna možná vzdialenosť do ukončenia AAT úlohy."
 
 #: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
-msgid "AA min. distance"
+msgid "AAT min. distance"
 msgstr "Zostávajúca vzdialenosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:369
 #, no-c-format
-msgid "AA Dmin"
-msgstr "AA Vzmin"
+msgid "AAT Dmin"
+msgstr "AAT Vzmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:370
 #, no-c-format
@@ -967,13 +967,13 @@ msgstr "Minimálna možná vzdialenosť do ukončenia AAT úlohy."
 
 #: src/InfoBoxes/Content/Factory.cpp:378
 #, no-c-format
-msgid "AA speed max. distance"
+msgid "AAT speed max. distance"
 msgstr "Zostávajúca vzdialenosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:379
 #, no-c-format
-msgid "AA Vmax"
-msgstr "AA Rmax"
+msgid "AAT Vmax"
+msgstr "AAT Rmax"
 
 #: src/InfoBoxes/Content/Factory.cpp:380
 #, no-c-format
@@ -986,13 +986,13 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:388
 #, no-c-format
-msgid "AA speed min. distance"
-msgstr "AA rýchlosť pre min. vzdialenosť"
+msgid "AAT speed min. distance"
+msgstr "AAT rýchlosť pre min. vzdialenosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:389
 #, no-c-format
-msgid "AA Vmin"
-msgstr "AA Rmin"
+msgid "AAT Vmin"
+msgstr "AAT Rmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
@@ -1378,13 +1378,13 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:588
 #, no-c-format
-msgid "AA distance around target"
-msgstr "AA zostavajuca vzdial. k cieľu"
+msgid "AAT distance around target"
+msgstr "AAT zostavajuca vzdial. k cieľu"
 
 #: src/InfoBoxes/Content/Factory.cpp:589
 #, no-c-format
-msgid "AA Dtgt"
-msgstr "AA Vciel"
+msgid "AAT Dtgt"
+msgstr "AAT Vciel"
 
 #: src/InfoBoxes/Content/Factory.cpp:590
 #, no-c-format
@@ -1394,13 +1394,13 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:598
 #, no-c-format
-msgid "AA speed around target"
-msgstr "AA rýchlosť pre plán. trať"
+msgid "AAT speed around target"
+msgstr "AAT rýchlosť pre plán. trať"
 
 #: src/InfoBoxes/Content/Factory.cpp:599
 #, no-c-format
-msgid "AA Vtgt"
-msgstr "AA Rciel"
+msgid "AAT Vtgt"
+msgstr "AAT Rciel"
 
 #: src/InfoBoxes/Content/Factory.cpp:600
 #, no-c-format
@@ -1571,12 +1571,12 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:698
 #, no-c-format
-msgid "AA delta time"
-msgstr "AA časový rozdiel"
+msgid "AAT delta time"
+msgstr "AAT časový rozdiel"
 
 #: src/InfoBoxes/Content/Factory.cpp:699
 #, no-c-format
-msgid "AA dT"
+msgid "AAT dT"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:700
@@ -7716,7 +7716,7 @@ msgstr "Rýchlosť pri štarte"
 
 #: Data/Dialogs/dlgTarget.xml:10 Data/Dialogs/dlgTarget_L.xml:28
 msgid ""
-"AA Delta Time - Difference between estimated task time and AAT minimum time. "
+"AAT Delta Time - Difference between estimated task time and AAT minimum time. "
 "Colored red if negative (expected arrival too early), or blue if in sector "
 "and can turn now with estimated arrival time greater than AAT time plus 5 "
 "minutes."
@@ -7955,10 +7955,6 @@ msgstr "Negatívne klapky"
 #: Data/Dialogs/pnlStatusFlight.xml:6
 msgid "Max. height gain"
 msgstr "Maximálne získaná výška"
-
-#: Data/Dialogs/pnlTaskCalculator.xml:10
-msgid "AAT time"
-msgstr ""
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:33
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:33
@@ -9182,11 +9178,11 @@ msgstr ""
 #~ msgid "Next Altitude Difference"
 #~ msgstr "Výškový rozdiel k ďalšiemu"
 
-#~ msgid "AA Distance Max"
-#~ msgstr "AA Max vzdialenosť"
+#~ msgid "AAT Distance Max"
+#~ msgstr "AAT Max vzdialenosť"
 
-#~ msgid "AA Distance Min"
-#~ msgstr "AA Min vzdialenosť"
+#~ msgid "AAT Distance Min"
+#~ msgstr "AAT Min vzdialenosť"
 
 #~ msgid "Terrain Elevation"
 #~ msgstr "Výška terénu"
@@ -9203,11 +9199,11 @@ msgstr ""
 #~ msgid "Final Altitude Difference"
 #~ msgstr "Výškový rozdiel do cieľa"
 
-#~ msgid "AA Speed Min"
-#~ msgstr "AA Min rýchlosť"
+#~ msgid "AAT Speed Min"
+#~ msgstr "AAT Min rýchlosť"
 
-#~ msgid "AA Speed Max"
-#~ msgstr "AA Max rýchlosť"
+#~ msgid "AAT Speed Max"
+#~ msgstr "AAT Max rýchlosť"
 
 #~ msgid "Thermal Gain"
 #~ msgstr "Získaná výška"
@@ -9248,8 +9244,8 @@ msgstr ""
 #~ msgid "Own Team Code"
 #~ msgstr "Vlastný kód tímu"
 
-#~ msgid "AA Delta Time"
-#~ msgstr "AA časový rozdiel"
+#~ msgid "AAT Delta Time"
+#~ msgstr "AAT časový rozdiel"
 
 #~ msgid "Online Contest Distance"
 #~ msgstr "OLC vzdialenosť"
@@ -9266,8 +9262,8 @@ msgstr ""
 #~ msgid "Screen Mode Normal"
 #~ msgstr "Normálny režim displeja"
 
-#~ msgid "AA Distance Tgt"
-#~ msgstr "AA vzdialenosť do bodu"
+#~ msgid "AAT Distance Tgt"
+#~ msgstr "AAT vzdialenosť do bodu"
 
 #~ msgid "Speed Task Achieved"
 #~ msgstr "Dosiahnutá rýchlosť úlohy"
