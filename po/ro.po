@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-09 23:34+0100\n"
+"POT-Creation-Date: 2012-02-10 12:11+0100\n"
 "PO-Revision-Date: 2012-02-08 19:41+0000\n"
 "Last-Translator: Pop Paul <poppali1@yahoo.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -2825,6 +2825,7 @@ msgid "Ignore"
 msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:111
+#: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:152
 #, c-format
 msgid "%s on %s"
 msgstr ""
@@ -3798,16 +3799,6 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:216
 msgid "If enabled, then airspaces are filled transparently."
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:148
-#, c-format
-msgid "%c: %s on %s"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:152
-#, c-format
-msgid "%c: %s"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/ExperimentalConfigPanel.cpp:39

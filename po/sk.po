@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-09 23:34+0100\n"
+"POT-Creation-Date: 2012-02-10 12:11+0100\n"
 "PO-Revision-Date: 2011-12-20 19:56+0100\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
@@ -3002,6 +3002,7 @@ msgid "Ignore"
 msgstr "Ignorovať"
 
 #: src/Dialogs/DeviceListDialog.cpp:111
+#: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:152
 #, c-format
 msgid "%s on %s"
 msgstr ""
@@ -3999,16 +4000,6 @@ msgstr "Zobrazenie vzduš. priestoru"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:216
 msgid "If enabled, then airspaces are filled transparently."
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:148
-#, c-format
-msgid "%c: %s on %s"
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:152
-#, c-format
-msgid "%c: %s"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/ExperimentalConfigPanel.cpp:39
