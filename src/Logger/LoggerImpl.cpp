@@ -412,8 +412,10 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   // chars must be legal in file names
   char logger_id[4];
+  unsigned asset_length = _tcslen(asset_number);
   for (unsigned i = 0; i < 3; i++)
-    logger_id[i] = IsAlphaNum(asset_number[i]) ? asset_number[i] : _T('A');
+    logger_id[i] = i < asset_length && IsAlphaNum(asset_number[i]) ?
+                   asset_number[i] : _T('A');
   logger_id[3] = _T('\0');
 
   StartLogger(gps_info, settings, logger_id);
