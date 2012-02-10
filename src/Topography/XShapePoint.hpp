@@ -35,6 +35,14 @@ struct ShapePoint {
    */
   typedef float SquareType;
   ShapeScalar x, y;
+
+  bool operator==(const ShapePoint &other) const {
+    return x == other.x && y == other.y;
+  }
+
+  bool operator!=(const ShapePoint &other) const {
+    return !(*this == other);
+  }
 };
 
 static inline unsigned
