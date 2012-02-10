@@ -345,8 +345,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // e_AA_Time
   {
-    N_("AA time"),
-    N_("AA Time"),
+    N_("AAT time"),
+    N_("AAT Time"),
     N_("Assigned Area Task time remaining. Goes red when time remaining has expired."),
     IBFHelper<InfoBoxContentTaskAATime>::Create,
     e_AA_TimeDiff, // AA dTime
@@ -355,8 +355,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // e_AA_DistanceMax
   {
-    N_("AA max. distance "),
-    N_("AA Dmax"),
+    N_("AAT max. distance "),
+    N_("AAT Dmax"),
     N_("Assigned Area Task maximum distance possible for remainder of task."),
     IBFHelper<InfoBoxContentTaskAADistanceMax>::Create,
     e_AA_DistanceMin, // AA Dmin
@@ -365,8 +365,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // e_AA_DistanceMin
   {
-    N_("AA min. distance"),
-    N_("AA Dmin"),
+    N_("AAT min. distance"),
+    N_("AAT Dmin"),
     N_("Assigned Area Task minimum distance possible for remainder of task."),
     IBFHelper<InfoBoxContentTaskAADistanceMin>::Create,
     e_AA_SpeedMax, // AA Vmax
@@ -375,8 +375,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // e_AA_SpeedMax
   {
-    N_("AA speed max. distance"),
-    N_("AA Vmax"),
+    N_("AAT speed max. distance"),
+    N_("AAT Vmax"),
     N_("Assigned Area Task average speed achievable if flying maximum possible distance remaining in minimum AAT time."),
     IBFHelper<InfoBoxContentTaskAASpeedMax>::Create,
     e_AA_SpeedMin, // AA Vmin
@@ -385,8 +385,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // e_AA_SpeedMin
   {
-    N_("AA speed min. distance"),
-    N_("AA Vmin"),
+    N_("AAT speed min. distance"),
+    N_("AAT Vmin"),
     N_("Assigned Area Task average speed achievable if flying minimum possible distance remaining in minimum AAT time."),
     IBFHelper<InfoBoxContentTaskAASpeedMin>::Create,
     e_Fin_AA_Distance, // AA Dtgt
@@ -585,8 +585,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // e_Fin_AA_Distance
   {
-    N_("AA distance around target"),
-    N_("AA Dtgt"),
+    N_("AAT distance around target"),
+    N_("AAT Dtgt"),
     N_("Assigned Area Task distance around target points for remainder of task."),
     IBFHelper<InfoBoxContentTaskAADistance>::Create,
     e_AA_SpeedAvg, // AA Vtgt
@@ -595,8 +595,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // e_AA_SpeedAvg
   {
-    N_("AA speed around target"),
-    N_("AA Vtgt"),
+    N_("AAT speed around target"),
+    N_("AAT Vtgt"),
     N_("Assigned Area Task average speed achievable around target points remaining in minimum AAT time."),
     IBFHelper<InfoBoxContentTaskAASpeed>::Create,
     e_Home_Distance, // Home Dis
@@ -695,8 +695,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // e_AA_TimeDiff
   {
-    N_("AA delta time"),
-    N_("AA dT"),
+    N_("AAT delta time"),
+    N_("AAT dT"),
     N_("Difference between estimated task time and AAT minimum time. Colored red if negative (expected arrival too early), or blue if in sector and can turn now with estimated arrival time greater than AAT time plus 5 minutes."),
     IBFHelper<InfoBoxContentTaskAATimeDelta>::Create,
     e_AA_DistanceMax, // AA Dmax
