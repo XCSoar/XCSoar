@@ -64,8 +64,9 @@ RasterRenderer::RasterRenderer()
   :quantisation_pixels(2),
    image(NULL)
 {
-  // scale quantisation_pixels so resolution is not too high on large displays
-  if (IsEmbedded())
+  // scale quantisation_pixels so resolution is not too high on old hardware
+  // with large displays
+  if (IsAncientHardware())
     quantisation_pixels = Layout::FastScale(quantisation_pixels);
 }
 
