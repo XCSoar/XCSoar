@@ -270,46 +270,49 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     return;
   }
 
-  // Show list of the flights
-  const RecordedFlightInfo *flight = ShowFlightList(flight_list);
-  if (!flight) {
-    device.DisableDownloadMode();
-    return;
-  }
+  while (true) {
+    // Show list of the flights
+    const RecordedFlightInfo *flight = ShowFlightList(flight_list);
+    if (!flight)
+      break;
 
-  // Download chosen IGC file into temporary file
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("logs"), _T("temp.igc"));
-  if (!DoDownloadFlight(device, *flight, path)) {
-    // Delete temporary file
-    File::Delete(path);
-    device.DisableDownloadMode();
-    MessageBoxX(_("Failed to download flight."),
-                _("Download flight"), MB_OK | MB_ICONERROR);
-    return;
+    // Download chosen IGC file into temporary file
+    TCHAR path[MAX_PATH];
+    LocalPath(path, _T("logs"), _T("temp.igc"));
+    if (!DoDownloadFlight(device, *flight, path)) {
+      // Delete temporary file
+      File::Delete(path);
+      MessageBoxX(_("Failed to download flight."),
+                  _("Download flight"), MB_OK | MB_ICONERROR);
+      continue;
+    }
+
+    /* read the IGC header and build the final IGC file name with it */
+
+    IGCHeader header;
+    BrokenDate date;
+    ReadIGCMetaData(path, header, date);
+    if (header.flight == 0)
+      header.flight = GetFlightNumber(flight_list, *flight);
+
+    TCHAR name[64];
+    FormatIGCFilenameLong(name, date, header.manufacturer, header.id,
+                          header.flight);
+
+    TCHAR final_path[MAX_PATH];
+    LocalPath(final_path, _T("logs"), name);
+
+    // Remove a file with the same name if it exists
+    if (File::Exists(final_path))
+      File::Delete(final_path);
+
+    // Rename the temporary file to the actual filename
+    File::Rename(path, final_path);
+
+    if (MessageBoxX(_("Do you want to download another flight?"),
+                    _("Download flight"), MB_YESNO | MB_ICONQUESTION) != IDYES)
+      break;
   }
 
   device.DisableDownloadMode();
-
-  /* read the IGC header and build the final IGC file name with it */
-
-  IGCHeader header;
-  BrokenDate date;
-  ReadIGCMetaData(path, header, date);
-  if (header.flight == 0)
-    header.flight = GetFlightNumber(flight_list, *flight);
-
-  TCHAR name[64];
-  FormatIGCFilenameLong(name, date, header.manufacturer, header.id,
-                        header.flight);
-
-  TCHAR final_path[MAX_PATH];
-  LocalPath(final_path, _T("logs"), name);
-
-  // Remove a file with the same name if it exists
-  if (File::Exists(final_path))
-    File::Delete(final_path);
-
-  // Rename the temporary file to the actual filename
-  File::Rename(path, final_path);
 }
