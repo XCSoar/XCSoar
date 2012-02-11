@@ -37,6 +37,14 @@ struct RasterPoint {
    */
   typedef int SquareType;
   PixelScalar x, y;
+
+  bool operator==(const RasterPoint &other) const {
+    return x == other.x && y == other.y;
+  }
+
+  bool operator!=(const RasterPoint &other) const {
+    return !(*this == other);
+  }
 };
 
 struct PixelSize {

@@ -41,6 +41,14 @@
 #define REACH_MAX_VERTICES 2000
 
 static bool
+AlmostTheSame(const FlatGeoPoint &p1, const FlatGeoPoint &p2)
+{
+  const FlatGeoPoint k = p1 - p2;
+  const int dmax = std::max(abs(k.Longitude), abs(k.Latitude));
+  return dmax <= 1;
+}
+
+static bool
 TooClose(const FlatGeoPoint &p1, const FlatGeoPoint &p2)
 {
   const FlatGeoPoint k = p1 - p2;
@@ -156,7 +164,15 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
   AddPoint(origin);
   for (int index = index_low; index < index_high; ++index) {
     const FlatGeoPoint x = parms.reach_intercept(index, ao);
-    AddPoint(x);
+    /* hao: if reach_intercept() did not find anything reasonable it returns
+     *      a FlatGeoPoint that is almost the same as origin, but differs
+     *      +/- 1 due to conversion errors. The resulting polygon can have
+     *      overlapping edges causing triangulation failures.
+     */
+    if (AlmostTheSame(origin, x))
+      AddPoint(origin);
+    else
+      AddPoint(x);
   }
 }
 

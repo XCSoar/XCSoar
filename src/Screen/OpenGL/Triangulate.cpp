@@ -46,17 +46,6 @@ PolygonRotatesLeft(const PT *points, unsigned num_points)
 }
 
 /**
- * Test whether the area of a triangle is zero, or not.
- */
-template <typename PT>
-static inline bool
-TriangleEmpty(const PT &a, const PT &b, const PT &c)
-{
-  return ((b.x - a.x) * (typename PT::SquareType)(c.y - b.y) -
-          (b.y - a.y) * (typename PT::SquareType)(c.x - b.x)) == 0;
-}
-
-/**
  * Test whether point p ist left of line (a,b) or not
  */
 template <typename PT>
@@ -71,7 +60,7 @@ PointLeftOfLine(const PT &p, const PT &a, const PT &b)
   typename PT::SquareType apy = p.y - a.y;
 
   // almost distance point from line (normal has to be normalized for that)
-  return (nx * apx + ny * apy) >= 0;
+  return (nx * apx + ny * apy) > 0;
 }
 
 /**
@@ -89,13 +78,25 @@ InsideTriangle(const PT &p, const PT &a, const PT &b, const PT &c)
 
 /**
  * Test whether the line a,b,c makes a bend to the left or not.
+ *
+ * @return: positive if a,b,c turns left, zero for a spike, negative otherwise
+ */
+template <typename PT>
+static inline typename PT::SquareType
+LeftBend(const PT &a, const PT &b, const PT &c)
+{
+  return (b.x - a.x) * (typename PT::SquareType)(c.y - b.y) -
+         (b.y - a.y) * (typename PT::SquareType)(c.x - b.x);
+}
+
+/**
+ * Test whether the area of a triangle is zero, or not.
  */
 template <typename PT>
 static inline bool
-LeftBend(const PT &a, const PT &b, const PT &c)
+TriangleEmpty(const PT &a, const PT &b, const PT &c)
 {
-  return ((b.x - a.x) * (typename PT::SquareType)(c.y - b.y) -
-          (b.y - a.y) * (typename PT::SquareType)(c.x - b.x)) > 0;
+  return LeftBend(a, b, c) == 0;
 }
 
 /**
@@ -118,9 +119,7 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
                     GLushort *triangles, unsigned min_distance)
 {
   // no redundant start/end please
-  if (num_points >= 1 &&
-      points[0].x == points[num_points - 1].x &&
-      points[0].y == points[num_points - 1].y)
+  if (num_points >= 1 && points[0] == points[num_points - 1])
     num_points--;
 
   if (num_points < 3)
@@ -185,8 +184,14 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
   GLushort *t = triangles;
   for (unsigned a = start, b = next[a], c = next[b], heat = 0;
        num_points > 2; a = b, b = c, c = next[c]) {
-    if (LeftBend(points[a], points[b], points[c])) {
-      bool ear_cuttable = true;
+    typename PT::SquareType bendiness =
+      LeftBend(points[a], points[b], points[c]);
+
+    // left bend, spike or line with a redundant point in the middle
+    bool ear_cuttable = (bendiness >= 0);
+
+    if (bendiness > 0) {
+      // left bend
       for (unsigned p = next[c]; p != a; p = next[p]) {
         if (InsideTriangle(points[p], points[a], points[b], points[c])) {
           ear_cuttable = false;
@@ -198,15 +203,19 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
         *t++ = a;
         *t++ = b;
         *t++ = c;
-        // remove node b from polygon
-        next[a] = c;
-        num_points--;
-        // 'a' should stay the same in the next loop
-        b = a;
-        // reset heat
-        heat = 0;
       }
     }
+
+    if (ear_cuttable) {
+      // remove node b from polygon
+      next[a] = c;
+      num_points--;
+      // 'a' should stay the same in the next loop
+      b = a;
+      // reset heat
+      heat = 0;
+    }
+
     if (heat++ > num_points) {
       // if polygon edges overlap we may loop endlessly
       //LogDebug(_T("polygon_to_triangle: bad polygon"));
@@ -413,7 +422,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
     a = b - 1;
 
     // skip identical points before b
-    while (a >= points && a->x == b->x && a->y == b->y)
+    while (a >= points && *a == *b)
       a--;
 
     if (a < points)
@@ -426,7 +435,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
     b = a + 1;
 
     // skip identical points after a
-    while (b != points_end && a->x == b->x && a->y == b->y)
+    while (b != points_end && *a == *b)
       b++;
 
     if (b == points_end)
@@ -437,7 +446,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
   }
 
   // skip identical points after b
-  while (c != points_end && b->x == c->x && b->y == c->y)
+  while (c != points_end && *b == *c)
     c++;
 
   if (!loop) {
@@ -500,7 +509,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
       b = c;
       c++;
 
-      while (c != points_end && b->x == c->x && b->y == c->y)
+      while (c != points_end && *b == *c)
         // skip identical points
         c++;
     }
