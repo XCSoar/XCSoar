@@ -42,6 +42,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
 import android.util.Log;
+import android.provider.Settings;
 
 public class XCSoar extends Activity {
   private static final String TAG = "XCSoar";
@@ -162,12 +163,27 @@ public class XCSoar extends Activity {
     super.onPause();
   }
 
+  private void getHapticFeedbackSettings() {
+    boolean hapticFeedbackEnabled;
+    try {
+      hapticFeedbackEnabled =
+        (Settings.System.getInt(getContentResolver(),
+                                Settings.System.HAPTIC_FEEDBACK_ENABLED)) != 0;
+    } catch (Settings.SettingNotFoundException e) {
+      hapticFeedbackEnabled = false;
+    }
+
+    if (nativeView != null)
+      nativeView.setHapticFeedback(hapticFeedbackEnabled);
+  }
+
   @Override protected void onResume() {
     super.onResume();
     if (nativeView != null)
       nativeView.onResume();
     else
       initSDL();
+    getHapticFeedbackSettings();
   }
 
   @Override protected void onDestroy()

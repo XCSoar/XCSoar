@@ -264,6 +264,8 @@ class NativeView extends SurfaceView
 
   protected native void setBatteryPercent(int level, int plugged);
 
+  protected native void setHapticFeedback(boolean on);
+
   private int findConfigAttrib(EGLConfig config, int attribute,
                                int defaultValue) {
     int[] mValue = new int[1];

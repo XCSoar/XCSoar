@@ -58,7 +58,9 @@ NativeView *native_view;
 EventQueue *event_queue;
 
 SoundUtil *sound_util;
+
 Vibrator *vibrator;
+bool os_haptic_feedback_enabled;
 
 #ifdef IOIOLIB
 IOIOManager *ioio_manager;
@@ -171,4 +173,12 @@ Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
     exit(0);
 
   CommonInterface::main_window.resume();
+}
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeView_setHapticFeedback(JNIEnv *env, jobject obj,
+                                             jboolean on)
+{
+  os_haptic_feedback_enabled = on;
 }

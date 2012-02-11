@@ -44,6 +44,7 @@ extern EventQueue *event_queue;
 extern SoundUtil *sound_util;
 
 extern Vibrator *vibrator;
+extern bool os_haptic_feedback_enabled;
 
 #ifdef IOIOLIB
 extern IOIOManager *ioio_manager;
