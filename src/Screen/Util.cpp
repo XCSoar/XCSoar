@@ -27,15 +27,10 @@ Copyright_License {
 
 #include <winuser.h>
 
-static 
-void segment_poly(RasterPoint* pt,
-                  const PixelScalar x,
-                  const PixelScalar y,
-                  const UPixelScalar radius,
-                  const int istart,
-                  const int iend,
-                  int &npoly,
-                  const bool forward=true)
+static void
+segment_poly(RasterPoint* pt, const PixelScalar x, const PixelScalar y,
+             const UPixelScalar radius, const int istart, const int iend,
+             int &npoly, const bool forward=true)
 {
   // add start node
   pt[npoly].x = x + ISINETABLE[istart] * (PixelScalar)radius / 1024;
@@ -50,9 +45,8 @@ void segment_poly(RasterPoint* pt,
       pt[npoly].x = x + ISINETABLE[angle] * (PixelScalar)radius / 1024;
       pt[npoly].y = y - ICOSTABLE[angle] * (PixelScalar)radius / 1024;
       
-      if ((pt[npoly].x != pt[npoly-1].x) || (pt[npoly].y != pt[npoly-1].y)) {
+      if (pt[npoly].x != pt[npoly-1].x || pt[npoly].y != pt[npoly-1].y)
         npoly++;
-      }
     }
   } else {
     int ilast = istart > iend ? iend : iend - 4096;
@@ -61,9 +55,8 @@ void segment_poly(RasterPoint* pt,
       pt[npoly].x = x + ISINETABLE[angle] * (PixelScalar)radius / 1024;
       pt[npoly].y = y - ICOSTABLE[angle] * (PixelScalar)radius / 1024;
       
-      if ((pt[npoly].x != pt[npoly-1].x) || (pt[npoly].y != pt[npoly-1].y)) {
+      if (pt[npoly].x != pt[npoly-1].x || pt[npoly].y != pt[npoly-1].y)
         npoly++;
-      }
     }
   }
 
@@ -100,9 +93,8 @@ Segment(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
   segment_poly(pt, x, y, radius, istart, iend, npoly);
 
   assert(npoly <= 66);
-  if (npoly) {
+  if (npoly)
     canvas.DrawTriangleFan(pt, npoly);
-  }
 
   return true;
 }
@@ -129,9 +121,8 @@ Annulus(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
   segment_poly(pt, x, y, inner_radius, iend, istart, npoly, false);
 
   assert(npoly <= 66*2);
-  if (npoly) {
+  if (npoly)
     canvas.polygon(pt, npoly);
-  }
 
   return true;
 }
@@ -157,17 +148,15 @@ KeyHole(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
   segment_poly(pt, x, y, inner_radius, iend, istart, npoly);
 
   assert(npoly <= 66*2);
-  if (npoly) {
+  if (npoly)
     canvas.polygon(pt, npoly);
-  }
 
   return true;
 }
 
 void
 RoundRect(Canvas &canvas, PixelScalar left, PixelScalar top,
-          PixelScalar right, PixelScalar bottom,
-          UPixelScalar radius)
+          PixelScalar right, PixelScalar bottom, UPixelScalar radius)
 {
   int npoly = 0;
   RasterPoint pt[66*4];

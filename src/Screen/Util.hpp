@@ -36,22 +36,18 @@ class Canvas;
 
 bool
 Segment(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
-        Angle start, Angle end,
-        bool horizon=false);
+        Angle start, Angle end, bool horizon=false);
 
 bool
 Annulus(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
-        Angle start, Angle end,
-        UPixelScalar inner_radius);
+        Angle start, Angle end, UPixelScalar inner_radius);
 
 bool
 KeyHole(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
-        Angle start, Angle end,
-        UPixelScalar inner_radius);
+        Angle start, Angle end, UPixelScalar inner_radius);
 
 void
 RoundRect(Canvas &canvas, PixelScalar left, PixelScalar top,
-          PixelScalar right, PixelScalar bottom,
-          UPixelScalar radius);
+          PixelScalar right, PixelScalar bottom, UPixelScalar radius);
 
 #endif
