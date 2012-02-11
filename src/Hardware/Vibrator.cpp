@@ -39,9 +39,13 @@ HaveVibrator()
 void
 VibrateShort()
 {
-  if (vibrator != NULL &&
-      CommonInterface::GetUISettings().haptic_feedback == UISettings::HapticFeedback::On)
-    vibrator->Vibrate(Java::GetEnv(), 25);
+  if (vibrator != NULL) {
+    const UISettings &ui_settings = CommonInterface::GetUISettings();
+    if (ui_settings.haptic_feedback == UISettings::HapticFeedback::On ||
+         (ui_settings.haptic_feedback == UISettings::HapticFeedback::Default &&
+          vibrator->IsOSHapticFeedbackEnabled()))
+      vibrator->Vibrate(Java::GetEnv(), 25);
+  }
 }
 
 #endif /* Android */
