@@ -131,17 +131,24 @@ ProgressBar::OnPaint(Canvas &canvas)
       value = min_value;
     else if (value > max_value)
       value = max_value;
+#ifdef EYE_CANDY
+    position = (value - min_value) * (get_width() - get_height()) /
+               (max_value - min_value);
+#else
     position = (value - min_value) * get_width() / (max_value - min_value);
+#endif
   }
 
 #ifdef EYE_CANDY
-  canvas.SelectHollowBrush();
-  canvas.SelectWhitePen();
-  canvas.DrawRoundRectangle(0, 0, get_width(), get_height(),
-                         get_height(), get_height());
+  unsigned margin_vert = get_height() / 10;
+  unsigned margin_hor  = get_height() / 2;
+
+  canvas.SelectNullPen();
   canvas.SelectWhiteBrush();
-  canvas.DrawRoundRectangle(0, 0, position, get_height(),
-                         get_height(), get_height());
+  canvas.DrawRoundRectangle(0, 0, get_width(), get_height(),
+                            get_height(), get_height());
+  canvas.DrawFilledRectangle(margin_hor, margin_vert, margin_hor + position,
+                             get_height() - margin_vert, COLOR_GREEN);
 #else
   canvas.DrawFilledRectangle(0, 0, position, get_height(), COLOR_GREEN);
   canvas.DrawFilledRectangle(position, 0, get_width(), get_height(), COLOR_WHITE);
