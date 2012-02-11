@@ -66,6 +66,7 @@ class TrackingGlue : protected StandbyThread {
   bool flying;
 
 public:
+  TrackingGlue();
   void StopAsync();
   void WaitStopped();
 

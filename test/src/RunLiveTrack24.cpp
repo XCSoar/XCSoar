@@ -106,7 +106,7 @@ main(int argc, char *argv[])
 {
   Net::Initialise();
 
-  LiveTrack24::SetTestServer(true);
+  LiveTrack24::SetServer(_T("test.livetrack24.com"));
   bool result = TestTracking(argc, argv);
 
   Net::Deinitialise();

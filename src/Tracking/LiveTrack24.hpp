@@ -117,10 +117,10 @@ namespace LiveTrack24
   bool EndTracking(SessionID session, unsigned packet_id);
 
   /**
-   * Set whether the HTTP requests should be send to
-   * the test or the production server
+   * Set the tracking server
+   * @param server e.g. www.livetrack24.com (without http:// prefix)
    */
-  void SetTestServer(bool use_test_server);
+  void SetServer(const TCHAR *server);
 }
 
 #endif

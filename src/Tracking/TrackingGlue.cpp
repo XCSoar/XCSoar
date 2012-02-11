@@ -26,6 +26,11 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Units/System.hpp"
 
+TrackingGlue::TrackingGlue()
+{
+  LiveTrack24::SetServer(_T("www.livetrack24.com"));
+}
+
 void
 TrackingGlue::StopAsync()
 {

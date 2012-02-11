@@ -38,7 +38,7 @@ Copyright_License {
 
 namespace LiveTrack24
 {
-  bool use_test_server = false;
+  StaticString<256> server;
 
   const TCHAR *GetServer();
   bool SendRequest(const TCHAR *url);
@@ -151,15 +151,15 @@ LiveTrack24::EndTracking(SessionID session, unsigned packet_id)
 }
 
 void
-LiveTrack24::SetTestServer(bool _use_test_server)
+LiveTrack24::SetServer(const TCHAR * _server)
 {
-  use_test_server = _use_test_server;
+  server = _server;
 }
 
 const TCHAR *
 LiveTrack24::GetServer()
 {
-  return use_test_server ? _T("test.livetrack24.com") : _T("www.livetrack24.com");
+  return server;
 }
 
 bool
