@@ -122,7 +122,7 @@ LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict subdir,
  * @param p Pointer to the string to normalize
  */
 static void
-normalize_backslashes(TCHAR *p)
+NormalizeBackslashes(TCHAR *p)
 {
 #if !defined(_WIN32) || defined(__WINE__)
   while ((p = _tcschr(p, '\\')) != NULL)
@@ -152,7 +152,7 @@ ExpandLocalPath(TCHAR *dest, const TCHAR *src)
   LocalPath(dest, ptr);
 
   // Normalize the backslashes (if necessary)
-  normalize_backslashes(dest);
+  NormalizeBackslashes(dest);
 }
 
 void
