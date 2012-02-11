@@ -40,6 +40,7 @@
 #include "OS/FileUtil.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Replay/IGCParser.hpp"
+#include "Formatter/IGCFilenameFormatter.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -196,24 +197,6 @@ ReadIGCMetaData(const TCHAR *path, IGCHeader &header, BrokenDate &date)
     date = BrokenDateTime::NowUTC();
 }
 
-static void
-BuildIGCFileName(TCHAR *name, const IGCHeader &header, const BrokenDate &date)
-{
-  assert(strlen(header.manufacturer) == 3);
-  assert(strlen(header.id) == 3);
-
-  TCHAR manufacturer[4], id[4];
-  /* poor man's char->TCHAR converted; this works because we know
-     we're dealing with ASCII only */
-  std::copy(header.manufacturer, header.manufacturer + 4, manufacturer);
-  std::copy(header.id, header.id + 4, id);
-
-  _stprintf(name, _T("%04u-%02u-%02u-%s-%s-%02u.igc"),
-            date.year, date.month, date.day,
-            manufacturer,id,
-            header.flight);
-}
-
 /**
  *
  * @param list list of flights from the logger
@@ -317,8 +300,10 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     header.flight = GetFlightNumber(flight_list, *flight);
 
   TCHAR name[64];
+  FormatIGCFilenameLong(name, date, header.manufacturer, header.id,
+                        header.flight);
+
   TCHAR final_path[MAX_PATH];
-  BuildIGCFileName(name, header, date);
   LocalPath(final_path, _T("logs"), name);
 
   // Remove a file with the same name if it exists

@@ -88,7 +88,8 @@ TEST_NAMES = \
 	TestStrings \
 	TestUnitsFormatter \
 	TestGeoPointFormatter \
-	TestTimeFormatter
+	TestTimeFormatter \
+	TestIGCFilenameFormatter
 
 TESTS = $(call name-to-bin,$(TEST_NAMES))
 
@@ -377,6 +378,15 @@ TEST_TIME_FORMATTER_SOURCES = \
 	$(TEST_SRC_DIR)/TestTimeFormatter.cpp
 TEST_TIME_FORMATTER_DEPENDS = MATH
 $(eval $(call link-program,TestTimeFormatter,TEST_TIME_FORMATTER))
+
+TEST_IGC_FILENAME_FORMATTER_SOURCES = \
+	$(SRC)/DateTime.cpp \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Formatter/IGCFilenameFormatter.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestIGCFilenameFormatter.cpp
+TEST_IGC_FILENAME_FORMATTER_DEPENDS = MATH
+$(eval $(call link-program,TestIGCFilenameFormatter,TEST_IGC_FILENAME_FORMATTER))
 
 TEST_STRINGS_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \

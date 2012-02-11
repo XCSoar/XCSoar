@@ -33,6 +33,7 @@
 #include "Simulator.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
+#include "Formatter/IGCFilenameFormatter.hpp"
 
 #ifdef HAVE_POSIX
 #include <unistd.h>
@@ -85,15 +86,6 @@ LoggerImpl::LoggerImpl()
 LoggerImpl::~LoggerImpl()
 {
   delete writer;
-}
-
-static TCHAR
-NumToIGCChar(int num)
-{
-  if (num < 10)
-    return _T('1') + (num - 1);
-
-  return _T('A') + (num - 10);
 }
 
 static int
@@ -222,30 +214,12 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   StaticString<64> name;
   for (int i = 1; i < 99; i++) {
-    // 2003-12-31-XXX-987-01.igc
-    // long filename form of IGC file.
-    // XXX represents manufacturer code
-
-    if (!settings.short_name) {
-      // Long file name
-      name.Format(_T("%04u-%02u-%02u-XCS-%c%c%c-%02d.igc"),
-                  gps_info.date_time_utc.year,
-                  gps_info.date_time_utc.month,
-                  gps_info.date_time_utc.day,
-                  logger_id[0],
-                  logger_id[1],
-                  logger_id[2], i);
-    } else {
-      // Short file name
-      TCHAR cyear, cmonth, cday, cflight;
-      cyear = NumToIGCChar((int)gps_info.date_time_utc.year % 10);
-      cmonth = NumToIGCChar(gps_info.date_time_utc.month);
-      cday = NumToIGCChar(gps_info.date_time_utc.day);
-      cflight = NumToIGCChar(i);
-      name.Format(_T("%c%c%cX%c%c%c%c.igc"), cyear, cmonth, cday,
-                  logger_id[0], logger_id[1], logger_id[2],
-                  cflight);
-    }
+    if (!settings.short_name)
+      FormatIGCFilenameLong(name.buffer(), gps_info.date_time_utc,
+                            "XCS", logger_id, i);
+    else
+      FormatIGCFilename(name.buffer(), gps_info.date_time_utc,
+                        'X', logger_id, i);
 
     LocalPath(filename, _T("logs"), name);
     if (!File::Exists(filename))
