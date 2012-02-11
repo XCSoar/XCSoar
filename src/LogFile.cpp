@@ -25,6 +25,9 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Asset.hpp"
 #include "IO/TextWriter.hpp"
+#include "Formatter/TimeFormatter.hpp"
+#include "OS/Clock.hpp"
+#include "Util/StaticString.hpp"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -52,6 +55,9 @@ LogStartUp(const TCHAR *Str, ...)
   _vstprintf(buf, Str, ap);
   va_end(ap);
 
+  TCHAR time_buffer[32];
+  FormatTimeLong(time_buffer, fixed(MonotonicClockMS()) / 1000);
+
 #ifdef ANDROID
   __android_log_print(ANDROID_LOG_INFO, "XCSoar", "%s", buf);
 #endif
@@ -61,8 +67,12 @@ LogStartUp(const TCHAR *Str, ...)
 #endif
 
   TextWriter writer(szFileName, initialised);
-  if (!writer.error())
-    writer.writeln(buf);
+  if (writer.error())
+    return;
+
+  StaticString<MAX_PATH> output_buffer;
+  output_buffer.Format(_T("[%s] %s"), time_buffer, buf);
+  writer.writeln(output_buffer);
 
   if (!initialised)
     initialised = true;
