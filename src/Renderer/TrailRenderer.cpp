@@ -167,19 +167,6 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 }
 
 void
-TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
-                               const TracePointVector &trace)
-{
-  points.GrowDiscard(trace.size());
-
-  unsigned n = 0;
-  for (auto i = trace.begin(), end = trace.end(); i != end; ++i)
-    points[n++] = projection.GeoToScreen(i->get_location());
-
-  canvas.DrawPolyline(points.begin(), n);
-}
-
-void
 TrailRenderer::Draw(Canvas &canvas, const WindowProjection &projection)
 {
   canvas.Select(look.trace_pen);
@@ -196,8 +183,9 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 }
 
 void
-TrailRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
-                    const ContestTraceVector &trace)
+TrailRenderer::DrawTraceVector(Canvas &canvas,
+                               const WindowProjection &projection,
+                               const ContestTraceVector &trace)
 {
   points.GrowDiscard(trace.size());
 
@@ -208,3 +196,15 @@ TrailRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
   canvas.DrawPolyline(points.begin(), n);
 }
 
+void
+TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
+                               const TracePointVector &trace)
+{
+  points.GrowDiscard(trace.size());
+
+  unsigned n = 0;
+  for (auto i = trace.begin(), end = trace.end(); i != end; ++i)
+    points[n++] = projection.GeoToScreen(i->get_location());
+
+  canvas.DrawPolyline(points.begin(), n);
+}
