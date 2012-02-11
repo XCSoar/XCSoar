@@ -5,7 +5,6 @@ results/terrain.txt
 .deps
 *.gcov
 *~
-*.IGC
 \#*#
 .#*
 *.orig

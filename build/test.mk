@@ -89,7 +89,8 @@ TEST_NAMES = \
 	TestUnitsFormatter \
 	TestGeoPointFormatter \
 	TestTimeFormatter \
-	TestIGCFilenameFormatter
+	TestIGCFilenameFormatter \
+	TestLXNToIGC
 
 TESTS = $(call name-to-bin,$(TEST_NAMES))
 
@@ -1314,6 +1315,14 @@ RUN_DOWNLOAD_FLIGHT_SOURCES += \
 endif
 RUN_DOWNLOAD_FLIGHT_DEPENDS = DRIVER ENGINE MATH UTIL IO
 $(eval $(call link-program,RunDownloadFlight,RUN_DOWNLOAD_FLIGHT))
+
+TEST_LXN_TO_IGC_SOURCES = \
+	$(SRC)/Device/Driver/LX/Convert.cpp \
+	$(SRC)/Device/Driver/LX/LXN.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestLXNToIGC.cpp
+TEST_LXN_TO_IGC_DEPENDS =
+$(eval $(call link-program,TestLXNToIGC,TEST_LXN_TO_IGC))
 
 LXN2IGC_SOURCES = \
 	$(SRC)/Device/Driver/LX/Convert.cpp \
