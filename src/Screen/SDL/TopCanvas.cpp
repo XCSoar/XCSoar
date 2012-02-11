@@ -67,8 +67,8 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height, bool full_screen)
     flags |= SDL_SWSURFACE;
 #endif /* !ENABLE_OPENGL */
 
-  if (full_screen)
 #ifndef ANDROID
+  if (full_screen)
     flags |= SDL_FULLSCREEN;
 #endif
 
