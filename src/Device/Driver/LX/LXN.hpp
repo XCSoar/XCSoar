@@ -124,7 +124,7 @@ namespace LXN {
     uint8_t day, month, year;
     uint8_t day2, month2, year2;
     uint16_t task_id;
-    uint8_t num_tps;
+    int8_t num_tps;
     uint8_t usage[12];
     uint32_t longitude[12], latitude[12];
     char name[12][9];

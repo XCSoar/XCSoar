@@ -285,6 +285,9 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
 
       context.time = FromBE32(packet.task->time);
 
+      // from a valid IGC file read with LXe:
+      // C 11 08 11 14 11 18 11 08 11 0001 -2
+
       fprintf(file, "C%02d%02d%02d%02d%02d%02d"
               "%02d%02d%02d" "%04d%02d\r\n",
               packet.task->day, packet.task->month, packet.task->year,
