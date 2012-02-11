@@ -30,7 +30,7 @@ Copyright_License {
 /**
  * Character table for base-36.
  */
-static const char c36[] = "0123456789abcdefghijklmnopqrstuvwxyz";
+static const char c36[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 /**
  * Convert a 5 digit logger serial to a 3 letter logger id.

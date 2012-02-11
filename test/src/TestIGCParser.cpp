@@ -44,7 +44,7 @@ TestHeader()
 
   ok1(IGCParseHeader("ALXN13103FLIGHT:1", header));
   ok1(strcmp(header.manufacturer, "LXN") == 0);
-  ok1(strcmp(header.id, "a3z") == 0);
+  ok1(strcmp(header.id, "A3Z") == 0);
   ok1(header.flight == 1);
 }
 
