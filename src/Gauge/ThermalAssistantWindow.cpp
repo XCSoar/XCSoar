@@ -26,7 +26,7 @@
 #include "NMEA/Derived.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/UserUnitsFormatter.hpp"
 #include "Language/Language.hpp"
 
 #ifdef ENABLE_OPENGL

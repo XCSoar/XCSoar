@@ -351,9 +351,7 @@ $(eval $(call link-program,TestUnits,TEST_UNITS))
 
 TEST_UNITS_FORMATTER_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
-	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -831,6 +829,7 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
+	$(SRC)/Units/UserUnitsFormatter.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1562,6 +1561,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
+	$(SRC)/Units/UserUnitsFormatter.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/Earth.cpp \
@@ -1822,6 +1822,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
+	$(SRC)/Units/UserUnitsFormatter.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/LocalPath.cpp \
@@ -1958,6 +1959,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
+	$(SRC)/Units/UserUnitsFormatter.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \

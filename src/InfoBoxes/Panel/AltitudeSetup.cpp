@@ -26,7 +26,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Units/Units.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/UserUnitsFormatter.hpp"
 #include "Simulator.hpp"
 #include "DataField/Float.hpp"
 #include "Dialogs/CallBackTable.hpp"

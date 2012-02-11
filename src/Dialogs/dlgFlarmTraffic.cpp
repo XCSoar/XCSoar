@@ -47,7 +47,7 @@
 #include "Gauge/FlarmTrafficWindow.hpp"
 #include "Language/Language.hpp"
 #include "GestureManager.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/UserUnitsFormatter.hpp"
 
 /**
  * A Window which renders FLARM traffic, with user interaction.

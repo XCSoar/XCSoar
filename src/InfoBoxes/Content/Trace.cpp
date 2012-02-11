@@ -27,7 +27,7 @@ Copyright_License {
 #include "Renderer/TraceHistoryRenderer.hpp"
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/TaskProgressRenderer.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/UserUnitsFormatter.hpp"
 #include "Units/Units.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"

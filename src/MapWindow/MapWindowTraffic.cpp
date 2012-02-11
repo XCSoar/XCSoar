@@ -30,7 +30,7 @@ Copyright_License {
 #include "Screen/TextInBox.hpp"
 #include "StringUtil.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/UserUnitsFormatter.hpp"
 #include "Look/TrafficLook.hpp"
 #include "Renderer/TrafficRenderer.hpp"
 

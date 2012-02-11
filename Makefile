@@ -570,6 +570,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Units/UnitsGlue.cpp \
 	$(SRC)/Units/UnitsStore.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
+	$(SRC)/Units/UserUnitsFormatter.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/Formatter/UserGeoPointFormatter.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \

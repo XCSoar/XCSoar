@@ -26,7 +26,7 @@ Copyright_License {
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Units/Units.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/UserUnitsFormatter.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Airspace/AirspaceWarning.hpp"

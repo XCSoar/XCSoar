@@ -38,7 +38,7 @@
 #include "Gauge/FlarmTrafficWindow.hpp"
 #include "Language/Language.hpp"
 #include "GestureManager.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/UserUnitsFormatter.hpp"
 #include "Input/InputEvents.hpp"
 #include "Interface.hpp"
 

@@ -31,7 +31,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/UserUnitsFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"

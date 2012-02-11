@@ -25,7 +25,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/UserUnitsFormatter.hpp"
 #include "Simulator.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Form/Util.hpp"

@@ -35,7 +35,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/UserUnitsFormatter.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 

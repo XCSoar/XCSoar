@@ -24,7 +24,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Thermal.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Units/Units.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/UserUnitsFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"

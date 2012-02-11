@@ -26,7 +26,7 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Interface.hpp"
 #include "Form/Util.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/UserUnitsFormatter.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"

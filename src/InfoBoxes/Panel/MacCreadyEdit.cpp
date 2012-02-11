@@ -31,7 +31,7 @@ Copyright_License {
 #include "Form/XMLWidget.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Util/Macros.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Units/UserUnitsFormatter.hpp"
 #include "Units/Units.hpp"
 
 class MacCreadyEditPanel : public XMLWidget {
