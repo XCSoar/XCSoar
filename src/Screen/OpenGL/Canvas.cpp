@@ -666,6 +666,8 @@ Canvas::DrawRoundRectangle(PixelScalar left, PixelScalar top,
                         UPixelScalar ellipse_width,
                         UPixelScalar ellipse_height)
 {
-  UPixelScalar radius = std::min(ellipse_width, ellipse_height) / 2;
+  UPixelScalar radius = std::min(std::min(ellipse_width, ellipse_height),
+                                 (UPixelScalar) std::min(bottom - top,
+                                                         right - left)) / 2;
   ::RoundRect(*this, left, top, right, bottom, radius);
 }
