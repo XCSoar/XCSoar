@@ -163,7 +163,8 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     last_valid = true;
   }
 
-  canvas.line(last_point, pos);
+  if (last_valid)
+    canvas.line(last_point, pos);
 }
 
 void
