@@ -334,7 +334,7 @@ private:
 
   void setup_interior(const AbstractAirspace &airspace) {
     Color color = airspace_look.colors[settings.colours[airspace.GetType()]];
-    canvas.Select(Brush(color.WithAlpha(90)));
+    canvas.Select(Brush(color.WithAlpha(48)));
     canvas.SelectNullPen();
   }
 };
