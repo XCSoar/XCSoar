@@ -48,8 +48,9 @@ Profile::LoadAirspaceConfig()
 
 #ifndef ENABLE_OPENGL
   Get(szProfileAirspaceTransparency, renderer.transparency);
-  GetEnum(szProfileAirspaceFillMode, renderer.fill_mode);
 #endif
+
+  GetEnum(szProfileAirspaceFillMode, renderer.fill_mode);
 
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++) {
     if (Get(szProfileAirspaceMode[i], Temp)) {
