@@ -292,7 +292,7 @@ public:
                        int min_value, int max_value, unsigned step,
                        int value, unsigned max_tokens,
                        DataFieldListener *listener) {
-    WndProperty *control = AddTime(label, help, min_value, max_tokens, step,
+    WndProperty *control = AddTime(label, help, min_value, max_value, step,
                                    value, max_tokens);
     control->GetDataField()->SetListener(listener);
     return control;
