@@ -77,7 +77,7 @@ EditWindow::OnPaint(Canvas &canvas)
   else {
     PixelScalar canvas_height = rc.bottom - rc.top;
     UPixelScalar text_height = canvas.CalcTextHeight(value.c_str());
-    PixelScalar top = (canvas_height - text_height) / 2;
+    PixelScalar top = rc.top + (canvas_height - text_height) / 2;
     canvas.TextAutoClipped(rc.left, top, value.c_str());
   }
 }
