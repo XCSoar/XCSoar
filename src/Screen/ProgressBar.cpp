@@ -140,15 +140,17 @@ ProgressBar::OnPaint(Canvas &canvas)
   }
 
 #ifdef EYE_CANDY
-  unsigned margin_vert = get_height() / 10;
-  unsigned margin_hor  = get_height() / 2;
+  unsigned margin = get_height() / 9;
 
   canvas.SelectNullPen();
   canvas.SelectWhiteBrush();
   canvas.DrawRoundRectangle(0, 0, get_width(), get_height(),
                             get_height(), get_height());
-  canvas.DrawFilledRectangle(margin_hor, margin_vert, margin_hor + position,
-                             get_height() - margin_vert, COLOR_GREEN);
+
+  Brush progress_brush(COLOR_XCSOAR_LIGHT);
+  canvas.Select(progress_brush);
+  canvas.DrawRoundRectangle(margin, margin, margin + position,
+                            get_height() - margin, get_height(), get_height());
 #else
   canvas.DrawFilledRectangle(0, 0, position, get_height(), COLOR_GREEN);
   canvas.DrawFilledRectangle(position, 0, get_width(), get_height(), COLOR_WHITE);
