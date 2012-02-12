@@ -187,7 +187,8 @@ public:
    */
   int isInAnyActiveSector(const GeoPoint &gp);
 
-  bool ShowMapItems(const GeoPoint &location) const;
+  bool ShowMapItems(const GeoPoint &location,
+                    bool show_empty_message = true) const;
 
 protected:
   // events

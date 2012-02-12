@@ -30,9 +30,12 @@ Copyright_License {
 #include "MapWindow/MapItemListBuilder.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Computer/GlideComputer.hpp"
+#include "Dialogs/Message.hpp"
+#include "Language/Language.hpp"
 
 bool
-GlueMapWindow::ShowMapItems(const GeoPoint &location) const
+GlueMapWindow::ShowMapItems(const GeoPoint &location,
+                            bool show_empty_message) const
 {
   fixed range = visible_projection.DistancePixelsToMeters(Layout::Scale(10));
 
@@ -81,8 +84,13 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location) const
   else
     elevation = RasterBuffer::TERRAIN_INVALID;
 
-  if (list.empty())
+  if (list.empty()) {
+    if (show_empty_message)
+      MessageBoxX(_("There is nothing interesting near this location."),
+                  _("Map elements at this location"), MB_OK | MB_ICONINFORMATION);
+
     return false;
+  }
 
   ShowMapItemListDialog(UIGlobals::GetMainWindow(), vector, list, elevation,
                         UIGlobals::GetDialogLook(), look, traffic_look,

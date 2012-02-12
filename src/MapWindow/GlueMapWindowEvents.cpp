@@ -323,7 +323,7 @@ GlueMapWindow::OnTimer(WindowTimer &timer)
 {
   if (timer == map_item_timer) {
     map_item_timer.Cancel();
-    ShowMapItems(drag_start_geopoint);
+    ShowMapItems(drag_start_geopoint, false);
     return true;
   } else
     return MapWindow::OnTimer(timer);
