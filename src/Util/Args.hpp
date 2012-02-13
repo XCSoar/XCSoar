@@ -78,25 +78,38 @@ public:
   }
 
   void ParseCommandLine(const char *_cmdline) {
-    cmdline = strdup(_cmdline);
+    const char *s = _cmdline;
+    char *d0 = new char[strlen(s) + 1];   // start of destination buffer
+    char *d = d0;                         // current position in destination buffer
+    char *option = d0;
 
-    char *p = cmdline;
-    name = p;
-    while (true) {
-      char *space = strchr(p, ' ');
-      if (space == NULL)
-        break;
+    name = NULL;
+    bool in_qoute = false;
+    do {
+      if (*s == '"')
+        in_qoute = !in_qoute;
+      else if (*s == '\0' || (!in_qoute && *s == ' ')) {
+        // collapse runs of unqouted ' 's to a single '\0'
+        if (d > d0 && *(d-1) != '\0') {
+          *d++ = '\0';
+          // remember potential start position of next option
+          option = d;
+        }
+      } else {
+        *d = *s;
+        if (option == d) {
+          // first quoted blank or non blank character of new option
+          if (name == NULL)
+            name = option;
+          else
+            args.push_back(option);
+        }
+        d++;
+      }
+    } while (*s++);
 
-      *space++ = 0;
-      while (*space == ' ')
-        ++space;
-
-      if (*space == 0)
-        break;
-
-      p = space;
-      args.push_back(p);
-    }
+    if (name == NULL)
+      name = d0;
   }
 
 #ifdef _UNICODE
