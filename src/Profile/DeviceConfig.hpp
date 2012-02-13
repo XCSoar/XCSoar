@@ -203,6 +203,7 @@ struct DeviceConfig {
   void Clear() {
     port_type = PortType::DISABLED;
     baud_rate = 4800u;
+    bulk_baud_rate = 0u;
     tcp_port = 4353u;
     path.clear();
     bluetooth_mac.clear();
