@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/EditWindow.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Features.hpp"
+#include "Screen/Layout.hpp"
 
 void
 EditWindow::set(ContainerWindow &parent, PixelScalar left, PixelScalar top,
@@ -69,6 +70,9 @@ EditWindow::OnPaint(Canvas &canvas)
     return;
 
   canvas.SetBackgroundTransparent();
+
+  PixelScalar padding = Layout::FastScale(2);
+  InflateRect(&rc, -padding, -padding);
 
   if (have_clipping() || (get_text_style() & DT_WORDBREAK) != 0)
     canvas.formatted_text(&rc, value.c_str(), get_text_style());
