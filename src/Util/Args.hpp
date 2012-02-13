@@ -79,9 +79,9 @@ public:
 
   void ParseCommandLine(const char *_cmdline) {
     const char *s = _cmdline;
-    char *d0 = new char[strlen(s) + 1];   // start of destination buffer
-    char *d = d0;                         // current position in destination buffer
-    char *option = d0;
+    cmdline = new char[strlen(s) + 1];
+    char *d = cmdline;                 // current position in destination buffer
+    char *option = cmdline;
 
     name = NULL;
     bool in_qoute = false;
@@ -90,7 +90,7 @@ public:
         in_qoute = !in_qoute;
       else if (*s == '\0' || (!in_qoute && *s == ' ')) {
         // collapse runs of unqouted ' 's to a single '\0'
-        if (d > d0 && *(d-1) != '\0') {
+        if (d > cmdline && *(d-1) != '\0') {
           *d++ = '\0';
           // remember potential start position of next option
           option = d;
@@ -109,7 +109,7 @@ public:
     } while (*s++);
 
     if (name == NULL)
-      name = d0;
+      name = cmdline;
   }
 
 #ifdef _UNICODE
