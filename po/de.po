@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-10 12:11+0100\n"
-"PO-Revision-Date: 2012-02-07 21:52+0000\n"
+"PO-Revision-Date: 2012-02-12 22:07+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-08 19:56+0000\n"
-"X-Generator: Launchpad (build 14747)\n"
+"X-Launchpad-Export-Date: 2012-02-13 11:52+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -5136,20 +5136,20 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:90
 msgid "STF risk factor"
-msgstr "STF Risiko Faktor"
+msgstr "Vorflug Risikofaktor"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:91
-#, fuzzy
 msgid ""
 "The STF risk factor reduces the MacCready setting used to calculate speed to "
 "fly as the glider gets low, in order to compensate for risk. Set to 0.0 for "
 "no compensation, 1.0 scales MC linearly with current height (with reference "
 "to height of the maximum climb). If considered, 0.3 is recommended."
 msgstr ""
-"Der STF Risikofaktor reduziert die MacCready Einstellung für die empfohlene "
-"Vorfluggeschwindigkeit wenn man tiefer fliegt um das Risiko auszugleichen. "
-"Auf 0,0 gesetzt gibt es kein Ausgleich, 1,0 berechnet einen Ausgleich linear "
-"zur Höhe."
+"Der Vorflug Risikofaktor reduziert die MacCready Einstellung für die "
+"empfohlene Vorfluggeschwindigkeit mit schwindender Flughöhe um das Risiko "
+"auszugleichen. Auf 0,0 gesetzt gibt es kein Ausgleich, 1,0 skaliert den MC "
+"Wert linear zur aktuellen Höhe (mit Bezug auf die maximal erreichte Höhe). "
+"0,3 ist eine Empfohlene Einstellung."
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:97
 msgid "Predict wind drift"
@@ -8904,10 +8904,6 @@ msgid ""
 msgstr ""
 "METAR\n"
 "TAF"
-
-#, fuzzy
-#~ msgid "%c: %s on %s"
-#~ msgstr "%s auf %s"
 
 #~ msgid "Ignore checksum*"
 #~ msgstr "Prüfsumme ignorieren*"
