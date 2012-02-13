@@ -44,8 +44,13 @@ CommandLine::Parse(Args args)
   while (!args.IsEmpty()) {
     const char *s = args.GetNext();
 
-    if (*s != '-')
+    if (*s != '-') {
+#ifdef _WIN32
+      continue;
+#else
       args.UsageError();
+#endif
+    }
 
     // Also accept "--" prefix for arguments. Usually used on UNIX for long options
     if (s[1] == '-')
@@ -116,8 +121,10 @@ CommandLine::Parse(Args args)
       Display::SetDPI(x_dpi, y_dpi);
     }
 #endif
+#ifndef _WIN32
     else
       args.UsageError();
+#endif
   }
 
 #if !defined(_WIN32_WCE)
