@@ -38,7 +38,6 @@ struct NMEAInfo;
 struct LoggerSettings;
 struct Declaration;
 class OrderedTask;
-class DeviceDescriptor;
 
 /**
  * Implementation of logger
