@@ -40,16 +40,19 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
+  PixelRect screen_rc{0, 0, 640, 480};
+
   ScreenGlobalInit screen_init;
 
 #ifdef WIN32
   ResourceLoader::Init(hInstance);
 #endif
 
-  Layout::Initialize(320,240);
+  Layout::Initialize(screen_rc.right - screen_rc.left,
+                     screen_rc.bottom - screen_rc.top);
+
   SingleWindow main_window;
-  main_window.set(_T("STATIC"), _T("RunProgressWindow"),
-                  PixelRect{0, 0, 640, 480});
+  main_window.set(_T("STATIC"), _T("RunProgressWindow"), screen_rc);
   main_window.show();
 
   ProgressWindow progress(main_window);
