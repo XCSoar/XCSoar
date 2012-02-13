@@ -22,9 +22,10 @@ Copyright_License {
 */
 
 #include "ProgressGlue.hpp"
+#include "Screen/SingleWindow.hpp"
 #include "Screen/ProgressWindow.hpp"
 #include "Interface.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 #include "PeriodClock.hpp"
 
 static ProgressWindow *global_progress_window;
@@ -37,15 +38,15 @@ static PeriodClock throttle_clock;
 void
 ProgressGlue::Create(const TCHAR *text)
 {
-  CommonInterface::main_window.RefreshSize();
+  UIGlobals::GetMainWindow().RefreshSize();
 
   if (global_progress_window == NULL)
-    global_progress_window = new ProgressWindow(XCSoarInterface::main_window);
+    global_progress_window = new ProgressWindow(UIGlobals::GetMainWindow());
 
   global_progress_window->set_message(text);
   global_progress_window->set_pos(0);
 
-  CommonInterface::main_window.refresh();
+  UIGlobals::GetMainWindow().refresh();
   throttle_clock.Reset();
 }
 
@@ -76,8 +77,8 @@ ProgressGlue::Step()
     return;
 
   global_progress_window->step();
-  CommonInterface::main_window.RefreshSize();
-  CommonInterface::main_window.refresh();
+  UIGlobals::GetMainWindow().RefreshSize();
+  UIGlobals::GetMainWindow().refresh();
 }
 
 void
@@ -90,8 +91,8 @@ ProgressGlue::SetValue(unsigned value)
     return;
 
   global_progress_window->set_pos(value);
-  CommonInterface::main_window.RefreshSize();
-  CommonInterface::main_window.refresh();
+  UIGlobals::GetMainWindow().RefreshSize();
+  UIGlobals::GetMainWindow().refresh();
 }
 
 void
