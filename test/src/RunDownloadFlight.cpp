@@ -30,6 +30,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Util/Args.hpp"
 
 #ifdef HAVE_POSIX
 #include "Device/Port/TTYPort.hpp"
@@ -59,27 +60,32 @@ PrintFlightList(const RecordedFlightList &flight_list)
 
 int main(int argc, char **argv)
 {
-  if (argc < 5) {
-    fprintf(stderr, "Usage: %s DRIVER PORT BAUD FILE.igc [FLIGHT NR]\n"
-            "Where DRIVER is one of:\n", argv[0]);
-
-    const struct DeviceRegister *driver;
-    for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i)
-      if (driver->IsLogger())
-        _ftprintf(stderr, _T("\t%s\n"), driver->name);
-
-    return EXIT_FAILURE;
+  NarrowString<1024> usage;
+  usage = "DRIVER PORT BAUD FILE.igc [FLIGHT NR]\n\n"
+          "Where DRIVER is one of:";
+  {
+    const DeviceRegister *driver;
+    for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i) {
+      if (driver->IsLogger()) {
+        NarrowPathName driver_name(driver->name);
+        usage.AppendFormat("\n\t%s", (const char *)driver_name);
+      }
+    }
   }
 
-  PathName driver_name(argv[1]);
-  PathName port_name(argv[2]);
-  PathName path(argv[4]);
+  Args args(argc, argv, usage);
+
+  PathName driver_name(args.ExpectNext());
+  PathName port_name(args.ExpectNext());
 
   DeviceConfig config;
   config.Clear();
-  config.baud_rate = atoi(argv[3]);
+  config.baud_rate = atoi(args.ExpectNext());
 
-  unsigned flight_id = (argc == 6 ? atoi(argv[5]) : 0);
+  PathName path(args.ExpectNext());
+
+  unsigned flight_id = args.IsEmpty() ? 0 : atoi(args.GetNext());
+  args.ExpectEnd();
 
 #ifdef HAVE_POSIX
   TTYPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
@@ -95,12 +101,12 @@ int main(int argc, char **argv)
   const struct DeviceRegister *driver = FindDriverByName(driver_name);
   if (driver == NULL) {
     fprintf(stderr, "No such driver: %s\n", argv[1]);
-    return EXIT_FAILURE;
+    args.UsageError();
   }
 
   if (!driver->IsLogger()) {
     fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
-    return EXIT_FAILURE;
+    args.UsageError();
   }
 
   assert(driver->CreateOnPort != NULL);
