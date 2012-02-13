@@ -47,9 +47,11 @@ PolygonRotatesLeft(const PT *points, unsigned num_points)
 
 /**
  * Test whether point p ist left of line (a,b) or not
+ *
+ * @return: positive if p is left of a,b; zero if p is on a,b; else negative
  */
 template <typename PT>
-static inline bool
+static inline typename PT::SquareType
 PointLeftOfLine(const PT &p, const PT &a, const PT &b)
 {
   // normal vector of the line
@@ -60,7 +62,7 @@ PointLeftOfLine(const PT &p, const PT &a, const PT &b)
   typename PT::SquareType apy = p.y - a.y;
 
   // almost distance point from line (normal has to be normalized for that)
-  return (nx * apx + ny * apy) > 0;
+  return nx * apx + ny * apy;
 }
 
 /**
@@ -71,9 +73,9 @@ template <typename PT>
 static inline bool
 InsideTriangle(const PT &p, const PT &a, const PT &b, const PT &c)
 {
-  return PointLeftOfLine(p, a, b) &&
-         PointLeftOfLine(p, b, c) &&
-         PointLeftOfLine(p, c, a);
+  return PointLeftOfLine(p, a, b) > 0 &&
+         PointLeftOfLine(p, b, c) > 0 &&
+         PointLeftOfLine(p, c, a) > 0;
 }
 
 /**
@@ -192,10 +194,43 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
 
     if (bendiness > 0) {
       // left bend
-      for (unsigned p = next[c]; p != a; p = next[p]) {
-        if (InsideTriangle(points[p], points[a], points[b], points[c])) {
+      for (unsigned prev_p = c, p = next[c]; p != a;
+           prev_p = p, p = next[p]) {
+        typename PT::SquareType ab = PointLeftOfLine(points[p], points[a],
+                                                     points[b]);
+        typename PT::SquareType bc = PointLeftOfLine(points[p], points[b],
+                                                     points[c]);
+        typename PT::SquareType ca = PointLeftOfLine(points[p], points[c],
+                                                     points[a]);
+        if (ab > 0 && bc > 0 && ca > 0) {
+          // p is inside a,b,c
           ear_cuttable = false;
           break;
+        } else if (ab >= 0 && bc >= 0 && ca >= 0) {
+          // p is on one or two edges of a,b,c
+          bool outside_ab = (ab == 0) &&
+            PointLeftOfLine(points[prev_p], points[a], points[b]) <= 0;
+          bool outside_bc = (bc == 0) &&
+            PointLeftOfLine(points[prev_p], points[b], points[c]) <= 0;
+          bool outside_ca = (ca == 0) &&
+            PointLeftOfLine(points[prev_p], points[c], points[a]) <= 0;
+          if (!(outside_ab || outside_bc || outside_ca)) {
+            // line p,prev_p intersects with triangle a,b,c
+            ear_cuttable = false;
+            break;
+          }
+
+          outside_ab = (ab == 0) &&
+            PointLeftOfLine(points[next[p]], points[a], points[b]) <= 0;
+          outside_bc = (bc == 0) &&
+            PointLeftOfLine(points[next[p]], points[b], points[c]) <= 0;
+          outside_ca = (ca == 0) &&
+            PointLeftOfLine(points[next[p]], points[c], points[a]) <= 0;
+          if (!(outside_ab || outside_bc || outside_ca)) {
+            // line p,next[p] intersects with triangle a,b,c
+            ear_cuttable = false;
+            break;
+          }
         }
       }
       if (ear_cuttable) {
