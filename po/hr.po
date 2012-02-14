@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-10 12:11+0100\n"
+"POT-Creation-Date: 2012-02-15 00:09+0100\n"
 "PO-Revision-Date: 2011-12-20 19:54+0100\n"
 "Last-Translator: Filip <Unknown>\n"
 "Language-Team: none\n"
@@ -25,8 +25,8 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:156
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:74
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:191
-#: Data/Input/default.xci:306 Data/Input/default.xci:355
-#: Data/Input/default.xci:954 Data/Input/default.xci:992
+#: Data/Input/default.xci:311 Data/Input/default.xci:360
+#: Data/Input/default.xci:959 Data/Input/default.xci:997
 #, no-c-format
 msgid "Task"
 msgstr "Zadatak"
@@ -95,50 +95,55 @@ msgstr "Loger greška"
 msgid "Stop Logger"
 msgstr "Stop logera"
 
-#: src/Logger/ExternalLogger.cpp:81
+#: src/Logger/ExternalLogger.cpp:82
 #, fuzzy
 msgid "Declare task?"
 msgstr "Prijavi zadatak?"
 
-#: src/Logger/ExternalLogger.cpp:86
+#: src/Logger/ExternalLogger.cpp:87
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
 
-#: src/Logger/ExternalLogger.cpp:91
+#: src/Logger/ExternalLogger.cpp:92
 #, fuzzy
 msgid "Task declared!"
 msgstr "Zadatak objavljen"
 
-#: src/Logger/ExternalLogger.cpp:109
+#: src/Logger/ExternalLogger.cpp:110
 msgid "No logger connected"
 msgstr "Loger nije spojen"
 
-#: src/Logger/ExternalLogger.cpp:110
+#: src/Logger/ExternalLogger.cpp:111
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:394
 msgid "Declare task"
 msgstr ""
 
-#: src/Logger/ExternalLogger.cpp:268
+#: src/Logger/ExternalLogger.cpp:251
 msgid "Failed to enable download mode."
 msgstr ""
 
-#: src/Logger/ExternalLogger.cpp:269 src/Logger/ExternalLogger.cpp:278
-#: src/Logger/ExternalLogger.cpp:286 src/Logger/ExternalLogger.cpp:305
+#: src/Logger/ExternalLogger.cpp:252 src/Logger/ExternalLogger.cpp:261
+#: src/Logger/ExternalLogger.cpp:269 src/Logger/ExternalLogger.cpp:286
+#: src/Logger/ExternalLogger.cpp:313
 msgid "Download flight"
 msgstr ""
 
-#: src/Logger/ExternalLogger.cpp:277
+#: src/Logger/ExternalLogger.cpp:260
 msgid "Failed to download flight list."
 msgstr ""
 
-#: src/Logger/ExternalLogger.cpp:285
+#: src/Logger/ExternalLogger.cpp:268
 msgid "Logger is empty."
 msgstr ""
 
-#: src/Logger/ExternalLogger.cpp:304
+#: src/Logger/ExternalLogger.cpp:285
 msgid "Failed to download flight."
+msgstr ""
+
+#: src/Logger/ExternalLogger.cpp:312
+msgid "Do you want to download another flight?"
 msgstr ""
 
 #: src/Replay/IgcReplayGlue.cpp:79
@@ -806,8 +811,8 @@ msgstr ""
 #: src/Dialogs/dlgConfiguration.cpp:97 src/Dialogs/dlgFlarmTraffic.cpp:316
 #: src/Dialogs/dlgFlarmTraffic.cpp:317
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:14
-#: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:22 Data/Input/default.xci:549
-#: Data/Input/default.xci:625 Data/Input/default.xci:672
+#: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:22 Data/Input/default.xci:554
+#: Data/Input/default.xci:630 Data/Input/default.xci:677
 #, no-c-format
 msgid "Vario"
 msgstr ""
@@ -857,7 +862,7 @@ msgid ""
 "InfoBox is active."
 msgstr ""
 
-#: src/InfoBoxes/Content/Factory.cpp:348
+#: src/InfoBoxes/Content/Factory.cpp:348 Data/Dialogs/pnlTaskCalculator.xml:10
 #, fuzzy, no-c-format
 msgid "AAT time"
 msgstr "AAT min vrijeme"
@@ -1938,15 +1943,15 @@ msgid "Simulator"
 msgstr ""
 
 #: src/InfoBoxes/Content/Altitude.cpp:57 src/PageSettings.cpp:45
-#: src/PageSettings.cpp:56 Data/Input/default.xci:719
-#: Data/Input/default.xci:769 Data/Input/default.xci:819
-#: Data/Input/default.xci:882
+#: src/PageSettings.cpp:56 Data/Input/default.xci:724
+#: Data/Input/default.xci:774 Data/Input/default.xci:824
+#: Data/Input/default.xci:887
 #, no-c-format
 msgid "Info"
 msgstr "INFO"
 
 #: src/InfoBoxes/Content/Altitude.cpp:61
-#: src/InfoBoxes/Content/MacCready.cpp:63
+#: src/InfoBoxes/Content/MacCready.cpp:62
 #: src/InfoBoxes/Content/Weather.cpp:105 src/Dialogs/dlgConfiguration.cpp:82
 #, fuzzy, no-c-format
 msgid "Setup"
@@ -1957,7 +1962,7 @@ msgstr "Podešavanje ..."
 msgid "no QNH"
 msgstr ""
 
-#: src/InfoBoxes/Content/MacCready.cpp:59
+#: src/InfoBoxes/Content/MacCready.cpp:58
 #: src/InfoBoxes/Content/Weather.cpp:101 src/Dialogs/DeviceListDialog.cpp:280
 #: Data/Dialogs/dlgConfigFonts.xml:11 Data/Dialogs/dlgConfigFonts.xml:14
 #: Data/Dialogs/dlgConfigFonts.xml:17 Data/Dialogs/dlgConfigFonts.xml:20
@@ -1974,13 +1979,13 @@ msgstr ""
 msgid "Edit"
 msgstr "Uredi"
 
-#: src/InfoBoxes/Content/MacCready.cpp:90
+#: src/InfoBoxes/Content/MacCready.cpp:89
 #: src/InfoBoxes/Panel/MacCreadySetup.cpp:72
 #: src/InfoBoxes/Panel/MacCreadySetup.cpp:97
 msgid "AUTO"
 msgstr ""
 
-#: src/InfoBoxes/Content/MacCready.cpp:92
+#: src/InfoBoxes/Content/MacCready.cpp:91
 #: src/InfoBoxes/Panel/MacCreadySetup.cpp:74
 #: src/InfoBoxes/Panel/MacCreadySetup.cpp:95
 msgid "MANUAL"
@@ -2007,18 +2012,18 @@ msgstr ""
 msgid "Time Below"
 msgstr ""
 
-#: src/InfoBoxes/InfoBoxSettings.cpp:75 src/InfoBoxes/Panel/WindSetup.cpp:96
+#: src/InfoBoxes/InfoBoxSettings.cpp:77 src/InfoBoxes/Panel/WindSetup.cpp:96
 #: src/Dialogs/WindSettingsPanel.cpp:48 Data/Dialogs/dlgVegaDemo.xml:14
 #, no-c-format
 msgid "Circling"
 msgstr "Kruženje"
 
-#: src/InfoBoxes/InfoBoxSettings.cpp:76
+#: src/InfoBoxes/InfoBoxSettings.cpp:78
 #, no-c-format
 msgid "Cruise"
 msgstr "Preskok"
 
-#: src/InfoBoxes/InfoBoxSettings.cpp:77
+#: src/InfoBoxes/InfoBoxSettings.cpp:79
 #, fuzzy, no-c-format
 msgid "FinalGlide"
 msgstr "Ispod 'Final Glide' visine"
@@ -2343,6 +2348,15 @@ msgstr "Udaljenost"
 msgid "Arrival Alt"
 msgstr ""
 
+#: src/MapWindow/GlueMapWindowItems.cpp:89
+msgid "There is nothing interesting near this location."
+msgstr ""
+
+#: src/MapWindow/GlueMapWindowItems.cpp:90 Data/Dialogs/dlgMapItemList.xml:3
+#: Data/Dialogs/dlgMapItemList_L.xml:3
+msgid "Map elements at this location"
+msgstr ""
+
 #: src/MapWindow/GlueMapWindowOverlays.cpp:109
 #, fuzzy
 msgid "Elevation: "
@@ -2364,7 +2378,7 @@ msgstr "Učitavam datoteku topologije..."
 #: src/Terrain/RasterWeather.cpp:49 src/Dialogs/dlgConfiguration.cpp:90
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:103
 #: src/Dialogs/dlgWeather.cpp:111 Data/Dialogs/dlgVoice.xml:10
-#: Data/Input/default.xci:469 Data/Input/default.xci:1065
+#: Data/Input/default.xci:474 Data/Input/default.xci:1070
 #, no-c-format
 msgid "Terrain"
 msgstr "Teren"
@@ -2636,22 +2650,22 @@ msgid "Australian"
 msgstr ""
 
 #. Read the terrain file
-#: src/UtilsSettings.cpp:121 src/Components.cpp:320
+#: src/UtilsSettings.cpp:121 src/Components.cpp:321
 msgid "Loading Terrain File..."
 msgstr "Učitavam datoteku terena..."
 
-#: src/Profile/DeviceConfig.cpp:67 src/Widgets/DeviceEditWidget.cpp:55
+#: src/Profile/DeviceConfig.cpp:78 src/Widgets/DeviceEditWidget.cpp:55
 #: src/Dialogs/Vega/AudioModeParameters.hpp:41
 #, no-c-format
 msgid "Disabled"
 msgstr ""
 
-#: src/Profile/DeviceConfig.cpp:83 src/Widgets/DeviceEditWidget.cpp:57
+#: src/Profile/DeviceConfig.cpp:94 src/Widgets/DeviceEditWidget.cpp:57
 #, no-c-format
 msgid "GPS Intermediate Driver"
 msgstr ""
 
-#: src/Profile/DeviceConfig.cpp:86 src/Widgets/DeviceEditWidget.cpp:60
+#: src/Profile/DeviceConfig.cpp:97 src/Widgets/DeviceEditWidget.cpp:60
 #, no-c-format
 msgid "Built-in GPS"
 msgstr ""
@@ -2672,12 +2686,12 @@ msgstr "Upozorenje"
 msgid "Battery low"
 msgstr "Napon baterije"
 
-#: src/Components.cpp:268
+#: src/Components.cpp:269
 msgid "Initialising"
 msgstr ""
 
 #. Start the device thread(s)
-#: src/Components.cpp:395
+#: src/Components.cpp:396
 msgid "Starting devices"
 msgstr ""
 
@@ -2688,27 +2702,27 @@ msgstr ""
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Components.cpp:406
+#: src/Components.cpp:407
 msgid "Initialising display"
 msgstr ""
 
 #. Show progress dialog
-#: src/Components.cpp:486 src/Components.cpp:522 src/Components.cpp:564
+#: src/Components.cpp:487 src/Components.cpp:523 src/Components.cpp:565
 msgid "Shutdown, please wait..."
 msgstr ""
 
 #. Stop logger and save igc file
-#: src/Components.cpp:501
+#: src/Components.cpp:502
 msgid "Shutdown, saving logs..."
 msgstr ""
 
 #. Save settings to profile
-#: src/Components.cpp:510
+#: src/Components.cpp:511
 msgid "Shutdown, saving profile..."
 msgstr ""
 
 #. Save the task for the next time
-#: src/Components.cpp:555
+#: src/Components.cpp:556
 msgid "Shutdown, saving task..."
 msgstr ""
 
@@ -2830,7 +2844,7 @@ msgstr "Ponovo"
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:8
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:8
 #: Data/Dialogs/dlgWaypointSelect.xml:20
-#: Data/Dialogs/dlgWaypointSelect_L.xml:18 Data/Input/default.xci:889
+#: Data/Dialogs/dlgWaypointSelect_L.xml:18 Data/Input/default.xci:894
 msgid "Cancel"
 msgstr "Izađi"
 
@@ -2839,7 +2853,7 @@ msgid "Ignore"
 msgstr "zanemari"
 
 #: src/Dialogs/DeviceListDialog.cpp:111
-#: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:152
+#: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:156
 #, c-format
 msgid "%s on %s"
 msgstr ""
@@ -2875,7 +2889,7 @@ msgid "Edit device"
 msgstr "Uredi tekst"
 
 #: src/Dialogs/DeviceListDialog.cpp:271 src/Dialogs/dlgConfiguration.cpp:104
-#: Data/Input/default.xci:606 Data/Input/default.xci:1136
+#: Data/Input/default.xci:611 Data/Input/default.xci:1141
 #, no-c-format
 msgid "Devices"
 msgstr "Uređaji"
@@ -3049,8 +3063,8 @@ msgid "Warn"
 msgstr "Upozori"
 
 #: src/Dialogs/dlgAirspace.cpp:62 src/Dialogs/dlgAirspace.cpp:91
-#: Data/Input/default.xci:395 Data/Input/default.xci:446
-#: Data/Input/default.xci:868
+#: Data/Input/default.xci:400 Data/Input/default.xci:451
+#: Data/Input/default.xci:873
 msgid "Display"
 msgstr "Prikaži"
 
@@ -3084,8 +3098,8 @@ msgstr "Sletio"
 msgid "No Warnings"
 msgstr "Nema upozorenja"
 
-#: src/Dialogs/dlgAlternatesList.cpp:69 Data/Input/default.xci:336
-#: Data/Input/default.xci:984
+#: src/Dialogs/dlgAlternatesList.cpp:69 Data/Input/default.xci:341
+#: Data/Input/default.xci:989
 msgid "Alternates"
 msgstr ""
 
@@ -3099,7 +3113,7 @@ msgstr ""
 #: src/Dialogs/dlgAnalysis.cpp:346 src/Dialogs/dlgAnalysis.cpp:354
 #: src/Dialogs/dlgAnalysis.cpp:363 src/Dialogs/dlgAnalysis.cpp:372
 #: Data/Dialogs/dlgAnalysis.xml:3 Data/Dialogs/dlgAnalysis_L.xml:3
-#: Data/Input/default.xci:759 Data/Input/default.xci:1183
+#: Data/Input/default.xci:764 Data/Input/default.xci:1188
 msgid "Analysis"
 msgstr "Analiza"
 
@@ -3424,8 +3438,8 @@ msgid "InfoBox Modes"
 msgstr "InfoBox nalepiti"
 
 #: src/Dialogs/dlgConfiguration.cpp:106 Data/Dialogs/dlgStatusSystem.xml:8
-#: Data/Dialogs/pnlStatusSystem.xml:8 Data/Input/default.xci:573
-#: Data/Input/default.xci:1121
+#: Data/Dialogs/pnlStatusSystem.xml:8 Data/Input/default.xci:578
+#: Data/Input/default.xci:1126
 #, no-c-format
 msgid "Logger"
 msgstr "Loger"
@@ -3539,8 +3553,8 @@ msgid "Switch InfoBox"
 msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:63 Data/Dialogs/dlgStatus.xml:2
-#: Data/Dialogs/dlgStatus_L.xml:2 Data/Input/default.xci:777
-#: Data/Input/default.xci:1191
+#: Data/Dialogs/dlgStatus_L.xml:2 Data/Input/default.xci:782
+#: Data/Input/default.xci:1196
 msgid "Status"
 msgstr "STATUS"
 
@@ -4158,283 +4172,283 @@ msgstr ""
 msgid "Determines if haptic feedback like vibration is used."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:50
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:49
 #, no-c-format
 msgid "Rotate the display on devices that support it."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:53
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:54
 #, no-c-format
 msgid "Portrait"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:54
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:56
 #, no-c-format
 msgid "Landscape"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:55
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:58
 #, no-c-format
 msgid "Reverse Portrait"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:56
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:60
 #, no-c-format
 msgid "Reverse Landscape"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:61
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:66
 #, no-c-format
 msgid "8 Top + Bottom (Portrait)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:62
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:68
 #, no-c-format
 msgid "8 Bottom (Portrait)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:63
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:70
 #, no-c-format
 msgid "8 Bottom + Vario (Portrait)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:64
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:72
 #, no-c-format
 msgid "8 Top (Portrait)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:65
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:74
 #, no-c-format
 msgid "8 Left + Right (Landscape)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:66
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:76
 #, no-c-format
 msgid "8 Left (Landscape)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:67
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:78
 #, no-c-format
 msgid "8 Right (Landscape)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:68
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:80
 #, no-c-format
 msgid "9 Right + Vario (Landscape)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:69
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:82
 #, no-c-format
 msgid "9 Left + Right (Landscape)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:70
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
 #, no-c-format
 msgid "5 Right (Square)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:71
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:86
 #, no-c-format
 msgid "12 Right (Landscape)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:72
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:88
 #, no-c-format
 msgid "12 Bottom (Portrait)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:73
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:90
 #, no-c-format
 msgid "12 Top (Portrait)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:74
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:92
 #, no-c-format
 msgid "24 Right (Landscape)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:78
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:96
 #, no-c-format
 msgid "Choose a location for the FLARM display."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:81
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:99
 #, no-c-format
 msgid "Auto (follow infoboxes)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:83
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:101
 #, no-c-format
 msgid "Top Left"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:85
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:103
 #, no-c-format
 msgid "Top Right"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:87
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:105
 #, no-c-format
 msgid "Bottom Left"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:89
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:107
 #, no-c-format
 msgid "Bottom Right"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:91
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:109
 #, fuzzy, no-c-format
 msgid "Centre Top"
 msgstr "Centar"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:93
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:111
 #, no-c-format
 msgid "Centre Bottom"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:98
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:116
 #, no-c-format
 msgid "Text"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:99
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:117
 #, no-c-format
 msgid "Show text on tabbed dialogs."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:100
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:118
 #, no-c-format
 msgid "Icons"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:101
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:119
 #, no-c-format
 msgid "Show icons on tabbed dialogs."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:106
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:124
 #, no-c-format
 msgid "Center"
 msgstr "Centar"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:106
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:124
 #, no-c-format
 msgid "Center the status message boxes."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:107
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:125
 #, no-c-format
 msgid "Topleft"
 msgstr "Gore lijevo"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:107
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:125
 #, no-c-format
 msgid "Show status message boxes in the top left corner."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:111
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:129
 #, no-c-format
 msgid "Choose the display size of dialogs."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:113
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:131
 #, no-c-format
 msgid "Full width"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:114
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:132
 #, no-c-format
 msgid "Scaled"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:115
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:133
 #, no-c-format
 msgid "Scaled centered"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:116
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:134
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:187
 #, no-c-format
 msgid "Fixed"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:121
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:139
 #, no-c-format
 msgid "Box"
 msgstr "Okvir"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:121
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:139
 #, no-c-format
 msgid "Draws boxes around each InfoBox."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:122
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:140
 #, no-c-format
 msgid "Tab"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:122
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:140
 #, no-c-format
 msgid "Draws a tab at the top of the InfoBox across the title."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:143
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:161
 #, fuzzy
 msgid "Display orientation"
 msgstr "Zum kruženja"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:147
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:165
 msgid "InfoBox geometry"
 msgstr "Geometrija infoboxa "
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:148
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:166
 msgid ""
 "A list of possible InfoBox layouts. Do some trials to find the best for your "
 "screen size."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:151
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:169
 #, fuzzy
 msgid "FLARM display"
 msgstr "prikaz Terena"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:155
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:173
 #, fuzzy
 msgid "Tab dialog style"
 msgstr "Dialozi"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:158
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:176
 #, fuzzy
 msgid "Message display"
 msgstr "prikaz Terena"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:162
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:180
 #, fuzzy
 msgid "Dialog size"
 msgstr "Dialozi"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:166
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:184
 #, fuzzy
 msgid "Inverse InfoBoxes"
 msgstr "InfoBox nalepiti"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:166
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:184
 msgid "If true, the InfoBoxes are white on black, otherwise black on white."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:170
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:188
 #, fuzzy
 msgid "Colored InfoBoxes"
 msgstr "InfoBox nalepiti"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:171
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:189
 msgid ""
 "If true, certain InfoBoxes will have coloured text.  For example, the active "
 "waypoint InfoBox will be blue when the glider is above final glide."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:176
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:194
 #, fuzzy
 msgid "InfoBox border"
 msgstr "Geometrija infoboxa"
@@ -6443,7 +6457,7 @@ msgstr ""
 msgid "Sky Conditions"
 msgstr ""
 
-#: src/Weather/NOAAFormatter.cpp:203 Data/Input/default.xci:785
+#: src/Weather/NOAAFormatter.cpp:203 Data/Input/default.xci:790
 msgid "Weather"
 msgstr ""
 "VRIJEME\n"
@@ -7415,10 +7429,6 @@ msgstr ""
 msgid "Clear All"
 msgstr "Briši.sve"
 
-#: Data/Dialogs/dlgMapItemList.xml:3 Data/Dialogs/dlgMapItemList_L.xml:3
-msgid "Map elements at this location"
-msgstr ""
-
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:49
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:49
 msgid "The handicap factor used for the OnLine Contest scoring."
@@ -7439,14 +7449,6 @@ msgstr ""
 #: Data/Dialogs/pnlStatusRules.xml:8
 msgid "Start speed"
 msgstr "Startna brzina"
-
-#: Data/Dialogs/dlgTarget.xml:10 Data/Dialogs/dlgTarget_L.xml:28
-msgid ""
-"AAT Delta Time - Difference between estimated task time and AAT minimum time. "
-"Colored red if negative (expected arrival too early), or blue if in sector "
-"and can turn now with estimated arrival time greater than AAT time plus 5 "
-"minutes."
-msgstr ""
 
 #: Data/Dialogs/pnlTaskProperties.xml:35
 #: Data/Dialogs/pnlTaskProperties_L.xml:36
@@ -7817,7 +7819,7 @@ msgstr "Vrijeme leta"
 
 #: Data/Dialogs/dlgSimulatorPrompt.xml:8
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:8 Data/Dialogs/dlgStartup.xml:10
-#: Data/Dialogs/dlgStartup_L.xml:10 Data/Input/default.xci:897
+#: Data/Dialogs/dlgStartup_L.xml:10 Data/Input/default.xci:902
 msgid "Quit"
 msgstr ""
 
@@ -7942,6 +7944,14 @@ msgstr ""
 msgid "Green"
 msgstr ""
 
+#: Data/Dialogs/dlgTarget.xml:10 Data/Dialogs/dlgTarget_L.xml:28
+msgid ""
+"AAT Delta Time - Difference between estimated task time and AAT minimum "
+"time. Colored red if negative (expected arrival too early), or blue if in "
+"sector and can turn now with estimated arrival time greater than AAT time "
+"plus 5 minutes."
+msgstr ""
+
 #: Data/Dialogs/dlgComboPicker.xml:7 Data/Dialogs/dlgComboPicker_L.xml:8
 #: Data/Dialogs/dlgTaskPointType.xml:4 Data/Dialogs/dlgTaskPointType_L.xml:4
 #: Data/Dialogs/dlgWaypointSelect.xml:19
@@ -8060,12 +8070,12 @@ msgid "Rename"
 msgstr "Preimenuj"
 
 #: Data/Dialogs/dlgWaypointDetails.xml:10
-#: Data/Dialogs/dlgWaypointDetails_L.xml:4 Data/Input/default.xci:363
-#: Data/Input/default.xci:1000
+#: Data/Dialogs/dlgWaypointDetails_L.xml:4 Data/Input/default.xci:368
+#: Data/Input/default.xci:1005
 msgid "GoTo"
 msgstr "Idi na"
 
-#: Data/Dialogs/dlgLoggerReplay.xml:3 Data/Input/default.xci:581
+#: Data/Dialogs/dlgLoggerReplay.xml:3 Data/Input/default.xci:586
 msgid "Replay"
 msgstr ""
 
@@ -8130,27 +8140,27 @@ msgstr "Status zrakoplova"
 msgid "Change callsign"
 msgstr ""
 
-#: Data/Input/default.xci:614 Data/Input/default.xci:1144
+#: Data/Input/default.xci:619 Data/Input/default.xci:1149
 #, fuzzy
 msgid "Setup Plane"
 msgstr "Podešavanje ..."
 
-#: Data/Input/default.xci:476 Data/Input/default.xci:1072
+#: Data/Input/default.xci:481 Data/Input/default.xci:1077
 msgid "Topo."
 msgstr ""
 
-#: Data/Input/default.xci:328 Data/Input/default.xci:976
+#: Data/Input/default.xci:333 Data/Input/default.xci:981
 msgid ""
 "Waypoint\n"
 "List"
 msgstr ""
 
-#: Data/Input/default.xci:493 Data/Input/default.xci:542
-#: Data/Input/default.xci:591 Data/Input/default.xci:875
+#: Data/Input/default.xci:498 Data/Input/default.xci:547
+#: Data/Input/default.xci:596 Data/Input/default.xci:880
 msgid "Config"
 msgstr "KONF"
 
-#: Data/Input/default.xci:454 Data/Input/default.xci:1050
+#: Data/Input/default.xci:459 Data/Input/default.xci:1055
 msgid "Labels"
 msgstr "Oznake"
 
@@ -8158,75 +8168,75 @@ msgstr "Oznake"
 msgid "Below final glide"
 msgstr "Ispod 'Final Glide' visine"
 
-#: Data/Input/default.xci:702
+#: Data/Input/default.xci:707
 msgid ""
 "Cruise\n"
 "Demo"
 msgstr ""
 
-#: Data/Input/default.xci:687
+#: Data/Input/default.xci:692
 msgid ""
 "Accel\n"
 "Zero"
 msgstr ""
 
-#: Data/Input/default.xci:647
+#: Data/Input/default.xci:652
 msgid ""
 "Manual\n"
 "Demo"
 msgstr ""
 
-#: Data/Input/default.xci:462 Data/Input/default.xci:1058
+#: Data/Input/default.xci:467 Data/Input/default.xci:1063
 msgid "Trail"
 msgstr "Trag"
 
-#: Data/Input/default.xci:654
+#: Data/Input/default.xci:659
 msgid ""
 "Setup\n"
 "Stall"
 msgstr ""
 
-#: Data/Input/default.xci:751 Data/Input/default.xci:1175
+#: Data/Input/default.xci:756 Data/Input/default.xci:1180
 msgid ""
 "Check\n"
 "list"
 msgstr ""
 
-#: Data/Input/default.xci:143 Data/Input/default.xci:743
+#: Data/Input/default.xci:143 Data/Input/default.xci:748
 msgid ""
 "What's\n"
 "here?"
 msgstr ""
 
-#: Data/Input/default.xci:508
+#: Data/Input/default.xci:513
 #, fuzzy
 msgid ""
 "MacCready\n"
 "-"
 msgstr "Set MacCready"
 
-#: Data/Input/default.xci:379 Data/Input/default.xci:1016
+#: Data/Input/default.xci:384 Data/Input/default.xci:1021
 #, fuzzy
 msgid ""
 "Waypoint\n"
 "Details"
 msgstr "Točka"
 
-#: Data/Input/default.xci:425 Data/Input/default.xci:1032
+#: Data/Input/default.xci:430 Data/Input/default.xci:1037
 msgid "Dropped marker"
 msgstr ""
 
-#: Data/Input/default.xci:598 Data/Input/default.xci:1128
+#: Data/Input/default.xci:603 Data/Input/default.xci:1133
 msgid "Raw Logger"
 msgstr ""
 
-#: Data/Input/default.xci:532 Data/Input/default.xci:1097
+#: Data/Input/default.xci:537 Data/Input/default.xci:1102
 msgid ""
 "Setup\n"
 "Wind"
 msgstr ""
 
-#: Data/Input/default.xci:633
+#: Data/Input/default.xci:638
 msgid ""
 "Airframe\n"
 "Switches"
@@ -8238,7 +8248,7 @@ msgid ""
 "Off"
 msgstr ""
 
-#: Data/Input/default.xci:809 Data/Input/default.xci:1199
+#: Data/Input/default.xci:814 Data/Input/default.xci:1204
 msgid "Thermal Assistant"
 msgstr ""
 
@@ -8246,46 +8256,46 @@ msgstr ""
 msgid "Above final glide"
 msgstr "Iznad 'Final Glide' visine"
 
-#: Data/Input/default.xci:1167
+#: Data/Input/default.xci:1172
 msgid ""
 "Nearest\n"
 "Airspace"
 msgstr ""
 
-#: Data/Input/default.xci:524 Data/Input/default.xci:1089
+#: Data/Input/default.xci:529 Data/Input/default.xci:1094
 msgid ""
 "Flight\n"
 "Setup"
 msgstr ""
 
-#: Data/Input/default.xci:557 Data/Input/default.xci:1105
+#: Data/Input/default.xci:562 Data/Input/default.xci:1110
 msgid ""
 "Setup\n"
 "System"
 msgstr ""
 
-#: Data/Input/default.xci:640
+#: Data/Input/default.xci:645
 msgid "Setup Audio"
 msgstr ""
 
-#: Data/Input/default.xci:727 Data/Input/default.xci:1151
+#: Data/Input/default.xci:732 Data/Input/default.xci:1156
 msgid "FLARM Radar"
 msgstr ""
 
-#: Data/Input/default.xci:418 Data/Input/default.xci:935
-#: Data/Input/default.xci:1025
+#: Data/Input/default.xci:423 Data/Input/default.xci:940
+#: Data/Input/default.xci:1030
 msgid "Zoom"
 msgstr "Zum"
 
-#: Data/Input/default.xci:679
+#: Data/Input/default.xci:684
 msgid "Vario ASI zeroed"
 msgstr ""
 
-#: Data/Input/default.xci:686
+#: Data/Input/default.xci:691
 msgid "Accelerometer leveled"
 msgstr ""
 
-#: Data/Input/default.xci:435 Data/Input/default.xci:1042
+#: Data/Input/default.xci:440 Data/Input/default.xci:1047
 msgid ""
 "Pan\n"
 "On"
@@ -8299,89 +8309,89 @@ msgstr "Poletio"
 msgid "Final glide through terrain"
 msgstr "'Final Glide' kroz teren"
 
-#: Data/Input/default.xci:680
+#: Data/Input/default.xci:685
 msgid ""
 "ASI\n"
 "Zero"
 msgstr ""
 
-#: Data/Input/default.xci:428 Data/Input/default.xci:1035
+#: Data/Input/default.xci:433 Data/Input/default.xci:1040
 msgid ""
 "Mark\n"
 "Drop"
 msgstr ""
 
-#: Data/Input/default.xci:694
+#: Data/Input/default.xci:699
 msgid "Stored to EEPROM"
 msgstr ""
 
-#: Data/Input/default.xci:661
+#: Data/Input/default.xci:666
 msgid "Accel"
 msgstr ""
 
-#: Data/Input/default.xci:828
+#: Data/Input/default.xci:833
 msgid "Credits"
 msgstr ""
 
-#: Data/Input/default.xci:136 Data/Input/default.xci:410
-#: Data/Input/default.xci:928
+#: Data/Input/default.xci:136 Data/Input/default.xci:415
+#: Data/Input/default.xci:933
 msgid ""
 "Zoom\n"
 "Out"
 msgstr ""
 
-#: Data/Input/default.xci:709
+#: Data/Input/default.xci:714
 msgid ""
 "Climb\n"
 "Demo"
 msgstr ""
 
-#: Data/Input/default.xci:850
+#: Data/Input/default.xci:855
 msgid ""
 "Message\n"
 "Repeat"
 msgstr ""
 
-#: Data/Input/default.xci:801
+#: Data/Input/default.xci:806
 #, fuzzy
 msgid ""
 "FLARM\n"
 "Details"
 msgstr "Detalji"
 
-#: Data/Input/default.xci:129 Data/Input/default.xci:403
-#: Data/Input/default.xci:921
+#: Data/Input/default.xci:129 Data/Input/default.xci:408
+#: Data/Input/default.xci:926
 msgid ""
 "Zoom\n"
 "In"
 msgstr ""
 
-#: Data/Input/default.xci:910
+#: Data/Input/default.xci:915
 msgid "Return"
 msgstr ""
 
-#: Data/Input/default.xci:565 Data/Input/default.xci:1113
+#: Data/Input/default.xci:570 Data/Input/default.xci:1118
 msgid ""
 "Settings\n"
 "Airspace"
 msgstr ""
 
-#: Data/Input/default.xci:298 Data/Input/default.xci:347
-#: Data/Input/default.xci:861
+#: Data/Input/default.xci:303 Data/Input/default.xci:352
+#: Data/Input/default.xci:866
 msgid "Nav"
 msgstr "NAV"
 
-#: Data/Input/default.xci:695
+#: Data/Input/default.xci:700
 msgid "Store"
 msgstr ""
 
-#: Data/Input/default.xci:793
+#: Data/Input/default.xci:798
 msgid ""
 "Team\n"
 "Code"
 msgstr ""
 
-#: Data/Input/default.xci:501
+#: Data/Input/default.xci:506
 #, fuzzy
 msgid ""
 "MacCready\n"
@@ -8392,7 +8402,7 @@ msgstr "Set MacCready"
 msgid "Landing"
 msgstr "Sletio"
 
-#: Data/Input/default.xci:735 Data/Input/default.xci:1159
+#: Data/Input/default.xci:740 Data/Input/default.xci:1164
 msgid ""
 "METAR\n"
 "TAF"
