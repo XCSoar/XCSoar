@@ -29,6 +29,17 @@ Copyright_License {
 
 #include <stdio.h>
 
+static const TCHAR *const port_type_strings[] = {
+  _T("disabled"),
+  _T("serial"),
+  _T("rfcomm"),
+  _T("ioio_uart"),
+  _T("auto"),
+  _T("internal"),
+  _T("tcp_listener"),
+  NULL
+};
+
 bool
 DeviceConfig::IsAvailable() const
 {
@@ -112,26 +123,11 @@ MakeDeviceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n,
 static DeviceConfig::PortType
 StringToPortType(const TCHAR *value)
 {
-  if (StringIsEqual(value, _T("disabled")))
-    return DeviceConfig::PortType::DISABLED;
-
-  if (StringIsEqual(value, _T("serial")))
-    return DeviceConfig::PortType::SERIAL;
-
-  if (StringIsEqual(value, _T("rfcomm")))
-    return DeviceConfig::PortType::RFCOMM;
-
-  if (StringIsEqual(value, _T("ioio_uart")))
-    return DeviceConfig::PortType::IOIOUART;
-
-  if (StringIsEqual(value, _T("auto")))
-    return DeviceConfig::PortType::AUTO;
-
-  if (StringIsEqual(value, _T("internal")))
-    return DeviceConfig::PortType::INTERNAL;
-
-  if (StringIsEqual(value, _T("tcp_listener")))
-    return DeviceConfig::PortType::TCP_LISTENER;
+  for (auto i = port_type_strings; *i != NULL; ++i) {
+    if (StringIsEqual(value, *i)) {
+      return (DeviceConfig::PortType)std::distance(port_type_strings, i);
+    }
+  }
 
   if (IsAndroid())
     return DeviceConfig::PortType::INTERNAL;
@@ -273,30 +269,10 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
 static const TCHAR *
 PortTypeToString(DeviceConfig::PortType type)
 {
-  switch (type) {
-  case DeviceConfig::PortType::DISABLED:
-    return _T("disabled");
-
-  case DeviceConfig::PortType::SERIAL:
-    return _T("serial");
-
-  case DeviceConfig::PortType::RFCOMM:
-    return _T("rfcomm");
-
-  case DeviceConfig::PortType::IOIOUART:
-    return _T("ioio_uart");
-
-  case DeviceConfig::PortType::AUTO:
-    return _T("auto");
-
-  case DeviceConfig::PortType::INTERNAL:
-    return _T("internal");
-
-  case DeviceConfig::PortType::TCP_LISTENER:
-    return _T("tcp_listener");
-  }
-
-  return NULL;
+  const unsigned i = (unsigned)type;
+  return i < ARRAY_SIZE(port_type_strings)
+    ? port_type_strings[i]
+    : NULL;
 }
 
 static bool
