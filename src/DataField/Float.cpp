@@ -180,6 +180,7 @@ ComboList *
 DataFieldFloat::CreateComboList() const
 {
   ComboList *combo_list = new ComboList();
+  const fixed epsilon = mStep / fixed_int_constant(1000);
 
   /* how many items before and after the current value? */
   unsigned surrounding_items = ComboList::MAX_SIZE / 2 - 2;
@@ -188,18 +189,18 @@ DataFieldFloat::CreateComboList() const
   fixed corrected_value = int((mValue - mMin) / mStep) * mStep + mMin;
 
   fixed first = corrected_value - surrounding_items * mStep;
-  if (first > mMin)
+  if (first > mMin + epsilon)
     /* there are values before "first" - give the user a choice */
     combo_list->Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
-  else if (first < mMin)
+  else if (first < mMin - epsilon)
     first = mMin;
 
   fixed last = std::min(first + surrounding_items * mStep * 2, mMax);
 
   bool found_current = false;
-  for (fixed i = first; i <= last; i += mStep) {
-    if (!found_current && mValue <= i) {
-      if (mValue < i)
+  for (fixed i = first; i <= last +  epsilon; i += mStep) {
+    if (!found_current && mValue <= i + epsilon) {
+      if (mValue < i - epsilon)
         /* the current value is not listed - insert it here */
         AppendComboValue(*combo_list, mValue);
 
@@ -210,14 +211,14 @@ DataFieldFloat::CreateComboList() const
     AppendComboValue(*combo_list, i);
   }
 
-  if (mValue > last) {
+  if (mValue > last + epsilon) {
     /* the current value out of range - append it here */
     last = mValue;
     AppendComboValue(*combo_list, mValue);
     combo_list->ComboPopupItemSavedIndex = combo_list->size();
   }
 
-  if (last < mMax)
+  if (last < mMax - epsilon)
     /* there are values after "last" - give the user a choice */
     combo_list->Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
 
