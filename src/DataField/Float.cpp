@@ -181,9 +181,12 @@ DataFieldFloat::CreateComboList() const
 {
   ComboList *combo_list = new ComboList();
   const fixed epsilon = mStep / fixed_int_constant(1000);
+  const fixed fine_step = mStep / fixed_int_constant(10);
 
   /* how many items before and after the current value? */
   unsigned surrounding_items = ComboList::MAX_SIZE / 2 - 2;
+  if (mFine)
+    surrounding_items -= 20;
 
   /* the value aligned to mStep */
   fixed corrected_value = int((mValue - mMin) / mStep) * mStep + mMin;
@@ -193,12 +196,42 @@ DataFieldFloat::CreateComboList() const
     /* there are values before "first" - give the user a choice */
     combo_list->Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
   else if (first < mMin - epsilon)
-    first = mMin;
+    first = int(mMin / mStep) * mStep;
 
   fixed last = std::min(first + surrounding_items * mStep * 2, mMax);
 
   bool found_current = false;
-  for (fixed i = first; i <= last +  epsilon; i += mStep) {
+  fixed step = mStep;
+  bool inFineSteps = false;
+  for (fixed i = first; i <= last + epsilon; i += step) {
+
+    // Skip over the items which fall below the beginning of the valid range.
+    // e.g. first may be 0.0 for values with valid range 0.1 - 10.0 and step 1.0
+    // rather than duplicate all the fine_step setup above simply ignore the few
+    // values here. Needed for nice sequence e.g. 1.0 2.0 ... instead of 1.1 2.1 ...
+    if (i < mMin - epsilon)
+      continue;
+
+    if (mFine) {
+      // show up to 9 items above and below current value with extended precision
+      if (i - epsilon > mValue + mStep - fine_step) {
+        if (inFineSteps) {
+          inFineSteps = false;
+          step = mStep;
+          i = int((i + mStep - fine_step) / mStep) * mStep;
+          if (i > mMax)
+            i = mMax;
+        }
+      }
+      else if (i + epsilon >= mValue - mStep + fine_step) {
+        if (!inFineSteps) {
+          inFineSteps = true;
+          step = fine_step;
+          i = std::max(mMin, mValue - mStep + fine_step);
+        }
+      }
+    }
+
     if (!found_current && mValue <= i + epsilon) {
       if (mValue < i - epsilon)
         /* the current value is not listed - insert it here */
