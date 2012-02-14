@@ -233,6 +233,11 @@ event=WaypointDetails select
 
 mode=default
 type=gesture
+data=DL
+event=Setup Alternates
+
+mode=default
+type=gesture
 data=DU
 event=Mode Menu
 
