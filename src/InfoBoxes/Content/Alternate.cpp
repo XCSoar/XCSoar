@@ -57,7 +57,7 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
     }
   }
 
-  data.FormatTitle(_T("Altrn %d"), index + 1);
+  data.FormatTitle(_T("Altn %d"), index + 1);
 
   if (alternate == NULL || !XCSoarInterface::Basic().track_available) {
     data.SetInvalid();
@@ -121,7 +121,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data)
     }
   }
 
-  data.FormatTitle(_T("Altrn %d GR"), index + 1);
+  data.FormatTitle(_T("Altn %d GR"), index + 1);
 
   if (alternate == NULL) {
     data.SetInvalid();
