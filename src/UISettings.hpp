@@ -33,17 +33,18 @@ Copyright_License {
 #include "Dialogs/DialogSettings.hpp"
 #include "Util/TypeTraits.hpp"
 #include "Geo/CoordinateFormat.hpp"
+#include "DisplaySettings.hpp"
 
 /**
  * User interface settings.
  */
 struct UISettings {
+  DisplaySettings display;
+
   /** timeout in quarter seconds of menu button */
   unsigned menu_timeout;
 
   bool custom_fonts;
-
-  bool enable_auto_blank;
 
   /** Show ThermalAssistant if circling */
   bool enable_thermal_assistant_gauge;

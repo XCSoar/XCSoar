@@ -40,7 +40,7 @@ BlankDisplay(bool doblank)
 {
   static bool oldblank = false;
 
-  if (!XCSoarInterface::GetUISettings().enable_auto_blank)
+  if (!XCSoarInterface::GetUISettings().display.enable_auto_blank)
     return;
 
   if (doblank == oldblank)

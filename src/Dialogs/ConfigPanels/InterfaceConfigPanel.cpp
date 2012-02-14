@@ -110,7 +110,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("Auto. blank"),
              _("This determines whether to blank the display after a long period of inactivity "
                  "when operating on internal battery power."),
-             settings.enable_auto_blank);
+             settings.display.enable_auto_blank);
 #endif
 
   AddFileReader(_("Events"),
@@ -216,7 +216,8 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool changed = false, require_restart = false;;
 
 #ifdef HAVE_BLANK
-  changed |= SaveValue(AutoBlank, szProfileAutoBlank, settings.enable_auto_blank);
+  changed |= SaveValue(AutoBlank, szProfileAutoBlank,
+                       settings.display.enable_auto_blank);
 #endif
 
   require_restart |= changed |= SaveValueFileReader(InputFile, szProfileInputFile);

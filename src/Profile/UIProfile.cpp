@@ -30,10 +30,17 @@ Copyright_License {
 #include "UISettings.hpp"
 
 namespace Profile {
+  static void Load(DisplaySettings &settings);
   static void Load(VarioSettings &settings);
   static void Load(TrafficSettings &settings);
   static void Load(DialogSettings &settings);
 };
+
+void
+Profile::Load(DisplaySettings &settings)
+{
+  Get(szProfileAutoBlank, settings.enable_auto_blank);
+}
 
 void
 Profile::Load(VarioSettings &settings)
@@ -69,10 +76,11 @@ Profile::Load(DialogSettings &settings)
 void
 Profile::Load(UISettings &settings)
 {
+  Load(settings.display);
+
   Get(szProfileMenuTimeout, settings.menu_timeout);
 
   Get(szProfileUseCustomFonts, settings.custom_fonts);
-  Get(szProfileAutoBlank, settings.enable_auto_blank);
 
   Get(szProfileEnableTAGauge, settings.enable_thermal_assistant_gauge);
 

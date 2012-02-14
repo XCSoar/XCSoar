@@ -21,31 +21,20 @@ Copyright_License {
 }
 */
 
-#include "UISettings.hpp"
-#include "Asset.hpp"
+#ifndef XCSOAR_DISPLAY_SETTINGS_HPP
+#define XCSOAR_DISPLAY_SETTINGS_HPP
 
-void
-UISettings::SetDefaults()
-{
-  display.SetDefaults();
+#include "Util/TypeTraits.hpp"
 
-  menu_timeout = 8 * 4;
+/**
+ * Display settings.
+ */
+struct DisplaySettings {
+  bool enable_auto_blank;
 
-  custom_fonts = false;
+  void SetDefaults();
+};
 
-  enable_thermal_assistant_gauge = true;
+static_assert(is_trivial<DisplaySettings>::value, "type is not trivial");
 
-  popup_message_position = smAlignCenter;
-
-  haptic_feedback = HapticFeedback::Default;
-
-  coordinate_format = CoordinateFormat::DDMMSS;
-
-  units.SetDefaults();
-  map.SetDefaults();
-  info_boxes.SetDefaults();
-  vario.SetDefaults();
-  traffic.SetDefaults();
-  pages.SetDefaults();
-  dialog.SetDefaults();
-}
+#endif
