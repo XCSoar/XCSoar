@@ -138,10 +138,12 @@ StringToPortType(const TCHAR *value)
 static DeviceConfig::PortType
 ReadPortType(unsigned n)
 {
-  TCHAR name[64], value[64];
+  TCHAR name[64];
 
   MakeDeviceSettingName(name, _T("Port"), n, _T("Type"));
-  if (!Profile::Get(name, value, ARRAY_SIZE(value)))
+
+  const TCHAR *value = Profile::Get(name);
+  if (value == NULL)
     return n == 0
       ? (IsAndroid()
          ? DeviceConfig::PortType::INTERNAL
