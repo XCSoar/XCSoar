@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-10 12:11+0100\n"
-"PO-Revision-Date: 2012-02-08 21:29+0000\n"
-"Last-Translator: Patrick Pipart <p.pipart@gmail.com>\n"
+"PO-Revision-Date: 2012-02-13 19:32+0000\n"
+"Last-Translator: Matthieu GAULON <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-08 22:28+0000\n"
-"X-Generator: Launchpad (build 14747)\n"
+"X-Launchpad-Export-Date: 2012-02-14 19:24+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -3551,7 +3551,7 @@ msgstr "Jauges"
 #: src/Dialogs/dlgConfiguration.cpp:80
 #, no-c-format
 msgid "Task Defaults"
-msgstr ""
+msgstr "Valeurs par défaut du circuit"
 
 #: src/Dialogs/dlgConfiguration.cpp:81
 #, no-c-format
@@ -3773,11 +3773,11 @@ msgstr "Inconnu"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:57
 msgid "Too much wind"
-msgstr ""
+msgstr "Trop de vent"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:61
 msgid "No solution"
-msgstr ""
+msgstr "Pas de solution"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:78
 #: src/Dialogs/dlgWaypointEdit.cpp:58 Data/Dialogs/dlgWaypointEdit.xml:8
@@ -3793,13 +3793,13 @@ msgstr "Fréquence radio"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:103
 msgid "Runway"
-msgstr ""
+msgstr "Piste"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:107
 #: Data/Dialogs/dlgTaskPoint.xml:7 Data/Dialogs/dlgTaskPoint_L.xml:11
 #: Data/Dialogs/pnlStatusFlight.xml:4
 msgid "Location"
-msgstr ""
+msgstr "Localisation"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:122
 #: Data/Dialogs/dlgStatusAircraft.xml:8 Data/Dialogs/pnlStatusTimes.xml:8
@@ -3854,7 +3854,7 @@ msgstr ""
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:134
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:139
 msgid "Success"
-msgstr ""
+msgstr "Succès"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:105
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:139
@@ -4385,7 +4385,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:199
 #, no-c-format
 msgid "OS settings"
-msgstr ""
+msgstr "Paramètres du SE"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:205
 msgid "Haptic feedback"
@@ -4677,7 +4677,7 @@ msgstr "Bordure InfoBox"
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:61
 #, no-c-format
 msgid "Start only"
-msgstr ""
+msgstr "Départ seulement"
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:75
 msgid "Time step cruise"
@@ -5096,18 +5096,12 @@ msgid "STF risk factor"
 msgstr "Coef. risque sur calage"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:91
-#, fuzzy
 msgid ""
 "The STF risk factor reduces the MacCready setting used to calculate speed to "
 "fly as the glider gets low, in order to compensate for risk. Set to 0.0 for "
 "no compensation, 1.0 scales MC linearly with current height (with reference "
 "to height of the maximum climb). If considered, 0.3 is recommended."
 msgstr ""
-"Ce facteur de risque réduit le calage MacCready lors que le planeur est bas, "
-"dans le but de diminuer les risques. Choisissez 0.0 pour en pas avoir "
-"d'effet; 1.0 pour une diminution linéaire du calage MC entre la hauteur sol "
-"courante et le plafond des ascendance. Si utilisé, alors une valeur de 0.3 "
-"est recommandée."
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:97
 msgid "Predict wind drift"
@@ -8717,10 +8711,6 @@ msgid ""
 msgstr ""
 "METAR\n"
 "TAF"
-
-#, fuzzy
-#~ msgid "%c: %s on %s"
-#~ msgstr "%s sur %s"
 
 #~ msgid "Task declared"
 #~ msgstr "Circuit déclaré"
