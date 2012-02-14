@@ -21,34 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef INTERFACE_BLACKBOARD_H
-#define INTERFACE_BLACKBOARD_H
+#ifndef XCSOAR_SYSTEM_SETTINGS_HPP
+#define XCSOAR_SYSTEM_SETTINGS_HPP
 
-#include "LiveBlackboard.hpp"
-#include "Compiler.h"
+#include "Util/TypeTraits.hpp"
+#include "Device/List.hpp"
+#include "Profile/DeviceConfig.hpp"
 
-class InterfaceBlackboard : public LiveBlackboard
-{
-public:
-  void ReadBlackboardBasic(const MoreData &nmea_info);
-  void ReadBlackboardCalculated(const DerivedInfo &derived_info);
+#include <array>
 
-  gcc_const
-  SystemSettings &SetSystemSettings() {
-    return system_settings;
-  }
+struct SystemSettings {
+  std::array<DeviceConfig, NUMDEV> devices;
 
-  gcc_const
-  ComputerSettings& SetComputerSettings() {
-    return computer_settings;
-  }
-
-  gcc_const
-  UISettings &SetUISettings() {
-    return ui_settings;
-  }
-
-  void ReadComputerSettings(const ComputerSettings &settings);
+  void SetDefaults();
 };
+
+static_assert(is_trivial<SystemSettings>::value, "type is not trivial");
 
 #endif

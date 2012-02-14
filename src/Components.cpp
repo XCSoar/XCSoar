@@ -258,6 +258,7 @@ XCSoarInterface::Startup()
 
   SetXMLDialogLook(main_window.GetLook().dialog);
 
+  SetSystemSettings().SetDefaults();
   SetComputerSettings().SetDefaults();
   SetUISettings().SetDefaults();
   SetUIState().Clear();

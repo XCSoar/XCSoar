@@ -27,8 +27,7 @@ Copyright_License {
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
 #include "LogFile.hpp"
-#include "Profile/Profile.hpp"
-#include "Profile/DeviceConfig.hpp"
+#include "Interface.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 
 #include <assert.h>
@@ -96,12 +95,14 @@ devStartup()
 
   DeviceDescriptor *pDevNmeaOut = NULL;
 
+  const SystemSettings &settings = CommonInterface::GetSystemSettings();
+
   bool none_available = true;
   for (unsigned i = 0; i < NUMDEV; ++i) {
     device_list[i].SetIndex(i);
 
     DeviceConfig &config = device_list[i].SetConfig();
-    Profile::GetDeviceConfig(i, config);
+    config = settings.devices[i];
     if (!config.IsAvailable()) {
       config.Clear();
       continue;

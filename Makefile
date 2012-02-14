@@ -521,6 +521,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/UISettings.cpp \
 	$(SRC)/DisplaySettings.cpp \
 	$(SRC)/MapSettings.cpp \
+	$(SRC)/SystemSettings.cpp \
 	$(SRC)/ComputerSettings.cpp \
 	$(SRC)/MergeThread.cpp \
 	$(SRC)/CalculationThread.cpp \
@@ -595,6 +596,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Earth.cpp \
 	$(SRC)/Profile/TrackingProfile.cpp \
+	$(SRC)/Profile/SystemProfile.cpp \
 	$(SRC)/Profile/ComputerProfile.cpp \
 	$(SRC)/Profile/RouteProfile.cpp \
 	$(SRC)/Profile/TaskProfile.cpp \

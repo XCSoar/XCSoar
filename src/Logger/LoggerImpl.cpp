@@ -23,7 +23,6 @@
 
 #include "Logger/LoggerImpl.hpp"
 #include "Logger/Settings.hpp"
-#include "Profile/DeviceConfig.hpp"
 #include "LogFile.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
@@ -34,6 +33,7 @@
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
+#include "Interface.hpp"
 
 #ifdef HAVE_POSIX
 #include <unistd.h>
@@ -394,17 +394,17 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   StartLogger(gps_info, settings, logger_id);
 
-  DeviceConfig device_config;
   // this is only the XCSoar Simulator, not Condor etc, so don't use Simulator flag
+  const TCHAR *driver_name;
   if (is_simulator())
-    device_config.driver_name = _T("Simulator");
+    driver_name = _T("Simulator");
   else
-    Profile::GetDeviceConfig(0, device_config);
+    driver_name = CommonInterface::GetSystemSettings().devices[0].driver_name;
 
   writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name,
                       decl.aircraft_type, decl.aircraft_registration,
                       decl.competition_id,
-                      logger_id, device_config.driver_name);
+                      logger_id, driver_name);
 
   if (decl.Size()) {
     BrokenDateTime FirstDateTime = !pre_takeoff_buffer.empty()

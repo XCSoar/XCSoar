@@ -29,7 +29,7 @@
 #include "Dialogs/Message.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Components.hpp"
-#include "Profile/DeviceConfig.hpp"
+#include "Interface.hpp"
 
 NmeaReplayGlue::NmeaReplayGlue()
   :parser(NULL), device(NULL)
@@ -52,8 +52,8 @@ NmeaReplayGlue::Start()
   parser->SetReal(false);
 
   /* get the device driver name from the profile */
-  DeviceConfig config;
-  Profile::GetDeviceConfig(0, config);
+  const DeviceConfig &config =
+    CommonInterface::GetSystemSettings().devices[0];
 
   parser->SetIgnoreChecksum(config.ignore_checksum);
 

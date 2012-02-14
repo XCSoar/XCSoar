@@ -21,34 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef INTERFACE_BLACKBOARD_H
-#define INTERFACE_BLACKBOARD_H
+#ifndef XCSOAR_SYSTEM_PROFILE_HPP
+#define XCSOAR_SYSTEM_PROFILE_HPP
 
-#include "LiveBlackboard.hpp"
-#include "Compiler.h"
+struct SystemSettings;
 
-class InterfaceBlackboard : public LiveBlackboard
-{
-public:
-  void ReadBlackboardBasic(const MoreData &nmea_info);
-  void ReadBlackboardCalculated(const DerivedInfo &derived_info);
-
-  gcc_const
-  SystemSettings &SetSystemSettings() {
-    return system_settings;
-  }
-
-  gcc_const
-  ComputerSettings& SetComputerSettings() {
-    return computer_settings;
-  }
-
-  gcc_const
-  UISettings &SetUISettings() {
-    return ui_settings;
-  }
-
-  void ReadComputerSettings(const ComputerSettings &settings);
+namespace Profile {
+  void Load(SystemSettings &settings);
 };
 
 #endif

@@ -48,8 +48,6 @@ Copyright_License {
 #include "Dialogs/CallBackTable.hpp"
 
 class DevicesConfigPanel : public XMLWidget {
-  DeviceConfig device_config[NUMDEV];
-
   unsigned current_device;
 
   gcc_pure
@@ -65,7 +63,15 @@ public:
   const DeviceConfig &GetDeviceConfig(unsigned i) const {
     assert(i < NUMDEV);
 
-    return device_config[i];
+    return CommonInterface::GetSystemSettings().devices[i];
+  }
+
+  void SetDeviceConfig(unsigned i, const DeviceConfig &config) const {
+    assert(i < NUMDEV);
+
+    CommonInterface::SetSystemSettings().devices[i] = config;
+    Profile::SetDeviceConfig(i, config);
+    DevicePortChanged = true;
   }
 
   void ShowDevice(unsigned idx);
@@ -88,10 +94,8 @@ DevicesConfigPanel::SaveDeviceConfig()
   if (!widget.Save(changed, require_restart))
     return false;
 
-  if (changed) {
-    device_config[current_device] = widget.GetConfig();
-    DevicePortChanged = true;
-  }
+  if (changed)
+    SetDeviceConfig(current_device, widget.GetConfig());
 
   return true;
 }
@@ -108,7 +112,7 @@ DevicesConfigPanel::ShowDevice(unsigned idx)
     return;
 
   current_device = idx;
-  GetEditWidget().SetConfig(device_config[current_device]);
+  GetEditWidget().SetConfig(GetDeviceConfig(current_device));
 }
 
 void
@@ -171,12 +175,9 @@ DevicesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   current_device = 0;
 
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    Profile::GetDeviceConfig(i, device_config[i]);
-
   DockWindow *dock = (DockWindow *)form.FindByName(_T("edit"));
   assert(dock != NULL);
-  DeviceEditWidget *edit = new DeviceEditWidget(device_config[0]);
+  DeviceEditWidget *edit = new DeviceEditWidget(GetDeviceConfig(0));
   dock->SetWidget(edit);
 
   WndListFrame *list = (WndListFrame *)form.FindByName(_T("list"));
@@ -206,11 +207,8 @@ DevicesConfigPanel::Save(bool &_changed, bool &_require_restart)
   if (!SaveDeviceConfig())
     return false;
 
-  if (DevicePortChanged) {
+  if (DevicePortChanged)
     changed = true;
-    for (unsigned i = 0; i < NUMDEV; ++i)
-      Profile::SetDeviceConfig(i, device_config[i]);
-  }
 
   _changed |= changed;
   _require_restart |= require_restart;

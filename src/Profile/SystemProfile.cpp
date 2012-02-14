@@ -21,34 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef INTERFACE_BLACKBOARD_H
-#define INTERFACE_BLACKBOARD_H
+#include "Profile/SystemProfile.hpp"
+#include "Profile/DeviceConfig.hpp"
+#include "SystemSettings.hpp"
 
-#include "LiveBlackboard.hpp"
-#include "Compiler.h"
-
-class InterfaceBlackboard : public LiveBlackboard
+void
+Profile::Load(SystemSettings &settings)
 {
-public:
-  void ReadBlackboardBasic(const MoreData &nmea_info);
-  void ReadBlackboardCalculated(const DerivedInfo &derived_info);
-
-  gcc_const
-  SystemSettings &SetSystemSettings() {
-    return system_settings;
-  }
-
-  gcc_const
-  ComputerSettings& SetComputerSettings() {
-    return computer_settings;
-  }
-
-  gcc_const
-  UISettings &SetUISettings() {
-    return ui_settings;
-  }
-
-  void ReadComputerSettings(const ComputerSettings &settings);
-};
-
-#endif
+  for (unsigned i = 0; i < settings.devices.size(); ++i)
+    GetDeviceConfig(i, settings.devices[i]);
+}

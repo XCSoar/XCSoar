@@ -71,6 +71,16 @@ public:
   gcc_const
   static const DerivedInfo& Calculated() { return blackboard.Calculated(); }
 
+  gcc_const
+  static const SystemSettings& GetSystemSettings() {
+    return blackboard.GetSystemSettings();
+  }
+
+  gcc_const
+  static SystemSettings &SetSystemSettings() {
+    return blackboard.SetSystemSettings();
+  }
+
   /**
    * Returns the InterfaceBlackboard.ComputerSettings (read-only)
    * @return The InterfaceBlackboard.ComputerSettings

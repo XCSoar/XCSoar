@@ -120,37 +120,28 @@ MakeDeviceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n,
   return buffer;
 }
 
-static DeviceConfig::PortType
-StringToPortType(const TCHAR *value)
+static bool
+StringToPortType(const TCHAR *value, DeviceConfig::PortType &type)
 {
   for (auto i = port_type_strings; *i != NULL; ++i) {
     if (StringIsEqual(value, *i)) {
-      return (DeviceConfig::PortType)std::distance(port_type_strings, i);
+      type = (DeviceConfig::PortType)std::distance(port_type_strings, i);
+      return true;
     }
   }
 
-  if (IsAndroid())
-    return DeviceConfig::PortType::INTERNAL;
-
-  return DeviceConfig::PortType::SERIAL;
+  return false;
 }
 
-static DeviceConfig::PortType
-ReadPortType(unsigned n)
+static bool
+ReadPortType(unsigned n, DeviceConfig::PortType &type)
 {
   TCHAR name[64];
 
   MakeDeviceSettingName(name, _T("Port"), n, _T("Type"));
 
   const TCHAR *value = Profile::Get(name);
-  if (value == NULL)
-    return n == 0
-      ? (IsAndroid()
-         ? DeviceConfig::PortType::INTERNAL
-         : DeviceConfig::PortType::SERIAL)
-      : DeviceConfig::PortType::DISABLED;
-
-  return StringToPortType(value);
+  return value != NULL && StringToPortType(value, type);
 }
 
 static bool
@@ -187,7 +178,7 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
 {
   TCHAR buffer[64];
 
-  config.port_type = ReadPortType(n);
+  bool have_port_type = ReadPortType(n, config.port_type);
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("BluetoothMAC"));
   Get(buffer, config.bluetooth_mac);
@@ -200,15 +191,10 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
     config.tcp_port = 4353;
 
   config.path.clear();
-  if (config.port_type == DeviceConfig::PortType::SERIAL &&
-      !LoadPath(config, n) && !LoadPortIndex(config, n)) {
-    if (IsAltair() && n == 0)
-      config.path = _T("COM3:");
-    else if (IsAltair() && n == 2)
-      config.path = _T("COM2:");
-    else
-      config.port_type = DeviceConfig::PortType::DISABLED;
-  }
+  if ((!have_port_type ||
+       config.port_type == DeviceConfig::PortType::SERIAL) &&
+      !LoadPath(config, n) && LoadPortIndex(config, n))
+    config.port_type = DeviceConfig::PortType::SERIAL;
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("BaudRate"));
   if (!Get(buffer, config.baud_rate)) {
@@ -231,10 +217,6 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
     if (Get(buffer, speed_index) &&
         speed_index < ARRAY_SIZE(speed_index_table))
       config.baud_rate = speed_index_table[speed_index];
-    else if (IsAltair())
-      config.baud_rate = 38400;
-    else
-      config.baud_rate = 4800;
   }
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("BulkBaudRate"));
@@ -243,29 +225,17 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
 
   _tcscpy(buffer, _T("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
-  if (!Get(buffer, config.driver_name)) {
-    if (IsAltair() && n == 0)
-      config.driver_name = _T("Altair RU");
-    else if (IsAltair() && n == 1)
-      config.driver_name = _T("Vega");
-    else if (IsAltair() && n == 2)
-      config.driver_name = _T("NmeaOut");
-    else
-      config.driver_name.clear();
-  }
+  Get(buffer, config.driver_name);
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("SyncFromDevice"));
-  if (!Get(buffer, config.sync_from_device))
-    config.sync_from_device = true;
+  Get(buffer, config.sync_from_device);
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("SyncToDevice"));
-  if (!Get(buffer, config.sync_to_device))
-    config.sync_to_device = true;
+  Get(buffer, config.sync_to_device);
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("IgnoreChecksum"));
-  if (!Get(buffer, config.ignore_checksum) &&
-      !Get(szProfileIgnoreNMEAChecksum, config.ignore_checksum))
-    config.ignore_checksum = false;
+  if (!Get(buffer, config.ignore_checksum))
+    Get(szProfileIgnoreNMEAChecksum, config.ignore_checksum);
 }
 
 static const TCHAR *

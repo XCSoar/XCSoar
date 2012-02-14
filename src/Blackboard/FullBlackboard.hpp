@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "BaseBlackboard.hpp"
 #include "ComputerSettingsBlackboard.hpp"
+#include "SystemSettings.hpp"
 #include "UISettings.hpp"
 
 /**
@@ -38,9 +39,14 @@ class FullBlackboard
     public ComputerSettingsBlackboard
 {
 protected:
+  SystemSettings system_settings;
   UISettings ui_settings;
 
 public:
+  const SystemSettings &GetSystemSettings() const {
+    return system_settings;
+  }
+
   const UISettings &GetUISettings() const {
     return ui_settings;
   }
