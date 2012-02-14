@@ -180,8 +180,8 @@ ComboList *
 DataFieldFloat::CreateComboList() const
 {
   ComboList *combo_list = new ComboList();
-  const fixed epsilon = mStep / fixed_int_constant(1000);
-  const fixed fine_step = mStep / fixed_int_constant(10);
+  const fixed epsilon = mStep / 1000;
+  const fixed fine_step = mStep / 10;
 
   /* how many items before and after the current value? */
   unsigned surrounding_items = ComboList::MAX_SIZE / 2 - 2;
