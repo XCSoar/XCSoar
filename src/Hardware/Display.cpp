@@ -183,10 +183,10 @@ Display::RotateSupported()
 }
 
 bool
-Display::Rotate(enum orientation orientation)
+Display::Rotate(DisplaySettings::Orientation orientation)
 {
 #ifndef ANDROID
-  if (orientation == ORIENTATION_DEFAULT)
+  if (orientation == DisplaySettings::Orientation::DEFAULT)
     /* leave it as it is */
     return true;
 #endif
@@ -200,23 +200,23 @@ Display::Rotate(enum orientation orientation)
   /* determine the new rotation */
 
   switch (orientation) {
-  case ORIENTATION_PORTRAIT:
+  case DisplaySettings::Orientation::PORTRAIT:
     DeviceMode.dmDisplayOrientation = native_landscape
       ? DMDO_90
       : initial_orientation;
     break;
 
-  case ORIENTATION_LANDSCAPE:
+  case DisplaySettings::Orientation::LANDSCAPE:
     DeviceMode.dmDisplayOrientation = native_landscape
       ? initial_orientation
       : DMDO_270;
     break;
 
-  case ORIENTATION_REVERSE_PORTRAIT:
+  case DisplaySettings::Orientation::REVERSE_PORTRAIT:
     DeviceMode.dmDisplayOrientation = (native_landscape ? DMDO_270 : DMDO_180);
     break;
 
-  case ORIENTATION_REVERSE_LANDSCAPE:
+  case DisplaySettings::Orientation::REVERSE_LANDSCAPE:
     DeviceMode.dmDisplayOrientation = (native_landscape ? DMDO_180 : DMDO_90);
     break;
 
@@ -234,21 +234,21 @@ Display::Rotate(enum orientation orientation)
 
   NativeView::screen_orientation android_orientation;
   switch (orientation) {
-  case ORIENTATION_PORTRAIT:
+  case DisplaySettings::Orientation::PORTRAIT:
     android_orientation = NativeView::SCREEN_ORIENTATION_PORTRAIT;
     break;
 
-  case ORIENTATION_LANDSCAPE:
+  case DisplaySettings::Orientation::LANDSCAPE:
     android_orientation = NativeView::SCREEN_ORIENTATION_LANDSCAPE;
     break;
 
-  case ORIENTATION_REVERSE_PORTRAIT:
+  case DisplaySettings::Orientation::REVERSE_PORTRAIT:
     android_orientation = IsGalaxyTab22() ?
                           NativeView::SCREEN_ORIENTATION_REVERSE_PORTRAIT_GT :
                           NativeView::SCREEN_ORIENTATION_REVERSE_PORTRAIT;
     break;
 
-  case ORIENTATION_REVERSE_LANDSCAPE:
+  case DisplaySettings::Orientation::REVERSE_LANDSCAPE:
     android_orientation = IsGalaxyTab22() ?
                           NativeView::SCREEN_ORIENTATION_REVERSE_LANDSCAPE_GT :
                           NativeView::SCREEN_ORIENTATION_REVERSE_LANDSCAPE;

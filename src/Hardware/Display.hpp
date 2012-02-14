@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_HARDWARE_DISPLAY_H
 #define XCSOAR_HARDWARE_DISPLAY_H
 
+#include "DisplaySettings.hpp"
 #include "Compiler.h"
 
 namespace Display {
@@ -49,14 +50,6 @@ namespace Display {
   }
 #endif
 
-  enum orientation {
-    ORIENTATION_DEFAULT,
-    ORIENTATION_PORTRAIT,
-    ORIENTATION_LANDSCAPE,
-    ORIENTATION_REVERSE_PORTRAIT,
-    ORIENTATION_REVERSE_LANDSCAPE,
-  };
-
   void RotateInitialize();
 
   gcc_const
@@ -66,7 +59,7 @@ namespace Display {
    * Change the orientation of the screen.
    */
   bool
-  Rotate(enum orientation orientation);
+  Rotate(DisplaySettings::Orientation orientation);
 
   /**
    * Restores the display rotation setting.

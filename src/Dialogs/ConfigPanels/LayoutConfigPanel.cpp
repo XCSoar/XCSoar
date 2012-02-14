@@ -24,7 +24,6 @@ Copyright_License {
 #include "LayoutConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
-#include "Profile/DisplayConfig.hpp"
 #include "DataField/Enum.hpp"
 #include "Hardware/Display.hpp"
 #include "Interface.hpp"
@@ -49,11 +48,16 @@ enum ControlIndex {
 
 const TCHAR *display_orientation_help = N_("Rotate the display on devices that support it.");
 static const StaticEnumChoice display_orientation_list[] = {
-  { Display::ORIENTATION_DEFAULT, N_("Default"), display_orientation_help },
-  { Display::ORIENTATION_PORTRAIT, N_("Portrait"), display_orientation_help },
-  { Display::ORIENTATION_LANDSCAPE, N_("Landscape"), display_orientation_help },
-  { Display::ORIENTATION_REVERSE_PORTRAIT, N_("Reverse Portrait"), display_orientation_help },
-  { Display::ORIENTATION_REVERSE_LANDSCAPE, N_("Reverse Landscape"), display_orientation_help },
+  { (unsigned)DisplaySettings::Orientation::DEFAULT,
+    N_("Default"), display_orientation_help },
+  { (unsigned)DisplaySettings::Orientation::PORTRAIT,
+    N_("Portrait"), display_orientation_help },
+  { (unsigned)DisplaySettings::Orientation::LANDSCAPE,
+    N_("Landscape"), display_orientation_help },
+  { (unsigned)DisplaySettings::Orientation::REVERSE_PORTRAIT,
+    N_("Reverse Portrait"), display_orientation_help },
+  { (unsigned)DisplaySettings::Orientation::REVERSE_LANDSCAPE,
+    N_("Reverse Landscape"), display_orientation_help },
   { 0 }
 };
 
@@ -141,7 +145,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
   AddEnum(_("Display orientation"), NULL,
-          display_orientation_list, Profile::GetDisplayOrientation());
+          display_orientation_list, (unsigned)ui_settings.display.orientation);
   SetRowVisible(DisplayOrientation, Display::RotateSupported());
 
   AddEnum(_("InfoBox geometry"),
@@ -187,12 +191,10 @@ LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool orientation_changed = false;
 
   if (Display::RotateSupported()) {
-    Display::orientation orientation = Profile::GetDisplayOrientation();
-    if (SaveValueEnum(DisplayOrientation, orientation)) {
-      Profile::SetDisplayOrientation(orientation);
-      changed = true;
-      orientation_changed = true;
-    }
+    orientation_changed =
+      SaveValueEnum(DisplayOrientation, szProfileDisplayOrientation,
+                    ui_settings.display.orientation);
+    changed |= orientation_changed;
   }
 
   bool info_box_geometry_changed = false;
@@ -227,11 +229,10 @@ LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
   if (orientation_changed) {
     assert(Display::RotateSupported());
 
-    Display::orientation orientation = Profile::GetDisplayOrientation();
-    if (orientation == Display::ORIENTATION_DEFAULT)
+    if (ui_settings.display.orientation == DisplaySettings::Orientation::DEFAULT)
       Display::RotateRestore();
     else {
-      if (!Display::Rotate(orientation))
+      if (!Display::Rotate(ui_settings.display.orientation))
         LogStartUp(_T("Display rotation failed"));
     }
   } else if (info_box_geometry_changed)

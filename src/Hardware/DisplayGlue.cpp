@@ -25,7 +25,6 @@ Copyright_License {
 #include "Display.hpp"
 #include "Operation/VerboseOperationEnvironment.hpp"
 #include "LogFile.hpp"
-#include "Profile/DisplayConfig.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 
@@ -37,8 +36,9 @@ Display::LoadOrientation(VerboseOperationEnvironment &env)
 
   Display::RotateInitialize();
 
-  Display::orientation orientation = Profile::GetDisplayOrientation();
-  if (orientation == Display::ORIENTATION_DEFAULT)
+  DisplaySettings::Orientation orientation =
+    CommonInterface::GetUISettings().display.orientation;
+  if (orientation == DisplaySettings::Orientation::DEFAULT)
     return;
 
   if (!Display::Rotate(orientation)) {
@@ -60,8 +60,9 @@ Display::RestoreOrientation()
   if (!Display::RotateSupported())
     return;
 
-  Display::orientation orientation = Profile::GetDisplayOrientation();
-  if (orientation == Display::ORIENTATION_DEFAULT)
+  DisplaySettings::Orientation orientation =
+    CommonInterface::GetUISettings().display.orientation;
+  if (orientation == DisplaySettings::Orientation::DEFAULT)
     return;
 
   Display::RotateRestore();

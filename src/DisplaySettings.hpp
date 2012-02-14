@@ -26,11 +26,21 @@ Copyright_License {
 
 #include "Util/TypeTraits.hpp"
 
+#include <stdint.h>
+
 /**
  * Display settings.
  */
 struct DisplaySettings {
   bool enable_auto_blank;
+
+  enum class Orientation : uint8_t {
+    DEFAULT,
+    PORTRAIT,
+    LANDSCAPE,
+    REVERSE_PORTRAIT,
+    REVERSE_LANDSCAPE,
+  } orientation;
 
   void SetDefaults();
 };

@@ -40,6 +40,7 @@ void
 Profile::Load(DisplaySettings &settings)
 {
   Get(szProfileAutoBlank, settings.enable_auto_blank);
+  GetEnum(szProfileDisplayOrientation, settings.orientation);
 }
 
 void
