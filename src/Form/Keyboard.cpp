@@ -25,6 +25,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "StringUtil.hpp"
 #include "Screen/ButtonWindow.hpp"
+#include "Screen/Layout.hpp"
 
 #include <assert.h>
 #include <string.h>
@@ -162,10 +163,10 @@ KeyboardControl::move_buttons()
   move_buttons_to_row(_T("ZXCVBNM,."), 3, button_width * 2 / 3);
 
   if (is_landscape()) {
-    move_button(_T('-'), button_width * 9, button_height * 4);
+    move_button(_T('-'), button_width * 9, Layout::Scale(160));
 
-    move_button(_T(' '), button_width * 5 / 2, button_height * 4);
-    resize_button(_T(' '), button_width * 3, button_height);
+    move_button(_T(' '), Layout::Scale(80), Layout::Scale(160));
+    resize_button(_T(' '), Layout::Scale(93), Layout::Scale(40));
   } else {
     move_button(_T('-'), button_width * 8, button_height * 4);
 
