@@ -29,6 +29,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "LogFile.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Dialogs/dlgConfigInfoboxes.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Language/Language.hpp"
@@ -59,7 +60,7 @@ InfoBoxesConfigPanel::OnAction(int id)
     dlgConfigInfoboxesShowModal(UIGlobals::GetMainWindow(),
                                 UIGlobals::GetDialogLook(),
                                 UIGlobals::GetLook().info_box,
-                                InfoBoxLayout::InfoBoxGeometry, data,
+                                InfoBoxManager::layout.geometry, data,
                                 i >= InfoBoxSettings::PREASSIGNED_PANELS);
   if (changed) {
     Profile::Save(data, i);

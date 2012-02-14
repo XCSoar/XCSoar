@@ -28,6 +28,8 @@ Copyright_License {
 #include "Compiler.h"
 #include "InfoBoxes/Content/Factory.hpp"
 
+#include <stdint.h>
+
 enum InfoBoxBorderAppearance_t {
   apIbBox = 0,
   apIbTab
@@ -48,6 +50,50 @@ struct InfoBoxSettings {
 
   static const unsigned int MAX_PANELS = 8;
   static const unsigned int PREASSIGNED_PANELS = 3;
+
+  enum class Geometry : uint8_t {
+    /** default, infoboxes along top and bottom, map in middle */
+    TOP_4_BOTTOM_4 = 0,
+
+    /** both infoboxes along bottom */
+    BOTTOM_8 = 1,
+
+    /** both infoboxes along top */
+    TOP_8 = 2,
+
+    /** infoboxes along both sides */
+    LEFT_4_RIGHT_4 = 3,
+
+    /** infoboxes along left side */
+    LEFT_8 = 4,
+
+    /** infoboxes along right side */
+    RIGHT_8 = 5,
+
+    /** infoboxes GNAV (9 right + vario) */
+    RIGHT_9_VARIO = 6,
+
+    /** infoboxes (5) along right side (square screen) */
+    RIGHT_5 = 7,
+
+    /** 12 infoboxes along right side (i.e. like GNav without vario) */
+    RIGHT_12 = 8,
+
+    /** 24 infoboxes along right side (3x8) */
+    RIGHT_24 = 9,
+
+    /** 12 infoboxes along bottom */
+    BOTTOM_12 = 10,
+
+    /** 12 infoboxes along top */
+    TOP_12 = 11,
+
+    /** 6 left, 3 right + vario */
+    LEFT_6_RIGHT_3_VARIO = 12,
+
+    /** 8 bottom + vario */
+    BOTTOM_8_VARIO = 13,
+  } geometry;
 
   bool inverse, use_colors;
 

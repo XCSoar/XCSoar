@@ -49,6 +49,7 @@ GetV60InfoBoxManagerConfig(InfoBoxSettings &settings) {
 void
 Profile::Load(InfoBoxSettings &settings)
 {
+  GetEnum(szProfileInfoBoxGeometry, settings.geometry);
   Get(szProfileAppInverseInfoBox, settings.inverse);
   Get(szProfileAppInfoBoxColors, settings.use_colors);
 

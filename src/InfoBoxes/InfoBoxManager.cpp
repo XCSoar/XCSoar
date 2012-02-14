@@ -328,8 +328,8 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
 
   unsigned border = 0;
 
-  switch (InfoBoxLayout::InfoBoxGeometry) {
-  case InfoBoxLayout::ibTop4Bottom4:
+  switch (settings.geometry) {
+  case InfoBoxSettings::Geometry::TOP_4_BOTTOM_4:
     if (i < 4)
       border |= BORDERBOTTOM;
     else
@@ -339,36 +339,36 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
       border |= BORDERRIGHT;
     break;
 
-  case InfoBoxLayout::ibBottom8:
-  case InfoBoxLayout::ibBottom8Vario:
+  case InfoBoxSettings::Geometry::BOTTOM_8:
+  case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
     border |= BORDERTOP;
 
     if (i != 3 && i != 7)
       border |= BORDERRIGHT;
     break;
 
-  case InfoBoxLayout::ibBottom12:
+  case InfoBoxSettings::Geometry::BOTTOM_12:
     border |= BORDERTOP;
 
     if (i != 5 && i != 11)
       border |= BORDERRIGHT;
     break;
 
-  case InfoBoxLayout::ibTop8:
+  case InfoBoxSettings::Geometry::TOP_8:
     border |= BORDERBOTTOM;
 
     if (i != 3 && i != 7)
       border |= BORDERRIGHT;
     break;
 
-  case InfoBoxLayout::ibTop12:
+  case InfoBoxSettings::Geometry::TOP_12:
     border |= BORDERBOTTOM;
 
     if (i != 5 && i != 11)
       border |= BORDERRIGHT;
     break;
 
-  case InfoBoxLayout::ibLeft4Right4:
+  case InfoBoxSettings::Geometry::LEFT_4_RIGHT_4:
     if (i != 3 && i != 7)
       border |= BORDERBOTTOM;
 
@@ -378,7 +378,7 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
       border |= BORDERLEFT;
     break;
 
-  case InfoBoxLayout::ibGNav2:
+  case InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO:
     if ((i != 0) && (i != 6))
       border |= BORDERTOP;
     if (i < 6)
@@ -387,40 +387,40 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
       border |= BORDERLEFT;
     break;
 
-  case InfoBoxLayout::ibLeft8:
+  case InfoBoxSettings::Geometry::LEFT_8:
     if (i != 3 && i != 7)
       border |= BORDERBOTTOM;
 
     border |= BORDERRIGHT;
     break;
 
-  case InfoBoxLayout::ibRight8:
+  case InfoBoxSettings::Geometry::RIGHT_8:
     if (i != 3 && i != 7)
       border |= BORDERBOTTOM;
 
     border |= BORDERLEFT;
     break;
 
-  case InfoBoxLayout::ibGNav:
+  case InfoBoxSettings::Geometry::RIGHT_9_VARIO:
     if (i != 0)
       border |= BORDERTOP;
     if (i < 6)
       border |= BORDERLEFT|BORDERRIGHT;
     break;
 
-  case InfoBoxLayout::ibSquare:
+  case InfoBoxSettings::Geometry::RIGHT_5:
     border |= BORDERLEFT;
     if (i != 0)
       border |= BORDERTOP;
     break;
 
-  case InfoBoxLayout::ibRight12:
+  case InfoBoxSettings::Geometry::RIGHT_12:
     if (i % 6 != 0)
       border |= BORDERTOP;
     border |= BORDERLEFT;
     break;
 
-  case InfoBoxLayout::ibRight24:
+  case InfoBoxSettings::Geometry::RIGHT_24:
     if (i % 8 != 0)
       border |= BORDERTOP;
     border |= BORDERLEFT;

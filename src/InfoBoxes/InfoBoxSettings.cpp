@@ -49,6 +49,8 @@ InfoBoxSettings::Panel::IsEmpty() const
 void
 InfoBoxSettings::SetDefaults()
 {
+  geometry = Geometry::TOP_4_BOTTOM_4;
+
   inverse = false;
   use_colors = true;
   border_style = apIbBox;

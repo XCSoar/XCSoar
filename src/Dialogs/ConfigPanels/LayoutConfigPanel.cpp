@@ -62,20 +62,34 @@ static const StaticEnumChoice display_orientation_list[] = {
 };
 
 static const StaticEnumChoice info_box_geometry_list[] = {
-  { InfoBoxLayout::ibTop4Bottom4, N_("8 Top + Bottom (Portrait)") },
-  { InfoBoxLayout::ibBottom8, N_("8 Bottom (Portrait)") },
-  { InfoBoxLayout::ibBottom8Vario, N_("8 Bottom + Vario (Portrait)") },
-  { InfoBoxLayout::ibTop8, N_("8 Top (Portrait)") },
-  { InfoBoxLayout::ibLeft4Right4, N_("8 Left + Right (Landscape)") },
-  { InfoBoxLayout::ibLeft8, N_("8 Left (Landscape)") },
-  { InfoBoxLayout::ibRight8, N_("8 Right (Landscape)") },
-  { InfoBoxLayout::ibGNav, N_("9 Right + Vario (Landscape)") },
-  { InfoBoxLayout::ibGNav2, N_("9 Left + Right (Landscape)") },
-  { InfoBoxLayout::ibSquare, N_("5 Right (Square)") },
-  { InfoBoxLayout::ibRight12, N_("12 Right (Landscape)") },
-  { InfoBoxLayout::ibBottom12, N_("12 Bottom (Portrait)") },
-  { InfoBoxLayout::ibTop12, N_("12 Top (Portrait)") },
-  { InfoBoxLayout::ibRight24, N_("24 Right (Landscape)") },
+  { (unsigned)InfoBoxSettings::Geometry::TOP_4_BOTTOM_4,
+    N_("8 Top + Bottom (Portrait)") },
+  { (unsigned)InfoBoxSettings::Geometry::BOTTOM_8,
+    N_("8 Bottom (Portrait)") },
+  { (unsigned)InfoBoxSettings::Geometry::BOTTOM_8_VARIO,
+    N_("8 Bottom + Vario (Portrait)") },
+  { (unsigned)InfoBoxSettings::Geometry::TOP_8,
+    N_("8 Top (Portrait)") },
+  { (unsigned)InfoBoxSettings::Geometry::LEFT_4_RIGHT_4,
+    N_("8 Left + Right (Landscape)") },
+  { (unsigned)InfoBoxSettings::Geometry::LEFT_8,
+    N_("8 Left (Landscape)") },
+  { (unsigned)InfoBoxSettings::Geometry::RIGHT_8,
+    N_("8 Right (Landscape)") },
+  { (unsigned)InfoBoxSettings::Geometry::RIGHT_9_VARIO,
+    N_("9 Right + Vario (Landscape)") },
+  { (unsigned)InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO,
+    N_("9 Left + Right (Landscape)") },
+  { (unsigned)InfoBoxSettings::Geometry::RIGHT_5,
+    N_("5 Right (Square)") },
+  { (unsigned)InfoBoxSettings::Geometry::RIGHT_12,
+    N_("12 Right (Landscape)") },
+  { (unsigned)InfoBoxSettings::Geometry::BOTTOM_12,
+    N_("12 Bottom (Portrait)") },
+  { (unsigned)InfoBoxSettings::Geometry::TOP_12,
+    N_("12 Top (Portrait)") },
+  { (unsigned)InfoBoxSettings::Geometry::RIGHT_24,
+    N_("24 Right (Landscape)") },
   { 0 }
 };
 
@@ -150,7 +164,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddEnum(_("InfoBox geometry"),
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
-          info_box_geometry_list, InfoBoxLayout::InfoBoxGeometry);
+          info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
 
   AddEnum(_("FLARM display"), NULL, flarm_display_location_list,
           (unsigned)ui_settings.traffic.gauge_location);
@@ -200,7 +214,8 @@ LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool info_box_geometry_changed = false;
 
   info_box_geometry_changed |=
-    SaveValueEnum(AppInfoBoxGeom, szProfileInfoBoxGeometry, InfoBoxLayout::InfoBoxGeometry);
+    SaveValueEnum(AppInfoBoxGeom, szProfileInfoBoxGeometry,
+                  ui_settings.info_boxes.geometry);
 
   info_box_geometry_changed |=
     SaveValueEnum(AppFlarmLocation, szProfileFlarmLocation,

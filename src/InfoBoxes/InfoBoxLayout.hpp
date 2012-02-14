@@ -32,38 +32,9 @@ namespace InfoBoxLayout
 {
   static const double CONTROLHEIGHTRATIO =  7.4;
 
-  enum Geometry {
-    // 0: default, infoboxes along top and bottom, map in middle
-    ibTop4Bottom4 = 0,
-    // 1: both infoboxes along bottom
-    ibBottom8 = 1,
-    // 2: both infoboxes along top
-    ibTop8 = 2,
-    // 3: infoboxes along both sides
-    ibLeft4Right4 = 3,
-    // 4: infoboxes along left side
-    ibLeft8 = 4,
-    // 5: infoboxes along right side
-    ibRight8 = 5,
-    // 6: infoboxes GNAV (9 right + vario)
-    ibGNav = 6,
-    // 7: infoboxes (5) along right side (square screen)
-    ibSquare = 7,
-    // 8: 12 infoboxes along right side (i.e. like GNav without vario)
-    ibRight12 = 8,
-    // 9: 24 infoboxes along right side (3x8)
-    ibRight24 = 9,
-    // 10: 12 infoboxes along bottom
-    ibBottom12 = 10,
-    // 11: 12 infoboxes along top
-    ibTop12 = 11,
-    // 12: 6 left, 3 right + vario
-    ibGNav2 = 12,
-    // 13: 8 bottom + vario
-    ibBottom8Vario = 13,
-  };
-
   struct Layout {
+    InfoBoxSettings::Geometry geometry;
+
     UPixelScalar control_width, control_height;
 
     unsigned count;
@@ -82,13 +53,9 @@ namespace InfoBoxLayout
     }
   };
 
-  extern Geometry InfoBoxGeometry;
-
   gcc_pure
   Layout
-  Calculate(PixelRect rc, Geometry geometry);
-
-  void Init(PixelRect rc);
+  Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry);
 };
 
 #endif

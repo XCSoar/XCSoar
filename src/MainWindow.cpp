@@ -156,9 +156,8 @@ MainWindow::InitialiseConfigured()
   PixelRect rc = get_client_rect();
 
   LogStartUp(_T("InfoBox geometry"));
-  InfoBoxLayout::Init(rc);
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, InfoBoxLayout::InfoBoxGeometry);
+    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
   Fonts::SizeInfoboxFont(ib_layout.control_width);
 
@@ -278,10 +277,11 @@ MainWindow::ReinitialiseLayout()
 
   InfoBoxManager::Destroy();
 
+  const UISettings &ui_settings = CommonInterface::GetUISettings();
+
   PixelRect rc = get_client_rect();
-  InfoBoxLayout::Init(rc);
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, InfoBoxLayout::InfoBoxGeometry);
+    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
   Fonts::SizeInfoboxFont(ib_layout.control_width);
 
@@ -334,14 +334,14 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout i
 
   // Automatic mode - follow info boxes
   if (val == TrafficSettings::GaugeLocation::Auto) {
-    switch (InfoBoxLayout::InfoBoxGeometry) {
-    case InfoBoxLayout::ibTop8:
+    switch (InfoBoxManager::layout.geometry) {
+    case InfoBoxSettings::Geometry::TOP_8:
       val = TrafficSettings::GaugeLocation::TopRight;
       break;
-    case InfoBoxLayout::ibLeft8:
+    case InfoBoxSettings::Geometry::LEFT_8:
       val = TrafficSettings::GaugeLocation::BottomLeft;
       break;
-    case InfoBoxLayout::ibTop12:
+    case InfoBoxSettings::Geometry::TOP_12:
       val = TrafficSettings::GaugeLocation::TopLeft;
       break;
     default:

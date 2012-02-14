@@ -25,7 +25,6 @@ Copyright_License {
 #define INFOBOXES_CONFIG_DIALOG_HPP
 
 #include "InfoBoxes/InfoBoxSettings.hpp"
-#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "tchar.h"
 
 struct DialogLook;
@@ -39,7 +38,7 @@ bool
 dlgConfigInfoboxesShowModal(SingleWindow &parent,
                             const DialogLook &dialog_look,
                             const InfoBoxLook &look,
-                            InfoBoxLayout::Geometry geometry,
+                            InfoBoxSettings::Geometry geometry,
                             InfoBoxSettings::Panel &data,
                             bool allow_name_change);
 
