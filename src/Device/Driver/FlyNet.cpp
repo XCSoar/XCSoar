@@ -30,10 +30,13 @@ Copyright_License {
 class FlyNetDevice : public AbstractDevice {
 public:
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
+
+  bool ParseBAT(const char *content, NMEAInfo &info);
+  bool ParsePRS(const char *content, NMEAInfo &info);
 };
 
-static bool
-ParseBAT(const char *content, NMEAInfo &info)
+bool
+FlyNetDevice::ParseBAT(const char *content, NMEAInfo &info)
 {
   // e.g.
   // _BAT 3 (30%)
@@ -50,8 +53,8 @@ ParseBAT(const char *content, NMEAInfo &info)
   return true;
 }
 
-static bool
-ParsePRS(const char *content, NMEAInfo &info)
+bool
+FlyNetDevice::ParsePRS(const char *content, NMEAInfo &info)
 {
   // e.g. _PRS 00017CBA
 
