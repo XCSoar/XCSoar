@@ -94,6 +94,7 @@ MacCready::SolveVertical(const GlideState &task) const
 
   result.pure_glide_height = fixed_zero;
   result.time_elapsed = time_cruise + time_climb;
+  result.time_virtual = fixed_zero;
   result.height_climb = -task.altitude_difference;
   result.height_glide = fixed_zero;
   result.validity = GlideResult::Validity::OK;
@@ -192,6 +193,7 @@ MacCready::SolveCruise(const GlideState &task) const
   const fixed sink_glide = time_cruise * mc_sink_rate;
 
   result.time_elapsed = estimated_time + time_climb_drift;
+  result.time_virtual = fixed_zero;
   result.height_climb = time_climb * mc;
   result.height_glide = sink_glide;
   result.altitude_difference -= sink_glide;
@@ -250,6 +252,8 @@ MacCready::SolveGlide(const GlideState &task, const fixed v_set,
   if(positive(inv_mc))
     // equivalent time to gain the height that was used
     result.time_virtual = result.height_glide * inv_mc;
+  else
+    result.time_virtual = fixed_zero;
 
   return result;
 }
