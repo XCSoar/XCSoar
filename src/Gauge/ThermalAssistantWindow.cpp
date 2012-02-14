@@ -72,7 +72,7 @@ ThermalAssistantWindow::OnCreate()
 #endif /* !OPENGL */
   hpInnerCircle.Set(1, hcCircles);
   hpOuterCircle.Set(Pen::DASH, 1, hcCircles);
-  hpPlane.Set(width, hcCircles);
+  hpPlane.Set(width, COLOR_BLACK);
 
   hfNoTraffic.Set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
   hfLabels.Set(Fonts::GetStandardFontFace(), Layout::FastScale(12));
@@ -201,7 +201,7 @@ ThermalAssistantWindow::PaintRadarBackground(Canvas &canvas) const
   if (small)
     return;
 
-  canvas.SetTextColor(hcCircles);
+  canvas.SetTextColor(COLOR_BLACK);
   canvas.Select(hfLabels);
   canvas.SetBackgroundColor(hcBackground);
   canvas.SetBackgroundOpaque();

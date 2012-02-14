@@ -913,12 +913,12 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:348
 #, no-c-format
-msgid "AA time"
+msgid "AAT time"
 msgstr "AAТ время"
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
-msgid "AA Time"
+msgid "AAT Time"
 msgstr "AAТ время"
 
 #: src/InfoBoxes/Content/Factory.cpp:350
@@ -931,12 +931,12 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
-msgid "AA max. distance "
+msgid "AAT max. distance "
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 #, no-c-format
-msgid "AA Dmax"
+msgid "AAT Dmax"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:360
@@ -948,12 +948,12 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
-msgid "AA min. distance"
+msgid "AAT min. distance"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:369
 #, no-c-format
-msgid "AA Dmin"
+msgid "AAT Dmin"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:370
@@ -963,12 +963,12 @@ msgstr "Минимальное расстояние оставшееся в уп
 
 #: src/InfoBoxes/Content/Factory.cpp:378
 #, no-c-format
-msgid "AA speed max. distance"
+msgid "AAT speed max. distance"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:379
 #, no-c-format
-msgid "AA Vmax"
+msgid "AAT Vmax"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:380
@@ -983,12 +983,12 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:388
 #, no-c-format
-msgid "AA speed min. distance"
+msgid "AAT speed min. distance"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:389
 #, no-c-format
-msgid "AA Vmin"
+msgid "AAT Vmin"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:390
@@ -1364,12 +1364,12 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:588
 #, no-c-format
-msgid "AA distance around target"
+msgid "AAT distance around target"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:589
 #, no-c-format
-msgid "AA Dtgt"
+msgid "AAT Dtgt"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:590
@@ -1379,12 +1379,12 @@ msgstr "Расстояние через  поворотные пункты на�
 
 #: src/InfoBoxes/Content/Factory.cpp:598
 #, no-c-format
-msgid "AA speed around target"
+msgid "AAT speed around target"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:599
 #, no-c-format
-msgid "AA Vtgt"
+msgid "AAT Vtgt"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:600
@@ -1552,12 +1552,12 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:698
 #, no-c-format
-msgid "AA delta time"
+msgid "AAT delta time"
 msgstr "AAТ разница времени"
 
 #: src/InfoBoxes/Content/Factory.cpp:699
 #, no-c-format
-msgid "AA dT"
+msgid "AAT dT"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:700
@@ -1656,7 +1656,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:753
 #, no-c-format
-msgid "Altrn 1"
+msgid "Altn 1"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:754
@@ -1671,7 +1671,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:763
 #, no-c-format
-msgid "Altrn 2"
+msgid "Altn 2"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:764
@@ -1687,7 +1687,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:773
 #, no-c-format
-msgid "Altrn1 GR"
+msgid "Altn1 GR"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:774
@@ -7433,7 +7433,7 @@ msgstr "Старт. скорость"
 
 #: Data/Dialogs/dlgTarget.xml:10 Data/Dialogs/dlgTarget_L.xml:28
 msgid ""
-"AA Delta Time - Difference between estimated task time and AAT minimum time. "
+"AAT Delta Time - Difference between estimated task time and AAT minimum time. "
 "Colored red if negative (expected arrival too early), or blue if in sector "
 "and can turn now with estimated arrival time greater than AAT time plus 5 "
 "minutes."
@@ -7666,10 +7666,6 @@ msgstr ""
 
 #: Data/Dialogs/pnlStatusFlight.xml:6
 msgid "Max. height gain"
-msgstr ""
-
-#: Data/Dialogs/pnlTaskCalculator.xml:10
-msgid "AAT time"
 msgstr ""
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:33
