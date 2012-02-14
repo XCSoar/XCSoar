@@ -28,6 +28,7 @@ Copyright_License {
 
 TrackingGlue::TrackingGlue()
 {
+  settings.SetDefaults();
   LiveTrack24::SetServer(_T("www.livetrack24.com"));
 }
 
