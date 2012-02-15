@@ -201,40 +201,26 @@ TabDisplay::OnPaint(Canvas &canvas)
   const unsigned CaptionStyle = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;
 
+  const bool is_focused = has_focus();
   for (unsigned i = 0; i < buttons.size(); i++) {
     const OneTabButton &button = *buttons[i];
-    bool inverse = false;
-    if (((int)i == down_index) && (drag_off_button == false)) {
-      canvas.SetTextColor(COLOR_BLACK);
-      canvas.SetBackgroundColor(COLOR_YELLOW);
 
-    } else if (i == tab_bar.GetCurrentPage()) {
-        canvas.SetTextColor(COLOR_WHITE);
-        if (has_focus() && !HasPointer()) {
-          canvas.SetBackgroundColor(COLOR_GRAY.Highlight());
-        } else {
-          canvas.SetBackgroundColor(COLOR_BLACK);
-        }
-        inverse = true;
+    const bool is_down = (int)i == down_index && !drag_off_button;
+    const bool is_selected = i == tab_bar.GetCurrentPage();
 
-    } else {
-      canvas.SetTextColor(COLOR_BLACK);
-      canvas.SetBackgroundColor(COLOR_WHITE);
-    }
+    canvas.SetTextColor(look.list.GetTextColor(is_selected, is_focused,
+                                               is_down));
+    canvas.SetBackgroundColor(look.list.GetBackgroundColor(is_selected,
+                                                           is_focused,
+                                                           is_down));
+
     const PixelRect &rc = GetButtonSize(i);
     PaintButton(canvas, CaptionStyle,
                 button.caption,
                 rc,
                 button.is_button_only,
                 button.bmp,
-                (int)i == down_index, inverse);
-  }
-  if (has_focus()) {
-    PixelRect rcFocus;
-    rcFocus.top = rcFocus.left = 0;
-    rcFocus.right = canvas.get_width();
-    rcFocus.bottom = canvas.get_height();
-    canvas.DrawFocusRectangle(rcFocus);
+                is_down, is_selected);
   }
 }
 
