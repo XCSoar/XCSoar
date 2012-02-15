@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Profile/SystemProfile.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Profile/Profile.hpp"
 #include "SystemSettings.hpp"
 
 void
