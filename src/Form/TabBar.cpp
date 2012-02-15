@@ -133,14 +133,28 @@ TabBarControl::SetCurrentPage(unsigned i)
 void
 TabBarControl::NextPage()
 {
-  if (pager.Next(HasPointer()) && page_flipped_callback != NULL)
+  if (!pager.Next(HasPointer()))
+    /* failed to switch */
+    return;
+
+  if (tab_display != NULL)
+    tab_display->invalidate();
+
+  if (page_flipped_callback != NULL)
     page_flipped_callback();
 }
 
 void
 TabBarControl::PreviousPage()
 {
-  if (pager.Previous(HasPointer()) && page_flipped_callback != NULL)
+  if (!pager.Previous(HasPointer()))
+    /* failed to switch */
+    return;
+
+  if (tab_display != NULL)
+    tab_display->invalidate();
+
+  if (page_flipped_callback != NULL)
     page_flipped_callback();
 }
 
