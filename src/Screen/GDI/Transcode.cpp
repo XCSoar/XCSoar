@@ -25,94 +25,89 @@ Copyright_License {
 #include "Key.h"
 #include "Asset.hpp"
 
+struct KeyMap {
+  unsigned from, to;
+};
+
+static gcc_constexpr_data KeyMap altair_key_map[] = {
+  { VK_F1, VK_APP1 },
+  { VK_F2, VK_APP2 },
+  { VK_F3, VK_APP3 },
+  { VK_F4, VK_APP4 },
+  { VK_F5, '6' },
+  { VK_F6, '7' },
+  { VK_F7, '8' },
+  { VK_F8, '9' },
+  { VK_F9, '0' },
+  { 0 }
+};
+
+static gcc_constexpr_data KeyMap hp31x_key_map[] = {
+  { VK_F12, VK_ESCAPE },
+  { 0 }
+};
+
+static gcc_constexpr_data KeyMap medion_p5_key_map[] = {
+  { VK_F6, 0x26 }, // + key = pg up
+  { VK_F7, 0x28 }, // - key = pg down
+  { VK_F8, VK_RETURN }, // middle key = enter
+  { 0 }
+};
+
+static gcc_constexpr_data KeyMap nokia_500_key_map[] = {
+  { 0xc1, VK_RETURN }, // middle key = enter
+  { 0xc5, 0x26 }, // + key = pg down
+  { 0xc6, 0x28 }, // - key = pg up
+  { 0 }
+};
+
+static gcc_constexpr_data KeyMap pn_6000_key_map[] = {
+  { VK_F10, VK_APP1 }, // Upper Silver key short press
+  { VK_F12, VK_APP2 }, // Lower Silver key short press
+  { VK_F3, VK_APP3 }, // Back key plus
+  { VK_F2, VK_APP4 }, // Back key minus
+  { VK_F11, VK_F1 }, // Upper silver key LONG press
+  { VK_F13, VK_F2 }, // Lower silver key LONG press
+  { 0 }
+};
+
+gcc_const
+static unsigned
+KeyMapLookup(const KeyMap *map, unsigned key_code)
+{
+  for (auto i = map; i->from != 0; ++i)
+    if (i->from == key_code)
+      return i->to;
+
+  return key_code;
+}
+
 unsigned
 TranscodeKey(unsigned key_code)
 {
+  if (IsAltair())
+    return KeyMapLookup(altair_key_map, key_code);
+
 #ifdef _WIN32_WCE
   /* VK_F23 is the "action" key on some iPaqs */
   if (key_code == VK_F23)
     return VK_RETURN;
 #endif
 
-  if (global_model_type == ModelType::HP31X) {
-    if (key_code == 0x7b)
-      key_code = 0x1b;
-  } else if (global_model_type == ModelType::PN6000) {
-    switch(key_code) {
-    case 0x79: // Upper Silver key short press
-      key_code = 0xc1; // F10 -> APP1
-      break;
-    case 0x7b: // Lower Silver key short press
-      key_code = 0xc2; // F12 -> APP2
-      break;
-    case 0x72: // Back key plus
-      key_code = 0xc3; // F3  -> APP3
-      break;
-    case 0x71: // Back key minus
-      key_code = 0xc4; // F2  -> APP4
-      break;
-    case 0x7a: // Upper silver key LONG press
-      key_code = 0x70; // F11 -> F1
-      break;
-    case 0x7c: // Lower silver key LONG press
-      key_code = 0x71; // F13 -> F2
-      break;
-    }
-  } else if (global_model_type == ModelType::NOKIA_500) {
-    switch(key_code) {
-    case 0xc1:
-      key_code = 0x0d; // middle key = enter
-      break;
-    case 0xc5:
-      key_code = 0x26; // + key = pg Up
-      break;
-    case 0xc6:
-      key_code = 0x28; // - key = pg Down
-      break;
-    }
-  } else if (global_model_type == ModelType::MEDION_P5) {
-    switch(key_code) {
-    case 0x79:
-      key_code = 0x0d; // middle key = enter
-      break;
-    case 0x75:
-      key_code = 0x26; // + key = pg Up
-      break;
-    case 0x76:
-      key_code = 0x28; // - key = pg Down
-      break;
-    }
-  } else if (IsAltair()){  // handles new keypad driver button codes
-    switch(key_code) {
-    case VK_F1:
-      return VK_APP1;
+  switch (global_model_type) {
+  case ModelType::HP31X:
+    return KeyMapLookup(hp31x_key_map, key_code);
 
-    case VK_F2:
-      return VK_APP2;
+  case ModelType::MEDION_P5:
+    return KeyMapLookup(medion_p5_key_map, key_code);
 
-    case VK_F3:
-      return VK_APP3;
+  case ModelType::NOKIA_500:
+    return KeyMapLookup(nokia_500_key_map, key_code);
 
-    case VK_F4:
-      return VK_APP4;
+  case ModelType::PN6000:
+    return KeyMapLookup(pn_6000_key_map, key_code);
 
-    case VK_F5:
-      key_code = '6';
-      break;
-    case VK_F6:
-      key_code = '7';
-      break;
-    case VK_F7:
-      key_code = '8';
-      break;
-    case VK_F8:
-      key_code = '9';
-      break;
-    case VK_F9:
-      key_code = '0';
-      break;
-    }
+  default:
+    return key_code;
   }
-
-  return key_code;
 }
