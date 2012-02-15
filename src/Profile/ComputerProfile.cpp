@@ -118,12 +118,12 @@ Profile::Load(FeaturesSettings &settings)
 void
 Profile::Load(ComputerSettings &settings)
 {
-  Load((WindSettings &)settings);
-  Load((SoundSettings &)settings);
-  Load((TeamCodeSettings &)settings);
-  Load((VoiceSettings &)settings);
-  Load((PlacesOfInterestSettings &)settings);
-  Load((FeaturesSettings &)settings);
+  Load(settings.wind);
+  Load(settings.sound);
+  Load(settings.team_code);
+  Load(settings.voice);
+  Load(settings.poi);
+  Load(settings.features);
 
   Get(szProfileEnableExternalTriggerCruise,
       settings.external_trigger_cruise_enabled);
