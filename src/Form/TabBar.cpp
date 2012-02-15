@@ -106,7 +106,10 @@ TabBarControl::AddTab(Widget *widget, const TCHAR *caption,
 void
 TabBarControl::ClickPage(unsigned i)
 {
-  pager.ClickPage(i);
+  const bool is_current = i == pager.GetCurrentIndex();
+  if (!pager.ClickPage(i) || is_current)
+    /* failure */
+    return;
 
   if (tab_display != NULL)
     tab_display->invalidate();
