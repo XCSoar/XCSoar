@@ -120,16 +120,19 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   unsigned last_item = min(length, end);
 
   const bool focused = has_focus();
-  const bool pressed = drag_mode == DragMode::CURSOR;
 
   for (unsigned i = start; i < last_item; i++) {
+    const bool selected = i == cursor;
+    const bool pressed = selected && drag_mode == DragMode::CURSOR;
+
     canvas.DrawFilledRectangle(rc,
-                               look.list.GetBackgroundColor(i == cursor,
-                                                            focused, pressed));
+                               look.list.GetBackgroundColor(selected,
+                                                            focused,
+                                                            pressed));
 
     paint_item_callback(canvas, rc, i);
 
-    if (focused && i == cursor)
+    if (focused && selected)
       canvas.DrawFocusRectangle(rc);
 
     ::OffsetRect(&rc, 0, rc.bottom - rc.top);

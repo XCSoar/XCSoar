@@ -88,23 +88,25 @@ struct DialogLook {
     gcc_pure
     Color GetTextColor(bool is_selected, bool is_focused,
                        bool is_pressed) const {
-      return is_selected
-        ? (is_pressed
-           ? pressed.text_color
-           : (is_focused
-              ? focused.text_color : selected.text_color))
-        : text_color;
+      return is_pressed
+        ? pressed.text_color
+        : (is_selected
+           ? (is_focused
+              ? focused.text_color
+              : selected.text_color)
+           : text_color);
     }
 
     gcc_pure
     Color GetBackgroundColor(bool is_selected, bool is_focused,
                              bool is_pressed) const {
-      return is_selected
-        ? (is_pressed
-           ? pressed.background_color
-           : (is_focused
-              ? focused.background_color : selected.background_color))
-        : background_color;
+      return is_pressed
+        ? pressed.background_color
+        : (is_selected
+           ? (is_focused
+              ? focused.background_color
+              : selected.background_color)
+           : background_color);
     }
   } list;
 
