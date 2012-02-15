@@ -391,7 +391,7 @@ WndForm::ShowModal()
   if (default_focus)
     default_focus->set_focus();
   else
-    focus_first_control();
+    FocusFirstControl();
 
   bool hastimed = false;
   WndForm::time_any_open_close.Update(); // when current dlg opens or child closes
@@ -473,9 +473,9 @@ WndForm::ShowModal()
       if (!check_key(this, event)) {
         /* this window doesn't handle VK_UP/VK_DOWN */
         if (get_key_code(event) == VK_DOWN)
-          focus_next_control();
+          FocusNextControl();
         else
-          focus_previous_control();
+          FocusPreviousControl();
         continue;
       }
     }

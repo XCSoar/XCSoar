@@ -40,8 +40,8 @@ ContainerWindow::~ContainerWindow()
 
 gcc_pure
 Window *
-ContainerWindow::find_control(std::list<Window*>::const_iterator i,
-                              std::list<Window*>::const_iterator end)
+ContainerWindow::FindControl(std::list<Window*>::const_iterator i,
+                             std::list<Window*>::const_iterator end)
 {
   for (; i != end; ++i) {
     Window &child = **i;
@@ -53,7 +53,7 @@ ContainerWindow::find_control(std::list<Window*>::const_iterator i,
 
     if (child.is_control_parent()) {
       ContainerWindow &container = (ContainerWindow &)child;
-      Window *control = container.find_first_control();
+      Window *control = container.FindFirstControl();
       if (control != NULL)
         return control;
     }
@@ -64,8 +64,8 @@ ContainerWindow::find_control(std::list<Window*>::const_iterator i,
 
 gcc_pure
 Window *
-ContainerWindow::find_control(std::list<Window*>::const_reverse_iterator i,
-                              std::list<Window*>::const_reverse_iterator end)
+ContainerWindow::FindControl(std::list<Window*>::const_reverse_iterator i,
+                             std::list<Window*>::const_reverse_iterator end)
 {
   for (; i != end; ++i) {
     Window &child = **i;
@@ -77,7 +77,7 @@ ContainerWindow::find_control(std::list<Window*>::const_reverse_iterator i,
 
     if (child.is_control_parent()) {
       ContainerWindow &container = (ContainerWindow &)child;
-      Window *control = container.find_last_control();
+      Window *control = container.FindLastControl();
       if (control != NULL)
         return control;
     }
@@ -87,19 +87,19 @@ ContainerWindow::find_control(std::list<Window*>::const_reverse_iterator i,
 }
 
 Window *
-ContainerWindow::find_first_control()
+ContainerWindow::FindFirstControl()
 {
-  return find_control(children.begin(), children.end());
+  return FindControl(children.begin(), children.end());
 }
 
 Window *
-ContainerWindow::find_last_control()
+ContainerWindow::FindLastControl()
 {
-  return find_control(children.rbegin(), children.rend());
+  return FindControl(children.rbegin(), children.rend());
 }
 
 Window *
-ContainerWindow::find_next_child_control(Window *reference)
+ContainerWindow::FindNextChildControl(Window *reference)
 {
   assert(reference != NULL);
   assert(reference->GetParent() == this);
@@ -108,11 +108,11 @@ ContainerWindow::find_next_child_control(Window *reference)
     std::find(children.begin(), children.end(), reference);
   assert(i != children.end());
 
-  return find_control(++i, children.end());
+  return FindControl(++i, children.end());
 }
 
 Window *
-ContainerWindow::find_previous_child_control(Window *reference)
+ContainerWindow::FindPreviousChildControl(Window *reference)
 {
   assert(reference != NULL);
   assert(reference->GetParent() == this);
@@ -125,11 +125,11 @@ ContainerWindow::find_previous_child_control(Window *reference)
   assert(i != children.rend());
 #endif
 
-  return find_control(++i, children.rend());
+  return FindControl(++i, children.rend());
 }
 
 Window *
-ContainerWindow::find_next_control(Window *reference)
+ContainerWindow::FindNextControl(Window *reference)
 {
   assert(reference != NULL);
 
@@ -140,7 +140,7 @@ ContainerWindow::find_next_control(Window *reference)
     ContainerWindow *container = reference->parent;
     assert(container != NULL);
 
-    Window *control = container->find_next_child_control(reference);
+    Window *control = container->FindNextChildControl(reference);
     if (control != NULL)
       return control;
 
@@ -152,7 +152,7 @@ ContainerWindow::find_next_control(Window *reference)
 }
 
 Window *
-ContainerWindow::find_previous_control(Window *reference)
+ContainerWindow::FindPreviousControl(Window *reference)
 {
   assert(reference != NULL);
 
@@ -163,7 +163,7 @@ ContainerWindow::find_previous_control(Window *reference)
     ContainerWindow *container = reference->parent;
     assert(container != NULL);
 
-    Window *control = container->find_previous_child_control(reference);
+    Window *control = container->FindPreviousChildControl(reference);
     if (control != NULL)
       return control;
 
@@ -175,36 +175,36 @@ ContainerWindow::find_previous_control(Window *reference)
 }
 
 void
-ContainerWindow::focus_first_control()
+ContainerWindow::FocusFirstControl()
 {
-  Window *control = find_first_control();
+  Window *control = FindFirstControl();
   if (control != NULL)
     control->set_focus();
 }
 
 void
-ContainerWindow::focus_next_control()
+ContainerWindow::FocusNextControl()
 {
   Window *focused = get_focused_window();
   if (focused != NULL) {
-    Window *control = find_next_control(focused);
+    Window *control = FindNextControl(focused);
     if (control != NULL)
       control->set_focus();
     else
-      focus_first_control();
+      FocusFirstControl();
   } else
-    focus_first_control();
+    FocusFirstControl();
 }
 
 void
-ContainerWindow::focus_previous_control()
+ContainerWindow::FocusPreviousControl()
 {
   Window *focused = get_focused_window();
   Window *control = focused != NULL
-    ? find_previous_control(focused)
+    ? FindPreviousControl(focused)
     : NULL;
   if (control == NULL)
-    control = find_last_control();
+    control = FindLastControl();
   if (control != NULL)
     control->set_focus();
 }
@@ -229,7 +229,7 @@ ContainerWindow::OnDestroy()
 bool
 ContainerWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
-  Window *child = event_child_at(x, y);
+  Window *child = EventChildAt(x, y);
   if (child != NULL) {
     child->OnMouseMove(x - child->get_left(), y - child->get_top(), keys);
     return true;
@@ -241,7 +241,7 @@ ContainerWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 bool
 ContainerWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  Window *child = event_child_at(x, y);
+  Window *child = EventChildAt(x, y);
   if (child != NULL) {
     child->OnMouseDown(x - child->get_left(), y - child->get_top());
     return true;
@@ -253,7 +253,7 @@ ContainerWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 bool
 ContainerWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
-  Window *child = event_child_at(x, y);
+  Window *child = EventChildAt(x, y);
   if (child != NULL) {
     child->OnMouseUp(x - child->get_left(), y - child->get_top());
     return true;
@@ -265,7 +265,7 @@ ContainerWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 bool
 ContainerWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
-  Window *child = event_child_at(x, y);
+  Window *child = EventChildAt(x, y);
   if (child != NULL) {
     child->OnMouseDouble(x - child->get_left(), y - child->get_top());
     return true;
@@ -277,7 +277,7 @@ ContainerWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 bool
 ContainerWindow::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 {
-  Window *child = event_child_at(x, y);
+  Window *child = EventChildAt(x, y);
   if (child != NULL) {
     child->OnMouseWheel(x - child->get_left(), y - child->get_top(), delta);
     return true;
@@ -359,14 +359,14 @@ ContainerWindow::OnPaint(Canvas &canvas)
 }
 
 void
-ContainerWindow::add_child(Window &child) {
+ContainerWindow::AddChild(Window &child) {
   children.push_back(&child);
 
   invalidate();
 }
 
 void
-ContainerWindow::remove_child(Window &child) {
+ContainerWindow::Removehild(Window &child) {
   children.remove(&child);
 
   if (active_child == &child)
@@ -382,14 +382,14 @@ ContainerWindow::HasChild(const Window &child) const
 }
 
 void
-ContainerWindow::bring_child_to_top(Window &child) {
+ContainerWindow::BringChildToTop(Window &child) {
   children.remove(&child);
   children.insert(children.begin(), &child);
   invalidate();
 }
 
 Window *
-ContainerWindow::child_at(PixelScalar x, PixelScalar y)
+ContainerWindow::ChildAt(PixelScalar x, PixelScalar y)
 {
   for (auto i = children.begin(); i != children.end(); ++i) {
     Window &child = **i;
@@ -403,7 +403,7 @@ ContainerWindow::child_at(PixelScalar x, PixelScalar y)
 }
 
 Window *
-ContainerWindow::event_child_at(PixelScalar x, PixelScalar y)
+ContainerWindow::EventChildAt(PixelScalar x, PixelScalar y)
 {
   if (capture)
     /* if this window is capturing the mouse, events must go exactly
@@ -414,11 +414,11 @@ ContainerWindow::event_child_at(PixelScalar x, PixelScalar y)
     return capture_child;
   else
     /* find the child window at the specified position */
-    return child_at(x, y);
+    return ChildAt(x, y);
 }
 
 void
-ContainerWindow::set_active_child(Window &child)
+ContainerWindow::SetActiveChild(Window &child)
 {
   if (active_child == &child)
     return;
@@ -428,7 +428,7 @@ ContainerWindow::set_active_child(Window &child)
   active_child = &child;
 
   if (parent != NULL)
-    parent->set_active_child(*this);
+    parent->SetActiveChild(*this);
 }
 
 void
@@ -477,7 +477,7 @@ ContainerWindow::GetFocusedWindowReference()
 }
 
 void
-ContainerWindow::set_child_capture(Window *window)
+ContainerWindow::SetChildCapture(Window *window)
 {
   assert(window != NULL);
   assert(window->parent == this);
@@ -490,11 +490,11 @@ ContainerWindow::set_child_capture(Window *window)
 
   capture_child = window;
   if (parent != NULL)
-    parent->set_child_capture(this);
+    parent->SetChildCapture(this);
 }
 
 void
-ContainerWindow::release_child_capture(Window *window)
+ContainerWindow::ReleaseChildCapture(Window *window)
 {
   assert(window != NULL);
   assert(window->parent == this);
@@ -505,7 +505,7 @@ ContainerWindow::release_child_capture(Window *window)
   capture_child = NULL;
 
   if (parent != NULL)
-    parent->release_child_capture(this);
+    parent->ReleaseChildCapture(this);
 }
 
 void

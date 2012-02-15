@@ -885,6 +885,6 @@ RowFormWidget::SetFocus()
     return false;
 
   PanelControl &panel = *(PanelControl *)GetWindow();
-  panel.focus_first_control();
+  panel.FocusFirstControl();
   return true;
 }

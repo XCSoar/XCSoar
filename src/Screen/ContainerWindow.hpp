@@ -83,13 +83,13 @@ protected:
 
 public:
 #ifndef USE_GDI
-  void add_child(Window &child);
-  void remove_child(Window &child);
+  void AddChild(Window &child);
+  void Removehild(Window &child);
 
   gcc_pure
   bool HasChild(const Window &child) const;
 
-  void bring_child_to_top(Window &child);
+  void BringChildToTop(Window &child);
 
   void BringChildToBottom(Window &child) {
     children.remove(&child);
@@ -101,16 +101,16 @@ public:
    * Locate a child window by its relative coordinates.
    */
   gcc_pure
-  Window *child_at(PixelScalar x, PixelScalar y);
+  Window *ChildAt(PixelScalar x, PixelScalar y);
 
   /**
    * Locates the child which should get a mouse event.  Prefers the
    * captured child.
    */
   gcc_pure
-  Window *event_child_at(PixelScalar x, PixelScalar y);
+  Window *EventChildAt(PixelScalar x, PixelScalar y);
 
-  void set_active_child(Window &child);
+  void SetActiveChild(Window &child);
   virtual void set_focus();
   virtual void ClearFocus();
 
@@ -124,36 +124,36 @@ public:
   gcc_pure
   WindowReference GetFocusedWindowReference();
 
-  void set_child_capture(Window *window);
-  void release_child_capture(Window *window);
+  void SetChildCapture(Window *window);
+  void ReleaseChildCapture(Window *window);
   virtual void clear_capture();
 
 protected:
   gcc_pure
-  static Window *find_control(std::list<Window*>::const_iterator i,
-                              std::list<Window*>::const_iterator end);
+  static Window *FindControl(std::list<Window*>::const_iterator i,
+                             std::list<Window*>::const_iterator end);
 
   gcc_pure
-  static Window *find_control(std::list<Window*>::const_reverse_iterator i,
-                              std::list<Window*>::const_reverse_iterator end);
+  static Window *FindControl(std::list<Window*>::const_reverse_iterator i,
+                             std::list<Window*>::const_reverse_iterator end);
 
   gcc_pure
-  Window *find_first_control();
+  Window *FindFirstControl();
 
   gcc_pure
-  Window *find_last_control();
+  Window *FindLastControl();
 
   gcc_pure
-  Window *find_next_child_control(Window *reference);
+  Window *FindNextChildControl(Window *reference);
 
   gcc_pure
-  Window *find_previous_child_control(Window *reference);
+  Window *FindPreviousChildControl(Window *reference);
 
   gcc_pure
-  Window *find_next_control(Window *reference);
+  Window *FindNextControl(Window *reference);
 
   gcc_pure
-  Window *find_previous_control(Window *reference);
+  Window *FindPreviousControl(Window *reference);
 
 public:
 #endif /* !USE_GDI */
@@ -162,19 +162,19 @@ public:
    * Sets the keyboard focus on the first descendant window which has
    * the WindowStyle::tab_stop() attribute.
    */
-  void focus_first_control();
+  void FocusFirstControl();
 
   /**
    * Sets the keyboard focus on the next descendant window which has
    * the WindowStyle::tab_stop() attribute.
    */
-  void focus_next_control();
+  void FocusNextControl();
 
   /**
    * Sets the keyboard focus on the previous descendant window which
    * has the WindowStyle::tab_stop() attribute.
    */
-  void focus_previous_control();
+  void FocusPreviousControl();
 };
 
 #endif

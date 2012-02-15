@@ -26,7 +26,7 @@ Copyright_License {
 #include "Asset.hpp"
 
 void
-ContainerWindow::focus_first_control()
+ContainerWindow::FocusFirstControl()
 {
   HWND hControl = ::GetNextDlgTabItem(hWnd, hWnd, false);
   if (hControl != NULL)
@@ -34,7 +34,7 @@ ContainerWindow::focus_first_control()
 }
 
 void
-ContainerWindow::focus_next_control()
+ContainerWindow::FocusNextControl()
 {
   HWND hControl = ::GetNextDlgTabItem(hWnd, ::GetFocus(), false);
   if (hControl == NULL)
@@ -50,7 +50,7 @@ ContainerWindow::focus_next_control()
 }
 
 void
-ContainerWindow::focus_previous_control()
+ContainerWindow::FocusPreviousControl()
 {
   HWND hFocus = ::GetFocus();
 

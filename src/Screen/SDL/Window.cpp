@@ -58,7 +58,7 @@ Window::set(ContainerWindow *parent,
   text_style = window_style.text_style;
 
   if (parent != NULL)
-    parent->add_child(*this);
+    parent->AddChild(*this);
 
   OnCreate();
   OnResize(width, height);
@@ -109,7 +109,7 @@ void
 Window::set_focus()
 {
   if (parent != NULL)
-    parent->set_active_child(*this);
+    parent->SetActiveChild(*this);
 
   if (focused)
     return;
@@ -134,7 +134,7 @@ Window::set_capture()
   AssertThread();
 
   if (parent != NULL)
-    parent->set_child_capture(this);
+    parent->SetChildCapture(this);
 
   capture = true;
 }
@@ -148,7 +148,7 @@ Window::release_capture()
   capture = false;
 
   if (parent != NULL)
-    parent->release_child_capture(this);
+    parent->ReleaseChildCapture(this);
 }
 
 void
@@ -211,7 +211,7 @@ Window::bring_to_top()
   assert_none_locked();
   AssertThread();
 
-  parent->bring_child_to_top(*this);
+  parent->BringChildToTop(*this);
 }
 
 void

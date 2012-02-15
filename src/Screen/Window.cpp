@@ -145,7 +145,7 @@ Window::OnDestroy()
     release_capture();
 
   if (parent != NULL) {
-    parent->remove_child(*this);
+    parent->Removehild(*this);
     parent = NULL;
   }
 

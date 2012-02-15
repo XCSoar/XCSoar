@@ -48,7 +48,7 @@ SingleWindow::FilterMouseEvent(PixelScalar x, PixelScalar y,
   const ContainerWindow *container = this;
   while (true) {
     const Window *child =
-      const_cast<ContainerWindow *>(container)->event_child_at(x, y);
+      const_cast<ContainerWindow *>(container)->EventChildAt(x, y);
     if (child == NULL)
       /* no receiver for the event */
       return false;

@@ -338,7 +338,7 @@ TaskEditPanel::OnKeyDown(unsigned key_code)
   switch (key_code){
   case VK_ESCAPE:
     if (IsAltair() && wTaskPoints->has_focus()){
-       wf.focus_first_control();
+       wf.FocusFirstControl();
       return true;
     }
     return false;
