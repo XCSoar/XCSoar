@@ -115,16 +115,19 @@ TabBarControl::ClickPage(unsigned i)
 void
 TabBarControl::SetCurrentPage(unsigned i)
 {
-  const unsigned old_current = pager.GetCurrentIndex();
+  if (i == pager.GetCurrentIndex())
+    /* no-op */
+    return;
 
-  bool success = pager.SetCurrent(i);
-
-  if (success && old_current != pager.GetCurrentIndex() &&
-      page_flipped_callback != NULL)
-    page_flipped_callback();
+  if (!pager.SetCurrent(i))
+    /* failed to switch */
+    return;
 
   if (tab_display != NULL)
     tab_display->invalidate();
+
+  if (page_flipped_callback != NULL)
+    page_flipped_callback();
 }
 
 void
