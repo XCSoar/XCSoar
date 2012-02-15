@@ -107,7 +107,6 @@ dlgStartupShowModal()
 
   dfe->SetNotNullable();
   dfe->ScanDirectoryTop(_T("*.prf"));
-  dfe->Lookup(Profile::GetPath());
   wp->RefreshDisplay();
 
   if (dfe->GetNumFiles() <= 1) {

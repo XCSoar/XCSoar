@@ -149,7 +149,8 @@ AltairControl altair_control;
 bool
 XCSoarInterface::LoadProfile()
 {
-  if (!dlgStartupShowModal())
+  if (StringIsEmpty(Profile::GetPath()) &&
+      !dlgStartupShowModal())
     return false;
 
   Profile::Load();
