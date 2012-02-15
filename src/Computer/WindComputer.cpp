@@ -37,7 +37,8 @@ WindComputer::Reset()
 }
 
 void
-WindComputer::Compute(const ComputerSettings &settings,
+WindComputer::Compute(const WindSettings &settings,
+                      const GlidePolar &glide_polar,
                       const MoreData &basic, DerivedInfo &calculated)
 {
   if (settings.CirclingWindEnabled() &&
@@ -58,7 +59,7 @@ last_circling = calculated.circling;
 
   if (settings.ZigZagWindEnabled() &&
       basic.airspeed_available && basic.airspeed_real &&
-      basic.true_airspeed > settings.glide_polar_task.GetVTakeoff()) {
+      basic.true_airspeed > glide_polar.GetVTakeoff()) {
     WindEKFGlue::Result result = wind_ekf.Update(basic, calculated);
     if (result.quality > 0) {
       Vector v_wind = Vector(result.wind);
@@ -87,7 +88,7 @@ WindComputer::ComputeHeadWind(const NMEAInfo &basic, DerivedInfo &info)
 }
 
 void
-WindComputer::Select(const ComputerSettings &settings,
+WindComputer::Select(const WindSettings &settings,
                      const NMEAInfo &basic, DerivedInfo &calculated)
 {
   if (basic.external_wind_available && settings.use_external_wind) {

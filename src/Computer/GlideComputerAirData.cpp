@@ -122,7 +122,8 @@ void
 GlideComputerAirData::Wind(const MoreData &basic, DerivedInfo &calculated,
                            const ComputerSettings &settings)
 {
-  wind_computer.Compute(settings, basic, calculated);
+  wind_computer.Compute(settings, settings.glide_polar_task,
+                        basic, calculated);
 }
 
 void

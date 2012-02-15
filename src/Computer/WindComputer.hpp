@@ -28,7 +28,8 @@ Copyright_License {
 #include "Wind/WindEKFGlue.hpp"
 #include "Wind/WindStore.hpp"
 
-struct ComputerSettings;
+struct WindSettings;
+class GlidePolar;
 struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
@@ -54,7 +55,8 @@ public:
 
   void Reset();
 
-  void Compute(const ComputerSettings &settings,
+  void Compute(const WindSettings &settings,
+               const GlidePolar &glide_polar,
                const MoreData &basic, DerivedInfo &calculated);
 
   void ComputeHeadWind(const NMEAInfo &basic, DerivedInfo &calculated);
@@ -63,7 +65,7 @@ public:
    * Select one of the wind values and write it into
    * DerivedInfo::wind, according to the configuration.
    */
-  void Select(const ComputerSettings &settings,
+  void Select(const WindSettings &settings,
               const NMEAInfo &basic, DerivedInfo &calculated);
 };
 
