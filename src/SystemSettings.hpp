@@ -27,11 +27,16 @@ Copyright_License {
 #include "Util/TypeTraits.hpp"
 #include "Device/List.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Hardware/ModelType.hpp"
 
 #include <array>
 
 struct SystemSettings {
   std::array<DeviceConfig, NUMDEV> devices;
+
+#ifdef HAVE_MODEL_TYPE
+  ModelType model_type;
+#endif
 
   void SetDefaults();
 };

@@ -57,4 +57,8 @@ SystemSettings::SetDefaults()
     devices[0].baud_rate = 4800;
     devices[0].driver_name = _T("Generic");
   }
+
+#ifdef HAVE_MODEL_TYPE
+  model_type = ModelType::GENERIC;
+#endif
 }

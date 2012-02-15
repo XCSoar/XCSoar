@@ -253,6 +253,4 @@ HasColors()
   return true;
 }
 
-void InitAsset();
-
 #endif

@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Asset.hpp"
 #include "Util/Macros.hpp"
-#include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
@@ -190,12 +189,4 @@ void ReadAssetNumber(void)
     _tcscpy(asset_number, _T("AAA"));
     LogStartUp(_T("Asset ID: %s (fallback)"), asset_number);
   }
-}
-
-void
-InitAsset()
-{
-#ifdef HAVE_MODEL_TYPE
-  Profile::GetEnum(szProfileAppInfoBoxModel, global_model_type);
-#endif
 }

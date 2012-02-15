@@ -30,4 +30,8 @@ Profile::Load(SystemSettings &settings)
 {
   for (unsigned i = 0; i < settings.devices.size(); ++i)
     GetDeviceConfig(i, settings.devices[i]);
+
+#ifdef HAVE_MODEL_TYPE
+  Profile::GetEnum(szProfileAppInfoBoxModel, settings.model_type);
+#endif
 }

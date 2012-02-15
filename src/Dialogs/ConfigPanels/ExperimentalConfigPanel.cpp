@@ -60,11 +60,13 @@ ExperimentalConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   RowFormWidget::Prepare(parent, rc);
 
-  if (HasModelType()) {
-    AddEnum(_("Device model"),
-            _("Select your PNA model to make full use of its hardware capabilities. If it is not included, use Generic type."),
-            model_type_list, (unsigned int)global_model_type);
-  }
+#ifdef HAVE_MODEL_TYPE
+  const SystemSettings &system_settings = CommonInterface::GetSystemSettings();
+
+  AddEnum(_("Device model"),
+          _("Select your PNA model to make full use of its hardware capabilities. If it is not included, use Generic type."),
+          model_type_list, (unsigned)system_settings.model_type);
+#endif
 }
 
 bool
@@ -73,9 +75,11 @@ ExperimentalConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool changed = false, require_restart = false;
 
 #ifdef HAVE_MODEL_TYPE
-  // VENTA-ADDON MODEL CHANGE
-  changed |= SaveValueEnum(DeviceModelType, szProfileAppInfoBoxModel, global_model_type);
+  SystemSettings &system_settings = CommonInterface::SetSystemSettings();
+  changed |= SaveValueEnum(DeviceModelType, szProfileAppInfoBoxModel,
+                           system_settings.model_type);
   if (changed) {
+    global_model_type = system_settings.model_type;
     require_restart = true;
   }
 #endif

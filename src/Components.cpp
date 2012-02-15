@@ -157,6 +157,10 @@ XCSoarInterface::LoadProfile()
 
   Units::SetConfig(GetUISettings().units);
 
+#ifdef HAVE_MODEL_TYPE
+  global_model_type = GetSystemSettings().model_type;
+#endif
+
   return true;
 }
 
@@ -270,8 +274,6 @@ XCSoarInterface::Startup()
 
   /* create XCSoarData on the first start */
   CreateDataPath();
-
-  InitAsset();
 
   Display::LoadOrientation(operation);
 
