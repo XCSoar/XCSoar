@@ -21,49 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_GDI_EVENT_HPP
-#define XCSOAR_SCREEN_GDI_EVENT_HPP
+#ifndef XCSOAR_SCREEN_GDI_TRANSCODE_HPP
+#define XCSOAR_SCREEN_GDI_TRANSCODE_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Compiler.h"
 
-#include <windows.h>
-
-static inline bool
-IsUserInput(UINT message)
-{
-  return message == WM_KEYDOWN || message == WM_KEYUP ||
-    message == WM_LBUTTONDOWN || message == WM_LBUTTONUP ||
-    message == WM_LBUTTONDBLCLK;
-}
-
-static inline bool
-IsUserInput(const MSG &msg)
-{
-  return IsUserInput(msg.message);
-}
-
-class EventLoop : private NonCopyable {
-public:
-  bool Get(MSG &msg);
-  void Dispatch(const MSG &msg);
-};
-
-class DialogEventLoop : public EventLoop {
-  HWND dialog;
-
-public:
-  DialogEventLoop(HWND _dialog):dialog(_dialog) {}
-
-  void Dispatch(MSG &msg);
-};
-
-namespace EventQueue {
-  /**
-   * Handle all pending repaint messages.
-   */
-  void
-  HandlePaintMessages();
-}
+gcc_const
+unsigned
+TranscodeKey(unsigned key_code);
 
 #endif
