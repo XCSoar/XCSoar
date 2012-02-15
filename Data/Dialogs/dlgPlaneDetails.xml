@@ -31,7 +31,7 @@
   <Panel Height="26">
     <Label Caption="Wing Area" X="2" Y="6" Height="-2" Width="88" />
     <Edit Name="WingAreaEdit" X="90" Y="2" Width="-2" Height="-2">
-      <DataField DataType="double" DisplayFormat="%.1f m&#178;" EditFormat="%.1f" Min="0" Max="20" Step="0.1" />
+      <DataField DataType="double" DisplayFormat="%.1f m²" EditFormat="%.1f" Min="0" Max="20" Step="0.1" />
     </Edit>
   </Panel>
   
