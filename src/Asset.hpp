@@ -158,16 +158,6 @@ IsHP31X()
 }
 
 /**
- * Returns whether the application is running on a Medion P5
- * @return True if host hardware is a Medion P5, False otherwise
- */
-static inline bool
-IsMedionP5()
-{
-  return global_model_type == MODELTYPE_PNA_MEDION_P5;
-}
-
-/**
  * Returns whether the application is running on an Altair
  * @return True if host hardware is an Altair, False otherwise
  */
