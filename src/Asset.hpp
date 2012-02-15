@@ -23,6 +23,7 @@ Copyright_License {
 #ifndef ASSET_H
 #define ASSET_H
 
+#include "Hardware/ModelType.hpp"
 #include "Compiler.h"
 #ifdef ANDROID
 #include "Android/Main.hpp"
@@ -38,18 +39,7 @@ extern TCHAR asset_number[];
 void ReadAssetNumber(void);
 
 // model info
-
-enum ModelType {
-  MODELTYPE_PNA_PNA,
-  MODELTYPE_PNA_HP31X,
-  MODELTYPE_PNA_MEDION_P5,
-  MODELTYPE_PNA_MIO,
-  MODELTYPE_PNA_NOKIA_500,
-  MODELTYPE_PNA_PN6000,
-};
-
-#if defined(_WIN32_WCE) && !defined(GNAV)
-#define HAVE_MODEL_TYPE
+#ifdef HAVE_MODEL_TYPE
 
 extern ModelType global_model_type;
 
@@ -58,17 +48,6 @@ extern ModelType global_model_type;
 #define global_model_type MODELTYPE_PNA_PNA
 
 #endif
-
-gcc_constexpr_function
-static inline bool
-HasModelType()
-{
-#ifdef HAVE_MODEL_TYPE
-  return true;
-#else
-  return false;
-#endif
-}
 
 /**
  * Returns whether this is a debug build.
