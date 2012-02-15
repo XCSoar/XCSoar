@@ -114,6 +114,11 @@ TabBarControl::ClickPage(unsigned i)
   if (tab_display != NULL)
     tab_display->invalidate();
 
+  if (!is_current)
+    /* switching to a new page by mouse click focuses the first
+       control of the page, which is important for Altair hot keys */
+    pager.SetFocus();
+
   if (page_flipped_callback != NULL)
     page_flipped_callback();
 }
