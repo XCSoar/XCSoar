@@ -309,7 +309,7 @@ VegaVoiceMessage::DoSend(gcc_unused fixed time, TCHAR *text)
 bool
 VegaVoiceMessage::Update(const NMEAInfo &basic,
                          const DerivedInfo &calculated,
-			 const ComputerSettings &settings)
+                         const VoiceSettings &settings)
 {
   const fixed Time = basic.clock;
   TCHAR text[80];
@@ -524,7 +524,7 @@ VegaVoice::~VegaVoice() {
 
 void
 VegaVoice::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
-		  const ComputerSettings &settings)
+                  const VoiceSettings &settings)
 {
 
   if (!AirspaceNotifierInstalled){
