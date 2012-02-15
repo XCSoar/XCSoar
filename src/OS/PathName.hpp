@@ -25,6 +25,7 @@ Copyright_License {
 #define OS_PATH_HPP
 
 #include "Util/Macros.hpp"
+#include "Compiler.h"
 
 #ifdef _UNICODE
 #include "Util/StringUtil.hpp"
@@ -147,6 +148,7 @@ public:
  * Returns the base name of the specified path, i.e. the part after
  * the last separator.  May return NULL if there is no base name.
  */
+gcc_pure
 const TCHAR *
 BaseName(const TCHAR *path);
 
@@ -164,6 +166,7 @@ DirName(const TCHAR *path, TCHAR *buffer);
  * @param extension Extension to check against (e.g. .xcm)
  * @return True if filename matches the given extension, False otherwise
  */
+gcc_pure
 bool MatchesExtension(const TCHAR *filename, const TCHAR *extension);
 
 #ifdef _UNICODE
@@ -174,6 +177,7 @@ bool MatchesExtension(const TCHAR *filename, const TCHAR *extension);
  * @param extension Extension to check against (e.g. .xcm)
  * @return True if filename matches the given extension, False otherwise
  */
+gcc_pure
 bool MatchesExtension(const char *filename, const char *extension);
 
 #endif

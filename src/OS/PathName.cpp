@@ -27,6 +27,7 @@ Copyright_License {
 #include <string.h>
 #include <algorithm>
 
+gcc_pure
 static const TCHAR *
 LastSeparator(const TCHAR *path)
 {
