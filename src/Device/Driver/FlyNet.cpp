@@ -28,14 +28,7 @@ Copyright_License {
 #include <stdlib.h>
 
 class FlyNetDevice : public AbstractDevice {
-  /**
-   * Last pressure in Pa. Use for low pass filtering of the raw value.
-   */
-  fixed last_pressure;
-
 public:
-  FlyNetDevice(): last_pressure(fixed_minus_one) {}
-
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 
   bool ParseBAT(const char *content, NMEAInfo &info);
@@ -71,13 +64,15 @@ FlyNetDevice::ParsePRS(const char *content, NMEAInfo &info)
     fixed pressure = fixed(value);
 
     // Low-pass filter
+    fixed filtered_pressure;
     static const fixed alpha(0.05);
-    if (negative(last_pressure))
-      last_pressure = pressure;
+    if (!info.static_pressure_available)
+      filtered_pressure = pressure;
     else
-      last_pressure += alpha * (pressure - last_pressure);
+      filtered_pressure = alpha * pressure +
+          (fixed_one - alpha) * info.static_pressure.GetPascal();
 
-    info.ProvideStaticPressure(AtmosphericPressure::Pascal(last_pressure));
+    info.ProvideStaticPressure(AtmosphericPressure::Pascal(filtered_pressure));
   }
 
   return true;
