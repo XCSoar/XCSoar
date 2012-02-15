@@ -51,27 +51,33 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   const int y0 = (rc.bottom + rc.top) / 2;
 
-  // 60 units is size, div by 8 means 60*8 = 480 meters.
-  int Offset = ((int)calculated.task_stats.total.solution_remaining.altitude_difference) / 8;
-  int Offset0 = ((int)calculated.task_stats.total.solution_mc0.altitude_difference) / 8;
+  // 480 meters is it's size. Will be divided by 8 to fit screen resolution.
+  int altitude_difference = ((int)calculated.task_stats.total.solution_remaining.altitude_difference);
+  int altitude_difference0 = ((int)calculated.task_stats.total.solution_mc0.altitude_difference);
   // TODO feature: should be an angle if in final glide mode
 
-  if (Offset > 60)
-    Offset = 60;
-  if (Offset < -60)
-    Offset = -60;
+  if (altitude_difference > 480)
+    altitude_difference = 480;
+  if (altitude_difference < -480)
+    altitude_difference = -480;
 
+  // 60 units is size, 480 meters div by 8 means 60.
+  int Offset = altitude_difference / 8;
+  
   Offset = Layout::Scale(Offset);
-  if (Offset < 0)
+  if (altitude_difference < 0)
     GlideBar[1].y = Layout::Scale(9);
 
-  if (Offset0 > 60)
-    Offset0 = 60;
-  if (Offset0 < -60)
-    Offset0 = -60;
+  if (altitude_difference0 > 480)
+    altitude_difference0 = 480;
+  if (altitude_difference0 < -480)
+    altitude_difference0 = -480;
 
+  // 60 units is size, 480 meters div by 8 means 60.
+  int Offset0 = altitude_difference0 / 8;
+  
   Offset0 = Layout::Scale(Offset0);
-  if (Offset0 < 0)
+  if (altitude_difference0 < 0)
     GlideBar0[1].y = Layout::Scale(9);
 
   for (unsigned i = 0; i < 6; i++) {
@@ -92,11 +98,13 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   GlideBar0[1].y -= Offset0;
   GlideBar0[2].y -= Offset0;
 
-  if ((Offset < 0) && (Offset0 < 0)) {
+  if ((altitude_difference < 0) && (altitude_difference0 < 0)) {
     // both below
-    if (Offset0 != Offset) {
+    if (altitude_difference0 != altitude_difference) {
       PixelScalar dy = (GlideBar0[0].y - GlideBar[0].y);
-      dy = max(Layout::Scale(3), dy);
+      // keep some significant size of solid arrow.
+      dy = max(Layout::Scale(6), dy);
+
       GlideBar[3].y = GlideBar0[0].y - dy;
       GlideBar[4].y = GlideBar0[1].y - dy;
       GlideBar[5].y = GlideBar0[2].y - dy;
@@ -105,20 +113,22 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
       GlideBar0[1].y = GlideBar[4].y;
       GlideBar0[2].y = GlideBar[5].y;
     } else {
-      Offset0 = 0;
+      // don't draw hollow arrow if altitude_difference equals altitude_difference0
+      altitude_difference0 = 0;
     }
-  } else if ((Offset > 0) && (Offset0 > 0)) {
+  } else if ((altitude_difference > 0) && (altitude_difference0 > 0)) {
     // both above
     GlideBar0[3].y = GlideBar[0].y;
     GlideBar0[4].y = GlideBar[1].y;
     GlideBar0[5].y = GlideBar[2].y;
 
+    // don't draw hollow arrow Offset0 - Offset is small
     if (abs(Offset0 - Offset) < Layout::Scale(4))
-      Offset = Offset0;
+      altitude_difference = altitude_difference0;
   }
 
   // draw actual glide bar
-  if (Offset <= 0) {
+  if (altitude_difference <= 0) {
     if (calculated.common_stats.landable_reachable) {
       canvas.Select(look.hpFinalGlideBelowLandable);
       canvas.Select(look.hbFinalGlideBelowLandable);
@@ -133,7 +143,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   canvas.polygon(GlideBar, 6);
 
   // draw glide bar at mc 0
-  if (Offset0 <= 0) {
+  if (altitude_difference0 <= 0) {
     if (calculated.common_stats.landable_reachable) {
       canvas.Select(look.hpFinalGlideBelowLandable);
       canvas.SelectHollowBrush();
@@ -146,7 +156,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     canvas.SelectHollowBrush();
   }
 
-  if (Offset != Offset0)
+  if (altitude_difference != altitude_difference0)
     canvas.polygon(GlideBar0, 6);
 
   // draw cross (x) on final glide bar if unreachable at current Mc
@@ -155,7 +165,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   if (!calculated.task_stats.total.IsAchievable())
     cross_sign = 1;
-  if (calculated.terrain_warning && (Offset>0))
+  if (calculated.terrain_warning && (altitude_difference>0))
     cross_sign = -1;
 
   if (cross_sign != 0) {
@@ -169,9 +179,9 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   Units::FormatUserAltitude(calculated.task_stats.total.solution_remaining.altitude_difference,
                             Value, false);
 
-  if (Offset >= 0)
+  if (altitude_difference >= 0)
     Offset = GlideBar[2].y + Offset + Layout::Scale(5);
-  else if (Offset0 > 0)
+  else if (altitude_difference0 > 0)
     Offset = GlideBar0[1].y - Layout::Scale(15);
   else
     Offset = GlideBar[2].y + Offset - Layout::Scale(15);
