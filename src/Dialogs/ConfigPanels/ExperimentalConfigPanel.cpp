@@ -44,6 +44,7 @@ static const StaticEnumChoice  model_type_list[] = {
   { (unsigned)ModelType::MIO, _T("MIO") },
   { (unsigned)ModelType::NOKIA_500, _T("Nokia500") },
   { (unsigned)ModelType::PN6000, _T("PN6000") },
+  { (unsigned)ModelType::LX_MINI_MAP, _T("LX MiniMap") },
   { 0 }
 };
 

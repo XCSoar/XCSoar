@@ -39,6 +39,7 @@ enum class ModelType : uint8_t {
   MIO,
   NOKIA_500,
   PN6000,
+  LX_MINI_MAP,
 };
 
 gcc_constexpr_function

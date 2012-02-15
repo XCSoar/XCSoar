@@ -71,6 +71,13 @@ static gcc_constexpr_data KeyMap pn_6000_key_map[] = {
   { 0 }
 };
 
+static gcc_constexpr_data KeyMap lx_mm_key_map[] = {
+  { 'n', VK_APP1 }, // NAV
+  { 'c', VK_APP3 }, // SET/SYS
+  { 'p', VK_APP4 }, // INFO
+  { 0 }
+};
+
 gcc_const
 static unsigned
 KeyMapLookup(const KeyMap *map, unsigned key_code)
@@ -106,6 +113,9 @@ TranscodeKey(unsigned key_code)
 
   case ModelType::PN6000:
     return KeyMapLookup(pn_6000_key_map, key_code);
+
+  case ModelType::LX_MINI_MAP:
+    return KeyMapLookup(lx_mm_key_map, key_code);
 
   default:
     return key_code;
