@@ -113,6 +113,9 @@ TabBarControl::ClickPage(unsigned i)
 
   if (tab_display != NULL)
     tab_display->invalidate();
+
+  if (page_flipped_callback != NULL)
+    page_flipped_callback();
 }
 
 void
