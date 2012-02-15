@@ -152,20 +152,20 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
     const int offsety = (rc.bottom - rc.top - bitmap_size.cy) / 2;
 
     if (inverse) // black background
-      canvas.copy_not(rc.left + offsetx,
-                  rc.top + offsety,
-                  bitmap_size.cx / 2,
-                  bitmap_size.cy,
-                  *bmp,
-                  bitmap_size.cx / 2, 0);
+      canvas.CopyNotOr(rc.left + offsetx,
+                       rc.top + offsety,
+                       bitmap_size.cx / 2,
+                       bitmap_size.cy,
+                       *bmp,
+                       bitmap_size.cx / 2, 0);
 
     else
-      canvas.copy(rc.left + offsetx,
-                  rc.top + offsety,
-                  bitmap_size.cx / 2,
-                  bitmap_size.cy,
-                  *bmp,
-                  bitmap_size.cx / 2, 0);
+      canvas.copy_and(rc.left + offsetx,
+                      rc.top + offsety,
+                      bitmap_size.cx / 2,
+                      bitmap_size.cy,
+                      *bmp,
+                      bitmap_size.cx / 2, 0);
 
   } else {
     canvas.formatted_text(&rcTextFinal, caption,
