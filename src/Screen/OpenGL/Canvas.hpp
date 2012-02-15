@@ -388,6 +388,10 @@ public:
     copy_or(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
+  void CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
+                 UPixelScalar dest_width, UPixelScalar dest_height,
+                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
+
   void copy_not(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y);

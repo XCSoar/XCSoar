@@ -710,6 +710,69 @@ blit_or(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
 }
 
 static void
+BlitNotOr(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
+          UPixelScalar dest_width, UPixelScalar dest_height,
+          SDL_Surface *_src, PixelScalar src_x, PixelScalar src_y)
+{
+  int ret;
+
+  /* obey the dest and src surface borders */
+
+  if (!clip_range(dest_x, dest->w, src_x, _src->w, dest_width) ||
+      !clip_range(dest_y, dest->h, src_y, _src->h, dest_height))
+    return;
+
+  ret = ::SDL_LockSurface(dest);
+  if (ret != 0)
+    return;
+
+  /* convert src's pixel format */
+
+  SDL_Surface *src = ::SDL_ConvertSurface(_src, dest->format, SDL_SWSURFACE);
+  if (src == NULL) {
+    ::SDL_UnlockSurface(dest);
+    return;
+  }
+
+  ret = ::SDL_LockSurface(src);
+  if (ret != 0) {
+    ::SDL_FreeSurface(src);
+    ::SDL_UnlockSurface(dest);
+    return;
+  }
+
+  /* get pointers to the upper left dest/src pixel */
+
+  unsigned char *dest_buffer = (unsigned char *)dest->pixels;
+  dest_buffer += dest_y * dest->pitch +
+    dest_x * dest->format->BytesPerPixel;
+
+  unsigned char *src_buffer = (unsigned char *)src->pixels;
+  src_buffer += src_y * src->pitch +
+    src_x * src->format->BytesPerPixel;
+
+  /* copy line by line */
+
+  const size_t line_size = dest_width * dest->format->BytesPerPixel;
+  unsigned char *tmp = new unsigned char[line_size];
+
+  for (UPixelScalar y = 0; y < dest_height; ++y) {
+    ::SDL_imageFilterBitNegation(src_buffer, tmp, line_size);
+    src_buffer += src->pitch;
+    ::SDL_imageFilterBitOr(tmp, dest_buffer, dest_buffer, line_size);
+    dest_buffer += dest->pitch;
+  }
+
+  delete[] tmp;
+
+  /* cleanup */
+
+  ::SDL_UnlockSurface(src);
+  ::SDL_FreeSurface(src);
+  ::SDL_UnlockSurface(dest);
+}
+
+static void
 blit_and(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
          UPixelScalar dest_width, UPixelScalar dest_height,
          SDL_Surface *_src, PixelScalar src_x, PixelScalar src_y)
@@ -793,6 +856,31 @@ Canvas::copy_or(PixelScalar dest_x, PixelScalar dest_y,
 
   ::blit_or(surface, dest_x, dest_y, dest_width, dest_height,
             src, src_x, src_y);
+}
+
+void
+Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
+                  UPixelScalar dest_width, UPixelScalar dest_height,
+                  SDL_Surface *src, PixelScalar src_x, PixelScalar src_y)
+{
+  assert(src != NULL);
+
+  dest_x += x_offset;
+  dest_y += y_offset;
+
+  ::BlitNotOr(surface, dest_x, dest_y, dest_width, dest_height,
+              src, src_x, src_y);
+}
+
+void
+Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
+                  UPixelScalar dest_width, UPixelScalar dest_height,
+                  const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
+{
+  assert(src.IsDefined());
+
+  CopyNotOr(dest_x, dest_y, dest_width, dest_height,
+            src.GetNative(), src_x, src_y);
 }
 
 void

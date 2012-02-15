@@ -480,6 +480,14 @@ public:
     copy_or(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
+  void CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
+                 UPixelScalar dest_width, UPixelScalar dest_height,
+                 SDL_Surface *src, PixelScalar src_x, PixelScalar src_y);
+
+  void CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
+                 UPixelScalar dest_width, UPixelScalar dest_height,
+                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
+
   void copy_and(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 SDL_Surface *src, PixelScalar src_x, PixelScalar src_y);

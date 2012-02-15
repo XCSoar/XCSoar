@@ -537,6 +537,18 @@ public:
          SRCPAINT);
   }
 
+  /**
+   * Merges the colors of the inverted source bitmap with the colors
+   * of this Canvas using the "OR" operator.
+   */
+  void CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
+                 UPixelScalar dest_width, UPixelScalar dest_height,
+                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y) {
+    copy(dest_x, dest_y, dest_width, dest_height,
+         src, src_x, src_y,
+         MERGEPAINT);
+  }
+
   void copy_not(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src, PixelScalar src_x, PixelScalar src_y) {

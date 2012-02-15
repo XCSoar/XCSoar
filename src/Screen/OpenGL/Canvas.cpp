@@ -619,6 +619,18 @@ Canvas::copy_or(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
+Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
+                  UPixelScalar dest_width, UPixelScalar dest_height,
+                  const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
+{
+  assert(src.IsDefined());
+
+  GLLogicOp logic_op(GL_OR_INVERTED);
+  copy(dest_x, dest_y, dest_width, dest_height,
+       src, src_x, src_y);
+}
+
+void
 Canvas::copy_and(PixelScalar dest_x, PixelScalar dest_y,
                  UPixelScalar dest_width, UPixelScalar dest_height,
                  const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
