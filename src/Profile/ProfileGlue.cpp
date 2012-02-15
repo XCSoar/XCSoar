@@ -44,17 +44,12 @@ Profile::Use()
 void
 Profile::SetSoundSettings()
 {
-  const ComputerSettings &settings_computer =
-    XCSoarInterface::GetComputerSettings();
+  const SoundSettings &settings =
+    CommonInterface::GetComputerSettings().sound;
 
-  Set(szProfileSoundVolume,
-      settings_computer.sound_volume);
-  Set(szProfileSoundDeadband,
-      settings_computer.sound_deadband);
-  Set(szProfileSoundAudioVario,
-      settings_computer.sound_vario_enabled);
-  Set(szProfileSoundTask,
-      settings_computer.sound_task_enabled);
-  Set(szProfileSoundModes,
-      settings_computer.sound_modes_enabled);
+  Set(szProfileSoundVolume, settings.sound_volume);
+  Set(szProfileSoundDeadband, settings.sound_deadband);
+  Set(szProfileSoundAudioVario, settings.sound_vario_enabled);
+  Set(szProfileSoundTask, settings.sound_task_enabled);
+  Set(szProfileSoundModes, settings.sound_modes_enabled);
 }

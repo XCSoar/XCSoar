@@ -122,7 +122,7 @@ void
 GlideComputerAirData::Wind(const MoreData &basic, DerivedInfo &calculated,
                            const ComputerSettings &settings)
 {
-  wind_computer.Compute(settings, settings.glide_polar_task,
+  wind_computer.Compute(settings.wind, settings.polar.glide_polar_task,
                         basic, calculated);
 }
 
@@ -131,7 +131,7 @@ GlideComputerAirData::SelectWind(const NMEAInfo &basic,
                                  DerivedInfo &calculated,
                                  const ComputerSettings &settings)
 {
-  wind_computer.Select(settings, basic, calculated);
+  wind_computer.Select(settings.wind, basic, calculated);
 }
 
 void
@@ -161,8 +161,8 @@ GlideComputerAirData::NettoVario(const NMEAInfo &basic,
 {
   vario.sink_rate =
     flight.flying && basic.airspeed_available
-    ? - settings_computer.glide_polar_task.SinkRate(basic.indicated_airspeed,
-                                                    basic.acceleration.g_load)
+    ? - settings_computer.polar.glide_polar_task.SinkRate(basic.indicated_airspeed,
+                                                          basic.acceleration.g_load)
     /* the glider sink rate is useless when not flying */
     : fixed_zero;
 }
@@ -447,7 +447,7 @@ GlideComputerAirData::FlightTimes(const NMEAInfo &basic,
   }
 
   FlightState(basic, last_basic, calculated, calculated.flight,
-              settings.glide_polar_task);
+              settings.polar.glide_polar_task);
 
   return true;
 }

@@ -43,7 +43,7 @@ ThermalBandRenderer::scale_chart(const DerivedInfo &calculated,
 
   chart.ScaleXFromValue(fixed_zero);
   chart.ScaleXFromValue(fixed_half);
-  chart.ScaleXFromValue(settings_computer.glide_polar_task.GetMC());
+  chart.ScaleXFromValue(settings_computer.polar.glide_polar_task.GetMC());
 }
 
 
@@ -134,13 +134,13 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   const Pen &pen = is_infobox && look.inverse
     ? look.white_pen : look.black_pen;
   chart.DrawLine(fixed_zero, h,
-                 settings_computer.glide_polar_task.GetMC(), h, pen);
+                 settings_computer.polar.glide_polar_task.GetMC(), h, pen);
 
   if (is_infobox && look.inverse)
     chart.get_canvas().SelectWhiteBrush();
   else
     chart.get_canvas().SelectBlackBrush();
-  chart.DrawDot(settings_computer.glide_polar_task.GetMC(), h, Layout::Scale(2));
+  chart.DrawDot(settings_computer.polar.glide_polar_task.GetMC(), h, Layout::Scale(2));
 
   /*
   RasterPoint GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };

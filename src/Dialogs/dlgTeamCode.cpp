@@ -48,6 +48,8 @@ Update()
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TeamInfo &teamcode_info = CommonInterface::Calculated();
+  const TeamCodeSettings &settings =
+    CommonInterface::GetComputerSettings().team_code;
   StaticString<100> buffer;
 
   if (teamcode_info.teammate_available && basic.track_available) {
@@ -68,10 +70,8 @@ Update()
 
   SetFormValue(*wf, _T("prpOwnCode"),
                teamcode_info.own_teammate_code.GetCode());
-  SetFormValue(*wf, _T("prpMateCode"),
-               CommonInterface::GetComputerSettings().team_code.GetCode());
+  SetFormValue(*wf, _T("prpMateCode"), settings.team_code.GetCode());
 
-  const TeamCodeSettings &settings = CommonInterface::GetComputerSettings();
   SetFormValue(*wf, _T("prpFlarmLock"),
                settings.team_flarm_tracking
                ? settings.team_flarm_callsign.c_str()
@@ -84,7 +84,7 @@ OnSetWaypointClicked(gcc_unused WndButton &button)
   const Waypoint* wp = dlgWaypointSelect(UIGlobals::GetMainWindow(),
                                          XCSoarInterface::Basic().location);
   if (wp != NULL) {
-    XCSoarInterface::SetComputerSettings().team_code_reference_waypoint = wp->id;
+    CommonInterface::SetComputerSettings().team_code.team_code_reference_waypoint = wp->id;
     Profile::Set(szProfileTeamcodeRefWaypoint, wp->id);
   }
 }
@@ -95,7 +95,7 @@ OnCodeClicked(gcc_unused WndButton &button)
   TCHAR newTeammateCode[10];
 
   CopyString(newTeammateCode,
-             XCSoarInterface::GetComputerSettings().team_code.GetCode(), 10);
+             CommonInterface::GetComputerSettings().team_code.team_code.GetCode(), 10);
 
   if (!dlgTextEntryShowModal(*(SingleWindow *)button.GetRootOwner(),
                              newTeammateCode, 7))
@@ -103,19 +103,22 @@ OnCodeClicked(gcc_unused WndButton &button)
 
   TrimRight(newTeammateCode);
 
-  XCSoarInterface::SetComputerSettings().team_code.Update(newTeammateCode);
-  if (!StringIsEmpty(XCSoarInterface::GetComputerSettings().team_code.GetCode())) {
-    XCSoarInterface::SetComputerSettings().team_code_valid = true;
-    XCSoarInterface::SetComputerSettings().team_flarm_tracking = false;
+  TeamCodeSettings &settings =
+    CommonInterface::SetComputerSettings().team_code;
+  settings.team_code.Update(newTeammateCode);
+  if (!StringIsEmpty(settings.team_code.GetCode())) {
+    settings.team_code_valid = true;
+    settings.team_flarm_tracking = false;
   }
   else
-    XCSoarInterface::SetComputerSettings().team_code_valid = false;
+    settings.team_code_valid = false;
 }
 
 static void
 OnFlarmLockClicked(gcc_unused WndButton &button)
 {
-  TeamCodeSettings &settings = CommonInterface::SetComputerSettings();
+  TeamCodeSettings &settings =
+    CommonInterface::SetComputerSettings().team_code;
   TCHAR newTeamFlarmCNTarget[settings.team_flarm_callsign.MAX_SIZE];
   _tcscpy(newTeamFlarmCNTarget, settings.team_flarm_callsign.c_str());
 
@@ -126,15 +129,15 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
   settings.team_flarm_callsign = newTeamFlarmCNTarget;
   settings.team_code_valid = false;
 
-  if (StringIsEmpty(XCSoarInterface::GetComputerSettings().team_flarm_callsign)) {
+  if (StringIsEmpty(settings.team_flarm_callsign)) {
     settings.team_flarm_tracking = false;
     settings.team_flarm_id.Clear();
     return;
   }
 
   FlarmId ids[30];
-  unsigned count = FlarmDetails::FindIdsByCallSign(
-      XCSoarInterface::GetComputerSettings().team_flarm_callsign, ids, 30);
+  unsigned count =
+    FlarmDetails::FindIdsByCallSign(settings.team_flarm_callsign, ids, 30);
 
   if (count > 0) {
     const FlarmId id =

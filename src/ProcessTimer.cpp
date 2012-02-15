@@ -214,12 +214,12 @@ BallastDumpProcessTimer()
   ComputerSettings &settings_computer =
     CommonInterface::SetComputerSettings();
 
-  GlidePolar &glide_polar = settings_computer.glide_polar_task;
+  GlidePolar &glide_polar = settings_computer.polar.glide_polar_task;
 
   static BallastDumpManager ballast_manager;
 
   // Start/Stop the BallastDumpManager
-  ballast_manager.SetEnabled(settings_computer.ballast_timer_active);
+  ballast_manager.SetEnabled(settings_computer.polar.ballast_timer_active);
 
   // If the BallastDumpManager is not enabled we must not call Update()
   if (!ballast_manager.IsEnabled())
@@ -227,7 +227,7 @@ BallastDumpProcessTimer()
 
   if (!ballast_manager.Update(glide_polar, settings_computer.plane.dump_time))
     // Plane is dry now -> disable ballast_timer
-    settings_computer.ballast_timer_active = false;
+    settings_computer.polar.ballast_timer_active = false;
 
   if (protected_task_manager != NULL)
     protected_task_manager->SetGlidePolar(glide_polar);
@@ -241,8 +241,8 @@ ManualWindProcessTimer()
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
   /* as soon as another wind setting is used, clear the manual wind */
-  if (calculated.wind_available.Modified(settings_computer.manual_wind_available))
-    settings_computer.manual_wind_available.Clear();
+  if (calculated.wind_available.Modified(settings_computer.wind.manual_wind_available))
+    settings_computer.wind.manual_wind_available.Clear();
 }
 
 static void

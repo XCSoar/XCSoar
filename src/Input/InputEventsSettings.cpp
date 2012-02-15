@@ -44,18 +44,17 @@ trigger_redraw()
 void
 InputEvents::eventSounds(const TCHAR *misc)
 {
-  ComputerSettings &settings_computer =
-    CommonInterface::SetComputerSettings();
+  SoundSettings &settings = CommonInterface::SetComputerSettings().sound;
  // bool OldEnableSoundVario = EnableSoundVario;
 
   if (StringIsEqual(misc, _T("toggle")))
-    settings_computer.sound_vario_enabled = !settings_computer.sound_vario_enabled;
+    settings.sound_vario_enabled = !settings.sound_vario_enabled;
   else if (StringIsEqual(misc, _T("on")))
-    settings_computer.sound_vario_enabled = true;
+    settings.sound_vario_enabled = true;
   else if (StringIsEqual(misc, _T("off")))
-    settings_computer.sound_vario_enabled = false;
+    settings.sound_vario_enabled = false;
   else if (StringIsEqual(misc, _T("show"))) {
-    if (settings_computer.sound_vario_enabled)
+    if (settings.sound_vario_enabled)
       Message::AddMessage(_("Vario sounds on"));
     else
       Message::AddMessage(_("Vario sounds off"));
@@ -149,20 +148,19 @@ InputEvents::eventTerrainTopography(const TCHAR *misc)
 void
 InputEvents::eventAudioDeadband(const TCHAR *misc)
 {
-  ComputerSettings &settings_computer =
-    CommonInterface::SetComputerSettings();
+  SoundSettings &settings = CommonInterface::SetComputerSettings().sound;
 
   if (StringIsEqual(misc, _T("+"))) {
-    if (settings_computer.sound_deadband >= 40)
+    if (settings.sound_deadband >= 40)
       return;
 
-    settings_computer.sound_deadband++;
+    ++settings.sound_deadband;
   }
   if (StringIsEqual(misc, _T("-"))) {
-    if (settings_computer.sound_deadband <= 0)
+    if (settings.sound_deadband <= 0)
       return;
 
-    settings_computer.sound_deadband--;
+    --settings.sound_deadband;
   }
 
   /*
@@ -187,7 +185,8 @@ InputEvents::eventBugs(const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  GlidePolar &polar = CommonInterface::SetComputerSettings().glide_polar_task;
+  GlidePolar &polar =
+    CommonInterface::SetComputerSettings().polar.glide_polar_task;
   fixed BUGS = polar.GetBugs();
   fixed oldBugs = BUGS;
 
@@ -228,7 +227,8 @@ InputEvents::eventBallast(const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  GlidePolar &polar = CommonInterface::SetComputerSettings().glide_polar_task;
+  GlidePolar &polar =
+    CommonInterface::SetComputerSettings().polar.glide_polar_task;
   fixed BALLAST = polar.GetBallast();
   fixed oldBallast = BALLAST;
 

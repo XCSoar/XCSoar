@@ -128,7 +128,7 @@ GlideComputer::ProcessGPS()
   // Calculate the bearing and range of the teammate
   CalculateTeammateBearingRange();
 
-  vegavoice.Update(basic, Calculated(), GetComputerSettings());
+  vegavoice.Update(basic, Calculated(), GetComputerSettings().voice);
 
   // update basic trace history
   if (time_advanced())
@@ -162,15 +162,15 @@ GlideComputer::ProcessIdle(bool exhaustive)
 bool
 GlideComputer::DetermineTeamCodeRefLocation()
 {
-  const ComputerSettings &settings_computer = GetComputerSettings();
+  const TeamCodeSettings &settings = GetComputerSettings().team_code;
 
-  if (settings_computer.team_code_reference_waypoint < 0)
+  if (settings.team_code_reference_waypoint < 0)
     return false;
 
-  if (settings_computer.team_code_reference_waypoint == team_code_ref_id)
+  if (settings.team_code_reference_waypoint == team_code_ref_id)
     return team_code_ref_found;
 
-  team_code_ref_id = settings_computer.team_code_reference_waypoint;
+  team_code_ref_id = settings.team_code_reference_waypoint;
   const Waypoint *wp = waypoints.LookupId(team_code_ref_id);
   if (wp == NULL)
     return team_code_ref_found = false;
@@ -246,7 +246,7 @@ ComputeTeamCode(const GeoPoint &location, const GeoPoint &reference_location,
 void
 GlideComputer::CalculateTeammateBearingRange()
 {
-  const ComputerSettings &settings_computer = GetComputerSettings();
+  const TeamCodeSettings &settings = GetComputerSettings().team_code;
   const NMEAInfo &basic = Basic();
   TeamInfo &teamcode_info = SetCalculated();
 
@@ -254,15 +254,15 @@ GlideComputer::CalculateTeammateBearingRange()
   if (!DetermineTeamCodeRefLocation())
     return;
 
-  if (settings_computer.team_flarm_tracking) {
+  if (settings.team_flarm_tracking) {
     ComputeFlarmTeam(basic.location, team_code_ref_location,
-                     basic.flarm, settings_computer.team_flarm_id,
+                     basic.flarm, settings.team_flarm_id,
                      teamcode_info);
-  } else if (settings_computer.team_code_valid) {
+  } else if (settings.team_code_valid) {
     teamcode_info.flarm_teammate_code_available = false;
 
     ComputeTeamCode(basic.location, team_code_ref_location,
-                    settings_computer.team_code,
+                    settings.team_code,
                     teamcode_info);
   } else {
     teamcode_info.teammate_available = false;

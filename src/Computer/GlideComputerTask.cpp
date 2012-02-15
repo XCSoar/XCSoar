@@ -109,7 +109,7 @@ GlideComputerTask::ProcessMoreTask(const MoreData &basic,
                      settings_computer.task.route_planner,
                      glide_polar, safety_polar);
 
-  if (settings_computer.block_stf_enabled)
+  if (settings_computer.features.block_stf_enabled)
     calculated.V_stf = calculated.common_stats.V_block;
   else
     calculated.V_stf = calculated.common_stats.V_dolphin;

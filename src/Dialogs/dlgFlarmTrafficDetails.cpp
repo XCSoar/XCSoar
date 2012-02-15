@@ -213,7 +213,8 @@ OnTeamClicked(gcc_unused WndButton &Sender)
                   _("New Teammate"), MB_YESNO) != IDYES)
     return;
 
-  TeamCodeSettings &settings = CommonInterface::SetComputerSettings();
+  TeamCodeSettings &settings =
+    CommonInterface::SetComputerSettings().team_code;
 
   // Set the Teammate callsign
   const TCHAR *callsign = FlarmDetails::LookupCallsign(target_id);

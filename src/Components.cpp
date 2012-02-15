@@ -335,7 +335,7 @@ XCSoarInterface::Startup()
   // Load the EGM96 geoid data
   EGM96::Load();
 
-  GlidePolar &gp = SetComputerSettings().glide_polar_task;
+  GlidePolar &gp = SetComputerSettings().polar.glide_polar_task;
   gp = GlidePolar(fixed_zero);
   gp.SetMC(GetComputerSettings().task.safety_mc);
   PlaneGlue::FromProfile(SetComputerSettings().plane);

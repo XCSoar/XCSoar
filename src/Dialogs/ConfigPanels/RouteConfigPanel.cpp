@@ -150,7 +150,7 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
 
   AddEnum(_("Reach display"), NULL, final_glide_terrain_list,
-          settings_computer.final_glide_terrain);
+          settings_computer.features.final_glide_terrain);
 
   static gcc_constexpr_data StaticEnumChoice reach_polar_list[] = {
     { (unsigned)RoutePlannerConfig::Polar::TASK, N_("Task"),
@@ -183,7 +183,7 @@ RouteConfigPanel::Save(bool &_changed, bool &_require_restart)
                            route_planner.reach_polar_mode);
 
   changed |= SaveValueEnum(FinalGlideTerrain, szProfileFinalGlideTerrain,
-                           settings_computer.final_glide_terrain);
+                           settings_computer.features.final_glide_terrain);
 
   changed |= SaveValue(RoutePlannerAllowClimb, szProfileRoutePlannerAllowClimb,
                        route_planner.allow_climb);

@@ -32,7 +32,8 @@ Copyright_License {
 void
 InfoBoxContentTeamCode::Update(InfoBoxData &data)
 {
-  const TeamCodeSettings &settings = CommonInterface::GetComputerSettings();
+  const TeamCodeSettings &settings =
+    CommonInterface::GetComputerSettings().team_code;
   const TeamInfo &teamcode_info = XCSoarInterface::Calculated();
 
   if (!settings.team_code_reference_waypoint) {
@@ -58,7 +59,8 @@ InfoBoxContentTeamCode::Update(InfoBoxData &data)
 bool
 InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
 {
-  TeamCodeSettings &settings = CommonInterface::SetComputerSettings();
+  TeamCodeSettings &settings =
+    CommonInterface::SetComputerSettings().team_code;
   const FlarmState &flarm = XCSoarInterface::Basic().flarm;
   const FlarmTraffic *traffic =
     settings.team_flarm_id.IsDefined()
@@ -94,7 +96,8 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentTeamBearing::Update(InfoBoxData &data)
 {
-  const TeamCodeSettings &settings = CommonInterface::GetComputerSettings();
+  const TeamCodeSettings &settings =
+    CommonInterface::GetComputerSettings().team_code;
   const FlarmState &flarm = XCSoarInterface::Basic().flarm;
   const TeamInfo &teamcode_info = CommonInterface::Calculated();
 
@@ -122,7 +125,8 @@ InfoBoxContentTeamBearing::Update(InfoBoxData &data)
 void
 InfoBoxContentTeamBearingDiff::Update(InfoBoxData &data)
 {
-  const TeamCodeSettings &settings = CommonInterface::GetComputerSettings();
+  const TeamCodeSettings &settings =
+    CommonInterface::GetComputerSettings().team_code;
   const NMEAInfo &basic = XCSoarInterface::Basic();
   const FlarmState &flarm = basic.flarm;
   const TeamInfo &teamcode_info = CommonInterface::Calculated();
@@ -151,7 +155,8 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxData &data)
 void
 InfoBoxContentTeamDistance::Update(InfoBoxData &data)
 {
-  const TeamCodeSettings &settings = CommonInterface::GetComputerSettings();
+  const TeamCodeSettings &settings =
+    CommonInterface::GetComputerSettings().team_code;
   const TeamInfo &teamcode_info = CommonInterface::Calculated();
 
   // Set Value

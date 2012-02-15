@@ -77,10 +77,9 @@ WindSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   LoadWindow(CallBackTable, parent, _T("IDR_XML_INFOBOXWINDSETUP"));
 
   const NMEAInfo &basic = XCSoarInterface::Basic();
-  const ComputerSettings &settings_computer =
-    XCSoarInterface::GetComputerSettings();
+  const WindSettings &settings = CommonInterface::GetComputerSettings().wind;
   const bool external_wind = basic.external_wind_available &&
-    settings_computer.use_external_wind;
+    settings.use_external_wind;
 
   if (external_wind) {
     static gcc_constexpr_data StaticEnumChoice external_wind_list[] = {
@@ -100,7 +99,7 @@ WindSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     };
 
     LoadFormProperty(form, _T("prpAutoWind"), auto_wind_list,
-                     settings_computer.GetLegacyAutoWindMode());
+                     settings.GetLegacyAutoWindMode());
   }
 }
 
@@ -119,16 +118,15 @@ WindSetupPanel::Save(bool &_changed, bool &_require_restart)
   bool changed = false, require_restart = false;
 
   const NMEAInfo &basic = XCSoarInterface::Basic();
-  ComputerSettings &settings_computer =
-    XCSoarInterface::SetComputerSettings();
+  WindSettings &settings = CommonInterface::SetComputerSettings().wind;
   const bool external_wind = basic.external_wind_available &&
-    settings_computer.use_external_wind;
+    settings.use_external_wind;
 
   if (!external_wind) {
-    unsigned auto_wind_mode = settings_computer.GetLegacyAutoWindMode();
+    unsigned auto_wind_mode = settings.GetLegacyAutoWindMode();
     if (SaveFormProperty(form, _T("prpAutoWind"), szProfileAutoWind,
                          auto_wind_mode)) {
-      settings_computer.SetLegacyAutoWindMode(auto_wind_mode);
+      settings.SetLegacyAutoWindMode(auto_wind_mode);
       changed = true;
     }
   }

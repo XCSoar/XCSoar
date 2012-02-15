@@ -70,7 +70,7 @@ public:
   FlightSetupPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()),
      dump_button(NULL),
-     glide_polar(CommonInterface::GetComputerSettings().glide_polar_task),
+     glide_polar(CommonInterface::GetComputerSettings().polar.glide_polar_task),
      glide_polar_modified(false),
      last_altitude(-2)
   {}
@@ -117,7 +117,7 @@ FlightSetupPanel::SetButtons()
   dump_button->set_visible(glide_polar.HasBallast());
 
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
-  dump_button->SetCaption(settings.ballast_timer_active
+  dump_button->SetCaption(settings.polar.ballast_timer_active
                           ? _("Stop") : _("Dump"));
 }
 
@@ -142,7 +142,7 @@ FlightSetupPanel::SavePolar()
     return;
 
   glide_polar_modified = false;
-  CommonInterface::SetComputerSettings().glide_polar_task = glide_polar;
+  CommonInterface::SetComputerSettings().polar.glide_polar_task = glide_polar;
 
   if (protected_task_manager != NULL)
     protected_task_manager->SetGlidePolar(glide_polar);
@@ -154,7 +154,7 @@ FlightSetupPanel::SetBallastTimer(bool active)
   if (!glide_polar.HasBallast())
     active = false;
 
-  ComputerSettings &settings = CommonInterface::SetComputerSettings();
+  PolarSettings &settings = CommonInterface::SetComputerSettings().polar;
   if (active == settings.ballast_timer_active)
     return;
 
@@ -170,7 +170,7 @@ void
 FlightSetupPanel::FlipBallastTimer()
 {
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
-  SetBallastTimer(!settings.ballast_timer_active);
+  SetBallastTimer(!settings.polar.ballast_timer_active);
 }
 
 void
@@ -217,11 +217,11 @@ FlightSetupPanel::SetQNH(AtmosphericPressure qnh)
 void
 FlightSetupPanel::OnTimer()
 {
-  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+  const PolarSettings &settings = CommonInterface::GetComputerSettings().polar;
 
   if (settings.ballast_timer_active && !glide_polar_modified) {
     /* get new GlidePolar values */
-    glide_polar = CommonInterface::GetComputerSettings().glide_polar_task;
+    glide_polar = settings.glide_polar_task;
 
     /* display the new values on the screen */
     SetBallast();

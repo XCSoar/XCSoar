@@ -266,10 +266,10 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     buffer += _T(" ");
   }
 
-  if (GetComputerSettings().ballast_timer_active)
+  if (GetComputerSettings().polar.ballast_timer_active)
     buffer.AppendFormat(
         _T("BALLAST %d LITERS "),
-        (int)GetComputerSettings().glide_polar_task.GetBallastLitres());
+        (int)GetComputerSettings().polar.glide_polar_task.GetBallastLitres());
 
   if (weather != NULL && weather->GetParameter() > 0) {
     const TCHAR *label = weather->ItemLabel(weather->GetParameter());

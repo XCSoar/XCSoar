@@ -452,10 +452,10 @@ PolarConfigPanel::Save(bool &_changed, bool &_require_restart)
   if (changed) {
     PlaneGlue::ToProfile(settings_computer.plane);
     PlaneGlue::Synchronize(settings_computer.plane, settings_computer,
-                           settings_computer.glide_polar_task);
+                           settings_computer.polar.glide_polar_task);
 
     if (protected_task_manager != NULL)
-      protected_task_manager->SetGlidePolar(settings_computer.glide_polar_task);
+      protected_task_manager->SetGlidePolar(settings_computer.polar.glide_polar_task);
   }
 
   _changed |= changed;

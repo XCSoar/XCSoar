@@ -128,7 +128,7 @@ ActionInterface::SetMacCready(fixed mc, bool to_devices)
 {
   /* update interface settings */
 
-  GlidePolar &polar = SetComputerSettings().glide_polar_task;
+  GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;
   polar.SetMC(mc);
 
   /* update InfoBoxes (that might show the MacCready setting) */

@@ -143,9 +143,10 @@ Load(unsigned i)
     return false;
 
   Profile::SetPath(_T("PlanePath"), list[i].path);
-  PlaneGlue::Synchronize(settings.plane, settings, settings.glide_polar_task);
+  PlaneGlue::Synchronize(settings.plane, settings,
+                         settings.polar.glide_polar_task);
   if (protected_task_manager != NULL)
-    protected_task_manager->SetGlidePolar(settings.glide_polar_task);
+    protected_task_manager->SetGlidePolar(settings.polar.glide_polar_task);
 
   return true;
 }

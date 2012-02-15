@@ -122,7 +122,7 @@ InfoBoxContentSpeedDolphin::Update(InfoBoxData &data)
   data.SetValueFromSpeed(calculated.V_stf, false);
 
   // Set Comment
-  if (XCSoarInterface::GetComputerSettings().block_stf_enabled)
+  if (XCSoarInterface::GetComputerSettings().features.block_stf_enabled)
     data.SetComment(_("BLOCK"));
   else
     data.SetComment(_("DOLPHIN"));

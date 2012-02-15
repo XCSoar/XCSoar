@@ -190,7 +190,7 @@ ChartControl::OnPaint(Canvas &canvas)
   case ANALYSIS_PAGE_CLIMB:
     RenderClimbChart(canvas, rcgfx, chart_look,
                      glide_computer->GetFlightStats(),
-                     settings_computer.glide_polar_task);
+                     settings_computer.polar.glide_polar_task);
     break;
   case ANALYSIS_PAGE_THERMAL_BAND:
   {
@@ -218,7 +218,7 @@ ChartControl::OnPaint(Canvas &canvas)
     RenderGlidePolar(canvas, rcgfx, look->chart,
                      calculated.climb_history,
                      settings_computer,
-                     settings_computer.glide_polar_task);
+                     settings_computer.polar.glide_polar_task);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
     RenderTemperatureChart(canvas, rcgfx, chart_look,
@@ -326,9 +326,9 @@ Update(void)
   case ANALYSIS_PAGE_POLAR:
     _stprintf(sTmp, _T("%s: %s (%s %d kg)"), _("Analysis"),
               _("Glide Polar"), _("Mass"),
-              (int)settings_computer.glide_polar_task.GetTotalMass());
+              (int)settings_computer.polar.glide_polar_task.GetTotalMass());
     wf->SetCaption(sTmp);
-    GlidePolarCaption(sTmp, settings_computer.glide_polar_task);
+    GlidePolarCaption(sTmp, settings_computer.polar.glide_polar_task);
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Settings"));
    break;

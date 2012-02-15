@@ -101,14 +101,13 @@ FeaturesSettings::SetDefaults()
 void
 ComputerSettings::SetDefaults()
 {
-  WindSettings::SetDefaults();
-  PolarSettings::SetDefaults();
-  SoundSettings::SetDefaults();
-  TeamCodeSettings::SetDefaults();
-  VoiceSettings::SetDefaults();
-  PlacesOfInterestSettings::SetDefaults();
-  FeaturesSettings::SetDefaults();
-  PlacesOfInterestSettings::SetDefaults();
+  wind.SetDefaults();
+  polar.SetDefaults();
+  sound.SetDefaults();
+  team_code.SetDefaults();
+  voice.SetDefaults();
+  poi.SetDefaults();
+  features.SetDefaults();
 
   external_trigger_cruise_enabled =false;
   average_eff_time = ae30seconds;

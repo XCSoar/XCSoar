@@ -135,13 +135,13 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 
   if (basic.location_available && basic.NavAltitudeAvailable() &&
-      settings.glide_polar_task.IsValid()) {
+      settings.polar.glide_polar_task.IsValid()) {
     const GlideState glide_state(basic.location.DistanceBearing(waypoint.location),
                                  waypoint.altitude + settings.task.safety_height_arrival,
                                  basic.nav_altitude,
                                  calculated.GetWindOrZero());
 
-    GlidePolar gp0 = settings.glide_polar_task;
+    GlidePolar gp0 = settings.polar.glide_polar_task;
     gp0.SetMC(fixed_zero);
     AddGlideResult(_("Alt. diff. MC 0"),
                    MacCready::Solve(settings.task.glide,
@@ -154,7 +154,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
     AddGlideResult(_("Alt. diff. MC current"),
                    MacCready::Solve(settings.task.glide,
-                                    settings.glide_polar_task,
+                                    settings.polar.glide_polar_task,
                                     glide_state));
   }
 }

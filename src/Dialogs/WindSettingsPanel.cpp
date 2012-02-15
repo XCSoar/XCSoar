@@ -40,7 +40,7 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
   const NMEAInfo &basic = CommonInterface::Basic();
-  const WindSettings &settings = XCSoarInterface::GetComputerSettings();
+  const WindSettings &settings = CommonInterface::GetComputerSettings().wind;
 
   static gcc_constexpr_data StaticEnumChoice auto_wind_list[] = {
     { AUTOWIND_NONE, N_("Manual"),
@@ -94,7 +94,7 @@ bool
 WindSettingsPanel::Save(bool &_changed, bool &_require_restart)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  WindSettings &settings = XCSoarInterface::SetComputerSettings();
+  WindSettings &settings = CommonInterface::SetComputerSettings().wind;
 
   bool changed = false;
 

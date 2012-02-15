@@ -106,7 +106,7 @@ static void
 ComputeNavAltitude(MoreData &basic,
                    const ComputerSettings &settings_computer)
 {
-  basic.nav_altitude = settings_computer.nav_baro_altitude_enabled &&
+  basic.nav_altitude = settings_computer.features.nav_baro_altitude_enabled &&
     basic.baro_altitude_available
     ? basic.baro_altitude
     : basic.gps_altitude;

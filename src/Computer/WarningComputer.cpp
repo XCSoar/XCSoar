@@ -76,7 +76,7 @@ WarningComputer::Update(const ComputerSettings &settings_computer,
     lease->Reset(as);
   }
 
-  if (lease->Update(as, settings_computer.glide_polar_task,
+  if (lease->Update(as, settings_computer.polar.glide_polar_task,
                     calculated.task_stats,
                     calculated.circling,
                     uround(basic.time - last_basic.time)))

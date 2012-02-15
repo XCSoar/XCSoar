@@ -566,7 +566,7 @@ Update()
 
   wdf->Update(XCSoarInterface::Basic().track,
               XCSoarInterface::Basic().flarm,
-              XCSoarInterface::GetComputerSettings());
+              CommonInterface::GetComputerSettings().team_code);
 
   wdf->UpdateTaskDirection(XCSoarInterface::Calculated().task_stats.task_valid &&
                            XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.IsOk(),

@@ -225,15 +225,21 @@ enum AverageEffTime {
   ae3minutes,
 };
 
-struct ComputerSettings: 
-  public WindSettings,
-  public PolarSettings,
-  public SoundSettings,
-  public TeamCodeSettings,
-  public VoiceSettings,
-  public PlacesOfInterestSettings,
-  public FeaturesSettings
-{
+struct ComputerSettings {
+  WindSettings wind;
+
+  PolarSettings polar;
+
+  SoundSettings sound;
+
+  TeamCodeSettings team_code;
+
+  VoiceSettings voice;
+
+  PlacesOfInterestSettings poi;
+
+  FeaturesSettings features;
+
   bool external_trigger_cruise_enabled;
 
   AverageEffTime average_eff_time;

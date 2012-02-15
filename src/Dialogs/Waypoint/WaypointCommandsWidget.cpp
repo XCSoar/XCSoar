@@ -180,7 +180,7 @@ static void
 SetHome(const Waypoint &waypoint)
 {
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
-  settings_computer.SetHome(waypoint);
+  settings_computer.poi.SetHome(waypoint);
 
   {
     ScopeSuspendAllThreads suspend;

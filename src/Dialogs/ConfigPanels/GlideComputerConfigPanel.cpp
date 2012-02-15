@@ -75,13 +75,13 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                  "no vertical air-mass movement. If disabled, the command speed in cruise is set "
                  "to the dolphin speed to fly, equivalent to the MacCready speed with vertical "
                  "air-mass movement."),
-             settings_computer.block_stf_enabled);
+             settings_computer.features.block_stf_enabled);
   SetExpertRow(BlockSTF);
 
   AddBoolean(_("Nav. by baro altitude"),
              _("When enabled and if connected to a barometric altimeter, barometric altitude is "
                  "used for all navigation functions. Otherwise GPS altitude is used."),
-             settings_computer.nav_baro_altitude_enabled);
+             settings_computer.features.nav_baro_altitude_enabled);
   SetExpertRow(EnableNavBaroAltitude);
 
   AddBoolean(_("Flap forces cruise"),
@@ -116,10 +116,11 @@ GlideComputerConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValueEnum(AutoMcMode, szProfileAutoMcMode, settings_computer.task.auto_mc_mode);
 
-  changed |= SaveValue(BlockSTF, szProfileBlockSTF, settings_computer.block_stf_enabled);
+  changed |= SaveValue(BlockSTF, szProfileBlockSTF,
+                       settings_computer.features.block_stf_enabled);
 
   changed |= SaveValue(EnableNavBaroAltitude, szProfileEnableNavBaroAltitude,
-                       settings_computer.nav_baro_altitude_enabled);
+                       settings_computer.features.nav_baro_altitude_enabled);
 
   changed |= SaveValue(EnableExternalTriggerCruise, szProfileEnableExternalTriggerCruise,
                        settings_computer.external_trigger_cruise_enabled);

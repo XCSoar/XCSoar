@@ -41,15 +41,13 @@ static void
 PnlEditOnWindSpeed(gcc_unused DataFieldFloat &Sender)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
-  ComputerSettings &settings_computer =
-    XCSoarInterface::SetComputerSettings();
+  WindSettings &settings = CommonInterface::SetComputerSettings().wind;
   const bool external_wind = basic.external_wind_available &&
-    settings_computer.use_external_wind;
+    settings.use_external_wind;
 
   if (!external_wind) {
-    settings_computer.manual_wind.norm =
-      Units::ToSysWindSpeed(Sender.GetAsFixed());
-    settings_computer.manual_wind_available.Update(basic.clock);
+    settings.manual_wind.norm = Units::ToSysWindSpeed(Sender.GetAsFixed());
+    settings.manual_wind_available.Update(basic.clock);
   }
 }
 
@@ -57,14 +55,13 @@ static void
 PnlEditOnWindDirection(gcc_unused DataFieldFloat &Sender)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
-  ComputerSettings &settings_computer =
-    XCSoarInterface::SetComputerSettings();
+  WindSettings &settings = CommonInterface::SetComputerSettings().wind;
   const bool external_wind = basic.external_wind_available &&
-    settings_computer.use_external_wind;
+    settings.use_external_wind;
 
   if (!external_wind) {
-    settings_computer.manual_wind.bearing = Angle::Degrees(Sender.GetAsFixed());
-    settings_computer.manual_wind_available.Update(basic.clock);
+    settings.manual_wind.bearing = Angle::Degrees(Sender.GetAsFixed());
+    settings.manual_wind_available.Update(basic.clock);
   }
 }
 
@@ -85,10 +82,9 @@ void
 WindEditPanel::Show(const PixelRect &rc)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
-  const ComputerSettings &settings_computer =
-    XCSoarInterface::GetComputerSettings();
+  const WindSettings &settings = CommonInterface::GetComputerSettings().wind;
   const bool external_wind = basic.external_wind_available &&
-    settings_computer.use_external_wind;
+    settings.use_external_wind;
 
   WndProperty* wp;
 
