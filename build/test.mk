@@ -153,6 +153,7 @@ $(eval $(call link-program,TestDateTime,TEST_DATE_TIME))
 TEST_PROFILE_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Profile/Profile.cpp \
@@ -876,6 +877,7 @@ $(eval $(call link-program,ReadMO,READ_MO))
 READ_PROFILE_STRING_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileString.cpp
@@ -885,6 +887,7 @@ $(eval $(call link-program,ReadProfileString,READ_PROFILE_STRING))
 READ_PROFILE_INT_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileInt.cpp
@@ -894,6 +897,7 @@ $(eval $(call link-program,ReadProfileInt,READ_PROFILE_INT))
 WRITE_PROFILE_STRING_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileString.cpp
@@ -903,6 +907,7 @@ $(eval $(call link-program,WriteProfileString,WRITE_PROFILE_STRING))
 WRITE_PROFILE_INT_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileInt.cpp

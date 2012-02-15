@@ -31,6 +31,7 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/PathName.hpp"
 
 #include <string.h>
 #include <windef.h> /* for MAX_PATH */
@@ -100,7 +101,13 @@ void
 Profile::SetFiles(const TCHAR* override)
 {
   if (!StringIsEmpty(override)) {
-    CopyString(startProfileFile, override, MAX_PATH);
+    if (IsBaseName(override)) {
+      LocalPath(startProfileFile, override);
+
+      if (_tcschr(override, '.') == NULL)
+        _tcscat(startProfileFile, _T(".prf"));
+    } else
+      CopyString(startProfileFile, override, MAX_PATH);
     return;
   }
 
