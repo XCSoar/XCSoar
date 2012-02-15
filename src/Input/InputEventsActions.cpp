@@ -90,6 +90,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Compiler.h"
 #include "Net/Features.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "Simulator.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -353,6 +354,9 @@ InputEvents::eventPlaySound(const TCHAR *misc)
 void
 InputEvents::eventAutoLogger(const TCHAR *misc)
 {
+  if (is_simulator())
+    return;
+
   LoggerSettings::AutoLogger auto_logger =
     CommonInterface::GetComputerSettings().logger.auto_logger;
 

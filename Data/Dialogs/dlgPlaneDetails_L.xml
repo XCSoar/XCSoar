@@ -25,7 +25,7 @@
 
     <Label Caption="Wing Area" X="-107" Y="6" Height="-2" Width="-54" />
     <Edit Name="WingAreaEdit" X="-52" Y="2" Width="-2" Height="-2">
-      <DataField DataType="double" DisplayFormat="%.1f m&#178;" EditFormat="%.1f" Min="0" Max="20" Step="0.1" />
+      <DataField DataType="double" DisplayFormat="%.1f m²" EditFormat="%.1f" Min="0" Max="20" Step="0.1" />
     </Edit>
   </Panel>
   
