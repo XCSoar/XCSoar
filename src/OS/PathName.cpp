@@ -24,6 +24,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Util/StringUtil.hpp"
 
+#include <assert.h>
 #include <string.h>
 #include <algorithm>
 
@@ -38,6 +39,18 @@ LastSeparator(const TCHAR *path)
     p = backslash;
 #endif
   return p;
+}
+
+bool
+IsBaseName(const TCHAR *path)
+{
+  assert(path != NULL);
+
+#ifdef WIN32
+  return _tcspbrk(path, _T("/\\")) == NULL;
+#else
+  return _tcschr(path, _T('/')) == NULL;
+#endif
 }
 
 const TCHAR *

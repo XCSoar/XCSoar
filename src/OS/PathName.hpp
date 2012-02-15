@@ -145,6 +145,14 @@ public:
 };
 
 /**
+ * Is this path a "base name", i.e. is there no path separate?
+ * Behaviour is undefined when the string is empty.
+ */
+gcc_pure
+bool
+IsBaseName(const TCHAR *path);
+
+/**
  * Returns the base name of the specified path, i.e. the part after
  * the last separator.  May return NULL if there is no base name.
  */
