@@ -174,39 +174,47 @@ ContainerWindow::FindPreviousControl(Window *reference)
   }
 }
 
-void
+bool
 ContainerWindow::FocusFirstControl()
 {
   Window *control = FindFirstControl();
-  if (control != NULL)
-    control->set_focus();
+  if (control == NULL)
+    return false;
+
+  control->set_focus();
+  return true;
 }
 
-void
+bool
 ContainerWindow::FocusNextControl()
 {
   Window *focused = get_focused_window();
   if (focused != NULL) {
     Window *control = FindNextControl(focused);
-    if (control != NULL)
+    if (control != NULL) {
       control->set_focus();
-    else
-      FocusFirstControl();
+      return true;
+    } else
+      return FocusFirstControl();
   } else
-    FocusFirstControl();
+    return FocusFirstControl();
 }
 
-void
+bool
 ContainerWindow::FocusPreviousControl()
 {
   Window *focused = get_focused_window();
   Window *control = focused != NULL
     ? FindPreviousControl(focused)
     : NULL;
-  if (control == NULL)
+  if (control == NULL) {
     control = FindLastControl();
-  if (control != NULL)
-    control->set_focus();
+    if (control == NULL)
+      return false;
+  }
+
+  control->set_focus();
+  return true;
 }
 
 void

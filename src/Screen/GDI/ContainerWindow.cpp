@@ -25,31 +25,35 @@ Copyright_License {
 #include "Screen/ButtonWindow.hpp"
 #include "Asset.hpp"
 
-void
+bool
 ContainerWindow::FocusFirstControl()
 {
   HWND hControl = ::GetNextDlgTabItem(hWnd, hWnd, false);
-  if (hControl != NULL)
-    ::SetFocus(hControl);
+  if (hControl == NULL)
+    return false;
+
+  ::SetFocus(hControl);
+  return true;
 }
 
-void
+bool
 ContainerWindow::FocusNextControl()
 {
   HWND hControl = ::GetNextDlgTabItem(hWnd, ::GetFocus(), false);
   if (hControl == NULL)
-    return;
+    return false;
 
   if (IsAltair()) { // detect and block wraparound 
     HWND hControl_first = ::GetNextDlgTabItem(hWnd, hWnd, false);
     if (hControl == hControl_first)
-      return;
+      return false;
   }
 
   ::SetFocus(hControl);
+  return true;
 }
 
-void
+bool
 ContainerWindow::FocusPreviousControl()
 {
   HWND hFocus = ::GetFocus();
@@ -57,14 +61,15 @@ ContainerWindow::FocusPreviousControl()
   if (IsAltair()) { // detect and block wraparound 
     HWND hControl_first = ::GetNextDlgTabItem(hWnd, hWnd, false);
     if (hFocus == hControl_first) 
-      return;
+      return false;
   }
 
   HWND hControl = ::GetNextDlgTabItem(hWnd, hFocus, true);
   if (hControl == NULL)
-    return;
+    return false;
 
   ::SetFocus(hControl);
+  return true;
 }
 
 LRESULT

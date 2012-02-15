@@ -161,20 +161,26 @@ public:
   /**
    * Sets the keyboard focus on the first descendant window which has
    * the WindowStyle::tab_stop() attribute.
+   *
+   * @return true if the focus has been moved
    */
-  void FocusFirstControl();
+  bool FocusFirstControl();
 
   /**
    * Sets the keyboard focus on the next descendant window which has
    * the WindowStyle::tab_stop() attribute.
+   *
+   * @return true if the focus has been moved
    */
-  void FocusNextControl();
+  bool FocusNextControl();
 
   /**
    * Sets the keyboard focus on the previous descendant window which
    * has the WindowStyle::tab_stop() attribute.
+   *
+   * @return true if the focus has been moved
    */
-  void FocusPreviousControl();
+  bool FocusPreviousControl();
 };
 
 #endif
