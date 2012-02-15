@@ -117,6 +117,9 @@ static_assert(is_trivial<WindSettings>::value, "type is not trivial");
  * Glide polar settings
  */
 struct PolarSettings {
+  /** Glide polar used for task calculations */
+  GlidePolar glide_polar_task;
+
   /** Whether the ballast countdown timer is active */
   bool ballast_timer_active;
 
@@ -251,9 +254,6 @@ struct ComputerSettings:
    */
   AtmosphericPressure pressure;
   Validity pressure_available;
-
-  /** Glide polar used for task calculations */
-  GlidePolar glide_polar_task;
 
   AirspaceComputerSettings airspace;
   Plane plane;
