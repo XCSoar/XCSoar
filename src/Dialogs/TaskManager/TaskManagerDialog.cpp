@@ -32,7 +32,6 @@ Copyright_License {
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Components.hpp"
@@ -139,19 +138,6 @@ dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
             terrain, &airspace_database);
 }
 
-void
-dlgTaskManager::OnBlackBarPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
-{
-  canvas.clear(COLOR_BLACK);
-  if (wTabBar->has_focus()) {
-    PixelRect rcFocus;
-    rcFocus.top = rcFocus.left = 0;
-    rcFocus.right = canvas.get_width();
-    rcFocus.bottom = canvas.get_height();
-    canvas.DrawFocusRectangle(rcFocus);
-  }
-}
-
 bool
 dlgTaskManager::CommitTaskChanges()
 {
@@ -201,12 +187,6 @@ dlgTaskManagerShowModal(SingleWindow &parent)
   dlgTaskManager::dlgTaskManagerShowModal(parent);
 }
 
-const CallBackTableEntry dlgTaskManager::CallBackTable[] = {
-  DeclareCallBackEntry(dlgTaskManager::OnBlackBarPaint),
-
-  DeclareCallBackEntry(NULL)
-};
-
 void
 dlgTaskManager::RevertTask()
 {
@@ -223,7 +203,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   if (protected_task_manager == NULL)
     return;
 
-  wf = LoadDialog(CallBackTable, parent,
+  wf = LoadDialog(NULL, parent,
                   Layout::landscape ?
                   _T("IDR_XML_TASKMANAGER_L") : _T("IDR_XML_TASKMANAGER"));
 
@@ -238,18 +218,6 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
   wTabBar->SetClientOverlapTabs(true);
   wTabBar->SetPageFlippedCallback(SetTitle);
-
-  if (!Layout::landscape) {
-    WndOwnerDrawFrame* wBlackRect =
-        (WndOwnerDrawFrame*)wf->FindByName(_T("frmBlackRect"));
-    assert(wBlackRect);
-    const UPixelScalar TabLineHeight = wTabBar->GetTabLineHeight();
-    wBlackRect->move(0,
-                     wTabBar->GetTabHeight() - TabLineHeight - Layout::Scale(1),
-                     wf->get_width() - wTabBar->GetTabWidth() + Layout::Scale(3),
-                     TabLineHeight + Layout::Scale(2));
-    wBlackRect->show_on_top();
-  }
 
   const MapLook &look = UIGlobals::GetMapLook();
 
