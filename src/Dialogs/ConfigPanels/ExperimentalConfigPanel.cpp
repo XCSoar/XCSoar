@@ -29,6 +29,8 @@ Copyright_License {
 #include "ExperimentalConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
+#include "SystemSettings.hpp"
+#include "Interface.hpp"
 
 enum ControlIndex {
   DeviceModelType
