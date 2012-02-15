@@ -102,7 +102,7 @@ bool
 Display::SetBacklight()
 {
   switch (global_model_type) {
-  case MODELTYPE_PNA_HP31X:
+  case ModelType::HP31X:
     return SetHP31XBacklight();
 
   default:

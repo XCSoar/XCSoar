@@ -40,7 +40,7 @@ Copyright_License {
 TCHAR asset_number[100] = _T(""); //4G17DW31L0HY");
 
 #ifdef HAVE_MODEL_TYPE
-ModelType global_model_type = MODELTYPE_PNA_PNA;
+ModelType global_model_type = ModelType::GENERIC;
 #endif
 
 gcc_const

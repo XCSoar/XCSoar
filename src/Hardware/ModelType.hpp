@@ -26,17 +26,19 @@ Copyright_License {
 
 #include "Compiler.h"
 
+#include <stdint.h>
+
 #if defined(_WIN32_WCE) && !defined(GNAV)
 #define HAVE_MODEL_TYPE
 #endif
 
-enum ModelType {
-  MODELTYPE_PNA_PNA,
-  MODELTYPE_PNA_HP31X,
-  MODELTYPE_PNA_MEDION_P5,
-  MODELTYPE_PNA_MIO,
-  MODELTYPE_PNA_NOKIA_500,
-  MODELTYPE_PNA_PN6000,
+enum class ModelType : uint8_t {
+  GENERIC,
+  HP31X,
+  MEDION_P5,
+  MIO,
+  NOKIA_500,
+  PN6000,
 };
 
 gcc_constexpr_function

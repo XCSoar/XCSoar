@@ -45,7 +45,7 @@ extern ModelType global_model_type;
 
 #else
 
-#define global_model_type MODELTYPE_PNA_PNA
+#define global_model_type ModelType::GENERIC
 
 #endif
 
@@ -133,7 +133,7 @@ IsAncientHardware()
 static inline bool
 IsHP31X()
 {
-  return global_model_type == MODELTYPE_PNA_HP31X;
+  return global_model_type == ModelType::HP31X;
 }
 
 /**

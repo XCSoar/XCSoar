@@ -25,6 +25,6 @@ Copyright_License {
 
 #ifdef HAVE_MODEL_TYPE
 
-ModelType global_model_type = MODELTYPE_PNA_PNA;
+ModelType global_model_type = ModelType::GENERIC;
 
 #endif

@@ -111,10 +111,10 @@ TranscodeKey(unsigned key_code)
     return VK_RETURN;
 #endif
 
-  if (global_model_type == MODELTYPE_PNA_HP31X) {
+  if (global_model_type == ModelType::HP31X) {
     if (key_code == 0x7b)
       key_code = 0x1b;
-  } else if (global_model_type == MODELTYPE_PNA_PN6000) {
+  } else if (global_model_type == ModelType::PN6000) {
     switch(key_code) {
     case 0x79: // Upper Silver key short press
       key_code = 0xc1; // F10 -> APP1
@@ -135,7 +135,7 @@ TranscodeKey(unsigned key_code)
       key_code = 0x71; // F13 -> F2
       break;
     }
-  } else if (global_model_type == MODELTYPE_PNA_NOKIA_500) {
+  } else if (global_model_type == ModelType::NOKIA_500) {
     switch(key_code) {
     case 0xc1:
       key_code = 0x0d; // middle key = enter
@@ -147,7 +147,7 @@ TranscodeKey(unsigned key_code)
       key_code = 0x28; // - key = pg Down
       break;
     }
-  } else if (global_model_type == MODELTYPE_PNA_MEDION_P5) {
+  } else if (global_model_type == ModelType::MEDION_P5) {
     switch(key_code) {
     case 0x79:
       key_code = 0x0d; // middle key = enter
