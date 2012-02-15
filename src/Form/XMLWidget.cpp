@@ -35,3 +35,10 @@ XMLWidget::LoadWindow(const CallBackTableEntry *callbacks,
   assert(window != NULL);
   SetWindow(window);
 }
+
+bool
+XMLWidget::SetFocus()
+{
+  ContainerWindow &window = *(ContainerWindow *)GetWindow();
+  return window.FocusFirstControl();
+}

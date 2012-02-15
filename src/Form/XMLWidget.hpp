@@ -53,6 +53,8 @@ protected:
   virtual void Unprepare() {
     form.Clear();
   }
+
+  virtual bool SetFocus();
 };
 
 #endif
