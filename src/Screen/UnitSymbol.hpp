@@ -74,7 +74,11 @@ public:
     return size;
   }
 
-  void draw(Canvas& canvas, PixelScalar x, PixelScalar y) const;
+  gcc_pure
+  PixelSize GetScreenSize() const;
+
+  void draw(Canvas &canvas, PixelScalar x, PixelScalar y,
+            kind k=NORMAL) const;
 };
 
 #endif

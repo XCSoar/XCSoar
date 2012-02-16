@@ -408,15 +408,10 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
   }
 
   if (!is_persistent()) {
-    RasterPoint BitmapUnitPos = unit_symbol->get_origin(look.inverse
-                                                  ? UnitSymbol::INVERSE_GRAY
-                                                  : UnitSymbol::GRAY);
-    PixelSize BitmapUnitSize = unit_symbol->get_size();
-
-    canvas.scale_copy(x - Layout::Scale(5), diValue->recBkg.top,
-                      *unit_symbol,
-                      BitmapUnitPos.x, BitmapUnitPos.y,
-                      BitmapUnitSize.cx, BitmapUnitSize.cy);
+    unit_symbol->draw(canvas, x - Layout::Scale(5), diValue->recBkg.top,
+                      look.inverse
+                      ? UnitSymbol::INVERSE_GRAY
+                      : UnitSymbol::GRAY);
   }
 }
 

@@ -217,16 +217,9 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
       return;
 #endif
 
-    RasterPoint origin = unit_symbol->get_origin(look.inverse
-                                           ? UnitSymbol::INVERSE
-                                           : UnitSymbol::NORMAL);
-
-    canvas.scale_copy(x + value_size.cx,
-                      y + ascent_height
-                      - Layout::FastScale(unit_size.cy),
-                      *unit_symbol,
-                      origin.x, origin.y,
-                      unit_size.cx, unit_size.cy);
+    unit_symbol->draw(canvas, x + value_size.cx,
+                      y + ascent_height - unit_symbol->GetScreenSize().cy,
+                      look.inverse ? UnitSymbol::INVERSE : UnitSymbol::NORMAL);
   }
 }
 

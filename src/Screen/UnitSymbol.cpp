@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Layout.hpp"
 
 #include <assert.h>
 
@@ -37,10 +38,17 @@ UnitSymbol::get_origin(enum kind kind) const
   return origin;
 }
 
-void 
-UnitSymbol::draw(Canvas& canvas, PixelScalar x, PixelScalar y) const
+PixelSize
+UnitSymbol::GetScreenSize() const
 {
-  const RasterPoint BmpPos = get_origin(UnitSymbol::NORMAL);
+  return PixelSize{ PixelScalar(Layout::Scale(size.cx)),
+      PixelScalar(Layout::Scale(size.cy)) };
+}
+
+void 
+UnitSymbol::draw(Canvas &canvas, PixelScalar x, PixelScalar y, kind k) const
+{
+  const RasterPoint BmpPos = get_origin(k);
   const PixelSize size = get_size();
   canvas.scale_copy(x, y, bitmap,
 		    BmpPos.x, BmpPos.y,
