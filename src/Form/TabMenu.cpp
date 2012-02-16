@@ -37,19 +37,14 @@ Copyright_License {
 #include <assert.h>
 #include <winuser.h>
 
-TabMenuControl::TabMenuControl(ContainerWindow &_parent,
-                               WndForm &_form,
-                               const CallBackTableEntry *_look_up_table,
+TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
                                const DialogLook &look, const TCHAR * _caption,
                                PixelScalar x, PixelScalar y,
                                UPixelScalar _width, UPixelScalar _height,
                                const WindowStyle style)
   :last_content_page(-1),
    caption(_caption),
-   setting_up(true),
-   form(_form),
-   look_up_table(_look_up_table)
-
+   form(_form)
 {
   set(_parent, x, 0, _parent.get_width() - x, _parent.get_height(), style);
 
@@ -128,12 +123,8 @@ TabMenuControl::SetCurrentPage(unsigned page)
 {
   assert(page < buttons.size());
 
-  if (!pager.ClickPage(page)) {
-    assert(!setting_up);
+  if (!pager.ClickPage(page))
     return;
-  }
-
-  setting_up = false;
 
   if (page == GetMenuPage()) {
     form.SetCaption(caption);

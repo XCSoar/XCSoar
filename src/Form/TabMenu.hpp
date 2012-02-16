@@ -27,7 +27,6 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Form/Tabbed.hpp"
 #include "Form/TabDisplay.hpp"
-#include "Dialogs/XML.hpp"
 
 struct DialogLook;
 class WndForm;
@@ -123,11 +122,7 @@ protected:
 
   StaticString<256u> caption;
 
-  // used to indicate initial state before tabs have changed
-  bool setting_up;
-
   WndForm &form;
-  const CallBackTableEntry *look_up_table;
 
 public:
   /**
@@ -138,8 +133,7 @@ public:
    * @param style
    * @return
    */
-  TabMenuControl(ContainerWindow &parent,
-                 WndForm &_form, const CallBackTableEntry *_look_up_table,
+  TabMenuControl(ContainerWindow &parent, WndForm &_form,
                  const DialogLook &look, const TCHAR * Caption,
                  PixelScalar x, PixelScalar y,
                  UPixelScalar width, UPixelScalar height,

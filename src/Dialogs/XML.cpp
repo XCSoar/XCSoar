@@ -845,7 +845,6 @@ LoadChild(SubForm &form, ContainerWindow &parent,
                                                     an ugly hack!
                                                     Please rewrite: */
                                                  (WndForm &)form,
-                                                 lookup_table,
                                                  *xml_dialog_look, caption,
                                                  pos.x, pos.y, size.cx, size.cy,
                                                  style);
