@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.2.6 - not yet released
+* calculations
+  - fix bogus terrain warnings
 * devices:
   - Vega: fix Vega configuration dialog
 
