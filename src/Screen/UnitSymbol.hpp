@@ -59,14 +59,6 @@ public:
     return bitmap.IsDefined();
   }
 
-  const Bitmap &get_bitmap() const {
-    return bitmap;
-  }
-
-  operator const Bitmap &() const {
-    return bitmap;
-  }
-
   gcc_pure
   const RasterPoint get_origin(enum kind kind) const;
 
