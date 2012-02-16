@@ -23,9 +23,23 @@ Copyright_License {
 
 #include "Device/Driver/LX/Internal.hpp"
 #include "Device/Port/Port.hpp"
+#include "Device/Internal.hpp"
 #include "NMEA/Checksum.hpp"
 
 #include <cstdio>
+
+bool
+LXDevice::Open(gcc_unused OperationEnvironment &env)
+{
+  // This line initiates the Color Vario to send out LXWP2 and LXWP3
+  // LXWP0 once started, is repeated every second
+  // This is a copy of the initiation done in LK8000, realized by Lx developers
+  // We have no documentation and so we do not know what this exactly means
+  char tmp[100];
+  sprintf(tmp, "PFLX0,LXWP0,1,LXWP2,3,LXWP3,4");
+  PortWriteNMEA(port, tmp);
+  return true;
+}
 
 bool
 LXDevice::PutMacCready(fixed MacCready)
