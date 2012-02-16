@@ -42,6 +42,7 @@ public:
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool PutMacCready(fixed MacCready);
+  virtual bool PutQNH(const AtmosphericPressure &pres);
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
 
