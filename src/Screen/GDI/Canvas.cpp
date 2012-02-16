@@ -177,14 +177,12 @@ Canvas::copy(PixelScalar dest_x, PixelScalar dest_y,
   assert(IsDefined());
   assert(src != NULL);
 
-  if (compatible_dc == NULL)
-    compatible_dc = ::CreateCompatibleDC(dc);
-
-  HBITMAP old = (HBITMAP)::SelectObject(compatible_dc, src);
+  HDC virtual_dc = GetCompatibleDC();
+  HBITMAP old = (HBITMAP)::SelectObject(virtual_dc, src);
   copy(dest_x, dest_y, dest_width, dest_height,
-       compatible_dc, src_x, src_y,
+       virtual_dc, src_x, src_y,
        dwRop);
-  ::SelectObject(compatible_dc, old);
+  ::SelectObject(virtual_dc, old);
 }
 
 void
@@ -257,23 +255,21 @@ Canvas::stretch_transparent(const Bitmap &src, Color key)
   assert(IsDefined());
   assert(src.IsDefined());
 
-  if (compatible_dc == NULL)
-    compatible_dc = ::CreateCompatibleDC(dc);
-
-  HBITMAP old = (HBITMAP)::SelectObject(compatible_dc, src.GetNative());
+  HDC virtual_dc = GetCompatibleDC();
+  HBITMAP old = (HBITMAP)::SelectObject(virtual_dc, src.GetNative());
 
   const PixelSize size = src.GetSize();
 #ifdef _WIN32_WCE
   ::TransparentImage(dc, 0, 0, get_width(), get_height(),
-                     compatible_dc, 0, 0, size.cx, size.cy,
+                     virtual_dc, 0, 0, size.cx, size.cy,
                      key);
 #else
   ::TransparentBlt(dc, 0, 0, get_width(), get_height(),
-                   compatible_dc, 0, 0, size.cx, size.cy,
+                   virtual_dc, 0, 0, size.cx, size.cy,
                    key);
 #endif
 
-  ::SelectObject(compatible_dc, old);
+  ::SelectObject(virtual_dc, old);
 }
 
 void
@@ -282,16 +278,14 @@ Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
   assert(IsDefined());
   assert(src.IsDefined());
 
-  if (compatible_dc == NULL)
-    compatible_dc = ::CreateCompatibleDC(dc);
-
-  HBITMAP old = (HBITMAP)::SelectObject(compatible_dc, src.GetNative());
+  HDC virtual_dc = GetCompatibleDC();
+  HBITMAP old = (HBITMAP)::SelectObject(virtual_dc, src.GetNative());
   const PixelSize size = src.GetSize();
 
   BufferCanvas inverted(*this, size.cx, size.cy);
   ::BitBlt(inverted, 0, 0, size.cx, size.cy,
-           compatible_dc, 0, 0, NOTSRCCOPY);
-  ::SelectObject(compatible_dc, old);
+           virtual_dc, 0, 0, NOTSRCCOPY);
+  ::SelectObject(virtual_dc, old);
 
 #ifdef _WIN32_WCE
   ::TransparentImage(dc, 0, 0, get_width(), get_height(),
@@ -322,13 +316,11 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
   assert(IsDefined());
   assert(src != NULL);
 
-  if (compatible_dc == NULL)
-    compatible_dc = ::CreateCompatibleDC(dc);
-
-  HBITMAP old = (HBITMAP)::SelectObject(compatible_dc, src);
+  HDC virtual_dc = GetCompatibleDC();
+  HBITMAP old = (HBITMAP)::SelectObject(virtual_dc, src);
   stretch(dest_x, dest_y, dest_width, dest_height,
-          compatible_dc, src_x, src_y, src_width, src_height);
-  ::SelectObject(compatible_dc, old);
+          virtual_dc, src_x, src_y, src_width, src_height);
+  ::SelectObject(virtual_dc, old);
 }
 
 void

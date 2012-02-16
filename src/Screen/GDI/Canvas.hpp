@@ -79,6 +79,14 @@ protected:
     height = _height;
   }
 
+  HDC GetCompatibleDC() {
+    assert(IsDefined());
+
+    if (compatible_dc == NULL)
+      compatible_dc = ::CreateCompatibleDC(dc);
+    return compatible_dc;
+  }
+
 public:
   bool IsDefined() const {
     return dc != NULL;
