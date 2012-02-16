@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-15 00:09+0100\n"
-"PO-Revision-Date: 2012-02-12 22:07+0000\n"
+"PO-Revision-Date: 2012-02-15 23:10+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-13 11:52+0000\n"
+"X-Launchpad-Export-Date: 2012-02-16 02:16+0000\n"
 "X-Generator: Launchpad (build 14781)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -146,9 +146,8 @@ msgid "Failed to download flight."
 msgstr "Flug herunterladen fehlgeschlagen"
 
 #: src/Logger/ExternalLogger.cpp:312
-#, fuzzy
 msgid "Do you want to download another flight?"
-msgstr "Möchtest Du das Flugzeugprofil \"%s\" laden?"
+msgstr "Möchtest Du einen weiteren Flug herunter laden?"
 
 #: src/Replay/IgcReplayGlue.cpp:79
 msgid "Could not open IGC file!"
@@ -2525,7 +2524,7 @@ msgstr "Ankunftshöhe"
 
 #: src/MapWindow/GlueMapWindowItems.cpp:89
 msgid "There is nothing interesting near this location."
-msgstr ""
+msgstr "Da ist nichts interessantes in der Nähe."
 
 #: src/MapWindow/GlueMapWindowItems.cpp:90 Data/Dialogs/dlgMapItemList.xml:3
 #: Data/Dialogs/dlgMapItemList_L.xml:3
@@ -9318,17 +9317,20 @@ msgstr ""
 #~ msgid "Task Arrival Time"
 #~ msgstr "Aufgabe - Ankunftszeit"
 
-#~ msgid "AAT Speed Min"
+#~ msgid "AA Speed Min"
 #~ msgstr "AAT - min. Geschwindigkeit"
 
-#~ msgid "AAT Distance Min"
+#~ msgid "AA Distance Min"
 #~ msgstr "AAT - min. Distanz"
 
-#~ msgid "AAT Speed Max"
+#~ msgid "AA Speed Max"
 #~ msgstr "AAT - max. Geschwindigkeit"
 
-#~ msgid "AAT Distance Max"
+#~ msgid "AA Distance Max"
 #~ msgstr "AAT - max. Distanz"
+
+#~ msgid "AA Time"
+#~ msgstr "AAT - Zeit"
 
 #~ msgid "Team Bearing"
 #~ msgstr "Team - Kurs"
@@ -9592,6 +9594,12 @@ msgstr ""
 #~ "altitude."
 #~ msgstr "Mittlere Geschwindigkeit über die Aufgabe, höhenkompensiert."
 
+#~ msgid "AA Dmin"
+#~ msgstr "AA Dmin"
+
+#~ msgid "AA Dmax"
+#~ msgstr "AA Dmax"
+
 #~ msgid ""
 #~ "This is the barometric altitude obtained from a GPS equipped with "
 #~ "pressure sensor, or a supported external intelligent vario."
@@ -9599,6 +9607,12 @@ msgstr ""
 
 #~ msgid "V Mc"
 #~ msgstr "V Mc"
+
+#~ msgid "AA Vmin"
+#~ msgstr "AA Vmin"
+
+#~ msgid "AA Vmax"
+#~ msgstr "AA Vmax"
 
 #~ msgid ""
 #~ "Ground speed measured by the GPS. If this infobox is active in simulation "
@@ -9658,6 +9672,15 @@ msgstr ""
 
 #~ msgid "MaxTemp"
 #~ msgstr "MaxTemp"
+
+#~ msgid "AA dT"
+#~ msgstr "AA dT"
+
+#~ msgid "AA Dtgt"
+#~ msgstr "AA DZiel"
+
+#~ msgid "AA Vtgt"
+#~ msgstr "AA VZiel"
 
 #~ msgid ""
 #~ "The required glide ratio to finish the task, given by the distance to go "
@@ -9879,10 +9902,10 @@ msgstr ""
 #~ msgstr "Eigenschaften der Aufgabe"
 
 #~ msgid ""
-#~ "AAT Speed - Assigned Area Task average speed achievable around target "
+#~ "AA Speed - Assigned Area Task average speed achievable around target "
 #~ "points remaining in minimum AAT time."
 #~ msgstr ""
-#~ "AAT Geschwindigkeit - Für die Assigned Area Aufgabe erreichbare mittlere "
+#~ "AA Geschwindigkeit - Für die Assigned Area Aufgabe erreichbare mittlere "
 #~ "\r\n"
 #~ "Geschwindigkeit um alle Zielpunkte in minimaler Aufgabenzeit."
 
@@ -10475,6 +10498,15 @@ msgstr ""
 #~ msgid "Finish min height"
 #~ msgstr "EA min. Flughöhe"
 
+#~ msgid "Altrn1 GR"
+#~ msgstr "GZ Alt.1"
+
+#~ msgid "Altrn 2"
+#~ msgstr "Alt. 2"
+
+#~ msgid "Altrn 1"
+#~ msgstr "Alt. 1"
+
 #~ msgid ""
 #~ "Instantaneous cross country speed while on current task, compensated for "
 #~ "altitude."
@@ -10505,10 +10537,10 @@ msgstr ""
 #~ msgid "L/D Average"
 #~ msgstr "Gleitzahl - Mittelwert"
 
-#~ msgid "AAT Delta Time"
+#~ msgid "AA Delta Time"
 #~ msgstr "AAT - Differenzzeit"
 
-#~ msgid "AAT Distance Tgt"
+#~ msgid "AA Distance Tgt"
 #~ msgstr "AAT - Restdistanz zum Ziel"
 
 #~ msgid "Distance Vario"
@@ -10535,7 +10567,7 @@ msgstr ""
 #~ msgid "Thermal last 30 sec"
 #~ msgstr "Vario - 30 sec. Mittel"
 
-#~ msgid "AAT Speed Tgt"
+#~ msgid "AA Speed Tgt"
 #~ msgstr "AAT - m. Geschwindigkeit zum Ziel"
 
 #~ msgid "Alternate1 GR"
@@ -11049,3 +11081,14 @@ msgstr ""
 
 #~ msgid "Declared"
 #~ msgstr "Angemeldet"
+
+#~ msgid ""
+#~ "AA Delta Time - Difference between estimated task time and AAT minimum "
+#~ "time. Colored red if negative (expected arrival too early), or blue if in "
+#~ "sector and can turn now with estimated arrival time greater than AAT time "
+#~ "plus 5 minutes."
+#~ msgstr ""
+#~ "AA Delta Zeit - die Differenz zwischen geschätzter Aufgabenzeit und "
+#~ "minimaler AAT Zeit. Der Wert wird rot gefärbt wenn die Ankunft zu früh "
+#~ "erwartet wird, oder blau wenn im Sektor gewendet werden kann und die "
+#~ "geschätzte Ankunftszeit mehr als 5 Minuten nach der AAT Zeit liegt."
