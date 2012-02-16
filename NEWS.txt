@@ -49,6 +49,8 @@ Version 6.3 - not yet released
   - support for the hardware buttons
 
 Version 6.2.6 - not yet released
+* calculations
+  - fix bogus terrain warnings
 * devices:
   - Vega: fix Vega configuration dialog
 

@@ -226,42 +226,9 @@ RoutePolars::Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
   if (!positive(e.d))
     return false;
 
-  const RoughAltitude h_diff = origin.altitude - destination.altitude;
-
-  if (!h_diff.IsPositive()) {
-    // assume gradual climb to destination
-    intx = map->Intersection(origin, (short)(origin.altitude - GetSafetyHeight()),
-                             (short)h_diff, destination);
-    return !(intx == destination);
-  }
-
   const RoughAltitude vh = CalcVHeight(e);
-
-  if (h_diff > vh) {
-    // have excess height to glide, scan pure glide, will arrive at destination high
-
-    intx = map->Intersection(origin, (short)(origin.altitude - GetSafetyHeight()),
-                             (short)vh, destination);
-    return !(intx == destination);
-  }
-
-  // mixed cruise-climb then glide segments, do separate searches for each
-
-  // proportion of flight as glide
-  const fixed p = h_diff / vh;
-
-  // location of start of glide
-  const GeoPoint p_glide = destination.Interpolate(origin, p);
-
-  // intersects during cruise-climb?
   intx = map->Intersection(origin, (short)(origin.altitude - GetSafetyHeight()),
-                           0, destination);
-  if (!(intx == destination))
-    return true;
-
-  // intersects during glide?
-  intx = map->Intersection(p_glide, (short)(origin.altitude - GetSafetyHeight()),
-                           (short)h_diff, destination);
+                           (short)vh, destination);
   return !(intx == destination);
 }
 
