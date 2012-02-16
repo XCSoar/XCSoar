@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-15 00:09+0100\n"
-"PO-Revision-Date: 2012-02-13 19:32+0000\n"
-"Last-Translator: Matthieu GAULON <Unknown>\n"
+"PO-Revision-Date: 2012-02-15 21:55+0000\n"
+"Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-14 19:24+0000\n"
+"X-Launchpad-Export-Date: 2012-02-16 02:16+0000\n"
 "X-Generator: Launchpad (build 14781)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -146,9 +146,8 @@ msgid "Failed to download flight."
 msgstr "Impossible de télécharger le vol."
 
 #: src/Logger/ExternalLogger.cpp:312
-#, fuzzy
 msgid "Do you want to download another flight?"
-msgstr "Voulez vous charger le profil \"%s\" du planeur ?"
+msgstr "Télécharger un autre vol ?"
 
 #: src/Replay/IgcReplayGlue.cpp:79
 msgid "Could not open IGC file!"
@@ -2533,12 +2532,12 @@ msgstr "Alt. d'arrivée"
 
 #: src/MapWindow/GlueMapWindowItems.cpp:89
 msgid "There is nothing interesting near this location."
-msgstr ""
+msgstr "Il n'y a rien d'intéressant à proximité de ce lieu."
 
 #: src/MapWindow/GlueMapWindowItems.cpp:90 Data/Dialogs/dlgMapItemList.xml:3
 #: Data/Dialogs/dlgMapItemList_L.xml:3
 msgid "Map elements at this location"
-msgstr ""
+msgstr "Elements de la carte à cet endroit."
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:109
 msgid "Elevation: "
@@ -3399,6 +3398,9 @@ msgid ""
 "How clean the glider is. Set to 0% for clean, larger numbers as the wings "
 "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."
 msgstr ""
+"Propreté du planeur. Mettre 0% pour propre, et des valeurs plus élevées "
+"lorsque les ailes se salissent de moucherons ou sont mouillées. 50%  indique "
+"un doublement du taux de chute."
 
 #: src/Dialogs/dlgBasicSettings.cpp:308
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeSetup.xml:4
@@ -3571,7 +3573,7 @@ msgstr "Valeurs par défaut du circuit"
 #: src/Dialogs/dlgConfiguration.cpp:81
 #, no-c-format
 msgid "Look"
-msgstr ""
+msgstr "Apparence"
 
 #: src/Dialogs/dlgConfiguration.cpp:87
 #, no-c-format
@@ -3827,7 +3829,7 @@ msgstr "Cap et distance"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:146
 msgid "Alt. diff. MC 0"
-msgstr ""
+msgstr "Diff. Alt. MC 0"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:150
 msgid "Alt. diff. MC safety"
@@ -3835,7 +3837,7 @@ msgstr "Diff Alt MC sécurité"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:155
 msgid "Alt. diff. MC current"
-msgstr ""
+msgstr "Diff. Alt. MC act"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:57
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:89
@@ -4178,7 +4180,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:81
 msgid "Whether to show the gross climb rate."
-msgstr ""
+msgstr "Affichage du taux de montée."
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:84
 msgid "Averager needle"
@@ -4328,6 +4330,8 @@ msgid ""
 "The Input Events file defines the menu system and how XCSoar responds to "
 "button presses and events from external devices."
 msgstr ""
+"Le fichier \"Input Eventse définit le menu principal, et comment XCSoar "
+"réagit aux appuis sur les boutons et aux requêtes d'appareils externes."
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:124
 msgid "Language"
@@ -5117,6 +5121,11 @@ msgid ""
 "no compensation, 1.0 scales MC linearly with current height (with reference "
 "to height of the maximum climb). If considered, 0.3 is recommended."
 msgstr ""
+"Le facteur de risque STF (Speed To Fly) réduit le calage MacCready utilisé "
+"dans le calcul de la vitesse de consigne lorsque le planeur est bas. Mettre "
+"0 pour ne pas effectuer cette prise en compte du risque STF, 1.0 linéarise "
+"le calage en fonctions de la hautur courante (par rapport à la hauteur "
+"maximale de montée). Si utilisé, 0.3 est une valeur recommandée."
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:97
 msgid "Predict wind drift"
@@ -5519,6 +5528,10 @@ msgid ""
 "leg less than 28% of total except for tasks longer than 500km: No leg less "
 "than 25% or larger than 45%."
 msgstr ""
+"Conforme aux règles du triangle FAI. Trois points de virage dont départ et "
+"arrivée. Pas de branche inférieure à 28% de la longueur totale, sauf si "
+"longueur totale de plus de 500km. Si plus de 500km, alors pas de branche de "
+"moins de 25% ou plus de 45%."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:127
 #, no-c-format
@@ -5526,6 +5539,8 @@ msgid ""
 "Up to seven points including start and finish, finish height must not be "
 "lower than start height less 1000 meters."
 msgstr ""
+"Jusqu'à sept point, dont départ et arrivée. L'arrivée ne devant pas être "
+"plus basse que le départ moins 1000m."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:130
 #, no-c-format
@@ -5632,7 +5647,7 @@ msgstr "Affichage relief"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:160
 msgid "Draw a digital elevation terrain on the map."
-msgstr ""
+msgstr "Dessine un terrain numérique altimétrique sur la carte."
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:164
 msgid "Topography display"
@@ -9139,17 +9154,17 @@ msgstr ""
 #~ msgid "Final LD"
 #~ msgstr "Final : LD"
 
-#~ msgid "AAT Speed Min"
-#~ msgstr "AAT Vitesse Min"
+#~ msgid "AA Speed Min"
+#~ msgstr "AA Vitesse Min"
 
-#~ msgid "AAT Distance Min"
-#~ msgstr "AAT Distance Min"
+#~ msgid "AA Distance Min"
+#~ msgstr "AA Distance Min"
 
-#~ msgid "AAT Speed Max"
-#~ msgstr "AAT Vitesse Max"
+#~ msgid "AA Speed Max"
+#~ msgstr "AA Vitesse Max"
 
-#~ msgid "AAT Distance Max"
-#~ msgstr "AAT Distance Max"
+#~ msgid "AA Distance Max"
+#~ msgstr "AA Distance Max"
 
 #~ msgid "Task Arrival Time"
 #~ msgstr "circuit heure arrivée"
@@ -9433,12 +9448,24 @@ msgstr ""
 #~ msgid "Flap"
 #~ msgstr "Volet"
 
+#~ msgid "AA Dmin"
+#~ msgstr "Dmin AA"
+
+#~ msgid "AA Dmax"
+#~ msgstr "Dmax AA"
+
 #~ msgid ""
 #~ "This is the barometric altitude obtained from a GPS equipped with "
 #~ "pressure sensor, or a supported external intelligent vario."
 #~ msgstr ""
 #~ "Altitude barométrique obtenue à partir d'un récepteur GPS équippé d'une "
 #~ "capsule barométrique, ou un variomètre intelligent externe."
+
+#~ msgid "AA Vmin"
+#~ msgstr "Vmin AAT"
+
+#~ msgid "AA Vmax"
+#~ msgstr "Vmax AAT"
 
 #~ msgid "Airspaces at this location"
 #~ msgstr "Espace aérien à cet android."
@@ -9458,6 +9485,18 @@ msgstr ""
 
 #~ msgid "OK to invalidate declaration?"
 #~ msgstr "OK pour invalider la déclaration?"
+
+#~ msgid "AA Dtgt"
+#~ msgstr "Dist AAT"
+
+#~ msgid "AA Vtgt"
+#~ msgstr "V AAT"
+
+#~ msgid "Altrn 1"
+#~ msgstr "Opt 1"
+
+#~ msgid "Altrn 2"
+#~ msgstr "Opt 2"
 
 #~ msgid "Vega Audio"
 #~ msgstr "Vega Audio"
@@ -9557,3 +9596,12 @@ msgstr ""
 #~ msgstr ""
 #~ "Permet l'utilisation de données GPS malgré une somme de controle "
 #~ "(checksum) invalide."
+
+#~ msgid "Altrn1 GR"
+#~ msgstr "Plan Dégagmt1"
+
+#~ msgid "AA dT"
+#~ msgstr "AA dT"
+
+#~ msgid "AA Time"
+#~ msgstr "AA Temps"
