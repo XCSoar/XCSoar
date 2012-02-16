@@ -24,7 +24,6 @@ Copyright_License {
 #include "Device/Driver/LX/Internal.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Internal.hpp"
-#include "NMEA/Checksum.hpp"
 
 #include <cstdio>
 
@@ -45,10 +44,7 @@ bool
 LXDevice::PutMacCready(fixed MacCready)
 {
   char szTmp[32];
-  sprintf(szTmp, "$PFLX2,%1.1f,,,,,,", (double)MacCready);
-  AppendNMEAChecksum(szTmp);
-  strcat(szTmp, "\r\n");
-  port.Write(szTmp);
-
+  sprintf(szTmp, "PFLX2,%1.1f,,,,,,", (double)MacCready);
+  PortWriteNMEA(port, szTmp);
   return true;
 }
