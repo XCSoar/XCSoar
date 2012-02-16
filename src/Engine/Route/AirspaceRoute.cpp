@@ -278,9 +278,12 @@ AirspaceRoute::AddNearbyAirspace(const RouteAirspaceIntersection &inx,
 void
 AirspaceRoute::AddNearby(const RouteLink &e)
 {
-  if (m_inx.airspace == NULL)
-    AddNearbyTerrain(m_inx.point, e);
-  else
+  if (m_inx.airspace == NULL) {
+    // NOTE: m_inx is "mutable" so that const in AddNearbyTerrain is ignored!!
+    // The copy is really needed!
+    RoutePoint ptmp = m_inx.point;
+    AddNearbyTerrain(ptmp, e);
+  } else
     AddNearbyAirspace(m_inx, e);
 }
 
