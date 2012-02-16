@@ -392,6 +392,22 @@ public:
                     PixelScalar src_x, PixelScalar src_y,
                     UPixelScalar src_width, UPixelScalar src_height);
 
+  /**
+   * Stretches a monochrome bitmap (1 bit per pixel), painting the
+   * black pixels in the specified foreground color.  The white pixels
+   * will be either transparent or drawn in the specified background
+   * color, whichever operation is faster on the Canvas.
+   *
+   * @param fg_color draw this color instead of "black"
+   * @param bg_color draw this color instead of "white"
+   */
+  void StretchMono(PixelScalar dest_x, PixelScalar dest_y,
+                   UPixelScalar dest_width, UPixelScalar dest_height,
+                   const Bitmap &src,
+                   PixelScalar src_x, PixelScalar src_y,
+                   UPixelScalar src_width, UPixelScalar src_height,
+                   Color fg_color, Color bg_color);
+
   void copy_or(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);

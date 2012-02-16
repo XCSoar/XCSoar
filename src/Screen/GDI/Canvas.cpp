@@ -361,3 +361,37 @@ Canvas::stretch(const Bitmap &src)
   const PixelSize size = src.GetSize();
   stretch(src, 0, 0, size.cx, size.cy);
 }
+
+void
+Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
+                    UPixelScalar dest_width, UPixelScalar dest_height,
+                    const Bitmap &src,
+                    PixelScalar src_x, PixelScalar src_y,
+                    UPixelScalar src_width, UPixelScalar src_height,
+                    Color fg_color, Color bg_color)
+{
+  assert(IsDefined());
+  assert(src.IsDefined());
+
+#ifndef _WIN32_WCE
+  if (bg_color == COLOR_BLACK && (src_width != dest_width ||
+                                  src_height != dest_height)) {
+    /* workaround for a WINE bug: stretching a mono bitmap ignores the
+       text color; this kludge makes the text color white */
+    SetTextColor(COLOR_BLACK);
+    SetBackgroundColor(COLOR_WHITE);
+    Stretch(dest_x, dest_y, dest_width, dest_height,
+            src, src_x, src_y, src_width, src_height,
+            MERGEPAINT);
+    return;
+  }
+#endif
+
+  /* on GDI, monochrome bitmaps are special: they are painted with the
+     destination HDC's current colors */
+  SetTextColor(fg_color);
+  SetBackgroundTransparent();
+
+  Stretch(dest_x, dest_y, src_width*2, src_height*2,
+          src, src_x, src_y, src_width, src_height);
+}

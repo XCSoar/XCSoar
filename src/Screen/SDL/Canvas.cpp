@@ -561,6 +561,41 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
           surface, 0, 0, surface->w, surface->h);
 }
 
+void
+Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
+                    UPixelScalar dest_width, UPixelScalar dest_height,
+                    const Bitmap &src,
+                    PixelScalar src_x, PixelScalar src_y,
+                    UPixelScalar src_width, UPixelScalar src_height,
+                    Color fg_color, Color bg_color)
+{
+  assert(IsDefined());
+  assert(src.IsDefined());
+
+  SDL_Surface *src_surface = src.GetNative();
+  assert(src_surface->format->palette != NULL &&
+         src_surface->format->palette->ncolors == 2);
+
+  SDL_Surface *zoomed =
+    ::zoomSurface(src_surface, (double)dest_width / (double)src_width,
+                  (double)dest_height / (double)src_height,
+                  SMOOTHING_OFF);
+  if (zoomed == NULL)
+    return;
+
+  assert(zoomed->format->palette != NULL &&
+         zoomed->format->palette->ncolors == 2);
+
+  ::SDL_SetColorKey(zoomed, 0, 0);
+  zoomed->format->palette->colors[0] = text_color;
+  zoomed->format->palette->colors[1] = bg_color;
+
+  copy(dest_x, dest_y, dest_width, dest_height,
+       zoomed, (src_x * dest_width) / src_width,
+       (src_y * dest_height) / src_height);
+  ::SDL_FreeSurface(zoomed);
+}
+
 static bool
 clip_range(PixelScalar &a, UPixelScalar a_size,
            PixelScalar &b, UPixelScalar b_size,

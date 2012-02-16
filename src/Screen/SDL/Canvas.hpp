@@ -460,6 +460,13 @@ public:
     stretch(0, 0, width, height, src);
   }
 
+  void StretchMono(PixelScalar dest_x, PixelScalar dest_y,
+                   UPixelScalar dest_width, UPixelScalar dest_height,
+                   const Bitmap &src,
+                   PixelScalar src_x, PixelScalar src_y,
+                   UPixelScalar src_width, UPixelScalar src_height,
+                   Color fg_color, Color bg_color);
+
   void copy_not(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 SDL_Surface *src, PixelScalar src_x, PixelScalar src_y);

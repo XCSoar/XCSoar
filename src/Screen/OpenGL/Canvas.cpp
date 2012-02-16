@@ -631,6 +631,75 @@ Canvas::StretchNotOr(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
+Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
+                    UPixelScalar dest_width, UPixelScalar dest_height,
+                    const Bitmap &src,
+                    PixelScalar src_x, PixelScalar src_y,
+                    UPixelScalar src_width, UPixelScalar src_height,
+                    Color fg_color, Color bg_color)
+{
+  /* note that this implementation ignores the background color; it is
+     not mandatory, and we can assume that the background is already
+     set; it is only being passed to this function because the GDI
+     implementation will be faster when erasing the background
+     again */
+
+  GLTexture &texture = *src.GetNative();
+  GLEnable scope(GL_TEXTURE_2D);
+  texture.Bind();
+
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+  if (fg_color == COLOR_WHITE) {
+    /* white text requested: use this trivial implementation */
+    GLLogicOp logic_op(GL_OR_INVERTED);
+    texture.Draw(dest_x, dest_y, dest_width, dest_height,
+                 src_x, src_y, src_width, src_height);
+    return;
+  }
+
+  /* apply the mask, pixels will be black then */
+  GLLogicOp logic_op(GL_AND);
+  if (bg_color != COLOR_BLACK)
+    texture.Draw(dest_x, dest_y, dest_width, dest_height,
+                 src_x, src_y, src_width, src_height);
+
+  if (fg_color != COLOR_BLACK) {
+    /* draw */
+
+#ifndef HAVE_GLES
+    if (fg_color != COLOR_WHITE) {
+      /* XXX OpenGL/ES doesn't support GL_OPERAND0_RGB; we can't print
+         colored mono images currently */
+
+      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_TEXTURE);
+      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB,
+                        GL_ONE_MINUS_SRC_COLOR);
+
+      const GLfloat color[] = {
+        GLfloat(fg_color.Red() / 256.),
+        GLfloat(fg_color.Green() / 256.),
+        GLfloat(fg_color.Blue() / 256.),
+        GLfloat(1.0),
+      };
+
+      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB, GL_CONSTANT);
+      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB, GL_SRC_COLOR);
+      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
+      glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, color);
+
+      logic_op.set(GL_OR);
+    } else
+#endif
+      logic_op.set(GL_OR_INVERTED);
+
+    texture.Draw(dest_x, dest_y, dest_width, dest_height,
+                 src_x, src_y, src_width, src_height);
+  }
+}
+
+void
 Canvas::copy_or(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
