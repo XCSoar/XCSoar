@@ -299,42 +299,46 @@ Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
 }
 
 void
-Canvas::stretch(const Canvas &src,
-                PixelScalar src_x, PixelScalar src_y,
-                UPixelScalar src_width, UPixelScalar src_height)
-{
-  stretch(0, 0, width, height, src, src_x, src_y, src_width, src_height);
-}
-
-void
-Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 HBITMAP src,
                 PixelScalar src_x, PixelScalar src_y,
-                UPixelScalar src_width, UPixelScalar src_height)
+                UPixelScalar src_width, UPixelScalar src_height,
+                DWORD dwRop)
 {
   assert(IsDefined());
   assert(src != NULL);
 
   HDC virtual_dc = GetCompatibleDC();
   HBITMAP old = (HBITMAP)::SelectObject(virtual_dc, src);
-  stretch(dest_x, dest_y, dest_width, dest_height,
-          virtual_dc, src_x, src_y, src_width, src_height);
+  Stretch(dest_x, dest_y, dest_width, dest_height,
+          virtual_dc, src_x, src_y, src_width, src_height,
+          dwRop);
   ::SelectObject(virtual_dc, old);
 }
 
 void
-Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src,
                 PixelScalar src_x, PixelScalar src_y,
-                UPixelScalar src_width, UPixelScalar src_height)
+                UPixelScalar src_width, UPixelScalar src_height,
+                DWORD dwRop)
 {
   assert(IsDefined());
   assert(src.IsDefined());
 
-  stretch(dest_x, dest_y, dest_width, dest_height,
-          src.GetNative(), src_x, src_y, src_width, src_height);
+  Stretch(dest_x, dest_y, dest_width, dest_height,
+          src.GetNative(), src_x, src_y, src_width, src_height,
+          dwRop);
+}
+
+void
+Canvas::stretch(const Canvas &src,
+                PixelScalar src_x, PixelScalar src_y,
+                UPixelScalar src_width, UPixelScalar src_height)
+{
+  stretch(0, 0, width, height, src, src_x, src_y, src_width, src_height);
 }
 
 void

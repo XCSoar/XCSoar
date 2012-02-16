@@ -442,6 +442,48 @@ public:
   void stretch_transparent(const Bitmap &src, Color key);
   void invert_stretch_transparent(const Bitmap &src, Color key);
 
+  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
+               HDC src,
+               PixelScalar src_x, PixelScalar src_y,
+               UPixelScalar src_width, UPixelScalar src_height,
+               DWORD dwRop=SRCCOPY) {
+    assert(IsDefined());
+    assert(src != NULL);
+
+    ::StretchBlt(dc, dest_x, dest_y, dest_width, dest_height,
+                 src, src_x, src_y, src_width, src_height,
+                 dwRop);
+  }
+
+  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
+               const Canvas &src,
+               PixelScalar src_x, PixelScalar src_y,
+               UPixelScalar src_width, UPixelScalar src_height,
+               DWORD dwRop=SRCCOPY) {
+    assert(IsDefined());
+    assert(src.IsDefined());
+
+    Stretch(dest_x, dest_y, dest_width, dest_height,
+            (HDC)src, src_x, src_y, src_width, src_height,
+            dwRop);
+  }
+
+  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
+               HBITMAP src,
+               PixelScalar src_x, PixelScalar src_y,
+               UPixelScalar src_width, UPixelScalar src_height,
+               DWORD dwRop=SRCCOPY);
+
+  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
+               const Bitmap &src,
+               PixelScalar src_x, PixelScalar src_y,
+               UPixelScalar src_width, UPixelScalar src_height,
+               DWORD dwRop=SRCCOPY);
+
   void stretch(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                HDC src,
@@ -450,9 +492,9 @@ public:
     assert(IsDefined());
     assert(src != NULL);
 
-    ::StretchBlt(dc, dest_x, dest_y, dest_width, dest_height,
-                 src, src_x, src_y, src_width, src_height,
-                 SRCCOPY);
+    Stretch(dest_x, dest_y, dest_width, dest_height,
+            src, src_x, src_y, src_width, src_height,
+            SRCCOPY);
   }
 
   void stretch(PixelScalar dest_x, PixelScalar dest_y,
@@ -474,13 +516,19 @@ public:
                UPixelScalar dest_width, UPixelScalar dest_height,
                HBITMAP src,
                PixelScalar src_x, PixelScalar src_y,
-               UPixelScalar src_width, UPixelScalar src_height);
+               UPixelScalar src_width, UPixelScalar src_height) {
+    Stretch(dest_x, dest_y, dest_width, dest_height,
+            src, src_x, src_y, src_width, src_height);
+  }
 
   void stretch(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src,
                PixelScalar src_x, PixelScalar src_y,
-               UPixelScalar src_width, UPixelScalar src_height);
+               UPixelScalar src_width, UPixelScalar src_height) {
+    Stretch(dest_x, dest_y, dest_width, dest_height,
+            src, src_x, src_y, src_width, src_height);
+  }
 
   void stretch(const Bitmap &src,
                PixelScalar src_x, PixelScalar src_y,
