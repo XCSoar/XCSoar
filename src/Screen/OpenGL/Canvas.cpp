@@ -607,6 +607,30 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
+Canvas::StretchAnd(PixelScalar dest_x, PixelScalar dest_y,
+                   UPixelScalar dest_width, UPixelScalar dest_height,
+                   const Bitmap &src,
+                   PixelScalar src_x, PixelScalar src_y,
+                   UPixelScalar src_width, UPixelScalar src_height)
+{
+  GLLogicOp logic_op(GL_AND);
+  stretch(dest_x, dest_y, dest_width, dest_height,
+          src, src_x, src_y, src_width, src_height);
+}
+
+void
+Canvas::StretchNotOr(PixelScalar dest_x, PixelScalar dest_y,
+                     UPixelScalar dest_width, UPixelScalar dest_height,
+                     const Bitmap &src,
+                     PixelScalar src_x, PixelScalar src_y,
+                     UPixelScalar src_width, UPixelScalar src_height)
+{
+  GLLogicOp logic_op(GL_OR_INVERTED);
+  stretch(dest_x, dest_y, dest_width, dest_height,
+          src, src_x, src_y, src_width, src_height);
+}
+
+void
 Canvas::copy_or(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y)

@@ -542,6 +542,26 @@ public:
 
   void stretch(const Bitmap &src);
 
+  void StretchAnd(PixelScalar dest_x, PixelScalar dest_y,
+                  UPixelScalar dest_width, UPixelScalar dest_height,
+                  const Bitmap &src,
+                  PixelScalar src_x, PixelScalar src_y,
+                  UPixelScalar src_width, UPixelScalar src_height) {
+    Stretch(dest_x, dest_y, dest_width, dest_height,
+            src, src_x, src_y, src_width, src_height,
+            SRCAND);
+  }
+
+  void StretchNotOr(PixelScalar dest_x, PixelScalar dest_y,
+                    UPixelScalar dest_width, UPixelScalar dest_height,
+                    const Bitmap &src,
+                    PixelScalar src_x, PixelScalar src_y,
+                    UPixelScalar src_width, UPixelScalar src_height) {
+    Stretch(dest_x, dest_y, dest_width, dest_height,
+            src, src_x, src_y, src_width, src_height,
+            MERGEPAINT);
+  }
+
 #ifdef HAVE_ALPHA_BLEND
   void alpha_blend(PixelScalar dest_x, PixelScalar dest_y,
                    UPixelScalar dest_width, UPixelScalar dest_height,

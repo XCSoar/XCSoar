@@ -380,6 +380,18 @@ public:
     stretch(0, 0, width, height, src);
   }
 
+  void StretchAnd(PixelScalar dest_x, PixelScalar dest_y,
+                  UPixelScalar dest_width, UPixelScalar dest_height,
+                  const Bitmap &src,
+                  PixelScalar src_x, PixelScalar src_y,
+                  UPixelScalar src_width, UPixelScalar src_height);
+
+  void StretchNotOr(PixelScalar dest_x, PixelScalar dest_y,
+                    UPixelScalar dest_width, UPixelScalar dest_height,
+                    const Bitmap &src,
+                    PixelScalar src_x, PixelScalar src_y,
+                    UPixelScalar src_width, UPixelScalar src_height);
+
   void copy_or(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
