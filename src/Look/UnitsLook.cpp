@@ -29,18 +29,18 @@ Copyright_License {
 void
 UnitsLook::Initialise()
 {
-  symbols[(unsigned)Unit::KILOMETER].load(IDB_UNIT_KM, 5, 11);
-  symbols[(unsigned)Unit::NAUTICAL_MILES].load(IDB_UNIT_NM, 5, 11);
-  symbols[(unsigned)Unit::STATUTE_MILES].load(IDB_UNIT_SM, 5, 11);
-  symbols[(unsigned)Unit::KILOMETER_PER_HOUR].load(IDB_UNIT_KMH, 10, 11);
-  symbols[(unsigned)Unit::KNOTS].load(IDB_UNIT_KT, 5, 11);
-  symbols[(unsigned)Unit::STATUTE_MILES_PER_HOUR].load(IDB_UNIT_MPH, 10, 11);
-  symbols[(unsigned)Unit::METER_PER_SECOND].load(IDB_UNIT_MS, 5, 11);
-  symbols[(unsigned)Unit::FEET_PER_MINUTE].load(IDB_UNIT_FPM, 5, 11);
-  symbols[(unsigned)Unit::METER].load(IDB_UNIT_M, 5, 11);
-  symbols[(unsigned)Unit::FEET].load(IDB_UNIT_FT, 5, 11);
-  symbols[(unsigned)Unit::FLIGHT_LEVEL].load(IDB_UNIT_FL, 5, 11);
-  symbols[(unsigned)Unit::KELVIN].load(IDB_UNIT_DegK, 5, 11);
-  symbols[(unsigned)Unit::DEGREES_CELCIUS].load(IDB_UNIT_DegC, 5, 11);
-  symbols[(unsigned)Unit::DEGREES_FAHRENHEIT].load(IDB_UNIT_DegF, 5, 11);
+  symbols[(unsigned)Unit::KILOMETER].load(IDB_UNIT_KM);
+  symbols[(unsigned)Unit::NAUTICAL_MILES].load(IDB_UNIT_NM);
+  symbols[(unsigned)Unit::STATUTE_MILES].load(IDB_UNIT_SM);
+  symbols[(unsigned)Unit::KILOMETER_PER_HOUR].load(IDB_UNIT_KMH);
+  symbols[(unsigned)Unit::KNOTS].load(IDB_UNIT_KT);
+  symbols[(unsigned)Unit::STATUTE_MILES_PER_HOUR].load(IDB_UNIT_MPH);
+  symbols[(unsigned)Unit::METER_PER_SECOND].load(IDB_UNIT_MS);
+  symbols[(unsigned)Unit::FEET_PER_MINUTE].load(IDB_UNIT_FPM);
+  symbols[(unsigned)Unit::METER].load(IDB_UNIT_M);
+  symbols[(unsigned)Unit::FEET].load(IDB_UNIT_FT);
+  symbols[(unsigned)Unit::FLIGHT_LEVEL].load(IDB_UNIT_FL);
+  symbols[(unsigned)Unit::KELVIN].load(IDB_UNIT_DegK);
+  symbols[(unsigned)Unit::DEGREES_CELCIUS].load(IDB_UNIT_DegC);
+  symbols[(unsigned)Unit::DEGREES_FAHRENHEIT].load(IDB_UNIT_DegF);
 }

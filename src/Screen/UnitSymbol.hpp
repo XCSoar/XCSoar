@@ -44,10 +44,9 @@ protected:
   PixelSize size;
 
 public:
-  void load(unsigned id, UPixelScalar width, UPixelScalar height) {
-    bitmap.Load(id);
-    size.cx = width;
-    size.cy = height;
+  void load(unsigned id) {
+    bitmap.Load(id, Bitmap::Type::MONO);
+    size = bitmap.GetSize();
   }
 
   void reset() {
@@ -58,9 +57,6 @@ public:
   bool IsDefined() const {
     return bitmap.IsDefined();
   }
-
-  gcc_pure
-  const RasterPoint get_origin(enum kind kind) const;
 
   const PixelSize get_size() const {
     return size;

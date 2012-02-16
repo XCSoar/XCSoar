@@ -27,17 +27,6 @@ Copyright_License {
 
 #include <assert.h>
 
-const RasterPoint
-UnitSymbol::get_origin(enum kind kind) const
-{
-  assert(kind >= 0 && kind < 4);
-
-  RasterPoint origin;
-  origin.x = size.cx * kind;
-  origin.y = 0;
-  return origin;
-}
-
 PixelSize
 UnitSymbol::GetScreenSize() const
 {
@@ -48,9 +37,15 @@ UnitSymbol::GetScreenSize() const
 void 
 UnitSymbol::draw(Canvas &canvas, PixelScalar x, PixelScalar y, kind k) const
 {
-  const RasterPoint BmpPos = get_origin(k);
+  Color text_color = COLOR_BLACK, bg_color = COLOR_WHITE;
+  if (k & INVERSE)
+    std::swap(text_color, bg_color);
+  if (k & GRAY)
+    text_color = COLOR_GRAY;
+
   const PixelSize size = get_size();
-  canvas.scale_copy(x, y, bitmap,
-		    BmpPos.x, BmpPos.y,
-		    size.cx, size.cy);
+  const PixelSize screen_size = GetScreenSize();
+  canvas.StretchMono(x, y, screen_size.cx, screen_size.cy,
+                     bitmap, 0, 0, size.cx, size.cy,
+                     text_color, bg_color);
 }
