@@ -40,6 +40,7 @@ struct DrawInfo_t {
   RasterPoint orgText;
   fixed lastValue;
   TCHAR   lastText[32];
+  Unit last_unit;
 };
 
 class GaugeVario : public BufferWindow
@@ -60,6 +61,7 @@ class GaugeVario : public BufferWindow
   const FullBlackboard &blackboard;
 
   const VarioLook &look;
+  const UnitsLook &units_look;
 
 private:
   const UPixelScalar nlength0, nlength1, nwidth, nline;
@@ -82,7 +84,8 @@ private:
   DrawInfo_t diLabelTop;
   DrawInfo_t diLabelMiddle;
   DrawInfo_t diLabelBottom;
-  const UnitSymbol *unit_symbol;
+
+  Unit unit;
 
   RasterPoint polys[(gmax * 2 + 1) * 3];
   RasterPoint lines[gmax * 2 + 1];

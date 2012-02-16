@@ -45,17 +45,18 @@ using std::max;
 
 GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
                        ContainerWindow &parent, const VarioLook &_look,
-                       const UnitsLook &units_look,
+                       const UnitsLook &_units_look,
                        PixelScalar left, PixelScalar top,
                        UPixelScalar width, UPixelScalar height,
                        const WindowStyle style)
-  :blackboard(_blackboard), look(_look),
+  :blackboard(_blackboard), look(_look), units_look(_units_look),
    nlength0(Layout::Scale(15)),
    nlength1(Layout::Scale(6)),
    nwidth(Layout::Scale(4)),
    nline(Layout::Scale(8)),
    dirty(true), layout_initialised(false), needle_initialised(false),
-   ballast_initialised(false), bugs_initialised(false)
+   ballast_initialised(false), bugs_initialised(false),
+   unit(Unit::UNDEFINED)
 {
   diValueTop.InitDone = false;
   diValueMiddle.InitDone = false;
@@ -65,8 +66,6 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
   diLabelBottom.InitDone = false;
 
   set(parent, left, top, width, height, style);
-
-  unit_symbol = units_look.GetSymbol(Units::current.vertical_speed_unit);
 
   hide();
 }
@@ -345,6 +344,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
 
     diValue->lastValue = fixed(-9999);
     diValue->lastText[0] = '\0';
+    diValue->last_unit = Unit::UNDEFINED;
     diValue->InitDone = true;
   }
 
@@ -407,7 +407,10 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
     }
   }
 
-  if (!is_persistent()) {
+  if (!is_persistent() ||
+      diValue->last_unit != Units::current.vertical_speed_unit) {
+    diValue->last_unit = Units::current.vertical_speed_unit;
+    const UnitSymbol *unit_symbol = units_look.GetSymbol(diValue->last_unit);
     unit_symbol->draw(canvas, x - Layout::Scale(5), diValue->recBkg.top,
                       look.inverse
                       ? UnitSymbol::INVERSE_GRAY
