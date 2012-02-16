@@ -58,7 +58,7 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
 
   if (task_behaviour.auto_mc_mode == TaskBehaviour::AutoMCMode::CLIMBAVERAGE) {
     stats.mc_best = mc_lpf.reset(fallback_mc);
-    mc_lpf_valid = false;
+    mc_lpf_valid = true;
     trigger_auto = false;
     return false;
   }
@@ -89,6 +89,7 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
   } else {
     // reset lpf so will be smooth next time it becomes active
     stats.mc_best = mc_lpf.reset(fallback_mc);
+    mc_lpf_valid = true;
   }
 
   return trigger_auto;
