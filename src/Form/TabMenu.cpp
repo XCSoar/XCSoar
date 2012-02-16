@@ -46,7 +46,7 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
    caption(_caption),
    form(_form)
 {
-  set(_parent, x, 0, _parent.get_width() - x, _parent.get_height(), style);
+  set(_parent, x, y, _width, _height, style);
 
   const PixelRect rc = get_client_rect();
   WindowStyle pager_style;
@@ -54,8 +54,7 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
   pager.set(*this, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
             pager_style);
 
-  tab_display = new TabMenuDisplay(*this, look, pager,
-                                     0, y, _width, _height);
+  tab_display = new TabMenuDisplay(*this, look, pager, rc);
 }
 
 TabMenuControl::~TabMenuControl()
@@ -183,18 +182,6 @@ TabMenuControl::GetMenuButtonHeight() const
 }
 
 UPixelScalar
-TabMenuControl::GetButtonVerticalOffset() const
-{
-  if (!Layout::landscape) {
-    PixelRect rc = get_client_rect();
-    const UPixelScalar spaceUnderButtons = Layout::Scale(80);
-    return (rc.bottom - spaceUnderButtons - GetTabHeight()) / 2;
-  }
-  else
-    return 0;
-}
-
-UPixelScalar
 TabMenuControl::GetMenuButtonWidth() const
 {
   return (tab_display->GetTabWidth() - GetTabLineHeight()) / 2;
@@ -212,7 +199,6 @@ TabMenuControl::GetMainMenuButtonSize(unsigned i) const
   const UPixelScalar finalmargin = Layout::Scale(1);
   const UPixelScalar butHeight = GetMenuButtonHeight();
   rc.top = finalmargin + (margin + butHeight) * i;
-  rc.top += GetButtonVerticalOffset();
   rc.bottom = rc.top + butHeight;
 
   rc.left = 0;
@@ -251,7 +237,6 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page) const
        topMainMenuItemWOffset : tabHeight - SubMenuHeight - offset;
 
   rc.top = subMenuTop + sub_index * itemHeight;
-  rc.top += GetButtonVerticalOffset();
   rc.bottom = rc.top + butHeight;
 
   rc.left = GetMenuButtonWidth() + GetTabLineHeight();
@@ -373,9 +358,7 @@ TabMenuControl::FocusMenuPage()
 // TabMenuDisplay Functions
 TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
                                const DialogLook &_look,
-                               ContainerWindow &parent,
-                               PixelScalar left, PixelScalar top,
-                               UPixelScalar width, UPixelScalar height)
+                               ContainerWindow &parent, PixelRect rc)
   :menu(_theTabBar),
    look(_look),
    dragging(false),
@@ -385,7 +368,7 @@ TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
 {
   WindowStyle mystyle;
   mystyle.TabStop();
-  set(parent, left, top, width, height, mystyle);
+  set(parent, rc, mystyle);
 }
 
 void

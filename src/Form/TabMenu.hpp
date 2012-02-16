@@ -339,11 +339,6 @@ protected:
    */
   UPixelScalar GetMenuButtonWidth() const;
 
-  /**
-   * @return for portrait mode, puts menu near vertical center of screen
-   */
-  UPixelScalar GetButtonVerticalOffset() const;
-
 public:
   void NextPage();
   void PreviousPage();
@@ -385,9 +380,7 @@ public:
 
 public:
   TabMenuDisplay(TabMenuControl &_menu, const DialogLook &look,
-                 ContainerWindow &parent,
-                 PixelScalar left, PixelScalar top,
-                 UPixelScalar width, UPixelScalar height);
+                 ContainerWindow &parent, PixelRect rc);
 
   void SetSelectedIndex(TabMenuControl::MenuTabIndex di);
 

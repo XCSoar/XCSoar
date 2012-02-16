@@ -16,6 +16,6 @@
   <Button Name="cmdSavePolarFile" Caption="Export" X="-60" Y="-90" Width="60" Height="30" Visible="0"/>
   <Button Name="cmdLoadInternalPolar" Caption="List" X="120" Y="-60" Width="120" Height="30" Visible="0"/>
 
-  <TabMenu Name="TabMenu" Caption="Configuration Menu" X="0" Y="0">
+  <TabMenu Name="TabMenu" Caption="Configuration Menu" X="0" Y="0" Height="-92">
   </TabMenu>
 </Form>
