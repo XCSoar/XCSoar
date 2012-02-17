@@ -30,6 +30,7 @@ Copyright_License {
 #include "Look/TaskLook.hpp"
 #include "Units/UserUnitsFormatter.hpp"
 #include "Util/Macros.hpp"
+#include "Screen/Fonts.hpp"
 
 void
 FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
@@ -51,6 +52,14 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   const int y0 = (rc.bottom + rc.top) / 2;
 
+  PixelScalar dy_glidebar = 0;
+  PixelScalar dy_glidebar0 = 0;
+
+  Units::FormatUserAltitude(calculated.task_stats.total.solution_remaining.altitude_difference,
+                            Value, false);
+  canvas.Select(Fonts::map_bold);
+  const PixelSize text_size = canvas.CalcTextSize(Value);
+
   // 480 meters is it's size. Will be divided by 8 to fit screen resolution.
   int altitude_difference = ((int)calculated.task_stats.total.solution_remaining.altitude_difference);
   int altitude_difference0 = ((int)calculated.task_stats.total.solution_mc0.altitude_difference);
@@ -65,8 +74,12 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   int Offset = altitude_difference / 8;
   
   Offset = Layout::Scale(Offset);
-  if (altitude_difference <= 0)
+  if (altitude_difference <= 0) {
     GlideBar[1].y = Layout::Scale(9);
+    dy_glidebar = text_size.cy + 2;
+  } else {
+    dy_glidebar = -1;
+  }
 
   if (altitude_difference0 > 480)
     altitude_difference0 = 480;
@@ -77,11 +90,15 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   int Offset0 = altitude_difference0 / 8;
   
   Offset0 = Layout::Scale(Offset0);
-  if (altitude_difference0 <= 0)
+  if (altitude_difference0 <= 0) {
     GlideBar0[1].y = Layout::Scale(9);
+    dy_glidebar0 = text_size.cy + 2;
+  } else {
+    dy_glidebar0 = -1;
+  }
 
   for (unsigned i = 0; i < 6; i++) {
-    GlideBar[i].y += y0;
+    GlideBar[i].y += y0 + dy_glidebar;
     GlideBar[i].x = Layout::Scale(GlideBar[i].x) + rc.left;
   }
 
@@ -90,7 +107,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   GlideBar[2].y -= Offset;
 
   for (unsigned i = 0; i < 6; i++) {
-    GlideBar0[i].y += y0;
+    GlideBar0[i].y += y0 + dy_glidebar0;
     GlideBar0[i].x = Layout::Scale(GlideBar0[i].x) + rc.left;
   }
 
@@ -176,14 +193,6 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                 Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 - 5));
   }
 
-  Units::FormatUserAltitude(calculated.task_stats.total.solution_remaining.altitude_difference,
-                            Value, false);
-
-  if (altitude_difference >= 0)
-    Offset = GlideBar[2].y + Offset + Layout::Scale(5);
-  else
-    Offset = GlideBar[2].y + Offset - Layout::Scale(15);
-
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundColor(COLOR_WHITE);
 
@@ -191,5 +200,5 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   style.mode = RM_ROUNDED_BLACK;
   style.bold = true;
   style.move_in_view = true;
-  TextInBox(canvas, Value, 0, (int)Offset, style, rc);
+  TextInBox(canvas, Value, 0, y0, style, rc);
 }
