@@ -67,22 +67,22 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   canvas.Select(Fonts::map_bold);
   const PixelSize text_size = canvas.CalcTextSize(Value);
 
-  PixelScalar clipping_arrow_offset = Layout::Scale(6);
-  PixelScalar clipping_arrow0_offset = Layout::Scale(6);
+  PixelScalar clipping_arrow_offset = Layout::Scale(4);
+  PixelScalar clipping_arrow0_offset = Layout::Scale(4);
 
-  // 480 meters is it's size. Will be divided by 8 to fit screen resolution.
+  // 468 meters is it's size. Will be divided by 9 to fit screen resolution.
   int altitude_difference = ((int)calculated.task_stats.total.solution_remaining.altitude_difference);
   int altitude_difference0 = ((int)calculated.task_stats.total.solution_mc0.altitude_difference);
   // TODO feature: should be an angle if in final glide mode
 
-  // cut altitude_difference at +- 480 meters (60 units)
-  if (altitude_difference > 480)
-    altitude_difference = 480;
-  if (altitude_difference < -480)
-    altitude_difference = -480;
+  // cut altitude_difference at +- 468 meters (55 units)
+  if (altitude_difference > 468)
+    altitude_difference = 468;
+  if (altitude_difference < -468)
+    altitude_difference = -468;
 
-  // 60 units is size, 480 meters div by 8 means 60.
-  int Offset = altitude_difference / 8;
+  // 55 units is size, 468 meters div by 9 means 55.
+  int Offset = altitude_difference / 9;
   
   Offset = Layout::Scale(Offset);
   if (altitude_difference <= 0) {
@@ -98,14 +98,14 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     dy_glidebar = -1;
   }
 
-  // cut altitude_difference0 at +- 480 meters (60 units)
-  if (altitude_difference0 > 480)
-    altitude_difference0 = 480;
-  if (altitude_difference0 < -480)
-    altitude_difference0 = -480;
+  // cut altitude_difference0 at +- 468 meters (55 units)
+  if (altitude_difference0 > 468)
+    altitude_difference0 = 468;
+  if (altitude_difference0 < -468)
+    altitude_difference0 = -468;
 
-  // -50 to +60 units is size, therefore div by 8.
-  int Offset0 = altitude_difference0 / 8;
+  // 55 units is size, therefore div by 9.
+  int Offset0 = altitude_difference0 / 9;
   
   Offset0 = Layout::Scale(Offset0);
   if (altitude_difference0 <= 0) {
@@ -173,7 +173,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   canvas.polygon(GlideBar, 6);
 
   // draw clipping arrow
-  if ((altitude_difference <= -480 ) || (altitude_difference >= 480))
+  if ((altitude_difference <= -468 ) || (altitude_difference >= 468))
     canvas.polygon(clipping_arrow, 6);
 
   // draw glide bar at mc 0
@@ -194,7 +194,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
       && final_glide_bar_mc0_enabled) {
     canvas.polygon(GlideBar0, 4);
 
-    if ((altitude_difference0 <= -480 ) || (altitude_difference0 >= 480))
+    if ((altitude_difference0 <= -468 ) || (altitude_difference0 >= 468))
       canvas.polygon(clipping_arrow0, 4);
   }
 

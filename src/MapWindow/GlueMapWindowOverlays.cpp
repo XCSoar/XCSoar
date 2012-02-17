@@ -340,8 +340,8 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
   PixelRect tb_rect;
   tb_rect.left = rc.left;
   tb_rect.right = rc.left+Layout::Scale(20);
-  tb_rect.top = Layout::Scale(4);
-  tb_rect.bottom = tb_rect.top+(rc.bottom-rc.top)/2-Layout::Scale(30);
+  tb_rect.top = Layout::Scale(2);
+  tb_rect.bottom = (rc.bottom-rc.top)/2-Layout::Scale(73);
 
   const ThermalBandRenderer &renderer = thermal_band_renderer;
   if (task != NULL) {
