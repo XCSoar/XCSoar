@@ -679,6 +679,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunTerminal \
 	RunRenderOZ \
 	RunWindArrowRenderer \
+	RunFinalGlideBarRenderer \
 	RunProgressWindow \
 	RunJobDialog \
 	RunAnalysis \
@@ -1737,6 +1738,45 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 RUN_WIND_ARROW_RENDERER_LDADD = $(RESOURCE_BINARY)
 RUN_WIND_ARROW_RENDERER_DEPENDS = ENGINE_CORE FORM SCREEN MATH
 $(eval $(call link-program,RunWindArrowRenderer,RUN_WIND_ARROW_RENDERER))
+
+RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Notify.cpp \
+	$(SRC)/Math/Screen.cpp \
+	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Screen/LabelBlock.cpp \
+	$(SRC)/Screen/TextInBox.cpp \
+	$(SRC)/Look/FinalGlideBarLook.cpp \
+	$(SRC)/Look/TaskLook.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/Settings.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
+	$(SRC)/Units/UserUnitsFormatter.cpp \
+	$(SRC)/Renderer/FinalGlideBarRenderer.cpp \
+	$(SRC)/NMEA/Derived.cpp \
+	$(SRC)/NMEA/VarioInfo.cpp \
+	$(SRC)/NMEA/CirclingInfo.cpp \
+	$(SRC)/NMEA/ClimbHistory.cpp \
+	$(SRC)/NMEA/ThermalBand.cpp \
+	$(SRC)/NMEA/ClimbInfo.cpp \
+	$(SRC)/NMEA/ThermalLocator.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
+	$(SRC)/Engine/Navigation/TraceHistory.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/RunFinalGlideBarRenderer.cpp
+RUN_FINAL_GLIDE_BAR_RENDERER_LDADD = $(RESOURCE_BINARY)
+RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = ENGINE_CORE FORM SCREEN MATH
+$(eval $(call link-program,RunFinalGlideBarRenderer,RUN_FINAL_GLIDE_BAR_RENDERER))
 
 RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Version.cpp \
