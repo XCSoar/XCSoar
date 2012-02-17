@@ -42,6 +42,12 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   RasterPoint GlideBar0[4] = {
       { 0, 0 }, { 9, -9 }, { 9, 0 }, { 0, 0 }
   };
+  RasterPoint clipping_arrow[6] = {
+      { 0, 0 }, { 9, 9 }, { 18, 0 }, { 18, 6 }, { 9, 15 }, { 0, 6 }
+  };
+  RasterPoint clipping_arrow0[4] = {
+      { 0, 0 }, { 9, 9 }, { 9, 15 }, { 0, 6 }
+  };
 
   TCHAR Value[10];
 
@@ -59,6 +65,9 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                             Value, false);
   canvas.Select(Fonts::map_bold);
   const PixelSize text_size = canvas.CalcTextSize(Value);
+
+  PixelScalar clipping_arrow_offset = Layout::Scale(6);
+  PixelScalar clipping_arrow0_offset = Layout::Scale(6);
 
   // 480 meters is it's size. Will be divided by 8 to fit screen resolution.
   int altitude_difference = ((int)calculated.task_stats.total.solution_remaining.altitude_difference);
@@ -80,15 +89,19 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     dy_glidebar = text_size.cy + 2;
   } else {
     GlideBar[1].y = -Layout::Scale(9);
+    clipping_arrow[1].y = -clipping_arrow[1].y;
+    clipping_arrow[3].y = -clipping_arrow[3].y;
+    clipping_arrow[4].y = -clipping_arrow[4].y;
+    clipping_arrow[5].y = -clipping_arrow[5].y;
+    clipping_arrow_offset = -clipping_arrow_offset;
     dy_glidebar = -1;
   }
 
-  // cut altitude_difference0 at -400 meters (50 units) and +480 meters (60 units)
-  // there will always be a big red arrow when altitude_difference is below 480 meters
+  // cut altitude_difference0 at +- 480 meters (60 units)
   if (altitude_difference0 > 480)
     altitude_difference0 = 480;
-  if (altitude_difference0 < -400)
-    altitude_difference0 = -400;
+  if (altitude_difference0 < -480)
+    altitude_difference0 = -480;
 
   // -50 to +60 units is size, therefore div by 8.
   int Offset0 = altitude_difference0 / 8;
@@ -99,6 +112,10 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     dy_glidebar0 = text_size.cy + 2;
   } else {
     GlideBar0[1].y = -Layout::Scale(9);
+    clipping_arrow0[1].y = -clipping_arrow0[1].y;
+    clipping_arrow0[2].y = -clipping_arrow0[2].y;
+    clipping_arrow0[3].y = -clipping_arrow0[3].y;
+    clipping_arrow0_offset = -clipping_arrow0_offset;
     dy_glidebar0 = -1;
   }
 
@@ -125,6 +142,20 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     GlideBar0[3].y = GlideBar[0].y;
   }
 
+  // prepare clipping arrow
+  for (unsigned i = 0; i < 6; i++) {
+    clipping_arrow[i].y = Layout::Scale(clipping_arrow[i].y) + y0 - Offset
+      + clipping_arrow_offset + dy_glidebar;
+    clipping_arrow[i].x = Layout::Scale(clipping_arrow[i].x) + rc.left;
+  }
+
+  // prepare clipping arrow mc0
+  for (unsigned i = 0; i < 4; i++) {
+    clipping_arrow0[i].y = Layout::Scale(clipping_arrow0[i].y) + y0 - Offset0
+      + clipping_arrow0_offset + dy_glidebar0;
+    clipping_arrow0[i].x = Layout::Scale(clipping_arrow0[i].x) + rc.left;
+  }
+
   // draw actual glide bar
   if (altitude_difference <= 0) {
     if (calculated.common_stats.landable_reachable) {
@@ -140,6 +171,10 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   }
   canvas.polygon(GlideBar, 6);
 
+  // draw clipping arrow
+  if ((altitude_difference <= -480 ) || (altitude_difference >= 480))
+    canvas.polygon(clipping_arrow, 6);
+
   // draw glide bar at mc 0
   if (altitude_difference0 <= 0) {
     if (calculated.common_stats.landable_reachable) {
@@ -154,8 +189,12 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     canvas.Select(look.brush_above_mc0);
   }
 
-  if ((altitude_difference != altitude_difference0) || (altitude_difference0 < 0))
+  if ((altitude_difference != altitude_difference0) || (altitude_difference0 < 0)) {
     canvas.polygon(GlideBar0, 4);
+
+    if ((altitude_difference0 <= -480 ) || (altitude_difference0 >= 480))
+      canvas.polygon(clipping_arrow0, 4);
+  }
 
   // draw cross (x) on final glide bar if unreachable at current Mc
   // or above final glide but impeded by obstacle
