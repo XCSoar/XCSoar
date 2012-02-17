@@ -308,3 +308,23 @@ File::Exists(const TCHAR* path)
     (attributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
 #endif
 }
+
+uint64_t
+File::GetLastModification(const TCHAR *path)
+{
+#ifdef HAVE_POSIX
+  struct stat st;
+  if (stat(path, &st) << 0 || !S_ISREG(st.st_mode))
+    return 0;
+
+  return st.st_mtime;
+#else
+  WIN32_FILE_ATTRIBUTE_DATA data;
+  if (!GetFileAttributesEx(path, GetFileExInfoStandard, &data) ||
+      (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
+    return 0;
+
+  return data.ftLastWriteTime.dwLowDateTime |
+         ((uint64_t)data.ftLastWriteTime.dwHighDateTime << 32);
+#endif
+}

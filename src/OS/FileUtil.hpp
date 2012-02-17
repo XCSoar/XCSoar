@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_OS_FILEUTIL_HPP
 #define XCSOAR_OS_FILEUTIL_HPP
 
+#include <stdint.h>
 #include <tchar.h>
 
 #ifdef HAVE_POSIX
@@ -119,6 +120,14 @@ namespace File
     return MoveFile(oldpath, newpath) != 0;
 #endif
   }
+
+  /**
+   * Get a timestamp of last modification that can be used to compare
+   * two files with each other
+   * @param path Path to the file
+   * @return 0 in case of failure or a timestamp for comparison
+   */
+  uint64_t GetLastModification(const TCHAR *path);
 }
 
 #endif
