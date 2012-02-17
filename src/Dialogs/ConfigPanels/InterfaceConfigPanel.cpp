@@ -27,7 +27,6 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "Form/Form.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "DataField/FileReader.hpp"
 #include "DataField/Enum.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Util/StringUtil.hpp"
@@ -35,6 +34,7 @@ Copyright_License {
 #include "Language/LanguageGlue.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
+#include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 #include "Protection.hpp"
 #include "ConfigPanel.hpp"
@@ -96,6 +96,26 @@ InterfaceConfigPanel::Hide()
   RowFormWidget::Hide();
 }
 
+#ifndef HAVE_NATIVE_GETTEXT
+
+class LanguageFileVisitor: public File::Visitor
+{
+private:
+  DataFieldEnum &df;
+
+public:
+  LanguageFileVisitor(DataFieldEnum &_df): df(_df) {}
+
+  void
+  Visit(const TCHAR *path, const TCHAR *filename)
+  {
+    if (filename != NULL && !df.Exists(filename))
+      df.addEnumText(filename);
+  }
+};
+
+#endif
+
 void
 InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
@@ -136,17 +156,8 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
       df.addEnumText(l->resource);
 #endif
 
-    DataFieldFileReader files(NULL);
-    files.ScanDirectoryTop(_T("*.mo"));
-    for (unsigned i = 0; i < files.size(); ++i) {
-      const TCHAR *path = files.GetItem(i);
-      if (path == NULL)
-        continue;
-
-      path = BaseName(path);
-      if (path != NULL && !df.Exists(path))
-        df.addEnumText(path);
-    }
+    LanguageFileVisitor lfv(df);
+    VisitDataFiles(_T("*.mo"), lfv);
 
     df.Sort(2);
 
