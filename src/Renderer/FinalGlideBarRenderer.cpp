@@ -65,7 +65,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   int Offset = altitude_difference / 8;
   
   Offset = Layout::Scale(Offset);
-  if (altitude_difference < 0)
+  if (altitude_difference <= 0)
     GlideBar[1].y = Layout::Scale(9);
 
   if (altitude_difference0 > 480)
@@ -77,7 +77,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   int Offset0 = altitude_difference0 / 8;
   
   Offset0 = Layout::Scale(Offset0);
-  if (altitude_difference0 < 0)
+  if (altitude_difference0 <= 0)
     GlideBar0[1].y = Layout::Scale(9);
 
   for (unsigned i = 0; i < 6; i++) {
@@ -181,8 +181,6 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   if (altitude_difference >= 0)
     Offset = GlideBar[2].y + Offset + Layout::Scale(5);
-  else if (altitude_difference0 > 0)
-    Offset = GlideBar0[1].y - Layout::Scale(15);
   else
     Offset = GlideBar[2].y + Offset - Layout::Scale(15);
 
