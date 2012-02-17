@@ -38,6 +38,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "LocalPath.hpp"
 #include "OS/PathName.hpp"
+#include "OS/FileUtil.hpp"
 #include "Compiler.h"
 
 #include <windef.h> /* for MAX_PATH */
@@ -115,7 +116,19 @@ dlgStartupShowModal()
     return true;
   }
 
-  dfe->Set(0);
+  unsigned best_index = 0;
+  uint64_t best_timestamp = 0;
+  unsigned length = dfe->size();
+
+  for (unsigned i = 0; i < length; ++i) {
+    const TCHAR *path = dfe->GetItem(i);
+    uint64_t timestamp = File::GetLastModification(path);
+    if (timestamp > best_timestamp) {
+      best_timestamp = timestamp;
+      best_index = i;
+    }
+  }
+  dfe->Set(best_index);
   wp->RefreshDisplay();
 
   if (wf->ShowModal() != mrOK) {
