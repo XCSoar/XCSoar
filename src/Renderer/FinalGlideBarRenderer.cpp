@@ -200,5 +200,11 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   style.mode = RM_ROUNDED_BLACK;
   style.bold = true;
   style.move_in_view = true;
-  TextInBox(canvas, Value, 0, y0, style, rc);
+
+  if (text_size.cx < Layout::Scale(18)) {
+    style.align = A_RIGHT;
+    TextInBox(canvas, Value, Layout::Scale(18), y0, style, rc);
+  } else
+    TextInBox(canvas, Value, 0, y0, style, rc);
+
 }
