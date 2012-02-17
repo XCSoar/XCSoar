@@ -107,8 +107,6 @@ dlgStartupShowModal()
 
   dfe->SetNotNullable();
   dfe->ScanDirectoryTop(_T("*.prf"));
-  dfe->Set(1);
-  wp->RefreshDisplay();
 
   if (dfe->GetNumFiles() <= 1) {
     SelectProfile(dfe->GetPathFile());
@@ -117,6 +115,9 @@ dlgStartupShowModal()
     delete logo;
     return true;
   }
+
+  dfe->Set(1);
+  wp->RefreshDisplay();
 
   if (wf->ShowModal() != mrOK) {
     delete wf;
