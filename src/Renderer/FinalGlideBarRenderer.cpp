@@ -39,8 +39,8 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   RasterPoint GlideBar[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
   };
-  RasterPoint GlideBar0[6] = {
-      { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
+  RasterPoint GlideBar0[4] = {
+      { 0, 0 }, { 9, -9 }, { 9, 0 }, { 0, 0 }
   };
 
   TCHAR Value[10];
@@ -65,6 +65,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   int altitude_difference0 = ((int)calculated.task_stats.total.solution_mc0.altitude_difference);
   // TODO feature: should be an angle if in final glide mode
 
+  // cut altitude_difference at +- 480 meters (60 units)
   if (altitude_difference > 480)
     altitude_difference = 480;
   if (altitude_difference < -480)
@@ -78,15 +79,18 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     GlideBar[1].y = Layout::Scale(9);
     dy_glidebar = text_size.cy + 2;
   } else {
+    GlideBar[1].y = -Layout::Scale(9);
     dy_glidebar = -1;
   }
 
+  // cut altitude_difference0 at -400 meters (50 units) and +480 meters (60 units)
+  // there will always be a big red arrow when altitude_difference is below 480 meters
   if (altitude_difference0 > 480)
     altitude_difference0 = 480;
-  if (altitude_difference0 < -480)
-    altitude_difference0 = -480;
+  if (altitude_difference0 < -400)
+    altitude_difference0 = -400;
 
-  // 60 units is size, 480 meters div by 8 means 60.
+  // -50 to +60 units is size, therefore div by 8.
   int Offset0 = altitude_difference0 / 8;
   
   Offset0 = Layout::Scale(Offset0);
@@ -94,6 +98,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     GlideBar0[1].y = Layout::Scale(9);
     dy_glidebar0 = text_size.cy + 2;
   } else {
+    GlideBar0[1].y = -Layout::Scale(9);
     dy_glidebar0 = -1;
   }
 
@@ -106,42 +111,18 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   GlideBar[1].y -= Offset;
   GlideBar[2].y -= Offset;
 
-  for (unsigned i = 0; i < 6; i++) {
+  for (unsigned i = 0; i < 4; i++) {
     GlideBar0[i].y += y0 + dy_glidebar0;
     GlideBar0[i].x = Layout::Scale(GlideBar0[i].x) + rc.left;
   }
 
   GlideBar0[0].y -= Offset0;
   GlideBar0[1].y -= Offset0;
-  GlideBar0[2].y -= Offset0;
 
-  if ((altitude_difference < 0) && (altitude_difference0 < 0)) {
-    // both below
-    if (altitude_difference0 != altitude_difference) {
-      PixelScalar dy = (GlideBar0[0].y - GlideBar[0].y);
-      // keep some significant size of solid arrow.
-      dy = max(Layout::Scale(6), dy);
-
-      GlideBar[3].y = GlideBar0[0].y - dy;
-      GlideBar[4].y = GlideBar0[1].y - dy;
-      GlideBar[5].y = GlideBar0[2].y - dy;
-
-      GlideBar0[0].y = GlideBar[3].y;
-      GlideBar0[1].y = GlideBar[4].y;
-      GlideBar0[2].y = GlideBar[5].y;
-    } else {
-      // don't draw hollow arrow if altitude_difference equals altitude_difference0
-      altitude_difference0 = 0;
-    }
-  } else if ((altitude_difference > 0) && (altitude_difference0 > 0)) {
-    // both above
+  if ((altitude_difference0 >= altitude_difference) && (altitude_difference > 0)) {
+    // both above and mc0 arrow larger than mc arrow
+    GlideBar0[2].y = GlideBar[1].y;    // both below
     GlideBar0[3].y = GlideBar[0].y;
-    GlideBar0[4].y = GlideBar[1].y;
-    GlideBar0[5].y = GlideBar[2].y;
-
-    // don't draw hollow arrow Offset0 - Offset is small
-    if (abs(Offset0 - Offset) < Layout::Scale(4))
-      altitude_difference = altitude_difference0;
   }
 
   // draw actual glide bar
@@ -173,8 +154,8 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     canvas.Select(look.brush_above_mc0);
   }
 
-  if (altitude_difference != altitude_difference0)
-    canvas.polygon(GlideBar0, 6);
+  if ((altitude_difference != altitude_difference0) || (altitude_difference0 < 0))
+    canvas.polygon(GlideBar0, 4);
 
   // draw cross (x) on final glide bar if unreachable at current Mc
   // or above final glide but impeded by obstacle
