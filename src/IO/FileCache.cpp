@@ -56,7 +56,7 @@ struct FileInfo {
 
 gcc_pure
 static inline bool
-GetRegularFileInfo(const TCHAR *path, struct FileInfo *info)
+GetRegularFileInfo(const TCHAR *path, FileInfo &info)
 {
   TCHAR buffer[MAX_PATH];
   if (!File::Exists(path))
@@ -69,8 +69,8 @@ GetRegularFileInfo(const TCHAR *path, struct FileInfo *info)
   if (stat(path, &st) << 0 || !S_ISREG(st.st_mode))
     return false;
 
-  info->mtime = st.st_mtime;
-  info->size = st.st_size;
+  info.mtime = st.st_mtime;
+  info.size = st.st_size;
   return true;
 #else
   WIN32_FILE_ATTRIBUTE_DATA data;
@@ -78,9 +78,9 @@ GetRegularFileInfo(const TCHAR *path, struct FileInfo *info)
       (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
     return false;
 
-  info->mtime = data.ftLastWriteTime.dwLowDateTime |
+  info.mtime = data.ftLastWriteTime.dwLowDateTime |
     ((uint64_t)data.ftLastWriteTime.dwHighDateTime << 32);
-  info->size = data.nFileSizeLow |
+  info.size = data.nFileSizeLow |
     ((uint64_t)data.nFileSizeHigh << 32);
   return true;
 #endif
@@ -118,15 +118,15 @@ FileCache::Flush(const TCHAR *name)
 FILE *
 FileCache::Load(const TCHAR *name, const TCHAR *original_path)
 {
-  struct FileInfo original_info;
-  if (!GetRegularFileInfo(original_path, &original_info))
+  FileInfo original_info;
+  if (!GetRegularFileInfo(original_path, original_info))
     return NULL;
 
   TCHAR path[PathBufferSize(name)];
   MakeCachePath(path, name);
 
-  struct FileInfo cached_info;
-  if (!GetRegularFileInfo(path, &cached_info))
+  FileInfo cached_info;
+  if (!GetRegularFileInfo(path, cached_info))
     return NULL;
 #ifndef _WIN32_WCE
   /*
@@ -159,8 +159,8 @@ FileCache::Load(const TCHAR *name, const TCHAR *original_path)
 FILE *
 FileCache::Save(const TCHAR *name, const TCHAR *original_path)
 {
-  struct FileInfo original_info;
-  if (!GetRegularFileInfo(original_path, &original_info))
+  FileInfo original_info;
+  if (!GetRegularFileInfo(original_path, original_info))
     return NULL;
 
   Directory::Create(cache_path);
