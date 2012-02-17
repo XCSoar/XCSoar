@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/ProfileMap.hpp"
-#include "Math/fixed.hpp"
 
 #include <stddef.h>
 #include <tchar.h>
