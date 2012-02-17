@@ -78,13 +78,13 @@ public:
   Visit(const TCHAR* path, const TCHAR* filename)
   {
     if (!IsInternalFile(filename))
-      datafield.addFile(filename, path);
+      datafield.AddFile(filename, path);
   }
 };
 
 DataFieldFileReader::Item::~Item()
 {
-  free(mTextPathFile);
+  free(path);
 }
 
 DataFieldFileReader::DataFieldFileReader(DataAccessCallback_t OnDataAccess)
@@ -158,7 +158,7 @@ DataFieldFileReader::Lookup(const TCHAR *Text)
   // Iterate through the filelist
   for (unsigned i = 1; i < files.size(); i++) {
     // If Text == pathfile
-    if (_tcscmp(Text, files[i].mTextPathFile) == 0) {
+    if (_tcscmp(Text, files[i].path) == 0) {
       // -> set selection to current element
       mValue = i;
     }
@@ -181,13 +181,13 @@ DataFieldFileReader::GetPathFile(void) const
 
   const unsigned first = nullable;
   if (mValue >= first && mValue < files.size())
-    return files[mValue].mTextPathFile;
+    return files[mValue].path;
 
   return _T("");
 }
 
 void
-DataFieldFileReader::addFile(const TCHAR *Text, const TCHAR *PText)
+DataFieldFileReader::AddFile(const TCHAR *filename, const TCHAR *path)
 {
   assert(loaded);
 
@@ -198,10 +198,10 @@ DataFieldFileReader::addFile(const TCHAR *Text, const TCHAR *PText)
     return;
 
   Item &item = files.append();
-  item.mTextPathFile = _tcsdup(PText);
-  item.mTextFile = BaseName(item.mTextPathFile);
-  if (item.mTextFile == NULL)
-    item.mTextFile = item.mTextPathFile;
+  item.path = _tcsdup(path);
+  item.filename = BaseName(item.path);
+  if (item.filename == NULL)
+    item.filename = item.path;
 }
 
 const TCHAR *
@@ -211,7 +211,7 @@ DataFieldFileReader::GetAsString(void) const
     return postponed_value;
 
   if (mValue < files.size())
-    return files[mValue].mTextPathFile;
+    return files[mValue].path;
   else
     return NULL;
 }
@@ -229,7 +229,7 @@ DataFieldFileReader::GetAsDisplayString() const
   }
 
   if (mValue < files.size())
-    return files[mValue].mTextFile;
+    return files[mValue].filename;
   else
     return NULL;
 }
@@ -272,8 +272,8 @@ static int _cdecl
 DataFieldFileReaderCompare(const void *elem1, const void *elem2)
 {
   // Compare by filename
-  return _tcscmp(((const DataFieldFileReader::Item *)elem1)->mTextFile,
-                 ((const DataFieldFileReader::Item *)elem2)->mTextFile);
+  return _tcscmp(((const DataFieldFileReader::Item *)elem1)->filename,
+                 ((const DataFieldFileReader::Item *)elem2)->filename);
 }
 
 void
@@ -305,7 +305,7 @@ DataFieldFileReader::CreateComboList() const
   TCHAR buffer[MAX_PATH];
 
   for (unsigned i = 0; i < files.size(); i++) {
-    const TCHAR *path = files[i].mTextFile;
+    const TCHAR *path = files[i].filename;
     if (path == NULL)
       path = _T("");
 
@@ -314,7 +314,7 @@ DataFieldFileReader::CreateComboList() const
 
     bool found = false;
     for (unsigned j = 1; j < files.size(); j++) {
-      if (j != i && _tcscmp(path, files[j].mTextFile) == 0) {
+      if (j != i && _tcscmp(path, files[j].filename) == 0) {
         found = true;
         break;
       }
@@ -325,7 +325,7 @@ DataFieldFileReader::CreateComboList() const
          difference */
       _tcscpy(buffer, path);
       _tcscat(buffer, _T(" ("));
-      _tcscat(buffer, files[i].mTextPathFile);
+      _tcscat(buffer, files[i].path);
       _tcscat(buffer, _T(")"));
       path = buffer;
     }
@@ -348,11 +348,11 @@ DataFieldFileReader::size() const
 }
 
 const TCHAR *
-DataFieldFileReader::getItem(unsigned index) const
+DataFieldFileReader::GetItem(unsigned index) const
 {
   EnsureLoadedDeconst();
 
-  return files[index].mTextPathFile;
+  return files[index].path;
 }
 
 void

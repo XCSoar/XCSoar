@@ -139,7 +139,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     DataFieldFileReader files(NULL);
     files.ScanDirectoryTop(_T("*.mo"));
     for (unsigned i = 0; i < files.size(); ++i) {
-      const TCHAR *path = files.getItem(i);
+      const TCHAR *path = files.GetItem(i);
       if (path == NULL)
         continue;
 

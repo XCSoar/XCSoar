@@ -42,11 +42,11 @@ public:
   /** FileList item */
   struct Item : private NonCopyable {
     /** Filename */
-    const TCHAR *mTextFile;
+    const TCHAR *filename;
     /** Path including Filename */
-    TCHAR *mTextPathFile;
+    TCHAR *path;
 
-    Item():mTextFile(NULL), mTextPathFile(NULL) {}
+    Item():filename(NULL), path(NULL) {}
     ~Item();
   };
 
@@ -113,7 +113,7 @@ public:
    * @param fname The filename
    * @param fpname The filepath
    */
-  void addFile(const TCHAR *fname, const TCHAR *fpname);
+  void AddFile(const TCHAR *fname, const TCHAR *fpname);
 
   /**
    * Returns the number of files in the list
@@ -179,7 +179,7 @@ public:
   unsigned size() const;
 
   gcc_pure
-  const TCHAR *getItem(unsigned index) const;
+  const TCHAR *GetItem(unsigned index) const;
 
 protected:
   void EnsureLoaded();
