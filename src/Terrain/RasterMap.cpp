@@ -38,7 +38,7 @@ RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
   bool cache_loaded = false;
   if (cache != NULL) {
     /* load the cache file */
-    FILE *file = cache->load(_T("terrain"), _path);
+    FILE *file = cache->Load(_T("terrain"), _path);
     if (file != NULL) {
       cache_loaded = raster_tile_cache.LoadCache(file);
       fclose(file);
@@ -51,12 +51,12 @@ RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
 
     if (cache != NULL) {
       /* save the cache file */
-      FILE *file = cache->save(_T("terrain"), _path);
+      FILE *file = cache->Save(_T("terrain"), _path);
       if (file != NULL) {
         if (raster_tile_cache.SaveCache(file))
-          cache->commit(_T("terrain"), file);
+          cache->Commit(_T("terrain"), file);
         else
-          cache->cancel(_T("terrain"), file);
+          cache->Cancel(_T("terrain"), file);
       }
     }
   }

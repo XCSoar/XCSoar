@@ -36,16 +36,16 @@ public:
   ~FileCache();
 
 protected:
-  size_t path_buffer_size(const TCHAR *name) const;
-  const TCHAR *make_cache_path(TCHAR *buffer, const TCHAR *name) const;
+  size_t PathBufferSize(const TCHAR *name) const;
+  const TCHAR *MakeCachePath(TCHAR *buffer, const TCHAR *name) const;
 
 public:
-  void flush(const TCHAR *name);
-  FILE *load(const TCHAR *name, const TCHAR *original_path);
+  void Flush(const TCHAR *name);
+  FILE *Load(const TCHAR *name, const TCHAR *original_path);
 
-  FILE *save(const TCHAR *name, const TCHAR *original_path);
-  bool commit(const TCHAR *name, FILE *file);
-  void cancel(const TCHAR *name, FILE *file);
+  FILE *Save(const TCHAR *name, const TCHAR *original_path);
+  bool Commit(const TCHAR *name, FILE *file);
+  void Cancel(const TCHAR *name, FILE *file);
 };
 
 #endif

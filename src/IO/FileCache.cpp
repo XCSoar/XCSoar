@@ -39,24 +39,24 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-static const unsigned file_cache_magic = 0xab352f8a;
+static const unsigned FILE_CACHE_MAGIC = 0xab352f8a;
 
-struct file_info {
+struct FileInfo {
   uint64_t mtime;
   uint64_t size;
 
-  bool operator==(const file_info &other) const {
+  bool operator==(const FileInfo &other) const {
     return mtime == other.mtime && size == other.size;
   }
 
-  bool operator!=(const file_info &other) const {
+  bool operator!=(const FileInfo &other) const {
     return !(*this == other);
   }
 };
 
 gcc_pure
 static inline bool
-get_regular_file_info(const TCHAR *path, struct file_info *info)
+GetRegularFileInfo(const TCHAR *path, struct FileInfo *info)
 {
   TCHAR buffer[MAX_PATH];
   if (!File::Exists(path))
@@ -94,13 +94,13 @@ FileCache::~FileCache() {
 }
 
 inline size_t
-FileCache::path_buffer_size(const TCHAR *name) const
+FileCache::PathBufferSize(const TCHAR *name) const
 {
   return cache_path_length + _tcslen(name) + 2;
 }
 
 const TCHAR *
-FileCache::make_cache_path(TCHAR *buffer, const TCHAR *name) const
+FileCache::MakeCachePath(TCHAR *buffer, const TCHAR *name) const
 {
   _tcscpy(buffer, cache_path);
   buffer[cache_path_length] = _T(DIR_SEPARATOR);
@@ -109,24 +109,24 @@ FileCache::make_cache_path(TCHAR *buffer, const TCHAR *name) const
 }
 
 void
-FileCache::flush(const TCHAR *name)
+FileCache::Flush(const TCHAR *name)
 {
-  TCHAR buffer[path_buffer_size(name)];
-  File::Delete(make_cache_path(buffer, name));
+  TCHAR buffer[PathBufferSize(name)];
+  File::Delete(MakeCachePath(buffer, name));
 }
 
 FILE *
-FileCache::load(const TCHAR *name, const TCHAR *original_path)
+FileCache::Load(const TCHAR *name, const TCHAR *original_path)
 {
-  struct file_info original_info;
-  if (!get_regular_file_info(original_path, &original_info))
+  struct FileInfo original_info;
+  if (!GetRegularFileInfo(original_path, &original_info))
     return NULL;
 
-  TCHAR path[path_buffer_size(name)];
-  make_cache_path(path, name);
+  TCHAR path[PathBufferSize(name)];
+  MakeCachePath(path, name);
 
-  struct file_info cached_info;
-  if (!get_regular_file_info(path, &cached_info))
+  struct FileInfo cached_info;
+  if (!GetRegularFileInfo(path, &cached_info))
     return NULL;
 #ifndef _WIN32_WCE
   if (original_info.mtime > cached_info.mtime) {
@@ -139,9 +139,9 @@ FileCache::load(const TCHAR *name, const TCHAR *original_path)
     return NULL;
 
   unsigned magic;
-  struct file_info old_info;
+  struct FileInfo old_info;
   if (fread(&magic, sizeof(magic), 1, file) != 1 ||
-      magic != file_cache_magic ||
+      magic != FILE_CACHE_MAGIC ||
       fread(&old_info, sizeof(old_info), 1, file) != 1 ||
       old_info != original_info) {
     fclose(file);
@@ -153,23 +153,23 @@ FileCache::load(const TCHAR *name, const TCHAR *original_path)
 }
 
 FILE *
-FileCache::save(const TCHAR *name, const TCHAR *original_path)
+FileCache::Save(const TCHAR *name, const TCHAR *original_path)
 {
-  struct file_info original_info;
-  if (!get_regular_file_info(original_path, &original_info))
+  struct FileInfo original_info;
+  if (!GetRegularFileInfo(original_path, &original_info))
     return NULL;
 
   Directory::Create(cache_path);
 
-  TCHAR path[path_buffer_size(name)];
-  make_cache_path(path, name);
+  TCHAR path[PathBufferSize(name)];
+  MakeCachePath(path, name);
 
   File::Delete(path);
   FILE *file = _tfopen(path, _T("wb"));
   if (file == NULL)
     return NULL;
 
-  if (fwrite(&file_cache_magic, sizeof(file_cache_magic), 1, file) != 1 ||
+  if (fwrite(&FILE_CACHE_MAGIC, sizeof(FILE_CACHE_MAGIC), 1, file) != 1 ||
       fwrite(&original_info, sizeof(original_info), 1, file) != 1) {
     fclose(file);
     File::Delete(path);
@@ -180,11 +180,11 @@ FileCache::save(const TCHAR *name, const TCHAR *original_path)
 }
 
 bool
-FileCache::commit(const TCHAR *name, FILE *file)
+FileCache::Commit(const TCHAR *name, FILE *file)
 {
   if (fclose(file) != 0) {
-    TCHAR path[path_buffer_size(name)];
-    File::Delete(make_cache_path(path, name));
+    TCHAR path[PathBufferSize(name)];
+    File::Delete(MakeCachePath(path, name));
     return false;
   }
 
@@ -192,10 +192,10 @@ FileCache::commit(const TCHAR *name, FILE *file)
 }
 
 void
-FileCache::cancel(const TCHAR *name, FILE *file)
+FileCache::Cancel(const TCHAR *name, FILE *file)
 {
   fclose(file);
 
-  TCHAR path[path_buffer_size(name)];
-  File::Delete(make_cache_path(path, name));
+  TCHAR path[PathBufferSize(name)];
+  File::Delete(MakeCachePath(path, name));
 }
