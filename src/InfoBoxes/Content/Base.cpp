@@ -38,19 +38,7 @@ void FillInfoBoxWaypointName(InfoBoxData &data, const Waypoint* way_point,
   if (!way_point) {
     tmp[0] = '\0';
   } else {
-    switch (XCSoarInterface::GetMapSettings().waypoint.display_text_type) {
-    case WaypointRendererSettings::DisplayTextType::FIRST_THREE:
-      CopyString(tmp, way_point->name.c_str(), 4);
-      break;
-
-    case WaypointRendererSettings::DisplayTextType::FIRST_FIVE:
-      CopyString(tmp, way_point->name.c_str(), 6);
-      break;
-
-    default:
-      CopyString(tmp, way_point->name.c_str(), sizeof(tmp) / sizeof(TCHAR));
-      break;
-    }
+    CopyString(tmp, way_point->name.c_str(), sizeof(tmp) / sizeof(TCHAR));
   }
   if (title) {
     data.SetTitle(tmp);
