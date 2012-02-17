@@ -145,6 +145,16 @@ InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentNextDistance::Update(InfoBoxData &data)
 {
+  const Waypoint* way_point = protected_task_manager != NULL
+    ? protected_task_manager->GetActiveWaypoint()
+    : NULL;
+
+  // Set title
+  if (!way_point)
+    data.SetTitle(_("WP Dist"));
+  else
+    SetTitleFromWaypointName(data, way_point);
+
   // use proper non-terminal next task stats
 
   const NMEAInfo &basic = CommonInterface::Basic();
