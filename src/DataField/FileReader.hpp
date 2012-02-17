@@ -57,11 +57,6 @@ private:
   StaticArray<Item, 100> files;
 
   /**
-   * Does the list contain the "null" item?
-   */
-  bool nullable;
-
-  /**
    * Has the file list already been loaded?  This class tries to
    * postpone disk access for as long as possible, to reduce UI
    * latency.
@@ -91,13 +86,6 @@ public:
    */
   DataFieldFileReader(DataAccessCallback_t OnDataAccess);
 
-  /**
-   * Removes the "empty" item from the list, and makes this object not
-   * nullable.  This must not be called after the real file list was
-   * loaded.
-   */
-  void SetNotNullable();
-
   /** Move the selection up (+1) */
   void Inc(void);
   /** Move the selection down (-1) */
@@ -114,6 +102,11 @@ public:
    * @param fpname The filepath
    */
   void AddFile(const TCHAR *fname, const TCHAR *fpname);
+
+  /**
+   * Adds an empty row to the filelist
+   */
+  void AddNull();
 
   /**
    * Returns the number of files in the list

@@ -505,8 +505,14 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
   if (_tcsicmp(data_type, _T("enum")) == 0)
     return new DataFieldEnum(callback);
 
-  if (_tcsicmp(data_type, _T("filereader")) == 0)
-    return new DataFieldFileReader(callback);
+  if (_tcsicmp(data_type, _T("filereader")) == 0) {
+    DataFieldFileReader *df = new DataFieldFileReader(callback);
+
+    if (StringToIntDflt(node.getAttribute(_T("Nullable")), true))
+      df->AddNull();
+
+    return df;
+  }
 
   if (_tcsicmp(data_type, _T("boolean")) == 0)
     return new DataFieldBoolean(false, _("On"), _("Off"), callback);

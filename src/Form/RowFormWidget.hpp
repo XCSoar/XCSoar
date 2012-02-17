@@ -301,7 +301,8 @@ public:
   WndProperty *AddSpacer(void);
 
   WndProperty *AddFileReader(const TCHAR *label, const TCHAR *help,
-                             const TCHAR *registry_key, const TCHAR *filters);
+                             const TCHAR *registry_key, const TCHAR *filters,
+                             bool nullable = true);
 
   /**
    * Add a read-only multi-line control.  You can use

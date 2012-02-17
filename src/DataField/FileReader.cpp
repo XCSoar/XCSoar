@@ -91,24 +91,8 @@ DataFieldFileReader::DataFieldFileReader(DataAccessCallback_t OnDataAccess)
   :DataField(Type::FILE, true, OnDataAccess),
    // Set selection to zero
    mValue(0),
-   nullable(true),
    loaded(false), postponed_sort(false),
-   postponed_value(_T(""))
-{
-  // Fill first entry -> always exists and is blank
-  files.append();
-}
-
-void
-DataFieldFileReader::SetNotNullable()
-{
-  assert(nullable);
-  assert(!loaded);
-  assert(files.size() == 1);
-
-  nullable = false;
-  files.clear();
-}
+   postponed_value(_T("")) {}
 
 int
 DataFieldFileReader::GetAsInteger(void) const
@@ -179,11 +163,11 @@ DataFieldFileReader::GetPathFile(void) const
   if (!loaded)
     return postponed_value;
 
-  const unsigned first = nullable;
-  if (mValue >= first && mValue < files.size())
-    return files[mValue].path;
+  if (mValue >= files.size())
+    return _T("");
 
-  return _T("");
+  const TCHAR *path = files[mValue].path;
+  return path != NULL ? path : _T("");
 }
 
 void
@@ -202,6 +186,14 @@ DataFieldFileReader::AddFile(const TCHAR *filename, const TCHAR *path)
   item.filename = BaseName(item.path);
   if (item.filename == NULL)
     item.filename = item.path;
+}
+
+void
+DataFieldFileReader::AddNull()
+{
+  assert(!files.full());
+
+  files.append();
 }
 
 const TCHAR *
@@ -271,6 +263,12 @@ DataFieldFileReader::Dec(void)
 static int _cdecl
 DataFieldFileReaderCompare(const void *elem1, const void *elem2)
 {
+  if (((const DataFieldFileReader::Item *)elem1)->filename == NULL)
+    return -1;
+
+  if (((const DataFieldFileReader::Item *)elem2)->filename == NULL)
+    return 1;
+
   // Compare by filename
   return _tcscmp(((const DataFieldFileReader::Item *)elem1)->filename,
                  ((const DataFieldFileReader::Item *)elem2)->filename);
@@ -285,9 +283,7 @@ DataFieldFileReader::Sort(void)
   }
 
   // Sort the filelist (except for the first (empty) element)
-  const unsigned skip = nullable;
-  qsort(files.begin() + skip, files.size() - skip, sizeof(Item),
-        DataFieldFileReaderCompare);
+  qsort(files.begin(), files.size(), sizeof(Item), DataFieldFileReaderCompare);
   /* by the way, we're not using std::sort() here, because this
      function would require the Item class to be copyable */
 }

@@ -105,7 +105,6 @@ dlgStartupShowModal()
   DataFieldFileReader* dfe = (DataFieldFileReader*)wp->GetDataField();
   assert(dfe != NULL);
 
-  dfe->SetNotNullable();
   dfe->ScanDirectoryTop(_T("*.prf"));
 
   if (dfe->GetNumFiles() <= 1) {
@@ -116,7 +115,7 @@ dlgStartupShowModal()
     return true;
   }
 
-  dfe->Set(1);
+  dfe->Set(0);
   wp->RefreshDisplay();
 
   if (wf->ShowModal() != mrOK) {

@@ -363,11 +363,15 @@ RowFormWidget::AddSpacer(void)
 
 WndProperty *
 RowFormWidget::AddFileReader(const TCHAR *label, const TCHAR *help,
-                             const TCHAR *registry_key, const TCHAR *filters)
+                             const TCHAR *registry_key, const TCHAR *filters,
+                             bool nullable)
 {
   WndProperty *edit = Add(label, help);
   DataFieldFileReader *df = new DataFieldFileReader(NULL);
   edit->SetDataField(df);
+
+  if (nullable)
+    df->AddNull();
 
   size_t length;
   while ((length = _tcslen(filters)) > 0) {
