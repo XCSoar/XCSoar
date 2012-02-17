@@ -129,6 +129,10 @@ FileCache::Load(const TCHAR *name, const TCHAR *original_path)
   if (!GetRegularFileInfo(path, &cached_info))
     return NULL;
 #ifndef _WIN32_WCE
+  /*
+   * WinCE devices often have wrongly-set system clocks.
+   * This allows generated cache files to predate terrain files.
+   */
   if (original_info.mtime > cached_info.mtime) {
     File::Delete(path);
     return NULL;
