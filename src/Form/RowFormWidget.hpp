@@ -157,6 +157,7 @@ class RowFormWidget : public WindowWidget {
      */
     bool IsElastic() const {
       return type == Type::EDIT || type == Type::BUTTON ||
+        type == Type::MULTI_LINE ||
         type == Type::REMAINING;
     }
 

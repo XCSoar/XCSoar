@@ -61,7 +61,7 @@ RowFormWidget::Row::GetMinimumHeight() const
     return Layout::GetMinimumControlHeight();
 
   case Type::MULTI_LINE:
-    return Layout::GetMinimumControlHeight() * 2;
+    return Layout::GetMinimumControlHeight();
 
   case Type::REMAINING:
     return Layout::GetMinimumControlHeight();
