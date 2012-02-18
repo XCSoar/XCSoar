@@ -78,9 +78,6 @@ public:
   };
 
   virtual const DialogContent *GetDialogContent();
-
-  static void SetValueBearingDifference(InfoBoxData &data, Angle delta);
-  static void SetCommentBearingDifference(InfoBoxData &data, Angle delta);
 };
 
 #endif

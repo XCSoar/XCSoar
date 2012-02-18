@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "Base.hpp"
 #include "InfoBoxes/Data.hpp"
-#include "Math/Angle.hpp"
-#include "Formatter/AngleFormatter.hpp"
 
 InfoBoxContent::~InfoBoxContent() {}
 
@@ -49,16 +47,4 @@ const InfoBoxContent::DialogContent *
 InfoBoxContent::GetDialogContent()
 {
   return NULL;
-}
-
-void
-InfoBoxContent::SetValueBearingDifference(InfoBoxData &data, Angle delta)
-{
-  FormatAngleDelta(data.value.buffer(), data.value.MAX_SIZE, delta);
-}
-
-void
-InfoBoxContent::SetCommentBearingDifference(InfoBoxData &data, Angle delta)
-{
-  FormatAngleDelta(data.comment.buffer(), data.comment.MAX_SIZE, delta);
 }

@@ -97,6 +97,8 @@ struct InfoBoxData {
    */
   void SetValue(Angle value, const TCHAR *suffix=_T(""));
 
+  void SetValueFromBearingDifference(Angle delta);
+
   /**
    * Set the InfoBox value to the specified distance.
    */
@@ -127,6 +129,8 @@ struct InfoBoxData {
    * Sets the InfoBox comment to the given angle.
    */
   void SetComment(Angle comment, const TCHAR *suffix=_T(""));
+
+  void SetCommentFromBearingDifference(Angle delta);
 
   /**
    * Set the InfoBox value to the specified altitude in the alternate

@@ -70,7 +70,7 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
   Angle Value = alternate->solution.vector.bearing -
     XCSoarInterface::Basic().track;
 
-  SetValueBearingDifference(data, Value);
+  data.SetValueFromBearingDifference(Value);
 
   // Set Color (blue/black)
   data.SetValueColor(alternate->solution.IsFinalGlide() ? 2 : 0);

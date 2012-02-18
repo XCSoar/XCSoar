@@ -134,7 +134,7 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxData &data)
   if (teamcode_info.teammate_available && basic.track_available) {
     // Set Value
     Angle Value = teamcode_info.teammate_vector.bearing - basic.track;
-    SetValueBearingDifference(data, Value);
+    data.SetValueFromBearingDifference(Value);
   } else
     data.SetValueInvalid();
 

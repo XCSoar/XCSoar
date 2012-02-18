@@ -67,7 +67,7 @@ InfoBoxContentBearingDiff::Update(InfoBoxData &data)
   }
 
   Angle Value = vector_remaining.bearing - basic.track;
-  SetValueBearingDifference(data, Value);
+  data.SetValueFromBearingDifference(Value);
 }
 
 void
@@ -109,7 +109,7 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
 
   // Set Value
   Angle Value = vector_remaining.bearing - basic.track;
-  SetValueBearingDifference(data, Value);
+  data.SetValueFromBearingDifference(Value);
 
   // Set Color (blue/black)
   data.SetValueColor(solution_remaining.IsFinalGlide() ? 2 : 0);
@@ -171,7 +171,7 @@ InfoBoxContentNextDistance::Update(InfoBoxData &data)
 
   if (basic.track_available) {
     Angle bd = vector_remaining.bearing - basic.track;
-    SetCommentBearingDifference(data, bd);
+    data.SetCommentFromBearingDifference(bd);
   } else
     data.SetCommentInvalid();
 }
@@ -504,7 +504,7 @@ InfoBoxContentHomeDistance::Update(InfoBoxData &data)
 
   if (basic.track_available) {
     Angle bd = common_stats.vector_home.bearing - basic.track;
-    SetCommentBearingDifference(data, bd);
+    data.SetCommentFromBearingDifference(bd);
   } else
     data.SetCommentInvalid();
 }

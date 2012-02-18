@@ -40,9 +40,21 @@ InfoBoxData::SetValue(Angle _value, const TCHAR *suffix)
 }
 
 void
+InfoBoxData::SetValueFromBearingDifference(Angle delta)
+{
+  FormatAngleDelta(value.buffer(), value.MAX_SIZE, delta);
+}
+
+void
 InfoBoxData::SetComment(Angle _value, const TCHAR *suffix)
 {
   assert(suffix != NULL);
 
   FormatBearing(comment.buffer(), comment.MAX_SIZE, _value, suffix);
+}
+
+void
+InfoBoxData::SetCommentFromBearingDifference(Angle delta)
+{
+  FormatAngleDelta(comment.buffer(), comment.MAX_SIZE, delta);
 }
