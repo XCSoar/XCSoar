@@ -31,4 +31,9 @@ public:
   virtual void Update(InfoBoxData &data);
 };
 
+class InfoBoxContentTerrainCollision : public InfoBoxContent {
+public:
+  virtual void Update(InfoBoxData &data);
+};
+
 #endif

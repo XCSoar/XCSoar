@@ -137,6 +137,8 @@ namespace InfoBoxFactory
     e_WP_MC0AltDiff,
     e_HeadWind,
 
+    TerrainCollision,
+
     e_NUM_TYPES /* Last item */
   };
 

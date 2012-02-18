@@ -38,3 +38,18 @@ InfoBoxContentTerrainHeight::Update(InfoBoxData &data)
   data.SetValueFromAltitude(calculated.terrain_altitude);
   data.SetCommentFromAlternateAltitude(calculated.terrain_altitude);
 }
+
+void
+InfoBoxContentTerrainCollision::Update(InfoBoxData &data)
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const TerrainInfo &calculated = CommonInterface::Calculated();
+  if (!basic.location_available || !calculated.terrain_warning) {
+    data.SetInvalid();
+    return;
+  }
+
+  fixed distance =
+    basic.location.Distance(calculated.terrain_warning_location);
+  data.SetValueFromDistance(distance);
+}

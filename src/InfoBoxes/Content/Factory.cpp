@@ -1004,6 +1004,15 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_HeadWind,
     e_HeadWind,
   },
+
+  {
+    N_("Terrain collision"),
+    N_("Terr Coll"),
+    N_("The distance to the next terrain collision along the current task leg. At this location, the altitude will be below the configured terrain clearance altitude."),
+    IBFHelper<InfoBoxContentTerrainCollision>::Create,
+    TerrainCollision,
+    TerrainCollision,
+  },
 };
 
 bool
