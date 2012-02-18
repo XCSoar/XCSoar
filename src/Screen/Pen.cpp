@@ -29,12 +29,16 @@ Copyright_License {
 #ifndef USE_GDI
 
 void
-Pen::Set(Style style, unsigned _width, const Color c)
+Pen::Set(Style _style, unsigned _width, const Color c)
 {
   assert(IsScreenInitialized());
 
   width = _width;
   color = c;
+
+#if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
+  style = _style;
+#endif
 }
 
 void

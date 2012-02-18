@@ -115,8 +115,9 @@ Canvas::DrawPolyline(const RasterPoint *points, unsigned num_points)
 {
   glVertexPointer(2, GL_VALUE, 0, points);
 
-  pen.Set();
+  pen.Bind();
   glDrawArrays(GL_LINE_STRIP, 0, num_points);
+  pen.Unbind();
 }
 
 void
@@ -139,7 +140,8 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
   }
 
   if (pen_over_brush()) {
-    pen.Set();
+    pen.Bind();
+
     if (pen.GetWidth() <= 2) {
       glDrawArrays(GL_LINE_LOOP, 0, num_points);
     } else {
@@ -150,6 +152,8 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
         glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
       }
     }
+
+    pen.Unbind();
   }
 }
 
@@ -167,7 +171,8 @@ Canvas::DrawTriangleFan(const RasterPoint *points, unsigned num_points)
   }
 
   if (pen_over_brush()) {
-    pen.Set();
+    pen.Bind();
+
     if (pen.GetWidth() <= 2) {
       glDrawArrays(GL_LINE_LOOP, 0, num_points);
     } else {
@@ -178,17 +183,21 @@ Canvas::DrawTriangleFan(const RasterPoint *points, unsigned num_points)
         glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
       }
     }
+
+    pen.Unbind();
   }
 }
 
 void
 Canvas::line(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by)
 {
-  pen.Set();
+  pen.Bind();
 
   const GLvalue v[] = { ax, ay, bx, by };
   glVertexPointer(2, GL_VALUE, 0, v);
   glDrawArrays(GL_LINE_STRIP, 0, 2);
+
+  pen.Unbind();
 }
 
 /**
@@ -198,7 +207,7 @@ Canvas::line(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by)
 void
 Canvas::line_piece(const RasterPoint a, const RasterPoint b)
 {
-  pen.Set();
+  pen.Bind();
 
   const RasterPoint v[] = { {a.x, a.y}, {b.x, b.y} };
   if (pen.GetWidth() > 2) {
@@ -212,6 +221,8 @@ Canvas::line_piece(const RasterPoint a, const RasterPoint b)
     glVertexPointer(2, GL_VALUE, 0, &v[0].x);
     glDrawArrays(GL_LINE_STRIP, 0, 2);
   }
+
+  pen.Unbind();
 }
 
 void
@@ -219,11 +230,13 @@ Canvas::DrawTwoLines(PixelScalar ax, PixelScalar ay,
                   PixelScalar bx, PixelScalar by,
                   PixelScalar cx, PixelScalar cy)
 {
-  pen.Set();
+  pen.Bind();
 
   const GLvalue v[] = { ax, ay, bx, by, cx, cy };
   glVertexPointer(2, GL_VALUE, 0, v);
   glDrawArrays(GL_LINE_STRIP, 0, 3);
+
+  pen.Unbind();
 }
 
 void
@@ -263,8 +276,9 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
     }
 
     if (pen_over_brush()) {
-      pen.Set();
+      pen.Bind();
       glDrawArrays(GL_LINE_LOOP, 0, OpenGL::SMALL_CIRCLE_SIZE);
+      pen.Unbind();
     }
 
     glPopMatrix();
@@ -292,8 +306,9 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
     }
 
     if (pen_over_brush()) {
-      pen.Set();
+      pen.Bind();
       glDrawArrays(GL_LINE_LOOP, 0, OpenGL::CIRCLE_SIZE);
+      pen.Unbind();
     }
 
     glPopMatrix();
@@ -309,8 +324,9 @@ Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
     }
 
     if (pen_over_brush()) {
-      pen.Set();
+      pen.Bind();
       glDrawArrays(GL_LINE_LOOP, 0, vertices.SIZE);
+      pen.Unbind();
     }
   }
 }
@@ -352,7 +368,7 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
   }
 
   if (pen_over_brush()) {
-    pen.Set();
+    pen.Bind();
 
     if (istart != iend) {
       if (brush.IsHollow())
@@ -380,6 +396,8 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
       glDrawArrays(GL_LINE_STRIP, pstart, 32 - pstart + 1);
       glDrawArrays(GL_LINE_STRIP, 0, pend + 1);
     }
+
+    pen.Unbind();
   }
 }
 

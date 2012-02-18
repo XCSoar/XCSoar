@@ -56,6 +56,10 @@ protected:
 #ifndef USE_GDI
   unsigned width;
   Color color;
+
+#if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
+  Style style;
+#endif
 #else
   HPEN pen;
 #endif
@@ -65,12 +69,20 @@ public:
   Pen():width(0) {}
 
   gcc_constexpr_ctor
-  Pen(Style style, unsigned _width, const Color _color)
-    :width(_width), color(_color) {} // XXX style
+  Pen(Style _style, unsigned _width, const Color _color)
+    :width(_width), color(_color)
+#if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
+    , style(_style)
+#endif
+  {}
 
   gcc_constexpr_ctor
   Pen(unsigned _width, const Color _color)
-    :width(_width), color(_color) {}
+    :width(_width), color(_color)
+#if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
+    , style(SOLID)
+#endif
+  {}
 #else /* USE_GDI */
   /** Base Constructor for the Pen class */
   Pen() : pen(NULL) {}
@@ -160,6 +172,30 @@ public:
     glLineWidthx(width << 16);
 #else
     glLineWidth(width);
+#endif
+  }
+
+  /**
+   * Configure the Pen in the OpenGL context.  Don't forget to call
+   * UnbindStyle() when you're done with this Pen.
+   */
+  void Bind() const {
+    Set();
+
+#ifndef HAVE_GLES
+    if (style == DASH) {
+      /* XXX implement for OpenGL/ES (using a 1D texture?) */
+      glLineStipple(2, 0x1f1f);
+      glEnable(GL_LINE_STIPPLE);
+    }
+#endif
+  }
+
+  void Unbind() const {
+#ifndef HAVE_GLES
+    if (style == DASH) {
+      glDisable(GL_LINE_STIPPLE);
+    }
 #endif
   }
 #endif /* OPENGL */
