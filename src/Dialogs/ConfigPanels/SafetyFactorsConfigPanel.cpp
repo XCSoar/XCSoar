@@ -27,6 +27,8 @@ Copyright_License {
 #include "Form/RowFormWidget.hpp"
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
+#include "Components.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "UIGlobals.hpp"
@@ -134,6 +136,8 @@ SafetyFactorsConfigPanel::Save(bool &_changed, bool &_require_restart)
     settings_computer.polar.SetDegradation(degradation / 100);
     Profile::Set(ProfilePolarDegradation,
                  settings_computer.polar.degradation);
+    if (protected_task_manager != NULL)
+      protected_task_manager->SetGlidePolar(settings_computer.polar.glide_polar_task);
     changed = true;
   }
 
