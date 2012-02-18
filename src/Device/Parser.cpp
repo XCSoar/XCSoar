@@ -531,9 +531,6 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
 
   gps.hdop = line.read(fixed_zero);
 
-  // VENTA3 CONDOR ALTITUDE
-  // "Altitude" should always be GPS Altitude.
-
   bool altitude_available = ReadAltitude(line, info.gps_altitude);
   if (altitude_available)
     info.gps_altitude_available.Update(info.clock);
