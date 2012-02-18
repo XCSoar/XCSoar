@@ -34,16 +34,14 @@ static
 void FillInfoBoxWaypointName(InfoBoxData &data, const Waypoint* way_point,
                              const bool title=true)
 {
-  TCHAR tmp[32];
-  if (!way_point) {
-    tmp[0] = '\0';
-  } else {
-    CopyString(tmp, way_point->name.c_str(), sizeof(tmp) / sizeof(TCHAR));
-  }
+  const TCHAR *name = way_point != NULL
+    ? way_point->name.c_str()
+    : _T("");
+
   if (title) {
-    data.SetTitle(tmp);
+    data.SetTitle(name);
   } else {
-    data.SetComment(tmp);
+    data.SetComment(name);
   }
 }
 
