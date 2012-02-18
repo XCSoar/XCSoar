@@ -450,6 +450,7 @@ PolarConfigPanel::Save(bool &_changed, bool &_require_restart)
                               settings_computer.plane.dump_time);
 
   if (changed) {
+    PlaneGlue::DetachFromPlaneFile();
     PlaneGlue::ToProfile(settings_computer.plane);
     PlaneGlue::Synchronize(settings_computer.plane, settings_computer,
                            settings_computer.polar.glide_polar_task);

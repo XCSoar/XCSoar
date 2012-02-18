@@ -31,6 +31,11 @@ Copyright_License {
 
 #include <windef.h> /* for MAX_PATH */
 
+void PlaneGlue::DetachFromPlaneFile()
+{
+  Profile::Set(_T("PlanePath"), _T(""));
+}
+
 void
 PlaneGlue::FromProfile(Plane &plane)
 {

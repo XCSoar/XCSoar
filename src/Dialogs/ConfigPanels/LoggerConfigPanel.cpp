@@ -111,7 +111,7 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 bool
 LoggerConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false, require_restart = false, plane_settings_changed = false;
 
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   LoggerSettings &logger = settings_computer.logger;
@@ -126,9 +126,13 @@ LoggerConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValue(LoggerID, szProfilePilotName,
                        logger.pilot_name.buffer(), logger.pilot_name.MAX_SIZE);
 
-  changed |= SaveValue(AircraftType, plane.type.buffer(), plane.type.MAX_SIZE);
-  changed |= SaveValue(AircraftReg, plane.registration.buffer(), plane.registration.MAX_SIZE);
-  changed |= SaveValue(CompetitionID, plane.competition_id.buffer(), plane.competition_id.MAX_SIZE);
+  plane_settings_changed |= SaveValue(AircraftType, plane.type.buffer(),
+                                      plane.type.MAX_SIZE);
+  plane_settings_changed |= SaveValue(AircraftReg, plane.registration.buffer(),
+                                      plane.registration.MAX_SIZE);
+  plane_settings_changed |= SaveValue(CompetitionID, plane.competition_id.buffer(),
+                                      plane.competition_id.MAX_SIZE);
+  changed |= plane_settings_changed;
 
   changed |= SaveValue(LoggerID, szProfileLoggerID,
                        logger.logger_id.buffer(), logger.logger_id.MAX_SIZE);
@@ -150,8 +154,10 @@ LoggerConfigPanel::Save(bool &_changed, bool &_require_restart)
     require_restart = true;
   }
 
-  if (changed)
+  if (plane_settings_changed) {
+    PlaneGlue::DetachFromPlaneFile();
     PlaneGlue::ToProfile(settings_computer.plane);
+  }
 
   _changed |= changed;
   _require_restart |= require_restart;
