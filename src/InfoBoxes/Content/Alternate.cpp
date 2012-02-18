@@ -64,7 +64,7 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
     return;
   }
 
-  SetCommentFromWaypointName(data, &alternate->waypoint);
+  data.SetComment(alternate->waypoint.name.c_str());
 
   // Set Value
   Angle Value = alternate->solution.vector.bearing -
@@ -128,7 +128,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data)
     return;
   }
 
-  SetCommentFromWaypointName(data, &alternate->waypoint);
+  data.SetComment(alternate->waypoint.name.c_str());
 
   fixed gradient =
     ::AngleToGradient(alternate->solution.DestinationAngleGround());

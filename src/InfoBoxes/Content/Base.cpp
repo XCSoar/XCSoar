@@ -24,26 +24,9 @@ Copyright_License {
 #include "Base.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
-#include "Waypoint/Waypoint.hpp"
 #include "Math/Angle.hpp"
-#include "Util/StringUtil.hpp"
 
 #include <stdio.h>
-
-static
-void FillInfoBoxWaypointName(InfoBoxData &data, const Waypoint* way_point,
-                             const bool title=true)
-{
-  const TCHAR *name = way_point != NULL
-    ? way_point->name.c_str()
-    : _T("");
-
-  if (title) {
-    data.SetTitle(name);
-  } else {
-    data.SetComment(name);
-  }
-}
 
 void
 InfoBoxContent::SetValueBearingDifference(InfoBoxData &data, Angle delta)
@@ -67,18 +50,4 @@ InfoBoxContent::SetCommentBearingDifference(InfoBoxData &data, Angle delta)
     data.UnsafeFormatComment(_T("«%2.0f°"), (double)-delta_degrees);
   else
     data.SetComment(_T("«»"));
-}
-
-void
-InfoBoxContent::SetTitleFromWaypointName(InfoBoxData &data,
-                                         const Waypoint* waypoint)
-{
-  FillInfoBoxWaypointName(data, waypoint, true);
-}
-
-void
-InfoBoxContent::SetCommentFromWaypointName(InfoBoxData &data,
-                                           const Waypoint* waypoint)
-{
-  FillInfoBoxWaypointName(data, waypoint, false);
 }

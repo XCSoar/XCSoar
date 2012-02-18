@@ -85,12 +85,6 @@ public:
     return NULL;
   }
 
-  static void SetTitleFromWaypointName(InfoBoxData &data,
-                                       const Waypoint* waypoint);
-
-  static void SetCommentFromWaypointName(InfoBoxData &data,
-                                         const Waypoint* waypoint);
-
   static void SetValueBearingDifference(InfoBoxData &data, Angle delta);
   static void SetCommentBearingDifference(InfoBoxData &data, Angle delta);
 };

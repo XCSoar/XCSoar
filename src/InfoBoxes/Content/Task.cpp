@@ -84,7 +84,8 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
     data.SetInvalid();
     return;
   }
-  SetTitleFromWaypointName(data, way_point);
+
+  data.SetTitle(way_point->name.c_str());
 
   // Set Comment
   if (way_point->radio_frequency.IsDefined()) {
@@ -153,7 +154,7 @@ InfoBoxContentNextDistance::Update(InfoBoxData &data)
   if (!way_point)
     data.SetTitle(_("WP Dist"));
   else
-    SetTitleFromWaypointName(data, way_point);
+    data.SetTitle(way_point->name.c_str());
 
   // use proper non-terminal next task stats
 
