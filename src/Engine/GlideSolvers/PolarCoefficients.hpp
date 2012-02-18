@@ -34,6 +34,18 @@ struct PolarCoefficients
   PolarCoefficients() = default;
   PolarCoefficients(fixed _a, fixed _b, fixed _c):a(_a), b(_b), c(_c) {}
 
+  /**
+   * Construct an invalid object.
+   */
+  gcc_const
+  static PolarCoefficients Invalid() {
+    return PolarCoefficients(fixed_zero, fixed_zero, fixed_zero);
+  }
+
+  void SetInvalid() {
+    a = b = c = fixed_zero;
+  }
+
   gcc_pure
   bool IsValid() const;
 

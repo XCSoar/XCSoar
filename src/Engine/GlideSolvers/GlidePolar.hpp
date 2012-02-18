@@ -118,10 +118,30 @@ public:
       const fixed _ballast = fixed_zero);
 
   /**
+   * Constructs a GlidePolar object that is invalid.
+   */
+  gcc_const
+  static GlidePolar Invalid() {
+    GlidePolar gp(fixed_zero);
+    gp.SetInvalid();
+    return gp;
+  }
+
+  /**
+   * Mark this polar as "invalid", but retain the settings (MacCready,
+   * bugs, ballast, cruise efficiency).
+   */
+  void SetInvalid() {
+    ideal_polar.SetInvalid();
+    polar.SetInvalid();
+    Update();
+  }
+
+  /**
    * Perform basic checks on the validity of the object.
    */
   bool IsValid() const {
-    return GetVMin() < GetVMax();
+    return Vmin < Vmax;
   }
 
   /**
@@ -133,6 +153,7 @@ public:
   fixed
   GetSMin() const
   {
+    assert(IsValid());
     return Smin;
   }
 
@@ -145,6 +166,7 @@ public:
   fixed
   GetVMin() const
   {
+    assert(IsValid());
     return Vmin;
   }
 
@@ -159,12 +181,15 @@ public:
   fixed
   GetVMax() const
   {
+    assert(IsValid());
     return Vmax;
   }
 
   void
   SetVMax(fixed _v_max, bool update = true)
   {
+    assert(IsValid());
+
     Vmax = _v_max;
 
     if (update) {
@@ -182,6 +207,8 @@ public:
   fixed
   GetSMax() const
   {
+    assert(IsValid());
+
     return Smax;
   }
 
@@ -194,6 +221,8 @@ public:
   fixed
   GetVBestLD() const
   {
+    assert(IsValid());
+
     return VbestLD;
   }
 
@@ -206,6 +235,8 @@ public:
   fixed
   GetSBestLD() const
   {
+    assert(IsValid());
+
     return SbestLD;
   }
 
@@ -217,6 +248,8 @@ public:
   gcc_pure
   fixed GetBestLD() const
   {
+    assert(IsValid());
+
     return bestLD;
   }
 

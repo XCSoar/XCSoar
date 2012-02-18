@@ -55,6 +55,11 @@ GlidePolar::Update()
 {
   assert(positive(bugs));
 
+  if (!ideal_polar.IsValid()) {
+    Vmin = Vmax = fixed_zero;
+    return;
+  }
+
   const fixed loading_factor = sqrt(GetTotalMass() / reference_mass);
   const fixed inv_bugs = fixed_one/bugs;
 
@@ -71,6 +76,8 @@ GlidePolar::Update()
 void
 GlidePolar::UpdateSMax()
 {
+  assert(polar.IsValid());
+
   Smax = SinkRate(Vmax);
 }
 
@@ -107,7 +114,8 @@ GlidePolar::SetMC(const fixed _mc)
   else
     inv_mc = fixed_zero;
 
-  UpdateBestLD();
+  if (IsValid())
+    UpdateBestLD();
 }
 
 fixed
@@ -119,6 +127,8 @@ GlidePolar::MSinkRate(const fixed V) const
 fixed
 GlidePolar::SinkRate(const fixed V) const
 {
+  assert(polar.IsValid());
+
   return V * (V * polar.a + polar.b) + polar.c;
 }
 
@@ -179,7 +189,9 @@ GlidePolar::UpdateBestLD()
   GlidePolarVopt gpvopt(*this, Vmin, Vmax);
   VbestLD = gpvopt.find_min(VbestLD);
 #else
+  assert(polar.IsValid());
   assert(!negative(mc));
+
   VbestLD = max(Vmin, min(Vmax, sqrt((polar.c+mc)/polar.a)));
   SbestLD = SinkRate(VbestLD);
   bestLD = VbestLD / SbestLD;
@@ -226,6 +238,8 @@ GlidePolar::UpdateSMin()
   GlidePolarMinSink gpminsink(*this, Vmax);
   Vmin = gpminsink.find_min(Vmin);
 #else
+  assert(polar.IsValid());
+
   Vmin = min(Vmax, -polar.b / Double(polar.a));
   Smin = SinkRate(Vmin);
 #endif
@@ -384,6 +398,8 @@ GlidePolar::GetRiskMC(fixed height_fraction, const fixed riskGamma) const
 fixed
 GlidePolar::GetBestGlideRatioSpeed(fixed head_wind) const
 {
+  assert(polar.IsValid());
+
   fixed s = sqr(head_wind) +
     (mc + polar.c + polar.b * head_wind) / polar.a;
   if (negative(s))
