@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
+#include "Util/Macros.hpp"
 
 #include <algorithm>
 
@@ -165,8 +166,29 @@ CheckBox::OnPaint(Canvas &canvas)
   canvas.Rectangle(2, 2, size, size);
 
   if (checked) {
-    canvas.line(4, 4, canvas.get_height() - 8, canvas.get_height() - 8);
-    canvas.line(canvas.get_height() - 8, 4, 4, canvas.get_height() - 8);
+    canvas.SelectNullPen();
+
+    if (is_enabled())
+      canvas.SelectBlackBrush();
+    else
+      canvas.Select(Brush(COLOR_GRAY));
+
+    RasterPoint check_mark[] = {
+      {-8, -2},
+      {-3, 6},
+      {7, -9},
+      {8, -5},
+      {-3, 9},
+      {-9, 2},
+    };
+
+    unsigned top = canvas.get_height() / 2;
+    for (unsigned i = 0; i < ARRAY_SIZE(check_mark); ++i) {
+      check_mark[i].x = (check_mark[i].x * (int)size) / 24 + top;
+      check_mark[i].y = (check_mark[i].y * (int)size) / 24 + top;
+    }
+
+    canvas.polygon(check_mark, ARRAY_SIZE(check_mark));
   }
 
   canvas.SetTextColor(
