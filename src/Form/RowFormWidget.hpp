@@ -177,6 +177,9 @@ public:
 protected:
   void Add(Row::Type type, Window *window);
 
+  WndProperty *CreateEdit(const TCHAR *label, const TCHAR *help=NULL,
+                          bool read_only=false);
+
 public:
   /**
    * Add a "dummy" row.  It does not have a #Window and its height is

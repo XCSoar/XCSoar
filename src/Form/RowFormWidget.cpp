@@ -171,7 +171,8 @@ RowFormWidget::Add(Row::Type type, Window *window)
 }
 
 WndProperty *
-RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
+RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,
+                          bool read_only)
 {
   assert(IsDefined());
 
@@ -205,6 +206,13 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
   if (help != NULL)
     edit->SetHelpText(help);
 
+  return edit;
+}
+
+WndProperty *
+RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
+{
+  WndProperty *edit = CreateEdit(label, help, read_only);
   Add(Row::Type::EDIT, edit);
   return edit;
 }
