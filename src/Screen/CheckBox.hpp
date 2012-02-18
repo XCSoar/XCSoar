@@ -89,7 +89,7 @@ protected:
   virtual bool OnCancelMode();
   virtual void OnPaint(Canvas &canvas);
 
-  virtual bool on_clicked();
+  virtual bool OnClicked();
 };
 
 #else /* USE_GDI */

@@ -145,7 +145,7 @@ public:
    * keyboard).  The default implementation invokes the OnClick
    * callback.
    */
-  virtual bool on_clicked();
+  virtual bool OnClicked();
 
 private:
   /**

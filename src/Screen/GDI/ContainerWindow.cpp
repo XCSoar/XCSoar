@@ -110,9 +110,9 @@ ContainerWindow::OnMessage(HWND hWnd, UINT message,
 
   case WM_COMMAND:
     if (wParam == MAKEWPARAM(BaseButtonWindow::COMMAND_BOUNCE_ID, BN_CLICKED)) {
-      /* forward this message to ButtonWindow::on_clicked() */
+      /* forward this message to ButtonWindow::OnClicked() */
       BaseButtonWindow *window = (BaseButtonWindow *)Window::get((HWND)lParam);
-      if (window != NULL && window->on_clicked())
+      if (window != NULL && window->OnClicked())
         return true;
     }
     break;

@@ -74,7 +74,7 @@ ButtonWindow::OnKeyDown(unsigned key_code)
   case VK_SPACE:
     set_down(false);
 
-    if (!on_clicked() && id != 0 && parent != NULL)
+    if (!OnClicked() && id != 0 && parent != NULL)
       parent->OnCommand(id, 0);
     return true;
 
@@ -120,7 +120,7 @@ ButtonWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 
   set_down(false);
 
-  if (!on_clicked() && id != 0 && parent != NULL)
+  if (!OnClicked() && id != 0 && parent != NULL)
     parent->OnCommand(id, 0);
 
   return true;
@@ -177,7 +177,7 @@ ButtonWindow::OnPaint(Canvas &canvas)
 }
 
 bool
-ButtonWindow::on_clicked()
+ButtonWindow::OnClicked()
 {
   return false;
 }

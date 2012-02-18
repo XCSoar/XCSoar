@@ -115,7 +115,7 @@ public:
   /**
    * The button was clicked, and its action shall be triggered.
    */
-  virtual bool on_clicked();
+  virtual bool OnClicked();
 
 protected:
   bool OnKeyCheck(unsigned key_code) const;
@@ -145,7 +145,7 @@ public:
     /**
      * On WIN32, a WM_COMMAND/BN_CLICKED message with this id will be
      * bounced back to the originating child
-     * ButtonWindow::on_clicked().
+     * ButtonWindow::OnClicked().
      */
     COMMAND_BOUNCE_ID = 0xbeef,
   };
@@ -169,7 +169,7 @@ public:
   /**
    * The button was clicked, and its action shall be triggered.
    */
-  virtual bool on_clicked();
+  virtual bool OnClicked();
 
 protected:
   /**

@@ -37,7 +37,7 @@ CheckBoxControl::CheckBoxControl(ContainerWindow &parent,
 }
 
 bool
-CheckBoxControl::on_clicked()
+CheckBoxControl::OnClicked()
 {
   // Call the OnClick function
   if (click_notify_callback != NULL) {
@@ -72,7 +72,7 @@ CheckBoxControl::OnKeyDown(unsigned key_code)
 #endif
   case VK_RETURN:
     set_checked(!get_checked());
-    return on_clicked();
+    return OnClicked();
   }
 
   return CheckBox::OnKeyDown(key_code);

@@ -89,7 +89,7 @@ GetButtonPosition(unsigned i, PixelRect rc)
 }
 
 bool
-MenuBar::Button::on_clicked()
+MenuBar::Button::OnClicked()
 {
   if (event > 0)
     InputEvents::ProcessEvent(event);

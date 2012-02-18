@@ -49,7 +49,7 @@ protected:
       event = _event;
     }
 
-    virtual bool on_clicked();
+    virtual bool OnClicked();
 
 #ifdef USE_GDI
   protected:

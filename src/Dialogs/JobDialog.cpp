@@ -58,7 +58,7 @@ public:
   JobCancelButton(JobThread &_thread)
     :thread(_thread) {}
 
-  virtual bool on_clicked() {
+  virtual bool OnClicked() {
     thread.Cancel();
     return true;
   }

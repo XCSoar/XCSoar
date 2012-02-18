@@ -39,7 +39,7 @@ BaseButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
 }
 
 bool
-BaseButtonWindow::on_clicked()
+BaseButtonWindow::OnClicked()
 {
   return false;
 }
@@ -47,7 +47,7 @@ BaseButtonWindow::on_clicked()
 void
 BaseButtonWindow::Click()
 {
-  if (on_clicked())
+  if (OnClicked())
     return;
 
   unsigned id = GetID();

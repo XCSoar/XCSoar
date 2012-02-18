@@ -69,7 +69,7 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
 }
 
 bool
-WndButton::on_clicked()
+WndButton::OnClicked()
 {
   if (listener != NULL) {
 #ifndef USE_GDI
@@ -85,7 +85,7 @@ WndButton::on_clicked()
     return true;
   }
 
-  return ButtonWindow::on_clicked();
+  return ButtonWindow::OnClicked();
 }
 
 bool

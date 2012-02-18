@@ -49,7 +49,7 @@ public:
      form(_form), result(_result) {}
 
 protected:
-  virtual bool on_clicked() {
+  virtual bool OnClicked() {
     form.SetModalResult(result);
     return true;
   }
