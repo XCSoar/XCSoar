@@ -35,6 +35,7 @@ enum ControlIndex {
   ArrivalHeight,
   TerrainHeight,
   AlternateMode,
+  PolarDegradation,
   SafetyMC,
   RiskFactor,
   PredictWindDrift,
@@ -80,6 +81,15 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("Determines sorting of alternates in the alternates dialog and in abort mode:\n[Simple] The alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height.\n[Task] The sorting will also take the current task direction into account.\n[Home] The sorting will try to find landing options in the current direction to the configured home waypoint."),
           abort_task_mode_list, (unsigned)task_behaviour.abort_task_mode);
 
+  AddFloat(_("Polar degradation"), /* xgettext:no-c-format */
+           _("A permanent polar degradation factor. "
+             "100% means no degradation, "
+             "50% indicates the glider's sink rate is doubled."),
+           _T("%.0f %%"), _T("%.0f"),
+           fixed(50), fixed(100), fixed_one, false,
+           settings_computer.polar.degradation * 100);
+  SetExpertRow(PolarDegradation);
+
   AddFloat(_("Safety MC"),
            _("The MacCready setting used, when safety MC is enabled for reach calculations, in task abort mode and for determining arrival altitude at airfields."),
            _T("%.1f %s"), _T("%.1f"),
@@ -118,6 +128,14 @@ SafetyFactorsConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValueEnum(AlternateMode, szProfileAbortTaskMode,
                            task_behaviour.abort_task_mode);
+
+  fixed degradation = settings_computer.polar.degradation * 100;
+  if (SaveValue(PolarDegradation, degradation)) {
+    settings_computer.polar.SetDegradation(degradation / 100);
+    Profile::Set(ProfilePolarDegradation,
+                 settings_computer.polar.degradation);
+    changed = true;
+  }
 
   if (SaveValue(SafetyMC, UnitGroup::VERTICAL_SPEED, task_behaviour.safety_mc)) {
     Profile::Set(szProfileSafetyMacCready,

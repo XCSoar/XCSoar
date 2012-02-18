@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.3 - not yet released
 * calculations
   - real-time OLC score
+  - configurable permanent polar degradation
 * devices
   - COM port monitor
   - added separate FLARM driver for declaration and IGC file download

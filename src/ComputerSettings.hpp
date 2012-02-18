@@ -118,8 +118,19 @@ static_assert(is_trivial<WindSettings>::value, "type is not trivial");
  */
 struct PolarSettings {
   /**
+   * A global factor that is applied to the polar.  It is used to
+   * degrade the polar permanently, to be multiplied with the current
+   * "bugs" setting.  Range is 0..1, where 1 means "no degradation".
+   *
+   * When you modify this, you should update glide_polar_task and send
+   * the new GlidePolar to the TaskManager.
+   */
+  fixed degradation;
+
+  /**
    * Bugs ratio applied to polar.  Range is 0..1, where 1 means
-   * "clean".
+   * "clean".  Unlike the "degradation" attribute above, this setting
+   * is not permanent.
    *
    * When you modify this, you should update glide_polar_task and send
    * the new GlidePolar to the TaskManager.
@@ -134,9 +145,14 @@ struct PolarSettings {
 
   void SetDefaults();
 
+  void SetDegradation(fixed _degradation) {
+    degradation = _degradation;
+    glide_polar_task.SetBugs(degradation * bugs);
+  }
+
   void SetBugs(fixed _bugs) {
     bugs = _bugs;
-    glide_polar_task.SetBugs(bugs);
+    glide_polar_task.SetBugs(degradation * bugs);
   }
 };
 

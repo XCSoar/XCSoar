@@ -29,6 +29,7 @@ Copyright_License {
 
 namespace Profile {
   static void Load(WindSettings &settings);
+  static void Load(PolarSettings &settings);
   static void Load(LoggerSettings &settings);
   static void Load(SoundSettings &settings);
   static void Load(TeamCodeSettings &settings);
@@ -45,6 +46,15 @@ Profile::Load(WindSettings &settings)
     settings.SetLegacyAutoWindMode(auto_wind_mode);
 
   Get(szProfileExternalWind, settings.use_external_wind);
+}
+
+void
+Profile::Load(PolarSettings &settings)
+{
+  fixed degradation;
+  if (Get(ProfilePolarDegradation, degradation) &&
+      degradation >= fixed_half && degradation <= fixed_one)
+    settings.SetDegradation(degradation);
 }
 
 void
@@ -119,6 +129,7 @@ void
 Profile::Load(ComputerSettings &settings)
 {
   Load(settings.wind);
+  Load(settings.polar);
   Load(settings.sound);
   Load(settings.team_code);
   Load(settings.voice);

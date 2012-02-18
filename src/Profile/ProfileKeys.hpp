@@ -52,6 +52,7 @@ extern const TCHAR szProfileDryMass[];
 extern const TCHAR szProfilePolarID[];
 extern const TCHAR szProfilePolar[];
 extern const TCHAR szProfilePolarName[];
+extern const TCHAR ProfilePolarDegradation[];
 extern const TCHAR szProfileWaypointFile[];
 extern const TCHAR szProfileAdditionalWaypointFile[];
 extern const TCHAR szProfileWatchedWaypointFile[];

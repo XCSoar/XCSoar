@@ -116,6 +116,7 @@ const TCHAR szProfileLatLonUnits[] = _T("LatLonUnits");
 const TCHAR szProfilePolarID[] = _T("Polar");
 const TCHAR szProfilePolar[] = _T("PolarInformation");
 const TCHAR szProfilePolarName[] = _T("PolarName");
+const TCHAR ProfilePolarDegradation[] = _T("PolarDegradation");
 const TCHAR szProfileSafetyAltitudeArrival[] = _T("SafetyAltitudeArrival");
 const TCHAR szProfileSafetyAltitudeTerrain[] = _T("SafetyAltitudeTerrain");
 const TCHAR szProfileSafteySpeed[] = _T("SafteySpeed");
