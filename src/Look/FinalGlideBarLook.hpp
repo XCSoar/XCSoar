@@ -30,12 +30,15 @@
 struct FinalGlideBarLook {
   Pen pen_above;
   Brush brush_above;
+  Brush brush_above_mc0;
 
   Pen pen_below;
   Brush brush_below;
+  Brush brush_below_mc0;
 
   Pen pen_below_landable;
   Brush brush_below_landable;
+  Brush brush_below_landable_mc0;
 
   void Initialise();
 };

@@ -163,14 +163,14 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   if (altitude_difference0 <= 0) {
     if (calculated.common_stats.landable_reachable) {
       canvas.Select(look.pen_below_landable);
-      canvas.SelectHollowBrush();
+      canvas.Select(look.brush_below_landable_mc0);
     } else {
       canvas.Select(look.pen_below);
-      canvas.SelectHollowBrush();
+      canvas.Select(look.brush_below_mc0);
     }
   } else {
     canvas.Select(look.pen_above);
-    canvas.SelectHollowBrush();
+    canvas.Select(look.brush_above_mc0);
   }
 
   if (altitude_difference != altitude_difference0)
