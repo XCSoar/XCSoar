@@ -214,7 +214,7 @@ public:
 
   WndProperty *AddBoolean(const TCHAR *label, const TCHAR *help,
                           bool value=false,
-                          DataField::DataAccessCallback_t callback=NULL);
+                          DataField::DataAccessCallback callback=NULL);
 
   WndProperty *AddBoolean(const TCHAR *label, const TCHAR *help,
                           bool value, DataFieldListener *listener) {
@@ -227,7 +227,7 @@ public:
                           const TCHAR *display_format,
                           const TCHAR *edit_format,
                           int min_value, int max_value, int step, int value,
-                          DataField::DataAccessCallback_t callback=NULL);
+                          DataField::DataAccessCallback callback=NULL);
 
   WndProperty *AddInteger(const TCHAR *label, const TCHAR *help,
                           const TCHAR *display_format,
@@ -246,7 +246,7 @@ public:
                         fixed min_value, fixed max_value,
                         fixed step, bool fine,
                         fixed value,
-                        DataField::DataAccessCallback_t callback=NULL);
+                        DataField::DataAccessCallback callback=NULL);
 
   WndProperty *AddFloat(const TCHAR *label, const TCHAR *help,
                         const TCHAR *display_format,
@@ -254,11 +254,11 @@ public:
                         fixed min_value, fixed max_value,
                         fixed step, bool fine,
                         UnitGroup unit_group, fixed value,
-                        DataField::DataAccessCallback_t callback=NULL);
+                        DataField::DataAccessCallback callback=NULL);
 
   WndProperty *AddEnum(const TCHAR *label, const TCHAR *help,
                        const StaticEnumChoice *list, unsigned value=0,
-                       DataField::DataAccessCallback_t callback=NULL);
+                       DataField::DataAccessCallback callback=NULL);
 
   WndProperty *AddEnum(const TCHAR *label, const TCHAR *help,
                        const StaticEnumChoice *list, unsigned value,
@@ -269,7 +269,7 @@ public:
   }
 
   WndProperty *AddEnum(const TCHAR *label, const TCHAR *help,
-                       DataField::DataAccessCallback_t callback=NULL);
+                       DataField::DataAccessCallback callback=NULL);
 
   WndProperty *AddEnum(const TCHAR *label, const TCHAR *help,
                        DataFieldListener *listener) {
@@ -280,12 +280,12 @@ public:
 
   WndProperty *AddText(const TCHAR *label, const TCHAR *help,
                        const TCHAR *content, bool editable=true,
-                       DataField::DataAccessCallback_t callback=NULL);
+                       DataField::DataAccessCallback callback=NULL);
 
   WndProperty *AddTime(const TCHAR *label, const TCHAR *help,
                        int min_value, int max_value, unsigned step,
                        int value, unsigned max_tokens = 2,
-                       DataField::DataAccessCallback_t callback=NULL);
+                       DataField::DataAccessCallback callback=NULL);
 
   WndProperty *AddTime(const TCHAR *label, const TCHAR *help,
                        int min_value, int max_value, unsigned step,

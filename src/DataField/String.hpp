@@ -35,7 +35,7 @@ class DataFieldString: public DataField
 
 public:
   DataFieldString(const TCHAR *Default,
-                  DataAccessCallback_t OnDataAccess) :
+                  DataAccessCallback OnDataAccess) :
     DataField(Type::STRING, false, OnDataAccess), mValue(Default) {}
 
   virtual void SetAsString(const TCHAR *Value);

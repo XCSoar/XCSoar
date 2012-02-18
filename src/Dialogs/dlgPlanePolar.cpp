@@ -226,7 +226,7 @@ ImportClicked(gcc_unused WndButton &button)
 }
 
 static void
-PolarChanged(gcc_unused DataField *Sender, DataField::DataAccessKind_t Mode)
+PolarChanged(gcc_unused DataField *Sender, DataField::DataAccessMode Mode)
 {
   if (loading)
     return;

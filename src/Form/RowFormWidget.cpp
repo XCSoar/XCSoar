@@ -230,7 +230,7 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help,
 WndProperty *
 RowFormWidget::AddBoolean(const TCHAR *label, const TCHAR *help,
                           bool value,
-                          DataField::DataAccessCallback_t callback)
+                          DataField::DataAccessCallback callback)
 {
   WndProperty *edit = Add(label, help);
   DataFieldBoolean *df = new DataFieldBoolean(value, _("On"), _("Off"),
@@ -244,7 +244,7 @@ RowFormWidget::AddInteger(const TCHAR *label, const TCHAR *help,
                           const TCHAR *display_format,
                           const TCHAR *edit_format,
                           int min_value, int max_value, int step, int value,
-                          DataField::DataAccessCallback_t callback)
+                          DataField::DataAccessCallback callback)
 {
   WndProperty *edit = Add(label, help);
   DataFieldInteger *df = new DataFieldInteger(edit_format, display_format,
@@ -261,7 +261,7 @@ RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
                         fixed min_value, fixed max_value,
                         fixed step, bool fine,
                         fixed value,
-                        DataField::DataAccessCallback_t callback)
+                        DataField::DataAccessCallback callback)
 {
   WndProperty *edit = Add(label, help);
   DataFieldFloat *df = new DataFieldFloat(edit_format, display_format,
@@ -278,7 +278,7 @@ RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
                         fixed min_value, fixed max_value,
                         fixed step, bool fine,
                         UnitGroup unit_group, fixed value,
-                        DataField::DataAccessCallback_t callback)
+                        DataField::DataAccessCallback callback)
 {
   WndProperty *edit = Add(label, help);
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
@@ -294,7 +294,7 @@ RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
 WndProperty *
 RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
                        const StaticEnumChoice *list, unsigned value,
-                       DataField::DataAccessCallback_t callback)
+                       DataField::DataAccessCallback callback)
 {
   assert(list != NULL);
 
@@ -313,7 +313,7 @@ RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
 
 WndProperty *
 RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
-                       DataField::DataAccessCallback_t callback)
+                       DataField::DataAccessCallback callback)
 {
   WndProperty *edit = Add(label, help);
   DataFieldEnum *df = new DataFieldEnum(callback);
@@ -325,7 +325,7 @@ RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
 WndProperty *
 RowFormWidget::AddText(const TCHAR *label, const TCHAR *help,
                        const TCHAR *content, bool editable,
-                       DataField::DataAccessCallback_t callback)
+                       DataField::DataAccessCallback callback)
 {
   WndProperty *edit = Add(label, help);
   DataFieldString *df = new DataFieldString(content, callback);
@@ -338,7 +338,7 @@ WndProperty *
 RowFormWidget::AddTime(const TCHAR *label, const TCHAR *help,
                        int min_value, int max_value, unsigned step,
                        int value, unsigned max_tokens,
-                       DataField::DataAccessCallback_t callback)
+                       DataField::DataAccessCallback callback)
 {
   WndProperty *edit = Add(label, help);
   DataFieldTime *df = new DataFieldTime(min_value, max_value, value,

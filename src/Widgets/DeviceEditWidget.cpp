@@ -482,7 +482,7 @@ DeviceEditWidget::UpdateVisibilities()
 }
 
 static void
-OnDataField(gcc_unused DataField *df, DataField::DataAccessKind_t mode)
+OnDataField(gcc_unused DataField *df, DataField::DataAccessMode mode)
 {
   if (mode == DataField::daChange)
     instance->UpdateVisibilities();

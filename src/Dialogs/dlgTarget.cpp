@@ -329,7 +329,7 @@ OnPrevClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnRangeData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
 
@@ -355,7 +355,7 @@ OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
  * to [180, -180] based on whether the Range variable is positive or negative
  */
 static void
-OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnRadialData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
 
@@ -411,7 +411,7 @@ RefreshTargetPoint(void)
  * handles UI event where task point is changed
  */
 static void
-OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnTaskPointData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   unsigned old_target_point = target_point;
   switch (Mode) {

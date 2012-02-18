@@ -699,7 +699,7 @@ OnFilterNameButton(gcc_unused WndButton &button)
 }
 
 static void
-OnFilterDistance(DataField *sender, DataField::DataAccessKind_t mode)
+OnFilterDistance(DataField *sender, DataField::DataAccessMode mode)
 {
   switch (mode) {
   case DataField::daChange:
@@ -713,7 +713,7 @@ OnFilterDistance(DataField *sender, DataField::DataAccessKind_t mode)
 }
 
 static void
-OnFilterDirection(DataField *sender, DataField::DataAccessKind_t mode)
+OnFilterDirection(DataField *sender, DataField::DataAccessMode mode)
 {
   switch (mode) {
   case DataField::daChange:
@@ -727,7 +727,7 @@ OnFilterDirection(DataField *sender, DataField::DataAccessKind_t mode)
 }
 
 static void
-OnFilterType(DataField *sender, DataField::DataAccessKind_t mode)
+OnFilterType(DataField *sender, DataField::DataAccessMode mode)
 {
   switch (mode) {
   case DataField::daChange:

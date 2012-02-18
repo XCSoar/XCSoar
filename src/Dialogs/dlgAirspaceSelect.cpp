@@ -155,7 +155,7 @@ static void FilterMode(bool direction) {
 }
 
 
-static void OnFilterName(DataField *_Sender, DataField::DataAccessKind_t Mode){
+static void OnFilterName(DataField *_Sender, DataField::DataAccessMode Mode){
   switch(Mode){
     case DataField::daChange:
     FilterMode(true);
@@ -170,7 +170,7 @@ static void OnFilterName(DataField *_Sender, DataField::DataAccessKind_t Mode){
 
 
 static void OnFilterDistance(DataField *_Sender,
-                             DataField::DataAccessKind_t Mode) {
+                             DataField::DataAccessMode Mode) {
   DataFieldString *Sender = (DataFieldString *)_Sender;
 
   switch(Mode){
@@ -188,7 +188,7 @@ static void OnFilterDistance(DataField *_Sender,
 }
 
 static void OnFilterDirection(DataField *_Sender,
-                              DataField::DataAccessKind_t Mode){
+                              DataField::DataAccessMode Mode){
   DataFieldEnum &df = *(DataFieldEnum *)_Sender;
 
   switch(Mode){
@@ -204,7 +204,7 @@ static void OnFilterDirection(DataField *_Sender,
 }
 
 static void OnFilterType(DataField *Sender,
-                         DataField::DataAccessKind_t Mode) {
+                         DataField::DataAccessMode Mode) {
   switch(Mode){
     case DataField::daChange:
       TypeFilterIdx = Sender->GetAsInteger();

@@ -56,7 +56,7 @@ public:
 static AltitudeSetupPanel *instance;
 
 static void
-PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode)
+PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
   ComputerSettings &settings_computer =

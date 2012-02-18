@@ -152,7 +152,7 @@ RefreshFonts()
 }
 
 static void
-OnUseCustomFontData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnUseCustomFontData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   switch (Mode) {
   case DataField::daChange:

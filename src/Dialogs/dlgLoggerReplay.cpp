@@ -59,7 +59,7 @@ OnCloseClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-OnRateData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnRateData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
 

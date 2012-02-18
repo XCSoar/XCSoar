@@ -60,7 +60,7 @@ VegaWriteDemo()
 }
 
 static void
-OnVegaDemoW(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnVegaDemoW(DataField *Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
 
@@ -76,7 +76,7 @@ OnVegaDemoW(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnVegaDemoV(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnVegaDemoV(DataField *Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
 
@@ -92,7 +92,7 @@ OnVegaDemoV(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnVegaDemoAudioClimb(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnVegaDemoAudioClimb(DataField *Sender, DataField::DataAccessMode Mode)
 {
   switch (Mode){
   case DataField::daChange:

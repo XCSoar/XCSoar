@@ -39,7 +39,7 @@ public:
 protected:
   NumberDataField(Type type, bool support_combo,
                   const TCHAR *edit_format, const TCHAR *display_format,
-                  DataAccessCallback_t OnDataAccess = NULL);
+                  DataAccessCallback OnDataAccess = NULL);
 };
 
 #endif

@@ -125,7 +125,7 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 }
 
 static void
-OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnMacCreadyData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat *df = (DataFieldFloat *)Sender;
 
@@ -149,7 +149,7 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
   fixed clast = CommonInterface::GetComputerSettings().polar.glide_polar_task.GetCruiseEfficiency();

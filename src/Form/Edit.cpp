@@ -68,7 +68,7 @@ WndProperty::Editor::OnKeyCheck(unsigned key_code) const
   switch (key_code) {
   case VK_RETURN:
     return is_read_only() ||
-      (parent->mDataField != NULL && parent->mDataField->SupportCombo) ||
+      (parent->mDataField != NULL && parent->mDataField->supports_combolist) ||
       !CanEditInPlace() || parent->HasHelp();
 
   case VK_LEFT:
@@ -195,7 +195,7 @@ WndProperty::BeginEditing()
     /* this would display xml file help on a read-only wndproperty if
        it exists */
     return OnHelp();
-  } else if (mDataField != NULL && mDataField->SupportCombo) {
+  } else if (mDataField != NULL && mDataField->supports_combolist) {
     SingleWindow *root = (SingleWindow *)GetRootOwner();
 
     /* if this asserton fails, then there no valid root window could

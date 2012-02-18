@@ -87,7 +87,7 @@ DataFieldFileReader::Item::~Item()
   free(path);
 }
 
-DataFieldFileReader::DataFieldFileReader(DataAccessCallback_t OnDataAccess)
+DataFieldFileReader::DataFieldFileReader(DataAccessCallback OnDataAccess)
   :DataField(Type::FILE, true, OnDataAccess),
    // Set selection to zero
    mValue(0),

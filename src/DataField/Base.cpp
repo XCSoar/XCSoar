@@ -28,13 +28,15 @@ Copyright_License {
 
 #include <math.h>
 
-enum { ComboPopupITEMMAX = 100 };
+enum {
+  ComboPopupITEMMAX = 100
+};
 
-DataField::DataField(Type _type, bool _support_combo,
-                     DataAccessCallback_t OnDataAccess)
-  :listener(NULL), mOnDataAccess(OnDataAccess),
-   SupportCombo(_support_combo), type(_type),
-   mItemHelp(false), mDetachGUI(false)
+DataField::DataField(Type _type, bool _supports_combolist,
+                     DataAccessCallback _data_access_callback)
+  :listener(NULL), data_access_callback(_data_access_callback),
+   supports_combolist(_supports_combolist), type(_type),
+   item_help_enabled(false), detach_gui(false)
 {
 }
 
@@ -46,26 +48,26 @@ DataField::Modified()
 
   if (listener != NULL)
     listener->OnModified(*this);
-  else if (mOnDataAccess != NULL)
-    mOnDataAccess(this, daChange);
+  else if (data_access_callback != NULL)
+    data_access_callback(this, daChange);
 }
 
 void
-DataField::Special(void)
+DataField::Special()
 {
   if (listener != NULL)
     listener->OnSpecial(*this);
-  else if (mOnDataAccess != NULL)
-    mOnDataAccess(this, daSpecial);
+  else if (data_access_callback != NULL)
+    data_access_callback(this, daSpecial);
 }
 
 void
-DataField::Inc(void)
+DataField::Inc()
 {
 }
 
 void
-DataField::Dec(void)
+DataField::Dec()
 {
 }
 
@@ -88,21 +90,21 @@ DataField::GetAsDisplayString() const
 }
 
 void
-DataField::SetAsInteger(gcc_unused int Value)
+DataField::SetAsInteger(gcc_unused int value)
 {
 }
 
 void
-DataField::SetAsString(gcc_unused const TCHAR *Value)
+DataField::SetAsString(gcc_unused const TCHAR *value)
 {
 }
 
 void
-DataField::CopyString(TCHAR * szbuffOut, bool bFormatted)
+DataField::CopyString(TCHAR *buffer, bool formatted)
 {
-  const TCHAR *src = bFormatted ? GetAsDisplayString() : GetAsString();
+  const TCHAR *src = formatted ? GetAsDisplayString() : GetAsString();
   if (src == NULL)
     src = _T("");
 
-  ::CopyString(szbuffOut, src, ComboPopupITEMMAX);
+  ::CopyString(buffer, src, ComboPopupITEMMAX);
 }

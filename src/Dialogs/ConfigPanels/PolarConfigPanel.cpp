@@ -311,7 +311,7 @@ PolarConfigPanel::DataChanged()
 }
 
 static void
-OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnFieldData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   if (Mode == DataField::daChange)
     instance->DataChanged();

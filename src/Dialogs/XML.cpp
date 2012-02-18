@@ -499,7 +499,7 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
   step = StringToFloatDflt(node.getAttribute(_T("Step")), 1);
   fine = StringToIntDflt(node.getAttribute(_T("Fine")), false);
 
-  DataField::DataAccessCallback_t callback = (DataField::DataAccessCallback_t)
+  DataField::DataAccessCallback callback = (DataField::DataAccessCallback)
     GetCallBack(LookUpTable, node, _T("OnDataAccess"));
 
   if (_tcsicmp(data_type, _T("enum")) == 0)

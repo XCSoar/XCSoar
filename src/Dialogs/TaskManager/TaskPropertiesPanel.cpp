@@ -185,7 +185,7 @@ TaskPropertiesPanel::OnFAIFinishHeightChange(DataFieldBoolean &df)
 }
 
 static void
-OnFAIFinishHeightData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnFAIFinishHeightData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   if (Mode == DataField::daChange)
     instance->OnFAIFinishHeightChange(*(DataFieldBoolean*)Sender);
@@ -205,7 +205,7 @@ TaskPropertiesPanel::OnTaskTypeChange(DataFieldEnum &df)
 }
 
 static void
-OnTaskTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnTaskTypeData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   if (Mode == DataField::daChange)
     instance->OnTaskTypeChange(*(DataFieldEnum *)Sender);

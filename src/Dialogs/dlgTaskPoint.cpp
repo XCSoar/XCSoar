@@ -373,7 +373,7 @@ OnOptionalStartsClicked(gcc_unused WndButton &Sender)
 
 static void
 OnOZData(gcc_unused DataField *Sender,
-         gcc_unused DataField::DataAccessKind_t Mode)
+         gcc_unused DataField::DataAccessMode Mode)
 {
   if (!Refreshing)
     ReadValues();

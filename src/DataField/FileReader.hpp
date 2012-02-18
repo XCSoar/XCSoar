@@ -84,7 +84,7 @@ public:
    * Constructor of the DataFieldFileReader class
    * @param OnDataAccess
    */
-  DataFieldFileReader(DataAccessCallback_t OnDataAccess);
+  DataFieldFileReader(DataAccessCallback OnDataAccess);
 
   /** Move the selection up (+1) */
   void Inc(void);

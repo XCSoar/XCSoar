@@ -48,56 +48,55 @@ public:
     TIME,
   };
 
-  enum DataAccessKind_t {
+  enum DataAccessMode {
     daChange,
     daSpecial,
   };
 
-  typedef void (*DataAccessCallback_t)(DataField * Sender, DataAccessKind_t Mode);
-
   DataFieldListener *listener;
 
-  DataAccessCallback_t mOnDataAccess;
+  typedef void (*DataAccessCallback)(DataField *sender, DataAccessMode mode);
+  DataAccessCallback data_access_callback;
 
   // all Types dataField support combolist except DataFieldString.
-  const bool SupportCombo;
+  const bool supports_combolist;
 
 protected:
   const Type type;
 
-  bool mItemHelp;
+  bool item_help_enabled;
 
 private:
-  bool mDetachGUI;
+  bool detach_gui;
 
 protected:
-  DataField(Type _type, bool support_combo,
-            DataAccessCallback_t OnDataAccess = NULL);
+  DataField(Type type, bool supports_combolist,
+            DataAccessCallback data_access_callback = NULL);
 
 public:
-  virtual ~DataField(void) {}
+  virtual ~DataField() {}
 
   void SetListener(DataFieldListener *_listener) {
-    assert(mOnDataAccess == NULL);
+    assert(data_access_callback == NULL);
     assert(listener == NULL);
     assert(_listener != NULL);
 
     listener = _listener;
   }
 
-  void SetDataAccessCallback(DataAccessCallback_t _data_access_callback) {
+  void SetDataAccessCallback(DataAccessCallback _data_access_callback) {
     assert(listener == NULL);
 
-    mOnDataAccess = _data_access_callback;
+    data_access_callback = _data_access_callback;
   }
 
   Type GetType() const {
     return type;
   }
 
-  void Special(void);
-  virtual void Inc(void);
-  virtual void Dec(void);
+  void Special();
+  virtual void Inc();
+  virtual void Dec();
 
   gcc_pure
   virtual int GetAsInteger() const;
@@ -108,26 +107,36 @@ public:
   gcc_pure
   virtual const TCHAR *GetAsDisplayString() const;
 
-  virtual void SetAsInteger(int Value);
-  virtual void SetAsString(const TCHAR *Value);
+  virtual void SetAsInteger(int value);
+  virtual void SetAsString(const TCHAR *value);
 
   virtual void EnableItemHelp(bool value) {};
 
   // allows combolist to iterate all values w/out triggering external events
-  void SetDetachGUI(bool bDetachGUI) { mDetachGUI = bDetachGUI; }
-  bool GetDetachGUI(void) { return mDetachGUI; }
+  void SetDetachGUI(bool _detach_gui) {
+    detach_gui = _detach_gui;
+  }
+
+  bool GetDetachGUI() {
+    return detach_gui;
+  }
 
   gcc_malloc
-  virtual ComboList *CreateComboList() const { return NULL; }
+  virtual ComboList *CreateComboList() const {
+    return NULL;
+  }
 
   virtual void
   SetFromCombo(int iDataFieldIndex, TCHAR *sValue)
   {
     SetAsInteger(iDataFieldIndex);
   }
-  bool GetItemHelpEnabled() { return mItemHelp; }
 
-  void CopyString(TCHAR * szStringOut, bool bFormatted);
+  bool GetItemHelpEnabled() {
+    return item_help_enabled;
+  }
+
+  void CopyString(TCHAR *buffer, bool formatted);
 
 protected:
   /**

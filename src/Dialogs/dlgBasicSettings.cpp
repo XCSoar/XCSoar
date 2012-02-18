@@ -213,7 +213,7 @@ FlightSetupPanel::OnTimer()
 }
 
 static void
-OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnBallastData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
 
@@ -229,7 +229,7 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnBugsData(DataField *_Sender, DataField::DataAccessKind_t Mode)
+OnBugsData(DataField *_Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
 
@@ -244,7 +244,7 @@ OnBugsData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
+OnQnhData(DataField *_Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
 
