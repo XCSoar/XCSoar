@@ -23,31 +23,17 @@ Copyright_License {
 
 #include "Base.hpp"
 #include "InfoBoxes/Data.hpp"
-#include "Interface.hpp"
 #include "Math/Angle.hpp"
-
-#include <stdio.h>
+#include "Formatter/AngleFormatter.hpp"
 
 void
 InfoBoxContent::SetValueBearingDifference(InfoBoxData &data, Angle delta)
 {
-  fixed delta_degrees = delta.AsDelta().Degrees();
-  if (delta_degrees > fixed_one)
-    data.UnsafeFormatValue(_T("%2.0f°»"), (double)delta_degrees);
-  else if (delta_degrees < fixed_minus_one)
-    data.UnsafeFormatValue(_T("«%2.0f°"), (double)-delta_degrees);
-  else
-    data.SetValue(_T("«»"));
+  FormatAngleDelta(data.value.buffer(), data.value.MAX_SIZE, delta);
 }
 
 void
 InfoBoxContent::SetCommentBearingDifference(InfoBoxData &data, Angle delta)
 {
-  fixed delta_degrees = delta.AsDelta().Degrees();
-  if (delta_degrees > fixed_one)
-    data.UnsafeFormatComment(_T("%2.0f°»"), (double)delta_degrees);
-  else if (delta_degrees < fixed_minus_one)
-    data.UnsafeFormatComment(_T("«%2.0f°"), (double)-delta_degrees);
-  else
-    data.SetComment(_T("«»"));
+  FormatAngleDelta(data.comment.buffer(), data.comment.MAX_SIZE, delta);
 }
