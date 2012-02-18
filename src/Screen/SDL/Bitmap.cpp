@@ -43,7 +43,7 @@ Copyright_License {
 #include <assert.h>
 
 bool
-Bitmap::Load(SDL_Surface *_surface)
+Bitmap::Load(SDL_Surface *_surface, Type type)
 {
   assert(IsScreenInitialized());
   assert(_surface != NULL);
@@ -61,7 +61,20 @@ Bitmap::Load(SDL_Surface *_surface)
 #else
   assert(surface == NULL);
 
-  surface = ConvertToDisplayFormat(_surface);
+  switch (type) {
+  case Type::STANDARD:
+    surface = ConvertToDisplayFormat(_surface);
+    break;
+
+  case Type::MONO:
+    // XXX convert?
+    surface = _surface;
+
+    assert(surface->format->palette != NULL &&
+           surface->format->palette->ncolors == 2);
+    break;
+  }
+
   return true;
 #endif
 }
@@ -80,7 +93,7 @@ Bitmap::Reload()
 #endif
 
 bool
-Bitmap::Load(unsigned id)
+Bitmap::Load(unsigned id, Type type)
 {
   assert(IsScreenInitialized());
 
@@ -126,7 +139,7 @@ Bitmap::Load(unsigned id)
   if (original == NULL)
     return false;
 
-  Load(original);
+  Load(original, type);
 
 #ifdef WIN32
   free(header);

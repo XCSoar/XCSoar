@@ -38,7 +38,7 @@ Copyright_License {
 #include <assert.h>
 
 bool
-Bitmap::Load(unsigned id)
+Bitmap::Load(unsigned id, Type type)
 {
   Reset();
 

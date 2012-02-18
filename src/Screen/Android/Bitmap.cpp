@@ -81,7 +81,7 @@ Bitmap::Reload()
 }
 
 bool
-Bitmap::Load(unsigned _id)
+Bitmap::Load(unsigned _id, Type type)
 {
   assert(_id != 0);
 

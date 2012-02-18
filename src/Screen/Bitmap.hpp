@@ -41,6 +41,7 @@ Copyright_License {
 
 #include <assert.h>
 #include <tchar.h>
+#include <stdint.h>
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
@@ -54,6 +55,20 @@ class Bitmap : private NonCopyable
              , private GLSurfaceListener
 #endif
 {
+public:
+  enum class Type {
+    /**
+     * A standard bitmap that will be blitted to the screen.  After
+     * loading, it will be converted to the screen's pixel format.
+     */
+    STANDARD,
+
+    /**
+     * A monochrome bitmap (1 bit per pixel).
+     */
+    MONO,
+  };
+
 protected:
 #ifdef ENABLE_OPENGL
   /** resource id */
@@ -113,11 +128,11 @@ public:
 
 #ifndef ANDROID
 #ifdef ENABLE_SDL
-  bool Load(SDL_Surface *_surface);
+  bool Load(SDL_Surface *_surface, Type type=Type::STANDARD);
 #endif
 #endif
 
-  bool Load(unsigned id);
+  bool Load(unsigned id, Type type=Type::STANDARD);
 
   /**
    * Load a bitmap and stretch it by the specified zoom factor.
