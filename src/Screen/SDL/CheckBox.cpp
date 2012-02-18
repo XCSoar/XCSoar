@@ -161,7 +161,8 @@ CheckBox::OnPaint(Canvas &canvas)
   else
     canvas.Select(Pen(1, COLOR_GRAY));
 
-  canvas.Rectangle(2, 2, canvas.get_height() - 4, canvas.get_height() - 4);
+  unsigned size = canvas.get_height() - 4;
+  canvas.Rectangle(2, 2, size, size);
 
   if (checked) {
     canvas.line(4, 4, canvas.get_height() - 8, canvas.get_height() - 8);
