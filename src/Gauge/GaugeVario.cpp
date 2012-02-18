@@ -58,12 +58,12 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
    ballast_initialised(false), bugs_initialised(false),
    unit(Unit::UNDEFINED)
 {
-  diValueTop.InitDone = false;
-  diValueMiddle.InitDone = false;
-  diValueBottom.InitDone = false;
-  diLabelTop.InitDone = false;
-  diLabelMiddle.InitDone = false;
-  diLabelBottom.InitDone = false;
+  value_top.initialised = false;
+  value_middle.initialised = false;
+  value_bottom.initialised = false;
+  label_top.initialised = false;
+  label_middle.initialised = false;
+  label_bottom.initialised = false;
 
   set(parent, left, top, width, height, style);
 
@@ -78,15 +78,15 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   const UPixelScalar height = rc.bottom - rc.top;
 
   if (!is_persistent() || !layout_initialised) {
-    UPixelScalar ValueHeight = 4 + look.value_font->GetCapitalHeight()
+    UPixelScalar value_height = 4 + look.value_font->GetCapitalHeight()
       + look.text_font->GetCapitalHeight();
 
-    orgMiddle.y = yoffset - ValueHeight / 2;
-    orgMiddle.x = rc.right;
-    orgTop.y = orgMiddle.y - ValueHeight;
-    orgTop.x = rc.right;
-    orgBottom.y = orgMiddle.y + ValueHeight;
-    orgBottom.x = rc.right;
+    middle_position.y = yoffset - value_height / 2;
+    middle_position.x = rc.right;
+    top_position.y = middle_position.y - value_height;
+    top_position.x = rc.right;
+    bottom_position.y = middle_position.y + value_height;
+    bottom_position.x = rc.right;
 
     canvas.stretch(rc.left, rc.top, width, height,
                    look.background_bitmap,
@@ -98,18 +98,20 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   if (Settings().ShowAvgText) {
     // JMW averager now displays netto average if not circling
     if (!Calculated().circling) {
-      RenderValue(canvas, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
+      RenderValue(canvas, top_position.x, top_position.y, &value_top, &label_top,
                   Units::ToUserVSpeed(Calculated().netto_average),
                   _T("NetAvg"));
     } else {
-      RenderValue(canvas, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
+      RenderValue(canvas, top_position.x, top_position.y,
+                  &value_top, &label_top,
                   Units::ToUserVSpeed(Calculated().average), _T("Avg"));
     }
   }
 
   if (Settings().ShowMc) {
     fixed mc = Units::ToUserVSpeed(Calculated().common_stats.current_mc);
-    RenderValue(canvas, orgBottom.x, orgBottom.y, &diValueBottom, &diLabelBottom,
+    RenderValue(canvas, bottom_position.x, bottom_position.y,
+                &value_bottom, &label_bottom,
                 mc,
                 GetComputerSettings().task.auto_mc ? _T("Auto MC") : _T("MC"));
   }
@@ -170,8 +172,8 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   if (Settings().ShowGross) {
     fixed vvaldisplay = min(fixed(99.9), max(fixed(-99.9), Units::ToUserVSpeed(vval)));
 
-    RenderValue(canvas, orgMiddle.x, orgMiddle.y,
-                &diValueMiddle, &diLabelMiddle,
+    RenderValue(canvas, middle_position.x, middle_position.y,
+                &value_middle, &label_middle,
                 vvaldisplay,
                 _T("Gross"));
   }
@@ -317,8 +319,8 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
 // TODO code: Optimise vario rendering, this is slow
 void
 GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
-                        DrawInfo_t *diValue,
-                        DrawInfo_t *diLabel, fixed Value, const TCHAR *Label)
+                        DrawInfo *value_info,
+                        DrawInfo *diLabel, fixed Value, const TCHAR *Label)
 {
   PixelSize tsize;
 
@@ -326,92 +328,93 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
   Value = (double)iround(Value * 10) / 10; // prevent the -0.0 case
 #endif
 
-  if (!diValue->InitDone) {
+  if (!value_info->initialised) {
 
-    diValue->recBkg.right = x - Layout::Scale(5);
-    diValue->recBkg.top = y + Layout::Scale(3)
+    value_info->rc.right = x - Layout::Scale(5);
+    value_info->rc.top = y + Layout::Scale(3)
       + look.text_font->GetCapitalHeight();
 
-    diValue->recBkg.left = diValue->recBkg.right;
+    value_info->rc.left = value_info->rc.right;
     // update back rect with max label size
-    diValue->recBkg.bottom = diValue->recBkg.top
-                             + look.value_font->GetCapitalHeight();
+    value_info->rc.bottom = value_info->rc.top + look.value_font->GetCapitalHeight();
 
-    diValue->orgText.x = diValue->recBkg.left;
-    diValue->orgText.y = diValue->recBkg.top
+    value_info->text_position.x = value_info->rc.left;
+    value_info->text_position.y = value_info->rc.top
                          + look.value_font->GetCapitalHeight()
                          - look.value_font->GetAscentHeight();
 
-    diValue->lastValue = fixed(-9999);
-    diValue->lastText[0] = '\0';
-    diValue->last_unit = Unit::UNDEFINED;
-    diValue->InitDone = true;
+    value_info->last_value = fixed(-9999);
+    value_info->last_text[0] = '\0';
+    value_info->last_unit = Unit::UNDEFINED;
+    value_info->initialised = true;
   }
 
-  if (!diLabel->InitDone) {
+  if (!diLabel->initialised) {
 
-    diLabel->recBkg.right = x;
-    diLabel->recBkg.top = y + Layout::Scale(1);
+    diLabel->rc.right = x;
+    diLabel->rc.top = y + Layout::Scale(1);
 
-    diLabel->recBkg.left = diLabel->recBkg.right;
+    diLabel->rc.left = diLabel->rc.right;
     // update back rect with max label size
-    diLabel->recBkg.bottom = diLabel->recBkg.top
+    diLabel->rc.bottom = diLabel->rc.top
       + look.text_font->GetCapitalHeight();
 
-    diLabel->orgText.x = diLabel->recBkg.left;
-    diLabel->orgText.y = diLabel->recBkg.top
+    diLabel->text_position.x = diLabel->rc.left;
+    diLabel->text_position.y = diLabel->rc.top
       + look.text_font->GetCapitalHeight()
       - look.text_font->GetAscentHeight();
 
-    diLabel->lastValue = fixed(-9999);
-    diLabel->lastText[0] = '\0';
-    diLabel->InitDone = true;
+    diLabel->last_value = fixed(-9999);
+    diLabel->last_text[0] = '\0';
+    diLabel->initialised = true;
   }
 
   canvas.SetBackgroundTransparent();
 
-  if (!is_persistent() || (dirty && _tcscmp(diLabel->lastText, Label) != 0)) {
+  if (!is_persistent() || (dirty && _tcscmp(diLabel->last_text, Label) != 0)) {
     canvas.SetTextColor(look.dimmed_text_color);
     canvas.Select(*look.text_font);
     tsize = canvas.CalcTextSize(Label);
-    diLabel->orgText.x = diLabel->recBkg.right - tsize.cx;
+    diLabel->text_position.x = diLabel->rc.right - tsize.cx;
 
     if (is_persistent()) {
       canvas.SetBackgroundColor(look.background_color);
-      canvas.text_opaque(diLabel->orgText.x, diLabel->orgText.y,
-                         diLabel->recBkg, Label);
-      diLabel->recBkg.left = diLabel->orgText.x;
-      _tcscpy(diLabel->lastText, Label);
+      canvas.text_opaque(diLabel->text_position.x, diLabel->text_position.y,
+                         diLabel->rc, Label);
+      diLabel->rc.left = diLabel->text_position.x;
+      _tcscpy(diLabel->last_text, Label);
     } else {
-      canvas.text(diLabel->orgText.x, diLabel->orgText.y, Label);
+      canvas.text(diLabel->text_position.x, diLabel->text_position.y, Label);
     }
   }
 
-  if (!is_persistent() || (dirty && diValue->lastValue != Value)) {
-    TCHAR Temp[18];
+  if (!is_persistent() || (dirty && value_info->last_value != Value)) {
+    TCHAR buffer[18];
     canvas.SetBackgroundColor(look.background_color);
     canvas.SetTextColor(look.text_color);
-    _stprintf(Temp, _T("%.1f"), (double)Value);
+    _stprintf(buffer, _T("%.1f"), (double)Value);
     canvas.Select(*look.value_font);
-    tsize = canvas.CalcTextSize(Temp);
-    diValue->orgText.x = diValue->recBkg.right - tsize.cx;
+    tsize = canvas.CalcTextSize(buffer);
+    value_info->text_position.x = value_info->rc.right - tsize.cx;
 
     if (is_persistent()) {
-      canvas.text_opaque(diValue->orgText.x, diValue->orgText.y,
-                         diValue->recBkg, Temp);
+      canvas.text_opaque(value_info->text_position.x,
+                         value_info->text_position.y,
+                         value_info->rc, buffer);
 
-      diValue->recBkg.left = diValue->orgText.x;
-      diValue->lastValue = Value;
+      value_info->rc.left = value_info->text_position.x;
+      value_info->last_value = Value;
     } else {
-      canvas.text(diValue->orgText.x, diValue->orgText.y, Temp);
+      canvas.text(value_info->text_position.x, value_info->text_position.y,
+                  buffer);
     }
   }
 
   if (!is_persistent() ||
-      diValue->last_unit != Units::current.vertical_speed_unit) {
-    diValue->last_unit = Units::current.vertical_speed_unit;
-    const UnitSymbol *unit_symbol = units_look.GetSymbol(diValue->last_unit);
-    unit_symbol->draw(canvas, x - Layout::Scale(5), diValue->recBkg.top,
+      value_info->last_unit != Units::current.vertical_speed_unit) {
+    value_info->last_unit = Units::current.vertical_speed_unit;
+    const UnitSymbol *unit_symbol = units_look.GetSymbol(value_info->last_unit);
+    unit_symbol->draw(canvas, x - Layout::Scale(5), value_info->rc.top,
                       look.inverse
                       ? UnitSymbol::INVERSE_GRAY
                       : UnitSymbol::GRAY);
@@ -428,19 +431,19 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
   static fixed lastVdiff;
   fixed vdiff;
 
-  const UPixelScalar ARROWYSIZE = Layout::Scale(3);
-  const UPixelScalar ARROWXSIZE = Layout::Scale(7);
+  const UPixelScalar arrow_y_size = Layout::Scale(3);
+  const UPixelScalar arrow_x_size = Layout::Scale(7);
 
   const PixelRect rc = get_client_rect();
 
-  PixelScalar nary = NARROWS * ARROWYSIZE;
+  PixelScalar nary = NARROWS * arrow_y_size;
   PixelScalar ytop = rc.top + YOFFSET + nary; // JMW
   PixelScalar ybottom = rc.bottom - YOFFSET - nary - Layout::FastScale(1);
 
   ytop += Layout::Scale(14);
   ybottom -= Layout::Scale(14);
 
-  x = rc.right - 2 * ARROWXSIZE;
+  x = rc.right - 2 * arrow_x_size;
 
   // only draw speed command if flying and vario is not circling
   if ((Calculated().flight.flying)
@@ -457,17 +460,17 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
     if (is_persistent()) {
       // bottom (too slow)
       canvas.DrawFilledRectangle(x, ybottom + YOFFSET,
-                            x + ARROWXSIZE * 2 + 1,
-                            ybottom + YOFFSET + nary + ARROWYSIZE +
-                            Layout::FastScale(2),
-                            look.background_color);
+                                 x + arrow_x_size * 2 + 1,
+                                 ybottom + YOFFSET + nary + arrow_y_size +
+                                 Layout::FastScale(2),
+                                 look.background_color);
 
       // top (too fast)
       canvas.DrawFilledRectangle(x, ytop - YOFFSET + 1,
-                            x + ARROWXSIZE * 2  +1,
-                            ytop - YOFFSET - nary + 1 - ARROWYSIZE -
-                            Layout::FastScale(2),
-                            look.background_color);
+                                 x + arrow_x_size * 2  +1,
+                                 ytop - YOFFSET - nary + 1 - arrow_y_size -
+                                 Layout::FastScale(2),
+                                 look.background_color);
     }
 
     RenderClimb(canvas);
@@ -495,19 +498,20 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
 
       while (positive(vdiff)) {
         if (vdiff > DeltaVstep) {
-          canvas.Rectangle(x, y, x + ARROWXSIZE * 2 + 1, y + ARROWYSIZE - 1);
+          canvas.Rectangle(x, y,
+                           x + arrow_x_size * 2 + 1, y + arrow_y_size - 1);
         } else {
-          RasterPoint Arrow[3];
-          Arrow[0].x = x;
-          Arrow[0].y = y;
-          Arrow[1].x = x + ARROWXSIZE;
-          Arrow[1].y = y + ARROWYSIZE - 1;
-          Arrow[2].x = x + 2 * ARROWXSIZE;
-          Arrow[2].y = y;
-          canvas.DrawTriangleFan(Arrow, 3);
+          RasterPoint arrow[3];
+          arrow[0].x = x;
+          arrow[0].y = y;
+          arrow[1].x = x + arrow_x_size;
+          arrow[1].y = y + arrow_y_size - 1;
+          arrow[2].x = x + 2 * arrow_x_size;
+          arrow[2].y = y;
+          canvas.DrawTriangleFan(arrow, 3);
         }
         vdiff -= DeltaVstep;
-        y += ARROWYSIZE;
+        y += arrow_y_size;
       }
     } else if (negative(vdiff)) {
       // too fast
@@ -516,19 +520,20 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
 
       while (negative(vdiff)) {
         if (vdiff < -DeltaVstep) {
-          canvas.Rectangle(x, y + 1, x + ARROWXSIZE * 2 + 1, y - ARROWYSIZE + 2);
+          canvas.Rectangle(x, y + 1,
+                           x + arrow_x_size * 2 + 1, y - arrow_y_size + 2);
         } else {
-          RasterPoint Arrow[3];
-          Arrow[0].x = x;
-          Arrow[0].y = y;
-          Arrow[1].x = x + ARROWXSIZE;
-          Arrow[1].y = y - ARROWYSIZE + 1;
-          Arrow[2].x = x + 2 * ARROWXSIZE;
-          Arrow[2].y = y;
-          canvas.DrawTriangleFan(Arrow, 3);
+          RasterPoint arrow[3];
+          arrow[0].x = x;
+          arrow[0].y = y;
+          arrow[1].x = x + arrow_x_size;
+          arrow[1].y = y - arrow_y_size + 1;
+          arrow[2].x = x + 2 * arrow_x_size;
+          arrow[2].y = y;
+          canvas.DrawTriangleFan(arrow, 3);
         }
         vdiff += DeltaVstep;
-        y -= ARROWYSIZE;
+        y -= arrow_y_size;
       }
     }
   }
@@ -537,7 +542,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
 void
 GaugeVario::RenderBallast(Canvas &canvas)
 {
-  static unsigned lastBallast = -1;
+  static unsigned last_ballast = -1;
   static PixelRect recLabelBk = {-1,-1,-1,-1};
   static PixelRect recValueBk = {-1,-1,-1,-1};
   static RasterPoint orgLabel = {-1,-1};
@@ -592,9 +597,9 @@ GaugeVario::RenderBallast(Canvas &canvas)
     ballast_initialised = true;
   }
 
-  unsigned BALLAST = uround(Calculated().common_stats.current_ballast * 100);
+  unsigned ballast = uround(Calculated().common_stats.current_ballast * 100);
 
-  if (!is_persistent() || BALLAST != lastBallast) {
+  if (!is_persistent() || ballast != last_ballast) {
     // ballast hase been changed
 
     canvas.Select(*look.text_font);
@@ -604,9 +609,9 @@ GaugeVario::RenderBallast(Canvas &canvas)
     else
       canvas.SetBackgroundTransparent();
 
-    if (is_persistent() || lastBallast == 0 || BALLAST == 0) {
+    if (is_persistent() || last_ballast == 0 || ballast == 0) {
       // new ballast is 0, hide label
-      if (BALLAST > 0) {
+      if (ballast > 0) {
         canvas.SetTextColor(look.dimmed_text_color);
         // ols ballast was 0, show label
         if (is_persistent())
@@ -618,27 +623,27 @@ GaugeVario::RenderBallast(Canvas &canvas)
     }
 
     // new ballast 0, hide value
-    if (BALLAST > 0) {
-      TCHAR Temp[18];
-      _stprintf(Temp, _T("%u%%"), BALLAST);
+    if (ballast > 0) {
+      TCHAR buffer[18];
+      _stprintf(buffer, _T("%u%%"), ballast);
       canvas.SetTextColor(look.text_color);
 
       if (is_persistent())
-        canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
+        canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, buffer);
       else
-        canvas.text(orgValue.x, orgValue.y, Temp);
+        canvas.text(orgValue.x, orgValue.y, buffer);
     } else if (is_persistent())
       canvas.DrawFilledRectangle(recValueBk, look.background_color);
 
     if (is_persistent())
-      lastBallast = BALLAST;
+      last_ballast = ballast;
   }
 }
 
 void
 GaugeVario::RenderBugs(Canvas &canvas)
 {
-  static int lastBugs = -1;
+  static int last_bugs = -1;
   static PixelRect recLabelBk = {-1,-1,-1,-1};
   static PixelRect recValueBk = {-1,-1,-1,-1};
   static RasterPoint orgLabel = {-1,-1};
@@ -684,8 +689,8 @@ GaugeVario::RenderBugs(Canvas &canvas)
     bugs_initialised = true;
   }
 
-  int BUGS = iround((fixed_one - Calculated().common_stats.current_bugs) * 100);
-  if (is_persistent() || BUGS != lastBugs) {
+  int bugs = iround((fixed_one - Calculated().common_stats.current_bugs) * 100);
+  if (is_persistent() || bugs != last_bugs) {
 
     canvas.Select(*look.text_font);
 
@@ -694,8 +699,8 @@ GaugeVario::RenderBugs(Canvas &canvas)
     else
       canvas.SetBackgroundTransparent();
 
-    if (is_persistent() || lastBugs < 1 || BUGS < 1) {
-      if (BUGS > 0) {
+    if (is_persistent() || last_bugs < 1 || bugs < 1) {
+      if (bugs > 0) {
         canvas.SetTextColor(look.dimmed_text_color);
         if (is_persistent())
           canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBug);
@@ -705,19 +710,19 @@ GaugeVario::RenderBugs(Canvas &canvas)
         canvas.DrawFilledRectangle(recLabelBk, look.background_color);
     }
 
-    if (BUGS > 0) {
-      TCHAR Temp[18];
-      _stprintf(Temp, _T("%d%%"), BUGS);
+    if (bugs > 0) {
+      TCHAR buffer[18];
+      _stprintf(buffer, _T("%d%%"), bugs);
       canvas.SetTextColor(look.text_color);
       if (is_persistent())
-        canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
+        canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, buffer);
       else 
-        canvas.text(orgValue.x, orgValue.y, Temp);
+        canvas.text(orgValue.x, orgValue.y, buffer);
     } else if (is_persistent())
       canvas.DrawFilledRectangle(recValueBk, look.background_color);
 
     if (is_persistent())
-      lastBugs = BUGS;
+      last_bugs = bugs;
   }
 }
 

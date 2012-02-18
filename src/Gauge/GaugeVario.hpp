@@ -34,15 +34,6 @@ struct UnitsLook;
 class ContainerWindow;
 class UnitSymbol;
 
-struct DrawInfo_t {
-  bool    InitDone;
-  PixelRect recBkg;
-  RasterPoint orgText;
-  fixed lastValue;
-  TCHAR   lastText[32];
-  Unit last_unit;
-};
-
 class GaugeVario : public BufferWindow
 {
   enum {
@@ -56,6 +47,15 @@ class GaugeVario : public BufferWindow
     GAUGEVARIOSWEEP = 90,
 
     gmax = GAUGEVARIOSWEEP + 2,
+  };
+
+  struct DrawInfo {
+    bool initialised;
+    PixelRect rc;
+    RasterPoint text_position;
+    fixed last_value;
+    TCHAR last_text[32];
+    Unit last_unit;
   };
 
   const FullBlackboard &blackboard;
@@ -74,16 +74,17 @@ private:
   bool needle_initialised;
   bool ballast_initialised;
   bool bugs_initialised;
-  RasterPoint orgTop;
-  RasterPoint orgMiddle;
-  RasterPoint orgBottom;
 
-  DrawInfo_t diValueTop;
-  DrawInfo_t diValueMiddle;
-  DrawInfo_t diValueBottom;
-  DrawInfo_t diLabelTop;
-  DrawInfo_t diLabelMiddle;
-  DrawInfo_t diLabelBottom;
+  RasterPoint top_position;
+  RasterPoint middle_position;
+  RasterPoint bottom_position;
+
+  DrawInfo value_top;
+  DrawInfo value_middle;
+  DrawInfo value_bottom;
+  DrawInfo label_top;
+  DrawInfo label_middle;
+  DrawInfo label_bottom;
 
   Unit unit;
 
@@ -122,7 +123,7 @@ protected:
 private:
   void RenderZero(Canvas &canvas);
   void RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
-                   DrawInfo_t *diValue, DrawInfo_t *diLabel,
+                   DrawInfo *diValue, DrawInfo *diLabel,
                    fixed Value, const TCHAR *Label);
   void RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y);
   void RenderBallast(Canvas &canvas);
