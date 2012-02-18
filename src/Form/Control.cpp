@@ -82,7 +82,6 @@ WindowControl::OnHelp()
 bool
 WindowControl::OnKeyDown(unsigned key_code)
 {
-  // JMW: HELP
   KeyTimer(true, key_code);
 
   return ContainerWindow::OnKeyDown(key_code);
