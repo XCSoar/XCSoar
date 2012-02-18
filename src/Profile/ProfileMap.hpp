@@ -35,6 +35,18 @@ class KeyValueFileWriter;
 
 namespace ProfileMap {
   /**
+   * Has the in-memory profile been modified since the last
+   * SetModified(false) call?
+   */
+  gcc_pure
+  bool IsModified();
+
+  /**
+   * Set the "modified" flag.
+   */
+  void SetModified(bool modified);
+
+  /**
    * Look up a string value in the profile.
    *
    * @param key name of the value

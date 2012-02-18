@@ -51,6 +51,7 @@ Profile::Load()
 {
   LogStartUp(_T("Loading profiles"));
   LoadFile(startProfileFile);
+  SetModified(false);
 }
 
 void
@@ -74,6 +75,9 @@ Profile::LoadFile(const TCHAR *szFile)
 void
 Profile::Save()
 {
+  if (!IsModified())
+    return;
+
   LogStartUp(_T("Saving profiles"));
   SaveFile(startProfileFile);
 }
@@ -100,6 +104,10 @@ Profile::SaveFile(const TCHAR *szFile)
 void
 Profile::SetFiles(const TCHAR* override)
 {
+  /* set the "modified" flag, because we are potentially saving to a
+     new file now */
+  SetModified(true);
+
   if (!StringIsEmpty(override)) {
     if (IsBaseName(override)) {
       LocalPath(startProfileFile, override);

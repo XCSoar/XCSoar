@@ -32,6 +32,19 @@ namespace ProfileMap {
   typedef std::map<tstring, tstring> map_t;
 
   static map_t map;
+  static bool modified;
+}
+
+bool
+ProfileMap::IsModified()
+{
+  return modified;
+}
+
+void
+ProfileMap::SetModified(bool _modified)
+{
+  modified = _modified;
 }
 
 const TCHAR *
@@ -62,6 +75,7 @@ bool
 ProfileMap::Set(const TCHAR *key, const TCHAR *value)
 {
   map[key] = value;
+  modified = true;
   return true;
 }
 
