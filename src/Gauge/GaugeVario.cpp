@@ -738,4 +738,11 @@ GaugeVario::OnResize(UPixelScalar width, UPixelScalar height)
   needle_initialised = false;
   ballast_initialised = false;
   bugs_initialised = false;
+
+  value_top.initialised = false;
+  value_middle.initialised = false;
+  value_bottom.initialised = false;
+  label_top.initialised = false;
+  label_middle.initialised = false;
+  label_bottom.initialised = false;
 }
