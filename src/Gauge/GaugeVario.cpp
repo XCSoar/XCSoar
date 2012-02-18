@@ -689,7 +689,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
     bugs_initialised = true;
   }
 
-  int bugs = iround((fixed_one - Calculated().common_stats.current_bugs) * 100);
+  int bugs = iround((fixed_one - GetComputerSettings().polar.bugs) * 100);
   if (is_persistent() || bugs != last_bugs) {
 
     canvas.Select(*look.text_font);

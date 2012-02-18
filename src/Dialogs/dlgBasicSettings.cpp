@@ -95,7 +95,7 @@ public:
   }
 
   void SetBugs(fixed bugs) {
-    polar_settings.glide_polar_task.SetBugs(bugs);
+    polar_settings.SetBugs(bugs);
     PublishPolarSettings();
   }
 
@@ -284,7 +284,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."),
            _T("%.0f %%"), _T("%.0f"),
            fixed_zero, fixed(50), fixed_one, false,
-           (fixed_one - polar_settings.glide_polar_task.GetBugs()) * 100,
+           (fixed_one - polar_settings.bugs) * 100,
            OnBugsData);
 
   wp = AddFloat(_("QNH"),

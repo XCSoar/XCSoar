@@ -189,9 +189,8 @@ InputEvents::eventBugs(const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  GlidePolar &polar =
-    CommonInterface::SetComputerSettings().polar.glide_polar_task;
-  fixed BUGS = polar.GetBugs();
+  PolarSettings &settings = CommonInterface::SetComputerSettings().polar;
+  fixed BUGS = settings.bugs;
   fixed oldBugs = BUGS;
 
   if (StringIsEqual(misc, _T("up"))) {
@@ -213,8 +212,8 @@ InputEvents::eventBugs(const TCHAR *misc)
   }
 
   if (BUGS != oldBugs) {
-    polar.SetBugs(fixed(BUGS));
-    protected_task_manager->SetGlidePolar(polar);
+    settings.SetBugs(BUGS);
+    protected_task_manager->SetGlidePolar(settings.glide_polar_task);
   }
 }
 

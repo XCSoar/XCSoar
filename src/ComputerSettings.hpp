@@ -117,6 +117,15 @@ static_assert(is_trivial<WindSettings>::value, "type is not trivial");
  * Glide polar settings
  */
 struct PolarSettings {
+  /**
+   * Bugs ratio applied to polar.  Range is 0..1, where 1 means
+   * "clean".
+   *
+   * When you modify this, you should update glide_polar_task and send
+   * the new GlidePolar to the TaskManager.
+   */
+  fixed bugs;
+
   /** Glide polar used for task calculations */
   GlidePolar glide_polar_task;
 
@@ -124,6 +133,11 @@ struct PolarSettings {
   bool ballast_timer_active;
 
   void SetDefaults();
+
+  void SetBugs(fixed _bugs) {
+    bugs = _bugs;
+    glide_polar_task.SetBugs(bugs);
+  }
 };
 
 struct SoundSettings {
