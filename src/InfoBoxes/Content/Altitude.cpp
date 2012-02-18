@@ -231,18 +231,3 @@ InfoBoxContentFlightLevel::Update(InfoBoxData &data)
     data.SetInvalid();
   }
 }
-
-void
-InfoBoxContentTerrainHeight::Update(InfoBoxData &data)
-{
-  const DerivedInfo &calculated = CommonInterface::Calculated();
-
-  if (!calculated.terrain_valid){
-    data.SetInvalid();
-    return;
-  }
-
-  data.SetValueFromAltitude(calculated.terrain_altitude);
-  data.SetCommentFromAlternateAltitude(calculated.terrain_altitude);
-}
-

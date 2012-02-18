@@ -33,6 +33,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Speed.hpp"
 #include "InfoBoxes/Content/Task.hpp"
 #include "InfoBoxes/Content/Team.hpp"
+#include "InfoBoxes/Content/Terrain.hpp"
 #include "InfoBoxes/Content/Thermal.hpp"
 #include "InfoBoxes/Content/Time.hpp"
 #include "InfoBoxes/Content/Trace.hpp"

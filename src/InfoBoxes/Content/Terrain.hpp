@@ -21,44 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_INFOBOX_CONTENT_ALTITUDE_HPP
-#define XCSOAR_INFOBOX_CONTENT_ALTITUDE_HPP
+#ifndef XCSOAR_INFOBOX_CONTENT_TERRAIN_HPP
+#define XCSOAR_INFOBOX_CONTENT_TERRAIN_HPP
 
 #include "InfoBoxes/Content/Base.hpp"
 
-class InfoBoxContentAltitude : public InfoBoxContent
-{
-public:
-  virtual const DialogContent *GetDialogContent();
-};
-
-class InfoBoxContentAltitudeGPS : public InfoBoxContentAltitude
-{
-public:
-  virtual void Update(InfoBoxData &data);
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
-};
-
-class InfoBoxContentAltitudeAGL : public InfoBoxContentAltitude
-{
-public:
-  virtual void Update(InfoBoxData &data);
-};
-
-class InfoBoxContentAltitudeBaro : public InfoBoxContentAltitude
-{
-public:
-  virtual void Update(InfoBoxData &data);
-};
-
-class InfoBoxContentAltitudeQFE : public InfoBoxContentAltitude
-{
-public:
-  virtual void Update(InfoBoxData &data);
-};
-
-class InfoBoxContentFlightLevel : public InfoBoxContentAltitude
-{
+class InfoBoxContentTerrainHeight : public InfoBoxContent {
 public:
   virtual void Update(InfoBoxData &data);
 };
