@@ -486,12 +486,8 @@ InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 bool
 InfoBoxWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
-  if (!IsAltair()) {
-    // JMW capture double click, so infoboxes double clicked also bring up menu
-    // VENTA3: apparently this is working only on PC ! Disable it to let PC work
-    // with same timeout of PDA and PNA versions with synthetic DBLCLK
+  if (!IsAltair())
     InputEvents::ShowMenu();
-  }
 
   return true;
 }
