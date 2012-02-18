@@ -26,10 +26,12 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct Waypoint;
 class Waypoints;
 class RasterTerrain;
 class OperationEnvironment;
 struct ComputerSettings;
+struct PlacesOfInterestSettings;
 
 class WaypointReaderBase;
 
@@ -37,6 +39,39 @@ class WaypointReaderBase;
  * This class is used to parse different waypoint files
  */
 namespace WaypointGlue {
+  /**
+   * Find the configured home by location (in
+   * #PlacesOfInterestSettings) in the #Waypoints database.  Sets the
+   * home in #Waypoints and updates the home waypoint id in
+   * #PlacesOfInterestSettings.  Will not update the profile, because
+   * that should only be done on user action.
+   *
+   * @return the home #Waypoint, or NULL if it not found
+   */
+  const Waypoint *FindHomeId(Waypoints &waypoints,
+                             PlacesOfInterestSettings &settings);
+
+  /**
+   * Find the configured home by id (in #PlacesOfInterestSettings) in
+   * the #Waypoints database.  Sets the home in #Waypoints and updates
+   * the home location in #PlacesOfInterestSettings.  Will not update
+   * the profile, because that should only be done on user action.
+   *
+   * @return the home #Waypoint, or NULL if it not found
+   */
+  const Waypoint *FindHomeLocation(Waypoints &waypoints,
+                                   PlacesOfInterestSettings &settings);
+
+  /**
+   * Find the waypoint flagged as "home" in the #Waypoints database,
+   * and configures it in #PlacesOfInterestSettings.  Will not update
+   * the profile, because that should only be done on user action.
+   *
+   * @return the home #Waypoint, or NULL if it not found
+   */
+  const Waypoint *FindFlaggedHome(Waypoints &waypoints,
+                                  PlacesOfInterestSettings &settings);
+
   /**
    * This functions checks if the home and teamcode waypoint
    * indices exist and if necessary tries to find new ones in the waypoint list

@@ -85,6 +85,56 @@ WaypointGlue::IsWritable()
   return IsWritable(1) || IsWritable(2) || IsWritable(3);
 }
 
+const Waypoint *
+WaypointGlue::FindHomeId(Waypoints &waypoints,
+                         PlacesOfInterestSettings &settings)
+{
+  if (settings.home_waypoint < 0)
+    return NULL;
+
+  const Waypoint *wp = waypoints.LookupId(settings.home_waypoint);
+  if (wp == NULL) {
+    settings.home_waypoint = -1;
+    return NULL;
+  }
+
+  settings.home_location = wp->location;
+  settings.home_location_available = true;
+  waypoints.SetHome(wp->id);
+  return wp;
+}
+
+const Waypoint *
+WaypointGlue::FindHomeLocation(Waypoints &waypoints,
+                               PlacesOfInterestSettings &settings)
+{
+  if (!settings.home_location_available)
+    return NULL;
+
+  const Waypoint *wp = waypoints.LookupLocation(settings.home_location,
+                                                fixed(100));
+  if (wp == NULL || !wp->IsAirport()) {
+    settings.home_location_available = false;
+    return NULL;
+  }
+
+  settings.home_waypoint = wp->id;
+  waypoints.SetHome(wp->id);
+  return wp;
+}
+
+const Waypoint *
+WaypointGlue::FindFlaggedHome(Waypoints &waypoints,
+                              PlacesOfInterestSettings &settings)
+{
+  const Waypoint *wp = waypoints.FindHome();
+  if (wp == NULL)
+    return NULL;
+
+  settings.SetHome(*wp);
+  return wp;
+}
+
 void
 WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
                       ComputerSettings &settings,
@@ -92,27 +142,18 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 {
   LogStartUp(_T("SetHome"));
 
+  if (reset)
+    settings.poi.home_waypoint = -1;
+
   // check invalid home waypoint or forced reset due to file change
-  const Waypoint *wp = reset
-    ? NULL : way_points.LookupId(settings.poi.home_waypoint);
-  if (wp == NULL && settings.poi.home_location_available) {
+  const Waypoint *wp = FindHomeId(way_points, settings.poi);
+  if (wp == NULL) {
     /* fall back to HomeLocation, try to find it in the waypoint
        database */
-    wp = way_points.LookupLocation(settings.poi.home_location, fixed(100));
-    if (wp != NULL && wp->IsAirport())
-      settings.poi.SetHome(*wp);
-  }
-
-  if (wp != NULL) {
-    // home waypoint found
-    way_points.SetHome(settings.poi.home_waypoint);
-  } else {
-    // search for home in waypoint list, if we don't have a home
-    wp = way_points.FindHome();
-    if (wp != NULL)
-      settings.poi.SetHome(*wp);
-    else
-      settings.poi.ClearHome();
+    wp = FindHomeLocation(way_points, settings.poi);
+    if (wp == NULL)
+      // search for home in waypoint list, if we don't have a home
+      wp = FindFlaggedHome(way_points, settings.poi);
   }
 
   // check invalid task ref waypoint or forced reset due to file change
