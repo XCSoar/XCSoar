@@ -175,8 +175,11 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
                                             fixed(terrain->GetTerrainHeight(loc)));
     }
   }
+}
 
-  // Save the home waypoint number in the resgistry
+void
+WaypointGlue::SaveHome(const ComputerSettings &settings)
+{
   Profile::Set(szProfileHomeWaypoint, settings.poi.home_waypoint);
   if (settings.poi.home_location_available)
     Profile::SetGeoPoint(szProfileHomeLocation, settings.poi.home_location);

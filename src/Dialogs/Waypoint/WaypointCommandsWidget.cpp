@@ -187,6 +187,7 @@ SetHome(const Waypoint &waypoint)
     WaypointGlue::SetHome(way_points, terrain,
                           settings_computer,
                           false);
+    WaypointGlue::SaveHome(settings_computer);
   }
 }
 

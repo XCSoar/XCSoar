@@ -87,6 +87,12 @@ namespace WaypointGlue {
                ComputerSettings &settings, const bool reset);
 
   /**
+   * Save the home waypoint and the teamcode reference location to the
+   * profile.
+   */
+  void SaveHome(const ComputerSettings &settings);
+
+  /**
    * Reads the waypoints out of the two waypoint files and appends them to the
    * specified waypoint list
    * @param way_points The waypoint list to fill
