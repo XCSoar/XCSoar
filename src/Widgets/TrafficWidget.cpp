@@ -152,7 +152,7 @@ FlarmTrafficControl2::SetNorthUp(bool enabled)
   TrafficSettings &settings = CommonInterface::SetUISettings().traffic;
   settings.north_up = enable_north_up = enabled;
   Profile::Set(szProfileFlarmNorthUp, enabled);
-  //north_up->set_checked(enabled);
+  //north_up->SetState(enabled);
 }
 
 void
@@ -161,7 +161,7 @@ FlarmTrafficControl2::SetAutoZoom(bool enabled)
   TrafficSettings &settings = CommonInterface::SetUISettings().traffic;
   settings.auto_zoom = enable_auto_zoom = enabled;
   Profile::Set(szProfileFlarmAutoZoom, enabled);
-  //auto_zoom->set_checked(enabled);
+  //auto_zoom->SetState(enabled);
 }
 
 void
@@ -649,10 +649,10 @@ TrafficWidget::Show(const PixelRect &rc)
 #if 0
   // Get the last chosen Side Data configuration
   auto_zoom = (CheckBox *)form.FindByName(_T("AutoZoom"));
-  auto_zoom->set_checked(view->GetAutoZoom());
+  auto_zoom->SetState(view->GetAutoZoom());
 
   north_up = (CheckBox *)form.FindByName(_T("NorthUp"));
-  north_up->set_checked(view->GetNorthUp());
+  north_up->SetState(view->GetNorthUp());
 #endif
 
   WindowWidget::Show(rc);

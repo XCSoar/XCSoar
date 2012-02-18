@@ -71,7 +71,7 @@ CheckBoxControl::OnKeyDown(unsigned key_code)
   case VK_F4:
 #endif
   case VK_RETURN:
-    set_checked(!get_checked());
+    SetState(!GetState());
     return OnClicked();
   }
 

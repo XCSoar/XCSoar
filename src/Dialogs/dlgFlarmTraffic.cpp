@@ -149,7 +149,7 @@ FlarmTrafficControl::SetNorthUp(bool enabled)
   TrafficSettings &settings = CommonInterface::SetUISettings().traffic;
   settings.north_up = enable_north_up = enabled;
   Profile::Set(szProfileFlarmNorthUp, enabled);
-  north_up->set_checked(enabled);
+  north_up->SetState(enabled);
 }
 
 void
@@ -158,7 +158,7 @@ FlarmTrafficControl::SetAutoZoom(bool enabled)
   TrafficSettings &settings = CommonInterface::SetUISettings().traffic;
   settings.auto_zoom = enable_auto_zoom = enabled;
   Profile::Set(szProfileFlarmAutoZoom, enabled);
-  auto_zoom->set_checked(enabled);
+  auto_zoom->SetState(enabled);
 }
 
 void
@@ -498,13 +498,13 @@ OnSwitchDataClicked(gcc_unused WndButton &button)
 static void
 OnAutoZoom(CheckBoxControl &control)
 {
-  wdf->SetAutoZoom(control.get_checked());
+  wdf->SetAutoZoom(control.GetState());
 }
 
 static void
 OnNorthUp(CheckBoxControl &control)
 {
-  wdf->SetNorthUp(control.get_checked());
+  wdf->SetNorthUp(control.GetState());
 }
 
 /**
@@ -702,10 +702,10 @@ dlgFlarmTrafficShowModal()
 
   // Get the last chosen Side Data configuration
   auto_zoom = (CheckBox *)wf->FindByName(_T("AutoZoom"));
-  auto_zoom->set_checked(wdf->GetAutoZoom());
+  auto_zoom->SetState(wdf->GetAutoZoom());
 
   north_up = (CheckBox *)wf->FindByName(_T("NorthUp"));
-  north_up->set_checked(wdf->GetNorthUp());
+  north_up->SetState(wdf->GetNorthUp());
 
   // Show the dialog
   wf->ShowModal();

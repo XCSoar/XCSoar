@@ -71,14 +71,14 @@ public:
     set(parent, text, 0, rc, style);
   }
 
-  bool get_checked() const {
+  bool GetState() const {
     return checked;
   }
 
-  void set_checked(bool value);
+  void SetState(bool value);
 
 protected:
-  void set_pressed(bool value);
+  void SetPressed(bool value);
 
   virtual bool OnKeyDown(unsigned key_code);
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
@@ -113,11 +113,11 @@ public:
     BaseButtonWindow::set(parent, text, rc, style);
   }
 
-  bool get_checked() const {
+  bool GetState() const {
     return SendMessage(hWnd, BM_GETCHECK, 0, 0) == BST_CHECKED;
   }
 
-  void set_checked(bool value) {
+  void SetState(bool value) {
     SendMessage(hWnd, BM_SETCHECK, value ? BST_CHECKED : BST_UNCHECKED, 0);
   }
 };

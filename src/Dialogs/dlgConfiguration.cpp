@@ -147,7 +147,7 @@ ConfigPanel::GetExtraButton(unsigned number)
 static void
 OnUserLevel(CheckBoxControl &control)
 {
-  const bool expert = control.get_checked();
+  const bool expert = control.GetState();
   CommonInterface::SetUISettings().dialog.expert = expert;
   Profile::Set(szProfileUserLevel, expert);
   wf->FilterAdvanced(expert);
@@ -249,7 +249,7 @@ PrepareConfigurationDialog()
 
   bool expert_mode = CommonInterface::GetUISettings().dialog.expert;
   CheckBox *cb = (CheckBox *)wf->FindByName(_T("Expert"));
-  cb->set_checked(expert_mode);
+  cb->SetState(expert_mode);
   wf->FilterAdvanced(expert_mode);
 
   PrepareConfigurationMenu();

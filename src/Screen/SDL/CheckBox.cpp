@@ -42,7 +42,7 @@ CheckBox::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
 }
 
 void
-CheckBox::set_checked(bool value)
+CheckBox::SetState(bool value)
 {
   if (value == checked)
     return;
@@ -52,7 +52,7 @@ CheckBox::set_checked(bool value)
 }
 
 void
-CheckBox::set_pressed(bool value)
+CheckBox::SetPressed(bool value)
 {
   if (value == pressed)
     return;
@@ -83,7 +83,7 @@ bool
 CheckBox::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (dragging) {
-    set_pressed(x >= 0 && y >= 0 &&
+    SetPressed(x >= 0 && y >= 0 &&
                 (unsigned)x < get_width() && (unsigned)y < get_height());
     return true;
   } else
@@ -96,7 +96,7 @@ CheckBox::OnMouseDown(PixelScalar x, PixelScalar y)
   if (is_tab_stop())
     set_focus();
 
-  set_pressed(true);
+  SetPressed(true);
   set_capture();
   dragging = true;
   return true;
@@ -114,7 +114,7 @@ CheckBox::OnMouseUp(PixelScalar x, PixelScalar y)
   if (!pressed)
     return true;
 
-  set_pressed(false);
+  SetPressed(false);
   checked = !checked;
   invalidate();
 
@@ -142,7 +142,7 @@ bool
 CheckBox::OnCancelMode()
 {
   dragging = false;
-  set_pressed(false);
+  SetPressed(false);
 
   return PaintWindow::OnCancelMode();
 }

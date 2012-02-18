@@ -243,7 +243,7 @@ RefreshCalculator()
 
   if (chkbOptimized) {
     chkbOptimized->set_visible(bAAT);
-    chkbOptimized->set_checked(!IsLocked);
+    chkbOptimized->SetState(!IsLocked);
   }
 
   LockCalculatorUI();
@@ -294,7 +294,7 @@ RefreshCalculator()
 static void
 OnOptimized(CheckBoxControl &control)
 {
-  IsLocked = !control.get_checked();
+  IsLocked = !control.GetState();
   protected_task_manager->TargetLock(target_point, IsLocked);
   RefreshCalculator();
 }
