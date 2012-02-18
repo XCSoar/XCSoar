@@ -79,6 +79,8 @@ SelectProfile(const TCHAR *path)
      becomes the primary data path */
   TCHAR temp[MAX_PATH];
   SetPrimaryDataPath(DirName(path, temp));
+
+  File::Touch(path);
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
