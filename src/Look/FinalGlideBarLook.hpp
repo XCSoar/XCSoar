@@ -28,14 +28,14 @@
 #include "Screen/Brush.hpp"
 
 struct FinalGlideBarLook {
-  Pen hpFinalGlideAbove;
-  Brush hbFinalGlideAbove;
+  Pen pen_above;
+  Brush brush_above;
 
-  Pen hpFinalGlideBelow;
-  Brush hbFinalGlideBelow;
+  Pen pen_below;
+  Brush brush_below;
 
-  Pen hpFinalGlideBelowLandable;
-  Brush hbFinalGlideBelowLandable;
+  Pen pen_below_landable;
+  Brush brush_below_landable;
 
   void Initialise();
 };

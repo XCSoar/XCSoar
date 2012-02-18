@@ -147,29 +147,29 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   // draw actual glide bar
   if (altitude_difference <= 0) {
     if (calculated.common_stats.landable_reachable) {
-      canvas.Select(look.hpFinalGlideBelowLandable);
-      canvas.Select(look.hbFinalGlideBelowLandable);
+      canvas.Select(look.pen_below_landable);
+      canvas.Select(look.brush_below_landable);
     } else {
-      canvas.Select(look.hpFinalGlideBelow);
-      canvas.Select(look.hbFinalGlideBelow);
+      canvas.Select(look.pen_below);
+      canvas.Select(look.brush_below);
     }
   } else {
-    canvas.Select(look.hpFinalGlideAbove);
-    canvas.Select(look.hbFinalGlideAbove);
+    canvas.Select(look.pen_above);
+    canvas.Select(look.brush_above);
   }
   canvas.polygon(GlideBar, 6);
 
   // draw glide bar at mc 0
   if (altitude_difference0 <= 0) {
     if (calculated.common_stats.landable_reachable) {
-      canvas.Select(look.hpFinalGlideBelowLandable);
+      canvas.Select(look.pen_below_landable);
       canvas.SelectHollowBrush();
     } else {
-      canvas.Select(look.hpFinalGlideBelow);
+      canvas.Select(look.pen_below);
       canvas.SelectHollowBrush();
     }
   } else {
-    canvas.Select(look.hpFinalGlideAbove);
+    canvas.Select(look.pen_above);
     canvas.SelectHollowBrush();
   }
 

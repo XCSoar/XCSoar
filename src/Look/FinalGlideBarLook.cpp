@@ -27,13 +27,13 @@ Copyright_License {
 void
 FinalGlideBarLook::Initialise()
 {
-  hbFinalGlideBelow.Set(COLOR_RED);
-  hpFinalGlideBelow.Set(Layout::ScalePenWidth(1), DarkColor(COLOR_RED));
+  brush_below.Set(COLOR_RED);
+  pen_below.Set(Layout::ScalePenWidth(1), DarkColor(COLOR_RED));
 
-  hbFinalGlideBelowLandable.Set(COLOR_ORANGE);
-  hpFinalGlideBelowLandable.Set(Layout::ScalePenWidth(1),
-                                DarkColor(COLOR_ORANGE));
+  brush_below_landable.Set(COLOR_ORANGE);
+  pen_below_landable.Set(Layout::ScalePenWidth(1),
+                         DarkColor(COLOR_ORANGE));
 
-  hbFinalGlideAbove.Set(COLOR_GREEN);
-  hpFinalGlideAbove.Set(Layout::ScalePenWidth(1), DarkColor(COLOR_GREEN));
+  brush_above.Set(COLOR_GREEN);
+  pen_above.Set(Layout::ScalePenWidth(1), DarkColor(COLOR_GREEN));
 }
