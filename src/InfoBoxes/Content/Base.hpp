@@ -47,14 +47,12 @@ public:
     ibkRight = 2
   };
 
-  virtual ~InfoBoxContent() {}
+  virtual ~InfoBoxContent();
 
   virtual void Update(InfoBoxData &data) = 0;
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode) {
-    return false;
-  }
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 
-  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas) {}
+  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
 
   /**
    * This is a generic handler for the InfoBox. It takes the argument and
@@ -62,9 +60,7 @@ public:
    * @param misc
    * @return True on success, Fales otherwise
    */
-  virtual bool HandleQuickAccess(const TCHAR *misc) {
-    return false;
-  }
+  virtual bool HandleQuickAccess(const TCHAR *misc);
 
   struct PanelContent {
     gcc_constexpr_ctor
@@ -81,9 +77,7 @@ public:
     const PanelContent *Panels;
   };
 
-  virtual const DialogContent *GetDialogContent() {
-    return NULL;
-  }
+  virtual const DialogContent *GetDialogContent();
 
   static void SetValueBearingDifference(InfoBoxData &data, Angle delta);
   static void SetCommentBearingDifference(InfoBoxData &data, Angle delta);

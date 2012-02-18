@@ -26,6 +26,31 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Formatter/AngleFormatter.hpp"
 
+InfoBoxContent::~InfoBoxContent() {}
+
+bool
+InfoBoxContent::HandleKey(const InfoBoxKeyCodes keycode)
+{
+  return false;
+}
+
+void
+InfoBoxContent::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
+{
+}
+
+bool
+InfoBoxContent::HandleQuickAccess(const TCHAR *misc)
+{
+  return false;
+}
+
+const InfoBoxContent::DialogContent *
+InfoBoxContent::GetDialogContent()
+{
+  return NULL;
+}
+
 void
 InfoBoxContent::SetValueBearingDifference(InfoBoxData &data, Angle delta)
 {
