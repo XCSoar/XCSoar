@@ -30,65 +30,65 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
-static bool DataFieldKeyUp = false;
+static bool datafield_key_up = false;
 
 int
 DataFieldInteger::GetAsInteger() const
 {
-  return mValue;
+  return value;
 }
 
 const TCHAR *
 DataFieldInteger::GetAsString() const
 {
-  TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
-  _stprintf(mOutBuf, edit_format, mValue);
-  return mOutBuf;
+  TCHAR *output_buffer = const_cast<TCHAR *>(this->outpuf_buffer);
+  _stprintf(output_buffer, edit_format, value);
+  return output_buffer;
 }
 
 const TCHAR *
 DataFieldInteger::GetAsDisplayString() const
 {
-  TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
-  _stprintf(mOutBuf, display_format, mValue);
-  return mOutBuf;
+  TCHAR *output_buffer = const_cast<TCHAR *>(this->outpuf_buffer);
+  _stprintf(output_buffer, display_format, value);
+  return output_buffer;
 }
 
 void
-DataFieldInteger::Set(int Value)
+DataFieldInteger::Set(int _value)
 {
-  mValue = Value;
+  value = _value;
 }
 
 void
-DataFieldInteger::SetAsInteger(int Value)
+DataFieldInteger::SetAsInteger(int _value)
 {
-  if (Value < mMin)
-    Value = mMin;
-  if (Value > mMax)
-    Value = mMax;
-  if (mValue != Value) {
-    mValue = Value;
+  if (_value < min)
+    _value = min;
+  if (_value > max)
+    _value = max;
+  if (value != _value) {
+    value = _value;
     Modified();
   }
 }
 
 void
-DataFieldInteger::SetAsString(const TCHAR *Value)
+DataFieldInteger::SetAsString(const TCHAR *_value)
 {
-  SetAsInteger(_ttoi(Value));
+  SetAsInteger(_ttoi(_value));
 }
 
 void
 DataFieldInteger::Inc()
 {
-  SetAsInteger(mValue + mStep * SpeedUp(true));
+  SetAsInteger(value + step * SpeedUp(true));
 }
 
 void
 DataFieldInteger::Dec()
 {
-  SetAsInteger(mValue - mStep * SpeedUp(false));
+  SetAsInteger(value - step * SpeedUp(false));
 }
 
 int
@@ -99,22 +99,22 @@ DataFieldInteger::SpeedUp(bool keyup)
   if (IsAltair())
     return res;
 
-  if (keyup != DataFieldKeyUp) {
-    mSpeedup = 0;
-    DataFieldKeyUp = keyup;
+  if (keyup != datafield_key_up) {
+    speedup = 0;
+    datafield_key_up = keyup;
     last_step.Update();
     return 1;
   }
 
   if (!last_step.Check(200)) {
-    mSpeedup++;
-    if (mSpeedup > 5) {
+    speedup++;
+    if (speedup > 5) {
       res = 10;
       last_step.UpdateWithOffset(350);
       return (res);
     }
   } else
-    mSpeedup = 0;
+    speedup = 0;
 
   last_step.Update();
 
@@ -139,23 +139,23 @@ DataFieldInteger::CreateComboList() const
   unsigned surrounding_items = ComboList::MAX_SIZE / 2 - 2;
 
   /* the value aligned to mStep */
-  int corrected_value = ((mValue - mMin) / mStep) * mStep + mMin;
+  int corrected_value = ((value - min) / step) * step + min;
 
-  int first = corrected_value - (int)surrounding_items * mStep;
-  if (first > mMin)
+  int first = corrected_value - (int)surrounding_items * step;
+  if (first > min)
     /* there are values before "first" - give the user a choice */
     combo_list->Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
-  else if (first < mMin)
-    first = mMin;
+  else if (first < min)
+    first = min;
 
-  int last = std::min(first + (int)surrounding_items * mStep * 2, mMax);
+  int last = std::min(first + (int)surrounding_items * step * 2, max);
 
   bool found_current = false;
-  for (int i = first; i <= last; i += mStep) {
-    if (!found_current && mValue <= i) {
-      if (mValue < i)
+  for (int i = first; i <= last; i += step) {
+    if (!found_current && value <= i) {
+      if (value < i)
         /* the current value is not listed - insert it here */
-        AppendComboValue(*combo_list, mValue);
+        AppendComboValue(*combo_list, value);
 
       combo_list->ComboPopupItemSavedIndex = combo_list->size();
       found_current = true;
@@ -164,14 +164,14 @@ DataFieldInteger::CreateComboList() const
     AppendComboValue(*combo_list, i);
   }
 
-  if (mValue > last) {
+  if (value > last) {
     /* the current value out of range - append it here */
-    last = mValue;
-    AppendComboValue(*combo_list, mValue);
+    last = value;
+    AppendComboValue(*combo_list, value);
     combo_list->ComboPopupItemSavedIndex = combo_list->size();
   }
 
-  if (last < mMax)
+  if (last < max)
     /* there are values after "last" - give the user a choice */
     combo_list->Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
 
@@ -179,7 +179,7 @@ DataFieldInteger::CreateComboList() const
 }
 
 void
-DataFieldInteger::SetFromCombo(int iDataFieldIndex, TCHAR *sValue)
+DataFieldInteger::SetFromCombo(int index, TCHAR *value)
 {
-  SetAsString(sValue);
+  SetAsString(value);
 }

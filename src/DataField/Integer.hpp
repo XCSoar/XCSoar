@@ -30,13 +30,13 @@ Copyright_License {
 class DataFieldInteger : public NumberDataField
 {
 private:
-  int mValue;
-  int mMin;
-  int mMax;
-  int mStep;
+  int value;
+  int min;
+  int max;
+  int step;
   PeriodClock last_step;
-  int mSpeedup;
-  TCHAR mOutBuf[OUTBUFFERSIZE + 1];
+  int speedup;
+  TCHAR outpuf_buffer[OUTBUFFERSIZE + 1];
 
 protected:
   int SpeedUp(bool keyup);
@@ -46,7 +46,7 @@ public:
                    int Min, int Max,
                    int Default, int Step, DataAccessCallback OnDataAccess)
     :NumberDataField(Type::INTEGER, true, EditFormat, DisplayFormat, OnDataAccess),
-     mValue(Default), mMin(Min), mMax(Max), mStep(Step) {}
+     value(Default), min(Min), max(Max), step(Step) {}
 
   void Inc();
   void Dec();
@@ -57,12 +57,20 @@ public:
   virtual const TCHAR *GetAsString() const;
   virtual const TCHAR *GetAsDisplayString() const;
 
-  void Set(int Value);
-  int SetMin(int Value) { mMin = Value; return mMin; }
-  int SetMax(int Value) { mMax = Value; return mMax; }
+  void Set(int value);
 
-  virtual void SetAsInteger(int Value);
-  virtual void SetAsString(const TCHAR *Value);
+  int SetMin(int _min) {
+    min = _min;
+    return min;
+  }
+
+  int SetMax(int _max) {
+    max = _max;
+    return max;
+  }
+
+  virtual void SetAsInteger(int value);
+  virtual void SetAsString(const TCHAR *value);
 
 protected:
   void AppendComboValue(ComboList &combo_list, int value) const;
