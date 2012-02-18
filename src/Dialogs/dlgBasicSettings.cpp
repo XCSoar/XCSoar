@@ -61,8 +61,7 @@ class FlightSetupPanel : public RowFormWidget,
                          public ActionListener {
   WndButton *dump_button;
 
-  GlidePolar glide_polar;
-  bool glide_polar_modified;
+  PolarSettings &polar_settings;
 
   fixed last_altitude;
 
@@ -70,8 +69,7 @@ public:
   FlightSetupPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()),
      dump_button(NULL),
-     glide_polar(CommonInterface::GetComputerSettings().polar.glide_polar_task),
-     glide_polar_modified(false),
+     polar_settings(CommonInterface::SetComputerSettings().polar),
      last_altitude(-2)
   {}
 
@@ -81,20 +79,24 @@ public:
 
   void SetButtons();
   void SetBallast();
-  void SavePolar();
   void SetBallastTimer(bool active);
   void FlipBallastTimer();
 
+  void PublishPolarSettings() {
+    if (protected_task_manager != NULL)
+      protected_task_manager->SetGlidePolar(polar_settings.glide_polar_task);
+  }
+
   void SetBallastLitres(fixed ballast_litres) {
-    glide_polar.SetBallastLitres(ballast_litres);
-    glide_polar_modified = true;
+    polar_settings.glide_polar_task.SetBallastLitres(ballast_litres);
+    PublishPolarSettings();
     SetButtons();
     SetBallast();
   }
 
   void SetBugs(fixed bugs) {
-    glide_polar.SetBugs(bugs);
-    glide_polar_modified = true;
+    polar_settings.glide_polar_task.SetBugs(bugs);
+    PublishPolarSettings();
   }
 
   void ShowAltitude(fixed altitude);
@@ -114,7 +116,7 @@ static FlightSetupPanel *instance;
 void
 FlightSetupPanel::SetButtons()
 {
-  dump_button->set_visible(glide_polar.HasBallast());
+  dump_button->set_visible(polar_settings.glide_polar_task.HasBallast());
 
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
   dump_button->SetCaption(settings.polar.ballast_timer_active
@@ -124,43 +126,26 @@ FlightSetupPanel::SetButtons()
 void
 FlightSetupPanel::SetBallast()
 {
-  const bool ballastable = glide_polar.IsBallastable();
+  const bool ballastable = polar_settings.glide_polar_task.IsBallastable();
   SetRowVisible(Ballast, ballastable);
   if (ballastable)
-    LoadValue(Ballast, glide_polar.GetBallastLitres());
+    LoadValue(Ballast, polar_settings.glide_polar_task.GetBallastLitres());
 
-  const fixed wl = glide_polar.GetWingLoading();
+  const fixed wl = polar_settings.glide_polar_task.GetWingLoading();
   SetRowVisible(WingLoading, positive(wl));
   if (positive(wl))
     LoadValue(WingLoading, wl);
 }
 
 void
-FlightSetupPanel::SavePolar()
-{
-  if (!glide_polar_modified)
-    return;
-
-  glide_polar_modified = false;
-  CommonInterface::SetComputerSettings().polar.glide_polar_task = glide_polar;
-
-  if (protected_task_manager != NULL)
-    protected_task_manager->SetGlidePolar(glide_polar);
-}
-
-void
 FlightSetupPanel::SetBallastTimer(bool active)
 {
-  if (!glide_polar.HasBallast())
+  if (!polar_settings.glide_polar_task.HasBallast())
     active = false;
 
   PolarSettings &settings = CommonInterface::SetComputerSettings().polar;
   if (active == settings.ballast_timer_active)
     return;
-
-  if (active)
-    /* apply the new ballast settings before starting the timer */
-    SavePolar();
 
   settings.ballast_timer_active = active;
   SetButtons();
@@ -219,10 +204,7 @@ FlightSetupPanel::OnTimer()
 {
   const PolarSettings &settings = CommonInterface::GetComputerSettings().polar;
 
-  if (settings.ballast_timer_active && !glide_polar_modified) {
-    /* get new GlidePolar values */
-    glide_polar = settings.glide_polar_task;
-
+  if (settings.ballast_timer_active) {
     /* display the new values on the screen */
     SetBallast();
   }
@@ -302,7 +284,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."),
            _T("%.0f %%"), _T("%.0f"),
            fixed_zero, fixed(50), fixed_one, false,
-           (fixed_one - glide_polar.GetBugs()) * 100,
+           (fixed_one - polar_settings.glide_polar_task.GetBugs()) * 100,
            OnBugsData);
 
   wp = AddFloat(_("QNH"),
@@ -347,10 +329,6 @@ bool
 FlightSetupPanel::Save(bool &changed, bool &require_restart)
 {
   ComputerSettings &settings = CommonInterface::SetComputerSettings();
-
-  changed |= glide_polar_modified;
-
-  SavePolar();
 
   changed |= SaveValue(Temperature, UnitGroup::TEMPERATURE,
                        settings.forecast_temperature);
