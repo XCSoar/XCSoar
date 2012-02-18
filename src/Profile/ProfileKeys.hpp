@@ -186,6 +186,7 @@ extern const TCHAR szProfileUserLevel[];
 extern const TCHAR szProfileRiskGamma[];
 extern const TCHAR szProfilePredictWindDrift[];
 extern const TCHAR szProfileWindArrowStyle[];
+extern const TCHAR szProfileEnableFinalGlideBarMC0[];
 extern const TCHAR szProfileAutoLogger[];
 extern const TCHAR szProfileDisableAutoLogger[];
 extern const TCHAR szProfileEnableFlightLogger[];

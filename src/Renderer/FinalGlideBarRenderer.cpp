@@ -34,7 +34,8 @@ Copyright_License {
 
 void
 FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
-                            const DerivedInfo &calculated) const
+                            const DerivedInfo &calculated,
+                            const bool &final_glide_bar_mc0_enabled) const
 {
   RasterPoint GlideBar[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
@@ -176,7 +177,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     canvas.polygon(clipping_arrow, 6);
 
   // draw glide bar at mc 0
-  if (altitude_difference0 <= 0) {
+  if (altitude_difference0 <= 0 && final_glide_bar_mc0_enabled) {
     if (calculated.common_stats.landable_reachable) {
       canvas.Select(look.pen_below_landable);
       canvas.Select(look.brush_below_landable_mc0);
@@ -189,7 +190,8 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     canvas.Select(look.brush_above_mc0);
   }
 
-  if ((altitude_difference != altitude_difference0) || (altitude_difference0 < 0)) {
+  if ( ( (altitude_difference != altitude_difference0) || (altitude_difference0 < 0) )
+      && final_glide_bar_mc0_enabled) {
     canvas.polygon(GlideBar0, 4);
 
     if ((altitude_difference0 <= -480 ) || (altitude_difference0 >= 480))

@@ -84,6 +84,7 @@ Profile::Load(UISettings &settings)
   Get(szProfileUseCustomFonts, settings.custom_fonts);
 
   Get(szProfileEnableTAGauge, settings.enable_thermal_assistant_gauge);
+  Get(szProfileEnableFinalGlideBarMC0, settings.final_glide_bar_mc0_enabled);
 
   GetEnum(szProfileAppStatusMessageAlignment, settings.popup_message_position);
 

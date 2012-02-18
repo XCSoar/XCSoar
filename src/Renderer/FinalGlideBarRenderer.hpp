@@ -41,7 +41,8 @@ public:
     :look(_look), task_look(_task_look) {}
 
   void Draw(Canvas &canvas, const PixelRect &rc,
-            const DerivedInfo &calculated) const;
+            const DerivedInfo &calculated,
+            const bool &final_glide_bar_mc0_enabled) const;
 };
 
 #endif

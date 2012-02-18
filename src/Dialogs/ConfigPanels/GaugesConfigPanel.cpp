@@ -32,7 +32,8 @@ enum ControlIndex {
   EnableFLARMGauge,
   AutoCloseFlarmDialog,
   EnableTAGauge,
-  EnableThermalProfile
+  EnableThermalProfile,
+  EnableFinalGlideBarMC0
 };
 
 class GaugesConfigPanel : public RowFormWidget {
@@ -68,6 +69,12 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("Thermal band"),
              _("This enables the display of the thermal profile (climb band) display on the map."),
              XCSoarInterface::GetMapSettings().show_thermal_profile);
+
+  AddBoolean(_("Final glide bar MC0"),
+             _("If set to ON the final glide bar will show a second arrow indicating the required height "
+                 "to reach the final waypoint at MC zero."),
+             ui_settings.final_glide_bar_mc0_enabled);
+  SetExpertRow(EnableFinalGlideBarMC0);
 }
 
 bool
@@ -88,6 +95,9 @@ GaugesConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValue(EnableThermalProfile, szProfileEnableThermalProfile,
                        XCSoarInterface::SetMapSettings().show_thermal_profile);
+
+  changed |= SaveValue(EnableFinalGlideBarMC0, szProfileEnableFinalGlideBarMC0,
+                       ui_settings.final_glide_bar_mc0_enabled);
 
   _changed |= changed;
   _require_restart |= require_restart;

@@ -34,6 +34,7 @@ UISettings::SetDefaults()
   custom_fonts = false;
 
   enable_thermal_assistant_gauge = true;
+  final_glide_bar_mc0_enabled = true;
 
   popup_message_position = smAlignCenter;
 

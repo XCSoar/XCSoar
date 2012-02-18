@@ -244,6 +244,7 @@ const TCHAR szProfileUserLevel[] = _T("UserLevel");
 const TCHAR szProfileRiskGamma[] = _T("RiskGamma");
 const TCHAR szProfilePredictWindDrift[] = _T("PredictWindDrift");
 const TCHAR szProfileWindArrowStyle[] = _T("WindArrowStyle");
+const TCHAR szProfileEnableFinalGlideBarMC0[] = _T("EnableFinalGlideBarMC0");
 const TCHAR szProfileAutoLogger[] = _T("AutoLogger");
 const TCHAR szProfileDisableAutoLogger[] = _T("DisableAutoLogger");
 const TCHAR szProfileEnableFlightLogger[] = _T("EnableFlightLogger");
