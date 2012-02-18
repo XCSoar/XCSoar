@@ -93,11 +93,6 @@ namespace Profile
    * Adjusts the application settings according to the profile settings
    */
   void Use();
-
-  /**
-   * Saves the sound settings to the profile
-   */
-  void SetSoundSettings();
 };
 
 #endif

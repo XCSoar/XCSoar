@@ -58,12 +58,16 @@ InputEvents::eventSounds(const TCHAR *misc)
       Message::AddMessage(_("Vario sounds on"));
     else
       Message::AddMessage(_("Vario sounds off"));
+    return;
   }
+
   /*
   if (EnableSoundVario != OldEnableSoundVario) {
     VarioSound_EnableSound(EnableSoundVario);
   }
   */
+
+  Profile::Set(szProfileSoundAudioVario, settings.sound_vario_enabled);
 }
 
 void
@@ -167,7 +171,7 @@ InputEvents::eventAudioDeadband(const TCHAR *misc)
   VarioSound_SetVdead(SoundDeadband);
   */
 
-  Profile::SetSoundSettings(); // save to registry
+  Profile::Set(szProfileSoundDeadband, settings.sound_deadband);
 
   // TODO feature: send to vario if available
 }

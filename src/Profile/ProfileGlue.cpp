@@ -40,16 +40,3 @@ Profile::Use()
   Load(CommonInterface::SetComputerSettings());
   Load(CommonInterface::SetUISettings());
 }
-
-void
-Profile::SetSoundSettings()
-{
-  const SoundSettings &settings =
-    CommonInterface::GetComputerSettings().sound;
-
-  Set(szProfileSoundVolume, settings.sound_volume);
-  Set(szProfileSoundDeadband, settings.sound_deadband);
-  Set(szProfileSoundAudioVario, settings.sound_vario_enabled);
-  Set(szProfileSoundTask, settings.sound_task_enabled);
-  Set(szProfileSoundModes, settings.sound_modes_enabled);
-}
