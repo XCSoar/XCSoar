@@ -39,6 +39,7 @@ WindSettings::SetDefaults()
 void
 PolarSettings::SetDefaults()
 {
+  glide_polar_task = GlidePolar::Invalid();
   ballast_timer_active = false;
 }
 
