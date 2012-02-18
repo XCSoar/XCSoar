@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-15 00:09+0100\n"
-"PO-Revision-Date: 2012-02-15 21:55+0000\n"
+"PO-Revision-Date: 2012-02-17 21:45+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-16 02:16+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-02-18 16:56+0000\n"
+"X-Generator: Launchpad (build 14814)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -5705,7 +5705,7 @@ msgstr "couleur relief"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:181
 msgid "Defines the color ramp used in terrain rendering."
-msgstr ""
+msgstr "Définit la variation de couleur dans le rendu du terrain."
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:188
 #, no-c-format
@@ -5735,6 +5735,9 @@ msgid ""
 "values to emphasise terrain slope, smaller values if flying in steep "
 "mountains."
 msgstr ""
+"Définit l'intensité de l'ombrage dans le rendu du terrain. Utilisez de "
+"grandes valeurs pour mettre en valeur les pentes, des valeurs plus petites "
+"si vous volez en régions montagneuses escarpées."
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:204
 msgid "Terrain brightness"
@@ -5852,7 +5855,7 @@ msgstr "Lat./Lon."
 #: src/Dialogs/Vega/LoggerParameters.hpp:34
 #, no-c-format
 msgid "UTC offset"
-msgstr ""
+msgstr "Décalage UTC"
 
 #: src/Dialogs/ConfigPanels/TimeConfigPanel.cpp:97
 msgid ""
@@ -5947,27 +5950,27 @@ msgstr "Aucune hauteur d'arrivée n'est affichée"
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:111
 #, no-c-format
 msgid "Straight glide"
-msgstr ""
+msgstr "Plané direct"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:112
 #, no-c-format
 msgid "Straight glide arrival height (no terrain is considered)."
-msgstr ""
+msgstr "Hauteur d'arrivée en plané direct (sans considération du terrain)."
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:114
 #, no-c-format
 msgid "Terrain avoidance glide"
-msgstr ""
+msgstr "Plané selon terrain"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:115
 #, no-c-format
 msgid "Arrival height considering terrain avoidance"
-msgstr ""
+msgstr "Hauteur d'arrivée considérant la clairance du terrain."
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:117
 #, no-c-format
 msgid "Straight & terrain glide"
-msgstr ""
+msgstr "Plané selon terrain et direct"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:118
 #, no-c-format
@@ -6132,7 +6135,7 @@ msgstr "Taille de la zone posable"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:187
 msgid "A percentage to select the size landables are displayed on the map."
-msgstr ""
+msgstr "Pourcentage pour la taille des déroutement affichés sur la carte."
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:191
 msgid "Scale runway length"
@@ -6143,6 +6146,8 @@ msgid ""
 "[Off] Display fixed length for runways.\n"
 "[On] Scale displayed runway length based on real length."
 msgstr ""
+"[Off] Affiche des pistes de longueur fixe\n"
+"[On] Pistes représentées à l'échelle (longueurs réelles)"
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:83
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:184
@@ -6239,7 +6244,7 @@ msgstr "Nouveau circuit"
 
 #: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:172
 msgid "Calculator excludes unsaved task changes!"
-msgstr ""
+msgstr "Le calculateur exclut les modification de circuit non sauvées!"
 
 #: src/Dialogs/dlgTaskOptionalStarts.cpp:72
 msgid "(Add Alternate Start)"
@@ -6345,7 +6350,7 @@ msgstr "Objectif"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:126
 msgid "Out and return"
-msgstr ""
+msgstr "Aller retour"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:130
 msgid "Two legs"
@@ -6383,7 +6388,7 @@ msgstr "dist."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:236 src/Dialogs/dlgTaskHelpers.cpp:337
 msgid "FAI quadrant"
-msgstr ""
+msgstr "Quadrant FAI"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:241
 msgid "Sector"
@@ -6392,7 +6397,7 @@ msgstr "Secteur"
 #: src/Dialogs/dlgTaskHelpers.cpp:247 Data/Dialogs/dlgTaskPoint.xml:19
 #: Data/Dialogs/dlgTaskPoint_L.xml:23
 msgid "Gate Width"
-msgstr ""
+msgstr "Largeur de porte"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:253
 msgid "Cylinder"
