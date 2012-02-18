@@ -38,22 +38,22 @@ struct DialogLook;
  */
 class WindowControl : public ContainerWindow {
 public:
-  typedef void (*OnHelpCallback_t)(WindowControl *Sender);
+  typedef void (*HelpCallback)(WindowControl *Sender);
 
 protected:
   /** Caption/Text of the Control */
-  StaticString<254> mCaption;
+  StaticString<254> caption;
 
 private:
   /** Helptext of the Control */
-  TCHAR *mHelpText;
+  TCHAR *help_text;
 
   /**
    * The callback-function that should be called when the help button is
    * pressed while the control has focus
    * @see SetOnHelpCallback()
    */
-  OnHelpCallback_t mOnHelpCallback;
+  HelpCallback help_callback;
 
 public:
   WindowControl();
@@ -91,7 +91,7 @@ public:
    * Does this control have a help text?
    */
   bool HasHelp() const {
-    return mHelpText != NULL || mOnHelpCallback != NULL;
+    return help_text != NULL || help_callback != NULL;
   }
 
   /**
@@ -105,12 +105,12 @@ public:
    * Sets the function that should be called when the help button is pressed
    * @param Function Pointer to the function to be called
    */
-  void SetOnHelpCallback(OnHelpCallback_t Function) {
-    mOnHelpCallback = Function;
+  void SetOnHelpCallback(HelpCallback Function) {
+    help_callback = Function;
   }
 
   bool HasCaption() const {
-    return !mCaption.empty();
+    return !caption.empty();
   }
 
   /**
@@ -118,7 +118,7 @@ public:
    * @return The Caption/Text of the Control
    */
   const TCHAR *GetCaption() const {
-    return mCaption.c_str();
+    return caption.c_str();
   }
 
   /**

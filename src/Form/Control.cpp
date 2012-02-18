@@ -31,23 +31,23 @@ Copyright_License {
 #include <stdlib.h>
 
 WindowControl::WindowControl() :
-    mHelpText(NULL),
-    mOnHelpCallback(NULL)
+    help_text(NULL),
+    help_callback(NULL)
 {
   // Clear the caption
-  mCaption.clear();
+  caption.clear();
 }
 
 WindowControl::~WindowControl()
 {
-  free(mHelpText);
+  free(help_text);
 }
 
 void
 WindowControl::SetHelpText(const TCHAR *Value)
 {
-  free(mHelpText);
-  mHelpText = Value != NULL ? _tcsdup(Value) : NULL;
+  free(help_text);
+  help_text = Value != NULL ? _tcsdup(Value) : NULL;
 }
 
 void
@@ -56,8 +56,8 @@ WindowControl::SetCaption(const TCHAR *Value)
   if (Value == NULL)
     Value = _T("");
 
-  if (!mCaption.equals(Value)) {
-    mCaption = Value;
+  if (!caption.equals(Value)) {
+    caption = Value;
     invalidate();
   }
 }
@@ -65,14 +65,14 @@ WindowControl::SetCaption(const TCHAR *Value)
 bool
 WindowControl::OnHelp()
 {
-  if (mHelpText) {
+  if (help_text) {
     dlgHelpShowModal(*(SingleWindow *)GetRootOwner(),
-                     mCaption.c_str(), mHelpText);
+                     caption.c_str(), help_text);
     return true;
   }
 
-  if (mOnHelpCallback) {
-    (mOnHelpCallback)(this);
+  if (help_callback) {
+    (help_callback)(this);
     return true;
   }
 

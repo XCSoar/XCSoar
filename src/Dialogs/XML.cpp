@@ -600,8 +600,8 @@ LoadChild(SubForm &form, ContainerWindow &parent,
       (WndProperty::DataChangeCallback_t)
       GetCallBack(lookup_table, node, _T("OnDataNotify"));
 
-    WindowControl::OnHelpCallback_t help_callback =
-      (WindowControl::OnHelpCallback_t)
+    WindowControl::HelpCallback help_callback =
+      (WindowControl::HelpCallback)
       GetCallBack(lookup_table, node, _T("OnHelp"));
 
     // Create the Property Control

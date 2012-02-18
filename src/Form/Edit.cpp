@@ -147,7 +147,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
    mOnClickUpNotify(NULL), mOnClickDownNotify(NULL),
    mDataField(NULL)
 {
-  mCaption = Caption;
+  caption = Caption;
 
   set(parent, rc, style);
 
@@ -169,7 +169,7 @@ WndProperty::~WndProperty()
 UPixelScalar
 WndProperty::GetRecommendedCaptionWidth() const
 {
-  return look.text_font->TextSize(mCaption).cx + Layout::FastScale(3);
+  return look.text_font->TextSize(caption).cx + Layout::FastScale(3);
 }
 
 void
@@ -342,14 +342,14 @@ WndProperty::OnPaint(Canvas &canvas)
   /* kludge: don't draw caption if width is too small (but not 0),
      used by the polar configuration panel.  This concept needs to be
      redesigned. */
-  if (caption_width != 0 && !mCaption.empty()) {
+  if (caption_width != 0 && !caption.empty()) {
     canvas.SetTextColor(focused
                           ? look.focused.text_color
                           : look.text_color);
     canvas.SetBackgroundTransparent();
     canvas.Select(*look.text_font);
 
-    PixelSize tsize = canvas.CalcTextSize(mCaption.c_str());
+    PixelSize tsize = canvas.CalcTextSize(caption.c_str());
 
     RasterPoint org;
     if (caption_width < 0) {
@@ -364,10 +364,10 @@ WndProperty::OnPaint(Canvas &canvas)
       org.x = 1;
 
     if (have_clipping())
-      canvas.text(org.x, org.y, mCaption.c_str());
+      canvas.text(org.x, org.y, caption.c_str());
     else
       canvas.text_clipped(org.x, org.y, caption_width - org.x,
-                          mCaption.c_str());
+                          caption.c_str());
   }
 }
 
