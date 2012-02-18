@@ -156,9 +156,7 @@ class RowFormWidget : public WindowWidget {
      * Will this row grow when there is excess screen space?
      */
     bool IsElastic() const {
-      return type == Type::EDIT || type == Type::BUTTON ||
-        type == Type::MULTI_LINE ||
-        type == Type::REMAINING;
+      return GetMaximumHeight() > GetMinimumHeight();
     }
 
     gcc_pure
