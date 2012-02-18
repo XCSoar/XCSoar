@@ -847,12 +847,24 @@ public:
     return ::GetWindowLong(hWnd, nIndex);
   }
 
+  void SetWindowLong(int nIndex, LONG value) {
+    ::SetWindowLong(hWnd, nIndex, value);
+  }
+
   LONG get_window_style() const {
     return get_window_long(GWL_STYLE);
   }
 
+  void SetWindowStyle(LONG value) {
+    SetWindowLong(GWL_STYLE, value);
+  }
+
   LONG get_window_ex_style() const {
     return get_window_long(GWL_EXSTYLE);
+  }
+
+  void SetWindowExStyle(LONG value) {
+    SetWindowLong(GWL_EXSTYLE, value);
   }
 #endif
 

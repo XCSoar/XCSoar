@@ -33,7 +33,7 @@ BaseButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
 {
   Window::set(&parent, WC_BUTTON, text, rc, style);
 
-  ::SetWindowLong(hWnd, GWL_ID, id);
+  SetWindowLong(GWL_ID, id);
 
   InstallWndProc();
 }
