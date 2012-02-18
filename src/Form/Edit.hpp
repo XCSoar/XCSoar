@@ -156,6 +156,11 @@ public:
     edit.set_read_only(read_only);
   }
 
+  gcc_pure
+  bool IsReadOnly() const {
+    return edit.is_read_only();
+  }
+
   /**
    * Starts  interactively  editing  the  value.   If  a  ComboBox  is
    * available, then the ComboPicker  will be launched, otherwise, the
