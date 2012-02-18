@@ -81,6 +81,11 @@ RowFormWidget::Row::GetMaximumHeight() const
     break;
 
   case Type::EDIT:
+    return GetControl().IsReadOnly()
+      /* rows that are not clickable don't need to be extra-large */
+      ? Layout::GetMinimumControlHeight()
+      : Layout::GetMaximumControlHeight();
+
   case Type::BUTTON:
     return Layout::GetMaximumControlHeight();
 
