@@ -60,10 +60,10 @@ Logger::Logger() {}
 Logger::~Logger() {}
 void Logger::LoggerDeviceDeclare() {}
 
-void RasterTerrain::Lock(void) {}
-void RasterTerrain::Unlock(void) {}
+void RasterTerrain::Lock() {}
+void RasterTerrain::Unlock() {}
 
-void dlgAnalysisShowModal(void) {}
+void dlgAnalysisShowModal() {}
 void dlgTaskCalculatorShowModal(SingleWindow &parent) {}
 
 Waypoints way_points;

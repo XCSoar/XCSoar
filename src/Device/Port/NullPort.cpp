@@ -36,7 +36,7 @@ NullPort::NullPort(Port::Handler &_handler)
 }
 
 void
-NullPort::Flush(void)
+NullPort::Flush()
 {
 }
 
@@ -53,7 +53,7 @@ NullPort::StopRxThread()
 }
 
 bool
-NullPort::StartRxThread(void)
+NullPort::StartRxThread()
 {
   return true;
 }

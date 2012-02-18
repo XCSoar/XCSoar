@@ -123,10 +123,10 @@ public:
               DataChangeCallback_t DataChangeNotify);
 
   /** Destructor */
-  ~WndProperty(void);
+  ~WndProperty();
 
 protected:
-  int CallSpecial(void);
+  int CallSpecial();
 
   void on_editor_setfocus();
   void on_editor_killfocus();
@@ -145,7 +145,7 @@ public:
 
   void SetCaptionWidth(PixelScalar caption_width);
 
-  void RefreshDisplay(void);
+  void RefreshDisplay();
 
   void set_enabled(bool enabled) {
     WindowControl::set_enabled(enabled);
@@ -189,7 +189,7 @@ public:
    * Returns the Control's DataField
    * @return The Control's DataField
    */
-  DataField *GetDataField(void) {
+  DataField *GetDataField() {
     return mDataField;
   }
 
@@ -197,7 +197,7 @@ public:
    * Returns the Control's DataField
    * @return The Control's DataField
    */
-  const DataField *GetDataField(void) const {
+  const DataField *GetDataField() const {
     return mDataField;
   }
 
@@ -217,9 +217,9 @@ private:
   virtual void OnPaint(Canvas &canvas);
 
   /** Increases the Editor value */
-  int IncValue(void);
+  int IncValue();
   /** Decreases the Editor value */
-  int DecValue(void);
+  int DecValue();
 
   void UpdateLayout();
 };

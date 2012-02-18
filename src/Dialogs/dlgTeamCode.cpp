@@ -180,7 +180,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgTeamCodeShowModal(void)
+dlgTeamCodeShowModal()
 {
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_TEAMCODE_L") :

@@ -481,7 +481,7 @@ XCSoarInterface::Startup()
 }
 
 void
-XCSoarInterface::Shutdown(void)
+XCSoarInterface::Shutdown()
 {
   VerboseOperationEnvironment operation;
   gcc_unused ScopeBusyIndicator busy;

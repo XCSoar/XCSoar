@@ -27,7 +27,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 
 void
-dlgWindSettingsShowModal(void)
+dlgWindSettingsShowModal()
 {
   WidgetDialog dialog(_("Wind Settings"), new WindSettingsPanel(true));
   dialog.AddButton(_("OK"), mrOK);

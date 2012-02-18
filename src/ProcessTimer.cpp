@@ -314,7 +314,7 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
 }
 
 void
-ProcessTimer::Process(void)
+ProcessTimer::Process()
 {
   CommonProcessTimer();
 

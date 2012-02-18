@@ -74,7 +74,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[]={
 };
 
 
-int dlgAirspacePatternsShowModal(void){
+int dlgAirspacePatternsShowModal(){
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape
                   ? _T("IDR_XML_AIRSPACEPATTERNS")

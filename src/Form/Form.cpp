@@ -149,7 +149,7 @@ WndForm::UpdateLayout()
 }
 
 ContainerWindow &
-WndForm::GetClientAreaWindow(void)
+WndForm::GetClientAreaWindow()
 {
   return client_area;
 }

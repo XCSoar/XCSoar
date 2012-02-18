@@ -58,7 +58,7 @@ public:
     return true;
   }
 
-  int GetChar(void) {
+  int GetChar() {
     return EOF;
   }
 

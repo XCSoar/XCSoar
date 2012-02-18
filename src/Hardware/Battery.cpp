@@ -42,7 +42,7 @@ namespace Power
 };
 
 void
-UpdateBatteryInfo(void)
+UpdateBatteryInfo()
 {
   SYSTEM_POWER_STATUS_EX2 sps;
 

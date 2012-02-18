@@ -40,7 +40,7 @@ DataFieldString::Set(const TCHAR *Value)
 }
 
 const TCHAR *
-DataFieldString::GetAsString(void) const
+DataFieldString::GetAsString() const
 {
   return mValue;
 }

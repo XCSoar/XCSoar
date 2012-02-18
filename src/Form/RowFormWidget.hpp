@@ -297,7 +297,7 @@ public:
     return control;
   }
 
-  WndProperty *AddSpacer(void);
+  WndProperty *AddSpacer();
 
   WndProperty *AddFileReader(const TCHAR *label, const TCHAR *help,
                              const TCHAR *registry_key, const TCHAR *filters,

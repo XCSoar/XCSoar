@@ -100,7 +100,7 @@ OnAirspaceListEnter(unsigned i)
 }
 
 
-static void UpdateList(void)
+static void UpdateList()
 {
   AirspaceSelectInfo = airspace_sorter->get_list();
 

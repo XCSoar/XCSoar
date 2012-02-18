@@ -99,7 +99,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[]={
 
 
 
-void dlgBrightnessShowModal(void){
+void dlgBrightnessShowModal(){
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
 		      _T("IDR_XML_BRIGHTNESS"));
   if (wf == NULL)

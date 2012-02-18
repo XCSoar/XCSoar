@@ -274,7 +274,7 @@ UpdateCrossSection()
 }
 
 static void
-Update(void)
+Update()
 {
   TCHAR sTmp[1000];
 

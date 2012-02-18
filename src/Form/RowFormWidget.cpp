@@ -349,7 +349,7 @@ RowFormWidget::AddTime(const TCHAR *label, const TCHAR *help,
 }
 
 WndProperty *
-RowFormWidget::AddSpacer(void)
+RowFormWidget::AddSpacer()
 {
   assert(IsDefined());
 

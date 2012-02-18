@@ -84,7 +84,7 @@ OnOKClicked(gcc_unused WndButton &Sender)
   wf->SetModalResult(mrOK);
 }
 
-static void RefreshTargetPoint(void);
+static void RefreshTargetPoint();
 
 static void
 MoveTarget(gcc_unused double adjust_angle)
@@ -395,7 +395,7 @@ SetTarget()
  * from the AATPoint's target
  */
 static void
-RefreshTargetPoint(void)
+RefreshTargetPoint()
 {
   if (target_point < TaskSize && target_point >= ActiveTaskPointOnEntry) {
     SetTarget();

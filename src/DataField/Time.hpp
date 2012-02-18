@@ -52,8 +52,8 @@ public:
      speedup(0) {}
 
 
-  void Inc(void);
-  void Dec(void);
+  void Inc();
+  void Dec();
   virtual ComboList *CreateComboList() const;
   void SetFromCombo(int data_field_index, TCHAR *value_string);
 

@@ -55,6 +55,6 @@ TimeLocal(int d);
 
 gcc_pure
 int
-GetUTCOffset(void);
+GetUTCOffset();
 
 #endif

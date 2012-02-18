@@ -205,7 +205,7 @@ DataFieldEnum::SetAsString(const TCHAR *Value)
 }
 
 void
-DataFieldEnum::Inc(void)
+DataFieldEnum::Inc()
 {
   if (entries.empty()) {
     assert(value == 0);
@@ -221,7 +221,7 @@ DataFieldEnum::Inc(void)
 }
 
 void
-DataFieldEnum::Dec(void)
+DataFieldEnum::Dec()
 {
   if (entries.empty()) {
     assert(value == 0);

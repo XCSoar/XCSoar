@@ -89,7 +89,7 @@ UpdateAckButton()
 }
 
 static void
-SetValues(void)
+SetValues()
 {
   assert(airspace);
 

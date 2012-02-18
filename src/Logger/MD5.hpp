@@ -46,9 +46,9 @@ private:
 public:
   void InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in);
 
-  void InitDigest(void);
+  void InitDigest();
   void AppendString(const unsigned char *in, int skip_invalid_igc_chars); // must be NULL-terminated string!
-  void Finalize(void);
+  void Finalize();
   int GetDigest(char *buffer);
   static bool IsValidIGCChar(char c);
 };

@@ -49,7 +49,7 @@ AndroidBluetoothPort::Open()
 }
 
 void
-AndroidBluetoothPort::Flush(void)
+AndroidBluetoothPort::Flush()
 {
   helper->flush(Java::GetEnv());
 }
@@ -125,7 +125,7 @@ AndroidBluetoothPort::StopRxThread()
 }
 
 bool
-AndroidBluetoothPort::StartRxThread(void)
+AndroidBluetoothPort::StartRxThread()
 {
   // Make sure the thread isn't starting itself
   assert(!Thread::IsInside());

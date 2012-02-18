@@ -62,7 +62,7 @@ InputEvents::processNmea(unsigned ne_id)
 
 // This should be called ONLY by the GUI thread.
 void
-InputEvents::DoQueuedEvents(void)
+InputEvents::DoQueuedEvents()
 {
   int GCE_Queue_copy[MAX_GCE_QUEUE];
   int NMEA_Queue_copy[MAX_NMEA_QUEUE];

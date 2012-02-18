@@ -144,7 +144,7 @@ public:
    * Returns the Buffer
    * @return The Buffer as BGRColor array
    */
-  BGRColor *GetBuffer(void) {
+  BGRColor *GetBuffer() {
     return buffer;
   }
 

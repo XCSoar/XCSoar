@@ -50,7 +50,7 @@ TriggerMapUpdate();
 void
 TriggerCalculatedUpdate();
 
-void CreateCalculationThread(void);
+void CreateCalculationThread();
 
 // changed only in config or by user interface
 // used in settings dialog

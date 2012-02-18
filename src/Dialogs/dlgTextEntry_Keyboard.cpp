@@ -56,7 +56,7 @@ UpdateAllowedCharacters()
 }
 
 static void
-UpdateTextboxProp(void)
+UpdateTextboxProp()
 {
   WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpText"));
   assert(wp != NULL);
@@ -137,7 +137,7 @@ OnCancel(WndButton &Sender)
 }
 
 static void
-ClearText(void)
+ClearText()
 {
   cursor = 0;
   edittext[0] = 0;

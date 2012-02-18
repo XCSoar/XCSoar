@@ -159,7 +159,7 @@ VarioWriteNMEA(const TCHAR *text)
 }
 
 DeviceDescriptor *
-devVarioFindVega(void)
+devVarioFindVega()
 {
   for (int i = 0; i < NUMDEV; i++)
     if (device_list[i].IsVega())

@@ -76,7 +76,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgWeatherShowModal(void)
+dlgWeatherShowModal()
 {
 
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),

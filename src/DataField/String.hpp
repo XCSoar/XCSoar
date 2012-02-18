@@ -42,7 +42,7 @@ public:
 
   void Set(const TCHAR *Value);
 
-  virtual const TCHAR *GetAsString(void) const;
+  virtual const TCHAR *GetAsString() const;
 };
 
 #endif

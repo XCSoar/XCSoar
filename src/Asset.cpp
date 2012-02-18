@@ -71,7 +71,7 @@ SetAssetNumber(const TCHAR *p)
 }
 
 static bool
-ReadCompaqID(void)
+ReadCompaqID()
 {
 #if defined(_WIN32_WCE)
   PROCESS_INFORMATION pi;
@@ -97,7 +97,7 @@ ReadCompaqID(void)
 }
 
 static bool
-ReadUUID(void)
+ReadUUID()
 {
 #if defined(_WIN32_WCE) && defined(IOCTL_HAL_GET_DEVICEID) && defined(FILE_DEVICE_HAL)
   BOOL fRes;
@@ -179,7 +179,7 @@ ReadUUID(void)
 /**
  * Finds the unique ID of this PDA
  */
-void ReadAssetNumber(void)
+void ReadAssetNumber()
 {
   if (ReadCompaqID()) {
     LogStartUp(_T("Asset ID: %s (compaq)"), asset_number);

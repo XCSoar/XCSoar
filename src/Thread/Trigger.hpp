@@ -124,7 +124,7 @@ public:
    * Checks if this object is triggered.
    * @return true if this object was triggered, false if not
    */
-  bool Test(void) {
+  bool Test() {
 #ifdef HAVE_POSIX
     bool ret;
 

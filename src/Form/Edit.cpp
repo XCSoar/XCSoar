@@ -161,7 +161,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
 #endif
 }
 
-WndProperty::~WndProperty(void)
+WndProperty::~WndProperty()
 {
   delete mDataField;
 }
@@ -293,7 +293,7 @@ WndProperty::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 int
-WndProperty::CallSpecial(void)
+WndProperty::CallSpecial()
 {
   if (mDataField != NULL) {
     mDataField->Special();
@@ -303,7 +303,7 @@ WndProperty::CallSpecial(void)
 }
 
 int
-WndProperty::IncValue(void)
+WndProperty::IncValue()
 {
   if (mDataField != NULL) {
     mDataField->Inc();
@@ -313,7 +313,7 @@ WndProperty::IncValue(void)
 }
 
 int
-WndProperty::DecValue(void)
+WndProperty::DecValue()
 {
   if (mDataField != NULL) {
     mDataField->Dec();

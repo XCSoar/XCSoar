@@ -25,7 +25,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 
 void
-Profile::Save(void)
+Profile::Save()
 {
 }
 

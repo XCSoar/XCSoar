@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_LANGUAGE_GLUE_HPP
 #define XCSOAR_LANGUAGE_GLUE_HPP
 
-void ReadLanguageFile(void);
+void ReadLanguageFile();
 
 void
 CloseLanguageFile();

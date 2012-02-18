@@ -63,7 +63,7 @@ TTYPort::Open()
 }
 
 void
-TTYPort::Flush(void)
+TTYPort::Flush()
 {
   tcflush(fd, TCIOFLUSH);
 }
@@ -128,7 +128,7 @@ TTYPort::StopRxThread()
 }
 
 bool
-TTYPort::StartRxThread(void)
+TTYPort::StartRxThread()
 {
   // Make sure the thread isn't starting itself
   assert(!Thread::IsInside());

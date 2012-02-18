@@ -33,13 +33,13 @@ Copyright_License {
 static bool DataFieldKeyUp = false;
 
 int
-DataFieldInteger::GetAsInteger(void) const
+DataFieldInteger::GetAsInteger() const
 {
   return mValue;
 }
 
 const TCHAR *
-DataFieldInteger::GetAsString(void) const
+DataFieldInteger::GetAsString() const
 {
   TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
   _stprintf(mOutBuf, edit_format, mValue);
@@ -47,7 +47,7 @@ DataFieldInteger::GetAsString(void) const
 }
 
 const TCHAR *
-DataFieldInteger::GetAsDisplayString(void) const
+DataFieldInteger::GetAsDisplayString() const
 {
   TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
   _stprintf(mOutBuf, display_format, mValue);
@@ -80,13 +80,13 @@ DataFieldInteger::SetAsString(const TCHAR *Value)
 }
 
 void
-DataFieldInteger::Inc(void)
+DataFieldInteger::Inc()
 {
   SetAsInteger(mValue + mStep * SpeedUp(true));
 }
 
 void
-DataFieldInteger::Dec(void)
+DataFieldInteger::Dec()
 {
   SetAsInteger(mValue - mStep * SpeedUp(false));
 }

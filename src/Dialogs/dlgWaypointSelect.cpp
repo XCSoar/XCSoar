@@ -223,7 +223,7 @@ GetProfilePathBase(const TCHAR *key)
 }
 
 static void
-PrepareData(void)
+PrepareData()
 {
   TCHAR buffer[15];
 

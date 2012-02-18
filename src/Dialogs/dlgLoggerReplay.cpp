@@ -82,7 +82,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgLoggerReplayShowModal(void)
+dlgLoggerReplayShowModal()
 {
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   _T("IDR_XML_LOGGERREPLAY"));

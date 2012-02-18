@@ -284,7 +284,7 @@ Save()
   }
 }
 
-void dlgConfigurationShowModal(void)
+void dlgConfigurationShowModal()
 {
   PrepareConfigurationDialog();
 

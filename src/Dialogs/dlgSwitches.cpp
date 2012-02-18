@@ -80,7 +80,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgSwitchesShowModal(void)
+dlgSwitchesShowModal()
 {
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
 		              _T("IDR_XML_SWITCHES"));

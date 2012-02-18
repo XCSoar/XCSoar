@@ -38,7 +38,7 @@ WindowControl::WindowControl() :
   mCaption.clear();
 }
 
-WindowControl::~WindowControl(void)
+WindowControl::~WindowControl()
 {
   free(mHelpText);
 }

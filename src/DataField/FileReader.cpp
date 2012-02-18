@@ -95,7 +95,7 @@ DataFieldFileReader::DataFieldFileReader(DataAccessCallback OnDataAccess)
    postponed_value(_T("")) {}
 
 int
-DataFieldFileReader::GetAsInteger(void) const
+DataFieldFileReader::GetAsInteger() const
 {
   if (!postponed_value.empty())
     EnsureLoadedDeconst();
@@ -150,7 +150,7 @@ DataFieldFileReader::Lookup(const TCHAR *Text)
 }
 
 int
-DataFieldFileReader::GetNumFiles(void) const
+DataFieldFileReader::GetNumFiles() const
 {
   EnsureLoadedDeconst();
 
@@ -158,7 +158,7 @@ DataFieldFileReader::GetNumFiles(void) const
 }
 
 const TCHAR *
-DataFieldFileReader::GetPathFile(void) const
+DataFieldFileReader::GetPathFile() const
 {
   if (!loaded)
     return postponed_value;
@@ -197,7 +197,7 @@ DataFieldFileReader::AddNull()
 }
 
 const TCHAR *
-DataFieldFileReader::GetAsString(void) const
+DataFieldFileReader::GetAsString() const
 {
   if (!loaded)
     return postponed_value;
@@ -241,7 +241,7 @@ DataFieldFileReader::Set(int Value)
 }
 
 void
-DataFieldFileReader::Inc(void)
+DataFieldFileReader::Inc()
 {
   EnsureLoaded();
 
@@ -252,7 +252,7 @@ DataFieldFileReader::Inc(void)
 }
 
 void
-DataFieldFileReader::Dec(void)
+DataFieldFileReader::Dec()
 {
   if (mValue > 0) {
     mValue--;
@@ -275,7 +275,7 @@ DataFieldFileReaderCompare(const void *elem1, const void *elem2)
 }
 
 void
-DataFieldFileReader::Sort(void)
+DataFieldFileReader::Sort()
 {
   if (!loaded) {
     postponed_sort = true;

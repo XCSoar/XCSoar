@@ -87,9 +87,9 @@ public:
   DataFieldFileReader(DataAccessCallback OnDataAccess);
 
   /** Move the selection up (+1) */
-  void Inc(void);
+  void Inc();
   /** Move the selection down (-1) */
-  void Dec(void);
+  void Dec();
   /**
    * Prepares the ComboList items
    * @return The number of items in the ComboList
@@ -113,14 +113,14 @@ public:
    * @return The number of files in the list
    */
   gcc_pure
-  int GetNumFiles(void) const;
+  int GetNumFiles() const;
 
   /**
    * Returns the selection index in integer format
    * @return The selection index in integer format
    */
   gcc_pure
-  virtual int GetAsInteger(void) const;
+  virtual int GetAsInteger() const;
 
   /**
    * Returns the selection title (filename)
@@ -134,7 +134,7 @@ public:
    * @return The PathFile of the currently selected item
    */
   gcc_pure
-  virtual const TCHAR *GetAsString(void) const;
+  virtual const TCHAR *GetAsString() const;
 
   /**
    * Iterates through the file list and tries to find an item where the path
@@ -149,7 +149,7 @@ public:
    * @return The PathFile of the currently selected item
    */
   gcc_pure
-  const TCHAR *GetPathFile(void) const;
+  const TCHAR *GetPathFile() const;
 
   /**
    * Sets the selection to the given index

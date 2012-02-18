@@ -240,7 +240,7 @@ IGCWriter::StartDeclaration(const BrokenDateTime &FirstDateTime,
 }
 
 void
-IGCWriter::EndDeclaration(void)
+IGCWriter::EndDeclaration()
 {
   // TODO bug: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus

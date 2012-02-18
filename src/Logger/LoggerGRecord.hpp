@@ -75,7 +75,7 @@ public:
    */
   bool ReadGRecordFromFile(char *buffer, size_t max_length);
   /// returns 0 if false, 1 if true
-  bool VerifyGRecordInFile(void);
+  bool VerifyGRecordInFile();
 
 private:
   void Initialize(int iKey);

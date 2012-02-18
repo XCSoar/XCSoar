@@ -73,7 +73,7 @@ TriggerCalculatedUpdate()
 #include "DeviceBlackboard.hpp"
 
 
-void CreateCalculationThread(void) {
+void CreateCalculationThread() {
   assert(glide_computer != NULL);
 
   /* copy settings to DeviceBlackboard */

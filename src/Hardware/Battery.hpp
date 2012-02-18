@@ -69,7 +69,7 @@ UpdateBatteryInfo()
 #else /* _WIN32_WCE */
 
 void
-UpdateBatteryInfo(void);
+UpdateBatteryInfo();
 
 #endif /* _WIN32_WCE */
 

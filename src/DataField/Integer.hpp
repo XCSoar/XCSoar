@@ -48,14 +48,14 @@ public:
     :NumberDataField(Type::INTEGER, true, EditFormat, DisplayFormat, OnDataAccess),
      mValue(Default), mMin(Min), mMax(Max), mStep(Step) {}
 
-  void Inc(void);
-  void Dec(void);
+  void Inc();
+  void Dec();
   virtual ComboList *CreateComboList() const;
   virtual void SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
 
-  virtual int GetAsInteger(void) const;
-  virtual const TCHAR *GetAsString(void) const;
-  virtual const TCHAR *GetAsDisplayString(void) const;
+  virtual int GetAsInteger() const;
+  virtual const TCHAR *GetAsString() const;
+  virtual const TCHAR *GetAsDisplayString() const;
 
   void Set(int Value);
   int SetMin(int Value) { mMin = Value; return mMin; }

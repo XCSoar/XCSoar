@@ -119,7 +119,7 @@ MD5::InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in)
 }
 
 void
-MD5::InitDigest(void)
+MD5::InitDigest()
 {
   memset(buff512bits, 0, 64);
 
@@ -170,7 +170,7 @@ MD5::AppendString(const unsigned char *in, int skip_invalid_igc_chars) // must b
 }
 
 void
-MD5::Finalize(void)
+MD5::Finalize()
 {
   // append "0" bits until message length in bits ? 448 (mod 512)
   int buffer_left_over = (message_length_bits / 8) % 64;

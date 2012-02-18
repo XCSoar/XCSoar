@@ -54,7 +54,7 @@ NMEAParser::NMEAParser(bool _ignore_checksum)
 }
 
 void
-NMEAParser::Reset(void)
+NMEAParser::Reset()
 {
   real = true;
   use_geoid = true;

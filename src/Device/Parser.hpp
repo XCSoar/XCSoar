@@ -49,7 +49,7 @@ public:
   /**
    * Resets the NMEAParser
    */
-  void Reset(void);
+  void Reset();
 
   void SetReal(bool _real) {
     real = _real;

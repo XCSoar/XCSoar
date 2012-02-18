@@ -101,7 +101,7 @@ public:
   void AddDeclaration(const GeoPoint &location, const TCHAR *ID);
   void StartDeclaration(const BrokenDateTime &FirstDateTime,
                         const int number_of_turnpoints);
-  void EndDeclaration(void);
+  void EndDeclaration();
 
   void LoggerNote(const TCHAR *text);
 

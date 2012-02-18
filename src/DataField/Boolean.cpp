@@ -36,13 +36,13 @@ DataFieldBoolean::CreateComboList() const
 }
 
 bool
-DataFieldBoolean::GetAsBoolean(void) const
+DataFieldBoolean::GetAsBoolean() const
 {
   return mValue;
 }
 
 int
-DataFieldBoolean::GetAsInteger(void) const
+DataFieldBoolean::GetAsInteger() const
 {
   if (mValue)
     return 1;
@@ -51,7 +51,7 @@ DataFieldBoolean::GetAsInteger(void) const
 }
 
 const TCHAR *
-DataFieldBoolean::GetAsString(void) const
+DataFieldBoolean::GetAsString() const
 {
   return mValue ? true_text : false_text;
 }
@@ -89,13 +89,13 @@ DataFieldBoolean::SetAsString(const TCHAR *Value)
 }
 
 void
-DataFieldBoolean::Inc(void)
+DataFieldBoolean::Inc()
 {
   SetAsBoolean(true);
 }
 
 void
-DataFieldBoolean::Dec(void)
+DataFieldBoolean::Dec()
 {
   SetAsBoolean(false);
 }

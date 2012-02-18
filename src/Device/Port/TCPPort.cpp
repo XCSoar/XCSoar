@@ -93,7 +93,7 @@ TCPPort::Open()
 }
 
 void
-TCPPort::Flush(void)
+TCPPort::Flush()
 {
 }
 
@@ -207,7 +207,7 @@ TCPPort::StopRxThread()
 }
 
 bool
-TCPPort::StartRxThread(void)
+TCPPort::StartRxThread()
 {
   // Make sure the thread isn't starting itself
   assert(!Thread::IsInside());

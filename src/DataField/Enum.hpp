@@ -86,8 +86,8 @@ public:
     return Find(text) >= 0;
   }
 
-  void Inc(void);
-  void Dec(void);
+  void Inc();
+  void Dec();
   virtual ComboList *CreateComboList() const;
 
   void replaceEnumText(unsigned int i, const TCHAR *Text);

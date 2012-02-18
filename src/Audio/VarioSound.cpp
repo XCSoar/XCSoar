@@ -140,7 +140,7 @@ short quantisesound(short vv) {
   return max(0,min(200,vv+100));
 }
 
-void audio_soundparameters(void) {
+void audio_soundparameters() {
   // save last phase, so seamless stitching of sin waves
   // if this is not done, there will be crackles and pops when
   // the sound parameters change due to phase offsets
@@ -249,7 +249,7 @@ unsigned char audio_sound_beep(unsigned short i) {
 
 // Retrieve the next sound byte
 //
-unsigned char audio_get_sound_byte(void) {
+unsigned char audio_get_sound_byte() {
 
   return 0x80;
 
@@ -1645,7 +1645,7 @@ extern "C" {
   }
 
 
-  VARIOSOUND_API void VarioSound_Close(void) {  // added sgi
+  VARIOSOUND_API void VarioSound_Close() {  // added sgi
 #ifndef DISABLEAUDIO
     variosound_waveOut.StopThread();   // added manually stop the thread
 #endif
@@ -1665,7 +1665,7 @@ extern "C" {
 
 bool suppressdeadband = false;
 
-void audio_soundmode_volume(void) {
+void audio_soundmode_volume() {
   short grad;
 
   // calculate gradient/urgency based volume
@@ -1694,7 +1694,7 @@ void audio_soundmode_smooth(short vinst, short vstf) {
 }
 
 
-void audio_soundmode_cruise(void) {
+void audio_soundmode_cruise() {
   // apply deadbands and sound types
   // if too slow, type=double beep
   // if too fast, type=continuous
@@ -1737,7 +1737,7 @@ void audio_soundmode_cruise(void) {
 }
 
 
-void audio_soundmode_climb(void) {
+void audio_soundmode_climb() {
   // apply deadbands and sound types
   // if in lift, and above deadband or deadband suppressed, type=short beep
   // if in sink, and below deadband or deadband suppressed, type=continuous

@@ -59,7 +59,7 @@ AndroidIOIOUartPort::Open()
 }
 
 void
-AndroidIOIOUartPort::Flush(void)
+AndroidIOIOUartPort::Flush()
 {
   helper->flush(Java::GetEnv(), UartID);
 }
@@ -119,7 +119,7 @@ AndroidIOIOUartPort::StopRxThread()
 }
 
 bool
-AndroidIOIOUartPort::StartRxThread(void)
+AndroidIOIOUartPort::StartRxThread()
 {
   // Make sure the thread isn't starting itself
   assert(!Thread::IsInside());

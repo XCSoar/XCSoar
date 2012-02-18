@@ -129,7 +129,7 @@ addChecklist(const TCHAR *name, const TCHAR *details)
 }
 
 static void
-LoadChecklist(void)
+LoadChecklist()
 {
   nLists = 0;
 
@@ -196,7 +196,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgChecklistShowModal(void)
+dlgChecklistShowModal()
 {
   static bool first = true;
   if (first) {

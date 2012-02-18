@@ -19,14 +19,14 @@
 
 
 extern "C" {
-VARIOSOUND_API void VarioSound_Init(void);
-VARIOSOUND_API void VarioSound_SoundParam(void);
+VARIOSOUND_API void VarioSound_Init();
+VARIOSOUND_API void VarioSound_SoundParam();
 VARIOSOUND_API void VarioSound_SetV(short v);
 VARIOSOUND_API void VarioSound_SetSTFMode(bool);
 VARIOSOUND_API void VarioSound_SetVAlt(short v);
 VARIOSOUND_API void VarioSound_EnableSound(bool);
 VARIOSOUND_API void VarioSound_SetVdead(short v);
-VARIOSOUND_API void VarioSound_Close(void);  // added sgi
+VARIOSOUND_API void VarioSound_Close();  // added sgi
   void VarioSound_SetSoundVolume(int vpercent);
 }
 

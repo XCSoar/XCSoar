@@ -42,13 +42,13 @@ public:
      mValue(Default),
      true_text(TextTrue), false_text(TextFalse) {}
 
-  void Inc(void);
-  void Dec(void);
+  void Inc();
+  void Dec();
   virtual ComboList *CreateComboList() const;
 
-  bool GetAsBoolean(void) const;
-  virtual int GetAsInteger(void) const;
-  virtual const TCHAR *GetAsString(void) const;
+  bool GetAsBoolean() const;
+  virtual int GetAsInteger() const;
+  virtual const TCHAR *GetAsString() const;
 
   virtual void
   Set(int Value)

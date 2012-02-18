@@ -147,7 +147,7 @@ public:
     return look;
   }
 
-  ContainerWindow &GetClientAreaWindow(void);
+  ContainerWindow &GetClientAreaWindow();
 
   unsigned GetTitleHeight() const {
     return title_rect.bottom - title_rect.top;
@@ -157,7 +157,7 @@ public:
     force = _force;
   }
 
-  int GetModalResult(void) { return modal_result; }
+  int GetModalResult() { return modal_result; }
   int SetModalResult(int Value) {
     modal_result = Value;
     return Value;

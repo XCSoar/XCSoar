@@ -56,7 +56,7 @@ ConditionMonitorSunset::CheckCondition(const GlideComputer& cmp)
 }
 
 void
-ConditionMonitorSunset::Notify(void)
+ConditionMonitorSunset::Notify()
 {
   Message::AddMessage(_("Expect arrival past sunset"));
 }

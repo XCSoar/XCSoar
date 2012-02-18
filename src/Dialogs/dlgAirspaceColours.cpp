@@ -75,7 +75,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 };
 
 int
-dlgAirspaceColoursShowModal(void)
+dlgAirspaceColoursShowModal()
 {
   ItemIndex = -1;
 

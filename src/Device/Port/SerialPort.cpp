@@ -132,7 +132,7 @@ SerialPort::Open()
 }
 
 void
-SerialPort::Flush(void)
+SerialPort::Flush()
 {
   PurgeComm(hPort, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
 }
@@ -400,7 +400,7 @@ SerialPort::StopRxThread()
 }
 
 bool
-SerialPort::StartRxThread(void)
+SerialPort::StartRxThread()
 {
   // Make sure the thread isn't starting itself
   assert(!Thread::IsInside());

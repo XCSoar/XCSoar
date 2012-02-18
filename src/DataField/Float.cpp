@@ -113,7 +113,7 @@ DataFieldFloat::SetAsString(const TCHAR *Value)
 }
 
 void
-DataFieldFloat::Inc(void)
+DataFieldFloat::Inc()
 {
   // no keypad, allow user to scroll small values
   if (mFine && mValue < fixed(0.95) && mStep >= fixed_half &&
@@ -124,7 +124,7 @@ DataFieldFloat::Inc(void)
 }
 
 void
-DataFieldFloat::Dec(void)
+DataFieldFloat::Dec()
 {
   // no keypad, allow user to scroll small values
   if (mFine && mValue <= fixed_one && mStep >= fixed_half &&

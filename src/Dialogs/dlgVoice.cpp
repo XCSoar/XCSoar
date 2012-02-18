@@ -90,7 +90,7 @@ SaveFromForm(const WndForm &form, VoiceSettings &settings)
 }
 
 
-void dlgVoiceShowModal(void){
+void dlgVoiceShowModal(){
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
 		      _T("IDR_XML_VOICE"));
 

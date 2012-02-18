@@ -60,15 +60,15 @@ public:
     unit = text;
   }
 
-  void Inc(void);
-  void Dec(void);
+  void Inc();
+  void Dec();
   virtual ComboList *CreateComboList() const;
   void SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
 
-  virtual int GetAsInteger(void) const;
+  virtual int GetAsInteger() const;
   fixed GetAsFixed() const;
-  virtual const TCHAR *GetAsString(void) const;
-  virtual const TCHAR *GetAsDisplayString(void) const;
+  virtual const TCHAR *GetAsString() const;
+  virtual const TCHAR *GetAsDisplayString() const;
 
   void Set(fixed Value);
   fixed SetMin(fixed Value);

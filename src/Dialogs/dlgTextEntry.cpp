@@ -101,7 +101,7 @@ OnTextPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 }
 
 static void
-UpdateCursor(void)
+UpdateCursor()
 {
   if (lettercursor >= (int)MAXENTRYLETTERS)
     lettercursor = 0;
@@ -116,7 +116,7 @@ UpdateCursor(void)
 }
 
 static void
-MoveCursor(void)
+MoveCursor()
 {
   if (cursor >= _tcslen(edittext))
     edittext[cursor + 1] = 0;

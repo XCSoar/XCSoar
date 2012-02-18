@@ -36,7 +36,7 @@ Copyright_License {
 // asset/registration data
 extern TCHAR asset_number[];
 
-void ReadAssetNumber(void);
+void ReadAssetNumber();
 
 // model info
 #ifdef HAVE_MODEL_TYPE

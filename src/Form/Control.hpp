@@ -59,7 +59,7 @@ public:
   WindowControl();
 
   /** Destructor */
-  virtual ~WindowControl(void);
+  virtual ~WindowControl();
 
   /**
    * The OnSetFocus event is called when the control gets focused

@@ -32,7 +32,7 @@ class Mutex;
 class DeviceDescriptor;
 
 void VarioWriteNMEA(const TCHAR *Text);
-DeviceDescriptor *devVarioFindVega(void);
+DeviceDescriptor *devVarioFindVega();
 
 /**
  * Returns true if at least one of the connected device is a Condor
@@ -43,6 +43,6 @@ HaveCondorDevice();
 
 void devStartup();
 void devShutdown();
-void devRestart(void);
+void devRestart();
 
 #endif
