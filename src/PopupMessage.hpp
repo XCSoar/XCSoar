@@ -149,6 +149,9 @@ public:
   bool Acknowledge(int type);
 
 private:
+  gcc_pure
+  PixelRect GetRect(UPixelScalar height) const;
+
   void Resize();
   int GetEmptySlot();
 

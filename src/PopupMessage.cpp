@@ -118,9 +118,7 @@ PopupMessage::set(const PixelRect _rc)
   style.read_only();
   style.Hide();
 
-  EditWindow::set(parent, rc.left, rc.top,
-                  rc.right - rc.left, rc.bottom - rc.top,
-                  style);
+  EditWindow::set(parent, GetRect(100), style);
 
   set_font(Fonts::map_bold);
   InstallWndProc();
@@ -135,11 +133,36 @@ PopupMessage::OnMouseDown(PixelScalar x, PixelScalar y)
   return true;
 }
 
-void
-PopupMessage::Resize()
+PixelRect
+PopupMessage::GetRect(UPixelScalar height) const
 {
   PixelRect rthis;
 
+  if (settings.popup_message_position == UISettings::smAlignTopLeft){
+    rthis.top = 0;
+    rthis.left = 0;
+    rthis.bottom = height;
+    rthis.right = Layout::FastScale(206);
+    // TODO code: this shouldn't be hard-coded
+  } else {
+    PixelScalar width =// min((rc.right-rc.left)*0.8,tsize.cx);
+      (PixelScalar)((rc.right - rc.left) * 0.9);
+    PixelScalar midx = (rc.right + rc.left) / 2;
+    PixelScalar midy = (rc.bottom + rc.top) / 2;
+    PixelScalar h1 = height / 2;
+    PixelScalar h2 = height - h1;
+    rthis.left = midx-width/2;
+    rthis.right = midx+width/2;
+    rthis.top = midy-h1;
+    rthis.bottom = midy+h2;
+  }
+
+  return rthis;
+}
+
+void
+PopupMessage::Resize()
+{
   if (*msgText == _T('\0')) {
     hide();
   } else {
@@ -151,28 +174,10 @@ PopupMessage::Resize()
 
     int linecount = max((unsigned)nvisible, max((unsigned)1, get_row_count()));
 
-    PixelScalar width =// min((rc.right-rc.left)*0.8,tsize.cx);
-      (PixelScalar)((rc.right - rc.left) * 0.9);
     PixelScalar height = min((PixelScalar)((rc.bottom-rc.top) * 0.8),
                              (PixelScalar)(tsize.cy * (linecount + 1)));
-    PixelScalar h1 = height / 2;
-    PixelScalar h2 = height - h1;
 
-    PixelScalar midx = (rc.right + rc.left) / 2;
-    PixelScalar midy = (rc.bottom + rc.top) / 2;
-
-    if (settings.popup_message_position == UISettings::smAlignTopLeft){
-      rthis.top = 0;
-      rthis.left = 0;
-      rthis.bottom = height;
-      rthis.right = Layout::FastScale(206);
-      // TODO code: this shouldn't be hard-coded
-    } else {
-      rthis.left = midx-width/2;
-      rthis.right = midx+width/2;
-      rthis.top = midy-h1;
-      rthis.bottom = midy+h2;
-    }
+    PixelRect rthis = GetRect(height);
 
     move(rthis.left, rthis.top,
          rthis.right - rthis.left,
