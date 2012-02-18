@@ -61,7 +61,7 @@ static void UpdateValues() {
   }
 }
 
-static void OnAutoData(DataField *Sender, DataField::DataAccessKind_t Mode){
+static void OnAutoData(DataField *Sender, DataField::DataAccessMode Mode){
   DataFieldBoolean &df = *(DataFieldBoolean *)Sender;
 
   switch(Mode){
@@ -77,7 +77,7 @@ static void OnAutoData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
 
 static void OnBrightnessData(DataField *Sender,
-			     DataField::DataAccessKind_t Mode){
+			     DataField::DataAccessMode Mode){
   switch(Mode){
     case DataField::daChange:
       BrightnessValue = Sender->GetAsInteger();
