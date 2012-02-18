@@ -35,6 +35,9 @@ Copyright_License {
 #include <dirent.h>
 #include <unistd.h>
 #include <fnmatch.h>
+#include <utime.h>
+#else
+#include <windows.h>
 #endif
 
 void
@@ -326,5 +329,37 @@ File::GetLastModification(const TCHAR *path)
 
   return data.ftLastWriteTime.dwLowDateTime |
          ((uint64_t)data.ftLastWriteTime.dwHighDateTime << 32);
+#endif
+}
+
+bool
+File::Touch(const TCHAR *path)
+{
+#ifdef HAVE_POSIX
+  return utime(path, NULL) == 0;
+#else
+  /// @see http://msdn.microsoft.com/en-us/library/windows/desktop/ms724205(v=vs.85).aspx
+
+  // Create a file handle
+  HANDLE handle = ::CreateFile(path, GENERIC_WRITE, 0, NULL,
+                               OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+  if (handle == INVALID_HANDLE_VALUE)
+    return false;
+
+  // Gets the current system time
+  SYSTEMTIME st;
+  ::GetSystemTime(&st);
+
+  // Converts the current system time to file time format
+  FILETIME ft;
+  ::SystemTimeToFileTime(&st, &ft);
+
+  // Sets last-write time of the file to the converted current system time
+  bool result = ::SetFileTime(handle, (LPFILETIME)NULL, (LPFILETIME)NULL, &ft);
+
+  CloseHandle(handle);
+
+  return result;
 #endif
 }

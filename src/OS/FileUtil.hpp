@@ -128,6 +128,13 @@ namespace File
    * @return 0 in case of failure or a timestamp for comparison
    */
   uint64_t GetLastModification(const TCHAR *path);
+
+  /**
+   * Sets the modification timestamp of the file to the current system time
+   * @param path Path to the file
+   * @return True in case of success, False otherwise
+   */
+  bool Touch(const TCHAR *path);
 }
 
 #endif
