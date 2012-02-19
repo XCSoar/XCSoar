@@ -331,15 +331,21 @@ public:
       text_clipped(x, y, rc.right - x, text);
   }
 
+  void TextClipped(PixelScalar x, PixelScalar y,
+                   UPixelScalar width, UPixelScalar height,
+                   const TCHAR *text);
+
   void text_clipped(PixelScalar x, PixelScalar y, UPixelScalar width,
-                    const TCHAR *text);
+                    const TCHAR *text) {
+    TextClipped(x, y, width, 16384, text);
+  }
 
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
   void TextAutoClipped(PixelScalar x, PixelScalar y, const TCHAR *t) {
-    if (x < (int)get_width())
-      text_clipped(x, y, get_width() - x, t);
+    if (x < (int)get_width() && y < (int)get_height())
+      TextClipped(x, y, get_width() - x, get_height() - y, t);
   }
 
   void formatted_text(PixelRect *rc, const TCHAR *text, unsigned format);

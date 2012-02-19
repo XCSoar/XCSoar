@@ -488,8 +488,9 @@ Canvas::text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text)
 }
 
 void
-Canvas::text_clipped(PixelScalar x, PixelScalar y, UPixelScalar width,
-                     const TCHAR *text)
+Canvas::TextClipped(PixelScalar x, PixelScalar y,
+                    UPixelScalar width, UPixelScalar height,
+                    const TCHAR *text)
 {
 #ifdef HAVE_GLES
   assert(x_offset == OpenGL::translate_x);
@@ -507,7 +508,8 @@ Canvas::text_clipped(PixelScalar x, PixelScalar y, UPixelScalar width,
   texture->Bind();
   GLLogicOp logic_op(GL_AND_INVERTED);
 
-  UPixelScalar height = texture->GetHeight();
+  if (texture->GetHeight() < height)
+    height = texture->GetHeight();
   if (texture->GetWidth() < width)
     width = texture->GetWidth();
 
