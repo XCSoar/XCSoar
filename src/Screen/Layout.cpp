@@ -38,6 +38,7 @@ namespace Layout
   unsigned small_scale = 1024;
   unsigned pen_width_scale = 1024;
   UPixelScalar minimum_control_height = 22, maximum_control_height = 44;
+  UPixelScalar hit_radius = 10;
 }
 
 void
@@ -68,4 +69,6 @@ Layout::Initialize(unsigned width, unsigned height)
   } else {
     maximum_control_height = minimum_control_height;
   }
+
+  hit_radius = x_dpi / (HasTouchScreen() ? 6 : 12);
 }

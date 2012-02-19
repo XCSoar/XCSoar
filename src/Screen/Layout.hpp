@@ -51,6 +51,8 @@ namespace Layout
 
   extern UPixelScalar minimum_control_height, maximum_control_height;
 
+  extern UPixelScalar hit_radius;
+
   /**
    * Initializes the screen layout information provided by this
    * namespace.
@@ -151,6 +153,17 @@ namespace Layout
   GetMaximumControlHeight()
   {
     return maximum_control_height;
+  }
+
+  /**
+   * Returns the radius (in pixels) of the hit circle around map
+   * items.
+   */
+  gcc_pure
+  static inline UPixelScalar
+  GetHitRadius()
+  {
+    return hit_radius;
   }
 }
 

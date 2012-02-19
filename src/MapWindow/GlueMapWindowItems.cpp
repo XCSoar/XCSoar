@@ -37,7 +37,7 @@ bool
 GlueMapWindow::ShowMapItems(const GeoPoint &location,
                             bool show_empty_message) const
 {
-  fixed range = visible_projection.DistancePixelsToMeters(Layout::Scale(10));
+  fixed range = visible_projection.DistancePixelsToMeters(Layout::GetHitRadius());
 
   MapItemList list;
   MapItemListBuilder builder(list, location, range);
