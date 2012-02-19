@@ -39,6 +39,7 @@ public:
 
 protected:
   virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
+  virtual bool OnKeyDown(unsigned key_code);
 };
 
 #endif

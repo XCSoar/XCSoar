@@ -30,3 +30,9 @@ BigThermalAssistantWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
   InputEvents::ShowMenu();
   return true;
 }
+
+bool
+BigThermalAssistantWindow::OnKeyDown(unsigned key_code)
+{
+  return InputEvents::processKey(key_code);
+}
