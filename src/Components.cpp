@@ -625,7 +625,7 @@ XCSoarInterface::Shutdown()
 
   delete file_cache;
 
-  LogStartUp(_T("Close Windows - main "));
+  LogStartUp(_T("Close Windows - main"));
   main_window.reset();
 
   CloseLanguageFile();
