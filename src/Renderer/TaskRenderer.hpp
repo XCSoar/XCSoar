@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Geo/GeoBounds.hpp"
 
-class RenderTaskPoint;
+class TaskPointRenderer;
 class AbstractTask;
 class AbortTask;
 class OrderedTask;
@@ -35,11 +35,11 @@ class TaskInterface;
 
 class TaskRenderer
 {
-  RenderTaskPoint &tpv;
+  TaskPointRenderer &tpv;
   GeoBounds screen_bounds;
 
 public:
-  TaskRenderer(RenderTaskPoint &_tpv, GeoBounds _screen_bounds);
+  TaskRenderer(TaskPointRenderer &_tpv, GeoBounds _screen_bounds);
 
   void Draw(const TaskInterface &task);
   void Draw(const AbortTask &task);

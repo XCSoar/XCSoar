@@ -40,7 +40,7 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Projection/ChartProjection.hpp"
 #include "Renderer/TaskRenderer.hpp"
-#include "Renderer/RenderTaskPoint.hpp"
+#include "Renderer/TaskPointRenderer.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Computer/TraceComputer.hpp"
@@ -201,9 +201,10 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
     proj.Set(rc, task, nmea_info.location);
 
     OZRenderer ozv(map_look.task, map_look.airspace, settings_map.airspace);
-    RenderTaskPoint tpv(canvas, proj, map_look.task,
-                        task.GetTaskProjection(),
-                        ozv, false, RenderTaskPoint::ALL, nmea_info.location);
+    TaskPointRenderer tpv(canvas, proj, map_look.task,
+                          task.GetTaskProjection(),
+                          ozv, false, TaskPointRenderer::ALL,
+                          nmea_info.location);
     ::TaskRenderer dv(tpv, proj.GetScreenBounds());
     dv.Draw(task);
   }

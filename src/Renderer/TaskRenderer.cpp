@@ -29,9 +29,9 @@ Copyright_License {
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/FinishPoint.hpp"
 #include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
-#include "RenderTaskPoint.hpp"
+#include "TaskPointRenderer.hpp"
 
-TaskRenderer::TaskRenderer(RenderTaskPoint &_tpv, GeoBounds _screen_bounds)
+TaskRenderer::TaskRenderer(TaskPointRenderer &_tpv, GeoBounds _screen_bounds)
   :tpv(_tpv), screen_bounds(_screen_bounds) {}
 
 void 
@@ -43,7 +43,7 @@ TaskRenderer::Draw(const AbortTask &task)
 
     tpv.SetModeOptional(false);
     for (unsigned j = 0, end = task.TaskSize(); j < end; ++j)
-      tpv.Draw(task.GetAlternate(j), (RenderTaskPoint::Layer)i);
+      tpv.Draw(task.GetAlternate(j), (TaskPointRenderer::Layer)i);
   }
 }
 
@@ -55,16 +55,17 @@ TaskRenderer::Draw(const OrderedTask &task)
   for (unsigned i = 0; i < 4; i++) {
     tpv.ResetIndex();
 
-    if (i != RenderTaskPoint::LAYER_SYMBOLS && i != RenderTaskPoint::LAYER_LEG) {
+    if (i != TaskPointRenderer::LAYER_SYMBOLS &&
+        i != TaskPointRenderer::LAYER_LEG) {
       tpv.SetModeOptional(true);
 
       for (unsigned j = 0, end = task.optional_start_points_size(); j < end; ++j)
-        tpv.Draw(*task.get_optional_start(j), (RenderTaskPoint::Layer)i);
+        tpv.Draw(*task.get_optional_start(j), (TaskPointRenderer::Layer)i);
     }
 
     tpv.SetModeOptional(false);
     for (unsigned j = 0, end = task.TaskSize(); j < end; ++j)
-      tpv.Draw(task.GetTaskPoint(j), (RenderTaskPoint::Layer)i);
+      tpv.Draw(task.GetTaskPoint(j), (TaskPointRenderer::Layer)i);
   }
 }
 
@@ -76,7 +77,7 @@ TaskRenderer::Draw(const GotoTask &task)
     tpv.ResetIndex();
 
     tpv.SetModeOptional(false);
-    tpv.Draw(*task.GetActiveTaskPoint(), (RenderTaskPoint::Layer)i);
+    tpv.Draw(*task.GetActiveTaskPoint(), (TaskPointRenderer::Layer)i);
   }
 }
 

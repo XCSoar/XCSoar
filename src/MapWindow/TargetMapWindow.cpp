@@ -29,7 +29,7 @@ Copyright_License {
 #include "Terrain/RasterWeather.hpp"
 #include "Look/TaskLook.hpp"
 #include "Renderer/TaskRenderer.hpp"
-#include "Renderer/RenderTaskPoint.hpp"
+#include "Renderer/TaskPointRenderer.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Renderer/TrailRenderer.hpp"
@@ -151,18 +151,15 @@ TargetMapWindow::DrawTask(Canvas &canvas)
   ProtectedTaskManager::Lease task_manager(*task);
   const AbstractTask *task = task_manager->GetActiveTask();
   if (task && task->CheckTask()) {
-
     OZRenderer ozv(task_look, airspace_renderer.GetLook(),
-                              GetMapSettings().airspace);
-    RenderTaskPoint tpv(canvas,
-                        projection,
-                        task_look,
-                        /* we're accessing the OrderedTask here,
-                           which may be invalid at this point, but it
-                           will be used only if active, so it's ok */
-                        task_manager->GetOrderedTask().GetTaskProjection(),
-                        ozv, false, RenderTaskPoint::ALL,
-                        Basic().location);
+                   GetMapSettings().airspace);
+    TaskPointRenderer tpv(canvas, projection, task_look,
+                          /* we're accessing the OrderedTask here,
+                             which may be invalid at this point, but it
+                             will be used only if active, so it's ok */
+                          task_manager->GetOrderedTask().GetTaskProjection(),
+                          ozv, false, TaskPointRenderer::ALL,
+                          Basic().location);
     TaskRenderer dv(tpv, projection.GetScreenBounds());
     dv.Draw(*task);
   }

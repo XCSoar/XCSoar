@@ -27,7 +27,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Renderer/TaskRenderer.hpp"
-#include "Renderer/RenderTaskPoint.hpp"
+#include "Renderer/TaskPointRenderer.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
@@ -58,21 +58,18 @@ MapWindow::DrawTask(Canvas &canvas)
   ProtectedTaskManager::Lease task_manager(*task);
   const AbstractTask *task = task_manager->GetActiveTask();
   if (task && task->CheckTask()) {
-    RenderTaskPoint::TargetVisibility target_visibility =
-        IsNearSelf() ? RenderTaskPoint::ACTIVE : RenderTaskPoint::ALL;
+    TaskPointRenderer::TargetVisibility target_visibility =
+        IsNearSelf() ? TaskPointRenderer::ACTIVE : TaskPointRenderer::ALL;
 
     OZRenderer ozv(look.task, airspace_renderer.GetLook(),
-                              GetMapSettings().airspace);
-    RenderTaskPoint tpv(canvas,
-                        render_projection,
-                        look.task,
-                        /* we're accessing the OrderedTask here,
-                           which may be invalid at this point, but it
-                           will be used only if active, so it's ok */
-                        task_manager->GetOrderedTask().GetTaskProjection(),
-                        ozv, draw_bearing,
-                        target_visibility,
-                        Basic().location);
+                   GetMapSettings().airspace);
+    TaskPointRenderer tpv(canvas, render_projection, look.task,
+                          /* we're accessing the OrderedTask here,
+                             which may be invalid at this point, but it
+                             will be used only if active, so it's ok */
+                          task_manager->GetOrderedTask().GetTaskProjection(),
+                          ozv, draw_bearing, target_visibility,
+                          Basic().location);
     TaskRenderer dv(tpv, render_projection.GetScreenBounds());
     dv.Draw(*task);
   }

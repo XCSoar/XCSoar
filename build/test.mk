@@ -1507,7 +1507,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapWindow/MapDrawHelper.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \
-	$(SRC)/Renderer/RenderTaskPoint.cpp \
+	$(SRC)/Renderer/TaskPointRenderer.cpp \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
 	$(SRC)/Renderer/AirspaceRenderer.cpp \
 	$(SRC)/Renderer/BestCruiseArrowRenderer.cpp \
@@ -1865,7 +1865,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Projection/ChartProjection.cpp \
 	$(SRC)/Renderer/ChartRenderer.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \
-	$(SRC)/Renderer/RenderTaskPoint.cpp \
+	$(SRC)/Renderer/TaskPointRenderer.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
 	$(SRC)/Renderer/TrailRenderer.cpp \

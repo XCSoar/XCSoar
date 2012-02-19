@@ -37,7 +37,7 @@ class OrderedTaskPoint;
 class AATPoint;
 struct TaskLook;
 
-class RenderTaskPoint
+class TaskPointRenderer
 {
 public:
   enum TargetVisibility {
@@ -72,14 +72,14 @@ public:
     LAYER_SYMBOLS,
   };
 
-  RenderTaskPoint(Canvas &_canvas,
-                  const WindowProjection &_projection,
-                  const TaskLook &task_look,
-                  const TaskProjection &_task_projection,
-                  OZRenderer &_ozv,
-                  bool _draw_bearing,
-                  TargetVisibility _target_visibility,
-                  const GeoPoint &_location);
+  TaskPointRenderer(Canvas &_canvas,
+                    const WindowProjection &_projection,
+                    const TaskLook &task_look,
+                    const TaskProjection &_task_projection,
+                    OZRenderer &_ozv,
+                    bool _draw_bearing,
+                    TargetVisibility _target_visibility,
+                    const GeoPoint &_location);
 
   void ResetIndex() {
     index = 0;
@@ -124,6 +124,5 @@ protected:
   void DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp);
   void DrawOZForeground(const OrderedTaskPoint &tp);
 };
-
 
 #endif

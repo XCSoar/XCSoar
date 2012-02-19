@@ -27,7 +27,7 @@
 #include "Renderer/BackgroundRenderer.hpp"
 #include "Renderer/AirspaceRenderer.hpp"
 #include "Renderer/OZRenderer.hpp"
-#include "Renderer/RenderTaskPoint.hpp"
+#include "Renderer/TaskPointRenderer.hpp"
 #include "Renderer/TaskRenderer.hpp"
 #include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 #include "Engine/Task/Tasks/OrderedTask.hpp"
@@ -75,9 +75,9 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
 #endif
 
   OZRenderer ozv(task_look, airspace_look, settings_map.airspace);
-  RenderTaskPoint tpv(canvas, projection, task_look,
-                      task.GetTaskProjection(),
-                      ozv, false, RenderTaskPoint::NONE, location);
+  TaskPointRenderer tpv(canvas, projection, task_look,
+                        task.GetTaskProjection(),
+                        ozv, false, TaskPointRenderer::NONE, location);
   TaskRenderer dv(tpv, projection.GetScreenBounds());
   dv.Draw(task);
 }

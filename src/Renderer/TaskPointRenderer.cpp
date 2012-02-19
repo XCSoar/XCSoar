@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "RenderTaskPoint.hpp"
+#include "TaskPointRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Projection/WindowProjection.hpp"
@@ -35,14 +35,14 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "OZRenderer.hpp"
 
-RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
-                                 const WindowProjection &_projection,
-                                 const TaskLook &_task_look,
-                                 const TaskProjection &_task_projection,
-                                 OZRenderer &_ozv,
-                                 bool _draw_bearing,
-                                 TargetVisibility _target_visibility,
-                                 const GeoPoint &_location)
+TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
+                                     const WindowProjection &_projection,
+                                     const TaskLook &_task_look,
+                                     const TaskProjection &_task_projection,
+                                     OZRenderer &_ozv,
+                                     bool _draw_bearing,
+                                     TargetVisibility _target_visibility,
+                                     const GeoPoint &_location)
   :canvas(_canvas), m_proj(_projection),
    map_canvas(_canvas, _projection,
               _projection.GetScreenBounds().Scale(fixed(1.1))),
@@ -58,8 +58,8 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
 {
 }
 
-void 
-RenderTaskPoint::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
+void
+TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
 {
   switch (layer) {
   case LAYER_OZ_SHADE:
@@ -88,8 +88,8 @@ RenderTaskPoint::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
   }
 }
 
-bool 
-RenderTaskPoint::IsTargetVisible(const TaskPoint &tp) const
+bool
+TaskPointRenderer::IsTargetVisible(const TaskPoint &tp) const
 {
   if (!tp.HasTarget() || target_visibility == NONE)
     return false;
@@ -100,8 +100,8 @@ RenderTaskPoint::IsTargetVisible(const TaskPoint &tp) const
   return PointCurrent();
 }
 
-void 
-RenderTaskPoint::DrawBearing(const TaskPoint &tp) 
+void
+TaskPointRenderer::DrawBearing(const TaskPoint &tp)
 {
   if (!draw_bearing || !PointCurrent())
     return;
@@ -110,8 +110,8 @@ RenderTaskPoint::DrawBearing(const TaskPoint &tp)
   map_canvas.offset_line(location, tp.GetLocationRemaining());
 }
 
-void 
-RenderTaskPoint::DrawTarget(const TaskPoint &tp) 
+void
+TaskPointRenderer::DrawTarget(const TaskPoint &tp)
 {
   if (!IsTargetVisible(tp))
     return;
@@ -121,22 +121,22 @@ RenderTaskPoint::DrawTarget(const TaskPoint &tp)
     task_look.target_icon.Draw(canvas, sc.x, sc.y);
 }
 
-void 
-RenderTaskPoint::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
+void
+TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
 {
   canvas.Select(LegActive() ? task_look.leg_active_pen :
                               task_look.leg_inactive_pen);
   canvas.SetBackgroundTransparent();
   map_canvas.line(start, end);
   canvas.SetBackgroundOpaque();
-  
+
   // draw small arrow along task direction
   RasterPoint p_p;
   RasterPoint Arrow[3] = { {6,6}, {-6,6}, {0,0} };
-  
+
   const RasterPoint p_start = m_proj.GeoToScreen(start);
   const RasterPoint p_end = m_proj.GeoToScreen(end);
-  
+
   const Angle ang = Angle::Radians(atan2(fixed(p_end.x - p_start.x),
                                          fixed(p_start.y - p_end.y))).AsBearing();
 
@@ -144,13 +144,13 @@ RenderTaskPoint::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
   PolygonRotateShift(Arrow, 2, p_p.x, p_p.y, ang);
   Arrow[2] = Arrow[1];
   Arrow[1] = p_p;
-  
+
   canvas.Select(task_look.arrow_pen);
   canvas.DrawPolyline(Arrow, 3);
 }
 
-void 
-RenderTaskPoint::DrawIsoline(const AATPoint &tp)
+void
+TaskPointRenderer::DrawIsoline(const AATPoint &tp)
 {
   if (!tp.valid() || !IsTargetVisible(tp))
     return;
@@ -160,7 +160,7 @@ RenderTaskPoint::DrawIsoline(const AATPoint &tp)
     return;
 
   #define fixed_twentieth fixed(1.0 / 20.0)
-  
+
   GeoPoint start = seg.Parametric(fixed_zero);
   GeoPoint end = seg.Parametric(fixed_one);
 
@@ -184,14 +184,14 @@ RenderTaskPoint::DrawIsoline(const AATPoint &tp)
 }
 
 void
-RenderTaskPoint::DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp)
+TaskPointRenderer::DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp)
 {
   ozv.Draw(canvas, OZRenderer::LAYER_SHADE, m_proj, *tp.GetOZPoint(),
            index - active_index);
 }
 
-void 
-RenderTaskPoint::DrawOZForeground(const OrderedTaskPoint &tp)
+void
+TaskPointRenderer::DrawOZForeground(const OrderedTaskPoint &tp)
 {
   int offset = index - active_index;
   if (mode_optional_start)
@@ -204,7 +204,7 @@ RenderTaskPoint::DrawOZForeground(const OrderedTaskPoint &tp)
 }
 
 void
-RenderTaskPoint::Draw(const TaskPoint &tp, Layer layer)
+TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
 {
   const OrderedTaskPoint &otp = (const OrderedTaskPoint &)tp;
   const AATPoint &atp = (const AATPoint &)tp;

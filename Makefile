@@ -457,7 +457,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/ChartRenderer.cpp \
 	$(SRC)/Renderer/BackgroundRenderer.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \
-	$(SRC)/Renderer/RenderTaskPoint.cpp \
+	$(SRC)/Renderer/TaskPointRenderer.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
 	$(SRC)/Renderer/AirspaceRenderer.cpp \
