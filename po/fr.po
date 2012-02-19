@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-15 00:09+0100\n"
-"PO-Revision-Date: 2012-02-17 21:45+0000\n"
+"PO-Revision-Date: 2012-02-19 08:56+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-18 16:56+0000\n"
+"X-Launchpad-Export-Date: 2012-02-19 14:24+0000\n"
 "X-Generator: Launchpad (build 14814)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -3864,7 +3864,7 @@ msgstr "Le circuit ne serait pas valide après modification."
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:100
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:134
 msgid "Created Goto Task."
-msgstr ""
+msgstr "Créé circuit à 1-Pt"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:100
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:105
@@ -3876,7 +3876,7 @@ msgstr "Succès"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:105
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:139
 msgid "Created 2-point task from Goto Task."
-msgstr ""
+msgstr "Créé un circuit 2-Pts à partir du circuit à 1-Pt"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:162
 msgid "Waypoint not in task."
@@ -3963,7 +3963,7 @@ msgstr "Remplir tout"
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:68
 #, no-c-format
 msgid "Fill padding"
-msgstr ""
+msgstr "Remplir partiellement"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:137
 msgid "Colours"
@@ -4164,7 +4164,7 @@ msgstr "Montrer les moucherons"
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:75
 msgid "Whether to show the bugs percentage."
-msgstr "Propreté (moucherons)"
+msgstr "Affichage de la ropreté (moucherons) en %."
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:78
 msgid "Show ballast"
@@ -4172,15 +4172,15 @@ msgstr "Affichage ballast"
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:78
 msgid "Whether to show the ballast percentage."
-msgstr "Affiche ou non le pourcentage des ballasts."
+msgstr "Affichage numérique du pourcentage des ballasts."
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:81
 msgid "Show gross"
-msgstr ""
+msgstr "Vario instantané"
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:81
 msgid "Whether to show the gross climb rate."
-msgstr "Affichage du taux de montée."
+msgstr "Affichage numérique du taux de montée."
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:84
 msgid "Averager needle"
@@ -6296,7 +6296,7 @@ msgstr "AAT"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:61
 msgid "Mixed"
-msgstr ""
+msgstr "Mélangé"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:63
 msgid "Touring"
@@ -6432,7 +6432,7 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:287
 msgid "A cylinder.  Exit area to start."
-msgstr ""
+msgstr "Cylindre. En sortir pour lancer le départ."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:289
 msgid ""
@@ -6605,7 +6605,7 @@ msgstr "Points de virage non-FAI."
 
 #: src/Dialogs/dlgTeamCode.cpp:142
 msgid "Set new teammate:"
-msgstr ""
+msgstr "Définir nouvel équipier"
 
 #: src/Dialogs/dlgTeamCode.cpp:150
 msgid "Unknown Competition Number"
@@ -6698,31 +6698,33 @@ msgstr "Reset"
 
 #: src/Dialogs/dlgNOAAList.cpp:128
 msgid "No METAR available"
-msgstr ""
+msgstr "Pas de METAR disponible"
 
 #: src/Dialogs/dlgNOAAList.cpp:142
 msgid "Airport ICAO code"
-msgstr ""
+msgstr "Code OACI de l'aéroport"
 
 #: src/Dialogs/dlgNOAAList.cpp:146
 msgid "Please enter the FOUR letter code of the desired station."
-msgstr ""
+msgstr "Saisir les quatre lettres de la station voulue."
 
 #: src/Dialogs/dlgNOAAList.cpp:153
 msgid ""
 "Please don't use special characters in the four letter code of the desired "
 "station."
 msgstr ""
+"Ne pas utiliser de caractères spéciaux parmi les quatre lettre de la station "
+"voulue."
 
 #: src/Dialogs/dlgNOAAList.cpp:163 src/Dialogs/dlgNOAAList.cpp:173
 #: src/Dialogs/dlgNOAADetails.cpp:74
 msgid "Download"
-msgstr ""
+msgstr "Télécharger"
 
 #: src/Dialogs/dlgNOAAList.cpp:185 src/Dialogs/dlgNOAADetails.cpp:83
 #, c-format
 msgid "Do you want to remove station %s?"
-msgstr ""
+msgstr "Supprimer la station %s?"
 
 #: src/Dialogs/dlgNOAAList.cpp:188 src/Dialogs/dlgNOAADetails.cpp:86
 #: Data/Dialogs/dlgNOAADetails.xml:7 Data/Dialogs/dlgNOAADetails_L.xml:7
@@ -6735,7 +6737,7 @@ msgstr "Supprimer"
 
 #: src/Dialogs/dlgNOAAList.cpp:273 src/Dialogs/dlgNOAADetails.cpp:131
 msgid "This function is not available on your platform yet."
-msgstr ""
+msgstr "Cette fonction n'est pas encore disponible sur votre plateforme."
 
 #: src/Dialogs/dlgNOAADetails.cpp:57 Data/Dialogs/dlgNOAADetails.xml:3
 #: Data/Dialogs/dlgNOAADetails_L.xml:3 Data/Dialogs/dlgNOAAList.xml:3
@@ -6745,32 +6747,32 @@ msgstr "METAR et TAF"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:87
 msgid "Tracking Interval"
-msgstr ""
+msgstr "Intervalle de tracking"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:93
 msgid "Username"
-msgstr ""
+msgstr "Nom d'utilisateur"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:94
 msgid "Password"
-msgstr ""
+msgstr "Mot de passe"
 
 #: src/Weather/NOAAFormatter.cpp:132 src/Weather/NOAAFormatter.cpp:139
 msgid "Dew Point"
-msgstr ""
+msgstr "Point de rosée"
 
 #: src/Weather/NOAAFormatter.cpp:166
 msgid "Visibility"
-msgstr ""
+msgstr "Visibilité"
 
 #: src/Weather/NOAAFormatter.cpp:175
 #, c-format
 msgid "more than %s"
-msgstr ""
+msgstr "plus que %s"
 
 #: src/Weather/NOAAFormatter.cpp:189
 msgid "Sky Conditions"
-msgstr ""
+msgstr "Conditions météo"
 
 #: src/Weather/NOAAFormatter.cpp:203 Data/Input/default.xci:790
 msgid "Weather"
@@ -6779,15 +6781,15 @@ msgstr "Météo"
 #: src/Weather/NOAAFormatter.cpp:251
 #, c-format
 msgid "METAR for %s:"
-msgstr ""
+msgstr "METAR pour %s"
 
 #: src/Weather/NOAAFormatter.cpp:279
 msgid "No METAR available!"
-msgstr ""
+msgstr "Pas de METAR disponible !"
 
 #: src/Weather/NOAAFormatter.cpp:294
 msgid "No TAF available!"
-msgstr ""
+msgstr "Pas de TAF disponible !"
 
 #: src/Dialogs/Vega/AlertParameters.hpp:34
 #, no-c-format
@@ -6827,7 +6829,7 @@ msgstr "Intervalle; batterie"
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:33
 #, no-c-format
 msgid "Step"
-msgstr ""
+msgstr "Pas"
 
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:34
 #, no-c-format
@@ -7316,7 +7318,7 @@ msgstr "Volume min. urgent"
 
 #: Data/Dialogs/dlgTeamCode.xml:19 Data/Dialogs/dlgTeamCode_L.xml:19
 msgid "Flarm lock"
-msgstr ""
+msgstr "Capture Flarm"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:4
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:4
@@ -7333,11 +7335,11 @@ msgstr "Champ"
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid "TE vario"
-msgstr ""
+msgstr "Vario compensé"
 
 #: Data/Dialogs/dlgTaskPoint.xml:39 Data/Dialogs/dlgTaskPoint_L.xml:43
 msgid "Finish radial of the OZ area"
-msgstr ""
+msgstr "Radiale d'arrivée de le zone d'observation"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:22
 #: Data/Dialogs/pnlTaskCalculator_L.xml:22
@@ -7347,18 +7349,24 @@ msgid ""
 "affect the main computer's setting if the dialog is exited with the Cancel "
 "button."
 msgstr ""
+"Réglage du calage MacCready utilisé par le calculateur. Permet de déterminer "
+"l'effet du calage sur la durée du circuit en cas de changement de "
+"conditions. Cette valeur n'affectera pas les réglages du calculateur "
+"principal si la fenêtre est fermée sans confirmer."
 
 #: Data/Dialogs/dlgPlanePolar.xml:30 Data/Dialogs/dlgPlanePolar_L.xml:24
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:18
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:18
 msgid "Polar W"
-msgstr ""
+msgstr "Vz polaire"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:14
 msgid ""
 "Time acceleration of replay. Set to 0 for pause, 1 for normal real-time "
 "replay."
 msgstr ""
+"Accélération du temps pour le rejeu. Mettre 0 pour pause, 1 pour le rejeu en "
+"temps-réel."
 
 #: Data/Dialogs/dlgLoggerReplay.xml:14
 msgid "Rate"
@@ -7427,6 +7435,9 @@ msgid ""
 "[MSL] Reference is altitude above mean sea level\n"
 "[AGL] Reference is the height above the start point"
 msgstr ""
+"Référence utilisée pour la règle de hauteur max de départ\n"
+"[MSL] Référence par rapport au niveau moyen des mers\n"
+"[AGL] Référence par rapport au point de départ"
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:59
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:59
@@ -7440,6 +7451,7 @@ msgstr "Prévision météo"
 #: Data/Dialogs/dlgVoice.xml:22
 msgid "Enable voice read-back of MacReady setting after it is adjusted."
 msgstr ""
+"Activer la confirmation vocale du calage MacCready après un changement."
 
 #: Data/Dialogs/dlgTarget.xml:25 Data/Dialogs/dlgTarget_L.xml:18
 msgid ""
@@ -7456,7 +7468,7 @@ msgstr "Pilote"
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:28
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:28
 msgid "Reference mass"
-msgstr ""
+msgstr "Masse de référence"
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "Enable voice announcement that the task waypoint has changed."
@@ -7477,6 +7489,8 @@ msgid ""
 "Optional the amount of water ballast XCSoar refers to as 100% ballast. Set "
 "to zero if it does not apply."
 msgstr ""
+"Optionnel : Quantité d'eau (ballast) que XCSoar doit considérer comme 100%. "
+"Mettre 0 si non applicable."
 
 #: Data/Dialogs/dlgTarget_L.xml:23
 msgid "ETE"
@@ -7488,7 +7502,7 @@ msgstr "Temps minimum de l'épreuve AAT en minutes."
 
 #: Data/Dialogs/dlgSwitches.xml:11
 msgid "Flap positive"
-msgstr ""
+msgstr "Volets positifs"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid "File"
@@ -7504,7 +7518,7 @@ msgstr "GPS Lock"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:46 Data/Dialogs/dlgPlaneDetails_L.xml:38
 msgid "Dump Time"
-msgstr ""
+msgstr "Durée de vidange"
 
 #: Data/Dialogs/dlgTextEntry.xml:8
 msgid "A-"
@@ -7530,7 +7544,7 @@ msgstr "Vent auto."
 
 #: Data/Dialogs/dlgTarget.xml:32 Data/Dialogs/dlgTarget_L.xml:38
 msgid "Optimized"
-msgstr ""
+msgstr "Optimisé"
 
 #: Data/Dialogs/dlgConfiguration.xml:8 Data/Dialogs/dlgConfiguration_L.xml:4
 msgid "Expert"
@@ -7569,11 +7583,11 @@ msgstr "Planeur"
 
 #: Data/Dialogs/dlgVoice.xml:6
 msgid "Enable voice read-back of the average climb rate when circling."
-msgstr ""
+msgstr "Activer la confirmation vocale du taux de montée moyen en spirale."
 
 #: Data/Dialogs/dlgTaskPoint.xml:19 Data/Dialogs/dlgTaskPoint_L.xml:23
 msgid "Width of the start/finish gate."
-msgstr ""
+msgstr "Largeur de la parte de départ/arrivée."
 
 #: Data/Dialogs/dlgStatusTask.xml:10 Data/Dialogs/dlgTarget.xml:15
 #: Data/Dialogs/dlgTarget_L.xml:33 Data/Dialogs/pnlTaskCalculator.xml:33
@@ -7583,7 +7597,7 @@ msgstr "Vitesse restante"
 
 #: Data/Dialogs/dlgConfigFonts.xml:16 Data/Dialogs/dlgConfigFonts_L.xml:16
 msgid "InfoBox values, small"
-msgstr ""
+msgstr "Valeurs en InfoBox, petites"
 
 #: Data/Dialogs/pnlTaskProperties.xml:39
 #: Data/Dialogs/pnlTaskProperties_L.xml:40
@@ -7594,10 +7608,12 @@ msgstr "Configure le comportement pour le circuit actuel."
 msgid ""
 "Enable voice read-back of the distance to next waypoint when in cruise mode."
 msgstr ""
+"Activer la confirmation vocale de la distance au prochain waypoint en "
+"transition."
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:10
 msgid "Radio"
-msgstr ""
+msgstr "Radio"
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:44
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:44
@@ -7609,11 +7625,11 @@ msgstr ""
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:33
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:33
 msgid "Dry mass of the glider (pilot + empty mass)."
-msgstr ""
+msgstr "Masse du planeur (pilote + masse à vide)"
 
 #: Data/Dialogs/dlgTeamCode.xml:10 Data/Dialogs/dlgTeamCode_L.xml:10
 msgid "Own code"
-msgstr ""
+msgstr "Code individuel"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:20 Data/Dialogs/dlgPlaneDetails_L.xml:16
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:49
@@ -7699,12 +7715,12 @@ msgstr "Heure de posé"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:39 Data/Dialogs/dlgPlaneDetails_L.xml:33
 msgid "Max. Ballast"
-msgstr ""
+msgstr "Ballast max."
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:7
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:15
 msgid "Callsign"
-msgstr ""
+msgstr "Indicatif"
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "New waypoint"
@@ -7721,7 +7737,7 @@ msgstr "delta T"
 
 #: Data/Dialogs/dlgTeamCode.xml:5 Data/Dialogs/dlgTeamCode_L.xml:5
 msgid "Set WP"
-msgstr ""
+msgstr "Def WP"
 
 #: Data/Dialogs/dlgConfigFonts.xml:6 Data/Dialogs/dlgConfigFonts_L.xml:6
 msgid "Customize fonts"
@@ -7729,7 +7745,7 @@ msgstr "Personnaliser Polices"
 
 #: Data/Dialogs/dlgConfiguration.xml:10 Data/Dialogs/dlgConfiguration_L.xml:6
 msgid "Waypts."
-msgstr ""
+msgstr "Wpts."
 
 #: Data/Dialogs/dlgPlaneDetails.xml:32 Data/Dialogs/dlgPlaneDetails_L.xml:26
 msgid "Wing Area"
@@ -7742,7 +7758,7 @@ msgstr "Poids de référence auquel la polaire donnée est valide."
 
 #: Data/Dialogs/pnlTaskEdit.xml:13 Data/Dialogs/pnlTaskEdit_L.xml:12
 msgid "Clear All"
-msgstr ""
+msgstr "Tout effacer"
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:49
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:49
@@ -7756,7 +7772,7 @@ msgstr "Ceci force le mode spirale ou transition du variomètre"
 
 #: Data/Dialogs/dlgPlanePolar.xml:50 Data/Dialogs/dlgPlanePolar_L.xml:38
 msgid "Reference Mass"
-msgstr ""
+msgstr "Masse de référence"
 
 #: Data/Dialogs/dlgComboPicker.xml:3 Data/Dialogs/dlgComboPicker_L.xml:3
 msgid "Picker"
@@ -7773,7 +7789,7 @@ msgstr "Règles de départ/arrivée FAI"
 
 #: Data/Dialogs/dlgPlanes.xml:3 Data/Dialogs/dlgPlanes_L.xml:3
 msgid "Planes"
-msgstr ""
+msgstr "Appareils"
 
 #: Data/Dialogs/dlgSwitches.xml:3
 msgid "Switches"
@@ -7782,11 +7798,11 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:25
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:10
 msgid "Magenta"
-msgstr ""
+msgstr "Magenta"
 
 #: Data/Dialogs/dlgTaskPoint.xml:25 Data/Dialogs/dlgTaskPoint_L.xml:29
 msgid "Radius of the OZ cylinder."
-msgstr ""
+msgstr "Rayon du cylindre de la zone d'observation"
 
 #: Data/Dialogs/dlgStatusTask.xml:9 Data/Dialogs/pnlStatusTask.xml:8
 msgid "Remaining distance"
@@ -7800,7 +7816,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
 msgid "InfoBox values, normal"
-msgstr ""
+msgstr "Valeurs InfoBox, normal"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:18 Data/Dialogs/dlgTarget.xml:20
 #: Data/Dialogs/dlgTarget_L.xml:13 Data/Dialogs/dlgTeamCode.xml:12
@@ -7815,11 +7831,11 @@ msgstr "Cap Réel"
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:54
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:54
 msgid "Max. ballast"
-msgstr ""
+msgstr "Ballast max."
 
 #: Data/Dialogs/dlgVoice.xml:10
 msgid "Enable warnings for final glide through terrain."
-msgstr ""
+msgstr "Active les alertes lors d'arrivée au-travers du terrain."
 
 #: Data/Dialogs/dlgSwitches.xml:35
 msgid "Speed command"
@@ -7827,7 +7843,7 @@ msgstr "Commande de vitesse"
 
 #: Data/Dialogs/dlgCredits_L.xml:3
 msgid "XCSoar"
-msgstr ""
+msgstr "XCSoar"
 
 #: Data/Dialogs/dlgStatusTask.xml:6 Data/Dialogs/pnlStatusTask.xml:6
 msgid "Remaining time"
@@ -7844,7 +7860,7 @@ msgstr "Select. Couleur"
 
 #: Data/Dialogs/pnlStatusRules.xml:6
 msgid "Start alt."
-msgstr ""
+msgstr "Alt. départ"
 
 #: Data/Dialogs/dlgStatusSystem.xml:9 Data/Dialogs/pnlStatusSystem.xml:9
 msgid "Supply voltage"
@@ -7868,7 +7884,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:14
 msgid "Waypoint distance"
-msgstr ""
+msgstr "Distance au waypoint"
 
 #: Data/Dialogs/dlgSwitches.xml:53
 msgid "Vario circling"
@@ -7876,7 +7892,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgFlarmTraffic.xml:9 Data/Dialogs/dlgFlarmTraffic_L.xml:16
 msgid "AVG/ALT"
-msgstr ""
+msgstr "Vzm/ALT"
 
 #: Data/Dialogs/pnlTaskList.xml:8 Data/Dialogs/pnlTaskList_L.xml:12
 msgid "Browse"
@@ -7892,7 +7908,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTaskPoint.xml:43 Data/Dialogs/dlgTaskPoint_L.xml:47
 msgid "Inner radius"
-msgstr ""
+msgstr "Rayon intérieur"
 
 #: Data/Dialogs/dlgVoice.xml:34
 msgid "Enable voice warnings for airspace incursions."
@@ -7924,6 +7940,11 @@ msgid ""
 "[ZigZag] Requires an intelligent vario with airspeed output.\n"
 "[Both] Use ZigZag and circling."
 msgstr ""
+"Activation de l'algorithme de calcul du vent. Si sur Off, alors le/la pilote "
+"insère lui/elle-même l'estimation du vent.\n"
+"[Spirale] Nécessite seulement une source GPS\n"
+"[Zigzag] Nécessite une information de vitesse air\n"
+"[Les deux] Utiliser Spirale et Zigzag"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:45
 #: Data/Dialogs/pnlTaskCalculator_L.xml:45
@@ -7934,7 +7955,7 @@ msgstr "Finesse Transition"
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:8
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:8
 msgid "Polar V"
-msgstr "V polaire"
+msgstr "Vi polaire"
 
 #: Data/Dialogs/dlgConfiguration.xml:15 Data/Dialogs/dlgConfiguration_L.xml:9
 #: Data/Dialogs/dlgPlanePolar.xml:65 Data/Dialogs/dlgPlanePolar_L.xml:53
@@ -7965,7 +7986,7 @@ msgstr "Entrer MacCready"
 
 #: Data/Dialogs/dlgTeamCode.xml:4 Data/Dialogs/dlgTeamCode_L.xml:4
 msgid "Set Code"
-msgstr ""
+msgstr "Définir code"
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:39
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:39
@@ -7982,24 +8003,24 @@ msgstr "Code Position"
 
 #: Data/Dialogs/dlgTaskPoint.xml:31 Data/Dialogs/dlgTaskPoint_L.xml:35
 msgid "Radius of the OZ sector."
-msgstr ""
+msgstr "Rayon du secteur d'observation"
 
 #: Data/Dialogs/dlgVoice.xml:30
 msgid "In sector"
-msgstr ""
+msgstr "Dans le secteur"
 
 #: Data/Dialogs/dlgSwitches.xml:19
 msgid "Flap negative"
-msgstr ""
+msgstr "Volets négatifs"
 
 #: Data/Dialogs/pnlStatusFlight.xml:6
 msgid "Max. height gain"
-msgstr ""
+msgstr "Gain d'alt. max."
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:33
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:33
 msgid "Dry mass"
-msgstr ""
+msgstr "Masse  à vide"
 
 #: Data/Dialogs/dlgConfiguration.xml:16 Data/Dialogs/dlgConfiguration_L.xml:10
 msgid "Export"
@@ -8007,11 +8028,11 @@ msgstr "Exporter"
 
 #: Data/Dialogs/dlgConfiguration.xml:19 Data/Dialogs/dlgConfiguration_L.xml:19
 msgid "Configuration Menu"
-msgstr ""
+msgstr "Menu de Configuration"
 
 #: Data/Dialogs/dlgPlanePolar.xml:57 Data/Dialogs/dlgPlanePolar_L.xml:45
 msgid "Dry Mass"
-msgstr ""
+msgstr "Masse  à vide"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:41
 #: Data/Dialogs/pnlTaskCalculator_L.xml:41
@@ -8024,7 +8045,7 @@ msgstr "Vitesse Moyenne"
 
 #: Data/Dialogs/dlgFontEdit.xml:4
 msgid "Standard names of fonts available"
-msgstr ""
+msgstr "Noms standards des polices disponibles"
 
 #: Data/Dialogs/dlgVario.xml:3 Data/Dialogs/dlgVario_L.xml:3
 msgid "Vario Configuration"
@@ -8041,7 +8062,7 @@ msgstr "Radiale N°1"
 
 #: Data/Dialogs/dlgTaskPoint.xml:35 Data/Dialogs/dlgTaskPoint_L.xml:39
 msgid "Start radial of the OZ area"
-msgstr ""
+msgstr "Radiale de départ de la zone d'observation"
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid ""
@@ -8049,10 +8070,14 @@ msgid ""
 "backlight algorithm. When the automatic backlight is disabled, this controls "
 "the backlight directly."
 msgstr ""
+"Réglage du rétro-éclairage. Si le rétro-éclairage automatique est activé, "
+"alors cela influence l'algorithme de rétro-éclairage. Si le rétro-éclairage "
+"automatique est désactivé, alors cela controle directement le rétro-"
+"éclairage."
 
 #: Data/Dialogs/pnlTaskEdit.xml:10 Data/Dialogs/pnlTaskEdit_L.xml:9
 msgid "Make Finish"
-msgstr ""
+msgstr "Pt d'arrivée"
 
 #: Data/Dialogs/pnlTaskProperties.xml:35
 #: Data/Dialogs/pnlTaskProperties_L.xml:36
@@ -8069,7 +8094,7 @@ msgstr "Italique"
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:21
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:6
 msgid "Friends"
-msgstr ""
+msgstr "Amis"
 
 #: Data/Dialogs/dlgStatusTask.xml:4 Data/Dialogs/pnlStatusTask.xml:4
 #: Data/Dialogs/pnlTaskCalculator_L.xml:10
@@ -8099,7 +8124,7 @@ msgstr "Que voulez-vous faire ?"
 
 #: Data/Dialogs/dlgTaskPoint.xml:3 Data/Dialogs/dlgTaskPoint_L.xml:3
 msgid "Waypoint"
-msgstr ""
+msgstr "Waypoint"
 
 #: Data/Dialogs/dlgSwitches.xml:31
 msgid "Repeat"
@@ -8127,11 +8152,11 @@ msgstr "Quitter"
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:4 Data/Dialogs/dlgTaskPoint.xml:10
 #: Data/Dialogs/dlgTaskPoint_L.xml:14
 msgid "Relocate"
-msgstr ""
+msgstr "Relocaliser"
 
 #: Data/Dialogs/pnlTaskEdit.xml:9 Data/Dialogs/pnlTaskEdit_L.xml:8
 msgid "Edit Point"
-msgstr ""
+msgstr "Editer le point"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:28
 #: Data/Dialogs/pnlTaskCalculator_L.xml:28
@@ -8152,7 +8177,7 @@ msgstr "Heure décollage"
 
 #: Data/Dialogs/dlgSwitches.xml:15
 msgid "Flap neutral"
-msgstr ""
+msgstr "Volets en lisse"
 
 #: Data/Dialogs/dlgTarget_L.xml:23
 msgid "AAT Est Remaining Help"
@@ -8175,7 +8200,7 @@ msgstr "Parcourir"
 
 #: Data/Dialogs/dlgTaskPoint.xml:15 Data/Dialogs/dlgTaskPoint_L.xml:19
 msgid "Change Type"
-msgstr ""
+msgstr "Modifier le type"
 
 #: Data/Dialogs/pnlStatusTask.xml:9
 msgid "Speed estimated"
@@ -8193,7 +8218,7 @@ msgstr "n° concours"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:16
 msgid "Base"
-msgstr ""
+msgstr "Base"
 
 #: Data/Dialogs/dlgVoice.xml:30
 msgid ""
@@ -8205,7 +8230,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTaskPoint.xml:43 Data/Dialogs/dlgTaskPoint_L.xml:47
 msgid "Inner radius of the OZ sector."
-msgstr ""
+msgstr "Rayon intérieur du secteur d'observation."
 
 #: Data/Dialogs/dlgFlarmTraffic.xml:4 Data/Dialogs/dlgFlarmTraffic_L.xml:4
 #: Data/Dialogs/dlgMapItemList.xml:7 Data/Dialogs/dlgMapItemList_L.xml:7
@@ -8218,7 +8243,7 @@ msgstr "Détails"
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:24
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:9
 msgid "Yellow"
-msgstr ""
+msgstr "Jaune"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:5 Data/Dialogs/dlgPlaneDetails_L.xml:5
 msgid "Registration"
@@ -8226,7 +8251,7 @@ msgstr "Immatriculation"
 
 #: Data/Dialogs/dlgTarget.xml:25 Data/Dialogs/dlgTarget_L.xml:18
 msgid "Radial"
-msgstr ""
+msgstr "Radial"
 
 #: Data/Dialogs/dlgConfigWaypoints.xml:3
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:3
@@ -8241,7 +8266,7 @@ msgstr "Bleu"
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:22
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:7
 msgid "Green"
-msgstr ""
+msgstr "Vert"
 
 #: Data/Dialogs/dlgTarget.xml:10 Data/Dialogs/dlgTarget_L.xml:28
 msgid ""
@@ -8482,6 +8507,8 @@ msgid ""
 "Accel\n"
 "Zero"
 msgstr ""
+"Accel\n"
+"Nulle"
 
 #: Data/Input/default.xci:652
 msgid ""
@@ -8516,6 +8543,8 @@ msgid ""
 "What's\n"
 "here?"
 msgstr ""
+"Qu'y a-\n"
+"t-il ici?"
 
 #: Data/Input/default.xci:513
 msgid ""
