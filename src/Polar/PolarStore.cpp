@@ -51,7 +51,7 @@ PolarStore::Item::ToPolarInfo() const
 /**
  *  Note: new items should be added to bottom, otherwise saved index is lost
  */
-static gcc_constexpr_data PolarStore::Item InternalPolars[] =
+static gcc_constexpr_data PolarStore::Item internal_polars[] =
 {
   { _T("206 Hornet"), 318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8, 41.666, 100 },
   { _T("604 Kestrel"), 570, 100, 112.97, -0.72, 150.64, -1.42, 207.13, -4.1, 16.26, 0.0, 114 },
@@ -229,11 +229,11 @@ const PolarStore::Item &
 PolarStore::GetItem(unsigned i)
 {
   assert(i < Count());
-  return InternalPolars[i];
+  return internal_polars[i];
 }
 
 unsigned
 PolarStore::Count()
 {
-  return ARRAY_SIZE(InternalPolars);
+  return ARRAY_SIZE(internal_polars);
 }
