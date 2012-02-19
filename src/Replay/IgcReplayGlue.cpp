@@ -57,7 +57,7 @@ IgcReplayGlue::ResetTime()
 }
 
 void
-IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
+IgcReplayGlue::OnAdvance(const GeoPoint &loc, const fixed speed,
                           const Angle bearing, const fixed alt,
                           const fixed baroalt, const fixed t)
 {
@@ -65,7 +65,7 @@ IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
 }
 
 void
-IgcReplayGlue::on_stop()
+IgcReplayGlue::OnStop()
 {
   device_blackboard->StopReplay();
 
@@ -74,14 +74,14 @@ IgcReplayGlue::on_stop()
 }
 
 void
-IgcReplayGlue::on_bad_file()
+IgcReplayGlue::OnBadFile()
 {
   MessageBoxX(_("Could not open IGC file!"),
               _("Flight replay"), MB_OK | MB_ICONINFORMATION);
 }
 
 void
-IgcReplayGlue::on_reset()
+IgcReplayGlue::OnReset()
 {
   if (logger != NULL)
     logger->ClearBuffer();

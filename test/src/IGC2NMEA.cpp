@@ -42,10 +42,10 @@ public:
     return writer.error();
   }
 
-  virtual void on_reset() {}
-  virtual void on_stop() {}
-  virtual void on_bad_file() {}
-  virtual void on_advance(const GeoPoint &loc,
+  virtual void OnReset() {}
+  virtual void OnStop() {}
+  virtual void OnBadFile() {}
+  virtual void OnAdvance(const GeoPoint &loc,
                           const fixed speed, const Angle bearing,
                           const fixed alt, const fixed baroalt, const fixed t);
 };
@@ -59,7 +59,7 @@ IGCConverterReplay::IGCConverterReplay(const char *input_file,
 }
 
 void
-IGCConverterReplay::on_advance(const GeoPoint &loc, const fixed speed,
+IGCConverterReplay::OnAdvance(const GeoPoint &loc, const fixed speed,
                                const Angle bearing, const fixed alt,
                                const fixed baroalt, const fixed t)
 {

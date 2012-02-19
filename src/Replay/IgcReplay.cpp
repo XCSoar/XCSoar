@@ -77,7 +77,7 @@ IgcReplay::Stop()
 {
   CloseFile();
 
-  on_stop();
+  OnStop();
 
   enabled = false;
 }
@@ -89,13 +89,13 @@ IgcReplay::Start()
     Stop();
 
   if (!OpenFile()) {
-    on_bad_file();
+    OnBadFile();
     return;
   }
 
   cli.Reset();
   ResetTime();
-  on_reset();
+  OnReset();
 
   enabled = true;
 }
@@ -148,7 +148,7 @@ IgcReplay::Update()
 
   const CatmullRomInterpolator::Record r = cli.Interpolate(t_simulation);
   const GeoVector v = cli.GetVector(t_simulation);
-  on_advance(r.location, v.distance, v.bearing, r.gps_altitude, r.baro_altitude, t_simulation);
+  OnAdvance(r.location, v.distance, v.bearing, r.gps_altitude, r.baro_altitude, t_simulation);
 
   return true;
 }

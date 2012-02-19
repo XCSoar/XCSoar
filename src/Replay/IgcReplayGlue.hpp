@@ -42,10 +42,10 @@ public:
 protected:
   virtual bool UpdateTime();
   virtual void ResetTime();
-  virtual void on_reset();
-  virtual void on_stop();
-  virtual void on_bad_file();
-  virtual void on_advance(const GeoPoint &loc,
+  virtual void OnReset();
+  virtual void OnStop();
+  virtual void OnBadFile();
+  virtual void OnAdvance(const GeoPoint &loc,
                           const fixed speed, const Angle bearing,
                           const fixed alt, const fixed baroalt, const fixed t);
 };

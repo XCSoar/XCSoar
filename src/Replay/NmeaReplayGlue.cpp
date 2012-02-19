@@ -83,7 +83,7 @@ NmeaReplayGlue::Stop()
 }
 
 void
-NmeaReplayGlue::on_sentence(const char *line)
+NmeaReplayGlue::OnSentence(const char *line)
 {
   assert(device != NULL);
 
@@ -99,7 +99,7 @@ NmeaReplayGlue::on_sentence(const char *line)
 }
 
 void
-NmeaReplayGlue::on_bad_file()
+NmeaReplayGlue::OnBadFile()
 {
   MessageBoxX(_("Could not open NMEA file!"),
               _("Flight replay"), MB_OK | MB_ICONINFORMATION);

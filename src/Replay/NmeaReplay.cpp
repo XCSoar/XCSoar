@@ -56,7 +56,7 @@ NmeaReplay::Start()
     Stop();
 
   if (!OpenFile()) {
-    on_bad_file();
+    OnBadFile();
     return;
   }
 
@@ -86,7 +86,7 @@ NmeaReplay::ReadUntilRMC(bool ignore)
 
   while ((buffer = reader->read()) != NULL) {
     if (!ignore)
-      on_sentence(buffer);
+      OnSentence(buffer);
 
     if (strstr(buffer, "$GPRMC") == buffer)
       return true;

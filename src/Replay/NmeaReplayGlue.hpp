@@ -50,8 +50,8 @@ public:
 protected:
   virtual bool UpdateTime();
   virtual void ResetTime();
-  virtual void on_bad_file();
-  virtual void on_sentence(const char *line);
+  virtual void OnBadFile();
+  virtual void OnSentence(const char *line);
 };
 
 #endif

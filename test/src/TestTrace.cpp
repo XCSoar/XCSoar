@@ -34,7 +34,7 @@
 #include <cstdio>
 
 static void
-on_advance(Trace &trace,
+OnAdvance(Trace &trace,
            const GeoPoint &loc, const fixed speed,
            const Angle bearing, const fixed alt,
            const fixed baroalt, const fixed t)
@@ -82,7 +82,7 @@ TestTrace(const char *filename, unsigned ntrace, bool output=false)
     if (!IGCParseFix(line, fix))
       continue;
 
-    on_advance(trace,
+    OnAdvance(trace,
                fix.location, fixed(30), Angle::Zero(),
                fix.gps_altitude, fix.pressure_altitude,
                fixed(fix.time.GetSecondOfDay()));
