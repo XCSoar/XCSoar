@@ -34,6 +34,7 @@ Copyright_License {
 #include "DataField/Float.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/String.hpp"
+#include "DataField/Password.hpp"
 #include "DataField/FileReader.hpp"
 #include "DataField/Time.hpp"
 #include "Language/Language.hpp"
@@ -336,6 +337,17 @@ RowFormWidget::AddText(const TCHAR *label, const TCHAR *help,
 {
   WndProperty *edit = Add(label, help);
   DataFieldString *df = new DataFieldString(content, NULL);
+
+  edit->SetDataField(df);
+  return edit;
+}
+
+WndProperty *
+RowFormWidget::AddPassword(const TCHAR *label, const TCHAR *help,
+                           const TCHAR *content)
+{
+  WndProperty *edit = Add(label, help);
+  PasswordDataField *df = new PasswordDataField(content);
 
   edit->SetDataField(df);
   return edit;

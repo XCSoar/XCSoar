@@ -284,6 +284,13 @@ public:
   WndProperty *AddText(const TCHAR *label, const TCHAR *help,
                        const TCHAR *content);
 
+  /**
+   * Add a password edit control.  The password is obfuscated while
+   * not editing.
+   */
+  WndProperty *AddPassword(const TCHAR *label, const TCHAR *help,
+                           const TCHAR *content);
+
   WndProperty *AddTime(const TCHAR *label, const TCHAR *help,
                        int min_value, int max_value, unsigned step,
                        int value, unsigned max_tokens = 2,
