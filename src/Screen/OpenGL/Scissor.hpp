@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/Globals.hpp"
+#include "Screen/Canvas.hpp"
+
 
 class GLCanvasScissor : public GLScissor {
 public:
