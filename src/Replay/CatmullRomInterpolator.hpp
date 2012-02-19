@@ -36,21 +36,21 @@ class CatmullRomInterpolator
 {
 public:
   struct Record {
-    GeoPoint loc;
-    fixed alt;
-    fixed palt;
-    fixed t;
+    GeoPoint location;
+    fixed gps_altitude;
+    fixed baro_altitude;
+    fixed time;
   };
 
 private:
-  const fixed t;
+  const fixed time;
 
   unsigned num;
   Record p[4];
 
 public:
-  CatmullRomInterpolator(fixed _t):
-    t(_t)
+  CatmullRomInterpolator(fixed _time):
+    time(_time)
   {
     Reset();
   }
@@ -64,7 +64,7 @@ public:
   void
   Update(fixed t, GeoPoint location, fixed alt, fixed palt)
   {
-    if (num && (t <= p[3].t))
+    if (num && (t <= p[3].time))
       return;
 
     if (num < 4)
@@ -72,10 +72,10 @@ public:
 
     std::copy(p + 1, p + 4, p);
 
-    p[3].loc = location;
-    p[3].alt = alt;
-    p[3].palt = palt;
-    p[3].t = t;
+    p[3].location = location;
+    p[3].gps_altitude = alt;
+    p[3].baro_altitude = palt;
+    p[3].time = t;
   }
 
   bool
@@ -85,27 +85,29 @@ public:
   }
 
   GeoVector 
-  GetVector(fixed time) const
+  GetVector(fixed _time) const
   {
     assert(Ready());
 
-    if (!positive(p[2].t-p[1].t)) {
+    if (!positive(p[2].time-p[1].time))
       return GeoVector(fixed_zero, Angle::Zero());
-    }
 
-    const Record r0 = Interpolate(time - fixed(0.05));
-    const Record r1 = Interpolate(time + fixed(0.05));
-    return GeoVector(p[1].loc.Distance(p[2].loc)/
-                     (p[2].t-p[1].t), r0.loc.Bearing(r1.loc));
+    const Record r0 = Interpolate(_time - fixed(0.05));
+    const Record r1 = Interpolate(_time + fixed(0.05));
+
+    fixed speed = p[1].location.Distance(p[2].location) / (p[2].time - p[1].time);
+    Angle bearing = r0.location.Bearing(r1.location);
+
+    return GeoVector(speed, bearing);
   }
 
   gcc_pure
   Record
-  Interpolate(fixed time) const
+  Interpolate(fixed _time) const
   {
     assert(Ready());
 
-    const fixed u = time_fraction(time, false);
+    const fixed u = GetTimeFraction(_time, false);
 
     /*
       ps = ( c0   c1    c2  c3)
@@ -117,24 +119,29 @@ public:
 
     const fixed u2 = u * u;
     const fixed u3 = u2 * u;
-    const fixed c[4]= {-t * u3 + 2 * t * u2 - t * u,
-                       (fixed_two - t) * u3 + (t - fixed(3)) * u2 + fixed_one,
-                       (t - fixed_two) * u3 + (fixed(3) - 2 * t) * u2 + t * u,
-                        t * u3 - t * u2};
+    const fixed c[4]= {-time * u3 + 2 * time * u2 - time * u,
+                       (fixed_two - time) * u3 + (time - fixed(3)) * u2 + fixed_one,
+                       (time - fixed_two) * u3 + (fixed(3) - 2 * time) * u2 + time * u,
+                        time * u3 - time * u2};
 
     Record r;
-    r.loc.latitude = p[0].loc.latitude * c[0] + p[1].loc.latitude * c[1]
-      + p[2].loc.latitude * c[2] + p[3].loc.latitude * c[3];
+    r.location.latitude =
+        p[0].location.latitude * c[0] + p[1].location.latitude * c[1] +
+        p[2].location.latitude * c[2] + p[3].location.latitude * c[3];
 
-    r.loc.longitude = p[0].loc.longitude * c[0] + p[1].loc.longitude * c[1]
-      + p[2].loc.longitude * c[2] + p[3].loc.longitude * c[3];
+    r.location.longitude =
+        p[0].location.longitude * c[0] + p[1].location.longitude * c[1] +
+        p[2].location.longitude * c[2] + p[3].location.longitude * c[3];
 
-    r.alt = p[0].alt * c[0] + p[1].alt * c[1] +
-      p[2].alt * c[2] + p[3].alt * c[3];
-    r.palt = p[0].palt * c[0] + p[1].palt * c[1] +
-      p[2].palt * c[2] + p[3].palt * c[3];
+    r.gps_altitude =
+        p[0].gps_altitude * c[0] + p[1].gps_altitude * c[1] +
+        p[2].gps_altitude * c[2] + p[3].gps_altitude * c[3];
 
-    r.t = time;
+    r.baro_altitude =
+        p[0].baro_altitude * c[0] + p[1].baro_altitude * c[1] +
+        p[2].baro_altitude * c[2] + p[3].baro_altitude * c[3];
+
+    r.time = _time;
 
     return r;
   }
@@ -144,7 +151,7 @@ public:
   {
     assert(Ready());
 
-    return p[0].t;
+    return p[0].time;
   }
 
   fixed
@@ -152,25 +159,27 @@ public:
   {
     assert(Ready());
 
-    return max(fixed_zero, max(p[0].t, max(p[1].t, max(p[2].t, p[3].t))));
+    return max(fixed_zero, max(p[0].time, max(p[1].time, max(p[2].time, p[3].time))));
   }
 
   bool
   NeedData(fixed t_simulation) const
   {
-    return !Ready() || (p[2].t <= t_simulation + fixed(0.1));
+    return !Ready() || (p[2].time <= t_simulation + fixed(0.1));
   }
 
 private:
-
-  fixed time_fraction(const fixed time, bool limit_range=true) const {
+  fixed
+  GetTimeFraction(const fixed time, bool limit_range = true) const
+  {
     assert(Ready());
-    assert(p[2].t>p[1].t);
-    const fixed u = (time - p[1].t) / (p[2].t - p[1].t);
-    if (limit_range) {
-      return max(fixed_zero, min(fixed_one, u));
-    } else {
-      return u;
-    }
+    assert(p[2].time > p[1].time);
+
+    const fixed fraction = (time - p[1].time) / (p[2].time - p[1].time);
+
+    if (limit_range)
+      return max(fixed_zero, min(fixed_one, fraction));
+    else
+      return fraction;
   }
 };
