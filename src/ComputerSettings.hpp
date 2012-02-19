@@ -125,12 +125,12 @@ struct PolarSettings {
    * When you modify this, you should update glide_polar_task and send
    * the new GlidePolar to the TaskManager.
    */
-  fixed degradation;
+  fixed degradation_factor;
 
   /**
    * Bugs ratio applied to polar.  Range is 0..1, where 1 means
-   * "clean".  Unlike the "degradation" attribute above, this setting
-   * is not permanent.
+   * "clean".  Unlike the "degradation_factor" attribute above, this
+   * setting is not permanent.
    *
    * When you modify this, you should update glide_polar_task and send
    * the new GlidePolar to the TaskManager.
@@ -145,14 +145,14 @@ struct PolarSettings {
 
   void SetDefaults();
 
-  void SetDegradation(fixed _degradation) {
-    degradation = _degradation;
-    glide_polar_task.SetBugs(degradation * bugs);
+  void SetDegradationFactor(fixed _degradation_factor) {
+    degradation_factor = _degradation_factor;
+    glide_polar_task.SetBugs(degradation_factor * bugs);
   }
 
   void SetBugs(fixed _bugs) {
     bugs = _bugs;
-    glide_polar_task.SetBugs(degradation * bugs);
+    glide_polar_task.SetBugs(degradation_factor * bugs);
   }
 };
 

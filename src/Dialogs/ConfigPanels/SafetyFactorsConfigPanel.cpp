@@ -89,7 +89,7 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              "50% indicates the glider's sink rate is doubled."),
            _T("%.0f %%"), _T("%.0f"),
            fixed(0), fixed(50), fixed_one, false,
-           (fixed_one - settings_computer.polar.degradation) * 100);
+           (fixed_one - settings_computer.polar.degradation_factor) * 100);
   SetExpertRow(PolarDegradation);
 
   AddFloat(_("Safety MC"),
@@ -131,11 +131,11 @@ SafetyFactorsConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValueEnum(AlternateMode, szProfileAbortTaskMode,
                            task_behaviour.abort_task_mode);
 
-  fixed degradation = (fixed_one - settings_computer.polar.degradation) * 100;
+  fixed degradation = (fixed_one - settings_computer.polar.degradation_factor) * 100;
   if (SaveValue(PolarDegradation, degradation)) {
-    settings_computer.polar.SetDegradation(fixed_one - degradation / 100);
+    settings_computer.polar.SetDegradationFactor(fixed_one - degradation / 100);
     Profile::Set(ProfilePolarDegradation,
-                 settings_computer.polar.degradation);
+                 settings_computer.polar.degradation_factor);
     if (protected_task_manager != NULL)
       protected_task_manager->SetGlidePolar(settings_computer.polar.glide_polar_task);
     changed = true;
