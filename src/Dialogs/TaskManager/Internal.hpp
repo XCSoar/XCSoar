@@ -41,7 +41,7 @@ public:
    * Validates task and prompts if change or error
    * Commits task if no error
    * @return True if task manager should close
-   *          False if window should remain open
+   *         False if window should remain open
    */
   static bool CommitTaskChanges();
 
@@ -71,10 +71,6 @@ public:
 
   /**
    * toggles maximize or restore state of the TaskView frame
-   * @param Sender
-   * @param x
-   * @param y
-   * @return
    */
   static bool OnTaskViewClick(WndOwnerDrawFrame *Sender,
                               PixelScalar x, PixelScalar y);
