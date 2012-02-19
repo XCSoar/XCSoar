@@ -61,7 +61,7 @@ public:
 
 private:
 #ifdef _UNICODE
-  static unsigned length(const char *data) {
+  static size_type length(const char *data) {
     return strlen(data);
   }
 
@@ -70,7 +70,7 @@ private:
   }
 
   template<typename... Args>
-  static void FormatInternal(char *data, unsigned max_size,
+  static void FormatInternal(char *data, size_type max_size,
                              const char *fmt, Args&&... args) {
     ::snprintf(data, max_size, fmt, args...);
   }
@@ -81,7 +81,7 @@ private:
   }
 #endif
 
-  static unsigned length(const TCHAR *data) {
+  static size_type length(const TCHAR *data) {
     return _tcslen(data);
   }
 
@@ -90,7 +90,7 @@ private:
   }
 
   template<typename... Args>
-  static void FormatInternal(TCHAR *data, unsigned max_size,
+  static void FormatInternal(TCHAR *data, size_type max_size,
                              const TCHAR *fmt, Args&&... args) {
     ::_sntprintf(data, max_size, fmt, args...);
   }
