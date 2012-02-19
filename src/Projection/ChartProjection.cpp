@@ -24,28 +24,13 @@ Copyright_License {
 #include "ChartProjection.hpp"
 #include "Engine/Task/TaskManager.hpp"
 
-ChartProjection::ChartProjection(const PixelRect &rc,
-                                 const TaskManager &task,
-                                 const GeoPoint &fallback_loc)
-{
-  Set(rc, task, fallback_loc);
-}
-
 void
-ChartProjection::Set(const PixelRect &rc,
-                     const TaskManager &task,
+ChartProjection::Set(const PixelRect &rc, const TaskManager &task,
                      const GeoPoint &fallback_loc)
 {
   const GeoPoint center = task.GetTaskCenter(fallback_loc);
   const fixed radius = max(fixed(10000), task.GetTaskRadius(fallback_loc));
   set_projection(rc, center, radius);
-}
-
-ChartProjection::ChartProjection(const PixelRect &rc,
-                                 const OrderedTask& task,
-                                 const GeoPoint &fallback_loc) 
-{
-  Set(rc, task, fallback_loc);
 }
 
 void
@@ -60,8 +45,7 @@ ChartProjection::Set(const PixelRect &rc,
 }
 
 void
-ChartProjection::Set(const PixelRect &rc,
-                     const OrderedTask &task,
+ChartProjection::Set(const PixelRect &rc, const OrderedTask &task,
                      const GeoPoint &fallback_loc)
 {
   const GeoPoint center = task.GetTaskCenter(fallback_loc);
@@ -69,9 +53,9 @@ ChartProjection::Set(const PixelRect &rc,
   set_projection(rc, center, radius);
 }
 
-void ChartProjection::set_projection(const PixelRect &rc, 
-                                     const GeoPoint &center,
-                                     const fixed radius)
+void
+ChartProjection::set_projection(const PixelRect &rc, const GeoPoint &center,
+                                const fixed radius)
 {
   SetMapRect(rc);
   SetScaleFromRadius(radius);
