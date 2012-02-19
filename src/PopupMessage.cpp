@@ -178,6 +178,17 @@ PopupMessage::Resize()
                              (PixelScalar)(tsize.cy * (linecount + 1)));
 
     PixelRect rthis = GetRect(height);
+#ifdef USE_GDI
+    PixelRect old_rc = get_position();
+    if (rthis.left != old_rc.left || rthis.right != old_rc.right) {
+      /* on Windows, the TEXT control can never change its text style
+         after it has been created, so we have to destroy it and
+         create a new one */
+      reset();
+      set(rc);
+      set_text(msgText);
+    }
+#endif
 
     move(rthis.left, rthis.top,
          rthis.right - rthis.left,
