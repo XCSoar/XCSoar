@@ -55,4 +55,12 @@ Latin1ToUTF8(const char *src, char *buffer, size_t buffer_size);
 char *
 Latin1ToUTF8(unsigned char ch, char *buffer);
 
+/**
+ * Returns the number of characters in the string.  This is different
+ * from strlen(), which counts the number of bytes.
+ */
+gcc_pure
+size_t
+LengthUTF8(const char *p);
+
 #endif

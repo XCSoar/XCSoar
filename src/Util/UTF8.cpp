@@ -139,3 +139,17 @@ Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
   *q = 0;
   return buffer;
 }
+
+size_t
+LengthUTF8(const char *p)
+{
+  /* this is a very naive implementation: it does not do any
+     verification, it just counts the bytes that are not a UTF-8
+     continuation  */
+
+  size_t n = 0;
+  for (; *p != 0; ++p)
+    if (!IsContinuation(*p))
+      ++n;
+  return n;
+}
