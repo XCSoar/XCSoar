@@ -29,7 +29,7 @@ Copyright_License {
 TrackingGlue::TrackingGlue()
 {
   settings.SetDefaults();
-  LiveTrack24::SetServer(_T("www.livetrack24.com"));
+  LiveTrack24::SetServer(settings.livetrack24.server);
 }
 
 void
@@ -50,6 +50,11 @@ void
 TrackingGlue::SetSettings(const TrackingSettings &_settings)
 {
   ScopeLock protect(mutex);
+
+  if (_settings.livetrack24.server != settings.livetrack24.server) {
+    state.ResetSession();
+    LiveTrack24::SetServer(_settings.livetrack24.server);
+  }
 
   if (_settings.livetrack24.username != settings.livetrack24.username ||
       _settings.livetrack24.password != settings.livetrack24.password)

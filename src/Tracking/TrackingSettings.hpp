@@ -32,6 +32,7 @@ Copyright_License {
 
 struct LiveTrack24Settings {
   bool enabled;
+  StaticString<64> server;
   StaticString<64> username;
   StaticString<64> password;
 

@@ -32,6 +32,7 @@ void
 Profile::Load(LiveTrack24Settings &settings)
 {
   Get(ProfileLiveTrack24Enabled, settings.enabled);
+  settings.server = Get(ProfileLiveTrack24Server, _T("www.livetrack24.com"));
   settings.username = Get(ProfileLiveTrack24Username, _T(""));
   settings.password = Get(ProfileLiveTrack24Password, _T(""));
 }

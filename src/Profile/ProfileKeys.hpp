@@ -233,6 +233,7 @@ extern const TCHAR szProfileFlarmLocation[];
 
 extern const TCHAR ProfileTrackingInterval[];
 extern const TCHAR ProfileLiveTrack24Enabled[];
+extern const TCHAR ProfileLiveTrack24Server[];
 extern const TCHAR ProfileLiveTrack24Username[];
 extern const TCHAR ProfileLiveTrack24Password[];
 

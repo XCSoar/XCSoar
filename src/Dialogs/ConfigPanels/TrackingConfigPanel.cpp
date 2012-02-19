@@ -24,6 +24,7 @@ Copyright_License {
 #include "TrackingConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Form/Edit.hpp"
+#include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Listener.hpp"
 #include "Language/Language.hpp"
@@ -38,6 +39,7 @@ enum ControlIndex {
   TrackingInterval,
   Spacer,
   LT24Enabled,
+  LT24Server,
   LT24Username,
   LT24Password
 };
@@ -76,6 +78,12 @@ TrackingConfigPanel::OnModified(DataField &df)
   }
 }
 
+static const StaticEnumChoice  server_list[] = {
+  { 0, _T("www.livetrack24.com") },
+  { 1, _T("test.livetrack24.com") },
+  { 0 },
+};
+
 void
 TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
@@ -89,6 +97,10 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddSpacer();
 
   AddBoolean(_T("LiveTrack24"),  _T(""), settings.livetrack24.enabled, this);
+
+  WndProperty *edit = AddEnum(_("Server"), _T(""), server_list, 0);
+  edit->GetDataField()->SetAsString(settings.livetrack24.server);
+  edit->RefreshDisplay();
 
   AddText(_("Username"), _T(""), settings.livetrack24.username);
   AddPassword(_("Password"), _T(""), settings.livetrack24.password);
@@ -107,6 +119,9 @@ TrackingConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValue(TrackingInterval, ProfileTrackingInterval, settings.interval);
 
   changed |= SaveValue(LT24Enabled, ProfileLiveTrack24Enabled, settings.livetrack24.enabled);
+
+  changed |= SaveValue(LT24Server, ProfileLiveTrack24Server,
+                       settings.livetrack24.server.buffer(), settings.livetrack24.server.MAX_SIZE);
 
   changed |= SaveValue(LT24Username, ProfileLiveTrack24Username,
                        settings.livetrack24.username.buffer(), settings.livetrack24.username.MAX_SIZE);
