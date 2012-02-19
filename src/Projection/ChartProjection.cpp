@@ -54,6 +54,17 @@ ChartProjection::Set(const PixelRect &rc, const OrderedTask &task,
 }
 
 void
+ChartProjection::Set(const PixelRect &rc, const OrderedTaskPoint &point,
+                     const GeoPoint &fallback_loc)
+{
+  TaskProjection task_projection;
+  task_projection.reset(fallback_loc);
+  point.scan_projection(task_projection);
+
+  Set(rc, task_projection, fixed(1.3));
+}
+
+void
 ChartProjection::set_projection(const PixelRect &rc, const GeoPoint &center,
                                 const fixed radius)
 {
@@ -62,15 +73,4 @@ ChartProjection::set_projection(const PixelRect &rc, const GeoPoint &center,
   SetGeoLocation(center);
   SetScreenOrigin((rc.left + rc.right) / 2, (rc.bottom + rc.top) / 2);
   UpdateScreenBounds();
-}
-
-ChartProjection::ChartProjection(const PixelRect &rc,
-                                 const OrderedTaskPoint& point,
-                                 const GeoPoint &fallback_loc)
-{
-  TaskProjection task_projection;
-  task_projection.reset(fallback_loc);
-  point.scan_projection(task_projection);
-
-  Set(rc, task_projection, fixed(1.3));
 }
