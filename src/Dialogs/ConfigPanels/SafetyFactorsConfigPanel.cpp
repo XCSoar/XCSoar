@@ -84,12 +84,12 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           abort_task_mode_list, (unsigned)task_behaviour.abort_task_mode);
 
   AddFloat(_("Polar degradation"), /* xgettext:no-c-format */
-           _("A permanent polar degradation factor. "
-             "100% means no degradation, "
+           _("A permanent polar degradation. "
+             "0% means no degradation, "
              "50% indicates the glider's sink rate is doubled."),
            _T("%.0f %%"), _T("%.0f"),
-           fixed(50), fixed(100), fixed_one, false,
-           settings_computer.polar.degradation * 100);
+           fixed(0), fixed(50), fixed_one, false,
+           (fixed_one - settings_computer.polar.degradation) * 100);
   SetExpertRow(PolarDegradation);
 
   AddFloat(_("Safety MC"),
@@ -131,9 +131,9 @@ SafetyFactorsConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValueEnum(AlternateMode, szProfileAbortTaskMode,
                            task_behaviour.abort_task_mode);
 
-  fixed degradation = settings_computer.polar.degradation * 100;
+  fixed degradation = (fixed_one - settings_computer.polar.degradation) * 100;
   if (SaveValue(PolarDegradation, degradation)) {
-    settings_computer.polar.SetDegradation(degradation / 100);
+    settings_computer.polar.SetDegradation(fixed_one - degradation / 100);
     Profile::Set(ProfilePolarDegradation,
                  settings_computer.polar.degradation);
     if (protected_task_manager != NULL)
