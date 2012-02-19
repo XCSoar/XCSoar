@@ -906,6 +906,11 @@ location=9
 # mode=default.TA (ThermalAssistant)
 # ----------------------------------
 
+mode=default.TA
+type=key
+data=ESCAPE
+event=Map show
+
 # This hack shows a permanent "Return to map" button when the
 # ThermalAssistant is visible.  This probably needs a redesign.
 mode=default.TA
