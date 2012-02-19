@@ -332,11 +332,10 @@ RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
 
 WndProperty *
 RowFormWidget::AddText(const TCHAR *label, const TCHAR *help,
-                       const TCHAR *content, bool editable,
-                       DataField::DataAccessCallback callback)
+                       const TCHAR *content)
 {
   WndProperty *edit = Add(label, help);
-  DataFieldString *df = new DataFieldString(content, callback);
+  DataFieldString *df = new DataFieldString(content, NULL);
 
   edit->SetDataField(df);
   return edit;

@@ -90,8 +90,8 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddBoolean(_T("LiveTrack24"),  _T(""), settings.livetrack24.enabled, this);
 
-  AddText(_("Username"), _T(""), settings.livetrack24.username, settings.livetrack24.enabled);
-  AddText(_("Password"), _T(""), settings.livetrack24.password, settings.livetrack24.enabled);
+  AddText(_("Username"), _T(""), settings.livetrack24.username);
+  AddText(_("Password"), _T(""), settings.livetrack24.password);
 
   SetEnabled(settings.livetrack24.enabled);
 }

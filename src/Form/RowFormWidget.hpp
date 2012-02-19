@@ -282,8 +282,7 @@ public:
   }
 
   WndProperty *AddText(const TCHAR *label, const TCHAR *help,
-                       const TCHAR *content, bool editable=true,
-                       DataField::DataAccessCallback callback=NULL);
+                       const TCHAR *content);
 
   WndProperty *AddTime(const TCHAR *label, const TCHAR *help,
                        int min_value, int max_value, unsigned step,
