@@ -29,7 +29,7 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Globals.hpp"
-#ifdef ANDROID
+#ifdef HAVE_GLES
 #include <GLES/gl.h>
 #else
 #include <SDL/SDL_opengl.h>
@@ -69,7 +69,7 @@ public:
       OpenGL::translate_y += _y;
 
       glPushMatrix();
-#ifdef ANDROID
+#ifdef HAVE_GLES
       glTranslatex((GLfixed)relative_x << 16, (GLfixed)relative_y << 16, 0);
 #else
       glTranslatef(relative_x, relative_y, 0);
