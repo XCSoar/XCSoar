@@ -72,9 +72,9 @@ static gcc_constexpr_data KeyMap pn_6000_key_map[] = {
 };
 
 static gcc_constexpr_data KeyMap lx_mm_key_map[] = {
-  { 'n', VK_APP1 }, // NAV
-  { 'c', VK_APP3 }, // SET/SYS
-  { 'p', VK_APP4 }, // INFO
+  { 'N', VK_APP1 }, // NAV
+  { 'C', VK_APP3 }, // SET/SYS
+  { 'P', VK_APP4 }, // INFO
   { 0 }
 };
 
