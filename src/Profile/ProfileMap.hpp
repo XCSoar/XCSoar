@@ -226,7 +226,7 @@ namespace ProfileMap {
     return Set(key, tmp);
   }
 
-  template<unsigned max>
+  template<size_t max>
   static inline bool
   Get(const TCHAR *key, StaticString<max> &value)
   {

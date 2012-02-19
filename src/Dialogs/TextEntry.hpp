@@ -35,7 +35,7 @@ dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text,
                       int width, const TCHAR* caption = NULL,
                       AllowedCharactersCallback_t accb = NULL);
 
-template<unsigned N>
+template<size_t N>
 static inline bool
 TextEntryDialog(SingleWindow &parent, StaticString<N> &text,
                 const TCHAR *caption=NULL,

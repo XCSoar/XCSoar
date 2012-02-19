@@ -33,6 +33,7 @@
 #include "Util/StringUtil.hpp"
 
 #include <assert.h>
+#include <stddef.h>
 #include <string.h>
 #include <stdio.h>
 #include <tchar.h>
@@ -41,14 +42,14 @@
 /**
  * A string with a maximum size known at compile time.
  */
-template<typename T, unsigned max>
+template<typename T, size_t max>
 class StaticStringBase
 {
 public:
-  static const unsigned MAX_SIZE = max;
-  static const T SENTINEL = '\0';
+  typedef size_t size_type;
 
-  typedef unsigned size_type;
+  static const size_type MAX_SIZE = max;
+  static const T SENTINEL = '\0';
 
 protected:
   T data[max];
@@ -297,7 +298,7 @@ public:
  * A string with a maximum size known at compile time.
  * This is the TCHAR-based sister of the NarrowString class.
  */
-template<unsigned max>
+template<size_t max>
 class StaticString: public StaticStringBase<TCHAR, max>
 {
 public:
@@ -321,7 +322,7 @@ public:
  * A string with a maximum size known at compile time.
  * This is the char-based sister of the StaticString class.
  */
-template<unsigned max>
+template<size_t max>
 class NarrowString: public StaticStringBase<char, max>
 {
 public:
