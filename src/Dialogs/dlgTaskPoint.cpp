@@ -218,8 +218,7 @@ ReadValues()
   }
   case ObservationZonePoint::SECTOR: {
     fixed radius =
-      Units::ToSysDistance(
-          GetFormValueFixed(*wf, _T("prpOZSectorRadius")));
+      Units::ToSysDistance(GetFormValueFixed(*wf, _T("prpOZSectorRadius")));
 
     if (fabs(radius - ((SectorZone &)oz).getRadius()) > fixed(49)) {
       ((SectorZone &)oz).setRadius(radius);
@@ -294,8 +293,8 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 static void 
 OnRemoveClicked(gcc_unused WndButton &Sender)
 {
-  if (MessageBoxX(_("Remove task point?"),
-                        _("Task Point"), MB_YESNO | MB_ICONQUESTION) != IDYES)
+  if (MessageBoxX(_("Remove task point?"), _("Task Point"),
+                  MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
   if (!ordered_task->GetFactory().Remove(active_index))
@@ -310,7 +309,8 @@ OnDetailsClicked(gcc_unused WndButton &Sender)
 {
   OrderedTaskPoint* task_point = ordered_task->get_tp(active_index);
   if (task_point)
-    dlgWaypointDetailsShowModal(wf->GetMainWindow(), task_point->GetWaypoint(), false);
+    dlgWaypointDetailsShowModal(wf->GetMainWindow(),
+                                task_point->GetWaypoint(), false);
 }
 
 static void
@@ -321,8 +321,7 @@ OnRelocateClicked(gcc_unused WndButton &Sender)
                                XCSoarInterface::Basic().location);
 
   const Waypoint *wp = dlgWaypointSelect(wf->GetMainWindow(), gpBearing,
-                                         ordered_task,
-                                         active_index);
+                                         ordered_task, active_index);
   if (wp == NULL)
     return;
 
@@ -366,7 +365,7 @@ static void
 OnOptionalStartsClicked(gcc_unused WndButton &Sender)
 {
   if (dlgTaskOptionalStarts(wf->GetMainWindow(), &ordered_task)) {
-    task_modified =true;
+    task_modified = true;
     RefreshView();
   }
 }

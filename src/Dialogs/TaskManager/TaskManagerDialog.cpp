@@ -94,14 +94,15 @@ dlgTaskManager::OnTaskViewClick(WndOwnerDrawFrame *Sender,
   if (!fullscreen) {
     const UPixelScalar xoffset = Layout::landscape ? wTabBar->GetTabWidth() : 0;
     const UPixelScalar yoffset = !Layout::landscape ? wTabBar->GetTabHeight() : 0;
-    Sender->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
-                    wf->GetClientAreaWindow().get_height() - yoffset);
+    Sender->move(xoffset, yoffset,
+                 wf->GetClientAreaWindow().get_width() - xoffset,
+                 wf->GetClientAreaWindow().get_height() - yoffset);
     fullscreen = true;
     Sender->show_on_top();
   } else {
     Sender->move(TaskViewRect.left, TaskViewRect.top,
-                    TaskViewRect.right - TaskViewRect.left,
-                    TaskViewRect.bottom - TaskViewRect.top);
+                 TaskViewRect.right - TaskViewRect.left,
+                 TaskViewRect.bottom - TaskViewRect.top);
     fullscreen = false;
   }
   Sender->invalidate();
@@ -118,8 +119,8 @@ dlgTaskManager::TaskViewRestore(WndOwnerDrawFrame *wTaskView)
 
   fullscreen = false;
   wTaskView->move(TaskViewRect.left, TaskViewRect.top,
-      TaskViewRect.right - TaskViewRect.left,
-      TaskViewRect.bottom - TaskViewRect.top);
+                  TaskViewRect.right - TaskViewRect.left,
+                  TaskViewRect.bottom - TaskViewRect.top);
 }
 
 void
@@ -241,8 +242,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   const Bitmap *CalcIcon = enable_icons ? &icons.hBmpTabCalculator : NULL;
   const Bitmap *TurnPointIcon = enable_icons ? &icons.hBmpTabTask : NULL;
   const Bitmap *BrowseIcon = enable_icons ? &icons.hBmpTabWrench : NULL;
-  const Bitmap *PropertiesIcon = enable_icons
-    ? &icons.hBmpTabSettings : NULL;
+  const Bitmap *PropertiesIcon = enable_icons ? &icons.hBmpTabSettings : NULL;
 
   wTabBar->AddTab(wCalculator, _("Calculator"), false, CalcIcon);
 
