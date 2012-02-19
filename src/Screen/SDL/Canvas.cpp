@@ -331,7 +331,8 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
       } else {  // default is DT_LEFT
         x = rc->left;
       }
-      Canvas::text(x, y, duplicated + i);
+
+      TextAutoClipped(x, y, duplicated + i);
     }
     y += skip;
     if (y >= rc->bottom)
