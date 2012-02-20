@@ -45,7 +45,7 @@ WindComputer::Compute(const WindSettings &settings,
       calculated.circling != last_circling)
     circling_wind.NewFlightMode(calculated);
 
-last_circling = calculated.circling;
+  last_circling = calculated.circling;
 
   if (!calculated.flight.flying)
     return;
@@ -114,6 +114,6 @@ WindComputer::Select(const WindSettings &settings,
     calculated.wind_available = settings.manual_wind_available;
 
   } else
-   // no wind available
-   calculated.wind_available.Clear();
+    // no wind available
+    calculated.wind_available.Clear();
 }
