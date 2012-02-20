@@ -31,12 +31,20 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Util/Macros.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 void
 FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                             const DerivedInfo &calculated,
                             const GlideSettings &glide_settings,
                             const bool final_glide_bar_mc0_enabled) const
 {
+#ifdef ENABLE_OPENGL
+  const GLEnable blend(GL_BLEND);
+#endif
+
   RasterPoint GlideBar[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
   };
