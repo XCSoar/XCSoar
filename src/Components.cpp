@@ -423,6 +423,10 @@ XCSoarInterface::Startup()
     map_window->SetWeather(&RASP);
     map_window->SetMarks(protected_marks);
     map_window->SetLogger(&logger);
+
+    /* show map at home waypoint until GPS fix becomes available */
+    if (GetComputerSettings().poi.home_location_available)
+      map_window->SetLocation(GetComputerSettings().poi.home_location);
   }
 
   // Finally ready to go.. all structures must be present before this.
