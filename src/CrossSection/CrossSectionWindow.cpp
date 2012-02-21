@@ -51,7 +51,7 @@ class AirspaceIntersectionVisitorSlice: public AirspaceIntersectionVisitor
   /** Canvas to draw on */
   Canvas& canvas;
   /** ChartRenderer for scaling the airspace CrossSection */
-  ChartRenderer &chart;
+  const ChartRenderer &chart;
   /** MapSettings for reading airspace colors, pen and brushes */
   const AirspaceRendererSettings &settings;
 
@@ -71,7 +71,8 @@ public:
    * @param _start GeoPoint at the left of the CrossSection
    * @param _state AltitudeState instance used for AGL-based airspaces
    */
-  AirspaceIntersectionVisitorSlice(Canvas &_canvas, ChartRenderer &_chart,
+  AirspaceIntersectionVisitorSlice(Canvas &_canvas,
+                                   const ChartRenderer &_chart,
                                    const AirspaceRendererSettings &_settings,
                                    const AirspaceLook &_airspace_look,
                                    const GeoPoint _start,
@@ -87,8 +88,8 @@ public:
    * @param black Use black pen?
    * @param type Airspace class
    */
-  void
-  RenderBox(const PixelRect rc, const Brush &brush, bool black, int type)
+  void RenderBox(const PixelRect rc, const Brush &brush,
+                 bool black, int type) const
   {
     // Enable "transparency" effect
 #ifdef ENABLE_OPENGL
@@ -150,7 +151,7 @@ public:
    * @param as AbstractAirspace to render
    */
   void
-  Render(const AbstractAirspace& as)
+  Render(const AbstractAirspace& as) const
   {
     int type = as.GetType();
     if (type <= 0)
@@ -241,7 +242,7 @@ CrossSectionWindow::ReadBlackboard(const MoreData &_gps_info,
 }
 
 void
-CrossSectionWindow::Paint(Canvas &canvas, const PixelRect rc)
+CrossSectionWindow::Paint(Canvas &canvas, const PixelRect rc) const
 {
   const fixed nav_altitude = gps_info.NavAltitudeAvailable()
     ? gps_info.nav_altitude
@@ -264,7 +265,8 @@ CrossSectionWindow::Paint(Canvas &canvas, const PixelRect rc)
 }
 
 void
-CrossSectionWindow::PaintAirspaces(Canvas &canvas, ChartRenderer &chart)
+CrossSectionWindow::PaintAirspaces(Canvas &canvas,
+                                   const ChartRenderer &chart) const
 {
   // Quit early if no airspace database available
   if (airspace_database == NULL)
@@ -283,7 +285,7 @@ CrossSectionWindow::PaintAirspaces(Canvas &canvas, ChartRenderer &chart)
 }
 
 void
-CrossSectionWindow::PaintTerrain(Canvas &canvas, ChartRenderer &chart)
+CrossSectionWindow::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
 {
   if (terrain == NULL)
     return;
@@ -328,7 +330,7 @@ CrossSectionWindow::PaintTerrain(Canvas &canvas, ChartRenderer &chart)
 }
 
 void
-CrossSectionWindow::PaintGlide(ChartRenderer &chart)
+CrossSectionWindow::PaintGlide(ChartRenderer &chart) const
 {
   if (gps_info.ground_speed_available && gps_info.ground_speed > fixed(10)) {
     fixed t = vec.distance / gps_info.ground_speed;
@@ -340,7 +342,7 @@ CrossSectionWindow::PaintGlide(ChartRenderer &chart)
 
 void
 CrossSectionWindow::PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
-                                  const PixelRect rc)
+                                  const PixelRect rc) const
 {
   if (!gps_info.NavAltitudeAvailable())
     return;
@@ -361,7 +363,7 @@ CrossSectionWindow::PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
 }
 
 void
-CrossSectionWindow::PaintGrid(Canvas &canvas, ChartRenderer &chart)
+CrossSectionWindow::PaintGrid(Canvas &canvas, ChartRenderer &chart) const
 {
   canvas.SetTextColor(look.text_color);
 

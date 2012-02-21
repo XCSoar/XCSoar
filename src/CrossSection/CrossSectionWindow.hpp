@@ -78,7 +78,7 @@ public:
    * @param canvas Canvas to draw on
    * @param rc PixelRect to draw in
    */
-  void Paint(Canvas &canvas, const PixelRect rc);
+  void Paint(Canvas &canvas, const PixelRect rc) const;
 
   /**
    * Set airspace database to use
@@ -119,12 +119,12 @@ public:
   }
 
 protected:
-  void PaintAirspaces(Canvas &canvas, ChartRenderer &chart);
-  void PaintTerrain(Canvas &canvas, ChartRenderer &chart);
-  void PaintGlide(ChartRenderer &chart);
+  void PaintAirspaces(Canvas &canvas, const ChartRenderer &chart) const;
+  void PaintTerrain(Canvas &canvas, ChartRenderer &chart) const;
+  void PaintGlide(ChartRenderer &chart) const;
   void PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
-                     const PixelRect rc);
-  void PaintGrid(Canvas &canvas, ChartRenderer &chart);
+                     const PixelRect rc) const;
+  void PaintGrid(Canvas &canvas, ChartRenderer &chart) const;
 
   /**
    * OnPaint event called by the message loop
