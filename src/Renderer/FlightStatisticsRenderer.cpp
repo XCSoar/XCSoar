@@ -212,9 +212,11 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
   if (trace_computer != NULL)
     trail_renderer.Draw(canvas, *trace_computer, proj, 0);
 
-  RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
-  AircraftRenderer::Draw(canvas, settings_map, map_look.aircraft,
-                         calculated.heading, aircraft_pos);
+  if (nmea_info.location_available) {
+    RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
+    AircraftRenderer::Draw(canvas, settings_map, map_look.aircraft,
+                           calculated.heading, aircraft_pos);
+  }
 }
 
 void
