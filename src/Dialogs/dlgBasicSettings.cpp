@@ -94,13 +94,9 @@ public:
     SetBallast();
   }
 
-  void SetBugs(fixed bugs) {
-    polar_settings.SetBugs(bugs);
-    PublishPolarSettings();
-  }
-
   void ShowAltitude(fixed altitude);
   void RefreshAltitudeControl();
+  void SetBugs(fixed bugs);
   void SetQNH(AtmosphericPressure qnh);
 
   void OnTimer();
@@ -182,6 +178,15 @@ FlightSetupPanel::RefreshAltitudeControl()
     ShowAltitude(basic.baro_altitude);
   else
     HideRow(Altitude);
+}
+
+void
+FlightSetupPanel::SetBugs(fixed bugs) {
+  polar_settings.SetBugs(bugs);
+  PublishPolarSettings();
+
+  if (device_blackboard != NULL)
+    device_blackboard->SetBugs(bugs);
 }
 
 void

@@ -194,11 +194,11 @@ WaypointGlue::LoadWaypointFile(int num, Waypoints &way_points,
                                OperationEnvironment &operation)
 {
   // Get waypoint filename
-  TCHAR szFile[MAX_PATH];
-  if (!GetPath(num, szFile))
+  TCHAR path[MAX_PATH];
+  if (!GetPath(num, path))
     return false;
 
-  WaypointReader reader(szFile, num);
+  WaypointReader reader(path, num);
 
   // If waypoint file exists
   if (!reader.Error()) {
@@ -222,23 +222,24 @@ WaypointGlue::LoadMapFileWaypoints(int num, const TCHAR* key,
                                    const RasterTerrain *terrain,
                                    OperationEnvironment &operation)
 {
-  TCHAR szFile[MAX_PATH];
+  TCHAR path[MAX_PATH];
 
   // Get the map filename
-  Profile::GetPath(key, szFile);
-  _tcscat(szFile, _T("/"));
-  _tcscat(szFile, _T("waypoints.xcw"));
+  if (!Profile::GetPath(key, path))
+    /* no map file configured */
+    return true;
 
-  WaypointReader reader(szFile, num);
+  TCHAR *tail = path + _tcslen(path);
+
+  _tcscpy(tail, _T("/waypoints.xcw"));
+
+  WaypointReader reader(path, num);
 
   // Test if waypoints.xcw can be loaded, otherwise try waypoints.cup
   if (reader.Error()) {
     // Get the map filename
-    Profile::GetPath(key, szFile);
-    _tcscat(szFile, _T("/"));
-    _tcscat(szFile, _T("waypoints.cup"));
-
-    reader.Open(szFile, num);
+    _tcscpy(tail, _T("/waypoints.cup"));
+    reader.Open(path, num);
   }
 
   // If waypoint file inside map file exists

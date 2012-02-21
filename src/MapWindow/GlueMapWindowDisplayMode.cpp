@@ -324,7 +324,7 @@ GlueMapWindow::UpdateProjection()
       SetLocation(basic.location.Interpolate(calculated.thermal_locator.estimate_location,
                                                t));
     }
-  } else
+  } else if (basic.location_available)
     // Pan is off
     SetLocationLazy(basic.location);
 

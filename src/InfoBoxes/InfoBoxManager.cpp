@@ -328,7 +328,9 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
 
   unsigned border = 0;
 
-  switch (settings.geometry) {
+  /* layout.geometry is the effective layout, while settings.geometry
+     is the configured layout */
+  switch (layout.geometry) {
   case InfoBoxSettings::Geometry::TOP_4_BOTTOM_4:
     if (i < 4)
       border |= BORDERBOTTOM;

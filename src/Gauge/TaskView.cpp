@@ -42,7 +42,8 @@
 static void
 PaintTask(Canvas &canvas, const WindowProjection &projection,
           const OrderedTask &task,
-          const GeoPoint &location, const MapSettings &settings_map,
+          bool location_available, const GeoPoint &location,
+          const MapSettings &settings_map,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
           const RasterTerrain *terrain, const Airspaces *airspaces)
@@ -77,32 +78,39 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
   OZRenderer ozv(task_look, airspace_look, settings_map.airspace);
   TaskPointRenderer tpv(canvas, projection, task_look,
                         task.GetTaskProjection(),
-                        ozv, false, TaskPointRenderer::NONE, location);
+                        ozv, false, TaskPointRenderer::NONE,
+                        location_available, location);
   TaskRenderer dv(tpv, projection.GetScreenBounds());
   dv.Draw(task);
 }
 
 void
 PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
-          const GeoPoint &location, const MapSettings &settings_map,
+          bool location_available, const GeoPoint &location,
+          const MapSettings &settings_map,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
           const RasterTerrain *terrain, const Airspaces *airspaces)
 {
+  /* TODO: check location_available in ChartProjection */
   ChartProjection projection(rc, task, location);
-  PaintTask(canvas, projection, task, location, settings_map,
+  PaintTask(canvas, projection, task, location_available, location,
+            settings_map,
             task_look, airspace_look, terrain, airspaces);
 }
 
 void
 PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const OrderedTask &task, const OrderedTaskPoint &point,
-               const GeoPoint &location, const MapSettings &settings_map,
+               bool location_available, const GeoPoint &location,
+               const MapSettings &settings_map,
                const TaskLook &task_look,
                const AirspaceLook &airspace_look,
                const RasterTerrain *terrain, const Airspaces *airspaces)
 {
+  /* TODO: check location_available in ChartProjection */
   ChartProjection projection(rc, point, point.GetLocation());
-  PaintTask(canvas, projection, task, location, settings_map,
+  PaintTask(canvas, projection, task, location_available, location,
+            settings_map,
             task_look, airspace_look, terrain, airspaces);
 }

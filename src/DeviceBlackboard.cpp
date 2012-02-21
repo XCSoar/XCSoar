@@ -294,6 +294,12 @@ DeviceBlackboard::Merge()
 }
 
 void
+DeviceBlackboard::SetBugs(fixed bugs)
+{
+  AllDevicesPutBugs(bugs);
+}
+
+void
 DeviceBlackboard::SetQNH(AtmosphericPressure qnh)
 {
   AllDevicesPutQNH(qnh);

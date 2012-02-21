@@ -106,17 +106,3 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
     reader = NULL;
   }
 }
-
-WaypointReader::WaypointReader()
-  :reader(NULL) {}
-
-WaypointReader::WaypointReader(const TCHAR* filename, int the_filenum)
-  :reader(NULL)
-{
-  Open(filename, the_filenum);
-}
-
-WaypointReader::~WaypointReader()
-{
-  delete reader;
-}

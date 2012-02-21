@@ -92,11 +92,14 @@ MapWindow::RenderGlide(Canvas &canvas)
 void
 MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 { 
+  const NMEAInfo &basic = Basic();
+
   render_projection = visible_projection;
 
   // Calculate screen position of the aircraft
-  const RasterPoint aircraft_pos =
-      render_projection.GeoToScreen(Basic().location);
+  RasterPoint aircraft_pos{0,0};
+  if (basic.location_available)
+      aircraft_pos = render_projection.GeoToScreen(basic.location);
 
   // reset label over-write preventer
   label_block.reset();
@@ -132,7 +135,8 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
     DrawTaskOffTrackIndicator(canvas);
 
   // Render the snail trail
-  RenderTrail(canvas, aircraft_pos);
+  if (basic.location_available)
+    RenderTrail(canvas, aircraft_pos);
 
   RenderMarkers(canvas);
 
@@ -154,14 +158,17 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   airspace_renderer.DrawIntersections(canvas, render_projection);
 
   // Draw wind vector at aircraft
-  DrawWind(canvas, aircraft_pos, rc);
+  if (basic.location_available)
+    DrawWind(canvas, aircraft_pos, rc);
 
   // Draw traffic
   DrawTeammate(canvas);
-  DrawFLARMTraffic(canvas, aircraft_pos);
+
+  if (basic.location_available)
+    DrawFLARMTraffic(canvas, aircraft_pos);
 
   // Finally, draw you!
-  if (Basic().location_available)
+  if (basic.location_available)
     AircraftRenderer::Draw(canvas, GetMapSettings(), look.aircraft,
                            Calculated().heading - render_projection.GetScreenAngle(),
                            aircraft_pos);

@@ -27,6 +27,7 @@ Copyright_License {
 
 #include "WaypointReaderBase.hpp"
 
+#include <algorithm>
 #include <tchar.h>
 
 class Waypoints;
@@ -40,11 +41,32 @@ class WaypointReader
 
 public:
   /** Non-initializing constructor */
-  WaypointReader();
+  WaypointReader():reader(NULL) {}
+
   /** Initializing constructor. Loads the specified waypoint file */
-  WaypointReader(const TCHAR* filename, int filenum = 0);
+  WaypointReader(const TCHAR* filename, int filenum = 0)
+    :reader(NULL) {
+    Open(filename, filenum);
+  }
+
+  WaypointReader(const WaypointReader &other) = delete;
+
+  WaypointReader(WaypointReader &&other)
+    :reader(other.reader) {
+    other.reader = NULL;
+  }
+
   /** Destroys the internal reader */
-  ~WaypointReader();
+  ~WaypointReader() {
+    delete reader;
+  }
+
+  WaypointReader &operator=(const WaypointReader &other) = delete;
+
+  WaypointReader &operator=(WaypointReader &&other) {
+    std::swap(reader, other.reader);
+    return *this;
+  }
 
   /**
    * Opens the given file, tries to guess the file format and

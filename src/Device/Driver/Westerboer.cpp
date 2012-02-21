@@ -174,7 +174,7 @@ bool
 WesterboerDevice::PutBugs(fixed _bugs)
 {
   // Dirtyness from 0 until 20 %
-  unsigned bugs = 100 - ((unsigned)_bugs * 100);
+  unsigned bugs = 100 - (unsigned)(_bugs * 100);
 
   char buffer[64];
   sprintf(buffer, "$PWES4,,,,,%02u,,,,", bugs);

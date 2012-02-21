@@ -126,6 +126,13 @@ ActionInterface::SendGetComputerSettings()
 void
 ActionInterface::SetMacCready(fixed mc, bool to_devices)
 {
+  // Repeated adjustment of MC with the +/- UI elements could result in
+  // an MC which is slightly larger than 0. Since the calculations
+  // fundamentally change depending on  "MC == 0" or "MC <> 0" force
+  // a fixed_zero for small MC values.
+  if (mc < fixed(0.01))
+    mc = fixed_zero;
+
   /* update interface settings */
 
   GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;

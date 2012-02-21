@@ -61,8 +61,12 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   // calculate height above safety height
   fixed hoffset = task_props.route_planner.safety_height_terrain +
     calculated.GetTerrainBaseFallback();
-  fixed h = basic.nav_altitude - hoffset;
-  chart.ScaleYFromValue(h);
+
+  fixed h = fixed_zero;
+  if (basic.NavAltitudeAvailable()) {
+    h = basic.nav_altitude - hoffset;
+    chart.ScaleYFromValue(h);
+  }
 
   bool draw_start_height = false;
   fixed hstart = fixed_zero;
@@ -131,16 +135,19 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   }
 
   // position of thermal band
-  const Pen &pen = is_infobox && look.inverse
-    ? look.white_pen : look.black_pen;
-  chart.DrawLine(fixed_zero, h,
-                 settings_computer.polar.glide_polar_task.GetMC(), h, pen);
+  if (basic.NavAltitudeAvailable()) {
+    const Pen &pen = is_infobox && look.inverse
+      ? look.white_pen : look.black_pen;
+    chart.DrawLine(fixed_zero, h,
+                   settings_computer.polar.glide_polar_task.GetMC(), h, pen);
 
-  if (is_infobox && look.inverse)
-    chart.get_canvas().SelectWhiteBrush();
-  else
-    chart.get_canvas().SelectBlackBrush();
-  chart.DrawDot(settings_computer.polar.glide_polar_task.GetMC(), h, Layout::Scale(2));
+    if (is_infobox && look.inverse)
+      chart.get_canvas().SelectWhiteBrush();
+    else
+      chart.get_canvas().SelectBlackBrush();
+    chart.DrawDot(settings_computer.polar.glide_polar_task.GetMC(),
+                  h, Layout::Scale(2));
+  }
 
   /*
   RasterPoint GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
