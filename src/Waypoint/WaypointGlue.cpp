@@ -226,18 +226,16 @@ WaypointGlue::LoadMapFileWaypoints(int num, const TCHAR* key,
 
   // Get the map filename
   Profile::GetPath(key, path);
-  _tcscat(path, _T("/"));
-  _tcscat(path, _T("waypoints.xcw"));
+  TCHAR *tail = path + _tcslen(path);
+
+  _tcscpy(tail, _T("/waypoints.xcw"));
 
   WaypointReader reader(path, num);
 
   // Test if waypoints.xcw can be loaded, otherwise try waypoints.cup
   if (reader.Error()) {
     // Get the map filename
-    Profile::GetPath(key, path);
-    _tcscat(path, _T("/"));
-    _tcscat(path, _T("waypoints.cup"));
-
+    _tcscpy(tail, _T("/waypoints.cup"));
     reader.Open(path, num);
   }
 
