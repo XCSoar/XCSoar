@@ -225,7 +225,10 @@ WaypointGlue::LoadMapFileWaypoints(int num, const TCHAR* key,
   TCHAR path[MAX_PATH];
 
   // Get the map filename
-  Profile::GetPath(key, path);
+  if (!Profile::GetPath(key, path))
+    /* no map file configured */
+    return true;
+
   TCHAR *tail = path + _tcslen(path);
 
   _tcscpy(tail, _T("/waypoints.xcw"));
