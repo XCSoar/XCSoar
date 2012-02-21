@@ -40,11 +40,18 @@ class WaypointReader
 
 public:
   /** Non-initializing constructor */
-  WaypointReader();
+  WaypointReader():reader(NULL) {}
+
   /** Initializing constructor. Loads the specified waypoint file */
-  WaypointReader(const TCHAR* filename, int filenum = 0);
+  WaypointReader(const TCHAR* filename, int filenum = 0)
+    :reader(NULL) {
+    Open(filename, filenum);
+  }
+
   /** Destroys the internal reader */
-  ~WaypointReader();
+  ~WaypointReader() {
+    delete reader;
+  }
 
   /**
    * Opens the given file, tries to guess the file format and
