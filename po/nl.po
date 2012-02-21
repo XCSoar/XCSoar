@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-21 21:10+0100\n"
-"PO-Revision-Date: 2012-02-17 18:53+0000\n"
+"PO-Revision-Date: 2012-02-20 18:52+0000\n"
 "Last-Translator: Wil Crielaars <kawa1998@home.nl>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-18 16:56+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-21 20:12+0000\n"
+"X-Generator: Launchpad (build 14838)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -3766,7 +3766,7 @@ msgstr ""
 #: Data/Dialogs/dlgStatus_L.xml:2 Data/Input/default.xci:794
 #: Data/Input/default.xci:1213
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:36
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:68
@@ -4810,12 +4810,12 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:54
 #, no-c-format
 msgid "Disable adjustments."
-msgstr ""
+msgstr "Aanpassingen uitschakelen"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:56
 #, no-c-format
 msgid "Use a recent average of the ground track as basis."
-msgstr ""
+msgstr "Gebruik een recente gemiddelde van het grond spoor als basis."
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:57
 #: Data/Dialogs/dlgTarget.xml:3 Data/Dialogs/dlgTarget_L.xml:3
@@ -4827,7 +4827,7 @@ msgstr "Doel"
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
 msgid "Use the current target waypoint as basis."
-msgstr ""
+msgstr "Gebruik het huidige doel-routepunt als basis."
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:102
 msgid "Cruise orientation"
@@ -4835,15 +4835,17 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:103
 msgid "Determines how the screen is rotated with the glider"
-msgstr ""
+msgstr "Hiermee bepaalt u hoe het scherm is gedraaid t.o.v. het zweefvliegtuig"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:108
 msgid "Circling orientation"
-msgstr ""
+msgstr "Thermieken oriëntatie"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:109
 msgid "Determines how the screen is rotated with the glider while circling"
 msgstr ""
+"Hiermee bepaalt u hoe het scherm is gedraaid t.o.v. het zweefvliegtuig "
+"tijdens het thermieken"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:114
 msgid "Circling zoom"
@@ -4854,6 +4856,8 @@ msgid ""
 "If enabled, then the map will zoom in automatically when entering circling "
 "mode and zoom out automatically when leaving circling mode."
 msgstr ""
+"Indien ingeschakeld, zal de kaart automatisch inzoomen tijdens het "
+"thermieken en uitzoomen bij het stoppen met thermieken."
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:118
 msgid "Map shift reference"
@@ -4862,6 +4866,8 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:119
 msgid "Determines what is used to shift the glider from the map center"
 msgstr ""
+"Bepaalt wat wordt gebruikt om het zweefvliegtuig t.o.v. het kaart centrum te "
+"verschuiven"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:125
 msgid "Glider position offset"
@@ -4872,14 +4878,16 @@ msgid ""
 "Defines the location of the glider drawn on the screen in percent from the "
 "screen edge."
 msgstr ""
+"Bepaalt de plaats van het zweefvliegtuig weergegeven in procenten van de "
+"rand van het scherm."
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:131
 msgid "Max. auto zoom distance"
-msgstr ""
+msgstr "Max. autozoom afstand"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:132
 msgid "The upper limit for auto zoom distance."
-msgstr ""
+msgstr "De bovengrens voor auto zoom afstand."
 
 #: src/Dialogs/ConfigPanels/PagesConfigPanel.cpp:79
 msgid "Page"
@@ -4887,35 +4895,35 @@ msgstr "Pagina"
 
 #: src/Dialogs/ConfigPanels/PagesConfigPanel.cpp:81
 msgid "Determines the information displayed on different screen pages."
-msgstr ""
+msgstr "Bepaald de informatie weergegeven op de verschillende scherm pagina's."
 
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:282
 msgid "Polar name"
-msgstr ""
+msgstr "Polaire naam"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:102
 #, no-c-format
 msgid "Neither airspace nor terrain is used for route planning."
-msgstr ""
+msgstr "Luchtruim en terrein worden niet gebruikt voor de routeplanning."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:104
 #, no-c-format
 msgid "Routes will avoid terrain."
-msgstr ""
+msgstr "Routes zal  terrein vermijden."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:106
 #, no-c-format
 msgid "Routes will avoid airspace."
-msgstr ""
+msgstr "Routes zal luchtruim vermijden."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:108
 #, no-c-format
 msgid "Routes will avoid airspace and terrain."
-msgstr ""
+msgstr "Routes zal luchtruim en terrein vermijden."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:112
 msgid "Route mode"
-msgstr ""
+msgstr "Route-modes"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:115
 msgid "Route climb"
@@ -4926,10 +4934,12 @@ msgid ""
 "When enabled and MC is positive, route planning allows climbs between the "
 "aircraft location and destination."
 msgstr ""
+"Indien ingeschakeld en MC positief is, routeplanning zal stijgen tussen de "
+"positie van het vliegtuig en de bestemming toestaan."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:121
 msgid "Route ceiling"
-msgstr ""
+msgstr "Route bovengrens"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:122
 msgid ""
@@ -4941,12 +4951,12 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:130
 #, no-c-format
 msgid "Reach calculations disabled."
-msgstr ""
+msgstr "Te bereiken berekeningen uitgeschakeld."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:131
 #, no-c-format
 msgid "Straight"
-msgstr ""
+msgstr "bereik"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:132
 #, no-c-format
@@ -4956,28 +4966,32 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:133
 #, no-c-format
 msgid "Turning"
-msgstr ""
+msgstr "Draaien"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:134
 #, no-c-format
 msgid "The reach is calculated allowing turns around terrain obstacles."
 msgstr ""
+"Het bereik wordt berekend rekening houdend met bochten rond terrein "
+"obstakels."
 
 #. Spacer
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:140
 msgid "Reach mode"
-msgstr ""
+msgstr "Bereik modus"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:141
 msgid ""
 "How calculations are performed of the reach of the glider with respect to "
 "terrain."
 msgstr ""
+"Hoe berekeningen voor bereik van het zweefvliegtuig worden uitgevoerd met "
+"betrekking tot terrein."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:146
 #, no-c-format
 msgid "Disables the reach display."
-msgstr ""
+msgstr "Schakelt bereik-weergave uit."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:147
 #: src/Dialogs/dlgTaskHelpers.cpp:247
@@ -4988,7 +5002,7 @@ msgstr "Regel"
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:147
 #, no-c-format
 msgid "Draws a dashed line at the glide reach."
-msgstr ""
+msgstr "Tekent een stippellijn op het glijvlucht bereik."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:148
 #, no-c-format
@@ -5002,12 +5016,12 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:152
 msgid "Reach display"
-msgstr ""
+msgstr "Bereik weergave"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:157
 #, no-c-format
 msgid "Uses task glide polar."
-msgstr ""
+msgstr "Gebruikt taak glijvlucht polaire."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:158
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:95
@@ -5018,17 +5032,19 @@ msgstr "Veilige MC"
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:159
 #, no-c-format
 msgid "Uses safety MacCready value"
-msgstr ""
+msgstr "Gebruikt veiligheid MacCready waarde"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:163
 msgid "Reach polar"
-msgstr ""
+msgstr "Bereik polaire"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:164
 msgid ""
 "This determines the glide performance used in reach, landable arrival, abort "
 "and alternate calculations."
 msgstr ""
+"Dit bepaalt de glijvlucht prestaties gebruikt binnen bereik, landbare "
+"aankomst, af te breken en alternatieve berekeningen."
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:63
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:124
@@ -5039,6 +5055,8 @@ msgstr "Aankomsthoogte"
 msgid ""
 "The height above terrain that the glider should arrive at for a safe landing."
 msgstr ""
+"De hoogte boven de grond dat het zweefvliegtuig moet aankomen voor een "
+"veilige landing."
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:69
 msgid "Terrain height"
@@ -5047,6 +5065,8 @@ msgstr "Terreinhoogte"
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:70
 msgid "The height above terrain that the glider must clear during final glide."
 msgstr ""
+"De hoogte boven het terrein dat het zweefvliegtuig tijdens final glide moet "
+"blijven ."
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:76
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:108
@@ -5109,7 +5129,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:109
 msgid "Predict wind drift"
-msgstr ""
+msgstr "Voorspelde wind afwijking"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:110
 msgid ""
@@ -5119,23 +5139,28 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:98
 msgid "Map database"
-msgstr ""
+msgstr "Kaart gegevens bestand"
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:99
 msgid ""
 "The name of the file (.xcm) containing terrain, topography, and optionally "
 "waypoints, their details and airspaces."
 msgstr ""
+"De naam van het bestand (. XCM) bevat terrein, topografie, en optioneel "
+"keerpunten, hun details en het luchtruim."
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:104
 msgid ""
 "Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
 "dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
+"Primaire keerpunten bestand. Ondersteunde bestandstypen zijn Cambridge/"
+"Winpilot-bestanden (. DAT), Zander-bestanden (. WPZ) of SeeYou-bestanden (. "
+"Cup)."
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:108
 msgid "More waypoints"
-msgstr ""
+msgstr "Meer keerpunten"
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:109
 msgid ""
@@ -5147,7 +5172,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:113
 msgid "Watched waypoints"
-msgstr ""
+msgstr "Bekeken keerpunten"
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:114
 msgid ""
@@ -5159,19 +5184,19 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:120
 msgid "Airspaces"
-msgstr ""
+msgstr "Luchtruim"
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:120
 msgid "The file name of the primary airspace file."
-msgstr ""
+msgstr "De bestandsnaam van het primaire luchtruim bestand."
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:123
 msgid "More airspaces"
-msgstr ""
+msgstr "Meer luchtruim"
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:123
 msgid "The file name of the secondary airspace file."
-msgstr ""
+msgstr "De bestandsnaam van het secundaire luchtruim bestand."
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:127
 msgid "Terrain file"
