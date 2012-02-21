@@ -88,8 +88,10 @@ dlgStatusShowModal(int start_page)
   assert(wTabBar != NULL);
   wTabBar->SetPageFlippedCallback(SetTitle);
 
-  const Waypoint *nearest_waypoint =
-    way_points.GetNearest(CommonInterface::Basic().location, fixed(100000));
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const Waypoint *nearest_waypoint = basic.location_available
+    ? way_points.GetNearest(CommonInterface::Basic().location, fixed(100000))
+    : NULL;
 
   /* setup tabs */
 
