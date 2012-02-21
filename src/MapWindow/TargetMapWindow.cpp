@@ -159,7 +159,7 @@ TargetMapWindow::DrawTask(Canvas &canvas)
                              will be used only if active, so it's ok */
                           task_manager->GetOrderedTask().GetTaskProjection(),
                           ozv, false, TaskPointRenderer::ALL,
-                          Basic().location);
+                          Basic().location_available, Basic().location);
     TaskRenderer dv(tpv, projection.GetScreenBounds());
     dv.Draw(*task);
   }

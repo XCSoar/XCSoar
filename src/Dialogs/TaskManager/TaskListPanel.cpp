@@ -118,8 +118,9 @@ TaskListPanel::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 #endif
 
   const MapLook &look = UIGlobals::GetMapLook();
+  const NMEAInfo &basic = CommonInterface::Basic();
   PaintTask(canvas, Sender->get_client_rect(), *ordered_task,
-            XCSoarInterface::Basic().location,
+            basic.location_available, basic.location,
             XCSoarInterface::GetMapSettings(),
             look.task, look.airspace,
             terrain, &airspace_database);

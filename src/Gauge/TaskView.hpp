@@ -38,7 +38,8 @@ struct AirspaceLook;
 
 void
 PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
-          const GeoPoint &location, const MapSettings &settings_map,
+          bool location_available, const GeoPoint &location,
+          const MapSettings &settings_map,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
           const RasterTerrain *terrain, const Airspaces *airspaces);
@@ -46,7 +47,8 @@ PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
 void
 PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const OrderedTask &task, const OrderedTaskPoint &point,
-               const GeoPoint &location, const MapSettings &settings_map,
+               bool location_available, const GeoPoint &location,
+               const MapSettings &settings_map,
                const TaskLook &task_look,
                const AirspaceLook &airspace_look,
                const RasterTerrain *terrain, const Airspaces *airspaces);

@@ -62,6 +62,7 @@ protected:
   unsigned active_index;
   const GeoPoint location;
   FlatBoundingBox bb_screen;
+  bool location_available;
   bool mode_optional_start;
 
 public:
@@ -79,7 +80,7 @@ public:
                     OZRenderer &_ozv,
                     bool _draw_bearing,
                     TargetVisibility _target_visibility,
-                    const GeoPoint &_location);
+                    bool location_available, const GeoPoint &_location);
 
   void ResetIndex() {
     index = 0;
