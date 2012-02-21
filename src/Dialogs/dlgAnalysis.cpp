@@ -269,8 +269,13 @@ UpdateCrossSection()
 
   assert(csw != NULL);
   csw->ReadBlackboard(basic, calculated, blackboard->GetMapSettings().airspace);
-  csw->set_direction(basic.track);
-  csw->set_start(basic.location);
+
+  if (basic.location_available && basic.track_available) {
+    csw->set_direction(basic.track);
+    csw->set_start(basic.location);
+    csw->SetValid();
+  } else
+    csw->SetInvalid();
 }
 
 static void

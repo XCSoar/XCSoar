@@ -385,5 +385,11 @@ CrossSectionWindow::OnPaint(Canvas &canvas)
 
   const PixelRect rc = get_client_rect();
 
+  if (!valid) {
+    ChartRenderer chart(chart_look, canvas, rc);
+    chart.DrawNoData();
+    return;
+  }
+
   Paint(canvas, rc);
 }
