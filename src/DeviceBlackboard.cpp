@@ -56,6 +56,8 @@ DeviceBlackboard::DeviceBlackboard()
     per_device_data[i] = gps_info;
 
   real_data = simulator_data = replay_data = gps_info;
+
+  simulator.Init(simulator_data);
 }
 
 /**

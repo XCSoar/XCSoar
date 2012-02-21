@@ -35,6 +35,19 @@ Copyright_License {
 
 #include <stdio.h>
 
+void
+Simulator::Init(NMEAInfo &basic)
+{
+  /* just in case DeviceBlackboard::SetStartupLocation never gets
+     called, set some dummy values that are better than uninitialised
+     values */
+
+  basic.location = GeoPoint::Zero();
+  basic.track = Angle::Zero();
+  basic.ground_speed = fixed_zero;
+  basic.gps_altitude = fixed_zero;
+}
+
 /**
  * This function creates some simulated traffic for FLARM debugging
  * @param GPS_INFO Pointer to the NMEA_INFO struct

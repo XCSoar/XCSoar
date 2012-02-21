@@ -30,6 +30,8 @@ class Simulator {
   void GenerateFLARMTraffic(NMEAInfo &basic);
 
 public:
+  void Init(NMEAInfo &basic);
+
   /**
    * Update the clock and a few important Validity attributes, as if
    * there had been a new GPS fix, without actually modifying the
