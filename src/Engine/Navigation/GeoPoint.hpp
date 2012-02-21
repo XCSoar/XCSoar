@@ -57,6 +57,18 @@ struct GeoPoint {
     longitude(_longitude), latitude(_latitude) {}
 
   /**
+   * Construct an instance at the origin of the coordinate system.
+   * This is used to initialise the simulator when there is no better
+   * reference (home, map center).  The goal is to bootstrap the
+   * simulator when XCSoar is launched for the first time with an
+   * empty profile; it is pretty useless for anything else.
+   */
+  gcc_constexpr_function
+  static GeoPoint Zero() {
+    return GeoPoint(Angle::Zero(), Angle::Zero());
+  }
+
+  /**
    * Construct an instance that is "invalid", i.e. IsValid() will
    * return false.  The return value must not be used in any
    * calculation.  This method may be used to explicitly declare a
