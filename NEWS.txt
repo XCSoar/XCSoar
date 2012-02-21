@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.2.6 - not yet released
 * calculations
   - fix bogus terrain warnings
+  - fix incorrect expiration of wind data, e.g. for temporary manually
+    overridden automatic wind calculations results
 * devices:
   - Vega: fix Vega configuration dialog
 

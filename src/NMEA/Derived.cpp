@@ -86,9 +86,14 @@ DerivedInfo::Reset()
 void
 DerivedInfo::Expire(fixed Time)
 {
+  // NOTE: wind_available is deliberately not expired. Expiry happens automatically
+  // due to the expiration of the real wind source. If wind_available would be
+  // expired here (with an shorter expiry time then the source) this would lead
+  // to alternating valid/invalid transitions (valid after the source is copied,
+  // invalidated shortly after the copy here).
+
   /* the estimated wind remains valid for an hour */
   estimated_wind_available.Expire(Time, fixed(3600));
-  wind_available.Expire(Time, fixed(600));
 
   auto_mac_cready_available.Expire(Time, fixed(300));
 }
