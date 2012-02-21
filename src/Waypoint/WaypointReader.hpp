@@ -48,10 +48,14 @@ public:
     Open(filename, filenum);
   }
 
+  WaypointReader(const WaypointReader &other) = delete;
+
   /** Destroys the internal reader */
   ~WaypointReader() {
     delete reader;
   }
+
+  WaypointReader &operator=(const WaypointReader &other) = delete;
 
   /**
    * Opens the given file, tries to guess the file format and
