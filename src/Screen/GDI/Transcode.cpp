@@ -78,6 +78,8 @@ static gcc_constexpr_data KeyMap lx_mm_key_map[] = {
   { 'P', VK_APP4 }, // INFO
   { 'E', VK_F5 }, // AN/CLC
   { 'G', VK_F6 }, // START/R
+  { VK_UP, VK_DOWN }, // Invert direction of rotation
+  { VK_DOWN, VK_UP }, // of the UP/DOWN rotary knob
   { 0 }
 };
 
