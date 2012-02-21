@@ -133,6 +133,11 @@ struct InfoBoxData {
   void SetCommentFromBearingDifference(Angle delta);
 
   /**
+   * Set the InfoBox comment to the specified horizontal speed.
+   */
+  void SetCommentFromSpeed(fixed value, bool precision=true);
+
+  /**
    * Set the InfoBox value to the specified altitude in the alternate
    * altitude unit.
    */

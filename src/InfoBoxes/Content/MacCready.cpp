@@ -82,13 +82,12 @@ InfoBoxContentMacCready::Update(InfoBoxData &data)
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
 
+  data.SetTitle(settings_computer.task.auto_mc ? _("MC AUTO") : _("MC MANUAL"));
+
   SetVSpeed(data, settings_computer.polar.glide_polar_task.GetMC());
 
-  // Set Comment
-  if (XCSoarInterface::GetComputerSettings().task.auto_mc)
-    data.SetComment(_("AUTO"));
-  else
-    data.SetComment(_("MANUAL"));
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  data.SetCommentFromSpeed(common_stats.V_block, false);
 }
 
 bool

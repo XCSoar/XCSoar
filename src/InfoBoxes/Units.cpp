@@ -59,3 +59,9 @@ InfoBoxData::SetCommentFromAlternateAltitude(fixed new_value)
 {
   Units::FormatAlternateUserAltitude(new_value, comment.buffer());
 }
+
+void
+InfoBoxData::SetCommentFromSpeed(fixed new_value, bool precision)
+{
+  Units::FormatUserSpeed(new_value, comment.buffer(), true, precision);
+}
