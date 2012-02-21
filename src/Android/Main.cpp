@@ -76,8 +76,6 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   assert(native_view == NULL);
   native_view = new NativeView(env, obj, width, height);
 
-  Profile::SetFiles(_T(""));
-
   event_queue = new EventQueue();
 
   sound_util = new SoundUtil(env);
