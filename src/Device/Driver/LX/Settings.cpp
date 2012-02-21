@@ -42,6 +42,19 @@ LXDevice::Open(gcc_unused OperationEnvironment &env)
 }
 
 bool
+LXDevice::PutBugs(fixed bugs)
+{
+  // This is a copy of the routine done in LK8000 for LX MiniMap, realized
+  // by Lx developers. We have no documentation and so we do not know what this
+  // exactly means.
+  char tmp[100];
+  int TransformedBugsValue = 100 - (int)(bugs*100);
+  sprintf(tmp, "PFLX2,,,%d,,,", TransformedBugsValue);
+  PortWriteNMEA(port, tmp);
+  return true;
+}
+
+bool
 LXDevice::PutMacCready(fixed MacCready)
 {
   char szTmp[32];
