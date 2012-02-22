@@ -9,6 +9,7 @@ Version 6.2.6 - not yet released
     overridden automatic wind calculations results
 * devices:
   - Vega: fix Vega configuration dialog
+* fix parsing of weather station codes read from profile
 
 Version 6.2.5 - 2012/01/27
 * calculations
