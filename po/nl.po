@@ -2012,7 +2012,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:962
 #, no-c-format
 msgid "Attitude indicator"
-msgstr "Hoogtemeter"
+msgstr "Kunstmatige horizon"
 
 #: src/InfoBoxes/Content/Factory.cpp:963
 #, no-c-format
