@@ -170,7 +170,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     else if (!StringIsEmpty(value) && _tcscmp(value, _T("auto")) != 0) {
       const TCHAR *base = BaseName(value);
       if (base != NULL)
-        df.SetAsString(base);
+        df.Set(base);
     }
     wp->RefreshDisplay();
   }

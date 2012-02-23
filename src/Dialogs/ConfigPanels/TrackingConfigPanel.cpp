@@ -101,7 +101,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_T("LiveTrack24"),  _T(""), settings.livetrack24.enabled, this);
 
   WndProperty *edit = AddEnum(_("Server"), _T(""), server_list, 0);
-  edit->GetDataField()->SetAsString(settings.livetrack24.server);
+  ((DataFieldEnum *)edit->GetDataField())->Set(settings.livetrack24.server);
   edit->RefreshDisplay();
 
   AddText(_("Username"), _T(""), settings.livetrack24.username);

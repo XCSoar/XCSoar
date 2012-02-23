@@ -173,6 +173,17 @@ DataFieldEnum::Set(int Value)
     SetIndex(i, false);
 }
 
+bool
+DataFieldEnum::Set(const TCHAR *text)
+{
+  int i = Find(text);
+  if (i < 0)
+    return false;
+
+  SetIndex(i, false);
+  return true;
+}
+
 int
 DataFieldEnum::SetStringAutoAdd(const TCHAR *text)
 {

@@ -131,6 +131,15 @@ public:
   void Set(int Value);
 
   /**
+   * Select the item with the specified text (not display string).
+   * Does not trigger the "modified" event.
+   *
+   * @return false if an item with the specified text was not found,
+   * and therefore the value was not changed
+   */
+  bool Set(const TCHAR *text);
+
+  /**
    * Set the value to the specified string.  If there is no choice
    * with the string, a new one is added.
    *
