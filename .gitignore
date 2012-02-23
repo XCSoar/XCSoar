@@ -12,6 +12,7 @@ results/terrain.txt
 *.rej
 *.log
 *.dmp
+*.s
 *.so
 Doc/html/*
 output
