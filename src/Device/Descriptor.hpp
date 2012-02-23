@@ -52,9 +52,9 @@ class DeviceDescriptor : public Port::Handler {
 
   DeviceConfig config;
 
-  Port *Com;
-  DeviceDescriptor *pDevPipeTo;
-  const struct DeviceRegister *Driver;
+  Port *port;
+  DeviceDescriptor *pipe_to_device;
+  const struct DeviceRegister *driver;
 
   Device *device;
 
@@ -120,7 +120,7 @@ public:
   }
 
   void SetPipeTo(DeviceDescriptor *other) {
-    pDevPipeTo = other;
+    pipe_to_device = other;
   }
 
   bool IsConfigured() const {
@@ -128,7 +128,7 @@ public:
   }
 
   bool IsOpen() const {
-    return Com != NULL
+    return port != NULL
 #ifdef ANDROID
       || internal_gps != NULL;
 #endif

@@ -51,8 +51,8 @@ Copyright_License {
 #include <assert.h>
 
 DeviceDescriptor::DeviceDescriptor()
-  :Com(NULL), pDevPipeTo(NULL),
-   Driver(NULL), device(NULL),
+  :port(NULL), pipe_to_device(NULL),
+   driver(NULL), device(NULL),
 #ifdef ANDROID
    internal_gps(NULL),
 #endif
@@ -71,7 +71,7 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver,
 {
   assert(_port != NULL);
   assert(_driver != NULL);
-  assert(Com == NULL);
+  assert(port == NULL);
   assert(device == NULL);
   assert(!ticker);
 
@@ -86,23 +86,23 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver,
   settings_received.Clear();
   was_connected = false;
 
-  Com = _port;
-  Driver = _driver;
+  port = _port;
+  driver = _driver;
 
-  assert(Driver->CreateOnPort != NULL || Driver->IsNMEAOut());
-  if (Driver->CreateOnPort == NULL)
+  assert(driver->CreateOnPort != NULL || driver->IsNMEAOut());
+  if (driver->CreateOnPort == NULL)
     return true;
 
   parser.Reset();
-  parser.SetReal(_tcscmp(Driver->name, _T("Condor")) != 0);
+  parser.SetReal(_tcscmp(driver->name, _T("Condor")) != 0);
   if (config.IsDriver(_T("Condor")))
     parser.DisableGeoid();
 
-  device = Driver->CreateOnPort(config, Com);
-  if (!device->Open(env) || !Com->StartRxThread()) {
+  device = driver->CreateOnPort(config, port);
+  if (!device->Open(env) || !port->StartRxThread()) {
     delete device;
     device = NULL;
-    Com = NULL;
+    port = NULL;
     return false;
   }
 
@@ -172,13 +172,13 @@ DeviceDescriptor::Close()
   delete device;
   device = NULL;
 
-  Port *OldCom = Com;
-  Com = NULL;
+  Port *OldCom = port;
+  port = NULL;
 
   delete OldCom;
 
-  Driver = NULL;
-  pDevPipeTo = NULL;
+  driver = NULL;
+  pipe_to_device = NULL;
   ticker = false;
 
   device_blackboard.mutex.Lock();
@@ -201,7 +201,7 @@ void
 DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 {
   if (is_altair() || !config.IsAvailable() || config.IsServer() ||
-      IsConnected() || (Driver != NULL && !Driver->HasTimeout()) ||
+      IsConnected() || (driver != NULL && !driver->HasTimeout()) ||
       /* attempt to reopen a failed device every 30 seconds */
       !reopen_clock.check_update(30000))
     return;
@@ -216,41 +216,41 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 const TCHAR *
 DeviceDescriptor::GetDisplayName() const
 {
-  return Driver != NULL ? Driver->display_name : NULL;
+  return driver != NULL ? driver->display_name : NULL;
 }
 
 bool
 DeviceDescriptor::IsDriver(const TCHAR *name) const
 {
-  return Driver != NULL
-    ? _tcscmp(Driver->name, name) == 0
+  return driver != NULL
+    ? _tcscmp(driver->name, name) == 0
     : false;
 }
 
 bool
 DeviceDescriptor::CanDeclare() const
 {
-  return Driver != NULL &&
-    (Driver->CanDeclare() ||
+  return driver != NULL &&
+    (driver->CanDeclare() ||
      device_blackboard.IsFLARM(index));
 }
 
 bool
 DeviceDescriptor::IsLogger() const
 {
-  return Driver != NULL && Driver->IsLogger();
+  return driver != NULL && driver->IsLogger();
 }
 
 bool
 DeviceDescriptor::IsNMEAOut() const
 {
-  return Driver != NULL && Driver->IsNMEAOut();
+  return driver != NULL && driver->IsNMEAOut();
 }
 
 bool
 DeviceDescriptor::IsManageable() const
 {
-  return Driver != NULL && Driver->IsManageable();
+  return driver != NULL && driver->IsManageable();
 }
 
 bool
@@ -299,7 +299,7 @@ DeviceDescriptor::WriteNMEA(const char *line)
 {
   assert(line != NULL);
 
-  return Com != NULL && PortWriteNMEA(Com, line);
+  return port != NULL && PortWriteNMEA(port, line);
 }
 
 #ifdef _UNICODE
@@ -308,7 +308,7 @@ DeviceDescriptor::WriteNMEA(const TCHAR *line)
 {
   assert(line != NULL);
 
-  if (Com == NULL)
+  if (port == NULL)
     return false;
 
   char buffer[_tcslen(line) * 4 + 1];
@@ -416,27 +416,27 @@ bool
 DeviceDescriptor::Declare(const struct Declaration &declaration,
                           OperationEnvironment &env)
 {
-  if (Com == NULL)
+  if (port == NULL)
     return false;
 
   SetBusy(true);
 
   TCHAR text[60];
 
-  _stprintf(text, _T("%s: %s."), _("Sending declaration"), Driver->display_name);
+  _stprintf(text, _T("%s: %s."), _("Sending declaration"), driver->display_name);
   env.SetText(text);
 
-  Com->StopRxThread();
+  port->StopRxThread();
 
   bool result = device != NULL && device->Declare(declaration, env);
 
   if (device_blackboard.IsFLARM(index)) {
     _stprintf(text, _T("%s: FLARM."), _("Sending declaration"));
     env.SetText(text);
-    result = FlarmDeclare(Com, declaration, env) || result;
+    result = FlarmDeclare(port, declaration, env) || result;
   }
 
-  Com->StartRxThread();
+  port->StartRxThread();
 
   SetBusy(false);
   return result;
@@ -446,16 +446,16 @@ bool
 DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
                                  OperationEnvironment &env)
 {
-  if (Com == NULL || Driver == NULL || device == NULL)
+  if (port == NULL || driver == NULL || device == NULL)
     return false;
 
   TCHAR text[60];
-  _stprintf(text, _T("%s: %s."), _("Reading flight list"), Driver->display_name);
+  _stprintf(text, _T("%s: %s."), _("Reading flight list"), driver->display_name);
   env.SetText(text);
 
-  Com->StopRxThread();
+  port->StopRxThread();
   bool result = device->ReadFlightList(flight_list, env);
-  Com->StartRxThread();
+  port->StartRxThread();
   return result;
 }
 
@@ -464,16 +464,16 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
                                  const TCHAR *path,
                                  OperationEnvironment &env)
 {
-  if (Driver == NULL || device == NULL)
+  if (driver == NULL || device == NULL)
     return false;
 
   TCHAR text[60];
-  _stprintf(text, _T("%s: %s."), _("Downloading flight log"), Driver->display_name);
+  _stprintf(text, _T("%s: %s."), _("Downloading flight log"), driver->display_name);
   env.SetText(text);
 
-  Com->StopRxThread();
+  port->StopRxThread();
   bool result = device->DownloadFlight(flight, path, env);
-  Com->StartRxThread();
+  port->StartRxThread();
   return result;
 }
 
@@ -512,11 +512,11 @@ DeviceDescriptor::LineReceived(const char *line)
 {
   LogNMEA(line);
 
-  if (pDevPipeTo && pDevPipeTo->Com) {
+  if (pipe_to_device && pipe_to_device->port) {
     // stream pipe, pass nmea to other device (NmeaOut)
     // TODO code: check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
-    pDevPipeTo->Com->Write(line);
-    pDevPipeTo->Com->Write("\r\n");
+    pipe_to_device->port->Write(line);
+    pipe_to_device->port->Write("\r\n");
   }
 
   if (ParseLine(line))
