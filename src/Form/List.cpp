@@ -157,8 +157,8 @@ void
 WndListFrame::OnPaint(Canvas &canvas, const PixelRect &dirty)
 {
   if (paint_item_callback != NULL)
-    DrawItems(canvas, origin + dirty.top / item_height,
-              origin + (dirty.bottom + item_height - 1) / item_height);
+    DrawItems(canvas, origin + (dirty.top + pixel_pan) / item_height,
+              origin + (dirty.bottom + pixel_pan + item_height - 1) / item_height);
 
   DrawScrollBar(canvas);
 }
