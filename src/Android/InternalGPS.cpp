@@ -125,6 +125,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.time = second_of_day;
   basic.time_available.Update(basic.clock);
   basic.date_time_utc = date_time;
+  basic.date_available = true;
 
   basic.gps.satellites_used = n_satellites;
   basic.gps.real = true;
