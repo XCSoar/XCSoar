@@ -52,8 +52,11 @@ TimesStatusPanel::Refresh()
   if (basic.time_available) {
     FormatSignedTimeHHMM(Temp, DetectCurrentTime(basic));
     SetFormValue(form, _T("prpLocalTime"), Temp);
+    FormatSignedTimeHHMM(Temp, (int) basic.time);
+    SetFormValue(form, _T("prpUTCTime"), Temp);
   } else {
     SetFormValue(form, _T("prpLocalTime"), _T(""));
+    SetFormValue(form, _T("prpUTCTime"), _T(""));
   }
 
   if (positive(flight.flight_time)) {
