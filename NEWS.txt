@@ -14,6 +14,7 @@ Version 6.3 - not yet released
   - allow up to 4 devices
   - LX: support the LX Color Vario
   - LX: send QNH to device
+  - LX: send keep-alives while in flight list
   - send/receive bugs setting to/from device, if driver support it
 * map
   - airspace rendering fixed

@@ -30,6 +30,50 @@
 
 #include <stdio.h>
 
+bool
+LXDevice::EnableDownloadMode(OperationEnvironment &env)
+{
+  old_baud_rate = bulk_baud_rate != 0
+    ? port.SetBaudrate(bulk_baud_rate)
+    : 0;
+
+  if (!LX::CommandMode(port, env)) {
+    if (old_baud_rate != 0)
+      port.SetBaudrate(old_baud_rate);
+    return false;
+  }
+
+  ScopeLock protect(mutex);
+  in_command_mode = true;
+  busy = false;
+  return true;
+}
+
+bool
+LXDevice::DisableDownloadMode()
+{
+  if (old_baud_rate != 0)
+    port.SetBaudrate(old_baud_rate);
+
+  port.Flush();
+
+  ScopeLock protect(mutex);
+  in_command_mode = false;
+  return true;
+}
+
+void
+LXDevice::OnSysTicker(const DerivedInfo &calculated)
+{
+  ScopeLock protect(mutex);
+  if (in_command_mode && !busy) {
+    /* keep the command mode alive while the user chooses a flight in
+       the download dialog */
+    port.Flush();
+    LX::SendSYN(port);
+  }
+}
+
 static bool
 ParseDate(BrokenDate &date, const char *p)
 {
@@ -133,9 +177,12 @@ bool
 LXDevice::ReadFlightList(RecordedFlightList &flight_list,
                          OperationEnvironment &env)
 {
-  const unsigned old_baud_rate = bulk_baud_rate != 0
-    ? port.SetBaudrate(bulk_baud_rate)
-    : 0;
+  assert(in_command_mode);
+
+  assert(!busy);
+  mutex.Lock();
+  busy = true;
+  mutex.Unlock();
 
   bool success = ReadFlightListInner(port, flight_list, env);
 
@@ -143,8 +190,9 @@ LXDevice::ReadFlightList(RecordedFlightList &flight_list,
 
   LX::CommandModeQuick(port, env);
 
-  if (old_baud_rate != 0)
-    port.SetBaudrate(old_baud_rate);
+  mutex.Lock();
+  busy = false;
+  mutex.Unlock();
 
   return success;
 }
@@ -204,9 +252,10 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
   if (file == NULL)
     return false;
 
-  const unsigned old_baud_rate = bulk_baud_rate != 0
-    ? port.SetBaudrate(bulk_baud_rate)
-    : 0;
+  assert(!busy);
+  mutex.Lock();
+  busy = true;
+  mutex.Unlock();
 
   bool success = DownloadFlightInner(port, flight, file, env);
   fclose(file);
@@ -215,8 +264,9 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
 
   LX::CommandModeQuick(port, env);
 
-  if (old_baud_rate != 0)
-    port.SetBaudrate(old_baud_rate);
+  mutex.Lock();
+  busy = false;
+  mutex.Unlock();
 
   return success;
 }

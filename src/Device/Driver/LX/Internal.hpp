@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Protocol.hpp"
 #include "Device/Driver.hpp"
+#include "Thread/Mutex.hpp"
 
 class LXDevice: public AbstractDevice
 {
@@ -33,9 +34,14 @@ class LXDevice: public AbstractDevice
 
   unsigned bulk_baud_rate;
 
+  Mutex mutex;
+  bool in_command_mode, busy;
+  unsigned old_baud_rate;
+
 public:
   LXDevice(Port &_port, unsigned _bulk_baud_rate)
-    :port(_port), bulk_baud_rate(_bulk_baud_rate) {}
+    :port(_port), bulk_baud_rate(_bulk_baud_rate),
+     in_command_mode(false), old_baud_rate(0) {}
 
 public:
   virtual bool Open(OperationEnvironment &env);
@@ -46,6 +52,10 @@ public:
   virtual bool PutQNH(const AtmosphericPressure &pres);
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
+
+  virtual bool EnableDownloadMode(OperationEnvironment &env);
+  virtual bool DisableDownloadMode();
+  virtual void OnSysTicker(const DerivedInfo &calculated);
 
   virtual bool ReadFlightList(RecordedFlightList &flight_list,
                               OperationEnvironment &env);
