@@ -49,8 +49,12 @@ TimesStatusPanel::Refresh()
     SetFormValue(form, _T("prpSunset"), _T(""));
   }
 
-  FormatSignedTimeHHMM(Temp, DetectCurrentTime(basic));
-  SetFormValue(form, _T("prpLocalTime"), Temp);
+  if (basic.time_available) {
+    FormatSignedTimeHHMM(Temp, DetectCurrentTime(basic));
+    SetFormValue(form, _T("prpLocalTime"), Temp);
+  } else {
+    SetFormValue(form, _T("prpLocalTime"), _T(""));
+  }
 
   if (positive(flight.flight_time)) {
     FormatSignedTimeHHMM(Temp, TimeLocal((long)flight.takeoff_time));
