@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-21 21:10+0100\n"
-"PO-Revision-Date: 2012-02-20 18:52+0000\n"
+"PO-Revision-Date: 2012-02-22 13:48+0000\n"
 "Last-Translator: Wil Crielaars <kawa1998@home.nl>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-21 20:12+0000\n"
+"X-Launchpad-Export-Date: 2012-02-23 00:04+0000\n"
 "X-Generator: Launchpad (build 14838)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -147,7 +147,7 @@ msgstr "Vlucht niet gedownload."
 
 #: src/Logger/ExternalLogger.cpp:312
 msgid "Do you want to download another flight?"
-msgstr ""
+msgstr "Wilt u een andere vlucht te downloaden?"
 
 #: src/Replay/IgcReplayGlue.cpp:79
 msgid "Could not open IGC file!"
@@ -2025,7 +2025,7 @@ msgid ""
 "Attitude indicator (artifical horizon) display calculated from flightpath, "
 "supplemented with acceleration and variometer data if available."
 msgstr ""
-"Attitude indicator (kunstmatige horizon) display berekend op basis van "
+"Attitude indicator (kunstmatige horizon) scherm berekend op basis van "
 "vliegpad, aangevuld met acceleratie en variometer data, indien beschikbaar."
 
 #: src/InfoBoxes/Content/Factory.cpp:971
@@ -2104,14 +2104,14 @@ msgstr ""
 "extern apparaat. Anders wordt de geschatte wind  gebruikt voor de berekening."
 
 #: src/InfoBoxes/Content/Factory.cpp:1009
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain collision"
-msgstr "Terreinkleuren"
+msgstr "Terrein botsing"
 
 #: src/InfoBoxes/Content/Factory.cpp:1010
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terr Coll"
-msgstr "Terreinkaart aan"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1011
 #, no-c-format
@@ -2520,12 +2520,12 @@ msgstr "Aankomst Hgt"
 
 #: src/MapWindow/GlueMapWindowItems.cpp:89
 msgid "There is nothing interesting near this location."
-msgstr ""
+msgstr "Er is niets interessant in de buurt van deze locatie."
 
 #: src/MapWindow/GlueMapWindowItems.cpp:90 Data/Dialogs/dlgMapItemList.xml:3
 #: Data/Dialogs/dlgMapItemList_L.xml:3
 msgid "Map elements at this location"
-msgstr ""
+msgstr "Kaartelementen op deze locatie"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:109
 msgid "Elevation: "
@@ -2964,7 +2964,7 @@ msgstr ""
 
 #: src/Widgets/DeviceEditWidget.cpp:519
 msgid "TCP Port"
-msgstr ""
+msgstr "TCP-poort"
 
 #: src/Widgets/DeviceEditWidget.cpp:530
 msgid "Driver"
@@ -3647,7 +3647,7 @@ msgstr "InfoBox pagina's"
 #: src/Dialogs/dlgConfiguration.cpp:103
 #, no-c-format
 msgid "InfoBox Modes"
-msgstr ""
+msgstr "InfoBox functie"
 
 #: src/Dialogs/dlgConfiguration.cpp:106 Data/Dialogs/dlgStatusSystem.xml:8
 #: Data/Dialogs/pnlStatusSystem.xml:8 Data/Input/default.xci:590
@@ -3760,7 +3760,7 @@ msgstr "Help"
 #: Data/Dialogs/Infobox/pnlInfoBoxMacCreadySetup.xml:5
 #: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:12
 msgid "Switch InfoBox"
-msgstr ""
+msgstr "Verander infoBox"
 
 #: src/Dialogs/dlgStatus.cpp:63 Data/Dialogs/dlgStatus.xml:2
 #: Data/Dialogs/dlgStatus_L.xml:2 Data/Input/default.xci:794
@@ -3916,7 +3916,7 @@ msgstr "Instellen als nieuwe thuisbasis"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:259
 msgid "Pan To Waypoint"
-msgstr ""
+msgstr "Beweeg naar Waypoint"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:52
 #, no-c-format
@@ -3936,7 +3936,7 @@ msgstr "Doorsnede"
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:55
 #, no-c-format
 msgid "Display airspaces below the clip altitude."
-msgstr ""
+msgstr "Geef luchtruim onder de clip hoogte weer."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:57
 #, no-c-format
@@ -4132,15 +4132,17 @@ msgstr ""
 "in."
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:73
-#, fuzzy
 msgid "Final glide bar MC0"
-msgstr "Eindsteek balk"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:74
 msgid ""
 "If set to ON the final glide bar will show a second arrow indicating the "
 "required height to reach the final waypoint at MC zero."
 msgstr ""
+"Indien ingesteld op AAN wordt aan de final glide balk een tweede pijl "
+"toegevoegd die de benogdigde hoogte van de laatste waypoint weergeeft op MC "
+"nul."
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:60
 msgid "Speed arrows"
@@ -5099,14 +5101,11 @@ msgid "Polar degradation"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:87
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "A permanent polar degradation. 0% means no degradation, 50% indicates the "
 "glider's sink rate is doubled."
 msgstr ""
-"Hoe schoon het zweefvliegtuig is. Stel in op 0% voor schone vleugels en een "
-"grotere waarde wanneer insecten op de vleugels zitten of deze nat worden. "
-"50% geeft aan dat de daalsnelheid van het zweefvliegtuig wordt verdubbeld."
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:96
 msgid ""
@@ -8526,24 +8525,32 @@ msgid ""
 "Zoom\n"
 "Out"
 msgstr ""
+"Zoom\n"
+"Uit"
 
 #: Data/Input/default.xci:726
 msgid ""
 "Climb\n"
 "Demo"
 msgstr ""
+"Klimmen\n"
+"Demo"
 
 #: Data/Input/default.xci:867
 msgid ""
 "Message\n"
 "Repeat"
 msgstr ""
+"Bericht\n"
+"Herhalen"
 
 #: Data/Input/default.xci:818
 msgid ""
 "FLARM\n"
 "Details"
 msgstr ""
+"FLARM\n"
+"Details"
 
 #: Data/Input/default.xci:129 Data/Input/default.xci:420
 #: Data/Input/default.xci:943
@@ -8551,16 +8558,20 @@ msgid ""
 "Zoom\n"
 "In"
 msgstr ""
+"Zoom\n"
+"In"
 
 #: Data/Input/default.xci:932
 msgid "Return"
-msgstr ""
+msgstr "Terug"
 
 #: Data/Input/default.xci:582 Data/Input/default.xci:1135
 msgid ""
 "Settings\n"
 "Airspace"
 msgstr ""
+"Instellingen\n"
+"Luchtruim"
 
 #: Data/Input/default.xci:315 Data/Input/default.xci:364
 #: Data/Input/default.xci:878
@@ -8569,19 +8580,23 @@ msgstr "Navigatie"
 
 #: Data/Input/default.xci:712
 msgid "Store"
-msgstr ""
+msgstr "Opslaan"
 
 #: Data/Input/default.xci:810
 msgid ""
 "Team\n"
 "Code"
 msgstr ""
+"Team\n"
+"Code"
 
 #: Data/Input/default.xci:518
 msgid ""
 "MacCready\n"
 "+"
 msgstr ""
+"MacCready\n"
+"+"
 
 #: Data/Input/default.xci:59
 msgid "Landing"
@@ -8850,6 +8865,9 @@ msgstr ""
 #~ msgid "Topology on"
 #~ msgstr "Topokaart aan"
 
+#~ msgid "Terrain on"
+#~ msgstr "Terreinkaart aan"
+
 #~ msgid "Terrain + Topology"
 #~ msgstr "Terrein + Topo"
 
@@ -9029,6 +9047,9 @@ msgstr ""
 
 #~ msgid "Comms with Volkslogger"
 #~ msgstr "Comms met Volkslogger"
+
+#~ msgid "Final glide bar"
+#~ msgstr "Eindsteek balk"
 
 #~ msgid "Name: "
 #~ msgstr "Naam: "
