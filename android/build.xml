@@ -30,6 +30,7 @@ that have native methods, to prepare for calling "javah".
       <include name="InternalGPS.java"/>
       <include name="NonGPSSensors.java"/>
       <include name="Settings.java"/>
+      <include name="SafeDestruct.java"/>
     </javac>
   </target>
 </project>

@@ -46,8 +46,7 @@ InternalSensors::InternalSensors(JNIEnv* env, jobject gps_obj, jobject sensors_o
       obj_NonGPSSensors_(env, sensors_obj) {
   // Retrieve method IDs from the InternalGPS object.
   Java::Class gps_cls(env, env->GetObjectClass(gps_obj));
-  mid_gps_setLocationProvider_ =
-      env->GetMethodID(gps_cls, "setLocationProvider", "(Ljava/lang/String;)V");
+  close_method = env->GetMethodID(gps_cls, "close", "()V");
 
   // Retrieve method IDs from the NonGPSSensors object.
   Java::Class sensors_cls(env, env->GetObjectClass(sensors_obj));
@@ -72,8 +71,7 @@ InternalSensors::~InternalSensors() {
   // Unsubscribe from sensors and the GPS.
   cancelAllSensorSubscriptions();
   JNIEnv *env = Java::GetEnv();
-  env->CallVoidMethod(obj_InternalGPS_.Get(),
-                      mid_gps_setLocationProvider_, NULL);
+  env->CallVoidMethod(obj_InternalGPS_.Get(), close_method);
 }
 
 bool InternalSensors::subscribeToSensor(int id) {
@@ -214,6 +212,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
     fixed((unsigned)(time % 1000)) / 1000u;
 
   if (second_of_day < basic.time &&
+      basic.date_available &&
       (BrokenDate)date_time > (BrokenDate)basic.date_time_utc)
     /* don't wrap around when going past midnight in UTC */
     second_of_day += fixed(24u * 3600u);
@@ -221,6 +220,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.time = second_of_day;
   basic.time_available.Update(basic.clock);
   basic.date_time_utc = date_time;
+  basic.date_available = true;
 
   basic.gps.satellites_used = n_satellites;
   basic.gps.satellites_used_available.Update(basic.clock);

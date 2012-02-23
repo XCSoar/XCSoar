@@ -42,7 +42,7 @@ class InternalSensors {
   Java::Object obj_NonGPSSensors_;
 
   // IDs for methods in InternalGPS.java.
-  jmethodID mid_gps_setLocationProvider_;
+  jmethodID close_method;
 
   // IDs for methods in NonGPSSensors.java.
   jmethodID mid_sensors_subscribeToSensor_;

@@ -212,6 +212,7 @@ NMEAInfo::Complement(const NMEAInfo &add)
   if (time_available.Complement(add.time_available)) {
     time = add.time;
     date_time_utc = add.date_time_utc;
+    date_available = add.date_available;
   }
 
   acceleration.Complement(add.acceleration);

@@ -41,9 +41,6 @@ import android.view.WindowManager;
 import android.view.Surface;
 import android.util.Log;
 import java.lang.Math;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Code to support the internal GPS receiver via #LocationManager.
@@ -77,10 +74,7 @@ public class InternalGPS
   private double acceleration;
   private static boolean queriedLocationSettings = false;
 
-  // For waiting for updates to GPS/sensor subscriptions.
-  private boolean awaitingUpdate;
-  private final Lock updateLock;
-  private final Condition updateCondition;
+  private final SafeDestruct safeDestruct = new SafeDestruct();
 
   InternalGPS(Context context, int _index) {
     index = _index;
@@ -99,11 +93,6 @@ public class InternalGPS
     accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     acceleration = 1.0;
 
-    // Prepare locking/condition mechanism for GPS/sensor subscription updates.
-    awaitingUpdate = false;
-    updateLock = new ReentrantLock();
-    updateCondition = updateLock.newCondition();
-
     update();
   }
 
@@ -112,38 +101,31 @@ public class InternalGPS
    * LocationManager subscription inside the main thread.
    */
   @Override public void run() {
-    updateLock.lock();
-    try {
-      Log.d(TAG, "Updating GPS subscription...");
-      locationManager.removeUpdates(this);
-      sensorManager.unregisterListener(this);
+    Log.d(TAG, "Updating GPS subscription...");
+    locationManager.removeUpdates(this);
+    sensorManager.unregisterListener(this);
 
-      if (locationProvider != null) {
-        Log.d(TAG, "Subscribing to GPS updates.");
-        try {
-          locationManager.requestLocationUpdates(locationProvider,
-                                                 1000, 0, this);
-        } catch (IllegalArgumentException e) {
-          /* this exception was recorded on the Android Market, message
-             was: "provider=gps" - no idea what that means */
-          setConnected(0);
-          return;
-        }
-
-        sensorManager.registerListener(this, accelerometer,
-                                       sensorManager.SENSOR_DELAY_NORMAL);
-
-        setConnected(1); // waiting for fix
-      } else {
-        Log.d(TAG, "Unsubscribing from GPS updates.");
-        setConnected(0); // not connected
+    if (locationProvider != null) {
+      Log.d(TAG, "Subscribing to GPS updates.");
+      try {
+        locationManager.requestLocationUpdates(locationProvider,
+                                               1000, 0, this);
+      } catch (IllegalArgumentException e) {
+        /* this exception was recorded on the Android Market, message
+           was: "provider=gps" - no idea what that means */
+        setConnectedSafe(0);
+        return;
       }
-      Log.d(TAG, "Done updating GPS subscription...");
-      awaitingUpdate = false;
-      updateCondition.signal();
-    } finally {
-      updateLock.unlock();
+
+      sensorManager.registerListener(this, accelerometer,
+                                     sensorManager.SENSOR_DELAY_NORMAL);
+
+      setConnectedSafe(1); // waiting for fix
+    } else {
+      Log.d(TAG, "Unsubscribing from GPS updates.");
+      setConnectedSafe(0); // not connected
     }
+    Log.d(TAG, "Done updating GPS subscription...");
   }
 
   /**
@@ -151,22 +133,20 @@ public class InternalGPS
    * thread.
    */
   private void update() {
-    updateLock.lock();
-    try {
-      Log.d(TAG, "Triggering GPS subscription update...");
-      handler.post(this);
-      for (awaitingUpdate = true; awaitingUpdate;) {
-        updateCondition.awaitUninterruptibly();
-      }
-      Log.d(TAG, "GPS subscription update complete.");
-    } finally {
-      updateLock.unlock();
-    }
+    Log.d(TAG, "Triggering GPS subscription update...");
+    handler.removeCallbacks(this);
+    handler.post(this);
   }
 
   public void setLocationProvider(String _locationProvider) {
     locationProvider = _locationProvider;
     update();
+  }
+
+  public void close() {
+    safeDestruct.beginShutdown();
+    setLocationProvider(null);
+    safeDestruct.finishShutdown();
   }
 
   private native void setConnected(int connected);
@@ -191,21 +171,38 @@ public class InternalGPS
                 true, acceleration);
   }
 
+  private void setConnectedSafe(int connected) {
+    if (!safeDestruct.Increment())
+      return;
+
+    try {
+      setConnected(connected);
+    } finally {
+      safeDestruct.Decrement();
+    }
+  }
+
   /** from LocationListener */
   @Override public void onLocationChanged(Location newLocation) {
-    setConnected(2); // fix found
+    if (!safeDestruct.Increment())
+      return;
 
-    sendLocation(newLocation);
+    try {
+      setConnected(2); // fix found
+      sendLocation(newLocation);
+    } finally {
+      safeDestruct.Decrement();
+    }
   }
 
   /** from LocationListener */
   @Override public void onProviderDisabled(String provider) {
-    setConnected(0); // not connected
+    setConnectedSafe(0); // not connected
   }
 
   /** from LocationListener */
   @Override public void onProviderEnabled(String provider) {
-    setConnected(1); // waiting for fix
+    setConnectedSafe(1); // waiting for fix
   }
 
   /** from LocationListener */
@@ -213,11 +210,11 @@ public class InternalGPS
                                         Bundle extras) {
     switch (status) {
     case LocationProvider.OUT_OF_SERVICE:
-      setConnected(0); // not connected
+      setConnectedSafe(0); // not connected
       break;
 
     case LocationProvider.TEMPORARILY_UNAVAILABLE:
-      setConnected(1); // waiting for fix
+      setConnectedSafe(1); // waiting for fix
       break;
 
     case LocationProvider.AVAILABLE:

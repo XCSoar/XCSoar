@@ -49,8 +49,7 @@ class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
 
-class DeviceDescriptor : public PortLineHandler
-{
+class DeviceDescriptor : PortLineHandler {
   /** the index of this device in the global list */
   unsigned index;
 
@@ -257,8 +256,11 @@ public:
 
   bool ParseLine(const char *line);
 
-protected:
+private:
+  /* virtual methods from Port::Handler */
   virtual void DataReceived(const void *data, size_t length);
+
+  /* virtual methods from PortLineHandler */
   virtual void LineReceived(const char *line);
 };
 

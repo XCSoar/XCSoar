@@ -196,6 +196,14 @@ struct DeviceConfig {
     return IsDriver(_T("Vega"));
   }
 
+  bool IsAndroidInternalGPS() {
+#ifdef ANDROID
+    return port_type == PortType::INTERNAL;
+#else
+    return false;
+#endif
+  }
+
   bool UsesPort() const {
     return UsesDriver();
   }
