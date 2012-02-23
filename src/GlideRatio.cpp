@@ -63,7 +63,7 @@ GlideRatioCalculator::init(const SETTINGS_COMPUTER &settings)
   }
 
   assert(bsize >= 3);
-  assert(bsize < ARRAY_SIZE(records));
+  assert(bsize <= ARRAY_SIZE(records));
 
   totaldistance = 0;
   start = -1;
