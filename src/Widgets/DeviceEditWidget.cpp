@@ -62,7 +62,7 @@ static gcc_constexpr_data struct {
 
   /* label not translated for now, until we have a TCP port
      selection UI */
-  { DeviceConfig::PortType::TCP_LISTENER, _T("TCP port") },
+  { DeviceConfig::PortType::TCP_LISTENER, N_("TCP Port") },
 
   { DeviceConfig::PortType::SERIAL, NULL } /* sentinel */
 };
