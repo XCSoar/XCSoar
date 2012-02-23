@@ -47,14 +47,22 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Dialogs/CallBackTable.hpp"
 
-class DevicesConfigPanel : public XMLWidget {
+class DevicesConfigPanel : public XMLWidget, DeviceEditWidget::Listener {
   unsigned current_device;
+  bool current_modified;
 
   gcc_pure
   DeviceEditWidget &GetEditWidget() {
     DockWindow *dock = (DockWindow *)form.FindByName(_T("edit"));
     assert(dock != NULL);
     return *(DeviceEditWidget *)dock->GetWidget();
+  }
+
+  gcc_pure
+  const DeviceEditWidget &GetEditWidget() const {
+    const DockWindow *dock = (const DockWindow *)form.FindByName(_T("edit"));
+    assert(dock != NULL);
+    return *(const DeviceEditWidget *)dock->GetWidget();
   }
 
   bool SaveDeviceConfig();
@@ -64,6 +72,14 @@ public:
     assert(i < NUMDEV);
 
     return CommonInterface::GetSystemSettings().devices[i];
+  }
+
+  const DeviceConfig &GetListItemConfig(unsigned i) const {
+    assert(i < NUMDEV);
+
+    return i == current_device
+      ? GetEditWidget().GetConfig()
+      : GetDeviceConfig(i);
   }
 
   void SetDeviceConfig(unsigned i, const DeviceConfig &config) const {
@@ -80,6 +96,10 @@ public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void Move(const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
+
+private:
+  /* virtual methods from DeviceEditWidget::Listener */
+  virtual void OnModified(DeviceEditWidget &widget);
 };
 
 /** XXX this hack is needed because the form callbacks don't get a
@@ -89,7 +109,7 @@ static DevicesConfigPanel *instance;
 bool
 DevicesConfigPanel::SaveDeviceConfig()
 {
-  bool changed = false, require_restart = false;
+  bool changed = current_modified, require_restart = false;
   DeviceEditWidget &widget = GetEditWidget();
   if (!widget.Save(changed, require_restart))
     return false;
@@ -97,6 +117,7 @@ DevicesConfigPanel::SaveDeviceConfig()
   if (changed)
     SetDeviceConfig(current_device, widget.GetConfig());
 
+  current_modified = false;
   return true;
 }
 
@@ -112,6 +133,7 @@ DevicesConfigPanel::ShowDevice(unsigned idx)
     return;
 
   current_device = idx;
+  current_modified = false;
   GetEditWidget().SetConfig(GetDeviceConfig(current_device));
 }
 
@@ -137,7 +159,7 @@ DeviceListActivateCallback(unsigned idx)
 static void
 PaintDeviceListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
-  const DeviceConfig &config = instance->GetDeviceConfig(idx);
+  const DeviceConfig &config = instance->GetListItemConfig(idx);
 
   const UPixelScalar margin = Layout::Scale(2);
 
@@ -178,6 +200,7 @@ DevicesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   DockWindow *dock = (DockWindow *)form.FindByName(_T("edit"));
   assert(dock != NULL);
   DeviceEditWidget *edit = new DeviceEditWidget(GetDeviceConfig(0));
+  edit->SetListener(this);
   dock->SetWidget(edit);
 
   WndListFrame *list = (WndListFrame *)form.FindByName(_T("list"));
@@ -214,6 +237,17 @@ DevicesConfigPanel::Save(bool &_changed, bool &_require_restart)
   _require_restart |= require_restart;
 
   return true;
+}
+
+void
+DevicesConfigPanel::OnModified(DeviceEditWidget &widget)
+{
+  bool changed = false, require_restart = false;
+  if (GetEditWidget().Save(changed, require_restart) && changed) {
+    current_modified = true;
+    WndListFrame *list = (WndListFrame *)form.FindByName(_T("list"));
+    list->invalidate();
+  }
 }
 
 Widget *
