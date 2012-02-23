@@ -59,6 +59,14 @@ TimesStatusPanel::Refresh()
     SetFormValue(form, _T("prpUTCTime"), _T(""));
   }
 
+  if (basic.date_available) {
+    temp.Format(_T("%04d-%02d-%02d"), basic.date_time_utc.year,
+                basic.date_time_utc.month, basic.date_time_utc.day);
+    SetFormValue(form, _T("prpUTCDate"), temp);
+  } else {
+    SetFormValue(form, _T("prpUTCDate"), _T(""));
+  }
+
   if (positive(flight.flight_time)) {
     FormatSignedTimeHHMM(temp.buffer(), TimeLocal((long)flight.takeoff_time));
     SetFormValue(form, _T("prpTakeoffTime"), temp);
