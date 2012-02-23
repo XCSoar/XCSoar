@@ -124,6 +124,27 @@ ActionInterface::SendGetComputerSettings()
 }
 
 void
+ActionInterface::SetBugs(fixed bugs, bool to_devices)
+{
+  // Write Bugs into settings
+  CommonInterface::SetComputerSettings().polar.SetBugs(bugs);
+  GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;
+
+  // send to calculation thread and trigger recalculation
+  if (protected_task_manager != NULL)
+    protected_task_manager->SetGlidePolar(polar);
+
+  if (calculation_thread != NULL) {
+    calculation_thread->SetComputerSettings(GetComputerSettings());
+    calculation_thread->Trigger();
+  }
+
+  // send to external devices
+  if (to_devices)
+    device_blackboard->SetBugs(bugs);
+}
+
+void
 ActionInterface::SetMacCready(fixed mc, bool to_devices)
 {
   // Repeated adjustment of MC with the +/- UI elements could result in

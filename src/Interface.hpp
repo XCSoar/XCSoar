@@ -193,6 +193,14 @@ protected:
 
 public:
   /**
+   * Configure a new Bugs setting in #ComputerSettings, and
+   * forward it to all XCSoar modules that want it.
+   *
+   * @param to_devices send the new settings to all devices?
+   */
+  static void SetBugs(fixed mc, bool to_devices=true);
+
+  /**
    * Configure a new MacCready setting in #ComputerSettings, and
    * forward it to all XCSoar modules that want it.
    *
