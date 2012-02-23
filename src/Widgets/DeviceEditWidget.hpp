@@ -31,10 +31,25 @@
 #include <assert.h>
 
 class DeviceEditWidget : public RowFormWidget, DataFieldListener {
+public:
+  struct Listener {
+    virtual void OnModified(DeviceEditWidget &widget) = 0;
+  };
+
+private:
   DeviceConfig config;
+
+  Listener *listener;
 
 public:
   DeviceEditWidget(const DeviceConfig &_config);
+
+  void SetListener(Listener *_listener) {
+    assert(listener == NULL);
+    assert(_listener != NULL);
+
+    listener = _listener;
+  }
 
   const DeviceConfig &GetConfig() const {
     return config;

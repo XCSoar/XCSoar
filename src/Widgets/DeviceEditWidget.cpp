@@ -340,7 +340,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config)
 
 DeviceEditWidget::DeviceEditWidget(const DeviceConfig &_config)
   :RowFormWidget(UIGlobals::GetDialogLook()),
-   config(_config) {}
+   config(_config), listener(NULL) {}
 
 
 void
@@ -482,11 +482,13 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   Add(_("Port"), NULL, port_df);
 
   DataFieldEnum *baud_rate_df = new DataFieldEnum(NULL);
+  baud_rate_df->SetListener(this);
   FillBaudRates(*baud_rate_df);
   baud_rate_df->Set(config.baud_rate);
   Add(_("Baudrate"), NULL, baud_rate_df);
 
   DataFieldEnum *bulk_baud_rate_df = new DataFieldEnum(NULL);
+  bulk_baud_rate_df->SetListener(this);
   bulk_baud_rate_df->addEnumText(_T("Default"), 0u);
   FillBaudRates(*bulk_baud_rate_df);
   bulk_baud_rate_df->Set(config.bulk_baud_rate);
@@ -495,6 +497,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
       bulk_baud_rate_df);
 
   DataFieldEnum *tcp_port_df = new DataFieldEnum(NULL);
+  tcp_port_df->SetListener(this);
   FillTCPPorts(*tcp_port_df);
   tcp_port_df->Set(config.tcp_port);
   Add(_("TCP Port"), NULL, tcp_port_df);
@@ -513,19 +516,19 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("Sync. from device"),
              _("This option lets you configure if XCSoar should use settings "
                "like the MacCready value, bugs and ballast from the device."),
-             config.sync_from_device);
+             config.sync_from_device, this);
   SetExpertRow(SyncFromDevice);
 
   AddBoolean(_("Sync. to device"),
              _("This option lets you configure if XCSoar should send settings "
                "like the MacCready value, bugs and ballast to the device."),
-             config.sync_to_device);
+             config.sync_to_device, this);
   SetExpertRow(SyncToDevice);
 
   AddBoolean(_("Ignore checksum"),
              _("If your GPS device outputs invalid NMEA checksums, this will "
                "allow it's data to be used anyway."),
-             config.ignore_checksum);
+             config.ignore_checksum, this);
   SetExpertRow(IgnoreCheckSum);
 
   UpdateVisibilities();
@@ -629,4 +632,7 @@ DeviceEditWidget::OnModified(DataField &df)
 {
   if (IsDataField(Port, df) || IsDataField(Driver, df))
     UpdateVisibilities();
+
+  if (listener != NULL)
+    listener->OnModified(*this);
 }
