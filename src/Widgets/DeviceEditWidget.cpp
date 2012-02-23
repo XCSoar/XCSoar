@@ -187,7 +187,7 @@ static void
 FillPortTypes(DataFieldEnum &df, const DeviceConfig &config)
 {
   for (unsigned i = 0; port_types[i].label != NULL; i++) {
-    unsigned id = AddPort(df, port_types[i].type,
+    unsigned id = AddPort(df, port_types[i].type, port_types[i].label,
                           gettext(port_types[i].label));
 
     if (port_types[i].type == config.port_type)
@@ -342,7 +342,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config)
 
   for (unsigned i = 0; port_types[i].label != NULL; i++) {
     if (port_types[i].type == config.port_type) {
-      df.SetAsString(gettext(port_types[i].label));
+      df.SetAsString(port_types[i].label);
       break;
     }
   }
