@@ -70,10 +70,6 @@ static gcc_constexpr_data struct {
 /** the number of fixed port types (excludes Serial, Bluetooth and IOIOUart) */
 static gcc_constexpr_data unsigned num_port_types = ARRAY_SIZE(port_types) - 1;
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static DeviceEditWidget *instance;
-
 static unsigned
 AddPort(DataFieldEnum &df, DeviceConfig::PortType type,
         const TCHAR *text, const TCHAR *display_string=NULL,
@@ -475,21 +471,13 @@ DeviceEditWidget::UpdateVisibilities()
   SetRowVisible(IgnoreCheckSum, DeviceConfig::UsesDriver(type));
 }
 
-static void
-OnDataField(gcc_unused DataField *df, DataField::DataAccessMode mode)
-{
-  if (mode == DataField::daChange)
-    instance->UpdateVisibilities();
-}
-
 void
 DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  instance = this;
-
   RowFormWidget::Prepare(parent, rc);
 
-  DataFieldEnum *port_df = new DataFieldEnum(OnDataField);
+  DataFieldEnum *port_df = new DataFieldEnum(NULL);
+  port_df->SetListener(this);
   FillPorts(*port_df, config);
   Add(_("Port"), NULL, port_df);
 
@@ -511,7 +499,8 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   tcp_port_df->Set(config.tcp_port);
   Add(_("TCP Port"), NULL, tcp_port_df);
 
-  DataFieldEnum *driver_df = new DataFieldEnum(OnDataField);
+  DataFieldEnum *driver_df = new DataFieldEnum(NULL);
+  driver_df->SetListener(this);
   const TCHAR *driver_name;
   for (unsigned i = 0; (driver_name = GetDriverNameByIndex(i)) != NULL; i++)
     driver_df->addEnumText(driver_name, GetDriverDisplayNameByIndex(i));
@@ -633,4 +622,11 @@ DeviceEditWidget::Save(bool &_changed, bool &require_restart)
 
   _changed |= changed;
   return true;
+}
+
+void
+DeviceEditWidget::OnModified(DataField &df)
+{
+  if (IsDataField(Port, df) || IsDataField(Driver, df))
+    UpdateVisibilities();
 }

@@ -26,8 +26,11 @@
 
 #include "Form/RowFormWidget.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "DataField/Listener.hpp"
 
-class DeviceEditWidget : public RowFormWidget {
+#include <assert.h>
+
+class DeviceEditWidget : public RowFormWidget, DataFieldListener {
   DeviceConfig config;
 
 public:
@@ -46,6 +49,10 @@ public:
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
+
+private:
+  /* virtual methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
 };
 
 #endif
