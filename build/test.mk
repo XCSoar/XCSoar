@@ -694,6 +694,7 @@ DEBUG_PROGRAM_NAMES = \
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += FeedNMEA \
+	FeedVega \
 	FeedTCP \
 	FeedTCPServer \
 	FeedFlyNetData
@@ -2128,6 +2129,10 @@ $(eval $(call link-program,TestNotify,TEST_NOTIFY))
 FEED_NMEA_SOURCES = \
 	$(TEST_SRC_DIR)/FeedNMEA.cpp
 $(eval $(call link-program,FeedNMEA,FEED_NMEA))
+
+FEED_VEGA_SOURCES = \
+	$(TEST_SRC_DIR)/FeedVega.cpp
+$(eval $(call link-program,FeedVega,FEED_VEGA))
 
 FEED_TCP_SOURCES = \
 	$(TEST_SRC_DIR)/FeedTCP.cpp
