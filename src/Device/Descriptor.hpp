@@ -243,6 +243,8 @@ public:
 
   bool ParseLine(const char *line);
 
+private:
+  /* virtual methods from Port::Handler */
   virtual void LineReceived(const char *line);
 };
 
