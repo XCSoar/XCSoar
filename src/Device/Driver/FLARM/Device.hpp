@@ -328,7 +328,7 @@ public:
    * Tries to enable the binary transfer mode of the connected FLARM device
    * @return True if binary mode was enabled and confirmed, False otherwise
    */
-  bool EnableDownloadMode();
+  bool EnableDownloadMode(OperationEnvironment &env);
 
   /**
    * Tries to disable the binary transfer mode of the connected FLARM device.

@@ -244,7 +244,7 @@ public:
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env);
 
-  bool EnableDownloadMode();
+  bool EnableDownloadMode(OperationEnvironment &env);
   bool DisableDownloadMode();
 
   bool ReadFlightList(RecordedFlightList &flight_list,

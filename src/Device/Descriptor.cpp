@@ -453,14 +453,14 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
 }
 
 bool
-DeviceDescriptor::EnableDownloadMode()
+DeviceDescriptor::EnableDownloadMode(OperationEnvironment &env)
 {
   if (port == NULL || device == NULL)
     return false;
 
   SetBusy(true);
   port->StopRxThread();
-  bool result = device->EnableDownloadMode();
+  bool result = device->EnableDownloadMode(env);
   if (!result) {
     /* roll back */
     SetBusy(false);

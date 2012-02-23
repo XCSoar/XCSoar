@@ -34,6 +34,7 @@
 #include "LocalPath.hpp"
 #include "UIGlobals.hpp"
 #include "Operation/Operation.hpp"
+#include "Operation/MessageOperationEnvironment.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Thread/JobThread.hpp"
 #include "Job.hpp"
@@ -243,7 +244,8 @@ ShowFlightList(const RecordedFlightList &flight_list)
 void
 ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 {
-  if (!device.EnableDownloadMode()) {
+  MessageOperationEnvironment env;
+  if (!device.EnableDownloadMode(env)) {
     MessageBoxX(_("Failed to enable download mode."),
                 _("Download flight"), MB_OK | MB_ICONERROR);
     return;

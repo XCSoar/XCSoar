@@ -24,6 +24,7 @@ Copyright_License {
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
 #include "PeriodClock.hpp"
+#include "Operation/Operation.hpp"
 
 #define FLARM_STARTFRAME 0x73
 #define FLARM_ESCAPE 0x78
@@ -308,7 +309,7 @@ FlarmDevice::BinaryReset(unsigned timeout_ms)
 }
 
 bool
-FlarmDevice::EnableDownloadMode()
+FlarmDevice::EnableDownloadMode(OperationEnvironment &env)
 {
   assert(!in_binary_mode);
 
@@ -323,10 +324,17 @@ FlarmDevice::EnableDownloadMode()
   // Testing has revealed that switching the protocol takes a certain amount
   // of time (around 1.5 sec). Due to that it is recommended to issue new pings
   // for a certain time until the ping is ACKed properly or a timeout occurs.
-  for (unsigned i = 0; i < 10; ++i)
+  for (unsigned i = 0; i < 10; ++i) {
+    if (env.IsCancelled()) {
+      BinaryReset(200);
+      in_binary_mode = true;
+      return false;
+    }
+
     if (BinaryPing(500))
       // We are now in binary mode and have verified that with a binary ping
       return true;
+  }
 
   // Apparently the switch to binary mode didn't work
   in_binary_mode = false;

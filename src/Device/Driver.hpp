@@ -184,7 +184,7 @@ public:
    * are called.
    * @return true on success
    */
-  virtual bool EnableDownloadMode() = 0;
+  virtual bool EnableDownloadMode(OperationEnvironment &env) = 0;
 
   /**
    * Leave the download mode.
@@ -255,7 +255,7 @@ public:
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
 
-  virtual bool EnableDownloadMode() {
+  virtual bool EnableDownloadMode(OperationEnvironment &env) {
     return true;
   }
 

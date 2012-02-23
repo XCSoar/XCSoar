@@ -104,7 +104,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  if (!device->EnableDownloadMode()) {
+  if (!device->EnableDownloadMode(env)) {
     delete device;
     fprintf(stderr, "Failed to enable download mode\n");
     return EXIT_FAILURE;
