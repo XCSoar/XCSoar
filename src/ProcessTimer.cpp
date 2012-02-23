@@ -162,8 +162,20 @@ BlackboardProcessTimer()
 }
 
 /**
- * Collect QNH updates from external devices and AutoQNH.
+ * Collect QNH, MacCready and Bugs updates from external devices
  */
+static void
+BugsProcessTimer()
+{
+  static ExternalSettings last_external_settings;
+  const NMEAInfo &basic = CommonInterface::Basic();
+
+  if (basic.settings.bugs_available.Modified(last_external_settings.bugs_available))
+    ActionInterface::SetBugs(basic.settings.bugs, false);
+
+  last_external_settings = basic.settings;
+}
+
 static void
 QNHProcessTimer()
 {
@@ -248,6 +260,7 @@ ManualWindProcessTimer()
 static void
 SettingsProcessTimer()
 {
+  BugsProcessTimer();
   QNHProcessTimer();
   MacCreadyProcessTimer();
   BallastDumpProcessTimer();
