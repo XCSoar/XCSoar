@@ -196,6 +196,15 @@ FillPortTypes(DataFieldEnum &df, const DeviceConfig &config)
 }
 
 static void
+SetPort(DataFieldEnum &df, DeviceConfig::PortType type, const TCHAR *value)
+{
+  assert(value != NULL);
+
+  if (!df.Set(value))
+    df.Set(AddPort(df, type, value));
+}
+
+static void
 FillSerialPorts(DataFieldEnum &df, const DeviceConfig &config)
 {
 #if defined(HAVE_POSIX)
@@ -207,12 +216,8 @@ FillSerialPorts(DataFieldEnum &df, const DeviceConfig &config)
     FillDefaultSerialPorts(df);
 #endif
 
-  if (config.port_type == DeviceConfig::PortType::SERIAL) {
-    if (!df.Exists(config.path))
-        AddPort(df, config.port_type, config.path);
-
-    df.SetAsString(config.path);
-  }
+  if (config.port_type == DeviceConfig::PortType::SERIAL)
+    SetPort(df, config.port_type, config.path);
 }
 
 static void
@@ -249,12 +254,8 @@ FillAndroidBluetoothPorts(DataFieldEnum &df, const DeviceConfig &config)
   env->DeleteLocalRef(bonded);
 
   if (config.port_type == DeviceConfig::PortType::RFCOMM &&
-      !config.bluetooth_mac.empty()) {
-    if (!df.Exists(config.bluetooth_mac))
-      AddPort(df, DeviceConfig::PortType::RFCOMM, config.bluetooth_mac);
-
-    df.SetAsString(config.bluetooth_mac);
-  }
+      !config.bluetooth_mac.empty())
+    SetPort(df, DeviceConfig::PortType::RFCOMM, config.bluetooth_mac);
 #endif
 }
 
@@ -269,14 +270,12 @@ FillAndroidIOIOPorts(DataFieldEnum &df, const DeviceConfig &config)
   for (unsigned i = 0; i < AndroidIOIOUartPort::getNumberUarts(); i++) {
     _sntprintf(tempID, sizeof(tempID), _T("%d"), i);
     _sntprintf(tempName, sizeof(tempName), _T("IOIO Uart %d"), i);
-    AddPort(df, DeviceConfig::PortType::IOIOUART, tempID, tempName,
-            AndroidIOIOUartPort::getPortHelp(i));
-  }
-
-  if (config.port_type == DeviceConfig::PortType::IOIOUART &&
-      config.ioio_uart_id < AndroidIOIOUartPort::getNumberUarts()) {
-    _sntprintf(tempID,  sizeof(tempID), _T("%d"), config.ioio_uart_id);
-    df.SetAsString(tempID);
+    unsigned id = AddPort(df, DeviceConfig::PortType::IOIOUART,
+                          tempID, tempName,
+                          AndroidIOIOUartPort::getPortHelp(i));
+    if (config.port_type == DeviceConfig::PortType::IOIOUART &&
+        config.ioio_uart_id == i)
+      df.Set(id);
   }
 #endif
 }
@@ -321,28 +320,23 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config)
     break;
 
   case DeviceConfig::PortType::SERIAL:
-    if (!df.Exists(config.path))
-      AddPort(df, config.port_type, config.path);
-    df.SetAsString(config.path);
+    SetPort(df, config.port_type, config.path);
     return;
 
   case DeviceConfig::PortType::RFCOMM:
-    if (!df.Exists(config.bluetooth_mac))
-      AddPort(df, DeviceConfig::PortType::RFCOMM, config.bluetooth_mac);
-
-    df.SetAsString(config.bluetooth_mac);
+    SetPort(df, config.port_type, config.bluetooth_mac);
     return;
 
   case DeviceConfig::PortType::IOIOUART:
     StaticString<16> buffer;
     buffer.UnsafeFormat(_T("%d"), config.ioio_uart_id);
-    df.SetAsString(buffer);
+    df.Set(buffer);
     return;
   }
 
   for (unsigned i = 0; port_types[i].label != NULL; i++) {
     if (port_types[i].type == config.port_type) {
-      df.SetAsString(port_types[i].label);
+      df.Set(port_types[i].label);
       break;
     }
   }
@@ -382,7 +376,7 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config)
 
   WndProperty &driver_control = GetControl(Driver);
   DataFieldEnum &driver_df = *(DataFieldEnum *)driver_control.GetDataField();
-  driver_df.SetAsString(config.driver_name);
+  driver_df.Set(config.driver_name);
   driver_control.RefreshDisplay();
 
   WndProperty &sync_from_control = GetControl(SyncFromDevice);
@@ -496,7 +490,6 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
   DataFieldEnum *port_df = new DataFieldEnum(OnDataField);
-  port_df->SetDetachGUI(true);
   FillPorts(*port_df, config);
   Add(_("Port"), NULL, port_df);
 
@@ -519,13 +512,12 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   Add(_("TCP Port"), NULL, tcp_port_df);
 
   DataFieldEnum *driver_df = new DataFieldEnum(OnDataField);
-  driver_df->SetDetachGUI(true);
   const TCHAR *driver_name;
   for (unsigned i = 0; (driver_name = GetDriverNameByIndex(i)) != NULL; i++)
     driver_df->addEnumText(driver_name, GetDriverDisplayNameByIndex(i));
 
   driver_df->Sort(1);
-  driver_df->SetAsString(config.driver_name);
+  driver_df->Set(config.driver_name);
 
   Add(_("Driver"), NULL, driver_df);
 
@@ -546,9 +538,6 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                "allow it's data to be used anyway."),
              config.ignore_checksum);
   SetExpertRow(IgnoreCheckSum);
-
-  port_df->SetDetachGUI(false);
-  driver_df->SetDetachGUI(false);
 
   UpdateVisibilities();
 }
