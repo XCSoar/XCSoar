@@ -34,29 +34,31 @@ Copyright_License {
 
 NOAAStore *noaa_store;
 
+static bool
+IsValidCode(const TCHAR* code)
+{
+  for (unsigned i = 0; i < 4; ++i)
+    if (code[i] < _T('A') || code[i] > _T('Z'))
+      return false;
+
+  return true;
+}
+
 bool
 NOAAStore::LoadFromString(const TCHAR *string)
 {
-  TCHAR code[5];
-  for (unsigned i = 0; *string != '\0'; string++) {
-    // New code
-    if (*string == ',' && i == 4) {
+  const TCHAR *s = string;
+  while (s != NULL && *s) {
+    const TCHAR *next = _tcschr(s, _T(','));
+    if ((next != NULL && next - s == 4) || (next == NULL && _tcslen(s) == 4)) {
+      TCHAR code[5];
+      std::copy(s, s+4, code);
       code[4] = '\0';
-      AddStation(code);
-
-      i = 0;
-      continue;
+      if (IsValidCode(code))
+        AddStation(code);
     }
-
-    // Skip additional characters
-    // Skip characters outside of A-Z
-    if (i >= 4 || *string <= 'A' || *string >= 'Z')
-      continue;
-
-    code[i] = *string;
-    i++;
+    s = (next == NULL) ? NULL : next + 1;
   }
-
   return true;
 }
 
