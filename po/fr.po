@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-21 21:10+0100\n"
-"PO-Revision-Date: 2012-02-20 21:42+0000\n"
+"PO-Revision-Date: 2012-02-22 20:40+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-21 20:12+0000\n"
+"X-Launchpad-Export-Date: 2012-02-23 00:04+0000\n"
 "X-Generator: Launchpad (build 14838)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -2134,14 +2134,14 @@ msgstr ""
 "équipement externe. Sinon l'estimation interne du vent est utilisée."
 
 #: src/InfoBoxes/Content/Factory.cpp:1009
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain collision"
-msgstr "couleur relief"
+msgstr "Collision avec le terrain"
 
 #: src/InfoBoxes/Content/Factory.cpp:1010
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terr Coll"
-msgstr "Terrain on"
+msgstr "Coll Terr"
 
 #: src/InfoBoxes/Content/Factory.cpp:1011
 #, no-c-format
@@ -2150,6 +2150,9 @@ msgid ""
 "this location, the altitude will be below the configured terrain clearance "
 "altitude."
 msgstr ""
+"Distance à la prochaine collision avec le terrain le long de la branche de "
+"circuit actuelle. A cet endroit, l'altitude devient inférieure à la "
+"clairance du terrain configurée par l'utilisateur."
 
 #: src/InfoBoxes/Content/Altitude.cpp:53
 #: src/MapWindow/GlueMapWindowOverlays.cpp:266
@@ -4143,9 +4146,8 @@ msgid ""
 msgstr "Affiche le profile d'ascendance, affiché sur la carte"
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:73
-#, fuzzy
 msgid "Final glide bar MC0"
-msgstr "Plané Final"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:74
 msgid ""
@@ -5134,14 +5136,11 @@ msgid "Polar degradation"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:87
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "A permanent polar degradation. 0% means no degradation, 50% indicates the "
 "glider's sink rate is doubled."
 msgstr ""
-"Propreté du planeur. Mettre 0% pour propre, et des valeurs plus élevées "
-"lorsque les ailes se salissent de moucherons ou sont mouillées. 50%  indique "
-"un doublement du taux de chute."
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:96
 msgid ""
@@ -9496,6 +9495,9 @@ msgstr ""
 
 #~ msgid "Topology on"
 #~ msgstr "Topologie On"
+
+#~ msgid "Terrain on"
+#~ msgstr "Terrain on"
 
 #~ msgid "Thermal last 30 sec"
 #~ msgstr "Thermique dure 30 seconde"
