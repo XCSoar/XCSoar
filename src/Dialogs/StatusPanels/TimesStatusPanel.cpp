@@ -34,7 +34,7 @@ TimesStatusPanel::Refresh()
   const NMEAInfo &basic = CommonInterface::Basic();
   const FlyingState &flight = CommonInterface::Calculated().flight;
 
-  TCHAR Temp[64];
+  StaticString<64> temp;
 
   if (basic.location_available && basic.date_available) {
     SunEphemeris::Result sun = SunEphemeris::CalcSunTimes(
@@ -43,38 +43,49 @@ TimesStatusPanel::Refresh()
     int sunsethours = (int)sun.time_of_sunset;
     int sunsetmins = (int)((sun.time_of_sunset - fixed(sunsethours)) * 60);
 
-    _stprintf(Temp, _T("%02d:%02d"), sunsethours, sunsetmins);
-    SetFormValue(form, _T("prpSunset"), Temp);
+    temp.Format(_T("%02d:%02d"), sunsethours, sunsetmins);
+    SetFormValue(form, _T("prpSunset"), temp);
   } else {
     SetFormValue(form, _T("prpSunset"), _T(""));
   }
 
   if (basic.time_available) {
-    FormatSignedTimeHHMM(Temp, DetectCurrentTime(basic));
-    SetFormValue(form, _T("prpLocalTime"), Temp);
+    FormatSignedTimeHHMM(temp.buffer(), DetectCurrentTime(basic));
+    SetFormValue(form, _T("prpLocalTime"), temp);
+    FormatSignedTimeHHMM(temp.buffer(), (int) basic.time);
+    SetFormValue(form, _T("prpUTCTime"), temp);
   } else {
     SetFormValue(form, _T("prpLocalTime"), _T(""));
+    SetFormValue(form, _T("prpUTCTime"), _T(""));
+  }
+
+  if (basic.date_available) {
+    temp.Format(_T("%04d-%02d-%02d"), basic.date_time_utc.year,
+                basic.date_time_utc.month, basic.date_time_utc.day);
+    SetFormValue(form, _T("prpUTCDate"), temp);
+  } else {
+    SetFormValue(form, _T("prpUTCDate"), _T(""));
   }
 
   if (positive(flight.flight_time)) {
-    FormatSignedTimeHHMM(Temp, TimeLocal((long)flight.takeoff_time));
-    SetFormValue(form, _T("prpTakeoffTime"), Temp);
+    FormatSignedTimeHHMM(temp.buffer(), TimeLocal((long)flight.takeoff_time));
+    SetFormValue(form, _T("prpTakeoffTime"), temp);
   } else {
     SetFormValue(form, _T("prpTakeoffTime"), _T(""));
   }
 
   if (!flight.flying && positive(flight.flight_time)) {
-    FormatSignedTimeHHMM(Temp,
+    FormatSignedTimeHHMM(temp.buffer(),
                       TimeLocal((long)(flight.takeoff_time
                                        + flight.flight_time)));
-    SetFormValue(form, _T("prpLandingTime"), Temp);
+    SetFormValue(form, _T("prpLandingTime"), temp);
   } else {
     SetFormValue(form, _T("prpLandingTime"), _T(""));
   }
 
   if (positive(flight.flight_time)) {
-    FormatSignedTimeHHMM(Temp, (int)flight.flight_time);
-    SetFormValue(form, _T("prpFlightTime"), Temp);
+    FormatSignedTimeHHMM(temp.buffer(), (int)flight.flight_time);
+    SetFormValue(form, _T("prpFlightTime"), temp);
   } else {
     SetFormValue(form, _T("prpFlightTime"), _T(""));
   }
