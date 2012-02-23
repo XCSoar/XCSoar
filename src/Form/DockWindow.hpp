@@ -52,6 +52,10 @@ public:
     return widget;
   }
 
+  const Widget *GetWidget() const {
+    return widget;
+  }
+
   /**
    * Call Widget::Move() again.  This should never be needed, as the
    * Widget is supposed to be at the position already.  It's a hack to
