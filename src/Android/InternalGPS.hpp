@@ -32,7 +32,7 @@ Copyright_License {
 class Context;
 
 class InternalGPS : public Java::Object {
-  jmethodID mid_setLocationProvider;
+  jmethodID close_method;
 
   InternalGPS(JNIEnv *env, jobject obj);
 

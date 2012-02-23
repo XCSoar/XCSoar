@@ -28,6 +28,7 @@ that have native methods, to prepare for calling "javah".
       <include name="Timer.java"/>
       <include name="InternalGPS.java"/>
       <include name="Settings.java"/>
+      <include name="SafeDestruct.java"/>
     </javac>
   </target>
 </project>

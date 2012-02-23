@@ -10,6 +10,7 @@ Version 6.2.6 - not yet released
 * devices:
   - Vega: fix Vega configuration dialog
   - Android: don't auto-reopen the internal GPS periodically
+  - Android: fix deadlock when internal GPS is disabled
 * fix parsing of weather station codes read from profile
 
 Version 6.2.5 - 2012/01/27

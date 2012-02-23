@@ -33,14 +33,13 @@ InternalGPS::InternalGPS(JNIEnv *env, jobject obj)
   :Java::Object(env, obj)
 {
   Java::Class cls(env, env->GetObjectClass(obj));
-  mid_setLocationProvider = env->GetMethodID(cls, "setLocationProvider",
-                                             "(Ljava/lang/String;)V");
+  close_method = env->GetMethodID(cls, "close", "()V");
 }
 
 InternalGPS::~InternalGPS()
 {
   JNIEnv *env = Java::GetEnv();
-  env->CallVoidMethod(get(), mid_setLocationProvider, NULL);
+  env->CallVoidMethod(get(), close_method);
 }
 
 InternalGPS *
