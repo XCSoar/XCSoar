@@ -160,6 +160,14 @@ struct DeviceConfig {
     return IsDriver(_T("Vega"));
   }
 
+  bool IsAndroidInternalGPS() {
+#ifdef ANDROID
+    return port_type == INTERNAL;
+#else
+    return false;
+#endif
+  }
+
   void Clear() {
     port_type = DISABLED;
     baud_rate = 4800u;

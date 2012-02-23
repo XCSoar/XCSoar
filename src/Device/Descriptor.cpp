@@ -201,6 +201,8 @@ void
 DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 {
   if (is_altair() || !config.IsAvailable() || config.IsServer() ||
+      /* reopening the Android internal GPS doesn't help */
+      config.IsAndroidInternalGPS() ||
       IsConnected() || (driver != NULL && !driver->HasTimeout()) ||
       /* attempt to reopen a failed device every 30 seconds */
       !reopen_clock.check_update(30000))
