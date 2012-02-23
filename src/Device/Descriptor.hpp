@@ -46,7 +46,7 @@ class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
 
-class DeviceDescriptor : public Port::Handler {
+class DeviceDescriptor : Port::Handler {
   /** the index of this device in the global list */
   unsigned index;
 
