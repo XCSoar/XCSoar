@@ -458,9 +458,15 @@ DeviceDescriptor::EnableDownloadMode()
   if (port == NULL || device == NULL)
     return false;
 
+  SetBusy(true);
   port->StopRxThread();
   bool result = device->EnableDownloadMode();
-  port->StartRxThread();
+  if (!result) {
+    /* roll back */
+    SetBusy(false);
+    port->StartRxThread();
+  }
+
   return result;
 }
 
@@ -470,9 +476,11 @@ DeviceDescriptor::DisableDownloadMode()
   if (port == NULL || device == NULL)
     return false;
 
-  port->StopRxThread();
+  assert(IsBusy());
+
   bool result = device->DisableDownloadMode();
   port->StartRxThread();
+  SetBusy(false);
   return result;
 }
 
@@ -487,10 +495,7 @@ DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
   text.Format(_T("%s: %s."), _("Reading flight list"), driver->display_name);
   env.SetText(text);
 
-  port->StopRxThread();
-  bool result = device->ReadFlightList(flight_list, env);
-  port->StartRxThread();
-  return result;
+  return device->ReadFlightList(flight_list, env);
 }
 
 bool
@@ -505,10 +510,7 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
   text.Format(_T("%s: %s."), _("Downloading flight log"), driver->display_name);
   env.SetText(text);
 
-  port->StopRxThread();
-  bool result = device->DownloadFlight(flight, path, env);
-  port->StartRxThread();
-  return result;
+  return device->DownloadFlight(flight, path, env);
 }
 
 void

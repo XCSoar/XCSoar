@@ -134,11 +134,9 @@ public:
 static bool
 DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
 {
-  device.SetBusy(true);
   ReadFlightListJob job(device, flight_list);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
-  device.SetBusy(false);
   return job.GetResult();
 }
 
@@ -167,11 +165,9 @@ static bool
 DoDownloadFlight(DeviceDescriptor &device,
                  const RecordedFlightInfo &flight, const TCHAR *path)
 {
-  device.SetBusy(true);
   DownloadFlightJob job(device, flight, path);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
-  device.SetBusy(false);
   return job.GetResult();
 }
 
