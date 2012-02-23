@@ -37,10 +37,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * Code to support the growing suite of non-GPS sensors on Android platforms.
  */
@@ -90,10 +86,7 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
   // Handler for non-GPS sensor reading.
   private static Handler handler_;
 
-  // For waiting for updates to our sensor subscriptions.
-  private boolean awaiting_sensor_subscription_update_;
-  private final Lock sensor_subscription_update_lock_;
-  private final Condition sensor_subscription_update_condition_;
+  private final SafeDestruct safeDestruct = new SafeDestruct();
 
   /**
    * Index of this device in the global list. This value is extracted directly
@@ -124,11 +117,6 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
       default_sensors_[id] = sensor_manager_.getDefaultSensor(id);
     }
 
-    // Prepare locking/condition mechanism for sensor subscription updates.
-    awaiting_sensor_subscription_update_ = false;
-    sensor_subscription_update_lock_ = new ReentrantLock();
-    sensor_subscription_update_condition_ = sensor_subscription_update_lock_.newCondition();
-
     updateSensorSubscriptions();
   }
 
@@ -138,17 +126,9 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
    * change to enabled_sensors_.
    */
   private void updateSensorSubscriptions() {
-    sensor_subscription_update_lock_.lock();
-    try {
-      Log.d(TAG, "Triggering non-GPS sensor subscription update...");
-      handler_.post(this);
-      for (awaiting_sensor_subscription_update_ = true; awaiting_sensor_subscription_update_;) {
-        sensor_subscription_update_condition_.awaitUninterruptibly();
-      }
-      Log.d(TAG, "Non-GPS sensor subscription update complete.");
-    } finally {
-      sensor_subscription_update_lock_.unlock();
-    }
+    Log.d(TAG, "Triggering non-GPS sensor subscription update...");
+    handler_.removeCallbacks(this);
+    handler_.post(this);
   }
 
   /**
@@ -208,8 +188,10 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
 
   /** Cancel all sensor subscriptions. */
   public void cancelAllSensorSubscriptions() {
+    safeDestruct.beginShutdown();
     for (int id : SUPPORTED_SENSORS) enabled_sensors_[id] = false;
     updateSensorSubscriptions();
+    safeDestruct.finishShutdown();
   }
 
   /**
@@ -219,25 +201,18 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
    */
   @Override
   public void run() {
-    sensor_subscription_update_lock_.lock();
-    try {
-      // Clear out all sensor listening subscriptions and subscribe (all over
-      // again) to all desired sensors.
-      Log.d(TAG, "Updating non-GPS sensor subscriptions...");
-      sensor_manager_.unregisterListener(this);
-      for (int id : SUPPORTED_SENSORS) {
-        if (enabled_sensors_[id] && default_sensors_[id] != null) {
-          Log.d(TAG, "Subscribing to sensor ID " + id + " (" + default_sensors_[id].getName() + ")");
-          sensor_manager_.registerListener(this, default_sensors_[id],
-                                           sensor_manager_.SENSOR_DELAY_NORMAL);
-        }
+    // Clear out all sensor listening subscriptions and subscribe (all over
+    // again) to all desired sensors.
+    Log.d(TAG, "Updating non-GPS sensor subscriptions...");
+    sensor_manager_.unregisterListener(this);
+    for (int id : SUPPORTED_SENSORS) {
+      if (enabled_sensors_[id] && default_sensors_[id] != null) {
+        Log.d(TAG, "Subscribing to sensor ID " + id + " (" + default_sensors_[id].getName() + ")");
+        sensor_manager_.registerListener(this, default_sensors_[id],
+                                         sensor_manager_.SENSOR_DELAY_NORMAL);
       }
-      Log.d(TAG, "Done updating non-GPS sensor subscriptions...");
-      awaiting_sensor_subscription_update_ = false;
-      sensor_subscription_update_condition_.signal();
-    } finally {
-      sensor_subscription_update_lock_.unlock();
     }
+    Log.d(TAG, "Done updating non-GPS sensor subscriptions...");
   }
 
   /** from SensorEventListener; currently does nothing. */
@@ -246,7 +221,11 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
 
   /** from SensorEventListener; report new sensor values to XCSoar. */
   public void onSensorChanged(SensorEvent event) {
-    switch (event.sensor.getType()) {
+    if (!safeDestruct.Increment())
+      return;
+
+    try {
+      switch (event.sensor.getType()) {
       case Sensor.TYPE_ACCELEROMETER:
         setAcceleration(event.values[0], event.values[1], event.values[2]);
         break;
@@ -259,6 +238,9 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
       case Sensor.TYPE_PRESSURE:
         setBarometricPressure(event.values[0]);
         break;
+      }
+    } finally {
+      safeDestruct.Decrement();
     }
   }
 
