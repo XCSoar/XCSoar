@@ -516,7 +516,7 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
 void
 DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
 {
-  if (device == NULL || IsBusy())
+  if (device == NULL)
     return;
 
   const bool now_connected = IsConnected();
