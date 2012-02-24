@@ -88,15 +88,19 @@ DeviceDeclare(DeviceDescriptor *dev, const Declaration &declaration)
   if (!dev->CanDeclare())
     return false;
 
+  const TCHAR *caption = dev->GetDisplayName();
+  if (caption == NULL)
+    caption = _("Declare task");
+
   if (MessageBoxX(_("Declare task?"),
-                  dev->GetDisplayName(), MB_YESNO| MB_ICONQUESTION) == IDYES) {
+                  caption, MB_YESNO| MB_ICONQUESTION) == IDYES) {
     if (DoDeviceDeclare(*dev, declaration)) {
       MessageBoxX(_("Task declared!"),
-                  dev->GetDisplayName(), MB_OK| MB_ICONINFORMATION);
+                  caption, MB_OK| MB_ICONINFORMATION);
       DeclaredToDevice = true;
     } else {
       MessageBoxX(_("Error occured,\nTask NOT declared!"),
-                  dev->GetDisplayName(), MB_OK| MB_ICONERROR);
+                  caption, MB_OK| MB_ICONERROR);
     }
   }
 
