@@ -203,6 +203,11 @@ struct DerivedInfo:
   void ResetFlight(bool full);
 
   void Expire(fixed Time);
+
+  void ProvideAutoMacCready(fixed clock, fixed mc) {
+    auto_mac_cready = mc;
+    auto_mac_cready_available.Update(clock);
+  }
 };
 
 #endif

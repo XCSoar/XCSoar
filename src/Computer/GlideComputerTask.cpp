@@ -81,10 +81,9 @@ GlideComputerTask::ProcessBasicTask()
       positive(derived.last_thermal_average_smooth)
       ? derived.last_thermal_average_smooth
       : fixed_zero;
-    if (task->update_auto_mc(current_as, fallback_mc)) {
-      derived.auto_mac_cready = task->get_glide_polar().GetMC();
-      derived.auto_mac_cready_available.Update(basic.clock);
-    }
+    if (task->update_auto_mc(current_as, fallback_mc))
+      derived.ProvideAutoMacCready(basic.clock,
+                                   task->get_glide_polar().GetMC());
   }
 
   SetCalculated().task_stats = task->get_stats();
