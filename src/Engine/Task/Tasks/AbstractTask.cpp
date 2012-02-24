@@ -38,8 +38,7 @@ AbstractTask::AbstractTask(enum Type _type,
    mc_lpf(fixed(8)),
    ce_lpf(fixed(60)),
    em_lpf(fixed(60)),
-   mc_lpf_valid(false),
-   trigger_auto(false)
+   mc_lpf_valid(false)
 {
    stats.reset();
 }
@@ -48,51 +47,50 @@ bool
 AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
                            const AircraftState& state, fixed fallback_mc)
 {
-  if (!positive(fallback_mc))
-    fallback_mc = glide_polar.GetMC();
-
-  if (!TaskStarted(true) || !task_behaviour.auto_mc) {
+  if (!task_behaviour.auto_mc) {
+    /* AutoMC disabled in configuration */
     ResetAutoMC();
     return false;
   }
 
-  if (task_behaviour.auto_mc_mode == TaskBehaviour::AutoMCMode::CLIMBAVERAGE) {
-    stats.mc_best = mc_lpf.reset(fallback_mc);
-    mc_lpf_valid = true;
-    trigger_auto = false;
-    return false;
-  }
-
   fixed mc_found;
-  if (CalcBestMC(state, glide_polar, mc_found)) {
-    // improved solution found, activate auto fg mode
-    if (mc_found > stats.mc_best)
-      trigger_auto = true;
-  } else {
-    // no solution even at mc=0, deactivate auto fg mode
-    trigger_auto = false;
-  }
+  if (task_behaviour.auto_mc_mode != TaskBehaviour::AutoMCMode::CLIMBAVERAGE &&
+      TaskStarted(true) && CalcBestMC(state, glide_polar, mc_found)) {
+    /* final glide MacCready found */
 
-  if (!trigger_auto &&
-      task_behaviour.auto_mc_mode == TaskBehaviour::AutoMCMode::FINALGLIDE &&
-      stats.mc_best >= fixed(0.05)) {
+    if (mc_lpf_valid)
+      stats.mc_best = std::max(mc_lpf.update(mc_found), fixed_zero);
+    else
+      stats.mc_best = std::max(mc_lpf.reset(mc_found), fixed_zero);
+    glide_polar.SetMC(stats.mc_best);
+    return true;
+  } else if (task_behaviour.auto_mc_mode != TaskBehaviour::AutoMCMode::FINALGLIDE) {
+    /* cruise: set MacCready to recent climb average */
+
+    if (!positive(fallback_mc)) {
+      /* no climb average calculated yet */
+      ResetAutoMC();
+      return false;
+    }
+
+    stats.mc_best = fallback_mc;
+    glide_polar.SetMC(stats.mc_best);
+    return true;
+  } else if (TaskStarted(true)) {
     /* no solution, but forced final glide AutoMacCready - converge to
        zero */
+
     mc_found = fixed_zero;
-    trigger_auto = true;
-  }
-
-  if (trigger_auto && mc_lpf_valid) {
-    // smooth out updates
-    stats.mc_best = std::max(mc_lpf.update(mc_found), fixed_zero);
+    if (mc_lpf_valid)
+      stats.mc_best = std::max(mc_lpf.update(mc_found), fixed_zero);
+    else
+      stats.mc_best = std::max(mc_lpf.reset(mc_found), fixed_zero);
     glide_polar.SetMC(stats.mc_best);
+    return true;
   } else {
-    // reset lpf so will be smooth next time it becomes active
-    stats.mc_best = mc_lpf.reset(fallback_mc);
-    mc_lpf_valid = true;
+    ResetAutoMC();
+    return false;
   }
-
-  return trigger_auto;
 }
 
 bool 
@@ -290,7 +288,6 @@ void
 AbstractTask::ResetAutoMC()
 {
   mc_lpf_valid = false;
-  trigger_auto = false;
 }
 
 void 

@@ -70,9 +70,6 @@ private:
    */
   bool mc_lpf_valid;
 
-  /** whether auto MC has been triggered (above final glide) */
-  bool trigger_auto;
-
 public:
   /** 
    * Base constructor.  Sets time constants of Best Mc and cruise efficiency

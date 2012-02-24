@@ -224,6 +224,16 @@ struct DerivedInfo:
       ? wind
       : SpeedVector::Zero();
   }
+
+  void ProvideAutoMacCready(fixed clock, fixed mc) {
+    if (auto_mac_cready_available &&
+        fabs(auto_mac_cready - mc) < fixed(0.05))
+      /* change is too small, ignore the new value to limit the rate */
+      return;
+
+    auto_mac_cready = mc;
+    auto_mac_cready_available.Update(clock);
+  }
 };
 
 static_assert(is_trivial_ndebug<DerivedInfo>::value, "type is not trivial");

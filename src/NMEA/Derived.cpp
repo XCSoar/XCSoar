@@ -103,6 +103,6 @@ DerivedInfo::Expire(fixed Time)
 
   head_wind_available.Expire(Time, fixed(3));
 
-  auto_mac_cready_available.Expire(Time, fixed(300));
+  auto_mac_cready_available.Expire(Time, fixed(3600));
   sun_data_available.Expire(Time, fixed(3600));
 }
