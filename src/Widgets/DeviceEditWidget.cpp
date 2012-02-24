@@ -392,6 +392,8 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config)
       *(DataFieldBoolean *)ignore_checksum_control.GetDataField();
   ignore_checksum_df.Set(config.ignore_checksum);
   ignore_checksum_control.RefreshDisplay();
+
+  UpdateVisibilities();
 }
 
 gcc_pure
