@@ -143,6 +143,12 @@ namespace LX {
 #pragma pack(pop)
 
   static inline bool
+  SendSYN(Port &port)
+  {
+    return port.Write(SYN);
+  }
+
+  static inline bool
   ExpectACK(Port &port, OperationEnvironment &env)
   {
     return port.WaitForChar(ACK, env, 2000) == Port::WaitResult::READY;
@@ -156,7 +162,7 @@ namespace LX {
   static inline bool
   Connect(Port &port, OperationEnvironment &env)
   {
-    return port.Write(SYN) && ExpectACK(port, env);
+    return SendSYN(port) && ExpectACK(port, env);
   }
 
   /**

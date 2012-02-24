@@ -28,7 +28,7 @@ bool
 LX::CommandMode(Port &port, OperationEnvironment &env)
 {
   /* switch to command mode, first attempt */
-  port.Write(SYN);
+  SendSYN(port);
 
   /* now flush all of the remaining input */
   port.SetRxTimeout(10);
@@ -45,11 +45,11 @@ LX::CommandMode(Port &port, OperationEnvironment &env)
 void
 LX::CommandModeQuick(Port &port, OperationEnvironment &env)
 {
-  port.Write(SYN);
+  SendSYN(port);
   env.Sleep(500);
-  port.Write(SYN);
+  SendSYN(port);
   env.Sleep(500);
-  port.Write(SYN);
+  SendSYN(port);
   env.Sleep(500);
 }
 
