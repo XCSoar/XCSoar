@@ -146,12 +146,12 @@ struct DeviceConfig {
   gcc_pure
   bool IsAvailable() const;
 
-  static bool MaybeBluetooth(PortType port_type) {
+  static bool MaybeBluetooth(PortType port_type, const TCHAR *path) {
     if (port_type == PortType::RFCOMM)
       return true;
 
 #ifdef HAVE_POSIX
-    if (port_type == PortType::SERIAL)
+    if (port_type == PortType::SERIAL && _tcsstr(path, _T("/rfcomm")) != NULL)
       return true;
 #endif
 
