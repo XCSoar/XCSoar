@@ -520,13 +520,13 @@ DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
     return;
 
   const bool now_connected = IsConnected();
-  if (!now_connected && was_connected)
+  if (!now_connected && was_connected && !IsBusy())
     /* connection was just lost */
     device->LinkTimeout();
 
   was_connected = now_connected;
 
-  if (now_connected) {
+  if (now_connected || IsBusy()) {
     ticker = !ticker;
     if (ticker)
       // write settings to vario every second
