@@ -91,6 +91,16 @@ public:
     return StringIsEqual(data, other);
   }
 
+  gcc_pure
+  bool StartsWith(const T *prefix) const {
+    return StringStartsWith(data, prefix);
+  }
+
+  gcc_pure
+  bool Contains(const T *needle) const {
+    return StringFind(data, needle) != NULL;
+  }
+
   /**
    * Returns a writable buffer.
    */

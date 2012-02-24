@@ -61,6 +61,38 @@ StringLength(const TCHAR *p)
 }
 #endif
 
+gcc_pure
+static inline bool
+StringStartsWith(const char *haystack, const char *needle)
+{
+  return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0]));
+}
+
+#ifdef _UNICODE
+gcc_pure
+static inline bool
+StringStartsWith(const TCHAR *haystack, const TCHAR *needle)
+{
+  return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0]));
+}
+#endif
+
+gcc_pure
+static inline const char *
+StringFind(const char *haystack, const char *needle)
+{
+  return strstr(haystack, needle);
+}
+
+#ifdef _UNICODE
+gcc_pure
+static inline const TCHAR *
+StringFind(const TCHAR *haystack, const TCHAR *needle)
+{
+  return _tcsstr(haystack, needle);
+}
+#endif
+
 static inline char *
 StringToken(char *str, const char *delim)
 {
