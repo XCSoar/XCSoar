@@ -874,15 +874,20 @@ TestFlightList(const struct DeviceRegister &driver)
   Device *device = driver.CreateOnPort(dummy_config, port);
   ok1(device != NULL);
 
+  NullOperationEnvironment env;
+  if (!device->EnableDownloadMode(env))
+    return;
+
   for (unsigned i = 0; i < 1024; ++i) {
     inject_port_fault = i;
-    NullOperationEnvironment env;
     RecordedFlightList flight_list;
     bool success = device->ReadFlightList(flight_list, env);
     if (success || !port.running || port.timeout != 0 ||
         port.baud_rate != FaultInjectionPort::DEFAULT_BAUD_RATE)
       break;
   }
+
+  ok1(device->DisableDownloadMode());
 
   ok1(port.running);
   ok1(port.baud_rate == FaultInjectionPort::DEFAULT_BAUD_RATE);
