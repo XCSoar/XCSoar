@@ -95,5 +95,5 @@ DerivedInfo::Expire(fixed Time)
   /* the estimated wind remains valid for an hour */
   estimated_wind_available.Expire(Time, fixed(3600));
 
-  auto_mac_cready_available.Expire(Time, fixed(300));
+  auto_mac_cready_available.Expire(Time, fixed(3600));
 }
