@@ -146,6 +146,44 @@ struct DeviceConfig {
   gcc_pure
   bool IsAvailable() const;
 
+  static bool MaybeBluetooth(PortType port_type) {
+    if (port_type == PortType::RFCOMM)
+      return true;
+
+#ifdef HAVE_POSIX
+    if (port_type == PortType::SERIAL)
+      return true;
+#endif
+
+#ifdef _WIN32_WCE
+    /* on Windows CE, any serial port may be mapped to a Bluetooth
+       driver */
+    if (port_type == PortType::SERIAL)
+      return true;
+#endif
+
+    return false;
+  }
+
+  bool MaybeBluetooth() const {
+    if (port_type == PortType::RFCOMM)
+      return true;
+
+#ifdef HAVE_POSIX
+    if (port_type == PortType::SERIAL && path.Contains("/rfcomm"))
+      return true;
+#endif
+
+#ifdef _WIN32_WCE
+    /* on Windows CE, any serial port may be mapped to a Bluetooth
+       driver */
+    if (port_type == PortType::SERIAL)
+      return true;
+#endif
+
+    return false;
+  }
+
   bool UsesSpeed() const {
     return UsesSpeed(port_type);
   }
