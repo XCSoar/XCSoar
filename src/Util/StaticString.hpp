@@ -34,9 +34,6 @@
 
 #include <assert.h>
 #include <stddef.h>
-#include <string.h>
-#include <stdio.h>
-#include <tchar.h>
 #include <algorithm>
 
 /**
@@ -60,50 +57,8 @@ public:
     set(value);
   }
 
-private:
-#ifdef _UNICODE
-  static size_type length(const char *data) {
-    return strlen(data);
-  }
-
-  static char *strtok(char *data, const char *delim) {
-    return strtok(data, delim);
-  }
-
-  template<typename... Args>
-  static void FormatInternal(char *data, size_type max_size,
-                             const char *fmt, Args&&... args) {
-    ::snprintf(data, max_size, fmt, args...);
-  }
-
-  template<typename... Args>
-  static void UnsafeFormatInternal(char *data, const char *fmt, Args&&... args) {
-    ::sprintf(data, fmt, args...);
-  }
-#endif
-
-  static size_type length(const TCHAR *data) {
-    return _tcslen(data);
-  }
-
-  static TCHAR *strtok(TCHAR *data, const TCHAR *delim) {
-    return _tcstok(data, delim);
-  }
-
-  template<typename... Args>
-  static void FormatInternal(TCHAR *data, size_type max_size,
-                             const TCHAR *fmt, Args&&... args) {
-    ::_sntprintf(data, max_size, fmt, args...);
-  }
-
-  template<typename... Args>
-  static void UnsafeFormatInternal(TCHAR *data, const TCHAR *fmt, Args&&... args) {
-    ::_stprintf(data, fmt, args...);
-  }
-
-public:
   size_type length() const {
-    return length(data);
+    return StringLength(data);
   }
 
   bool empty() const {
@@ -253,14 +208,14 @@ public:
    * Don't use - not thread safe.
    */
   T *first_token(const T *delim) {
-    return strtok(data, delim);
+    return StringToken(data, delim);
   }
 
   /**
    * Don't use - not thread safe.
    */
   T *next_token(const T *delim) {
-    return strtok(NULL, delim);
+    return StringToken(NULL, delim);
   }
 
   /**
@@ -269,7 +224,7 @@ public:
    */
   template<typename... Args>
   void Format(const T *fmt, Args&&... args) {
-    FormatInternal(data, MAX_SIZE, fmt, args...);
+    StringFormat(data, MAX_SIZE, fmt, args...);
   }
 
   /**
@@ -279,7 +234,7 @@ public:
   template<typename... Args>
   void AppendFormat(const T *fmt, Args&&... args) {
     size_t l = length();
-    FormatInternal(data + l, MAX_SIZE - l, fmt, args...);
+    StringFormat(data + l, MAX_SIZE - l, fmt, args...);
   }
 
   /**
@@ -290,7 +245,7 @@ public:
    */
   template<typename... Args>
   void UnsafeFormat(const T *fmt, Args&&... args) {
-    UnsafeFormatInternal(data, fmt, args...);
+    StringFormatUnsafe(data, fmt, args...);
   }
 };
 

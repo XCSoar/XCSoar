@@ -28,6 +28,7 @@ Copyright_License {
 
 #include <tchar.h>
 #include <string.h>
+#include <stdio.h>
 #include <assert.h>
 
 static inline bool
@@ -41,6 +42,67 @@ static inline bool
 StringIsEmpty(const char *string)
 {
   return *string == 0;
+}
+#endif
+
+gcc_pure
+static inline size_t
+StringLength(const char *p)
+{
+  return strlen(p);
+}
+
+#ifdef _UNICODE
+gcc_pure
+static inline size_t
+StringLength(const TCHAR *p)
+{
+  return _tcslen(p);
+}
+#endif
+
+static inline char *
+StringToken(char *str, const char *delim)
+{
+  return strtok(str, delim);
+}
+
+#ifdef _UNICODE
+static inline TCHAR *
+StringToken(TCHAR *str, const TCHAR *delim)
+{
+  return _tcstok(str, delim);
+}
+#endif
+
+template<typename... Args>
+static inline void
+StringFormat(char *buffer, size_t size, const char *fmt, Args&&... args)
+{
+  snprintf(buffer, size, fmt, args...);
+}
+
+template<typename... Args>
+static inline void
+StringFormatUnsafe(char *buffer, const char *fmt, Args&&... args)
+{
+  sprintf(buffer, fmt, args...);
+}
+
+#ifdef _UNICODE
+template<typename... Args>
+static inline void
+StringFormat(TCHAR *buffer, size_t
+ size, const TCHAR *fmt, Args&&... args)
+{
+  _sntprintf(buffer, size, fmt, args...);
+}
+
+template<typename... Args>
+static inline void
+StringFormatUnsafe(TCHAR *buffer, const TCHAR *fmt, Args&&... args)
+{
+  _stprintf(buffer, fmt, args...);
 }
 #endif
 
