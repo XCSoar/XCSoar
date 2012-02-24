@@ -170,7 +170,7 @@ struct DeviceConfig {
       return true;
 
 #ifdef HAVE_POSIX
-    if (port_type == PortType::SERIAL && path.Contains("/rfcomm"))
+    if (port_type == PortType::SERIAL && path.Contains(_T("/rfcomm")))
       return true;
 #endif
 
