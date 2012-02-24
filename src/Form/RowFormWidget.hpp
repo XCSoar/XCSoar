@@ -435,6 +435,11 @@ public:
   gcc_pure
   fixed GetValueFloat(unsigned i) const;
 
+  gcc_pure
+  const TCHAR *GetValueString(unsigned i) const {
+    return GetDataField(i).GetAsString();
+  }
+
   bool SaveValue(unsigned i, bool &value, bool negated = false) const;
   bool SaveValue(unsigned i, int &value) const;
   bool SaveValue(unsigned i, uint16_t &value) const;
