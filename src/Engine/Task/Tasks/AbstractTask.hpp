@@ -68,9 +68,6 @@ private:
   /** low pass filter on effective MC calculations */
   Filter em_lpf;
 
-  /** whether auto MC has been triggered (above final glide) */
-  bool trigger_auto;
-
 public:
   /** 
    * Base constructor.  Sets time constants of Best Mc and cruise efficiency

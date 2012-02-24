@@ -7,6 +7,7 @@ Version 6.2.6 - not yet released
   - fix bogus terrain warnings
   - fix incorrect expiration of wind data, e.g. for temporary manually
     overridden automatic wind calculations results
+  - fix auto MacCready calculation
 * devices:
   - Vega: fix Vega configuration dialog
   - Android: don't auto-reopen the internal GPS periodically
