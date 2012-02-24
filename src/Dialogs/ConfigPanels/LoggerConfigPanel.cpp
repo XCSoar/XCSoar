@@ -123,7 +123,7 @@ LoggerConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValue(LoggerTimeStepCircling, szProfileLoggerTimeStepCircling,
                        logger.time_step_circling);
 
-  changed |= SaveValue(LoggerID, szProfilePilotName,
+  changed |= SaveValue(PilotName, szProfilePilotName,
                        logger.pilot_name.buffer(), logger.pilot_name.MAX_SIZE);
 
   plane_settings_changed |= SaveValue(AircraftType, plane.type.buffer(),
