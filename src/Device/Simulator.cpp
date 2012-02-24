@@ -118,8 +118,7 @@ Simulator::Touch(NMEAInfo &basic)
 
   basic.time_available.Update(basic.clock);
   basic.time += fixed_one;
-  (BrokenTime &)basic.date_time_utc =
-    BrokenTime::FromSecondOfDayChecked((unsigned)basic.time);
+  basic.date_time_utc = basic.date_time_utc + 1;
 }
 
 void
