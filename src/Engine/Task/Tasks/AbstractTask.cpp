@@ -48,7 +48,6 @@ bool
 AbstractTask::update_auto_mc(GlidePolar &glide_polar,
                              const AircraftState& state, fixed fallback_mc)
 {
-  fallback_mc = fixed(2.2);
   if (!task_behaviour.auto_mc) {
     /* AutoMC disabled in configuration */
     reset_auto_mc();
