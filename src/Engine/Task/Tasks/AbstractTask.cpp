@@ -58,10 +58,15 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
       TaskStarted(true) && stats.flight_mode_final_glide) {
     /* calculate final glide MacCready */
 
-    if (CalcBestMC(state, glide_polar, mc_found))
+    if (CalcBestMC(state, glide_polar, mc_found)) {
       /* final glide MacCready found */
-      stats.mc_best = std::max(mc_lpf.update(mc_found), fixed_zero);
-    else
+      if (mc_lpf_valid)
+        stats.mc_best = std::max(mc_lpf.update(mc_found), fixed_zero);
+      else {
+        stats.mc_best = std::max(mc_lpf.reset(mc_found), fixed_zero);
+        mc_lpf_valid = true;
+      }
+    } else
       /* below final glide, but above margin */
       stats.mc_best = fixed_zero;
 
@@ -86,8 +91,11 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
     mc_found = fixed_zero;
     if (mc_lpf_valid)
       stats.mc_best = std::max(mc_lpf.update(mc_found), fixed_zero);
-    else
+    else {
       stats.mc_best = std::max(mc_lpf.reset(mc_found), fixed_zero);
+      mc_lpf_valid = true;
+    }
+
     glide_polar.SetMC(stats.mc_best);
     return true;
   } else {
