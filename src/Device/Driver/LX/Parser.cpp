@@ -132,6 +132,23 @@ LXWP2(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
+static bool
+LXWP3(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
+{
+  /*
+   * $LXWP3,
+   * altioffset
+   * scmode
+   * variofil
+   * tefilter
+   * televel
+   * varioavg.
+   * glider name
+   * time offset
+   */
+  return true;
+}
+
 bool
 LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
@@ -147,6 +164,9 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   if (StringIsEqual(type, "$LXWP2"))
     return LXWP2(line, info);
+
+  if (StringIsEqual(type, "$LXWP3"))
+    return LXWP3(line, info);
 
   return false;
 }
