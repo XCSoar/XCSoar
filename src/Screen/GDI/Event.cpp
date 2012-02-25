@@ -26,6 +26,12 @@ Copyright_License {
 #include "Thread/Debug.hpp"
 #include "Asset.hpp"
 
+static bool
+IsKeyMessage(const MSG &msg)
+{
+  return msg.message == WM_KEYDOWN || msg.message == WM_KEYUP;
+}
+
 bool
 EventLoop::get(MSG &msg)
 {
@@ -33,6 +39,9 @@ EventLoop::get(MSG &msg)
 
   if (!::GetMessage(&msg, NULL, 0, 0))
     return false;
+
+  if (IsKeyMessage(msg))
+    msg.wParam = TranscodeKey(msg.wParam);
 
   return true;
 }

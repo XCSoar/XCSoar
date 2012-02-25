@@ -186,7 +186,7 @@ Window::on_message(HWND _hWnd, UINT message,
 #endif
 
   case WM_KEYDOWN:
-    if (on_key_down(::TranscodeKey(wParam))) {
+    if (on_key_down(wParam)) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
@@ -194,7 +194,7 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_KEYUP:
-    if (on_key_up(::TranscodeKey(wParam))) {
+    if (on_key_up(wParam)) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
