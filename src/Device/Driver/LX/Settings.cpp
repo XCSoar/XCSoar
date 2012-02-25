@@ -89,21 +89,21 @@ bool
 LXDevice::PutBugs(fixed bugs)
 {
   // This is a copy of the routine done in LK8000 for LX MiniMap, realized
-  // by Lx developers. We have no documentation and so we do not know what this
-  // exactly means.
+  // by Lx developers.
+
   char tmp[100];
-  int TransformedBugsValue = 100 - (int)(bugs*100);
-  sprintf(tmp, "PFLX2,,,%d,,,", TransformedBugsValue);
+  int transformed_bugs_value = 100 - (int)(bugs*100);
+  sprintf(tmp, "PFLX2,,,%d,,,", transformed_bugs_value);
   PortWriteNMEA(port, tmp);
   return true;
 }
 
 bool
-LXDevice::PutMacCready(fixed MacCready)
+LXDevice::PutMacCready(fixed mac_cready)
 {
-  char szTmp[32];
-  sprintf(szTmp, "PFLX2,%1.1f,,,,,,", (double)MacCready);
-  PortWriteNMEA(port, szTmp);
+  char tmp[32];
+  sprintf(tmp, "PFLX2,%1.1f,,,,,,", (double)mac_cready);
+  PortWriteNMEA(port, tmp);
   return true;
 }
 
