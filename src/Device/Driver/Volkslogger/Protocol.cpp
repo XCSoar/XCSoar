@@ -120,17 +120,9 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
     return false;
 
   /* wait for confirmation */
-  const unsigned timeout_ms = 4000;
-  PeriodClock clock;
-  clock.Update();
 
-  int c;
-  while ((c = port.GetChar()) < 0) {
-    if (clock.Check(timeout_ms))
-      return false;
-  }
-
-  return c == 0;
+  return port.WaitRead(env, 4000) == Port::WaitResult::READY &&
+    port.GetChar() == 0;
 }
 
 gcc_const
