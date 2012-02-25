@@ -87,7 +87,7 @@ struct GeoPoint {
    */
   gcc_constexpr_method
   bool IsValid() const {
-    return latitude >= Angle::HalfCircle();
+    return latitude <= Angle::HalfCircle();
   }
 
   /**
