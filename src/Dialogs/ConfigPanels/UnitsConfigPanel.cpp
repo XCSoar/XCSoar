@@ -255,10 +255,6 @@ UnitsConfigPanel::Init(WndForm *_wf)
   int utc_offset = XCSoarInterface::SettingsComputer().UTCOffset;
   LoadFormProperty(*wf, _T("prpUTCOffset"),
                    fixed(iround(fixed(utc_offset) / 1800)) / 2);
-#ifdef WIN32
-  if (is_embedded() && !is_altair())
-    ((WndProperty*)wf->FindByName(_T("prpUTCOffset")))->set_enabled(false);
-#endif
   SetLocalTime(utc_offset);
 
   loading = false;
