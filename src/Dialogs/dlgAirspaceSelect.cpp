@@ -306,13 +306,13 @@ FormKeyDown(WndForm &Sender, unsigned key_code){
   wp = ((WndProperty *)wf->FindByName(_T("prpFltType")));
 
   switch(key_code) {
-    case VK_F1:
+  case VK_APP1:
       NewIndex = WILDCARD;
     break;
-    case VK_F2:
+  case VK_APP2:
       NewIndex = RESTRICT;
     break;
-    case VK_F3:
+  case VK_APP3:
       NewIndex = PROHIBITED;
     break;
 

@@ -87,6 +87,8 @@ OnOKClicked(gcc_unused WndButton &Sender)
 static void InitTargetPoints();
 static void RefreshTargetPoint(void);
 
+#ifdef GNAV
+
 static void
 MoveTarget(gcc_unused double adjust_angle)
 {
@@ -177,13 +179,11 @@ static bool
 FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
   switch (key_code) {
-  case '2':
-  case VK_F2:
+  case VK_APP2:
     MoveTarget(0);
     return true;
 
-  case '3':
-  case VK_F3:
+  case VK_APP3:
     MoveTarget(180);
     return true;
 
@@ -198,6 +198,8 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 
   return false;
 }
+
+#endif /* GNAV */
 
 /* Lock target fields
  * if turnpoint does not have
@@ -522,7 +524,9 @@ dlgTargetShowModal(int TargetPoint)
 
   drawBtnNext();
 
+#ifdef GNAV
   wf->SetKeyDownNotify(FormKeyDown);
+#endif
   wf->SetTimerNotify(OnTimerNotify);
 
   wf->ShowModal();

@@ -855,15 +855,15 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
   type_filter NewIndex = filter_data.type_index;
 
   switch (key_code) {
-  case VK_F1:
+  case VK_APP1:
     NewIndex = tfAll;
     break;
 
-  case VK_F2:
+  case VK_APP2:
     NewIndex = tfLandable;
     break;
 
-  case VK_F3:
+  case VK_APP3:
     NewIndex = tfTurnpoint;
     break;
 
