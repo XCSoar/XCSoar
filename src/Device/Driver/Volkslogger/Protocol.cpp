@@ -35,7 +35,9 @@ Volkslogger::Reset(Port &port, OperationEnvironment &env, unsigned n)
   static const unsigned delay = 2;
 
   while (n-- > 0) {
-    port.Write(CAN);
+    if (!port.Write(CAN))
+      return false;
+
     env.Sleep(delay);
   }
 
@@ -113,7 +115,9 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
     0, 0, 0, 0, 0,
   };
 
-  port.Write(ENQ);
+  if (!port.Write(ENQ))
+    return false;
+
   env.Sleep(delay);
 
   if (!SendWithCRC(port, cmdarray, sizeof(cmdarray)))
@@ -186,7 +190,8 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
   env.Sleep(300);
   while (!ende) {
     // Zeichen anfordern und darauf warten
-    port.Write(ACK);
+    if (!port.Write(ACK))
+      return -1;
 
     int ch = port.GetChar();
     if (ch < 0)
@@ -301,12 +306,7 @@ Volkslogger::WriteBulk(Port &port, OperationEnvironment &env,
     env.Sleep(delay * 100);
   }
 
-  port.Write(crc16 >> 8);
-  env.Sleep(delay);
-  port.Write(crc16 & 0xff);
-  env.Sleep(delay);
-
-  return true;
+  return port.Write(crc16 >> 8) && port.Write(crc16 & 0xff);
 }
 
 int
