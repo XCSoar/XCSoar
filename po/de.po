@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-21 21:10+0100\n"
-"PO-Revision-Date: 2012-02-15 23:10+0000\n"
+"PO-Revision-Date: 2012-02-25 00:19+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-16 02:16+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-02-25 13:12+0000\n"
+"X-Generator: Launchpad (build 14860)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2126,14 +2126,14 @@ msgstr ""
 "verwendet."
 
 #: src/InfoBoxes/Content/Factory.cpp:1009
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain collision"
-msgstr "Geländefarben"
+msgstr "Geländekollision"
 
 #: src/InfoBoxes/Content/Factory.cpp:1010
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terr Coll"
-msgstr "Gelände an"
+msgstr "Gelände"
 
 #: src/InfoBoxes/Content/Factory.cpp:1011
 #, no-c-format
@@ -2142,6 +2142,9 @@ msgid ""
 "this location, the altitude will be below the configured terrain clearance "
 "altitude."
 msgstr ""
+"Der Weg bis zur nächsten Geländekollision entlang des aktuellen "
+"Kursschenkels. An diesem Punkt wird die Höhe die eingestellte "
+"Geländefreiheit unterschreiten."
 
 #: src/InfoBoxes/Content/Altitude.cpp:53
 #: src/MapWindow/GlueMapWindowOverlays.cpp:266
@@ -4172,15 +4175,16 @@ msgid ""
 msgstr "Aktiviert die Anzeige des Thermikprofils über der Karte."
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:73
-#, fuzzy
 msgid "Final glide bar MC0"
-msgstr "Endanflug Linie"
+msgstr "Endanflug Anzeige für MC 0"
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:74
 msgid ""
 "If set to ON the final glide bar will show a second arrow indicating the "
 "required height to reach the final waypoint at MC zero."
 msgstr ""
+"Wenn aktiviert zeigt der Endanflug Anzeigebalken einen zweiten Pfeil für die "
+"bei MC 0 Einstellung benötigte Höhe um das Ziel zu erreichen."
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:60
 msgid "Speed arrows"
@@ -5170,17 +5174,16 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:86
 msgid "Polar degradation"
-msgstr ""
+msgstr "Polaren Verschlechterung"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:87
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "A permanent polar degradation. 0% means no degradation, 50% indicates the "
 "glider's sink rate is doubled."
 msgstr ""
-"Wie sauber ist der Segler. Setze auf 100% für komplett sauber, niedrigere "
-"Eingaben sobald Mücken an den Flügeln kleben oder der Segler nass wird. 50% "
-"bedeutet dass der Segler mit doppelter Rate sinkt."
+"Eine permanente Verschlechterung der Polare. 0% meint keine "
+"Verschlechterung, 50% bedeutet eine verdoppelte Sinkrate."
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:96
 msgid ""
@@ -6863,7 +6866,7 @@ msgstr "Verfolgungsinterval"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:102
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:106
 msgid "Username"
@@ -9436,6 +9439,9 @@ msgstr ""
 #~ msgid "Comms with Volkslogger"
 #~ msgstr "Verbindung mit Volkslogger"
 
+#~ msgid "Final glide bar"
+#~ msgstr "Endanflug Linie"
+
 #~ msgid "Radio com max delay"
 #~ msgstr "Funkverbindung maximale Verzögerung"
 
@@ -9546,6 +9552,9 @@ msgstr ""
 
 #~ msgid "Topology on"
 #~ msgstr "Topologie an"
+
+#~ msgid "Terrain on"
+#~ msgstr "Gelände an"
 
 #~ msgid "Terrain + Topology"
 #~ msgstr "Gelände + Topologie"
@@ -10319,6 +10328,15 @@ msgstr ""
 
 #~ msgid "This enables the display of the ThermalAssistant gauge."
 #~ msgstr "Aktiviert die Anzeige des Thermikassistenten."
+
+#~ msgid ""
+#~ "How clean the glider is. Set to 100% for clean, lower numbers as the "
+#~ "wings pick up bugs or get wet.  50% indicates the glider's sink rate is "
+#~ "doubled."
+#~ msgstr ""
+#~ "Wie sauber ist der Segler. Setze auf 100% für komplett sauber, niedrigere "
+#~ "Eingaben sobald Mücken an den Flügeln kleben oder der Segler nass wird. "
+#~ "50% bedeutet dass der Segler mit doppelter Rate sinkt."
 
 #~ msgid ""
 #~ "MC\n"
