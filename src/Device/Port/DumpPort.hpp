@@ -30,11 +30,14 @@ Copyright_License {
  * A port wrapper that dumps everything into the log file.
  */
 class DumpPort : public Port {
-  Port &other;
+  Port *port;
 
 public:
-  DumpPort(Port &_other):Port(*(Handler *)NULL), other(_other) {}
+  DumpPort(Port *port);
 
+  virtual ~DumpPort();
+
+  /* virtual methods from Port */
   virtual size_t Write(const void *data, size_t length);
   virtual void Flush();
   virtual bool SetRxTimeout(unsigned timeout_ms);
