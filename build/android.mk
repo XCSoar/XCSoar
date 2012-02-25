@@ -110,8 +110,8 @@ $(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) build/r.sed | $(TARGET_BIN_
 	$(Q)ln -s ../../../../android/src $(@D)/src/xcsoar
 ifneq ($(IOIOLIB_DIR),)
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/api) $(ANDROID_BUILD)/src/ioio_api
-	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/spi) $(ANDROID_BUILD)/src/ioio_api
-	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/util) $(ANDROID_BUILD)/src/ioio_api
+	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/spi) $(ANDROID_BUILD)/src/ioio_spi
+	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/util) $(ANDROID_BUILD)/src/ioio_util
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/impl) $(ANDROID_BUILD)/src/ioio_impl
 	$(Q)ln -s ../../../../android/IOIOHelper $(@D)/src/ioio_xcsoar
 endif
