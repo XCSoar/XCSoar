@@ -144,8 +144,6 @@ VolksloggerDevice::Declare(const Declaration &declaration,
   if (declaration.Size() < 2)
     return false;
 
-  env.SetText(_T("Comms with Volkslogger"));
-
   port.SetRxTimeout(500);
 
   // change to IO mode baud rate
