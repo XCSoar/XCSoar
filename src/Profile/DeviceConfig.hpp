@@ -122,6 +122,13 @@ struct DeviceConfig {
    */
   bool k6bt;
 
+#ifndef NDEBUG
+  /**
+   * Use the DumpPort wrapper for debugging
+   */
+  bool dump_port;
+#endif
+
   /**
    * Should XCSoar send MC value, bug, ballast, etc. to the device
    */
@@ -262,6 +269,9 @@ struct DeviceConfig {
     sync_from_device = true;
     sync_to_device = true;
     k6bt = false;
+#ifndef NDEBUG
+    dump_port = false;
+#endif
     ignore_checksum = false;
   }
 

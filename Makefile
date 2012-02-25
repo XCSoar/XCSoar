@@ -720,6 +720,11 @@ XCSOAR_SOURCES += \
 	$(SRC)/Device/Port/SerialPort.cpp
 endif
 
+ifneq ($(DEBUG),n)
+XCSOAR_SOURCES += \
+	$(SRC)/Device/Port/DumpPort.cpp
+endif
+
 ifeq ($(HAVE_CE),y)
 XCSOAR_SOURCES += \
 	$(SRC)/OS/MemInfo.cpp \
