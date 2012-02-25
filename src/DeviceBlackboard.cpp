@@ -296,6 +296,12 @@ DeviceBlackboard::Merge()
 }
 
 void
+DeviceBlackboard::SetBallast(fixed ballast)
+{
+  AllDevicesPutBallast(ballast);
+}
+
+void
 DeviceBlackboard::SetBugs(fixed bugs)
 {
   AllDevicesPutBugs(bugs);
