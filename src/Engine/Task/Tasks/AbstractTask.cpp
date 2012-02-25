@@ -316,7 +316,7 @@ AbstractTask::calc_effective_mc(const AircraftState &state_now, fixed& val) cons
 void
 AbstractTask::update_flight_mode()
 {
-  if (!stats.calc_flight_mode())
+  if (!stats.calc_flight_mode(task_behaviour))
     return;
 
   task_events.transition_flight_mode(stats.flight_mode_final_glide);

@@ -19,8 +19,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "TaskStats.hpp"
-#include <assert.h>
+#include "Task/TaskBehaviour.hpp"
 
 void
 TaskStats::reset()
@@ -46,13 +47,20 @@ TaskStats::reset()
 }
 
 bool
-TaskStats::calc_flight_mode()
+TaskStats::calc_flight_mode(const TaskBehaviour &settings)
 {
   const int margin =
       (flight_mode_final_glide ? 1 : 0) * flight_mode_height_margin;
 
-  const bool this_is_final = total.solution_remaining.IsOk() &&
-    positive(total.solution_remaining.altitude_difference + fixed(margin));
+  /* when final glide Auto MacCready is enabled, it will auto-set MC
+     to 0 if needed; therefore, we must use the "MC=0" solution to
+     decide whether to switch to final glide */
+  const GlideResult &solution_remaining = settings.IsAutoMCFinalGlideEnabled()
+    ? total.solution_mc0
+    : total.solution_remaining;
+
+  const bool this_is_final = solution_remaining.IsOk() &&
+    positive(solution_remaining.altitude_difference + fixed(margin));
 
   if (flight_mode_final_glide == this_is_final)
     return false;

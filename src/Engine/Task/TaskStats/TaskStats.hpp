@@ -28,6 +28,8 @@
 #include <iostream>
 #endif
 
+struct TaskBehaviour;
+
 /** Container for common task statistics */
 class TaskStats 
 {
@@ -89,7 +91,7 @@ public:
    *
    * @return True if is mode changed
    */
-  bool calc_flight_mode();
+  bool calc_flight_mode(const TaskBehaviour &settings);
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 
