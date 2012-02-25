@@ -171,10 +171,6 @@ VLAPI::VLAPI(Port &_port, OperationEnvironment &_env)
   vlpresent = 0;
 }
 
-VLAPI::~VLAPI() {
-  close(1);
-}
-
 // open a connection to the VL
 //
 // return values;
@@ -194,19 +190,6 @@ VLA_ERROR VLAPI::open(int timeout,
   vlpresent = 1;
   return err;
 }
-
-
-
-// close connection to VL
-void VLAPI::close(boolean reset) {
-  if(vlpresent) {
-    if(reset) {
-      Volkslogger::Reset(*port, env);
-    }
-    vlpresent = 0;
-  }
-}
-
 
 VLA_ERROR VLAPI::read_info() {
   byte buffer[8];

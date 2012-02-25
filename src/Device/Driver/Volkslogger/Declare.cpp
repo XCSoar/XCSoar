@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
+#include "Protocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
 #include "vlapi2.h"
@@ -91,9 +92,12 @@ CopyTurnPoint(VLAPI_DATA::DCLWPT &dest, const Declaration::TurnPoint &src)
 }
 
 static bool
-DeclareInner(VLAPI &vl, const Declaration &declaration, const Waypoint *home)
+DeclareInner(Port &port, const Declaration &declaration, const Waypoint *home,
+             OperationEnvironment &env)
 {
   assert(declaration.Size() >= 2);
+
+  VLAPI vl(port, env);
 
   if (vl.open(20, 38400L) != VLA_ERR_NOERR)
     return false;
@@ -132,7 +136,9 @@ DeclareInner(VLAPI &vl, const Declaration &declaration, const Waypoint *home)
 
   vl.declaration.task.nturnpoints = n;
 
-  return vl.write_db_and_declaration() == VLA_ERR_NOERR;
+  bool success = vl.write_db_and_declaration() == VLA_ERR_NOERR;
+  Volkslogger::Reset(port, env);
+  return success;
 }
 
 bool
@@ -148,11 +154,7 @@ VolksloggerDevice::Declare(const Declaration &declaration,
   // change to IO mode baud rate
   unsigned lLastBaudrate = port.SetBaudrate(9600L);
 
-  VLAPI vl(port, env);
-
-  bool success = DeclareInner(vl, declaration, home);
-
-  vl.close(1);
+  bool success = DeclareInner(port, declaration, home, env);
 
   port.SetBaudrate(lLastBaudrate); // restore baudrate
 

@@ -157,7 +157,6 @@ class VLAPI : protected VLA_XFR, public VLAPI_DATA {
  public:
 
   VLAPI(Port &_port, OperationEnvironment &env);
-  ~VLAPI();
 
   VLINFO vlinfo;
   DATABASE database;
@@ -193,10 +192,6 @@ class VLAPI : protected VLA_XFR, public VLAPI_DATA {
 
   // write database and flight declaration from the structs back into the Volkslogger
   VLA_ERROR write_db_and_declaration();
-
-  // cleanup and closing of API (and comports etc.)
-  void close(boolean reset=0 // reset=1 will cause the logger to leave data mode and restart
-             );
 };
 
 #endif
