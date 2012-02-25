@@ -105,8 +105,6 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
   if (!port.FullFlush(env, 20, 100))
     return false;
 
-  //port.SetRxTimeout(500);
-
   /* reset command interpreter */
   if (!Reset(port, env, 6))
     return false;
