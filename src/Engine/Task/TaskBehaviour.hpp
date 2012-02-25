@@ -169,6 +169,13 @@ struct TaskBehaviour : public TaskStartMargins {
    */
   void all_off();
 
+  bool IsAutoMCFinalGlideEnabled() const {
+    return auto_mc && auto_mc_mode != AUTOMC_CLIMBAVERAGE;
+  }
+
+  bool IsAutoMCCruiseEnabled() const {
+    return auto_mc && auto_mc_mode != AUTOMC_FINALGLIDE;
+  }
 };
 
 #endif

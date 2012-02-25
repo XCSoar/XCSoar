@@ -55,7 +55,7 @@ AbstractTask::update_auto_mc(GlidePolar &glide_polar,
   }
 
   fixed mc_found;
-  if (task_behaviour.auto_mc_mode != TaskBehaviour::AUTOMC_CLIMBAVERAGE &&
+  if (task_behaviour.IsAutoMCFinalGlideEnabled() &&
       task_started(true) && stats.flight_mode_final_glide) {
     /* calculate final glide MacCready */
 
@@ -68,7 +68,7 @@ AbstractTask::update_auto_mc(GlidePolar &glide_polar,
 
     glide_polar.SetMC(stats.mc_best);
     return true;
-  } else if (task_behaviour.auto_mc_mode != TaskBehaviour::AUTOMC_FINALGLIDE) {
+  } else if (task_behaviour.IsAutoMCCruiseEnabled()) {
     /* cruise: set MacCready to recent climb average */
 
     if (!positive(fallback_mc)) {

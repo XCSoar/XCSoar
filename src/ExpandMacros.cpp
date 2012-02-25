@@ -307,8 +307,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
 
   if (_tcsstr(OutBuffer, _T("$(CheckAutoMc)"))) {
     if (!calculated.task_stats.task_valid
-        && ((settings_computer.task.auto_mc_mode==TaskBehaviour::AUTOMC_FINALGLIDE)
-            || (settings_computer.task.auto_mc_mode==TaskBehaviour::AUTOMC_BOTH)))
+        && settings_computer.task.IsAutoMCFinalGlideEnabled())
       invalid = true;
 
     ReplaceInString(OutBuffer, _T("$(CheckAutoMc)"), _T(""), Size);
