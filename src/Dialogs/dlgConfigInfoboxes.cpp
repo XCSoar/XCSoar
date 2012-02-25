@@ -32,6 +32,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/String.hpp"
 #include "Compiler.h"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -61,7 +62,7 @@ static InfoBoxLayout::Layout info_box_layout;
 static InfoBoxPreview previews[InfoBoxSettings::Panel::MAX_CONTENTS];
 static unsigned current_preview;
 
-static WndButton *buttonPanelName;
+static WndProperty *edit_name;
 static WndProperty *edit_select;
 static WndProperty *edit_content;
 static WndButton *buttonPaste;
@@ -232,34 +233,6 @@ OnContentHelp(WindowControl *Sender)
   dlgHelpShowModal(wf->GetMainWindow(), caption, text);
 }
 
-
-static void
-UpdatePanelName()
-{
-  const unsigned BUFFER_LENGTH = data.name.MAX_SIZE + 32;
-  TCHAR caption[BUFFER_LENGTH];
-
-  _sntprintf(caption, BUFFER_LENGTH, _T("%s: %s"), _("Name"),
-             gettext(data.name));
-  buttonPanelName->SetCaption(caption);
-}
-
-
-static void
-OnNameAccess(WndButton &button)
-{
-  if (buttonPanelName) {
-    TCHAR buffer[data.name.MAX_SIZE];
-    _tcscpy(buffer, data.name);
-    if (dlgTextEntryShowModal(*(SingleWindow *)button.GetRootOwner(), buffer,
-                              data.name.MAX_SIZE,
-                              _("Panel name"))) {
-      data.name = buffer;
-      UpdatePanelName();
-    }
-  }
-}
-
 #ifdef _WIN32_WCE
 
 static bool
@@ -294,7 +267,7 @@ OnKeyDown(WndForm &sender, unsigned key_code)
     return true;
 
   case VK_APP1:
-    OnNameAccess(*buttonPaste);
+    edit_name->BeginEditing();
     return true;
 
   case '6':
@@ -377,11 +350,16 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   button_style.TabStop();
 
   control_rc.bottom = control_rc.top + height;
-  buttonPanelName =
-    new WndButton(client_area, dialog_look, _T(""),
-                  control_rc, button_style, OnNameAccess);
-  buttonPanelName->set_enabled(allow_name_change);
-  UpdatePanelName();
+  edit_name = new WndProperty(client_area, dialog_look, _("Name"),
+                              control_rc, caption_width,
+                              style, edit_style,
+                              NULL);
+  DataFieldString *dfs = new DataFieldString(allow_name_change
+                                             ? (const TCHAR *)data.name
+                                             : gettext(data.name),
+                                             NULL);
+  edit_name->SetDataField(dfs);
+  edit_name->SetReadOnly(!allow_name_change);
 
   control_rc.top = control_rc.bottom;
   control_rc.bottom = control_rc.top + height;
@@ -459,8 +437,11 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   int result = wf->ShowModal();
 
+  if (result == mrOK && allow_name_change)
+    data.name = edit_name->GetDataField()->GetAsString();
+
   delete wf;
-  delete buttonPanelName;
+  delete edit_name;
   delete edit_select;
   delete edit_content;
   delete close_button;
