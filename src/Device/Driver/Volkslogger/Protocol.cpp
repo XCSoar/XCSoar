@@ -336,3 +336,16 @@ Volkslogger::SendCommandReadBulk(Port &port, OperationEnvironment &env,
 
   return nbytes;
 }
+
+bool
+Volkslogger::SendCommandWriteBulk(Port &port, OperationEnvironment &env,
+                                  Command cmd,
+                                  const void *data, unsigned size)
+{
+  if (!SendCommand(port, env, cmd, 0, 0) || !WaitForACK(port, env))
+    return false;
+
+  env.Sleep(100);
+
+  return WriteBulk(port, env, data, size) && WaitForACK(port, env);
+}

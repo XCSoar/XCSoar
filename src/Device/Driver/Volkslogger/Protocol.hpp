@@ -129,6 +129,9 @@ namespace Volkslogger {
   int SendCommandReadBulk(Port &port, OperationEnvironment &env,
                           Command cmd, void *buffer, unsigned max_length,
                           unsigned baud_rate);
+
+  bool SendCommandWriteBulk(Port &port, OperationEnvironment &env,
+                            Command cmd, const void *data, unsigned size);
 }
 
 #endif

@@ -40,19 +40,10 @@ const int32 VLAPI_LOG_MEMSIZE = 81920L;
 
 // Blockweises Schreiben in den Logger (z.B. Datenbank)
 VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
-  // Schreibkommando geben
-  if (!Volkslogger::SendCommand(*port, env, Volkslogger::cmd_PDB, 0, 0) ||
-      !Volkslogger::WaitForACK(*port, env))
-    return VLA_ERR_MISC;
-
-  // Schreiben der Datenbank
-  env.Sleep(100);
-
-  if (!Volkslogger::WriteBulk(*port, env, dbbbuffer, dbbsize) ||
-      !Volkslogger::WaitForACK(*port, env))
-    return VLA_ERR_MISC;
-
-  return VLA_ERR_NOERR;
+  return Volkslogger::SendCommandWriteBulk(*port, env, Volkslogger::cmd_PDB,
+                                           dbbbuffer, dbbsize)
+    ? VLA_ERR_NOERR
+    : VLA_ERR_MISC;
 }
 
 
