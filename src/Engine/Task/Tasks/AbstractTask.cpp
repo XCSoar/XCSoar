@@ -48,6 +48,7 @@ bool
 AbstractTask::update_auto_mc(GlidePolar &glide_polar,
                              const AircraftState& state, fixed fallback_mc)
 {
+  fallback_mc = fixed(2.2);
   if (!task_behaviour.auto_mc) {
     /* AutoMC disabled in configuration */
     reset_auto_mc();
@@ -56,10 +57,16 @@ AbstractTask::update_auto_mc(GlidePolar &glide_polar,
 
   fixed mc_found;
   if (task_behaviour.auto_mc_mode != TaskBehaviour::AUTOMC_CLIMBAVERAGE &&
-      task_started(true) && calc_mc_best(state, mc_found)) {
-    /* final glide MacCready found */
+      task_started(true) && stats.flight_mode_final_glide) {
+    /* calculate final glide MacCready */
 
-    stats.mc_best = std::max(mc_lpf.update(mc_found), fixed_zero);
+    if (calc_mc_best(state, mc_found))
+      /* final glide MacCready found */
+      stats.mc_best = std::max(mc_lpf.update(mc_found), fixed_zero);
+    else
+      /* below final glide, but above margin */
+      stats.mc_best = fixed_zero;
+
     glide_polar.SetMC(stats.mc_best);
     return true;
   } else if (task_behaviour.auto_mc_mode != TaskBehaviour::AUTOMC_FINALGLIDE) {
