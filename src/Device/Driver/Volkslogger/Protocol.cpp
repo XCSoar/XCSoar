@@ -54,6 +54,8 @@ Volkslogger::Handshake(Port &port, OperationEnvironment &env,
   do { // Solange R's aussenden, bis ein L zurückkommt
     port.Write('R');
     env.Sleep(30);
+    if (env.IsCancelled())
+      return false;
 
     if (clock.Check(timeout_ms))
       return false;
