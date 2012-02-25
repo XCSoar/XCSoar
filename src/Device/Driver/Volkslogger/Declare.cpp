@@ -95,8 +95,7 @@ DeclareInner(VLAPI &vl, const Declaration &declaration, const Waypoint *home)
 {
   assert(declaration.Size() >= 2);
 
-  if (vl.open(20, 38400L) != VLA_ERR_NOERR ||
-      vl.read_info() != VLA_ERR_NOERR)
+  if (vl.open(20, 38400L) != VLA_ERR_NOERR)
     return false;
 
   memset(&vl.database, 0, sizeof(vl.database));
