@@ -14,7 +14,7 @@ Version 6.3 - not yet released
   - added driver for the FlyNet variometer
   - allow up to 4 devices
   - LX: support the LX Color Vario
-  - LX: send QNH to device
+  - LX: send QNH and ballast to device
   - LX: send keep-alives while in flight list
   - LX: support LX1600 pass-through mode
   - send/receive bugs setting to/from device, if driver support it

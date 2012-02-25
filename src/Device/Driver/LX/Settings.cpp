@@ -86,6 +86,18 @@ LXDevice::Open(gcc_unused OperationEnvironment &env)
 }
 
 bool
+LXDevice::PutBallast(gcc_unused fixed fraction, fixed overload)
+{
+  // This is a copy of the routine done in LK8000 for LX MiniMap, realized
+  // by Lx developers.
+
+  char tmp[100];
+  sprintf(tmp, "PFLX2,,%.2f,,,,", (double)overload);
+  PortWriteNMEA(port, tmp);
+  return true;
+}
+
+bool
 LXDevice::PutBugs(fixed bugs)
 {
   // This is a copy of the routine done in LK8000 for LX MiniMap, realized

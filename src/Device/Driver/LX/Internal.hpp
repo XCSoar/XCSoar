@@ -47,6 +47,7 @@ public:
   virtual bool Open(OperationEnvironment &env);
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
+  virtual bool PutBallast(fixed fraction, fixed overload);
   virtual bool PutBugs(fixed bugs);
   virtual bool PutMacCready(fixed MacCready);
   virtual bool PutQNH(const AtmosphericPressure &pres);
