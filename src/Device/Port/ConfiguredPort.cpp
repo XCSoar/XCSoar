@@ -73,7 +73,7 @@ static Port *
 WrapPort(const DeviceConfig &config, Port::Handler &handler, Port *port)
 {
   if (config.k6bt && config.MaybeBluetooth())
-    port = new K6BtPort(port, config.baud_rate,handler);
+    port = new K6BtPort(port, config.baud_rate, handler);
 
   return port;
 }
