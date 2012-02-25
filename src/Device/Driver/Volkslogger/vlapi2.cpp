@@ -38,12 +38,6 @@ const int32 VLAPI_LOG_MEMSIZE = 81920L;
 //                        VLA_XFR
 // ------------------------------------------------------------
 
-// set baudrate
-//
-void VLA_XFR::set_databaud(int32 db) {
-  databaud = db;
-}
-
 // Blockweises Schreiben in den Logger (z.B. Datenbank)
 VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   // Schreibkommando geben
@@ -144,9 +138,8 @@ VLA_ERROR VLA_XFR::connect(int32 waittime) {
   return VLA_ERR_NOERR;
 }
 
-VLA_XFR::VLA_XFR(Port &_port, OperationEnvironment &_env)
-  :VLA_SYS(_port), env(_env) {
-  set_databaud(9600L);
+VLA_XFR::VLA_XFR(Port &_port, unsigned _databaud, OperationEnvironment &_env)
+  :VLA_SYS(_port), env(_env), databaud(_databaud) {
 }
 
 
@@ -166,29 +159,8 @@ VLA_ERROR VLA_XFR::readinfo(lpb buffer, int32 buffersize) {
 // ------------------------------------------------------------
 
 // constructor
-VLAPI::VLAPI(Port &_port, OperationEnvironment &_env)
-  :VLA_XFR(_port, _env) {
-  vlpresent = 0;
-}
-
-// open a connection to the VL
-//
-// return values;
-// -1 : port not accessible
-// 0  : logger not present
-// >0 : logger present
-//
-VLA_ERROR VLAPI::open(int timeout,
-                      int32 sbaudrate) {
-  VLA_ERROR err = VLA_ERR_NOERR;
-
-  set_databaud(sbaudrate);
-  // connect
-  if ((err = connect(timeout)) != VLA_ERR_NOERR)
-    return err;
-
-  vlpresent = 1;
-  return err;
+VLAPI::VLAPI(Port &_port, unsigned _databaud, OperationEnvironment &_env)
+  :VLA_XFR(_port, _databaud, _env) {
 }
 
 VLA_ERROR VLAPI::read_info() {
@@ -214,8 +186,6 @@ VLA_ERROR VLAPI::stillconnect() {
   err = connect(4);
   if(err != VLA_ERR_NOERR)
     err = connect(10);
-  if (err == VLA_ERR_NOERR)
-    vlpresent = 1;
   return err;
 }
 

@@ -97,9 +97,9 @@ DeclareInner(Port &port, const Declaration &declaration, const Waypoint *home,
 {
   assert(declaration.Size() >= 2);
 
-  VLAPI vl(port, env);
+  VLAPI vl(port, 38400L, env);
 
-  if (vl.open(20, 38400L) != VLA_ERR_NOERR)
+  if (vl.connect(20) != VLA_ERR_NOERR)
     return false;
 
   memset(&vl.database, 0, sizeof(vl.database));

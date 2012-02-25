@@ -56,7 +56,8 @@ protected:
 
   int32 databaud; // Baudrate as integer (e.g. 115200)
 
-  VLA_XFR(Port &port, OperationEnvironment &env);
+public:
+  VLA_XFR(Port &port, unsigned _databaud, OperationEnvironment &env);
   void set_databaud(int32 db);
 
 	// establish connection with VL within specified time

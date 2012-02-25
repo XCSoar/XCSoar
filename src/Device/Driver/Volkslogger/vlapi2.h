@@ -151,22 +151,16 @@ class VLAPI_DATA {
 // all data exchange with the API will be done through its
 // public members
 /** API facade for Volkslogger device handler */
-class VLAPI : protected VLA_XFR, public VLAPI_DATA {
-  boolean vlpresent;
+class VLAPI : public VLA_XFR, public VLAPI_DATA {
   VLA_ERROR stillconnect();
  public:
 
-  VLAPI(Port &_port, OperationEnvironment &env);
+  VLAPI(Port &_port, unsigned _databaud, OperationEnvironment &env);
 
   VLINFO vlinfo;
   DATABASE database;
   DECLARATION declaration;
   DIRECTORY directory; // struct DIRECTORY declared in VLCONV.H
-
-  // Initialize the API
-  VLA_ERROR open(int timeout=15, // time in seconds how long the API will wait for a logger to respond
-                 int32 baudrate=115200 // data transfer baudrate, needs no change on modern PCs
-                 );
 
   // read info (serial numer, firmware versions etc.) from
   // the logger into the struct VLINFO (see above)
