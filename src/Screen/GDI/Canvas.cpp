@@ -392,6 +392,6 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
   SetTextColor(fg_color);
   SetBackgroundTransparent();
 
-  Stretch(dest_x, dest_y, src_width*2, src_height*2,
+  Stretch(dest_x, dest_y, dest_width, dest_height,
           src, src_x, src_y, src_width, src_height);
 }
