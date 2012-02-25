@@ -812,15 +812,15 @@ FormKeyDown(WndForm &sender, unsigned key_code)
   TypeFilter new_index = filter_data.type_index;
 
   switch (key_code) {
-  case VK_F1:
+  case VK_APP1:
     new_index = TF_ALL;
     break;
 
-  case VK_F2:
+  case VK_APP2:
     new_index = TF_LANDABLE;
     break;
 
-  case VK_F3:
+  case VK_APP3:
     new_index = TF_TURNPOINT;
     break;
 

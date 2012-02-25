@@ -84,14 +84,18 @@ DeviceDeclare(DeviceDescriptor &dev, const Declaration &declaration,
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
     return false;
 
+  const TCHAR *caption = dev.GetDisplayName();
+  if (caption == NULL)
+    caption = _("Declare task");
+
   if (!DoDeviceDeclare(dev, declaration, home)) {
     MessageBoxX(_("Error occured,\nTask NOT declared!"),
-                dev.GetDisplayName(), MB_OK | MB_ICONERROR);
+                caption, MB_OK | MB_ICONERROR);
     return false;
   }
 
   MessageBoxX(_("Task declared!"),
-              dev.GetDisplayName(), MB_OK | MB_ICONINFORMATION);
+              caption, MB_OK | MB_ICONINFORMATION);
   return true;
 }
 

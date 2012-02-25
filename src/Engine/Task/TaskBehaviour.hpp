@@ -158,6 +158,14 @@ struct TaskBehaviour : public TaskStartMargins {
    * all expensive task behaviour functions.
    */
   void DisableAll();
+
+  bool IsAutoMCFinalGlideEnabled() const {
+    return auto_mc && auto_mc_mode != AutoMCMode::CLIMBAVERAGE;
+  }
+
+  bool IsAutoMCCruiseEnabled() const {
+    return auto_mc && auto_mc_mode != AutoMCMode::FINALGLIDE;
+  }
 };
 
 static_assert(is_trivial<TaskBehaviour>::value, "type is not trivial");

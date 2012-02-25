@@ -423,10 +423,7 @@ TaskManager::UpdateAutoMC(const AircraftState& state_now,
       active_task->UpdateAutoMC(glide_polar, state_now, fallback_mc))
     return true;
 
-  if (!task_behaviour.auto_mc) 
-    return false;
-
-  if (task_behaviour.auto_mc_mode == TaskBehaviour::AutoMCMode::FINALGLIDE)
+  if (!task_behaviour.IsAutoMCCruiseEnabled())
     return false;
 
   if (positive(fallback_mc)) {

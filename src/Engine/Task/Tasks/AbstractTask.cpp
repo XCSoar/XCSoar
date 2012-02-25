@@ -54,17 +54,20 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
   }
 
   fixed mc_found;
-  if (task_behaviour.auto_mc_mode != TaskBehaviour::AutoMCMode::CLIMBAVERAGE &&
-      TaskStarted(true) && CalcBestMC(state, glide_polar, mc_found)) {
-    /* final glide MacCready found */
+  if (task_behaviour.IsAutoMCFinalGlideEnabled() &&
+      TaskStarted(true) && stats.flight_mode_final_glide) {
+    /* calculate final glide MacCready */
 
-    if (mc_lpf_valid)
+    if (CalcBestMC(state, glide_polar, mc_found))
+      /* final glide MacCready found */
       stats.mc_best = std::max(mc_lpf.update(mc_found), fixed_zero);
     else
-      stats.mc_best = std::max(mc_lpf.reset(mc_found), fixed_zero);
+      /* below final glide, but above margin */
+      stats.mc_best = fixed_zero;
+
     glide_polar.SetMC(stats.mc_best);
     return true;
-  } else if (task_behaviour.auto_mc_mode != TaskBehaviour::AutoMCMode::FINALGLIDE) {
+  } else if (task_behaviour.IsAutoMCCruiseEnabled()) {
     /* cruise: set MacCready to recent climb average */
 
     if (!positive(fallback_mc)) {
@@ -328,7 +331,7 @@ AbstractTask::CalcEffectiveMC(const AircraftState &state_now,
 void
 AbstractTask::UpdateFlightMode()
 {
-  if (!stats.calc_flight_mode())
+  if (!stats.calc_flight_mode(task_behaviour))
     return;
 
   if (task_events != NULL)

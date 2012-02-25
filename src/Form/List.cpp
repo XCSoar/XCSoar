@@ -373,7 +373,7 @@ WndListFrame::OnKeyDown(unsigned key_code)
   switch (key_code) {
 #ifdef GNAV
   // JMW added this to make data entry easier
-  case VK_F4:
+  case VK_APP4:
 #endif
   case VK_RETURN:
     if (IsEmpty() || activate_callback == NULL)

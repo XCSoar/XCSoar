@@ -98,10 +98,6 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
             "time is displayed below in order to make it easier to verify the correct offset "
             "has been entered."),
            -13 * 60 * 60, 13  * 60 * 60, 30 * 60, utc_offset, 2, this);
-#ifdef WIN32
-  if (IsEmbedded() && !IsAltair())
-    GetControl(UTCOffset).set_enabled(false);
-#endif
 
   Add(_("Local time"), 0, true);
   SetLocalTime(utc_offset);

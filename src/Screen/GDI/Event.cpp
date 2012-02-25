@@ -23,8 +23,15 @@ Copyright_License {
 
 #include "Screen/GDI/Event.hpp"
 #include "Screen/GDI/Key.h"
+#include "Screen/GDI/Transcode.hpp"
 #include "Thread/Debug.hpp"
 #include "Asset.hpp"
+
+static bool
+IsKeyMessage(const MSG &msg)
+{
+  return msg.message == WM_KEYDOWN || msg.message == WM_KEYUP;
+}
 
 bool
 EventLoop::Get(MSG &msg)
@@ -33,6 +40,9 @@ EventLoop::Get(MSG &msg)
 
   if (!::GetMessage(&msg, NULL, 0, 0))
     return false;
+
+  if (IsKeyMessage(msg))
+    msg.wParam = TranscodeKey(msg.wParam);
 
   return true;
 }

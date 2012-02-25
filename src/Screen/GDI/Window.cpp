@@ -25,7 +25,6 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Blank.hpp"
-#include "Screen/GDI/Transcode.hpp"
 #include "Screen/GDI/PaintCanvas.hpp"
 #include "Asset.hpp"
 
@@ -179,7 +178,7 @@ Window::OnMessage(HWND _hWnd, UINT message,
 #endif
 
   case WM_KEYDOWN:
-    if (OnKeyDown(::TranscodeKey(wParam))) {
+    if (OnKeyDown(wParam)) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
@@ -187,7 +186,7 @@ Window::OnMessage(HWND _hWnd, UINT message,
     break;
 
   case WM_KEYUP:
-    if (OnKeyUp(::TranscodeKey(wParam))) {
+    if (OnKeyUp(wParam)) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;

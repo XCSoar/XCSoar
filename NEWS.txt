@@ -52,7 +52,7 @@ Version 6.3 - not yet released
 * LX MiniMap
   - support for the hardware buttons
 
-Version 6.2.6 - not yet released
+Version 6.2.6 - 2012/02/25
 * calculations
   - fix bogus terrain warnings
   - fix incorrect expiration of wind data, e.g. for temporary manually
@@ -62,7 +62,12 @@ Version 6.2.6 - not yet released
   - Vega: fix Vega configuration dialog
   - Android: don't auto-reopen the internal GPS periodically
   - Android: fix deadlock when internal GPS is disabled
+  - fix rare crash bug during task declaration
 * fix parsing of weather station codes read from profile
+* Altair:
+  - fix a few broken dialog hot keys
+* Windows
+  - allow configuring the UTC offset on Windows CE
 
 Version 6.2.5 - 2012/01/27
 * calculations
