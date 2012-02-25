@@ -85,6 +85,15 @@ Volkslogger::Connect(Port &port, OperationEnvironment &env,
   return Reset(port, env, 10) && Handshake(port, env, timeout_ms);
 }
 
+bool
+Volkslogger::ConnectAndFlush(Port &port, OperationEnvironment &env,
+                             unsigned timeout_ms)
+{
+  port.Flush();
+
+  return Connect(port, env, timeout_ms) && port.FullFlush(env, 50, 300);
+}
+
 static bool
 SendWithCRC(Port &port, const void *data, size_t length)
 {

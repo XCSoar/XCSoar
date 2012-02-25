@@ -114,17 +114,10 @@ long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secm
 // VL to the serial port
 //
 VLA_ERROR VLA_XFR::connect(int32 waittime) {
-  port->Flush();
-
-  // eventuell noch laufende Aktion im Logger abbrechen
   const unsigned timeout_ms = waittime * 1000;
-  if (!Volkslogger::Connect(*port, env, timeout_ms))
-    return VLA_ERR_MISC;
-
-  if (!port->FullFlush(env, 50, 300))
-    return VLA_ERR_MISC;
-
-  return VLA_ERR_NOERR;
+  return Volkslogger::ConnectAndFlush(*port, env, timeout_ms)
+    ? VLA_ERR_NOERR
+    : VLA_ERR_MISC;
 }
 
 VLA_XFR::VLA_XFR(Port &_port, unsigned _databaud, OperationEnvironment &_env)
