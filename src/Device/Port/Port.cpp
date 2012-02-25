@@ -76,15 +76,33 @@ Port::GetChar()
     : -1;
 }
 
-void
-Port::FullFlush(unsigned timeout_ms)
+bool
+Port::FullFlush(OperationEnvironment &env, unsigned timeout_ms,
+                unsigned total_timeout_ms)
 {
   Flush();
 
   PeriodClock clock;
   clock.Update();
+
   char buffer[0x100];
-  while (Read(buffer, sizeof(buffer)) && !clock.Check(timeout_ms)) {}
+  do {
+    switch (WaitRead(env, timeout_ms)) {
+    case WaitResult::READY:
+      if (!Read(buffer, sizeof(buffer)))
+        return false;
+      break;
+
+    case WaitResult::TIMEOUT:
+      return true;
+
+    case WaitResult::FAILED:
+    case WaitResult::CANCELLED:
+      return false;
+    }
+  } while (!clock.Check(total_timeout_ms));
+
+  return true;
 }
 
 bool

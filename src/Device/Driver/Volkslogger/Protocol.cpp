@@ -102,9 +102,10 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
   static const unsigned delay = 2;
 
   /* flush buffers */
-  port.SetRxTimeout(20);
-  port.FullFlush(100);
-  port.SetRxTimeout(500);
+  if (!port.FullFlush(env, 20, 100))
+    return false;
+
+  //port.SetRxTimeout(500);
 
   /* reset command interpreter */
   if (!Reset(port, env, 6))

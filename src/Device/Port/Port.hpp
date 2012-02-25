@@ -174,10 +174,15 @@ public:
    * Force flushing the receive buffers, by trying to read from the
    * port until it times out.
    *
-   * @param timeout_ms the maximum duration of this method [ms]; the
-   * receive timeout must already be set accordingly.
+   * The configured read timeout not relevant for this method.
+   *
+   * @param total_timeout_ms the timeout for each read call [ms]
+   * @param total_timeout_ms the maximum total duration of this method [ms]
+   * @return true on timeout, false if an error has occurred or the
+   * operation was cancelled
    */
-  void FullFlush(unsigned timeout_ms);
+  bool FullFlush(OperationEnvironment &env, unsigned timeout_ms,
+                 unsigned total_timeout_ms);
 
   /**
    * Read data from the serial port, take care for partial reads.

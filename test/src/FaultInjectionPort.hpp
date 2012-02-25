@@ -126,10 +126,12 @@ Port::GetChar()
     : EOF;
 }
 
-void
-Port::FullFlush(unsigned timeout_ms)
+bool
+Port::FullFlush(OperationEnvironment &env, unsigned timeout_ms,
+                unsigned total_timeout_ms)
 {
   Flush();
+  return true;
 }
 
 bool

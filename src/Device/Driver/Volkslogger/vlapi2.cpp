@@ -138,9 +138,9 @@ VLA_ERROR VLA_XFR::connect(int32 waittime) {
   if (!Volkslogger::Connect(*port, env, timeout_ms))
     return VLA_ERR_MISC;
 
-  port->SetRxTimeout(50);
-  port->FullFlush(300);
-  port->SetRxTimeout(500);
+  if (!port->FullFlush(env, 50, 300))
+    return VLA_ERR_MISC;
+
   return VLA_ERR_NOERR;
 }
 

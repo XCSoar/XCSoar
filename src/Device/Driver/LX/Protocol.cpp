@@ -30,13 +30,9 @@ LX::CommandMode(Port &port, OperationEnvironment &env)
   /* switch to command mode, first attempt */
   SendSYN(port);
 
-  /* now flush all of the remaining input */
-  port.SetRxTimeout(10);
-  port.FullFlush(20);
-
   /* the port is clean now; try the SYN/ACK procedure up to three
      times */
-  return port.SetRxTimeout(500) &&
+  return port.FullFlush(env, 10, 20) &&
     (Connect(port, env) || Connect(port, env) || Connect(port, env)) &&
     /* ... and configure the timeout */
     port.SetRxTimeout(5000);
