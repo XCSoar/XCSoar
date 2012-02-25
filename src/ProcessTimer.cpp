@@ -162,8 +162,33 @@ BlackboardProcessTimer()
 }
 
 /**
- * Collect QNH, MacCready and Bugs updates from external devices
+ * Collect QNH, MacCready, Ballast and Bugs updates from external devices
  */
+static void
+BallastProcessTimer()
+{
+  static ExternalSettings last_external_settings;
+  const NMEAInfo &basic = CommonInterface::Basic();
+
+  if (basic.settings.ballast_fraction_available.Modified(
+        last_external_settings.ballast_fraction_available))
+    ActionInterface::SetBallast(basic.settings.ballast_fraction, false);
+
+  if (basic.settings.ballast_overload_available.Modified(
+        last_external_settings.ballast_overload_available)) {
+
+    const Plane &plane = device_blackboard->GetComputerSettings().plane;
+
+    if (plane.max_ballast > fixed_zero) {
+      fixed fraction = ((basic.settings.ballast_overload - fixed_one) *
+                        plane.dry_mass) / plane.max_ballast;
+      ActionInterface::SetBallast(fraction, false);
+    }
+  }
+
+  last_external_settings = basic.settings;
+}
+
 static void
 BugsProcessTimer()
 {
@@ -260,6 +285,7 @@ ManualWindProcessTimer()
 static void
 SettingsProcessTimer()
 {
+  BallastProcessTimer();
   BugsProcessTimer();
   QNHProcessTimer();
   MacCreadyProcessTimer();
