@@ -176,19 +176,7 @@ Volkslogger::SendCommandSwitchBaudRate(Port &port, OperationEnvironment &env,
 bool
 Volkslogger::WaitForACK(Port &port, OperationEnvironment &env)
 {
-  const unsigned timeout_ms = 30000;
-
-  PeriodClock clock;
-  clock.Update();
-
-  int ch;
-  while (true) {
-    ch = port.GetChar();
-    if (ch == ACK)
-      return true;
-    else if (ch < 0 || env.IsCancelled() || clock.Check(timeout_ms))
-      return false;
-  }
+  return port.WaitForChar(ACK, env, 30000) == Port::WaitResult::READY;
 }
 
 int
