@@ -32,42 +32,52 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(46);
+  plan_tests(64);
 
   // test constructor
   GeoPoint p1(Angle::Degrees(fixed(345.32)), Angle::Degrees(fixed(-6.332)));
+  ok1(p1.IsValid());
   ok1(equals(p1, -6.332, 345.32));
 
   // test normalize()
   p1.Normalize();
+  ok1(p1.IsValid());
   ok1(equals(p1, -6.332, -14.68));
 
   // test parametric()
   GeoPoint p2(Angle::Degrees(fixed_two), Angle::Degrees(fixed_one));
   GeoPoint p3 = p1.Parametric(p2, fixed(5));
+  ok1(p2.IsValid());
+  ok1(p3.IsValid());
   ok1(equals(p3, -1.332, -4.68));
 
   // test interpolate
   GeoPoint p4 = p1.Interpolate(p3, fixed_half);
+  ok1(p4.IsValid());
   ok1(equals(p4, -3.832, -9.68));
 
   GeoPoint p5 = p1.Interpolate(p3, fixed(0.25));
+  ok1(p5.IsValid());
   ok1(equals(p5, -5.082, -12.18));
 
   // test *
   GeoPoint p6 = p2 * fixed(3.5);
+  ok1(p6.IsValid());
   ok1(equals(p6, 3.5, 7));
 
   // test +
   p6 = p6 + p2;
+  ok1(p6.IsValid());
   ok1(equals(p6, 4.5, 9));
 
   // test +=
   p6 += p2;
+  ok1(p6.IsValid());
   ok1(equals(p6, 5.5, 11));
 
   // test -
   p6 = p6 - p2;
+  ok1(p6.IsValid());
   ok1(equals(p6, 4.5, 9));
 
   // test sort()
@@ -120,10 +130,13 @@ int main(int argc, char **argv)
 
   // test intermediate_point()
   GeoPoint p7(Angle::Degrees(fixed_zero), Angle::Degrees(fixed_zero));
+  ok1(p7.IsValid());
   GeoPoint p8 = p7.IntermediatePoint(p2, fixed(100000));
+  ok1(p8.IsValid());
   ok1(equals(p8, 0.402274, 0.804342));
   ok1(equals(p8.Distance(p7), 100000));
   GeoPoint p9 = p7.IntermediatePoint(p2, fixed(100000000));
+  ok1(p9.IsValid());
   ok1(equals(p9, p2));
 
   // test projected_distance()
@@ -133,9 +146,13 @@ int main(int argc, char **argv)
 
   // Tests moved here from test_fixed.cpp
   GeoPoint l1(Angle::Zero(), Angle::Zero());
+  ok1(l1.IsValid());
   GeoPoint l2(Angle::Degrees(fixed(-0.3)), Angle::Degrees(fixed(1.0)));
+  ok1(l2.IsValid());
   GeoPoint l3(Angle::Degrees(fixed(0.00001)), Angle::Degrees(fixed_zero));
+  ok1(l3.IsValid());
   GeoPoint l4(Angle::Degrees(fixed(10)), Angle::Degrees(fixed_zero));
+  ok1(l4.IsValid());
 
   v = l1.DistanceBearing(l2);
   printf("Dist %g bearing %d\n",
@@ -150,6 +167,10 @@ int main(int argc, char **argv)
   v = l1.DistanceBearing(l4);
   printf("Dist %g bearing %d\n",
          FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.Degrees()));
+
+  GeoPoint p10(GeoPoint::Invalid());
+  ok1(!p10.IsValid());
+
 
   return exit_status();
 }
