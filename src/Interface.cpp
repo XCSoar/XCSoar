@@ -124,6 +124,27 @@ ActionInterface::SendGetComputerSettings()
 }
 
 void
+ActionInterface::SetBallast(fixed ballast, bool to_devices)
+{
+  // write ballast into settings
+  GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;
+  polar.SetBallast(ballast);
+
+  // send to calculation thread and trigger recalculation
+  if (protected_task_manager != NULL)
+    protected_task_manager->SetGlidePolar(polar);
+
+  if (calculation_thread != NULL) {
+    calculation_thread->SetComputerSettings(GetComputerSettings());
+    calculation_thread->Trigger();
+  }
+
+  // send to external devices
+  if (to_devices)
+    device_blackboard->SetBallast(ballast);
+}
+
+void
 ActionInterface::SetBugs(fixed bugs, bool to_devices)
 {
   // Write Bugs into settings
