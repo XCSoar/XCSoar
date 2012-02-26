@@ -46,7 +46,8 @@ TriggerMergeThread()
 /**
  * Triggers a GPS update resulting in a run of the calculation thread
  */
-void TriggerGPSUpdate()
+void
+TriggerGPSUpdate()
 {
   if (calculation_thread == NULL)
     return;
@@ -54,7 +55,8 @@ void TriggerGPSUpdate()
   calculation_thread->Trigger();
 }
 
-void TriggerVarioUpdate()
+void
+TriggerVarioUpdate()
 {
   CommonInterface::main_window.SendGPSUpdate();
 }
@@ -71,9 +73,9 @@ TriggerCalculatedUpdate()
   CommonInterface::main_window.SendCalculatedUpdate();
 }
 
-
-
-void CreateCalculationThread() {
+void
+CreateCalculationThread()
+{
   assert(glide_computer != NULL);
 
   /* copy settings to DeviceBlackboard */
