@@ -188,8 +188,6 @@ public:
   void
   SetVMax(fixed _v_max, bool update = true)
   {
-    assert(IsValid());
-
     Vmax = _v_max;
 
     if (update) {
