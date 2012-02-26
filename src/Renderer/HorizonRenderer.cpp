@@ -25,12 +25,12 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/CrossSectionLook.hpp"
-#include "NMEA/Info.hpp"
+#include "NMEA/Attitude.hpp"
 
 void
 HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                       const CrossSectionLook &look,
-                      const NMEAInfo &Basic)
+                      const AttitudeState &attitude)
 {
   /*
   This feature of having a backup artificial horizon based on inferred
@@ -58,9 +58,9 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 #define fixed_89 fixed_int_constant(89)
 
   fixed phi = max(-fixed_89,
-                  min(fixed_89, Basic.attitude.bank_angle.Degrees()));
+                  min(fixed_89, attitude.bank_angle.Degrees()));
   fixed alpha = fixed_rad_to_deg * acos(max(-fixed_one,min(fixed_one,
-                  Basic.attitude.pitch_angle.Degrees() * fixed_div)));
+                  attitude.pitch_angle.Degrees() * fixed_div)));
   fixed sphi = fixed_180 - phi;
   Angle alpha1 = Angle::Degrees(sphi - alpha);
   Angle alpha2 = Angle::Degrees(sphi + alpha);
