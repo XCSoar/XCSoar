@@ -46,14 +46,10 @@ AirspaceRendererSettings::SetDefaults()
   std::fill(brushes, brushes + AIRSPACECLASSCOUNT, 0);
 
   brushes[0] = 2;
-  brushes[1] = 0;
-  brushes[2] = 0;
-  brushes[3] = 0;
   brushes[4] = 3;
   brushes[5] = 3;
   brushes[6] = 3;
   brushes[7] = 3;
-  brushes[8] = 0;
   brushes[9] = 3;
   brushes[10] = 2;
   brushes[11] = 3;
@@ -64,14 +60,9 @@ AirspaceRendererSettings::SetDefaults()
   std::fill(colours, colours + AIRSPACECLASSCOUNT, 0);
 
   colours[0] = 5;
-  colours[1] = 0;
-  colours[2] = 0;
   colours[3] = 10;
-  colours[4] = 0;
-  colours[5] = 0;
   colours[6] = 10;
   colours[7] = 2;
-  colours[8] = 0;
   colours[9] = 10;
   colours[10] = 9;
   colours[11] = 3;
