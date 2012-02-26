@@ -46,10 +46,6 @@ struct AccelerationState
 
   void Reset() {
     available = false;
-
-    /* g_load must be available to have a reasonable value until
-       BasicComputer has calculated an estimate */
-    g_load = fixed_one;
   }
 
   /**

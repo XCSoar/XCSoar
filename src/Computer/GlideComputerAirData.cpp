@@ -159,10 +159,13 @@ GlideComputerAirData::NettoVario(const NMEAInfo &basic,
                                  VarioInfo &vario,
                                  const ComputerSettings &settings_computer)
 {
+  fixed g_load = basic.acceleration.available ?
+                 basic.acceleration.g_load : fixed_one;
+
   vario.sink_rate =
     flight.flying && basic.airspeed_available
     ? - settings_computer.polar.glide_polar_task.SinkRate(basic.indicated_airspeed,
-                                                          basic.acceleration.g_load)
+                                                          g_load)
     /* the glider sink rate is useless when not flying */
     : fixed_zero;
 }
