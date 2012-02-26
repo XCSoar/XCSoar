@@ -30,7 +30,7 @@ AirspaceRendererSettings::SetDefaults()
 {
   enable = true;
   black_outline = false;
-  altitude_mode = ALLON;
+  altitude_mode = AirspaceDisplayMode::ALLON;
   clip_altitude = 1000;
 
   std::fill(display, display + AIRSPACECLASSCOUNT, true);

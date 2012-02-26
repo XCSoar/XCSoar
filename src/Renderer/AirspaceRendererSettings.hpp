@@ -29,7 +29,7 @@ Copyright_License {
 #include <stdint.h>
 
 /** Airspace display modes */
-enum AirspaceDisplayMode_t
+enum class AirspaceDisplayMode: uint8_t
 {
   ALLON = 0,
   CLIP,
@@ -50,7 +50,7 @@ struct AirspaceRendererSettings {
   bool black_outline;
 
   /** Mode controlling how airspaces are filtered for display */
-  AirspaceDisplayMode_t altitude_mode;
+  AirspaceDisplayMode altitude_mode;
 
   /**< Altitude (m) above which airspace is not drawn for clip mode */
   unsigned clip_altitude;

@@ -39,19 +39,23 @@ AirspaceVisiblePredicate::IsAltitudeVisible(const AbstractAirspace& airspace) co
   /// @todo airspace visibility did use ToMSL(..., map.Calculated().TerrainAlt); 
 
   switch (renderer_settings.altitude_mode) {
-  case ALLON:
+  case AirspaceDisplayMode::ALLON:
     return true;
-  case CLIP:
+
+  case AirspaceDisplayMode::CLIP:
     return airspace.GetBase().GetAltitude(state) <= fixed(renderer_settings.clip_altitude);
-  case AUTO:
+
+  case AirspaceDisplayMode::AUTO:
     return airspace.GetBase().IsBelow(state, fixed(computer_settings.warnings.AltWarningMargin))
       && airspace.GetTop().IsAbove(state, fixed(computer_settings.warnings.AltWarningMargin));
-  case ALLBELOW:
+
+  case AirspaceDisplayMode::ALLBELOW:
     return airspace.GetBase().IsBelow(state, fixed(computer_settings.warnings.AltWarningMargin));
-  case INSIDE:
+
+  case AirspaceDisplayMode::INSIDE:
     return (airspace.GetBase().IsBelow(state) && airspace.GetTop().IsAbove(state));
 
-  case ALLOFF:
+  case AirspaceDisplayMode::ALLOFF:
     return false;
   }
   return true;

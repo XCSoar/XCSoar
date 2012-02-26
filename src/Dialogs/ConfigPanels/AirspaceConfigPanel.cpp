@@ -49,13 +49,13 @@ enum ControlIndex {
 };
 
 static const StaticEnumChoice  as_display_list[] = {
-  { ALLON, N_("All on"),
+  { (unsigned)AirspaceDisplayMode::ALLON, N_("All on"),
     N_("All airspaces are displayed.") },
-  { CLIP, N_("Clip"),
+  { (unsigned)AirspaceDisplayMode::CLIP, N_("Clip"),
     N_("Display airspaces below the clip altitude.") },
-  { AUTO, N_("Auto"),
+  { (unsigned)AirspaceDisplayMode::AUTO, N_("Auto"),
     N_("Display airspaces within a margin of the glider.") },
-  { ALLBELOW, N_("All below"),
+  { (unsigned)AirspaceDisplayMode::ALLBELOW, N_("All below"),
     N_("Display airspaces below the glider or within a margin.") },
   { 0 }
 };
@@ -79,7 +79,7 @@ public:
   AirspaceConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-  void ShowDisplayControls(AirspaceDisplayMode_t mode);
+  void ShowDisplayControls(AirspaceDisplayMode mode);
   void ShowWarningControls(bool visible);
   void SetButtonsVisible(bool active);
 
@@ -107,10 +107,14 @@ OnAirspaceModeClicked(gcc_unused WndButton &button)
 }
 
 void
-AirspaceConfigPanel::ShowDisplayControls(AirspaceDisplayMode_t mode)
+AirspaceConfigPanel::ShowDisplayControls(AirspaceDisplayMode mode)
 {
-  SetRowVisible(ClipAltitude, mode == CLIP);
-  SetRowVisible(AltWarningMargin, mode == AUTO || mode == ALLBELOW);
+  SetRowVisible(ClipAltitude,
+                mode == AirspaceDisplayMode::CLIP);
+
+  SetRowVisible(AltWarningMargin,
+                mode == AirspaceDisplayMode::AUTO ||
+                mode == AirspaceDisplayMode::ALLBELOW);
 }
 
 void
@@ -158,7 +162,7 @@ void
 AirspaceConfigPanel::OnModified(DataField &df)
 {
   if (IsDataField(AirspaceDisplay, df)) {
-    AirspaceDisplayMode_t mode = (AirspaceDisplayMode_t)df.GetAsInteger();
+    AirspaceDisplayMode mode = (AirspaceDisplayMode)df.GetAsInteger();
     ShowDisplayControls(mode);
   } else if (IsDataField(AirspaceWarnings, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
@@ -178,7 +182,7 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddEnum(_("Airspace display"),
           _("Controls filtering of airspace for display and warnings.  The airspace filter button also allows filtering of display and warnings independently for each airspace class."),
-          as_display_list ,renderer.altitude_mode, this);
+          as_display_list, (unsigned)renderer.altitude_mode, this);
 
   AddFloat(_("Clip altitude"),
            _("For clip airspace mode, this is the altitude below which airspace is displayed."),

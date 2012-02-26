@@ -562,19 +562,19 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       OutBuffer, _T("$(DispModeFinalShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 
-  CondReplaceInString(GetMapSettings().airspace.altitude_mode == ALLON,
+  CondReplaceInString(GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::ALLON,
                       OutBuffer, _T("$(AirspaceModeAllShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().airspace.altitude_mode == CLIP,
+  CondReplaceInString(GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::CLIP,
                       OutBuffer, _T("$(AirspaceModeClipShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().airspace.altitude_mode == AUTO,
+  CondReplaceInString(GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::AUTO,
                       OutBuffer, _T("$(AirspaceModeAutoShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().airspace.altitude_mode == ALLBELOW,
+  CondReplaceInString(GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::ALLBELOW,
                       OutBuffer, _T("$(AirspaceModeBelowShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().airspace.altitude_mode == ALLOFF,
+  CondReplaceInString(GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::ALLOFF,
                       OutBuffer, _T("$(AirspaceModeAllOffIndicator)"),
                       _T("(*)"), _T(""), Size);
 

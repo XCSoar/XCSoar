@@ -355,15 +355,15 @@ InputEvents::eventAirspaceDisplayMode(const TCHAR *misc)
     CommonInterface::SetMapSettings().airspace;
 
   if (StringIsEqual(misc, _T("all")))
-    settings.altitude_mode = ALLON;
+    settings.altitude_mode = AirspaceDisplayMode::ALLON;
   else if (StringIsEqual(misc, _T("clip")))
-    settings.altitude_mode = CLIP;
+    settings.altitude_mode = AirspaceDisplayMode::CLIP;
   else if (StringIsEqual(misc, _T("auto")))
-    settings.altitude_mode = AUTO;
+    settings.altitude_mode = AirspaceDisplayMode::AUTO;
   else if (StringIsEqual(misc, _T("below")))
-    settings.altitude_mode = ALLBELOW;
+    settings.altitude_mode = AirspaceDisplayMode::ALLBELOW;
   else if (StringIsEqual(misc, _T("off")))
-    settings.altitude_mode = ALLOFF;
+    settings.altitude_mode = AirspaceDisplayMode::ALLOFF;
 
   trigger_redraw();
 }
