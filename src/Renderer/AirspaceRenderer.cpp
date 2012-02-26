@@ -405,7 +405,8 @@ public:
 
 private:
   void set_buffer_pens(const AbstractAirspace &airspace) {
-    const unsigned color_index = settings.colours[airspace.GetType()];
+    AirspaceClass airspace_class = airspace.GetType();
+    const unsigned color_index = settings.colours[airspace_class];
 
 #ifndef HAVE_HATCHED_BRUSH
     m_buffer.Select(airspace_look.solid_brushes[color_index]);
@@ -420,7 +421,7 @@ private:
       m_buffer.SetTextColor(LightColor(airspace_look.preset_colors[color_index]));
 
       // get brush, can be solid or a 1bpp bitmap
-      m_buffer.Select(airspace_look.brushes[settings.brushes[airspace.GetType()]]);
+      m_buffer.Select(airspace_look.brushes[settings.brushes[airspace_class]]);
 
       m_buffer.SetBackgroundOpaque();
       m_buffer.SetBackgroundColor(COLOR_WHITE);
