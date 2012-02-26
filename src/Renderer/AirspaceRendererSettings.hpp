@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_AIRSPACE_RENDERER_SETTINGS_HPP
 
 #include "Airspace/AirspaceClass.hpp"
+#include "Screen/Features.hpp"
 
 #include <stdint.h>
 
@@ -81,7 +82,10 @@ struct AirspaceRendererSettings {
     PADDING,
   } fill_mode;
 
+#ifdef HAVE_HATCHED_BRUSH
   uint8_t brushes[AIRSPACECLASSCOUNT];
+#endif
+
   uint8_t colours[AIRSPACECLASSCOUNT];
 
   void SetDefaults();

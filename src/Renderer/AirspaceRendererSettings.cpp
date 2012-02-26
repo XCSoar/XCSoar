@@ -42,8 +42,8 @@ AirspaceRendererSettings::SetDefaults()
 
   fill_mode = FillMode::DEFAULT;
 
+#ifdef HAVE_HATCHED_BRUSH
   std::fill(brushes, brushes + AIRSPACECLASSCOUNT, 0);
-  std::fill(colours, colours + AIRSPACECLASSCOUNT, 0);
 
   brushes[0] = 2;
   brushes[1] = 0;
@@ -59,6 +59,9 @@ AirspaceRendererSettings::SetDefaults()
   brushes[11] = 3;
   brushes[12] = 3;
   brushes[13] = 3;
+#endif
+
+  std::fill(colours, colours + AIRSPACECLASSCOUNT, 0);
 
   colours[0] = 5;
   colours[1] = 0;

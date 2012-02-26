@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Profile/AirspaceConfig.hpp"
-
 #include "Profile/Profile.hpp"
+#include "Screen/Features.hpp"
 #include "Interface.hpp"
 #include "Sizes.h"
 
@@ -58,12 +58,15 @@ Profile::LoadAirspaceConfig()
       computer.warnings.class_warnings[i] = (Temp & 0x2) != 0;
     }
 
+#ifdef HAVE_HATCHED_BRUSH
     Get(szProfileBrush[i], renderer.brushes[i]);
+    if (renderer.brushes[i] >= NUMAIRSPACEBRUSHES)
+      renderer.brushes[i] = 0;
+#endif
+
     Get(szProfileColour[i], renderer.colours[i]);
     if (renderer.colours[i] >= NUMAIRSPACECOLORS)
       renderer.colours[i] = 0;
-    if (renderer.brushes[i] >= NUMAIRSPACEBRUSHES)
-      renderer.brushes[i] = 0;
   }
 }
 
