@@ -66,7 +66,7 @@ class InfoBoxContentHorizon : public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxData &data);
-  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
+  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas);
 };
 
 #endif

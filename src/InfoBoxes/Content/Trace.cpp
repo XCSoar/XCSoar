@@ -66,19 +66,19 @@ InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
 }
 
 void
-InfoBoxContentVarioSpark::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
+InfoBoxContentVarioSpark::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   do_paint(infobox, canvas, CommonInterface::Calculated().trace_history.BruttoVario);
 }
 
 void
-InfoBoxContentNettoVarioSpark::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
+InfoBoxContentNettoVarioSpark::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   do_paint(infobox, canvas, CommonInterface::Calculated().trace_history.NettoVario);
 }
 
 void
-InfoBoxContentCirclingAverageSpark::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
+InfoBoxContentCirclingAverageSpark::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   do_paint(infobox, canvas, CommonInterface::Calculated().trace_history.CirclingAverage,
     false);
@@ -132,7 +132,7 @@ InfoBoxContentBarogram::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentBarogram::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
+InfoBoxContentBarogram::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   const Look &look = UIGlobals::GetLook();
   RenderBarographSpark(canvas, get_spark_rect(infobox),
@@ -167,7 +167,7 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
 
 
 void
-InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
+InfoBoxContentThermalBand::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   const Look &look = UIGlobals::GetLook();
   ThermalBandRenderer renderer(look.thermal_band, look.chart);
@@ -187,7 +187,7 @@ InfoBoxContentThermalBand::Update(InfoBoxData &data)
 
 
 void
-InfoBoxContentTaskProgress::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
+InfoBoxContentTaskProgress::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   const Look &look = UIGlobals::GetLook();
   TaskProgressRenderer renderer(look.map.task);

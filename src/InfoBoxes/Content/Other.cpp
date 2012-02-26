@@ -154,7 +154,7 @@ InfoBoxContentFreeRAM::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentHorizon::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
+InfoBoxContentHorizon::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   if (CommonInterface::Basic().acceleration.available) {
     const Look &look = UIGlobals::GetLook();

@@ -33,7 +33,7 @@ InfoBoxContent::HandleKey(const InfoBoxKeyCodes keycode)
 }
 
 void
-InfoBoxContent::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
+InfoBoxContent::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
 {
 }
 

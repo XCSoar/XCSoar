@@ -254,7 +254,7 @@ InfoBoxWindow::Paint(Canvas &canvas)
     canvas.clear(look.background_color);
 
   if (data.GetCustom() && content != NULL)
-    content->on_custom_paint(*this, canvas);
+    content->OnCustomPaint(*this, canvas);
 
   canvas.SetBackgroundTransparent();
 

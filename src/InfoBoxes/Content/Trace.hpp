@@ -44,28 +44,28 @@ class InfoBoxContentVarioSpark : public InfoBoxContentSpark
 {
 public:
   virtual void Update(InfoBoxData &data);
-  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
+  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas);
 };
 
 class InfoBoxContentNettoVarioSpark : public InfoBoxContentSpark
 {
 public:
   virtual void Update(InfoBoxData &data);
-  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
+  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas);
 };
 
 class InfoBoxContentCirclingAverageSpark : public InfoBoxContentSpark
 {
 public:
   virtual void Update(InfoBoxData &data);
-  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
+  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas);
 };
 
 class InfoBoxContentBarogram : public InfoBoxContentAltitude
 {
 public:
   virtual void Update(InfoBoxData &data);
-  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
+  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas);
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 };
 
@@ -73,14 +73,14 @@ class InfoBoxContentThermalBand : public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxData &data);
-  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
+  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas);
 };
 
 class InfoBoxContentTaskProgress : public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxData &data);
-  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
+  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas);
 };
 
 #endif

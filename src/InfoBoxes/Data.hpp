@@ -44,7 +44,7 @@ struct InfoBoxData {
   void Clear();
 
   /**
-   * Enable custom painting via InfoBoxContent::on_custom_paint().
+   * Enable custom painting via InfoBoxContent::OnCustomPaint().
    */
   void SetCustom() {
     /* 0xff is a "magic" value that indicates custom painting*/

@@ -52,7 +52,7 @@ public:
   virtual void Update(InfoBoxData &data) = 0;
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 
-  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
+  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas);
 
   /**
    * This is a generic handler for the InfoBox. It takes the argument and
