@@ -251,12 +251,8 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   if (hasAccuracy)
     basic.gps.hdop = fixed(accuracy);
 
-  if (hasAcceleration) {
-    // TODO: use ACCELERATION_STATE::complement() ?!?
-    basic.acceleration.available = true;
-    basic.acceleration.real = true;
-    basic.acceleration.g_load = fixed(acceleration);
-  }
+  if (hasAcceleration)
+    basic.acceleration.ProvideGLoad(fixed(acceleration), true);
 
   device_blackboard->ScheduleMerge();
 }

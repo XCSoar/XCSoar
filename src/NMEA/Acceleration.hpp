@@ -54,6 +54,12 @@ struct AccelerationState
     available = false;
   }
 
+  void ProvideGLoad(fixed _g_load, bool _real) {
+    g_load = _g_load;
+    real = _real;
+    available = true;
+  }
+
   /**
    * Adds data from the specified object, unless already present in
    * this one.

@@ -115,7 +115,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.connected.Update(basic.clock);
   basic.ProvideTime(t);
   basic.gps.satellites_used_available.Clear();
-  basic.acceleration.available = false;
+  basic.acceleration.Reset();
   basic.location = loc;
   basic.location_available.Update(t);
   basic.ground_speed = speed;

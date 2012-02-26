@@ -218,9 +218,7 @@ PDVDS(NMEAInputLine &line, NMEAInfo &info)
   fixed AccelZ = line.read(fixed_zero);
 
   int mag = (int)hypot(AccelX, AccelZ);
-  info.acceleration.g_load = fixed(mag) / 100;
-  info.acceleration.available = true;
-  info.acceleration.real = true;
+  info.acceleration.ProvideGLoad(fixed(mag) / 100, true);
 
   /*
   double flap = line.read(0.0);
