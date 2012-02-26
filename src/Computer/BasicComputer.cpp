@@ -301,30 +301,33 @@ ComputeNettoVario(MoreData &basic, const VarioInfo &vario)
 static void
 ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 {
-  if (calculated.flight.flying &&
-      (positive(basic.ground_speed) ||
-       (calculated.wind_available && calculated.wind.IsNonZero()))) {
+  if (!calculated.flight.flying)
+    return;
 
-    // estimate bank angle (assuming balanced turn)
-    if (basic.airspeed_available) {
-      const fixed angle = atan(Angle::Degrees(calculated.turn_rate_heading
-          * basic.true_airspeed * fixed_inv_g).Radians());
+  if (!positive(basic.ground_speed) &&
+      (!calculated.wind_available || calculated.wind.IsZero()))
+    return;
 
-      basic.attitude.bank_angle = Angle::Radians(angle);
-      basic.attitude.bank_angle_available = true;
+  if (!basic.airspeed_available)
+    return;
 
-      if (!basic.acceleration.available) {
-        basic.acceleration.g_load = fixed_one / max(fixed_small, fabs(cos(angle)));
-        basic.acceleration.available = true;
-      }
-    }
+  // estimate bank angle (assuming balanced turn)
+  const fixed angle = atan(Angle::Degrees(calculated.turn_rate_heading
+      * basic.true_airspeed * fixed_inv_g).Radians());
 
+  basic.attitude.bank_angle = Angle::Radians(angle);
+  basic.attitude.bank_angle_available = true;
+
+  if (basic.total_energy_vario_available) {
     // estimate pitch angle (assuming balanced turn)
-    if (basic.airspeed_available && basic.total_energy_vario_available) {
-      basic.attitude.pitch_angle = Angle::Radians(atan2(basic.gps_vario - basic.total_energy_vario,
-                                                        basic.true_airspeed));
-      basic.attitude.pitch_angle_available = true;
-    }
+    basic.attitude.pitch_angle = Angle::Radians(atan2(basic.gps_vario - basic.total_energy_vario,
+                                                      basic.true_airspeed));
+    basic.attitude.pitch_angle_available = true;
+  }
+
+  if (!basic.acceleration.available) {
+    basic.acceleration.g_load = fixed_one / max(fixed_small, fabs(cos(angle)));
+    basic.acceleration.available = true;
   }
 }
 
