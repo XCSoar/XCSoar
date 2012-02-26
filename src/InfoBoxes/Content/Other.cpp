@@ -33,6 +33,10 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 
+#ifdef HAVE_MEM_INFO
+#include "Formatter/ByteSizeFormatter.hpp"
+#endif
+
 #include <tchar.h>
 #include <stdio.h>
 
@@ -143,21 +147,7 @@ void
 InfoBoxContentFreeRAM::Update(InfoBoxData &data)
 {
 #ifdef HAVE_MEM_INFO
-  TCHAR unit;
-  unsigned long freeRAM = SystemFreeRAM();
-  double f = freeRAM;
-  if (freeRAM >= 1024 * 1024 *1024) {
-    f /= (1024 * 1024 * 1024);
-    unit = _T('G');
-  } else if (freeRAM >= 1024 * 1024) {
-    f /= (1024 * 1024);
-    unit = _T('M');
-  } else if (freeRAM >= 1024) {
-    f /= 1024;
-    unit = _T('K');
-  } else
-    unit = _T('B');
-  data.UnsafeFormatValue(_T("%.1f%c"), f, unit);
+  FormatByteSize(data.value.buffer(), data.value.MAX_SIZE, SystemFreeRAM(), true);
 #else
   data.SetInvalid();
 #endif

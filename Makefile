@@ -576,6 +576,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Units/UserUnitsFormatter.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
+	$(SRC)/Formatter/ByteSizeFormatter.cpp \
 	$(SRC)/Formatter/UserGeoPointFormatter.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/IGCFilenameFormatter.cpp \
