@@ -294,9 +294,7 @@ ComputeNettoVario(MoreData &basic, const VarioInfo &vario)
 }
 
 /**
- * Calculates the turn rate of the heading,
- * the estimated bank angle and
- * the estimated pitch angle
+ * Calculates the estimated bank and pitch angles
  */
 static void
 ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
