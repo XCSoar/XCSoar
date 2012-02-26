@@ -47,7 +47,7 @@ void
 OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
 {
   if (layer == LAYER_SHADE) {
-    Color color = airspace_look.colors[settings.colours[AATASK]];
+    Color color = airspace_look.preset_colors[settings.colours[AATASK]];
 #ifdef ENABLE_OPENGL
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

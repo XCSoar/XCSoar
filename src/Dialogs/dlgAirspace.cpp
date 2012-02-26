@@ -72,7 +72,7 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
       canvas.Select(look.solid_brushes[renderer.colours[i]]);
     } else {
 #endif
-      canvas.SetTextColor(look.colors[renderer.colours[i]]);
+      canvas.SetTextColor(look.preset_colors[renderer.colours[i]]);
       canvas.SetBackgroundColor(Color(0xFF, 0xFF, 0xFF));
       canvas.Select(look.brushes[renderer.brushes[i]]);
 #ifdef HAVE_ALPHA_BLEND

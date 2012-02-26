@@ -30,7 +30,7 @@ Copyright_License {
 #include "Screen/GDI/AlphaBlend.hpp"
 #endif
 
-const Color AirspaceLook::colors[] = {
+const Color AirspaceLook::preset_colors[] = {
   COLOR_RED,
   COLOR_GREEN,
   COLOR_BLUE,
@@ -54,7 +54,7 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
 {
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
     pens[i].Set(Layout::ScalePenWidth(2),
-                colors[settings.colours[i]]);
+                preset_colors[settings.colours[i]]);
 
   // airspace brushes and colors
 #ifdef HAVE_HATCHED_BRUSH
@@ -76,7 +76,7 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
 #endif
 #if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
     for (unsigned i = 0; i < NUMAIRSPACECOLORS; ++i)
-      solid_brushes[i].Set(colors[i]);
+      solid_brushes[i].Set(preset_colors[i]);
 #endif
 
   thick_pen.Set(Layout::ScalePenWidth(10), COLOR_BLACK);

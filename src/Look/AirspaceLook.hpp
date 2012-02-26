@@ -35,7 +35,7 @@ Copyright_License {
 struct AirspaceRendererSettings;
 
 struct AirspaceLook {
-  static const Color colors[NUMAIRSPACECOLORS];
+  static const Color preset_colors[NUMAIRSPACECOLORS];
 
 #if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
   /**

@@ -48,7 +48,7 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 #else
   canvas.SetBackgroundTransparent();
   canvas.Select(look.brushes[1]); // this is the solid brush
-  canvas.SetTextColor(look.colors[i]);
+  canvas.SetTextColor(look.preset_colors[i]);
 #endif
   canvas.Rectangle(rc.left + Layout::FastScale(2),
                    rc.top + Layout::FastScale(2),
