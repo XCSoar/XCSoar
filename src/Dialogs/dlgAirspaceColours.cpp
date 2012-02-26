@@ -41,19 +41,21 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   assert(i < NUMAIRSPACECOLORS);
 
   const AirspaceLook &look = UIGlobals::GetMapLook().airspace;
+  const Color &color = look.preset_colors[i];
+
+  PixelRect rc2 = rc;
+  InflateRect(&rc2, -Layout::FastScale(2), -Layout::FastScale(2));
+
+#ifdef USE_GDI
+  canvas.DrawFilledRectangle(rc2, color);
+  canvas.SelectHollowBrush();
+#else
+  Brush brush(color);
+  canvas.Select(brush);
+#endif
 
   canvas.SelectBlackPen();
-#ifndef HAVE_HATCHED_BRUSH
-  canvas.Select(look.solid_brushes[i]);
-#else
-  canvas.SetBackgroundTransparent();
-  canvas.Select(look.brushes[1]); // this is the solid brush
-  canvas.SetTextColor(look.preset_colors[i]);
-#endif
-  canvas.Rectangle(rc.left + Layout::FastScale(2),
-                   rc.top + Layout::FastScale(2),
-                   rc.right - Layout::FastScale(2),
-                   rc.bottom - Layout::FastScale(2));
+  canvas.Rectangle(rc2.left, rc2.top, rc2.right, rc2.bottom);
 }
 
 static void
