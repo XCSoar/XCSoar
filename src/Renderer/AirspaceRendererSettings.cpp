@@ -40,7 +40,7 @@ AirspaceRendererSettings::SetDefaults()
   transparency = false;
 #endif
 
-  fill_mode = AS_FILL_DEFAULT;
+  fill_mode = FillMode::DEFAULT;
 
   std::fill(brushes, brushes + AIRSPACECLASSCOUNT, 0);
   std::fill(colours, colours + AIRSPACECLASSCOUNT, 0);

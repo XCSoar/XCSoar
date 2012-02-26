@@ -70,15 +70,15 @@ struct AirspaceRendererSettings {
    * What portion of the airspace area should be filled with the
    * airspace brush?
    */
-  enum AirspaceFillMode {
+  enum class FillMode: uint8_t {
     /** the platform specific default is used */
-    AS_FILL_DEFAULT,
+    DEFAULT,
 
     /** fill all of the area */
-    AS_FILL_ALL,
+    ALL,
 
     /** fill only a thick padding (like on ICAO maps) */
-    AS_FILL_PADDING,
+    PADDING,
   } fill_mode;
 
   uint8_t brushes[AIRSPACECLASSCOUNT];

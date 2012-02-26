@@ -61,11 +61,11 @@ static const StaticEnumChoice  as_display_list[] = {
 };
 
 static const StaticEnumChoice  as_fill_mode_list[] = {
-  { AirspaceRendererSettings::AS_FILL_DEFAULT, N_("Default"),
+  { (unsigned)AirspaceRendererSettings::FillMode::DEFAULT, N_("Default"),
     _T("") },
-  { AirspaceRendererSettings::AS_FILL_ALL, N_("Fill all"),
+  { (unsigned)AirspaceRendererSettings::FillMode::ALL, N_("Fill all"),
     _T("") },
-  { AirspaceRendererSettings::AS_FILL_PADDING, N_("Fill padding"),
+  { (unsigned)AirspaceRendererSettings::FillMode::PADDING, N_("Fill padding"),
     _T("") },
   { 0 }
 };
@@ -212,7 +212,7 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddEnum(_("Airspace fill mode"),
           _("Specifies the mode for filling the airspace area."),
-          as_fill_mode_list, renderer.fill_mode);
+          as_fill_mode_list, (unsigned)renderer.fill_mode);
   SetExpertRow(AirspaceFillMode);
 
 #if !defined(ENABLE_OPENGL) && defined(HAVE_ALPHA_BLEND)

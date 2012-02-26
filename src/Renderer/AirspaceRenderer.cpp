@@ -364,15 +364,15 @@ public:
      m_warnings(warnings)
   {
     switch (settings.fill_mode) {
-    case AirspaceRendererSettings::AS_FILL_DEFAULT:
+    case AirspaceRendererSettings::FillMode::DEFAULT:
       m_use_stencil = !IsAncientHardware();
       break;
 
-    case AirspaceRendererSettings::AS_FILL_ALL:
+    case AirspaceRendererSettings::FillMode::ALL:
       m_use_stencil = false;
       break;
 
-    case AirspaceRendererSettings::AS_FILL_PADDING:
+    case AirspaceRendererSettings::FillMode::PADDING:
       m_use_stencil = true;
       break;
     }
@@ -509,7 +509,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
     return;
 
 #ifdef ENABLE_OPENGL
-  if (settings.fill_mode == AirspaceRendererSettings::AS_FILL_ALL) {
+  if (settings.fill_mode == AirspaceRendererSettings::FillMode::ALL) {
     AirspaceFillRenderer renderer(canvas, projection, airspace_look, awc,
                                   settings);
     airspace_database->visit_within_range(projection.GetGeoScreenCenter(),
