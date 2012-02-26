@@ -67,7 +67,7 @@ CheckAirspace(const AbstractAirspace &airspace)
   const AirspaceWarningConfig &config =
     CommonInterface::GetComputerSettings().airspace.warnings;
 
-  return config.class_enabled(airspace.GetType()) && !IsAcked(airspace);
+  return config.IsClassEnabled(airspace.GetType()) && !IsAcked(airspace);
 }
 
 class HorizontalAirspaceCondition : public AirspacePredicate {

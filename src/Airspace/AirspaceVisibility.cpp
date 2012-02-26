@@ -46,11 +46,11 @@ AirspaceVisiblePredicate::IsAltitudeVisible(const AbstractAirspace& airspace) co
     return airspace.GetBase().GetAltitude(state) <= fixed(renderer_settings.clip_altitude);
 
   case AirspaceDisplayMode::AUTO:
-    return airspace.GetBase().IsBelow(state, fixed(computer_settings.warnings.AltWarningMargin))
-      && airspace.GetTop().IsAbove(state, fixed(computer_settings.warnings.AltWarningMargin));
+    return airspace.GetBase().IsBelow(state, fixed(computer_settings.warnings.altitude_warning_margin))
+      && airspace.GetTop().IsAbove(state, fixed(computer_settings.warnings.altitude_warning_margin));
 
   case AirspaceDisplayMode::ALLBELOW:
-    return airspace.GetBase().IsBelow(state, fixed(computer_settings.warnings.AltWarningMargin));
+    return airspace.GetBase().IsBelow(state, fixed(computer_settings.warnings.altitude_warning_margin));
 
   case AirspaceDisplayMode::INSIDE:
     return (airspace.GetBase().IsBelow(state) && airspace.GetTop().IsAbove(state));

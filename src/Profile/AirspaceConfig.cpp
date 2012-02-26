@@ -38,9 +38,9 @@ Profile::LoadAirspaceConfig()
     CommonInterface::SetMapSettings().airspace;
 
   Get(szProfileAirspaceWarning, computer.enable_warnings);
-  Get(szProfileAltMargin, computer.warnings.AltWarningMargin);
-  Get(szProfileWarningTime, computer.warnings.WarningTime);
-  Get(szProfileAcknowledgementTime, computer.warnings.AcknowledgementTime);
+  Get(szProfileAltMargin, computer.warnings.altitude_warning_margin);
+  Get(szProfileWarningTime, computer.warnings.warning_time);
+  Get(szProfileAcknowledgementTime, computer.warnings.acknowledgement_time);
 
   Get(szProfileAirspaceBlackOutline, renderer.black_outline);
   GetEnum(szProfileAltMode, renderer.altitude_mode);

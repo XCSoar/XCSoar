@@ -27,22 +27,23 @@
 
 #include <assert.h>
 
-struct AirspaceWarningConfig {
+struct AirspaceWarningConfig
+{
   /** Warning time before airspace entry */
-  unsigned WarningTime;
+  unsigned warning_time;
 
   /** Time an acknowledgement will persist before a warning is reissued */
-  unsigned AcknowledgementTime;
+  unsigned acknowledgement_time;
 
   /** Altitude margin (m) outside of which to not display airspace for auto mode */
-  unsigned AltWarningMargin;    
+  unsigned altitude_warning_margin;
 
   /** Class-specific warning flags */
   bool class_warnings[AIRSPACECLASSCOUNT];
 
   void SetDefaults();
 
-  bool class_enabled(AirspaceClass cls) const {
+  bool IsClassEnabled(AirspaceClass cls) const {
     assert(cls >= 0 && cls < AIRSPACECLASSCOUNT);
 
     return class_warnings[cls];

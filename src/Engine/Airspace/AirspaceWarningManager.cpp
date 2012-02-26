@@ -48,8 +48,8 @@ AirspaceWarningManager::SetConfig(const AirspaceWarningConfig &_config)
 {
   config = _config;
 
-  SetPredictionTimeGlide(fixed(config.WarningTime));
-  SetPredictionTimeFilter(fixed(config.WarningTime));
+  SetPredictionTimeGlide(fixed(config.warning_time));
+  SetPredictionTimeFilter(fixed(config.warning_time));
 }
 
 void
@@ -125,7 +125,7 @@ AirspaceWarningManager::Update(const AircraftState& state,
 
   // action changes
   for (auto it = warnings.begin(), end = warnings.end(); it != end;) {
-    if (it->WarningLive(config.AcknowledgementTime, dt)) {
+    if (it->WarningLive(config.acknowledgement_time, dt)) {
       if (it->ChangedState())
         changed = true;
 
@@ -195,7 +195,7 @@ public:
     if (!airspace.IsActive())
       return; // ignore inactive airspaces completely
 
-    if (!warning_manager.GetConfig().class_enabled(airspace.GetType()) ||
+    if (!warning_manager.GetConfig().IsClassEnabled(airspace.GetType()) ||
         ExcludeAltitude(airspace))
       return;
 
@@ -265,7 +265,7 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
   // it can be the minimum of the user set warning time, or the time of the 
   // task segment
 
-  const fixed max_time_limit = min(fixed(config.WarningTime), max_time);
+  const fixed max_time_limit = min(fixed(config.warning_time), max_time);
 
   // the ceiling is the max height for predicted intrusions, given
   // that you may be climbing.  the ceiling is nominally set at 1000m
@@ -275,7 +275,7 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
   // collected for it.  It is very unlikely users will have more than 1000m
   // in AltWarningMargin anyway.
 
-  const fixed ceiling = state.altitude + fixed(max((unsigned)1000, config.AltWarningMargin));
+  const fixed ceiling = state.altitude + fixed(max((unsigned)1000, config.altitude_warning_margin));
 
   AirspaceIntersectionWarningVisitor visitor(state, perf, 
                                              *this, 
@@ -312,7 +312,7 @@ AirspaceWarningManager::UpdateTask(const AircraftState &state,
   const fixed time_remaining = solution.time_elapsed;
 
   const GeoVector vector(state.location, location_tp);
-  fixed max_distance = config.WarningTime * glide_polar.GetVMax();
+  fixed max_distance = config.warning_time * glide_polar.GetVMax();
   if (vector.distance > max_distance)
     /* limit the distance to what our glider can actually fly within
        the configured warning time */
@@ -374,7 +374,7 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
     if (!airspace.IsActive())
       continue; // ignore inactive airspaces
 
-    if (!config.class_enabled(airspace.GetType()))
+    if (!config.IsClassEnabled(airspace.GetType()))
       continue;
 
     AirspaceWarning& warning = GetWarning(airspace);

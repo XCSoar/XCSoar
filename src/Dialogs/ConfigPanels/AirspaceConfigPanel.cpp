@@ -190,19 +190,19 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddFloat(_("Margin"),
            _("For auto and all below airspace mode, this is the altitude above/below which airspace is included."),
-           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(100), false, UnitGroup::ALTITUDE, fixed(computer.warnings.AltWarningMargin));
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(100), false, UnitGroup::ALTITUDE, fixed(computer.warnings.altitude_warning_margin));
 
   AddBoolean(_("Warnings"), _("Enable/disable all airspace warnings."),
              computer.enable_warnings, this);
 
   AddTime(_("Warning time"),
           _("This is the time before an airspace incursion is estimated at which the system will warn the pilot."),
-          10, 1000, 5, computer.warnings.WarningTime);
+          10, 1000, 5, computer.warnings.warning_time);
   SetExpertRow(WarningTime);
 
   AddTime(_("Acknowledge time"),
           _("This is the time period in which an acknowledged airspace warning will not be repeated."),
-          10, 1000, 5, computer.warnings.AcknowledgementTime);
+          10, 1000, 5, computer.warnings.acknowledgement_time);
   SetExpertRow(AcknowledgeTime);
 
   AddBoolean(_("Use black outline"),
@@ -248,17 +248,17 @@ AirspaceConfigPanel::Save(bool &_changed, bool &require_restart)
 
   changed |= SaveValue(ClipAltitude, UnitGroup::ALTITUDE, szProfileClipAlt, renderer.clip_altitude);
 
-  changed |= SaveValue(AltWarningMargin, UnitGroup::ALTITUDE, szProfileAltMargin, computer.warnings.AltWarningMargin);
+  changed |= SaveValue(AltWarningMargin, UnitGroup::ALTITUDE, szProfileAltMargin, computer.warnings.altitude_warning_margin);
 
   changed |= SaveValue(AirspaceWarnings, szProfileAirspaceWarning, computer.enable_warnings);
 
-  if (SaveValue(WarningTime, szProfileWarningTime, computer.warnings.WarningTime)) {
+  if (SaveValue(WarningTime, szProfileWarningTime, computer.warnings.warning_time)) {
     changed = true;
     require_restart = true;
   }
 
   if (SaveValue(AcknowledgeTime, szProfileAcknowledgementTime,
-                computer.warnings.AcknowledgementTime)) {
+                computer.warnings.acknowledgement_time)) {
     changed = true;
     require_restart = true;
   }
