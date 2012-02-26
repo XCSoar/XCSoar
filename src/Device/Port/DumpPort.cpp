@@ -27,11 +27,18 @@ Copyright_License {
 #include <stdint.h>
 #include <stdio.h>
 
+DumpPort::DumpPort(Port *_port) :Port(*(Handler *)NULL), port(_port) {}
+
+DumpPort::~DumpPort()
+{
+  delete port;
+}
+
 size_t
 DumpPort::Write(const void *data, size_t length)
 {
   LogStartUp(_T("Write(%u)"), (unsigned)length);
-  size_t nbytes = other.Write(data, length);
+  size_t nbytes = port->Write(data, length);
   LogStartUp(_T("Write(%u)=%u"), (unsigned)length, (unsigned)nbytes);
   HexDump(_T("W "), data, nbytes);
   return nbytes;
@@ -41,48 +48,48 @@ void
 DumpPort::Flush()
 {
   LogStartUp(_T("Flush"));
-  other.Flush();
+  port->Flush();
 }
 
 bool
 DumpPort::SetRxTimeout(unsigned timeout_ms)
 {
   LogStartUp(_T("SetRxTimeout %u"), timeout_ms);
-  return other.SetRxTimeout(timeout_ms);
+  return port->SetRxTimeout(timeout_ms);
 }
 
 unsigned
 DumpPort::GetBaudrate() const
 {
-  return other.GetBaudrate();
+  return port->GetBaudrate();
 }
 
 unsigned
 DumpPort::SetBaudrate(unsigned baud_rate)
 {
   LogStartUp(_T("SetBaudrate %u"), baud_rate);
-  return other.SetBaudrate(baud_rate);
+  return port->SetBaudrate(baud_rate);
 }
 
 bool
 DumpPort::StopRxThread()
 {
   LogStartUp(_T("StopRxThread"));
-  return other.StopRxThread();
+  return port->StopRxThread();
 }
 
 bool
 DumpPort::StartRxThread()
 {
   LogStartUp(_T("StartRxThread"));
-  return other.StartRxThread();
+  return port->StartRxThread();
 }
 
 int
 DumpPort::Read(void *buffer, size_t size)
 {
   LogStartUp(_T("Read(%u)"), (unsigned)size);
-  int nbytes = other.Read(buffer, size);
+  int nbytes = port->Read(buffer, size);
   LogStartUp(_T("Read(%u)=%d"), (unsigned)size, nbytes);
   if (nbytes > 0)
     HexDump(_T("R "), buffer, nbytes);
@@ -93,5 +100,5 @@ Port::WaitResult
 DumpPort::WaitRead(unsigned timeout_ms)
 {
   LogStartUp(_T("WaitRead %u"), timeout_ms);
-  return other.WaitRead(timeout_ms);
+  return port->WaitRead(timeout_ms);
 }

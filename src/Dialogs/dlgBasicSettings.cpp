@@ -131,6 +131,9 @@ FlightSetupPanel::SetBallast()
   SetRowVisible(WingLoading, positive(wl));
   if (positive(wl))
     LoadValue(WingLoading, wl);
+
+  if (device_blackboard != NULL)
+    device_blackboard->SetBallast(polar_settings.glide_polar_task.GetBallast());
 }
 
 void

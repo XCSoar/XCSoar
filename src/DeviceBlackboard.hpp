@@ -118,6 +118,7 @@ public:
   void SetTrack(Angle val);
   void SetSpeed(fixed val);
   void SetAltitude(fixed alt);
+  void SetBallast(fixed ballast);
   void SetBugs(fixed bugs);
   void SetQNH(AtmosphericPressure qnh);
   void SetMC(fixed mc);

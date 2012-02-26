@@ -46,6 +46,10 @@ Copyright_License {
 #include "SerialPort.hpp"
 #endif
 
+#ifndef NDEBUG
+#include "DumpPort.hpp"
+#endif
+
 #include <windef.h> /* for MAX_PATH */
 
 /**
@@ -73,7 +77,12 @@ static Port *
 WrapPort(const DeviceConfig &config, Port::Handler &handler, Port *port)
 {
   if (config.k6bt && config.MaybeBluetooth())
-    port = new K6BtPort(port, config.baud_rate,handler);
+    port = new K6BtPort(port, config.baud_rate, handler);
+
+#ifndef NDEBUG
+  if (config.dump_port)
+    port = new DumpPort(port);
+#endif
 
   return port;
 }
