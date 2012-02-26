@@ -88,6 +88,7 @@ TEST_NAMES = \
 	TestStrings \
 	TestUnitsFormatter \
 	TestGeoPointFormatter \
+	TestByteSizeFormatter \
 	TestTimeFormatter \
 	TestIGCFilenameFormatter \
 	TestLXNToIGC
@@ -369,6 +370,14 @@ TEST_GEO_POINT_FORMATTER_SOURCES = \
 	$(TEST_SRC_DIR)/TestGeoPointFormatter.cpp
 TEST_GEO_POINT_FORMATTER_DEPENDS = MATH
 $(eval $(call link-program,TestGeoPointFormatter,TEST_GEO_POINT_FORMATTER))
+
+TEST_BYTE_SIZE_FORMATTER_SOURCES = \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Formatter/ByteSizeFormatter.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestByteSizeFormatter.cpp
+TEST_BYTE_SIZE_FORMATTER_DEPENDS = MATH
+$(eval $(call link-program,TestByteSizeFormatter,TEST_BYTE_SIZE_FORMATTER))
 
 TEST_TIME_FORMATTER_SOURCES = \
 	$(SRC)/DateTime.cpp \
