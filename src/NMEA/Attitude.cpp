@@ -21,13 +21,11 @@ Copyright_License {
 }
 */
 
-#include "NMEA/Acceleration.hpp"
+#include "NMEA/Attitude.hpp"
 
 void
-AccelerationState::Complement(const AccelerationState &add)
+AttitudeState::Complement(const AttitudeState &add)
 {
-  if (!available && add.available) {
-    g_load = add.g_load;
-    available = add.available;
-  }
+  bank_angle = add.bank_angle;
+  pitch_angle = add.pitch_angle;
 }

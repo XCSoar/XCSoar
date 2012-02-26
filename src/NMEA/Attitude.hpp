@@ -21,13 +21,28 @@ Copyright_License {
 }
 */
 
-#include "NMEA/Acceleration.hpp"
+#ifndef XCSOAR_ATTITUDE_HPP
+#define XCSOAR_ATTITUDE_HPP
 
-void
-AccelerationState::Complement(const AccelerationState &add)
+#include "Math/Angle.hpp"
+
+struct AttitudeState
 {
-  if (!available && add.available) {
-    g_load = add.g_load;
-    available = add.available;
+  /** Estimated bank angle */
+  Angle bank_angle;
+  /** Estimated pitch angle */
+  Angle pitch_angle;
+
+  void Reset() {
+    bank_angle = Angle::Zero();
+    pitch_angle = Angle::Zero();
   }
-}
+
+  /**
+   * Adds data from the specified object, unless already present in
+   * this one.
+   */
+  void Complement(const AttitudeState &add);
+};
+
+#endif

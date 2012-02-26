@@ -216,6 +216,7 @@ NMEAInfo::Complement(const NMEAInfo &add)
   }
 
   acceleration.Complement(add.acceleration);
+  attitude.Complement(add.attitude);
 
   if (location_available.Complement(add.location_available))
     location = add.location;

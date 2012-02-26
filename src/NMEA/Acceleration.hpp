@@ -27,15 +27,10 @@ Copyright_License {
 #include "Math/Angle.hpp"
 
 /**
- * State of acceleration of aircraft, with calculated pseudo-attitude reference
+ * State of acceleration of aircraft
  */
 struct AccelerationState
 {
-  /** Estimated bank angle */
-  Angle bank_angle;
-  /** Estimated pitch angle */
-  Angle pitch_angle;
-
   /**
    * Is G-load information available?
    * @see Gload

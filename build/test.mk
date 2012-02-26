@@ -565,6 +565,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
@@ -736,6 +737,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/MoreData.cpp \
+	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
@@ -1138,6 +1140,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
+	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
@@ -1472,6 +1475,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/MoreData.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
+	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
@@ -1834,6 +1838,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/MoreData.cpp \
+	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Derived.cpp \

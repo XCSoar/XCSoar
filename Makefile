@@ -331,6 +331,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/MoreData.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
+	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/NMEA/Derived.cpp \

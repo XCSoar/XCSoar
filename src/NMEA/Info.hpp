@@ -28,6 +28,7 @@ Copyright_License {
 #include "NMEA/Validity.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "NMEA/Acceleration.hpp"
+#include "NMEA/Attitude.hpp"
 #include "DateTime.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
@@ -149,6 +150,8 @@ struct NMEAInfo {
   GPSState gps;
 
   AccelerationState acceleration;
+
+  AttitudeState attitude;
 
   Validity location_available;
 
