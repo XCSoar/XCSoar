@@ -220,6 +220,7 @@ PDVDS(NMEAInputLine &line, NMEAInfo &info)
   int mag = (int)hypot(AccelX, AccelZ);
   info.acceleration.g_load = fixed(mag) / 100;
   info.acceleration.available = true;
+  info.acceleration.real = true;
 
   /*
   double flap = line.read(0.0);

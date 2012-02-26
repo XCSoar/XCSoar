@@ -38,6 +38,12 @@ struct AccelerationState
   bool available;
 
   /**
+   * Is the G-load information coming from a connected device (true) or
+   * was it calculated by XCSoar (false)
+   */
+  bool real;
+
+  /**
    * G-Load information of external device (if available)
    * or estimated (assuming balanced turn) 
    * @see AccelerationAvailable

@@ -92,6 +92,7 @@ WindZigZagGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   // temporary manoeuvering, dont append this point
   if ((fabs(derived.turn_rate) > fixed(20)) ||
       (basic.acceleration.available &&
+       basic.acceleration.real &&
        fabs(basic.acceleration.g_load - fixed_one) > fixed(0.3))) {
 
     blackout((unsigned)basic.time);

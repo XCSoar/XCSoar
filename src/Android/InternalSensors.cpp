@@ -254,6 +254,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   if (hasAcceleration) {
     // TODO: use ACCELERATION_STATE::complement() ?!?
     basic.acceleration.available = true;
+    basic.acceleration.real = true;
     basic.acceleration.g_load = fixed(acceleration);
   }
 

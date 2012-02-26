@@ -26,7 +26,8 @@ Copyright_License {
 void
 AccelerationState::Complement(const AccelerationState &add)
 {
-  if (!available && add.available) {
+  if (add.available && (!available || (add.real && !real))) {
+    real = add.real;
     g_load = add.g_load;
     available = add.available;
   }

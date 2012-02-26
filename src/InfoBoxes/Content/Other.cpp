@@ -49,8 +49,7 @@ InfoBoxContentGLoad::Update(InfoBoxData &data)
   }
 
   // Set Value
-  data.SetValue(_T("%2.2f"),
-                    XCSoarInterface::Basic().acceleration.g_load);
+  data.SetValue(_T("%2.2f"), XCSoarInterface::Basic().acceleration.g_load);
 }
 
 void

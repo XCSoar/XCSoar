@@ -179,6 +179,7 @@ GlideComputerAirData::AverageClimbRate(const NMEAInfo &basic,
       basic.total_energy_vario_available &&
       !calculated.circling &&
       (!basic.acceleration.available ||
+       !basic.acceleration.real ||
        fabs(basic.acceleration.g_load - fixed_one) <= fixed(0.25))) {
     // TODO: Check this is correct for TAS/IAS
     fixed ias_to_tas = basic.indicated_airspeed / basic.true_airspeed;

@@ -325,6 +325,7 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 
   if (!basic.acceleration.available) {
     basic.acceleration.g_load = fixed_one / max(fixed_small, fabs(cos(angle)));
+    basic.acceleration.real = false;
     basic.acceleration.available = true;
   }
 }
