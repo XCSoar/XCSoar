@@ -30,6 +30,7 @@ Copyright_License {
 #include "CalculationThread.hpp"
 #include "MergeThread.hpp"
 #include "DrawThread.hpp"
+#include "DeviceBlackboard.hpp"
 
 #include <assert.h>
 
@@ -70,7 +71,6 @@ TriggerCalculatedUpdate()
   CommonInterface::main_window.SendCalculatedUpdate();
 }
 
-#include "DeviceBlackboard.hpp"
 
 
 void CreateCalculationThread() {
