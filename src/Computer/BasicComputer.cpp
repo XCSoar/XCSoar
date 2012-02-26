@@ -311,24 +311,20 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
           * basic.true_airspeed * fixed_inv_g).Radians());
 
       basic.attitude.bank_angle = Angle::Radians(angle);
+      basic.attitude.bank_angle_available = true;
+
       if (!basic.acceleration.available) {
         basic.acceleration.g_load = fixed_one / max(fixed_small, fabs(cos(angle)));
         basic.acceleration.available = true;
       }
-    } else {
-      basic.attitude.bank_angle = Angle::Zero();
     }
 
     // estimate pitch angle (assuming balanced turn)
-    if (basic.airspeed_available && basic.total_energy_vario_available)
+    if (basic.airspeed_available && basic.total_energy_vario_available) {
       basic.attitude.pitch_angle = Angle::Radians(atan2(basic.gps_vario - basic.total_energy_vario,
-                                                           basic.true_airspeed));
-    else
-      basic.attitude.pitch_angle = Angle::Zero();
-
-  } else {
-    basic.attitude.bank_angle = Angle::Zero();
-    basic.attitude.pitch_angle = Angle::Zero();
+                                                        basic.true_airspeed));
+      basic.attitude.pitch_angle_available = true;
+    }
   }
 }
 

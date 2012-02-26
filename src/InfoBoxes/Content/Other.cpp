@@ -176,7 +176,8 @@ InfoBoxContentHorizon::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 void
 InfoBoxContentHorizon::Update(InfoBoxData &data)
 {
-  if (!CommonInterface::Basic().acceleration.available) {
+  if (!CommonInterface::Basic().attitude.bank_angle_available &&
+      !CommonInterface::Basic().attitude.pitch_angle_available) {
     data.SetInvalid();
     return;
   }

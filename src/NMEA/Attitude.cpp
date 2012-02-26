@@ -26,6 +26,13 @@ Copyright_License {
 void
 AttitudeState::Complement(const AttitudeState &add)
 {
-  bank_angle = add.bank_angle;
-  pitch_angle = add.pitch_angle;
+  if (!bank_angle_available && add.bank_angle_available) {
+    bank_angle = add.bank_angle;
+    bank_angle_available = add.bank_angle_available;
+  }
+
+  if (!pitch_angle_available && add.pitch_angle_available) {
+    pitch_angle = add.pitch_angle;
+    pitch_angle_available = add.pitch_angle_available;
+  }
 }

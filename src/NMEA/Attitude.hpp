@@ -28,14 +28,18 @@ Copyright_License {
 
 struct AttitudeState
 {
+  bool bank_angle_available;
+  bool pitch_angle_available;
+
   /** Estimated bank angle */
   Angle bank_angle;
+
   /** Estimated pitch angle */
   Angle pitch_angle;
 
   void Reset() {
-    bank_angle = Angle::Zero();
-    pitch_angle = Angle::Zero();
+    bank_angle_available = false;
+    pitch_angle_available = false;
   }
 
   /**
