@@ -166,6 +166,18 @@ public:
   virtual bool PutStandbyFrequency(RadioFrequency frequency) = 0;
 
   /**
+   * Enable pass-through mode.  This may be used to communicate
+   * directly with the device that is "behind" this one (e.g. a LX1600
+   * connected to a FLARM).
+   */
+  virtual bool EnablePassThrough(OperationEnvironment &env) = 0;
+
+  /**
+   * Disable pass-through mode, see EnablePassThrough().
+   */
+  virtual void DisablePassThrough() = 0;
+
+  /**
    * Declare a task.
    *
    * @param declaration the task declaration
@@ -251,6 +263,9 @@ public:
   virtual bool PutVolume(int volume);
   virtual bool PutActiveFrequency(RadioFrequency frequency);
   virtual bool PutStandbyFrequency(RadioFrequency frequency);
+
+  virtual bool EnablePassThrough(OperationEnvironment &env);
+  virtual void DisablePassThrough();
 
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
@@ -340,6 +355,13 @@ struct DeviceRegister {
      * bugs or ballast to the device?
      */
     SEND_SETTINGS = 0x100,
+
+    /**
+     * Is this driver capable of passing through communication to
+     * another device behind it?  This indicates that
+     * EnablePassThrough() is implemented.
+     */
+    PASS_THROUGH = 0x200,
   };
 
   /**
@@ -429,6 +451,13 @@ struct DeviceRegister {
    */
   bool UsesRawData() const {
     return (flags & RAW_GPS_DATA) != 0;
+  }
+
+  /**
+   * Does this driver implement EnablePassThrough()?
+   */
+  bool HasPassThrough() const {
+    return (flags & PASS_THROUGH) != 0;
   }
 };
 

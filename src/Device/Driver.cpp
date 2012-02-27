@@ -85,6 +85,17 @@ AbstractDevice::PutStandbyFrequency(RadioFrequency frequency)
 }
 
 bool
+AbstractDevice::EnablePassThrough(OperationEnvironment &env)
+{
+  return true;
+}
+
+void
+AbstractDevice::DisablePassThrough()
+{
+}
+
+bool
 AbstractDevice::Declare(const Declaration &declaration, const Waypoint *home,
                         OperationEnvironment &env)
 {
