@@ -41,7 +41,7 @@ struct AirspaceLook {
   /**
    * Non-pattern brushes used for transparent
    */
-  Brush solid_brushes[NUMAIRSPACECOLORS];
+  Brush solid_brushes[AIRSPACECLASSCOUNT];
 #endif
 
 #ifdef HAVE_HATCHED_BRUSH

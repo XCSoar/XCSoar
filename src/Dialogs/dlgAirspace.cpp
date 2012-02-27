@@ -65,11 +65,11 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   if (colormode) {
     canvas.SelectWhitePen();
 #ifndef HAVE_HATCHED_BRUSH
-    canvas.Select(look.solid_brushes[renderer.colours[i]]);
+    canvas.Select(look.solid_brushes[i]);
 #else
 #ifdef HAVE_ALPHA_BLEND
     if (renderer.transparency && AlphaBlendAvailable()) {
-      canvas.Select(look.solid_brushes[renderer.colours[i]]);
+      canvas.Select(look.solid_brushes[i]);
     } else {
 #endif
       canvas.SetTextColor(look.preset_colors[renderer.colours[i]]);

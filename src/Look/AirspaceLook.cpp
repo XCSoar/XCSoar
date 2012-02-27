@@ -75,8 +75,8 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
   if (AlphaBlendAvailable())
 #endif
 #if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
-    for (unsigned i = 0; i < NUMAIRSPACECOLORS; ++i)
-      solid_brushes[i].Set(preset_colors[i]);
+    for (unsigned i = 0; i < AIRSPACECLASSCOUNT; ++i)
+      solid_brushes[i].Set(preset_colors[settings.colours[i]]);
 #endif
 
   thick_pen.Set(Layout::ScalePenWidth(10), COLOR_BLACK);
