@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Color.hpp"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 
 void
@@ -34,4 +35,25 @@ FormatHexColor(TCHAR *buffer, size_t size, const Color &color)
 
   _sntprintf(buffer, size, _T("#%02X%02X%02X"),
              color.Red(), color.Green(), color.Blue());
+}
+
+bool
+ParseHexColor(const TCHAR *buffer, Color &color)
+{
+  if (*buffer != _T('#'))
+    return false;
+
+  buffer++;
+
+  TCHAR *endptr;
+  unsigned long value = _tcstoul(buffer, &endptr, 16);
+  if (endptr != buffer + 6)
+    return false;
+
+  uint8_t r = value >> 16;
+  uint8_t g = value >> 8;
+  uint8_t b = value;
+
+  color = Color(r, g, b);
+  return true;
 }

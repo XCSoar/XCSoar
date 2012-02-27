@@ -34,4 +34,6 @@ struct Color;
  */
 void FormatHexColor(TCHAR *buffer, size_t size, const Color &color);
 
+bool ParseHexColor(const TCHAR *buffer, Color &color);
+
 #endif
