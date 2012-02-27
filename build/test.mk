@@ -88,6 +88,7 @@ TEST_NAMES = \
 	TestStrings \
 	TestUnitsFormatter \
 	TestGeoPointFormatter \
+	TestHexColorFormatter \
 	TestByteSizeFormatter \
 	TestTimeFormatter \
 	TestIGCFilenameFormatter \
@@ -370,6 +371,14 @@ TEST_GEO_POINT_FORMATTER_SOURCES = \
 	$(TEST_SRC_DIR)/TestGeoPointFormatter.cpp
 TEST_GEO_POINT_FORMATTER_DEPENDS = MATH
 $(eval $(call link-program,TestGeoPointFormatter,TEST_GEO_POINT_FORMATTER))
+
+TEST_HEX_COLOR_FORMATTER_SOURCES = \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Formatter/HexColor.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestHexColorFormatter.cpp
+TEST_HEX_COLOR_FORMATTER_DEPENDS = MATH SCREEN
+$(eval $(call link-program,TestHexColorFormatter,TEST_HEX_COLOR_FORMATTER))
 
 TEST_BYTE_SIZE_FORMATTER_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \
