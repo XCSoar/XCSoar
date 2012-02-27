@@ -37,6 +37,10 @@ Copyright_License {
 #include <stdio.h>
 #include <assert.h>
 
+#ifdef MORE_USAGE
+extern void PrintMoreUsage();
+#endif
+
 class Args {
   std::list<char *> args;
   const char *name, *usage;
@@ -128,6 +132,9 @@ public:
   gcc_noreturn
   void UsageError() {
     fprintf(stderr, "Usage: %s %s\n", name, usage);
+#ifdef MORE_USAGE
+    PrintMoreUsage();
+#endif
     exit(EXIT_FAILURE);
   }
 
