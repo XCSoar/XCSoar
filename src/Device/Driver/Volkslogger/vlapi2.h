@@ -45,7 +45,7 @@ class VLAPI_DATA {
     byte typ; // type(attributes) of WPT, or-combination of enum WPTTYP
 
     void get(const void *p);
-    void put(void *p);
+    void put(void *p) const;
   };
 
   // declaration-waypoint
@@ -72,7 +72,7 @@ class VLAPI_DATA {
     OZTYP oztyp;
 
     void get(const void *p);
-    void put(void *p);
+    void put(void *p) const;
   };
 
   struct ROUTE {
@@ -80,14 +80,14 @@ class VLAPI_DATA {
     WPT wpt[10];
 
     void get(const void *p);
-    void put(void *p);
+    void put(void *p) const;
   };
 
   struct PILOT {
     char name[17];
 
     void get(lpb p);
-    void put(lpb p);
+    void put(lpb p) const;
   };
 
   struct DATABASE {

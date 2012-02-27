@@ -339,7 +339,7 @@ void VLAPI_DATA::WPT::get(const void *p) {
 
 // putting a waypoint object into the database memory
 //
-void VLAPI_DATA::WPT::put(void *p) {
+void VLAPI_DATA::WPT::put(void *p) const {
   Volkslogger::Waypoint *dest = (Volkslogger::Waypoint *)p;
   // String, evtl. mit Blanks aufgef�llt, zur�ckschreiben
   CopyPaddedUpper(dest->name, sizeof(dest->name), name);
@@ -384,7 +384,7 @@ void VLAPI_DATA::DCLWPT::get(const void *p) {
 
 // putting a declaration waypoint object into the database memory
 //
-void VLAPI_DATA::DCLWPT::put(void *p) {
+void VLAPI_DATA::DCLWPT::put(void *p) const {
   Volkslogger::DeclarationWaypoint *dest =
     (Volkslogger::DeclarationWaypoint *)p;
 
@@ -424,7 +424,7 @@ void VLAPI_DATA::ROUTE::get(const void *p) {
     wpt[i].get(&src->waypoints[i]);
 }
 
-void VLAPI_DATA::ROUTE::put(void *p) {
+void VLAPI_DATA::ROUTE::put(void *p) const {
   Volkslogger::Route *dest = (Volkslogger::Route *)p;
 
 	int i;
@@ -443,7 +443,9 @@ void VLAPI_DATA::PILOT::get(lpb p) {
   strupr(name);
 }
 
-void VLAPI_DATA::PILOT::put(lpb p) {
+void
+VLAPI_DATA::PILOT::put(lpb p) const
+{
   Volkslogger::Pilot *dest = (Volkslogger::Pilot *)p;
 
   CopyPaddedUpper(dest->name, sizeof(dest->name), name);
