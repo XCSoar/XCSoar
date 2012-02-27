@@ -421,6 +421,35 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure &value)
   return true;
 }
 
+static bool
+DeclareToFLARM(const struct Declaration &declaration, Port &port,
+               const Waypoint *home, OperationEnvironment &env)
+{
+  return FlarmDevice(port).Declare(declaration, home, env);
+}
+
+static bool
+DoDeclare(const struct Declaration &declaration,
+          Port &port, const DeviceRegister &driver, Device *device,
+          bool flarm, const Waypoint *home,
+          OperationEnvironment &env)
+{
+  StaticString<60> text;
+  text.Format(_T("%s: %s."), _("Sending declaration"), driver.display_name);
+  env.SetText(text);
+
+  bool result = device != NULL && device->Declare(declaration, home, env);
+
+  if (flarm) {
+    text.Format(_T("%s: FLARM."), _("Sending declaration"));
+    env.SetText(text);
+
+    result |= DeclareToFLARM(declaration, port, home, env);
+  }
+
+  return result;
+}
+
 bool
 DeviceDescriptor::Declare(const struct Declaration &declaration,
                           const Waypoint *home,
@@ -429,22 +458,18 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
   if (port == NULL)
     return false;
 
-  SetBusy(true);
+  assert(driver != NULL);
 
-  StaticString<60> text;
-  text.Format(_T("%s: %s."), _("Sending declaration"), driver->display_name);
-  env.SetText(text);
+  SetBusy(true);
 
   port->StopRxThread();
 
-  bool result = device != NULL && device->Declare(declaration, home, env);
+  /* enable the "muxed FLARM" hack? */
+  const bool flarm = device_blackboard->IsFLARM(index) &&
+    !IsDriver(_T("FLARM"));
 
-  if (device_blackboard->IsFLARM(index) && !IsDriver(_T("FLARM"))) {
-    text.Format(_T("%s: FLARM."), _("Sending declaration"));
-    env.SetText(text);
-    FlarmDevice flarm(*port);
-    result = flarm.Declare(declaration, home, env) || result;
-  }
+  bool result = DoDeclare(declaration, *port, *driver, device, flarm,
+                          home, env);
 
   port->StartRxThread();
 
