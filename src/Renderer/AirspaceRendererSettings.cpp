@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "AirspaceRendererSettings.hpp"
-#include "Look/AirspaceLook.hpp"
 
 #include <algorithm>
 
@@ -46,27 +45,27 @@ AirspaceRendererSettings::SetDefaults()
 #ifdef HAVE_HATCHED_BRUSH
   std::fill(brushes, brushes + AIRSPACECLASSCOUNT, 0);
 
-  brushes[0] = 2;
-  brushes[4] = 3;
-  brushes[5] = 3;
-  brushes[6] = 3;
-  brushes[7] = 3;
-  brushes[9] = 3;
-  brushes[10] = 2;
-  brushes[11] = 3;
-  brushes[12] = 3;
-  brushes[13] = 3;
+  brushes[OTHER] = 2;
+  brushes[CLASSA] = 3;
+  brushes[CLASSB] = 3;
+  brushes[CLASSC] = 3;
+  brushes[CLASSD] = 3;
+  brushes[CTR] = 3;
+  brushes[WAVE] = 2;
+  brushes[AATASK] = 3;
+  brushes[CLASSE] = 3;
+  brushes[CLASSF] = 3;
 #endif
 
-  std::fill(colours, colours + AIRSPACECLASSCOUNT, AirspaceLook::preset_colors[0]);
+  std::fill(colours, colours + AIRSPACECLASSCOUNT, COLOR_RED);
 
-  colours[0] = AirspaceLook::preset_colors[5];
-  colours[3] = AirspaceLook::preset_colors[10];
-  colours[6] = AirspaceLook::preset_colors[10];
-  colours[7] = AirspaceLook::preset_colors[2];
-  colours[9] = AirspaceLook::preset_colors[10];
-  colours[10] = AirspaceLook::preset_colors[9];
-  colours[11] = AirspaceLook::preset_colors[3];
-  colours[12] = AirspaceLook::preset_colors[7];
-  colours[13] = AirspaceLook::preset_colors[7];
+  colours[OTHER] = COLOR_CYAN;
+  colours[DANGER] = DarkColor(COLOR_MAGENTA);
+  colours[CLASSC] = DarkColor(COLOR_MAGENTA);
+  colours[CLASSD] = COLOR_BLUE;
+  colours[CTR] = DarkColor(COLOR_MAGENTA);
+  colours[WAVE] = DarkColor(COLOR_YELLOW);
+  colours[AATASK] = COLOR_YELLOW;
+  colours[CLASSE] = DarkColor(COLOR_GREEN);
+  colours[CLASSF] = DarkColor(COLOR_GREEN);
 }
