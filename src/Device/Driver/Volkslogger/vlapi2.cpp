@@ -39,15 +39,18 @@ const int32 VLAPI_LOG_MEMSIZE = 81920L;
 // ------------------------------------------------------------
 
 // Blockweises Schreiben in den Logger (z.B. Datenbank)
-VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
+VLA_ERROR
+VLA_XFR::dbbput(const void *dbbbuffer, int32 dbbsize)
+{
   return Volkslogger::SendCommandWriteBulk(*port, env, Volkslogger::cmd_PDB,
                                            dbbbuffer, dbbsize)
     ? VLA_ERR_NOERR
     : VLA_ERR_MISC;
 }
 
-
-VLA_ERROR VLA_XFR::dbbget(lpb dbbbuffer, int32 dbbsize) {
+VLA_ERROR
+VLA_XFR::dbbget(void *dbbbuffer, int32 dbbsize)
+{
   int groesse = Volkslogger::SendCommandReadBulk(*port, env,
                                                  Volkslogger::cmd_RDB,
                                                  dbbbuffer, dbbsize, databaud);
@@ -57,7 +60,8 @@ VLA_ERROR VLA_XFR::dbbget(lpb dbbbuffer, int32 dbbsize) {
   return VLA_ERR_NOERR;
 }
 
-VLA_ERROR VLA_XFR::readdir(lpb buffer, int32 size) {
+VLA_ERROR
+VLA_XFR::readdir(void *buffer, int32 size) {
   if(buffer==0)
     return VLA_ERR_MISC;
 
@@ -70,7 +74,9 @@ VLA_ERROR VLA_XFR::readdir(lpb buffer, int32 size) {
     return VLA_ERR_NOERR;
 }
 
-VLA_ERROR VLA_XFR::all_logsget(lpb dbbbuffer, int32 dbbsize) {
+VLA_ERROR
+VLA_XFR::all_logsget(void *dbbbuffer, int32 dbbsize)
+{
   int groesse = Volkslogger::SendCommandReadBulk(*port, env,
                                                  Volkslogger::cmd_ERO,
                                                  dbbbuffer, dbbsize, databaud);
@@ -85,7 +91,10 @@ VLA_ERROR VLA_XFR::all_logsget(lpb dbbbuffer, int32 dbbsize) {
   Auslesen des Fluges flightnumber im Sicherheitslevel secmode,
   Abspeichern als GCS-Datei im Speicher
 */
-long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secmode) {
+long
+VLA_XFR::flightget(void *buffer, int32 buffersize,
+                   int16 flightnr, int16 secmode)
+{
   // read binary flightlog
   const Volkslogger::Command cmd = secmode
     ? Volkslogger::cmd_GFS
@@ -99,7 +108,7 @@ long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secm
   env.Sleep(300);
 
   int sgr = Volkslogger::SendCommandReadBulk(*port, env, Volkslogger::cmd_SIG,
-                                             buffer + groesse,
+                                             (uint8_t *)buffer + groesse,
                                              buffersize - groesse,
                                              databaud);
   if (sgr <= 0)
@@ -125,7 +134,7 @@ VLA_XFR::VLA_XFR(Port &_port, unsigned _databaud, OperationEnvironment &_env)
 }
 
 
-VLA_ERROR VLA_XFR::readinfo(lpb buffer, int32 buffersize) {
+VLA_ERROR VLA_XFR::readinfo(void *buffer, int32 buffersize) {
   int nbytes = Volkslogger::SendCommandReadBulk(*port, env,
                                                 Volkslogger::cmd_INF,
                                                 buffer, buffersize);
@@ -146,7 +155,7 @@ VLAPI::VLAPI(Port &_port, unsigned _databaud, OperationEnvironment &_env)
 }
 
 VLA_ERROR VLAPI::read_info() {
-  byte buffer[8];
+  uint8_t buffer[8];
   VLA_ERROR err;
 
   if ((err = readinfo(buffer, sizeof(buffer))) == VLA_ERR_NOERR) {
@@ -172,7 +181,7 @@ VLA_ERROR VLAPI::stillconnect() {
 }
 
 VLA_ERROR VLAPI::read_db_and_declaration() {
-  byte dbbbuffer[VLAPI_DBB_MEMSIZE];
+  uint8_t dbbbuffer[VLAPI_DBB_MEMSIZE];
   VLA_ERROR err = stillconnect();
   if(err != VLA_ERR_NOERR)
     return err;
@@ -236,7 +245,7 @@ VLA_ERROR VLAPI::write_db_and_declaration() {
   declaration.put(&dbb1);
 
   // copy dbb1 blocks into buffer
-  byte dbbbuffer[VLAPI_DBB_MEMSIZE];
+  uint8_t dbbbuffer[VLAPI_DBB_MEMSIZE];
   memcpy(dbbbuffer,dbb1.block,sizeof(dbb1.block));
   memcpy(dbbbuffer+DBB::FrmBeg,dbb1.fdf,sizeof(dbb1.fdf));
   // and write buffer back into VOLKSLOGGER
@@ -252,7 +261,7 @@ VLA_ERROR VLAPI::read_directory() {
   if(err != VLA_ERR_NOERR)
     return err;
 
-  byte dirbuffer[VLAPI_LOG_MEMSIZE];
+  uint8_t dirbuffer[VLAPI_LOG_MEMSIZE];
   err = readdir(dirbuffer, sizeof(dirbuffer));
 
   if(err == VLA_ERR_NOERR) {
@@ -286,7 +295,7 @@ VLA_ERROR VLAPI::read_igcfile(char *filename, int index, int secmode) {
     return err;
   }
 
-  byte logbuffer[VLAPI_LOG_MEMSIZE];
+  uint8_t logbuffer[VLAPI_LOG_MEMSIZE];
   if (flightget(logbuffer, sizeof(logbuffer), index, secmode)>0)
     err = VLA_ERR_NOERR;
 
@@ -435,7 +444,9 @@ void VLAPI_DATA::ROUTE::put(void *p) const {
     wpt[i].put(&dest->waypoints[i]);
 }
 
-void VLAPI_DATA::PILOT::get(lpb p) {
+void
+VLAPI_DATA::PILOT::get(const void *p)
+{
   const Volkslogger::Pilot *src = (const Volkslogger::Pilot *)p;
 
   memcpy(name, src->name, sizeof(src->name));
@@ -444,7 +455,7 @@ void VLAPI_DATA::PILOT::get(lpb p) {
 }
 
 void
-VLAPI_DATA::PILOT::put(lpb p) const
+VLAPI_DATA::PILOT::put(void * p) const
 {
   Volkslogger::Pilot *dest = (Volkslogger::Pilot *)p;
 
@@ -457,21 +468,21 @@ VLAPI_DATA::DATABASE::CopyTo(DBB &dbb) const
   dbb.open_dbb();
 
   for (int i = 0; i < nwpts; ++i) {
-    byte bwpt[13];
+    uint8_t bwpt[13];
     wpts[i].put(bwpt);
     dbb.add_ds(0, bwpt);
   }
   dbb.close_db(0);
 
   for (int i = 0; i < npilots; ++i) {
-    byte bpilot[17];
+    uint8_t bpilot[17];
     pilots[i].put(bpilot);
     dbb.add_ds(1, bpilot);
   }
   dbb.close_db(1);
 
   for (int i = 0; i < nroutes; ++i) {
-    byte broute[144];
+    uint8_t broute[144];
     routes[i].put(broute);
     dbb.add_ds(3, broute);
   }
@@ -512,17 +523,17 @@ void VLAPI_DATA::DECLARATION::get(DBB *dbb) {
   if ((p = dbb->fdf_findfield(FLDCID))>=0)
     strncpy(flightinfo.competitionid,(char*)(dbb->fdf+p+2),sizeof(flightinfo.competitionid));
   if ((p = dbb->fdf_findfield(FLDTKF))>=0)
-    flightinfo.homepoint.get((byte *)(dbb->fdf+p+2));
+    flightinfo.homepoint.get(dbb->fdf + p + 2);
 
   if ((p = dbb->fdf_findfield(FLDSTA))>=0)
-    task.startpoint.get((byte*)(dbb->fdf+p+2));
+    task.startpoint.get(dbb->fdf + p + 2);
   if ((p = dbb->fdf_findfield(FLDFIN))>=0)
-    task.finishpoint.get((byte*)(dbb->fdf+p+2));
+    task.finishpoint.get(dbb->fdf + p + 2);
   if ((p = dbb->fdf_findfield(FLDNTP))>=0)
-    task.nturnpoints = (byte)dbb->fdf[p+2];
+    task.nturnpoints = dbb->fdf[p+2];
   for (i=0; i<task.nturnpoints; i++) {
     if ((p = dbb->fdf_findfield(FLDTP1+i))>=0)
-      task.turnpoints[i].get((byte*)(dbb->fdf+p+2));
+      task.turnpoints[i].get(dbb->fdf + p + 2);
   }
 }
 
@@ -551,11 +562,11 @@ void VLAPI_DATA::DECLARATION::put(DBB *dbb) {
   dbb->add_fdf(FLDCID, strlen(flightinfo.competitionid)+1,
                flightinfo.competitionid);
 
-  byte fdfwpt[16]; // temporary space for data conversions
+  uint8_t fdfwpt[16]; // temporary space for data conversions
   flightinfo.homepoint.put(fdfwpt);
   dbb->add_fdf(FLDTKF,sizeof(fdfwpt),&fdfwpt);
 
-  byte ntp = task.nturnpoints;
+  uint8_t ntp = task.nturnpoints;
   dbb->add_fdf(FLDNTP,1,&ntp);
 
   task.startpoint.put(fdfwpt);

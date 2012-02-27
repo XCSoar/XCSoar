@@ -24,7 +24,7 @@
 // base-64 functions
 //
 static const char *
-byte_bas64(const byte *b)
+byte_bas64(const uint8_t *b)
 {
  const char *base64tab = "0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZ`abcdefghijklmnopqrstuvwxyz";
  static char bas64ar[5];
@@ -36,7 +36,7 @@ byte_bas64(const byte *b)
   return bas64ar;
 }
 
-static byte
+static uint8_t
 b64b(char c)
 {
   if ((c >= '0') && (c <= '9'))
@@ -50,7 +50,7 @@ b64b(char c)
 }
 
 static void
-bas64_byte(byte *b, char *c)
+bas64_byte(uint8_t *b, char *c)
 {
   b[0] = ( b64b(c[0]) << 2)         | (b64b(c[1]) >> 4);
   b[1] = ((b64b(c[1]) & 0x0f) << 4) | (b64b(c[2]) >> 2);
@@ -68,7 +68,9 @@ GRECORD::GRECORD(FILE *ausgabedatei) {
   ausgabe = ausgabedatei;
 }
 
-void GRECORD::update(byte b) {
+void
+GRECORD::update(uint8_t b)
+{
   ba[tricnt++] = b;
   if (tricnt == 3) {
   tricnt = 0;
@@ -190,9 +192,9 @@ fgetline(char *st, size_t si, FILE *datei)
   return stat;
 }
 
-
-
-void print_g_record(FILE *datei, lpb puffer, int32 puflen) {
+void
+print_g_record(FILE *datei, const uint8_t *puffer, int32 puflen)
+{
  int32 i;
  GRECORD g1(datei);
   for(i=0; i<puflen; i++)
@@ -200,22 +202,21 @@ void print_g_record(FILE *datei, lpb puffer, int32 puflen) {
   g1.final();
 }
 
-
-
-
 /*
 Aus Datei *dateiname die G-Records extrahieren (nur als zusammenhängender
 Block), von radix-64 in Binär umwandeln und in *puffer speichern.
 Pufferlänge puflen ist angegeben, um ein Überschreiben nicht zum Puffer
 gehörender Bereiche zu verhindern
 */
-int get_g_record(char *dateiname, lpb puffer, unsigned long puflen) {
+int
+get_g_record(char *dateiname, uint8_t *puffer, unsigned long puflen)
+{
  unsigned long i = 0;
  int	       j;
  const int     zeilemax = 79;
  char          zeile[zeilemax];
  FILE	       *datei;
- byte	       bin[3];
+ uint8_t bin[3];
  char          *stat;
   if ((datei = fopen(dateiname,"rt")) == NULL)
     return -1;

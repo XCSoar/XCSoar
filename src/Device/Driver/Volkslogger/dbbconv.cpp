@@ -107,7 +107,9 @@ void DBB::add_fdf(int feldkennung,int feldlaenge, void *quelle) {
 // find an actual record of specified type(id) in the declaration memory
 // and return it's position in the memory array
 //
-int16 DBB::fdf_findfield(byte id) {
+int16
+DBB::fdf_findfield(uint8_t id) const
+{
  int16 ii;
   ii = -1;
   for (unsigned i = 0; i < sizeof(fdf);) {

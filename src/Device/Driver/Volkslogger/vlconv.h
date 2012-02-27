@@ -21,6 +21,7 @@
 #include "vlapityp.h"
 
 #include <stdio.h>
+#include <stdint.h>
 #include <time.h>
 
 /* Untertypen des Haupttyps Variabel */
@@ -75,7 +76,7 @@ convert_gcs
   return value:
     length of binary file
 */
-int32 convert_gcs(int16, FILE *, lpb, int16, word *, long *);
+int32 convert_gcs(int16, FILE *, uint8_t *, int16, word *, long *);
 
 
 /*
@@ -103,7 +104,7 @@ struct DIRECTORY {
 
 //const int MAXDIRENTRY = 100;
 
-int conv_dir(DIRENTRY* flights, lpb dirbuffer, int countonly);
+int conv_dir(DIRENTRY* flights, uint8_t *dirbuffer, int countonly);
 
 
 #endif

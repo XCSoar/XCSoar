@@ -42,7 +42,7 @@ class VLAPI_DATA {
     char name[7]; // name of waypoint, zero-ended C-string, max. 6 characters
     double lat; // latitude in degrees, southern values are negative
     double lon; // longitude in degrees, western values are negative
-    byte typ; // type(attributes) of WPT, or-combination of enum WPTTYP
+    uint8_t typ; // type(attributes) of WPT, or-combination of enum WPTTYP
 
     void get(const void *p);
     void put(void *p) const;
@@ -86,8 +86,8 @@ class VLAPI_DATA {
   struct PILOT {
     char name[17];
 
-    void get(lpb p);
-    void put(lpb p) const;
+    void get(const void *p);
+    void put(void *p) const;
   };
 
   struct DATABASE {
@@ -127,9 +127,9 @@ class VLAPI_DATA {
   struct VLINFO {
     word sessionid;
     word vlserno;
-    byte fwmajor;
-    byte fwminor;
-    byte fwbuild;
+    uint8_t fwmajor;
+    uint8_t fwminor;
+    uint8_t fwbuild;
   };
 };
 

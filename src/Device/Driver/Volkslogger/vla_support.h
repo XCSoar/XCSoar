@@ -63,17 +63,18 @@ public:
 	// establish connection with VL within specified time
   VLA_ERROR connect(int32 waittime);
 
-	VLA_ERROR readinfo(lpb buffer, int32 buffersize);
+  VLA_ERROR readinfo(void *buffer, int32 buffersize);
 
   // write binary DATABASE-block to VL
-  VLA_ERROR dbbput(lpb dbbbuffer, int32 dbbsize);
+  VLA_ERROR dbbput(const void *dbbbuffer, int32 dbbsize);
   // read binary DATABASE from VL
-  VLA_ERROR dbbget(lpb dbbbuffer, int32 dbbsize);
+  VLA_ERROR dbbget(void *dbbbuffer, int32 dbbsize);
   // read all binary flight logs from VL
-  VLA_ERROR all_logsget(lpb dbbbuffer, int32 dbbsize);
+  VLA_ERROR all_logsget(void *dbbbuffer, int32 dbbsize);
   // read one binary flight log from VL
-  int32 flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secmode);
-  VLA_ERROR readdir(lpb buffer, int32 buffersize);
+  int32 flightget(void *buffer, int32 buffersize,
+                  int16 flightnr, int16 secmode);
+  VLA_ERROR readdir(void *buffer, int32 buffersize);
 };
 
 #endif

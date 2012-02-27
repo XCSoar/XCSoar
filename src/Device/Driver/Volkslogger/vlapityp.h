@@ -36,14 +36,6 @@
 #ifndef VLAPITYP_H
 #define VLAPITYP_H
 
-typedef unsigned char
-	boolean;
-
-// 8-bit unsigned
-typedef unsigned char
-  byte;
-
-
 // 16-bit unsigned
 typedef unsigned int
   word;
@@ -57,9 +49,5 @@ typedef long
 // 16-bit signed
 typedef int
 	int16;
-
-// pointer to a byte variable, which can be anywhere in the memory space
-typedef byte *
-  lpb;
 
 #endif

@@ -19,21 +19,22 @@
 #define GRECORD_H
 
 #include "vlapityp.h"
-#include <stdio.h>
 
+#include <stdint.h>
+#include <stdio.h>
 
 class GRECORD {
  private:
   char grecord[80];
   int  tricnt;
   int  gcnt;
-  byte ba[3];
+  uint8_t ba[3];
   FILE *ausgabe;
   void init(void);                  // Initialisieren der Werte
 
  public:
   GRECORD(FILE *ausgabedatei);
-  void update(byte b);
+  void update(uint8_t b);
   void final (void);
 
 };
@@ -82,7 +83,7 @@ und je 72 Datenworte als G-Datensatz an datei *dateiname anhängen
 */
 //void append_g_record(char *dateiname, byte huge *puffer, unsigned long puflen);
 
-void print_g_record(FILE *datei, lpb puffer, int32 puflen);
+void print_g_record(FILE *datei, const uint8_t *puffer, int32 puflen);
 
 
 /*
@@ -91,8 +92,8 @@ Block), von radix-64 in Binär umwandeln und in *puffer speichern.
 Pufferlänge puflen ist angegeben, um ein Überschreiben nicht zum Puffer
 gehörender Bereiche zu verhindern
 */
-int get_g_record(char *dateiname, lpb puffer, unsigned long puflen);
-
+int
+get_g_record(char *dateiname, uint8_t *puffer, unsigned long puflen);
 
 // Eine IGC-Datei von allen Zeilen befreien, die vom Pilot oder OO legal zur
 // Datei hinzugefügt worden sein könnten

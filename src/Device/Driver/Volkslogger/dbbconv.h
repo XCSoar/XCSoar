@@ -21,6 +21,8 @@
 #include "vlapityp.h"
 #include "Database.hpp"
 
+#include <stdint.h>
+
 class DBB {
 //private:
 public:
@@ -39,8 +41,8 @@ public:
  };
  HEADER header[8];
 public:
- byte block[DBBEnd-DBBBeg];
- byte	fdf[FrmEnd-FrmBeg];
+ uint8_t block[DBBEnd-DBBBeg];
+ uint8_t fdf[FrmEnd-FrmBeg];
 	DBB();
 
 protected:
@@ -60,7 +62,7 @@ public:
 	void close_db(int kennung);
 	void add_ds(int kennung,void *quelle);
 	void add_fdf(int feldkennung,int feldlaenge, void *quelle);
-	int16 fdf_findfield(byte id);
+  int16 fdf_findfield(uint8_t id) const;
 };
 
 #endif

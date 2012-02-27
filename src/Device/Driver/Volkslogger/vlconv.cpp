@@ -139,7 +139,7 @@ public:
   }
 
   void
-  packed2unpacked(lpb packed)
+  packed2unpacked(const uint8_t *packed)
   {
     //_fmemcpy(name,packed,6);
     for (i = 0; i < 6; i++)
@@ -184,7 +184,7 @@ public:
   int hasdeclaration;
   char sTDECL[20];
   /** Expected date of flight */
-  byte FDT[3];
+  uint8_t FDT[3];
   /** Location of takeoff */
   C2 TKF;
   /** Location of task start */
@@ -432,7 +432,7 @@ struct IGCHEADER
  * doesn't have to be right. might be changed sometime.
  */
 static word
-hdop2fxa(byte hdop)
+hdop2fxa(uint8_t hdop)
 {
   // return (float) hdop * 100.0/3);
   return word((float(hdop) * 100.01 / 3));
@@ -511,7 +511,7 @@ Parameter
 const int actual_conv_version = 424;
 
 long
-convert_gcs(int igcfile_version, FILE *Ausgabedatei, lpb bin_puffer,
+convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
     int oo_fillin, word *serno, long *sp)
 {
   IGCHEADER igcheader;
@@ -547,10 +547,10 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, lpb bin_puffer,
   memset(&firsttime, 0, sizeof(firsttime));
 
   tm realtime;
-  byte Haupttyp;
-  byte Untertyp;
-  lpb p;
-  lpb p2;
+  uint8_t Haupttyp;
+  uint8_t Untertyp;
+  uint8_t *p;
+  uint8_t *p2;
   long pl;
   char PILOT[40];
   int tzh, tzm;
@@ -1052,13 +1052,13 @@ gen_filename(DIRENTRY *de, int flightnum)
 
 // Members of class DIR
 int
-conv_dir(DIRENTRY* flights, lpb p, int countonly)
+conv_dir(DIRENTRY* flights, uint8_t *p, int countonly)
 {
   int number_of_flights;
   DIRENTRY de; // directory entry
-  byte Haupttyp, Untertyp;
-  byte l; // length of DS
-  lpb p2; // Pointer to the beginning of the content of a vrb or vrt
+  uint8_t Haupttyp, Untertyp;
+  uint8_t l; // length of DS
+  uint8_t *p2; // Pointer to the beginning of the content of a vrb or vrt
   tm olddate;
   memset(&olddate, 0, sizeof(olddate));
 
