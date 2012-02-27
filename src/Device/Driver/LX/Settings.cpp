@@ -53,7 +53,7 @@ ModeLX1600(Port &port)
   const unsigned old_baud_rate = port.SetBaudrate(4800);
   const bool success = PortWriteNMEA(port, "PFLX0,LX1600");
 
-  if (old_baud_rate != 0)
+  if (old_baud_rate != 0 && old_baud_rate != 4800)
     port.SetBaudrate(old_baud_rate);
 
   return success;
