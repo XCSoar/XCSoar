@@ -5,6 +5,7 @@ VOLKSLOGGER_SOURCES = \
 	$(DRIVER_SRC_DIR)/Volkslogger/Parser.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/Protocol.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/Declare.cpp \
+	$(DRIVER_SRC_DIR)/Volkslogger/Database.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/Util.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/dbbconv.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/grecord.cpp \

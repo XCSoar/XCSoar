@@ -296,20 +296,7 @@ void VLAPI_DATA::WPT::get(const void *p) {
 
   typ = (WPTTYP)(src->type_and_longitude_sign & 0x7f);
 
-  uint32_t ll = ((src->latitude[0] & 0x7f) << 16) |
-    (src->latitude[1] << 8) | src->latitude[2];
-  double lat = ll / 60000.0;
-  if (src->latitude[0] & 0x80)
-    lat = -lat;
-  location.latitude = Angle::Degrees(fixed(lat));
-
-  ll = (src->longitude[0] << 16) |
-    (src->longitude[1] << 8) | src->longitude[2];
-  double lon = ll / 60000.0;
-
-  if (src->type_and_longitude_sign & 0x80)
-    lon = -lon;
-  location.longitude = Angle::Degrees(fixed(lon));
+  location = src->GetLocation();
 }
 
 
@@ -321,23 +308,8 @@ void VLAPI_DATA::WPT::put(void *p) const {
   // String, evtl. mit Blanks aufgef�llt, zur�ckschreiben
   CopyPaddedUpper(dest->name, sizeof(dest->name), name);
 
-  // Koordinaten zur�ckschreiben
-  uint32_t llat = labs((long)(location.latitude.Degrees() * 60000));
-  uint32_t llon = labs((long)(location.longitude.Degrees() * 60000));
-
   dest->type_and_longitude_sign = (typ & 0x7f);
-  if (negative(location.longitude.Native()))
-    dest->type_and_longitude_sign |= 0x80;
-
-  dest->latitude[0] = llat >> 16;
-  if (negative(location.latitude.Native()))
-    dest->latitude[0] |= 0x80;
-  dest->latitude[1] = llat >> 8;
-  dest->latitude[2] = llat;
-
-  dest->longitude[0] = llon >> 16;
-  dest->longitude[1] = llon >> 8;
-  dest->longitude[2] = llon;
+  dest->SetLocation(location);
 }
 
 // getting a declaration waypoint object out of the database

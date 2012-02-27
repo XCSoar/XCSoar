@@ -28,6 +28,8 @@ Copyright_License {
 
 #include <stdint.h>
 
+struct GeoPoint;
+
 namespace Volkslogger {
 #pragma pack(push, 1)
 
@@ -43,6 +45,10 @@ namespace Volkslogger {
     uint8_t type_and_longitude_sign;
     uint8_t latitude[3];
     uint8_t longitude[3];
+
+    gcc_pure
+    GeoPoint GetLocation() const;
+    void SetLocation(GeoPoint gp);
   } gcc_packed;
 
   struct DeclarationWaypoint : public Waypoint{
