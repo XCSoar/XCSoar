@@ -41,6 +41,8 @@ public:
   AndroidPort(Handler &_handler, PortBridge *bridge);
   virtual ~AndroidPort();
 
+  virtual bool Drain();
+
   virtual unsigned GetBaudrate() const;
   virtual bool SetBaudrate(unsigned baud_rate);
 

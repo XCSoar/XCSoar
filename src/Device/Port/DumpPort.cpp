@@ -44,6 +44,13 @@ DumpPort::Write(const void *data, size_t length)
   return nbytes;
 }
 
+bool
+DumpPort::Drain()
+{
+  LogStartUp(_T("Drain"));
+  return port->Drain();
+}
+
 void
 DumpPort::Flush()
 {

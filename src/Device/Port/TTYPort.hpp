@@ -57,6 +57,8 @@ public:
    */
   virtual ~TTYPort();
 
+  virtual bool Drain();
+
   virtual size_t Write(const void *data, size_t length);
   virtual void Flush();
 

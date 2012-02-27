@@ -27,6 +27,7 @@ Copyright_License {
 #include "Java/Object.hpp"
 
 class PortBridge : protected Java::Object {
+  jmethodID drain_method;
   jmethodID getBaudRate_method, setBaudRate_method;
   jmethodID setReadTimeout_mid;
   jmethodID read_method, write_method, flush_mid;
@@ -41,6 +42,10 @@ public:
 
   ~PortBridge() {
     CallVoid("close");
+  }
+
+  bool drain(JNIEnv *env) {
+    return env->CallBooleanMethod(Get(), drain_method);
   }
 
   int getBaudRate(JNIEnv *env) const {

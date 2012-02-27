@@ -66,6 +66,18 @@ class OutputThread extends Thread {
     notifyAll();
   }
 
+  synchronized boolean drain() {
+    while (os != null && head < tail) {
+      try {
+        wait();
+      } catch (InterruptedException e) {
+        return false;
+      }
+    }
+
+    return os != null;
+  }
+
   void setTimeout(int _timeout) {
     timeout = _timeout;
   }

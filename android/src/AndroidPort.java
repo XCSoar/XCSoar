@@ -30,6 +30,11 @@ interface AndroidPort {
   void close();
   void flush();
 
+  /**
+   * @see Port::Drain()
+   */
+  boolean drain();
+
   int getBaudRate();
   boolean setBaudRate(int baud);
 

@@ -44,6 +44,12 @@ AndroidPort::Flush()
   bridge->flush(Java::GetEnv());
 }
 
+bool
+AndroidPort::Drain()
+{
+  return bridge != NULL && bridge->drain(Java::GetEnv());
+}
+
 void
 AndroidPort::Run()
 {

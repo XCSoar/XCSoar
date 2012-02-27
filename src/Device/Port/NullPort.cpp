@@ -35,6 +35,12 @@ NullPort::NullPort(Port::Handler &_handler)
 {
 }
 
+bool
+NullPort::Drain()
+{
+  return true;
+}
+
 void
 NullPort::Flush()
 {

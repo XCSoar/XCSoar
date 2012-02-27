@@ -99,6 +99,8 @@ protected:
 
 public:
   virtual size_t Write(const void *data, size_t length);
+
+  virtual bool Drain();
   virtual void Flush();
 
   /**

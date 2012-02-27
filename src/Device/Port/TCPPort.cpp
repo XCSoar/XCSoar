@@ -92,6 +92,13 @@ TCPPort::Open()
   return true;
 }
 
+bool
+TCPPort::Drain()
+{
+  /* writes are synchronous */
+  return true;
+}
+
 void
 TCPPort::Flush()
 {

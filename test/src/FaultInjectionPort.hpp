@@ -41,6 +41,10 @@ public:
   FaultInjectionPort(Handler &_handler)
     :Port(_handler), running(true), timeout(0), baud_rate(DEFAULT_BAUD_RATE) {}
 
+  bool Drain() {
+    return true;
+  }
+
   void Flush() {}
 
   size_t Write(const void *data, size_t length) {

@@ -73,6 +73,11 @@ abstract class AbstractAndroidPort implements AndroidPort {
       i.flush();
   }
 
+  public final boolean drain() {
+    OutputThread o = output;
+    return o != null && o.drain();
+  }
+
   public final void setReadTimeout(int timeout) {
     InputThread i = input;
     if (i != null)

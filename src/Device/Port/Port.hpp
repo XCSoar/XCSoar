@@ -115,6 +115,13 @@ public:
   bool FullWriteString(const char *s, unsigned timeout_ms);
 
   /**
+   * Wait until all data in the output buffer has been sent.
+   *
+   * @return false on error
+   */
+  virtual bool Drain() = 0;
+
+  /**
    * Flushes the serial port buffers
    */
   virtual void Flush() = 0;

@@ -85,6 +85,12 @@ K6BtPort::Write(const void *_data, size_t length)
   return total;
 }
 
+bool
+K6BtPort::Drain()
+{
+  return port->Drain();
+}
+
 void
 K6BtPort::Flush()
 {

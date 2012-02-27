@@ -50,6 +50,17 @@ TTYPort::~TTYPort()
 }
 
 bool
+TTYPort::Drain()
+{
+#ifdef __BIONIC__
+  /* bionic doesn't have tcdrain() */
+  return fd >= 0;
+#else
+  return fd >= 0 && tcdrain(fd) == 0;
+#endif
+}
+
+bool
 TTYPort::Open()
 {
   fd = open(sPortName, O_RDWR | O_NOCTTY);

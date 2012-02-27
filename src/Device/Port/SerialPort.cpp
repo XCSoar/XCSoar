@@ -131,6 +131,18 @@ SerialPort::Open()
   return true;
 }
 
+bool
+SerialPort::Drain()
+{
+  if (hPort == INVALID_HANDLE_VALUE)
+    return false;
+
+  ::SetCommMask(hPort, EV_ERR|EV_TXEMPTY);
+  DWORD events;
+  return WaitCommEvent(hPort, &events, NULL) &&
+    (events & EV_TXEMPTY) != 0;
+}
+
 void
 SerialPort::Flush()
 {
