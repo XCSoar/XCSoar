@@ -43,7 +43,7 @@ Copyright_License {
 #include "ResourceLoader.hpp"
 #include "Language/Language.hpp"
 #include "Simulator.hpp"
-#include "Util/Args.hpp"
+#include "OS/Args.hpp"
 
 static const char *Usage = "\n"
 #ifdef SIMULATOR_AVAILABLE

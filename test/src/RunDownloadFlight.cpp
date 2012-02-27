@@ -30,7 +30,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Profile/DeviceConfig.hpp"
-#include "Util/Args.hpp"
+#include "OS/Args.hpp"
 
 #ifdef HAVE_POSIX
 #include "Device/Port/TTYPort.hpp"

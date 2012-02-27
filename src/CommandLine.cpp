@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "CommandLine.hpp"
-#include "Util/Args.hpp"
 #include "Profile/Profile.hpp"
+#include "OS/Args.hpp"
 #include "OS/PathName.hpp"
 #include "Hardware/Display.hpp"
 #include "Simulator.hpp"
