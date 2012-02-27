@@ -166,13 +166,14 @@ GetBaudRateIndex(unsigned baud_rate)
 
 bool
 Volkslogger::SendCommandSwitchBaudRate(Port &port, OperationEnvironment &env,
-                                       Command cmd, unsigned baud_rate)
+                                       Command cmd, uint8_t param1,
+                                       unsigned baud_rate)
 {
   int baud_rate_index = GetBaudRateIndex(baud_rate);
   if (baud_rate_index < 0)
     return false;
 
-  if (!SendCommand(port, env, cmd, 0, baud_rate_index))
+  if (!SendCommand(port, env, cmd, param1, baud_rate_index))
     return false;
 
   port.SetBaudrate(baud_rate);
@@ -331,11 +332,11 @@ Volkslogger::SendCommandReadBulk(Port &port, OperationEnvironment &env,
 
 int
 Volkslogger::SendCommandReadBulk(Port &port, OperationEnvironment &env,
-                                 Command cmd,
+                                 Command cmd, uint8_t param1,
                                  void *buffer, unsigned max_length,
                                  unsigned baud_rate)
 {
-  if (!SendCommandSwitchBaudRate(port, env, cmd, baud_rate))
+  if (!SendCommandSwitchBaudRate(port, env, cmd, param1, baud_rate))
     return -1;
 
   unsigned old_baud_rate = port.SetBaudrate(baud_rate);

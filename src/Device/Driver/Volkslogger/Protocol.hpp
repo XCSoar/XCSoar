@@ -116,7 +116,15 @@ namespace Volkslogger {
   }
 
   bool SendCommandSwitchBaudRate(Port &port, OperationEnvironment &env,
-                                 Command cmd, unsigned baud_rate);
+                                 Command cmd, uint8_t param1,
+                                 unsigned baud_rate);
+
+  static inline bool SendCommandSwitchBaudRate(Port &port,
+                                               OperationEnvironment &env,
+                                               Command cmd,
+                                               unsigned baud_rate) {
+    return SendCommandSwitchBaudRate(port, env, cmd, 0, baud_rate);
+  }
 
   bool WaitForACK(Port &port, OperationEnvironment &env);
 
@@ -130,8 +138,17 @@ namespace Volkslogger {
                           Command cmd, void *buffer, unsigned max_length);
 
   int SendCommandReadBulk(Port &port, OperationEnvironment &env,
-                          Command cmd, void *buffer, unsigned max_length,
+                          Command cmd, uint8_t param1,
+                          void *buffer, unsigned max_length,
                           unsigned baud_rate);
+
+  static inline int SendCommandReadBulk(Port &port, OperationEnvironment &env,
+                                        Command cmd,
+                                        void *buffer, unsigned max_length,
+                                        unsigned baud_rate) {
+    return SendCommandReadBulk(port, env, cmd, 0, buffer, max_length,
+                               baud_rate);
+  }
 
   bool SendCommandWriteBulk(Port &port, OperationEnvironment &env,
                             Command cmd, const void *data, unsigned size);

@@ -99,7 +99,7 @@ VLA_XFR::flightget(void *buffer, int32 buffersize,
   const Volkslogger::Command cmd = secmode
     ? Volkslogger::cmd_GFS
     : Volkslogger::cmd_GFL;
-  int groesse = Volkslogger::SendCommandReadBulk(*port, env, cmd,
+  int groesse = Volkslogger::SendCommandReadBulk(*port, env, cmd, flightnr,
                                                  buffer, buffersize, databaud);
   if (groesse <= 0)
     return 0;
