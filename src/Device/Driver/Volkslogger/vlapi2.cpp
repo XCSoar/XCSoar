@@ -342,8 +342,7 @@ void VLAPI_DATA::WPT::get(const void *p) {
 void VLAPI_DATA::WPT::put(void *p) {
   Volkslogger::Waypoint *dest = (Volkslogger::Waypoint *)p;
   // String, evtl. mit Blanks aufgef�llt, zur�ckschreiben
-  strupr(name);
-  copy_padded(dest->name, sizeof(dest->name), name);
+  CopyPaddedUpper(dest->name, sizeof(dest->name), name);
 
   // Koordinaten zur�ckschreiben
   uint32_t llat = labs((long)(lat * 60000.0));
@@ -429,8 +428,7 @@ void VLAPI_DATA::ROUTE::put(void *p) {
   Volkslogger::Route *dest = (Volkslogger::Route *)p;
 
 	int i;
-  strupr(name);
-  copy_padded(dest->name, sizeof(dest->name), name);
+  CopyPaddedUpper(dest->name, sizeof(dest->name), name);
   // In the following line, we insertes "int"
   // (Florian Ehinger)
   for(i=0; i<10; i++)
@@ -448,8 +446,7 @@ void VLAPI_DATA::PILOT::get(lpb p) {
 void VLAPI_DATA::PILOT::put(lpb p) {
   Volkslogger::Pilot *dest = (Volkslogger::Pilot *)p;
 
-  strupr(name);
-  copy_padded(dest->name, sizeof(dest->name), name);
+  CopyPaddedUpper(dest->name, sizeof(dest->name), name);
 }
 
 void

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Util.hpp"
+#include "Util/CharUtil.hpp"
 
 #include <assert.h>
 #include <string.h>
@@ -39,4 +40,31 @@ copy_padded(char *dest, size_t size, const char *src)
 
   memcpy(dest, src, src_length);
   memset(dest + src_length, ' ', size - src_length);
+}
+
+static char *
+CopyUpper(char *dest, const char *src, const char *end)
+{
+  assert(dest != NULL);
+  assert(src != NULL);
+  assert(end >= src);
+
+  while (src < end)
+    *dest++ = ToUpperASCII(*src++);
+  return dest;
+}
+
+void
+CopyPaddedUpper(char *dest, size_t size, const char *src)
+{
+  assert(dest != NULL);
+  assert(size > 0);
+  assert(src != NULL);
+
+  size_t src_length = strlen(src);
+  if (src_length > size)
+    src_length = size;
+
+  dest = CopyUpper(dest, src, src + src_length);
+  memset(dest, ' ', size - src_length);
 }

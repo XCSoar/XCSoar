@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_CHAR_UTIL_HPP
 #define XCSOAR_CHAR_UTIL_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 static inline bool
@@ -53,5 +55,18 @@ IsWhitespaceNotNull(const char ch)
 }
 
 #endif /* _UNICODE */
+
+/**
+ * Convert the specified ASCII character (0x00..0x7f) to upper case.
+ * Unlike toupper(), it ignores the system locale.
+ */
+gcc_constexpr_function
+static inline bool
+ToUpperASCII(char ch)
+{
+  return ch >= 'a' && ch <= 'z'
+    ? (ch - ('a' - 'A'))
+    : ch;
+}
 
 #endif
