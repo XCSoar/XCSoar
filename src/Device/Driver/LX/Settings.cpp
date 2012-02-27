@@ -28,9 +28,43 @@ Copyright_License {
 
 #include <cstdio>
 
+/**
+ * Enable pass-through mode on the LX1600.  This command was provided
+ * by Crtomir Rojnik (LX Navigation) in an email without further
+ * explanation.  Tests have shown that this command can be sent at
+ * either 4800 baud or the current vario baud rate.  Since both works
+ * equally well, we don't bother to switch.
+ */
+static bool
+ModeColibri(Port &port)
+{
+  return PortWriteNMEA(port, "PFLX0,COLIBRI");
+}
+
+/**
+ * Cancel pass-through mode on the LX1600.  This command was provided
+ * by Crtomir Rojnik (LX Navigation) in an email.  It must always be
+ * sent at 4800 baud.  After this command has been sent, we switch
+ * back to the "real" baud rate.
+ */
+static bool
+ModeLX1600(Port &port)
+{
+  const unsigned old_baud_rate = port.SetBaudrate(4800);
+  const bool success = PortWriteNMEA(port, "PFLX0,LX1600");
+
+  if (old_baud_rate != 0)
+    port.SetBaudrate(old_baud_rate);
+
+  return success;
+}
+
 bool
 LXDevice::Open(gcc_unused OperationEnvironment &env)
 {
+  /* just in case the LX1600 is still in pass-through mode: */
+  ModeLX1600(port);
+
   // This line initiates the Color Vario to send out LXWP2 and LXWP3
   // LXWP0 once started, is repeated every second
   // This is a copy of the initiation done in LK8000, realized by Lx developers
@@ -72,4 +106,16 @@ LXDevice::PutQNH(const AtmosphericPressure &pres)
   sprintf(buffer, "PFLX3,%.2f,,,,,,,,,,,,", (double)altitude_offset / 0.3048);
   PortWriteNMEA(port, buffer);
   return true;
+}
+
+bool
+LXDevice::EnablePassThrough(OperationEnvironment &env)
+{
+  return ModeColibri(port);
+}
+
+void
+LXDevice::DisablePassThrough()
+{
+  ModeLX1600(port);
 }

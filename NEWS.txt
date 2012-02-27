@@ -15,6 +15,7 @@ Version 6.3 - not yet released
   - LX: support the LX Color Vario
   - LX: send QNH to device
   - LX: send keep-alives while in flight list
+  - LX: support LX1600 pass-through mode
   - send/receive bugs setting to/from device, if driver support it
   - support for K6-Bt baud rate switching
 * map

@@ -50,6 +50,10 @@ public:
   virtual bool PutBugs(fixed bugs);
   virtual bool PutMacCready(fixed MacCready);
   virtual bool PutQNH(const AtmosphericPressure &pres);
+
+  virtual bool EnablePassThrough(OperationEnvironment &env);
+  virtual void DisablePassThrough();
+
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
 

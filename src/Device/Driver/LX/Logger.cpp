@@ -33,6 +33,9 @@
 bool
 LXDevice::EnableDownloadMode(OperationEnvironment &env)
 {
+  if (!EnablePassThrough(env))
+    return false;
+
   old_baud_rate = bulk_baud_rate != 0
     ? port.SetBaudrate(bulk_baud_rate)
     : 0;
@@ -52,6 +55,8 @@ LXDevice::EnableDownloadMode(OperationEnvironment &env)
 bool
 LXDevice::DisableDownloadMode()
 {
+  DisablePassThrough();
+
   if (old_baud_rate != 0)
     port.SetBaudrate(old_baud_rate);
 
