@@ -98,7 +98,7 @@ class VLAPI_DATA {
     int npilots;
     PILOT *pilots;
 
-    void CopyTo(DBB &dbb);
+    void CopyTo(DBB &dbb) const;
   };
 
   // flight declaration

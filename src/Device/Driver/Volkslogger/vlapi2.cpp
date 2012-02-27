@@ -452,7 +452,7 @@ VLAPI_DATA::PILOT::put(lpb p) const
 }
 
 void
-VLAPI_DATA::DATABASE::CopyTo(DBB &dbb)
+VLAPI_DATA::DATABASE::CopyTo(DBB &dbb) const
 {
   dbb.open_dbb();
 
