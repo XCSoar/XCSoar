@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_AIRSPACE_CONFIG_HPP
 #define XCSOAR_PROFILE_AIRSPACE_CONFIG_HPP
 
+struct Color;
+
 namespace Profile
 {
   void LoadAirspaceConfig();
@@ -33,7 +35,8 @@ namespace Profile
    * @param i Airspace class index
    */
   void SetAirspaceMode(int i);
-  void SetAirspaceColor(int i, int c);
+  bool GetAirspaceColor(int i, Color &color);
+  void SetAirspaceColor(int i, const Color &color);
   void SetAirspaceBrush(int i, int c);
 };
 

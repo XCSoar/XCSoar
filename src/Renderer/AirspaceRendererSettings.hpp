@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Airspace/AirspaceClass.hpp"
 #include "Screen/Features.hpp"
+#include "Screen/Color.hpp"
 
 #include <stdint.h>
 
@@ -86,7 +87,7 @@ struct AirspaceRendererSettings {
   uint8_t brushes[AIRSPACECLASSCOUNT];
 #endif
 
-  uint8_t colours[AIRSPACECLASSCOUNT];
+  Color colours[AIRSPACECLASSCOUNT];
 
   void SetDefaults();
 };

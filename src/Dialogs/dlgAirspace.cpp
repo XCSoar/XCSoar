@@ -72,7 +72,7 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
       canvas.Select(look.solid_brushes[i]);
     } else {
 #endif
-      canvas.SetTextColor(look.preset_colors[renderer.colours[i]]);
+      canvas.SetTextColor(renderer.colours[i]);
       canvas.SetBackgroundColor(Color(0xFF, 0xFF, 0xFF));
       canvas.Select(look.brushes[renderer.brushes[i]]);
 #ifdef HAVE_ALPHA_BLEND
@@ -111,7 +111,7 @@ OnAirspaceListEnter(unsigned ItemIndex)
   if (colormode) {
     int c = dlgAirspaceColoursShowModal();
     if (c >= 0) {
-      renderer.colours[ItemIndex] = c;
+      renderer.colours[ItemIndex] = AirspaceLook::preset_colors[c];
       ActionInterface::SendMapSettings();
       Profile::SetAirspaceColor(ItemIndex, renderer.colours[ItemIndex]);
       changed = true;

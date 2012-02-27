@@ -575,6 +575,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Units/UnitsStore.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Units/UserUnitsFormatter.cpp \
+	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/Formatter/ByteSizeFormatter.cpp \
 	$(SRC)/Formatter/UserGeoPointFormatter.cpp \

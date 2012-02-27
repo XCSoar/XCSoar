@@ -163,7 +163,7 @@ public:
 
     // Select pens and brushes
 #ifndef USE_GDI
-    Color color = airspace_look.preset_colors[settings.colours[type]];
+    Color color = settings.colours[type];
 #ifdef ENABLE_OPENGL
     color = color.WithAlpha(48);
 #endif

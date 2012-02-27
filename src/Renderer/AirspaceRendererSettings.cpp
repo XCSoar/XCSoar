@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "AirspaceRendererSettings.hpp"
+#include "Look/AirspaceLook.hpp"
 
 #include <algorithm>
 
@@ -57,15 +58,15 @@ AirspaceRendererSettings::SetDefaults()
   brushes[13] = 3;
 #endif
 
-  std::fill(colours, colours + AIRSPACECLASSCOUNT, 0);
+  std::fill(colours, colours + AIRSPACECLASSCOUNT, AirspaceLook::preset_colors[0]);
 
-  colours[0] = 5;
-  colours[3] = 10;
-  colours[6] = 10;
-  colours[7] = 2;
-  colours[9] = 10;
-  colours[10] = 9;
-  colours[11] = 3;
-  colours[12] = 7;
-  colours[13] = 7;
+  colours[0] = AirspaceLook::preset_colors[5];
+  colours[3] = AirspaceLook::preset_colors[10];
+  colours[6] = AirspaceLook::preset_colors[10];
+  colours[7] = AirspaceLook::preset_colors[2];
+  colours[9] = AirspaceLook::preset_colors[10];
+  colours[10] = AirspaceLook::preset_colors[9];
+  colours[11] = AirspaceLook::preset_colors[3];
+  colours[12] = AirspaceLook::preset_colors[7];
+  colours[13] = AirspaceLook::preset_colors[7];
 }

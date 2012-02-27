@@ -24,7 +24,10 @@ Copyright_License {
 #include "Profile/AirspaceConfig.hpp"
 #include "Profile/Profile.hpp"
 #include "Screen/Features.hpp"
+#include "Formatter/HexColor.hpp"
+#include "Look/AirspaceLook.hpp"
 #include "Interface.hpp"
+#include "Util/Macros.hpp"
 #include "Sizes.h"
 
 void
@@ -70,9 +73,7 @@ Profile::LoadAirspaceConfig()
       renderer.brushes[i] = 0;
 #endif
 
-    Get(szProfileColour[i], renderer.colours[i]);
-    if (renderer.colours[i] >= NUMAIRSPACECOLORS)
-      renderer.colours[i] = 0;
+    GetAirspaceColor(i, renderer.colours[i]);
   }
 }
 
@@ -94,9 +95,32 @@ Profile::SetAirspaceMode(int i)
 }
 
 void
-Profile::SetAirspaceColor(int i, int c)
+Profile::SetAirspaceColor(int i, const Color &color)
 {
-  Set(szProfileColour[i], c);
+  TCHAR buffer[16];
+  FormatHexColor(buffer, ARRAY_SIZE(buffer), color);
+  Set(szProfileColour[i], buffer);
+}
+
+bool
+Profile::GetAirspaceColor(int i, Color &color)
+{
+  const TCHAR *color_string = Get(szProfileColour[i]);
+  if (!color_string)
+    return false;
+
+  if (ParseHexColor(color_string, color))
+    return true;
+
+  unsigned index;
+  if (!Get(szProfileColour[i], index))
+    return false;
+
+  if (index >= NUMAIRSPACECOLORS)
+    index = 0;
+
+  color = AirspaceLook::preset_colors[index];
+  return true;
 }
 
 void
