@@ -26,15 +26,8 @@ class DBB;
 
 class VLAPI_DATA {
  public:
-  // forward declarations for friend statements
-  class ROUTE;
-  class DECLARATION;
   // waypoint
-  class WPT {
-    friend class VLAPI;
-    friend class ROUTE;
-    friend class DECLARATION;
-  public:
+  struct WPT {
     // waypoint attribute(type) flags
     enum WPTTYP {
       // landable -> WPT will be included in nearest wapoint search (NAV/EMR)
@@ -50,7 +43,7 @@ class VLAPI_DATA {
     double lat; // latitude in degrees, southern values are negative
     double lon; // longitude in degrees, western values are negative
     byte typ; // type(attributes) of WPT, or-combination of enum WPTTYP
-  protected:
+
     void get(const void *p);
     void put(void *p);
   };
@@ -58,9 +51,7 @@ class VLAPI_DATA {
   // declaration-waypoint
   // this is the database waypoint extended by information about the
   // observation zone for each point of the flight-declaration (task)
-  class DCLWPT : public WPT {
-    friend class DECLARATION;
-  public:
+  struct DCLWPT : public WPT {
     // either can the observation zone be a cyl/sector combination
     // or can it be a line, but it cannot be both
     // oztype determines which variables(rz/rs or lw) are used
@@ -79,27 +70,22 @@ class VLAPI_DATA {
     // 360ø means automatic calculation of the direction inside
     // the VL, according to FAI-rules
     OZTYP oztyp;
-  protected:
+
     void get(const void *p);
     void put(void *p);
   };
 
-  class ROUTE {
-    friend class VLAPI;
-  public:
+  struct ROUTE {
     char name[15];
     WPT wpt[10];
-  protected:
+
     void get(const void *p);
     void put(void *p);
   };
 
-
-  class PILOT {
-    friend class VLAPI;
-  public:
+  struct PILOT {
     char name[17];
-  protected:
+
     void get(lpb p);
     void put(lpb p);
   };
@@ -111,6 +97,8 @@ class VLAPI_DATA {
     ROUTE *routes;
     int npilots;
     PILOT *pilots;
+
+    void CopyTo(DBB &dbb);
   };
 
   // flight declaration

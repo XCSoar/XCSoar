@@ -232,31 +232,7 @@ VLA_ERROR VLAPI::read_db_and_declaration() {
 VLA_ERROR VLAPI::write_db_and_declaration() {
 
   DBB dbb1;
-
-  dbb1.open_dbb();
-
-  int i;
-  for(i=0; i<database.nwpts; i++) {
-    byte bwpt[13];
-    database.wpts[i].put(bwpt);
-    dbb1.add_ds(0,bwpt);
-  }
-  dbb1.close_db(0);
-
-  for(i=0; i<database.npilots; i++) {
-    byte bpilot[17];
-    database.pilots[i].put(bpilot);
-    dbb1.add_ds(1,bpilot);
-  }
-  dbb1.close_db(1);
-
-  for(i=0; i<database.nroutes; i++) {
-    byte broute[144];
-    database.routes[i].put(broute);
-    dbb1.add_ds(3,broute);
-  }
-  dbb1.close_db(3);
-
+  database.CopyTo(dbb1);
   declaration.put(&dbb1);
 
   // copy dbb1 blocks into buffer
@@ -476,6 +452,32 @@ void VLAPI_DATA::PILOT::put(lpb p) {
   copy_padded(dest->name, sizeof(dest->name), name);
 }
 
+void
+VLAPI_DATA::DATABASE::CopyTo(DBB &dbb)
+{
+  dbb.open_dbb();
+
+  for (int i = 0; i < nwpts; ++i) {
+    byte bwpt[13];
+    wpts[i].put(bwpt);
+    dbb.add_ds(0, bwpt);
+  }
+  dbb.close_db(0);
+
+  for (int i = 0; i < npilots; ++i) {
+    byte bpilot[17];
+    pilots[i].put(bpilot);
+    dbb.add_ds(1, bpilot);
+  }
+  dbb.close_db(1);
+
+  for (int i = 0; i < nroutes; ++i) {
+    byte broute[144];
+    routes[i].put(broute);
+    dbb.add_ds(3, broute);
+  }
+  dbb.close_db(3);
+}
 
 // read flight-declaration fields database into structure
 //
