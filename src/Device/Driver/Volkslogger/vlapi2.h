@@ -21,6 +21,7 @@
 #include "vlapierr.h"
 #include "vla_support.h"
 #include "vlconv.h"
+#include "Engine/Navigation/GeoPoint.hpp"
 
 class DBB;
 
@@ -40,8 +41,7 @@ class VLAPI_DATA {
       WPTTYP_C = 8
     };
     char name[7]; // name of waypoint, zero-ended C-string, max. 6 characters
-    double lat; // latitude in degrees, southern values are negative
-    double lon; // longitude in degrees, western values are negative
+    GeoPoint location;
     uint8_t typ; // type(attributes) of WPT, or-combination of enum WPTTYP
 
     void get(const void *p);
