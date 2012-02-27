@@ -193,45 +193,10 @@ VLA_ERROR VLAPI::read_db_and_declaration() {
   DBB dbb1;
   memcpy(dbb1.block,dbbbuffer,sizeof(dbb1.block));
   memcpy(dbb1.fdf,dbbbuffer+DBB::FrmBeg,sizeof(dbb1.fdf));
+
   dbb1.open_dbb();
 
-  // convert and write list of waypoints
-  if (dbb1.header[0].dsfirst != 0xffff) {
-    database.nwpts = 1 + (dbb1.header[0].dslast - dbb1.header[0].dsfirst)
-      / dbb1.header[0].dslaenge;
-    delete[] database.wpts;
-    database.wpts = new WPT[database.nwpts];
-    for (int i=0; i<database.nwpts; i++) {
-      database.wpts[i].get(dbb1.block + dbb1.header[0].dsfirst +
-                           i*dbb1.header[0].dslaenge);
-    }
-  }
-
-
-  // convert and write list of routes
-  if (dbb1.header[3].dsfirst != 0xffff) {
-    database.nroutes = 1 + (dbb1.header[3].dslast - dbb1.header[3].dsfirst)
-      / dbb1.header[3].dslaenge ;
-    delete[] database.routes;
-    database.routes = new ROUTE[database.nroutes];
-    for (int i=0; i<database.nroutes; i++) {
-      database.routes[i].get(dbb1.block + dbb1.header[3].dsfirst +
-                             i*dbb1.header[3].dslaenge);
-    }
-  }
-
-  // convert and write list of pilots
-  if (dbb1.header[1].dsfirst != 0xffff) {
-    database.npilots = 1 + (dbb1.header[1].dslast - dbb1.header[1].dsfirst)
-      / dbb1.header[1].dslaenge;
-    delete[] database.pilots;
-    database.pilots = new PILOT[database.npilots];
-    for (int i=0; i<database.npilots; i++) {
-      database.pilots[i].get(dbb1.block + dbb1.header[1].dsfirst +
-                             i*dbb1.header[1].dslaenge);
-    }
-  }
-
+  database.CopyFrom(dbb1);
   declaration.get(&dbb1);
 
   return VLA_ERR_NOERR;
@@ -460,6 +425,46 @@ VLAPI_DATA::PILOT::put(void * p) const
   Volkslogger::Pilot *dest = (Volkslogger::Pilot *)p;
 
   CopyPaddedUpper(dest->name, sizeof(dest->name), name);
+}
+
+void
+VLAPI_DATA::DATABASE::CopyFrom(const DBB &dbb)
+{
+  // convert and write list of waypoints
+  if (dbb.header[0].dsfirst != 0xffff) {
+    nwpts = 1 + (dbb.header[0].dslast - dbb.header[0].dsfirst)
+      / dbb.header[0].dslaenge;
+    delete[] wpts;
+    wpts = new WPT[nwpts];
+    for (int i=0; i<nwpts; i++) {
+      wpts[i].get(dbb.block + dbb.header[0].dsfirst +
+                           i*dbb.header[0].dslaenge);
+    }
+  }
+
+  // convert and write list of routes
+  if (dbb.header[3].dsfirst != 0xffff) {
+    nroutes = 1 + (dbb.header[3].dslast - dbb.header[3].dsfirst)
+      / dbb.header[3].dslaenge ;
+    delete[] routes;
+    routes = new ROUTE[nroutes];
+    for (int i=0; i<nroutes; i++) {
+      routes[i].get(dbb.block + dbb.header[3].dsfirst +
+                             i*dbb.header[3].dslaenge);
+    }
+  }
+
+  // convert and write list of pilots
+  if (dbb.header[1].dsfirst != 0xffff) {
+    npilots = 1 + (dbb.header[1].dslast - dbb.header[1].dsfirst)
+      / dbb.header[1].dslaenge;
+    delete[] pilots;
+    pilots = new PILOT[npilots];
+    for (int i=0; i<npilots; i++) {
+      pilots[i].get(dbb.block + dbb.header[1].dsfirst +
+                             i*dbb.header[1].dslaenge);
+    }
+  }
 }
 
 void

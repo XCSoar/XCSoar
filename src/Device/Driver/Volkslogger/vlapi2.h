@@ -98,6 +98,7 @@ class VLAPI_DATA {
     int npilots;
     PILOT *pilots;
 
+    void CopyFrom(const DBB &dbb);
     void CopyTo(DBB &dbb) const;
   };
 
