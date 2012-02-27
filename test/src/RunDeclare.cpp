@@ -47,9 +47,15 @@ Copyright_License {
 void
 PrintMoreUsage()
 {
-  fputs("Where DRIVER is one of:\n", stderr);
+  fputs("Where DRIVER0 is one of:\n", stderr);
 
   const struct DeviceRegister *driver;
+  for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i)
+    if (driver->HasPassThrough())
+      _ftprintf(stderr, _T("\t%s\n"), driver->name);
+
+  fputs("Where DRIVER is one of:\n", stderr);
+
   for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i)
     if (driver->CanDeclare())
       _ftprintf(stderr, _T("\t%s\n"), driver->name);
@@ -74,7 +80,20 @@ MakeWaypoint(const TCHAR *name, int altitude,
 
 int main(int argc, char **argv)
 {
-  Args args(argc, argv, "DRIVER PORT BAUD");
+  Args args(argc, argv, "[--through DRIVER0] DRIVER PORT BAUD");
+
+  tstring _through_name;
+  const TCHAR *through_name = NULL;
+
+  const char *a;
+  while ((a = args.PeekNext()) != NULL && *a == '-') {
+    a = args.ExpectNext();
+    if (strcmp(a, "--through") == 0) {
+      _through_name = args.ExpectNextT();
+      through_name = _through_name.c_str();
+    } else
+      args.UsageError();
+  }
 
   tstring _driver_name = args.ExpectNextT();
   const TCHAR *driver_name = _driver_name.c_str();
@@ -113,6 +132,31 @@ int main(int argc, char **argv)
   declaration.Append(MakeWaypoint(_T("Bergneustadt"), 488,
                                   7.7061111111111114, 51.051944444444445));
 
+  Device *through_device = NULL;
+  if (through_name != NULL) {
+    const struct DeviceRegister *through_driver =
+      FindDriverByName(through_name);
+    if (through_driver == NULL) {
+      _ftprintf(stderr, _T("No such driver: %s\n"), through_name);
+      return EXIT_FAILURE;
+    }
+
+    if (!through_driver->HasPassThrough()) {
+      _ftprintf(stderr, _T("Not a pass-through driver: %s\n"), through_name);
+      return EXIT_FAILURE;
+    }
+
+    assert(through_driver->CreateOnPort != NULL);
+    through_device = through_driver->CreateOnPort(config, port);
+    assert(through_device != NULL);
+
+    ConsoleOperationEnvironment env;
+    if (!through_device->Open(env)) {
+      _ftprintf(stderr, _T("Failed to open driver: %s\n"), through_name);
+      return EXIT_FAILURE;
+    }
+  }
+
   const struct DeviceRegister *driver = FindDriverByName(driver_name);
   if (driver == NULL) {
     _ftprintf(stderr, _T("No such driver: %s\n"), driver_name);
@@ -129,6 +173,13 @@ int main(int argc, char **argv)
   assert(device != NULL);
 
   ConsoleOperationEnvironment env;
+
+  if (through_device != NULL && !through_device->EnablePassThrough(env)) {
+    _ftprintf(stderr, _T("Failed to enable pass-through mode: %s\n"),
+              through_name);
+    return EXIT_FAILURE;
+  }
+
   if (!device->Open(env)) {
     _ftprintf(stderr, _T("Failed to open driver: %s\n"), driver_name);
     return EXIT_FAILURE;
@@ -138,6 +189,11 @@ int main(int argc, char **argv)
     fprintf(stderr, "Declaration ok\n");
   else
     fprintf(stderr, "Declaration failed\n");
+
+  if (through_device != NULL) {
+    through_device->DisablePassThrough();
+    delete through_device;
+  }
 
   delete device;
 
