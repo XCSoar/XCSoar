@@ -249,7 +249,9 @@ VLA_ERROR VLAPI::read_directory() {
 
 }
 
-VLA_ERROR VLAPI::read_igcfile(char *filename, int index, int secmode) {
+VLA_ERROR
+VLAPI::read_igcfile(const char *filename, int index, int secmode)
+{
   FILE *outfile = fopen(filename,"wt");
   if(!outfile)
     return VLA_ERR_FILE;
