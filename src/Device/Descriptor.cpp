@@ -429,6 +429,26 @@ DeclareToFLARM(const struct Declaration &declaration, Port &port,
 }
 
 static bool
+DeclareToFLARM(const struct Declaration &declaration,
+               Port &port, const DeviceRegister &driver, Device *device,
+               const Waypoint *home,
+               OperationEnvironment &env)
+{
+  /* enable pass-through mode in the "front" device */
+  if (driver.HasPassThrough() && device != NULL &&
+      !device->EnablePassThrough(env))
+    return false;
+
+  bool success = DeclareToFLARM(declaration, port, home, env);
+
+  /* leave pass-through mode */
+  if (driver.HasPassThrough() && device != NULL)
+    device->DisablePassThrough();
+
+  return success;
+}
+
+static bool
 DoDeclare(const struct Declaration &declaration,
           Port &port, const DeviceRegister &driver, Device *device,
           bool flarm, const Waypoint *home,
@@ -444,7 +464,7 @@ DoDeclare(const struct Declaration &declaration,
     text.Format(_T("%s: FLARM."), _("Sending declaration"));
     env.SetText(text);
 
-    result |= DeclareToFLARM(declaration, port, home, env);
+    result |= DeclareToFLARM(declaration, port, driver, device, home, env);
   }
 
   return result;
