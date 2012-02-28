@@ -253,9 +253,7 @@ final class IOIOHelper {
    * @return: ID of opened UArt or -1 if fail
    */
   public int openUart(int ID, int baud) {
-    if (xuarts_[ID].isAvailable())
-      return xuarts_[ID].openUart(baud);
-    return -1;
+    return xuarts_[ID].openUart(baud);
   }
 
   /**
