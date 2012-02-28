@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
+#include "Device/Internal.hpp"
 #include "PeriodClock.hpp"
 
 #include <assert.h>
@@ -33,9 +34,11 @@ FlarmDevice::Send(const char *sentence)
   assert(!in_binary_mode);
   assert(sentence != NULL);
 
-  port.Write('$');
-  port.Write(sentence);
-  port.Write("\r\n");
+  /* From the FLARM data port specification: "All sentences must [...]
+     end with [...] two checksum characters [...].  [...] these
+     characters [...] must be provided in sentences to FLARM and are
+     part of the answers given by FLARM." */
+  PortWriteNMEA(port, sentence);
 }
 
 bool

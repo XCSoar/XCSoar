@@ -9,6 +9,7 @@ Version 6.3 - not yet released
 * devices
   - COM port monitor
   - added separate FLARM driver for declaration and IGC file download
+  - FLARM: generate checksums for task declaration
   - added driver for the Westerboer VW921/VW922 devices
   - added driver for the FlyNet variometer
   - allow up to 4 devices
