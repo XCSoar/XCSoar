@@ -59,6 +59,12 @@ ModeLX1600(Port &port)
   return success;
 }
 
+static bool
+EnableLXWP(Port &port)
+{
+  return PortWriteNMEA(port, "PFLX0,LXWP0,1,LXWP2,3,LXWP3,4");
+}
+
 bool
 LXDevice::Open(gcc_unused OperationEnvironment &env)
 {
@@ -69,7 +75,8 @@ LXDevice::Open(gcc_unused OperationEnvironment &env)
   // LXWP0 once started, is repeated every second
   // This is a copy of the initiation done in LK8000, realized by Lx developers
   // We have no documentation and so we do not know what this exactly means
-  PortWriteNMEA(port, "PFLX0,LXWP0,1,LXWP2,3,LXWP3,4");
+  EnableLXWP(port);
+
   return true;
 }
 
